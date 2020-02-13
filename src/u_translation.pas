@@ -1229,6 +1229,9 @@ resourcestring
   rsCoordinates = 'Coordinates';
   rsRiseSetCondi = 'Rise/Set condition';
   rsInformation = 'Information';
+  rsSlot = 'Slot';
+  rsNumberOfSlot = 'Number of slot';
+  rsManualFilter = 'Manual filter change canceled';
 
 implementation
 

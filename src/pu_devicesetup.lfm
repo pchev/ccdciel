@@ -905,8 +905,8 @@ object f_setup: Tf_setup
         OnChange = PageControlWheelChange
         object WheelIndi: TTabSheet
           Caption = 'WheelIndi'
-          ClientHeight = 383
-          ClientWidth = 488
+          ClientHeight = 356
+          ClientWidth = 482
           ParentFont = False
           object PanelWheelIndi: TPanel
             Left = 0
@@ -915,8 +915,8 @@ object f_setup: Tf_setup
             Width = 482
             Align = alClient
             BevelOuter = bvNone
-            ClientHeight = 352
-            ClientWidth = 478
+            ClientHeight = 356
+            ClientWidth = 482
             ParentFont = False
             TabOrder = 0
             object WheelIndiDevice: TComboBox
@@ -972,8 +972,8 @@ object f_setup: Tf_setup
               Top = 8
               Width = 412
               BevelOuter = bvNone
-              ClientHeight = 34
-              ClientWidth = 408
+              ClientHeight = 38
+              ClientWidth = 412
               ParentFont = False
               TabOrder = 3
               object Label75: TLabel
@@ -1041,8 +1041,8 @@ object f_setup: Tf_setup
         end
         object WheelAscom: TTabSheet
           Caption = 'WheelAscom'
-          ClientHeight = 383
-          ClientWidth = 488
+          ClientHeight = 356
+          ClientWidth = 482
           ParentFont = False
           object PanelWheelAscom: TPanel
             Left = 16
@@ -1050,8 +1050,8 @@ object f_setup: Tf_setup
             Top = 16
             Width = 290
             BevelOuter = bvNone
-            ClientHeight = 109
-            ClientWidth = 286
+            ClientHeight = 113
+            ClientWidth = 290
             ParentFont = False
             TabOrder = 0
             object BtnChooseFilter: TButton
@@ -1067,7 +1067,7 @@ object f_setup: Tf_setup
             end
             object AscomWheel: TEdit
               Left = 14
-              Height = 23
+              Height = 28
               Top = 17
               Width = 139
               Constraints.MaxHeight = 28
@@ -1100,8 +1100,8 @@ object f_setup: Tf_setup
         end
         object WheelInCamera: TTabSheet
           Caption = 'WheelInCamera'
-          ClientHeight = 383
-          ClientWidth = 488
+          ClientHeight = 356
+          ClientWidth = 482
           ParentFont = False
           object PanelWheelIncamera: TPanel
             Left = 16
@@ -1109,8 +1109,8 @@ object f_setup: Tf_setup
             Top = 32
             Width = 404
             BevelOuter = bvNone
-            ClientHeight = 198
-            ClientWidth = 400
+            ClientHeight = 202
+            ClientWidth = 404
             ParentFont = False
             TabOrder = 0
             object Label17: TLabel
@@ -1128,23 +1128,23 @@ object f_setup: Tf_setup
         end
         object WheelAscomRest: TTabSheet
           Caption = 'WheelAscomRest'
-          ClientHeight = 383
-          ClientWidth = 488
+          ClientHeight = 356
+          ClientWidth = 482
           ParentFont = False
           object Panel3: TPanel
             Left = 0
-            Height = 295
+            Height = 356
             Top = 0
-            Width = 416
+            Width = 482
             Align = alClient
             BevelOuter = bvNone
-            ClientHeight = 291
-            ClientWidth = 412
+            ClientHeight = 356
+            ClientWidth = 482
             ParentFont = False
             TabOrder = 0
             object WheelARestProtocol: TComboBox
               Left = 13
-              Height = 23
+              Height = 28
               Top = 65
               Width = 75
               Constraints.MaxHeight = 28
@@ -1162,16 +1162,16 @@ object f_setup: Tf_setup
             end
             object Label34: TLabel
               Left = 13
-              Height = 15
+              Height = 19
               Top = 40
-              Width = 45
+              Width = 52
               Caption = 'Protocol'
               ParentColor = False
               ParentFont = False
             end
             object WheelARestHost: TEdit
               Left = 93
-              Height = 23
+              Height = 28
               Top = 65
               Width = 194
               Constraints.MaxHeight = 28
@@ -1181,16 +1181,16 @@ object f_setup: Tf_setup
             end
             object Label35: TLabel
               Left = 93
-              Height = 15
+              Height = 19
               Top = 40
-              Width = 137
+              Width = 165
               Caption = 'Remote host or IP address'
               ParentColor = False
               ParentFont = False
             end
             object WheelARestPort: TSpinEditEx
               Left = 291
-              Height = 23
+              Height = 28
               Top = 65
               Width = 82
               Constraints.MaxHeight = 28
@@ -1203,16 +1203,16 @@ object f_setup: Tf_setup
             end
             object Label36: TLabel
               Left = 291
-              Height = 15
+              Height = 19
               Top = 40
-              Width = 35
+              Width = 43
               Caption = 'IP Port'
               ParentColor = False
               ParentFont = False
             end
             object WheelARestDevice: TSpinEditEx
               Left = 93
-              Height = 23
+              Height = 28
               Top = 137
               Width = 82
               Constraints.MaxHeight = 28
@@ -1223,43 +1223,43 @@ object f_setup: Tf_setup
             end
             object Label37: TLabel
               Left = 93
-              Height = 15
+              Height = 19
               Top = 113
-              Width = 123
+              Width = 145
               Caption = 'Remote device number'
               ParentColor = False
               ParentFont = False
             end
             object Label63: TLabel
               Left = 16
-              Height = 15
+              Height = 19
               Top = 141
-              Width = 64
+              Width = 76
               Caption = 'FilterWheel/'
               ParentColor = False
               ParentFont = False
             end
             object Label93: TLabel
               Left = 16
-              Height = 15
+              Height = 19
               Top = 170
-              Width = 56
+              Width = 69
               Caption = 'User name'
               ParentColor = False
               ParentFont = False
             end
             object Label94: TLabel
               Left = 159
-              Height = 15
+              Height = 19
               Top = 170
-              Width = 50
+              Width = 61
               Caption = 'Password'
               ParentColor = False
               ParentFont = False
             end
             object WheelARestUser: TEdit
               Left = 16
-              Height = 23
+              Height = 28
               Top = 190
               Width = 131
               AutoSelect = False
@@ -1269,7 +1269,7 @@ object f_setup: Tf_setup
             end
             object WheelARestPass: TEdit
               Left = 159
-              Height = 23
+              Height = 28
               Top = 190
               Width = 131
               AutoSelect = False
@@ -1281,7 +1281,7 @@ object f_setup: Tf_setup
             end
             object AlpacaWheelList: TComboBox
               Left = 13
-              Height = 23
+              Height = 28
               Top = 5
               Width = 360
               Constraints.MaxHeight = 28
@@ -1291,6 +1291,55 @@ object f_setup: Tf_setup
               Style = csDropDownList
               TabOrder = 6
             end
+          end
+        end
+        object WheelManual: TTabSheet
+          Caption = 'WheelManual'
+          ClientHeight = 356
+          ClientWidth = 482
+          object Panel32: TPanel
+            Left = 0
+            Height = 58
+            Top = 0
+            Width = 482
+            Align = alTop
+            ClientHeight = 58
+            ClientWidth = 482
+            TabOrder = 0
+            object Label8: TLabel
+              Left = 16
+              Height = 19
+              Top = 21
+              Width = 93
+              Caption = 'Number of slot'
+              ParentColor = False
+            end
+            object WheelMslot: TSpinEditEx
+              Left = 168
+              Height = 28
+              Top = 16
+              Width = 82
+              Constraints.MaxHeight = 28
+              MaxLength = 0
+              ParentFont = False
+              TabOrder = 0
+              OnChange = WheelMslotChange
+              MaxValue = 99
+              MinValue = 1
+              Value = 5
+            end
+          end
+          object ManualFilterName: TStringGrid
+            Left = 0
+            Height = 298
+            Top = 58
+            Width = 482
+            Align = alClient
+            ColCount = 2
+            Options = [goFixedVertLine, goFixedHorzLine, goVertLine, goHorzLine, goRangeSelect, goEditing, goAlwaysShowEditor, goSmoothScroll, goFixedRowNumbering]
+            RowCount = 6
+            TabOrder = 1
+            OnResize = ManualFilterNameResize
           end
         end
       end

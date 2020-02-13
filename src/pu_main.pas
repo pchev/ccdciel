@@ -46,7 +46,7 @@ uses
   cu_indiwheel, cu_ascomwheel, cu_incamerawheel, cu_indicamera, cu_ascomcamera, cu_astrometry,
   cu_autoguider, cu_autoguider_phd, cu_autoguider_linguider, cu_autoguider_none, cu_autoguider_dither, cu_planetarium,
   cu_planetarium_cdc, cu_planetarium_samp, cu_planetarium_hnsky, pu_planetariuminfo, indiapi,
-  cu_ascomrestcamera, cu_ascomrestdome, cu_ascomrestfocuser, cu_ascomrestmount,
+  cu_ascomrestcamera, cu_ascomrestdome, cu_ascomrestfocuser, cu_ascomrestmount, cu_manualwheel,
   cu_ascomrestrotator, cu_ascomrestsafety, cu_ascomrestweather, cu_ascomrestwheel, pu_polaralign,
   u_annotation, BGRABitmap, BGRABitmapTypes, LCLVersion, InterfaceBase, lclplatformdef,
   LazUTF8, Classes, dynlibs, LCLType, LMessages, IniFiles, IntfGraphics, FPImage, GraphType,
@@ -1202,6 +1202,7 @@ begin
   ConfigExpEarlyStart:=false;
   CameraProcessingImage:=false;
   MagnitudeCalibration:=NullCoord;
+  ManualFilterNames:=TStringList.Create;
   ScrBmp := TBGRABitmap.Create;
   Image1 := TImgDrawingControl.Create(Self);
   Image1.Parent := PanelCenter;
@@ -1557,6 +1558,7 @@ begin
      ASCOM: wheel:=T_ascomwheel.Create(nil);
      INCAMERA: wheel:=T_incamerawheel.Create(nil);
      ASCOMREST: wheel:=T_ascomrestwheel.Create(nil);
+     MANUAL: wheel:=T_manualwheel.Create(nil);
    end;
    wheel.onMsg:=@NewMessage;
    wheel.onDeviceMsg:=@DeviceMessage;
@@ -1943,6 +1945,7 @@ begin
    SafetyActionName[12]:=trim(rsExitProgram);
    DevInterfaceName[2]:=rsInCamera;
    DevInterfaceName[3]:=rsInMount;
+   DevInterfaceName[5]:=rsManual;
    DomeCloseActionName[0]:='';
    DomeCloseActionName[1]:=trim(rsStopTelescop2);
    DomeCloseActionName[2]:=trim(rsParkTheTeles2);
@@ -2679,6 +2682,7 @@ begin
   ReadoutList.Free;
   ISOList.Free;
   deepstring.Free;
+  ManualFilterNames.Free;
   for i:=1 to MaxScriptDir do ScriptDir[i].Free;
   if NeedRestart then begin
      ExecNoWait(paramstr(0));
@@ -3213,6 +3217,7 @@ end;
 
 procedure Tf_main.SetConfig;
 var defautindiserver, defaultindiport: string;
+    i,n: integer;
 begin
  // Upgrade old config with single server
 defautindiserver:=config.GetValue('/INDI/Server','localhost');
@@ -3247,6 +3252,7 @@ case wheel.WheelInterface of
    INDI : WheelName:=config.GetValue('/INDIwheel/Device','');
    ASCOM: WheelName:=config.GetValue('/ASCOMwheel/Device','');
    ASCOMREST: WheelName:='FilterWheel/'+IntToStr(config.GetValue('/ASCOMRestwheel/Device',0));
+   MANUAL: WheelName:=rsManual;
 end;
 case focuser.FocuserInterface of
    INDI : FocuserName:=config.GetValue('/INDIfocuser/Device','');
@@ -3302,6 +3308,16 @@ if camera.CameraInterface=ASCOM then
    camera.ASCOMFlipImage:=config.GetValue('/ASCOMcamera/FlipImage',true);
 if camera.CameraInterface=ASCOMREST then
    camera.ASCOMFlipImage:=config.GetValue('/ASCOMRestcamera/FlipImage',true);
+if wheel.WheelInterface=MANUAL then begin
+   ManualFilterNames.Clear;
+   ManualFilterNames.Add(rsFilter0);
+   n:=config.GetValue('/Manualwheel/Slots',5);
+   for i:=1 to n do begin
+     ManualFilterNames.Add(config.GetValue('/Manualwheel/Slot'+inttostr(i),''));
+   end;
+   wheel.FilterNames:=ManualFilterNames;
+   FilterNameChange(Self);
+end;
 weather.AutoLoadConfig:=config.GetValue('/INDIweather/AutoLoadConfig',false);
 safety.AutoLoadConfig:=config.GetValue('/INDIsafety/AutoLoadConfig',false);
 if watchdog<>nil then begin
@@ -4354,6 +4370,7 @@ begin
                           'filterwheel/'+IntToStr(config.GetValue('/ASCOMRestwheel/Device',0)),
                           DecryptStr(hextostr(credentialconfig.GetValue('/ASCOMRestwheel/User','')), encryptpwd),
                           DecryptStr(hextostr(credentialconfig.GetValue('/ASCOMRestwheel/Pass','')), encryptpwd));
+    MANUAL : wheel.Connect('');
   end;
 end;
 
@@ -6070,6 +6087,7 @@ procedure Tf_main.MenuSetupClick(Sender: TObject);
 var configfile: string;
     loadopt: boolean;
     pt: TPoint;
+    i:integer;
 begin
   if camera.Status<>devDisconnected then begin
     ShowMessage(rsDisconnectTh);
@@ -6160,6 +6178,9 @@ begin
     config.SetValue('/ASCOMRestwheel/Host',f_setup.WheelARestHost.Text);
     config.SetValue('/ASCOMRestwheel/Port',f_setup.WheelARestPort.Value);
     config.SetValue('/ASCOMRestwheel/Device',f_setup.WheelARestDevice.Value);
+    config.SetValue('/Manualwheel/Slots',f_setup.ManualFilterName.RowCount-1);
+    for i:=1 to f_setup.ManualFilterName.RowCount-1 do
+      config.SetValue('/Manualwheel/Slot'+inttostr(i),f_setup.ManualFilterName.Cells[1,i]);
 
     config.SetValue('/FocuserInterface',ord(f_setup.FocuserConnection));
     config.SetValue('/INDIfocuser/Server',f_setup.FocuserIndiServer.Text);
