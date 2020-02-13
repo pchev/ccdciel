@@ -796,9 +796,10 @@ begin
   TargetList.Cells[colseq,i]:=IntToStr(i);
   TargetList.Cells[colname,i]:='';
   TargetList.Cells[colplan,i]:=t.planname;
+  if t.astrometrypointing then TargetList.Cells[colastrometry,i]:='1';
+  if t.inplaceautofocus then TargetList.Cells[colinplace,i]:='1';
   TargetList.Objects[colseq,i]:=t;
   TargetList.Row:=i;
-  TargetChange(nil);
 end;
 
 procedure Tf_EditTargets.BtnNewScriptClick(Sender: TObject);
@@ -867,6 +868,7 @@ begin
       begin
         TargetList.Cells[colra,n]:=RAToStr(ra0*12/pi);{Add position}
         TargetList.Cells[coldec,n]:=DEToStr(dec0*180/pi);
+        TargetList.Cells[colastrometry,n]:=BoolToStr(astrometryResolver<>ResolverNone,'1','0');
 
         if naam3='' then TargetList.Cells[colname,n]:=naam2 {Add one object name only}
         else

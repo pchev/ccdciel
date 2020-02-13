@@ -491,7 +491,7 @@ begin
   ra:=NullCoord;
   de:=NullCoord;
   pa:=NullCoord;
-  astrometrypointing:=false;
+  astrometrypointing:=(astrometryResolver<>ResolverNone);
   updatecoord:=false;
   inplaceautofocus:=AutofocusInPlace;
   autoguiding:=false;
