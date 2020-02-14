@@ -459,6 +459,7 @@ var
   SMTPSSLTLS: boolean;
   EmailEndSequence,EmailAbortSequence,EmailAutoguider,EmailAufofocus,EmailMeridianFlip,EmailTargetInitialisation: boolean;
   ManualFilterNames: TStringList;
+  VoiceDialog,VoiceSequence,VoiceError,VoiceEmail: boolean;
 
   procedure globalmsg(str:string);
 

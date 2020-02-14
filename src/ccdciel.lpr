@@ -51,7 +51,7 @@ uses
   cu_ascomrestcamera, cu_ascomrestwheel, cu_ascomrestweather,
   cu_ascomrestsafety, cu_ascomrestrotator, cu_ascomrestmount,
   cu_ascomrestfocuser, cu_ascomrestdome, cu_ascomrest, cu_autoguider_dither,
-  u_hints, pu_goto, pu_photometry, u_libraw, pu_polaralign, pu_keyboard, cu_alpacamanagement, pu_compute, cu_manualwheel;
+  u_hints, pu_goto, pu_photometry, u_libraw, pu_polaralign, pu_keyboard, cu_alpacamanagement, pu_compute, cu_manualwheel, u_speech;
 
 {$R *.res}
 

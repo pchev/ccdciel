@@ -28,7 +28,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 interface
 
-uses  u_global, UScaleDPI, u_utils, u_translation,
+uses  u_global, UScaleDPI, u_utils, u_translation, u_speech,
   Classes, SysUtils, FileUtil, Forms, Controls, Graphics, Dialogs, StdCtrls;
 
 type
@@ -140,6 +140,7 @@ begin
   else
      BtnCancel.Caption:=rsCancel;
   n:=0;
+  if VoiceDialog then speak(rsPause+' . ' +PauseLabel.Caption);
   while (not FContinue) do begin
     if timeout>0 then begin
       inc(n);

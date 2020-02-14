@@ -157,7 +157,7 @@ function email(Subject,Msg:string):string;
 
 implementation
 
-uses u_translation;
+uses u_translation, u_speech;
 
 const
   GregorianStart=15821015;
@@ -3213,6 +3213,7 @@ finally
   MailData.Free;
   result:=error;
 end;
+if VoiceEmail then speak(Subject+' . '+Msg);
 end;
 
 end.

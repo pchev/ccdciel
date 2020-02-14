@@ -300,7 +300,7 @@
         <PackageName Value="LCL"/>
       </Item11>
     </RequiredPackages>
-    <Units Count="103">
+    <Units Count="104">
       <Unit0>
         <Filename Value="ccdciel.lpr"/>
         <IsPartOfProject Value="True"/>
@@ -830,6 +830,10 @@
         <Filename Value="cu_manualwheel.pas"/>
         <IsPartOfProject Value="True"/>
       </Unit102>
+      <Unit103>
+        <Filename Value="u_speech.pas"/>
+        <IsPartOfProject Value="True"/>
+      </Unit103>
     </Units>
   </ProjectOptions>
   <CompilerOptions>

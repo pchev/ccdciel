@@ -50,8 +50,8 @@ uses
   cu_ascomrestrotator, cu_ascomrestsafety, cu_ascomrestweather, cu_ascomrestwheel, pu_polaralign,
   u_annotation, BGRABitmap, BGRABitmapTypes, LCLVersion, InterfaceBase, lclplatformdef,
   LazUTF8, Classes, dynlibs, LCLType, LMessages, IniFiles, IntfGraphics, FPImage, GraphType,
-  SysUtils, LazFileUtils, Forms, Controls, Math, Graphics, Dialogs,
-  StdCtrls, ExtCtrls, Menus, ComCtrls, Buttons, ExtDlgs, Types, u_translation;
+  SysUtils, LazFileUtils, Forms, Controls, Math, Graphics, Dialogs, u_speech,
+  StdCtrls, ExtCtrls, Menus, ComCtrls, Buttons, Types, u_translation;
 
 type
 
@@ -1961,7 +1961,7 @@ begin
    TabMsgLevel.Tabs[0]:=rsSummary;
    TabMsgLevel.Tabs[1]:=rsCommands;
    TabMsgLevel.Tabs[2]:=rsDetails;
-
+   u_speech.InitSpeak;
 end;
 
 procedure Tf_main.FormShow(Sender: TObject);
@@ -3617,6 +3617,11 @@ begin
   EmailAufofocus:=config.GetValue('/Mail/Aufofocus',false);
   EmailMeridianFlip:=config.GetValue('/Mail/MeridianFlip',false);
   EmailTargetInitialisation:=config.GetValue('/Mail/TargetInitialisation',false);
+  VoiceDialog:=config.GetValue('/Voice/Dialog',false);
+  VoiceSequence:=config.GetValue('/Voice/Sequence',false);
+  VoiceError:=config.GetValue('/Voice/Error',false);
+  VoiceEmail:=config.GetValue('/Voice/Email',false);
+
 end;
 
 procedure Tf_main.SaveScreenConfig;
@@ -4916,6 +4921,7 @@ begin
   if LogToFile then begin
     WriteLog(IntToStr(level)+': '+msg);
   end;
+  if VoiceError and (level=0) then speak(msg);
  end;
 end;
 
@@ -6691,6 +6697,10 @@ begin
    f_option.EmailCondition.Checked[3]:=config.GetValue('/Mail/Aufofocus',false);
    f_option.EmailCondition.Checked[4]:=config.GetValue('/Mail/MeridianFlip',false);
    f_option.EmailCondition.Checked[5]:=config.GetValue('/Mail/TargetInitialisation',false);
+   f_option.CheckGroupVoice.Checked[0]:=config.GetValue('/Voice/Dialog',false);
+   f_option.CheckGroupVoice.Checked[1]:=config.GetValue('/Voice/Sequence',false);
+   f_option.CheckGroupVoice.Checked[2]:=config.GetValue('/Voice/Error',false);
+   f_option.CheckGroupVoice.Checked[3]:=config.GetValue('/Voice/Email',false);
 
    f_option.LockTemp:=false;
    pt.x:=PanelCenter.Left;
@@ -6992,6 +7002,10 @@ begin
      config.SetValue('/Mail/Aufofocus',f_option.EmailCondition.Checked[3]);
      config.SetValue('/Mail/MeridianFlip',f_option.EmailCondition.Checked[4]);
      config.SetValue('/Mail/TargetInitialisation',f_option.EmailCondition.Checked[5]);
+     config.SetValue('/Voice/Dialog',f_option.CheckGroupVoice.Checked[0]);
+     config.SetValue('/Voice/Sequence',f_option.CheckGroupVoice.Checked[1]);
+     config.SetValue('/Voice/Error',f_option.CheckGroupVoice.Checked[2]);
+     config.SetValue('/Voice/Email',f_option.CheckGroupVoice.Checked[3]);
 
      SaveConfig;
 

@@ -26,7 +26,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 interface
 
 uses
-  pu_edittargets, u_ccdconfig, u_global, u_utils, UScaleDPI, indiapi,
+  pu_edittargets, u_ccdconfig, u_global, u_utils, UScaleDPI, indiapi, u_speech,
   fu_capture, fu_preview, fu_filterwheel, u_translation, u_hints, math,
   cu_mount, cu_camera, cu_autoguider, cu_astrometry, cu_rotator, pu_viewtext,
   cu_targets, cu_plan, cu_planetarium, pu_pause, fu_safety, fu_weather, cu_dome,
@@ -368,7 +368,10 @@ end;
 
 procedure Tf_sequence.msg(txt:string; level: integer);
 begin
-  if level<9 then StatusMsg.Caption:=txt;
+  if level<9 then begin
+     StatusMsg.Caption:=txt;
+     if VoiceSequence and Targets.Running then Speak(txt);
+  end;
   if Assigned(FonMsg) then FonMsg(txt, level);
 end;
 

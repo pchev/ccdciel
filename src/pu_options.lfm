@@ -249,8 +249,8 @@ object f_option: Tf_option
         TabOrder = 0
         object FileOpt: TTabSheet
           Caption = 'File name options'
-          ClientHeight = 284
-          ClientWidth = 516
+          ClientHeight = 311
+          ClientWidth = 522
           ParentFont = False
           object BtnFileDefault: TButton
             Left = 394
@@ -356,8 +356,8 @@ object f_option: Tf_option
         end
         object FolderOpt: TTabSheet
           Caption = 'Folder name options'
-          ClientHeight = 284
-          ClientWidth = 516
+          ClientHeight = 311
+          ClientWidth = 522
           ParentFont = False
           object BtnFolderDefault: TButton
             Left = 394
@@ -566,7 +566,7 @@ object f_option: Tf_option
           Top = 8
           Width = 255
           AutoSize = True
-          ClientHeight = 28
+          ClientHeight = 10
           ClientWidth = 253
           ParentFont = False
           TabOrder = 0
@@ -649,7 +649,7 @@ object f_option: Tf_option
           Top = 60
           Width = 255
           AutoSize = True
-          ClientHeight = 28
+          ClientHeight = 10
           ClientWidth = 253
           ParentFont = False
           TabOrder = 1
@@ -916,8 +916,8 @@ object f_option: Tf_option
             Top = 30
             Width = 331
             BevelOuter = bvNone
-            ClientHeight = 30
-            ClientWidth = 331
+            ClientHeight = 26
+            ClientWidth = 327
             ParentFont = False
             TabOrder = 1
             object Label74: TLabel
@@ -1464,7 +1464,7 @@ object f_option: Tf_option
           ChildSizing.ShrinkVertical = crsScaleChilds
           ChildSizing.Layout = cclLeftToRightThenTopToBottom
           ChildSizing.ControlsPerLine = 3
-          ClientHeight = 40
+          ClientHeight = 22
           ClientWidth = 237
           Columns = 3
           Items.Strings = (
@@ -1987,8 +1987,8 @@ object f_option: Tf_option
           TabOrder = 0
           ColWidths = (
             123
-            189
-            190
+            198
+            199
           )
         end
       end
@@ -2205,7 +2205,7 @@ object f_option: Tf_option
           Height = 91
           Top = 152
           Width = 445
-          PageIndex = 2
+          PageIndex = 0
           TabOrder = 2
           TabStop = True
           object PageDynamic: TPage
@@ -2785,7 +2785,7 @@ object f_option: Tf_option
         Height = 340
         Top = 184
         Width = 526
-        PageIndex = 3
+        PageIndex = 0
         Align = alClient
         TabOrder = 1
         TabStop = True
@@ -2865,8 +2865,8 @@ object f_option: Tf_option
               Top = 218
               Width = 454
               BevelOuter = bvNone
-              ClientHeight = 40
-              ClientWidth = 454
+              ClientHeight = 36
+              ClientWidth = 450
               ParentFont = False
               TabOrder = 1
               Visible = False
@@ -2972,8 +2972,8 @@ object f_option: Tf_option
               Top = 218
               Width = 454
               BevelOuter = bvNone
-              ClientHeight = 40
-              ClientWidth = 454
+              ClientHeight = 36
+              ClientWidth = 450
               ParentFont = False
               TabOrder = 8
               Visible = False
@@ -4444,8 +4444,8 @@ object f_option: Tf_option
               Height = 81
               Top = 49
               Width = 337
-              ClientHeight = 81
-              ClientWidth = 337
+              ClientHeight = 77
+              ClientWidth = 333
               ParentFont = False
               TabOrder = 1
               object CdCport: TEdit
@@ -4503,11 +4503,11 @@ object f_option: Tf_option
         Height = 458
         Top = 66
         Width = 526
-        HorzScrollBar.Page = 501
+        HorzScrollBar.Page = 505
         VertScrollBar.Page = 429
         Align = alClient
-        ClientHeight = 456
-        ClientWidth = 524
+        ClientHeight = 454
+        ClientWidth = 522
         ParentFont = False
         TabOrder = 0
         object PanelW1: TPanel
@@ -4516,8 +4516,8 @@ object f_option: Tf_option
           Top = 0
           Width = 524
           Align = alTop
-          ClientHeight = 33
-          ClientWidth = 524
+          ClientHeight = 29
+          ClientWidth = 520
           ParentFont = False
           TabOrder = 0
           object LabelMi1: TLabel
@@ -4586,8 +4586,8 @@ object f_option: Tf_option
           Top = 33
           Width = 524
           Align = alTop
-          ClientHeight = 33
-          ClientWidth = 524
+          ClientHeight = 29
+          ClientWidth = 520
           ParentFont = False
           TabOrder = 1
           object LabelMi2: TLabel
@@ -4656,8 +4656,8 @@ object f_option: Tf_option
           Top = 66
           Width = 524
           Align = alTop
-          ClientHeight = 33
-          ClientWidth = 524
+          ClientHeight = 29
+          ClientWidth = 520
           ParentFont = False
           TabOrder = 2
           object LabelMi3: TLabel
@@ -4726,8 +4726,8 @@ object f_option: Tf_option
           Top = 99
           Width = 524
           Align = alTop
-          ClientHeight = 33
-          ClientWidth = 524
+          ClientHeight = 29
+          ClientWidth = 520
           ParentFont = False
           TabOrder = 3
           object LabelMi4: TLabel
@@ -4796,8 +4796,8 @@ object f_option: Tf_option
           Top = 132
           Width = 524
           Align = alTop
-          ClientHeight = 33
-          ClientWidth = 524
+          ClientHeight = 29
+          ClientWidth = 520
           ParentFont = False
           TabOrder = 4
           object LabelMi5: TLabel
@@ -4866,8 +4866,8 @@ object f_option: Tf_option
           Top = 165
           Width = 524
           Align = alTop
-          ClientHeight = 33
-          ClientWidth = 524
+          ClientHeight = 29
+          ClientWidth = 520
           ParentFont = False
           TabOrder = 5
           object LabelMi6: TLabel
@@ -4936,8 +4936,8 @@ object f_option: Tf_option
           Top = 198
           Width = 524
           Align = alTop
-          ClientHeight = 33
-          ClientWidth = 524
+          ClientHeight = 29
+          ClientWidth = 520
           ParentFont = False
           TabOrder = 6
           object LabelMi7: TLabel
@@ -5006,8 +5006,8 @@ object f_option: Tf_option
           Top = 231
           Width = 524
           Align = alTop
-          ClientHeight = 33
-          ClientWidth = 524
+          ClientHeight = 29
+          ClientWidth = 520
           ParentFont = False
           TabOrder = 7
           object LabelMi8: TLabel
@@ -5076,8 +5076,8 @@ object f_option: Tf_option
           Top = 264
           Width = 524
           Align = alTop
-          ClientHeight = 33
-          ClientWidth = 524
+          ClientHeight = 29
+          ClientWidth = 520
           ParentFont = False
           TabOrder = 8
           object LabelMi9: TLabel
@@ -5146,8 +5146,8 @@ object f_option: Tf_option
           Top = 297
           Width = 524
           Align = alTop
-          ClientHeight = 33
-          ClientWidth = 524
+          ClientHeight = 29
+          ClientWidth = 520
           ParentFont = False
           TabOrder = 9
           object LabelMi10: TLabel
@@ -5216,8 +5216,8 @@ object f_option: Tf_option
           Top = 330
           Width = 524
           Align = alTop
-          ClientHeight = 33
-          ClientWidth = 524
+          ClientHeight = 29
+          ClientWidth = 520
           ParentFont = False
           TabOrder = 10
           object LabelMi11: TLabel
@@ -5286,8 +5286,8 @@ object f_option: Tf_option
           Top = 363
           Width = 524
           Align = alTop
-          ClientHeight = 33
-          ClientWidth = 524
+          ClientHeight = 29
+          ClientWidth = 520
           ParentFont = False
           TabOrder = 11
           object LabelMi12: TLabel
@@ -5356,8 +5356,8 @@ object f_option: Tf_option
           Top = 396
           Width = 524
           Align = alTop
-          ClientHeight = 33
-          ClientWidth = 524
+          ClientHeight = 29
+          ClientWidth = 520
           ParentFont = False
           TabOrder = 12
           object LabelMi13: TLabel
@@ -5504,13 +5504,13 @@ object f_option: Tf_option
             MinSize = 101
             MaxSize = 202
             Title.Caption = 'Action'
-            Width = 236
+            Width = 235
           end        
           item
             MinSize = 101
             MaxSize = 202
             Title.Caption = 'Parameters'
-            Width = 237
+            Width = 236
           end>
         DefaultColWidth = 51
         Options = [goFixedVertLine, goFixedHorzLine, goVertLine, goHorzLine, goRowMoving, goEditing, goAlwaysShowEditor, goSmoothScroll, goFixedRowNumbering]
@@ -5521,8 +5521,8 @@ object f_option: Tf_option
         OnValidateEntry = SafetyActionsValidateEntry
         ColWidths = (
           51
+          235
           236
-          237
         )
       end
       object Panel18: TPanel
@@ -5810,226 +5810,308 @@ object f_option: Tf_option
       ClientHeight = 524
       ClientWidth = 526
       ParentFont = False
-      object GroupBox24: TGroupBox
+      object PageControl2: TPageControl
         Left = 0
-        Height = 284
+        Height = 524
         Top = 0
         Width = 526
-        Align = alTop
-        Caption = 'Email configuration'
-        ClientHeight = 264
-        ClientWidth = 524
-        ParentFont = False
-        TabOrder = 0
-        object Label134: TLabel
-          Left = 8
-          Height = 19
-          Top = 29
-          Width = 131
-          Caption = 'SMTP server address'
-          ParentColor = False
-          ParentFont = False
-        end
-        object Label135: TLabel
-          Left = 8
-          Height = 19
-          Top = 59
-          Width = 108
-          Caption = 'SMTP server port'
-          ParentColor = False
-          ParentFont = False
-        end
-        object Label136: TLabel
-          Left = 8
-          Height = 19
-          Top = 117
-          Width = 69
-          Caption = 'User name'
-          ParentColor = False
-          ParentFont = False
-        end
-        object Label137: TLabel
-          Left = 8
-          Height = 19
-          Top = 147
-          Width = 61
-          Caption = 'Password'
-          ParentColor = False
-          ParentFont = False
-        end
-        object Label138: TLabel
-          Left = 8
-          Height = 19
-          Top = 177
-          Width = 123
-          Caption = 'From email address'
-          ParentColor = False
-          ParentFont = False
-        end
-        object Label139: TLabel
-          Left = 8
-          Height = 19
-          Top = 208
-          Width = 162
-          Caption = 'Destination email address'
-          ParentColor = False
-          ParentFont = False
-        end
-        object smtp_host: TEdit
-          Left = 226
-          Height = 28
-          Top = 24
-          Width = 251
-          Constraints.MaxHeight = 28
-          ParentFont = False
-          TabOrder = 0
-        end
-        object smtp_port: TEdit
-          Left = 226
-          Height = 28
-          Top = 54
-          Width = 251
-          Constraints.MaxHeight = 28
-          ParentFont = False
-          TabOrder = 1
-        end
-        object smtp_user: TEdit
-          Left = 226
-          Height = 28
-          Top = 112
-          Width = 251
-          Constraints.MaxHeight = 28
-          ParentFont = False
-          TabOrder = 2
-        end
-        object smtp_pass: TEdit
-          Left = 226
-          Height = 28
-          Top = 142
-          Width = 251
-          Constraints.MaxHeight = 28
-          EchoMode = emPassword
-          ParentFont = False
-          PasswordChar = '*'
-          TabOrder = 3
-        end
-        object mail_from: TEdit
-          Left = 226
-          Height = 28
-          Top = 172
-          Width = 251
-          Constraints.MaxHeight = 28
-          ParentFont = False
-          TabOrder = 4
-        end
-        object mail_to: TEdit
-          Left = 226
-          Height = 28
-          Top = 203
-          Width = 251
-          Constraints.MaxHeight = 28
-          ParentFont = False
-          TabOrder = 5
-        end
-        object ButtonTestEmail: TButton
-          Left = 226
-          Height = 25
-          Top = 234
-          Width = 165
-          Caption = 'Send test email'
-          OnClick = ButtonTestEmailClick
-          ParentFont = False
-          TabOrder = 6
-        end
-        object BtnShowPass: TSpeedButton
-          Left = 479
-          Height = 22
-          Top = 142
-          Width = 23
-          AllowAllUp = True
-          Caption = 'v'
-          GroupIndex = 678
-          OnClick = BtnShowPassClick
-          ParentFont = False
-        end
-        object Label140: TLabel
-          Left = 8
-          Height = 19
-          Top = 2
-          Width = 425
-          Caption = 'Please look at the documentation for important security information'
-          ParentColor = False
-        end
-        object smtp_ssltls: TCheckBox
-          Left = 226
-          Height = 21
-          Top = 86
-          Width = 188
-          Caption = 'Secure SSL/TLS connection'
-          TabOrder = 7
-        end
-      end
-      object GroupBox25: TGroupBox
-        Left = 0
-        Height = 240
-        Top = 284
-        Width = 526
+        ActivePage = TabSheetEmail
         Align = alClient
-        Caption = 'Email on :'
-        ClientHeight = 220
-        ClientWidth = 524
-        ParentFont = False
-        TabOrder = 1
-        object EmailCondition: TCheckListBox
-          Left = 0
-          Height = 179
-          Top = 0
-          Width = 524
-          Align = alClient
-          Items.Strings = (
-            'Sequence normal end'
-            'Sequence abnormal end'
-            'Autoguider error'
-            'Autofocus error'
-            'Meridian flip error'
-            'Target initialisation'
-          )
-          ItemHeight = 23
-          ParentFont = False
-          TabOrder = 0
-          Data = {
-            06000000000000000000
-          }
-        end
-        object Panel6: TPanel
-          Left = 0
-          Height = 41
-          Top = 179
-          Width = 524
-          Align = alBottom
-          ClientHeight = 41
-          ClientWidth = 524
-          ParentFont = False
-          TabOrder = 1
-          object ButtonNotificationAll: TButton
-            Left = 8
-            Height = 25
-            Top = 8
-            Width = 75
-            Caption = 'All'
-            OnClick = ButtonNotificationAllClick
+        TabIndex = 0
+        TabOrder = 0
+        object TabSheetEmail: TTabSheet
+          Caption = 'Email'
+          ClientHeight = 493
+          ClientWidth = 516
+          object GroupBox25: TGroupBox
+            Left = 0
+            Height = 209
+            Top = 284
+            Width = 516
+            Align = alClient
+            Caption = 'Email on :'
+            ClientHeight = 189
+            ClientWidth = 514
             ParentFont = False
             TabOrder = 0
+            object EmailCondition: TCheckListBox
+              Left = 0
+              Height = 148
+              Top = 0
+              Width = 514
+              Align = alClient
+              Items.Strings = (
+                'Sequence normal end'
+                'Sequence abnormal end'
+                'Autoguider error'
+                'Autofocus error'
+                'Meridian flip error'
+                'Target initialisation'
+              )
+              ItemHeight = 23
+              ParentFont = False
+              TabOrder = 0
+              Data = {
+                06000000000000000000
+              }
+            end
+            object Panel6: TPanel
+              Left = 0
+              Height = 41
+              Top = 148
+              Width = 514
+              Align = alBottom
+              ClientHeight = 41
+              ClientWidth = 514
+              ParentFont = False
+              TabOrder = 1
+              object ButtonNotificationAll: TButton
+                Left = 8
+                Height = 25
+                Top = 8
+                Width = 75
+                Caption = 'All'
+                OnClick = ButtonNotificationAllClick
+                ParentFont = False
+                TabOrder = 0
+              end
+              object ButtonNotificationNone: TButton
+                Left = 116
+                Height = 25
+                Top = 8
+                Width = 75
+                Caption = 'None'
+                OnClick = ButtonNotificationNoneClick
+                ParentFont = False
+                TabOrder = 1
+              end
+            end
           end
-          object ButtonNotificationNone: TButton
-            Left = 116
-            Height = 25
-            Top = 8
-            Width = 75
-            Caption = 'None'
-            OnClick = ButtonNotificationNoneClick
+          object GroupBox24: TGroupBox
+            Left = 0
+            Height = 284
+            Top = 0
+            Width = 516
+            Align = alTop
+            Caption = 'Email configuration'
+            ClientHeight = 264
+            ClientWidth = 514
             ParentFont = False
             TabOrder = 1
+            object Label134: TLabel
+              Left = 8
+              Height = 19
+              Top = 29
+              Width = 131
+              Caption = 'SMTP server address'
+              ParentColor = False
+              ParentFont = False
+            end
+            object Label135: TLabel
+              Left = 8
+              Height = 19
+              Top = 59
+              Width = 108
+              Caption = 'SMTP server port'
+              ParentColor = False
+              ParentFont = False
+            end
+            object Label136: TLabel
+              Left = 8
+              Height = 19
+              Top = 117
+              Width = 69
+              Caption = 'User name'
+              ParentColor = False
+              ParentFont = False
+            end
+            object Label137: TLabel
+              Left = 8
+              Height = 19
+              Top = 147
+              Width = 61
+              Caption = 'Password'
+              ParentColor = False
+              ParentFont = False
+            end
+            object Label138: TLabel
+              Left = 8
+              Height = 19
+              Top = 177
+              Width = 123
+              Caption = 'From email address'
+              ParentColor = False
+              ParentFont = False
+            end
+            object Label139: TLabel
+              Left = 8
+              Height = 19
+              Top = 208
+              Width = 162
+              Caption = 'Destination email address'
+              ParentColor = False
+              ParentFont = False
+            end
+            object smtp_host: TEdit
+              Left = 226
+              Height = 28
+              Top = 24
+              Width = 251
+              Constraints.MaxHeight = 28
+              ParentFont = False
+              TabOrder = 0
+            end
+            object smtp_port: TEdit
+              Left = 226
+              Height = 28
+              Top = 54
+              Width = 251
+              Constraints.MaxHeight = 28
+              ParentFont = False
+              TabOrder = 1
+            end
+            object smtp_user: TEdit
+              Left = 226
+              Height = 28
+              Top = 112
+              Width = 251
+              Constraints.MaxHeight = 28
+              ParentFont = False
+              TabOrder = 2
+            end
+            object smtp_pass: TEdit
+              Left = 226
+              Height = 28
+              Top = 142
+              Width = 251
+              Constraints.MaxHeight = 28
+              EchoMode = emPassword
+              ParentFont = False
+              PasswordChar = '*'
+              TabOrder = 3
+            end
+            object mail_from: TEdit
+              Left = 226
+              Height = 28
+              Top = 172
+              Width = 251
+              Constraints.MaxHeight = 28
+              ParentFont = False
+              TabOrder = 4
+            end
+            object mail_to: TEdit
+              Left = 226
+              Height = 28
+              Top = 203
+              Width = 251
+              Constraints.MaxHeight = 28
+              ParentFont = False
+              TabOrder = 5
+            end
+            object ButtonTestEmail: TButton
+              Left = 226
+              Height = 25
+              Top = 234
+              Width = 165
+              Caption = 'Send test email'
+              OnClick = ButtonTestEmailClick
+              ParentFont = False
+              TabOrder = 6
+            end
+            object BtnShowPass: TSpeedButton
+              Left = 479
+              Height = 22
+              Top = 142
+              Width = 23
+              AllowAllUp = True
+              Caption = 'v'
+              GroupIndex = 678
+              OnClick = BtnShowPassClick
+              ParentFont = False
+            end
+            object Label140: TLabel
+              Left = 8
+              Height = 19
+              Top = 2
+              Width = 425
+              Caption = 'Please look at the documentation for important security information'
+              ParentColor = False
+            end
+            object smtp_ssltls: TCheckBox
+              Left = 226
+              Height = 21
+              Top = 86
+              Width = 188
+              Caption = 'Secure SSL/TLS connection'
+              TabOrder = 7
+            end
+          end
+        end
+        object TabSheetVoice: TTabSheet
+          Caption = 'Voice'
+          ClientHeight = 493
+          ClientWidth = 516
+          object CheckGroupVoice: TCheckGroup
+            Left = 0
+            Height = 166
+            Top = 0
+            Width = 516
+            Align = alTop
+            AutoFill = True
+            AutoSize = True
+            Caption = 'Voice'
+            ChildSizing.LeftRightSpacing = 6
+            ChildSizing.TopBottomSpacing = 16
+            ChildSizing.VerticalSpacing = 10
+            ChildSizing.EnlargeHorizontal = crsHomogenousChildResize
+            ChildSizing.EnlargeVertical = crsHomogenousChildResize
+            ChildSizing.ShrinkHorizontal = crsScaleChilds
+            ChildSizing.ShrinkVertical = crsScaleChilds
+            ChildSizing.Layout = cclLeftToRightThenTopToBottom
+            ChildSizing.ControlsPerLine = 1
+            ClientHeight = 146
+            ClientWidth = 514
+            Items.Strings = (
+              'Interaction dialog'
+              'Sequence steps'
+              'Error messages'
+              'Email notification text'
+            )
+            TabOrder = 0
+            Data = {
+              0400000002020202
+            }
+          end
+          object Panel20: TPanel
+            Left = 0
+            Height = 41
+            Top = 166
+            Width = 516
+            Align = alTop
+            ClientHeight = 41
+            ClientWidth = 516
+            ParentFont = False
+            TabOrder = 1
+            object ButtonVoiceAll: TButton
+              Left = 8
+              Height = 25
+              Top = 8
+              Width = 75
+              Caption = 'All'
+              OnClick = ButtonVoiceAllClick
+              ParentFont = False
+              TabOrder = 0
+            end
+            object ButtonVoiceNone: TButton
+              Left = 116
+              Height = 25
+              Top = 8
+              Width = 75
+              Caption = 'None'
+              OnClick = ButtonVoiceNoneClick
+              ParentFont = False
+              TabOrder = 1
+            end
           end
         end
       end
