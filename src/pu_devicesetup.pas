@@ -31,7 +31,7 @@ uses indibaseclient, indibasedevice, indiapi, u_global, u_utils, u_ccdconfig, US
     Variants, comobj, math,
   {$endif}
   Classes, SysUtils, FileUtil, Forms, Controls, Graphics, Dialogs, StdCtrls,
-  ExtCtrls, ComCtrls, SpinEx, Types;
+  ExtCtrls, ComCtrls, Grids, SpinEx, Types;
 
 type
 
@@ -55,6 +55,7 @@ type
     DefaultARestUser: TEdit;
     Label107: TLabel;
     Label108: TLabel;
+    Label8: TLabel;
     Panel20: TPanel;
     Panel21: TPanel;
     Panel22: TPanel;
@@ -67,6 +68,10 @@ type
     Panel29: TPanel;
     Panel30: TPanel;
     Panel31: TPanel;
+    Panel32: TPanel;
+    ManualFilterName: TStringGrid;
+    WheelMslot: TSpinEditEx;
+    WheelManual: TTabSheet;
     WheelARestPass: TEdit;
     FocuserARestPass: TEdit;
     RotatorARestPass: TEdit;
@@ -459,6 +464,7 @@ type
     procedure IndiSensorChange(Sender: TObject);
     procedure FormCreate(Sender: TObject);
     procedure IndiTimerTimer(Sender: TObject);
+    procedure ManualFilterNameResize(Sender: TObject);
     procedure MountARestProtocolChange(Sender: TObject);
     procedure MountGetObservatoryClick(Sender: TObject);
     procedure MountSetObservatoryClick(Sender: TObject);
@@ -478,6 +484,7 @@ type
     procedure SafetyARestProtocolChange(Sender: TObject);
     procedure WeatherARestProtocolChange(Sender: TObject);
     procedure WheelARestProtocolChange(Sender: TObject);
+    procedure WheelMslotChange(Sender: TObject);
   private
     { private declarations }
     indiclient: TIndiBaseClient;
@@ -594,6 +601,9 @@ begin
   CameraIndiTransfert.Items[1]:=rsRAMDisk;
   Label5.Caption:=rsDirectory;
   Filterwheel.Caption:=rsFilterWheel;
+  label8.Caption:=rsNumberOfSlot;
+  ManualFilterName.Cells[0,0]:=rsSlot;
+  ManualFilterName.Cells[1,0]:=rsFilterName;
   Label75.Caption:=rsServer;
   Label76.Caption:=rsPort;
   GetIndi1.Caption:=rsGet;
@@ -736,6 +746,7 @@ begin
   WheelAscom.Caption:=DevInterfaceName[1];
   WheelAscomRest.Caption:=DevInterfaceName[4];
   WheelInCamera.Caption:=DevInterfaceName[2];
+  WheelManual.Caption:=DevInterfaceName[5];
   FocuserIndi.Caption:=DevInterfaceName[0];
   FocuserAscom.Caption:=DevInterfaceName[1];
   FocuserAscomRest.Caption:=DevInterfaceName[4];
@@ -793,6 +804,7 @@ end;
 
 procedure Tf_setup.Loadconfig(conf,credentialconf: TCCDConfig);
 var defautindiserver, defaultindiport: string;
+    i: integer;
 begin
 // default value from old config
 defautindiserver:=conf.GetValue('/INDI/Server','localhost');
@@ -851,6 +863,10 @@ WheelARestProtocol.ItemIndex:=conf.GetValue('/ASCOMRestwheel/Protocol',0);
 WheelARestHost.Text:=conf.GetValue('/ASCOMRestwheel/Host','127.0.0.1');
 WheelARestPort.Value:=conf.GetValue('/ASCOMRestwheel/Port',11111);
 WheelARestDevice.Value:=conf.GetValue('/ASCOMRestwheel/Device',0);
+WheelMslot.Value:=conf.GetValue('/Manualwheel/Slots',5);
+ManualFilterName.RowCount:=WheelMslot.Value+1;
+for i:=1 to ManualFilterName.RowCount-1 do
+  ManualFilterName.Cells[1,i]:=conf.GetValue('/Manualwheel/Slot'+inttostr(i),'');
 
 FocuserConnection:=TDevInterface(conf.GetValue('/FocuserInterface',ord(DefaultFocuserInterface)));
 FocuserIndiServer.Text:=conf.GetValue('/INDIfocuser/Server',defautindiserver);
@@ -1635,6 +1651,11 @@ begin
   end;
 end;
 
+procedure Tf_setup.ManualFilterNameResize(Sender: TObject);
+begin
+  ManualFilterName.ColWidths[1]:=ManualFilterName.ClientWidth-ManualFilterName.ColWidths[0]-2;
+end;
+
 procedure Tf_setup.MountARestProtocolChange(Sender: TObject);
 begin
   case MountARestProtocol.ItemIndex of
@@ -1738,6 +1759,7 @@ begin
     1: FWheelConnection:=ASCOM;
     2: FWheelConnection:=INCAMERA;
     3: FWheelConnection:=ASCOMREST;
+    4: FWheelConnection:=MANUAL;
   end;
   DeviceFilterWheel.Caption:=rsUseFilterWhe+': '+DevInterfaceName[ord(FWheelConnection)];
 end;
@@ -1806,6 +1828,11 @@ begin
     0: WheelARestPort.Value:=11111;
     1: WheelARestPort.Value:=443;
   end;
+end;
+
+procedure Tf_setup.WheelMslotChange(Sender: TObject);
+begin
+ ManualFilterName.RowCount:=WheelMslot.Value+1;
 end;
 
 procedure Tf_setup.BtnCopyProfileClick(Sender: TObject);

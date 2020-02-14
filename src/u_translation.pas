@@ -1229,6 +1229,13 @@ resourcestring
   rsCoordinates = 'Coordinates';
   rsRiseSetCondi = 'Rise/Set condition';
   rsInformation = 'Information';
+  rsSlot = 'Slot';
+  rsNumberOfSlot = 'Number of slot';
+  rsManualFilter = 'Manual filter change canceled';
+  rsInteractionD = 'Interaction dialog';
+  rsSequenceStep = 'Sequence steps';
+  rsErrorMessage = 'Error messages';
+  rsEmailNotific = 'Email notification text';
 
 implementation
 

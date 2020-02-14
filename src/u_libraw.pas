@@ -28,7 +28,7 @@ type
     TRawInfo2 = record
       version: integer;                   // start of version 2
       camera: array [0..79] of Char;
-      timestamp: int64;
+      timestamp: {$ifdef cpu64}int64{$else}integer{$endif};
       isospeed: integer;
       shutter: single;
       aperture: single;

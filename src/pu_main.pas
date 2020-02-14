@@ -46,12 +46,12 @@ uses
   cu_indiwheel, cu_ascomwheel, cu_incamerawheel, cu_indicamera, cu_ascomcamera, cu_astrometry,
   cu_autoguider, cu_autoguider_phd, cu_autoguider_linguider, cu_autoguider_none, cu_autoguider_dither, cu_planetarium,
   cu_planetarium_cdc, cu_planetarium_samp, cu_planetarium_hnsky, pu_planetariuminfo, indiapi,
-  cu_ascomrestcamera, cu_ascomrestdome, cu_ascomrestfocuser, cu_ascomrestmount,
+  cu_ascomrestcamera, cu_ascomrestdome, cu_ascomrestfocuser, cu_ascomrestmount, cu_manualwheel,
   cu_ascomrestrotator, cu_ascomrestsafety, cu_ascomrestweather, cu_ascomrestwheel, pu_polaralign,
   u_annotation, BGRABitmap, BGRABitmapTypes, LCLVersion, InterfaceBase, lclplatformdef,
   LazUTF8, Classes, dynlibs, LCLType, LMessages, IniFiles, IntfGraphics, FPImage, GraphType,
-  SysUtils, LazFileUtils, Forms, Controls, Math, Graphics, Dialogs,
-  StdCtrls, ExtCtrls, Menus, ComCtrls, Buttons, ExtDlgs, Types, u_translation;
+  SysUtils, LazFileUtils, Forms, Controls, Math, Graphics, Dialogs, u_speech,
+  StdCtrls, ExtCtrls, Menus, ComCtrls, Buttons, Types, u_translation;
 
 type
 
@@ -1202,6 +1202,7 @@ begin
   ConfigExpEarlyStart:=false;
   CameraProcessingImage:=false;
   MagnitudeCalibration:=NullCoord;
+  ManualFilterNames:=TStringList.Create;
   ScrBmp := TBGRABitmap.Create;
   Image1 := TImgDrawingControl.Create(Self);
   Image1.Parent := PanelCenter;
@@ -1557,6 +1558,7 @@ begin
      ASCOM: wheel:=T_ascomwheel.Create(nil);
      INCAMERA: wheel:=T_incamerawheel.Create(nil);
      ASCOMREST: wheel:=T_ascomrestwheel.Create(nil);
+     MANUAL: wheel:=T_manualwheel.Create(nil);
    end;
    wheel.onMsg:=@NewMessage;
    wheel.onDeviceMsg:=@DeviceMessage;
@@ -1943,6 +1945,7 @@ begin
    SafetyActionName[12]:=trim(rsExitProgram);
    DevInterfaceName[2]:=rsInCamera;
    DevInterfaceName[3]:=rsInMount;
+   DevInterfaceName[5]:=rsManual;
    DomeCloseActionName[0]:='';
    DomeCloseActionName[1]:=trim(rsStopTelescop2);
    DomeCloseActionName[2]:=trim(rsParkTheTeles2);
@@ -1958,7 +1961,7 @@ begin
    TabMsgLevel.Tabs[0]:=rsSummary;
    TabMsgLevel.Tabs[1]:=rsCommands;
    TabMsgLevel.Tabs[2]:=rsDetails;
-
+   u_speech.InitSpeak;
 end;
 
 procedure Tf_main.FormShow(Sender: TObject);
@@ -2679,6 +2682,7 @@ begin
   ReadoutList.Free;
   ISOList.Free;
   deepstring.Free;
+  ManualFilterNames.Free;
   for i:=1 to MaxScriptDir do ScriptDir[i].Free;
   if NeedRestart then begin
      ExecNoWait(paramstr(0));
@@ -3213,6 +3217,7 @@ end;
 
 procedure Tf_main.SetConfig;
 var defautindiserver, defaultindiport: string;
+    i,n: integer;
 begin
  // Upgrade old config with single server
 defautindiserver:=config.GetValue('/INDI/Server','localhost');
@@ -3247,6 +3252,7 @@ case wheel.WheelInterface of
    INDI : WheelName:=config.GetValue('/INDIwheel/Device','');
    ASCOM: WheelName:=config.GetValue('/ASCOMwheel/Device','');
    ASCOMREST: WheelName:='FilterWheel/'+IntToStr(config.GetValue('/ASCOMRestwheel/Device',0));
+   MANUAL: WheelName:=rsManual;
 end;
 case focuser.FocuserInterface of
    INDI : FocuserName:=config.GetValue('/INDIfocuser/Device','');
@@ -3302,6 +3308,16 @@ if camera.CameraInterface=ASCOM then
    camera.ASCOMFlipImage:=config.GetValue('/ASCOMcamera/FlipImage',true);
 if camera.CameraInterface=ASCOMREST then
    camera.ASCOMFlipImage:=config.GetValue('/ASCOMRestcamera/FlipImage',true);
+if wheel.WheelInterface=MANUAL then begin
+   ManualFilterNames.Clear;
+   ManualFilterNames.Add(rsFilter0);
+   n:=config.GetValue('/Manualwheel/Slots',5);
+   for i:=1 to n do begin
+     ManualFilterNames.Add(config.GetValue('/Manualwheel/Slot'+inttostr(i),''));
+   end;
+   wheel.FilterNames:=ManualFilterNames;
+   FilterNameChange(Self);
+end;
 weather.AutoLoadConfig:=config.GetValue('/INDIweather/AutoLoadConfig',false);
 safety.AutoLoadConfig:=config.GetValue('/INDIsafety/AutoLoadConfig',false);
 if watchdog<>nil then begin
@@ -3601,6 +3617,11 @@ begin
   EmailAufofocus:=config.GetValue('/Mail/Aufofocus',false);
   EmailMeridianFlip:=config.GetValue('/Mail/MeridianFlip',false);
   EmailTargetInitialisation:=config.GetValue('/Mail/TargetInitialisation',false);
+  VoiceDialog:=config.GetValue('/Voice/Dialog',false);
+  VoiceSequence:=config.GetValue('/Voice/Sequence',false);
+  VoiceError:=config.GetValue('/Voice/Error',false);
+  VoiceEmail:=config.GetValue('/Voice/Email',false);
+
 end;
 
 procedure Tf_main.SaveScreenConfig;
@@ -4354,6 +4375,7 @@ begin
                           'filterwheel/'+IntToStr(config.GetValue('/ASCOMRestwheel/Device',0)),
                           DecryptStr(hextostr(credentialconfig.GetValue('/ASCOMRestwheel/User','')), encryptpwd),
                           DecryptStr(hextostr(credentialconfig.GetValue('/ASCOMRestwheel/Pass','')), encryptpwd));
+    MANUAL : wheel.Connect('');
   end;
 end;
 
@@ -4899,6 +4921,7 @@ begin
   if LogToFile then begin
     WriteLog(IntToStr(level)+': '+msg);
   end;
+  if VoiceError and (level=0) then speak(msg);
  end;
 end;
 
@@ -6070,6 +6093,7 @@ procedure Tf_main.MenuSetupClick(Sender: TObject);
 var configfile: string;
     loadopt: boolean;
     pt: TPoint;
+    i:integer;
 begin
   if camera.Status<>devDisconnected then begin
     ShowMessage(rsDisconnectTh);
@@ -6160,6 +6184,9 @@ begin
     config.SetValue('/ASCOMRestwheel/Host',f_setup.WheelARestHost.Text);
     config.SetValue('/ASCOMRestwheel/Port',f_setup.WheelARestPort.Value);
     config.SetValue('/ASCOMRestwheel/Device',f_setup.WheelARestDevice.Value);
+    config.SetValue('/Manualwheel/Slots',f_setup.ManualFilterName.RowCount-1);
+    for i:=1 to f_setup.ManualFilterName.RowCount-1 do
+      config.SetValue('/Manualwheel/Slot'+inttostr(i),f_setup.ManualFilterName.Cells[1,i]);
 
     config.SetValue('/FocuserInterface',ord(f_setup.FocuserConnection));
     config.SetValue('/INDIfocuser/Server',f_setup.FocuserIndiServer.Text);
@@ -6670,6 +6697,10 @@ begin
    f_option.EmailCondition.Checked[3]:=config.GetValue('/Mail/Aufofocus',false);
    f_option.EmailCondition.Checked[4]:=config.GetValue('/Mail/MeridianFlip',false);
    f_option.EmailCondition.Checked[5]:=config.GetValue('/Mail/TargetInitialisation',false);
+   f_option.CheckGroupVoice.Checked[0]:=config.GetValue('/Voice/Dialog',false);
+   f_option.CheckGroupVoice.Checked[1]:=config.GetValue('/Voice/Sequence',false);
+   f_option.CheckGroupVoice.Checked[2]:=config.GetValue('/Voice/Error',false);
+   f_option.CheckGroupVoice.Checked[3]:=config.GetValue('/Voice/Email',false);
 
    f_option.LockTemp:=false;
    pt.x:=PanelCenter.Left;
@@ -6971,6 +7002,10 @@ begin
      config.SetValue('/Mail/Aufofocus',f_option.EmailCondition.Checked[3]);
      config.SetValue('/Mail/MeridianFlip',f_option.EmailCondition.Checked[4]);
      config.SetValue('/Mail/TargetInitialisation',f_option.EmailCondition.Checked[5]);
+     config.SetValue('/Voice/Dialog',f_option.CheckGroupVoice.Checked[0]);
+     config.SetValue('/Voice/Sequence',f_option.CheckGroupVoice.Checked[1]);
+     config.SetValue('/Voice/Error',f_option.CheckGroupVoice.Checked[2]);
+     config.SetValue('/Voice/Email',f_option.CheckGroupVoice.Checked[3]);
 
      SaveConfig;
 
@@ -7899,7 +7934,8 @@ procedure Tf_main.CameraNewImage(Sender: TObject);
 begin
   if Capture then begin
     // save file first
-    CameraSaveNewImage;
+    if not (FlatAutoExposure and (camera.FrameType=FLAT)) then
+      CameraSaveNewImage;
   end;
   Application.QueueAsyncCall(@CameraNewImageAsync,0);
 end;
@@ -7940,6 +7976,7 @@ begin
                  if not CameraNewDomeFlat then exit;
                  end;
        end;
+       CameraSaveNewImage;
      end;
      // image measurement
      CameraMeasureNewImage;
@@ -8454,14 +8491,20 @@ if ImgZoom=0 then begin
   if r1>r2 then begin
     h:=trunc(w/r1);
     ImgScale0:=h/img_Height;
+    px:=0;
+    py:=(ScrBmp.Height-h) div 2;
   end else begin
     w:=trunc(h*r1);
     ImgScale0:=w/img_Width;
+    px:=(ScrBmp.width-w) div 2;
+    py:=0;
   end;
+  OrigX:=round(px/ImgScale0);
+  OrigY:=round(py/ImgScale0);
   {$ifdef debug_raw}writeln(FormatDateTime(dateiso,Now)+blank+'Resample');{$endif}
   str:=ImaBmp.Resample(w,h,rmode) as TBGRABitmap;
   {$ifdef debug_raw}writeln(FormatDateTime(dateiso,Now)+blank+'PutImage');{$endif}
-  ScrBmp.PutImage(0,0,str,dmSet);
+  ScrBmp.PutImage(px,py,str,dmSet);
   str.Free;
 end
 else if ImgZoom=1 then begin

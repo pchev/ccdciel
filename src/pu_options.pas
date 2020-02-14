@@ -44,6 +44,9 @@ type
     AutofocusMultistar: TGroupBox;
     BtnMaxDriftDisable: TButton;
     BtnDisableStarLost: TButton;
+    ButtonVoiceAll: TButton;
+    ButtonVoiceNone: TButton;
+    CheckGroupVoice: TCheckGroup;
     GroupBox27: TGroupBox;
     GroupBox28: TGroupBox;
     GroupBox29: TGroupBox;
@@ -76,6 +79,7 @@ type
     AutofocusExpTime: TComboBox;
     Label141: TLabel;
     Label142: TLabel;
+    PageControl2: TPageControl;
     PagePlanet: TPage;
     Panel10: TPanel;
     Panel11: TPanel;
@@ -87,6 +91,7 @@ type
     Panel17: TPanel;
     Panel18: TPanel;
     Panel19: TPanel;
+    Panel20: TPanel;
     Panel7: TPanel;
     Panel8: TPanel;
     Panel9: TPanel;
@@ -131,6 +136,8 @@ type
     PagePref: TTabSheet;
     PageNotification: TTabSheet;
     PageSequence: TTabSheet;
+    TabSheetVoice: TTabSheet;
+    TabSheetEmail: TTabSheet;
     UseFileSequenceWidth: TCheckBox;
     ExpEarlyStart: TCheckBox;
     DomeNoSafetyCheck: TCheckBox;
@@ -602,6 +609,8 @@ type
     procedure ButtonNotificationNoneClick(Sender: TObject);
     procedure ButtonTempDirClick(Sender: TObject);
     procedure ButtonTestEmailClick(Sender: TObject);
+    procedure ButtonVoiceAllClick(Sender: TObject);
+    procedure ButtonVoiceNoneClick(Sender: TObject);
     procedure ChangeAutofocusInPlace(Sender: TObject);
     procedure CheckFocuserDirection(Sender: TObject);
     procedure CheckFocusWindow(Sender: TObject);
@@ -1059,8 +1068,14 @@ begin
   EmailCondition.Items[3]:=rsAutofocusErr2;
   EmailCondition.Items[4]:=rsMeridianFlip8;
   EmailCondition.Items[5]:=rsTargetInitia2;
+  CheckGroupVoice.Items[0]:=rsInteractionD;
+  CheckGroupVoice.Items[1]:=rsSequenceStep;
+  CheckGroupVoice.Items[2]:=rsErrorMessage;
+  CheckGroupVoice.Items[3]:=rsEmailNotific;
   ButtonNotificationAll.Caption:=rsAll;
   ButtonNotificationNone.Caption:=rsNone2;
+  ButtonVoiceAll.Caption:=rsAll;
+  ButtonVoiceNone.Caption:=rsNone2;
   //Hint
   CaptureDir.Hint:=rsTheBaseFolde;
   TempDir.Hint:=rsATemporaryDi;
@@ -1656,6 +1671,21 @@ begin
   end;
 end;
 
+procedure Tf_option.ButtonVoiceAllClick(Sender: TObject);
+var i: integer;
+begin
+  for i:=0 to CheckGroupVoice.items.Count-1 do begin
+    CheckGroupVoice.Checked[i]:=true;
+  end;
+end;
+
+procedure Tf_option.ButtonVoiceNoneClick(Sender: TObject);
+var i: integer;
+begin
+  for i:=0 to CheckGroupVoice.items.Count-1 do begin
+    CheckGroupVoice.Checked[i]:=false;
+  end;
+end;
 
 end.
 

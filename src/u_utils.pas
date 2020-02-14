@@ -157,7 +157,7 @@ function email(Subject,Msg:string):string;
 
 implementation
 
-uses u_translation;
+uses u_translation, u_speech;
 
 const
   GregorianStart=15821015;
@@ -1395,8 +1395,8 @@ try
   if FlipHorz then x:=ScrWidth-x;
   if FlipVert then y:=ScrHeigth-y;
   if ImgZoom=0  then begin
-     xx:=trunc((x/ImgScale0)/ImgPixRatio);
-     yy:=trunc(y/ImgScale0);
+     xx:=trunc(((x/ImgScale0)-OrigX)/ImgPixRatio);
+     yy:=trunc((y/ImgScale0)-OrigY);
   end
   else begin
      xx:=trunc(((x/ImgZoom)-OrigX)/ImgPixRatio);
@@ -1412,8 +1412,8 @@ procedure Fits2Screen(x,y: integer; FlipHorz,FlipVert: boolean; out xx,yy: integ
 begin
 try
   if ImgZoom=0 then begin
-    xx:=round(x * ImgPixRatio * ImgScale0);
-    yy:=round(y * ImgScale0);
+    xx:=round((x * ImgPixRatio+OrigX )* ImgScale0);
+    yy:=round((y+OrigY )* ImgScale0);
   end
   else begin
     xx:=round(((x+0.5) * ImgPixRatio+OrigX)*ImgZoom);
@@ -1432,9 +1432,9 @@ begin
   if FlipHorz then x:=ScrWidth-x;
   if FlipVert then y:=ScrHeigth-y;
   if ImgZoom=0 then  begin
-    xx:=trunc(x/ImgScale0);
-    if vflip then yy:=trunc(img_Height-(y/ImgScale0))
-             else yy:=trunc(y/ImgScale0);
+    xx:=trunc((x/ImgScale0)-OrigX);
+    if vflip then yy:=trunc(img_Height-(y/ImgScale0)+OrigY)
+             else yy:=trunc((y/ImgScale0)-OrigY);
   end
   else begin
     xx:=trunc((x/ImgZoom)-OrigX);
@@ -1449,9 +1449,9 @@ procedure CCD2Screen(x,y: integer; FlipHorz,FlipVert: boolean; vflip:boolean; ou
 begin
 try
   if ImgZoom=0 then begin
-    xx:=round(x * ImgScale0);
-    if vflip then yy:=round((img_Height-y) * ImgScale0)
-             else yy:=round(y * ImgScale0);
+    xx:=round((x+OrigX) * ImgScale0);
+    if vflip then yy:=round((img_Height-y+OrigY) * ImgScale0)
+             else yy:=round((y +OrigY)* ImgScale0);
   end
   else begin
     xx:=round((x+OrigX)*ImgZoom);
@@ -3213,6 +3213,7 @@ finally
   MailData.Free;
   result:=error;
 end;
+if VoiceEmail then speak(Subject+' . '+Msg);
 end;
 
 end.

@@ -41,7 +41,7 @@ type
   TNotifyBoolConst= procedure(v: boolean) of object;
   TNotifyBool= procedure(var v: boolean) of object;
 
-  TDevInterface = (INDI, ASCOM, INCAMERA, INTELESCOPE, ASCOMREST);
+  TDevInterface = (INDI, ASCOM, INCAMERA, INTELESCOPE, ASCOMREST, MANUAL);
   TFrameType =(LIGHT, BIAS, DARK, FLAT);
   TFlatType=(ftNone,ftSKY,ftDome);
   TAutoguiderType=(agPHD,agLINGUIDER,agNONE,agDITHER);
@@ -449,7 +449,7 @@ var
   PauseSequence: boolean;
   DummyDouble: double;
   DummyBool: boolean;
-  DevInterfaceName: array[0..4] of string=('INDI','ASCOM','In camera','In mount','ASCOM Alpaca');
+  DevInterfaceName: array[0..5] of string=('INDI','ASCOM','In camera','In mount','ASCOM Alpaca','Manual');
   ProtocolName: array[0..1] of string=('http:','https:');
   CheckRecenterTarget,NeedRecenterTarget,RecenteringTarget,CheckRecenterBusy: boolean;
   AstrometryTimeout,RecenterTargetDistance,SlewPrecision: double;
@@ -458,6 +458,8 @@ var
   MailTo,MailFrom,SMTPHost,SMTPPort,SMTPUser,SMTPPasswd : String;
   SMTPSSLTLS: boolean;
   EmailEndSequence,EmailAbortSequence,EmailAutoguider,EmailAufofocus,EmailMeridianFlip,EmailTargetInitialisation: boolean;
+  ManualFilterNames: TStringList;
+  VoiceDialog,VoiceSequence,VoiceError,VoiceEmail: boolean;
 
   procedure globalmsg(str:string);
 
@@ -490,7 +492,7 @@ begin
   ra:=NullCoord;
   de:=NullCoord;
   pa:=NullCoord;
-  astrometrypointing:=false;
+  astrometrypointing:=(astrometryResolver<>ResolverNone);
   updatecoord:=false;
   inplaceautofocus:=AutofocusInPlace;
   autoguiding:=false;
