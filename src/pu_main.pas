@@ -8477,14 +8477,20 @@ if ImgZoom=0 then begin
   if r1>r2 then begin
     h:=trunc(w/r1);
     ImgScale0:=h/img_Height;
+    px:=0;
+    py:=(ScrBmp.Height-h) div 2;
   end else begin
     w:=trunc(h*r1);
     ImgScale0:=w/img_Width;
+    px:=(ScrBmp.width-w) div 2;
+    py:=0;
   end;
+  OrigX:=round(px/ImgScale0);
+  OrigY:=round(py/ImgScale0);
   {$ifdef debug_raw}writeln(FormatDateTime(dateiso,Now)+blank+'Resample');{$endif}
   str:=ImaBmp.Resample(w,h,rmode) as TBGRABitmap;
   {$ifdef debug_raw}writeln(FormatDateTime(dateiso,Now)+blank+'PutImage');{$endif}
-  ScrBmp.PutImage(0,0,str,dmSet);
+  ScrBmp.PutImage(px,py,str,dmSet);
   str.Free;
 end
 else if ImgZoom=1 then begin
