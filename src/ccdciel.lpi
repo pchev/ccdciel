@@ -829,7 +829,8 @@
       <Unit102>
         <Filename Value="cu_sequencefile.pas"/>
         <IsPartOfProject Value="True"/>
-      </Unit103>
+      </Unit102>
+      <Unit103>
         <Filename Value="cu_manualwheel.pas"/>
         <IsPartOfProject Value="True"/>
       </Unit103>
