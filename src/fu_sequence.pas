@@ -757,6 +757,7 @@ end;
 procedure Tf_sequence.SaveTargets(fn,defaultname:string);
 var tfile: TCCDconfig;
     t:TTarget;
+    p:T_Plan;
     i,j: integer;
 begin
  if TargetGrid.RowCount>1 then begin
@@ -840,13 +841,30 @@ begin
       tfile.SetValue('/Targets/Target'+inttostr(i)+'/FlatGain',t.FlatGain);
       tfile.SetValue('/Targets/Target'+inttostr(i)+'/FlatFstop',t.FlatFstop);
       tfile.SetValue('/Targets/Target'+inttostr(i)+'/FlatFilters',t.FlatFilters);
-      tfile.SetValue('/Targets/Target'+inttostr(i)+'/StepDone/StepCount',Length(t.DoneList));
-      for j:=0 to Length(t.DoneList)-1 do begin
-        if Targets.IgnoreRestart then
-           tfile.SetValue('/Targets/Target'+inttostr(i)+'/StepDone/Step'+inttostr(j)+'/Done',0)
-        else
-           tfile.SetValue('/Targets/Target'+inttostr(i)+'/StepDone/Step'+inttostr(j)+'/Done',t.DoneList[j]);
+
+      p:=T_Plan(t.plan);
+      tfile.SetValue('/Targets/Target'+inttostr(i)+'/Plan/Name',p.PlanName);
+      tfile.SetValue('/Targets/Target'+inttostr(i)+'/Plan/StepNum',p.Count);
+      for j:=0 to p.Count-1 do begin
+        tfile.SetValue('/Targets/Target'+inttostr(i)+'/Plan/Steps/Step'+inttostr(j)+'/Description',p.Steps[j].description);
+        tfile.SetValue('/Targets/Target'+inttostr(i)+'/Plan/Steps/Step'+inttostr(j)+'/FrameType',trim(FrameName[ord(p.Steps[j].frtype)]));
+        tfile.SetValue('/Targets/Target'+inttostr(i)+'/Plan/Steps/Step'+inttostr(j)+'/Exposure',p.Steps[j].exposure);
+        tfile.SetValue('/Targets/Target'+inttostr(i)+'/Plan/Steps/Step'+inttostr(j)+'/Binning',IntToStr(p.Steps[j].binx)+'x'+IntToStr(p.Steps[j].biny));
+        tfile.SetValue('/Targets/Target'+inttostr(i)+'/Plan/Steps/Step'+inttostr(j)+'/Gain',p.Steps[j].gain);
+        tfile.SetValue('/Targets/Target'+inttostr(i)+'/Plan/Steps/Step'+inttostr(j)+'/Fstop',p.Steps[j].fstop);
+        tfile.SetValue('/Targets/Target'+inttostr(i)+'/Plan/Steps/Step'+inttostr(j)+'/Filter',p.Steps[j].filter_str);
+        tfile.SetValue('/Targets/Target'+inttostr(i)+'/Plan/Steps/Step'+inttostr(j)+'/Count',p.Steps[j].count);
+        tfile.SetValue('/Targets/Target'+inttostr(i)+'/Plan/Steps/Step'+inttostr(j)+'/Dither',p.Steps[j].dither);
+        tfile.SetValue('/Targets/Target'+inttostr(i)+'/Plan/Steps/Step'+inttostr(j)+'/DitherCount',p.Steps[j].dithercount);
+        tfile.SetValue('/Targets/Target'+inttostr(i)+'/Plan/Steps/Step'+inttostr(j)+'/AutofocusStart',p.Steps[j].autofocusstart);
+        tfile.SetValue('/Targets/Target'+inttostr(i)+'/Plan/Steps/Step'+inttostr(j)+'/Autofocus',p.Steps[j].autofocus);
+        tfile.SetValue('/Targets/Target'+inttostr(i)+'/Plan/Steps/Step'+inttostr(j)+'/AutofocusCount',p.Steps[j].autofocuscount);
+        tfile.SetValue('/Targets/Target'+inttostr(i)+'/Plan/Steps/Step'+inttostr(j)+'/Done',0)
       end;
+      if not Targets.IgnoreRestart then
+        for j:=0 to Length(t.DoneList)-1 do begin
+           tfile.SetValue('/Targets/Target'+inttostr(i)+'/Plan/Steps/Step'+inttostr(j)+'/Done',t.DoneList[j]);
+        end;
     end;
     tfile.Flush;
     tfile.Free;
