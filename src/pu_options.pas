@@ -25,7 +25,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 interface
 
-uses u_utils, u_global, UScaleDPI, u_hints, u_translation,
+uses u_utils, u_global, UScaleDPI, u_hints, u_translation, u_speech,
   Classes, SysUtils, FileUtil, Forms, Controls, Graphics, Dialogs,
   StdCtrls, ExtCtrls, ComCtrls, Grids, EditBtn, CheckLst, Buttons, Spin, SpinEx, enhedits;
 
@@ -44,6 +44,7 @@ type
     AutofocusMultistar: TGroupBox;
     BtnMaxDriftDisable: TButton;
     BtnDisableStarLost: TButton;
+    ButtonVoiceTest: TButton;
     ButtonVoiceAll: TButton;
     ButtonVoiceNone: TButton;
     CheckGroupVoice: TCheckGroup;
@@ -611,6 +612,7 @@ type
     procedure ButtonTestEmailClick(Sender: TObject);
     procedure ButtonVoiceAllClick(Sender: TObject);
     procedure ButtonVoiceNoneClick(Sender: TObject);
+    procedure ButtonVoiceTestClick(Sender: TObject);
     procedure ChangeAutofocusInPlace(Sender: TObject);
     procedure CheckFocuserDirection(Sender: TObject);
     procedure CheckFocusWindow(Sender: TObject);
@@ -1053,6 +1055,7 @@ begin
   PageNotification.Caption := rsNotification;
   Label140.Caption:=rsPleaseSeeThe;
   GroupBox24.Caption:=rsEmailConfigu;
+  TabSheetEmail.Caption:=rsEmailConfigu;
   Label134.Caption:=rsSMTPServerAd;
   Label135.Caption:=rsSMTPServerPo;
   Label136.Caption:=rsUserName;
@@ -1074,8 +1077,11 @@ begin
   CheckGroupVoice.Items[3]:=rsEmailNotific;
   ButtonNotificationAll.Caption:=rsAll;
   ButtonNotificationNone.Caption:=rsNone2;
+  TabSheetVoice.Caption:=rsVoiceConfigu;
+  CheckGroupVoice.Caption:=rsVoiceConfigu;
   ButtonVoiceAll.Caption:=rsAll;
   ButtonVoiceNone.Caption:=rsNone2;
+  ButtonVoiceTest.Caption:=rsTest;
   //Hint
   CaptureDir.Hint:=rsTheBaseFolde;
   TempDir.Hint:=rsATemporaryDi;
@@ -1685,6 +1691,11 @@ begin
   for i:=0 to CheckGroupVoice.items.Count-1 do begin
     CheckGroupVoice.Checked[i]:=false;
   end;
+end;
+
+procedure Tf_option.ButtonVoiceTestClick(Sender: TObject);
+begin
+  speak(rstest+' . '+format(rsNeedToWaitUn,['22:34:56']));
 end;
 
 end.

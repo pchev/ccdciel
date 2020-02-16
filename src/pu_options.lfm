@@ -4292,7 +4292,7 @@ object f_option: Tf_option
                 MinSize = 101
                 MaxSize = 202
                 Title.Caption = 'Action'
-                Width = 471
+                Width = 469
               end>
             DefaultColWidth = 51
             Options = [goFixedVertLine, goFixedHorzLine, goVertLine, goHorzLine, goRowMoving, goEditing, goAlwaysShowEditor, goSmoothScroll, goFixedRowNumbering]
@@ -4301,7 +4301,7 @@ object f_option: Tf_option
             TabOrder = 0
             ColWidths = (
               51
-              471
+              469
             )
           end
         end
@@ -4331,7 +4331,7 @@ object f_option: Tf_option
                 MinSize = 101
                 MaxSize = 202
                 Title.Caption = 'Action'
-                Width = 471
+                Width = 469
               end>
             DefaultColWidth = 51
             Options = [goFixedVertLine, goFixedHorzLine, goVertLine, goHorzLine, goRowMoving, goEditing, goAlwaysShowEditor, goSmoothScroll, goFixedRowNumbering]
@@ -4340,7 +4340,7 @@ object f_option: Tf_option
             TabOrder = 0
             ColWidths = (
               51
-              471
+              469
             )
           end
         end
@@ -5821,8 +5821,8 @@ object f_option: Tf_option
         TabOrder = 0
         object TabSheetEmail: TTabSheet
           Caption = 'Email'
-          ClientHeight = 493
-          ClientWidth = 516
+          ClientHeight = 520
+          ClientWidth = 522
           object GroupBox25: TGroupBox
             Left = 0
             Height = 209
@@ -5848,9 +5848,10 @@ object f_option: Tf_option
                 'Meridian flip error'
                 'Target initialisation'
               )
-              ItemHeight = 23
+              ItemHeight = 0
               ParentFont = False
               TabOrder = 0
+              TopIndex = -1
               Data = {
                 06000000000000000000
               }
@@ -5861,8 +5862,8 @@ object f_option: Tf_option
               Top = 148
               Width = 514
               Align = alBottom
-              ClientHeight = 41
-              ClientWidth = 514
+              ClientHeight = 37
+              ClientWidth = 510
               ParentFont = False
               TabOrder = 1
               object ButtonNotificationAll: TButton
@@ -6049,8 +6050,8 @@ object f_option: Tf_option
         end
         object TabSheetVoice: TTabSheet
           Caption = 'Voice'
-          ClientHeight = 493
-          ClientWidth = 516
+          ClientHeight = 520
+          ClientWidth = 522
           object CheckGroupVoice: TCheckGroup
             Left = 0
             Height = 166
@@ -6088,8 +6089,8 @@ object f_option: Tf_option
             Top = 166
             Width = 516
             Align = alTop
-            ClientHeight = 41
-            ClientWidth = 516
+            ClientHeight = 37
+            ClientWidth = 512
             ParentFont = False
             TabOrder = 1
             object ButtonVoiceAll: TButton
@@ -6111,6 +6112,15 @@ object f_option: Tf_option
               OnClick = ButtonVoiceNoneClick
               ParentFont = False
               TabOrder = 1
+            end
+            object ButtonVoiceTest: TButton
+              Left = 224
+              Height = 25
+              Top = 8
+              Width = 75
+              Caption = 'Test'
+              OnClick = ButtonVoiceTestClick
+              TabOrder = 2
             end
           end
         end

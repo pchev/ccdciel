@@ -1236,6 +1236,8 @@ resourcestring
   rsSequenceStep = 'Sequence steps';
   rsErrorMessage = 'Error messages';
   rsEmailNotific = 'Email notification text';
+  rsVoiceConfigu = 'Voice configuration';
+  rsTest = 'Test';
 
 implementation
 

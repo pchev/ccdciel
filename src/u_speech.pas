@@ -49,6 +49,8 @@ var
 {$ifdef mswindows}
 procedure speak(Text: string);
 var  SavedCW: word;
+const SVSFlagsAsync = 1;
+      SVSFIsXML = 8;
 begin
   try
     if VarIsEmpty(SpVoice) then
@@ -58,7 +60,8 @@ begin
       SavedCW := Get8087CW;
       try
         Set8087CW(SavedCW or $4);
-        SpVoice.Speak(WideString(Text), 1);
+        text:='<speak version="1.0" xmlns="http://www.w3.org/2001/10/synthesis" xml:lang="'+lang+'">'+text+'</speak>';
+        SpVoice.Speak(WideString(Text), SVSFlagsAsync+SVSFIsXML);
       finally
         Set8087CW(SavedCW);
       end;
