@@ -4098,7 +4098,7 @@ begin
    case camera.CameraInterface of
     INDI : begin
            camera.IndiTransfert:=TIndiTransfert(config.GetValue('/INDIcamera/IndiTransfert',ord(itNetwork)));
-           camera.IndiTransfertDir:=config.GetValue('/INDIcamera/IndiTransfertDir','/tmp');
+           camera.IndiTransfertDir:=config.GetValue('/INDIcamera/IndiTransfertDir',defTransfertPath);
            camera.Connect(config.GetValue('/INDIcamera/Server',''),
                           config.GetValue('/INDIcamera/ServerPort',''),
                           config.GetValue('/INDIcamera/Device',''),
