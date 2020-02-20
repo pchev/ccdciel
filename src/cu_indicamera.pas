@@ -945,25 +945,24 @@ begin
 
 procedure T_indicamera.NewText(tvp: ITextVectorProperty);
 var i: integer;
+    ft: string;
+    data: TMemoryStream;
 begin
 if tvp=CCDfilepath then begin
   if tvp.s=IPS_OK then begin // ignore extra messages from Indigo
-  ExposureTimer.Enabled:=false;
-  FMidExposureTime:=(Ftimestart+NowUTC)/2;
-  if debug_msg then msg('receive image file');
-  {$ifdef debug_raw}writeln(FormatDateTime(dateiso,Now)+blank+'INDI receive new file path '+CCDfilepath.tp[0].text );{$endif}
-  // if possible start next exposure now
-  TryNextExposure(FImgNum);
-  FImageFormat:=ExtractFileExt(CCDfilepath.tp[0].text);
-  if assigned(FonExposureProgress) then FonExposureProgress(-10);
-  FImgStream.Clear;
-  FImgStream.Position:=0;
-  {$ifdef debug_raw}writeln(FormatDateTime(dateiso,Now)+blank+'Load from file');{$endif}
-  FImgStream.LoadFromFile(CCDfilepath.tp[0].text);
-  {$ifdef debug_raw}writeln(FormatDateTime(dateiso,Now)+blank+'Delete file');{$endif}
-  DeleteFile(CCDfilepath.tp[0].text);
-  if assigned(FonExposureProgress) then FonExposureProgress(-11);
-  NewImage;
+    if debug_msg then msg('receive file '+CCDfilepath.tp[0].text);
+    {$ifdef debug_raw}writeln(FormatDateTime(dateiso,Now)+blank+'INDI receive new file path '+CCDfilepath.tp[0].text );{$endif}
+    ft:=ExtractFileExt(CCDfilepath.tp[0].text);
+    data:=TMemoryStream.Create;
+    try
+      {$ifdef debug_raw}writeln(FormatDateTime(dateiso,Now)+blank+'Load from file');{$endif}
+      data.LoadFromFile(CCDfilepath.tp[0].text);
+      {$ifdef debug_raw}writeln(FormatDateTime(dateiso,Now)+blank+'Delete file');{$endif}
+      DeleteFile(CCDfilepath.tp[0].text);
+      NewImageFile(ft,0,data.Size,data);
+    finally
+      data.Free;
+    end;
   end;
 end
 else if tvp=FilterName then begin
@@ -1145,7 +1144,7 @@ begin
      {$ifdef debug_raw}writeln(FormatDateTime(dateiso,Now)+blank+'copy blob stream');{$endif}
      FImgStream.Clear;
      FImgStream.Position:=0;
-     FImgStream.CopyFrom(data,sz);
+     FImgStream.CopyFrom(data,data.Size);
      if debug_msg then msg('NewImage');
      if assigned(FonExposureProgress) then FonExposureProgress(-11);
      NewImage;
@@ -1191,7 +1190,7 @@ begin
        if debug_msg then msg('copy frame');
        FVideoStream.Clear;
        FVideoStream.Position:=0;
-       FVideoStream.CopyFrom(data,sz);
+       FVideoStream.CopyFrom(data,data.Size);
        if debug_msg then msg('NewVideoFrame');
        NewVideoFrame;
      finally
