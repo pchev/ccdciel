@@ -301,7 +301,7 @@ const
   {$ifdef linux}
     SharedDir = '../share/ccdciel';
     defCapturePath='/tmp';
-    defTransfertPath='/ramdisk';
+    defTransfertPath='/mnt/ramdisk';
     libwcs = 'libpaswcs.so.1';
     libz = 'libz.so.1';
     fpackcmd = 'fpack';
@@ -310,7 +310,7 @@ const
   {$ifdef darwin}
     SharedDir = './';
     defCapturePath='/tmp';
-    defTransfertPath='/tmp';
+    defTransfertPath='/Volumes/ramdisk';
     libwcs = 'libccdcielwcs.dylib';
     libz = 'libz.dylib';
     fpackcmd = 'fpack';
@@ -319,7 +319,7 @@ const
   {$ifdef mswindows}
     SharedDir = '.\';
     defCapturePath='C:\';
-    defTransfertPath='C:\';
+    defTransfertPath='Z:\';
     libwcs = 'libccdcielwcs.dll';
     libz = 'zlib1.dll';
     fpackcmd = 'fpack.exe';
