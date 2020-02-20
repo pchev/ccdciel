@@ -661,7 +661,6 @@ procedure T_Targets.SaveDoneCount(RepeatDone: integer);
 var p: T_Plan;
     t: TTarget;
     i,n: integer;
-    tfile: TCCDconfig;
 begin
  try
   if (FCurrentTarget<0)or(FCurrentTarget>Count) then exit;
@@ -670,19 +669,17 @@ begin
   p:=t_plan(t.plan);
   if p=nil then exit;
   if p.Count<=0 then exit;
-  tfile:=TCCDconfig.Create(self);
-  tfile.Filename:=CurrentSequenceFile;
   i:=FCurrentTarget+1;
   // global sequence repeat
   if FIgnoreRestart then
-     tfile.SetValue('/Targets/RepeatDone',0)
+     SequenceFile.Items.SetValue('/Targets/RepeatDone',0)
   else
-     tfile.SetValue('/Targets/RepeatDone',RepeatDone);
+     SequenceFile.Items.SetValue('/Targets/RepeatDone',RepeatDone);
   // target repeat
   if FIgnoreRestart then
-     tfile.SetValue('/Targets/Target'+inttostr(i)+'/RepeatDone',0)
+     SequenceFile.Items.SetValue('/Targets/Target'+inttostr(i)+'/RepeatDone',0)
   else
-     tfile.SetValue('/Targets/Target'+inttostr(i)+'/RepeatDone',t.repeatdone);
+     SequenceFile.Items.SetValue('/Targets/Target'+inttostr(i)+'/RepeatDone',t.repeatdone);
   // plan step done
   n:=p.CurrentStep;
   if (n>=0)and(n<p.Count) then begin
@@ -691,12 +688,11 @@ begin
        t.DoneList[n]:=0
     else
        t.DoneList[n]:=p.Steps[n].donecount;
-    tfile.SetValue('/Targets/Target'+inttostr(i)+'/StepDone/StepCount',Length(t.DoneList));
-    tfile.SetValue('/Targets/Target'+inttostr(i)+'/StepDone/Step'+inttostr(n)+'/Done',t.DoneList[n]);
+    SequenceFile.Items.SetValue('/Targets/Target'+inttostr(i)+'/StepDone/StepCount',Length(t.DoneList));
+    SequenceFile.Items.SetValue('/Targets/Target'+inttostr(i)+'/StepDone/Step'+inttostr(n)+'/Done',t.DoneList[n]);
   end;
   // save file
-  tfile.Flush;
-  tfile.Free;
+  SequenceFile.Save;
  except
    on E: Exception do msg('Error saving sequence state:'+ E.Message,1);
  end;

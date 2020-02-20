@@ -238,7 +238,6 @@ type
     FTargetsRepeat: integer;
     LockStep, StepsModified, ObjectNameChange: boolean;
     Lockcb: boolean;
-    originalFilter: array[0..99] of string;
     SortDirection: integer;
     FDoneWarning: boolean;
     procedure SetPlanList(n: integer; pl:string);
@@ -259,6 +258,7 @@ type
     procedure NewPlanetariumTarget(Sender: TObject);
   public
     { public declarations }
+    originalFilter: array[0..99] of string;
     procedure LoadPlanList;
     procedure LoadScriptList;
     procedure SetTarget(n: integer; t: TTarget);
@@ -1201,7 +1201,7 @@ CheckPlanModified;
 SaveDialog1.InitialDir:=ConfigDir;
 SaveDialog1.DefaultExt:='.targets';
 SaveDialog1.filter:='CCDciel Sequence|*.targets';
-if CurrentSequenceFile='' then begin
+if SequenceFile.Filename='' then begin
   n:=TargetList.RowCount;
   defaultname:=FormatDateTime('mmdd',now);
   for i:=1 to n-1 do begin
@@ -1221,12 +1221,12 @@ else begin
     SaveDialog1.FileName:=slash(ConfigDir)+defaultname+'.targets';
   end
   else begin
-    SaveDialog1.FileName:=CurrentSequenceFile;
+    SaveDialog1.FileName:=SequenceFile.Filename;
   end;
 end;
 
 if SaveDialog1.Execute then begin
-  CurrentSequenceFile:=SaveDialog1.FileName;
+  SequenceFile.Filename:=SaveDialog1.FileName;
   ModalResult:=mrOK;
 end;
 end;

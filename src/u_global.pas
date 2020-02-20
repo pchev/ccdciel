@@ -204,7 +204,7 @@ type
 const
   ccdcielver = '0.9.69';
   ccdciel_version='Version beta '+ccdcielver;
-  TargetFileVersion = 4;
+  TargetFileVersion = 5;
   Maxclient = 100;
   blank=' ';
   blank80='                                                                                ';
@@ -354,7 +354,7 @@ var
   filteroffset_initialized: boolean;
   ReadoutModeCapture,ReadoutModePreview,ReadoutModeFocus,ReadoutModeAstrometry: integer;
   compile_time, compile_version, compile_system, lclver: string;
-  CurrentSequenceFile: string;
+//  CurrentSequenceFile: string;
   DitherPixel, SettlePixel, DitherWaitTime: double;
   DitherRAonly: boolean;
   SettleMinTime, SettleMaxTime, CalibrationDelay: integer;

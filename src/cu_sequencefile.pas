@@ -5,16 +5,23 @@ unit cu_sequencefile;
 interface
 
 uses u_ccdconfig,
-  Classes, SysUtils;
+     LazFileUtils, Classes, SysUtils;
 
 type
   T_SequenceFile = Class(TComponent)
     private
-      FConfig: TCCDconfig;
+      FItems: TCCDconfig;
+      FCurrentName: string;
+      procedure SetFilename(value: string);
+      function GetFilename: string;
     public
       constructor Create(AOwner: TComponent);override;
       destructor  Destroy; override;
-      property Config: TCCDconfig read FConfig write FConfig;
+      procedure Clear;
+      procedure Save;
+      property Filename: String read GetFilename write SetFilename;
+      property Items: TCCDconfig read FItems write FItems;
+      property CurrentName: string read FCurrentName;
   end;
 
 var
@@ -25,13 +32,36 @@ implementation
 constructor T_SequenceFile.Create(AOwner: TComponent);
 begin
   inherited Create(AOwner);
-  FConfig:=TCCDconfig.Create(self);
+  FItems:=TCCDconfig.Create(self);
+  FCurrentName:='';
 end;
 
 destructor  T_SequenceFile.Destroy;
 begin
-  FConfig.Free;
+  FItems.Free;
   inherited Destroy;
+end;
+
+procedure T_SequenceFile.SetFilename(value: string);
+begin
+  FItems.Filename:=value;
+  FCurrentName:=ExtractFileNameOnly(value);
+end;
+
+function T_SequenceFile.GetFilename: string;
+begin
+  result:=FItems.Filename;
+end;
+
+procedure T_SequenceFile.Clear;
+begin
+  FItems.Clear;
+  FCurrentName:='';
+end;
+
+procedure T_SequenceFile.Save;
+begin
+  FItems.Flush;
 end;
 
 end.

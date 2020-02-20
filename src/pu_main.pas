@@ -50,7 +50,7 @@ uses
   cu_ascomrestrotator, cu_ascomrestsafety, cu_ascomrestweather, cu_ascomrestwheel, pu_polaralign,
   u_annotation, BGRABitmap, BGRABitmapTypes, LCLVersion, InterfaceBase, lclplatformdef,
   LazUTF8, Classes, dynlibs, LCLType, LMessages, IniFiles, IntfGraphics, FPImage, GraphType,
-  SysUtils, LazFileUtils, Forms, Controls, Math, Graphics, Dialogs, u_speech,
+  SysUtils, LazFileUtils, Forms, Controls, Math, Graphics, Dialogs, u_speech, cu_sequencefile,
   StdCtrls, ExtCtrls, Menus, ComCtrls, Buttons, Types, u_translation;
 
 type
@@ -1217,6 +1217,7 @@ begin
   Image1.PopupMenu := ImagePopupMenu;
   GetAppDir;
   chdir(Appdir);
+  SequenceFile:=T_SequenceFile.Create(nil);
   cdcwcs_initfitsfile:=nil;
   cdcwcs_release:=nil;
   cdcwcs_sky2xy:=nil;
@@ -3762,7 +3763,7 @@ begin
    else
      config.SetValue('/Capture/Gain',f_capture.GainEdit.Value);
 
-   config.SetValue('/Sequence/Targets',CurrentSequenceFile);
+   config.SetValue('/Sequence/Targets',SequenceFile.Filename);
    config.SetValue('/Sequence/Unattended',f_sequence.Unattended.Checked);
    config.SetValue('/Sequence/EditTarget/Width',f_EditTargets.Width);
    config.SetValue('/Sequence/EditTarget/Height',f_EditTargets.Height);
