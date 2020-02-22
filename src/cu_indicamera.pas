@@ -953,15 +953,33 @@ if tvp=CCDfilepath then begin
     if debug_msg then msg('receive file '+CCDfilepath.tp[0].text);
     {$ifdef debug_raw}writeln(FormatDateTime(dateiso,Now)+blank+'INDI receive new file path '+CCDfilepath.tp[0].text );{$endif}
     ft:=ExtractFileExt(CCDfilepath.tp[0].text);
-    data:=TMemoryStream.Create;
-    try
-      {$ifdef debug_raw}writeln(FormatDateTime(dateiso,Now)+blank+'Load from file');{$endif}
-      data.LoadFromFile(CCDfilepath.tp[0].text);
-      {$ifdef debug_raw}writeln(FormatDateTime(dateiso,Now)+blank+'Delete file');{$endif}
+    if ft='.fits' then begin
+      ExposureTimer.Enabled:=false;
+      FMidExposureTime:=(Ftimestart+NowUTC)/2;
+      FImageFormat:=ft;
+      if assigned(FonExposureProgress) then FonExposureProgress(-10);
+      FImgStream.Clear;
+      FImgStream.Position:=0;
+      {$ifdef debug_raw}writeln(FormatDateTime(dateiso,Now)+blank+'Load FITS from file');{$endif}
+      FImgStream.LoadFromFile(CCDfilepath.tp[0].text);
+      {$ifdef debug_raw}writeln(FormatDateTime(dateiso,Now)+blank+'Delete FITS file');{$endif}
       DeleteFile(CCDfilepath.tp[0].text);
-      NewImageFile(ft,0,data.Size,data);
-    finally
-      data.Free;
+      // if possible start next exposure now
+      TryNextExposure(FImgNum);
+      if assigned(FonExposureProgress) then FonExposureProgress(-11);
+      NewImage;
+    end
+    else begin
+      data:=TMemoryStream.Create;
+      try
+        {$ifdef debug_raw}writeln(FormatDateTime(dateiso,Now)+blank+'Load from file');{$endif}
+        data.LoadFromFile(CCDfilepath.tp[0].text);
+        {$ifdef debug_raw}writeln(FormatDateTime(dateiso,Now)+blank+'Delete file');{$endif}
+        DeleteFile(CCDfilepath.tp[0].text);
+        NewImageFile(ft,0,data.Size,data);
+      finally
+        data.Free;
+      end;
     end;
   end;
 end
