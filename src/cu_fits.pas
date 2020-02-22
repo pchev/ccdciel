@@ -23,7 +23,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 {$mode delphi}{$H+}
 
-{$define debug_raw}
+//{$define debug_raw}
 
 interface
 
