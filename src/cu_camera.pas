@@ -23,7 +23,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 }
 
-//{$define debug_raw}
+{$define debug_raw}
 
 
 interface
@@ -488,22 +488,21 @@ if FAddFrames then begin  // stack preview frames
   // update image
   FFits.Header.Assign(f.Header);
   WriteHeaders;
+  Ffits.GetFitsInfo;
   f.free;
   if Assigned(FonNewImage) then FonNewImage(self);
 end
 else begin  // normal capture
   FStackCount:=0;
   if ImgStream.Size>0 then begin
-  {$ifdef debug_raw}writeln(FormatDateTime(dateiso,Now)+blank+'load stream');{$endif}
+  {$ifdef debug_raw}writeln(FormatDateTime(dateiso,Now)+blank+'set fits stream');{$endif}
   Ffits.Stream:=ImgStream;
-  Ffits.LoadStream;
   {$ifdef debug_raw}writeln(FormatDateTime(dateiso,Now)+blank+'write headers');{$endif}
   WriteHeaders;
-  {$ifdef debug_raw}writeln(FormatDateTime(dateiso,Now)+blank+'apply correction');{$endif}
   FFits.ApplyDark;
   FFits.ApplyBPM;
   end;
-  {$ifdef debug_raw}writeln(FormatDateTime(dateiso,Now)+blank+'display image');{$endif}
+  {$ifdef debug_raw}writeln(FormatDateTime(dateiso,Now)+blank+'process new image');{$endif}
   if Assigned(FonNewImage) then FonNewImage(self);
 end;
 end;
@@ -751,7 +750,6 @@ begin
   end;
   if hcomment1<>'' then Ffits.Header.Add('COMMENT',hcomment1 ,'');
   Ffits.Header.Add('END','','');
-  Ffits.GetFitsInfo;
 end;
 
 procedure T_camera.NewVideoFrame;

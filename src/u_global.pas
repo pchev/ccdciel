@@ -460,6 +460,8 @@ var
   EmailEndSequence,EmailAbortSequence,EmailAutoguider,EmailAufofocus,EmailMeridianFlip,EmailTargetInitialisation: boolean;
   ManualFilterNames: TStringList;
   VoiceDialog,VoiceSequence,VoiceError,VoiceEmail: boolean;
+  DisplayCapture,LowQualityDisplay: boolean;
+
 
   procedure globalmsg(str:string);
 

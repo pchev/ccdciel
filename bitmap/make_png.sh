@@ -20,7 +20,7 @@ function dopng {
 }
 
 
-iconlist=(adjust bullseye capture center clipping-info focus hist pin plan video inf invert flip-horizontal flip-vertical)
+iconlist=(adjust bullseye capture center clipping-info focus hist pin plan video inf invert flip-horizontal flip-vertical show-images)
 
 dopng svg/daylight icons/daylight 22
 dopng svg/night-vision icons/night-vision 22

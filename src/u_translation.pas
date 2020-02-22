@@ -1238,6 +1238,10 @@ resourcestring
   rsEmailNotific = 'Email notification text';
   rsVoiceConfigu = 'Voice configuration';
   rsTest = 'Test';
+  rsPerformance = 'Performance';
+  rsDisplaySpeed = 'Display speed';
+  rsLowQualityIm = 'Low quality image scaling';
+  rsDoNotDisplay = 'Do not display images during capture';
 
 implementation
 

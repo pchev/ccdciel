@@ -37,6 +37,7 @@ type
     BtnInvert: TSpeedButton;
     BtnFlipHorz: TSpeedButton;
     BtnFlipVert: TSpeedButton;
+    BtnShowLastImage: TSpeedButton;
     BtnZoom05: TSpeedButton;
     BtnBullsEye: TSpeedButton;
     Gamma: TFloatSpinEditEx;
@@ -52,6 +53,8 @@ type
     Panel3: TPanel;
     BtnZoom2: TSpeedButton;
     BtnZoom1: TSpeedButton;
+    Panel4: TPanel;
+    PanelNoDisplay: TPanel;
     SpinEditMin: TFloatSpinEditEx;
     SpinEditMax: TFloatSpinEditEx;
     Title: TLabel;
@@ -62,6 +65,7 @@ type
     procedure BtnFlipHorzClick(Sender: TObject);
     procedure BtnFlipVertClick(Sender: TObject);
     procedure BtnInvertClick(Sender: TObject);
+    procedure BtnShowLastImageClick(Sender: TObject);
     procedure BtnZoomClick(Sender: TObject);
     procedure FrameEndDrag(Sender, Target: TObject; X, Y: Integer);
     procedure FrameResize(Sender: TObject);
@@ -95,6 +99,7 @@ type
     FonZoom: TNotifyEvent;
     FRedrawHistogram: TNotifyEvent;
     FShowHistogramPos: TNotifyStr;
+    FShowLastImage: TNotifyEvent;
     procedure SetZoom(value: double);
     procedure SetFlipHorz(value:boolean);
     procedure SetFlipVert(value:boolean);
@@ -116,6 +121,7 @@ type
     property onRedraw: TNotifyEvent read FRedraw write FRedraw;
     property onRedrawHistogram: TNotifyEvent read FRedrawHistogram write FRedrawHistogram;
     property onShowHistogramPos: TNotifyStr read FShowHistogramPos write FShowHistogramPos;
+    property onShowLastImage: TNotifyEvent read FShowLastImage write FShowLastImage;
   end;
 
 implementation
@@ -187,6 +193,7 @@ begin
   BtnInvert.Hint:=rsInvertImageD;
   BtnFlipHorz.Hint:=rsFlipTheImageH;
   BtnFlipVert.Hint:=rsFlipTheImageV;
+  BtnShowLastImage.Hint:=rsShowLastCapt;
 end;
 
 procedure Tf_visu.DrawHistogram(hist:Thistogram; SetLevel,isFloatingPoint: boolean; iC,iMin,iMax: double);
@@ -454,6 +461,12 @@ procedure Tf_visu.BtnInvertClick(Sender: TObject);
 begin
   FInvert:=BtnInvert.Down;
   TimerRedraw.Enabled:=true;
+end;
+
+procedure Tf_visu.BtnShowLastImageClick(Sender: TObject);
+begin
+  BtnShowLastImage.Down:=false;
+  if assigned(FShowLastImage) then FShowLastImage(self);
 end;
 
 procedure Tf_visu.histminmaxClick(Sender: TObject);

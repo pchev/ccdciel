@@ -47,10 +47,13 @@ type
     ButtonVoiceTest: TButton;
     ButtonVoiceAll: TButton;
     ButtonVoiceNone: TButton;
+    LowQualityDisplay: TCheckBox;
+    NotDisplayCapture: TCheckBox;
     CheckGroupVoice: TCheckGroup;
     GroupBox27: TGroupBox;
     GroupBox28: TGroupBox;
     GroupBox29: TGroupBox;
+    GroupBox30: TGroupBox;
     GroupBoxFocus: TGroupBox;
     GroupBoxMeasurement: TGroupBox;
     GuideDriftCancelExposure: TCheckBox;
@@ -137,6 +140,7 @@ type
     PagePref: TTabSheet;
     PageNotification: TTabSheet;
     PageSequence: TTabSheet;
+    PagePerformance: TTabSheet;
     TabSheetVoice: TTabSheet;
     TabSheetEmail: TTabSheet;
     UseFileSequenceWidth: TCheckBox;
@@ -1052,6 +1056,10 @@ begin
   label111.Caption:=rsTheFollowing;
   SafetyActions.Columns[0].Title.Caption:=rsAction;
   SafetyActions.Columns[1].Title.Caption:=rsParameter;
+  PagePerformance.Caption:=rsPerformance;
+  GroupBox30.Caption:=rsDisplaySpeed;
+  LowQualityDisplay.Caption:=rsLowQualityIm;
+  NotDisplayCapture.Caption:=rsDoNotDisplay;
   PageNotification.Caption := rsNotification;
   Label140.Caption:=rsPleaseSeeThe;
   GroupBox24.Caption:=rsEmailConfigu;

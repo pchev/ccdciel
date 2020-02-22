@@ -23,7 +23,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 {$mode delphi}{$H+}
 
-//{$define debug_raw}
+{$define debug_raw}
 
 interface
 
@@ -138,7 +138,7 @@ type
     FTitle : string;
     Fmean,Fsigma,Fdmin,Fdmax : double;
     FImgDmin, FImgDmax: Word;
-    FImgFullRange,FStreamValid: Boolean;
+    FImgFullRange,FStreamValid,FImageValid: Boolean;
     Fbpm: TBpm;
     FBPMcount,FBPMnx,FBPMny,FBPMnax: integer;
     gamma_c : array[0..32768] of single; {prepared power values for gamma correction}
@@ -172,6 +172,7 @@ type
      destructor  Destroy; override;
      function  GetStatistics: string;
      Procedure LoadStream;
+     procedure ClearFitsInfo;
      procedure GetFitsInfo;
      function  BayerInterpolationExp(t:TBayerMode; rmult,gmult,bmult:double; pix1,pix2,pix3,pix4,pix5,pix6,pix7,pix8,pix9:integer; row,col:integer):TExpandedPixel; inline;
      function  BayerInterpolation(t:TBayerMode; rmult,gmult,bmult:double; pix1,pix2,pix3,pix4,pix5,pix6,pix7,pix8,pix9:integer; row,col:integer):TBGRAPixel; inline;
@@ -208,6 +209,7 @@ type
      property ImgDmin : Word read FImgDmin write FImgDmin;
      property ImgDmax : Word read FImgDmax write FImgDmax;
      property Gamma: single read FGamma write SetGamma;
+     property ImageValid: boolean read FImageValid;
      property image : Timaw16 read Fimage;
      property imageC : double read FimageC;
      property imageMin : double read FimageMin;
@@ -1048,13 +1050,13 @@ FDarkOn:=false;
 ImgDmax:=MaxWord;
 FImgFullRange:=false;
 FStreamValid:=false;
+FImageValid:=false;
 FMarkOverflow:=false;
 FMaxADU:=MAXWORD;
 FOverflow:=MAXWORD;
 FUnderflow:=0;
 FInvert:=false;
-FFitsInfo.valid:=false;
-FFitsInfo.naxis1:=0;
+ClearFitsInfo;
 FHeader:=TFitsHeader.Create;
 FStream:=TMemoryStream.Create;
 FIntfImg:=TLazIntfImage.Create(0,0);
@@ -1091,7 +1093,8 @@ end;
 procedure TFits.SetVideoStream(value:TMemoryStream);
 begin
 // other header previously set by caller
-FFitsInfo.solved:=false;
+ClearFitsInfo;
+FImageValid:=false;
 cur_axis:=1;
 setlength(imar64,0,0,0);
 setlength(imar32,0,0,0);
@@ -1110,8 +1113,8 @@ end;
 procedure TFits.SetStream(value:TMemoryStream);
 begin
 try
- FFitsInfo.valid:=false;
- FFitsInfo.solved:=false;
+ FImageValid:=false;
+ ClearFitsInfo;
  cur_axis:=1;
  setlength(imar64,0,0,0);
  setlength(imar32,0,0,0);
@@ -1124,15 +1127,15 @@ try
  value.Position:=0;
  FStream.CopyFrom(value,value.Size);
  Fhdr_end:=FHeader.ReadHeader(FStream);
- GetFitsInfo;
  FStreamValid:=true;
 except
- FFitsInfo.valid:=false;
+ ClearFitsInfo;
 end;
 end;
 
 Procedure TFits.LoadStream;
 begin
+  GetFitsInfo;
   if FFitsInfo.valid then begin
     ReadFitsImage;
   end;
@@ -1247,16 +1250,30 @@ begin
     result:='';
 end;
 
+procedure TFits.ClearFitsInfo;
+begin
+with FFitsInfo do begin
+   valid:=false; solved:=false; floatingpoint:=false;
+   bitpix:=0; naxis:=0; naxis1:=0; naxis2:=0; naxis3:=1;
+   Frx:=-1; Fry:=-1; Frwidth:=0; Frheight:=0; BinX:=1; BinY:=1;
+   bzero:=0; bscale:=1; dmax:=0; dmin:=0; blank:=0;
+   bayerpattern:='';
+   bayeroffsetx:=0; bayeroffsety:=0;
+   rmult:=0; gmult:=0; bmult:=0;
+   equinox:=2000; ra:=NullCoord; dec:=NullCoord; crval1:=NullCoord; crval2:=NullCoord;
+   pixsz1:=0; pixsz2:=0; pixratio:=1; focallen:=0; scale:=0;
+   exptime:=0; airmass:=0;
+   objects:=''; ctype1:=''; ctype2:='';
+end;
+end;
+
 procedure TFits.GetFitsInfo;
 var   i : integer;
       keyword,buf : string;
 begin
-with FFitsInfo do begin
- valid:=false; solved:=false; floatingpoint:=false; naxis1:=0 ; naxis2:=0 ; naxis3:=1; bitpix:=0 ; dmin:=0 ; dmax := 0; blank:=0;
- bzero:=0 ; bscale:=1; equinox:=2000; ra:=NullCoord; dec:=NullCoord; crval1:=NullCoord; crval2:=NullCoord; bayerpattern:='';
- objects:=''; ctype1:=''; ctype2:=''; pixsz1:=0; pixsz2:=0; pixratio:=1; scale:=0; Frx:=-1;Fry:=-1;Frwidth:=0;Frheight:=0;
- focallen:=0; BinX:=1; BinY:=1; exptime:=0; airmass:=0; rmult:=0; gmult:=0; bmult:=0; bayeroffsetx:=0; bayeroffsety:=0;
- for i:=0 to FHeader.Rows.Count-1 do begin
+ ClearFitsInfo;
+ with FFitsInfo do begin
+  for i:=0 to FHeader.Rows.Count-1 do begin
     keyword:=trim(FHeader.Keys[i]);
     buf:=trim(FHeader.Values[i]);
     if (keyword='SIMPLE') then if (copy(buf,1,1)<>'T')
@@ -1351,6 +1368,7 @@ var i,ii,j,npix,k,km,kk : integer;
     x8,b8:byte;
 begin
 {$ifdef debug_raw}writeln(FormatDateTime(dateiso,Now)+blank+'ReadFitsImage');{$endif}
+FImageValid:=false;
 if FFitsInfo.naxis1=0 then exit;
 FDarkProcess:=false;
 FBPMProcess:=false;
@@ -1548,6 +1566,7 @@ SetLength(FStarList,0); {reset object list}
 {$ifdef debug_raw}writeln(FormatDateTime(dateiso,Now)+blank+'GetImage');{$endif}
 GetImage;
 {$ifdef debug_raw}writeln(FormatDateTime(dateiso,Now)+blank+'GetImage end');{$endif}
+FImageValid:=true;
 end;
 
 Procedure TFits.WriteFitsImage;
@@ -1695,6 +1714,7 @@ procedure TFits.ApplyDark;
 begin
 if (FDarkOn)and(FDark<>nil)and(SameFormat(FDark))
    then begin
+    {$ifdef debug_raw}writeln(FormatDateTime(dateiso,Now)+blank+'apply dark');{$endif}
      Math(FDark,moSub);
      FDarkProcess:=true;
      FHeader.Insert( FHeader.Indexof('END'),'COMMENT','Dark substracted','');
@@ -1705,6 +1725,8 @@ procedure TFits.ApplyBPM;
 var i,x,y,x0,y0: integer;
 begin
 if (FBPMcount>0)and(FBPMnax=FFitsInfo.naxis) then begin
+  {$ifdef debug_raw}writeln(FormatDateTime(dateiso,Now)+blank+'apply BPM');{$endif}
+  if not FImageValid then LoadStream;
   if (FFitsInfo.Frwidth>0)and(FFitsInfo.Frheight>0)and(FFitsInfo.Frx>=0)and(FFitsInfo.Fry>=0) then begin
     x0:=FFitsInfo.Frx;
     y0:=FBPMny-FFitsInfo.Fry-FFitsInfo.Frheight;
@@ -2232,11 +2254,10 @@ end;
 
 procedure TFits.ClearImage;
 begin
+FImageValid:=false;
 Fheight:=0;
 Fwidth:=0;
-FFitsInfo.naxis1:=0;
-FFitsInfo.valid:=false;
-FFitsInfo.solved:=false;
+ClearFitsInfo;
 setlength(imar64,0,0,0);
 setlength(imar32,0,0,0);
 setlength(imai8,0,0,0);
@@ -2924,7 +2945,8 @@ begin
  end
  else begin  // do operation
 
-    dmin:=1.0E100;
+   if not FImageValid then LoadStream;
+   dmin:=1.0E100;
     dmax:=-1.0E100;
     sum:=0; sum2:=0; ni:=0;
     minoffset:=operand.FFitsInfo.dmin-FFitsInfo.dmin;

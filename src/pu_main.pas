@@ -23,7 +23,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 }
 
-//{$define debug_raw}
+{$define debug_raw}
 
 interface
 
@@ -707,6 +707,7 @@ type
     procedure CameraVideoRateChange(Sender: TObject);
     procedure CameraVideoExposureChange(Sender: TObject);
     procedure CameraFPSChange(Sender: TObject);
+    procedure ShowLastImage(Sender: TObject);
     procedure ResetPreviewStack(Sender: TObject);
     Procedure StopExposure(Sender: TObject);
     Procedure StartPreviewExposure(Sender: TObject);
@@ -1199,7 +1200,9 @@ begin
   ReadoutModeAstrometry:=0;
   DomeNoSafetyCheck:=false;
   EarlyNextExposure:=false;
-  ConfigExpEarlyStart:=false;
+  DisplayCapture:=true;
+  LowQualityDisplay:={$ifdef cpuarm}true{$else}false{$endif};
+  ConfigExpEarlyStart:=true;
   CameraProcessingImage:=false;
   MagnitudeCalibration:=NullCoord;
   ManualFilterNames:=TStringList.Create;
@@ -1343,6 +1346,7 @@ begin
   f_visu.onZoom:=@ZoomImage;
   f_visu.onRedrawHistogram:=@RedrawHistogram;
   f_visu.onShowHistogramPos:=@ShowHistogramPos;
+  f_visu.onShowLastImage:=@ShowLastImage;
 
   f_frame:=Tf_frame.Create(self);
   f_frame.onSet:=@SetFrame;
@@ -2191,6 +2195,8 @@ begin
   f_visu.BtnFlipHorz.Glyph.Assign(btn);
   TBTabs.Images.GetBitmap(13, btn);
   f_visu.BtnFlipVert.Glyph.Assign(btn);
+  TBTabs.Images.GetBitmap(14, btn);
+  f_visu.BtnShowLastImage.Glyph.Assign(btn);
   TBTabs.Images.GetBitmap(9, btn);
   f_starprofile.BtnPinGraph.Glyph.Assign(btn);
   TBTabs.Images.GetBitmap(10, btn);
@@ -3371,6 +3377,9 @@ begin
     Showgain;
   end;
   MaxADU:=config.GetValue('/Sensor/MaxADU',MAXWORD);
+  DisplayCapture:=config.GetValue('/Visu/DisplayCapture',DisplayCapture);
+  f_visu.PanelNoDisplay.Visible:=not DisplayCapture;
+  LowQualityDisplay:=config.GetValue('/Visu/LowQualityDisplay',LowQualityDisplay);
   ConfigExpEarlyStart:=config.GetValue('/Sensor/ExpEarlyStart',ConfigExpEarlyStart);
   MeasureNewImage:=config.GetValue('/Files/MeasureNewImage',false) and ConfigExpEarlyStart;
   CheckRecenterTarget:=config.GetValue('/PrecSlew/CheckRecenterTarget',false) and ConfigExpEarlyStart;
@@ -6514,6 +6523,8 @@ begin
    f_option.GainFromCamera.Checked:=config.GetValue('/Sensor/GainFromCamera',(not camera.CanSetGain));
    f_option.MaxAdu.Value:=config.GetValue('/Sensor/MaxADU',MAXWORD);
    f_option.MaxAduFromCamera.Checked:=config.GetValue('/Sensor/MaxADUFromCamera',true);
+   f_option.NotDisplayCapture.Checked:=not config.GetValue('/Visu/DisplayCapture',DisplayCapture);
+   f_option.LowQualityDisplay.Checked:=config.GetValue('/Visu/LowQualityDisplay',LowQualityDisplay);
    f_option.ExpEarlyStart.Checked:=config.GetValue('/Sensor/ExpEarlyStart',ConfigExpEarlyStart);
    f_option.MeasureNewImage.Checked:=config.GetValue('/Files/MeasureNewImage',false) and f_option.ExpEarlyStart.Checked;
    f_option.CheckRecenterTarget.Checked:=config.GetValue('/PrecSlew/CheckRecenterTarget',false) and f_option.ExpEarlyStart.Checked;
@@ -6841,6 +6852,8 @@ begin
      config.SetValue('/Sensor/MaxADUFromCamera',f_option.MaxAduFromCamera.Checked);
      config.SetValue('/Sensor/MaxADU',f_option.MaxAdu.Value);
      config.SetValue('/Sensor/ExpEarlyStart',f_option.ExpEarlyStart.Checked);
+     config.SetValue('/Visu/DisplayCapture',not f_option.NotDisplayCapture.Checked);
+     config.SetValue('/Visu/LowQualityDisplay',f_option.LowQualityDisplay.Checked);
      config.SetValue('/Files/MeasureNewImage',f_option.MeasureNewImage.Checked and f_option.ExpEarlyStart.Checked);
      config.SetValue('/PrecSlew/CheckRecenterTarget',f_option.CheckRecenterTarget.Checked and f_option.ExpEarlyStart.Checked);
      config.SetValue('/Astrometry/Resolver',f_option.Resolver);
@@ -7935,28 +7948,55 @@ begin
   if Capture then begin
     // save file first
     if not (FlatAutoExposure and (camera.FrameType=FLAT)) then
+      {$ifdef debug_raw}writeln(FormatDateTime(dateiso,Now)+blank+'save fits file');{$endif}
       CameraSaveNewImage;
+      {$ifdef debug_raw}writeln(FormatDateTime(dateiso,Now)+blank+'saved');{$endif}
   end;
   Application.QueueAsyncCall(@CameraNewImageAsync,0);
 end;
 
+procedure Tf_main.ShowLastImage(Sender: TObject);
+begin
+  fits.LoadStream;
+  DrawHistogram(true);
+  DrawImage;
+  Image1.Invalidate;
+end;
+
 procedure Tf_main.CameraNewImageAsync(Data: PtrInt);
 var buf: string;
+    displayimage: boolean;
 begin
  try
-  try
-  // draw preview
   StatusBar1.Panels[1].Text:='';
   ImgFrameX:=FrameX;
   ImgFrameY:=FrameY;
   ImgFrameW:=FrameW;
   ImgFrameH:=FrameH;
-  // draw image
-  DrawHistogram(true);
-  DrawImage;
-  if (GetCurrentThreadId=MainThreadID) then CheckSynchronize;
-  except
-    on E: Exception do NewMessage('CameraNewImage, DrawImage :'+ E.Message,1);
+  displayimage:=DisplayCapture or (not capture) or (Autofocusing) or (FlatAutoExposure and (camera.FrameType=FLAT));
+  if displayimage and (not fits.ImageValid) then begin
+    {$ifdef debug_raw}writeln(FormatDateTime(dateiso,Now)+blank+'fits loadstream');{$endif}
+     fits.LoadStream;
+  end;
+  if displayimage then begin
+  try
+    // draw image
+    {$ifdef debug_raw}writeln(FormatDateTime(dateiso,Now)+blank+'DrawHistogram');{$endif}
+    DrawHistogram(true);
+    {$ifdef debug_raw}writeln(FormatDateTime(dateiso,Now)+blank+'DrawImage');{$endif}
+    DrawImage;
+    {$ifdef debug_raw}writeln(FormatDateTime(dateiso,Now)+blank+'DrawImage end');{$endif}
+    if (GetCurrentThreadId=MainThreadID) then CheckSynchronize;
+    except
+      on E: Exception do NewMessage('CameraNewImage, DrawImage :'+ E.Message,1);
+    end;
+  end
+  else begin
+    img_Width:=0;
+    img_Height:=0;
+    ImaBmp.SetSize(0,0);
+    ClearImage;
+    Image1.Invalidate;
   end;
   try
   // process autofocus frame
@@ -7968,6 +8008,7 @@ begin
   if Capture then begin
      // process automatic flat
      if FlatAutoExposure and (camera.FrameType=FLAT) then begin
+       {$ifdef debug_raw}writeln(FormatDateTime(dateiso,Now)+blank+'flat auto exposure');{$endif}
        case FlatType of
          ftSKY : begin
                  if not CameraNewSkyFlat then exit;
@@ -7976,13 +8017,17 @@ begin
                  if not CameraNewDomeFlat then exit;
                  end;
        end;
+       {$ifdef debug_raw}writeln(FormatDateTime(dateiso,Now)+blank+'save flat image');{$endif}
        CameraSaveNewImage;
      end;
      // image measurement
+     {$ifdef debug_raw}writeln(FormatDateTime(dateiso,Now)+blank+'image measurement');{$endif}
      CameraMeasureNewImage;
+     {$ifdef debug_raw}writeln(FormatDateTime(dateiso,Now)+blank+'image measurement end');{$endif}
      if (not EarlyNextExposure) or SkipEarlyExposure then begin
        // Next exposure delayed after image display
        // start the exposure now
+       {$ifdef debug_raw}writeln(FormatDateTime(dateiso,Now)+blank+'start exposure');{$endif}
        f_capture.SeqCount:=f_capture.SeqCount+1;
        f_capture.DitherNum:=f_capture.DitherNum+1;
        f_capture.FocusNum:=f_capture.FocusNum+1;
@@ -8009,8 +8054,10 @@ begin
     if (not EarlyNextExposure) or Autofocusing then begin
       // Next exposure delayed after image display
       // start the exposure now
-      if f_preview.Loop and f_preview.Running and (not CancelAutofocus) then
+      if f_preview.Loop and f_preview.Running and (not CancelAutofocus) then begin
+         {$ifdef debug_raw}writeln(FormatDateTime(dateiso,Now)+blank+'start exposure');{$endif}
          Application.QueueAsyncCall(@StartPreviewExposureAsync,0)
+      end
       else begin
          // end preview
          f_preview.stop;
@@ -8475,13 +8522,14 @@ ZoomMin:=minvalue([1.0,r1,r2]);
 if (ZoomMin<1)and((ImgZoom<ZoomMin)or(abs(ImgZoom-ZoomMin)<0.01)) then ImgZoom:=0;
 {$ifdef debug_raw}writeln(FormatDateTime(dateiso,Now)+blank+'ClearImage');{$endif}
 ClearImage;
-{$ifdef cpuarm}
+if LowQualityDisplay then begin
   imabmp.ResampleFilter:=rfBox;
   rmode:=rmSimpleStretch;
-{$else}
+end
+else begin
   imabmp.ResampleFilter:=rfBestQuality;
   rmode:=rmFineResample;
-{$endif}
+end;
 if ImgZoom=0 then begin
   // adjust
   r1:=img_Width/img_Height;
@@ -10247,7 +10295,8 @@ begin
 
 Procedure Tf_main.DoAutoFocus;
 begin
-if Preview or Capture then begin // not on control exposure
+if (fits.HeaderInfo.valid)and(Preview or Capture) then begin // not on control exposure
+  {$ifdef debug_raw}writeln(FormatDateTime(dateiso,Now)+blank+'check autofocus');{$endif}
   if f_starprofile.AutofocusRunning then
     // process autofocus
     f_starprofile.Autofocus(fits,round(f_starprofile.StarX),round(f_starprofile.StarY),Starwindow div fits.HeaderInfo.BinX)
