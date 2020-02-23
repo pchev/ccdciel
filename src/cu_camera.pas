@@ -695,14 +695,19 @@ begin
   if objname<>'' then Ffits.Header.Add('OBJECT',objname,'Observed object name');
   Ffits.Header.Add('IMAGETYP',hframe,'Image Type');
   Ffits.Header.Add('DATE-OBS',hdateobs,'UTC start date of observation');
-  if hexp>0 then Ffits.Header.Add('EXPTIME',hexp,'[s] Total Exposure Time');
+  if shutter>0 then begin
+    Ffits.Header.Add('EXPTIME',shutter,'[s] Camera Exposure Time');
+    if hexp>0 then Ffits.Header.Add('REQTIME',hexp,'[s] Requested Exposure Time');
+  end
+  else begin
+    if hexp>0 then Ffits.Header.Add('EXPTIME',hexp,'[s] Total Exposure Time');
+  end;
   if FStackCount>1 then Ffits.Header.Add('STACKCNT',FStackCount,'Number of stacked frames');
   if cgain<>NullInt then Ffits.Header.Add('GAIN',cgain,'Camera gain setting in manufacturer units');
   if siso<>'' then Ffits.Header.Add('GAIN',siso,'Camera ISO');
   if gamma<>NullInt then Ffits.Header.Add('GAMMA',gamma,'Video gamma');
   if offset<>NullInt then Ffits.Header.Add('OFFSET',offset,'Video offset,brightness');
   if fstop>0 then Ffits.Header.Add('F_STOP',fstop ,'Camera F-stop');
-  if shutter>0 then Ffits.Header.Add('SHUTTER',shutter ,'Camera shutter');
   if hpix1>0 then Ffits.Header.Add('XPIXSZ',hpix1 ,'[um] Pixel Size X, binned');
   if hpix2>0 then Ffits.Header.Add('YPIXSZ',hpix2 ,'[um] Pixel Size Y, binned');
   if hpix1>0 then Ffits.Header.Add('PIXSIZE1',hpix1 ,'[um] Pixel Size X, binned');

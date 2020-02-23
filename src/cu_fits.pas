@@ -3283,6 +3283,7 @@ var i,j,n,x,c: integer;
     rawf,tiff,cmdi,cmdu,txt,bayerpattern: string;
     outr: TStringList;
     rmult,gmult,bmult: string;
+    infook: boolean;
 begin
 rmsg:='';
 if libraw<>0 then begin  // Use libraw directly
@@ -3310,11 +3311,15 @@ if libraw<>0 then begin  // Use libraw directly
   rawinfo.bitmap:=nil;
   n:=GetRawInfo(rawinfo);
   if (n<>0) or (rawinfo.bitmap=nil) then begin
+   rmsg:='GetRawInfo error';
    exit;
   end;
   rawinfo2.version:=1;
-  if @GetRawInfo2<>nil then
+  infook:=false;
+  if @GetRawInfo2<>nil then begin
      n:=GetRawInfo2(rawinfo2);
+     infook:=(n=0);
+  end;
   xs:=rawinfo.leftmargin;
   ys:=rawinfo.topmargin;
   xmax:=xs+rawinfo.imgwidth;
@@ -3340,19 +3345,19 @@ if libraw<>0 then begin  // Use libraw directly
   if piy>0 then hdr.Add('PIXSIZE2',piy ,'Pixel Size 2 (microns)');
   if binx>0 then hdr.Add('XBINNING',binx ,'Binning factor in width');
   if biny>0 then hdr.Add('YBINNING',biny ,'Binning factor in height');
-  if (rawinfo2.version>1) then begin
+  if infook and (rawinfo2.version>1) then begin
     txt:=copy(trim(rawinfo2.camera),1,40);
     if txt<>'' then hdr.Add('CAMERA', txt ,'Camera model');
   end;
-  if (rawinfo2.version>1) and (rawinfo2.focal_len>0) then hdr.Add('FOCALLEN',rawinfo2.focal_len ,'Camera focal length');
-  if (rawinfo2.version>1) and (rawinfo2.aperture>0) then hdr.Add('F_STOP',round(10*rawinfo2.aperture)/10 ,'Camera F-stop');
-  if (rawinfo2.version>1) and (rawinfo2.isospeed>0) then hdr.Add('ISOSPEED',rawinfo2.isospeed ,'Camera ISO speed');
-  if (rawinfo2.version>1) and (rawinfo2.shutter>0) then hdr.Add('SHUTTER',rawinfo2.shutter ,'Camera shutter');
-  if (rawinfo2.version>1) and (rawinfo2.timestamp>0) then hdr.Add('DATE-OBS',FormatDateTime(dateisoshort,UnixToDateTime(rawinfo2.timestamp)) ,'Camera timestamp');
+  if infook and (rawinfo2.version>1) and (rawinfo2.focal_len>0) then hdr.Add('FOCALLEN',rawinfo2.focal_len ,'Camera focal length');
+  if infook and (rawinfo2.version>1) and (rawinfo2.aperture>0) then hdr.Add('F_STOP',round(10*rawinfo2.aperture)/10 ,'Camera F-stop');
+  if infook and (rawinfo2.version>1) and (rawinfo2.isospeed>0) then hdr.Add('ISOSPEED',rawinfo2.isospeed ,'Camera ISO speed');
+  if infook and (rawinfo2.version>1) and (rawinfo2.shutter>0) then hdr.Add('SHUTTER',rawinfo2.shutter ,'Camera shutter');
+  if infook and (rawinfo2.version>1) and (rawinfo2.timestamp>0) then hdr.Add('DATE-OBS',FormatDateTime(dateisoshort,UnixToDateTime(rawinfo2.timestamp)) ,'Camera timestamp');
   hdr.Add('XBAYROFF',0,'X offset of Bayer array');
   hdr.Add('YBAYROFF',0,'Y offset of Bayer array');
   hdr.Add('BAYERPAT',rawinfo.bayerpattern,'CFA Bayer pattern');
-  if (rawinfo2.version>1) and (rawinfo2.colors=3) then begin
+  if infook and (rawinfo2.version>1) and (rawinfo2.colors=3) then begin
     hdr.Add('MULT_R',rawinfo2.rmult,'R multiplier');
     hdr.Add('MULT_G',rawinfo2.gmult,'G multiplier');
     hdr.Add('MULT_B',rawinfo2.bmult,'B multiplier');
