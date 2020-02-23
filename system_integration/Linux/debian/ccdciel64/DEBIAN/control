@@ -5,8 +5,8 @@ Priority: optional
 Maintainer: Patrick Chevalley <pch@ap-i.net>
 Architecture: amd64
 Installed-Size: %size%
-Depends: libc6, libx11-6, libgtk2.0-0, libglib2.0-0, libpango1.0-0, libpasastro, libcfitsio-bin, espeak
-Recommends: indi-bin
+Depends: libc6, libx11-6, libgtk2.0-0, libglib2.0-0, libpango1.0-0, libpasastro, libcfitsio-bin
+Recommends: indi-bin, espeak
 Description: A CCD capture software intended for the amateur astronomer.
  It include all the features required to perform digital imaging CCD observation of celestial objects.
  Using the standard drivers protocol INDI and ASCOM it can connect and control the CCD camera, the focuser, 
