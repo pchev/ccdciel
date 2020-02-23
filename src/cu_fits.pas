@@ -3255,9 +3255,12 @@ begin
    end;
    // fill to fits buffer size
    b:='';
-   c:=2880-(ImgStream.Size mod 2880);
-   FillChar(b,c,0);
-   ImgStream.Write(b,c);
+   c:=ImgStream.Size mod 2880;
+   if c>0 then begin
+     c:=2880-c;
+     FillChar(b,c,0);
+     ImgStream.Write(b,c);
+   end;
  finally
    // Free resources
    hdr.Free;
@@ -3381,9 +3384,12 @@ if libraw<>0 then begin  // Use libraw directly
     end;
   end;
   b:='';
-  c:=2880-(ImgStream.Size mod 2880);
-  FillChar(b,c,0);
-  ImgStream.Write(b,c);
+  c:=ImgStream.Size mod 2880;
+  if c>0 then begin
+    c:=2880-c;
+    FillChar(b,c,0);
+    ImgStream.Write(b,c);
+  end;
   CloseRaw();
   {$ifdef debug_raw}writeln(FormatDateTime(dateiso,Now)+blank+'RawToFITS end');{$endif}
   except
