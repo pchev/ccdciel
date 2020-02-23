@@ -47,6 +47,7 @@ type
     ButtonVoiceTest: TButton;
     ButtonVoiceAll: TButton;
     ButtonVoiceNone: TButton;
+    LabelTestVoice: TLabel;
     LowQualityDisplay: TCheckBox;
     NotDisplayCapture: TCheckBox;
     CheckGroupVoice: TCheckGroup;
@@ -1703,7 +1704,10 @@ end;
 
 procedure Tf_option.ButtonVoiceTestClick(Sender: TObject);
 begin
+  LabelTestVoice.Caption:='';
   speak(rstest+' . '+format(rsNeedToWaitUn,['22:34:56']));
+  if SPError<>0 then
+    LabelTestVoice.Caption:=SPErrorMsg;
 end;
 
 end.
