@@ -239,7 +239,7 @@ object f_option: Tf_option
       ParentFont = False
       object FileFolderOpt: TPageControl
         Left = 0
-        Height = 315
+        Height = 336
         Top = 56
         Width = 526
         ActivePage = FileOpt
@@ -249,8 +249,8 @@ object f_option: Tf_option
         TabOrder = 0
         object FileOpt: TTabSheet
           Caption = 'File name options'
-          ClientHeight = 311
-          ClientWidth = 522
+          ClientHeight = 305
+          ClientWidth = 516
           ParentFont = False
           object BtnFileDefault: TButton
             Left = 394
@@ -353,11 +353,19 @@ object f_option: Tf_option
             ParentFont = False
             TabOrder = 5
           end
+          object WantExif: TCheckBox
+            Left = 8
+            Height = 21
+            Top = 272
+            Width = 259
+            Caption = 'Add FITS keywords for DSLR EXIF tags'
+            TabOrder = 6
+          end
         end
         object FolderOpt: TTabSheet
           Caption = 'Folder name options'
-          ClientHeight = 311
-          ClientWidth = 522
+          ClientHeight = 305
+          ClientWidth = 516
           ParentFont = False
           object BtnFolderDefault: TButton
             Left = 394
@@ -443,11 +451,11 @@ object f_option: Tf_option
       end
       object Panel8: TPanel
         Left = 0
-        Height = 153
-        Top = 371
+        Height = 132
+        Top = 392
         Width = 526
         Align = alClient
-        ClientHeight = 153
+        ClientHeight = 132
         ClientWidth = 526
         TabOrder = 2
         object SaveBitmap: TCheckBox
@@ -2792,12 +2800,12 @@ object f_option: Tf_option
         object Page1: TPage
           object astrometrynet: TGroupBox
             Left = 0
-            Height = 348
+            Height = 340
             Top = 0
             Width = 526
             Align = alClient
             Caption = 'Astrometry.Net'
-            ClientHeight = 328
+            ClientHeight = 320
             ClientWidth = 524
             ParentFont = False
             TabOrder = 0
@@ -4503,11 +4511,11 @@ object f_option: Tf_option
         Height = 458
         Top = 66
         Width = 526
-        HorzScrollBar.Page = 501
+        HorzScrollBar.Page = 505
         VertScrollBar.Page = 429
         Align = alClient
-        ClientHeight = 456
-        ClientWidth = 524
+        ClientHeight = 454
+        ClientWidth = 522
         ParentFont = False
         TabOrder = 0
         object PanelW1: TPanel
@@ -4516,8 +4524,8 @@ object f_option: Tf_option
           Top = 0
           Width = 524
           Align = alTop
-          ClientHeight = 33
-          ClientWidth = 524
+          ClientHeight = 29
+          ClientWidth = 520
           ParentFont = False
           TabOrder = 0
           object LabelMi1: TLabel
@@ -4586,8 +4594,8 @@ object f_option: Tf_option
           Top = 33
           Width = 524
           Align = alTop
-          ClientHeight = 33
-          ClientWidth = 524
+          ClientHeight = 29
+          ClientWidth = 520
           ParentFont = False
           TabOrder = 1
           object LabelMi2: TLabel
@@ -4656,8 +4664,8 @@ object f_option: Tf_option
           Top = 66
           Width = 524
           Align = alTop
-          ClientHeight = 33
-          ClientWidth = 524
+          ClientHeight = 29
+          ClientWidth = 520
           ParentFont = False
           TabOrder = 2
           object LabelMi3: TLabel
@@ -4726,8 +4734,8 @@ object f_option: Tf_option
           Top = 99
           Width = 524
           Align = alTop
-          ClientHeight = 33
-          ClientWidth = 524
+          ClientHeight = 29
+          ClientWidth = 520
           ParentFont = False
           TabOrder = 3
           object LabelMi4: TLabel
@@ -4796,8 +4804,8 @@ object f_option: Tf_option
           Top = 132
           Width = 524
           Align = alTop
-          ClientHeight = 33
-          ClientWidth = 524
+          ClientHeight = 29
+          ClientWidth = 520
           ParentFont = False
           TabOrder = 4
           object LabelMi5: TLabel
@@ -4866,8 +4874,8 @@ object f_option: Tf_option
           Top = 165
           Width = 524
           Align = alTop
-          ClientHeight = 33
-          ClientWidth = 524
+          ClientHeight = 29
+          ClientWidth = 520
           ParentFont = False
           TabOrder = 5
           object LabelMi6: TLabel
@@ -4936,8 +4944,8 @@ object f_option: Tf_option
           Top = 198
           Width = 524
           Align = alTop
-          ClientHeight = 33
-          ClientWidth = 524
+          ClientHeight = 29
+          ClientWidth = 520
           ParentFont = False
           TabOrder = 6
           object LabelMi7: TLabel
@@ -5006,8 +5014,8 @@ object f_option: Tf_option
           Top = 231
           Width = 524
           Align = alTop
-          ClientHeight = 33
-          ClientWidth = 524
+          ClientHeight = 29
+          ClientWidth = 520
           ParentFont = False
           TabOrder = 7
           object LabelMi8: TLabel
@@ -5076,8 +5084,8 @@ object f_option: Tf_option
           Top = 264
           Width = 524
           Align = alTop
-          ClientHeight = 33
-          ClientWidth = 524
+          ClientHeight = 29
+          ClientWidth = 520
           ParentFont = False
           TabOrder = 8
           object LabelMi9: TLabel
@@ -5146,8 +5154,8 @@ object f_option: Tf_option
           Top = 297
           Width = 524
           Align = alTop
-          ClientHeight = 33
-          ClientWidth = 524
+          ClientHeight = 29
+          ClientWidth = 520
           ParentFont = False
           TabOrder = 9
           object LabelMi10: TLabel
@@ -5216,8 +5224,8 @@ object f_option: Tf_option
           Top = 330
           Width = 524
           Align = alTop
-          ClientHeight = 33
-          ClientWidth = 524
+          ClientHeight = 29
+          ClientWidth = 520
           ParentFont = False
           TabOrder = 10
           object LabelMi11: TLabel
@@ -5286,8 +5294,8 @@ object f_option: Tf_option
           Top = 363
           Width = 524
           Align = alTop
-          ClientHeight = 33
-          ClientWidth = 524
+          ClientHeight = 29
+          ClientWidth = 520
           ParentFont = False
           TabOrder = 11
           object LabelMi12: TLabel
@@ -5356,8 +5364,8 @@ object f_option: Tf_option
           Top = 396
           Width = 524
           Align = alTop
-          ClientHeight = 33
-          ClientWidth = 524
+          ClientHeight = 29
+          ClientWidth = 520
           ParentFont = False
           TabOrder = 12
           object LabelMi13: TLabel
@@ -5853,8 +5861,8 @@ object f_option: Tf_option
         TabOrder = 0
         object TabSheetEmail: TTabSheet
           Caption = 'Email'
-          ClientHeight = 493
-          ClientWidth = 516
+          ClientHeight = 520
+          ClientWidth = 522
           object GroupBox25: TGroupBox
             Left = 0
             Height = 209
@@ -5880,9 +5888,10 @@ object f_option: Tf_option
                 'Meridian flip error'
                 'Target initialisation'
               )
-              ItemHeight = 23
+              ItemHeight = 0
               ParentFont = False
               TabOrder = 0
+              TopIndex = -1
               Data = {
                 06000000000000000000
               }
@@ -5893,8 +5902,8 @@ object f_option: Tf_option
               Top = 148
               Width = 514
               Align = alBottom
-              ClientHeight = 41
-              ClientWidth = 514
+              ClientHeight = 37
+              ClientWidth = 510
               ParentFont = False
               TabOrder = 1
               object ButtonNotificationAll: TButton
@@ -6081,8 +6090,8 @@ object f_option: Tf_option
         end
         object TabSheetVoice: TTabSheet
           Caption = 'Voice'
-          ClientHeight = 493
-          ClientWidth = 516
+          ClientHeight = 520
+          ClientWidth = 522
           object CheckGroupVoice: TCheckGroup
             Left = 0
             Height = 166
@@ -6120,8 +6129,8 @@ object f_option: Tf_option
             Top = 166
             Width = 516
             Align = alTop
-            ClientHeight = 66
-            ClientWidth = 516
+            ClientHeight = 62
+            ClientWidth = 512
             ParentFont = False
             TabOrder = 1
             object ButtonVoiceAll: TButton

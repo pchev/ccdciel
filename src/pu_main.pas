@@ -1204,6 +1204,7 @@ begin
   LowQualityDisplay:={$ifdef cpuarm}true{$else}false{$endif};
   ConfigExpEarlyStart:=true;
   CameraProcessingImage:=false;
+  WantExif:=false;
   MagnitudeCalibration:=NullCoord;
   ManualFilterNames:=TStringList.Create;
   ScrBmp := TBGRABitmap.Create;
@@ -3553,6 +3554,7 @@ begin
   FilenameSep:=config.GetValue('/Files/FileNameSep','_');
   FileSequenceWidth:=config.GetValue('/Files/FileSequenceWidth',0);
   FilePack:=config.GetValue('/Files/Pack',false);
+  WantExif:=config.GetValue('/Files/Exif',false);
   if UseTcpServer and ((TCPDaemon=nil)or(TCPDaemon.stoping)) then StartServer;
   if (not UseTcpServer) and (TCPDaemon<>nil) then StopServer;
   WeatherRestartDelay:=config.GetValue('/Weather/RestartDelay',5);
@@ -6392,6 +6394,7 @@ begin
       f_option.FileSequenceWidth.Enabled:=false;
    end;
    f_option.FilePack.checked:=config.GetValue('/Files/Pack',false);
+   f_option.WantExif.Checked:=config.GetValue('/Files/Exif',false);
    f_option.SaveBitmap.Checked:=config.GetValue('/Files/SaveBitmap',false);
    buf:=config.GetValue('/Files/SaveBitmapFormat','png');
    if buf='png' then f_option.SaveBitmapFormat.ItemIndex:=0
@@ -6747,6 +6750,7 @@ begin
      else
         config.SetValue('/Files/FileSequenceWidth',0);
      config.SetValue('/Files/Pack',f_option.FilePack.checked);
+     config.SetValue('/Files/Exif',f_option.WantExif.Checked);
      config.SetValue('/StarAnalysis/Window',f_option.StarWindow.Value);
      config.SetValue('/StarAnalysis/Focus',f_option.FocusWindow.Value);
      config.SetValue('/StarAnalysis/Undersampled',f_option.Undersampled.Checked);

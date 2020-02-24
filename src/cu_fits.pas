@@ -373,8 +373,7 @@ begin
       for i:=1 to 36 do begin
          row:=header[i];
          if trim(row)='' then continue;
-         p1:=pos('=',row);
-         if p1=0 then p1:=9;
+         p1:=9;
          p2:=pos('/',row);
          keyword:=trim(copy(row,1,p1-1));
          if p2>0 then begin
@@ -442,8 +441,7 @@ repeat
    for i:=1 to 36 do begin
       row:=header[i];
       if trim(row)='' then continue;
-      p1:=pos('=',row);
-      if p1=0 then p1:=9;
+      p1:=9;
       p2:=pos('/',row);
       keyword:=trim(copy(row,1,p1-1));
       if p2>0 then begin
@@ -566,6 +564,15 @@ begin
    val:='';
    comment:='';
  end
+ // hierarch
+ else if (trim(key)='HIERARCH') then begin
+    row:=Format('%0:-8s',[key])+
+         Format(' %0:-70s',[val]);
+    if comment>'' then
+       row:=row+Format(' / %0:-47s',[comment])
+    else
+       row:=row+b80;
+ end
  // Comments with keyword
  else if (trim(key)='COMMENT') then begin
    val:=val+comment;
@@ -582,18 +589,24 @@ begin
  // Quoted string
  else if quotedval then begin
     row:=Format('%0:-8s',[key])+
-         Format('= %0:-20s',[QuotedStr(val)])+
-         Format(' / %0:-47s',[comment]);
+         Format('= %0:-20s',[QuotedStr(val)]);
+         if comment>'' then
+            row:=row+Format(' / %0:-47s',[comment])
+         else
+            row:=row+b80;
  end
  // Other unquoted values
  else begin
     row:=Format('%0:-8s',[key])+
-         Format('= %0:-20s',[val])+
-         Format(' / %0:-47s',[comment]);
+         Format('= %0:-20s',[val]);
+         if comment>'' then
+            row:=row+Format(' / %0:-47s',[comment])
+         else
+            row:=row+b80;
  end;
  row:=copy(row,1,80);
  // Search for existing key
- if (key<>'')and(key<>'COMMENT')and(key<>'HISTORY') then
+ if (key<>'')and(key<>'COMMENT')and(key<>'HISTORY')and(key<>'HIERARCH') then
    ii:=FKeys.IndexOf(key)
  else
    ii:=-1;
@@ -3268,6 +3281,37 @@ begin
  end;
 end;
 
+procedure GetExif(raw:TMemoryStream; exifkey,exifvalue:TStringList);
+var cmd,fn,k,v: string;
+    r: Tstringlist;
+    i,j,n: integer;
+begin
+ if Exiv2Cmd<>'' then begin
+   r:=Tstringlist.Create;
+   try
+   fn:=slash(TmpDir)+'exiftmp.raw';
+   raw.SaveToFile(fn);
+   cmd:=Exiv2Cmd+' -PEkt '+fn;
+   n:=ExecProcess(cmd,r);
+   if n=0 then begin
+     for i:=0 to r.Count-1 do begin
+       j:=pos(' ',r[i]);
+       if j>0 then begin
+         k:=trim(copy(r[i],1,j));
+         v:=trim(copy(r[i],j,999));
+         if (length(k+v)<65)and(v<>'(Binary value suppressed)') then begin
+           exifkey.Add(k);
+           exifvalue.Add(v);
+         end;
+       end;
+     end;
+   end;
+   finally
+     r.free;
+   end;
+ end;
+end;
+
 procedure RawToFits(raw:TMemoryStream; var ImgStream:TMemoryStream; out rmsg:string; pix:double=-1;piy:double=-1;binx:integer=-1;biny:integer=-1);
 var i,j,n,x,c: integer;
     xs,ys,xmax,ymax: integer;
@@ -3284,8 +3328,15 @@ var i,j,n,x,c: integer;
     outr: TStringList;
     rmult,gmult,bmult: string;
     infook: boolean;
+    exifkey,exifvalue: TStringList;
 begin
 rmsg:='';
+try
+exifkey:=TStringList.Create;
+exifvalue:=TStringList.Create;
+if WantExif then begin
+  GetExif(raw,exifkey,exifvalue);
+end;
 if libraw<>0 then begin  // Use libraw directly
   try
   {$ifdef debug_raw}writeln(FormatDateTime(dateiso,Now)+blank+'Copy raw buffer');{$endif}
@@ -3364,6 +3415,11 @@ if libraw<>0 then begin  // Use libraw directly
   end;
   hdr.Add('DATE',FormatDateTime(dateisoshort,NowUTC),'Date data written');
   hdr.Add('SWCREATE','CCDciel '+ccdciel_version+'-'+RevisionStr,'');
+  if exifkey.Count>0 then begin
+    for i:=0 to exifkey.Count-1 do begin
+       hdr.Add('HIERARCH',StringReplace(exifkey[i],'.',' ',[rfReplaceAll])+' = '''+exifvalue[i]+'''','');
+    end;
+  end;
   hdr.Add('COMMENT','Converted from camera RAW by libraw','');
   hdr.Add('END','','');
   hdrmem:=hdr.GetStream;
@@ -3475,6 +3531,10 @@ else if DcrawCmd<>'' then begin  // try dcraw command line
 end
 else begin
   rmsg:='No RAW decoder found!';
+end;
+finally
+  exifkey.Free;
+  exifvalue.Free;
 end;
 end;
 

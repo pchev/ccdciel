@@ -527,13 +527,18 @@ procedure T_camera.WriteHeaders;
 var origin,observer,telname,objname,siso,CType: string;
     focal_length,pixscale1,pixscale2,ccdtemp,st,ra,de,fstop,shutter,multr,multg,multb: double;
     hbitpix,hnaxis,hnaxis1,hnaxis2,hnaxis3,hbin1,hbin2,cgain,focuserpos: integer;
-    hfilter,hframe,hinstr,hdateobs,hcomment1 : string;
+    hfilter,hframe,hinstr,hdateobs : string;
     hbzero,hbscale,hdmin,hdmax,hra,hdec,hexp,hpix1,hpix2,hairmass,focusertemp: double;
     haz,hal: double;
     gamma,offset,OffsetX,OffsetY: integer;
     Frx,Fry,Frwidth,Frheight: integer;
     hasfocusertemp,hasfocuserpos: boolean;
+    i: integer;
+    hhierarch,hcomment: Tstringlist;
 begin
+  hhierarch:= Tstringlist.Create;
+  hcomment:= Tstringlist.Create;
+  try
   // get header values from camera (set by INDI driver or libraw)
   if not Ffits.Header.Valueof('BITPIX',hbitpix) then hbitpix:=Ffits.HeaderInfo.bitpix;
   if not Ffits.Header.Valueof('NAXIS',hnaxis)   then hnaxis:=Ffits.HeaderInfo.naxis;
@@ -568,8 +573,10 @@ begin
   if not Ffits.Header.Valueof('MULT_B',multb)  then multb:=-1;
   if not Ffits.Header.Valueof('DATE-OBS',hdateobs) then hdateobs:=FormatDateTime(dateisoshort,NowUTC);
   if not Ffits.Header.Valueof('AIRMASS',hairmass) then hairmass:=-1;
-  if not Ffits.Header.Valueof('COMMENT',hcomment1) then hcomment1:='';
-  if copy(hcomment1,1,14)='FITS (Flexible' then hcomment1:='';
+  for i:=0 to Ffits.Header.Keys.Count-1 do begin
+    if Ffits.Header.Keys[i]='HIERARCH' then hhierarch.Add(Ffits.Header.Values[i]);
+    if Ffits.Header.Keys[i]='COMMENT' then hcomment.Add(Ffits.Header.Values[i]);
+  end;
   // get other values
   hra:=NullCoord; hdec:=NullCoord;
   if (FMount<>nil)and(Fmount.Status=devConnected) then begin
@@ -753,8 +760,17 @@ begin
        Ffits.Header.Add('SCALE',pixscale1,'image scale arcseconds per pixel');
     end;
   end;
-  if hcomment1<>'' then Ffits.Header.Add('COMMENT',hcomment1 ,'');
+  for i:=0 to hhierarch.Count-1 do begin
+    Ffits.Header.Add('HIERARCH',hhierarch[i],'');
+  end;
+  for i:=0 to hcomment.Count-1 do begin
+    Ffits.Header.Add('COMMENT',hcomment[i],'');
+  end;
   Ffits.Header.Add('END','','');
+  finally
+  hhierarch.Free;
+  hcomment.Free;
+  end;
 end;
 
 procedure T_camera.NewVideoFrame;

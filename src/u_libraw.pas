@@ -56,7 +56,7 @@ var libraw: TLibHandle;
     GetRawInfo2: TGetRawInfo2;
     GetRawBitmap: TGetRawBitmap;
     GetRawErrorMsg: TGetRawErrorMsg;
-    DcrawCmd, RawIdCmd, RawUnpCmd: string;
+    DcrawCmd, RawIdCmd, RawUnpCmd, Exiv2Cmd: string;
 
 const
   rawext='.bay,.bmq,.cr3,.cr2,.crw,.cs1,.dc2,.dcr,.dng,.erf,.fff,.hdr,.k25,.kdc,.mdc,.mos,.mrw,.nef,.orf,.pef,.pxn,.raf,.raw,.rdc,.sr2,.srf,.x3f,.arw,.3fr,.cine,.ia,.kc2,.mef,.nrw,.qtk,.rw2,.sti,.rwl,.srw,';
@@ -65,18 +65,21 @@ const
   dcrawname='dcraw.exe';
   RawIdName='raw-identify.exe';
   RawUnpName='unprocessed_raw.exe';
+  exiv2name='exiv2.exe';
   {$endif}
   {$ifdef linux}
   librawname='libpasraw.so.1';
   dcrawname='dcraw';
   RawIdName='raw-identify';
   RawUnpName='unprocessed_raw';
+  exiv2name='exiv2';
   {$endif}
   {$ifdef darwin}
   librawname='libpasraw.dylib';
   dcrawname='dcraw';
   RawIdName='raw-identify';
   RawUnpName='unprocessed_raw';
+  exiv2name='exiv2';
   {$endif}
 
 implementation
@@ -172,6 +175,26 @@ begin
   end;
   except
   end;
+  // exiv2
+  {$ifdef mswindows}
+  Exiv2Cmd:=slash(Appdir)+exiv2name;
+  if not fileexists(Exiv2Cmd) then Exiv2Cmd:='';
+  {$endif}
+  {$ifdef linux}
+  Exiv2Cmd:='/usr/bin/'+exiv2name;
+  if not fileexists(Exiv2Cmd) then begin
+     Exiv2Cmd:='/usr/local/bin/'+exiv2name;
+     if not fileexists(Exiv2Cmd) then begin
+        Exiv2Cmd:=ExpandFileName('~/bin/'+exiv2name);
+        if not fileexists(Exiv2Cmd) then Exiv2Cmd:='';
+     end;
+  end;
+  {$endif}
+  {$ifdef darwin}
+  Exiv2Cmd:=slash(AppDir)+'ccdciel.app/Contents/MacOS/'+exiv2name;
+  if not fileexists(Exiv2Cmd) then Exiv2Cmd:='';
+  {$endif}
+
 end;
 
 initialization

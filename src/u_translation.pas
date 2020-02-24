@@ -1242,6 +1242,7 @@ resourcestring
   rsDisplaySpeed = 'Display speed';
   rsLowQualityIm = 'Low quality image scaling';
   rsDoNotDisplay = 'Do not display images during capture';
+  rsAddFITSKeywo = 'Add FITS keyword for DSLR EXIF tags';
 
 implementation
 

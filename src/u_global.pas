@@ -461,7 +461,7 @@ var
   ManualFilterNames: TStringList;
   VoiceDialog,VoiceSequence,VoiceError,VoiceEmail: boolean;
   DisplayCapture,LowQualityDisplay: boolean;
-
+  WantExif: boolean;
 
   procedure globalmsg(str:string);
 

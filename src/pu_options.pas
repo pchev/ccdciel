@@ -47,6 +47,7 @@ type
     ButtonVoiceTest: TButton;
     ButtonVoiceAll: TButton;
     ButtonVoiceNone: TButton;
+    WantExif: TCheckBox;
     LabelTestVoice: TLabel;
     LowQualityDisplay: TCheckBox;
     NotDisplayCapture: TCheckBox;
@@ -746,6 +747,7 @@ begin
   UseTcpServer.Caption := rsAllowToGetPr;
   UseFileSequenceWidth.Caption:=rsFixedSequenc;
   FilePack.Caption:=rsCompressTheF;
+  WantExif.Caption:=rsAddFITSKeywo;
   Label18.Caption := rsLanguage;
   CbShowHints.Caption:=rsShowHints;
   Debug_msg.Caption:=rsVerboseDevic;
