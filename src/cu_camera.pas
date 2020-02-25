@@ -534,11 +534,7 @@ var origin,observer,telname,objname,siso,CType: string;
     Frx,Fry,Frwidth,Frheight: integer;
     hasfocusertemp,hasfocuserpos: boolean;
     i: integer;
-    hhierarch,hcomment: Tstringlist;
 begin
-  hhierarch:= Tstringlist.Create;
-  hcomment:= Tstringlist.Create;
-  try
   // get header values from camera (set by INDI driver or libraw)
   if not Ffits.Header.Valueof('BITPIX',hbitpix) then hbitpix:=Ffits.HeaderInfo.bitpix;
   if not Ffits.Header.Valueof('NAXIS',hnaxis)   then hnaxis:=Ffits.HeaderInfo.naxis;
@@ -573,10 +569,6 @@ begin
   if not Ffits.Header.Valueof('MULT_B',multb)  then multb:=-1;
   if not Ffits.Header.Valueof('DATE-OBS',hdateobs) then hdateobs:=FormatDateTime(dateisoshort,NowUTC);
   if not Ffits.Header.Valueof('AIRMASS',hairmass) then hairmass:=-1;
-  for i:=0 to Ffits.Header.Keys.Count-1 do begin
-    if Ffits.Header.Keys[i]='HIERARCH' then hhierarch.Add(Ffits.Header.Values[i]);
-    if Ffits.Header.Keys[i]='COMMENT' then hcomment.Add(Ffits.Header.Values[i]);
-  end;
   // get other values
   hra:=NullCoord; hdec:=NullCoord;
   if (FMount<>nil)and(Fmount.Status=devConnected) then begin
@@ -676,7 +668,8 @@ begin
     end;
   end;
   // write new header
-  Ffits.Header.ClearHeader;
+  i:=FFits.Header.Indexof('END');
+  if i>0 then FFits.Header.Delete(i);
   Ffits.Header.Add('SIMPLE',true,'file does conform to FITS standard');
   Ffits.Header.Add('BITPIX',hbitpix,'number of bits per data pixel');
   Ffits.Header.Add('NAXIS',hnaxis,'number of data axes');
@@ -760,17 +753,7 @@ begin
        Ffits.Header.Add('SCALE',pixscale1,'image scale arcseconds per pixel');
     end;
   end;
-  for i:=0 to hhierarch.Count-1 do begin
-    Ffits.Header.Add('HIERARCH',hhierarch[i],'');
-  end;
-  for i:=0 to hcomment.Count-1 do begin
-    Ffits.Header.Add('COMMENT',hcomment[i],'');
-  end;
   Ffits.Header.Add('END','','');
-  finally
-  hhierarch.Free;
-  hcomment.Free;
-  end;
 end;
 
 procedure T_camera.NewVideoFrame;
