@@ -1243,6 +1243,9 @@ resourcestring
   rsLowQualityIm = 'Low quality image scaling';
   rsDoNotDisplay = 'Do not display images during capture';
   rsAddFITSKeywo = 'Add FITS keyword for DSLR EXIF tags';
+  rsAlignmentOn = 'Alignment on';
+  rsTruePole = 'True pole';
+  rsRefractedPol = 'Refracted pole';
 
 implementation
 
