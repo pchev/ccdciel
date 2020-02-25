@@ -286,7 +286,7 @@ type
 
 
 
-  procedure PictureToFits(pict:TMemoryStream; ext: string; var ImgStream:TMemoryStream; flip:boolean=true;pix:double=-1;piy:double=-1;binx:integer=-1;biny:integer=-1;bayer:string='';rmult:string='';gmult:string='';bmult:string='');
+  procedure PictureToFits(pict:TMemoryStream; ext: string; var ImgStream:TMemoryStream; flip:boolean=true;pix:double=-1;piy:double=-1;binx:integer=-1;biny:integer=-1;bayer:string='';rmult:string='';gmult:string='';bmult:string='';origin:string='';exifkey:TStringList=nil;exifvalue:TStringList=nil);
   procedure RawToFits(raw:TMemoryStream; var ImgStream:TMemoryStream; out rmsg:string; pix:double=-1;piy:double=-1;binx:integer=-1;biny:integer=-1);
   function PackFits(unpackedfilename,packedfilename: string; out rmsg:string):integer;
   function UnpackFits(packedfilename: string; var ImgStream:TMemoryStream; out rmsg:string):integer;
@@ -3096,7 +3096,7 @@ begin
   m.free;
 end;
 
-procedure PictureToFits(pict:TMemoryStream; ext: string; var ImgStream:TMemoryStream; flip:boolean=true;pix:double=-1;piy:double=-1;binx:integer=-1;biny:integer=-1;bayer:string='';rmult:string='';gmult:string='';bmult:string='');
+procedure PictureToFits(pict:TMemoryStream; ext: string; var ImgStream:TMemoryStream; flip:boolean=true;pix:double=-1;piy:double=-1;binx:integer=-1;biny:integer=-1;bayer:string='';rmult:string='';gmult:string='';bmult:string='';origin:string='';exifkey:TStringList=nil;exifvalue:TStringList=nil);
 var img:TLazIntfImage;
     lRawImage: TRawImage;
     i,j,c,w,h,x,y,naxis: integer;
@@ -3202,12 +3202,15 @@ begin
    end;
    hdr.Add('DATE',FormatDateTime(dateisoshort,NowUTC),'Date data written');
    hdr.Add('SWCREATE','CCDciel '+ccdciel_version+'-'+RevisionStr,'');
-   if bayer<>'' then begin
-     if rmult='' then hdr.Add('COMMENT','Converted from camera RAW by dcraw','')
-                 else hdr.Add('COMMENT','Converted from camera RAW by libraw tools','');
-   end
+   if (exifkey<>nil)and(exifvalue<>nil)and(exifkey.Count>0) then begin
+     for i:=0 to exifkey.Count-1 do begin
+        hdr.Add('HIERARCH',StringReplace(exifkey[i],'.',' ',[rfReplaceAll])+' = '''+exifvalue[i]+'''','');
+     end;
+   end;
+   if origin='' then
+     hdr.Add('COMMENT','Converted from '+ext,'')
    else
-     hdr.Add('COMMENT','Converted from ',ext);
+     hdr.Add('COMMENT','Converted from camera RAW by '+origin,'');
    hdr.Add('END','','');
    hdrmem:=hdr.GetStream;
    try
@@ -3491,7 +3494,7 @@ else if RawUnpCmd<>'' then begin  // try libraw tools
    exit;
  end;
  raw.LoadFromFile(tiff);
- PictureToFits(raw,'tiff',ImgStream,false,pix,piy,binx,biny,bayerpattern,rmult,gmult,bmult);
+ PictureToFits(raw,'tiff',ImgStream,false,pix,piy,binx,biny,bayerpattern,rmult,gmult,bmult,'LibRaw tools',exifkey,exifvalue);
  outr.Free;
  except
    rmsg:='Error converting raw file';
@@ -3523,7 +3526,7 @@ else if DcrawCmd<>'' then begin  // try dcraw command line
     exit;
   end;
   raw.LoadFromFile(tiff);
-  PictureToFits(raw,'tiff',ImgStream,false,pix,piy,binx,biny,bayerpattern);
+  PictureToFits(raw,'tiff',ImgStream,false,pix,piy,binx,biny,bayerpattern,'','','','dcraw',exifkey,exifvalue);
   outr.Free;
   except
     rmsg:='Error converting raw file';

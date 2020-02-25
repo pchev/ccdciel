@@ -152,7 +152,7 @@ begin
   end;
   // try dcraw
   try
-  if (RawUnpCmd='')or(RawIdCmd='') then begin
+  if (libraw=0)and((RawUnpCmd='')or(RawIdCmd='')) then begin
     {$ifdef mswindows}
     DcrawCmd:=slash(Appdir)+dcrawname;
     if not fileexists(DcrawCmd) then DcrawCmd:='';
