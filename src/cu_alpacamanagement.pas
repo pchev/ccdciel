@@ -227,8 +227,17 @@ begin
         delete(ip,length(ip),1);
         Fjson:=GetJSON(data);
         if Fjson<>nil then begin
+            try
             port:=Fjson.GetPath('AlpacaPort').AsString;
+            except
+              Fjson.Free;
+              continue;
+            end;
+            try
             id:=Fjson.GetPath('AlpacaUniqueId').AsString;
+            except
+              id:=IntToStr(Random(MaxInt));
+            end;
         end;
         Fjson.Free;
         for i:=0 to Length(result)-1 do begin
