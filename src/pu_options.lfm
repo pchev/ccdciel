@@ -249,8 +249,8 @@ object f_option: Tf_option
         TabOrder = 0
         object FileOpt: TTabSheet
           Caption = 'File name options'
-          ClientHeight = 305
-          ClientWidth = 516
+          ClientHeight = 332
+          ClientWidth = 522
           ParentFont = False
           object BtnFileDefault: TButton
             Left = 394
@@ -364,8 +364,8 @@ object f_option: Tf_option
         end
         object FolderOpt: TTabSheet
           Caption = 'Folder name options'
-          ClientHeight = 305
-          ClientWidth = 516
+          ClientHeight = 332
+          ClientWidth = 522
           ParentFont = False
           object BtnFolderDefault: TButton
             Left = 394
@@ -2873,8 +2873,8 @@ object f_option: Tf_option
               Top = 218
               Width = 454
               BevelOuter = bvNone
-              ClientHeight = 36
-              ClientWidth = 450
+              ClientHeight = 40
+              ClientWidth = 454
               ParentFont = False
               TabOrder = 1
               Visible = False
@@ -2980,8 +2980,8 @@ object f_option: Tf_option
               Top = 218
               Width = 454
               BevelOuter = bvNone
-              ClientHeight = 36
-              ClientWidth = 450
+              ClientHeight = 40
+              ClientWidth = 454
               ParentFont = False
               TabOrder = 8
               Visible = False
@@ -4402,15 +4402,16 @@ object f_option: Tf_option
         ChildSizing.ShrinkHorizontal = crsScaleChilds
         ChildSizing.ShrinkVertical = crsScaleChilds
         ChildSizing.Layout = cclLeftToRightThenTopToBottom
-        ChildSizing.ControlsPerLine = 3
+        ChildSizing.ControlsPerLine = 4
         ClientHeight = 61
         ClientWidth = 524
-        Columns = 3
+        Columns = 4
         ItemIndex = 0
         Items.Strings = (
           'Skychart / Cartes du Ciel'
           'SAMP'
           'HNSKY'
+          'None'
         )
         OnClick = PlanetariumBoxClick
         ParentFont = False
@@ -4421,7 +4422,7 @@ object f_option: Tf_option
         Height = 443
         Top = 81
         Width = 526
-        PageIndex = 0
+        PageIndex = 3
         Align = alClient
         TabOrder = 1
         TabStop = True
@@ -4452,8 +4453,8 @@ object f_option: Tf_option
               Height = 81
               Top = 49
               Width = 337
-              ClientHeight = 77
-              ClientWidth = 333
+              ClientHeight = 81
+              ClientWidth = 337
               ParentFont = False
               TabOrder = 1
               object CdCport: TEdit
@@ -4498,6 +4499,8 @@ object f_option: Tf_option
         object PageSamp: TPage
         end
         object PageHNSKY: TPage
+        end
+        object PagePlaNone: TPage
         end
       end
     end

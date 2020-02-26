@@ -49,6 +49,8 @@ protected
   procedure SetCmdTimeout(value:double);
   function GetCmdTimeout:double;
   procedure DisplayMessagesyn;
+  procedure SyncOnDisconnect;
+  procedure SyncOnConnect;
   procedure ProcessDataSyn; virtual; abstract;
   procedure DisplayMessage(msg:string);
   procedure ProcessData(line:string);
@@ -146,6 +148,16 @@ end;
 procedure TPlanetarium.DisplayMessageSyn;
 begin
 if assigned(FonShowMessage) then FonShowMessage(FErrorDesc);
+end;
+
+procedure TPlanetarium.SyncOnDisconnect;
+begin
+if assigned(FonDisconnect) then FonDisconnect(Self);
+end;
+
+procedure TPlanetarium.SyncOnConnect;
+begin
+if assigned(FonConnect) then FonConnect(Self);
 end;
 
 procedure TPlanetarium.ProcessData(line:string);

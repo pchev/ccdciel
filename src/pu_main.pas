@@ -1324,9 +1324,9 @@ begin
   autoguider.onDisconnect:=@AutoguiderDisconnect;
   autoguider.onShowMessage:=@NewMessage;
 
-  i:=config.GetValue('/Planetarium/Software',0);
+  i:=config.GetValue('/Planetarium/Software',ord(plaNONE));
   case TPlanetariumType(i) of
-    CDC: planetarium:=TPlanetarium_cdc.Create;
+    CDC,plaNONE: planetarium:=TPlanetarium_cdc.Create;
     SAMP:planetarium:=TPlanetarium_samp.Create;
     HNSKY:planetarium:=TPlanetarium_hnsky.Create;
   end;
@@ -3940,6 +3940,8 @@ begin
   if WantSafety  then ConnectSafety(Sender);
   Application.ProcessMessages;
   if WantWatchdog then ConnectWatchdog(Sender);
+  AutoguiderConnectClick(Sender);
+  PlanetariumConnectClick(Sender);
 end;
 
 Procedure Tf_main.Disconnect(Sender: TObject);
@@ -4915,6 +4917,9 @@ var buf: string;
     ilevel:TIntList;
 begin
  if (msg<>'')and(f_msg<>nil) then begin
+  if (GetCurrentThreadId<>MainThreadID) then begin
+    exit;
+  end;
   if level<9 then begin
   buf:=FormatDateTime('hh:nn:ss',now)+blank+msg;
   if AllMsg.Count>100 then
@@ -5935,6 +5940,7 @@ begin
                 autoguider.Connect(config.GetValue('/Autoguider/LinGuiderHostname','localhost'),config.GetValue('/Autoguider/LinGuiderPort','5656'));
                end;
     end;
+    agNONE: exit;
   end;
  end else begin
    autoguider.Disconnect;
@@ -6624,7 +6630,7 @@ begin
    f_option.GuideDriftMax.Value:=config.GetValue('/Autoguider/Recovery/MaxGuideDrift',100.0);
    f_option.GuideDriftCancelExposure.Checked:=config.GetValue('/Autoguider/Recovery/CancelExposure',false);
    f_option.GuideDriftRestartDelay.Value:=config.GetValue('/Autoguider/Recovery/RestartDelay',15);
-   f_option.PlanetariumBox.ItemIndex:=config.GetValue('/Planetarium/Software',0);
+   f_option.PlanetariumBox.ItemIndex:=config.GetValue('/Planetarium/Software',ord(plaNONE));
    f_option.CdChostname.Text:=config.GetValue('/Planetarium/CdChostname','localhost');
    f_option.CdCport.Text:=config.GetValue('/Planetarium/CdCport','');
    f_option.CheckBoxLocalCdc.Checked:=f_option.CdCport.Text='';
@@ -6923,7 +6929,7 @@ begin
      config.SetValue('/Autoguider/Recovery/MaxGuideDrift',f_option.GuideDriftMax.Value);
      config.SetValue('/Autoguider/Recovery/CancelExposure',f_option.GuideDriftCancelExposure.Checked);
      config.SetValue('/Autoguider/Recovery/RestartDelay',f_option.GuideDriftRestartDelay.Value);
-     PlanetariumChange := (f_option.PlanetariumBox.ItemIndex <> config.GetValue('/Planetarium/Software',0));
+     PlanetariumChange := (f_option.PlanetariumBox.ItemIndex <> config.GetValue('/Planetarium/Software',ord(plaNONE)));
      config.SetValue('/Planetarium/Software',f_option.PlanetariumBox.ItemIndex);
      config.SetValue('/Planetarium/CdChostname',f_option.CdChostname.Text);
      config.SetValue('/Planetarium/CdCport',trim(f_option.CdCport.Text));
@@ -7031,9 +7037,9 @@ begin
      if PlanetariumChange and (not planetarium.Connected) then begin
         planetarium.Terminate;
         planetarium.Connect('');
-        i:=config.GetValue('/Planetarium/Software',0);
+        i:=config.GetValue('/Planetarium/Software',ord(plaNONE));
         case TPlanetariumType(i) of
-          CDC: planetarium:=TPlanetarium_cdc.Create;
+          CDC,plaNONE: planetarium:=TPlanetarium_cdc.Create;
           SAMP:planetarium:=TPlanetarium_samp.Create;
           HNSKY:planetarium:=TPlanetarium_hnsky.Create;
         end;
@@ -10836,6 +10842,7 @@ end;
 Procedure Tf_main.PlanetariumConnectClick(Sender: TObject);
 var i: integer;
 begin
+ if TPlanetariumType(config.GetValue('/Planetarium/Software',ord(plaNONE)))=plaNONE then exit;
  if f_planetarium.BtnConnect.Caption=rsConnect then begin
    f_planetarium.BtnConnect.Caption:=rsDisconnect;
    MenuPlanetariumConnect.Caption:=f_planetarium.BtnConnect.Caption;
@@ -10872,9 +10879,9 @@ begin
    MenuPlanetariumConnect.Caption:=f_planetarium.BtnConnect.Caption;
    NewMessage(rsPlanetarium+': '+Format(rsDisconnected,[PlanetariumName[ord(planetarium.PlanetariumType)]]),1);
    wait(1);
-   i:=config.GetValue('/Planetarium/Software',0);
+   i:=config.GetValue('/Planetarium/Software',ord(plaNONE));
    case TPlanetariumType(i) of
-     CDC: planetarium:=TPlanetarium_cdc.Create;
+     CDC,plaNONE: planetarium:=TPlanetarium_cdc.Create;
      SAMP:planetarium:=TPlanetarium_samp.Create;
      HNSKY:planetarium:=TPlanetarium_hnsky.Create;
    end;

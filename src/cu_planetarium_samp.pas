@@ -118,7 +118,7 @@ begin
       DisplayMessage('SAMP listen on port '+inttostr(SampClient.ListenPort));
       FStatus:=true;
       FRunning:=true;
-      if assigned(FonConnect) then FonConnect(self);
+      Synchronize(@SyncOnConnect);
       repeat
         if FClientChange then DoClientChange;
         sleep(200);
@@ -132,7 +132,7 @@ begin
   FRunning:=false;
   SampClient.onDisconnect:=nil;
  finally
-   if assigned(FonDisconnect) then FonDisconnect(self);
+   Synchronize(@SyncOnDisconnect);
    if SampClient.Connected then SampClient.SampHubDisconnect;
    SampClient.free;
    Terminate;
@@ -152,7 +152,7 @@ end;
 procedure TPlanetarium_samp.ClientDisconnected(Sender: TObject);
 begin
  FStatus:=false;
- if assigned(FonDisconnect) then FonDisconnect(self);
+ Synchronize(@SyncOnDisconnect);
  Terminate;
 end;
 
