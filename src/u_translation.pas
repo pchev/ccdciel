@@ -1246,6 +1246,8 @@ resourcestring
   rsAlignmentOn = 'Alignment on';
   rsTruePole = 'True pole';
   rsRefractedPol = 'Refracted pole';
+  rsDiscover = 'Discover';
+  rsDiscoveryPor = 'Discovery port';
 
 implementation
 

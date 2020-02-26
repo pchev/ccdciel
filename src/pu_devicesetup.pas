@@ -50,11 +50,13 @@ type
     CameraARestPass: TEdit;
     AlpacaServers: TComboBox;
     AlpacaCameraList: TComboBox;
+    AlpacaDiscoveryPort: TSpinEditEx;
     FocuserExternalTemperature: TCheckBox;
     DefaultARestPass: TEdit;
     DefaultARestUser: TEdit;
     Label107: TLabel;
     Label108: TLabel;
+    Label26: TLabel;
     Label8: TLabel;
     Panel20: TPanel;
     Panel21: TPanel;
@@ -567,6 +569,8 @@ begin
   Label22.Caption:=rsPort;
   Label1.Caption:=rsTimeout;
   ApplyIndi.Caption:=rsApplyToAllDe;
+  BtnDiscover.Caption:=rsDiscover;
+  Label26.Caption:=rsDiscoveryPor;
   Label70.Caption:=rsProtocol;
   Label71.Caption:=rsServer;
   Label72.Caption:=rsPort;
@@ -1903,7 +1907,7 @@ var i,j,n:integer;
 begin
 try
   Screen.Cursor:=crHourGlass;
-  AlpacaServerList:=AlpacaDiscover;
+  AlpacaServerList:=AlpacaDiscover(AlpacaDiscoveryPort.Value);
   n:=length(AlpacaServerList);
   if n>0 then begin
     AlpacaServers.Clear;
