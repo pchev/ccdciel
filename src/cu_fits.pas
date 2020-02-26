@@ -498,6 +498,18 @@ begin
   result:=FKeys.IndexOf(key);
 end;
 
+function CleanASCII(txt: string):string;
+var i: integer;
+begin
+result:='';
+for i:=1 to length(txt) do begin
+  if (txt[i]>=#32)and(txt[i]<=#126) then
+    result:=result+txt[i]
+  else
+    result:=result+blank;
+end;
+end;
+
 function TFitsHeader.Valueof(key: string; out val: string): boolean; overload;
 var k: integer;
 begin
@@ -558,6 +570,8 @@ function TFitsHeader.Insert(idx: integer; key,val,comment: string; quotedval:boo
 var row: string;
     ii: integer;
 begin
+ val:=CleanASCII(val);
+ comment:=CleanASCII(comment);
  // The END keyword
  if (trim(key)='END') then begin
    row:=copy('END'+b80,1,80);
