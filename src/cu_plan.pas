@@ -61,6 +61,7 @@ T_Plan = class(TComponent)
     StepRunning: boolean;
     StepTimeStart,StepDelayEnd: TDateTime;
     FName,FObjectName: string;
+    FRestartTargetNum: integer;
     FRunning: boolean;
   public
     constructor Create(AOwner: TComponent);override;
@@ -74,6 +75,7 @@ T_Plan = class(TComponent)
     property Running: boolean read FRunning;
     property PlanName: string read FName write SetPlanName;
     property ObjectName: string read FObjectName write FObjectName;
+    property RestartTargetNum: integer read FRestartTargetNum write FRestartTargetNum;
     property Steps: T_Steps read FSteps;
     property Preview: Tf_preview read Fpreview write Fpreview;
     property Capture: Tf_capture read Fcapture write Fcapture;
@@ -175,6 +177,7 @@ begin
   PlanTimer.Enabled:=false;
   FlatWaitDusk:=false;
   FlatWaitDawn:=false;
+  if (FRestartTargetNum>0)and(CurrentStep>=0) then SequenceFile.Items.SetValue('/Targets/Target'+inttostr(FRestartTargetNum)+'/Plan/Steps/Step'+inttostr(CurrentStep)+'/Done',CurrentDoneCount);
   if assigned(FonStepProgress) then FonStepProgress(self);
   inc(FCurrentStep);
   if FCurrentStep<NumSteps then begin
@@ -242,14 +245,15 @@ end;
 
 
 procedure T_Plan.PlanTimerTimer(Sender: TObject);
-var p: TStep;
+var s: TStep;
 begin
  if FRunning then begin
-   p:=FSteps[CurrentStep];
-   if p<>nil then begin
+   s:=FSteps[CurrentStep];
+   if s<>nil then begin
      // store image count
-     if p.donecount<>CurrentDoneCount then begin
-        p.donecount:=CurrentDoneCount;
+     if s.donecount<>CurrentDoneCount then begin
+        s.donecount:=CurrentDoneCount;
+        if FRestartTargetNum>0 then SequenceFile.Items.SetValue('/Targets/Target'+inttostr(FRestartTargetNum)+'/Plan/Steps/Step'+inttostr(CurrentStep)+'/Done',s.donecount);
         if assigned(FonStepProgress) then FonStepProgress(self);
      end;
    end;

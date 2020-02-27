@@ -123,8 +123,6 @@ type
               function autofocuscount_str: string;
             end;
 
-  TStepDone = array of integer;
-
   TTarget = Class(TObject)
               public
               objectname, planname, path: shortstring;
@@ -138,7 +136,6 @@ type
               preview,astrometrypointing,updatecoord,inplaceautofocus,autoguiding: boolean;
               delay, previewexposure: double;
               plan :TComponent;
-              DoneList: TStepDone;
               constructor Create;
               destructor Destroy; override;
               procedure Assign(Source: TTarget);
@@ -505,7 +502,6 @@ begin
   previewexposure:=1;
   darknight:=false;
   skip:=false;
-  SetLength(DoneList,0);
 end;
 
 destructor TTarget.Destroy;
@@ -514,7 +510,6 @@ begin
   if (plan<>nil) then FreeAndNil(plan);
   except
   end;
-  SetLength(DoneList,0);
   Inherited Destroy;
 end;
 
@@ -552,8 +547,6 @@ begin
   FlatFstop:=Source.FlatFstop;
   darknight:=Source.darknight;
   skip:=Source.skip;
-  SetLength(DoneList,Length(Source.DoneList));
-  for i:=0 to Length(Source.DoneList)-1 do DoneList[i]:=Source.DoneList[i];
 end;
 
 function TTarget.previewexposure_str: string;

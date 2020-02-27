@@ -131,7 +131,6 @@ type
     procedure StartSequence;
     procedure ClearTargetGrid;
     procedure ClearPlanGrid;
-    procedure LoadPlan(p: T_Plan; plan:string; donelist:TStepDone);
     procedure msg(txt:string; level: integer);
     procedure ShowDelayMsg(txt:string);
     procedure StopSequence;
@@ -145,6 +144,7 @@ type
     function GetPercentComplete: double;
     function GetTargetPercentComplete: double;
     procedure ClearRestartHistory(Confirm:boolean);
+    procedure CompatLoadPlan(p: T_Plan; plan:string);
   public
     { public declarations }
     StepRepeatCount, StepTotalCount: integer;
@@ -492,10 +492,9 @@ begin
            defaultname:=f_EditTargets.TargetList.Cells[1,i];
         t:=TTarget(f_EditTargets.TargetList.Objects[0,i]);
         t.repeatdone:=0;
-        for j:=0 to length(t.DoneList)-1 do
-           t.DoneList[j]:=0;
         Targets.Add(t);
-        LoadPlan(T_Plan(t.plan), t.planname,t.DoneList);
+        { TODO : remove after edittarget set the plan }
+        CompatLoadPlan(T_Plan(t.plan), t.planname);
       end;
       Targets.IgnoreRestart    := not f_EditTargets.CheckBoxRestartStatus.Checked;
       Targets.ResetRepeat      := f_EditTargets.CheckBoxResetRepeat.Checked;
@@ -679,16 +678,10 @@ begin
           end;
          end
          else begin
+           // compatibility with old sequence format
            m:=trunc(SequenceFile.Items.GetValue('/Targets/Target'+inttostr(i)+'/StepDone/StepCount',0));
-           SetLength(t.DoneList,m);
-           for j:=0 to m-1 do begin
-              if Targets.IgnoreRestart then
-                 t.DoneList[j]:=0
-              else
-                 t.DoneList[j]:=trunc(SequenceFile.Items.GetValue('/Targets/Target'+inttostr(i)+'/StepDone/Step'+inttostr(j)+'/Done',0));
-           end;
            Targets.Add(t);
-           LoadPlan(T_Plan(t.plan), t.planname, t.DoneList);
+           CompatLoadPlan(T_Plan(t.plan), t.planname);
          end;
      end;
    end;
@@ -714,7 +707,7 @@ begin
    end;
 end;
 
-procedure Tf_sequence.LoadPlan(p: T_plan; plan:string; donelist:TStepDone);
+procedure Tf_sequence.CompatLoadPlan(p: T_plan; plan:string);
 var fn,buf: string;
     i,n,m:integer;
     pfile: TCCDconfig;
@@ -727,19 +720,15 @@ begin
      pfile:=TCCDconfig.Create(self);
      pfile.Filename:=fn;
      n:=pfile.GetValue('/StepNum',0);
-     m:=Length(donelist);
-     if n<>m then begin
-       SetLength(donelist,n);
-       for i:=m to n-1 do donelist[i]:=0;
-     end;
      buf:='';
      for i:=1 to n do begin
        s:=TStep.Create;
        f_EditTargets.ReadStep(pfile,i,s,buf);
-       s.donecount:=donelist[i-1];
+       s.donecount:=0;
        p.Add(s);
      end;
-     if buf>'' then ShowMessage(buf);
+     if buf='' then buf:='Warning! the sequence completion status is cleared.';
+     ShowMessage(buf);
   end;
 end;
 
@@ -900,12 +889,8 @@ begin
         SequenceFile.Items.SetValue('/Targets/Target'+inttostr(i)+'/Plan/Steps/Step'+inttostr(j)+'/AutofocusStart',p.Steps[j].autofocusstart);
         SequenceFile.Items.SetValue('/Targets/Target'+inttostr(i)+'/Plan/Steps/Step'+inttostr(j)+'/Autofocus',p.Steps[j].autofocus);
         SequenceFile.Items.SetValue('/Targets/Target'+inttostr(i)+'/Plan/Steps/Step'+inttostr(j)+'/AutofocusCount',p.Steps[j].autofocuscount);
-        SequenceFile.Items.SetValue('/Targets/Target'+inttostr(i)+'/Plan/Steps/Step'+inttostr(j)+'/Done',0)
+        SequenceFile.Items.SetValue('/Targets/Target'+inttostr(i)+'/Plan/Steps/Step'+inttostr(j)+'/Done',p.Steps[j].donecount)
       end;
-      if not Targets.IgnoreRestart then
-        for j:=0 to Length(t.DoneList)-1 do begin
-           SequenceFile.Items.SetValue('/Targets/Target'+inttostr(i)+'/Plan/Steps/Step'+inttostr(j)+'/Done',t.DoneList[j]);
-        end;
     end;
     SequenceFile.Save;
  end;

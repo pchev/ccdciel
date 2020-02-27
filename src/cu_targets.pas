@@ -649,10 +649,8 @@ begin
     p:=t_plan(t.plan);
     if p=nil then Continue;
     if p.Count<=0 then Continue;
-    SetLength(t.DoneList,p.Count);
     for j:=0 to p.Count-1 do begin
       p.Steps[j].donecount:=0;
-      t.DoneList[j]:=0;
     end;
  end;
 end;
@@ -680,7 +678,8 @@ begin
      SequenceFile.Items.SetValue('/Targets/Target'+inttostr(i)+'/RepeatDone',0)
   else
      SequenceFile.Items.SetValue('/Targets/Target'+inttostr(i)+'/RepeatDone',t.repeatdone);
-  // plan step done
+
+{  // plan step done
   n:=p.CurrentStep;
   if (n>=0)and(n<p.Count) then begin
     SetLength(t.DoneList,p.Count);
@@ -690,7 +689,8 @@ begin
        t.DoneList[n]:=p.Steps[n].donecount;
     SequenceFile.Items.SetValue('/Targets/Target'+inttostr(i)+'/StepDone/StepCount',Length(t.DoneList));
     SequenceFile.Items.SetValue('/Targets/Target'+inttostr(i)+'/StepDone/Step'+inttostr(n)+'/Done',t.DoneList[n]);
-  end;
+  end; }
+
   // save file
   SequenceFile.Save;
  except
@@ -1349,6 +1349,10 @@ begin
     if t.objectname<>'None' then
        Fcapture.Fname.Text:=trim(t.objectname);
     p.ObjectName:=t.objectname;
+    if FIgnoreRestart then
+      p.RestartTargetNum:=-1
+    else
+      p.RestartTargetNum:=FCurrentTarget+1;
     TargetTimeStart:=now;
     p.Start;
   end;
