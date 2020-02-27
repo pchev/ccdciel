@@ -38,6 +38,7 @@ type
     BtnStart: TButton;
     BtnCancel: TButton;
     BtnContinue: TButton;
+    RefractionGroup: TRadioGroup;
     SaveImages: TCheckBox;
     ExposeList: TCheckListBox;
     Label1: TLabel;
@@ -85,6 +86,7 @@ type
     FExposeStep:Integer;
     FInProgress: boolean;
     FTerminate: boolean;
+    FFirstInit: boolean;
     FonShowMessage: TNotifyMsg;
     FonClose: TNotifyEvent;
     Fx, Fy: array[1..3] of double;
@@ -199,6 +201,9 @@ begin
    BtnLock.Caption:=rsLockOverlay;
    Label5.Caption:=rsPolarAlignme2;
    Label1.Caption:=Format(rsMakeAFirstPo, [crlf, crlf, crlf]);
+   RefractionGroup.Caption:=rsAlignmentOn;
+   RefractionGroup.Items[0]:=rsTruePole;
+   RefractionGroup.Items[1]:=rsRefractedPol;
    MountSlewing.Caption:=rsMovingMount;
    MountSlewing.Items[0]:=rsAutomatic;
    MountSlewing.Items[1]:=rsManual;
@@ -221,6 +226,7 @@ end;
 procedure Tf_polaralign.FormCreate(Sender: TObject);
 begin
   SetLang;
+  FFirstInit:=true;
 end;
 
 procedure Tf_polaralign.FormShow(Sender: TObject);
@@ -284,6 +290,13 @@ begin
   MountSlewingClick(nil);
   FInProgress:=false;
   FTerminate:=false;
+  if FFirstInit then begin
+    FFirstInit:=false;
+    if abs(ObsLatitude)<30 then
+      RefractionGroup.ItemIndex:=0  // use true pole
+    else
+      RefractionGroup.ItemIndex:=1; // use refracted pole
+  end;
 end;
 
 procedure Tf_polaralign.AbortAlignment;
@@ -562,22 +575,29 @@ begin
   rotcenter.y:=(rotcenter1.y+rotcenter2.y+rotcenter3.y)/3;
   errx:=maxvalue([abs(rotcenter.x-rotcenter1.x),abs(rotcenter.x-rotcenter2.x),abs(rotcenter.x-rotcenter3.x)]);
   erry:=maxvalue([abs(rotcenter.y-rotcenter1.y),abs(rotcenter.y-rotcenter2.y),abs(rotcenter.y-rotcenter3.y)]);
-  tracemsg('Rotation center in projection plane:  X='+FormatFloat(f6,rotcenter.x)+' Y='+FormatFloat(f6,rotcenter.y));
-  // Position of pole corrected for refraction
-  poleH:=deg2rad*abs(ObsLatitude);        // geometric
-  Refraction(poleH,true);                 // refracted
-  poleH:=rad2deg*poleH;
-  poleRefraction:=poleH-abs(ObsLatitude); // correction
-  tracemsg('Observatory Latitude: '+FormatFloat(f6,ObsLatitude));
-  tracemsg('Pole refraction: '+FormatFloat(f6,poleRefraction));
   // the offset in degree
   FOffsetAz:=rotcenter.x;
-  FOffsetH:=rotcenter.y+poleRefraction;
-  tracemsg('Rotation center corrected for refraction:  X='+FormatFloat(f6,FOffsetAz)+' Y='+FormatFloat(f6,FOffsetH));
+  FOffsetH:=rotcenter.y;
+  tracemsg('Refracted rotation center in projection plane:  X='+FormatFloat(f6,FOffsetAz)+' Y='+FormatFloat(f6,FOffsetH));
+  if RefractionGroup.ItemIndex=0 then begin
+    // Position of true pole corrected for Refraction
+    poleH:=deg2rad*abs(ObsLatitude);        // geometric
+    Refraction(poleH,true);                 // refracted
+    poleH:=rad2deg*poleH;
+    poleRefraction:=poleH-abs(ObsLatitude); // correction
+    FOffsetH:=FOffsetH+poleRefraction;
+    tracemsg('Observatory Latitude: '+FormatFloat(f6,ObsLatitude));
+    tracemsg('Pole refraction: '+FormatFloat(f6,poleRefraction));
+    tracemsg('True rotation center in projection plane:  X='+FormatFloat(f6,FOffsetAz)+' Y='+FormatFloat(f6,FOffsetH));
+    tracemsg('Using true pole');
+  end
+  else begin
+    tracemsg('Using refracted pole');
+  end;
   poleoffset:=sqrt(FOffsetAz*FOffsetAz+FOffsetH*FOffsetH);
   err:=sqrt(errx*errx+erry*erry);
   tracemsg('Total polar error:  '+FormatFloat(f6,poleoffset)+' error='+FormatFloat(f6,err));
-  // position of rotation axis corrected for refraction
+  // position of rotation axis
   InvProj(deg2rad*FOffsetAz,deg2rad*FOffsetH,Fac,Fdc,rotRa,rotDec);
   rotRa:=rad2deg*rotRa/15;
   rotDec:=rad2deg*rotDec;

@@ -47,10 +47,16 @@ type
     ButtonVoiceTest: TButton;
     ButtonVoiceAll: TButton;
     ButtonVoiceNone: TButton;
+    PagePlaNone: TPage;
+    WantExif: TCheckBox;
+    LabelTestVoice: TLabel;
+    LowQualityDisplay: TCheckBox;
+    NotDisplayCapture: TCheckBox;
     CheckGroupVoice: TCheckGroup;
     GroupBox27: TGroupBox;
     GroupBox28: TGroupBox;
     GroupBox29: TGroupBox;
+    GroupBox30: TGroupBox;
     GroupBoxFocus: TGroupBox;
     GroupBoxMeasurement: TGroupBox;
     GuideDriftCancelExposure: TCheckBox;
@@ -137,6 +143,7 @@ type
     PagePref: TTabSheet;
     PageNotification: TTabSheet;
     PageSequence: TTabSheet;
+    PagePerformance: TTabSheet;
     TabSheetVoice: TTabSheet;
     TabSheetEmail: TTabSheet;
     UseFileSequenceWidth: TCheckBox;
@@ -741,6 +748,7 @@ begin
   UseTcpServer.Caption := rsAllowToGetPr;
   UseFileSequenceWidth.Caption:=rsFixedSequenc;
   FilePack.Caption:=rsCompressTheF;
+  WantExif.Caption:=rsAddFITSKeywo;
   Label18.Caption := rsLanguage;
   CbShowHints.Caption:=rsShowHints;
   Debug_msg.Caption:=rsVerboseDevic;
@@ -1052,6 +1060,10 @@ begin
   label111.Caption:=rsTheFollowing;
   SafetyActions.Columns[0].Title.Caption:=rsAction;
   SafetyActions.Columns[1].Title.Caption:=rsParameter;
+  PagePerformance.Caption:=rsPerformance;
+  GroupBox30.Caption:=rsDisplaySpeed;
+  LowQualityDisplay.Caption:=rsLowQualityIm;
+  NotDisplayCapture.Caption:=rsDoNotDisplay;
   PageNotification.Caption := rsNotification;
   Label140.Caption:=rsPleaseSeeThe;
   GroupBox24.Caption:=rsEmailConfigu;
@@ -1695,7 +1707,10 @@ end;
 
 procedure Tf_option.ButtonVoiceTestClick(Sender: TObject);
 begin
+  LabelTestVoice.Caption:='';
   speak(rstest+' . '+format(rsNeedToWaitUn,['22:34:56']));
+  if SPError<>0 then
+    LabelTestVoice.Caption:=SPErrorMsg;
 end;
 
 end.

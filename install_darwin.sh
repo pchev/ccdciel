@@ -22,6 +22,7 @@ install -v -m 644 system_integration/MacOSX/pkg/ccdciel.app/Contents/Resources/c
 install -v -m 755 library/wcs/libccdcielwcs.dylib  $destdir/libccdcielwcs.dylib
 install -v -m 755 library/raw/libpasraw.dylib  $destdir/libpasraw.dylib
 tar xvzf system_integration/MacOSX/data/cfitsio-mac.tgz -C $destdir
+tar xvzf system_integration/MacOSX/data/exiv2-mac.tgz -C $destdir/ccdciel.app/Contents/MacOS
 
 install -d -m 755 $destdir/scripts
 install -m 755 -d $destdir/scripts/siril

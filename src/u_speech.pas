@@ -32,12 +32,15 @@ uses
  {$ifdef unix}
    unix,
  {$endif}
-  u_utils, u_global,
+  u_utils, u_global, u_translation,
   Classes, Forms, SysUtils;
 
 procedure InitSpeak;
 procedure speak(Text: string);
 
+var
+  SPError: integer;
+  SPErrorMsg: string;
 
 implementation
 
@@ -53,6 +56,8 @@ const SVSFlagsAsync = 1;
       SVSFIsXML = 8;
 begin
   try
+    SPError:=0;
+    SPErrorMsg:='';
     if VarIsEmpty(SpVoice) then
       SpVoice := CreateOleObject('SAPI.SpVoice');
     if not VarIsEmpty(SpVoice) then
@@ -67,6 +72,10 @@ begin
       end;
     end;
   except
+    on E:exception do begin
+       SPError:=1;
+       SPErrorMsg:=E.Message;
+       end;
   end;
 end;
 
@@ -86,7 +95,8 @@ begin
     sl := copy(sl, 1, p - 1);
   ll := TStringList.Create;
   try
-    ExecProcess('espeak --voices', ll);
+    SPError:=ExecProcess('espeak --voices', ll);
+    if SPError=0 then begin
     for i := 0 to ll.Count - 1 do
     begin
       buf := words(ll[i], '', 2, 1);
@@ -110,6 +120,11 @@ begin
         end;
       end;
     end;
+    end
+    else begin
+      SPErrorMsg:=format(rsError,[IntToStr(SPError)]);
+      if ll.Count>0 then SPErrorMsg:=SPErrorMsg+', '+ll[0];
+    end;
   finally
     ll.Free;
   end;
@@ -126,6 +141,8 @@ begin
  end;
  try
   LockSpeak:=true;
+  SPError:=0;
+  SPErrorMsg:='';
   if splang = '' then
     GetLang;
   opt:='';
@@ -133,7 +150,7 @@ begin
     Text:=StringReplace(Text,'.',', <break time="1000ms"/> ',[rfReplaceAll]);
     opt:=opt+' -m ';
   end;
-  fpSystem('espeak -s 140 -v ' + spLang + opt + ' "' + LowerCase(Text) + '"');
+  SPError:=fpSystem('espeak -s 140 -v ' + spLang + opt + ' "' + LowerCase(Text) + '"');
  finally
    LockSpeak:=false;
  end;
@@ -152,7 +169,9 @@ begin
  end;
  try
   LockSpeak:=true;
-  fpSystem('osascript -e ''say "' + Text + '"''');
+  SPError:=0;
+  SPErrorMsg:='';
+  SPError:=fpSystem('osascript -e ''say "' + Text + '"''');
   finally
     LockSpeak:=false;
   end;

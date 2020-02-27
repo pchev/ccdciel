@@ -136,7 +136,7 @@ try
            i:=pos(' ',buf);
            FclientName:=trim(copy(buf,1,i-1));
            FStatus:=true;
-           if assigned(FonConnect) then FonConnect(self);
+           Synchronize(@SyncOnConnect);
            break;
         end else begin
            // failure, close thread
@@ -178,17 +178,13 @@ try
         if tcpclient.resultbuffer='' then tcpclient.resultbuffer:=msgTimeout;
      end;
    until false;
- end
- else begin
-   DisplayMessage('Cannot connect to CdC, Is CdC running and the server active?');
-
  end;
 FRunning:=false;
 FStatus:=false;
 if not terminated then DisplayMessage(tcpclient.GetErrorDesc);
 finally
   terminate;
-  if assigned(FonDisconnect) then FonDisconnect(self);
+  Synchronize(@SyncOnDisconnect);
   tcpclient.Disconnect;
   tcpclient.Free;
 end;

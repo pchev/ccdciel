@@ -707,6 +707,7 @@ type
     procedure CameraVideoRateChange(Sender: TObject);
     procedure CameraVideoExposureChange(Sender: TObject);
     procedure CameraFPSChange(Sender: TObject);
+    procedure ShowLastImage(Sender: TObject);
     procedure ResetPreviewStack(Sender: TObject);
     Procedure StopExposure(Sender: TObject);
     Procedure StartPreviewExposure(Sender: TObject);
@@ -1199,8 +1200,11 @@ begin
   ReadoutModeAstrometry:=0;
   DomeNoSafetyCheck:=false;
   EarlyNextExposure:=false;
-  ConfigExpEarlyStart:=false;
+  DisplayCapture:=true;
+  LowQualityDisplay:={$ifdef cpuarm}true{$else}false{$endif};
+  ConfigExpEarlyStart:=true;
   CameraProcessingImage:=false;
+  WantExif:=true;
   MagnitudeCalibration:=NullCoord;
   ManualFilterNames:=TStringList.Create;
   ScrBmp := TBGRABitmap.Create;
@@ -1321,9 +1325,9 @@ begin
   autoguider.onDisconnect:=@AutoguiderDisconnect;
   autoguider.onShowMessage:=@NewMessage;
 
-  i:=config.GetValue('/Planetarium/Software',0);
+  i:=config.GetValue('/Planetarium/Software',ord(plaNONE));
   case TPlanetariumType(i) of
-    CDC: planetarium:=TPlanetarium_cdc.Create;
+    CDC,plaNONE: planetarium:=TPlanetarium_cdc.Create;
     SAMP:planetarium:=TPlanetarium_samp.Create;
     HNSKY:planetarium:=TPlanetarium_hnsky.Create;
   end;
@@ -1344,6 +1348,7 @@ begin
   f_visu.onZoom:=@ZoomImage;
   f_visu.onRedrawHistogram:=@RedrawHistogram;
   f_visu.onShowHistogramPos:=@ShowHistogramPos;
+  f_visu.onShowLastImage:=@ShowLastImage;
 
   f_frame:=Tf_frame.Create(self);
   f_frame.onSet:=@SetFrame;
@@ -1974,10 +1979,10 @@ begin
   if (cdcwcs_initfitsfile=nil)or(cdcwcs_release=nil)or(cdcwcs_sky2xy=nil)or(cdcwcs_xy2sky=nil)or(cdcwcs_getinfo=nil) then begin
      NewMessage('Could not load '+libwcs+crlf+'Some astrometry function are not available.',1);
   end;
-  if (libraw=0)and(DcrawCmd='') then begin
+  if (libraw=0)and(DcrawCmd='')and(RawUnpCmd='') then begin
      NewMessage('Could not find '+librawname
      {$ifdef unix}
-               +', libraw.so'
+               +', libraw.so, unprocessed_raw, raw-identify'
      {$endif}
                +' or '+dcrawname+'. Loading camera raw files is not possible.',1);
   end;
@@ -2192,6 +2197,8 @@ begin
   f_visu.BtnFlipHorz.Glyph.Assign(btn);
   TBTabs.Images.GetBitmap(13, btn);
   f_visu.BtnFlipVert.Glyph.Assign(btn);
+  TBTabs.Images.GetBitmap(14, btn);
+  f_visu.BtnShowLastImage.Glyph.Assign(btn);
   TBTabs.Images.GetBitmap(9, btn);
   f_starprofile.BtnPinGraph.Glyph.Assign(btn);
   TBTabs.Images.GetBitmap(10, btn);
@@ -3372,6 +3379,9 @@ begin
     Showgain;
   end;
   MaxADU:=config.GetValue('/Sensor/MaxADU',MAXWORD);
+  DisplayCapture:=config.GetValue('/Visu/DisplayCapture',DisplayCapture);
+  f_visu.PanelNoDisplay.Visible:=not DisplayCapture;
+  LowQualityDisplay:=config.GetValue('/Visu/LowQualityDisplay',LowQualityDisplay);
   ConfigExpEarlyStart:=config.GetValue('/Sensor/ExpEarlyStart',ConfigExpEarlyStart);
   MeasureNewImage:=config.GetValue('/Files/MeasureNewImage',false) and ConfigExpEarlyStart;
   CheckRecenterTarget:=config.GetValue('/PrecSlew/CheckRecenterTarget',false) and ConfigExpEarlyStart;
@@ -3545,6 +3555,7 @@ begin
   FilenameSep:=config.GetValue('/Files/FileNameSep','_');
   FileSequenceWidth:=config.GetValue('/Files/FileSequenceWidth',0);
   FilePack:=config.GetValue('/Files/Pack',false);
+  WantExif:=config.GetValue('/Files/Exif',WantExif);
   if UseTcpServer and ((TCPDaemon=nil)or(TCPDaemon.stoping)) then StartServer;
   if (not UseTcpServer) and (TCPDaemon<>nil) then StopServer;
   WeatherRestartDelay:=config.GetValue('/Weather/RestartDelay',5);
@@ -3930,6 +3941,8 @@ begin
   if WantSafety  then ConnectSafety(Sender);
   Application.ProcessMessages;
   if WantWatchdog then ConnectWatchdog(Sender);
+  AutoguiderConnectClick(Sender);
+  PlanetariumConnectClick(Sender);
 end;
 
 Procedure Tf_main.Disconnect(Sender: TObject);
@@ -4905,6 +4918,9 @@ var buf: string;
     ilevel:TIntList;
 begin
  if (msg<>'')and(f_msg<>nil) then begin
+  if (GetCurrentThreadId<>MainThreadID) then begin
+    exit;
+  end;
   if level<9 then begin
   buf:=FormatDateTime('hh:nn:ss',now)+blank+msg;
   if AllMsg.Count>100 then
@@ -5925,6 +5941,7 @@ begin
                 autoguider.Connect(config.GetValue('/Autoguider/LinGuiderHostname','localhost'),config.GetValue('/Autoguider/LinGuiderPort','5656'));
                end;
     end;
+    agNONE: exit;
   end;
  end else begin
    autoguider.Disconnect;
@@ -6384,6 +6401,7 @@ begin
       f_option.FileSequenceWidth.Enabled:=false;
    end;
    f_option.FilePack.checked:=config.GetValue('/Files/Pack',false);
+   f_option.WantExif.Checked:=config.GetValue('/Files/Exif',WantExif);
    f_option.SaveBitmap.Checked:=config.GetValue('/Files/SaveBitmap',false);
    buf:=config.GetValue('/Files/SaveBitmapFormat','png');
    if buf='png' then f_option.SaveBitmapFormat.ItemIndex:=0
@@ -6515,6 +6533,8 @@ begin
    f_option.GainFromCamera.Checked:=config.GetValue('/Sensor/GainFromCamera',(not camera.CanSetGain));
    f_option.MaxAdu.Value:=config.GetValue('/Sensor/MaxADU',MAXWORD);
    f_option.MaxAduFromCamera.Checked:=config.GetValue('/Sensor/MaxADUFromCamera',true);
+   f_option.NotDisplayCapture.Checked:=not config.GetValue('/Visu/DisplayCapture',DisplayCapture);
+   f_option.LowQualityDisplay.Checked:=config.GetValue('/Visu/LowQualityDisplay',LowQualityDisplay);
    f_option.ExpEarlyStart.Checked:=config.GetValue('/Sensor/ExpEarlyStart',ConfigExpEarlyStart);
    f_option.MeasureNewImage.Checked:=config.GetValue('/Files/MeasureNewImage',false) and f_option.ExpEarlyStart.Checked;
    f_option.CheckRecenterTarget.Checked:=config.GetValue('/PrecSlew/CheckRecenterTarget',false) and f_option.ExpEarlyStart.Checked;
@@ -6611,7 +6631,7 @@ begin
    f_option.GuideDriftMax.Value:=config.GetValue('/Autoguider/Recovery/MaxGuideDrift',100.0);
    f_option.GuideDriftCancelExposure.Checked:=config.GetValue('/Autoguider/Recovery/CancelExposure',false);
    f_option.GuideDriftRestartDelay.Value:=config.GetValue('/Autoguider/Recovery/RestartDelay',15);
-   f_option.PlanetariumBox.ItemIndex:=config.GetValue('/Planetarium/Software',0);
+   f_option.PlanetariumBox.ItemIndex:=config.GetValue('/Planetarium/Software',ord(plaNONE));
    f_option.CdChostname.Text:=config.GetValue('/Planetarium/CdChostname','localhost');
    f_option.CdCport.Text:=config.GetValue('/Planetarium/CdCport','');
    f_option.CheckBoxLocalCdc.Checked:=f_option.CdCport.Text='';
@@ -6737,6 +6757,7 @@ begin
      else
         config.SetValue('/Files/FileSequenceWidth',0);
      config.SetValue('/Files/Pack',f_option.FilePack.checked);
+     config.SetValue('/Files/Exif',f_option.WantExif.Checked);
      config.SetValue('/StarAnalysis/Window',f_option.StarWindow.Value);
      config.SetValue('/StarAnalysis/Focus',f_option.FocusWindow.Value);
      config.SetValue('/StarAnalysis/Undersampled',f_option.Undersampled.Checked);
@@ -6842,6 +6863,8 @@ begin
      config.SetValue('/Sensor/MaxADUFromCamera',f_option.MaxAduFromCamera.Checked);
      config.SetValue('/Sensor/MaxADU',f_option.MaxAdu.Value);
      config.SetValue('/Sensor/ExpEarlyStart',f_option.ExpEarlyStart.Checked);
+     config.SetValue('/Visu/DisplayCapture',not f_option.NotDisplayCapture.Checked);
+     config.SetValue('/Visu/LowQualityDisplay',f_option.LowQualityDisplay.Checked);
      config.SetValue('/Files/MeasureNewImage',f_option.MeasureNewImage.Checked and f_option.ExpEarlyStart.Checked);
      config.SetValue('/PrecSlew/CheckRecenterTarget',f_option.CheckRecenterTarget.Checked and f_option.ExpEarlyStart.Checked);
      config.SetValue('/Astrometry/Resolver',f_option.Resolver);
@@ -6907,7 +6930,7 @@ begin
      config.SetValue('/Autoguider/Recovery/MaxGuideDrift',f_option.GuideDriftMax.Value);
      config.SetValue('/Autoguider/Recovery/CancelExposure',f_option.GuideDriftCancelExposure.Checked);
      config.SetValue('/Autoguider/Recovery/RestartDelay',f_option.GuideDriftRestartDelay.Value);
-     PlanetariumChange := (f_option.PlanetariumBox.ItemIndex <> config.GetValue('/Planetarium/Software',0));
+     PlanetariumChange := (f_option.PlanetariumBox.ItemIndex <> config.GetValue('/Planetarium/Software',ord(plaNONE)));
      config.SetValue('/Planetarium/Software',f_option.PlanetariumBox.ItemIndex);
      config.SetValue('/Planetarium/CdChostname',f_option.CdChostname.Text);
      config.SetValue('/Planetarium/CdCport',trim(f_option.CdCport.Text));
@@ -7015,9 +7038,9 @@ begin
      if PlanetariumChange and (not planetarium.Connected) then begin
         planetarium.Terminate;
         planetarium.Connect('');
-        i:=config.GetValue('/Planetarium/Software',0);
+        i:=config.GetValue('/Planetarium/Software',ord(plaNONE));
         case TPlanetariumType(i) of
-          CDC: planetarium:=TPlanetarium_cdc.Create;
+          CDC,plaNONE: planetarium:=TPlanetarium_cdc.Create;
           SAMP:planetarium:=TPlanetarium_samp.Create;
           HNSKY:planetarium:=TPlanetarium_hnsky.Create;
         end;
@@ -7936,28 +7959,55 @@ begin
   if Capture then begin
     // save file first
     if not (FlatAutoExposure and (camera.FrameType=FLAT)) then
+      {$ifdef debug_raw}writeln(FormatDateTime(dateiso,Now)+blank+'save fits file');{$endif}
       CameraSaveNewImage;
+      {$ifdef debug_raw}writeln(FormatDateTime(dateiso,Now)+blank+'saved');{$endif}
   end;
   Application.QueueAsyncCall(@CameraNewImageAsync,0);
 end;
 
+procedure Tf_main.ShowLastImage(Sender: TObject);
+begin
+  fits.LoadStream;
+  DrawHistogram(true);
+  DrawImage;
+  Image1.Invalidate;
+end;
+
 procedure Tf_main.CameraNewImageAsync(Data: PtrInt);
 var buf: string;
+    displayimage: boolean;
 begin
  try
-  try
-  // draw preview
   StatusBar1.Panels[1].Text:='';
   ImgFrameX:=FrameX;
   ImgFrameY:=FrameY;
   ImgFrameW:=FrameW;
   ImgFrameH:=FrameH;
-  // draw image
-  DrawHistogram(true);
-  DrawImage;
-  if (GetCurrentThreadId=MainThreadID) then CheckSynchronize;
-  except
-    on E: Exception do NewMessage('CameraNewImage, DrawImage :'+ E.Message,1);
+  displayimage:=DisplayCapture or (not capture) or (Autofocusing) or (FlatAutoExposure and (camera.FrameType=FLAT));
+  if displayimage and (not fits.ImageValid) then begin
+    {$ifdef debug_raw}writeln(FormatDateTime(dateiso,Now)+blank+'fits loadstream');{$endif}
+     fits.LoadStream;
+  end;
+  if displayimage then begin
+  try
+    // draw image
+    {$ifdef debug_raw}writeln(FormatDateTime(dateiso,Now)+blank+'DrawHistogram');{$endif}
+    DrawHistogram(true);
+    {$ifdef debug_raw}writeln(FormatDateTime(dateiso,Now)+blank+'DrawImage');{$endif}
+    DrawImage;
+    {$ifdef debug_raw}writeln(FormatDateTime(dateiso,Now)+blank+'DrawImage end');{$endif}
+    if (GetCurrentThreadId=MainThreadID) then CheckSynchronize;
+    except
+      on E: Exception do NewMessage('CameraNewImage, DrawImage :'+ E.Message,1);
+    end;
+  end
+  else begin
+    img_Width:=0;
+    img_Height:=0;
+    ImaBmp.SetSize(0,0);
+    ClearImage;
+    Image1.Invalidate;
   end;
   try
   // process autofocus frame
@@ -7969,6 +8019,7 @@ begin
   if Capture then begin
      // process automatic flat
      if FlatAutoExposure and (camera.FrameType=FLAT) then begin
+       {$ifdef debug_raw}writeln(FormatDateTime(dateiso,Now)+blank+'flat auto exposure');{$endif}
        case FlatType of
          ftSKY : begin
                  if not CameraNewSkyFlat then exit;
@@ -7977,13 +8028,17 @@ begin
                  if not CameraNewDomeFlat then exit;
                  end;
        end;
+       {$ifdef debug_raw}writeln(FormatDateTime(dateiso,Now)+blank+'save flat image');{$endif}
        CameraSaveNewImage;
      end;
      // image measurement
+     {$ifdef debug_raw}writeln(FormatDateTime(dateiso,Now)+blank+'image measurement');{$endif}
      CameraMeasureNewImage;
+     {$ifdef debug_raw}writeln(FormatDateTime(dateiso,Now)+blank+'image measurement end');{$endif}
      if (not EarlyNextExposure) or SkipEarlyExposure then begin
        // Next exposure delayed after image display
        // start the exposure now
+       {$ifdef debug_raw}writeln(FormatDateTime(dateiso,Now)+blank+'start exposure');{$endif}
        f_capture.SeqCount:=f_capture.SeqCount+1;
        f_capture.DitherNum:=f_capture.DitherNum+1;
        f_capture.FocusNum:=f_capture.FocusNum+1;
@@ -8010,8 +8065,10 @@ begin
     if (not EarlyNextExposure) or Autofocusing then begin
       // Next exposure delayed after image display
       // start the exposure now
-      if f_preview.Loop and f_preview.Running and (not CancelAutofocus) then
+      if f_preview.Loop and f_preview.Running and (not CancelAutofocus) then begin
+         {$ifdef debug_raw}writeln(FormatDateTime(dateiso,Now)+blank+'start exposure');{$endif}
          Application.QueueAsyncCall(@StartPreviewExposureAsync,0)
+      end
       else begin
          // end preview
          f_preview.stop;
@@ -8476,13 +8533,14 @@ ZoomMin:=minvalue([1.0,r1,r2]);
 if (ZoomMin<1)and((ImgZoom<ZoomMin)or(abs(ImgZoom-ZoomMin)<0.01)) then ImgZoom:=0;
 {$ifdef debug_raw}writeln(FormatDateTime(dateiso,Now)+blank+'ClearImage');{$endif}
 ClearImage;
-{$ifdef cpuarm}
+if LowQualityDisplay then begin
   imabmp.ResampleFilter:=rfBox;
   rmode:=rmSimpleStretch;
-{$else}
+end
+else begin
   imabmp.ResampleFilter:=rfBestQuality;
   rmode:=rmFineResample;
-{$endif}
+end;
 if ImgZoom=0 then begin
   // adjust
   r1:=img_Width/img_Height;
@@ -10248,7 +10306,8 @@ begin
 
 Procedure Tf_main.DoAutoFocus;
 begin
-if Preview or Capture then begin // not on control exposure
+if (fits.HeaderInfo.valid)and(Preview or Capture) then begin // not on control exposure
+  {$ifdef debug_raw}writeln(FormatDateTime(dateiso,Now)+blank+'check autofocus');{$endif}
   if f_starprofile.AutofocusRunning then
     // process autofocus
     f_starprofile.Autofocus(fits,round(f_starprofile.StarX),round(f_starprofile.StarY),Starwindow div fits.HeaderInfo.BinX)
@@ -10784,6 +10843,7 @@ end;
 Procedure Tf_main.PlanetariumConnectClick(Sender: TObject);
 var i: integer;
 begin
+ if TPlanetariumType(config.GetValue('/Planetarium/Software',ord(plaNONE)))=plaNONE then exit;
  if f_planetarium.BtnConnect.Caption=rsConnect then begin
    f_planetarium.BtnConnect.Caption:=rsDisconnect;
    MenuPlanetariumConnect.Caption:=f_planetarium.BtnConnect.Caption;
@@ -10820,9 +10880,9 @@ begin
    MenuPlanetariumConnect.Caption:=f_planetarium.BtnConnect.Caption;
    NewMessage(rsPlanetarium+': '+Format(rsDisconnected,[PlanetariumName[ord(planetarium.PlanetariumType)]]),1);
    wait(1);
-   i:=config.GetValue('/Planetarium/Software',0);
+   i:=config.GetValue('/Planetarium/Software',ord(plaNONE));
    case TPlanetariumType(i) of
-     CDC: planetarium:=TPlanetarium_cdc.Create;
+     CDC,plaNONE: planetarium:=TPlanetarium_cdc.Create;
      SAMP:planetarium:=TPlanetarium_samp.Create;
      HNSKY:planetarium:=TPlanetarium_hnsky.Create;
    end;

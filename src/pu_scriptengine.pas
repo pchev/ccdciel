@@ -1483,12 +1483,13 @@ var i: integer;
 begin
 try
 result:=msgFailed;
-i:=config.GetValue('/Planetarium/Software',0);
+i:=config.GetValue('/Planetarium/Software',ord(plaNONE));
 case TPlanetariumType(i) of
   CDC:  planetarium.Connect(config.GetValue('/Planetarium/CdChostname','localhost'),
                    config.GetValue('/Planetarium/CdCport',''));
   SAMP: planetarium.Connect('');
   HNSKY: planetarium.Connect('');
+  plaNONE: exit;
 end;
 wait(1);
 result:=msgOK;

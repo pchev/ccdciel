@@ -488,22 +488,21 @@ if FAddFrames then begin  // stack preview frames
   // update image
   FFits.Header.Assign(f.Header);
   WriteHeaders;
+  Ffits.GetFitsInfo;
   f.free;
   if Assigned(FonNewImage) then FonNewImage(self);
 end
 else begin  // normal capture
   FStackCount:=0;
   if ImgStream.Size>0 then begin
-  {$ifdef debug_raw}writeln(FormatDateTime(dateiso,Now)+blank+'load stream');{$endif}
+  {$ifdef debug_raw}writeln(FormatDateTime(dateiso,Now)+blank+'set fits stream');{$endif}
   Ffits.Stream:=ImgStream;
-  Ffits.LoadStream;
   {$ifdef debug_raw}writeln(FormatDateTime(dateiso,Now)+blank+'write headers');{$endif}
   WriteHeaders;
-  {$ifdef debug_raw}writeln(FormatDateTime(dateiso,Now)+blank+'apply correction');{$endif}
   FFits.ApplyDark;
   FFits.ApplyBPM;
   end;
-  {$ifdef debug_raw}writeln(FormatDateTime(dateiso,Now)+blank+'display image');{$endif}
+  {$ifdef debug_raw}writeln(FormatDateTime(dateiso,Now)+blank+'process new image');{$endif}
   if Assigned(FonNewImage) then FonNewImage(self);
 end;
 end;
@@ -528,12 +527,13 @@ procedure T_camera.WriteHeaders;
 var origin,observer,telname,objname,siso,CType: string;
     focal_length,pixscale1,pixscale2,ccdtemp,st,ra,de,fstop,shutter,multr,multg,multb: double;
     hbitpix,hnaxis,hnaxis1,hnaxis2,hnaxis3,hbin1,hbin2,cgain,focuserpos: integer;
-    hfilter,hframe,hinstr,hdateobs,hcomment1 : string;
+    hfilter,hframe,hinstr,hdateobs : string;
     hbzero,hbscale,hdmin,hdmax,hra,hdec,hexp,hpix1,hpix2,hairmass,focusertemp: double;
     haz,hal: double;
     gamma,offset,OffsetX,OffsetY: integer;
     Frx,Fry,Frwidth,Frheight: integer;
     hasfocusertemp,hasfocuserpos: boolean;
+    i: integer;
 begin
   // get header values from camera (set by INDI driver or libraw)
   if not Ffits.Header.Valueof('BITPIX',hbitpix) then hbitpix:=Ffits.HeaderInfo.bitpix;
@@ -569,8 +569,6 @@ begin
   if not Ffits.Header.Valueof('MULT_B',multb)  then multb:=-1;
   if not Ffits.Header.Valueof('DATE-OBS',hdateobs) then hdateobs:=FormatDateTime(dateisoshort,NowUTC);
   if not Ffits.Header.Valueof('AIRMASS',hairmass) then hairmass:=-1;
-  if not Ffits.Header.Valueof('COMMENT',hcomment1) then hcomment1:='';
-  if copy(hcomment1,1,14)='FITS (Flexible' then hcomment1:='';
   // get other values
   hra:=NullCoord; hdec:=NullCoord;
   if (FMount<>nil)and(Fmount.Status=devConnected) then begin
@@ -670,88 +668,97 @@ begin
     end;
   end;
   // write new header
-  Ffits.Header.ClearHeader;
-  Ffits.Header.Add('SIMPLE',true,'file does conform to FITS standard');
-  Ffits.Header.Add('BITPIX',hbitpix,'number of bits per data pixel');
-  Ffits.Header.Add('NAXIS',hnaxis,'number of data axes');
-  Ffits.Header.Add('NAXIS1',hnaxis1 ,'length of data axis 1');
-  Ffits.Header.Add('NAXIS2',hnaxis2 ,'length of data axis 2');
-  if hnaxis=3 then Ffits.Header.Add('NAXIS3',hnaxis3 ,'length of data axis 3');;
-  Ffits.Header.Add('EXTEND',true,'FITS dataset may contain extensions');
-  Ffits.Header.Add('BZERO',hbzero,'offset data range to that of unsigned short');
-  Ffits.Header.Add('BSCALE',hbscale,'default scaling factor');
+  i:=FFits.Header.Indexof('END');
+  if i>0 then FFits.Header.Delete(i);
+  Ffits.Header.Insert(0,'SIMPLE',true,'file does conform to FITS standard');
+  Ffits.Header.Insert(1,'BITPIX',hbitpix,'number of bits per data pixel');
+  Ffits.Header.Insert(2,'NAXIS',hnaxis,'number of data axes');
+  Ffits.Header.Insert(3,'NAXIS1',hnaxis1 ,'length of data axis 1');
+  Ffits.Header.Insert(4,'NAXIS2',hnaxis2 ,'length of data axis 2');
+  if hnaxis=3 then Ffits.Header.Insert(-1,'NAXIS3',hnaxis3 ,'length of data axis 3');;
+  Ffits.Header.Insert(-1,'EXTEND',true,'FITS dataset may contain extensions');
+  Ffits.Header.Insert(-1,'BZERO',hbzero,'offset data range to that of unsigned short');
+  Ffits.Header.Insert(-1,'BSCALE',hbscale,'default scaling factor');
+  i:=FFits.Header.Indexof('HIERARCH');
+  if i>0 then
+     i:=i-1
+  else
+     i:=-1;
   if hdmax>0 then begin
-    Ffits.Header.Add('DATAMIN',hdmin,'Minimum value');
-    Ffits.Header.Add('DATAMAX',hdmax,'Maximum value');
+    Ffits.Header.Insert(i,'DATAMIN',hdmin,'Minimum value');
+    Ffits.Header.Insert(i,'DATAMAX',hdmax,'Maximum value');
   end;
-  Ffits.Header.Add('DATE',FormatDateTime(dateisoshort,NowUTC),'Date data written');
-  if origin<>'' then Ffits.Header.Add('ORIGIN',origin,'Observatory name');
-  Ffits.Header.Add('SITELAT',ObsLatitude,'Observatory latitude');
-  Ffits.Header.Add('SITELONG',-ObsLongitude,'Observatory longitude'); //Internal longitude is East negative for historical reason
-  if observer<>'' then Ffits.Header.Add('OBSERVER',observer,'Observer name');
-  if telname<>'' then Ffits.Header.Add('TELESCOP',telname,'Telescope used for acquisition');
-  if hinstr<>'' then Ffits.Header.Add('INSTRUME',hinstr,'Instrument used for acquisition');
-  if hfilter<>'' then Ffits.Header.Add('FILTER',hfilter,'Filter');
-  Ffits.Header.Add('SWCREATE','CCDciel '+ccdciel_version+'-'+RevisionStr+blank+compile_system,'');
-  if objname<>'' then Ffits.Header.Add('OBJECT',objname,'Observed object name');
-  Ffits.Header.Add('IMAGETYP',hframe,'Image Type');
-  Ffits.Header.Add('DATE-OBS',hdateobs,'UTC start date of observation');
-  if hexp>0 then Ffits.Header.Add('EXPTIME',hexp,'[s] Total Exposure Time');
-  if FStackCount>1 then Ffits.Header.Add('STACKCNT',FStackCount,'Number of stacked frames');
-  if cgain<>NullInt then Ffits.Header.Add('GAIN',cgain,'Camera gain setting in manufacturer units');
-  if siso<>'' then Ffits.Header.Add('GAIN',siso,'Camera ISO');
-  if gamma<>NullInt then Ffits.Header.Add('GAMMA',gamma,'Video gamma');
-  if offset<>NullInt then Ffits.Header.Add('OFFSET',offset,'Video offset,brightness');
-  if fstop>0 then Ffits.Header.Add('F_STOP',fstop ,'Camera F-stop');
-  if shutter>0 then Ffits.Header.Add('SHUTTER',shutter ,'Camera shutter');
-  if hpix1>0 then Ffits.Header.Add('XPIXSZ',hpix1 ,'[um] Pixel Size X, binned');
-  if hpix2>0 then Ffits.Header.Add('YPIXSZ',hpix2 ,'[um] Pixel Size Y, binned');
-  if hpix1>0 then Ffits.Header.Add('PIXSIZE1',hpix1 ,'[um] Pixel Size X, binned');
-  if hpix2>0 then Ffits.Header.Add('PIXSIZE2',hpix2 ,'[um] Pixel Size Y, binned');
-  if hbin1>0 then Ffits.Header.Add('XBINNING',hbin1 ,'Binning factor X');
-  if hbin2>0 then Ffits.Header.Add('YBINNING',hbin2 ,'Binning factor Y');
+  Ffits.Header.Insert(i,'DATE',FormatDateTime(dateisoshort,NowUTC),'Date data written');
+  if origin<>'' then Ffits.Header.Insert(i,'ORIGIN',origin,'Observatory name');
+  Ffits.Header.Insert(i,'SITELAT',ObsLatitude,'Observatory latitude');
+  Ffits.Header.Insert(i,'SITELONG',-ObsLongitude,'Observatory longitude'); //Internal longitude is East negative for historical reason
+  if observer<>'' then Ffits.Header.Insert(i,'OBSERVER',observer,'Observer name');
+  if telname<>'' then Ffits.Header.Insert(i,'TELESCOP',telname,'Telescope used for acquisition');
+  if hinstr<>'' then Ffits.Header.Insert(i,'INSTRUME',hinstr,'Instrument used for acquisition');
+  if hfilter<>'' then Ffits.Header.Insert(i,'FILTER',hfilter,'Filter');
+  Ffits.Header.Insert(i,'SWCREATE','CCDciel '+ccdciel_version+'-'+RevisionStr+blank+compile_system,'');
+  if objname<>'' then Ffits.Header.Insert(i,'OBJECT',objname,'Observed object name');
+  Ffits.Header.Insert(i,'IMAGETYP',hframe,'Image Type');
+  Ffits.Header.Insert(i,'DATE-OBS',hdateobs,'UTC start date of observation');
+  if shutter>0 then begin
+    Ffits.Header.Insert(i,'EXPTIME',shutter,'[s] Camera Exposure Time');
+    if hexp>0 then Ffits.Header.Insert(i,'REQTIME',hexp,'[s] Requested Exposure Time');
+  end
+  else begin
+    if hexp>0 then Ffits.Header.Insert(i,'EXPTIME',hexp,'[s] Total Exposure Time');
+  end;
+  if FStackCount>1 then Ffits.Header.Insert(i,'STACKCNT',FStackCount,'Number of stacked frames');
+  if cgain<>NullInt then Ffits.Header.Insert(i,'GAIN',cgain,'Camera gain setting in manufacturer units');
+  if siso<>'' then Ffits.Header.Insert(i,'GAIN',siso,'Camera ISO');
+  if gamma<>NullInt then Ffits.Header.Insert(i,'GAMMA',gamma,'Video gamma');
+  if offset<>NullInt then Ffits.Header.Insert(i,'OFFSET',offset,'Video offset,brightness');
+  if fstop>0 then Ffits.Header.Insert(i,'F_STOP',fstop ,'Camera F-stop');
+  if hpix1>0 then Ffits.Header.Insert(i,'XPIXSZ',hpix1 ,'[um] Pixel Size X, binned');
+  if hpix2>0 then Ffits.Header.Insert(i,'YPIXSZ',hpix2 ,'[um] Pixel Size Y, binned');
+  if hpix1>0 then Ffits.Header.Insert(i,'PIXSIZE1',hpix1 ,'[um] Pixel Size X, binned');
+  if hpix2>0 then Ffits.Header.Insert(i,'PIXSIZE2',hpix2 ,'[um] Pixel Size Y, binned');
+  if hbin1>0 then Ffits.Header.Insert(i,'XBINNING',hbin1 ,'Binning factor X');
+  if hbin2>0 then Ffits.Header.Insert(i,'YBINNING',hbin2 ,'Binning factor Y');
   if CType<>'' then begin
-     if OffsetX>=0 then Ffits.Header.Add('XBAYROFF',OffsetX ,'X offset of Bayer array');
-     if OffsetY>=0 then Ffits.Header.Add('YBAYROFF',OffsetY ,'Y offset of Bayer array');
-     Ffits.Header.Add('BAYERPAT',CType ,'Bayer color pattern');
-     if multr>0 then Ffits.Header.Add('MULT_R',multr ,'R multiplier');
-     if multg>0 then Ffits.Header.Add('MULT_G',multg ,'G multiplier');
-     if multb>0 then Ffits.Header.Add('MULT_B',multb ,'B multiplier');
+     if OffsetX>=0 then Ffits.Header.Insert(i,'XBAYROFF',OffsetX ,'X offset of Bayer array');
+     if OffsetY>=0 then Ffits.Header.Insert(i,'YBAYROFF',OffsetY ,'Y offset of Bayer array');
+     Ffits.Header.Insert(i,'BAYERPAT',CType ,'Bayer color pattern');
+     if multr>0 then Ffits.Header.Insert(i,'MULT_R',multr ,'R multiplier');
+     if multg>0 then Ffits.Header.Insert(i,'MULT_G',multg ,'G multiplier');
+     if multb>0 then Ffits.Header.Insert(i,'MULT_B',multb ,'B multiplier');
   end;
-  Ffits.Header.Add('FOCALLEN',focal_length,'[mm] Telescope focal length');
-  if ccdtemp<>NullCoord then Ffits.Header.Add('CCD-TEMP',ccdtemp ,'CCD temperature (Celsius)');
+  Ffits.Header.Insert(i,'FOCALLEN',focal_length,'[mm] Telescope focal length');
+  if ccdtemp<>NullCoord then Ffits.Header.Insert(i,'CCD-TEMP',ccdtemp ,'CCD temperature (Celsius)');
   if Frwidth<>0 then begin
-    Ffits.Header.Add('FRAMEX',Frx,'Frame start x');
-    Ffits.Header.Add('FRAMEY',Fry,'Frame start y');
-    Ffits.Header.Add('FRAMEHGT',Frheight,'Frame height');
-    Ffits.Header.Add('FRAMEWDH',Frwidth,'Frame width');
+    Ffits.Header.Insert(i,'FRAMEX',Frx,'Frame start x');
+    Ffits.Header.Insert(i,'FRAMEY',Fry,'Frame start y');
+    Ffits.Header.Insert(i,'FRAMEHGT',Frheight,'Frame height');
+    Ffits.Header.Insert(i,'FRAMEWDH',Frwidth,'Frame width');
   end;
   if (haz<>NullCoord)and(hal<>NullCoord) then begin
-    Ffits.Header.Add('CENTAZ',haz,'[deg] Azimuth of center of image');
-    Ffits.Header.Add('CENTALT',hal,'[deg] Altitude of center of image');
-    Ffits.Header.Add('OBJCTAZ',haz,'[deg] Azimuth of center of image');
-    Ffits.Header.Add('OBJCTALT',hal,'[deg] Altitude of center of image');
+    Ffits.Header.Insert(i,'CENTAZ',haz,'[deg] Azimuth of center of image');
+    Ffits.Header.Insert(i,'CENTALT',hal,'[deg] Altitude of center of image');
+    Ffits.Header.Insert(i,'OBJCTAZ',haz,'[deg] Azimuth of center of image');
+    Ffits.Header.Insert(i,'OBJCTALT',hal,'[deg] Altitude of center of image');
   end;
-  if hairmass>0 then Ffits.Header.Add('AIRMASS',hairmass ,'Airmass');
-  if hasfocuserpos then Ffits.Header.Add('FOCUSPOS',focuserpos ,'Focuser position in steps');
-  if hasfocusertemp then Ffits.Header.Add('FOCUSTEM',focusertemp ,'Focuser temperature (Celsius)');
+  if hairmass>0 then Ffits.Header.Insert(i,'AIRMASS',hairmass ,'Airmass');
+  if hasfocuserpos then Ffits.Header.Insert(i,'FOCUSPOS',focuserpos ,'Focuser position in steps');
+  if hasfocusertemp then Ffits.Header.Insert(i,'FOCUSTEM',focusertemp ,'Focuser temperature (Celsius)');
   if (hra<>NullCoord)and(hdec<>NullCoord) then begin
-    Ffits.Header.Add('EQUINOX',2000.0,'');
-    Ffits.Header.Add('RA',hra,'[deg] Telescope pointing RA');
-    Ffits.Header.Add('DEC',hdec,'[deg] Telescope pointing DEC');
-    Ffits.Header.Add('OBJCTRA',trim(RAToStrB(hra/15)),'[hh mm ss] Telescope pointing RA');
-    Ffits.Header.Add('OBJCTDEC',trim(DEToStrB(hdec)),'[+dd mm ss] Telescope pointing DEC');
+    Ffits.Header.Insert(i,'EQUINOX',2000.0,'');
+    Ffits.Header.Insert(i,'RA',hra,'[deg] Telescope pointing RA');
+    Ffits.Header.Insert(i,'DEC',hdec,'[deg] Telescope pointing DEC');
+    Ffits.Header.Insert(i,'OBJCTRA',trim(RAToStrB(hra/15)),'[hh mm ss] Telescope pointing RA');
+    Ffits.Header.Insert(i,'OBJCTDEC',trim(DEToStrB(hdec)),'[+dd mm ss] Telescope pointing DEC');
     if (hpix1>0)and(hpix2>0)and(focal_length>0)  then begin
        pixscale1:=3600*rad2deg*arctan(hpix1/1000/focal_length);
        pixscale2:=3600*rad2deg*arctan(hpix2/1000/focal_length);
-       Ffits.Header.Add('SECPIX1',pixscale1,'image scale arcseconds per pixel');
-       Ffits.Header.Add('SECPIX2',pixscale2,'image scale arcseconds per pixel');
-       Ffits.Header.Add('SCALE',pixscale1,'image scale arcseconds per pixel');
+       Ffits.Header.Insert(i,'SECPIX1',pixscale1,'image scale arcseconds per pixel');
+       Ffits.Header.Insert(i,'SECPIX2',pixscale2,'image scale arcseconds per pixel');
+       Ffits.Header.Insert(i,'SCALE',pixscale1,'image scale arcseconds per pixel');
     end;
   end;
-  if hcomment1<>'' then Ffits.Header.Add('COMMENT',hcomment1 ,'');
   Ffits.Header.Add('END','','');
-  Ffits.GetFitsInfo;
 end;
 
 procedure T_camera.NewVideoFrame;

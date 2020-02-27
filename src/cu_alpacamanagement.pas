@@ -34,8 +34,8 @@ uses cu_ascomrest, u_utils,
   process, Forms, Dialogs, Classes, SysUtils;
 
 const AlpacaCurrentVersion = 1;
-      AlpacaDiscStr = 'alpacadiscovery';
-      AlpacaDiscPort = '32227';
+      DefaultPort = 32227;
+      AlpacaDiscStr = 'alpacadiscovery1';
       DiscoverTimeout = 3000;
 
 Type
@@ -45,7 +45,7 @@ Type
   end;
   TAlpacaDeviceList = array of TAlpacaDevice;
   TAlpacaServer = record
-     ip,port,id: string;
+     ip,port: string;
      servername,manufacturer,version,location: string;
      apiversion, devicecount: integer;
      devices: TAlpacaDeviceList;
@@ -53,12 +53,13 @@ Type
   TAlpacaServerList = array of TAlpacaServer;
 
 var
+    AlpacaDiscPort: string;
     FClientId: integer = 1;
     FClientTransactionID: integer =0;
     FLastErrorCode: integer;
     FLastError: string;
 
-function AlpacaDiscover: TAlpacaServerList;
+function AlpacaDiscover(dport:integer=DefaultPort): TAlpacaServerList;
 function AlpacaDiscoverServer: TAlpacaServerList;
 procedure AlpacaServerDescription(var srv:TAlpacaServer);
 function AlpacaApiVersions(ip,port: string): IIntArray;
@@ -68,10 +69,11 @@ procedure AlpacaDeviceSetup(srv: TAlpacaServer; dev:TAlpacaDevice);
 
 implementation
 
-function AlpacaDiscover: TAlpacaServerList;
+function AlpacaDiscover(dport:integer=DefaultPort): TAlpacaServerList;
 var apiversions: array of integer;
     i,j: integer;
 begin
+  AlpacaDiscPort:=inttostr(dport);
   result:=AlpacaDiscoverServer;
   for i:=0 to Length(result)-1 do begin
     result[i].apiversion:=-1;
@@ -189,6 +191,8 @@ begin
   end;
   {$ENDIF}
   sl.Free();
+  if Result.Count=0 then
+    Result.Add('255.255.255.255');
 end;
 
 function AlpacaDiscoverServer: TAlpacaServerList;
@@ -212,6 +216,7 @@ begin
     data:=AlpacaDiscStr;
     p:=@data;
     sock.SendBuffer(p,length(AlpacaDiscStr));
+    sock.SendBuffer(p,length(AlpacaDiscStr));
     repeat
       ok:=sock.CanRead(DiscoverTimeout);
       if ok then begin
@@ -227,19 +232,23 @@ begin
         delete(ip,length(ip),1);
         Fjson:=GetJSON(data);
         if Fjson<>nil then begin
+            try
             port:=Fjson.GetPath('AlpacaPort').AsString;
-            id:=Fjson.GetPath('AlpacaUniqueId').AsString;
+            except
+              // not a alpaca response
+              Fjson.Free;
+              continue;
+            end;
         end;
         Fjson.Free;
         for i:=0 to Length(result)-1 do begin
-          if result[i].id=id then duplicate:=true;
+           if (result[i].ip=ip)and(result[i].port=port) then duplicate:=true;
         end;
         if not duplicate then begin
           inc(k);
           SetLength(result,k);
           result[k-1].ip:=ip;
           result[k-1].port:=port;
-          result[k-1].id:=id;
         end;
       end;
     until not ok;

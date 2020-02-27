@@ -608,9 +608,12 @@ begin
    end;
    if debug_msg then msg('pad fits');
    b:='';
-   c:=2880-(FImgStream.Size mod 2880);
-   FillChar(b,c,0);
-   FImgStream.Write(b,c);
+   c:=FImgStream.Size mod 2880;
+   if c>0 then begin
+     c:=2880-c;
+     FillChar(b,c,0);
+     FImgStream.Write(b,c);
+   end;
    if debug_msg then msg('release imagearray');
    imgarray.Free;
    if assigned(FonExposureProgress) then FonExposureProgress(-11);

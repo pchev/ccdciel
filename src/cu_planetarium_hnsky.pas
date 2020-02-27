@@ -109,7 +109,7 @@ try
  if tcpclient.Connect then begin
    FRunning:=true;
    FStatus:=true;
-   if assigned(FonConnect) then FonConnect(self);
+   Synchronize(@SyncOnConnect);
    // main loop
    repeat
      if terminated then break;
@@ -148,7 +148,7 @@ FStatus:=false;
 if not terminated then DisplayMessage(tcpclient.GetErrorDesc);
 finally
   terminate;
-  if assigned(FonDisconnect) then FonDisconnect(self);
+  Synchronize(@SyncOnDisconnect);
   tcpclient.Disconnect;
   tcpclient.Free;
 end;

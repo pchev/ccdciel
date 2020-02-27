@@ -138,7 +138,7 @@ type
     FTitle : string;
     Fmean,Fsigma,Fdmin,Fdmax : double;
     FImgDmin, FImgDmax: Word;
-    FImgFullRange,FStreamValid: Boolean;
+    FImgFullRange,FStreamValid,FImageValid: Boolean;
     Fbpm: TBpm;
     FBPMcount,FBPMnx,FBPMny,FBPMnax: integer;
     gamma_c : array[0..32768] of single; {prepared power values for gamma correction}
@@ -172,6 +172,7 @@ type
      destructor  Destroy; override;
      function  GetStatistics: string;
      Procedure LoadStream;
+     procedure ClearFitsInfo;
      procedure GetFitsInfo;
      function  BayerInterpolationExp(t:TBayerMode; rmult,gmult,bmult:double; pix1,pix2,pix3,pix4,pix5,pix6,pix7,pix8,pix9:integer; row,col:integer):TExpandedPixel; inline;
      function  BayerInterpolation(t:TBayerMode; rmult,gmult,bmult:double; pix1,pix2,pix3,pix4,pix5,pix6,pix7,pix8,pix9:integer; row,col:integer):TBGRAPixel; inline;
@@ -208,6 +209,7 @@ type
      property ImgDmin : Word read FImgDmin write FImgDmin;
      property ImgDmax : Word read FImgDmax write FImgDmax;
      property Gamma: single read FGamma write SetGamma;
+     property ImageValid: boolean read FImageValid;
      property image : Timaw16 read Fimage;
      property imageC : double read FimageC;
      property imageMin : double read FimageMin;
@@ -284,7 +286,7 @@ type
 
 
 
-  procedure PictureToFits(pict:TMemoryStream; ext: string; var ImgStream:TMemoryStream; flip:boolean=true;pix:double=-1;piy:double=-1;binx:integer=-1;biny:integer=-1;bayer:string='';rmult:string='';gmult:string='';bmult:string='');
+  procedure PictureToFits(pict:TMemoryStream; ext: string; var ImgStream:TMemoryStream; flip:boolean=true;pix:double=-1;piy:double=-1;binx:integer=-1;biny:integer=-1;bayer:string='';rmult:string='';gmult:string='';bmult:string='';origin:string='';exifkey:TStringList=nil;exifvalue:TStringList=nil);
   procedure RawToFits(raw:TMemoryStream; var ImgStream:TMemoryStream; out rmsg:string; pix:double=-1;piy:double=-1;binx:integer=-1;biny:integer=-1);
   function PackFits(unpackedfilename,packedfilename: string; out rmsg:string):integer;
   function UnpackFits(packedfilename: string; var ImgStream:TMemoryStream; out rmsg:string):integer;
@@ -371,8 +373,7 @@ begin
       for i:=1 to 36 do begin
          row:=header[i];
          if trim(row)='' then continue;
-         p1:=pos('=',row);
-         if p1=0 then p1:=9;
+         p1:=9;
          p2:=pos('/',row);
          keyword:=trim(copy(row,1,p1-1));
          if p2>0 then begin
@@ -440,8 +441,7 @@ repeat
    for i:=1 to 36 do begin
       row:=header[i];
       if trim(row)='' then continue;
-      p1:=pos('=',row);
-      if p1=0 then p1:=9;
+      p1:=9;
       p2:=pos('/',row);
       keyword:=trim(copy(row,1,p1-1));
       if p2>0 then begin
@@ -496,6 +496,18 @@ end;
 function TFitsHeader.Indexof(key: string): integer;
 begin
   result:=FKeys.IndexOf(key);
+end;
+
+function CleanASCII(txt: string):string;
+var i: integer;
+begin
+result:='';
+for i:=1 to length(txt) do begin
+  if (txt[i]>=#32)and(txt[i]<=#126) then
+    result:=result+txt[i]
+  else
+    result:=result+blank;
+end;
 end;
 
 function TFitsHeader.Valueof(key: string; out val: string): boolean; overload;
@@ -558,11 +570,22 @@ function TFitsHeader.Insert(idx: integer; key,val,comment: string; quotedval:boo
 var row: string;
     ii: integer;
 begin
+ val:=CleanASCII(val);
+ comment:=CleanASCII(comment);
  // The END keyword
  if (trim(key)='END') then begin
    row:=copy('END'+b80,1,80);
    val:='';
    comment:='';
+ end
+ // hierarch
+ else if (trim(key)='HIERARCH') then begin
+    row:=Format('%0:-8s',[key])+
+         Format(' %0:-70s',[val]);
+    if comment>'' then
+       row:=row+Format(' / %0:-47s',[comment])
+    else
+       row:=row+b80;
  end
  // Comments with keyword
  else if (trim(key)='COMMENT') then begin
@@ -580,18 +603,24 @@ begin
  // Quoted string
  else if quotedval then begin
     row:=Format('%0:-8s',[key])+
-         Format('= %0:-20s',[QuotedStr(val)])+
-         Format(' / %0:-47s',[comment]);
+         Format('= %0:-20s',[QuotedStr(val)]);
+         if comment>'' then
+            row:=row+Format(' / %0:-47s',[comment])
+         else
+            row:=row+b80;
  end
  // Other unquoted values
  else begin
     row:=Format('%0:-8s',[key])+
-         Format('= %0:-20s',[val])+
-         Format(' / %0:-47s',[comment]);
+         Format('= %0:-20s',[val]);
+         if comment>'' then
+            row:=row+Format(' / %0:-47s',[comment])
+         else
+            row:=row+b80;
  end;
  row:=copy(row,1,80);
  // Search for existing key
- if (key<>'')and(key<>'COMMENT')and(key<>'HISTORY') then
+ if (key<>'')and(key<>'COMMENT')and(key<>'HISTORY')and(key<>'HIERARCH') then
    ii:=FKeys.IndexOf(key)
  else
    ii:=-1;
@@ -1048,13 +1077,13 @@ FDarkOn:=false;
 ImgDmax:=MaxWord;
 FImgFullRange:=false;
 FStreamValid:=false;
+FImageValid:=false;
 FMarkOverflow:=false;
 FMaxADU:=MAXWORD;
 FOverflow:=MAXWORD;
 FUnderflow:=0;
 FInvert:=false;
-FFitsInfo.valid:=false;
-FFitsInfo.naxis1:=0;
+ClearFitsInfo;
 FHeader:=TFitsHeader.Create;
 FStream:=TMemoryStream.Create;
 FIntfImg:=TLazIntfImage.Create(0,0);
@@ -1091,7 +1120,8 @@ end;
 procedure TFits.SetVideoStream(value:TMemoryStream);
 begin
 // other header previously set by caller
-FFitsInfo.solved:=false;
+ClearFitsInfo;
+FImageValid:=false;
 cur_axis:=1;
 setlength(imar64,0,0,0);
 setlength(imar32,0,0,0);
@@ -1110,8 +1140,8 @@ end;
 procedure TFits.SetStream(value:TMemoryStream);
 begin
 try
- FFitsInfo.valid:=false;
- FFitsInfo.solved:=false;
+ FImageValid:=false;
+ ClearFitsInfo;
  cur_axis:=1;
  setlength(imar64,0,0,0);
  setlength(imar32,0,0,0);
@@ -1124,15 +1154,15 @@ try
  value.Position:=0;
  FStream.CopyFrom(value,value.Size);
  Fhdr_end:=FHeader.ReadHeader(FStream);
- GetFitsInfo;
  FStreamValid:=true;
 except
- FFitsInfo.valid:=false;
+ ClearFitsInfo;
 end;
 end;
 
 Procedure TFits.LoadStream;
 begin
+  GetFitsInfo;
   if FFitsInfo.valid then begin
     ReadFitsImage;
   end;
@@ -1247,16 +1277,30 @@ begin
     result:='';
 end;
 
+procedure TFits.ClearFitsInfo;
+begin
+with FFitsInfo do begin
+   valid:=false; solved:=false; floatingpoint:=false;
+   bitpix:=0; naxis:=0; naxis1:=0; naxis2:=0; naxis3:=1;
+   Frx:=-1; Fry:=-1; Frwidth:=0; Frheight:=0; BinX:=1; BinY:=1;
+   bzero:=0; bscale:=1; dmax:=0; dmin:=0; blank:=0;
+   bayerpattern:='';
+   bayeroffsetx:=0; bayeroffsety:=0;
+   rmult:=0; gmult:=0; bmult:=0;
+   equinox:=2000; ra:=NullCoord; dec:=NullCoord; crval1:=NullCoord; crval2:=NullCoord;
+   pixsz1:=0; pixsz2:=0; pixratio:=1; focallen:=0; scale:=0;
+   exptime:=0; airmass:=0;
+   objects:=''; ctype1:=''; ctype2:='';
+end;
+end;
+
 procedure TFits.GetFitsInfo;
 var   i : integer;
       keyword,buf : string;
 begin
-with FFitsInfo do begin
- valid:=false; solved:=false; floatingpoint:=false; naxis1:=0 ; naxis2:=0 ; naxis3:=1; bitpix:=0 ; dmin:=0 ; dmax := 0; blank:=0;
- bzero:=0 ; bscale:=1; equinox:=2000; ra:=NullCoord; dec:=NullCoord; crval1:=NullCoord; crval2:=NullCoord; bayerpattern:='';
- objects:=''; ctype1:=''; ctype2:=''; pixsz1:=0; pixsz2:=0; pixratio:=1; scale:=0; Frx:=-1;Fry:=-1;Frwidth:=0;Frheight:=0;
- focallen:=0; BinX:=1; BinY:=1; exptime:=0; airmass:=0; rmult:=0; gmult:=0; bmult:=0; bayeroffsetx:=0; bayeroffsety:=0;
- for i:=0 to FHeader.Rows.Count-1 do begin
+ ClearFitsInfo;
+ with FFitsInfo do begin
+  for i:=0 to FHeader.Rows.Count-1 do begin
     keyword:=trim(FHeader.Keys[i]);
     buf:=trim(FHeader.Values[i]);
     if (keyword='SIMPLE') then if (copy(buf,1,1)<>'T')
@@ -1351,6 +1395,7 @@ var i,ii,j,npix,k,km,kk : integer;
     x8,b8:byte;
 begin
 {$ifdef debug_raw}writeln(FormatDateTime(dateiso,Now)+blank+'ReadFitsImage');{$endif}
+FImageValid:=false;
 if FFitsInfo.naxis1=0 then exit;
 FDarkProcess:=false;
 FBPMProcess:=false;
@@ -1548,6 +1593,7 @@ SetLength(FStarList,0); {reset object list}
 {$ifdef debug_raw}writeln(FormatDateTime(dateiso,Now)+blank+'GetImage');{$endif}
 GetImage;
 {$ifdef debug_raw}writeln(FormatDateTime(dateiso,Now)+blank+'GetImage end');{$endif}
+FImageValid:=true;
 end;
 
 Procedure TFits.WriteFitsImage;
@@ -1695,6 +1741,7 @@ procedure TFits.ApplyDark;
 begin
 if (FDarkOn)and(FDark<>nil)and(SameFormat(FDark))
    then begin
+    {$ifdef debug_raw}writeln(FormatDateTime(dateiso,Now)+blank+'apply dark');{$endif}
      Math(FDark,moSub);
      FDarkProcess:=true;
      FHeader.Insert( FHeader.Indexof('END'),'COMMENT','Dark substracted','');
@@ -1705,6 +1752,8 @@ procedure TFits.ApplyBPM;
 var i,x,y,x0,y0: integer;
 begin
 if (FBPMcount>0)and(FBPMnax=FFitsInfo.naxis) then begin
+  {$ifdef debug_raw}writeln(FormatDateTime(dateiso,Now)+blank+'apply BPM');{$endif}
+  if not FImageValid then LoadStream;
   if (FFitsInfo.Frwidth>0)and(FFitsInfo.Frheight>0)and(FFitsInfo.Frx>=0)and(FFitsInfo.Fry>=0) then begin
     x0:=FFitsInfo.Frx;
     y0:=FBPMny-FFitsInfo.Fry-FFitsInfo.Frheight;
@@ -2232,11 +2281,10 @@ end;
 
 procedure TFits.ClearImage;
 begin
+FImageValid:=false;
 Fheight:=0;
 Fwidth:=0;
-FFitsInfo.naxis1:=0;
-FFitsInfo.valid:=false;
-FFitsInfo.solved:=false;
+ClearFitsInfo;
 setlength(imar64,0,0,0);
 setlength(imar32,0,0,0);
 setlength(imai8,0,0,0);
@@ -2924,7 +2972,8 @@ begin
  end
  else begin  // do operation
 
-    dmin:=1.0E100;
+   if not FImageValid then LoadStream;
+   dmin:=1.0E100;
     dmax:=-1.0E100;
     sum:=0; sum2:=0; ni:=0;
     minoffset:=operand.FFitsInfo.dmin-FFitsInfo.dmin;
@@ -3061,7 +3110,7 @@ begin
   m.free;
 end;
 
-procedure PictureToFits(pict:TMemoryStream; ext: string; var ImgStream:TMemoryStream; flip:boolean=true;pix:double=-1;piy:double=-1;binx:integer=-1;biny:integer=-1;bayer:string='';rmult:string='';gmult:string='';bmult:string='');
+procedure PictureToFits(pict:TMemoryStream; ext: string; var ImgStream:TMemoryStream; flip:boolean=true;pix:double=-1;piy:double=-1;binx:integer=-1;biny:integer=-1;bayer:string='';rmult:string='';gmult:string='';bmult:string='';origin:string='';exifkey:TStringList=nil;exifvalue:TStringList=nil);
 var img:TLazIntfImage;
     lRawImage: TRawImage;
     i,j,c,w,h,x,y,naxis: integer;
@@ -3167,12 +3216,15 @@ begin
    end;
    hdr.Add('DATE',FormatDateTime(dateisoshort,NowUTC),'Date data written');
    hdr.Add('SWCREATE','CCDciel '+ccdciel_version+'-'+RevisionStr,'');
-   if bayer<>'' then begin
-     if rmult='' then hdr.Add('COMMENT','Converted from camera RAW by dcraw','')
-                 else hdr.Add('COMMENT','Converted from camera RAW by libraw tools','');
-   end
+   if (exifkey<>nil)and(exifvalue<>nil)and(exifkey.Count>0) then begin
+     for i:=0 to exifkey.Count-1 do begin
+        hdr.Add('HIERARCH',StringReplace(exifkey[i],'.',' ',[rfReplaceAll])+' = '''+exifvalue[i]+'''','');
+     end;
+   end;
+   if origin='' then
+     hdr.Add('COMMENT','Converted from '+ext,'')
    else
-     hdr.Add('COMMENT','Converted from ',ext);
+     hdr.Add('COMMENT','Converted from camera RAW by '+origin,'');
    hdr.Add('END','','');
    hdrmem:=hdr.GetStream;
    try
@@ -3233,13 +3285,47 @@ begin
    end;
    // fill to fits buffer size
    b:='';
-   c:=2880-(ImgStream.Size mod 2880);
-   FillChar(b,c,0);
-   ImgStream.Write(b,c);
+   c:=ImgStream.Size mod 2880;
+   if c>0 then begin
+     c:=2880-c;
+     FillChar(b,c,0);
+     ImgStream.Write(b,c);
+   end;
  finally
    // Free resources
    hdr.Free;
    img.free;
+ end;
+end;
+
+procedure GetExif(raw:TMemoryStream; exifkey,exifvalue:TStringList);
+var cmd,fn,k,v: string;
+    r: Tstringlist;
+    i,j,n: integer;
+begin
+ if Exiv2Cmd<>'' then begin
+   r:=Tstringlist.Create;
+   try
+   fn:=slash(TmpDir)+'exiftmp.raw';
+   raw.SaveToFile(fn);
+   cmd:=Exiv2Cmd+' -PEkt '+fn;
+   n:=ExecProcess(cmd,r);
+   if n=0 then begin
+     for i:=0 to r.Count-1 do begin
+       j:=pos(' ',r[i]);
+       if j>0 then begin
+         k:=trim(copy(r[i],1,j));
+         v:=trim(copy(r[i],j,999));
+         if (length(k+v)<65)and(v<>'(Binary value suppressed)') then begin
+           exifkey.Add(k);
+           exifvalue.Add(v);
+         end;
+       end;
+     end;
+   end;
+   finally
+     r.free;
+   end;
  end;
 end;
 
@@ -3258,8 +3344,16 @@ var i,j,n,x,c: integer;
     rawf,tiff,cmdi,cmdu,txt,bayerpattern: string;
     outr: TStringList;
     rmult,gmult,bmult: string;
+    infook: boolean;
+    exifkey,exifvalue: TStringList;
 begin
 rmsg:='';
+try
+exifkey:=TStringList.Create;
+exifvalue:=TStringList.Create;
+if WantExif then begin
+  GetExif(raw,exifkey,exifvalue);
+end;
 if libraw<>0 then begin  // Use libraw directly
   try
   {$ifdef debug_raw}writeln(FormatDateTime(dateiso,Now)+blank+'Copy raw buffer');{$endif}
@@ -3285,11 +3379,15 @@ if libraw<>0 then begin  // Use libraw directly
   rawinfo.bitmap:=nil;
   n:=GetRawInfo(rawinfo);
   if (n<>0) or (rawinfo.bitmap=nil) then begin
+   rmsg:='GetRawInfo error';
    exit;
   end;
   rawinfo2.version:=1;
-  if @GetRawInfo2<>nil then
+  infook:=false;
+  if @GetRawInfo2<>nil then begin
      n:=GetRawInfo2(rawinfo2);
+     infook:=(n=0);
+  end;
   xs:=rawinfo.leftmargin;
   ys:=rawinfo.topmargin;
   xmax:=xs+rawinfo.imgwidth;
@@ -3315,25 +3413,30 @@ if libraw<>0 then begin  // Use libraw directly
   if piy>0 then hdr.Add('PIXSIZE2',piy ,'Pixel Size 2 (microns)');
   if binx>0 then hdr.Add('XBINNING',binx ,'Binning factor in width');
   if biny>0 then hdr.Add('YBINNING',biny ,'Binning factor in height');
-  if (rawinfo2.version>1) then begin
+  if infook and (rawinfo2.version>1) then begin
     txt:=copy(trim(rawinfo2.camera),1,40);
     if txt<>'' then hdr.Add('CAMERA', txt ,'Camera model');
   end;
-  if (rawinfo2.version>1) and (rawinfo2.focal_len>0) then hdr.Add('FOCALLEN',rawinfo2.focal_len ,'Camera focal length');
-  if (rawinfo2.version>1) and (rawinfo2.aperture>0) then hdr.Add('F_STOP',round(10*rawinfo2.aperture)/10 ,'Camera F-stop');
-  if (rawinfo2.version>1) and (rawinfo2.isospeed>0) then hdr.Add('ISOSPEED',rawinfo2.isospeed ,'Camera ISO speed');
-  if (rawinfo2.version>1) and (rawinfo2.shutter>0) then hdr.Add('SHUTTER',rawinfo2.shutter ,'Camera shutter');
-  if (rawinfo2.version>1) and (rawinfo2.timestamp>0) then hdr.Add('DATE-OBS',FormatDateTime(dateisoshort,UnixToDateTime(rawinfo2.timestamp)) ,'Camera timestamp');
+  if infook and (rawinfo2.version>1) and (rawinfo2.focal_len>0) then hdr.Add('FOCALLEN',rawinfo2.focal_len ,'Camera focal length');
+  if infook and (rawinfo2.version>1) and (rawinfo2.aperture>0) then hdr.Add('F_STOP',round(10*rawinfo2.aperture)/10 ,'Camera F-stop');
+  if infook and (rawinfo2.version>1) and (rawinfo2.isospeed>0) then hdr.Add('ISOSPEED',rawinfo2.isospeed ,'Camera ISO speed');
+  if infook and (rawinfo2.version>1) and (rawinfo2.shutter>0) then hdr.Add('SHUTTER',rawinfo2.shutter ,'Camera shutter');
+  if infook and (rawinfo2.version>1) and (rawinfo2.timestamp>0) then hdr.Add('DATE-OBS',FormatDateTime(dateisoshort,UnixToDateTime(rawinfo2.timestamp)) ,'Camera timestamp');
   hdr.Add('XBAYROFF',0,'X offset of Bayer array');
   hdr.Add('YBAYROFF',0,'Y offset of Bayer array');
   hdr.Add('BAYERPAT',rawinfo.bayerpattern,'CFA Bayer pattern');
-  if (rawinfo2.version>1) and (rawinfo2.colors=3) then begin
+  if infook and (rawinfo2.version>1) and (rawinfo2.colors=3) then begin
     hdr.Add('MULT_R',rawinfo2.rmult,'R multiplier');
     hdr.Add('MULT_G',rawinfo2.gmult,'G multiplier');
     hdr.Add('MULT_B',rawinfo2.bmult,'B multiplier');
   end;
   hdr.Add('DATE',FormatDateTime(dateisoshort,NowUTC),'Date data written');
   hdr.Add('SWCREATE','CCDciel '+ccdciel_version+'-'+RevisionStr,'');
+  if exifkey.Count>0 then begin
+    for i:=0 to exifkey.Count-1 do begin
+       hdr.Add('HIERARCH',StringReplace(exifkey[i],'.',' ',[rfReplaceAll])+' = '''+exifvalue[i]+'''','');
+    end;
+  end;
   hdr.Add('COMMENT','Converted from camera RAW by libraw','');
   hdr.Add('END','','');
   hdrmem:=hdr.GetStream;
@@ -3359,9 +3462,12 @@ if libraw<>0 then begin  // Use libraw directly
     end;
   end;
   b:='';
-  c:=2880-(ImgStream.Size mod 2880);
-  FillChar(b,c,0);
-  ImgStream.Write(b,c);
+  c:=ImgStream.Size mod 2880;
+  if c>0 then begin
+    c:=2880-c;
+    FillChar(b,c,0);
+    ImgStream.Write(b,c);
+  end;
   CloseRaw();
   {$ifdef debug_raw}writeln(FormatDateTime(dateiso,Now)+blank+'RawToFITS end');{$endif}
   except
@@ -3402,7 +3508,7 @@ else if RawUnpCmd<>'' then begin  // try libraw tools
    exit;
  end;
  raw.LoadFromFile(tiff);
- PictureToFits(raw,'tiff',ImgStream,false,pix,piy,binx,biny,bayerpattern,rmult,gmult,bmult);
+ PictureToFits(raw,'tiff',ImgStream,false,pix,piy,binx,biny,bayerpattern,rmult,gmult,bmult,'LibRaw tools',exifkey,exifvalue);
  outr.Free;
  except
    rmsg:='Error converting raw file';
@@ -3434,7 +3540,7 @@ else if DcrawCmd<>'' then begin  // try dcraw command line
     exit;
   end;
   raw.LoadFromFile(tiff);
-  PictureToFits(raw,'tiff',ImgStream,false,pix,piy,binx,biny,bayerpattern);
+  PictureToFits(raw,'tiff',ImgStream,false,pix,piy,binx,biny,bayerpattern,'','','','dcraw',exifkey,exifvalue);
   outr.Free;
   except
     rmsg:='Error converting raw file';
@@ -3442,6 +3548,10 @@ else if DcrawCmd<>'' then begin  // try dcraw command line
 end
 else begin
   rmsg:='No RAW decoder found!';
+end;
+finally
+  exifkey.Free;
+  exifvalue.Free;
 end;
 end;
 
