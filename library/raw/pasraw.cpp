@@ -34,6 +34,7 @@ struct TImgInfo2
    float rmult;
    float gmult;
    float bmult;
+   float temperature;
 };
 
 LibRaw RawProcessor;
@@ -41,6 +42,10 @@ LibRaw RawProcessor;
 #define P1 RawProcessor.imgdata.idata
 #define P2 RawProcessor.imgdata.other
 #define C  RawProcessor.imgdata.color
+#if (LIBRAW_COMPILE_CHECK_VERSION_NOTLESS(0, 20))
+#define P3 RawProcessor.imgdata.makernotes.common
+#endif
+
 
 
 extern "C" int loadraw(char *rawinput, int inputsize)
@@ -98,7 +103,8 @@ extern "C" int getinfo2(TImgInfo2 *info)
    if ((!S.raw_width)&&(!S.raw_height)) {
      return(1);
    }
-   info->version = 2;
+   int RequestVersion = info->version;
+   info->version = 3;
    snprintf(info->camera, 80, "%s %s", P1.make, P1.model);
    info->timestamp = P2.timestamp;
    info->isospeed = (int)P2.iso_speed;
@@ -114,6 +120,47 @@ extern "C" int getinfo2(TImgInfo2 *info)
      info->rmult = 1.0;
      info->gmult = 1.0;
      info->bmult = 1.0;
+   }
+   if (RequestVersion >= 3){
+#if (LIBRAW_COMPILE_CHECK_VERSION_NOTLESS(0, 20))
+     if (P3.SensorTemperature > -273.15f) {
+       info->temperature = P3.SensorTemperature;
+     }
+     else if (P3.SensorTemperature2 > -273.15f) {
+       info->temperature = P3.SensorTemperature2;
+     }
+     else if (P3.CameraTemperature > -273.15f) {
+       info->temperature = P3.CameraTemperature;
+     }
+     else if (P3.AmbientTemperature > -273.15f) {
+       info->temperature = P3.AmbientTemperature;
+     }
+     else if (P3.exifAmbientTemperature > -273.15f) {
+       info->temperature = P3.exifAmbientTemperature;
+     }
+     else {
+       info->temperature = -999.0f;
+     }
+#else
+     if (P2.SensorTemperature > -273.15f) {
+       info->temperature = P2.SensorTemperature;
+     }
+     else if (P2.SensorTemperature2 > -273.15f) {
+       info->temperature = P2.SensorTemperature2;
+     }
+     else if (P2.CameraTemperature > -273.15f) {
+       info->temperature = P2.CameraTemperature;
+     }
+     else if (P2.AmbientTemperature > -273.15f) {
+       info->temperature = P2.AmbientTemperature;
+     }
+     else if (P2.exifAmbientTemperature > -273.15f) {
+       info->temperature = P2.exifAmbientTemperature;
+     }
+     else {
+       info->temperature = -999.0f;
+     }
+#endif
    }
    return(0);
 }

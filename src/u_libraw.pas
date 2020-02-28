@@ -37,6 +37,7 @@ type
       rmult: single;
       gmult: single;
       bmult: single;
+      temperature: single;
     end;
 
     TRawBitmap = array of smallint;
