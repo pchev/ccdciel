@@ -39,7 +39,7 @@ type
   Tf_starprofile = class(TFrame)
     FitSourceMeasure: TListChartSource;
     FitSourceComp: TListChartSource;
-    graph: TImage;
+    HistoryChartImax: TLineSeries;
     Label1: TLabel;
     Label2: TLabel;
     Label3: TLabel;
@@ -47,13 +47,18 @@ type
     LabelCoord: TLabel;
     LabelFWHM: TLabel;
     LabelSNR: TLabel;
+    HistoryChart: TChart;
+    HistoryChartHfd: TLineSeries;
+    HistSourceHfd: TListChartSource;
+    HistSourceImax: TListChartSource;
+    Panel7: TPanel;
+    ProfileSource: TListChartSource;
     Panel3: TPanel;
     Panel4: TPanel;
     Panel5: TPanel;
     PanelGraph: TPanel;
     PanelFWHM: TPanel;
     Panel6: TPanel;
-    profile: TImage;
     LabelHFD: TLabel;
     LabelImax: TLabel;
     Panel1: TPanel;
@@ -67,19 +72,19 @@ type
     Title: TLabel;
     TimerHideGraph: TTimer;
     VcChart: TChart;
+    ProfileChart: TChart;
     VcChartL: TFitSeries;
     VcChartPtMeasure: TLineSeries;
     VcChartPtComp: TLineSeries;
+    ProfileChartLine: TLineSeries;
     VcChartR: TFitSeries;
     VcChartRegMeasure: TLineSeries;
     VcChartRegComp: TLineSeries;
     procedure BtnPinGraphClick(Sender: TObject);
     procedure ChkAutofocusChange(Sender: TObject);
     procedure ChkFocusChange(Sender: TObject);
-    procedure FrameEndDrag(Sender, Target: TObject; X, Y: Integer);
-    procedure FrameResize(Sender: TObject);
-    procedure graphDblClick(Sender: TObject);
     procedure BtnMeasureImageClick(Sender: TObject);
+    procedure HistoryChartDblClick(Sender: TObject);
     procedure PanelGraphDblClick(Sender: TObject);
     procedure TimerHideGraphTimer(Sender: TObject);
     procedure VcChartMouseMove(Sender: TObject; Shift: TShiftState; X,
@@ -213,8 +218,8 @@ begin
   BtnMeasureImage.Caption:=rsImageInspect;
   ChkFocus.Caption:=rsManualFocusA;
   ChkAutofocus.Caption:=rsAutofocus;
-  profile.Hint:=rsTheSelectedS;
-  graph.Hint:=rsHistoryOfThe;
+  ProfileChart.Hint:=rsTheSelectedS;
+  HistoryChart.Hint:=rsHistoryOfThe;
   LabelHFD.Hint:=rsTheHalfFluxD;
   LabelImax.Hint:=rsTheMaximumIn;
   LabelSNR.Hint:=rsTheSignalNoi;
@@ -223,20 +228,6 @@ begin
   BtnMeasureImage.Hint:=rsInspectTheRe;
   ChkFocus.Hint:=rsStartImageLo;
   ChkAutofocus.Hint:=rsStartTheAuto;
-end;
-
-
-procedure Tf_starprofile.FrameEndDrag(Sender, Target: TObject; X, Y: Integer);
-begin
- if Target is TPanel then begin
-    if TPanel(Target).Width>TPanel(Target).Height then begin
-       Panel1.ChildSizing.ControlsPerLine:=2;
-       Panel1.ChildSizing.Layout:=cclLeftToRightThenTopToBottom;
-    end else begin
-        Panel1.ChildSizing.ControlsPerLine:=99;
-        Panel1.ChildSizing.Layout:=cclTopToBottomThenLeftToRight;
-    end;
- end;
 end;
 
 procedure Tf_starprofile.ChkFocusDown(value:boolean);
@@ -336,24 +327,12 @@ begin
  end;
 end;
 
-procedure Tf_starprofile.FrameResize(Sender: TObject);
-begin
- if Parent is TPanel then begin
-    if TPanel(Parent).Width>TPanel(Parent).Height then begin
-       Panel1.ChildSizing.ControlsPerLine:=2;
-       Panel1.ChildSizing.Layout:=cclLeftToRightThenTopToBottom;
-    end else begin
-        Panel1.ChildSizing.ControlsPerLine:=99;
-        Panel1.ChildSizing.Layout:=cclTopToBottomThenLeftToRight;
-    end;
- end;
-end;
-
-procedure Tf_starprofile.graphDblClick(Sender: TObject);
+procedure Tf_starprofile.HistoryChartDblClick(Sender: TObject);
 begin
  curhist:=0;
  maxfwhm:=0;
  maximax:=0;
+ ClearGraph;
 end;
 
 procedure Tf_starprofile.BtnMeasureImageClick(Sender: TObject);
@@ -466,27 +445,13 @@ end;
 
 procedure Tf_starprofile.ClearGraph;
 begin
- profile.Picture.Bitmap.Width:=profile.Width;
- profile.Picture.Bitmap.Height:=profile.Height;
- with profile.Picture.Bitmap do begin
-   Canvas.Brush.Color:=clBlack;
-   Canvas.Pen.Color:=clBlack;
-   Canvas.Pen.Mode:=pmCopy;
-   Canvas.FillRect(0,0,Width,Height);
- end;
- graph.Picture.Bitmap.Width:=graph.Width;
- graph.Picture.Bitmap.Height:=graph.Height;
- with graph.Picture.Bitmap do begin
-   Canvas.Brush.Color:=clBlack;
-   Canvas.Pen.Color:=clBlack;
-   Canvas.Pen.Mode:=pmCopy;
-   Canvas.FillRect(0,0,Width,Height);
- end;
+ ProfileSource.Clear;
+ HistSourceHfd.Clear;
+ HistSourceImax.Clear;
 end;
 
 procedure Tf_starprofile.PlotProfile(f: TFits; bg: double; s:integer);
-var i,j,i0,x1,x2,y1,y2,rs:integer;
-    xs,ys: double;
+var i,j,i0,rs:integer;
     txt:string;
 begin
 if (FStarX<0)or(FStarY<0)or(s<0) then exit;
@@ -508,77 +473,24 @@ if Ffwhm>0 then begin
 end
 else
   LabelFWHM.Caption:='-';
-if curhist>maxhist then
-  for i:=0 to maxhist-1 do begin
-    histfwhm[i]:=histfwhm[i+1];
-    histimax[i]:=histimax[i+1];
-    curhist:=maxhist;
-  end;
-histfwhm[curhist]:=Fhfd;
-histimax[curhist]:=FValMax;
-if histfwhm[curhist] > maxfwhm then maxfwhm:=histfwhm[curhist];
-if histimax[curhist] > maximax then maximax:=histimax[curhist];
 // Star profile
-profile.Picture.Bitmap.Width:=profile.Width;
-profile.Picture.Bitmap.Height:=profile.Height;
-with profile.Picture.Bitmap do begin
-  Canvas.Brush.Color:=clBlack;
-  Canvas.Pen.Color:=clBlack;
-  Canvas.Pen.Mode:=pmCopy;
-  Canvas.FillRect(0,0,Width,Height);
-  if FValMax>0 then begin
-    bg:=max(bg,0);
-    rs:=s div 2;
-    if (FStarX-rs)<0 then rs:=round(FStarX);
-    if (FStarX+rs)>(img_Width-1) then rs:=img_Width-1-integer(round(FStarX));
-    if (FStarY-rs)<0 then rs:=round(FStarY);
-    if (FStarY+rs)>(img_Height-1) then rs:=img_Height-1-integer(round(FStarY));
-    if rs<=0 then exit;
-    s:=2*rs;
-    Canvas.Pen.Color:=clRed;
-    xs:=Width/s;
-    ys:=Height/(1.1*(FValMax));
-    j:=trunc(FStarY);
-    i0:=trunc(FStarX)-(s div 2);
-    x1:=0;
-    y1:=Height-trunc((f.imageMin+(f.image[0,j,i0])-bg)*ys)+3;
-    for i:=0 to s-1 do begin
-      x2:=trunc(i*xs);
-      y2:=trunc((f.imageMin+(f.image[0,j,i0+i])-bg)*ys)+3;
-      y2:=Height-y2;
-      Canvas.Line(x1,y1,x2,y2);
-      x1:=x2;
-      y1:=y2;
-    end;
+if FValMax>0 then begin
+  bg:=max(bg,0);
+  rs:=s div 2;
+  if (FStarX-rs)<0 then rs:=round(FStarX);
+  if (FStarX+rs)>(img_Width-1) then rs:=img_Width-1-integer(round(FStarX));
+  if (FStarY-rs)<0 then rs:=round(FStarY);
+  if (FStarY+rs)>(img_Height-1) then rs:=img_Height-1-integer(round(FStarY));
+  if rs<=0 then exit;
+  s:=2*rs;
+  j:=trunc(FStarY);
+  i0:=trunc(FStarX)-(s div 2);
+  ProfileSource.Clear;
+  ProfileSource.Add(0,f.image[0,j,i0]-bg);
+  for i:=0 to s-1 do begin
+    ProfileSource.Add(i,f.image[0,j,i0+i]-bg);
   end;
 end;
-// History graph
-graph.Picture.Bitmap.Width:=graph.Width;
-graph.Picture.Bitmap.Height:=graph.Height;
-if FValMax>0 then with graph.Picture.Bitmap do begin
-  Canvas.Brush.Color:=clBlack;
-  Canvas.Pen.Color:=clBlack;
-  Canvas.Pen.Mode:=pmCopy;
-  Canvas.FillRect(0,0,Width,Height);
-  xs:=Width/maxhist;
-  ys:=Height/maxfwhm;
-  Canvas.Pen.Color:=clRed;
-  for i:=0 to curhist-1 do begin
-    Canvas.Line( trunc(i*xs),
-                 Height-trunc(histfwhm[i]*ys),
-                 trunc((i+1)*xs),
-                 Height-trunc(histfwhm[i+1]*ys));
-  end;
-  ys:=Height/maximax;
-  Canvas.Pen.Color:=clLime;
-  for i:=0 to curhist-1 do begin
-    Canvas.Line( trunc(i*xs),
-                 Height-trunc(histimax[i]*ys),
-                 trunc((i+1)*xs),
-                 Height-trunc(histimax[i+1]*ys));
-  end;
-end;
-inc(curhist);
 except
   on E: Exception do begin
     msg('PlotProfile :'+ E.Message,0);
@@ -588,7 +500,7 @@ end;
 
 procedure Tf_starprofile.PlotHistory;
 var i:integer;
-    xs,ys: double;
+    ys1,ys2: double;
 begin
 try
 if curhist>maxhist then
@@ -601,30 +513,14 @@ histfwhm[curhist]:=Fhfd;
 histimax[curhist]:=FValMax;
 if histfwhm[curhist] > maxfwhm then maxfwhm:=histfwhm[curhist];
 if histimax[curhist] > maximax then maximax:=histimax[curhist];
-// History graph
-graph.Picture.Bitmap.Width:=graph.Width;
-graph.Picture.Bitmap.Height:=graph.Height;
-if FValMax>0 then with graph.Picture.Bitmap do begin
-  Canvas.Brush.Color:=clBlack;
-  Canvas.Pen.Color:=clBlack;
-  Canvas.Pen.Mode:=pmCopy;
-  Canvas.FillRect(0,0,Width,Height);
-  xs:=Width/maxhist;
-  ys:=Height/maxfwhm;
-  Canvas.Pen.Color:=clRed;
-  for i:=0 to curhist-1 do begin
-    Canvas.Line( trunc(i*xs),
-                 Height-trunc(histfwhm[i]*ys),
-                 trunc((i+1)*xs),
-                 Height-trunc(histfwhm[i+1]*ys));
-  end;
-  ys:=Height/maximax;
-  Canvas.Pen.Color:=clLime;
-  for i:=0 to curhist-1 do begin
-    Canvas.Line( trunc(i*xs),
-                 Height-trunc(histimax[i]*ys),
-                 trunc((i+1)*xs),
-                 Height-trunc(histimax[i+1]*ys));
+if FValMax>0 then begin
+  ys1:=1/maxfwhm;
+  ys2:=1/maximax;
+  HistSourceHfd.Clear;
+  HistSourceImax.Clear;
+  for i:=0 to curhist do begin
+    HistSourceHfd.Add(i,histfwhm[i]*ys1);
+    HistSourceImax.Add(i,histimax[i]*ys2);
   end;
 end;
 inc(curhist);

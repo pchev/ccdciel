@@ -1,13 +1,11 @@
 object f_starprofile: Tf_starprofile
   Left = 0
-  Height = 504
+  Height = 454
   Top = 0
   Width = 194
   AutoSize = True
-  ClientHeight = 504
+  ClientHeight = 454
   ClientWidth = 194
-  OnEndDrag = FrameEndDrag
-  OnResize = FrameResize
   ParentFont = False
   TabOrder = 0
   DesignLeft = -1
@@ -30,75 +28,144 @@ object f_starprofile: Tf_starprofile
   end
   object Panel1: TPanel
     Left = 0
-    Height = 484
+    Height = 434
     Top = 20
     Width = 194
     Align = alClient
-    ChildSizing.Layout = cclTopToBottomThenLeftToRight
-    ChildSizing.ControlsPerLine = 99
-    ClientHeight = 484
+    ClientHeight = 434
     ClientWidth = 194
     ParentFont = False
     TabOrder = 0
     object Panel2: TPanel
-      Left = 0
-      Height = 81
-      Top = 0
-      Width = 172
+      Left = 1
+      Height = 100
+      Top = 1
+      Width = 192
+      Align = alTop
       BevelOuter = bvNone
-      ClientHeight = 81
-      ClientWidth = 172
-      Constraints.MaxHeight = 81
-      Constraints.MaxWidth = 172
-      Constraints.MinHeight = 81
-      Constraints.MinWidth = 172
+      ClientHeight = 100
+      ClientWidth = 192
       ParentColor = False
       ParentFont = False
       TabOrder = 0
-      object profile: TImage
-        Left = 10
-        Height = 81
-        Hint = 'The selected star luminosity profile'
+      object ProfileChart: TChart
+        Left = 0
+        Height = 100
         Top = 0
-        Width = 162
+        Width = 192
+        AntialiasingMode = amOn
+        AxisList = <        
+          item
+            Visible = False
+            Marks.LabelFont.Height = 8
+            Marks.LabelBrush.Style = bsClear
+            Minors = <>
+            Title.LabelFont.Orientation = 900
+            Title.LabelBrush.Style = bsClear
+          end        
+          item
+            Intervals.NiceSteps = '1|10|50|100|500|1000|5000'
+            Intervals.Options = [aipUseCount, aipUseNiceSteps]
+            Visible = False
+            Alignment = calBottom
+            Marks.LabelFont.Height = 8
+            Marks.LabelBrush.Style = bsClear
+            Minors = <>
+            Title.LabelBrush.Style = bsClear
+          end>
+        Extent.UseYMin = True
+        Foot.Brush.Color = clBtnFace
+        Foot.Font.Color = clBlue
+        Legend.GridHorizontal.Visible = True
+        Title.Brush.Color = clBtnFace
+        Title.Font.Color = clBlue
+        Title.Text.Strings = (
+          'TAChart'
+        )
         Align = alClient
-        BorderSpacing.Left = 10
+        object ProfileChartLine: TLineSeries
+          Legend.Visible = False
+          Marks.Visible = False
+          LinePen.Color = clRed
+          Pointer.Brush.Style = bsClear
+          Pointer.OverrideColor = [ocPen]
+          Pointer.Style = psCircle
+          Source = ProfileSource
+        end
       end
     end
     object Panel3: TPanel
-      Left = 0
-      Height = 40
-      Top = 81
-      Width = 172
+      Left = 1
+      Height = 50
+      Top = 101
+      Width = 192
+      Align = alTop
       BevelOuter = bvNone
-      ClientHeight = 40
-      ClientWidth = 172
-      Constraints.MaxHeight = 40
-      Constraints.MaxWidth = 172
-      Constraints.MinHeight = 40
-      Constraints.MinWidth = 172
+      ClientHeight = 50
+      ClientWidth = 192
       ParentFont = False
       TabOrder = 1
-      object graph: TImage
-        Left = 10
-        Height = 40
-        Hint = 'History of the last FWHM and Intensity measurement'
+      object HistoryChart: TChart
+        Left = 0
+        Height = 50
         Top = 0
-        Width = 162
+        Width = 192
+        AntialiasingMode = amOn
+        AxisList = <        
+          item
+            Visible = False
+            Marks.LabelFont.Height = 8
+            Marks.LabelBrush.Style = bsClear
+            Minors = <>
+            Title.LabelFont.Orientation = 900
+            Title.LabelBrush.Style = bsClear
+          end        
+          item
+            Intervals.NiceSteps = '1|10|50|100|500|1000|5000'
+            Intervals.Options = [aipUseCount, aipUseNiceSteps]
+            Visible = False
+            Alignment = calBottom
+            Marks.LabelFont.Height = 8
+            Marks.LabelBrush.Style = bsClear
+            Minors = <>
+            Title.LabelBrush.Style = bsClear
+          end>
+        Extent.UseYMin = True
+        Foot.Brush.Color = clBtnFace
+        Foot.Font.Color = clBlue
+        Legend.GridHorizontal.Visible = True
+        Title.Brush.Color = clBtnFace
+        Title.Font.Color = clBlue
+        Title.Text.Strings = (
+          'TAChart'
+        )
         Align = alClient
-        BorderSpacing.Left = 10
-        OnDblClick = graphDblClick
+        OnDblClick = HistoryChartDblClick
+        object HistoryChartHfd: TLineSeries
+          Legend.Visible = False
+          Marks.Visible = False
+          LinePen.Color = clRed
+          Pointer.Brush.Style = bsClear
+          Pointer.OverrideColor = [ocPen]
+          Pointer.Style = psCircle
+          Source = HistSourceHfd
+        end
+        object HistoryChartImax: TLineSeries
+          LinePen.Color = clGreen
+          Source = HistSourceImax
+        end
       end
     end
     object Panel4: TPanel
-      Left = 0
+      Left = 1
       Height = 66
-      Top = 121
-      Width = 190
+      Top = 151
+      Width = 192
+      Align = alTop
       BevelOuter = bvNone
       ChildSizing.ControlsPerLine = 1
       ClientHeight = 66
-      ClientWidth = 190
+      ClientWidth = 192
       ParentFont = False
       TabOrder = 2
       object LabelHFD: TLabel
@@ -124,24 +191,26 @@ object f_starprofile: Tf_starprofile
       end
     end
     object Panel6: TPanel
-      Left = 0
+      Left = 1
       Height = 121
-      Top = 187
-      Width = 190
+      Top = 217
+      Width = 192
+      Align = alTop
       BevelOuter = bvNone
       ChildSizing.ControlsPerLine = 1
       ClientHeight = 121
-      ClientWidth = 190
+      ClientWidth = 192
       ParentFont = False
       TabOrder = 3
       object PanelFWHM: TPanel
         Left = 0
         Height = 121
         Top = 0
-        Width = 188
+        Width = 192
+        Align = alClient
         BevelOuter = bvNone
         ClientHeight = 121
-        ClientWidth = 188
+        ClientWidth = 192
         ParentFont = False
         TabOrder = 0
         object LabelImax: TLabel
@@ -212,10 +281,11 @@ object f_starprofile: Tf_starprofile
         Left = 0
         Height = 121
         Top = 0
-        Width = 190
+        Width = 192
+        Align = alClient
         BevelOuter = bvNone
         ClientHeight = 121
-        ClientWidth = 190
+        ClientWidth = 192
         ParentFont = False
         TabOrder = 1
         Visible = False
@@ -224,7 +294,7 @@ object f_starprofile: Tf_starprofile
           Left = 0
           Height = 102
           Top = 0
-          Width = 190
+          Width = 192
           AntialiasingMode = amOn
           AxisList = <          
             item
@@ -288,25 +358,25 @@ object f_starprofile: Tf_starprofile
           Left = 0
           Height = 19
           Top = 102
-          Width = 190
+          Width = 192
           Align = alBottom
           BevelOuter = bvNone
           ClientHeight = 19
-          ClientWidth = 190
+          ClientWidth = 192
           ParentFont = False
           TabOrder = 1
           object LabelCoord: TLabel
             Left = 0
             Height = 19
             Top = 0
-            Width = 171
+            Width = 173
             Align = alClient
             AutoSize = False
             ParentColor = False
             ParentFont = False
           end
           object BtnPinGraph: TSpeedButton
-            Left = 171
+            Left = 173
             Height = 19
             Hint = 'Keep graph visible after autofocus is completed'
             Top = 0
@@ -321,62 +391,85 @@ object f_starprofile: Tf_starprofile
         end
       end
     end
-    object BtnMeasureImage: TSpeedButton
-      Left = 0
-      Height = 23
-      Hint = 'Inspect the repartition of the HFD across the image'
-      Top = 308
-      Width = 190
-      Caption = 'Image inspection'
-      OnClick = BtnMeasureImageClick
-      ParentFont = False
-    end
-    object ChkFocus: TSpeedButton
-      Left = 0
-      Height = 23
-      Hint = 'Start image loop centered on selected star'
-      Top = 331
-      Width = 190
-      AllowAllUp = True
-      Caption = 'Manual focus aid'
-      GroupIndex = 500
-      OnClick = ChkFocusChange
-      ParentFont = False
-    end
-    object ChkAutofocus: TSpeedButton
-      Left = 0
-      Height = 23
-      Hint = 'Start the auto-focus procedure'
-      Top = 354
-      Width = 190
-      AllowAllUp = True
-      Caption = 'Autofocus'
-      GroupIndex = 501
-      OnClick = ChkAutofocusChange
-      ParentFont = False
+    object Panel7: TPanel
+      Left = 1
+      Height = 86
+      Top = 338
+      Width = 192
+      Align = alTop
+      BevelOuter = bvNone
+      ClientHeight = 86
+      ClientWidth = 192
+      TabOrder = 4
+      object BtnMeasureImage: TSpeedButton
+        Left = 0
+        Height = 23
+        Hint = 'Inspect the repartition of the HFD across the image'
+        Top = 3
+        Width = 190
+        Caption = 'Image inspection'
+        OnClick = BtnMeasureImageClick
+        ParentFont = False
+      end
+      object ChkFocus: TSpeedButton
+        Left = 0
+        Height = 23
+        Hint = 'Start image loop centered on selected star'
+        Top = 28
+        Width = 190
+        AllowAllUp = True
+        Caption = 'Manual focus aid'
+        GroupIndex = 500
+        OnClick = ChkFocusChange
+        ParentFont = False
+      end
+      object ChkAutofocus: TSpeedButton
+        Left = 0
+        Height = 23
+        Hint = 'Start the auto-focus procedure'
+        Top = 53
+        Width = 190
+        AllowAllUp = True
+        Caption = 'Autofocus'
+        GroupIndex = 501
+        OnClick = ChkAutofocusChange
+        ParentFont = False
+      end
     end
   end
   object PtSourceComp: TListChartSource
-    left = 89
-    top = 428
+    left = 105
+    top = 264
   end
   object FitSourceComp: TListChartSource
-    left = 129
-    top = 428
+    left = 145
+    top = 264
   end
   object FitSourceMeasure: TListChartSource
-    left = 8
-    top = 428
+    left = 24
+    top = 264
   end
   object PtSourceMeasure: TListChartSource
-    left = 49
-    top = 428
+    left = 65
+    top = 264
   end
   object TimerHideGraph: TTimer
     Enabled = False
     Interval = 5000
     OnTimer = TimerHideGraphTimer
-    left = 16
-    top = 464
+    left = 24
+    top = 312
+  end
+  object ProfileSource: TListChartSource
+    left = 80
+    top = 32
+  end
+  object HistSourceHfd: TListChartSource
+    left = 32
+    top = 112
+  end
+  object HistSourceImax: TListChartSource
+    left = 112
+    top = 112
   end
 end
