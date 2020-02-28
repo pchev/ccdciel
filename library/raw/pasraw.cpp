@@ -123,6 +123,7 @@ extern "C" int getinfo2(TImgInfo2 *info)
    }
    if (RequestVersion >= 3){
 #if (LIBRAW_COMPILE_CHECK_VERSION_NOTLESS(0, 20))
+     // version 0.20 , temperature is in imgdata.makernotes.common
      if (P3.SensorTemperature > -273.15f) {
        info->temperature = P3.SensorTemperature;
      }
@@ -142,6 +143,8 @@ extern "C" int getinfo2(TImgInfo2 *info)
        info->temperature = -999.0f;
      }
 #else
+#if (LIBRAW_COMPILE_CHECK_VERSION_NOTLESS(0, 19))
+     // version 0.19 , temperature is in imgdata.other
      if (P2.SensorTemperature > -273.15f) {
        info->temperature = P2.SensorTemperature;
      }
@@ -160,6 +163,10 @@ extern "C" int getinfo2(TImgInfo2 *info)
      else {
        info->temperature = -999.0f;
      }
+#else
+    // no temperature in previous version
+    info->temperature = -999.0f;
+#endif
 #endif
    }
    return(0);
