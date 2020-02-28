@@ -541,10 +541,10 @@ with profile.Picture.Bitmap do begin
     j:=trunc(FStarY);
     i0:=trunc(FStarX)-(s div 2);
     x1:=0;
-    y1:=Height-trunc((f.imageMin+(f.image[0,j,i0]/f.imageC)-bg)*ys)+3;
+    y1:=Height-trunc((f.imageMin+(f.image[0,j,i0])-bg)*ys)+3;
     for i:=0 to s-1 do begin
       x2:=trunc(i*xs);
-      y2:=trunc((f.imageMin+(f.image[0,j,i0+i]/f.imageC)-bg)*ys)+3;
+      y2:=trunc((f.imageMin+(f.image[0,j,i0+i])-bg)*ys)+3;
       y2:=Height-y2;
       Canvas.Line(x1,y1,x2,y2);
       x1:=x2;
@@ -658,7 +658,6 @@ begin
  if s>=(f.HeaderInfo.naxis2 div 2) then s:=f.HeaderInfo.naxis2 div 2;
 
  f.FindStarPos(x,y,s,xm,ym,ri,FValMax,bg,bgdev);
- FValMaxCalibrated:=(FValMax+bg)/f.imageC;
  if FValMax=0 then exit;
 
  f.GetHFD2(xm,ym,2*ri,xg,yg,bg,bgdev,Fhfd,Ffwhm,FValMax,Fsnr,flux);
