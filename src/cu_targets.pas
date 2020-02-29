@@ -31,6 +31,28 @@ uses u_global, cu_plan, u_utils, indiapi, pu_scriptengine, pu_pause, cu_rotator,
   u_translation, LazFileUtils, Controls, Dialogs, ExtCtrls,Classes, Forms, SysUtils;
 
 type
+
+  TTarget = Class(TObject)
+              public
+              objectname, planname, path: shortstring;
+              starttime,endtime,startmeridian,endmeridian,ra,de,pa: double;
+              startrise,endset,darknight,skip: boolean;
+              repeatcount,repeatdone: integer;
+              FlatBinX,FlatBinY,FlatCount: integer;
+              FlatGain: integer;
+              FlatFilters: shortstring;
+              FlatFstop: shortstring;
+              preview,astrometrypointing,updatecoord,inplaceautofocus,autoguiding: boolean;
+              delay, previewexposure: double;
+              plan :TComponent;
+              constructor Create;
+              destructor Destroy; override;
+              procedure Assign(Source: TTarget);
+              function previewexposure_str: string;
+              function delay_str: string;
+              function repeatcount_str: string;
+            end;
+
   TTargetList = array of TTarget;
 
   T_Targets = class(TComponent)
@@ -327,7 +349,8 @@ end;
 function T_Targets.Add(t: TTarget):integer;
 var p:T_Plan;
 begin
-  p:=T_Plan.Create(nil);
+  p:=T_Plan(t.plan);
+  if p=nil then p:=T_Plan.Create(nil);
   p.onPlanChange:=FPlanChange;
   p.onStepProgress:=@PlanStepChange;
   p.Preview:=Fpreview;
@@ -1625,6 +1648,96 @@ end
 else
   msg(rsNoTerminatio, 1);
 end;
+
+////////////////////  TTarget  /////////////////////////////
+
+constructor TTarget.Create;
+begin
+  inherited Create;
+  plan:=T_Plan.Create(nil);
+  objectname:='None';
+  planname:='';
+  path:='';
+  starttime:=NullCoord;
+  endtime:=NullCoord;
+  startmeridian:=NullCoord;
+  endmeridian:=NullCoord;
+  ra:=NullCoord;
+  de:=NullCoord;
+  pa:=NullCoord;
+  astrometrypointing:=(astrometryResolver<>ResolverNone);
+  updatecoord:=false;
+  inplaceautofocus:=AutofocusInPlace;
+  autoguiding:=false;
+  repeatcount:=1;
+  repeatdone:=0;
+  preview:=False;
+  delay:=1;
+  previewexposure:=1;
+  darknight:=false;
+  skip:=false;
+end;
+
+destructor TTarget.Destroy;
+begin
+  try
+  FreeAndNil(plan);
+  except
+  end;
+  Inherited Destroy;
+end;
+
+procedure TTarget.Assign(Source: TTarget);
+var i: integer;
+begin
+  objectname:=Source.objectname;
+  planname:=Source.planname;
+  path:=Source.path;
+  T_Plan(plan).Clear;
+  T_Plan(plan).Assign(T_Plan(Source.plan));
+  starttime:=Source.starttime;
+  endtime:=Source.endtime;
+  startrise:=Source.startrise;
+  endset:=Source.endset;
+  startmeridian:=Source.startmeridian;
+  endmeridian:=Source.endmeridian;
+  ra:=Source.ra;
+  de:=Source.de;
+  pa:=Source.pa;
+  astrometrypointing:=source.astrometrypointing;
+  updatecoord:=Source.updatecoord;
+  repeatcount:=Source.repeatcount;
+  repeatdone:=Source.repeatdone;
+  inplaceautofocus:=Source.inplaceautofocus;
+  autoguiding:=Source.autoguiding;
+  preview:=Source.preview;
+  delay:=Source.delay;
+  previewexposure:=Source.previewexposure;
+  FlatCount:=Source.FlatCount;
+  FlatBinX:=Source.FlatBinX;
+  FlatBinY:=Source.FlatBinY;
+  FlatGain:=Source.FlatGain;
+  FlatFilters:=Source.FlatFilters;
+  FlatFstop:=Source.FlatFstop;
+  darknight:=Source.darknight;
+  skip:=Source.skip;
+end;
+
+function TTarget.previewexposure_str: string;
+begin
+ Result:=FloatToStr(previewexposure);
+end;
+
+function TTarget.delay_str: string;
+begin
+  Result:=FloatToStr(delay);
+end;
+
+function TTarget.repeatcount_str: string;
+begin
+  Result:=IntToStr(repeatcount);
+end;
+
 
 end.
 

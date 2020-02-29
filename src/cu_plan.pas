@@ -67,6 +67,7 @@ T_Plan = class(TComponent)
     constructor Create(AOwner: TComponent);override;
     destructor  Destroy; override;
     procedure Clear;
+    procedure Assign(Source: T_plan);
     function Add(s: TStep):integer;
     procedure Start;
     procedure Stop;
@@ -129,6 +130,35 @@ end;
 procedure T_Plan.ShowDelayMsg(txt:string);
 begin
   if Assigned(FDelayMsg) then FDelayMsg(txt);
+end;
+
+procedure T_Plan.Assign(Source: T_plan);
+var i: integer;
+begin
+ FPlanChange:=Source.FPlanChange;
+ FonMsg:=Source.FonMsg;
+ FDelayMsg:=Source.FDelayMsg;
+ Fcapture:=Source.Fcapture;
+ Fpreview:=Source.Fpreview;
+ Ffilter:=Source.Ffilter;
+ Fmount:=Source.Fmount;
+ Fcamera:=Source.Fcamera;
+ Fautoguider:=Source.Fautoguider;
+ FonStepProgress:=Source.FonStepProgress;
+ NumSteps:=Source.NumSteps;
+ SetLength(FSteps,NumSteps);
+ for i:=0 to NumSteps-1 do begin
+   FSteps[i]:=TStep.Create;
+   FSteps[i].Assign(Source.FSteps[i]);
+ end;
+ FCurrentStep:=Source.FCurrentStep;
+ StepRunning:=Source.StepRunning;
+ StepTimeStart:=Source.StepTimeStart;
+ StepDelayEnd:=Source.StepDelayEnd;
+ FName:=Source.FName;
+ FObjectName:=Source.FObjectName;
+ FRestartTargetNum:=Source.FRestartTargetNum;
+ FRunning:=Source.FRunning;
 end;
 
 procedure  T_Plan.Clear;

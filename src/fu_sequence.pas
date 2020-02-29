@@ -425,8 +425,10 @@ end;
 procedure Tf_sequence.BtnEditTargetsClick(Sender: TObject);
 var i,j,n:integer;
     t:TTarget;
+    p:T_Plan;
     defaultname: string;
 begin
+   f_EditTargets.ClearTargetList;
    f_EditTargets.LoadPlanList;
    f_EditTargets.LoadScriptList;
    if (Sender=BtnEditTargets)and(Targets.Count>0) then begin
@@ -490,11 +492,12 @@ begin
       for i:=1 to n-1 do begin
         if (f_EditTargets.TargetList.Cells[1,i]<>ScriptTxt) and (f_EditTargets.TargetList.Cells[1,i]<>SkyFlatTxt) then
            defaultname:=f_EditTargets.TargetList.Cells[1,i];
-        t:=TTarget(f_EditTargets.TargetList.Objects[0,i]);
+        t:=TTarget.Create;
+        t.Assign(TTarget(f_EditTargets.TargetList.Objects[0,i]));
         t.repeatdone:=0;
         Targets.Add(t);
         { TODO : remove after edittarget set the plan }
-        CompatLoadPlan(T_Plan(t.plan), t.planname);
+        //CompatLoadPlan(T_Plan(t.plan), t.planname);
       end;
       Targets.IgnoreRestart    := not f_EditTargets.CheckBoxRestartStatus.Checked;
       Targets.ResetRepeat      := f_EditTargets.CheckBoxResetRepeat.Checked;

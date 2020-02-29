@@ -26,7 +26,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 interface
 
 uses pu_planetariuminfo, u_global, u_utils, u_ccdconfig, pu_pascaleditor, u_annotation, pu_keyboard,
-  pu_scriptengine, cu_astrometry, u_hints, u_translation, pu_selectscript, Classes, math,
+  pu_scriptengine, cu_astrometry, u_hints, u_translation, pu_selectscript, Classes, math, cu_targets,
   SysUtils, FileUtil, Forms, Controls, Graphics, Dialogs, StdCtrls, UScaleDPI, cu_sequencefile,
   LazUTF8, maskedit, Grids, ExtCtrls, ComCtrls, EditBtn, SpinEx, Buttons;
 
@@ -262,6 +262,7 @@ type
     procedure LoadPlanList;
     procedure LoadScriptList;
     procedure SetTarget(n: integer; t: TTarget);
+    procedure ClearTargetList;
     procedure ClearStepList;
     procedure ShowPlan;
     procedure SavePlan;
@@ -308,7 +309,7 @@ end;
 
 procedure Tf_EditTargets.FormDestroy(Sender: TObject);
 begin
-  // objects are destroyed in fu_sequence
+  ClearTargetList;
   ClearStepList;
 end;
 
@@ -2234,6 +2235,16 @@ if trim(PlanName.Caption)<>'' then begin
   else begin
    PageControlPlan.ActivePageIndex:=pagenone;
   end;
+end;
+
+procedure Tf_EditTargets.ClearTargetList;
+var i: integer;
+begin
+for i:=1 to TargetList.RowCount-1 do begin
+  if TargetList.Objects[0,i]<>nil then TargetList.Objects[0,i].Free;
+  TargetList.Objects[0,i]:=nil;
+end;
+TargetList.RowCount:=1;
 end;
 
 procedure Tf_EditTargets.ClearStepList;
