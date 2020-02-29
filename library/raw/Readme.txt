@@ -4,6 +4,8 @@ This library exist because we cannot link a C++ object directly from Pascal.
 It export C function we can link from Pascal to load a raw buffer and return 
 a pointer to the raw data.
 The rest of the processing is in the Pascal code.
+
+This procedure is tested with "LibRaw 201910 snapshot" it may require adjustement with another version.
  
 LINUX:
 ======

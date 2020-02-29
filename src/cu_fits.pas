@@ -3382,7 +3382,7 @@ if libraw<>0 then begin  // Use libraw directly
    rmsg:='GetRawInfo error';
    exit;
   end;
-  rawinfo2.version:=1;
+  rawinfo2.version:=3;
   infook:=false;
   if @GetRawInfo2<>nil then begin
      n:=GetRawInfo2(rawinfo2);
@@ -3417,6 +3417,7 @@ if libraw<>0 then begin  // Use libraw directly
     txt:=copy(trim(rawinfo2.camera),1,40);
     if txt<>'' then hdr.Add('CAMERA', txt ,'Camera model');
   end;
+  if infook and (rawinfo2.version>=3) and (rawinfo2.temperature>-273) then hdr.Add('CCD-TEMP',rawinfo2.temperature ,'CCD temperature (Celsius)');
   if infook and (rawinfo2.version>1) and (rawinfo2.focal_len>0) then hdr.Add('FOCALLEN',rawinfo2.focal_len ,'Camera focal length');
   if infook and (rawinfo2.version>1) and (rawinfo2.aperture>0) then hdr.Add('F_STOP',round(10*rawinfo2.aperture)/10 ,'Camera F-stop');
   if infook and (rawinfo2.version>1) and (rawinfo2.isospeed>0) then hdr.Add('ISOSPEED',rawinfo2.isospeed ,'Camera ISO speed');

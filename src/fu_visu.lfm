@@ -774,7 +774,7 @@ object f_visu: Tf_visu
         ClientWidth = 28
         TabOrder = 1
         Visible = False
-        object BtnShowLastImage: TSpeedButton
+        object BtnShowImage: TSpeedButton
           Left = 0
           Height = 22
           Top = 0
@@ -782,7 +782,7 @@ object f_visu: Tf_visu
           AllowAllUp = True
           GroupIndex = 87855
           Layout = blGlyphTop
-          OnClick = BtnShowLastImageClick
+          OnClick = BtnShowImageClick
         end
       end
     end

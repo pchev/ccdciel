@@ -37,7 +37,7 @@ type
     BtnInvert: TSpeedButton;
     BtnFlipHorz: TSpeedButton;
     BtnFlipVert: TSpeedButton;
-    BtnShowLastImage: TSpeedButton;
+    BtnShowImage: TSpeedButton;
     BtnZoom05: TSpeedButton;
     BtnBullsEye: TSpeedButton;
     Gamma: TFloatSpinEditEx;
@@ -65,7 +65,7 @@ type
     procedure BtnFlipHorzClick(Sender: TObject);
     procedure BtnFlipVertClick(Sender: TObject);
     procedure BtnInvertClick(Sender: TObject);
-    procedure BtnShowLastImageClick(Sender: TObject);
+    procedure BtnShowImageClick(Sender: TObject);
     procedure BtnZoomClick(Sender: TObject);
     procedure FrameEndDrag(Sender, Target: TObject; X, Y: Integer);
     procedure FrameResize(Sender: TObject);
@@ -193,7 +193,7 @@ begin
   BtnInvert.Hint:=rsInvertImageD;
   BtnFlipHorz.Hint:=rsFlipTheImageH;
   BtnFlipVert.Hint:=rsFlipTheImageV;
-  BtnShowLastImage.Hint:=rsShowLastCapt;
+  BtnShowImage.Hint:=rsShowLastCapt;
 end;
 
 procedure Tf_visu.DrawHistogram(hist:Thistogram; SetLevel,isFloatingPoint: boolean; iC,iMin,iMax: double);
@@ -463,9 +463,8 @@ begin
   TimerRedraw.Enabled:=true;
 end;
 
-procedure Tf_visu.BtnShowLastImageClick(Sender: TObject);
+procedure Tf_visu.BtnShowImageClick(Sender: TObject);
 begin
-  BtnShowLastImage.Down:=false;
   if assigned(FShowLastImage) then FShowLastImage(self);
 end;
 
