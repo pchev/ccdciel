@@ -2197,7 +2197,7 @@ begin
   TBTabs.Images.GetBitmap(13, btn);
   f_visu.BtnFlipVert.Glyph.Assign(btn);
   TBTabs.Images.GetBitmap(14, btn);
-  f_visu.BtnShowLastImage.Glyph.Assign(btn);
+  f_visu.BtnShowImage.Glyph.Assign(btn);
   TBTabs.Images.GetBitmap(9, btn);
   f_starprofile.BtnPinGraph.Glyph.Assign(btn);
   TBTabs.Images.GetBitmap(10, btn);
@@ -7967,10 +7967,19 @@ end;
 
 procedure Tf_main.ShowLastImage(Sender: TObject);
 begin
+ if f_visu.BtnShowImage.Down then begin
   fits.LoadStream;
   DrawHistogram(true);
   DrawImage;
   Image1.Invalidate;
+ end
+ else begin
+  img_Width:=0;
+  img_Height:=0;
+  ImaBmp.SetSize(0,0);
+  ClearImage;
+  Image1.Invalidate;
+ end;
 end;
 
 procedure Tf_main.CameraNewImageAsync(Data: PtrInt);
@@ -7983,7 +7992,7 @@ begin
   ImgFrameY:=FrameY;
   ImgFrameW:=FrameW;
   ImgFrameH:=FrameH;
-  displayimage:=DisplayCapture or (not capture) or (Autofocusing) or (FlatAutoExposure and (camera.FrameType=FLAT));
+  displayimage:=DisplayCapture or f_visu.BtnShowImage.Down or (not capture) or (Autofocusing) or (FlatAutoExposure and (camera.FrameType=FLAT));
   if displayimage and (not fits.ImageValid) then begin
     {$ifdef debug_raw}writeln(FormatDateTime(dateiso,Now)+blank+'fits loadstream');{$endif}
      fits.LoadStream;
