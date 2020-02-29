@@ -3356,6 +3356,7 @@ begin
   if pos(' ', TmpDir)>0 then NewMessage(rsPleaseSelect2,1);
   SaveBitmap:=config.GetValue('/Files/SaveBitmap',false);
   SaveBitmapFormat:=config.GetValue('/Files/SaveBitmapFormat','png');
+  OpenPictureDialog1.InitialDir:=config.GetValue('/Files/CapturePath',defCapturePath);
   ObsLatitude:=config.GetValue('/Info/ObservatoryLatitude',0.0);
   ObsLongitude:=config.GetValue('/Info/ObservatoryLongitude',0.0);
   ObsElevation:=config.GetValue('/Info/ObservatoryElevation',0.0);
