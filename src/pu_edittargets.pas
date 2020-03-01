@@ -265,6 +265,7 @@ type
     procedure ClearTargetList;
     procedure ClearStepList;
     procedure ShowPlan;
+    procedure LoadTemplate;
     procedure SavePlan;
     procedure ReadStep(pfile:TCCDconfig; i: integer; var p:TStep; var msg:string);
     property TargetsRepeat: integer read FTargetsRepeat write FTargetsRepeat;
@@ -1534,7 +1535,7 @@ begin
     t.preview:=Preview.Checked;
     if planchange then begin
       PlanName.Caption:=t.planname;
-      ShowPlan;
+      LoadTemplate;
     end;
   end;
   TargetList.EditorMode := false;
@@ -2196,6 +2197,38 @@ begin
 end;
 
 procedure Tf_EditTargets.ShowPlan;
+var s:TStep;
+    p:T_Plan;
+    t: TTarget;
+    i,n: integer;
+    pn: string;
+begin
+  ClearStepList;
+  PageControlPlan.ActivePageIndex:=pageobject;
+  t:=TTarget(TargetList.Objects[colseq,TargetList.Row]);
+  if t<>nil then begin
+    p:=T_Plan(t.plan);
+    if (p=nil)or(p.Count=0) then begin
+      LoadTemplate;
+    end
+    else begin
+      n:=p.Count;
+      StepList.RowCount:=n+1;
+      for i:=1 to n do begin
+        s:=TStep.Create;
+        s.Assign(p.Steps[i-1]);
+        StepList.Cells[0,i]:=IntToStr(i);
+        StepList.Cells[1,i]:=s.description_str;
+        StepList.Objects[0,i]:=s;
+        StepListSelection(nil,0,i);
+      end;
+    end;
+    StepList.Row:=1;
+    StepListSelection(StepList,0,1);
+  end;
+end;
+
+procedure Tf_EditTargets.LoadTemplate;
 var pfile: TCCDconfig;
     fn,buf: string;
     i,n:integer;
