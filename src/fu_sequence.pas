@@ -517,7 +517,7 @@ begin
       SaveTargets(SequenceFile.Filename,defaultname);
       LoadTargets(SequenceFile.Filename);
     end else begin
-      // look for modified plan
+      // reset last saved
       LoadTargets(SequenceFile.Filename);
     end;
     BtnReset.Enabled:=not Targets.IgnoreRestart;
@@ -530,6 +530,8 @@ var t:TTarget;
     x, str:string;
     i,j,k,m,n: integer;
 begin
+   SequenceFile.Filename:='';
+   SequenceFile.Clear;
    SequenceFile.Filename:=fn;
    CurrentSeqName:=SequenceFile.CurrentName;
    Targets.Clear;

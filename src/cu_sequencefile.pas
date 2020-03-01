@@ -44,7 +44,6 @@ end;
 
 procedure T_SequenceFile.SetFilename(value: string);
 begin
-  FItems.Filename:='';  // force to reload the file
   FItems.Filename:=value;
   FCurrentName:=ExtractFileNameOnly(value);
 end;

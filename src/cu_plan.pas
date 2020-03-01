@@ -71,6 +71,7 @@ T_Plan = class(TComponent)
     function Add(s: TStep):integer;
     procedure Start;
     procedure Stop;
+    procedure UpdateDoneCount(progress: boolean);
     property Count: integer read NumSteps;
     property CurrentStep: integer read FCurrentStep;
     property Running: boolean read FRunning;
@@ -192,12 +193,8 @@ begin
 end;
 
 procedure T_Plan.Stop;
-var p: TStep;
 begin
-  p:=FSteps[CurrentStep];
-  if p<>nil then begin
-    p.donecount:=CurrentDoneCount;
-  end;
+  UpdateDoneCount(true);
   FRunning:=false;
   if Capture.Running then Capture.BtnStartClick(Self);
 end;
@@ -207,8 +204,7 @@ begin
   PlanTimer.Enabled:=false;
   FlatWaitDusk:=false;
   FlatWaitDawn:=false;
-  if (FRestartTargetNum>0)and(CurrentStep>=0) then SequenceFile.Items.SetValue('/Targets/Target'+inttostr(FRestartTargetNum)+'/Plan/Steps/Step'+inttostr(CurrentStep)+'/Done',CurrentDoneCount);
-  if assigned(FonStepProgress) then FonStepProgress(self);
+  UpdateDoneCount(true);
   inc(FCurrentStep);
   if FCurrentStep<NumSteps then begin
     StartStep;
@@ -273,20 +269,25 @@ begin
   end;
 end;
 
-
-procedure T_Plan.PlanTimerTimer(Sender: TObject);
+procedure T_Plan.UpdateDoneCount(progress: boolean);
 var s: TStep;
 begin
- if FRunning then begin
-   s:=FSteps[CurrentStep];
-   if s<>nil then begin
-     // store image count
-     if s.donecount<>CurrentDoneCount then begin
-        s.donecount:=CurrentDoneCount;
-        if FRestartTargetNum>0 then SequenceFile.Items.SetValue('/Targets/Target'+inttostr(FRestartTargetNum)+'/Plan/Steps/Step'+inttostr(CurrentStep)+'/Done',s.donecount);
-        if assigned(FonStepProgress) then FonStepProgress(self);
-     end;
+ if CurrentStep<0 then exit;
+ s:=FSteps[CurrentStep];
+ if s<>nil then begin
+   // store image count
+   if s.donecount<>CurrentDoneCount then begin
+      s.donecount:=CurrentDoneCount;
+      if FRestartTargetNum>0 then SequenceFile.Items.SetValue('/Targets/Target'+inttostr(FRestartTargetNum)+'/Plan/Steps/Step'+inttostr(CurrentStep)+'/Done',s.donecount);
+      if progress and assigned(FonStepProgress) then FonStepProgress(self);
    end;
+ end;
+end;
+
+procedure T_Plan.PlanTimerTimer(Sender: TObject);
+begin
+ if FRunning then begin
+   UpdateDoneCount(true);
    StepRunning:=Capture.Running;
    if not StepRunning then begin
        NextStep;
