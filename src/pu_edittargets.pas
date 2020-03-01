@@ -53,9 +53,9 @@ type
     Btn_coord_internal: TButton;
     BtnUnattendedScript: TButton;
     BtnSaveAs: TButton;
-    BtnSavePlan: TButton;
+    BtnSaveTemplate: TButton;
     BtnRemoveStep: TButton;
-    BtnSavePlanAs: TButton;
+    BtnTemplatePlanAs: TButton;
     BtnImportObslist: TButton;
     BtnEndScript: TButton;
     cbNone: TCheckBox;
@@ -109,7 +109,7 @@ type
     BtnImgRot: TButton;
     BtnSave: TButton;
     BtnEditNewScript: TButton;
-    BtnDeletePlan: TButton;
+    BtnDeleteTemplate: TButton;
     BtnCancel: TButton;
     GroupBox5: TGroupBox;
     GroupBox6: TGroupBox;
@@ -173,7 +173,7 @@ type
     procedure BtnInsertPlanetariumClick(Sender: TObject);
     procedure BtnPlanetariumCoordClick(Sender: TObject);
     procedure BtnCurrentCoordClick(Sender: TObject);
-    procedure BtnDeletePlanClick(Sender: TObject);
+    procedure BtnDeleteTemplateClick(Sender: TObject);
     procedure BtnDeleteObjectClick(Sender: TObject);
     procedure BtnEndScriptClick(Sender: TObject);
     procedure BtnImportMosaicClick(Sender: TObject);
@@ -183,8 +183,8 @@ type
     procedure BtnImgRotClick(Sender: TObject);
     procedure BtnSaveAsClick(Sender: TObject);
     procedure BtnSaveClick(Sender: TObject);
-    procedure BtnSavePlanAsClick(Sender: TObject);
-    procedure BtnSavePlanClick(Sender: TObject);
+    procedure BtnTemplatePlanAsClick(Sender: TObject);
+    procedure BtnSaveTemplateClick(Sender: TObject);
     procedure BtnSkyFlatClick(Sender: TObject);
     procedure BtnScriptClick(Sender: TObject);
     procedure BtnNewObjectClick(Sender: TObject);
@@ -266,7 +266,7 @@ type
     procedure ClearStepList;
     procedure ShowPlan;
     procedure LoadTemplate;
-    procedure SavePlan;
+    procedure SaveTemplate;
     procedure ReadStep(pfile:TCCDconfig; i: integer; var p:TStep; var msg:string);
     property TargetsRepeat: integer read FTargetsRepeat write FTargetsRepeat;
     property Astrometry: TAstrometry read FAstrometry write FAstrometry;
@@ -440,9 +440,9 @@ begin
   label2.Caption:=rsSequence;
   GroupBox5.Caption:=rsRepeat;
   // plan
-  BtnDeletePlan.Caption := rsDeletePlan;
-  BtnSavePlan.Caption := rsSavePlan;
-  BtnSavePlanAs.Caption:=rsSavePlanAs;
+  BtnDeleteTemplate.Caption := rsDeleteTempl;
+  BtnSaveTemplate.Caption := rsSaveTempl;
+  BtnTemplatePlanAs.Caption:=rsSaveTemplAs;
   BtnRemoveStep.Caption := rsRemoveStep;
   BtnAddStep.Caption := rsAddStep;
   StepList.Columns.Items[pcoldesc-1].Title.Caption := rsDescription;
@@ -560,21 +560,20 @@ begin
   TargetList.Cells[colplan,n]:=sl;
 end;
 
-procedure Tf_EditTargets.BtnDeletePlanClick(Sender: TObject);
+procedure Tf_EditTargets.BtnDeleteTemplateClick(Sender: TObject);
 var txt,fn: string;
     n: integer;
 begin
   n:=TargetList.Row;
-  txt:=TargetList.Cells[colplan,n];
+  txt:=trim(TargetList.Cells[colplan,n]);
+  if txt='' then exit;
   fn:=slash(ConfigDir)+txt+'.plan';
+  if not FileExistsUTF8(fn) then exit;
   if MessageDlg(Format(rsDoYouWantToD, [fn]), mtConfirmation, mbYesNo, 0)=mrYes
     then begin
      DeleteFileUTF8(fn);
      LoadPlanList;
-     if TargetList.Columns[colplan-1].PickList.Count>0 then
-       TargetList.Cells[colplan,n]:=TargetList.Columns[colplan-1].PickList[0]
-     else
-       TargetList.Cells[colplan,n]:='';
+     TargetList.Cells[colplan,n]:='';
      PlanName.Caption:=TargetList.Cells[colplan,n];
      ShowPlan;
      TargetChange(nil);
@@ -1254,14 +1253,12 @@ var s:TStep;
     p:T_Plan;
     t: TTarget;
     i,n: integer;
-    pn: string;
 begin
 if StepsModified then begin
   t:=TTarget(TargetList.Objects[colseq,TargetList.Row]);
   p:=T_Plan(t.plan);
-  pn:=p.PlanName;
   p.Clear;
-  p.PlanName:=pn;
+  p.PlanName:=PlanName.Caption;
   n:=StepList.RowCount-1;
   for i:=1 to n do begin
      s:=TStep.Create;
@@ -1533,7 +1530,7 @@ begin
     t.delay:=TDelay.Value;
     t.previewexposure:=PreviewExposure.Value;
     t.preview:=Preview.Checked;
-    if planchange then begin
+    if planchange and (trim(t.planname)>'') then begin
       PlanName.Caption:=t.planname;
       LoadTemplate;
     end;
@@ -2233,7 +2230,7 @@ var pfile: TCCDconfig;
     fn,buf: string;
     i,n:integer;
     p: TStep;
-  procedure NewPlan;
+  procedure NewTemplate;
   begin
     StepList.RowCount:=2;
     p:=TStep.Create;
@@ -2252,7 +2249,7 @@ if trim(PlanName.Caption)<>'' then begin
     pfile.Filename:=fn;
     n:=pfile.GetValue('/StepNum',0);
     if n=0 then begin
-      NewPlan;
+      NewTemplate;
     end else begin
       StepList.RowCount:=n+1;
       buf:='';
@@ -2270,9 +2267,10 @@ if trim(PlanName.Caption)<>'' then begin
       if buf>'' then ShowMessage(buf);
     end;
   end else begin
-    NewPlan;
-    if PlanName.Caption<>'' then SavePlan;
+    NewTemplate;
   end;
+  StepsModified:=true;
+  SavePlanModified;
   end
   else begin
    PageControlPlan.ActivePageIndex:=pagenone;
@@ -2558,6 +2556,7 @@ begin
   StepList.Row:=i;
   StepsModified:=true;
   SetStep(i,p);
+  SavePlanModified;
 end;
 
 procedure Tf_EditTargets.BtnRemoveStepClick(Sender: TObject);
@@ -2581,6 +2580,7 @@ begin
         StepsModified:=true;
      end;
      ResetSteps;
+     SavePlanModified;
   end;
 end;
 
@@ -2592,7 +2592,7 @@ begin
   end;
 end;
 
-procedure Tf_EditTargets.BtnSavePlanAsClick(Sender: TObject);
+procedure Tf_EditTargets.BtnTemplatePlanAsClick(Sender: TObject);
 begin
   SaveDialog1.InitialDir:=ConfigDir;
   SaveDialog1.DefaultExt:='.plan';
@@ -2600,18 +2600,21 @@ begin
   SaveDialog1.FileName:=PlanName.Caption+'.plan';
   if SaveDialog1.Execute then begin
      PlanName.Caption:=ExtractFileNameOnly(SaveDialog1.FileName);
-     SavePlan;
+     SaveTemplate;
      SetPlanList(TargetList.Row,PlanName.Caption);
      TargetChange(nil);
   end;
 end;
 
-procedure Tf_EditTargets.BtnSavePlanClick(Sender: TObject);
+procedure Tf_EditTargets.BtnSaveTemplateClick(Sender: TObject);
 begin
-  SavePlan;
+  if trim(PlanName.Caption)='' then
+    BtnTemplatePlanAsClick(Sender)
+  else
+    SaveTemplate;
 end;
 
-procedure Tf_EditTargets.SavePlan;
+procedure Tf_EditTargets.SaveTemplate;
 var pfile: TCCDconfig;
     fn,str: string;
     i,n,k: integer;

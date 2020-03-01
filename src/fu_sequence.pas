@@ -496,8 +496,6 @@ begin
         t.Assign(TTarget(f_EditTargets.TargetList.Objects[0,i]));
         t.repeatdone:=0;
         Targets.Add(t);
-        { TODO : remove after edittarget set the plan }
-        //CompatLoadPlan(T_Plan(t.plan), t.planname);
       end;
       Targets.IgnoreRestart    := not f_EditTargets.CheckBoxRestartStatus.Checked;
       Targets.ResetRepeat      := f_EditTargets.CheckBoxResetRepeat.Checked;
@@ -688,6 +686,8 @@ begin
          end;
      end;
    end;
+   TargetGrid.Row:=1;
+   TargetGridSelection(TargetGrid,0,1);
    BtnReset.Enabled:=not Targets.IgnoreRestart;
    if Targets.CheckDoneCount then begin
       msg(targets.LastDoneStep,2);

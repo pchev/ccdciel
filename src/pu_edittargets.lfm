@@ -1313,33 +1313,33 @@ object f_EditTargets: Tf_EditTargets
               ParentFont = False
               TabOrder = 1
             end
-            object BtnSavePlan: TButton
+            object BtnSaveTemplate: TButton
               Left = 251
               Height = 25
               Top = 2
               Width = 137
-              Caption = 'Save plan'
-              OnClick = BtnSavePlanClick
+              Caption = 'Save template'
+              OnClick = BtnSaveTemplateClick
               ParentFont = False
               TabOrder = 2
             end
-            object BtnSavePlanAs: TButton
+            object BtnTemplatePlanAs: TButton
               Left = 396
               Height = 25
               Top = 2
               Width = 146
-              Caption = 'Save plan as...'
-              OnClick = BtnSavePlanAsClick
+              Caption = 'Save template as...'
+              OnClick = BtnTemplatePlanAsClick
               ParentFont = False
               TabOrder = 3
             end
-            object BtnDeletePlan: TButton
+            object BtnDeleteTemplate: TButton
               Left = 550
               Height = 25
               Top = 2
               Width = 154
-              Caption = 'Delete plan'
-              OnClick = BtnDeletePlanClick
+              Caption = 'Delete template'
+              OnClick = BtnDeleteTemplateClick
               ParentFont = False
               TabOrder = 4
             end
