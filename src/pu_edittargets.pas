@@ -241,7 +241,6 @@ type
     LockStep, StepsModified, ObjectNameChange: boolean;
     Lockcb: boolean;
     SortDirection: integer;
-    FDoneWarning: boolean;
     procedure SetPlanList(n: integer; pl:string);
     procedure SetScriptList(n: integer; sl:string);
     procedure ResetSequences;
@@ -272,7 +271,6 @@ type
     procedure ReadStep(pfile:TCCDconfig; i: integer; var p:TStep; var msg:string);
     property TargetsRepeat: integer read FTargetsRepeat write FTargetsRepeat;
     property Astrometry: TAstrometry read FAstrometry write FAstrometry;
-    property DoneWarning: boolean read FDoneWarning write FDoneWarning;
   end;
 
 var
@@ -1291,12 +1289,6 @@ end;
 
 procedure Tf_EditTargets.BtnSaveClick(Sender: TObject);
 begin
-  if FDoneWarning then begin
-    if MessageDlg(Format(rsThisSequence, [''])+crlf+Format(rsThisWillBeLo, [crlf]), mtConfirmation, mbYesNo, 0)=mryes then begin
-       BtnSaveAsClick(Sender);
-       exit;
-    end;
-  end;
   ModalResult:=mrOK;
 end;
 

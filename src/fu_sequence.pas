@@ -482,7 +482,6 @@ begin
       f_EditTargets.cbUnattended.Checked:=false;
       f_EditTargets.TargetList.RowCount:=1;
     end;
-    f_EditTargets.DoneWarning:=Targets.CheckDoneCount;
     FormPos(f_EditTargets,mouse.CursorPos.X,mouse.CursorPos.Y);
     if f_EditTargets.ShowModal=mrOK then begin
       n:=f_EditTargets.TargetList.RowCount;
@@ -493,7 +492,6 @@ begin
            defaultname:=f_EditTargets.TargetList.Cells[1,i];
         t:=TTarget.Create;
         t.Assign(TTarget(f_EditTargets.TargetList.Objects[0,i]));
-        t.repeatdone:=0;
         Targets.Add(t);
       end;
       Targets.IgnoreRestart    := not f_EditTargets.CheckBoxRestartStatus.Checked;

@@ -1057,7 +1057,6 @@ resourcestring
   rsItWillContin = 'It will continue after the last checkpoint.';
   rsGlobalRepeat = 'Global repeat:';
   rsDone = 'done';
-  rsThisWillBeLo = 'This will be lost when saving the new file.%sDo you want to save with a new name to not loss this information in the original file?';
   rsOpenTheDomeS = 'Open the Dome shutter';
   rsUnparkTheDom = 'Unpark the Dome';
   rsUnparkTheTel = 'Unpark the telescope';
