@@ -49,6 +49,7 @@ type
     BtnInsertPlanetarium: TButton;
     BtnNewObject: TButton;
     BtnNewScript: TButton;
+    BtnApplyTemplate: TButton;
     BtnSkyFlat: TButton;
     Btn_coord_internal: TButton;
     BtnUnattendedScript: TButton;
@@ -169,6 +170,7 @@ type
     TargetList: TStringGrid;
     procedure BtnAddStepClick(Sender: TObject);
     procedure BtnAnytimeClick(Sender: TObject);
+    procedure BtnApplyTemplateClick(Sender: TObject);
     procedure BtnCancelClick(Sender: TObject);
     procedure BtnInsertPlanetariumClick(Sender: TObject);
     procedure BtnPlanetariumCoordClick(Sender: TObject);
@@ -1127,6 +1129,29 @@ begin
   TargetList.Cells[colstart,TargetList.Row]:='';
   TargetList.Cells[colend,TargetList.Row]:='';
   TargetChange(nil);
+end;
+
+procedure Tf_EditTargets.BtnApplyTemplateClick(Sender: TObject);
+var s:TStep;
+    p:T_Plan;
+    t: TTarget;
+    i,j,n: integer;
+begin
+  BtnSaveTemplateClick(Sender); // ensure modification are saved
+  for j:=1 to TargetList.RowCount-1 do begin
+    if TargetList.Cells[colplan,j]=PlanName.Caption then begin
+      t:=TTarget(TargetList.Objects[colseq,j]);
+      p:=T_Plan(t.plan);
+      p.Clear;
+      p.PlanName:=PlanName.Caption;
+      n:=StepList.RowCount-1;
+      for i:=1 to n do begin
+         s:=TStep.Create;
+         s.Assign(TStep(StepList.Objects[0,i]));
+         p.Add(s);
+      end;
+    end;
+  end;
 end;
 
 procedure Tf_EditTargets.BtnCancelClick(Sender: TObject);
