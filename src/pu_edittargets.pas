@@ -27,7 +27,7 @@ interface
 
 uses pu_planetariuminfo, u_global, u_utils, u_ccdconfig, pu_pascaleditor, u_annotation, pu_keyboard,
   pu_scriptengine, cu_astrometry, u_hints, u_translation, pu_selectscript, Classes, math, cu_targets,
-  SysUtils, FileUtil, Forms, Controls, Graphics, Dialogs, StdCtrls, UScaleDPI, cu_sequencefile,
+  SysUtils, FileUtil, Forms, Controls, Graphics, Dialogs, StdCtrls, UScaleDPI, cu_sequencefile, cu_plan,
   LazUTF8, maskedit, Grids, ExtCtrls, ComCtrls, EditBtn, SpinEx, Buttons;
 
 const
@@ -246,7 +246,7 @@ type
     procedure SetLang;
     procedure ResetSteps;
     procedure SetStep(n: integer; p: TStep);
-    procedure CheckPlanModified;
+    procedure SavePlanModified;
     function  CheckRiseSet(n: integer; showmsg:boolean=true): boolean;
     procedure FrameTypeChange(n: integer; newtype: TFrameType);
     procedure SetStartTime(buf: string; var t:TTarget);
@@ -1098,7 +1098,6 @@ end;
 
 procedure Tf_EditTargets.BtnCancelClick(Sender: TObject);
 begin
-  CheckPlanModified;
   ModalResult:=mrCancel;
 end;
 
@@ -1198,7 +1197,6 @@ procedure Tf_EditTargets.BtnSaveAsClick(Sender: TObject);
 var defaultname: string;
     i,n: integer;
 begin
-CheckPlanModified;
 SaveDialog1.InitialDir:=ConfigDir;
 SaveDialog1.DefaultExt:='.targets';
 SaveDialog1.filter:='CCDciel Sequence|*.targets';
@@ -1234,7 +1232,6 @@ end;
 
 procedure Tf_EditTargets.BtnSaveClick(Sender: TObject);
 begin
-  CheckPlanModified;
   if FDoneWarning then begin
     if MessageDlg(Format(rsThisSequence, [''])+crlf+Format(rsThisWillBeLo, [crlf]), mtConfirmation, mbYesNo, 0)=mryes then begin
        BtnSaveAsClick(Sender);
@@ -1251,11 +1248,24 @@ begin
   TargetChange(nil);
 end;
 
-procedure Tf_EditTargets.CheckPlanModified;
+procedure Tf_EditTargets.SavePlanModified;
+var s:TStep;
+    p:T_Plan;
+    t: TTarget;
+    i,n: integer;
+    pn: string;
 begin
 if StepsModified then begin
-  if MessageDlg(Format(rsThePlanIsMod, [PlanName.Caption]), mtConfirmation, mbYesNo, 0)=mrYes then begin
-     SavePlan;
+  t:=TTarget(TargetList.Objects[colseq,TargetList.Row]);
+  p:=T_Plan(t.plan);
+  pn:=p.PlanName;
+  p.Clear;
+  p.PlanName:=pn;
+  n:=StepList.RowCount-1;
+  for i:=1 to n do begin
+     s:=TStep.Create;
+     s.Assign(TStep(StepList.Objects[0,i]));
+     p.Add(s);
   end;
   StepsModified:=false;
 end;
@@ -1267,7 +1277,6 @@ var i,j:integer;
     filterlst:TStringList;
 begin
   if (t=nil)or(n=0)or(n>=TargetList.RowCount) then exit;
-  CheckPlanModified;
   LockTarget:=true;
   TargetList.Cells[colseq,n]:=IntToStr(n);
   TargetList.Cells[colname,n]:=t.objectname;
@@ -2399,7 +2408,7 @@ begin
   ok:=j>0;
   StepsModified:=StepsModified or (p.dither<>ok);
   p.dither:=(p.frtype=LIGHT) and ok;
-  StepsModified:=StepsModified or (p.dithercount<>j);
+  StepsModified:=StepsModified or (ok and (p.dithercount<>j));
   if ok then
      p.dithercount:=j
   else
@@ -2411,13 +2420,14 @@ begin
   ok:=j>0;
   StepsModified:=StepsModified or (p.autofocus<>ok);
   p.autofocus:=(p.frtype=LIGHT) and ok;
-  StepsModified:=StepsModified or (p.autofocuscount<>j);
+  StepsModified:=StepsModified or (ok and (p.autofocuscount<>j));
   if ok then
      p.autofocuscount:=j
   else
      p.autofocuscount:=0;
   StepList.Cells[1,n]:=p.description;
   SetStep(n,p);
+  SavePlanModified;
 end;
 
 procedure Tf_EditTargets.StepListValidateEntry(sender: TObject; aCol, aRow: Integer; const OldValue: string; var NewValue: String);
