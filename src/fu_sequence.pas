@@ -912,7 +912,7 @@ end;
 procedure Tf_sequence.TargetGridSelection(Sender: TObject; aCol, aRow: Integer);
 var p : T_plan;
 begin
-  if not Running then begin
+  if (not Running)and(arow<=Targets.Count) then begin
     p:=T_Plan(Targets.Targets[arow-1].plan);
     if p<>nil then PlanChange(p);
   end;

@@ -55,7 +55,7 @@ type
     BtnSaveAs: TButton;
     BtnSaveTemplate: TButton;
     BtnRemoveStep: TButton;
-    BtnTemplatePlanAs: TButton;
+    BtnSaveTemplateAs: TButton;
     BtnImportObslist: TButton;
     BtnEndScript: TButton;
     cbNone: TCheckBox;
@@ -183,7 +183,7 @@ type
     procedure BtnImgRotClick(Sender: TObject);
     procedure BtnSaveAsClick(Sender: TObject);
     procedure BtnSaveClick(Sender: TObject);
-    procedure BtnTemplatePlanAsClick(Sender: TObject);
+    procedure BtnSaveTemplateAsClick(Sender: TObject);
     procedure BtnSaveTemplateClick(Sender: TObject);
     procedure BtnSkyFlatClick(Sender: TObject);
     procedure BtnScriptClick(Sender: TObject);
@@ -364,7 +364,7 @@ begin
   BtnSkyFlat.Caption := rsSkyFlat;
   BtnImportObslist.Caption:=rsImportCdCObs;
   TargetList.Columns.Items[colname-1].Title.Caption := Format(rsTargetName, [crlf]);
-  TargetList.Columns.Items[colplan-1].Title.Caption := rsPlan;
+  TargetList.Columns.Items[colplan-1].Title.Caption := rsTemplate;
   TargetList.Columns.Items[colra-1].Title.Caption := rsRA+j2000;
   TargetList.Columns.Items[coldec-1].Title.Caption := rsDec+j2000;
   TargetList.Columns.Items[colpa-1].Title.Caption := rsPA;
@@ -442,7 +442,7 @@ begin
   // plan
   BtnDeleteTemplate.Caption := rsDeleteTempl;
   BtnSaveTemplate.Caption := rsSaveTempl;
-  BtnTemplatePlanAs.Caption:=rsSaveTemplAs;
+  BtnSaveTemplateAs.Caption:=rsSaveTemplAs;
   BtnRemoveStep.Caption := rsRemoveStep;
   BtnAddStep.Caption := rsAddStep;
   StepList.Columns.Items[pcoldesc-1].Title.Caption := rsDescription;
@@ -456,7 +456,7 @@ begin
   StepList.Columns.Items[pcoldither-1].Title.Caption := Format(rsDitherEvery2,[crlf]);
   StepList.Columns.Items[pcolgain-1].Title.Caption := rsGain;
   StepList.Columns.Items[pcolfstop-1].Title.Caption := rsFStop;
-  Label1.Caption := rsPlan;
+  Label1.Caption := rsTemplate;
   // termination options
   Label3.Caption:=rsTerminationO;
   cbNone.Caption:=rsDoNothing;
@@ -588,6 +588,7 @@ var obj:string;
     f: textfile;
     title, buf, buf1: string;
     ra, de: double;
+    firstrow: boolean;
 const
   objl = 32;
   radecl = 10;
@@ -595,6 +596,7 @@ begin
   // Import Cartes du Ciel observation list
   OpenDialog1.Filter:='';
   if OpenDialog1.Execute then begin
+     firstrow:=true;
      AssignFile(f, UTF8ToSys(OpenDialog1.FileName));
      reset(f);
      readln(f, title);
@@ -617,11 +619,24 @@ begin
        // create new target
        t:=TTarget.Create;
        n:=TargetList.Row;
-       if n>=1 then begin
-         // copy current target
-         tt:=TTarget(TargetList.Objects[colseq,n]);
-         if (tt.objectname<>ScriptTxt) and (tt.objectname<>SkyFlatTxt) then t.Assign(tt);
-       end;
+       if firstrow then begin
+          // select new plan
+          buf:=FormEntryCB(self, TargetList.Columns[colplan-1].PickList, TargetList.Columns[colplan-1].Title.Caption, '');
+          if (buf='')and(TargetList.Columns[colplan-1].PickList.Count>0) then buf:=TargetList.Columns[colplan-1].PickList[0];
+          if buf<>'' then begin
+            PlanName.Caption:=buf;
+            t.planname:=buf;
+            ShowPlan;
+          end;
+          firstrow:=false;
+        end
+        else begin
+          if n>=1 then begin
+            // copy previous row
+            tt:=TTarget(TargetList.Objects[colseq,n]);
+            if (tt.objectname<>ScriptTxt) and (tt.objectname<>SkyFlatTxt) then t.Assign(tt);
+          end
+        end;
        // assign name and coordinates J2000
        t.objectname:=obj;
        t.ra:=ra;
@@ -640,6 +655,7 @@ begin
        SetTarget(i,t);
      end;
      CloseFile(f);
+     MoveFlat(Sender);
   end;
 end;
 
@@ -650,6 +666,7 @@ var buf,buf2,obj,tra,tde,trot:string;
     f: textfile;
     eq,ra,de: double;
     rec: Tstringlist;
+    firstrow: boolean;
 begin
   // Import Cartes du Ciel mosaic
   OpenDialog1.Filter:='CdC circle file |*.cdcc';
@@ -658,6 +675,7 @@ begin
      reset(f);
      rec:=Tstringlist.Create;
      eq:=jdtoday;  // old cdc version do not store the equinox but most probably use equinox of date
+     firstrow:=true;
      try
      while not EOF(f) do
      begin
@@ -690,10 +708,23 @@ begin
        // create new target
        t:=TTarget.Create;
        n:=TargetList.Row;
-       if n>=1 then begin
-         // copy current target
-         tt:=TTarget(TargetList.Objects[colseq,n]);
-         if (tt.objectname<>ScriptTxt) and (tt.objectname<>SkyFlatTxt) then t.Assign(tt);
+       if firstrow then begin
+         // select new plan
+         buf:=FormEntryCB(self, TargetList.Columns[colplan-1].PickList, TargetList.Columns[colplan-1].Title.Caption, '');
+         if (buf='')and(TargetList.Columns[colplan-1].PickList.Count>0) then buf:=TargetList.Columns[colplan-1].PickList[0];
+         if buf<>'' then begin
+           PlanName.Caption:=buf;
+           t.planname:=buf;
+           ShowPlan;
+         end;
+         firstrow:=false;
+       end
+       else begin
+         if n>=1 then begin
+           // copy previous row
+           tt:=TTarget(TargetList.Objects[colseq,n]);
+           if (tt.objectname<>ScriptTxt) and (tt.objectname<>SkyFlatTxt) then t.Assign(tt);
+         end
        end;
        // assign name and coordinates J2000
        t.objectname:=obj;
@@ -723,6 +754,7 @@ begin
        rec.Free;
        TargetList.EditorMode := false;
      end;
+     MoveFlat(Sender);
   end;
 end;
 
@@ -770,6 +802,7 @@ begin
   end;
   TargetChange(nil);
   ShowPlan;
+  MoveFlat(Sender);
 end;
 
 procedure Tf_EditTargets.NewObject;
@@ -1150,6 +1183,7 @@ begin
   if f_planetariuminfo.Obj.Text<>'' then TargetList.Cells[colname,n]:=trim(f_planetariuminfo.Obj.Text);
   TargetList.Cells[colastrometry,n]:=BoolToStr(astrometryResolver<>ResolverNone,'1','0');
   TargetChange(nil);
+  MoveFlat(Sender);
 end;
 
 procedure Tf_EditTargets.BtnImgCoordClick(Sender: TObject);
@@ -1809,7 +1843,8 @@ begin
                        t:=TTarget(Objects[colseq,i]);
                        t.planname:=buf;
                        PlanName.Caption:=t.planname;
-                       ShowPlan;
+                       Row:=i;
+                       LoadTemplate;
                      end;
                 end;
               end;
@@ -2328,8 +2363,10 @@ end;
 procedure Tf_EditTargets.StepListSelection(Sender: TObject; aCol, aRow: Integer);
 var p: Tstep;
 begin
+if aRow<StepList.RowCount then begin
   p:=TStep(StepList.Objects[pcolseq,aRow]);
   SetStep(aRow,p);
+end;
 end;
 
 procedure Tf_EditTargets.SetStep(n: integer; p: TStep);
@@ -2485,6 +2522,7 @@ procedure Tf_EditTargets.StepListColRowMoved(Sender: TObject; IsColumn: Boolean;
 begin
   ResetSteps;
   StepsModified:=true;
+  SavePlanModified;
 end;
 
 procedure Tf_EditTargets.StepListEditingDone(Sender: TObject);
@@ -2592,7 +2630,7 @@ begin
   end;
 end;
 
-procedure Tf_EditTargets.BtnTemplatePlanAsClick(Sender: TObject);
+procedure Tf_EditTargets.BtnSaveTemplateAsClick(Sender: TObject);
 begin
   SaveDialog1.InitialDir:=ConfigDir;
   SaveDialog1.DefaultExt:='.plan';
@@ -2609,7 +2647,7 @@ end;
 procedure Tf_EditTargets.BtnSaveTemplateClick(Sender: TObject);
 begin
   if trim(PlanName.Caption)='' then
-    BtnTemplatePlanAsClick(Sender)
+    BtnSaveTemplateAsClick(Sender)
   else
     SaveTemplate;
 end;
@@ -2622,7 +2660,7 @@ var pfile: TCCDconfig;
 begin
 try
   if trim(PlanName.Caption)='' then begin
-    ShowMessage('No plan selected!');
+    ShowMessage('No template selected!');
     exit;
   end;
   fn:=slash(ConfigDir)+PlanName.Caption+'.plan';
@@ -2661,7 +2699,7 @@ try
   TargetChange(nil);
   StepsModified:=false;
 except
-  on E: Exception do ShowMessage('Error saving plan: '+ E.Message);
+  on E: Exception do ShowMessage('Error saving template: '+ E.Message);
 end;
 end;
 

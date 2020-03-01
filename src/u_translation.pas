@@ -1248,6 +1248,7 @@ resourcestring
   rsRefractedPol = 'Refracted pole';
   rsDiscover = 'Discover';
   rsDiscoveryPor = 'Discovery port';
+  rsTemplate = 'Template';
 
 implementation
 
