@@ -1723,7 +1723,7 @@ var v1,v2: float;
     n1, n2: double;
     p, i1, i2: integer;
 
-  procedure GetPrefix(str: string; var pref: string; var n: double; var i: integer);
+  procedure GetPrefix(str: string; out pref: string; out n: double; out i: integer);
     var
       j: integer;
     begin
@@ -2258,7 +2258,6 @@ var s:TStep;
     p:T_Plan;
     t: TTarget;
     i,n: integer;
-    pn: string;
 begin
   ClearStepList;
   PageControlPlan.ActivePageIndex:=pageobject;

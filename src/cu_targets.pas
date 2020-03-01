@@ -681,7 +681,7 @@ end;
 procedure T_Targets.SaveDoneCount(RepeatDone: integer);
 var p: T_Plan;
     t: TTarget;
-    i,n: integer;
+    i: integer;
 begin
  try
   if (FCurrentTarget<0)or(FCurrentTarget>Count) then exit;
@@ -701,19 +701,6 @@ begin
      SequenceFile.Items.SetValue('/Targets/Target'+inttostr(i)+'/RepeatDone',0)
   else
      SequenceFile.Items.SetValue('/Targets/Target'+inttostr(i)+'/RepeatDone',t.repeatdone);
-
-{  // plan step done
-  n:=p.CurrentStep;
-  if (n>=0)and(n<p.Count) then begin
-    SetLength(t.DoneList,p.Count);
-    if FIgnoreRestart then
-       t.DoneList[n]:=0
-    else
-       t.DoneList[n]:=p.Steps[n].donecount;
-    SequenceFile.Items.SetValue('/Targets/Target'+inttostr(i)+'/StepDone/StepCount',Length(t.DoneList));
-    SequenceFile.Items.SetValue('/Targets/Target'+inttostr(i)+'/StepDone/Step'+inttostr(n)+'/Done',t.DoneList[n]);
-  end; }
-
   // save file
   SequenceFile.Save;
  except
@@ -1688,13 +1675,12 @@ begin
 end;
 
 procedure TTarget.Assign(Source: TTarget);
-var i: integer;
 begin
   objectname:=Source.objectname;
   planname:=Source.planname;
   path:=Source.path;
   T_Plan(plan).Clear;
-  T_Plan(plan).Assign(T_Plan(Source.plan));
+  T_Plan(plan).AssignPlan(T_Plan(Source.plan));
   starttime:=Source.starttime;
   endtime:=Source.endtime;
   startrise:=Source.startrise;

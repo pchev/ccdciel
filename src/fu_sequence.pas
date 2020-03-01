@@ -423,9 +423,8 @@ begin
 end;
 
 procedure Tf_sequence.BtnEditTargetsClick(Sender: TObject);
-var i,j,n:integer;
+var i,n:integer;
     t:TTarget;
-    p:T_Plan;
     defaultname: string;
 begin
    f_EditTargets.ClearTargetList;
@@ -714,7 +713,7 @@ end;
 
 procedure Tf_sequence.CompatLoadPlan(p: T_plan; plan:string);
 var fn,buf: string;
-    i,n,m:integer;
+    i,n:integer;
     pfile: TCCDconfig;
     s: TStep;
 begin

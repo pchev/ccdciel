@@ -25,7 +25,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 interface
 
-uses u_global, u_utils, u_translation, math, cu_sequencefile,
+uses u_global, u_utils, u_translation, cu_sequencefile,
   fu_capture, fu_preview, fu_filterwheel, cu_mount, cu_camera, cu_autoguider,
   ExtCtrls, Classes, SysUtils;
 
@@ -67,7 +67,7 @@ T_Plan = class(TComponent)
     constructor Create(AOwner: TComponent);override;
     destructor  Destroy; override;
     procedure Clear;
-    procedure Assign(Source: T_plan);
+    procedure AssignPlan(Source: T_plan);
     function Add(s: TStep):integer;
     procedure Start;
     procedure Stop;
@@ -133,7 +133,7 @@ begin
   if Assigned(FDelayMsg) then FDelayMsg(txt);
 end;
 
-procedure T_Plan.Assign(Source: T_plan);
+procedure T_Plan.AssignPlan(Source: T_plan);
 var i: integer;
 begin
  FPlanChange:=Source.FPlanChange;
