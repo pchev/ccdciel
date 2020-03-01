@@ -436,6 +436,7 @@ begin
       f_EditTargets.CheckBoxRestartStatus.Checked:=not Targets.IgnoreRestart;
       f_EditTargets.CheckBoxResetRepeat.Checked:=Targets.ResetRepeat;
       f_EditTargets.TargetsRepeat:=Targets.TargetsRepeat;
+      f_EditTargets.TargetsRepeatCount:=Targets.TargetsRepeatCount;
       f_EditTargets.TargetList.RowCount:=Targets.Count+1;
       f_EditTargets.SeqStart.Checked:=Targets.SeqStart;
       f_EditTargets.SeqStop.Checked:=Targets.SeqStop;
@@ -467,6 +468,7 @@ begin
       f_EditTargets.CheckBoxRestartStatus.Checked:=true;
       f_EditTargets.CheckBoxResetRepeat.Checked:=true;
       f_EditTargets.TargetsRepeat:=1;
+      f_EditTargets.TargetsRepeatCount:=0;
       f_EditTargets.SeqStart.Checked:=false;
       f_EditTargets.SeqStop.Checked:=false;
       f_EditTargets.SeqStartTwilight.Checked:=false;
@@ -497,6 +499,7 @@ begin
       Targets.IgnoreRestart    := not f_EditTargets.CheckBoxRestartStatus.Checked;
       Targets.ResetRepeat      := f_EditTargets.CheckBoxResetRepeat.Checked;
       Targets.TargetsRepeat    := f_EditTargets.TargetsRepeat;
+      Targets.TargetsRepeatCount:=f_EditTargets.TargetsRepeatCount;
       Targets.SeqStart         := f_EditTargets.SeqStart.Checked;
       Targets.SeqStop          := f_EditTargets.SeqStop.Checked;
       Targets.SeqStartTwilight := f_EditTargets.SeqStartTwilight.Checked;

@@ -237,7 +237,7 @@ type
     { private declarations }
     FAstrometry: TAstrometry;
     LockTarget: boolean;
-    FTargetsRepeat: integer;
+    FTargetsRepeat,FTargetsRepeatCount: integer;
     LockStep, StepsModified, ObjectNameChange: boolean;
     Lockcb: boolean;
     SortDirection: integer;
@@ -270,6 +270,7 @@ type
     procedure SaveTemplate;
     procedure ReadStep(pfile:TCCDconfig; i: integer; var p:TStep; var msg:string);
     property TargetsRepeat: integer read FTargetsRepeat write FTargetsRepeat;
+    property TargetsRepeatCount: integer read FTargetsRepeatCount write FTargetsRepeatCount;
     property Astrometry: TAstrometry read FAstrometry write FAstrometry;
   end;
 
