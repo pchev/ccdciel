@@ -6192,6 +6192,7 @@ object f_option: Tf_option
     ChildSizing.ControlsPerLine = 1
     TabOrder = 0
     TabStop = True
+    OnMouseWheel = PanelLeftMouseWheel
   end
   object SelectDirectoryDialog1: TSelectDirectoryDialog
     left = 56

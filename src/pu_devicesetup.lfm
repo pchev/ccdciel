@@ -4062,6 +4062,7 @@ object f_setup: Tf_setup
     ChildSizing.Layout = cclLeftToRightThenTopToBottom
     ChildSizing.ControlsPerLine = 1
     TabOrder = 2
+    OnMouseWheel = PanelLeftMouseWheel
   end
   object IndiTimer: TTimer
     Enabled = False
