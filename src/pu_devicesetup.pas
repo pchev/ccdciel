@@ -31,7 +31,7 @@ uses indibaseclient, indibasedevice, indiapi, u_global, u_utils, u_ccdconfig, US
     Variants, comobj, math,
   {$endif}
   Classes, SysUtils, FileUtil, Forms, Controls, Graphics, Dialogs, StdCtrls,
-  ExtCtrls, ComCtrls, Grids, SpinEx, Types;
+  ExtCtrls, ComCtrls, Grids, Buttons, SpinEx, Types;
 
 type
 
@@ -72,6 +72,7 @@ type
     Panel31: TPanel;
     Panel32: TPanel;
     ManualFilterName: TStringGrid;
+    PanelLeft: TPanel;
     WheelMslot: TSpinEditEx;
     WheelManual: TTabSheet;
     WheelARestPass: TEdit;
@@ -510,6 +511,7 @@ type
     procedure SetSafetyConnection(value: TDevInterface);
     procedure SetCameraSensor(value: string);
     procedure SetLang;
+    procedure SelectPage(Sender: TObject);
   public
     { public declarations }
     DefaultCameraInterface, DefaultMountInterface, DefaultDomeInterface, DefaultWheelInterface, DefaultFocuserInterface, DefaultRotatorInterface, DefaultWeatherInterface, DefaultSafetyInterface: TDevInterface;
@@ -541,6 +543,8 @@ uses LazFileUtils;
 
 
 procedure Tf_setup.FormCreate(Sender: TObject);
+var i: integer;
+    b: TSpeedButton;
 begin
   ScaleDPI(Self);
   SetLang;
@@ -557,6 +561,22 @@ begin
   WeatherAscom.TabVisible:=false;
   SafetyAscom.TabVisible:=false;
   {$endif}
+  for i:=0 to PageControl1.PageCount-1 do begin
+    b:=TSpeedButton.Create(self);
+    b.GroupIndex:=1234;
+    b.Constraints.MinHeight:=DoScaleY(24);
+    b.Caption:=PageControl1.Pages[i].Caption;
+    b.tag:=i;
+    if i=0 then b.down:=true;
+    b.OnClick:=@SelectPage;
+    b.Parent:=PanelLeft;
+  end;
+end;
+
+procedure Tf_setup.SelectPage(Sender: TObject);
+begin
+  if sender is TSpeedButton then
+     PageControl1.ActivePageIndex:=TSpeedButton(Sender).Tag;
 end;
 
 procedure Tf_setup.SetLang;
