@@ -6187,7 +6187,6 @@ object f_option: Tf_option
     Width = 150
     Align = alLeft
     BevelOuter = bvNone
-    ChildSizing.VerticalSpacing = 2
     ChildSizing.EnlargeHorizontal = crsHomogenousChildResize
     ChildSizing.Layout = cclLeftToRightThenTopToBottom
     ChildSizing.ControlsPerLine = 1

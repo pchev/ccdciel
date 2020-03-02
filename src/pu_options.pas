@@ -721,6 +721,7 @@ begin
   for i:=0 to PageControl1.PageCount-1 do begin
     b:=TSpeedButton.Create(self);
     b.GroupIndex:=1234;
+    b.Constraints.MinHeight:=DoScaleY(24);
     b.Caption:=PageControl1.Pages[i].Caption;
     b.tag:=i;
     if i=0 then b.down:=true;

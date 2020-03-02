@@ -4057,7 +4057,7 @@ object f_setup: Tf_setup
     Top = 0
     Width = 140
     Align = alLeft
-    ChildSizing.VerticalSpacing = 2
+    BevelOuter = bvNone
     ChildSizing.EnlargeHorizontal = crsHomogenousChildResize
     ChildSizing.Layout = cclLeftToRightThenTopToBottom
     ChildSizing.ControlsPerLine = 1
