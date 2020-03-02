@@ -2,21 +2,21 @@ object f_setup: Tf_setup
   Left = 116
   Height = 498
   Top = 125
-  Width = 502
+  Width = 637
   ActiveControl = Button1
   Caption = 'Devices setup'
   ClientHeight = 498
-  ClientWidth = 502
+  ClientWidth = 637
   OnCreate = FormCreate
   OnShow = FormShow
   object Panel1: TPanel
     Left = 0
     Height = 40
     Top = 458
-    Width = 502
+    Width = 637
     Align = alBottom
     ClientHeight = 40
-    ClientWidth = 502
+    ClientWidth = 637
     ParentFont = False
     TabOrder = 0
     object Button1: TButton
@@ -52,31 +52,32 @@ object f_setup: Tf_setup
     end
   end
   object Pagecontrol1: TPageControl
-    Left = 0
+    Left = 140
     Height = 458
     Top = 0
-    Width = 502
+    Width = 497
     ActivePage = DeviceInterface
     Align = alClient
     MultiLine = True
     ParentFont = False
+    ShowTabs = False
     TabIndex = 0
     TabOrder = 1
     OnChange = Pagecontrol1Change
     Options = [nboMultiLine]
     object DeviceInterface: TTabSheet
       Caption = 'Interface'
-      ClientHeight = 427
-      ClientWidth = 492
+      ClientHeight = 454
+      ClientWidth = 487
       ParentFont = False
       object PanelIndiServer: TPanel
         Left = 0
         Height = 127
         Top = 88
-        Width = 492
+        Width = 487
         Align = alTop
         ClientHeight = 127
-        ClientWidth = 492
+        ClientWidth = 487
         ParentFont = False
         TabOrder = 0
         object IndiServer: TEdit
@@ -157,12 +158,12 @@ object f_setup: Tf_setup
       end
       object Panel10: TPanel
         Left = 0
-        Height = 212
+        Height = 239
         Top = 215
-        Width = 492
+        Width = 487
         Align = alClient
-        ClientHeight = 212
-        ClientWidth = 492
+        ClientHeight = 239
+        ClientWidth = 487
         ParentFont = False
         TabOrder = 1
         object Label62: TLabel
@@ -340,10 +341,10 @@ object f_setup: Tf_setup
         Left = 0
         Height = 88
         Top = 0
-        Width = 492
+        Width = 487
         Align = alTop
         ClientHeight = 88
-        ClientWidth = 492
+        ClientWidth = 487
         TabOrder = 2
         object Label2: TLabel
           Left = 21
@@ -409,8 +410,8 @@ object f_setup: Tf_setup
     end
     object Camera: TTabSheet
       Caption = 'Camera'
-      ClientHeight = 427
-      ClientWidth = 492
+      ClientHeight = 454
+      ClientWidth = 487
       ParentFont = False
       object PageControlCamera: TPageControl
         Left = 0
@@ -910,14 +911,14 @@ object f_setup: Tf_setup
     end
     object Filterwheel: TTabSheet
       Caption = 'Filter wheel'
-      ClientHeight = 427
-      ClientWidth = 492
+      ClientHeight = 454
+      ClientWidth = 487
       ParentFont = False
       object PageControlWheel: TPageControl
         Left = 0
         Height = 387
         Top = 40
-        Width = 492
+        Width = 488
         ActivePage = WheelIndi
         Align = alClient
         ParentFont = False
@@ -927,17 +928,17 @@ object f_setup: Tf_setup
         object WheelIndi: TTabSheet
           Caption = 'WheelIndi'
           ClientHeight = 383
-          ClientWidth = 488
+          ClientWidth = 484
           ParentFont = False
           object PanelWheelIndi: TPanel
             Left = 0
             Height = 356
             Top = 0
-            Width = 482
+            Width = 478
             Align = alClient
             BevelOuter = bvNone
             ClientHeight = 352
-            ClientWidth = 478
+            ClientWidth = 474
             ParentFont = False
             TabOrder = 0
             object WheelIndiDevice: TComboBox
@@ -1063,7 +1064,7 @@ object f_setup: Tf_setup
         object WheelAscom: TTabSheet
           Caption = 'WheelAscom'
           ClientHeight = 383
-          ClientWidth = 488
+          ClientWidth = 484
           ParentFont = False
           object PanelWheelAscom: TPanel
             Left = 16
@@ -1122,7 +1123,7 @@ object f_setup: Tf_setup
         object WheelInCamera: TTabSheet
           Caption = 'WheelInCamera'
           ClientHeight = 383
-          ClientWidth = 488
+          ClientWidth = 484
           ParentFont = False
           object PanelWheelIncamera: TPanel
             Left = 16
@@ -1150,7 +1151,7 @@ object f_setup: Tf_setup
         object WheelAscomRest: TTabSheet
           Caption = 'WheelAscomRest'
           ClientHeight = 383
-          ClientWidth = 488
+          ClientWidth = 484
           ParentFont = False
           object Panel3: TPanel
             Left = 0
@@ -1317,7 +1318,7 @@ object f_setup: Tf_setup
         object WheelManual: TTabSheet
           Caption = 'WheelManual'
           ClientHeight = 383
-          ClientWidth = 488
+          ClientWidth = 484
           object Panel32: TPanel
             Left = 0
             Height = 58
@@ -1368,11 +1369,11 @@ object f_setup: Tf_setup
         Left = 0
         Height = 40
         Top = 0
-        Width = 492
+        Width = 488
         Align = alTop
         BevelOuter = bvNone
         ClientHeight = 40
-        ClientWidth = 492
+        ClientWidth = 488
         TabOrder = 1
         object DeviceFilterWheel: TCheckBox
           Left = 16
@@ -1387,8 +1388,8 @@ object f_setup: Tf_setup
     end
     object Focuser: TTabSheet
       Caption = 'Focuser'
-      ClientHeight = 427
-      ClientWidth = 492
+      ClientHeight = 454
+      ClientWidth = 487
       ParentFont = False
       object Panel23: TPanel
         Left = 0
@@ -1834,8 +1835,8 @@ object f_setup: Tf_setup
     end
     object Rotator: TTabSheet
       Caption = 'Rotator'
-      ClientHeight = 427
-      ClientWidth = 492
+      ClientHeight = 454
+      ClientWidth = 487
       ParentFont = False
       object PageControlRotator: TPageControl
         Left = 0
@@ -2234,8 +2235,8 @@ object f_setup: Tf_setup
     end
     object Mount: TTabSheet
       Caption = 'Mount'
-      ClientHeight = 427
-      ClientWidth = 492
+      ClientHeight = 454
+      ClientWidth = 487
       ParentFont = False
       object Panel26: TPanel
         Left = 0
@@ -2673,8 +2674,8 @@ object f_setup: Tf_setup
     end
     object Dome: TTabSheet
       Caption = 'Dome'
-      ClientHeight = 427
-      ClientWidth = 492
+      ClientHeight = 454
+      ClientWidth = 487
       ParentFont = False
       object PageControlDome: TPageControl
         Left = 0
@@ -3073,8 +3074,8 @@ object f_setup: Tf_setup
     end
     object Weather: TTabSheet
       Caption = 'Weather'
-      ClientHeight = 427
-      ClientWidth = 492
+      ClientHeight = 454
+      ClientWidth = 487
       ParentFont = False
       object PageControlWeather: TPageControl
         Left = 0
@@ -3495,8 +3496,8 @@ object f_setup: Tf_setup
     end
     object Safety: TTabSheet
       Caption = 'Safety'
-      ClientHeight = 427
-      ClientWidth = 492
+      ClientHeight = 454
+      ClientWidth = 487
       ParentFont = False
       object PageControlSafety: TPageControl
         Left = 0
@@ -3877,8 +3878,8 @@ object f_setup: Tf_setup
     end
     object Watchdog: TTabSheet
       Caption = 'Watchdog'
-      ClientHeight = 427
-      ClientWidth = 492
+      ClientHeight = 454
+      ClientWidth = 487
       ParentFont = False
       object PageControlWatchdog: TPageControl
         Left = 0
@@ -4049,6 +4050,18 @@ object f_setup: Tf_setup
         end
       end
     end
+  end
+  object PanelLeft: TPanel
+    Left = 0
+    Height = 458
+    Top = 0
+    Width = 140
+    Align = alLeft
+    ChildSizing.VerticalSpacing = 2
+    ChildSizing.EnlargeHorizontal = crsHomogenousChildResize
+    ChildSizing.Layout = cclLeftToRightThenTopToBottom
+    ChildSizing.ControlsPerLine = 1
+    TabOrder = 2
   end
   object IndiTimer: TTimer
     Enabled = False

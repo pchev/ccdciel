@@ -26,7 +26,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 interface
 
 uses u_utils, u_global, UScaleDPI, u_hints, u_translation, u_speech,
-  Classes, SysUtils, FileUtil, Forms, Controls, Graphics, Dialogs,
+  Classes, SysUtils, FileUtil, Forms, Controls, Graphics, Dialogs, LCLType,
   StdCtrls, ExtCtrls, ComCtrls, Grids, EditBtn, CheckLst, Buttons, Spin, SpinEx, enhedits;
 
 type
@@ -48,6 +48,7 @@ type
     ButtonVoiceAll: TButton;
     ButtonVoiceNone: TButton;
     PagePlaNone: TPage;
+    PanelLeft: TPanel;
     WantExif: TCheckBox;
     LabelTestVoice: TLabel;
     LowQualityDisplay: TCheckBox;
@@ -673,6 +674,7 @@ type
     procedure FileOrFolderOptionsRenumber(G: TStringGrid);
     procedure SetAutofocusExpTime(val: double);
     procedure Setlang;
+    procedure SelectPage(Sender: TObject);
   public
     { public declarations }
     LockTemp: Boolean;
@@ -700,6 +702,8 @@ implementation
 
 
 procedure Tf_option.FormCreate(Sender: TObject);
+var i: integer;
+    b: TSpeedButton;
 begin
   {$ifdef mswindows}
     CygwinPanel.Visible:=true;
@@ -714,6 +718,21 @@ begin
   LockTemp:=false;
   SafetyActions.RowCount:=SafetyActionNum+1;
   PageControl1.ActivePageIndex:=0;
+  for i:=0 to PageControl1.PageCount-1 do begin
+    b:=TSpeedButton.Create(self);
+    b.GroupIndex:=1234;
+    b.Caption:=PageControl1.Pages[i].Caption;
+    b.tag:=i;
+    if i=0 then b.down:=true;
+    b.OnClick:=@SelectPage;
+    b.Parent:=PanelLeft;
+  end;
+end;
+
+procedure Tf_option.SelectPage(Sender: TObject);
+begin
+  if sender is TSpeedButton then
+     PageControl1.ActivePageIndex:=TSpeedButton(Sender).Tag;
 end;
 
 procedure Tf_option.FormShow(Sender: TObject);
