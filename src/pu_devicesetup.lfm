@@ -2629,7 +2629,7 @@ object f_setup: Tf_setup
               object Label100: TLabel
                 Left = 159
                 Height = 19
-                Top = 169
+                Top = 170
                 Width = 61
                 Caption = 'Password'
                 ParentColor = False
