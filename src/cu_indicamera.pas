@@ -140,6 +140,7 @@ private
    stX,stY,stWidth,stHeight: integer;
    FSensorList: TStringList;
    FNotAbortSequence: boolean;
+   FISOInitialized: boolean;
    procedure ExposureTimerTimer(sender: TObject);
    procedure CreateIndiClient;
    procedure InitTimerTimer(Sender: TObject);
@@ -407,6 +408,7 @@ begin
     stHeight:=-1;
     FSensorList.Clear;
     FNotAbortSequence:=false;
+    FISOInitialized:=false;
     if Assigned(FonStatusChange) then FonStatusChange(self);
     if Assigned(FonWheelStatusChange) then FonWheelStatusChange(self);
 end;
@@ -866,12 +868,16 @@ begin
   else if (proptype=INDI_SWITCH)and(CCDIso=nil)and((propname='CCD_ISO')or(propname='DSLR_ISO')) then begin
      CCDIso:=indiProp.getSwitch;
      FISOList.Clear;
-     for i:=0 to CCDIso.nsp-1 do begin
-        if debug_msg then msg('Found ISO: '+CCDIso.sp[i].lbl);
-        FISOList.Add(CCDIso.sp[i].lbl);
+     if debug_msg then msg('receive ISO property size '+IntToStr(CCDIso.nsp));
+     if CCDIso.nsp>0 then begin
+       for i:=0 to CCDIso.nsp-1 do begin
+          if debug_msg then msg('Found ISO: '+CCDIso.sp[i].lbl);
+          FISOList.Add(CCDIso.sp[i].lbl);
+       end;
+       FhasGainISO:=(FISOList.Count>0);
+       FISOInitialized:=true;
+       if assigned(FonGainStatus) then FonGainStatus(self);
      end;
-     FhasGainISO:=(FISOList.Count>0);
-     if assigned(FonGainStatus) then FonGainStatus(self);
   end
   else if (proptype=INDI_TEXT)and(propname='CCD_CFA') then begin
      CCDCfa:=indiProp.getText();
@@ -896,7 +902,7 @@ begin
     CameraAperture:=indiProp.getSwitch();
     FFNumberList.Clear;
     for i:=0 to CameraAperture.nsp-1 do begin
-      msg('aperture: '+CameraAperture.sp[i].Name+blank+CameraAperture.sp[i].lbl);
+      if debug_msg then msg('aperture: '+CameraAperture.sp[i].Name+blank+CameraAperture.sp[i].lbl);
       FFNumberList.Add(CameraAperture.sp[i].lbl);
     end;
     FhasFnumber:=(FFNumberList.Count>0);
@@ -1046,13 +1052,19 @@ begin
          DisconnectWs;
   end
   else if svp=CCDIso then begin
-     FISOList.Clear;
-     for i:=0 to CCDIso.nsp-1 do begin
-        if debug_msg then msg('Found ISO: '+CCDIso.sp[i].lbl);
-        FISOList.Add(CCDIso.sp[i].lbl);
+     if not FISOInitialized then begin
+       if debug_msg then msg('change ISO property size '+IntToStr(CCDIso.nsp));
+       if CCDIso.nsp>0 then begin
+         FISOList.Clear;
+         for i:=0 to CCDIso.nsp-1 do begin
+            if debug_msg then msg('Found ISO: '+CCDIso.sp[i].lbl);
+            FISOList.Add(CCDIso.sp[i].lbl);
+         end;
+         FhasGainISO:=(FISOList.Count>0);
+         FISOInitialized:=true;
+         if assigned(FonGainStatus) then FonGainStatus(self);
+       end;
      end;
-     FhasGainISO:=(FISOList.Count>0);
-     if assigned(FonGainStatus) then FonGainStatus(self);
   end
   ;
 end;
@@ -1814,6 +1826,7 @@ procedure T_indicamera.SetGain(value: integer);
 begin
 if FCanSetGain then begin
   if (CCDIso<>nil) and FhasGainISO then begin
+    if debug_msg then msg('Set ISO position '+inttostr(value)+' ISO='+CCDIso.sp[value].lbl);
     IUResetSwitch(CCDIso);
     CCDIso.sp[value].s := ISS_ON;
     indiclient.sendNewSwitch(CCDIso);
@@ -1833,6 +1846,7 @@ begin
     for i := 0 to CCDIso.nsp - 1 do
       if CCDIso.sp[i].s = ISS_ON then begin
          result:=i;
+         if debug_msg then msg('Get ISO position '+inttostr(i)+' ISO='+CCDIso.sp[i].lbl);
          break;
       end;
   end

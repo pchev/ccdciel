@@ -7451,7 +7451,11 @@ if (camera.Status=devConnected) and ((not f_capture.Running) or autofocusing) an
   end;
   if camera.CanSetGain then begin
     if camera.hasGainISO then begin
-       if camera.Gain<>f_preview.ISObox.ItemIndex then camera.Gain:=f_preview.ISObox.ItemIndex;
+       if camera.Gain<>f_capture.ISObox.ItemIndex then begin
+         if debug_msg then NewMessage('Camera gain='+IntToStr(camera.Gain)+', list gain='+IntToStr(f_capture.ISObox.ItemIndex),3);
+         if debug_msg then NewMessage('Camera gain name='+camera.ISOList[camera.Gain]+', list name='+f_capture.ISObox.Text,3);
+         camera.Gain:=f_capture.ISObox.ItemIndex;
+       end;
     end;
     if camera.hasGain and (not camera.hasGainISO) then begin
        i:=f_preview.GainEdit.Value;
@@ -7871,7 +7875,11 @@ if (AllDevicesConnected)and(not autofocusing)and (not learningvcurve) then begin
   // check and set gain
   if camera.CanSetGain then begin
     if camera.hasGainISO then begin
-      if camera.Gain<>f_capture.ISObox.ItemIndex then camera.Gain:=f_capture.ISObox.ItemIndex;
+      if camera.Gain<>f_capture.ISObox.ItemIndex then begin
+        if debug_msg then NewMessage('Camera gain='+IntToStr(camera.Gain)+', list gain='+IntToStr(f_capture.ISObox.ItemIndex),3);
+        if debug_msg then NewMessage('Camera gain name='+camera.ISOList[camera.Gain]+', list name='+f_capture.ISObox.Text,3);
+        camera.Gain:=f_capture.ISObox.ItemIndex;
+      end;
     end;
     if camera.hasGain and (not camera.hasGainISO) then begin
       i:=f_capture.GainEdit.Value;
