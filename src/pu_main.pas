@@ -8050,7 +8050,7 @@ begin
      end;
      // image measurement
      {$ifdef debug_raw}writeln(FormatDateTime(dateiso,Now)+blank+'image measurement');{$endif}
-     CameraMeasureNewImage;
+     if displayimage then CameraMeasureNewImage;
      {$ifdef debug_raw}writeln(FormatDateTime(dateiso,Now)+blank+'image measurement end');{$endif}
      if (not EarlyNextExposure) or SkipEarlyExposure then begin
        // Next exposure delayed after image display
