@@ -472,6 +472,7 @@ begin
   autofocus:=false;
   autofocuscount:=10;
   fstop:='';
+  gain:=1;
   description:='Step1';
 end;
 

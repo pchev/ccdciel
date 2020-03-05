@@ -27,7 +27,7 @@ interface
 
 uses u_utils, u_global, UScaleDPI, u_hints, u_translation, u_speech,
   Classes, SysUtils, FileUtil, Forms, Controls, Graphics, Dialogs, LCLType,
-  StdCtrls, ExtCtrls, ComCtrls, Grids, EditBtn, CheckLst, Buttons, Spin, SpinEx, enhedits;
+  StdCtrls, ExtCtrls, ComCtrls, Grids, EditBtn, CheckLst, Buttons, Spin, SpinEx, enhedits, Types;
 
 type
 
@@ -644,6 +644,7 @@ type
     procedure MinutesPastMeridianChange(Sender: TObject);
     procedure MinutesPastMeridianMinChange(Sender: TObject);
     procedure PageControl1Changing(Sender: TObject; var AllowChange: Boolean);
+    procedure PanelLeftMouseWheel(Sender: TObject; Shift: TShiftState; WheelDelta: Integer; MousePos: TPoint; var Handled: Boolean);
     procedure PixelSizeFromCameraChange(Sender: TObject);
     procedure PlanetariumBoxClick(Sender: TObject);
     procedure rbLinSocketChange(Sender: TObject);
@@ -675,6 +676,8 @@ type
     procedure SetAutofocusExpTime(val: double);
     procedure Setlang;
     procedure SelectPage(Sender: TObject);
+    procedure IncPage(Sender: TObject);
+    procedure SelectNextPage(direction: integer);
   public
     { public declarations }
     LockTemp: Boolean;
@@ -718,9 +721,17 @@ begin
   LockTemp:=false;
   SafetyActions.RowCount:=SafetyActionNum+1;
   PageControl1.ActivePageIndex:=0;
+  b:=TSpeedButton.Create(self);
+  b.GroupIndex:=99876;
+  b.AllowAllUp:=true;
+  b.Constraints.MinHeight:=DoScaleY(24);
+  b.Caption:='^';
+  b.tag:=1001;
+  b.OnClick:=@IncPage;
+  b.Parent:=PanelLeft;
   for i:=0 to PageControl1.PageCount-1 do begin
     b:=TSpeedButton.Create(self);
-    b.GroupIndex:=1234;
+    b.GroupIndex:=99870;
     b.Constraints.MinHeight:=DoScaleY(24);
     b.Caption:=PageControl1.Pages[i].Caption;
     b.tag:=i;
@@ -728,12 +739,53 @@ begin
     b.OnClick:=@SelectPage;
     b.Parent:=PanelLeft;
   end;
+  b:=TSpeedButton.Create(self);
+  b.GroupIndex:=99877;
+  b.AllowAllUp:=true;
+  b.Constraints.MinHeight:=DoScaleY(24);
+  b.Caption:='v';
+  b.tag:=1002;
+  b.OnClick:=@IncPage;
+  b.Parent:=PanelLeft;
 end;
 
 procedure Tf_option.SelectPage(Sender: TObject);
 begin
   if sender is TSpeedButton then
      PageControl1.ActivePageIndex:=TSpeedButton(Sender).Tag;
+end;
+
+procedure Tf_option.SelectNextPage(direction: integer);
+var i: integer;
+begin
+  if direction<0 then begin
+    if PageControl1.ActivePageIndex<PageControl1.PageCount-1 then
+       PageControl1.ActivePageIndex:=PageControl1.ActivePageIndex+1;
+  end
+  else begin
+    if PageControl1.ActivePageIndex>0 then
+       PageControl1.ActivePageIndex:=PageControl1.ActivePageIndex-1;
+  end;
+  for i:=0 to PanelLeft.ControlCount-1 do  begin
+    if TSpeedButton(PanelLeft.Controls[i]).Tag=PageControl1.ActivePageIndex then
+      TSpeedButton(PanelLeft.Controls[i]).Down:=True;
+  end;
+end;
+
+procedure Tf_option.IncPage(Sender: TObject);
+begin
+  if sender is TSpeedButton then begin
+    TSpeedButton(sender).Down:=false;
+    if TSpeedButton(Sender).Tag=1002 then
+       SelectNextPage(-1)
+    else if TSpeedButton(Sender).Tag=1001 then
+       SelectNextPage(1);
+end;
+end;
+
+procedure Tf_option.PanelLeftMouseWheel(Sender: TObject; Shift: TShiftState; WheelDelta: Integer; MousePos: TPoint; var Handled: Boolean);
+begin
+  SelectNextPage(WheelDelta);
 end;
 
 procedure Tf_option.FormShow(Sender: TObject);

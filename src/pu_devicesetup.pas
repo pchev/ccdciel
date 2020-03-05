@@ -481,6 +481,7 @@ type
     procedure PageControlWatchdogChange(Sender: TObject);
     procedure PageControlWeatherChange(Sender: TObject);
     procedure PageControlWheelChange(Sender: TObject);
+    procedure PanelLeftMouseWheel(Sender: TObject; Shift: TShiftState; WheelDelta: Integer; MousePos: TPoint; var Handled: Boolean);
     procedure ProfileListChange(Sender: TObject);
     procedure AscomWeatherTypeClick(Sender: TObject);
     procedure RotatorARestProtocolChange(Sender: TObject);
@@ -512,6 +513,8 @@ type
     procedure SetCameraSensor(value: string);
     procedure SetLang;
     procedure SelectPage(Sender: TObject);
+    procedure IncPage(Sender: TObject);
+    procedure SelectNextPage(direction: integer);
   public
     { public declarations }
     DefaultCameraInterface, DefaultMountInterface, DefaultDomeInterface, DefaultWheelInterface, DefaultFocuserInterface, DefaultRotatorInterface, DefaultWeatherInterface, DefaultSafetyInterface: TDevInterface;
@@ -561,9 +564,17 @@ begin
   WeatherAscom.TabVisible:=false;
   SafetyAscom.TabVisible:=false;
   {$endif}
+  b:=TSpeedButton.Create(self);
+  b.GroupIndex:=94876;
+  b.AllowAllUp:=true;
+  b.Constraints.MinHeight:=DoScaleY(24);
+  b.Caption:='^';
+  b.tag:=1001;
+  b.OnClick:=@IncPage;
+  b.Parent:=PanelLeft;
   for i:=0 to PageControl1.PageCount-1 do begin
     b:=TSpeedButton.Create(self);
-    b.GroupIndex:=1234;
+    b.GroupIndex:=94870;
     b.Constraints.MinHeight:=DoScaleY(24);
     b.Caption:=PageControl1.Pages[i].Caption;
     b.tag:=i;
@@ -571,6 +582,14 @@ begin
     b.OnClick:=@SelectPage;
     b.Parent:=PanelLeft;
   end;
+  b:=TSpeedButton.Create(self);
+  b.GroupIndex:=94877;
+  b.AllowAllUp:=true;
+  b.Constraints.MinHeight:=DoScaleY(24);
+  b.Caption:='v';
+  b.tag:=1002;
+  b.OnClick:=@IncPage;
+  b.Parent:=PanelLeft;
 end;
 
 procedure Tf_setup.SelectPage(Sender: TObject);
@@ -578,6 +597,40 @@ begin
   if sender is TSpeedButton then
      PageControl1.ActivePageIndex:=TSpeedButton(Sender).Tag;
 end;
+
+procedure Tf_setup.SelectNextPage(direction: integer);
+var i: integer;
+begin
+  if direction<0 then begin
+    if PageControl1.ActivePageIndex<PageControl1.PageCount-1 then
+       PageControl1.ActivePageIndex:=PageControl1.ActivePageIndex+1;
+  end
+  else begin
+    if PageControl1.ActivePageIndex>0 then
+       PageControl1.ActivePageIndex:=PageControl1.ActivePageIndex-1;
+  end;
+  for i:=0 to PanelLeft.ControlCount-1 do  begin
+    if TSpeedButton(PanelLeft.Controls[i]).Tag=PageControl1.ActivePageIndex then
+      TSpeedButton(PanelLeft.Controls[i]).Down:=True;
+  end;
+end;
+
+procedure Tf_setup.IncPage(Sender: TObject);
+begin
+  if sender is TSpeedButton then begin
+    TSpeedButton(sender).Down:=false;
+    if TSpeedButton(Sender).Tag=1002 then
+       SelectNextPage(-1)
+    else if TSpeedButton(Sender).Tag=1001 then
+       SelectNextPage(1);
+end;
+end;
+
+procedure Tf_setup.PanelLeftMouseWheel(Sender: TObject; Shift: TShiftState; WheelDelta: Integer; MousePos: TPoint; var Handled: Boolean);
+begin
+  SelectNextPage(WheelDelta);
+end;
+
 
 procedure Tf_setup.SetLang;
 begin
