@@ -5352,7 +5352,7 @@ begin
  if focuser.hasAbsolutePosition then begin
     val(f_focuser.PosIncr.Text,p,n);
     if n=0 then begin
-       focuser.Position:=focuser.Position-p;
+       focuser.Position:=f_focuser.Position.Value-p;
     end;
  end
  else if focuser.hasRelativePosition then begin
@@ -5379,7 +5379,7 @@ begin
  if focuser.hasAbsolutePosition then begin
     val(f_focuser.PosIncr.Text,p,n);
     if n=0 then begin
-       focuser.Position:=focuser.Position+p;
+       focuser.Position:=f_focuser.Position.Value+p;
     end;
  end
  else if focuser.hasRelativePosition then begin
