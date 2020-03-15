@@ -81,6 +81,7 @@ private
    CCDWebsocketSetting: INumberVectorProperty;
    CCDAbortExposure: ISwitchVectorProperty;
    CCDAbort: ISwitch;
+   CCDCoolerPower: INumberVectorProperty;
    CCDCooler: ISwitchVectorProperty;
    CCDCoolerOn,CCDCoolerOff: ISwitch;
    CCDTemperature: INumberVectorProperty;
@@ -181,6 +182,7 @@ private
    procedure SetFilterNames(value:TStringList); override;
    function  GetTemperature: double; override;
    procedure SetTemperature(value:double); override;
+   function  GetCoolerPower: Double; override;
    function  GetCooler: boolean; override;
    procedure SetCooler(value:boolean); override;
    function GetMaxX: double; override;
@@ -371,6 +373,7 @@ begin
     IGain:=nil;
     IExposure:=nil;
     StreamOptions:=nil;
+    CCDCoolerPower:=nil;
     CCDCooler:=nil;
     CCDTemperature:=nil;
     CCDinfo:=nil;
@@ -711,6 +714,9 @@ begin
   else if (proptype=INDI_NUMBER)and(propname='CCD_WEBSOCKET_SETTINGS') then begin
      CCDWebsocketSetting:=indiProp.getNumber;
   end
+  else if (proptype=INDI_NUMBER)and(propname='CCD_COOLER_POWER') then begin
+     CCDCoolerPower:=indiProp.getNumber;
+  end
   else if (proptype=INDI_SWITCH)and(CCDCooler=nil)and(propname='CCD_COOLER') then begin
      CCDCooler:=indiProp.getSwitch;
      CCDCoolerOn:=IUFindSwitch(CCDCooler,'COOLER_ON');
@@ -936,6 +942,9 @@ begin
   end
   else if nvp=CCDTemperature then begin
      if Assigned(FonTemperatureChange) then FonTemperatureChange(nvp.np[0].value);
+  end
+  else if nvp=CCDCoolerPower then begin
+     if Assigned(FonCoolerPowerChange) then FonCoolerPowerChange(nvp.np[0].value);
   end
   else if nvp=CameraFnumber then begin
      if Assigned(FonFnumberChange) then FonFnumberChange(FormatFloat(f1,CameraFnumberValue.value));
@@ -1618,6 +1627,14 @@ begin
     CCDTemperature.np[0].value:=value;
     indiclient.sendNewNumber(CCDTemperature);
  end;
+end;
+
+function  T_indicamera.GetCoolerPower: Double;
+begin
+ if CCDCoolerPower<>nil then begin
+    result:=CCDCoolerPower.np[0].value;
+ end
+ else result:=NullCoord;
 end;
 
 function  T_indicamera.GetCooler: boolean;

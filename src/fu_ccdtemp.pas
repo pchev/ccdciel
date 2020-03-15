@@ -36,6 +36,9 @@ type
     BtnSet: TButton;
     CCDcooler: TCheckBox;
     Current: TLabel;
+    Label3: TLabel;
+    Power: TLabel;
+    PanelCooler: TPanel;
     Setpoint: TFloatSpinEditEx;
     Label1: TLabel;
     Label2: TLabel;
@@ -88,6 +91,7 @@ begin
   CCDcooler.Caption:=rsCooler;
   Label2.Caption:=rsSetpoint;
   BtnSet.Caption:=rsSet;
+  Label3.Caption:=rsPower;
 end;
 
 procedure Tf_ccdtemp.BtnSetClick(Sender: TObject);

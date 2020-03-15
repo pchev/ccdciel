@@ -630,6 +630,7 @@ type
     Procedure CameraExposureAborted(Sender: TObject);
     procedure CameraProgress(n:double);
     procedure CameraTemperatureChange(t:double);
+    procedure CameraCoolerPowerChange(t:double);
     procedure CameraCoolerChange(var v:boolean);
     procedure CameraFnumberChange(f:string);
     Procedure WheelStatus(Sender: TObject);
@@ -1666,6 +1667,7 @@ begin
    camera.onExposureProgress:=@CameraProgress;
    camera.onFrameChange:=@FrameChange;
    camera.onTemperatureChange:=@CameraTemperatureChange;
+   camera.onCoolerPowerChange:=@CameraCoolerPowerChange;
    camera.onCoolerChange:=@CameraCoolerChange;
    camera.onFnumberChange:=@CameraFnumberChange;
    camera.onNewImage:=@CameraNewImage;
@@ -3409,6 +3411,7 @@ begin
     if camera.Status=devConnected then begin
        ShowTemperatureRange;
        CameraTemperatureChange(camera.Temperature);
+       CameraCoolerPowerChange(camera.CoolerPower);
     end;
     if (focuser.Status=devConnected) and focuser.hasTemperature then begin
        FocuserTemperatureChange(focuser.Temperature);
@@ -5051,6 +5054,11 @@ procedure  Tf_main.CameraTemperatureChange(t:double);
 begin
  f_ccdtemp.Current.Caption:=FormatFloat(f1,TempDisplay(TemperatureScale,t));
  if camera.TemperatureRampActive then f_ccdtemp.BtnSet.Caption:=rsCancel else f_ccdtemp.BtnSet.Caption:=rsSet;
+end;
+
+procedure Tf_main.CameraCoolerPowerChange(t:double);
+begin
+ f_ccdtemp.Power.Caption:=FormatFloat(f1,t);
 end;
 
 procedure Tf_main.CameraCoolerChange(var v:boolean);

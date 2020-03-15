@@ -47,7 +47,7 @@ T_ascomcamera = class(T_camera)
    FCType: string;
    FMaxBinX,FMaxBinY,FBinX,FBinY:integer;
    FHasTemperature, FCanSetTemperature: boolean;
-   stCCDtemp : double;
+   stCCDtemp,stCoolerPower : double;
    stCooler : boolean;
    FFrametype:TFrameType;
    ExposureTimer: TTimer;
@@ -69,6 +69,7 @@ T_ascomcamera = class(T_camera)
    procedure SetFilterNames(value:TStringList); override;
    function  GetTemperature: double; override;
    procedure SetTemperature(value:double); override;
+   function  GetCoolerPower: Double; override;
    function  GetCooler: boolean; override;
    procedure SetCooler(value:boolean); override;
    function GetMaxX: double; override;
@@ -265,6 +266,11 @@ begin
     except
     end;
     try
+      FhasCoolerPower:=V.CanGetCoolerPower;
+    except
+      FhasCoolerPower:=false;
+    end;
+    try
       FCanSetTemperature:=V.CanSetCCDTemperature;
     except
       FCanSetTemperature:=false;
@@ -384,6 +390,13 @@ begin
     if c<>stCooler then begin
        stCooler:=c;
        if Assigned(FonCoolerChange) then FonCoolerChange(stCooler);
+    end;
+    if FhasCoolerPower then begin
+       t:=GetCoolerPower;
+       if (t<>stCoolerPower) then begin
+         stCoolerPower:=t;
+         if Assigned(FonCoolerPowerChange) then FonCoolerPowerChange(stCoolerPower);
+       end;
     end;
     if FHasTemperature then begin
        t:=GetTemperature;
@@ -961,6 +974,19 @@ begin
    end;
    except
     on E: Exception do msg('Set temperature error: ' + E.Message,0);
+   end;
+ {$endif}
+end;
+
+function  T_ascomcamera.GetCoolerPower: Double;
+begin
+ result:=NullCoord;
+ {$ifdef mswindows}
+   if not FhasCoolerPower then exit;
+   try
+     result:=V.CoolerPower;
+   except
+     result:=NullCoord;
    end;
  {$endif}
 end;
