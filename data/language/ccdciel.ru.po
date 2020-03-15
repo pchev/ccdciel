@@ -6,15 +6,15 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ccdciel\n"
 "Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
-"POT-Creation-Date: 2020-02-02 17:30+0000\n"
-"PO-Revision-Date: 2020-01-18 17:18+0000\n"
+"POT-Creation-Date: 2020-03-15 14:12+0000\n"
+"PO-Revision-Date: 2020-03-03 18:33+0000\n"
 "Last-Translator: Sergey Tarantsov <tsn-ast@yandex.ru>\n"
 "Language-Team: Russian <ru@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2020-02-02 17:36+0000\n"
-"X-Generator: Launchpad (build 0a62c17273454a1313f81a74a2198ec30b44c7b6)\n"
+"X-Launchpad-Export-Date: 2020-03-15 14:40+0000\n"
+"X-Generator: Launchpad (build 3a6db24bbe7280ec09bae73384238390fcc98ad3)\n"
 
 #: u_translation.rs32bitdriver
 msgid "This driver work only in 32bit, please install the 32bit version of CCDciel."
@@ -56,6 +56,10 @@ msgstr "Действие"
 msgid "Add"
 msgstr "Добавить"
 
+#: u_translation.rsaddfitskeywo
+msgid "Add FITS keyword for DSLR EXIF tags"
+msgstr ""
+
 #: u_translation.rsaddstep
 msgid "Add step"
 msgstr "Добавить шаг"
@@ -83,6 +87,10 @@ msgstr "После наведения на объект смещение отн�
 #: u_translation.rsairmass
 msgid "Airmass"
 msgstr "Airmass"
+
+#: u_translation.rsalignmenton
+msgid "Alignment on"
+msgstr ""
 
 #: u_translation.rsalignmentsta
 msgid "Alignment star lost"
@@ -186,7 +194,7 @@ msgstr "Автофокусировка отменена, потому что н�
 
 #: u_translation.rsautofocuscan3
 msgid "Autofocus canceled because no star was found."
-msgstr "Автофокусировка отменена, так как не было найдено ни одной звезды"
+msgstr "Автофокусировка отменена: не найдено ни одной звезды"
 
 #: u_translation.rsautofocuscan4
 msgid "Autofocus canceled because the HFD cannot be measured"
@@ -234,11 +242,11 @@ msgstr "HFD по окончании фокусировки выше %s"
 
 #: u_translation.rsautofocusfoc
 msgid "Autofocus focus in by %s"
-msgstr ""
+msgstr "Движение наружу через %s"
 
 #: u_translation.rsautofocusfoc2
 msgid "Autofocus focus out by %s"
-msgstr ""
+msgstr "Движение вовнутрь через %s"
 
 #: u_translation.rsautofocusgra
 msgid "Autofocus graph"
@@ -342,7 +350,7 @@ msgstr "Гидирование"
 
 #: u_translation.rsautoguidingr
 msgid "Autoguiding restarted."
-msgstr "Автогидирование перезапущено."
+msgstr "Автогидирование перезапущено"
 
 #: u_translation.rsautoguidings
 msgid "Autoguiding stopped for %s minutes, sequence timeout in %s minutes."
@@ -518,11 +526,11 @@ msgstr "Отмена"
 
 #: u_translation.rscancelexposu
 msgid "Cancel exposure"
-msgstr ""
+msgstr "Отмена экспозиции"
 
 #: u_translation.rscancelinseco
 msgid "Cancel in %s seconds."
-msgstr "Отмена через %s секунд."
+msgstr "Отмена через %s сек"
 
 #: u_translation.rscancelpolara
 msgid "Cancel polar alignment"
@@ -570,11 +578,11 @@ msgstr "Невозможно получить абсолютную позици�
 
 #: u_translation.rscannotreachn
 msgid "Cannot reach near focus HFD, please increase Half Width or better center the curve."
-msgstr ""
+msgstr "Не удается достичь заданного HFD вблизи фокуса, увеличьте полуширину или лучше отцентрируйте кривую"
 
 #: u_translation.rscannotreachs
 msgid "Cannot reach start focus HFD, please increase Half Width or decrease the start HFD"
-msgstr ""
+msgstr "Не удается достичь заданного начального HFD, увеличьте полуширину или уменьшите начальный HFD"
 
 #: u_translation.rscannotruncal
 msgid "Cannot run calibration now, stop capture and retry"
@@ -646,7 +654,7 @@ msgstr "Съёмка остановлена на время автофокуси
 
 #: u_translation.rscapturestopp2
 msgid "Capture stopped unexpectedly"
-msgstr "Съёмка неожиданно остановилась"
+msgstr "Съёмка неожиданно остановлена"
 
 #: u_translation.rsccdframesent
 msgid "CCD frame sent to planetarium."
@@ -654,7 +662,7 @@ msgstr "Граница кадра отправлена в планетарий"
 
 #: u_translation.rscenter
 msgid "Center"
-msgstr "Центрировать"
+msgstr "Центр"
 
 #: u_translation.rscenterappare
 msgid "Center, apparent coord. RA=%s DEC=%s PA=%s"
@@ -826,7 +834,7 @@ msgstr "Продолжение выполнения задания"
 
 #: u_translation.rscontrolexpos
 msgid "Control exposure"
-msgstr "Контрольная экспозиция"
+msgstr "Контрольный снимок"
 
 #: u_translation.rscooldownwhen
 msgid "Cool down when camera is connected"
@@ -834,11 +842,11 @@ msgstr "Включать при подключении камеры"
 
 #: u_translation.rscooler
 msgid "Cooler"
-msgstr "Охлажд."
+msgstr "Охлаждать"
 
 #: u_translation.rscoordinates
 msgid "Coordinates"
-msgstr ""
+msgstr "Местонахождение"
 
 #: u_translation.rscopy
 msgid "Copy"
@@ -1034,11 +1042,23 @@ msgstr "Ошибка отключения: %s"
 
 #: u_translation.rsdisconnectth
 msgid "Disconnect the camera before to change the configuration."
-msgstr "Отключите камеру перед изменением конфигурации."
+msgstr "Отключите камеру перед изменением конфигурации"
+
+#: u_translation.rsdiscover
+msgid "Discover"
+msgstr ""
+
+#: u_translation.rsdiscoverypor
+msgid "Discovery port"
+msgstr ""
 
 #: u_translation.rsdisplay
 msgid "Display"
-msgstr "Экран"
+msgstr "Отображение"
+
+#: u_translation.rsdisplayspeed
+msgid "Display speed"
+msgstr ""
 
 #: u_translation.rsdistancetota
 msgid "Distance to target: %s arcmin"
@@ -1058,7 +1078,7 @@ msgstr "Подвижка%sчерез"
 
 #: u_translation.rsdithering
 msgid "Dithering"
-msgstr "Подвижка"
+msgstr "Выполнение подвижки"
 
 #: u_translation.rsditheronly
 msgid "Dither only"
@@ -1091,6 +1111,10 @@ msgstr "Ведение купола: %s"
 #: u_translation.rsdone
 msgid "done"
 msgstr "готово"
+
+#: u_translation.rsdonotdisplay
+msgid "Do not display images during capture"
+msgstr ""
 
 #: u_translation.rsdonothing
 msgid "Do nothing"
@@ -1134,7 +1158,7 @@ msgstr "Повторить попытку?"
 
 #: u_translation.rsdoyouwanttor2
 msgid "Do you want to run the termination action now?"
-msgstr ""
+msgstr "Вы хотите запустить действие для завершения?"
 
 #: u_translation.rsdusk
 msgid "dusk"
@@ -1162,7 +1186,7 @@ msgstr "Редактировать план"
 
 #: u_translation.rsedittargetli
 msgid "Edit target list"
-msgstr "Изменить список объектов"
+msgstr "Изменение задания"
 
 #: u_translation.rselbrusimages
 msgid "Elbrus Images folder "
@@ -1175,6 +1199,10 @@ msgstr "Высота"
 #: u_translation.rsemailconfigu
 msgid "Email configuration"
 msgstr "Настройки электронной почты"
+
+#: u_translation.rsemailnotific
+msgid "Email notification text"
+msgstr ""
 
 #: u_translation.rsemailon
 msgid "Email on :"
@@ -1204,6 +1232,10 @@ msgstr "Ошибка: %s"
 msgid "Error"
 msgstr "Ошибка"
 
+#: u_translation.rserrormessage
+msgid "Error messages"
+msgstr ""
+
 #: u_translation.rserrormountno
 msgid "Error! Mount not connected"
 msgstr "Ошибка! Монтировка не подключена"
@@ -1230,11 +1262,11 @@ msgstr "Расчётное проскальзывание с момента по
 
 #: u_translation.rsexecutingthe
 msgid "Executing the termination error actions."
-msgstr ""
+msgstr "Выполнение действий при ошибке завершения"
 
 #: u_translation.rsexecutingthe2
 msgid "Executing the termination actions."
-msgstr ""
+msgstr "Выполнение действий для завершения"
 
 #: u_translation.rsexitprogram
 msgid "Exit program"
@@ -1282,7 +1314,7 @@ msgstr "Выдержка, сек"
 
 #: u_translation.rsexposuretime4
 msgid "Exposure time too short for measurement, need %d seconds."
-msgstr ""
+msgstr "Время экспозиции слишком короткое для измерения, требуется %d секунд."
 
 #: u_translation.rsfailedtostar
 msgid "Failed to start guiding!"
@@ -1290,7 +1322,7 @@ msgstr "Не удалось начать гидирование!"
 
 #: u_translation.rsfailtoresolv
 msgid "Fail to resolve control exposure"
-msgstr "Неудачное распознавание контрольной экспозиции"
+msgstr "Неудачное распознавание контрольного снимка"
 
 #: u_translation.rsfalse
 msgid "False"
@@ -1418,7 +1450,7 @@ msgstr "Направление фокусировки"
 
 #: u_translation.rsfocusdirecti2
 msgid "Focus direction: "
-msgstr ""
+msgstr "Направление "
 
 #: u_translation.rsfocuser
 msgid "Focuser"
@@ -1478,7 +1510,7 @@ msgstr "Фокусировка через"
 
 #: u_translation.rsfocuspositio
 msgid "Focus position"
-msgstr ""
+msgstr "Позиция фокуса"
 
 #: u_translation.rsfocusquality
 msgid "Focus quality = %s"
@@ -1530,7 +1562,7 @@ msgstr "От драйвера телескопа"
 
 #: u_translation.rsfromtoby
 msgid "From: %s to %s by %s"
-msgstr ""
+msgstr "С позиции %s до %s через %s"
 
 #: u_translation.rsfstop
 msgid "F-stop"
@@ -1550,7 +1582,7 @@ msgstr "Получить"
 
 #: u_translation.rsgetcurrent
 msgid "Get current"
-msgstr "Получить текущую"
+msgstr "Текущая"
 
 #: u_translation.rsgetcurrentpo
 msgid "Get current position from current target"
@@ -1570,11 +1602,11 @@ msgstr "Получить долг/шир от монтировки"
 
 #: u_translation.rsglobalaction
 msgid "Global actions when a sequence is running"
-msgstr ""
+msgstr "Общие действия при выполнении задания"
 
 #: u_translation.rsglobalfocuse
 msgid "Global focuser parameters.%sSet the focuser direction IN or OUT to the one that give the best result for your setup. If you plan to use temperature compensation, set the direction it need to move when the temperature drop during the night."
-msgstr "Общие параметры фокусера.%sУстановите направление фокусировки IN или OUT на то, которое даёт наилучший результат для вашего устройства. Если вы планируете использовать температурную компенсацию, установите направление, в котором она должна производиться, когда температура ночью падает."
+msgstr "Общие параметры фокусера.%sУстановите направление фокусировки Вовнутрь или Наружу на то, которое даёт наилучший результат для вашего устройства. Если вы планируете использовать температурную компенсацию, установите направление, в котором она должна производиться, когда температура ночью падает."
 
 #: u_translation.rsglobalrepeat
 msgid "Global repeat:"
@@ -1642,11 +1674,11 @@ msgstr "Влажность"
 
 #: u_translation.rshyperbolacur
 msgid "HYPERBOLA curve fitting focus at %s,  remaining curve fit error %s,  iteration cycles %s"
-msgstr "Приблизительный фокус в положении %s, ошибка кривой %s, итераций %s"
+msgstr "Приблизительный фокус в позиции %s, ошибка кривой %s, итераций %s"
 
 #: u_translation.rsidle
 msgid "Idle"
-msgstr "Бездействие"
+msgstr "Ожидание"
 
 #: u_translation.rsifyourfocuse
 msgid "If your focuser driver do not offer this option, set here the number of steps necessary to clean the backlash when the direction change. This not need to be a precise value, it is better to set it higher than the actual backlash."
@@ -1686,7 +1718,7 @@ msgstr ""
 
 #: u_translation.rsimagesharpne
 msgid "Image sharpness %s"
-msgstr ""
+msgstr "Резкость изображения %s"
 
 #: u_translation.rsimagestatist
 msgid "Image statistic"
@@ -1722,7 +1754,7 @@ msgstr "Настройки INDI"
 
 #: u_translation.rsinformation
 msgid "Information"
-msgstr ""
+msgstr "Информация"
 
 #: u_translation.rsinitializeta
 msgid "Initialize target %s"
@@ -1747,6 +1779,10 @@ msgstr "Вставить строки"
 #: u_translation.rsintensity
 msgid "Intensity"
 msgstr "Интенсивность"
+
+#: u_translation.rsinteractiond
+msgid "Interaction dialog"
+msgstr ""
 
 #: u_translation.rsinterface
 msgid "Interface"
@@ -1868,6 +1904,10 @@ msgstr "Долгота"
 msgid "Loop"
 msgstr "Цикл"
 
+#: u_translation.rslowqualityim
+msgid "Low quality image scaling"
+msgstr ""
+
 #: u_translation.rsmagnifyer
 msgid "Magnifier"
 msgstr "Увеличитель"
@@ -1887,6 +1927,10 @@ msgstr "Установите RA ось монтировки вручную, чт
 #: u_translation.rsmanual
 msgid "Manual"
 msgstr "Вручную"
+
+#: u_translation.rsmanualfilter
+msgid "Manual filter change canceled"
+msgstr ""
 
 #: u_translation.rsmanualfocusa
 msgid "Manual focus aid"
@@ -1946,11 +1990,11 @@ msgstr "Измерение"
 
 #: u_translation.rsmeasurementh
 msgid "Measurement %s hfd:%s peak:%s snr:%s"
-msgstr "Измерение %s HFD:%s Пик:%s SNR:%s"
+msgstr "Измерение %s HFD:%s PEAK:%s SNR:%s"
 
 #: u_translation.rsmeasuremento
 msgid "Measurement on new images"
-msgstr ""
+msgstr "Измерения на новых снимках"
 
 #: u_translation.rsmeasurementp
 msgid "Measurement %s pos:%s step:%s hfd:%s peak:%s snr:%s"
@@ -2070,7 +2114,7 @@ msgstr "Монтировка не запаркована.%sВсё равно з�
 
 #: u_translation.rsmountisnotre
 msgid "Mount is not reporting pier side, meridian flip can be unreliable."
-msgstr "Монтировка не сообщает своё положение, перекладка ненадёжна."
+msgstr "Монтировка не сообщает своё положение, перекладка ненадёжна"
 
 #: u_translation.rsmountrotatio
 msgid "Mount rotation center"
@@ -2146,7 +2190,7 @@ msgstr "Перемещение монтировки"
 
 #: u_translation.rsnearfocus
 msgid "Near focus"
-msgstr "Ближайший фокус"
+msgstr "Вблизи"
 
 #: u_translation.rsnearhfdmustb
 msgid "Near HFD must be smaller than Start HFD!"
@@ -2154,7 +2198,7 @@ msgstr "HFD ближайшего фокуса должен быть меньше
 
 #: u_translation.rsneedtowaitun
 msgid "Need to wait until %s"
-msgstr "Нужно подождать, пока %s"
+msgstr "Необходимо подождать до %s"
 
 #: u_translation.rsnetwork
 msgid "Network"
@@ -2298,7 +2342,7 @@ msgstr "Недостаточно точек измерения! Попробуй
 
 #: u_translation.rsnotenoughpoi
 msgid "Not enough points in or out of focus position after two try. Start with a better focus position and run the focuser calibration tool."
-msgstr "Недостаточно точек до или за точкой фокуса после двух попыток. Начните с лучшего положения фокуса и запустите инструмент калибровки фокусера"
+msgstr "Недостаточно точек до или за точкой фокуса после двух попыток. Начните с лучшей позиции фокусировки и запустите инструмент калибровки фокусера"
 
 #: u_translation.rsnotenoughpoi2
 msgid "Not enough points in or out of focus position, retrying now."
@@ -2306,7 +2350,7 @@ msgstr "Недостаточно точек до или за точкой фок
 
 #: u_translation.rsnoterminatio
 msgid "No termination actions configured."
-msgstr "Нет настроенных действий завершения"
+msgstr "Нет настроенных действий для завершения"
 
 #: u_translation.rsnotification
 msgid "Notifications"
@@ -2331,6 +2375,10 @@ msgstr "Количество динамических точек"
 #: u_translation.rsnumberofexpo
 msgid "Number of exposure per point"
 msgstr "Количество экспозиций на точку"
+
+#: u_translation.rsnumberofslot
+msgid "Number of slot"
+msgstr ""
 
 #: u_translation.rsnumberofstep
 msgid "Number of steps"
@@ -2374,7 +2422,7 @@ msgstr "Откл"
 
 #: u_translation.rsoffaxisaberr
 msgid "Off-axis aberration[hfd]=%s"
-msgstr ""
+msgstr "Внеосевая аберрация [hfd]=%s"
 
 #: u_translation.rsoffset
 msgid "offset"
@@ -2454,7 +2502,7 @@ msgstr "%s вне диапазона"
 
 #: u_translation.rspa
 msgid "PA"
-msgstr "Поз.угол"
+msgstr ""
 
 #: u_translation.rsparameter
 msgid "Parameter"
@@ -2528,6 +2576,10 @@ msgstr "Запрос приостановки задания отменён."
 msgid "PDF documentation"
 msgstr "PDF документация"
 
+#: u_translation.rsperformance
+msgid "Performance"
+msgstr ""
+
 #: u_translation.rsperiodicauto
 msgid "Periodic auto-focus"
 msgstr "Периодическая автофокусировка"
@@ -2586,7 +2638,7 @@ msgstr "Закрыть планетарий"
 
 #: u_translation.rsplanetariumt
 msgid "Planetarium target set to %s"
-msgstr "Цель планетария %s"
+msgstr "Цель из планетария: %s"
 
 #: u_translation.rsplanetariumt2
 msgid "Planetarium target slew fail"
@@ -2688,17 +2740,21 @@ msgstr "Порт"
 msgid "Pos."
 msgstr "Pos."
 
+#: u_translation.rspower
+msgid "Power"
+msgstr ""
+
 #: u_translation.rsprecisionsle
 msgid "Precision slewing options"
 msgstr "Параметры уточнения наведения"
 
 #: u_translation.rsprecisionsle2
 msgid "Precision slew finished."
-msgstr "Уточнение выполнено"
+msgstr "Уточнение позиции выполнено"
 
 #: u_translation.rsprecisionsle3
 msgid "Precision slew failed!"
-msgstr "Уточнение неудачно!"
+msgstr "Уточнение позиции не выполнено!"
 
 #: u_translation.rspreferedfocu
 msgid "Prefered focuser direction"
@@ -2782,11 +2838,11 @@ msgstr ""
 
 #: u_translation.rsreadccd
 msgid "Read CCD"
-msgstr "Читать CCD"
+msgstr "Чтение CCD"
 
 #: u_translation.rsreadimage
 msgid "Read image"
-msgstr "Читать изображение"
+msgstr "Чтение изображения"
 
 #: u_translation.rsreadoutmodes
 msgid "Readout modes"
@@ -2827,6 +2883,10 @@ msgstr "красный"
 #: u_translation.rsreferenceima
 msgid "Reference image"
 msgstr "Опорное изображение"
+
+#: u_translation.rsrefractedpol
+msgid "Refracted pole"
+msgstr ""
 
 #: u_translation.rsrelativeincr
 msgid "Relative increment for the inward or outward movement"
@@ -2874,7 +2934,7 @@ msgstr "Сообщить о проблеме"
 
 #: u_translation.rsrequestedton
 msgid "Requested to not run the termination action"
-msgstr ""
+msgstr "Отмена запуска действий для завершения"
 
 #: u_translation.rsrequesttosto
 msgid "Request to stop focuser calibration"
@@ -2942,7 +3002,7 @@ msgstr "Распознать и синхронизировать ротатор"
 
 #: u_translation.rsresolvecontr
 msgid "Resolve control exposure"
-msgstr "Распознавание контрольной экспозиции"
+msgstr "Распознавание контрольного снимка"
 
 #: u_translation.rsresolveerror
 msgid "%s resolve error."
@@ -2974,11 +3034,11 @@ msgstr "Перезапуск автогида"
 
 #: u_translation.rsrestartexpos
 msgid "Restart exposure"
-msgstr ""
+msgstr "Перезапуск  экспозиции"
 
 #: u_translation.rsresumeautogu
 msgid "Resume autoguider"
-msgstr "Возобновить гидирование"
+msgstr "Возобновление гидирования"
 
 #: u_translation.rsretrieveposi
 msgid "Retrieve position from deepsky database"
@@ -3006,7 +3066,7 @@ msgstr "восход"
 
 #: u_translation.rsrisesetcondi
 msgid "Rise/Set condition"
-msgstr ""
+msgstr "Условия восхода и заката"
 
 #: u_translation.rsrot
 msgid "Rot."
@@ -3078,7 +3138,7 @@ msgstr "Безопасный"
 
 #: u_translation.rssafeforopera
 msgid "Safe for operation"
-msgstr ""
+msgstr "Безопасная работа"
 
 #: u_translation.rssafetymonito
 msgid "Safety monitor"
@@ -3210,7 +3270,7 @@ msgstr "Сенсор"
 
 #: u_translation.rssensorsprope
 msgid "Sensors properties"
-msgstr "Свойства сенсоров"
+msgstr "Свойства сенсора"
 
 #: u_translation.rssensortemperatu
 msgid "Sensor temperature"
@@ -3276,6 +3336,10 @@ msgstr "Задание приостановлено ​​из-за плохой
 msgid "Sequence %s start immediately"
 msgstr "Задание %s начинается немедленно"
 
+#: u_translation.rssequencestep
+msgid "Sequence steps"
+msgstr ""
+
 #: u_translation.rssequencestop
 msgid "Sequence stopped by user request, no termination script will be run."
 msgstr "Задание остановлено ​​по запросу пользователя, скрипт завершения не будет запущен"
@@ -3314,7 +3378,7 @@ msgstr "Установить бинниг"
 
 #: u_translation.rssetbinningx
 msgid "Set binning %sx%s"
-msgstr "Установить биннинг %sx%s"
+msgstr "Установлен биннинг %sx%s"
 
 #: u_translation.rssetcooler
 msgid "Set cooler %s"
@@ -3322,19 +3386,19 @@ msgstr "Охлаждение сенсора %s"
 
 #: u_translation.rssetfilterpos
 msgid "Set filter position %s"
-msgstr "Установить положение фильтра %s"
+msgstr "Установлено положение фильтра %s"
 
 #: u_translation.rssetfocusdire
 msgid "Set focus direction inward"
-msgstr "Установить направление вовнутрь"
+msgstr "Установлено направление фокусировки вовнутрь"
 
 #: u_translation.rssetfocusdire2
 msgid "Set focus direction outward"
-msgstr "Установить направление наружу"
+msgstr "Установлено направление фокусировки наружу"
 
 #: u_translation.rssetframetype
 msgid "Set frame type %s"
-msgstr "Установить тип кадра %s"
+msgstr "Установлен тип кадра %s"
 
 #: u_translation.rssetmagnitude
 msgid "Set magnitude"
@@ -3386,7 +3450,7 @@ msgstr "Тени ADU"
 
 #: u_translation.rssharpness
 msgid "Sharpness"
-msgstr ""
+msgstr "Резкость"
 
 #: u_translation.rsshowcurrentl
 msgid "Show current log"
@@ -3426,11 +3490,11 @@ msgstr "Упрощённая фотометрия только с учётом �
 
 #: u_translation.rssitesendtote
 msgid "Site send to telescope."
-msgstr "Местоположение отправлено в телескоп."
+msgstr "Местоположение отправлено в телескоп"
 
 #: u_translation.rssitesetfromt
 msgid "Site set from the telescope."
-msgstr "Местоположение получено от телескопа."
+msgstr "Местоположение получено от телескопа"
 
 #: u_translation.rsskiptarget
 msgid "Skip target %s"
@@ -3523,6 +3587,10 @@ msgstr "Коррекция проскальзывания "
 #: u_translation.rsslope
 msgid "Slope"
 msgstr "Наклон"
+
+#: u_translation.rsslot
+msgid "Slot"
+msgstr ""
 
 #: u_translation.rssmtpserverad
 msgid "SMTP server address"
@@ -3622,7 +3690,7 @@ msgstr "Ошибка запуска экспозиции: %s"
 
 #: u_translation.rsstartfocus
 msgid "Start focus"
-msgstr "Начальный фокус"
+msgstr "Начальный"
 
 #: u_translation.rsstartfocushf
 msgid "Start focus HFD is outside of current V curve, please decrease the start HFD value"
@@ -3630,7 +3698,7 @@ msgstr "Начальный HFD находится вне текущей V-кри
 
 #: u_translation.rsstartingexpo
 msgid "Starting %s exposure %s for %s seconds"
-msgstr "Запущена съёмка %s %s по %s сек"
+msgstr "Запущена съёмка %s %s выдержка %s сек"
 
 #: u_translation.rsstartingsequ
 msgid "Starting sequence %s"
@@ -3642,7 +3710,7 @@ msgstr "Старт задания %s повтор %s/%s"
 
 #: u_translation.rsstartlearnin
 msgid "Start learning V curve"
-msgstr "Начать обучение V-кривой"
+msgstr "Запущено обучение V-кривой"
 
 #: u_translation.rsstartnewexpo
 msgid "Start new exposure as early as possible"
@@ -3746,11 +3814,11 @@ msgstr "Стоп в"
 
 #: u_translation.rsstopautoguid
 msgid "Stop autoguider"
-msgstr "Остановить гидирование"
+msgstr "Гидирование остановлено"
 
 #: u_translation.rsstopcapture
 msgid "Stop capture"
-msgstr "Остановить съёмку"
+msgstr "Съёмка остановлена"
 
 #: u_translation.rsstopdomeslav
 msgid "Stop Dome slaving"
@@ -3786,7 +3854,7 @@ msgstr "Остановка записи"
 
 #: u_translation.rsstoptelescop
 msgid "Stop telescope motion."
-msgstr "Остановить движение телескопа."
+msgstr "Движение телескопа остановлено"
 
 #: u_translation.rsstoptelescop2
 msgid "Stop telescope tracking"
@@ -3834,7 +3902,7 @@ msgstr "Подпапка по имени объекта"
 
 #: u_translation.rssubfolderbyp
 msgid "Subfolder by plan step"
-msgstr "Подпапка по этапу плана"
+msgstr "Подпапка по шагу плана"
 
 #: u_translation.rssubfolderbys
 msgid "Subfolder by sequence name"
@@ -3858,7 +3926,7 @@ msgstr "Система субдискретна, допускать звёзды
 
 #: u_translation.rstakecontrole
 msgid "Take control exposure for %s seconds"
-msgstr "Контрольная экспозиция %s секунд"
+msgstr "Контрольный снимок %s сек"
 
 #: u_translation.rstargetcancel
 msgid "Target %s canceled before start"
@@ -3910,11 +3978,11 @@ msgstr "Телескоп и купол распаркованы"
 
 #: u_translation.rstelescopeazi
 msgid "Telescope azimuth"
-msgstr "Азимут телескопа"
+msgstr "Азимут"
 
 #: u_translation.rstelescopeele
 msgid "Telescope elevation"
-msgstr "Высота телескопа"
+msgstr "Высота"
 
 #: u_translation.rstelescopemou
 msgid "Telescope mount"
@@ -3922,7 +3990,7 @@ msgstr "Монтировка"
 
 #: u_translation.rstelescopenam
 msgid "Telescope name"
-msgstr "Название телескопа"
+msgstr "Телескоп"
 
 #: u_translation.rstelescopenot
 msgid "Telescope not %s after request!"
@@ -3958,7 +4026,7 @@ msgstr "Температурный коэффициент, шаги/%s"
 
 #: u_translation.rstemperaturef
 msgid "Temperature from weather station"
-msgstr ""
+msgstr "Температура от метеостанции"
 
 #: u_translation.rstemperaturer
 msgid "Temperature ramp requested to stop"
@@ -3983,6 +4051,10 @@ msgstr "Временная папка должна содержать тольк
 #: u_translation.rsterminationo
 msgid "Termination options"
 msgstr "Варианты завершения"
+
+#: u_translation.rstest
+msgid "Test"
+msgstr ""
 
 #: u_translation.rstestemailfro
 msgid "Test email from CCDciel"
@@ -4014,7 +4086,7 @@ msgstr "Фокусер не сдвинулся за 30 шагов! Провер�
 
 #: u_translation.rsthefocuseris
 msgid "The focuser is now positioned at the best observed HFD position."
-msgstr "Фокусер находится в лучшем наблюдаемом положении HFD"
+msgstr "Фокусер находится в позиции с лучшим наблюдаемым HFD"
 
 #: u_translation.rsthefollowing
 msgid "The following actions are run if the safety monitor report dangerous condition"
@@ -4082,7 +4154,7 @@ msgstr "Этот объект не может быть выше указанно
 
 #: u_translation.rsthisoptionsa
 msgid "This options are in addition to the autofocus frequency available in the Plan definition"
-msgstr ""
+msgstr "Эти опции дополняют частоту автофокусировки, доступную в определении плана"
 
 #: u_translation.rsthisprocedur
 msgid "This procedure will help you to  find the focuser parameters for auto-focus.%sYou only need to run it once to set this parameters.%sCenter a star with a high elevation and do a manual focusing to be as close as possible of the focus point. Use the Manual focus tool for that.%sUse the Star profile tool to check the star peak intensity is about three fourth of the camera maximum ADU but not saturated. %sAfter focusing, your focuser must be positioned about half way of it's mechanical travel. If this is not the case please adjust it now.%sThe binning you set in the Preview now will be used for the autofocusing operation. If you want to change the focusing binning later you have to run this procedure again."
@@ -4146,7 +4218,7 @@ msgstr "Полная полярная ошибка:"
 
 #: u_translation.rstrack
 msgid "Track"
-msgstr "Слежение"
+msgstr ""
 
 #: u_translation.rstracking
 msgid "tracking"
@@ -4159,6 +4231,10 @@ msgstr "Порог:"
 #: u_translation.rstrue
 msgid "True"
 msgstr "Вкл"
+
+#: u_translation.rstruepole
+msgid "True pole"
+msgstr ""
 
 #: u_translation.rstrynexttarge
 msgid "Try next target in sequence."
@@ -4362,7 +4438,11 @@ msgstr "Визуализация"
 
 #: u_translation.rsvlearn
 msgid "V-learn"
-msgstr "V-обучение"
+msgstr "Обучение"
+
+#: u_translation.rsvoiceconfigu
+msgid "Voice configuration"
+msgstr ""
 
 #: u_translation.rswait1minute
 msgid "Wait 1 minute ..."
@@ -4375,7 +4455,7 @@ msgstr "Ожидание после%sраспознавания"
 
 #: u_translation.rswaitingdseco
 msgid "Waiting %d seconds before to restart the exposure"
-msgstr ""
+msgstr "Ожидание %d секунд до перезапуска экспозиции"
 
 #: u_translation.rswaitingforda
 msgid "Waiting for dawn"
@@ -4443,7 +4523,7 @@ msgstr "Предупреждение! %s изображение получено
 
 #: u_translation.rswarningrever
 msgid "Warning, reversing the rotator will invalidated the calibration. Do you want to continue?"
-msgstr "Предупреждение, изменение направления вращения приведёт к аннулированию калибровки. Вы хотите продолжить?"
+msgstr "Предупреждение, изменение направления перемещения приведёт к сбросу калибровки. Вы хотите продолжить?"
 
 #: u_translation.rswatchdog
 msgid "Watchdog"

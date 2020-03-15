@@ -4502,3 +4502,83 @@ msgstr ""
 msgid "Information"
 msgstr ""
 
+#: u_translation:rsslot
+msgid "Slot"
+msgstr ""
+
+#: u_translation:rsnumberofslot
+msgid "Number of slot"
+msgstr ""
+
+#: u_translation:rsmanualfilter
+msgid "Manual filter change canceled"
+msgstr ""
+
+#: u_translation:rsinteractiond
+msgid "Interaction dialog"
+msgstr ""
+
+#: u_translation:rssequencestep
+msgid "Sequence steps"
+msgstr ""
+
+#: u_translation:rserrormessage
+msgid "Error messages"
+msgstr ""
+
+#: u_translation:rsemailnotific
+msgid "Email notification text"
+msgstr ""
+
+#: u_translation:rsvoiceconfigu
+msgid "Voice configuration"
+msgstr ""
+
+#: u_translation:rstest
+msgid "Test"
+msgstr ""
+
+#: u_translation:rsperformance
+msgid "Performance"
+msgstr ""
+
+#: u_translation:rsdisplayspeed
+msgid "Display speed"
+msgstr ""
+
+#: u_translation:rslowqualityim
+msgid "Low quality image scaling"
+msgstr ""
+
+#: u_translation:rsdonotdisplay
+msgid "Do not display images during capture"
+msgstr ""
+
+#: u_translation:rsaddfitskeywo
+msgid "Add FITS keyword for DSLR EXIF tags"
+msgstr ""
+
+#: u_translation:rsalignmenton
+msgid "Alignment on"
+msgstr ""
+
+#: u_translation:rstruepole
+msgid "True pole"
+msgstr ""
+
+#: u_translation:rsrefractedpol
+msgid "Refracted pole"
+msgstr ""
+
+#: u_translation:rsdiscover
+msgid "Discover"
+msgstr ""
+
+#: u_translation:rsdiscoverypor
+msgid "Discovery port"
+msgstr ""
+
+#: u_translation:rspower
+msgid "Power"
+msgstr ""
+
