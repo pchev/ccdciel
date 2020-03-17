@@ -25,7 +25,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 interface
 
-uses u_translation, u_utils, u_global, fu_preview, cu_fits, cu_astrometry, cu_mount, cu_wheel, fu_visu, indiapi,
+uses u_translation, u_utils, u_global, fu_preview, cu_fits, cu_astrometry, cu_mount, cu_wheel, fu_visu, indiapi, UScaleDPI,
   math, Classes, SysUtils, Forms, Controls, Graphics, Dialogs, ComCtrls, StdCtrls, ExtCtrls, CheckLst, Spin;
 
 type
@@ -225,6 +225,7 @@ end;
 
 procedure Tf_polaralign.FormCreate(Sender: TObject);
 begin
+  ScaleDPI(Self);
   SetLang;
   FFirstInit:=true;
 end;

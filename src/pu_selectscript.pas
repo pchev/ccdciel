@@ -4,7 +4,7 @@ unit pu_selectscript;
 
 interface
 
-uses u_translation,
+uses u_translation, UScaleDPI,
   Classes, SysUtils, Forms, Controls, Graphics, Dialogs, ExtCtrls, StdCtrls;
 
 type
@@ -35,6 +35,7 @@ implementation
 
 procedure Tf_selectscript.FormCreate(Sender: TObject);
 begin
+  ScaleDPI(Self);
   SetLang;
 end;
 

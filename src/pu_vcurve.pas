@@ -26,7 +26,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 interface
 
 uses fu_starprofile, fu_focuser, fu_preview, u_global, u_utils, Classes, SysUtils, u_translation, u_hints,
-  FileUtil, TAGraph, TAFuncSeries, TASources, TAMultiSeries, TAChartUtils, Forms, Controls,
+  FileUtil, TAGraph, TAFuncSeries, TASources, TAMultiSeries, TAChartUtils, Forms, Controls, UScaleDPI,
   Math, Graphics, Dialogs, StdCtrls, ComCtrls, SpinEx, TACustomSeries, TASeries;
 
 type
@@ -144,6 +144,7 @@ end;
 
 procedure Tf_vcurve.FormCreate(Sender: TObject);
 begin
+  ScaleDPI(Self);
   SetLang;
 end;
 

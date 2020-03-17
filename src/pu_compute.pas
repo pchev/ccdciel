@@ -24,7 +24,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 interface
 
-uses u_global, u_translation,
+uses u_global, u_translation, UScaleDPI,
   Classes, SysUtils, Forms, Controls, Graphics, Dialogs, ComCtrls, ExtCtrls, StdCtrls;
 
 type
@@ -74,6 +74,7 @@ end;
 
 procedure Tf_compute.FormCreate(Sender: TObject);
 begin
+  ScaleDPI(Self);
   Setlang;
 end;
 

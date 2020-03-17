@@ -25,7 +25,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 interface
 
-uses u_global, cu_focuser, u_translation, Classes, SysUtils, FileUtil,
+uses u_global, cu_focuser, u_translation, Classes, SysUtils, FileUtil, UScaleDPI,
   TASources, TAGraph, TASeries, Forms, Controls, Graphics, Dialogs, ExtCtrls,
   StdCtrls, ValEdit, SpinEx, TACustomSeries;
 
@@ -115,6 +115,7 @@ implementation
 
 procedure Tf_focusercalibration.FormCreate(Sender: TObject);
 begin
+  ScaleDPI(Self);
   SetLang;
   hfdmax.Value:=20;
   stepmin.Value:=1;
