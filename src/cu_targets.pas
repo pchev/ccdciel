@@ -929,13 +929,13 @@ begin
     if t.repeatcount=0 then begin
       SkipTarget:=true;
       result:=false;
-      msg(Format(rsSkipTarget, [t.objectname+', '+rsRepeat+'=0']), 2);
+      msg(Format(rsSkipTarget, [t.objectname+', '+rsRepeat+'=0']), 3);
       exit;
     end;
     if t.repeatdone>=t.repeatcount then begin
       SkipTarget:=true;
       result:=false;
-      msg(Format(rsSkipTarget, [t.objectname+', '+Format(rsSeqFinished,[t.planname])]), 2);
+      msg(Format(rsSkipTarget, [t.objectname+', '+Format(rsSeqFinished,[t.planname])]), 3);
       exit;
     end;
     msg(Format(rsInitializeTa, [t.objectname]),1);
@@ -958,7 +958,7 @@ begin
     // adjust moving object coordinates from planetarium
     if t.updatecoord then begin
        if Fplanetarium.Search(t.objectname,newra,newde) then begin
-          msg(Format(rsNewCoordinat, [RAToStr(newra), DEToStr(newde)]),2);
+          msg(Format(rsNewCoordinat, [RAToStr(newra), DEToStr(newde)]),3);
           t.ra:=newra;
           t.de:=newde;
        end;
@@ -982,7 +982,7 @@ begin
        ObjRise(appra,appde,hr,ri);
        // check object visibility
        if ri=2 then begin
-          msg(Format(rsSkipTarget, [t.objectname])+', '+rsThisObjectIs2, 2);
+          msg(Format(rsSkipTarget, [t.objectname])+', '+rsThisObjectIs2, 3);
           SkipTarget:=true;
           result:=false;
           exit;
@@ -1054,14 +1054,14 @@ begin
         end;
       end;
       if SkipTarget then begin
-        msg(Format(rsSkipTarget, [t.objectname])+skipmsg, 2);
+        msg(Format(rsSkipTarget, [t.objectname])+skipmsg, 3);
         result:=false;
         exit;
       end;
     end;
     // start / stop timer
     if (intime>0) then begin
-      msg(Format(rsTargetCancel, [t.objectname])+', '+Format(rsStopTimeAlre, [TimeToStr(t.endtime)]),2);
+      msg(Format(rsTargetCancel, [t.objectname])+', '+Format(rsStopTimeAlre, [TimeToStr(t.endtime)]),3);
       result:=false;
       exit;
     end;
@@ -1079,11 +1079,11 @@ begin
        SecondsToWait(chkendtime,true,stw,nd);
        if stw>60 then begin
           SecondsToWait(t.endtime,true,stw,nd);
-          msg(Format(rsTargetWillBe, [TimeToStr(t.endtime), inttostr(stw)]), 3);
+          msg(Format(rsTargetWillBe, [TimeToStr(t.endtime), inttostr(stw)]), 9);
           StopTargetTimer.Interval:=1000*stw;
           StopTargetTimer.Enabled:=true;
        end else begin
-         msg(Format(rsTargetCancel, [t.objectname])+', '+Format(rsStopTimeAlre, [TimeToStr(t.endtime)]),2);
+         msg(Format(rsTargetCancel, [t.objectname])+', '+Format(rsStopTimeAlre, [TimeToStr(t.endtime)]),3);
          result:=false;
          exit;
        end;

@@ -6,15 +6,15 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ccdciel\n"
 "Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
-"POT-Creation-Date: 2020-02-02 17:30+0000\n"
-"PO-Revision-Date: 2020-01-29 19:18+0000\n"
+"POT-Creation-Date: 2020-03-15 14:12+0000\n"
+"PO-Revision-Date: 2020-02-04 19:45+0000\n"
 "Last-Translator: Thomas <email@starhopper.de>\n"
 "Language-Team: German <de@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2020-02-02 17:36+0000\n"
-"X-Generator: Launchpad (build 0a62c17273454a1313f81a74a2198ec30b44c7b6)\n"
+"X-Launchpad-Export-Date: 2020-03-15 14:40+0000\n"
+"X-Generator: Launchpad (build 3a6db24bbe7280ec09bae73384238390fcc98ad3)\n"
 
 #: u_translation.rs32bitdriver
 msgid "This driver work only in 32bit, please install the 32bit version of CCDciel."
@@ -56,6 +56,10 @@ msgstr "Aktion"
 msgid "Add"
 msgstr "Hinzufügen"
 
+#: u_translation.rsaddfitskeywo
+msgid "Add FITS keyword for DSLR EXIF tags"
+msgstr ""
+
 #: u_translation.rsaddstep
 msgid "Add step"
 msgstr "Schritt hinzufügen"
@@ -83,6 +87,10 @@ msgstr "Nach abgeschlossenem GOTO ist der Versatz zur angeforderten Position %s 
 #: u_translation.rsairmass
 msgid "Airmass"
 msgstr "Luftmasse"
+
+#: u_translation.rsalignmenton
+msgid "Alignment on"
+msgstr ""
 
 #: u_translation.rsalignmentsta
 msgid "Alignment star lost"
@@ -614,7 +622,7 @@ msgstr "Vorschau Schleife kann jetzt nicht gestartet werden"
 
 #: u_translation.rscannotstartw
 msgid "Cannot start when capture is running"
-msgstr ""
+msgstr "Kann nicht starten während die Aufnahme läuft"
 
 #: u_translation.rscannotsyncwh
 msgid "Cannot Sync when the mount is not tracking"
@@ -838,7 +846,7 @@ msgstr "Kühlung"
 
 #: u_translation.rscoordinates
 msgid "Coordinates"
-msgstr ""
+msgstr "Koordinaten"
 
 #: u_translation.rscopy
 msgid "Copy"
@@ -1036,9 +1044,21 @@ msgstr "Fehler beim Trennen: %s"
 msgid "Disconnect the camera before to change the configuration."
 msgstr "Trennen Sie die Kamera vor dem Ändern der Konfiguration."
 
+#: u_translation.rsdiscover
+msgid "Discover"
+msgstr ""
+
+#: u_translation.rsdiscoverypor
+msgid "Discovery port"
+msgstr ""
+
 #: u_translation.rsdisplay
 msgid "Display"
 msgstr "Anzeige"
+
+#: u_translation.rsdisplayspeed
+msgid "Display speed"
+msgstr ""
 
 #: u_translation.rsdistancetota
 msgid "Distance to target: %s arcmin"
@@ -1091,6 +1111,10 @@ msgstr "Kuppel Kopplung: %s"
 #: u_translation.rsdone
 msgid "done"
 msgstr "erledigt"
+
+#: u_translation.rsdonotdisplay
+msgid "Do not display images during capture"
+msgstr ""
 
 #: u_translation.rsdonothing
 msgid "Do nothing"
@@ -1176,6 +1200,10 @@ msgstr "Höhe"
 msgid "Email configuration"
 msgstr "e-Mail Konfiguration"
 
+#: u_translation.rsemailnotific
+msgid "Email notification text"
+msgstr ""
+
 #: u_translation.rsemailon
 msgid "Email on :"
 msgstr "E-Mail an:"
@@ -1203,6 +1231,10 @@ msgstr "Fehler: %s"
 #: u_translation.rserror2
 msgid "Error"
 msgstr "Fehler"
+
+#: u_translation.rserrormessage
+msgid "Error messages"
+msgstr ""
 
 #: u_translation.rserrormountno
 msgid "Error! Mount not connected"
@@ -1722,7 +1754,7 @@ msgstr "INDI Einstellungen"
 
 #: u_translation.rsinformation
 msgid "Information"
-msgstr ""
+msgstr "Information"
 
 #: u_translation.rsinitializeta
 msgid "Initialize target %s"
@@ -1747,6 +1779,10 @@ msgstr "Zeilen einfügen"
 #: u_translation.rsintensity
 msgid "Intensity"
 msgstr "Helligkeit"
+
+#: u_translation.rsinteractiond
+msgid "Interaction dialog"
+msgstr ""
 
 #: u_translation.rsinterface
 msgid "Interface"
@@ -1868,6 +1904,10 @@ msgstr "Längengrad"
 msgid "Loop"
 msgstr "Schleife"
 
+#: u_translation.rslowqualityim
+msgid "Low quality image scaling"
+msgstr ""
+
 #: u_translation.rsmagnifyer
 msgid "Magnifier"
 msgstr "Lupe"
@@ -1888,6 +1928,10 @@ msgstr "Die Montierung vorher so gut wie möglich auf den Pol ausrichten. Das Te
 #: u_translation.rsmanual
 msgid "Manual"
 msgstr "Benutzerhandbuch"
+
+#: u_translation.rsmanualfilter
+msgid "Manual filter change canceled"
+msgstr ""
 
 #: u_translation.rsmanualfocusa
 msgid "Manual focus aid"
@@ -2333,6 +2377,10 @@ msgstr "Anzahl Punkte für dynamic Fokus"
 msgid "Number of exposure per point"
 msgstr "Anzahl Aufnahmen pro Punkt"
 
+#: u_translation.rsnumberofslot
+msgid "Number of slot"
+msgstr ""
+
 #: u_translation.rsnumberofstep
 msgid "Number of steps"
 msgstr "Anzahl der Schritte"
@@ -2529,6 +2577,10 @@ msgstr "Angehaltene Sequenz abgebrochen"
 msgid "PDF documentation"
 msgstr "PDF Dokumentation"
 
+#: u_translation.rsperformance
+msgid "Performance"
+msgstr ""
+
 #: u_translation.rsperiodicauto
 msgid "Periodic auto-focus"
 msgstr "Periodischer Autofokus"
@@ -2690,6 +2742,10 @@ msgstr "Port"
 msgid "Pos."
 msgstr "Pos."
 
+#: u_translation.rspower
+msgid "Power"
+msgstr ""
+
 #: u_translation.rsprecisionsle
 msgid "Precision slewing options"
 msgstr "Optionen Präzisionsbewegung"
@@ -2829,6 +2885,10 @@ msgstr "rot"
 #: u_translation.rsreferenceima
 msgid "Reference image"
 msgstr "Referenzbild"
+
+#: u_translation.rsrefractedpol
+msgid "Refracted pole"
+msgstr ""
 
 #: u_translation.rsrelativeincr
 msgid "Relative increment for the inward or outward movement"
@@ -3008,7 +3068,7 @@ msgstr "Aufgang"
 
 #: u_translation.rsrisesetcondi
 msgid "Rise/Set condition"
-msgstr ""
+msgstr "Aufgang/Untergang Bedingung"
 
 #: u_translation.rsrot
 msgid "Rot."
@@ -3278,6 +3338,10 @@ msgstr "Sequenz wegen schlechtem Wetter unterbrochen ..."
 msgid "Sequence %s start immediately"
 msgstr "Sequenz %s startet sofort"
 
+#: u_translation.rssequencestep
+msgid "Sequence steps"
+msgstr ""
+
 #: u_translation.rssequencestop
 msgid "Sequence stopped by user request, no termination script will be run."
 msgstr "Sequenz durch Benutzeranforderung gestoppt, es wird kein Beendigungsskript ausgeführt"
@@ -3525,6 +3589,10 @@ msgstr "Schlupfkorrektur "
 #: u_translation.rsslope
 msgid "Slope"
 msgstr "Steigung"
+
+#: u_translation.rsslot
+msgid "Slot"
+msgstr ""
 
 #: u_translation.rssmtpserverad
 msgid "SMTP server address"
@@ -3986,6 +4054,10 @@ msgstr "Temporärer Ordner darf nur ASCII Zeichen enthalten"
 msgid "Termination options"
 msgstr "Optionen beim Beenden"
 
+#: u_translation.rstest
+msgid "Test"
+msgstr ""
+
 #: u_translation.rstestemailfro
 msgid "Test email from CCDciel"
 msgstr "Test e-Mail von CCDciel"
@@ -4161,6 +4233,10 @@ msgstr "Schwellwert"
 #: u_translation.rstrue
 msgid "True"
 msgstr "Wahr"
+
+#: u_translation.rstruepole
+msgid "True pole"
+msgstr ""
 
 #: u_translation.rstrynexttarge
 msgid "Try next target in sequence."
@@ -4365,6 +4441,10 @@ msgstr "Darstellung"
 #: u_translation.rsvlearn
 msgid "V-learn"
 msgstr "V-lernen"
+
+#: u_translation.rsvoiceconfigu
+msgid "Voice configuration"
+msgstr ""
 
 #: u_translation.rswait1minute
 msgid "Wait 1 minute ..."

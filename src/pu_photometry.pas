@@ -25,7 +25,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 interface
 
-uses  u_translation, u_global,
+uses  u_translation, u_global, UScaleDPI,
   Classes, SysUtils, Forms, Controls, Graphics, Dialogs, StdCtrls, SpinEx, ExtCtrls;
 
 type
@@ -67,6 +67,7 @@ implementation
 
 procedure Tf_photometry.FormCreate(Sender: TObject);
 begin
+   ScaleDPI(Self);
    SetLang;
    Fmag:=NullCoord;
    hfd:=-1;

@@ -1,10 +1,10 @@
 object f_ccdtemp: Tf_ccdtemp
   Left = 0
-  Height = 82
+  Height = 122
   Top = 0
   Width = 194
   AutoSize = True
-  ClientHeight = 82
+  ClientHeight = 122
   ClientWidth = 194
   ParentFont = False
   TabOrder = 0
@@ -28,22 +28,24 @@ object f_ccdtemp: Tf_ccdtemp
   end
   object Panel1: TPanel
     Left = 0
-    Height = 62
+    Height = 89
     Top = 20
     Width = 194
-    Align = alClient
-    ClientHeight = 62
+    Align = alTop
+    AutoSize = True
+    ClientHeight = 89
     ClientWidth = 194
     ParentFont = False
     TabOrder = 0
     object Panel2: TPanel
-      Left = 0
+      Left = 1
       Height = 27
-      Top = 0
-      Width = 190
+      Top = 1
+      Width = 192
+      Align = alTop
       BevelOuter = bvNone
       ClientHeight = 27
-      ClientWidth = 190
+      ClientWidth = 192
       ParentFont = False
       TabOrder = 0
       object Label1: TLabel
@@ -54,16 +56,6 @@ object f_ccdtemp: Tf_ccdtemp
         Caption = 'Current'
         ParentColor = False
         ParentFont = False
-      end
-      object CCDcooler: TCheckBox
-        Left = 110
-        Height = 21
-        Top = 2
-        Width = 65
-        Caption = 'Cooler'
-        OnClick = CCDcoolerChange
-        ParentFont = False
-        TabOrder = 0
       end
       object Current: TLabel
         Left = 62
@@ -77,13 +69,14 @@ object f_ccdtemp: Tf_ccdtemp
       end
     end
     object Panel3: TPanel
-      Left = 0
+      Left = 1
       Height = 33
-      Top = 29
-      Width = 190
+      Top = 28
+      Width = 192
+      Align = alTop
       BevelOuter = bvNone
       ClientHeight = 33
-      ClientWidth = 190
+      ClientWidth = 192
       ParentFont = False
       TabOrder = 1
       object Label2: TLabel
@@ -117,6 +110,43 @@ object f_ccdtemp: Tf_ccdtemp
         OnClick = BtnSetClick
         ParentFont = False
         TabOrder = 1
+      end
+    end
+    object PanelCooler: TPanel
+      Left = 1
+      Height = 27
+      Top = 61
+      Width = 192
+      Align = alTop
+      BevelOuter = bvNone
+      ClientHeight = 27
+      ClientWidth = 192
+      TabOrder = 2
+      object CCDcooler: TCheckBox
+        Left = 4
+        Height = 21
+        Top = 2
+        Width = 65
+        Caption = 'Cooler'
+        OnClick = CCDcoolerChange
+        ParentFont = False
+        TabOrder = 0
+      end
+      object Label3: TLabel
+        Left = 100
+        Height = 19
+        Top = 4
+        Width = 41
+        Caption = 'Power'
+        ParentColor = False
+      end
+      object Power: TLabel
+        Left = 156
+        Height = 19
+        Top = 4
+        Width = 4
+        Caption = '-'
+        ParentColor = False
       end
     end
   end

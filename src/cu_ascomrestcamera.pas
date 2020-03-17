@@ -41,7 +41,7 @@ T_ascomrestcamera = class(T_camera)
    Fccdname: string;
    FMaxBinX,FMaxBinY,FBinX,FBinY:integer;
    FHasTemperature, FCanSetTemperature: boolean;
-   stCCDtemp : double;
+   stCCDtemp,stCoolerPower : double;
    stCooler : boolean;
    stX,stY,stWidth,stHeight: integer;
    stGain: integer;
@@ -68,6 +68,7 @@ T_ascomrestcamera = class(T_camera)
    function  GetTemperature: double; override;
    function  GetTemperatureReal: double;
    procedure SetTemperature(value:double); override;
+   function  GetCoolerPower: Double; override;
    function  GetCooler: boolean; override;
    procedure SetCooler(value:boolean); override;
    function GetMaxX: double; override;
@@ -274,6 +275,11 @@ begin
     except
     end;
     try
+      FhasCoolerPower:=V.Get('cangetcoolerpower').AsBool;
+    except
+      FhasCoolerPower:=false;
+    end;
+    try
       FCanSetTemperature:=V.Get('cansetccdtemperature').AsBool;
     except
       FCanSetTemperature:=false;
@@ -334,7 +340,7 @@ begin
     end;
     FStatus := devConnected;
     if Assigned(FonStatusChange) then FonStatusChange(self);
-    StatusTimer.Interval:=1000;
+    StatusTimer.Interval:=10;
     StatusTimer.Enabled:=true;
     msg(rsConnected3);
   end
@@ -389,6 +395,13 @@ begin
     if c<>stCooler then begin
        stCooler:=c;
        if Assigned(FonCoolerChange) then FonCoolerChange(stCooler);
+    end;
+    if FhasCoolerPower then begin
+      t:=GetCoolerPower;
+      if (t<>stCoolerPower) then begin
+        stCoolerPower:=t;
+        if Assigned(FonCoolerPowerChange) then FonCoolerPowerChange(stCoolerPower);
+      end;
     end;
     if FHasTemperature then begin
        t:=GetTemperatureReal;
@@ -939,6 +952,17 @@ begin
    end;
    except
     on E: Exception do msg('Set temperature error: ' + E.Message,0);
+   end;
+end;
+
+function  T_ascomrestcamera.GetCoolerPower: Double;
+begin
+ result:=NullCoord;
+   if (FStatus<>devConnected)or(not FhasCoolerPower) then exit;
+   try
+     result:=V.Get('coolerpower').AsFloat;
+   except
+     result:=NullCoord;
    end;
 end;
 

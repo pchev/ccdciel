@@ -438,6 +438,8 @@ var
   VoiceDialog,VoiceSequence,VoiceError,VoiceEmail: boolean;
   DisplayCapture,LowQualityDisplay: boolean;
   WantExif: boolean;
+  Collimation: boolean;
+  CollimationCircle: integer;
 
   procedure globalmsg(str:string);
 

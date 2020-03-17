@@ -554,3 +554,7 @@ msgstr ""
 msgid "Show completion status"
 msgstr ""
 
+#: u_hints:rsshowlastcapt
+msgid "Show captured image"
+msgstr ""
+

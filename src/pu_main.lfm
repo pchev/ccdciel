@@ -600,8 +600,9 @@ object f_main: Tf_main
         Caption = 'MenuPolarAlignment'
         OnClick = MenuPolarAlignmentClick
       end
-      object MenuItem19: TMenuItem
-        Caption = '-'
+      object MenuCollimation: TMenuItem
+        Caption = 'Collimation'
+        OnClick = MenuCollimationClick
       end
       object MenuFocuserCalibration: TMenuItem
         Caption = 'Focuser calibration'

@@ -6,15 +6,15 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ccdciel\n"
 "Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
-"POT-Creation-Date: 2020-02-02 17:30+0000\n"
+"POT-Creation-Date: 2020-03-15 14:12+0000\n"
 "PO-Revision-Date: 2018-05-14 09:37+0000\n"
 "Last-Translator: Rokar ✌ <Unknown>\n"
 "Language-Team: Kurdish <ku@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2020-02-02 17:36+0000\n"
-"X-Generator: Launchpad (build 0a62c17273454a1313f81a74a2198ec30b44c7b6)\n"
+"X-Launchpad-Export-Date: 2020-03-15 14:40+0000\n"
+"X-Generator: Launchpad (build 3a6db24bbe7280ec09bae73384238390fcc98ad3)\n"
 
 #: u_translation.rs32bitdriver
 msgid "This driver work only in 32bit, please install the 32bit version of CCDciel."
@@ -56,6 +56,10 @@ msgstr ""
 msgid "Add"
 msgstr ""
 
+#: u_translation.rsaddfitskeywo
+msgid "Add FITS keyword for DSLR EXIF tags"
+msgstr ""
+
 #: u_translation.rsaddstep
 msgid "Add step"
 msgstr ""
@@ -82,6 +86,10 @@ msgstr ""
 
 #: u_translation.rsairmass
 msgid "Airmass"
+msgstr ""
+
+#: u_translation.rsalignmenton
+msgid "Alignment on"
 msgstr ""
 
 #: u_translation.rsalignmentsta
@@ -1036,8 +1044,20 @@ msgstr ""
 msgid "Disconnect the camera before to change the configuration."
 msgstr ""
 
+#: u_translation.rsdiscover
+msgid "Discover"
+msgstr ""
+
+#: u_translation.rsdiscoverypor
+msgid "Discovery port"
+msgstr ""
+
 #: u_translation.rsdisplay
 msgid "Display"
+msgstr ""
+
+#: u_translation.rsdisplayspeed
+msgid "Display speed"
 msgstr ""
 
 #: u_translation.rsdistancetota
@@ -1090,6 +1110,10 @@ msgstr ""
 
 #: u_translation.rsdone
 msgid "done"
+msgstr ""
+
+#: u_translation.rsdonotdisplay
+msgid "Do not display images during capture"
 msgstr ""
 
 #: u_translation.rsdonothing
@@ -1176,6 +1200,10 @@ msgstr ""
 msgid "Email configuration"
 msgstr ""
 
+#: u_translation.rsemailnotific
+msgid "Email notification text"
+msgstr ""
+
 #: u_translation.rsemailon
 msgid "Email on :"
 msgstr ""
@@ -1202,6 +1230,10 @@ msgstr ""
 
 #: u_translation.rserror2
 msgid "Error"
+msgstr ""
+
+#: u_translation.rserrormessage
+msgid "Error messages"
 msgstr ""
 
 #: u_translation.rserrormountno
@@ -1748,6 +1780,10 @@ msgstr ""
 msgid "Intensity"
 msgstr ""
 
+#: u_translation.rsinteractiond
+msgid "Interaction dialog"
+msgstr ""
+
 #: u_translation.rsinterface
 msgid "Interface"
 msgstr ""
@@ -1868,6 +1904,10 @@ msgstr ""
 msgid "Loop"
 msgstr "Dubareya Bêdawîn"
 
+#: u_translation.rslowqualityim
+msgid "Low quality image scaling"
+msgstr ""
+
 #: u_translation.rsmagnifyer
 msgid "Magnifier"
 msgstr ""
@@ -1886,6 +1926,10 @@ msgstr ""
 
 #: u_translation.rsmanual
 msgid "Manual"
+msgstr ""
+
+#: u_translation.rsmanualfilter
+msgid "Manual filter change canceled"
 msgstr ""
 
 #: u_translation.rsmanualfocusa
@@ -2332,6 +2376,10 @@ msgstr ""
 msgid "Number of exposure per point"
 msgstr ""
 
+#: u_translation.rsnumberofslot
+msgid "Number of slot"
+msgstr ""
+
 #: u_translation.rsnumberofstep
 msgid "Number of steps"
 msgstr ""
@@ -2528,6 +2576,10 @@ msgstr ""
 msgid "PDF documentation"
 msgstr ""
 
+#: u_translation.rsperformance
+msgid "Performance"
+msgstr ""
+
 #: u_translation.rsperiodicauto
 msgid "Periodic auto-focus"
 msgstr ""
@@ -2688,6 +2740,10 @@ msgstr ""
 msgid "Pos."
 msgstr ""
 
+#: u_translation.rspower
+msgid "Power"
+msgstr ""
+
 #: u_translation.rsprecisionsle
 msgid "Precision slewing options"
 msgstr ""
@@ -2826,6 +2882,10 @@ msgstr ""
 
 #: u_translation.rsreferenceima
 msgid "Reference image"
+msgstr ""
+
+#: u_translation.rsrefractedpol
+msgid "Refracted pole"
 msgstr ""
 
 #: u_translation.rsrelativeincr
@@ -3276,6 +3336,10 @@ msgstr ""
 msgid "Sequence %s start immediately"
 msgstr ""
 
+#: u_translation.rssequencestep
+msgid "Sequence steps"
+msgstr ""
+
 #: u_translation.rssequencestop
 msgid "Sequence stopped by user request, no termination script will be run."
 msgstr ""
@@ -3522,6 +3586,10 @@ msgstr ""
 
 #: u_translation.rsslope
 msgid "Slope"
+msgstr ""
+
+#: u_translation.rsslot
+msgid "Slot"
 msgstr ""
 
 #: u_translation.rssmtpserverad
@@ -3984,6 +4052,10 @@ msgstr ""
 msgid "Termination options"
 msgstr ""
 
+#: u_translation.rstest
+msgid "Test"
+msgstr ""
+
 #: u_translation.rstestemailfro
 msgid "Test email from CCDciel"
 msgstr ""
@@ -4158,6 +4230,10 @@ msgstr ""
 
 #: u_translation.rstrue
 msgid "True"
+msgstr ""
+
+#: u_translation.rstruepole
+msgid "True pole"
 msgstr ""
 
 #: u_translation.rstrynexttarge
@@ -4362,6 +4438,10 @@ msgstr ""
 
 #: u_translation.rsvlearn
 msgid "V-learn"
+msgstr ""
+
+#: u_translation.rsvoiceconfigu
+msgid "Voice configuration"
 msgstr ""
 
 #: u_translation.rswait1minute

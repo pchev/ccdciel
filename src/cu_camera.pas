@@ -45,6 +45,7 @@ T_camera = class(TComponent)
     FonFilterChange: TNotifyNum;
     FonFrameChange: TNotifyEvent;
     FonTemperatureChange: TNotifyNum;
+    FonCoolerPowerChange: TNotifyNum;
     FonCoolerChange: TNotifyBool;
     FonFnumberChange: TNotifyStr;
     FonGainStatus: TNotifyEvent;
@@ -80,7 +81,7 @@ T_camera = class(TComponent)
     FTemperatureRampActive, FCancelTemperatureRamp: boolean;
     FIndiTransfert: TIndiTransfert;
     FIndiTransfertDir,FIndiTransfertPrefix: string;
-    FhasGain,FhasGainISO,FCanSetGain,FhasCfaInfo,FhasFnumber: boolean;
+    FhasGain,FhasGainISO,FCanSetGain,FhasCfaInfo,FhasFnumber,FhasCoolerPower: boolean;
     FGainMin, FGainMax: integer;
     FISOList: TStringList;
     FhasFastReadout, FhasReadOut: boolean;
@@ -106,6 +107,7 @@ T_camera = class(TComponent)
     procedure SetTemperature(value:double); virtual; abstract;
     procedure SetTemperatureRamp(value:double);
     procedure SetTemperatureRampAsync(Data: PtrInt);
+    function  GetCoolerPower: double; virtual; abstract;
     function  GetCooler: boolean; virtual; abstract;
     procedure SetCooler(value:boolean); virtual; abstract;
     procedure SetFilter(num:integer); virtual; abstract;
@@ -219,6 +221,7 @@ T_camera = class(TComponent)
     property VideoBrightness: integer read GetVideoBrightness write SetVideoBrightness;
     property VideoBrightnessRange: TNumRange read GetVideoBrightnessRange;
     property VideoPreviewDivisor: integer read GetVideoPreviewDivisor write SetVideoPreviewDivisor;
+    property CoolerPower: Double read GetCoolerPower;
     property Cooler: boolean read GetCooler write SetCooler;
     property Temperature: double read GetTemperature write SetTemperatureRamp;
     property TemperatureRampActive: Boolean read FTemperatureRampActive;
@@ -264,6 +267,7 @@ T_camera = class(TComponent)
     property onDeviceMsg: TNotifyMsg read FonDeviceMsg write FonDeviceMsg;
     property onExposureProgress: TNotifyNum read FonExposureProgress write FonExposureProgress;
     property onTemperatureChange: TNotifyNum read FonTemperatureChange write FonTemperatureChange;
+    property onCoolerPowerChange: TNotifyNum read FonCoolerPowerChange write FonCoolerPowerChange;
     property onCoolerChange: TNotifyBool read FonCoolerChange write FonCoolerChange;
     property onFnumberChange: TNotifyStr read FonFnumberChange write FonFnumberChange;
     property onFilterChange: TNotifyNum read FonFilterChange write FonFilterChange;
@@ -331,6 +335,7 @@ begin
   FImageFormat:='.fits';
   Fexptime:=0;
   FCanSetGain:=false;
+  FhasCoolerPower:=false;
   RampTimer:=TTimer.Create(self);
   RampTimer.Enabled:=false;
   RampTimer.Interval:=1000;
