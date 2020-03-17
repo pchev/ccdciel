@@ -47,7 +47,7 @@ uses
   cu_autoguider, cu_autoguider_phd, cu_autoguider_linguider, cu_autoguider_none, cu_autoguider_dither, cu_planetarium,
   cu_planetarium_cdc, cu_planetarium_samp, cu_planetarium_hnsky, pu_planetariuminfo, indiapi,
   cu_ascomrestcamera, cu_ascomrestdome, cu_ascomrestfocuser, cu_ascomrestmount, cu_manualwheel,
-  cu_ascomrestrotator, cu_ascomrestsafety, cu_ascomrestweather, cu_ascomrestwheel, pu_polaralign,
+  cu_ascomrestrotator, cu_ascomrestsafety, cu_ascomrestweather, cu_ascomrestwheel, pu_polaralign, pu_collimation,
   u_annotation, BGRABitmap, BGRABitmapTypes, LCLVersion, InterfaceBase, lclplatformdef,
   LazUTF8, Classes, dynlibs, LCLType, LMessages, IniFiles, IntfGraphics, FPImage, GraphType,
   SysUtils, LazFileUtils, Forms, Controls, Math, Graphics, Dialogs, u_speech,
@@ -114,7 +114,7 @@ type
     MenuImgStat: TMenuItem;
     MenuImage: TMenuItem;
     MenuItem15: TMenuItem;
-    MenuItem19: TMenuItem;
+    MenuCollimation: TMenuItem;
     MenuSavePicture: TMenuItem;
     MenuPolarAlignment: TMenuItem;
     MenuItem18: TMenuItem;
@@ -350,6 +350,7 @@ type
     procedure MenuCCDtempSetClick(Sender: TObject);
     procedure MenuClearBPMClick(Sender: TObject);
     procedure MenuClearRefClick(Sender: TObject);
+    procedure MenuCollimationClick(Sender: TObject);
     procedure MenuConnectClick(Sender: TObject);
     procedure MenuDarkApplyClick(Sender: TObject);
     procedure MenuDarkCameraClick(Sender: TObject);
@@ -764,6 +765,10 @@ type
     function  CheckImageInfo:boolean;
     procedure PolaralignClose(Sender: TObject);
     procedure PhotometryClose(Sender: TObject);
+    procedure CollimationStart(Sender: TObject);
+    procedure CollimationStop(Sender: TObject);
+    procedure CollimationCenterStar(Sender: TObject);
+    procedure CollimationCircleChange(Sender: TObject);
   public
     { public declarations }
   end;
@@ -1207,6 +1212,8 @@ begin
   CameraProcessingImage:=false;
   WantExif:=true;
   MagnitudeCalibration:=NullCoord;
+  Collimation:=false;
+  CollimationCircle:=4;
   ManualFilterNames:=TStringList.Create;
   ScrBmp := TBGRABitmap.Create;
   Image1 := TImgDrawingControl.Create(Self);
@@ -8665,7 +8672,7 @@ if fits.HeaderInfo.solved and
 end;
 
 procedure Tf_main.Image1Paint(Sender: TObject);
-var x,y,x1,y1,x2,y2,xr1,yr1,xr2,yr2,xxc,yyc,s,r: integer;
+var x,y,x1,y1,x2,y2,xr1,yr1,xr2,yr2,xxc,yyc,s,r,rc: integer;
     i,size: integer;
 begin
   ScrBmp.Draw(Image1.Canvas,0,0,true);
@@ -8698,9 +8705,22 @@ begin
      end;
      with Image1.Canvas do begin
         Pen.Color:=clLime;
-        Frame(x-s,y-s,x+s,y+s);
         brush.Style:=bsClear;
-        if r>0 then EllipseC(x,y,r,r);
+        if r>0 then begin
+          if Collimation then begin
+            rc:=r*2;
+            Line(x-rc,y,x+rc,y);
+            Line(x,y-rc,x,y+rc);
+            for i:=1 to CollimationCircle do begin
+               rc:=round(r*2*i/CollimationCircle);
+               EllipseC(x,y,rc,rc);
+            end;
+          end
+          else begin
+            Frame(x-s,y-s,x+s,y+s);
+            EllipseC(x,y,r,r);
+          end;
+        end;
         brush.Style:=bsSolid;
      end;
   end;
@@ -8836,6 +8856,76 @@ procedure Tf_main.PhotometryClose(Sender: TObject);
 begin
   image1.Invalidate;
 end;
+
+procedure Tf_main.MenuCollimationClick(Sender: TObject);
+var pt: TPoint;
+begin
+  if camera.Status<>devConnected then begin
+    ShowMessage(Format(rsNotConnected, [rsCamera]));
+    exit;
+  end;
+  pt.x:=0;
+  pt.y:=PanelCenter.top;
+  pt:=ClientToScreen(pt);
+  f_collimation.onStart:=@CollimationStart;
+  f_collimation.onStop:=@CollimationStop;
+  f_collimation.onCenterStar:=@CollimationCenterStar;
+  f_collimation.onCircleChange:=@CollimationCircleChange;
+  FormPos(f_collimation,pt.X,pt.Y);
+  f_collimation.Show;
+end;
+
+procedure Tf_main.CollimationCenterStar(Sender: TObject);
+begin
+  if Collimation then begin
+    CollimationStop(Sender);
+    wait(2);
+  end;
+  if not f_visu.BullsEye then f_visu.BtnBullsEyeClick(Sender);
+  f_preview.Loop:=true;
+  if not f_preview.Running then begin
+    f_preview.Running:=true;
+    StartPreviewExposure(self);
+  end;
+end;
+
+procedure Tf_main.CollimationCircleChange(Sender: TObject);
+begin
+  if Collimation then begin
+    CollimationCircle:=f_collimation.CircleNum.Value;
+  end;
+end;
+
+procedure Tf_main.CollimationStart(Sender: TObject);
+begin
+  if not Collimation then begin
+    Collimation:=true;
+    if f_preview.Running then begin
+      f_preview.Running:=false;
+      f_preview.Loop:=false;
+      StopExposure(Sender);
+      wait(2);
+    end;
+    if f_visu.BullsEye then f_visu.BtnBullsEyeClick(Sender);
+    Collimation:=true;
+    CollimationCircle:=f_collimation.CircleNum.Value;
+    FocusStart(nil);
+  end;
+end;
+
+procedure Tf_main.CollimationStop(Sender: TObject);
+begin
+ if Collimation then begin
+   Collimation:=false;
+   FocusStop(nil);
+ end
+ else if f_preview.Running then begin
+   f_preview.Running:=false;
+   f_preview.Loop:=false;
+   StopExposure(Sender);
+ end;
+end;
+
 
 procedure Tf_main.MenuAscomSetupClick(Sender: TObject);
 {$ifdef mswindows}
@@ -9623,7 +9713,7 @@ if  f_capture.Running  then begin
   f_starprofile.ChkFocusDown(false);
   exit;
  end;
-if AutofocusMode=afPlanet then begin
+if (AutofocusMode=afPlanet)and(Sender<>nil) then begin
   SaveFocusZoom:=f_visu.Zoom;
   f_preview.StackPreview.Checked:=false;
   if not f_preview.Loop then f_preview.Loop:=true;
@@ -9670,7 +9760,7 @@ else begin
        f_preview.Running:=true;
        StartPreviewExposure(self);
      end;
-     NewMessage(rsFocusAidStar,1);
+     if (Sender<>nil) then NewMessage(rsFocusAidStar,1);
   end
   else begin
     f_starprofile.ChkFocusDown(false);
@@ -9694,8 +9784,8 @@ begin
    f_starprofile.StarY:=-1;
    f_starprofile.FindStar:=false;
    StartPreviewExposure(nil);
-   NewMessage(rsFocusAidStop,1);
-   if focuser.hasTemperature then NewMessage(Format(rsFocuserTempe, [FormatFloat(f1, TempDisplay(TemperatureScale,FocuserTemp))+TempLabel]),2);
+   if Sender<>nil then NewMessage(rsFocusAidStop,1);
+   if (Sender<>nil)and focuser.hasTemperature then NewMessage(Format(rsFocuserTempe, [FormatFloat(f1, TempDisplay(TemperatureScale,FocuserTemp))+TempLabel]),2);
 end;
 
 procedure Tf_main.LoadFocusStar(focusmag:integer);
@@ -10330,6 +10420,8 @@ begin
  end;
 
 Procedure Tf_main.DoAutoFocus;
+var c,dx,dy,vmax: double;
+    sx,sy,sw: integer;
 begin
 if (fits.HeaderInfo.valid)and(Preview or Capture) then begin // not on control exposure
   {$ifdef debug_raw}writeln(FormatDateTime(dateiso,Now)+blank+'check autofocus');{$endif}
@@ -10338,7 +10430,33 @@ if (fits.HeaderInfo.valid)and(Preview or Capture) then begin // not on control e
     f_starprofile.Autofocus(fits,round(f_starprofile.StarX),round(f_starprofile.StarY),Starwindow div fits.HeaderInfo.BinX)
   else if (AutofocusMode=afPlanet) and (f_starprofile.ChkFocus.Down) then
     f_starprofile.ShowSharpness(fits)
-  else if f_starprofile.FindStar or f_starprofile.ChkFocus.Down then
+  else if Collimation or f_starprofile.ChkFocus.Down then begin
+    c:=(Focuswindow div fits.HeaderInfo.BinX)/2;
+    f_starprofile.showprofile(fits,round(f_starprofile.StarX),round(f_starprofile.StarY),Starwindow div fits.HeaderInfo.BinX,fits.HeaderInfo.focallen,fits.HeaderInfo.pixsz1);
+    if not f_starprofile.FindStar then begin
+      // try to re-acquire star in full window
+      sw:=starwindow div (2*fits.HeaderInfo.BinX);
+      fits.FindBrightestPixel(round(c),round(c),round(2*c)-sw,sw,sx,sy,vmax);
+      if vmax>0 then
+        f_starprofile.showprofile(fits,sx,sy,Starwindow div fits.HeaderInfo.BinX,fits.HeaderInfo.focallen,fits.HeaderInfo.pixsz1);
+    end;
+    // recenter star
+    sx:=StrToIntDef(f_frame.FX.Text,-1);
+    sy:=StrToIntDef(f_frame.FY.Text,-1);
+    if f_starprofile.FindStar  then begin
+      dx:=f_starprofile.StarX - c;
+      dy:=f_starprofile.StarY - c;
+      if (abs(dx)>2)or(abs(dy)>2) then begin
+        sx:=sx+round(dx);
+        sy:=sy-round(dy);
+        f_frame.FX.Text:=IntToStr(sx);
+        f_frame.FY.Text:=IntToStr(sy);
+        f_starprofile.StarX:=c;
+        f_starprofile.StarY:=c;
+      end;
+    end;
+  end
+  else if f_starprofile.FindStar  then
     // only refresh star profile
     f_starprofile.showprofile(fits,round(f_starprofile.StarX),round(f_starprofile.StarY),Starwindow div fits.HeaderInfo.BinX,fits.HeaderInfo.focallen,fits.HeaderInfo.pixsz1);
 end;

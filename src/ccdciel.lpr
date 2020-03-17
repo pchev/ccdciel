@@ -51,7 +51,7 @@ uses
   cu_ascomrestcamera, cu_ascomrestwheel, cu_ascomrestweather,
   cu_ascomrestsafety, cu_ascomrestrotator, cu_ascomrestmount,
   cu_ascomrestfocuser, cu_ascomrestdome, cu_ascomrest, cu_autoguider_dither,
-  u_hints, pu_goto, pu_photometry, u_libraw, pu_polaralign, pu_keyboard, cu_alpacamanagement, pu_compute, cu_manualwheel, u_speech;
+  u_hints, pu_goto, pu_photometry, u_libraw, pu_polaralign, pu_keyboard, cu_alpacamanagement, pu_compute, cu_manualwheel, u_speech, pu_collimation;
 
 {$R *.res}
 
@@ -86,6 +86,7 @@ begin
   Application.CreateForm(Tf_photometry, f_photometry);
   Application.CreateForm(Tf_polaralign, f_polaralign);
   Application.CreateForm(Tf_compute, f_compute);
+  Application.CreateForm(Tf_collimation, f_collimation);
   Application.Run;
 end.
 

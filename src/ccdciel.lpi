@@ -300,7 +300,7 @@
         <PackageName Value="LCL"/>
       </Item11>
     </RequiredPackages>
-    <Units Count="104">
+    <Units Count="105">
       <Unit0>
         <Filename Value="ccdciel.lpr"/>
         <IsPartOfProject Value="True"/>
@@ -824,6 +824,7 @@
         <Filename Value="pu_compute.pas"/>
         <IsPartOfProject Value="True"/>
         <ComponentName Value="f_compute"/>
+        <HasResources Value="True"/>
         <ResourceBaseClass Value="Form"/>
       </Unit101>
       <Unit102>
@@ -834,6 +835,12 @@
         <Filename Value="u_speech.pas"/>
         <IsPartOfProject Value="True"/>
       </Unit103>
+      <Unit104>
+        <Filename Value="pu_collimation.pas"/>
+        <IsPartOfProject Value="True"/>
+        <ComponentName Value="f_collimation"/>
+        <ResourceBaseClass Value="Form"/>
+      </Unit104>
     </Units>
   </ProjectOptions>
   <CompilerOptions>

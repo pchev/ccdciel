@@ -1249,6 +1249,9 @@ resourcestring
   rsDiscover = 'Discover';
   rsDiscoveryPor = 'Discovery port';
   rsPower = 'Power';
+  rsCollimation = 'Collimation';
+  rsNumberOfCirc = 'Number of circles';
+  rsCenterABrigh = 'Center a bright star. %s Defocus until the ring are clearly visible. %s Click Start button. %s Adjust the collimation. %s The star must be centered in full frame for the final adjustement.';
 
 implementation
 
