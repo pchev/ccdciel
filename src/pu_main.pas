@@ -2903,7 +2903,7 @@ end;
 procedure Tf_main.Image1MouseWheel(Sender: TObject; Shift: TShiftState;
   WheelDelta: Integer; MousePos: TPoint; var Handled: Boolean);
 var
-  zf: double;
+  zf,r1,r2: double;
 begin
 if (fits.HeaderInfo.naxis>0) then begin
   if LockMouseWheel then
@@ -2915,7 +2915,11 @@ if (fits.HeaderInfo.naxis>0) then begin
       zf := 1.25
     else
       zf := 0.8;
-    if ImgZoom=0 then imgzoom:=ZoomMin;
+    if ImgZoom=0 then begin
+      r1:=ScrBmp.Width/imabmp.Width;
+      r2:=ScrBmp.Height/imabmp.Height;
+      ImgZoom:=minvalue([r1,r2]);
+    end;
     ImgZoom:=ImgZoom*zf;
     if ImgZoom>ZoomMax then ImgZoom:=ZoomMax;
     if ImgZoom<ZoomMin then ImgZoom:=ZoomMin;
