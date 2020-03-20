@@ -10424,7 +10424,7 @@ begin
  end;
 
 Procedure Tf_main.DoAutoFocus;
-var c,dx,dy,vmax: double;
+var c,dx,dy,vmax,dm: double;
     sx,sy,sw: integer;
 begin
 if (fits.HeaderInfo.valid)and(Preview or Capture) then begin // not on control exposure
@@ -10441,8 +10441,18 @@ if (fits.HeaderInfo.valid)and(Preview or Capture) then begin // not on control e
       // try to re-acquire star in full window
       sw:=starwindow div (2*fits.HeaderInfo.BinX);
       fits.FindBrightestPixel(round(c),round(c),round(2*c)-sw,sw,sx,sy,vmax);
-      if vmax>0 then
+      if vmax>0 then begin
         f_starprofile.showprofile(fits,sx,sy,Starwindow div fits.HeaderInfo.BinX,fits.HeaderInfo.focallen,fits.HeaderInfo.pixsz1);
+        if Collimation and (not f_starprofile.FindStar) then begin
+          // for collimation, automatically increase the detection window
+          dm:=((Focuswindow/2)-Starwindow)/3;
+          sw:=round(Starwindow+dm);
+          repeat
+             f_starprofile.showprofile(fits,sx,sy,sw div fits.HeaderInfo.BinX,fits.HeaderInfo.focallen,fits.HeaderInfo.pixsz1);
+             sw:=round(sw+dm);
+          until f_starprofile.FindStar or (sw>(Focuswindow/2));
+        end;
+      end;
     end;
     // recenter star
     sx:=StrToIntDef(f_frame.FX.Text,-1);
