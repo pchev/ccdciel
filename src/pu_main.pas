@@ -5895,6 +5895,10 @@ var ra,de,err:double;
     tra,tde,objn: string;
 begin
  if (AllDevicesConnected) and (mount.Status=devConnected) then begin
+   if Mount.Park then begin
+     NewMessage(rsTheTelescope);
+     exit;
+   end;
    if  f_preview.Running then begin
      f_preview.Loop:=false;
      f_preview.BtnPreviewClick(nil);
@@ -5916,10 +5920,6 @@ begin
    f_goto.ButtonOK.Caption:=rsGoto;
    f_goto.ShowModal;
    if f_goto.ModalResult=mrok then begin
-     if Mount.Park then begin
-        NewMessage(rsTheTelescope);
-        mount.Park:=false;
-     end;
      CancelAutofocus:=false;
      tra:= f_goto.Ra.Text;
      tde:=f_goto.De.Text;
@@ -11059,6 +11059,10 @@ var ra,de,err:double;
     tra,tde,objn: string;
 begin
  if planetarium.Connected and (AllDevicesConnected)and(Mount.Status=devConnected)and(Camera.Status=devConnected) then begin
+    if Mount.Park then begin
+      NewMessage(rsTheTelescope);
+      exit;
+    end;
     if  f_preview.Running then begin
      f_preview.Loop:=false;
      f_preview.BtnPreviewClick(nil);
@@ -11080,10 +11084,6 @@ begin
     FormPos(f_planetariuminfo,mouse.CursorPos.X,mouse.CursorPos.Y);
     f_planetariuminfo.ShowModal;
     if f_planetariuminfo.ModalResult=mrOK then begin
-      if Mount.Park then begin
-         NewMessage(rsTheTelescope);
-         mount.Park:=false;
-      end;
       CancelAutofocus:=false;
       tra:= f_planetariuminfo.Ra.Text;
       tde:=f_planetariuminfo.De.Text;
