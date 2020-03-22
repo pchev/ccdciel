@@ -8842,6 +8842,14 @@ begin
     ShowMessage(Format(rsNotConnected, [rsCamera]));
     exit;
   end;
+  if mount.Status<>devConnected then begin
+    ShowMessage(Format(rsNotConnected, [rsMount]));
+    exit;
+  end;
+  if mount.Park then begin
+    NewMessage(rsTheTelescope);
+    exit;
+  end;
   if f_preview.Loop then f_preview.BtnLoopClick(nil);
   f_polaralign.Mount:=mount;
   f_polaralign.Wheel:=wheel;
