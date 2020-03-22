@@ -1,0 +1,575 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: ccdceil\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2020-03-22 12:30+0000\n"
+"PO-Revision-Date: 2020-03-22 11:49+0000\n"
+"Last-Translator: Stanislav Holub <Unknown>\n"
+"Language-Team: Czech <cz@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Launchpad-Export-Date: 2020-03-22 12:36+0000\n"
+"X-Generator: Launchpad (build 3a6db24bbe7280ec09bae73384238390fcc98ad3)\n"
+"Language: cs\n"
+
+#: u_hints.rsactivateback
+msgid "Activate backlash compensation.%sLet this disabled if your focuser driver include backlash compensation."
+msgstr "Aktivovat kompenzaci vůle.%sNechte tuto možnost vypnutou, pokud váš ovladač zaostřovače zahrnuje již kompenzaci vůle v sobě."
+
+#: u_hints.rsactivatethes
+msgid "Activate the start time"
+msgstr "Aktivovat počáteční čas"
+
+#: u_hints.rsactivatethes2
+msgid "Activate the stop time"
+msgstr "Aktivat čas zastavení"
+
+#: u_hints.rsactiveonlyif
+msgid "Active only if the target use astrometry positioning%sand the exposure time is longer than the astrometry timeout"
+msgstr "Aktivní pouze v případě, že cíl používá umístění astrometrie%sa doba expozice je delší než časový limit astrometrie"
+
+#: u_hints.rsaddaflatsequ
+msgid "Add a flat sequence to the list."
+msgstr "Přidat Flat sekvenci do seznamu."
+
+#: u_hints.rsaddanobjectt
+msgid "Add an object to the list"
+msgstr "Přidat objekt do seznamu"
+
+#: u_hints.rsaddascriptto
+msgid "Add a script to the list."
+msgstr "Přidat skript do seznamu."
+
+#: u_hints.rsadescription
+msgid "A description for this step"
+msgstr "Popis tohoto kroku"
+
+#: u_hints.rsafterlearnin
+msgid "After learning is completed you can use this cursor to better adjust to the linear part of the curve.%sThe fit must be particularly good near the horizontal blue line position."
+msgstr "Po dokončení učení můžete pomocí tohoto kurzoru lépe přizpůsobit lineární část křivky.%sPřizpůsobení musí být obzvláště dobré blízko vodorovné polohy modré čáry."
+
+#: u_hints.rsatemporarydi
+msgid "A temporary directory for work files. Be sure it contain only ASCII character and no space"
+msgstr "Dočasný adresář pro pracovní soubory. Ujistěte se, že obsahuje pouze znak ASCII a žádné mezery"
+
+#: u_hints.rsautofocusatt
+msgid "Autofocus at the start of this step"
+msgstr "Automatické zaostření na začátku tohoto kroku"
+
+#: u_hints.rsautofocusift
+msgid "Autofocus if the temperature change is greater than the configured value"
+msgstr "Automatické zaostření, pokud je změna teploty větší než nakonfigurovaná hodnota"
+
+#: u_hints.rsautoguiderst
+msgid "Autoguider status"
+msgstr "Stav autopointování"
+
+#: u_hints.rsbesuretopaus
+msgid "Be sure to pause guiding when using a OAG. You can continue guiding when using a separate guide scope."
+msgstr "Při používání OAG nezapomeňte pozastavit pointaci. Při použití samostatného rozsahu průvodce můžete pokračovat v pointování."
+
+#: u_hints.rscamerabinnin
+msgid "Camera binning"
+msgstr "Kamera binning"
+
+#: u_hints.rscameragain
+msgid "Camera gain"
+msgstr "Kamera zisk"
+
+#: u_hints.rscameraiso
+msgid "Camera ISO"
+msgstr "Kamera ISO"
+
+#: u_hints.rscamerapositi
+msgid "Camera position angle"
+msgstr "Úhel poloha kamery"
+
+#: u_hints.rsclearthesequ
+msgid "Clear the sequence completion status"
+msgstr "Vymazat stav dokončení sekvence"
+
+#: u_hints.rscleartimecon
+msgid "Clear time constraint"
+msgstr "Smazat časové omezení"
+
+#: u_hints.rsclicktosetva
+msgid "Click to set value for all the targets"
+msgstr "Kliknutím nastavit hodnotu pro všechny cíle"
+
+#: u_hints.rsclicktosortb
+msgid "Click to sort by %s"
+msgstr "Kliknutím seřadit %s"
+
+#: u_hints.rsconnectallde
+msgid "Connect all devices"
+msgstr "Připojit všechna zařízení"
+
+#: u_hints.rscontrolhowco
+msgid "Control how complete target are managed when the whole list is repeated"
+msgstr "Určit, jak bude celý cíl spravován při opakování celého seznamu"
+
+#: u_hints.rscopythecurre
+msgid "Copy the current profile to a new one.%sThis also copy every program preference to the new profile."
+msgstr "Zkopírovat aktuální profil do nového.%sToto také zkopíruje všechny preference programu do nového profilu."
+
+#: u_hints.rscopytheseque
+msgid "Copy the sequence to a new one. Completion status is reinitialized"
+msgstr "Zkopírovat sekvenci na novou. Stav dokončení je znovu inicializován"
+
+#: u_hints.rscreateanewem
+msgid "Create a new empty profile.%sWarning this also clear every program preference for this new profile.%sUse the Copy button if you want to configure a different equipment but keep the program options."
+msgstr "Vytvořit nový prázdný profil.%sVarování! Tím se také vymažou všechna nastavení programu pro tento nový profil.%sPomocí tlačítka Kopírovat nakonfigurujte další zařízení, ale ponechte nastavení programu."
+
+#: u_hints.rscreateanewse
+msgid "Create a new sequence"
+msgstr "Vytvořit novou sekvenci"
+
+#: u_hints.rscurrentteles
+msgid "Current telescope Right Ascension"
+msgstr "Aktuální Rekrascence dalekohledu"
+
+#: u_hints.rscurrentteles2
+msgid "Current telescope Declination"
+msgstr "Aktuální Deklinace dalekohledu"
+
+#: u_hints.rscurrentteles3
+msgid "Current telescope side of pier"
+msgstr "Aktuální poloha dalekohledu na pilíři"
+
+#: u_hints.rsdeletethesel
+msgid "Delete the selected row from the list."
+msgstr "Odstranit vybraný řádek ze seznamu."
+
+#: u_hints.rsdeletetheseq
+msgid "Delete the sequence file"
+msgstr "Odstranit soubor sekvence"
+
+#: u_hints.rsdeletethispr
+msgid "Delete this profile and associated program preference."
+msgstr "Odstraňit tento profil a přidružené předvolby programu."
+
+#: u_hints.rsditheraftert
+msgid "Dither on the specified frame interval"
+msgstr "Ditherink v zadaném intervalu snímku"
+
+#: u_hints.rsdonotmovethe
+msgid "Do not move the telescope before to start imaging."
+msgstr "Před zahájením zobrazování nepohybovat dalekohledem."
+
+#: u_hints.rsdontwaitfort
+msgid "Process the other targets in the list instead of waiting for the start condition(s) to be met. To be used with option \"Repeat the whole list\""
+msgstr "Zpracovat ostatní cíle v seznamu místo čekání na splnění podmínek zahájení. Pro použití s možností „Opakovat celý seznam“"
+
+#: u_hints.rsdragdroptoch
+msgid "Drag&drop to change order"
+msgstr "Přetažením změníte pořadí"
+
+#: u_hints.rseditthecurre
+msgid "Edit the current sequence"
+msgstr "Upravtit aktuální sekvenci"
+
+#: u_hints.rsfixthevisual
+msgid "Fix the visualisation threshold to the image data range, 100% of the histogram."
+msgstr "Prahová hodnota vizualizace na snímku opravte datovou oblast, 100% histogramu."
+
+#: u_hints.rsgammaoftheim
+msgid "Gamma of the image display"
+msgstr "Gama zobrazení snímku"
+
+#: u_hints.rsgetthecoordi
+msgid "Get the coordinates and object name from the planetarium"
+msgstr "Získat souřadnice a jméno objektu z planetária"
+
+#: u_hints.rsgetthecoordi2
+msgid "Get the coordinates from the internal annotation database"
+msgstr "Získat souřadnice z interní anotační databáze"
+
+#: u_hints.rsglobalalpaca
+msgid "Global ALPACA server parameters"
+msgstr "Globální parametry serveru ALPACA"
+
+#: u_hints.rsglobalindise
+msgid "Global INDI server parameters"
+msgstr "Globální parametry serveru INDI"
+
+#: u_hints.rshistogramoft
+msgid "Histogram of the current image.%sClick and move to adjust the visualisation threshold."
+msgstr "Histogram aktuálního snímku.%sKliknutím a posunutím upravit práh vizualizace."
+
+#: u_hints.rshistoryofthe
+msgid "History of the last FWHM and Intensity measurement"
+msgstr "Historie posledního měření FWHM a jasu"
+
+#: u_hints.rsifcheckednoc
+msgid "If checked no confirmation dialog will be presented and failed operation will abort the current step."
+msgstr "Pokud je tato možnost povolena, nezobrazí se žádné potvrzovací dialogové okno a jakékoli neúspěšné operace zruší aktuální krok."
+
+#: u_hints.rsiftheimageis
+msgid "If the image is now focused, click this button to get the current focuser position"
+msgstr "Pokud je teď snímek zaostřen, kliknutím na toto tlačítko získáte aktuální polohu zaostřovače"
+
+#: u_hints.rsincrementste
+msgid "Increment step for the inward or outward movement"
+msgstr "Krok zvýšení pro pohyb dovnitř nebo ven"
+
+#: u_hints.rsinfinitenumb
+msgid "Infinite number of repetition"
+msgstr "Nekonečný počet opakování"
+
+#: u_hints.rsinspectthere
+msgid "Inspect the distribution of the HFD across the image"
+msgstr "Přehled rozdělení HFD v celém snímku"
+
+#: u_hints.rsinvertimaged
+msgid "Invert image display"
+msgstr "Invertovat zobrazení snímku"
+
+#: u_hints.rskeepthegraph
+msgid "Keep the graph visible after autofocus is completed"
+msgstr "Po dokončení automatického zaostřování ponechat graf viditelný"
+
+#: u_hints.rsletblankford
+msgid "Let blank for default system search path"
+msgstr "Nechat prázdné pro výchozí cestu pro vyhledávání systému"
+
+#: u_hints.rslistofprofil
+msgid "List of profile for every different equipment configuration"
+msgstr "Seznam profilů pro různé konfigurace zařízení"
+
+#: u_hints.rsloadasequenc
+msgid "Load a sequence file"
+msgstr "Načíst soubor sekvence"
+
+#: u_hints.rslooppreviewe
+msgid "Loop preview exposures"
+msgstr "Expozice náhledu smyčky"
+
+#: u_hints.rsmaketesttode
+msgid "Make test to determine the most performant option depending on your computer.%s(Network is mandatory if the camera is connected to a remote Indi server)"
+msgstr "Provést test, abyste určili nejúčinnější možnost v závislosti na počítači.%s(Pokud je kamera připojena ke vzdálenému serveru Indi, je síť povinná)"
+
+#: u_hints.rsmovefocuseri
+msgid "Move focuser inward"
+msgstr "Pohyb zaostřovače dovnitř"
+
+#: u_hints.rsmovefocusero
+msgid "Move focuser outward"
+msgstr "Pohyb zaostřovače ven"
+
+#: u_hints.rspausethesequ
+msgid "Pause the sequence after the current exposure is complete"
+msgstr "Po dokončení aktuální expozice pozastavit sekvenci"
+
+#: u_hints.rspixelbinning
+msgid "Pixel binning"
+msgstr ""
+
+#: u_hints.rsplanetariums2
+msgid "Planetarium status"
+msgstr "Stav planetária"
+
+#: u_hints.rspriortoslewi
+msgid "Prior to slewing retrieve actual comet or asteroid coordinates from planetarium program.%sPlanetarium program should be connected and following system time.%sTarget name should be searchable within the planetarium."
+msgstr "Načtení souřadnic komet nebo asteroidů z programu planetária.%sProgram planetária by měl být připojen a nastaven na systémový čas.%sCílové jméno by mělo být vyhledatelné v planetáriu."
+
+#: u_hints.rsredoautofocu
+msgid "Redo autofocus after a number of frames"
+msgstr "Opakovat automatické zaostření po několika snímcích"
+
+#: u_hints.rsrepeatthepla
+msgid "Repeat the plan for this object.%sSet to zero to not process this target."
+msgstr "Opakovat plán pro tento objekt.%sNastavení na nulu, se tento cíl nebude nezpracovával."
+
+#: u_hints.rsrepeatthewho2
+msgid "Repeat the whole list a number of time."
+msgstr "Opakovat celý seznam několikrát."
+
+#: u_hints.rssavethelista
+msgid "Save the list and close this window."
+msgstr "Seznam uložit a zavřít toto okno."
+
+#: u_hints.rssavethelistw
+msgid "Save the list with a new name and close this window."
+msgstr "Seznam uložit pod novým názvem a zavřít toto okno."
+
+#: u_hints.rsselecttheinf
+msgid "Select the information used to make the image file name"
+msgstr "Vyberte informace použité k vytvoření názvu souboru snímku"
+
+#: u_hints.rsselecttheinf2
+msgid "Select the information used to make the image directory name"
+msgstr "Vyberte informace použité k vytvoření názvu adresáře snímku"
+
+#: u_hints.rssetabsolutef
+msgid "Set absolute focuser position"
+msgstr "Nastavit absolutní polohu zaostřovače"
+
+#: u_hints.rssetheretheac
+msgid "Set here the action to take after the sequence is terminated"
+msgstr "Nastavit akci, která má být provedena po ukončení sekvence"
+
+#: u_hints.rssetthestartt
+msgid "Set the start time at astronomical dusk, recomputed for the date you run the sequence."
+msgstr "Nastavit počáteční čas na astronomický soumrak, přepočítaný na datum spuštění sekvence."
+
+#: u_hints.rssetthestopti
+msgid "Set the stop time at astronomical dawn, recomputed for the date you run the sequence."
+msgstr "Nastavit čas zastavení na astronomický úsvit, přepočítaný na datum spuštění sekvence."
+
+#: u_hints.rsshowbullseye
+msgid "Show bulls eye"
+msgstr "Zobrazit zaměřovač"
+
+#: u_hints.rsshowcompleti
+msgid "Show completion status"
+msgstr "Zobrazit stav dokončení"
+
+#: u_hints.rsshowhighligh
+msgid "Show highlight and shadow clipping"
+msgstr "Zobrazit oříznutí světel a stínů"
+
+#: u_hints.rsshowlastcapt
+msgid "Show captured image"
+msgstr ""
+
+#: u_hints.rsshowofthehis
+msgid "Show %s of the histogram"
+msgstr "Zobrazí %s histogram"
+
+#: u_hints.rsshowtheoptio
+msgid "Show the option to stack the preview frame in real time.%sThis feature is normally use for demonstration in public event.%sYou can let this option disabled to not risk an unwanted use during your imaging session."
+msgstr "Zobrazí možnost automatické skládání náhledu v reálném čase.%sTato funkce je obvykle určena pro použití jako demo při veřejných akcích.%sTuto možnost můžete nechat vypnutou, abyste vyloučili riziko nežádoucího používání během relace."
+
+#: u_hints.rssolvethecurr
+msgid "Solve the current image and get the center coordinates"
+msgstr "Vyřešit aktuální snímek a získat středové souřadnice"
+
+#: u_hints.rssolvethecurr2
+msgid "Solve the current image and get the rotation of the image"
+msgstr "Vyřešit aktuální snímek a získat jeho rotaci"
+
+#: u_hints.rsstacktheprev
+msgid "Stack the preview frames to a single image.%sA new stack is started when you start a loop or if you uncheck this button."
+msgstr "Skládání snímků náhledu do jednoho obrazu.%sNové skládání se spustí, když spustíte smyčku nebo zrušíte zaškrtnutí tohoto tlačítka."
+
+#: u_hints.rsstartaprevie
+msgid "Start a preview loop when waiting for the delay to expire."
+msgstr "Začít smyčku náhledu, když se čeká na vypršení prodlevy."
+
+#: u_hints.rsstartimagelo
+msgid "Start image loop centered on selected star"
+msgstr "Počáteční smyčka se středem vybrané hvězdy"
+
+#: u_hints.rsstartoneprev
+msgid "Start one preview exposure"
+msgstr "Zahajit jednu expozici náhledu"
+
+#: u_hints.rsstarttheauto
+msgid "Start the auto-focus procedure"
+msgstr "Spustit postup automatického ostření"
+
+#: u_hints.rsstartthecapt
+msgid "Start the capture sequence"
+msgstr "Spustit sekvenci snímání"
+
+#: u_hints.rsstartthesequ
+msgid "Start the sequence execution"
+msgstr "Spustit provádění sekvence"
+
+#: u_hints.rsstartthevcur
+msgid "Start the Vcurve learning process"
+msgstr "Spustit proces učení V-křivky"
+
+#: u_hints.rsstarttimecap
+msgid "Start time capturing (MC=Meridian crossing)"
+msgstr "Čas začátku záznamu (MC = průchod poledníku)"
+
+#: u_hints.rsstartx
+msgid "Start X"
+msgstr "Hvězda X"
+
+#: u_hints.rsstarty
+msgid "Start Y"
+msgstr "Hvězda Y"
+
+#: u_hints.rsstayatthetar
+msgid "Stay at the target position for autofocus.%sA medium bright star should be visible.%sElse slew to a bright database star."
+msgstr "Zůstat v cílové poloze pro automatické zaostření.%sMěla by být viditelná středně jasná hvězda.%sJinak najedu do jasné hvězdné databáze."
+
+#: u_hints.rsstepplanfor
+msgid "Step plan for capturing the images.%sThe step plan details are specified in the list below"
+msgstr "Plán kroků pro pořízení snímku.%sPodrobnosti plánu kroků jsou uvedeny v níže uvedeném seznamu"
+
+#: u_hints.rsstopatthisti
+msgid "Stop at this time even if the processing is not finished."
+msgstr "V tuto chvíli zastavit, i když zpracování není dokončeno."
+
+#: u_hints.rsstoptheseque
+msgid "Stop the sequence execution"
+msgstr "Zastavit provádění sekvence"
+
+#: u_hints.rsstoptimecapt
+msgid "Stop time capturing (MC=Meridian crossing)"
+msgstr "Čas zastavení záznamu (MC = průchod poledníku)"
+
+#: u_hints.rstargetpositi
+msgid "Target position (J2000)"
+msgstr "Cílová pozice (J2000)"
+
+#: u_hints.rsthebasefolde
+msgid "The base folder where the images are recorded"
+msgstr "Základní složka, kam se ukládají snímky"
+
+#: u_hints.rsthedirection
+msgid "The direction the focuser will always finish to move.%sIf using auto-focus set the same move direction."
+msgstr "Směr ostření vždy dokončí pohyb.%sPokud používáte automatické ostření, nastavte stejný směr pohybu."
+
+#: u_hints.rstheelbrusima
+msgid "The Elbrus Images folder as set in the Elbrus parameters."
+msgstr "Složka Snímků Elbrus, jak je nastavena v parametrech Elbrus."
+
+#: u_hints.rsthefullwidth
+msgid "The Full Width at Half Maximum value in pixels / arc seconds"
+msgstr "Hodnota FWHM v pixelech / obloukových sekundách"
+
+#: u_hints.rsthehalffluxd
+msgid "The Half Flux Diameter value in pixels"
+msgstr "Hodnota HFD v pixelech"
+
+#: u_hints.rsthehorizonpr
+msgid "The horizon profile used to compute object visibility. This file is the same as used in Cartes du Ciel"
+msgstr "Profil horizontu používaný k výpočtu viditelnosti objektu. Tento soubor je stejný jako v Cartes du Ciel"
+
+#: u_hints.rsthelistoftar
+msgid "The list of target to process in sequence."
+msgstr "Seznam cílů, které mají být zpracovávány postupně."
+
+#: u_hints.rsthemagnitude
+msgid "The magnitude of the star used to run the autofocus.%sUsing a faint star can minimize the telescope movement but prefer the brightest to avoid trouble with nearby stars."
+msgstr "Velikost hvězdy použité pro automatické zaostřování.%sPoužití slabé hvězdy může minimalizovat pohyb dalekohledu, ale dává přednost nejjasnějším, aby se předešlo problémům se sousedními hvězdami."
+
+#: u_hints.rsthemaximumin
+msgid "The maximum intensity value"
+msgstr "Maximální hodnota intenzity"
+
+#: u_hints.rstheminimalob
+msgid "The minimal object elevation to start or end observing"
+msgstr "Minimální výška objektu pro zahájení nebo ukončení pozorování"
+
+#: u_hints.rsthenumberofi
+msgid "The number of images to take"
+msgstr "Počet snímků"
+
+#: u_hints.rsthenumberofi2
+msgid "The number of image to take before dither"
+msgstr "Počet snímků, které mají být pořízeny před ditherinkem"
+
+#: u_hints.rsthenumberofi3
+msgid "The number of image to take before autofocus"
+msgstr "Počet snímků pořízených před automatickým zaostřením"
+
+#: u_hints.rsthenumberofi4
+msgid "The number of image for this step"
+msgstr "Počet snímků pro tento krok"
+
+#: u_hints.rstheobjectnam
+msgid "The object name for use in FITS header and file name"
+msgstr "Jméno objektu pro použití v hlavičce FITS a názvu souboru"
+
+#: u_hints.rstheobservato
+msgid "The observatory name for inclusion in the FITS header"
+msgstr "Jméno observatoře pro zahrnutí do záhlaví FITS"
+
+#: u_hints.rstheobservern
+msgid "The observer name for inclusion in the FITS header"
+msgstr "Jméno pozorovatele pro zahrnutí do záhlaví FITS"
+
+#: u_hints.rsthepreferedf
+msgid "The preferred focuser direction for autofocus."
+msgstr "Preferovaný směr ostření pro automatické zaostřování.."
+
+#: u_hints.rstheselecteds
+msgid "The selected star luminosity profile"
+msgstr "Vybraný profil jasu hvězd"
+
+#: u_hints.rsthesignalnoi
+msgid "The Signal/Noise ratio"
+msgstr "Poměr signál / šum"
+
+#: u_hints.rsthetargetnam
+msgid "The target name to be used for capturing the images"
+msgstr "Cílové jméno, které se použije pro pořízení snímků"
+
+#: u_hints.rsthetelescopenamefori
+msgid "The telescope name for inclusion in the FITS header"
+msgstr "Jméno dalekohledu pro zahrnutí do záhlaví FITS"
+
+#: u_hints.rsthetemporary
+msgid "The temporary RAM disk used to transfer the images from the Indi server"
+msgstr "Dočasný disk RAM používaný k přenosu snímů ze serveru Indi"
+
+#: u_hints.rsthetypeoffra
+msgid "The type of frame"
+msgstr "Typ snímku"
+
+#: u_hints.rstheunixpathe
+msgid "The Unix path equivalent to the Elbrus Images folder."
+msgstr "Cesta Unix ekvivalentní ke složce Elbrus Images."
+
+#: u_hints.rsthisallowtor
+msgid "This allow to restart an interrupted sequence at the point it was stopped"
+msgstr "To umožňuje restartování přerušené sekvence v bodě, kdy byla zastavena"
+
+#: u_hints.rstimefrommeri
+msgid "Time from meridian transit (hour angle)"
+msgstr "Čas přechodu poledníku (hodinový úhel)"
+
+#: u_hints.rstrytocorrect
+msgid "Try to correct for focuser slippage since the last Vcurve learning.%sBeware you must set the focuser temperature correction and the filters offset before to use this option."
+msgstr "Pokuste se opravit posunutím kurzoru od posledního učení V-křivky.%sUpozorňění! Před použitím této možnosti musíte nastavit korekci teploty ostření a odsazení filtru."
+
+#: u_hints.rsusedynamic2
+msgid "Dynamic can be use with an absolute or relative position focuser,%s this method require the starting position is near the focus position.%s This is the preferred method."
+msgstr "Dynamickou metodu lze použít s absolutním nebo relativním ostřením polohy,%s tato metoda vyžaduje, aby počáteční pozice byla blízko zaostřovací pozice.%sToto je upřednostňovaná metoda."
+
+#: u_hints.rsuseiterati2
+msgid "Use Iterative if the first two options do not work for you or if you start with really bad focus.%s This is the slowest and less precise method."
+msgstr "Použít Iterativní metodu, je vhodné, pokud první dvě možnosti nefungují nebo pokud začínáte se skutečně špatným zaostřením.%s Toto je nejpomalejší a nejméně přesná metoda."
+
+#: u_hints.rsuseplatesolv
+msgid "Use astrometric (plate) solving to improve telescope pointing accuracy"
+msgstr "Ke zlepšení přesnosti najíždění dalekohledem použít astrometrické (deskové) řešení"
+
+#: u_hints.rsusevcurvewi2
+msgid "Vcurve can only work with an absolute position focuser, it require to learn the curve."
+msgstr "Metoda V-křivky může pracovat pouze s absolutním ostřičem polohy, vyžaduje se naučit křivku."
+
+#: u_hints.rsvcurvelearni
+msgid "V curve learning"
+msgstr "V křivka učení"
+
+#: u_hints.rswaitforfulld
+msgid "Wait for a moonless night"
+msgstr "Počkat na noc bez měsíce"
+
+#: u_hints.rswaittothisti
+msgid "Wait to this time before to start to process the list."
+msgstr "Počkat do doby, než se seznam začne zpracovávat."
+
+#: u_hints.rszoomtoadjust
+msgid "Zoom to adjust in window"
+msgstr "Přiblížení pro úpravu v okně"
+
+#: u_hints.rszoomtohalfsi
+msgid "Zoom to half size"
+msgstr "Přiblížení na poloviční velikost"
+
+#: u_hints.rszoomtoorigin
+msgid "Zoom to original scale"
+msgstr "Původní měřítko"
+
+#: u_hints.rszoomtwotime
+msgid "Zoom two time"
+msgstr "Zoom 2x"
+

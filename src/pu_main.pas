@@ -6366,6 +6366,7 @@ begin
      delete(buf,1,8);
      if buf='en' then langname:='English (US)'
      else if buf='en_GB' then langname:='English (GB)'
+     else if buf='cs' then langname:='Czech'
      else if buf='de' then langname:='Deutch'
      else if buf='es' then langname:='Español'
      else if buf='fr' then langname:='Français'
