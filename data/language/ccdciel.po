@@ -3231,7 +3231,7 @@ msgid "Run a script"
 msgstr ""
 
 #: u_translation:rsthetelescope
-msgid "The telescope is parked, unpark now"
+msgid "The telescope is parked!"
 msgstr ""
 
 #: u_translation:rsexecutingthe

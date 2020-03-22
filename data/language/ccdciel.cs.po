@@ -2,14 +2,14 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ccdciel\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-03-22 12:30+0000\n"
-"PO-Revision-Date: 2020-03-22 11:48+0000\n"
-"Last-Translator: Stanislav Holub <Unknown>\n"
+"POT-Creation-Date: 2020-03-22 15:04+0000\n"
+"PO-Revision-Date: 2020-03-22 15:06+0000\n"
+"Last-Translator: Patrick Chevalley <Unknown>\n"
 "Language-Team: Czech <cz@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2020-03-22 12:36+0000\n"
+"X-Launchpad-Export-Date: 2020-03-22 15:12+0000\n"
 "X-Generator: Launchpad (build 3a6db24bbe7280ec09bae73384238390fcc98ad3)\n"
 "Language: cs\n"
 
@@ -663,7 +663,7 @@ msgstr "Střed"
 
 #: u_translation.rscenterabrigh
 msgid "Center a bright star. %s Defocus until the ring are clearly visible. %s Click Start button. %s Adjust the collimation. %s The star must be centered in full frame for the final adjustement."
-msgstr ""
+msgstr "Vycentrujte jasnou hvězdu. %s Rozostřete, dokud není prsten jasně viditelný.  %s Klikněte na tlačítko Start. %s Upravte kolimaci. %s Hvězda musí být po konečném nastavení vystředěna na plný rámeček."
 
 #: u_translation.rscenterappare
 msgid "Center, apparent coord. RA=%s DEC=%s PA=%s"
@@ -751,7 +751,7 @@ msgstr "Oblačnost"
 
 #: u_translation.rscollimation
 msgid "Collimation"
-msgstr ""
+msgstr "Kolimace"
 
 #: u_translation.rscolorbalance
 msgid "Color balance"
@@ -4147,8 +4147,8 @@ msgid "The sequence %s will be stopped at %s, in %s seconds."
 msgstr "Sekvence %s bude zastavena na %s, v %s sekundách."
 
 #: u_translation.rsthetelescope
-msgid "The telescope is parked, unpark now"
-msgstr "Dalekohled je zaparkovaný, nyní se od parkuje"
+msgid "The telescope is parked!"
+msgstr "Dalekohled je zaparkovaný!"
 
 #: u_translation.rsthismessagec
 msgid "This message confirm the email configuration is working."

@@ -6,14 +6,14 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ccdciel\n"
 "Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
-"POT-Creation-Date: 2020-03-22 12:30+0000\n"
-"PO-Revision-Date: 2020-03-22 12:35+0000\n"
+"POT-Creation-Date: 2020-03-22 15:04+0000\n"
+"PO-Revision-Date: 2020-03-22 15:09+0000\n"
 "Last-Translator: Patrick Chevalley <Unknown>\n"
 "Language-Team: French <fr@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2020-03-22 12:36+0000\n"
+"X-Launchpad-Export-Date: 2020-03-22 15:12+0000\n"
 "X-Generator: Launchpad (build 3a6db24bbe7280ec09bae73384238390fcc98ad3)\n"
 
 #: u_translation.rs32bitdriver
@@ -4151,8 +4151,8 @@ msgid "The sequence %s will be stopped at %s, in %s seconds."
 msgstr "La séquence %s sera arrêtée à %s, dans %s secondes."
 
 #: u_translation.rsthetelescope
-msgid "The telescope is parked, unpark now"
-msgstr "Le télescope est parqué, déparque maintenant"
+msgid "The telescope is parked!"
+msgstr "Le télescope est parqué!"
 
 #: u_translation.rsthismessagec
 msgid "This message confirm the email configuration is working."
