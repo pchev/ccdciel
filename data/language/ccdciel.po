@@ -3231,7 +3231,7 @@ msgid "Run a script"
 msgstr ""
 
 #: u_translation:rsthetelescope
-msgid "The telescope is parked, unpark now"
+msgid "The telescope is parked!"
 msgstr ""
 
 #: u_translation:rsexecutingthe
@@ -4580,5 +4580,17 @@ msgstr ""
 
 #: u_translation:rspower
 msgid "Power"
+msgstr ""
+
+#: u_translation:rscollimation
+msgid "Collimation"
+msgstr ""
+
+#: u_translation:rsnumberofcirc
+msgid "Number of circles"
+msgstr ""
+
+#: u_translation:rscenterabrigh
+msgid "Center a bright star. %s Defocus until the ring are clearly visible. %s Click Start button. %s Adjust the collimation. %s The star must be centered in full frame for the final adjustement."
 msgstr ""
 

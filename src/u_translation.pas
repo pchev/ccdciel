@@ -906,7 +906,7 @@ resourcestring
   rsParkTheTeles2 = 'Park the telescope';
   rsWarmTheCamer = 'Warm the camera';
   rsRunAScript = 'Run a script';
-  rsTheTelescope = 'The telescope is parked, unpark now';
+  rsTheTelescope = 'The telescope is parked!';
   rsExecutingThe = 'Executing the termination error actions.';
   rsExecutingThe2 = 'Executing the termination actions.';
   rsTheSequenceW = 'The sequence %s will be stopped at %s, in %s seconds.';

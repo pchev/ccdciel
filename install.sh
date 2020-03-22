@@ -61,6 +61,7 @@ install -v -m 644 data/dso/deep_sky.csv  $destdir/share/ccdciel/data/dso/deep_sk
 install -v -m 644 data/resources/smallcross.cur  $destdir/share/ccdciel/data/resources/smallcross.cur
 install -v -m 644 data/language/ccdciel.po     $destdir/share/ccdciel/data/language/ccdciel.en.po
 install -v -m 644 data/language/ccdciel.en_GB.po $destdir/share/ccdciel/data/language/ccdciel.en_GB.po
+install -v -m 644 data/language/ccdciel.cs.po  $destdir/share/ccdciel/data/language/ccdciel.cs.po
 install -v -m 644 data/language/ccdciel.de.po  $destdir/share/ccdciel/data/language/ccdciel.de.po
 install -v -m 644 data/language/ccdciel.es.po  $destdir/share/ccdciel/data/language/ccdciel.es.po
 install -v -m 644 data/language/ccdciel.fr.po  $destdir/share/ccdciel/data/language/ccdciel.fr.po
@@ -68,6 +69,7 @@ install -v -m 644 data/language/ccdciel.it.po  $destdir/share/ccdciel/data/langu
 install -v -m 644 data/language/ccdciel.ru.po  $destdir/share/ccdciel/data/language/ccdciel.ru.po
 install -v -m 644 data/language/ccdciel_hints.po     $destdir/share/ccdciel/data/language/ccdciel_hints.en.po
 install -v -m 644 data/language/ccdciel_hints.en_GB.po $destdir/share/ccdciel/data/language/ccdciel_hints.en_GB.po
+install -v -m 644 data/language/ccdciel_hints.cs.po  $destdir/share/ccdciel/data/language/ccdciel_hints.cs.po
 install -v -m 644 data/language/ccdciel_hints.de.po  $destdir/share/ccdciel/data/language/ccdciel_hints.de.po
 install -v -m 644 data/language/ccdciel_hints.es.po  $destdir/share/ccdciel/data/language/ccdciel_hints.es.po
 install -v -m 644 data/language/ccdciel_hints.fr.po  $destdir/share/ccdciel/data/language/ccdciel_hints.fr.po

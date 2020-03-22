@@ -2904,7 +2904,7 @@ end;
 procedure Tf_main.Image1MouseWheel(Sender: TObject; Shift: TShiftState;
   WheelDelta: Integer; MousePos: TPoint; var Handled: Boolean);
 var
-  zf: double;
+  zf,r1,r2: double;
 begin
 if (fits.HeaderInfo.naxis>0) then begin
   if LockMouseWheel then
@@ -2916,7 +2916,11 @@ if (fits.HeaderInfo.naxis>0) then begin
       zf := 1.25
     else
       zf := 0.8;
-    if ImgZoom=0 then imgzoom:=ZoomMin;
+    if ImgZoom=0 then begin
+      r1:=ScrBmp.Width/imabmp.Width;
+      r2:=ScrBmp.Height/imabmp.Height;
+      ImgZoom:=minvalue([r1,r2]);
+    end;
     ImgZoom:=ImgZoom*zf;
     if ImgZoom>ZoomMax then ImgZoom:=ZoomMax;
     if ImgZoom<ZoomMin then ImgZoom:=ZoomMin;
@@ -5892,6 +5896,10 @@ var ra,de,err:double;
     tra,tde,objn: string;
 begin
  if (AllDevicesConnected) and (mount.Status=devConnected) then begin
+   if Mount.Park then begin
+     NewMessage(rsTheTelescope);
+     exit;
+   end;
    if  f_preview.Running then begin
      f_preview.Loop:=false;
      f_preview.BtnPreviewClick(nil);
@@ -5913,10 +5921,6 @@ begin
    f_goto.ButtonOK.Caption:=rsGoto;
    f_goto.ShowModal;
    if f_goto.ModalResult=mrok then begin
-     if Mount.Park then begin
-        NewMessage(rsTheTelescope);
-        mount.Park:=false;
-     end;
      CancelAutofocus:=false;
      tra:= f_goto.Ra.Text;
      tde:=f_goto.De.Text;
@@ -6363,6 +6367,7 @@ begin
      delete(buf,1,8);
      if buf='en' then langname:='English (US)'
      else if buf='en_GB' then langname:='English (GB)'
+     else if buf='cs' then langname:='Czech'
      else if buf='de' then langname:='Deutch'
      else if buf='es' then langname:='Español'
      else if buf='fr' then langname:='Français'
@@ -8838,6 +8843,14 @@ begin
     ShowMessage(Format(rsNotConnected, [rsCamera]));
     exit;
   end;
+  if mount.Status<>devConnected then begin
+    ShowMessage(Format(rsNotConnected, [rsMount]));
+    exit;
+  end;
+  if mount.Park then begin
+    NewMessage(rsTheTelescope);
+    exit;
+  end;
   if f_preview.Loop then f_preview.BtnLoopClick(nil);
   f_polaralign.Mount:=mount;
   f_polaralign.Wheel:=wheel;
@@ -10421,7 +10434,7 @@ begin
  end;
 
 Procedure Tf_main.DoAutoFocus;
-var c,dx,dy,vmax: double;
+var c,dx,dy,vmax,dm: double;
     sx,sy,sw: integer;
 begin
 if (fits.HeaderInfo.valid)and(Preview or Capture) then begin // not on control exposure
@@ -10438,8 +10451,18 @@ if (fits.HeaderInfo.valid)and(Preview or Capture) then begin // not on control e
       // try to re-acquire star in full window
       sw:=starwindow div (2*fits.HeaderInfo.BinX);
       fits.FindBrightestPixel(round(c),round(c),round(2*c)-sw,sw,sx,sy,vmax);
-      if vmax>0 then
+      if vmax>0 then begin
         f_starprofile.showprofile(fits,sx,sy,Starwindow div fits.HeaderInfo.BinX,fits.HeaderInfo.focallen,fits.HeaderInfo.pixsz1);
+        if Collimation and (not f_starprofile.FindStar) then begin
+          // for collimation, automatically increase the detection window
+          dm:=((Focuswindow/2)-Starwindow)/3;
+          sw:=round(Starwindow+dm);
+          repeat
+             f_starprofile.showprofile(fits,sx,sy,sw div fits.HeaderInfo.BinX,fits.HeaderInfo.focallen,fits.HeaderInfo.pixsz1);
+             sw:=round(sw+dm);
+          until f_starprofile.FindStar or (sw>(Focuswindow/2));
+        end;
+      end;
     end;
     // recenter star
     sx:=StrToIntDef(f_frame.FX.Text,-1);
@@ -11045,6 +11068,10 @@ var ra,de,err:double;
     tra,tde,objn: string;
 begin
  if planetarium.Connected and (AllDevicesConnected)and(Mount.Status=devConnected)and(Camera.Status=devConnected) then begin
+    if Mount.Park then begin
+      NewMessage(rsTheTelescope);
+      exit;
+    end;
     if  f_preview.Running then begin
      f_preview.Loop:=false;
      f_preview.BtnPreviewClick(nil);
@@ -11066,10 +11093,6 @@ begin
     FormPos(f_planetariuminfo,mouse.CursorPos.X,mouse.CursorPos.Y);
     f_planetariuminfo.ShowModal;
     if f_planetariuminfo.ModalResult=mrOK then begin
-      if Mount.Park then begin
-         NewMessage(rsTheTelescope);
-         mount.Park:=false;
-      end;
       CancelAutofocus:=false;
       tra:= f_planetariuminfo.Ra.Text;
       tde:=f_planetariuminfo.De.Text;

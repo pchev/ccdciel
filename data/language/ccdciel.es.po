@@ -6,14 +6,14 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ccdciel\n"
 "Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
-"POT-Creation-Date: 2020-03-15 14:12+0000\n"
-"PO-Revision-Date: 2019-12-15 12:50+0000\n"
+"POT-Creation-Date: 2020-03-22 15:04+0000\n"
+"PO-Revision-Date: 2020-03-22 15:09+0000\n"
 "Last-Translator: Patrick Chevalley <Unknown>\n"
 "Language-Team: Spanish <es@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2020-03-15 14:40+0000\n"
+"X-Launchpad-Export-Date: 2020-03-22 15:12+0000\n"
 "X-Generator: Launchpad (build 3a6db24bbe7280ec09bae73384238390fcc98ad3)\n"
 
 #: u_translation.rs32bitdriver
@@ -664,6 +664,10 @@ msgstr "Fotograma de la CCD enviada al planetario."
 msgid "Center"
 msgstr "Centrar"
 
+#: u_translation.rscenterabrigh
+msgid "Center a bright star. %s Defocus until the ring are clearly visible. %s Click Start button. %s Adjust the collimation. %s The star must be centered in full frame for the final adjustement."
+msgstr ""
+
 #: u_translation.rscenterappare
 msgid "Center, apparent coord. RA=%s DEC=%s PA=%s"
 msgstr "Centro, coord. aparente AR=%s DEC=%s AP=%s"
@@ -747,6 +751,10 @@ msgstr "Secuencia de cierre de la cúpula cuando se solicite aparcar la montura"
 #: u_translation.rscloudcover
 msgid "Cloud cover"
 msgstr "Cobertura de nubes"
+
+#: u_translation.rscollimation
+msgid "Collimation"
+msgstr ""
 
 #: u_translation.rscolorbalance
 msgid "Color balance"
@@ -2367,6 +2375,10 @@ msgstr "No está en ejecución, nada que hacer."
 #: u_translation.rsnottracking
 msgid "not tracking"
 msgstr "sin seguimiento"
+
+#: u_translation.rsnumberofcirc
+msgid "Number of circles"
+msgstr ""
 
 #: u_translation.rsnumberofdyna
 msgid "Number of dynamic points"
@@ -4137,8 +4149,8 @@ msgid "The sequence %s will be stopped at %s, in %s seconds."
 msgstr "La secuencia %s se detendrá a las %s, en %s segundos."
 
 #: u_translation.rsthetelescope
-msgid "The telescope is parked, unpark now"
-msgstr "El telescopio está aparcado, desaparcarlo ahora"
+msgid "The telescope is parked!"
+msgstr "El telescopio está aparcado!"
 
 #: u_translation.rsthismessagec
 msgid "This message confirm the email configuration is working."

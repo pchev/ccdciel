@@ -988,6 +988,13 @@ begin
  StartingSequence:=true;
  msg(Format(rsStartingSequ,['']),1);
  led.Brush.Color:=clYellow;
+ // check mount park
+ if mount.Park then begin
+    msg(rsTheTelescope, 1);
+    StopSequence;
+    exit;
+ end;
+ if not StartingSequence then exit;
  if Targets.CheckDoneCount then begin
     msg(targets.DoneStatus,2);
     msg(Format(rsThisSequence,['"'+CurrentSeqName+'"']),2);
@@ -1039,14 +1046,6 @@ begin
       StopSequence;
     end;
  end;
- if not StartingSequence then exit;
- // check mount park
- if mount.Park then begin
-    msg(rsTheTelescope, 1);
-    mount.Park:=false;
-    wait(5);
- end;
-
  if not StartingSequence then exit;
  // check if autoguider is required and connected
  if (not isCalibrationSequence)and(Autoguider.AutoguiderType<>agNONE)and(Autoguider.State=GUIDER_DISCONNECTED)and(assigned(FConnectAutoguider)) then begin
