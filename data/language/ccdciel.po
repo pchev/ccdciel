@@ -4582,3 +4582,15 @@ msgstr ""
 msgid "Power"
 msgstr ""
 
+#: u_translation:rscollimation
+msgid "Collimation"
+msgstr ""
+
+#: u_translation:rsnumberofcirc
+msgid "Number of circles"
+msgstr ""
+
+#: u_translation:rscenterabrigh
+msgid "Center a bright star. %s Defocus until the ring are clearly visible. %s Click Start button. %s Adjust the collimation. %s The star must be centered in full frame for the final adjustement."
+msgstr ""
+

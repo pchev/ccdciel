@@ -6,14 +6,14 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ccdciel\n"
 "Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
-"POT-Creation-Date: 2020-03-15 14:12+0000\n"
+"POT-Creation-Date: 2020-03-22 12:30+0000\n"
 "PO-Revision-Date: 2020-02-04 19:45+0000\n"
 "Last-Translator: Thomas <email@starhopper.de>\n"
 "Language-Team: German <de@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2020-03-15 14:40+0000\n"
+"X-Launchpad-Export-Date: 2020-03-22 12:36+0000\n"
 "X-Generator: Launchpad (build 3a6db24bbe7280ec09bae73384238390fcc98ad3)\n"
 
 #: u_translation.rs32bitdriver
@@ -664,6 +664,10 @@ msgstr "CCD Aufnahmen zum Planetarium gesendet"
 msgid "Center"
 msgstr "Zentrum"
 
+#: u_translation.rscenterabrigh
+msgid "Center a bright star. %s Defocus until the ring are clearly visible. %s Click Start button. %s Adjust the collimation. %s The star must be centered in full frame for the final adjustement."
+msgstr ""
+
 #: u_translation.rscenterappare
 msgid "Center, apparent coord. RA=%s DEC=%s PA=%s"
 msgstr "Zentralkoordinaten sind RA=%s DEC=%s PA=%s"
@@ -747,6 +751,10 @@ msgstr "Kuppelspalt Schließsequenz ausführen wenn Montierung zum parken aufgef
 #: u_translation.rscloudcover
 msgid "Cloud cover"
 msgstr "Wolkenbedeckung"
+
+#: u_translation.rscollimation
+msgid "Collimation"
+msgstr ""
 
 #: u_translation.rscolorbalance
 msgid "Color balance"
@@ -2368,6 +2376,10 @@ msgstr "Läuft nicht, nichts zu tun."
 #: u_translation.rsnottracking
 msgid "not tracking"
 msgstr "Nicht Nachführen"
+
+#: u_translation.rsnumberofcirc
+msgid "Number of circles"
+msgstr ""
 
 #: u_translation.rsnumberofdyna
 msgid "Number of dynamic points"
