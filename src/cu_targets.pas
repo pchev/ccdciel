@@ -972,6 +972,10 @@ begin
           msg(Format(rsNewCoordinat, [RAToStr(newra), DEToStr(newde)]),3);
           t.ra:=newra;
           t.de:=newde;
+       end
+       else begin
+          msg(rsPlanetariumE+blank+Fplanetarium.LastErrorTxt,3);
+          msg(Format(rsTargetSCoord, [t.objectname]), 3);
        end;
     end;
     if (p<>nil)and (p.Count>0) then
