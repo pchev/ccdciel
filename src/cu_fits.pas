@@ -2579,7 +2579,7 @@ const
     max_ri=100;
 var i,j,rs,distance,counter,ri, distance_top_value, illuminated_pixels, saturated_counter, max_saturated: integer;
     valsaturation:Int64;
-    SumVal,SumValX,SumValY,SumvalR,val,xg,yg,bg_average, pixel_counter,r, val_00,val_01,val_10,val_11,af,
+    SumVal,SumValX,SumValY,SumvalR,val,xg,yg,bg_average, pixel_counter,pixel_counter2,r, val_00,val_01,val_10,val_11,af,
     faintA,faintB, brightA,brightB,faintest,brightest : double;
     distance_histogram  : array [0..max_ri] of integer;
     HistStart,asymmetry : boolean;
@@ -2728,6 +2728,7 @@ begin
   SumVal:=0;
   SumValR:=0;
   pixel_counter:=0;
+  pixel_counter2:=0;
 
   for i:=-ri to ri do {Make steps of one pixel}
     for j:=-ri to ri do
@@ -2737,10 +2738,12 @@ begin
       SumVal:=SumVal+Val;{Sumval will be star total flux value}
       SumValR:=SumValR+Val*r; {Method Kazuhisa Miyashita, see notes of HFD calculation method}
       if val>=valmax*0.5 then pixel_counter:=pixel_counter+1;{How many pixels are above half maximum for FWHM}
+      if val>=valmax*0.25 then pixel_counter2:=pixel_counter2+1;{How many pixels high enough to be sure we not have a single hot pixel}
     end;
-  if (not Undersampled) and (pixel_counter<=1) then exit; // reject hot pixel in noisy environment
+  if (not Undersampled) and (pixel_counter2<=1) then exit; // reject hot pixel in noisy environment
   if Sumval<0.00001 then Sumval:=0.00001;{prevent divide by zero}
   hfd:=2*SumValR/SumVal;
+  if (not Undersampled) and (hfd<=0.7) then exit; // reject single hot pixel
   hfd:=max(0.7,hfd); // minimum value for a star size of 1 pixel
   star_fwhm:=2*sqrt(pixel_counter/pi);{The surface is calculated by counting pixels above half max. The diameter of that surface called FWHM is then 2*sqrt(surface/pi) }
   if (SumVal>0.00001)and(saturated_counter<=max_saturated) then begin

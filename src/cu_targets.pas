@@ -91,6 +91,7 @@ type
       SkipTarget: boolean;
       TargetForceNext: boolean;
       FDoneStatus, FLastDoneStep: string;
+      FAllDone: boolean;
       function GetBusy: boolean;
       procedure SetTargetName(val: string);
       procedure SetPreview(val: Tf_preview);
@@ -625,14 +626,20 @@ begin
 end;
 
 function T_Targets.CheckDoneCount:boolean;
-var i,j: integer;
+var i,j,tc,dc: integer;
     t: TTarget;
     p: T_Plan;
 begin
  result:=false;
+ FAllDone:=false;
  FDoneStatus:='';
  FLastDoneStep:='';
+ tc:=0; dc:=0;
  if IgnoreRestart then exit;
+ if FResetRepeat then begin
+   tc:=tc+FTargetsRepeat;
+   dc:=dc+FTargetsRepeatCount;
+ end;
  if FTargetsRepeatCount>0 then begin
    result:=true;
    FLastDoneStep:=rsGlobalRepeat+blank+IntToStr(FTargetsRepeatCount)+'/'+IntToStr(FTargetsRepeat);
@@ -641,6 +648,10 @@ begin
  for i:=0 to NumTargets-1 do begin
     t:=Targets[i];
     if t=nil then Continue;
+    if t.objectname<>SkyFlatTxt then begin
+      tc:=tc+t.repeatcount;
+      dc:=dc+t.repeatdone;
+    end;
     if t.repeatdone>0 then begin
       result:=true;
       FLastDoneStep:=t.objectname+blank+rsRepeat+':'+blank+IntToStr(t.repeatdone)+'/'+IntToStr(t.repeatcount);
@@ -650,6 +661,10 @@ begin
     if p=nil then Continue;
     if p.Count<=0 then Continue;
     for j:=0 to p.Count-1 do begin
+      if t.objectname<>SkyFlatTxt then begin
+        tc:=tc+p.Steps[j].count;
+        dc:=dc+p.Steps[j].donecount;
+      end;
       if p.Steps[j].donecount>0 then begin
         result:=true;
         FLastDoneStep:=t.objectname+blank+p.PlanName+blank+rsStep+':'+blank+p.Steps[j].description+blank+rsDone+':'+IntToStr(p.Steps[j].donecount)+'/'+IntToStr(p.Steps[j].count);
@@ -657,6 +672,7 @@ begin
       end;
     end;
  end;
+ FAllDone:=(tc=dc);
 end;
 
 procedure T_Targets.ClearDoneCount(ClearRepeat: boolean);
@@ -761,6 +777,7 @@ begin
   InplaceAutofocus:=AutofocusInPlace;
   CancelAutofocus:=false;
   SaveDoneCount(FTargetsRepeatCount);
+  CheckDoneCount;
   inc(FCurrentTarget);
   if FRunning and (FCurrentTarget<NumTargets) then begin
    CurrentTargetName:=Targets[FCurrentTarget].objectname;
@@ -795,7 +812,7 @@ begin
    end
    else if (Targets[FCurrentTarget].objectname=SkyFlatTxt) then begin
     if ((Targets[FCurrentTarget].planname=FlatTimeName[0])and(FTargetsRepeatCount=0)  // Dusk, run only on first repeat
-        or((Targets[FCurrentTarget].planname=FlatTimeName[1])and(FTargetsRepeatCount=FTargetsRepeat-1)))  // Dawn, run only on last repeat
+        or((Targets[FCurrentTarget].planname=FlatTimeName[1])and(FAllDone or(FTargetsRepeatCount=FTargetsRepeat-1))))  // Dawn, run only on last repeat
     then begin
      FInitializing:=true;
      ShowDelayMsg('');
@@ -879,7 +896,7 @@ begin
   end
   else begin
    inc(FTargetsRepeatCount);
-   if FTargetsRepeatCount<FTargetsRepeat then begin
+   if (not FAllDone)and(FTargetsRepeatCount<FTargetsRepeat) then begin
      FCurrentTarget:=-1;
      FTargetCoord:=false;
      FTargetRA:=NullCoord;

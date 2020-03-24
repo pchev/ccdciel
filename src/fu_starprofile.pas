@@ -1103,11 +1103,13 @@ begin
                 focuser.FocusSpeed:=step+AutofocusDynamicMovement;  // move a bit more
                 if AutofocusMoveDir=FocusDirIn then begin
                   onFocusOUT(self);
+                  wait; // let time for position refresh
                   focuser.FocusSpeed:=AutofocusDynamicMovement;     // got to position in right direction
                   onFocusIN(self);
                 end
                 else begin
                   onFocusIN(self);
+                  wait; // let time for position refresh
                   focuser.FocusSpeed:=AutofocusDynamicMovement;     // got to position in right direction
                   onFocusOUT(self)
                 end;
