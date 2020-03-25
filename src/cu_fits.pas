@@ -2730,6 +2730,16 @@ begin
   pixel_counter:=0;
   pixel_counter2:=0;
 
+  // search single hot pixel in noisy environment
+  for i:=-ri to ri do
+    for j:=-ri to ri do
+    begin
+      Val:=Fimage[0,y+j,x+i]-bg;
+      if (abs(i)<=3)and(abs(j)<=3)and(val>=valmax*0.25) then
+        pixel_counter2:=pixel_counter2+1; {Other nearby pixels high enough to be sure we not have a single hot pixel}
+    end;
+  if (not Undersampled) and (pixel_counter2<=1) then exit; // reject single hot pixel
+
   for i:=-ri to ri do {Make steps of one pixel}
     for j:=-ri to ri do
     begin
@@ -2738,9 +2748,7 @@ begin
       SumVal:=SumVal+Val;{Sumval will be star total flux value}
       SumValR:=SumValR+Val*r; {Method Kazuhisa Miyashita, see notes of HFD calculation method}
       if val>=valmax*0.5 then pixel_counter:=pixel_counter+1;{How many pixels are above half maximum for FWHM}
-      if val>=valmax*0.25 then pixel_counter2:=pixel_counter2+1;{How many pixels high enough to be sure we not have a single hot pixel}
     end;
-  if (not Undersampled) and (pixel_counter2<=1) then exit; // reject hot pixel in noisy environment
   if Sumval<0.00001 then Sumval:=0.00001;{prevent divide by zero}
   hfd:=2*SumValR/SumVal;
   if (not Undersampled) and (hfd<=0.7) then exit; // reject single hot pixel
@@ -2824,8 +2832,8 @@ var
  thread: array[0..15] of TGetStarList;
  tc,timeout: integer;
 begin
-  overlap:=round(s/3); // large overlap to have more chance to measure a big dot as a single piece
-  s:=round(2*s/3);     // keep original window size after adding overlap
+  overlap:=max(8,round(s/3)); // large overlap to have more chance to measure a big dot as a single piece
+  s:=max(4,s-overlap);        // keep original window size after adding overlap
   SetLength(img_temp,1,FWidth,FHeight); {array to check for duplicate}
   for j:=0 to Fheight-1 do
      for i:=0 to FWidth-1 do
