@@ -2731,14 +2731,16 @@ begin
   pixel_counter2:=0;
 
   // search single hot pixel in noisy environment
-  for i:=-ri to ri do
-    for j:=-ri to ri do
-    begin
-      Val:=Fimage[0,y+j,x+i]-bg;
-      if (abs(i)<=3)and(abs(j)<=3)and(val>=valmax*0.25) then
-        pixel_counter2:=pixel_counter2+1; {Other nearby pixels high enough to be sure we not have a single hot pixel}
-    end;
-  if (not Undersampled) and (pixel_counter2<=1) then exit; // reject single hot pixel
+  if (not Undersampled) then begin
+    for i:=-ri to ri do
+      for j:=-ri to ri do
+      begin
+        Val:=Fimage[0,round(yc)+j,round(xc)+i]-bg;
+        if (abs(i)<=1)and(abs(j)<=1)and(val>=valmax*0.25) then
+          pixel_counter2:=pixel_counter2+1; {Other nearby pixels high enough to be sure we not have a single hot pixel}
+      end;
+    if (pixel_counter2<=1) then exit; // reject single hot pixel
+  end;
 
   for i:=-ri to ri do {Make steps of one pixel}
     for j:=-ri to ri do
