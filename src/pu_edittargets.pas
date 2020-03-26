@@ -1161,11 +1161,6 @@ try
   screen.Cursor:=crHourGlass;
   FAstrometry.SolveCurrentImage(true);
   if FAstrometry.CurrentCoord(ra,de,eq,pa) then begin
-    ra:=ra*15*deg2rad;
-    de:=de*deg2rad;
-    J2000ToApparent(ra,de);
-    ra:=rad2deg*ra/15;
-    de:=rad2deg*de;
     TargetList.Cells[colra,n]:=RAToStr(ra);
     TargetList.Cells[coldec,n]:=DEToStr(de);
     TargetList.Cells[colastrometry,n]:=BoolToStr(astrometryResolver<>ResolverNone,'1','0');
