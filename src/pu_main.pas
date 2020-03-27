@@ -11930,7 +11930,7 @@ begin
    fits.FindStarPos(xx,yy,s,xxc,yyc,rc,vmax,bg,bgdev);
    if vmax>0 then begin
      fits.GetHFD2(xxc,yyc,2*rc,xc,yc,bg,bgdev,hfd,fwhm,vmax,snr,flux);
-     if (hfd>0)and(Undersampled or (hfd>0.8)) then begin
+     if (hfd>0)and(Undersampled or (hfd>0.7)) then begin
        sval:=sval+' HFD='+FormatFloat(f1,hfd)+' FWHM='+FormatFloat(f1,fwhm);
        if flux>0 then begin
          sval:=sval+' '+rsFlux+'='+FormatFloat(f0, flux)+' SNR='+FormatFloat(f1, snr);

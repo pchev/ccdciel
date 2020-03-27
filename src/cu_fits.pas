@@ -1034,7 +1034,7 @@ begin
        bgdev:=bgdev/fits.imageC;
 
        {check valid hfd }
-       if ((hfd1>0)and (Undersampled or (hfd1>0.8)))
+       if ((hfd1>0)and (Undersampled or (hfd1>0.7)))
           and (hfd1<99)
           and (img_temp[0,round(xc),round(yc)]=0)  {area not surveyed}
           and (snr>AutofocusMinSNR)  {minimal star detection level, also detect saturation}
@@ -2910,7 +2910,7 @@ for i:=0 to Length(list)-1 do
 
 
    {check valid hfd, snr}
-   if (((hfd1>0)and(Undersampled or (hfd1>0.8))) and (hfd1<99) and (snr>3)) then
+   if (((hfd1>0)and(Undersampled or (hfd1>0.7))) and (hfd1<99) and (snr>3)) then
     begin
        inc(nhfd);
        if nhfd>=Length(FStarList) then
