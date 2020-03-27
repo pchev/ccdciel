@@ -2579,7 +2579,7 @@ const
     max_ri=100;
 var i,j,rs,distance,counter,ri, distance_top_value, illuminated_pixels, saturated_counter, max_saturated: integer;
     valsaturation:Int64;
-    SumVal,SumValX,SumValY,SumvalR,val,xg,yg,bg_average, pixel_counter,pixel_counter2,r, val_00,val_01,val_10,val_11,af,
+    SumVal,SumValX,SumValY,SumvalR,val,xg,yg,bg_average, pixel_counter,r, val_00,val_01,val_10,val_11,af,
     faintA,faintB, brightA,brightB,faintest,brightest : double;
     distance_histogram  : array [0..max_ri] of integer;
     HistStart,asymmetry : boolean;
@@ -2709,6 +2709,9 @@ begin
     end;
   end;
 
+  if ((not Undersampled) and (distance_histogram[1]<3)) then
+    exit; // reject single hot pixel if less then 3 pixels are detected around the center of gravity
+
   ri:=-1; {will start from distance 0}
   distance_top_value:=0;
   HistStart:=false;
@@ -2728,19 +2731,6 @@ begin
   SumVal:=0;
   SumValR:=0;
   pixel_counter:=0;
-  pixel_counter2:=0;
-
-  // search single hot pixel in noisy environment
-  if (not Undersampled) then begin
-    for i:=-ri to ri do
-      for j:=-ri to ri do
-      begin
-        Val:=Fimage[0,round(yc)+j,round(xc)+i]-bg;
-        if (abs(i)<=1)and(abs(j)<=1)and(val>=valmax*0.25) then
-          pixel_counter2:=pixel_counter2+1; {Other nearby pixels high enough to be sure we not have a single hot pixel}
-      end;
-    if (pixel_counter2<=1) then exit; // reject single hot pixel
-  end;
 
   for i:=-ri to ri do {Make steps of one pixel}
     for j:=-ri to ri do
