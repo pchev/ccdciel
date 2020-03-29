@@ -2709,9 +2709,6 @@ begin
     end;
   end;
 
-  if ((not Undersampled) and (distance_histogram[1]<3)) then
-    exit; // reject single hot pixel if less then 3 pixels are detected around the center of gravity
-
   ri:=-1; {will start from distance 0}
   distance_top_value:=0;
   HistStart:=false;
@@ -2725,7 +2722,13 @@ begin
 
   if ri>=rs then {star is equal or larger then box, abort} exit; {hfd:=-1}
   if (ri>2)and(illuminated_pixels<0.35*sqr(ri+ri-2)){35% surface} then {not a star disk but stars, abort} exit; {hfd:=-1}
-  if ri<3 then ri:=3; {Minimum 6+1 x 6+1 pixel box}
+
+  if ri<3 then  {small star image}
+  begin
+   if ((not Undersampled) and (distance_histogram[1]<3)) then
+      exit; // reject single hot pixel if less then 3 pixels are detected around the center of gravity
+   ri:=3; {Minimum 6+1 x 6+1 pixel box}
+  end;
 
   // Get HFD using the aproximation routine assuming that HFD line divides the star in equal portions of gravity:
   SumVal:=0;
