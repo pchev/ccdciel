@@ -2645,7 +2645,11 @@ begin
      buf:=trim(emailconfig.GetValue('/SMTP/Port',''));
      emailconfig.SetValue('/SMTP/SSLTLS',(buf<>'25'));
   end;
-  if oldver<'0.9.67' then
+  if oldver<'0.9.70' then begin
+     // reset default star detection window size
+     config.SetValue('/StarAnalysis/Window',60);     ;
+  end;
+  if config.Modified then
      SaveConfig;
 end;
 
