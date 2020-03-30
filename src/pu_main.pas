@@ -1980,9 +1980,7 @@ end;
 
 procedure Tf_main.FormShow(Sender: TObject);
 var str: string;
-    i,n: integer;
-    posprev,poscapt:integer;
-    binprev,bincapt:string;
+    i: integer;
 begin
   if (cdcwcs_initfitsfile=nil)or(cdcwcs_release=nil)or(cdcwcs_sky2xy=nil)or(cdcwcs_xy2sky=nil)or(cdcwcs_getinfo=nil) then begin
      NewMessage('Could not load '+libwcs+crlf+'Some astrometry function are not available.',1);
@@ -2011,67 +2009,10 @@ begin
   StatusBar1.Visible:=false; // bug with statusbar visibility
   StatusbarTimer.Enabled:=true;
 
-  n:=config.GetValue('/Filters/Num',0);
-  for i:=0 to MaxFilter do FilterOffset[i]:=0;
-  for i:=0 to MaxFilter do FilterExpFact[i]:=1.0;
-  FilterList.Clear;
-  FilterList.Add(Filter0);
-  for i:=1 to n do begin
-     FilterOffset[i]:=trunc(config.GetValue('/Filters/Offset'+IntToStr(i),0));
-     FilterExpFact[i]:=config.GetValue('/Filters/ExpFact'+IntToStr(i),1.0);
-     str:=config.GetValue('/Filters/Filter'+IntToStr(i),'');
-     FilterList.Add(str);
-  end;
-  f_filterwheel.Filters.Items.Assign(FilterList);
-  f_filterwheel.Filters.ItemIndex:=0;
-  f_EditTargets.StepList.Columns[pcolfilter-1].PickList.Assign(FilterList);
-  f_EditTargets.FlatFilterList.Items.Assign(FilterList);
-  if f_EditTargets.FlatFilterList.Items.Count>0 then f_EditTargets.FlatFilterList.Items.Delete(0);
-  SetFilterMenu;
-
-  n:=config.GetValue('/Binning/Num',0);
-  BinningList.Clear;
-  binprev:=config.GetValue('/Preview/Binning','1x1');
-  bincapt:=config.GetValue('/Capture/Binning','1x1');
-  posprev:=0;
-  poscapt:=0;
-  if n>0 then begin
-    for i:=0 to n-1 do begin
-       str:=config.GetValue('/Binning/Binning'+IntToStr(i),'');
-       n:=BinningList.Add(str);
-       if str=binprev then posprev:=n;
-       if str=bincapt then poscapt:=n;
-    end;
-  end
-  else
-    BinningList.Add(Binning0);
-  SetBinningList(posprev,poscapt);
-
-  n:=config.GetValue('/Readout/Num',0);
-  ReadoutList.Clear;
-  for i:=1 to n do begin
-     str:=config.GetValue('/Readout/Mode'+IntToStr(i),'');
-     ReadoutList.Add(str);
-  end;
-  f_option.ReadOutCapture.Items.Assign(ReadoutList);
-  f_option.ReadOutPreview.Items.Assign(ReadoutList);
-  f_option.ReadOutFocus.Items.Assign(ReadoutList);
-  f_option.ReadOutAstrometry.Items.Assign(ReadoutList);
   f_option.onShowHelp:=@MenuPdfHelpClick;
   f_setup.onShowHelp:=@MenuPdfHelpClick;
 
-  hasGain:=config.GetValue('/Gain/hasGain',false);
-  hasGainISO:=config.GetValue('/Gain/hasGainISO',false);
-  Gain:=config.GetValue('/Gain/Gain',0);
-  GainMin:=config.GetValue('/Gain/GainMin',0);
-  GainMax:=config.GetValue('/Gain/GainMax',0);
-  n:=config.GetValue('/Gain/NumISO',0);
-  for i:=0 to n-1 do begin
-     str:=config.GetValue('/Gain/ISO'+IntToStr(i),'');
-     ISOList.Add(str);
-  end;
-  SetGainList;
-  ShowFnumber;
+  SetOptions;
 
   str:=config.GetValue('/Sequence/Targets','');
   if str<>'' then f_sequence.LoadTargets(str);
@@ -3353,11 +3294,13 @@ end;
 
 procedure Tf_main.SetOptions;
 var i,n: integer;
-    buf,v: string;
+    buf,v,str: string;
     ok: boolean;
     oldbayer: TBayerMode;
     oldRed,oldGreen,oldBlue:double;
     oldBalance:boolean;
+    posprev,poscapt:integer;
+    binprev,bincapt:string;
 begin
   ShowHint:=screenconfig.GetValue('/Hint/Show',true);
   if f_option<>nil then f_option.ShowHint:=ShowHint;
@@ -3653,6 +3596,68 @@ begin
   VoiceError:=config.GetValue('/Voice/Error',false);
   VoiceEmail:=config.GetValue('/Voice/Email',false);
 
+  if wheel.Status=devDisconnected then begin
+    n:=config.GetValue('/Filters/Num',0);
+    for i:=0 to MaxFilter do FilterOffset[i]:=0;
+    for i:=0 to MaxFilter do FilterExpFact[i]:=1.0;
+    FilterList.Clear;
+    FilterList.Add(Filter0);
+    for i:=1 to n do begin
+       FilterOffset[i]:=trunc(config.GetValue('/Filters/Offset'+IntToStr(i),0));
+       FilterExpFact[i]:=config.GetValue('/Filters/ExpFact'+IntToStr(i),1.0);
+       str:=config.GetValue('/Filters/Filter'+IntToStr(i),'');
+       FilterList.Add(str);
+    end;
+    f_filterwheel.Filters.Items.Assign(FilterList);
+    f_filterwheel.Filters.ItemIndex:=0;
+    f_EditTargets.StepList.Columns[pcolfilter-1].PickList.Assign(FilterList);
+    f_EditTargets.FlatFilterList.Items.Assign(FilterList);
+    if f_EditTargets.FlatFilterList.Items.Count>0 then f_EditTargets.FlatFilterList.Items.Delete(0);
+    SetFilterMenu;
+  end;
+  if (f_option<>nil)and(camera.Status=devDisconnected) then begin
+    n:=config.GetValue('/Binning/Num',0);
+    BinningList.Clear;
+    binprev:=config.GetValue('/Preview/Binning','1x1');
+    bincapt:=config.GetValue('/Capture/Binning','1x1');
+    posprev:=0;
+    poscapt:=0;
+    if n>0 then begin
+      for i:=0 to n-1 do begin
+         str:=config.GetValue('/Binning/Binning'+IntToStr(i),'');
+         n:=BinningList.Add(str);
+         if str=binprev then posprev:=n;
+         if str=bincapt then poscapt:=n;
+      end;
+    end
+    else
+      BinningList.Add(Binning0);
+    SetBinningList(posprev,poscapt);
+
+    n:=config.GetValue('/Readout/Num',0);
+    ReadoutList.Clear;
+    for i:=1 to n do begin
+       str:=config.GetValue('/Readout/Mode'+IntToStr(i),'');
+       ReadoutList.Add(str);
+    end;
+    f_option.ReadOutCapture.Items.Assign(ReadoutList);
+    f_option.ReadOutPreview.Items.Assign(ReadoutList);
+    f_option.ReadOutFocus.Items.Assign(ReadoutList);
+    f_option.ReadOutAstrometry.Items.Assign(ReadoutList);
+
+    hasGain:=config.GetValue('/Gain/hasGain',false);
+    hasGainISO:=config.GetValue('/Gain/hasGainISO',false);
+    Gain:=config.GetValue('/Gain/Gain',0);
+    GainMin:=config.GetValue('/Gain/GainMin',0);
+    GainMax:=config.GetValue('/Gain/GainMax',0);
+    n:=config.GetValue('/Gain/NumISO',0);
+    for i:=0 to n-1 do begin
+       str:=config.GetValue('/Gain/ISO'+IntToStr(i),'');
+       ISOList.Add(str);
+    end;
+    SetGainList;
+    ShowFnumber;
+  end;
 end;
 
 procedure Tf_main.SaveScreenConfig;
@@ -6165,6 +6170,7 @@ begin
 
   if f_setup.ModalResult=mrOK then begin
     if profile<>f_setup.profile then begin
+      SaveConfig;
       ProfileFromCommandLine:=false;
       profile:=f_setup.profile;
       if profile='default' then
@@ -6329,8 +6335,6 @@ begin
     credentialconfig.SetValue('/ASCOMRestdome/Pass',strtohex(encryptStr(f_setup.DomeARestPass.Text, encryptpwd)));
     credentialconfig.SetValue('/ASCOMRestweather/Pass',strtohex(encryptStr(f_setup.WeatherARestPass.Text, encryptpwd)));
     credentialconfig.SetValue('/ASCOMRestsafety/Pass',strtohex(encryptStr(f_setup.SafetyARestPass.Text, encryptpwd)));
-
-    SaveConfig;
 
     DestroyDevices;
     CreateDevices;

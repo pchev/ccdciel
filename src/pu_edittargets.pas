@@ -1472,7 +1472,7 @@ begin
     if hasGainISO then begin
        t.FlatGain:=FISObox.ItemIndex;
     end
-    else begin
+    else if hasGain then begin
        t.FlatGain:=FGainEdit.Value;
     end;
     t.FlatFilters:='';
@@ -2361,7 +2361,7 @@ begin
     StepsModified:=StepsModified or (p.gain<>j);
     if j>=0 then p.gain:=j;
   end
-  else begin
+  else if hasGain then begin
     j:=StrToIntDef(StepList.Cells[pcolgain,n],p.gain);
     if j>GainMax then begin j:=GainMax; StepList.Cells[pcolgain,n]:=inttostr(j); end;
     if j<GainMin then begin j:=GainMin; StepList.Cells[pcolgain,n]:=inttostr(j); end;
