@@ -2751,7 +2751,7 @@ begin
    end
    else begin
       Screen2fits(Mx,My,f_visu.FlipHorz,f_visu.FlipVert,x,y);
-      f_starprofile.ShowProfile(fits,x,y,Starwindow div fits.HeaderInfo.BinX,fits.HeaderInfo.focallen,fits.HeaderInfo.pixsz1);
+      f_starprofile.ShowProfile(fits,x,y,Starwindow,fits.HeaderInfo.focallen,fits.HeaderInfo.pixsz1);
    end;
    Image1.Invalidate;
  end;
@@ -5504,7 +5504,7 @@ begin
        f_vcurve.LoadCurve;
        exit;
      end;
-     f_starprofile.showprofile(fits,round(f_starprofile.StarX),round(f_starprofile.StarY),Starwindow div fits.HeaderInfo.BinX,fits.HeaderInfo.focallen,fits.HeaderInfo.pixsz1);
+     f_starprofile.showprofile(fits,round(f_starprofile.StarX),round(f_starprofile.StarY),Starwindow,fits.HeaderInfo.focallen,fits.HeaderInfo.pixsz1);
      hfdlist[j-1]:=f_starprofile.HFD;
      NewMessage('Measurement '+inttostr(j)+' hfd:'+FormatFloat(f1,f_starprofile.hfd)+' peak:'+FormatFloat(f1,f_starprofile.ValMax)+' snr:'+FormatFloat(f1,f_starprofile.SNR),2);
    end;
@@ -5601,7 +5601,7 @@ begin
    x:=fits.HeaderInfo.naxis1 div 2;
    y:=fits.HeaderInfo.naxis2 div 2;
    s:=2*min(fits.HeaderInfo.naxis1,fits.HeaderInfo.naxis2) div 3;
-   fits.FindBrightestPixel(x,y,s,starwindow div (2*fits.HeaderInfo.BinX),xc1,yc1,vmax);
+   fits.FindBrightestPixel(x,y,s,starwindow div 2,xc1,yc1,vmax);
    f_starprofile.FindStar:=(vmax>0);
    f_starprofile.StarX:=xc1;
    f_starprofile.StarY:=yc1;
@@ -5617,7 +5617,7 @@ begin
  end;
  learningvcurve:=true;
  // set focus frame around the star
- s:=Focuswindow div camera.BinX;
+ s:=Focuswindow;
  s2:=s div 2;
  Fits2Screen(round(f_starprofile.StarX),round(f_starprofile.StarY),f_visu.FlipHorz,f_visu.FlipVert,x,y);
  Screen2CCD(x,y,f_visu.FlipHorz,f_visu.FlipVert,camera.VerticalFlip,xc,yc);
@@ -8700,14 +8700,8 @@ begin
   end;
   if f_starprofile.FindStar and(f_starprofile.StarX>0)and(f_starprofile.StarY>0) then begin
      Fits2Screen(round(f_starprofile.StarX),round(f_starprofile.StarY),f_visu.FlipHorz,f_visu.FlipVert,x,y);
-     if ImgZoom=0 then begin
-       s:=round((Starwindow/fits.HeaderInfo.BinX/2)*ImgScale0);
-       r:=round(f_starprofile.HFD*ImgScale0/2);
-     end
-     else  begin
-       s:=round(ImgZoom*Starwindow/fits.HeaderInfo.BinX/2);
-       r:=round(ImgZoom*f_starprofile.HFD/2);
-     end;
+     s:=max(3,round(max(ImgZoom,ImgScale0)*2.5*f_starprofile.HFD));
+     r:=max(3,round(max(ImgZoom,ImgScale0)*f_starprofile.HFD));
      with Image1.Canvas do begin
         Pen.Color:=clLime;
         brush.Style:=bsClear;
@@ -9344,15 +9338,15 @@ begin
   step:=f_focusercalibration.MinStep;
   hfdmax:=f_focusercalibration.MaxHfd;
   // check window size is enough to reach hfd=20
-  if (Starwindow div camera.BinX)< (4*hfdmax) then
-    Starwindow:=max(20,round(4*hfdmax*camera.BinX));
-  if Focuswindow < (5*Starwindow) then
-    Focuswindow:=5*Starwindow;
+  if (Starwindow)< (2.5*hfdmax) then
+    Starwindow:=max(20,round(2.5*hfdmax));
+  if Focuswindow < (4*Starwindow) then
+    Focuswindow:=4*Starwindow;
   if (not f_starprofile.FindStar)and(fits.HeaderInfo.valid) then begin
     x:=fits.HeaderInfo.naxis1 div 2;
     y:=fits.HeaderInfo.naxis2 div 2;
     rs:=2*min(fits.HeaderInfo.naxis1,fits.HeaderInfo.naxis2) div 3;
-    fits.FindBrightestPixel(x,y,rs,starwindow div (2*fits.HeaderInfo.BinX),xc,yc,vmax);
+    fits.FindBrightestPixel(x,y,rs,starwindow div 2,xc,yc,vmax);
     f_starprofile.FindStar:=(vmax>0);
     f_starprofile.StarX:=xc;
     f_starprofile.StarY:=yc;
@@ -9361,7 +9355,7 @@ begin
     try
      bin:=camera.BinX;
      exp:=f_preview.Exposure;
-     s:=Focuswindow div camera.BinX;
+     s:=Focuswindow;
      s2:=s div 2;
      Fits2Screen(round(f_starprofile.StarX),round(f_starprofile.StarY),f_visu.FlipHorz,f_visu.FlipVert,x,y);
      Screen2CCD(x,y,f_visu.FlipHorz,f_visu.FlipVert,camera.VerticalFlip,xc,yc);
@@ -9407,7 +9401,7 @@ begin
          f_focusercalibration.CalibrationCancel(buf);
          exit;
        end;
-       f_starprofile.showprofile(fits,round(f_starprofile.StarX),round(f_starprofile.StarY),Starwindow div fits.HeaderInfo.BinX,fits.HeaderInfo.focallen,fits.HeaderInfo.pixsz1);
+       f_starprofile.showprofile(fits,round(f_starprofile.StarX),round(f_starprofile.StarY),Starwindow,fits.HeaderInfo.focallen,fits.HeaderInfo.pixsz1);
        if j=0 then begin
          if FocAbsolute then
            NewMessage(Format(rsStartPositio, [IntToStr(focuser.Position),
@@ -9527,7 +9521,7 @@ begin
         f_focusercalibration.CalibrationCancel(buf);
         exit;
       end;
-      f_starprofile.showprofile(fits,round(f_starprofile.StarX),round(f_starprofile.StarY),Starwindow div fits.HeaderInfo.BinX,fits.HeaderInfo.focallen,fits.HeaderInfo.pixsz1);
+      f_starprofile.showprofile(fits,round(f_starprofile.StarX),round(f_starprofile.StarY),Starwindow,fits.HeaderInfo.focallen,fits.HeaderInfo.pixsz1);
       if j=0 then begin
         if FocAbsolute then
           NewMessage(Format(rsStartPositio, [IntToStr(focuser.Position),
@@ -9741,13 +9735,13 @@ else begin
     x:=fits.HeaderInfo.naxis1 div 2;
     y:=fits.HeaderInfo.naxis2 div 2;
     s:=2*min(fits.HeaderInfo.naxis1,fits.HeaderInfo.naxis2) div 3;
-    fits.FindBrightestPixel(x,y,s,starwindow div (2*fits.HeaderInfo.BinX),xc,yc,vmax);
+    fits.FindBrightestPixel(x,y,s,starwindow div 2,xc,yc,vmax);
     f_starprofile.FindStar:=(vmax>0);
     f_starprofile.StarX:=xc;
     f_starprofile.StarY:=yc;
   end;
   if f_starprofile.FindStar then begin
-     s:=Focuswindow div camera.BinX;
+     s:=Focuswindow;
      s2:=s div 2;
      Fits2Screen(round(f_starprofile.StarX),round(f_starprofile.StarY),f_visu.FlipHorz,f_visu.FlipVert,x,y);
      Screen2CCD(x,y,f_visu.FlipHorz,f_visu.FlipVert,camera.VerticalFlip,xc,yc);
@@ -10262,7 +10256,7 @@ begin
   if InplaceAutofocus then begin  // use multiple stars
     if AutofocusMode<>afPlanet then begin
      // first measurement with a big window to find median star diameter
-     s:=starwindow div fits.HeaderInfo.BinX; {use configured star window}
+     s:=starwindow; {use configured star window}
      rx:=img_Width-6*s; {search area}
      ry:=img_Height-6*s;
      fits.GetStarList(rx,ry,s); {search stars in fits image}
@@ -10272,7 +10266,7 @@ begin
        for i:=0 to ns-1 do
          hfdlist[i]:=fits.StarList[i].hfd;
        med:=SMedian(hfdlist);            {median of starshfd}
-       s:=min(max(12,round(6*med)),starwindow div fits.HeaderInfo.BinX);  {reasonable window to measure this stars}
+       s:=min(max(12,round(2.5*med)),starwindow);  {reasonable window to measure this stars}
      end
      else
        s:=20; {no star found, try with small default window}
@@ -10291,7 +10285,7 @@ begin
            AutofocusStarList[i,2]:=fits.StarList[i].y;
          end;
         // Measure again to remove stars that are problematic with the full star window
-        fits.MeasureStarList(Starwindow div fits.HeaderInfo.BinX,AutofocusStarList);
+        fits.MeasureStarList(Starwindow,AutofocusStarList);
         ns:=Length(fits.StarList);
         if ns>0 then begin
            // compute median HFD
@@ -10340,7 +10334,7 @@ begin
     x:=fits.HeaderInfo.naxis1 div 2;
     y:=fits.HeaderInfo.naxis2 div 2;
     s:=2*min(fits.HeaderInfo.naxis1,fits.HeaderInfo.naxis2) div 3;
-    fits.FindBrightestPixel(x,y,s,starwindow div (2*fits.HeaderInfo.BinX),xc,yc,vmax);
+    fits.FindBrightestPixel(x,y,s,starwindow div 2,xc,yc,vmax);
     f_starprofile.FindStar:=(vmax>0);
     f_starprofile.StarX:=xc;
     f_starprofile.StarY:=yc;
@@ -10348,7 +10342,7 @@ begin
     wait(1);
     if f_starprofile.FindStar then begin  // star selected OK
        // set focus frame
-       s:=Focuswindow div camera.BinX;
+       s:=Focuswindow;
        s2:=s div 2;
        Fits2Screen(round(f_starprofile.StarX),round(f_starprofile.StarY),f_visu.FlipHorz,f_visu.FlipVert,x,y);
        Screen2CCD(x,y,f_visu.FlipHorz,f_visu.FlipVert,camera.VerticalFlip,xc,yc);
@@ -10440,24 +10434,24 @@ if (fits.HeaderInfo.valid)and(Preview or Capture) then begin // not on control e
   {$ifdef debug_raw}writeln(FormatDateTime(dateiso,Now)+blank+'check autofocus');{$endif}
   if f_starprofile.AutofocusRunning then
     // process autofocus
-    f_starprofile.Autofocus(fits,round(f_starprofile.StarX),round(f_starprofile.StarY),Starwindow div fits.HeaderInfo.BinX)
+    f_starprofile.Autofocus(fits,round(f_starprofile.StarX),round(f_starprofile.StarY),Starwindow)
   else if (AutofocusMode=afPlanet) and (f_starprofile.ChkFocus.Down) then
     f_starprofile.ShowSharpness(fits)
   else if Collimation or f_starprofile.ChkFocus.Down then begin
-    c:=(Focuswindow div fits.HeaderInfo.BinX)/2;
-    f_starprofile.showprofile(fits,round(f_starprofile.StarX),round(f_starprofile.StarY),Starwindow div fits.HeaderInfo.BinX,fits.HeaderInfo.focallen,fits.HeaderInfo.pixsz1);
+    c:=Focuswindow/2;
+    f_starprofile.showprofile(fits,round(f_starprofile.StarX),round(f_starprofile.StarY),Starwindow,fits.HeaderInfo.focallen,fits.HeaderInfo.pixsz1);
     if not f_starprofile.FindStar then begin
       // try to re-acquire star in full window
-      sw:=starwindow div (2*fits.HeaderInfo.BinX);
+      sw:=starwindow div 2;
       fits.FindBrightestPixel(round(c),round(c),round(2*c)-sw,sw,sx,sy,vmax);
       if vmax>0 then begin
-        f_starprofile.showprofile(fits,sx,sy,Starwindow div fits.HeaderInfo.BinX,fits.HeaderInfo.focallen,fits.HeaderInfo.pixsz1);
+        f_starprofile.showprofile(fits,sx,sy,Starwindow,fits.HeaderInfo.focallen,fits.HeaderInfo.pixsz1);
         if Collimation and (not f_starprofile.FindStar) then begin
           // for collimation, automatically increase the detection window
           dm:=((Focuswindow/2)-Starwindow)/3;
           sw:=round(Starwindow+dm);
           repeat
-             f_starprofile.showprofile(fits,sx,sy,sw div fits.HeaderInfo.BinX,fits.HeaderInfo.focallen,fits.HeaderInfo.pixsz1);
+             f_starprofile.showprofile(fits,sx,sy,sw,fits.HeaderInfo.focallen,fits.HeaderInfo.pixsz1);
              sw:=round(sw+dm);
           until f_starprofile.FindStar or (sw>(Focuswindow/2));
         end;
@@ -10481,7 +10475,7 @@ if (fits.HeaderInfo.valid)and(Preview or Capture) then begin // not on control e
   end
   else if f_starprofile.FindStar  then
     // only refresh star profile
-    f_starprofile.showprofile(fits,round(f_starprofile.StarX),round(f_starprofile.StarY),Starwindow div fits.HeaderInfo.BinX,fits.HeaderInfo.focallen,fits.HeaderInfo.pixsz1);
+    f_starprofile.showprofile(fits,round(f_starprofile.StarX),round(f_starprofile.StarY),Starwindow,fits.HeaderInfo.focallen,fits.HeaderInfo.pixsz1);
 end;
 end;
 
@@ -11696,7 +11690,7 @@ begin
   if plot then DrawImage; {draw clean image}
 
   // first measurement with a big window to find median star diameter
-  s:=starwindow div fits.HeaderInfo.BinX; {use configured star window}
+  s:=starwindow; {use configured star window}
   rx:=img_Width-6*s; {search area}
   ry:=img_Height-6*s;
   fits.GetStarList(rx,ry,s); {search stars in fits image}
@@ -11706,7 +11700,7 @@ begin
     for i:=0 to nhfd-1 do
       hfdlist[i]:=fits.StarList[i].hfd;
     med:=SMedian(hfdlist);            {median of starshfd}
-    s:=min(max(12,round(6*med)),starwindow div fits.HeaderInfo.BinX);  {reasonable window to measure this stars}
+    s:=min(max(12,round(2.5*med)),starwindow);  {reasonable window to measure this stars}
   end
   else
     s:=20; {no star found, try with small default window}
@@ -11925,7 +11919,7 @@ begin
       end;
     end
  else sval:='';
- s:=Starwindow div fits.HeaderInfo.BinX;
+ s:=Starwindow;
  if (xx>s)and(xx<(fits.HeaderInfo.naxis1-s))and(yy>s)and(yy<(fits.HeaderInfo.naxis2-s)) then begin
    fits.FindStarPos(xx,yy,s,xxc,yyc,rc,vmax,bg,bgdev);
    if vmax>0 then begin
