@@ -6491,8 +6491,8 @@ begin
    f_option.DomeFlatSetLight.Checked:=config.GetValue('/Flat/DomeFlatSetLight',DomeFlatSetLight);
    f_option.DomeFlatSetLightON.Text:=config.GetValue('/Flat/DomeFlatSetLightON',DomeFlatSetLightON);
    f_option.DomeFlatSetLightOFF.Text:=config.GetValue('/Flat/DomeFlatSetLightOFF',DomeFlatSetLightOFF);
-   f_option.StarWindow.Value:=config.GetValue('/StarAnalysis/Window',Starwindow);
    f_option.FocusWindow.Value:=config.GetValue('/StarAnalysis/Focus',Focuswindow);
+   f_option.FocusWindow.MinValue:=4*Starwindow;
    f_option.Undersampled.Checked:=config.GetValue('/StarAnalysis/Undersampled',Undersampled);
    f_option.FilterList.Cells[0, 0]:=rsFilterName;
    f_option.FilterList.Cells[1, 0]:=rsFocuserOffse;
@@ -6783,7 +6783,6 @@ begin
         config.SetValue('/Files/FileSequenceWidth',0);
      config.SetValue('/Files/Pack',f_option.FilePack.checked);
      config.SetValue('/Files/Exif',f_option.WantExif.Checked);
-     config.SetValue('/StarAnalysis/Window',f_option.StarWindow.Value);
      config.SetValue('/StarAnalysis/Focus',f_option.FocusWindow.Value);
      config.SetValue('/StarAnalysis/Undersampled',f_option.Undersampled.Checked);
      n:=FilterList.Count-1;

@@ -1825,55 +1825,31 @@ object f_option: Tf_option
         Left = 0
         Height = 105
         Top = 0
-        Width = 502
+        Width = 499
         Align = alTop
         Caption = 'Star profile'
         ClientHeight = 85
-        ClientWidth = 500
+        ClientWidth = 497
         ParentFont = False
         TabOrder = 0
-        object Label14: TLabel
-          Left = 8
-          Height = 19
-          Top = 4
-          Width = 169
-          Caption = 'Star detection window size '
-          ParentColor = False
-          ParentFont = False
-        end
         object Label2: TLabel
           Left = 8
           Height = 19
-          Top = 32
+          Top = 11
           Width = 113
           Caption = 'Focus window size'
           ParentColor = False
           ParentFont = False
         end
-        object StarWindow: TSpinEditEx
+        object FocusWindow: TSpinEditEx
           Left = 273
           Height = 28
-          Top = 1
+          Top = 8
           Width = 75
           Constraints.MaxHeight = 28
           MaxLength = 0
           ParentFont = False
           TabOrder = 0
-          OnEditingDone = CheckFocusWindow
-          MaxValue = 1000
-          MinValue = 10
-          Value = 10
-        end
-        object FocusWindow: TSpinEditEx
-          Left = 273
-          Height = 28
-          Top = 29
-          Width = 75
-          Constraints.MaxHeight = 28
-          MaxLength = 0
-          ParentFont = False
-          TabOrder = 1
-          OnEditingDone = CheckFocusWindow
           MaxValue = 1000
           MinValue = 100
           Value = 100
@@ -1881,22 +1857,22 @@ object f_option: Tf_option
         object Undersampled: TCheckBox
           Left = 8
           Height = 21
-          Top = 59
+          Top = 48
           Width = 297
           Caption = 'System is undersampled, accept 1 pixel star.'
           ParentFont = False
-          TabOrder = 2
+          TabOrder = 1
         end
       end
       object GroupCorrection: TGroupBox
         Left = 0
         Height = 87
         Top = 105
-        Width = 502
+        Width = 499
         Align = alTop
         Caption = 'Focuser correction'
         ClientHeight = 67
-        ClientWidth = 500
+        ClientWidth = 497
         ParentFont = False
         TabOrder = 1
         object Label98: TLabel
@@ -1973,20 +1949,20 @@ object f_option: Tf_option
       end
       object GroupBox12: TGroupBox
         Left = 0
-        Height = 318
+        Height = 345
         Top = 192
-        Width = 502
+        Width = 499
         Align = alClient
         Caption = 'Filter offset'
-        ClientHeight = 298
-        ClientWidth = 500
+        ClientHeight = 325
+        ClientWidth = 497
         ParentFont = False
         TabOrder = 2
         object FilterList: TStringGrid
           Left = 0
-          Height = 298
+          Height = 325
           Top = 0
-          Width = 500
+          Width = 497
           Align = alClient
           AutoFillColumns = True
           ColCount = 3
@@ -1997,8 +1973,8 @@ object f_option: Tf_option
           TabOrder = 0
           ColWidths = (
             123
-            186
-            187
+            176
+            176
           )
         end
       end

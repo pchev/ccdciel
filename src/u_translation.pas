@@ -583,8 +583,6 @@ resourcestring
   rsAbortAfter = 'Abort after';
   rsSkychartOnLo = 'Skychart on local computer';
   rsTheProgramNe = 'The program need to be restarted';
-  rsFocusWindowM = 'Focus window must be at least four time greater than Star '
-    +'window!';
   rsNearHFDMustB = 'Near HFD must be smaller than Start HFD!';
   rsDestroyAllBa = 'Destroy all Bad Pixel Map data?';
   rsCreateFromCa = 'Create from camera';
