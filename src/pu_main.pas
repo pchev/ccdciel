@@ -3433,8 +3433,9 @@ begin
   ReadoutModePreview:=config.GetValue('/Readout/Preview',0);
   ReadoutModeFocus:=config.GetValue('/Readout/Focus',0);
   ReadoutModeAstrometry:=config.GetValue('/Readout/Astrometry',0);
-  Starwindow:=config.GetValue('/StarAnalysis/Window',80);
+  Starwindow:=config.GetValue('/StarAnalysis/Window',60);
   Focuswindow:=config.GetValue('/StarAnalysis/Focus',400);
+  Focuswindow:=max(Focuswindow,4*Starwindow);
   Undersampled:=config.GetValue('/StarAnalysis/Undersampled',false);
   n:=config.GetValue('/Filters/Num',0);
   for i:=0 to MaxFilter do FilterOffset[i]:=0;
@@ -5617,7 +5618,7 @@ begin
  end;
  learningvcurve:=true;
  // set focus frame around the star
- s:=Focuswindow;
+ s:=min(Focuswindow,min(fits.HeaderInfo.naxis1 div 2,fits.HeaderInfo.naxis2 div 2));
  s2:=s div 2;
  Fits2Screen(round(f_starprofile.StarX),round(f_starprofile.StarY),f_visu.FlipHorz,f_visu.FlipVert,x,y);
  Screen2CCD(x,y,f_visu.FlipHorz,f_visu.FlipVert,camera.VerticalFlip,xc,yc);
@@ -9355,7 +9356,7 @@ begin
     try
      bin:=camera.BinX;
      exp:=f_preview.Exposure;
-     s:=Focuswindow;
+     s:=min(Focuswindow,min(fits.HeaderInfo.naxis1 div 2,fits.HeaderInfo.naxis2 div 2));
      s2:=s div 2;
      Fits2Screen(round(f_starprofile.StarX),round(f_starprofile.StarY),f_visu.FlipHorz,f_visu.FlipVert,x,y);
      Screen2CCD(x,y,f_visu.FlipHorz,f_visu.FlipVert,camera.VerticalFlip,xc,yc);
@@ -9741,7 +9742,7 @@ else begin
     f_starprofile.StarY:=yc;
   end;
   if f_starprofile.FindStar then begin
-     s:=Focuswindow;
+     s:=min(Focuswindow,min(fits.HeaderInfo.naxis1 div 2,fits.HeaderInfo.naxis2 div 2));
      s2:=s div 2;
      Fits2Screen(round(f_starprofile.StarX),round(f_starprofile.StarY),f_visu.FlipHorz,f_visu.FlipVert,x,y);
      Screen2CCD(x,y,f_visu.FlipHorz,f_visu.FlipVert,camera.VerticalFlip,xc,yc);
@@ -10342,7 +10343,7 @@ begin
     wait(1);
     if f_starprofile.FindStar then begin  // star selected OK
        // set focus frame
-       s:=Focuswindow;
+       s:=min(Focuswindow,min(fits.HeaderInfo.naxis1 div 2,fits.HeaderInfo.naxis2 div 2));
        s2:=s div 2;
        Fits2Screen(round(f_starprofile.StarX),round(f_starprofile.StarY),f_visu.FlipHorz,f_visu.FlipVert,x,y);
        Screen2CCD(x,y,f_visu.FlipHorz,f_visu.FlipVert,camera.VerticalFlip,xc,yc);
@@ -10438,7 +10439,7 @@ if (fits.HeaderInfo.valid)and(Preview or Capture) then begin // not on control e
   else if (AutofocusMode=afPlanet) and (f_starprofile.ChkFocus.Down) then
     f_starprofile.ShowSharpness(fits)
   else if Collimation or f_starprofile.ChkFocus.Down then begin
-    c:=Focuswindow/2;
+    c:=fits.HeaderInfo.naxis1/2;
     f_starprofile.showprofile(fits,round(f_starprofile.StarX),round(f_starprofile.StarY),Starwindow,fits.HeaderInfo.focallen,fits.HeaderInfo.pixsz1);
     if not f_starprofile.FindStar then begin
       // try to re-acquire star in full window
@@ -10448,12 +10449,12 @@ if (fits.HeaderInfo.valid)and(Preview or Capture) then begin // not on control e
         f_starprofile.showprofile(fits,sx,sy,Starwindow,fits.HeaderInfo.focallen,fits.HeaderInfo.pixsz1);
         if Collimation and (not f_starprofile.FindStar) then begin
           // for collimation, automatically increase the detection window
-          dm:=((Focuswindow/2)-Starwindow)/3;
+          dm:=(c-Starwindow)/3;
           sw:=round(Starwindow+dm);
           repeat
              f_starprofile.showprofile(fits,sx,sy,sw,fits.HeaderInfo.focallen,fits.HeaderInfo.pixsz1);
              sw:=round(sw+dm);
-          until f_starprofile.FindStar or (sw>(Focuswindow/2));
+          until f_starprofile.FindStar or (sw>c);
         end;
       end;
     end;
