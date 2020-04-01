@@ -3434,6 +3434,7 @@ begin
   else
      AutofocusPauseGuider:=true;
   if not f_sequence.Running then InplaceAutofocus:=AutofocusInPlace;
+  AutofocusMultiStarCenter:=config.GetValue('/StarAnalysis/AutofocusMultiStarCenter',true);
   LoadFocusStar(config.GetValue('/StarAnalysis/AutofocusStarMag',4));
   FocusStarMagAdjust:=config.GetValue('/StarAnalysis/FocusStarMagAdjust',false);
   AutofocusDynamicNumPoint:=config.GetValue('/StarAnalysis/AutofocusDynamicNumPoint',7);
@@ -6555,6 +6556,7 @@ begin
    f_option.AutofocusInPlace.Checked:=ok;
    f_option.AutofocusSlew.Checked:=not ok;
    f_option.AutofocusPauseGuider.Checked:=config.GetValue('/StarAnalysis/AutofocusPauseGuider',AutofocusPauseGuider);
+   f_option.AutofocusMultiStarCenter.Checked:=config.GetValue('/StarAnalysis/AutofocusMultiStarCenter',AutofocusMultiStarCenter);
    f_option.AutofocusDynamicNumPoint.Value:=config.GetValue('/StarAnalysis/AutofocusDynamicNumPoint',AutofocusDynamicNumPoint);
    f_option.AutofocusDynamicMovement.Value:=config.GetValue('/StarAnalysis/AutofocusDynamicMovement',AutofocusDynamicMovement);
    f_option.AutofocusPlanetNumPoint.Value:=config.GetValue('/StarAnalysis/AutofocusPlanetNumPoint',AutofocusPlanetNumPoint);
@@ -6828,6 +6830,7 @@ begin
        config.SetValue('/StarAnalysis/AutofocusPauseGuider',f_option.AutofocusPauseGuider.Checked)
      else
        config.SetValue('/StarAnalysis/AutofocusPauseGuider',true);
+     config.SetValue('/StarAnalysis/AutofocusMultiStarCenter',f_option.AutofocusMultiStarCenter.Checked);
      config.SetValue('/StarAnalysis/AutofocusDynamicNumPoint',f_option.AutofocusDynamicNumPoint.Value);
      config.SetValue('/StarAnalysis/AutofocusDynamicMovement',f_option.AutofocusDynamicMovement.Value);
      config.SetValue('/StarAnalysis/AutofocusPlanetNumPoint',f_option.AutofocusPlanetNumPoint.Value);
@@ -10279,9 +10282,14 @@ begin
      else
        s:=20; {no star found, try with small default window}
 
+     if AutofocusMultiStarCenter then begin  // reduce search area to image center
+       if max(img_Height,img_Width)/min(img_Height,img_Width)>1.4 then // format ratio > 4/3
+         rx:=round(min(img_Height,img_Width)-4*s)  // format 3/2, use full height
+       else
+         rx:=round(2*min(img_Height,img_Width)/3); // format 4/3 or 1/1 use 2/3 height
+       ry:=rx;
+     end;
 
-     rx:=round(2*min(img_Height,img_Width)/3); {search area}
-     ry:=rx;
      fits.GetStarList(rx,ry,s); {search stars in fits image}
      ns:=Length(fits.StarList);
      // store star list

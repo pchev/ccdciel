@@ -47,6 +47,7 @@ type
     ButtonVoiceTest: TButton;
     ButtonVoiceAll: TButton;
     ButtonVoiceNone: TButton;
+    AutofocusMultiStarCenter: TCheckBox;
     PagePlaNone: TPage;
     PanelLeft: TPanel;
     WantExif: TCheckBox;
@@ -975,6 +976,7 @@ begin
   AutofocusMultistar.Caption := rsFocusStarSel;
   label56.Caption := rsDetectMultip;
   AutofocusPauseGuider.Caption:=rsPauseGuiding;
+  AutofocusMultiStarCenter.Caption:=rsUseOnlyStarN;
   Label101.Caption := rsTheMenuFileF;
   PageAstrometry.Caption := rsAstrometry;
   GroupBox4.Caption := rsAstrometryOp;
