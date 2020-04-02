@@ -10288,50 +10288,32 @@ begin
        else
          rx:=round(2*min(img_Height,img_Width)/3); // format 4/3 or 1/1 use 2/3 height
        ry:=rx;
+     end
+     else begin
+       rx:=img_Width-6*s; {search area}
+       ry:=img_Height-6*s;
      end;
 
      fits.GetStarList(rx,ry,s); {search stars in fits image}
      ns:=Length(fits.StarList);
      // store star list
      if ns>0 then begin
-        // make temporary list with all the stars
+        // compute median HFD
+        SetLength(hfdlist,ns);
+        for i:=0 to ns-1 do
+            hfdlist[i]:=fits.StarList[i].hfd;
+        meanhfd:=SMedian(hfdlist);
+        n:=0;
         SetLength(AutofocusStarList,ns);
         for i:=0 to ns-1 do begin
-           AutofocusStarList[i,1]:=fits.StarList[i].x;
-           AutofocusStarList[i,2]:=fits.StarList[i].y;
-         end;
-        // Measure again to remove stars that are problematic with the full star window
-        fits.MeasureStarList(Starwindow,AutofocusStarList);
-        ns:=Length(fits.StarList);
-        if ns>0 then begin
-           // compute median HFD
-          SetLength(hfdlist,ns);
-          for i:=0 to ns-1 do
-              hfdlist[i]:=fits.StarList[i].hfd;
-          meanhfd:=SMedian(hfdlist);
-          n:=0;
-          SetLength(AutofocusStarList,ns);
-          for i:=0 to ns-1 do begin
-            // filter by hfd to remove galaxies and others outliers
-            if abs(fits.StarList[i].hfd-meanhfd)<(0.5*meanhfd) then begin
-              inc(n);
-              AutofocusStarList[n-1,1]:=fits.StarList[i].x;
-              AutofocusStarList[n-1,2]:=fits.StarList[i].y;
-            end;
+          // filter by hfd to remove galaxies and others outliers
+          if abs(fits.StarList[i].hfd-meanhfd)<(0.5*meanhfd) then begin
+            inc(n);
+            AutofocusStarList[n-1,1]:=fits.StarList[i].x;
+            AutofocusStarList[n-1,2]:=fits.StarList[i].y;
           end;
-          SetLength(AutofocusStarList,n);
-        end
-        else begin
-         SetLength(AutofocusStarList,0);
-         f_starprofile.ChkAutofocusDown(false);
-         NewMessage(Format(rsAutofocusCan, [crlf]),1);
-         if LogToFile then begin
-           buf:=slash(LogDir)+'focus_fail_'+FormatDateTime('yyyymmdd_hhnnss',now)+'.fits';
-           fits.SaveToFile(buf);
-           NewMessage(Format(rsSavedFile, [buf]),2);
-         end;
-         exit;
         end;
+        SetLength(AutofocusStarList,n);
      end
      else begin  // no star, manual action is required
         SetLength(AutofocusStarList,0);

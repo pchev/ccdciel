@@ -2903,7 +2903,10 @@ for i:=0 to Length(list)-1 do
 
 
    {check valid hfd, snr}
-   if (((hfd1>0)and(Undersampled or (hfd1>0.7))) and (hfd1<99) and (snr>3)) then
+   if ((hfd1>0)and (Undersampled or (hfd1>0.7)))
+      and (hfd1<99)
+      and (snr>AutofocusMinSNR)  {minimal star detection level, also detect saturation}
+    then
     begin
        inc(nhfd);
        if nhfd>=Length(FStarList) then
