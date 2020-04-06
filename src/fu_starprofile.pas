@@ -621,6 +621,7 @@ begin
     end
     else
       s:=20; {no star found, try with small default window}
+    s:=s+4; // safe margin for small difference with first measurement in Getstarlist
     // measure with new window
     f.MeasureStarList(s,AutofocusStarList);
     ns:=Length(f.StarList);
