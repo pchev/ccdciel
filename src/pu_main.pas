@@ -1981,9 +1981,7 @@ end;
 
 procedure Tf_main.FormShow(Sender: TObject);
 var str: string;
-    i,n: integer;
-    posprev,poscapt:integer;
-    binprev,bincapt:string;
+    i: integer;
 begin
   if (cdcwcs_initfitsfile=nil)or(cdcwcs_release=nil)or(cdcwcs_sky2xy=nil)or(cdcwcs_xy2sky=nil)or(cdcwcs_getinfo=nil) then begin
      NewMessage('Could not load '+libwcs+crlf+'Some astrometry function are not available.',1);
@@ -2012,67 +2010,10 @@ begin
   StatusBar1.Visible:=false; // bug with statusbar visibility
   StatusbarTimer.Enabled:=true;
 
-  n:=config.GetValue('/Filters/Num',0);
-  for i:=0 to MaxFilter do FilterOffset[i]:=0;
-  for i:=0 to MaxFilter do FilterExpFact[i]:=1.0;
-  FilterList.Clear;
-  FilterList.Add(Filter0);
-  for i:=1 to n do begin
-     FilterOffset[i]:=trunc(config.GetValue('/Filters/Offset'+IntToStr(i),0));
-     FilterExpFact[i]:=config.GetValue('/Filters/ExpFact'+IntToStr(i),1.0);
-     str:=config.GetValue('/Filters/Filter'+IntToStr(i),'');
-     FilterList.Add(str);
-  end;
-  f_filterwheel.Filters.Items.Assign(FilterList);
-  f_filterwheel.Filters.ItemIndex:=0;
-  f_EditTargets.StepList.Columns[pcolfilter-1].PickList.Assign(FilterList);
-  f_EditTargets.FlatFilterList.Items.Assign(FilterList);
-  if f_EditTargets.FlatFilterList.Items.Count>0 then f_EditTargets.FlatFilterList.Items.Delete(0);
-  SetFilterMenu;
-
-  n:=config.GetValue('/Binning/Num',0);
-  BinningList.Clear;
-  binprev:=config.GetValue('/Preview/Binning','1x1');
-  bincapt:=config.GetValue('/Capture/Binning','1x1');
-  posprev:=0;
-  poscapt:=0;
-  if n>0 then begin
-    for i:=0 to n-1 do begin
-       str:=config.GetValue('/Binning/Binning'+IntToStr(i),'');
-       n:=BinningList.Add(str);
-       if str=binprev then posprev:=n;
-       if str=bincapt then poscapt:=n;
-    end;
-  end
-  else
-    BinningList.Add(Binning0);
-  SetBinningList(posprev,poscapt);
-
-  n:=config.GetValue('/Readout/Num',0);
-  ReadoutList.Clear;
-  for i:=1 to n do begin
-     str:=config.GetValue('/Readout/Mode'+IntToStr(i),'');
-     ReadoutList.Add(str);
-  end;
-  f_option.ReadOutCapture.Items.Assign(ReadoutList);
-  f_option.ReadOutPreview.Items.Assign(ReadoutList);
-  f_option.ReadOutFocus.Items.Assign(ReadoutList);
-  f_option.ReadOutAstrometry.Items.Assign(ReadoutList);
   f_option.onShowHelp:=@MenuPdfHelpClick;
   f_setup.onShowHelp:=@MenuPdfHelpClick;
 
-  hasGain:=config.GetValue('/Gain/hasGain',false);
-  hasGainISO:=config.GetValue('/Gain/hasGainISO',false);
-  Gain:=config.GetValue('/Gain/Gain',0);
-  GainMin:=config.GetValue('/Gain/GainMin',0);
-  GainMax:=config.GetValue('/Gain/GainMax',0);
-  n:=config.GetValue('/Gain/NumISO',0);
-  for i:=0 to n-1 do begin
-     str:=config.GetValue('/Gain/ISO'+IntToStr(i),'');
-     ISOList.Add(str);
-  end;
-  SetGainList;
-  ShowFnumber;
+  SetOptions;
 
   str:=config.GetValue('/Sequence/Targets','');
   if str<>'' then f_sequence.LoadTargets(str);
@@ -2646,7 +2587,11 @@ begin
      buf:=trim(emailconfig.GetValue('/SMTP/Port',''));
      emailconfig.SetValue('/SMTP/SSLTLS',(buf<>'25'));
   end;
-  if oldver<'0.9.67' then
+  if oldver<'0.9.70' then begin
+     // reset default star detection window size
+     config.SetValue('/StarAnalysis/Window',60);     ;
+  end;
+  if config.Modified then
      SaveConfig;
 end;
 
@@ -2752,7 +2697,7 @@ begin
    end
    else begin
       Screen2fits(Mx,My,f_visu.FlipHorz,f_visu.FlipVert,x,y);
-      f_starprofile.ShowProfile(fits,x,y,Starwindow div fits.HeaderInfo.BinX,fits.HeaderInfo.focallen,fits.HeaderInfo.pixsz1);
+      f_starprofile.ShowProfile(fits,x,y,Starwindow,fits.HeaderInfo.focallen,fits.HeaderInfo.pixsz1);
    end;
    Image1.Invalidate;
  end;
@@ -3350,11 +3295,13 @@ end;
 
 procedure Tf_main.SetOptions;
 var i,n: integer;
-    buf,v: string;
+    buf,v,str: string;
     ok: boolean;
     oldbayer: TBayerMode;
     oldRed,oldGreen,oldBlue:double;
     oldBalance:boolean;
+    posprev,poscapt:integer;
+    binprev,bincapt:string;
 begin
   ShowHint:=screenconfig.GetValue('/Hint/Show',true);
   if f_option<>nil then f_option.ShowHint:=ShowHint;
@@ -3434,8 +3381,9 @@ begin
   ReadoutModePreview:=config.GetValue('/Readout/Preview',0);
   ReadoutModeFocus:=config.GetValue('/Readout/Focus',0);
   ReadoutModeAstrometry:=config.GetValue('/Readout/Astrometry',0);
-  Starwindow:=config.GetValue('/StarAnalysis/Window',80);
+  Starwindow:=config.GetValue('/StarAnalysis/Window',60);
   Focuswindow:=config.GetValue('/StarAnalysis/Focus',400);
+  Focuswindow:=max(Focuswindow,4*Starwindow);
   Undersampled:=config.GetValue('/StarAnalysis/Undersampled',false);
   n:=config.GetValue('/Filters/Num',0);
   for i:=0 to MaxFilter do FilterOffset[i]:=0;
@@ -3487,6 +3435,7 @@ begin
   else
      AutofocusPauseGuider:=true;
   if not f_sequence.Running then InplaceAutofocus:=AutofocusInPlace;
+  AutofocusMultiStarCenter:=config.GetValue('/StarAnalysis/AutofocusMultiStarCenter',true);
   LoadFocusStar(config.GetValue('/StarAnalysis/AutofocusStarMag',4));
   FocusStarMagAdjust:=config.GetValue('/StarAnalysis/FocusStarMagAdjust',false);
   AutofocusDynamicNumPoint:=config.GetValue('/StarAnalysis/AutofocusDynamicNumPoint',7);
@@ -3649,6 +3598,68 @@ begin
   VoiceError:=config.GetValue('/Voice/Error',false);
   VoiceEmail:=config.GetValue('/Voice/Email',false);
 
+  if wheel.Status=devDisconnected then begin
+    n:=config.GetValue('/Filters/Num',0);
+    for i:=0 to MaxFilter do FilterOffset[i]:=0;
+    for i:=0 to MaxFilter do FilterExpFact[i]:=1.0;
+    FilterList.Clear;
+    FilterList.Add(Filter0);
+    for i:=1 to n do begin
+       FilterOffset[i]:=trunc(config.GetValue('/Filters/Offset'+IntToStr(i),0));
+       FilterExpFact[i]:=config.GetValue('/Filters/ExpFact'+IntToStr(i),1.0);
+       str:=config.GetValue('/Filters/Filter'+IntToStr(i),'');
+       FilterList.Add(str);
+    end;
+    f_filterwheel.Filters.Items.Assign(FilterList);
+    f_filterwheel.Filters.ItemIndex:=0;
+    f_EditTargets.StepList.Columns[pcolfilter-1].PickList.Assign(FilterList);
+    f_EditTargets.FlatFilterList.Items.Assign(FilterList);
+    if f_EditTargets.FlatFilterList.Items.Count>0 then f_EditTargets.FlatFilterList.Items.Delete(0);
+    SetFilterMenu;
+  end;
+  if (f_option<>nil)and(camera.Status=devDisconnected) then begin
+    n:=config.GetValue('/Binning/Num',0);
+    BinningList.Clear;
+    binprev:=config.GetValue('/Preview/Binning','1x1');
+    bincapt:=config.GetValue('/Capture/Binning','1x1');
+    posprev:=0;
+    poscapt:=0;
+    if n>0 then begin
+      for i:=0 to n-1 do begin
+         str:=config.GetValue('/Binning/Binning'+IntToStr(i),'');
+         n:=BinningList.Add(str);
+         if str=binprev then posprev:=n;
+         if str=bincapt then poscapt:=n;
+      end;
+    end
+    else
+      BinningList.Add(Binning0);
+    SetBinningList(posprev,poscapt);
+
+    n:=config.GetValue('/Readout/Num',0);
+    ReadoutList.Clear;
+    for i:=1 to n do begin
+       str:=config.GetValue('/Readout/Mode'+IntToStr(i),'');
+       ReadoutList.Add(str);
+    end;
+    f_option.ReadOutCapture.Items.Assign(ReadoutList);
+    f_option.ReadOutPreview.Items.Assign(ReadoutList);
+    f_option.ReadOutFocus.Items.Assign(ReadoutList);
+    f_option.ReadOutAstrometry.Items.Assign(ReadoutList);
+
+    hasGain:=config.GetValue('/Gain/hasGain',false);
+    hasGainISO:=config.GetValue('/Gain/hasGainISO',false);
+    Gain:=config.GetValue('/Gain/Gain',0);
+    GainMin:=config.GetValue('/Gain/GainMin',0);
+    GainMax:=config.GetValue('/Gain/GainMax',0);
+    n:=config.GetValue('/Gain/NumISO',0);
+    for i:=0 to n-1 do begin
+       str:=config.GetValue('/Gain/ISO'+IntToStr(i),'');
+       ISOList.Add(str);
+    end;
+    SetGainList;
+    ShowFnumber;
+  end;
 end;
 
 procedure Tf_main.SaveScreenConfig;
@@ -5505,7 +5516,7 @@ begin
        f_vcurve.LoadCurve;
        exit;
      end;
-     f_starprofile.showprofile(fits,round(f_starprofile.StarX),round(f_starprofile.StarY),Starwindow div fits.HeaderInfo.BinX,fits.HeaderInfo.focallen,fits.HeaderInfo.pixsz1);
+     f_starprofile.showprofile(fits,round(f_starprofile.StarX),round(f_starprofile.StarY),Starwindow,fits.HeaderInfo.focallen,fits.HeaderInfo.pixsz1);
      hfdlist[j-1]:=f_starprofile.HFD;
      NewMessage('Measurement '+inttostr(j)+' hfd:'+FormatFloat(f1,f_starprofile.hfd)+' peak:'+FormatFloat(f1,f_starprofile.ValMax)+' snr:'+FormatFloat(f1,f_starprofile.SNR),2);
    end;
@@ -5602,7 +5613,7 @@ begin
    x:=fits.HeaderInfo.naxis1 div 2;
    y:=fits.HeaderInfo.naxis2 div 2;
    s:=2*min(fits.HeaderInfo.naxis1,fits.HeaderInfo.naxis2) div 3;
-   fits.FindBrightestPixel(x,y,s,starwindow div (2*fits.HeaderInfo.BinX),xc1,yc1,vmax);
+   fits.FindBrightestPixel(x,y,s,starwindow div 2,xc1,yc1,vmax);
    f_starprofile.FindStar:=(vmax>0);
    f_starprofile.StarX:=xc1;
    f_starprofile.StarY:=yc1;
@@ -5618,7 +5629,7 @@ begin
  end;
  learningvcurve:=true;
  // set focus frame around the star
- s:=Focuswindow div camera.BinX;
+ s:=min(Focuswindow,min(fits.HeaderInfo.naxis1 div 2,fits.HeaderInfo.naxis2 div 2));
  s2:=s div 2;
  Fits2Screen(round(f_starprofile.StarX),round(f_starprofile.StarY),f_visu.FlipHorz,f_visu.FlipVert,x,y);
  Screen2CCD(x,y,f_visu.FlipHorz,f_visu.FlipVert,camera.VerticalFlip,xc,yc);
@@ -6161,6 +6172,7 @@ begin
 
   if f_setup.ModalResult=mrOK then begin
     if profile<>f_setup.profile then begin
+      SaveConfig;
       ProfileFromCommandLine:=false;
       profile:=f_setup.profile;
       if profile='default' then
@@ -6326,8 +6338,6 @@ begin
     credentialconfig.SetValue('/ASCOMRestweather/Pass',strtohex(encryptStr(f_setup.WeatherARestPass.Text, encryptpwd)));
     credentialconfig.SetValue('/ASCOMRestsafety/Pass',strtohex(encryptStr(f_setup.SafetyARestPass.Text, encryptpwd)));
 
-    SaveConfig;
-
     DestroyDevices;
     CreateDevices;
 
@@ -6487,8 +6497,8 @@ begin
    f_option.DomeFlatSetLight.Checked:=config.GetValue('/Flat/DomeFlatSetLight',DomeFlatSetLight);
    f_option.DomeFlatSetLightON.Text:=config.GetValue('/Flat/DomeFlatSetLightON',DomeFlatSetLightON);
    f_option.DomeFlatSetLightOFF.Text:=config.GetValue('/Flat/DomeFlatSetLightOFF',DomeFlatSetLightOFF);
-   f_option.StarWindow.Value:=config.GetValue('/StarAnalysis/Window',Starwindow);
    f_option.FocusWindow.Value:=config.GetValue('/StarAnalysis/Focus',Focuswindow);
+   f_option.FocusWindow.MinValue:=4*Starwindow;
    f_option.Undersampled.Checked:=config.GetValue('/StarAnalysis/Undersampled',Undersampled);
    f_option.FilterList.Cells[0, 0]:=rsFilterName;
    f_option.FilterList.Cells[1, 0]:=rsFocuserOffse;
@@ -6547,6 +6557,7 @@ begin
    f_option.AutofocusInPlace.Checked:=ok;
    f_option.AutofocusSlew.Checked:=not ok;
    f_option.AutofocusPauseGuider.Checked:=config.GetValue('/StarAnalysis/AutofocusPauseGuider',AutofocusPauseGuider);
+   f_option.AutofocusMultiStarCenter.Checked:=config.GetValue('/StarAnalysis/AutofocusMultiStarCenter',AutofocusMultiStarCenter);
    f_option.AutofocusDynamicNumPoint.Value:=config.GetValue('/StarAnalysis/AutofocusDynamicNumPoint',AutofocusDynamicNumPoint);
    f_option.AutofocusDynamicMovement.Value:=config.GetValue('/StarAnalysis/AutofocusDynamicMovement',AutofocusDynamicMovement);
    f_option.AutofocusPlanetNumPoint.Value:=config.GetValue('/StarAnalysis/AutofocusPlanetNumPoint',AutofocusPlanetNumPoint);
@@ -6779,7 +6790,6 @@ begin
         config.SetValue('/Files/FileSequenceWidth',0);
      config.SetValue('/Files/Pack',f_option.FilePack.checked);
      config.SetValue('/Files/Exif',f_option.WantExif.Checked);
-     config.SetValue('/StarAnalysis/Window',f_option.StarWindow.Value);
      config.SetValue('/StarAnalysis/Focus',f_option.FocusWindow.Value);
      config.SetValue('/StarAnalysis/Undersampled',f_option.Undersampled.Checked);
      n:=FilterList.Count-1;
@@ -6821,6 +6831,7 @@ begin
        config.SetValue('/StarAnalysis/AutofocusPauseGuider',f_option.AutofocusPauseGuider.Checked)
      else
        config.SetValue('/StarAnalysis/AutofocusPauseGuider',true);
+     config.SetValue('/StarAnalysis/AutofocusMultiStarCenter',f_option.AutofocusMultiStarCenter.Checked);
      config.SetValue('/StarAnalysis/AutofocusDynamicNumPoint',f_option.AutofocusDynamicNumPoint.Value);
      config.SetValue('/StarAnalysis/AutofocusDynamicMovement',f_option.AutofocusDynamicMovement.Value);
      config.SetValue('/StarAnalysis/AutofocusPlanetNumPoint',f_option.AutofocusPlanetNumPoint.Value);
@@ -8701,14 +8712,8 @@ begin
   end;
   if f_starprofile.FindStar and(f_starprofile.StarX>0)and(f_starprofile.StarY>0) then begin
      Fits2Screen(round(f_starprofile.StarX),round(f_starprofile.StarY),f_visu.FlipHorz,f_visu.FlipVert,x,y);
-     if ImgZoom=0 then begin
-       s:=round((Starwindow/fits.HeaderInfo.BinX/2)*ImgScale0);
-       r:=round(f_starprofile.HFD*ImgScale0/2);
-     end
-     else  begin
-       s:=round(ImgZoom*Starwindow/fits.HeaderInfo.BinX/2);
-       r:=round(ImgZoom*f_starprofile.HFD/2);
-     end;
+     s:=max(3,round(max(ImgZoom,ImgScale0)*2.5*f_starprofile.HFD));
+     r:=max(3,round(max(ImgZoom,ImgScale0)*f_starprofile.HFD));
      with Image1.Canvas do begin
         Pen.Color:=clLime;
         brush.Style:=bsClear;
@@ -9345,15 +9350,15 @@ begin
   step:=f_focusercalibration.MinStep;
   hfdmax:=f_focusercalibration.MaxHfd;
   // check window size is enough to reach hfd=20
-  if (Starwindow div camera.BinX)< (4*hfdmax) then
-    Starwindow:=max(20,round(4*hfdmax*camera.BinX));
-  if Focuswindow < (5*Starwindow) then
-    Focuswindow:=5*Starwindow;
+  if (Starwindow)< (2.5*hfdmax) then
+    Starwindow:=max(20,round(2.5*hfdmax));
+  if Focuswindow < (4*Starwindow) then
+    Focuswindow:=4*Starwindow;
   if (not f_starprofile.FindStar)and(fits.HeaderInfo.valid) then begin
     x:=fits.HeaderInfo.naxis1 div 2;
     y:=fits.HeaderInfo.naxis2 div 2;
     rs:=2*min(fits.HeaderInfo.naxis1,fits.HeaderInfo.naxis2) div 3;
-    fits.FindBrightestPixel(x,y,rs,starwindow div (2*fits.HeaderInfo.BinX),xc,yc,vmax);
+    fits.FindBrightestPixel(x,y,rs,starwindow div 2,xc,yc,vmax);
     f_starprofile.FindStar:=(vmax>0);
     f_starprofile.StarX:=xc;
     f_starprofile.StarY:=yc;
@@ -9362,7 +9367,7 @@ begin
     try
      bin:=camera.BinX;
      exp:=f_preview.Exposure;
-     s:=Focuswindow div camera.BinX;
+     s:=min(Focuswindow,min(fits.HeaderInfo.naxis1 div 2,fits.HeaderInfo.naxis2 div 2));
      s2:=s div 2;
      Fits2Screen(round(f_starprofile.StarX),round(f_starprofile.StarY),f_visu.FlipHorz,f_visu.FlipVert,x,y);
      Screen2CCD(x,y,f_visu.FlipHorz,f_visu.FlipVert,camera.VerticalFlip,xc,yc);
@@ -9408,7 +9413,7 @@ begin
          f_focusercalibration.CalibrationCancel(buf);
          exit;
        end;
-       f_starprofile.showprofile(fits,round(f_starprofile.StarX),round(f_starprofile.StarY),Starwindow div fits.HeaderInfo.BinX,fits.HeaderInfo.focallen,fits.HeaderInfo.pixsz1);
+       f_starprofile.showprofile(fits,round(f_starprofile.StarX),round(f_starprofile.StarY),Starwindow,fits.HeaderInfo.focallen,fits.HeaderInfo.pixsz1);
        if j=0 then begin
          if FocAbsolute then
            NewMessage(Format(rsStartPositio, [IntToStr(focuser.Position),
@@ -9528,7 +9533,7 @@ begin
         f_focusercalibration.CalibrationCancel(buf);
         exit;
       end;
-      f_starprofile.showprofile(fits,round(f_starprofile.StarX),round(f_starprofile.StarY),Starwindow div fits.HeaderInfo.BinX,fits.HeaderInfo.focallen,fits.HeaderInfo.pixsz1);
+      f_starprofile.showprofile(fits,round(f_starprofile.StarX),round(f_starprofile.StarY),Starwindow,fits.HeaderInfo.focallen,fits.HeaderInfo.pixsz1);
       if j=0 then begin
         if FocAbsolute then
           NewMessage(Format(rsStartPositio, [IntToStr(focuser.Position),
@@ -9742,13 +9747,13 @@ else begin
     x:=fits.HeaderInfo.naxis1 div 2;
     y:=fits.HeaderInfo.naxis2 div 2;
     s:=2*min(fits.HeaderInfo.naxis1,fits.HeaderInfo.naxis2) div 3;
-    fits.FindBrightestPixel(x,y,s,starwindow div (2*fits.HeaderInfo.BinX),xc,yc,vmax);
+    fits.FindBrightestPixel(x,y,s,starwindow div 2,xc,yc,vmax);
     f_starprofile.FindStar:=(vmax>0);
     f_starprofile.StarX:=xc;
     f_starprofile.StarY:=yc;
   end;
   if f_starprofile.FindStar then begin
-     s:=Focuswindow div camera.BinX;
+     s:=min(Focuswindow,min(fits.HeaderInfo.naxis1 div 2,fits.HeaderInfo.naxis2 div 2));
      s2:=s div 2;
      Fits2Screen(round(f_starprofile.StarX),round(f_starprofile.StarY),f_visu.FlipHorz,f_visu.FlipVert,x,y);
      Screen2CCD(x,y,f_visu.FlipHorz,f_visu.FlipVert,camera.VerticalFlip,xc,yc);
@@ -10263,7 +10268,7 @@ begin
   if InplaceAutofocus then begin  // use multiple stars
     if AutofocusMode<>afPlanet then begin
      // first measurement with a big window to find median star diameter
-     s:=starwindow div fits.HeaderInfo.BinX; {use configured star window}
+     s:=starwindow; {use configured star window}
      rx:=img_Width-6*s; {search area}
      ry:=img_Height-6*s;
      fits.GetStarList(rx,ry,s); {search stars in fits image}
@@ -10273,56 +10278,43 @@ begin
        for i:=0 to ns-1 do
          hfdlist[i]:=fits.StarList[i].hfd;
        med:=SMedian(hfdlist);            {median of starshfd}
-       s:=min(max(12,round(6*med)),starwindow div fits.HeaderInfo.BinX);  {reasonable window to measure this stars}
+       s:=min(max(12,round(2.5*med)),starwindow);  {reasonable window to measure this stars}
      end
      else
        s:=20; {no star found, try with small default window}
 
+     if AutofocusMultiStarCenter then begin  // reduce search area to image center
+       if max(img_Height,img_Width)/min(img_Height,img_Width)>1.4 then // format ratio > 4/3
+         rx:=round(min(img_Height,img_Width)-4*s)  // format 3/2, use full height
+       else
+         rx:=round(2*min(img_Height,img_Width)/3); // format 4/3 or 1/1 use 2/3 height
+       ry:=rx;
+     end
+     else begin
+       rx:=img_Width-6*s; {search area}
+       ry:=img_Height-6*s;
+     end;
 
-     rx:=round(2*min(img_Height,img_Width)/3); {search area}
-     ry:=rx;
      fits.GetStarList(rx,ry,s); {search stars in fits image}
      ns:=Length(fits.StarList);
      // store star list
      if ns>0 then begin
-        // make temporary list with all the stars
+        // compute median HFD
+        SetLength(hfdlist,ns);
+        for i:=0 to ns-1 do
+            hfdlist[i]:=fits.StarList[i].hfd;
+        meanhfd:=SMedian(hfdlist);
+        n:=0;
         SetLength(AutofocusStarList,ns);
         for i:=0 to ns-1 do begin
-           AutofocusStarList[i,1]:=fits.StarList[i].x;
-           AutofocusStarList[i,2]:=fits.StarList[i].y;
-         end;
-        // Measure again to remove stars that are problematic with the full star window
-        fits.MeasureStarList(Starwindow div fits.HeaderInfo.BinX,AutofocusStarList);
-        ns:=Length(fits.StarList);
-        if ns>0 then begin
-           // compute median HFD
-          SetLength(hfdlist,ns);
-          for i:=0 to ns-1 do
-              hfdlist[i]:=fits.StarList[i].hfd;
-          meanhfd:=SMedian(hfdlist);
-          n:=0;
-          SetLength(AutofocusStarList,ns);
-          for i:=0 to ns-1 do begin
-            // filter by hfd to remove galaxies and others outliers
-            if abs(fits.StarList[i].hfd-meanhfd)<(0.5*meanhfd) then begin
-              inc(n);
-              AutofocusStarList[n-1,1]:=fits.StarList[i].x;
-              AutofocusStarList[n-1,2]:=fits.StarList[i].y;
-            end;
+          // filter by hfd to remove galaxies and others outliers
+          if abs(fits.StarList[i].hfd-meanhfd)<(0.5*meanhfd) then begin
+            inc(n);
+            AutofocusStarList[n-1,1]:=fits.StarList[i].x;
+            AutofocusStarList[n-1,2]:=fits.StarList[i].y;
           end;
-          SetLength(AutofocusStarList,n);
-        end
-        else begin
-         SetLength(AutofocusStarList,0);
-         f_starprofile.ChkAutofocusDown(false);
-         NewMessage(Format(rsAutofocusCan, [crlf]),1);
-         if LogToFile then begin
-           buf:=slash(LogDir)+'focus_fail_'+FormatDateTime('yyyymmdd_hhnnss',now)+'.fits';
-           fits.SaveToFile(buf);
-           NewMessage(Format(rsSavedFile, [buf]),2);
-         end;
-         exit;
         end;
+        SetLength(AutofocusStarList,n);
      end
      else begin  // no star, manual action is required
         SetLength(AutofocusStarList,0);
@@ -10341,7 +10333,7 @@ begin
     x:=fits.HeaderInfo.naxis1 div 2;
     y:=fits.HeaderInfo.naxis2 div 2;
     s:=2*min(fits.HeaderInfo.naxis1,fits.HeaderInfo.naxis2) div 3;
-    fits.FindBrightestPixel(x,y,s,starwindow div (2*fits.HeaderInfo.BinX),xc,yc,vmax);
+    fits.FindBrightestPixel(x,y,s,starwindow div 2,xc,yc,vmax);
     f_starprofile.FindStar:=(vmax>0);
     f_starprofile.StarX:=xc;
     f_starprofile.StarY:=yc;
@@ -10349,7 +10341,7 @@ begin
     wait(1);
     if f_starprofile.FindStar then begin  // star selected OK
        // set focus frame
-       s:=Focuswindow div camera.BinX;
+       s:=min(Focuswindow,min(fits.HeaderInfo.naxis1 div 2,fits.HeaderInfo.naxis2 div 2));
        s2:=s div 2;
        Fits2Screen(round(f_starprofile.StarX),round(f_starprofile.StarY),f_visu.FlipHorz,f_visu.FlipVert,x,y);
        Screen2CCD(x,y,f_visu.FlipHorz,f_visu.FlipVert,camera.VerticalFlip,xc,yc);
@@ -10441,26 +10433,26 @@ if (fits.HeaderInfo.valid)and(Preview or Capture) then begin // not on control e
   {$ifdef debug_raw}writeln(FormatDateTime(dateiso,Now)+blank+'check autofocus');{$endif}
   if f_starprofile.AutofocusRunning then
     // process autofocus
-    f_starprofile.Autofocus(fits,round(f_starprofile.StarX),round(f_starprofile.StarY),Starwindow div fits.HeaderInfo.BinX)
+    f_starprofile.Autofocus(fits,round(f_starprofile.StarX),round(f_starprofile.StarY),Starwindow)
   else if (AutofocusMode=afPlanet) and (f_starprofile.ChkFocus.Down) then
     f_starprofile.ShowSharpness(fits)
   else if Collimation or f_starprofile.ChkFocus.Down then begin
-    c:=(Focuswindow div fits.HeaderInfo.BinX)/2;
-    f_starprofile.showprofile(fits,round(f_starprofile.StarX),round(f_starprofile.StarY),Starwindow div fits.HeaderInfo.BinX,fits.HeaderInfo.focallen,fits.HeaderInfo.pixsz1);
+    c:=fits.HeaderInfo.naxis1/2;
+    f_starprofile.showprofile(fits,round(f_starprofile.StarX),round(f_starprofile.StarY),Starwindow,fits.HeaderInfo.focallen,fits.HeaderInfo.pixsz1);
     if not f_starprofile.FindStar then begin
       // try to re-acquire star in full window
-      sw:=starwindow div (2*fits.HeaderInfo.BinX);
+      sw:=starwindow div 2;
       fits.FindBrightestPixel(round(c),round(c),round(2*c)-sw,sw,sx,sy,vmax);
       if vmax>0 then begin
-        f_starprofile.showprofile(fits,sx,sy,Starwindow div fits.HeaderInfo.BinX,fits.HeaderInfo.focallen,fits.HeaderInfo.pixsz1);
+        f_starprofile.showprofile(fits,sx,sy,Starwindow,fits.HeaderInfo.focallen,fits.HeaderInfo.pixsz1);
         if Collimation and (not f_starprofile.FindStar) then begin
           // for collimation, automatically increase the detection window
-          dm:=((Focuswindow/2)-Starwindow)/3;
+          dm:=(c-Starwindow)/3;
           sw:=round(Starwindow+dm);
           repeat
-             f_starprofile.showprofile(fits,sx,sy,sw div fits.HeaderInfo.BinX,fits.HeaderInfo.focallen,fits.HeaderInfo.pixsz1);
+             f_starprofile.showprofile(fits,sx,sy,sw,fits.HeaderInfo.focallen,fits.HeaderInfo.pixsz1);
              sw:=round(sw+dm);
-          until f_starprofile.FindStar or (sw>(Focuswindow/2));
+          until f_starprofile.FindStar or (sw>c);
         end;
       end;
     end;
@@ -10482,7 +10474,7 @@ if (fits.HeaderInfo.valid)and(Preview or Capture) then begin // not on control e
   end
   else if f_starprofile.FindStar  then
     // only refresh star profile
-    f_starprofile.showprofile(fits,round(f_starprofile.StarX),round(f_starprofile.StarY),Starwindow div fits.HeaderInfo.BinX,fits.HeaderInfo.focallen,fits.HeaderInfo.pixsz1);
+    f_starprofile.showprofile(fits,round(f_starprofile.StarX),round(f_starprofile.StarY),Starwindow,fits.HeaderInfo.focallen,fits.HeaderInfo.pixsz1);
 end;
 end;
 
@@ -11697,7 +11689,7 @@ begin
   if plot then DrawImage; {draw clean image}
 
   // first measurement with a big window to find median star diameter
-  s:=starwindow div fits.HeaderInfo.BinX; {use configured star window}
+  s:=starwindow; {use configured star window}
   rx:=img_Width-6*s; {search area}
   ry:=img_Height-6*s;
   fits.GetStarList(rx,ry,s); {search stars in fits image}
@@ -11707,7 +11699,7 @@ begin
     for i:=0 to nhfd-1 do
       hfdlist[i]:=fits.StarList[i].hfd;
     med:=SMedian(hfdlist);            {median of starshfd}
-    s:=min(max(12,round(6*med)),starwindow div fits.HeaderInfo.BinX);  {reasonable window to measure this stars}
+    s:=min(max(12,round(2.5*med)),starwindow);  {reasonable window to measure this stars}
   end
   else
     s:=20; {no star found, try with small default window}
@@ -11926,12 +11918,12 @@ begin
       end;
     end
  else sval:='';
- s:=Starwindow div fits.HeaderInfo.BinX;
+ s:=Starwindow;
  if (xx>s)and(xx<(fits.HeaderInfo.naxis1-s))and(yy>s)and(yy<(fits.HeaderInfo.naxis2-s)) then begin
    fits.FindStarPos(xx,yy,s,xxc,yyc,rc,vmax,bg,bgdev);
    if vmax>0 then begin
      fits.GetHFD2(xxc,yyc,2*rc,xc,yc,bg,bgdev,hfd,fwhm,vmax,snr,flux);
-     if (hfd>0)and(Undersampled or (hfd>0.8)) then begin
+     if (hfd>0)and(Undersampled or (hfd>0.7)) then begin
        sval:=sval+' HFD='+FormatFloat(f1,hfd)+' FWHM='+FormatFloat(f1,fwhm);
        if flux>0 then begin
          sval:=sval+' '+rsFlux+'='+FormatFloat(f0, flux)+' SNR='+FormatFloat(f1, snr);

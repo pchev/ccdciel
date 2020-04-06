@@ -129,7 +129,7 @@ type
       FResetRepeat: boolean;
       FSeqStartAt,FSeqStopAt,FSeqStartTime: TDateTime;
       FSeqStart,FSeqStop: boolean;
-      FSeqStartTwilight,FSeqStopTwilight: boolean;
+      FSeqStartTwilight,FSeqStopTwilight,FSeqLockTwilight: boolean;
       TargetTimeStart,TargetDelayEnd: TDateTime;
       FRunning,FScriptRunning: boolean;
       FInitializing: boolean;
@@ -226,6 +226,7 @@ begin
   FSeqStop:=false;
   FSeqStartTwilight:=false;
   FSeqStopTwilight:=false;
+  FSeqLockTwilight:=false;
   FAtEndPark:=false;
   FAtEndCloseDome:=false;
   FAtEndStopTracking:=true;
@@ -382,6 +383,7 @@ begin
   FTargetDE:=NullCoord;
   CancelAutofocus:=false;
   WeatherCancelRestart:=false;
+  FSeqLockTwilight:=false;
   FRunning:=true;
   // look for a dawn sky flat
   for j:=0 to NumTargets-1 do begin
@@ -461,14 +463,16 @@ begin
     // look for a dawn sky flat
     for j:=0 to NumTargets-1 do begin
      if (Targets[j].objectname=SkyFlatTxt)and(Targets[j].planname=FlatTimeName[1]) then begin
+        FSeqLockTwilight:=true;
         // stop current step
         if FCurrentTarget>=0 then
            p:=t_plan(Ftargets[FCurrentTarget].plan)
         else
            p:=nil;
         if (p<>nil) and p.Running then p.Stop;
-        wait(5);
+        wait(15);
         // run sky flat
+        FSeqLockTwilight:=false;
         FCurrentTarget:=j-1;
         FTargetsRepeatCount:=FTargetsRepeat-1;
         NextTarget;
@@ -767,6 +771,8 @@ var initok: boolean;
 begin
   TargetTimer.Enabled:=false;
   StopTargetTimer.Enabled:=false;
+  // do not try to start a new target when stopped for dawn flat
+  if FSeqLockTwilight then exit;
   // stop autoguider
   if (Autoguider<>nil)and(Autoguider.Running)and(Autoguider.State=GUIDER_GUIDING) then
      StopGuider;
@@ -978,6 +984,10 @@ begin
           msg(Format(rsNewCoordinat, [RAToStr(newra), DEToStr(newde)]),3);
           t.ra:=newra;
           t.de:=newde;
+       end
+       else begin
+          msg(rsPlanetariumE+blank+Fplanetarium.LastErrorTxt,3);
+          msg(Format(rsTargetSCoord, [t.objectname]), 3);
        end;
     end;
     if (p<>nil)and (p.Count>0) then

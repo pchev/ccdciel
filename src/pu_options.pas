@@ -47,6 +47,7 @@ type
     ButtonVoiceTest: TButton;
     ButtonVoiceAll: TButton;
     ButtonVoiceNone: TButton;
+    AutofocusMultiStarCenter: TCheckBox;
     PagePlaNone: TPage;
     PanelLeft: TPanel;
     WantExif: TCheckBox;
@@ -349,7 +350,6 @@ type
     AutofocusMaxSpeed: TSpinEditEx;
     AutofocusMinSpeed: TSpinEditEx;
     AstrometryTimeout: TSpinEditEx;
-    StarWindow: TSpinEditEx;
     TemperatureSlope: TFloatSpinEditEx;
     Languages: TComboBox;
     Label18: TLabel;
@@ -599,7 +599,6 @@ type
     Logtofile: TCheckBox;
     GroupBox2: TGroupBox;
     Label1: TLabel;
-    Label14: TLabel;
     Panel1: TPanel;
     RefTreshold: TTrackBar;
     procedure AstUseScriptClick(Sender: TObject);
@@ -623,7 +622,6 @@ type
     procedure ButtonVoiceTestClick(Sender: TObject);
     procedure ChangeAutofocusInPlace(Sender: TObject);
     procedure CheckFocuserDirection(Sender: TObject);
-    procedure CheckFocusWindow(Sender: TObject);
     procedure CheckStartNearHFD(Sender: TObject);
     procedure ButtonDirClick(Sender: TObject);
     procedure CheckBoxLocalCdcChange(Sender: TObject);
@@ -941,7 +939,6 @@ begin
   Label110.Caption:=rsLightOFF;
   PageFocus.Caption := rsFocus;
   GroupBox2.Caption := rsStarProfile;
-  Label14.Caption := rsStarDetectio;
   Label2.Caption := rsFocusWindowS;
   Undersampled.Caption:=rsSystemIsUnde;
   GroupCorrection.Caption := rsFocuserCorre;
@@ -979,6 +976,7 @@ begin
   AutofocusMultistar.Caption := rsFocusStarSel;
   label56.Caption := rsDetectMultip;
   AutofocusPauseGuider.Caption:=rsPauseGuiding;
+  AutofocusMultiStarCenter.Caption:=rsUseOnlyStarN;
   Label101.Caption := rsTheMenuFileF;
   PageAstrometry.Caption := rsAstrometry;
   GroupBox4.Caption := rsAstrometryOp;
@@ -1577,15 +1575,6 @@ end;
 procedure Tf_option.ButtonHelpClick(Sender: TObject);
 begin
   if Assigned(FShowHelp) then FShowHelp(self);
-end;
-
-procedure Tf_option.CheckFocusWindow(Sender: TObject);
-var a,b: integer;
-begin
-  msg('');
-  a:=StarWindow.Value;
-  b:=FocusWindow.Value;
-  if (4*a)>b then msg(rsFocusWindowM);
 end;
 
 procedure Tf_option.CheckStartNearHFD(Sender: TObject);

@@ -587,7 +587,7 @@ end;
 
 procedure Tf_starprofile.Autofocus(f: TFits; x,y,s: integer);
 var bg,bgdev,star_fwhm,focuspos,tempcomp: double;
-  xg,yg,flux: double;
+  xg,yg,flux,med: double;
   xm,ym,ri,ns,i,nhfd: integer;
   hfdlist: array of double;
   txt:string;
@@ -610,6 +610,19 @@ begin
     Ffwhm:=-1
    end
    else begin                             // measure multiple stars
+    f.MeasureStarList(s,AutofocusStarList);
+    ns:=Length(f.StarList);
+    if ns>0 then begin
+      SetLength(hfdlist,ns);
+      for i:=0 to ns-1 do
+        hfdlist[i]:=f.StarList[i].hfd;
+      med:=SMedian(hfdlist);             {median of stars hfd}
+      s:=min(max(12,round(2.5*med)),s);  {reasonable window to measure this stars}
+    end
+    else
+      s:=20; {no star found, try with small default window}
+    s:=s+4; // safe margin for small difference with first measurement in Getstarlist
+    // measure with new window
     f.MeasureStarList(s,AutofocusStarList);
     ns:=Length(f.StarList);
     if ns>0 then begin

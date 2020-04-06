@@ -1034,7 +1034,7 @@ begin
        bgdev:=bgdev/fits.imageC;
 
        {check valid hfd }
-       if ((hfd1>0)and (Undersampled or (hfd1>0.8)))
+       if ((hfd1>0)and (Undersampled or (hfd1>0.7)))
           and (hfd1<99)
           and (img_temp[0,round(xc),round(yc)]=0)  {area not surveyed}
           and (snr>AutofocusMinSNR)  {minimal star detection level, also detect saturation}
@@ -2579,7 +2579,7 @@ const
     max_ri=100;
 var i,j,rs,distance,counter,ri, distance_top_value, illuminated_pixels, saturated_counter, max_saturated: integer;
     valsaturation:Int64;
-    SumVal,SumValX,SumValY,SumvalR,val,xg,yg,bg_average, pixel_counter,pixel_counter2,r, val_00,val_01,val_10,val_11,af,
+    SumVal,SumValX,SumValY,SumvalR,val,xg,yg,bg_average, pixel_counter,r, val_00,val_01,val_10,val_11,af,
     faintA,faintB, brightA,brightB,faintest,brightest : double;
     distance_histogram  : array [0..max_ri] of integer;
     HistStart,asymmetry : boolean;
@@ -2722,13 +2722,18 @@ begin
 
   if ri>=rs then {star is equal or larger then box, abort} exit; {hfd:=-1}
   if (ri>2)and(illuminated_pixels<0.35*sqr(ri+ri-2)){35% surface} then {not a star disk but stars, abort} exit; {hfd:=-1}
-  if ri<3 then ri:=3; {Minimum 6+1 x 6+1 pixel box}
+
+  if ri<3 then  {small star image}
+  begin
+   if ((not Undersampled) and (distance_histogram[1]<3)) then
+      exit; // reject single hot pixel if less then 3 pixels are detected around the center of gravity
+   ri:=3; {Minimum 6+1 x 6+1 pixel box}
+  end;
 
   // Get HFD using the aproximation routine assuming that HFD line divides the star in equal portions of gravity:
   SumVal:=0;
   SumValR:=0;
   pixel_counter:=0;
-  pixel_counter2:=0;
 
   for i:=-ri to ri do {Make steps of one pixel}
     for j:=-ri to ri do
@@ -2738,9 +2743,7 @@ begin
       SumVal:=SumVal+Val;{Sumval will be star total flux value}
       SumValR:=SumValR+Val*r; {Method Kazuhisa Miyashita, see notes of HFD calculation method}
       if val>=valmax*0.5 then pixel_counter:=pixel_counter+1;{How many pixels are above half maximum for FWHM}
-      if val>=valmax*0.25 then pixel_counter2:=pixel_counter2+1;{How many pixels high enough to be sure we not have a single hot pixel}
     end;
-  if (not Undersampled) and (pixel_counter2<=1) then exit; // reject hot pixel in noisy environment
   if Sumval<0.00001 then Sumval:=0.00001;{prevent divide by zero}
   hfd:=2*SumValR/SumVal;
   if (not Undersampled) and (hfd<=0.7) then exit; // reject single hot pixel
@@ -2824,8 +2827,8 @@ var
  thread: array[0..15] of TGetStarList;
  tc,timeout: integer;
 begin
-  overlap:=round(s/3); // large overlap to have more chance to measure a big dot as a single piece
-  s:=round(2*s/3);     // keep original window size after adding overlap
+  overlap:=max(8,round(s/3)); // large overlap to have more chance to measure a big dot as a single piece
+  s:=max(4,s-overlap);        // keep original window size after adding overlap
   SetLength(img_temp,1,FWidth,FHeight); {array to check for duplicate}
   for j:=0 to Fheight-1 do
      for i:=0 to FWidth-1 do
@@ -2900,7 +2903,10 @@ for i:=0 to Length(list)-1 do
 
 
    {check valid hfd, snr}
-   if (((hfd1>0)and(Undersampled or (hfd1>0.8))) and (hfd1<99) and (snr>3)) then
+   if ((hfd1>0)and (Undersampled or (hfd1>0.7)))
+      and (hfd1<99)
+      and (snr>AutofocusMinSNR)  {minimal star detection level, also detect saturation}
+    then
     begin
        inc(nhfd);
        if nhfd>=Length(FStarList) then

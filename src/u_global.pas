@@ -178,7 +178,7 @@ type
   {$i revision.inc}
 
 const
-  ccdcielver = '0.9.69';
+  ccdcielver = '0.9.70';
   ccdciel_version='Version beta '+ccdcielver;
   TargetFileVersion = 5;
   Maxclient = 100;
@@ -373,7 +373,7 @@ var
   AutofocusVcCheckNum: integer;
   AutofocusVcCheckHFDlist: array of double;
   AutofocusVcTemp, AutofocusVcTemp1, AutofocusVcTemp2: double;
-  AutofocusInPlace, InplaceAutofocus, AutofocusPauseGuider: boolean;
+  AutofocusInPlace, InplaceAutofocus, AutofocusPauseGuider, AutofocusMultiStarCenter: boolean;
   AutofocusStarList: TArrayDouble2;
   CancelAutofocus, Autofocusing, TerminateFocuserCalibration: Boolean;
   CameraProcessingImage: boolean;

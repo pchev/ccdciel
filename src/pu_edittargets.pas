@@ -1219,11 +1219,6 @@ try
   screen.Cursor:=crHourGlass;
   FAstrometry.SolveCurrentImage(true);
   if FAstrometry.CurrentCoord(ra,de,eq,pa) then begin
-    ra:=ra*15*deg2rad;
-    de:=de*deg2rad;
-    J2000ToApparent(ra,de);
-    ra:=rad2deg*ra/15;
-    de:=rad2deg*de;
     TargetList.Cells[colra,n]:=RAToStr(ra);
     TargetList.Cells[coldec,n]:=DEToStr(de);
     TargetList.Cells[colastrometry,n]:=BoolToStr(astrometryResolver<>ResolverNone,'1','0');
@@ -1537,7 +1532,7 @@ begin
     if hasGainISO then begin
        t.FlatGain:=FISObox.ItemIndex;
     end
-    else begin
+    else if hasGain then begin
        t.FlatGain:=FGainEdit.Value;
     end;
     t.FlatFilters:='';
@@ -2471,7 +2466,7 @@ begin
     StepsModified:=StepsModified or (p.gain<>j);
     if j>=0 then p.gain:=j;
   end
-  else begin
+  else if hasGain then begin
     j:=StrToIntDef(StepList.Cells[pcolgain,n],p.gain);
     if j>GainMax then begin j:=GainMax; StepList.Cells[pcolgain,n]:=inttostr(j); end;
     if j<GainMin then begin j:=GainMin; StepList.Cells[pcolgain,n]:=inttostr(j); end;
