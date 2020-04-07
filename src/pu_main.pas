@@ -10277,7 +10277,7 @@ begin
        for i:=0 to ns-1 do
          hfdlist[i]:=fits.StarList[i].hfd;
        med:=SMedian(hfdlist);            {median of starshfd}
-       s:=min(max(12,round(2.5*med)),starwindow);  {reasonable window to measure this stars}
+       s:=min(max(14,round(3.0*med)),s); {reasonable window to measure this star}
      end
      else
        s:=20; {no star found, try with small default window}
@@ -11698,7 +11698,7 @@ begin
     for i:=0 to nhfd-1 do
       hfdlist[i]:=fits.StarList[i].hfd;
     med:=SMedian(hfdlist);            {median of starshfd}
-    s:=min(max(12,round(2.5*med)),starwindow);  {reasonable window to measure this stars}
+    s:=min(max(14,round(3.0*med)),s); {reasonable window to measure this star}
   end
   else
     s:=20; {no star found, try with small default window}

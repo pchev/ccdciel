@@ -617,11 +617,10 @@ begin
       for i:=0 to ns-1 do
         hfdlist[i]:=f.StarList[i].hfd;
       med:=SMedian(hfdlist);             {median of stars hfd}
-      s:=min(max(12,round(2.5*med)),s);  {reasonable window to measure this stars}
+      s:=min(max(14,round(3.0*med)),s); {reasonable window to measure this star}
     end
     else
       s:=20; {no star found, try with small default window}
-    s:=s+4; // safe margin for small difference with first measurement in Getstarlist
     // measure with new window
     f.MeasureStarList(s,AutofocusStarList);
     ns:=Length(f.StarList);
