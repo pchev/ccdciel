@@ -6,15 +6,15 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ccdciel\n"
 "Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
-"POT-Creation-Date: 2020-03-22 15:04+0000\n"
+"POT-Creation-Date: 2020-04-07 13:12+0000\n"
 "PO-Revision-Date: 2019-12-15 12:55+0000\n"
 "Last-Translator: Mattia Verga <Unknown>\n"
 "Language-Team: Italian <it@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2020-03-22 15:12+0000\n"
-"X-Generator: Launchpad (build 3a6db24bbe7280ec09bae73384238390fcc98ad3)\n"
+"X-Launchpad-Export-Date: 2020-04-07 13:24+0000\n"
+"X-Generator: Launchpad (build a296f04231dee355be5db73cc878b9e21689a253)\n"
 
 #: u_translation.rs32bitdriver
 msgid "This driver work only in 32bit, please install the 32bit version of CCDciel."
@@ -1527,10 +1527,6 @@ msgstr ""
 #: u_translation.rsfocusstarsel
 msgid "Focus star selection"
 msgstr "Selezione stella di messa a fuoco"
-
-#: u_translation.rsfocuswindowm
-msgid "Focus window must be at least four time greater than Star window!"
-msgstr ""
 
 #: u_translation.rsfocuswindows
 msgid "Focus window size"
@@ -3964,6 +3960,10 @@ msgstr "Precisione di puntamento [arcmin] "
 msgid "Targets"
 msgstr "Obiettivi"
 
+#: u_translation.rstargetscoord
+msgid "Target %s coordinates not updated"
+msgstr ""
+
 #: u_translation.rstargetwillbe
 msgid "Target can run until %s, in %s seconds"
 msgstr ""
@@ -4375,6 +4375,10 @@ msgstr "Usa focheggiatore"
 #: u_translation.rsusemount
 msgid "Use mount"
 msgstr "Usa montatura"
+
+#: u_translation.rsuseonlystarn
+msgid "Use only star near the image center"
+msgstr ""
 
 #: u_translation.rsusergroup
 msgid "User group"

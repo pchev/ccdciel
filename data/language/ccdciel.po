@@ -2058,10 +2058,6 @@ msgstr ""
 msgid "The program need to be restarted"
 msgstr ""
 
-#: u_translation:rsfocuswindowm
-msgid "Focus window must be at least four time greater than Star window!"
-msgstr ""
-
 #: u_translation:rsnearhfdmustb
 msgid "Near HFD must be smaller than Start HFD!"
 msgstr ""
@@ -4592,5 +4588,13 @@ msgstr ""
 
 #: u_translation:rscenterabrigh
 msgid "Center a bright star. %s Defocus until the ring are clearly visible. %s Click Start button. %s Adjust the collimation. %s The star must be centered in full frame for the final adjustement."
+msgstr ""
+
+#: u_translation:rstargetscoord
+msgid "Target %s coordinates not updated"
+msgstr ""
+
+#: u_translation:rsuseonlystarn
+msgid "Use only star near the image center"
 msgstr ""
 
