@@ -6112,7 +6112,7 @@ end;
 
 Procedure Tf_main.AutoguiderGuideStat;
 var i,n: integer;
-    m,smmax,ras,des,tots: double;
+    ma,mi,smmax,ras,des,tots: double;
 begin
    // Add current point to list, keep last 100 points
    n:=Length(AutoguiderStat);
@@ -6143,21 +6143,35 @@ begin
      f_autoguider.GuideChartRAdist.Clear;
      f_autoguider.GuideChartDecdist.Clear;
      f_autoguider.GuideChartStarmass.Clear;
-     smmax:=0; m:=0;
+     smmax:=0; ma:=0; mi:=0;
      for i:=0 to Length(AutoguiderStat)-1 do begin
         // add ra and dec points
         f_autoguider.GuideChartRAdist.Add(AutoguiderStat[i,1]);
         f_autoguider.GuideChartDecdist.Add(AutoguiderStat[i,2]);
         // max values for starmass scaling
-        m:=max(m,AutoguiderStat[i,1]);
-        m:=max(m,AutoguiderStat[i,2]);
+        ma:=max(ma,AutoguiderStat[i,1]);
+        ma:=max(ma,AutoguiderStat[i,2]);
+        mi:=min(mi,AutoguiderStat[i,1]);
+        mi:=min(mi,AutoguiderStat[i,2]);
         smmax:=max(smmax,AutoguiderStat[i,3]);
      end;
+     // restrict vertical scale to +/- 2"
+     if ma<2 then begin
+        ma:=2;
+        f_autoguider.GuideChart.AxisList[0].range.Max:=ma;
+        f_autoguider.GuideChart.AxisList[0].range.UseMax:=true;
+     end
+     else f_autoguider.GuideChart.AxisList[0].range.UseMax:=false;
+     if mi>-2 then begin
+        f_autoguider.GuideChart.AxisList[0].range.Min:=-2;
+        f_autoguider.GuideChart.AxisList[0].range.UseMin:=true;
+     end
+     else f_autoguider.GuideChart.AxisList[0].range.UseMin:=false;
      // starmass scaling factor
-     m:=m/smmax;
+     ma:=ma/smmax;
      for i:=0 to Length(AutoguiderStat)-1 do begin
         // add scaled starmass points
-        f_autoguider.GuideChartStarmass.Add(AutoguiderStat[i,3]*m);
+        f_autoguider.GuideChartStarmass.Add(AutoguiderStat[i,3]*ma);
      end;
    end;
 end;
