@@ -188,6 +188,7 @@ object f_autoguider: Tf_autoguider
             Minors = <>
             Title.LabelBrush.Style = bsClear
           end>
+        BackColor = clBlack
         Foot.Brush.Color = clBtnFace
         Foot.Font.Color = clBlue
         Title.Brush.Color = clBtnFace
