@@ -558,3 +558,11 @@ msgstr ""
 msgid "Show captured image"
 msgstr ""
 
+#: u_hints:rsshowguidings
+msgid "Show guiding statistics"
+msgstr ""
+
+#: u_hints:rsguidinghisto
+msgid "Guiding history in arcsecond %s - blue: RA error %s - red: Dec error %s - yellow: Star mass"
+msgstr ""
+

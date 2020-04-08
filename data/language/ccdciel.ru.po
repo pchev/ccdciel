@@ -6,14 +6,14 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ccdciel\n"
 "Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
-"POT-Creation-Date: 2020-04-07 13:12+0000\n"
-"PO-Revision-Date: 2020-03-22 15:10+0000\n"
-"Last-Translator: Patrick Chevalley <Unknown>\n"
+"POT-Creation-Date: 2020-04-08 15:57+0000\n"
+"PO-Revision-Date: 2020-04-08 11:13+0000\n"
+"Last-Translator: Sergey Tarantsov <tsn-ast@yandex.ru>\n"
 "Language-Team: Russian <ru@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2020-04-07 13:24+0000\n"
+"X-Launchpad-Export-Date: 2020-04-08 16:08+0000\n"
 "X-Generator: Launchpad (build a296f04231dee355be5db73cc878b9e21689a253)\n"
 
 #: u_translation.rs32bitdriver
@@ -90,11 +90,11 @@ msgstr "Airmass"
 
 #: u_translation.rsalignmenton
 msgid "Alignment on"
-msgstr ""
+msgstr "Выравнивание"
 
 #: u_translation.rsalignmentsta
 msgid "Alignment star lost"
-msgstr "Звезда выравнивания потеряна"
+msgstr "Опорная звезда потеряна"
 
 #: u_translation.rsall
 msgid "All"
@@ -666,7 +666,7 @@ msgstr "Центр"
 
 #: u_translation.rscenterabrigh
 msgid "Center a bright star. %s Defocus until the ring are clearly visible. %s Click Start button. %s Adjust the collimation. %s The star must be centered in full frame for the final adjustement."
-msgstr ""
+msgstr "Центрируйте яркую звезду. %s Расфокусируйте, пока кольцо не будет чётко видно. %s Нажмите кнопку Пуск. %s Отрегулируйте коллимацию. %s Звезда должна быть центрирована в полном кадре для окончательной настройки."
 
 #: u_translation.rscenterappare
 msgid "Center, apparent coord. RA=%s DEC=%s PA=%s"
@@ -754,7 +754,7 @@ msgstr "Облачность"
 
 #: u_translation.rscollimation
 msgid "Collimation"
-msgstr ""
+msgstr "Коллимация"
 
 #: u_translation.rscolorbalance
 msgid "Color balance"
@@ -1122,7 +1122,7 @@ msgstr "готово"
 
 #: u_translation.rsdonotdisplay
 msgid "Do not display images during capture"
-msgstr ""
+msgstr "Не показывать изображения во время съёмки"
 
 #: u_translation.rsdonothing
 msgid "Do nothing"
@@ -1210,7 +1210,7 @@ msgstr "Настройки электронной почты"
 
 #: u_translation.rsemailnotific
 msgid "Email notification text"
-msgstr ""
+msgstr "Текст уведомления"
 
 #: u_translation.rsemailon
 msgid "Email on :"
@@ -1242,7 +1242,7 @@ msgstr "Ошибка"
 
 #: u_translation.rserrormessage
 msgid "Error messages"
-msgstr ""
+msgstr "Сообщения об ошибках"
 
 #: u_translation.rserrormountno
 msgid "Error! Mount not connected"
@@ -1306,7 +1306,7 @@ msgstr "Экспозиция не удалась!"
 
 #: u_translation.rsexposures
 msgid "Exposure %s"
-msgstr "Выдержка %s"
+msgstr "Экспозиция %s"
 
 #: u_translation.rsexposuretime
 msgid "Exposure time in secondes"
@@ -1622,7 +1622,7 @@ msgstr "Хорошо"
 
 #: u_translation.rsgoto
 msgid "Goto"
-msgstr ""
+msgstr "Goto"
 
 #: u_translation.rsgreen
 msgid "green"
@@ -1786,7 +1786,7 @@ msgstr "Интенсивность"
 
 #: u_translation.rsinteractiond
 msgid "Interaction dialog"
-msgstr ""
+msgstr "Диалог взаимодействия"
 
 #: u_translation.rsinterface
 msgid "Interface"
@@ -1910,7 +1910,7 @@ msgstr "Цикл"
 
 #: u_translation.rslowqualityim
 msgid "Low quality image scaling"
-msgstr ""
+msgstr "Низкое качество изображения"
 
 #: u_translation.rsmagnifyer
 msgid "Magnifier"
@@ -1926,7 +1926,7 @@ msgstr "Главный сенсор"
 
 #: u_translation.rsmakeafirstpo
 msgid "Adjust the mount RA axis manually to point to the pole the best as possible.%sSlew the telescope to point near the pole at a declination about 89 to 90 degrees with counterweight down.%sSelect below if the telescope can already slew automatically or if it must be moved manually.%sIf automatic, select the direction and movement step. Beware it will move two time this amount."
-msgstr "Установите RA ось монтировки вручную, чтобы она указывала на полюс как можно точнее.%sПоверните телескоп так, чтобы он находился рядом с полюсом на склонении приблизительно от 89 до 90 градусов с противовесом вниз.%sВыберите ниже, если телескоп может поворачиваться автоматически или если он должен быть перемещён вручную.%sПри автоматическом повороте выберите направление и шаг движения. Осторожно, он повернётся два раза на эту величину."
+msgstr "Установите ось RA монтировки вручную, чтобы она указывала на полюс как можно точнее.%sНаправьте трубу телескопа на область рядом с полюсом: склонение приблизительно от 89 до 90 градусов с противовесом вниз.%sВыберите ниже, если телескоп может поворачиваться автоматически или если он должен быть перемещён вручную.%sПри автоматическом повороте выберите направление и шаг движения. Осторожно, он повернётся на эту величину два раза."
 
 #: u_translation.rsmanual
 msgid "Manual"
@@ -1934,7 +1934,7 @@ msgstr "Вручную"
 
 #: u_translation.rsmanualfilter
 msgid "Manual filter change canceled"
-msgstr ""
+msgstr "Ручная смена фильтра отменена"
 
 #: u_translation.rsmanualfocusa
 msgid "Manual focus aid"
@@ -2006,7 +2006,7 @@ msgstr "Измерение %s POS:%s STEP:%s HFD:%s PEAK:%s SNR:%s"
 
 #: u_translation.rsmedian
 msgid "%sMedian:%s"
-msgstr ""
+msgstr "%sMedian:%s"
 
 #: u_translation.rsmeridian
 msgid "Meridian"
@@ -2126,7 +2126,7 @@ msgstr "Центр вращения монтировки"
 
 #: u_translation.rsmountrotatio2
 msgid "Mount rotation direction"
-msgstr "Направление вращения монтировки"
+msgstr "Направление поворота"
 
 #: u_translation.rsmountsync
 msgid "Mount sync"
@@ -2190,7 +2190,7 @@ msgstr "двигать на запад "
 
 #: u_translation.rsmovingmount
 msgid "Moving mount"
-msgstr "Перемещение монтировки"
+msgstr "Поворот телескопа"
 
 #: u_translation.rsnearfocus
 msgid "Near focus"
@@ -2238,7 +2238,7 @@ msgstr "Нет"
 
 #: u_translation.rsnoalignments
 msgid "No alignment star found for stacking"
-msgstr "Звезда для выравнивания не найдена"
+msgstr "Опорная звезда не найдена"
 
 #: u_translation.rsnoastronomic
 msgid "No astronomical twilight at this location today"
@@ -2374,7 +2374,7 @@ msgstr "нет слежения"
 
 #: u_translation.rsnumberofcirc
 msgid "Number of circles"
-msgstr ""
+msgstr "Количество кругов"
 
 #: u_translation.rsnumberofdyna
 msgid "Number of dynamic points"
@@ -2386,7 +2386,7 @@ msgstr "Количество экспозиций на точку"
 
 #: u_translation.rsnumberofslot
 msgid "Number of slot"
-msgstr ""
+msgstr "Количество слотов"
 
 #: u_translation.rsnumberofstep
 msgid "Number of steps"
@@ -2510,7 +2510,7 @@ msgstr "%s вне диапазона"
 
 #: u_translation.rspa
 msgid "PA"
-msgstr ""
+msgstr "PA"
 
 #: u_translation.rsparameter
 msgid "Parameter"
@@ -2518,7 +2518,7 @@ msgstr "Параметр"
 
 #: u_translation.rspark
 msgid "Park"
-msgstr ""
+msgstr "Park"
 
 #: u_translation.rsparkandclose
 msgid "Park and close the dome"
@@ -2530,7 +2530,7 @@ msgstr "Запарковать купол"
 
 #: u_translation.rsparked
 msgid "Parked"
-msgstr ""
+msgstr "Parked"
 
 #: u_translation.rsparktheteles
 msgid "Park the telescope now?"
@@ -2586,7 +2586,7 @@ msgstr "PDF документация"
 
 #: u_translation.rsperformance
 msgid "Performance"
-msgstr ""
+msgstr "Производительность"
 
 #: u_translation.rsperiodicauto
 msgid "Periodic auto-focus"
@@ -2598,7 +2598,7 @@ msgstr "Фотометрия"
 
 #: u_translation.rspixelcount
 msgid "%sPixel count:%s"
-msgstr ""
+msgstr "%sPixel count:%s"
 
 #: u_translation.rspixels
 msgid "Pixels"
@@ -2662,7 +2662,7 @@ msgstr "План %s остановлен"
 
 #: u_translation.rsplatesolveex
 msgid "Plate solve exposure %s"
-msgstr "Выдержка распознавания %s"
+msgstr "Распознавание экспозиции %s"
 
 #: u_translation.rspleaseactiva
 msgid "Please activate the log file in the preference."
@@ -2750,7 +2750,7 @@ msgstr "Pos."
 
 #: u_translation.rspower
 msgid "Power"
-msgstr ""
+msgstr "Питание"
 
 #: u_translation.rsprecisionsle
 msgid "Precision slewing options"
@@ -2842,7 +2842,7 @@ msgstr "Достигнута максимальная выдержка флет�
 
 #: u_translation.rsreachfocuser
 msgid "Reach focuser range limit! please better position the focuser half way on it's mechanical travel or decrease the maximum HFD"
-msgstr ""
+msgstr "Достигнут предел хода фокусера! Расположите фокусер на середине его механическом хода или уменьшите максимальный HFD"
 
 #: u_translation.rsreadccd
 msgid "Read CCD"
@@ -2894,7 +2894,7 @@ msgstr "Опорное изображение"
 
 #: u_translation.rsrefractedpol
 msgid "Refracted pole"
-msgstr ""
+msgstr "Преломленный полюс"
 
 #: u_translation.rsrelativeincr
 msgid "Relative increment for the inward or outward movement"
@@ -3086,11 +3086,11 @@ msgstr "Повернуть"
 
 #: u_translation.rsrotateby
 msgid "rotate by"
-msgstr "повернуть на"
+msgstr "Угол поворота"
 
 #: u_translation.rsrotatetelesc
 msgid "Rotate the telescope"
-msgstr "Повернуть телескоп"
+msgstr "Поворот телескопа"
 
 #: u_translation.rsrotator
 msgid "Rotator"
@@ -3518,7 +3518,7 @@ msgstr "Skychart на локальном компьютере"
 
 #: u_translation.rsskyflat
 msgid "Sky Flat"
-msgstr ""
+msgstr "Sky Flat"
 
 #: u_translation.rsskyisstillto
 msgid "Sky is still too bright, waiting for dusk"
@@ -3538,11 +3538,11 @@ msgstr "Температура неба"
 
 #: u_translation.rsslave
 msgid "Slave"
-msgstr ""
+msgstr "Slave"
 
 #: u_translation.rsslaved
 msgid "Slaved"
-msgstr ""
+msgstr "Slaved"
 
 #: u_translation.rsslavethedome
 msgid "Slave the Dome"
@@ -3598,7 +3598,7 @@ msgstr "Наклон"
 
 #: u_translation.rsslot
 msgid "Slot"
-msgstr ""
+msgstr "Слот"
 
 #: u_translation.rssmtpserverad
 msgid "SMTP server address"
@@ -3646,7 +3646,7 @@ msgstr "Сумма"
 
 #: u_translation.rsstackingwith
 msgid "Stacking with alignment star at %s/%s"
-msgstr "Сложение со звездой выравнивания %s/%s"
+msgstr "Сложение по опорной звезде %s/%s"
 
 #: u_translation.rsstackofframe
 msgid "stack of %s frames"
@@ -3962,7 +3962,7 @@ msgstr "Объект"
 
 #: u_translation.rstargetscoord
 msgid "Target %s coordinates not updated"
-msgstr ""
+msgstr "Координаты объекта %s не обновлены"
 
 #: u_translation.rstargetwillbe
 msgid "Target can run until %s, in %s seconds"
@@ -4066,7 +4066,7 @@ msgstr "Варианты завершения"
 
 #: u_translation.rstest
 msgid "Test"
-msgstr ""
+msgstr "Тест"
 
 #: u_translation.rstestemailfro
 msgid "Test email from CCDciel"
@@ -4230,7 +4230,7 @@ msgstr "Полная полярная ошибка:"
 
 #: u_translation.rstrack
 msgid "Track"
-msgstr ""
+msgstr "Track"
 
 #: u_translation.rstracking
 msgid "tracking"
@@ -4246,7 +4246,7 @@ msgstr "Вкл"
 
 #: u_translation.rstruepole
 msgid "True pole"
-msgstr ""
+msgstr "Истинный полюс"
 
 #: u_translation.rstrynexttarge
 msgid "Try next target in sequence."
@@ -4294,11 +4294,11 @@ msgstr "Не определено"
 
 #: u_translation.rsunpark
 msgid "Unpark"
-msgstr ""
+msgstr "Unpark"
 
 #: u_translation.rsunparked
 msgid "Unparked"
-msgstr ""
+msgstr "Unparked"
 
 #: u_translation.rsunparkthedom
 msgid "Unpark the Dome"
@@ -4326,7 +4326,7 @@ msgstr "Небезопасное состояние игноровано пол�
 
 #: u_translation.rsunslaved
 msgid "Unslaved"
-msgstr ""
+msgstr "Unslaved"
 
 #: u_translation.rsupdateradec2
 msgid "Update RA+Dec%sfrom Planetarium"
@@ -4378,7 +4378,7 @@ msgstr "Использовать монтировку"
 
 #: u_translation.rsuseonlystarn
 msgid "Use only star near the image center"
-msgstr ""
+msgstr "Используйте только звезду рядом с центром кадра"
 
 #: u_translation.rsusergroup
 msgid "User group"
@@ -4458,7 +4458,7 @@ msgstr "Обучение"
 
 #: u_translation.rsvoiceconfigu
 msgid "Voice configuration"
-msgstr ""
+msgstr "Конфигурация голоса"
 
 #: u_translation.rswait1minute
 msgid "Wait 1 minute ..."

@@ -6,14 +6,14 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ccdciel\n"
 "Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
-"POT-Creation-Date: 2020-04-07 13:13+0000\n"
-"PO-Revision-Date: 2020-03-15 14:24+0000\n"
+"POT-Creation-Date: 2020-04-08 15:58+0000\n"
+"PO-Revision-Date: 2020-04-08 16:07+0000\n"
 "Last-Translator: Patrick Chevalley <Unknown>\n"
 "Language-Team: French <fr@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2020-04-07 13:24+0000\n"
+"X-Launchpad-Export-Date: 2020-04-08 16:08+0000\n"
 "X-Generator: Launchpad (build a296f04231dee355be5db73cc878b9e21689a253)\n"
 
 #: u_hints.rsactivateback
@@ -196,6 +196,10 @@ msgstr "Paramètres globaux du serveur ALPACA"
 msgid "Global INDI server parameters"
 msgstr "Paramètres globaux du serveur INDI"
 
+#: u_hints.rsguidinghisto
+msgid "Guiding history in arcsecond %s - blue: RA error %s - red: Dec error %s - yellow: Star mass"
+msgstr "Historique du guidage en secondes d'arc %s - bleu: erreur AD %s - rouge: erreur Dec %s - jaune: Masse de l'étoile"
+
 #: u_hints.rshistogramoft
 msgid "Histogram of the current image.%sClick and move to adjust the visualisation threshold."
 msgstr "Histogramme de l'image courante.%sCliquez et déplacez pour ajuster le seuil de visualisation."
@@ -327,6 +331,10 @@ msgstr "Affiche la mire"
 #: u_hints.rsshowcompleti
 msgid "Show completion status"
 msgstr "Affiche le statut d'achèvement"
+
+#: u_hints.rsshowguidings
+msgid "Show guiding statistics"
+msgstr "Voir les statistiques de guidage"
 
 #: u_hints.rsshowhighligh
 msgid "Show highlight and shadow clipping"

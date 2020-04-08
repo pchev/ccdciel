@@ -2,14 +2,14 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ccdciel\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-04-07 13:12+0000\n"
-"PO-Revision-Date: 2020-04-03 07:15+0000\n"
+"POT-Creation-Date: 2020-04-08 15:57+0000\n"
+"PO-Revision-Date: 2020-04-08 07:10+0000\n"
 "Last-Translator: Stanislav Holub <Unknown>\n"
 "Language-Team: Czech <cz@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2020-04-07 13:24+0000\n"
+"X-Launchpad-Export-Date: 2020-04-08 16:08+0000\n"
 "X-Generator: Launchpad (build a296f04231dee355be5db73cc878b9e21689a253)\n"
 "Language: cs\n"
 
@@ -3962,7 +3962,7 @@ msgstr "Cíle"
 
 #: u_translation.rstargetscoord
 msgid "Target %s coordinates not updated"
-msgstr ""
+msgstr "Cílové souřadnice %s nebyly aktualizovány"
 
 #: u_translation.rstargetwillbe
 msgid "Target can run until %s, in %s seconds"
@@ -4380,7 +4380,7 @@ msgstr "Použíjte montáž"
 
 #: u_translation.rsuseonlystarn
 msgid "Use only star near the image center"
-msgstr ""
+msgstr "Použít pouze hvězdy v blízkosti středu obrázku"
 
 #: u_translation.rsusergroup
 msgid "User group"

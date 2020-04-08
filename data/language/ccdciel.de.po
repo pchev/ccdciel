@@ -6,14 +6,14 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ccdciel\n"
 "Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
-"POT-Creation-Date: 2020-04-07 13:12+0000\n"
-"PO-Revision-Date: 2020-03-29 19:34+0000\n"
+"POT-Creation-Date: 2020-04-08 15:57+0000\n"
+"PO-Revision-Date: 2020-04-07 18:09+0000\n"
 "Last-Translator: Thomas <email@starhopper.de>\n"
 "Language-Team: German <de@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2020-04-07 13:24+0000\n"
+"X-Launchpad-Export-Date: 2020-04-08 16:08+0000\n"
 "X-Generator: Launchpad (build a296f04231dee355be5db73cc878b9e21689a253)\n"
 
 #: u_translation.rs32bitdriver
@@ -3964,7 +3964,7 @@ msgstr "Ziele"
 
 #: u_translation.rstargetscoord
 msgid "Target %s coordinates not updated"
-msgstr ""
+msgstr "Koordinaten des Ziels %s nicht aktualisiert"
 
 #: u_translation.rstargetwillbe
 msgid "Target can run until %s, in %s seconds"
@@ -4380,7 +4380,7 @@ msgstr "Montierung verwenden"
 
 #: u_translation.rsuseonlystarn
 msgid "Use only star near the image center"
-msgstr ""
+msgstr "Nur Sterne im Zentrum verwenden"
 
 #: u_translation.rsusergroup
 msgid "User group"
