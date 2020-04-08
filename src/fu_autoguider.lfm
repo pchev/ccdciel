@@ -170,6 +170,7 @@ object f_autoguider: Tf_autoguider
         Width = 225
         AxisList = <        
           item
+            Grid.Color = clSilver
             Marks.LabelBrush.Style = bsClear
             Minors = <>
             Title.LabelFont.Orientation = 900
