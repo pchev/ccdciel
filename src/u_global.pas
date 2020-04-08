@@ -267,6 +267,7 @@ const
   M_AutoguiderStatusChange=1000;
   M_AutoguiderMessage=1001;
   M_AutoguiderCancelExposure=1002;
+  M_AutoguiderGuideStat=1003;
   M_AstrometryDone=1100;
   M_AstrometryMsg=1101;
   StarLostStatus='Star lost';
@@ -464,6 +465,7 @@ var
   WantExif: boolean;
   Collimation: boolean;
   CollimationCircle: integer;
+  AutoguiderStat: array of array[1..3] of double;
 
   procedure globalmsg(str:string);
 

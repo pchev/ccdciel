@@ -45,11 +45,13 @@ type
     FRestartDelay : integer;
     FStarLostCount: integer;
     FStarLostTime: double;
+    FRAdistance,FDecdistance,FStarmass: double;
     FonShowMessage: TNotifyMsg;
     FonConnect: TNotifyEvent;
     FonConnectError: TNotifyEvent;
     FonDisconnect: TNotifyEvent;
     FonStatusChange: TNotifyEvent;
+    FonGuideStat: TNotifyEvent;
     StarLostTimer: TTimer;
     FMount: T_mount;
     procedure StarLostTimerTimer(Sender: TObject);
@@ -60,6 +62,7 @@ type
     procedure ProcessEvent(txt:string); virtual; abstract;
     procedure StarLostTimerTimer(Sender: TObject); virtual; abstract;
     procedure CancelExposure;
+    procedure GuideStat(dra,dde,sm:double);
   public
     Constructor Create;
     Destructor Destroy; override;
@@ -88,11 +91,15 @@ type
     property Status : string read FStatus;
     property State : TAutoguiderState read FState;
     property RestartDelay : integer read FRestartDelay;
+    property RAdistance: double read FRAdistance;
+    property Decdistance: double read FDecdistance;
+    property Starmass: double read FStarmass;
     property onConnect: TNotifyEvent read FonConnect  write FonConnect;
     property onConnectError: TNotifyEvent read FonConnectError  write FonConnectError;
     property onDisconnect: TNotifyEvent read FonDisconnect  write FonDisconnect;
     property onShowMessage: TNotifyMsg read FonShowMessage write FonShowMessage;
     property onStatusChange: TNotifyEvent read FonStatusChange write FonStatusChange;
+    property onGuideStat: TNotifyEvent read FonGuideStat write FonGuideStat;
   end;
 
 implementation
@@ -126,6 +133,9 @@ FCancelExposure:=config.GetValue('/Autoguider/Recovery/CancelExposure',false);
 FRestartDelay:=config.GetValue('/Autoguider/Recovery/RestartDelay',15);
 FStarLostTime:=0;
 FStarLostCount:=0;
+FRAdistance:=0;
+FDecdistance:=0;
+FStarmass:=0;
 end;
 
 Destructor T_autoguider.Destroy;
@@ -162,6 +172,15 @@ procedure T_autoguider.CancelExposure;
 begin
  PostMessage(MsgHandle, LM_CCDCIEL, M_AutoguiderCancelExposure, 0);
 end;
+
+procedure T_autoguider.GuideStat(dra,dde,sm:double);
+begin
+ FRAdistance:=dra;
+ FDecdistance:=dde;
+ FStarmass:=sm;
+ PostMessage(MsgHandle, LM_CCDCIEL, M_AutoguiderGuideStat, 0);
+end;
+
 
 end.
 
