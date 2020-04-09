@@ -3,14 +3,14 @@ msgstr ""
 "Project-Id-Version: ccdceil\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2020-04-08 15:58+0000\n"
-"PO-Revision-Date: 2020-03-27 08:44+0000\n"
+"PO-Revision-Date: 2020-04-09 03:56+0000\n"
 "Last-Translator: Stanislav Holub <Unknown>\n"
 "Language-Team: Czech <cz@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2020-04-08 16:08+0000\n"
-"X-Generator: Launchpad (build a296f04231dee355be5db73cc878b9e21689a253)\n"
+"X-Launchpad-Export-Date: 2020-04-09 06:16+0000\n"
+"X-Generator: Launchpad (build 2e26c9bbd21cdca248baaea29aeffb920afcc32a)\n"
 "Language: cs\n"
 
 #: u_hints.rsactivateback
@@ -195,7 +195,7 @@ msgstr "Globální parametry serveru INDI"
 
 #: u_hints.rsguidinghisto
 msgid "Guiding history in arcsecond %s - blue: RA error %s - red: Dec error %s - yellow: Star mass"
-msgstr ""
+msgstr "Historie pointace v obloukových sekundách %s - modrá: RA chyba%s - červená: Chyba DEC %s - žlutá: Velikost hvězdy"
 
 #: u_hints.rshistogramoft
 msgid "Histogram of the current image.%sClick and move to adjust the visualisation threshold."
@@ -331,7 +331,7 @@ msgstr "Zobrazit stav dokončení"
 
 #: u_hints.rsshowguidings
 msgid "Show guiding statistics"
-msgstr ""
+msgstr "Zobrazit statistiku pointace"
 
 #: u_hints.rsshowhighligh
 msgid "Show highlight and shadow clipping"

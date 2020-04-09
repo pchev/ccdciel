@@ -7,14 +7,14 @@ msgstr ""
 "Project-Id-Version: ccdciel\n"
 "Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
 "POT-Creation-Date: 2020-04-08 15:58+0000\n"
-"PO-Revision-Date: 2020-03-25 19:55+0000\n"
+"PO-Revision-Date: 2020-04-08 20:45+0000\n"
 "Last-Translator: Thomas <email@starhopper.de>\n"
 "Language-Team: German <de@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2020-04-08 16:08+0000\n"
-"X-Generator: Launchpad (build a296f04231dee355be5db73cc878b9e21689a253)\n"
+"X-Launchpad-Export-Date: 2020-04-09 06:16+0000\n"
+"X-Generator: Launchpad (build 2e26c9bbd21cdca248baaea29aeffb920afcc32a)\n"
 
 #: u_hints.rsactivateback
 msgid "Activate backlash compensation.%sLet this disabled if your focuser driver include backlash compensation."
@@ -198,7 +198,7 @@ msgstr "Globale INDI-Server Parameter"
 
 #: u_hints.rsguidinghisto
 msgid "Guiding history in arcsecond %s - blue: RA error %s - red: Dec error %s - yellow: Star mass"
-msgstr ""
+msgstr "Guidingverlauf in Bogensekunden %s - blau: RA Fehler %s - rot: Dec Fehler %s - gelb: Sterngröße"
 
 #: u_hints.rshistogramoft
 msgid "Histogram of the current image.%sClick and move to adjust the visualisation threshold."
@@ -335,7 +335,7 @@ msgstr "Fertigstellungsstatus anzeigen"
 
 #: u_hints.rsshowguidings
 msgid "Show guiding statistics"
-msgstr ""
+msgstr "Zeige Guiding Statistik"
 
 #: u_hints.rsshowhighligh
 msgid "Show highlight and shadow clipping"
