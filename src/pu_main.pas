@@ -3970,8 +3970,8 @@ begin
   if WantSafety  then ConnectSafety(Sender);
   Application.ProcessMessages;
   if WantWatchdog then ConnectWatchdog(Sender);
-  AutoguiderConnectClick(Sender);
-  PlanetariumConnectClick(Sender);
+  if f_autoguider.BtnConnect.Caption=rsConnect then AutoguiderConnectClick(Sender);
+  if f_planetarium.BtnConnect.Caption=rsConnect then PlanetariumConnectClick(Sender);
 end;
 
 Procedure Tf_main.Disconnect(Sender: TObject);
