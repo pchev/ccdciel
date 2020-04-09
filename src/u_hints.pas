@@ -182,6 +182,8 @@ resourcestring
   rsPauseTheSequ = 'Pause the sequence after the current exposure is complete';
   rsShowCompleti = 'Show completion status';
   rsShowLastCapt = 'Show captured image';
+  rsShowGuidingS = 'Show guiding statistics';
+  rsGuidingHisto = 'Guiding history in arcsecond %s - blue: RA error %s - red: Dec error %s - yellow: Star mass';
 
 implementation
 

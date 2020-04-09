@@ -32,6 +32,7 @@ type
 
   T_autoguider_phd = class(T_autoguider)
   private
+    FArcsecPixel: double;
     procedure ProcessEventAsync(Data: PtrInt);
   protected
     TcpClient : TTcpclient;
@@ -43,6 +44,7 @@ type
     Procedure ProcessEvent(txt:string); override;
     procedure Execute; override;
     procedure StarLostTimerTimer(Sender: TObject); override;
+    procedure GetInfo;
   public
     Constructor Create;
     Destructor Destroy; override;
@@ -69,6 +71,7 @@ begin
   FTargetHost:='localhost';
   FTargetPort:='4400';
   FTimeout:=500;
+  FArcsecPixel:=1;
 end;
 
 Destructor T_autoguider_phd.Destroy;
@@ -215,7 +218,7 @@ end;
 procedure T_autoguider_phd.ProcessEventAsync(Data: PtrInt);
 var eventname,rpcid,rpcresult,rpcerror,err: string;
     attrib,value:Tstringlist;
-    p,q,i,s,k:integer;
+    p,q,r,i,s,k:integer;
     radiff, decdiff:string;
 begin
 try
@@ -244,6 +247,13 @@ if p>=0 then begin
          else FLastError:='';
        end;
      end;
+     p:=attrib.IndexOf('RADistanceRaw');
+     q:=attrib.IndexOf('DECDistanceRaw');
+     r:=attrib.IndexOf('StarMass');
+     if (p>=0) and (q>=0) and (r>=0) then
+         begin
+           GuideStat(-FArcsecPixel*StrToFloatDef(value[p],0),FArcsecPixel*StrToFloatDef(value[q],0),StrToFloatDef(value[r],0));
+         end;
      if (not FDithering)and(FMaxGuideDrift<=99) then
          begin
            p:=attrib.IndexOf('RADistanceGuide');
@@ -253,7 +263,7 @@ if p>=0 then begin
                  radiff:=value[p];
                  decdiff:=value[q];
 
-                 if Sqrt(Sqr(Abs(StrToFloat(radiff)))+Sqr(Abs(StrToFloat(decdiff))))>FMaxGuideDrift then
+                 if Sqrt(Sqr(Abs(StrToFloatDef(radiff,0)))+Sqr(Abs(StrToFloatDef(decdiff,0))))>FMaxGuideDrift then
                      begin
                           FStatus:='Drift ('+radiff+'/'+decdiff+')';
                           if (FCancelExposure) then
@@ -266,7 +276,10 @@ if p>=0 then begin
          end;
 
    end
-   else if eventname='StartGuiding' then FStatus:='Start Guiding'
+   else if eventname='StartGuiding' then begin
+      FStatus:='Start Guiding';
+      GetInfo;
+   end
    else if eventname='GuidingStopped' then FStatus:='Stopped'
    else if eventname='StarSelected' then FStatus:='Star Selected'
    else if eventname='StarLost' then begin
@@ -368,6 +381,15 @@ end else begin
           DisplayMessage('shutdown'+' '+rpcresult+' '+rpcerror);
        end;
      end
+     else if rpcid='1002' then begin  // get_pixel_scale
+       if rpcresult='error' then begin
+          DisplayMessage('get_pixel_scale'+' '+rpcresult+' '+rpcerror);
+          FArcsecPixel:=1;
+       end
+       else begin
+          FArcsecPixel:=StrToFloatDef(rpcresult,1);
+       end;
+     end
      else if rpcid='2001' then begin  // stop capture
        if rpcresult='error' then begin
           DisplayMessage('stop capture'+' '+rpcresult+' '+rpcerror);
@@ -451,6 +473,13 @@ procedure T_autoguider_phd.Shutdown;
 var buf:string;
 begin
  buf:='{"method": "shutdown","id":1001}';
+ Send(buf);
+end;
+
+procedure T_autoguider_phd.GetInfo;
+var buf:string;
+begin
+ buf:='{"method": "get_pixel_scale","id":1002}';
  Send(buf);
 end;
 

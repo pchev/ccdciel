@@ -2,15 +2,15 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ccdceil\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-03-22 15:06+0000\n"
-"PO-Revision-Date: 2020-03-22 11:49+0000\n"
+"POT-Creation-Date: 2020-04-08 15:58+0000\n"
+"PO-Revision-Date: 2020-04-09 03:56+0000\n"
 "Last-Translator: Stanislav Holub <Unknown>\n"
 "Language-Team: Czech <cz@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2020-03-22 15:12+0000\n"
-"X-Generator: Launchpad (build 3a6db24bbe7280ec09bae73384238390fcc98ad3)\n"
+"X-Launchpad-Export-Date: 2020-04-09 06:16+0000\n"
+"X-Generator: Launchpad (build 2e26c9bbd21cdca248baaea29aeffb920afcc32a)\n"
 "Language: cs\n"
 
 #: u_hints.rsactivateback
@@ -31,7 +31,7 @@ msgstr "Aktivní pouze v případě, že cíl používá umístění astrometrie
 
 #: u_hints.rsaddaflatsequ
 msgid "Add a flat sequence to the list."
-msgstr "Přidat Flat sekvenci do seznamu."
+msgstr "Přidat Flat úkol do seznamu."
 
 #: u_hints.rsaddanobjectt
 msgid "Add an object to the list"
@@ -87,7 +87,7 @@ msgstr "Úhel poloha kamery"
 
 #: u_hints.rsclearthesequ
 msgid "Clear the sequence completion status"
-msgstr "Vymazat stav dokončení sekvence"
+msgstr "Restarovat stav dokončení úkolu"
 
 #: u_hints.rscleartimecon
 msgid "Clear time constraint"
@@ -115,7 +115,7 @@ msgstr "Zkopírovat aktuální profil do nového.%sToto také zkopíruje všechn
 
 #: u_hints.rscopytheseque
 msgid "Copy the sequence to a new one. Completion status is reinitialized"
-msgstr "Zkopírovat sekvenci na novou. Stav dokončení je znovu inicializován"
+msgstr "Zkopírujte úlohu do nového souboru. Stav provádění je odstraněn"
 
 #: u_hints.rscreateanewem
 msgid "Create a new empty profile.%sWarning this also clear every program preference for this new profile.%sUse the Copy button if you want to configure a different equipment but keep the program options."
@@ -123,7 +123,7 @@ msgstr "Vytvořit nový prázdný profil.%sVarování! Tím se také vymažou v�
 
 #: u_hints.rscreateanewse
 msgid "Create a new sequence"
-msgstr "Vytvořit novou sekvenci"
+msgstr "Vytvořit nový úkol"
 
 #: u_hints.rscurrentteles
 msgid "Current telescope Right Ascension"
@@ -143,7 +143,7 @@ msgstr "Odstranit vybraný řádek ze seznamu."
 
 #: u_hints.rsdeletetheseq
 msgid "Delete the sequence file"
-msgstr "Odstranit soubor sekvence"
+msgstr "Odstranit soubor úloh"
 
 #: u_hints.rsdeletethispr
 msgid "Delete this profile and associated program preference."
@@ -167,7 +167,7 @@ msgstr "Přetažením změníte pořadí"
 
 #: u_hints.rseditthecurre
 msgid "Edit the current sequence"
-msgstr "Upravtit aktuální sekvenci"
+msgstr "Upravit aktuální úkol"
 
 #: u_hints.rsfixthevisual
 msgid "Fix the visualisation threshold to the image data range, 100% of the histogram."
@@ -192,6 +192,10 @@ msgstr "Globální parametry serveru ALPACA"
 #: u_hints.rsglobalindise
 msgid "Global INDI server parameters"
 msgstr "Globální parametry serveru INDI"
+
+#: u_hints.rsguidinghisto
+msgid "Guiding history in arcsecond %s - blue: RA error %s - red: Dec error %s - yellow: Star mass"
+msgstr "Historie pointace v obloukových sekundách %s - modrá: RA chyba%s - červená: Chyba DEC %s - žlutá: Velikost hvězdy"
 
 #: u_hints.rshistogramoft
 msgid "Histogram of the current image.%sClick and move to adjust the visualisation threshold."
@@ -239,7 +243,7 @@ msgstr "Seznam profilů pro různé konfigurace zařízení"
 
 #: u_hints.rsloadasequenc
 msgid "Load a sequence file"
-msgstr "Načíst soubor sekvence"
+msgstr "Načíst soubor úkolů"
 
 #: u_hints.rslooppreviewe
 msgid "Loop preview exposures"
@@ -259,11 +263,11 @@ msgstr "Pohyb zaostřovače ven"
 
 #: u_hints.rspausethesequ
 msgid "Pause the sequence after the current exposure is complete"
-msgstr "Po dokončení aktuální expozice pozastavit sekvenci"
+msgstr "Po dokončení aktuální expozice pozastavit úkol"
 
 #: u_hints.rspixelbinning
 msgid "Pixel binning"
-msgstr ""
+msgstr "Binning"
 
 #: u_hints.rsplanetariums2
 msgid "Planetarium status"
@@ -307,15 +311,15 @@ msgstr "Nastavit absolutní polohu zaostřovače"
 
 #: u_hints.rssetheretheac
 msgid "Set here the action to take after the sequence is terminated"
-msgstr "Nastavit akci, která má být provedena po ukončení sekvence"
+msgstr "Nastavit akci, která má být provedena po ukončení úkolu"
 
 #: u_hints.rssetthestartt
 msgid "Set the start time at astronomical dusk, recomputed for the date you run the sequence."
-msgstr "Nastavit počáteční čas na astronomický soumrak, přepočítaný na datum spuštění sekvence."
+msgstr "Nastavit počáteční čas na astronomický soumrak, přepočítaný na datum spuštění úkolu."
 
 #: u_hints.rssetthestopti
 msgid "Set the stop time at astronomical dawn, recomputed for the date you run the sequence."
-msgstr "Nastavit čas zastavení na astronomický úsvit, přepočítaný na datum spuštění sekvence."
+msgstr "Nastavit čas zastavení na astronomický úsvit, přepočítaný na datum spuštění úkolu."
 
 #: u_hints.rsshowbullseye
 msgid "Show bulls eye"
@@ -325,13 +329,17 @@ msgstr "Zobrazit zaměřovač"
 msgid "Show completion status"
 msgstr "Zobrazit stav dokončení"
 
+#: u_hints.rsshowguidings
+msgid "Show guiding statistics"
+msgstr "Zobrazit statistiku pointace"
+
 #: u_hints.rsshowhighligh
 msgid "Show highlight and shadow clipping"
 msgstr "Zobrazit oříznutí světel a stínů"
 
 #: u_hints.rsshowlastcapt
 msgid "Show captured image"
-msgstr ""
+msgstr "Zobrazit zachycený snímek"
 
 #: u_hints.rsshowofthehis
 msgid "Show %s of the histogram"
@@ -371,11 +379,11 @@ msgstr "Spustit postup automatického ostření"
 
 #: u_hints.rsstartthecapt
 msgid "Start the capture sequence"
-msgstr "Spustit sekvenci snímání"
+msgstr "Spusťte záznam"
 
 #: u_hints.rsstartthesequ
 msgid "Start the sequence execution"
-msgstr "Spustit provádění sekvence"
+msgstr "Spustit provádění úkolů"
 
 #: u_hints.rsstartthevcur
 msgid "Start the Vcurve learning process"
@@ -407,7 +415,7 @@ msgstr "V tuto chvíli zastavit, i když zpracování není dokončeno."
 
 #: u_hints.rsstoptheseque
 msgid "Stop the sequence execution"
-msgstr "Zastavit provádění sekvence"
+msgstr "Zastavit provádění úkolů"
 
 #: u_hints.rsstoptimecapt
 msgid "Stop time capturing (MC=Meridian crossing)"
@@ -519,15 +527,16 @@ msgstr "Cesta Unix ekvivalentní ke složce Elbrus Images."
 
 #: u_hints.rsthisallowtor
 msgid "This allow to restart an interrupted sequence at the point it was stopped"
-msgstr "To umožňuje restartování přerušené sekvence v bodě, kdy byla zastavena"
+msgstr "To umožňuje restartování přerušené úlohy v bodě, kdy byla zastavena"
 
 #: u_hints.rstimefrommeri
 msgid "Time from meridian transit (hour angle)"
 msgstr "Čas přechodu poledníku (hodinový úhel)"
 
 #: u_hints.rstrytocorrect
+#, fuzzy,badformat
 msgid "Try to correct for focuser slippage since the last Vcurve learning.%sBeware you must set the focuser temperature correction and the filters offset before to use this option."
-msgstr "Pokuste se opravit posunutím kurzoru od posledního učení V-křivky.%sUpozorňění! Před použitím této možnosti musíte nastavit korekci teploty ostření a odsazení filtru."
+msgstr "Pokuste se opravit posun ostření od posledního učení V-křivky.% Před použitím této možnosti se ujistěte, že jste nastavili korekci teploty ostření a posun filtru."
 
 #: u_hints.rsusedynamic2
 msgid "Dynamic can be use with an absolute or relative position focuser,%s this method require the starting position is near the focus position.%s This is the preferred method."

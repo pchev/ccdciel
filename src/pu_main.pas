@@ -692,6 +692,9 @@ type
     Procedure AutoguiderConnect(Sender: TObject);
     Procedure AutoguiderDisconnect(Sender: TObject);
     Procedure AutoguiderStatus(Sender: TObject);
+    Procedure AutoguiderGetSigma(axis:integer; out sigma: double);
+    Procedure AutoguiderGuideStat;
+    Procedure AutoguiderClearStat(Sender: TObject);
     Procedure PlanetariumConnectClick(Sender: TObject);
     Procedure PlanetariumConnect(Sender: TObject);
     Procedure PlanetariumDisconnect(Sender: TObject);
@@ -1434,6 +1437,7 @@ begin
   f_autoguider.onCalibrate:=@AutoguiderCalibrateClick;
   f_autoguider.onGuide:=@AutoguiderGuideClick;
   f_autoguider.onDither:=@AutoguiderDitherClick;
+  f_autoguider.onClearStat:=@AutoguiderClearStat;
   f_autoguider.Status.Text:=autoguider.Status;
   f_autoguider.DitherOnly:=autoguider.AutoguiderType=agDITHER;
 
@@ -3967,8 +3971,8 @@ begin
   if WantSafety  then ConnectSafety(Sender);
   Application.ProcessMessages;
   if WantWatchdog then ConnectWatchdog(Sender);
-  AutoguiderConnectClick(Sender);
-  PlanetariumConnectClick(Sender);
+  if f_autoguider.BtnConnect.Caption=rsConnect then AutoguiderConnectClick(Sender);
+  if f_planetarium.BtnConnect.Caption=rsConnect then PlanetariumConnectClick(Sender);
 end;
 
 Procedure Tf_main.Disconnect(Sender: TObject);
@@ -6077,6 +6081,105 @@ begin
  end;
  if autoguider.LastError<>'' then NewMessage(Format(rsAutoguider+': %s', [autoguider.LastError]),1);
  StatusBar1.Invalidate;
+end;
+
+Procedure Tf_main.AutoguiderGetSigma(axis:integer; out sigma: double);
+var i,n,count: integer;
+    val,runningMean,newMean,newS,runningS: double;
+begin
+ // compute RA or DEC RMS guide error
+ // use the same method as PHD2 to get the same number
+ // see DescriptiveStats::AddValue and DescriptiveStats::GetSigma in guiding_stats.cpp
+ sigma:=0;
+ runningS:=0;
+ n:=Length(AutoguiderStat);
+ if n<2 then exit;
+ for i:=0 to n-1 do begin
+   count:=i+1;
+   Val:=AutoguiderStat[i,axis];
+   if count=1 then begin
+     runningMean := Val;
+     newMean := Val;
+   end
+   else begin
+     newMean := runningMean + (Val - runningMean) / count;
+     newS := runningS + (Val - runningMean) * (Val - newMean);
+     runningMean := newMean;
+     runningS := newS;
+   end;
+ end;
+ sigma:=sqrt(runningS / (count - 1));
+end;
+
+Procedure Tf_main.AutoguiderGuideStat;
+var i,n: integer;
+    ma,mi,smmax,ras,des,tots: double;
+begin
+   // Add current point to list, keep last 100 points
+   n:=Length(AutoguiderStat);
+   if n<100 then begin
+     SetLength(AutoguiderStat,n+1);
+   end
+   else begin
+     for i:=1 to n-1 do
+       AutoguiderStat[i-1]:=AutoguiderStat[i];
+     n:=n-1;
+   end;
+   AutoguiderStat[n,1]:=autoguider.RAdistance;
+   AutoguiderStat[n,2]:=autoguider.Decdistance;
+   AutoguiderStat[n,3]:=autoguider.Starmass;
+   // show graph and stats
+   if f_autoguider.ShowStat.Checked then begin
+     if n>1 then begin
+       // show guide error
+       AutoguiderGetSigma(1,ras);
+       AutoguiderGetSigma(2,des);
+       tots:=sqrt(ras*ras+des*des);
+       f_autoguider.Label1.Caption:='RA:'+FormatFloat(f2,ras)+'" Dec:'+FormatFloat(f2,des)+'" Tot:'+FormatFloat(f2,tots)+'"';
+     end
+     else begin
+       f_autoguider.Label1.Caption:=' ';
+     end;
+     // prepare chart
+     f_autoguider.GuideChartRAdist.Clear;
+     f_autoguider.GuideChartDecdist.Clear;
+     f_autoguider.GuideChartStarmass.Clear;
+     smmax:=0; ma:=0; mi:=0;
+     for i:=0 to Length(AutoguiderStat)-1 do begin
+        // add ra and dec points
+        f_autoguider.GuideChartRAdist.Add(AutoguiderStat[i,1]);
+        f_autoguider.GuideChartDecdist.Add(AutoguiderStat[i,2]);
+        // max values for starmass scaling
+        ma:=max(ma,AutoguiderStat[i,1]);
+        ma:=max(ma,AutoguiderStat[i,2]);
+        mi:=min(mi,AutoguiderStat[i,1]);
+        mi:=min(mi,AutoguiderStat[i,2]);
+        smmax:=max(smmax,AutoguiderStat[i,3]);
+     end;
+     // restrict vertical scale to +/- 2"
+     if ma<2 then begin
+        ma:=2;
+        f_autoguider.GuideChart.AxisList[0].range.Max:=ma;
+        f_autoguider.GuideChart.AxisList[0].range.UseMax:=true;
+     end
+     else f_autoguider.GuideChart.AxisList[0].range.UseMax:=false;
+     if mi>-2 then begin
+        f_autoguider.GuideChart.AxisList[0].range.Min:=-2;
+        f_autoguider.GuideChart.AxisList[0].range.UseMin:=true;
+     end
+     else f_autoguider.GuideChart.AxisList[0].range.UseMin:=false;
+     // starmass scaling factor
+     ma:=ma/smmax;
+     for i:=0 to Length(AutoguiderStat)-1 do begin
+        // add scaled starmass points
+        f_autoguider.GuideChartStarmass.Add(AutoguiderStat[i,3]*ma);
+     end;
+   end;
+end;
+
+Procedure Tf_main.AutoguiderClearStat(Sender: TObject);
+begin
+  SetLength(AutoguiderStat,0);
 end;
 
 procedure Tf_main.MenuViewhdrClick(Sender: TObject);
@@ -10278,7 +10381,7 @@ begin
        for i:=0 to ns-1 do
          hfdlist[i]:=fits.StarList[i].hfd;
        med:=SMedian(hfdlist);            {median of starshfd}
-       s:=min(max(12,round(2.5*med)),starwindow);  {reasonable window to measure this stars}
+       s:=min(max(14,round(3.0*med)),s); {reasonable window to measure this star}
      end
      else
        s:=20; {no star found, try with small default window}
@@ -11363,6 +11466,7 @@ begin
     M_AutoguiderCancelExposure: begin
                           CancelRestartExposure(autoguider.RestartDelay);
                          end;
+    M_AutoguiderGuideStat: AutoguiderGuideStat;
     M_AstrometryDone: begin
                       try
                       buf:=PChar(Message.LParam);
@@ -11699,7 +11803,7 @@ begin
     for i:=0 to nhfd-1 do
       hfdlist[i]:=fits.StarList[i].hfd;
     med:=SMedian(hfdlist);            {median of starshfd}
-    s:=min(max(12,round(2.5*med)),starwindow);  {reasonable window to measure this stars}
+    s:=min(max(14,round(3.0*med)),s); {reasonable window to measure this star}
   end
   else
     s:=20; {no star found, try with small default window}

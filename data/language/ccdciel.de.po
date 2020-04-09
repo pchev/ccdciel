@@ -6,15 +6,15 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ccdciel\n"
 "Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
-"POT-Creation-Date: 2020-03-22 15:04+0000\n"
-"PO-Revision-Date: 2020-03-22 15:07+0000\n"
-"Last-Translator: Patrick Chevalley <Unknown>\n"
+"POT-Creation-Date: 2020-04-08 15:57+0000\n"
+"PO-Revision-Date: 2020-04-07 18:09+0000\n"
+"Last-Translator: Thomas <email@starhopper.de>\n"
 "Language-Team: German <de@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2020-03-22 15:12+0000\n"
-"X-Generator: Launchpad (build 3a6db24bbe7280ec09bae73384238390fcc98ad3)\n"
+"X-Launchpad-Export-Date: 2020-04-09 06:16+0000\n"
+"X-Generator: Launchpad (build 2e26c9bbd21cdca248baaea29aeffb920afcc32a)\n"
 
 #: u_translation.rs32bitdriver
 msgid "This driver work only in 32bit, please install the 32bit version of CCDciel."
@@ -58,7 +58,7 @@ msgstr "Hinzufügen"
 
 #: u_translation.rsaddfitskeywo
 msgid "Add FITS keyword for DSLR EXIF tags"
-msgstr ""
+msgstr "FITS Schlüsselwort für DSLR EXIF tags hinzufügen"
 
 #: u_translation.rsaddstep
 msgid "Add step"
@@ -90,7 +90,7 @@ msgstr "Luftmasse"
 
 #: u_translation.rsalignmenton
 msgid "Alignment on"
-msgstr ""
+msgstr "Ausrichtung auf"
 
 #: u_translation.rsalignmentsta
 msgid "Alignment star lost"
@@ -666,7 +666,7 @@ msgstr "Zentrum"
 
 #: u_translation.rscenterabrigh
 msgid "Center a bright star. %s Defocus until the ring are clearly visible. %s Click Start button. %s Adjust the collimation. %s The star must be centered in full frame for the final adjustement."
-msgstr ""
+msgstr "Einen hellen Stern zentrieren. %s Defokussieren bis der Ring deutlich sichtbar ist. %s Auf die Schaltfläche Start drücken. %s Die Kollimation anpassen. %s Der Stern muss für die endgültige Justage in der Mitte des Bildfeldes liegen."
 
 #: u_translation.rscenterappare
 msgid "Center, apparent coord. RA=%s DEC=%s PA=%s"
@@ -754,7 +754,7 @@ msgstr "Wolkenbedeckung"
 
 #: u_translation.rscollimation
 msgid "Collimation"
-msgstr ""
+msgstr "Kollimation"
 
 #: u_translation.rscolorbalance
 msgid "Color balance"
@@ -1054,11 +1054,11 @@ msgstr "Trennen Sie die Kamera vor dem Ändern der Konfiguration."
 
 #: u_translation.rsdiscover
 msgid "Discover"
-msgstr ""
+msgstr "Entdecken"
 
 #: u_translation.rsdiscoverypor
 msgid "Discovery port"
-msgstr ""
+msgstr "Port erkennen"
 
 #: u_translation.rsdisplay
 msgid "Display"
@@ -1066,7 +1066,7 @@ msgstr "Anzeige"
 
 #: u_translation.rsdisplayspeed
 msgid "Display speed"
-msgstr ""
+msgstr "Anzeigegeschwindigkeit"
 
 #: u_translation.rsdistancetota
 msgid "Distance to target: %s arcmin"
@@ -1122,7 +1122,7 @@ msgstr "erledigt"
 
 #: u_translation.rsdonotdisplay
 msgid "Do not display images during capture"
-msgstr ""
+msgstr "Keine Bildwiedergabe während der Aufnahme"
 
 #: u_translation.rsdonothing
 msgid "Do nothing"
@@ -1210,7 +1210,7 @@ msgstr "e-Mail Konfiguration"
 
 #: u_translation.rsemailnotific
 msgid "Email notification text"
-msgstr ""
+msgstr "E-Mail-Benachrichtigungstext"
 
 #: u_translation.rsemailon
 msgid "Email on :"
@@ -1242,7 +1242,7 @@ msgstr "Fehler"
 
 #: u_translation.rserrormessage
 msgid "Error messages"
-msgstr ""
+msgstr "Fehlermeldungen"
 
 #: u_translation.rserrormountno
 msgid "Error! Mount not connected"
@@ -1528,10 +1528,6 @@ msgstr "Fokusqualität = %s"
 msgid "Focus star selection"
 msgstr "Auswahl Fokusstern"
 
-#: u_translation.rsfocuswindowm
-msgid "Focus window must be at least four time greater than Star window!"
-msgstr "Fokusfenstergröße muss mindestens viermal größer sein als das Sternerkennungsfenster!"
-
 #: u_translation.rsfocuswindows
 msgid "Focus window size"
 msgstr "Fenstergröße für die Fokussierung"
@@ -1790,7 +1786,7 @@ msgstr "Helligkeit"
 
 #: u_translation.rsinteractiond
 msgid "Interaction dialog"
-msgstr ""
+msgstr "Interaktionsdialog"
 
 #: u_translation.rsinterface
 msgid "Interface"
@@ -1914,7 +1910,7 @@ msgstr "Schleife"
 
 #: u_translation.rslowqualityim
 msgid "Low quality image scaling"
-msgstr ""
+msgstr "Bildskalierung mit geringer Qualität"
 
 #: u_translation.rsmagnifyer
 msgid "Magnifier"
@@ -1935,11 +1931,11 @@ msgstr "Die Montierung vorher so gut wie möglich auf den Pol ausrichten. Das Te
 
 #: u_translation.rsmanual
 msgid "Manual"
-msgstr "Benutzerhandbuch"
+msgstr "Manuell"
 
 #: u_translation.rsmanualfilter
 msgid "Manual filter change canceled"
-msgstr ""
+msgstr "Manueller Filterwechsel abgebrochen"
 
 #: u_translation.rsmanualfocusa
 msgid "Manual focus aid"
@@ -2379,7 +2375,7 @@ msgstr "Nicht Nachführen"
 
 #: u_translation.rsnumberofcirc
 msgid "Number of circles"
-msgstr ""
+msgstr "Anzahl der Kreise"
 
 #: u_translation.rsnumberofdyna
 msgid "Number of dynamic points"
@@ -2391,7 +2387,7 @@ msgstr "Anzahl Aufnahmen pro Punkt"
 
 #: u_translation.rsnumberofslot
 msgid "Number of slot"
-msgstr ""
+msgstr "Nummer der Filterposition"
 
 #: u_translation.rsnumberofstep
 msgid "Number of steps"
@@ -2591,7 +2587,7 @@ msgstr "PDF Dokumentation"
 
 #: u_translation.rsperformance
 msgid "Performance"
-msgstr ""
+msgstr "Leistung"
 
 #: u_translation.rsperiodicauto
 msgid "Periodic auto-focus"
@@ -2756,7 +2752,7 @@ msgstr "Pos."
 
 #: u_translation.rspower
 msgid "Power"
-msgstr ""
+msgstr "Leistung"
 
 #: u_translation.rsprecisionsle
 msgid "Precision slewing options"
@@ -2900,7 +2896,7 @@ msgstr "Referenzbild"
 
 #: u_translation.rsrefractedpol
 msgid "Refracted pole"
-msgstr ""
+msgstr "Himmelspol mit Refraktion"
 
 #: u_translation.rsrelativeincr
 msgid "Relative increment for the inward or outward movement"
@@ -3352,7 +3348,7 @@ msgstr "Sequenz %s startet sofort"
 
 #: u_translation.rssequencestep
 msgid "Sequence steps"
-msgstr ""
+msgstr "Sequenzschritte"
 
 #: u_translation.rssequencestop
 msgid "Sequence stopped by user request, no termination script will be run."
@@ -3604,7 +3600,7 @@ msgstr "Steigung"
 
 #: u_translation.rsslot
 msgid "Slot"
-msgstr ""
+msgstr "Filterposition"
 
 #: u_translation.rssmtpserverad
 msgid "SMTP server address"
@@ -3966,6 +3962,10 @@ msgstr "Zielgenauigkeit [arcmin] "
 msgid "Targets"
 msgstr "Ziele"
 
+#: u_translation.rstargetscoord
+msgid "Target %s coordinates not updated"
+msgstr "Koordinaten des Ziels %s nicht aktualisiert"
+
 #: u_translation.rstargetwillbe
 msgid "Target can run until %s, in %s seconds"
 msgstr "Ziel kann bis %s laufen, in %s Sekunden"
@@ -4068,7 +4068,7 @@ msgstr "Optionen beim Beenden"
 
 #: u_translation.rstest
 msgid "Test"
-msgstr ""
+msgstr "Test"
 
 #: u_translation.rstestemailfro
 msgid "Test email from CCDciel"
@@ -4248,7 +4248,7 @@ msgstr "Wahr"
 
 #: u_translation.rstruepole
 msgid "True pole"
-msgstr ""
+msgstr "Echter Himmelspol"
 
 #: u_translation.rstrynexttarge
 msgid "Try next target in sequence."
@@ -4378,6 +4378,10 @@ msgstr "Fokussierer verwenden"
 msgid "Use mount"
 msgstr "Montierung verwenden"
 
+#: u_translation.rsuseonlystarn
+msgid "Use only star near the image center"
+msgstr "Nur Sterne im Zentrum verwenden"
+
 #: u_translation.rsusergroup
 msgid "User group"
 msgstr "User Group"
@@ -4456,7 +4460,7 @@ msgstr "V-lernen"
 
 #: u_translation.rsvoiceconfigu
 msgid "Voice configuration"
-msgstr ""
+msgstr "Sprachkonfiguration"
 
 #: u_translation.rswait1minute
 msgid "Wait 1 minute ..."

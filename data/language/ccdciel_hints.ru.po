@@ -6,15 +6,15 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ccdciel\n"
 "Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
-"POT-Creation-Date: 2020-03-22 15:06+0000\n"
-"PO-Revision-Date: 2020-01-11 18:34+0000\n"
+"POT-Creation-Date: 2020-04-08 15:58+0000\n"
+"PO-Revision-Date: 2020-04-08 10:47+0000\n"
 "Last-Translator: Sergey Tarantsov <tsn-ast@yandex.ru>\n"
 "Language-Team: Russian <ru@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2020-03-22 15:12+0000\n"
-"X-Generator: Launchpad (build 3a6db24bbe7280ec09bae73384238390fcc98ad3)\n"
+"X-Launchpad-Export-Date: 2020-04-09 06:16+0000\n"
+"X-Generator: Launchpad (build 2e26c9bbd21cdca248baaea29aeffb920afcc32a)\n"
 
 #: u_hints.rsactivateback
 msgid "Activate backlash compensation.%sLet this disabled if your focuser driver include backlash compensation."
@@ -50,7 +50,7 @@ msgstr "Описание для этого шага"
 
 #: u_hints.rsafterlearnin
 msgid "After learning is completed you can use this cursor to better adjust to the linear part of the curve.%sThe fit must be particularly good near the horizontal blue line position."
-msgstr ""
+msgstr "После завершения обучения вы можете использовать этот курсор, чтобы лучше приспособиться к линейной части кривой.%sПодгонка должна быть особенно хорошей вблизи положения горизонтальной синей линии."
 
 #: u_hints.rsatemporarydi
 msgid "A temporary directory for work files. Be sure it contain only ASCII character and no space"
@@ -196,6 +196,10 @@ msgstr "Общие  параметры сервера ALPACA"
 msgid "Global INDI server parameters"
 msgstr "Общие параметры сервера INDI"
 
+#: u_hints.rsguidinghisto
+msgid "Guiding history in arcsecond %s - blue: RA error %s - red: Dec error %s - yellow: Star mass"
+msgstr ""
+
 #: u_hints.rshistogramoft
 msgid "Histogram of the current image.%sClick and move to adjust the visualisation threshold."
 msgstr "Гистограмма текущего изображения.%sНажмите и переместите, чтобы настроить порог визуализации."
@@ -328,13 +332,17 @@ msgstr "Перекрестье"
 msgid "Show completion status"
 msgstr "Показать статус выполнения"
 
+#: u_hints.rsshowguidings
+msgid "Show guiding statistics"
+msgstr ""
+
 #: u_hints.rsshowhighligh
 msgid "Show highlight and shadow clipping"
 msgstr "Клиппинг теней и светов"
 
 #: u_hints.rsshowlastcapt
 msgid "Show captured image"
-msgstr ""
+msgstr "Показать захваченное изображение"
 
 #: u_hints.rsshowofthehis
 msgid "Show %s of the histogram"
@@ -358,7 +366,7 @@ msgstr "Сложить превью-кадры в одно изображени�
 
 #: u_hints.rsstartaprevie
 msgid "Start a preview loop when waiting for the delay to expire."
-msgstr ""
+msgstr "Запустить цикл превью, ожидая истечения задержки."
 
 #: u_hints.rsstartimagelo
 msgid "Start image loop centered on selected star"

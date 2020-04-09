@@ -25,8 +25,8 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 interface
 
-uses  UScaleDPI, u_translation, u_hints,
-  Classes, SysUtils, FileUtil, Forms, Graphics, Controls, StdCtrls, ExtCtrls;
+uses  UScaleDPI, u_translation, u_hints, u_global,
+  Classes, SysUtils, FileUtil, TAGraph, TAFuncSeries, TASeries, Forms, Graphics, Controls, StdCtrls, ExtCtrls;
 
 type
 
@@ -37,6 +37,13 @@ type
     BtnCal: TButton;
     BtnGuide: TButton;
     BtnDither: TButton;
+    GuideChart: TChart;
+    GuideChartDecdist: TLineSeries;
+    GuideChartStarmass: TLineSeries;
+    GuideChartRAdist: TLineSeries;
+    Label1: TLabel;
+    Panel5: TPanel;
+    ShowStat: TCheckBox;
     Panel1: TPanel;
     led: TShape;
     Panel2: TPanel;
@@ -48,9 +55,11 @@ type
     procedure BtnConnectClick(Sender: TObject);
     procedure BtnDitherClick(Sender: TObject);
     procedure BtnGuideClick(Sender: TObject);
+    procedure GuideChartDblClick(Sender: TObject);
+    procedure ShowStatChange(Sender: TObject);
   private
     { private declarations }
-    FonConnect,FonCalibrate,FonGuide,FonDither: TNotifyEvent;
+    FonConnect,FonCalibrate,FonGuide,FonDither,FonClearStat: TNotifyEvent;
     procedure SetLang;
     procedure SetDitherOnly(value:boolean);
     function  GetDitherOnly: boolean;
@@ -63,6 +72,7 @@ type
     property onCalibrate: TNotifyEvent read FonCalibrate write FonCalibrate;
     property onGuide: TNotifyEvent read FonGuide write FonGuide;
     property onDither: TNotifyEvent read FonDither write FonDither;
+    property onClearStat: TNotifyEvent read FonClearStat write FonClearStat;
   end;
 
 implementation
@@ -96,6 +106,8 @@ begin
   BtnGuide.Caption:=rsGuide;
   BtnDither.Caption:=rsDither;
   Status.Hint:=rsAutoguiderSt;
+  ShowStat.Hint:=rsShowGuidingS;
+  GuideChart.Hint:=Format(rsGuidingHisto,[crlf,crlf,crlf]);
 end;
 
 procedure Tf_autoguider.SetDitherOnly(value:boolean);
@@ -129,6 +141,16 @@ end;
 procedure Tf_autoguider.BtnGuideClick(Sender: TObject);
 begin
    if Assigned(FonGuide) then FonGuide(self);
+end;
+
+procedure Tf_autoguider.GuideChartDblClick(Sender: TObject);
+begin
+  if Assigned(FonClearStat) then FonClearStat(self);
+end;
+
+procedure Tf_autoguider.ShowStatChange(Sender: TObject);
+begin
+  Panel5.Visible:=ShowStat.Checked;
 end;
 
 procedure Tf_autoguider.BtnCalClick(Sender: TObject);
