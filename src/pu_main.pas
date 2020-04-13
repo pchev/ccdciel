@@ -3641,7 +3641,7 @@ begin
 
     n:=config.GetValue('/Readout/Num',0);
     ReadoutList.Clear;
-    for i:=1 to n do begin
+    for i:=0 to n-1 do begin
        str:=config.GetValue('/Readout/Mode'+IntToStr(i),'');
        ReadoutList.Add(str);
     end;

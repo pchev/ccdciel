@@ -132,6 +132,10 @@ private
    CameraFnumber: INumberVectorProperty;
    CameraFnumberValue: INumber;
    CameraAperture: ISwitchVectorProperty;
+   CaptureFormat: ISwitchVectorProperty;
+   TransfertFormat: ISwitchVectorProperty;
+   TransfertFits, TransfertNative: ISwitch;
+   FRAWformat: integer;
    FhasBlob,Fready,FWheelReady,Fconnected,UseMainSensor: boolean;
    Findiserver, Findiserverport, Findidevice, Findisensor, Findideviceport: string;
    FVideoMsg: boolean;
@@ -392,6 +396,8 @@ begin
     CameraFnumber:=nil;
     FhasFnumber:=false;
     CameraAperture:=nil;
+    CaptureFormat:=nil;
+    TransfertFormat:=nil;
     FhasBlob:=false;
     FhasVideo:=false;
     Fready:=false;
@@ -403,6 +409,7 @@ begin
     FhasGainISO:=false;
     FhasGain:=false;
     FISOList.Clear;
+    FRAWformat:=-1;
     FCameraXSize:=-1;
     FCameraYSize:=-1;
     stX:=-1;
@@ -412,6 +419,8 @@ begin
     FSensorList.Clear;
     FNotAbortSequence:=false;
     FISOInitialized:=false;
+    FReadOutList.Clear;
+    FhasReadOut:=false;
     if Assigned(FonStatusChange) then FonStatusChange(self);
     if Assigned(FonWheelStatusChange) then FonWheelStatusChange(self);
 end;
@@ -892,6 +901,25 @@ begin
      CfaType:=IUFindText(CCDCfa,'CFA_TYPE');
      if (CfaOffsetX=nil)or(CfaOffsetY=nil)or(CfaType=nil) then CCDCfa:=nil;
      FhasCfaInfo:=(CCDCfa<>nil);
+  end
+  else if (proptype=INDI_SWITCH)and(propname='CAPTURE_FORMAT') then begin
+    CaptureFormat:=indiProp.getSwitch;
+    FReadOutList.Clear;
+    FRAWformat:=-1;
+    FReadOutList.Add('FITS');
+    for i:=0 to CaptureFormat.nsp-1 do begin
+       FReadOutList.Add(CaptureFormat.sp[i].lbl);
+       if CaptureFormat.sp[i].lbl='RAW' then FRAWformat:=i;
+    end;
+    if (FReadOutList.Count<=1)or(FRAWformat<0) then CaptureFormat:=nil;
+    FhasReadOut:=(CaptureFormat<>nil)and(TransfertFormat<>nil);
+  end
+  else if (proptype=INDI_SWITCH)and(propname='CCD_TRANSFER_FORMAT') then begin
+    TransfertFormat:=indiProp.getSwitch;
+    TransfertFits:=IUFindSwitch(TransfertFormat,'FORMAT_FITS');
+    TransfertNative:=IUFindSwitch(TransfertFormat,'FORMAT_NATIVE');
+    if (TransfertFits=nil)or(TransfertNative=nil) then TransfertFormat:=nil;
+    FhasReadOut:=(CaptureFormat<>nil)and(TransfertFormat<>nil);
   end
   else if (proptype=INDI_NUMBER)and(propname='f-number') then begin
     CameraFnumber:=indiProp.getNumber();
@@ -1874,12 +1902,44 @@ end;
 
 procedure T_indicamera.SetReadOutMode(value: integer);
 begin
-// no INDI property ?
+// Readout mode simulation for DSLR using combination of CCD_TRANSFER_FORMAT and CAPTURE_FORMAT
+if (TransfertFormat<>nil)and(CaptureFormat<>nil)and FhasReadOut then begin
+  if value=0 then begin // FITS
+    IUResetSwitch(CaptureFormat);
+    CaptureFormat.sp[FRAWformat].s:=ISS_ON;
+    IUResetSwitch(TransfertFormat);
+    TransfertFits.s:=ISS_ON;
+    indiclient.sendNewSwitch(CaptureFormat);
+    indiclient.sendNewSwitch(TransfertFormat);
+  end
+  else begin  // Native
+    IUResetSwitch(CaptureFormat);
+    CaptureFormat.sp[value-1].s:=ISS_ON;
+    IUResetSwitch(TransfertFormat);
+    TransfertNative.s:=ISS_ON;
+    indiclient.sendNewSwitch(TransfertFormat);
+    indiclient.sendNewSwitch(CaptureFormat);
+  end;
+end;
 end;
 
 function T_indicamera.GetReadOutMode: integer;
+var i: integer;
 begin
 result:=0;
+// Readout mode simulation for DSLR using combination of CCD_TRANSFER_FORMAT and CAPTURE_FORMAT
+if (TransfertFormat<>nil)and(CaptureFormat<>nil)and FhasReadOut then begin
+   if TransfertFits.s=ISS_ON then
+     result:=0
+   else begin
+     for i:=0 to CaptureFormat.nsp-1 do begin
+       if CaptureFormat.sp[i].s=ISS_ON then begin
+         result:=i+1;
+         break;
+       end;
+     end;
+   end;
+end;
 end;
 
 procedure T_indicamera.SetFnumber(value: string);
