@@ -541,8 +541,8 @@ if parkprop<>nil then begin
     swunpark.s:=ISS_ON;
  end;
  indiclient.sendNewSwitch(parkprop);
- indiclient.WaitBusy(parkprop,120000);
- indiclient.WaitBusy(coord_prop,120000);
+ indiclient.WaitBusy(parkprop,120000,2000);
+ indiclient.WaitBusy(coord_prop,120000,2000);
 end;
 end;
 
