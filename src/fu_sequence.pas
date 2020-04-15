@@ -941,8 +941,6 @@ begin
  // check mount park
  if mount.Park then begin
     msg(rsTheTelescope, 1);
-    StopSequence;
-    exit;
  end;
  if not StartingSequence then exit;
  if Targets.CheckDoneCount then begin

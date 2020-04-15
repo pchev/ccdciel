@@ -1137,6 +1137,11 @@ begin
         end;
         // set coordinates
         if ((t.ra<>NullCoord)and(t.de<>NullCoord)) then begin
+          if mount.Park then begin
+             msg(rsTheTelescope, 1);
+             StopSequence(true);
+             exit;
+          end;
           // disable astrometrypointing and autoguiding if first step is to move to focus star
           astrometrypointing:=t.astrometrypointing and (not (autofocusstart and (not InplaceAutofocus))) ;
           // must track before to slew
