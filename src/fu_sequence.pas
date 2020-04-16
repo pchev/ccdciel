@@ -981,20 +981,6 @@ begin
     end;
  end;
  if not StartingSequence then exit;
- // Check dome open and slaving
- if (not isCalibrationSequence)and(dome.Status=devConnected) and
-   ((not dome.Shutter)or(dome.hasSlaving and(not dome.Slave)))
-   then begin
-    buf:='Dome is: ';
-    if not dome.Shutter then buf:=buf+'closed, ';
-    if dome.hasSlaving and(not dome.Slave) then buf:=buf+'not slaved ';
-    f_pause.Caption:='Dome is not ready';
-    f_pause.Text:=buf;
-    if not f_pause.Wait then begin
-      StopSequence;
-    end;
- end;
- if not StartingSequence then exit;
  // check if autoguider is required and connected
  if (not isCalibrationSequence)and(Autoguider.AutoguiderType<>agNONE)and(Autoguider.State=GUIDER_DISCONNECTED)and(assigned(FConnectAutoguider)) then begin
    if AutoguiderStarting then begin
