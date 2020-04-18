@@ -545,7 +545,7 @@ begin
    piy:=FPixelSizeY;
    ccdname:=Fccdname;
    frname:=FrameName[ord(FFrametype)];
-   dateobs:=FormatDateTime(dateisoshort,Ftimestart);
+   dateobs:=FormatDateTime(dateiso,Ftimestart);
    if FhasLastExposureStartTime then begin
      try
        dateobs:=V.Get('lastexposurestarttime').AsString;
