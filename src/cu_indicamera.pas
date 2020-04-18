@@ -1238,7 +1238,7 @@ begin
      if assigned(FonExposureProgress) then FonExposureProgress(-10);
      if debug_msg then msg('this is a '+ft+' file');
      if debug_msg then msg('copy '+ft+' stream to fits');
-     RawToFits(data,FImgStream,rmsg,GetPixelSizeX,GetPixelSizeY,GetBinX,GetBinY);
+     RawToFits(data,ft,FImgStream,rmsg,GetPixelSizeX,GetPixelSizeY,GetBinX,GetBinY);
      if rmsg<>'' then msg(rmsg,1);
      if FImgStream.Size<2880 then begin
         msg('Invalid file received '+ft,0);

@@ -11347,7 +11347,7 @@ end;
 
 procedure Tf_main.LoadRawFile(fn:string);
 var RawStream, FitsStream: TMemoryStream;
-    imgsize, rmsg: string;
+    imgsize, rmsg, ext: string;
 begin
  {$ifdef debug_raw}writeln(FormatDateTime(dateiso,Now)+blank+'LoadRawFile'+blank+fn);{$endif}
  // create resources
@@ -11355,10 +11355,11 @@ begin
  FitsStream:=TMemoryStream.Create;
  try
    // load picture
+   ext:=ExtractFileExt(fn);
    {$ifdef debug_raw}writeln(FormatDateTime(dateiso,Now)+blank+'LoadFromFile');{$endif}
    RawStream.LoadFromFile(fn);
    {$ifdef debug_raw}writeln(FormatDateTime(dateiso,Now)+blank+'RawToFits');{$endif}
-   RawToFits(RawStream,FitsStream,rmsg);
+   RawToFits(RawStream,ext,FitsStream,rmsg);
    if rmsg<>'' then NewMessage(rmsg,1);
    if FitsStream.size<2880 then
       NewMessage('Invalid file '+fn,0)
