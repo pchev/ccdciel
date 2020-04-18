@@ -82,6 +82,7 @@ T_camera = class(TComponent)
     FIndiTransfert: TIndiTransfert;
     FIndiTransfertDir,FIndiTransfertPrefix: string;
     FhasGain,FhasGainISO,FCanSetGain,FhasCfaInfo,FhasFnumber,FhasCoolerPower: boolean;
+    FhasLastExposureStartTime,FhasLastExposureDuration: boolean;
     FGainMin, FGainMax: integer;
     FISOList: TStringList;
     FhasFastReadout, FhasReadOut: boolean;
@@ -332,6 +333,8 @@ begin
   FhasFastReadout:=false;
   FhasReadOut:=false;
   FhasFnumber:=false;
+  FhasLastExposureStartTime:=false;
+  FhasLastExposureDuration:=false;
   FImageFormat:='.fits';
   Fexptime:=0;
   FCanSetGain:=false;
@@ -704,13 +707,19 @@ begin
   Ffits.Header.Insert(i,'SWCREATE','CCDciel '+ccdciel_version+'-'+RevisionStr+blank+compile_system,'');
   if objname<>'' then Ffits.Header.Insert(i,'OBJECT',objname,'Observed object name');
   Ffits.Header.Insert(i,'IMAGETYP',hframe,'Image Type');
-  Ffits.Header.Insert(i,'DATE-OBS',hdateobs,'UTC start date of observation');
+  if FhasLastExposureStartTime then
+    Ffits.Header.Insert(i,'DATE-OBS',hdateobs,'UTC start date from camera')
+  else
+    Ffits.Header.Insert(i,'DATE-OBS',hdateobs,'UTC start date of observation');
   if shutter>0 then begin
     Ffits.Header.Insert(i,'EXPTIME',shutter,'[s] Camera Exposure Time');
     if hexp>0 then Ffits.Header.Insert(i,'REQTIME',hexp,'[s] Requested Exposure Time');
   end
   else begin
-    if hexp>0 then Ffits.Header.Insert(i,'EXPTIME',hexp,'[s] Total Exposure Time');
+    if FhasLastExposureDuration then
+       Ffits.Header.Insert(i,'EXPTIME',hexp,'[s] Exposure Time from camera')
+    else
+       Ffits.Header.Insert(i,'EXPTIME',hexp,'[s] Total Exposure Time');
   end;
   if FStackCount>1 then Ffits.Header.Insert(i,'STACKCNT',FStackCount,'Number of stacked frames');
   if cgain<>NullInt then Ffits.Header.Insert(i,'GAIN',cgain,'Camera gain setting in manufacturer units');

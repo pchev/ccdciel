@@ -197,6 +197,8 @@ var readmodes,roitem: Variant;
 begin
 {$ifdef mswindows}
  try
+ FhasLastExposureStartTime:=true;
+ FhasLastExposureDuration:=true;
  stCooler:=false;
  stCCDtemp:=NullCoord;
  FStatus := devConnecting;
@@ -456,7 +458,7 @@ type Timgdata = array of longint;
 var ok: boolean;
     i,j,c,xs,ys: integer;
     nax1,nax2,state: integer;
-    pix,piy: double;
+    pix,piy,expt: double;
     dateobs,ccdname,frname:string;
     img: PSafeArray;
     pimgdata: pointer;
@@ -555,6 +557,21 @@ begin
    ccdname:=Fccdname;
    frname:=FrameName[ord(FFrametype)];
    dateobs:=FormatDateTime(dateisoshort,Ftimestart);
+   if FhasLastExposureStartTime then begin
+     try
+       dateobs:=V.LastExposureStartTime;
+     except
+       FhasLastExposureStartTime:=false;
+     end;
+   end;
+   expt:=Fexptime;
+   if FhasLastExposureDuration then begin
+     try
+       expt:=V.LastExposureDuration;
+     except
+       FhasLastExposureDuration:=false;
+     end;
+   end;
    if debug_msg then msg('set fits header');
    hdr:=TFitsHeader.Create;
    hdr.ClearHeader;
@@ -566,7 +583,7 @@ begin
    hdr.Add('EXTEND',true,'FITS dataset may contain extensions');
    hdr.Add('BZERO',32768,'offset data range to that of unsigned short');
    hdr.Add('BSCALE',1,'default scaling factor');
-   hdr.Add('EXPTIME',Fexptime,'Total Exposure Time (s)');
+   hdr.Add('EXPTIME',expt,'Total Exposure Time (s)');
    hdr.Add('PIXSIZE1',pix ,'Pixel Size 1 (microns)');
    hdr.Add('PIXSIZE2',piy ,'Pixel Size 2 (microns)');
    hdr.Add('XBINNING',BinX ,'Binning factor in width');
