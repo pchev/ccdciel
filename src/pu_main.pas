@@ -4148,13 +4148,20 @@ begin
                           config.GetValue('/INDIcamera/Sensor','CCD1'),
                           config.GetValue('/INDIcamera/DevicePort',''));
            end;
-    ASCOM: camera.Connect(config.GetValue('/ASCOMcamera/Device',''));
-    ASCOMREST: camera.Connect(config.GetValue('/ASCOMRestcamera/Host',''),
+    ASCOM: begin
+           camera.UseCameraStartTime:=config.GetValue('/ASCOMcamera/CameraDateObs',false);
+           camera.Connect(config.GetValue('/ASCOMcamera/Device',''));
+           end;
+    ASCOMREST: begin
+           camera.UseCameraStartTime:=config.GetValue('/ASCOMRestcamera/CameraDateObs',false);
+           camera.Connect(config.GetValue('/ASCOMRestcamera/Host',''),
                           IntToStr(config.GetValue('/ASCOMRestcamera/Port',0)),
                           ProtocolName[config.GetValue('/ASCOMRestcamera/Protocol',0)],
                           'camera/'+IntToStr(config.GetValue('/ASCOMRestcamera/Device',0)),
                           DecryptStr(hextostr(credentialconfig.GetValue('/ASCOMRestcamera/User','')), encryptpwd),
                           DecryptStr(hextostr(credentialconfig.GetValue('/ASCOMRestcamera/Pass','')), encryptpwd));
+
+           end;
   end;
 end;
 
@@ -6319,11 +6326,13 @@ begin
     config.SetValue('/INDIcamera/IndiTransfertDir',f_setup.CameraIndiTransfertDir.Text);
     config.SetValue('/ASCOMcamera/Device',f_setup.AscomCamera.Text);
     config.SetValue('/ASCOMcamera/FlipImage',f_setup.FlipImage.Checked);
+    config.SetValue('/ASCOMcamera/CameraDateObs',f_setup.CameraDateObs.Checked);
     config.SetValue('/ASCOMRestcamera/Protocol',f_setup.CameraARestProtocol.ItemIndex);
     config.SetValue('/ASCOMRestcamera/Host',f_setup.CameraARestHost.Text);
     config.SetValue('/ASCOMRestcamera/Port',f_setup.CameraARestPort.Value);
     config.SetValue('/ASCOMRestcamera/Device',f_setup.CameraARestDevice.Value);
     config.SetValue('/ASCOMRestcamera/FlipImage',f_setup.FlipImage1.Checked);
+    config.SetValue('/ASCOMRestcamera/CameraDateObs',f_setup.CameraDateObs1.Checked);
 
     config.SetValue('/FilterWheelInterface',ord(f_setup.WheelConnection));
     config.SetValue('/INDIwheel/Server',f_setup.WheelIndiServer.Text);

@@ -201,8 +201,8 @@ var rlist: array of string;
     buf: string;
 begin
  try
-  FhasLastExposureStartTime:=true;
-  FhasLastExposureDuration:=true;
+  FhasLastExposureStartTime:=FUseCameraStartTime;
+  FhasLastExposureDuration:=FUseCameraStartTime;
   stCooler:=false;
   stCCDtemp:=NullCoord;
   FStatus := devConnecting;
@@ -442,8 +442,9 @@ begin
   try
      Fexptime:=exptime;
      if debug_msg then msg('start exposure.');
-     V.Put('startexposure',['Duration',formatfloat(f4,exptime),'Light',li]);
      Ftimestart:=NowUTC;
+     V.Put('startexposure',['Duration',formatfloat(f4,exptime),'Light',li]);
+     Ftimestart:=(Ftimestart+NowUTC)/2;
      inc(FImgNum);
      Ftimeend:=now+(exptime)/secperday;
      timedout:=now+(exptime+CameraTimeout)/secperday;

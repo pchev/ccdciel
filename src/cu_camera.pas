@@ -82,7 +82,7 @@ T_camera = class(TComponent)
     FIndiTransfert: TIndiTransfert;
     FIndiTransfertDir,FIndiTransfertPrefix: string;
     FhasGain,FhasGainISO,FCanSetGain,FhasCfaInfo,FhasFnumber,FhasCoolerPower: boolean;
-    FhasLastExposureStartTime,FhasLastExposureDuration: boolean;
+    FUseCameraStartTime,FhasLastExposureStartTime,FhasLastExposureDuration: boolean;
     FGainMin, FGainMax: integer;
     FISOList: TStringList;
     FhasFastReadout, FhasReadOut: boolean;
@@ -264,6 +264,7 @@ T_camera = class(TComponent)
     property ReadOutMode: integer read GetReadOutMode write SetReadOutMode;
     property hasFnumber: boolean read FhasFnumber;
     property Fnumber: string read GetFnumber write SetFnumber;
+    property UseCameraStartTime: boolean read FUseCameraStartTime write FUseCameraStartTime;
     property onMsg: TNotifyMsg read FonMsg write FonMsg;
     property onDeviceMsg: TNotifyMsg read FonDeviceMsg write FonDeviceMsg;
     property onExposureProgress: TNotifyNum read FonExposureProgress write FonExposureProgress;
@@ -333,6 +334,7 @@ begin
   FhasFastReadout:=false;
   FhasReadOut:=false;
   FhasFnumber:=false;
+  FUseCameraStartTime:=false;
   FhasLastExposureStartTime:=false;
   FhasLastExposureDuration:=false;
   FImageFormat:='.fits';

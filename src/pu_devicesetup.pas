@@ -51,6 +51,8 @@ type
     AlpacaServers: TComboBox;
     AlpacaCameraList: TComboBox;
     AlpacaDiscoveryPort: TSpinEditEx;
+    CameraDateObs: TCheckBox;
+    CameraDateObs1: TCheckBox;
     FocuserExternalTemperature: TCheckBox;
     DefaultARestPass: TEdit;
     DefaultARestUser: TEdit;
@@ -695,6 +697,8 @@ begin
   BtnSetupCamera1.Caption:=rsSetup;
   FlipImage.Caption:=rsFlipTheImageV;
   FlipImage1.Caption:=rsFlipTheImageV;
+  CameraDateObs.Caption:=rsDATEOBSFromC;
+  CameraDateObs1.Caption:=rsDATEOBSFromC;
   Label17.Caption:=rsBeSureToConf;
   Label6.Caption:=rsDevices;
   Label7.Caption:=rsPort;
@@ -915,12 +919,14 @@ CameraIndiTransfert.ItemIndex:=conf.GetValue('/INDIcamera/IndiTransfert',ord(itN
 CameraIndiTransfertDir.Text:=conf.GetValue('/INDIcamera/IndiTransfertDir',defTransfertPath);
 AscomCamera.Text:=conf.GetValue('/ASCOMcamera/Device','');
 FlipImage.Checked:=conf.GetValue('/ASCOMcamera/FlipImage',true);
+CameraDateObs.Checked:=conf.GetValue('/ASCOMcamera/CameraDateObs',false);
 CameraDiskPanel.Visible:=CameraIndiTransfert.ItemIndex>0;
 CameraARestProtocol.ItemIndex:=conf.GetValue('/ASCOMRestcamera/Protocol',0);
 CameraARestHost.Text:=conf.GetValue('/ASCOMRestcamera/Host','127.0.0.1');
 CameraARestPort.Value:=conf.GetValue('/ASCOMRestcamera/Port',11111);
 CameraARestDevice.Value:=conf.GetValue('/ASCOMRestcamera/Device',0);
 FlipImage1.Checked:=conf.GetValue('/ASCOMRestcamera/FlipImage',true);
+CameraDateObs1.Checked:=conf.GetValue('/ASCOMRestcamera/CameraDateObs',false);
 DefaultARestProtocol.ItemIndex:=CameraARestProtocol.ItemIndex;
 DefaultARestHost.Text:=CameraARestHost.Text;
 DefaultARestPort.Value:=CameraARestPort.Value;

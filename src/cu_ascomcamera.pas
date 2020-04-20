@@ -197,8 +197,8 @@ var readmodes,roitem: Variant;
 begin
 {$ifdef mswindows}
  try
- FhasLastExposureStartTime:=true;
- FhasLastExposureDuration:=true;
+ FhasLastExposureStartTime:=FUseCameraStartTime;
+ FhasLastExposureDuration:=FUseCameraStartTime;
  stCooler:=false;
  stCCDtemp:=NullCoord;
  FStatus := devConnecting;
@@ -437,8 +437,9 @@ begin
   try
      Fexptime:=exptime;
      if debug_msg then msg('start exposure.');
-     V.StartExposure(exptime,li);
      Ftimestart:=NowUTC;
+     V.StartExposure(exptime,li);
+     Ftimestart:=(Ftimestart+NowUTC)/2;
      inc(FImgNum);
      Ftimeend:=now+(exptime)/secperday;
      timedout:=now+(exptime+CameraTimeout)/secperday;
