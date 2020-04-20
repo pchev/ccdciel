@@ -2918,6 +2918,9 @@ for i:=0 to Length(list)-1 do
        FStarList[nhfd-1].snr:=snr;
        FStarList[nhfd-1].vmax:=vmax;
        FStarList[nhfd-1].bg:=bg;
+       // new position to correct image drift
+       list[i,1]:=xc;
+       list[i,2]:=yc;
     end;
  end;
  SetLength(FStarList,nhfd);  {set length to new number of elements}
