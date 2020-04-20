@@ -688,6 +688,7 @@ object f_EditTargets: Tf_EditTargets
         OnCheckboxToggled = TargetListCheckboxToggled
         OnColRowMoved = TargetListColRowMoved
         OnCompareCells = TargetListCompareCells
+        OnDrawCell = TargetListDrawCell
         OnEditingDone = TargetListEditingDone
         OnGetCellHint = TargetListGetCellHint
         OnHeaderClick = TargetListHeaderClick

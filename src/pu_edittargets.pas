@@ -28,7 +28,7 @@ interface
 uses pu_planetariuminfo, u_global, u_utils, u_ccdconfig, pu_pascaleditor, u_annotation, pu_keyboard,
   pu_scriptengine, cu_astrometry, u_hints, u_translation, pu_selectscript, Classes, math,
   SysUtils, FileUtil, Forms, Controls, Graphics, Dialogs, StdCtrls, UScaleDPI,
-  LazUTF8, maskedit, Grids, ExtCtrls, ComCtrls, EditBtn, SpinEx, Buttons;
+  LazUTF8, maskedit, Grids, ExtCtrls, ComCtrls, EditBtn, SpinEx, Buttons, Types;
 
 const
   colseq=0; colname=1; colplan=2; colra=3; coldec=4; colpa=5; colstart=6; colend=7; coldark=8; colskip=9; colrepeat=10; colastrometry=11; colinplace=12; colupdcoord=13;
@@ -223,6 +223,7 @@ type
       tIndex: Integer);
     procedure TargetListCompareCells(Sender: TObject; ACol, ARow, BCol,
       BRow: Integer; var Result: integer);
+    procedure TargetListDrawCell(Sender: TObject; aCol, aRow: Integer; aRect: TRect; aState: TGridDrawState);
     procedure TargetListEditingDone(Sender: TObject);
     procedure TargetListGetCellHint(Sender: TObject; ACol, ARow: Integer; var HintText: String);
     procedure TargetListHeaderClick(Sender: TObject; IsColumn: Boolean; Index: Integer);
@@ -241,6 +242,8 @@ type
     originalFilter: array[0..99] of string;
     SortDirection: integer;
     FDoneWarning: boolean;
+    FCoordWarning: boolean;
+    FCoordWarningRow: integer;
     procedure SetPlanList(n: integer; pl:string);
     procedure SetScriptList(n: integer; sl:string);
     procedure ResetSequences;
@@ -300,6 +303,7 @@ begin
   StepsModified:=false;
   Lockcb:=false;
   SortDirection:=-1;
+  FCoordWarning:=false;
   f_selectscript:=Tf_selectscript.Create(self);
   cbStopTracking.Checked:=true;
   LoadPlanList;
@@ -765,10 +769,14 @@ begin
     until linepos>=$FFFFFF;{Found object or end of database}
   end;
   if not foundok then begin
+    FCoordWarning:=true;
+    FCoordWarningRow:=n;
     TargetList.Cells[colname,n]:=obj;
   end;
   TargetChange(nil);
   ShowPlan;
+  Application.ProcessMessages;
+  FCoordWarning:=false;
 end;
 
 procedure Tf_EditTargets.NewObject;
@@ -1739,6 +1747,18 @@ begin
      else Result:=CompareText(Cells[ACol,ARow],Cells[BCol,BRow]);
    end;
    if SortDirection=-1 then Result:=-Result;
+ end;
+end;
+
+procedure Tf_EditTargets.TargetListDrawCell(Sender: TObject; aCol, aRow: Integer; aRect: TRect; aState: TGridDrawState);
+begin
+ if FCoordWarning then begin
+   if ((aCol=colra)or(aCol=coldec))and(aRow=FCoordWarningRow) then begin
+      TargetList.Canvas.Brush.Style:=bsSolid;
+      TargetList.Canvas.Brush.Color:=clred;
+      TargetList.Canvas.FillRect(aRect);
+      TargetList.Canvas.TextOut(aRect.Left,aRect.Top,TargetList.Cells[aCol,aRow]);
+   end;
  end;
 end;
 
