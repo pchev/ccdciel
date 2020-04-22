@@ -23,18 +23,18 @@ object f_main: Tf_main
   ShowHint = True
   object Panel1: TPanel
     Left = 0
-    Height = 559
+    Height = 557
     Top = 0
     Width = 773
     Align = alClient
     BevelOuter = bvNone
-    ClientHeight = 559
+    ClientHeight = 557
     ClientWidth = 773
     ParentFont = False
     TabOrder = 0
     object PanelLeft: TPanel
       Left = 0
-      Height = 551
+      Height = 549
       Top = 4
       Width = 4
       Align = alLeft
@@ -73,12 +73,12 @@ object f_main: Tf_main
     end
     object PanelCenter: TPanel
       Left = 4
-      Height = 551
+      Height = 549
       Top = 4
       Width = 769
       Align = alClient
       BevelOuter = bvNone
-      ClientHeight = 551
+      ClientHeight = 549
       ClientWidth = 769
       Color = 4197901
       ParentColor = False
@@ -121,7 +121,7 @@ object f_main: Tf_main
     object PanelBottom: TPanel
       Left = 0
       Height = 4
-      Top = 555
+      Top = 553
       Width = 773
       Align = alBottom
       AutoSize = True
@@ -141,7 +141,7 @@ object f_main: Tf_main
   end
   object Splitter1: TSplitter
     Left = 773
-    Height = 559
+    Height = 557
     Top = 0
     Width = 5
     Align = alRight
@@ -150,19 +150,19 @@ object f_main: Tf_main
   end
   object PanelRight: TPanel
     Left = 778
-    Height = 559
+    Height = 557
     Top = 0
     Width = 222
     Align = alRight
     BevelOuter = bvNone
-    ClientHeight = 559
+    ClientHeight = 557
     ClientWidth = 222
     Constraints.MinWidth = 222
     ParentFont = False
     TabOrder = 2
     object PageControlRight: TPageControl
       Left = 0
-      Height = 518
+      Height = 516
       Top = 41
       Width = 222
       ActivePage = PageConnect
@@ -175,15 +175,15 @@ object f_main: Tf_main
       TabOrder = 0
       Options = [nboMultiLine]
       object PageConnect: TTabSheet
-        ClientHeight = 514
-        ClientWidth = 212
+        ClientHeight = 508
+        ClientWidth = 214
         ImageIndex = 0
         ParentFont = False
         object PanelRight1: TPanel
           Left = 0
-          Height = 514
+          Height = 508
           Top = 0
-          Width = 212
+          Width = 214
           Align = alClient
           AutoSize = True
           BevelOuter = bvNone
@@ -366,8 +366,8 @@ object f_main: Tf_main
   end
   object StatusBar1: TStatusBar
     Left = 0
-    Height = 21
-    Top = 559
+    Height = 23
+    Top = 557
     Width = 1000
     BorderWidth = 1
     Panels = <    
@@ -379,6 +379,9 @@ object f_main: Tf_main
       end    
       item
         Width = 323
+      end    
+      item
+        Width = 60
       end    
       item
         Alignment = taRightJustify
@@ -1135,10 +1138,6 @@ object f_main: Tf_main
         Caption = 'About'
         OnClick = MenuHelpAboutClick
       end
-    end
-    object Timestamp: TMenuItem
-      Caption = '00:00:00'
-      GlyphShowMode = gsmNever
     end
   end
   object ConnectTimer: TTimer
