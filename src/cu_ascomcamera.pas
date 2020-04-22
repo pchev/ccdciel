@@ -459,7 +459,7 @@ type Timgdata = array of longint;
 var ok: boolean;
     i,j,c,xs,ys: integer;
     nax1,nax2,state: integer;
-    pix,piy,expt: double;
+    pix,piy,expt,ElectronsPerADU: double;
     dateobs,ccdname,frname:string;
     img: PSafeArray;
     pimgdata: pointer;
@@ -575,6 +575,11 @@ begin
        FhasLastExposureDuration:=false;
      end;
    end;
+   try
+     ElectronsPerADU:=V.ElectronsPerADU;
+   except
+     ElectronsPerADU:=-1;
+   end;
    i:=SafeArrayAccessData(img,pimgdata);
    if i<>S_OK then begin
      msg('Error accessing ImageArray data: ' + hexStr(i,10));
@@ -619,6 +624,7 @@ begin
    hdr.Add('YBINNING',BinY ,'Binning factor in height');
    hdr.Add('FRAME',frname,'Frame Type');
    hdr.Add('INSTRUME',ccdname,'CCD Name');
+   if ElectronsPerADU>0 then hdr.Add('EGAIN',ElectronsPerADU,' Electronic gain in e-/ADU');
    if FFixPixelRange then begin
      hdr.Add('COMMENT','Detected '+inttostr(nb)+' bit per pixel camera image','');
      if pxdiv=1 then
