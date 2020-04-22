@@ -90,6 +90,7 @@ T_camera = class(TComponent)
     Ftimestart,Ftimeend,FMidExposureTime: double;
     FImgNum:PtrInt;
     Fexptime: double;
+    FFixPixelRange: boolean;
     procedure msg(txt: string; level:integer=3);
     procedure NewImage;
     procedure TryNextExposure(Data: PtrInt);
@@ -265,6 +266,7 @@ T_camera = class(TComponent)
     property hasFnumber: boolean read FhasFnumber;
     property Fnumber: string read GetFnumber write SetFnumber;
     property UseCameraStartTime: boolean read FUseCameraStartTime write FUseCameraStartTime;
+    property FixPixelRange: boolean read FFixPixelRange write FFixPixelRange;
     property onMsg: TNotifyMsg read FonMsg write FonMsg;
     property onDeviceMsg: TNotifyMsg read FonDeviceMsg write FonDeviceMsg;
     property onExposureProgress: TNotifyNum read FonExposureProgress write FonExposureProgress;
@@ -337,6 +339,7 @@ begin
   FUseCameraStartTime:=false;
   FhasLastExposureStartTime:=false;
   FhasLastExposureDuration:=false;
+  FFixPixelRange:=false;
   FImageFormat:='.fits';
   Fexptime:=0;
   FCanSetGain:=false;

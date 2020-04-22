@@ -426,8 +426,8 @@ object f_setup: Tf_setup
         OnChange = PageControlCameraChange
         object CameraIndi: TTabSheet
           Caption = 'CameraIndi'
-          ClientHeight = 383
-          ClientWidth = 477
+          ClientHeight = 410
+          ClientWidth = 483
           ParentFont = False
           object PanelCameraIndi: TPanel
             Left = 0
@@ -436,8 +436,8 @@ object f_setup: Tf_setup
             Width = 477
             Align = alClient
             BevelOuter = bvNone
-            ClientHeight = 383
-            ClientWidth = 477
+            ClientHeight = 379
+            ClientWidth = 473
             ParentFont = False
             TabOrder = 0
             object CameraIndiDevice: TComboBox
@@ -545,8 +545,8 @@ object f_setup: Tf_setup
               Top = 227
               Width = 356
               BevelOuter = bvNone
-              ClientHeight = 34
-              ClientWidth = 356
+              ClientHeight = 30
+              ClientWidth = 352
               ParentFont = False
               TabOrder = 5
               object Label5: TLabel
@@ -576,8 +576,8 @@ object f_setup: Tf_setup
               Top = 8
               Width = 412
               BevelOuter = bvNone
-              ClientHeight = 38
-              ClientWidth = 412
+              ClientHeight = 34
+              ClientWidth = 408
               ParentFont = False
               TabOrder = 6
               object Label73: TLabel
@@ -645,17 +645,17 @@ object f_setup: Tf_setup
         end
         object CameraAscom: TTabSheet
           Caption = 'CameraAscom'
-          ClientHeight = 383
-          ClientWidth = 477
+          ClientHeight = 410
+          ClientWidth = 483
           ParentFont = False
           object PanelCameraAscom: TPanel
             Left = 16
-            Height = 226
+            Height = 266
             Top = 16
-            Width = 348
+            Width = 456
             BevelOuter = bvNone
-            ClientHeight = 226
-            ClientWidth = 348
+            ClientHeight = 262
+            ClientWidth = 452
             ParentFont = False
             TabOrder = 0
             object BtnChooseCamera: TButton
@@ -717,12 +717,20 @@ object f_setup: Tf_setup
               Caption = 'DATE-OBS from camera driver'
               TabOrder = 5
             end
+            object FixPixelRange: TCheckBox
+              Left = 13
+              Height = 21
+              Top = 192
+              Width = 358
+              Caption = 'Try to fix pixel range to match CMOS camera bit depth'
+              TabOrder = 6
+            end
           end
         end
         object CameraAscomRest: TTabSheet
           Caption = 'CameraAscomRest'
-          ClientHeight = 383
-          ClientWidth = 477
+          ClientHeight = 410
+          ClientWidth = 483
           ParentFont = False
           object Panel2: TPanel
             Left = 0
@@ -731,8 +739,8 @@ object f_setup: Tf_setup
             Width = 477
             Align = alClient
             BevelOuter = bvNone
-            ClientHeight = 383
-            ClientWidth = 477
+            ClientHeight = 379
+            ClientWidth = 473
             ParentFont = False
             TabOrder = 0
             object FlipImage1: TCheckBox
@@ -900,6 +908,14 @@ object f_setup: Tf_setup
               Width = 212
               Caption = 'DATE-OBS from camera driver'
               TabOrder = 8
+            end
+            object FixPixelRange1: TCheckBox
+              Left = 16
+              Height = 21
+              Top = 304
+              Width = 358
+              Caption = 'Try to fix pixel range to match CMOS camera bit depth'
+              TabOrder = 9
             end
           end
         end

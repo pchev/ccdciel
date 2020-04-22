@@ -1253,6 +1253,7 @@ resourcestring
   rsTargetSCoord = 'Target %s coordinates not updated';
   rsUseOnlyStarN = 'Use only star near the image center';
   rsDATEOBSFromC = 'DATE-OBS from camera driver';
+  rsTryToFixPixe = 'Try to fix pixel range to match CMOS camera bit depth';
 
 implementation
 

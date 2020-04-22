@@ -471,6 +471,8 @@ var ok: boolean;
     b: array[0..2880]of char;
     hdr: TFitsHeader;
     hdrmem: TMemoryStream;
+    n, nb: byte;
+    w,ww,pxdiv: word;
     {$endif}
 begin
  ExposureTimer.Enabled:=false;
@@ -573,6 +575,32 @@ begin
        FhasLastExposureDuration:=false;
      end;
    end;
+   i:=SafeArrayAccessData(img,pimgdata);
+   if i<>S_OK then begin
+     msg('Error accessing ImageArray data: ' + hexStr(i,10));
+     if assigned(FonAbortExposure) then FonAbortExposure(self);
+     exit;
+   end;
+   // count used bit by pixel
+   pxdiv:=1;
+   if FFixPixelRange then begin
+     nb:=16;
+     w:=0;
+     for i:=LBoundY to ys-1 do begin
+       for j := LBoundX to xs-1 do begin
+         ww:=Timgdata(pimgdata)[j+i*xs];
+         w:=w or ww;
+       end;
+     end;
+     for n:=16 downto 1 do begin
+       if w and 1 <>0 then begin
+         nb:=n;
+         break;
+       end;
+       w:=w div 2;
+     end;
+     pxdiv:=2**(16-nb); // divisor need to recover original pixel range
+   end;
    if debug_msg then msg('set fits header');
    hdr:=TFitsHeader.Create;
    hdr.ClearHeader;
@@ -591,6 +619,14 @@ begin
    hdr.Add('YBINNING',BinY ,'Binning factor in height');
    hdr.Add('FRAME',frname,'Frame Type');
    hdr.Add('INSTRUME',ccdname,'CCD Name');
+   if FFixPixelRange then begin
+     hdr.Add('COMMENT','Detected '+inttostr(nb)+' bit per pixel camera image','');
+     if pxdiv=1 then
+       hdr.Add('COMMENT','Pixel values are using the original range','')
+     else
+       hdr.Add('COMMENT','Pixel values are divided by '+inttostr(pxdiv)+' to recover original range','');
+     hdr.Add('MAXADU',2**nb,'Maximum pixel value');
+   end;
    hdr.Add('DATE-OBS',dateobs,'UTC start date of observation');
    hdr.Add('END','','');
    hdrmem:=hdr.GetStream;
@@ -602,12 +638,6 @@ begin
    hdrmem.Free;
    hdr.Free;
    if debug_msg then msg('write image');
-   i:=SafeArrayAccessData(img,pimgdata);
-   if i<>S_OK then begin
-     msg('Error accessing ImageArray data: ' + hexStr(i,10));
-     if assigned(FonAbortExposure) then FonAbortExposure(self);
-     exit;
-   end;
    if Dims=2 then begin
      for i:=LBoundY to ys-1 do begin
         if FASCOMFlipImage then
@@ -617,6 +647,7 @@ begin
         for j:=LBoundX to xs-1 do begin
           p2[0]:=j;
           lii:=Timgdata(pimgdata)[p2[0]+p2[1]*xs];
+          if FFixPixelRange then lii:=lii div pxdiv;
           if lii>0 then
              ii:=lii-32768
           else
@@ -636,6 +667,7 @@ begin
         for j:=LBoundX to xs-1 do begin
           p3[0]:=j;
           lii:=Timgdata(pimgdata)[p3[0]+p3[1]*xs];
+          if FFixPixelRange then lii:=lii div pxdiv;
           if lii>0 then
              ii:=lii-32768
           else
