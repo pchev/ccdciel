@@ -7298,7 +7298,7 @@ end;
 procedure Tf_main.MenuViewClockClick(Sender: TObject);
 begin
   if MenuViewClock.Checked then begin
-     StatusBar1.Panels[panelclock].Width:=DoScaleY(55);
+     StatusBar1.Panels[panelclock].Width:=DoScaleY(65);
      StatusBar1Resize(nil);
      TimerStampTimer.Enabled:=true;
      TimerStampTimerTimer(nil);
