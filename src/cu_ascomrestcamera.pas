@@ -471,7 +471,7 @@ var ok: boolean;
     hdr: TFitsHeader;
     hdrmem: TMemoryStream;
     n, nb: byte;
-    w,ww,pxdiv: word;
+    w,ww,pxdiv,newsaturation: word;
 begin
  ExposureTimer.Enabled:=false;
  try
@@ -572,7 +572,8 @@ begin
      for i:=0 to ys-1 do begin
        for j := 0 to xs-1 do begin
          ww:=imgarray.img[0,i,j];
-         w:=w or ww;
+         if ww<65535 then
+           w:=w or ww;
        end;
      end;
      for n:=16 downto 1 do begin
@@ -583,6 +584,7 @@ begin
        w:=w div 2;
      end;
      pxdiv:=2**(16-nb); // divisor need to recover original pixel range
+     newsaturation:=2**nb-1; // new saturation value to replace 65535
    end;
    if debug_msg then msg('set fits header');
    hdr:=TFitsHeader.Create;
@@ -616,7 +618,7 @@ begin
        hdr.Add('COMMENT','Pixel values are using the original range','')
      else
        hdr.Add('COMMENT','Pixel values are divided by '+inttostr(pxdiv)+' to recover original range','');
-     hdr.Add('MAXADU',2**nb,'Maximum pixel value');
+     hdr.Add('MAXADU',newsaturation,'Maximum pixel value');
    end;
    hdr.Add('DATE-OBS',dateobs,'UTC start date of observation');
    hdr.Add('END','','');
@@ -638,7 +640,12 @@ begin
         for j:=0 to xs-1 do begin
           x:=j;
           lii:=imgarray.img[0,y,x];
-          if FFixPixelRange then lii:=lii div pxdiv;
+          if FFixPixelRange then begin
+            if lii<65535 then
+              lii:=lii div pxdiv
+            else
+              lii:=newsaturation;
+          end;
           if lii>0 then
              ii:=lii-32768
           else
