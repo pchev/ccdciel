@@ -525,6 +525,7 @@ type
     profile: string;
     procedure LoadProfileList;
     procedure Loadconfig(conf,credentialconf: TCCDConfig);
+    procedure SetActivePageButton;
     property CameraSensor: string read FCameraSensor write SetCameraSensor;
     property CameraConnection: TDevInterface read FCameraConnection write SetCameraConnection;
     property WheelConnection: TDevInterface read FWheelConnection write SetWheelConnection;
@@ -603,7 +604,6 @@ begin
 end;
 
 procedure Tf_setup.SelectNextPage(direction: integer);
-var i: integer;
 begin
   if direction<0 then begin
     if PageControl1.ActivePageIndex<PageControl1.PageCount-1 then
@@ -613,6 +613,12 @@ begin
     if PageControl1.ActivePageIndex>0 then
        PageControl1.ActivePageIndex:=PageControl1.ActivePageIndex-1;
   end;
+  SetActivePageButton;
+end;
+
+procedure Tf_setup.SetActivePageButton;
+var i: integer;
+begin
   for i:=0 to PanelLeft.ControlCount-1 do  begin
     if TSpeedButton(PanelLeft.Controls[i]).Tag=PageControl1.ActivePageIndex then
       TSpeedButton(PanelLeft.Controls[i]).Down:=True;
@@ -864,7 +870,7 @@ begin
   BtnCopyProfile.Hint:=Format(rsCopyTheCurre, [crlf]);
   PanelIndiServer.Hint:=rsGlobalINDISe;
   Panel10.Hint:=rsGlobalALPACA;
-  CameraIndiTransfert.Hint:=Format(rsMakeTestToDe, [crlf]);
+  CameraIndiTransfert.Hint:=rsDoNotSetThis+crlf+crlf+Format(rsMakeTestToDe, [crlf]);
   CameraIndiTransfertDir.Hint:=rsTheTemporary;
 end;
 

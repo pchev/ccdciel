@@ -4138,12 +4138,27 @@ allcount:=0; upcount:=0; downcount:=0; concount:=0;
 end;
 
 Procedure Tf_main.ConnectCamera(Sender: TObject);
+var inditransfer: TIndiTransfert;
+    indihost,inditransferdir: string;
+    ok: boolean;
 begin
    CameraInitialized:=false;
    case camera.CameraInterface of
     INDI : begin
-           camera.IndiTransfert:=TIndiTransfert(config.GetValue('/INDIcamera/IndiTransfert',ord(itNetwork)));
-           camera.IndiTransfertDir:=config.GetValue('/INDIcamera/IndiTransfertDir',defTransfertPath);
+           inditransfer:=TIndiTransfert(config.GetValue('/INDIcamera/IndiTransfert',ord(itNetwork)));
+           inditransferdir:=config.GetValue('/INDIcamera/IndiTransfertDir',defTransfertPath);
+           indihost:=config.GetValue('/INDIcamera/Server','');
+           if inditransfer=itDisk then begin
+             // some control to be sure we can use disk transfer
+             ok:=(copy(indihost,1,3)='127')or(uppercase(indihost)='LOCALHOST'); // local indiserver
+             ok:=ok and DirectoryIsWritable(inditransferdir);
+             if not ok then begin
+               inditransfer:=itNetwork;
+               NewMessage('Cannot use ramdisk camera transfer, switch to network',3);
+             end;
+           end;
+           camera.IndiTransfert:=inditransfer;
+           camera.IndiTransfertDir:=inditransferdir;
            camera.Connect(config.GetValue('/INDIcamera/Server',''),
                           config.GetValue('/INDIcamera/ServerPort',''),
                           config.GetValue('/INDIcamera/Device',''),
@@ -6276,6 +6291,7 @@ begin
   f_setup.Loadconfig(config,credentialconfig);
   if sender is Tf_devicesconnection then begin
     f_setup.Pagecontrol1.ActivePageIndex:=0;
+    f_setup.SetActivePageButton;
   end;
   pt.x:=PanelCenter.Left;
   pt.y:=PanelCenter.top;
