@@ -1071,6 +1071,7 @@ begin
  if not DirectoryExistsUTF8(TmpDir) then  CreateDirUTF8(TmpDir);
  LogDir:=slash(ConfigDir)+'Log';
  if not DirectoryExistsUTF8(LogDir) then  CreateDirUTF8(LogDir);
+ defCapturePath:=ExpandFileNameUTF8(defCapPath);
 end;
 
 procedure Tf_main.ScaleMainForm;

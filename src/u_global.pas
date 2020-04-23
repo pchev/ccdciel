@@ -301,7 +301,7 @@ const
 
   {$ifdef linux}
     SharedDir = '../share/ccdciel';
-    defCapturePath='/tmp';
+    defCapPath='~/';
     defTransfertPath='/mnt/ramdisk';
     libwcs = 'libpaswcs.so.1';
     libz = 'libz.so.1';
@@ -310,7 +310,7 @@ const
   {$endif}
   {$ifdef darwin}
     SharedDir = './';
-    defCapturePath='/tmp';
+    defCapPath='~/';
     defTransfertPath='/Volumes/ramdisk';
     libwcs = 'libccdcielwcs.dylib';
     libz = 'libz.dylib';
@@ -319,7 +319,7 @@ const
   {$endif}
   {$ifdef mswindows}
     SharedDir = '.\';
-    defCapturePath='C:\';
+    defCapPath='C:\';
     defTransfertPath='Z:\';
     libwcs = 'libccdcielwcs.dll';
     libz = 'zlib1.dll';
@@ -336,6 +336,7 @@ const
 var
   onMsgGlobal: TNotifyMsg;
   Appdir,ConfigDir,LogDir,TmpDir,DataDir: UTF8String;
+  defCapturePath: string;
   CameraName,WheelName,FocuserName,RotatorName,MountName,DomeName,WatchdogName,WeatherName,SafetyName: string;
   ConfigDarkFile,cdate: string;
   isAdmin, debug_msg: boolean;
