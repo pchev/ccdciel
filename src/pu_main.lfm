@@ -28,8 +28,8 @@ object f_main: Tf_main
     Width = 773
     Align = alClient
     BevelOuter = bvNone
-    ClientHeight = 555
-    ClientWidth = 769
+    ClientHeight = 559
+    ClientWidth = 773
     ParentFont = False
     TabOrder = 0
     object PanelLeft: TPanel
@@ -78,8 +78,8 @@ object f_main: Tf_main
       Width = 769
       Align = alClient
       BevelOuter = bvNone
-      ClientHeight = 547
-      ClientWidth = 765
+      ClientHeight = 551
+      ClientWidth = 769
       Color = 4197901
       ParentColor = False
       ParentFont = False
@@ -90,8 +90,8 @@ object f_main: Tf_main
         Top = 501
         Width = 299
         BevelOuter = bvNone
-        ClientHeight = 24
-        ClientWidth = 295
+        ClientHeight = 28
+        ClientWidth = 299
         ParentColor = False
         ParentFont = False
         TabOrder = 0
@@ -155,8 +155,8 @@ object f_main: Tf_main
     Width = 222
     Align = alRight
     BevelOuter = bvNone
-    ClientHeight = 555
-    ClientWidth = 218
+    ClientHeight = 559
+    ClientWidth = 222
     Constraints.MinWidth = 222
     ParentFont = False
     TabOrder = 2
@@ -176,7 +176,7 @@ object f_main: Tf_main
       Options = [nboMultiLine]
       object PageConnect: TTabSheet
         ClientHeight = 514
-        ClientWidth = 218
+        ClientWidth = 212
         ImageIndex = 0
         ParentFont = False
         object PanelRight1: TPanel
@@ -200,7 +200,7 @@ object f_main: Tf_main
       end
       object PageFocus: TTabSheet
         ClientHeight = 514
-        ClientWidth = 218
+        ClientWidth = 212
         ImageIndex = 1
         ParentFont = False
         object PanelRight2: TPanel
@@ -224,7 +224,7 @@ object f_main: Tf_main
       end
       object PageCapture: TTabSheet
         ClientHeight = 514
-        ClientWidth = 218
+        ClientWidth = 212
         ImageIndex = 2
         ParentFont = False
         object PanelRight3: TPanel
@@ -248,7 +248,7 @@ object f_main: Tf_main
       end
       object PageSequence: TTabSheet
         ClientHeight = 514
-        ClientWidth = 218
+        ClientWidth = 212
         ImageIndex = 3
         ParentFont = False
         object PanelRight4: TPanel
@@ -272,7 +272,7 @@ object f_main: Tf_main
       end
       object PageVideo: TTabSheet
         ClientHeight = 514
-        ClientWidth = 218
+        ClientWidth = 212
         ImageIndex = 4
         ParentFont = False
         object PanelRight5: TPanel

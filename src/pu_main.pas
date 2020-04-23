@@ -527,6 +527,7 @@ type
     TerminateVcurve: boolean;
     ScrBmp: TBGRABitmap;
     Image1: TImgDrawingControl;
+    ImageSaved: boolean;
 
     trpx1,trpx2,trpx3,trpx4,trpy1,trpy2,trpy3,trpy4: integer;{for image inspection}
     median_center,median_top_left, median_top_right,median_bottom_left,median_bottom_right : double;{for image inspection}
@@ -8122,10 +8123,14 @@ procedure Tf_main.CameraNewImage(Sender: TObject);
 begin
   if Capture then begin
     // save file first
-    if not (FlatAutoExposure and (camera.FrameType=FLAT)) then
+    if not ((FlatAutoExposure and (camera.FrameType=FLAT))or(SaveBitmap)) then begin
       {$ifdef debug_raw}writeln(FormatDateTime(dateiso,Now)+blank+'save fits file');{$endif}
       CameraSaveNewImage;
       {$ifdef debug_raw}writeln(FormatDateTime(dateiso,Now)+blank+'saved');{$endif}
+      ImageSaved:=true;
+    end
+    else
+      ImageSaved:=false;
   end;
   Application.QueueAsyncCall(@CameraNewImageAsync,0);
 end;
@@ -8190,19 +8195,23 @@ begin
   end;
   // process capture
   if Capture then begin
+     if not ImageSaved then begin
      // process automatic flat
-     if FlatAutoExposure and (camera.FrameType=FLAT) then begin
-       {$ifdef debug_raw}writeln(FormatDateTime(dateiso,Now)+blank+'flat auto exposure');{$endif}
-       case FlatType of
-         ftSKY : begin
-                 if not CameraNewSkyFlat then exit;
-                 end;
-         ftDome :begin
-                 if not CameraNewDomeFlat then exit;
-                 end;
-       end;
-       {$ifdef debug_raw}writeln(FormatDateTime(dateiso,Now)+blank+'save flat image');{$endif}
-       CameraSaveNewImage;
+       if FlatAutoExposure and (camera.FrameType=FLAT) then begin
+         {$ifdef debug_raw}writeln(FormatDateTime(dateiso,Now)+blank+'flat auto exposure');{$endif}
+         case FlatType of
+           ftSKY : begin
+                   if not CameraNewSkyFlat then exit;
+                   end;
+           ftDome :begin
+                   if not CameraNewDomeFlat then exit;
+                   end;
+         end;
+         {$ifdef debug_raw}writeln(FormatDateTime(dateiso,Now)+blank+'save flat image');{$endif}
+         CameraSaveNewImage;
+       end
+       else
+         CameraSaveNewImage;
      end;
      // image measurement
      {$ifdef debug_raw}writeln(FormatDateTime(dateiso,Now)+blank+'image measurement');{$endif}
