@@ -655,12 +655,7 @@ begin
         for j:=LBoundX to xs-1 do begin
           p2[0]:=j;
           lii:=Timgdata(pimgdata)[p2[0]+p2[1]*xs];
-          if FFixPixelRange then begin
-            if lii<65535 then
-              lii:=lii div pxdiv
-            else
-              lii:=newsaturation;
-          end;
+          if FFixPixelRange then lii:=lii div pxdiv;
           if lii>0 then
              ii:=lii-32768
           else

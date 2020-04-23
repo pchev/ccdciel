@@ -640,12 +640,7 @@ begin
         for j:=0 to xs-1 do begin
           x:=j;
           lii:=imgarray.img[0,y,x];
-          if FFixPixelRange then begin
-            if lii<65535 then
-              lii:=lii div pxdiv
-            else
-              lii:=newsaturation;
-          end;
+          if FFixPixelRange then lii:=lii div pxdiv;
           if lii>0 then
              ii:=lii-32768
           else
