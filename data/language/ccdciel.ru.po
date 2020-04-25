@@ -6,15 +6,15 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ccdciel\n"
 "Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
-"POT-Creation-Date: 2020-04-08 15:57+0000\n"
-"PO-Revision-Date: 2020-04-08 11:13+0000\n"
+"POT-Creation-Date: 2020-04-25 17:03+0000\n"
+"PO-Revision-Date: 2020-04-13 20:28+0000\n"
 "Last-Translator: Sergey Tarantsov <tsn-ast@yandex.ru>\n"
 "Language-Team: Russian <ru@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2020-04-09 06:16+0000\n"
-"X-Generator: Launchpad (build 2e26c9bbd21cdca248baaea29aeffb920afcc32a)\n"
+"X-Launchpad-Export-Date: 2020-04-25 18:01+0000\n"
+"X-Generator: Launchpad (build 486bbbd6cb608f8eb468ed0d08689a349dfabe49)\n"
 
 #: u_translation.rs32bitdriver
 msgid "This driver work only in 32bit, please install the 32bit version of CCDciel."
@@ -58,7 +58,7 @@ msgstr "Добавить"
 
 #: u_translation.rsaddfitskeywo
 msgid "Add FITS keyword for DSLR EXIF tags"
-msgstr ""
+msgstr "Добавить в заголовок FITS теги из DSLR EXIF"
 
 #: u_translation.rsaddstep
 msgid "Add step"
@@ -102,7 +102,7 @@ msgstr "Всё"
 
 #: u_translation.rsallowtogetpr
 msgid "Allow to get program status from TCP/IP internal server"
-msgstr "Разрешить получать статус программы с внутреннего сервера TCP/IP"
+msgstr "Разрешить получать статус программы с внутреннего TCP/IP сервера"
 
 #: u_translation.rsallowtoopent
 msgid "Allow to open the dome when safety status is bad or unknown"
@@ -142,7 +142,7 @@ msgstr "угл.мин"
 
 #: u_translation.rsareyousureyo
 msgid "Are you sure you want to disconnect all the devices now?"
-msgstr "Вы уверены, что хотите отключить все устройства?"
+msgstr "Отключить все устройства?"
 
 #: u_translation.rsascominterfa
 msgid "ASCOM interface is only available on Windows."
@@ -434,7 +434,7 @@ msgstr "Порог:"
 
 #: u_translation.rsbayermatrixp
 msgid "Bayer matrix pattern"
-msgstr "Матрица Байера"
+msgstr "Тип матрицы"
 
 #: u_translation.rsbeforetouset
 msgid "Before to use this tool you must connect the camera, the mount and the planetarium"
@@ -554,7 +554,7 @@ msgstr "Невозможно рассчитать время меридиана"
 
 #: u_translation.rscannotconnec
 msgid "Cannot connect to autoguider, sequence will run without guiding! %sDo you want to continue anyway?"
-msgstr "Не удаётся подключиться к автогиду, задание будет выполняться без гидирования! %sВы хотите продолжить?"
+msgstr "Не удаётся подключиться к автогиду, задание будет выполняться без гидирования! %sПродолжить?"
 
 #: u_translation.rscannotdetect
 msgid "Cannot detect star."
@@ -622,7 +622,7 @@ msgstr "Невозможно запустить циклическую съём�
 
 #: u_translation.rscannotstartw
 msgid "Cannot start when capture is running"
-msgstr ""
+msgstr "Невозможно запустить во время съёмки"
 
 #: u_translation.rscannotsyncwh
 msgid "Cannot Sync when the mount is not tracking"
@@ -666,7 +666,7 @@ msgstr "Центр"
 
 #: u_translation.rscenterabrigh
 msgid "Center a bright star. %s Defocus until the ring are clearly visible. %s Click Start button. %s Adjust the collimation. %s The star must be centered in full frame for the final adjustement."
-msgstr "Центрируйте яркую звезду. %s Расфокусируйте, пока кольцо не будет чётко видно. %s Нажмите кнопку Пуск. %s Отрегулируйте коллимацию. %s Звезда должна быть центрирована в полном кадре для окончательной настройки."
+msgstr "Центрируйте яркую звезду. %s Расфокусируйте её, чтобы было хорошо видно кольцо. %s Нажмите кнопку Старт. %s Отрегулируйте коллимацию. %s Для окончательной настройки звезда должна быть в центре полного кадра."
 
 #: u_translation.rscenterappare
 msgid "Center, apparent coord. RA=%s DEC=%s PA=%s"
@@ -726,7 +726,7 @@ msgstr "Нажмите Далее, чтобы сохранить эти знач
 
 #: u_translation.rsclicktheobje
 msgid "Click the object in planetarium"
-msgstr "Нажмите на объект в планетарии"
+msgstr "Выделите нужный объект в планетарии"
 
 #: u_translation.rsclippingindi
 msgid "Clipping indicator"
@@ -786,7 +786,7 @@ msgstr "Compiled with"
 
 #: u_translation.rscompressthef
 msgid "Compress the FITS files with fpack"
-msgstr "Сжатие файлов FITS с помощью fpack"
+msgstr "Сжимать FITS с помощью fpack"
 
 #: u_translation.rscomputationr
 msgid "Computation result:"
@@ -850,7 +850,7 @@ msgstr "Включать при подключении камеры"
 
 #: u_translation.rscooler
 msgid "Cooler"
-msgstr "Охлаждать"
+msgstr "Охлаждение"
 
 #: u_translation.rscoordinates
 msgid "Coordinates"
@@ -919,6 +919,10 @@ msgstr "Дарк"
 #: u_translation.rsdarknight
 msgid "Dark%snight"
 msgstr "Тёмная%sночь"
+
+#: u_translation.rsdateobsfromc
+msgid "DATE-OBS from camera driver"
+msgstr ""
 
 #: u_translation.rsdateutsequen
 msgid "Date (UT) / Sequence"
@@ -1002,7 +1006,7 @@ msgstr "Обнаружить кратные звёзды на изображен
 
 #: u_translation.rsdeviceisconn
 msgid "Device %s is connected.%sDo you want to disconnect now to open the setup dialog?"
-msgstr "Устройство %s подключено.%sВы хотите отключиться сейчас, чтобы открыть диалоговое окно настройки?"
+msgstr "Устройство %s подключено.%sОтключить его, чтобы открыть окно настройки?"
 
 #: u_translation.rsdevices
 msgid "Device"
@@ -1066,11 +1070,11 @@ msgstr "Отображение"
 
 #: u_translation.rsdisplayspeed
 msgid "Display speed"
-msgstr ""
+msgstr "Ускорение отображения"
 
 #: u_translation.rsdistancetota
 msgid "Distance to target: %s arcmin"
-msgstr "Расстояние до объекта: %s угл.мин"
+msgstr "Расстояние до цели: %s угл.мин"
 
 #: u_translation.rsdither
 msgid "Dither"
@@ -1154,11 +1158,11 @@ msgstr "Уменьшение снимка"
 
 #: u_translation.rsdoyouwanttoc
 msgid "Do you want to cancel the polar alignment?"
-msgstr "Вы хотите отменить полярное выравнивание?"
+msgstr "Отменить полярное выравнивание?"
 
 #: u_translation.rsdoyouwanttod
 msgid "Do you want to delete file %s ?"
-msgstr "Вы хотите удалить файл %s?"
+msgstr "Удалить файл %s?"
 
 #: u_translation.rsdoyouwanttor
 msgid "Do you want to retry?"
@@ -1602,7 +1606,7 @@ msgstr "Получить позицию от телескопа"
 
 #: u_translation.rsgetsitelongl
 msgid "Get site long/lat from the mount"
-msgstr "Получить долг/шир от монтировки"
+msgstr "Получить долготу/широту от монтировки"
 
 #: u_translation.rsglobalaction
 msgid "Global actions when a sequence is running"
@@ -1711,6 +1715,10 @@ msgstr "Проверка изображения"
 #: u_translation.rsimagemedianh
 msgid "Image median hfd=%s"
 msgstr "Средний HFD=%s"
+
+#: u_translation.rsimages
+msgid "images"
+msgstr ""
 
 #: u_translation.rsimagescale
 msgid "Image scale"
@@ -1870,7 +1878,7 @@ msgstr "Включить подсветку"
 
 #: u_translation.rslimitedto15x
 msgid "(limited to 1.5x the slew precision)"
-msgstr ""
+msgstr "(ограничено 1,5х точностью наведения)"
 
 #: u_translation.rslimittempera
 msgid "Limit temperature change"
@@ -1910,7 +1918,7 @@ msgstr "Цикл"
 
 #: u_translation.rslowqualityim
 msgid "Low quality image scaling"
-msgstr "Низкое качество изображения"
+msgstr "Понизить качество изображений"
 
 #: u_translation.rsmagnifyer
 msgid "Magnifier"
@@ -2178,7 +2186,7 @@ msgstr "Вручную переместите монтировку по RA, за
 
 #: u_translation.rsmovetonewpla
 msgid "Move to new planetarium object %s"
-msgstr "Переход на новый объект из планетария - %s"
+msgstr "Наведение на новую цель из планетария - %s"
 
 #: u_translation.rsmoveupby
 msgid "move Up by "
@@ -2226,7 +2234,7 @@ msgstr "Новый скрипт"
 
 #: u_translation.rsnewtarget
 msgid "New target"
-msgstr "Новый объект"
+msgstr "Новая цель"
 
 #: u_translation.rsnext
 msgid "Next"
@@ -2534,7 +2542,7 @@ msgstr "Parked"
 
 #: u_translation.rsparktheteles
 msgid "Park the telescope now?"
-msgstr "Запарковать телескоп сейчас?"
+msgstr "Запарковать телескоп?"
 
 #: u_translation.rsparktheteles2
 msgid "Park the telescope"
@@ -2638,7 +2646,7 @@ msgstr "Планетарий не подключен"
 
 #: u_translation.rsplanetariump
 msgid "Planetarium position"
-msgstr "Положение из планетария"
+msgstr "Новая цель"
 
 #: u_translation.rsplanetariums
 msgid "Planetarium shutdown"
@@ -2650,7 +2658,7 @@ msgstr "Цель из планетария: %s"
 
 #: u_translation.rsplanetariumt2
 msgid "Planetarium target slew fail"
-msgstr "Поворот к объекту из планетария неудачен"
+msgstr "Наведение на цель из планетария неудачно"
 
 #: u_translation.rsplanfinished
 msgid "Plan %s finished."
@@ -2678,7 +2686,7 @@ msgstr "Настройте параметры автофокусировки"
 
 #: u_translation.rspleaseconfir
 msgid "Please confirm you want to slew the telescope to %s at coordinates %s/%s"
-msgstr "Подтвердите, что хотите повернуть телескоп на %s в координаты %s/%s"
+msgstr "Повернуть телескоп на %s в координаты %s/%s?"
 
 #: u_translation.rspleaseconnec
 msgid "Please connect the planetarium first"
@@ -2698,7 +2706,7 @@ msgstr "Сначала загрузите или создайте список �
 
 #: u_translation.rspleaserunthe
 msgid "Please run the V-curve learning for this focuser direction first. Button V-learn."
-msgstr ""
+msgstr "Сначала запустите обучение V-кривой для этого направления фокусировки кнопкой Обучение."
 
 #: u_translation.rspleaserunthe2
 msgid "Please run the Focuser Calibration procedure first"
@@ -2710,7 +2718,7 @@ msgstr "Запустите обучение V-кривой для биннинг
 
 #: u_translation.rspleaseseethe
 msgid "Please see the documentation for important security information"
-msgstr "Смотрите документацию для информации о безопасности"
+msgstr "Смотрите документацию для информации по безопасности"
 
 #: u_translation.rspleaseselect
 msgid "Please select a script!"
@@ -2730,7 +2738,7 @@ msgstr "Подождите, пока измерения не будут заве
 
 #: u_translation.rspointingoffs
 msgid "Pointing offset"
-msgstr "Смещение координат"
+msgstr "Компенсация смещения"
 
 #: u_translation.rspolaralignme
 msgid "Polar alignment"
@@ -2750,7 +2758,7 @@ msgstr "Pos."
 
 #: u_translation.rspower
 msgid "Power"
-msgstr "Питание"
+msgstr "Мощность"
 
 #: u_translation.rsprecisionsle
 msgid "Precision slewing options"
@@ -3074,7 +3082,7 @@ msgstr "восход"
 
 #: u_translation.rsrisesetcondi
 msgid "Rise/Set condition"
-msgstr "Условия восхода и заката"
+msgstr "Условия восхода и заката объектов"
 
 #: u_translation.rsrot
 msgid "Rot."
@@ -3162,7 +3170,7 @@ msgstr "Сохранить"
 
 #: u_translation.rssaveapngfile
 msgid "Save a bitmap file additionally to the standard FITS file"
-msgstr "Сохранить растровый файл вместе с FITS"
+msgstr "Сохранять растровый файл вместе с FITS"
 
 #: u_translation.rssaveas
 msgid "Save as..."
@@ -3210,7 +3218,7 @@ msgstr "Скрипт %s уже существует. Хотите заменит
 
 #: u_translation.rsscriptalread2
 msgid "Script %s already exist. Do you want to edit this script?"
-msgstr "Скрипт %s уже существует. Вы хотите редактировать этот скрипт?"
+msgstr "Скрипт %s уже существует. Редактировать этот скрипт?"
 
 #: u_translation.rsscriptalread3
 msgid "Script %s already exist. Do you want to replace this custom script by the template?"
@@ -3346,7 +3354,7 @@ msgstr "Задание %s начинается немедленно"
 
 #: u_translation.rssequencestep
 msgid "Sequence steps"
-msgstr ""
+msgstr "Шаги задания"
 
 #: u_translation.rssequencestop
 msgid "Sequence stopped by user request, no termination script will be run."
@@ -3414,7 +3422,7 @@ msgstr "Установить величину"
 
 #: u_translation.rssetmountsite
 msgid "Set mount site long/lat from configuration"
-msgstr "Установить долг/шир монтировки из конфигурации"
+msgstr "Установить долготу/широту монтировки из конфигурации программы"
 
 #: u_translation.rssetmounttime
 msgid "Set mount time from computer"
@@ -3558,7 +3566,7 @@ msgstr "Поворот выполнен"
 
 #: u_translation.rsslewing
 msgid "Slewing"
-msgstr "Поворот"
+msgstr "Наведение"
 
 #: u_translation.rsslewtelescop2
 msgid "Slew telescope to flat panel position"
@@ -3574,7 +3582,7 @@ msgstr "Поворот к %s %s/%s"
 
 #: u_translation.rsslewtofocuss
 msgid "Slew to focus star %s"
-msgstr "Поворнуть к звезде %s"
+msgstr "Повернуть к звезде %s"
 
 #: u_translation.rsslewtofocuss2
 msgid "Slew to focus star"
@@ -3650,7 +3658,7 @@ msgstr "Сложение по опорной звезде %s/%s"
 
 #: u_translation.rsstackofframe
 msgid "stack of %s frames"
-msgstr "сложение %s кадров"
+msgstr "сумма %s кадров"
 
 #: u_translation.rsstar
 msgid "Star"
@@ -4054,11 +4062,11 @@ msgstr "Шкала температуры"
 
 #: u_translation.rstemporaryfol
 msgid "Temporary folder"
-msgstr "Временная папка"
+msgstr "Папка временных файлов"
 
 #: u_translation.rstemporaryfol2
 msgid "Temporary folder must contain only ASCII characters"
-msgstr "Временная папка должна содержать только символы ASCII"
+msgstr "Путь должен содержать только символы ASCII"
 
 #: u_translation.rsterminationo
 msgid "Termination options"
@@ -4078,7 +4086,7 @@ msgstr "Формат изображения камеры"
 
 #: u_translation.rsthecameraisc
 msgid "The camera is connected. Do you want to exit the program now?"
-msgstr "Камера подключена. Вы хотите выйти из программы сейчас?"
+msgstr "Камера подключена. Выйти из программы?"
 
 #: u_translation.rsthedataare2
 msgid "The data are now recorded in the profile.%sYou can review the other auto-focus options using the menu %sEdit / Preferences / Autofocus"
@@ -4260,6 +4268,10 @@ msgstr "Попробуйте следующий объект"
 msgid "Try to connect to autoguider"
 msgstr "Попробуйте подключиться к автогиду"
 
+#: u_translation.rstrytofixpixe
+msgid "Try to fix pixel range to match CMOS camera bit depth"
+msgstr ""
+
 #: u_translation.rstwilightskyf
 msgid "Twilight sky flat"
 msgstr "Сумеречное небо"
@@ -4378,7 +4390,7 @@ msgstr "Использовать монтировку"
 
 #: u_translation.rsuseonlystarn
 msgid "Use only star near the image center"
-msgstr "Используйте только звезду рядом с центром кадра"
+msgstr "Использовать звёзды только в центре кадра"
 
 #: u_translation.rsusergroup
 msgid "User group"
@@ -4422,7 +4434,7 @@ msgstr "V-кривая"
 
 #: u_translation.rsvcurvequalit
 msgid "V curve quality is low. Do you really want to save this curve?"
-msgstr "Качество V-кривой низкое. Вы действительно хотите сохранить эту кривую?"
+msgstr "Низкое качество V-кривой. Сохранить эту кривую?"
 
 #: u_translation.rsverbosedevic
 msgid "Verbose device log"
@@ -4458,7 +4470,7 @@ msgstr "Обучение"
 
 #: u_translation.rsvoiceconfigu
 msgid "Voice configuration"
-msgstr "Конфигурация голоса"
+msgstr "Голосовые уведомления"
 
 #: u_translation.rswait1minute
 msgid "Wait 1 minute ..."
@@ -4539,7 +4551,7 @@ msgstr "Предупреждение! %s изображение получено
 
 #: u_translation.rswarningrever
 msgid "Warning, reversing the rotator will invalidated the calibration. Do you want to continue?"
-msgstr "Предупреждение, изменение направления перемещения приведёт к сбросу калибровки. Вы хотите продолжить?"
+msgstr "Предупреждение, изменение направления перемещения приведёт к сбросу калибровки. Продолжить?"
 
 #: u_translation.rswatchdog
 msgid "Watchdog"
@@ -4555,7 +4567,7 @@ msgstr "Возможно, мы пытаемся сфокусироваться �
 
 #: u_translation.rsweathercondi
 msgid "Weather condition are bad, it is best if you stop the running capture now."
-msgstr "Погодные условия плохие, лучше, если вы сейчас остановите съёмку."
+msgstr "Плохие погодные условия, лучше остановить съёмку."
 
 #: u_translation.rsweatherissue
 msgid "Weather issue: %s"

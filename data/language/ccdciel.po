@@ -4598,3 +4598,15 @@ msgstr ""
 msgid "Use only star near the image center"
 msgstr ""
 
+#: u_translation:rsdateobsfromc
+msgid "DATE-OBS from camera driver"
+msgstr ""
+
+#: u_translation:rstrytofixpixe
+msgid "Try to fix pixel range to match CMOS camera bit depth"
+msgstr ""
+
+#: u_translation:rsimages
+msgid "images"
+msgstr ""
+

@@ -6,15 +6,15 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ccdciel\n"
 "Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
-"POT-Creation-Date: 2020-04-08 15:57+0000\n"
-"PO-Revision-Date: 2020-03-27 12:05+0000\n"
+"POT-Creation-Date: 2020-04-25 17:03+0000\n"
+"PO-Revision-Date: 2020-04-12 09:57+0000\n"
 "Last-Translator: Stephan Woidowski <swoidowski@t-online.de>\n"
 "Language-Team: English (United Kingdom) <en_GB@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2020-04-09 06:16+0000\n"
-"X-Generator: Launchpad (build 2e26c9bbd21cdca248baaea29aeffb920afcc32a)\n"
+"X-Launchpad-Export-Date: 2020-04-25 18:01+0000\n"
+"X-Generator: Launchpad (build 486bbbd6cb608f8eb468ed0d08689a349dfabe49)\n"
 "Language: en_GB\n"
 
 #: u_translation.rs32bitdriver
@@ -921,6 +921,10 @@ msgstr "Dark frame"
 msgid "Dark%snight"
 msgstr "Dark%snight"
 
+#: u_translation.rsdateobsfromc
+msgid "DATE-OBS from camera driver"
+msgstr ""
+
 #: u_translation.rsdateutsequen
 msgid "Date (UT) / Sequence"
 msgstr "Date (UT) / Sequence"
@@ -1712,6 +1716,10 @@ msgstr "Image inspection"
 #: u_translation.rsimagemedianh
 msgid "Image median hfd=%s"
 msgstr "Image median hfd=%s"
+
+#: u_translation.rsimages
+msgid "images"
+msgstr ""
 
 #: u_translation.rsimagescale
 msgid "Image scale"
@@ -3963,7 +3971,7 @@ msgstr "Targets"
 
 #: u_translation.rstargetscoord
 msgid "Target %s coordinates not updated"
-msgstr ""
+msgstr "Target %s coordinates not updated"
 
 #: u_translation.rstargetwillbe
 msgid "Target can run until %s, in %s seconds"
@@ -4261,6 +4269,10 @@ msgstr "Try next target"
 msgid "Try to connect to autoguider"
 msgstr "Try to connect to autoguider"
 
+#: u_translation.rstrytofixpixe
+msgid "Try to fix pixel range to match CMOS camera bit depth"
+msgstr ""
+
 #: u_translation.rstwilightskyf
 msgid "Twilight sky flat"
 msgstr "Twilight sky flat"
@@ -4379,7 +4391,7 @@ msgstr "Use mount"
 
 #: u_translation.rsuseonlystarn
 msgid "Use only star near the image center"
-msgstr ""
+msgstr "Use only star near the image center"
 
 #: u_translation.rsusergroup
 msgid "User group"

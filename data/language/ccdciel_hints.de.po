@@ -6,15 +6,15 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ccdciel\n"
 "Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
-"POT-Creation-Date: 2020-04-08 15:58+0000\n"
-"PO-Revision-Date: 2020-04-08 20:45+0000\n"
+"POT-Creation-Date: 2020-04-25 17:04+0000\n"
+"PO-Revision-Date: 2020-04-25 17:10+0000\n"
 "Last-Translator: Thomas <email@starhopper.de>\n"
 "Language-Team: German <de@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2020-04-09 06:16+0000\n"
-"X-Generator: Launchpad (build 2e26c9bbd21cdca248baaea29aeffb920afcc32a)\n"
+"X-Launchpad-Export-Date: 2020-04-25 18:01+0000\n"
+"X-Generator: Launchpad (build 486bbbd6cb608f8eb468ed0d08689a349dfabe49)\n"
 
 #: u_hints.rsactivateback
 msgid "Activate backlash compensation.%sLet this disabled if your focuser driver include backlash compensation."
@@ -159,6 +159,10 @@ msgstr "Dither nach einer bestimmten Bilderzahl"
 #: u_hints.rsdonotmovethe
 msgid "Do not move the telescope before to start imaging."
 msgstr "Bewegen Sie das Teleskop nicht, bevor mit den Aufnahmen begonnen wird"
+
+#: u_hints.rsdonotsetthis
+msgid "Do not set this option if you don't know exactly what you do and without careful testing"
+msgstr "Stellen Sie diese Option nicht ein, wenn Sie nicht genau wissen, was Sie tun, und nicht ohne sorgfältige Tests"
 
 #: u_hints.rsdontwaitfort
 msgid "Process the other targets in the list instead of waiting for the start condition(s) to be met. To be used with option \"Repeat the whole list\""
