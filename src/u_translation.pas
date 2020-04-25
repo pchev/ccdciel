@@ -1254,6 +1254,7 @@ resourcestring
   rsUseOnlyStarN = 'Use only star near the image center';
   rsDATEOBSFromC = 'DATE-OBS from camera driver';
   rsTryToFixPixe = 'Try to fix pixel range to match CMOS camera bit depth';
+  rsImages = 'images';
 
 implementation
 

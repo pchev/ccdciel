@@ -7904,7 +7904,7 @@ if (AllDevicesConnected)and(not autofocusing)and (not learningvcurve) then begin
       txt:='';
       if f_capture.CheckBoxFocus.Checked then begin
         i:=f_capture.FocusCount.Value-f_capture.FocusNum;
-        buf:=blank+inttostr(i)+blank+LowerCase(rsImage);
+        buf:=blank+inttostr(i)+blank+LowerCase(rsImages);
         if txt='' then txt:=buf else txt:=txt+', '+rsOr+blank+buf;
       end;
       if (AutofocusPeriod>0)and(AutoFocusLastTime<>NullCoord) then begin
