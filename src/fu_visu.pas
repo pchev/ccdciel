@@ -41,25 +41,22 @@ type
     BtnZoom05: TSpeedButton;
     BtnBullsEye: TSpeedButton;
     Gamma: TFloatSpinEditEx;
-    hist3: TSpeedButton;
-    hist4: TSpeedButton;
     Histogram: TImage;
     Panel1: TPanel;
-    hist1: TSpeedButton;
-    hist2: TSpeedButton;
-    histminmax: TSpeedButton;
     BtnZoomAdjust: TSpeedButton;
     Panel2: TPanel;
     Panel3: TPanel;
     BtnZoom2: TSpeedButton;
     BtnZoom1: TSpeedButton;
     Panel4: TPanel;
+    Panel5: TPanel;
     PanelNoDisplay: TPanel;
     SpinEditMin: TFloatSpinEditEx;
     SpinEditMax: TFloatSpinEditEx;
     Title: TLabel;
     TimerRedraw: TTimer;
     TimerMinMax: TTimer;
+    HistBar: TTrackBar;
     procedure BtnBullsEyeClick(Sender: TObject);
     procedure BtnClippingClick(Sender: TObject);
     procedure BtnFlipHorzClick(Sender: TObject);
@@ -70,10 +67,6 @@ type
     procedure FrameEndDrag(Sender, Target: TObject; X, Y: Integer);
     procedure FrameResize(Sender: TObject);
     procedure GammaChange(Sender: TObject);
-    procedure hist1Click(Sender: TObject);
-    procedure hist2Click(Sender: TObject);
-    procedure hist3Click(Sender: TObject);
-    procedure hist4Click(Sender: TObject);
     procedure histminmaxClick(Sender: TObject);
     procedure HistogramMouseDown(Sender: TObject; Button: TMouseButton;
       Shift: TShiftState; X, Y: Integer);
@@ -85,8 +78,11 @@ type
     procedure SpinEditMinChange(Sender: TObject);
     procedure TimerMinMaxTimer(Sender: TObject);
     procedure TimerRedrawTimer(Sender: TObject);
+    procedure HistBarChange(Sender: TObject);
   private
     { private declarations }
+    Fhist:Thistogram;
+    Fmaxh, Fmaxp, Fsum: integer;
     FimageC, FimageMin, FimageMax : double;
     FisFloatingPoint, Finitialized: boolean;
     FimgMin, FimgMax: double;
@@ -94,7 +90,6 @@ type
     FZoom: double;
     StartUpd,Updmax: boolean;
     XP: integer;
-    l1,h1,l2,h2,l3,h3,l4,h4: integer;
     FRedraw: TNotifyEvent;
     FonZoom: TNotifyEvent;
     FRedrawHistogram: TNotifyEvent;
@@ -104,6 +99,7 @@ type
     procedure SetFlipHorz(value:boolean);
     procedure SetFlipVert(value:boolean);
     procedure SetLang;
+    procedure SetLimit(SetLevel:boolean);
   public
     { public declarations }
     constructor Create(aOwner: TComponent); override;
@@ -140,16 +136,17 @@ begin
  BtnClipping.Flat:=true;
  BtnZoom05.Flat:=true;
  BtnBullsEye.Flat:=true;
- hist3.Flat:=true;
- hist4.Flat:=true;
- hist1.Flat:=true;
- hist2.Flat:=true;
- histminmax.Flat:=true;
  BtnZoomAdjust.Flat:=true;
  BtnZoom2.Flat:=true;
  BtnZoom1.Flat:=true;
  {$endif}
  ScaleDPI(Self);
+ {$ifdef lclgtk2}
+   HistBar.top:=-((HistBar.Height-Panel5.Height) div 2);
+ {$else}
+   HistBar.Top:=0;
+   HistBar.Height:=Panel5.ClientHeight;
+ {$endif}
  SetLang;
  Finitialized:=false;
  ImgMax:=high(word);
@@ -179,11 +176,7 @@ begin
   Title.Caption:=rsVisualisatio;
   Histogram.Hint:=Format(rsHistogramOfT, [crlf]);
   BtnZoomAdjust.Hint:=rsZoomToAdjust;
-  histminmax.Hint:=rsFixTheVisual;
-  hist2.Hint:=Format(rsShowOfTheHis, ['90%']);
-  hist1.Hint:=Format(rsShowOfTheHis, ['95%']);
-  hist3.Hint:=Format(rsShowOfTheHis, ['96%']);
-  hist4.Hint:=Format(rsShowOfTheHis, ['98%']);
+  HistBar.Hint:=rsImageLuminos;
   BtnZoom2.Hint:=rsZoomTwoTime;
   BtnZoom1.Hint:=rsZoomToOrigin;
   BtnZoom05.Hint:=rsZoomToHalfSi;
@@ -196,9 +189,70 @@ begin
   BtnShowImage.Hint:=rsShowLastCapt;
 end;
 
+procedure Tf_visu.SetLimit(SetLevel:boolean);
+var hval: double;
+    i,sum,slh,shh,lh,hh: integer;
+
+begin
+  hval:=(101-power(10,HistBar.Position/100))/100;
+  slh:=round((1-hval)*Fsum); lh:=0;
+  shh:=round(hval*Fsum); hh:=0;
+  sum:=0;
+  for i:=0 to high(word) do begin
+    sum:=sum+Fhist[i];
+    if i>(0.7*Fmaxp) then begin
+      if (lh=0) and (sum>=slh) then lh:=i;
+      if (hh=0) and (sum>=shh) then hh:=i;
+    end;
+  end;
+  if SetLevel then begin
+    if hval=1 then begin
+      FImgMin:=0;
+      FImgMax:=high(word);
+    end
+    else begin
+      FimgMin:=lh;
+      FImgMax:=hh;
+    end;
+  end;
+  // adjust spinedit for data range
+  if FisFloatingPoint then begin
+    SpinEditMin.DecimalPlaces:=3;
+    SpinEditMax.DecimalPlaces:=3;
+    if abs(FimageMax-FimageMin)<=10 then begin
+      SpinEditMin.Increment:=0.01;
+      SpinEditMax.Increment:=0.01;
+    end
+    else begin
+      SpinEditMin.Increment:=1;
+      SpinEditMax.Increment:=1;
+    end;
+  end
+  else begin
+    SpinEditMin.DecimalPlaces:=0;
+    SpinEditMax.DecimalPlaces:=0;
+    if abs(FimageMax-FimageMin)<=255 then begin
+      SpinEditMin.Increment:=1;
+      SpinEditMax.Increment:=1;
+    end
+    else begin
+      SpinEditMin.Increment:=10;
+      SpinEditMax.Increment:=10;
+    end;
+  end;
+  // histogram is always 0-65535, show real pixel value in the spinedit
+  SpinEditMin.minValue:=FimageMin;
+  SpinEditMin.maxValue:=FimageMax;
+  SpinEditMax.minValue:=FimageMin;
+  SpinEditMax.maxValue:=FimageMax;
+  // scale from 0-65535 to image min-max
+  SpinEditMin.Value:=FimageMin+FImgMin/FimageC;
+  SpinEditMax.Value:=FimageMin+FimgMax/FimageC;
+end;
+
 procedure Tf_visu.DrawHistogram(hist:Thistogram; SetLevel,isFloatingPoint: boolean; iC,iMin,iMax: double);
-var i,j,maxp,maxh,h,hd2,l: integer;
-    sum,sl1,sh1,sl2,sh2,sl3,sh3,sl4,sh4,hc: integer;
+var i,j,h,hd2,l: integer;
+    hc: integer;
     sh: double;
 begin
 try
@@ -207,90 +261,21 @@ FimageC:=iC;
 FimageMin:=iMin;
 FimageMax:=iMax;
 FisFloatingPoint:=isFloatingPoint;
-maxh:=0;
-sum:=0;
+Fmaxh:=0;
+Fsum:=0;
 for i:=0 to high(word) do begin
-  sum:=sum+hist[i];
-  if hist[i]>maxh then begin
-      maxh:=hist[i];
-      maxp:=i;
+  Fhist[i]:=hist[i];
+  Fsum:=Fsum+hist[i];
+  if hist[i]>Fmaxh then begin
+      Fmaxh:=hist[i];
+      Fmaxp:=i;
   end;
 end;
-if maxh=0 then exit;
-if maxp>(high(word) div 10) then maxp:=0; // peak is probably not sky background
-sl1:=round(0.050*sum); l1:=0;
-sh1:=round(0.950*sum); h1:=0;
-sl2:=round(0.100*sum); l2:=0;
-sh2:=round(0.900*sum); h2:=0;
-sl3:=round(0.040*sum); l3:=0;
-sh3:=round(0.960*sum); h3:=0;
-sl4:=round(0.020*sum); l4:=0;
-sh4:=round(0.980*sum); h4:=0;
-sum:=0;
-for i:=0 to high(word) do begin
-  sum:=sum+hist[i];
-  if i>(0.7*maxp) then begin
-    if (l1=0) and (sum>=sl1) then l1:=i;
-    if (l2=0) and (sum>=sl2) then l2:=i;
-    if (l3=0) and (sum>=sl3) then l3:=i;
-    if (l4=0) and (sum>=sl4) then l4:=i;
-    if (h1=0) and (sum>=sh1) then h1:=i;
-    if (h2=0) and (sum>=sh2) then h2:=i;
-    if (h3=0) and (sum>=sh3) then h3:=i;
-    if (h4=0) and (sum>=sh4) then h4:=i;
-  end;
-end;
-if SetLevel then begin
-  if hist1.Down then begin
-    FimgMin:=l1;
-    FImgMax:=h1;
-  end;
-  if hist2.Down then begin
-    FImgMin:=l2;
-    FImgMax:=h2;
-  end;
-  if hist3.Down then begin
-    FImgMin:=l3;
-    FImgMax:=h3;
-  end;
-  if hist4.Down then begin
-    FImgMin:=l4;
-    FImgMax:=h4;
-  end;
-end;
-// adjust spinedit for data range
-if isFloatingPoint then begin
-  SpinEditMin.DecimalPlaces:=3;
-  SpinEditMax.DecimalPlaces:=3;
-  if abs(FimageMax-FimageMin)<=10 then begin
-    SpinEditMin.Increment:=0.01;
-    SpinEditMax.Increment:=0.01;
-  end
-  else begin
-    SpinEditMin.Increment:=1;
-    SpinEditMax.Increment:=1;
-  end;
-end
-else begin
-  SpinEditMin.DecimalPlaces:=0;
-  SpinEditMax.DecimalPlaces:=0;
-  if abs(FimageMax-FimageMin)<=255 then begin
-    SpinEditMin.Increment:=1;
-    SpinEditMax.Increment:=1;
-  end
-  else begin
-    SpinEditMin.Increment:=10;
-    SpinEditMax.Increment:=10;
-  end;
-end;
-// histogram is always 0-65535, show real pixel value in the spinedit
-SpinEditMin.minValue:=FimageMin;
-SpinEditMin.maxValue:=FimageMax;
-SpinEditMax.minValue:=FimageMin;
-SpinEditMax.maxValue:=FimageMax;
-// scale from 0-65535 to image min-max
-SpinEditMin.Value:=FimageMin+FImgMin/FimageC;
-SpinEditMax.Value:=FimageMin+FimgMax/FimageC;
+if Fmaxh=0 then exit;
+if Fmaxp>(high(word) div 10) then Fmaxp:=0; // peak is probably not sky background
+
+SetLimit(SetLevel);
+
 Histogram.Picture.Bitmap.Width:=Histogram.Width;
 Histogram.Picture.Bitmap.Height:=Histogram.Height;
 with Histogram.Picture.Bitmap do begin
@@ -298,13 +283,13 @@ with Histogram.Picture.Bitmap do begin
   Canvas.Pen.Color:=clBlack;
   Canvas.Pen.Mode:=pmCopy;
   Canvas.FillRect(0,0,Width,Height);
-  sh:=height/ln(maxh);
+  sh:=height/ln(Fmaxh);
   Canvas.Pen.Color:=clWhite;
   hd2:=0;
   for i:=0 to 255 do begin
     hc:=0;
     for j:=0 to 255 do
-       if hist[255*i+j]>hc then hc:=hist[255*i+j];
+       if Fhist[255*i+j]>hc then hc:=Fhist[255*i+j];
     h:=trunc(ln(hc)*sh);
     if (Histogram.Width=128) then begin
       if ((i mod 2)=0) then begin
@@ -366,32 +351,11 @@ begin
   if Assigned(FRedrawHistogram) then FRedrawHistogram(self);
 end;
 
-procedure Tf_visu.hist1Click(Sender: TObject);
+procedure Tf_visu.HistBarChange(Sender: TObject);
 begin
-FimgMin:=l1;
-FImgMax:=h1;
-TimerRedraw.Enabled:=true;
-end;
-
-procedure Tf_visu.hist2Click(Sender: TObject);
-begin
-FImgMin:=l2;
-FImgMax:=h2;
-TimerRedraw.Enabled:=true;
-end;
-
-procedure Tf_visu.hist3Click(Sender: TObject);
-begin
-FImgMin:=l3;
-FImgMax:=h3;
-TimerRedraw.Enabled:=true;
-end;
-
-procedure Tf_visu.hist4Click(Sender: TObject);
-begin
-FImgMin:=l4;
-FImgMax:=h4;
-TimerRedraw.Enabled:=true;
+  SetLimit(true);
+  TimerRedraw.Enabled:=false;
+  TimerRedraw.Enabled:=true;
 end;
 
 procedure Tf_visu.SetZoom(value: double);
@@ -533,7 +497,6 @@ begin
     ImgMin:=min(ImgMin,ImgMax);
   end;
   StartUpd:=false;
-  histminmax.Down:=true;
   TimerRedraw.Enabled:=true;
 end;
 
@@ -554,7 +517,6 @@ end;
 procedure Tf_visu.TimerMinMaxTimer(Sender: TObject);
 begin
   TimerMinMax.Enabled:=false;
-  histminmax.Down:=true;
   // scale from image min-max to 0-65535
   FImgMin:=round(FimageC*(SpinEditMin.Value-FimageMin));
   FImgMax:=round(FimageC*(SpinEditMax.Value-FimageMin));

@@ -1507,15 +1507,9 @@ begin
   f_capture.SeqNum.Value:=config.GetValue('/Capture/Count',1);
 
   f_visu.Gamma.Value:=config.GetValue('/Visu/Gamma',1.0);
-  f_visu.histminmax.AllowAllUp:=true;
-  f_visu.histminmax.Down:=config.GetValue('/Visu/HistMinMax',true);
-  f_visu.hist1.Down:=config.GetValue('/Visu/Hist1',false);
-  f_visu.hist2.Down:=config.GetValue('/Visu/Hist2',false);
-  f_visu.hist3.Down:=config.GetValue('/Visu/Hist3',false);
-  f_visu.hist4.Down:=config.GetValue('/Visu/Hist4',false);
+  f_visu.HistBar.Position:=config.GetValue('/Visu/HistBar',50);
   f_visu.FlipHorz:=config.GetValue('/Visu/FlipHorz',false);
   f_visu.FlipVert:=config.GetValue('/Visu/FlipVert',false);
-  f_visu.histminmax.AllowAllUp:=false;
 
   LogLevel:=config.GetValue('/Log/LogLevel',LogLevel);
   TabMsgLevel.TabIndex:=LogLevel-1;
@@ -2143,8 +2137,6 @@ begin
   f_visu.BtnZoomAdjust.Glyph.Assign(btn);
   TBTabs.Images.GetBitmap(6, btn);
   f_visu.BtnBullsEye.Glyph.Assign(btn);
-  TBTabs.Images.GetBitmap(7, btn);
-  f_visu.histminmax.Glyph.Assign(btn);
   TBTabs.Images.GetBitmap(8, btn);
   f_visu.BtnClipping.Glyph.Assign(btn);
   TBTabs.Images.GetBitmap(11, btn);
@@ -3812,11 +3804,7 @@ begin
    config.SetValue('/Sequence/EditTarget/Height',f_EditTargets.Height);
 
    config.SetValue('/Visu/Gamma',f_visu.Gamma.Value);
-   config.SetValue('/Visu/HistMinMax',f_visu.histminmax.Down);
-   config.SetValue('/Visu/Hist1',f_visu.hist1.Down);
-   config.SetValue('/Visu/Hist2',f_visu.hist2.Down);
-   config.SetValue('/Visu/Hist3',f_visu.hist3.Down);
-   config.SetValue('/Visu/Hist4',f_visu.hist4.Down);
+   config.SetValue('/Visu/HistBar',f_visu.HistBar.Position);
    config.SetValue('/Visu/FlipHorz',f_visu.FlipHorz);
    config.SetValue('/Visu/FlipVert',f_visu.FlipVert);
 
