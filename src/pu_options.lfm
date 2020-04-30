@@ -7,7 +7,6 @@ object f_option: Tf_option
   Caption = 'Options'
   ClientHeight = 600
   ClientWidth = 659
-  Font.Height = 13
   KeyPreview = True
   OnCreate = FormCreate
   OnShow = FormShow
