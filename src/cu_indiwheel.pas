@@ -120,7 +120,6 @@ begin
  ReadyTimer.Enabled:=false;
  ReadyTimer.Interval:=2000;
  ReadyTimer.OnTimer:=@ReadyTimerTimer;
- CreateIndiClient;
 end;
 
 destructor  T_indiwheel.Destroy;
@@ -128,8 +127,7 @@ begin
  InitTimer.Enabled:=false;
  ConnectTimer.Enabled:=false;
  ReadyTimer.Enabled:=false;
- indiclient.onServerDisconnected:=nil;
- indiclient.Free;
+ if indiclient<>nil then indiclient.onServerDisconnected:=nil;
  FreeAndNil(InitTimer);
  FreeAndNil(ConnectTimer);
  FreeAndNil(ReadyTimer);
@@ -176,7 +174,7 @@ end;
 
 Procedure T_indiwheel.Connect(cp1: string; cp2:string=''; cp3:string=''; cp4:string=''; cp5:string=''; cp6:string='');
 begin
-if (indiclient=nil)or(indiclient.Terminated) then CreateIndiClient;
+CreateIndiClient;
 if not indiclient.Connected then begin
   Findiserver:=cp1;
   Findiserverport:=cp2;
@@ -246,7 +244,6 @@ begin
   FStatus := devDisconnected;
   if Assigned(FonStatusChange) then FonStatusChange(self);
   msg(rsServer+' '+rsDisconnected3,0);
-  CreateIndiClient;
 end;
 
 procedure T_indiwheel.NewDevice(dp: Basedevice);
@@ -422,7 +419,7 @@ end;
 procedure T_indiwheel.SetTimeout(num:integer);
 begin
  FTimeOut:=num;
- indiclient.Timeout:=FTimeOut;
+ if indiclient<>nil then indiclient.Timeout:=FTimeOut;
 end;
 
 procedure T_indiwheel.LoadConfig;

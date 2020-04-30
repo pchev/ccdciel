@@ -324,7 +324,6 @@ begin
  GetCCDSizeTimer.Enabled:=false;
  GetCCDSizeTimer.Interval:=100;
  GetCCDSizeTimer.OnTimer:=@GetCCDSizeTimerTimer;
- CreateIndiClient;
  lockvideostream:=false;
  FVideoMsg:=false;
 end;
@@ -335,9 +334,7 @@ begin
  ConnectTimer.Enabled:=false;
  ExposureTimer.Enabled:=false;
  GetCCDSizeTimer.Enabled:=false;
- indiclient.onServerDisconnected:=nil;
- indiclient.Free;
- indiblob.Free;
+ if indiclient<>nil then indiclient.onServerDisconnected:=nil;
  FSensorList.Free;
  FreeAndNil(ExposureTimer);
  FreeAndNil(InitTimer);
@@ -465,7 +462,7 @@ end;
 
 Procedure T_indicamera.Connect(cp1: string; cp2:string=''; cp3:string=''; cp4:string=''; cp5:string=''; cp6:string='');
 begin
-if (indiclient=nil)or(indiclient.Terminated)or(indiblob=nil)or(indiblob.Terminated) then CreateIndiClient;
+CreateIndiClient;
 if not indiclient.Connected then begin
   Findiserver:=cp1;
   Findiserverport:=cp2;
@@ -587,7 +584,6 @@ begin
   if Assigned(FonStatusChange) then FonStatusChange(self);
   if Assigned(FonWheelStatusChange) then FonWheelStatusChange(self);
   msg(rsServer+' '+rsDisconnected3,0);
-  CreateIndiClient;
 end;
 
 procedure T_indicamera.NewDevice(dp: Basedevice);
@@ -1858,8 +1854,8 @@ end;
 procedure T_indicamera.SetTimeout(num:integer);
 begin
  FTimeOut:=num;
- indiclient.Timeout:=FTimeOut;
- indiblob.Timeout:=FTimeOut;
+ if indiclient<>nil then indiclient.Timeout:=FTimeOut;
+ if indiblob<>nil then indiblob.Timeout:=FTimeOut;
 end;
 
 function T_indicamera.CheckGain:boolean;
