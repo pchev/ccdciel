@@ -1120,7 +1120,6 @@ end;
 procedure TFits.SetVideoStream(value:TMemoryStream);
 begin
 // other header previously set by caller
-ClearFitsInfo;
 FImageValid:=false;
 cur_axis:=1;
 setlength(imar64,0,0,0);
