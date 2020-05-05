@@ -153,57 +153,58 @@ procedure Tf_video.SetImageControls;
 var r: TNumRange;
     sr:TONumRange;
 begin
- // try streaming exposure as in DSLR
- r:=camera.StreamingExposureRange;
- PanelExposure2.Visible:=(r.max>0);
- if PanelExposure2.Visible then begin
-   PanelExposure1.Visible:=false;
-   StreamExp.Hint:=FormatFloat(f3,r.min)+'...'+FormatFloat(f3,r.max);
-   StreamExp.MinValue:=r.min;
-   StreamExp.MaxValue:=r.max;
-   StreamExp.Value:=camera.StreamingExposure;
- end
- else begin
-   // try video exposure as in V4L2
-   r:=camera.VideoExposureRange;
-   PanelExposure1.Visible:=(r.max>0);
-   if PanelExposure1.Visible then begin
-     if r.max<=100 then begin
-       Exprange.Visible:=false;
-       ResetTrackBar(Exposure);
-       Exposure.Min:=round(r.min);
-       Exposure.Max:=round(r.max);
-       Exposure.LineSize:=round(r.step);
-       Exposure.PageSize:=round(5*r.step);
+ // try video exposure as in V4L2
+ r:=camera.VideoExposureRange;
+ PanelExposure1.Visible:=(r.max>0);
+ if PanelExposure1.Visible then begin
+   PanelExposure2.Visible:=false;
+   if r.max<=100 then begin
+     Exprange.Visible:=false;
+     ResetTrackBar(Exposure);
+     Exposure.Min:=round(r.min);
+     Exposure.Max:=round(r.max);
+     Exposure.LineSize:=round(r.step);
+     Exposure.PageSize:=round(5*r.step);
+   end else begin
+     Exprange.Clear;
+     sr:=TONumRange.Create;
+     sr.range.min:=1; sr.range.max:=9; sr.range.step:=r.step;
+     Exprange.Items.AddObject('1-9',sr);
+     sr:=TONumRange.Create;
+     sr.range.min:=10; sr.range.max:=99; sr.range.step:=r.step;
+     Exprange.Items.AddObject('10-99',sr);
+     if r.max<1000 then begin
+       sr:=TONumRange.Create;
+       sr.range.min:=100; sr.range.max:=r.max; sr.range.step:=r.step;
+       Exprange.Items.AddObject('100-'+IntToStr(round(r.max)),sr);
      end else begin
-       Exprange.Clear;
        sr:=TONumRange.Create;
-       sr.range.min:=1; sr.range.max:=9; sr.range.step:=r.step;
-       Exprange.Items.AddObject('1-9',sr);
-       sr:=TONumRange.Create;
-       sr.range.min:=10; sr.range.max:=99; sr.range.step:=r.step;
-       Exprange.Items.AddObject('10-99',sr);
-       if r.max<1000 then begin
+       sr.range.min:=100; sr.range.max:=999; sr.range.step:=r.step;
+       Exprange.Items.AddObject('100-999',sr);
+       if r.max<10000 then begin
          sr:=TONumRange.Create;
-         sr.range.min:=100; sr.range.max:=r.max; sr.range.step:=r.step;
-         Exprange.Items.AddObject('100-'+IntToStr(round(r.max)),sr);
+         sr.range.min:=1000; sr.range.max:=r.max; sr.range.step:=r.step;
+         Exprange.Items.AddObject('1000-'+IntToStr(round(r.max)),sr);
        end else begin
          sr:=TONumRange.Create;
-         sr.range.min:=100; sr.range.max:=999; sr.range.step:=r.step;
-         Exprange.Items.AddObject('100-999',sr);
-         if r.max<10000 then begin
-           sr:=TONumRange.Create;
-           sr.range.min:=1000; sr.range.max:=r.max; sr.range.step:=r.step;
-           Exprange.Items.AddObject('1000-'+IntToStr(round(r.max)),sr);
-         end else begin
-           sr:=TONumRange.Create;
-           sr.range.min:=1000; sr.range.max:=10000; sr.range.step:=r.step;
-           Exprange.Items.AddObject('1000-10000',sr);
-         end;
+         sr.range.min:=1000; sr.range.max:=10000; sr.range.step:=r.step;
+         Exprange.Items.AddObject('1000-10000',sr);
        end;
      end;
-     ShowExposure(camera.VideoExposure);
    end;
+   ShowExposure(camera.VideoExposure);
+ end
+ else begin
+   // try streaming exposure as in DSLR
+   r:=camera.StreamingExposureRange;
+   PanelExposure2.Visible:=(r.max>0);
+   if PanelExposure2.Visible then begin
+     PanelExposure1.Visible:=false;
+     StreamExp.Hint:=FormatFloat(f3,r.min)+'...'+FormatFloat(f3,r.max);
+     StreamExp.MinValue:=r.min;
+     StreamExp.MaxValue:=r.max;
+     StreamExp.Value:=camera.StreamingExposure;
+   end
  end;
  r:=camera.VideoGainRange;
  PanelGain.Visible:=(r.max>0);
