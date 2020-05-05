@@ -117,6 +117,9 @@ T_ascomrestcamera = class(T_camera)
    function GetReadOutMode: integer; override;
    procedure SetFnumber(value: string); override;
    function GetFnumber: string; override;
+   function GetStreamingExposureRange:TNumRange; override;
+   function GetStreamingExposure:double; override;
+   procedure SetStreamingExposure(value:double); override;
 
 public
    constructor Create(AOwner: TComponent);override;
@@ -131,6 +134,7 @@ public
    procedure GetFrameReal(out x,y,width,height: integer);
    procedure GetFrameRange(out xr,yr,widthr,heightr: TNumRange); override;
    procedure ResetFrame; override;
+   procedure GetStreamFrame(out x,y,width,height: integer);  override;
    procedure CfaInfo(out OffsetX, OffsetY: integer; out CType: string);  override;
    function  CheckGain:boolean; override;
    Procedure AbortExposure; override;
@@ -1435,6 +1439,29 @@ end;
 procedure T_ascomrestcamera.SetVideoPreviewDivisor(value:integer);
 begin
  // todo
+end;
+
+function T_ascomrestcamera.GetStreamingExposureRange:TNumRange;
+begin
+ result:=NullRange;
+ // todo
+end;
+
+function T_ascomrestcamera.GetStreamingExposure:double;
+begin
+ result:=0;
+ // todo
+end;
+
+procedure T_ascomrestcamera.SetStreamingExposure(value:double);
+begin
+ // todo
+end;
+
+procedure T_ascomrestcamera.GetStreamFrame(out x,y,width,height: integer);
+begin
+ // todo
+ x:=0; y:=0; width:=0; height:=0;
 end;
 
 function T_ascomrestcamera.GetImageFormat: string;

@@ -106,7 +106,11 @@ private
    ImageAdjustments: INumberVectorProperty;
    IBrightness,IGamma,IGain,IExposure:INumber;
    StreamOptions: INumberVectorProperty;
-   StreamRate:INumber;
+   StreamORate:INumber;
+   StreamExposure: INumberVectorProperty;
+   StreamERate,StreamExp:INumber;
+   Streamframe: INumberVectorProperty;
+   StreamframeX,StreamframeY,StreamframeWidth,StreamframeHeight: INumber;
    CCDIso: ISwitchVectorProperty;
    Guiderexpose: INumberVectorProperty;
    GuiderexposeValue: INumber;
@@ -145,7 +149,7 @@ private
    stX,stY,stWidth,stHeight: integer;
    FSensorList: TStringList;
    FNotAbortSequence: boolean;
-   FISOInitialized: boolean;
+   FISOInitialized, isASI: boolean;
    procedure ExposureTimerTimer(sender: TObject);
    procedure CreateIndiClient;
    procedure InitTimerTimer(Sender: TObject);
@@ -234,6 +238,9 @@ private
    function GetReadOutMode: integer; override;
    procedure SetFnumber(value: string); override;
    function GetFnumber: string; override;
+   function GetStreamingExposureRange:TNumRange; override;
+   function GetStreamingExposure:double; override;
+   procedure SetStreamingExposure(value:double); override;
 
  public
    constructor Create(AOwner: TComponent);override;
@@ -247,6 +254,7 @@ private
    procedure GetFrame(out x,y,width,height: integer; refresh:boolean=false); override;
    procedure GetFrameRange(out xr,yr,widthr,heightr: TNumRange); override;
    procedure ResetFrame; override;
+   procedure GetStreamFrame(out x,y,width,height: integer);  override;
    procedure CfaInfo(out OffsetX, OffsetY: integer; out CType: string);  override;
    function  CheckGain:boolean; override;
    Procedure AbortExposure; override;
@@ -395,6 +403,8 @@ begin
     CameraAperture:=nil;
     CaptureFormat:=nil;
     TransfertFormat:=nil;
+    StreamExposure:=nil;
+    Streamframe:=nil;
     FhasBlob:=false;
     FhasVideo:=false;
     Fready:=false;
@@ -418,6 +428,7 @@ begin
     FISOInitialized:=false;
     FReadOutList.Clear;
     FhasReadOut:=false;
+    isASI:=false;
     if Assigned(FonStatusChange) then FonStatusChange(self);
     if Assigned(FonWheelStatusChange) then FonWheelStatusChange(self);
 end;
@@ -639,6 +650,7 @@ begin
      if TxtProp<>nil then begin
        Txt:=IUFindText(TxtProp,'DRIVER_EXEC');
        if Txt<>nil then buf:=buf+Txt.lbl+': '+Txt.Text+', ';
+       isASI:=pos('_asi_',Txt.Text)>0;
        Txt:=IUFindText(TxtProp,'DRIVER_VERSION');
        if Txt<>nil then buf:=buf+Txt.lbl+': '+Txt.Text+', ';
        Txt:=IUFindText(TxtProp,'DRIVER_INTERFACE');
@@ -858,8 +870,22 @@ begin
   end
   else if (proptype=INDI_NUMBER)and(StreamOptions=nil)and(propname='STREAM_OPTIONS') then begin
      StreamOptions:=indiProp.getNumber;
-     StreamRate:=IUFindNumber(StreamOptions,'STREAM_RATE');
-     if (StreamRate=nil) then StreamOptions:=nil;
+     StreamORate:=IUFindNumber(StreamOptions,'STREAM_RATE');
+     if (StreamORate=nil) then StreamOptions:=nil;
+  end
+  else if (proptype=INDI_NUMBER)and(StreamExposure=nil)and(propname='STREAMING_EXPOSURE') then begin
+     StreamExposure:=indiProp.getNumber;
+     StreamERate:=IUFindNumber(StreamExposure,'STREAMING_DIVISOR_VALUE');
+     StreamExp:=IUFindNumber(StreamExposure,'STREAMING_EXPOSURE_VALUE');
+     if (StreamERate=nil)or(StreamExp=nil) then StreamExposure:=nil;
+  end
+  else if (proptype=INDI_NUMBER)and(Streamframe=nil)and(propname='CCD_STREAM_FRAME') then begin
+     Streamframe:=indiProp.getNumber;
+     StreamframeX:=IUFindNumber(Streamframe,'X');
+     StreamframeY:=IUFindNumber(Streamframe,'Y');
+     StreamframeWidth:=IUFindNumber(Streamframe,'WIDTH');
+     StreamframeHeight:=IUFindNumber(Streamframe,'HEIGHT');
+     if (StreamframeX=nil)or(StreamframeY=nil)or(StreamframeWidth=nil)or(StreamframeHeight=nil) then Streamframe:=nil;
   end
   else if (proptype=INDI_NUMBER)and(ImageAdjustments=nil)and((propname='CCD_GAIN')or(propname='CCD_CONTROLS')or(propname='Image Adjustments')) then begin
      ImageAdjustments:=indiProp.getNumber;
@@ -959,7 +985,14 @@ begin
      end;
   end
   else if nvp=CCDframe then begin
-    // ignore CCDFrame change because this can be just a binning requirement, see: https://indilib.org/forum/ccds-dslrs/4956-indi-asi-driver-bug-causes-false-binned-images.html?start=12#38430
+    // ignore ASI CCDFrame change because this can be just a binning requirement, see: https://indilib.org/forum/ccds-dslrs/4956-indi-asi-driver-bug-causes-false-binned-images.html
+    if not isASI then begin
+      stX      := round(CCDframeX.value);
+      stY      := round(CCDframeY.value);
+      stWidth  := round(CCDframeWidth.value);
+      stHeight := round(CCDframeHeight.value);
+      if Assigned(FonFrameChange) then FonFrameChange(Self);
+    end;
   end
   else if nvp=WheelSlot then begin
      if Assigned(FonFilterChange) then FonFilterChange(Slot.value);
@@ -977,6 +1010,9 @@ begin
      if Assigned(FonFPSChange) then FonFPSChange(self);
   end
   else if nvp=ImageAdjustments then begin
+     if Assigned(FonVideoExposureChange) then FonVideoExposureChange(self);
+  end
+  else if nvp=StreamExposure then begin
      if Assigned(FonVideoExposureChange) then FonVideoExposureChange(self);
   end
   ;
@@ -2283,17 +2319,63 @@ end;
 function T_indicamera.GetVideoPreviewDivisor:integer;
 begin
   result:=0;
-  if StreamOptions<>nil then begin
-     result:=round(StreamRate.value);
+  if StreamExposure<>nil then begin
+     result:=round(StreamERate.value);
+  end
+  else if StreamOptions<>nil then begin
+     result:=round(StreamORate.value);
   end;
 end;
 
 procedure T_indicamera.SetVideoPreviewDivisor(value:integer);
 begin
- if StreamOptions<>nil then begin;
-   StreamRate.value:=value;
+ if StreamExposure<>nil then begin;
+   StreamERate.value:=value;
+   indiclient.sendNewNumber(StreamExposure);
+ end
+ else if StreamOptions<>nil then begin;
+   StreamORate.value:=value;
    indiclient.sendNewNumber(StreamOptions);
  end;
+end;
+
+function T_indicamera.GetStreamingExposureRange:TNumRange;
+begin
+ result:=NullRange;
+ if StreamExposure<>nil then begin
+    result.min:=StreamExp.min;
+    if result.min<1E-5 then result.min:=0;
+    result.max:=StreamExp.max;
+    result.step:=StreamExp.step;
+ end
+end;
+
+function T_indicamera.GetStreamingExposure:double;
+begin
+ result:=0;
+ if StreamExposure<>nil then begin
+    result:=StreamExp.value;
+ end;
+end;
+
+procedure T_indicamera.SetStreamingExposure(value:double);
+begin
+ if StreamExposure<>nil then begin;
+   StreamExp.value:=value;
+   indiclient.sendNewNumber(StreamExposure);
+ end;
+end;
+
+procedure T_indicamera.GetStreamFrame(out x,y,width,height: integer);
+begin
+  if Streamframe<>nil then begin
+    x:=round(StreamframeX.Value);
+    y:=round(StreamframeY.Value);
+    width:=round(StreamframeWidth.Value);
+    height:=round(StreamframeHeight.Value);
+  end
+  else
+    GetFrame(x,y,width,height);
 end;
 
 procedure T_indicamera.ConnectWs;
@@ -2388,6 +2470,7 @@ begin
   fFramedStream.free;
   inherited;
 end;
+
 
 end.
 

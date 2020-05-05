@@ -160,6 +160,9 @@ T_camera = class(TComponent)
     function GetReadOutMode: integer; virtual; abstract;
     procedure SetFnumber(value: string); virtual; abstract;
     function GetFnumber: string; virtual; abstract;
+    function GetStreamingExposureRange:TNumRange; virtual; abstract;
+    function GetStreamingExposure:double; virtual; abstract;
+    procedure SetStreamingExposure(value:double); virtual; abstract;
   private
     lockvideoframe: boolean;
     TempFinal: Double;
@@ -181,6 +184,7 @@ T_camera = class(TComponent)
     procedure GetFrame(out x,y,width,height: integer; refresh:boolean=false); virtual; abstract;
     procedure GetFrameRange(out xr,yr,widthr,heightr: TNumRange); virtual; abstract;
     procedure ResetFrame; virtual; abstract;
+    procedure GetStreamFrame(out x,y,width,height: integer); virtual; abstract;
     procedure CfaInfo(out OffsetX, OffsetY: integer; out CType: string);  virtual; abstract;
     function  CheckGain: boolean; virtual; abstract;
     Procedure SetActiveDevices(focuser,filters,telescope: string); virtual; abstract;
@@ -216,6 +220,8 @@ T_camera = class(TComponent)
     property VideoRecordFile:string read GetVideoRecordFile write SetVideoRecordFile;
     property VideoExposure: integer read GetVideoExposure write SetVideoExposure;
     property VideoExposureRange: TNumRange read GetVideoExposureRange;
+    property StreamingExposure: double read GetStreamingExposure write SetStreamingExposure;
+    property StreamingExposureRange: TNumRange read GetStreamingExposureRange;
     property VideoGain: integer read GetVideoGain write SetVideoGain;
     property VideoGainRange: TNumRange read GetVideoGainRange;
     property VideoGamma: integer read GetVideoGamma write SetVideoGamma;
@@ -786,7 +792,7 @@ begin
   if lockvideoframe then exit;
   lockvideoframe:=true;
   try
-  GetFrame(x,y,w,h);
+  GetStreamFrame(x,y,w,h);
   FVideoStream.Position:=0;
   if Color then begin
     WriteVideoHeader(w,h,3,8);

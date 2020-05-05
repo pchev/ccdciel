@@ -772,6 +772,7 @@ type
     procedure CollimationStop(Sender: TObject);
     procedure CollimationCenterStar(Sender: TObject);
     procedure CollimationCircleChange(Sender: TObject);
+    procedure ReadyForVideo(var v: boolean);
   public
     { public declarations }
   end;
@@ -1383,6 +1384,7 @@ begin
 
   f_video:=Tf_video.Create(self);
   f_video.onMsg:=@NewMessage;
+  f_video.onCheckReady:=@ReadyForVideo;
 
   f_filterwheel:=Tf_filterwheel.Create(self);
   f_filterwheel.onSetFilter:=@SetFilter;
@@ -3316,6 +3318,7 @@ begin
   SaveBitmap:=config.GetValue('/Files/SaveBitmap',false);
   SaveBitmapFormat:=config.GetValue('/Files/SaveBitmapFormat','png');
   OpenPictureDialog1.InitialDir:=config.GetValue('/Files/CapturePath',defCapturePath);
+  f_video.VideoCaptureDir.Text:=config.GetValue('/Files/VideoCapturePath','/tmp');
   ObsLatitude:=config.GetValue('/Info/ObservatoryLatitude',0.0);
   ObsLongitude:=config.GetValue('/Info/ObservatoryLongitude',0.0);
   ObsElevation:=config.GetValue('/Info/ObservatoryElevation',0.0);
@@ -5110,6 +5113,13 @@ begin
  end;
 end;
 
+procedure Tf_main.ReadyForVideo(var v: boolean);
+begin
+ v:=(camera.Status=devConnected)and(not f_sequence.Running)and
+    (not f_preview.Running)and(not f_capture.Running)and
+    (not autofocusing)and(not learningvcurve);
+end;
+
 procedure Tf_main.CameraVideoPreviewChange(Sender: TObject);
 begin
   f_video.Preview.Checked:=camera.VideoPreviewRunning;
@@ -5136,7 +5146,10 @@ end;
 
 procedure Tf_main.CameraVideoExposureChange(Sender: TObject);
 begin
-  f_video.ShowExposure(round(camera.VideoExposure));
+  if f_video.PanelExposure1.Visible then
+    f_video.ShowExposure(camera.VideoExposure);
+  if f_video.PanelExposure2.Visible then
+    f_video.ShowExposure(camera.StreamingExposure);
   f_video.Gain.Position:=max(min(round(camera.VideoGain),f_video.Gain.Max),f_video.Gain.Min);
   f_video.Gamma.Position:=max(min(round(camera.VideoGamma),f_video.Gamma.Max),f_video.Gamma.Min);
   f_video.Brightness.Position:=max(min(round(camera.VideoBrightness),f_video.Brightness.Max),f_video.Brightness.Min);
@@ -7556,7 +7569,7 @@ var e: double;
     p,binx,biny,i,x,y,w,h,sx,sy,sw,sh: integer;
 begin
 // ! can run out of main thread
-if (camera.Status=devConnected) and ((not f_capture.Running) or autofocusing) and (not learningvcurve) then begin
+if (camera.Status=devConnected) and ((not f_capture.Running) or autofocusing) and (not learningvcurve)and(not f_video.Running) then begin
   Preview:=true;
   // be sure mount is tracking, but not repeat after every frame
   if (Sender<>nil)and(not mount.Tracking) then
@@ -7705,7 +7718,7 @@ if not f_capture.Running then begin
   NewMessage(rsCaptureStopp2, 0);
   exit;
 end;
-if (AllDevicesConnected)and(not autofocusing)and (not learningvcurve) then begin
+if (AllDevicesConnected)and(not autofocusing)and(not learningvcurve)and(not f_video.Running) then begin
   if (f_capture.FrameType.ItemIndex>=0)and(f_capture.FrameType.ItemIndex<=ord(High(TFrameType))) then
     ftype:=TFrameType(f_capture.FrameType.ItemIndex)
   else
