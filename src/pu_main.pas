@@ -5159,7 +5159,7 @@ end;
 
 procedure Tf_main.CameraVideoEncoderChange(Sender: TObject);
 begin
-  if f_video.PanelEncoder.Visible then
+  if f_video.PanelEncoder.Visible and (f_video.VideoEncoder.Items.Count>0) then
     f_video.VideoEncoder.ItemIndex:=camera.VideoEncoder;
 end;
 

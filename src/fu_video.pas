@@ -213,6 +213,8 @@ begin
  PanelEncoder.Visible:=camera.VideoEncoders.Count>0;
  if PanelEncoder.Visible then begin
    VideoEncoder.items.Assign(camera.VideoEncoders);
+   if VideoEncoder.Items.Count>0 then
+     VideoEncoder.ItemIndex:=camera.VideoEncoder;
  end;
  r:=camera.VideoGainRange;
  PanelGain.Visible:=(r.max>0);
