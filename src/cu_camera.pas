@@ -57,6 +57,7 @@ T_camera = class(TComponent)
     FonAbortExposure,FonCameraDisconnected: TNotifyEvent;
     FonVideoPreviewChange,FonVideoSizeChange,FonVideoRateChange: TNotifyEvent;
     FonFPSChange,FonVideoExposureChange : TNotifyEvent;
+    FonEncoderChange: TNotifyEvent;
     FImgStream: TMemoryStream;
     FVideoStream: TMemoryStream;
     FFilterNames: TStringList;
@@ -77,7 +78,7 @@ T_camera = class(TComponent)
     FVerticalFlip: boolean;
     FASCOMFlipImage: boolean;
     FAddFrames: boolean;
-    FVideoSizes, FVideoRates,FFNumberList:TStringList;
+    FVideoSizes, FVideoRates,FFNumberList,FVideoEncoder:TStringList;
     FTemperatureRampActive, FCancelTemperatureRamp: boolean;
     FIndiTransfert: TIndiTransfert;
     FIndiTransfertDir,FIndiTransfertPrefix: string;
@@ -163,6 +164,8 @@ T_camera = class(TComponent)
     function GetStreamingExposureRange:TNumRange; virtual; abstract;
     function GetStreamingExposure:double; virtual; abstract;
     procedure SetStreamingExposure(value:double); virtual; abstract;
+    function GetVideoEncoder: integer; virtual; abstract;
+    procedure SetVideoEncoder(value:integer); virtual; abstract;
   private
     lockvideoframe: boolean;
     TempFinal: Double;
@@ -272,6 +275,8 @@ T_camera = class(TComponent)
     property hasFnumber: boolean read FhasFnumber;
     property Fnumber: string read GetFnumber write SetFnumber;
     property UseCameraStartTime: boolean read FUseCameraStartTime write FUseCameraStartTime;
+    property VideoEncoders: TStringList read FVideoEncoder;
+    property VideoEncoder: Integer read GetVideoEncoder write SetVideoEncoder;
     property FixPixelRange: boolean read FFixPixelRange write FFixPixelRange;
     property onMsg: TNotifyMsg read FonMsg write FonMsg;
     property onDeviceMsg: TNotifyMsg read FonDeviceMsg write FonDeviceMsg;
@@ -296,6 +301,7 @@ T_camera = class(TComponent)
     property onVideoRateChange: TNotifyEvent read FonVideoRateChange write FonVideoRateChange;
     property onFPSChange: TNotifyEvent read FonFPSChange write FonFPSChange;
     property onVideoExposureChange: TNotifyEvent read FonVideoExposureChange write FonVideoExposureChange;
+    property onEncoderChange: TNotifyEvent read FonEncoderChange write FonEncoderChange;
 end;
 
 const CameraTimeout=60; // in seconds, must be enough to download image from any camers
@@ -329,6 +335,7 @@ begin
   FVideoSizes:=TStringList.Create;
   FVideoRates:=TStringList.Create;
   FFNumberList:=TStringList.Create;
+  FVideoEncoder:=TStringList.Create;
   FTemperatureRampActive:=false;
   FCancelTemperatureRamp:=false;
   FStackCount:=0;
@@ -366,6 +373,7 @@ begin
   FFNumberList.Free;
   FISOList.Free;
   FReadOutList.Free;
+  FVideoEncoder.Free;
   inherited Destroy;
 end;
 

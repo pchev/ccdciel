@@ -120,6 +120,8 @@ T_ascomrestcamera = class(T_camera)
    function GetStreamingExposureRange:TNumRange; override;
    function GetStreamingExposure:double; override;
    procedure SetStreamingExposure(value:double); override;
+   function GetVideoEncoder: integer; override;
+   procedure SetVideoEncoder(value:integer); override;
 
 public
    constructor Create(AOwner: TComponent);override;
@@ -1462,6 +1464,17 @@ procedure T_ascomrestcamera.GetStreamFrame(out x,y,width,height: integer);
 begin
  // todo
  x:=0; y:=0; width:=0; height:=0;
+end;
+
+function T_ascomrestcamera.GetVideoEncoder: integer;
+begin
+ result:=0;
+ // todo
+end;
+
+procedure T_ascomrestcamera.SetVideoEncoder(value:integer);
+begin
+ // todo
 end;
 
 function T_ascomrestcamera.GetImageFormat: string;

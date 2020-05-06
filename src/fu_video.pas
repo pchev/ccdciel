@@ -36,8 +36,11 @@ type
     BtnStartRec: TButton;
     BtnStopRec: TButton;
     BtnOptions: TButton;
+    VideoEncoder: TComboBox;
     Exprange: TComboBox;
+    Label10: TLabel;
     Label9: TLabel;
+    PanelEncoder: TPanel;
     VideoCaptureDir: TEdit;
     StreamExp: TFloatSpinEditEx;
     Label4: TLabel;
@@ -94,6 +97,7 @@ type
       Shift: TShiftState; X, Y: Integer);
     procedure PreviewChange(Sender: TObject);
     procedure StreamExpChange(Sender: TObject);
+    procedure VideoEncoderChange(Sender: TObject);
     procedure VideoSizeChange(Sender: TObject);
   private
     { private declarations }
@@ -205,6 +209,10 @@ begin
      StreamExp.MaxValue:=r.max;
      StreamExp.Value:=camera.StreamingExposure;
    end
+ end;
+ PanelEncoder.Visible:=camera.VideoEncoders.Count>0;
+ if PanelEncoder.Visible then begin
+   VideoEncoder.items.Assign(camera.VideoEncoders);
  end;
  r:=camera.VideoGainRange;
  PanelGain.Visible:=(r.max>0);
@@ -377,6 +385,11 @@ end;
 procedure Tf_video.StreamExpChange(Sender: TObject);
 begin
   camera.StreamingExposure:=StreamExp.Value;
+end;
+
+procedure Tf_video.VideoEncoderChange(Sender: TObject);
+begin
+  camera.VideoEncoder:=VideoEncoder.ItemIndex;
 end;
 
 procedure Tf_video.ExposureKeyUp(Sender: TObject; var Key: Word;

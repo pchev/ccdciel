@@ -139,6 +139,7 @@ private
    CaptureFormat: ISwitchVectorProperty;
    TransfertFormat: ISwitchVectorProperty;
    TransfertFits, TransfertNative: ISwitch;
+   StreamEncoder: ISwitchVectorProperty;
    FRAWformat: integer;
    FhasBlob,Fready,FWheelReady,Fconnected,UseMainSensor: boolean;
    Findiserver, Findiserverport, Findidevice, Findisensor, Findideviceport: string;
@@ -241,6 +242,8 @@ private
    function GetStreamingExposureRange:TNumRange; override;
    function GetStreamingExposure:double; override;
    procedure SetStreamingExposure(value:double); override;
+   function GetVideoEncoder: integer; override;
+   procedure SetVideoEncoder(value:integer); override;
 
  public
    constructor Create(AOwner: TComponent);override;
@@ -405,6 +408,7 @@ begin
     TransfertFormat:=nil;
     StreamExposure:=nil;
     Streamframe:=nil;
+    StreamEncoder:=nil;
     FhasBlob:=false;
     FhasVideo:=false;
     Fready:=false;
@@ -429,6 +433,7 @@ begin
     FReadOutList.Clear;
     FhasReadOut:=false;
     isASI:=false;
+    FVideoEncoder.Clear;
     if Assigned(FonStatusChange) then FonStatusChange(self);
     if Assigned(FonWheelStatusChange) then FonWheelStatusChange(self);
 end;
@@ -887,6 +892,13 @@ begin
      StreamframeHeight:=IUFindNumber(Streamframe,'HEIGHT');
      if (StreamframeX=nil)or(StreamframeY=nil)or(StreamframeWidth=nil)or(StreamframeHeight=nil) then Streamframe:=nil;
   end
+  else if (proptype=INDI_SWITCH)and(StreamEncoder=nil)and(propname='CCD_STREAM_ENCODER') then begin
+     StreamEncoder:=indiProp.getSwitch;
+     FVideoEncoder.Clear;
+     for i:=0 to StreamEncoder.nsp-1 do
+       FVideoEncoder.Add(StreamEncoder.sp[i].lbl);
+     if assigned(FonEncoderChange) then FonEncoderChange(self);
+  end
   else if (proptype=INDI_NUMBER)and(ImageAdjustments=nil)and((propname='CCD_GAIN')or(propname='CCD_CONTROLS')or(propname='Image Adjustments')) then begin
      ImageAdjustments:=indiProp.getNumber;
      IBrightness:=IUFindNumber(ImageAdjustments,'Brightness');
@@ -1113,6 +1125,9 @@ begin
   end
   else if svp=CCDVideoRates then begin
       if Assigned(FonVideoRateChange) then FonVideoRateChange(self);
+  end
+  else if svp=StreamEncoder then begin
+      if Assigned(FonEncoderChange) then FonEncoderChange(self);
   end
   else if svp=CCDWebsocket then begin
       if (CCDWebsocketON.s=ISS_ON) then
@@ -2372,10 +2387,33 @@ end;
 
 procedure T_indicamera.SetStreamingExposure(value:double);
 begin
- if StreamExposure<>nil then begin;
+ if StreamExposure<>nil then begin
    StreamExp.value:=value;
    indiclient.sendNewNumber(StreamExposure);
  end;
+end;
+
+function T_indicamera.GetVideoEncoder: integer;
+var i: integer;
+begin
+  result:=0;
+  if StreamEncoder<>nil then begin
+    for i:=0 to StreamEncoder.nsp-1 do begin
+     if StreamEncoder.sp[i].s = ISS_ON then begin
+       result:=i;
+       break;
+     end;
+    end;
+  end;
+end;
+
+procedure T_indicamera.SetVideoEncoder(value:integer);
+begin
+  if StreamEncoder<>nil then begin
+    IUResetSwitch(StreamEncoder);
+    StreamEncoder.sp[value].s:=ISS_ON;
+    indiclient.sendNewSwitch(StreamEncoder);
+  end;
 end;
 
 procedure T_indicamera.GetStreamFrame(out x,y,width,height: integer);

@@ -1,15 +1,15 @@
 object f_video: Tf_video
   Left = 0
-  Height = 554
+  Height = 577
   Top = 0
   Width = 190
   AutoSize = True
-  ClientHeight = 554
+  ClientHeight = 577
   ClientWidth = 190
   ParentFont = False
   TabOrder = 0
-  DesignLeft = -3
-  DesignTop = -3
+  DesignLeft = -4
+  DesignTop = -4
   object Title: TLabel
     Left = 0
     Height = 20
@@ -28,20 +28,20 @@ object f_video: Tf_video
   end
   object Panel1: TPanel
     Left = 0
-    Height = 512
+    Height = 554
     Top = 20
     Width = 190
     Align = alTop
     AutoSize = True
     BevelOuter = bvNone
-    ClientHeight = 512
+    ClientHeight = 554
     ClientWidth = 190
     ParentFont = False
     TabOrder = 0
     object PanelExposure2: TPanel
       Left = 0
       Height = 46
-      Top = 76
+      Top = 118
       Width = 190
       Align = alTop
       BevelOuter = bvNone
@@ -58,10 +58,10 @@ object f_video: Tf_video
         ParentFont = False
       end
       object StreamExp: TFloatSpinEditEx
-        Left = 79
+        Left = 81
         Height = 30
         Top = 6
-        Width = 103
+        Width = 101
         MaxLength = 0
         TabOrder = 0
         OnChange = StreamExpChange
@@ -77,7 +77,7 @@ object f_video: Tf_video
     object PanelExposure1: TPanel
       Left = 0
       Height = 46
-      Top = 30
+      Top = 72
       Width = 190
       Align = alTop
       BevelOuter = bvNone
@@ -152,7 +152,7 @@ object f_video: Tf_video
     object PanelGain: TPanel
       Left = 0
       Height = 46
-      Top = 122
+      Top = 164
       Width = 190
       Align = alTop
       BevelOuter = bvNone
@@ -184,7 +184,7 @@ object f_video: Tf_video
     object PanelGamma: TPanel
       Left = 0
       Height = 46
-      Top = 168
+      Top = 210
       Width = 190
       Align = alTop
       BevelOuter = bvNone
@@ -216,7 +216,7 @@ object f_video: Tf_video
     object PanelBrightness: TPanel
       Left = 0
       Height = 46
-      Top = 214
+      Top = 256
       Width = 190
       Align = alTop
       BevelOuter = bvNone
@@ -248,7 +248,7 @@ object f_video: Tf_video
     object PanelOptions: TPanel
       Left = 0
       Height = 59
-      Top = 288
+      Top = 330
       Width = 190
       Align = alTop
       BevelOuter = bvNone
@@ -302,7 +302,7 @@ object f_video: Tf_video
     object PanelRecord: TPanel
       Left = 0
       Height = 165
-      Top = 347
+      Top = 389
       Width = 190
       Align = alTop
       BevelOuter = bvNone
@@ -427,7 +427,7 @@ object f_video: Tf_video
     object PanelMore: TPanel
       Left = 0
       Height = 28
-      Top = 260
+      Top = 302
       Width = 190
       Align = alTop
       BevelOuter = bvNone
@@ -443,6 +443,36 @@ object f_video: Tf_video
         Caption = 'More settings'
         OnClick = BtnOptionsClick
         ParentFont = False
+        TabOrder = 0
+      end
+    end
+    object PanelEncoder: TPanel
+      Left = 0
+      Height = 42
+      Top = 30
+      Width = 190
+      Align = alTop
+      BevelOuter = bvNone
+      ClientHeight = 42
+      ClientWidth = 190
+      TabOrder = 9
+      object Label10: TLabel
+        Left = 8
+        Height = 17
+        Top = 10
+        Width = 51
+        Caption = 'Encoder'
+        ParentColor = False
+      end
+      object VideoEncoder: TComboBox
+        Left = 81
+        Height = 28
+        Top = 6
+        Width = 101
+        Constraints.MaxHeight = 28
+        ItemHeight = 0
+        OnChange = VideoEncoderChange
+        Style = csDropDownList
         TabOrder = 0
       end
     end
