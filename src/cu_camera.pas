@@ -95,7 +95,7 @@ T_camera = class(TComponent)
     procedure NewImage;
     procedure TryNextExposure(Data: PtrInt);
     procedure WriteHeaders;
-    procedure NewVideoFrame;
+    procedure NewVideoFrame(rawframe: boolean);
     procedure WriteVideoHeader(width,height,naxis,bitpix: integer);
     function GetBinX:integer; virtual; abstract;
     function GetBinY:integer; virtual; abstract;
@@ -786,18 +786,21 @@ begin
   Ffits.Header.Add('END','','');
 end;
 
-procedure T_camera.NewVideoFrame;
+procedure T_camera.NewVideoFrame(rawframe: boolean);
 var x,y,w,h: integer;
 begin
   if lockvideoframe then exit;
   lockvideoframe:=true;
   try
-  GetStreamFrame(x,y,w,h);
-  FVideoStream.Position:=0;
-  if Color then begin
-    WriteVideoHeader(w,h,3,8);
-  end else begin
-    WriteVideoHeader(w,h,2,8);
+  // set header for raw frame, it is set in stream from mjpeg
+  if rawframe then begin
+    GetStreamFrame(x,y,w,h);
+    FVideoStream.Position:=0;
+    if Color then begin
+      WriteVideoHeader(w,h,3,8);
+    end else begin
+      WriteVideoHeader(w,h,2,8);
+    end;
   end;
   FFits.VideoStream:=FVideoStream;
   if Assigned(FonVideoFrame) then FonVideoFrame(self);

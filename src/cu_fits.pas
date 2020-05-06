@@ -1118,8 +1118,8 @@ begin
 end;
 
 procedure TFits.SetVideoStream(value:TMemoryStream);
+var buf: array[0..80] of char;
 begin
-// other header previously set by caller
 FImageValid:=false;
 cur_axis:=1;
 setlength(imar64,0,0,0);
@@ -1132,7 +1132,18 @@ FStream.Clear;
 FStream.Position:=0;
 value.Position:=0;
 FStream.CopyFrom(value,value.Size);
-Fhdr_end:=0;
+FStream.Position:=0;
+FStream.Read(buf,80);
+FStream.Position:=0;
+if copy(buf,1,6)='SIMPLE' then begin
+  // read header from stream
+  Fhdr_end:=FHeader.ReadHeader(FStream);
+  GetFitsInfo;
+end
+else begin
+  // header already set by caller, stream contain only image data
+  Fhdr_end:=0;
+end;
 ReadFitsImage;
 end;
 

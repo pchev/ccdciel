@@ -1280,18 +1280,30 @@ begin
      if assigned(FonExposureProgress) then FonExposureProgress(-11);
      NewImage;
    end
-   else if pos('.stream',ft)>0 then begin // video stream
-     if debug_msg then msg('this is a video stream');
+   else if (ft='.stream_jpg') then begin // mjpeg video stream
+     if debug_msg then msg('this is a mjpeg video stream');
      if lockvideostream then exit; // skip extra frames if we cannot follow the rate
      lockvideostream:=true;
-     if debug_msg then msg('process this frame');
      try
-       if debug_msg then msg('copy frame');
+       if debug_msg then msg('decode jpeg');
+       PictureToFits(data,'jpg',FVideoStream,false,GetPixelSizeX,GetPixelSizeY,GetBinX,GetBinY);
+       if debug_msg then msg('NewVideoFrame');
+       NewVideoFrame(false);
+     finally
+       lockvideostream:=false;
+     end;
+   end
+   else if (ft='.stream') then begin // raw video stream
+     if debug_msg then msg('this is a raw video stream');
+     if lockvideostream then exit; // skip extra frames if we cannot follow the rate
+     lockvideostream:=true;
+     try
+       if debug_msg then msg('process this frame');
        FVideoStream.Clear;
        FVideoStream.Position:=0;
        FVideoStream.CopyFrom(data,data.Size);
        if debug_msg then msg('NewVideoFrame');
-       NewVideoFrame;
+       NewVideoFrame(true);
      finally
        lockvideostream:=false;
      end;
