@@ -1657,23 +1657,46 @@ begin
 end;
 
 procedure T_indicamera.ResetFrame;
+var tf: ISwitch;
+    ResetNative:boolean;
 begin
-  if UseMainSensor then begin
-     // Must not set the binning to 1x1 as CCD_FRAME_RESET do
-     if CCDframe<>nil then begin
-       CCDframeX.value:=CCDframeX.min;
-       CCDframeY.value:=CCDframeY.min;
-       CCDframeWidth.value:=FCameraXSize;
-       CCDframeHeight.value:=FCameraYSize;
-       indiclient.sendNewNumber(CCDframe);
-       stX:=round(CCDframeX.min);
-       stY:=round(CCDframeY.min);
-       stWidth:=FCameraXSize;
-       stHeight:=FCameraYSize;
-       indiclient.WaitBusy(CCDframe);
-       if assigned(FonFrameChange) then FonFrameChange(self);
-    end;
-  end;
+ if UseMainSensor then begin
+   // Must not set the binning to 1x1 as CCD_FRAME_RESET do
+   if CCDframe<>nil then begin
+     ResetNative:=false;
+     if TransfertFormat<>nil then begin
+       // DSLR do not support to reset frame when in native transfer mode
+       // but reset is need after liveview
+       tf:=IUFindOnSwitch(TransfertFormat);
+       if tf=TransfertNative then begin
+         // reset temporarily to fits transfer
+         ResetNative:=true;
+         IUResetSwitch(TransfertFormat);
+         TransfertFits.s:=ISS_ON;
+         indiclient.sendNewSwitch(TransfertFormat);
+         indiclient.WaitBusy(TransfertFormat);
+       end;
+     end;
+     CCDframeX.value:=CCDframeX.min;
+     CCDframeY.value:=CCDframeY.min;
+     CCDframeWidth.value:=FCameraXSize;
+     CCDframeHeight.value:=FCameraYSize;
+     indiclient.sendNewNumber(CCDframe);
+     stX:=round(CCDframeX.min);
+     stY:=round(CCDframeY.min);
+     stWidth:=FCameraXSize;
+     stHeight:=FCameraYSize;
+     indiclient.WaitBusy(CCDframe);
+     if ResetNative then begin
+       // reset to native transfer
+       IUResetSwitch(TransfertFormat);
+       TransfertNative.s:=ISS_ON;
+       indiclient.sendNewSwitch(TransfertFormat);
+       indiclient.WaitBusy(TransfertFormat);
+     end;
+     if assigned(FonFrameChange) then FonFrameChange(self);
+   end;
+ end;
 end;
 
 procedure T_indicamera.CfaInfo(out OffsetX, OffsetY: integer; out CType: string);
@@ -2081,6 +2104,8 @@ begin
   IUResetSwitch(CCDVideoStream);
   VideoStreamOff.s:=ISS_ON;
   indiclient.sendNewSwitch(CCDVideoStream);
+  // reset DSLR to full frame after liveview
+  if TransfertFormat<>nil then ResetFrame;
  end;
 end;
 
@@ -2149,6 +2174,8 @@ begin
     IUResetSwitch(RecordStream);
     RecordStreamOff.s:=ISS_ON;
     indiclient.sendNewSwitch(RecordStream);
+    // reset DSLR to full frame after liveview
+    if TransfertFormat<>nil then ResetFrame;
   end;
 end;
 
