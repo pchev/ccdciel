@@ -296,6 +296,7 @@ object f_visu: Tf_visu
           Caption = '2:1'
           Color = clDefault
           GroupIndex = 102
+          Layout = blGlyphBottom
           OnClick = BtnZoomClick
           ParentFont = False
         end
@@ -310,6 +311,7 @@ object f_visu: Tf_visu
           Caption = '1:1'
           Color = clDefault
           GroupIndex = 102
+          Layout = blGlyphBottom
           OnClick = BtnZoomClick
           ParentFont = False
         end
@@ -324,6 +326,7 @@ object f_visu: Tf_visu
           Caption = '1:2'
           Color = clDefault
           GroupIndex = 102
+          Layout = blGlyphBottom
           OnClick = BtnZoomClick
           ParentFont = False
         end
