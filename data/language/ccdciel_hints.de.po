@@ -6,15 +6,15 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ccdciel\n"
 "Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
-"POT-Creation-Date: 2020-04-25 17:04+0000\n"
+"POT-Creation-Date: 2020-05-08 19:45+0000\n"
 "PO-Revision-Date: 2020-04-25 17:10+0000\n"
 "Last-Translator: Thomas <email@starhopper.de>\n"
 "Language-Team: German <de@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2020-04-25 18:01+0000\n"
-"X-Generator: Launchpad (build 486bbbd6cb608f8eb468ed0d08689a349dfabe49)\n"
+"X-Launchpad-Export-Date: 2020-05-08 20:12+0000\n"
+"X-Generator: Launchpad (build fbdff7602bd10fb883bf7e2ddcc7fd5a16f60398)\n"
 
 #: u_hints.rsactivateback
 msgid "Activate backlash compensation.%sLet this disabled if your focuser driver include backlash compensation."
@@ -176,10 +176,6 @@ msgstr "Mit der Maus ziehen um die Reihenfolge zu ändern"
 msgid "Edit the current sequence"
 msgstr "Bearbeiten der aktuellen Sequenz"
 
-#: u_hints.rsfixthevisual
-msgid "Fix the visualisation threshold to the image data range, 100% of the histogram."
-msgstr "Visualisierungsschwellwert auf den Bilddatenbereich fixieren, 100% desHistogramms"
-
 #: u_hints.rsgammaoftheim
 msgid "Gamma of the image display"
 msgstr "Gamma der Bildanzeige"
@@ -219,6 +215,10 @@ msgstr "Wenn diese Option aktiviert ist, wird kein Bestätigungsdialog angezeigt
 #: u_hints.rsiftheimageis
 msgid "If the image is now focused, click this button to get the current focuser position"
 msgstr "Wenn das Bild jetzt fokussiert ist, klicken Sie auf diese Schaltfläche,um die aktuelle Position des Fokussierers abzurufen"
+
+#: u_hints.rsimageluminos
+msgid "Image luminosity"
+msgstr ""
 
 #: u_hints.rsincrementste
 msgid "Increment step for the inward or outward movement"
@@ -348,10 +348,6 @@ msgstr "Zeige Helligkeits- und Dunkelbeschneidungen"
 #: u_hints.rsshowlastcapt
 msgid "Show captured image"
 msgstr "Aufgenommenes Bild anzeigen"
-
-#: u_hints.rsshowofthehis
-msgid "Show %s of the histogram"
-msgstr "Zeige %s des Histgramms"
 
 #: u_hints.rsshowtheoptio
 msgid "Show the option to stack the preview frame in real time.%sThis feature is normally use for demonstration in public event.%sYou can let this option disabled to not risk an unwanted use during your imaging session."

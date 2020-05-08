@@ -2,15 +2,15 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ccdceil\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-04-25 17:04+0000\n"
-"PO-Revision-Date: 2020-04-09 03:56+0000\n"
+"POT-Creation-Date: 2020-05-08 19:45+0000\n"
+"PO-Revision-Date: 2020-05-05 17:07+0000\n"
 "Last-Translator: Stanislav Holub <Unknown>\n"
 "Language-Team: Czech <cz@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2020-04-25 18:01+0000\n"
-"X-Generator: Launchpad (build 486bbbd6cb608f8eb468ed0d08689a349dfabe49)\n"
+"X-Launchpad-Export-Date: 2020-05-08 20:12+0000\n"
+"X-Generator: Launchpad (build fbdff7602bd10fb883bf7e2ddcc7fd5a16f60398)\n"
 "Language: cs\n"
 
 #: u_hints.rsactivateback
@@ -159,7 +159,7 @@ msgstr "Před zahájením zobrazování nepohybovat dalekohledem."
 
 #: u_hints.rsdonotsetthis
 msgid "Do not set this option if you don't know exactly what you do and without careful testing"
-msgstr ""
+msgstr "Nenastavujte tuto možnost, pokud přesně nevíte, co děláte, a nebo bez pečlivého testování"
 
 #: u_hints.rsdontwaitfort
 msgid "Process the other targets in the list instead of waiting for the start condition(s) to be met. To be used with option \"Repeat the whole list\""
@@ -172,10 +172,6 @@ msgstr "Přetažením změníte pořadí"
 #: u_hints.rseditthecurre
 msgid "Edit the current sequence"
 msgstr "Upravit aktuální úkol"
-
-#: u_hints.rsfixthevisual
-msgid "Fix the visualisation threshold to the image data range, 100% of the histogram."
-msgstr "Prahová hodnota vizualizace na snímku opravte datovou oblast, 100% histogramu."
 
 #: u_hints.rsgammaoftheim
 msgid "Gamma of the image display"
@@ -216,6 +212,10 @@ msgstr "Pokud je tato možnost povolena, nezobrazí se žádné potvrzovací dia
 #: u_hints.rsiftheimageis
 msgid "If the image is now focused, click this button to get the current focuser position"
 msgstr "Pokud je teď snímek zaostřen, kliknutím na toto tlačítko získáte aktuální polohu zaostřovače"
+
+#: u_hints.rsimageluminos
+msgid "Image luminosity"
+msgstr ""
 
 #: u_hints.rsincrementste
 msgid "Increment step for the inward or outward movement"
@@ -344,10 +344,6 @@ msgstr "Zobrazit oříznutí světel a stínů"
 #: u_hints.rsshowlastcapt
 msgid "Show captured image"
 msgstr "Zobrazit zachycený snímek"
-
-#: u_hints.rsshowofthehis
-msgid "Show %s of the histogram"
-msgstr "Zobrazí %s histogram"
 
 #: u_hints.rsshowtheoptio
 msgid "Show the option to stack the preview frame in real time.%sThis feature is normally use for demonstration in public event.%sYou can let this option disabled to not risk an unwanted use during your imaging session."
@@ -572,17 +568,17 @@ msgstr "Počkat do doby, než se seznam začne zpracovávat."
 
 #: u_hints.rszoomtoadjust
 msgid "Zoom to adjust in window"
-msgstr "Přiblížení pro úpravu v okně"
+msgstr "Přizpůsobit velikosti okna"
 
 #: u_hints.rszoomtohalfsi
 msgid "Zoom to half size"
-msgstr "Přiblížení na poloviční velikost"
+msgstr "Měřítko 50%"
 
 #: u_hints.rszoomtoorigin
 msgid "Zoom to original scale"
-msgstr "Původní měřítko"
+msgstr "Měřítko 100%"
 
 #: u_hints.rszoomtwotime
 msgid "Zoom two time"
-msgstr "Zoom 2x"
+msgstr "Měřítko 200%"
 

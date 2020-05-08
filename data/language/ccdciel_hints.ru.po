@@ -6,15 +6,15 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ccdciel\n"
 "Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
-"POT-Creation-Date: 2020-04-25 17:04+0000\n"
-"PO-Revision-Date: 2020-04-13 20:17+0000\n"
+"POT-Creation-Date: 2020-05-08 19:45+0000\n"
+"PO-Revision-Date: 2020-05-03 08:55+0000\n"
 "Last-Translator: Sergey Tarantsov <tsn-ast@yandex.ru>\n"
 "Language-Team: Russian <ru@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2020-04-25 18:01+0000\n"
-"X-Generator: Launchpad (build 486bbbd6cb608f8eb468ed0d08689a349dfabe49)\n"
+"X-Launchpad-Export-Date: 2020-05-08 20:12+0000\n"
+"X-Generator: Launchpad (build fbdff7602bd10fb883bf7e2ddcc7fd5a16f60398)\n"
 
 #: u_hints.rsactivateback
 msgid "Activate backlash compensation.%sLet this disabled if your focuser driver include backlash compensation."
@@ -162,7 +162,7 @@ msgstr "Не перемещать телескоп до начала съёмк�
 
 #: u_hints.rsdonotsetthis
 msgid "Do not set this option if you don't know exactly what you do and without careful testing"
-msgstr ""
+msgstr "Не устанавливайте эту опцию, если вы точно не знаете, что делаете, и без тщательного тестирования"
 
 #: u_hints.rsdontwaitfort
 msgid "Process the other targets in the list instead of waiting for the start condition(s) to be met. To be used with option \"Repeat the whole list\""
@@ -175,10 +175,6 @@ msgstr "Перетащите, чтобы изменить порядок"
 #: u_hints.rseditthecurre
 msgid "Edit the current sequence"
 msgstr "Изменить текущуее задание"
-
-#: u_hints.rsfixthevisual
-msgid "Fix the visualisation threshold to the image data range, 100% of the histogram."
-msgstr "Показать весь диапазон, 100% гистограммы."
 
 #: u_hints.rsgammaoftheim
 msgid "Gamma of the image display"
@@ -219,6 +215,10 @@ msgstr "Если флажок установлен, диалоговое окн�
 #: u_hints.rsiftheimageis
 msgid "If the image is now focused, click this button to get the current focuser position"
 msgstr "Если изображение сфокусировано, нажмите эту кнопку, чтобы получить текущую позицию фокусера"
+
+#: u_hints.rsimageluminos
+msgid "Image luminosity"
+msgstr ""
 
 #: u_hints.rsincrementste
 msgid "Increment step for the inward or outward movement"
@@ -347,10 +347,6 @@ msgstr "Клиппинг теней и светов"
 #: u_hints.rsshowlastcapt
 msgid "Show captured image"
 msgstr "Показать захваченное изображение"
-
-#: u_hints.rsshowofthehis
-msgid "Show %s of the histogram"
-msgstr "Показать %s гистограммы"
 
 #: u_hints.rsshowtheoptio
 msgid "Show the option to stack the preview frame in real time.%sThis feature is normally use for demonstration in public event.%sYou can let this option disabled to not risk an unwanted use during your imaging session."
