@@ -57,7 +57,7 @@ private
    indiws: TIndiWebSocketClientConnection;
    InitTimer: TTimer;
    ConnectTimer: TTimer;
-   GetCCDSizeTimer: TTimer;
+   ConfigTimer: TTimer;
    CCDDevice: Basedevice;
    CCDport: ITextVectorProperty;
    CCDexpose: INumberVectorProperty;
@@ -155,7 +155,7 @@ private
    procedure CreateIndiClient;
    procedure InitTimerTimer(Sender: TObject);
    procedure ConnectTimerTimer(Sender: TObject);
-   procedure GetCCDSizeTimerTimer(Sender: TObject);
+   procedure ConfigTimerTimer(Sender: TObject);
    procedure ClearStatus;
    procedure CheckStatus;
    procedure NewBlobProperty(indiProp: IndiProperty);
@@ -331,10 +331,10 @@ begin
  ExposureTimer.Enabled:=false;
  ExposureTimer.Interval:=1000;
  ExposureTimer.OnTimer:=@ExposureTimerTimer;
- GetCCDSizeTimer:=TTimer.Create(nil);
- GetCCDSizeTimer.Enabled:=false;
- GetCCDSizeTimer.Interval:=100;
- GetCCDSizeTimer.OnTimer:=@GetCCDSizeTimerTimer;
+ ConfigTimer:=TTimer.Create(nil);
+ ConfigTimer.Enabled:=false;
+ ConfigTimer.Interval:=100;
+ ConfigTimer.OnTimer:=@ConfigTimerTimer;
  lockvideostream:=false;
  FVideoMsg:=false;
 end;
@@ -344,13 +344,13 @@ begin
  InitTimer.Enabled:=false;
  ConnectTimer.Enabled:=false;
  ExposureTimer.Enabled:=false;
- GetCCDSizeTimer.Enabled:=false;
+ ConfigTimer.Enabled:=false;
  if indiclient<>nil then indiclient.onServerDisconnected:=nil;
  FSensorList.Free;
  FreeAndNil(ExposureTimer);
  FreeAndNil(InitTimer);
  FreeAndNil(ConnectTimer);
- FreeAndNil(GetCCDSizeTimer);
+ FreeAndNil(ConfigTimer);
  inherited Destroy;
 end;
 
@@ -423,8 +423,8 @@ begin
     FRAWformat:=-1;
     FCameraXSize:=-1;
     FCameraYSize:=-1;
-    stX:=-1;
-    stY:=-1;
+    stX:=0;
+    stY:=0;
     stWidth:=-1;
     stHeight:=-1;
     FSensorList.Clear;
@@ -449,9 +449,9 @@ begin
        (CCDframe<>nil) and
        (FCameraXSize<0) and
        (FCameraYSize<0) and
-       (not GetCCDSizeTimer.Enabled)
+       (not ConfigTimer.Enabled)
     then begin
-       GetCCDSizeTimer.Enabled:=true;
+       ConfigTimer.Enabled:=true;
        UseMainSensor:=(Findisensor<>'CCD2');
     end;
     if Fconnected and
@@ -542,30 +542,22 @@ begin
    ConnectTimer.Enabled:=True;
 end;
 
-procedure T_indicamera.GetCCDSizeTimerTimer(Sender: TObject);
-var xr,yr,widthr,heightr: TNumRange;
+procedure T_indicamera.ConfigTimerTimer(Sender: TObject);
 begin
- GetCCDSizeTimer.Enabled:=false;
+ ConfigTimer.Enabled:=false;
  FCameraXSize:=0;
  FCameraYSize:=0;
- if UseMainSensor then begin
-   GetFrameRange(xr,yr,widthr,heightr);
-   FCameraXSize:=round(widthr.max);
-   FCameraYSize:=round(heightr.max);
-   stWidth:=-1;
-   GetFrame(stX,stY,stWidth,stHeight);
- end;
  if (not Fready) then begin
     Fready:=true;
     if FAutoloadConfig then begin
       LoadConfig;
     end;
-    if Assigned(FonStatusChange) then FonStatusChange(self);
  end;
 end;
 
 procedure T_indicamera.ConnectTimerTimer(Sender: TObject);
 var i: integer;
+    xr,yr,widthr,heightr: TNumRange;
 begin
  ConnectTimer.Enabled:=False;
  if ((not FhasBlob) or (CCDport=nil)) and (not Fready) and InitTimer.Enabled then begin
@@ -587,6 +579,13 @@ begin
  if Fready and (FStatus<>devConnected) then begin
    if (CCDWebsocket<>nil)and(CCDWebsocketON.s=ISS_ON) then
       ConnectWs;
+   if UseMainSensor then begin
+     GetFrameRange(xr,yr,widthr,heightr);
+     FCameraXSize:=round(widthr.max);
+     FCameraYSize:=round(heightr.max);
+     stWidth:=-1;
+     GetFrame(stX,stY,stWidth,stHeight);
+   end;
    FStatus := devConnected;
    if Assigned(FonStatusChange) then FonStatusChange(self);
  end;
@@ -1005,6 +1004,13 @@ begin
       stHeight := round(CCDframeHeight.value);
       if Assigned(FonFrameChange) then FonFrameChange(Self);
     end;
+  end
+  else if nvp=CCDinfo then begin
+     stWidth:=max(stWidth,round(CCDmaxx.Value));
+     stHeight:=max(stHeight,round(CCDmaxy.Value));
+     FCameraXSize:=max(FCameraXSize,stWidth);
+     FCameraYSize:=max(FCameraYSize,stHeight);
+     if Assigned(FonFrameChange) then FonFrameChange(Self);
   end
   else if nvp=WheelSlot then begin
      if Assigned(FonFilterChange) then FonFilterChange(Slot.value);
@@ -2085,6 +2091,7 @@ begin
     IUResetSwitch(configprop);
     configload.s:=ISS_ON;
     indiclient.sendNewSwitch(configprop);
+    indiclient.WaitBusy(configprop);
   end;
 end;
 
