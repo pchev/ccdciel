@@ -4610,3 +4610,11 @@ msgstr ""
 msgid "images"
 msgstr ""
 
+#: u_translation:rscoolthecamer
+msgid "Cool the camera"
+msgstr ""
+
+#: u_translation:rsstartoptions
+msgid "Start options"
+msgstr ""
+
