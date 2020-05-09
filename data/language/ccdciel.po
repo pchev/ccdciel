@@ -3155,7 +3155,7 @@ msgid "Light OFF"
 msgstr ""
 
 #: u_translation:rsresolveandpl
-msgid "Resolve and plot DSO"
+msgid "Resolve and annotate DSO"
 msgstr ""
 
 #: u_translation:rssaveas
@@ -3963,7 +3963,7 @@ msgid "Verbose device log"
 msgstr ""
 
 #: u_translation:rsresolveandpl2
-msgid "Resolve and plot Hyperleda"
+msgid "Resolve and annotate galaxies (Hyperleda)"
 msgstr ""
 
 #: u_translation:rspauseguiding

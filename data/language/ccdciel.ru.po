@@ -6,14 +6,14 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ccdciel\n"
 "Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
-"POT-Creation-Date: 2020-05-09 12:45+0000\n"
+"POT-Creation-Date: 2020-05-09 13:30+0000\n"
 "PO-Revision-Date: 2020-05-03 08:56+0000\n"
 "Last-Translator: Sergey Tarantsov <tsn-ast@yandex.ru>\n"
 "Language-Team: Russian <ru@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2020-05-09 12:52+0000\n"
+"X-Launchpad-Export-Date: 2020-05-09 13:36+0000\n"
 "X-Generator: Launchpad (build fbdff7602bd10fb883bf7e2ddcc7fd5a16f60398)\n"
 
 #: u_translation.rs32bitdriver
@@ -2985,12 +2985,12 @@ msgid "Resolve"
 msgstr "Распознать"
 
 #: u_translation.rsresolveandpl
-msgid "Resolve and plot DSO"
-msgstr "Распознать и наложить DSO"
+msgid "Resolve and annotate DSO"
+msgstr ""
 
 #: u_translation.rsresolveandpl2
-msgid "Resolve and plot Hyperleda"
-msgstr "Распознать и наложить Hyperleda"
+msgid "Resolve and annotate galaxies (Hyperleda)"
+msgstr ""
 
 #: u_translation.rsresolveandro
 msgid "Resolve and Rotate"

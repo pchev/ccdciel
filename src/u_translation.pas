@@ -886,7 +886,7 @@ resourcestring
   rsUseExternalC = 'Use external command to light the panel on/off';
   rsLightON = 'Light ON';
   rsLightOFF = 'Light OFF';
-  rsResolveAndPl = 'Resolve and plot DSO';
+  rsResolveAndPl = 'Resolve and annotate DSO';
   rsSaveAs = 'Save as...';
   rsRemoveObject = 'Remove object';
   rsCannotComput = 'Cannot compute rise or set time.';
@@ -1090,7 +1090,7 @@ resourcestring
   rsImportCdCObs = 'Import CdC observing list';
   rsShowHints = 'Show hints';
   rsVerboseDevic = 'Verbose device log';
-  rsResolveAndPl2 = 'Resolve and plot Hyperleda';
+  rsResolveAndPl2 = 'Resolve and annotate galaxies (Hyperleda)';
   rsPauseGuiding = 'Pause guiding during autofocus';
   rsGoto = 'Goto';
   rsRetrievePosi = 'Retrieve position from deepsky database';
