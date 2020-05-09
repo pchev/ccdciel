@@ -991,8 +991,6 @@ begin
  // check mount park
  if mount.Park then begin
     msg(rsTheTelescope, 1);
-    StopSequence;
-    exit;
  end;
  if not StartingSequence then exit;
  if Targets.CheckDoneCount then begin
@@ -1030,20 +1028,6 @@ begin
        msg(Format(rsCameraNotCoo, [FormatFloat(f1, ccdtemp)]),1);
        ccdtemp:=TempCelsius(TemperatureScale,ccdtemp);
        camera.Temperature:=ccdtemp;
-    end;
- end;
- if not StartingSequence then exit;
- // Check dome open and slaving
- if (not isCalibrationSequence)and(dome.Status=devConnected) and
-   ((not dome.Shutter)or(dome.hasSlaving and(not dome.Slave)))
-   then begin
-    buf:='Dome is: ';
-    if not dome.Shutter then buf:=buf+'closed, ';
-    if dome.hasSlaving and(not dome.Slave) then buf:=buf+'not slaved ';
-    f_pause.Caption:='Dome is not ready';
-    f_pause.Text:=buf;
-    if not f_pause.Wait then begin
-      StopSequence;
     end;
  end;
  if not StartingSequence then exit;

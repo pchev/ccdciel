@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CONFIG>
+  <Package Version="4">
+    <Name Value="CCDCielcomponents"/>
+    <Type Value="RunAndDesignTime"/>
+    <AddToProjectUsesSection Value="True"/>
+    <CompilerOptions>
+      <Version Value="11"/>
+      <SearchPaths>
+        <UnitOutputDirectory Value="lib/$(TargetCPU)-$(TargetOS)-$(LCLWidgetType)"/>
+      </SearchPaths>
+      <Parsing>
+        <SyntaxOptions>
+          <UseAnsiStrings Value="False"/>
+        </SyntaxOptions>
+      </Parsing>
+    </CompilerOptions>
+    <Description Value="Requires packages for Cartes du Ciel"/>
+    <RequiredPkgs Count="7">
+      <Item1>
+        <PackageName Value="BGRABitmapPack_nogl"/>
+        <DefaultFilename Value="bgrabitmap/bgrabitmappack_nogl.lpk"/>
+      </Item1>
+      <Item2>
+        <PackageName Value="enhedit"/>
+        <DefaultFilename Value="enhedits/enhedit.lpk"/>
+      </Item2>
+      <Item3>
+        <PackageName Value="indiclient"/>
+        <DefaultFilename Value="indiclient/indiclient.lpk"/>
+      </Item3>
+      <Item4>
+        <PackageName Value="synapse"/>
+        <DefaultFilename Value="synapse/source/lib/synapse.lpk"/>
+      </Item4>
+      <Item5>
+        <PackageName Value="vosamp"/>
+        <DefaultFilename Value="vosamp/vosamp.lpk"/>
+      </Item5>
+      <Item6>
+        <PackageName Value="XmlParser"/>
+        <DefaultFilename Value="xmlparser/xmlparser.lpk"/>
+      </Item6>
+      <Item7>
+        <PackageName Value="FCL"/>
+        <MinVersion Major="1" Valid="True"/>
+      </Item7>
+    </RequiredPkgs>
+    <UsageOptions>
+      <UnitPath Value="$(PkgOutDir)"/>
+    </UsageOptions>
+    <PublishOptions>
+      <Version Value="2"/>
+    </PublishOptions>
+    <CustomOptions Items="ExternHelp" Version="2">
+      <_ExternHelp Items="Count"/>
+    </CustomOptions>
+  </Package>
+</CONFIG>

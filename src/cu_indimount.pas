@@ -181,7 +181,6 @@ begin
  ReadyTimer.Enabled:=false;
  ReadyTimer.Interval:=2000;
  ReadyTimer.OnTimer:=@ReadyTimerTimer;
- CreateIndiClient;
 end;
 
 destructor  T_indimount.Destroy;
@@ -189,8 +188,7 @@ begin
  InitTimer.Enabled:=false;
  ConnectTimer.Enabled:=false;
  ReadyTimer.Enabled:=false;
- indiclient.onServerDisconnected:=nil;
- indiclient.Free;
+ if indiclient<>nil then indiclient.onServerDisconnected:=nil;
  FreeAndNil(InitTimer);
  FreeAndNil(ConnectTimer);
  FreeAndNil(ReadyTimer);
@@ -251,7 +249,7 @@ end;
 
 Procedure T_indimount.Connect(cp1: string; cp2:string=''; cp3:string=''; cp4:string=''; cp5:string=''; cp6:string='');
 begin
-if (indiclient=nil)or(indiclient.Terminated) then CreateIndiClient;
+CreateIndiClient;
 if not indiclient.Connected then begin
   Findiserver:=cp1;
   Findiserverport:=cp2;
@@ -319,7 +317,6 @@ begin
   FStatus := devDisconnected;
   if Assigned(FonStatusChange) then FonStatusChange(self);
   msg(rsServer+' '+rsDisconnected3,0);
-  CreateIndiClient;
 end;
 
 procedure T_indimount.NewDevice(dp: Basedevice);
@@ -541,8 +538,8 @@ if parkprop<>nil then begin
     swunpark.s:=ISS_ON;
  end;
  indiclient.sendNewSwitch(parkprop);
- indiclient.WaitBusy(parkprop,120000);
- indiclient.WaitBusy(coord_prop,120000);
+ indiclient.WaitBusy(parkprop,120000,2000);
+ indiclient.WaitBusy(coord_prop,120000,2000);
 end;
 end;
 
@@ -751,7 +748,7 @@ end;
 procedure T_indimount.SetTimeout(num:integer);
 begin
  FTimeOut:=num;
- indiclient.Timeout:=FTimeOut;
+ if indiclient<>nil then indiclient.Timeout:=FTimeOut;
 end;
 
 procedure T_indimount.LoadConfig;

@@ -6,15 +6,15 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ccdciel\n"
 "Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
-"POT-Creation-Date: 2020-04-08 15:57+0000\n"
-"PO-Revision-Date: 2020-04-07 13:20+0000\n"
-"Last-Translator: Patrick Chevalley <Unknown>\n"
+"POT-Creation-Date: 2020-05-08 19:45+0000\n"
+"PO-Revision-Date: 2020-05-02 16:01+0000\n"
+"Last-Translator: Jean-Marc <Unknown>\n"
 "Language-Team: French <fr@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2020-04-09 06:16+0000\n"
-"X-Generator: Launchpad (build 2e26c9bbd21cdca248baaea29aeffb920afcc32a)\n"
+"X-Launchpad-Export-Date: 2020-05-08 20:12+0000\n"
+"X-Generator: Launchpad (build fbdff7602bd10fb883bf7e2ddcc7fd5a16f60398)\n"
 
 #: u_translation.rs32bitdriver
 msgid "This driver work only in 32bit, please install the 32bit version of CCDciel."
@@ -921,6 +921,10 @@ msgstr "Image noire"
 msgid "Dark%snight"
 msgstr "Nuit%snoire"
 
+#: u_translation.rsdateobsfromc
+msgid "DATE-OBS from camera driver"
+msgstr "DATE-OBS depuis le pilote de la caméra"
+
 #: u_translation.rsdateutsequen
 msgid "Date (UT) / Sequence"
 msgstr "Date (TU) / Séquence"
@@ -1713,6 +1717,10 @@ msgstr "Inspection de l'image"
 msgid "Image median hfd=%s"
 msgstr "HFD médian de l'image = %s"
 
+#: u_translation.rsimages
+msgid "images"
+msgstr "images"
+
 #: u_translation.rsimagescale
 msgid "Image scale"
 msgstr "Echelle de l'image"
@@ -1760,7 +1768,7 @@ msgstr "Paramètres INDI"
 
 #: u_translation.rsinformation
 msgid "Information"
-msgstr "Information"
+msgstr "Informations"
 
 #: u_translation.rsinitializeta
 msgid "Initialize target %s"
@@ -4261,6 +4269,10 @@ msgstr "Essaie la cible suivante"
 #: u_translation.rstrytoconnect
 msgid "Try to connect to autoguider"
 msgstr "Essaie de connecter l'autoguideur"
+
+#: u_translation.rstrytofixpixe
+msgid "Try to fix pixel range to match CMOS camera bit depth"
+msgstr "Essaye de corriger la valeur des pixels pour correspondre au nombre de bits de la caméra CMOS"
 
 #: u_translation.rstwilightskyf
 msgid "Twilight sky flat"

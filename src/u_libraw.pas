@@ -57,7 +57,7 @@ var libraw: TLibHandle;
     GetRawInfo2: TGetRawInfo2;
     GetRawBitmap: TGetRawBitmap;
     GetRawErrorMsg: TGetRawErrorMsg;
-    DcrawCmd, RawIdCmd, RawUnpCmd, Exiv2Cmd: string;
+    DcrawCmd, RawIdCmd, RawUnpCmd, Exiv2Cmd, ExifToolCmd: string;
 
 const
   rawext='.bay,.bmq,.cr3,.cr2,.crw,.cs1,.dc2,.dcr,.dng,.erf,.fff,.hdr,.k25,.kdc,.mdc,.mos,.mrw,.nef,.orf,.pef,.pxn,.raf,.raw,.rdc,.sr2,.srf,.x3f,.arw,.3fr,.cine,.ia,.kc2,.mef,.nrw,.qtk,.rw2,.sti,.rwl,.srw,';
@@ -67,6 +67,7 @@ const
   RawIdName='raw-identify.exe';
   RawUnpName='unprocessed_raw.exe';
   exiv2name='exiv2.exe';
+  exiftoolname='exiftool.exe';
   {$endif}
   {$ifdef linux}
   librawname='libpasraw.so.1';
@@ -74,6 +75,7 @@ const
   RawIdName='raw-identify';
   RawUnpName='unprocessed_raw';
   exiv2name='exiv2';
+  exiftoolname='exiftool';
   {$endif}
   {$ifdef darwin}
   librawname='libpasraw.dylib';
@@ -81,6 +83,7 @@ const
   RawIdName='raw-identify';
   RawUnpName='unprocessed_raw';
   exiv2name='exiv2';
+  exiftoolname='exiftool';
   {$endif}
 
 implementation
@@ -194,6 +197,25 @@ begin
   {$ifdef darwin}
   Exiv2Cmd:=slash(AppDir)+'ccdciel.app/Contents/MacOS/'+exiv2name;
   if not fileexists(Exiv2Cmd) then Exiv2Cmd:='';
+  {$endif}
+  // exiftool
+  {$ifdef mswindows}
+  ExifToolCmd:=slash(Appdir)+exiftoolname;
+  if not fileexists(ExifToolCmd) then ExifToolCmd:='';
+  {$endif}
+  {$ifdef linux}
+  ExifToolCmd:='/usr/bin/'+exiftoolname;
+  if not fileexists(ExifToolCmd) then begin
+     ExifToolCmd:='/usr/local/bin/'+exiftoolname;
+     if not fileexists(ExifToolCmd) then begin
+        ExifToolCmd:=ExpandFileName('~/bin/'+exiftoolname);
+        if not fileexists(ExifToolCmd) then ExifToolCmd:='';
+     end;
+  end;
+  {$endif}
+  {$ifdef darwin}
+  ExifToolCmd:=slash(AppDir)+'ccdciel.app/Contents/MacOS/'+exiftoolname;
+  if not fileexists(ExifToolCmd) then ExifToolCmd:='';
   {$endif}
 
 end;

@@ -23,18 +23,18 @@ object f_main: Tf_main
   ShowHint = True
   object Panel1: TPanel
     Left = 0
-    Height = 559
+    Height = 560
     Top = 0
     Width = 773
     Align = alClient
     BevelOuter = bvNone
-    ClientHeight = 559
+    ClientHeight = 560
     ClientWidth = 773
     ParentFont = False
     TabOrder = 0
     object PanelLeft: TPanel
       Left = 0
-      Height = 551
+      Height = 552
       Top = 4
       Width = 4
       Align = alLeft
@@ -73,12 +73,12 @@ object f_main: Tf_main
     end
     object PanelCenter: TPanel
       Left = 4
-      Height = 551
+      Height = 552
       Top = 4
       Width = 769
       Align = alClient
       BevelOuter = bvNone
-      ClientHeight = 551
+      ClientHeight = 552
       ClientWidth = 769
       Color = 4197901
       ParentColor = False
@@ -121,7 +121,7 @@ object f_main: Tf_main
     object PanelBottom: TPanel
       Left = 0
       Height = 4
-      Top = 555
+      Top = 556
       Width = 773
       Align = alBottom
       AutoSize = True
@@ -141,7 +141,7 @@ object f_main: Tf_main
   end
   object Splitter1: TSplitter
     Left = 773
-    Height = 559
+    Height = 560
     Top = 0
     Width = 5
     Align = alRight
@@ -150,19 +150,19 @@ object f_main: Tf_main
   end
   object PanelRight: TPanel
     Left = 778
-    Height = 559
+    Height = 560
     Top = 0
     Width = 222
     Align = alRight
     BevelOuter = bvNone
-    ClientHeight = 559
+    ClientHeight = 560
     ClientWidth = 222
     Constraints.MinWidth = 222
     ParentFont = False
     TabOrder = 2
     object PageControlRight: TPageControl
       Left = 0
-      Height = 518
+      Height = 519
       Top = 41
       Width = 222
       ActivePage = PageConnect
@@ -175,13 +175,13 @@ object f_main: Tf_main
       TabOrder = 0
       Options = [nboMultiLine]
       object PageConnect: TTabSheet
-        ClientHeight = 514
+        ClientHeight = 515
         ClientWidth = 212
         ImageIndex = 0
         ParentFont = False
         object PanelRight1: TPanel
           Left = 0
-          Height = 514
+          Height = 515
           Top = 0
           Width = 212
           Align = alClient
@@ -199,7 +199,7 @@ object f_main: Tf_main
         end
       end
       object PageFocus: TTabSheet
-        ClientHeight = 514
+        ClientHeight = 515
         ClientWidth = 212
         ImageIndex = 1
         ParentFont = False
@@ -223,7 +223,7 @@ object f_main: Tf_main
         end
       end
       object PageCapture: TTabSheet
-        ClientHeight = 514
+        ClientHeight = 515
         ClientWidth = 212
         ImageIndex = 2
         ParentFont = False
@@ -247,7 +247,7 @@ object f_main: Tf_main
         end
       end
       object PageSequence: TTabSheet
-        ClientHeight = 514
+        ClientHeight = 515
         ClientWidth = 212
         ImageIndex = 3
         ParentFont = False
@@ -271,7 +271,7 @@ object f_main: Tf_main
         end
       end
       object PageVideo: TTabSheet
-        ClientHeight = 514
+        ClientHeight = 515
         ClientWidth = 212
         ImageIndex = 4
         ParentFont = False
@@ -366,8 +366,8 @@ object f_main: Tf_main
   end
   object StatusBar1: TStatusBar
     Left = 0
-    Height = 21
-    Top = 559
+    Height = 20
+    Top = 560
     Width = 1000
     BorderWidth = 1
     Panels = <    
@@ -379,6 +379,9 @@ object f_main: Tf_main
       end    
       item
         Width = 323
+      end    
+      item
+        Width = 60
       end    
       item
         Alignment = taRightJustify
@@ -1135,10 +1138,6 @@ object f_main: Tf_main
         Caption = 'About'
         OnClick = MenuHelpAboutClick
       end
-    end
-    object Timestamp: TMenuItem
-      Caption = '00:00:00'
-      GlyphShowMode = gsmNever
     end
   end
   object ConnectTimer: TTimer

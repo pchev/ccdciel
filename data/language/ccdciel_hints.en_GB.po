@@ -6,15 +6,15 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ccdciel\n"
 "Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
-"POT-Creation-Date: 2020-04-08 15:58+0000\n"
-"PO-Revision-Date: 2020-03-27 12:03+0000\n"
+"POT-Creation-Date: 2020-05-08 19:45+0000\n"
+"PO-Revision-Date: 2020-04-12 09:57+0000\n"
 "Last-Translator: Stephan Woidowski <swoidowski@t-online.de>\n"
 "Language-Team: English (United Kingdom) <en_GB@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2020-04-09 06:16+0000\n"
-"X-Generator: Launchpad (build 2e26c9bbd21cdca248baaea29aeffb920afcc32a)\n"
+"X-Launchpad-Export-Date: 2020-05-08 20:12+0000\n"
+"X-Generator: Launchpad (build fbdff7602bd10fb883bf7e2ddcc7fd5a16f60398)\n"
 
 #: u_hints.rsactivateback
 msgid "Activate backlash compensation.%sLet this disabled if your focuser driver include backlash compensation."
@@ -160,6 +160,10 @@ msgstr "Dither on the specified frame interval"
 msgid "Do not move the telescope before to start imaging."
 msgstr "Do not move the telescope before to start imaging."
 
+#: u_hints.rsdonotsetthis
+msgid "Do not set this option if you don't know exactly what you do and without careful testing"
+msgstr ""
+
 #: u_hints.rsdontwaitfort
 msgid "Process the other targets in the list instead of waiting for the start condition(s) to be met. To be used with option \"Repeat the whole list\""
 msgstr "Process the other targets in the list instead of waiting for the start condition(s) to be met. To be used with option \"Repeat the whole list\""
@@ -171,10 +175,6 @@ msgstr "Drag&drop to change order"
 #: u_hints.rseditthecurre
 msgid "Edit the current sequence"
 msgstr "Edit the current sequence"
-
-#: u_hints.rsfixthevisual
-msgid "Fix the visualisation threshold to the image data range, 100% of the histogram."
-msgstr "Fix the visualisation threshold to the image data range, 100% of the histogram."
 
 #: u_hints.rsgammaoftheim
 msgid "Gamma of the image display"
@@ -198,7 +198,7 @@ msgstr "Global INDI server parameters"
 
 #: u_hints.rsguidinghisto
 msgid "Guiding history in arcsecond %s - blue: RA error %s - red: Dec error %s - yellow: Star mass"
-msgstr ""
+msgstr "Guiding history in arcsecond %s - blue: RA error %s - red: Dec error %s - yellow: Star mass"
 
 #: u_hints.rshistogramoft
 msgid "Histogram of the current image.%sClick and move to adjust the visualisation threshold."
@@ -215,6 +215,10 @@ msgstr "If checked no confirmation dialogue will be presented and failed operati
 #: u_hints.rsiftheimageis
 msgid "If the image is now focused, click this button to get the current focuser position"
 msgstr "If the image is now focused, click this button to get the current focuser position"
+
+#: u_hints.rsimageluminos
+msgid "Image luminosity"
+msgstr ""
 
 #: u_hints.rsincrementste
 msgid "Increment step for the inward or outward movement"
@@ -334,7 +338,7 @@ msgstr "Show completion status"
 
 #: u_hints.rsshowguidings
 msgid "Show guiding statistics"
-msgstr ""
+msgstr "Show guiding statistics"
 
 #: u_hints.rsshowhighligh
 msgid "Show highlight and shadow clipping"
@@ -343,10 +347,6 @@ msgstr "Show highlight and shadow clipping"
 #: u_hints.rsshowlastcapt
 msgid "Show captured image"
 msgstr "Show captured image"
-
-#: u_hints.rsshowofthehis
-msgid "Show %s of the histogram"
-msgstr "Show %s of the histogram"
 
 #: u_hints.rsshowtheoptio
 msgid "Show the option to stack the preview frame in real time.%sThis feature is normally use for demonstration in public event.%sYou can let this option disabled to not risk an unwanted use during your imaging session."

@@ -6,15 +6,15 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ccdciel\n"
 "Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
-"POT-Creation-Date: 2020-04-08 15:58+0000\n"
-"PO-Revision-Date: 2020-04-08 10:47+0000\n"
+"POT-Creation-Date: 2020-05-08 19:45+0000\n"
+"PO-Revision-Date: 2020-05-03 08:55+0000\n"
 "Last-Translator: Sergey Tarantsov <tsn-ast@yandex.ru>\n"
 "Language-Team: Russian <ru@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2020-04-09 06:16+0000\n"
-"X-Generator: Launchpad (build 2e26c9bbd21cdca248baaea29aeffb920afcc32a)\n"
+"X-Launchpad-Export-Date: 2020-05-08 20:12+0000\n"
+"X-Generator: Launchpad (build fbdff7602bd10fb883bf7e2ddcc7fd5a16f60398)\n"
 
 #: u_hints.rsactivateback
 msgid "Activate backlash compensation.%sLet this disabled if your focuser driver include backlash compensation."
@@ -160,6 +160,10 @@ msgstr "Делать подвижки после ряда снимков"
 msgid "Do not move the telescope before to start imaging."
 msgstr "Не перемещать телескоп до начала съёмки"
 
+#: u_hints.rsdonotsetthis
+msgid "Do not set this option if you don't know exactly what you do and without careful testing"
+msgstr "Не устанавливайте эту опцию, если вы точно не знаете, что делаете, и без тщательного тестирования"
+
 #: u_hints.rsdontwaitfort
 msgid "Process the other targets in the list instead of waiting for the start condition(s) to be met. To be used with option \"Repeat the whole list\""
 msgstr "Обрабатывать другие объекты в списке вместо того, чтобы ожидать выполнения начальных условий для текущего. Используется с опцией «Повторить весь список»"
@@ -171,10 +175,6 @@ msgstr "Перетащите, чтобы изменить порядок"
 #: u_hints.rseditthecurre
 msgid "Edit the current sequence"
 msgstr "Изменить текущуее задание"
-
-#: u_hints.rsfixthevisual
-msgid "Fix the visualisation threshold to the image data range, 100% of the histogram."
-msgstr "Показать весь диапазон, 100% гистограммы."
 
 #: u_hints.rsgammaoftheim
 msgid "Gamma of the image display"
@@ -198,7 +198,7 @@ msgstr "Общие параметры сервера INDI"
 
 #: u_hints.rsguidinghisto
 msgid "Guiding history in arcsecond %s - blue: RA error %s - red: Dec error %s - yellow: Star mass"
-msgstr ""
+msgstr "История гидирования в угл.сек. %s - синий: RA error %s - красный: Dec error %s - желтый: Star mass"
 
 #: u_hints.rshistogramoft
 msgid "Histogram of the current image.%sClick and move to adjust the visualisation threshold."
@@ -215,6 +215,10 @@ msgstr "Если флажок установлен, диалоговое окн�
 #: u_hints.rsiftheimageis
 msgid "If the image is now focused, click this button to get the current focuser position"
 msgstr "Если изображение сфокусировано, нажмите эту кнопку, чтобы получить текущую позицию фокусера"
+
+#: u_hints.rsimageluminos
+msgid "Image luminosity"
+msgstr ""
 
 #: u_hints.rsincrementste
 msgid "Increment step for the inward or outward movement"
@@ -334,7 +338,7 @@ msgstr "Показать статус выполнения"
 
 #: u_hints.rsshowguidings
 msgid "Show guiding statistics"
-msgstr ""
+msgstr "Показать статистику гидирования"
 
 #: u_hints.rsshowhighligh
 msgid "Show highlight and shadow clipping"
@@ -343,10 +347,6 @@ msgstr "Клиппинг теней и светов"
 #: u_hints.rsshowlastcapt
 msgid "Show captured image"
 msgstr "Показать захваченное изображение"
-
-#: u_hints.rsshowofthehis
-msgid "Show %s of the histogram"
-msgstr "Показать %s гистограммы"
 
 #: u_hints.rsshowtheoptio
 msgid "Show the option to stack the preview frame in real time.%sThis feature is normally use for demonstration in public event.%sYou can let this option disabled to not risk an unwanted use during your imaging session."
@@ -362,7 +362,7 @@ msgstr "Распознать текущий снимок и получить у�
 
 #: u_hints.rsstacktheprev
 msgid "Stack the preview frames to a single image.%sA new stack is started when you start a loop or if you uncheck this button."
-msgstr "Сложить превью-кадры в одно изображение.%sНовая сумма запускается при запуске цикла или при снятии флажка."
+msgstr "Сложить превью-кадры в одно изображение.%sНовая сумма запускается при запуске цикла или при снятии/установке флажка."
 
 #: u_hints.rsstartaprevie
 msgid "Start a preview loop when waiting for the delay to expire."

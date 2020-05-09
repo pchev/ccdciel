@@ -287,7 +287,7 @@ type
 
 
   procedure PictureToFits(pict:TMemoryStream; ext: string; var ImgStream:TMemoryStream; flip:boolean=true;pix:double=-1;piy:double=-1;binx:integer=-1;biny:integer=-1;bayer:string='';rmult:string='';gmult:string='';bmult:string='';origin:string='';exifkey:TStringList=nil;exifvalue:TStringList=nil);
-  procedure RawToFits(raw:TMemoryStream; var ImgStream:TMemoryStream; out rmsg:string; pix:double=-1;piy:double=-1;binx:integer=-1;biny:integer=-1);
+  procedure RawToFits(raw:TMemoryStream; ext: string; var ImgStream:TMemoryStream; out rmsg:string; pix:double=-1;piy:double=-1;binx:integer=-1;biny:integer=-1);
   function PackFits(unpackedfilename,packedfilename: string; out rmsg:string):integer;
   function UnpackFits(packedfilename: string; var ImgStream:TMemoryStream; out rmsg:string):integer;
 
@@ -1118,9 +1118,8 @@ begin
 end;
 
 procedure TFits.SetVideoStream(value:TMemoryStream);
+var buf: array[0..80] of char;
 begin
-// other header previously set by caller
-ClearFitsInfo;
 FImageValid:=false;
 cur_axis:=1;
 setlength(imar64,0,0,0);
@@ -1133,7 +1132,18 @@ FStream.Clear;
 FStream.Position:=0;
 value.Position:=0;
 FStream.CopyFrom(value,value.Size);
-Fhdr_end:=0;
+FStream.Position:=0;
+FStream.Read(buf,80);
+FStream.Position:=0;
+if copy(buf,1,6)='SIMPLE' then begin
+  // read header from stream
+  Fhdr_end:=FHeader.ReadHeader(FStream);
+  GetFitsInfo;
+end
+else begin
+  // header already set by caller, stream contain only image data
+  Fhdr_end:=0;
+end;
 ReadFitsImage;
 end;
 
@@ -2918,6 +2928,9 @@ for i:=0 to Length(list)-1 do
        FStarList[nhfd-1].snr:=snr;
        FStarList[nhfd-1].vmax:=vmax;
        FStarList[nhfd-1].bg:=bg;
+       // new position to correct image drift
+       list[i,1]:=xc;
+       list[i,2]:=yc;
     end;
  end;
  SetLength(FStarList,nhfd);  {set length to new number of elements}
@@ -3307,19 +3320,23 @@ begin
  end;
 end;
 
-procedure GetExif(raw:TMemoryStream; exifkey,exifvalue:TStringList);
+procedure GetExif(raw:TMemoryStream; ext:string; exifkey,exifvalue:TStringList);
 var cmd,fn,k,v: string;
     r: Tstringlist;
     i,j,n: integer;
+    ok: boolean;
 begin
+ if trim(ext)='' then ext:='.raw';
+ fn:=slash(TmpDir)+'exiftmp'+ext;
+ ok:=false;
  if Exiv2Cmd<>'' then begin
    r:=Tstringlist.Create;
    try
-   fn:=slash(TmpDir)+'exiftmp.raw';
    raw.SaveToFile(fn);
    cmd:=Exiv2Cmd+' -PEkt '+fn;
    n:=ExecProcess(cmd,r);
    if n=0 then begin
+     ok:=true;
      for i:=0 to r.Count-1 do begin
        j:=pos(' ',r[i]);
        if j>0 then begin
@@ -3336,9 +3353,37 @@ begin
      r.free;
    end;
  end;
+ if (not ok) and (ExifToolCmd<>'') then begin
+   r:=Tstringlist.Create;
+   try
+   raw.SaveToFile(fn);
+   cmd:=ExifToolCmd+' -m -G:2 -s2 '+fn;
+   n:=ExecProcess(cmd,r);
+   if n=0 then begin
+     for i:=0 to r.Count-1 do begin
+       j:=pos(': ',r[i]);
+       if j>0 then begin
+         k:=trim(copy(r[i],1,j));
+         k:=StringReplace(k,'[','',[]);
+         k:=StringReplace(k,']','.',[]);
+         k:=StringReplace(k,':','.',[rfReplaceAll]);
+         k:=StringReplace(k,' ','',[rfReplaceAll]);
+         v:=trim(copy(r[i],j+2,999));
+         v:=StringReplace(v,'; ',';',[rfReplaceAll]);
+         if (length(k+v)<65)and(pos('(Binary data',v)=0) then begin
+           exifkey.Add(k);
+           exifvalue.Add(v);
+         end;
+       end;
+     end;
+   end;
+   finally
+     r.free;
+   end;
+ end;
 end;
 
-procedure RawToFits(raw:TMemoryStream; var ImgStream:TMemoryStream; out rmsg:string; pix:double=-1;piy:double=-1;binx:integer=-1;biny:integer=-1);
+procedure RawToFits(raw:TMemoryStream; ext: string; var ImgStream:TMemoryStream; out rmsg:string; pix:double=-1;piy:double=-1;binx:integer=-1;biny:integer=-1);
 var i,j,n,x,c: integer;
     xs,ys,xmax,ymax: integer;
     rawinfo:TRawInfo;
@@ -3361,7 +3406,7 @@ try
 exifkey:=TStringList.Create;
 exifvalue:=TStringList.Create;
 if WantExif then begin
-  GetExif(raw,exifkey,exifvalue);
+  GetExif(raw,ext,exifkey,exifvalue);
 end;
 if libraw<>0 then begin  // Use libraw directly
   try

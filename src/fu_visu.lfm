@@ -109,6 +109,28 @@ object f_visu: Tf_visu
         ClientHeight = 90
         ClientWidth = 116
         TabOrder = 0
+        object Panel5: TPanel
+          Left = 2
+          Height = 21
+          Top = 0
+          Width = 114
+          BevelOuter = bvNone
+          ClientHeight = 21
+          ClientWidth = 114
+          TabOrder = 1
+          object HistBar: TTrackBar
+            Left = 0
+            Height = 43
+            Top = 0
+            Width = 114
+            Max = 100
+            OnChange = HistBarChange
+            Position = 0
+            TickStyle = tsNone
+            Constraints.MaxHeight = 26
+            TabOrder = 0
+          end
+        end
         object BtnFlipVert: TSpeedButton
           Left = 29
           Height = 22
@@ -187,10 +209,10 @@ object f_visu: Tf_visu
           ParentFont = False
         end
         object BtnZoomAdjust: TSpeedButton
-          Left = 88
+          Left = 0
           Height = 22
           Hint = 'Zoom to adjust in window'
-          Top = 67
+          Top = 44
           Width = 28
           AllowAllUp = True
           Color = clDefault
@@ -263,142 +285,39 @@ object f_visu: Tf_visu
           OnClick = BtnZoomClick
           ParentFont = False
         end
-        object histminmax: TSpeedButton
-          Left = 59
-          Height = 22
-          Hint = 'Fix the visualisation threshold to the image data range, 100% of the histogram.'
-          Top = 0
-          Width = 28
-          Color = clDefault
-          Down = True
-          Glyph.Data = {
-            C6070000424DC607000000000000360000002800000016000000160000000100
-            2000000000009007000064000000640000000000000000000000000000000000
-            0000000000000000000000000000000000000000000000000000000000000000
-            0000000000000000000000000000000000000000000000000000000000000000
-            0000000000000000000000000000000000000000000000000000000000000000
-            0000000000000000000000000000000000000000000000000000000000000000
-            0000000000000000000000000000000000000000000000000000000000000000
-            0000000000000000000000000000000000000000000000000000000000000000
-            0000000000000000000000000000000000000000000000000000000000000000
-            0000000000000000000000000000000000000000000000000000000000000000
-            0000000000000000000000000000000000004D4D4DFF00000000000000000000
-            0000000000000000000000000000000000000000000000000000000000000000
-            0000000000000000000000000000000000000000000000000000000000000000
-            0000000000004D4D4DFF4D4D4DFF4D4D4DFF4D4D4DFF4D4D4DFF4D4D4DFF4D4D
-            4DFF4D4D4DFF4D4D4DFF4D4D4DFF4D4D4DFF4D4D4DFF4D4D4DFF4D4D4DFF4D4D
-            4DFF4D4D4DFF0000000000000000000000000000000000000000000000000000
-            00004D4D4DFF4D4D4DFF4D4D4DFF4D4D4DFF4D4D4DFF4D4D4DFF4D4D4DFF4D4D
-            4DFF4D4D4DFF4D4D4DFF4D4D4DFF4D4D4DFF4D4D4DFF4D4D4DFF000000000000
-            00000000000000000000000000000000000000000000000000004D4D4DFF4D4D
-            4DFF4D4D4DFF4D4D4DFF4D4D4DFF4D4D4DFF4D4D4DFF4D4D4DFF4D4D4DFF4D4D
-            4DFF4D4D4DFF4D4D4DFF00000000000000000000000000000000000000000000
-            0000000000000000000000000000000000004D4D4DFF4D4D4DFF4D4D4DFF4D4D
-            4DFF4D4D4DFF4D4D4DFF4D4D4DFF4D4D4DFF000000004D4D4DFF000000000000
-            0000000000000000000000000000000000000000000000000000000000000000
-            000000000000000000004D4D4DFF4D4D4DFF4D4D4DFF4D4D4DFF4D4D4DFF4D4D
-            4DFF4D4D4DFF0000000000000000000000000000000000000000000000000000
-            0000000000000000000000000000000000000000000000000000000000000000
-            00004D4D4DFF000000004D4D4DFF4D4D4DFF4D4D4DFF4D4D4DFF4D4D4DFF0000
-            0000000000000000000000000000000000000000000000000000000000000000
-            00000000000000000000000000000000000000000000000000004D4D4DFF0000
-            00004D4D4DFF4D4D4DFF4D4D4DFF4D4D4DFF4D4D4DFF00000000000000000000
-            0000000000000000000000000000000000000000000000000000000000000000
-            0000000000000000000000000000000000004D4D4DFF000000004D4D4DFF4D4D
-            4DFF4D4D4DFF4D4D4DFF4D4D4DFF000000000000000000000000000000000000
-            0000000000000000000000000000000000000000000000000000000000000000
-            000000000000000000004D4D4DFF00000000000000004D4D4DFF4D4D4DFF4D4D
-            4DFF4D4D4DFF0000000000000000000000000000000000000000000000000000
-            0000000000000000000000000000000000000000000000000000000000000000
-            00004D4D4DFF00000000000000004D4D4DFF4D4D4DFF4D4D4DFF4D4D4DFF0000
-            0000000000000000000000000000000000000000000000000000000000000000
-            00000000000000000000000000000000000000000000000000004D4D4DFF0000
-            000000000000000000004D4D4DFF4D4D4DFF4D4D4DFF00000000000000000000
-            0000000000000000000000000000000000000000000000000000000000000000
-            0000000000000000000000000000000000004D4D4DFF00000000000000000000
-            00004D4D4DFF4D4D4DFF00000000000000000000000000000000000000000000
-            0000000000000000000000000000000000000000000000000000000000000000
-            000000000000000000004D4D4DFF0000000000000000000000004D4D4DFF4D4D
-            4DFF000000000000000000000000000000000000000000000000000000000000
-            0000000000000000000000000000000000000000000000000000000000000000
-            00004D4D4DFF000000000000000000000000000000004D4D4DFF000000000000
-            0000000000000000000000000000000000000000000000000000000000000000
-            00000000000000000000000000000000000000000000000000004D4D4DFF0000
-            00000000000000000000000000004D4D4DFF0000000000000000000000000000
-            0000000000000000000000000000000000000000000000000000000000000000
-            0000000000000000000000000000000000000000000000000000000000000000
-            0000000000000000000000000000000000000000000000000000000000000000
-            0000000000000000000000000000000000000000000000000000000000000000
-            0000000000000000000000000000000000000000000000000000000000000000
-            0000000000000000000000000000000000000000000000000000000000000000
-            0000000000000000000000000000000000000000000000000000000000000000
-            0000000000000000000000000000000000000000000000000000000000000000
-            0000000000000000000000000000000000000000000000000000000000000000
-            00000000000000000000
-          }
-          GroupIndex = 101
-          Transparent = False
-          OnClick = histminmaxClick
-          ShowCaption = False
-          ParentFont = False
-        end
-        object hist2: TSpeedButton
-          Left = 0
-          Height = 22
-          Hint = 'Show 90% of the histogram'
-          Top = 22
-          Width = 28
-          Caption = '90'
-          Color = clDefault
-          GroupIndex = 101
-          Transparent = False
-          OnClick = hist2Click
-          ParentFont = False
-        end
-        object hist1: TSpeedButton
-          Left = 29
-          Height = 22
-          Hint = 'Show 95% of the histogram'
-          Top = 22
-          Width = 28
-          Caption = '95'
-          Color = clDefault
-          GroupIndex = 101
-          Transparent = False
-          OnClick = hist1Click
-          ParentFont = False
-        end
         object BtnZoom2: TSpeedButton
           Tag = 3
           Left = 88
           Height = 22
           Hint = 'Zoom two time'
-          Top = 0
+          Top = 44
           Width = 28
           AllowAllUp = True
           Caption = '2:1'
           Color = clDefault
           GroupIndex = 102
+          Layout = blGlyphBottom
           OnClick = BtnZoomClick
           ParentFont = False
         end
         object BtnZoom1: TSpeedButton
           Tag = 2
-          Left = 88
+          Left = 59
           Height = 22
           Hint = 'Zoom to original scale'
-          Top = 22
+          Top = 44
           Width = 28
           AllowAllUp = True
           Caption = '1:1'
           Color = clDefault
           GroupIndex = 102
+          Layout = blGlyphBottom
           OnClick = BtnZoomClick
           ParentFont = False
         end
         object BtnZoom05: TSpeedButton
           Tag = 1
-          Left = 88
+          Left = 29
           Height = 22
           Hint = 'Zoom to half size'
           Top = 44
@@ -407,6 +326,7 @@ object f_visu: Tf_visu
           Caption = '1:2'
           Color = clDefault
           GroupIndex = 102
+          Layout = blGlyphBottom
           OnClick = BtnZoomClick
           ParentFont = False
         end
@@ -414,7 +334,7 @@ object f_visu: Tf_visu
           Left = 59
           Height = 22
           Hint = 'Show bulls eye'
-          Top = 22
+          Top = 67
           Width = 28
           AllowAllUp = True
           Color = clDefault
@@ -488,10 +408,10 @@ object f_visu: Tf_visu
           ParentFont = False
         end
         object BtnClipping: TSpeedButton
-          Left = 59
+          Left = 88
           Height = 22
           Hint = 'Show highlight and shadow clipping'
-          Top = 44
+          Top = 22
           Width = 28
           AllowAllUp = True
           Color = clDefault
@@ -565,10 +485,10 @@ object f_visu: Tf_visu
           ParentFont = False
         end
         object Gamma: TFloatSpinEditEx
-          Left = 2
+          Left = 0
           Height = 22
           Hint = 'Gamma'
-          Top = 44
+          Top = 22
           Width = 57
           AutoSize = False
           Constraints.MaxHeight = 26
@@ -582,37 +502,11 @@ object f_visu: Tf_visu
           NullValue = 0
           Value = 1
         end
-        object hist3: TSpeedButton
-          Left = 0
-          Height = 22
-          Hint = 'Show 96% of the histogram'
-          Top = 0
-          Width = 28
-          Caption = '96'
-          Color = clDefault
-          GroupIndex = 101
-          Transparent = False
-          OnClick = hist3Click
-          ParentFont = False
-        end
-        object hist4: TSpeedButton
-          Left = 29
-          Height = 22
-          Hint = 'Show 98% of the histogram'
-          Top = 0
-          Width = 28
-          Caption = '98'
-          Color = clDefault
-          GroupIndex = 101
-          Transparent = False
-          OnClick = hist4Click
-          ParentFont = False
-        end
         object BtnInvert: TSpeedButton
           Left = 59
           Height = 22
           Hint = 'Invert image display'
-          Top = 67
+          Top = 22
           Width = 28
           AllowAllUp = True
           Color = clDefault
@@ -777,7 +671,7 @@ object f_visu: Tf_visu
         object BtnShowImage: TSpeedButton
           Left = 0
           Height = 22
-          Top = 0
+          Top = 22
           Width = 28
           AllowAllUp = True
           GroupIndex = 87855

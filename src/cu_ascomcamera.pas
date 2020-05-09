@@ -117,6 +117,11 @@ T_ascomcamera = class(T_camera)
    function GetReadOutMode: integer; override;
    procedure SetFnumber(value: string); override;
    function GetFnumber: string; override;
+   function GetStreamingExposureRange:TNumRange; override;
+   function GetStreamingExposure:double; override;
+   procedure SetStreamingExposure(value:double); override;
+   function GetVideoEncoder: integer; override;
+   procedure SetVideoEncoder(value:integer); override;
 
 public
    constructor Create(AOwner: TComponent);override;
@@ -130,6 +135,7 @@ public
    procedure GetFrame(out x,y,width,height: integer; refresh:boolean=false); override;
    procedure GetFrameRange(out xr,yr,widthr,heightr: TNumRange); override;
    procedure ResetFrame; override;
+   procedure GetStreamFrame(out x,y,width,height: integer);  override;
    procedure CfaInfo(out OffsetX, OffsetY: integer; out CType: string);  override;
    function  CheckGain:boolean; override;
    Procedure AbortExposure; override;
@@ -197,6 +203,8 @@ var readmodes,roitem: Variant;
 begin
 {$ifdef mswindows}
  try
+ FhasLastExposureStartTime:=FUseCameraStartTime;
+ FhasLastExposureDuration:=FUseCameraStartTime;
  stCooler:=false;
  stCCDtemp:=NullCoord;
  FStatus := devConnecting;
@@ -435,8 +443,9 @@ begin
   try
      Fexptime:=exptime;
      if debug_msg then msg('start exposure.');
-     V.StartExposure(exptime,li);
      Ftimestart:=NowUTC;
+     V.StartExposure(exptime,li);
+     Ftimestart:=(Ftimestart+NowUTC)/2;
      inc(FImgNum);
      Ftimeend:=now+(exptime)/secperday;
      timedout:=now+(exptime+CameraTimeout)/secperday;
@@ -456,7 +465,7 @@ type Timgdata = array of longint;
 var ok: boolean;
     i,j,c,xs,ys: integer;
     nax1,nax2,state: integer;
-    pix,piy: double;
+    pix,piy,expt,ElectronsPerADU: double;
     dateobs,ccdname,frname:string;
     img: PSafeArray;
     pimgdata: pointer;
@@ -468,6 +477,8 @@ var ok: boolean;
     b: array[0..2880]of char;
     hdr: TFitsHeader;
     hdrmem: TMemoryStream;
+    n, nb: byte;
+    w,ww,pxdiv,newsaturation: word;
     {$endif}
 begin
  ExposureTimer.Enabled:=false;
@@ -554,7 +565,55 @@ begin
    piy:=FPixelSizeY;
    ccdname:=Fccdname;
    frname:=FrameName[ord(FFrametype)];
-   dateobs:=FormatDateTime(dateisoshort,Ftimestart);
+   dateobs:=FormatDateTime(dateiso,Ftimestart);
+   if FhasLastExposureStartTime then begin
+     try
+       dateobs:=V.LastExposureStartTime;
+     except
+       FhasLastExposureStartTime:=false;
+     end;
+   end;
+   expt:=Fexptime;
+   if FhasLastExposureDuration then begin
+     try
+       expt:=V.LastExposureDuration;
+     except
+       FhasLastExposureDuration:=false;
+     end;
+   end;
+   try
+     ElectronsPerADU:=V.ElectronsPerADU;
+   except
+     ElectronsPerADU:=-1;
+   end;
+   i:=SafeArrayAccessData(img,pimgdata);
+   if i<>S_OK then begin
+     msg('Error accessing ImageArray data: ' + hexStr(i,10));
+     if assigned(FonAbortExposure) then FonAbortExposure(self);
+     exit;
+   end;
+   // count used bit by pixel
+   pxdiv:=1;
+   if FFixPixelRange then begin
+     nb:=16;
+     w:=0;
+     for i:=LBoundY to ys-1 do begin
+       for j := LBoundX to xs-1 do begin
+         ww:=Timgdata(pimgdata)[j+i*xs];
+         if ww<65535 then
+           w:=w or ww;
+       end;
+     end;
+     for n:=16 downto 1 do begin
+       if w and 1 <>0 then begin
+         nb:=n;
+         break;
+       end;
+       w:=w div 2;
+     end;
+     pxdiv:=2**(16-nb); // divisor need to recover original pixel range
+     newsaturation:=2**nb-1; // new saturation value to replace 65535
+   end;
    if debug_msg then msg('set fits header');
    hdr:=TFitsHeader.Create;
    hdr.ClearHeader;
@@ -566,13 +625,22 @@ begin
    hdr.Add('EXTEND',true,'FITS dataset may contain extensions');
    hdr.Add('BZERO',32768,'offset data range to that of unsigned short');
    hdr.Add('BSCALE',1,'default scaling factor');
-   hdr.Add('EXPTIME',Fexptime,'Total Exposure Time (s)');
+   hdr.Add('EXPTIME',expt,'Total Exposure Time (s)');
    hdr.Add('PIXSIZE1',pix ,'Pixel Size 1 (microns)');
    hdr.Add('PIXSIZE2',piy ,'Pixel Size 2 (microns)');
    hdr.Add('XBINNING',BinX ,'Binning factor in width');
    hdr.Add('YBINNING',BinY ,'Binning factor in height');
    hdr.Add('FRAME',frname,'Frame Type');
    hdr.Add('INSTRUME',ccdname,'CCD Name');
+   if ElectronsPerADU>0 then hdr.Add('EGAIN',ElectronsPerADU,' Electronic gain in e-/ADU');
+   if FFixPixelRange then begin
+     hdr.Add('COMMENT','Detected '+inttostr(nb)+' bit per pixel camera image','');
+     if pxdiv=1 then
+       hdr.Add('COMMENT','Pixel values are using the original range','')
+     else
+       hdr.Add('COMMENT','Pixel values are divided by '+inttostr(pxdiv)+' to recover original range','');
+     hdr.Add('MAXADU',newsaturation,'Maximum pixel value');
+   end;
    hdr.Add('DATE-OBS',dateobs,'UTC start date of observation');
    hdr.Add('END','','');
    hdrmem:=hdr.GetStream;
@@ -584,12 +652,6 @@ begin
    hdrmem.Free;
    hdr.Free;
    if debug_msg then msg('write image');
-   i:=SafeArrayAccessData(img,pimgdata);
-   if i<>S_OK then begin
-     msg('Error accessing ImageArray data: ' + hexStr(i,10));
-     if assigned(FonAbortExposure) then FonAbortExposure(self);
-     exit;
-   end;
    if Dims=2 then begin
      for i:=LBoundY to ys-1 do begin
         if FASCOMFlipImage then
@@ -599,6 +661,7 @@ begin
         for j:=LBoundX to xs-1 do begin
           p2[0]:=j;
           lii:=Timgdata(pimgdata)[p2[0]+p2[1]*xs];
+          if FFixPixelRange then lii:=lii div pxdiv;
           if lii>0 then
              ii:=lii-32768
           else
@@ -618,6 +681,7 @@ begin
         for j:=LBoundX to xs-1 do begin
           p3[0]:=j;
           lii:=Timgdata(pimgdata)[p3[0]+p3[1]*xs];
+          if FFixPixelRange then lii:=lii div pxdiv;
           if lii>0 then
              ii:=lii-32768
           else
@@ -1423,10 +1487,45 @@ begin
  // todo
 end;
 
+function T_ascomcamera.GetStreamingExposureRange:TNumRange;
+begin
+ result:=NullRange;
+ // todo
+end;
+
+function T_ascomcamera.GetStreamingExposure:double;
+begin
+ result:=0;
+ // todo
+end;
+
+procedure T_ascomcamera.SetStreamingExposure(value:double);
+begin
+ // todo
+end;
+
+procedure T_ascomcamera.GetStreamFrame(out x,y,width,height: integer);
+begin
+ // todo
+ x:=0; y:=0; width:=0; height:=0;
+end;
+
+function T_ascomcamera.GetVideoEncoder: integer;
+begin
+ result:=0;
+ // todo
+end;
+
+procedure T_ascomcamera.SetVideoEncoder(value:integer);
+begin
+ // todo
+end;
+
 function T_ascomcamera.GetImageFormat: string;
 begin
  result:=FImageFormat;
 end;
+
 
 initialization
 {$ifdef mswindows}

@@ -174,7 +174,6 @@ type
     Splitter1: TSplitter;
     TabMsgLevel: TTabControl;
     TimerStampTimer: TTimer;
-    Timestamp: TMenuItem;
     MenuPdfHelp: TMenuItem;
     MenuOnlineHelp: TMenuItem;
     MenuBugReport: TMenuItem;
@@ -528,6 +527,7 @@ type
     TerminateVcurve: boolean;
     ScrBmp: TBGRABitmap;
     Image1: TImgDrawingControl;
+    ImageSaved: boolean;
 
     trpx1,trpx2,trpx3,trpx4,trpy1,trpy2,trpy3,trpy4: integer;{for image inspection}
     median_center,median_top_left, median_top_right,median_bottom_left,median_bottom_right : double;{for image inspection}
@@ -711,6 +711,7 @@ type
     procedure CameraVideoSizeChange(Sender: TObject);
     procedure CameraVideoRateChange(Sender: TObject);
     procedure CameraVideoExposureChange(Sender: TObject);
+    procedure CameraVideoEncoderChange(Sender: TObject);
     procedure CameraFPSChange(Sender: TObject);
     procedure ShowLastImage(Sender: TObject);
     procedure ResetPreviewStack(Sender: TObject);
@@ -772,6 +773,7 @@ type
     procedure CollimationStop(Sender: TObject);
     procedure CollimationCenterStar(Sender: TObject);
     procedure CollimationCircleChange(Sender: TObject);
+    procedure ReadyForVideo(var v: boolean);
   public
     { public declarations }
   end;
@@ -789,6 +791,8 @@ LazUTF8SysUtils;
 {$endif}
 
 {$R *.lfm}
+
+const panelcursor=0; panelstatus=1; panelfile=2; panelclock=3; panelled=4;
 
 { Tf_main }
 
@@ -1069,6 +1073,7 @@ begin
  if not DirectoryExistsUTF8(TmpDir) then  CreateDirUTF8(TmpDir);
  LogDir:=slash(ConfigDir)+'Log';
  if not DirectoryExistsUTF8(LogDir) then  CreateDirUTF8(LogDir);
+ defCapturePath:=ExpandFileNameUTF8(defCapPath);
 end;
 
 procedure Tf_main.ScaleMainForm;
@@ -1381,6 +1386,7 @@ begin
 
   f_video:=Tf_video.Create(self);
   f_video.onMsg:=@NewMessage;
+  f_video.onCheckReady:=@ReadyForVideo;
 
   f_filterwheel:=Tf_filterwheel.Create(self);
   f_filterwheel.onSetFilter:=@SetFilter;
@@ -1505,15 +1511,9 @@ begin
   f_capture.SeqNum.Value:=config.GetValue('/Capture/Count',1);
 
   f_visu.Gamma.Value:=config.GetValue('/Visu/Gamma',1.0);
-  f_visu.histminmax.AllowAllUp:=true;
-  f_visu.histminmax.Down:=config.GetValue('/Visu/HistMinMax',true);
-  f_visu.hist1.Down:=config.GetValue('/Visu/Hist1',false);
-  f_visu.hist2.Down:=config.GetValue('/Visu/Hist2',false);
-  f_visu.hist3.Down:=config.GetValue('/Visu/Hist3',false);
-  f_visu.hist4.Down:=config.GetValue('/Visu/Hist4',false);
+  f_visu.HistBar.Position:=config.GetValue('/Visu/HistBar',50);
   f_visu.FlipHorz:=config.GetValue('/Visu/FlipHorz',false);
   f_visu.FlipVert:=config.GetValue('/Visu/FlipVert',false);
-  f_visu.histminmax.AllowAllUp:=false;
 
   LogLevel:=config.GetValue('/Log/LogLevel',LogLevel);
   TabMsgLevel.TabIndex:=LogLevel-1;
@@ -1690,6 +1690,7 @@ begin
    camera.onVideoRateChange:=@CameraVideoRateChange;
    camera.onFPSChange:=@CameraFPSChange;
    camera.onVideoExposureChange:=@CameraVideoExposureChange;
+   camera.onEncoderChange:=@CameraVideoEncoderChange;
    camera.onStatusChange:=@CameraStatus;
    camera.onCameraDisconnected:=@CameraDisconnected;
    camera.onAbortExposure:=@CameraExposureAborted;
@@ -2141,8 +2142,6 @@ begin
   f_visu.BtnZoomAdjust.Glyph.Assign(btn);
   TBTabs.Images.GetBitmap(6, btn);
   f_visu.BtnBullsEye.Glyph.Assign(btn);
-  TBTabs.Images.GetBitmap(7, btn);
-  f_visu.histminmax.Glyph.Assign(btn);
   TBTabs.Images.GetBitmap(8, btn);
   f_visu.BtnClipping.Glyph.Assign(btn);
   TBTabs.Images.GetBitmap(11, btn);
@@ -2237,7 +2236,7 @@ var msg: string;
     s,x,y: integer;
 begin
   if StatusBar=StatusBar1 then begin;
-    if panel=StatusBar.Panels[3] then begin
+    if panel=StatusBar.Panels[panelled] then begin
       msg:='';
       s:=(StatusBar.Height-6) div 2;
       y:=StatusBar.Height div 2;
@@ -2300,12 +2299,12 @@ end;
 procedure Tf_main.StatusBar1Resize(Sender: TObject);
 var i: integer;
 begin
-  StatusBar1.Panels[3].Width:=3*(StatusBar1.Height);
-  i:=StatusBar1.ClientWidth-StatusBar1.Panels[0].Width-StatusBar1.Panels[1].Width-StatusBar1.Panels[3].Width;
+  StatusBar1.Panels[panelled].Width:=3*(StatusBar1.Height);
+  i:=StatusBar1.ClientWidth-StatusBar1.Panels[panelcursor].Width-StatusBar1.Panels[panelstatus].Width-StatusBar1.Panels[panelclock].Width-StatusBar1.Panels[panelled].Width;
   if i>0 then
-    StatusBar1.Panels[2].Width:=i
+    StatusBar1.Panels[panelfile].Width:=i
   else
-    StatusBar1.Panels[2].Width:=0;
+    StatusBar1.Panels[panelfile].Width:=0;
 end;
 
 procedure Tf_main.ScriptExecute(Sender: TObject);
@@ -3322,6 +3321,7 @@ begin
   SaveBitmap:=config.GetValue('/Files/SaveBitmap',false);
   SaveBitmapFormat:=config.GetValue('/Files/SaveBitmapFormat','png');
   OpenPictureDialog1.InitialDir:=config.GetValue('/Files/CapturePath',defCapturePath);
+  f_video.VideoCaptureDir.Text:=config.GetValue('/Files/VideoCapturePath','/tmp');
   ObsLatitude:=config.GetValue('/Info/ObservatoryLatitude',0.0);
   ObsLongitude:=config.GetValue('/Info/ObservatoryLongitude',0.0);
   ObsElevation:=config.GetValue('/Info/ObservatoryElevation',0.0);
@@ -3642,7 +3642,7 @@ begin
 
     n:=config.GetValue('/Readout/Num',0);
     ReadoutList.Clear;
-    for i:=1 to n do begin
+    for i:=0 to n-1 do begin
        str:=config.GetValue('/Readout/Mode'+IntToStr(i),'');
        ReadoutList.Add(str);
     end;
@@ -3810,11 +3810,7 @@ begin
    config.SetValue('/Sequence/EditTarget/Height',f_EditTargets.Height);
 
    config.SetValue('/Visu/Gamma',f_visu.Gamma.Value);
-   config.SetValue('/Visu/HistMinMax',f_visu.histminmax.Down);
-   config.SetValue('/Visu/Hist1',f_visu.hist1.Down);
-   config.SetValue('/Visu/Hist2',f_visu.hist2.Down);
-   config.SetValue('/Visu/Hist3',f_visu.hist3.Down);
-   config.SetValue('/Visu/Hist4',f_visu.hist4.Down);
+   config.SetValue('/Visu/HistBar',f_visu.HistBar.Position);
    config.SetValue('/Visu/FlipHorz',f_visu.FlipHorz);
    config.SetValue('/Visu/FlipVert',f_visu.FlipVert);
 
@@ -3983,7 +3979,7 @@ begin
      f_preview.stop;
      f_capture.stop;
      Capture:=false;
-     StatusBar1.Panels[1].Text:='';
+     StatusBar1.Panels[panelstatus].Text:='';
      DisconnectCamera(Sender); // disconnect camera first
      DisconnectWheel(Sender);
      DisconnectFocuser(Sender);
@@ -4137,25 +4133,49 @@ allcount:=0; upcount:=0; downcount:=0; concount:=0;
 end;
 
 Procedure Tf_main.ConnectCamera(Sender: TObject);
+var inditransfer: TIndiTransfert;
+    indihost,inditransferdir: string;
+    ok: boolean;
 begin
    CameraInitialized:=false;
    case camera.CameraInterface of
     INDI : begin
-           camera.IndiTransfert:=TIndiTransfert(config.GetValue('/INDIcamera/IndiTransfert',ord(itNetwork)));
-           camera.IndiTransfertDir:=config.GetValue('/INDIcamera/IndiTransfertDir',defTransfertPath);
+           inditransfer:=TIndiTransfert(config.GetValue('/INDIcamera/IndiTransfert',ord(itNetwork)));
+           inditransferdir:=config.GetValue('/INDIcamera/IndiTransfertDir',defTransfertPath);
+           indihost:=config.GetValue('/INDIcamera/Server','');
+           if inditransfer=itDisk then begin
+             // some control to be sure we can use disk transfer
+             ok:=(copy(indihost,1,3)='127')or(uppercase(indihost)='LOCALHOST'); // local indiserver
+             ok:=ok and DirectoryIsWritable(inditransferdir);
+             if not ok then begin
+               inditransfer:=itNetwork;
+               NewMessage('Cannot use ramdisk camera transfer, switch to network',3);
+             end;
+           end;
+           camera.IndiTransfert:=inditransfer;
+           camera.IndiTransfertDir:=inditransferdir;
            camera.Connect(config.GetValue('/INDIcamera/Server',''),
                           config.GetValue('/INDIcamera/ServerPort',''),
                           config.GetValue('/INDIcamera/Device',''),
                           config.GetValue('/INDIcamera/Sensor','CCD1'),
                           config.GetValue('/INDIcamera/DevicePort',''));
            end;
-    ASCOM: camera.Connect(config.GetValue('/ASCOMcamera/Device',''));
-    ASCOMREST: camera.Connect(config.GetValue('/ASCOMRestcamera/Host',''),
+    ASCOM: begin
+           camera.UseCameraStartTime:=config.GetValue('/ASCOMcamera/CameraDateObs',false);
+           camera.FixPixelRange:=config.GetValue('/ASCOMcamera/FixPixelRange',false);
+           camera.Connect(config.GetValue('/ASCOMcamera/Device',''));
+           end;
+    ASCOMREST: begin
+           camera.UseCameraStartTime:=config.GetValue('/ASCOMRestcamera/CameraDateObs',false);
+           camera.FixPixelRange:=config.GetValue('/ASCOMRestcamera/FixPixelRange',false);
+           camera.Connect(config.GetValue('/ASCOMRestcamera/Host',''),
                           IntToStr(config.GetValue('/ASCOMRestcamera/Port',0)),
                           ProtocolName[config.GetValue('/ASCOMRestcamera/Protocol',0)],
                           'camera/'+IntToStr(config.GetValue('/ASCOMRestcamera/Device',0)),
                           DecryptStr(hextostr(credentialconfig.GetValue('/ASCOMRestcamera/User','')), encryptpwd),
                           DecryptStr(hextostr(credentialconfig.GetValue('/ASCOMRestcamera/Pass','')), encryptpwd));
+
+           end;
   end;
 end;
 
@@ -4992,7 +5012,7 @@ begin
                    f_capture.stop;
                    Capture:=false;
                    f_sequence.CameraDisconnected;
-                   StatusBar1.Panels[1].Text:='';
+                   StatusBar1.Panels[panelstatus].Text:='';
                    f_devicesconnection.LabelCamera.Font.Color:=clRed;
                    if TBVideo.Visible then begin
                      TBConnect.Click;
@@ -5067,7 +5087,7 @@ begin
   f_capture.stop;
   Capture:=false;
   Preview:=false;
-  StatusBar1.Panels[1].Text:=rsStop;
+  StatusBar1.Panels[panelstatus].Text:=rsStop;
   MenuCaptureStart.Caption:=f_capture.BtnStart.Caption;
 end;
 
@@ -5096,6 +5116,13 @@ begin
  end;
 end;
 
+procedure Tf_main.ReadyForVideo(var v: boolean);
+begin
+ v:=(camera.Status=devConnected)and(not f_sequence.Running)and
+    (not f_preview.Running)and(not f_capture.Running)and
+    (not autofocusing)and(not learningvcurve);
+end;
+
 procedure Tf_main.CameraVideoPreviewChange(Sender: TObject);
 begin
   f_video.Preview.Checked:=camera.VideoPreviewRunning;
@@ -5122,10 +5149,19 @@ end;
 
 procedure Tf_main.CameraVideoExposureChange(Sender: TObject);
 begin
-  f_video.ShowExposure(round(camera.VideoExposure));
+  if f_video.PanelExposure1.Visible then
+    f_video.ShowExposure(camera.VideoExposure);
+  if f_video.PanelExposure2.Visible then
+    f_video.ShowExposure(camera.StreamingExposure);
   f_video.Gain.Position:=max(min(round(camera.VideoGain),f_video.Gain.Max),f_video.Gain.Min);
   f_video.Gamma.Position:=max(min(round(camera.VideoGamma),f_video.Gamma.Max),f_video.Gamma.Min);
   f_video.Brightness.Position:=max(min(round(camera.VideoBrightness),f_video.Brightness.Max),f_video.Brightness.Min);
+end;
+
+procedure Tf_main.CameraVideoEncoderChange(Sender: TObject);
+begin
+  if f_video.PanelEncoder.Visible and (f_video.VideoEncoder.Items.Count>0) then
+    f_video.VideoEncoder.ItemIndex:=camera.VideoEncoder;
 end;
 
 Procedure Tf_main.WheelStatus(Sender: TObject);
@@ -6266,6 +6302,7 @@ begin
   f_setup.Loadconfig(config,credentialconfig);
   if sender is Tf_devicesconnection then begin
     f_setup.Pagecontrol1.ActivePageIndex:=0;
+    f_setup.SetActivePageButton;
   end;
   pt.x:=PanelCenter.Left;
   pt.y:=PanelCenter.top;
@@ -6320,11 +6357,15 @@ begin
     config.SetValue('/INDIcamera/IndiTransfertDir',f_setup.CameraIndiTransfertDir.Text);
     config.SetValue('/ASCOMcamera/Device',f_setup.AscomCamera.Text);
     config.SetValue('/ASCOMcamera/FlipImage',f_setup.FlipImage.Checked);
+    config.SetValue('/ASCOMcamera/CameraDateObs',f_setup.CameraDateObs.Checked);
+    config.SetValue('/ASCOMcamera/FixPixelRange',f_setup.FixPixelRange.Checked);
     config.SetValue('/ASCOMRestcamera/Protocol',f_setup.CameraARestProtocol.ItemIndex);
     config.SetValue('/ASCOMRestcamera/Host',f_setup.CameraARestHost.Text);
     config.SetValue('/ASCOMRestcamera/Port',f_setup.CameraARestPort.Value);
     config.SetValue('/ASCOMRestcamera/Device',f_setup.CameraARestDevice.Value);
     config.SetValue('/ASCOMRestcamera/FlipImage',f_setup.FlipImage1.Checked);
+    config.SetValue('/ASCOMRestcamera/CameraDateObs',f_setup.CameraDateObs1.Checked);
+    config.SetValue('/ASCOMRestcamera/FixPixelRange',f_setup.FixPixelRange1.Checked);
 
     config.SetValue('/FilterWheelInterface',ord(f_setup.WheelConnection));
     config.SetValue('/INDIwheel/Server',f_setup.WheelIndiServer.Text);
@@ -7284,9 +7325,17 @@ end;
 
 procedure Tf_main.MenuViewClockClick(Sender: TObject);
 begin
-  Timestamp.Visible:=MenuViewClock.Checked;
-  TimerStampTimer.Enabled:=Timestamp.Visible;
-  TimerStampTimerTimer(nil);
+  if MenuViewClock.Checked then begin
+     StatusBar1.Panels[panelclock].Width:=DoScaleY(65);
+     StatusBar1Resize(nil);
+     TimerStampTimer.Enabled:=true;
+     TimerStampTimerTimer(nil);
+  end
+  else begin
+     StatusBar1.Panels[panelclock].Width:=0;
+     StatusBar1Resize(nil);
+     TimerStampTimer.Enabled:=false;
+  end;
 end;
 
 procedure Tf_main.MenuViewFocuserClick(Sender: TObject);
@@ -7510,7 +7559,7 @@ begin
   camera.AbortExposure;
   Preview:=false;
   Capture:=false;
-  StatusBar1.Panels[1].Text:=rsStop;
+  StatusBar1.Panels[panelstatus].Text:=rsStop;
 end;
 
 procedure Tf_main.ResetPreviewStack(Sender: TObject);
@@ -7529,7 +7578,7 @@ var e: double;
     p,binx,biny,i,x,y,w,h,sx,sy,sw,sh: integer;
 begin
 // ! can run out of main thread
-if (camera.Status=devConnected) and ((not f_capture.Running) or autofocusing) and (not learningvcurve) then begin
+if (camera.Status=devConnected) and ((not f_capture.Running) or autofocusing) and (not learningvcurve)and(not f_video.Running) then begin
   Preview:=true;
   // be sure mount is tracking, but not repeat after every frame
   if (Sender<>nil)and(not mount.Tracking) then
@@ -7609,7 +7658,7 @@ end
 else begin
    f_preview.stop;
    Preview:=false;
-   StatusBar1.Panels[1].Text:='';
+   StatusBar1.Panels[panelstatus].Text:='';
    if not AllDevicesConnected then NewMessage(rsSomeDefinedD,1);
 end;
 end;
@@ -7678,7 +7727,7 @@ if not f_capture.Running then begin
   NewMessage(rsCaptureStopp2, 0);
   exit;
 end;
-if (AllDevicesConnected)and(not autofocusing)and (not learningvcurve) then begin
+if (AllDevicesConnected)and(not autofocusing)and(not learningvcurve)and(not f_video.Running) then begin
   if (f_capture.FrameType.ItemIndex>=0)and(f_capture.FrameType.ItemIndex<=ord(High(TFrameType))) then
     ftype:=TFrameType(f_capture.FrameType.ItemIndex)
   else
@@ -7753,7 +7802,7 @@ if (AllDevicesConnected)and(not autofocusing)and (not learningvcurve) then begin
   if f_preview.Running then begin
    if canwait then begin
     NewMessage(rsStopPreview,1);
-    StatusBar1.Panels[1].Text:=rsStopPreview;
+    StatusBar1.Panels[panelstatus].Text:=rsStopPreview;
     camera.AbortExposure;
     f_preview.stop;
     // wait 5 sec.
@@ -7865,7 +7914,7 @@ if (AllDevicesConnected)and(not autofocusing)and (not learningvcurve) then begin
       txt:='';
       if f_capture.CheckBoxFocus.Checked then begin
         i:=f_capture.FocusCount.Value-f_capture.FocusNum;
-        buf:=blank+inttostr(i)+blank+LowerCase(rsImage);
+        buf:=blank+inttostr(i)+blank+LowerCase(rsImages);
         if txt='' then txt:=buf else txt:=txt+', '+rsOr+blank+buf;
       end;
       if (AutofocusPeriod>0)and(AutoFocusLastTime<>NullCoord) then begin
@@ -7905,7 +7954,7 @@ if (AllDevicesConnected)and(not autofocusing)and (not learningvcurve) then begin
     f_capture.DitherNum:=0;
     if autoguider.State=GUIDER_GUIDING then begin
       NewMessage(rsDithering+ellipsis,1);
-      StatusBar1.Panels[1].Text:=rsDithering+ellipsis;
+      StatusBar1.Panels[panelstatus].Text:=rsDithering+ellipsis;
       autoguider.Dither(DitherPixel, DitherRAonly, DitherWaitTime);
       autoguider.WaitDithering(SettleMaxTime);
       Wait(1);
@@ -7935,7 +7984,7 @@ begin
      NewMessage(rsCannotStartC+', '+rsAbort,9);
      f_capture.Stop;
      Capture:=false;
-     StatusBar1.Panels[1].Text := '';
+     StatusBar1.Panels[panelstatus].Text := '';
      if not AllDevicesConnected then NewMessage(rsSomeDefinedD,1);
   end;
 end;
@@ -8048,7 +8097,7 @@ else begin
    NewMessage(rsCannotStartC+', autofocus='+BoolToStr(Autofocusing,True),9);
    f_capture.Stop;
    Capture:=false;
-   StatusBar1.Panels[1].Text := '';
+   StatusBar1.Panels[panelstatus].Text := '';
    if not AllDevicesConnected then NewMessage(rsSomeDefinedD,1);
 end;
 end;
@@ -8075,24 +8124,24 @@ begin
      end;
      if Capture then begin
        if f_capture.Running then
-         StatusBar1.Panels[1].Text := rsSeq+blank+inttostr(f_capture.SeqCount)+'/'+f_capture.SeqNum.Text+' '+txt;
+         StatusBar1.Panels[panelstatus].Text := rsSeq+blank+inttostr(f_capture.SeqCount)+'/'+f_capture.SeqNum.Text+' '+txt;
      end
      else begin
-        StatusBar1.Panels[1].Text := txt;
+        StatusBar1.Panels[panelstatus].Text := txt;
      end;
    end
    else begin
-      StatusBar1.Panels[1].Text := '';
+      StatusBar1.Panels[panelstatus].Text := '';
    end;
  end else begin
   if n>=10 then txt:=FormatFloat(f0, n)
            else txt:=FormatFloat(f1, n);
   if Capture then begin
     if f_capture.Running then
-      StatusBar1.Panels[1].Text := rsSeq+blank+inttostr(f_capture.SeqCount)+'/'+f_capture.SeqNum.Text+blank+rsExp+blank+txt+blank+rsSec;
+      StatusBar1.Panels[panelstatus].Text := rsSeq+blank+inttostr(f_capture.SeqCount)+'/'+f_capture.SeqNum.Text+blank+rsExp+blank+txt+blank+rsSec;
   end
   else begin
-     StatusBar1.Panels[1].Text := rsExp+blank+txt+blank+rsSec;
+     StatusBar1.Panels[panelstatus].Text := rsExp+blank+txt+blank+rsSec;
   end;
  end;
 end;
@@ -8101,10 +8150,14 @@ procedure Tf_main.CameraNewImage(Sender: TObject);
 begin
   if Capture then begin
     // save file first
-    if not (FlatAutoExposure and (camera.FrameType=FLAT)) then
+    if not ((FlatAutoExposure and (camera.FrameType=FLAT))or(SaveBitmap)) then begin
       {$ifdef debug_raw}writeln(FormatDateTime(dateiso,Now)+blank+'save fits file');{$endif}
       CameraSaveNewImage;
       {$ifdef debug_raw}writeln(FormatDateTime(dateiso,Now)+blank+'saved');{$endif}
+      ImageSaved:=true;
+    end
+    else
+      ImageSaved:=false;
   end;
   Application.QueueAsyncCall(@CameraNewImageAsync,0);
 end;
@@ -8131,7 +8184,7 @@ var buf: string;
     displayimage: boolean;
 begin
  try
-  StatusBar1.Panels[1].Text:='';
+  StatusBar1.Panels[panelstatus].Text:='';
   ImgFrameX:=FrameX;
   ImgFrameY:=FrameY;
   ImgFrameW:=FrameW;
@@ -8169,19 +8222,23 @@ begin
   end;
   // process capture
   if Capture then begin
+     if not ImageSaved then begin
      // process automatic flat
-     if FlatAutoExposure and (camera.FrameType=FLAT) then begin
-       {$ifdef debug_raw}writeln(FormatDateTime(dateiso,Now)+blank+'flat auto exposure');{$endif}
-       case FlatType of
-         ftSKY : begin
-                 if not CameraNewSkyFlat then exit;
-                 end;
-         ftDome :begin
-                 if not CameraNewDomeFlat then exit;
-                 end;
-       end;
-       {$ifdef debug_raw}writeln(FormatDateTime(dateiso,Now)+blank+'save flat image');{$endif}
-       CameraSaveNewImage;
+       if FlatAutoExposure and (camera.FrameType=FLAT) then begin
+         {$ifdef debug_raw}writeln(FormatDateTime(dateiso,Now)+blank+'flat auto exposure');{$endif}
+         case FlatType of
+           ftSKY : begin
+                   if not CameraNewSkyFlat then exit;
+                   end;
+           ftDome :begin
+                   if not CameraNewDomeFlat then exit;
+                   end;
+         end;
+         {$ifdef debug_raw}writeln(FormatDateTime(dateiso,Now)+blank+'save flat image');{$endif}
+         CameraSaveNewImage;
+       end
+       else
+         CameraSaveNewImage;
      end;
      // image measurement
      {$ifdef debug_raw}writeln(FormatDateTime(dateiso,Now)+blank+'image measurement');{$endif}
@@ -8202,7 +8259,7 @@ begin
           Capture:=false;
           f_capture.Stop;
           NewMessage(rsStopCapture+', '+Format(rsSeqFinished, [inttostr(f_capture.SeqCount-1)+'/'+f_capture.SeqNum.Text]),2);
-          StatusBar1.Panels[1].Text := Format(rsSeqFinished, [inttostr(f_capture.SeqCount-1)+'/'+f_capture.SeqNum.Text]);
+          StatusBar1.Panels[panelstatus].Text := Format(rsSeqFinished, [inttostr(f_capture.SeqCount-1)+'/'+f_capture.SeqNum.Text]);
           MenuCaptureStart.Caption:=f_capture.BtnStart.Caption
        end;
      end;
@@ -8213,7 +8270,7 @@ begin
     if camera.ImageFormat<>'.fits' then buf:=buf+' '+UpperCase(camera.ImageFormat);
     buf:=buf+'  '+inttostr(fits.HeaderInfo.naxis1)+'x'+inttostr(fits.HeaderInfo.naxis2);
     if camera.StackCount>1 then buf:=buf+','+blank+Format(rsStackOfFrame, [inttostr(camera.StackCount)]);
-    StatusBar1.Panels[2].Text:=buf;
+    StatusBar1.Panels[panelfile].Text:=buf;
     if (not EarlyNextExposure) or Autofocusing then begin
       // Next exposure delayed after image display
       // start the exposure now
@@ -8226,7 +8283,7 @@ begin
          f_preview.stop;
          Preview:=false;
          NewMessage(rsEndPreview,2);
-         StatusBar1.Panels[1].Text:='';
+         StatusBar1.Panels[panelstatus].Text:='';
       end;
     end;
   end;
@@ -8338,14 +8395,14 @@ begin
       // wait for dusk
       if FlatWaitDusk then begin
          NewMessage(rsSkyIsStillTo,2);
-         StatusBar1.Panels[1].Text:=rsWaitingForDu;
+         StatusBar1.Panels[panelstatus].Text:=rsWaitingForDu;
          wait(30);
       end
       // or abort
       else begin
          Capture:=false;
          f_capture.Stop;
-         StatusBar1.Panels[1].Text:=rsStop;
+         StatusBar1.Panels[panelstatus].Text:=rsStop;
          NewMessage(rsReachConfigu,1);
          NewMessage(rsStopFlatCapt,1);
          exit;
@@ -8357,14 +8414,14 @@ begin
       // wait for dawn
       if FlatWaitDawn then begin
         NewMessage(rsSkyIsStillTo2,2);
-        StatusBar1.Panels[1].Text:=rsWaitingForDa;
+        StatusBar1.Panels[panelstatus].Text:=rsWaitingForDa;
         wait(30);
       end
       // or abort
       else begin
         Capture:=false;
         f_capture.Stop;
-        StatusBar1.Panels[1].Text:=rsStop;
+        StatusBar1.Panels[panelstatus].Text:=rsStop;
         NewMessage(rsReachConfigu2,1);
         NewMessage(rsStopFlatCapt,1);
         exit;
@@ -8511,8 +8568,8 @@ try
  end;
  if camera.ImageFormat<>'.fits' then buf:=UpperCase(camera.ImageFormat)+' '+buf;
  buf:=buf+' '+inttostr(fits.HeaderInfo.naxis1)+'x'+inttostr(fits.HeaderInfo.naxis2);
- StatusBar1.Panels[2].Text:=buf;
- StatusBar1.Panels[1].Text := '';
+ StatusBar1.Panels[panelfile].Text:=buf;
+ StatusBar1.Panels[panelstatus].Text := '';
  // save as bitmap
  if SaveBitmap then begin
   {$ifdef debug_raw}writeln(FormatDateTime(dateiso,Now)+blank+'Save bitmap');{$endif}
@@ -8599,7 +8656,7 @@ end;
 
 Procedure Tf_main.ShowHistogramPos(msg:string);
 begin
-  StatusBar1.Panels[0].Text:=msg;
+  StatusBar1.Panels[panelcursor].Text:=msg;
 end;
 
 Procedure Tf_main.Redraw(Sender: TObject);
@@ -10672,7 +10729,7 @@ end;
 
 procedure Tf_main.EndControlExposure(Sender: TObject);
 begin
-  StatusBar1.Panels[1].Text:='';
+  StatusBar1.Panels[panelstatus].Text:='';
 end;
 
 procedure Tf_main.MenuStopAstrometryClick(Sender: TObject);
@@ -11239,7 +11296,7 @@ var imgsize: string;
 begin
    oldw:=fits.HeaderInfo.naxis1;
    oldh:=fits.HeaderInfo.naxis2;
-   StatusBar1.Panels[1].Text:='';
+   StatusBar1.Panels[panelstatus].Text:='';
    fits.LoadFromFile(fn);
    if fits.HeaderInfo.valid then begin
      if fits.HeaderInfo.solved then begin
@@ -11339,7 +11396,7 @@ begin
      DrawImage;
      imgsize:=inttostr(fits.HeaderInfo.naxis1)+'x'+inttostr(fits.HeaderInfo.naxis2);
      NewMessage(Format(rsOpenFile, [fn]),2);
-     StatusBar1.Panels[2].Text:=Format(rsOpenFile, [fn])+' '+imgsize;
+     StatusBar1.Panels[panelfile].Text:=Format(rsOpenFile, [fn])+' '+imgsize;
    end
    else begin
     NewMessage(Format(rsInvalidOrUns, [fn]),1);
@@ -11348,7 +11405,7 @@ end;
 
 procedure Tf_main.LoadRawFile(fn:string);
 var RawStream, FitsStream: TMemoryStream;
-    imgsize, rmsg: string;
+    imgsize, rmsg, ext: string;
 begin
  {$ifdef debug_raw}writeln(FormatDateTime(dateiso,Now)+blank+'LoadRawFile'+blank+fn);{$endif}
  // create resources
@@ -11356,10 +11413,11 @@ begin
  FitsStream:=TMemoryStream.Create;
  try
    // load picture
+   ext:=ExtractFileExt(fn);
    {$ifdef debug_raw}writeln(FormatDateTime(dateiso,Now)+blank+'LoadFromFile');{$endif}
    RawStream.LoadFromFile(fn);
    {$ifdef debug_raw}writeln(FormatDateTime(dateiso,Now)+blank+'RawToFits');{$endif}
-   RawToFits(RawStream,FitsStream,rmsg);
+   RawToFits(RawStream,ext,FitsStream,rmsg);
    if rmsg<>'' then NewMessage(rmsg,1);
    if FitsStream.size<2880 then
       NewMessage('Invalid file '+fn,0)
@@ -11377,7 +11435,7 @@ begin
      {$ifdef debug_raw}writeln(FormatDateTime(dateiso,Now)+blank+'DrawImage end');{$endif}
      imgsize:=inttostr(fits.HeaderInfo.naxis1)+'x'+inttostr(fits.HeaderInfo.naxis2);
      NewMessage(Format(rsOpenFile, [fn]),2);
-     StatusBar1.Panels[2].Text:=Format(rsOpenFile, [fn])+' '+imgsize;
+     StatusBar1.Panels[panelfile].Text:=Format(rsOpenFile, [fn])+' '+imgsize;
    end;
  finally
    // Free resources
@@ -11410,7 +11468,7 @@ begin
      DrawImage;
      imgsize:=inttostr(fits.HeaderInfo.naxis1)+'x'+inttostr(fits.HeaderInfo.naxis2);
      NewMessage(Format(rsOpenFile, [fn]),2);
-     StatusBar1.Panels[2].Text:=Format(rsOpenFile, [fn])+' '+imgsize;
+     StatusBar1.Panels[panelfile].Text:=Format(rsOpenFile, [fn])+' '+imgsize;
    end;
  finally
    // Free resources
@@ -11501,7 +11559,7 @@ end;
 
 procedure Tf_main.TimerStampTimerTimer(Sender: TObject);
 begin
-   Timestamp.Caption:=TimeToStr(now);
+   StatusBar1.Panels[panelclock].Text:=TimeToStr(now);
 end;
 
 function Tf_main.CheckMeridianFlip(nextexposure:double; canwait:boolean; out waittime:integer):boolean;
@@ -11568,7 +11626,7 @@ begin
            wait(2);
            meridianflipping:=true;
            NewMessage(Format(rsWaitMeridian, [inttostr(MeridianDelay1)]),2);
-           StatusBar1.Panels[1].Text := rsWaitMeridian2;
+           StatusBar1.Panels[panelstatus].Text := rsWaitMeridian2;
            waittime:=15+abs(round(rad2deg*3600*hh/15)); // time to wait for meridian
            exit;
         end else begin
@@ -11637,7 +11695,7 @@ begin
         end;
         // flip
         NewMessage(rsMeridianFlip4,1);
-        StatusBar1.Panels[1].Text := rsMeridianFlip5;
+        StatusBar1.Panels[panelstatus].Text := rsMeridianFlip5;
         mount.FlipMeridian;
         wait(2);
         if mount.PierSide=pierWest then begin
@@ -11750,7 +11808,7 @@ begin
         Wait(2);
         f_capture.DitherNum:=0; // no dither after flip
         NewMessage(rsMeridianFlip10,1);
-        StatusBar1.Panels[1].Text := '';
+        StatusBar1.Panels[panelstatus].Text := '';
         finally
           meridianflipping:=false;
         end;
@@ -12119,11 +12177,11 @@ begin
      ra:=c.ra/15;
      de:=c.dec;
      J2000ToMount(mount.EquinoxJD,ra,de);
-     StatusBar1.Panels[1].Text:=ARToStr3(ra)+' '+DEToStr(de);
+     StatusBar1.Panels[panelstatus].Text:=ARToStr3(ra)+' '+DEToStr(de);
    end;
  end;
  yy:=img_Height-yy;
- StatusBar1.Panels[0].Text:=inttostr(xx)+'/'+inttostr(yy)+': '+sval;
+ StatusBar1.Panels[panelcursor].Text:=inttostr(xx)+'/'+inttostr(yy)+': '+sval;
 end;
 
 procedure Tf_main.StartServer;
@@ -12212,7 +12270,7 @@ begin
            f_sequence.DelayMsg.Caption;
  end
  else if (s = 'CAPTURE') then begin
-   result:=StatusBar1.Panels[1].Text+' '+StatusBar1.Panels[2].Text;
+   result:=StatusBar1.Panels[panelstatus].Text+' '+StatusBar1.Panels[panelfile].Text;
  end
  else if (s = 'LOG') then begin
    result:='';
@@ -12360,10 +12418,10 @@ begin
       result:=result+'<b>'+rsCapture+': '+'</b>'
    else if preview then
       result:=result+'<b>'+rsPreview+': '+'</b>';
-   result:=result+StatusBar1.Panels[1].Text+'<br>'+crlf;
+   result:=result+StatusBar1.Panels[panelstatus].Text+'<br>'+crlf;
 
    result:=result+'<a href="fullimage.jpg" target="_blank"><img src="scrimage.jpg" width="520" alt="Last image on screen"></a>' +'<br>'+crlf;
-   result:=result+StatusBar1.Panels[2].Text+'<br>'+crlf;
+   result:=result+StatusBar1.Panels[panelfile].Text+'<br>'+crlf;
 
    n:=f_msg.msg.Lines.Count-1;
    if n<30 then j:=0

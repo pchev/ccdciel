@@ -81,6 +81,7 @@ procedure T_indiwatchdog.CreateIndiClient;
 begin
 if csDestroying in ComponentState then exit;
   indiclient:=TIndiBaseClient.Create;
+  indiclient.Timeout:=FTimeOut;
   indiclient.onNewDevice:=@NewDevice;
   indiclient.onNewMessage:=@NewMessage;
   indiclient.onNewProperty:=@NewProperty;
@@ -118,7 +119,6 @@ begin
  HeartbeatTimer.Enabled:=false;
  HeartbeatTimer.Interval:=60000;
  HeartbeatTimer.OnTimer:=@HeartbeatTimerTimer;
- CreateIndiClient;
 end;
 
 destructor  T_indiwatchdog.Destroy;
@@ -127,8 +127,7 @@ begin
  ConnectTimer.Enabled:=false;
  ReadyTimer.Enabled:=false;
  HeartbeatTimer.Enabled:=false;
- indiclient.onServerDisconnected:=nil;
- indiclient.Free;
+ if indiclient<>nil then indiclient.onServerDisconnected:=nil;
  FreeAndNil(InitTimer);
  FreeAndNil(ConnectTimer);
  FreeAndNil(ReadyTimer);
@@ -177,7 +176,7 @@ end;
 
 Procedure T_indiwatchdog.Connect(cp1: string; cp2:string=''; cp3:string=''; cp4:string='');
 begin
-if (indiclient=nil)or(indiclient.Terminated) then CreateIndiClient;
+CreateIndiClient;
 if not indiclient.Connected then begin
   Findiserver:=cp1;
   Findiserverport:=cp2;
@@ -216,11 +215,13 @@ begin
 InitTimer.Enabled:=False;
 ConnectTimer.Enabled:=False;
 HeartbeatTimer.Enabled:=False;
-SetHeartbeat(0);
-wait(1);
-indiclient.disconnectDevice(Findidevice);
-wait(1);
-indiclient.Terminate;
+if indiclient<>nil then begin
+  SetHeartbeat(0);
+  wait(1);
+  indiclient.disconnectDevice(Findidevice);
+  wait(1);
+  indiclient.Terminate;
+end;
 ClearStatus;
 end;
 
@@ -240,7 +241,6 @@ begin
   FStatus := devDisconnected;
   if Assigned(FonStatusChange) then FonStatusChange(self);
   msg(rsserver+' '+rsDisconnected3,0);
-  CreateIndiClient;
 end;
 
 procedure T_indiwatchdog.NewDevice(dp: Basedevice);
@@ -333,8 +333,8 @@ end;
 
 procedure T_indiwatchdog.SetTimeout(num:integer);
 begin
- FTimeOut:=num;
- indiclient.Timeout:=FTimeOut;
+  FTimeOut:=num;
+  if indiclient<>nil then indiclient.Timeout:=FTimeOut;
 end;
 
 procedure T_indiwatchdog.LoadConfig;

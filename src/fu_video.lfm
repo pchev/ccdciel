@@ -1,18 +1,20 @@
 object f_video: Tf_video
   Left = 0
-  Height = 449
+  Height = 577
   Top = 0
-  Width = 186
+  Width = 190
   AutoSize = True
-  ClientHeight = 449
-  ClientWidth = 186
+  ClientHeight = 577
+  ClientWidth = 190
   ParentFont = False
   TabOrder = 0
+  DesignLeft = -4
+  DesignTop = -4
   object Title: TLabel
     Left = 0
     Height = 20
     Top = 0
-    Width = 186
+    Width = 190
     Align = alTop
     Alignment = taCenter
     AutoSize = False
@@ -26,32 +28,68 @@ object f_video: Tf_video
   end
   object Panel1: TPanel
     Left = 0
-    Height = 424
+    Height = 554
     Top = 20
-    Width = 186
+    Width = 190
     Align = alTop
     AutoSize = True
     BevelOuter = bvNone
-    ClientHeight = 424
-    ClientWidth = 186
+    ClientHeight = 554
+    ClientWidth = 190
     ParentFont = False
     TabOrder = 0
-    object PanelExposure: TPanel
+    object PanelExposure2: TPanel
       Left = 0
       Height = 46
-      Top = 30
-      Width = 186
+      Top = 118
+      Width = 190
       Align = alTop
       BevelOuter = bvNone
       ClientHeight = 46
-      ClientWidth = 186
+      ClientWidth = 190
+      TabOrder = 8
+      object Label8: TLabel
+        Left = 8
+        Height = 17
+        Top = 10
+        Width = 57
+        Caption = 'Exposure'
+        ParentColor = False
+        ParentFont = False
+      end
+      object StreamExp: TFloatSpinEditEx
+        Left = 81
+        Height = 30
+        Top = 6
+        Width = 101
+        MaxLength = 0
+        TabOrder = 0
+        OnChange = StreamExpChange
+        DecimalPlaces = 3
+        Increment = 0.1
+        MaxValue = 1
+        MinValue = 0
+        NullValue = 0
+        NullValueBehaviour = nvbInitialValue
+        Value = 0
+      end
+    end
+    object PanelExposure1: TPanel
+      Left = 0
+      Height = 46
+      Top = 72
+      Width = 190
+      Align = alTop
+      BevelOuter = bvNone
+      ClientHeight = 46
+      ClientWidth = 190
       ParentFont = False
       TabOrder = 0
       object Label4: TLabel
-        Left = 0
-        Height = 19
+        Left = 8
+        Height = 17
         Top = 0
-        Width = 58
+        Width = 57
         Caption = 'Exposure'
         ParentColor = False
         ParentFont = False
@@ -84,18 +122,18 @@ object f_video: Tf_video
       Left = 0
       Height = 30
       Top = 0
-      Width = 186
+      Width = 190
       Align = alTop
       BevelOuter = bvNone
       ClientHeight = 30
-      ClientWidth = 186
+      ClientWidth = 190
       ParentFont = False
       TabOrder = 1
       object Preview: TCheckBox
         Left = 8
         Height = 21
         Top = 1
-        Width = 75
+        Width = 72
         Caption = 'Preview'
         OnChange = PreviewChange
         ParentFont = False
@@ -103,7 +141,7 @@ object f_video: Tf_video
       end
       object FPSlabel: TLabel
         Left = 101
-        Height = 19
+        Height = 17
         Top = 1
         Width = 57
         Caption = '                   '
@@ -114,19 +152,19 @@ object f_video: Tf_video
     object PanelGain: TPanel
       Left = 0
       Height = 46
-      Top = 76
-      Width = 186
+      Top = 164
+      Width = 190
       Align = alTop
       BevelOuter = bvNone
       ClientHeight = 46
-      ClientWidth = 186
+      ClientWidth = 190
       ParentFont = False
       TabOrder = 2
       object Label5: TLabel
         Left = 8
-        Height = 19
+        Height = 17
         Top = 0
-        Width = 29
+        Width = 28
         Caption = 'Gain'
         ParentColor = False
         ParentFont = False
@@ -146,19 +184,19 @@ object f_video: Tf_video
     object PanelGamma: TPanel
       Left = 0
       Height = 46
-      Top = 122
-      Width = 186
+      Top = 210
+      Width = 190
       Align = alTop
       BevelOuter = bvNone
       ClientHeight = 46
-      ClientWidth = 186
+      ClientWidth = 190
       ParentFont = False
       TabOrder = 3
       object Label6: TLabel
         Left = 8
-        Height = 19
+        Height = 17
         Top = 0
-        Width = 50
+        Width = 48
         Caption = 'Gamma'
         ParentColor = False
         ParentFont = False
@@ -178,17 +216,17 @@ object f_video: Tf_video
     object PanelBrightness: TPanel
       Left = 0
       Height = 46
-      Top = 168
-      Width = 186
+      Top = 256
+      Width = 190
       Align = alTop
       BevelOuter = bvNone
       ClientHeight = 46
-      ClientWidth = 186
+      ClientWidth = 190
       ParentFont = False
       TabOrder = 4
       object Label7: TLabel
         Left = 8
-        Height = 19
+        Height = 17
         Top = 0
         Width = 67
         Caption = 'Brightness'
@@ -210,17 +248,17 @@ object f_video: Tf_video
     object PanelOptions: TPanel
       Left = 0
       Height = 59
-      Top = 242
-      Width = 186
+      Top = 330
+      Width = 190
       Align = alTop
       BevelOuter = bvNone
       ClientHeight = 59
-      ClientWidth = 186
+      ClientWidth = 190
       ParentFont = False
       TabOrder = 5
       object Label2: TLabel
         Left = 8
-        Height = 19
+        Height = 17
         Top = 4
         Width = 24
         Caption = 'Size'
@@ -241,9 +279,9 @@ object f_video: Tf_video
       end
       object Label1: TLabel
         Left = 8
-        Height = 19
+        Height = 17
         Top = 32
-        Width = 71
+        Width = 67
         Caption = 'Frame rate'
         ParentColor = False
         ParentFont = False
@@ -263,20 +301,20 @@ object f_video: Tf_video
     end
     object PanelRecord: TPanel
       Left = 0
-      Height = 123
-      Top = 301
-      Width = 186
+      Height = 165
+      Top = 389
+      Width = 190
       Align = alTop
       BevelOuter = bvNone
-      ClientHeight = 123
-      ClientWidth = 186
+      ClientHeight = 165
+      ClientWidth = 190
       ParentFont = False
       TabOrder = 6
       object Duration: TCheckBox
         Left = 7
         Height = 21
         Top = 2
-        Width = 80
+        Width = 78
         Caption = 'Duration'
         OnClick = DurationClick
         ParentFont = False
@@ -304,7 +342,7 @@ object f_video: Tf_video
         Left = 7
         Height = 21
         Top = 28
-        Width = 71
+        Width = 69
         Caption = 'Frames'
         OnClick = FramesClick
         ParentFont = False
@@ -331,7 +369,7 @@ object f_video: Tf_video
       end
       object Label3: TLabel
         Left = 7
-        Height = 19
+        Height = 17
         Top = 61
         Width = 40
         Caption = 'Object'
@@ -339,7 +377,7 @@ object f_video: Tf_video
         ParentFont = False
       end
       object ObjectName: TEdit
-        Left = 68
+        Left = 69
         Height = 28
         Top = 57
         Width = 112
@@ -350,7 +388,7 @@ object f_video: Tf_video
       object BtnStartRec: TButton
         Left = 7
         Height = 25
-        Top = 96
+        Top = 128
         Width = 76
         Caption = 'Start'
         OnClick = BtnStartRecClick
@@ -360,23 +398,41 @@ object f_video: Tf_video
       object BtnStopRec: TButton
         Left = 100
         Height = 25
-        Top = 96
+        Top = 128
         Width = 76
         Caption = 'Stop'
         OnClick = BtnStopRecClick
         ParentFont = False
         TabOrder = 6
       end
+      object VideoCaptureDir: TEdit
+        Left = 69
+        Height = 28
+        Top = 88
+        Width = 112
+        Constraints.MaxHeight = 28
+        ParentFont = False
+        TabOrder = 7
+      end
+      object Label9: TLabel
+        Left = 7
+        Height = 17
+        Top = 92
+        Width = 58
+        Caption = 'Directory'
+        ParentColor = False
+        ParentFont = False
+      end
     end
     object PanelMore: TPanel
       Left = 0
       Height = 28
-      Top = 214
-      Width = 186
+      Top = 302
+      Width = 190
       Align = alTop
       BevelOuter = bvNone
       ClientHeight = 28
-      ClientWidth = 186
+      ClientWidth = 190
       ParentFont = False
       TabOrder = 7
       object BtnOptions: TButton
@@ -387,6 +443,36 @@ object f_video: Tf_video
         Caption = 'More settings'
         OnClick = BtnOptionsClick
         ParentFont = False
+        TabOrder = 0
+      end
+    end
+    object PanelEncoder: TPanel
+      Left = 0
+      Height = 42
+      Top = 30
+      Width = 190
+      Align = alTop
+      BevelOuter = bvNone
+      ClientHeight = 42
+      ClientWidth = 190
+      TabOrder = 9
+      object Label10: TLabel
+        Left = 8
+        Height = 17
+        Top = 10
+        Width = 51
+        Caption = 'Encoder'
+        ParentColor = False
+      end
+      object VideoEncoder: TComboBox
+        Left = 81
+        Height = 28
+        Top = 6
+        Width = 101
+        Constraints.MaxHeight = 28
+        ItemHeight = 0
+        OnChange = VideoEncoderChange
+        Style = csDropDownList
         TabOrder = 0
       end
     end

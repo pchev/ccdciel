@@ -158,20 +158,12 @@ msgstr ""
 msgid "Histogram of the current image.%sClick and move to adjust the visualisation threshold."
 msgstr ""
 
-#: u_hints:rsshowofthehis
-msgid "Show %s of the histogram"
-msgstr ""
-
 #: u_hints:rscreateanewem
 msgid "Create a new empty profile.%sWarning this also clear every program preference for this new profile.%sUse the Copy button if you want to configure a different equipment but keep the program options."
 msgstr ""
 
 #: u_hints:rszoomtoadjust
 msgid "Zoom to adjust in window"
-msgstr ""
-
-#: u_hints:rsfixthevisual
-msgid "Fix the visualisation threshold to the image data range, 100% of the histogram."
 msgstr ""
 
 #: u_hints:rszoomtwotime
@@ -564,5 +556,13 @@ msgstr ""
 
 #: u_hints:rsguidinghisto
 msgid "Guiding history in arcsecond %s - blue: RA error %s - red: Dec error %s - yellow: Star mass"
+msgstr ""
+
+#: u_hints:rsdonotsetthis
+msgid "Do not set this option if you don't know exactly what you do and without careful testing"
+msgstr ""
+
+#: u_hints:rsimageluminos
+msgid "Image luminosity"
 msgstr ""
 

@@ -28,7 +28,7 @@ interface
 uses pu_planetariuminfo, u_global, u_utils, u_ccdconfig, pu_pascaleditor, u_annotation, pu_keyboard,
   pu_scriptengine, cu_astrometry, u_hints, u_translation, pu_selectscript, Classes, math, cu_targets,
   SysUtils, FileUtil, Forms, Controls, Graphics, Dialogs, StdCtrls, UScaleDPI, cu_sequencefile, cu_plan,
-  LazUTF8, maskedit, Grids, ExtCtrls, ComCtrls, EditBtn, SpinEx, Buttons;
+  LazUTF8, maskedit, Grids, ExtCtrls, ComCtrls, EditBtn, SpinEx, Buttons, Types;
 
 const
   colseq=0; colname=1; colplan=2; colra=3; coldec=4; colpa=5; colstart=6; colend=7; coldark=8; colskip=9; colrepeat=10; colastrometry=11; colinplace=12; colupdcoord=13;
@@ -225,6 +225,7 @@ type
       tIndex: Integer);
     procedure TargetListCompareCells(Sender: TObject; ACol, ARow, BCol,
       BRow: Integer; var Result: integer);
+    procedure TargetListDrawCell(Sender: TObject; aCol, aRow: Integer; aRect: TRect; aState: TGridDrawState);
     procedure TargetListEditingDone(Sender: TObject);
     procedure TargetListGetCellHint(Sender: TObject; ACol, ARow: Integer; var HintText: String);
     procedure TargetListHeaderClick(Sender: TObject; IsColumn: Boolean; Index: Integer);
@@ -241,6 +242,9 @@ type
     LockStep, StepsModified, ObjectNameChange: boolean;
     Lockcb: boolean;
     SortDirection: integer;
+    FDoneWarning: boolean;
+    FCoordWarning: boolean;
+    FCoordWarningRow: integer;
     procedure SetPlanList(n: integer; pl:string);
     procedure SetScriptList(n: integer; sl:string);
     procedure ResetSequences;
@@ -303,6 +307,7 @@ begin
   StepsModified:=false;
   Lockcb:=false;
   SortDirection:=-1;
+  FCoordWarning:=false;
   f_selectscript:=Tf_selectscript.Create(self);
   cbStopTracking.Checked:=true;
   LoadPlanList;
@@ -760,9 +765,9 @@ begin
 end;
 
 procedure Tf_EditTargets.BtnNewObjectClick(Sender: TObject);
-var n: integer;
+var n,i: integer;
     ra0,dec0,length0,width0,pa : double;
-    obj,objname : string;
+    obj,objname,chkobj : string;
     foundok: boolean;
 begin
   PageControlTools.ActivePageIndex:=pageobject;
@@ -798,12 +803,27 @@ begin
      end;
     until linepos>=$FFFFFF;{Found object or end of database}
   end;
+  chkobj:=obj+'##%%##';
   if not foundok then begin
-    TargetList.Cells[colname,n]:=obj;
+    FCoordWarning:=true;
+    FCoordWarningRow:=n;
+    TargetList.Cells[colname,n]:=chkobj;
+  end;
+  MoveFlat(nil);
+  if FCoordWarning then begin
+    // search moved object row
+    for i:=0 to TargetList.RowCount-1 do begin
+      if TargetList.Cells[colname,i]=chkobj then begin
+        TargetList.Cells[colname,i]:=obj;
+        FCoordWarningRow:=i;
+        break;
+      end;
+    end;
   end;
   TargetChange(nil);
   ShowPlan;
-  MoveFlat(Sender);
+  Application.ProcessMessages;
+  FCoordWarning:=false;
 end;
 
 procedure Tf_EditTargets.NewObject;
@@ -1802,6 +1822,18 @@ begin
  end;
 end;
 
+procedure Tf_EditTargets.TargetListDrawCell(Sender: TObject; aCol, aRow: Integer; aRect: TRect; aState: TGridDrawState);
+begin
+ if FCoordWarning then begin
+   if ((aCol=colra)or(aCol=coldec))and(aRow=FCoordWarningRow) then begin
+      TargetList.Canvas.Brush.Style:=bsSolid;
+      TargetList.Canvas.Brush.Color:=clred;
+      TargetList.Canvas.FillRect(aRect);
+      TargetList.Canvas.TextOut(aRect.Left,aRect.Top,TargetList.Cells[aCol,aRow]);
+   end;
+ end;
+end;
+
 procedure Tf_EditTargets.TargetListEditingDone(Sender: TObject);
 begin
   TargetChange(Sender);
@@ -2093,7 +2125,7 @@ begin
       SeqStopTwilight.Checked:=false;
       SeqStop.Checked:=false;
     end;
-    TargetChange(Sender);
+    if Sender<>nil then TargetChange(Sender);
   end;
 end;
 

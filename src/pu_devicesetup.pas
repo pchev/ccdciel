@@ -51,6 +51,10 @@ type
     AlpacaServers: TComboBox;
     AlpacaCameraList: TComboBox;
     AlpacaDiscoveryPort: TSpinEditEx;
+    CameraDateObs: TCheckBox;
+    CameraDateObs1: TCheckBox;
+    FixPixelRange: TCheckBox;
+    FixPixelRange1: TCheckBox;
     FocuserExternalTemperature: TCheckBox;
     DefaultARestPass: TEdit;
     DefaultARestUser: TEdit;
@@ -521,6 +525,7 @@ type
     profile: string;
     procedure LoadProfileList;
     procedure Loadconfig(conf,credentialconf: TCCDConfig);
+    procedure SetActivePageButton;
     property CameraSensor: string read FCameraSensor write SetCameraSensor;
     property CameraConnection: TDevInterface read FCameraConnection write SetCameraConnection;
     property WheelConnection: TDevInterface read FWheelConnection write SetWheelConnection;
@@ -599,7 +604,6 @@ begin
 end;
 
 procedure Tf_setup.SelectNextPage(direction: integer);
-var i: integer;
 begin
   if direction<0 then begin
     if PageControl1.ActivePageIndex<PageControl1.PageCount-1 then
@@ -609,6 +613,12 @@ begin
     if PageControl1.ActivePageIndex>0 then
        PageControl1.ActivePageIndex:=PageControl1.ActivePageIndex-1;
   end;
+  SetActivePageButton;
+end;
+
+procedure Tf_setup.SetActivePageButton;
+var i: integer;
+begin
   for i:=0 to PanelLeft.ControlCount-1 do  begin
     if TSpeedButton(PanelLeft.Controls[i]).Tag=PageControl1.ActivePageIndex then
       TSpeedButton(PanelLeft.Controls[i]).Down:=True;
@@ -695,6 +705,16 @@ begin
   BtnSetupCamera1.Caption:=rsSetup;
   FlipImage.Caption:=rsFlipTheImageV;
   FlipImage1.Caption:=rsFlipTheImageV;
+  CameraDateObs.Caption:=rsDATEOBSFromC;
+  CameraDateObs1.Caption:=rsDATEOBSFromC;
+  FixPixelRange.Caption:=rsTryToFixPixe;
+  FixPixelRange1.Caption:=rsTryToFixPixe;
+  FlipImage.Hint:=rsDoNotSetThis;
+  FlipImage1.Hint:=rsDoNotSetThis;
+  CameraDateObs.Hint:=rsDoNotSetThis;
+  CameraDateObs1.Hint:=rsDoNotSetThis;
+  FixPixelRange.Hint:=rsDoNotSetThis;
+  FixPixelRange1.Hint:=rsDoNotSetThis;
   Label17.Caption:=rsBeSureToConf;
   Label6.Caption:=rsDevices;
   Label7.Caption:=rsPort;
@@ -850,7 +870,7 @@ begin
   BtnCopyProfile.Hint:=Format(rsCopyTheCurre, [crlf]);
   PanelIndiServer.Hint:=rsGlobalINDISe;
   Panel10.Hint:=rsGlobalALPACA;
-  CameraIndiTransfert.Hint:=Format(rsMakeTestToDe, [crlf]);
+  CameraIndiTransfert.Hint:=rsDoNotSetThis+crlf+crlf+Format(rsMakeTestToDe, [crlf]);
   CameraIndiTransfertDir.Hint:=rsTheTemporary;
 end;
 
@@ -915,12 +935,16 @@ CameraIndiTransfert.ItemIndex:=conf.GetValue('/INDIcamera/IndiTransfert',ord(itN
 CameraIndiTransfertDir.Text:=conf.GetValue('/INDIcamera/IndiTransfertDir',defTransfertPath);
 AscomCamera.Text:=conf.GetValue('/ASCOMcamera/Device','');
 FlipImage.Checked:=conf.GetValue('/ASCOMcamera/FlipImage',true);
+CameraDateObs.Checked:=conf.GetValue('/ASCOMcamera/CameraDateObs',false);
+FixPixelRange.Checked:=conf.GetValue('/ASCOMcamera/FixPixelRange',false);
 CameraDiskPanel.Visible:=CameraIndiTransfert.ItemIndex>0;
 CameraARestProtocol.ItemIndex:=conf.GetValue('/ASCOMRestcamera/Protocol',0);
 CameraARestHost.Text:=conf.GetValue('/ASCOMRestcamera/Host','127.0.0.1');
 CameraARestPort.Value:=conf.GetValue('/ASCOMRestcamera/Port',11111);
 CameraARestDevice.Value:=conf.GetValue('/ASCOMRestcamera/Device',0);
 FlipImage1.Checked:=conf.GetValue('/ASCOMRestcamera/FlipImage',true);
+CameraDateObs1.Checked:=conf.GetValue('/ASCOMRestcamera/CameraDateObs',false);
+FixPixelRange1.Checked:=conf.GetValue('/ASCOMRestcamera/FixPixelRange',false);
 DefaultARestProtocol.ItemIndex:=CameraARestProtocol.ItemIndex;
 DefaultARestHost.Text:=CameraARestHost.Text;
 DefaultARestPort.Value:=CameraARestPort.Value;

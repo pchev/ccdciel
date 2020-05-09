@@ -57,6 +57,7 @@ T_camera = class(TComponent)
     FonAbortExposure,FonCameraDisconnected: TNotifyEvent;
     FonVideoPreviewChange,FonVideoSizeChange,FonVideoRateChange: TNotifyEvent;
     FonFPSChange,FonVideoExposureChange : TNotifyEvent;
+    FonEncoderChange: TNotifyEvent;
     FImgStream: TMemoryStream;
     FVideoStream: TMemoryStream;
     FFilterNames: TStringList;
@@ -77,11 +78,12 @@ T_camera = class(TComponent)
     FVerticalFlip: boolean;
     FASCOMFlipImage: boolean;
     FAddFrames: boolean;
-    FVideoSizes, FVideoRates,FFNumberList:TStringList;
+    FVideoSizes, FVideoRates,FFNumberList,FVideoEncoder:TStringList;
     FTemperatureRampActive, FCancelTemperatureRamp: boolean;
     FIndiTransfert: TIndiTransfert;
     FIndiTransfertDir,FIndiTransfertPrefix: string;
     FhasGain,FhasGainISO,FCanSetGain,FhasCfaInfo,FhasFnumber,FhasCoolerPower: boolean;
+    FUseCameraStartTime,FhasLastExposureStartTime,FhasLastExposureDuration: boolean;
     FGainMin, FGainMax: integer;
     FISOList: TStringList;
     FhasFastReadout, FhasReadOut: boolean;
@@ -89,11 +91,12 @@ T_camera = class(TComponent)
     Ftimestart,Ftimeend,FMidExposureTime: double;
     FImgNum:PtrInt;
     Fexptime: double;
+    FFixPixelRange: boolean;
     procedure msg(txt: string; level:integer=3);
     procedure NewImage;
     procedure TryNextExposure(Data: PtrInt);
     procedure WriteHeaders;
-    procedure NewVideoFrame;
+    procedure NewVideoFrame(rawframe: boolean);
     procedure WriteVideoHeader(width,height,naxis,bitpix: integer);
     function GetBinX:integer; virtual; abstract;
     function GetBinY:integer; virtual; abstract;
@@ -158,6 +161,11 @@ T_camera = class(TComponent)
     function GetReadOutMode: integer; virtual; abstract;
     procedure SetFnumber(value: string); virtual; abstract;
     function GetFnumber: string; virtual; abstract;
+    function GetStreamingExposureRange:TNumRange; virtual; abstract;
+    function GetStreamingExposure:double; virtual; abstract;
+    procedure SetStreamingExposure(value:double); virtual; abstract;
+    function GetVideoEncoder: integer; virtual; abstract;
+    procedure SetVideoEncoder(value:integer); virtual; abstract;
   private
     lockvideoframe: boolean;
     TempFinal: Double;
@@ -179,6 +187,7 @@ T_camera = class(TComponent)
     procedure GetFrame(out x,y,width,height: integer; refresh:boolean=false); virtual; abstract;
     procedure GetFrameRange(out xr,yr,widthr,heightr: TNumRange); virtual; abstract;
     procedure ResetFrame; virtual; abstract;
+    procedure GetStreamFrame(out x,y,width,height: integer); virtual; abstract;
     procedure CfaInfo(out OffsetX, OffsetY: integer; out CType: string);  virtual; abstract;
     function  CheckGain: boolean; virtual; abstract;
     Procedure SetActiveDevices(focuser,filters,telescope: string); virtual; abstract;
@@ -214,6 +223,8 @@ T_camera = class(TComponent)
     property VideoRecordFile:string read GetVideoRecordFile write SetVideoRecordFile;
     property VideoExposure: integer read GetVideoExposure write SetVideoExposure;
     property VideoExposureRange: TNumRange read GetVideoExposureRange;
+    property StreamingExposure: double read GetStreamingExposure write SetStreamingExposure;
+    property StreamingExposureRange: TNumRange read GetStreamingExposureRange;
     property VideoGain: integer read GetVideoGain write SetVideoGain;
     property VideoGainRange: TNumRange read GetVideoGainRange;
     property VideoGamma: integer read GetVideoGamma write SetVideoGamma;
@@ -263,6 +274,10 @@ T_camera = class(TComponent)
     property ReadOutMode: integer read GetReadOutMode write SetReadOutMode;
     property hasFnumber: boolean read FhasFnumber;
     property Fnumber: string read GetFnumber write SetFnumber;
+    property UseCameraStartTime: boolean read FUseCameraStartTime write FUseCameraStartTime;
+    property VideoEncoders: TStringList read FVideoEncoder;
+    property VideoEncoder: Integer read GetVideoEncoder write SetVideoEncoder;
+    property FixPixelRange: boolean read FFixPixelRange write FFixPixelRange;
     property onMsg: TNotifyMsg read FonMsg write FonMsg;
     property onDeviceMsg: TNotifyMsg read FonDeviceMsg write FonDeviceMsg;
     property onExposureProgress: TNotifyNum read FonExposureProgress write FonExposureProgress;
@@ -286,6 +301,7 @@ T_camera = class(TComponent)
     property onVideoRateChange: TNotifyEvent read FonVideoRateChange write FonVideoRateChange;
     property onFPSChange: TNotifyEvent read FonFPSChange write FonFPSChange;
     property onVideoExposureChange: TNotifyEvent read FonVideoExposureChange write FonVideoExposureChange;
+    property onEncoderChange: TNotifyEvent read FonEncoderChange write FonEncoderChange;
 end;
 
 const CameraTimeout=60; // in seconds, must be enough to download image from any camers
@@ -319,6 +335,7 @@ begin
   FVideoSizes:=TStringList.Create;
   FVideoRates:=TStringList.Create;
   FFNumberList:=TStringList.Create;
+  FVideoEncoder:=TStringList.Create;
   FTemperatureRampActive:=false;
   FCancelTemperatureRamp:=false;
   FStackCount:=0;
@@ -332,6 +349,10 @@ begin
   FhasFastReadout:=false;
   FhasReadOut:=false;
   FhasFnumber:=false;
+  FUseCameraStartTime:=false;
+  FhasLastExposureStartTime:=false;
+  FhasLastExposureDuration:=false;
+  FFixPixelRange:=false;
   FImageFormat:='.fits';
   Fexptime:=0;
   FCanSetGain:=false;
@@ -352,6 +373,7 @@ begin
   FFNumberList.Free;
   FISOList.Free;
   FReadOutList.Free;
+  FVideoEncoder.Free;
   inherited Destroy;
 end;
 
@@ -704,13 +726,19 @@ begin
   Ffits.Header.Insert(i,'SWCREATE','CCDciel '+ccdciel_version+'-'+RevisionStr+blank+compile_system,'');
   if objname<>'' then Ffits.Header.Insert(i,'OBJECT',objname,'Observed object name');
   Ffits.Header.Insert(i,'IMAGETYP',hframe,'Image Type');
-  Ffits.Header.Insert(i,'DATE-OBS',hdateobs,'UTC start date of observation');
+  if FhasLastExposureStartTime then
+    Ffits.Header.Insert(i,'DATE-OBS',hdateobs,'UTC start date from camera')
+  else
+    Ffits.Header.Insert(i,'DATE-OBS',hdateobs,'UTC start date of observation');
   if shutter>0 then begin
     Ffits.Header.Insert(i,'EXPTIME',shutter,'[s] Camera Exposure Time');
     if hexp>0 then Ffits.Header.Insert(i,'REQTIME',hexp,'[s] Requested Exposure Time');
   end
   else begin
-    if hexp>0 then Ffits.Header.Insert(i,'EXPTIME',hexp,'[s] Total Exposure Time');
+    if FhasLastExposureDuration then
+       Ffits.Header.Insert(i,'EXPTIME',hexp,'[s] Exposure Time from camera')
+    else
+       Ffits.Header.Insert(i,'EXPTIME',hexp,'[s] Total Exposure Time');
   end;
   if FStackCount>1 then Ffits.Header.Insert(i,'STACKCNT',FStackCount,'Number of stacked frames');
   if cgain<>NullInt then Ffits.Header.Insert(i,'GAIN',cgain,'Camera gain setting in manufacturer units');
@@ -766,18 +794,21 @@ begin
   Ffits.Header.Add('END','','');
 end;
 
-procedure T_camera.NewVideoFrame;
+procedure T_camera.NewVideoFrame(rawframe: boolean);
 var x,y,w,h: integer;
 begin
   if lockvideoframe then exit;
   lockvideoframe:=true;
   try
-  GetFrame(x,y,w,h);
-  FVideoStream.Position:=0;
-  if Color then begin
-    WriteVideoHeader(w,h,3,8);
-  end else begin
-    WriteVideoHeader(w,h,2,8);
+  // set header for raw frame, it is set in stream from mjpeg
+  if rawframe then begin
+    GetStreamFrame(x,y,w,h);
+    FVideoStream.Position:=0;
+    if Color then begin
+      WriteVideoHeader(w,h,3,8);
+    end else begin
+      WriteVideoHeader(w,h,2,8);
+    end;
   end;
   FFits.VideoStream:=FVideoStream;
   if Assigned(FonVideoFrame) then FonVideoFrame(self);

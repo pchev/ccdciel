@@ -607,9 +607,9 @@ var s,p : integer;
 const
     sep1: tseplist = ('h','m','s');
     sep2: tseplist = (':',':',':');
+    sep3: tseplist = (' ',' ',' ');
 begin
 try
-dms:=StringReplace(dms,blank,'0',[rfReplaceAll]);
 if copy(dms,1,1)='-' then s:=-1 else s:=1;
 sep:=sep1;
 p:=pos(sep[1],dms);
@@ -617,20 +617,28 @@ if p=0 then begin
   sep:=sep2;
   p:=pos(sep[1],dms);
 end;
+if p=0 then begin
+  sep:=sep3;
+  p:=pos(sep[1],dms);
+end;
 if p=0 then
-  result:=StrToFloatDef(dms,NullCoord)
+  result:=StrToFloatDef(trim(dms),NullCoord)
 else begin
   t:=copy(dms,1,p-1); delete(dms,1,p);
-  result:=StrToIntDef(t,0);
+  result:=StrToFloatDef(trim(t),0);
   p:=pos(sep[2],dms);
-  t:=copy(dms,1,p-1); delete(dms,1,p);
-  result:=result+ s * StrToIntDef(t,0) / 60;
-  p:=pos(sep[3],dms);
   if p=0 then
-    t:=dms
-  else
-    t:=copy(dms,1,p-1);
-  result:=result+ s * StrToFloatDef(t,0) / 3600;
+    result:=result+ s * StrToFloatDef(trim(dms),0) / 60
+  else begin
+    t:=copy(dms,1,p-1); delete(dms,1,p);
+    result:=result+ s * StrToFloatDef(trim(t),0) / 60;
+    p:=pos(sep[3],dms);
+    if p=0 then
+      t:=dms
+    else
+      t:=copy(dms,1,p-1);
+    result:=result+ s * StrToFloatDef(trim(t),0) / 3600;
+  end;
 end;
 except
 result:=NullCoord;
@@ -647,9 +655,9 @@ const
     sep2: tseplist = ('°','''','"');
     sep3: tseplist = (#176,'''','"');
     sep4: tseplist = (':',':',':');
+    sep5: tseplist = (' ',' ',' ');
 begin
 try
-dms:=StringReplace(dms,blank,'0',[rfReplaceAll]);
 if copy(dms,1,1)='-' then s:=-1 else s:=1;
 sep:=sep1;
 d1:=length(sep[1])-1;
@@ -669,21 +677,29 @@ if p=0 then begin
   d1:=length(sep[1])-1;
   p:=pos(sep[1],dms);
 end;
+if p=0 then begin
+  sep:=sep5;
+  d1:=length(sep[1])-1;
+  p:=pos(sep[1],dms);
+end;
 if p=0 then
-  result:=StrToFloatDef(dms,NullCoord)
+  result:=StrToFloatDef(trim(dms),NullCoord)
 else begin
-t:=copy(dms,1,p-1); delete(dms,1,p+d1);
-result:=StrToIntDef(t,NullInt);
-if result=NullCoord then exit;
-p:=pos(sep[2],dms);
-t:=copy(dms,1,p-1); delete(dms,1,p);
-result:=result+ s * StrToIntDef(t,0) / 60;
-p:=pos(sep[3],dms);
-if p=0 then
-  t:=dms
-else
-  t:=copy(dms,1,p-1);
-result:=result+ s * StrToFloatDef(t,0) / 3600;
+  t:=copy(dms,1,p-1); delete(dms,1,p+d1);
+  result:=StrToFloatDef(trim(t),0);
+  p:=pos(sep[2],dms);
+  if p=0 then
+    result:=result+ s * StrToFloatDef(trim(dms),0) / 60
+  else begin
+    t:=copy(dms,1,p-1); delete(dms,1,p);
+    result:=result+ s * StrToFloatDef(trim(t),0) / 60;
+    p:=pos(sep[3],dms);
+    if p=0 then
+      t:=dms
+    else
+      t:=copy(dms,1,p-1);
+    result:=result+ s * StrToFloatDef(trim(t),0) / 3600;
+  end;
 end;
 except
 result:=NullCoord;

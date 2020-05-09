@@ -939,7 +939,7 @@ var t: TTarget;
     stw,i,intime,ri,si,ti: integer;
     hr,hs,ht,tt,dt,st,newra,newde,appra,appde,enddelay,chkendtime: double;
     autofocusstart, astrometrypointing, autostartguider,isCalibrationTarget: boolean;
-    skipmsg: string;
+    skipmsg, buf: string;
 begin
   SkipTarget:=false;
   result:=false;
@@ -1143,6 +1143,24 @@ begin
         end;
         // set coordinates
         if ((t.ra<>NullCoord)and(t.de<>NullCoord)) then begin
+          // Check dome open and slaving
+          if (dome.Status=devConnected) and
+            ((not dome.Shutter)or(dome.hasSlaving and(not dome.Slave)))
+            then begin
+             buf:='Dome is: ';
+             if not dome.Shutter then buf:=buf+'closed, ';
+             if dome.hasSlaving and(not dome.Slave) then buf:=buf+'not slaved ';
+             msg('Dome is not ready',1);
+             msg(buf,1);
+             StopSequence(true);
+             exit;
+          end;
+          // check mount not parked
+          if mount.Park then begin
+             msg(rsTheTelescope, 1);
+             StopSequence(true);
+             exit;
+          end;
           // disable astrometrypointing and autoguiding if first step is to move to focus star
           astrometrypointing:=t.astrometrypointing and (not (autofocusstart and (not InplaceAutofocus))) ;
           // must track before to slew

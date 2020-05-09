@@ -54,13 +54,10 @@ resourcestring
   rsStartTheAuto = 'Start the auto-focus procedure';
   rsHistogramOfT = 'Histogram of the current image.%sClick and move to adjust '
     +'the visualisation threshold.';
-  rsShowOfTheHis = 'Show %s of the histogram';
   rsCreateANewEm = 'Create a new empty profile.%sWarning this also clear every'
     +' program preference for this new profile.%sUse the Copy button if you '
     +'want to configure a different equipment but keep the program options.';
   rsZoomToAdjust = 'Zoom to adjust in window';
-  rsFixTheVisual = 'Fix the visualisation threshold to the image data range, 1'
-    +'00% of the histogram.';
   rsZoomTwoTime = 'Zoom two time';
   rsZoomToOrigin = 'Zoom to original scale';
   rsZoomToHalfSi = 'Zoom to half size';
@@ -184,6 +181,8 @@ resourcestring
   rsShowLastCapt = 'Show captured image';
   rsShowGuidingS = 'Show guiding statistics';
   rsGuidingHisto = 'Guiding history in arcsecond %s - blue: RA error %s - red: Dec error %s - yellow: Star mass';
+  rsDoNotSetThis = 'Do not set this option if you don''t know exactly what you do and without careful testing';
+  rsImageLuminos = 'Image luminosity';
 
 implementation
 

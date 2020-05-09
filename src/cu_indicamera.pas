@@ -57,7 +57,7 @@ private
    indiws: TIndiWebSocketClientConnection;
    InitTimer: TTimer;
    ConnectTimer: TTimer;
-   GetCCDSizeTimer: TTimer;
+   ConfigTimer: TTimer;
    CCDDevice: Basedevice;
    CCDport: ITextVectorProperty;
    CCDexpose: INumberVectorProperty;
@@ -106,7 +106,11 @@ private
    ImageAdjustments: INumberVectorProperty;
    IBrightness,IGamma,IGain,IExposure:INumber;
    StreamOptions: INumberVectorProperty;
-   StreamRate:INumber;
+   StreamORate:INumber;
+   StreamExposure: INumberVectorProperty;
+   StreamERate,StreamExp:INumber;
+   Streamframe: INumberVectorProperty;
+   StreamframeX,StreamframeY,StreamframeWidth,StreamframeHeight: INumber;
    CCDIso: ISwitchVectorProperty;
    Guiderexpose: INumberVectorProperty;
    GuiderexposeValue: INumber;
@@ -132,6 +136,11 @@ private
    CameraFnumber: INumberVectorProperty;
    CameraFnumberValue: INumber;
    CameraAperture: ISwitchVectorProperty;
+   CaptureFormat: ISwitchVectorProperty;
+   TransfertFormat: ISwitchVectorProperty;
+   TransfertFits, TransfertNative: ISwitch;
+   StreamEncoder: ISwitchVectorProperty;
+   FRAWformat: integer;
    FhasBlob,Fready,FWheelReady,Fconnected,UseMainSensor: boolean;
    Findiserver, Findiserverport, Findidevice, Findisensor, Findideviceport: string;
    FVideoMsg: boolean;
@@ -141,12 +150,12 @@ private
    stX,stY,stWidth,stHeight: integer;
    FSensorList: TStringList;
    FNotAbortSequence: boolean;
-   FISOInitialized: boolean;
+   FISOInitialized, isASI: boolean;
    procedure ExposureTimerTimer(sender: TObject);
    procedure CreateIndiClient;
    procedure InitTimerTimer(Sender: TObject);
    procedure ConnectTimerTimer(Sender: TObject);
-   procedure GetCCDSizeTimerTimer(Sender: TObject);
+   procedure ConfigTimerTimer(Sender: TObject);
    procedure ClearStatus;
    procedure CheckStatus;
    procedure NewBlobProperty(indiProp: IndiProperty);
@@ -230,6 +239,11 @@ private
    function GetReadOutMode: integer; override;
    procedure SetFnumber(value: string); override;
    function GetFnumber: string; override;
+   function GetStreamingExposureRange:TNumRange; override;
+   function GetStreamingExposure:double; override;
+   procedure SetStreamingExposure(value:double); override;
+   function GetVideoEncoder: integer; override;
+   procedure SetVideoEncoder(value:integer); override;
 
  public
    constructor Create(AOwner: TComponent);override;
@@ -243,6 +257,7 @@ private
    procedure GetFrame(out x,y,width,height: integer; refresh:boolean=false); override;
    procedure GetFrameRange(out xr,yr,widthr,heightr: TNumRange); override;
    procedure ResetFrame; override;
+   procedure GetStreamFrame(out x,y,width,height: integer);  override;
    procedure CfaInfo(out OffsetX, OffsetY: integer; out CType: string);  override;
    function  CheckGain:boolean; override;
    Procedure AbortExposure; override;
@@ -316,11 +331,10 @@ begin
  ExposureTimer.Enabled:=false;
  ExposureTimer.Interval:=1000;
  ExposureTimer.OnTimer:=@ExposureTimerTimer;
- GetCCDSizeTimer:=TTimer.Create(nil);
- GetCCDSizeTimer.Enabled:=false;
- GetCCDSizeTimer.Interval:=100;
- GetCCDSizeTimer.OnTimer:=@GetCCDSizeTimerTimer;
- CreateIndiClient;
+ ConfigTimer:=TTimer.Create(nil);
+ ConfigTimer.Enabled:=false;
+ ConfigTimer.Interval:=100;
+ ConfigTimer.OnTimer:=@ConfigTimerTimer;
  lockvideostream:=false;
  FVideoMsg:=false;
 end;
@@ -330,15 +344,13 @@ begin
  InitTimer.Enabled:=false;
  ConnectTimer.Enabled:=false;
  ExposureTimer.Enabled:=false;
- GetCCDSizeTimer.Enabled:=false;
- indiclient.onServerDisconnected:=nil;
- indiclient.Free;
- indiblob.Free;
+ ConfigTimer.Enabled:=false;
+ if indiclient<>nil then indiclient.onServerDisconnected:=nil;
  FSensorList.Free;
  FreeAndNil(ExposureTimer);
  FreeAndNil(InitTimer);
  FreeAndNil(ConnectTimer);
- FreeAndNil(GetCCDSizeTimer);
+ FreeAndNil(ConfigTimer);
  inherited Destroy;
 end;
 
@@ -392,6 +404,11 @@ begin
     CameraFnumber:=nil;
     FhasFnumber:=false;
     CameraAperture:=nil;
+    CaptureFormat:=nil;
+    TransfertFormat:=nil;
+    StreamExposure:=nil;
+    Streamframe:=nil;
+    StreamEncoder:=nil;
     FhasBlob:=false;
     FhasVideo:=false;
     Fready:=false;
@@ -403,15 +420,20 @@ begin
     FhasGainISO:=false;
     FhasGain:=false;
     FISOList.Clear;
+    FRAWformat:=-1;
     FCameraXSize:=-1;
     FCameraYSize:=-1;
-    stX:=-1;
-    stY:=-1;
+    stX:=0;
+    stY:=0;
     stWidth:=-1;
     stHeight:=-1;
     FSensorList.Clear;
     FNotAbortSequence:=false;
     FISOInitialized:=false;
+    FReadOutList.Clear;
+    FhasReadOut:=false;
+    isASI:=false;
+    FVideoEncoder.Clear;
     if Assigned(FonStatusChange) then FonStatusChange(self);
     if Assigned(FonWheelStatusChange) then FonWheelStatusChange(self);
 end;
@@ -427,9 +449,9 @@ begin
        (CCDframe<>nil) and
        (FCameraXSize<0) and
        (FCameraYSize<0) and
-       (not GetCCDSizeTimer.Enabled)
+       (not ConfigTimer.Enabled)
     then begin
-       GetCCDSizeTimer.Enabled:=true;
+       ConfigTimer.Enabled:=true;
        UseMainSensor:=(Findisensor<>'CCD2');
     end;
     if Fconnected and
@@ -456,7 +478,7 @@ end;
 
 Procedure T_indicamera.Connect(cp1: string; cp2:string=''; cp3:string=''; cp4:string=''; cp5:string=''; cp6:string='');
 begin
-if (indiclient=nil)or(indiclient.Terminated)or(indiblob=nil)or(indiblob.Terminated) then CreateIndiClient;
+CreateIndiClient;
 if not indiclient.Connected then begin
   Findiserver:=cp1;
   Findiserverport:=cp2;
@@ -520,30 +542,22 @@ begin
    ConnectTimer.Enabled:=True;
 end;
 
-procedure T_indicamera.GetCCDSizeTimerTimer(Sender: TObject);
-var xr,yr,widthr,heightr: TNumRange;
+procedure T_indicamera.ConfigTimerTimer(Sender: TObject);
 begin
- GetCCDSizeTimer.Enabled:=false;
+ ConfigTimer.Enabled:=false;
  FCameraXSize:=0;
  FCameraYSize:=0;
- if UseMainSensor then begin
-   GetFrameRange(xr,yr,widthr,heightr);
-   FCameraXSize:=round(widthr.max);
-   FCameraYSize:=round(heightr.max);
-   stWidth:=-1;
-   GetFrame(stX,stY,stWidth,stHeight);
- end;
  if (not Fready) then begin
     Fready:=true;
     if FAutoloadConfig then begin
       LoadConfig;
     end;
-    if Assigned(FonStatusChange) then FonStatusChange(self);
  end;
 end;
 
 procedure T_indicamera.ConnectTimerTimer(Sender: TObject);
 var i: integer;
+    xr,yr,widthr,heightr: TNumRange;
 begin
  ConnectTimer.Enabled:=False;
  if ((not FhasBlob) or (CCDport=nil)) and (not Fready) and InitTimer.Enabled then begin
@@ -565,6 +579,13 @@ begin
  if Fready and (FStatus<>devConnected) then begin
    if (CCDWebsocket<>nil)and(CCDWebsocketON.s=ISS_ON) then
       ConnectWs;
+   if UseMainSensor then begin
+     GetFrameRange(xr,yr,widthr,heightr);
+     FCameraXSize:=round(widthr.max);
+     FCameraYSize:=round(heightr.max);
+     stWidth:=-1;
+     GetFrame(stX,stY,stWidth,stHeight);
+   end;
    FStatus := devConnected;
    if Assigned(FonStatusChange) then FonStatusChange(self);
  end;
@@ -578,7 +599,6 @@ begin
   if Assigned(FonStatusChange) then FonStatusChange(self);
   if Assigned(FonWheelStatusChange) then FonWheelStatusChange(self);
   msg(rsServer+' '+rsDisconnected3,0);
-  CreateIndiClient;
 end;
 
 procedure T_indicamera.NewDevice(dp: Basedevice);
@@ -634,6 +654,7 @@ begin
      if TxtProp<>nil then begin
        Txt:=IUFindText(TxtProp,'DRIVER_EXEC');
        if Txt<>nil then buf:=buf+Txt.lbl+': '+Txt.Text+', ';
+       isASI:=pos('_asi_',Txt.Text)>0;
        Txt:=IUFindText(TxtProp,'DRIVER_VERSION');
        if Txt<>nil then buf:=buf+Txt.lbl+': '+Txt.Text+', ';
        Txt:=IUFindText(TxtProp,'DRIVER_INTERFACE');
@@ -853,8 +874,29 @@ begin
   end
   else if (proptype=INDI_NUMBER)and(StreamOptions=nil)and(propname='STREAM_OPTIONS') then begin
      StreamOptions:=indiProp.getNumber;
-     StreamRate:=IUFindNumber(StreamOptions,'STREAM_RATE');
-     if (StreamRate=nil) then StreamOptions:=nil;
+     StreamORate:=IUFindNumber(StreamOptions,'STREAM_RATE');
+     if (StreamORate=nil) then StreamOptions:=nil;
+  end
+  else if (proptype=INDI_NUMBER)and(StreamExposure=nil)and(propname='STREAMING_EXPOSURE') then begin
+     StreamExposure:=indiProp.getNumber;
+     StreamERate:=IUFindNumber(StreamExposure,'STREAMING_DIVISOR_VALUE');
+     StreamExp:=IUFindNumber(StreamExposure,'STREAMING_EXPOSURE_VALUE');
+     if (StreamERate=nil)or(StreamExp=nil) then StreamExposure:=nil;
+  end
+  else if (proptype=INDI_NUMBER)and(Streamframe=nil)and(propname='CCD_STREAM_FRAME') then begin
+     Streamframe:=indiProp.getNumber;
+     StreamframeX:=IUFindNumber(Streamframe,'X');
+     StreamframeY:=IUFindNumber(Streamframe,'Y');
+     StreamframeWidth:=IUFindNumber(Streamframe,'WIDTH');
+     StreamframeHeight:=IUFindNumber(Streamframe,'HEIGHT');
+     if (StreamframeX=nil)or(StreamframeY=nil)or(StreamframeWidth=nil)or(StreamframeHeight=nil) then Streamframe:=nil;
+  end
+  else if (proptype=INDI_SWITCH)and(StreamEncoder=nil)and(propname='CCD_STREAM_ENCODER') then begin
+     StreamEncoder:=indiProp.getSwitch;
+     FVideoEncoder.Clear;
+     for i:=0 to StreamEncoder.nsp-1 do
+       FVideoEncoder.Add(StreamEncoder.sp[i].lbl);
+     if assigned(FonEncoderChange) then FonEncoderChange(self);
   end
   else if (proptype=INDI_NUMBER)and(ImageAdjustments=nil)and((propname='CCD_GAIN')or(propname='CCD_CONTROLS')or(propname='Image Adjustments')) then begin
      ImageAdjustments:=indiProp.getNumber;
@@ -892,6 +934,25 @@ begin
      CfaType:=IUFindText(CCDCfa,'CFA_TYPE');
      if (CfaOffsetX=nil)or(CfaOffsetY=nil)or(CfaType=nil) then CCDCfa:=nil;
      FhasCfaInfo:=(CCDCfa<>nil);
+  end
+  else if (proptype=INDI_SWITCH)and(propname='CAPTURE_FORMAT') then begin
+    CaptureFormat:=indiProp.getSwitch;
+    FReadOutList.Clear;
+    FRAWformat:=-1;
+    FReadOutList.Add('FITS');
+    for i:=0 to CaptureFormat.nsp-1 do begin
+       FReadOutList.Add(CaptureFormat.sp[i].lbl);
+       if CaptureFormat.sp[i].lbl='RAW' then FRAWformat:=i;
+    end;
+    if (FReadOutList.Count<=1)or(FRAWformat<0) then CaptureFormat:=nil;
+    FhasReadOut:=(CaptureFormat<>nil)and(TransfertFormat<>nil);
+  end
+  else if (proptype=INDI_SWITCH)and(propname='CCD_TRANSFER_FORMAT') then begin
+    TransfertFormat:=indiProp.getSwitch;
+    TransfertFits:=IUFindSwitch(TransfertFormat,'FORMAT_FITS');
+    TransfertNative:=IUFindSwitch(TransfertFormat,'FORMAT_NATIVE');
+    if (TransfertFits=nil)or(TransfertNative=nil) then TransfertFormat:=nil;
+    FhasReadOut:=(CaptureFormat<>nil)and(TransfertFormat<>nil);
   end
   else if (proptype=INDI_NUMBER)and(propname='f-number') then begin
     CameraFnumber:=indiProp.getNumber();
@@ -935,7 +996,21 @@ begin
      end;
   end
   else if nvp=CCDframe then begin
-    // ignore CCDFrame change because this can be just a binning requirement, see: https://indilib.org/forum/ccds-dslrs/4956-indi-asi-driver-bug-causes-false-binned-images.html?start=12#38430
+    // ignore ASI CCDFrame change because this can be just a binning requirement, see: https://indilib.org/forum/ccds-dslrs/4956-indi-asi-driver-bug-causes-false-binned-images.html
+    if not isASI then begin
+      stX      := round(CCDframeX.value);
+      stY      := round(CCDframeY.value);
+      stWidth  := round(CCDframeWidth.value);
+      stHeight := round(CCDframeHeight.value);
+      if Assigned(FonFrameChange) then FonFrameChange(Self);
+    end;
+  end
+  else if nvp=CCDinfo then begin
+     stWidth:=max(stWidth,round(CCDmaxx.Value));
+     stHeight:=max(stHeight,round(CCDmaxy.Value));
+     FCameraXSize:=max(FCameraXSize,stWidth);
+     FCameraYSize:=max(FCameraYSize,stHeight);
+     if Assigned(FonFrameChange) then FonFrameChange(Self);
   end
   else if nvp=WheelSlot then begin
      if Assigned(FonFilterChange) then FonFilterChange(Slot.value);
@@ -953,6 +1028,9 @@ begin
      if Assigned(FonFPSChange) then FonFPSChange(self);
   end
   else if nvp=ImageAdjustments then begin
+     if Assigned(FonVideoExposureChange) then FonVideoExposureChange(self);
+  end
+  else if nvp=StreamExposure then begin
      if Assigned(FonVideoExposureChange) then FonVideoExposureChange(self);
   end
   ;
@@ -1053,6 +1131,9 @@ begin
   end
   else if svp=CCDVideoRates then begin
       if Assigned(FonVideoRateChange) then FonVideoRateChange(self);
+  end
+  else if svp=StreamEncoder then begin
+      if Assigned(FonEncoderChange) then FonEncoderChange(self);
   end
   else if svp=CCDWebsocket then begin
       if (CCDWebsocketON.s=ISS_ON) then
@@ -1210,7 +1291,7 @@ begin
      if assigned(FonExposureProgress) then FonExposureProgress(-10);
      if debug_msg then msg('this is a '+ft+' file');
      if debug_msg then msg('copy '+ft+' stream to fits');
-     RawToFits(data,FImgStream,rmsg,GetPixelSizeX,GetPixelSizeY,GetBinX,GetBinY);
+     RawToFits(data,ft,FImgStream,rmsg,GetPixelSizeX,GetPixelSizeY,GetBinX,GetBinY);
      if rmsg<>'' then msg(rmsg,1);
      if FImgStream.Size<2880 then begin
         msg('Invalid file received '+ft,0);
@@ -1220,18 +1301,30 @@ begin
      if assigned(FonExposureProgress) then FonExposureProgress(-11);
      NewImage;
    end
-   else if pos('.stream',ft)>0 then begin // video stream
-     if debug_msg then msg('this is a video stream');
+   else if (ft='.stream_jpg') then begin // mjpeg video stream
+     if debug_msg then msg('this is a mjpeg video stream');
      if lockvideostream then exit; // skip extra frames if we cannot follow the rate
      lockvideostream:=true;
-     if debug_msg then msg('process this frame');
      try
-       if debug_msg then msg('copy frame');
+       if debug_msg then msg('decode jpeg');
+       PictureToFits(data,'jpg',FVideoStream,false,GetPixelSizeX,GetPixelSizeY,GetBinX,GetBinY);
+       if debug_msg then msg('NewVideoFrame');
+       NewVideoFrame(false);
+     finally
+       lockvideostream:=false;
+     end;
+   end
+   else if (ft='.stream') then begin // raw video stream
+     if debug_msg then msg('this is a raw video stream');
+     if lockvideostream then exit; // skip extra frames if we cannot follow the rate
+     lockvideostream:=true;
+     try
+       if debug_msg then msg('process this frame');
        FVideoStream.Clear;
        FVideoStream.Position:=0;
        FVideoStream.CopyFrom(data,data.Size);
        if debug_msg then msg('NewVideoFrame');
-       NewVideoFrame;
+       NewVideoFrame(true);
      finally
        lockvideostream:=false;
      end;
@@ -1570,23 +1663,46 @@ begin
 end;
 
 procedure T_indicamera.ResetFrame;
+var tf: ISwitch;
+    ResetNative:boolean;
 begin
-  if UseMainSensor then begin
-     // Must not set the binning to 1x1 as CCD_FRAME_RESET do
-     if CCDframe<>nil then begin
-       CCDframeX.value:=CCDframeX.min;
-       CCDframeY.value:=CCDframeY.min;
-       CCDframeWidth.value:=FCameraXSize;
-       CCDframeHeight.value:=FCameraYSize;
-       indiclient.sendNewNumber(CCDframe);
-       stX:=round(CCDframeX.min);
-       stY:=round(CCDframeY.min);
-       stWidth:=FCameraXSize;
-       stHeight:=FCameraYSize;
-       indiclient.WaitBusy(CCDframe);
-       if assigned(FonFrameChange) then FonFrameChange(self);
-    end;
-  end;
+ if UseMainSensor then begin
+   // Must not set the binning to 1x1 as CCD_FRAME_RESET do
+   if CCDframe<>nil then begin
+     ResetNative:=false;
+     if TransfertFormat<>nil then begin
+       // DSLR do not support to reset frame when in native transfer mode
+       // but reset is need after liveview
+       tf:=IUFindOnSwitch(TransfertFormat);
+       if tf=TransfertNative then begin
+         // reset temporarily to fits transfer
+         ResetNative:=true;
+         IUResetSwitch(TransfertFormat);
+         TransfertFits.s:=ISS_ON;
+         indiclient.sendNewSwitch(TransfertFormat);
+         indiclient.WaitBusy(TransfertFormat);
+       end;
+     end;
+     CCDframeX.value:=CCDframeX.min;
+     CCDframeY.value:=CCDframeY.min;
+     CCDframeWidth.value:=FCameraXSize;
+     CCDframeHeight.value:=FCameraYSize;
+     indiclient.sendNewNumber(CCDframe);
+     stX:=round(CCDframeX.min);
+     stY:=round(CCDframeY.min);
+     stWidth:=FCameraXSize;
+     stHeight:=FCameraYSize;
+     indiclient.WaitBusy(CCDframe);
+     if ResetNative then begin
+       // reset to native transfer
+       IUResetSwitch(TransfertFormat);
+       TransfertNative.s:=ISS_ON;
+       indiclient.sendNewSwitch(TransfertFormat);
+       indiclient.WaitBusy(TransfertFormat);
+     end;
+     if assigned(FonFrameChange) then FonFrameChange(self);
+   end;
+ end;
 end;
 
 procedure T_indicamera.CfaInfo(out OffsetX, OffsetY: integer; out CType: string);
@@ -1830,8 +1946,8 @@ end;
 procedure T_indicamera.SetTimeout(num:integer);
 begin
  FTimeOut:=num;
- indiclient.Timeout:=FTimeOut;
- indiblob.Timeout:=FTimeOut;
+ if indiclient<>nil then indiclient.Timeout:=FTimeOut;
+ if indiblob<>nil then indiblob.Timeout:=FTimeOut;
 end;
 
 function T_indicamera.CheckGain:boolean;
@@ -1874,12 +1990,44 @@ end;
 
 procedure T_indicamera.SetReadOutMode(value: integer);
 begin
-// no INDI property ?
+// Readout mode simulation for DSLR using combination of CCD_TRANSFER_FORMAT and CAPTURE_FORMAT
+if (TransfertFormat<>nil)and(CaptureFormat<>nil)and FhasReadOut then begin
+  if value=0 then begin // FITS
+    IUResetSwitch(CaptureFormat);
+    CaptureFormat.sp[FRAWformat].s:=ISS_ON;
+    IUResetSwitch(TransfertFormat);
+    TransfertFits.s:=ISS_ON;
+    indiclient.sendNewSwitch(CaptureFormat);
+    indiclient.sendNewSwitch(TransfertFormat);
+  end
+  else begin  // Native
+    IUResetSwitch(CaptureFormat);
+    CaptureFormat.sp[value-1].s:=ISS_ON;
+    IUResetSwitch(TransfertFormat);
+    TransfertNative.s:=ISS_ON;
+    indiclient.sendNewSwitch(TransfertFormat);
+    indiclient.sendNewSwitch(CaptureFormat);
+  end;
+end;
 end;
 
 function T_indicamera.GetReadOutMode: integer;
+var i: integer;
 begin
 result:=0;
+// Readout mode simulation for DSLR using combination of CCD_TRANSFER_FORMAT and CAPTURE_FORMAT
+if (TransfertFormat<>nil)and(CaptureFormat<>nil)and FhasReadOut then begin
+   if TransfertFits.s=ISS_ON then
+     result:=0
+   else begin
+     for i:=0 to CaptureFormat.nsp-1 do begin
+       if CaptureFormat.sp[i].s=ISS_ON then begin
+         result:=i+1;
+         break;
+       end;
+     end;
+   end;
+end;
 end;
 
 procedure T_indicamera.SetFnumber(value: string);
@@ -1943,6 +2091,7 @@ begin
     IUResetSwitch(configprop);
     configload.s:=ISS_ON;
     indiclient.sendNewSwitch(configprop);
+    indiclient.WaitBusy(configprop);
   end;
 end;
 
@@ -1962,6 +2111,8 @@ begin
   IUResetSwitch(CCDVideoStream);
   VideoStreamOff.s:=ISS_ON;
   indiclient.sendNewSwitch(CCDVideoStream);
+  // reset DSLR to full frame after liveview
+  if TransfertFormat<>nil then ResetFrame;
  end;
 end;
 
@@ -2030,6 +2181,8 @@ begin
     IUResetSwitch(RecordStream);
     RecordStreamOff.s:=ISS_ON;
     indiclient.sendNewSwitch(RecordStream);
+    // reset DSLR to full frame after liveview
+    if TransfertFormat<>nil then ResetFrame;
   end;
 end;
 
@@ -2227,17 +2380,86 @@ end;
 function T_indicamera.GetVideoPreviewDivisor:integer;
 begin
   result:=0;
-  if StreamOptions<>nil then begin
-     result:=round(StreamRate.value);
+  if StreamExposure<>nil then begin
+     result:=round(StreamERate.value);
+  end
+  else if StreamOptions<>nil then begin
+     result:=round(StreamORate.value);
   end;
 end;
 
 procedure T_indicamera.SetVideoPreviewDivisor(value:integer);
 begin
- if StreamOptions<>nil then begin;
-   StreamRate.value:=value;
+ if StreamExposure<>nil then begin;
+   StreamERate.value:=value;
+   indiclient.sendNewNumber(StreamExposure);
+ end
+ else if StreamOptions<>nil then begin;
+   StreamORate.value:=value;
    indiclient.sendNewNumber(StreamOptions);
  end;
+end;
+
+function T_indicamera.GetStreamingExposureRange:TNumRange;
+begin
+ result:=NullRange;
+ if StreamExposure<>nil then begin
+    result.min:=StreamExp.min;
+    if result.min<1E-5 then result.min:=0;
+    result.max:=StreamExp.max;
+    result.step:=StreamExp.step;
+ end
+end;
+
+function T_indicamera.GetStreamingExposure:double;
+begin
+ result:=0;
+ if StreamExposure<>nil then begin
+    result:=StreamExp.value;
+ end;
+end;
+
+procedure T_indicamera.SetStreamingExposure(value:double);
+begin
+ if StreamExposure<>nil then begin
+   StreamExp.value:=value;
+   indiclient.sendNewNumber(StreamExposure);
+ end;
+end;
+
+function T_indicamera.GetVideoEncoder: integer;
+var i: integer;
+begin
+  result:=0;
+  if StreamEncoder<>nil then begin
+    for i:=0 to StreamEncoder.nsp-1 do begin
+     if StreamEncoder.sp[i].s = ISS_ON then begin
+       result:=i;
+       break;
+     end;
+    end;
+  end;
+end;
+
+procedure T_indicamera.SetVideoEncoder(value:integer);
+begin
+  if StreamEncoder<>nil then begin
+    IUResetSwitch(StreamEncoder);
+    StreamEncoder.sp[value].s:=ISS_ON;
+    indiclient.sendNewSwitch(StreamEncoder);
+  end;
+end;
+
+procedure T_indicamera.GetStreamFrame(out x,y,width,height: integer);
+begin
+  if Streamframe<>nil then begin
+    x:=round(StreamframeX.Value);
+    y:=round(StreamframeY.Value);
+    width:=round(StreamframeWidth.Value);
+    height:=round(StreamframeHeight.Value);
+  end
+  else
+    GetFrame(x,y,width,height);
 end;
 
 procedure T_indicamera.ConnectWs;
@@ -2332,6 +2554,7 @@ begin
   fFramedStream.free;
   inherited;
 end;
+
 
 end.
 
