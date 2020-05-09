@@ -170,7 +170,7 @@ object f_starprofile: Tf_starprofile
       TabOrder = 2
       object LabelHFD: TLabel
         Left = 8
-        Height = 50
+        Height = 48
         Hint = 'The Half Flux Diameter value in pixels'
         Top = 16
         Width = 9
@@ -182,7 +182,7 @@ object f_starprofile: Tf_starprofile
       end
       object Label1: TLabel
         Left = 8
-        Height = 19
+        Height = 17
         Top = 0
         Width = 31
         Caption = 'HFD:'
@@ -215,7 +215,7 @@ object f_starprofile: Tf_starprofile
         TabOrder = 0
         object LabelImax: TLabel
           Left = 8
-          Height = 26
+          Height = 24
           Hint = 'The maximum intensity value'
           Top = 87
           Width = 5
@@ -227,7 +227,7 @@ object f_starprofile: Tf_starprofile
         end
         object Label2: TLabel
           Left = 8
-          Height = 19
+          Height = 17
           Top = 73
           Width = 59
           Caption = 'Intensity:'
@@ -236,7 +236,7 @@ object f_starprofile: Tf_starprofile
         end
         object Label4: TLabel
           Left = 126
-          Height = 19
+          Height = 17
           Top = 73
           Width = 25
           Caption = 'SNR'
@@ -245,7 +245,7 @@ object f_starprofile: Tf_starprofile
         end
         object LabelSNR: TLabel
           Left = 126
-          Height = 26
+          Height = 24
           Hint = 'The Signal/Noise ratio'
           Top = 87
           Width = 5
@@ -257,7 +257,7 @@ object f_starprofile: Tf_starprofile
         end
         object Label3: TLabel
           Left = 8
-          Height = 19
+          Height = 17
           Top = 0
           Width = 45
           Caption = 'FWHM:'
@@ -266,7 +266,7 @@ object f_starprofile: Tf_starprofile
         end
         object LabelFWHM: TLabel
           Left = 8
-          Height = 50
+          Height = 48
           Hint = 'The Full Width at Half Maximum value in pixels / arc seconds'
           Top = 16
           Width = 9
@@ -408,6 +408,7 @@ object f_starprofile: Tf_starprofile
         Top = 3
         Width = 190
         Caption = 'Image inspection'
+        Layout = blGlyphBottom
         OnClick = BtnMeasureImageClick
         ParentFont = False
       end
@@ -420,6 +421,7 @@ object f_starprofile: Tf_starprofile
         AllowAllUp = True
         Caption = 'Manual focus aid'
         GroupIndex = 500
+        Layout = blGlyphBottom
         OnClick = ChkFocusChange
         ParentFont = False
       end
@@ -432,6 +434,7 @@ object f_starprofile: Tf_starprofile
         AllowAllUp = True
         Caption = 'Autofocus'
         GroupIndex = 501
+        Layout = blGlyphBottom
         OnClick = ChkAutofocusChange
         ParentFont = False
       end

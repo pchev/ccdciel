@@ -102,7 +102,7 @@ object f_setup: Tf_setup
         end
         object Label18: TLabel
           Left = 13
-          Height = 19
+          Height = 17
           Top = 24
           Width = 42
           Caption = 'Server'
@@ -111,7 +111,7 @@ object f_setup: Tf_setup
         end
         object Label22: TLabel
           Left = 145
-          Height = 19
+          Height = 17
           Top = 24
           Width = 27
           Caption = 'Port'
@@ -120,7 +120,7 @@ object f_setup: Tf_setup
         end
         object Label1: TLabel
           Left = 226
-          Height = 19
+          Height = 17
           Top = 24
           Width = 51
           Caption = 'Timeout'
@@ -138,7 +138,7 @@ object f_setup: Tf_setup
         end
         object Label29: TLabel
           Left = 13
-          Height = 19
+          Height = 17
           Top = 0
           Width = 75
           Caption = 'INDI Server'
@@ -168,18 +168,18 @@ object f_setup: Tf_setup
         TabOrder = 1
         object Label62: TLabel
           Left = 13
-          Height = 19
+          Height = 17
           Top = 0
-          Width = 91
+          Width = 89
           Caption = 'ASCOM Alpaca'
           ParentColor = False
           ParentFont = False
         end
         object Label70: TLabel
           Left = 13
-          Height = 19
+          Height = 17
           Top = 64
-          Width = 52
+          Width = 51
           Caption = 'Protocol'
           ParentColor = False
           ParentFont = False
@@ -204,9 +204,9 @@ object f_setup: Tf_setup
         end
         object Label71: TLabel
           Left = 93
-          Height = 19
+          Height = 17
           Top = 64
-          Width = 165
+          Width = 163
           Caption = 'Remote host or IP address'
           ParentColor = False
           ParentFont = False
@@ -223,7 +223,7 @@ object f_setup: Tf_setup
         end
         object Label72: TLabel
           Left = 298
-          Height = 19
+          Height = 17
           Top = 64
           Width = 43
           Caption = 'IP Port'
@@ -255,18 +255,18 @@ object f_setup: Tf_setup
         end
         object Label107: TLabel
           Left = 8
-          Height = 19
+          Height = 17
           Top = 116
-          Width = 69
+          Width = 68
           Caption = 'User name'
           ParentColor = False
           ParentFont = False
         end
         object Label108: TLabel
           Left = 156
-          Height = 19
+          Height = 17
           Top = 116
-          Width = 61
+          Width = 59
           Caption = 'Password'
           ParentColor = False
           ParentFont = False
@@ -330,7 +330,7 @@ object f_setup: Tf_setup
         end
         object Label26: TLabel
           Left = 392
-          Height = 19
+          Height = 17
           Top = 2
           Width = 91
           Caption = 'Discovery port'
@@ -348,9 +348,9 @@ object f_setup: Tf_setup
         TabOrder = 2
         object Label2: TLabel
           Left = 21
-          Height = 19
+          Height = 17
           Top = 14
-          Width = 48
+          Width = 47
           Caption = 'Profile :'
           ParentColor = False
           ParentFont = False

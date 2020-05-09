@@ -723,6 +723,7 @@ begin
   b.GroupIndex:=99876;
   b.AllowAllUp:=true;
   b.Constraints.MinHeight:=DoScaleY(24);
+  b.Layout:=blGlyphBottom;
   b.Caption:='^';
   b.tag:=1001;
   b.OnClick:=@IncPage;
@@ -731,6 +732,7 @@ begin
     b:=TSpeedButton.Create(self);
     b.GroupIndex:=99870;
     b.Constraints.MinHeight:=DoScaleY(24);
+    b.Layout:=blGlyphBottom;
     b.Caption:=PageControl1.Pages[i].Caption;
     b.tag:=i;
     if i=0 then b.down:=true;
@@ -741,6 +743,7 @@ begin
   b.GroupIndex:=99877;
   b.AllowAllUp:=true;
   b.Constraints.MinHeight:=DoScaleY(24);
+  b.Layout:=blGlyphBottom;
   b.Caption:='v';
   b.tag:=1002;
   b.OnClick:=@IncPage;
