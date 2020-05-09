@@ -88,6 +88,7 @@ type
       FFileVersion, FSlewRetry: integer;
       FAtEndPark, FAtEndCloseDome, FAtEndStopTracking,FAtEndWarmCamera,FAtEndRunScript,FOnErrorRunScript,FAtEndShutdown: boolean;
       FAtEndScript, FOnErrorScript: string;
+      FAtStartCool,FAtStartUnpark: boolean;
       SkipTarget: boolean;
       TargetForceNext: boolean;
       FDoneStatus, FLastDoneStep: string;
@@ -193,6 +194,8 @@ type
       property DelayMsg: TNotifyStr read FDelayMsg write FDelayMsg;
       property onMsg: TNotifyMsg read FonMsg write FonMsg;
       property onEndSequence: TNotifyEvent read FonEndSequence write FonEndSequence;
+      property AtStartCool: boolean  read FAtStartCool write FAtStartCool;
+      property AtStartUnpark: boolean read FAtStartUnpark write FAtStartUnpark;
       property AtEndPark: boolean read FAtEndPark write FAtEndPark;
       property AtEndCloseDome: boolean read FAtEndCloseDome write FAtEndCloseDome;
       property AtEndStopTracking: boolean read FAtEndStopTracking write FAtEndStopTracking;
@@ -227,6 +230,8 @@ begin
   FSeqStartTwilight:=false;
   FSeqStopTwilight:=false;
   FSeqLockTwilight:=false;
+  FAtStartCool:=false;
+  FAtStartUnpark:=false;
   FAtEndPark:=false;
   FAtEndCloseDome:=false;
   FAtEndStopTracking:=true;
@@ -371,7 +376,7 @@ begin
 end;
 
 procedure T_Targets.Start;
-var hm,he: double;
+var hm,he,ccdtemp: double;
     twok,wtok,nd: boolean;
     j,stw:integer;
 begin
@@ -446,6 +451,20 @@ begin
     msg(Format(rsStartingSequ, [FName]),1)
   else
     msg(Format(rsStartingSequ2, [FName, inttostr(FTargetsRepeatCount+1),inttostr(FTargetsRepeat)]),1);
+  if AtStartCool then begin
+    ccdtemp:=config.GetValue('/Cooler/CameraAutoCoolTemp',0.0);
+    if not camera.Cooler then begin
+      msg(Format(rsCameraNotCoo, [FormatFloat(f1, ccdtemp)]),1);
+      ccdtemp:=TempCelsius(TemperatureScale,ccdtemp);
+      camera.Temperature:=ccdtemp;
+      wait;
+    end;
+  end;
+  if AtStartUnpark then begin
+    msg(rsUnparkTheTel,1);
+    Mount.Park:=false;
+    wait;
+  end;
   finally
     FWaitStarting:=false;
   end;

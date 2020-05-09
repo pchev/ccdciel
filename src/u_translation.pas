@@ -1255,6 +1255,8 @@ resourcestring
   rsDATEOBSFromC = 'DATE-OBS from camera driver';
   rsTryToFixPixe = 'Try to fix pixel range to match CMOS camera bit depth';
   rsImages = 'images';
+  rsCoolTheCamer = 'Cool the camera';
+  rsStartOptions = 'Start options';
 
 implementation
 
