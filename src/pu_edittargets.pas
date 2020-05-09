@@ -43,6 +43,8 @@ type
   Tf_EditTargets = class(TForm)
     Bevel1: TBevel;
     Bevel2: TBevel;
+    Bevel3: TBevel;
+    Bevel4: TBevel;
     BtnAddStep: TButton;
     BtnDeleteObject: TButton;
     BtnImportMosaic: TButton;
@@ -65,6 +67,9 @@ type
     cbWarm: TCheckBox;
     cbScript: TCheckBox;
     cbUnattended: TCheckBox;
+    ccNone: TCheckBox;
+    ccCool: TCheckBox;
+    ccUnpark: TCheckBox;
     CheckBoxResetRepeat: TCheckBox;
     CheckBoxRestartStatus: TCheckBox;
     FFstopbox: TComboBox;
@@ -75,10 +80,10 @@ type
     ImageListNight: TImageList;
     ImageListDay: TImageList;
     Label3: TLabel;
-    Label4: TLabel;
     Label13: TLabel;
     Label5: TLabel;
     Label6: TLabel;
+    Label7: TLabel;
     TargetMsg: TLabel;
     LabelMsg: TLabel;
     OpenDialog1: TOpenDialog;
@@ -91,10 +96,8 @@ type
     Panel18: TPanel;
     Panel19: TPanel;
     Panel20: TPanel;
-    Panel21: TPanel;
     Panel22: TPanel;
     Panel3: TPanel;
-    Panel6: TPanel;
     GroupboxInsert: TGroupBox;
     Panel8: TPanel;
     PanelFstop: TPanel;
@@ -119,7 +122,6 @@ type
     PanelBtn: TPanel;
     Panel10: TPanel;
     PanelBot2: TPanel;
-    Panel13: TPanel;
     Panel14: TPanel;
     Panel2: TPanel;
     PanelPlan: TPanel;
@@ -192,6 +194,7 @@ type
     procedure BtnUnattendedScriptClick(Sender: TObject);
     procedure Btn_coord_internalClick(Sender: TObject);
     procedure cbTermOptionClick(Sender: TObject);
+    procedure StartOptionClick(Sender: TObject);
     procedure CheckBoxRepeatListChange(Sender: TObject);
     procedure FlatFilterListItemClick(Sender: TObject; Index: integer);
     procedure FlatTimeClick(Sender: TObject);
@@ -459,6 +462,11 @@ begin
   StepList.Columns.Items[pcolgain-1].Title.Caption := rsGain;
   StepList.Columns.Items[pcolfstop-1].Title.Caption := rsFStop;
   Label1.Caption := rsPlan;
+  // start options
+  Label7.Caption:=rsStartOptions;
+  ccNone.Caption:=rsDoNothing;
+  ccCool.Caption:=rsCoolTheCamer;
+  ccUnpark.Caption:=rsUnparkTheTel;
   // termination options
   Label3.Caption:=rsTerminationO;
   cbNone.Caption:=rsDoNothing;
@@ -467,7 +475,7 @@ begin
   cbParkDome.Caption:=rsParkAndClose;
   cbWarm.Caption:=rsWarmTheCamer;
   cbScript.Caption:=rsRunAScript;
-  Label4.Caption:=rsUnattendedEr;
+  cbUnattended.Caption:=rsUnattendedEr;
   // hint
   BtnCurrentCoord.Hint:=rsDoNotMoveThe;
   BtnPlanetariumCoord.Hint:=rsGetTheCoordi;
@@ -887,6 +895,22 @@ begin
      end;
     until linepos>=$FFFFFF;{Found object or end of database}
   end;
+end;
+
+procedure Tf_EditTargets.StartOptionClick(Sender: TObject);
+begin
+  if not(Sender is TCheckBox) then exit;
+  if Lockcb then exit;
+  Lockcb:=true;
+  if (Sender=ccNone) then begin
+     ccNone.Checked:=true;
+     ccCool.Checked:=false;
+     ccUnpark.Checked:=false;
+  end;
+  if (Sender<>ccNone) and TCheckBox(Sender).Checked then begin
+     ccNone.Checked:=false;
+  end;
+  Lockcb:=false;
 end;
 
 procedure Tf_EditTargets.cbTermOptionClick(Sender: TObject);

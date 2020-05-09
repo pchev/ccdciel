@@ -443,6 +443,9 @@ begin
       f_EditTargets.SeqStopTwilight.Checked:=Targets.SeqStopTwilight;
       f_EditTargets.SeqStartAt.Text:=TimeToStr(Targets.SeqStartAt);
       f_EditTargets.SeqStopAt.Text:=TimeToStr(Targets.SeqStopAt);
+      f_EditTargets.ccNone.Checked:=not(Targets.AtStartCool or Targets.AtStartUnpark);
+      f_EditTargets.ccCool.Checked:=Targets.AtStartCool;
+      f_EditTargets.ccUnpark.Checked:=Targets.AtStartUnpark;
       f_EditTargets.cbNone.Checked:=not(Targets.AtEndStopTracking or Targets.AtEndPark or Targets.AtEndCloseDome or Targets.AtEndWarmCamera or Targets.AtEndRunScript);
       f_EditTargets.cbStopTracking.Checked:=Targets.AtEndStopTracking;
       f_EditTargets.cbParkScope.Checked:=Targets.AtEndPark;
@@ -473,6 +476,9 @@ begin
       f_EditTargets.SeqStopTwilight.Checked:=false;
       f_EditTargets.SeqStartAt.Text:='00:00:00';
       f_EditTargets.SeqStopAt.Text:='00:00:00';
+      f_EditTargets.ccNone.Checked:=false;
+      f_EditTargets.ccCool.Checked:=true;
+      f_EditTargets.ccUnpark.Checked:=true;
       f_EditTargets.cbNone.Checked:=false;
       f_EditTargets.cbStopTracking.Checked:=true;
       f_EditTargets.cbParkScope.Checked:=false;
@@ -507,6 +513,8 @@ begin
       Targets.SeqStopTwilight  := f_EditTargets.SeqStopTwilight.Checked;
       Targets.SeqStartAt       := StrToTimeDef(f_EditTargets.SeqStartAt.Text,Targets.SeqStartAt);
       Targets.SeqStopAt        := StrToTimeDef(f_EditTargets.SeqStopAt.Text,Targets.SeqStopAt);
+      Targets.AtStartCool      := f_EditTargets.ccCool.Checked;
+      Targets.AtStartUnpark    := f_EditTargets.ccUnpark.Checked;
       Targets.AtEndStopTracking := f_EditTargets.cbStopTracking.Checked;
       Targets.AtEndPark         := f_EditTargets.cbParkScope.Checked;
       Targets.AtEndCloseDome    := f_EditTargets.cbParkDome.Checked;
@@ -551,6 +559,8 @@ begin
    Targets.SeqStopTwilight  := tfile.GetValue('/Startup/SeqStopTwilight',false);
    Targets.SeqStartAt       := StrToTimeDef(tfile.GetValue('/Startup/SeqStartAt','00:00:00'),0);
    Targets.SeqStopAt        := StrToTimeDef(tfile.GetValue('/Startup/SeqStopAt','00:00:00'),0);
+   Targets.AtStartCool      := tfile.GetValue('/Startup/CoolCamera',false);
+   Targets.AtStartUnpark    := tfile.GetValue('/Startup/Unpark',false);
    Targets.AtEndStopTracking:= tfile.GetValue('/Termination/StopTracking',true);
    Targets.AtEndPark        := tfile.GetValue('/Termination/Park',false);
    Targets.AtEndCloseDome   := tfile.GetValue('/Termination/CloseDome',false);
@@ -788,6 +798,8 @@ begin
     tfile.SetValue('/Startup/SeqStopTwilight',Targets.SeqStopTwilight);
     tfile.SetValue('/Startup/SeqStartAt',TimeToStr(Targets.SeqStartAt));
     tfile.SetValue('/Startup/SeqStopAt',TimeToStr(Targets.SeqStopAt));
+    tfile.SetValue('/Startup/CoolCamera',Targets.AtStartCool);
+    tfile.SetValue('/Startup/Unpark',Targets.AtStartUnpark);
     tfile.SetValue('/Termination/StopTracking',Targets.AtEndStopTracking);
     tfile.SetValue('/Termination/Park',Targets.AtEndPark);
     tfile.SetValue('/Termination/CloseDome',Targets.AtEndCloseDome);
