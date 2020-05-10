@@ -3,13 +3,13 @@ msgstr ""
 "Project-Id-Version: ccdciel\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2020-05-09 13:30+0000\n"
-"PO-Revision-Date: 2020-04-27 06:48+0000\n"
+"PO-Revision-Date: 2020-05-10 06:39+0000\n"
 "Last-Translator: Stanislav Holub <Unknown>\n"
 "Language-Team: Czech <cz@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2020-05-09 13:36+0000\n"
+"X-Launchpad-Export-Date: 2020-05-10 18:44+0000\n"
 "X-Generator: Launchpad (build fbdff7602bd10fb883bf7e2ddcc7fd5a16f60398)\n"
 "Language: cs\n"
 
@@ -851,7 +851,7 @@ msgstr "Chladit"
 
 #: u_translation.rscoolthecamer
 msgid "Cool the camera"
-msgstr ""
+msgstr "Ochladit kameru"
 
 #: u_translation.rscoordinates
 msgid "Coordinates"
@@ -2464,7 +2464,7 @@ msgstr "Co dělat na přechodu poledníku"
 
 #: u_translation.rsopen
 msgid "Open"
-msgstr "Opteřít"
+msgstr "Otevřít"
 
 #: u_translation.rsopendarkfile
 msgid "Open Dark file"
@@ -2984,11 +2984,11 @@ msgstr "Vyřešit"
 
 #: u_translation.rsresolveandpl
 msgid "Resolve and annotate DSO"
-msgstr ""
+msgstr "Vyřešit a anotovat DSO"
 
 #: u_translation.rsresolveandpl2
 msgid "Resolve and annotate galaxies (Hyperleda)"
-msgstr ""
+msgstr "Vyřešit a anotovat  galaxie (Hyperleda)"
 
 #: u_translation.rsresolveandro
 msgid "Resolve and Rotate"
@@ -3076,7 +3076,7 @@ msgstr "Návrat na pozici cíle"
 
 #: u_translation.rsreverse
 msgid "Reverse"
-msgstr "Nazpět"
+msgstr "Opačný směr"
 
 #: u_translation.rsrise
 msgid "rise"
@@ -3740,7 +3740,7 @@ msgstr "Spustit nový protokol"
 
 #: u_translation.rsstartoptions
 msgid "Start options"
-msgstr ""
+msgstr "Možnosti spuštění"
 
 #: u_translation.rsstartplan
 msgid "Start plan %s"
