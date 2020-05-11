@@ -3335,7 +3335,7 @@ begin
    raw.SaveToFile(fn);
    cmd:=Exiv2Cmd+' -PEkt '+fn;
    n:=ExecProcess(cmd,r);
-   if n=0 then begin
+   if (n=0)and(r.Count>0) then begin
      ok:=true;
      for i:=0 to r.Count-1 do begin
        j:=pos(' ',r[i]);
@@ -3359,7 +3359,7 @@ begin
    raw.SaveToFile(fn);
    cmd:=ExifToolCmd+' -m -G:2 -s2 '+fn;
    n:=ExecProcess(cmd,r);
-   if n=0 then begin
+   if (n=0)and(r.Count>0) then begin
      for i:=0 to r.Count-1 do begin
        j:=pos(': ',r[i]);
        if j>0 then begin

@@ -42,9 +42,11 @@ object f_EditTargets: Tf_EditTargets
         Top = 0
         Width = 528
         Align = alLeft
+        Anchors = [akTop, akLeft, akRight, akBottom]
         BevelOuter = bvNone
         ClientHeight = 97
         ClientWidth = 528
+        Constraints.MaxWidth = 650
         ParentFont = False
         TabOrder = 0
         object Panel15: TPanel
@@ -287,6 +289,14 @@ object f_EditTargets: Tf_EditTargets
             ParentFont = False
             TabOrder = 5
           end
+          object Bevel3: TBevel
+            Left = 225
+            Height = 50
+            Top = 0
+            Width = 7
+            Align = alRight
+            Shape = bsRightLine
+          end
         end
         object Panel7: TPanel
           Left = 232
@@ -295,15 +305,20 @@ object f_EditTargets: Tf_EditTargets
           Width = 296
           Align = alClient
           BevelOuter = bvNone
+          ChildSizing.LeftRightSpacing = 4
+          ChildSizing.TopBottomSpacing = 2
+          ChildSizing.EnlargeHorizontal = crsHomogenousChildResize
+          ChildSizing.Layout = cclTopToBottomThenLeftToRight
+          ChildSizing.ControlsPerLine = 2
           ClientHeight = 50
           ClientWidth = 296
           ParentFont = False
           TabOrder = 2
           object Label7: TLabel
             Left = 4
-            Height = 17
-            Top = 1
-            Width = 79
+            Height = 21
+            Top = 2
+            Width = 143
             Caption = 'Start options'
             ParentColor = False
             ParentFont = False
@@ -312,36 +327,28 @@ object f_EditTargets: Tf_EditTargets
             Left = 4
             Height = 21
             Top = 23
-            Width = 70
+            Width = 143
             Caption = 'ccNone'
             OnClick = StartOptionClick
             TabOrder = 0
           end
           object ccCool: TCheckBox
-            Left = 120
+            Left = 147
             Height = 21
-            Top = 0
-            Width = 63
+            Top = 2
+            Width = 145
             Caption = 'ccCool'
             OnClick = StartOptionClick
             TabOrder = 1
           end
           object ccUnpark: TCheckBox
-            Left = 120
+            Left = 147
             Height = 21
             Top = 23
-            Width = 82
+            Width = 145
             Caption = 'ccUnpark'
             OnClick = StartOptionClick
             TabOrder = 2
-          end
-          object Bevel3: TBevel
-            Left = 0
-            Height = 50
-            Top = 0
-            Width = 7
-            Align = alLeft
-            Shape = bsLeftLine
           end
         end
         object Panel18: TPanel
@@ -395,7 +402,7 @@ object f_EditTargets: Tf_EditTargets
         ChildSizing.ControlsPerLine = 3
         ClientHeight = 97
         ClientWidth = 460
-        Constraints.MaxWidth = 909
+        Constraints.MaxWidth = 606
         ParentFont = False
         TabOrder = 1
         object Panel19: TPanel

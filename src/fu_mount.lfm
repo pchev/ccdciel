@@ -50,7 +50,7 @@ object f_mount: Tf_mount
       TabOrder = 0
       object Label1: TLabel
         Left = 4
-        Height = 19
+        Height = 17
         Top = 4
         Width = 32
         Caption = 'RA     '
@@ -63,12 +63,13 @@ object f_mount: Tf_mount
         Top = 2
         Width = 71
         Caption = 'Track'
+        Layout = blGlyphBottom
         OnClick = BtnTrackClick
         ParentFont = False
       end
       object RA: TLabel
         Left = 30
-        Height = 19
+        Height = 17
         Hint = 'Current telescope Right Ascension'
         Top = 4
         Width = 6
@@ -90,7 +91,7 @@ object f_mount: Tf_mount
       TabOrder = 1
       object Label2: TLabel
         Left = 4
-        Height = 19
+        Height = 17
         Top = 4
         Width = 33
         Caption = 'Dec   '
@@ -103,12 +104,13 @@ object f_mount: Tf_mount
         Top = 2
         Width = 71
         Caption = 'Park'
+        Layout = blGlyphBottom
         OnClick = BtnParkClick
         ParentFont = False
       end
       object DE: TLabel
         Left = 30
-        Height = 19
+        Height = 17
         Hint = 'Current telescope Declination'
         Top = 4
         Width = 6
@@ -120,17 +122,17 @@ object f_mount: Tf_mount
     end
     object Panel6: TPanel
       Left = 0
-      Height = 19
+      Height = 17
       Top = 48
       Width = 191
       BevelOuter = bvNone
-      ClientHeight = 19
+      ClientHeight = 17
       ClientWidth = 191
       ParentFont = False
       TabOrder = 4
       object Label3: TLabel
         Left = 4
-        Height = 19
+        Height = 17
         Top = 0
         Width = 15
         Caption = 'Az'
@@ -139,7 +141,7 @@ object f_mount: Tf_mount
       end
       object Label5: TLabel
         Left = 89
-        Height = 19
+        Height = 17
         Top = 0
         Width = 17
         Caption = 'Alt'
@@ -148,7 +150,7 @@ object f_mount: Tf_mount
       end
       object AZ: TLabel
         Left = 30
-        Height = 19
+        Height = 17
         Top = 0
         Width = 3
         Caption = ' '
@@ -157,7 +159,7 @@ object f_mount: Tf_mount
       end
       object ALT: TLabel
         Left = 116
-        Height = 19
+        Height = 17
         Top = 0
         Width = 3
         Caption = ' '
@@ -168,7 +170,7 @@ object f_mount: Tf_mount
     object Panel4: TPanel
       Left = 0
       Height = 25
-      Top = 67
+      Top = 65
       Width = 191
       BevelOuter = bvNone
       ClientHeight = 25
@@ -177,7 +179,7 @@ object f_mount: Tf_mount
       TabOrder = 2
       object Pierside: TLabel
         Left = 4
-        Height = 19
+        Height = 17
         Hint = 'Current telescope pier side'
         Top = 4
         Width = 116
@@ -199,26 +201,26 @@ object f_mount: Tf_mount
     end
     object Panel5: TPanel
       Left = 0
-      Height = 23
-      Top = 92
+      Height = 21
+      Top = 90
       Width = 191
       BevelOuter = bvNone
-      ClientHeight = 23
+      ClientHeight = 21
       ClientWidth = 191
       ParentFont = False
       TabOrder = 3
       object LabelMeridian: TLabel
         Left = 4
-        Height = 19
+        Height = 17
         Top = 4
-        Width = 70
+        Width = 69
         Caption = 'Meridian in'
         ParentColor = False
         ParentFont = False
       end
       object Label4: TLabel
         Left = 146
-        Height = 19
+        Height = 17
         Top = 4
         Width = 27
         Caption = 'min.'
@@ -227,7 +229,7 @@ object f_mount: Tf_mount
       end
       object TimeToMeridian: TLabel
         Left = 113
-        Height = 19
+        Height = 17
         Hint = 'Time from meridian transit (hour angle)'
         Top = 4
         Width = 8
