@@ -25,7 +25,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 interface
 
 uses  u_translation, u_global, UScaleDPI,
-  Classes, SysUtils, Forms, Controls, Graphics, Dialogs, StdCtrls, ExtCtrls, SpinEx;
+  Classes, SysUtils, Forms, Controls, Graphics, Dialogs, StdCtrls, ExtCtrls, Spin;
 
 type
 
@@ -35,7 +35,7 @@ type
     BtnStart: TButton;
     BtnStop: TButton;
     BtnCenter: TButton;
-    CircleNum: TSpinEditEx;
+    CircleNum: TSpinEdit;
     GroupBox1: TGroupBox;
     Label1: TLabel;
     Label2: TLabel;

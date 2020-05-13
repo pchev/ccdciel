@@ -26,7 +26,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 interface
 
 uses   UScaleDPI, Dialogs, u_translation, u_global,
-  Classes, SysUtils, FileUtil, Forms, Graphics, Controls, StdCtrls, ExtCtrls, SpinEx;
+  Classes, SysUtils, FileUtil, Forms, Graphics, Controls, StdCtrls, ExtCtrls, Spin;
 
 type
 
@@ -39,7 +39,7 @@ type
     Label3: TLabel;
     Power: TLabel;
     PanelCooler: TPanel;
-    Setpoint: TFloatSpinEditEx;
+    Setpoint: TFloatSpinEdit;
     Label1: TLabel;
     Label2: TLabel;
     Panel1: TPanel;

@@ -88,7 +88,7 @@ object f_ccdtemp: Tf_ccdtemp
         ParentColor = False
         ParentFont = False
       end
-      object Setpoint: TFloatSpinEditEx
+      object Setpoint: TFloatSpinEdit
         Left = 61
         Height = 28
         Top = 2
@@ -98,7 +98,6 @@ object f_ccdtemp: Tf_ccdtemp
         ParentFont = False
         TabOrder = 0
         MinValue = -100
-        NullValue = 0
         Value = 0
       end
       object BtnSet: TButton

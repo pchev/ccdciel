@@ -322,7 +322,7 @@ object f_option: Tf_option
             TabOrder = 2
             Text = '_'
           end
-          object FileSequenceWidth: TSpinEditEx
+          object FileSequenceWidth: TSpinEdit
             Left = 388
             Height = 28
             Top = 206
@@ -753,7 +753,7 @@ object f_option: Tf_option
           ParentColor = False
           ParentFont = False
         end
-        object ObsElev: TFloatSpinEditEx
+        object ObsElev: TFloatSpinEdit
           Left = 146
           Height = 28
           Top = 111
@@ -765,7 +765,6 @@ object f_option: Tf_option
           DecimalPlaces = 1
           MaxValue = 10000
           MinValue = -500
-          NullValue = 0
           Value = 0
         end
         object Label108: TLabel
@@ -822,7 +821,7 @@ object f_option: Tf_option
           ParentFont = False
           WordWrap = True
         end
-        object ElevationMin: TFloatSpinEditEx
+        object ElevationMin: TFloatSpinEdit
           Left = 146
           Height = 28
           Top = 49
@@ -834,7 +833,6 @@ object f_option: Tf_option
           DecimalPlaces = 1
           MaxValue = 89
           MinValue = 0
-          NullValue = 0
           Value = 0
         end
       end
@@ -884,7 +882,7 @@ object f_option: Tf_option
             ParentColor = False
             ParentFont = False
           end
-          object CameraAutoCoolTemp: TFloatSpinEditEx
+          object CameraAutoCoolTemp: TFloatSpinEdit
             Left = 40
             Height = 28
             Top = 30
@@ -894,7 +892,6 @@ object f_option: Tf_option
             ParentFont = False
             TabOrder = 1
             MinValue = -100
-            NullValue = 0
             Value = 0
           end
         end
@@ -938,7 +935,7 @@ object f_option: Tf_option
               ParentColor = False
               ParentFont = False
             end
-            object TemperatureSlope: TFloatSpinEditEx
+            object TemperatureSlope: TFloatSpinEdit
               Left = 24
               Height = 28
               Top = 0
@@ -949,7 +946,6 @@ object f_option: Tf_option
               TabOrder = 0
               Increment = 0.1
               MinValue = 0
-              NullValue = 0
               Value = 0
             end
           end
@@ -985,7 +981,7 @@ object f_option: Tf_option
           ParentFont = False
           TabOrder = 0
         end
-        object MaxAdu: TSpinEditEx
+        object MaxAdu: TSpinEdit
           Left = 364
           Height = 28
           Top = 30
@@ -1015,7 +1011,7 @@ object f_option: Tf_option
           ParentFont = False
           TabOrder = 2
         end
-        object PixelSize: TFloatSpinEditEx
+        object PixelSize: TFloatSpinEdit
           Left = 364
           Height = 28
           Top = 1
@@ -1027,7 +1023,6 @@ object f_option: Tf_option
           Increment = 0.1
           MaxValue = 99
           MinValue = 0
-          NullValue = 0
           Value = 0
         end
         object Label124: TLabel
@@ -1309,7 +1304,7 @@ object f_option: Tf_option
           ParentColor = False
           ParentFont = False
         end
-        object VideoPreviewRate: TSpinEditEx
+        object VideoPreviewRate: TSpinEdit
           Left = 194
           Height = 28
           Top = 0
@@ -1352,7 +1347,7 @@ object f_option: Tf_option
           ParentColor = False
           ParentFont = False
         end
-        object BPMsigma: TFloatSpinEditEx
+        object BPMsigma: TFloatSpinEdit
           Left = 194
           Height = 28
           Top = 0
@@ -1365,7 +1360,6 @@ object f_option: Tf_option
           Increment = 0.1
           MaxValue = 8
           MinValue = 1
-          NullValue = 0
           Value = 1
         end
       end
@@ -1420,7 +1414,7 @@ object f_option: Tf_option
           ParentColor = False
           ParentFont = False
         end
-        object ClippingLow: TFloatSpinEditEx
+        object ClippingLow: TFloatSpinEdit
           Left = 143
           Height = 28
           Top = 0
@@ -1431,10 +1425,9 @@ object f_option: Tf_option
           TabOrder = 0
           MaxValue = 65535
           MinValue = 0
-          NullValue = 0
           Value = 0
         end
-        object ClippingHigh: TFloatSpinEditEx
+        object ClippingHigh: TFloatSpinEdit
           Left = 396
           Height = 28
           Top = 0
@@ -1445,7 +1438,6 @@ object f_option: Tf_option
           TabOrder = 1
           MaxValue = 65535
           MinValue = 0
-          NullValue = 0
           Value = 65535
         end
       end
@@ -1628,7 +1620,7 @@ object f_option: Tf_option
           ParentFont = False
           WordWrap = True
         end
-        object FlatMinExp: TFloatSpinEditEx
+        object FlatMinExp: TFloatSpinEdit
           Left = 226
           Height = 28
           Top = 92
@@ -1640,10 +1632,9 @@ object f_option: Tf_option
           DecimalPlaces = 3
           MaxValue = 600
           MinValue = 0
-          NullValue = 0
           Value = 0
         end
-        object FlatMaxExp: TFloatSpinEditEx
+        object FlatMaxExp: TFloatSpinEdit
           Left = 363
           Height = 28
           Top = 92
@@ -1655,10 +1646,9 @@ object f_option: Tf_option
           DecimalPlaces = 3
           MaxValue = 600
           MinValue = 0
-          NullValue = 0
           Value = 0
         end
-        object FlatLevelMin: TSpinEditEx
+        object FlatLevelMin: TSpinEdit
           Left = 226
           Height = 28
           Top = 129
@@ -1670,7 +1660,7 @@ object f_option: Tf_option
           Increment = 1000
           MaxValue = 65535
         end
-        object FlatLevelMax: TSpinEditEx
+        object FlatLevelMax: TSpinEdit
           Left = 363
           Height = 28
           Top = 129
@@ -1713,7 +1703,7 @@ object f_option: Tf_option
           ParentColor = False
           ParentFont = False
         end
-        object DomeFlatTelescopeAz: TFloatSpinEditEx
+        object DomeFlatTelescopeAz: TFloatSpinEdit
           Left = 226
           Height = 28
           Top = 32
@@ -1724,10 +1714,9 @@ object f_option: Tf_option
           TabOrder = 0
           MaxValue = 360
           MinValue = -360
-          NullValue = 0
           Value = 0
         end
-        object DomeFlatTelescopeAlt: TFloatSpinEditEx
+        object DomeFlatTelescopeAlt: TFloatSpinEdit
           Left = 226
           Height = 28
           Top = 57
@@ -1738,7 +1727,6 @@ object f_option: Tf_option
           TabOrder = 1
           MaxValue = 90
           MinValue = 0
-          NullValue = 0
           Value = 0
         end
         object Label103: TLabel
@@ -1840,7 +1828,7 @@ object f_option: Tf_option
           ParentColor = False
           ParentFont = False
         end
-        object FocusWindow: TSpinEditEx
+        object FocusWindow: TSpinEdit
           Left = 273
           Height = 28
           Top = 8
@@ -1923,7 +1911,7 @@ object f_option: Tf_option
           ParentFont = False
           TabOrder = 2
         end
-        object FocuserBacklash: TSpinEditEx
+        object FocuserBacklash: TSpinEdit
           Left = 273
           Height = 28
           Top = 1
@@ -1934,7 +1922,7 @@ object f_option: Tf_option
           TabOrder = 3
           MaxValue = 10000
         end
-        object FocuserDelay: TSpinEditEx
+        object FocuserDelay: TSpinEdit
           Left = 273
           Height = 28
           Top = 32
@@ -2092,7 +2080,7 @@ object f_option: Tf_option
             ParentColor = False
             ParentFont = False
           end
-          object AutofocusNearNum: TSpinEditEx
+          object AutofocusNearNum: TSpinEdit
             Left = 214
             Height = 28
             Top = 0
@@ -2142,7 +2130,7 @@ object f_option: Tf_option
           ParentColor = False
           ParentFont = False
         end
-        object AutofocusBinning: TSpinEditEx
+        object AutofocusBinning: TSpinEdit
           Left = 214
           Height = 28
           Top = 28
@@ -2155,7 +2143,7 @@ object f_option: Tf_option
           MinValue = 1
           Value = 1
         end
-        object AutofocusTolerance: TFloatSpinEditEx
+        object AutofocusTolerance: TFloatSpinEdit
           Left = 214
           Height = 28
           Top = 85
@@ -2167,10 +2155,9 @@ object f_option: Tf_option
           Increment = 0.1
           MaxValue = 99
           MinValue = 1
-          NullValue = 0
           Value = 1
         end
-        object AutofocusMinSNR: TFloatSpinEditEx
+        object AutofocusMinSNR: TFloatSpinEdit
           Left = 356
           Height = 28
           Top = 85
@@ -2182,7 +2169,6 @@ object f_option: Tf_option
           DecimalPlaces = 1
           MaxValue = 99
           MinValue = 1
-          NullValue = 0
           Value = 1
         end
         object AutofocusNotebook: TNotebook
@@ -2212,7 +2198,7 @@ object f_option: Tf_option
               ParentColor = False
               ParentFont = False
             end
-            object AutofocusDynamicNumPoint: TSpinEditEx
+            object AutofocusDynamicNumPoint: TSpinEdit
               Left = 214
               Height = 31
               Top = 0
@@ -2224,7 +2210,7 @@ object f_option: Tf_option
               MinValue = 5
               Value = 5
             end
-            object AutofocusDynamicMovement: TSpinEditEx
+            object AutofocusDynamicMovement: TSpinEdit
               Left = 214
               Height = 31
               Top = 32
@@ -2284,7 +2270,7 @@ object f_option: Tf_option
               ParentColor = False
               ParentFont = False
             end
-            object AutofocusStartHFD: TFloatSpinEditEx
+            object AutofocusStartHFD: TFloatSpinEdit
               Left = 214
               Height = 28
               Top = 0
@@ -2298,10 +2284,9 @@ object f_option: Tf_option
               Increment = 0.1
               MaxValue = 99
               MinValue = 1
-              NullValue = 0
               Value = 1
             end
-            object AutofocusNearHFD: TFloatSpinEditEx
+            object AutofocusNearHFD: TFloatSpinEdit
               Left = 356
               Height = 28
               Top = 0
@@ -2315,10 +2300,9 @@ object f_option: Tf_option
               Increment = 0.1
               MaxValue = 99
               MinValue = 1
-              NullValue = 0
               Value = 1
             end
-            object AutofocusSlippageOffset: TSpinEditEx
+            object AutofocusSlippageOffset: TSpinEdit
               Left = 356
               Height = 28
               Top = 57
@@ -2349,7 +2333,7 @@ object f_option: Tf_option
               ParentColor = False
               ParentFont = False
             end
-            object AutofocusMaxSpeed: TSpinEditEx
+            object AutofocusMaxSpeed: TSpinEdit
               Left = 214
               Height = 31
               Top = 0
@@ -2361,7 +2345,7 @@ object f_option: Tf_option
               MinValue = 10
               Value = 10
             end
-            object AutofocusMinSpeed: TSpinEditEx
+            object AutofocusMinSpeed: TSpinEdit
               Left = 214
               Height = 31
               Top = 32
@@ -2393,7 +2377,7 @@ object f_option: Tf_option
               ParentColor = False
               ParentFont = False
             end
-            object AutofocusPlanetNumPoint: TSpinEditEx
+            object AutofocusPlanetNumPoint: TSpinEdit
               Left = 214
               Height = 31
               Top = 0
@@ -2405,7 +2389,7 @@ object f_option: Tf_option
               MinValue = 5
               Value = 5
             end
-            object AutofocusPlanetMovement: TSpinEditEx
+            object AutofocusPlanetMovement: TSpinEdit
               Left = 214
               Height = 31
               Top = 32
@@ -2555,7 +2539,7 @@ object f_option: Tf_option
             ParentColor = False
             ParentFont = False
           end
-          object AutofocusPrecisionSlew: TFloatSpinEditEx
+          object AutofocusPrecisionSlew: TFloatSpinEdit
             Left = 299
             Height = 28
             Top = 28
@@ -2568,7 +2552,6 @@ object f_option: Tf_option
             Increment = 0.1
             MaxValue = 99
             MinValue = 0
-            NullValue = 0
             Value = 0
           end
           object FocusStarMagAdjust: TCheckBox
@@ -2726,7 +2709,7 @@ object f_option: Tf_option
           ParentColor = False
           ParentFont = False
         end
-        object Focale: TFloatSpinEditEx
+        object Focale: TFloatSpinEdit
           Left = 292
           Height = 28
           Top = 8
@@ -2738,10 +2721,9 @@ object f_option: Tf_option
           DecimalPlaces = 1
           MaxValue = 10000
           MinValue = 0
-          NullValue = 0
           Value = 0
         end
-        object AstrometryTimeout: TSpinEditEx
+        object AstrometryTimeout: TSpinEdit
           Left = 292
           Height = 28
           Top = 40
@@ -2905,7 +2887,7 @@ object f_option: Tf_option
               ParentFont = False
               TabOrder = 3
             end
-            object MaxRadius: TFloatSpinEditEx
+            object MaxRadius: TFloatSpinEdit
               Left = 186
               Height = 28
               Top = 8
@@ -2917,10 +2899,9 @@ object f_option: Tf_option
               DecimalPlaces = 1
               MaxValue = 90
               MinValue = 0
-              NullValue = 0
               Value = 0
             end
-            object Tolerance: TFloatSpinEditEx
+            object Tolerance: TFloatSpinEdit
               Left = 380
               Height = 28
               Top = 8
@@ -2932,10 +2913,9 @@ object f_option: Tf_option
               Increment = 0.01
               MaxValue = 1
               MinValue = 0
-              NullValue = 0
               Value = 0
             end
-            object Downsample: TSpinEditEx
+            object Downsample: TSpinEdit
               Left = 186
               Height = 28
               Top = 46
@@ -2948,7 +2928,7 @@ object f_option: Tf_option
               MinValue = 1
               Value = 1
             end
-            object SourcesLimit: TSpinEditEx
+            object SourcesLimit: TSpinEdit
               Left = 380
               Height = 28
               Top = 46
@@ -3121,7 +3101,7 @@ object f_option: Tf_option
               ParentColor = False
               ParentFont = False
             end
-            object PlatesolveWait: TSpinEditEx
+            object PlatesolveWait: TSpinEdit
               Left = 170
               Height = 28
               Top = 77
@@ -3168,7 +3148,7 @@ object f_option: Tf_option
               ParentColor = False
               ParentFont = False
             end
-            object ASTAPSearchRadius: TSpinEditEx
+            object ASTAPSearchRadius: TSpinEdit
               Left = 178
               Height = 28
               Top = 73
@@ -3214,7 +3194,7 @@ object f_option: Tf_option
               ParentFont = False
               TabOrder = 1
             end
-            object ASTAPdownsample: TSpinEditEx
+            object ASTAPdownsample: TSpinEdit
               Left = 180
               Height = 28
               Top = 121
@@ -3347,7 +3327,7 @@ object f_option: Tf_option
           ParentColor = False
           ParentFont = False
         end
-        object SlewPrec: TFloatSpinEditEx
+        object SlewPrec: TFloatSpinEdit
           Left = 327
           Height = 28
           Top = 81
@@ -3360,10 +3340,9 @@ object f_option: Tf_option
           Increment = 0.1
           MaxValue = 60
           MinValue = 0.01
-          NullValue = 0
           Value = 5
         end
-        object SlewRetry: TSpinEditEx
+        object SlewRetry: TSpinEdit
           Left = 327
           Height = 28
           Top = 113
@@ -3374,7 +3353,7 @@ object f_option: Tf_option
           TabOrder = 3
           MaxValue = 10
         end
-        object SlewExp: TFloatSpinEditEx
+        object SlewExp: TFloatSpinEdit
           Left = 327
           Height = 28
           Top = 178
@@ -3386,10 +3365,9 @@ object f_option: Tf_option
           Increment = 0.1
           MaxValue = 60
           MinValue = 1
-          NullValue = 0
           Value = 1
         end
-        object SlewBin: TSpinEditEx
+        object SlewBin: TSpinEdit
           Left = 327
           Height = 28
           Top = 218
@@ -3402,7 +3380,7 @@ object f_option: Tf_option
           MinValue = 1
           Value = 1
         end
-        object SlewDelay: TSpinEditEx
+        object SlewDelay: TSpinEdit
           Left = 359
           Height = 28
           Top = 307
@@ -3547,7 +3525,7 @@ object f_option: Tf_option
           ParentFont = False
           TabOrder = 3
         end
-        object MinutesPastMeridian: TSpinEditEx
+        object MinutesPastMeridian: TSpinEdit
           Left = 243
           Height = 28
           Top = 10
@@ -3559,7 +3537,7 @@ object f_option: Tf_option
           OnChange = MinutesPastMeridianChange
           MaxValue = 120
         end
-        object MinutesPastMeridianMin: TSpinEditEx
+        object MinutesPastMeridianMin: TSpinEdit
           Left = 243
           Height = 28
           Top = 44
@@ -3571,7 +3549,7 @@ object f_option: Tf_option
           OnChange = MinutesPastMeridianMinChange
           MaxValue = 110
         end
-        object MeridianFlipPauseTimeout: TSpinEditEx
+        object MeridianFlipPauseTimeout: TSpinEdit
           Left = 144
           Height = 28
           Top = 251
@@ -3831,7 +3809,7 @@ object f_option: Tf_option
           ParentColor = False
           ParentFont = False
         end
-        object GuideDriftMax: TFloatSpinEditEx
+        object GuideDriftMax: TFloatSpinEdit
           Left = 121
           Height = 28
           Top = 8
@@ -3842,7 +3820,6 @@ object f_option: Tf_option
           TabOrder = 0
           Increment = 0.1
           MinValue = 0
-          NullValue = 0
           Value = 0
         end
         object GuideDriftCancelExposure: TCheckBox
@@ -3871,7 +3848,7 @@ object f_option: Tf_option
           ParentColor = False
           ParentFont = False
         end
-        object GuideDriftRestartDelay: TSpinEditEx
+        object GuideDriftRestartDelay: TSpinEdit
           Left = 360
           Height = 28
           Top = 44
@@ -3912,7 +3889,7 @@ object f_option: Tf_option
           ClientWidth = 197
           ParentFont = False
           TabOrder = 1
-          object DitherWaitTime: TSpinEditEx
+          object DitherWaitTime: TSpinEdit
             Left = 105
             Height = 28
             Top = 8
@@ -3980,7 +3957,7 @@ object f_option: Tf_option
             ParentColor = False
             ParentFont = False
           end
-          object SettlePixel: TFloatSpinEditEx
+          object SettlePixel: TFloatSpinEdit
             Left = 97
             Height = 28
             Top = 4
@@ -3992,10 +3969,9 @@ object f_option: Tf_option
             Increment = 0.1
             MaxValue = 99
             MinValue = 0
-            NullValue = 0
             Value = 0
           end
-          object SettleMinTime: TSpinEditEx
+          object SettleMinTime: TSpinEdit
             Left = 97
             Height = 28
             Top = 43
@@ -4006,7 +3982,7 @@ object f_option: Tf_option
             TabOrder = 1
             MaxValue = 99
           end
-          object SettleMaxTime: TSpinEditEx
+          object SettleMaxTime: TSpinEdit
             Left = 97
             Height = 28
             Top = 82
@@ -4017,7 +3993,7 @@ object f_option: Tf_option
             TabOrder = 2
             MaxValue = 120
           end
-          object CalibrationDelay: TSpinEditEx
+          object CalibrationDelay: TSpinEdit
             Left = 97
             Height = 28
             Top = 121
@@ -4068,7 +4044,7 @@ object f_option: Tf_option
               ParentFont = False
               TabOrder = 0
             end
-            object DitherPixel: TFloatSpinEditEx
+            object DitherPixel: TFloatSpinEdit
               Left = 112
               Height = 28
               Top = 0
@@ -4080,7 +4056,6 @@ object f_option: Tf_option
               Increment = 0.1
               MaxValue = 99
               MinValue = 0.1
-              NullValue = 0
               Value = 0.1
             end
             object Label122: TLabel
@@ -4140,7 +4115,7 @@ object f_option: Tf_option
               ParentColor = False
               ParentFont = False
             end
-            object StarLostRestart: TSpinEditEx
+            object StarLostRestart: TSpinEdit
               Left = 152
               Height = 28
               Top = 34
@@ -4151,7 +4126,7 @@ object f_option: Tf_option
               TabOrder = 0
               MaxValue = 3600
             end
-            object StarLostCancel: TSpinEditEx
+            object StarLostCancel: TSpinEdit
               Left = 152
               Height = 28
               Top = 64
@@ -4171,7 +4146,7 @@ object f_option: Tf_option
               ParentColor = False
               ParentFont = False
             end
-            object StarLostCancelExposure: TSpinEditEx
+            object StarLostCancelExposure: TSpinEdit
               Left = 152
               Height = 28
               Top = 4
@@ -4238,7 +4213,7 @@ object f_option: Tf_option
             ParentColor = False
             ParentFont = False
           end
-          object DomeActionWait: TSpinEditEx
+          object DomeActionWait: TSpinEdit
             Left = 232
             Height = 26
             Top = 4
@@ -4534,7 +4509,7 @@ object f_option: Tf_option
             ParentColor = False
             ParentFont = False
           end
-          object FloatSpinEditMi1: TFloatSpinEditEx
+          object FloatSpinEditMi1: TFloatSpinEdit
             Tag = 1
             Left = 241
             Height = 28
@@ -4547,10 +4522,9 @@ object f_option: Tf_option
             DecimalPlaces = 3
             MaxValue = 0
             MinValue = 0
-            NullValue = 0
             Value = 0
           end
-          object FloatSpinEditMa1: TFloatSpinEditEx
+          object FloatSpinEditMa1: TFloatSpinEdit
             Tag = 1
             Left = 415
             Height = 28
@@ -4563,7 +4537,6 @@ object f_option: Tf_option
             DecimalPlaces = 3
             MaxValue = 0
             MinValue = 0
-            NullValue = 0
             Value = 0
           end
           object UseW1: TCheckBox
@@ -4604,7 +4577,7 @@ object f_option: Tf_option
             ParentColor = False
             ParentFont = False
           end
-          object FloatSpinEditMi2: TFloatSpinEditEx
+          object FloatSpinEditMi2: TFloatSpinEdit
             Tag = 1
             Left = 241
             Height = 28
@@ -4617,10 +4590,9 @@ object f_option: Tf_option
             DecimalPlaces = 3
             MaxValue = 0
             MinValue = 0
-            NullValue = 0
             Value = 0
           end
-          object FloatSpinEditMa2: TFloatSpinEditEx
+          object FloatSpinEditMa2: TFloatSpinEdit
             Tag = 1
             Left = 415
             Height = 28
@@ -4633,7 +4605,6 @@ object f_option: Tf_option
             DecimalPlaces = 3
             MaxValue = 0
             MinValue = 0
-            NullValue = 0
             Value = 0
           end
           object UseW2: TCheckBox
@@ -4674,7 +4645,7 @@ object f_option: Tf_option
             ParentColor = False
             ParentFont = False
           end
-          object FloatSpinEditMi3: TFloatSpinEditEx
+          object FloatSpinEditMi3: TFloatSpinEdit
             Tag = 1
             Left = 241
             Height = 28
@@ -4687,10 +4658,9 @@ object f_option: Tf_option
             DecimalPlaces = 3
             MaxValue = 0
             MinValue = 0
-            NullValue = 0
             Value = 0
           end
-          object FloatSpinEditMa3: TFloatSpinEditEx
+          object FloatSpinEditMa3: TFloatSpinEdit
             Tag = 1
             Left = 415
             Height = 28
@@ -4703,7 +4673,6 @@ object f_option: Tf_option
             DecimalPlaces = 3
             MaxValue = 0
             MinValue = 0
-            NullValue = 0
             Value = 0
           end
           object UseW3: TCheckBox
@@ -4744,7 +4713,7 @@ object f_option: Tf_option
             ParentColor = False
             ParentFont = False
           end
-          object FloatSpinEditMi4: TFloatSpinEditEx
+          object FloatSpinEditMi4: TFloatSpinEdit
             Tag = 1
             Left = 241
             Height = 28
@@ -4757,10 +4726,9 @@ object f_option: Tf_option
             DecimalPlaces = 3
             MaxValue = 0
             MinValue = 0
-            NullValue = 0
             Value = 0
           end
-          object FloatSpinEditMa4: TFloatSpinEditEx
+          object FloatSpinEditMa4: TFloatSpinEdit
             Tag = 1
             Left = 415
             Height = 28
@@ -4773,7 +4741,6 @@ object f_option: Tf_option
             DecimalPlaces = 3
             MaxValue = 0
             MinValue = 0
-            NullValue = 0
             Value = 0
           end
           object UseW4: TCheckBox
@@ -4814,7 +4781,7 @@ object f_option: Tf_option
             ParentColor = False
             ParentFont = False
           end
-          object FloatSpinEditMi5: TFloatSpinEditEx
+          object FloatSpinEditMi5: TFloatSpinEdit
             Tag = 1
             Left = 241
             Height = 28
@@ -4827,10 +4794,9 @@ object f_option: Tf_option
             DecimalPlaces = 3
             MaxValue = 0
             MinValue = 0
-            NullValue = 0
             Value = 0
           end
-          object FloatSpinEditMa5: TFloatSpinEditEx
+          object FloatSpinEditMa5: TFloatSpinEdit
             Tag = 1
             Left = 415
             Height = 28
@@ -4843,7 +4809,6 @@ object f_option: Tf_option
             DecimalPlaces = 3
             MaxValue = 0
             MinValue = 0
-            NullValue = 0
             Value = 0
           end
           object UseW5: TCheckBox
@@ -4884,7 +4849,7 @@ object f_option: Tf_option
             ParentColor = False
             ParentFont = False
           end
-          object FloatSpinEditMi6: TFloatSpinEditEx
+          object FloatSpinEditMi6: TFloatSpinEdit
             Tag = 1
             Left = 241
             Height = 28
@@ -4897,10 +4862,9 @@ object f_option: Tf_option
             DecimalPlaces = 3
             MaxValue = 0
             MinValue = 0
-            NullValue = 0
             Value = 0
           end
-          object FloatSpinEditMa6: TFloatSpinEditEx
+          object FloatSpinEditMa6: TFloatSpinEdit
             Tag = 1
             Left = 415
             Height = 28
@@ -4913,7 +4877,6 @@ object f_option: Tf_option
             DecimalPlaces = 3
             MaxValue = 0
             MinValue = 0
-            NullValue = 0
             Value = 0
           end
           object UseW6: TCheckBox
@@ -4954,7 +4917,7 @@ object f_option: Tf_option
             ParentColor = False
             ParentFont = False
           end
-          object FloatSpinEditMi7: TFloatSpinEditEx
+          object FloatSpinEditMi7: TFloatSpinEdit
             Tag = 1
             Left = 241
             Height = 28
@@ -4967,10 +4930,9 @@ object f_option: Tf_option
             DecimalPlaces = 3
             MaxValue = 0
             MinValue = 0
-            NullValue = 0
             Value = 0
           end
-          object FloatSpinEditMa7: TFloatSpinEditEx
+          object FloatSpinEditMa7: TFloatSpinEdit
             Tag = 1
             Left = 415
             Height = 28
@@ -4983,7 +4945,6 @@ object f_option: Tf_option
             DecimalPlaces = 3
             MaxValue = 0
             MinValue = 0
-            NullValue = 0
             Value = 0
           end
           object UseW7: TCheckBox
@@ -5024,7 +4985,7 @@ object f_option: Tf_option
             ParentColor = False
             ParentFont = False
           end
-          object FloatSpinEditMi8: TFloatSpinEditEx
+          object FloatSpinEditMi8: TFloatSpinEdit
             Tag = 1
             Left = 241
             Height = 28
@@ -5037,10 +4998,9 @@ object f_option: Tf_option
             DecimalPlaces = 3
             MaxValue = 0
             MinValue = 0
-            NullValue = 0
             Value = 0
           end
-          object FloatSpinEditMa8: TFloatSpinEditEx
+          object FloatSpinEditMa8: TFloatSpinEdit
             Tag = 1
             Left = 415
             Height = 28
@@ -5053,7 +5013,6 @@ object f_option: Tf_option
             DecimalPlaces = 3
             MaxValue = 0
             MinValue = 0
-            NullValue = 0
             Value = 0
           end
           object UseW8: TCheckBox
@@ -5094,7 +5053,7 @@ object f_option: Tf_option
             ParentColor = False
             ParentFont = False
           end
-          object FloatSpinEditMi9: TFloatSpinEditEx
+          object FloatSpinEditMi9: TFloatSpinEdit
             Tag = 1
             Left = 241
             Height = 28
@@ -5107,10 +5066,9 @@ object f_option: Tf_option
             DecimalPlaces = 3
             MaxValue = 0
             MinValue = 0
-            NullValue = 0
             Value = 0
           end
-          object FloatSpinEditMa9: TFloatSpinEditEx
+          object FloatSpinEditMa9: TFloatSpinEdit
             Tag = 1
             Left = 415
             Height = 28
@@ -5123,7 +5081,6 @@ object f_option: Tf_option
             DecimalPlaces = 3
             MaxValue = 0
             MinValue = 0
-            NullValue = 0
             Value = 0
           end
           object UseW9: TCheckBox
@@ -5164,7 +5121,7 @@ object f_option: Tf_option
             ParentColor = False
             ParentFont = False
           end
-          object FloatSpinEditMi10: TFloatSpinEditEx
+          object FloatSpinEditMi10: TFloatSpinEdit
             Tag = 1
             Left = 241
             Height = 28
@@ -5177,10 +5134,9 @@ object f_option: Tf_option
             DecimalPlaces = 3
             MaxValue = 0
             MinValue = 0
-            NullValue = 0
             Value = 0
           end
-          object FloatSpinEditMa10: TFloatSpinEditEx
+          object FloatSpinEditMa10: TFloatSpinEdit
             Tag = 1
             Left = 415
             Height = 28
@@ -5193,7 +5149,6 @@ object f_option: Tf_option
             DecimalPlaces = 3
             MaxValue = 0
             MinValue = 0
-            NullValue = 0
             Value = 0
           end
           object UseW10: TCheckBox
@@ -5234,7 +5189,7 @@ object f_option: Tf_option
             ParentColor = False
             ParentFont = False
           end
-          object FloatSpinEditMi11: TFloatSpinEditEx
+          object FloatSpinEditMi11: TFloatSpinEdit
             Tag = 1
             Left = 241
             Height = 28
@@ -5247,10 +5202,9 @@ object f_option: Tf_option
             DecimalPlaces = 3
             MaxValue = 0
             MinValue = 0
-            NullValue = 0
             Value = 0
           end
-          object FloatSpinEditMa11: TFloatSpinEditEx
+          object FloatSpinEditMa11: TFloatSpinEdit
             Tag = 1
             Left = 415
             Height = 28
@@ -5263,7 +5217,6 @@ object f_option: Tf_option
             DecimalPlaces = 3
             MaxValue = 0
             MinValue = 0
-            NullValue = 0
             Value = 0
           end
           object UseW11: TCheckBox
@@ -5304,7 +5257,7 @@ object f_option: Tf_option
             ParentColor = False
             ParentFont = False
           end
-          object FloatSpinEditMi12: TFloatSpinEditEx
+          object FloatSpinEditMi12: TFloatSpinEdit
             Tag = 1
             Left = 241
             Height = 28
@@ -5317,10 +5270,9 @@ object f_option: Tf_option
             DecimalPlaces = 3
             MaxValue = 0
             MinValue = 0
-            NullValue = 0
             Value = 0
           end
-          object FloatSpinEditMa12: TFloatSpinEditEx
+          object FloatSpinEditMa12: TFloatSpinEdit
             Tag = 1
             Left = 415
             Height = 28
@@ -5333,7 +5285,6 @@ object f_option: Tf_option
             DecimalPlaces = 3
             MaxValue = 0
             MinValue = 0
-            NullValue = 0
             Value = 0
           end
           object UseW12: TCheckBox
@@ -5374,7 +5325,7 @@ object f_option: Tf_option
             ParentColor = False
             ParentFont = False
           end
-          object FloatSpinEditMi13: TFloatSpinEditEx
+          object FloatSpinEditMi13: TFloatSpinEdit
             Tag = 1
             Left = 241
             Height = 28
@@ -5387,10 +5338,9 @@ object f_option: Tf_option
             DecimalPlaces = 3
             MaxValue = 0
             MinValue = 0
-            NullValue = 0
             Value = 0
           end
-          object FloatSpinEditMa13: TFloatSpinEditEx
+          object FloatSpinEditMa13: TFloatSpinEdit
             Tag = 1
             Left = 415
             Height = 28
@@ -5403,7 +5353,6 @@ object f_option: Tf_option
             DecimalPlaces = 3
             MaxValue = 0
             MinValue = 0
-            NullValue = 0
             Value = 0
           end
           object UseW13: TCheckBox
@@ -5436,7 +5385,7 @@ object f_option: Tf_option
           ParentColor = False
           ParentFont = False
         end
-        object WeatherRestartDelay: TSpinEditEx
+        object WeatherRestartDelay: TSpinEdit
           Left = 323
           Height = 28
           Top = 1
@@ -5585,7 +5534,7 @@ object f_option: Tf_option
             ParentFont = False
             TabOrder = 0
           end
-          object RecenterTargetDistance: TFloatSpinEditEx
+          object RecenterTargetDistance: TFloatSpinEdit
             Left = 289
             Height = 31
             Top = 40
@@ -5595,7 +5544,6 @@ object f_option: Tf_option
             TabOrder = 1
             Increment = 0.1
             MinValue = 0
-            NullValue = 0
             Value = 0
           end
           object Label130: TLabel
@@ -5666,7 +5614,7 @@ object f_option: Tf_option
             ParentFont = False
             TabOrder = 0
           end
-          object FocuserTempCoeff: TFloatSpinEditEx
+          object FocuserTempCoeff: TFloatSpinEdit
             Left = 289
             Height = 28
             Top = 3
@@ -5678,7 +5626,6 @@ object f_option: Tf_option
             Increment = 0.1
             MaxValue = 1000
             MinValue = -1000
-            NullValue = 0
             Value = 0
           end
           object Label119: TLabel
@@ -5690,7 +5637,7 @@ object f_option: Tf_option
             ParentColor = False
             ParentFont = False
           end
-          object AutofocusTemp: TFloatSpinEditEx
+          object AutofocusTemp: TFloatSpinEdit
             Left = 289
             Height = 28
             Top = 31
@@ -5702,7 +5649,6 @@ object f_option: Tf_option
             DecimalPlaces = 1
             Increment = 0.1
             MinValue = 0
-            NullValue = 0
             Value = 0
           end
           object BtnDisableAutofocusTemp: TButton
@@ -5736,7 +5682,7 @@ object f_option: Tf_option
             ParentColor = False
             ParentFont = False
           end
-          object AutofocusPeriod: TSpinEditEx
+          object AutofocusPeriod: TSpinEdit
             Left = 289
             Height = 28
             Top = 0

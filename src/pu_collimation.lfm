@@ -64,7 +64,7 @@ object f_collimation: Tf_collimation
       Caption = 'Number of circles'
       ParentColor = False
     end
-    object CircleNum: TSpinEditEx
+    object CircleNum: TSpinEdit
       Left = 176
       Height = 31
       Top = 8

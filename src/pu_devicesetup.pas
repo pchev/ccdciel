@@ -31,7 +31,7 @@ uses indibaseclient, indibasedevice, indiapi, u_global, u_utils, u_ccdconfig, US
     Variants, comobj, math,
   {$endif}
   Classes, SysUtils, FileUtil, Forms, Controls, Graphics, Dialogs, StdCtrls,
-  ExtCtrls, ComCtrls, Grids, Buttons, SpinEx, Types;
+  ExtCtrls, ComCtrls, Grids, Buttons, Spin, Types;
 
 type
 
@@ -50,7 +50,7 @@ type
     CameraARestPass: TEdit;
     AlpacaServers: TComboBox;
     AlpacaCameraList: TComboBox;
-    AlpacaDiscoveryPort: TSpinEditEx;
+    AlpacaDiscoveryPort: TSpinEdit;
     CameraDateObs: TCheckBox;
     CameraDateObs1: TCheckBox;
     FixPixelRange: TCheckBox;
@@ -77,7 +77,7 @@ type
     Panel32: TPanel;
     ManualFilterName: TStringGrid;
     PanelLeft: TPanel;
-    WheelMslot: TSpinEditEx;
+    WheelMslot: TSpinEdit;
     WheelManual: TTabSheet;
     WheelARestPass: TEdit;
     FocuserARestPass: TEdit;
@@ -191,7 +191,7 @@ type
     WheelIndiPort: TEdit;
     WheelIndiServer: TEdit;
     DefaultARestHost: TEdit;
-    DefaultARestPort: TSpinEditEx;
+    DefaultARestPort: TSpinEdit;
     DefaultARestProtocol: TComboBox;
     CameraIndiPort: TEdit;
     CameraIndiServer: TEdit;
@@ -213,13 +213,13 @@ type
     Panel10: TPanel;
     Panel11: TPanel;
     Panel12: TPanel;
-    WheelARestDevice: TSpinEditEx;
-    FocuserARestDevice: TSpinEditEx;
-    RotatorARestDevice: TSpinEditEx;
-    MountARestDevice: TSpinEditEx;
-    DomeARestDevice: TSpinEditEx;
-    WeatherARestDevice: TSpinEditEx;
-    SafetyARestDevice: TSpinEditEx;
+    WheelARestDevice: TSpinEdit;
+    FocuserARestDevice: TSpinEdit;
+    RotatorARestDevice: TSpinEdit;
+    MountARestDevice: TSpinEdit;
+    DomeARestDevice: TSpinEdit;
+    WeatherARestDevice: TSpinEdit;
+    SafetyARestDevice: TSpinEdit;
     WheelARestHost: TEdit;
     FocuserARestHost: TEdit;
     RotatorARestHost: TEdit;
@@ -227,13 +227,13 @@ type
     DomeARestHost: TEdit;
     WeatherARestHost: TEdit;
     SafetyARestHost: TEdit;
-    WheelARestPort: TSpinEditEx;
-    FocuserARestPort: TSpinEditEx;
-    RotatorARestPort: TSpinEditEx;
-    MountARestPort: TSpinEditEx;
-    DomeARestPort: TSpinEditEx;
-    WeatherARestPort: TSpinEditEx;
-    SafetyARestPort: TSpinEditEx;
+    WheelARestPort: TSpinEdit;
+    FocuserARestPort: TSpinEdit;
+    RotatorARestPort: TSpinEdit;
+    MountARestPort: TSpinEdit;
+    DomeARestPort: TSpinEdit;
+    WeatherARestPort: TSpinEdit;
+    SafetyARestPort: TSpinEdit;
     WheelARestProtocol: TComboBox;
     FocuserARestProtocol: TComboBox;
     RotatorARestProtocol: TComboBox;
@@ -338,8 +338,8 @@ type
     SafetyIndi: TTabSheet;
     SafetyAscom: TTabSheet;
     CameraAscomRest: TTabSheet;
-    CameraARestPort: TSpinEditEx;
-    CameraARestDevice: TSpinEditEx;
+    CameraARestPort: TSpinEdit;
+    CameraARestDevice: TSpinEdit;
     WheelAscomRest: TTabSheet;
     FocuserAscomRest: TTabSheet;
     RotatorAscomRest: TTabSheet;

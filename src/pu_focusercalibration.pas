@@ -27,7 +27,7 @@ interface
 
 uses u_global, cu_focuser, u_translation, Classes, SysUtils, FileUtil, UScaleDPI,
   TASources, TAGraph, TASeries, Forms, Controls, Graphics, Dialogs, ExtCtrls,
-  StdCtrls, ValEdit, SpinEx, TACustomSeries;
+  StdCtrls, ValEdit, Spin, TACustomSeries;
 
 type
 
@@ -64,9 +64,9 @@ type
     Panel1: TPanel;
     PtSourceL: TListChartSource;
     PtSourceR: TListChartSource;
-    Backlash: TSpinEditEx;
-    hfdmax: TSpinEditEx;
-    stepmin: TSpinEditEx;
+    Backlash: TSpinEdit;
+    hfdmax: TSpinEdit;
+    stepmin: TSpinEdit;
     ValueListEditor1: TValueListEditor;
     ValueListEditor2: TValueListEditor;
     VcChart: TChart;

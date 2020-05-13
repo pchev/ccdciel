@@ -103,7 +103,7 @@ object f_preview: Tf_preview
         ParentColor = False
         ParentFont = False
       end
-      object GainEdit: TSpinEditEx
+      object GainEdit: TSpinEdit
         Left = 100
         Height = 28
         Top = 4

@@ -67,7 +67,7 @@ object f_rotator: Tf_rotator
         ParentColor = False
         ParentFont = False
       end
-      object Angle: TFloatSpinEditEx
+      object Angle: TFloatSpinEdit
         Left = 49
         Height = 28
         Top = 1
@@ -79,7 +79,6 @@ object f_rotator: Tf_rotator
         DecimalPlaces = 1
         MaxValue = 0
         MinValue = 0
-        NullValue = 0
         Value = 0
       end
       object BtnRotate: TButton

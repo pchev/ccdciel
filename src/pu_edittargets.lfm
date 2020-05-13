@@ -113,7 +113,7 @@ object f_EditTargets: Tf_EditTargets
               ParentFont = False
               TabOrder = 0
             end
-            object RepeatCountList: TSpinEditEx
+            object RepeatCountList: TSpinEdit
               Left = 182
               Height = 24
               Top = 0
@@ -852,7 +852,7 @@ object f_EditTargets: Tf_EditTargets
                   ParentColor = False
                   ParentFont = False
                 end
-                object TDelay: TSpinEditEx
+                object TDelay: TSpinEdit
                   Left = 3
                   Height = 26
                   Top = 24
@@ -864,7 +864,7 @@ object f_EditTargets: Tf_EditTargets
                   OnChange = TargetChange
                   MaxValue = 100000
                 end
-                object PreviewExposure: TFloatSpinEditEx
+                object PreviewExposure: TFloatSpinEdit
                   Left = 89
                   Height = 26
                   Top = 24
@@ -877,7 +877,6 @@ object f_EditTargets: Tf_EditTargets
                   Increment = 0.1
                   MaxValue = 60
                   MinValue = 0.001
-                  NullValue = 0
                   Value = 0.001
                 end
                 object Label13: TLabel
@@ -1426,7 +1425,7 @@ object f_EditTargets: Tf_EditTargets
                 ParentColor = False
                 ParentFont = False
               end
-              object FGainEdit: TSpinEditEx
+              object FGainEdit: TSpinEdit
                 Left = 91
                 Height = 26
                 Top = 0
@@ -1474,7 +1473,7 @@ object f_EditTargets: Tf_EditTargets
               ParentColor = False
               ParentFont = False
             end
-            object FlatCount: TSpinEditEx
+            object FlatCount: TSpinEdit
               Left = 91
               Height = 28
               Top = 0

@@ -28,7 +28,7 @@ interface
 uses pu_planetariuminfo, u_global, u_utils, u_ccdconfig, pu_pascaleditor, u_annotation, pu_keyboard,
   pu_scriptengine, cu_astrometry, u_hints, u_translation, pu_selectscript, Classes, math,
   SysUtils, FileUtil, Forms, Controls, Graphics, Dialogs, StdCtrls, UScaleDPI,
-  LazUTF8, maskedit, Grids, ExtCtrls, ComCtrls, EditBtn, SpinEx, Buttons, Types;
+  LazUTF8, maskedit, Grids, ExtCtrls, ComCtrls, EditBtn, Spin, Buttons, Types;
 
 const
   colseq=0; colname=1; colplan=2; colra=3; coldec=4; colpa=5; colstart=6; colend=7; coldark=8; colskip=9; colrepeat=10; colastrometry=11; colinplace=12; colupdcoord=13;
@@ -139,17 +139,17 @@ type
     PlanNone: TTabSheet;
     ToolsNone: TTabSheet;
     TargetName: TLabel;
-    PreviewExposure: TFloatSpinEditEx;
+    PreviewExposure: TFloatSpinEdit;
     FISObox: TComboBox;
     Label16: TLabel;
     Label18: TLabel;
     LabelGain: TLabel;
     FlatTime: TRadioGroup;
     PanelGain: TPanel;
-    TDelay: TSpinEditEx;
-    RepeatCountList: TSpinEditEx;
-    FlatCount: TSpinEditEx;
-    FGainEdit: TSpinEditEx;
+    TDelay: TSpinEdit;
+    RepeatCountList: TSpinEdit;
+    FlatCount: TSpinEdit;
+    FGainEdit: TSpinEdit;
     StepList: TStringGrid;
     ToolsFlat: TTabSheet;
     SeqStart: TCheckBox;

@@ -114,7 +114,7 @@ object f_capture: Tf_capture
         ParentColor = False
         ParentFont = False
       end
-      object GainEdit: TSpinEditEx
+      object GainEdit: TSpinEdit
         Left = 89
         Height = 28
         Top = 4
@@ -243,7 +243,7 @@ object f_capture: Tf_capture
         ParentColor = False
         ParentFont = False
       end
-      object SeqNum: TSpinEditEx
+      object SeqNum: TSpinEdit
         Left = 89
         Height = 28
         Top = 0
@@ -317,7 +317,7 @@ object f_capture: Tf_capture
         ParentFont = False
         TabOrder = 0
       end
-      object DitherCount: TSpinEditEx
+      object DitherCount: TSpinEdit
         Left = 135
         Height = 28
         Top = 0
@@ -351,7 +351,7 @@ object f_capture: Tf_capture
         ParentFont = False
         TabOrder = 0
       end
-      object FocusCount: TSpinEditEx
+      object FocusCount: TSpinEdit
         Left = 135
         Height = 28
         Top = 0
