@@ -73,12 +73,11 @@ object f_rotator: Tf_rotator
         Top = 1
         Width = 66
         Constraints.MaxHeight = 28
-        MaxLength = 0
+        DecimalPlaces = 1
+        MaxValue = 99999
+        MinValue = -99999
         ParentFont = False
         TabOrder = 0
-        DecimalPlaces = 1
-        MaxValue = 0
-        MinValue = 0
         Value = 0
       end
       object BtnRotate: TButton
