@@ -26,7 +26,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 interface
 
 uses Graphics, cu_fits, math, UScaleDPI, Classes, SysUtils, FileUtil, u_translation, u_hints,
-  u_global, Forms, Controls, ExtCtrls, StdCtrls, Buttons, SpinEx, ComCtrls;
+  u_global, Forms, Controls, ExtCtrls, StdCtrls, Buttons, Spin, ComCtrls;
 
 type
 
@@ -40,7 +40,7 @@ type
     BtnShowImage: TSpeedButton;
     BtnZoom05: TSpeedButton;
     BtnBullsEye: TSpeedButton;
-    Gamma: TFloatSpinEditEx;
+    Gamma: TFloatSpinEdit;
     Histogram: TImage;
     Panel1: TPanel;
     BtnZoomAdjust: TSpeedButton;
@@ -51,8 +51,8 @@ type
     Panel4: TPanel;
     Panel5: TPanel;
     PanelNoDisplay: TPanel;
-    SpinEditMin: TFloatSpinEditEx;
-    SpinEditMax: TFloatSpinEditEx;
+    SpinEditMin: TFloatSpinEdit;
+    SpinEditMax: TFloatSpinEdit;
     Title: TLabel;
     TimerRedraw: TTimer;
     TimerMinMax: TTimer;

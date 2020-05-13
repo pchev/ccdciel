@@ -26,7 +26,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 interface
 
 uses  u_translation, u_global, UScaleDPI,
-  Classes, SysUtils, Forms, Controls, Graphics, Dialogs, StdCtrls, SpinEx, ExtCtrls;
+  Classes, SysUtils, Forms, Controls, Graphics, Dialogs, StdCtrls, Spin, ExtCtrls;
 
 type
 
@@ -35,7 +35,7 @@ type
   Tf_photometry = class(TForm)
     ButtonSetRefMag: TButton;
     ButtonClose: TButton;
-    RefMag: TFloatSpinEditEx;
+    RefMag: TFloatSpinEdit;
     GroupBoxRefStar: TGroupBox;
     GroupBoxMeasurement: TGroupBox;
     Memo1: TMemo;

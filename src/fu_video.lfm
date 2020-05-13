@@ -57,7 +57,7 @@ object f_video: Tf_video
         ParentColor = False
         ParentFont = False
       end
-      object StreamExp: TFloatSpinEditEx
+      object StreamExp: TFloatSpinEdit
         Left = 81
         Height = 30
         Top = 6
@@ -69,8 +69,6 @@ object f_video: Tf_video
         Increment = 0.1
         MaxValue = 1
         MinValue = 0
-        NullValue = 0
-        NullValueBehaviour = nvbInitialValue
         Value = 0
       end
     end
