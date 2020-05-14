@@ -280,7 +280,7 @@ begin
      result:=(i=0);  // open
    end
    else
-     result:=true;  // Assume open when shutter control is not present
+     result:=not GetPark;  // Use park status when shutter control is not implemented
    except
     result:=false;
    end;
