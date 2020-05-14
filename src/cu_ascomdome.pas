@@ -278,7 +278,9 @@ begin
    if FhasShutter then begin
      i:=V.ShutterStatus;
      result:=(i=0);  // open
-   end;
+   end
+   else
+     result:=true;  // Assume open when shutter control is not present
    except
     result:=false;
    end;
