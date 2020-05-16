@@ -3221,7 +3221,6 @@ begin
    hdr.Add('NAXIS1',w ,'length of data axis 1');
    hdr.Add('NAXIS2',h ,'length of data axis 2');
    if naxis=3 then hdr.Add('NAXIS3',3 ,'length of data axis 3');
-   hdr.Add('EXTEND',true,'FITS dataset may contain extensions');
    hdr.Add('BZERO',32768,'offset data range to that of unsigned short');
    hdr.Add('BSCALE',1,'default scaling factor');
    if pix>0 then hdr.Add('PIXSIZE1',pix ,'Pixel Size 1 (microns)');
@@ -3460,7 +3459,6 @@ if libraw<>0 then begin  // Use libraw directly
   hdr.Add('NAXIS',2,'number of data axes');
   hdr.Add('NAXIS1',rawinfo.imgwidth ,'length of data axis 1');
   hdr.Add('NAXIS2',rawinfo.imgheight ,'length of data axis 2');
-  hdr.Add('EXTEND',true,'FITS dataset may contain extensions');
   hdr.Add('BZERO',32768,'offset data range to that of unsigned short');
   hdr.Add('BSCALE',1,'default scaling factor');
   if pix>0 then hdr.Add('PIXSIZE1',pix ,'Pixel Size 1 (microns)');
