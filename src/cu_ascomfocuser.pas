@@ -298,25 +298,27 @@ end;
 
 procedure T_ascomfocuser.SetPosition(p:integer);
 {$ifdef mswindows}
-var n,np: integer;
+var np: integer;
 {$endif}
 begin
  {$ifdef mswindows}
  if not VarIsEmpty(V) then begin
    try
-   if FPositionRange<>NullRange then
-     n:=max(min(p,round(FPositionRange.max)),round(FPositionRange.min))
-   else
-     n:=p;
-   if debug_msg then msg('Move '+inttostr(p)+' '+inttostr(n));
-   V.Move(n);
+   if PositionRange<>NullRange then begin
+      if (p>FPositionRange.max)or(p<FPositionRange.min) then begin
+        msg('Invalid position request: '+inttostr(p),1);
+        exit;
+      end;
+   end;
+   if debug_msg then msg('Move '+inttostr(p));
+   V.Move(p);
    FocuserLastTemp:=FocuserTemp;
    WaitFocuserMoving(60000);
    // Fix for usb-focus
    if Fdevice='ASCOM.USB_Focus.Focuser' then begin
      np:=GetPosition;
-     if (np<>n) then begin
-       msg('Error, new position is '+IntToStr(np)+' instead of '+IntToStr(n),0);
+     if (np<>p) then begin
+       msg('Error, new position is '+IntToStr(np)+' instead of '+IntToStr(p),0);
      end; {fix for some poor written focuser drivers. The getposition is already sufficient to fix the problem, so message should never occur.}
    end;
    except

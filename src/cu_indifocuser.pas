@@ -407,14 +407,15 @@ begin
 end;
 
 procedure T_indifocuser.SetPosition(p:integer);
-var n: integer;
 begin
 if FocusAbsolutePosition<>nil then begin
-  if PositionRange<>NullRange then
-     n:=max(min(p,round(PositionRange.max)),round(PositionRange.min))
-   else
-     n:=p;
-  FocusAbsolutePosition.np[0].value:=n;
+  if PositionRange<>NullRange then begin
+     if (p>PositionRange.max)or(p<PositionRange.min) then begin
+       msg('Invalid position request: '+inttostr(p),1);
+       exit;
+     end;
+  end;
+  FocusAbsolutePosition.np[0].value:=p;
   indiclient.sendNewNumber(FocusAbsolutePosition);
   FocuserLastTemp:=FocuserTemp;
   indiclient.WaitBusy(FocusAbsolutePosition,60000);
