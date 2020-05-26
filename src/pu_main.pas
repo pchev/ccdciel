@@ -694,6 +694,7 @@ type
     Procedure AutoguiderStatus(Sender: TObject);
     Procedure AutoguiderGetSigma(axis:integer; out sigma: double);
     Procedure AutoguiderGuideStat;
+    Procedure AutoguiderGuideGraph(Sender: TObject);
     Procedure AutoguiderClearStat(Sender: TObject);
     Procedure PlanetariumConnectClick(Sender: TObject);
     Procedure PlanetariumConnect(Sender: TObject);
@@ -1444,6 +1445,7 @@ begin
   f_autoguider.onGuide:=@AutoguiderGuideClick;
   f_autoguider.onDither:=@AutoguiderDitherClick;
   f_autoguider.onClearStat:=@AutoguiderClearStat;
+  f_autoguider.onShowStat:=@AutoguiderGuideGraph;
   f_autoguider.Status.Text:=autoguider.Status;
   f_autoguider.DitherOnly:=autoguider.AutoguiderType=agDITHER;
 
@@ -6165,7 +6167,15 @@ begin
    AutoguiderStat[n,2]:=autoguider.Decdistance;
    AutoguiderStat[n,3]:=autoguider.Starmass;
    // show graph and stats
-   if f_autoguider.ShowStat.Checked then begin
+   AutoguiderGuideGraph(nil);
+end;
+
+Procedure Tf_main.AutoguiderGuideGraph(Sender: TObject);
+var i,n: integer;
+    ma,mi,smmax,ras,des,tots: double;
+begin
+   n:=Length(AutoguiderStat);
+   if (n>0) and f_autoguider.ShowStat.Checked then begin
      if n>1 then begin
        // show guide error
        AutoguiderGetSigma(1,ras);
