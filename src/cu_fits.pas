@@ -2682,14 +2682,15 @@ begin
    // Check for asymmetry. Are we testing a group of stars or a defocused star?
     val_00:=0;val_01:=0;val_10:=0;val_11:=0;
 
-    for i:=-rs to 0 do begin
-      for j:=-rs to 0 do begin
-        val_00:=val_00+ value_subpixel(xc+i,yc+j)-bg; {value top left}
-        val_01:=val_01+ value_subpixel(xc+i,yc-j)-bg; {value bottom left}
-        val_10:=val_10+ value_subpixel(xc-i,yc+j)-bg; {value top right}
-        val_11:=val_11+ value_subpixel(xc-i,yc-j)-bg; {value bottom right}
+    for i:=rs downto 1 do begin
+      for j:=rs downto 1 do begin
+        val_00:=val_00+ value_subpixel(xc+i-0.5,yc+j-0.5)-bg;
+        val_01:=val_01+ value_subpixel(xc+i-0.5,yc-j+0.5)-bg;
+        val_10:=val_10+ value_subpixel(xc-i+0.5,yc+j-0.5)-bg;
+        val_11:=val_11+ value_subpixel(xc-i+0.5,yc-j+0.5)-bg;
       end;
     end;
+
     af:=0.30; {## asymmetry factor. 1=is allow only prefect symmetrical, 0.000001=off}
               {0.30 make focusing to work with bad seeing}
 
@@ -2703,6 +2704,13 @@ begin
     if asymmetry then dec(rs,2); {try a smaller window to exclude nearby stars}
     if rs<4 then exit; {try to reduce box up to rs=4 equals 8x8 box else exit}
   until asymmetry=false; {loop and reduce box size until asymmetry is gone or exit if box is too small}
+
+  if (not Undersampled) then   {check on single hot pixels}
+  for i:=-1 to +1 do
+    for j:=-1 to +1 do begin
+      val:=Fimage[0,round(yc)+j,round(xc)+i]-bg; {no subpixel calculation here}
+      if val>0.5*sumval then exit;
+    end;
 
   // Get diameter of star above the noise level.
   for i:=0 to rs do distance_histogram[i]:=0;{clear histogram of pixel distances}
@@ -2756,7 +2764,6 @@ begin
     end;
   if Sumval<0.00001 then Sumval:=0.00001;{prevent divide by zero}
   hfd:=2*SumValR/SumVal;
-  if (not Undersampled) and (hfd<=0.7) then exit; // reject single hot pixel
   hfd:=max(0.7,hfd); // minimum value for a star size of 1 pixel
   star_fwhm:=2*sqrt(pixel_counter/pi);{The surface is calculated by counting pixels above half max. The diameter of that surface called FWHM is then 2*sqrt(surface/pi) }
   if (SumVal>0.00001)and(saturated_counter<=max_saturated) then begin
