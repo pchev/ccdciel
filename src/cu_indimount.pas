@@ -80,7 +80,7 @@ T_indimount = class(T_mount)
    Guide_Rate_NS:  INumber;
    Guide_Rate_WE:  INumber;
    Fready,Fconnected: boolean;
-   Findiserver, Findiserverport, Findidevice, Findideviceport: string;
+   Findiserver, Findiserverport, Findidevice: string;
    procedure CreateIndiClient;
    procedure InitTimerTimer(Sender: TObject);
    procedure ConnectTimerTimer(Sender: TObject);
@@ -167,7 +167,6 @@ begin
  Findiserver:='localhost';
  Findiserverport:='7624';
  Findidevice:='';
- Findideviceport:='';
  eod_coord:=true;
  InitTimer:=TTimer.Create(nil);
  InitTimer.Enabled:=false;
@@ -255,7 +254,6 @@ if not indiclient.Connected then begin
   Findiserverport:=cp2;
   Findidevice:=cp3;
   Fdevice:=cp3;
-  Findideviceport:=cp4;
   FStatus := devDisconnected;
   if Assigned(FonStatusChange) then FonStatusChange(self);
   indiclient.SetServer(Findiserver,Findiserverport);
@@ -303,11 +301,6 @@ begin
   ConnectTimer.Enabled:=False;
   if (Mountport=nil) and (not Fready) and InitTimer.Enabled then begin
     ConnectTimer.Enabled:=true;
-  end;
-  if (Mountport<>nil)and(Findideviceport<>'') then begin
-     Mountport.tp[0].text:=Findideviceport;
-     indiclient.sendNewText(Mountport);
-     msg('Set port '+Findideviceport);
   end;
  indiclient.connectDevice(Findidevice);
 end;

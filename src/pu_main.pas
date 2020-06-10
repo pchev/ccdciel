@@ -4159,8 +4159,7 @@ begin
            camera.Connect(config.GetValue('/INDIcamera/Server',''),
                           config.GetValue('/INDIcamera/ServerPort',''),
                           config.GetValue('/INDIcamera/Device',''),
-                          config.GetValue('/INDIcamera/Sensor','CCD1'),
-                          config.GetValue('/INDIcamera/DevicePort',''));
+                          config.GetValue('/INDIcamera/Sensor','CCD1'));
            end;
     ASCOM: begin
            camera.UseCameraStartTime:=config.GetValue('/ASCOMcamera/CameraDateObs',false);
@@ -4432,8 +4431,7 @@ begin
     INCAMERA : wheel.Connect('');
     INDI : wheel.Connect(config.GetValue('/INDIwheel/Server',''),
                           config.GetValue('/INDIwheel/ServerPort',''),
-                          config.GetValue('/INDIwheel/Device',''),
-                          config.GetValue('/INDIwheel/DevicePort',''));
+                          config.GetValue('/INDIwheel/Device',''));
     ASCOM: wheel.Connect(config.GetValue('/ASCOMwheel/Device',''));
     ASCOMREST: wheel.Connect(config.GetValue('/ASCOMRestwheel/Host',''),
                           IntToStr(config.GetValue('/ASCOMRestwheel/Port',0)),
@@ -4456,8 +4454,7 @@ begin
   case focuser.FocuserInterface of
     INDI : focuser.Connect(config.GetValue('/INDIfocuser/Server',''),
                           config.GetValue('/INDIfocuser/ServerPort',''),
-                          config.GetValue('/INDIfocuser/Device',''),
-                          config.GetValue('/INDIfocuser/DevicePort',''));
+                          config.GetValue('/INDIfocuser/Device',''));
     ASCOM: focuser.Connect(config.GetValue('/ASCOMfocuser/Device',''));
     ASCOMREST: focuser.Connect(config.GetValue('/ASCOMRestfocuser/Host',''),
                           IntToStr(config.GetValue('/ASCOMRestfocuser/Port',0)),
@@ -4520,8 +4517,7 @@ begin
   case rotator.RotatorInterface of
     INDI : rotator.Connect(config.GetValue('/INDIrotator/Server',''),
                           config.GetValue('/INDIrotator/ServerPort',''),
-                          config.GetValue('/INDIrotator/Device',''),
-                          config.GetValue('/INDIrotator/DevicePort',''));
+                          config.GetValue('/INDIrotator/Device',''));
     ASCOM: rotator.Connect(config.GetValue('/ASCOMrotator/Device',''));
     ASCOMREST: rotator.Connect(config.GetValue('/ASCOMRestrotator/Host',''),
                           IntToStr(config.GetValue('/ASCOMRestrotator/Port',0)),
@@ -4542,8 +4538,7 @@ begin
   case mount.MountInterface of
     INDI : mount.Connect(config.GetValue('/INDImount/Server',''),
                           config.GetValue('/INDImount/ServerPort',''),
-                          config.GetValue('/INDImount/Device',''),
-                          config.GetValue('/INDImount/DevicePort',''));
+                          config.GetValue('/INDImount/Device',''));
     ASCOM: mount.Connect(config.GetValue('/ASCOMmount/Device',''));
     ASCOMREST: mount.Connect(config.GetValue('/ASCOMRestmount/Host',''),
                           IntToStr(config.GetValue('/ASCOMRestmount/Port',0)),
@@ -4564,8 +4559,7 @@ begin
   case dome.DomeInterface of
     INDI : dome.Connect(config.GetValue('/INDIdome/Server',''),
                           config.GetValue('/INDIdome/ServerPort',''),
-                          config.GetValue('/INDIdome/Device',''),
-                          config.GetValue('/INDIdome/DevicePort',''));
+                          config.GetValue('/INDIdome/Device',''));
     ASCOM: dome.Connect(config.GetValue('/ASCOMdome/Device',''));
     ASCOMREST: dome.Connect(config.GetValue('/ASCOMRestdome/Host',''),
                           IntToStr(config.GetValue('/ASCOMRestdome/Port',0)),
@@ -6362,7 +6356,6 @@ begin
     config.SetValue('/INDIcamera/ServerPort',f_setup.CameraIndiPort.Text);
     if f_setup.CameraIndiDevice.Text<>'' then config.SetValue('/INDIcamera/Device',f_setup.CameraIndiDevice.Text);
     config.SetValue('/INDIcamera/Sensor',f_setup.CameraSensor);
-    config.SetValue('/INDIcamera/DevicePort',f_setup.CameraIndiDevPort.Text);
     config.SetValue('/INDIcamera/AutoLoadConfig',f_setup.CameraAutoLoadConfig.Checked);
     config.SetValue('/INDIcamera/IndiTransfert',f_setup.CameraIndiTransfert.ItemIndex);
     config.SetValue('/INDIcamera/IndiTransfertDir',f_setup.CameraIndiTransfertDir.Text);
@@ -6382,7 +6375,6 @@ begin
     config.SetValue('/INDIwheel/Server',f_setup.WheelIndiServer.Text);
     config.SetValue('/INDIwheel/ServerPort',f_setup.WheelIndiPort.Text);
     if f_setup.WheelIndiDevice.Text<>'' then config.SetValue('/INDIwheel/Device',f_setup.WheelIndiDevice.Text);
-    config.SetValue('/INDIwheel/DevicePort',f_setup.WheelIndiDevPort.Text);
     config.SetValue('/INDIwheel/AutoLoadConfig',f_setup.WheelAutoLoadConfig.Checked);
     config.SetValue('/ASCOMwheel/Device',f_setup.AscomWheel.Text);
     config.SetValue('/ASCOMRestwheel/Protocol',f_setup.WheelARestProtocol.ItemIndex);
@@ -6397,7 +6389,6 @@ begin
     config.SetValue('/INDIfocuser/Server',f_setup.FocuserIndiServer.Text);
     config.SetValue('/INDIfocuser/ServerPort',f_setup.FocuserIndiPort.Text);
     if f_setup.FocuserIndiDevice.Text<>'' then config.SetValue('/INDIfocuser/Device',f_setup.FocuserIndiDevice.Text);
-    config.SetValue('/INDIfocuser/DevicePort',f_setup.FocuserIndiDevPort.Text);
     config.SetValue('/INDIfocuser/AutoLoadConfig',f_setup.FocuserAutoLoadConfig.Checked);
     config.SetValue('/ASCOMfocuser/Device',f_setup.AscomFocuser.Text);
     config.SetValue('/ASCOMRestfocuser/Protocol',f_setup.FocuserARestProtocol.ItemIndex);
@@ -6410,7 +6401,6 @@ begin
     config.SetValue('/INDIrotator/Server',f_setup.RotatorIndiServer.Text);
     config.SetValue('/INDIrotator/ServerPort',f_setup.RotatorIndiPort.Text);
     if f_setup.RotatorIndiDevice.Text<>'' then config.SetValue('/INDIrotator/Device',f_setup.RotatorIndiDevice.Text);
-    config.SetValue('/INDIrotator/DevicePort',f_setup.RotatorIndiDevPort.Text);
     config.SetValue('/INDIrotator/AutoLoadConfig',f_setup.RotatorAutoLoadConfig.Checked);
     config.SetValue('/ASCOMrotator/Device',f_setup.AscomRotator.Text);
     config.SetValue('/ASCOMRestrotator/Protocol',f_setup.RotatorARestProtocol.ItemIndex);
@@ -6422,7 +6412,6 @@ begin
     config.SetValue('/INDImount/Server',f_setup.MountIndiServer.Text);
     config.SetValue('/INDImount/ServerPort',f_setup.MountIndiPort.Text);
     if f_setup.MountIndiDevice.Text<>'' then config.SetValue('/INDImount/Device',f_setup.MountIndiDevice.Text);
-    config.SetValue('/INDImount/DevicePort',f_setup.MountIndiDevPort.Text);
     config.SetValue('/INDImount/AutoLoadConfig',f_setup.MountAutoLoadConfig.Checked);
     config.SetValue('/ASCOMmount/Device',f_setup.AscomMount.Text);
     config.SetValue('/Mount/SetDateTime',f_setup.MountSetDateTime.Checked);
@@ -6437,7 +6426,6 @@ begin
     config.SetValue('/INDIdome/Server',f_setup.DomeIndiServer.Text);
     config.SetValue('/INDIdome/ServerPort',f_setup.DomeIndiPort.Text);
     if f_setup.DomeIndiDevice.Text<>'' then config.SetValue('/INDIdome/Device',f_setup.DomeIndiDevice.Text);
-    config.SetValue('/INDIdome/DevicePort',f_setup.DomeIndiDevPort.Text);
     config.SetValue('/INDIdome/AutoLoadConfig',f_setup.DomeAutoLoadConfig.Checked);
     config.SetValue('/ASCOMdome/Device',f_setup.AscomDome.Text);
     config.SetValue('/ASCOMRestdome/Protocol',f_setup.DomeARestProtocol.ItemIndex);

@@ -45,7 +45,7 @@ T_indirotator = class(T_rotator)
    configprop: ISwitchVectorProperty;
    configload,configsave: ISwitch;
    Fready,Fconnected: boolean;
-   Findiserver, Findiserverport, Findidevice, Findideviceport: string;
+   Findiserver, Findiserverport, Findidevice: string;
    procedure CreateIndiClient;
    procedure InitTimerTimer(Sender: TObject);
    procedure ConnectTimerTimer(Sender: TObject);
@@ -108,7 +108,6 @@ begin
  Findiserver:='localhost';
  Findiserverport:='7624';
  Findidevice:='';
- Findideviceport:='';
  InitTimer:=TTimer.Create(nil);
  InitTimer.Enabled:=false;
  InitTimer.Interval:=60000;
@@ -183,7 +182,6 @@ if not indiclient.Connected then begin
   Findiserverport:=cp2;
   Findidevice:=cp3;
   Fdevice:=cp3;
-  Findideviceport:=cp4;
   FStatus := devDisconnected;
   if Assigned(FonStatusChange) then FonStatusChange(self);
   indiclient.SetServer(Findiserver,Findiserverport);
@@ -231,11 +229,6 @@ begin
   ConnectTimer.Enabled:=False;
   if (Rotatorport=nil) and (not Fready) and InitTimer.Enabled then begin
     ConnectTimer.Enabled:=true;
-  end;
-  if (Rotatorport<>nil)and(Findideviceport<>'') then begin
-     Rotatorport.tp[0].text:=Findideviceport;
-     indiclient.sendNewText(Rotatorport);
-     msg('Rotator '+Findidevice+' Set port '+Findideviceport);
   end;
  indiclient.connectDevice(Findidevice);
 end;
