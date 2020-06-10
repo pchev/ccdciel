@@ -88,7 +88,7 @@ type
     FimgMin, FimgMax: double;
     FBullsEye, LockSpinEdit, FClipping, FInvert, FFlipVert, FFlipHorz: Boolean;
     FZoom: double;
-    StartUpd,Updmax: boolean;
+    StartUpd,Updmax,HistogramAdjusted: boolean;
     XP: integer;
     FRedraw: TNotifyEvent;
     FonZoom: TNotifyEvent;
@@ -151,6 +151,9 @@ begin
  Finitialized:=false;
  ImgMax:=high(word);
  ImgMin:=0;
+ HistogramAdjusted:=false;
+ StartUpd:=false;
+ Updmax:=false;
  FBullsEye:=false;
  FClipping:=false;
  FInvert:=false;
@@ -205,7 +208,7 @@ begin
       if (hh=0) and (sum>=shh) then hh:=i;
     end;
   end;
-  if SetLevel then begin
+  if SetLevel and (not HistogramAdjusted) then begin
     if hval=1 then begin
       FImgMin:=0;
       FImgMax:=high(word);
@@ -353,6 +356,7 @@ end;
 
 procedure Tf_visu.HistBarChange(Sender: TObject);
 begin
+  HistogramAdjusted:=false;
   SetLimit(true);
   TimerRedraw.Enabled:=false;
   TimerRedraw.Enabled:=true;
@@ -497,6 +501,7 @@ begin
     ImgMin:=min(ImgMin,ImgMax);
   end;
   StartUpd:=false;
+  HistogramAdjusted:=true;
   TimerRedraw.Enabled:=true;
 end;
 
@@ -504,6 +509,7 @@ procedure Tf_visu.SpinEditMaxChange(Sender: TObject);
 begin
   if LockSpinEdit then exit;
   SpinEditMin.maxValue:=min(FimageMax,SpinEditMax.Value);
+  HistogramAdjusted:=true;
   TimerMinMax.Enabled:=true;
 end;
 
@@ -511,6 +517,7 @@ procedure Tf_visu.SpinEditMinChange(Sender: TObject);
 begin
   if LockSpinEdit then exit;
   SpinEditMax.minValue:=max(FimageMin,SpinEditMin.Value);
+  HistogramAdjusted:=true;
   TimerMinMax.Enabled:=true;
 end;
 

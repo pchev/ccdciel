@@ -328,11 +328,10 @@ object f_option: Tf_option
             Top = 206
             Width = 58
             Constraints.MaxHeight = 28
-            MaxLength = 0
-            ParentFont = False
-            TabOrder = 3
             MaxValue = 5
             MinValue = 3
+            ParentFont = False
+            TabOrder = 3
             Value = 3
           end
           object UseFileSequenceWidth: TCheckBox
@@ -759,12 +758,11 @@ object f_option: Tf_option
           Top = 111
           Width = 105
           Constraints.MaxHeight = 28
-          MaxLength = 0
-          ParentFont = False
-          TabOrder = 2
           DecimalPlaces = 1
           MaxValue = 10000
           MinValue = -500
+          ParentFont = False
+          TabOrder = 2
           Value = 0
         end
         object Label108: TLabel
@@ -827,12 +825,11 @@ object f_option: Tf_option
           Top = 49
           Width = 82
           Constraints.MaxHeight = 28
-          MaxLength = 0
-          ParentFont = False
-          TabOrder = 1
           DecimalPlaces = 1
           MaxValue = 89
           MinValue = 0
+          ParentFont = False
+          TabOrder = 1
           Value = 0
         end
       end
@@ -888,10 +885,9 @@ object f_option: Tf_option
             Top = 30
             Width = 73
             Constraints.MaxHeight = 28
-            MaxLength = 0
+            MinValue = -100
             ParentFont = False
             TabOrder = 1
-            MinValue = -100
             Value = 0
           end
         end
@@ -941,11 +937,10 @@ object f_option: Tf_option
               Top = 0
               Width = 73
               Constraints.MaxHeight = 28
-              MaxLength = 0
-              ParentFont = False
-              TabOrder = 0
               Increment = 0.1
               MinValue = 0
+              ParentFont = False
+              TabOrder = 0
               Value = 0
             end
           end
@@ -987,10 +982,9 @@ object f_option: Tf_option
           Top = 30
           Width = 79
           Constraints.MaxHeight = 28
-          MaxLength = 0
+          MaxValue = 99999
           ParentFont = False
           TabOrder = 1
-          MaxValue = 99999
         end
         object Label3: TLabel
           Left = 8
@@ -1017,12 +1011,11 @@ object f_option: Tf_option
           Top = 1
           Width = 79
           Constraints.MaxHeight = 28
-          MaxLength = 0
-          ParentFont = False
-          TabOrder = 3
           Increment = 0.1
           MaxValue = 99
           MinValue = 0
+          ParentFont = False
+          TabOrder = 3
           Value = 0
         end
         object Label124: TLabel
@@ -1310,11 +1303,10 @@ object f_option: Tf_option
           Top = 0
           Width = 73
           Constraints.MaxHeight = 28
-          MaxLength = 0
-          ParentFont = False
-          TabOrder = 0
           MaxValue = 60
           MinValue = 1
+          ParentFont = False
+          TabOrder = 0
           Value = 1
         end
       end
@@ -1353,13 +1345,12 @@ object f_option: Tf_option
           Top = 0
           Width = 73
           Constraints.MaxHeight = 28
-          MaxLength = 0
-          ParentFont = False
-          TabOrder = 0
           DecimalPlaces = 1
           Increment = 0.1
           MaxValue = 8
           MinValue = 1
+          ParentFont = False
+          TabOrder = 0
           Value = 1
         end
       end
@@ -1420,11 +1411,10 @@ object f_option: Tf_option
           Top = 0
           Width = 85
           Constraints.MaxHeight = 28
-          MaxLength = 0
-          ParentFont = False
-          TabOrder = 0
           MaxValue = 65535
           MinValue = 0
+          ParentFont = False
+          TabOrder = 0
           Value = 0
         end
         object ClippingHigh: TFloatSpinEdit
@@ -1433,11 +1423,10 @@ object f_option: Tf_option
           Top = 0
           Width = 89
           Constraints.MaxHeight = 28
-          MaxLength = 0
-          ParentFont = False
-          TabOrder = 1
           MaxValue = 65535
           MinValue = 0
+          ParentFont = False
+          TabOrder = 1
           Value = 65535
         end
       end
@@ -1626,12 +1615,11 @@ object f_option: Tf_option
           Top = 92
           Width = 85
           Constraints.MaxHeight = 28
-          MaxLength = 0
-          ParentFont = False
-          TabOrder = 1
           DecimalPlaces = 3
           MaxValue = 600
           MinValue = 0
+          ParentFont = False
+          TabOrder = 1
           Value = 0
         end
         object FlatMaxExp: TFloatSpinEdit
@@ -1640,12 +1628,11 @@ object f_option: Tf_option
           Top = 92
           Width = 85
           Constraints.MaxHeight = 28
-          MaxLength = 0
-          ParentFont = False
-          TabOrder = 2
           DecimalPlaces = 3
           MaxValue = 600
           MinValue = 0
+          ParentFont = False
+          TabOrder = 2
           Value = 0
         end
         object FlatLevelMin: TSpinEdit
@@ -1654,11 +1641,10 @@ object f_option: Tf_option
           Top = 129
           Width = 85
           Constraints.MaxHeight = 28
-          MaxLength = 0
-          ParentFont = False
-          TabOrder = 3
           Increment = 1000
           MaxValue = 65535
+          ParentFont = False
+          TabOrder = 3
         end
         object FlatLevelMax: TSpinEdit
           Left = 363
@@ -1666,11 +1652,10 @@ object f_option: Tf_option
           Top = 129
           Width = 85
           Constraints.MaxHeight = 28
-          MaxLength = 0
-          ParentFont = False
-          TabOrder = 4
           Increment = 1000
           MaxValue = 65535
+          ParentFont = False
+          TabOrder = 4
         end
       end
       object DomeBox: TGroupBox
@@ -1709,11 +1694,10 @@ object f_option: Tf_option
           Top = 32
           Width = 82
           Constraints.MaxHeight = 28
-          MaxLength = 0
-          ParentFont = False
-          TabOrder = 0
           MaxValue = 360
           MinValue = -360
+          ParentFont = False
+          TabOrder = 0
           Value = 0
         end
         object DomeFlatTelescopeAlt: TFloatSpinEdit
@@ -1722,11 +1706,10 @@ object f_option: Tf_option
           Top = 57
           Width = 82
           Constraints.MaxHeight = 28
-          MaxLength = 0
-          ParentFont = False
-          TabOrder = 1
           MaxValue = 90
           MinValue = 0
+          ParentFont = False
+          TabOrder = 1
           Value = 0
         end
         object Label103: TLabel
@@ -1834,11 +1817,10 @@ object f_option: Tf_option
           Top = 8
           Width = 75
           Constraints.MaxHeight = 28
-          MaxLength = 0
-          ParentFont = False
-          TabOrder = 0
           MaxValue = 1000
           MinValue = 100
+          ParentFont = False
+          TabOrder = 0
           Value = 100
         end
         object Undersampled: TCheckBox
@@ -1917,10 +1899,9 @@ object f_option: Tf_option
           Top = 1
           Width = 75
           Constraints.MaxHeight = 28
-          MaxLength = 0
+          MaxValue = 10000
           ParentFont = False
           TabOrder = 3
-          MaxValue = 10000
         end
         object FocuserDelay: TSpinEdit
           Left = 273
@@ -1928,10 +1909,9 @@ object f_option: Tf_option
           Top = 32
           Width = 75
           Constraints.MaxHeight = 28
-          MaxLength = 0
+          MaxValue = 30
           ParentFont = False
           TabOrder = 4
-          MaxValue = 30
         end
       end
       object GroupBox12: TGroupBox
@@ -2086,11 +2066,10 @@ object f_option: Tf_option
             Top = 0
             Width = 61
             Constraints.MaxHeight = 28
-            MaxLength = 0
-            ParentFont = False
-            TabOrder = 0
             MaxValue = 10
             MinValue = 1
+            ParentFont = False
+            TabOrder = 0
             Value = 1
           end
         end
@@ -2136,11 +2115,10 @@ object f_option: Tf_option
           Top = 28
           Width = 61
           Constraints.MaxHeight = 28
-          MaxLength = 0
-          ParentFont = False
-          TabOrder = 4
           MaxValue = 8
           MinValue = 1
+          ParentFont = False
+          TabOrder = 4
           Value = 1
         end
         object AutofocusTolerance: TFloatSpinEdit
@@ -2149,12 +2127,11 @@ object f_option: Tf_option
           Top = 85
           Width = 61
           Constraints.MaxHeight = 28
-          MaxLength = 0
-          ParentFont = False
-          TabOrder = 5
           Increment = 0.1
           MaxValue = 99
           MinValue = 1
+          ParentFont = False
+          TabOrder = 5
           Value = 1
         end
         object AutofocusMinSNR: TFloatSpinEdit
@@ -2163,12 +2140,11 @@ object f_option: Tf_option
           Top = 85
           Width = 61
           Constraints.MaxHeight = 28
-          MaxLength = 0
-          ParentFont = False
-          TabOrder = 6
           DecimalPlaces = 1
           MaxValue = 99
           MinValue = 1
+          ParentFont = False
+          TabOrder = 6
           Value = 1
         end
         object AutofocusNotebook: TNotebook
@@ -2203,11 +2179,10 @@ object f_option: Tf_option
               Height = 31
               Top = 0
               Width = 61
-              MaxLength = 0
-              ParentFont = False
-              TabOrder = 0
               MaxValue = 30
               MinValue = 5
+              ParentFont = False
+              TabOrder = 0
               Value = 5
             end
             object AutofocusDynamicMovement: TSpinEdit
@@ -2215,11 +2190,10 @@ object f_option: Tf_option
               Height = 31
               Top = 32
               Width = 61
-              MaxLength = 0
-              ParentFont = False
-              TabOrder = 1
               MaxValue = 10000
               MinValue = 1
+              ParentFont = False
+              TabOrder = 1
               Value = 1
             end
           end
@@ -2276,14 +2250,13 @@ object f_option: Tf_option
               Top = 0
               Width = 61
               Constraints.MaxHeight = 28
-              MaxLength = 0
-              ParentFont = False
-              TabOrder = 1
-              OnEditingDone = CheckStartNearHFD
               DecimalPlaces = 1
               Increment = 0.1
               MaxValue = 99
               MinValue = 1
+              OnEditingDone = CheckStartNearHFD
+              ParentFont = False
+              TabOrder = 1
               Value = 1
             end
             object AutofocusNearHFD: TFloatSpinEdit
@@ -2292,14 +2265,13 @@ object f_option: Tf_option
               Top = 0
               Width = 61
               Constraints.MaxHeight = 28
-              MaxLength = 0
-              ParentFont = False
-              TabOrder = 2
-              OnEditingDone = CheckStartNearHFD
               DecimalPlaces = 1
               Increment = 0.1
               MaxValue = 99
               MinValue = 1
+              OnEditingDone = CheckStartNearHFD
+              ParentFont = False
+              TabOrder = 2
               Value = 1
             end
             object AutofocusSlippageOffset: TSpinEdit
@@ -2308,10 +2280,9 @@ object f_option: Tf_option
               Top = 57
               Width = 61
               Constraints.MaxHeight = 28
-              MaxLength = 0
+              MaxValue = 10000
               ParentFont = False
               TabOrder = 3
-              MaxValue = 10000
             end
           end
           object PageIterative: TPage
@@ -2338,11 +2309,10 @@ object f_option: Tf_option
               Height = 31
               Top = 0
               Width = 61
-              MaxLength = 0
-              ParentFont = False
-              TabOrder = 0
               MaxValue = 10000
               MinValue = 10
+              ParentFont = False
+              TabOrder = 0
               Value = 10
             end
             object AutofocusMinSpeed: TSpinEdit
@@ -2350,11 +2320,10 @@ object f_option: Tf_option
               Height = 31
               Top = 32
               Width = 61
-              MaxLength = 0
-              ParentFont = False
-              TabOrder = 1
               MaxValue = 1000
               MinValue = 2
+              ParentFont = False
+              TabOrder = 1
               Value = 2
             end
           end
@@ -2382,11 +2351,10 @@ object f_option: Tf_option
               Height = 31
               Top = 0
               Width = 61
-              MaxLength = 0
-              ParentFont = False
-              TabOrder = 0
               MaxValue = 30
               MinValue = 5
+              ParentFont = False
+              TabOrder = 0
               Value = 5
             end
             object AutofocusPlanetMovement: TSpinEdit
@@ -2394,11 +2362,10 @@ object f_option: Tf_option
               Height = 31
               Top = 32
               Width = 61
-              MaxLength = 0
-              ParentFont = False
-              TabOrder = 1
               MaxValue = 10000
               MinValue = 1
+              ParentFont = False
+              TabOrder = 1
               Value = 1
             end
           end
@@ -2545,13 +2512,12 @@ object f_option: Tf_option
             Top = 28
             Width = 61
             Constraints.MaxHeight = 28
-            MaxLength = 0
-            ParentFont = False
-            TabOrder = 1
             DecimalPlaces = 1
             Increment = 0.1
             MaxValue = 99
             MinValue = 0
+            ParentFont = False
+            TabOrder = 1
             Value = 0
           end
           object FocusStarMagAdjust: TCheckBox
@@ -2715,12 +2681,11 @@ object f_option: Tf_option
           Top = 8
           Width = 78
           Constraints.MaxHeight = 28
-          MaxLength = 0
-          ParentFont = False
-          TabOrder = 2
           DecimalPlaces = 1
           MaxValue = 10000
           MinValue = 0
+          ParentFont = False
+          TabOrder = 2
           Value = 0
         end
         object AstrometryTimeout: TSpinEdit
@@ -2729,11 +2694,10 @@ object f_option: Tf_option
           Top = 40
           Width = 78
           Constraints.MaxHeight = 28
-          MaxLength = 0
-          ParentFont = False
-          TabOrder = 3
           MaxValue = 300
           MinValue = 10
+          ParentFont = False
+          TabOrder = 3
           Value = 10
         end
         object Label132: TLabel
@@ -2893,12 +2857,11 @@ object f_option: Tf_option
               Top = 8
               Width = 58
               Constraints.MaxHeight = 28
-              MaxLength = 0
-              ParentFont = False
-              TabOrder = 4
               DecimalPlaces = 1
               MaxValue = 90
               MinValue = 0
+              ParentFont = False
+              TabOrder = 4
               Value = 0
             end
             object Tolerance: TFloatSpinEdit
@@ -2907,12 +2870,11 @@ object f_option: Tf_option
               Top = 8
               Width = 61
               Constraints.MaxHeight = 28
-              MaxLength = 0
-              ParentFont = False
-              TabOrder = 5
               Increment = 0.01
               MaxValue = 1
               MinValue = 0
+              ParentFont = False
+              TabOrder = 5
               Value = 0
             end
             object Downsample: TSpinEdit
@@ -2921,11 +2883,10 @@ object f_option: Tf_option
               Top = 46
               Width = 58
               Constraints.MaxHeight = 28
-              MaxLength = 0
-              ParentFont = False
-              TabOrder = 6
               MaxValue = 10
               MinValue = 1
+              ParentFont = False
+              TabOrder = 6
               Value = 1
             end
             object SourcesLimit: TSpinEdit
@@ -2934,10 +2895,9 @@ object f_option: Tf_option
               Top = 46
               Width = 61
               Constraints.MaxHeight = 28
-              MaxLength = 0
+              MaxValue = 1000
               ParentFont = False
               TabOrder = 7
-              MaxValue = 1000
             end
             object AstrometryPathPanel: TPanel
               Left = 7
@@ -3107,10 +3067,9 @@ object f_option: Tf_option
               Top = 77
               Width = 58
               Constraints.MaxHeight = 28
-              MaxLength = 0
+              MaxValue = 60
               ParentFont = False
               TabOrder = 0
-              MaxValue = 60
             end
             object PlatesolveFolder: TDirectoryEdit
               Left = 170
@@ -3154,11 +3113,10 @@ object f_option: Tf_option
               Top = 73
               Width = 105
               Constraints.MaxHeight = 28
-              MaxLength = 0
-              ParentFont = False
-              TabOrder = 0
               MaxValue = 180
               MinValue = 1
+              ParentFont = False
+              TabOrder = 0
               Value = 1
             end
             object Label107: TLabel
@@ -3200,10 +3158,9 @@ object f_option: Tf_option
               Top = 121
               Width = 103
               Constraints.MaxHeight = 28
-              MaxLength = 0
+              MaxValue = 4
               ParentFont = False
               TabOrder = 2
-              MaxValue = 4
               Value = 1
             end
           end
@@ -3333,13 +3290,12 @@ object f_option: Tf_option
           Top = 81
           Width = 81
           Constraints.MaxHeight = 28
-          MaxLength = 0
-          ParentFont = False
-          TabOrder = 2
-          OnChange = SlewPrecChange
           Increment = 0.1
           MaxValue = 60
           MinValue = 0.01
+          OnChange = SlewPrecChange
+          ParentFont = False
+          TabOrder = 2
           Value = 5
         end
         object SlewRetry: TSpinEdit
@@ -3348,10 +3304,9 @@ object f_option: Tf_option
           Top = 113
           Width = 81
           Constraints.MaxHeight = 28
-          MaxLength = 0
+          MaxValue = 10
           ParentFont = False
           TabOrder = 3
-          MaxValue = 10
         end
         object SlewExp: TFloatSpinEdit
           Left = 327
@@ -3359,12 +3314,11 @@ object f_option: Tf_option
           Top = 178
           Width = 81
           Constraints.MaxHeight = 28
-          MaxLength = 0
-          ParentFont = False
-          TabOrder = 4
           Increment = 0.1
           MaxValue = 60
           MinValue = 1
+          ParentFont = False
+          TabOrder = 4
           Value = 1
         end
         object SlewBin: TSpinEdit
@@ -3373,11 +3327,10 @@ object f_option: Tf_option
           Top = 218
           Width = 81
           Constraints.MaxHeight = 28
-          MaxLength = 0
-          ParentFont = False
-          TabOrder = 5
           MaxValue = 9
           MinValue = 1
+          ParentFont = False
+          TabOrder = 5
           Value = 1
         end
         object SlewDelay: TSpinEdit
@@ -3386,10 +3339,9 @@ object f_option: Tf_option
           Top = 307
           Width = 50
           Constraints.MaxHeight = 28
-          MaxLength = 0
+          MaxValue = 60
           ParentFont = False
           TabOrder = 6
-          MaxValue = 60
         end
       end
     end
@@ -3531,11 +3483,10 @@ object f_option: Tf_option
           Top = 10
           Width = 66
           Constraints.MaxHeight = 28
-          MaxLength = 0
+          MaxValue = 120
+          OnChange = MinutesPastMeridianChange
           ParentFont = False
           TabOrder = 4
-          OnChange = MinutesPastMeridianChange
-          MaxValue = 120
         end
         object MinutesPastMeridianMin: TSpinEdit
           Left = 243
@@ -3543,11 +3494,10 @@ object f_option: Tf_option
           Top = 44
           Width = 66
           Constraints.MaxHeight = 28
-          MaxLength = 0
+          MaxValue = 110
+          OnChange = MinutesPastMeridianMinChange
           ParentFont = False
           TabOrder = 5
-          OnChange = MinutesPastMeridianMinChange
-          MaxValue = 110
         end
         object MeridianFlipPauseTimeout: TSpinEdit
           Left = 144
@@ -3555,10 +3505,9 @@ object f_option: Tf_option
           Top = 251
           Width = 58
           Constraints.MaxHeight = 28
-          MaxLength = 0
+          MaxValue = 10
           ParentFont = False
           TabOrder = 6
-          MaxValue = 10
         end
         object MeridianFlipStopSlaving: TCheckBox
           Left = 8
@@ -3599,7 +3548,7 @@ object f_option: Tf_option
         Left = 0
         Height = 65
         Top = 0
-        Width = 502
+        Width = 520
         Align = alTop
         AutoFill = True
         Caption = 'Software'
@@ -3611,7 +3560,7 @@ object f_option: Tf_option
         ChildSizing.Layout = cclLeftToRightThenTopToBottom
         ChildSizing.ControlsPerLine = 4
         ClientHeight = 45
-        ClientWidth = 500
+        ClientWidth = 518
         Columns = 4
         ItemIndex = 0
         Items.Strings = (
@@ -3628,7 +3577,7 @@ object f_option: Tf_option
         Left = 0
         Height = 90
         Top = 65
-        Width = 502
+        Width = 520
         PageIndex = 0
         Align = alTop
         TabOrder = 1
@@ -3637,25 +3586,25 @@ object f_option: Tf_option
             Left = 0
             Height = 90
             Top = 0
-            Width = 502
+            Width = 520
             Align = alClient
             Caption = 'PHD2'
             ClientHeight = 70
-            ClientWidth = 500
+            ClientWidth = 518
             ParentFont = False
             TabOrder = 0
             object Label16: TLabel
               Left = 16
-              Height = 19
+              Height = 17
               Top = 6
-              Width = 65
+              Width = 64
               Caption = 'Hostname'
               ParentColor = False
               ParentFont = False
             end
             object Label17: TLabel
               Left = 16
-              Height = 19
+              Height = 17
               Top = 38
               Width = 27
               Caption = 'Port'
@@ -3782,18 +3731,18 @@ object f_option: Tf_option
       end
       object GroupBoxDrift: TGroupBox
         Left = 0
-        Height = 113
+        Height = 140
         Top = 397
-        Width = 502
+        Width = 520
         Align = alClient
         Caption = 'Guiding drift control'
-        ClientHeight = 93
-        ClientWidth = 500
+        ClientHeight = 120
+        ClientWidth = 518
         ParentFont = False
         TabOrder = 2
         object Label1119: TLabel
           Left = 208
-          Height = 19
+          Height = 17
           Top = 10
           Width = 15
           Caption = 'px'
@@ -3802,9 +3751,9 @@ object f_option: Tf_option
         end
         object Label920: TLabel
           Left = 4
-          Height = 19
+          Height = 17
           Top = 10
-          Width = 95
+          Width = 94
           Caption = 'Max guide drift'
           ParentColor = False
           ParentFont = False
@@ -3815,33 +3764,32 @@ object f_option: Tf_option
           Top = 8
           Width = 81
           Constraints.MaxHeight = 28
-          MaxLength = 0
-          ParentFont = False
-          TabOrder = 0
           Increment = 0.1
           MinValue = 0
+          ParentFont = False
+          TabOrder = 0
           Value = 0
         end
         object GuideDriftCancelExposure: TCheckBox
           Left = 8
           Height = 21
           Top = 47
-          Width = 201
+          Width = 195
           Caption = 'Cancel and restart exposure'
           ParentFont = False
           TabOrder = 1
         end
         object Label143: TLabel
           Left = 253
-          Height = 19
+          Height = 17
           Top = 48
-          Width = 83
+          Width = 81
           Caption = 'Restart delay'
           ParentColor = False
         end
         object Label144: TLabel
           Left = 449
-          Height = 19
+          Height = 17
           Top = 43
           Width = 6
           Caption = 's'
@@ -3854,9 +3802,8 @@ object f_option: Tf_option
           Top = 44
           Width = 79
           Constraints.MaxHeight = 28
-          MaxLength = 0
-          TabOrder = 2
           MaxValue = 600
+          TabOrder = 2
         end
         object BtnMaxDriftDisable: TButton
           Left = 248
@@ -3872,21 +3819,21 @@ object f_option: Tf_option
         Left = 0
         Height = 242
         Top = 155
-        Width = 502
+        Width = 520
         Align = alTop
         BevelOuter = bvNone
         ClientHeight = 242
-        ClientWidth = 502
+        ClientWidth = 520
         TabOrder = 3
         object GroupBox11: TGroupBox
           Left = 303
           Height = 242
           Top = 0
-          Width = 199
+          Width = 217
           Align = alClient
           Caption = 'Settle tolerance'
           ClientHeight = 222
-          ClientWidth = 197
+          ClientWidth = 215
           ParentFont = False
           TabOrder = 1
           object DitherWaitTime: TSpinEdit
@@ -3895,16 +3842,15 @@ object f_option: Tf_option
             Top = 8
             Width = 74
             Constraints.MaxHeight = 28
-            MaxLength = 0
+            MaxValue = 120
             ParentFont = False
             TabOrder = 0
-            MaxValue = 120
           end
           object Label121: TLabel
             Left = 8
-            Height = 19
+            Height = 17
             Top = 11
-            Width = 59
+            Width = 58
             Caption = 'Wait time'
             ParentColor = False
             ParentFont = False
@@ -3914,16 +3860,16 @@ object f_option: Tf_option
           Left = 303
           Height = 242
           Top = 0
-          Width = 199
+          Width = 217
           Align = alClient
           Caption = 'Settle tolerance'
           ClientHeight = 222
-          ClientWidth = 197
+          ClientWidth = 215
           ParentFont = False
           TabOrder = 0
           object Label20: TLabel
             Left = 8
-            Height = 19
+            Height = 17
             Top = 7
             Width = 35
             Caption = 'Pixels'
@@ -3932,8 +3878,8 @@ object f_option: Tf_option
           end
           object Label21: TLabel
             Left = 8
-            Height = 19
-            Top = 85
+            Height = 17
+            Top = 48
             Width = 58
             Caption = 'Min. time'
             ParentColor = False
@@ -3941,8 +3887,8 @@ object f_option: Tf_option
           end
           object Label22: TLabel
             Left = 8
-            Height = 19
-            Top = 46
+            Height = 17
+            Top = 88
             Width = 51
             Caption = 'Timeout'
             ParentColor = False
@@ -3950,9 +3896,9 @@ object f_option: Tf_option
           end
           object Label26: TLabel
             Left = 8
-            Height = 38
+            Height = 34
             Top = 124
-            Width = 71
+            Width = 68
             Caption = 'Calibration '#10'delay'
             ParentColor = False
             ParentFont = False
@@ -3963,12 +3909,11 @@ object f_option: Tf_option
             Top = 4
             Width = 74
             Constraints.MaxHeight = 28
-            MaxLength = 0
-            ParentFont = False
-            TabOrder = 0
             Increment = 0.1
             MaxValue = 99
             MinValue = 0
+            ParentFont = False
+            TabOrder = 0
             Value = 0
           end
           object SettleMinTime: TSpinEdit
@@ -3977,10 +3922,9 @@ object f_option: Tf_option
             Top = 43
             Width = 74
             Constraints.MaxHeight = 28
-            MaxLength = 0
+            MaxValue = 99
             ParentFont = False
             TabOrder = 1
-            MaxValue = 99
           end
           object SettleMaxTime: TSpinEdit
             Left = 97
@@ -3988,10 +3932,9 @@ object f_option: Tf_option
             Top = 82
             Width = 74
             Constraints.MaxHeight = 28
-            MaxLength = 0
+            MaxValue = 120
             ParentFont = False
             TabOrder = 2
-            MaxValue = 120
           end
           object CalibrationDelay: TSpinEdit
             Left = 97
@@ -3999,10 +3942,9 @@ object f_option: Tf_option
             Top = 121
             Width = 74
             Constraints.MaxHeight = 28
-            MaxLength = 0
+            MaxValue = 600
             ParentFont = False
             TabOrder = 3
-            MaxValue = 600
           end
         end
         object Panel15: TPanel
@@ -4028,7 +3970,7 @@ object f_option: Tf_option
             TabOrder = 0
             object Label23: TLabel
               Left = 4
-              Height = 19
+              Height = 17
               Top = 5
               Width = 35
               Caption = 'Pixels'
@@ -4050,17 +3992,16 @@ object f_option: Tf_option
               Top = 0
               Width = 72
               Constraints.MaxHeight = 28
-              MaxLength = 0
-              ParentFont = False
-              TabOrder = 1
               Increment = 0.1
               MaxValue = 99
               MinValue = 0.1
+              ParentFont = False
+              TabOrder = 1
               Value = 0.1
             end
             object Label122: TLabel
               Left = 192
-              Height = 19
+              Height = 17
               Top = 5
               Width = 6
               Caption = 's'
@@ -4081,7 +4022,7 @@ object f_option: Tf_option
             TabOrder = 1
             object Label70: TLabel
               Left = 225
-              Height = 19
+              Height = 17
               Top = 38
               Width = 6
               Caption = 's'
@@ -4090,16 +4031,16 @@ object f_option: Tf_option
             end
             object Label71: TLabel
               Left = 4
-              Height = 19
+              Height = 17
               Top = 38
-              Width = 81
+              Width = 79
               Caption = 'Restart after'
               ParentColor = False
               ParentFont = False
             end
             object Label72: TLabel
               Left = 225
-              Height = 19
+              Height = 17
               Top = 69
               Width = 6
               Caption = 's'
@@ -4108,9 +4049,9 @@ object f_option: Tf_option
             end
             object Label73: TLabel
               Left = 4
-              Height = 19
+              Height = 17
               Top = 69
-              Width = 71
+              Width = 70
               Caption = 'Abort after'
               ParentColor = False
               ParentFont = False
@@ -4121,10 +4062,9 @@ object f_option: Tf_option
               Top = 34
               Width = 65
               Constraints.MaxHeight = 28
-              MaxLength = 0
+              MaxValue = 3600
               ParentFont = False
               TabOrder = 0
-              MaxValue = 3600
             end
             object StarLostCancel: TSpinEdit
               Left = 152
@@ -4132,16 +4072,15 @@ object f_option: Tf_option
               Top = 64
               Width = 65
               Constraints.MaxHeight = 28
-              MaxLength = 0
+              MaxValue = 3600
               ParentFont = False
               TabOrder = 1
-              MaxValue = 3600
             end
             object Label145: TLabel
               Left = 4
-              Height = 19
+              Height = 17
               Top = 8
-              Width = 138
+              Width = 134
               Caption = 'Cancel exposure after'
               ParentColor = False
               ParentFont = False
@@ -4152,7 +4091,6 @@ object f_option: Tf_option
               Top = 4
               Width = 65
               Constraints.MaxHeight = 28
-              MaxLength = 0
               ParentFont = False
               TabOrder = 2
             end
@@ -4167,7 +4105,7 @@ object f_option: Tf_option
             end
             object Label146: TLabel
               Left = 225
-              Height = 19
+              Height = 17
               Top = 8
               Width = 35
               Caption = 'count'
@@ -4219,7 +4157,6 @@ object f_option: Tf_option
             Top = 4
             Width = 57
             Constraints.MaxHeight = 26
-            MaxLength = 0
             ParentFont = False
             TabOrder = 0
             Value = 1
@@ -4516,12 +4453,11 @@ object f_option: Tf_option
             Top = 4
             Width = 85
             Constraints.MaxHeight = 28
-            MaxLength = 0
-            ParentFont = False
-            TabOrder = 0
             DecimalPlaces = 3
             MaxValue = 0
             MinValue = 0
+            ParentFont = False
+            TabOrder = 0
             Value = 0
           end
           object FloatSpinEditMa1: TFloatSpinEdit
@@ -4531,12 +4467,11 @@ object f_option: Tf_option
             Top = 4
             Width = 85
             Constraints.MaxHeight = 28
-            MaxLength = 0
-            ParentFont = False
-            TabOrder = 1
             DecimalPlaces = 3
             MaxValue = 0
             MinValue = 0
+            ParentFont = False
+            TabOrder = 1
             Value = 0
           end
           object UseW1: TCheckBox
@@ -4584,12 +4519,11 @@ object f_option: Tf_option
             Top = 4
             Width = 85
             Constraints.MaxHeight = 28
-            MaxLength = 0
-            ParentFont = False
-            TabOrder = 0
             DecimalPlaces = 3
             MaxValue = 0
             MinValue = 0
+            ParentFont = False
+            TabOrder = 0
             Value = 0
           end
           object FloatSpinEditMa2: TFloatSpinEdit
@@ -4599,12 +4533,11 @@ object f_option: Tf_option
             Top = 4
             Width = 85
             Constraints.MaxHeight = 28
-            MaxLength = 0
-            ParentFont = False
-            TabOrder = 1
             DecimalPlaces = 3
             MaxValue = 0
             MinValue = 0
+            ParentFont = False
+            TabOrder = 1
             Value = 0
           end
           object UseW2: TCheckBox
@@ -4652,12 +4585,11 @@ object f_option: Tf_option
             Top = 4
             Width = 85
             Constraints.MaxHeight = 28
-            MaxLength = 0
-            ParentFont = False
-            TabOrder = 0
             DecimalPlaces = 3
             MaxValue = 0
             MinValue = 0
+            ParentFont = False
+            TabOrder = 0
             Value = 0
           end
           object FloatSpinEditMa3: TFloatSpinEdit
@@ -4667,12 +4599,11 @@ object f_option: Tf_option
             Top = 4
             Width = 85
             Constraints.MaxHeight = 28
-            MaxLength = 0
-            ParentFont = False
-            TabOrder = 1
             DecimalPlaces = 3
             MaxValue = 0
             MinValue = 0
+            ParentFont = False
+            TabOrder = 1
             Value = 0
           end
           object UseW3: TCheckBox
@@ -4720,12 +4651,11 @@ object f_option: Tf_option
             Top = 4
             Width = 85
             Constraints.MaxHeight = 28
-            MaxLength = 0
-            ParentFont = False
-            TabOrder = 0
             DecimalPlaces = 3
             MaxValue = 0
             MinValue = 0
+            ParentFont = False
+            TabOrder = 0
             Value = 0
           end
           object FloatSpinEditMa4: TFloatSpinEdit
@@ -4735,12 +4665,11 @@ object f_option: Tf_option
             Top = 4
             Width = 85
             Constraints.MaxHeight = 28
-            MaxLength = 0
-            ParentFont = False
-            TabOrder = 1
             DecimalPlaces = 3
             MaxValue = 0
             MinValue = 0
+            ParentFont = False
+            TabOrder = 1
             Value = 0
           end
           object UseW4: TCheckBox
@@ -4788,12 +4717,11 @@ object f_option: Tf_option
             Top = 4
             Width = 85
             Constraints.MaxHeight = 28
-            MaxLength = 0
-            ParentFont = False
-            TabOrder = 0
             DecimalPlaces = 3
             MaxValue = 0
             MinValue = 0
+            ParentFont = False
+            TabOrder = 0
             Value = 0
           end
           object FloatSpinEditMa5: TFloatSpinEdit
@@ -4803,12 +4731,11 @@ object f_option: Tf_option
             Top = 4
             Width = 85
             Constraints.MaxHeight = 28
-            MaxLength = 0
-            ParentFont = False
-            TabOrder = 1
             DecimalPlaces = 3
             MaxValue = 0
             MinValue = 0
+            ParentFont = False
+            TabOrder = 1
             Value = 0
           end
           object UseW5: TCheckBox
@@ -4856,12 +4783,11 @@ object f_option: Tf_option
             Top = 4
             Width = 85
             Constraints.MaxHeight = 28
-            MaxLength = 0
-            ParentFont = False
-            TabOrder = 0
             DecimalPlaces = 3
             MaxValue = 0
             MinValue = 0
+            ParentFont = False
+            TabOrder = 0
             Value = 0
           end
           object FloatSpinEditMa6: TFloatSpinEdit
@@ -4871,12 +4797,11 @@ object f_option: Tf_option
             Top = 4
             Width = 85
             Constraints.MaxHeight = 28
-            MaxLength = 0
-            ParentFont = False
-            TabOrder = 1
             DecimalPlaces = 3
             MaxValue = 0
             MinValue = 0
+            ParentFont = False
+            TabOrder = 1
             Value = 0
           end
           object UseW6: TCheckBox
@@ -4924,12 +4849,11 @@ object f_option: Tf_option
             Top = 4
             Width = 85
             Constraints.MaxHeight = 28
-            MaxLength = 0
-            ParentFont = False
-            TabOrder = 0
             DecimalPlaces = 3
             MaxValue = 0
             MinValue = 0
+            ParentFont = False
+            TabOrder = 0
             Value = 0
           end
           object FloatSpinEditMa7: TFloatSpinEdit
@@ -4939,12 +4863,11 @@ object f_option: Tf_option
             Top = 4
             Width = 85
             Constraints.MaxHeight = 28
-            MaxLength = 0
-            ParentFont = False
-            TabOrder = 1
             DecimalPlaces = 3
             MaxValue = 0
             MinValue = 0
+            ParentFont = False
+            TabOrder = 1
             Value = 0
           end
           object UseW7: TCheckBox
@@ -4992,12 +4915,11 @@ object f_option: Tf_option
             Top = 4
             Width = 85
             Constraints.MaxHeight = 28
-            MaxLength = 0
-            ParentFont = False
-            TabOrder = 0
             DecimalPlaces = 3
             MaxValue = 0
             MinValue = 0
+            ParentFont = False
+            TabOrder = 0
             Value = 0
           end
           object FloatSpinEditMa8: TFloatSpinEdit
@@ -5007,12 +4929,11 @@ object f_option: Tf_option
             Top = 4
             Width = 85
             Constraints.MaxHeight = 28
-            MaxLength = 0
-            ParentFont = False
-            TabOrder = 1
             DecimalPlaces = 3
             MaxValue = 0
             MinValue = 0
+            ParentFont = False
+            TabOrder = 1
             Value = 0
           end
           object UseW8: TCheckBox
@@ -5060,12 +4981,11 @@ object f_option: Tf_option
             Top = 4
             Width = 85
             Constraints.MaxHeight = 28
-            MaxLength = 0
-            ParentFont = False
-            TabOrder = 0
             DecimalPlaces = 3
             MaxValue = 0
             MinValue = 0
+            ParentFont = False
+            TabOrder = 0
             Value = 0
           end
           object FloatSpinEditMa9: TFloatSpinEdit
@@ -5075,12 +4995,11 @@ object f_option: Tf_option
             Top = 4
             Width = 85
             Constraints.MaxHeight = 28
-            MaxLength = 0
-            ParentFont = False
-            TabOrder = 1
             DecimalPlaces = 3
             MaxValue = 0
             MinValue = 0
+            ParentFont = False
+            TabOrder = 1
             Value = 0
           end
           object UseW9: TCheckBox
@@ -5128,12 +5047,11 @@ object f_option: Tf_option
             Top = 4
             Width = 85
             Constraints.MaxHeight = 28
-            MaxLength = 0
-            ParentFont = False
-            TabOrder = 0
             DecimalPlaces = 3
             MaxValue = 0
             MinValue = 0
+            ParentFont = False
+            TabOrder = 0
             Value = 0
           end
           object FloatSpinEditMa10: TFloatSpinEdit
@@ -5143,12 +5061,11 @@ object f_option: Tf_option
             Top = 4
             Width = 85
             Constraints.MaxHeight = 28
-            MaxLength = 0
-            ParentFont = False
-            TabOrder = 1
             DecimalPlaces = 3
             MaxValue = 0
             MinValue = 0
+            ParentFont = False
+            TabOrder = 1
             Value = 0
           end
           object UseW10: TCheckBox
@@ -5196,12 +5113,11 @@ object f_option: Tf_option
             Top = 4
             Width = 85
             Constraints.MaxHeight = 28
-            MaxLength = 0
-            ParentFont = False
-            TabOrder = 0
             DecimalPlaces = 3
             MaxValue = 0
             MinValue = 0
+            ParentFont = False
+            TabOrder = 0
             Value = 0
           end
           object FloatSpinEditMa11: TFloatSpinEdit
@@ -5211,12 +5127,11 @@ object f_option: Tf_option
             Top = 4
             Width = 85
             Constraints.MaxHeight = 28
-            MaxLength = 0
-            ParentFont = False
-            TabOrder = 1
             DecimalPlaces = 3
             MaxValue = 0
             MinValue = 0
+            ParentFont = False
+            TabOrder = 1
             Value = 0
           end
           object UseW11: TCheckBox
@@ -5264,12 +5179,11 @@ object f_option: Tf_option
             Top = 4
             Width = 85
             Constraints.MaxHeight = 28
-            MaxLength = 0
-            ParentFont = False
-            TabOrder = 0
             DecimalPlaces = 3
             MaxValue = 0
             MinValue = 0
+            ParentFont = False
+            TabOrder = 0
             Value = 0
           end
           object FloatSpinEditMa12: TFloatSpinEdit
@@ -5279,12 +5193,11 @@ object f_option: Tf_option
             Top = 4
             Width = 85
             Constraints.MaxHeight = 28
-            MaxLength = 0
-            ParentFont = False
-            TabOrder = 1
             DecimalPlaces = 3
             MaxValue = 0
             MinValue = 0
+            ParentFont = False
+            TabOrder = 1
             Value = 0
           end
           object UseW12: TCheckBox
@@ -5332,12 +5245,11 @@ object f_option: Tf_option
             Top = 4
             Width = 85
             Constraints.MaxHeight = 28
-            MaxLength = 0
-            ParentFont = False
-            TabOrder = 0
             DecimalPlaces = 3
             MaxValue = 0
             MinValue = 0
+            ParentFont = False
+            TabOrder = 0
             Value = 0
           end
           object FloatSpinEditMa13: TFloatSpinEdit
@@ -5347,12 +5259,11 @@ object f_option: Tf_option
             Top = 4
             Width = 85
             Constraints.MaxHeight = 28
-            MaxLength = 0
-            ParentFont = False
-            TabOrder = 1
             DecimalPlaces = 3
             MaxValue = 0
             MinValue = 0
+            ParentFont = False
+            TabOrder = 1
             Value = 0
           end
           object UseW13: TCheckBox
@@ -5391,11 +5302,10 @@ object f_option: Tf_option
           Top = 1
           Width = 81
           Constraints.MaxHeight = 28
-          MaxLength = 0
-          ParentFont = False
-          TabOrder = 0
           MaxValue = 60
           MinValue = 1
+          ParentFont = False
+          TabOrder = 0
           Value = 1
         end
         object Label117: TLabel
@@ -5539,11 +5449,10 @@ object f_option: Tf_option
             Height = 31
             Top = 40
             Width = 74
-            MaxLength = 0
-            ParentFont = False
-            TabOrder = 1
             Increment = 0.1
             MinValue = 0
+            ParentFont = False
+            TabOrder = 1
             Value = 0
           end
           object Label130: TLabel
@@ -5620,12 +5529,11 @@ object f_option: Tf_option
             Top = 3
             Width = 75
             Constraints.MaxHeight = 28
-            MaxLength = 0
-            ParentFont = False
-            TabOrder = 1
             Increment = 0.1
             MaxValue = 1000
             MinValue = -1000
+            ParentFont = False
+            TabOrder = 1
             Value = 0
           end
           object Label119: TLabel
@@ -5643,12 +5551,11 @@ object f_option: Tf_option
             Top = 31
             Width = 75
             Constraints.MaxHeight = 28
-            MaxLength = 0
-            ParentFont = False
-            TabOrder = 2
             DecimalPlaces = 1
             Increment = 0.1
             MinValue = 0
+            ParentFont = False
+            TabOrder = 2
             Value = 0
           end
           object BtnDisableAutofocusTemp: TButton
@@ -5688,10 +5595,9 @@ object f_option: Tf_option
             Top = 0
             Width = 75
             Constraints.MaxHeight = 28
-            MaxLength = 0
+            MaxValue = 1440
             ParentFont = False
             TabOrder = 0
-            MaxValue = 1440
           end
           object Label128: TLabel
             Left = 370

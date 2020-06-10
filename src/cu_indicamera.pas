@@ -142,7 +142,7 @@ private
    StreamEncoder: ISwitchVectorProperty;
    FRAWformat: integer;
    FhasBlob,Fready,FWheelReady,Fconnected,UseMainSensor: boolean;
-   Findiserver, Findiserverport, Findidevice, Findisensor, Findideviceport: string;
+   Findiserver, Findiserverport, Findidevice, Findisensor: string;
    FVideoMsg: boolean;
    lockvideostream:boolean;
    timedout: double;
@@ -318,7 +318,6 @@ begin
  Findiserverport:='7624';
  Findidevice:='';
  Findisensor:='';
- Findideviceport:='';
  InitTimer:=TTimer.Create(nil);
  InitTimer.Enabled:=false;
  InitTimer.Interval:=60000;
@@ -485,7 +484,6 @@ if not indiclient.Connected then begin
   Findidevice:=cp3;
   Fdevice:=cp3;
   Findisensor:=cp4;
-  Findideviceport:=cp5;
   FStatus := devDisconnected;
   FWheelStatus:=devDisconnected;
   if Assigned(FonStatusChange) then FonStatusChange(self);
@@ -562,11 +560,6 @@ begin
  ConnectTimer.Enabled:=False;
  if ((not FhasBlob) or (CCDport=nil)) and (not Fready) and InitTimer.Enabled then begin
    ConnectTimer.Enabled:=true;
- end;
- if (CCDport<>nil)and(Findideviceport<>'') then begin
-     CCDport.tp[0].text:=Findideviceport;
-     indiclient.sendNewText(CCDport);
-     msg('Set port '+Findideviceport);
  end;
  indiclient.connectDevice(Findidevice);
  if FhasBlob then begin

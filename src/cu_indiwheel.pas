@@ -44,7 +44,7 @@ T_indiwheel = class(T_wheel)
    configprop: ISwitchVectorProperty;
    configload,configsave: ISwitch;
    Fready,Fconnected: boolean;
-   Findiserver, Findiserverport, Findidevice, Findideviceport: string;
+   Findiserver, Findiserverport, Findidevice: string;
    procedure CreateIndiClient;
    procedure InitTimerTimer(Sender: TObject);
    procedure ConnectTimerTimer(Sender: TObject);
@@ -107,7 +107,6 @@ begin
  Findiserver:='localhost';
  Findiserverport:='7624';
  Findidevice:='';
- Findideviceport:='';
  InitTimer:=TTimer.Create(nil);
  InitTimer.Enabled:=false;
  InitTimer.Interval:=60000;
@@ -180,7 +179,6 @@ if not indiclient.Connected then begin
   Findiserverport:=cp2;
   Findidevice:=cp3;
   Fdevice:=cp3;
-  Findideviceport:=cp4;
   FStatus := devDisconnected;
   if Assigned(FonStatusChange) then FonStatusChange(self);
   indiclient.SetServer(Findiserver,Findiserverport);
@@ -230,11 +228,6 @@ begin
   ConnectTimer.Enabled:=False;
   if (Wheelport=nil) and (not Fready) and InitTimer.Enabled then begin
     ConnectTimer.Enabled:=true;
-  end;
-  if (Wheelport<>nil)and(Findideviceport<>'') then begin
-     Wheelport.tp[0].text:=Findideviceport;
-     indiclient.sendNewText(Wheelport);
-     msg('Set port '+Findideviceport);
   end;
  indiclient.connectDevice(Findidevice);
 end;

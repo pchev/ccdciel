@@ -402,7 +402,7 @@ begin
    result := (DomeShutterOpen.s=ISS_ON);
  end
  else
-   result := not GetPark;
+   result := not GetPark;  // Use park status when shutter control is not implemented
 end;
 
 procedure T_indidome.SetShutter(value:boolean);

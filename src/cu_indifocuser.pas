@@ -51,7 +51,7 @@ T_indifocuser = class(T_focuser)
    configprop: ISwitchVectorProperty;
    configload,configsave: ISwitch;
    Fready,Fconnected: boolean;
-   Findiserver, Findiserverport, Findidevice, Findideviceport: string;
+   Findiserver, Findiserverport, Findidevice: string;
    procedure CreateIndiClient;
    procedure InitTimerTimer(Sender: TObject);
    procedure ConnectTimerTimer(Sender: TObject);
@@ -124,7 +124,6 @@ begin
  Findiserver:='localhost';
  Findiserverport:='7624';
  Findidevice:='';
- Findideviceport:='';
  InitTimer:=TTimer.Create(nil);
  InitTimer.Enabled:=false;
  InitTimer.Interval:=60000;
@@ -207,7 +206,6 @@ if not indiclient.Connected then begin
   Findiserverport:=cp2;
   Findidevice:=cp3;
   Fdevice:=cp3;
-  Findideviceport:=cp4;
   FStatus := devDisconnected;
   if Assigned(FonStatusChange) then FonStatusChange(self);
   indiclient.SetServer(Findiserver,Findiserverport);
@@ -257,11 +255,6 @@ begin
   ConnectTimer.Enabled:=False;
   if (Focuserport=nil) and (not Fready) and InitTimer.Enabled then begin
     ConnectTimer.Enabled:=true;
-  end;
-  if (Focuserport<>nil)and(Findideviceport<>'') then begin
-     Focuserport.tp[0].text:=Findideviceport;
-     indiclient.sendNewText(Focuserport);
-     msg('Set port '+Findideviceport);
   end;
  indiclient.connectDevice(Findidevice);
 end;
@@ -407,14 +400,15 @@ begin
 end;
 
 procedure T_indifocuser.SetPosition(p:integer);
-var n: integer;
 begin
 if FocusAbsolutePosition<>nil then begin
-  if PositionRange<>NullRange then
-     n:=max(min(p,round(PositionRange.max)),round(PositionRange.min))
-   else
-     n:=p;
-  FocusAbsolutePosition.np[0].value:=n;
+  if PositionRange<>NullRange then begin
+     if (p>PositionRange.max)or(p<PositionRange.min) then begin
+       msg('Invalid position request: '+inttostr(p),1);
+       exit;
+     end;
+  end;
+  FocusAbsolutePosition.np[0].value:=p;
   indiclient.sendNewNumber(FocusAbsolutePosition);
   FocuserLastTemp:=FocuserTemp;
   indiclient.WaitBusy(FocusAbsolutePosition,60000);

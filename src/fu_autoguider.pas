@@ -59,7 +59,7 @@ type
     procedure ShowStatChange(Sender: TObject);
   private
     { private declarations }
-    FonConnect,FonCalibrate,FonGuide,FonDither,FonClearStat: TNotifyEvent;
+    FonConnect,FonCalibrate,FonGuide,FonDither,FonShowStat, FonClearStat: TNotifyEvent;
     procedure SetLang;
     procedure SetDitherOnly(value:boolean);
     function  GetDitherOnly: boolean;
@@ -72,6 +72,7 @@ type
     property onCalibrate: TNotifyEvent read FonCalibrate write FonCalibrate;
     property onGuide: TNotifyEvent read FonGuide write FonGuide;
     property onDither: TNotifyEvent read FonDither write FonDither;
+    property onShowStat: TNotifyEvent read FonShowStat write FonShowStat;
     property onClearStat: TNotifyEvent read FonClearStat write FonClearStat;
   end;
 
@@ -151,6 +152,7 @@ end;
 procedure Tf_autoguider.ShowStatChange(Sender: TObject);
 begin
   Panel5.Visible:=ShowStat.Checked;
+  if ShowStat.Checked and Assigned(FonShowStat) then FonShowStat(self);
 end;
 
 procedure Tf_autoguider.BtnCalClick(Sender: TObject);

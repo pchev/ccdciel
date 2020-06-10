@@ -278,7 +278,9 @@ begin
    if FhasShutter then begin
      i:=V.ShutterStatus;
      result:=(i=0);  // open
-   end;
+   end
+   else
+     result:=not GetPark;  // Use park status when shutter control is not implemented
    except
     result:=false;
    end;

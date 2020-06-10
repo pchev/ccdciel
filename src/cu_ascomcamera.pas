@@ -622,7 +622,6 @@ begin
    hdr.Add('NAXIS',2,'number of data axes');
    hdr.Add('NAXIS1',nax1 ,'length of data axis 1');
    hdr.Add('NAXIS2',nax2 ,'length of data axis 2');
-   hdr.Add('EXTEND',true,'FITS dataset may contain extensions');
    hdr.Add('BZERO',32768,'offset data range to that of unsigned short');
    hdr.Add('BSCALE',1,'default scaling factor');
    hdr.Add('EXPTIME',expt,'Total Exposure Time (s)');

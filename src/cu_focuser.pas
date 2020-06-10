@@ -147,6 +147,7 @@ begin
        msg(Format(rsFocuserMoveT, [inttostr(p)])+' - '+inttostr(FBacklash)+' '+rsBacklashComp);
        SetPosition(p-FBacklash);  // backlash OUT, go IN first
     end;
+    Wait(FDelay+1);
   end;
   msg(Format(rsFocuserMoveT, [inttostr(p)]));
   SetPosition(p);                 // go to final position

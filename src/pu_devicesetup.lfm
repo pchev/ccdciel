@@ -236,11 +236,10 @@ object f_setup: Tf_setup
           Top = 84
           Width = 82
           Constraints.MaxHeight = 28
-          MaxLength = 0
-          ParentFont = False
-          TabOrder = 2
           MaxValue = 65535
           MinValue = 1
+          ParentFont = False
+          TabOrder = 2
           Value = 11111
         end
         object ApplyAscomRemote: TButton
@@ -321,11 +320,10 @@ object f_setup: Tf_setup
           Top = 23
           Width = 82
           Constraints.MaxHeight = 28
-          MaxLength = 0
-          ParentFont = False
-          TabOrder = 8
           MaxValue = 65535
           MinValue = 1
+          ParentFont = False
+          TabOrder = 8
           Value = 32227
         end
         object Label26: TLabel
@@ -451,37 +449,18 @@ object f_setup: Tf_setup
               Style = csDropDownList
               TabOrder = 0
             end
-            object CameraIndiDevPort: TEdit
-              Left = 96
-              Height = 23
-              Top = 117
-              Width = 170
-              BorderStyle = bsNone
-              Constraints.MaxHeight = 28
-              ParentFont = False
-              TabOrder = 1
-            end
             object Label3: TLabel
               Left = 8
-              Height = 19
+              Height = 17
               Top = 54
-              Width = 42
+              Width = 41
               Caption = 'Device'
-              ParentColor = False
-              ParentFont = False
-            end
-            object Label4: TLabel
-              Left = 9
-              Height = 19
-              Top = 119
-              Width = 27
-              Caption = 'Port'
               ParentColor = False
               ParentFont = False
             end
             object Label15: TLabel
               Left = 8
-              Height = 19
+              Height = 17
               Top = 87
               Width = 43
               Caption = 'Sensor'
@@ -502,16 +481,16 @@ object f_setup: Tf_setup
               OnChange = IndiSensorChange
               ParentFont = False
               Style = csDropDownList
-              TabOrder = 2
+              TabOrder = 1
             end
             object CameraAutoLoadConfig: TCheckBox
               Left = 9
               Height = 21
               Top = 154
-              Width = 210
+              Width = 206
               Caption = 'Load configuration on startup'
               ParentFont = False
-              TabOrder = 3
+              TabOrder = 2
             end
             object CameraIndiTransfert: TRadioGroup
               Left = 8
@@ -537,7 +516,7 @@ object f_setup: Tf_setup
               )
               OnClick = CameraIndiTransfertClick
               ParentFont = False
-              TabOrder = 4
+              TabOrder = 3
             end
             object CameraDiskPanel: TPanel
               Left = 0
@@ -548,12 +527,12 @@ object f_setup: Tf_setup
               ClientHeight = 30
               ClientWidth = 352
               ParentFont = False
-              TabOrder = 5
+              TabOrder = 4
               object Label5: TLabel
                 Left = 8
-                Height = 19
+                Height = 17
                 Top = 6
-                Width = 59
+                Width = 58
                 Caption = 'Directory'
                 ParentColor = False
                 ParentFont = False
@@ -579,10 +558,10 @@ object f_setup: Tf_setup
               ClientHeight = 34
               ClientWidth = 408
               ParentFont = False
-              TabOrder = 6
+              TabOrder = 5
               object Label73: TLabel
                 Left = 8
-                Height = 19
+                Height = 17
                 Top = 6
                 Width = 42
                 Caption = 'Server'
@@ -601,7 +580,7 @@ object f_setup: Tf_setup
               end
               object Label74: TLabel
                 Left = 234
-                Height = 19
+                Height = 17
                 Top = 6
                 Width = 27
                 Caption = 'Port'
@@ -628,7 +607,7 @@ object f_setup: Tf_setup
               Caption = 'Get'
               OnClick = GetIndiClick
               ParentFont = False
-              TabOrder = 7
+              TabOrder = 6
             end
             object CameraMsg: TLabel
               Left = 275
@@ -804,11 +783,10 @@ object f_setup: Tf_setup
               Top = 65
               Width = 82
               Constraints.MaxHeight = 28
-              MaxLength = 0
-              ParentFont = False
-              TabOrder = 3
               MaxValue = 65535
               MinValue = 1
+              ParentFont = False
+              TabOrder = 3
               Value = 11111
             end
             object Label32: TLabel
@@ -826,10 +804,9 @@ object f_setup: Tf_setup
               Top = 137
               Width = 82
               Constraints.MaxHeight = 28
-              MaxLength = 0
+              MaxValue = 65535
               ParentFont = False
               TabOrder = 4
-              MaxValue = 65535
             end
             object Label33: TLabel
               Left = 93
@@ -932,9 +909,9 @@ object f_setup: Tf_setup
         TabOrder = 1
         object DeviceCamera: TLabel
           Left = 18
-          Height = 19
+          Height = 17
           Top = 8
-          Width = 92
+          Width = 88
           Caption = 'DeviceCamera'
           ParentColor = False
           ParentFont = False
@@ -984,30 +961,12 @@ object f_setup: Tf_setup
               Style = csDropDownList
               TabOrder = 0
             end
-            object WheelIndiDevPort: TEdit
-              Left = 96
-              Height = 28
-              Top = 89
-              Width = 170
-              Constraints.MaxHeight = 28
-              ParentFont = False
-              TabOrder = 1
-            end
             object Label6: TLabel
               Left = 8
-              Height = 19
+              Height = 17
               Top = 55
-              Width = 42
+              Width = 41
               Caption = 'Device'
-              ParentColor = False
-              ParentFont = False
-            end
-            object Label7: TLabel
-              Left = 8
-              Height = 19
-              Top = 95
-              Width = 27
-              Caption = 'Port'
               ParentColor = False
               ParentFont = False
             end
@@ -1015,10 +974,10 @@ object f_setup: Tf_setup
               Left = 8
               Height = 21
               Top = 154
-              Width = 210
+              Width = 206
               Caption = 'Load configuration on startup'
               ParentFont = False
-              TabOrder = 2
+              TabOrder = 1
             end
             object Panel12: TPanel
               Left = 0
@@ -1029,10 +988,10 @@ object f_setup: Tf_setup
               ClientHeight = 34
               ClientWidth = 408
               ParentFont = False
-              TabOrder = 3
+              TabOrder = 2
               object Label75: TLabel
                 Left = 8
-                Height = 19
+                Height = 17
                 Top = 4
                 Width = 42
                 Caption = 'Server'
@@ -1051,7 +1010,7 @@ object f_setup: Tf_setup
               end
               object Label76: TLabel
                 Left = 234
-                Height = 19
+                Height = 17
                 Top = 4
                 Width = 27
                 Caption = 'Port'
@@ -1078,7 +1037,7 @@ object f_setup: Tf_setup
               Caption = 'Get'
               OnClick = GetIndiClick
               ParentFont = False
-              TabOrder = 4
+              TabOrder = 3
             end
             object WheelMsg: TLabel
               Left = 275
@@ -1248,11 +1207,10 @@ object f_setup: Tf_setup
               Top = 65
               Width = 82
               Constraints.MaxHeight = 28
-              MaxLength = 0
-              ParentFont = False
-              TabOrder = 2
               MaxValue = 65535
               MinValue = 1
+              ParentFont = False
+              TabOrder = 2
               Value = 11111
             end
             object Label36: TLabel
@@ -1270,10 +1228,9 @@ object f_setup: Tf_setup
               Top = 137
               Width = 82
               Constraints.MaxHeight = 28
-              MaxLength = 0
+              MaxValue = 65535
               ParentFont = False
               TabOrder = 3
-              MaxValue = 65535
             end
             object Label37: TLabel
               Left = 93
@@ -1374,12 +1331,11 @@ object f_setup: Tf_setup
               Top = 16
               Width = 82
               Constraints.MaxHeight = 28
-              MaxLength = 0
-              ParentFont = False
-              TabOrder = 0
-              OnChange = WheelMslotChange
               MaxValue = 99
               MinValue = 1
+              OnChange = WheelMslotChange
+              ParentFont = False
+              TabOrder = 0
               Value = 5
             end
           end
@@ -1457,7 +1413,7 @@ object f_setup: Tf_setup
           Left = 16
           Height = 21
           Top = 336
-          Width = 244
+          Width = 238
           Caption = 'Temperature from weather station'
           TabOrder = 0
         end
@@ -1499,30 +1455,12 @@ object f_setup: Tf_setup
                 Style = csDropDownList
                 TabOrder = 0
               end
-              object FocuserIndiDevPort: TEdit
-                Left = 96
-                Height = 28
-                Top = 89
-                Width = 170
-                Constraints.MaxHeight = 28
-                ParentFont = False
-                TabOrder = 1
-              end
               object Label9: TLabel
                 Left = 8
-                Height = 19
+                Height = 17
                 Top = 55
-                Width = 42
+                Width = 41
                 Caption = 'Device'
-                ParentColor = False
-                ParentFont = False
-              end
-              object Label10: TLabel
-                Left = 8
-                Height = 19
-                Top = 95
-                Width = 27
-                Caption = 'Port'
                 ParentColor = False
                 ParentFont = False
               end
@@ -1530,10 +1468,10 @@ object f_setup: Tf_setup
                 Left = 8
                 Height = 21
                 Top = 154
-                Width = 210
+                Width = 206
                 Caption = 'Load configuration on startup'
                 ParentFont = False
-                TabOrder = 2
+                TabOrder = 1
               end
               object Panel13: TPanel
                 Left = 0
@@ -1544,10 +1482,10 @@ object f_setup: Tf_setup
                 ClientHeight = 34
                 ClientWidth = 408
                 ParentFont = False
-                TabOrder = 3
+                TabOrder = 2
                 object Label77: TLabel
                   Left = 8
-                  Height = 19
+                  Height = 17
                   Top = 4
                   Width = 42
                   Caption = 'Server'
@@ -1566,7 +1504,7 @@ object f_setup: Tf_setup
                 end
                 object Label78: TLabel
                   Left = 234
-                  Height = 19
+                  Height = 17
                   Top = 4
                   Width = 27
                   Caption = 'Port'
@@ -1593,7 +1531,7 @@ object f_setup: Tf_setup
                 Caption = 'Get'
                 OnClick = GetIndiClick
                 ParentFont = False
-                TabOrder = 4
+                TabOrder = 3
               end
               object FocuserMsg: TLabel
                 Left = 275
@@ -1764,11 +1702,10 @@ object f_setup: Tf_setup
                 Top = 65
                 Width = 82
                 Constraints.MaxHeight = 28
-                MaxLength = 0
-                ParentFont = False
-                TabOrder = 2
                 MaxValue = 65535
                 MinValue = 1
+                ParentFont = False
+                TabOrder = 2
                 Value = 11111
               end
               object Label40: TLabel
@@ -1786,10 +1723,9 @@ object f_setup: Tf_setup
                 Top = 137
                 Width = 82
                 Constraints.MaxHeight = 28
-                MaxLength = 0
+                MaxValue = 65535
                 ParentFont = False
                 TabOrder = 3
-                MaxValue = 65535
               end
               object Label41: TLabel
                 Left = 93
@@ -1909,30 +1845,12 @@ object f_setup: Tf_setup
               Style = csDropDownList
               TabOrder = 0
             end
-            object RotatorIndiDevPort: TEdit
-              Left = 96
-              Height = 28
-              Top = 89
-              Width = 170
-              Constraints.MaxHeight = 28
-              ParentFont = False
-              TabOrder = 1
-            end
             object Label11: TLabel
               Left = 8
-              Height = 19
+              Height = 17
               Top = 55
-              Width = 42
+              Width = 41
               Caption = 'Device'
-              ParentColor = False
-              ParentFont = False
-            end
-            object Label14: TLabel
-              Left = 8
-              Height = 19
-              Top = 95
-              Width = 27
-              Caption = 'Port'
               ParentColor = False
               ParentFont = False
             end
@@ -1940,10 +1858,10 @@ object f_setup: Tf_setup
               Left = 8
               Height = 21
               Top = 154
-              Width = 210
+              Width = 206
               Caption = 'Load configuration on startup'
               ParentFont = False
-              TabOrder = 2
+              TabOrder = 1
             end
             object Panel14: TPanel
               Left = 0
@@ -1954,10 +1872,10 @@ object f_setup: Tf_setup
               ClientHeight = 34
               ClientWidth = 408
               ParentFont = False
-              TabOrder = 3
+              TabOrder = 2
               object Label79: TLabel
                 Left = 8
-                Height = 19
+                Height = 17
                 Top = 4
                 Width = 42
                 Caption = 'Server'
@@ -1976,7 +1894,7 @@ object f_setup: Tf_setup
               end
               object Label80: TLabel
                 Left = 234
-                Height = 19
+                Height = 17
                 Top = 4
                 Width = 27
                 Caption = 'Port'
@@ -2003,7 +1921,7 @@ object f_setup: Tf_setup
               Caption = 'Get'
               OnClick = GetIndiClick
               ParentFont = False
-              TabOrder = 4
+              TabOrder = 3
             end
             object RotatorMsg: TLabel
               Left = 275
@@ -2145,11 +2063,10 @@ object f_setup: Tf_setup
               Top = 65
               Width = 82
               Constraints.MaxHeight = 28
-              MaxLength = 0
-              ParentFont = False
-              TabOrder = 2
               MaxValue = 65535
               MinValue = 1
+              ParentFont = False
+              TabOrder = 2
               Value = 11111
             end
             object Label44: TLabel
@@ -2167,10 +2084,9 @@ object f_setup: Tf_setup
               Top = 137
               Width = 82
               Constraints.MaxHeight = 28
-              MaxLength = 0
+              MaxValue = 65535
               ParentFont = False
               TabOrder = 3
-              MaxValue = 65535
             end
             object Label45: TLabel
               Left = 93
@@ -2259,7 +2175,7 @@ object f_setup: Tf_setup
           Left = 16
           Height = 21
           Top = 8
-          Width = 100
+          Width = 98
           Caption = 'Use rotator '
           ParentFont = False
           TabOrder = 0
@@ -2305,7 +2221,7 @@ object f_setup: Tf_setup
           Left = 16
           Height = 21
           Top = 272
-          Width = 218
+          Width = 216
           Caption = 'Set mount date from computer'
           ParentFont = False
           TabOrder = 0
@@ -2314,7 +2230,7 @@ object f_setup: Tf_setup
           Left = 16
           Height = 21
           Top = 302
-          Width = 285
+          Width = 281
           Caption = 'Set mount site long/lat from configuration'
           OnClick = MountSetObservatoryClick
           ParentFont = False
@@ -2324,7 +2240,7 @@ object f_setup: Tf_setup
           Left = 16
           Height = 21
           Top = 330
-          Width = 225
+          Width = 223
           Caption = 'Get site long/lat from the mount'
           OnClick = MountGetObservatoryClick
           ParentFont = False
@@ -2368,30 +2284,12 @@ object f_setup: Tf_setup
                 Style = csDropDownList
                 TabOrder = 0
               end
-              object MountIndiDevPort: TEdit
-                Left = 96
-                Height = 28
-                Top = 89
-                Width = 170
-                Constraints.MaxHeight = 28
-                ParentFont = False
-                TabOrder = 1
-              end
               object Label12: TLabel
                 Left = 8
-                Height = 19
+                Height = 17
                 Top = 55
-                Width = 42
+                Width = 41
                 Caption = 'Device'
-                ParentColor = False
-                ParentFont = False
-              end
-              object Label13: TLabel
-                Left = 8
-                Height = 19
-                Top = 95
-                Width = 27
-                Caption = 'Port'
                 ParentColor = False
                 ParentFont = False
               end
@@ -2399,10 +2297,10 @@ object f_setup: Tf_setup
                 Left = 8
                 Height = 21
                 Top = 154
-                Width = 210
+                Width = 206
                 Caption = 'Load configuration on startup'
                 ParentFont = False
-                TabOrder = 2
+                TabOrder = 1
               end
               object Panel15: TPanel
                 Left = 0
@@ -2413,10 +2311,10 @@ object f_setup: Tf_setup
                 ClientHeight = 34
                 ClientWidth = 408
                 ParentFont = False
-                TabOrder = 3
+                TabOrder = 2
                 object Label81: TLabel
                   Left = 8
-                  Height = 19
+                  Height = 17
                   Top = 4
                   Width = 42
                   Caption = 'Server'
@@ -2435,7 +2333,7 @@ object f_setup: Tf_setup
                 end
                 object Label82: TLabel
                   Left = 234
-                  Height = 19
+                  Height = 17
                   Top = 4
                   Width = 27
                   Caption = 'Port'
@@ -2462,7 +2360,7 @@ object f_setup: Tf_setup
                 Caption = 'Get'
                 OnClick = GetIndiClick
                 ParentFont = False
-                TabOrder = 4
+                TabOrder = 3
               end
               object MountMsg: TLabel
                 Left = 275
@@ -2604,11 +2502,10 @@ object f_setup: Tf_setup
                 Top = 65
                 Width = 82
                 Constraints.MaxHeight = 28
-                MaxLength = 0
-                ParentFont = False
-                TabOrder = 2
                 MaxValue = 65535
                 MinValue = 1
+                ParentFont = False
+                TabOrder = 2
                 Value = 11111
               end
               object Label48: TLabel
@@ -2626,10 +2523,9 @@ object f_setup: Tf_setup
                 Top = 137
                 Width = 82
                 Constraints.MaxHeight = 28
-                MaxLength = 0
+                MaxValue = 65535
                 ParentFont = False
                 TabOrder = 3
-                MaxValue = 65535
               end
               object Label49: TLabel
                 Left = 93
@@ -2751,9 +2647,9 @@ object f_setup: Tf_setup
             end
             object Label25: TLabel
               Left = 8
-              Height = 19
+              Height = 17
               Top = 55
-              Width = 42
+              Width = 41
               Caption = 'Device'
               ParentColor = False
               ParentFont = False
@@ -2762,28 +2658,10 @@ object f_setup: Tf_setup
               Left = 8
               Height = 21
               Top = 154
-              Width = 210
+              Width = 206
               Caption = 'Load configuration on startup'
               ParentFont = False
               TabOrder = 1
-            end
-            object Label23: TLabel
-              Left = 8
-              Height = 19
-              Top = 94
-              Width = 27
-              Caption = 'Port'
-              ParentColor = False
-              ParentFont = False
-            end
-            object DomeIndiDevPort: TEdit
-              Left = 96
-              Height = 28
-              Top = 88
-              Width = 170
-              Constraints.MaxHeight = 28
-              ParentFont = False
-              TabOrder = 2
             end
             object Panel16: TPanel
               Left = 0
@@ -2794,10 +2672,10 @@ object f_setup: Tf_setup
               ClientHeight = 34
               ClientWidth = 408
               ParentFont = False
-              TabOrder = 3
+              TabOrder = 2
               object Label83: TLabel
                 Left = 8
-                Height = 19
+                Height = 17
                 Top = 4
                 Width = 42
                 Caption = 'Server'
@@ -2816,7 +2694,7 @@ object f_setup: Tf_setup
               end
               object Label84: TLabel
                 Left = 234
-                Height = 19
+                Height = 17
                 Top = 4
                 Width = 27
                 Caption = 'Port'
@@ -2843,7 +2721,7 @@ object f_setup: Tf_setup
               Caption = 'Get'
               OnClick = GetIndiClick
               ParentFont = False
-              TabOrder = 4
+              TabOrder = 3
             end
             object DomeMsg: TLabel
               Left = 275
@@ -2985,11 +2863,10 @@ object f_setup: Tf_setup
               Top = 65
               Width = 82
               Constraints.MaxHeight = 28
-              MaxLength = 0
-              ParentFont = False
-              TabOrder = 2
               MaxValue = 65535
               MinValue = 1
+              ParentFont = False
+              TabOrder = 2
               Value = 11111
             end
             object Label52: TLabel
@@ -3007,10 +2884,9 @@ object f_setup: Tf_setup
               Top = 137
               Width = 82
               Constraints.MaxHeight = 28
-              MaxLength = 0
+              MaxValue = 65535
               ParentFont = False
               TabOrder = 3
-              MaxValue = 65535
             end
             object Label53: TLabel
               Left = 93
@@ -3151,9 +3027,9 @@ object f_setup: Tf_setup
             end
             object Label21: TLabel
               Left = 8
-              Height = 19
+              Height = 17
               Top = 55
-              Width = 42
+              Width = 41
               Caption = 'Device'
               ParentColor = False
               ParentFont = False
@@ -3162,7 +3038,7 @@ object f_setup: Tf_setup
               Left = 8
               Height = 21
               Top = 154
-              Width = 210
+              Width = 206
               Caption = 'Load configuration on startup'
               ParentFont = False
               TabOrder = 1
@@ -3179,7 +3055,7 @@ object f_setup: Tf_setup
               TabOrder = 2
               object Label85: TLabel
                 Left = 8
-                Height = 19
+                Height = 17
                 Top = 4
                 Width = 42
                 Caption = 'Server'
@@ -3198,7 +3074,7 @@ object f_setup: Tf_setup
               end
               object Label86: TLabel
                 Left = 234
-                Height = 19
+                Height = 17
                 Top = 4
                 Width = 27
                 Caption = 'Port'
@@ -3392,11 +3268,10 @@ object f_setup: Tf_setup
               Top = 65
               Width = 82
               Constraints.MaxHeight = 28
-              MaxLength = 0
-              ParentFont = False
-              TabOrder = 2
               MaxValue = 65535
               MinValue = 1
+              ParentFont = False
+              TabOrder = 2
               Value = 11111
             end
             object Label56: TLabel
@@ -3414,10 +3289,9 @@ object f_setup: Tf_setup
               Top = 137
               Width = 82
               Constraints.MaxHeight = 28
-              MaxLength = 0
+              MaxValue = 65535
               ParentFont = False
               TabOrder = 3
-              MaxValue = 65535
             end
             object Label57: TLabel
               Left = 13
@@ -3521,7 +3395,7 @@ object f_setup: Tf_setup
           Left = 16
           Height = 21
           Top = 8
-          Width = 158
+          Width = 157
           Caption = 'Use weather monitor'
           ParentFont = False
           TabOrder = 0
@@ -3573,9 +3447,9 @@ object f_setup: Tf_setup
             end
             object Label24: TLabel
               Left = 8
-              Height = 19
+              Height = 17
               Top = 55
-              Width = 42
+              Width = 41
               Caption = 'Device'
               ParentColor = False
               ParentFont = False
@@ -3584,7 +3458,7 @@ object f_setup: Tf_setup
               Left = 8
               Height = 21
               Top = 154
-              Width = 210
+              Width = 206
               Caption = 'Load configuration on startup'
               ParentFont = False
               TabOrder = 1
@@ -3601,7 +3475,7 @@ object f_setup: Tf_setup
               TabOrder = 2
               object Label87: TLabel
                 Left = 8
-                Height = 19
+                Height = 17
                 Top = 4
                 Width = 42
                 Caption = 'Server'
@@ -3620,7 +3494,7 @@ object f_setup: Tf_setup
               end
               object Label88: TLabel
                 Left = 234
-                Height = 19
+                Height = 17
                 Top = 4
                 Width = 27
                 Caption = 'Port'
@@ -3789,11 +3663,10 @@ object f_setup: Tf_setup
               Top = 65
               Width = 82
               Constraints.MaxHeight = 28
-              MaxLength = 0
-              ParentFont = False
-              TabOrder = 2
               MaxValue = 65535
               MinValue = 1
+              ParentFont = False
+              TabOrder = 2
               Value = 11111
             end
             object Label60: TLabel
@@ -3811,10 +3684,9 @@ object f_setup: Tf_setup
               Top = 137
               Width = 82
               Constraints.MaxHeight = 28
-              MaxLength = 0
+              MaxValue = 65535
               ParentFont = False
               TabOrder = 3
-              MaxValue = 65535
             end
             object Label61: TLabel
               Left = 93
@@ -3903,7 +3775,7 @@ object f_setup: Tf_setup
           Left = 16
           Height = 21
           Top = 8
-          Width = 143
+          Width = 142
           Caption = 'Use safety monitor'
           ParentFont = False
           TabOrder = 0
@@ -3955,9 +3827,9 @@ object f_setup: Tf_setup
             end
             object Label19: TLabel
               Left = 8
-              Height = 19
+              Height = 17
               Top = 55
-              Width = 42
+              Width = 41
               Caption = 'Device'
               ParentColor = False
               ParentFont = False
@@ -3966,16 +3838,16 @@ object f_setup: Tf_setup
               Left = 8
               Height = 21
               Top = 154
-              Width = 210
+              Width = 206
               Caption = 'Load configuration on startup'
               ParentFont = False
               TabOrder = 1
             end
             object Label20: TLabel
               Left = 8
-              Height = 19
+              Height = 17
               Top = 108
-              Width = 193
+              Width = 190
               Caption = 'Heart beat threshold [minutes]'
               ParentColor = False
               ParentFont = False
@@ -4001,7 +3873,7 @@ object f_setup: Tf_setup
               TabOrder = 3
               object Label89: TLabel
                 Left = 8
-                Height = 19
+                Height = 17
                 Top = 4
                 Width = 42
                 Caption = 'Server'
@@ -4020,7 +3892,7 @@ object f_setup: Tf_setup
               end
               object Label90: TLabel
                 Left = 234
-                Height = 19
+                Height = 17
                 Top = 4
                 Width = 27
                 Caption = 'Port'
@@ -4077,7 +3949,7 @@ object f_setup: Tf_setup
           Left = 16
           Height = 21
           Top = 8
-          Width = 113
+          Width = 112
           Caption = 'Use watchdog'
           ParentFont = False
           TabOrder = 0

@@ -266,9 +266,7 @@ type
     AscomWeatherType: TRadioGroup;
     Dome: TTabSheet;
     FlipImage1: TCheckBox;
-    Label23: TLabel;
     Label25: TLabel;
-    DomeIndiDevPort: TEdit;
     Label29: TLabel;
     DeviceCamera: TLabel;
     Label30: TLabel;
@@ -382,9 +380,7 @@ type
     PanelRotatorAscom: TPanel;
     RotatorAutoLoadConfig: TCheckBox;
     RotatorIndiDevice: TComboBox;
-    RotatorIndiDevPort: TEdit;
     Label11: TLabel;
-    Label14: TLabel;
     Label5: TLabel;
     CameraDiskPanel: TPanel;
     PanelRotatorIndi: TPanel;
@@ -408,9 +404,7 @@ type
     Label22: TLabel;
     PanelIndiServer: TPanel;
     PanelFocuserInMount: TPanel;
-    Label10: TLabel;
     Label12: TLabel;
-    Label13: TLabel;
     Label9: TLabel;
     PanelFocuserAscom: TPanel;
     PanelMountAscom: TPanel;
@@ -423,18 +417,12 @@ type
     WheelIndiDevice: TComboBox;
     FocuserIndiDevice: TComboBox;
     MountIndiDevice: TComboBox;
-    WheelIndiDevPort: TEdit;
-    FocuserIndiDevPort: TEdit;
-    MountIndiDevPort: TEdit;
     Label6: TLabel;
-    Label7: TLabel;
     PanelWheelAscom: TPanel;
     PanelWheelIndi: TPanel;
-    CameraIndiDevPort: TEdit;
     AscomCamera: TEdit;
     CameraIndiDevice: TComboBox;
     Label3: TLabel;
-    Label4: TLabel;
     Pagecontrol1: TPageControl;
     Panel1: TPanel;
     PanelCameraAscom: TPanel;
@@ -681,7 +669,6 @@ begin
   BtnSetupCamera.Caption:=rsSetup;
   BtnAboutCamera.Caption:=rsAbout;
   Label3.Caption:=rsDevices;
-  Label4.Caption:=rsPort;
   Label15.Caption:=rsSensor;
   IndiSensor.Items[0]:=rsMainSensor;
   IndiSensor.Items[1]:=rsGuiderSensor;
@@ -720,7 +707,6 @@ begin
   FixPixelRange1.Hint:=rsDoNotSetThis;
   Label17.Caption:=rsBeSureToConf;
   Label6.Caption:=rsDevices;
-  Label7.Caption:=rsPort;
   WheelAutoLoadConfig.Caption:=rsLoadConfigur;
   DeviceFilterWheel.Caption:=rsUseFilterWhe;
   Focuser.Caption:=rsFocuser;
@@ -729,7 +715,6 @@ begin
   BtnAboutCamera2.Caption:=rsAbout;
   BtnSetupCamera2.Caption:=rsSetup;
   Label9.Caption:=rsDevices;
-  Label10.Caption:=rsPort;
   FocuserAutoLoadConfig.Caption:=rsLoadConfigur;
   DeviceFocuser.Caption:=rsUseFocuser;
   FocuserExternalTemperature.Caption:=rsTemperatureF;
@@ -757,7 +742,6 @@ begin
   BtnAboutRotator.Caption:=rsAbout;
   BtnSetupRotator.Caption:=rsSetup;
   Label11.Caption:=rsDevices;
-  Label14.Caption:=rsPort;
   RotatorAutoLoadConfig.Caption:=rsLoadConfigur;
   Mount.Caption:=rsMount;
   Label81.Caption:=rsServer;
@@ -773,7 +757,6 @@ begin
   BtnAboutCamera3.Caption:=rsAbout;
   BtnSetupCamera3.Caption:=rsSetup;
   Label12.Caption:=rsDevices;
-  Label13.Caption:=rsPort;
   MountAutoLoadConfig.Caption:=rsLoadConfigur;
   DeviceMount.Caption:=rsUseMount;
   MountSetDateTime.Caption:=rsSetMountTime;
@@ -791,7 +774,6 @@ begin
   Label102.Caption:=rsPassword;
   DeviceDome.Caption:=rsUseDome;
   Label25.Caption:=rsDevices;
-  Label23.Caption:=rsPort;
   DomeAutoLoadConfig.Caption:=rsLoadConfigur;
   BtnChooseDome.Caption:=rsChoose;
   BtnAboutDome.Caption:=rsAbout;
@@ -932,7 +914,6 @@ if CameraIndiDevice.Items.Count=0 then begin
 end;
 CameraIndiDevice.Text:=conf.GetValue('/INDIcamera/Device','');
 CameraSensor:=conf.GetValue('/INDIcamera/Sensor','CCD1');
-CameraIndiDevPort.Text:=conf.GetValue('/INDIcamera/DevicePort','');
 CameraAutoLoadConfig.Checked:=conf.GetValue('/INDIcamera/AutoLoadConfig',false);
 CameraIndiTransfert.ItemIndex:=conf.GetValue('/INDIcamera/IndiTransfert',ord(itNetwork));
 CameraIndiTransfertDir.Text:=conf.GetValue('/INDIcamera/IndiTransfertDir',defTransfertPath);
@@ -960,7 +941,6 @@ if WheelIndiDevice.Items.Count=0 then begin
   WheelIndiDevice.ItemIndex:=0;
 end;
 WheelIndiDevice.Text:=conf.GetValue('/INDIwheel/Device','');
-WheelIndiDevPort.Text:=conf.GetValue('/INDIwheel/DevicePort','');
 WheelAutoLoadConfig.Checked:=conf.GetValue('/INDIwheel/AutoLoadConfig',false);
 AscomWheel.Text:=conf.GetValue('/ASCOMwheel/Device','');
 WheelARestProtocol.ItemIndex:=conf.GetValue('/ASCOMRestwheel/Protocol',0);
@@ -980,7 +960,6 @@ if FocuserIndiDevice.Items.Count=0 then begin
   FocuserIndiDevice.ItemIndex:=0;
 end;
 FocuserIndiDevice.Text:=conf.GetValue('/INDIfocuser/Device','');
-FocuserIndiDevPort.Text:=conf.GetValue('/INDIfocuser/DevicePort','');
 FocuserAutoLoadConfig.Checked:=conf.GetValue('/INDIfocuser/AutoLoadConfig',false);
 AscomFocuser.Text:=conf.GetValue('/ASCOMfocuser/Device','');
 FocuserARestProtocol.ItemIndex:=conf.GetValue('/ASCOMRestfocuser/Protocol',0);
@@ -997,7 +976,6 @@ if RotatorIndiDevice.Items.Count=0 then begin
   RotatorIndiDevice.ItemIndex:=0;
 end;
 RotatorIndiDevice.Text:=conf.GetValue('/INDIrotator/Device','');
-RotatorIndiDevPort.Text:=conf.GetValue('/INDIrotator/DevicePort','');
 RotatorAutoLoadConfig.Checked:=conf.GetValue('/INDIrotator/AutoLoadConfig',false);
 AscomRotator.Text:=conf.GetValue('/ASCOMrotator/Device','');
 RotatorARestProtocol.ItemIndex:=conf.GetValue('/ASCOMRestrotator/Protocol',0);
@@ -1013,7 +991,6 @@ if MountIndiDevice.Items.Count=0 then begin
   MountIndiDevice.ItemIndex:=0;
 end;
 MountIndiDevice.Text:=conf.GetValue('/INDImount/Device','');
-MountIndiDevPort.Text:=conf.GetValue('/INDImount/DevicePort','');
 MountAutoLoadConfig.Checked:=conf.GetValue('/INDImount/AutoLoadConfig',false);
 AscomMount.Text:=conf.GetValue('/ASCOMmount/Device','');
 MountSetDateTime.Checked:=conf.GetValue('/Mount/SetDateTime',false);
@@ -1032,7 +1009,6 @@ if DomeIndiDevice.Items.Count=0 then begin
   DomeIndiDevice.ItemIndex:=0;
 end;
 DomeIndiDevice.Text:=conf.GetValue('/INDIdome/Device','');
-DomeIndiDevPort.Text:=conf.GetValue('/INDIdome/DevicePort','');
 DomeAutoLoadConfig.Checked:=conf.GetValue('/INDIdome/AutoLoadConfig',false);
 AscomDome.Text:=conf.GetValue('/ASCOMdome/Device','');
 DomeARestProtocol.ItemIndex:=conf.GetValue('/ASCOMRestdome/Protocol',0);

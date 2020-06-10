@@ -703,7 +703,6 @@ begin
   Ffits.Header.Insert(3,'NAXIS1',hnaxis1 ,'length of data axis 1');
   Ffits.Header.Insert(4,'NAXIS2',hnaxis2 ,'length of data axis 2');
   if hnaxis=3 then Ffits.Header.Insert(-1,'NAXIS3',hnaxis3 ,'length of data axis 3');;
-  Ffits.Header.Insert(-1,'EXTEND',true,'FITS dataset may contain extensions');
   Ffits.Header.Insert(-1,'BZERO',hbzero,'offset data range to that of unsigned short');
   Ffits.Header.Insert(-1,'BSCALE',hbscale,'default scaling factor');
   i:=FFits.Header.Indexof('HIERARCH');
@@ -849,7 +848,6 @@ begin
   Ffits.Header.Add('NAXIS1',hnaxis1 ,'length of data axis 1');
   Ffits.Header.Add('NAXIS2',hnaxis2 ,'length of data axis 2');
   if hnaxis=3 then Ffits.Header.Add('NAXIS3',hnaxis3 ,'length of data axis 3');;
-  Ffits.Header.Add('EXTEND',true,'FITS dataset may contain extensions');
   Ffits.Header.Add('BZERO',hbzero,'offset data range to that of unsigned short');
   Ffits.Header.Add('BSCALE',hbscale,'default scaling factor');
   Ffits.Header.Add('DATAMIN',hdmin,'Minimum value');
