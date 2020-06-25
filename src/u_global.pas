@@ -274,7 +274,7 @@ const
   MaxCmdArg = 10;
   MaxScriptDir=2;
   MaxMenulevel=10;
-  MaxFilter=20;
+  MaxFilter=100;
   WaitResponseTime=120;
   ZoomMax=15;
   msgOK = 'OK!';

@@ -717,6 +717,7 @@ begin
   Setlang;
   Lockchange:=false;
   LockTemp:=false;
+  FilterList.RowCount:=MaxFilter;
   SafetyActions.RowCount:=SafetyActionNum+1;
   PageControl1.ActivePageIndex:=0;
   b:=TSpeedButton.Create(self);
