@@ -1718,12 +1718,12 @@ wcs.c:    wcs->xpix = *xpix;
 wcs.c:    wcs->ypix = *ypix;
 wcs.c:    if (wcs->prjcode == WCS_CSC || wcs->prjcode == WCS_QSC ||
 wcs.c:	wcs->prjcode == WCS_TSC)
-wcs.c:    offscl = wcsrev ((void *)&wcs->ctype, &wcs->wcsl, pixcrd, &wcs->lin, imgcrd,
+wcs.c:    offscl = wcsrev1 ((void *)&wcs->ctype, &wcs->wcsl, pixcrd, &wcs->lin, imgcrd,
 wcs.c:		    &wcs->prj, &phi, &theta, wcs->crval, &wcs->cel, wcscrd);
 wcs.c:	*xpos = wcscrd[wcs->wcsl.lng];
 wcs.c:	*ypos = wcscrd[wcs->wcsl.lat];
 wcs.c:    if (wcs->wcsl.flag != WCSSET) {
-wcs.c:	if (wcsset (wcs->lin.naxis, (void *)&wcs->ctype, &wcs->wcsl) )
+wcs.c:	if (wcsset1 (wcs->lin.naxis, (void *)&wcs->ctype, &wcs->wcsl) )
 wcs.c:    wcscrd[wcs->wcsl.lng] = xpos;
 wcs.c:    wcscrd[wcs->wcsl.lat] = ypos;
 wcs.c:    offscl = wcsfwd ((void *)&wcs->ctype, &wcs->wcsl, wcscrd, wcs->crval, &wcs->cel,
