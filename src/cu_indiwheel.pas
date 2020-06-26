@@ -26,7 +26,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 interface
 
 uses cu_wheel, indibaseclient, indibasedevice, indiapi, indicom, u_translation,
-     u_global, ExtCtrls, Forms, Classes, SysUtils;
+     u_global, math, ExtCtrls, Forms, Classes, SysUtils;
 
 type
 
@@ -308,7 +308,7 @@ begin
      FilterName:=indiProp.getText;
      FFilterNames.Clear;
      FFilterNames.Add(Filter0);
-     for i:=0 to FilterName.ntp-1 do begin
+     for i:=0 to min(Maxfilter,FilterName.ntp)-1 do begin
         if debug_msg then msg('Filter '+inttostr(i+1)+' : '+FilterName.tp[i].text,3);
         FFilterNames.Add(FilterName.tp[i].text);
      end;

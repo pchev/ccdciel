@@ -26,7 +26,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 interface
 
 uses  cu_wheel, cu_ascomrest, u_global, indiapi,
-     u_translation,
+     u_translation, math,
      ExtCtrls, Forms, Classes, SysUtils;
 
 type
@@ -277,7 +277,7 @@ begin
  n:=0;
    try
    fnames:=V.Get('names').AsStringArray;
-   n:=Length(fnames);
+   n:=min(Maxfilter,Length(fnames));
    value.Add(Filter0);
    for i:=0 to n-1 do begin
      value.Add(string(fnames[i]));

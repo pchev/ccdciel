@@ -280,7 +280,7 @@ begin
  {$ifdef mswindows}
    try
    fnames:=V.Names;
-   n:=Length(fnames);
+   n:=min(Maxfilter,Length(fnames));
    value.Add(Filter0);
    for i:=0 to n-1 do begin
      value.Add(string(fnames[i]));
