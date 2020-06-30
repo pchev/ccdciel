@@ -8676,6 +8676,8 @@ var tmpbmp:TBGRABitmap;
     s,cx,cy: integer;
 begin
 if fits.HeaderInfo.naxis>0 then begin
+  try
+  screen.Cursor:=crHourGlass;
   trpOK:=false;
   fits.Gamma:=f_visu.Gamma.Value;
   fits.ImgDmax:=round(f_visu.ImgMax);
@@ -8719,6 +8721,9 @@ if fits.HeaderInfo.naxis>0 then begin
   {$ifdef debug_raw}writeln(FormatDateTime(dateiso,Now)+blank+'PlotImage');{$endif}
   PlotImage;
   {$ifdef debug_raw}writeln(FormatDateTime(dateiso,Now)+blank+'PlotImage end');{$endif}
+  finally
+  screen.Cursor:=crDefault;
+  end;
 end;
 end;
 

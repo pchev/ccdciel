@@ -67,6 +67,8 @@ type
     procedure FrameEndDrag(Sender, Target: TObject; X, Y: Integer);
     procedure FrameResize(Sender: TObject);
     procedure GammaChange(Sender: TObject);
+    procedure HistBarKeyUp(Sender: TObject; var Key: Word; Shift: TShiftState);
+    procedure HistBarMouseUp(Sender: TObject; Button: TMouseButton; Shift: TShiftState; X, Y: Integer);
     procedure histminmaxClick(Sender: TObject);
     procedure HistogramMouseDown(Sender: TObject; Button: TMouseButton;
       Shift: TShiftState; X, Y: Integer);
@@ -387,6 +389,16 @@ end;
 procedure Tf_visu.GammaChange(Sender: TObject);
 begin
   TimerRedraw.Enabled:=true;
+end;
+
+procedure Tf_visu.HistBarKeyUp(Sender: TObject; var Key: Word; Shift: TShiftState);
+begin
+  HistBarChange(Sender);
+end;
+
+procedure Tf_visu.HistBarMouseUp(Sender: TObject; Button: TMouseButton; Shift: TShiftState; X, Y: Integer);
+begin
+HistBarChange(Sender);
 end;
 
 procedure Tf_visu.BtnBullsEyeClick(Sender: TObject);
