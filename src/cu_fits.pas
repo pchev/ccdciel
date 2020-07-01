@@ -134,7 +134,7 @@ type
     // Fits header values
     FFitsInfo : TFitsInfo;
     //
-    n_axis,cur_axis,Fwidth,Fheight,Fhdr_end,colormode : Integer;
+    n_axis,cur_axis,Fwidth,Fheight,Fhdr_end,colormode,Fpreview_axis : Integer;
     FTitle : string;
     Fmean,Fsigma,Fdmin,Fdmax : double;
     FImgDmin, FImgDmax: Word;
@@ -144,7 +144,7 @@ type
     gamma_c : array[0..32768] of single; {prepared power values for gamma correction}
     FGamma: single;
     emptybmp:Tbitmap;
-    FMarkOverflow: boolean;
+    FMarkOverflow,FDisableBayer: boolean;
     FMaxADU, FOverflow, FUnderflow: double;
     FInvert: boolean;
     FStarList: TStarList;
@@ -158,7 +158,6 @@ type
     procedure SetVideoStream(value:TMemoryStream);
     Procedure ReadFitsImage;
     Procedure WriteFitsImage;
-    Procedure GetImage;
     function GammaCorr(value: Word):byte;
     procedure SetImgFullRange(value: boolean);
     function GetHasBPM: boolean;
@@ -174,10 +173,10 @@ type
      Procedure LoadStream;
      procedure ClearFitsInfo;
      procedure GetFitsInfo;
-     function  BayerInterpolationExp(t:TBayerMode; rmult,gmult,bmult:double; pix1,pix2,pix3,pix4,pix5,pix6,pix7,pix8,pix9:integer; row,col:integer):TExpandedPixel; inline;
-     function  BayerInterpolation(t:TBayerMode; rmult,gmult,bmult:double; pix1,pix2,pix3,pix4,pix5,pix6,pix7,pix8,pix9:integer; row,col:integer):TBGRAPixel; inline;
-     procedure GetExpBitmap(var bgra: TExpandedBitmap; debayer:boolean);
-     procedure GetBGRABitmap(var bgra: TBGRABitmap; debayer:boolean);
+     procedure BayerInterpolation(t:TBayerMode; rmult,gmult,bmult:double; pix1,pix2,pix3,pix4,pix5,pix6,pix7,pix8,pix9:word; row,col:integer; out pixr,pixg,pixb:word); inline;
+     Procedure GetImage;
+     procedure GetExpBitmap(var bgra: TExpandedBitmap);
+     procedure GetBGRABitmap(var bgra: TBGRABitmap);
      procedure SaveToBitmap(fn: string);
      procedure SaveToFile(fn: string; pack: boolean=false);
      procedure LoadFromFile(fn:string);
@@ -216,6 +215,7 @@ type
      property imageMax : double read FimageMax;
      property imageMean: double read Fmean;
      property imageSigma: double read Fsigma;
+     property preview_axis: integer read Fpreview_axis;
      property BayerMode: TBayerMode read GetBayerMode;
      property ImgFullRange: Boolean read FImgFullRange write SetImgFullRange;
      property MaxADU: double read FMaxADU write FMaxADU;
@@ -223,6 +223,7 @@ type
      property MarkOverflow: boolean read FMarkOverflow write FMarkOverflow;
      property Overflow: double read FOverflow write FOverflow;
      property Underflow: double read FUnderflow write FUnderflow;
+     property DisableBayer: boolean read FDisableBayer write FDisableBayer;
      property hasBPM: boolean read GetHasBPM;
      property BPMProcess: boolean read FBPMProcess;
      property StarList: TStarList read FStarList;
@@ -239,6 +240,9 @@ type
     fits: TFits;
     hist: THistogram;
     Fdmin,c: double;
+    rmult,gmult,bmult: double;
+    debayer: boolean;
+    t: TBayerMode;
     procedure Execute; override;
     constructor Create(CreateSuspended: boolean);
   end;
@@ -251,9 +255,6 @@ type
       bgra: TBGRABitmap;
       HighOverflow,LowOverflow: TBGRAPixel;
       c,overflow,underflow: double;
-      rmult,gmult,bmult,mx: double;
-      debayer: boolean;
-      t: TBayerMode;
       FImgDmin: word;
       procedure Execute; override;
       constructor Create(CreateSuspended: boolean);
@@ -265,9 +266,6 @@ type
       num, id: integer;
       fits: TFits;
       bgra: TExpandedBitmap;
-      rmult,gmult,bmult,mx: double;
-      debayer: boolean;
-      t: TBayerMode;
       procedure Execute; override;
       constructor Create(CreateSuspended: boolean);
     end;
@@ -693,6 +691,8 @@ var
   i, j, startline, endline, xs,ys: integer;
   x : word;
   xx: extended;
+  ii,i1,i2,i3,j1,j2,j3 : integer;
+  pix1,pix2,pix3,pix4,pix5,pix6,pix7,pix8,pix9,pixr,pixg,pixb:word;
 begin
 xs:= fits.Fwidth;
 ys:= fits.FHeight;
@@ -747,27 +747,82 @@ case fits.FFitsInfo.bitpix of
          end;
      8 : begin
          for i:=startline to endline do begin
-         for j := 0 to xs-1 do begin
-             xx:=fits.FFitsInfo.bzero+fits.FFitsInfo.bscale*fits.imai8[0,i,j];
-             x:=round(max(0,min(MaxWord,(xx-Fdmin) * c )) );
-             fits.Fimage[0,i,j]:=x;
-             if fits.n_axis=3 then begin
-               inc(hist[x]);
-               xx:=fits.FFitsInfo.bzero+fits.FFitsInfo.bscale*fits.imai8[1,i,j];
+           if debayer then begin
+            ii:=ys-1-i; // image is flipped in fits, count color order from the bottom
+            i1:=max(i-1,0);
+            i2:=i;
+            i3:= min(i+1,ys-1);
+           end;
+           for j := 0 to xs-1 do begin
+             if debayer then begin
+               j1:=max(j-1,0);
+               j2:=j;
+               j3:=min(j+1,xs-1);
+               pix1:=round( max(0,min(MaxWord,(fits.FFitsInfo.bzero+fits.FFitsInfo.bscale*fits.imai8[0,i1,j1]-Fdmin) * c )) );
+               pix2:=round( max(0,min(MaxWord,(fits.FFitsInfo.bzero+fits.FFitsInfo.bscale*fits.imai8[0,i1,j2]-Fdmin) * c )) );
+               pix3:=round( max(0,min(MaxWord,(fits.FFitsInfo.bzero+fits.FFitsInfo.bscale*fits.imai8[0,i1,j3]-Fdmin) * c )) );
+               pix4:=round( max(0,min(MaxWord,(fits.FFitsInfo.bzero+fits.FFitsInfo.bscale*fits.imai8[0,i2,j1]-Fdmin) * c )) );
+               pix5:=round( max(0,min(MaxWord,(fits.FFitsInfo.bzero+fits.FFitsInfo.bscale*fits.imai8[0,i2,j2]-Fdmin) * c )) );
+               pix6:=round( max(0,min(MaxWord,(fits.FFitsInfo.bzero+fits.FFitsInfo.bscale*fits.imai8[0,i2,j3]-Fdmin) * c )) );
+               pix7:=round( max(0,min(MaxWord,(fits.FFitsInfo.bzero+fits.FFitsInfo.bscale*fits.imai8[0,i3,j1]-Fdmin) * c )) );
+               pix8:=round( max(0,min(MaxWord,(fits.FFitsInfo.bzero+fits.FFitsInfo.bscale*fits.imai8[0,i3,j2]-Fdmin) * c )) );
+               pix9:=round( max(0,min(MaxWord,(fits.FFitsInfo.bzero+fits.FFitsInfo.bscale*fits.imai8[0,i3,j3]-Fdmin) * c )) );
+               fits.BayerInterpolation(t,rmult,gmult,bmult,pix1,pix2,pix3,pix4,pix5,pix6,pix7,pix8,pix9,ii,j,pixr,pixg,pixb);
+               inc(hist[pixr]);
+               inc(hist[pixg]);
+               inc(hist[pixb]);
+               fits.Fimage[0,i,j]:=pixr;
+               fits.Fimage[1,i,j]:=pixg;
+               fits.Fimage[2,i,j]:=pixb;
+             end else begin
+               xx:=fits.FFitsInfo.bzero+fits.FFitsInfo.bscale*fits.imai8[0,i,j];
                x:=round(max(0,min(MaxWord,(xx-Fdmin) * c )) );
-               fits.Fimage[1,i,j]:=x;
+               fits.Fimage[0,i,j]:=x;
+               if fits.n_axis=3 then begin
+                 inc(hist[x]);
+                 xx:=fits.FFitsInfo.bzero+fits.FFitsInfo.bscale*fits.imai8[1,i,j];
+                 x:=round(max(0,min(MaxWord,(xx-Fdmin) * c )) );
+                 fits.Fimage[1,i,j]:=x;
+                 inc(hist[x]);
+                 xx:=fits.FFitsInfo.bzero+fits.FFitsInfo.bscale*fits.imai8[2,i,j];
+                 x:=round(max(0,min(MaxWord,(xx-Fdmin) * c )) );
+                 fits.Fimage[2,i,j]:=x;
+               end;
                inc(hist[x]);
-               xx:=fits.FFitsInfo.bzero+fits.FFitsInfo.bscale*fits.imai8[2,i,j];
-               x:=round(max(0,min(MaxWord,(xx-Fdmin) * c )) );
-               fits.Fimage[2,i,j]:=x;
-             end;
-             inc(hist[x]);
-         end;
+            end;
+           end;
          end;
          end;
     16 : begin
          for i:=startline to endline do begin
-         for j := 0 to xs-1 do begin
+          if debayer then begin
+           ii:=ys-1-i; // image is flipped in fits, count color order from the bottom
+           i1:=max(i-1,0);
+           i2:=i;
+           i3:= min(i+1,ys-1);
+          end;
+          for j := 0 to xs-1 do begin
+           if debayer then begin
+             j1:=max(j-1,0);
+             j2:=j;
+             j3:=min(j+1,xs-1);
+             pix1:=round( max(0,min(MaxWord,(fits.FFitsInfo.bzero+fits.FFitsInfo.bscale*fits.imai16[0,i1,j1]-Fdmin) * c )) );
+             pix2:=round( max(0,min(MaxWord,(fits.FFitsInfo.bzero+fits.FFitsInfo.bscale*fits.imai16[0,i1,j2]-Fdmin) * c )) );
+             pix3:=round( max(0,min(MaxWord,(fits.FFitsInfo.bzero+fits.FFitsInfo.bscale*fits.imai16[0,i1,j3]-Fdmin) * c )) );
+             pix4:=round( max(0,min(MaxWord,(fits.FFitsInfo.bzero+fits.FFitsInfo.bscale*fits.imai16[0,i2,j1]-Fdmin) * c )) );
+             pix5:=round( max(0,min(MaxWord,(fits.FFitsInfo.bzero+fits.FFitsInfo.bscale*fits.imai16[0,i2,j2]-Fdmin) * c )) );
+             pix6:=round( max(0,min(MaxWord,(fits.FFitsInfo.bzero+fits.FFitsInfo.bscale*fits.imai16[0,i2,j3]-Fdmin) * c )) );
+             pix7:=round( max(0,min(MaxWord,(fits.FFitsInfo.bzero+fits.FFitsInfo.bscale*fits.imai16[0,i3,j1]-Fdmin) * c )) );
+             pix8:=round( max(0,min(MaxWord,(fits.FFitsInfo.bzero+fits.FFitsInfo.bscale*fits.imai16[0,i3,j2]-Fdmin) * c )) );
+             pix9:=round( max(0,min(MaxWord,(fits.FFitsInfo.bzero+fits.FFitsInfo.bscale*fits.imai16[0,i3,j3]-Fdmin) * c )) );
+             fits.BayerInterpolation(t,rmult,gmult,bmult,pix1,pix2,pix3,pix4,pix5,pix6,pix7,pix8,pix9,ii,j,pixr,pixg,pixb);
+             inc(hist[pixr]);
+             inc(hist[pixg]);
+             inc(hist[pixb]);
+             fits.Fimage[0,i,j]:=pixr;
+             fits.Fimage[1,i,j]:=pixg;
+             fits.Fimage[2,i,j]:=pixb;
+           end else begin
              xx:=fits.FFitsInfo.bzero+fits.FFitsInfo.bscale*fits.imai16[0,i,j];
              x:=round(max(0,min(MaxWord,(xx-Fdmin) * c )) );
              fits.Fimage[0,i,j]:=x;
@@ -782,6 +837,7 @@ case fits.FFitsInfo.bitpix of
                fits.Fimage[2,i,j]:=x;
              end;
              inc(hist[x]);
+           end;
          end;
          end;
          end;
@@ -826,7 +882,6 @@ var
   x : word;
   xx,xxg,xxb: extended;
   p: PBGRAPixel;
-  pix1,pix2,pix3,pix4,pix5,pix6,pix7,pix8,pix9:integer;
 
 begin
 xs:= fits.Fwidth;
@@ -840,15 +895,9 @@ else
 ii:=0; i1:=0; i2:=0; i3:=0;
 // process the rows range for this thread
 for i:=startline to endline do begin
-   if debayer then begin
-     ii:=ys-1-i; // image is flipped in fits, count color order from the bottom
-     i1:=max(i-1,0);
-     i2:=i;
-     i3:= min(i+1,ys-1);
-   end;
    p := bgra.Scanline[i];
    for j := 0 to xs-1 do begin
-       if fits.HeaderInfo.naxis=3 then begin
+       if fits.preview_axis=3 then begin
          // 3 chanel color image
          xx:=fits.image[0,i,j];
          x:=round(max(0,min(MaxWord,(xx-FImgDmin) * c )) );
@@ -866,21 +915,6 @@ for i:=startline to endline do begin
              p^:=LowOverflow;
          end;
        end else begin
-         if debayer then begin
-           j1:=max(j-1,0);
-           j2:=j;
-           j3:=min(j+1,xs-1);
-           pix1:=round((fits.image[0,i1,j1]-FImgDmin) * c );
-           pix2:=round((fits.image[0,i1,j2]-FImgDmin) * c );
-           pix3:=round((fits.image[0,i1,j3]-FImgDmin) * c );
-           pix4:=round((fits.image[0,i2,j1]-FImgDmin) * c );
-           pix5:=round((fits.image[0,i2,j2]-FImgDmin) * c );
-           pix6:=round((fits.image[0,i2,j3]-FImgDmin) * c );
-           pix7:=round((fits.image[0,i3,j1]-FImgDmin) * c );
-           pix8:=round((fits.image[0,i3,j2]-FImgDmin) * c );
-           pix9:=round((fits.image[0,i3,j3]-FImgDmin) * c );
-           p^:=fits.BayerInterpolation(t,rmult,gmult,bmult,pix1,pix2,pix3,pix4,pix5,pix6,pix7,pix8,pix9,ii,j);
-         end else begin
            // B/W image
            xx:=fits.image[0,i,j];
            x:=round(max(0,min(MaxWord,(xx-FImgDmin) * c )) );
@@ -893,7 +927,6 @@ for i:=startline to endline do begin
              else if xx<=underflow then
                p^:=LowOverflow;
            end;
-         end;
        end;
        p^.alpha:=255;
        inc(p);
@@ -918,7 +951,6 @@ var
   x : word;
   xx,xxg,xxb: extended;
   p: PExpandedPixel;
-  pix1,pix2,pix3,pix4,pix5,pix6,pix7,pix8,pix9:integer;
 
 begin
 xs:= fits.Fwidth;
@@ -932,15 +964,9 @@ else
 ii:=0; i1:=0; i2:=0; i3:=0;
 // process the rows range for this thread
 for i:=startline to endline do begin
-   if debayer then begin
-     ii:=ys-1-i; // image is flipped in fits, count color order from the bottom
-     i1:=max(i-1,0);
-     i2:=i;
-     i3:= min(i+1,ys-1);
-   end;
    p := bgra.Scanline[i];
    for j := 0 to xs-1 do begin
-       if fits.HeaderInfo.naxis=3 then begin
+       if fits.preview_axis=3 then begin
          // 3 chanel color image
          xx:=fits.imageMin+fits.image[0,i,j]/fits.imageC;
          x:=round(max(0,min(MaxWord,xx)) );
@@ -952,28 +978,12 @@ for i:=startline to endline do begin
          x:=round(max(0,min(MaxWord,xxb)) );
          p^.blue:=x;
        end else begin
-         if debayer then begin
-           j1:=max(j-1,0);
-           j2:=j;
-           j3:=min(j+1,xs-1);
-           pix1:=round(fits.imageMin+fits.image[0,i1,j1]/fits.imageC);
-           pix2:=round(fits.imageMin+fits.image[0,i1,j2]/fits.imageC);
-           pix3:=round(fits.imageMin+fits.image[0,i1,j3]/fits.imageC);
-           pix4:=round(fits.imageMin+fits.image[0,i2,j1]/fits.imageC);
-           pix5:=round(fits.imageMin+fits.image[0,i2,j2]/fits.imageC);
-           pix6:=round(fits.imageMin+fits.image[0,i2,j3]/fits.imageC);
-           pix7:=round(fits.imageMin+fits.image[0,i3,j1]/fits.imageC);
-           pix8:=round(fits.imageMin+fits.image[0,i3,j2]/fits.imageC);
-           pix9:=round(fits.imageMin+fits.image[0,i3,j3]/fits.imageC);
-           p^:=fits.BayerInterpolationExp(t,rmult,gmult,bmult,pix1,pix2,pix3,pix4,pix5,pix6,pix7,pix8,pix9,ii,j);
-         end else begin
            // B/W image
            xx:=fits.imageMin+fits.image[0,i,j]/fits.imageC;
            x:=round(max(0,min(MaxWord,xx)));
            p^.red:=x;
            p^.green:=x;
            p^.blue:=x;
-         end;
        end;
        p^.alpha:=65535;
        inc(p);
@@ -1073,6 +1083,7 @@ FImgFullRange:=false;
 FStreamValid:=false;
 FImageValid:=false;
 FMarkOverflow:=false;
+FDisableBayer:=false;
 FMaxADU:=MAXWORD;
 FOverflow:=MAXWORD;
 FUnderflow:=0;
@@ -1679,6 +1690,9 @@ var i,j: integer;
     timelimit: TDateTime;
     thread: array[0..15] of TGetImage;
     tc,timeout: integer;
+    rmult,gmult,bmult,mx: double;
+    t: TBayerMode;
+    debayer: boolean;
 begin
   if FImgFullRange then begin
     Fdmin:=0;
@@ -1690,7 +1704,40 @@ begin
     Fdmin:=FFitsInfo.dmin;
     Fdmax:=FFitsInfo.dmax;
   end;
-  setlength(Fimage,n_axis,Fheight,Fwidth);
+  fpreview_axis:=n_axis;
+  t:=GetBayerMode;
+  debayer:=BayerColor and (not FDisableBayer) and (t<>bayerUnsupported) and ((FFitsInfo.bitpix=16)or(FFitsInfo.bitpix=8));
+  rmult:=0; gmult:=0; bmult:=0;
+  if debayer then begin
+     fpreview_axis:=3;
+     if (BalanceFromCamera)and(FFitsInfo.rmult>0)and(FFitsInfo.gmult>0)and(FFitsInfo.bmult>0) then begin
+       rmult:=FFitsInfo.rmult;
+       gmult:=FFitsInfo.gmult;
+       bmult:=FFitsInfo.bmult;
+     end else begin
+       mx:=minvalue([RedBalance,GreenBalance,BlueBalance]);
+       rmult:=RedBalance/mx;
+       gmult:=GreenBalance/mx;
+       bmult:=BlueBalance/mx;
+     end;
+     if (FFitsInfo.bayeroffsetx mod 2) = 1 then begin
+       case t of
+         bayerGR: t:=bayerRG;
+         bayerRG: t:=bayerGR;
+         bayerBG: t:=bayerGB;
+         bayerGB: t:=bayerBG;
+       end;
+     end;
+     if (FFitsInfo.bayeroffsety mod 2) = 1 then begin
+       case t of
+         bayerGR: t:=bayerBG;
+         bayerRG: t:=bayerGB;
+         bayerBG: t:=bayerGR;
+         bayerGB: t:=bayerRG;
+       end;
+     end;
+  end;
+  setlength(Fimage,preview_axis,Fheight,Fwidth);
   for i:=0 to high(word) do FHistogram[i]:=1; // minimum 1 to take the log
 
   if Fdmax>Fdmin then
@@ -1712,6 +1759,11 @@ begin
     thread[i].fits := self;
     thread[i].num := tc;
     thread[i].id := i;
+    thread[i].debayer := debayer;
+    thread[i].rmult := rmult;
+    thread[i].gmult := gmult;
+    thread[i].bmult := bmult;
+    thread[i].t := t;
     thread[i].c := c;
     thread[i].Fdmin := Fdmin;
     thread[i].Start;
@@ -1847,7 +1899,7 @@ begin
   end;
 end;
 
-function TFits.BayerInterpolationExp(t:TBayerMode; rmult,gmult,bmult:double; pix1,pix2,pix3,pix4,pix5,pix6,pix7,pix8,pix9:integer; row,col:integer):TExpandedPixel; inline;
+procedure TFits.BayerInterpolation(t:TBayerMode; rmult,gmult,bmult:double; pix1,pix2,pix3,pix4,pix5,pix6,pix7,pix8,pix9:word; row,col:integer; out pixr,pixg,pixb:word); inline;
 var r,g,b: integer;
 begin
    if not odd(row) then begin //ligne paire
@@ -1962,182 +2014,19 @@ begin
        end;
      end;
    end;
-   result.red:=max(0,min(MAXWORD,r));
-   result.green:=max(0,min(MAXWORD,g));
-   result.blue:= max(0,min(MAXWORD,b));
+   pixr:=max(0,min(MAXWORD,r));
+   pixg:=max(0,min(MAXWORD,g));
+   pixb:= max(0,min(MAXWORD,b));
 end;
 
-function TFits.BayerInterpolation(t:TBayerMode; rmult,gmult,bmult:double; pix1,pix2,pix3,pix4,pix5,pix6,pix7,pix8,pix9:integer; row,col:integer):TBGRAPixel; inline;
-var r,g,b: integer;
-    l,lg: word;
-begin
-   if not odd(row) then begin //ligne paire
-      if not odd(col) then begin //colonne paire et ligne paire
-        case t of
-        bayerGR: begin
-            r:= round(rmult*(pix4+pix6)/2);
-            g:=round(gmult*pix5);
-            b:= round(bmult*(pix2+pix8)/2);
-           end;
-        bayerRG: begin
-            r:=round(rmult*pix5);
-            g:= round(gmult*(pix2+pix4+pix6+pix8)/4);
-            b:= round(bmult*(pix1+pix3+pix7+pix9)/4);
-           end;
-        bayerBG: begin
-            r:= round(rmult*(pix1+pix3+pix7+pix9)/4);
-            g:= round(gmult*(pix2+pix4+pix6+pix8)/4);
-            b:=round(bmult*pix5);
-           end;
-        bayerGB: begin
-            r:= round(rmult*(pix2+pix8)/2);
-            g:=round(gmult*pix5);
-            b:= round(bmult*(pix4+pix6)/2);
-           end;
-        else begin
-            r:=0; g:=0; b:=0;
-           end;
-        end;
-      end
-      else begin //colonne impaire et ligne paire
-       case t of
-       bayerGR: begin
-           r:=round(rmult*pix5);
-           g:= round(gmult*(pix2+pix4+pix6+pix8)/4);
-           b:= round(bmult*(pix1+pix3+pix7+pix9)/4);
-          end;
-       bayerRG: begin
-           r:= round(rmult*(pix4+pix6)/2);
-           g:=round(gmult*pix5);
-           b:=round(bmult*(pix2+pix8)/2);
-          end;
-       bayerBG: begin
-           r:=round(rmult*(pix2+pix8)/2);
-           g:=round(gmult*pix5);
-           b:= round(bmult*(pix4+pix6)/2);
-          end;
-       bayerGB: begin
-           r:= round(rmult*(pix1+pix3+pix7+pix9)/4);
-           g:= round(gmult*(pix2+pix4+pix6+pix8)/4);
-           b:=round(bmult*pix5);
-          end;
-       else begin
-           r:=0; g:=0; b:=0;
-          end;
-       end;
-     end;
-   end
-   else begin //ligne impaire
-     if not odd(col) then begin //colonne paire et ligne impaire
-       case t of
-       bayerGR: begin
-           r:= round(rmult*(pix1+pix3+pix7+pix9)/4);
-           g:= round(gmult*(pix2+pix4+pix6+pix8)/4);
-           b:=round(bmult*pix5);
-          end;
-       bayerRG: begin
-           r:= round(rmult*(pix2+pix8)/2);
-           g:=round(gmult*pix5);
-           b:=round(bmult*(pix4+pix6)/2);
-          end;
-       bayerBG: begin
-           r:= round(rmult*(pix4+pix6)/2);
-           g:=round(gmult*pix5);
-           b:=round(bmult*(pix2+pix8)/2);
-          end;
-       bayerGB: begin
-           r:=round(rmult*pix5);
-           g:= round(gmult*(pix2+pix4+pix6+pix8)/4);
-           b:= round(bmult*(pix1+pix3+pix7+pix9)/4);
-          end;
-       else begin
-           r:=0; g:=0; b:=0;
-          end;
-       end;
-    end
-    else begin //colonne impaire et ligne impaire
-       case t of
-       bayerGR: begin
-           r:= round(rmult*(pix2+pix8)/2);
-           g:= round(gmult*pix5);
-           b:= round(bmult*(pix4+pix6)/2);
-          end;
-       bayerRG: begin
-           r:= round(rmult*(pix1+pix3+pix7+pix9)/4);
-           g:= round(gmult*(pix2+pix4+pix6+pix8)/4);
-           b:=round(bmult*pix5);
-          end;
-       bayerBG: begin
-           r:= round(rmult*pix5);
-           g:= round(gmult*(pix2+pix4+pix6+pix8)/4);
-           b:= round(bmult*(pix1+pix3+pix7+pix9)/4);
-          end;
-       bayerGB: begin
-           r:= round(rmult*(pix4+pix6)/2);
-           g:= round(gmult*pix5);
-           b:= round(bmult*(pix2+pix8)/2);
-          end;
-       else begin
-           r:=0; g:=0; b:=0;
-          end;
-       end;
-     end;
-   end;
-   l:=max(0,min(MAXWORD,maxvalue([r,b,g])));
-   if l>0 then begin
-     lg:=GammaCorr(l);
-     result.red:=max(0,min(MAXBYTE,round(r*lg/l)));
-     result.green:=max(0,min(MAXBYTE,round(g*lg/l)));
-     result.blue:= max(0,min(MAXBYTE,round(b*lg/l)));
-   end
-   else begin
-     result.red:=0;
-     result.green:=0;
-     result.blue:= 0;
-   end;
-end;
-
-procedure TFits.GetExpBitmap(var bgra: TExpandedBitmap; debayer:boolean);
+procedure TFits.GetExpBitmap(var bgra: TExpandedBitmap);
 // get linear 16bit bitmap
 var i: integer;
-    rmult,gmult,bmult,mx: double;
-    t:TBayerMode;
     working, timingout: boolean;
     timelimit: TDateTime;
     thread: array[0..15] of TGetExpThread;
     tc,timeout: integer;
 begin
-rmult:=0; gmult:=0; bmult:=0;
-t:=GetBayerMode;
-if t=bayerUnsupported then debayer:=false;
-if debayer then begin
-  if (BalanceFromCamera)and(FFitsInfo.rmult>0)and(FFitsInfo.gmult>0)and(FFitsInfo.bmult>0) then begin
-     rmult:=FFitsInfo.rmult;
-     gmult:=FFitsInfo.gmult;
-     bmult:=FFitsInfo.bmult;
-  end else begin
-     mx:=minvalue([RedBalance,GreenBalance,BlueBalance]);
-     rmult:=RedBalance/mx;
-     gmult:=GreenBalance/mx;
-     bmult:=BlueBalance/mx;
-  end;
-  if (FFitsInfo.bayeroffsetx mod 2) = 1 then begin
-    case t of
-      bayerGR: t:=bayerRG;
-      bayerRG: t:=bayerGR;
-      bayerBG: t:=bayerGB;
-      bayerGB: t:=bayerBG;
-    end;
-  end;
-  if (FFitsInfo.bayeroffsety mod 2) = 1 then begin
-    case t of
-      bayerGR: t:=bayerBG;
-      bayerRG: t:=bayerGB;
-      bayerBG: t:=bayerGR;
-      bayerGB: t:=bayerRG;
-    end;
-  end;
-end;
 bgra.SetSize(Fwidth,Fheight);
 thread[0]:=nil;
 // number of thread
@@ -2150,11 +2039,6 @@ begin
   thread[i].fits := self;
   thread[i].num := tc;
   thread[i].id := i;
-  thread[i].debayer := debayer;
-  thread[i].rmult := rmult;
-  thread[i].gmult := gmult;
-  thread[i].bmult := bmult;
-  thread[i].t := t;
   thread[i].bgra := bgra;
   thread[i].Start;
 end;
@@ -2172,49 +2056,16 @@ until (not working) or timingout;
 bgra.InvalidateBitmap;
 end;
 
-procedure TFits.GetBGRABitmap(var bgra: TBGRABitmap; debayer:boolean);
+procedure TFits.GetBGRABitmap(var bgra: TBGRABitmap);
 // get stretched 8bit bitmap
 var i : integer;
     HighOverflow,LowOverflow: TBGRAPixel;
     c,overflow,underflow: double;
-    rmult,gmult,bmult,mx: double;
-    t: TBayerMode;
     working, timingout: boolean;
     timelimit: TDateTime;
     thread: array[0..15] of TGetBgraThread;
     tc,timeout: integer;
 begin
-  rmult:=0; gmult:=0; bmult:=0;
-  t:=GetBayerMode;
-  if t=bayerUnsupported then debayer:=false;
-  if debayer then begin
-     if (BalanceFromCamera)and(FFitsInfo.rmult>0)and(FFitsInfo.gmult>0)and(FFitsInfo.bmult>0) then begin
-       rmult:=FFitsInfo.rmult;
-       gmult:=FFitsInfo.gmult;
-       bmult:=FFitsInfo.bmult;
-     end else begin
-       mx:=minvalue([RedBalance,GreenBalance,BlueBalance]);
-       rmult:=RedBalance/mx;
-       gmult:=GreenBalance/mx;
-       bmult:=BlueBalance/mx;
-     end;
-     if (FFitsInfo.bayeroffsetx mod 2) = 1 then begin
-       case t of
-         bayerGR: t:=bayerRG;
-         bayerRG: t:=bayerGR;
-         bayerBG: t:=bayerGB;
-         bayerGB: t:=bayerBG;
-       end;
-     end;
-     if (FFitsInfo.bayeroffsety mod 2) = 1 then begin
-       case t of
-         bayerGR: t:=bayerBG;
-         bayerRG: t:=bayerGB;
-         bayerBG: t:=bayerGR;
-         bayerGB: t:=bayerRG;
-       end;
-     end;
-  end;
   HighOverflow:=ColorToBGRA(clFuchsia);
   LowOverflow:=ColorToBGRA(clYellow);
   overflow:=(FOverflow-FimageMin)*FimageC;
@@ -2233,11 +2084,6 @@ begin
     thread[i].fits := self;
     thread[i].num := tc;
     thread[i].id := i;
-    thread[i].debayer := debayer;
-    thread[i].rmult := rmult;
-    thread[i].gmult := gmult;
-    thread[i].bmult := bmult;
-    thread[i].t := t;
     thread[i].HighOverflow := HighOverflow;
     thread[i].LowOverflow := LowOverflow;
     thread[i].overflow := overflow;
@@ -2270,14 +2116,14 @@ begin
   if (ext='.PNG')or(ext='.TIF')or(ext='.TIFF') then begin
     // save 16 bit linear image
     expbmp:=TExpandedBitmap.Create;
-    GetExpBitmap(expbmp,FFitsInfo.bayerpattern<>'');
+    GetExpBitmap(expbmp);
     expbmp.SaveToFile(fn);
     expbmp.Free;
   end
   else begin
     //save 8 bit stretched image
     bgra:=TBGRABitmap.Create;
-    GetBGRABitmap(bgra,FFitsInfo.bayerpattern<>'');
+    GetBGRABitmap(bgra);
     bgra.SaveToFile(fn);
     bgra.Free;
   end;

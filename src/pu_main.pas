@@ -8688,7 +8688,7 @@ if fits.HeaderInfo.naxis>0 then begin
   fits.MarkOverflow:=f_visu.Clipping;
   fits.Invert:=f_visu.Invert;
   {$ifdef debug_raw}writeln(FormatDateTime(dateiso,Now)+blank+'FITS GetBGRABitmap');{$endif}
-  fits.GetBGRABitmap(ImaBmp,BayerColor);
+  fits.GetBGRABitmap(ImaBmp);
   {$ifdef debug_raw}writeln(FormatDateTime(dateiso,Now)+blank+'FITS GetBGRABitmap end');{$endif}
   ImgPixRatio:=fits.HeaderInfo.pixratio;
   if (fits.HeaderInfo.pixratio<>1) then begin
@@ -9255,6 +9255,7 @@ begin
  if TMenuItem(Sender).Checked then begin
   BayerColor:=True;
   if fits.HeaderInfo.naxis>0 then begin
+    fits.GetImage;
     DrawImage;
     NewMessage(rsImageDebayer,1);
   end;
@@ -9262,6 +9263,7 @@ begin
  else begin
   BayerColor:=False;
   if fits.HeaderInfo.naxis>0 then begin
+    fits.GetImage;
     DrawImage;
     NewMessage(rsImageUnDebay,1);
   end;
@@ -9337,6 +9339,7 @@ if refmask then begin
   mem:=TMemoryStream.Create;
   f:=TFits.Create(nil);
   f.onMsg:=@NewMessage;
+  f.DisableBayer:=true;
   try
   mem.LoadFromFile(reffile);
   f.Stream:=mem;
@@ -9345,7 +9348,7 @@ if refmask then begin
     f.Gamma:=f_visu.Gamma.Value;
     f.ImgDmax:=round(f_visu.ImgMax);
     f.ImgDmin:=round(f_visu.ImgMin);
-    f.GetBGRABitmap(refbmp,false);
+    f.GetBGRABitmap(refbmp);
     p:=refbmp.data;
     for i:=0 to refbmp.NbPixels-1 do begin
      p[i].alpha:=128;
@@ -12055,7 +12058,7 @@ var xx,yy,n: integer;
 begin
  Screen2fits(x,y,f_visu.FlipHorz,f_visu.FlipVert,xx,yy);
  if (xx>0)and(xx<fits.HeaderInfo.naxis1)and(yy>0)and(yy<fits.HeaderInfo.naxis2) then
-    if fits.HeaderInfo.naxis=2 then begin
+    if fits.preview_axis=2 then begin
       if fits.HeaderInfo.bitpix>0 then begin
         val:=trunc(fits.imageMin+fits.image[0,yy,xx]/fits.imageC);
         sval:=inttostr(val);
@@ -12065,7 +12068,7 @@ begin
        sval:=FormatFloat(f3,dval);
       end;
     end
-    else if (fits.HeaderInfo.naxis=3)and(fits.HeaderInfo.naxis3=3) then begin
+    else if (fits.preview_axis=3) then begin
       if fits.HeaderInfo.bitpix>0 then begin
         val:=trunc(fits.imageMin+fits.image[0,yy,xx]/fits.imageC);
         sval:=inttostr(val);
