@@ -360,8 +360,8 @@ procedure Tf_visu.HistBarChange(Sender: TObject);
 begin
   HistogramAdjusted:=false;
   SetLimit(true);
-  TimerRedraw.Enabled:=false;
-  TimerRedraw.Enabled:=true;
+  TimerMinMax.Enabled:=false;
+  TimerMinMax.Enabled:=true;
 end;
 
 procedure Tf_visu.SetZoom(value: double);
