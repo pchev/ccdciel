@@ -9260,6 +9260,7 @@ begin
   BayerColor:=True;
   if fits.HeaderInfo.naxis>0 then begin
     fits.GetImage;
+    DrawHistogram(true,true);
     DrawImage;
     NewMessage(rsImageDebayer,1);
   end;
@@ -9268,6 +9269,7 @@ begin
   BayerColor:=False;
   if fits.HeaderInfo.naxis>0 then begin
     fits.GetImage;
+    DrawHistogram(true,true);
     DrawImage;
     NewMessage(rsImageUnDebay,1);
   end;
