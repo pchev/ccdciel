@@ -692,7 +692,6 @@ procedure TGetImage.Execute;
 var
   i, j, startline, endline, xs,ys: integer;
   x : word;
-  h: integer;
   xx: extended;
 begin
 xs:= fits.Fwidth;
@@ -713,15 +712,14 @@ case fits.FFitsInfo.bitpix of
              x:=round(max(0,min(MaxWord,(xx-Fdmin) * c )) );
              fits.Fimage[0,i,j]:=x;
              if fits.n_axis=3 then begin
-               h:=x;
+               inc(hist[x]);
                xx:=fits.FFitsInfo.bzero+fits.FFitsInfo.bscale*fits.imar64[1,i,j];
                x:=round(max(0,min(MaxWord,(xx-Fdmin) * c )) );
                fits.Fimage[1,i,j]:=x;
-               h:=h+x;
+               inc(hist[x]);
                xx:=fits.FFitsInfo.bzero+fits.FFitsInfo.bscale*fits.imar64[2,i,j];
                x:=round(max(0,min(MaxWord,(xx-Fdmin) * c )) );
                fits.Fimage[2,i,j]:=x;
-               x:=(h+x) div 3;
              end;
              inc(hist[x]);
          end;
@@ -734,15 +732,14 @@ case fits.FFitsInfo.bitpix of
              x:=round(max(0,min(MaxWord,(xx-Fdmin) * c )) );
              fits.Fimage[0,i,j]:=x;
              if fits.n_axis=3 then begin
-               h:=x;
+               inc(hist[x]);
                xx:=fits.FFitsInfo.bzero+fits.FFitsInfo.bscale*fits.imar32[1,i,j];
                x:=round(max(0,min(MaxWord,(xx-Fdmin) * c )) );
                fits.Fimage[1,i,j]:=x;
-               h:=h+x;
+               inc(hist[x]);
                xx:=fits.FFitsInfo.bzero+fits.FFitsInfo.bscale*fits.imar32[2,i,j];
                x:=round(max(0,min(MaxWord,(xx-Fdmin) * c )) );
                fits.Fimage[2,i,j]:=x;
-               x:=(h+x) div 3;
              end;
              inc(hist[x]);
          end;
@@ -755,15 +752,14 @@ case fits.FFitsInfo.bitpix of
              x:=round(max(0,min(MaxWord,(xx-Fdmin) * c )) );
              fits.Fimage[0,i,j]:=x;
              if fits.n_axis=3 then begin
-               h:=x;
+               inc(hist[x]);
                xx:=fits.FFitsInfo.bzero+fits.FFitsInfo.bscale*fits.imai8[1,i,j];
                x:=round(max(0,min(MaxWord,(xx-Fdmin) * c )) );
                fits.Fimage[1,i,j]:=x;
-               h:=h+x;
+               inc(hist[x]);
                xx:=fits.FFitsInfo.bzero+fits.FFitsInfo.bscale*fits.imai8[2,i,j];
                x:=round(max(0,min(MaxWord,(xx-Fdmin) * c )) );
                fits.Fimage[2,i,j]:=x;
-               x:=(h+x) div 3;
              end;
              inc(hist[x]);
          end;
@@ -776,15 +772,14 @@ case fits.FFitsInfo.bitpix of
              x:=round(max(0,min(MaxWord,(xx-Fdmin) * c )) );
              fits.Fimage[0,i,j]:=x;
              if fits.n_axis=3 then begin
-               h:=x;
+               inc(hist[x]);
                xx:=fits.FFitsInfo.bzero+fits.FFitsInfo.bscale*fits.imai16[1,i,j];
                x:=round(max(0,min(MaxWord,(xx-Fdmin) * c )) );
                fits.Fimage[1,i,j]:=x;
-               h:=h+x;
+               inc(hist[x]);
                xx:=fits.FFitsInfo.bzero+fits.FFitsInfo.bscale*fits.imai16[2,i,j];
                x:=round(max(0,min(MaxWord,(xx-Fdmin) * c )) );
                fits.Fimage[2,i,j]:=x;
-               x:=(h+x) div 3;
              end;
              inc(hist[x]);
          end;
@@ -797,15 +792,14 @@ case fits.FFitsInfo.bitpix of
              x:=round(max(0,min(MaxWord,(xx-Fdmin) * c )) );
              fits.Fimage[0,i,j]:=x;
              if fits.n_axis=3 then begin
-               h:=x;
+               inc(hist[x]);
                xx:=fits.FFitsInfo.bzero+fits.FFitsInfo.bscale*fits.imai32[1,i,j];
                x:=round(max(0,min(MaxWord,(xx-Fdmin) * c )) );
                fits.Fimage[1,i,j]:=x;
-               h:=h+x;
+               inc(hist[x]);
                xx:=fits.FFitsInfo.bzero+fits.FFitsInfo.bscale*fits.imai32[2,i,j];
                x:=round(max(0,min(MaxWord,(xx-Fdmin) * c )) );
                fits.Fimage[2,i,j]:=x;
-               x:=(h+x) div 3;
              end;
              inc(hist[x]);
          end;
