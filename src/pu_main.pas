@@ -3304,7 +3304,7 @@ var i,n: integer;
     ok: boolean;
     oldbayer: TBayerMode;
     oldRed,oldGreen,oldBlue:double;
-    oldBalance:boolean;
+    oldBalance, oldBGneutralization:boolean;
     posprev,poscapt:integer;
     binprev,bincapt:string;
 begin
@@ -3333,8 +3333,10 @@ begin
   oldGreen:=GreenBalance;
   oldBlue:=BlueBalance;
   oldBalance:=BalanceFromCamera;
+  oldBGneutralization:=BGneutralization;
   DefaultBayerMode:=TBayerMode(config.GetValue('/Color/BayerMode',4));
   BalanceFromCamera:=config.GetValue('/Color/BalanceFromCamera',true);
+  BGneutralization:=config.GetValue('/Color/BGneutralization',true);
   RedBalance:=config.GetValue('/Color/RedBalance',1.0);
   GreenBalance:=config.GetValue('/Color/GreenBalance',0.7);
   BlueBalance:=config.GetValue('/Color/BlueBalance',0.9);
@@ -3568,7 +3570,7 @@ begin
   weather.MaxWindDirection:=config.GetValue('/Weather/Max/WindDirection',0);
   weather.MaxWindGust:=config.GetValue('/Weather/Max/WindGust',0);
   weather.MaxWindSpeed:=config.GetValue('/Weather/Max/WindSpeed',0);
-  if (BayerColor<>MenuItemDebayer.Checked)or(oldbayer<>DefaultBayerMode) or
+  if (BayerColor<>MenuItemDebayer.Checked)or(oldbayer<>DefaultBayerMode) or (oldBGneutralization<>BGneutralization) or
      (oldRed<>RedBalance)or(oldGreen<>GreenBalance)or(oldBlue<>BlueBalance)or(oldBalance<>BalanceFromCamera)
   then begin
     MenuItemDebayer.Checked:=BayerColor;
@@ -6601,6 +6603,7 @@ begin
    f_option.GreenBalance.Position:=round(100*config.GetValue('/Color/GreenBalance',0.7));
    f_option.BlueBalance.Position:=round(100*config.GetValue('/Color/BlueBalance',0.9));
    f_option.BalanceFromCamera.Checked:=config.GetValue('/Color/BalanceFromCamera',true);
+   f_option.BGneutralization.Checked:=config.GetValue('/Color/BGneutralization',true);
    f_option.ClippingHigh.Value:=config.GetValue('/Color/ClippingOverflow',MAXWORD);
    f_option.ClippingLow.Value:=config.GetValue('/Color/ClippingUnderflow',0);
    f_option.BPMsigma.Value:=config.GetValue('/BadPixel/Sigma',5);
@@ -7005,6 +7008,7 @@ begin
      config.SetValue('/Color/GreenBalance',f_option.GreenBalance.Position/100);
      config.SetValue('/Color/BlueBalance',f_option.BlueBalance.Position/100);
      config.SetValue('/Color/BalanceFromCamera',f_option.BalanceFromCamera.Checked);
+     config.SetValue('/Color/BGneutralization',f_option.BGneutralization.Checked);
      config.SetValue('/Color/ClippingOverflow',f_option.ClippingHigh.Value);
      config.SetValue('/Color/ClippingUnderflow',f_option.ClippingLow.Value);
      config.SetValue('/BadPixel/Sigma',f_option.BPMsigma.Value);

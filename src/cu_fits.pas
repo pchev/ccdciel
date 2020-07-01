@@ -163,6 +163,7 @@ type
     function GetHasBPM: boolean;
     procedure SetGamma(value: single);
     function GetBayerMode: TBayerMode;
+    procedure GetBayerBgColor(t:TBayerMode; rmult,gmult,bmult:double; out r,g,b: integer);
   protected
     { Protected declarations }
   public
@@ -173,7 +174,7 @@ type
      Procedure LoadStream;
      procedure ClearFitsInfo;
      procedure GetFitsInfo;
-     procedure BayerInterpolation(t:TBayerMode; rmult,gmult,bmult:double; pix1,pix2,pix3,pix4,pix5,pix6,pix7,pix8,pix9:word; row,col:integer; out pixr,pixg,pixb:word); inline;
+     procedure BayerInterpolation(t:TBayerMode; rmult,gmult,bmult:double; rbg,gbg,bbg:integer; pix1,pix2,pix3,pix4,pix5,pix6,pix7,pix8,pix9:word; row,col:integer; out pixr,pixg,pixb:word); inline;
      Procedure GetImage;
      procedure GetExpBitmap(var bgra: TExpandedBitmap);
      procedure GetBGRABitmap(var bgra: TBGRABitmap);
@@ -241,6 +242,7 @@ type
     hist: THistogram;
     Fdmin,c: double;
     rmult,gmult,bmult: double;
+    rbg,gbg,bbg: integer;
     debayer: boolean;
     t: TBayerMode;
     procedure Execute; override;
@@ -767,7 +769,7 @@ case fits.FFitsInfo.bitpix of
                pix7:=round( max(0,min(MaxWord,(fits.FFitsInfo.bzero+fits.FFitsInfo.bscale*fits.imai8[0,i3,j1]-Fdmin) * c )) );
                pix8:=round( max(0,min(MaxWord,(fits.FFitsInfo.bzero+fits.FFitsInfo.bscale*fits.imai8[0,i3,j2]-Fdmin) * c )) );
                pix9:=round( max(0,min(MaxWord,(fits.FFitsInfo.bzero+fits.FFitsInfo.bscale*fits.imai8[0,i3,j3]-Fdmin) * c )) );
-               fits.BayerInterpolation(t,rmult,gmult,bmult,pix1,pix2,pix3,pix4,pix5,pix6,pix7,pix8,pix9,ii,j,pixr,pixg,pixb);
+               fits.BayerInterpolation(t,rmult,gmult,bmult,rbg,gbg,bbg,pix1,pix2,pix3,pix4,pix5,pix6,pix7,pix8,pix9,ii,j,pixr,pixg,pixb);
                inc(hist[pixr]);
                inc(hist[pixg]);
                inc(hist[pixb]);
@@ -815,7 +817,7 @@ case fits.FFitsInfo.bitpix of
              pix7:=round( max(0,min(MaxWord,(fits.FFitsInfo.bzero+fits.FFitsInfo.bscale*fits.imai16[0,i3,j1]-Fdmin) * c )) );
              pix8:=round( max(0,min(MaxWord,(fits.FFitsInfo.bzero+fits.FFitsInfo.bscale*fits.imai16[0,i3,j2]-Fdmin) * c )) );
              pix9:=round( max(0,min(MaxWord,(fits.FFitsInfo.bzero+fits.FFitsInfo.bscale*fits.imai16[0,i3,j3]-Fdmin) * c )) );
-             fits.BayerInterpolation(t,rmult,gmult,bmult,pix1,pix2,pix3,pix4,pix5,pix6,pix7,pix8,pix9,ii,j,pixr,pixg,pixb);
+             fits.BayerInterpolation(t,rmult,gmult,bmult,rbg,gbg,bbg,pix1,pix2,pix3,pix4,pix5,pix6,pix7,pix8,pix9,ii,j,pixr,pixg,pixb);
              inc(hist[pixr]);
              inc(hist[pixg]);
              inc(hist[pixb]);
@@ -1691,6 +1693,7 @@ var i,j: integer;
     thread: array[0..15] of TGetImage;
     tc,timeout: integer;
     rmult,gmult,bmult,mx: double;
+    rbg,gbg,bbg,bgm: integer;
     t: TBayerMode;
     debayer: boolean;
 begin
@@ -1707,7 +1710,7 @@ begin
   fpreview_axis:=n_axis;
   t:=GetBayerMode;
   debayer:=BayerColor and (not FDisableBayer) and (t<>bayerUnsupported) and ((FFitsInfo.bitpix=16)or(FFitsInfo.bitpix=8));
-  rmult:=0; gmult:=0; bmult:=0;
+  rmult:=0; gmult:=0; bmult:=0; rbg:=0; gbg:=0; bbg:=0;
   if debayer then begin
      fpreview_axis:=3;
      if (BalanceFromCamera)and(FFitsInfo.rmult>0)and(FFitsInfo.gmult>0)and(FFitsInfo.bmult>0) then begin
@@ -1748,6 +1751,15 @@ begin
   FimageMin:=Fdmin;
   FimageMax:=Fdmax;
   if FimageMin<0 then FimageMin:=0;
+
+  if debayer and BGneutralization then begin
+    GetBayerBgColor(t,rmult,gmult,bmult,rbg,gbg,bbg);
+    bgm:=MaxIntValue([rbg,gbg,bbg]);
+    rbg:=rbg-bgm;
+    gbg:=gbg-bgm;
+    bbg:=bbg-bgm;
+  end;
+
   thread[0]:=nil;
   // number of thread
    tc := max(1,min(16, MaxThreadCount)); // based on number of core
@@ -1763,6 +1775,9 @@ begin
     thread[i].rmult := rmult;
     thread[i].gmult := gmult;
     thread[i].bmult := bmult;
+    thread[i].rbg := rbg;
+    thread[i].gbg := gbg;
+    thread[i].bbg := bbg;
     thread[i].t := t;
     thread[i].c := c;
     thread[i].Fdmin := Fdmin;
@@ -1899,31 +1914,97 @@ begin
   end;
 end;
 
-procedure TFits.BayerInterpolation(t:TBayerMode; rmult,gmult,bmult:double; pix1,pix2,pix3,pix4,pix5,pix6,pix7,pix8,pix9:word; row,col:integer; out pixr,pixg,pixb:word); inline;
+procedure TFits.GetBayerBgColor(t:TBayerMode; rmult,gmult,bmult:double; out r,g,b: integer);
+var i,j,xs,ys,row,col,pix,thr: integer;
+    sr,sg,sb: double;
+    nr,ng,nb: integer;
+begin
+ r:=0;
+ b:=0;
+ g:=0;
+ sr:=0; sg:=0; sb:=0;
+ nr:=0; ng:=0; nb:=0;
+ xs:= Fwidth;
+ ys:= FHeight;
+ thr:=round(Fmean+3*Fsigma);
+ for i:=0 to ys-1 do begin
+   row:=ys-1-i;
+   for j:=0 to xs-1 do begin
+     col:=j;
+     case FFitsInfo.bitpix of
+       8: pix:=round( max(0,min(MaxWord,(FFitsInfo.bzero+FFitsInfo.bscale*imai8[0,i,j]-FimageMin) * FimageC )) );
+      16: pix:=round( max(0,min(MaxWord,(FFitsInfo.bzero+FFitsInfo.bscale*imai16[0,i,j]-FimageMin) * FimageC )) );
+     end;
+     if pix<thr then begin
+     if not odd(row) then begin //ligne paire
+        if not odd(col) then begin //colonne paire et ligne paire
+          case t of
+          bayerGR: begin inc(ng); sg:=sg+round(gmult*pix); end;
+          bayerRG: begin inc(nr); sr:=sr+round(rmult*pix); end;
+          bayerBG: begin inc(nb); sb:=sb+round(bmult*pix); end;
+          bayerGB: begin inc(ng); sg:=sg+round(gmult*pix); end;
+          end;
+        end
+        else begin //colonne impaire et ligne paire
+          case t of
+          bayerGR: begin inc(nr); sr:=sr+round(rmult*pix); end;
+          bayerRG: begin inc(ng); sg:=sg+round(gmult*pix); end;
+          bayerBG: begin inc(ng); sg:=sg+round(gmult*pix); end;
+          bayerGB: begin inc(nb); sb:=sb+round(bmult*pix); end;
+          end;
+        end;
+     end
+     else begin //ligne impaire
+        if not odd(col) then begin //colonne paire et ligne impaire
+          case t of
+          bayerGR: begin inc(nb); sb:=sb+round(bmult*pix); end;
+          bayerRG: begin inc(ng); sg:=sg+round(gmult*pix); end;
+          bayerBG: begin inc(ng); sg:=sg+round(gmult*pix); end;
+          bayerGB: begin inc(nr); sr:=sr+round(rmult*pix); end;
+          end;
+        end
+        else begin //colonne impaire et ligne impaire
+          case t of
+          bayerGR: begin inc(ng); sg:=sg+round(gmult*pix); end;
+          bayerRG: begin inc(nb); sb:=sb+round(bmult*pix); end;
+          bayerBG: begin inc(nr); sr:=sr+round(rmult*pix); end;
+          bayerGB: begin inc(ng); sg:=sg+round(gmult*pix); end;
+          end;
+       end;
+     end;
+     end;
+   end;
+ end;
+ if nr>0 then r:=round(sr/nr);
+ if ng>0 then g:=round(sg/ng);
+ if nb>0 then b:=round(sb/nb);
+end;
+
+procedure TFits.BayerInterpolation(t:TBayerMode; rmult,gmult,bmult:double; rbg,gbg,bbg:integer; pix1,pix2,pix3,pix4,pix5,pix6,pix7,pix8,pix9:word; row,col:integer; out pixr,pixg,pixb:word); inline;
 var r,g,b: integer;
 begin
    if not odd(row) then begin //ligne paire
       if not odd(col) then begin //colonne paire et ligne paire
         case t of
         bayerGR: begin
-            r:= round(rmult*(pix4+pix6)/2);
-            g:=round(gmult*pix5);
-            b:= round(bmult*(pix2+pix8)/2);
+            r:= round(rmult*(pix4+pix6)/2)-rbg;
+            g:=round(gmult*pix5)-gbg;
+            b:= round(bmult*(pix2+pix8)/2)-bbg;
            end;
         bayerRG: begin
-            r:=round(rmult*pix5);
-            g:= round(gmult*(pix2+pix4+pix6+pix8)/4);
-            b:= round(bmult*(pix1+pix3+pix7+pix9)/4);
+            r:=round(rmult*pix5)-rbg;
+            g:= round(gmult*(pix2+pix4+pix6+pix8)/4)-gbg;
+            b:= round(bmult*(pix1+pix3+pix7+pix9)/4)-bbg;
            end;
         bayerBG: begin
-            r:= round(rmult*(pix1+pix3+pix7+pix9)/4);
-            g:= round(gmult*(pix2+pix4+pix6+pix8)/4);
-            b:=round(bmult*pix5);
+            r:= round(rmult*(pix1+pix3+pix7+pix9)/4)-rbg;
+            g:= round(gmult*(pix2+pix4+pix6+pix8)/4)-gbg;
+            b:=round(bmult*pix5)-bbg;
            end;
         bayerGB: begin
-            r:= round(rmult*(pix2+pix8)/2);
-            g:=round(gmult*pix5);
-            b:= round(bmult*(pix4+pix6)/2);
+            r:= round(rmult*(pix2+pix8)/2)-rbg;
+            g:=round(gmult*pix5)-gbg;
+            b:= round(bmult*(pix4+pix6)/2)-bbg;
            end;
         else begin
             r:=0; g:=0; b:=0;
@@ -1933,24 +2014,24 @@ begin
       else begin //colonne impaire et ligne paire
        case t of
        bayerGR: begin
-           r:=round(rmult*pix5);
-           g:= round(gmult*(pix2+pix4+pix6+pix8)/4);
-           b:= round(bmult*(pix1+pix3+pix7+pix9)/4);
+           r:=round(rmult*pix5)-rbg;
+           g:= round(gmult*(pix2+pix4+pix6+pix8)/4)-gbg;
+           b:= round(bmult*(pix1+pix3+pix7+pix9)/4)-bbg;
           end;
        bayerRG: begin
-           r:= round(rmult*(pix4+pix6)/2);
-           g:=round(gmult*pix5);
-           b:=round(bmult*(pix2+pix8)/2);
+           r:= round(rmult*(pix4+pix6)/2)-rbg;
+           g:=round(gmult*pix5)-gbg;
+           b:=round(bmult*(pix2+pix8)/2)-bbg;
           end;
        bayerBG: begin
-           r:=round(rmult*(pix2+pix8)/2);
-           g:=round(gmult*pix5);
-           b:= round(bmult*(pix4+pix6)/2);
+           r:=round(rmult*(pix2+pix8)/2)-rbg;
+           g:=round(gmult*pix5)-gbg;
+           b:= round(bmult*(pix4+pix6)/2)-bbg;
           end;
        bayerGB: begin
-           r:= round(rmult*(pix1+pix3+pix7+pix9)/4);
-           g:= round(gmult*(pix2+pix4+pix6+pix8)/4);
-           b:=round(bmult*pix5);
+           r:= round(rmult*(pix1+pix3+pix7+pix9)/4)-rbg;
+           g:= round(gmult*(pix2+pix4+pix6+pix8)/4)-gbg;
+           b:=round(bmult*pix5)-bbg;
           end;
        else begin
            r:=0; g:=0; b:=0;
@@ -1962,24 +2043,24 @@ begin
      if not odd(col) then begin //colonne paire et ligne impaire
        case t of
        bayerGR: begin
-           r:= round(rmult*(pix1+pix3+pix7+pix9)/4);
-           g:= round(gmult*(pix2+pix4+pix6+pix8)/4);
-           b:=round(bmult*pix5);
+           r:= round(rmult*(pix1+pix3+pix7+pix9)/4)-rbg;
+           g:= round(gmult*(pix2+pix4+pix6+pix8)/4)-gbg;
+           b:=round(bmult*pix5)-bbg;
           end;
        bayerRG: begin
-           r:= round(rmult*(pix2+pix8)/2);
-           g:=round(gmult*pix5);
-           b:=round(bmult*(pix4+pix6)/2);
+           r:= round(rmult*(pix2+pix8)/2)-rbg;
+           g:=round(gmult*pix5)-gbg;
+           b:=round(bmult*(pix4+pix6)/2)-bbg;
           end;
        bayerBG: begin
-           r:= round(rmult*(pix4+pix6)/2);
-           g:=round(gmult*pix5);
-           b:=round(bmult*(pix2+pix8)/2);
+           r:= round(rmult*(pix4+pix6)/2)-rbg;
+           g:=round(gmult*pix5)-gbg;
+           b:=round(bmult*(pix2+pix8)/2)-bbg;
           end;
        bayerGB: begin
-           r:=round(rmult*pix5);
-           g:= round(gmult*(pix2+pix4+pix6+pix8)/4);
-           b:= round(bmult*(pix1+pix3+pix7+pix9)/4);
+           r:=round(rmult*pix5)-rbg;
+           g:= round(gmult*(pix2+pix4+pix6+pix8)/4)-gbg;
+           b:= round(bmult*(pix1+pix3+pix7+pix9)/4)-bbg;
           end;
        else begin
            r:=0; g:=0; b:=0;
@@ -1989,24 +2070,24 @@ begin
     else begin //colonne impaire et ligne impaire
        case t of
        bayerGR: begin
-           r:= round(rmult*(pix2+pix8)/2);
-           g:= round(gmult*pix5);
-           b:= round(bmult*(pix4+pix6)/2);
+           r:= round(rmult*(pix2+pix8)/2)-rbg;
+           g:= round(gmult*pix5)-gbg;
+           b:= round(bmult*(pix4+pix6)/2)-bbg;
           end;
        bayerRG: begin
-           r:= round(rmult*(pix1+pix3+pix7+pix9)/4);
-           g:= round(gmult*(pix2+pix4+pix6+pix8)/4);
-           b:=round(bmult*pix5);
+           r:= round(rmult*(pix1+pix3+pix7+pix9)/4)-rbg;
+           g:= round(gmult*(pix2+pix4+pix6+pix8)/4)-gbg;
+           b:=round(bmult*pix5)-bbg;
           end;
        bayerBG: begin
-           r:= round(rmult*pix5);
-           g:= round(gmult*(pix2+pix4+pix6+pix8)/4);
-           b:= round(bmult*(pix1+pix3+pix7+pix9)/4);
+           r:= round(rmult*pix5)-rbg;
+           g:= round(gmult*(pix2+pix4+pix6+pix8)/4)-gbg;
+           b:= round(bmult*(pix1+pix3+pix7+pix9)/4)-bbg;
           end;
        bayerGB: begin
-           r:= round(rmult*(pix4+pix6)/2);
-           g:= round(gmult*pix5);
-           b:= round(bmult*(pix2+pix8)/2);
+           r:= round(rmult*(pix4+pix6)/2)-rbg;
+           g:= round(gmult*pix5)-gbg;
+           b:= round(bmult*(pix2+pix8)/2)-bbg;
           end;
        else begin
            r:=0; g:=0; b:=0;

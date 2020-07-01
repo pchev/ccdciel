@@ -373,7 +373,7 @@ var
   ObsLongitude, ObsLatitude, ObsElevation, ObsTimeZone: double;
   BayerColor: boolean;
   DefaultBayerMode:TBayerMode;
-  BalanceFromCamera: boolean;
+  BalanceFromCamera,BGneutralization: boolean;
   RedBalance,GreenBalance,BlueBalance: double;
   MaxVideoPreviewRate: integer;
   TemperatureScale: integer;

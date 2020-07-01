@@ -48,6 +48,7 @@ type
     ButtonVoiceAll: TButton;
     ButtonVoiceNone: TButton;
     AutofocusMultiStarCenter: TCheckBox;
+    BGneutralization: TCheckBox;
     PagePlaNone: TPage;
     PanelLeft: TPanel;
     WantExif: TCheckBox;
@@ -868,6 +869,7 @@ begin
   DebayerPreview.Caption := rsDebayerThePr;
   BayerMode.Items[4]:=rsAutomatic;
   BalanceFromCamera.Caption:=rsUseDSLRColor;
+  BGneutralization.Caption:=rsBackgroundNe;
   GroupBox26.Caption:=rsColorBalance;
   GroupBox9.Caption := rsReferenceIma;
   Label39.Caption := rsTreshold;

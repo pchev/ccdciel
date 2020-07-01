@@ -1137,20 +1137,20 @@ object f_option: Tf_option
       ParentFont = False
       object GroupBox8: TGroupBox
         Left = 0
-        Height = 150
+        Height = 168
         Top = 0
-        Width = 502
+        Width = 520
         Align = alTop
         Caption = 'Color preview'
-        ClientHeight = 130
-        ClientWidth = 500
+        ClientHeight = 148
+        ClientWidth = 518
         ParentFont = False
         TabOrder = 0
         object Label38: TLabel
           Left = 16
-          Height = 19
+          Height = 17
           Top = 46
-          Width = 133
+          Width = 130
           Caption = 'Bayer matrix pattern'
           ParentColor = False
           ParentFont = False
@@ -1159,7 +1159,7 @@ object f_option: Tf_option
           Left = 16
           Height = 21
           Top = 8
-          Width = 199
+          Width = 194
           Caption = 'Debayer the preview image'
           ParentFont = False
           TabOrder = 0
@@ -1187,20 +1187,20 @@ object f_option: Tf_option
         object BalanceFromCamera: TCheckBox
           Left = 16
           Height = 21
-          Top = 88
-          Width = 169
+          Top = 80
+          Width = 167
           Caption = 'Use DSLR color balance'
           ParentFont = False
           TabOrder = 2
         end
         object GroupBox26: TGroupBox
-          Left = 315
-          Height = 130
+          Left = 333
+          Height = 148
           Top = 0
           Width = 185
           Align = alRight
           Caption = 'Color balance'
-          ClientHeight = 110
+          ClientHeight = 128
           ClientWidth = 183
           TabOrder = 3
           object RedBalance: TTrackBar
@@ -1220,7 +1220,7 @@ object f_option: Tf_option
           end
           object Label67: TLabel
             Left = 125
-            Height = 19
+            Height = 17
             Top = 1
             Width = 8
             Caption = 'R'
@@ -1244,7 +1244,7 @@ object f_option: Tf_option
           end
           object Label68: TLabel
             Left = 125
-            Height = 19
+            Height = 17
             Top = 38
             Width = 10
             Caption = 'G'
@@ -1268,7 +1268,7 @@ object f_option: Tf_option
           end
           object Label69: TLabel
             Left = 125
-            Height = 19
+            Height = 17
             Top = 75
             Width = 9
             Caption = 'B'
@@ -1276,23 +1276,31 @@ object f_option: Tf_option
             ParentFont = False
           end
         end
+        object BGneutralization: TCheckBox
+          Left = 16
+          Height = 21
+          Top = 112
+          Width = 185
+          Caption = 'Background neutralization'
+          TabOrder = 4
+        end
       end
       object VideoGroup: TGroupBox
         Left = 0
-        Height = 114
-        Top = 396
-        Width = 502
+        Height = 123
+        Top = 414
+        Width = 520
         Align = alClient
         Caption = 'Video'
-        ClientHeight = 94
-        ClientWidth = 500
+        ClientHeight = 103
+        ClientWidth = 518
         ParentFont = False
         TabOrder = 2
         object Label45: TLabel
           Left = 14
-          Height = 19
+          Height = 17
           Top = 6
-          Width = 164
+          Width = 157
           Caption = 'Video preview frame rate '
           ParentColor = False
           ParentFont = False
@@ -1313,28 +1321,28 @@ object f_option: Tf_option
       object GroupBox10: TGroupBox
         Left = 0
         Height = 55
-        Top = 276
-        Width = 502
+        Top = 294
+        Width = 520
         Align = alTop
         Caption = 'Bad pixels detection'
         ClientHeight = 35
-        ClientWidth = 500
+        ClientWidth = 518
         ParentFont = False
         TabOrder = 3
         object Label62: TLabel
           Left = 14
-          Height = 19
+          Height = 17
           Top = 6
-          Width = 120
+          Width = 118
           Caption = 'Bad pixel threshold'
           ParentColor = False
           ParentFont = False
         end
         object Label63: TLabel
           Left = 283
-          Height = 19
+          Height = 17
           Top = 6
-          Width = 37
+          Width = 36
           Caption = 'sigma'
           ParentColor = False
           ParentFont = False
@@ -1357,12 +1365,12 @@ object f_option: Tf_option
       object StackGroup: TGroupBox
         Left = 0
         Height = 65
-        Top = 331
-        Width = 502
+        Top = 349
+        Width = 520
         Align = alTop
         Caption = 'Preview stacking'
         ClientHeight = 45
-        ClientWidth = 500
+        ClientWidth = 518
         ParentFont = False
         TabOrder = 4
         object StackShow: TCheckBox
@@ -1370,7 +1378,7 @@ object f_option: Tf_option
           Height = 21
           Hint = 'Show the option to stack the preview frame in real time.'#10'This feature is normally use for demonstration in public event. '#10'You can let this option disabled to not risk  an unwanted use during your imaging session.'
           Top = 8
-          Width = 190
+          Width = 186
           Caption = 'Show preview stack option'
           ParentFont = False
           TabOrder = 0
@@ -1379,26 +1387,26 @@ object f_option: Tf_option
       object GroupBox19: TGroupBox
         Left = 0
         Height = 57
-        Top = 219
-        Width = 502
+        Top = 237
+        Width = 520
         Align = alTop
         Caption = 'Clipping indicator'
         ClientHeight = 37
-        ClientWidth = 500
+        ClientWidth = 518
         ParentFont = False
         TabOrder = 5
         object Label37: TLabel
           Left = 14
-          Height = 19
+          Height = 17
           Top = 4
-          Width = 107
+          Width = 106
           Caption = 'Shadow low ADU'
           ParentColor = False
           ParentFont = False
         end
         object Label100: TLabel
           Left = 240
-          Height = 19
+          Height = 17
           Top = 4
           Width = 118
           Caption = 'Highlight high ADU'
@@ -1433,12 +1441,12 @@ object f_option: Tf_option
       object GroupBox9: TGroupBox
         Left = 0
         Height = 69
-        Top = 150
-        Width = 502
+        Top = 168
+        Width = 520
         Align = alTop
         Caption = 'Reference image'
         ClientHeight = 49
-        ClientWidth = 500
+        ClientWidth = 518
         ParentFont = False
         TabOrder = 1
         object RefColor: TRadioGroup
@@ -1454,7 +1462,7 @@ object f_option: Tf_option
           ChildSizing.ShrinkVertical = crsScaleChilds
           ChildSizing.Layout = cclLeftToRightThenTopToBottom
           ChildSizing.ControlsPerLine = 3
-          ClientHeight = 22
+          ClientHeight = 40
           ClientWidth = 237
           Columns = 3
           Items.Strings = (
@@ -1467,7 +1475,7 @@ object f_option: Tf_option
         end
         object Label39: TLabel
           Left = 14
-          Height = 19
+          Height = 17
           Top = 8
           Width = 60
           Caption = 'Treshold :'

@@ -1257,6 +1257,7 @@ resourcestring
   rsImages = 'images';
   rsCoolTheCamer = 'Cool the camera';
   rsStartOptions = 'Start options';
+  rsBackgroundNe = 'Background neutralization';
 
 implementation
 
