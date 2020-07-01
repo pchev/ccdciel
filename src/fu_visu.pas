@@ -106,7 +106,7 @@ type
     { public declarations }
     constructor Create(aOwner: TComponent); override;
     destructor  Destroy; override;
-    procedure DrawHistogram(hist:Thistogram; SetLevel,isFloatingPoint: boolean; iC,iMin,iMax: double);
+    procedure DrawHistogram(hist:Thistogram; SetLevel,isFloatingPoint,ResetCursor: boolean; iC,iMin,iMax: double);
     property Zoom: double read FZoom write SetZoom;
     property ImgMin: double read FimgMin write FimgMin;
     property ImgMax: double read FimgMax write FimgMax;
@@ -255,13 +255,14 @@ begin
   SpinEditMax.Value:=FimageMin+FimgMax/FimageC;
 end;
 
-procedure Tf_visu.DrawHistogram(hist:Thistogram; SetLevel,isFloatingPoint: boolean; iC,iMin,iMax: double);
+procedure Tf_visu.DrawHistogram(hist:Thistogram; SetLevel,isFloatingPoint,ResetCursor: boolean; iC,iMin,iMax: double);
 var i,j,h,hd2,l: integer;
     hc: integer;
     sh: double;
 begin
 try
 LockSpinEdit:=true;
+if ResetCursor then HistogramAdjusted:=false;
 FimageC:=iC;
 FimageMin:=iMin;
 FimageMax:=iMax;

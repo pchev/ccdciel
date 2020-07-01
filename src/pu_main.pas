@@ -733,7 +733,7 @@ type
     Procedure DrawImage;
     Procedure PlotImage;
     procedure plot_north(bmp:TBGRABitmap);
-    Procedure DrawHistogram(SetLevel: boolean);
+    Procedure DrawHistogram(SetLevel,ResetCursor: boolean);
     procedure AstrometryStart(Sender: TObject);
     procedure AstrometryEnd(Sender: TObject);
     procedure EndControlExposure(Sender: TObject);
@@ -3049,7 +3049,7 @@ begin
     fits.DarkOn:=false;
     fits.LoadFromFile(fn);
     if fits.HeaderInfo.valid then begin
-      DrawHistogram(true);
+      DrawHistogram(true,true);
       DrawImage;
       wait(2);
       CreateBPM(fits);
@@ -3112,7 +3112,7 @@ begin
  try
  fits.DarkOn:=true;
  fits.ApplyDark;
- DrawHistogram(true);
+ DrawHistogram(true,false);
  DrawImage;
  finally
  fits.DarkOn:=false;
@@ -8169,7 +8169,7 @@ procedure Tf_main.ShowLastImage(Sender: TObject);
 begin
  if f_visu.BtnShowImage.Down then begin
   fits.LoadStream;
-  DrawHistogram(true);
+  DrawHistogram(true,true);
   DrawImage;
   Image1.Invalidate;
  end
@@ -8201,7 +8201,7 @@ begin
   try
     // draw image
     {$ifdef debug_raw}writeln(FormatDateTime(dateiso,Now)+blank+'DrawHistogram');{$endif}
-    DrawHistogram(true);
+    DrawHistogram(true,false);
     {$ifdef debug_raw}writeln(FormatDateTime(dateiso,Now)+blank+'DrawImage');{$endif}
     DrawImage;
     {$ifdef debug_raw}writeln(FormatDateTime(dateiso,Now)+blank+'DrawImage end');{$endif}
@@ -8648,13 +8648,13 @@ ImgFrameX:=FrameX;
 ImgFrameY:=FrameY;
 ImgFrameW:=FrameW;
 ImgFrameH:=FrameH;
-DrawHistogram(true);
+DrawHistogram(true,false);
 DrawImage;
 end;
 
 Procedure Tf_main.RedrawHistogram(Sender: TObject);
 begin
-  DrawHistogram(false);
+  DrawHistogram(false,false);
 end;
 
 Procedure Tf_main.ShowHistogramPos(msg:string);
@@ -8664,7 +8664,7 @@ end;
 
 Procedure Tf_main.Redraw(Sender: TObject);
 begin
-  DrawHistogram(false);
+  DrawHistogram(false,false);
   DrawImage;
 end;
 
@@ -8989,10 +8989,10 @@ begin
   if GetCurrentThreadId=MainThreadID then Application.ProcessMessages;
 end;
 
-Procedure Tf_main.DrawHistogram(SetLevel: boolean);
+Procedure Tf_main.DrawHistogram(SetLevel,ResetCursor: boolean);
 begin
   if fits.HeaderInfo.naxis>0 then begin
-     f_visu.DrawHistogram(fits.Histogram,SetLevel,fits.HeaderInfo.floatingpoint,fits.imageC,fits.imageMin,fits.imageMax);
+     f_visu.DrawHistogram(fits.Histogram,SetLevel,fits.HeaderInfo.floatingpoint,ResetCursor,fits.imageC,fits.imageMin,fits.imageMax);
   end;
 end;
 
@@ -11403,7 +11403,7 @@ begin
        ImgCx:=0;
        ImgCy:=0;
      end;
-     DrawHistogram(true);
+     DrawHistogram(true,true);
      DrawImage;
      imgsize:=inttostr(fits.HeaderInfo.naxis1)+'x'+inttostr(fits.HeaderInfo.naxis2);
      NewMessage(Format(rsOpenFile, [fn]),2);
@@ -11440,7 +11440,7 @@ begin
      fits.LoadStream;
      // draw new image
      {$ifdef debug_raw}writeln(FormatDateTime(dateiso,Now)+blank+'DrawHistogram');{$endif}
-     DrawHistogram(true);
+     DrawHistogram(true,true);
      {$ifdef debug_raw}writeln(FormatDateTime(dateiso,Now)+blank+'DrawImage');{$endif}
      DrawImage;
      {$ifdef debug_raw}writeln(FormatDateTime(dateiso,Now)+blank+'DrawImage end');{$endif}
@@ -11475,7 +11475,7 @@ begin
      fits.Stream:=FitsStream;
      fits.LoadStream;
      // draw new image
-     DrawHistogram(true);
+     DrawHistogram(true,true);
      DrawImage;
      imgsize:=inttostr(fits.HeaderInfo.naxis1)+'x'+inttostr(fits.HeaderInfo.naxis2);
      NewMessage(Format(rsOpenFile, [fn]),2);
