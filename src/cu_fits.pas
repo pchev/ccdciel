@@ -1918,22 +1918,23 @@ procedure TFits.GetBayerBgColor(t:TBayerMode; rmult,gmult,bmult:double; out r,g,
 var i,j,xs,ys,row,col,pix,thr: integer;
     sr,sg,sb: double;
     nr,ng,nb: integer;
+const subsample=3;
 begin
  r:=0;
  b:=0;
  g:=0;
  sr:=0; sg:=0; sb:=0;
  nr:=0; ng:=0; nb:=0;
- xs:= Fwidth;
- ys:= FHeight;
- thr:=round(Fmean+3*Fsigma);
+ xs:= Fwidth div subsample;
+ ys:= FHeight div subsample;
+ thr:=min(round(Fmean+5*Fsigma),round(FimageMax/3));
  for i:=0 to ys-1 do begin
-   row:=ys-1-i;
+   row:=subsample*ys-1-i;
    for j:=0 to xs-1 do begin
-     col:=j;
+     col:=subsample*j;
      case FFitsInfo.bitpix of
-       8: pix:=round( max(0,min(MaxWord,(FFitsInfo.bzero+FFitsInfo.bscale*imai8[0,i,j]-FimageMin) * FimageC )) );
-      16: pix:=round( max(0,min(MaxWord,(FFitsInfo.bzero+FFitsInfo.bscale*imai16[0,i,j]-FimageMin) * FimageC )) );
+       8: pix:=round( max(0,min(MaxWord,(FFitsInfo.bzero+FFitsInfo.bscale*imai8[0,subsample*i,subsample*j]-FimageMin) * FimageC )) );
+      16: pix:=round( max(0,min(MaxWord,(FFitsInfo.bzero+FFitsInfo.bscale*imai16[0,subsample*i,subsample*j]-FimageMin) * FimageC )) );
      end;
      if pix<thr then begin
      if not odd(row) then begin //ligne paire
