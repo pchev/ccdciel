@@ -38,7 +38,7 @@ type
             bitpix,naxis,naxis1,naxis2,naxis3 : integer;
             Frx,Fry,Frwidth,Frheight,BinX,BinY: integer;
             bzero,bscale,dmax,dmin,blank : double;
-            bayerpattern: string;
+            bayerpattern,roworder: string;
             bayeroffsetx, bayeroffsety: integer;
             rmult,gmult,bmult: double;
             equinox,ra,dec,crval1,crval2: double;
@@ -217,7 +217,6 @@ type
      property imageMean: double read Fmean;
      property imageSigma: double read Fsigma;
      property preview_axis: integer read Fpreview_axis;
-     property BayerMode: TBayerMode read GetBayerMode;
      property ImgFullRange: Boolean read FImgFullRange write SetImgFullRange;
      property MaxADU: double read FMaxADU write FMaxADU;
      property Invert: boolean read FInvert write FInvert;
@@ -693,7 +692,7 @@ var
   i, j, startline, endline, xs,ys: integer;
   x : word;
   xx: extended;
-  ii,i1,i2,i3,j1,j2,j3 : integer;
+  i1,i2,i3,j1,j2,j3 : integer;
   pix1,pix2,pix3,pix4,pix5,pix6,pix7,pix8,pix9,pixr,pixg,pixb:word;
 begin
 xs:= fits.Fwidth;
@@ -750,7 +749,6 @@ case fits.FFitsInfo.bitpix of
      8 : begin
          for i:=startline to endline do begin
            if debayer then begin
-            ii:=ys-1-i; // image is flipped in fits, count color order from the bottom
             i1:=max(i-1,0);
             i2:=i;
             i3:= min(i+1,ys-1);
@@ -769,7 +767,7 @@ case fits.FFitsInfo.bitpix of
                pix7:=round( max(0,min(MaxWord,(fits.FFitsInfo.bzero+fits.FFitsInfo.bscale*fits.imai8[0,i3,j1]-Fdmin) * c )) );
                pix8:=round( max(0,min(MaxWord,(fits.FFitsInfo.bzero+fits.FFitsInfo.bscale*fits.imai8[0,i3,j2]-Fdmin) * c )) );
                pix9:=round( max(0,min(MaxWord,(fits.FFitsInfo.bzero+fits.FFitsInfo.bscale*fits.imai8[0,i3,j3]-Fdmin) * c )) );
-               fits.BayerInterpolation(t,rmult,gmult,bmult,rbg,gbg,bbg,pix1,pix2,pix3,pix4,pix5,pix6,pix7,pix8,pix9,ii,j,pixr,pixg,pixb);
+               fits.BayerInterpolation(t,rmult,gmult,bmult,rbg,gbg,bbg,pix1,pix2,pix3,pix4,pix5,pix6,pix7,pix8,pix9,i,j,pixr,pixg,pixb);
                inc(hist[pixr]);
                inc(hist[pixg]);
                inc(hist[pixb]);
@@ -798,7 +796,6 @@ case fits.FFitsInfo.bitpix of
     16 : begin
          for i:=startline to endline do begin
           if debayer then begin
-           ii:=ys-1-i; // image is flipped in fits, count color order from the bottom
            i1:=max(i-1,0);
            i2:=i;
            i3:= min(i+1,ys-1);
@@ -817,7 +814,7 @@ case fits.FFitsInfo.bitpix of
              pix7:=round( max(0,min(MaxWord,(fits.FFitsInfo.bzero+fits.FFitsInfo.bscale*fits.imai16[0,i3,j1]-Fdmin) * c )) );
              pix8:=round( max(0,min(MaxWord,(fits.FFitsInfo.bzero+fits.FFitsInfo.bscale*fits.imai16[0,i3,j2]-Fdmin) * c )) );
              pix9:=round( max(0,min(MaxWord,(fits.FFitsInfo.bzero+fits.FFitsInfo.bscale*fits.imai16[0,i3,j3]-Fdmin) * c )) );
-             fits.BayerInterpolation(t,rmult,gmult,bmult,rbg,gbg,bbg,pix1,pix2,pix3,pix4,pix5,pix6,pix7,pix8,pix9,ii,j,pixr,pixg,pixb);
+             fits.BayerInterpolation(t,rmult,gmult,bmult,rbg,gbg,bbg,pix1,pix2,pix3,pix4,pix5,pix6,pix7,pix8,pix9,i,j,pixr,pixg,pixb);
              inc(hist[pixr]);
              inc(hist[pixg]);
              inc(hist[pixb]);
@@ -1301,7 +1298,7 @@ with FFitsInfo do begin
    bitpix:=0; naxis:=0; naxis1:=0; naxis2:=0; naxis3:=1;
    Frx:=-1; Fry:=-1; Frwidth:=0; Frheight:=0; BinX:=1; BinY:=1;
    bzero:=0; bscale:=1; dmax:=0; dmin:=0; blank:=0;
-   bayerpattern:='';
+   bayerpattern:=''; roworder:='';
    bayeroffsetx:=0; bayeroffsety:=0;
    rmult:=0; gmult:=0; bmult:=0;
    equinox:=2000; ra:=NullCoord; dec:=NullCoord; crval1:=NullCoord; crval2:=NullCoord;
@@ -1346,6 +1343,7 @@ begin
     if (keyword='FRAMEHGT') then Frheight:=round(StrToFloat(buf));
     if (keyword='FRAMEWDH') then Frwidth:=round(StrToFloat(buf));
     if (keyword='BAYERPAT') then bayerpattern:=trim(buf);
+    if (keyword='ROWORDER') then roworder:=trim(buf);
     if (keyword='XBAYROFF') then bayeroffsetx:=round(StrToFloat(buf));
     if (keyword='YBAYROFF') then bayeroffsety:=round(StrToFloat(buf));
     if (keyword='MULT_R') then rmult:=strtofloat(buf);
@@ -1386,6 +1384,8 @@ begin
     (bayerpattern='LRGB')
     then
       bayerpattern:='UNSUPPORTED';
+ // default roworder support most windows capture software and to not break bayerpattern from version before 0.9.72
+ if roworder='' then roworder:='TOP-DOWN';
  // set color image type
  colormode:=1;
  if (naxis=3)and(naxis1=3) then begin // contiguous color RGB
@@ -1693,7 +1693,7 @@ var i,j: integer;
     thread: array[0..15] of TGetImage;
     tc,timeout: integer;
     rmult,gmult,bmult,mx: double;
-    rbg,gbg,bbg,bgm: integer;
+    rbg,gbg,bbg,bgm,offsety: integer;
     t: TBayerMode;
     debayer: boolean;
 begin
@@ -1731,7 +1731,9 @@ begin
          bayerGB: t:=bayerBG;
        end;
      end;
-     if (FFitsInfo.bayeroffsety mod 2) = 1 then begin
+     offsety:=FFitsInfo.bayeroffsety;
+     if FFitsInfo.roworder<>'BOTTOM-UP' then offsety:=(offsety+1) mod 2;
+     if (offsety mod 2) = 1 then begin
        case t of
          bayerGR: t:=bayerBG;
          bayerRG: t:=bayerGB;
@@ -1929,7 +1931,7 @@ begin
  ys:= FHeight div subsample;
  thr:=min(round(Fmean+5*Fsigma),round(FimageMax/3));
  for i:=0 to ys-1 do begin
-   row:=subsample*ys-1-i;
+   row:=subsample*i;
    for j:=0 to xs-1 do begin
      col:=subsample*j;
      case FFitsInfo.bitpix of
@@ -3164,6 +3166,10 @@ begin
      if gmult<>'' then hdr.Add('MULT_G',gmult,'G multiplier');
      if bmult<>'' then hdr.Add('MULT_B',bmult,'B multiplier');
    end;
+   if flip then
+     hdr.Add('ROWORDER','BOTTOM-UP','Order of the rows in image array')
+   else
+     hdr.Add('ROWORDER','TOP-DOWN','Order of the rows in image array');
    hdr.Add('DATE',FormatDateTime(dateisoshort,NowUTC),'Date data written');
    hdr.Add('SWCREATE','CCDciel '+ccdciel_version+'-'+RevisionStr,'');
    if (exifkey<>nil)and(exifvalue<>nil)and(exifkey.Count>0) then begin
@@ -3312,7 +3318,7 @@ begin
 end;
 
 procedure RawToFits(raw:TMemoryStream; ext: string; var ImgStream:TMemoryStream; out rmsg:string; pix:double=-1;piy:double=-1;binx:integer=-1;biny:integer=-1);
-var i,j,n,x,c: integer;
+var i,ii,j,n,x,c: integer;
     xs,ys,xmax,ymax: integer;
     rawinfo:TRawInfo;
     rawinfo2:TRawInfo2;
@@ -3412,6 +3418,7 @@ if libraw<>0 then begin  // Use libraw directly
     hdr.Add('MULT_G',rawinfo2.gmult,'G multiplier');
     hdr.Add('MULT_B',rawinfo2.bmult,'B multiplier');
   end;
+  hdr.Add('ROWORDER','BOTTOM-UP','Order of the rows in image array');
   hdr.Add('DATE',FormatDateTime(dateisoshort,NowUTC),'Date data written');
   hdr.Add('SWCREATE','CCDciel '+ccdciel_version+'-'+RevisionStr,'');
   if exifkey.Count>0 then begin
@@ -3433,8 +3440,9 @@ if libraw<>0 then begin  // Use libraw directly
   hdr.Free;
   {$ifdef debug_raw}writeln(FormatDateTime(dateiso,Now)+blank+'Copy data to FITS');{$endif}
   for i:=ys to ymax-1 do begin
+    ii:=ymax-1-i;
     for j:=xs to xmax-1 do begin
-      {$RANGECHECKS OFF} x:=TRawBitmap(rawinfo.bitmap)[i*(rawinfo.rawwidth)+j];
+      {$RANGECHECKS OFF} x:=TRawBitmap(rawinfo.bitmap)[ii*(rawinfo.rawwidth)+j];
       if x>0 then
          xx:=x-32768
       else
@@ -3490,7 +3498,7 @@ else if RawUnpCmd<>'' then begin  // try libraw tools
    exit;
  end;
  raw.LoadFromFile(tiff);
- PictureToFits(raw,'tiff',ImgStream,false,pix,piy,binx,biny,bayerpattern,rmult,gmult,bmult,'LibRaw tools',exifkey,exifvalue);
+ PictureToFits(raw,'tiff',ImgStream,true,pix,piy,binx,biny,bayerpattern,rmult,gmult,bmult,'LibRaw tools',exifkey,exifvalue);
  outr.Free;
  except
    rmsg:='Error converting raw file';
@@ -3522,7 +3530,7 @@ else if DcrawCmd<>'' then begin  // try dcraw command line
     exit;
   end;
   raw.LoadFromFile(tiff);
-  PictureToFits(raw,'tiff',ImgStream,false,pix,piy,binx,biny,bayerpattern,'','','','dcraw',exifkey,exifvalue);
+  PictureToFits(raw,'tiff',ImgStream,true,pix,piy,binx,biny,bayerpattern,'','','','dcraw',exifkey,exifvalue);
   outr.Free;
   except
     rmsg:='Error converting raw file';
