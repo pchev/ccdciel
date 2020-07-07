@@ -103,6 +103,8 @@ type
  end;
 
 const    maxl = 20000;
+         bottomup = 'BOTTOM-UP';
+         topdown = 'TOP-DOWN';
 
 type
 
@@ -285,8 +287,8 @@ type
 
 
 
-  procedure PictureToFits(pict:TMemoryStream; ext: string; var ImgStream:TMemoryStream; flip:boolean=true;pix:double=-1;piy:double=-1;binx:integer=-1;biny:integer=-1;bayer:string='';rmult:string='';gmult:string='';bmult:string='';origin:string='';exifkey:TStringList=nil;exifvalue:TStringList=nil);
-  procedure RawToFits(raw:TMemoryStream; ext: string; var ImgStream:TMemoryStream; out rmsg:string; pix:double=-1;piy:double=-1;binx:integer=-1;biny:integer=-1);
+  procedure PictureToFits(pict:TMemoryStream; ext: string; var ImgStream:TMemoryStream; flip:boolean=false;pix:double=-1;piy:double=-1;binx:integer=-1;biny:integer=-1;bayer:string='';rmult:string='';gmult:string='';bmult:string='';origin:string='';exifkey:TStringList=nil;exifvalue:TStringList=nil);
+  procedure RawToFits(raw:TMemoryStream; ext: string; var ImgStream:TMemoryStream; out rmsg:string; pix:double=-1;piy:double=-1;binx:integer=-1;biny:integer=-1; flip:boolean=false);
   function PackFits(unpackedfilename,packedfilename: string; out rmsg:string):integer;
   function UnpackFits(packedfilename: string; var ImgStream:TMemoryStream; out rmsg:string):integer;
 
@@ -1385,7 +1387,7 @@ begin
     then
       bayerpattern:='UNSUPPORTED';
  // default roworder support most windows capture software and to not break bayerpattern from version before 0.9.72
- if roworder='' then roworder:='TOP-DOWN';
+ if roworder='' then roworder:=topdown;
  // set color image type
  colormode:=1;
  if (naxis=3)and(naxis1=3) then begin // contiguous color RGB
@@ -1732,7 +1734,7 @@ begin
        end;
      end;
      offsety:=FFitsInfo.bayeroffsety;
-     if FFitsInfo.roworder<>'BOTTOM-UP' then offsety:=(offsety+1) mod 2;
+     if FFitsInfo.roworder<>bottomup then offsety:=(offsety+1) mod 2;
      if (offsety mod 2) = 1 then begin
        case t of
          bayerGR: t:=bayerBG;
@@ -3063,7 +3065,7 @@ begin
   m.free;
 end;
 
-procedure PictureToFits(pict:TMemoryStream; ext: string; var ImgStream:TMemoryStream; flip:boolean=true;pix:double=-1;piy:double=-1;binx:integer=-1;biny:integer=-1;bayer:string='';rmult:string='';gmult:string='';bmult:string='';origin:string='';exifkey:TStringList=nil;exifvalue:TStringList=nil);
+procedure PictureToFits(pict:TMemoryStream; ext: string; var ImgStream:TMemoryStream; flip:boolean=false;pix:double=-1;piy:double=-1;binx:integer=-1;biny:integer=-1;bayer:string='';rmult:string='';gmult:string='';bmult:string='';origin:string='';exifkey:TStringList=nil;exifvalue:TStringList=nil);
 var img:TLazIntfImage;
     lRawImage: TRawImage;
     i,j,c,w,h,x,y,naxis: integer;
@@ -3167,9 +3169,9 @@ begin
      if bmult<>'' then hdr.Add('MULT_B',bmult,'B multiplier');
    end;
    if flip then
-     hdr.Add('ROWORDER','BOTTOM-UP','Order of the rows in image array')
+     hdr.Add('ROWORDER',bottomup,'Order of the rows in image array')
    else
-     hdr.Add('ROWORDER','TOP-DOWN','Order of the rows in image array');
+     hdr.Add('ROWORDER',topdown,'Order of the rows in image array');
    hdr.Add('DATE',FormatDateTime(dateisoshort,NowUTC),'Date data written');
    hdr.Add('SWCREATE','CCDciel '+ccdciel_version+'-'+RevisionStr,'');
    if (exifkey<>nil)and(exifvalue<>nil)and(exifkey.Count>0) then begin
@@ -3317,7 +3319,7 @@ begin
  end;
 end;
 
-procedure RawToFits(raw:TMemoryStream; ext: string; var ImgStream:TMemoryStream; out rmsg:string; pix:double=-1;piy:double=-1;binx:integer=-1;biny:integer=-1);
+procedure RawToFits(raw:TMemoryStream; ext: string; var ImgStream:TMemoryStream; out rmsg:string; pix:double=-1;piy:double=-1;binx:integer=-1;biny:integer=-1; flip:boolean=false);
 var i,ii,j,n,x,c: integer;
     xs,ys,xmax,ymax: integer;
     rawinfo:TRawInfo;
@@ -3418,7 +3420,10 @@ if libraw<>0 then begin  // Use libraw directly
     hdr.Add('MULT_G',rawinfo2.gmult,'G multiplier');
     hdr.Add('MULT_B',rawinfo2.bmult,'B multiplier');
   end;
-  hdr.Add('ROWORDER','BOTTOM-UP','Order of the rows in image array');
+  if flip then
+    hdr.Add('ROWORDER',bottomup,'Order of the rows in image array')
+  else
+    hdr.Add('ROWORDER',topdown,'Order of the rows in image array');
   hdr.Add('DATE',FormatDateTime(dateisoshort,NowUTC),'Date data written');
   hdr.Add('SWCREATE','CCDciel '+ccdciel_version+'-'+RevisionStr,'');
   if exifkey.Count>0 then begin
@@ -3440,7 +3445,10 @@ if libraw<>0 then begin  // Use libraw directly
   hdr.Free;
   {$ifdef debug_raw}writeln(FormatDateTime(dateiso,Now)+blank+'Copy data to FITS');{$endif}
   for i:=ys to ymax-1 do begin
-    ii:=ymax-1-i;
+    if flip then
+      ii:=ymax-1-i
+    else
+      ii:=i;
     for j:=xs to xmax-1 do begin
       {$RANGECHECKS OFF} x:=TRawBitmap(rawinfo.bitmap)[ii*(rawinfo.rawwidth)+j];
       if x>0 then
@@ -3498,7 +3506,7 @@ else if RawUnpCmd<>'' then begin  // try libraw tools
    exit;
  end;
  raw.LoadFromFile(tiff);
- PictureToFits(raw,'tiff',ImgStream,true,pix,piy,binx,biny,bayerpattern,rmult,gmult,bmult,'LibRaw tools',exifkey,exifvalue);
+ PictureToFits(raw,'tiff',ImgStream,flip,pix,piy,binx,biny,bayerpattern,rmult,gmult,bmult,'LibRaw tools',exifkey,exifvalue);
  outr.Free;
  except
    rmsg:='Error converting raw file';
@@ -3530,7 +3538,7 @@ else if DcrawCmd<>'' then begin  // try dcraw command line
     exit;
   end;
   raw.LoadFromFile(tiff);
-  PictureToFits(raw,'tiff',ImgStream,true,pix,piy,binx,biny,bayerpattern,'','','','dcraw',exifkey,exifvalue);
+  PictureToFits(raw,'tiff',ImgStream,flip,pix,piy,binx,biny,bayerpattern,'','','','dcraw',exifkey,exifvalue);
   outr.Free;
   except
     rmsg:='Error converting raw file';
