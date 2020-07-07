@@ -624,6 +624,10 @@ begin
    hdr.Add('NAXIS2',nax2 ,'length of data axis 2');
    hdr.Add('BZERO',32768,'offset data range to that of unsigned short');
    hdr.Add('BSCALE',1,'default scaling factor');
+   if FASCOMFlipImage then
+     hdr.Add('ROWORDER',bottomup,'Order of the rows in image array')
+   else
+     hdr.Add('ROWORDER',topdown,'Order of the rows in image array');
    hdr.Add('EXPTIME',expt,'Total Exposure Time (s)');
    hdr.Add('PIXSIZE1',pix ,'Pixel Size 1 (microns)');
    hdr.Add('PIXSIZE2',piy ,'Pixel Size 2 (microns)');

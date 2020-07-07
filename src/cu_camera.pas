@@ -688,8 +688,6 @@ begin
     try
      if FhasCfaInfo and (hbin1<=1) and (hbin2<=1)  then begin
        CfaInfo(OffsetX,OffsetY,CType);
-       if FASCOMFlipImage and (not odd(FCameraYSize)) then
-          OffsetY:=(OffsetY+1) mod 2;
      end;
     except
     end;
