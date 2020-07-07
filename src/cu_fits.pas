@@ -3156,6 +3156,10 @@ begin
    if naxis=3 then hdr.Add('NAXIS3',3 ,'length of data axis 3');
    hdr.Add('BZERO',32768,'offset data range to that of unsigned short');
    hdr.Add('BSCALE',1,'default scaling factor');
+   if flip then
+     hdr.Add('ROWORDER',bottomup,'Order of the rows in image array')
+   else
+     hdr.Add('ROWORDER',topdown,'Order of the rows in image array');
    if pix>0 then hdr.Add('PIXSIZE1',pix ,'Pixel Size 1 (microns)');
    if piy>0 then hdr.Add('PIXSIZE2',piy ,'Pixel Size 2 (microns)');
    if binx>0 then hdr.Add('XBINNING',binx ,'Binning factor in width');
@@ -3168,10 +3172,6 @@ begin
      if gmult<>'' then hdr.Add('MULT_G',gmult,'G multiplier');
      if bmult<>'' then hdr.Add('MULT_B',bmult,'B multiplier');
    end;
-   if flip then
-     hdr.Add('ROWORDER',bottomup,'Order of the rows in image array')
-   else
-     hdr.Add('ROWORDER',topdown,'Order of the rows in image array');
    hdr.Add('DATE',FormatDateTime(dateisoshort,NowUTC),'Date data written');
    hdr.Add('SWCREATE','CCDciel '+ccdciel_version+'-'+RevisionStr,'');
    if (exifkey<>nil)and(exifvalue<>nil)and(exifkey.Count>0) then begin
@@ -3398,6 +3398,10 @@ if libraw<>0 then begin  // Use libraw directly
   hdr.Add('NAXIS2',rawinfo.imgheight ,'length of data axis 2');
   hdr.Add('BZERO',32768,'offset data range to that of unsigned short');
   hdr.Add('BSCALE',1,'default scaling factor');
+  if flip then
+    hdr.Add('ROWORDER',bottomup,'Order of the rows in image array')
+  else
+    hdr.Add('ROWORDER',topdown,'Order of the rows in image array');
   if pix>0 then hdr.Add('PIXSIZE1',pix ,'Pixel Size 1 (microns)');
   if piy>0 then hdr.Add('PIXSIZE2',piy ,'Pixel Size 2 (microns)');
   if binx>0 then hdr.Add('XBINNING',binx ,'Binning factor in width');
@@ -3420,10 +3424,6 @@ if libraw<>0 then begin  // Use libraw directly
     hdr.Add('MULT_G',rawinfo2.gmult,'G multiplier');
     hdr.Add('MULT_B',rawinfo2.bmult,'B multiplier');
   end;
-  if flip then
-    hdr.Add('ROWORDER',bottomup,'Order of the rows in image array')
-  else
-    hdr.Add('ROWORDER',topdown,'Order of the rows in image array');
   hdr.Add('DATE',FormatDateTime(dateisoshort,NowUTC),'Date data written');
   hdr.Add('SWCREATE','CCDciel '+ccdciel_version+'-'+RevisionStr,'');
   if exifkey.Count>0 then begin
