@@ -86,7 +86,7 @@ type
     Fhist:Thistogram;
     Fmaxh, Fmaxp, Fsum: integer;
     FimageC, FimageMin, FimageMax : double;
-    FimageFlipped, FisFloatingPoint, Finitialized: boolean;
+    FisFloatingPoint, Finitialized: boolean;
     FimgMin, FimgMax: double;
     FBullsEye, LockSpinEdit, FClipping, FInvert: Boolean;
     FZoom: double;
@@ -108,7 +108,7 @@ type
     { public declarations }
     constructor Create(aOwner: TComponent); override;
     destructor  Destroy; override;
-    procedure DrawHistogram(hist:Thistogram; Flip,SetLevel,isFloatingPoint,ResetCursor: boolean; iC,iMin,iMax: double);
+    procedure DrawHistogram(hist:Thistogram; SetLevel,isFloatingPoint,ResetCursor: boolean; iC,iMin,iMax: double);
     property Zoom: double read FZoom write SetZoom;
     property ImgMin: double read FimgMin write FimgMin;
     property ImgMax: double read FimgMax write FimgMax;
@@ -162,7 +162,6 @@ begin
  FClipping:=false;
  FInvert:=false;
  LockSpinEdit:=true;
- FimageFlipped:=false;
  with Histogram.Picture.Bitmap do begin
    Width:=Histogram.Width;
    Height:=Histogram.Height;
@@ -256,7 +255,7 @@ begin
   SpinEditMax.Value:=FimageMin+FimgMax/FimageC;
 end;
 
-procedure Tf_visu.DrawHistogram(hist:Thistogram; Flip,SetLevel,isFloatingPoint,ResetCursor: boolean; iC,iMin,iMax: double);
+procedure Tf_visu.DrawHistogram(hist:Thistogram; SetLevel,isFloatingPoint,ResetCursor: boolean; iC,iMin,iMax: double);
 var i,j,h,hd2,l: integer;
     hc: integer;
     sh: double;
@@ -268,7 +267,6 @@ FimageC:=iC;
 FimageMin:=iMin;
 FimageMax:=iMax;
 FisFloatingPoint:=isFloatingPoint;
-FimageFlipped:=Flip;
 Fmaxh:=0;
 Fsum:=0;
 for i:=0 to high(word) do begin
@@ -428,7 +426,7 @@ end;
 
 function Tf_visu.GetFlipVert: boolean;
 begin
-  result:=BtnFlipVert.Down xor FimageFlipped;
+  result:=BtnFlipVert.Down;
 end;
 
 procedure Tf_visu.SetFlipVert(value:boolean);

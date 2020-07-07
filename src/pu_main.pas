@@ -8992,7 +8992,7 @@ end;
 Procedure Tf_main.DrawHistogram(SetLevel,ResetCursor: boolean);
 begin
   if fits.HeaderInfo.naxis>0 then begin
-     f_visu.DrawHistogram(fits.Histogram,(fits.HeaderInfo.roworder<>bottomup),SetLevel,fits.HeaderInfo.floatingpoint,ResetCursor,fits.imageC,fits.imageMin,fits.imageMax);
+     f_visu.DrawHistogram(fits.Histogram,SetLevel,fits.HeaderInfo.floatingpoint,ResetCursor,fits.imageC,fits.imageMin,fits.imageMax);
   end;
 end;
 
