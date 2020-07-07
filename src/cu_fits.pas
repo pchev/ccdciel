@@ -1709,7 +1709,7 @@ begin
     Fdmin:=FFitsInfo.dmin;
     Fdmax:=FFitsInfo.dmax;
   end;
-  fpreview_axis:=n_axis;
+  fpreview_axis:=FFitsInfo.naxis;
   t:=GetBayerMode;
   debayer:=BayerColor and (not FDisableBayer) and (t<>bayerUnsupported) and ((FFitsInfo.bitpix=16)or(FFitsInfo.bitpix=8));
   rmult:=0; gmult:=0; bmult:=0; rbg:=0; gbg:=0; bbg:=0;
@@ -2878,6 +2878,7 @@ begin
            (f.FFitsInfo.naxis2 = FFitsInfo.naxis2 ) and
            (f.FFitsInfo.naxis3 = FFitsInfo.naxis3 ) and
            (f.FFitsInfo.bzero  = FFitsInfo.bzero )  and
+           (f.FFitsInfo.roworder = FFitsInfo.roworder ) and
            (f.FFitsInfo.bscale = FFitsInfo.bscale );
 end;
 
