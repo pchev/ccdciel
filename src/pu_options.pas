@@ -447,9 +447,9 @@ type
     Label71: TLabel;
     Label72: TLabel;
     Label73: TLabel;
-    Label67: TLabel;
-    Label68: TLabel;
-    Label69: TLabel;
+    LabelR: TLabel;
+    LabelG: TLabel;
+    LabelB: TLabel;
     SlewFilter: TComboBox;
     FocusStarMag: TComboBox;
     GroupBox10: TGroupBox;
@@ -647,6 +647,7 @@ type
     procedure PixelSizeFromCameraChange(Sender: TObject);
     procedure PlanetariumBoxClick(Sender: TObject);
     procedure rbLinSocketChange(Sender: TObject);
+    procedure BalanceChange(Sender: TObject);
     procedure ResolverBoxClick(Sender: TObject);
     procedure SafetyActionsSelectEditor(Sender: TObject; aCol, aRow: Integer; var Editor: TWinControl);
     procedure SafetyActionsValidateEntry(sender: TObject; aCol, aRow: Integer; const OldValue: string; var NewValue: String);
@@ -802,6 +803,7 @@ begin
   panel4.Visible:=DomeSlaveToMount.Checked;
   AutoguiderBoxClick(nil);
   ExpEarlyStartClick(nil);
+  BalanceChange(nil);
 end;
 
 procedure Tf_option.Setlang;
@@ -1738,6 +1740,13 @@ begin
       rbLinTCP.Checked:=true;
    end;
 {$endif}
+end;
+
+procedure Tf_option.BalanceChange(Sender: TObject);
+begin
+  LabelR.Caption:='R '+FormatFloat(f2,RedBalance.Position/100);
+  LabelG.Caption:='G '+FormatFloat(f2,GreenBalance.Position/100);
+  LabelB.Caption:='B '+FormatFloat(f2,BlueBalance.Position/100);
 end;
 
 procedure Tf_option.ButtonNotificationNoneClick(Sender: TObject);

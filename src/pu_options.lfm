@@ -1210,6 +1210,7 @@ object f_option: Tf_option
             Width = 101
             Max = 100
             Min = 30
+            OnChange = BalanceChange
             PageSize = 10
             Position = 100
             ShowSelRange = False
@@ -1218,7 +1219,7 @@ object f_option: Tf_option
             ParentFont = False
             TabOrder = 0
           end
-          object Label67: TLabel
+          object LabelR: TLabel
             Left = 125
             Height = 17
             Top = 1
@@ -1234,6 +1235,7 @@ object f_option: Tf_option
             Width = 101
             Max = 100
             Min = 30
+            OnChange = BalanceChange
             PageSize = 10
             Position = 100
             ShowSelRange = False
@@ -1242,7 +1244,7 @@ object f_option: Tf_option
             ParentFont = False
             TabOrder = 1
           end
-          object Label68: TLabel
+          object LabelG: TLabel
             Left = 125
             Height = 17
             Top = 38
@@ -1258,6 +1260,7 @@ object f_option: Tf_option
             Width = 101
             Max = 100
             Min = 30
+            OnChange = BalanceChange
             PageSize = 10
             Position = 100
             ShowSelRange = False
@@ -1266,7 +1269,7 @@ object f_option: Tf_option
             ParentFont = False
             TabOrder = 2
           end
-          object Label69: TLabel
+          object LabelB: TLabel
             Left = 125
             Height = 17
             Top = 75
