@@ -4618,3 +4618,7 @@ msgstr ""
 msgid "Start options"
 msgstr ""
 
+#: u_translation:rsbackgroundne
+msgid "Background neutralization"
+msgstr ""
+

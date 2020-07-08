@@ -6,15 +6,15 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ccdciel\n"
 "Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
-"POT-Creation-Date: 2020-05-09 13:30+0000\n"
+"POT-Creation-Date: 2020-07-08 12:21+0000\n"
 "PO-Revision-Date: 2019-12-15 12:55+0000\n"
 "Last-Translator: Mattia Verga <Unknown>\n"
 "Language-Team: Italian <it@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2020-05-10 18:44+0000\n"
-"X-Generator: Launchpad (build fbdff7602bd10fb883bf7e2ddcc7fd5a16f60398)\n"
+"X-Launchpad-Export-Date: 2020-07-08 12:36+0000\n"
+"X-Generator: Launchpad (build ffd32ad7291fe66b5578d7c1407aaae58d1e0170)\n"
 
 #: u_translation.rs32bitdriver
 msgid "This driver work only in 32bit, please install the 32bit version of CCDciel."
@@ -402,6 +402,10 @@ msgstr ""
 
 #: u_translation.rsbackground
 msgid "Background"
+msgstr ""
+
+#: u_translation.rsbackgroundne
+msgid "Background neutralization"
 msgstr ""
 
 #: u_translation.rsbacklashcomp

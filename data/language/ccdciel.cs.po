@@ -2,15 +2,15 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ccdciel\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-05-09 13:30+0000\n"
-"PO-Revision-Date: 2020-05-10 06:39+0000\n"
+"POT-Creation-Date: 2020-07-08 12:21+0000\n"
+"PO-Revision-Date: 2020-05-12 08:12+0000\n"
 "Last-Translator: Stanislav Holub <Unknown>\n"
 "Language-Team: Czech <cz@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2020-05-10 18:44+0000\n"
-"X-Generator: Launchpad (build fbdff7602bd10fb883bf7e2ddcc7fd5a16f60398)\n"
+"X-Launchpad-Export-Date: 2020-07-08 12:36+0000\n"
+"X-Generator: Launchpad (build ffd32ad7291fe66b5578d7c1407aaae58d1e0170)\n"
 "Language: cs\n"
 
 #: u_translation.rs32bitdriver
@@ -359,7 +359,7 @@ msgstr "Automaticky"
 
 #: u_translation.rsautomaticall
 msgid "Automatically slave \"Dome Park\" to \"Mount Park\""
-msgstr "Automaticky propojit  \"Kopule Parkovat\" na \"Montáž Parkovat\""
+msgstr "Automaticky propojit  \"Kopule Park\" na \"Montáž park\""
 
 #: u_translation.rsautomaticall2
 msgid "Automatically run auto-focus every"
@@ -400,6 +400,10 @@ msgstr "Předešlý"
 #: u_translation.rsbackground
 msgid "Background"
 msgstr "Pozadí"
+
+#: u_translation.rsbackgroundne
+msgid "Background neutralization"
+msgstr ""
 
 #: u_translation.rsbacklashcomp
 msgid "Backlash compensation"
@@ -523,7 +527,7 @@ msgstr "Ukončení"
 
 #: u_translation.rscancelexposu
 msgid "Cancel exposure"
-msgstr "Zrušte expozici"
+msgstr "Zrušit expozici"
 
 #: u_translation.rscancelinseco
 msgid "Cancel in %s seconds."
@@ -743,7 +747,7 @@ msgstr "Zavřete štěrbinu kopule"
 
 #: u_translation.rsclosedomeseq
 msgid "Close dome sequence when mount is asked to park"
-msgstr "Když je montáž požádána o parkování, zavřít úlohu kopule"
+msgstr "Když je montáž požádána o park, zavřít úlohu kopule"
 
 #: u_translation.rscloudcover
 msgid "Cloud cover"
@@ -1408,7 +1412,7 @@ msgstr "Ploché snímky"
 
 #: u_translation.rsflatautoexpo
 msgid "Flat auto-exposure"
-msgstr "Flat snímky automatické expozice"
+msgstr "Automatická expozice Flat snímků"
 
 #: u_translation.rsflatimagemea
 msgid "Flat image mean level"
@@ -2124,7 +2128,7 @@ msgstr "Možnosti montáže: %s"
 
 #: u_translation.rsmountisnotpa
 msgid "Mount is not parked.%sPark the dome anyway?"
-msgstr "Montáž není zaparkovaná.%sParkovat přesto kupoli?"
+msgstr "Montáž není parked.%sPark přesto kupoli?"
 
 #: u_translation.rsmountisnotre
 msgid "Mount is not reporting pier side, meridian flip can be unreliable."
@@ -2528,31 +2532,31 @@ msgstr "Parametr"
 
 #: u_translation.rspark
 msgid "Park"
-msgstr "Parkovat"
+msgstr "Park"
 
 #: u_translation.rsparkandclose
 msgid "Park and close the dome"
-msgstr "Parkovat a zavřít kupoli"
+msgstr "Park a zavřít kupoli"
 
 #: u_translation.rsparkdome
 msgid "Park the Dome"
-msgstr "Parkovat Kopuli"
+msgstr "Park Kopuli"
 
 #: u_translation.rsparked
 msgid "Parked"
-msgstr "Parkováno"
+msgstr "Parked"
 
 #: u_translation.rsparktheteles
 msgid "Park the telescope now?"
-msgstr "Parkovat dalekohled?"
+msgstr "Park dalekohled?"
 
 #: u_translation.rsparktheteles2
 msgid "Park the telescope"
-msgstr "Parkovat dalekohled"
+msgstr "Park dalekohled"
 
 #: u_translation.rsparktheteles3
 msgid "Park the telescope and the dome"
-msgstr "Parkovat dalekohled i kopuli"
+msgstr "Park dalekohled i kopuli"
 
 #: u_translation.rspassword
 msgid "Password"
@@ -4164,7 +4168,7 @@ msgstr "Úloha %s bude zastavena na %s, v %s sekundách."
 
 #: u_translation.rsthetelescope
 msgid "The telescope is parked!"
-msgstr "Dalekohled je odparkován!"
+msgstr "Dalekohled je parked!"
 
 #: u_translation.rsthismessagec
 msgid "This message confirm the email configuration is working."
@@ -4313,23 +4317,23 @@ msgstr "Není definováno"
 
 #: u_translation.rsunpark
 msgid "Unpark"
-msgstr "Zaparkovat"
+msgstr "Unpark"
 
 #: u_translation.rsunparked
 msgid "Unparked"
-msgstr "Odparkovaný"
+msgstr "Unparked"
 
 #: u_translation.rsunparkthedom
 msgid "Unpark the Dome"
-msgstr "Zaparkovat  kopuli"
+msgstr "Unpark kopuli"
 
 #: u_translation.rsunparkthetel
 msgid "Unpark the telescope"
-msgstr "Zaparkovat dalekohled"
+msgstr "Unpark dalekohled"
 
 #: u_translation.rsunparkthetel2
 msgid "Unpark the telescope and the dome"
-msgstr "Zaparkovat kopuli a dalekohled"
+msgstr "Unpark kopuli a dalekohled"
 
 #: u_translation.rsunsafe
 msgid "Unsafe"

@@ -6,15 +6,15 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ccdciel\n"
 "Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
-"POT-Creation-Date: 2020-05-09 13:30+0000\n"
-"PO-Revision-Date: 2019-08-29 23:05+0000\n"
+"POT-Creation-Date: 2020-07-08 12:18+0000\n"
+"PO-Revision-Date: 2020-07-07 23:21+0000\n"
 "Last-Translator: Víctor R. Ruiz <Unknown>\n"
 "Language-Team: Spanish <es@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2020-05-10 18:44+0000\n"
-"X-Generator: Launchpad (build fbdff7602bd10fb883bf7e2ddcc7fd5a16f60398)\n"
+"X-Launchpad-Export-Date: 2020-07-08 12:36+0000\n"
+"X-Generator: Launchpad (build ffd32ad7291fe66b5578d7c1407aaae58d1e0170)\n"
 
 #: u_hints.rsactivateback
 msgid "Activate backlash compensation.%sLet this disabled if your focuser driver include backlash compensation."
@@ -54,7 +54,7 @@ msgstr "Después de que el aprendizaje haya finalizado, puede usar este cursor p
 
 #: u_hints.rsatemporarydi
 msgid "A temporary directory for work files. Be sure it contain only ASCII character and no space"
-msgstr ""
+msgstr "Un directorio temporal para el procesado de imágenes. Asegúrese de que solo contenga caracteres ASCII y sin espacios."
 
 #: u_hints.rsautofocusatt
 msgid "Autofocus at the start of this step"
@@ -190,11 +190,11 @@ msgstr "Obtener las coordenadas de la base de datos interna de anotaciones"
 
 #: u_hints.rsglobalalpaca
 msgid "Global ALPACA server parameters"
-msgstr ""
+msgstr "Parámetros globales del servidor ALPACA"
 
 #: u_hints.rsglobalindise
 msgid "Global INDI server parameters"
-msgstr ""
+msgstr "Parámetros globales del servidor INDI"
 
 #: u_hints.rsguidinghisto
 msgid "Guiding history in arcsecond %s - blue: RA error %s - red: Dec error %s - yellow: Star mass"
@@ -298,19 +298,19 @@ msgstr "Repetir la lista completa un número de veces."
 
 #: u_hints.rssavethelista
 msgid "Save the list and close this window."
-msgstr ""
+msgstr "Guardar la lista y cerrar esta ventana."
 
 #: u_hints.rssavethelistw
 msgid "Save the list with a new name and close this window."
-msgstr ""
+msgstr "Guarda la lista con un nombre nuevo y cierra esta ventana."
 
 #: u_hints.rsselecttheinf
 msgid "Select the information used to make the image file name"
-msgstr ""
+msgstr "Seleccionar la información usada para generar el nombre del fichero de la imagen"
 
 #: u_hints.rsselecttheinf2
 msgid "Select the information used to make the image directory name"
-msgstr ""
+msgstr "Seleccionar la información usada para generar el nombre del directorio de la imagen"
 
 #: u_hints.rssetabsolutef
 msgid "Set absolute focuser position"
@@ -430,7 +430,7 @@ msgstr ""
 
 #: u_hints.rsthebasefolde
 msgid "The base folder where the images are recorded"
-msgstr ""
+msgstr "El directorio base donde se guardan las imágenes"
 
 #: u_hints.rsthedirection
 msgid "The direction the focuser will always finish to move.%sIf using auto-focus set the same move direction."
@@ -454,7 +454,7 @@ msgstr ""
 
 #: u_hints.rsthelistoftar
 msgid "The list of target to process in sequence."
-msgstr ""
+msgstr "La lista de objetivos para procesar en secuencia."
 
 #: u_hints.rsthemagnitude
 msgid "The magnitude of the star used to run the autofocus.%sUsing a faint star can minimize the telescope movement but prefer the brightest to avoid trouble with nearby stars."
@@ -490,11 +490,11 @@ msgstr "El nombre del objeto para usarlo en las cabeceras FITS y en el nombre de
 
 #: u_hints.rstheobservato
 msgid "The observatory name for inclusion in the FITS header"
-msgstr ""
+msgstr "El nombre del observatorio a incluir en la cabecera FITS"
 
 #: u_hints.rstheobservern
 msgid "The observer name for inclusion in the FITS header"
-msgstr ""
+msgstr "El nombre del observador a incluir en la cabecera FITS"
 
 #: u_hints.rsthepreferedf
 msgid "The preferred focuser direction for autofocus."
@@ -542,7 +542,7 @@ msgstr "Intentar corregir los desplazamientos del enfocador desde el último apr
 
 #: u_hints.rsusedynamic2
 msgid "Dynamic can be use with an absolute or relative position focuser,%s this method require the starting position is near the focus position.%s This is the preferred method."
-msgstr ""
+msgstr "El método dinámico puede usarse con un enfocador de posición relativa o absoluta,%s este método requiere que la posición inicial está cercana a la posición de foco.%s Este es el método recomendado."
 
 #: u_hints.rsuseiterati2
 msgid "Use Iterative if the first two options do not work for you or if you start with really bad focus.%s This is the slowest and less precise method."
@@ -554,7 +554,7 @@ msgstr ""
 
 #: u_hints.rsusevcurvewi2
 msgid "Vcurve can only work with an absolute position focuser, it require to learn the curve."
-msgstr ""
+msgstr "La curva V solo funciona con un enfocador de posición absoluta, necesario para aprender la curva."
 
 #: u_hints.rsvcurvelearni
 msgid "V curve learning"

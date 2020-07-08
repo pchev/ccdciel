@@ -6,15 +6,15 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ccdciel\n"
 "Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
-"POT-Creation-Date: 2020-05-09 13:30+0000\n"
-"PO-Revision-Date: 2020-04-12 09:57+0000\n"
+"POT-Creation-Date: 2020-07-08 12:21+0000\n"
+"PO-Revision-Date: 2020-05-14 20:02+0000\n"
 "Last-Translator: Stephan Woidowski <swoidowski@t-online.de>\n"
 "Language-Team: English (United Kingdom) <en_GB@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2020-05-10 18:44+0000\n"
-"X-Generator: Launchpad (build fbdff7602bd10fb883bf7e2ddcc7fd5a16f60398)\n"
+"X-Launchpad-Export-Date: 2020-07-08 12:36+0000\n"
+"X-Generator: Launchpad (build ffd32ad7291fe66b5578d7c1407aaae58d1e0170)\n"
 "Language: en_GB\n"
 
 #: u_translation.rs32bitdriver
@@ -404,6 +404,10 @@ msgstr "Back"
 #: u_translation.rsbackground
 msgid "Background"
 msgstr "Background"
+
+#: u_translation.rsbackgroundne
+msgid "Background neutralization"
+msgstr ""
 
 #: u_translation.rsbacklashcomp
 msgid "Backlash compensation"
@@ -855,7 +859,7 @@ msgstr "Cooler"
 
 #: u_translation.rscoolthecamer
 msgid "Cool the camera"
-msgstr ""
+msgstr "Cool the camera"
 
 #: u_translation.rscoordinates
 msgid "Coordinates"
@@ -927,7 +931,7 @@ msgstr "Dark%snight"
 
 #: u_translation.rsdateobsfromc
 msgid "DATE-OBS from camera driver"
-msgstr ""
+msgstr "DATE-OBS from camera driver"
 
 #: u_translation.rsdateutsequen
 msgid "Date (UT) / Sequence"
@@ -1723,7 +1727,7 @@ msgstr "Image median hfd=%s"
 
 #: u_translation.rsimages
 msgid "images"
-msgstr ""
+msgstr "images"
 
 #: u_translation.rsimagescale
 msgid "Image scale"
@@ -2987,11 +2991,11 @@ msgstr "Resolve"
 
 #: u_translation.rsresolveandpl
 msgid "Resolve and annotate DSO"
-msgstr ""
+msgstr "Resolve and annotate DSO"
 
 #: u_translation.rsresolveandpl2
 msgid "Resolve and annotate galaxies (Hyperleda)"
-msgstr ""
+msgstr "Resolve and annotate galaxies (Hyperleda)"
 
 #: u_translation.rsresolveandro
 msgid "Resolve and Rotate"
@@ -3743,7 +3747,7 @@ msgstr "Start new log"
 
 #: u_translation.rsstartoptions
 msgid "Start options"
-msgstr ""
+msgstr "Start options"
 
 #: u_translation.rsstartplan
 msgid "Start plan %s"
@@ -4279,7 +4283,7 @@ msgstr "Try to connect to autoguider"
 
 #: u_translation.rstrytofixpixe
 msgid "Try to fix pixel range to match CMOS camera bit depth"
-msgstr ""
+msgstr "Try to fix pixel range to match CMOS camera bit depth"
 
 #: u_translation.rstwilightskyf
 msgid "Twilight sky flat"

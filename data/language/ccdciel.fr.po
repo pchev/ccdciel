@@ -6,15 +6,15 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ccdciel\n"
 "Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
-"POT-Creation-Date: 2020-05-09 13:30+0000\n"
-"PO-Revision-Date: 2020-05-10 09:28+0000\n"
-"Last-Translator: Jean-Marc <Unknown>\n"
+"POT-Creation-Date: 2020-07-08 12:21+0000\n"
+"PO-Revision-Date: 2020-07-08 12:32+0000\n"
+"Last-Translator: Patrick Chevalley <Unknown>\n"
 "Language-Team: French <fr@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2020-05-10 18:44+0000\n"
-"X-Generator: Launchpad (build fbdff7602bd10fb883bf7e2ddcc7fd5a16f60398)\n"
+"X-Launchpad-Export-Date: 2020-07-08 12:36+0000\n"
+"X-Generator: Launchpad (build ffd32ad7291fe66b5578d7c1407aaae58d1e0170)\n"
 
 #: u_translation.rs32bitdriver
 msgid "This driver work only in 32bit, please install the 32bit version of CCDciel."
@@ -403,6 +403,10 @@ msgstr "Retour"
 #: u_translation.rsbackground
 msgid "Background"
 msgstr "Arrière-plan"
+
+#: u_translation.rsbackgroundne
+msgid "Background neutralization"
+msgstr "Neutralisation du fond de ciel"
 
 #: u_translation.rsbacklashcomp
 msgid "Backlash compensation"
@@ -2972,7 +2976,7 @@ msgstr "Demande d'arrêt de l'autofocus"
 
 #: u_translation.rsreset
 msgid "Reset"
-msgstr "Rétablir"
+msgstr "Réinitialiser"
 
 #: u_translation.rsresetcomplet
 msgid "Reset completion status on repeat"
@@ -3096,7 +3100,7 @@ msgstr "Rot."
 
 #: u_translation.rsrotate
 msgid "Rotate"
-msgstr "Tourne"
+msgstr "Faire pivoter"
 
 #: u_translation.rsrotateby
 msgid "rotate by"

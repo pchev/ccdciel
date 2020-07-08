@@ -2,15 +2,15 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ccdceil\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-05-09 13:30+0000\n"
-"PO-Revision-Date: 2020-05-09 06:25+0000\n"
+"POT-Creation-Date: 2020-07-08 12:18+0000\n"
+"PO-Revision-Date: 2020-05-11 14:14+0000\n"
 "Last-Translator: Stanislav Holub <Unknown>\n"
 "Language-Team: Czech <cz@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2020-05-10 18:44+0000\n"
-"X-Generator: Launchpad (build fbdff7602bd10fb883bf7e2ddcc7fd5a16f60398)\n"
+"X-Launchpad-Export-Date: 2020-07-08 12:36+0000\n"
+"X-Generator: Launchpad (build ffd32ad7291fe66b5578d7c1407aaae58d1e0170)\n"
 "Language: cs\n"
 
 #: u_hints.rsactivateback
@@ -199,7 +199,7 @@ msgstr "Historie pointace v obloukových sekundách %s - modrá: RA chyba%s - č
 
 #: u_hints.rshistogramoft
 msgid "Histogram of the current image.%sClick and move to adjust the visualisation threshold."
-msgstr "Histogram aktuálního snímku.%sKliknutím a posunutím upravit práh vizualizace."
+msgstr "Histogram aktuálního snímku.%sKliknutím a posunutím upravíte práh vizualizace."
 
 #: u_hints.rshistoryofthe
 msgid "History of the last FWHM and Intensity measurement"
