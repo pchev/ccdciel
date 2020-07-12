@@ -345,9 +345,10 @@ end;
 procedure TTCPThrd.ProcessJSON;
 var attrib,value:Tstringlist;
     J: TJSONData;
-    i,p: integer;
+    p: integer;
 begin
   try
+
     Fjsonid:='null';
     attrib:=Tstringlist.Create;
     value:=Tstringlist.Create;
@@ -355,14 +356,12 @@ begin
     JsonRecurseLevel:=0;
     JsonDataToStringlist(attrib,value,'',J);
     J.Free;
-    for i:=0 to attrib.Count-1 do begin
-      WriteLn(attrib[i]+' = '+value[i]);
-    end;
     p:=attrib.IndexOf('id');
     if p>=0 then
       Fjsonid:=value[p];
     if (Fjsonid<>'null') and Assigned(FExecuteJSON) then
       cmdresult := FExecuteJSON(Fjsonid,attrib,value);
+
   except
     on E: Exception do cmdresult := '{"jsonrpc": "2.0", "error": {"code": -32603, "message": "Internal error:'+E.Message+'"}, "id": '+Fjsonid+'}';
   end;
