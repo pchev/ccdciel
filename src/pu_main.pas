@@ -761,6 +761,7 @@ type
     procedure TCPShowError(var msg: string);
     procedure TCPShowSocket(var msg: string);
     function TCPcmd(s: string):string;
+    function TCPjsoncmd(id:string; attrib,value:Tstringlist):string;
     procedure TCPgetimage(n: string;  var img: Tmemorystream);
     procedure SetLang;
     procedure UpdateMagnifyer(x,y:integer);
@@ -12204,6 +12205,7 @@ begin
     TCPDaemon.onErrorMsg := @TCPShowError;
     TCPDaemon.onShowSocket := @TCPShowSocket;
     TCPDaemon.onExecuteCmd:=@TCPcmd;
+    TCPDaemon.onExecuteJSON:=@TCPjsoncmd;
     TCPDaemon.onGetImage:=@TCPgetimage;
     TCPDaemon.IPaddr := '0.0.0.0';
     TCPDaemon.IPport := '3277';
@@ -12266,6 +12268,149 @@ begin
   except
     img.clear;
   end;
+end;
+
+function Tf_main.TCPjsoncmd(id:string; attrib,value:Tstringlist):string;
+var p,frx,fry,frw,frh,i,j,n: integer;
+    rpcversion,method,resp,buf:string;
+    noparams:boolean;
+function CleanText(str:string):string;
+begin
+ result:=StringReplace(str,'"','''',[rfReplaceAll]);
+ result:=StringReplace(result,';','.',[rfReplaceAll]);
+ result:=StringReplace(result,CRLF,'; ',[rfReplaceAll]);
+ result:=StringReplace(result,CR,' ',[rfReplaceAll]);
+ result:=StringReplace(result,LF,' ',[rfReplaceAll]);
+end;
+
+begin
+try
+  resp:='';
+  p:=attrib.IndexOf('jsonrpc');
+  if p>=0 then
+    rpcversion:=value[p]
+  else
+    rpcversion:='2.0';
+  if rpcversion<>'2.0' then begin
+    result:='{"jsonrpc": "2.0", "error": {"code": -32600, "message": "JSON-RPC version not supported"}, "id": '+id+'}';
+    exit;
+  end;
+  result:='{"jsonrpc": "2.0", ';
+  p:=attrib.IndexOf('method');
+  if p>=0 then
+    method:=value[p]
+  else
+    method:='';
+
+  if method='status' then begin
+    p:=attrib.IndexOf('params.0');
+    noparams:=attrib.IndexOf('params.0')<0;
+
+    if noparams or (value.IndexOf('devices')>0) then
+      resp:=resp+'"devices": '+BoolToStr(AllDevicesConnected,'true','false')+', ';
+    if noparams or (value.IndexOf('planetarium')>0) then begin
+      resp:=resp+'"planetarium": '+BoolToStr((f_planetarium<>nil)and(not planetarium.Terminated)and(planetarium.Connected),'true','false')+', ';
+    end;
+    if noparams or (value.IndexOf('autoguider')>0) then begin
+      resp:=resp+'"autoguider": '+BoolToStr((f_autoguider<>nil)and(autoguider.State<>GUIDER_DISCONNECTED),'true','false')+', ';
+      if (f_autoguider<>nil)and(autoguider.State<>GUIDER_DISCONNECTED) then resp:=resp+'"guiding": '+BoolToStr((f_autoguider<>nil)and(autoguider.State=GUIDER_GUIDING),'true','false')+', ';
+    end;
+    if (noparams and WantSafety) or (value.IndexOf('safety')>0) then
+      resp:=resp+'"safety": '+BoolToStr((safety.Status=devConnected)and(f_safety.Safe),'true','false')+', ';
+    if (noparams and WantWeather) or (value.IndexOf('weather')>0) then begin
+      resp:=resp+'"weather": '+BoolToStr((weather.Status=devConnected)and(f_weather.Clear),'true','false')+', ';
+      if (weather.Status=devConnected)and(not f_weather.Clear) then resp:=resp+'"weathermessage": "'+CleanText(weather.WeatherMessage)+'", ';
+    end;
+    if (noparams and WantDome) or (value.IndexOf('dome')>0) then begin
+      resp:=resp+'"dome": '+BoolToStr((dome.Status=devConnected)and(f_dome.Shutter),'true','false')+', ';
+      if (dome.Status=devConnected)and(f_dome.Shutter) then resp:=resp+'"domeslaving": '+BoolToStr((f_dome.CanSlave)and(f_dome.Slave),'true','false')+', ';
+    end;
+    if (noparams and WantMount) or (value.IndexOf('mount')>0) then begin
+      resp:=resp+'"mount": '+BoolToStr((mount.Status=devConnected),'true','false')+', ';
+      if mount.Status=devConnected then begin
+        resp:=resp+'"mountpark": '+BoolToStr((mount.Park),'true','false')+', ';
+        if not mount.Park then
+          resp:=resp+'"mountra": "'+CleanText(trim(f_mount.RA.Caption))+'", ';
+          resp:=resp+'"mountdec": "'+CleanText(trim(f_mount.DE.Caption))+'", ';
+          resp:=resp+'"mountpierside": "'+CleanText(trim(f_mount.Pierside.Caption))+'", ';
+          resp:=resp+'"mounttimetomeridian": "'+CleanText(trim(f_mount.LabelMeridian.Caption)+' '+trim(f_mount.TimeToMeridian.Caption)+' '+trim(f_mount.label4.Caption))+'", ';
+      end;
+    end;
+    if (noparams and WantCamera) or (value.IndexOf('camera')>0) then begin
+      resp:=resp+'"camera": '+BoolToStr(camera.Status=devConnected,'true','false')+', ';
+      if camera.Status=devConnected then begin
+        resp:=resp+'"camerabinning": "'+inttostr(camera.BinX)+'x'+inttostr(camera.BinY)+'", ';
+        camera.GetFrame(frx,fry,frw,frh);
+        resp:=resp+'"cameraframe": "'+inttostr(frx)+'/'+inttostr(fry)+'/'+inttostr(frw)+'/'+inttostr(frh)+'", ';
+        resp:=resp+'"cameracooler": '+BoolToStr(f_ccdtemp.CCDcooler.Checked,'true','false')+', ';
+        resp:=resp+'"cameratemperature": '+f_ccdtemp.Current.Caption+', ';
+      end;
+    end;
+    if (noparams and WantWheel) or (value.IndexOf('wheel')>0) then begin
+      resp:=resp+'"wheel": '+BoolToStr(wheel.Status=devConnected,'true','false')+', ';
+      if wheel.Status=devConnected then begin
+         resp:=resp+'"wheelfilter": "'+CleanText(f_filterwheel.Filters.Text)+'", ';
+      end;
+    end;
+    if (noparams and WantRotator) or (value.IndexOf('rotator')>0) then begin
+      resp:=resp+'"rotator": '+BoolToStr(rotator.Status=devConnected,'true','false')+', ';
+      if rotator.Status=devConnected then begin
+         resp:=resp+'"rotatorposition": '+CleanText(f_rotator.Angle.Text)+', ';
+      end;
+    end;
+    if (noparams and WantFocuser) or (value.IndexOf('focuser')>0) then begin
+      resp:=resp+'"focuser": '+BoolToStr(focuser.Status=devConnected,'true','false')+', ';
+      if focuser.Status=devConnected then begin
+         if focuser.hasAbsolutePosition then resp:=resp+'"focuserposition": '+f_focuser.Position.Text+', ';
+         if focuser.hasTemperature then resp:=resp+'"focusertemperature": '+f_focuser.Temp.Text+', ';
+         resp:=resp+'"focusermessage": "'+CleanText(f_starprofile.LastFocusMsg)+'", ';
+      end;
+    end;
+    if noparams or (value.IndexOf('sequence')>0) then begin
+      resp:=resp+'"sequence": '+BoolToStr(f_sequence.Running,'true','false')+', ';
+      if f_sequence.Running then begin
+        resp:=resp+'"sequencename": "'+CleanText(trim(CurrentSeqName))+'", ';
+        resp:=resp+'"sequencetarget": "'+CleanText(trim(CurrentTargetName))+'", ';
+        resp:=resp+'"sequencestep": "'+CleanText(trim(CurrentStepName))+'", ';
+        resp:=resp+'"sequencestatus": "'+CleanText(trim(f_sequence.StatusMsg.Caption))+'", ';
+        resp:=resp+'"sequencedelay": "'+CleanText(trim(f_sequence.DelayMsg.Caption))+'", ';
+        resp:=resp+'"sequencecompletion": '+FormatFloat(f0,f_sequence.PercentComplete*100)+', ';
+        resp:=resp+'"targetcompletion": '+FormatFloat(f0,f_sequence.TargetPercentComplete*100)+', ';
+      end;
+    end;
+    if noparams or (value.IndexOf('sequence')>0) or (value.IndexOf('capture')>0) then begin
+      resp:=resp+'"capture": '+BoolToStr(f_capture.Running,'true','false')+', ';
+      if f_capture.Running then begin
+         resp:=resp+'"capturetotal": '+f_capture.SeqNum.Text+', ';
+         resp:=resp+'"capturecurrent": '+inttostr(f_capture.SeqCount)+', ';
+         resp:=resp+'"captureexposure": '+formatfloat(f3,f_capture.ExposureTime)+', ';
+         resp:=resp+'"captureexposureremain": '+formatfloat(f3,CameraExposureRemain)+', ';
+      end;
+    end;
+    if noparams or (value.IndexOf('log')>0) then begin
+      n:=f_msg.msg.Lines.Count-1;
+      if n<30 then j:=0
+              else j:=n-30;
+      buf:='';
+      for i:=j to n do
+        buf:=buf+CleanText(f_msg.msg.Lines[i])+'; ';
+      resp:=resp+'"log": "'+buf+'", ';
+    end;
+    if resp>'' then begin
+      delete(resp,length(resp)-1,2);
+      result:=result+'"result": {'+resp+'}, "id": '+id+'}'
+    end
+    else
+      result:=result+'"error": {"code": -32602, "message": "Invalid params"}, "id": '+id+'}';
+  end
+
+  else begin
+    result:=result+'"error": {"code": -32601, "message": "Method not found"}, "id": '+id+'}';
+  end;
+
+except
+  on E: Exception do result := '{"jsonrpc": "2.0", "error": {"code": -32603, "message": "Internal error:'+E.Message+'"}, "id": '+id+'}';
+end;
 end;
 
 function Tf_main.TCPcmd(s: string):string;
