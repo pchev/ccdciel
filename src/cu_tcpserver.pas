@@ -352,6 +352,7 @@ begin
     Fjsonid:='null';
     attrib:=Tstringlist.Create;
     value:=Tstringlist.Create;
+    try
     J:=GetJSON(FJSONRequest);
     JsonRecurseLevel:=0;
     JsonDataToStringlist(attrib,value,'',J);
@@ -361,6 +362,10 @@ begin
       Fjsonid:=value[p];
     if (Fjsonid<>'null') and Assigned(FExecuteJSON) then
       cmdresult := FExecuteJSON(Fjsonid,attrib,value);
+    finally
+      attrib.Free;
+      value.Free;
+    end;
 
   except
     on E: Exception do cmdresult := '{"jsonrpc": "2.0", "error": {"code": -32603, "message": "Internal error:'+E.Message+'"}, "id": '+Fjsonid+'}';
