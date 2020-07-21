@@ -44,6 +44,7 @@ type
     AutofocusMultistar: TGroupBox;
     BtnMaxDriftDisable: TButton;
     BtnDisableStarLost: TButton;
+    ASTAPadvanced: TButton;
     ButtonVoiceTest: TButton;
     ButtonVoiceAll: TButton;
     ButtonVoiceNone: TButton;
@@ -602,6 +603,7 @@ type
     Label1: TLabel;
     Panel1: TPanel;
     RefTreshold: TTrackBar;
+    procedure ASTAPadvancedClick(Sender: TObject);
     procedure AstUseScriptClick(Sender: TObject);
     procedure AutofocusExpTimeChange(Sender: TObject);
     procedure AutofocusmodeClick(Sender: TObject);
@@ -1496,6 +1498,17 @@ end;
 procedure Tf_option.AstUseScriptClick(Sender: TObject);
 begin
    AstCustScript.Visible:=AstUseScript.Checked;
+end;
+
+procedure Tf_option.ASTAPadvancedClick(Sender: TObject);
+var cmd: string;
+begin
+ {$ifdef mswindows}
+   cmd:=slash(ASTAPFolder.Directory)+'astap.exe -debug';
+ {$else}
+   cmd:=slash(ASTAPFolder.Directory)+'astap -debug';
+ {$endif}
+ ExecNoWait(cmd,'',false);
 end;
 
 procedure Tf_option.AutofocusExpTimeChange(Sender: TObject);
