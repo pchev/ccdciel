@@ -5182,8 +5182,11 @@ case wheel.Status of
                       if f_EditTargets.FlatFilterList.Items.Count>0 then f_EditTargets.FlatFilterList.Items.Delete(0);
                       FilterList.Assign(wheel.FilterNames);
                       SetFilterMenu;
-                      if (wheel.Filter>0)and(wheel.Filter<=f_filterwheel.Filters.Items.Count) then
+                      if (wheel.Filter>0)and(wheel.Filter<=f_filterwheel.Filters.Items.Count) then begin
                          f_filterwheel.Filters.ItemIndex:=round(wheel.Filter);
+                         CurrentFilterOffset:=FilterOffset[round(wheel.Filter)];
+                         filteroffset_initialized:=true;
+                      end;
                    end;
 end;
 CheckConnectionStatus;
