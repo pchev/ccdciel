@@ -59,6 +59,7 @@ object f_filterwheel: Tf_filterwheel
     Color = clBtnShadow
     DragMode = dmAutomatic
     Font.Color = clBtnText
+    Layout = tlCenter
     ParentColor = False
     ParentFont = False
     Transparent = False
