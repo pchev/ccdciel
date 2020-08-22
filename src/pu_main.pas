@@ -934,6 +934,16 @@ begin
    i:=FindNextUTF8(fs);
  end;
  FindCloseUTF8(fs);
+ // purge astrometry error pictures
+ i:=FindFirstUTF8(slash(LogDir)+'astrometry_fail_*',0,fs);
+ while i=0 do begin
+   if (fs.Time>0)and(fs.Time<tl) then begin
+     buf:=slash(LogDir)+fs.Name;
+     DeleteFileUTF8(buf);
+   end;
+   i:=FindNextUTF8(fs);
+ end;
+ FindCloseUTF8(fs);
 end;
 
 procedure Tf_main.Restart;
@@ -10689,7 +10699,7 @@ begin
 end;
 
 procedure Tf_main.AstrometryEnd(Sender: TObject);
-var resulttxt:string;
+var resulttxt,buf:string;
     dist: double;
 begin
   // update Menu
@@ -10741,6 +10751,11 @@ begin
      NewMessage(Format(rsResolveSucce, [rsAstrometry])+resulttxt,3);
   end else begin
     NewMessage(Format(rsResolveError, [astrometry.Resolver])+' '+astrometry.LastError,1);
+    if LogToFile then begin
+       buf:=slash(LogDir)+'astrometry_fail_'+FormatDateTime('yyyymmdd_hhnnss',now)+'.fits';
+       fits.SaveToFile(buf);
+       NewMessage(Format(rsSavedFile, [buf]),2);
+    end;
   end;
 end;
 
