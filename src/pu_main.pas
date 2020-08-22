@@ -5997,6 +5997,11 @@ begin
      else
        de:=StrToDE(tde);
      if (ra<>NullCoord) and (de<>NullCoord) then begin
+       if autoguider.State=GUIDER_GUIDING then begin
+         NewMessage(rsStopAutoguid,2);
+         autoguider.Guide(false);
+         autoguider.WaitBusy(15);
+       end;
        NewMessage(rsGoto+': '+objn,1);
        J2000ToMount(mount.EquinoxJD,ra,de);
        if astrometry.PrecisionSlew(ra,de,err) then begin
