@@ -50,6 +50,7 @@ type
     ButtonVoiceNone: TButton;
     AutofocusMultiStarCenter: TCheckBox;
     BGneutralization: TCheckBox;
+    LongitudeError: TLabel;
     PagePlaNone: TPage;
     PanelLeft: TPanel;
     WantExif: TCheckBox;
@@ -680,6 +681,7 @@ type
     procedure SelectPage(Sender: TObject);
     procedure IncPage(Sender: TObject);
     procedure SelectNextPage(direction: integer);
+    procedure CheckLongitude;
   public
     { public declarations }
     LockTemp: Boolean;
@@ -1228,6 +1230,7 @@ begin
   else
      Flongitude:=longdeg.value+longmin.value/60+longsec.value/3600;
   if long.Itemindex>0 then Flongitude:=-Flongitude;
+  CheckLongitude;
 end;
 
 procedure Tf_option.MeridianOptionClick(Sender: TObject);
@@ -1280,11 +1283,20 @@ try
   longsec.Text:=s;
   if value>=0 then long.Itemindex:=0
                    else long.Itemindex:=1;
+  CheckLongitude;
 finally
   LockChange:=false;
 end;
 end;
 
+procedure Tf_option.CheckLongitude;
+begin
+  if abs(ObsTimeZone+FLongitude/15)>3 then begin
+    LongitudeError.Caption:=Format(rsTheComputerT, [FormatFloat(f1, ObsTimeZone), FormatFloat(f1, abs(FLongitude))+blank+long.Text])+crlf+rsBeCarefulOft;
+  end
+  else
+    LongitudeError.Caption:='';
+end;
 
 procedure Tf_option.MaxAduFromCameraChange(Sender: TObject);
 begin

@@ -1258,6 +1258,9 @@ resourcestring
   rsCoolTheCamer = 'Cool the camera';
   rsStartOptions = 'Start options';
   rsBackgroundNe = 'Background neutralization';
+  rsTheComputerT = 'The computer timezone %s and the observatory longitude %s are not compatible.';
+  rsBeSureTheCom = 'Be sure the computer use the local timezone and the observatory location is configured in the program preferences.';
+  rsBeCarefulOft = 'Be careful of the longitude East/West setting.';
 
 implementation
 
