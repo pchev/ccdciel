@@ -2,15 +2,15 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ccdceil\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-07-08 12:18+0000\n"
-"PO-Revision-Date: 2020-05-11 14:14+0000\n"
+"POT-Creation-Date: 2020-08-23 08:48+0000\n"
+"PO-Revision-Date: 2020-07-31 19:05+0000\n"
 "Last-Translator: Stanislav Holub <Unknown>\n"
 "Language-Team: Czech <cz@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2020-07-08 12:36+0000\n"
-"X-Generator: Launchpad (build ffd32ad7291fe66b5578d7c1407aaae58d1e0170)\n"
+"X-Launchpad-Export-Date: 2020-08-23 09:01+0000\n"
+"X-Generator: Launchpad (build 99c2d833c8d727fd05148486920aca032e908071)\n"
 "Language: cs\n"
 
 #: u_hints.rsactivateback
@@ -219,7 +219,7 @@ msgstr "Jas obrázku"
 
 #: u_hints.rsincrementste
 msgid "Increment step for the inward or outward movement"
-msgstr "Krok zvýšení pro pohyb dovnitř nebo ven"
+msgstr "Počet kroků pro pohyb ↑ a ↓"
 
 #: u_hints.rsinfinitenumb
 msgid "Infinite number of repetition"

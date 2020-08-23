@@ -6,15 +6,15 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ccdciel\n"
 "Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
-"POT-Creation-Date: 2020-07-08 12:21+0000\n"
-"PO-Revision-Date: 2020-07-08 12:32+0000\n"
+"POT-Creation-Date: 2020-08-23 08:48+0000\n"
+"PO-Revision-Date: 2020-08-23 08:56+0000\n"
 "Last-Translator: Patrick Chevalley <Unknown>\n"
 "Language-Team: French <fr@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2020-07-08 12:36+0000\n"
-"X-Generator: Launchpad (build ffd32ad7291fe66b5578d7c1407aaae58d1e0170)\n"
+"X-Launchpad-Export-Date: 2020-08-23 09:00+0000\n"
+"X-Generator: Launchpad (build 99c2d833c8d727fd05148486920aca032e908071)\n"
 
 #: u_translation.rs32bitdriver
 msgid "This driver work only in 32bit, please install the 32bit version of CCDciel."
@@ -440,6 +440,10 @@ msgstr "Seuil de détection"
 msgid "Bayer matrix pattern"
 msgstr "Motif de la matrice Bayer"
 
+#: u_translation.rsbecarefuloft
+msgid "Be careful of the longitude East/West setting."
+msgstr "Faites attention au paramètre Est/Ouest de la longitude."
+
 #: u_translation.rsbeforetouset
 msgid "Before to use this tool you must connect the camera, the mount and the planetarium"
 msgstr "Avant d'utiliser cet outil vous devez connecter la caméra, la monture et le planétarium"
@@ -451,6 +455,10 @@ msgstr "Avant de pouvoir utiliser cette option, le programme Elbrus doit être c
 #: u_translation.rsbegin
 msgid "Begin"
 msgstr "Début"
+
+#: u_translation.rsbesurethecom
+msgid "Be sure the computer use the local timezone and the observatory location is configured in the program preferences."
+msgstr "Assurez-vous que l'ordinateur utilise le fuseau horaire local et que l'emplacement de l'observatoire est configuré dans les préférences du programme."
 
 #: u_translation.rsbesuretoconf
 msgid "Be sure to configure the camera connection."
@@ -1039,7 +1047,7 @@ msgstr "Répertoire"
 
 #: u_translation.rsdisable
 msgid "Disable"
-msgstr "Désactivé"
+msgstr "Désactiver"
 
 #: u_translation.rsdisconnect
 msgid "Disconnect"
@@ -4101,6 +4109,10 @@ msgstr "Le format d'image de la camera est"
 #: u_translation.rsthecameraisc
 msgid "The camera is connected. Do you want to exit the program now?"
 msgstr "La caméra est connectée. Voulez-vous quitter le programme maintenant?"
+
+#: u_translation.rsthecomputert
+msgid "The computer timezone %s and the observatory longitude %s are not compatible."
+msgstr "Le fuseau horaire de l'ordinateur %s et la longitude de l'observatoire %s ne sont pas compatibles."
 
 #: u_translation.rsthedataare2
 msgid "The data are now recorded in the profile.%sYou can review the other auto-focus options using the menu %sEdit / Preferences / Autofocus"

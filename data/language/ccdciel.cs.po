@@ -2,15 +2,15 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ccdciel\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-07-08 12:21+0000\n"
-"PO-Revision-Date: 2020-05-12 08:12+0000\n"
+"POT-Creation-Date: 2020-08-23 08:48+0000\n"
+"PO-Revision-Date: 2020-08-16 05:41+0000\n"
 "Last-Translator: Stanislav Holub <Unknown>\n"
 "Language-Team: Czech <cz@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2020-07-08 12:36+0000\n"
-"X-Generator: Launchpad (build ffd32ad7291fe66b5578d7c1407aaae58d1e0170)\n"
+"X-Launchpad-Export-Date: 2020-08-23 09:01+0000\n"
+"X-Generator: Launchpad (build 99c2d833c8d727fd05148486920aca032e908071)\n"
 "Language: cs\n"
 
 #: u_translation.rs32bitdriver
@@ -403,7 +403,7 @@ msgstr "Pozadí"
 
 #: u_translation.rsbackgroundne
 msgid "Background neutralization"
-msgstr ""
+msgstr "Neutralizace pozadí"
 
 #: u_translation.rsbacklashcomp
 msgid "Backlash compensation"
@@ -437,6 +437,10 @@ msgstr "Prahová hodnota mrtvých pixelů"
 msgid "Bayer matrix pattern"
 msgstr "Maticový vzorec Bayer"
 
+#: u_translation.rsbecarefuloft
+msgid "Be careful of the longitude East/West setting."
+msgstr ""
+
 #: u_translation.rsbeforetouset
 msgid "Before to use this tool you must connect the camera, the mount and the planetarium"
 msgstr "Před použitím tohoto nástroje musíte připojit kameru, montáž a planetárium"
@@ -448,6 +452,10 @@ msgstr "Před použitím této možnosti musí být program Elbrus kalibrován p
 #: u_translation.rsbegin
 msgid "Begin"
 msgstr "Pokračovat"
+
+#: u_translation.rsbesurethecom
+msgid "Be sure the computer use the local timezone and the observatory location is configured in the program preferences."
+msgstr ""
 
 #: u_translation.rsbesuretoconf
 msgid "Be sure to configure the camera connection."
@@ -523,7 +531,7 @@ msgstr "Kamera nebo zaostřovač nejsou připojeny"
 
 #: u_translation.rscancel
 msgid "Cancel"
-msgstr "Ukončení"
+msgstr "Zrušit"
 
 #: u_translation.rscancelexposu
 msgid "Cancel exposure"
@@ -851,7 +859,7 @@ msgstr "Po připojení kamery vychladit na"
 
 #: u_translation.rscooler
 msgid "Cooler"
-msgstr "Chladit"
+msgstr "Chlazení"
 
 #: u_translation.rscoolthecamer
 msgid "Cool the camera"
@@ -903,7 +911,7 @@ msgstr "Aktuální"
 
 #: u_translation.rscurrentfocus
 msgid "Current focuser absolute position"
-msgstr "Aktuální absolutní zaostřovací pozice"
+msgstr "Aktuální (absolutní) poloha zaostřovače"
 
 #: u_translation.rscurrentimage
 msgid "Current image"
@@ -1036,7 +1044,7 @@ msgstr "Adresář"
 
 #: u_translation.rsdisable
 msgid "Disable"
-msgstr "Zakázat"
+msgstr "Vypnout"
 
 #: u_translation.rsdisconnect
 msgid "Disconnect"
@@ -1372,7 +1380,7 @@ msgstr "Filtr"
 
 #: u_translation.rsfilter0
 msgid "No change"
-msgstr "Žádná změna"
+msgstr "Beze změny"
 
 #: u_translation.rsfiltername
 msgid "Filter name"
@@ -3404,7 +3412,7 @@ msgstr "Nastaven binning %sx%s"
 
 #: u_translation.rssetcooler
 msgid "Set cooler %s"
-msgstr "Nastavit chlazení %s"
+msgstr "Chlazení nastavit  %s"
 
 #: u_translation.rssetfilterpos
 msgid "Set filter position %s"
@@ -3436,7 +3444,7 @@ msgstr "Nastavím čas montáže  z počítače"
 
 #: u_translation.rssetpoint
 msgid "Setpoint"
-msgstr "Nastavit"
+msgstr "Nastavit bod"
 
 #: u_translation.rssetrotatoran
 msgid "Set rotator angle"
@@ -3464,7 +3472,7 @@ msgstr "Vyrovnat toleranci"
 
 #: u_translation.rssetup
 msgid "Setup"
-msgstr "Založit"
+msgstr "Nastavit"
 
 #: u_translation.rsshadowadu
 msgid "Shadow ADU"
@@ -3604,7 +3612,7 @@ msgstr "Přejezd s posunem %s/%s"
 
 #: u_translation.rsslippagecorr
 msgid "Slippage correction "
-msgstr "Oprava prokluzu "
+msgstr "Korekce skluzu "
 
 #: u_translation.rsslope
 msgid "Slope"
@@ -4098,6 +4106,10 @@ msgstr "Formát snímku kamery je"
 msgid "The camera is connected. Do you want to exit the program now?"
 msgstr "Kamera je připojena. Chcete program ukončit?"
 
+#: u_translation.rsthecomputert
+msgid "The computer timezone %s and the observatory longitude %s are not compatible."
+msgstr ""
+
 #: u_translation.rsthedataare2
 msgid "The data are now recorded in the profile.%sYou can review the other auto-focus options using the menu %sEdit / Preferences / Autofocus"
 msgstr "Data jsou zaznamenána v profilu.%s Další možnosti automatického ostření můžete zkontrolovat pomocí nabídky %sUpravit / Předvolby / Auto-otření"
@@ -4168,7 +4180,7 @@ msgstr "Úloha %s bude zastavena na %s, v %s sekundách."
 
 #: u_translation.rsthetelescope
 msgid "The telescope is parked!"
-msgstr "Dalekohled je parked!"
+msgstr "Dalekohled je zaparkovaný!"
 
 #: u_translation.rsthismessagec
 msgid "This message confirm the email configuration is working."

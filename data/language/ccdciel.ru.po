@@ -6,15 +6,15 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ccdciel\n"
 "Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
-"POT-Creation-Date: 2020-07-08 12:21+0000\n"
+"POT-Creation-Date: 2020-08-23 08:48+0000\n"
 "PO-Revision-Date: 2020-05-11 13:06+0000\n"
 "Last-Translator: Sergey Tarantsov <tsn-ast@yandex.ru>\n"
 "Language-Team: Russian <ru@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2020-07-08 12:36+0000\n"
-"X-Generator: Launchpad (build ffd32ad7291fe66b5578d7c1407aaae58d1e0170)\n"
+"X-Launchpad-Export-Date: 2020-08-23 09:00+0000\n"
+"X-Generator: Launchpad (build 99c2d833c8d727fd05148486920aca032e908071)\n"
 
 #: u_translation.rs32bitdriver
 msgid "This driver work only in 32bit, please install the 32bit version of CCDciel."
@@ -440,6 +440,10 @@ msgstr "Порог:"
 msgid "Bayer matrix pattern"
 msgstr "Тип матрицы"
 
+#: u_translation.rsbecarefuloft
+msgid "Be careful of the longitude East/West setting."
+msgstr ""
+
 #: u_translation.rsbeforetouset
 msgid "Before to use this tool you must connect the camera, the mount and the planetarium"
 msgstr "Перед использованием этого инструмента необходимо подключить камеру, монтировку и планетарий"
@@ -451,6 +455,10 @@ msgstr "Прежде чем вы сможете использовать эту 
 #: u_translation.rsbegin
 msgid "Begin"
 msgstr "Начать"
+
+#: u_translation.rsbesurethecom
+msgid "Be sure the computer use the local timezone and the observatory location is configured in the program preferences."
+msgstr ""
 
 #: u_translation.rsbesuretoconf
 msgid "Be sure to configure the camera connection."
@@ -4099,6 +4107,10 @@ msgstr "Формат изображения камеры"
 #: u_translation.rsthecameraisc
 msgid "The camera is connected. Do you want to exit the program now?"
 msgstr "Камера подключена. Выйти из программы?"
+
+#: u_translation.rsthecomputert
+msgid "The computer timezone %s and the observatory longitude %s are not compatible."
+msgstr ""
 
 #: u_translation.rsthedataare2
 msgid "The data are now recorded in the profile.%sYou can review the other auto-focus options using the menu %sEdit / Preferences / Autofocus"

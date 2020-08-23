@@ -4622,3 +4622,15 @@ msgstr ""
 msgid "Background neutralization"
 msgstr ""
 
+#: u_translation:rsthecomputert
+msgid "The computer timezone %s and the observatory longitude %s are not compatible."
+msgstr ""
+
+#: u_translation:rsbesurethecom
+msgid "Be sure the computer use the local timezone and the observatory location is configured in the program preferences."
+msgstr ""
+
+#: u_translation:rsbecarefuloft
+msgid "Be careful of the longitude East/West setting."
+msgstr ""
+

@@ -6,15 +6,15 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ccdciel\n"
 "Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
-"POT-Creation-Date: 2020-07-08 12:18+0000\n"
-"PO-Revision-Date: 2020-07-07 23:21+0000\n"
+"POT-Creation-Date: 2020-08-23 08:48+0000\n"
+"PO-Revision-Date: 2020-08-06 21:07+0000\n"
 "Last-Translator: Víctor R. Ruiz <Unknown>\n"
 "Language-Team: Spanish <es@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2020-07-08 12:36+0000\n"
-"X-Generator: Launchpad (build ffd32ad7291fe66b5578d7c1407aaae58d1e0170)\n"
+"X-Launchpad-Export-Date: 2020-08-23 09:01+0000\n"
+"X-Generator: Launchpad (build 99c2d833c8d727fd05148486920aca032e908071)\n"
 
 #: u_hints.rsactivateback
 msgid "Activate backlash compensation.%sLet this disabled if your focuser driver include backlash compensation."
@@ -30,7 +30,7 @@ msgstr "Activar la hora de finalización"
 
 #: u_hints.rsactiveonlyif
 msgid "Active only if the target use astrometry positioning%sand the exposure time is longer than the astrometry timeout"
-msgstr ""
+msgstr "Activo solo si el objetivo usa posicionado astrométrico%sy el tiempo de exposición es más largo que el tiempo de espera de la astrometría."
 
 #: u_hints.rsaddaflatsequ
 msgid "Add a flat sequence to the list."
@@ -46,7 +46,7 @@ msgstr "Añadir un guión a la lista."
 
 #: u_hints.rsadescription
 msgid "A description for this step"
-msgstr ""
+msgstr "Una descripción para este paso"
 
 #: u_hints.rsafterlearnin
 msgid "After learning is completed you can use this cursor to better adjust to the linear part of the curve.%sThe fit must be particularly good near the horizontal blue line position."
@@ -58,7 +58,7 @@ msgstr "Un directorio temporal para el procesado de imágenes. Asegúrese de que
 
 #: u_hints.rsautofocusatt
 msgid "Autofocus at the start of this step"
-msgstr ""
+msgstr "Autoenfoque al comienzo de este paso"
 
 #: u_hints.rsautofocusift
 msgid "Autofocus if the temperature change is greater than the configured value"
@@ -70,7 +70,7 @@ msgstr "Estado guiado"
 
 #: u_hints.rsbesuretopaus
 msgid "Be sure to pause guiding when using a OAG. You can continue guiding when using a separate guide scope."
-msgstr ""
+msgstr "Asegúrese de pausar el guiado cuando use un guía fuera de eje (OAG). Puede continuar guiando si usa otro telescopio guía."
 
 #: u_hints.rscamerabinnin
 msgid "Camera binning"
@@ -86,7 +86,7 @@ msgstr "ISO cámara"
 
 #: u_hints.rscamerapositi
 msgid "Camera position angle"
-msgstr ""
+msgstr "Ángulo de posición de la cámara"
 
 #: u_hints.rsclearthesequ
 msgid "Clear the sequence completion status"
@@ -98,11 +98,11 @@ msgstr "Eliminar restricciones de tiempo"
 
 #: u_hints.rsclicktosetva
 msgid "Click to set value for all the targets"
-msgstr ""
+msgstr "Clic para establecer el valor de todos los objetivos"
 
 #: u_hints.rsclicktosortb
 msgid "Click to sort by %s"
-msgstr ""
+msgstr "Clic para ordenar por %s"
 
 #: u_hints.rsconnectallde
 msgid "Connect all devices"
@@ -154,7 +154,7 @@ msgstr "Borrar este perfil y las preferencias del programa asociadas."
 
 #: u_hints.rsditheraftert
 msgid "Dither on the specified frame interval"
-msgstr ""
+msgstr "Intepolar en el intervalo especificado"
 
 #: u_hints.rsdonotmovethe
 msgid "Do not move the telescope before to start imaging."
@@ -162,15 +162,15 @@ msgstr "No mover el telescopio antes de comenzar a tomar imágenes."
 
 #: u_hints.rsdonotsetthis
 msgid "Do not set this option if you don't know exactly what you do and without careful testing"
-msgstr ""
+msgstr "No activar esta opción si no sabe lo que está haciendo y sin probar con cuidado."
 
 #: u_hints.rsdontwaitfort
 msgid "Process the other targets in the list instead of waiting for the start condition(s) to be met. To be used with option \"Repeat the whole list\""
-msgstr ""
+msgstr "Procesar el resto de objetivos en la lista en lugar de esperar a que se cumplan las condiciones de inicio. Para usar con la opción «Repetir la lista completa»"
 
 #: u_hints.rsdragdroptoch
 msgid "Drag&drop to change order"
-msgstr ""
+msgstr "Arrastar y solar para cambiar el orden"
 
 #: u_hints.rseditthecurre
 msgid "Edit the current sequence"
@@ -198,7 +198,7 @@ msgstr "Parámetros globales del servidor INDI"
 
 #: u_hints.rsguidinghisto
 msgid "Guiding history in arcsecond %s - blue: RA error %s - red: Dec error %s - yellow: Star mass"
-msgstr ""
+msgstr "Histórico de guiado en arcosegundos %s - Azul: Error AR %s - Rojo: Error Dec %s - Amarillo: Masa estelar"
 
 #: u_hints.rshistogramoft
 msgid "Histogram of the current image.%sClick and move to adjust the visualisation threshold."
@@ -218,7 +218,7 @@ msgstr "Si la imagen está ahora enfocada, haga clic en el botón para obtener l
 
 #: u_hints.rsimageluminos
 msgid "Image luminosity"
-msgstr ""
+msgstr "Luminosidad de imagen"
 
 #: u_hints.rsincrementste
 msgid "Increment step for the inward or outward movement"
@@ -242,7 +242,7 @@ msgstr "Mantener visible la gráfica después de que se haya realizado el autoen
 
 #: u_hints.rsletblankford
 msgid "Let blank for default system search path"
-msgstr ""
+msgstr "Dejar en blanco para la ruta de búsqueda predefinida del sistema"
 
 #: u_hints.rslistofprofil
 msgid "List of profile for every different equipment configuration"
@@ -270,7 +270,7 @@ msgstr "Mover enfocador afuera"
 
 #: u_hints.rspausethesequ
 msgid "Pause the sequence after the current exposure is complete"
-msgstr ""
+msgstr "Pausar la secuencia después de que terminar la exposición actual"
 
 #: u_hints.rspixelbinning
 msgid "Pixel binning"
@@ -282,15 +282,15 @@ msgstr "Estado planetario"
 
 #: u_hints.rspriortoslewi
 msgid "Prior to slewing retrieve actual comet or asteroid coordinates from planetarium program.%sPlanetarium program should be connected and following system time.%sTarget name should be searchable within the planetarium."
-msgstr ""
+msgstr "Antes de mover, obtener las coordenadas actuales del asteroide o cometa del programa de planetario%sEl programa de planetario debe estar conectado y tener la hora del sistema.%sSe usará el nombre del objetivo para buscarlo en el planetario."
 
 #: u_hints.rsredoautofocu
 msgid "Redo autofocus after a number of frames"
-msgstr ""
+msgstr "Rehacer autoenfoque después de este número de imágenes"
 
 #: u_hints.rsrepeatthepla
 msgid "Repeat the plan for this object.%sSet to zero to not process this target."
-msgstr ""
+msgstr "Repetir el plan para este objeto.%sEstablecer a cero para no procesar este objetivo."
 
 #: u_hints.rsrepeatthewho2
 msgid "Repeat the whole list a number of time."
@@ -318,7 +318,7 @@ msgstr "Fijar la posición absoluta del enfocador"
 
 #: u_hints.rssetheretheac
 msgid "Set here the action to take after the sequence is terminated"
-msgstr ""
+msgstr "Establecer aquí la acción a realizar tras finalizar la secuencia"
 
 #: u_hints.rssetthestartt
 msgid "Set the start time at astronomical dusk, recomputed for the date you run the sequence."
@@ -334,11 +334,11 @@ msgstr "Mostrar diana"
 
 #: u_hints.rsshowcompleti
 msgid "Show completion status"
-msgstr ""
+msgstr "Mostrar estado ejecución"
 
 #: u_hints.rsshowguidings
 msgid "Show guiding statistics"
-msgstr ""
+msgstr "Mostrar estadísticas guiado"
 
 #: u_hints.rsshowhighligh
 msgid "Show highlight and shadow clipping"
@@ -346,7 +346,7 @@ msgstr ""
 
 #: u_hints.rsshowlastcapt
 msgid "Show captured image"
-msgstr ""
+msgstr "Mostrar imagen capturada"
 
 #: u_hints.rsshowtheoptio
 msgid "Show the option to stack the preview frame in real time.%sThis feature is normally use for demonstration in public event.%sYou can let this option disabled to not risk an unwanted use during your imaging session."
@@ -406,11 +406,11 @@ msgstr "Iniciar Y"
 
 #: u_hints.rsstayatthetar
 msgid "Stay at the target position for autofocus.%sA medium bright star should be visible.%sElse slew to a bright database star."
-msgstr ""
+msgstr "Permanecer en la posición del objetivo para el autoenfoque.%sSe necesita que una estrella de brillo medio sea visible.%sSi no, mover a una estrella brillante de la base de datos."
 
 #: u_hints.rsstepplanfor
 msgid "Step plan for capturing the images.%sThe step plan details are specified in the list below"
-msgstr ""
+msgstr "Plan para capturar las imágenes.%sLos detalles del plan se especifican en la lista de abajo"
 
 #: u_hints.rsstopatthisti
 msgid "Stop at this time even if the processing is not finished."
@@ -426,7 +426,7 @@ msgstr ""
 
 #: u_hints.rstargetpositi
 msgid "Target position (J2000)"
-msgstr ""
+msgstr "Posición objetivo (J2000)"
 
 #: u_hints.rsthebasefolde
 msgid "The base folder where the images are recorded"
@@ -450,7 +450,7 @@ msgstr ""
 
 #: u_hints.rsthehorizonpr
 msgid "The horizon profile used to compute object visibility. This file is the same as used in Cartes du Ciel"
-msgstr ""
+msgstr "El perfil del horizonte utilizado para calcular la visibilidad del objeto. Este fichero es el mismo que usa Cartes du Ciel"
 
 #: u_hints.rsthelistoftar
 msgid "The list of target to process in sequence."
@@ -466,7 +466,7 @@ msgstr "El valor máxima intensidad"
 
 #: u_hints.rstheminimalob
 msgid "The minimal object elevation to start or end observing"
-msgstr ""
+msgstr "La altura mínima del objeto para comenzar o finalizar la observación"
 
 #: u_hints.rsthenumberofi
 msgid "The number of images to take"
@@ -474,7 +474,7 @@ msgstr "Número de imágenes a capturar"
 
 #: u_hints.rsthenumberofi2
 msgid "The number of image to take before dither"
-msgstr ""
+msgstr "El número de imágenes a capturar antes de interpolar"
 
 #: u_hints.rsthenumberofi3
 msgid "The number of image to take before autofocus"
@@ -482,7 +482,7 @@ msgstr "Número de imágenes a capturar antes del autoenfoque"
 
 #: u_hints.rsthenumberofi4
 msgid "The number of image for this step"
-msgstr ""
+msgstr "Número de la imagen para este paso"
 
 #: u_hints.rstheobjectnam
 msgid "The object name for use in FITS header and file name"
@@ -510,11 +510,11 @@ msgstr "La relación señal/ruido."
 
 #: u_hints.rsthetargetnam
 msgid "The target name to be used for capturing the images"
-msgstr ""
+msgstr "El nombre del objetivo a utilizar para capturar las imágenes"
 
 #: u_hints.rsthetelescopenamefori
 msgid "The telescope name for inclusion in the FITS header"
-msgstr ""
+msgstr "Nombre del telescopio para su inclusión en la cabecera FITS"
 
 #: u_hints.rsthetemporary
 msgid "The temporary RAM disk used to transfer the images from the Indi server"
@@ -546,11 +546,11 @@ msgstr "El método dinámico puede usarse con un enfocador de posición relativa
 
 #: u_hints.rsuseiterati2
 msgid "Use Iterative if the first two options do not work for you or if you start with really bad focus.%s This is the slowest and less precise method."
-msgstr ""
+msgstr "Usar iteración si las primeras dos opciones no le funcionan o si comienza con un enfoque muy malo.%s Este es el método más lento e impreciso."
 
 #: u_hints.rsuseplatesolv
 msgid "Use astrometric (plate) solving to improve telescope pointing accuracy"
-msgstr ""
+msgstr "Usar resolución astromética para mejorar la precisión del apuntado del telescopio"
 
 #: u_hints.rsusevcurvewi2
 msgid "Vcurve can only work with an absolute position focuser, it require to learn the curve."
@@ -562,7 +562,7 @@ msgstr "Aprendizaje curva V"
 
 #: u_hints.rswaitforfulld
 msgid "Wait for a moonless night"
-msgstr ""
+msgstr "Esperar a una noche sin luna"
 
 #: u_hints.rswaittothisti
 msgid "Wait to this time before to start to process the list."
