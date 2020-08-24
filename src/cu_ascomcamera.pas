@@ -461,17 +461,14 @@ end;
 
 procedure T_ascomcamera.ExposureTimerTimer(sender: TObject);
 {$ifdef mswindows}
-type Timgdata = array of longint;
 var ok: boolean;
-    i,j,c,xs,ys: integer;
+    i,ix,j,c,xs,ys: integer;
     nax1,nax2,state: integer;
     pix,piy,expt,ElectronsPerADU: double;
     dateobs,ccdname,frname:string;
     img: PSafeArray;
-    pimgdata: pointer;
+    img2: array of array of LongInt;
     Dims, es, LBoundX, HBoundX,LBoundY, HBoundY : Integer;
-    p2:array[0..1] of integer;
-    p3:array[0..2] of integer;
     lii: integer;
     ii: smallint;
     b: array[0..2880]of char;
@@ -541,7 +538,7 @@ begin
      end;
    end;
    Dims:=SafeArrayGetDim(img);
-   if (Dims<2)or(Dims>3) then begin
+   if (Dims<>2) then begin
      msg('Error ImageArray unsupported Dimension=' + inttostr(Dims));
      if assigned(FonAbortExposure) then FonAbortExposure(self);
      exit;
@@ -559,6 +556,17 @@ begin
    SafeArrayGetUBound(img, 2, HBoundY);
    ys:=HBoundY-LBoundY+1;
    if debug_msg then msg('width:'+inttostr(xs)+' height:'+inttostr(ys));
+   try
+   if debug_msg then msg('get array');
+   SetLength(img2,xs,ys);
+   img2:=V.ImageArray;
+   except
+     on E: Exception do begin
+       msg('Error, cannot allocate image of size '+inttostr(xs)+'/'+inttostr(ys)+' : '+ E.Message,0);
+       if assigned(FonAbortExposure) then FonAbortExposure(self);
+       exit;
+     end;
+   end;
    nax1:=xs;
    nax2:=ys;
    pix:=FPixelSizeX;
@@ -586,12 +594,6 @@ begin
    except
      ElectronsPerADU:=-1;
    end;
-   i:=SafeArrayAccessData(img,pimgdata);
-   if i<>S_OK then begin
-     msg('Error accessing ImageArray data: ' + hexStr(i,10));
-     if assigned(FonAbortExposure) then FonAbortExposure(self);
-     exit;
-   end;
    // count used bit by pixel
    pxdiv:=1;
    if FFixPixelRange then begin
@@ -599,7 +601,7 @@ begin
      w:=0;
      for i:=LBoundY to ys-1 do begin
        for j := LBoundX to xs-1 do begin
-         ww:=Timgdata(pimgdata)[j+i*xs];
+         ww:=img2[j,i];
          if ww<65535 then
            w:=w or ww;
        end;
@@ -655,35 +657,15 @@ begin
    hdrmem.Free;
    hdr.Free;
    if debug_msg then msg('write image');
+
    if Dims=2 then begin
      for i:=LBoundY to ys-1 do begin
         if FASCOMFlipImage then
-           p2[1]:=ys-1-i
+           ix:=ys-1-i
         else
-           p2[1]:=i;
+           ix:=i;
         for j:=LBoundX to xs-1 do begin
-          p2[0]:=j;
-          lii:=Timgdata(pimgdata)[p2[0]+p2[1]*xs];
-          if FFixPixelRange then lii:=lii div pxdiv;
-          if lii>0 then
-             ii:=lii-32768
-          else
-             ii:=-32768;
-          ii:=NtoBE(ii);
-          FImgStream.Write(ii,sizeof(smallint));
-        end;
-     end;
-   end
-   else if Dims=3 then begin
-     p3[2]:=0; // only the first plane
-     for i:=LBoundY to ys-1 do begin
-        if FASCOMFlipImage then
-           p3[1]:=ys-1-i
-        else
-           p3[1]:=i;
-        for j:=LBoundX to xs-1 do begin
-          p3[0]:=j;
-          lii:=Timgdata(pimgdata)[p3[0]+p3[1]*xs];
+          lii:=img2[j,ix];
           if FFixPixelRange then lii:=lii div pxdiv;
           if lii>0 then
              ii:=lii-32768
@@ -703,7 +685,7 @@ begin
      FImgStream.Write(b,c);
    end;
    if debug_msg then msg('release imagearray');
-   SafeArrayUnaccessData(img);
+   SetLength(img2,0,0);
    SafeArrayDestroyData(img);
    // if possible start next exposure now
    TryNextExposure(FImgNum);
