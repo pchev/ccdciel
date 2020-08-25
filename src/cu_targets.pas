@@ -1452,6 +1452,12 @@ begin
   msg(rsStartAutogui,2);
   Autoguider.Guide(true);
   result:=Autoguider.WaitGuiding(CalibrationDelay+SettleMaxTime);
+  if FRunning and (not result) then begin
+    Autoguider.Guide(false);
+    Autoguider.WaitBusy(60);
+    Autoguider.Guide(true);
+    result:=Autoguider.WaitGuiding(CalibrationDelay+SettleMaxTime);
+  end;
   if FRunning and (not result)and(not Unattended) then begin
     f_pause.Caption:=rsAutoguiderSt2;
     f_pause.Text:=Format(rsAutoguiderNo2, [inttostr(CalibrationDelay+
