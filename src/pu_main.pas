@@ -9035,11 +9035,7 @@ begin
     ShowMessage(Format(rsNotConnected, [rsCamera]));
     exit;
   end;
-  if mount.Status<>devConnected then begin
-    ShowMessage(Format(rsNotConnected, [rsMount]));
-    exit;
-  end;
-  if mount.Park then begin
+  if (mount.Status=devConnected)and(mount.Park) then begin
     NewMessage(rsTheTelescope);
     exit;
   end;

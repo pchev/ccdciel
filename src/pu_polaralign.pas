@@ -454,9 +454,22 @@ begin
 end;
 
 procedure Tf_polaralign.Solve(step: integer);
-var cra,cde,eq,pa,x,y,dx,dy: double;
+var cra,cde,eq,pa,x,y,dx,dy,de: double;
+    i:integer;
 begin
   // solve the current image
+  if Mount.Status<>devConnected then begin
+    if ObsLatitude>0 then
+      de:=90
+    else
+      de:=-90;
+    i:=fits.Header.Indexof('END');
+    fits.Header.Insert(i-1,'RA',0.0,'polaralign');
+    fits.Header.Insert(i-1,'DEC',de,'polaralign');
+    fits.Header.Insert(i-1,'OBJCTRA',0.0,'polaralign');
+    fits.Header.Insert(i-1,'OBJCTDEC',de,'polaralign');
+    fits.Header.Insert(i-1,'EQUINOX',2000,'polaralign');
+  end;
   FAstrometry.SolveCurrentImage(true);
   if (not FAstrometry.Busy)and FAstrometry.LastResult then begin
      if FAstrometry.CurrentCoord(cra,cde,eq,pa) then begin
