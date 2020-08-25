@@ -558,7 +558,6 @@ begin
    if debug_msg then msg('width:'+inttostr(xs)+' height:'+inttostr(ys));
    try
    if debug_msg then msg('get array');
-   SetLength(img2,xs,ys);
    img2:=V.ImageArray;
    except
      on E: Exception do begin
@@ -685,7 +684,6 @@ begin
      FImgStream.Write(b,c);
    end;
    if debug_msg then msg('release imagearray');
-   SetLength(img2,0,0);
    SafeArrayDestroyData(img);
    // if possible start next exposure now
    TryNextExposure(FImgNum);
