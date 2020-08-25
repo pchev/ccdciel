@@ -90,7 +90,7 @@ type
     FimgMin, FimgMax: double;
     FBullsEye, LockSpinEdit, FClipping, FInvert: Boolean;
     FZoom: double;
-    StartUpd,Updmax,HistogramAdjusted: boolean;
+    StartUpd,Updmax,HistogramAdjusted, LockHistogram: boolean;
     XP: integer;
     FRedraw: TNotifyEvent;
     FonZoom: TNotifyEvent;
@@ -156,6 +156,7 @@ begin
  ImgMax:=high(word);
  ImgMin:=0;
  HistogramAdjusted:=false;
+ LockHistogram:=false;
  StartUpd:=false;
  Updmax:=false;
  FBullsEye:=false;
@@ -245,6 +246,7 @@ begin
       SpinEditMax.Increment:=10;
     end;
   end;
+  LockHistogram:=true;
   // histogram is always 0-65535, show real pixel value in the spinedit
   SpinEditMin.minValue:=FimageMin;
   SpinEditMin.maxValue:=FimageMax;
@@ -253,6 +255,7 @@ begin
   // scale from 0-65535 to image min-max
   SpinEditMin.Value:=FimageMin+FImgMin/FimageC;
   SpinEditMax.Value:=FimageMin+FimgMax/FimageC;
+  LockHistogram:=false;
 end;
 
 procedure Tf_visu.DrawHistogram(hist:Thistogram; SetLevel,isFloatingPoint,ResetCursor: boolean; iC,iMin,iMax: double);
@@ -528,7 +531,7 @@ procedure Tf_visu.SpinEditMaxChange(Sender: TObject);
 begin
   if LockSpinEdit then exit;
   SpinEditMin.maxValue:=min(FimageMax,SpinEditMax.Value);
-  HistogramAdjusted:=true;
+  if not LockHistogram then HistogramAdjusted:=true;
   TimerMinMax.Enabled:=true;
 end;
 
@@ -536,7 +539,7 @@ procedure Tf_visu.SpinEditMinChange(Sender: TObject);
 begin
   if LockSpinEdit then exit;
   SpinEditMax.minValue:=max(FimageMin,SpinEditMin.Value);
-  HistogramAdjusted:=true;
+  if not LockHistogram then HistogramAdjusted:=true;
   TimerMinMax.Enabled:=true;
 end;
 
