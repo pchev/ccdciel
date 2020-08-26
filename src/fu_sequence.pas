@@ -1127,7 +1127,7 @@ var tfile:TCCDconfig;
     buf:string;
 begin
  if (AllDevicesConnected) then begin
-   if abs(ObsTimeZone+ObsLongitude/15)>3 then begin
+   if (ObsTimeZone<>0) and (abs(ObsTimeZone+ObsLongitude/15)>3) then begin
      if ObsLongitude<0 then buf:=rsEast else buf:=rsWest;
      msg(Format(rsTheComputerT, [FormatFloat(f1, ObsTimeZone), FormatFloat(f1, abs(ObsLongitude))+blank+buf])+crlf+rsBeSureTheCom+crlf+rsBeCarefulOft, 0);
    end

@@ -1291,7 +1291,7 @@ end;
 
 procedure Tf_option.CheckLongitude;
 begin
-  if abs(ObsTimeZone+FLongitude/15)>3 then begin
+  if (ObsTimeZone<>0) and (abs(ObsTimeZone+FLongitude/15)>3) then begin
     LongitudeError.Caption:=Format(rsTheComputerT, [FormatFloat(f1, ObsTimeZone), FormatFloat(f1, abs(FLongitude))+blank+long.Text])+crlf+rsBeCarefulOft;
   end
   else
