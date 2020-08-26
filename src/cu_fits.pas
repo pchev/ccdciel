@@ -1,7 +1,7 @@
 unit cu_fits;
 
 {
-Copyright (C) 2005-2015 Patrick Chevalley
+Copyright (C) 2005-2020 Patrick Chevalley
 
 http://www.ap-i.net
 pch@ap-i.net
@@ -879,7 +879,6 @@ end;
 procedure TGetBgraThread.Execute;
 var
   i, j, startline, endline, xs,ys: integer;
-  ii,i1,i2,i3,j1,j2,j3 : integer;
   x : word;
   xx,xxg,xxb: extended;
   p: PBGRAPixel;
@@ -893,7 +892,6 @@ if id = (num - 1) then
   endline := ys - 1
 else
   endline := (id + 1) * i - 1;
-ii:=0; i1:=0; i2:=0; i3:=0;
 // process the rows range for this thread
 for i:=startline to endline do begin
    p := bgra.Scanline[i];
@@ -948,7 +946,6 @@ end;
 procedure TGetExpThread.Execute;
 var
   i, j, startline, endline, xs,ys: integer;
-  ii,i1,i2,i3,j1,j2,j3 : integer;
   x : word;
   xx,xxg,xxb: extended;
   p: PExpandedPixel;
@@ -962,7 +959,6 @@ if id = (num - 1) then
   endline := ys - 1
 else
   endline := (id + 1) * i - 1;
-ii:=0; i1:=0; i2:=0; i3:=0;
 // process the rows range for this thread
 for i:=startline to endline do begin
    p := bgra.Scanline[i];
@@ -2230,166 +2226,6 @@ setlength(Fimage,0,0,0);
 FStream.Clear;
 end;
 
-function TFits.double_star(ri, x,y : integer):boolean;
-// double star detection based difference bright_spot and center_of_gravity
-var SumVal,SumValX,SumValY,val,vmax,bg, Xg, Yg: double;
-     i,j : integer;
-begin
-  try
-  // New background from corner values
-  bg:=0;
-  for i:=-ri+1 to ri do {calculate average background at the square boundaries of region of interest}
-  begin
-    bg:=bg+Fimage[0,y+ri,x+i];{top line, left to right}
-    bg:=bg+Fimage[0,y+i,x+ri];{right line, top to bottom}
-    bg:=bg+Fimage[0,y-ri,x-i];{bottom line, right to left}
-    bg:=bg+Fimage[0,y-i,x-ri];{right line, bottom to top}
-  end;
-  bg:=bg/(8*ri);
-  bg:=FimageMin+bg/FimageC;
-
-  SumVal:=0;
-  SumValX:=0;
-  SumValY:=0;
-  vmax:=0;
-  for i:=-ri to ri do
-    for j:=-ri to ri do
-    begin
-      val:=FimageMin+Fimage[0,y+j,x+i]/FimageC-bg;
-      if val<0 then val:=0;
-      if val>vmax then vmax:=val;
-      SumVal:=SumVal+val;
-      SumValX:=SumValX+val*(i);
-     SumValY:=SumValY+val*(j);
-    end;
-  Xg:=SumValX/SumVal;
-  Yg:=SumValY/SumVal;
-  if ((Xg*Xg)+(Yg*Yg))>0.3 then result:=true {0.3 is experimental factor. Double star, too much unbalance between bright spot and centre of gravity}
-    else
-    result:=false;
-  except
-    on E: Exception do begin
-        result:=true;
-    end;
-  end;
-end;{double star detection}
-
-function TFits.value_subpixel(x1,y1:double):double;
-{calculate image pixel value on subpixel level}
-// see: https://www.ap-i.net/mantis/file_download.php?file_id=817&type=bug
-var
-  x_trunc,y_trunc: integer;
-  x_frac,y_frac : double;
-begin
-  try
-  result:=0;
-  x_trunc:=trunc(x1);
-  y_trunc:=trunc(y1);
-  if (x_trunc<=0) or (x_trunc>=(Fwidth-2)) or (y_trunc<=0) or (y_trunc>=(Fheight-2)) then exit;
-  x_frac :=frac(x1);
-  y_frac :=frac(y1);
-  result:= Fimage[0,y_trunc ,x_trunc ] * (1-x_frac)*(1-y_frac);{pixel left top, 1}
-  result:=result + Fimage[0,y_trunc ,x_trunc+1] * ( x_frac)*(1-y_frac);{pixel right top, 2}
-  result:=result + Fimage[0,y_trunc+1,x_trunc ] * (1-x_frac)*( y_frac);{pixel left bottom, 3}
-  result:=result + Fimage[0,y_trunc+1,x_trunc+1] * ( x_frac)*( y_frac);{pixel right bottom, 4}
-  except
-    on E: Exception do begin
-        result:=0;
-    end;
-  end;
-end;
-
-procedure TFits.FindBrightestPixel(x,y,s,starwindow2: integer; out xc,yc:integer; out vmax: double; accept_double: boolean=true);
-// brightest 3x3 pixels in area s*s centered on x,y
-var i,j,rs,xm,ym: integer;
-    bg,bg_average,sd: double;
-    val :double;
-begin
- rs:= s div 2;
- if (x-rs)<3 then x:=rs+3;
- if (x+rs)>(Fwidth-3) then x:=Fwidth-rs-3;
- if (y-rs)<3 then y:=rs+3;
- if (y+rs)>(Fheight-3) then y:=Fheight-rs-3;
-
- vmax:=0;
- xm:=0;
- ym:=0;
-
- try
-
-   // average background
-  bg_average:=0;
-  for i:=-rs+1 to rs do {calculate average background at the square boundaries of region of interest}
-  begin
-    bg_average:=bg_average+Fimage[0,y+rs,x+i];{top line, left to right}
-    bg_average:=bg_average+Fimage[0,y+i,x+rs];{right line, top to bottom}
-    bg_average:=bg_average+Fimage[0,y-rs,x-i];{bottom line, right to left}
-    bg_average:=bg_average+Fimage[0,y-i,x-rs];{right line, bottom to top}
-  end;
-  bg_average:=bg_average/(8*rs);
-
-  sd:=0;
-  for i:=-rs+1 to rs do {calculate standard deviation background at the square boundaries of region of interest}
-  begin
-    sd:=sd+sqr(bg_average-Fimage[0,y+rs,x+i]);{top line, left to right}
-    sd:=sd+sqr(bg_average-Fimage[0,y+i,x+rs]);{right line, top to bottom}
-    sd:=sd+sqr(bg_average-Fimage[0,y-rs,x-i]);{bottom line, right to left}
-    sd:=sd+sqr(bg_average-Fimage[0,y-i,x-rs]);{left line, bottom to top}
-  end;
-  sd:=sqrt(0.0001+sd/(8*rs))/FimageC;
-
-  bg:=FimageMin+bg_average/FimageC;
-
- // try with double star exclusion
- for i:=-rs to rs do
-   for j:=-rs to rs do begin
-     val:=(Fimage[0,y+j-1 ,x+i-1]+Fimage[0,y+j-1 ,x+i]+Fimage[0,y+j-1 ,x+i+1]+
-           Fimage[0,y+j ,x+i-1]+Fimage[0,y+j ,x+i]+Fimage[0,y+j ,x+i+1]+
-           Fimage[0,y+j+1 ,x+i-1]+Fimage[0,y+j+1 ,x+i]+Fimage[0,y+j+1 ,x+i+1])/9;
-
-     Val:=FimageMin+Val/FimageC-bg;
-     // huge performance improvement by checking only the pixels above the noise
-     if (val>((5*sd))) and (Val>vmax) then
-     begin
-       if double_star(starwindow2, x+i,y+j)=false then
-       begin
-         vmax:=Val;
-         xm:=i;
-         ym:=j;
-       end;
-     end;
- end;
-
- if accept_double then begin
- // if we not find anything repeat with only max value
- if vmax=0 then
-   for i:=-rs to rs do
-     for j:=-rs to rs do begin
-       val:=(Fimage[0,y+j-1 ,x+i-1]+Fimage[0,y+j-1 ,x+i]+Fimage[0,y+j-1 ,x+i+1]+
-             Fimage[0,y+j ,x+i-1]+Fimage[0,y+j ,x+i]+Fimage[0,y+j ,x+i+1]+
-             Fimage[0,y+j+1 ,x+i-1]+Fimage[0,y+j+1 ,x+i]+Fimage[0,y+j+1 ,x+i+1])/9;
-
-       Val:=FimageMin+Val/FimageC;
-       if Val>vmax then
-       begin
-         vmax:=Val;
-         xm:=i;
-         ym:=j;
-       end;
-   end;
- end;
-
- xc:=x+xm;
- yc:=y+ym;
-
- except
-   on E: Exception do begin
-       vmax:=0;
-   end;
- end;
-
-end;
-
 procedure calculate_bg_sd(fimage: Timaw16; x,y,rs,wd :integer; var bg,sd : double);{calculate background and standard deviation for position x,y around box rs x rs. wd is the measuring range outside the box }
 var
   iterations, counter,i,j : integer;
@@ -2444,12 +2280,148 @@ begin
   end;
 end;
 
+function TFits.value_subpixel(x1,y1:double):double;
+{calculate image pixel value on subpixel level}
+// see: https://www.ap-i.net/mantis/file_download.php?file_id=817&type=bug
+var
+  x_trunc,y_trunc: integer;
+  x_frac,y_frac : double;
+begin
+  try
+  result:=0;
+  x_trunc:=trunc(x1);
+  y_trunc:=trunc(y1);
+  if (x_trunc<=0) or (x_trunc>=(Fwidth-2)) or (y_trunc<=0) or (y_trunc>=(Fheight-2)) then exit;
+  x_frac :=frac(x1);
+  y_frac :=frac(y1);
+  result:= Fimage[0,y_trunc ,x_trunc ] * (1-x_frac)*(1-y_frac);{pixel left top, 1}
+  result:=result + Fimage[0,y_trunc ,x_trunc+1] * ( x_frac)*(1-y_frac);{pixel right top, 2}
+  result:=result + Fimage[0,y_trunc+1,x_trunc ] * (1-x_frac)*( y_frac);{pixel left bottom, 3}
+  result:=result + Fimage[0,y_trunc+1,x_trunc+1] * ( x_frac)*( y_frac);{pixel right bottom, 4}
+  except
+    on E: Exception do begin
+        result:=0;
+    end;
+  end;
+end;
+
+function TFits.double_star(ri, x,y : integer):boolean;
+// double star detection based difference bright_spot and center_of_gravity
+var SumVal,SumValX,SumValY,val,vmax,bg,sd, Xg, Yg: double;
+     i,j : integer;
+begin
+
+  try
+    calculate_bg_sd(fimage,x,y,ri,4,bg,sd); {calculate background and standard deviation for position x,y around box 2rs x 2rs. }
+    bg:=FimageMin+bg/FimageC;
+
+    SumVal:=0;
+    SumValX:=0;
+    SumValY:=0;
+    vmax:=0;
+    for i:=-ri to ri do
+      for j:=-ri to ri do
+      begin
+        val:=FimageMin+Fimage[0,y+j,x+i]/FimageC-bg;
+        if val<0 then val:=0;
+        if val>vmax then vmax:=val;
+        SumVal:=SumVal+val;
+        SumValX:=SumValX+val*(i);
+        SumValY:=SumValY+val*(j);
+      end;
+    Xg:=SumValX/SumVal;
+    Yg:=SumValY/SumVal;
+    // if ((Xg*Xg)+(Yg*Yg))>0.3 then result:=true {0.3 is experimental factor. Double star, too much unbalance between bright spot and centre of gravity}
+    if ((Xg*Xg)+(Yg*Yg))>sqr(4) then result:=true {Center of gravity is 4 or more pixels from brightest position x, y. Assume double star visible}
+    else
+      result:=false;
+  except
+    on E: Exception do begin
+        result:=true;
+    end;
+  end;
+end;{double star detection}
+
+procedure TFits.FindBrightestPixel(x,y,s,starwindow2: integer; out xc,yc:integer; out vmax: double; accept_double: boolean=true);
+// brightest 3x3 pixels in area s*s centered on x,y
+var i,j,rs,xm,ym: integer;
+    bg,bg_average,sd: double;
+    val :double;
+const
+    wd =4; {wd is the width of the area outside box rs used for calculating the mean value of the background}
+
+begin
+ rs:= s div 2;{box size is s x s pixels}
+ if (x-rs)<(3+wd) then x:=rs+(3+wd); {stay 3 pixels away from the sides. wd is the width of the area outside box 2rs x 2rs used for calculating the mean value of the background}
+ if (x+rs)>(Fwidth-(3+wd)) then x:=Fwidth-rs-(3+wd);
+ if (y-rs)<(3+wd) then y:=rs+(3+wd);
+ if (y+rs)>(Fheight-(3+wd)) then y:=Fheight-rs-(3+wd);
+
+ vmax:=0;
+ xm:=0;
+ ym:=0;
+
+ try
+   // average background
+  calculate_bg_sd(fimage,x,y,rs,wd {4},bg,sd); {calculate background and standard deviation for position x,y around box 2rs x 2rs. }
+  sd:=sd/FimageC;
+  bg:=FimageMin+bg/FimageC;
+
+ // try with double star exclusion
+ for i:=-rs to rs do
+   for j:=-rs to rs do begin
+     val:=(Fimage[0,y+j-1 ,x+i-1]+Fimage[0,y+j-1 ,x+i]+Fimage[0,y+j-1 ,x+i+1]+
+           Fimage[0,y+j ,x+i-1]+Fimage[0,y+j ,x+i]+Fimage[0,y+j ,x+i+1]+
+           Fimage[0,y+j+1 ,x+i-1]+Fimage[0,y+j+1 ,x+i]+Fimage[0,y+j+1 ,x+i+1])/9;
+
+     Val:=FimageMin+Val/FimageC-bg;
+     // huge performance improvement by checking only the pixels above the noise
+     if (val>((5*sd))) and (Val>vmax) then
+     begin
+       if double_star(starwindow2, x+i,y+j)=false then
+       begin
+         vmax:=Val;
+         xm:=i;
+         ym:=j;
+       end;
+     end;
+ end;
+
+ if accept_double then begin
+ // if we not find anything repeat with only max value
+ if vmax=0 then
+   for i:=-rs to rs do
+     for j:=-rs to rs do begin
+       val:=(Fimage[0,y+j-1 ,x+i-1]+Fimage[0,y+j-1 ,x+i]+Fimage[0,y+j-1 ,x+i+1]+
+             Fimage[0,y+j ,x+i-1]+Fimage[0,y+j ,x+i]+Fimage[0,y+j ,x+i+1]+
+             Fimage[0,y+j+1 ,x+i-1]+Fimage[0,y+j+1 ,x+i]+Fimage[0,y+j+1 ,x+i+1])/9;
+
+       Val:=FimageMin+Val/FimageC;
+       if Val>vmax then
+       begin
+         vmax:=Val;
+         xm:=i;
+         ym:=j;
+       end;
+   end;
+ end;
+
+ xc:=x+xm;
+ yc:=y+ym;
+
+ except
+   on E: Exception do begin
+       vmax:=0;
+   end;
+ end;
+end;
+
 procedure TFits.FindStarPos(x,y,s: integer; out xc,yc,ri:integer; out vmax,bg, sd: double);
 // center of gravity in area s*s centered on x,y
 const
     max_ri=100;
-var i,j,rs, distance, iterations, counter :integer;
-    SumVal,SumValX,SumValY, val,xg,yg, sd_old, bg_average : double;
+var i,j,rs, distance :integer;
+    SumVal,SumValX,SumValY, val,xg,yg : double;
     distance_histogram : array [0..max_ri] of integer;
     HistStart: boolean;
 begin
@@ -2464,10 +2436,8 @@ begin
 
   try
     calculate_bg_sd(fimage,x,y,rs,4,bg,sd); {calculate background and standard deviation for position x,y around box rs x rs. }
-
     sd:=sd/FimageC;
     bg:=FimageMin+bg/FimageC;
-
 
     // Get center of gravity whithin star detection box
     SumVal:=0;
