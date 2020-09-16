@@ -2141,10 +2141,16 @@ begin
   if i>=128 then begin
     TBTabs.Images:=ImageListDay;
     MainMenu1.Images:=ImageListDay;
+    colorGreen:=clGreen;
+    colorBlue:=clBlue;
+    colorRed:=clRed;
   end
   else begin
     TBTabs.Images:=ImageListNight;
     MainMenu1.Images:=ImageListNight;
+    colorGreen:=clLime;
+    colorBlue:=clAqua;
+    colorRed:=clFuchsia;
     {$ifdef lclcocoa}
     TBTabs.Color:=clBackground;
     {$endif}

@@ -26,7 +26,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 interface
 
-uses u_ccdconfig, dynlibs, LMessages,
+uses u_ccdconfig, dynlibs, LMessages, Graphics,
   Classes, SysUtils,LCLType;
 
 const
@@ -467,6 +467,7 @@ var
   Collimation: boolean;
   CollimationCircle: integer;
   AutoguiderStat: array of array[1..3] of double;
+  colorGreen, colorBlue, colorRed: Tcolor;
 
   procedure globalmsg(str:string);
 
