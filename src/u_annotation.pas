@@ -1,7 +1,7 @@
 unit u_annotation; {deep sky annotation of the image}
 { From ASTAP unit_deepsky with modification for CCDciel environment}
 {$mode delphi}
-{Copyright (C) 2018,2019 by Han Kleijn, www.hnsky.org
+{Copyright (C) 2018,2020 Han Kleijn (www.hnsky.org) and Patrick Chevalley.
  email: han.k.. at...hnsky.org
 
 {This program is free software: you can redistribute it and/or modify
@@ -217,18 +217,21 @@ begin
                      naam2:='';{for case data1='';}
                      naam3:='';
                      naam4:='';
-                     while (data1[1]=' ') do delete(data1,1,1); {remove spaces in front of the name, in practice faster then trimleft}
-                     backsl1:=pos('/',data1);
-                     if backsl1=0 then naam2:=data1
-                     else
+                     if length(data1)>0 then {if no name skip this part}
                      begin
-                       naam2:=copy(data1,1,backsl1-1);
-                       backsl2:=posEX('/',data1,backsl1+2);     { could also use LastDelimiter}
-                       if backsl2=0 then naam3:=copy(data1,backsl1+1,length(data1)-backsl1+1)
+                       while (data1[1]=' ') do delete(data1,1,1); {remove spaces in front of the name, in practice faster then trimleft}
+                       backsl1:=pos('/',data1);
+                       if backsl1=0 then naam2:=data1
                        else
                        begin
-                         naam3:=copy(data1,backsl1+1,backsl2-backsl1-1);
-                         naam4:=copy(data1,backsl2+1,length(data1)-backsl2+1);
+                         naam2:=copy(data1,1,backsl1-1);
+                         backsl2:=posEX('/',data1,backsl1+2);     { could also use LastDelimiter}
+                         if backsl2=0 then naam3:=copy(data1,backsl1+1,length(data1)-backsl1+1)
+                         else
+                         begin
+                           naam3:=copy(data1,backsl1+1,backsl2-backsl1-1);
+                           naam4:=copy(data1,backsl2+1,length(data1)-backsl2+1);
+                         end;
                        end;
                      end;
                    end;
@@ -375,7 +378,7 @@ begin
         { 2) If the text space is occupied, then move the text down. If the text crosses the bottom then use the original text position.}
         { 3) If the text crosses the right side of the image then move the text to the left.}
         { 4) If the text is moved in y then connect the text to the deepsky object with a vertical line.}
-        if ( (x>=0) and (x<=width2) and (y>=0) and (y<=height2) ) then {plot only text if center object is visible}
+        if ( (x>=0) and (x<=width2) and (y>=0) and (y<=height2) and (naam2<>'') ) then {plot only text if center object is visible and has a name}
         begin
           if naam3='' then name:=naam2
           else
