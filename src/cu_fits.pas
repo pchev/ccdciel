@@ -1721,7 +1721,7 @@ begin
        gmult:=GreenBalance/mx;
        bmult:=BlueBalance/mx;
      end;
-     if (FFitsInfo.bayeroffsetx mod 2) = 1 then begin
+     if ((FFitsInfo.bayeroffsetx mod 2) = 1) and (not odd(Fwidth)) then begin
        case t of
          bayerGR: t:=bayerRG;
          bayerRG: t:=bayerGR;
@@ -1731,7 +1731,7 @@ begin
      end;
      offsety:=FFitsInfo.bayeroffsety;
      if FFitsInfo.roworder<>bottomup then offsety:=(offsety+1) mod 2;
-     if (offsety mod 2) = 1 then begin
+     if ((offsety mod 2) = 1) and (not odd(Fheight)) then begin
        case t of
          bayerGR: t:=bayerBG;
          bayerRG: t:=bayerGB;
