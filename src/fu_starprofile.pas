@@ -358,6 +358,8 @@ begin
   PanelGraph.Parent:=f;
   PanelGraph.Align:=alClient;
   BtnPinGraph.Down:=true;
+  VcChart.AxisList.Axes[0].Marks.LabelFont.Height:=0;
+  VcChart.AxisList.Axes[1].Marks.LabelFont.Height:=0;
   FormPos(f,mouse.CursorPos.x,mouse.CursorPos.y);
   f.Show;
  end;
@@ -368,6 +370,8 @@ begin
   CloseAction:=caFree;
   PanelGraph.Align:=alNone;
   PanelGraph.Parent:=Panel6;
+  VcChart.AxisList.Axes[0].Marks.LabelFont.Height:=8;
+  VcChart.AxisList.Axes[1].Marks.LabelFont.Height:=8;
 end;
 
 procedure Tf_starprofile.TimerHideGraphTimer(Sender: TObject);
