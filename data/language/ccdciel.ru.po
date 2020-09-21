@@ -7,14 +7,14 @@ msgstr ""
 "Project-Id-Version: ccdciel\n"
 "Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
 "POT-Creation-Date: 2020-08-23 08:48+0000\n"
-"PO-Revision-Date: 2020-05-11 13:06+0000\n"
+"PO-Revision-Date: 2020-09-05 09:26+0000\n"
 "Last-Translator: Sergey Tarantsov <tsn-ast@yandex.ru>\n"
 "Language-Team: Russian <ru@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2020-08-23 09:00+0000\n"
-"X-Generator: Launchpad (build 99c2d833c8d727fd05148486920aca032e908071)\n"
+"X-Launchpad-Export-Date: 2020-09-21 08:44+0000\n"
+"X-Generator: Launchpad (build 83bdf6c8a3a5f87722c8927e54838522f3e57504)\n"
 
 #: u_translation.rs32bitdriver
 msgid "This driver work only in 32bit, please install the 32bit version of CCDciel."
@@ -442,7 +442,7 @@ msgstr "Тип матрицы"
 
 #: u_translation.rsbecarefuloft
 msgid "Be careful of the longitude East/West setting."
-msgstr ""
+msgstr "Обратите внимание на правильность настройки долготы Восток/Запад"
 
 #: u_translation.rsbeforetouset
 msgid "Before to use this tool you must connect the camera, the mount and the planetarium"
@@ -458,7 +458,7 @@ msgstr "Начать"
 
 #: u_translation.rsbesurethecom
 msgid "Be sure the computer use the local timezone and the observatory location is configured in the program preferences."
-msgstr ""
+msgstr "Убедитесь, что компьютер использует местный часовой пояс, а местоположение обсерватории установлено в настройках программы"
 
 #: u_translation.rsbesuretoconf
 msgid "Be sure to configure the camera connection."
@@ -4110,7 +4110,7 @@ msgstr "Камера подключена. Выйти из программы?"
 
 #: u_translation.rsthecomputert
 msgid "The computer timezone %s and the observatory longitude %s are not compatible."
-msgstr ""
+msgstr "Часовой пояс компьютера %s и долгота обсерватории %s несовместимы"
 
 #: u_translation.rsthedataare2
 msgid "The data are now recorded in the profile.%sYou can review the other auto-focus options using the menu %sEdit / Preferences / Autofocus"

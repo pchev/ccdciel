@@ -7,14 +7,14 @@ msgstr ""
 "Project-Id-Version: ccdciel\n"
 "Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
 "POT-Creation-Date: 2020-08-23 08:48+0000\n"
-"PO-Revision-Date: 2020-08-04 18:43+0000\n"
+"PO-Revision-Date: 2020-09-08 14:05+0000\n"
 "Last-Translator: Thomas <email@starhopper.de>\n"
 "Language-Team: German <de@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2020-08-23 09:00+0000\n"
-"X-Generator: Launchpad (build 99c2d833c8d727fd05148486920aca032e908071)\n"
+"X-Launchpad-Export-Date: 2020-09-21 08:44+0000\n"
+"X-Generator: Launchpad (build 83bdf6c8a3a5f87722c8927e54838522f3e57504)\n"
 
 #: u_translation.rs32bitdriver
 msgid "This driver work only in 32bit, please install the 32bit version of CCDciel."
@@ -442,7 +442,7 @@ msgstr "Bayermatrix Muster"
 
 #: u_translation.rsbecarefuloft
 msgid "Be careful of the longitude East/West setting."
-msgstr ""
+msgstr "Auf die richtige Einstellung des Längengrads (Ost/West) achten"
 
 #: u_translation.rsbeforetouset
 msgid "Before to use this tool you must connect the camera, the mount and the planetarium"
@@ -458,7 +458,7 @@ msgstr "Beginn"
 
 #: u_translation.rsbesurethecom
 msgid "Be sure the computer use the local timezone and the observatory location is configured in the program preferences."
-msgstr ""
+msgstr "Stellen Sie sicher, dass der Computer die lokale Zeitzone verwendet und der Standort des Observatoriums in den Programmeinstellungen konfiguriert ist."
 
 #: u_translation.rsbesuretoconf
 msgid "Be sure to configure the camera connection."
@@ -4111,8 +4111,9 @@ msgid "The camera is connected. Do you want to exit the program now?"
 msgstr "Die Kamera ist verbunden. Möchten Sie das Programm verlassen"
 
 #: u_translation.rsthecomputert
+#, fuzzy,badformat
 msgid "The computer timezone %s and the observatory longitude %s are not compatible."
-msgstr ""
+msgstr "Die Zeitzone des Computers und der Längengrad der Sternwarte sind verschieden"
 
 #: u_translation.rsthedataare2
 msgid "The data are now recorded in the profile.%sYou can review the other auto-focus options using the menu %sEdit / Preferences / Autofocus"
