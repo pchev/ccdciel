@@ -22,6 +22,7 @@ object f_ccdtemp: Tf_ccdtemp
     Color = clBtnShadow
     DragMode = dmAutomatic
     Font.Color = clBtnText
+    Layout = tlCenter
     ParentColor = False
     ParentFont = False
     Transparent = False

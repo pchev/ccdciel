@@ -20,6 +20,7 @@ object f_frame: Tf_frame
     Color = clBtnShadow
     DragMode = dmAutomatic
     Font.Color = clBtnText
+    Layout = tlCenter
     ParentColor = False
     ParentFont = False
     Transparent = False

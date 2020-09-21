@@ -307,16 +307,18 @@ begin
 end;
 
 procedure TAstrometry.AstrometrySolveonTimer(Sender: TObject);
-var ra,de,eq,pa: double;
+var ra,de,eq,pa,ra2000,de2000: double;
 begin
 TimerAstrometrySolve.Enabled:=false;
 if fits.HeaderInfo.solved and CurrentCoord(ra,de,eq,pa) then begin
+   ra2000:=ra;
+   de2000:=de;
    ra:=ra*15*deg2rad;
    de:=de*deg2rad;
    J2000ToApparent(ra,de);
    ra:=rad2deg*ra/15;
    de:=rad2deg*de;
-   msg(Format(rsCenterAppare, [RAToStr(ra), DEToStr(de), FormatFloat(f1, pa)]),3);
+   msg(Format(rsCenterAppare, [RAToStr(ra), DEToStr(de), FormatFloat(f1, pa)])+', J2000 '+rsRA+'='+RAToStr(ra2000)+' '+rsDec+'='+DEToStr(de2000),3);
 end;
 end;
 

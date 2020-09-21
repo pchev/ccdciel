@@ -551,7 +551,7 @@ begin
 end;
 
 procedure T_camera.WriteHeaders;
-var origin,observer,telname,objname,siso,CType: string;
+var origin,observer,telname,objname,siso,CType,roworder: string;
     focal_length,pixscale1,pixscale2,ccdtemp,st,ra,de,fstop,shutter,multr,multg,multb: double;
     hbitpix,hnaxis,hnaxis1,hnaxis2,hnaxis3,hbin1,hbin2,cgain,focuserpos: integer;
     hfilter,hframe,hinstr,hdateobs : string;
@@ -570,6 +570,7 @@ begin
   if not Ffits.Header.Valueof('NAXIS3',hnaxis3) then hnaxis3:=Ffits.HeaderInfo.naxis3;
   if not Ffits.Header.Valueof('BZERO',hbzero)   then hbzero:=Ffits.HeaderInfo.bzero;
   if not Ffits.Header.Valueof('BSCALE',hbscale) then hbscale:=Ffits.HeaderInfo.bscale;
+  if not Ffits.Header.Valueof('ROWORDER',roworder) then roworder:=topdown;
   if not Ffits.Header.Valueof('EXPTIME',hexp)   then hexp:=Fexptime;
   if not Ffits.Header.Valueof('PIXSIZE1',hpix1) then hpix1:=-1;
   if not Ffits.Header.Valueof('PIXSIZE2',hpix2) then hpix2:=-1;
@@ -688,8 +689,6 @@ begin
     try
      if FhasCfaInfo and (hbin1<=1) and (hbin2<=1)  then begin
        CfaInfo(OffsetX,OffsetY,CType);
-       if FASCOMFlipImage and (not odd(FCameraYSize)) then
-          OffsetY:=(OffsetY+1) mod 2;
      end;
     except
     end;
@@ -704,7 +703,8 @@ begin
   Ffits.Header.Insert(4,'NAXIS2',hnaxis2 ,'length of data axis 2');
   if hnaxis=3 then Ffits.Header.Insert(-1,'NAXIS3',hnaxis3 ,'length of data axis 3');;
   Ffits.Header.Insert(-1,'BZERO',hbzero,'offset data range to that of unsigned short');
-  Ffits.Header.Insert(-1,'BSCALE',hbscale,'default scaling factor');
+  i:=Ffits.Header.Insert(-1,'BSCALE',hbscale,'default scaling factor');
+  Ffits.Header.Insert(i+1,'ROWORDER',roworder,'Order of the rows in image array');
   i:=FFits.Header.Indexof('HIERARCH');
   if i>0 then
      i:=i-1

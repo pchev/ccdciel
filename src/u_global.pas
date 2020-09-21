@@ -26,7 +26,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 interface
 
-uses u_ccdconfig, dynlibs, LMessages,
+uses u_ccdconfig, dynlibs, LMessages, Graphics,
   Classes, SysUtils,LCLType;
 
 const
@@ -178,7 +178,7 @@ type
   {$i revision.inc}
 
 const
-  ccdcielver = '0.9.71';
+  ccdcielver = '0.9.72';
   ccdciel_version='Version beta '+ccdcielver;
   TargetFileVersion = 5;
   Maxclient = 100;
@@ -250,7 +250,7 @@ const
   MaxCmdArg = 10;
   MaxScriptDir=2;
   MaxMenulevel=10;
-  MaxFilter=20;
+  MaxFilter=100;
   WaitResponseTime=120;
   ZoomMax=15;
   msgOK = 'OK!';
@@ -349,7 +349,7 @@ var
   ObsLongitude, ObsLatitude, ObsElevation, ObsTimeZone: double;
   BayerColor: boolean;
   DefaultBayerMode:TBayerMode;
-  BalanceFromCamera: boolean;
+  BalanceFromCamera,BGneutralization: boolean;
   RedBalance,GreenBalance,BlueBalance: double;
   MaxVideoPreviewRate: integer;
   TemperatureScale: integer;
@@ -443,6 +443,7 @@ var
   Collimation: boolean;
   CollimationCircle: integer;
   AutoguiderStat: array of array[1..3] of double;
+  colorGreen, colorBlue, colorRed: Tcolor;
 
   procedure globalmsg(str:string);
 

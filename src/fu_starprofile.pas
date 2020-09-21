@@ -358,6 +358,8 @@ begin
   PanelGraph.Parent:=f;
   PanelGraph.Align:=alClient;
   BtnPinGraph.Down:=true;
+  VcChart.AxisList.Axes[0].Marks.LabelFont.Height:=0;
+  VcChart.AxisList.Axes[1].Marks.LabelFont.Height:=0;
   FormPos(f,mouse.CursorPos.x,mouse.CursorPos.y);
   f.Show;
  end;
@@ -368,6 +370,8 @@ begin
   CloseAction:=caFree;
   PanelGraph.Align:=alNone;
   PanelGraph.Parent:=Panel6;
+  VcChart.AxisList.Axes[0].Marks.LabelFont.Height:=8;
+  VcChart.AxisList.Axes[1].Marks.LabelFont.Height:=8;
 end;
 
 procedure Tf_starprofile.TimerHideGraphTimer(Sender: TObject);
@@ -751,7 +755,7 @@ begin
   if not FirstFrame then begin
     inc(FnumGraph);
     if AutofocusMode=afVcurve then begin
-      PtSourceMeasure.Add(focuser.FocusPosition,Fhfd,'',clGreen);
+      PtSourceMeasure.Add(focuser.FocusPosition,Fhfd,'',colorGreen);
     end
     else if (AutofocusMode=afDynamic)or(AutofocusMode=afPlanet) then begin
     if (not terminated) then begin
@@ -760,15 +764,15 @@ begin
       else
         i:=FnumGraph;
       if (FValMax+bg)< (0.9995*ClippingOverflow) then
-         PtSourceMeasure.Add(i,Fhfd,'',clBlue)
+         PtSourceMeasure.Add(i,Fhfd,'',colorBlue)
       else
-         PtSourceMeasure.Add(i,Fhfd,'',clRed);
+         PtSourceMeasure.Add(i,Fhfd,'',colorRed);
       FitSourceMeasure.Add(i,Fhfd);
     end;
     end
     else
     if (not terminated) then begin
-      PtSourceMeasure.Add(FnumGraph,Fhfd,'',clGreen);
+      PtSourceMeasure.Add(FnumGraph,Fhfd,'',colorGreen);
       FitSourceMeasure.Add(FnumGraph,Fhfd);
     end;
   end;

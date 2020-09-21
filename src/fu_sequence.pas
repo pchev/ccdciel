@@ -1173,9 +1173,14 @@ begin
 end;
 
 procedure Tf_sequence.BtnStartClick(Sender: TObject);
+var buf:string;
 begin
  if (AllDevicesConnected) then begin
-   if Targets.Running or Fcapture.Running then begin
+   if (ObsTimeZone<>0) and (abs(ObsTimeZone+ObsLongitude/15)>3) then begin
+     if ObsLongitude<0 then buf:=rsEast else buf:=rsWest;
+     msg(Format(rsTheComputerT, [FormatFloat(f1, ObsTimeZone), FormatFloat(f1, abs(ObsLongitude))+blank+buf])+crlf+rsBeSureTheCom+crlf+rsBeCarefulOft, 0);
+   end
+   else if Targets.Running or Fcapture.Running then begin
      msg(rsCaptureAlrea,0);
    end
    else if Targets.Count=0 then begin

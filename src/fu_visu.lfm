@@ -56,17 +56,16 @@ object f_visu: Tf_visu
         Top = 0
         Width = 71
         Constraints.MaxHeight = 26
-        Font.Color = clSilver
-        MaxLength = 0
-        ParentFont = False
-        TabOrder = 0
-        Visible = False
-        OnChange = SpinEditMinChange
         DecimalPlaces = 0
+        Font.Color = clSilver
         Increment = 10
         MaxValue = 65536
         MinValue = 0
+        OnChange = SpinEditMinChange
+        ParentFont = False
+        TabOrder = 0
         Value = 0
+        Visible = False
       end
       object SpinEditMax: TFloatSpinEdit
         Left = 188
@@ -74,17 +73,16 @@ object f_visu: Tf_visu
         Top = 0
         Width = 71
         Constraints.MaxHeight = 26
-        Font.Color = clSilver
-        MaxLength = 0
-        ParentFont = False
-        TabOrder = 1
-        Visible = False
-        OnChange = SpinEditMaxChange
         DecimalPlaces = 0
+        Font.Color = clSilver
         Increment = 10
         MaxValue = 65536
         MinValue = 0
+        OnChange = SpinEditMaxChange
+        ParentFont = False
+        TabOrder = 1
         Value = 0
+        Visible = False
       end
     end
     object Panel2: TPanel
@@ -122,10 +120,11 @@ object f_visu: Tf_visu
             Top = 0
             Width = 114
             Max = 100
-            OnChange = HistBarChange
             Position = 0
             TickStyle = tsNone
             Constraints.MaxHeight = 26
+            OnMouseUp = HistBarMouseUp
+            OnKeyUp = HistBarKeyUp
             TabOrder = 0
           end
         end
@@ -490,13 +489,12 @@ object f_visu: Tf_visu
           Width = 57
           AutoSize = False
           Constraints.MaxHeight = 26
-          MaxLength = 0
-          ParentFont = False
-          TabOrder = 0
-          OnChange = GammaChange
           Increment = 0.1
           MaxValue = 1
           MinValue = 0.1
+          OnChange = GammaChange
+          ParentFont = False
+          TabOrder = 0
           Value = 1
         end
         object BtnInvert: TSpeedButton
@@ -690,6 +688,7 @@ object f_visu: Tf_visu
     Color = clBtnShadow
     DragMode = dmAutomatic
     Font.Color = clBtnText
+    Layout = tlCenter
     ParentColor = False
     ParentFont = False
     Transparent = False

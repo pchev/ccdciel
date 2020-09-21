@@ -844,7 +844,7 @@
         <IsPartOfProject Value="True"/>
         <ComponentName Value="f_collimation"/>
         <ResourceBaseClass Value="Form"/>
-      </Unit105>      
+      </Unit105>
     </Units>
   </ProjectOptions>
   <CompilerOptions>

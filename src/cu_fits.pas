@@ -1,7 +1,7 @@
 unit cu_fits;
 
 {
-Copyright (C) 2005-2015 Patrick Chevalley
+Copyright (C) 2005-2020 Patrick Chevalley
 
 http://www.ap-i.net
 pch@ap-i.net
@@ -38,7 +38,7 @@ type
             bitpix,naxis,naxis1,naxis2,naxis3 : integer;
             Frx,Fry,Frwidth,Frheight,BinX,BinY: integer;
             bzero,bscale,dmax,dmin,blank : double;
-            bayerpattern: string;
+            bayerpattern,roworder: string;
             bayeroffsetx, bayeroffsety: integer;
             rmult,gmult,bmult: double;
             equinox,ra,dec,crval1,crval2: double;
@@ -103,6 +103,8 @@ type
  end;
 
 const    maxl = 20000;
+         bottomup = 'BOTTOM-UP';
+         topdown = 'TOP-DOWN';
 
 type
 
@@ -134,7 +136,7 @@ type
     // Fits header values
     FFitsInfo : TFitsInfo;
     //
-    n_axis,cur_axis,Fwidth,Fheight,Fhdr_end,colormode : Integer;
+    n_axis,cur_axis,Fwidth,Fheight,Fhdr_end,colormode,Fpreview_axis : Integer;
     FTitle : string;
     Fmean,Fsigma,Fdmin,Fdmax : double;
     FImgDmin, FImgDmax: Word;
@@ -144,7 +146,7 @@ type
     gamma_c : array[0..32768] of single; {prepared power values for gamma correction}
     FGamma: single;
     emptybmp:Tbitmap;
-    FMarkOverflow: boolean;
+    FMarkOverflow,FDisableBayer: boolean;
     FMaxADU, FOverflow, FUnderflow: double;
     FInvert: boolean;
     FStarList: TStarList;
@@ -158,12 +160,12 @@ type
     procedure SetVideoStream(value:TMemoryStream);
     Procedure ReadFitsImage;
     Procedure WriteFitsImage;
-    Procedure GetImage;
     function GammaCorr(value: Word):byte;
     procedure SetImgFullRange(value: boolean);
     function GetHasBPM: boolean;
     procedure SetGamma(value: single);
     function GetBayerMode: TBayerMode;
+    procedure GetBayerBgColor(t:TBayerMode; rmult,gmult,bmult:double; out r,g,b: integer);
   protected
     { Protected declarations }
   public
@@ -174,10 +176,10 @@ type
      Procedure LoadStream;
      procedure ClearFitsInfo;
      procedure GetFitsInfo;
-     function  BayerInterpolationExp(t:TBayerMode; rmult,gmult,bmult:double; pix1,pix2,pix3,pix4,pix5,pix6,pix7,pix8,pix9:integer; row,col:integer):TExpandedPixel; inline;
-     function  BayerInterpolation(t:TBayerMode; rmult,gmult,bmult:double; pix1,pix2,pix3,pix4,pix5,pix6,pix7,pix8,pix9:integer; row,col:integer):TBGRAPixel; inline;
-     procedure GetExpBitmap(var bgra: TExpandedBitmap; debayer:boolean);
-     procedure GetBGRABitmap(var bgra: TBGRABitmap; debayer:boolean);
+     procedure BayerInterpolation(t:TBayerMode; rmult,gmult,bmult:double; rbg,gbg,bbg:integer; pix1,pix2,pix3,pix4,pix5,pix6,pix7,pix8,pix9:word; row,col:integer; out pixr,pixg,pixb:word); inline;
+     Procedure GetImage;
+     procedure GetExpBitmap(var bgra: TExpandedBitmap);
+     procedure GetBGRABitmap(var bgra: TBGRABitmap);
      procedure SaveToBitmap(fn: string);
      procedure SaveToFile(fn: string; pack: boolean=false);
      procedure LoadFromFile(fn:string);
@@ -194,8 +196,8 @@ type
      function  double_star(ri, x,y : integer):boolean;
      function  value_subpixel(x1,y1:double):double;
      procedure FindBrightestPixel(x,y,s,starwindow2: integer; out xc,yc:integer; out vmax: double; accept_double: boolean=true);
-     procedure FindStarPos(x,y,s: integer; out xc,yc,ri:integer; out vmax,bg,bg_standard_deviation: double);
-     procedure GetHFD2(x,y,s: integer; out xc,yc,bg,bg_standard_deviation,hfd,star_fwhm,valmax,snr,flux: double; strict_saturation: boolean=true);{han.k 2018-3-21}
+     procedure FindStarPos(x,y,s: integer; out xc,yc,ri:integer; out vmax,bg,sd: double);
+     procedure GetHFD2(x,y,s: integer; out xc,yc,bg,sd,hfd,star_fwhm,valmax,snr,flux: double; strict_saturation: boolean=true);{han.k 2018-3-21}
      procedure GetStarList(rx,ry,s: integer);
      procedure MeasureStarList(s: integer; list: TArrayDouble2);
      procedure ClearStarList;
@@ -216,13 +218,14 @@ type
      property imageMax : double read FimageMax;
      property imageMean: double read Fmean;
      property imageSigma: double read Fsigma;
-     property BayerMode: TBayerMode read GetBayerMode;
+     property preview_axis: integer read Fpreview_axis;
      property ImgFullRange: Boolean read FImgFullRange write SetImgFullRange;
      property MaxADU: double read FMaxADU write FMaxADU;
      property Invert: boolean read FInvert write FInvert;
      property MarkOverflow: boolean read FMarkOverflow write FMarkOverflow;
      property Overflow: double read FOverflow write FOverflow;
      property Underflow: double read FUnderflow write FUnderflow;
+     property DisableBayer: boolean read FDisableBayer write FDisableBayer;
      property hasBPM: boolean read GetHasBPM;
      property BPMProcess: boolean read FBPMProcess;
      property StarList: TStarList read FStarList;
@@ -239,6 +242,10 @@ type
     fits: TFits;
     hist: THistogram;
     Fdmin,c: double;
+    rmult,gmult,bmult: double;
+    rbg,gbg,bbg: integer;
+    debayer: boolean;
+    t: TBayerMode;
     procedure Execute; override;
     constructor Create(CreateSuspended: boolean);
   end;
@@ -251,9 +258,6 @@ type
       bgra: TBGRABitmap;
       HighOverflow,LowOverflow: TBGRAPixel;
       c,overflow,underflow: double;
-      rmult,gmult,bmult,mx: double;
-      debayer: boolean;
-      t: TBayerMode;
       FImgDmin: word;
       procedure Execute; override;
       constructor Create(CreateSuspended: boolean);
@@ -265,9 +269,6 @@ type
       num, id: integer;
       fits: TFits;
       bgra: TExpandedBitmap;
-      rmult,gmult,bmult,mx: double;
-      debayer: boolean;
-      t: TBayerMode;
       procedure Execute; override;
       constructor Create(CreateSuspended: boolean);
     end;
@@ -286,8 +287,8 @@ type
 
 
 
-  procedure PictureToFits(pict:TMemoryStream; ext: string; var ImgStream:TMemoryStream; flip:boolean=true;pix:double=-1;piy:double=-1;binx:integer=-1;biny:integer=-1;bayer:string='';rmult:string='';gmult:string='';bmult:string='';origin:string='';exifkey:TStringList=nil;exifvalue:TStringList=nil);
-  procedure RawToFits(raw:TMemoryStream; ext: string; var ImgStream:TMemoryStream; out rmsg:string; pix:double=-1;piy:double=-1;binx:integer=-1;biny:integer=-1);
+  procedure PictureToFits(pict:TMemoryStream; ext: string; var ImgStream:TMemoryStream; flip:boolean=false;pix:double=-1;piy:double=-1;binx:integer=-1;biny:integer=-1;bayer:string='';rmult:string='';gmult:string='';bmult:string='';origin:string='';exifkey:TStringList=nil;exifvalue:TStringList=nil);
+  procedure RawToFits(raw:TMemoryStream; ext: string; var ImgStream:TMemoryStream; out rmsg:string; pix:double=-1;piy:double=-1;binx:integer=-1;biny:integer=-1; flip:boolean=false);
   function PackFits(unpackedfilename,packedfilename: string; out rmsg:string):integer;
   function UnpackFits(packedfilename: string; var ImgStream:TMemoryStream; out rmsg:string):integer;
 
@@ -692,8 +693,9 @@ procedure TGetImage.Execute;
 var
   i, j, startline, endline, xs,ys: integer;
   x : word;
-  h: integer;
   xx: extended;
+  i1,i2,i3,j1,j2,j3 : integer;
+  pix1,pix2,pix3,pix4,pix5,pix6,pix7,pix8,pix9,pixr,pixg,pixb:word;
 begin
 xs:= fits.Fwidth;
 ys:= fits.FHeight;
@@ -713,15 +715,14 @@ case fits.FFitsInfo.bitpix of
              x:=round(max(0,min(MaxWord,(xx-Fdmin) * c )) );
              fits.Fimage[0,i,j]:=x;
              if fits.n_axis=3 then begin
-               h:=x;
+               inc(hist[x]);
                xx:=fits.FFitsInfo.bzero+fits.FFitsInfo.bscale*fits.imar64[1,i,j];
                x:=round(max(0,min(MaxWord,(xx-Fdmin) * c )) );
                fits.Fimage[1,i,j]:=x;
-               h:=h+x;
+               inc(hist[x]);
                xx:=fits.FFitsInfo.bzero+fits.FFitsInfo.bscale*fits.imar64[2,i,j];
                x:=round(max(0,min(MaxWord,(xx-Fdmin) * c )) );
                fits.Fimage[2,i,j]:=x;
-               x:=(h+x) div 3;
              end;
              inc(hist[x]);
          end;
@@ -734,15 +735,14 @@ case fits.FFitsInfo.bitpix of
              x:=round(max(0,min(MaxWord,(xx-Fdmin) * c )) );
              fits.Fimage[0,i,j]:=x;
              if fits.n_axis=3 then begin
-               h:=x;
+               inc(hist[x]);
                xx:=fits.FFitsInfo.bzero+fits.FFitsInfo.bscale*fits.imar32[1,i,j];
                x:=round(max(0,min(MaxWord,(xx-Fdmin) * c )) );
                fits.Fimage[1,i,j]:=x;
-               h:=h+x;
+               inc(hist[x]);
                xx:=fits.FFitsInfo.bzero+fits.FFitsInfo.bscale*fits.imar32[2,i,j];
                x:=round(max(0,min(MaxWord,(xx-Fdmin) * c )) );
                fits.Fimage[2,i,j]:=x;
-               x:=(h+x) div 3;
              end;
              inc(hist[x]);
          end;
@@ -750,43 +750,95 @@ case fits.FFitsInfo.bitpix of
          end;
      8 : begin
          for i:=startline to endline do begin
-         for j := 0 to xs-1 do begin
-             xx:=fits.FFitsInfo.bzero+fits.FFitsInfo.bscale*fits.imai8[0,i,j];
-             x:=round(max(0,min(MaxWord,(xx-Fdmin) * c )) );
-             fits.Fimage[0,i,j]:=x;
-             if fits.n_axis=3 then begin
-               h:=x;
-               xx:=fits.FFitsInfo.bzero+fits.FFitsInfo.bscale*fits.imai8[1,i,j];
+           if debayer then begin
+            i1:=max(i-1,0);
+            i2:=i;
+            i3:= min(i+1,ys-1);
+           end;
+           for j := 0 to xs-1 do begin
+             if debayer then begin
+               j1:=max(j-1,0);
+               j2:=j;
+               j3:=min(j+1,xs-1);
+               pix1:=round( max(0,min(MaxWord,(fits.FFitsInfo.bzero+fits.FFitsInfo.bscale*fits.imai8[0,i1,j1]-Fdmin) * c )) );
+               pix2:=round( max(0,min(MaxWord,(fits.FFitsInfo.bzero+fits.FFitsInfo.bscale*fits.imai8[0,i1,j2]-Fdmin) * c )) );
+               pix3:=round( max(0,min(MaxWord,(fits.FFitsInfo.bzero+fits.FFitsInfo.bscale*fits.imai8[0,i1,j3]-Fdmin) * c )) );
+               pix4:=round( max(0,min(MaxWord,(fits.FFitsInfo.bzero+fits.FFitsInfo.bscale*fits.imai8[0,i2,j1]-Fdmin) * c )) );
+               pix5:=round( max(0,min(MaxWord,(fits.FFitsInfo.bzero+fits.FFitsInfo.bscale*fits.imai8[0,i2,j2]-Fdmin) * c )) );
+               pix6:=round( max(0,min(MaxWord,(fits.FFitsInfo.bzero+fits.FFitsInfo.bscale*fits.imai8[0,i2,j3]-Fdmin) * c )) );
+               pix7:=round( max(0,min(MaxWord,(fits.FFitsInfo.bzero+fits.FFitsInfo.bscale*fits.imai8[0,i3,j1]-Fdmin) * c )) );
+               pix8:=round( max(0,min(MaxWord,(fits.FFitsInfo.bzero+fits.FFitsInfo.bscale*fits.imai8[0,i3,j2]-Fdmin) * c )) );
+               pix9:=round( max(0,min(MaxWord,(fits.FFitsInfo.bzero+fits.FFitsInfo.bscale*fits.imai8[0,i3,j3]-Fdmin) * c )) );
+               fits.BayerInterpolation(t,rmult,gmult,bmult,rbg,gbg,bbg,pix1,pix2,pix3,pix4,pix5,pix6,pix7,pix8,pix9,i,j,pixr,pixg,pixb);
+               inc(hist[pixr]);
+               inc(hist[pixg]);
+               inc(hist[pixb]);
+               fits.Fimage[0,i,j]:=pixr;
+               fits.Fimage[1,i,j]:=pixg;
+               fits.Fimage[2,i,j]:=pixb;
+             end else begin
+               xx:=fits.FFitsInfo.bzero+fits.FFitsInfo.bscale*fits.imai8[0,i,j];
                x:=round(max(0,min(MaxWord,(xx-Fdmin) * c )) );
-               fits.Fimage[1,i,j]:=x;
-               h:=h+x;
-               xx:=fits.FFitsInfo.bzero+fits.FFitsInfo.bscale*fits.imai8[2,i,j];
-               x:=round(max(0,min(MaxWord,(xx-Fdmin) * c )) );
-               fits.Fimage[2,i,j]:=x;
-               x:=(h+x) div 3;
-             end;
-             inc(hist[x]);
-         end;
+               fits.Fimage[0,i,j]:=x;
+               if fits.n_axis=3 then begin
+                 inc(hist[x]);
+                 xx:=fits.FFitsInfo.bzero+fits.FFitsInfo.bscale*fits.imai8[1,i,j];
+                 x:=round(max(0,min(MaxWord,(xx-Fdmin) * c )) );
+                 fits.Fimage[1,i,j]:=x;
+                 inc(hist[x]);
+                 xx:=fits.FFitsInfo.bzero+fits.FFitsInfo.bscale*fits.imai8[2,i,j];
+                 x:=round(max(0,min(MaxWord,(xx-Fdmin) * c )) );
+                 fits.Fimage[2,i,j]:=x;
+               end;
+               inc(hist[x]);
+            end;
+           end;
          end;
          end;
     16 : begin
          for i:=startline to endline do begin
-         for j := 0 to xs-1 do begin
+          if debayer then begin
+           i1:=max(i-1,0);
+           i2:=i;
+           i3:= min(i+1,ys-1);
+          end;
+          for j := 0 to xs-1 do begin
+           if debayer then begin
+             j1:=max(j-1,0);
+             j2:=j;
+             j3:=min(j+1,xs-1);
+             pix1:=round( max(0,min(MaxWord,(fits.FFitsInfo.bzero+fits.FFitsInfo.bscale*fits.imai16[0,i1,j1]-Fdmin) * c )) );
+             pix2:=round( max(0,min(MaxWord,(fits.FFitsInfo.bzero+fits.FFitsInfo.bscale*fits.imai16[0,i1,j2]-Fdmin) * c )) );
+             pix3:=round( max(0,min(MaxWord,(fits.FFitsInfo.bzero+fits.FFitsInfo.bscale*fits.imai16[0,i1,j3]-Fdmin) * c )) );
+             pix4:=round( max(0,min(MaxWord,(fits.FFitsInfo.bzero+fits.FFitsInfo.bscale*fits.imai16[0,i2,j1]-Fdmin) * c )) );
+             pix5:=round( max(0,min(MaxWord,(fits.FFitsInfo.bzero+fits.FFitsInfo.bscale*fits.imai16[0,i2,j2]-Fdmin) * c )) );
+             pix6:=round( max(0,min(MaxWord,(fits.FFitsInfo.bzero+fits.FFitsInfo.bscale*fits.imai16[0,i2,j3]-Fdmin) * c )) );
+             pix7:=round( max(0,min(MaxWord,(fits.FFitsInfo.bzero+fits.FFitsInfo.bscale*fits.imai16[0,i3,j1]-Fdmin) * c )) );
+             pix8:=round( max(0,min(MaxWord,(fits.FFitsInfo.bzero+fits.FFitsInfo.bscale*fits.imai16[0,i3,j2]-Fdmin) * c )) );
+             pix9:=round( max(0,min(MaxWord,(fits.FFitsInfo.bzero+fits.FFitsInfo.bscale*fits.imai16[0,i3,j3]-Fdmin) * c )) );
+             fits.BayerInterpolation(t,rmult,gmult,bmult,rbg,gbg,bbg,pix1,pix2,pix3,pix4,pix5,pix6,pix7,pix8,pix9,i,j,pixr,pixg,pixb);
+             inc(hist[pixr]);
+             inc(hist[pixg]);
+             inc(hist[pixb]);
+             fits.Fimage[0,i,j]:=pixr;
+             fits.Fimage[1,i,j]:=pixg;
+             fits.Fimage[2,i,j]:=pixb;
+           end else begin
              xx:=fits.FFitsInfo.bzero+fits.FFitsInfo.bscale*fits.imai16[0,i,j];
              x:=round(max(0,min(MaxWord,(xx-Fdmin) * c )) );
              fits.Fimage[0,i,j]:=x;
              if fits.n_axis=3 then begin
-               h:=x;
+               inc(hist[x]);
                xx:=fits.FFitsInfo.bzero+fits.FFitsInfo.bscale*fits.imai16[1,i,j];
                x:=round(max(0,min(MaxWord,(xx-Fdmin) * c )) );
                fits.Fimage[1,i,j]:=x;
-               h:=h+x;
+               inc(hist[x]);
                xx:=fits.FFitsInfo.bzero+fits.FFitsInfo.bscale*fits.imai16[2,i,j];
                x:=round(max(0,min(MaxWord,(xx-Fdmin) * c )) );
                fits.Fimage[2,i,j]:=x;
-               x:=(h+x) div 3;
              end;
              inc(hist[x]);
+           end;
          end;
          end;
          end;
@@ -797,15 +849,14 @@ case fits.FFitsInfo.bitpix of
              x:=round(max(0,min(MaxWord,(xx-Fdmin) * c )) );
              fits.Fimage[0,i,j]:=x;
              if fits.n_axis=3 then begin
-               h:=x;
+               inc(hist[x]);
                xx:=fits.FFitsInfo.bzero+fits.FFitsInfo.bscale*fits.imai32[1,i,j];
                x:=round(max(0,min(MaxWord,(xx-Fdmin) * c )) );
                fits.Fimage[1,i,j]:=x;
-               h:=h+x;
+               inc(hist[x]);
                xx:=fits.FFitsInfo.bzero+fits.FFitsInfo.bscale*fits.imai32[2,i,j];
                x:=round(max(0,min(MaxWord,(xx-Fdmin) * c )) );
                fits.Fimage[2,i,j]:=x;
-               x:=(h+x) div 3;
              end;
              inc(hist[x]);
          end;
@@ -828,11 +879,9 @@ end;
 procedure TGetBgraThread.Execute;
 var
   i, j, startline, endline, xs,ys: integer;
-  ii,i1,i2,i3,j1,j2,j3 : integer;
   x : word;
   xx,xxg,xxb: extended;
   p: PBGRAPixel;
-  pix1,pix2,pix3,pix4,pix5,pix6,pix7,pix8,pix9:integer;
 
 begin
 xs:= fits.Fwidth;
@@ -843,18 +892,11 @@ if id = (num - 1) then
   endline := ys - 1
 else
   endline := (id + 1) * i - 1;
-ii:=0; i1:=0; i2:=0; i3:=0;
 // process the rows range for this thread
 for i:=startline to endline do begin
-   if debayer then begin
-     ii:=ys-1-i; // image is flipped in fits, count color order from the bottom
-     i1:=max(i-1,0);
-     i2:=i;
-     i3:= min(i+1,ys-1);
-   end;
    p := bgra.Scanline[i];
    for j := 0 to xs-1 do begin
-       if fits.HeaderInfo.naxis=3 then begin
+       if fits.preview_axis=3 then begin
          // 3 chanel color image
          xx:=fits.image[0,i,j];
          x:=round(max(0,min(MaxWord,(xx-FImgDmin) * c )) );
@@ -872,21 +914,6 @@ for i:=startline to endline do begin
              p^:=LowOverflow;
          end;
        end else begin
-         if debayer then begin
-           j1:=max(j-1,0);
-           j2:=j;
-           j3:=min(j+1,xs-1);
-           pix1:=round((fits.image[0,i1,j1]-FImgDmin) * c );
-           pix2:=round((fits.image[0,i1,j2]-FImgDmin) * c );
-           pix3:=round((fits.image[0,i1,j3]-FImgDmin) * c );
-           pix4:=round((fits.image[0,i2,j1]-FImgDmin) * c );
-           pix5:=round((fits.image[0,i2,j2]-FImgDmin) * c );
-           pix6:=round((fits.image[0,i2,j3]-FImgDmin) * c );
-           pix7:=round((fits.image[0,i3,j1]-FImgDmin) * c );
-           pix8:=round((fits.image[0,i3,j2]-FImgDmin) * c );
-           pix9:=round((fits.image[0,i3,j3]-FImgDmin) * c );
-           p^:=fits.BayerInterpolation(t,rmult,gmult,bmult,pix1,pix2,pix3,pix4,pix5,pix6,pix7,pix8,pix9,ii,j);
-         end else begin
            // B/W image
            xx:=fits.image[0,i,j];
            x:=round(max(0,min(MaxWord,(xx-FImgDmin) * c )) );
@@ -899,7 +926,6 @@ for i:=startline to endline do begin
              else if xx<=underflow then
                p^:=LowOverflow;
            end;
-         end;
        end;
        p^.alpha:=255;
        inc(p);
@@ -920,11 +946,9 @@ end;
 procedure TGetExpThread.Execute;
 var
   i, j, startline, endline, xs,ys: integer;
-  ii,i1,i2,i3,j1,j2,j3 : integer;
   x : word;
   xx,xxg,xxb: extended;
   p: PExpandedPixel;
-  pix1,pix2,pix3,pix4,pix5,pix6,pix7,pix8,pix9:integer;
 
 begin
 xs:= fits.Fwidth;
@@ -935,18 +959,11 @@ if id = (num - 1) then
   endline := ys - 1
 else
   endline := (id + 1) * i - 1;
-ii:=0; i1:=0; i2:=0; i3:=0;
 // process the rows range for this thread
 for i:=startline to endline do begin
-   if debayer then begin
-     ii:=ys-1-i; // image is flipped in fits, count color order from the bottom
-     i1:=max(i-1,0);
-     i2:=i;
-     i3:= min(i+1,ys-1);
-   end;
    p := bgra.Scanline[i];
    for j := 0 to xs-1 do begin
-       if fits.HeaderInfo.naxis=3 then begin
+       if fits.preview_axis=3 then begin
          // 3 chanel color image
          xx:=fits.imageMin+fits.image[0,i,j]/fits.imageC;
          x:=round(max(0,min(MaxWord,xx)) );
@@ -958,28 +975,12 @@ for i:=startline to endline do begin
          x:=round(max(0,min(MaxWord,xxb)) );
          p^.blue:=x;
        end else begin
-         if debayer then begin
-           j1:=max(j-1,0);
-           j2:=j;
-           j3:=min(j+1,xs-1);
-           pix1:=round(fits.imageMin+fits.image[0,i1,j1]/fits.imageC);
-           pix2:=round(fits.imageMin+fits.image[0,i1,j2]/fits.imageC);
-           pix3:=round(fits.imageMin+fits.image[0,i1,j3]/fits.imageC);
-           pix4:=round(fits.imageMin+fits.image[0,i2,j1]/fits.imageC);
-           pix5:=round(fits.imageMin+fits.image[0,i2,j2]/fits.imageC);
-           pix6:=round(fits.imageMin+fits.image[0,i2,j3]/fits.imageC);
-           pix7:=round(fits.imageMin+fits.image[0,i3,j1]/fits.imageC);
-           pix8:=round(fits.imageMin+fits.image[0,i3,j2]/fits.imageC);
-           pix9:=round(fits.imageMin+fits.image[0,i3,j3]/fits.imageC);
-           p^:=fits.BayerInterpolationExp(t,rmult,gmult,bmult,pix1,pix2,pix3,pix4,pix5,pix6,pix7,pix8,pix9,ii,j);
-         end else begin
            // B/W image
            xx:=fits.imageMin+fits.image[0,i,j]/fits.imageC;
            x:=round(max(0,min(MaxWord,xx)));
            p^.red:=x;
            p^.green:=x;
            p^.blue:=x;
-         end;
        end;
        p^.alpha:=65535;
        inc(p);
@@ -1079,6 +1080,7 @@ FImgFullRange:=false;
 FStreamValid:=false;
 FImageValid:=false;
 FMarkOverflow:=false;
+FDisableBayer:=false;
 FMaxADU:=MAXWORD;
 FOverflow:=MAXWORD;
 FUnderflow:=0;
@@ -1294,7 +1296,7 @@ with FFitsInfo do begin
    bitpix:=0; naxis:=0; naxis1:=0; naxis2:=0; naxis3:=1;
    Frx:=-1; Fry:=-1; Frwidth:=0; Frheight:=0; BinX:=1; BinY:=1;
    bzero:=0; bscale:=1; dmax:=0; dmin:=0; blank:=0;
-   bayerpattern:='';
+   bayerpattern:=''; roworder:='';
    bayeroffsetx:=0; bayeroffsety:=0;
    rmult:=0; gmult:=0; bmult:=0;
    equinox:=2000; ra:=NullCoord; dec:=NullCoord; crval1:=NullCoord; crval2:=NullCoord;
@@ -1339,6 +1341,7 @@ begin
     if (keyword='FRAMEHGT') then Frheight:=round(StrToFloat(buf));
     if (keyword='FRAMEWDH') then Frwidth:=round(StrToFloat(buf));
     if (keyword='BAYERPAT') then bayerpattern:=trim(buf);
+    if (keyword='ROWORDER') then roworder:=trim(buf);
     if (keyword='XBAYROFF') then bayeroffsetx:=round(StrToFloat(buf));
     if (keyword='YBAYROFF') then bayeroffsety:=round(StrToFloat(buf));
     if (keyword='MULT_R') then rmult:=strtofloat(buf);
@@ -1379,6 +1382,8 @@ begin
     (bayerpattern='LRGB')
     then
       bayerpattern:='UNSUPPORTED';
+ // default roworder support most windows capture software and to not break bayerpattern from version before 0.9.72
+ if roworder='' then roworder:=topdown;
  // set color image type
  colormode:=1;
  if (naxis=3)and(naxis1=3) then begin // contiguous color RGB
@@ -1685,6 +1690,10 @@ var i,j: integer;
     timelimit: TDateTime;
     thread: array[0..15] of TGetImage;
     tc,timeout: integer;
+    rmult,gmult,bmult,mx: double;
+    rbg,gbg,bbg,bgm,offsety: integer;
+    t: TBayerMode;
+    debayer: boolean;
 begin
   if FImgFullRange then begin
     Fdmin:=0;
@@ -1696,7 +1705,42 @@ begin
     Fdmin:=FFitsInfo.dmin;
     Fdmax:=FFitsInfo.dmax;
   end;
-  setlength(Fimage,n_axis,Fheight,Fwidth);
+  fpreview_axis:=FFitsInfo.naxis;
+  t:=GetBayerMode;
+  debayer:=BayerColor and (not FDisableBayer) and (t<>bayerUnsupported) and ((FFitsInfo.bitpix=16)or(FFitsInfo.bitpix=8));
+  rmult:=0; gmult:=0; bmult:=0; rbg:=0; gbg:=0; bbg:=0;
+  if debayer then begin
+     fpreview_axis:=3;
+     if (BalanceFromCamera)and(FFitsInfo.rmult>0)and(FFitsInfo.gmult>0)and(FFitsInfo.bmult>0) then begin
+       rmult:=FFitsInfo.rmult;
+       gmult:=FFitsInfo.gmult;
+       bmult:=FFitsInfo.bmult;
+     end else begin
+       mx:=minvalue([RedBalance,GreenBalance,BlueBalance]);
+       rmult:=RedBalance/mx;
+       gmult:=GreenBalance/mx;
+       bmult:=BlueBalance/mx;
+     end;
+     if ((FFitsInfo.bayeroffsetx mod 2) = 1) and (not odd(Fwidth)) then begin
+       case t of
+         bayerGR: t:=bayerRG;
+         bayerRG: t:=bayerGR;
+         bayerBG: t:=bayerGB;
+         bayerGB: t:=bayerBG;
+       end;
+     end;
+     offsety:=FFitsInfo.bayeroffsety;
+     if FFitsInfo.roworder<>bottomup then offsety:=(offsety+1) mod 2;
+     if ((offsety mod 2) = 1) and (not odd(Fheight)) then begin
+       case t of
+         bayerGR: t:=bayerBG;
+         bayerRG: t:=bayerGB;
+         bayerBG: t:=bayerGR;
+         bayerGB: t:=bayerRG;
+       end;
+     end;
+  end;
+  setlength(Fimage,preview_axis,Fheight,Fwidth);
   for i:=0 to high(word) do FHistogram[i]:=1; // minimum 1 to take the log
 
   if Fdmax>Fdmin then
@@ -1707,6 +1751,15 @@ begin
   FimageMin:=Fdmin;
   FimageMax:=Fdmax;
   if FimageMin<0 then FimageMin:=0;
+
+  if debayer and BGneutralization then begin
+    GetBayerBgColor(t,rmult,gmult,bmult,rbg,gbg,bbg);
+    bgm:=MaxIntValue([rbg,gbg,bbg]);
+    rbg:=rbg-bgm;
+    gbg:=gbg-bgm;
+    bbg:=bbg-bgm;
+  end;
+
   thread[0]:=nil;
   // number of thread
    tc := max(1,min(16, MaxThreadCount)); // based on number of core
@@ -1718,6 +1771,14 @@ begin
     thread[i].fits := self;
     thread[i].num := tc;
     thread[i].id := i;
+    thread[i].debayer := debayer;
+    thread[i].rmult := rmult;
+    thread[i].gmult := gmult;
+    thread[i].bmult := bmult;
+    thread[i].rbg := rbg;
+    thread[i].gbg := gbg;
+    thread[i].bbg := bbg;
+    thread[i].t := t;
     thread[i].c := c;
     thread[i].Fdmin := Fdmin;
     thread[i].Start;
@@ -1853,31 +1914,98 @@ begin
   end;
 end;
 
-function TFits.BayerInterpolationExp(t:TBayerMode; rmult,gmult,bmult:double; pix1,pix2,pix3,pix4,pix5,pix6,pix7,pix8,pix9:integer; row,col:integer):TExpandedPixel; inline;
+procedure TFits.GetBayerBgColor(t:TBayerMode; rmult,gmult,bmult:double; out r,g,b: integer);
+var i,j,xs,ys,row,col,pix,thr: integer;
+    sr,sg,sb: double;
+    nr,ng,nb: integer;
+const subsample=3;
+begin
+ r:=0;
+ b:=0;
+ g:=0;
+ sr:=0; sg:=0; sb:=0;
+ nr:=0; ng:=0; nb:=0;
+ xs:= Fwidth div subsample;
+ ys:= FHeight div subsample;
+ thr:=min(round(Fmean+5*Fsigma),round(FimageMax/3));
+ for i:=0 to ys-1 do begin
+   row:=subsample*i;
+   for j:=0 to xs-1 do begin
+     col:=subsample*j;
+     case FFitsInfo.bitpix of
+       8: pix:=round( max(0,min(MaxWord,(FFitsInfo.bzero+FFitsInfo.bscale*imai8[0,subsample*i,subsample*j]-FimageMin) * FimageC )) );
+      16: pix:=round( max(0,min(MaxWord,(FFitsInfo.bzero+FFitsInfo.bscale*imai16[0,subsample*i,subsample*j]-FimageMin) * FimageC )) );
+     end;
+     if pix<thr then begin
+     if not odd(row) then begin //ligne paire
+        if not odd(col) then begin //colonne paire et ligne paire
+          case t of
+          bayerGR: begin inc(ng); sg:=sg+round(gmult*pix); end;
+          bayerRG: begin inc(nr); sr:=sr+round(rmult*pix); end;
+          bayerBG: begin inc(nb); sb:=sb+round(bmult*pix); end;
+          bayerGB: begin inc(ng); sg:=sg+round(gmult*pix); end;
+          end;
+        end
+        else begin //colonne impaire et ligne paire
+          case t of
+          bayerGR: begin inc(nr); sr:=sr+round(rmult*pix); end;
+          bayerRG: begin inc(ng); sg:=sg+round(gmult*pix); end;
+          bayerBG: begin inc(ng); sg:=sg+round(gmult*pix); end;
+          bayerGB: begin inc(nb); sb:=sb+round(bmult*pix); end;
+          end;
+        end;
+     end
+     else begin //ligne impaire
+        if not odd(col) then begin //colonne paire et ligne impaire
+          case t of
+          bayerGR: begin inc(nb); sb:=sb+round(bmult*pix); end;
+          bayerRG: begin inc(ng); sg:=sg+round(gmult*pix); end;
+          bayerBG: begin inc(ng); sg:=sg+round(gmult*pix); end;
+          bayerGB: begin inc(nr); sr:=sr+round(rmult*pix); end;
+          end;
+        end
+        else begin //colonne impaire et ligne impaire
+          case t of
+          bayerGR: begin inc(ng); sg:=sg+round(gmult*pix); end;
+          bayerRG: begin inc(nb); sb:=sb+round(bmult*pix); end;
+          bayerBG: begin inc(nr); sr:=sr+round(rmult*pix); end;
+          bayerGB: begin inc(ng); sg:=sg+round(gmult*pix); end;
+          end;
+       end;
+     end;
+     end;
+   end;
+ end;
+ if nr>0 then r:=round(sr/nr);
+ if ng>0 then g:=round(sg/ng);
+ if nb>0 then b:=round(sb/nb);
+end;
+
+procedure TFits.BayerInterpolation(t:TBayerMode; rmult,gmult,bmult:double; rbg,gbg,bbg:integer; pix1,pix2,pix3,pix4,pix5,pix6,pix7,pix8,pix9:word; row,col:integer; out pixr,pixg,pixb:word); inline;
 var r,g,b: integer;
 begin
    if not odd(row) then begin //ligne paire
       if not odd(col) then begin //colonne paire et ligne paire
         case t of
         bayerGR: begin
-            r:= round(rmult*(pix4+pix6)/2);
-            g:=round(gmult*pix5);
-            b:= round(bmult*(pix2+pix8)/2);
+            r:= round(rmult*(pix4+pix6)/2)-rbg;
+            g:=round(gmult*pix5)-gbg;
+            b:= round(bmult*(pix2+pix8)/2)-bbg;
            end;
         bayerRG: begin
-            r:=round(rmult*pix5);
-            g:= round(gmult*(pix2+pix4+pix6+pix8)/4);
-            b:= round(bmult*(pix1+pix3+pix7+pix9)/4);
+            r:=round(rmult*pix5)-rbg;
+            g:= round(gmult*(pix2+pix4+pix6+pix8)/4)-gbg;
+            b:= round(bmult*(pix1+pix3+pix7+pix9)/4)-bbg;
            end;
         bayerBG: begin
-            r:= round(rmult*(pix1+pix3+pix7+pix9)/4);
-            g:= round(gmult*(pix2+pix4+pix6+pix8)/4);
-            b:=round(bmult*pix5);
+            r:= round(rmult*(pix1+pix3+pix7+pix9)/4)-rbg;
+            g:= round(gmult*(pix2+pix4+pix6+pix8)/4)-gbg;
+            b:=round(bmult*pix5)-bbg;
            end;
         bayerGB: begin
-            r:= round(rmult*(pix2+pix8)/2);
-            g:=round(gmult*pix5);
-            b:= round(bmult*(pix4+pix6)/2);
+            r:= round(rmult*(pix2+pix8)/2)-rbg;
+            g:=round(gmult*pix5)-gbg;
+            b:= round(bmult*(pix4+pix6)/2)-bbg;
            end;
         else begin
             r:=0; g:=0; b:=0;
@@ -1887,24 +2015,24 @@ begin
       else begin //colonne impaire et ligne paire
        case t of
        bayerGR: begin
-           r:=round(rmult*pix5);
-           g:= round(gmult*(pix2+pix4+pix6+pix8)/4);
-           b:= round(bmult*(pix1+pix3+pix7+pix9)/4);
+           r:=round(rmult*pix5)-rbg;
+           g:= round(gmult*(pix2+pix4+pix6+pix8)/4)-gbg;
+           b:= round(bmult*(pix1+pix3+pix7+pix9)/4)-bbg;
           end;
        bayerRG: begin
-           r:= round(rmult*(pix4+pix6)/2);
-           g:=round(gmult*pix5);
-           b:=round(bmult*(pix2+pix8)/2);
+           r:= round(rmult*(pix4+pix6)/2)-rbg;
+           g:=round(gmult*pix5)-gbg;
+           b:=round(bmult*(pix2+pix8)/2)-bbg;
           end;
        bayerBG: begin
-           r:=round(rmult*(pix2+pix8)/2);
-           g:=round(gmult*pix5);
-           b:= round(bmult*(pix4+pix6)/2);
+           r:=round(rmult*(pix2+pix8)/2)-rbg;
+           g:=round(gmult*pix5)-gbg;
+           b:= round(bmult*(pix4+pix6)/2)-bbg;
           end;
        bayerGB: begin
-           r:= round(rmult*(pix1+pix3+pix7+pix9)/4);
-           g:= round(gmult*(pix2+pix4+pix6+pix8)/4);
-           b:=round(bmult*pix5);
+           r:= round(rmult*(pix1+pix3+pix7+pix9)/4)-rbg;
+           g:= round(gmult*(pix2+pix4+pix6+pix8)/4)-gbg;
+           b:=round(bmult*pix5)-bbg;
           end;
        else begin
            r:=0; g:=0; b:=0;
@@ -1916,24 +2044,24 @@ begin
      if not odd(col) then begin //colonne paire et ligne impaire
        case t of
        bayerGR: begin
-           r:= round(rmult*(pix1+pix3+pix7+pix9)/4);
-           g:= round(gmult*(pix2+pix4+pix6+pix8)/4);
-           b:=round(bmult*pix5);
+           r:= round(rmult*(pix1+pix3+pix7+pix9)/4)-rbg;
+           g:= round(gmult*(pix2+pix4+pix6+pix8)/4)-gbg;
+           b:=round(bmult*pix5)-bbg;
           end;
        bayerRG: begin
-           r:= round(rmult*(pix2+pix8)/2);
-           g:=round(gmult*pix5);
-           b:=round(bmult*(pix4+pix6)/2);
+           r:= round(rmult*(pix2+pix8)/2)-rbg;
+           g:=round(gmult*pix5)-gbg;
+           b:=round(bmult*(pix4+pix6)/2)-bbg;
           end;
        bayerBG: begin
-           r:= round(rmult*(pix4+pix6)/2);
-           g:=round(gmult*pix5);
-           b:=round(bmult*(pix2+pix8)/2);
+           r:= round(rmult*(pix4+pix6)/2)-rbg;
+           g:=round(gmult*pix5)-gbg;
+           b:=round(bmult*(pix2+pix8)/2)-bbg;
           end;
        bayerGB: begin
-           r:=round(rmult*pix5);
-           g:= round(gmult*(pix2+pix4+pix6+pix8)/4);
-           b:= round(bmult*(pix1+pix3+pix7+pix9)/4);
+           r:=round(rmult*pix5)-rbg;
+           g:= round(gmult*(pix2+pix4+pix6+pix8)/4)-gbg;
+           b:= round(bmult*(pix1+pix3+pix7+pix9)/4)-bbg;
           end;
        else begin
            r:=0; g:=0; b:=0;
@@ -1943,24 +2071,24 @@ begin
     else begin //colonne impaire et ligne impaire
        case t of
        bayerGR: begin
-           r:= round(rmult*(pix2+pix8)/2);
-           g:= round(gmult*pix5);
-           b:= round(bmult*(pix4+pix6)/2);
+           r:= round(rmult*(pix2+pix8)/2)-rbg;
+           g:= round(gmult*pix5)-gbg;
+           b:= round(bmult*(pix4+pix6)/2)-bbg;
           end;
        bayerRG: begin
-           r:= round(rmult*(pix1+pix3+pix7+pix9)/4);
-           g:= round(gmult*(pix2+pix4+pix6+pix8)/4);
-           b:=round(bmult*pix5);
+           r:= round(rmult*(pix1+pix3+pix7+pix9)/4)-rbg;
+           g:= round(gmult*(pix2+pix4+pix6+pix8)/4)-gbg;
+           b:=round(bmult*pix5)-bbg;
           end;
        bayerBG: begin
-           r:= round(rmult*pix5);
-           g:= round(gmult*(pix2+pix4+pix6+pix8)/4);
-           b:= round(bmult*(pix1+pix3+pix7+pix9)/4);
+           r:= round(rmult*pix5)-rbg;
+           g:= round(gmult*(pix2+pix4+pix6+pix8)/4)-gbg;
+           b:= round(bmult*(pix1+pix3+pix7+pix9)/4)-bbg;
           end;
        bayerGB: begin
-           r:= round(rmult*(pix4+pix6)/2);
-           g:= round(gmult*pix5);
-           b:= round(bmult*(pix2+pix8)/2);
+           r:= round(rmult*(pix4+pix6)/2)-rbg;
+           g:= round(gmult*pix5)-gbg;
+           b:= round(bmult*(pix2+pix8)/2)-bbg;
           end;
        else begin
            r:=0; g:=0; b:=0;
@@ -1968,182 +2096,19 @@ begin
        end;
      end;
    end;
-   result.red:=max(0,min(MAXWORD,r));
-   result.green:=max(0,min(MAXWORD,g));
-   result.blue:= max(0,min(MAXWORD,b));
+   pixr:=max(0,min(MAXWORD,r));
+   pixg:=max(0,min(MAXWORD,g));
+   pixb:= max(0,min(MAXWORD,b));
 end;
 
-function TFits.BayerInterpolation(t:TBayerMode; rmult,gmult,bmult:double; pix1,pix2,pix3,pix4,pix5,pix6,pix7,pix8,pix9:integer; row,col:integer):TBGRAPixel; inline;
-var r,g,b: integer;
-    l,lg: word;
-begin
-   if not odd(row) then begin //ligne paire
-      if not odd(col) then begin //colonne paire et ligne paire
-        case t of
-        bayerGR: begin
-            r:= round(rmult*(pix4+pix6)/2);
-            g:=round(gmult*pix5);
-            b:= round(bmult*(pix2+pix8)/2);
-           end;
-        bayerRG: begin
-            r:=round(rmult*pix5);
-            g:= round(gmult*(pix2+pix4+pix6+pix8)/4);
-            b:= round(bmult*(pix1+pix3+pix7+pix9)/4);
-           end;
-        bayerBG: begin
-            r:= round(rmult*(pix1+pix3+pix7+pix9)/4);
-            g:= round(gmult*(pix2+pix4+pix6+pix8)/4);
-            b:=round(bmult*pix5);
-           end;
-        bayerGB: begin
-            r:= round(rmult*(pix2+pix8)/2);
-            g:=round(gmult*pix5);
-            b:= round(bmult*(pix4+pix6)/2);
-           end;
-        else begin
-            r:=0; g:=0; b:=0;
-           end;
-        end;
-      end
-      else begin //colonne impaire et ligne paire
-       case t of
-       bayerGR: begin
-           r:=round(rmult*pix5);
-           g:= round(gmult*(pix2+pix4+pix6+pix8)/4);
-           b:= round(bmult*(pix1+pix3+pix7+pix9)/4);
-          end;
-       bayerRG: begin
-           r:= round(rmult*(pix4+pix6)/2);
-           g:=round(gmult*pix5);
-           b:=round(bmult*(pix2+pix8)/2);
-          end;
-       bayerBG: begin
-           r:=round(rmult*(pix2+pix8)/2);
-           g:=round(gmult*pix5);
-           b:= round(bmult*(pix4+pix6)/2);
-          end;
-       bayerGB: begin
-           r:= round(rmult*(pix1+pix3+pix7+pix9)/4);
-           g:= round(gmult*(pix2+pix4+pix6+pix8)/4);
-           b:=round(bmult*pix5);
-          end;
-       else begin
-           r:=0; g:=0; b:=0;
-          end;
-       end;
-     end;
-   end
-   else begin //ligne impaire
-     if not odd(col) then begin //colonne paire et ligne impaire
-       case t of
-       bayerGR: begin
-           r:= round(rmult*(pix1+pix3+pix7+pix9)/4);
-           g:= round(gmult*(pix2+pix4+pix6+pix8)/4);
-           b:=round(bmult*pix5);
-          end;
-       bayerRG: begin
-           r:= round(rmult*(pix2+pix8)/2);
-           g:=round(gmult*pix5);
-           b:=round(bmult*(pix4+pix6)/2);
-          end;
-       bayerBG: begin
-           r:= round(rmult*(pix4+pix6)/2);
-           g:=round(gmult*pix5);
-           b:=round(bmult*(pix2+pix8)/2);
-          end;
-       bayerGB: begin
-           r:=round(rmult*pix5);
-           g:= round(gmult*(pix2+pix4+pix6+pix8)/4);
-           b:= round(bmult*(pix1+pix3+pix7+pix9)/4);
-          end;
-       else begin
-           r:=0; g:=0; b:=0;
-          end;
-       end;
-    end
-    else begin //colonne impaire et ligne impaire
-       case t of
-       bayerGR: begin
-           r:= round(rmult*(pix2+pix8)/2);
-           g:= round(gmult*pix5);
-           b:= round(bmult*(pix4+pix6)/2);
-          end;
-       bayerRG: begin
-           r:= round(rmult*(pix1+pix3+pix7+pix9)/4);
-           g:= round(gmult*(pix2+pix4+pix6+pix8)/4);
-           b:=round(bmult*pix5);
-          end;
-       bayerBG: begin
-           r:= round(rmult*pix5);
-           g:= round(gmult*(pix2+pix4+pix6+pix8)/4);
-           b:= round(bmult*(pix1+pix3+pix7+pix9)/4);
-          end;
-       bayerGB: begin
-           r:= round(rmult*(pix4+pix6)/2);
-           g:= round(gmult*pix5);
-           b:= round(bmult*(pix2+pix8)/2);
-          end;
-       else begin
-           r:=0; g:=0; b:=0;
-          end;
-       end;
-     end;
-   end;
-   l:=max(0,min(MAXWORD,maxvalue([r,b,g])));
-   if l>0 then begin
-     lg:=GammaCorr(l);
-     result.red:=max(0,min(MAXBYTE,round(r*lg/l)));
-     result.green:=max(0,min(MAXBYTE,round(g*lg/l)));
-     result.blue:= max(0,min(MAXBYTE,round(b*lg/l)));
-   end
-   else begin
-     result.red:=0;
-     result.green:=0;
-     result.blue:= 0;
-   end;
-end;
-
-procedure TFits.GetExpBitmap(var bgra: TExpandedBitmap; debayer:boolean);
+procedure TFits.GetExpBitmap(var bgra: TExpandedBitmap);
 // get linear 16bit bitmap
 var i: integer;
-    rmult,gmult,bmult,mx: double;
-    t:TBayerMode;
     working, timingout: boolean;
     timelimit: TDateTime;
     thread: array[0..15] of TGetExpThread;
     tc,timeout: integer;
 begin
-rmult:=0; gmult:=0; bmult:=0;
-t:=GetBayerMode;
-if t=bayerUnsupported then debayer:=false;
-if debayer then begin
-  if (BalanceFromCamera)and(FFitsInfo.rmult>0)and(FFitsInfo.gmult>0)and(FFitsInfo.bmult>0) then begin
-     rmult:=FFitsInfo.rmult;
-     gmult:=FFitsInfo.gmult;
-     bmult:=FFitsInfo.bmult;
-  end else begin
-     mx:=minvalue([RedBalance,GreenBalance,BlueBalance]);
-     rmult:=RedBalance/mx;
-     gmult:=GreenBalance/mx;
-     bmult:=BlueBalance/mx;
-  end;
-  if (FFitsInfo.bayeroffsetx mod 2) = 1 then begin
-    case t of
-      bayerGR: t:=bayerRG;
-      bayerRG: t:=bayerGR;
-      bayerBG: t:=bayerGB;
-      bayerGB: t:=bayerBG;
-    end;
-  end;
-  if (FFitsInfo.bayeroffsety mod 2) = 1 then begin
-    case t of
-      bayerGR: t:=bayerBG;
-      bayerRG: t:=bayerGB;
-      bayerBG: t:=bayerGR;
-      bayerGB: t:=bayerRG;
-    end;
-  end;
-end;
 bgra.SetSize(Fwidth,Fheight);
 thread[0]:=nil;
 // number of thread
@@ -2156,11 +2121,6 @@ begin
   thread[i].fits := self;
   thread[i].num := tc;
   thread[i].id := i;
-  thread[i].debayer := debayer;
-  thread[i].rmult := rmult;
-  thread[i].gmult := gmult;
-  thread[i].bmult := bmult;
-  thread[i].t := t;
   thread[i].bgra := bgra;
   thread[i].Start;
 end;
@@ -2178,49 +2138,16 @@ until (not working) or timingout;
 bgra.InvalidateBitmap;
 end;
 
-procedure TFits.GetBGRABitmap(var bgra: TBGRABitmap; debayer:boolean);
+procedure TFits.GetBGRABitmap(var bgra: TBGRABitmap);
 // get stretched 8bit bitmap
 var i : integer;
     HighOverflow,LowOverflow: TBGRAPixel;
     c,overflow,underflow: double;
-    rmult,gmult,bmult,mx: double;
-    t: TBayerMode;
     working, timingout: boolean;
     timelimit: TDateTime;
     thread: array[0..15] of TGetBgraThread;
     tc,timeout: integer;
 begin
-  rmult:=0; gmult:=0; bmult:=0;
-  t:=GetBayerMode;
-  if t=bayerUnsupported then debayer:=false;
-  if debayer then begin
-     if (BalanceFromCamera)and(FFitsInfo.rmult>0)and(FFitsInfo.gmult>0)and(FFitsInfo.bmult>0) then begin
-       rmult:=FFitsInfo.rmult;
-       gmult:=FFitsInfo.gmult;
-       bmult:=FFitsInfo.bmult;
-     end else begin
-       mx:=minvalue([RedBalance,GreenBalance,BlueBalance]);
-       rmult:=RedBalance/mx;
-       gmult:=GreenBalance/mx;
-       bmult:=BlueBalance/mx;
-     end;
-     if (FFitsInfo.bayeroffsetx mod 2) = 1 then begin
-       case t of
-         bayerGR: t:=bayerRG;
-         bayerRG: t:=bayerGR;
-         bayerBG: t:=bayerGB;
-         bayerGB: t:=bayerBG;
-       end;
-     end;
-     if (FFitsInfo.bayeroffsety mod 2) = 1 then begin
-       case t of
-         bayerGR: t:=bayerBG;
-         bayerRG: t:=bayerGB;
-         bayerBG: t:=bayerGR;
-         bayerGB: t:=bayerRG;
-       end;
-     end;
-  end;
   HighOverflow:=ColorToBGRA(clFuchsia);
   LowOverflow:=ColorToBGRA(clYellow);
   overflow:=(FOverflow-FimageMin)*FimageC;
@@ -2239,11 +2166,6 @@ begin
     thread[i].fits := self;
     thread[i].num := tc;
     thread[i].id := i;
-    thread[i].debayer := debayer;
-    thread[i].rmult := rmult;
-    thread[i].gmult := gmult;
-    thread[i].bmult := bmult;
-    thread[i].t := t;
     thread[i].HighOverflow := HighOverflow;
     thread[i].LowOverflow := LowOverflow;
     thread[i].overflow := overflow;
@@ -2276,14 +2198,14 @@ begin
   if (ext='.PNG')or(ext='.TIF')or(ext='.TIFF') then begin
     // save 16 bit linear image
     expbmp:=TExpandedBitmap.Create;
-    GetExpBitmap(expbmp,FFitsInfo.bayerpattern<>'');
+    GetExpBitmap(expbmp);
     expbmp.SaveToFile(fn);
     expbmp.Free;
   end
   else begin
     //save 8 bit stretched image
     bgra:=TBGRABitmap.Create;
-    GetBGRABitmap(bgra,FFitsInfo.bayerpattern<>'');
+    GetBGRABitmap(bgra);
     bgra.SaveToFile(fn);
     bgra.Free;
   end;
@@ -2304,49 +2226,59 @@ setlength(Fimage,0,0,0);
 FStream.Clear;
 end;
 
-function TFits.double_star(ri, x,y : integer):boolean;
-// double star detection based difference bright_spot and center_of_gravity
-var SumVal,SumValX,SumValY,val,vmax,bg, Xg, Yg: double;
-     i,j : integer;
+procedure calculate_bg_sd(fimage: Timaw16; x,y,rs,wd :integer; var bg,sd : double);{calculate background and standard deviation for position x,y around box rs x rs. wd is the measuring range outside the box }
+var
+  iterations, counter,i,j : integer;
+  sd_old,bg_average,val   : double;
 begin
-  try
-  // New background from corner values
+  sd:=99999999999;
   bg:=0;
-  for i:=-ri+1 to ri do {calculate average background at the square boundaries of region of interest}
-  begin
-    bg:=bg+Fimage[0,y+ri,x+i];{top line, left to right}
-    bg:=bg+Fimage[0,y+i,x+ri];{right line, top to bottom}
-    bg:=bg+Fimage[0,y-ri,x-i];{bottom line, right to left}
-    bg:=bg+Fimage[0,y-i,x-ri];{right line, bottom to top}
-  end;
-  bg:=bg/(8*ri);
-  bg:=FimageMin+bg/FimageC;
+  iterations:=0;
+  try
+    repeat {Sigma clipping, find background and sd value by repeat and exclude values above 3*sd}
+      counter:=0;
+      bg_average:=0;
+      for i:=-rs-wd to rs+wd do {calculate mean at square boundaries of detection box}
+      for j:=-rs-wd to rs+wd do
+      begin
+        if ( (abs(i)>rs) and (abs(j)>rs) ) then {measure only outside the box}
+        begin
+          val:=Fimage[0,y+i,x+j];
+          if  ((iterations=0) or (abs(val-bg)<=3*sd)) then  {ignore extreme outliers after first run}
+          begin
+            bg_average:=bg_average+val;
+            inc(counter);
+          end;
+        end;
+      end;
+      bg:=bg_average/counter; {mean value background}
 
-  SumVal:=0;
-  SumValX:=0;
-  SumValY:=0;
-  vmax:=0;
-  for i:=-ri to ri do
-    for j:=-ri to ri do
-    begin
-      val:=FimageMin+Fimage[0,y+j,x+i]/FimageC-bg;
-      if val<0 then val:=0;
-      if val>vmax then vmax:=val;
-      SumVal:=SumVal+val;
-      SumValX:=SumValX+val*(i);
-     SumValY:=SumValY+val*(j);
-    end;
-  Xg:=SumValX/SumVal;
-  Yg:=SumValY/SumVal;
-  if ((Xg*Xg)+(Yg*Yg))>0.3 then result:=true {0.3 is experimental factor. Double star, too much unbalance between bright spot and centre of gravity}
-    else
-    result:=false;
+      counter:=0;
+      sd_old:=sd;
+      sd:=0;
+      for i:=-rs-wd to rs+wd do {calculate standard deviation background at the square boundaries of detection box}
+        for j:=-rs-wd to rs+wd do
+        begin
+          if ( (abs(i)>rs) and (abs(j)>rs) ) then {measure only outside the box}
+          begin
+              val:=Fimage[0,y+i,x+j];
+              if val<=2*bg then {not an extreme outlier}
+              if ((iterations=0) or (abs(val-bg)<=3*sd_old)) then {ignore extreme outliers after first run}
+              begin
+                sd:=sd+sqr(val-bg);
+                inc(counter);
+              end;
+          end;
+      end;
+      sd:=sqrt(sd/(counter+0.0001)); {standard deviation in background}
+
+      inc(iterations);
+    until (((sd_old-sd)<0.1*sd) or (iterations>=3));{repeat until sd is stable or enough iterations}
+    sd:=max(sd,0.1); {prevent sd=0 for images with zero noise background. This will prevent that background is seen as a star.}
   except
-    on E: Exception do begin
-        result:=true;
-    end;
+    {should not happen, sd=99999999999}
   end;
-end;{double star detection}
+end;
 
 function TFits.value_subpixel(x1,y1:double):double;
 {calculate image pixel value on subpixel level}
@@ -2373,46 +2305,67 @@ begin
   end;
 end;
 
+function TFits.double_star(ri, x,y : integer):boolean;
+// double star detection based difference bright_spot and center_of_gravity
+var SumVal,SumValX,SumValY,val,vmax,bg,sd, Xg, Yg: double;
+     i,j : integer;
+begin
+
+  try
+    calculate_bg_sd(fimage,x,y,ri,4,bg,sd); {calculate background and standard deviation for position x,y around box 2rs x 2rs. }
+    bg:=FimageMin+bg/FimageC;
+
+    SumVal:=0;
+    SumValX:=0;
+    SumValY:=0;
+    vmax:=0;
+    for i:=-ri to ri do
+      for j:=-ri to ri do
+      begin
+        val:=FimageMin+Fimage[0,y+j,x+i]/FimageC-bg;
+        if val<0 then val:=0;
+        if val>vmax then vmax:=val;
+        SumVal:=SumVal+val;
+        SumValX:=SumValX+val*(i);
+        SumValY:=SumValY+val*(j);
+      end;
+    Xg:=SumValX/SumVal;
+    Yg:=SumValY/SumVal;
+    // if ((Xg*Xg)+(Yg*Yg))>0.3 then result:=true {0.3 is experimental factor. Double star, too much unbalance between bright spot and centre of gravity}
+    if ((Xg*Xg)+(Yg*Yg))>sqr(4) then result:=true {Center of gravity is 4 or more pixels from brightest position x, y. Assume double star visible}
+    else
+      result:=false;
+  except
+    on E: Exception do begin
+        result:=true;
+    end;
+  end;
+end;{double star detection}
+
 procedure TFits.FindBrightestPixel(x,y,s,starwindow2: integer; out xc,yc:integer; out vmax: double; accept_double: boolean=true);
 // brightest 3x3 pixels in area s*s centered on x,y
 var i,j,rs,xm,ym: integer;
-    bg,bg_average,bg_standard_deviation: double;
+    bg,bg_average,sd: double;
     val :double;
+const
+    wd =4; {wd is the width of the area outside box rs used for calculating the mean value of the background}
+
 begin
- rs:= s div 2;
- if (x-rs)<3 then x:=rs+3;
- if (x+rs)>(Fwidth-3) then x:=Fwidth-rs-3;
- if (y-rs)<3 then y:=rs+3;
- if (y+rs)>(Fheight-3) then y:=Fheight-rs-3;
+ rs:= s div 2;{box size is s x s pixels}
+ if (x-rs)<(3+wd) then x:=rs+(3+wd); {stay 3 pixels away from the sides. wd is the width of the area outside box 2rs x 2rs used for calculating the mean value of the background}
+ if (x+rs)>(Fwidth-(3+wd)) then x:=Fwidth-rs-(3+wd);
+ if (y-rs)<(3+wd) then y:=rs+(3+wd);
+ if (y+rs)>(Fheight-(3+wd)) then y:=Fheight-rs-(3+wd);
 
  vmax:=0;
  xm:=0;
  ym:=0;
 
  try
-
    // average background
-  bg_average:=0;
-  for i:=-rs+1 to rs do {calculate average background at the square boundaries of region of interest}
-  begin
-    bg_average:=bg_average+Fimage[0,y+rs,x+i];{top line, left to right}
-    bg_average:=bg_average+Fimage[0,y+i,x+rs];{right line, top to bottom}
-    bg_average:=bg_average+Fimage[0,y-rs,x-i];{bottom line, right to left}
-    bg_average:=bg_average+Fimage[0,y-i,x-rs];{right line, bottom to top}
-  end;
-  bg_average:=bg_average/(8*rs);
-
-  bg_standard_deviation:=0;
-  for i:=-rs+1 to rs do {calculate standard deviation background at the square boundaries of region of interest}
-  begin
-    bg_standard_deviation:=bg_standard_deviation+sqr(bg_average-Fimage[0,y+rs,x+i]);{top line, left to right}
-    bg_standard_deviation:=bg_standard_deviation+sqr(bg_average-Fimage[0,y+i,x+rs]);{right line, top to bottom}
-    bg_standard_deviation:=bg_standard_deviation+sqr(bg_average-Fimage[0,y-rs,x-i]);{bottom line, right to left}
-    bg_standard_deviation:=bg_standard_deviation+sqr(bg_average-Fimage[0,y-i,x-rs]);{left line, bottom to top}
-  end;
-  bg_standard_deviation:=sqrt(0.0001+bg_standard_deviation/(8*rs))/FimageC;
-
-  bg:=FimageMin+bg_average/FimageC;
+  calculate_bg_sd(fimage,x,y,rs,wd {4},bg,sd); {calculate background and standard deviation for position x,y around box 2rs x 2rs. }
+  sd:=sd/FimageC;
+  bg:=FimageMin+bg/FimageC;
 
  // try with double star exclusion
  for i:=-rs to rs do
@@ -2423,7 +2376,7 @@ begin
 
      Val:=FimageMin+Val/FimageC-bg;
      // huge performance improvement by checking only the pixels above the noise
-     if (val>((5*bg_standard_deviation))) and (Val>vmax) then
+     if (val>((5*sd))) and (Val>vmax) then
      begin
        if double_star(starwindow2, x+i,y+j)=false then
        begin
@@ -2461,19 +2414,14 @@ begin
        vmax:=0;
    end;
  end;
-
 end;
 
-
-procedure TFits.FindStarPos(x,y,s: integer; out xc,yc,ri:integer; out vmax,bg,bg_standard_deviation: double);
+procedure TFits.FindStarPos(x,y,s: integer; out xc,yc,ri:integer; out vmax,bg, sd: double);
 // center of gravity in area s*s centered on x,y
 const
     max_ri=100;
-var i,j,rs: integer;
-    SumVal,SumValX,SumValY: double;
-    val,xg,yg:double;
-    distance :integer;
-    bg_average : double;
+var i,j,rs, distance :integer;
+    SumVal,SumValX,SumValY, val,xg,yg : double;
     distance_histogram : array [0..max_ri] of integer;
     HistStart: boolean;
 begin
@@ -2487,85 +2435,65 @@ begin
   if (y+s)>(Fheight-1) then y:=Fheight-s-1;
 
   try
+    calculate_bg_sd(fimage,x,y,rs,4,bg,sd); {calculate background and standard deviation for position x,y around box rs x rs. }
+    sd:=sd/FimageC;
+    bg:=FimageMin+bg/FimageC;
 
-  // average background
-  bg_average:=0;
-  for i:=-rs+1 to rs do {calculate average background at the square boundaries of region of interest}
-  begin
-    bg_average:=bg_average+Fimage[0,y+rs,x+i];{top line, left to right}
-    bg_average:=bg_average+Fimage[0,y+i,x+rs];{right line, top to bottom}
-    bg_average:=bg_average+Fimage[0,y-rs,x-i];{bottom line, right to left}
-    bg_average:=bg_average+Fimage[0,y-i,x-rs];{right line, bottom to top}
-  end;
-  bg_average:=bg_average/(8*rs);
-
-  bg_standard_deviation:=0;
-  for i:=-rs+1 to rs do {calculate standard deviation background at the square boundaries of region of interest}
-  begin
-    bg_standard_deviation:=bg_standard_deviation+sqr(bg_average-Fimage[0,y+rs,x+i]);{top line, left to right}
-    bg_standard_deviation:=bg_standard_deviation+sqr(bg_average-Fimage[0,y+i,x+rs]);{right line, top to bottom}
-    bg_standard_deviation:=bg_standard_deviation+sqr(bg_average-Fimage[0,y-rs,x-i]);{bottom line, right to left}
-    bg_standard_deviation:=bg_standard_deviation+sqr(bg_average-Fimage[0,y-i,x-rs]);{left line, bottom to top}
-  end;
-  bg_standard_deviation:=sqrt(0.0001+bg_standard_deviation/(8*rs))/FimageC;
-
-  bg:=FimageMin+bg_average/FimageC;
-
-  // Get center of gravity whithin star detection box
-  SumVal:=0;
-  SumValX:=0;
-  SumValY:=0;
-  vmax:=0;
-  for i:=-rs to rs do
-   for j:=-rs to rs do begin
-     val:=FimageMin+Fimage[0,y+j,x+i]/FimageC-bg;
-     if val>((3*bg_standard_deviation)) then  {>3 * sd should be signal }
-     begin
-       if val>vmax then vmax:=val;
-       SumVal:=SumVal+val;
-       SumValX:=SumValX+val*(i);
-       SumValY:=SumValY+val*(j);
+    // Get center of gravity whithin star detection box
+    SumVal:=0;
+    SumValX:=0;
+    SumValY:=0;
+    vmax:=0;
+    for i:=-rs to rs do
+     for j:=-rs to rs do begin
+       val:=FimageMin+Fimage[0,y+j,x+i]/FimageC-bg;
+       if val>((3*sd)) then  {>3 * sd should be signal }
+       begin
+         if val>vmax then vmax:=val;
+         SumVal:=SumVal+val;
+         SumValX:=SumValX+val*(i);
+         SumValY:=SumValY+val*(j);
+       end;
      end;
-   end;
 
-  if sumval=0 then
-  begin
-    ri:=3;
-    exit;
-  end;
+    if sumval=0 then
+    begin
+      ri:=3;
+      exit;
+    end;
 
-  Xg:=SumValX/SumVal;
-  Yg:=SumValY/SumVal;
-  xc:=round(x+Xg);
-  yc:=round(y+Yg);
+    Xg:=SumValX/SumVal;
+    Yg:=SumValY/SumVal;
+    xc:=round(x+Xg);
+    yc:=round(y+Yg);
 
- // Get diameter of signal shape above the noise level. Find maximum distance of pixel with signal from the center of gravity. This works for donut shapes.
+   // Get diameter of signal shape above the noise level. Find maximum distance of pixel with signal from the center of gravity. This works for donut shapes.
 
- for i:=0 to max_ri do distance_histogram[i]:=0;{clear histogram of pixel distances}
+   for i:=0 to max_ri do distance_histogram[i]:=0;{clear histogram of pixel distances}
 
- for i:=-rs to rs do begin
-   for j:=-rs to rs do begin
-     val:=FimageMin+Fimage[0,yc+j,xc+i]/FimageC-bg;
-     if val>((3*bg_standard_deviation)) then {>3 * sd should be signal }
-     begin
-       distance:=round((sqrt(1+ i*i + j*j )));{distance from gravity center }
-       if distance<=max_ri then distance_histogram[distance]:=distance_histogram[distance]+1;{build distance histogram}
+   for i:=-rs to rs do begin
+     for j:=-rs to rs do begin
+       val:=FimageMin+Fimage[0,yc+j,xc+i]/FimageC-bg;
+       if val>((3*sd)) then {>3 * sd should be signal }
+       begin
+         distance:=round((sqrt(1+ i*i + j*j )));{distance from gravity center }
+         if distance<=max_ri then distance_histogram[distance]:=distance_histogram[distance]+1;{build distance histogram}
+       end;
      end;
-   end;
-  end;
+    end;
 
- ri:=0;
- HistStart:=false;
- repeat
-    inc(ri);
-    if distance_histogram[ri]>0 then {continue until we found a value>0, center of reflector ring can be black}
-       HistStart:=true;
- until ((ri>=max_ri) or (HistStart and (distance_histogram[ri]=0)));{find a distance where there is no pixel illuminated, so the border of the star image of interest}
+   ri:=0;
+   HistStart:=false;
+   repeat
+      inc(ri);
+      if distance_histogram[ri]>0 then {continue until we found a value>0, center of reflector ring can be black}
+         HistStart:=true;
+   until ((ri>=max_ri) or (HistStart and (distance_histogram[ri]=0)));{find a distance where there is no pixel illuminated, so the border of the star image of interest}
 
- inc(ri,2);
+   inc(ri,2);
 
- if ri=0 then ri:=rs;
- if ri<3 then ri:=3;
+   if ri=0 then ri:=rs;
+   if ri<3 then ri:=3;
 
  except
    on E: Exception do begin
@@ -2574,7 +2502,7 @@ begin
  end;
 end;
 
-procedure TFits.GetHFD2(x,y,s: integer; out xc,yc,bg,bg_standard_deviation,hfd,star_fwhm,valmax,snr,flux: double; strict_saturation: boolean=true);
+procedure TFits.GetHFD2(x,y,s: integer; out xc,yc,bg,sd,hfd,star_fwhm,valmax,snr,flux: double; strict_saturation: boolean=true);
 // x,y, s, test location x,y and box size s x s
 // xc,yc, center of gravity
 // bg, background value
@@ -2587,9 +2515,9 @@ procedure TFits.GetHFD2(x,y,s: integer; out xc,yc,bg,bg_standard_deviation,hfd,s
 // fluxsnr, the signal noise ratio on the total flux
 const
     max_ri=100;
-var i,j,rs,distance,counter,ri, distance_top_value, illuminated_pixels, saturated_counter, max_saturated: integer;
+var i,j,rs,distance,ri, distance_top_value, illuminated_pixels, saturated_counter, max_saturated : integer;
     valsaturation:Int64;
-    SumVal,SumValX,SumValY,SumvalR,val,xg,yg,bg_average, pixel_counter,r, val_00,val_01,val_10,val_11,af,
+    SumVal,SumValX,SumValY,SumvalR,val,xg,yg, pixel_counter,r, val_00,val_01,val_10,val_11,af,
     faintA,faintB, brightA,brightB,faintest,brightest : double;
     distance_histogram  : array [0..max_ri] of integer;
     HistStart,asymmetry : boolean;
@@ -2616,209 +2544,181 @@ begin
   if (y+s)>(Fheight-1-4) then y:=Fheight-s-1-4;
 
   try
-  // average background
-  counter:=0;
-  bg_average:=0;
-  for i:=-rs-4 to rs+4 do {calculate mean at square boundaries of detection box}
-  for j:=-rs-4 to rs+4 do
-  begin
-    if ( (abs(i)>rs) and (abs(j)>rs) ) then {measure only outside the box}
-    begin
-      bg_average:=bg_average+Fimage[0,y+i,x+j];
-      inc(counter)
-    end;
-  end;
-  bg_average:=bg_average/counter; {mean value background}
-  bg:=bg_average;
+    calculate_bg_sd(fimage,x,y,rs,4,bg,sd); {calculate background and standard deviation for position x,y around box rs x rs. }
 
-  counter:=0;
-  bg_standard_deviation:=0;
-  for i:=-rs-4 to rs+4 do {calculate standard deviation background at the square boundaries of detection box}
-    for j:=-rs-4 to rs+4 do
-    begin
-      if ( (abs(i)>rs) and (abs(j)>rs) ) then {measure only outside the box}
+    repeat {## reduce box size till symmetry to remove stars}
+      // Get center of gravity whithin star detection box and count signal pixels
+      SumVal:=0;
+      SumValX:=0;
+      SumValY:=0;
+      valmax:=0;
+      saturated_counter:=0;
+      if FFitsInfo.floatingpoint then
+        valsaturation:=round(FimageC*(FimageMax-FimageMin)-bg)
+      else
+        valsaturation:=round(FimageC*(MaxADU-1-FimageMin)-bg);
+      for i:=-rs to rs do
+      for j:=-rs to rs do
       begin
-          bg_standard_deviation:=bg_standard_deviation+sqr(bg_average-Fimage[0,y+i,x+j]);
-          inc(counter)
+        val:=Fimage[0,y+j,x+i]-bg;
+        if val>(3.5)*sd then {just above noise level. }
+        begin
+          if val>=valsaturation then inc(saturated_counter);
+          if val>valmax then valmax:=val;
+          SumVal:=SumVal+val;
+          SumValX:=SumValX+val*(i);
+          SumValY:=SumValY+val*(j);
+        end;
       end;
-  end;
-  bg_standard_deviation:=sqrt(0.0001+bg_standard_deviation/(counter)); {standard deviation in background}
+      if sumval<=15*sd then exit; {no star found, too noisy}
+      Xg:=SumValX/SumVal;
+      Yg:=SumValY/SumVal;
+      xc:=(x+Xg);
+      yc:=(y+Yg);
+     {center of star gravity found}
 
-  bg:=bg_average;
+      if ((xc-rs<=1) or (xc+rs>=Fwidth-2) or (yc-rs<=1) or (yc+rs>=Fheight-2) ) then begin exit;end;{prevent runtime errors near sides of images}
 
-  repeat {## reduce box size till symmetry to remove stars}
-    // Get center of gravity whithin star detection box and count signal pixels
+     // Check for asymmetry. Are we testing a group of stars or a defocused star?
+      val_00:=0;val_01:=0;val_10:=0;val_11:=0;
+
+      for i:=rs downto 1 do begin
+        for j:=rs downto 1 do begin
+          val_00:=val_00+ value_subpixel(xc+i-0.5,yc+j-0.5)-bg;
+          val_01:=val_01+ value_subpixel(xc+i-0.5,yc-j+0.5)-bg;
+          val_10:=val_10+ value_subpixel(xc-i+0.5,yc+j-0.5)-bg;
+          val_11:=val_11+ value_subpixel(xc-i+0.5,yc-j+0.5)-bg;
+        end;
+      end;
+
+      af:=0.30; {## asymmetry factor. 1=is allow only prefect symmetrical, 0.000001=off}
+                {0.30 make focusing to work with bad seeing}
+
+      {check for asymmetry of detected star using the four quadrants}
+      if val_00<val_01  then begin faintA:=val_00; brightA:=val_01; end else begin faintA:=val_01; brightA:=val_00; end;
+      if val_10<val_11  then begin faintB:=val_10; brightB:=val_11; end else begin faintB:=val_11; brightB:=val_10; end;
+      if faintA<faintB  then faintest:=faintA else faintest:=faintB;{find faintest quadrant}
+      if brightA>brightB  then brightest:=brightA else brightest:=brightB;{find brightest quadrant}
+      asymmetry:=(brightest*af>=faintest); {if true then detected star has asymmetry, ovals/galaxies or double stars will not be accepted}
+
+      if asymmetry then dec(rs,2); {try a smaller window to exclude nearby stars}
+      if rs<4 then exit; {try to reduce box up to rs=4 equals 8x8 box else exit}
+    until asymmetry=false; {loop and reduce box size until asymmetry is gone or exit if box is too small}
+
+    if (not Undersampled) then   {check on single hot pixels}
+    for i:=-1 to +1 do
+      for j:=-1 to +1 do begin
+        val:=Fimage[0,round(yc)+j,round(xc)+i]-bg; {no subpixel calculation here}
+        if val>0.5*sumval then exit;
+      end;
+
+    // Get diameter of star above the noise level.
+    for i:=0 to rs do distance_histogram[i]:=0;{clear histogram of pixel distances}
+
+    for i:=-rs to rs do begin
+      for j:=-rs to rs do begin
+        distance:=round((sqrt(i*i + j*j )));{distance from star gravity center }
+        if distance<=rs then {build histogram for circel with radius rs}
+        begin
+          Val:=value_subpixel(xc+i,yc+j)-bg;
+          if val>((3*sd)) then {>3 * sd should be signal }
+            distance_histogram[distance]:=distance_histogram[distance]+1;{build distance histogram}
+        end;
+      end;
+    end;
+
+    ri:=-1; {will start from distance 0}
+    distance_top_value:=0;
+    HistStart:=false;
+    illuminated_pixels:=0;
+    repeat
+      inc(ri);
+      illuminated_pixels:=illuminated_pixels+distance_histogram[ri];
+      if distance_histogram[ri]>0 then HistStart:=true;{continue until we found a value>0, center of defocused star image can be black having a central obstruction in the telescope}
+      if distance_top_value<distance_histogram[ri] then distance_top_value:=distance_histogram[ri]; {this should be 2*pi*ri if it is nice defocused star disk}
+    until ((ri>=rs) or (HistStart and (distance_histogram[ri]<=0.1*distance_top_value {drop-off detection})));{find a distance where there is no pixel illuminated, so the border of the star image of interest}
+
+    if ri>=rs then {star is equal or larger then box, abort} exit; {hfd:=-1}
+    if (ri>2)and(illuminated_pixels<0.35*sqr(ri+ri-2)){35% surface} then {not a star disk but stars, abort} exit; {hfd:=-1}
+
+    if ri<3 then  {small star image}
+    begin
+     if ((not Undersampled) and (distance_histogram[1]<3)) then
+        exit; // reject single hot pixel if less then 3 pixels are detected around the center of gravity
+     ri:=3; {Minimum 6+1 x 6+1 pixel box}
+    end;
+
+    // Get HFD using the aproximation routine assuming that HFD line divides the star in equal portions of gravity:
     SumVal:=0;
-    SumValX:=0;
-    SumValY:=0;
-    valmax:=0;
-    saturated_counter:=0;
-    if FFitsInfo.floatingpoint then
-      valsaturation:=round(FimageC*(FimageMax-FimageMin)-bg)
-    else
-      valsaturation:=round(FimageC*(MaxADU-1-FimageMin)-bg);
-    for i:=-rs to rs do
-    for j:=-rs to rs do
-    begin
-      val:=Fimage[0,y+j,x+i]-bg;
-      if val>(3.5)*bg_standard_deviation then {just above noise level. }
+    SumValR:=0;
+    pixel_counter:=0;
+
+    for i:=-ri to ri do {Make steps of one pixel}
+      for j:=-ri to ri do
       begin
-        if val>=valsaturation then inc(saturated_counter);
-        if val>valmax then valmax:=val;
-        SumVal:=SumVal+val;
-        SumValX:=SumValX+val*(i);
-        SumValY:=SumValY+val*(j);
+        Val:=value_subpixel(xc+i,yc+j)-bg;{The calculated center of gravity is a floating point position and can be anyware, so calculate pixel values on sub-pixel level}
+        r:=sqrt(i*i+j*j);{Distance from star gravity center}
+        SumVal:=SumVal+Val;{Sumval will be star total flux value}
+        SumValR:=SumValR+Val*r; {Method Kazuhisa Miyashita, see notes of HFD calculation method}
+        if val>=valmax*0.5 then pixel_counter:=pixel_counter+1;{How many pixels are above half maximum for FWHM}
       end;
-    end;
-    if sumval<=15*bg_standard_deviation then exit; {no star found, too noisy}
-    Xg:=SumValX/SumVal;
-    Yg:=SumValY/SumVal;
-    xc:=(x+Xg);
-    yc:=(y+Yg);
-   {center of star gravity found}
-
-    if ((xc-rs<=1) or (xc+rs>=Fwidth-2) or (yc-rs<=1) or (yc+rs>=Fheight-2) ) then begin exit;end;{prevent runtime errors near sides of images}
-
-   // Check for asymmetry. Are we testing a group of stars or a defocused star?
-    val_00:=0;val_01:=0;val_10:=0;val_11:=0;
-
-    for i:=rs downto 1 do begin
-      for j:=rs downto 1 do begin
-        val_00:=val_00+ value_subpixel(xc+i-0.5,yc+j-0.5)-bg;
-        val_01:=val_01+ value_subpixel(xc+i-0.5,yc-j+0.5)-bg;
-        val_10:=val_10+ value_subpixel(xc-i+0.5,yc+j-0.5)-bg;
-        val_11:=val_11+ value_subpixel(xc-i+0.5,yc-j+0.5)-bg;
-      end;
+    if Sumval<0.00001 then Sumval:=0.00001;{prevent divide by zero}
+    hfd:=2*SumValR/SumVal;
+    hfd:=max(0.7,hfd); // minimum value for a star size of 1 pixel
+    star_fwhm:=2*sqrt(pixel_counter/pi);{The surface is calculated by counting pixels above half max. The diameter of that surface called FWHM is then 2*sqrt(surface/pi) }
+    if (SumVal>0.00001)and(saturated_counter<=max_saturated) then begin
+      flux:=Sumval/FimageC;
+      snr:=flux/sqrt(flux +sqr(ri)*pi*sqr(sd/FimageC)); {For both bright stars (shot-noise limited) or skybackground limited situations
+                                                                       snr:=signal/sqrt(signal + r*r*pi* SKYsignal) equals snr:=flux/sqrt(flux + r*r*pi* sd^2).}
+    end else begin
+      flux:=-1;
+      snr:=0;
     end;
 
-    af:=0.30; {## asymmetry factor. 1=is allow only prefect symmetrical, 0.000001=off}
-              {0.30 make focusing to work with bad seeing}
 
-    {check for asymmetry of detected star using the four quadrants}
-    if val_00<val_01  then begin faintA:=val_00; brightA:=val_01; end else begin faintA:=val_01; brightA:=val_00; end;
-    if val_10<val_11  then begin faintB:=val_10; brightB:=val_11; end else begin faintB:=val_11; brightB:=val_10; end;
-    if faintA<faintB  then faintest:=faintA else faintest:=faintB;{find faintest quadrant}
-    if brightA>brightB  then brightest:=brightA else brightest:=brightB;{find brightest quadrant}
-    asymmetry:=(brightest*af>=faintest); {if true then detected star has asymmetry, ovals/galaxies or double stars will not be accepted}
+  {==========Notes on HFD calculation method=================
+    https://en.wikipedia.org/wiki/Half_flux_diameter
+    http://www005.upp.so-net.ne.jp/k_miyash/occ02/halffluxdiameter/halffluxdiameter_en.html       by Kazuhisa Miyashita. No sub-pixel calculation
+    https://www.lost-infinity.com/night-sky-image-processing-part-6-measuring-the-half-flux-diameter-hfd-of-a-star-a-simple-c-implementation/
+    http://www.ccdware.com/Files/ITS%20Paper.pdf     See page 10, HFD Measurement Algorithm
 
-    if asymmetry then dec(rs,2); {try a smaller window to exclude nearby stars}
-    if rs<4 then exit; {try to reduce box up to rs=4 equals 8x8 box else exit}
-  until asymmetry=false; {loop and reduce box size until asymmetry is gone or exit if box is too small}
+    HFD, Half Flux Diameter is defined as: The diameter of circle where total flux value of pixels inside is equal to the outside pixel's.
+    HFR, half flux radius:=0.5*HFD
+    The pixel_flux:=pixel_value - background.
 
-  if (not Undersampled) then   {check on single hot pixels}
-  for i:=-1 to +1 do
-    for j:=-1 to +1 do begin
-      val:=Fimage[0,round(yc)+j,round(xc)+i]-bg; {no subpixel calculation here}
-      if val>0.5*sumval then exit;
-    end;
+    The approximation routine assumes that the HFD line divides the star in equal portions of gravity:
+        sum(pixel_flux * (distance_from_the_centroid - HFR))=0
+    This can be rewritten as
+       sum(pixel_flux * distance_from_the_centroid) - sum(pixel_values * (HFR))=0
+       or
+       HFR:=sum(pixel_flux * distance_from_the_centroid))/sum(pixel_flux)
+       HFD:=2*HFR
 
-  // Get diameter of star above the noise level.
-  for i:=0 to rs do distance_histogram[i]:=0;{clear histogram of pixel distances}
+    This is not an exact method but a very efficient routine. Numerical checking with an a highly oversampled artificial Gaussian shaped star indicates the following:
 
-  for i:=-rs to rs do begin
-    for j:=-rs to rs do begin
-      distance:=round((sqrt(i*i + j*j )));{distance from star gravity center }
-      if distance<=rs then {build histogram for circel with radius rs}
-      begin
-        Val:=value_subpixel(xc+i,yc+j)-bg;
-        if val>((3*bg_standard_deviation)) then {>3 * sd should be signal }
-          distance_histogram[distance]:=distance_histogram[distance]+1;{build distance histogram}
-      end;
-    end;
-  end;
+    Perfect two dimensional Gaussian shape with σ=1:   Numerical HFD=2.3548*σ                     Approximation 2.5066, an offset of +6.4%
+    Homogeneous disk of a single value  :              Numerical HFD:=disk_diameter/sqrt(2)       Approximation disk_diameter/1.5, an offset of -6.1%
 
-  ri:=-1; {will start from distance 0}
-  distance_top_value:=0;
-  HistStart:=false;
-  illuminated_pixels:=0;
-  repeat
-    inc(ri);
-    illuminated_pixels:=illuminated_pixels+distance_histogram[ri];
-    if distance_histogram[ri]>0 then HistStart:=true;{continue until we found a value>0, center of defocused star image can be black having a central obstruction in the telescope}
-    if distance_top_value<distance_histogram[ri] then distance_top_value:=distance_histogram[ri]; {this should be 2*pi*ri if it is nice defocused star disk}
-  until ((ri>=rs) or (HistStart and (distance_histogram[ri]<=0.1*distance_top_value {drop-off detection})));{find a distance where there is no pixel illuminated, so the border of the star image of interest}
+    The approximation routine is robust and efficient.
 
-  if ri>=rs then {star is equal or larger then box, abort} exit; {hfd:=-1}
-  if (ri>2)and(illuminated_pixels<0.35*sqr(ri+ri-2)){35% surface} then {not a star disk but stars, abort} exit; {hfd:=-1}
+    Since the number of pixels illuminated is small and the calculated center of star gravity is not at the center of an pixel, above summation should be calculated on sub-pixel level (as used here)
+    or the image should be re-sampled to a higher resolution.
 
-  if ri<3 then  {small star image}
-  begin
-   if ((not Undersampled) and (distance_histogram[1]<3)) then
-      exit; // reject single hot pixel if less then 3 pixels are detected around the center of gravity
-   ri:=3; {Minimum 6+1 x 6+1 pixel box}
-  end;
+    A sufficient signal to noise is required to have valid HFD value due to background noise.
 
-  // Get HFD using the aproximation routine assuming that HFD line divides the star in equal portions of gravity:
-  SumVal:=0;
-  SumValR:=0;
-  pixel_counter:=0;
-
-  for i:=-ri to ri do {Make steps of one pixel}
-    for j:=-ri to ri do
-    begin
-      Val:=value_subpixel(xc+i,yc+j)-bg;{The calculated center of gravity is a floating point position and can be anyware, so calculate pixel values on sub-pixel level}
-      r:=sqrt(i*i+j*j);{Distance from star gravity center}
-      SumVal:=SumVal+Val;{Sumval will be star total flux value}
-      SumValR:=SumValR+Val*r; {Method Kazuhisa Miyashita, see notes of HFD calculation method}
-      if val>=valmax*0.5 then pixel_counter:=pixel_counter+1;{How many pixels are above half maximum for FWHM}
-    end;
-  if Sumval<0.00001 then Sumval:=0.00001;{prevent divide by zero}
-  hfd:=2*SumValR/SumVal;
-  hfd:=max(0.7,hfd); // minimum value for a star size of 1 pixel
-  star_fwhm:=2*sqrt(pixel_counter/pi);{The surface is calculated by counting pixels above half max. The diameter of that surface called FWHM is then 2*sqrt(surface/pi) }
-  if (SumVal>0.00001)and(saturated_counter<=max_saturated) then begin
-    flux:=Sumval/FimageC;
-    snr:=flux/sqrt(flux +sqr(ri)*pi*sqr(bg_standard_deviation/FimageC)); {For both bright stars (shot-noise limited) or skybackground limited situations
-                                                                     snr:=signal/sqrt(signal + r*r*pi* SKYsignal) equals snr:=flux/sqrt(flux + r*r*pi* sd^2).}
-  end else begin
-    flux:=-1;
-    snr:=0;
-  end;
+    Note that for perfect Gaussian shape both the HFD and FWHM are at the same 2.3548 σ.
+    }
 
 
-{==========Notes on HFD calculation method=================
-  https://en.wikipedia.org/wiki/Half_flux_diameter
-  http://www005.upp.so-net.ne.jp/k_miyash/occ02/halffluxdiameter/halffluxdiameter_en.html       by Kazuhisa Miyashita. No sub-pixel calculation
-  https://www.lost-infinity.com/night-sky-image-processing-part-6-measuring-the-half-flux-diameter-hfd-of-a-star-a-simple-c-implementation/
-  http://www.ccdware.com/Files/ITS%20Paper.pdf     See page 10, HFD Measurement Algorithm
+     {=============Notes on FWHM:=====================
+        1)	Determine the background level by the averaging the boarder pixels.
+        2)	Calculate the standard deviation of the background.
 
-  HFD, Half Flux Diameter is defined as: The diameter of circle where total flux value of pixels inside is equal to the outside pixel's.
-  HFR, half flux radius:=0.5*HFD
-  The pixel_flux:=pixel_value - background.
+            Signal is anything 3 * standard deviation above background
 
-  The approximation routine assumes that the HFD line divides the star in equal portions of gravity:
-      sum(pixel_flux * (distance_from_the_centroid - HFR))=0
-  This can be rewritten as
-     sum(pixel_flux * distance_from_the_centroid) - sum(pixel_values * (HFR))=0
-     or
-     HFR:=sum(pixel_flux * distance_from_the_centroid))/sum(pixel_flux)
-     HFD:=2*HFR
-
-  This is not an exact method but a very efficient routine. Numerical checking with an a highly oversampled artificial Gaussian shaped star indicates the following:
-
-  Perfect two dimensional Gaussian shape with σ=1:   Numerical HFD=2.3548*σ                     Approximation 2.5066, an offset of +6.4%
-  Homogeneous disk of a single value  :              Numerical HFD:=disk_diameter/sqrt(2)       Approximation disk_diameter/1.5, an offset of -6.1%
-
-  The approximation routine is robust and efficient.
-
-  Since the number of pixels illuminated is small and the calculated center of star gravity is not at the center of an pixel, above summation should be calculated on sub-pixel level (as used here)
-  or the image should be re-sampled to a higher resolution.
-
-  A sufficient signal to noise is required to have valid HFD value due to background noise.
-
-  Note that for perfect Gaussian shape both the HFD and FWHM are at the same 2.3548 σ.
-  }
-
-
-   {=============Notes on FWHM:=====================
-      1)	Determine the background level by the averaging the boarder pixels.
-      2)	Calculate the standard deviation of the background.
-
-          Signal is anything 3 * standard deviation above background
-
-      3)	Determine the maximum signal level of region of interest.
-      4)	Count pixels which are equal or above half maximum level.
-      5)	Use the pixel count as area and calculate the diameter of that area  as diameter:=2 *sqrt(count/pi).}
+        3)	Determine the maximum signal level of region of interest.
+        4)	Count pixels which are equal or above half maximum level.
+        5)	Use the pixel count as area and calculate the diameter of that area  as diameter:=2 *sqrt(count/pi).}
 
 
   except
@@ -2952,6 +2852,7 @@ begin
            (f.FFitsInfo.naxis2 = FFitsInfo.naxis2 ) and
            (f.FFitsInfo.naxis3 = FFitsInfo.naxis3 ) and
            (f.FFitsInfo.bzero  = FFitsInfo.bzero )  and
+           (f.FFitsInfo.roworder = FFitsInfo.roworder ) and
            (f.FFitsInfo.bscale = FFitsInfo.bscale );
 end;
 
@@ -3139,7 +3040,7 @@ begin
   m.free;
 end;
 
-procedure PictureToFits(pict:TMemoryStream; ext: string; var ImgStream:TMemoryStream; flip:boolean=true;pix:double=-1;piy:double=-1;binx:integer=-1;biny:integer=-1;bayer:string='';rmult:string='';gmult:string='';bmult:string='';origin:string='';exifkey:TStringList=nil;exifvalue:TStringList=nil);
+procedure PictureToFits(pict:TMemoryStream; ext: string; var ImgStream:TMemoryStream; flip:boolean=false;pix:double=-1;piy:double=-1;binx:integer=-1;biny:integer=-1;bayer:string='';rmult:string='';gmult:string='';bmult:string='';origin:string='';exifkey:TStringList=nil;exifvalue:TStringList=nil);
 var img:TLazIntfImage;
     lRawImage: TRawImage;
     i,j,c,w,h,x,y,naxis: integer;
@@ -3230,6 +3131,10 @@ begin
    if naxis=3 then hdr.Add('NAXIS3',3 ,'length of data axis 3');
    hdr.Add('BZERO',32768,'offset data range to that of unsigned short');
    hdr.Add('BSCALE',1,'default scaling factor');
+   if flip then
+     hdr.Add('ROWORDER',bottomup,'Order of the rows in image array')
+   else
+     hdr.Add('ROWORDER',topdown,'Order of the rows in image array');
    if pix>0 then hdr.Add('PIXSIZE1',pix ,'Pixel Size 1 (microns)');
    if piy>0 then hdr.Add('PIXSIZE2',piy ,'Pixel Size 2 (microns)');
    if binx>0 then hdr.Add('XBINNING',binx ,'Binning factor in width');
@@ -3389,8 +3294,8 @@ begin
  end;
 end;
 
-procedure RawToFits(raw:TMemoryStream; ext: string; var ImgStream:TMemoryStream; out rmsg:string; pix:double=-1;piy:double=-1;binx:integer=-1;biny:integer=-1);
-var i,j,n,x,c: integer;
+procedure RawToFits(raw:TMemoryStream; ext: string; var ImgStream:TMemoryStream; out rmsg:string; pix:double=-1;piy:double=-1;binx:integer=-1;biny:integer=-1; flip:boolean=false);
+var i,ii,j,n,x,c: integer;
     xs,ys,xmax,ymax: integer;
     rawinfo:TRawInfo;
     rawinfo2:TRawInfo2;
@@ -3468,6 +3373,10 @@ if libraw<>0 then begin  // Use libraw directly
   hdr.Add('NAXIS2',rawinfo.imgheight ,'length of data axis 2');
   hdr.Add('BZERO',32768,'offset data range to that of unsigned short');
   hdr.Add('BSCALE',1,'default scaling factor');
+  if flip then
+    hdr.Add('ROWORDER',bottomup,'Order of the rows in image array')
+  else
+    hdr.Add('ROWORDER',topdown,'Order of the rows in image array');
   if pix>0 then hdr.Add('PIXSIZE1',pix ,'Pixel Size 1 (microns)');
   if piy>0 then hdr.Add('PIXSIZE2',piy ,'Pixel Size 2 (microns)');
   if binx>0 then hdr.Add('XBINNING',binx ,'Binning factor in width');
@@ -3511,8 +3420,12 @@ if libraw<>0 then begin  // Use libraw directly
   hdr.Free;
   {$ifdef debug_raw}writeln(FormatDateTime(dateiso,Now)+blank+'Copy data to FITS');{$endif}
   for i:=ys to ymax-1 do begin
+    if flip then
+      ii:=ymax-1-i
+    else
+      ii:=i;
     for j:=xs to xmax-1 do begin
-      {$RANGECHECKS OFF} x:=TRawBitmap(rawinfo.bitmap)[i*(rawinfo.rawwidth)+j];
+      {$RANGECHECKS OFF} x:=TRawBitmap(rawinfo.bitmap)[ii*(rawinfo.rawwidth)+j];
       if x>0 then
          xx:=x-32768
       else
@@ -3568,7 +3481,7 @@ else if RawUnpCmd<>'' then begin  // try libraw tools
    exit;
  end;
  raw.LoadFromFile(tiff);
- PictureToFits(raw,'tiff',ImgStream,false,pix,piy,binx,biny,bayerpattern,rmult,gmult,bmult,'LibRaw tools',exifkey,exifvalue);
+ PictureToFits(raw,'tiff',ImgStream,flip,pix,piy,binx,biny,bayerpattern,rmult,gmult,bmult,'LibRaw tools',exifkey,exifvalue);
  outr.Free;
  except
    rmsg:='Error converting raw file';
@@ -3600,7 +3513,7 @@ else if DcrawCmd<>'' then begin  // try dcraw command line
     exit;
   end;
   raw.LoadFromFile(tiff);
-  PictureToFits(raw,'tiff',ImgStream,false,pix,piy,binx,biny,bayerpattern,'','','','dcraw',exifkey,exifvalue);
+  PictureToFits(raw,'tiff',ImgStream,flip,pix,piy,binx,biny,bayerpattern,'','','','dcraw',exifkey,exifvalue);
   outr.Free;
   except
     rmsg:='Error converting raw file';

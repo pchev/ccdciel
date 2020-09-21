@@ -29,7 +29,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 interface
 
 uses
-  u_global, blcksock, synsock, synautil,
+  u_global, blcksock, synsock, synautil, fpjson, jsonparser,
   Dialogs, LazUTF8, LazFileUtils, LCLIntf, SysUtils, Classes;
 
 type
@@ -37,6 +37,7 @@ type
   TStringProc = procedure(var S: string) of object;
   TIntProc = procedure(var i: integer) of object;
   TExCmd = function(cmd: string): string of object;
+  TExJSON = function(id:string; attrib,value:Tstringlist): string of object;
   TGetImage = procedure(n: string; var i: Tmemorystream) of object;
 
   TTCPThrd = class(TThread)
@@ -45,11 +46,14 @@ type
     CSock: TSocket;
     cmd: string;
     cmdresult: string;
-    FHttpRequest: string;
+    FHttpRequest, FJSONRequest, FJSONid: string;
+    JsonRecurseLevel: integer;
     FGetImage: TGetImage;
     FConnectTime: double;
     FTerminate: TIntProc;
     FExecuteCmd: TExCmd;
+    FExecuteJSON: TExJSON;
+    procedure JsonDataToStringlist(var SK,SV: TStringList; prefix:string; D : TJSONData);
   public
     id: integer;
     abort, stoping: boolean;
@@ -59,12 +63,14 @@ type
     procedure SendData(str: string);
     procedure ExecuteCmd;
     procedure ProcessHttp;
+    procedure ProcessJSON;
     property sock: TTCPBlockSocket read FSock;
     property ConnectTime: double read FConnectTime;
     property Terminated;
     property onTerminate: TIntProc read FTerminate write FTerminate;
     property onExecuteCmd: TExCmd read FExecuteCmd write FExecuteCmd;
     property onGetImage: TGetImage read  FGetImage write FGetImage;
+    property onExecuteJSON: TExJSON read FExecuteJSON write FExecuteJSON;
   end;
 
   TTCPDaemon = class(TThread)
@@ -74,6 +80,7 @@ type
     FShowSocket: TStringProc;
     FIPaddr, FIPport: string;
     FExecuteCmd: TExCmd;
+    FExecuteJSON: TExJSON;
     FGetImage: TGetImage;
     procedure ShowError;
     procedure ThrdTerminate(var i: integer);
@@ -90,6 +97,7 @@ type
     property onErrorMsg: TStringProc read FErrorMsg write FErrorMsg;
     property onShowSocket: TStringProc read FShowSocket write FShowSocket;
     property onExecuteCmd: TExCmd read FExecuteCmd write FExecuteCmd;
+    property onExecuteJSON: TExJSON read FExecuteJSON write FExecuteJSON;
     property onGetImage: TGetImage read  FGetImage write FGetImage;
   end;
 
@@ -202,6 +210,7 @@ begin
               TCPThrd[n] := TTCPThrd.Create(ClientSock);
               TCPThrd[n].onTerminate := @ThrdTerminate;
               TCPThrd[n].onExecuteCmd := FExecuteCmd;
+              TCPThrd[n].onExecuteJSON := FExecuteJSON;
               TCPThrd[n].onGetImage := FGetImage;
               TCPThrd[n].id := n;
               ThrdActive[n] := True;
@@ -281,6 +290,12 @@ begin
                Synchronize(@ProcessHttp);
                break;
             end
+            else if copy(s,1,1)='{' then begin
+               FJSONRequest:=s;
+               Synchronize(@ProcessJSON);
+               SendString(cmdresult + crlf);
+               if lastError <> 0 then break;
+            end
             else begin
               cmd:=su;
               Synchronize(@ExecuteCmd);
@@ -325,6 +340,73 @@ begin
   except
     cmdresult := msgFailed;
   end;
+end;
+
+procedure TTCPThrd.ProcessJSON;
+var attrib,value:Tstringlist;
+    J: TJSONData;
+    p: integer;
+begin
+  try
+
+    Fjsonid:='null';
+    attrib:=Tstringlist.Create;
+    value:=Tstringlist.Create;
+    try
+    J:=GetJSON(FJSONRequest);
+    JsonRecurseLevel:=0;
+    JsonDataToStringlist(attrib,value,'',J);
+    J.Free;
+    p:=attrib.IndexOf('id');
+    if p>=0 then
+      Fjsonid:=value[p];
+    if (Fjsonid<>'null') and Assigned(FExecuteJSON) then
+      cmdresult := FExecuteJSON(Fjsonid,attrib,value);
+    finally
+      attrib.Free;
+      value.Free;
+    end;
+
+  except
+    on E: Exception do cmdresult := '{"jsonrpc": "2.0", "error": {"code": -32603, "message": "Internal error:'+E.Message+'"}, "id": '+Fjsonid+'}';
+  end;
+end;
+
+procedure TTCPThrd.JsonDataToStringlist(var SK,SV: TStringList; prefix:string; D : TJSONData);
+var i:integer;
+    pr,buf:string;
+begin
+inc(JsonRecurseLevel);
+if Assigned(D) then begin
+  case D.JSONType of
+    jtArray,jtObject: begin
+        for i:=0 to D.Count-1 do begin
+           if D.JSONType=jtArray then begin
+              if prefix='' then pr:=IntToStr(I) else pr:=prefix+'.'+IntToStr(I);
+              if JsonRecurseLevel<100 then JsonDataToStringlist(SK,SV,pr,D.items[i])
+                 else raise Exception.Create('JSON data recursion > 100');
+           end else begin
+              if prefix='' then pr:=TJSONObject(D).Names[i] else pr:=prefix+'.'+TJSONObject(D).Names[i];
+              if JsonRecurseLevel<100 then JsonDataToStringlist(SK,SV,pr,D.items[i])
+                 else raise Exception.Create('JSON data recursion > 100');
+           end;
+        end;
+       end;
+    jtNull: begin
+       SK.Add(prefix);
+       SV.Add('null');
+    end;
+    jtNumber: begin
+       SK.Add(prefix);
+       buf:=floattostr(D.AsFloat);
+       SV.Add(buf);
+    end
+    else begin
+       SK.Add(prefix);
+       SV.Add(D.AsString);
+    end;
+ end;
+end;
 end;
 
 procedure TTCPThrd.ProcessHttp;

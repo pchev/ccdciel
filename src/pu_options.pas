@@ -44,10 +44,13 @@ type
     AutofocusMultistar: TGroupBox;
     BtnMaxDriftDisable: TButton;
     BtnDisableStarLost: TButton;
+    ASTAPadvanced: TButton;
     ButtonVoiceTest: TButton;
     ButtonVoiceAll: TButton;
     ButtonVoiceNone: TButton;
     AutofocusMultiStarCenter: TCheckBox;
+    BGneutralization: TCheckBox;
+    LongitudeError: TLabel;
     PagePlaNone: TPage;
     PanelLeft: TPanel;
     WantExif: TCheckBox;
@@ -446,9 +449,9 @@ type
     Label71: TLabel;
     Label72: TLabel;
     Label73: TLabel;
-    Label67: TLabel;
-    Label68: TLabel;
-    Label69: TLabel;
+    LabelR: TLabel;
+    LabelG: TLabel;
+    LabelB: TLabel;
     SlewFilter: TComboBox;
     FocusStarMag: TComboBox;
     GroupBox10: TGroupBox;
@@ -601,6 +604,7 @@ type
     Label1: TLabel;
     Panel1: TPanel;
     RefTreshold: TTrackBar;
+    procedure ASTAPadvancedClick(Sender: TObject);
     procedure AstUseScriptClick(Sender: TObject);
     procedure AutofocusExpTimeChange(Sender: TObject);
     procedure AutofocusmodeClick(Sender: TObject);
@@ -646,6 +650,7 @@ type
     procedure PixelSizeFromCameraChange(Sender: TObject);
     procedure PlanetariumBoxClick(Sender: TObject);
     procedure rbLinSocketChange(Sender: TObject);
+    procedure BalanceChange(Sender: TObject);
     procedure ResolverBoxClick(Sender: TObject);
     procedure SafetyActionsSelectEditor(Sender: TObject; aCol, aRow: Integer; var Editor: TWinControl);
     procedure SafetyActionsValidateEntry(sender: TObject; aCol, aRow: Integer; const OldValue: string; var NewValue: String);
@@ -676,6 +681,7 @@ type
     procedure SelectPage(Sender: TObject);
     procedure IncPage(Sender: TObject);
     procedure SelectNextPage(direction: integer);
+    procedure CheckLongitude;
   public
     { public declarations }
     LockTemp: Boolean;
@@ -717,6 +723,7 @@ begin
   Setlang;
   Lockchange:=false;
   LockTemp:=false;
+  FilterList.RowCount:=MaxFilter;
   SafetyActions.RowCount:=SafetyActionNum+1;
   PageControl1.ActivePageIndex:=0;
   b:=TSpeedButton.Create(self);
@@ -800,6 +807,7 @@ begin
   panel4.Visible:=DomeSlaveToMount.Checked;
   AutoguiderBoxClick(nil);
   ExpEarlyStartClick(nil);
+  BalanceChange(nil);
 end;
 
 procedure Tf_option.Setlang;
@@ -867,6 +875,7 @@ begin
   DebayerPreview.Caption := rsDebayerThePr;
   BayerMode.Items[4]:=rsAutomatic;
   BalanceFromCamera.Caption:=rsUseDSLRColor;
+  BGneutralization.Caption:=rsBackgroundNe;
   GroupBox26.Caption:=rsColorBalance;
   GroupBox9.Caption := rsReferenceIma;
   Label39.Caption := rsTreshold;
@@ -1221,6 +1230,7 @@ begin
   else
      Flongitude:=longdeg.value+longmin.value/60+longsec.value/3600;
   if long.Itemindex>0 then Flongitude:=-Flongitude;
+  CheckLongitude;
 end;
 
 procedure Tf_option.MeridianOptionClick(Sender: TObject);
@@ -1273,11 +1283,20 @@ try
   longsec.Text:=s;
   if value>=0 then long.Itemindex:=0
                    else long.Itemindex:=1;
+  CheckLongitude;
 finally
   LockChange:=false;
 end;
 end;
 
+procedure Tf_option.CheckLongitude;
+begin
+  if (ObsTimeZone<>0) and (abs(ObsTimeZone+FLongitude/15)>3) then begin
+    LongitudeError.Caption:=Format(rsTheComputerT, [FormatFloat(f1, ObsTimeZone), FormatFloat(f1, abs(FLongitude))+blank+long.Text])+crlf+rsBeCarefulOft;
+  end
+  else
+    LongitudeError.Caption:='';
+end;
 
 procedure Tf_option.MaxAduFromCameraChange(Sender: TObject);
 begin
@@ -1491,6 +1510,17 @@ end;
 procedure Tf_option.AstUseScriptClick(Sender: TObject);
 begin
    AstCustScript.Visible:=AstUseScript.Checked;
+end;
+
+procedure Tf_option.ASTAPadvancedClick(Sender: TObject);
+var cmd: string;
+begin
+ {$ifdef mswindows}
+   cmd:=slash(ASTAPFolder.Directory)+'astap.exe -debug';
+ {$else}
+   cmd:=slash(ASTAPFolder.Directory)+'astap -debug';
+ {$endif}
+ ExecNoWait(cmd,'',false);
 end;
 
 procedure Tf_option.AutofocusExpTimeChange(Sender: TObject);
@@ -1735,6 +1765,13 @@ begin
       rbLinTCP.Checked:=true;
    end;
 {$endif}
+end;
+
+procedure Tf_option.BalanceChange(Sender: TObject);
+begin
+  LabelR.Caption:='R '+FormatFloat(f2,RedBalance.Position/100);
+  LabelG.Caption:='G '+FormatFloat(f2,GreenBalance.Position/100);
+  LabelB.Caption:='B '+FormatFloat(f2,BlueBalance.Position/100);
 end;
 
 procedure Tf_option.ButtonNotificationNoneClick(Sender: TObject);

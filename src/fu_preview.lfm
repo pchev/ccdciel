@@ -263,6 +263,7 @@ object f_preview: Tf_preview
     Color = clBtnShadow
     DragMode = dmAutomatic
     Font.Color = clBtnText
+    Layout = tlCenter
     ParentColor = False
     ParentFont = False
     Transparent = False

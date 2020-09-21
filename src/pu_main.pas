@@ -733,7 +733,7 @@ type
     Procedure DrawImage;
     Procedure PlotImage;
     procedure plot_north(bmp:TBGRABitmap);
-    Procedure DrawHistogram(SetLevel: boolean);
+    Procedure DrawHistogram(SetLevel,ResetCursor: boolean);
     procedure AstrometryStart(Sender: TObject);
     procedure AstrometryEnd(Sender: TObject);
     procedure EndControlExposure(Sender: TObject);
@@ -761,6 +761,7 @@ type
     procedure TCPShowError(var msg: string);
     procedure TCPShowSocket(var msg: string);
     function TCPcmd(s: string):string;
+    function TCPjsoncmd(id:string; attrib,value:Tstringlist):string;
     procedure TCPgetimage(n: string;  var img: Tmemorystream);
     procedure SetLang;
     procedure UpdateMagnifyer(x,y:integer);
@@ -925,6 +926,16 @@ begin
  FindCloseUTF8(fs);
  // purge focus error pictures
  i:=FindFirstUTF8(slash(LogDir)+'focus_fail_*',0,fs);
+ while i=0 do begin
+   if (fs.Time>0)and(fs.Time<tl) then begin
+     buf:=slash(LogDir)+fs.Name;
+     DeleteFileUTF8(buf);
+   end;
+   i:=FindNextUTF8(fs);
+ end;
+ FindCloseUTF8(fs);
+ // purge astrometry error pictures
+ i:=FindFirstUTF8(slash(LogDir)+'astrometry_fail_*',0,fs);
  while i=0 do begin
    if (fs.Time>0)and(fs.Time<tl) then begin
      buf:=slash(LogDir)+fs.Name;
@@ -2131,10 +2142,16 @@ begin
   if i>=128 then begin
     TBTabs.Images:=ImageListDay;
     MainMenu1.Images:=ImageListDay;
+    colorGreen:=clGreen;
+    colorBlue:=clBlue;
+    colorRed:=clRed;
   end
   else begin
     TBTabs.Images:=ImageListNight;
     MainMenu1.Images:=ImageListNight;
+    colorGreen:=clLime;
+    colorBlue:=clAqua;
+    colorRed:=clFuchsia;
     {$ifdef lclcocoa}
     TBTabs.Color:=clBackground;
     {$endif}
@@ -3050,7 +3067,7 @@ begin
     fits.DarkOn:=false;
     fits.LoadFromFile(fn);
     if fits.HeaderInfo.valid then begin
-      DrawHistogram(true);
+      DrawHistogram(true,true);
       DrawImage;
       wait(2);
       CreateBPM(fits);
@@ -3113,7 +3130,7 @@ begin
  try
  fits.DarkOn:=true;
  fits.ApplyDark;
- DrawHistogram(true);
+ DrawHistogram(true,false);
  DrawImage;
  finally
  fits.DarkOn:=false;
@@ -3305,7 +3322,7 @@ var i,n: integer;
     ok: boolean;
     oldbayer: TBayerMode;
     oldRed,oldGreen,oldBlue:double;
-    oldBalance:boolean;
+    oldBalance, oldBGneutralization:boolean;
     posprev,poscapt:integer;
     binprev,bincapt:string;
 begin
@@ -3334,8 +3351,10 @@ begin
   oldGreen:=GreenBalance;
   oldBlue:=BlueBalance;
   oldBalance:=BalanceFromCamera;
+  oldBGneutralization:=BGneutralization;
   DefaultBayerMode:=TBayerMode(config.GetValue('/Color/BayerMode',4));
   BalanceFromCamera:=config.GetValue('/Color/BalanceFromCamera',true);
+  BGneutralization:=config.GetValue('/Color/BGneutralization',true);
   RedBalance:=config.GetValue('/Color/RedBalance',1.0);
   GreenBalance:=config.GetValue('/Color/GreenBalance',0.7);
   BlueBalance:=config.GetValue('/Color/BlueBalance',0.9);
@@ -3569,7 +3588,7 @@ begin
   weather.MaxWindDirection:=config.GetValue('/Weather/Max/WindDirection',0);
   weather.MaxWindGust:=config.GetValue('/Weather/Max/WindGust',0);
   weather.MaxWindSpeed:=config.GetValue('/Weather/Max/WindSpeed',0);
-  if (BayerColor<>MenuItemDebayer.Checked)or(oldbayer<>DefaultBayerMode) or
+  if (BayerColor<>MenuItemDebayer.Checked)or(oldbayer<>DefaultBayerMode) or (oldBGneutralization<>BGneutralization) or
      (oldRed<>RedBalance)or(oldGreen<>GreenBalance)or(oldBlue<>BlueBalance)or(oldBalance<>BalanceFromCamera)
   then begin
     MenuItemDebayer.Checked:=BayerColor;
@@ -5180,8 +5199,11 @@ case wheel.Status of
                       if f_EditTargets.FlatFilterList.Items.Count>0 then f_EditTargets.FlatFilterList.Items.Delete(0);
                       FilterList.Assign(wheel.FilterNames);
                       SetFilterMenu;
-                      if (wheel.Filter>0)and(wheel.Filter<=f_filterwheel.Filters.Items.Count) then
+                      if (wheel.Filter>0)and(wheel.Filter<=f_filterwheel.Filters.Items.Count) then begin
                          f_filterwheel.Filters.ItemIndex:=round(wheel.Filter);
+                         CurrentFilterOffset:=FilterOffset[round(wheel.Filter)];
+                         filteroffset_initialized:=true;
+                      end;
                    end;
 end;
 CheckConnectionStatus;
@@ -5982,6 +6004,11 @@ begin
      else
        de:=StrToDE(tde);
      if (ra<>NullCoord) and (de<>NullCoord) then begin
+       if autoguider.State=GUIDER_GUIDING then begin
+         NewMessage(rsStopAutoguid,2);
+         autoguider.Guide(false);
+         autoguider.WaitBusy(15);
+       end;
        NewMessage(rsGoto+': '+objn,1);
        J2000ToMount(mount.EquinoxJD,ra,de);
        if astrometry.PrecisionSlew(ra,de,err) then begin
@@ -6602,6 +6629,7 @@ begin
    f_option.GreenBalance.Position:=round(100*config.GetValue('/Color/GreenBalance',0.7));
    f_option.BlueBalance.Position:=round(100*config.GetValue('/Color/BlueBalance',0.9));
    f_option.BalanceFromCamera.Checked:=config.GetValue('/Color/BalanceFromCamera',true);
+   f_option.BGneutralization.Checked:=config.GetValue('/Color/BGneutralization',true);
    f_option.ClippingHigh.Value:=config.GetValue('/Color/ClippingOverflow',MAXWORD);
    f_option.ClippingLow.Value:=config.GetValue('/Color/ClippingUnderflow',0);
    f_option.BPMsigma.Value:=config.GetValue('/BadPixel/Sigma',5);
@@ -7006,6 +7034,7 @@ begin
      config.SetValue('/Color/GreenBalance',f_option.GreenBalance.Position/100);
      config.SetValue('/Color/BlueBalance',f_option.BlueBalance.Position/100);
      config.SetValue('/Color/BalanceFromCamera',f_option.BalanceFromCamera.Checked);
+     config.SetValue('/Color/BGneutralization',f_option.BGneutralization.Checked);
      config.SetValue('/Color/ClippingOverflow',f_option.ClippingHigh.Value);
      config.SetValue('/Color/ClippingUnderflow',f_option.ClippingLow.Value);
      config.SetValue('/BadPixel/Sigma',f_option.BPMsigma.Value);
@@ -8166,7 +8195,7 @@ procedure Tf_main.ShowLastImage(Sender: TObject);
 begin
  if f_visu.BtnShowImage.Down then begin
   fits.LoadStream;
-  DrawHistogram(true);
+  DrawHistogram(true,true);
   DrawImage;
   Image1.Invalidate;
  end
@@ -8198,7 +8227,7 @@ begin
   try
     // draw image
     {$ifdef debug_raw}writeln(FormatDateTime(dateiso,Now)+blank+'DrawHistogram');{$endif}
-    DrawHistogram(true);
+    DrawHistogram(true,false);
     {$ifdef debug_raw}writeln(FormatDateTime(dateiso,Now)+blank+'DrawImage');{$endif}
     DrawImage;
     {$ifdef debug_raw}writeln(FormatDateTime(dateiso,Now)+blank+'DrawImage end');{$endif}
@@ -8645,13 +8674,13 @@ ImgFrameX:=FrameX;
 ImgFrameY:=FrameY;
 ImgFrameW:=FrameW;
 ImgFrameH:=FrameH;
-DrawHistogram(true);
+DrawHistogram(true,false);
 DrawImage;
 end;
 
 Procedure Tf_main.RedrawHistogram(Sender: TObject);
 begin
-  DrawHistogram(false);
+  DrawHistogram(false,false);
 end;
 
 Procedure Tf_main.ShowHistogramPos(msg:string);
@@ -8661,7 +8690,7 @@ end;
 
 Procedure Tf_main.Redraw(Sender: TObject);
 begin
-  DrawHistogram(false);
+  DrawHistogram(false,false);
   DrawImage;
 end;
 
@@ -8677,6 +8706,8 @@ var tmpbmp:TBGRABitmap;
     s,cx,cy: integer;
 begin
 if fits.HeaderInfo.naxis>0 then begin
+  try
+  screen.Cursor:=crHourGlass;
   trpOK:=false;
   fits.Gamma:=f_visu.Gamma.Value;
   fits.ImgDmax:=round(f_visu.ImgMax);
@@ -8687,7 +8718,7 @@ if fits.HeaderInfo.naxis>0 then begin
   fits.MarkOverflow:=f_visu.Clipping;
   fits.Invert:=f_visu.Invert;
   {$ifdef debug_raw}writeln(FormatDateTime(dateiso,Now)+blank+'FITS GetBGRABitmap');{$endif}
-  fits.GetBGRABitmap(ImaBmp,BayerColor);
+  fits.GetBGRABitmap(ImaBmp);
   {$ifdef debug_raw}writeln(FormatDateTime(dateiso,Now)+blank+'FITS GetBGRABitmap end');{$endif}
   ImgPixRatio:=fits.HeaderInfo.pixratio;
   if (fits.HeaderInfo.pixratio<>1) then begin
@@ -8720,6 +8751,9 @@ if fits.HeaderInfo.naxis>0 then begin
   {$ifdef debug_raw}writeln(FormatDateTime(dateiso,Now)+blank+'PlotImage');{$endif}
   PlotImage;
   {$ifdef debug_raw}writeln(FormatDateTime(dateiso,Now)+blank+'PlotImage end');{$endif}
+  finally
+  screen.Cursor:=crDefault;
+  end;
 end;
 end;
 
@@ -8981,10 +9015,10 @@ begin
   if GetCurrentThreadId=MainThreadID then Application.ProcessMessages;
 end;
 
-Procedure Tf_main.DrawHistogram(SetLevel: boolean);
+Procedure Tf_main.DrawHistogram(SetLevel,ResetCursor: boolean);
 begin
   if fits.HeaderInfo.naxis>0 then begin
-     f_visu.DrawHistogram(fits.Histogram,SetLevel,fits.HeaderInfo.floatingpoint,fits.imageC,fits.imageMin,fits.imageMax);
+     f_visu.DrawHistogram(fits.Histogram,SetLevel,fits.HeaderInfo.floatingpoint,ResetCursor,fits.imageC,fits.imageMin,fits.imageMax);
   end;
 end;
 
@@ -9008,11 +9042,7 @@ begin
     ShowMessage(Format(rsNotConnected, [rsCamera]));
     exit;
   end;
-  if mount.Status<>devConnected then begin
-    ShowMessage(Format(rsNotConnected, [rsMount]));
-    exit;
-  end;
-  if mount.Park then begin
+  if (mount.Status=devConnected)and(mount.Park) then begin
     NewMessage(rsTheTelescope);
     exit;
   end;
@@ -9251,6 +9281,8 @@ begin
  if TMenuItem(Sender).Checked then begin
   BayerColor:=True;
   if fits.HeaderInfo.naxis>0 then begin
+    fits.GetImage;
+    DrawHistogram(true,true);
     DrawImage;
     NewMessage(rsImageDebayer,1);
   end;
@@ -9258,6 +9290,8 @@ begin
  else begin
   BayerColor:=False;
   if fits.HeaderInfo.naxis>0 then begin
+    fits.GetImage;
+    DrawHistogram(true,true);
     DrawImage;
     NewMessage(rsImageUnDebay,1);
   end;
@@ -9333,6 +9367,7 @@ if refmask then begin
   mem:=TMemoryStream.Create;
   f:=TFits.Create(nil);
   f.onMsg:=@NewMessage;
+  f.DisableBayer:=true;
   try
   mem.LoadFromFile(reffile);
   f.Stream:=mem;
@@ -9341,7 +9376,7 @@ if refmask then begin
     f.Gamma:=f_visu.Gamma.Value;
     f.ImgDmax:=round(f_visu.ImgMax);
     f.ImgDmin:=round(f_visu.ImgMin);
-    f.GetBGRABitmap(refbmp,false);
+    f.GetBGRABitmap(refbmp);
     p:=refbmp.data;
     for i:=0 to refbmp.NbPixels-1 do begin
      p[i].alpha:=128;
@@ -10672,7 +10707,7 @@ begin
 end;
 
 procedure Tf_main.AstrometryEnd(Sender: TObject);
-var resulttxt:string;
+var resulttxt,buf:string;
     dist: double;
 begin
   // update Menu
@@ -10724,6 +10759,11 @@ begin
      NewMessage(Format(rsResolveSucce, [rsAstrometry])+resulttxt,3);
   end else begin
     NewMessage(Format(rsResolveError, [astrometry.Resolver])+' '+astrometry.LastError,1);
+    if LogToFile then begin
+       buf:=slash(LogDir)+'astrometry_fail_'+FormatDateTime('yyyymmdd_hhnnss',now)+'.fits';
+       fits.SaveToFile(buf);
+       NewMessage(Format(rsSavedFile, [buf]),2);
+    end;
   end;
 end;
 
@@ -11392,7 +11432,7 @@ begin
        ImgCx:=0;
        ImgCy:=0;
      end;
-     DrawHistogram(true);
+     DrawHistogram(true,true);
      DrawImage;
      imgsize:=inttostr(fits.HeaderInfo.naxis1)+'x'+inttostr(fits.HeaderInfo.naxis2);
      NewMessage(Format(rsOpenFile, [fn]),2);
@@ -11429,7 +11469,7 @@ begin
      fits.LoadStream;
      // draw new image
      {$ifdef debug_raw}writeln(FormatDateTime(dateiso,Now)+blank+'DrawHistogram');{$endif}
-     DrawHistogram(true);
+     DrawHistogram(true,true);
      {$ifdef debug_raw}writeln(FormatDateTime(dateiso,Now)+blank+'DrawImage');{$endif}
      DrawImage;
      {$ifdef debug_raw}writeln(FormatDateTime(dateiso,Now)+blank+'DrawImage end');{$endif}
@@ -11464,7 +11504,7 @@ begin
      fits.Stream:=FitsStream;
      fits.LoadStream;
      // draw new image
-     DrawHistogram(true);
+     DrawHistogram(true,true);
      DrawImage;
      imgsize:=inttostr(fits.HeaderInfo.naxis1)+'x'+inttostr(fits.HeaderInfo.naxis2);
      NewMessage(Format(rsOpenFile, [fn]),2);
@@ -12051,7 +12091,7 @@ var xx,yy,n: integer;
 begin
  Screen2fits(x,y,f_visu.FlipHorz,f_visu.FlipVert,xx,yy);
  if (xx>0)and(xx<fits.HeaderInfo.naxis1)and(yy>0)and(yy<fits.HeaderInfo.naxis2) then
-    if fits.HeaderInfo.naxis=2 then begin
+    if fits.preview_axis=2 then begin
       if fits.HeaderInfo.bitpix>0 then begin
         val:=trunc(fits.imageMin+fits.image[0,yy,xx]/fits.imageC);
         sval:=inttostr(val);
@@ -12061,7 +12101,7 @@ begin
        sval:=FormatFloat(f3,dval);
       end;
     end
-    else if (fits.HeaderInfo.naxis=3)and(fits.HeaderInfo.naxis3=3) then begin
+    else if (fits.preview_axis=3) then begin
       if fits.HeaderInfo.bitpix>0 then begin
         val:=trunc(fits.imageMin+fits.image[0,yy,xx]/fits.imageC);
         sval:=inttostr(val);
@@ -12191,6 +12231,7 @@ begin
     TCPDaemon.onErrorMsg := @TCPShowError;
     TCPDaemon.onShowSocket := @TCPShowSocket;
     TCPDaemon.onExecuteCmd:=@TCPcmd;
+    TCPDaemon.onExecuteJSON:=@TCPjsoncmd;
     TCPDaemon.onGetImage:=@TCPgetimage;
     TCPDaemon.IPaddr := '0.0.0.0';
     TCPDaemon.IPport := '3277';
@@ -12253,6 +12294,173 @@ begin
   except
     img.clear;
   end;
+end;
+
+function Tf_main.TCPjsoncmd(id:string; attrib,value:Tstringlist):string;
+var p,frx,fry,frw,frh,i,j,n: integer;
+    rpcversion,method,resp:string;
+    noparams:boolean;
+function CleanText(str:string):string;
+begin
+ result:=StringReplace(str,'"','''',[rfReplaceAll]);
+ result:=StringReplace(result,';','.',[rfReplaceAll]);
+ result:=StringReplace(result,CRLF,'; ',[rfReplaceAll]);
+ result:=StringReplace(result,CR,' ',[rfReplaceAll]);
+ result:=StringReplace(result,LF,' ',[rfReplaceAll]);
+end;
+
+begin
+try
+  resp:='';
+  p:=attrib.IndexOf('jsonrpc');
+  if p>=0 then
+    rpcversion:=value[p]
+  else
+    rpcversion:='2.0';
+  if rpcversion<>'2.0' then begin
+    result:='{"jsonrpc": "2.0", "error": {"code": -32600, "message": "JSON-RPC version not supported"}, "id": '+id+'}';
+    exit;
+  end;
+  result:='{"jsonrpc": "2.0", ';
+  p:=attrib.IndexOf('method');
+  if p>=0 then
+    method:=value[p]
+  else
+    method:='';
+
+  if method='status' then begin
+    p:=attrib.IndexOf('params.0');
+    noparams:=attrib.IndexOf('params.0')<0;
+
+    if noparams or (value.IndexOf('devices')>0) then
+      resp:=resp+'"devices": {"connected": '+BoolToStr(AllDevicesConnected,'true','false')+'}, ';
+    if noparams or (value.IndexOf('planetarium')>0) then begin
+      resp:=resp+'"planetarium": {"connected": '+BoolToStr((f_planetarium<>nil)and(not planetarium.Terminated)and(planetarium.Connected),'true','false')+'}, ';
+    end;
+    if noparams or (value.IndexOf('autoguider')>0) then begin
+      resp:=resp+'"autoguider": {"connected": '+BoolToStr((f_autoguider<>nil)and(autoguider.State<>GUIDER_DISCONNECTED),'true','false');
+      if (f_autoguider<>nil)and(autoguider.State<>GUIDER_DISCONNECTED) then
+         resp:=resp+', "guiding": '+BoolToStr((autoguider.State=GUIDER_GUIDING),'true','false')+
+                    ', "alert": '+BoolToStr((autoguider.State=GUIDER_ALERT),'true','false');
+      resp:=resp+'}, ';
+    end;
+    if (noparams and WantSafety) or (value.IndexOf('safety')>0) then begin
+      resp:=resp+'"safety": {"connected": '+BoolToStr((safety.Status=devConnected),'true','false');
+      if safety.Status=devConnected then
+         resp:=resp+', "safe": '+BoolToStr((f_safety.Safe),'true','false');
+      resp:=resp+'}, ';
+    end;
+    if (noparams and WantWeather) or (value.IndexOf('weather')>0) then begin
+      resp:=resp+'"weather": {"connected": '+BoolToStr((weather.Status=devConnected),'true','false');
+      if weather.Status=devConnected then begin
+        resp:=resp+', "clear": '+BoolToStr((f_weather.Clear),'true','false');
+        if (not f_weather.Clear) then
+           resp:=resp+', "weathermessage": "'+CleanText(weather.WeatherMessage)+'"';
+      end;
+      resp:=resp+'}, ';
+    end;
+    if (noparams and WantDome) or (value.IndexOf('dome')>0) then begin
+      resp:=resp+'"dome": {"connected": '+BoolToStr((dome.Status=devConnected),'true','false');
+      if dome.Status=devConnected then
+        resp:=resp+', "shutter": '+BoolToStr((f_dome.Shutter),'true','false') +
+                   ', "slaving": '+BoolToStr((f_dome.CanSlave)and(f_dome.Slave),'true','false');
+      resp:=resp+'}, ';
+    end;
+    if (noparams and WantMount) or (value.IndexOf('mount')>0) then begin
+      resp:=resp+'"mount": {"connected": '+BoolToStr((mount.Status=devConnected),'true','false');
+      if mount.Status=devConnected then begin
+        resp:=resp+', "park": '+BoolToStr((mount.Park),'true','false');
+        if not mount.Park then begin
+          resp:=resp+', "ra": "'+CleanText(trim(f_mount.RA.Caption))+'"';
+          resp:=resp+', "dec": "'+CleanText(trim(f_mount.DE.Caption))+'"';
+          resp:=resp+', "pierside": "'+CleanText(trim(f_mount.Pierside.Caption))+'"';
+          resp:=resp+', "timetomeridian": "'+CleanText(trim(f_mount.LabelMeridian.Caption)+' '+trim(f_mount.TimeToMeridian.Caption)+' '+trim(f_mount.label4.Caption))+'"';
+        end;
+      end;
+      resp:=resp+'}, ';
+    end;
+    if (noparams and WantCamera) or (value.IndexOf('camera')>0) then begin
+      resp:=resp+'"camera": {"connected": '+BoolToStr(camera.Status=devConnected,'true','false');
+      if camera.Status=devConnected then begin
+        resp:=resp+', "binning": "'+inttostr(camera.BinX)+'x'+inttostr(camera.BinY)+'"';
+        camera.GetFrame(frx,fry,frw,frh);
+        resp:=resp+', "frame": "'+inttostr(frx)+'/'+inttostr(fry)+'/'+inttostr(frw)+'/'+inttostr(frh)+'"';
+        resp:=resp+', "cooler": '+BoolToStr(f_ccdtemp.CCDcooler.Checked,'true','false');
+        resp:=resp+', "temperature": '+f_ccdtemp.Current.Caption;
+      end;
+      resp:=resp+'}, ';
+    end;
+    if (noparams and WantWheel) or (value.IndexOf('wheel')>0) then begin
+      resp:=resp+'"wheel": {"connected": '+BoolToStr(wheel.Status=devConnected,'true','false');
+      if wheel.Status=devConnected then begin
+         resp:=resp+', "filter": "'+CleanText(f_filterwheel.Filters.Text)+'"';
+      end;
+      resp:=resp+'}, ';
+    end;
+    if (noparams and WantRotator) or (value.IndexOf('rotator')>0) then begin
+      resp:=resp+'"rotator": {"connected": '+BoolToStr(rotator.Status=devConnected,'true','false');
+      if rotator.Status=devConnected then begin
+         resp:=resp+', "position": '+CleanText(f_rotator.Angle.Text);
+      end;
+      resp:=resp+'}, ';
+    end;
+    if (noparams and WantFocuser) or (value.IndexOf('focuser')>0) then begin
+      resp:=resp+'"focuser": {"connected": '+BoolToStr(focuser.Status=devConnected,'true','false');
+      if focuser.Status=devConnected then begin
+         if focuser.hasAbsolutePosition then resp:=resp+', "position": '+f_focuser.Position.Text;
+         if focuser.hasTemperature then resp:=resp+', "temperature": '+f_focuser.Temp.Text;
+         resp:=resp+', "focusermessage": "'+CleanText(f_starprofile.LastFocusMsg)+'"';
+      end;
+      resp:=resp+'}, ';
+    end;
+    if noparams or (value.IndexOf('sequence')>0) then begin
+      resp:=resp+'"sequence": {"running": '+BoolToStr(f_sequence.Running,'true','false');
+      if f_sequence.Running then begin
+        resp:=resp+', "name": "'+CleanText(trim(CurrentSeqName))+'"';
+        resp:=resp+', "target": "'+CleanText(trim(CurrentTargetName))+'"';
+        resp:=resp+', "step": "'+CleanText(trim(CurrentStepName))+'"';
+        resp:=resp+', "status": "'+CleanText(trim(f_sequence.StatusMsg.Caption))+'"';
+        resp:=resp+', "delay": "'+CleanText(trim(f_sequence.DelayMsg.Caption))+'"';
+        resp:=resp+', "sequencecompletion": '+FormatFloat(f0,f_sequence.PercentComplete*100);
+        resp:=resp+', "targetcompletion": '+FormatFloat(f0,f_sequence.TargetPercentComplete*100);
+      end;
+      resp:=resp+'}, ';
+    end;
+    if noparams or (value.IndexOf('sequence')>0) or (value.IndexOf('capture')>0) then begin
+      resp:=resp+'"capture": {"running": '+BoolToStr(f_capture.Running,'true','false');
+      if f_capture.Running then begin
+         resp:=resp+', "total": '+f_capture.SeqNum.Text;
+         resp:=resp+', "current": '+inttostr(f_capture.SeqCount);
+         resp:=resp+', "exposure": '+formatfloat(f3,f_capture.ExposureTime);
+         resp:=resp+', "exposureremain": '+formatfloat(f3,CameraExposureRemain);
+      end;
+      resp:=resp+'}, ';
+    end;
+    if noparams or (value.IndexOf('log')>0) then begin
+      n:=f_msg.msg.Lines.Count-1;
+      if n<30 then j:=0
+              else j:=n-30;
+      resp:=resp+'"log": [';
+      for i:=j to n do
+        resp:=resp+'"'+CleanText(f_msg.msg.Lines[i])+'",';
+      delete(resp,length(resp),1);
+      resp:=resp+'], ';
+    end;
+    if resp>'' then begin
+      delete(resp,length(resp)-1,2);
+      result:=result+'"result": {'+resp+'}, "id": '+id+'}'
+    end
+    else
+      result:=result+'"error": {"code": -32602, "message": "Invalid params"}, "id": '+id+'}';
+  end
+
+  else begin
+    result:=result+'"error": {"code": -32601, "message": "Method not found"}, "id": '+id+'}';
+  end;
+
+except
+  on E: Exception do result := '{"jsonrpc": "2.0", "error": {"code": -32603, "message": "Internal error:'+E.Message+'"}, "id": '+id+'}';
+end;
 end;
 
 function Tf_main.TCPcmd(s: string):string;

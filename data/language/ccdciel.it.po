@@ -6,15 +6,15 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ccdciel\n"
 "Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
-"POT-Creation-Date: 2020-05-09 13:30+0000\n"
+"POT-Creation-Date: 2020-08-23 08:48+0000\n"
 "PO-Revision-Date: 2019-12-15 12:55+0000\n"
 "Last-Translator: Mattia Verga <Unknown>\n"
 "Language-Team: Italian <it@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2020-05-10 18:44+0000\n"
-"X-Generator: Launchpad (build fbdff7602bd10fb883bf7e2ddcc7fd5a16f60398)\n"
+"X-Launchpad-Export-Date: 2020-09-21 08:44+0000\n"
+"X-Generator: Launchpad (build 83bdf6c8a3a5f87722c8927e54838522f3e57504)\n"
 
 #: u_translation.rs32bitdriver
 msgid "This driver work only in 32bit, please install the 32bit version of CCDciel."
@@ -404,6 +404,10 @@ msgstr ""
 msgid "Background"
 msgstr ""
 
+#: u_translation.rsbackgroundne
+msgid "Background neutralization"
+msgstr ""
+
 #: u_translation.rsbacklashcomp
 msgid "Backlash compensation"
 msgstr "Compensazione gioco"
@@ -436,6 +440,10 @@ msgstr "Soglia pixel difettoso"
 msgid "Bayer matrix pattern"
 msgstr "Schema matrice Bayer"
 
+#: u_translation.rsbecarefuloft
+msgid "Be careful of the longitude East/West setting."
+msgstr ""
+
 #: u_translation.rsbeforetouset
 msgid "Before to use this tool you must connect the camera, the mount and the planetarium"
 msgstr ""
@@ -447,6 +455,10 @@ msgstr "Prima di poter usare questa opzione, il programma Elbrus deve essere cal
 #: u_translation.rsbegin
 msgid "Begin"
 msgstr "Inizia"
+
+#: u_translation.rsbesurethecom
+msgid "Be sure the computer use the local timezone and the observatory location is configured in the program preferences."
+msgstr ""
 
 #: u_translation.rsbesuretoconf
 msgid "Be sure to configure the camera connection."
@@ -4095,6 +4107,10 @@ msgstr ""
 #: u_translation.rsthecameraisc
 msgid "The camera is connected. Do you want to exit the program now?"
 msgstr "La fotocamera è disconnessa. Vuoi uscire dal programma adesso?"
+
+#: u_translation.rsthecomputert
+msgid "The computer timezone %s and the observatory longitude %s are not compatible."
+msgstr ""
 
 #: u_translation.rsthedataare2
 msgid "The data are now recorded in the profile.%sYou can review the other auto-focus options using the menu %sEdit / Preferences / Autofocus"

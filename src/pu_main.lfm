@@ -395,8 +395,8 @@ object f_main: Tf_main
   end
   object MainMenu1: TMainMenu
     Images = ImageListDay
-    left = 52
-    top = 41
+    Left = 52
+    Top = 41
     object MenuItem1: TMenuItem
       Caption = 'File'
       object MenuOpenPicture: TMenuItem
@@ -1143,30 +1143,30 @@ object f_main: Tf_main
   object ConnectTimer: TTimer
     Enabled = False
     OnTimer = ConnectTimerTimer
-    left = 207
-    top = 321
+    Left = 207
+    Top = 321
   end
   object StatusbarTimer: TTimer
     Enabled = False
     Interval = 100
     OnTimer = StatusbarTimerTimer
-    left = 207
-    top = 238
+    Left = 207
+    Top = 238
   end
   object OpenDialog1: TOpenDialog
     Filter = 'Fits file|*.fits;*.fit;*.fts|All|*.*'
-    left = 49
-    top = 238
+    Left = 49
+    Top = 238
   end
   object SaveDialogFits: TSaveDialog
     DefaultExt = '.fits'
     Filter = 'Fits file|*.fits|All|*.*'
-    left = 52
-    top = 321
+    Left = 52
+    Top = 321
   end
   object ImagePopupMenu: TPopupMenu
-    left = 348
-    top = 41
+    Left = 348
+    Top = 41
     object MenuResolve: TMenuItem
       Caption = 'Resolve'
       OnClick = MenuResolveClick
@@ -1253,40 +1253,40 @@ object f_main: Tf_main
     Enabled = False
     Interval = 100
     OnTimer = AbortTimerTimer
-    left = 352
-    top = 145
+    Left = 352
+    Top = 145
   end
   object StartupTimer: TTimer
     Enabled = False
     Interval = 500
     OnTimer = StartupTimerTimer
-    left = 207
-    top = 41
+    Left = 207
+    Top = 41
   end
   object StartSequenceTimer: TTimer
     Enabled = False
     OnTimer = StartSequenceTimerTimer
-    left = 538
-    top = 41
+    Left = 538
+    Top = 41
   end
   object StatusTimer: TTimer
     Enabled = False
     Interval = 15000
     OnTimer = StatusTimerTimer
-    left = 538
-    top = 238
+    Left = 538
+    Top = 238
   end
   object TimerStampTimer: TTimer
     Enabled = False
     OnTimer = TimerStampTimerTimer
-    left = 496
-    top = 145
+    Left = 496
+    Top = 145
   end
   object ImageListDay: TImageList
     Height = 22
     Width = 22
-    left = 675
-    top = 139
+    Left = 675
+    Top = 139
     Bitmap = {
       4C690F0000001600000016000000000000000000000000000000000000000000
       0000000000000000000000000000000000000000000000000000000000000000
@@ -2201,8 +2201,8 @@ object f_main: Tf_main
   object ImageListNight: TImageList
     Height = 22
     Width = 22
-    left = 675
-    top = 238
+    Left = 675
+    Top = 238
     Bitmap = {
       4C690F0000001600000016000000000000000000000000000000000000000000
       0000000000000000000000000000000000000000000000000000000000000000
@@ -3117,54 +3117,54 @@ object f_main: Tf_main
   object FocuserConnectTimer: TTimer
     Enabled = False
     OnTimer = FocuserConnectTimerTimer
-    left = 362
-    top = 321
+    Left = 362
+    Top = 321
   end
   object CameraConnectTimer: TTimer
     Enabled = False
     OnTimer = CameraConnectTimerTimer
-    left = 548
-    top = 321
+    Left = 548
+    Top = 321
   end
   object OpenPictureDialog1: TOpenDialog
     Title = 'Open picture file'
     Filter = 'All supported files|*.fits;*.fit;*.fts;*.fz;*.bay;*.bmq;*.cr3;*.cr2;*.crw;*.cs1;*.dc2;*.dcr;*.dng;*.erf;*.fff;*.hdr;*.k25;*.kdc;*.mdc;*.mos;*.mrw;*.nef;*.orf;*.pef;*.pxn;*.raf;*.raw;*.rdc;*.sr2;*.srf;*.x3f;*.arw;*.3fr;*.cine;*.ia;*.kc2;*.mef;*.nrw;*.qtk;*.rw2;*.sti;*.rwl;*.srw;*.png;*.bmp;*.jpeg;*.jpg;*.jpe;*.jfif;*.tif;*.tiff;*.gif;*.tga|FITS (*.fits;*.fit;*.fts)|*.fits;*.fit;*.fts;*.fz|Camera RAW (*.arw;*.cr3;*.cr2;*.crw;*.dng;*.nef;...)|*.bay;*.bmq;*.cr3;*.cr2;*.crw;*.cs1;*.dc2;*.dcr;*.dng;*.erf;*.fff;*.hdr;*.k25;*.kdc;*.mdc;*.mos;*.mrw;*.nef;*.orf;*.pef;*.pxn;*.raf;*.raw;*.rdc;*.sr2;*.srf;*.x3f;*.arw;*.3fr;*.cine;*.ia;*.kc2;*.mef;*.nrw;*.qtk;*.rw2;*.sti;*.rwl;*.srw|Graphic (*.png;*.bmp;*.jpeg;*.jpg;*.jpe;*.jfif;*.tif;*.tiff;*.gif;*.tga)|*.png;*.bmp;*.jpeg;*.jpg;*.jpe;*.jfif;*.tif;*.tiff;*.gif;*.tga|Portable Network Graphic (*.png)|*.png|Bitmaps (*.bmp)|*.bmp|Joint Picture Expert Group (*.jpeg;*.jpg;*.jpe;*.jfif)|*.jpeg;*.jpg;*.jpe;*.jfif|Tagged Image File Format (*.tif;*.tiff)|*.tif;*.tiff|Graphics Interchange Format (*.gif)|*.gif|TGA Image File (*.tga)|*.tga|All (*.*)|*.*'
     Options = [ofEnableSizing, ofViewDetail, ofAutoPreview]
-    left = 57
-    top = 145
+    Left = 57
+    Top = 145
   end
   object MagnifyerTimer: TTimer
     Enabled = False
     Interval = 200
     OnTimer = MagnifyerTimerTimer
-    left = 207
-    top = 145
+    Left = 207
+    Top = 145
   end
   object MeasureTimer: TTimer
     Enabled = False
     Interval = 200
     OnTimer = MeasureTimerTimer
-    left = 352
-    top = 238
+    Left = 352
+    Top = 238
   end
   object PlotTimer: TTimer
     Enabled = False
     Interval = 100
     OnTimer = PlotTimerTimer
-    left = 207
-    top = 403
+    Left = 207
+    Top = 403
   end
   object ImageResizeTimer: TTimer
     Enabled = False
     Interval = 500
     OnTimer = ImageResizeTimerTimer
-    left = 362
-    top = 395
+    Left = 362
+    Top = 395
   end
   object SaveDialogPicture: TSaveDialog
     DefaultExt = '.png'
     Filter = 'Picture files (*.png;*.tif;*.tiff;*.jpg;*.bmp)|*.png;*.tif;*.tiff;*.jpg;*.bmp'
-    left = 55
-    top = 408
+    Left = 55
+    Top = 408
   end
 end

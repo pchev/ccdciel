@@ -67,6 +67,8 @@ type
     procedure FrameEndDrag(Sender, Target: TObject; X, Y: Integer);
     procedure FrameResize(Sender: TObject);
     procedure GammaChange(Sender: TObject);
+    procedure HistBarKeyUp(Sender: TObject; var Key: Word; Shift: TShiftState);
+    procedure HistBarMouseUp(Sender: TObject; Button: TMouseButton; Shift: TShiftState; X, Y: Integer);
     procedure histminmaxClick(Sender: TObject);
     procedure HistogramMouseDown(Sender: TObject; Button: TMouseButton;
       Shift: TShiftState; X, Y: Integer);
@@ -86,9 +88,9 @@ type
     FimageC, FimageMin, FimageMax : double;
     FisFloatingPoint, Finitialized: boolean;
     FimgMin, FimgMax: double;
-    FBullsEye, LockSpinEdit, FClipping, FInvert, FFlipVert, FFlipHorz: Boolean;
+    FBullsEye, LockSpinEdit, FClipping, FInvert: Boolean;
     FZoom: double;
-    StartUpd,Updmax,HistogramAdjusted: boolean;
+    StartUpd,Updmax,HistogramAdjusted, LockHistogram: boolean;
     XP: integer;
     FRedraw: TNotifyEvent;
     FonZoom: TNotifyEvent;
@@ -98,21 +100,23 @@ type
     procedure SetZoom(value: double);
     procedure SetFlipHorz(value:boolean);
     procedure SetFlipVert(value:boolean);
+    function  GetFlipHorz: boolean;
+    function  GetFlipVert: boolean;
     procedure SetLang;
     procedure SetLimit(SetLevel:boolean);
   public
     { public declarations }
     constructor Create(aOwner: TComponent); override;
     destructor  Destroy; override;
-    procedure DrawHistogram(hist:Thistogram; SetLevel,isFloatingPoint: boolean; iC,iMin,iMax: double);
+    procedure DrawHistogram(hist:Thistogram; SetLevel,isFloatingPoint,ResetCursor: boolean; iC,iMin,iMax: double);
     property Zoom: double read FZoom write SetZoom;
     property ImgMin: double read FimgMin write FimgMin;
     property ImgMax: double read FimgMax write FimgMax;
     property BullsEye: boolean read FBullsEye;
     property Clipping: boolean read FClipping;
     property Invert: boolean read FInvert;
-    property FlipHorz: boolean read FFlipHorz write SetFlipHorz;
-    property FlipVert: boolean read FFlipVert write SetFlipVert;
+    property FlipHorz: boolean read GetFlipHorz write SetFlipHorz;
+    property FlipVert: boolean read GetFlipVert write SetFlipVert;
     property onZoom: TNotifyEvent read FonZoom write FonZoom;
     property onRedraw: TNotifyEvent read FRedraw write FRedraw;
     property onRedrawHistogram: TNotifyEvent read FRedrawHistogram write FRedrawHistogram;
@@ -152,13 +156,12 @@ begin
  ImgMax:=high(word);
  ImgMin:=0;
  HistogramAdjusted:=false;
+ LockHistogram:=false;
  StartUpd:=false;
  Updmax:=false;
  FBullsEye:=false;
  FClipping:=false;
  FInvert:=false;
- FFlipVert:=false;
- FFlipHorz:=false;
  LockSpinEdit:=true;
  with Histogram.Picture.Bitmap do begin
    Width:=Histogram.Width;
@@ -243,6 +246,7 @@ begin
       SpinEditMax.Increment:=10;
     end;
   end;
+  LockHistogram:=true;
   // histogram is always 0-65535, show real pixel value in the spinedit
   SpinEditMin.minValue:=FimageMin;
   SpinEditMin.maxValue:=FimageMax;
@@ -251,15 +255,17 @@ begin
   // scale from 0-65535 to image min-max
   SpinEditMin.Value:=FimageMin+FImgMin/FimageC;
   SpinEditMax.Value:=FimageMin+FimgMax/FimageC;
+  LockHistogram:=false;
 end;
 
-procedure Tf_visu.DrawHistogram(hist:Thistogram; SetLevel,isFloatingPoint: boolean; iC,iMin,iMax: double);
+procedure Tf_visu.DrawHistogram(hist:Thistogram; SetLevel,isFloatingPoint,ResetCursor: boolean; iC,iMin,iMax: double);
 var i,j,h,hd2,l: integer;
     hc: integer;
     sh: double;
 begin
 try
 LockSpinEdit:=true;
+if ResetCursor then HistogramAdjusted:=false;
 FimageC:=iC;
 FimageMin:=iMin;
 FimageMax:=iMax;
@@ -358,8 +364,8 @@ procedure Tf_visu.HistBarChange(Sender: TObject);
 begin
   HistogramAdjusted:=false;
   SetLimit(true);
-  TimerRedraw.Enabled:=false;
-  TimerRedraw.Enabled:=true;
+  TimerMinMax.Enabled:=false;
+  TimerMinMax.Enabled:=true;
 end;
 
 procedure Tf_visu.SetZoom(value: double);
@@ -389,6 +395,16 @@ begin
   TimerRedraw.Enabled:=true;
 end;
 
+procedure Tf_visu.HistBarKeyUp(Sender: TObject; var Key: Word; Shift: TShiftState);
+begin
+  HistBarChange(Sender);
+end;
+
+procedure Tf_visu.HistBarMouseUp(Sender: TObject; Button: TMouseButton; Shift: TShiftState; X, Y: Integer);
+begin
+HistBarChange(Sender);
+end;
+
 procedure Tf_visu.BtnBullsEyeClick(Sender: TObject);
 begin
   FBullsEye:=not FBullsEye;
@@ -401,27 +417,33 @@ begin
   TimerRedraw.Enabled:=true;
 end;
 
+function Tf_visu.GetFlipHorz: boolean;
+begin
+  result:=BtnFlipHorz.Down;
+end;
+
 procedure Tf_visu.SetFlipHorz(value:boolean);
 begin
-  FFlipHorz:=value;
   BtnFlipHorz.Down:=value;
+end;
+
+function Tf_visu.GetFlipVert: boolean;
+begin
+  result:=BtnFlipVert.Down;
 end;
 
 procedure Tf_visu.SetFlipVert(value:boolean);
 begin
-  FFlipVert:=value;
   BtnFlipVert.Down:=value;
 end;
 
 procedure Tf_visu.BtnFlipHorzClick(Sender: TObject);
 begin
-  FFlipHorz:=BtnFlipHorz.Down;
   TimerRedraw.Enabled:=true;
 end;
 
 procedure Tf_visu.BtnFlipVertClick(Sender: TObject);
 begin
-  FFlipVert:=BtnFlipVert.Down;
   TimerRedraw.Enabled:=true;
 end;
 
@@ -509,7 +531,7 @@ procedure Tf_visu.SpinEditMaxChange(Sender: TObject);
 begin
   if LockSpinEdit then exit;
   SpinEditMin.maxValue:=min(FimageMax,SpinEditMax.Value);
-  HistogramAdjusted:=true;
+  if not LockHistogram then HistogramAdjusted:=true;
   TimerMinMax.Enabled:=true;
 end;
 
@@ -517,7 +539,7 @@ procedure Tf_visu.SpinEditMinChange(Sender: TObject);
 begin
   if LockSpinEdit then exit;
   SpinEditMax.minValue:=max(FimageMin,SpinEditMin.Value);
-  HistogramAdjusted:=true;
+  if not LockHistogram then HistogramAdjusted:=true;
   TimerMinMax.Enabled:=true;
 end;
 

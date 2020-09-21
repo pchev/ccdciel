@@ -150,6 +150,7 @@ type
     function cmd_Wheel_SetFilter(num:string):string;
     function cmd_Wheel_GetFiltersName(var fl:TStringList):string;
     function cmd_Wheel_SetFiltersName(fl:TStringList):string;
+    function cmd_Focuser_SetPosition(p:string):string;
     function cmd_Ccd_SetTemperature(t:string):string;
     function cmd_Preview_SetExposure(exp:string):string;
     function cmd_Preview_SetBinning(bin:string):string;
@@ -398,7 +399,8 @@ function  Tf_scriptengine.doGetI(varname:string; var i: Integer):Boolean;
 begin
   result:=true;
   varname:=uppercase(varname);
-  if varname='INT1' then i:=ilist[0]
+  if varname='FOCUSERPOSITION' then i:=FFocuser.Position
+  else if varname='INT1' then i:=ilist[0]
   else if varname='INT2' then i:=ilist[1]
   else if varname='INT3' then i:=ilist[2]
   else if varname='INT4' then i:=ilist[3]
@@ -903,6 +905,7 @@ else if cname='TELESCOPE_PARK' then result:=cmd_MountPark(arg[0])
 else if cname='WHEEL_SETFILTER' then result:=cmd_Wheel_SetFilter(arg[0])
 else if cname='WHEEL_GETFILTERSNAME' then result:=cmd_Wheel_GetFiltersName(arg)
 else if cname='WHEEL_SETFILTERSNAME' then result:=cmd_Wheel_SetFiltersName(arg)
+else if cname='FOCUSER_SETPOSITION' then result:=cmd_Focuser_SetPosition(arg[0])
 else if cname='CCD_SETTEMPERATURE' then result:=cmd_Ccd_SetTemperature(arg[0])
 else if cname='PREVIEW_SETEXPOSURE' then result:=cmd_Preview_SetExposure(arg[0])
 else if cname='PREVIEW_SETBINNING' then result:=cmd_Preview_SetBinning(arg[0])
@@ -1216,6 +1219,17 @@ begin
 try
 result:=msgFailed;
 Ffilter.FilterNames.Assign(fl);
+result:=msgOK;
+except
+  result:=msgFailed;
+end;
+end;
+
+function Tf_scriptengine.cmd_Focuser_SetPosition(p:string):string;
+begin
+try
+result:=msgFailed;
+FFocuser.Position:=StrToInt(p);
 result:=msgOK;
 except
   result:=msgFailed;

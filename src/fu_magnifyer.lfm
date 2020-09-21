@@ -43,6 +43,7 @@ object f_magnifyer: Tf_magnifyer
     Color = clBtnShadow
     DragMode = dmAutomatic
     Font.Color = clBtnText
+    Layout = tlCenter
     ParentColor = False
     ParentFont = False
     Transparent = False

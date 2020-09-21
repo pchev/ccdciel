@@ -321,11 +321,11 @@ if (AutofocusVcNum>0)and(AutofocusVcDir=AutofocusMoveDir) then begin
 
   // draw data points
   for i:=0 to PosFocus do begin
-    if i<nl then col:=clGreen  else col:=clRed;
+    if i<nl then col:=colorGreen  else col:=colorRed;
     PtSourceL.Add(AutofocusVc[i,1],AutofocusVc[i,2],'',col);
   end;
   for i:=PosFocus to AutofocusVcNum do begin
-    if i>=(PosFocus+AutofocusVcSkipNum) then col:=clGreen else col:=clRed;
+    if i>=(PosFocus+AutofocusVcSkipNum) then col:=colorGreen else col:=colorRed;
     PtSourceR.Add(AutofocusVc[i,1],AutofocusVc[i,2],'',col);
   end;
 
@@ -352,7 +352,7 @@ end;
 procedure Tf_vcurve.LearnProgress(n:integer; x,y: double);
 begin
   LabelStepProgress.Caption:='/ '+IntToStr(n+1);
-  PtSourceL.Add(x,y,'',clGreen);
+  PtSourceL.Add(x,y,'',colorGreen);
   FitSourceL.Add(x,y);
 end;
 
