@@ -25,7 +25,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 interface
 
-uses u_utils, u_global, UScaleDPI, u_hints, u_translation, u_speech,
+uses u_utils, u_global, UScaleDPI, u_hints, u_translation, u_speech, u_ccdconfig,
   Classes, SysUtils, FileUtil, Forms, Controls, Graphics, Dialogs, LCLType,
   StdCtrls, ExtCtrls, ComCtrls, Grids, EditBtn, CheckLst, Buttons, Spin, enhedits, Types;
 
@@ -45,13 +45,17 @@ type
     BtnMaxDriftDisable: TButton;
     BtnDisableStarLost: TButton;
     ASTAPadvanced: TButton;
+    ObservatoryDBDelete: TButton;
     ButtonVoiceTest: TButton;
     ButtonVoiceAll: TButton;
     ButtonVoiceNone: TButton;
     AutofocusMultiStarCenter: TCheckBox;
     BGneutralization: TCheckBox;
+    Label14: TLabel;
+    ObservatoryDB: TComboBox;
     LongitudeError: TLabel;
     PagePlaNone: TPage;
+    Panel21: TPanel;
     PanelLeft: TPanel;
     WantExif: TCheckBox;
     LabelTestVoice: TLabel;
@@ -616,6 +620,7 @@ type
     procedure BtnFileDefaultClick(Sender: TObject);
     procedure BtnFolderDefaultClick(Sender: TObject);
     procedure BtnMaxDriftDisableClick(Sender: TObject);
+    procedure ObservatoryDBDeleteClick(Sender: TObject);
     procedure ButtonNotificationAllClick(Sender: TObject);
     procedure ButtonHelpClick(Sender: TObject);
     procedure ButtonNotificationNoneClick(Sender: TObject);
@@ -645,6 +650,7 @@ type
     procedure MeridianOptionClick(Sender: TObject);
     procedure MinutesPastMeridianChange(Sender: TObject);
     procedure MinutesPastMeridianMinChange(Sender: TObject);
+    procedure ObservatoryDBChange(Sender: TObject);
     procedure PageControl1Changing(Sender: TObject; var AllowChange: Boolean);
     procedure PanelLeftMouseWheel(Sender: TObject; Shift: TShiftState; WheelDelta: Integer; MousePos: TPoint; var Handled: Boolean);
     procedure PixelSizeFromCameraChange(Sender: TObject);
@@ -687,6 +693,8 @@ type
     LockTemp: Boolean;
     procedure SetAutofocusMode(value: TAutofocusMode);
     function  GetAutofocusMode: TAutofocusMode;
+    procedure LoadObservatoryDB(defaultobs:string);
+    procedure SaveObservatoryDB;
     property AutofocusExp: double read FAutofocusExposure write SetAutofocusExpTime;
     property Resolver: integer read GetResolver write SetResolver;
     property Latitude: double read Flatitude write SetLatitude;
@@ -1246,6 +1254,122 @@ end;
 procedure Tf_option.MinutesPastMeridianMinChange(Sender: TObject);
 begin
   MinutesPastMeridian.MinValue:=MinutesPastMeridianMin.Value+1;
+end;
+
+procedure Tf_option.LoadObservatoryDB(defaultobs:string);
+var obsdb: TCCDconfig;
+    obsname: string;
+    i,n,k,o: integer;
+begin
+  obsdb:=TCCDConfig.Create(self);
+  obsdb.Filename:=slash(ConfigDir)+'Observatory.cfg';
+  ObservatoryDB.Clear;
+  n:=obsdb.GetValue('/NumObservatory',0);
+  o:=-1;
+  for i:=1 to n do begin
+    obsname:=obsdb.GetValue('/Obs_'+inttostr(i)+'/ObservatoryName','');
+    k:=ObservatoryDB.Items.Add(obsname);
+    if obsname=defaultobs then o:=k;
+  end;
+  if o>=0 then ObservatoryDB.ItemIndex:=o;
+  obsdb.Free;
+end;
+
+
+procedure Tf_option.SaveObservatoryDB;
+var obsdb: TCCDconfig;
+    obsname, obskey: string;
+    i,n: integer;
+begin
+  obsname:=f_option.ObservatoryName.Text;
+  obskey:='';
+  obsdb:=TCCDConfig.Create(self);
+  obsdb.Filename:=slash(ConfigDir)+'Observatory.cfg';
+  n:=obsdb.GetValue('/NumObservatory',0);
+  for i:=1 to n do begin
+    if obsname=obsdb.GetValue('/Obs_'+inttostr(i)+'/ObservatoryName','') then begin
+      obskey:='Obs_'+inttostr(i);
+      break;
+    end;
+  end;
+  if obskey='' then begin
+    n:=n+1;
+    obsdb.SetValue('/NumObservatory',n);
+    obskey:='Obs_'+inttostr(n);
+  end;
+  obsdb.SetValue('/'+obskey+'/ObservatoryName',obsname);
+  obsdb.SetValue('/'+obskey+'/ObservatoryLatitude',f_option.Latitude);
+  obsdb.SetValue('/'+obskey+'/ObservatoryLongitude',f_option.Longitude);
+  obsdb.SetValue('/'+obskey+'/ObservatoryElevation',f_option.ObsElev.Value);
+  obsdb.SetValue('/'+obskey+'/ObserverName',f_option.ObserverName.Text);
+  obsdb.SetValue('/'+obskey+'/TelescopeName',f_option.TelescopeName.Text);
+  obsdb.SetValue('/'+obskey+'/HorizonFile',f_option.HorizonFile.FileName);
+  obsdb.SetValue('/'+obskey+'/ElevationMin',f_option.ElevationMin.Value);
+  obsdb.Flush;
+  obsdb.Free;
+end;
+
+procedure Tf_option.ObservatoryDBChange(Sender: TObject);
+var obsdb: TCCDconfig;
+    obskey: string;
+    i: integer;
+begin
+ if ObservatoryDB.Text<>'' then begin
+   obsdb:=TCCDConfig.Create(self);
+   obsdb.Filename:=slash(ConfigDir)+'Observatory.cfg';
+   i:=ObservatoryDB.ItemIndex+1;
+   obskey:='Obs_'+inttostr(i);
+   ObservatoryName.Text:=obsdb.GetValue('/'+obskey+'/ObservatoryName',ObservatoryName.Text);
+   Latitude:=obsdb.GetValue('/'+obskey+'/ObservatoryLatitude',Latitude);
+   Longitude:=obsdb.GetValue('/'+obskey+'/ObservatoryLongitude',Longitude);
+   ObsElev.Value:=obsdb.GetValue('/'+obskey+'/ObservatoryElevation',ObsElev.Value);
+   ObserverName.Text:=obsdb.GetValue('/'+obskey+'/ObserverName',ObserverName.Text);
+   TelescopeName.Text:=obsdb.GetValue('/'+obskey+'/TelescopeName',TelescopeName.Text);
+   HorizonFile.FileName:=obsdb.GetValue('/'+obskey+'/HorizonFile',HorizonFile.FileName);
+   ElevationMin.Value:=obsdb.GetValue('/'+obskey+'/ElevationMin',ElevationMin.Value);
+   obsdb.Free;
+ end;
+end;
+
+procedure Tf_option.ObservatoryDBDeleteClick(Sender: TObject);
+var obsdb: TCCDconfig;
+    obskey,v1,v2,v3,v4,v5,v6,v7,v8: string;
+    i,k,n,d: integer;
+begin
+ d:=ObservatoryDB.ItemIndex+1;
+ if (d<1) then exit;
+ obsdb:=TCCDConfig.Create(self);
+ obsdb.Filename:=slash(ConfigDir)+'Observatory.cfg';
+ n:=obsdb.GetValue('/NumObservatory',0);
+ obsdb.DeletePath(UnicodeString('/Obs_'+inttostr(d)));
+ k:=0;
+ for i:=1 to n do begin
+   obskey:='Obs_'+inttostr(i);
+   v1:=obsdb.GetValue('/'+obskey+'/ObservatoryName','');
+   if v1='' then continue;
+   v2:=obsdb.GetValue('/'+obskey+'/ObservatoryLatitude','');
+   v3:=obsdb.GetValue('/'+obskey+'/ObservatoryLongitude','');
+   v4:=obsdb.GetValue('/'+obskey+'/ObservatoryElevation','');
+   v5:=obsdb.GetValue('/'+obskey+'/ObserverName','');
+   v6:=obsdb.GetValue('/'+obskey+'/TelescopeName','');
+   v7:=obsdb.GetValue('/'+obskey+'/HorizonFile','');
+   v8:=obsdb.GetValue('/'+obskey+'/ElevationMin','');
+   obsdb.DeletePath(UnicodeString(obskey));
+   inc(k);
+   obskey:='Obs_'+inttostr(k);
+   obsdb.SetValue('/'+obskey+'/ObservatoryName',v1);
+   obsdb.SetValue('/'+obskey+'/ObservatoryLatitude',v2);
+   obsdb.SetValue('/'+obskey+'/ObservatoryLongitude',v3);
+   obsdb.SetValue('/'+obskey+'/ObservatoryElevation',v4);
+   obsdb.SetValue('/'+obskey+'/ObserverName',v5);
+   obsdb.SetValue('/'+obskey+'/TelescopeName',v6);
+   obsdb.SetValue('/'+obskey+'/HorizonFile',v7);
+   obsdb.SetValue('/'+obskey+'/ElevationMin',v8);
+ end;
+ obsdb.SetValue('/NumObservatory',k);
+ obsdb.Flush;
+ obsdb.Free;
+ LoadObservatoryDB('');
 end;
 
 procedure Tf_option.PageControl1Changing(Sender: TObject; var AllowChange: Boolean);
