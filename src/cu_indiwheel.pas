@@ -37,7 +37,6 @@ T_indiwheel = class(T_wheel)
    ConnectTimer: TTimer;
    ReadyTimer: TTimer;
    WheelDevice: Basedevice;
-   Wheelport: ITextVectorProperty;
    WheelSlot: INumberVectorProperty;
    Slot: INumber;
    FilterName: ITextVectorProperty;
@@ -136,7 +135,6 @@ end;
 procedure T_indiwheel.ClearStatus;
 begin
     WheelDevice:=nil;
-    Wheelport:=nil;
     WheelSlot:=nil;
     FilterName:=nil;
     configprop:=nil;
@@ -226,7 +224,7 @@ end;
 procedure T_indiwheel.ConnectTimerTimer(Sender: TObject);
 begin
   ConnectTimer.Enabled:=False;
-  if (Wheelport=nil) and (not Fready) and InitTimer.Enabled then begin
+  if (not Fready) and InitTimer.Enabled then begin
     ConnectTimer.Enabled:=true;
   end;
  indiclient.connectDevice(Findidevice);
@@ -277,10 +275,7 @@ begin
   propname:=indiProp.getName;
   proptype:=indiProp.getType;
 
-  if (proptype=INDI_TEXT)and(Wheelport=nil)and(propname='DEVICE_PORT') then begin
-     Wheelport:=indiProp.getText;
-  end
-  else if (proptype=INDI_TEXT)and(propname='DRIVER_INFO') then begin
+  if (proptype=INDI_TEXT)and(propname='DRIVER_INFO') then begin
      buf:='';
      TxtProp:=indiProp.getText;
      if TxtProp<>nil then begin

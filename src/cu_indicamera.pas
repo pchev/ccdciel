@@ -59,7 +59,6 @@ private
    ConnectTimer: TTimer;
    ConfigTimer: TTimer;
    CCDDevice: Basedevice;
-   CCDport: ITextVectorProperty;
    CCDexpose: INumberVectorProperty;
    CCDexposeValue: INumber;
    CCDbinning: INumberVectorProperty;
@@ -356,7 +355,6 @@ end;
 procedure T_indicamera.ClearStatus;
 begin
     CCDDevice:=nil;
-    CCDport:=nil;
     CCDexpose:=nil;
     CCDbinning:=nil;
     CCDframe:=nil;
@@ -558,7 +556,7 @@ var i: integer;
     xr,yr,widthr,heightr: TNumRange;
 begin
  ConnectTimer.Enabled:=False;
- if ((not FhasBlob) or (CCDport=nil)) and (not Fready) and InitTimer.Enabled then begin
+ if (not FhasBlob) and (not Fready) and InitTimer.Enabled then begin
    ConnectTimer.Enabled:=true;
  end;
  indiclient.connectDevice(Findidevice);
@@ -638,10 +636,7 @@ begin
   propname:=indiProp.getName;
   proptype:=indiProp.getType;
 
-  if (proptype=INDI_TEXT)and(CCDport=nil)and(propname='DEVICE_PORT') then begin
-     CCDport:=indiProp.getText;
-  end
-  else if (proptype=INDI_TEXT)and(propname='DRIVER_INFO') then begin
+  if (proptype=INDI_TEXT)and(propname='DRIVER_INFO') then begin
      buf:='';
      TxtProp:=indiProp.getText;
      if TxtProp<>nil then begin
