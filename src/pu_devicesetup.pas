@@ -491,6 +491,7 @@ type
     receiveindidevice: boolean;
     FShowHelp: TNotifyEvent;
     AlpacaServerList: TAlpacaServerList;
+    FonMsg: TNotifyMsg;
     procedure GetIndiDevicesStart;
     procedure IndiNewDevice(dp: Basedevice);
     procedure IndiDisconnected(Sender: TObject);
@@ -507,6 +508,7 @@ type
     procedure SelectPage(Sender: TObject);
     procedure IncPage(Sender: TObject);
     procedure SelectNextPage(direction: integer);
+    procedure msg(txt: string; level:integer=3);
   public
     { public declarations }
     DefaultCameraInterface, DefaultMountInterface, DefaultDomeInterface, DefaultWheelInterface, DefaultFocuserInterface, DefaultRotatorInterface, DefaultWeatherInterface, DefaultSafetyInterface: TDevInterface;
@@ -524,6 +526,7 @@ type
     property WeatherConnection: TDevInterface read FWeatherConnection write SetWeatherConnection;
     property SafetyConnection: TDevInterface read FSafetyConnection write SetSafetyConnection;
     property onShowHelp: TNotifyEvent read FShowHelp write FShowHelp;
+    property onMsg: TNotifyMsg read FonMsg write FonMsg;
   end;
 
 var
@@ -586,6 +589,11 @@ begin
   b.tag:=1002;
   b.OnClick:=@IncPage;
   b.Parent:=PanelLeft;
+end;
+
+procedure Tf_setup.msg(txt: string; level:integer=3);
+begin
+ if Assigned(FonMsg) then FonMsg(txt,level);
 end;
 
 procedure Tf_setup.SelectPage(Sender: TObject);
@@ -1482,38 +1490,47 @@ begin
         CameraMsg.Caption:='';
         CameraIndiDevice.Clear;
         indiclient.SetServer(CameraIndiServer.Text,CameraIndiPort.Text);
+        msg('Get driver list from server '+CameraIndiServer.Text+':'+CameraIndiPort.Text,9);
        end;
     2: begin
         WheelIndiDevice.Clear;
         indiclient.SetServer(WheelIndiServer.Text,WheelIndiPort.Text);
+        msg('Get driver list from server '+WheelIndiServer.Text+':'+WheelIndiPort.Text,9);
        end;
     3: begin
         FocuserIndiDevice.Clear;
         indiclient.SetServer(FocuserIndiServer.Text,FocuserIndiPort.Text);
+        msg('Get driver list from server '+FocuserIndiServer.Text+':'+FocuserIndiPort.Text,9);
        end;
     4: begin
         RotatorIndiDevice.Clear;
         indiclient.SetServer(RotatorIndiServer.Text,RotatorIndiPort.Text);
+        msg('Get driver list from server '+RotatorIndiServer.Text+':'+RotatorIndiPort.Text,9);
        end;
     5: begin
         MountIndiDevice.Clear;
         indiclient.SetServer(MountIndiServer.Text,MountIndiPort.Text);
+        msg('Get driver list from server '+MountIndiServer.Text+':'+MountIndiPort.Text,9);
        end;
     6: begin
         DomeIndiDevice.Clear;
         indiclient.SetServer(DomeIndiServer.Text,DomeIndiPort.Text);
+        msg('Get driver list from server '+DomeIndiServer.Text+':'+DomeIndiPort.Text,9);
        end;
     7: begin
         WeatherIndiDevice.Clear;
         indiclient.SetServer(WeatherIndiServer.Text,WeatherIndiPort.Text);
+        msg('Get driver list from server '+WeatherIndiServer.Text+':'+WeatherIndiPort.Text,9);
        end;
     8: begin
         SafetyIndiDevice.Clear;
         indiclient.SetServer(SafetyIndiServer.Text,SafetyIndiPort.Text);
+        msg('Get driver list from server '+SafetyIndiServer.Text+':'+SafetyIndiPort.Text,9);
        end;
     9: begin
         WatchdogIndiDevice.Clear;
         indiclient.SetServer(WatchdogIndiServer.Text,WatchdogIndiPort.Text);
+        msg('Get driver list from server '+WatchdogIndiServer.Text+':'+WatchdogIndiPort.Text,9);
        end;
   end;
   indiclient.ConnectServer;
@@ -1597,6 +1614,7 @@ begin
   try
   for i:=0 to indiclient.devices.Count-1 do begin
      drint:=BaseDevice(indiclient.devices[i]).getDriverInterface();
+     msg('Found driver: "'+ BaseDevice(indiclient.devices[i]).getDeviceName+'", interface='+inttostr(drint),9);
      if (GetDeviceType=1)and((drint and CCD_INTERFACE)<>0) then
         CameraIndiDevice.Items.Add(BaseDevice(indiclient.devices[i]).getDeviceName);
      if (GetDeviceType=2)and((drint and FILTER_INTERFACE)<>0) then

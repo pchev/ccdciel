@@ -2030,6 +2030,7 @@ begin
 
   f_option.onShowHelp:=@MenuPdfHelpClick;
   f_setup.onShowHelp:=@MenuPdfHelpClick;
+  f_setup.onMsg:=@NewMessage;
 
   SetOptions;
 
