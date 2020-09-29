@@ -5023,7 +5023,6 @@ var cool:boolean;
 begin
  case camera.Status of
    devDisconnected:begin
-                   NewMessage(Format(rsDisconnected,[rsCamera]),9);
                    f_preview.stop;
                    f_capture.stop;
                    Capture:=false;
