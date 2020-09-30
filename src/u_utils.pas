@@ -2936,7 +2936,7 @@ var
 
   function GetWMIObject(const objectName: String): IDispatch;
   var
-    chEaten: ULONG;
+    chEaten: PULONG;
     BindCtx: IBindCtx;
     Moniker: IMoniker;
   begin
