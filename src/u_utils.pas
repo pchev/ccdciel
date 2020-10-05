@@ -2936,7 +2936,11 @@ var
 
   function GetWMIObject(const objectName: String): IDispatch;
   var
+  {$if (fpc_version>3) or (fpc_release>0)}
+    chEaten: ULONG;
+  {$else}
     chEaten: PULONG;
+  {$endif}
     BindCtx: IBindCtx;
     Moniker: IMoniker;
   begin
