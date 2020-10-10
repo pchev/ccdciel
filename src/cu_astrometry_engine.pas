@@ -720,6 +720,9 @@ else if FResolver=ResolverAstap then begin
   process.Executable:=Fcmd;
   process.Parameters:=Fparam;
   process.Options:=[poUsePipes,poStderrToOutPut];
+  {$ifdef mswindows}
+  process.ShowWindow:=swoHIDE;
+  {$endif}
   endtime:=now+FTimeout/secperday;
   try
   process.Execute;
