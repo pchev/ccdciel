@@ -713,17 +713,33 @@ else if FResolver=ResolverAstap then begin
     buf:=buf+CRLF;
     cbuf:=buf;
     BlockWrite(f,cbuf,Length(buf));
-    CloseFile(f);
-  end;
+    logok:=true;
+  end
+  else
+    logok:=false;
   process.Executable:=Fcmd;
   process.Parameters:=Fparam;
+  process.Options:=[poUsePipes,poStderrToOutPut];
   endtime:=now+FTimeout/secperday;
   try
   process.Execute;
   while process.Running do begin
+    if logok and (process.Output<>nil) then begin
+      available:=process.Output.NumBytesAvailable;
+      if available>0 then begin
+        available:=min(available,READ_BYTES);
+        n := process.Output.Read(cbuf, available);
+        if n>=0 then BlockWrite(f,cbuf,n);
+      end;
+    end;
     if now>endtime then begin
-       err:=rsTimeout+'!';
        Stop;
+       err:=rsTimeout+'!';
+       if logok then begin
+         buf:=rsTimeout+'!';
+         cbuf:=buf;
+         BlockWrite(f,cbuf,Length(buf));
+       end;
        break;
     end;
     sleep(100);
@@ -734,6 +750,10 @@ else if FResolver=ResolverAstap then begin
   if (Fcode<>0)and(err='') then begin
      err:=AstapErr(Fcode);
   end;
+  if (logok)and(Fresult<>127)and(process.Output<>nil) then repeat
+    n := process.Output.Read(cbuf, READ_BYTES);
+    if n>=0 then BlockWrite(f,cbuf,n);
+  until (n<=0)or(process.Output=nil);
   except
      on E: Exception do begin
        Fresult:=99;
@@ -741,13 +761,12 @@ else if FResolver=ResolverAstap then begin
      end;
   end;
   if err<>'' then begin
-    AssignFile(ft,FLogFile);
-    Append(ft);
-    WriteLn(ft,err);
-    CloseFile(ft);
+    cbuf:=err;
+    BlockWrite(f,cbuf,Length(buf));
   end;
   process.Free;
   process:=TProcessUTF8.Create(nil);
+  CloseFile(f);
   // merge wcs result
   if (Fcode=0)and(FileExistsUTF8(wcsfile)) then begin
     Ftmpfits:=TFits.Create(nil);
