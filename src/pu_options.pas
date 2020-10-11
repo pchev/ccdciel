@@ -45,6 +45,7 @@ type
     BtnMaxDriftDisable: TButton;
     BtnDisableStarLost: TButton;
     ASTAPadvanced: TButton;
+    AstrometryLog: TCheckBox;
     ObservatoryDBDelete: TButton;
     ButtonVoiceTest: TButton;
     ButtonVoiceAll: TButton;
@@ -1006,6 +1007,7 @@ begin
   Label3.Caption := rsPixelSize;
   PixelSizeFromCamera.Caption := rsFromCameraDr;
   ResolverBox.Caption := rsSoftware;
+  AstrometryLog.Caption:=rsLogAllTheRes;
   Label33.Caption := rsTimeout;
   Label133.Caption:=rsSeconds2;
   Label6.Caption := rsMaximumSearc;

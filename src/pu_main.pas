@@ -6746,6 +6746,7 @@ begin
    f_option.Focale.Value:=config.GetValue('/Astrometry/FocaleLength',0.0);
    f_option.PixelSizeFromCamera.Checked:=config.GetValue('/Astrometry/PixelSizeFromCamera',true);
    f_option.Resolver:=config.GetValue('/Astrometry/Resolver',ResolverAstrometryNet);
+   f_option.AstrometryLog.Checked:=config.GetValue('/Astrometry/Log',false);
    if f_option.MaxAduFromCamera.Checked and (camera.Status=devConnected) then
       f_option.MaxAdu.Value:=round(camera.MaxAdu);
    if f_option.PixelSizeFromCamera.Checked and (camera.Status=devConnected) and (camera.PixelSizeX>0) then
@@ -7074,6 +7075,7 @@ begin
      config.SetValue('/Files/MeasureNewImage',f_option.MeasureNewImage.Checked and f_option.ExpEarlyStart.Checked);
      config.SetValue('/PrecSlew/CheckRecenterTarget',f_option.CheckRecenterTarget.Checked and f_option.ExpEarlyStart.Checked);
      config.SetValue('/Astrometry/Resolver',f_option.Resolver);
+     config.SetValue('/Astrometry/Log',f_option.AstrometryLog.Checked);
      config.SetValue('/Astrometry/PixelSizeFromCamera',f_option.PixelSizeFromCamera.Checked);
      config.SetValue('/Astrometry/FocaleFromTelescope',f_option.FocaleFromTelescope.Checked);
      config.SetValue('/Astrometry/PixelSize',f_option.PixelSize.Value);
