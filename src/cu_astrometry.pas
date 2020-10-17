@@ -48,7 +48,6 @@ TAstrometry = class(TComponent)
     FFits: TFits;
     FResolverName: string;
     logfile,solvefile,savefile: string;
-    AstrometryLog: boolean;
     Xslew, Yslew: integer;
     AstrometryTimeout: double;
     TimerAstrometrySolve, TimerAstrometrySync, TimerAstrometrySlewScreenXY : TTimer;
@@ -173,7 +172,6 @@ begin
    FInitra:=ra;
    FInitdec:=de;
    FStartTime:=now;
-   AstrometryLog:=config.GetValue('/Astrometry/Log',false);
    logfile:=ChangeFileExt(infile,'.log');
    solvefile:=ChangeFileExt(infile,'.solved');
    savefile:=outfile;
@@ -251,7 +249,7 @@ begin
    FLastResult:=false;
  FBusy:=false;
  FLastError:=trim(errstr);
- if AstrometryLog and (logfile<>'') and FileExistsUTF8(logfile) then begin
+ if (FLastError<>'') and (logfile<>'') and FileExistsUTF8(logfile) then begin
    AssignFile(f,logfile);
    Reset(f);
    while not EOF(f) do begin

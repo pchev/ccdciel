@@ -2656,20 +2656,20 @@ object f_option: Tf_option
       ParentFont = False
       object GroupBox4: TGroupBox
         Left = 0
-        Height = 210
+        Height = 192
         Top = 0
-        Width = 515
+        Width = 520
         Align = alTop
         Caption = 'Astrometry options'
-        ClientHeight = 190
-        ClientWidth = 513
+        ClientHeight = 172
+        ClientWidth = 518
         ParentFont = False
         TabOrder = 0
         object FocaleFromTelescope: TCheckBox
           Left = 114
           Height = 21
           Top = 10
-          Width = 154
+          Width = 160
           Caption = 'From telescope driver'
           OnChange = FocaleFromTelescopeChange
           ParentFont = False
@@ -2679,7 +2679,7 @@ object f_option: Tf_option
           Left = 8
           Height = 17
           Top = 12
-          Width = 80
+          Width = 82
           Caption = 'Focale length'
           ParentColor = False
           ParentFont = False
@@ -2687,8 +2687,8 @@ object f_option: Tf_option
         object ResolverBox: TRadioGroup
           Left = 0
           Height = 84
-          Top = 104
-          Width = 513
+          Top = 88
+          Width = 518
           Align = alBottom
           AutoFill = True
           Caption = 'Software'
@@ -2700,7 +2700,7 @@ object f_option: Tf_option
           ChildSizing.Layout = cclLeftToRightThenTopToBottom
           ChildSizing.ControlsPerLine = 3
           ClientHeight = 64
-          ClientWidth = 511
+          ClientWidth = 516
           Columns = 3
           ItemIndex = 0
           Items.Strings = (
@@ -2718,7 +2718,7 @@ object f_option: Tf_option
           Left = 216
           Height = 17
           Top = 44
-          Width = 50
+          Width = 51
           Caption = 'Timeout'
           ParentColor = False
           ParentFont = False
@@ -2759,26 +2759,17 @@ object f_option: Tf_option
           Left = 384
           Height = 17
           Top = 44
-          Width = 57
+          Width = 58
           Caption = '[seconds]'
           ParentColor = False
           ParentFont = False
         end
-        object AstrometryLog: TCheckBox
-          Left = 10
-          Height = 21
-          Top = 81
-          Width = 199
-          Caption = 'Log all the resolver messages'
-          ParentFont = False
-          TabOrder = 4
-        end
       end
       object Notebook1: TNotebook
         Left = 0
-        Height = 324
-        Top = 208
-        Width = 515
+        Height = 345
+        Top = 192
+        Width = 520
         PageIndex = 0
         Align = alClient
         TabOrder = 1
@@ -2786,13 +2777,13 @@ object f_option: Tf_option
         object Page1: TPage
           object astrometrynet: TGroupBox
             Left = 0
-            Height = 324
+            Height = 345
             Top = 0
-            Width = 515
+            Width = 520
             Align = alClient
             Caption = 'Astrometry.Net'
-            ClientHeight = 304
-            ClientWidth = 513
+            ClientHeight = 325
+            ClientWidth = 518
             ParentFont = False
             TabOrder = 0
             object Label6: TLabel
@@ -2810,7 +2801,7 @@ object f_option: Tf_option
               Left = 247
               Height = 17
               Top = 10
-              Width = 89
+              Width = 92
               Caption = 'Scale tolerance'
               ParentColor = False
               ParentFont = False
@@ -2819,7 +2810,7 @@ object f_option: Tf_option
               Left = 12
               Height = 17
               Top = 49
-              Width = 79
+              Width = 81
               Caption = 'Downsample'
               ParentColor = False
               ParentFont = False
@@ -2839,7 +2830,7 @@ object f_option: Tf_option
               Left = 12
               Height = 17
               Top = 117
-              Width = 87
+              Width = 89
               Caption = 'Other options '
               ParentColor = False
               ParentFont = False
@@ -2859,8 +2850,8 @@ object f_option: Tf_option
               Top = 218
               Width = 454
               BevelOuter = bvNone
-              ClientHeight = 36
-              ClientWidth = 450
+              ClientHeight = 40
+              ClientWidth = 454
               ParentFont = False
               TabOrder = 1
               Visible = False
@@ -2868,7 +2859,7 @@ object f_option: Tf_option
                 Left = 4
                 Height = 17
                 Top = 12
-                Width = 75
+                Width = 76
                 Caption = 'Cygwin path'
                 ParentColor = False
                 ParentFont = False
@@ -2891,7 +2882,7 @@ object f_option: Tf_option
               Left = 12
               Height = 21
               Top = 150
-              Width = 131
+              Width = 133
               Caption = 'Use custom script'
               OnClick = AstUseScriptClick
               ParentFont = False
@@ -2956,8 +2947,8 @@ object f_option: Tf_option
               Top = 218
               Width = 454
               BevelOuter = bvNone
-              ClientHeight = 36
-              ClientWidth = 450
+              ClientHeight = 40
+              ClientWidth = 454
               ParentFont = False
               TabOrder = 8
               Visible = False
@@ -2989,7 +2980,7 @@ object f_option: Tf_option
               Left = 12
               Height = 21
               Top = 88
-              Width = 236
+              Width = 241
               Caption = 'Use as fallback if other software fail'
               ParentFont = False
               TabOrder = 9

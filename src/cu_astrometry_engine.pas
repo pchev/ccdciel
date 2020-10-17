@@ -467,9 +467,10 @@ var n: LongInt;
     fn,imgdir,txt: string;
     i,nside,available: integer;
     endtime: double;
-    mem,log: TMemoryStream;
+    mem: TMemoryStream;
     newengine:TAstrometry_engine;
 begin
+try
 err:='';
 if (FResolver=ResolverAstrometryNet)or Fretry then begin
   cbuf:='';
@@ -732,26 +733,8 @@ else if FResolver=ResolverAstap then begin
        err:='Fail to start Astap:'+E.Message;
      end;
   end;
-  if (FLogFile<>'') then begin
-    log:=TMemoryStream.Create;
-    mem:=TMemoryStream.Create;
-    try
-      mem.LoadFromFile(FAstapLogFile);
-      mem.Position:=0;
-      buf:=Fcmd;
-      for i:=0 to Fparam.Count-1 do buf:=buf+' '+Fparam[i];
-      cbuf:=buf;
-      log.Write(cbuf,length(buf));
-      log.CopyFrom(mem,mem.Size);
-      if err<>'' then begin
-        cbuf:=err;
-        log.Write(cbuf,length(err));
-      end;
-      log.SaveToFile(FLogFile);
-    finally
-      log.Free;
-      mem.Free;
-    end;
+  if (FLogFile<>'')and(FAstapLogFile<>'')and(FLogFile<>FAstapLogFile)and FileExistsUTF8(FAstapLogFile) then begin
+    CopyFile(FAstapLogFile,FLogFile,[cffOverwriteFile]);
   end;
   process.Free;
   process:=TProcessUTF8.Create(nil);
@@ -804,6 +787,13 @@ else if FResolver=ResolverNone then begin
     CloseFile(ft);
   end;
   PostMessage(MsgHandle, LM_CCDCIEL, M_AstrometryDone, PtrInt(strnew(PChar(err))));
+end;
+except
+  on E: Exception do begin
+    Fresult:=99;
+    err:='Unexpected error: '+E.Message+crlf+err;
+    PostMessage(MsgHandle, LM_CCDCIEL, M_AstrometryDone, PtrInt(strnew(PChar(err))));
+  end;
 end;
 end;
 
