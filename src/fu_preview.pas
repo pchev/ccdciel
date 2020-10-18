@@ -228,7 +228,7 @@ end;
 
 function Tf_preview.ControlExposure(exp:double; binx,biny: integer; frmt:TFrameType; readoutmode:integer):boolean;
 var SaveonNewImage: TNotifyEvent;
-    savebinx,savebiny: integer;
+    savebinx,savebiny,i: integer;
     endt: TDateTime;
 begin
 result:=false;
@@ -245,6 +245,15 @@ if AllDevicesConnected then begin
   WaitExposure:=true;
   ControlExposureOK:=false;
   camera.AddFrames:=false;
+  if camera.CanSetGain then begin
+    if camera.hasGainISO then begin
+       if camera.Gain<>ISObox.ItemIndex then camera.Gain:=ISObox.ItemIndex;
+    end;
+    if camera.hasGain and (not camera.hasGainISO) then begin
+       i:=GainEdit.Value;
+       if camera.Gain<>i then camera.Gain:=i;
+    end;
+  end;
   if camera.hasReadOut then begin
      camera.readoutmode:=readoutmode;
   end;
