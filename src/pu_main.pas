@@ -8543,18 +8543,15 @@ try
      fnTemp: if FileNameActive[i] and fits.Header.Valueof('CCD-TEMP',ccdtemp) then
                 fn:=fn+formatfloat(f1,ccdtemp)+'C'+FilenameSep;
      fnDate: if FileNameActive[i] then begin
-                if f_capture.ExposureTime>1.0 then
+                if f_capture.ExposureTime>=1.0 then
                    fn:=fn+FormatDateTime('yyyymmdd'+FilenameSep+'hhnnss',dt)+FilenameSep
                 else
                    fn:=fn+FormatDateTime('yyyymmdd'+FilenameSep+'hhnnsszzz',dt)+FilenameSep;
              end
              else
                 UseFileSequenceNumber:=true;
-     fnGain: if FileNameActive[i] and f_capture.PanelGain.Visible then begin
-                if f_capture.ISObox.Visible then
-                  fn:=fn+f_capture.ISObox.Text+FilenameSep
-                else
-                  fn:=fn+f_capture.GainEdit.Text+FilenameSep
+     fnGain: if FileNameActive[i] and fits.Header.Valueof('GAIN',buf) then begin
+                fn:=fn+trim(buf)+FilenameSep;
              end;
    end;
  end;
