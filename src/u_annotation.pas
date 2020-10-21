@@ -28,6 +28,7 @@ procedure plot_deepsky(f: TFits; cnv: TCanvas; cnvheight: integer);{plot the dee
 procedure load_deep;{load the deepsky database once. If loaded no action}
 procedure load_hyperleda;{load the HyperLeda database once. If loaded no action }
 procedure read_deepsky(searchmode:char; telescope_ra,telescope_dec, cos_telescope_dec {cos(telescope_dec},fov : double; out ra2,dec2,length2,width2,pa : double);{deepsky database search}
+function find_object(var objname : string; var ra0,dec0,length0,width0,pa : double): boolean; {find object in database}
 
 var
   deepstring       : Tstrings;
@@ -464,6 +465,29 @@ begin
     text_dimensions:=nil;{remove used memory}
   end;
 end;{plot deep_sky}
+
+function find_object(var objname : string; var ra0,dec0,length0,width0,pa : double): boolean; {find object in database}
+begin
+  result:=false;
+  if length(objname)>1 then {Object name length should be two or longer}
+  begin
+    objname:=uppercase(objname);
+    load_deep;{Load the deepsky database once. If already loaded, no action}
+    linepos:=2;{Set pointer to the beginning}
+    repeat
+      read_deepsky('T' {full database search} ,0 {ra},0 {dec},1 {cos(telescope_dec)},2*pi{fov},{var} ra0,dec0,length0,width0,pa);{Deepsky database search}
+      if ((objname=uppercase(naam2)) or (objname=uppercase(naam3)) or (objname=uppercase(naam4))) then
+      begin
+        result:=true;
+        if naam3='' then objname:=naam2 {Add one object name only}
+         else
+         objname:=naam2+'_'+naam3;{Add two object names}
+        linepos:=$FFFFFF; {Stop searching}
+     end;
+    until linepos>=$FFFFFF;{Found object or end of database}
+  end;
+end;
+
 
 
 end.

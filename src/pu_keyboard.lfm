@@ -1,23 +1,23 @@
 object keyboard1: Tkeyboard1
-  Left = 294
-  Height = 227
-  Top = 313
-  Width = 345
+  Left = 701
+  Height = 398
+  Top = 261
+  Width = 285
   AutoSize = True
   BorderWidth = 5
   Caption = 'keyboard'
-  ClientHeight = 227
-  ClientWidth = 345
+  ClientHeight = 398
+  ClientWidth = 285
   KeyPreview = True
   OnClose = FormClose
+  OnKeyPress = FormKeyPress
   OnShow = FormShow
   Position = poOwnerFormCenter
-  LCLVersion = '2.0.6.0'
   object num7: TButton
-    Left = 119
-    Height = 25
-    Top = 69
-    Width = 32
+    Left = 98
+    Height = 33
+    Top = 240
+    Width = 20
     AutoSize = True
     Caption = '7'
     OnClick = num7Click
@@ -25,10 +25,10 @@ object keyboard1: Tkeyboard1
     TabOrder = 10
   end
   object num4: TButton
-    Left = 119
-    Height = 25
-    Top = 109
-    Width = 32
+    Left = 98
+    Height = 33
+    Top = 280
+    Width = 20
     AutoSize = True
     Caption = '4'
     OnClick = num7Click
@@ -36,10 +36,10 @@ object keyboard1: Tkeyboard1
     TabOrder = 7
   end
   object num8: TButton
-    Left = 167
-    Height = 25
-    Top = 69
-    Width = 32
+    Left = 146
+    Height = 33
+    Top = 240
+    Width = 20
     AutoSize = True
     Caption = '8'
     OnClick = num7Click
@@ -47,10 +47,10 @@ object keyboard1: Tkeyboard1
     TabOrder = 11
   end
   object num9: TButton
-    Left = 215
-    Height = 25
-    Top = 69
-    Width = 32
+    Left = 194
+    Height = 33
+    Top = 240
+    Width = 20
     AutoSize = True
     Caption = '9'
     OnClick = num7Click
@@ -58,10 +58,10 @@ object keyboard1: Tkeyboard1
     TabOrder = 12
   end
   object num5: TButton
-    Left = 167
-    Height = 25
-    Top = 111
-    Width = 32
+    Left = 146
+    Height = 33
+    Top = 280
+    Width = 20
     AutoSize = True
     Caption = '5'
     OnClick = num7Click
@@ -69,10 +69,10 @@ object keyboard1: Tkeyboard1
     TabOrder = 8
   end
   object num6: TButton
-    Left = 215
-    Height = 25
-    Top = 109
-    Width = 32
+    Left = 194
+    Height = 33
+    Top = 280
+    Width = 20
     AutoSize = True
     Caption = '6'
     OnClick = num7Click
@@ -80,10 +80,10 @@ object keyboard1: Tkeyboard1
     TabOrder = 9
   end
   object num1: TButton
-    Left = 119
-    Height = 25
-    Top = 149
-    Width = 32
+    Left = 98
+    Height = 33
+    Top = 320
+    Width = 20
     AutoSize = True
     Caption = '1'
     OnClick = num7Click
@@ -91,10 +91,10 @@ object keyboard1: Tkeyboard1
     TabOrder = 4
   end
   object num2: TButton
-    Left = 167
-    Height = 25
-    Top = 149
-    Width = 32
+    Left = 146
+    Height = 33
+    Top = 320
+    Width = 20
     AutoSize = True
     Caption = '2'
     OnClick = num7Click
@@ -102,10 +102,10 @@ object keyboard1: Tkeyboard1
     TabOrder = 5
   end
   object num3: TButton
-    Left = 215
-    Height = 25
-    Top = 149
-    Width = 32
+    Left = 194
+    Height = 33
+    Top = 320
+    Width = 20
     AutoSize = True
     Caption = '3'
     OnClick = num7Click
@@ -114,18 +114,18 @@ object keyboard1: Tkeyboard1
   end
   object Edit1: TEdit
     Left = 5
-    Height = 23
+    Height = 30
     Top = 29
-    Width = 335
+    Width = 275
     ParentFont = False
     TabOrder = 0
   end
   object clear1: TButton
-    Left = 303
-    Height = 25
+    Left = 242
+    Height = 33
     Hint = 'clear'
-    Top = 69
-    Width = 34
+    Top = 240
+    Width = 20
     AutoSize = True
     Caption = 'C'
     OnClick = clear1Click
@@ -135,12 +135,12 @@ object keyboard1: Tkeyboard1
     TabOrder = 15
   end
   object prefix1: TComboBox
-    Left = 7
-    Height = 23
+    Left = 5
+    Height = 30
     Hint = 'prefix'
-    Top = 71
+    Top = 240
     Width = 72
-    ItemHeight = 15
+    ItemHeight = 0
     ItemIndex = 4
     Items.Strings = (
       'B'
@@ -160,13 +160,13 @@ object keyboard1: Tkeyboard1
     Text = 'NGC'
   end
   object letter1: TComboBox
-    Left = 7
-    Height = 23
+    Left = 5
+    Height = 30
     Hint = 'letters'
-    Top = 111
+    Top = 280
     Width = 72
     DropDownCount = 30
-    ItemHeight = 15
+    ItemHeight = 0
     ItemIndex = 3
     Items.Strings = (
       '-'
@@ -207,11 +207,11 @@ object keyboard1: Tkeyboard1
     Text = 'A'
   end
   object enter1: TButton
-    Left = 303
-    Height = 25
+    Left = 242
+    Height = 36
     Hint = 'enter'
-    Top = 149
-    Width = 38
+    Top = 320
+    Width = 26
     AutoSize = True
     Caption = '⏎'
     Default = True
@@ -222,11 +222,11 @@ object keyboard1: Tkeyboard1
     TabOrder = 13
   end
   object backspace1: TButton
-    Left = 303
-    Height = 25
+    Left = 242
+    Height = 38
     Hint = 'backspace'
-    Top = 109
-    Width = 41
+    Top = 280
+    Width = 31
     AutoSize = True
     Caption = '⌫ '
     OnClick = backspace1Click
@@ -236,10 +236,10 @@ object keyboard1: Tkeyboard1
     TabOrder = 14
   end
   object num0: TButton
-    Left = 119
-    Height = 25
-    Top = 189
-    Width = 32
+    Left = 98
+    Height = 33
+    Top = 360
+    Width = 20
     AutoSize = True
     Caption = '0'
     OnClick = num7Click
@@ -247,12 +247,32 @@ object keyboard1: Tkeyboard1
     TabOrder = 3
   end
   object keyboard_question1: TLabel
-    Left = 5
-    Height = 15
+    Left = 7
+    Height = 17
     Top = 5
-    Width = 103
+    Width = 121
     Caption = 'keyboard_question:'
     ParentColor = False
     ParentFont = False
+  end
+  object ListBox1: TListBox
+    AnchorSideLeft.Control = Edit1
+    AnchorSideTop.Control = Edit1
+    AnchorSideTop.Side = asrBottom
+    Left = 5
+    Height = 168
+    Hint = 'This listbox will be filled if you enter an object designation with a wildcard. E.g. ngc10*'
+    Top = 59
+    Width = 275
+    ItemHeight = 0
+    OnClick = ListBox1Click
+    OnDblClick = ListBox1DblClick
+    ParentColor = True
+    ParentShowHint = False
+    ScrollWidth = 273
+    ShowHint = True
+    Sorted = True
+    TabOrder = 16
+    TopIndex = -1
   end
 end

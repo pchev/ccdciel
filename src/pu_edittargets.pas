@@ -739,9 +739,6 @@ end;
 
 procedure Tf_EditTargets.BtnNewObjectClick(Sender: TObject);
 var n: integer;
-    ra0,dec0,length0,width0,pa : double;
-    obj,objname : string;
-    foundok: boolean;
 begin
   PageControlTools.ActivePageIndex:=pageobject;
   PageControlPlan.ActivePageIndex:=pageobject;
@@ -749,39 +746,25 @@ begin
   n:=TargetList.Row;
   keyboard_caption:=rsNewObject;
   keyboard_question:=rsObject;
-  keyboard1.Edit1.Text:='';
-  keyboard1.showmodal;
-  obj:=keyboard_text;
-  objname:=uppercase(obj);
-  foundok:=false;
-  if length(objname)>1 then {Object name length should be two or longer}
+  keyboard_text:='';
+  keyboard1.showmodal; {get object data for name in keyboard_txt}
+
+  if object_found {found object in database}  then
   begin
-    load_deep;{Load the deepsky database once. If already loaded, no action}
-    linepos:=2;{Set pointer to the beginning}
-    repeat
-      read_deepsky('T' {full database search} ,0 {ra},0 {dec},1 {cos(telescope_dec)},2*pi{fov},{var} ra0,dec0,length0,width0,pa);{Deepsky database search}
-      if ((objname=uppercase(naam2)) or (objname=uppercase(naam3)) or (objname=uppercase(naam4))) then
-      begin
-        TargetList.Cells[colra,n]:=RAToStr(ra0*12/pi);{Add position}
-        TargetList.Cells[coldec,n]:=DEToStr(dec0*180/pi);
-        TargetList.Cells[colstart,n]:=rsRise;
-        TargetList.Cells[colend,n]:=rsSet2;
-
-        if naam3='' then TargetList.Cells[colname,n]:=naam2 {Add one object name only}
-        else
-        TargetList.Cells[colname,n]:=naam2+'_'+naam3;{Add two object names}
-
-        foundok:=true;
-        linepos:=$FFFFFF; {Stop searching}
-     end;
-    until linepos>=$FFFFFF;{Found object or end of database}
-  end;
-  if not foundok then begin
+    TargetList.Cells[colra,n]:=RAToStr(ra_data*12/pi);{Add position}
+    TargetList.Cells[coldec,n]:=DEToStr(dec_data*180/pi);
+    TargetList.Cells[colstart,n]:=rsRise;
+    TargetList.Cells[colend,n]:=rsSet2;
+    TargetList.Cells[colname,n]:=keyboard_text;
+  end
+  else
+  begin
     FCoordWarning:=true;
     FCoordWarningRow:=n;
-    TargetList.Cells[colname,n]:=obj;
+    TargetList.Cells[colname,n]:=keyboard_text;
   end;
   TargetChange(nil);
+  Targetlist.Refresh;{apply Fcoordwarning directly}
   ShowPlan;
   Application.ProcessMessages;
   FCoordWarning:=false;
@@ -864,37 +847,54 @@ end;
 
 procedure Tf_EditTargets.Btn_coord_internalClick(Sender: TObject);{Retrieve position from deepsky database}
 var n: integer;
-    ra0,dec0,length0,width0,pa : double;
-    objname : string;
 begin
   n:=TargetList.Row;
 
   keyboard_caption:=rsRetrievePosi;
   keyboard_question:=rsObject;
-  keyboard1.Edit1.Text:='';
-  keyboard1.showmodal;
-  objname:=uppercase(keyboard_text);
-  if length(objname)>1 then {Object name length should be two or longer}
+  keyboard_text:=TargetList.Cells[colname,n];
+  keyboard1.showmodal; {get object data for name in keyboard_txt}
+
+//  objname:=uppercase(keyboard_text);
+//  if length(objname)>1 then {Object name length should be two or longer}
+//  begin
+//    load_deep;{Load the deepsky database once. If already loaded, no action}
+//    linepos:=2;{Set pointer to the beginning}
+//    repeat
+//      read_deepsky('T' {full database search} ,0 {ra},0 {dec},1 {cos(telescope_dec)},2*pi{fov},{var} ra0,dec0,length0,width0,pa);{Deepsky database search}
+//      if ((objname=uppercase(naam2)) or (objname=uppercase(naam3)) or (objname=uppercase(naam4))) then
+//      begin
+//        TargetList.Cells[colra,n]:=RAToStr(ra0*12/pi);{Add position}
+//        TargetList.Cells[coldec,n]:=DEToStr(dec0*180/pi);
+//        TargetList.Cells[colastrometry,n]:=BoolToStr(astrometryResolver<>ResolverNone,'1','0');
+//
+//        if naam3='' then TargetList.Cells[colname,n]:=naam2 {Add one object name only}
+//        else
+//        TargetList.Cells[colname,n]:=naam2+'_'+naam3;{Add two object names}
+
+//        linepos:=$FFFFFF; {Stop searching}
+//        TargetChange(nil);
+//     end;
+//    until linepos>=$FFFFFF;{Found object or end of database}
+//  end;
+
+  if object_found {find object in database}  then
   begin
-    load_deep;{Load the deepsky database once. If already loaded, no action}
-    linepos:=2;{Set pointer to the beginning}
-    repeat
-      read_deepsky('T' {full database search} ,0 {ra},0 {dec},1 {cos(telescope_dec)},2*pi{fov},{var} ra0,dec0,length0,width0,pa);{Deepsky database search}
-      if ((objname=uppercase(naam2)) or (objname=uppercase(naam3)) or (objname=uppercase(naam4))) then
-      begin
-        TargetList.Cells[colra,n]:=RAToStr(ra0*12/pi);{Add position}
-        TargetList.Cells[coldec,n]:=DEToStr(dec0*180/pi);
-        TargetList.Cells[colastrometry,n]:=BoolToStr(astrometryResolver<>ResolverNone,'1','0');
-
-        if naam3='' then TargetList.Cells[colname,n]:=naam2 {Add one object name only}
-        else
-        TargetList.Cells[colname,n]:=naam2+'_'+naam3;{Add two object names}
-
-        linepos:=$FFFFFF; {Stop searching}
-        TargetChange(nil);
-     end;
-    until linepos>=$FFFFFF;{Found object or end of database}
+    TargetList.Cells[colra,n]:=RAToStr(ra_data*12/pi);{Add position}
+    TargetList.Cells[coldec,n]:=DEToStr(dec_data*180/pi);
+    TargetList.Cells[colastrometry,n]:=BoolToStr(astrometryResolver<>ResolverNone,'1','0');
+    TargetList.Cells[colname,n]:=keyboard_text;
+  end
+  else
+  begin
+    FCoordWarning:=true;
+    FCoordWarningRow:=n;
   end;
+  TargetChange(nil);
+  Targetlist.Refresh;{apply Fcoordwarning directly}
+  ShowPlan;
+  Application.ProcessMessages;
+  FCoordWarning:=false;
 end;
 
 procedure Tf_EditTargets.StartOptionClick(Sender: TObject);
@@ -1197,7 +1197,7 @@ try
     TargetList.Cells[coldec,n]:=DEToStr(de);
     TargetList.Cells[colastrometry,n]:=BoolToStr(astrometryResolver<>ResolverNone,'1','0');
     TargetChange(nil);
-  end;
+   end;
 finally
   screen.Cursor:=crDefault;
 end;
