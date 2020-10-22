@@ -144,7 +144,7 @@ type
     function GetPercentComplete: double;
     function GetTargetPercentComplete: double;
     procedure ClearRestartHistory(Confirm:boolean);
-    procedure CompatLoadPlan(p: T_Plan; plan:string);
+    procedure CompatLoadPlan(p: T_Plan; plan,obj:string);
   public
     { public declarations }
     StepRepeatCount, StepTotalCount: integer;
@@ -694,7 +694,7 @@ begin
            // compatibility with old sequence format
            m:=trunc(SequenceFile.Items.GetValue('/Targets/Target'+inttostr(i)+'/StepDone/StepCount',0));
            Targets.Add(t);
-           CompatLoadPlan(T_Plan(t.plan), t.planname);
+           CompatLoadPlan(T_Plan(t.plan), t.planname, t.objectname);
          end;
      end;
    end;
@@ -722,7 +722,7 @@ begin
    end;
 end;
 
-procedure Tf_sequence.CompatLoadPlan(p: T_plan; plan:string);
+procedure Tf_sequence.CompatLoadPlan(p: T_plan; plan,obj:string);
 var fn,buf: string;
     i,n:integer;
     pfile: TCCDconfig;
@@ -742,8 +742,8 @@ begin
        s.donecount:=0;
        p.Add(s);
      end;
-     if buf='' then buf:='Warning! the sequence completion status is cleared.';
-     ShowMessage(buf);
+     buf:=buf+obj+' '+plan+' warning! the completion status is cleared.';
+     msg(buf,1);
   end;
 end;
 

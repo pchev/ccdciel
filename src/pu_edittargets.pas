@@ -773,7 +773,7 @@ begin
 end;
 
 procedure Tf_EditTargets.BtnNewObjectClick(Sender: TObject);
-var n: integer;
+var i,n: integer;
     chkobj: string;
 begin
   PageControlTools.ActivePageIndex:=pageobject;
@@ -797,9 +797,9 @@ begin
   begin
     FCoordWarning:=true;
     FCoordWarningRow:=n;
-    TargetList.Cells[colname,n]:=keyboard_text;
+    chkobj:=keyboard_text+'##%%##';
+    TargetList.Cells[colname,n]:=chkobj;
   end;
-  chkobj:=keyboard_text+'##%%##';
   MoveFlat(nil);
   if FCoordWarning then begin
     // search if warning row is moved
@@ -2295,7 +2295,7 @@ begin
   p.autofocuscount:=trunc(pfile.GetValue('/Steps/Step'+inttostr(i)+'/AutofocusCount',10));
   // obsolete option
   if trunc(pfile.GetValue('/Steps/Step'+inttostr(i)+'/RepeatCount',1)) > 1 then
-     msg:='Warning! the Repeat option at the step level as been removed. Please use the Repeat option at the target level instead.';
+     msg:=msg+crlf+p.description+' warning! the Repeat option at the step level as been removed. Please use the Repeat option at the target level instead.';
 end;
 
 procedure Tf_EditTargets.ShowPlan;
