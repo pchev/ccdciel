@@ -240,6 +240,8 @@ begin
 end;
 
 procedure TAstrometry.AstrometryDone(errstr:string);
+var buf:string;
+    f:TextFile;
 begin
  if FileExistsUTF8(savefile) and FileExistsUTF8(solvefile) then
    FLastResult:=true
@@ -247,6 +249,15 @@ begin
    FLastResult:=false;
  FBusy:=false;
  FLastError:=trim(errstr);
+ if (FLastError<>'') and (logfile<>'') and FileExistsUTF8(logfile) then begin
+   AssignFile(f,logfile);
+   Reset(f);
+   while not EOF(f) do begin
+     ReadLn(f,buf);
+     msg(buf,9);
+   end;
+   CloseFile(f);
+ end;
  if Assigned(FonEndAstrometry) then FonEndAstrometry(self);
  if Assigned(Fterminatecmd) then Fterminatecmd(self);
  Fterminatecmd:=nil;

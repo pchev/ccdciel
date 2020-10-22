@@ -1045,6 +1045,7 @@ begin
   if (V.Get('cooleron').AsBool<>value) then begin
      msg(Format(rsSetCooler, [': '+BoolToStr(value, rsTrue, rsFalse)]));
      V.Put('CoolerOn',value);
+     Wait(1);
   end;
   except
    on E: Exception do msg('Set cooler error: ' + E.Message,0);

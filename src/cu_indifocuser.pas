@@ -37,7 +37,6 @@ T_indifocuser = class(T_focuser)
    ConnectTimer: TTimer;
    ReadyTimer: TTimer;
    FocuserDevice: Basedevice;
-   Focuserport: ITextVectorProperty;
    FocusMotion: ISwitchVectorProperty;
    FocusInward,FocusOutward: ISwitch;
    FocusSpeed: INumberVectorProperty;
@@ -153,7 +152,6 @@ end;
 procedure T_indifocuser.ClearStatus;
 begin
     FocuserDevice:=nil;
-    Focuserport:=nil;
     FocusMotion:=nil;
     FocusInward:=nil;
     FocusOutward:=nil;
@@ -208,6 +206,7 @@ if not indiclient.Connected then begin
   Fdevice:=cp3;
   FStatus := devDisconnected;
   if Assigned(FonStatusChange) then FonStatusChange(self);
+  msg('Connecting to INDI server "'+Findiserver+':'+Findiserverport+'" for device "'+Findidevice+'"',9);
   indiclient.SetServer(Findiserver,Findiserverport);
   indiclient.watchDevice(Findidevice);
   indiclient.ConnectServer;
@@ -253,7 +252,7 @@ end;
 procedure T_indifocuser.ConnectTimerTimer(Sender: TObject);
 begin
   ConnectTimer.Enabled:=False;
-  if (Focuserport=nil) and (not Fready) and InitTimer.Enabled then begin
+  if (not Fready) and InitTimer.Enabled then begin
     ConnectTimer.Enabled:=true;
   end;
  indiclient.connectDevice(Findidevice);
@@ -268,7 +267,7 @@ end;
 
 procedure T_indifocuser.NewDevice(dp: Basedevice);
 begin
-  //writeln('Newdev: '+dp.getDeviceName);
+  msg('INDI server send new device: "'+dp.getDeviceName+'"',9);
   if dp.getDeviceName=Findidevice then begin
      Fconnected:=true;
      FocuserDevice:=dp;
@@ -303,10 +302,7 @@ begin
   propname:=indiProp.getName;
   proptype:=indiProp.getType;
 
-  if (proptype=INDI_TEXT)and(Focuserport=nil)and(propname='DEVICE_PORT') then begin
-     Focuserport:=indiProp.getText;
-  end
-  else if (proptype=INDI_TEXT)and(propname='DRIVER_INFO') then begin
+  if (proptype=INDI_TEXT)and(propname='DRIVER_INFO') then begin
      buf:='';
      TxtProp:=indiProp.getText;
      if TxtProp<>nil then begin

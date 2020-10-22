@@ -186,6 +186,7 @@ if not indiclient.Connected then begin
   Fdevice:=cp3;
   FStatus := devDisconnected;
   if Assigned(FonStatusChange) then FonStatusChange(self);
+  msg('Connecting to INDI server "'+Findiserver+':'+Findiserverport+'" for device "'+Findidevice+'"',9);
   indiclient.SetServer(Findiserver,Findiserverport);
   indiclient.watchDevice(Findidevice);
   indiclient.ConnectServer;
@@ -246,7 +247,7 @@ end;
 
 procedure T_indidome.NewDevice(dp: Basedevice);
 begin
-  //writeln('Newdev: '+dp.getDeviceName);
+  msg('INDI server send new device: "'+dp.getDeviceName+'"',9);
   if dp.getDeviceName=Findidevice then begin
      Fconnected:=true;
      DomeDevice:=dp;

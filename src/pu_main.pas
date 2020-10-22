@@ -2031,6 +2031,7 @@ begin
 
   f_option.onShowHelp:=@MenuPdfHelpClick;
   f_setup.onShowHelp:=@MenuPdfHelpClick;
+  f_setup.onMsg:=@NewMessage;
 
   SetOptions;
 
@@ -5023,7 +5024,6 @@ var cool:boolean;
 begin
  case camera.Status of
    devDisconnected:begin
-                   NewMessage(Format(rsDisconnected,[rsCamera]),9);
                    f_preview.stop;
                    f_capture.stop;
                    Capture:=false;
@@ -6615,6 +6615,7 @@ begin
    f_option.Logtofile.Checked:=config.GetValue('/Log/Messages',true);
    f_option.Logtofile.Hint:=Format(rsLogFilesAreS, [ExtractFilePath(LogFile)]);
    f_option.debug_msg.Checked:=config.GetValue('/Log/debug_msg',debug_msg);
+   f_option.LoadObservatoryDB(config.GetValue('/Info/ObservatoryName',''));
    f_option.ObservatoryName.Text:=config.GetValue('/Info/ObservatoryName','');
    f_option.Latitude:=config.GetValue('/Info/ObservatoryLatitude',0.0);
    f_option.Longitude:=config.GetValue('/Info/ObservatoryLongitude',0.0);
@@ -7028,6 +7029,7 @@ begin
      config.SetValue('/Info/TelescopeName',f_option.TelescopeName.Text);
      config.SetValue('/Info/HorizonFile',f_option.HorizonFile.FileName);
      config.SetValue('/Info/ElevationMin',f_option.ElevationMin.Value);
+     f_option.SaveObservatoryDB;
      config.SetValue('/Color/Bayer',f_option.DebayerPreview.Checked);
      config.SetValue('/Color/BayerMode',f_option.BayerMode.ItemIndex);
      config.SetValue('/Color/RedBalance',f_option.RedBalance.Position/100);
@@ -8542,18 +8544,15 @@ try
      fnTemp: if FileNameActive[i] and fits.Header.Valueof('CCD-TEMP',ccdtemp) then
                 fn:=fn+formatfloat(f1,ccdtemp)+'C'+FilenameSep;
      fnDate: if FileNameActive[i] then begin
-                if f_capture.ExposureTime>1.0 then
+                if f_capture.ExposureTime>=1.0 then
                    fn:=fn+FormatDateTime('yyyymmdd'+FilenameSep+'hhnnss',dt)+FilenameSep
                 else
                    fn:=fn+FormatDateTime('yyyymmdd'+FilenameSep+'hhnnsszzz',dt)+FilenameSep;
              end
              else
                 UseFileSequenceNumber:=true;
-     fnGain: if FileNameActive[i] and f_capture.PanelGain.Visible then begin
-                if f_capture.ISObox.Visible then
-                  fn:=fn+f_capture.ISObox.Text+FilenameSep
-                else
-                  fn:=fn+f_capture.GainEdit.Text+FilenameSep
+     fnGain: if FileNameActive[i] and fits.Header.Valueof('GAIN',buf) then begin
+                fn:=fn+trim(buf)+FilenameSep;
              end;
    end;
  end;

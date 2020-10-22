@@ -3,14 +3,14 @@ msgstr ""
 "Project-Id-Version: ccdciel\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2020-08-23 08:48+0000\n"
-"PO-Revision-Date: 2020-09-15 16:23+0000\n"
+"PO-Revision-Date: 2020-10-09 08:32+0000\n"
 "Last-Translator: Stanislav Holub <Unknown>\n"
 "Language-Team: Czech <cz@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2020-09-21 08:44+0000\n"
-"X-Generator: Launchpad (build 83bdf6c8a3a5f87722c8927e54838522f3e57504)\n"
+"X-Launchpad-Export-Date: 2020-10-18 13:00+0000\n"
+"X-Generator: Launchpad (build 58bb2f3096f16f0e0acc917602669aecb4ffaf54)\n"
 "Language: cs\n"
 
 #: u_translation.rs32bitdriver
@@ -155,7 +155,7 @@ msgstr "Nastavení astrometrie"
 
 #: u_translation.rsastrometryre
 msgid "Astrometry resolver log"
-msgstr "Log řešení astrometrie"
+msgstr "Protokol řešení astrometrie"
 
 #: u_translation.rsatdawn
 msgid "at dawn"
@@ -252,7 +252,7 @@ msgstr "Graf automatického ostření"
 
 #: u_translation.rsautofocusmea
 msgid "Autofocus mean frame %s/%s, hfd=%s peak:%s snr:%s"
-msgstr "Automatické zaostření průměrný rám %s/%s, hfd=%s vrch:%s snr:%s"
+msgstr "Automatické zaostření průměrný rámec %s/%s, hfd=%s vrch:%s snr:%s"
 
 #: u_translation.rsautofocusmea2
 msgid "Autofocus measurement %s : HFD=%s position=%s"
@@ -521,7 +521,7 @@ msgstr "Chladič kamery %s"
 
 #: u_translation.rscameraframex
 msgid "Camera frame x=%s y=%s width=%s height=%s"
-msgstr "Rám kamery x =%s y =%s šířka=%s výška =%s"
+msgstr "Rámec kamery x =%s y =%s šířka=%s výška =%s"
 
 #: u_translation.rscameranotcoo
 msgid "Camera not cooling, set temperature to %s"
@@ -669,7 +669,7 @@ msgstr "Zachytávání bylo neočekávaně ukončeno"
 
 #: u_translation.rsccdframesent
 msgid "CCD frame sent to planetarium."
-msgstr "Rám CCD odeslán do planetária."
+msgstr "Rámec CCD odeslán do planetária."
 
 #: u_translation.rscenter
 msgid "Center"
@@ -705,7 +705,7 @@ msgstr "Stav Počasí"
 
 #: u_translation.rscleardarkfra
 msgid "Clear Dark frame"
-msgstr "Smazat Drak rám"
+msgstr "Smazat Drak rámec"
 
 #: u_translation.rsclearreferen
 msgid "Clear reference image"
@@ -929,7 +929,7 @@ msgstr "Cygwinova cesta"
 
 #: u_translation.rsdarkframe
 msgid "Dark frame"
-msgstr "Dark rám"
+msgstr "Dark rámec"
 
 #: u_translation.rsdarknight
 msgid "Dark%snight"
@@ -1033,7 +1033,7 @@ msgstr "Připojení zařízení"
 
 #: u_translation.rsdevicessetup
 msgid "Devices Setup%s"
-msgstr "Nastavené Zařízení%s"
+msgstr "Možnosti Zařízení%s"
 
 #: u_translation.rsdewpoint
 msgid "Dew point"
@@ -1349,7 +1349,7 @@ msgstr "Nepodařilo se zahájit pointaci!"
 
 #: u_translation.rsfailtoresolv
 msgid "Fail to resolve control exposure"
-msgstr "Selhání řešení expozice"
+msgstr "Selhání expozice kontrolního řešení"
 
 #: u_translation.rsfalse
 msgid "False"
@@ -1381,7 +1381,7 @@ msgstr "Filtr"
 
 #: u_translation.rsfilter0
 msgid "No change"
-msgstr "Beze změny"
+msgstr "Bez změny"
 
 #: u_translation.rsfiltername
 msgid "Filter name"
@@ -1566,7 +1566,7 @@ msgstr "FOV"
 
 #: u_translation.rsframe
 msgid "Frame"
-msgstr "Rám"
+msgstr "Rámec"
 
 #: u_translation.rsfromcameradr
 msgid "From camera driver"
@@ -2687,7 +2687,7 @@ msgstr "Plán %s se zastavil."
 
 #: u_translation.rsplatesolveex
 msgid "Plate solve exposure %s"
-msgstr "Vyřešit expozici %s"
+msgstr "Řešit expozici %s"
 
 #: u_translation.rspleaseactiva
 msgid "Please activate the log file in the preference."
@@ -3015,7 +3015,7 @@ msgstr "Vyřešit a zobrazit snímek v planetáriu"
 
 #: u_translation.rsresolveandsh2
 msgid "Resolve and show image frame in planetarium"
-msgstr "Vyřešit a zobrazit rám snímku v planetáriu"
+msgstr "Vyřešit a zobrazit obraz rámce  v planetáriu"
 
 #: u_translation.rsresolveandsl
 msgid "Resolve and Slew to image center"
@@ -3432,7 +3432,7 @@ msgstr "Nastavit směr ostření směrem ven↑"
 
 #: u_translation.rssetframetype
 msgid "Set frame type %s"
-msgstr "Typ rámu nastaven na %s"
+msgstr "Typ rámce nastaven na %s"
 
 #: u_translation.rssetmagnitude
 msgid "Set magnitude"
@@ -3448,7 +3448,7 @@ msgstr "Nastavím čas montáže  z počítače"
 
 #: u_translation.rssetpoint
 msgid "Setpoint"
-msgstr "Nastavit bod"
+msgstr "Zadat °C/F"
 
 #: u_translation.rssetrotatoran
 msgid "Set rotator angle"
@@ -3676,7 +3676,7 @@ msgstr "Přidání referenční hvězdy v %s/%s"
 
 #: u_translation.rsstackofframe
 msgid "stack of %s frames"
-msgstr "skládání rámů %s"
+msgstr "skládání rámců %s"
 
 #: u_translation.rsstar
 msgid "Star"
@@ -3932,7 +3932,7 @@ msgstr "Podsložka podle doby expozice"
 
 #: u_translation.rssubfolderbyf
 msgid "Subfolder by frame type"
-msgstr "Podsložka podle typu rámů"
+msgstr "Podsložka podle typu rámce"
 
 #: u_translation.rssubfolderbyo
 msgid "Subfolder by object name"
@@ -4328,7 +4328,7 @@ msgstr "Neznámý stav"
 
 #: u_translation.rsunknowpiersi
 msgid "Unknown pier side"
-msgstr "Neznáma pozice vzhledem k poledníku"
+msgstr "Neznámá pozice  dal."
 
 #: u_translation.rsunpark
 msgid "Unpark"

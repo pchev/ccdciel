@@ -35,7 +35,7 @@ type
 TAstrometry_engine = class(TThread)
    private
      FInFile, FOutFile, FLogFile, FElbrusFile, FElbrusDir, FElbrusFolder, FElbrusUnixpath, FCygwinPath, wcsfile, apmfile: string;
-     FPlateSolveFolder,FASTAPFolder,FAstrometryPath: string;
+     FPlateSolveFolder,FASTAPFolder,FAstrometryPath,FAstapLogFile: string;
      Fscalelow,Fscalehigh,Fra,Fde,Fradius,FTimeout,FXsize,FYsize: double;
      FObjs,FDown,FResolver,FPlateSolveWait,Fiwidth,Fiheight: integer;
      Fresult,Fcode:integer;
@@ -438,12 +438,15 @@ else if FResolver=ResolverAstap then begin
   {$else}
     Fcmd:=slash(FASTAPFolder)+'astap';
   {$endif}
+  Fparam.Add('-log');
   Fparam.Add('-z');
   Fparam.Add(inttostr(FASTAPdownsample));
   Fparam.Add('-r');
   Fparam.Add(inttostr(FASTAPSearchRadius));
   Fparam.Add('-f');
   Fparam.Add(FInFile);
+  FAstapLogFile:=ChangeFileExt(FInFile,'.log');
+  DeleteFileUTF8(FAstapLogFile);
   wcsfile:=ChangeFileExt(FInFile,'.wcs');
   DeleteFileUTF8(wcsfile);
   Start;
@@ -467,6 +470,7 @@ var n: LongInt;
     mem: TMemoryStream;
     newengine:TAstrometry_engine;
 begin
+try
 err:='';
 if (FResolver=ResolverAstrometryNet)or Fretry then begin
   cbuf:='';
@@ -704,17 +708,6 @@ else if FResolver=ResolverPlateSolve then begin
   PostMessage(MsgHandle, LM_CCDCIEL, M_AstrometryDone, PtrInt(strnew(PChar(err))));
 end
 else if FResolver=ResolverAstap then begin
-  cbuf:='';
-  if (FLogFile<>'') then begin
-    AssignFile(f,FLogFile);
-    rewrite(f,1);
-    buf:=Fcmd;
-    for i:=0 to Fparam.Count-1 do buf:=buf+' '+Fparam[i];
-    buf:=buf+CRLF;
-    cbuf:=buf;
-    BlockWrite(f,cbuf,Length(buf));
-    CloseFile(f);
-  end;
   process.Executable:=Fcmd;
   process.Parameters:=Fparam;
   endtime:=now+FTimeout/secperday;
@@ -740,11 +733,8 @@ else if FResolver=ResolverAstap then begin
        err:='Fail to start Astap:'+E.Message;
      end;
   end;
-  if err<>'' then begin
-    AssignFile(ft,FLogFile);
-    Append(ft);
-    WriteLn(ft,err);
-    CloseFile(ft);
+  if (FLogFile<>'')and(FAstapLogFile<>'')and(FLogFile<>FAstapLogFile)and FileExistsUTF8(FAstapLogFile) then begin
+    CopyFile(FAstapLogFile,FLogFile,[cffOverwriteFile]);
   end;
   process.Free;
   process:=TProcessUTF8.Create(nil);
@@ -797,6 +787,13 @@ else if FResolver=ResolverNone then begin
     CloseFile(ft);
   end;
   PostMessage(MsgHandle, LM_CCDCIEL, M_AstrometryDone, PtrInt(strnew(PChar(err))));
+end;
+except
+  on E: Exception do begin
+    Fresult:=99;
+    err:='Unexpected error: '+E.Message+crlf+err;
+    PostMessage(MsgHandle, LM_CCDCIEL, M_AstrometryDone, PtrInt(strnew(PChar(err))));
+  end;
 end;
 end;
 
