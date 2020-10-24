@@ -60,13 +60,13 @@ type
   private
     { private declarations }
     FonConnect,FonCalibrate,FonGuide,FonDither,FonShowStat, FonClearStat: TNotifyEvent;
-    procedure SetLang;
     procedure SetDitherOnly(value:boolean);
     function  GetDitherOnly: boolean;
   public
     { public declarations }
     constructor Create(aOwner: TComponent); override;
     destructor  Destroy; override;
+    procedure SetLang;
     property DitherOnly: boolean read GetDitherOnly write SetDitherOnly;
     property onConnect: TNotifyEvent read FonConnect write FonConnect;
     property onCalibrate: TNotifyEvent read FonCalibrate write FonCalibrate;

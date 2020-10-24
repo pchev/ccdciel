@@ -93,9 +93,9 @@ type
     FonStopVcurve: TNotifyEvent;
     FonSaveVcurve: TNotifyEvent;
     procedure LearnVcurveAsync(Data: PtrInt);
-    procedure SetLang;
   public
     { public declarations }
+    procedure SetLang;
     Procedure FindLinearPart;
     Procedure LoadCurve;
     Procedure ClearGraph;

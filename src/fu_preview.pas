@@ -71,11 +71,11 @@ type
     function GetExposure:double;
     procedure SetExposure(value:double);
     function GetBinning: integer;
-    procedure SetLang;
   public
     { public declarations }
     constructor Create(aOwner: TComponent); override;
     destructor  Destroy; override;
+    procedure SetLang;
     procedure Stop;
     function ControlExposure(exp:double; binx,biny: integer; frmt:TFrameType; readoutmode:integer):boolean;
     property Running: boolean read Frunning write Frunning;

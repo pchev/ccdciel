@@ -74,11 +74,11 @@ type
     function GetSpeed:integer;
     procedure SetPosition(value:integer);
     function GetPosition:integer;
-    procedure SetLang;
   public
     { public declarations }
     constructor Create(aOwner: TComponent); override;
     destructor  Destroy; override;
+    procedure SetLang;
     function TempOffset(TempRef,TempNow: double):integer;
     property FocusSpeed: integer read GetSpeed write SetSpeed;
     property FocusPosition: integer read GetPosition write SetPosition;

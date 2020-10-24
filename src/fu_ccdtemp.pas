@@ -51,11 +51,11 @@ type
   private
     { private declarations }
     FonSetTemperature,FonSetCooler: TNotifyEvent;
-    procedure SetLang;
   public
     { public declarations }
     constructor Create(aOwner: TComponent); override;
     destructor  Destroy; override;
+    procedure SetLang;
     property onSetTemperature: TNotifyEvent read FonSetTemperature write FonSetTemperature;
     property onSetCooler: TNotifyEvent read FonSetCooler write FonSetCooler;
   end;

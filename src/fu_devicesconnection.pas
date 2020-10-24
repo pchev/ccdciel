@@ -64,11 +64,11 @@ type
     FonSelectProfile,FonConnect,FonDisconnect: TNotifyEvent;
     FonConnectDevice,FonDisconnectDevice: TNotifyNum;
     SelectedDevice: integer;
-    procedure SetLang;
   public
     { public declarations }
     constructor Create(aOwner: TComponent); override;
     destructor  Destroy; override;
+    procedure SetLang;
     procedure Connect;
     procedure Disconnect(confirm:boolean);
     property onSelectProfile: TNotifyEvent read FonSelectProfile write FonSelectProfile;

@@ -63,10 +63,10 @@ type
     procedure FormShow(Sender: TObject);
     procedure ObjKeyDown(Sender: TObject; var Key: Word; Shift: TShiftState);
   private
-    procedure SetLang;
 
   public
     focallength,pixelsize: double;
+    procedure SetLang;
   end;
 
 var
@@ -100,6 +100,7 @@ begin
   Label8.Caption:=ssec+'/'+rsPixels;
   msginfo.Caption:='';
   BtnCompute.Caption:=rsCompute;
+  if f_compute<>nil then f_compute.Setlang;
 end;
 
 procedure Tf_goto.FormShow(Sender: TObject);

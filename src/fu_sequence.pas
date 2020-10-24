@@ -137,7 +137,6 @@ type
     procedure StopSequence;
     procedure EndSequence(Sender: TObject);
     procedure SetEditBtn(onoff:boolean);
-    procedure SetLang;
     function GetEndShutdown: boolean;
     procedure SetEndShutdown(value:boolean);
     function GetOnShutdown: TNotifyEvent;
@@ -150,6 +149,7 @@ type
     StepRepeatCount, StepTotalCount: integer;
     constructor Create(aOwner: TComponent); override;
     destructor  Destroy; override;
+    procedure SetLang;
     procedure AutoguiderDisconnected;
     procedure AutoguiderIddle;
     procedure MountTrackingStarted;
@@ -228,19 +228,8 @@ begin
  Targets.DelayMsg:=@ShowDelayMsg;
  Targets.onTargetsChange:=@TargetsChange;
  Targets.onPlanChange:=@PlanChange;
- TargetGrid.Cells[0, 0]:=rsObject;
- TargetGrid.Cells[1, 0]:=rsPlan;
- TargetGrid.Cells[2, 0]:=rsBegin;
- TargetGrid.Cells[3, 0]:=rsEnd;
  TargetGrid.ColWidths[2]:=0;
  TargetGrid.ColWidths[3]:=0;
- TargetGrid.Cells[4, 0]:=rsRA;
- TargetGrid.Cells[5,0]:=rsDec;
- PlanGrid.Cells[0, 0]:=rsDesc;
- PlanGrid.Cells[1, 0]:=rsExp2;
- PlanGrid.Cells[2, 0]:=rsCount;
- PlanGrid.Cells[3, 0]:=rsType;
- PlanGrid.Cells[4, 0]:=rsFilter;
  f_EditTargets:=Tf_EditTargets.Create(nil);
  f_EditTargets.Astrometry:=Fastrometry;
 end;
@@ -281,6 +270,17 @@ begin
   BtnReset.Hint:=rsClearTheSequ;
   BtnPause.Hint:=rsPauseTheSequ;
   BtnStatus.Hint:=rsShowCompleti;
+  TargetGrid.Cells[0, 0]:=rsObject;
+  TargetGrid.Cells[1, 0]:=rsPlan;
+  TargetGrid.Cells[2, 0]:=rsBegin;
+  TargetGrid.Cells[3, 0]:=rsEnd;
+  TargetGrid.Cells[4, 0]:=rsRA;
+  TargetGrid.Cells[5,0]:=rsDec;
+  PlanGrid.Cells[0, 0]:=rsDesc;
+  PlanGrid.Cells[1, 0]:=rsExp2;
+  PlanGrid.Cells[2, 0]:=rsCount;
+  PlanGrid.Cells[3, 0]:=rsType;
+  PlanGrid.Cells[4, 0]:=rsFilter;
 end;
 
 procedure Tf_sequence.SetPreview(val: Tf_preview);

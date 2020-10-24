@@ -91,8 +91,8 @@ type
     function GetMinStep: integer;
     procedure RunCalibration(Data: PtrInt);
     procedure Saveconfig;
-    procedure SetLang;
   public
+    procedure SetLang;
     procedure ProgressL(n:integer; x,y: double);
     procedure ProgressR(n:integer; x,y: double);
     procedure CalibrationCancel(reason:string);

@@ -504,7 +504,6 @@ type
     procedure SetWeatherConnection(value: TDevInterface);
     procedure SetSafetyConnection(value: TDevInterface);
     procedure SetCameraSensor(value: string);
-    procedure SetLang;
     procedure SelectPage(Sender: TObject);
     procedure IncPage(Sender: TObject);
     procedure SelectNextPage(direction: integer);
@@ -513,6 +512,7 @@ type
     { public declarations }
     DefaultCameraInterface, DefaultMountInterface, DefaultDomeInterface, DefaultWheelInterface, DefaultFocuserInterface, DefaultRotatorInterface, DefaultWeatherInterface, DefaultSafetyInterface: TDevInterface;
     profile: string;
+    procedure SetLang;
     procedure LoadProfileList;
     procedure Loadconfig(conf,credentialconf: TCCDConfig);
     procedure SetActivePageButton;

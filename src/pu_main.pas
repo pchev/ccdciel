@@ -1880,6 +1880,7 @@ begin
    MenuCapture.Caption := rsCapture;
    MenuCaptureStart.Caption := rsStart;
    MenuFilters.Caption := rsFilters;
+   if MenuFilters.Count>0 then MenuFilters.Items[0].Caption:=rsFilter0;
    MenuFrame.Caption := rsFrame;
    MenuFrameSet.Caption := rsSet;
    MenuFrameReset.Caption := rsReset;
@@ -1951,6 +1952,7 @@ begin
    SubDirName[6]:=rsSubfolderByD;
    SubDirName[7]:=rsSubfolderByD2;
    Filter0:=rsFilter0;
+   if FilterList.Count>0 then FilterList[0]:=rsFilter0;
    FilenameName[0]:=rsObjectName;
    FilenameName[1]:=rsFilter;
    FilenameName[2]:=rsExposureTime2;
@@ -1995,6 +1997,37 @@ begin
    TabMsgLevel.Tabs[1]:=rsCommands;
    TabMsgLevel.Tabs[2]:=rsDetails;
    u_speech.InitSpeak;
+   if  f_devicesconnection<>nil then f_devicesconnection.SetLang;
+   if  f_preview<>nil then f_preview.SetLang;
+   if  f_visu<>nil then f_visu.SetLang;
+   if  f_capture<>nil then f_capture.SetLang;
+   if  f_setup<>nil then f_setup.SetLang;
+   if  f_starprofile<>nil then f_starprofile.SetLang;
+   if  f_filterwheel<>nil then f_filterwheel.SetLang;
+   if  f_focuser<>nil then f_focuser.SetLang;
+   if  f_script<>nil then f_script.SetLang;
+   if  f_ccdtemp<>nil then f_ccdtemp.SetLang;
+   if  f_option<>nil then f_option.Setlang;
+   if  f_frame<>nil then f_frame.SetLang;
+   if  f_autoguider<>nil then f_autoguider.SetLang;
+   if  f_sequence<>nil then f_sequence.SetLang;
+   if  f_EditTargets<>nil then f_EditTargets.SetLang;
+   if  f_planetarium<>nil then f_planetarium.SetLang;
+   if  f_planetariuminfo<>nil then f_planetariuminfo.SetLang;
+   if  f_mount<>nil then f_mount.SetLang;
+   if  f_pause<>nil then f_pause.setlang;
+   if  f_vcurve<>nil then f_vcurve.SetLang;
+   if  f_rotator<>nil then f_rotator.SetLang;
+   if  f_focusercalibration<>nil then f_focusercalibration.SetLang;
+   if  f_magnifyer<>nil then f_magnifyer.SetLang;
+   if  f_weather<>nil then f_weather.SetLang;
+   if  f_dome<>nil then f_dome.SetLang;
+   if  f_safety<>nil then f_safety.SetLang;
+   if  f_about<>nil then f_about.SetLang;
+   if  f_goto<>nil then f_goto.SetLang;
+   if  f_photometry<>nil then f_photometry.SetLang;
+   if  f_polaralign<>nil then f_polaralign.SetLang;
+   if  f_collimation<>nil then f_collimation.SetLang;
 end;
 
 procedure Tf_main.FormShow(Sender: TObject);
@@ -7240,6 +7273,12 @@ begin
      SaveConfig;
 
      SetOptions;
+
+     if (lang<>config.GetValue('/Language',lang)) then begin
+       lang:=config.GetValue('/Language',lang);
+       lang:=u_translation.translate(lang);
+       SetLang;
+     end;
 
      if PlanetariumChange and (not planetarium.Connected) then begin
         planetarium.Terminate;

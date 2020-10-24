@@ -41,7 +41,6 @@ type
   private
     { private declarations }
     FConnected,FClear: boolean;
-    procedure SetLang;
     procedure SetConnected(value:boolean);
     procedure SetClear(value:boolean);
     procedure SetLed;
@@ -49,6 +48,7 @@ type
     { public declarations }
     constructor Create(aOwner: TComponent); override;
     destructor  Destroy; override;
+    procedure SetLang;
     property Connected: boolean read FConnected write SetConnected;
     property Clear: boolean read FClear write SetClear;
   end;

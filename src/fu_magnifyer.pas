@@ -38,11 +38,11 @@ type
     Title: TLabel;
   private
     { private declarations }
-    procedure SetLang;
   public
     { public declarations }
     constructor Create(aOwner: TComponent); override;
     destructor  Destroy; override;
+    procedure SetLang;
   end;
 
 implementation

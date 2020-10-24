@@ -83,12 +83,12 @@ type
     FonMsg: TNotifyMsg;
     FonStartExposure: TNotifyEvent;
     FonAbortExposure: TNotifyEvent;
-    procedure SetLang;
     procedure SetExposureTime(val: double);
   public
     { public declarations }
     constructor Create(aOwner: TComponent); override;
     destructor  Destroy; override;
+    procedure SetLang;
     procedure Stop;
     property Mount: T_mount read FMount write FMount;
     property Running: boolean read Frunning write Frunning;

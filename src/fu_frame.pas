@@ -50,11 +50,11 @@ type
   private
     { private declarations }
     FonSet, FonReset: TNotifyEvent;
-    procedure SetLang;
   public
     { public declarations }
     constructor Create(aOwner: TComponent); override;
     destructor  Destroy; override;
+    procedure SetLang;
     property onSet: TNotifyEvent read FonSet write FonSet;
     property onReset: TNotifyEvent read FonReset write FonReset;
   end;

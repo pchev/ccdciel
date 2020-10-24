@@ -63,11 +63,11 @@ type
     FonPark  : TNotifyEvent;
     FonTrack  : TNotifyEvent;
     FonGoto  : TNotifyEvent;
-    procedure SetLang;
   public
     { public declarations }
     constructor Create(aOwner: TComponent); override;
     destructor  Destroy; override;
+    procedure SetLang;
     property onPark  : TNotifyEvent read FonPark write FonPark;
     property onTrack  : TNotifyEvent read FonTrack write FonTrack;
     property onGoto  : TNotifyEvent read FonGoto write FonGoto;

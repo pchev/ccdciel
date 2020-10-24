@@ -53,10 +53,10 @@ type
     FPlanetarium: TPlanetarium;
     FNewTarget: TNotifyEvent;
     procedure recvdata(msg:string);
-    procedure SetLang;
     procedure SetPlanetarium(value: TPlanetarium);
   public
     { public declarations }
+    procedure SetLang;
     property planetarium: TPlanetarium read FPlanetarium write SetPlanetarium;
     property onNewTarget: TNotifyEvent read FNewTarget write FNewTarget;
   end;

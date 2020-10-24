@@ -250,7 +250,6 @@ type
     procedure SetPlanList(n: integer; pl:string);
     procedure SetScriptList(n: integer; sl:string);
     procedure ResetSequences;
-    procedure SetLang;
     procedure ResetSteps;
     procedure SetStep(n: integer; p: TStep);
     procedure CheckPlanModified;
@@ -265,6 +264,7 @@ type
     procedure NewPlanetariumTarget(Sender: TObject);
   public
     { public declarations }
+    procedure SetLang;
     procedure LoadPlanList;
     procedure LoadScriptList;
     procedure SetTarget(n: integer; t: TTarget);
@@ -298,7 +298,6 @@ begin
   ScaleDPI(Self);
   TargetList.RowHeights[0]:=DoScaleY(40);
   StepList.RowHeights[0]:=DoScaleY(40);
-  SetLang;
   keyboard1:=Tkeyboard1.Create(self);
   LockTarget:=false;
   FTargetsRepeat:=1;
@@ -309,6 +308,7 @@ begin
   FCoordWarning:=false;
   f_selectscript:=Tf_selectscript.Create(self);
   cbStopTracking.Checked:=true;
+  SetLang;
   LoadPlanList;
   LoadScriptList;
 end;
@@ -461,6 +461,7 @@ begin
   StepList.Columns.Items[pcoldither-1].Title.Caption := Format(rsDitherEvery2,[crlf]);
   StepList.Columns.Items[pcolgain-1].Title.Caption := rsGain;
   StepList.Columns.Items[pcolfstop-1].Title.Caption := rsFStop;
+  if StepList.Columns[pcolfilter-1].PickList.Count>0 then StepList.Columns[pcolfilter-1].PickList[0]:=Filter0;
   Label1.Caption := rsPlan;
   // start options
   Label7.Caption:=rsStartOptions;
@@ -504,6 +505,8 @@ begin
   BtnSave.Hint:=rsSaveTheListA;
   BtnSaveAs.Hint:=rsSaveTheListW;
   PanelTermination.Hint:=rsSetHereTheAc;
+  if f_pascaleditor<>nil then f_pascaleditor.SetLang;
+  if f_selectscript<>nil then f_selectscript.SetLang;
 end;
 
 procedure Tf_EditTargets.PointCoordChange(Sender: TObject);
