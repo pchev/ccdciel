@@ -47,10 +47,10 @@ type
   private
     Fmag: double;
     FMagnitudeCalibrationChange, FClosePhotometry: TNotifyEvent;
-    procedure SetLang;
     procedure SetMag(value:double);
   public
     StarX, StarY, hfd: double;
+    procedure SetLang;
     property mag: double read Fmag write SetMag;
     property onMagnitudeCalibrationChange: TNotifyEvent read FMagnitudeCalibrationChange write FMagnitudeCalibrationChange;
     property onClosePhotometry : TNotifyEvent read FClosePhotometry write FClosePhotometry;

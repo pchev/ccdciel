@@ -52,11 +52,11 @@ type
     FonReverse: TNotifyEvent;
     FonHalt: TNotifyEvent;
     lockreverse, noprompt: boolean;
-    procedure SetLang;
   public
     { public declarations }
     constructor Create(aOwner: TComponent); override;
     destructor  Destroy; override;
+    procedure SetLang;
     procedure SetCalibrated(onoff:boolean);
     procedure SetReverse(onoff:boolean);
     property onRotate: TNotifyEvent read FonRotate write FonRotate;

@@ -62,11 +62,11 @@ type
     Fastrometry: TAstrometry;
     FonMsg: TNotifyMsg;
     procedure msg(txt:string);
-    procedure SetLang;
  public
     { public declarations }
     constructor Create(aOwner: TComponent); override;
     destructor  Destroy; override;
+    procedure SetLang;
     procedure LoadScriptList;
     procedure SetScriptList(sl:string);
     procedure RunStartupScript;
@@ -112,6 +112,7 @@ begin
   BtnNew.Caption:=rsNew;
   BtnStop.Caption:=rsStop;
   BtnCopy.Caption:=rsCopy;
+  if f_pascaleditor<>nil then f_pascaleditor.SetLang;
 end;
 
 procedure Tf_script.msg(txt:string);

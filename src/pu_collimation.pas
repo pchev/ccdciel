@@ -48,8 +48,8 @@ type
     procedure FormCreate(Sender: TObject);
   private
     FonStart,FonStop,FonCircleChange,FonCenterStar: TNotifyEvent;
-    procedure SetLang;
   public
+    procedure SetLang;
     property onStart: TNotifyEvent read FonStart write FonStart;
     property onStop: TNotifyEvent read FonStop write FonStop;
     property onCenterStar: TNotifyEvent read FonCenterStar write FonCenterStar;

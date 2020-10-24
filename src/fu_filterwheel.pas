@@ -41,11 +41,11 @@ type
   private
     { private declarations }
     FonSetFilter: TNotifyEvent;
-    procedure SetLang;
   public
     { public declarations }
     constructor Create(aOwner: TComponent); override;
     destructor  Destroy; override;
+    procedure SetLang;
     property onSetFilter: TNotifyEvent read FonSetFilter write FonSetFilter;
   end;
 
@@ -76,6 +76,7 @@ procedure Tf_filterwheel.SetLang;
 begin
   Title.Caption:=rsFilter;
   Filters.Hint:=rsFilterName;
+  if Filters.Items.Count>0 then Filters.Items[0]:=rsFilter0;
 end;
 
 procedure Tf_filterwheel.FiltersChange(Sender: TObject);

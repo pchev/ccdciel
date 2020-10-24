@@ -47,11 +47,11 @@ type
   private
     { private declarations }
     FonConnect,FonNewTarget: TNotifyEvent;
-    procedure SetLang;
   public
     { public declarations }
     constructor Create(aOwner: TComponent); override;
     destructor  Destroy; override;
+    procedure SetLang;
     property onConnect: TNotifyEvent read FonConnect write FonConnect;
     property onNewTarget: TNotifyEvent read FonNewTarget write FonNewTarget;
   end;

@@ -54,11 +54,11 @@ type
     procedure SetCanSlave(value:boolean);
     procedure SetSlave(value:boolean);
     procedure SetLed;
-    procedure SetLang;
   public
     { public declarations }
     constructor Create(aOwner: TComponent); override;
     destructor  Destroy; override;
+    procedure SetLang;
     property Connected: boolean read FConnected write SetConnected;
     property Shutter: boolean read FShutter write SetShutter;
     property CanSlave: boolean read FCanSlave write SetCanSlave;

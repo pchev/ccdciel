@@ -50,9 +50,9 @@ type
     FContinue, Fresult : boolean;
     procedure SetText(value:string);
     function GetText: string;
-    procedure setlang;
   public
     { public declarations }
+    procedure setlang;
     function Wait(timeout:integer=0; defaultresult:boolean=true; TextOK:string=''; TextCancel:string=''): boolean;
     property Text: string read GetText write SetText;
   end;

@@ -643,7 +643,6 @@ type
       sIndex, tIndex: Integer);
     procedure FormCreate(Sender: TObject);
     procedure FormShow(Sender: TObject);
-    procedure LanguagesChange(Sender: TObject);
     procedure latChange(Sender: TObject);
     procedure longChange(Sender: TObject);
     procedure MaxAduFromCameraChange(Sender: TObject);
@@ -683,7 +682,6 @@ type
     function  GetLinGuiderUseUnixSocket: boolean;
     procedure FileOrFolderOptionsRenumber(G: TStringGrid);
     procedure SetAutofocusExpTime(val: double);
-    procedure Setlang;
     procedure SelectPage(Sender: TObject);
     procedure IncPage(Sender: TObject);
     procedure SelectNextPage(direction: integer);
@@ -691,6 +689,7 @@ type
   public
     { public declarations }
     LockTemp: Boolean;
+    procedure Setlang;
     procedure SetAutofocusMode(value: TAutofocusMode);
     function  GetAutofocusMode: TAutofocusMode;
     procedure LoadObservatoryDB(defaultobs:string);
@@ -1207,11 +1206,6 @@ begin
   ElbrusFolder.Hint:=rsTheElbrusIma;
   ElbrusUnixpath.Hint:=rsTheUnixPathE;
   CheckRecenterTarget.Hint:=Format(rsActiveOnlyIf, [crlf]);
-end;
-
-procedure Tf_option.LanguagesChange(Sender: TObject);
-begin
-   msg(rsTheProgramNe);
 end;
 
 procedure Tf_option.msg(txt:string);

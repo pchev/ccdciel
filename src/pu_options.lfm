@@ -106,7 +106,6 @@ object f_option: Tf_option
           Width = 202
           Constraints.MaxHeight = 28
           ItemHeight = 0
-          OnChange = LanguagesChange
           ParentFont = False
           Sorted = True
           Style = csDropDownList

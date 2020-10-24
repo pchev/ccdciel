@@ -121,7 +121,6 @@ type
     procedure doAutofocusDynamic;
     procedure doAutofocusIterative;
     procedure doAutofocusPlanet;
-    procedure SetLang;
     procedure PanelGraphClose(Sender: TObject; var CloseAction: TCloseAction);
   public
     { public declarations }
@@ -129,6 +128,7 @@ type
     LastFocusMsg: string;
     constructor Create(aOwner: TComponent); override;
     destructor  Destroy; override;
+    procedure SetLang;
     procedure ShowProfile(f: TFits; x,y,s: integer; focal:double=-1; pxsize:double=-1);
     procedure ShowSharpness(f: TFits);
     procedure Autofocus(f: TFits; x,y,s: integer);

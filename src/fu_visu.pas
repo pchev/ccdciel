@@ -102,12 +102,12 @@ type
     procedure SetFlipVert(value:boolean);
     function  GetFlipHorz: boolean;
     function  GetFlipVert: boolean;
-    procedure SetLang;
     procedure SetLimit(SetLevel:boolean);
   public
     { public declarations }
     constructor Create(aOwner: TComponent); override;
     destructor  Destroy; override;
+    procedure SetLang;
     procedure DrawHistogram(hist:Thistogram; SetLevel,isFloatingPoint,ResetCursor: boolean; iC,iMin,iMax: double);
     property Zoom: double read FZoom write SetZoom;
     property ImgMin: double read FimgMin write FimgMin;

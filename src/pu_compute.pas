@@ -46,8 +46,8 @@ type
     procedure BtnComputeImgScaleClick(Sender: TObject);
     procedure FormCreate(Sender: TObject);
   private
-    procedure Setlang;
   public
+    procedure Setlang;
 
   end;
 
