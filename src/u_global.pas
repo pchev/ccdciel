@@ -402,6 +402,7 @@ var
   AutofocusInPlace, InplaceAutofocus, AutofocusPauseGuider, AutofocusMultiStarCenter: boolean;
   AutofocusStarList: TArrayDouble2;
   CancelAutofocus, Autofocusing, TerminateFocuserCalibration: Boolean;
+  ExpectedStop: boolean;
   CameraProcessingImage: boolean;
   CameraProcessingNum: PtrInt;
   MagnitudeCalibration: double;

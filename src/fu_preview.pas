@@ -157,6 +157,7 @@ begin
      end;
   end else begin
      msg(rsStopPreview,2);
+     ExpectedStop:=true;
      if Assigned(FonAbortExposure) then FonAbortExposure(self);
   end;
 end;
@@ -181,6 +182,7 @@ begin
      end;
   end else begin
      EarlyNextExposure:=false;
+     ExpectedStop:=true;
      if Assigned(FonAbortExposure) then FonAbortExposure(self);
      led.Brush.Color:=clGray;
      BtnLoop.Caption:=rsLoop;
@@ -246,6 +248,7 @@ if AllDevicesConnected then begin
   Camera.onNewImage:=@EndExposure;
   if (binx<>savebinx)or(biny<>savebiny) then Camera.SetBinning(binx,biny);
   WaitExposure:=true;
+  ExpectedStop:=false;
   ControlExposureOK:=false;
   camera.AddFrames:=false;
   if camera.CanSetGain then begin
