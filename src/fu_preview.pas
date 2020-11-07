@@ -38,11 +38,14 @@ type
     Fnumber: TComboBox;
     ISObox: TComboBox;
     Label3: TLabel;
+    LabelOffset: TLabel;
     LabelGain: TLabel;
     Panel5: TPanel;
+    PanelOffset: TPanel;
     PanelFnumber: TPanel;
     PanelGain: TPanel;
     GainEdit: TSpinEdit;
+    OffsetEdit: TSpinEdit;
     StackPreview: TCheckBox;
     ExpTime: TComboBox;
     Binning: TComboBox;

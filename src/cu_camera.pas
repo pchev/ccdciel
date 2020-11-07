@@ -82,9 +82,9 @@ T_camera = class(TComponent)
     FTemperatureRampActive, FCancelTemperatureRamp: boolean;
     FIndiTransfert: TIndiTransfert;
     FIndiTransfertDir,FIndiTransfertPrefix: string;
-    FhasGain,FhasGainISO,FCanSetGain,FhasCfaInfo,FhasFnumber,FhasCoolerPower: boolean;
+    FhasGain,FhasOffset,FhasGainISO,FCanSetGain,FhasCfaInfo,FhasFnumber,FhasCoolerPower: boolean;
     FUseCameraStartTime,FhasLastExposureStartTime,FhasLastExposureDuration: boolean;
-    FGainMin, FGainMax: integer;
+    FGainMin, FGainMax, FOffsetMin, FOffsetMax: integer;
     FISOList: TStringList;
     FhasFastReadout, FhasReadOut: boolean;
     FReadOutList: TStringList;
@@ -157,6 +157,8 @@ T_camera = class(TComponent)
     procedure SetVideoPreviewDivisor(value:integer); virtual; abstract;
     procedure SetGain(value: integer); virtual; abstract;
     function GetGain: integer; virtual; abstract;
+    procedure SetOffset(value: integer); virtual; abstract;
+    function GetOffset: integer; virtual; abstract;
     procedure SetReadOutMode(value: integer); virtual; abstract;
     function GetReadOutMode: integer; virtual; abstract;
     procedure SetFnumber(value: string); virtual; abstract;
@@ -190,6 +192,7 @@ T_camera = class(TComponent)
     procedure GetStreamFrame(out x,y,width,height: integer); virtual; abstract;
     procedure CfaInfo(out OffsetX, OffsetY: integer; out CType: string);  virtual; abstract;
     function  CheckGain: boolean; virtual; abstract;
+    function  CheckOffset: boolean; virtual; abstract;
     Procedure SetActiveDevices(focuser,filters,telescope: string); virtual; abstract;
     procedure StartVideoPreview; virtual; abstract;
     procedure StopVideoPreview; virtual; abstract;
@@ -266,6 +269,10 @@ T_camera = class(TComponent)
     property GainMax: integer read FGainMax;
     property hasGainISO: boolean read FhasGainISO;
     property ISOList: TStringList read FISOList;
+    property Offset: integer read GetOffset write SetOffset;
+    property hasOffset: boolean read FhasOffset;
+    property OffsetMin: integer read FOffsetMin;
+    property OffsetMax: integer read FOffsetMax;
     property FnumberList: TstringList read FFNumberList;
     property LastExposureTime:double read Fexptime;
     property hasCfaInfo: boolean read FhasCfaInfo;
@@ -345,6 +352,9 @@ begin
   FhasGain:=false;
   FhasGainISO:=false;
   FhasCfaInfo:=false;
+  FOffsetMin:=0;
+  FOffsetMax:=0;
+  FhasOffset:=false;
   FReadOutList:=TStringList.Create;
   FhasFastReadout:=false;
   FhasReadOut:=false;
@@ -557,7 +567,7 @@ var origin,observer,telname,objname,siso,CType,roworder: string;
     hfilter,hframe,hinstr,hdateobs : string;
     hbzero,hbscale,hdmin,hdmax,hra,hdec,hexp,hpix1,hpix2,hairmass,focusertemp: double;
     haz,hal: double;
-    gamma,offset,OffsetX,OffsetY: integer;
+    gamma,voffset,coffset,OffsetX,OffsetY: integer;
     Frx,Fry,Frwidth,Frheight: integer;
     hasfocusertemp,hasfocuserpos: boolean;
     i: integer;
@@ -648,10 +658,10 @@ begin
   end;
   try
    gamma:=GetVideoGamma;
-   offset:=GetVideoBrightness;
+   voffset:=GetVideoBrightness;
   except
    gamma:=NullInt;
-   offset:=NullInt;
+   voffset:=NullInt;
   end;
   try
    cgain:=NullInt;
@@ -663,6 +673,12 @@ begin
    if FhasGainISO and (siso='') then siso:=FISOList[GetGain];
   except
    siso:='';
+  end;
+  try
+   coffset:=voffset;
+   if FhasOffset then coffset:=GetOffset;
+  except
+   cgain:=voffset;
   end;
   hasfocuserpos:=false;
   try
@@ -743,7 +759,7 @@ begin
   if cgain<>NullInt then Ffits.Header.Insert(i,'GAIN',cgain,'Camera gain setting in manufacturer units');
   if siso<>'' then Ffits.Header.Insert(i,'GAIN',siso,'Camera ISO');
   if gamma<>NullInt then Ffits.Header.Insert(i,'GAMMA',gamma,'Video gamma');
-  if offset<>NullInt then Ffits.Header.Insert(i,'OFFSET',offset,'Video offset,brightness');
+  if coffset<>NullInt then Ffits.Header.Insert(i,'OFFSET',coffset,'Camera offset setting in manufacturer units');
   if fstop>0 then Ffits.Header.Insert(i,'F_STOP',fstop ,'Camera F-stop');
   if hpix1>0 then Ffits.Header.Insert(i,'XPIXSZ',hpix1 ,'[um] Pixel Size X, binned');
   if hpix2>0 then Ffits.Header.Insert(i,'YPIXSZ',hpix2 ,'[um] Pixel Size Y, binned');

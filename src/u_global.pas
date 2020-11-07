@@ -412,9 +412,10 @@ var
   FilenameSep: String;
   FilePack: boolean;
   FileSequenceWidth: integer;
-  hasGain, hasGainISO: boolean;
+  hasGain, hasGainISO, hasOffset: boolean;
   ISOList: TStringList;
   Gain,GainMin,GainMax: integer;
+  Offset,OffsetMin,OffsetMax: integer;
   SubDirName: array[0..SubDirCount-1] of string;
   FilenameName: array[0..FileNameCount-1] of string;
   CurrentSeqName, CurrentTargetName, CurrentStepName: string;

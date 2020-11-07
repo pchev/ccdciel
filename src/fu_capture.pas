@@ -48,7 +48,9 @@ type
     Label5: TLabel;
     Label6: TLabel;
     LabelGain: TLabel;
+    LabelOffset: TLabel;
     led: TShape;
+    OffsetEdit: TSpinEdit;
     Panel1: TPanel;
     PanelFnumber: TPanel;
     PanelGain: TPanel;
@@ -62,6 +64,7 @@ type
     Panel9: TPanel;
     Fname: TEdit;
     GainEdit: TSpinEdit;
+    PanelOffset: TPanel;
     SeqNum: TSpinEdit;
     DitherCount: TSpinEdit;
     FocusCount: TSpinEdit;

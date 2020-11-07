@@ -35,6 +35,7 @@ type
 T_ascomrestcamera = class(T_camera)
  private
    V : TAscomRest;
+   FInterfaceVersion: integer;
    nf: integer;
    timedout:double;
    FPixelSizeX,FPixelSizeY: double;
@@ -44,7 +45,7 @@ T_ascomrestcamera = class(T_camera)
    stCCDtemp,stCoolerPower : double;
    stCooler : boolean;
    stX,stY,stWidth,stHeight: integer;
-   stGain: integer;
+   stGain,stOffset: integer;
    FFrametype:TFrameType;
    FOffsetX, FOffsetY: integer;
    FCType: string;
@@ -113,6 +114,9 @@ T_ascomrestcamera = class(T_camera)
    procedure SetGain(value: integer); override;
    function GetGain: integer; override;
    function GetGainReal: integer;
+   procedure SetOffset(value: integer); override;
+   function GetOffset: integer; override;
+   function GetOffsetReal: integer;
    procedure SetReadOutMode(value: integer); override;
    function GetReadOutMode: integer; override;
    procedure SetFnumber(value: string); override;
@@ -139,6 +143,7 @@ public
    procedure GetStreamFrame(out x,y,width,height: integer);  override;
    procedure CfaInfo(out OffsetX, OffsetY: integer; out CType: string);  override;
    function  CheckGain:boolean; override;
+   function  CheckOffset:boolean; override;
    Procedure AbortExposure; override;
    procedure AbortExposureButNotSequence; override;
    Procedure SetActiveDevices(afocuser,afilters,atelescope: string); override;
@@ -166,6 +171,7 @@ begin
  V.ClientId:=3200;
  stCooler:=false;
  stCCDtemp:=NullCoord;
+ FInterfaceVersion:=1;
  FCameraXSize:=-1;
  FCameraYSize:=-1;
  FMaxBinX:=1;
@@ -177,6 +183,7 @@ begin
  stWidth:=-1;
  stHeight:=-1;
  stGain:=-1;
+ stOffset:=-1;
  FOffsetX:=0;
  FOffsetY:=0;
  FCType:='';
@@ -228,6 +235,11 @@ begin
     msg('Driver version: '+V.Get('driverversion').AsString,9);
     except
       msg('Error: unknown driver version',9);
+    end;
+    try
+    FInterfaceVersion:=V.Get('interfaceversion').AsInt;
+    except
+      FInterfaceVersion:=1;
     end;
     try
     FCameraXSize:=V.Get('cameraxsize').AsInt;
@@ -1172,6 +1184,25 @@ begin
     result:=(FhasGainISO or FhasGain);
 end;
 
+function  T_ascomrestcamera.CheckOffset:boolean;
+var i:integer;
+begin
+  FhasOffset:=false;
+  result:=false;
+  if FStatus<>devConnected then exit;
+  if FInterfaceVersion>=3 then begin
+    try
+      i:=V.Get('offset').AsInt;
+      FOffsetMin:=V.Get('offsetmin').AsInt;
+      FOffsetMax:=V.Get('offsetmax').AsInt;
+      FhasOffset:=true;
+    except
+      FhasOffset:=false;
+    end;
+  end;
+  result:=FhasOffset;
+end;
+
 procedure T_ascomrestcamera.SetGain(value: integer);
 begin
  if FStatus<>devConnected then exit;
@@ -1203,6 +1234,43 @@ begin
  if (FhasGainISO or FhasGain) then begin
    try
       result:=V.Get('gain').AsInt;
+   except
+      result:=NullInt;
+   end;
+ end;
+end;
+
+procedure  T_ascomrestcamera.SetOffset(value: integer);
+begin
+ if FStatus<>devConnected then exit;
+ if FCanSetGain and FhasOffset then begin
+   try
+      V.Put('Offset',value);
+      stOffset:=value;
+   except
+   end;
+ end;
+end;
+
+function T_ascomrestcamera.GetOffset: integer;
+begin
+ if FStatus<>devConnected then
+   result:=NullInt
+ else begin
+   if stOffset=-1 then begin
+      stOffset:=GetOffsetReal;
+   end;
+   result:=stOffset;
+ end;
+end;
+
+function  T_ascomrestcamera.GetOffsetReal: integer;
+begin
+ result:=NullInt;
+ if FStatus<>devConnected then exit;
+ if FhasOffset then begin
+   try
+      result:=V.Get('offset').AsInt;
    except
       result:=NullInt;
    end;

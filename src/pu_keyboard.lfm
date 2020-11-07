@@ -141,10 +141,9 @@ object keyboard1: Tkeyboard1
     Top = 240
     Width = 72
     ItemHeight = 0
-    ItemIndex = 4
     Items.Strings = (
       'B'
-      'HGC'
+      'HCG'
       'IC'
       'M'
       'NGC'
