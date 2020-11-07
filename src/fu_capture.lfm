@@ -30,11 +30,11 @@ object f_capture: Tf_capture
       Left = 0
       Height = 29
       Top = 0
-      Width = 190
+      Width = 191
       BevelOuter = bvNone
       Caption = ' '
       ClientHeight = 29
-      ClientWidth = 190
+      ClientWidth = 191
       ParentFont = False
       TabOrder = 0
       object ExpTime: TComboBox
@@ -73,7 +73,7 @@ object f_capture: Tf_capture
       end
       object Label1: TLabel
         Left = 4
-        Height = 19
+        Height = 17
         Top = 4
         Width = 22
         Caption = 'Exp'
@@ -83,13 +83,13 @@ object f_capture: Tf_capture
     end
     object PanelGain: TPanel
       Left = 0
-      Height = 32
+      Height = 68
       Top = 29
-      Width = 190
+      Width = 191
       BevelOuter = bvNone
       Caption = ' '
-      ClientHeight = 32
-      ClientWidth = 190
+      ClientHeight = 68
+      ClientWidth = 191
       ParentFont = False
       TabOrder = 8
       Visible = False
@@ -107,9 +107,9 @@ object f_capture: Tf_capture
       end
       object LabelGain: TLabel
         Left = 4
-        Height = 19
+        Height = 17
         Top = 8
-        Width = 29
+        Width = 28
         Caption = 'Gain'
         ParentColor = False
         ParentFont = False
@@ -120,21 +120,45 @@ object f_capture: Tf_capture
         Top = 4
         Width = 101
         Constraints.MaxHeight = 28
-        MaxLength = 0
+        MaxValue = 999999999
         ParentFont = False
         TabOrder = 1
-        MaxValue = 999999999
+      end
+      object PanelOffset: TPanel
+        Left = 0
+        Height = 36
+        Top = 32
+        Width = 191
+        BevelOuter = bvNone
+        ClientHeight = 36
+        ClientWidth = 191
+        TabOrder = 2
+        object LabelOffset: TLabel
+          Left = 4
+          Height = 17
+          Top = 8
+          Width = 38
+          Caption = 'Offset'
+          ParentColor = False
+        end
+        object OffsetEdit: TSpinEdit
+          Left = 89
+          Height = 28
+          Top = 4
+          Width = 101
+          TabOrder = 0
+        end
       end
     end
     object Panel3: TPanel
       Left = 0
       Height = 29
-      Top = 61
-      Width = 190
+      Top = 97
+      Width = 191
       BevelOuter = bvNone
       Caption = ' '
       ClientHeight = 29
-      ClientWidth = 190
+      ClientWidth = 191
       ParentFont = False
       TabOrder = 1
       object Binning: TComboBox
@@ -155,7 +179,7 @@ object f_capture: Tf_capture
       end
       object Label2: TLabel
         Left = 4
-        Height = 19
+        Height = 17
         Top = 4
         Width = 24
         Caption = 'Bin.'
@@ -166,17 +190,17 @@ object f_capture: Tf_capture
     object PanelFnumber: TPanel
       Left = 0
       Height = 28
-      Top = 90
-      Width = 190
+      Top = 126
+      Width = 191
       BevelOuter = bvNone
       ClientHeight = 28
-      ClientWidth = 190
+      ClientWidth = 191
       ParentFont = False
       TabOrder = 9
       Visible = False
       object Label6: TLabel
         Left = 0
-        Height = 19
+        Height = 17
         Top = 4
         Width = 38
         Caption = 'F-stop'
@@ -197,11 +221,11 @@ object f_capture: Tf_capture
     object Panel4: TPanel
       Left = 0
       Height = 28
-      Top = 118
-      Width = 190
+      Top = 154
+      Width = 191
       BevelOuter = bvNone
       ClientHeight = 28
-      ClientWidth = 190
+      ClientWidth = 191
       ParentFont = False
       TabOrder = 2
       object Fname: TEdit
@@ -215,7 +239,7 @@ object f_capture: Tf_capture
       end
       object Label3: TLabel
         Left = 4
-        Height = 19
+        Height = 17
         Top = 4
         Width = 40
         Caption = 'Object'
@@ -226,17 +250,17 @@ object f_capture: Tf_capture
     object Panel5: TPanel
       Left = 0
       Height = 28
-      Top = 146
-      Width = 190
+      Top = 182
+      Width = 191
       BevelOuter = bvNone
       Caption = ' '
       ClientHeight = 28
-      ClientWidth = 190
+      ClientWidth = 191
       ParentFont = False
       TabOrder = 3
       object Label4: TLabel
         Left = 4
-        Height = 19
+        Height = 17
         Top = 4
         Width = 37
         Caption = 'Count'
@@ -249,27 +273,26 @@ object f_capture: Tf_capture
         Top = 0
         Width = 101
         Constraints.MaxHeight = 28
-        MaxLength = 0
-        ParentFont = False
-        TabOrder = 0
         MaxValue = 10000
         MinValue = 1
+        ParentFont = False
+        TabOrder = 0
         Value = 1
       end
     end
     object Panel6: TPanel
       Left = 0
       Height = 29
-      Top = 174
-      Width = 190
+      Top = 210
+      Width = 191
       BevelOuter = bvNone
       ClientHeight = 29
-      ClientWidth = 190
+      ClientWidth = 191
       ParentFont = False
       TabOrder = 4
       object Label5: TLabel
         Left = 4
-        Height = 19
+        Height = 17
         Top = 4
         Width = 30
         Caption = 'Type'
@@ -300,18 +323,18 @@ object f_capture: Tf_capture
     object Panel7: TPanel
       Left = 0
       Height = 28
-      Top = 203
-      Width = 190
+      Top = 239
+      Width = 191
       BevelOuter = bvNone
       ClientHeight = 28
-      ClientWidth = 190
+      ClientWidth = 191
       ParentFont = False
       TabOrder = 5
       object CheckBoxDither: TCheckBox
         Left = 4
         Height = 21
         Top = 0
-        Width = 103
+        Width = 102
         Caption = 'Dither every'
         OnClick = CheckLight
         ParentFont = False
@@ -323,29 +346,28 @@ object f_capture: Tf_capture
         Top = 0
         Width = 55
         Constraints.MaxHeight = 28
-        MaxLength = 0
-        ParentFont = False
-        TabOrder = 1
         MaxValue = 10000
         MinValue = 1
+        ParentFont = False
+        TabOrder = 1
         Value = 1
       end
     end
     object Panel8: TPanel
       Left = 0
       Height = 28
-      Top = 231
-      Width = 190
+      Top = 267
+      Width = 191
       BevelOuter = bvNone
       ClientHeight = 28
-      ClientWidth = 190
+      ClientWidth = 191
       ParentFont = False
       TabOrder = 6
       object CheckBoxFocus: TCheckBox
         Left = 4
         Height = 21
         Top = 0
-        Width = 98
+        Width = 97
         Caption = 'Focus every'
         OnClick = CheckLight
         ParentFont = False
@@ -357,22 +379,21 @@ object f_capture: Tf_capture
         Top = 0
         Width = 55
         Constraints.MaxHeight = 28
-        MaxLength = 0
-        ParentFont = False
-        TabOrder = 1
         MaxValue = 10000
         MinValue = 1
+        ParentFont = False
+        TabOrder = 1
         Value = 1
       end
     end
     object Panel9: TPanel
       Left = 0
       Height = 24
-      Top = 259
-      Width = 190
+      Top = 295
+      Width = 191
       BevelOuter = bvNone
       ClientHeight = 24
-      ClientWidth = 190
+      ClientWidth = 191
       ParentFont = False
       TabOrder = 7
       object BtnStart: TButton

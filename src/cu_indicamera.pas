@@ -139,6 +139,8 @@ private
    TransfertFormat: ISwitchVectorProperty;
    TransfertFits, TransfertNative: ISwitch;
    StreamEncoder: ISwitchVectorProperty;
+   CCDoffset:INumberVectorProperty;
+   CCDoffsetValue:INumber;
    FRAWformat: integer;
    FhasBlob,Fready,FWheelReady,Fconnected,UseMainSensor: boolean;
    Findiserver, Findiserverport, Findidevice, Findisensor: string;
@@ -234,6 +236,8 @@ private
    procedure SetVideoPreviewDivisor(value:integer); override;
    procedure SetGain(value: integer); override;
    function GetGain: integer; override;
+   procedure SetOffset(value: integer); override;
+   function GetOffset: integer; override;
    procedure SetReadOutMode(value: integer); override;
    function GetReadOutMode: integer; override;
    procedure SetFnumber(value: string); override;
@@ -259,6 +263,7 @@ private
    procedure GetStreamFrame(out x,y,width,height: integer);  override;
    procedure CfaInfo(out OffsetX, OffsetY: integer; out CType: string);  override;
    function  CheckGain:boolean; override;
+   function  CheckOffset:boolean; override;
    Procedure AbortExposure; override;
    procedure AbortExposureButNotSequence; override;
    Procedure SetActiveDevices(afocuser,afilters,atelescope: string); override;
@@ -406,6 +411,7 @@ begin
     StreamExposure:=nil;
     Streamframe:=nil;
     StreamEncoder:=nil;
+    CCDoffset:=nil;
     FhasBlob:=false;
     FhasVideo:=false;
     Fready:=false;
@@ -416,6 +422,7 @@ begin
     CCDIso:=nil;
     FhasGainISO:=false;
     FhasGain:=false;
+    FhasOffset:=false;
     FISOList.Clear;
     FRAWformat:=-1;
     FCameraXSize:=-1;
@@ -899,6 +906,17 @@ begin
      if FhasGain then begin
         FGainMin:=round(IGain.min);
         FGainMax:=round(IGain.max);
+        if assigned(FonGainStatus) then FonGainStatus(self);
+     end;
+  end
+  else if (proptype=INDI_NUMBER)and(CCDoffset=nil)and(propname='CCD_OFFSET') then begin
+     CCDoffset:=indiProp.getNumber;
+     CCDoffsetValue:=IUFindNumber(CCDoffset,'OFFSET');
+     if (CCDoffsetValue=nil) then CCDoffset:=nil;
+     FhasOffset:=(CCDoffset<>nil);
+     if FhasOffset then begin
+        FOffsetMin:=round(CCDoffsetValue.min);
+        FOffsetMax:=round(CCDoffsetValue.max);
         if assigned(FonGainStatus) then FonGainStatus(self);
      end;
   end
@@ -1944,6 +1962,11 @@ begin
   result:=(FhasGainISO or FhasGain);
 end;
 
+function T_indicamera.CheckOffset:boolean;
+begin
+  result:=FhasOffset;
+end;
+
 procedure T_indicamera.SetGain(value: integer);
 begin
 if FCanSetGain then begin
@@ -1974,6 +1997,22 @@ begin
   end
   else if (IGain<>nil) and FhasGain then begin
       result:=round(IGain.value);
+  end;
+end;
+
+procedure T_indicamera.SetOffset(value: integer);
+begin
+ if FCanSetGain and (CCDoffset<>nil) then begin
+   CCDoffsetValue.value:=value;
+   indiclient.sendNewNumber(CCDoffset);
+ end;
+end;
+
+function T_indicamera.GetOffset: integer;
+begin
+  result:=NullInt;
+  if (CCDoffset<>nil) then begin
+     result:=round(CCDoffsetValue.value);
   end;
 end;
 

@@ -43,6 +43,7 @@ T_ascomcamera = class(T_camera)
    FPixelSizeX,FPixelSizeY: double;
    Fccdname: string;
    {$endif}
+   FInterfaceVersion: integer;
    FOffsetX, FOffsetY: integer;
    FCType: string;
    FMaxBinX,FMaxBinY,FBinX,FBinY:integer;
@@ -113,6 +114,8 @@ T_ascomcamera = class(T_camera)
    procedure SetVideoPreviewDivisor(value:integer); override;
    procedure SetGain(value: integer); override;
    function GetGain: integer; override;
+   procedure SetOffset(value: integer); override;
+   function GetOffset: integer; override;
    procedure SetReadOutMode(value: integer); override;
    function GetReadOutMode: integer; override;
    procedure SetFnumber(value: string); override;
@@ -138,6 +141,7 @@ public
    procedure GetStreamFrame(out x,y,width,height: integer);  override;
    procedure CfaInfo(out OffsetX, OffsetY: integer; out CType: string);  override;
    function  CheckGain:boolean; override;
+   function  CheckOffset:boolean; override;
    Procedure AbortExposure; override;
    procedure AbortExposureButNotSequence; override;
    Procedure SetActiveDevices(afocuser,afilters,atelescope: string); override;
@@ -165,6 +169,7 @@ begin
  inherited Create(AOwner);
  stCooler:=false;
  stCCDtemp:=NullCoord;
+ FInterfaceVersion:=1;
  FCameraXSize:=-1;
  FCameraYSize:=-1;
  FMaxBinX:=1;
@@ -219,6 +224,11 @@ begin
     msg('Driver version: '+V.DriverVersion,9);
     except
       msg('Error: unknown driver version',9);
+    end;
+    try
+    FInterfaceVersion:=V.InterfaceVersion;
+    except
+      FInterfaceVersion:=1;
     end;
     try
     FCameraXSize:=V.CameraXSize;
@@ -1212,6 +1222,27 @@ begin
   {$endif}
 end;
 
+function  T_ascomcamera.CheckOffset:boolean;
+{$ifdef mswindows}
+var i:integer;
+{$endif}
+begin
+  FhasOffset:=false;
+  {$ifdef mswindows}
+  if FInterfaceVersion>=3 then begin
+    try
+      i:=V.Offset;
+      FOffsetMin:=V.OffsetMin;
+      FOffsetMax:=V.OffsetMax;
+      FhasOffset:=true;
+    except
+      FhasOffset:=false;
+    end;
+  end;
+  {$endif}
+  result:=FhasOffset;
+end;
+
 procedure T_ascomcamera.SetGain(value: integer);
 begin
  {$ifdef mswindows}
@@ -1231,6 +1262,32 @@ begin
  if (FhasGainISO or FhasGain) then begin
    try
       result:=V.Gain;
+   except
+      result:=NullInt;
+   end;
+ end;
+ {$endif}
+end;
+
+procedure  T_ascomcamera.SetOffset(value: integer);
+begin
+ {$ifdef mswindows}
+ if FCanSetGain and FhasOffset then begin
+   try
+      V.Offset:=value;
+   except
+   end;
+ end;
+ {$endif}
+end;
+
+function  T_ascomcamera.GetOffset: integer;
+begin
+ result:=NullInt;
+ {$ifdef mswindows}
+ if FhasOffset then begin
+   try
+      result:=V.Offset;
    except
       result:=NullInt;
    end;

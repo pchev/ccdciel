@@ -3716,6 +3716,10 @@ begin
        str:=config.GetValue('/Gain/ISO'+IntToStr(i),'');
        ISOList.Add(str);
     end;
+    hasOffset:=config.GetValue('/Offset/hasOffset',false);
+    Offset:=config.GetValue('/Offset/Offset',0);
+    OffsetMin:=config.GetValue('/Offset/OffsetMin',0);
+    OffsetMax:=config.GetValue('/Offset/OffsetMax',0);
     SetGainList;
     ShowFnumber;
   end;
@@ -3858,6 +3862,10 @@ begin
      config.SetValue('/Capture/Gain',f_capture.ISObox.Text)
    else
      config.SetValue('/Capture/Gain',f_capture.GainEdit.Value);
+   if hasOffset then begin
+     config.SetValue('/Preview/Offset',f_preview.OffsetEdit.Value);
+     config.SetValue('/Capture/Offset',f_capture.OffsetEdit.Value);
+   end;
 
    config.SetValue('/Sequence/Targets',CurrentSequenceFile);
    config.SetValue('/Sequence/Unattended',f_sequence.Unattended.Checked);
@@ -3899,6 +3907,10 @@ begin
    for i:=0 to n-1 do begin
       config.SetValue('/Gain/ISO'+IntToStr(i),ISOList[i]);
    end;
+   config.SetValue('/Offset/hasOffset',hasOffset);
+   config.SetValue('/Offset/Offset',Offset);
+   config.SetValue('/Offset/OffsetMin',OffsetMin);
+   config.SetValue('/Offset/OffsetMax',OffsetMax);
 
    config.SetValue('/Rotator/Reverse',f_rotator.Reverse.Checked);
    config.SetValue('/Rotator/CalibrationAngle',rotator.CalibrationAngle);
@@ -4402,21 +4414,32 @@ begin
  Gain:=camera.Gain;
  GainMin:=camera.GainMin;
  GainMax:=camera.GainMax;
+ camera.CheckOffset;
+ hasOffset:=camera.hasOffset;
+ Offset:=camera.Offset;
+ OffsetMin:=camera.OffsetMin;
+ OffsetMax:=camera.OffsetMax;
  SetGainList;
 end;
 
 procedure Tf_main.SetGainList;
-var gainprev,gaincapt:string;
-    i,posprev,poscapt:integer;
+var gainprev,gaincapt,offsetprev,offsetcapt:string;
+    i,posprev,poscapt,poffprev,poffcapt:integer;
 begin
  if debug_msg then NewMessage('Camera gain:'+BoolToStr(hasGain,rsTrue,rsFalse)+' iso:'+BoolToStr(hasGainISO,rsTrue,rsFalse));
  gainprev:=config.GetValue('/Preview/Gain','');
  gaincapt:=config.GetValue('/Capture/Gain','');
  posprev:=Gain;
  poscapt:=Gain;
+ offsetprev:=config.GetValue('/Preview/Offset','');
+ offsetcapt:=config.GetValue('/Capture/Offset','');
+ poffprev:=Offset;
+ poffcapt:=Offset;
  if debug_msg then NewMessage('Want camera gain control: '+BoolToStr(camera.CanSetGain,rsTrue,rsFalse));
  f_capture.PanelGain.Visible:=camera.CanSetGain and (hasGain or hasGainISO);
+ f_capture.PanelOffset.Visible:=f_capture.PanelGain.Visible and hasOffset;
  f_preview.PanelGain.Visible:=f_capture.PanelGain.Visible;
+ f_preview.PanelOffset.Visible:=f_capture.PanelGain.Visible and hasOffset;
  f_EditTargets.PanelGain.Visible:=f_capture.PanelGain.Visible;
  f_EditTargets.StepList.Columns[pcolgain-1].Visible:=f_capture.PanelGain.Visible;
  if hasGainISO then begin
@@ -4453,6 +4476,14 @@ begin
    f_capture.GainEdit.Value:=poscapt;
    f_preview.GainEdit.Value:=posprev;
    f_EditTargets.FGainEdit.Value:=poscapt;
+ end;
+ if hasOffset then begin
+   f_preview.OffsetEdit.Hint:=IntToStr(OffsetMin)+'...'+IntToStr(OffsetMax);
+   f_capture.OffsetEdit.Hint:=IntToStr(OffsetMin)+'...'+IntToStr(OffsetMax);
+   poffprev:=StrToIntDef(offsetprev,Offset);
+   poffcapt:=StrToIntDef(offsetcapt,Offset);
+   f_preview.OffsetEdit.Value:=poffprev;
+   f_capture.OffsetEdit.Value:=poffcapt;
  end;
 end;
 
@@ -7714,6 +7745,10 @@ if (camera.Status=devConnected) and ((not f_capture.Running) or autofocusing) an
        i:=f_preview.GainEdit.Value;
        if camera.Gain<>i then camera.Gain:=i;
     end;
+    if camera.hasOffset then begin
+       i:=f_preview.OffsetEdit.Value;
+       if camera.Offset<>i then camera.Offset:=i;
+    end;
   end;
   if camera.hasReadOut then begin
      camera.readoutmode:=ReadoutModePreview;
@@ -8137,6 +8172,10 @@ if (AllDevicesConnected)and(not autofocusing)and (not learningvcurve) then begin
     if camera.hasGain and (not camera.hasGainISO) then begin
       i:=f_capture.GainEdit.Value;
       if camera.Gain<>i then camera.Gain:=i;
+    end;
+    if camera.hasOffset then begin
+       i:=f_capture.OffsetEdit.Value;
+       if camera.Offset<>i then camera.Offset:=i;
     end;
   end;
   // check and set frame
