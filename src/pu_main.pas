@@ -4443,6 +4443,7 @@ begin
  f_preview.PanelOffset.Visible:=f_capture.PanelGain.Visible and hasOffset;
  f_EditTargets.PanelGain.Visible:=f_capture.PanelGain.Visible;
  f_EditTargets.StepList.Columns[pcolgain-1].Visible:=f_capture.PanelGain.Visible;
+ f_EditTargets.StepList.Columns[pcoloffset-1].Visible:=f_capture.PanelOffset.Visible;
  if hasGainISO then begin
    f_capture.ISObox.Visible:=true;
    f_capture.GainEdit.Visible:=false;
@@ -4481,10 +4482,12 @@ begin
  if hasOffset then begin
    f_preview.OffsetEdit.Hint:=IntToStr(OffsetMin)+'...'+IntToStr(OffsetMax);
    f_capture.OffsetEdit.Hint:=IntToStr(OffsetMin)+'...'+IntToStr(OffsetMax);
+   f_EditTargets.FOffsetEdit.Hint:=IntToStr(OffsetMin)+'...'+IntToStr(OffsetMax);
    poffprev:=StrToIntDef(offsetprev,Offset);
    poffcapt:=StrToIntDef(offsetcapt,Offset);
    f_preview.OffsetEdit.Value:=poffprev;
    f_capture.OffsetEdit.Value:=poffcapt;
+   f_EditTargets.FOffsetEdit.Value:=poffcapt;
  end;
 end;
 
@@ -5160,9 +5163,12 @@ end;
 procedure Tf_main.AbortTimerTimer(Sender: TObject);
 begin
   AbortTimer.Enabled:=false;
-  if Capture and f_capture.Running then NewMessage(rsExposureAbor,1);
-  if f_starprofile.AutofocusRunning then f_starprofile.Autofocus(nil,-1,-1,-1);
-  NewMessage(rsAbort,9);
+  if not ExpectedStop then begin
+    ExpectedStop:=false;
+    if Capture and f_capture.Running then NewMessage(rsExposureAbor,1);
+    if f_starprofile.AutofocusRunning then f_starprofile.Autofocus(nil,-1,-1,-1);
+    NewMessage(rsAbort,9);
+  end;
   f_preview.stop;
   f_capture.stop;
   Capture:=false;
@@ -6034,10 +6040,12 @@ begin
      NewMessage(rsTheTelescope);
      exit;
    end;
-   if  f_preview.Running then begin
-     f_preview.Loop:=false;
-     f_preview.BtnPreviewClick(nil);
-     wait(1);
+   if f_preview.Running then begin
+     if f_preview.Loop then
+       f_preview.BtnLoopClick(nil)
+     else
+       f_preview.BtnPreviewClick(nil);
+     wait(2);
    end;
    if  astrometry.Busy then begin
      NewMessage(rsResolverAlre,1);
@@ -7681,6 +7689,7 @@ begin
 // ! can run out of main thread
 if (camera.Status=devConnected) and ((not f_capture.Running) or autofocusing) and (not learningvcurve)and(not f_video.Running) then begin
   Preview:=true;
+  ExpectedStop:=false;
   // be sure mount is tracking, but not repeat after every frame
   if (Sender<>nil)and(not mount.Tracking) then
     mount.Track;
@@ -7906,16 +7915,17 @@ if (AllDevicesConnected)and(not autofocusing)and(not learningvcurve)and(not f_vi
   // check if we need to cancel running preview
   if f_preview.Running then begin
    if canwait then begin
-    NewMessage(rsStopPreview,1);
-    StatusBar1.Panels[panelstatus].Text:=rsStopPreview;
-    camera.AbortExposure;
-    f_preview.stop;
-    // wait 5 sec.
-    wait(5);
-   end
-   else begin
-    exit; // cannot start now
-   end;
+     NewMessage(rsStopPreview,1);
+     StatusBar1.Panels[panelstatus].Text:=rsStopPreview;
+     if f_preview.Loop then
+       f_preview.BtnLoopClick(nil)
+     else
+       f_preview.BtnPreviewClick(nil);
+     wait(2);
+    end
+    else begin
+      exit; // cannot start now
+    end;
   end;
   if not f_capture.Running then begin
     NewMessage(rsCaptureStopp2, 0);
@@ -8111,6 +8121,7 @@ if (AllDevicesConnected)and(not autofocusing)and (not learningvcurve) then begin
   MenuCaptureStart.Caption:=rsStop;
   Preview:=false;
   Capture:=true;
+  ExpectedStop:=false;
   // check exposure time
   e:=StrToFloatDef(f_capture.ExpTime.Text,-1);
   if e<0 then begin
@@ -9187,9 +9198,10 @@ begin
   if not Collimation then begin
     Collimation:=true;
     if f_preview.Running then begin
-      f_preview.Running:=false;
-      f_preview.Loop:=false;
-      StopExposure(Sender);
+      if f_preview.Loop then
+        f_preview.BtnLoopClick(nil)
+      else
+        f_preview.BtnPreviewClick(nil);
       wait(2);
     end;
     if f_visu.BullsEye then f_visu.BtnBullsEyeClick(Sender);
@@ -9609,10 +9621,12 @@ begin
     f_focusercalibration.CalibrationCancel(buf);
     exit;
   end;
-  if  f_preview.Running  then begin
-    f_preview.Loop:=false;
-    f_preview.BtnPreviewClick(nil);
-    wait(1);
+  if f_preview.Running then begin
+    if f_preview.Loop then
+      f_preview.BtnLoopClick(nil)
+    else
+      f_preview.BtnPreviewClick(nil);
+    wait(2);
   end;
   OutOfRange:=false;
   if FocAbsolute then
@@ -10484,10 +10498,12 @@ begin
     f_starprofile.ChkAutofocusDown(false);
     exit;
   end;
-  if  f_preview.Running then begin
-   f_preview.Loop:=false;
-   f_preview.BtnPreviewClick(nil);
-   wait(1);
+  if f_preview.Running then begin
+    if f_preview.Loop then
+      f_preview.BtnLoopClick(nil)
+    else
+      f_preview.BtnPreviewClick(nil);
+    wait(2);
   end;
   if  astrometry.Busy then begin
    NewMessage(rsCannotStartA2,1);
@@ -11341,10 +11357,12 @@ begin
       NewMessage(rsTheTelescope);
       exit;
     end;
-    if  f_preview.Running then begin
-     f_preview.Loop:=false;
-     f_preview.BtnPreviewClick(nil);
-     wait(1);
+    if f_preview.Running then begin
+      if f_preview.Loop then
+        f_preview.BtnLoopClick(nil)
+      else
+        f_preview.BtnPreviewClick(nil);
+      wait(2);
     end;
     if  astrometry.Busy then begin
      NewMessage(rsResolverAlre,1);

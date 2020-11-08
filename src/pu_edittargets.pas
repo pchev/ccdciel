@@ -32,7 +32,7 @@ uses pu_planetariuminfo, u_global, u_utils, u_ccdconfig, pu_pascaleditor, u_anno
 
 const
   colseq=0; colname=1; colplan=2; colra=3; coldec=4; colpa=5; colstart=6; colend=7; coldark=8; colskip=9; colrepeat=10; colastrometry=11; colinplace=12; colupdcoord=13;
-  pcolseq=0; pcoldesc=1; pcoltype=2; pcolexp=3; pcolbin=4; pcolfilter=5; pcolcount=6; pcolafstart=7; pcolafevery=8; pcoldither=9; pcolgain=10; pcolfstop=11;
+  pcolseq=0; pcoldesc=1; pcoltype=2; pcolexp=3; pcolbin=4; pcolfilter=5; pcolcount=6; pcolafstart=7; pcolafevery=8; pcoldither=9; pcolgain=10; pcoloffset=11; pcolfstop=12;
   titleadd=0; titledel=1;
   pageobject=0; pagescript=1; pageflat=2; pagenone=3;
 
@@ -75,6 +75,7 @@ type
     CheckBoxRestartStatus: TCheckBox;
     FFstopbox: TComboBox;
     FlatFilterList: TCheckGroup;
+    FOffsetEdit: TSpinEdit;
     GroupBoxTime: TGroupBox;
     GroupBoxPA: TGroupBox;
     GroupBoxCoord: TGroupBox;
@@ -464,6 +465,7 @@ begin
   StepList.Columns.Items[pcolafevery-1].Title.Caption := Format(rsAutofocusEve,[crlf]);
   StepList.Columns.Items[pcoldither-1].Title.Caption := Format(rsDitherEvery2,[crlf]);
   StepList.Columns.Items[pcolgain-1].Title.Caption := rsGain;
+  StepList.Columns.Items[pcoloffset-1].Title.Caption := rsOffset2;
   StepList.Columns.Items[pcolfstop-1].Title.Caption := rsFStop;
   if StepList.Columns[pcolfilter-1].PickList.Count>0 then StepList.Columns[pcolfilter-1].PickList[0]:=Filter0;
   Label1.Caption := rsTemplate;
@@ -1051,6 +1053,7 @@ begin
   t.FlatBinX:=1;
   t.FlatBinY:=1;
   t.FlatGain:=Gain;
+  t.FlatOffset:=Offset;
   t.FlatFstop:='';
   t.FlatCount:=15;
   TargetList.Cells[colseq,i]:=IntToStr(i);
@@ -1417,6 +1420,7 @@ begin
       FISObox.ItemIndex:=t.FlatGain
     else
       FGainEdit.Value:=t.FlatGain;
+    FOffsetEdit.Value:=t.FlatOffset;
     FFstopbox.Text:=t.FlatFstop;
     filterlst:=TStringList.Create();
     SplitRec(t.FlatFilters,';',filterlst);
@@ -1583,6 +1587,7 @@ begin
     else if hasGain then begin
        t.FlatGain:=FGainEdit.Value;
     end;
+    t.FlatOffset:=FOffsetEdit.Value;
     t.FlatFilters:='';
     for j:=0 to FlatFilterList.Items.Count-1 do begin
       if FlatFilterList.Checked[j] then
@@ -2283,6 +2288,8 @@ begin
   end;
   str:=pfile.GetValue('/Steps/Step'+inttostr(i)+'/Gain','');
   p.gain:=StrToIntDef(str,Gain);
+  str:=pfile.GetValue('/Steps/Step'+inttostr(i)+'/Offset','');
+  p.offset:=StrToIntDef(str,Offset);
   str:=pfile.GetValue('/Steps/Step'+inttostr(i)+'/Filter','');
   originalFilter[i]:=str;
   j:=StepList.Columns[pcolfilter-1].PickList.IndexOf(str);
@@ -2457,6 +2464,7 @@ begin
   end
   else
     StepList.Cells[pcolgain,n]:=IntToStr(p.gain);
+  StepList.Cells[pcoloffset,n]:=IntToStr(p.offset);
   StepList.Cells[pcolfstop,n]:=p.fstop;
   if p.filter<StepList.Columns[pcolfilter-1].PickList.count then
     StepList.Cells[pcolfilter,n]:=StepList.Columns[pcolfilter-1].PickList[p.filter]
@@ -2533,6 +2541,9 @@ begin
     StepsModified:=StepsModified or (p.gain<>j);
     p.gain:=j;
   end;
+  j:=StrToIntDef(StepList.Cells[pcoloffset,n],p.offset);
+  StepsModified:=StepsModified or (p.offset<>j);
+  p.offset:=j;
   str:=StepList.Cells[pcolfstop,n];
   StepsModified:=StepsModified or (p.fstop<>str);
   p.fstop:=str;
@@ -2617,6 +2628,7 @@ begin
     pcolafevery : HintText:=rsRedoAutofocu;
     pcoldither  : HintText:=rsDitherAfterT;
     pcolgain    : HintText:=rsCameraGain;
+    pcoloffset  : HintText:=rsCameraOffset;
     pcolfstop   : HintText:=rsFStop;
     else HintText:='';
   end;
@@ -2749,6 +2761,7 @@ try
     pfile.SetValue('/Steps/Step'+inttostr(i)+'/Exposure',p.exposure);
     pfile.SetValue('/Steps/Step'+inttostr(i)+'/Binning',IntToStr(p.binx)+'x'+IntToStr(p.biny));
     pfile.SetValue('/Steps/Step'+inttostr(i)+'/Gain',p.gain);
+    pfile.SetValue('/Steps/Step'+inttostr(i)+'/Offset',p.offset);
     pfile.SetValue('/Steps/Step'+inttostr(i)+'/Fstop',p.fstop);
     if StepList.Columns[pcolfilter-1].PickList.Count>0 then begin // do not erase the filters if the filter wheel is not connected
       k:=p.filter;

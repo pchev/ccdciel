@@ -39,7 +39,7 @@ type
               startrise,endset,darknight,skip: boolean;
               repeatcount,repeatdone: integer;
               FlatBinX,FlatBinY,FlatCount: integer;
-              FlatGain: integer;
+              FlatGain,FlatOffset: integer;
               FlatFilters: shortstring;
               FlatFstop: shortstring;
               preview,astrometrypointing,updatecoord,inplaceautofocus,autoguiding: boolean;
@@ -1284,6 +1284,7 @@ begin
       fls.binx:=flt.FlatBinX;
       fls.biny:=flt.FlatBinY;
       fls.gain:=flt.FlatGain;
+      fls.offset:=flt.FlatOffset;
       fls.fstop:=flt.FlatFstop;
       fls.count:=flt.FlatCount;
       fls.exposure:=FlatMinExp;
@@ -1773,6 +1774,7 @@ begin
   FlatBinX:=Source.FlatBinX;
   FlatBinY:=Source.FlatBinY;
   FlatGain:=Source.FlatGain;
+  FlatOffset:=Source.FlatOffset;
   FlatFilters:=Source.FlatFilters;
   FlatFstop:=Source.FlatFstop;
   darknight:=Source.darknight;

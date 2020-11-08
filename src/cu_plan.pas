@@ -242,6 +242,7 @@ begin
       Fcapture.ISObox.ItemIndex:=p.gain
     else
       Fcapture.GainEdit.Value:=p.gain;
+    Fcapture.OffsetEdit.Value:=p.offset;
     if p.fstop<>'' then Fcapture.Fnumber.Text:=p.fstop;
     Fcapture.SeqNum.Value:=p.count;
     Fcapture.SeqCount:=CurrentDoneCount+1;

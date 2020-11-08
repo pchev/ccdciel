@@ -1231,14 +1231,6 @@ begin
                  end;
                  exit;
               end;
-              if (amaxhfd<(1.1*aminhfd)) then begin
-                 // not enough difference between min and max HFD, abort
-                 msg(rsTooSmallHFDD,0);
-                 msg(rsTheFocuserIs,1);
-                 ResetPos;
-                 terminated:=true;
-                 exit;
-              end;
               // compute focus
               p_hyp:=0;a_hyp:=0;b_hyp:=0;
               find_best_hyperbola_fit(dyn_v_curve,afmpos,p_hyp,a_hyp,b_hyp); {output: bestfocusposition=p, a, b of hyperbola}

@@ -641,6 +641,7 @@ begin
        t.FlatBinX:=trunc(SequenceFile.Items.GetValue('/Targets/Target'+inttostr(i)+'/FlatBinX',1));
        t.FlatBinY:=trunc(SequenceFile.Items.GetValue('/Targets/Target'+inttostr(i)+'/FlatBinY',1));
        t.FlatGain:=trunc(SequenceFile.Items.GetValue('/Targets/Target'+inttostr(i)+'/FlatGain',0));
+       t.FlatOffset:=trunc(SequenceFile.Items.GetValue('/Targets/Target'+inttostr(i)+'/FlatOffset',0));
        t.FlatFstop:=SequenceFile.Items.GetValue('/Targets/Target'+inttostr(i)+'/FlatFstop','');
        t.FlatFilters:=SequenceFile.Items.GetValue('/Targets/Target'+inttostr(i)+'/FlatFilters','');
        if Targets.FileVersion>=5 then begin
@@ -886,6 +887,7 @@ begin
       SequenceFile.Items.SetValue('/Targets/Target'+inttostr(i)+'/FlatBinX',t.FlatBinX);
       SequenceFile.Items.SetValue('/Targets/Target'+inttostr(i)+'/FlatBinY',t.FlatBinY);
       SequenceFile.Items.SetValue('/Targets/Target'+inttostr(i)+'/FlatGain',t.FlatGain);
+      SequenceFile.Items.SetValue('/Targets/Target'+inttostr(i)+'/FlatOffset',t.FlatOffset);
       SequenceFile.Items.SetValue('/Targets/Target'+inttostr(i)+'/FlatFstop',t.FlatFstop);
       SequenceFile.Items.SetValue('/Targets/Target'+inttostr(i)+'/FlatFilters',t.FlatFilters);
 

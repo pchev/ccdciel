@@ -183,6 +183,7 @@ resourcestring
   rsGuidingHisto = 'Guiding history in arcsecond %s - blue: RA error %s - red: Dec error %s - yellow: Star mass';
   rsDoNotSetThis = 'Do not set this option if you don''t know exactly what you do and without careful testing';
   rsImageLuminos = 'Image luminosity';
+  rsCameraOffset = 'Camera offset';
 
 implementation
 

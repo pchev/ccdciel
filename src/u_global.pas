@@ -108,6 +108,7 @@ type
               filter: integer;
               binx,biny: integer;
               gain: integer;
+              offset: integer;
               frtype: TFrameType;
               fstop: string;
               description: string;
@@ -378,6 +379,7 @@ var
   AutofocusInPlace, InplaceAutofocus, AutofocusPauseGuider, AutofocusMultiStarCenter: boolean;
   AutofocusStarList: TArrayDouble2;
   CancelAutofocus, Autofocusing, TerminateFocuserCalibration: Boolean;
+  ExpectedStop: boolean;
   CameraProcessingImage: boolean;
   CameraProcessingNum: PtrInt;
   MagnitudeCalibration: double;
@@ -461,7 +463,6 @@ begin
   if Assigned(onMsgGlobal) then onMsgGlobal(str);
 end;
 
-
 ////////////////////  TStep  /////////////////////////////
 
 constructor TStep.Create;
@@ -480,6 +481,7 @@ begin
   autofocuscount:=10;
   fstop:='';
   gain:=1;
+  offset:=0;
   description:='Step1';
 end;
 
@@ -492,6 +494,7 @@ begin
   binx:=Source.binx;
   biny:=Source.biny;
   gain:=Source.gain;
+  offset:=Source.offset;
   frtype:=Source.frtype;
   dither:=Source.dither;
   dithercount:=Source.dithercount;
