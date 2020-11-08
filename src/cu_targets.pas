@@ -1278,6 +1278,7 @@ begin
       fls.binx:=flt.FlatBinX;
       fls.biny:=flt.FlatBinY;
       fls.gain:=flt.FlatGain;
+      fls.offset:=flt.FlatOffset;
       fls.fstop:=flt.FlatFstop;
       fls.count:=flt.FlatCount;
       fls.exposure:=FlatMinExp;

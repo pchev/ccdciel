@@ -108,6 +108,7 @@ type
               filter: integer;
               binx,biny: integer;
               gain: integer;
+              offset: integer;
               frtype: TFrameType;
               fstop: string;
               description: string;
@@ -132,7 +133,7 @@ type
               startrise,endset,darknight,skip: boolean;
               repeatcount,repeatdone: integer;
               FlatBinX,FlatBinY,FlatCount: integer;
-              FlatGain: integer;
+              FlatGain,FlatOffset: integer;
               FlatFilters: shortstring;
               FlatFstop: shortstring;
               preview,astrometrypointing,updatecoord,inplaceautofocus,autoguiding: boolean;
@@ -556,6 +557,7 @@ begin
   FlatBinX:=Source.FlatBinX;
   FlatBinY:=Source.FlatBinY;
   FlatGain:=Source.FlatGain;
+  FlatOffset:=Source.FlatOffset;
   FlatFilters:=Source.FlatFilters;
   FlatFstop:=Source.FlatFstop;
   darknight:=Source.darknight;
@@ -597,6 +599,7 @@ begin
   autofocuscount:=10;
   fstop:='';
   gain:=1;
+  offset:=0;
   description:='Step1';
 end;
 
@@ -609,6 +612,7 @@ begin
   binx:=Source.binx;
   biny:=Source.biny;
   gain:=Source.gain;
+  offset:=Source.offset;
   frtype:=Source.frtype;
   dither:=Source.dither;
   dithercount:=Source.dithercount;

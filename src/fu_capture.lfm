@@ -146,6 +146,7 @@ object f_capture: Tf_capture
           Height = 28
           Top = 4
           Width = 101
+          MaxValue = 0
           TabOrder = 0
         end
       end

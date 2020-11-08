@@ -4442,6 +4442,7 @@ begin
  f_preview.PanelOffset.Visible:=f_capture.PanelGain.Visible and hasOffset;
  f_EditTargets.PanelGain.Visible:=f_capture.PanelGain.Visible;
  f_EditTargets.StepList.Columns[pcolgain-1].Visible:=f_capture.PanelGain.Visible;
+ f_EditTargets.StepList.Columns[pcoloffset-1].Visible:=f_capture.PanelOffset.Visible;
  if hasGainISO then begin
    f_capture.ISObox.Visible:=true;
    f_capture.GainEdit.Visible:=false;
@@ -4480,10 +4481,12 @@ begin
  if hasOffset then begin
    f_preview.OffsetEdit.Hint:=IntToStr(OffsetMin)+'...'+IntToStr(OffsetMax);
    f_capture.OffsetEdit.Hint:=IntToStr(OffsetMin)+'...'+IntToStr(OffsetMax);
+   f_EditTargets.FOffsetEdit.Hint:=IntToStr(OffsetMin)+'...'+IntToStr(OffsetMax);
    poffprev:=StrToIntDef(offsetprev,Offset);
    poffcapt:=StrToIntDef(offsetcapt,Offset);
    f_preview.OffsetEdit.Value:=poffprev;
    f_capture.OffsetEdit.Value:=poffcapt;
+   f_EditTargets.FOffsetEdit.Value:=poffcapt;
  end;
 end;
 

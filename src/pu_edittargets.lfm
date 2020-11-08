@@ -119,12 +119,11 @@ object f_EditTargets: Tf_EditTargets
               Top = 0
               Width = 85
               Constraints.MaxHeight = 24
-              MaxLength = 0
-              ParentFont = False
-              TabOrder = 1
-              OnChange = RepeatCountListChange
               MaxValue = 999999
               MinValue = 1
+              OnChange = RepeatCountListChange
+              ParentFont = False
+              TabOrder = 1
               Value = 1
             end
             object BtnRepeatInf: TSpeedButton
@@ -858,11 +857,10 @@ object f_EditTargets: Tf_EditTargets
                   Top = 24
                   Width = 54
                   Constraints.MaxHeight = 26
-                  MaxLength = 0
+                  MaxValue = 100000
+                  OnChange = TargetChange
                   ParentFont = False
                   TabOrder = 1
-                  OnChange = TargetChange
-                  MaxValue = 100000
                 end
                 object PreviewExposure: TFloatSpinEdit
                   Left = 89
@@ -870,13 +868,12 @@ object f_EditTargets: Tf_EditTargets
                   Top = 24
                   Width = 63
                   Constraints.MaxHeight = 26
-                  MaxLength = 0
-                  ParentFont = False
-                  TabOrder = 2
-                  OnChange = TargetChange
                   Increment = 0.1
                   MaxValue = 60
                   MinValue = 0.001
+                  OnChange = TargetChange
+                  ParentFont = False
+                  TabOrder = 2
                   Value = 0.001
                 end
                 object Label13: TLabel
@@ -1108,11 +1105,11 @@ object f_EditTargets: Tf_EditTargets
       Height = 198
       Top = 0
       Width = 990
-      ActivePage = PlanObject
+      ActivePage = PlanFlat
       Align = alClient
       ParentFont = False
       ShowTabs = False
-      TabIndex = 0
+      TabIndex = 2
       TabOrder = 0
       object PlanObject: TTabSheet
         Caption = 'PlanObject'
@@ -1137,13 +1134,13 @@ object f_EditTargets: Tf_EditTargets
             Width = 980
             Align = alClient
             AutoFillColumns = True
-            ColCount = 12
+            ColCount = 13
             Columns = <            
               item
                 MaxSize = 202
                 Title.MultiLine = True
                 Title.Caption = 'Description'
-                Width = 92
+                Width = 80
               end            
               item
                 ButtonStyle = cbsPickList
@@ -1186,7 +1183,7 @@ object f_EditTargets: Tf_EditTargets
                 )
                 Title.MultiLine = True
                 Title.Caption = 'Filter'
-                Width = 92
+                Width = 80
               end            
               item
                 MinSize = 71
@@ -1201,32 +1198,37 @@ object f_EditTargets: Tf_EditTargets
                 MaxSize = 202
                 Title.MultiLine = True
                 Title.Caption = 'Autofocus before to start'
-                Width = 92
+                Width = 80
               end            
               item
                 MaxSize = 202
                 Title.MultiLine = True
                 Title.Caption = 'Autofocus every'
-                Width = 92
+                Width = 80
               end            
               item
                 MaxSize = 202
                 Title.MultiLine = True
                 Title.Caption = 'Dither every'
-                Width = 92
+                Width = 80
               end            
               item
                 ButtonStyle = cbsPickList
                 MaxSize = 202
                 Title.MultiLine = True
                 Title.Caption = 'Gain'
-                Width = 92
+                Width = 80
+              end            
+              item
+                Title.MultiLine = True
+                Title.Caption = 'Offset'
+                Width = 80
               end            
               item
                 ButtonStyle = cbsPickList
                 Title.MultiLine = True
                 Title.Caption = 'F-stop'
-                Width = 92
+                Width = 82
               end>
             DefaultColWidth = 30
             Options = [goFixedVertLine, goFixedHorzLine, goVertLine, goHorzLine, goDrawFocusSelected, goColSizing, goRowMoving, goEditing, goAlwaysShowEditor, goThumbTracking, goCellHints, goCellEllipsis]
@@ -1243,17 +1245,18 @@ object f_EditTargets: Tf_EditTargets
             OnValidateEntry = StepListValidateEntry
             ColWidths = (
               30
-              92
+              80
               71
               81
               81
-              92
+              80
               71
-              92
-              92
-              92
-              92
-              92
+              80
+              80
+              80
+              80
+              80
+              82
             )
           end
           object Panel17: TPanel
@@ -1371,35 +1374,35 @@ object f_EditTargets: Tf_EditTargets
         ParentFont = False
         object Panel1: TPanel
           Left = 0
-          Height = 156
+          Height = 170
           Top = 0
           Width = 980
           Align = alTop
           BevelOuter = bvNone
-          ClientHeight = 156
+          ClientHeight = 170
           ClientWidth = 980
           ParentFont = False
           TabOrder = 0
           object GroupBox7: TGroupBox
             Left = 202
-            Height = 156
+            Height = 170
             Top = 0
             Width = 194
             Align = alLeft
             Caption = 'Exposure'
-            ClientHeight = 136
+            ClientHeight = 150
             ClientWidth = 192
             ParentFont = False
             TabOrder = 0
             object PanelGain: TPanel
               Left = 0
-              Height = 29
-              Top = 68
+              Height = 68
+              Top = 64
               Width = 186
               BevelOuter = bvNone
               Caption = ' '
-              ClientHeight = 25
-              ClientWidth = 182
+              ClientHeight = 68
+              ClientWidth = 186
               ParentFont = False
               TabOrder = 1
               Visible = False
@@ -1418,9 +1421,9 @@ object f_EditTargets: Tf_EditTargets
               end
               object LabelGain: TLabel
                 Left = 8
-                Height = 19
+                Height = 17
                 Top = 4
-                Width = 29
+                Width = 28
                 Caption = 'Gain'
                 ParentColor = False
                 ParentFont = False
@@ -1431,17 +1434,43 @@ object f_EditTargets: Tf_EditTargets
                 Top = 0
                 Width = 65
                 Constraints.MaxHeight = 26
-                MaxLength = 0
+                MaxValue = 10000
+                OnChange = TargetChange
                 ParentFont = False
                 TabOrder = 1
-                OnChange = TargetChange
-                MaxValue = 10000
+              end
+              object PanelOffset: TPanel
+                Left = 0
+                Height = 36
+                Top = 24
+                Width = 191
+                BevelOuter = bvNone
+                ClientHeight = 36
+                ClientWidth = 191
+                TabOrder = 2
+                object LabelOffset: TLabel
+                  Left = 8
+                  Height = 17
+                  Top = 4
+                  Width = 38
+                  Caption = 'Offset'
+                  ParentColor = False
+                end
+                object FOffsetEdit: TSpinEdit
+                  Left = 91
+                  Height = 26
+                  Top = 4
+                  Width = 65
+                  Constraints.MaxHeight = 26
+                  MaxValue = 0
+                  TabOrder = 0
+                end
               end
             end
             object Label16: TLabel
               Left = 8
-              Height = 19
-              Top = 38
+              Height = 17
+              Top = 36
               Width = 47
               Caption = 'Binning'
               ParentColor = False
@@ -1450,7 +1479,7 @@ object f_EditTargets: Tf_EditTargets
             object FlatBinning: TComboBox
               Left = 91
               Height = 28
-              Top = 34
+              Top = 32
               Width = 65
               Constraints.MaxHeight = 28
               ItemHeight = 0
@@ -1466,7 +1495,7 @@ object f_EditTargets: Tf_EditTargets
             end
             object Label18: TLabel
               Left = 8
-              Height = 19
+              Height = 17
               Top = 3
               Width = 37
               Caption = 'Count'
@@ -1479,27 +1508,26 @@ object f_EditTargets: Tf_EditTargets
               Top = 0
               Width = 65
               Constraints.MaxHeight = 28
-              MaxLength = 0
-              ParentFont = False
-              TabOrder = 2
-              OnChange = TargetChange
               MaxValue = 10000
               MinValue = 1
+              OnChange = TargetChange
+              ParentFont = False
+              TabOrder = 2
               Value = 1
             end
             object PanelFstop: TPanel
-              Left = 0
-              Height = 32
-              Top = 100
+              Left = -1
+              Height = 28
+              Top = 120
               Width = 186
               BevelOuter = bvNone
               ClientHeight = 28
-              ClientWidth = 182
+              ClientWidth = 186
               TabOrder = 3
               Visible = False
               object Label6: TLabel
                 Left = 8
-                Height = 19
+                Height = 17
                 Top = 4
                 Width = 39
                 Caption = 'F-Stop'
@@ -1520,25 +1548,25 @@ object f_EditTargets: Tf_EditTargets
           end
           object GroupBox6: TGroupBox
             Left = 396
-            Height = 156
+            Height = 170
             Top = 0
             Width = 331
             Align = alLeft
             Caption = 'Filters'
-            ClientHeight = 136
+            ClientHeight = 150
             ClientWidth = 329
             ParentFont = False
             TabOrder = 1
             object ScrollBox1: TScrollBox
               Left = 0
-              Height = 136
+              Height = 150
               Top = 0
               Width = 329
               HorzScrollBar.Page = 4
               VertScrollBar.Page = 65
               Align = alClient
               BorderStyle = bsNone
-              ClientHeight = 136
+              ClientHeight = 150
               ClientWidth = 329
               ParentFont = False
               TabOrder = 0
@@ -1566,12 +1594,12 @@ object f_EditTargets: Tf_EditTargets
           end
           object Panel11: TPanel
             Left = 0
-            Height = 156
+            Height = 170
             Top = 0
             Width = 202
             Align = alLeft
             BevelOuter = bvNone
-            ClientHeight = 156
+            ClientHeight = 170
             ClientWidth = 202
             ParentFont = False
             TabOrder = 2
@@ -1699,19 +1727,19 @@ object f_EditTargets: Tf_EditTargets
     end
   end
   object SaveDialog1: TSaveDialog
-    left = 744
-    top = 464
+    Left = 744
+    Top = 464
   end
   object OpenDialog1: TOpenDialog
     Title = 'Open CDC observing list'
-    left = 857
-    top = 464
+    Left = 857
+    Top = 464
   end
   object ImageListDay: TImageList
     Height = 12
     Width = 12
-    left = 744
-    top = 404
+    Left = 744
+    Top = 404
     Bitmap = {
       4C69040000000C0000000C000000000000000000000000000000000000000000
       0000000000000000000000000000000000000000000000000000000000000000
@@ -1791,8 +1819,8 @@ object f_EditTargets: Tf_EditTargets
   object ImageListNight: TImageList
     Height = 12
     Width = 12
-    left = 857
-    top = 404
+    Left = 857
+    Top = 404
     Bitmap = {
       4C69040000000C0000000C000000000000000000000000000000000000000000
       0000000000000000000000000000000000000000000000000000000000000000
