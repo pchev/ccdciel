@@ -390,7 +390,7 @@ end;
 
 procedure Tf_polaralign.TakeExposure;
 var exp:double;
-    bin,filter: integer;
+    bin,filter,pgain,poffset: integer;
     fn: string;
 begin
 // Start an exposure
@@ -398,12 +398,14 @@ fits.SetBPM(bpm,bpmNum,bpmX,bpmY,bpmAxis);
 fits.DarkOn:=true;
 exp:=config.GetValue('/PrecSlew/Exposure',10.0);
 bin:=config.GetValue('/PrecSlew/Binning',1);
+pgain:=config.GetValue('/PrecSlew/Gain',NullInt);
+poffset:=config.GetValue('/PrecSlew/Offset',NullInt);
 filter:=config.GetValue('/PrecSlew/Filter',0);
 if (filter>0)and(Assigned(Fwheel)) then begin
   Fwheel.Filter:=filter;
 end;
 tracemsg('Exposure exptime='+FormatFloat(f3,exp)+' binning='+inttostr(bin)+' filter='+inttostr(filter));
-if not preview.ControlExposure(exp,bin,bin,LIGHT,ReadoutModeAstrometry) then begin
+if not preview.ControlExposure(exp,bin,bin,LIGHT,ReadoutModeAstrometry,pgain,poffset) then begin
     msg(rsExposureFail,1);
     AbortAlignment;
 end

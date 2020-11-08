@@ -34,6 +34,9 @@ type
   { Tf_option }
 
   Tf_option = class(TForm)
+    SlewGainEdit: TSpinEdit;
+    SlewISObox: TComboBox;
+    SlewOffsetEdit: TSpinEdit;
     AutofocusPlanetMovement: TSpinEdit;
     AutofocusPlanetNumPoint: TSpinEdit;
     AutofocusPauseGuider: TCheckBox;
@@ -45,6 +48,12 @@ type
     BtnMaxDriftDisable: TButton;
     BtnDisableStarLost: TButton;
     ASTAPadvanced: TButton;
+    AutofocusGainEdit: TSpinEdit;
+    AutofocusISObox: TComboBox;
+    LabelGain: TLabel;
+    LabelGain1: TLabel;
+    LabelOffset: TLabel;
+    LabelOffset1: TLabel;
     ObservatoryDBDelete: TButton;
     ButtonVoiceTest: TButton;
     ButtonVoiceAll: TButton;
@@ -54,9 +63,14 @@ type
     Label14: TLabel;
     ObservatoryDB: TComboBox;
     LongitudeError: TLabel;
+    AutofocusOffsetEdit: TSpinEdit;
     PagePlaNone: TPage;
     Panel21: TPanel;
+    AutofocusPanelGain: TPanel;
+    SlewPanelGain: TPanel;
     PanelLeft: TPanel;
+    AutofocusPanelOffset: TPanel;
+    SlewPanelOffset: TPanel;
     WantExif: TCheckBox;
     LabelTestVoice: TLabel;
     LowQualityDisplay: TCheckBox;

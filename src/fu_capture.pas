@@ -87,6 +87,10 @@ type
     FonStartExposure: TNotifyEvent;
     FonAbortExposure: TNotifyEvent;
     procedure SetExposureTime(val: double);
+    function GetGain:integer;
+    procedure SetGain(value:integer);
+    function GetOffset:integer;
+    procedure SetOffset(value:integer);
   public
     { public declarations }
     constructor Create(aOwner: TComponent); override;
@@ -97,6 +101,8 @@ type
     property Running: boolean read Frunning write Frunning;
     property SeqCount: Integer read FSeqCount write FSeqCount;
     property ExposureTime: double read FExposureTime write SetExposureTime;
+    property Gain: integer read GetGain write SetGain;
+    property Offset: integer read GetOffset write SetOffset;
     property DitherNum: Integer read FDitherNum write FDitherNum;
     property FocusNum: Integer read FFocusNum write FFocusNum;
     property FocusNow: boolean read FFocusNow write FFocusNow;
@@ -203,6 +209,35 @@ procedure Tf_capture.SetExposureTime(val: double);
 begin
   FExposureTime:=val;
   ExpTime.Text:=FormatFloat('0.###',val);
+end;
+
+function Tf_capture.GetGain:integer;
+begin
+  if hasGainISO then
+    result:=ISObox.ItemIndex
+  else
+    result:=GainEdit.Value;
+end;
+
+procedure Tf_capture.SetGain(value:integer);
+begin
+  if hasGainISO then begin
+    if (value>=0)and(value<ISObox.Items.Count) then
+      ISObox.ItemIndex:=value
+  end
+  else begin
+    GainEdit.Value:=value;
+  end;
+end;
+
+function Tf_capture.GetOffset:integer;
+begin
+  result:=OffsetEdit.Value;
+end;
+
+procedure Tf_capture.SetOffset(value:integer);
+begin
+  OffsetEdit.Value:=value;
 end;
 
 procedure Tf_capture.FrameEndDrag(Sender, Target: TObject; X, Y: Integer);
