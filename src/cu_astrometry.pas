@@ -68,7 +68,7 @@ TAstrometry = class(TComponent)
     procedure SolveCurrentImage(wait: boolean);
     procedure SyncCurrentImage(wait: boolean);
     procedure SlewScreenXY(x,y: integer);
-    function PrecisionSlew(ra,de,prec,exp:double; filter,binx,biny,method,maxslew,gain,offset: integer; out err: double):boolean;
+    function PrecisionSlew(ra,de,prec,exp:double; filter,binx,biny,method,maxslew,sgain,soffset: integer; out err: double):boolean;
     function PrecisionSlew(ra,de:double; out err: double):boolean;
     function AutofocusPrecisionSlew(ra,de:double; out err: double):boolean;
     property Busy: Boolean read FBusy;
@@ -427,7 +427,7 @@ if LastResult and (cdcwcs_xy2sky<>nil) then begin
        maxretry:=config.GetValue('/PrecSlew/Retry',3);
        exp:=config.GetValue('/PrecSlew/Exposure',10.0);
        sgain:=config.GetValue('/PrecSlew/Gain',NullInt);
-       soffset:=config.GetValue('/PrecSlew/Gain',NullInt);
+       soffset:=config.GetValue('/PrecSlew/Offset',NullInt);
        bin:=config.GetValue('/PrecSlew/Binning',1);
        fi:=config.GetValue('/PrecSlew/Filter',0);
        PrecisionSlew(ra,de,prec,exp,fi,bin,bin,cormethod,maxretry,sgain,soffset,err);
@@ -439,7 +439,7 @@ finally
 end;
 end;
 
-function TAstrometry.PrecisionSlew(ra,de,prec,exp:double; filter,binx,biny,method,maxslew,gain,offset: integer; out err: double): boolean;
+function TAstrometry.PrecisionSlew(ra,de,prec,exp:double; filter,binx,biny,method,maxslew,sgain,soffset: integer; out err: double): boolean;
 var cra,cde,eq,ar1,ar2,de1,de2,dist,raoffset,deoffset,newra,newde,pa,ara,ade: double;
     fn:string;
     n,i,oldfilter,delay,RetryMeridianSyncCount:integer;
@@ -482,7 +482,7 @@ begin
       RetryMeridianSync:=false;
       Wait(delay);
       if CancelAutofocus then exit;
-      if not Fpreview.ControlExposure(exp,binx,biny,LIGHT,ReadoutModeAstrometry,gain,offset) then begin
+      if not Fpreview.ControlExposure(exp,binx,biny,LIGHT,ReadoutModeAstrometry,sgain,soffset) then begin
         msg(rsExposureFail,0);
         exit;
       end;
@@ -590,7 +590,7 @@ begin
   maxretry:=config.GetValue('/PrecSlew/Retry',3);
   exp:=config.GetValue('/PrecSlew/Exposure',10.0);
   sgain:=config.GetValue('/PrecSlew/Gain',NullInt);
-  soffset:=config.GetValue('/PrecSlew/Gain',NullInt);
+  soffset:=config.GetValue('/PrecSlew/Offset',NullInt);
   bin:=config.GetValue('/PrecSlew/Binning',1);
   fi:=config.GetValue('/PrecSlew/Filter',0);
   result:=PrecisionSlew(ra,de,prec,exp,fi,bin,bin,cormethod,maxretry,sgain,soffset,err);
@@ -606,7 +606,7 @@ begin
   maxretry:=config.GetValue('/PrecSlew/Retry',3);
   exp:=config.GetValue('/PrecSlew/Exposure',10.0);
   sgain:=config.GetValue('/PrecSlew/Gain',NullInt);
-  soffset:=config.GetValue('/PrecSlew/Gain',NullInt);
+  soffset:=config.GetValue('/PrecSlew/Offset',NullInt);
   bin:=config.GetValue('/PrecSlew/Binning',1);
   fi:=config.GetValue('/PrecSlew/Filter',0);
   result:=PrecisionSlew(ra,de,prec,exp,fi,bin,bin,cormethod,maxretry,sgain,soffset,err);

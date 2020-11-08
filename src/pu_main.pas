@@ -524,7 +524,7 @@ type
     AccelList: array[0..MaxMenulevel] of string;
     SaveAutofocusBinning: string;
     SaveAutofocusFX,SaveAutofocusFY,SaveAutofocusFW,SaveAutofocusFH,SaveAutofocusBX,SaveAutofocusBY: integer;
-    SaveAutofocusGain, SaveAutofocusOffset: integer;
+    SaveAutofocusGain, SaveAutofocusOffset, SaveAutofocusPreviewGain, SaveAutofocusPreviewOffset: integer;
     TerminateVcurve: boolean;
     ScrBmp: TBGRABitmap;
     Image1: TImgDrawingControl;
@@ -10526,6 +10526,8 @@ begin
   SaveAutofocusBinning:=f_preview.Binning.Text;
   SaveAutofocusBX:=camera.BinX;
   SaveAutofocusBY:=camera.BinY;
+  SaveAutofocusPreviewGain:=f_preview.Gain;
+  SaveAutofocusPreviewOffset:=f_preview.Offset;
   SaveAutofocusGain:=camera.Gain;
   SaveAutofocusOffset:=camera.Offset;
   camera.GetFrame(SaveAutofocusFX,SaveAutofocusFY,SaveAutofocusFW,SaveAutofocusFH);
@@ -10735,6 +10737,8 @@ begin
    camera.SetBinning(SaveAutofocusBX,SaveAutofocusBY);
    camera.SetFrame(SaveAutofocusFX,SaveAutofocusFY,SaveAutofocusFW,SaveAutofocusFH);
    f_visu.Zoom:=SaveFocusZoom;
+   f_preview.Gain:=SaveAutofocusPreviewGain;
+   f_preview.Offset:=SaveAutofocusPreviewOffset;
    if camera.CanSetGain then begin
       camera.Gain:=SaveAutofocusGain;
       if hasOffset then camera.Offset:=SaveAutofocusOffset;

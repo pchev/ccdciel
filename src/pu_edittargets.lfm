@@ -1463,6 +1463,7 @@ object f_EditTargets: Tf_EditTargets
                   Width = 65
                   Constraints.MaxHeight = 26
                   MaxValue = 0
+                  OnChange = TargetChange
                   TabOrder = 0
                 end
               end

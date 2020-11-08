@@ -317,7 +317,7 @@ if AllDevicesConnected then begin
   if (binx<>savebinx)or(biny<>savebiny) then Camera.SetBinning(savebinx,savebiny);
   if camera.CanSetGain then begin
     if (savegain<>pgain) then camera.Gain:=savegain;
-    if camera.hasOffset and (saveoffset<>poffset) then camera.Gain:=saveoffset;
+    if camera.hasOffset and (saveoffset<>poffset) then camera.Offset:=saveoffset;
   end;
   if result and Assigned(SaveonNewImage) then SaveonNewImage(self);
   Wait(1);

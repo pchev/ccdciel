@@ -1496,7 +1496,7 @@ begin
     maxretry:=config.GetValue('/PrecSlew/Retry',3);
     exp:=config.GetValue('/PrecSlew/Exposure',10.0);
     sgain:=config.GetValue('/PrecSlew/Gain',NullInt);
-    soffset:=config.GetValue('/PrecSlew/Gain',NullInt);
+    soffset:=config.GetValue('/PrecSlew/Offset',NullInt);
     bin:=config.GetValue('/PrecSlew/Binning',1);
     fi:=config.GetValue('/PrecSlew/Filter',0);
     result:=astrometry.PrecisionSlew(ra,de,prec,exp,fi,bin,bin,cormethod,maxretry,sgain,soffset,err);
