@@ -179,7 +179,7 @@ type
   {$i revision.inc}
 
 const
-  ccdcielver = '0.9.72';
+  ccdcielver = '0.9.73';
   ccdciel_version='Version beta '+ccdcielver;
   TargetFileVersion = 5;
   Maxclient = 100;
@@ -363,6 +363,7 @@ var
   AutofocusMinSpeed,AutofocusMaxSpeed,AutofocusNearNum,FocuserDelay,AutofocusBinning,AutofocusPeriod: integer;
   AutofocusStartHFD,AutofocusNearHFD: double;
   AutofocusExposure,AutofocusExposureFact:double;
+  AutofocusGain, AutofocusOffset: integer;
   AutofocusMoveDir: boolean;
   PosStartL,PosStartR,PosNearL,PosNearR,PosFocus,AutofocusVcNum,AutofocusVcSkipNum,VcCenterpos,VcHalfwidth,VcNsteps:integer;
   AutofocusVc: array[0..100]of array[1..2] of double;

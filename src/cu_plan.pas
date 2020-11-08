@@ -238,11 +238,8 @@ begin
     end;
     if p.exposure>=0 then Fcapture.ExposureTime:=p.exposure;
     Fcapture.Binning.Text:=p.binning_str;
-    if hasGainISO then
-      Fcapture.ISObox.ItemIndex:=p.gain
-    else
-      Fcapture.GainEdit.Value:=p.gain;
-    Fcapture.OffsetEdit.Value:=p.offset;
+    Fcapture.Gain:=p.gain;
+    Fcapture.Offset:=p.offset;
     if p.fstop<>'' then Fcapture.Fnumber.Text:=p.fstop;
     Fcapture.SeqNum.Value:=p.count;
     Fcapture.SeqCount:=CurrentDoneCount+1;

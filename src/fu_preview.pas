@@ -74,17 +74,23 @@ type
     function GetExposure:double;
     procedure SetExposure(value:double);
     function GetBinning: integer;
+    function GetGain:integer;
+    procedure SetGain(value:integer);
+    function GetOffset:integer;
+    procedure SetOffset(value:integer);
   public
     { public declarations }
     constructor Create(aOwner: TComponent); override;
     destructor  Destroy; override;
     procedure SetLang;
     procedure Stop;
-    function ControlExposure(exp:double; binx,biny: integer; frmt:TFrameType; readoutmode:integer):boolean;
+    function ControlExposure(exp:double; binx,biny: integer; frmt:TFrameType; readoutmode,pgain,poffset:integer):boolean;
     property Running: boolean read Frunning write Frunning;
     property Camera: T_camera read Fcamera write Fcamera;
     property Loop: boolean read FLoop write FLoop;
     property Exposure: double read GetExposure write SetExposure;
+    property Gain: integer read GetGain write SetGain;
+    property Offset: integer read GetOffset write SetOffset;
     property Bin: integer read GetBinning;
     property onResetStack: TNotifyEvent read FonResetStack write FonResetStack;
     property onStartExposure: TNotifyEvent read FonStartExposure write FonStartExposure;
@@ -231,9 +237,38 @@ begin
   else result:=1;
 end;
 
-function Tf_preview.ControlExposure(exp:double; binx,biny: integer; frmt:TFrameType; readoutmode:integer):boolean;
+function Tf_preview.GetGain:integer;
+begin
+  if hasGainISO then
+    result:=ISObox.ItemIndex
+  else
+    result:=GainEdit.Value;
+end;
+
+procedure Tf_preview.SetGain(value:integer);
+begin
+  if hasGainISO then begin
+    if (value>=0)and(value<ISObox.Items.Count) then
+      ISObox.ItemIndex:=value
+  end
+  else begin
+    GainEdit.Value:=value;
+  end;
+end;
+
+function Tf_preview.GetOffset:integer;
+begin
+  result:=OffsetEdit.Value;
+end;
+
+procedure Tf_preview.SetOffset(value:integer);
+begin
+  OffsetEdit.Value:=value;
+end;
+
+function Tf_preview.ControlExposure(exp:double; binx,biny: integer; frmt:TFrameType; readoutmode,pgain,poffset:integer):boolean;
 var SaveonNewImage: TNotifyEvent;
-    savebinx,savebiny,i: integer;
+    savebinx,savebiny,savegain,saveoffset,i: integer;
     endt: TDateTime;
 begin
 result:=false;
@@ -252,12 +287,19 @@ if AllDevicesConnected then begin
   ControlExposureOK:=false;
   camera.AddFrames:=false;
   if camera.CanSetGain then begin
+    savegain:=camera.Gain;
     if camera.hasGainISO then begin
-       if camera.Gain<>ISObox.ItemIndex then camera.Gain:=ISObox.ItemIndex;
+       if pgain=NullInt then pgain:=ISObox.ItemIndex;
+       if savegain<>pgain then camera.Gain:=pgain;
     end;
     if camera.hasGain and (not camera.hasGainISO) then begin
-       i:=GainEdit.Value;
-       if camera.Gain<>i then camera.Gain:=i;
+       if pgain=NullInt then pgain:=GainEdit.Value;
+       if savegain<>pgain then camera.Gain:=pgain;
+    end;
+    if camera.hasOffset then begin
+       saveoffset:=camera.Offset;
+       if poffset=NullInt then poffset:=OffsetEdit.Value;
+       if saveoffset<>poffset then camera.Offset:=poffset;
     end;
   end;
   if camera.hasReadOut then begin
@@ -273,6 +315,10 @@ if AllDevicesConnected then begin
   result:=ControlExposureOK;
   Camera.onNewImage:=SaveonNewImage;
   if (binx<>savebinx)or(biny<>savebiny) then Camera.SetBinning(savebinx,savebiny);
+  if camera.CanSetGain then begin
+    if (savegain<>pgain) then camera.Gain:=savegain;
+    if camera.hasOffset and (saveoffset<>poffset) then camera.Offset:=saveoffset;
+  end;
   if result and Assigned(SaveonNewImage) then SaveonNewImage(self);
   Wait(1);
 end;
