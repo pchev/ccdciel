@@ -66,12 +66,12 @@ object f_option: Tf_option
     Height = 541
     Top = 0
     Width = 530
-    ActivePage = PagePref
+    ActivePage = PageCamera
     Align = alClient
     MultiLine = True
     ParentFont = False
     ShowTabs = False
-    TabIndex = 0
+    TabIndex = 3
     TabOrder = 2
     OnChanging = PageControl1Changing
     Options = [nboMultiLine]
@@ -965,8 +965,8 @@ object f_option: Tf_option
             Top = 30
             Width = 331
             BevelOuter = bvNone
-            ClientHeight = 26
-            ClientWidth = 327
+            ClientHeight = 30
+            ClientWidth = 331
             ParentFont = False
             TabOrder = 1
             object Label74: TLabel
@@ -993,12 +993,12 @@ object f_option: Tf_option
       end
       object GroupBox20: TGroupBox
         Left = 0
-        Height = 105
-        Top = 194
+        Height = 96
+        Top = 264
         Width = 520
         Align = alTop
         Caption = 'Sensors properties'
-        ClientHeight = 85
+        ClientHeight = 76
         ClientWidth = 518
         ParentFont = False
         TabOrder = 1
@@ -1015,8 +1015,8 @@ object f_option: Tf_option
           Left = 170
           Height = 21
           Top = 33
-          Width = 148
-          Caption = 'From camera driver '
+          Width = 145
+          Caption = 'From camera driver'
           OnChange = MaxAduFromCameraChange
           ParentFont = False
           TabOrder = 0
@@ -1061,33 +1061,15 @@ object f_option: Tf_option
           ParentFont = False
           TabOrder = 3
         end
-        object Label124: TLabel
-          Left = 8
-          Height = 17
-          Top = 61
-          Width = 28
-          Caption = 'Gain'
-          ParentColor = False
-          ParentFont = False
-        end
-        object GainFromCamera: TCheckBox
-          Left = 170
-          Height = 21
-          Top = 61
-          Width = 145
-          Caption = 'From camera driver'
-          ParentFont = False
-          TabOrder = 4
-        end
       end
       object GroupBoxReadOut: TGroupBox
         Left = 0
-        Height = 238
-        Top = 299
+        Height = 177
+        Top = 360
         Width = 520
         Align = alClient
         Caption = 'Readout modes'
-        ClientHeight = 218
+        ClientHeight = 157
         ClientWidth = 518
         ParentFont = False
         TabOrder = 2
@@ -1172,6 +1154,26 @@ object f_option: Tf_option
           ParentFont = False
         end
       end
+      object GroupBox31: TGroupBox
+        Left = 0
+        Height = 70
+        Top = 194
+        Width = 520
+        Align = alTop
+        Caption = 'Gain / Offset'
+        ClientHeight = 50
+        ClientWidth = 518
+        TabOrder = 3
+        object CanSetGain: TCheckBox
+          Left = 16
+          Height = 21
+          Top = 8
+          Width = 267
+          Caption = 'Manage the Gain and Offset if available.'
+          ParentFont = False
+          TabOrder = 0
+        end
+      end
     end
     object PagePreview: TTabSheet
       Caption = 'Preview'
@@ -1249,7 +1251,7 @@ object f_option: Tf_option
           TabOrder = 3
           object RedBalance: TTrackBar
             Left = 7
-            Height = 28
+            Height = 43
             Top = 1
             Width = 101
             Max = 100
@@ -1274,7 +1276,7 @@ object f_option: Tf_option
           end
           object GreenBalance: TTrackBar
             Left = 7
-            Height = 28
+            Height = 43
             Top = 38
             Width = 101
             Max = 100
@@ -1299,7 +1301,7 @@ object f_option: Tf_option
           end
           object BlueBalance: TTrackBar
             Left = 7
-            Height = 28
+            Height = 43
             Top = 75
             Width = 101
             Max = 100
@@ -1507,7 +1509,7 @@ object f_option: Tf_option
           ChildSizing.ShrinkVertical = crsScaleChilds
           ChildSizing.Layout = cclLeftToRightThenTopToBottom
           ChildSizing.ControlsPerLine = 3
-          ClientHeight = 22
+          ClientHeight = 40
           ClientWidth = 237
           Columns = 3
           Items.Strings = (
@@ -1529,7 +1531,7 @@ object f_option: Tf_option
         end
         object RefTreshold: TTrackBar
           Left = 105
-          Height = 28
+          Height = 43
           Top = 8
           Width = 105
           Max = 254
@@ -3474,8 +3476,8 @@ object f_option: Tf_option
           Top = 216
           Width = 519
           BevelOuter = bvNone
-          ClientHeight = 32
-          ClientWidth = 519
+          ClientHeight = 28
+          ClientWidth = 515
           ParentFont = False
           TabOrder = 7
           Visible = False
@@ -3517,8 +3519,8 @@ object f_option: Tf_option
             Top = 0
             Width = 200
             BevelOuter = bvNone
-            ClientHeight = 32
-            ClientWidth = 200
+            ClientHeight = 28
+            ClientWidth = 196
             TabOrder = 2
             object LabelOffset1: TLabel
               Left = 0

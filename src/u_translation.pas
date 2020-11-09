@@ -1262,6 +1262,7 @@ resourcestring
   rsBeSureTheCom = 'Be sure the computer use the local timezone and the observatory location is configured in the program preferences.';
   rsBeCarefulOft = 'Be careful of the longitude East/West setting.';
   rsOffset2 = 'Offset';
+  rsManageTheGai = 'Manage the Gain and Offset if available.';
 
 implementation
 

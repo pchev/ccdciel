@@ -34,6 +34,7 @@ type
   { Tf_option }
 
   Tf_option = class(TForm)
+    GroupBox31: TGroupBox;
     SlewGainEdit: TSpinEdit;
     SlewISObox: TComboBox;
     SlewOffsetEdit: TSpinEdit;
@@ -174,7 +175,7 @@ type
     DomeNoSafetyCheck: TCheckBox;
     DomeSlaveToMount: TCheckBox;
     DomeCloseActions: TStringGrid;
-    GainFromCamera: TCheckBox;
+    CanSetGain: TCheckBox;
     FilenameSep: TComboBox;
     Debug_msg: TCheckBox;
     GroupBox11: TGroupBox;
@@ -185,7 +186,6 @@ type
     Label121: TLabel;
     Label122: TLabel;
     Label123: TLabel;
-    Label124: TLabel;
     Label125: TLabel;
     Label126: TLabel;
     MeridianFlipStopSlaving: TCheckBox;
@@ -922,8 +922,7 @@ begin
   GroupBox20.Caption:=rsSensorsPrope;
   label19.Caption:=rsMaximumADU;
   MaxAduFromCamera.Caption:=rsFromCameraDr;
-  GainFromCamera.Caption:=rsFromCameraDr;
-  Label124.Caption:=rsGain;
+  CanSetGain.Caption:=rsManageTheGai;
   GroupBoxReadOut.Caption:=rsReadoutModes;
   Label112.Caption:=rsCapture;
   Label113.Caption:=rsPreview;
@@ -1207,6 +1206,7 @@ begin
   TelescopeName.Hint:=rsTheTelescopeNameForI;
   HorizonFile.Hint:=rsTheHorizonPr;
   ElevationMin.Hint:=rsTheMinimalOb;
+  CanSetGain.Hint:=rsIfNotChecked;
   StackShow.Hint:=Format(rsShowTheOptio, [crlf, crlf]);
   FocuserBacklashDirection.Hint:=Format(rsTheDirection, [crlf]);
   FocuserBacklashActive.Hint:=Format(rsActivateBack, [crlf]);

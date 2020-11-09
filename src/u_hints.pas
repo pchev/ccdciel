@@ -184,6 +184,7 @@ resourcestring
   rsDoNotSetThis = 'Do not set this option if you don''t know exactly what you do and without careful testing';
   rsImageLuminos = 'Image luminosity';
   rsCameraOffset = 'Camera offset';
+  rsIfNotChecked = 'If not checked the program will never change the gain/offset value set in the driver setup';
 
 implementation
 
