@@ -38,7 +38,6 @@ T_ascomrestdome = class(T_dome)
 
    procedure StatusTimerTimer(sender: TObject);
    function  Connected: boolean;
-   function  InterfaceVersion: integer;
  protected
    function WaitDomePark(maxtime:integer):boolean;
    function WaitShutter(onoff:boolean; maxtime:integer):boolean;
@@ -83,16 +82,6 @@ begin
  inherited Destroy;
 end;
 
-function  T_ascomrestdome.InterfaceVersion: integer;
-begin
- result:=1;
-  try
-   result:=V.Get('interfaceversion').AsInt;
-  except
-    result:=1;
-  end;
-end;
-
 procedure T_ascomrestdome.Connect(cp1: string; cp2:string=''; cp3:string=''; cp4:string=''; cp5:string=''; cp6:string='');
 begin
   try
@@ -109,12 +98,21 @@ begin
   V.Put('Connected',true);
   if V.Get('connected').AsBool then begin
      V.Timeout:=120000;
-     FInterfaceVersion:=InterfaceVersion;
+     try
+     msg(V.Get('driverinfo').AsString,9);
+     except
+     end;
      try
      msg('Driver version: '+V.Get('driverversion').AsString,9);
      except
        msg('Error: unknown driver version',9);
      end;
+     try
+     FInterfaceVersion:=V.Get('interfaceversion').AsInt;
+     except
+       FInterfaceVersion:=1;
+     end;
+     msg('Interface version: '+inttostr(FInterfaceVersion),9);
      try
      FhasPark:=V.Get('canpark').AsBool;
      except

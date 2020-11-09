@@ -232,6 +232,10 @@ begin
   if V.Get('connected').AsBool then begin
     V.Timeout:=120000;
     try
+    msg(V.Get('driverinfo').AsString,9);
+    except
+    end;
+    try
     msg('Driver version: '+V.Get('driverversion').AsString,9);
     except
       msg('Error: unknown driver version',9);
@@ -241,6 +245,7 @@ begin
     except
       FInterfaceVersion:=1;
     end;
+    msg('Interface version: '+inttostr(FInterfaceVersion),9);
     try
     FCameraXSize:=V.Get('cameraxsize').AsInt;
     except

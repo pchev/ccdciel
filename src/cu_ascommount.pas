@@ -43,6 +43,7 @@ T_ascommount = class(T_mount)
    stPierside: TPierSide;
    stTracking: boolean;
    StatusTimer: TTimer;
+   FInterfaceVersion: integer;
    function Connected: boolean;
    procedure StatusTimerTimer(sender: TObject);
    procedure CheckEqmod;
@@ -137,12 +138,21 @@ begin
   if V.connected then begin
      if debug_msg then msg('Connect OK');
      FStatus := devConnected;
-     if debug_msg then msg('Get version');
+     try
+     msg(V.DriverInfo,9);
+     except
+     end;
      try
      msg('Driver version: '+V.DriverVersion,9);
      except
        msg('Error: unknown driver version',9);
      end;
+     try
+     FInterfaceVersion:=V.InterfaceVersion;
+     except
+       FInterfaceVersion:=1;
+     end;
+     msg('Interface version: '+inttostr(FInterfaceVersion),9);
      CheckEqmod;
      if debug_msg then msg('Get park capability');
      CanPark:=V.CanPark;

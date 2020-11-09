@@ -110,10 +110,20 @@ begin
   V.Connected:=true;
   if Connected then begin
      try
+     msg(V.DriverInfo,9);
+     except
+     end;
+     try
      msg('Driver version: '+V.DriverVersion,9);
      except
        msg('Error: unknown driver version',9);
      end;
+     try
+     FInterfaceVersion:=V.InterfaceVersion;
+     except
+       FInterfaceVersion:=1;
+     end;
+     msg('Interface version: '+inttostr(FInterfaceVersion),9);
      msg(rsConnected3);
      FStatus := devConnected;
      if Assigned(FonStatusChange) then FonStatusChange(self);

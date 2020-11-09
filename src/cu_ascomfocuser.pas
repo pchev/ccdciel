@@ -48,7 +48,6 @@ T_ascomfocuser = class(T_focuser)
    StatusTimer: TTimer;
    procedure StatusTimerTimer(sender: TObject);
    function  Connected: boolean;
-   function  InterfaceVersion: integer;
  protected
    procedure SetPosition(p:integer); override;
    function  GetPosition:integer; override;
@@ -106,21 +105,6 @@ begin
  inherited Destroy;
 end;
 
-function  T_ascomfocuser.InterfaceVersion: integer;
-begin
- result:=1;
- {$ifdef mswindows}
-  try
-  if not VarIsEmpty(V) then begin
-   result:=V.InterfaceVersion;
-  end;
-  if debug_msg then msg('Interface version = '+inttostr(Result));
-  except
-    result:=1;
-  end;
- {$endif}
-end;
-
 procedure T_ascomfocuser.Connect(cp1: string; cp2:string=''; cp3:string=''; cp4:string=''; cp5:string=''; cp6:string='');
 begin
  {$ifdef mswindows}
@@ -131,12 +115,21 @@ begin
   if Assigned(FonStatusChange) then FonStatusChange(self);
   V:=Unassigned;
   V:=CreateOleObject(Fdevice);
-  FInterfaceVersion:=InterfaceVersion;
+  try
+  FInterfaceVersion:=V.InterfaceVersion;
+  except
+    FInterfaceVersion:=1;
+  end;
+  msg('Interface version: '+inttostr(FInterfaceVersion),9);
   if FInterfaceVersion=1 then
     V.Link:=true
   else
     V.Connected:=true;
   if Connected then begin
+     try
+     msg(V.DriverInfo,9);
+     except
+     end;
      try
      msg('Driver version: '+V.DriverVersion,9);
      except
