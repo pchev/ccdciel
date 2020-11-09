@@ -29,18 +29,18 @@ object f_sequence: Tf_sequence
   end
   object Panel1: TPanel
     Left = 0
-    Height = 319
+    Height = 320
     Top = 20
     Width = 212
     Align = alTop
     BevelOuter = bvNone
-    ClientHeight = 319
+    ClientHeight = 320
     ClientWidth = 212
     ParentFont = False
     TabOrder = 1
     object TargetGrid: TStringGrid
       Left = 0
-      Height = 153
+      Height = 158
       Top = 20
       Width = 212
       Align = alClient
@@ -66,20 +66,22 @@ object f_sequence: Tf_sequence
     end
     object Panel3: TPanel
       Left = 0
-      Height = 146
-      Top = 173
+      Height = 142
+      Top = 178
       Width = 212
       Align = alBottom
       BevelOuter = bvNone
-      ClientHeight = 146
+      ClientHeight = 142
       ClientWidth = 212
       ParentFont = False
       TabOrder = 1
       object Unattended: TCheckBox
-        Left = 57
+        AnchorSideTop.Control = led
+        AnchorSideTop.Side = asrCenter
+        Left = 48
         Height = 21
         Hint = 'If checked no confirmation dialog will be presented and failed operation will abort the current step.'
-        Top = 113
+        Top = 115
         Width = 124
         Caption = 'Run unattended'
         OnChange = UnattendedChange
@@ -207,7 +209,7 @@ object f_sequence: Tf_sequence
       object led: TShape
         Left = 8
         Height = 14
-        Top = 116
+        Top = 118
         Width = 14
         Brush.Color = clRed
         Shape = stCircle
@@ -232,7 +234,7 @@ object f_sequence: Tf_sequence
   object Panel2: TPanel
     Left = 0
     Height = 224
-    Top = 339
+    Top = 340
     Width = 212
     Align = alTop
     BevelOuter = bvNone

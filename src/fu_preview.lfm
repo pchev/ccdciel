@@ -26,10 +26,10 @@ object f_preview: Tf_preview
       Left = 0
       Height = 28
       Top = 0
-      Width = 192
+      Width = 191
       BevelOuter = bvNone
       ClientHeight = 28
-      ClientWidth = 192
+      ClientWidth = 191
       ParentFont = False
       TabOrder = 0
       object ExpTime: TComboBox
@@ -61,9 +61,11 @@ object f_preview: Tf_preview
         Text = '1'
       end
       object Label1: TLabel
+        AnchorSideTop.Control = ExpTime
+        AnchorSideTop.Side = asrCenter
         Left = 6
         Height = 17
-        Top = 4
+        Top = 6
         Width = 57
         Caption = 'Exposure'
         ParentColor = False
@@ -74,10 +76,10 @@ object f_preview: Tf_preview
       Left = 0
       Height = 68
       Top = 28
-      Width = 192
+      Width = 191
       BevelOuter = bvNone
       ClientHeight = 68
-      ClientWidth = 192
+      ClientWidth = 191
       ParentFont = False
       TabOrder = 4
       Visible = False
@@ -95,9 +97,11 @@ object f_preview: Tf_preview
         Visible = False
       end
       object LabelGain: TLabel
+        AnchorSideTop.Control = GainEdit
+        AnchorSideTop.Side = asrCenter
         Left = 6
         Height = 17
-        Top = 4
+        Top = 10
         Width = 28
         Caption = 'Gain'
         ParentColor = False
@@ -114,7 +118,7 @@ object f_preview: Tf_preview
         TabOrder = 1
       end
       object PanelOffset: TPanel
-        Left = 1
+        Left = 0
         Height = 36
         Top = 32
         Width = 191
@@ -123,9 +127,11 @@ object f_preview: Tf_preview
         ClientWidth = 191
         TabOrder = 2
         object LabelOffset: TLabel
+          AnchorSideTop.Control = OffsetEdit
+          AnchorSideTop.Side = asrCenter
           Left = 6
           Height = 17
-          Top = 4
+          Top = 10
           Width = 38
           Caption = 'Offset'
           ParentColor = False
@@ -144,10 +150,10 @@ object f_preview: Tf_preview
       Left = 0
       Height = 28
       Top = 96
-      Width = 192
+      Width = 191
       BevelOuter = bvNone
       ClientHeight = 28
-      ClientWidth = 192
+      ClientWidth = 191
       ParentFont = False
       TabOrder = 1
       object Binning: TComboBox
@@ -179,19 +185,21 @@ object f_preview: Tf_preview
     end
     object PanelFnumber: TPanel
       Left = 0
-      Height = 28
+      Height = 30
       Top = 124
-      Width = 192
+      Width = 191
       BevelOuter = bvNone
-      ClientHeight = 28
-      ClientWidth = 192
+      ClientHeight = 30
+      ClientWidth = 191
       ParentFont = False
       TabOrder = 5
       Visible = False
       object Label3: TLabel
+        AnchorSideTop.Control = Fnumber
+        AnchorSideTop.Side = asrCenter
         Left = 6
         Height = 17
-        Top = 4
+        Top = 8
         Width = 38
         Caption = 'F-stop'
         ParentColor = False
@@ -200,7 +208,7 @@ object f_preview: Tf_preview
       object Fnumber: TComboBox
         Left = 100
         Height = 28
-        Top = 0
+        Top = 2
         Width = 90
         Constraints.MaxHeight = 28
         ItemHeight = 0
@@ -210,19 +218,19 @@ object f_preview: Tf_preview
     end
     object Panel5: TPanel
       Left = 0
-      Height = 24
-      Top = 152
-      Width = 192
+      Height = 25
+      Top = 154
+      Width = 191
       BevelOuter = bvNone
-      ClientHeight = 24
-      ClientWidth = 192
+      ClientHeight = 25
+      ClientWidth = 191
       ParentFont = False
       TabOrder = 3
       object BtnPreview: TButton
         Left = 1
         Height = 23
         Hint = 'Start one preview exposure'
-        Top = 1
+        Top = 2
         Width = 96
         Caption = 'Preview'
         OnClick = BtnPreviewClick
@@ -234,7 +242,7 @@ object f_preview: Tf_preview
         Left = 100
         Height = 23
         Hint = 'Loop preview exposures'
-        Top = 1
+        Top = 2
         Width = 90
         Caption = 'Loop'
         OnClick = BtnLoopClick
@@ -245,11 +253,11 @@ object f_preview: Tf_preview
     object Panel4: TPanel
       Left = 0
       Height = 22
-      Top = 176
-      Width = 192
+      Top = 179
+      Width = 191
       BevelOuter = bvNone
       ClientHeight = 22
-      ClientWidth = 192
+      ClientWidth = 191
       ParentFont = False
       TabOrder = 2
       object led: TShape

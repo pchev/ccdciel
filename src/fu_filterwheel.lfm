@@ -37,8 +37,10 @@ object f_filterwheel: Tf_filterwheel
       TabOrder = 0
     end
     object Label1: TLabel
+      AnchorSideTop.Control = Filters
+      AnchorSideTop.Side = asrCenter
       Left = 8
-      Height = 19
+      Height = 17
       Top = 6
       Width = 23
       BorderSpacing.Left = 8

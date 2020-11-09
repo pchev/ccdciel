@@ -1,11 +1,11 @@
 object f_capture: Tf_capture
   Left = 0
-  Height = 315
+  Height = 369
   Top = 0
   Width = 194
   AutoSize = True
   ChildSizing.ControlsPerLine = 1
-  ClientHeight = 315
+  ClientHeight = 369
   ClientWidth = 194
   OnEndDrag = FrameEndDrag
   OnResize = FrameResize
@@ -15,14 +15,14 @@ object f_capture: Tf_capture
   DesignTop = -3
   object Panel1: TPanel
     Left = 0
-    Height = 295
+    Height = 349
     Top = 20
     Width = 194
     Align = alClient
     AutoSize = True
     ChildSizing.Layout = cclTopToBottomThenLeftToRight
     ChildSizing.ControlsPerLine = 99
-    ClientHeight = 295
+    ClientHeight = 349
     ClientWidth = 194
     ParentFont = False
     TabOrder = 0
@@ -72,9 +72,11 @@ object f_capture: Tf_capture
         Text = '1'
       end
       object Label1: TLabel
+        AnchorSideTop.Control = ExpTime
+        AnchorSideTop.Side = asrCenter
         Left = 4
         Height = 17
-        Top = 4
+        Top = 7
         Width = 22
         Caption = 'Exp'
         ParentColor = False
@@ -106,9 +108,11 @@ object f_capture: Tf_capture
         Visible = False
       end
       object LabelGain: TLabel
+        AnchorSideTop.Control = GainEdit
+        AnchorSideTop.Side = asrCenter
         Left = 4
         Height = 17
-        Top = 8
+        Top = 10
         Width = 28
         Caption = 'Gain'
         ParentColor = False
@@ -134,9 +138,11 @@ object f_capture: Tf_capture
         ClientWidth = 191
         TabOrder = 2
         object LabelOffset: TLabel
+          AnchorSideTop.Control = OffsetEdit
+          AnchorSideTop.Side = asrCenter
           Left = 4
           Height = 17
-          Top = 8
+          Top = 10
           Width = 38
           Caption = 'Offset'
           ParentColor = False
@@ -179,9 +185,11 @@ object f_capture: Tf_capture
         Text = '1x1'
       end
       object Label2: TLabel
+        AnchorSideTop.Control = Binning
+        AnchorSideTop.Side = asrCenter
         Left = 4
         Height = 17
-        Top = 4
+        Top = 7
         Width = 24
         Caption = 'Bin.'
         ParentColor = False
@@ -200,9 +208,11 @@ object f_capture: Tf_capture
       TabOrder = 9
       Visible = False
       object Label6: TLabel
-        Left = 0
+        AnchorSideTop.Control = Fnumber
+        AnchorSideTop.Side = asrCenter
+        Left = 4
         Height = 17
-        Top = 4
+        Top = 6
         Width = 38
         Caption = 'F-stop'
         ParentColor = False
@@ -239,9 +249,11 @@ object f_capture: Tf_capture
         TabOrder = 0
       end
       object Label3: TLabel
+        AnchorSideTop.Control = Fname
+        AnchorSideTop.Side = asrCenter
         Left = 4
         Height = 17
-        Top = 4
+        Top = 6
         Width = 40
         Caption = 'Object'
         ParentColor = False
@@ -260,9 +272,11 @@ object f_capture: Tf_capture
       ParentFont = False
       TabOrder = 3
       object Label4: TLabel
+        AnchorSideTop.Control = SeqNum
+        AnchorSideTop.Side = asrCenter
         Left = 4
         Height = 17
-        Top = 4
+        Top = 6
         Width = 37
         Caption = 'Count'
         ParentColor = False
@@ -292,9 +306,11 @@ object f_capture: Tf_capture
       ParentFont = False
       TabOrder = 4
       object Label5: TLabel
+        AnchorSideTop.Control = FrameType
+        AnchorSideTop.Side = asrCenter
         Left = 4
         Height = 17
-        Top = 4
+        Top = 7
         Width = 30
         Caption = 'Type'
         ParentColor = False
@@ -332,9 +348,11 @@ object f_capture: Tf_capture
       ParentFont = False
       TabOrder = 5
       object CheckBoxDither: TCheckBox
+        AnchorSideTop.Control = DitherCount
+        AnchorSideTop.Side = asrCenter
         Left = 4
         Height = 21
-        Top = 0
+        Top = 4
         Width = 102
         Caption = 'Dither every'
         OnClick = CheckLight
@@ -365,9 +383,11 @@ object f_capture: Tf_capture
       ParentFont = False
       TabOrder = 6
       object CheckBoxFocus: TCheckBox
+        AnchorSideTop.Control = FocusCount
+        AnchorSideTop.Side = asrCenter
         Left = 4
         Height = 21
-        Top = 0
+        Top = 4
         Width = 97
         Caption = 'Focus every'
         OnClick = CheckLight
@@ -389,19 +409,19 @@ object f_capture: Tf_capture
     end
     object Panel9: TPanel
       Left = 0
-      Height = 24
+      Height = 26
       Top = 295
       Width = 191
       BevelOuter = bvNone
-      ClientHeight = 24
+      ClientHeight = 26
       ClientWidth = 191
       ParentFont = False
       TabOrder = 7
       object BtnStart: TButton
-        Left = 2
+        Left = 4
         Height = 22
         Hint = 'Start the capture sequence'
-        Top = 2
+        Top = 4
         Width = 121
         Caption = 'Start'
         OnClick = BtnStartClick
@@ -411,7 +431,7 @@ object f_capture: Tf_capture
       object led: TShape
         Left = 164
         Height = 14
-        Top = 6
+        Top = 8
         Width = 14
         Brush.Color = clGray
         Shape = stCircle
