@@ -35,6 +35,11 @@ type
 
   Tf_option = class(TForm)
     GroupBox31: TGroupBox;
+    GroupBox32: TPanel;
+    Label28: TLabel;
+    Label29: TLabel;
+    Panel22: TPanel;
+    Panel23: TPanel;
     SlewGainEdit: TSpinEdit;
     SlewISObox: TComboBox;
     SlewOffsetEdit: TSpinEdit;
@@ -72,6 +77,8 @@ type
     PanelLeft: TPanel;
     AutofocusPanelOffset: TPanel;
     SlewPanelOffset: TPanel;
+    SlewPrec: TFloatSpinEdit;
+    SlewRetry: TSpinEdit;
     WantExif: TCheckBox;
     LabelTestVoice: TLabel;
     LowQualityDisplay: TCheckBox;
@@ -338,10 +345,8 @@ type
     astap: TGroupBox;
     SettlePixel: TFloatSpinEdit;
     SlewExp: TFloatSpinEdit;
-    SlewPrec: TFloatSpinEdit;
     SourcesLimit: TSpinEdit;
     PlatesolveWait: TSpinEdit;
-    SlewRetry: TSpinEdit;
     SlewBin: TSpinEdit;
     SlewDelay: TSpinEdit;
     MinutesPastMeridian: TSpinEdit;
@@ -548,8 +553,6 @@ type
     RefColor: TRadioGroup;
     SelectDirectoryDialog1: TSelectDirectoryDialog;
     GroupBox7: TGroupBox;
-    Label28: TLabel;
-    Label29: TLabel;
     Label30: TLabel;
     Label31: TLabel;
     Label32: TLabel;
@@ -922,6 +925,7 @@ begin
   GroupBox20.Caption:=rsSensorsPrope;
   label19.Caption:=rsMaximumADU;
   MaxAduFromCamera.Caption:=rsFromCameraDr;
+  GroupBox31.Caption:=rsGain+' / '+rsOffset2;
   CanSetGain.Caption:=rsManageTheGai;
   GroupBoxReadOut.Caption:=rsReadoutModes;
   Label112.Caption:=rsCapture;

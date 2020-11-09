@@ -66,12 +66,12 @@ object f_option: Tf_option
     Height = 541
     Top = 0
     Width = 530
-    ActivePage = PageCamera
+    ActivePage = PagePref
     Align = alClient
     MultiLine = True
     ParentFont = False
     ShowTabs = False
-    TabIndex = 3
+    TabIndex = 0
     TabOrder = 2
     OnChanging = PageControl1Changing
     Options = [nboMultiLine]
@@ -965,8 +965,8 @@ object f_option: Tf_option
             Top = 30
             Width = 331
             BevelOuter = bvNone
-            ClientHeight = 30
-            ClientWidth = 331
+            ClientHeight = 26
+            ClientWidth = 327
             ParentFont = False
             TabOrder = 1
             object Label74: TLabel
@@ -1509,7 +1509,7 @@ object f_option: Tf_option
           ChildSizing.ShrinkVertical = crsScaleChilds
           ChildSizing.Layout = cclLeftToRightThenTopToBottom
           ChildSizing.ControlsPerLine = 3
-          ClientHeight = 40
+          ClientHeight = 22
           ClientWidth = 237
           Columns = 3
           Items.Strings = (
@@ -2079,10 +2079,10 @@ object f_option: Tf_option
           TabStop = True
         end
         object AutofocusMoveDirOut: TRadioButton
-          Left = 356
+          Left = 369
           Height = 21
           Hint = 'The prefered focuser direction for autofocus.'
-          Top = 89
+          Top = 91
           Width = 47
           Caption = 'Out'
           OnClick = CheckFocuserDirection
@@ -2150,7 +2150,7 @@ object f_option: Tf_option
           ParentFont = False
         end
         object Label81: TLabel
-          Left = 283
+          Left = 296
           Height = 17
           Top = 121
           Width = 52
@@ -2184,7 +2184,7 @@ object f_option: Tf_option
           Value = 1
         end
         object AutofocusMinSNR: TFloatSpinEdit
-          Left = 356
+          Left = 369
           Height = 28
           Top = 117
           Width = 61
@@ -3310,51 +3310,6 @@ object f_option: Tf_option
         ClientWidth = 518
         ParentFont = False
         TabOrder = 0
-        object Label28: TLabel
-          Left = 16
-          Height = 17
-          Top = 81
-          Width = 152
-          Caption = 'Target precision [arcmin] '
-          ParentColor = False
-          ParentFont = False
-        end
-        object Label29: TLabel
-          Left = 16
-          Height = 17
-          Top = 113
-          Width = 164
-          Caption = 'Maximum number of retry'
-          ParentColor = False
-          ParentFont = False
-        end
-        object Label30: TLabel
-          Left = 16
-          Height = 17
-          Top = 182
-          Width = 149
-          Caption = 'Exposure time [seconds]'
-          ParentColor = False
-          ParentFont = False
-        end
-        object Label31: TLabel
-          Left = 16
-          Height = 17
-          Top = 260
-          Width = 47
-          Caption = 'Binning'
-          ParentColor = False
-          ParentFont = False
-        end
-        object Label32: TLabel
-          Left = 16
-          Height = 17
-          Top = 154
-          Width = 105
-          Caption = 'Control exposure'
-          ParentColor = False
-          ParentFont = False
-        end
         object PrecSlewBox: TRadioGroup
           Left = 0
           Height = 58
@@ -3364,7 +3319,7 @@ object f_option: Tf_option
           AutoFill = True
           BorderSpacing.Top = 4
           Caption = 'Correction method'
-          ChildSizing.LeftRightSpacing = 6
+          ChildSizing.LeftRightSpacing = 16
           ChildSizing.EnlargeHorizontal = crsHomogenousChildResize
           ChildSizing.EnlargeVertical = crsHomogenousChildResize
           ChildSizing.ShrinkHorizontal = crsScaleChilds
@@ -3381,108 +3336,20 @@ object f_option: Tf_option
           ParentFont = False
           TabOrder = 0
         end
-        object Label66: TLabel
-          Left = 16
-          Height = 17
-          Top = 301
-          Width = 32
-          Caption = 'Filter'
-          ParentColor = False
-          ParentFont = False
-        end
-        object SlewFilter: TComboBox
-          Left = 251
-          Height = 28
-          Top = 297
-          Width = 158
-          AutoSize = False
-          Constraints.MaxHeight = 28
-          ItemHeight = 0
-          ParentFont = False
-          Style = csDropDownList
-          TabOrder = 1
-        end
-        object Label87: TLabel
-          Left = 16
-          Height = 17
-          Top = 348
-          Width = 226
-          Caption = 'Delay after telescope slew [seconds] '
-          ParentColor = False
-          ParentFont = False
-        end
-        object SlewPrec: TFloatSpinEdit
-          Left = 327
-          Height = 28
-          Top = 81
-          Width = 81
-          Constraints.MaxHeight = 28
-          Increment = 0.1
-          MaxValue = 60
-          MinValue = 0.01
-          OnChange = SlewPrecChange
-          ParentFont = False
-          TabOrder = 2
-          Value = 5
-        end
-        object SlewRetry: TSpinEdit
-          Left = 327
-          Height = 28
-          Top = 113
-          Width = 81
-          Constraints.MaxHeight = 28
-          MaxValue = 10
-          ParentFont = False
-          TabOrder = 3
-        end
-        object SlewExp: TFloatSpinEdit
-          Left = 327
-          Height = 28
-          Top = 178
-          Width = 81
-          Constraints.MaxHeight = 28
-          Increment = 0.1
-          MaxValue = 60
-          MinValue = 1
-          ParentFont = False
-          TabOrder = 4
-          Value = 1
-        end
-        object SlewBin: TSpinEdit
-          Left = 327
-          Height = 28
-          Top = 256
-          Width = 81
-          Constraints.MaxHeight = 28
-          MaxValue = 9
-          MinValue = 1
-          ParentFont = False
-          TabOrder = 5
-          Value = 1
-        end
-        object SlewDelay: TSpinEdit
-          Left = 359
-          Height = 28
-          Top = 345
-          Width = 50
-          Constraints.MaxHeight = 28
-          MaxValue = 60
-          ParentFont = False
-          TabOrder = 6
-        end
         object SlewPanelGain: TPanel
           Left = 0
-          Height = 32
-          Top = 216
-          Width = 519
+          Height = 64
+          Top = 210
+          Width = 518
+          Align = alTop
           BevelOuter = bvNone
-          ClientHeight = 28
-          ClientWidth = 515
+          ClientHeight = 60
+          ClientWidth = 514
           ParentFont = False
-          TabOrder = 7
+          TabOrder = 1
           Visible = False
           object SlewISObox: TComboBox
-            Left = 160
+            Left = 327
             Height = 28
             Hint = 'Exposure time in seconds'
             Top = 0
@@ -3504,34 +3371,34 @@ object f_option: Tf_option
             ParentFont = False
           end
           object SlewGainEdit: TSpinEdit
-            Left = 160
+            Left = 327
             Height = 28
-            Top = 4
-            Width = 90
+            Top = 0
+            Width = 81
             Constraints.MaxHeight = 28
             MaxValue = 0
             ParentFont = False
             TabOrder = 1
           end
           object SlewPanelOffset: TPanel
-            Left = 272
+            Left = 0
             Height = 32
-            Top = 0
-            Width = 200
+            Top = 32
+            Width = 504
             BevelOuter = bvNone
             ClientHeight = 28
-            ClientWidth = 196
+            ClientWidth = 500
             TabOrder = 2
             object LabelOffset1: TLabel
-              Left = 0
+              Left = 16
               Height = 17
-              Top = 4
+              Top = 8
               Width = 38
               Caption = 'Offset'
               ParentColor = False
             end
             object SlewOffsetEdit: TSpinEdit
-              Left = 55
+              Left = 327
               Height = 28
               Top = 4
               Width = 81
@@ -3539,6 +3406,173 @@ object f_option: Tf_option
               MaxValue = 0
               TabOrder = 0
             end
+          end
+        end
+        object GroupBox32: TPanel
+          Left = 0
+          Height = 82
+          Top = 62
+          Width = 518
+          Align = alTop
+          BevelOuter = bvNone
+          ClientHeight = 78
+          ClientWidth = 514
+          TabOrder = 2
+          object SlewPrec: TFloatSpinEdit
+            Left = 327
+            Height = 28
+            Top = 8
+            Width = 81
+            Constraints.MaxHeight = 28
+            Increment = 0.1
+            MaxValue = 60
+            MinValue = 0.01
+            OnChange = SlewPrecChange
+            ParentFont = False
+            TabOrder = 0
+            Value = 5
+          end
+          object Label28: TLabel
+            Left = 16
+            Height = 17
+            Top = 8
+            Width = 152
+            Caption = 'Target precision [arcmin] '
+            ParentColor = False
+            ParentFont = False
+          end
+          object Label29: TLabel
+            Left = 16
+            Height = 17
+            Top = 40
+            Width = 164
+            Caption = 'Maximum number of retry'
+            ParentColor = False
+            ParentFont = False
+          end
+          object SlewRetry: TSpinEdit
+            Left = 327
+            Height = 28
+            Top = 40
+            Width = 81
+            Constraints.MaxHeight = 28
+            MaxValue = 10
+            ParentFont = False
+            TabOrder = 1
+          end
+        end
+        object Panel22: TPanel
+          Left = 0
+          Height = 66
+          Top = 144
+          Width = 518
+          Align = alTop
+          BevelOuter = bvNone
+          ClientHeight = 62
+          ClientWidth = 514
+          TabOrder = 3
+          object Label30: TLabel
+            Left = 16
+            Height = 17
+            Top = 36
+            Width = 149
+            Caption = 'Exposure time [seconds]'
+            ParentColor = False
+            ParentFont = False
+          end
+          object Label32: TLabel
+            Left = 16
+            Height = 17
+            Top = 8
+            Width = 105
+            Caption = 'Control exposure'
+            ParentColor = False
+            ParentFont = False
+          end
+          object SlewExp: TFloatSpinEdit
+            Left = 327
+            Height = 28
+            Top = 32
+            Width = 81
+            Constraints.MaxHeight = 28
+            Increment = 0.1
+            MaxValue = 60
+            MinValue = 1
+            ParentFont = False
+            TabOrder = 0
+            Value = 1
+          end
+        end
+        object Panel23: TPanel
+          Left = 0
+          Height = 142
+          Top = 274
+          Width = 518
+          Align = alTop
+          BevelOuter = bvNone
+          ClientHeight = 138
+          ClientWidth = 514
+          TabOrder = 4
+          object Label31: TLabel
+            Left = 16
+            Height = 17
+            Top = 12
+            Width = 47
+            Caption = 'Binning'
+            ParentColor = False
+            ParentFont = False
+          end
+          object Label66: TLabel
+            Left = 16
+            Height = 17
+            Top = 53
+            Width = 32
+            Caption = 'Filter'
+            ParentColor = False
+            ParentFont = False
+          end
+          object SlewFilter: TComboBox
+            Left = 251
+            Height = 28
+            Top = 49
+            Width = 158
+            AutoSize = False
+            Constraints.MaxHeight = 28
+            ItemHeight = 0
+            ParentFont = False
+            Style = csDropDownList
+            TabOrder = 0
+          end
+          object Label87: TLabel
+            Left = 16
+            Height = 17
+            Top = 100
+            Width = 226
+            Caption = 'Delay after telescope slew [seconds] '
+            ParentColor = False
+            ParentFont = False
+          end
+          object SlewBin: TSpinEdit
+            Left = 327
+            Height = 28
+            Top = 8
+            Width = 81
+            Constraints.MaxHeight = 28
+            MaxValue = 9
+            MinValue = 1
+            ParentFont = False
+            TabOrder = 1
+            Value = 1
+          end
+          object SlewDelay: TSpinEdit
+            Left = 359
+            Height = 28
+            Top = 97
+            Width = 50
+            Constraints.MaxHeight = 28
+            MaxValue = 60
+            ParentFont = False
+            TabOrder = 2
           end
         end
       end
