@@ -6,15 +6,15 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ccdciel\n"
 "Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
-"POT-Creation-Date: 2020-08-23 08:48+0000\n"
-"PO-Revision-Date: 2020-08-23 08:56+0000\n"
+"POT-Creation-Date: 2020-11-09 13:54+0000\n"
+"PO-Revision-Date: 2020-11-09 13:57+0000\n"
 "Last-Translator: Patrick Chevalley <Unknown>\n"
 "Language-Team: French <fr@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2020-10-18 13:00+0000\n"
-"X-Generator: Launchpad (build 58bb2f3096f16f0e0acc917602669aecb4ffaf54)\n"
+"X-Launchpad-Export-Date: 2020-11-09 14:00+0000\n"
+"X-Generator: Launchpad (build e39939c02bd86af4202bc6e2123a7708215ec8ea)\n"
 
 #: u_translation.rs32bitdriver
 msgid "This driver work only in 32bit, please install the 32bit version of CCDciel."
@@ -1954,6 +1954,10 @@ msgstr "Capteur principal"
 msgid "Adjust the mount RA axis manually to point to the pole the best as possible.%sSlew the telescope to point near the pole at a declination about 89 to 90 degrees with counterweight down.%sSelect below if the telescope can already slew automatically or if it must be moved manually.%sIf automatic, select the direction and movement step. Beware it will move two time this amount."
 msgstr "Pointer l’axe de la monture manuellement vers le pôle le mieux possible.%sPointer le télescope à proximité du pôle avec une déclinaison de 89 à 90 degrés avec le contrepoids vers le bas.%sSélectionnez ci-dessous si le télescope peut déjà se déplacer automatiquement ou si il doit être déplacé manuellement.%sSi automatique, sélectionnez la direction et le déplacement. Attention qu'il se déplacera de deux fois ce montant."
 
+#: u_translation.rsmanagethegai
+msgid "Manage the Gain and Offset if available."
+msgstr "Gérer le gain et l'offset si ils sont disponible"
+
 #: u_translation.rsmanual
 msgid "Manual"
 msgstr "Manuel"
@@ -2461,6 +2465,10 @@ msgstr "Aberration hors axe[hfd]=%s"
 #: u_translation.rsoffset
 msgid "offset"
 msgstr "décalage"
+
+#: u_translation.rsoffset2
+msgid "Offset"
+msgstr "Offset"
 
 #: u_translation.rsok
 msgid "OK"

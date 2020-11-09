@@ -2,15 +2,15 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ccdciel\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-08-23 08:48+0000\n"
-"PO-Revision-Date: 2020-10-09 08:32+0000\n"
+"POT-Creation-Date: 2020-11-09 13:54+0000\n"
+"PO-Revision-Date: 2020-10-27 07:33+0000\n"
 "Last-Translator: Stanislav Holub <Unknown>\n"
 "Language-Team: Czech <cz@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2020-10-18 13:00+0000\n"
-"X-Generator: Launchpad (build 58bb2f3096f16f0e0acc917602669aecb4ffaf54)\n"
+"X-Launchpad-Export-Date: 2020-11-09 14:00+0000\n"
+"X-Generator: Launchpad (build e39939c02bd86af4202bc6e2123a7708215ec8ea)\n"
 "Language: cs\n"
 
 #: u_translation.rs32bitdriver
@@ -155,7 +155,7 @@ msgstr "Nastavení astrometrie"
 
 #: u_translation.rsastrometryre
 msgid "Astrometry resolver log"
-msgstr "Protokol řešení astrometrie"
+msgstr "Protokol vyřešení astrometrie"
 
 #: u_translation.rsatdawn
 msgid "at dawn"
@@ -1349,7 +1349,7 @@ msgstr "Nepodařilo se zahájit pointaci!"
 
 #: u_translation.rsfailtoresolv
 msgid "Fail to resolve control exposure"
-msgstr "Selhání expozice kontrolního řešení"
+msgstr "Selhání expozice kontrolního vyřešení"
 
 #: u_translation.rsfalse
 msgid "False"
@@ -1952,6 +1952,10 @@ msgstr "Hlavní senzor"
 msgid "Adjust the mount RA axis manually to point to the pole the best as possible.%sSlew the telescope to point near the pole at a declination about 89 to 90 degrees with counterweight down.%sSelect below if the telescope can already slew automatically or if it must be moved manually.%sIf automatic, select the direction and movement step. Beware it will move two time this amount."
 msgstr "Osu RA držáku nastavte ručně tak, aby směřovala k pólu co nejpřesněji.%sNastavte dalekohled tak, aby byl blízko pólu při sklonu 89 až 90 stupňů s protizávažím dolů.%sVyberte z nabýtky, jak se dalekohled bude otáčet automaticky nebo ručně.%sPři automatické otáčení vyberte směr a krok pohybu. Pozor, otočí se dvakrát o tuto hodnotu."
 
+#: u_translation.rsmanagethegai
+msgid "Manage the Gain and Offset if available."
+msgstr ""
+
 #: u_translation.rsmanual
 msgid "Manual"
 msgstr "Ruční"
@@ -2319,7 +2323,7 @@ msgstr "Žádný"
 
 #: u_translation.rsnoresolverco
 msgid "No resolver configured!"
-msgstr "Není nakonfigurováno žádné řešení!"
+msgstr "Není nakonfigurováno žádné vyřešení!"
 
 #: u_translation.rsnoresponsefr
 msgid "No response from server"
@@ -2460,6 +2464,10 @@ msgstr "Aberace mimo osu [hfd]=%s"
 #: u_translation.rsoffset
 msgid "offset"
 msgstr "posun"
+
+#: u_translation.rsoffset2
+msgid "Offset"
+msgstr ""
 
 #: u_translation.rsok
 msgid "OK"
@@ -2999,11 +3007,11 @@ msgstr "Vyřešit"
 
 #: u_translation.rsresolveandpl
 msgid "Resolve and annotate DSO"
-msgstr "Vyřešit a anotovat DSO"
+msgstr "Řešit a anotovat DSO"
 
 #: u_translation.rsresolveandpl2
 msgid "Resolve and annotate galaxies (Hyperleda)"
-msgstr "Vyřešit a anotovat  galaxie (Hyperleda)"
+msgstr "Řešit a anotovat  galaxie (Hyperleda)"
 
 #: u_translation.rsresolveandro
 msgid "Resolve and Rotate"
@@ -3035,7 +3043,7 @@ msgstr "Vyřešit a Synchronizuj s rotátorem"
 
 #: u_translation.rsresolvecontr
 msgid "Resolve control exposure"
-msgstr "Řeším kontrolní expozici"
+msgstr "Vyřeším kontrolní expozice"
 
 #: u_translation.rsresolveerror
 msgid "%s resolve error."
@@ -3043,7 +3051,7 @@ msgstr "%s chyba řešení."
 
 #: u_translation.rsresolveralre
 msgid "Resolver already running, cannot start astrometry now!"
-msgstr "Řešení již běží, nelze začít s astrometrií!"
+msgstr "Vyřešení již běží, nelze začít s astrometrií!"
 
 #: u_translation.rsresolvesucce
 msgid "%s resolve successful."
@@ -3644,7 +3652,7 @@ msgstr "Programy"
 
 #: u_translation.rssolvedinseco
 msgid "Solved in %s seconds"
-msgstr "Vyřešeno v %s sekundách"
+msgstr "Řešeno v %s sekundách"
 
 #: u_translation.rssomedefinedd
 msgid "Some defined devices are not connected"
@@ -3840,7 +3848,7 @@ msgstr "Zastavit"
 
 #: u_translation.rsstopastromet
 msgid "Stop astrometry resolver"
-msgstr "Zastavit astrometrické řešení."
+msgstr "Zastavit astrometrické vyřešení."
 
 #: u_translation.rsstopastromet2
 msgid "Stop astrometry resolver."
@@ -4504,7 +4512,7 @@ msgstr "Čekám 1 minutu ..."
 
 #: u_translation.rswaitaftersol
 msgid "Wait after solve"
-msgstr "Vyčkat na vyřešení"
+msgstr "Vyčkat na řešení"
 
 #: u_translation.rswaitingdseco
 msgid "Waiting %d seconds before to restart the exposure"

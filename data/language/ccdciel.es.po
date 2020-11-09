@@ -6,15 +6,15 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ccdciel\n"
 "Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
-"POT-Creation-Date: 2020-08-23 08:48+0000\n"
+"POT-Creation-Date: 2020-11-09 13:54+0000\n"
 "PO-Revision-Date: 2020-08-01 19:06+0000\n"
 "Last-Translator: Víctor R. Ruiz <Unknown>\n"
 "Language-Team: Spanish <es@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2020-10-18 13:00+0000\n"
-"X-Generator: Launchpad (build 58bb2f3096f16f0e0acc917602669aecb4ffaf54)\n"
+"X-Launchpad-Export-Date: 2020-11-09 14:00+0000\n"
+"X-Generator: Launchpad (build e39939c02bd86af4202bc6e2123a7708215ec8ea)\n"
 
 #: u_translation.rs32bitdriver
 msgid "This driver work only in 32bit, please install the 32bit version of CCDciel."
@@ -1953,6 +1953,10 @@ msgstr "Sensor principal"
 msgid "Adjust the mount RA axis manually to point to the pole the best as possible.%sSlew the telescope to point near the pole at a declination about 89 to 90 degrees with counterweight down.%sSelect below if the telescope can already slew automatically or if it must be moved manually.%sIf automatic, select the direction and movement step. Beware it will move two time this amount."
 msgstr "Ajuste el eje de AR de la montura manualmente para apuntar al polo lo mejor que pueda.%sMueva el telescopio cerca del polo con una Declinación de 89 o 90 grados con el contrapeso abajo.%sSeleccione debajo si el telescopio ya puede moverse automáticamente o si debe moverlo manualmente.%sSi es automáticamente, seleccione la dirección y el paso de movimiento. Tenga en cuenta que se moverá dos veces esta cantidad."
 
+#: u_translation.rsmanagethegai
+msgid "Manage the Gain and Offset if available."
+msgstr ""
+
 #: u_translation.rsmanual
 msgid "Manual"
 msgstr "Manual"
@@ -2460,6 +2464,10 @@ msgstr "Aberración fuera de eje [hdf]=%s"
 #: u_translation.rsoffset
 msgid "offset"
 msgstr "desplazamiento"
+
+#: u_translation.rsoffset2
+msgid "Offset"
+msgstr ""
 
 #: u_translation.rsok
 msgid "OK"
