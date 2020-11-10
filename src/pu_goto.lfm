@@ -1,35 +1,36 @@
 object f_goto: Tf_goto
   Left = 369
-  Height = 268
+  Height = 265
   Top = 30
-  Width = 337
+  Width = 333
   Caption = 'f_goto'
-  ClientHeight = 268
-  ClientWidth = 337
+  ClientHeight = 265
+  ClientWidth = 333
+  DesignTimePPI = 95
   OnCreate = FormCreate
   OnShow = FormShow
   object PanelAltAz: TPanel
     Left = 0
-    Height = 74
-    Top = 137
-    Width = 338
+    Height = 73
+    Top = 136
+    Width = 334
     BevelOuter = bvNone
-    ClientHeight = 74
-    ClientWidth = 338
+    ClientHeight = 73
+    ClientWidth = 334
     ParentFont = False
     TabOrder = 5
     object Label4: TLabel
       Left = 19
-      Height = 19
+      Height = 17
       Top = 8
-      Width = 42
+      Width = 40
       Caption = 'Label4'
       ParentColor = False
       ParentFont = False
     end
     object LabelAz: TLabel
-      Left = 121
-      Height = 19
+      Left = 120
+      Height = 17
       Top = 8
       Width = 4
       Caption = '-'
@@ -38,16 +39,16 @@ object f_goto: Tf_goto
     end
     object Label5: TLabel
       Left = 19
-      Height = 19
+      Height = 17
       Top = 42
-      Width = 42
+      Width = 40
       Caption = 'Label5'
       ParentColor = False
       ParentFont = False
     end
     object LabelAlt: TLabel
-      Left = 121
-      Height = 19
+      Left = 120
+      Height = 17
       Top = 42
       Width = 4
       Caption = '-'
@@ -57,132 +58,143 @@ object f_goto: Tf_goto
   end
   object PanelPxSz: TPanel
     Left = 0
-    Height = 74
-    Top = 137
-    Width = 338
+    Height = 73
+    Top = 136
+    Width = 334
     BevelOuter = bvNone
-    ClientHeight = 74
-    ClientWidth = 338
+    ClientHeight = 73
+    ClientWidth = 334
     ParentFont = False
     TabOrder = 6
     object PxSz: TEdit
-      Left = 120
-      Height = 31
+      Left = 119
+      Height = 30
       Top = 8
-      Width = 111
+      Width = 110
       ParentFont = False
       TabOrder = 0
     end
     object Label7: TLabel
       Left = 19
-      Height = 19
+      Height = 17
       Top = 8
-      Width = 75
+      Width = 70
       Caption = 'Image scale'
       ParentColor = False
       ParentFont = False
     end
     object Label8: TLabel
       Left = 19
-      Height = 19
+      Height = 17
       Top = 32
-      Width = 60
+      Width = 57
       Caption = 'arcsec/px'
       ParentColor = False
       ParentFont = False
     end
     object BtnCompute: TButton
-      Left = 251
+      AnchorSideTop.Control = PxSz
+      AnchorSideTop.Side = asrCenter
+      Left = 243
       Height = 25
-      Top = 8
-      Width = 75
+      Top = 11
+      Width = 74
       Caption = 'Compute'
       OnClick = BtnComputeClick
+      ParentFont = False
       TabOrder = 1
     end
   end
   object BtnSearch: TButton
-    Left = 246
+    AnchorSideTop.Control = Obj
+    AnchorSideTop.Side = asrCenter
+    Left = 243
     Height = 25
     Top = 34
-    Width = 75
+    Width = 74
     Caption = 'Search'
     OnClick = BtnSearchClick
     ParentFont = False
     TabOrder = 0
   end
   object Ra: TEdit
-    Left = 121
+    Left = 120
     Height = 28
-    Top = 69
-    Width = 111
+    Top = 68
+    Width = 110
     Constraints.MaxHeight = 28
     OnChange = CenterChange
     ParentFont = False
     TabOrder = 1
   end
   object De: TEdit
-    Left = 121
+    Left = 120
     Height = 28
-    Top = 103
-    Width = 111
+    Top = 102
+    Width = 110
     Constraints.MaxHeight = 28
     OnChange = CenterChange
     ParentFont = False
     TabOrder = 2
   end
   object Obj: TEdit
-    Left = 121
+    Left = 120
     Height = 28
     Top = 32
-    Width = 111
+    Width = 110
     Constraints.MaxHeight = 28
     OnKeyDown = ObjKeyDown
     ParentFont = False
     TabOrder = 3
   end
   object Label1: TLabel
+    AnchorSideTop.Control = Ra
+    AnchorSideTop.Side = asrCenter
     Left = 19
-    Height = 19
-    Top = 75
-    Width = 63
+    Height = 17
+    Top = 74
+    Width = 59
     Caption = 'Center RA'
     ParentColor = False
     ParentFont = False
   end
   object Label2: TLabel
+    AnchorSideTop.Control = De
+    AnchorSideTop.Side = asrCenter
     Left = 19
-    Height = 19
-    Top = 109
-    Width = 70
+    Height = 17
+    Top = 108
+    Width = 66
     Caption = 'Center Dec'
     ParentColor = False
     ParentFont = False
   end
   object Label3: TLabel
+    AnchorSideTop.Control = Obj
+    AnchorSideTop.Side = asrCenter
     Left = 19
-    Height = 19
+    Height = 17
     Top = 38
-    Width = 79
+    Width = 76
     Caption = 'Object name'
     ParentColor = False
     ParentFont = False
   end
   object Panel1: TPanel
     Left = 0
-    Height = 50
-    Top = 218
-    Width = 337
+    Height = 49
+    Top = 216
+    Width = 333
     Align = alBottom
-    ClientHeight = 50
-    ClientWidth = 337
+    ClientHeight = 49
+    ClientWidth = 333
     ParentFont = False
     TabOrder = 4
     object Button2: TButton
-      Left = 130
+      Left = 128
       Height = 25
       Top = 8
-      Width = 76
+      Width = 75
       Anchors = [akTop, akRight]
       Caption = 'Cancel'
       ModalResult = 2
@@ -190,10 +202,10 @@ object f_goto: Tf_goto
       TabOrder = 0
     end
     object ButtonOK: TButton
-      Left = 251
+      Left = 243
       Height = 25
       Top = 8
-      Width = 76
+      Width = 75
       Anchors = [akTop, akRight]
       Caption = 'Goto'
       ModalResult = 1
@@ -202,18 +214,22 @@ object f_goto: Tf_goto
     end
   end
   object Label6: TLabel
-    Left = 246
-    Height = 19
-    Top = 75
+    AnchorSideTop.Control = Ra
+    AnchorSideTop.Side = asrCenter
+    Left = 243
+    Height = 17
+    Top = 74
     Width = 36
     Caption = 'J2000'
     ParentColor = False
     ParentFont = False
   end
   object Label16: TLabel
-    Left = 246
-    Height = 19
-    Top = 109
+    AnchorSideTop.Control = De
+    AnchorSideTop.Side = asrCenter
+    Left = 243
+    Height = 17
+    Top = 108
     Width = 36
     Caption = 'J2000'
     ParentColor = False
@@ -221,7 +237,7 @@ object f_goto: Tf_goto
   end
   object msginfo: TLabel
     Left = 19
-    Height = 19
+    Height = 17
     Top = 4
     Width = 50
     Caption = 'msginfo'
