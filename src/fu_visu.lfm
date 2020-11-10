@@ -60,11 +60,9 @@ object f_visu: Tf_visu
         Font.Color = clSilver
         Increment = 10
         MaxValue = 65536
-        MinValue = 0
         OnChange = SpinEditMinChange
         ParentFont = False
         TabOrder = 0
-        Value = 0
         Visible = False
       end
       object SpinEditMax: TFloatSpinEdit
@@ -77,11 +75,9 @@ object f_visu: Tf_visu
         Font.Color = clSilver
         Increment = 10
         MaxValue = 65536
-        MinValue = 0
         OnChange = SpinEditMaxChange
         ParentFont = False
         TabOrder = 1
-        Value = 0
         Visible = False
       end
     end
@@ -115,9 +111,11 @@ object f_visu: Tf_visu
           ClientWidth = 114
           TabOrder = 1
           object HistBar: TTrackBar
+            AnchorSideTop.Control = Panel5
+            AnchorSideTop.Side = asrCenter
             Left = 0
             Height = 43
-            Top = 0
+            Top = -11
             Width = 114
             Max = 100
             Position = 0
@@ -697,14 +695,14 @@ object f_visu: Tf_visu
     Enabled = False
     Interval = 250
     OnTimer = TimerMinMaxTimer
-    left = 40
-    top = 49
+    Left = 40
+    Top = 49
   end
   object TimerRedraw: TTimer
     Enabled = False
     Interval = 250
     OnTimer = TimerRedrawTimer
-    left = 151
-    top = 49
+    Left = 151
+    Top = 49
   end
 end

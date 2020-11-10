@@ -1,11 +1,11 @@
 object f_devicesconnection: Tf_devicesconnection
   Left = 0
-  Height = 133
+  Height = 143
   Top = 0
-  Width = 205
+  Width = 221
   AutoSize = True
-  ClientHeight = 133
-  ClientWidth = 205
+  ClientHeight = 143
+  ClientWidth = 221
   ParentFont = False
   TabOrder = 0
   DesignLeft = -7
@@ -14,7 +14,7 @@ object f_devicesconnection: Tf_devicesconnection
     Left = 0
     Height = 25
     Top = 0
-    Width = 205
+    Width = 221
     Align = alTop
     Alignment = taCenter
     AutoSize = False
@@ -29,33 +29,35 @@ object f_devicesconnection: Tf_devicesconnection
   end
   object Panel1: TPanel
     Left = 0
-    Height = 108
+    Height = 118
     Top = 25
-    Width = 205
+    Width = 221
     Align = alClient
     ChildSizing.EnlargeHorizontal = crsHomogenousChildResize
     ChildSizing.Layout = cclTopToBottomThenLeftToRight
     ChildSizing.ControlsPerLine = 99
-    ClientHeight = 108
-    ClientWidth = 205
+    ClientHeight = 118
+    ClientWidth = 221
     ParentFont = False
     TabOrder = 0
     object Panel2: TPanel
       Left = 0
       Height = 27
       Top = 0
-      Width = 206
+      Width = 221
       BevelOuter = bvNone
       BorderWidth = 2
       ClientHeight = 27
-      ClientWidth = 206
+      ClientWidth = 221
       ParentFont = False
       TabOrder = 0
       object ProfileLabel: TLabel
+        AnchorSideTop.Control = BtnProfile
+        AnchorSideTop.Side = asrCenter
         Left = 116
-        Height = 19
-        Top = 3
-        Width = 45
+        Height = 17
+        Top = 4
+        Width = 44
         Caption = 'Profile:'
         ParentColor = False
         ParentFont = False
@@ -74,11 +76,11 @@ object f_devicesconnection: Tf_devicesconnection
       Left = 0
       Height = 27
       Top = 27
-      Width = 206
+      Width = 221
       BevelOuter = bvNone
       BorderWidth = 2
       ClientHeight = 27
-      ClientWidth = 206
+      ClientWidth = 221
       ParentFont = False
       TabOrder = 1
       object BtnConnect: TButton
@@ -103,9 +105,9 @@ object f_devicesconnection: Tf_devicesconnection
     end
     object PanelDev: TPanel
       Left = 0
-      Height = 46
+      Height = 42
       Top = 54
-      Width = 206
+      Width = 221
       BevelOuter = bvNone
       ChildSizing.LeftRightSpacing = 4
       ChildSizing.TopBottomSpacing = 2
@@ -113,17 +115,17 @@ object f_devicesconnection: Tf_devicesconnection
       ChildSizing.VerticalSpacing = 4
       ChildSizing.Layout = cclLeftToRightThenTopToBottom
       ChildSizing.ControlsPerLine = 6
-      ClientHeight = 46
-      ClientWidth = 206
+      ClientHeight = 42
+      ClientWidth = 221
       ParentFont = False
       TabOrder = 2
       Visible = False
       object LabelCamera: TLabel
         Tag = 1
         Left = 4
-        Height = 19
+        Height = 17
         Top = 2
-        Width = 32
+        Width = 31
         Caption = 'Cam.'
         Font.Color = clRed
         ParentColor = False
@@ -132,8 +134,8 @@ object f_devicesconnection: Tf_devicesconnection
       end
       object LabelWheel: TLabel
         Tag = 2
-        Left = 40
-        Height = 19
+        Left = 39
+        Height = 17
         Top = 2
         Width = 29
         Caption = 'Fil.'
@@ -144,8 +146,8 @@ object f_devicesconnection: Tf_devicesconnection
       end
       object LabelFocuser: TLabel
         Tag = 3
-        Left = 73
-        Height = 19
+        Left = 72
+        Height = 17
         Top = 2
         Width = 25
         Caption = 'Foc.'
@@ -156,8 +158,8 @@ object f_devicesconnection: Tf_devicesconnection
       end
       object LabelRotator: TLabel
         Tag = 4
-        Left = 102
-        Height = 19
+        Left = 101
+        Height = 17
         Top = 2
         Width = 25
         Caption = 'Rot.'
@@ -168,8 +170,8 @@ object f_devicesconnection: Tf_devicesconnection
       end
       object LabelMount: TLabel
         Tag = 5
-        Left = 131
-        Height = 19
+        Left = 130
+        Height = 17
         Top = 2
         Width = 29
         Caption = 'Mnt.'
@@ -180,8 +182,8 @@ object f_devicesconnection: Tf_devicesconnection
       end
       object LabelDome: TLabel
         Tag = 6
-        Left = 164
-        Height = 19
+        Left = 163
+        Height = 17
         Top = 2
         Width = 38
         Caption = 'Dome'
@@ -193,9 +195,9 @@ object f_devicesconnection: Tf_devicesconnection
       object LabelWatchdog: TLabel
         Tag = 7
         Left = 4
-        Height = 19
-        Top = 25
-        Width = 32
+        Height = 17
+        Top = 23
+        Width = 31
         Caption = 'Wch.'
         Font.Color = clRed
         ParentColor = False
@@ -204,9 +206,9 @@ object f_devicesconnection: Tf_devicesconnection
       end
       object LabelWeather: TLabel
         Tag = 8
-        Left = 40
-        Height = 19
-        Top = 25
+        Left = 39
+        Height = 17
+        Top = 23
         Width = 29
         Caption = 'Wth.'
         Font.Color = clRed
@@ -216,9 +218,9 @@ object f_devicesconnection: Tf_devicesconnection
       end
       object LabelSafety: TLabel
         Tag = 9
-        Left = 73
-        Height = 19
-        Top = 25
+        Left = 72
+        Height = 17
+        Top = 23
         Width = 25
         Caption = 'Saf.'
         Font.Color = clRed
@@ -229,8 +231,8 @@ object f_devicesconnection: Tf_devicesconnection
     end
   end
   object PopupMenu1: TPopupMenu
-    left = 112
-    top = 101
+    Left = 112
+    Top = 101
     object MenuConnectDevice: TMenuItem
       Caption = 'Connect'
       OnClick = MenuConnectDeviceClick

@@ -221,6 +221,10 @@ begin
  if V.connected then begin
     FStatus := devConnected;
     try
+    msg(V.DriverInfo,9);
+    except
+    end;
+    try
     msg('Driver version: '+V.DriverVersion,9);
     except
       msg('Error: unknown driver version',9);
@@ -230,6 +234,7 @@ begin
     except
       FInterfaceVersion:=1;
     end;
+    msg('Interface version: '+inttostr(FInterfaceVersion),9);
     try
     FCameraXSize:=V.CameraXSize;
     except

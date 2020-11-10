@@ -29,24 +29,24 @@ object f_weather: Tf_weather
   end
   object Panel1: TPanel
     Left = 0
-    Height = 24
+    Height = 21
     Top = 20
     Width = 194
     Align = alTop
     AutoSize = True
     ChildSizing.Layout = cclTopToBottomThenLeftToRight
     ChildSizing.ControlsPerLine = 99
-    ClientHeight = 24
+    ClientHeight = 21
     ClientWidth = 194
     ParentFont = False
     TabOrder = 0
     object Panel2: TPanel
       Left = 0
-      Height = 23
+      Height = 20
       Top = 0
       Width = 178
       BevelOuter = bvNone
-      ClientHeight = 23
+      ClientHeight = 20
       ClientWidth = 178
       ParentFont = False
       TabOrder = 0
@@ -60,10 +60,12 @@ object f_weather: Tf_weather
         Shape = stCircle
       end
       object Label1: TLabel
+        AnchorSideTop.Control = led
+        AnchorSideTop.Side = asrCenter
         Left = 8
-        Height = 19
-        Top = 4
-        Width = 33
+        Height = 17
+        Top = 3
+        Width = 32
         Caption = 'Clear'
         ParentColor = False
         ParentFont = False

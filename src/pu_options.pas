@@ -34,6 +34,12 @@ type
   { Tf_option }
 
   Tf_option = class(TForm)
+    GroupBox31: TGroupBox;
+    GroupBox32: TPanel;
+    Label28: TLabel;
+    Label29: TLabel;
+    Panel22: TPanel;
+    Panel23: TPanel;
     SlewGainEdit: TSpinEdit;
     SlewISObox: TComboBox;
     SlewOffsetEdit: TSpinEdit;
@@ -71,6 +77,8 @@ type
     PanelLeft: TPanel;
     AutofocusPanelOffset: TPanel;
     SlewPanelOffset: TPanel;
+    SlewPrec: TFloatSpinEdit;
+    SlewRetry: TSpinEdit;
     WantExif: TCheckBox;
     LabelTestVoice: TLabel;
     LowQualityDisplay: TCheckBox;
@@ -174,7 +182,7 @@ type
     DomeNoSafetyCheck: TCheckBox;
     DomeSlaveToMount: TCheckBox;
     DomeCloseActions: TStringGrid;
-    GainFromCamera: TCheckBox;
+    CanSetGain: TCheckBox;
     FilenameSep: TComboBox;
     Debug_msg: TCheckBox;
     GroupBox11: TGroupBox;
@@ -185,7 +193,6 @@ type
     Label121: TLabel;
     Label122: TLabel;
     Label123: TLabel;
-    Label124: TLabel;
     Label125: TLabel;
     Label126: TLabel;
     MeridianFlipStopSlaving: TCheckBox;
@@ -338,10 +345,8 @@ type
     astap: TGroupBox;
     SettlePixel: TFloatSpinEdit;
     SlewExp: TFloatSpinEdit;
-    SlewPrec: TFloatSpinEdit;
     SourcesLimit: TSpinEdit;
     PlatesolveWait: TSpinEdit;
-    SlewRetry: TSpinEdit;
     SlewBin: TSpinEdit;
     SlewDelay: TSpinEdit;
     MinutesPastMeridian: TSpinEdit;
@@ -548,8 +553,6 @@ type
     RefColor: TRadioGroup;
     SelectDirectoryDialog1: TSelectDirectoryDialog;
     GroupBox7: TGroupBox;
-    Label28: TLabel;
-    Label29: TLabel;
     Label30: TLabel;
     Label31: TLabel;
     Label32: TLabel;
@@ -922,8 +925,8 @@ begin
   GroupBox20.Caption:=rsSensorsPrope;
   label19.Caption:=rsMaximumADU;
   MaxAduFromCamera.Caption:=rsFromCameraDr;
-  GainFromCamera.Caption:=rsFromCameraDr;
-  Label124.Caption:=rsGain;
+  GroupBox31.Caption:=rsGain+' / '+rsOffset2;
+  CanSetGain.Caption:=rsManageTheGai;
   GroupBoxReadOut.Caption:=rsReadoutModes;
   Label112.Caption:=rsCapture;
   Label113.Caption:=rsPreview;
@@ -1207,6 +1210,7 @@ begin
   TelescopeName.Hint:=rsTheTelescopeNameForI;
   HorizonFile.Hint:=rsTheHorizonPr;
   ElevationMin.Hint:=rsTheMinimalOb;
+  CanSetGain.Hint:=rsIfNotChecked;
   StackShow.Hint:=Format(rsShowTheOptio, [crlf, crlf]);
   FocuserBacklashDirection.Hint:=Format(rsTheDirection, [crlf]);
   FocuserBacklashActive.Hint:=Format(rsActivateBack, [crlf]);

@@ -45,7 +45,6 @@ T_ascomrestfocuser = class(T_focuser)
    FDeviceName: string;
    procedure StatusTimerTimer(sender: TObject);
    function  Connected: boolean;
-   function  InterfaceVersion: integer;
    function  DeviceName: string;
  protected
    procedure SetPosition(p:integer); override;
@@ -110,17 +109,6 @@ begin
  inherited Destroy;
 end;
 
-function  T_ascomrestfocuser.InterfaceVersion: integer;
-begin
- result:=1;
-  try
-   result:=V.Get('interfaceversion').AsInt;
-  if debug_msg then msg('Interface version = '+inttostr(Result));
-  except
-    result:=1;
-  end;
-end;
-
 function  T_ascomrestfocuser.DeviceName: string;
 begin
  result:='';
@@ -145,13 +133,22 @@ begin
   V.Device:=Fdevice;
   if Assigned(FonStatusChange) then FonStatusChange(self);
   V.Timeout:=5000;
-  FInterfaceVersion:=InterfaceVersion;
+  try
+  FInterfaceVersion:=V.Get('interfaceversion').AsInt;
+  except
+    FInterfaceVersion:=1;
+  end;
+  msg('Interface version: '+inttostr(FInterfaceVersion),9);
   if FInterfaceVersion=1 then
     raise Exception.Create('IFocuser V1 is not supported');
   V.Put('Connected',true);
   if Connected then begin
      FDeviceName:=DeviceName;
      V.Timeout:=120000;
+     try
+     msg(V.Get('driverinfo').AsString,9);
+     except
+     end;
      try
      msg('Driver version: '+V.Get('driverversion').AsString,9);
      except

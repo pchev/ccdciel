@@ -6,15 +6,15 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ccdciel\n"
 "Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
-"POT-Creation-Date: 2020-08-23 08:48+0000\n"
+"POT-Creation-Date: 2020-11-09 13:54+0000\n"
 "PO-Revision-Date: 2019-12-15 12:59+0000\n"
 "Last-Translator: Patrick Chevalley <Unknown>\n"
 "Language-Team: Italian <it@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2020-10-18 13:00+0000\n"
-"X-Generator: Launchpad (build 58bb2f3096f16f0e0acc917602669aecb4ffaf54)\n"
+"X-Launchpad-Export-Date: 2020-11-09 14:01+0000\n"
+"X-Generator: Launchpad (build e39939c02bd86af4202bc6e2123a7708215ec8ea)\n"
 
 #: u_hints.rsactivateback
 msgid "Activate backlash compensation.%sLet this disabled if your focuser driver include backlash compensation."
@@ -82,6 +82,10 @@ msgstr ""
 
 #: u_hints.rscameraiso
 msgid "Camera ISO"
+msgstr ""
+
+#: u_hints.rscameraoffset
+msgid "Camera offset"
 msgstr ""
 
 #: u_hints.rscamerapositi
@@ -210,6 +214,10 @@ msgstr ""
 
 #: u_hints.rsifcheckednoc
 msgid "If checked no confirmation dialog will be presented and failed operation will abort the current step."
+msgstr ""
+
+#: u_hints.rsifnotchecked
+msgid "If not checked the program will never change the gain/offset value set in the driver setup"
 msgstr ""
 
 #: u_hints.rsiftheimageis

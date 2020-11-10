@@ -29,41 +29,43 @@ object f_safety: Tf_safety
   end
   object Panel1: TPanel
     Left = 0
-    Height = 24
+    Height = 22
     Top = 20
     Width = 194
     Align = alTop
     AutoSize = True
     ChildSizing.Layout = cclTopToBottomThenLeftToRight
     ChildSizing.ControlsPerLine = 99
-    ClientHeight = 24
+    ClientHeight = 22
     ClientWidth = 194
     ParentFont = False
     TabOrder = 0
     object Panel2: TPanel
       Left = 0
-      Height = 23
+      Height = 21
       Top = 0
       Width = 178
       BevelOuter = bvNone
-      ClientHeight = 23
+      ClientHeight = 21
       ClientWidth = 178
       ParentFont = False
       TabOrder = 0
       object led: TShape
+        AnchorSideTop.Control = Label1
+        AnchorSideTop.Side = asrCenter
         Left = 164
         Height = 14
         Hint = 'Uncalibrated'
-        Top = 4
+        Top = 5
         Width = 14
         Brush.Color = clRed
         Shape = stCircle
       end
       object Label1: TLabel
         Left = 8
-        Height = 19
+        Height = 17
         Top = 4
-        Width = 28
+        Width = 27
         Caption = 'Safe'
         ParentColor = False
         ParentFont = False

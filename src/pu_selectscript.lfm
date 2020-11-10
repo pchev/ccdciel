@@ -2,40 +2,41 @@ object f_selectscript: Tf_selectscript
   Left = 369
   Height = 54
   Top = 30
-  Width = 241
+  Width = 238
   AutoSize = True
   Caption = 'f_selectscript'
   ClientHeight = 54
-  ClientWidth = 241
+  ClientWidth = 238
+  DesignTimePPI = 95
   OnCreate = FormCreate
   object Panel1: TPanel
     Left = 0
     Height = 54
     Top = 0
-    Width = 241
+    Width = 238
     Align = alClient
     AutoSize = True
     ChildSizing.Layout = cclTopToBottomThenLeftToRight
     ChildSizing.ControlsPerLine = 99
     ClientHeight = 54
-    ClientWidth = 241
+    ClientWidth = 238
     ParentFont = False
     TabOrder = 0
     object Panel2: TPanel
       Left = 0
       Height = 28
       Top = 0
-      Width = 240
+      Width = 237
       BevelOuter = bvNone
       ClientHeight = 28
-      ClientWidth = 240
+      ClientWidth = 237
       ParentFont = False
       TabOrder = 0
       object ComboBoxScript: TComboBox
         Left = 0
         Height = 28
         Top = 0
-        Width = 240
+        Width = 237
         Align = alClient
         Constraints.MaxHeight = 28
         ItemHeight = 0
@@ -48,17 +49,17 @@ object f_selectscript: Tf_selectscript
       Left = 0
       Height = 25
       Top = 28
-      Width = 240
+      Width = 237
       BevelOuter = bvNone
       ClientHeight = 25
-      ClientWidth = 240
+      ClientWidth = 237
       ParentFont = False
       TabOrder = 1
       object BtnCancel: TButton
         Left = 2
         Height = 25
         Top = 0
-        Width = 86
+        Width = 85
         Cancel = True
         Caption = 'Cancel'
         ModalResult = 2
@@ -66,10 +67,10 @@ object f_selectscript: Tf_selectscript
         TabOrder = 0
       end
       object BtnOK: TButton
-        Left = 154
+        Left = 152
         Height = 25
         Top = 0
-        Width = 86
+        Width = 85
         Caption = 'OK'
         Default = True
         ModalResult = 1

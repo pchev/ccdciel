@@ -53,7 +53,7 @@ object f_focuser: Tf_focuser
             TabOrder = 0
             object Label3: TLabel
               Left = 6
-              Height = 19
+              Height = 17
               Top = 4
               Width = 39
               Caption = 'Speed'
@@ -62,7 +62,7 @@ object f_focuser: Tf_focuser
             end
             object Label4: TLabel
               Left = 6
-              Height = 19
+              Height = 17
               Top = 27
               Width = 36
               Caption = 'Timer'
@@ -75,10 +75,9 @@ object f_focuser: Tf_focuser
               Top = 0
               Width = 81
               Constraints.MaxHeight = 28
-              MaxLength = 0
+              MaxValue = 999999999
               ParentFont = False
               TabOrder = 0
-              MaxValue = 999999999
             end
             object timer: TSpinEdit
               Left = 57
@@ -86,10 +85,9 @@ object f_focuser: Tf_focuser
               Top = 27
               Width = 81
               Constraints.MaxHeight = 28
-              MaxLength = 0
+              MaxValue = 999999999
               ParentFont = False
               TabOrder = 1
-              MaxValue = 999999999
             end
           end
         end
@@ -149,18 +147,22 @@ object f_focuser: Tf_focuser
             ParentFont = False
             TabOrder = 0
             object Label1: TLabel
+              AnchorSideTop.Control = Position
+              AnchorSideTop.Side = asrCenter
               Left = 6
-              Height = 19
-              Top = 4
+              Height = 17
+              Top = 6
               Width = 26
               Caption = 'Pos.'
               ParentColor = False
               ParentFont = False
             end
             object Label2: TLabel
+              AnchorSideTop.Control = PosIncr
+              AnchorSideTop.Side = asrCenter
               Left = 6
-              Height = 19
-              Top = 31
+              Height = 17
+              Top = 34
               Width = 28
               Caption = 'Step'
               ParentColor = False
@@ -188,10 +190,12 @@ object f_focuser: Tf_focuser
               Text = '5000'
             end
             object BtnSetAbsPos: TButton
+              AnchorSideTop.Control = Position
+              AnchorSideTop.Side = asrCenter
               Left = 126
               Height = 24
               Hint = 'Set absolute focuser position'
-              Top = 1
+              Top = 2
               Width = 65
               Caption = 'Move to'
               OnClick = BtnSetAbsPosClick
@@ -199,6 +203,8 @@ object f_focuser: Tf_focuser
               TabOrder = 1
             end
             object BtnVcurve: TButton
+              AnchorSideTop.Control = PosIncr
+              AnchorSideTop.Side = asrCenter
               Left = 126
               Height = 24
               Hint = 'V curve learning'
@@ -215,10 +221,9 @@ object f_focuser: Tf_focuser
               Top = 0
               Width = 82
               Constraints.MaxHeight = 28
-              MaxLength = 0
+              MaxValue = 999999999
               ParentFont = False
               TabOrder = 3
-              MaxValue = 999999999
             end
           end
         end
@@ -235,10 +240,12 @@ object f_focuser: Tf_focuser
       ParentFont = False
       TabOrder = 0
       object BtnDown: TButton
+        AnchorSideTop.Control = PanelBtn
+        AnchorSideTop.Side = asrCenter
         Left = 12
         Height = 25
         Hint = 'Move focuser inward'
-        Top = 1
+        Top = 2
         Width = 30
         Caption = '<'
         OnClick = BtnDownClick
@@ -246,10 +253,12 @@ object f_focuser: Tf_focuser
         TabOrder = 0
       end
       object BtnUp: TButton
+        AnchorSideTop.Control = PanelBtn
+        AnchorSideTop.Side = asrCenter
         Left = 46
         Height = 25
         Hint = 'Move focuser outward'
-        Top = 1
+        Top = 2
         Width = 30
         Caption = '>'
         OnClick = BtnUpClick
@@ -280,18 +289,22 @@ object f_focuser: Tf_focuser
         TabOrder = 0
       end
       object Label5: TLabel
+        AnchorSideTop.Control = Temp
+        AnchorSideTop.Side = asrCenter
         Left = 6
-        Height = 19
-        Top = 6
+        Height = 17
+        Top = 7
         Width = 38
         Caption = 'Temp.'
         ParentColor = False
         ParentFont = False
       end
       object lblTemp: TLabel
+        AnchorSideTop.Control = Temp
+        AnchorSideTop.Side = asrCenter
         Left = 103
-        Height = 19
-        Top = 6
+        Height = 17
+        Top = 7
         Width = 8
         Caption = 'C'
         ParentColor = False

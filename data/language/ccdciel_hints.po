@@ -566,3 +566,11 @@ msgstr ""
 msgid "Image luminosity"
 msgstr ""
 
+#: u_hints:rscameraoffset
+msgid "Camera offset"
+msgstr ""
+
+#: u_hints:rsifnotchecked
+msgid "If not checked the program will never change the gain/offset value set in the driver setup"
+msgstr ""
+

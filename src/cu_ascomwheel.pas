@@ -39,6 +39,7 @@ T_ascomwheel = class(T_wheel)
    FFilterNum: integer;
    stFilter: integer;
    {$endif}
+   FInterfaceVersion: integer;
    StatusTimer: TTimer;
    function Connected: boolean;
    procedure StatusTimerTimer(sender: TObject);
@@ -92,10 +93,20 @@ begin
   V.connected:=true;
   if V.connected then begin
      try
+     msg(V.DriverInfo,9);
+     except
+     end;
+     try
      msg('Driver version: '+V.DriverVersion,9);
      except
        msg('Error: unknown driver version',9);
      end;
+     try
+     FInterfaceVersion:=V.InterfaceVersion;
+     except
+       FInterfaceVersion:=1;
+     end;
+     msg('Interface version: '+inttostr(FInterfaceVersion),9);
      msg(rsConnected3);
      GetAscomFilterNames(FFilterNames,FFilterNum);
      FStatus := devConnected;

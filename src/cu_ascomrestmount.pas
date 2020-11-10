@@ -35,6 +35,7 @@ T_ascomrestmount = class(T_mount)
    V: TAscomRest;
    CanPark,CanSlew,CanSlewAsync,CanSetPierSide,CanSync,CanSetTracking: boolean;
    stRA,stDE,stFocalLength: double;
+   FInterfaceVersion: integer;
    stPark:boolean;
    stPierside: TPierSide;
    stTracking: boolean;
@@ -143,10 +144,20 @@ begin
   if V.Get('connected').AsBool then begin
      V.Timeout:=120000;
      try
+     msg(V.Get('driverinfo').AsString,9);
+     except
+     end;
+     try
      msg('Driver version: '+V.Get('driverversion').AsString,9);
      except
        msg('Error: unknown driver version',9);
      end;
+     try
+     FInterfaceVersion:=V.Get('interfaceversion').AsInt;
+     except
+       FInterfaceVersion:=1;
+     end;
+     msg('Interface version: '+inttostr(FInterfaceVersion),9);
      try
      FDeviceName:=V.Get('name').AsString;
      except

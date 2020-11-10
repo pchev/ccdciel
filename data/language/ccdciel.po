@@ -4634,3 +4634,11 @@ msgstr ""
 msgid "Be careful of the longitude East/West setting."
 msgstr ""
 
+#: u_translation:rsoffset2
+msgid "Offset"
+msgstr ""
+
+#: u_translation:rsmanagethegai
+msgid "Manage the Gain and Offset if available."
+msgstr ""
+

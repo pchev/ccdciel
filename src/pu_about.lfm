@@ -1,18 +1,19 @@
 object f_about: Tf_about
   Left = 369
-  Height = 505
+  Height = 500
   Top = 30
-  Width = 475
+  Width = 470
   Caption = 'f_about'
-  ClientHeight = 505
-  ClientWidth = 475
+  ClientHeight = 500
+  ClientWidth = 470
+  DesignTimePPI = 95
   OnCreate = FormCreate
   OnShow = FormShow
   object PageControl1: TPageControl
     Left = 0
-    Height = 455
+    Height = 451
     Top = 0
-    Width = 475
+    Width = 470
     ActivePage = TabSheet1
     Align = alClient
     ParentFont = False
@@ -20,14 +21,14 @@ object f_about: Tf_about
     TabOrder = 0
     object TabSheet1: TTabSheet
       Caption = 'About'
-      ClientHeight = 424
-      ClientWidth = 465
+      ClientHeight = 420
+      ClientWidth = 460
       ParentFont = False
       object MemoAbout: TMemo
         Left = 0
-        Height = 424
+        Height = 420
         Top = 0
-        Width = 465
+        Width = 460
         Align = alClient
         BorderStyle = bsNone
         Color = clWindow
@@ -40,14 +41,14 @@ object f_about: Tf_about
     end
     object TabSheet2: TTabSheet
       Caption = 'License agreement'
-      ClientHeight = 424
-      ClientWidth = 465
+      ClientHeight = 420
+      ClientWidth = 460
       ParentFont = False
       object MemoGPL: TMemo
         Left = 0
-        Height = 425
+        Height = 420
         Top = 0
-        Width = 469
+        Width = 460
         Align = alClient
         BorderStyle = bsNone
         Color = clWindow
@@ -252,19 +253,19 @@ object f_about: Tf_about
   end
   object Panel1: TPanel
     Left = 0
-    Height = 50
-    Top = 455
-    Width = 475
+    Height = 49
+    Top = 451
+    Width = 470
     Align = alBottom
-    ClientHeight = 50
-    ClientWidth = 475
+    ClientHeight = 49
+    ClientWidth = 470
     ParentFont = False
     TabOrder = 1
     object BtnClose: TButton
-      Left = 340
+      Left = 336
       Height = 25
       Top = 11
-      Width = 106
+      Width = 105
       Caption = 'Close'
       ModalResult = 11
       ParentFont = False

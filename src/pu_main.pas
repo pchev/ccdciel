@@ -2652,6 +2652,9 @@ begin
      config.SetValue('/StarAnalysis/Window',60);     ;
   end;
   if oldver<'0.9.73' then begin
+    ok:=(not config.GetValue('/Sensor/GainFromCamera',true));
+    config.SetValue('/Sensor/CanSetGain',ok);
+    config.DeleteValue('/Sensor/GainFromCamera');
     msg:='This version add Offset control for the camera that support this option.'+crlf+
          'Please be careful of the default value for the Offset in Preview, Capture and Sequences tools, '+
          'and in the Autofocus and Slewing preferences.';
@@ -3404,7 +3407,7 @@ begin
   BlueBalance:=config.GetValue('/Color/BlueBalance',0.9);
   ClippingOverflow:=config.GetValue('/Color/ClippingOverflow',MAXWORD);
   ClippingUnderflow:=config.GetValue('/Color/ClippingUnderflow',0);
-  ok:=(not config.GetValue('/Sensor/GainFromCamera',true));
+  ok:=config.GetValue('/Sensor/CanSetGain',false);
   if ok<>camera.CanSetGain then begin
     camera.CanSetGain:=ok;
     Showgain;
@@ -4419,7 +4422,7 @@ end;
 
 procedure Tf_main.ShowGain;
 begin
- camera.CanSetGain:=(not config.GetValue('/Sensor/GainFromCamera',true));
+ camera.CanSetGain:=config.GetValue('/Sensor/CanSetGain',false);
  camera.CheckGain;
  hasGain:=camera.hasGain;
  hasGainISO:=camera.hasGainISO;
@@ -6848,7 +6851,7 @@ begin
    f_option.AutofocusDynamicMovement.Value:=config.GetValue('/StarAnalysis/AutofocusDynamicMovement',AutofocusDynamicMovement);
    f_option.AutofocusPlanetNumPoint.Value:=config.GetValue('/StarAnalysis/AutofocusPlanetNumPoint',AutofocusPlanetNumPoint);
    f_option.AutofocusPlanetMovement.Value:=config.GetValue('/StarAnalysis/AutofocusPlanetMovement',AutofocusPlanetMovement);
-   f_option.GainFromCamera.Checked:=config.GetValue('/Sensor/GainFromCamera',(not camera.CanSetGain));
+   f_option.CanSetGain.Checked:=config.GetValue('/Sensor/CanSetGain',camera.CanSetGain);
    f_option.MaxAdu.Value:=config.GetValue('/Sensor/MaxADU',MAXWORD);
    f_option.MaxAduFromCamera.Checked:=config.GetValue('/Sensor/MaxADUFromCamera',true);
    f_option.NotDisplayCapture.Checked:=not config.GetValue('/Visu/DisplayCapture',DisplayCapture);
@@ -7189,7 +7192,7 @@ begin
      config.SetValue('/Flat/DomeFlatSetLight',f_option.DomeFlatSetLight.Checked);
      config.SetValue('/Flat/DomeFlatSetLightON',f_option.DomeFlatSetLightON.Text);
      config.SetValue('/Flat/DomeFlatSetLightOFF',f_option.DomeFlatSetLightOFF.Text);
-     config.SetValue('/Sensor/GainFromCamera',f_option.GainFromCamera.Checked);
+     config.SetValue('/Sensor/CanSetGain',f_option.CanSetGain.Checked);
      config.SetValue('/Sensor/MaxADUFromCamera',f_option.MaxAduFromCamera.Checked);
      config.SetValue('/Sensor/MaxADU',f_option.MaxAdu.Value);
      config.SetValue('/Sensor/ExpEarlyStart',f_option.ExpEarlyStart.Checked);

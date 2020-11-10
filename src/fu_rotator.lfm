@@ -50,15 +50,19 @@ object f_rotator: Tf_rotator
       ParentFont = False
       TabOrder = 0
       object led: TShape
+        AnchorSideTop.Control = Angle
+        AnchorSideTop.Side = asrCenter
         Left = 4
         Height = 14
         Hint = 'Uncalibrated'
-        Top = 6
+        Top = 8
         Width = 14
         Brush.Color = clRed
         Shape = stCircle
       end
       object Label6: TLabel
+        AnchorSideTop.Control = Angle
+        AnchorSideTop.Side = asrCenter
         Left = 28
         Height = 18
         Top = 6
@@ -79,12 +83,13 @@ object f_rotator: Tf_rotator
         MinValue = -99999
         ParentFont = False
         TabOrder = 0
-        Value = 0
       end
       object BtnRotate: TButton
+        AnchorSideTop.Control = Angle
+        AnchorSideTop.Side = asrCenter
         Left = 120
         Height = 25
-        Top = 1
+        Top = 3
         Width = 70
         Caption = 'Rotate'
         OnClick = BtnRotateClick
@@ -103,9 +108,11 @@ object f_rotator: Tf_rotator
       ParentFont = False
       TabOrder = 1
       object Reverse: TCheckBox
+        AnchorSideTop.Control = BtnHalt
+        AnchorSideTop.Side = asrCenter
         Left = 4
         Height = 21
-        Top = 0
+        Top = 2
         Width = 109
         AutoSize = False
         Caption = 'Reverse'
