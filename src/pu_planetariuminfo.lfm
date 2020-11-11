@@ -1,22 +1,21 @@
 object f_planetariuminfo: Tf_planetariuminfo
   Left = 387
-  Height = 261
+  Height = 264
   Top = 160
-  Width = 255
+  Width = 258
   ActiveControl = Ra
   Caption = 'Planetarium position'
-  ClientHeight = 261
-  ClientWidth = 255
-  DesignTimePPI = 95
+  ClientHeight = 264
+  ClientWidth = 258
   FormStyle = fsStayOnTop
   OnClose = FormClose
   OnCreate = FormCreate
   OnShow = FormShow
   object Ra: TEdit
-    Left = 139
-    Height = 28
-    Top = 72
-    Width = 95
+    Left = 140
+    Height = 24
+    Top = 73
+    Width = 96
     Constraints.MaxHeight = 28
     ParentFont = False
     ReadOnly = True
@@ -24,10 +23,10 @@ object f_planetariuminfo: Tf_planetariuminfo
     Text = 'Ra'
   end
   object De: TEdit
-    Left = 139
-    Height = 28
-    Top = 110
-    Width = 95
+    Left = 140
+    Height = 24
+    Top = 111
+    Width = 96
     Constraints.MaxHeight = 28
     ParentFont = False
     ReadOnly = True
@@ -35,10 +34,10 @@ object f_planetariuminfo: Tf_planetariuminfo
     Text = 'De'
   end
   object Obj: TEdit
-    Left = 139
-    Height = 28
-    Top = 146
-    Width = 95
+    Left = 140
+    Height = 24
+    Top = 148
+    Width = 96
     Constraints.MaxHeight = 28
     ParentFont = False
     ReadOnly = True
@@ -46,10 +45,10 @@ object f_planetariuminfo: Tf_planetariuminfo
     Text = 'Obj'
   end
   object Button1: TButton
-    Left = 139
+    Left = 140
     Height = 25
-    Top = 224
-    Width = 75
+    Top = 226
+    Width = 76
     Caption = 'OK'
     ModalResult = 1
     ParentFont = False
@@ -59,9 +58,9 @@ object f_planetariuminfo: Tf_planetariuminfo
     AnchorSideTop.Control = Ra
     AnchorSideTop.Side = asrCenter
     Left = 19
-    Height = 17
-    Top = 78
-    Width = 59
+    Height = 13
+    Top = 79
+    Width = 60
     Caption = 'Center RA'
     ParentColor = False
     ParentFont = False
@@ -70,9 +69,9 @@ object f_planetariuminfo: Tf_planetariuminfo
     AnchorSideTop.Control = De
     AnchorSideTop.Side = asrCenter
     Left = 19
-    Height = 17
-    Top = 116
-    Width = 66
+    Height = 13
+    Top = 117
+    Width = 67
     Caption = 'Center Dec'
     ParentColor = False
     ParentFont = False
@@ -81,9 +80,9 @@ object f_planetariuminfo: Tf_planetariuminfo
     AnchorSideTop.Control = Obj
     AnchorSideTop.Side = asrCenter
     Left = 19
-    Height = 17
-    Top = 152
-    Width = 76
+    Height = 13
+    Top = 154
+    Width = 77
     Caption = 'Object name'
     ParentColor = False
     ParentFont = False
@@ -91,8 +90,8 @@ object f_planetariuminfo: Tf_planetariuminfo
   object Button2: TButton
     Left = 19
     Height = 25
-    Top = 224
-    Width = 75
+    Top = 226
+    Width = 76
     Caption = 'Cancel'
     ModalResult = 2
     ParentFont = False
@@ -100,9 +99,9 @@ object f_planetariuminfo: Tf_planetariuminfo
   end
   object Label4: TLabel
     Left = 19
-    Height = 64
+    Height = 65
     Top = 8
-    Width = 227
+    Width = 229
     AutoSize = False
     Caption = 'Click the object in planetarium'
     Font.Style = [fsBold]
@@ -114,18 +113,18 @@ object f_planetariuminfo: Tf_planetariuminfo
     AnchorSideTop.Control = PA
     AnchorSideTop.Side = asrCenter
     Left = 19
-    Height = 17
-    Top = 190
-    Width = 15
+    Height = 13
+    Top = 192
+    Width = 14
     Caption = 'PA'
     ParentColor = False
     ParentFont = False
   end
   object PA: TEdit
-    Left = 139
-    Height = 28
-    Top = 184
-    Width = 95
+    Left = 140
+    Height = 24
+    Top = 186
+    Width = 96
     Constraints.MaxHeight = 28
     ParentFont = False
     ReadOnly = True

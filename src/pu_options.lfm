@@ -78,26 +78,26 @@ object f_option: Tf_option
     Options = [nboMultiLine]
     object PagePref: TTabSheet
       Caption = 'Preferences'
-      ClientHeight = 537
-      ClientWidth = 520
+      ClientHeight = 535
+      ClientWidth = 524
       ParentFont = False
       object Panel9: TPanel
         Left = 0
         Height = 136
         Top = 0
-        Width = 520
+        Width = 524
         Align = alTop
         ClientHeight = 136
-        ClientWidth = 520
+        ClientWidth = 524
         ParentFont = False
         TabOrder = 0
         object Label18: TLabel
           AnchorSideTop.Control = Languages
           AnchorSideTop.Side = asrCenter
           Left = 8
-          Height = 17
-          Top = 30
-          Width = 61
+          Height = 13
+          Top = 32
+          Width = 60
           Caption = 'Language'
           ParentColor = False
           ParentFont = False
@@ -128,8 +128,8 @@ object f_option: Tf_option
           ChildSizing.ShrinkVertical = crsScaleChilds
           ChildSizing.Layout = cclLeftToRightThenTopToBottom
           ChildSizing.ControlsPerLine = 2
-          ClientHeight = 29
-          ClientWidth = 358
+          ClientHeight = 32
+          ClientWidth = 356
           Columns = 2
           Items.Strings = (
             'Celsius'
@@ -144,42 +144,42 @@ object f_option: Tf_option
         Left = 0
         Height = 152
         Top = 136
-        Width = 520
+        Width = 524
         Align = alTop
         ClientHeight = 152
-        ClientWidth = 520
+        ClientWidth = 524
         ParentFont = False
         TabOrder = 1
         object Logtofile: TCheckBox
           Left = 8
-          Height = 21
+          Height = 22
           Top = 16
-          Width = 168
+          Width = 167
           Caption = 'Log all messages to file '
           ParentFont = False
           TabOrder = 0
         end
         object Debug_msg: TCheckBox
           Left = 8
-          Height = 21
+          Height = 22
           Top = 44
-          Width = 140
+          Width = 136
           Caption = 'Verbose device log'
           ParentFont = False
           TabOrder = 1
         end
         object UseTcpServer: TCheckBox
           Left = 8
-          Height = 21
+          Height = 22
           Top = 72
-          Width = 366
+          Width = 356
           Caption = 'Allow to get program status from TCP/IP internal server'
           ParentFont = False
           TabOrder = 2
         end
         object CbShowHints: TCheckBox
           Left = 8
-          Height = 21
+          Height = 22
           Top = 101
           Width = 91
           Caption = 'Show hints'
@@ -189,28 +189,28 @@ object f_option: Tf_option
       end
       object Panel11: TPanel
         Left = 0
-        Height = 249
+        Height = 247
         Top = 288
-        Width = 520
+        Width = 524
         Align = alClient
-        ClientHeight = 249
-        ClientWidth = 520
+        ClientHeight = 247
+        ClientWidth = 524
         ParentFont = False
         TabOrder = 2
         object Label99: TLabel
           AnchorSideTop.Control = TempDir
           AnchorSideTop.Side = asrCenter
           Left = 8
-          Height = 17
+          Height = 13
           Top = 23
-          Width = 108
+          Width = 101
           Caption = 'Temporary folder'
           ParentColor = False
           ParentFont = False
         end
         object TempDir: TEdit
           Left = 162
-          Height = 28
+          Height = 24
           Top = 17
           Width = 202
           Constraints.MaxHeight = 28
@@ -223,7 +223,7 @@ object f_option: Tf_option
           AnchorSideTop.Side = asrCenter
           Left = 369
           Height = 25
-          Top = 19
+          Top = 17
           Width = 27
           Caption = '...'
           OnClick = ButtonTempDirClick
@@ -235,7 +235,7 @@ object f_option: Tf_option
           AnchorSideTop.Side = asrCenter
           Left = 404
           Height = 25
-          Top = 19
+          Top = 17
           Width = 61
           Caption = 'Default'
           OnClick = TmpDirDefaultClick
@@ -246,8 +246,8 @@ object f_option: Tf_option
     end
     object PageFile: TTabSheet
       Caption = 'Files'
-      ClientHeight = 537
-      ClientWidth = 520
+      ClientHeight = 535
+      ClientWidth = 524
       ParentFont = False
       object FileFolderOpt: TPageControl
         Left = 0
@@ -512,8 +512,8 @@ object f_option: Tf_option
     end
     object PageObs: TTabSheet
       Caption = 'Observatory'
-      ClientHeight = 537
-      ClientWidth = 520
+      ClientHeight = 535
+      ClientWidth = 524
       ParentFont = False
       object GroupBox27: TGroupBox
         Left = 0
@@ -522,8 +522,8 @@ object f_option: Tf_option
         Width = 520
         Align = alTop
         Caption = 'Information'
-        ClientHeight = 132
-        ClientWidth = 518
+        ClientHeight = 135
+        ClientWidth = 516
         ParentFont = False
         TabOrder = 0
         object Label5: TLabel
@@ -594,8 +594,8 @@ object f_option: Tf_option
         Width = 520
         Align = alTop
         Caption = 'Coordinates'
-        ClientHeight = 204
-        ClientWidth = 518
+        ClientHeight = 207
+        ClientWidth = 516
         ParentFont = False
         TabOrder = 1
         object LatitudeGroup: TGroupBox
@@ -604,8 +604,8 @@ object f_option: Tf_option
           Top = 8
           Width = 255
           AutoSize = True
-          ClientHeight = 10
-          ClientWidth = 253
+          ClientHeight = 13
+          ClientWidth = 251
           ParentFont = False
           TabOrder = 0
           object hemis: TComboBox
@@ -683,8 +683,8 @@ object f_option: Tf_option
           Top = 60
           Width = 255
           AutoSize = True
-          ClientHeight = 10
-          ClientWidth = 253
+          ClientHeight = 13
+          ClientWidth = 251
           ParentFont = False
           TabOrder = 1
           object long: TComboBox
@@ -819,8 +819,8 @@ object f_option: Tf_option
         Width = 520
         Align = alClient
         Caption = 'Rise / Set'
-        ClientHeight = 91
-        ClientWidth = 518
+        ClientHeight = 94
+        ClientWidth = 516
         ParentFont = False
         TabOrder = 2
         object HorizonFile: TFileNameEdit
@@ -920,8 +920,8 @@ object f_option: Tf_option
     end
     object PageCamera: TTabSheet
       Caption = 'Camera'
-      ClientHeight = 537
-      ClientWidth = 520
+      ClientHeight = 535
+      ClientWidth = 524
       ParentFont = False
       object GroupBox1: TGroupBox
         Left = 0
@@ -930,8 +930,8 @@ object f_option: Tf_option
         Width = 520
         Align = alTop
         Caption = 'CCD temperature'
-        ClientHeight = 174
-        ClientWidth = 518
+        ClientHeight = 177
+        ClientWidth = 516
         ParentFont = False
         TabOrder = 0
         object GroupBox14: TGroupBox
@@ -941,8 +941,8 @@ object f_option: Tf_option
           Width = 518
           Align = alClient
           Caption = 'Automatic cooling '
-          ClientHeight = 71
-          ClientWidth = 516
+          ClientHeight = 74
+          ClientWidth = 514
           ParentFont = False
           TabOrder = 0
           object CameraAutoCool: TCheckBox
@@ -983,8 +983,8 @@ object f_option: Tf_option
           Width = 518
           Align = alTop
           Caption = 'Maximum temperature change '
-          ClientHeight = 63
-          ClientWidth = 516
+          ClientHeight = 66
+          ClientWidth = 514
           ParentFont = False
           TabOrder = 1
           object TemperatureSlopeActive: TCheckBox
@@ -1038,8 +1038,8 @@ object f_option: Tf_option
         Width = 520
         Align = alTop
         Caption = 'Sensors properties'
-        ClientHeight = 76
-        ClientWidth = 518
+        ClientHeight = 79
+        ClientWidth = 516
         ParentFont = False
         TabOrder = 1
         object Label19: TLabel
@@ -1117,8 +1117,8 @@ object f_option: Tf_option
         Width = 520
         Align = alClient
         Caption = 'Readout modes'
-        ClientHeight = 157
-        ClientWidth = 518
+        ClientHeight = 160
+        ClientWidth = 516
         ParentFont = False
         TabOrder = 2
         object Label112: TLabel
@@ -1221,8 +1221,8 @@ object f_option: Tf_option
         Width = 520
         Align = alTop
         Caption = 'Gain / Offset'
-        ClientHeight = 50
-        ClientWidth = 518
+        ClientHeight = 53
+        ClientWidth = 516
         TabOrder = 3
         object CanSetGain: TCheckBox
           Left = 16
@@ -1237,8 +1237,8 @@ object f_option: Tf_option
     end
     object PagePreview: TTabSheet
       Caption = 'Preview'
-      ClientHeight = 537
-      ClientWidth = 520
+      ClientHeight = 535
+      ClientWidth = 524
       ParentFont = False
       object GroupBox8: TGroupBox
         Left = 0
@@ -1247,8 +1247,8 @@ object f_option: Tf_option
         Width = 520
         Align = alTop
         Caption = 'Color preview'
-        ClientHeight = 150
-        ClientWidth = 518
+        ClientHeight = 153
+        ClientWidth = 516
         ParentFont = False
         TabOrder = 0
         object Label38: TLabel
@@ -1307,8 +1307,8 @@ object f_option: Tf_option
           Width = 185
           Align = alRight
           Caption = 'Color balance'
-          ClientHeight = 130
-          ClientWidth = 183
+          ClientHeight = 133
+          ClientWidth = 181
           ParentFont = False
           TabOrder = 3
           object RedBalance: TTrackBar
@@ -1410,8 +1410,8 @@ object f_option: Tf_option
         Width = 520
         Align = alClient
         Caption = 'Video'
-        ClientHeight = 96
-        ClientWidth = 518
+        ClientHeight = 99
+        ClientWidth = 516
         ParentFont = False
         TabOrder = 2
         object Label45: TLabel
@@ -1445,8 +1445,8 @@ object f_option: Tf_option
         Width = 520
         Align = alTop
         Caption = 'Bad pixels detection'
-        ClientHeight = 35
-        ClientWidth = 518
+        ClientHeight = 38
+        ClientWidth = 516
         ParentFont = False
         TabOrder = 3
         object Label62: TLabel
@@ -1493,8 +1493,8 @@ object f_option: Tf_option
         Width = 520
         Align = alTop
         Caption = 'Preview stacking'
-        ClientHeight = 45
-        ClientWidth = 518
+        ClientHeight = 48
+        ClientWidth = 516
         ParentFont = False
         TabOrder = 4
         object StackShow: TCheckBox
@@ -1515,8 +1515,8 @@ object f_option: Tf_option
         Width = 520
         Align = alTop
         Caption = 'Clipping indicator'
-        ClientHeight = 37
-        ClientWidth = 518
+        ClientHeight = 40
+        ClientWidth = 516
         ParentFont = False
         TabOrder = 5
         object Label37: TLabel
@@ -1572,8 +1572,8 @@ object f_option: Tf_option
         Width = 520
         Align = alTop
         Caption = 'Reference image'
-        ClientHeight = 54
-        ClientWidth = 518
+        ClientHeight = 57
+        ClientWidth = 516
         ParentFont = False
         TabOrder = 1
         object RefColor: TRadioGroup
@@ -1591,8 +1591,8 @@ object f_option: Tf_option
           ChildSizing.ShrinkVertical = crsScaleChilds
           ChildSizing.Layout = cclLeftToRightThenTopToBottom
           ChildSizing.ControlsPerLine = 3
-          ClientHeight = 40
-          ClientWidth = 237
+          ClientHeight = 25
+          ClientWidth = 235
           Columns = 3
           Items.Strings = (
             'red'
@@ -1631,8 +1631,8 @@ object f_option: Tf_option
     end
     object PageFlat: TTabSheet
       Caption = 'Flat'
-      ClientHeight = 537
-      ClientWidth = 520
+      ClientHeight = 535
+      ClientWidth = 524
       ParentFont = False
       object FlatType: TRadioGroup
         Left = 0
@@ -1649,8 +1649,8 @@ object f_option: Tf_option
         ChildSizing.ShrinkVertical = crsScaleChilds
         ChildSizing.Layout = cclLeftToRightThenTopToBottom
         ChildSizing.ControlsPerLine = 3
-        ClientHeight = 46
-        ClientWidth = 518
+        ClientHeight = 49
+        ClientWidth = 516
         Columns = 3
         ItemIndex = 0
         Items.Strings = (
@@ -1669,8 +1669,8 @@ object f_option: Tf_option
         Width = 520
         Align = alTop
         Caption = 'Flat auto-exposure'
-        ClientHeight = 171
-        ClientWidth = 518
+        ClientHeight = 174
+        ClientWidth = 516
         ParentFont = False
         TabOrder = 1
         Visible = False
@@ -1813,8 +1813,8 @@ object f_option: Tf_option
         Width = 520
         Align = alClient
         Caption = 'Dome/Panel'
-        ClientHeight = 260
-        ClientWidth = 518
+        ClientHeight = 263
+        ClientWidth = 516
         ParentFont = False
         TabOrder = 2
         Visible = False
@@ -1945,8 +1945,8 @@ object f_option: Tf_option
     end
     object PageFocus: TTabSheet
       Caption = 'Focus'
-      ClientHeight = 537
-      ClientWidth = 520
+      ClientHeight = 535
+      ClientWidth = 524
       ParentFont = False
       object GroupBox2: TGroupBox
         Left = 0
@@ -1955,8 +1955,8 @@ object f_option: Tf_option
         Width = 520
         Align = alTop
         Caption = 'Star profile'
-        ClientHeight = 85
-        ClientWidth = 518
+        ClientHeight = 88
+        ClientWidth = 516
         ParentFont = False
         TabOrder = 0
         object Label2: TLabel
@@ -1999,8 +1999,8 @@ object f_option: Tf_option
         Width = 520
         Align = alTop
         Caption = 'Focuser correction'
-        ClientHeight = 67
-        ClientWidth = 518
+        ClientHeight = 70
+        ClientWidth = 516
         ParentFont = False
         TabOrder = 1
         object Label98: TLabel
@@ -2088,8 +2088,8 @@ object f_option: Tf_option
         Width = 520
         Align = alClient
         Caption = 'Filter offset'
-        ClientHeight = 325
-        ClientWidth = 518
+        ClientHeight = 328
+        ClientWidth = 516
         ParentFont = False
         TabOrder = 2
         object FilterList: TStringGrid
@@ -2107,16 +2107,16 @@ object f_option: Tf_option
           TabOrder = 0
           ColWidths = (
             123
-            186
-            187
+            195
+            196
           )
         end
       end
     end
     object PageAutofocus: TTabSheet
       Caption = 'Autofocus'
-      ClientHeight = 537
-      ClientWidth = 520
+      ClientHeight = 535
+      ClientWidth = 524
       ParentFont = False
       object Autofocusmode: TRadioGroup
         Left = 0
@@ -2133,8 +2133,8 @@ object f_option: Tf_option
         ChildSizing.ShrinkVertical = crsScaleChilds
         ChildSizing.Layout = cclLeftToRightThenTopToBottom
         ChildSizing.ControlsPerLine = 5
-        ClientHeight = 33
-        ClientWidth = 518
+        ClientHeight = 36
+        ClientWidth = 516
         Columns = 5
         Items.Strings = (
           'Dynamic'
@@ -2338,7 +2338,7 @@ object f_option: Tf_option
           Height = 91
           Top = 185
           Width = 518
-          PageIndex = 2
+          PageIndex = 0
           Align = alBottom
           TabOrder = 2
           TabStop = True
@@ -2700,8 +2700,8 @@ object f_option: Tf_option
           Width = 518
           Align = alClient
           Caption = 'Focus star selection'
-          ClientHeight = 97
-          ClientWidth = 516
+          ClientHeight = 100
+          ClientWidth = 514
           ParentFont = False
           TabOrder = 1
           object Label56: TLabel
@@ -2739,8 +2739,8 @@ object f_option: Tf_option
           Width = 518
           Align = alClient
           Caption = 'Focus star selection'
-          ClientHeight = 97
-          ClientWidth = 516
+          ClientHeight = 100
+          ClientWidth = 514
           ParentFont = False
           TabOrder = 0
           object Label53: TLabel
@@ -2898,8 +2898,8 @@ object f_option: Tf_option
     end
     object PageAstrometry: TTabSheet
       Caption = 'Astrometry'
-      ClientHeight = 537
-      ClientWidth = 520
+      ClientHeight = 535
+      ClientWidth = 524
       ParentFont = False
       object GroupBox4: TGroupBox
         Left = 0
@@ -2908,8 +2908,8 @@ object f_option: Tf_option
         Width = 520
         Align = alTop
         Caption = 'Astrometry options'
-        ClientHeight = 172
-        ClientWidth = 518
+        ClientHeight = 175
+        ClientWidth = 516
         ParentFont = False
         TabOrder = 0
         object FocaleFromTelescope: TCheckBox
@@ -2950,8 +2950,8 @@ object f_option: Tf_option
           ChildSizing.ShrinkVertical = crsScaleChilds
           ChildSizing.Layout = cclLeftToRightThenTopToBottom
           ChildSizing.ControlsPerLine = 3
-          ClientHeight = 64
-          ClientWidth = 516
+          ClientHeight = 67
+          ClientWidth = 514
           Columns = 3
           ItemIndex = 0
           Items.Strings = (
@@ -3039,8 +3039,8 @@ object f_option: Tf_option
             Width = 520
             Align = alClient
             Caption = 'Astrometry.Net'
-            ClientHeight = 325
-            ClientWidth = 518
+            ClientHeight = 328
+            ClientWidth = 516
             ParentFont = False
             TabOrder = 0
             object Label6: TLabel
@@ -3107,8 +3107,8 @@ object f_option: Tf_option
               Top = 218
               Width = 454
               BevelOuter = bvNone
-              ClientHeight = 40
-              ClientWidth = 454
+              ClientHeight = 36
+              ClientWidth = 450
               ParentFont = False
               TabOrder = 1
               Visible = False
@@ -3204,8 +3204,8 @@ object f_option: Tf_option
               Top = 218
               Width = 454
               BevelOuter = bvNone
-              ClientHeight = 40
-              ClientWidth = 454
+              ClientHeight = 36
+              ClientWidth = 450
               ParentFont = False
               TabOrder = 8
               Visible = False
@@ -3252,8 +3252,8 @@ object f_option: Tf_option
             Width = 520
             Align = alClient
             Caption = 'Elbrus Star Locator'
-            ClientHeight = 325
-            ClientWidth = 518
+            ClientHeight = 328
+            ClientWidth = 516
             ParentFont = False
             TabOrder = 0
             object ElbrusFolder: TEdit
@@ -3330,8 +3330,8 @@ object f_option: Tf_option
             Width = 520
             Align = alClient
             Caption = 'PlateSolve 2'
-            ClientHeight = 325
-            ClientWidth = 518
+            ClientHeight = 328
+            ClientWidth = 516
             ParentFont = False
             TabOrder = 0
             object Label78: TLabel
@@ -3394,8 +3394,8 @@ object f_option: Tf_option
             Width = 520
             Align = alClient
             Caption = 'ASTAP'
-            ClientHeight = 325
-            ClientWidth = 518
+            ClientHeight = 328
+            ClientWidth = 516
             ParentFont = False
             TabOrder = 0
             object Label105: TLabel
@@ -3483,8 +3483,8 @@ object f_option: Tf_option
     end
     object PageSlew: TTabSheet
       Caption = 'Slewing'
-      ClientHeight = 537
-      ClientWidth = 520
+      ClientHeight = 535
+      ClientWidth = 524
       ParentFont = False
       object GroupBox7: TGroupBox
         Left = 0
@@ -3493,8 +3493,8 @@ object f_option: Tf_option
         Width = 520
         Align = alClient
         Caption = 'Precision slewing options'
-        ClientHeight = 517
-        ClientWidth = 518
+        ClientHeight = 520
+        ClientWidth = 516
         ParentFont = False
         TabOrder = 0
         object PrecSlewBox: TRadioGroup
@@ -3513,8 +3513,8 @@ object f_option: Tf_option
           ChildSizing.ShrinkVertical = crsScaleChilds
           ChildSizing.Layout = cclLeftToRightThenTopToBottom
           ChildSizing.ControlsPerLine = 2
-          ClientHeight = 38
-          ClientWidth = 516
+          ClientHeight = 41
+          ClientWidth = 514
           Columns = 2
           Items.Strings = (
             'Mount sync'
@@ -3530,8 +3530,8 @@ object f_option: Tf_option
           Width = 518
           Align = alTop
           BevelOuter = bvNone
-          ClientHeight = 64
-          ClientWidth = 518
+          ClientHeight = 60
+          ClientWidth = 514
           ParentFont = False
           TabOrder = 1
           Visible = False
@@ -3575,8 +3575,8 @@ object f_option: Tf_option
             Top = 32
             Width = 504
             BevelOuter = bvNone
-            ClientHeight = 32
-            ClientWidth = 504
+            ClientHeight = 28
+            ClientWidth = 500
             TabOrder = 2
             object LabelOffset1: TLabel
               AnchorSideTop.Control = SlewOffsetEdit
@@ -3606,8 +3606,8 @@ object f_option: Tf_option
           Width = 518
           Align = alTop
           BevelOuter = bvNone
-          ClientHeight = 82
-          ClientWidth = 518
+          ClientHeight = 78
+          ClientWidth = 514
           TabOrder = 2
           object SlewPrec: TFloatSpinEdit
             Left = 327
@@ -3663,8 +3663,8 @@ object f_option: Tf_option
           Width = 518
           Align = alTop
           BevelOuter = bvNone
-          ClientHeight = 66
-          ClientWidth = 518
+          ClientHeight = 62
+          ClientWidth = 514
           TabOrder = 3
           object Label30: TLabel
             AnchorSideTop.Control = SlewExp
@@ -3707,8 +3707,8 @@ object f_option: Tf_option
           Width = 518
           Align = alTop
           BevelOuter = bvNone
-          ClientHeight = 142
-          ClientWidth = 518
+          ClientHeight = 138
+          ClientWidth = 514
           TabOrder = 4
           object Label31: TLabel
             AnchorSideTop.Control = SlewBin
@@ -3782,8 +3782,8 @@ object f_option: Tf_option
     end
     object PageMeridian: TTabSheet
       Caption = 'Meridian'
-      ClientHeight = 537
-      ClientWidth = 520
+      ClientHeight = 535
+      ClientWidth = 524
       ParentFont = False
       object MeridianOption: TRadioGroup
         Left = 0
@@ -3800,8 +3800,8 @@ object f_option: Tf_option
         ChildSizing.ShrinkVertical = crsScaleChilds
         ChildSizing.Layout = cclLeftToRightThenTopToBottom
         ChildSizing.ControlsPerLine = 3
-        ClientHeight = 38
-        ClientWidth = 518
+        ClientHeight = 41
+        ClientWidth = 516
         Columns = 3
         Items.Strings = (
           'Do nothing'
@@ -3989,8 +3989,8 @@ object f_option: Tf_option
     end
     object PageGuide: TTabSheet
       Caption = 'Auto-guiding'
-      ClientHeight = 537
-      ClientWidth = 520
+      ClientHeight = 535
+      ClientWidth = 524
       ParentFont = False
       object AutoguiderBox: TRadioGroup
         Left = 0
@@ -4007,8 +4007,8 @@ object f_option: Tf_option
         ChildSizing.ShrinkVertical = crsScaleChilds
         ChildSizing.Layout = cclLeftToRightThenTopToBottom
         ChildSizing.ControlsPerLine = 4
-        ClientHeight = 45
-        ClientWidth = 518
+        ClientHeight = 48
+        ClientWidth = 516
         Columns = 4
         ItemIndex = 0
         Items.Strings = (
@@ -4037,8 +4037,8 @@ object f_option: Tf_option
             Width = 520
             Align = alClient
             Caption = 'PHD2'
-            ClientHeight = 70
-            ClientWidth = 518
+            ClientHeight = 73
+            ClientWidth = 516
             ParentFont = False
             TabOrder = 0
             object Label16: TLabel
@@ -4091,8 +4091,8 @@ object f_option: Tf_option
             Width = 526
             Align = alClient
             Caption = 'Lin_Guider'
-            ClientHeight = 70
-            ClientWidth = 524
+            ClientHeight = 73
+            ClientWidth = 522
             ParentFont = False
             TabOrder = 0
             object LinGuiderSocket: TEdit
@@ -4188,8 +4188,8 @@ object f_option: Tf_option
         Width = 520
         Align = alClient
         Caption = 'Guiding drift control'
-        ClientHeight = 120
-        ClientWidth = 518
+        ClientHeight = 123
+        ClientWidth = 516
         ParentFont = False
         TabOrder = 2
         object Label1119: TLabel
@@ -4298,8 +4298,8 @@ object f_option: Tf_option
           Width = 217
           Align = alClient
           Caption = 'Settle tolerance'
-          ClientHeight = 222
-          ClientWidth = 215
+          ClientHeight = 225
+          ClientWidth = 213
           ParentFont = False
           TabOrder = 1
           object DitherWaitTime: TSpinEdit
@@ -4329,8 +4329,8 @@ object f_option: Tf_option
           Width = 217
           Align = alClient
           Caption = 'Settle tolerance'
-          ClientHeight = 222
-          ClientWidth = 215
+          ClientHeight = 225
+          ClientWidth = 213
           ParentFont = False
           TabOrder = 0
           object Label20: TLabel
@@ -4435,8 +4435,8 @@ object f_option: Tf_option
             Width = 303
             Align = alTop
             Caption = 'Dithering'
-            ClientHeight = 37
-            ClientWidth = 301
+            ClientHeight = 40
+            ClientWidth = 299
             ParentFont = False
             TabOrder = 0
             object Label23: TLabel
@@ -4493,8 +4493,8 @@ object f_option: Tf_option
             Width = 303
             Align = alClient
             Caption = 'Star lost recovery'
-            ClientHeight = 165
-            ClientWidth = 301
+            ClientHeight = 168
+            ClientWidth = 299
             ParentFont = False
             TabOrder = 1
             object Label70: TLabel
@@ -4608,8 +4608,8 @@ object f_option: Tf_option
     end
     object PageDome: TTabSheet
       Caption = 'Dome'
-      ClientHeight = 537
-      ClientWidth = 520
+      ClientHeight = 535
+      ClientWidth = 524
       ParentFont = False
       object Panel4: TPanel
         Left = 0
@@ -4673,8 +4673,8 @@ object f_option: Tf_option
           Width = 520
           Align = alTop
           Caption = 'Open dome sequence when mount is asked to unpark'
-          ClientHeight = 162
-          ClientWidth = 518
+          ClientHeight = 165
+          ClientWidth = 516
           ParentFont = False
           TabOrder = 0
           object DomeOpenActions: TStringGrid
@@ -4692,7 +4692,7 @@ object f_option: Tf_option
                 MinSize = 101
                 MaxSize = 202
                 Title.Caption = 'Action'
-                Width = 465
+                Width = 463
               end>
             DefaultColWidth = 51
             Options = [goFixedVertLine, goFixedHorzLine, goVertLine, goHorzLine, goRowMoving, goEditing, goAlwaysShowEditor, goSmoothScroll, goFixedRowNumbering]
@@ -4701,7 +4701,7 @@ object f_option: Tf_option
             TabOrder = 0
             ColWidths = (
               51
-              465
+              463
             )
           end
         end
@@ -4712,8 +4712,8 @@ object f_option: Tf_option
           Width = 520
           Align = alClient
           Caption = 'Close dome sequence when mount is asked to park'
-          ClientHeight = 225
-          ClientWidth = 518
+          ClientHeight = 228
+          ClientWidth = 516
           ParentFont = False
           TabOrder = 1
           object DomeCloseActions: TStringGrid
@@ -4731,7 +4731,7 @@ object f_option: Tf_option
                 MinSize = 101
                 MaxSize = 202
                 Title.Caption = 'Action'
-                Width = 465
+                Width = 463
               end>
             DefaultColWidth = 51
             Options = [goFixedVertLine, goFixedHorzLine, goVertLine, goHorzLine, goRowMoving, goEditing, goAlwaysShowEditor, goSmoothScroll, goFixedRowNumbering]
@@ -4740,7 +4740,7 @@ object f_option: Tf_option
             TabOrder = 0
             ColWidths = (
               51
-              465
+              463
             )
           end
         end
@@ -4778,8 +4778,8 @@ object f_option: Tf_option
     end
     object PagePlanetarium: TTabSheet
       Caption = 'Planetarium'
-      ClientHeight = 537
-      ClientWidth = 520
+      ClientHeight = 535
+      ClientWidth = 524
       ParentFont = False
       object PlanetariumBox: TRadioGroup
         Left = 0
@@ -4796,8 +4796,8 @@ object f_option: Tf_option
         ChildSizing.ShrinkVertical = crsScaleChilds
         ChildSizing.Layout = cclLeftToRightThenTopToBottom
         ChildSizing.ControlsPerLine = 4
-        ClientHeight = 61
-        ClientWidth = 518
+        ClientHeight = 64
+        ClientWidth = 516
         Columns = 4
         ItemIndex = 0
         Items.Strings = (
@@ -4827,8 +4827,8 @@ object f_option: Tf_option
             Width = 520
             Align = alClient
             Caption = 'Skychart / Cartes du Ciel'
-            ClientHeight = 436
-            ClientWidth = 518
+            ClientHeight = 439
+            ClientWidth = 516
             ParentFont = False
             TabOrder = 0
             object CheckBoxLocalCdc: TCheckBox
@@ -4846,8 +4846,8 @@ object f_option: Tf_option
               Height = 81
               Top = 49
               Width = 337
-              ClientHeight = 81
-              ClientWidth = 337
+              ClientHeight = 77
+              ClientWidth = 333
               ParentFont = False
               TabOrder = 1
               object CdCport: TEdit
@@ -4903,19 +4903,19 @@ object f_option: Tf_option
     end
     object PageWeather: TTabSheet
       Caption = 'Weather'
-      ClientHeight = 537
-      ClientWidth = 520
+      ClientHeight = 535
+      ClientWidth = 524
       ParentFont = False
       object ScrollBoxWeather: TScrollBox
         Left = 0
         Height = 471
         Top = 66
         Width = 520
-        HorzScrollBar.Page = 501
+        HorzScrollBar.Page = 505
         VertScrollBar.Page = 429
         Align = alClient
-        ClientHeight = 469
-        ClientWidth = 518
+        ClientHeight = 467
+        ClientWidth = 516
         ParentFont = False
         TabOrder = 0
         object PanelW1: TPanel
@@ -4924,8 +4924,8 @@ object f_option: Tf_option
           Top = 0
           Width = 518
           Align = alTop
-          ClientHeight = 33
-          ClientWidth = 518
+          ClientHeight = 29
+          ClientWidth = 514
           ParentFont = False
           TabOrder = 0
           object LabelMi1: TLabel
@@ -4986,8 +4986,8 @@ object f_option: Tf_option
           Top = 33
           Width = 518
           Align = alTop
-          ClientHeight = 33
-          ClientWidth = 518
+          ClientHeight = 29
+          ClientWidth = 514
           ParentFont = False
           TabOrder = 1
           object LabelMi2: TLabel
@@ -5048,8 +5048,8 @@ object f_option: Tf_option
           Top = 66
           Width = 518
           Align = alTop
-          ClientHeight = 33
-          ClientWidth = 518
+          ClientHeight = 29
+          ClientWidth = 514
           ParentFont = False
           TabOrder = 2
           object LabelMi3: TLabel
@@ -5110,8 +5110,8 @@ object f_option: Tf_option
           Top = 99
           Width = 518
           Align = alTop
-          ClientHeight = 33
-          ClientWidth = 518
+          ClientHeight = 29
+          ClientWidth = 514
           ParentFont = False
           TabOrder = 3
           object LabelMi4: TLabel
@@ -5172,8 +5172,8 @@ object f_option: Tf_option
           Top = 132
           Width = 518
           Align = alTop
-          ClientHeight = 33
-          ClientWidth = 518
+          ClientHeight = 29
+          ClientWidth = 514
           ParentFont = False
           TabOrder = 4
           object LabelMi5: TLabel
@@ -5234,8 +5234,8 @@ object f_option: Tf_option
           Top = 165
           Width = 518
           Align = alTop
-          ClientHeight = 33
-          ClientWidth = 518
+          ClientHeight = 29
+          ClientWidth = 514
           ParentFont = False
           TabOrder = 5
           object LabelMi6: TLabel
@@ -5296,8 +5296,8 @@ object f_option: Tf_option
           Top = 198
           Width = 518
           Align = alTop
-          ClientHeight = 33
-          ClientWidth = 518
+          ClientHeight = 29
+          ClientWidth = 514
           ParentFont = False
           TabOrder = 6
           object LabelMi7: TLabel
@@ -5358,8 +5358,8 @@ object f_option: Tf_option
           Top = 231
           Width = 518
           Align = alTop
-          ClientHeight = 33
-          ClientWidth = 518
+          ClientHeight = 29
+          ClientWidth = 514
           ParentFont = False
           TabOrder = 7
           object LabelMi8: TLabel
@@ -5420,8 +5420,8 @@ object f_option: Tf_option
           Top = 264
           Width = 518
           Align = alTop
-          ClientHeight = 33
-          ClientWidth = 518
+          ClientHeight = 29
+          ClientWidth = 514
           ParentFont = False
           TabOrder = 8
           object LabelMi9: TLabel
@@ -5482,8 +5482,8 @@ object f_option: Tf_option
           Top = 297
           Width = 518
           Align = alTop
-          ClientHeight = 33
-          ClientWidth = 518
+          ClientHeight = 29
+          ClientWidth = 514
           ParentFont = False
           TabOrder = 9
           object LabelMi10: TLabel
@@ -5544,8 +5544,8 @@ object f_option: Tf_option
           Top = 330
           Width = 518
           Align = alTop
-          ClientHeight = 33
-          ClientWidth = 518
+          ClientHeight = 29
+          ClientWidth = 514
           ParentFont = False
           TabOrder = 10
           object LabelMi11: TLabel
@@ -5606,8 +5606,8 @@ object f_option: Tf_option
           Top = 363
           Width = 518
           Align = alTop
-          ClientHeight = 33
-          ClientWidth = 518
+          ClientHeight = 29
+          ClientWidth = 514
           ParentFont = False
           TabOrder = 11
           object LabelMi12: TLabel
@@ -5668,8 +5668,8 @@ object f_option: Tf_option
           Top = 396
           Width = 518
           Align = alTop
-          ClientHeight = 33
-          ClientWidth = 518
+          ClientHeight = 29
+          ClientWidth = 514
           ParentFont = False
           TabOrder = 12
           object LabelMi13: TLabel
@@ -5793,8 +5793,8 @@ object f_option: Tf_option
     end
     object PageSafety: TTabSheet
       Caption = 'Safety'
-      ClientHeight = 537
-      ClientWidth = 520
+      ClientHeight = 535
+      ClientWidth = 524
       ParentFont = False
       object SafetyActions: TStringGrid
         Left = 0
@@ -5811,13 +5811,13 @@ object f_option: Tf_option
             MinSize = 101
             MaxSize = 202
             Title.Caption = 'Action'
-            Width = 233
+            Width = 232
           end        
           item
             MinSize = 101
             MaxSize = 202
             Title.Caption = 'Parameters'
-            Width = 234
+            Width = 233
           end>
         DefaultColWidth = 51
         Options = [goFixedVertLine, goFixedHorzLine, goVertLine, goHorzLine, goRowMoving, goEditing, goAlwaysShowEditor, goSmoothScroll, goFixedRowNumbering]
@@ -5828,8 +5828,8 @@ object f_option: Tf_option
         OnValidateEntry = SafetyActionsValidateEntry
         ColWidths = (
           51
+          232
           233
-          234
         )
       end
       object Panel18: TPanel
@@ -5856,8 +5856,8 @@ object f_option: Tf_option
     end
     object PageSequence: TTabSheet
       Caption = 'Sequence'
-      ClientHeight = 537
-      ClientWidth = 520
+      ClientHeight = 535
+      ClientWidth = 524
       ParentFont = False
       object GroupBoxMeasurement: TGroupBox
         Left = 0
@@ -5866,8 +5866,8 @@ object f_option: Tf_option
         Width = 520
         Align = alTop
         Caption = 'Measurement on new images'
-        ClientHeight = 149
-        ClientWidth = 518
+        ClientHeight = 152
+        ClientWidth = 516
         ParentFont = False
         TabOrder = 0
         object MeasureNewImage: TCheckBox
@@ -5886,8 +5886,8 @@ object f_option: Tf_option
           Width = 518
           Align = alBottom
           Caption = 'Recenter sequence target that drift'
-          ClientHeight = 92
-          ClientWidth = 516
+          ClientHeight = 95
+          ClientWidth = 514
           ParentFont = False
           TabOrder = 1
           object CheckRecenterTarget: TCheckBox
@@ -5946,8 +5946,8 @@ object f_option: Tf_option
         Width = 520
         Align = alClient
         Caption = 'Periodic autofocus'
-        ClientHeight = 266
-        ClientWidth = 518
+        ClientHeight = 269
+        ClientWidth = 516
         ParentFont = False
         TabOrder = 1
         object GroupBox16: TGroupBox
@@ -5957,8 +5957,8 @@ object f_option: Tf_option
           Width = 518
           Align = alTop
           Caption = 'Focuser temperature compensation'
-          ClientHeight = 68
-          ClientWidth = 516
+          ClientHeight = 71
+          ClientWidth = 514
           ParentFont = False
           TabOrder = 0
           object Label84: TLabel
@@ -6038,8 +6038,8 @@ object f_option: Tf_option
           Width = 518
           Align = alTop
           Caption = 'Periodic auto-focus'
-          ClientHeight = 39
-          ClientWidth = 516
+          ClientHeight = 42
+          ClientWidth = 514
           ParentFont = False
           TabOrder = 1
           object Label127: TLabel
@@ -6124,8 +6124,8 @@ object f_option: Tf_option
     end
     object PagePerformance: TTabSheet
       Caption = 'Performance'
-      ClientHeight = 537
-      ClientWidth = 520
+      ClientHeight = 535
+      ClientWidth = 524
       ParentFont = False
       object GroupBox30: TGroupBox
         Left = 0
@@ -6134,8 +6134,8 @@ object f_option: Tf_option
         Width = 520
         Align = alTop
         Caption = 'Display performance'
-        ClientHeight = 132
-        ClientWidth = 518
+        ClientHeight = 135
+        ClientWidth = 516
         ParentFont = False
         TabOrder = 0
         object LowQualityDisplay: TCheckBox
@@ -6160,8 +6160,8 @@ object f_option: Tf_option
     end
     object PageNotification: TTabSheet
       Caption = 'Notifications'
-      ClientHeight = 537
-      ClientWidth = 520
+      ClientHeight = 535
+      ClientWidth = 524
       ParentFont = False
       object PageControl2: TPageControl
         Left = 0
@@ -6175,8 +6175,8 @@ object f_option: Tf_option
         TabOrder = 0
         object TabSheetEmail: TTabSheet
           Caption = 'Email'
-          ClientHeight = 506
-          ClientWidth = 510
+          ClientHeight = 533
+          ClientWidth = 516
           ParentFont = False
           object GroupBox25: TGroupBox
             Left = 0
@@ -6185,8 +6185,8 @@ object f_option: Tf_option
             Width = 510
             Align = alClient
             Caption = 'Email on :'
-            ClientHeight = 202
-            ClientWidth = 508
+            ClientHeight = 205
+            ClientWidth = 506
             ParentFont = False
             TabOrder = 0
             object EmailCondition: TCheckListBox
@@ -6203,9 +6203,10 @@ object f_option: Tf_option
                 'Meridian flip error'
                 'Target initialisation'
               )
-              ItemHeight = 23
+              ItemHeight = 0
               ParentFont = False
               TabOrder = 0
+              TopIndex = -1
               Data = {
                 06000000000000000000
               }
@@ -6216,8 +6217,8 @@ object f_option: Tf_option
               Top = 161
               Width = 508
               Align = alBottom
-              ClientHeight = 41
-              ClientWidth = 508
+              ClientHeight = 37
+              ClientWidth = 504
               ParentFont = False
               TabOrder = 1
               object ButtonNotificationAll: TButton
@@ -6249,8 +6250,8 @@ object f_option: Tf_option
             Width = 510
             Align = alTop
             Caption = 'Email configuration'
-            ClientHeight = 264
-            ClientWidth = 508
+            ClientHeight = 267
+            ClientWidth = 506
             ParentFont = False
             TabOrder = 1
             object Label134: TLabel
@@ -6421,8 +6422,8 @@ object f_option: Tf_option
         end
         object TabSheetVoice: TTabSheet
           Caption = 'Voice'
-          ClientHeight = 506
-          ClientWidth = 510
+          ClientHeight = 533
+          ClientWidth = 516
           ParentFont = False
           object CheckGroupVoice: TCheckGroup
             Left = 0
@@ -6442,8 +6443,8 @@ object f_option: Tf_option
             ChildSizing.ShrinkVertical = crsScaleChilds
             ChildSizing.Layout = cclLeftToRightThenTopToBottom
             ChildSizing.ControlsPerLine = 1
-            ClientHeight = 146
-            ClientWidth = 508
+            ClientHeight = 149
+            ClientWidth = 506
             Items.Strings = (
               'Interaction dialog'
               'Sequence steps'
@@ -6462,8 +6463,8 @@ object f_option: Tf_option
             Top = 166
             Width = 510
             Align = alTop
-            ClientHeight = 66
-            ClientWidth = 510
+            ClientHeight = 62
+            ClientWidth = 506
             ParentFont = False
             TabOrder = 1
             object ButtonVoiceAll: TButton
