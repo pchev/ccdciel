@@ -36,10 +36,21 @@ type
   Tf_option = class(TForm)
     GroupBox31: TGroupBox;
     GroupBox32: TPanel;
+    hemis: TComboBox;
     Label28: TLabel;
     Label29: TLabel;
+    latdeg: TFloatEdit;
+    LatitudeGroup: TPanel;
+    latmin: TLongEdit;
+    latsec: TFloatEdit;
+    long: TComboBox;
+    longdeg: TFloatEdit;
+    LongitudeGroup: TPanel;
+    longmin: TLongEdit;
+    longsec: TFloatEdit;
     Panel22: TPanel;
     Panel23: TPanel;
+    Panel24: TPanel;
     SlewGainEdit: TSpinEdit;
     SlewISObox: TComboBox;
     SlewOffsetEdit: TSpinEdit;
@@ -529,7 +540,6 @@ type
     MeridianFlipPauseAfter: TCheckBox;
     GroupBox8: TGroupBox;
     GroupBox9: TGroupBox;
-    hemis: TComboBox;
     Label33: TLabel;
     CygwinPanel: TPanel;
     Label34: TLabel;
@@ -538,15 +548,6 @@ type
     Label38: TLabel;
     Label39: TLabel;
     Label40: TLabel;
-    latdeg: TFloatEdit;
-    LatitudeGroup: TGroupBox;
-    latmin: TLongEdit;
-    latsec: TFloatEdit;
-    long: TComboBox;
-    longdeg: TFloatEdit;
-    LongitudeGroup: TGroupBox;
-    longmin: TLongEdit;
-    longsec: TFloatEdit;
     MeridianOption: TRadioGroup;
     MeridianFlipPanel: TPanel;
     Page3: TPage;
