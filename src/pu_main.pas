@@ -10240,9 +10240,18 @@ begin
    exit;
  end;
  if (AutofocusMode=afNone) then begin
-   NewMessage(rsPleaseConfig2,1);
+   // do not abort if autofocus is not configured and not using a focuser
+   if focuser.Status<>devConnected then
+     result:=true;
+   NewMessage(rsAutoFocusErr+': '+rsPleaseConfig2,1);
    f_starprofile.ChkAutofocusDown(false);
    exit;
+ end;
+ if (camera.Status<>devConnected)or(focuser.Status<>devConnected) then begin
+  // abort if configured but focuser not connected
+  NewMessage(rsCameraOrFocu,1);
+  f_starprofile.ChkAutofocusDown(false);
+  exit;
  end;
  if(AutofocusMode=afVcurve) and (config.GetValue('/StarAnalysis/Vcurve/AutofocusVcBinning',AutofocusBinning)<>AutofocusBinning) then begin
    NewMessage(Format(rsPleaseRunVcu, [inttostr(AutofocusBinning)]),1);
