@@ -67,22 +67,22 @@ object f_setup: Tf_setup
     Options = [nboMultiLine]
     object DeviceInterface: TTabSheet
       Caption = 'Interface'
-      ClientHeight = 452
-      ClientWidth = 491
+      ClientHeight = 454
+      ClientWidth = 487
       ParentFont = False
       object PanelIndiServer: TPanel
         Left = 0
         Height = 127
         Top = 88
-        Width = 491
+        Width = 487
         Align = alTop
         ClientHeight = 127
-        ClientWidth = 491
+        ClientWidth = 487
         ParentFont = False
         TabOrder = 0
         object IndiServer: TEdit
           Left = 8
-          Height = 24
+          Height = 28
           Top = 43
           Width = 121
           Constraints.MaxHeight = 28
@@ -92,7 +92,7 @@ object f_setup: Tf_setup
         end
         object IndiPort: TEdit
           Left = 137
-          Height = 24
+          Height = 28
           Top = 43
           Width = 81
           Constraints.MaxHeight = 28
@@ -102,34 +102,34 @@ object f_setup: Tf_setup
         end
         object Label18: TLabel
           Left = 13
-          Height = 13
+          Height = 17
           Top = 24
-          Width = 39
+          Width = 42
           Caption = 'Server'
           ParentColor = False
           ParentFont = False
         end
         object Label22: TLabel
           Left = 145
-          Height = 13
+          Height = 17
           Top = 24
-          Width = 24
+          Width = 27
           Caption = 'Port'
           ParentColor = False
           ParentFont = False
         end
         object Label1: TLabel
           Left = 226
-          Height = 13
+          Height = 17
           Top = 24
-          Width = 49
+          Width = 51
           Caption = 'Timeout'
           ParentColor = False
           ParentFont = False
         end
         object IndiTimeout: TEdit
           Left = 226
-          Height = 24
+          Height = 28
           Top = 43
           Width = 49
           Constraints.MaxHeight = 28
@@ -138,9 +138,9 @@ object f_setup: Tf_setup
         end
         object Label29: TLabel
           Left = 13
-          Height = 13
+          Height = 17
           Top = 0
-          Width = 69
+          Width = 75
           Caption = 'INDI Server'
           ParentColor = False
           ParentFont = False
@@ -158,35 +158,35 @@ object f_setup: Tf_setup
       end
       object Panel10: TPanel
         Left = 0
-        Height = 237
+        Height = 239
         Top = 215
-        Width = 491
+        Width = 487
         Align = alClient
-        ClientHeight = 237
-        ClientWidth = 491
+        ClientHeight = 239
+        ClientWidth = 487
         ParentFont = False
         TabOrder = 1
         object Label62: TLabel
           Left = 13
-          Height = 13
+          Height = 17
           Top = 2
-          Width = 87
+          Width = 89
           Caption = 'ASCOM Alpaca'
           ParentColor = False
           ParentFont = False
         end
         object Label70: TLabel
           Left = 13
-          Height = 13
+          Height = 17
           Top = 64
-          Width = 48
+          Width = 51
           Caption = 'Protocol'
           ParentColor = False
           ParentFont = False
         end
         object DefaultARestProtocol: TComboBox
           Left = 8
-          Height = 25
+          Height = 28
           Top = 84
           Width = 75
           Constraints.MaxHeight = 28
@@ -204,9 +204,9 @@ object f_setup: Tf_setup
         end
         object Label71: TLabel
           Left = 93
-          Height = 13
+          Height = 17
           Top = 64
-          Width = 158
+          Width = 163
           Caption = 'Remote host or IP address'
           ParentColor = False
           ParentFont = False
@@ -215,7 +215,7 @@ object f_setup: Tf_setup
           AnchorSideTop.Control = DefaultARestProtocol
           AnchorSideTop.Side = asrCenter
           Left = 93
-          Height = 24
+          Height = 28
           Top = 84
           Width = 194
           Constraints.MaxHeight = 28
@@ -225,9 +225,9 @@ object f_setup: Tf_setup
         end
         object Label72: TLabel
           Left = 298
-          Height = 13
+          Height = 17
           Top = 64
-          Width = 39
+          Width = 43
           Caption = 'IP Port'
           ParentColor = False
           ParentFont = False
@@ -236,7 +236,7 @@ object f_setup: Tf_setup
           AnchorSideTop.Control = DefaultARestProtocol
           AnchorSideTop.Side = asrCenter
           Left = 298
-          Height = 24
+          Height = 28
           Top = 84
           Width = 82
           Constraints.MaxHeight = 28
@@ -258,25 +258,25 @@ object f_setup: Tf_setup
         end
         object Label107: TLabel
           Left = 13
-          Height = 13
+          Height = 17
           Top = 116
-          Width = 65
+          Width = 68
           Caption = 'User name'
           ParentColor = False
           ParentFont = False
         end
         object Label108: TLabel
           Left = 160
-          Height = 13
+          Height = 17
           Top = 116
-          Width = 56
+          Width = 58
           Caption = 'Password'
           ParentColor = False
           ParentFont = False
         end
         object DefaultARestUser: TEdit
           Left = 8
-          Height = 24
+          Height = 28
           Top = 132
           Width = 131
           AutoSelect = False
@@ -286,7 +286,7 @@ object f_setup: Tf_setup
         end
         object DefaultARestPass: TEdit
           Left = 156
-          Height = 24
+          Height = 28
           Top = 132
           Width = 131
           AutoSelect = False
@@ -324,8 +324,8 @@ object f_setup: Tf_setup
           AnchorSideTop.Control = AlpacaServers
           AnchorSideTop.Side = asrCenter
           Left = 392
-          Height = 24
-          Top = 25
+          Height = 28
+          Top = 23
           Width = 82
           Constraints.MaxHeight = 28
           MaxValue = 65535
@@ -336,9 +336,9 @@ object f_setup: Tf_setup
         end
         object Label26: TLabel
           Left = 392
-          Height = 13
+          Height = 17
           Top = 2
-          Width = 87
+          Width = 91
           Caption = 'Discovery port'
           ParentColor = False
           ParentFont = False
@@ -348,26 +348,26 @@ object f_setup: Tf_setup
         Left = 0
         Height = 88
         Top = 0
-        Width = 491
+        Width = 487
         Align = alTop
         ClientHeight = 88
-        ClientWidth = 491
+        ClientWidth = 487
         ParentFont = False
         TabOrder = 2
         object Label2: TLabel
           AnchorSideTop.Control = ProfileList
           AnchorSideTop.Side = asrCenter
           Left = 21
-          Height = 13
+          Height = 17
           Top = 14
-          Width = 45
+          Width = 47
           Caption = 'Profile :'
           ParentColor = False
           ParentFont = False
         end
         object ProfileList: TComboBox
           Left = 97
-          Height = 25
+          Height = 28
           Top = 8
           Width = 375
           Constraints.MaxHeight = 28
@@ -420,14 +420,14 @@ object f_setup: Tf_setup
     end
     object Camera: TTabSheet
       Caption = 'Camera'
-      ClientHeight = 452
-      ClientWidth = 491
+      ClientHeight = 454
+      ClientWidth = 487
       ParentFont = False
       object PageControlCamera: TPageControl
         Left = 0
-        Height = 409
+        Height = 414
         Top = 40
-        Width = 481
+        Width = 487
         ActivePage = CameraIndi
         Align = alClient
         ParentFont = False
@@ -436,18 +436,18 @@ object f_setup: Tf_setup
         OnChange = PageControlCameraChange
         object CameraIndi: TTabSheet
           Caption = 'CameraIndi'
-          ClientHeight = 405
+          ClientHeight = 383
           ClientWidth = 477
           ParentFont = False
           object PanelCameraIndi: TPanel
             Left = 0
-            Height = 378
+            Height = 383
             Top = 0
-            Width = 471
+            Width = 477
             Align = alClient
             BevelOuter = bvNone
-            ClientHeight = 374
-            ClientWidth = 467
+            ClientHeight = 383
+            ClientWidth = 477
             ParentFont = False
             TabOrder = 0
             object CameraIndiDevice: TComboBox
@@ -467,7 +467,7 @@ object f_setup: Tf_setup
               Left = 8
               Height = 17
               Top = 56
-              Width = 40
+              Width = 41
               Caption = 'Device'
               ParentColor = False
               ParentFont = False
@@ -478,7 +478,7 @@ object f_setup: Tf_setup
               Left = 8
               Height = 17
               Top = 89
-              Width = 41
+              Width = 43
               Caption = 'Sensor'
               ParentColor = False
               ParentFont = False
@@ -503,7 +503,7 @@ object f_setup: Tf_setup
               Left = 9
               Height = 21
               Top = 154
-              Width = 205
+              Width = 206
               Caption = 'Load configuration on startup'
               ParentFont = False
               TabOrder = 2
@@ -523,8 +523,8 @@ object f_setup: Tf_setup
               ChildSizing.ShrinkVertical = crsScaleChilds
               ChildSizing.Layout = cclLeftToRightThenTopToBottom
               ChildSizing.ControlsPerLine = 2
-              ClientHeight = 28
-              ClientWidth = 336
+              ClientHeight = 25
+              ClientWidth = 338
               Columns = 2
               Items.Strings = (
                 'Network'
@@ -540,15 +540,15 @@ object f_setup: Tf_setup
               Top = 227
               Width = 356
               BevelOuter = bvNone
-              ClientHeight = 30
-              ClientWidth = 352
+              ClientHeight = 34
+              ClientWidth = 356
               ParentFont = False
               TabOrder = 4
               object Label5: TLabel
                 Left = 8
                 Height = 17
                 Top = 6
-                Width = 56
+                Width = 58
                 Caption = 'Directory'
                 ParentColor = False
                 ParentFont = False
@@ -571,8 +571,8 @@ object f_setup: Tf_setup
               Top = 8
               Width = 412
               BevelOuter = bvNone
-              ClientHeight = 34
-              ClientWidth = 408
+              ClientHeight = 38
+              ClientWidth = 412
               ParentFont = False
               TabOrder = 5
               object Label73: TLabel
@@ -581,7 +581,7 @@ object f_setup: Tf_setup
                 Left = 8
                 Height = 17
                 Top = 6
-                Width = 38
+                Width = 42
                 Caption = 'Server'
                 ParentColor = False
                 ParentFont = False
@@ -604,7 +604,7 @@ object f_setup: Tf_setup
                 Left = 234
                 Height = 17
                 Top = 6
-                Width = 26
+                Width = 27
                 Caption = 'Port'
                 ParentColor = False
                 ParentFont = False
@@ -648,7 +648,7 @@ object f_setup: Tf_setup
         end
         object CameraAscom: TTabSheet
           Caption = 'CameraAscom'
-          ClientHeight = 405
+          ClientHeight = 383
           ClientWidth = 477
           ParentFont = False
           object PanelCameraAscom: TPanel
@@ -657,8 +657,8 @@ object f_setup: Tf_setup
             Top = 16
             Width = 456
             BevelOuter = bvNone
-            ClientHeight = 262
-            ClientWidth = 452
+            ClientHeight = 266
+            ClientWidth = 456
             ParentFont = False
             TabOrder = 0
             object BtnChooseCamera: TButton
@@ -709,7 +709,7 @@ object f_setup: Tf_setup
               Left = 13
               Height = 21
               Top = 125
-              Width = 167
+              Width = 171
               Caption = 'Flip the image vertically '
               ParentFont = False
               TabOrder = 4
@@ -718,7 +718,7 @@ object f_setup: Tf_setup
               Left = 13
               Height = 21
               Top = 160
-              Width = 203
+              Width = 207
               Caption = 'DATE-OBS from camera driver'
               ParentFont = False
               TabOrder = 5
@@ -727,7 +727,7 @@ object f_setup: Tf_setup
               Left = 13
               Height = 21
               Top = 192
-              Width = 348
+              Width = 353
               Caption = 'Try to fix pixel range to match CMOS camera bit depth'
               ParentFont = False
               TabOrder = 6
@@ -736,25 +736,25 @@ object f_setup: Tf_setup
         end
         object CameraAscomRest: TTabSheet
           Caption = 'CameraAscomRest'
-          ClientHeight = 405
+          ClientHeight = 383
           ClientWidth = 477
           ParentFont = False
           object Panel2: TPanel
             Left = 0
-            Height = 378
+            Height = 383
             Top = 0
-            Width = 471
+            Width = 477
             Align = alClient
             BevelOuter = bvNone
-            ClientHeight = 374
-            ClientWidth = 467
+            ClientHeight = 383
+            ClientWidth = 477
             ParentFont = False
             TabOrder = 0
             object FlipImage1: TCheckBox
               Left = 16
               Height = 21
               Top = 241
-              Width = 167
+              Width = 171
               Caption = 'Flip the image vertically '
               ParentFont = False
               TabOrder = 0
@@ -800,7 +800,7 @@ object f_setup: Tf_setup
               Left = 93
               Height = 17
               Top = 40
-              Width = 158
+              Width = 163
               Caption = 'Remote host or IP address'
               ParentColor = False
               ParentFont = False
@@ -821,7 +821,7 @@ object f_setup: Tf_setup
               Left = 291
               Height = 17
               Top = 40
-              Width = 41
+              Width = 43
               Caption = 'IP Port'
               ParentColor = False
               ParentFont = False
@@ -840,7 +840,7 @@ object f_setup: Tf_setup
               Left = 93
               Height = 17
               Top = 113
-              Width = 139
+              Width = 144
               Caption = 'Remote device number'
               ParentColor = False
               ParentFont = False
@@ -849,7 +849,7 @@ object f_setup: Tf_setup
               Left = 16
               Height = 17
               Top = 141
-              Width = 51
+              Width = 52
               Caption = 'Camera/'
               ParentColor = False
               ParentFont = False
@@ -867,7 +867,7 @@ object f_setup: Tf_setup
               Left = 16
               Height = 17
               Top = 170
-              Width = 65
+              Width = 68
               Caption = 'User name'
               ParentColor = False
               ParentFont = False
@@ -910,7 +910,7 @@ object f_setup: Tf_setup
               Left = 16
               Height = 21
               Top = 272
-              Width = 203
+              Width = 207
               Caption = 'DATE-OBS from camera driver'
               ParentFont = False
               TabOrder = 8
@@ -919,7 +919,7 @@ object f_setup: Tf_setup
               Left = 16
               Height = 21
               Top = 304
-              Width = 348
+              Width = 353
               Caption = 'Try to fix pixel range to match CMOS camera bit depth'
               ParentFont = False
               TabOrder = 9
@@ -931,18 +931,18 @@ object f_setup: Tf_setup
         Left = 0
         Height = 40
         Top = 0
-        Width = 481
+        Width = 487
         Align = alTop
         BevelOuter = bvNone
         ClientHeight = 40
-        ClientWidth = 481
+        ClientWidth = 487
         ParentFont = False
         TabOrder = 1
         object DeviceCamera: TLabel
           Left = 18
           Height = 17
           Top = 8
-          Width = 86
+          Width = 88
           Caption = 'DeviceCamera'
           ParentColor = False
           ParentFont = False
@@ -951,8 +951,8 @@ object f_setup: Tf_setup
     end
     object Filterwheel: TTabSheet
       Caption = 'Filter wheel'
-      ClientHeight = 452
-      ClientWidth = 491
+      ClientHeight = 454
+      ClientWidth = 487
       ParentFont = False
       object PageControlWheel: TPageControl
         Left = 0
@@ -1424,8 +1424,8 @@ object f_setup: Tf_setup
     end
     object Focuser: TTabSheet
       Caption = 'Focuser'
-      ClientHeight = 452
-      ClientWidth = 491
+      ClientHeight = 454
+      ClientWidth = 487
       ParentFont = False
       object Panel23: TPanel
         Left = 0
@@ -1867,8 +1867,8 @@ object f_setup: Tf_setup
     end
     object Rotator: TTabSheet
       Caption = 'Rotator'
-      ClientHeight = 452
-      ClientWidth = 491
+      ClientHeight = 454
+      ClientWidth = 487
       ParentFont = False
       object PageControlRotator: TPageControl
         Left = 0
@@ -2260,8 +2260,8 @@ object f_setup: Tf_setup
     end
     object Mount: TTabSheet
       Caption = 'Mount'
-      ClientHeight = 452
-      ClientWidth = 491
+      ClientHeight = 454
+      ClientWidth = 487
       ParentFont = False
       object Panel26: TPanel
         Left = 0
@@ -2694,8 +2694,8 @@ object f_setup: Tf_setup
     end
     object Dome: TTabSheet
       Caption = 'Dome'
-      ClientHeight = 452
-      ClientWidth = 491
+      ClientHeight = 454
+      ClientWidth = 487
       ParentFont = False
       object PageControlDome: TPageControl
         Left = 0
@@ -3087,8 +3087,8 @@ object f_setup: Tf_setup
     end
     object Weather: TTabSheet
       Caption = 'Weather'
-      ClientHeight = 452
-      ClientWidth = 491
+      ClientHeight = 454
+      ClientWidth = 487
       ParentFont = False
       object PageControlWeather: TPageControl
         Left = 0
@@ -3302,8 +3302,8 @@ object f_setup: Tf_setup
               ChildSizing.ShrinkVertical = crsScaleChilds
               ChildSizing.Layout = cclLeftToRightThenTopToBottom
               ChildSizing.ControlsPerLine = 1
-              ClientHeight = 71
-              ClientWidth = 206
+              ClientHeight = 68
+              ClientWidth = 208
               ItemIndex = 0
               Items.Strings = (
                 'Observing condition'
@@ -3431,8 +3431,8 @@ object f_setup: Tf_setup
               ChildSizing.ShrinkVertical = crsScaleChilds
               ChildSizing.Layout = cclLeftToRightThenTopToBottom
               ChildSizing.ControlsPerLine = 1
-              ClientHeight = 71
-              ClientWidth = 166
+              ClientHeight = 68
+              ClientWidth = 168
               ItemIndex = 0
               Items.Strings = (
                 'Observing condition'
@@ -3520,8 +3520,8 @@ object f_setup: Tf_setup
     end
     object Safety: TTabSheet
       Caption = 'Safety'
-      ClientHeight = 452
-      ClientWidth = 491
+      ClientHeight = 454
+      ClientWidth = 487
       ParentFont = False
       object PageControlSafety: TPageControl
         Left = 0
@@ -3913,8 +3913,8 @@ object f_setup: Tf_setup
     end
     object Watchdog: TTabSheet
       Caption = 'Watchdog'
-      ClientHeight = 452
-      ClientWidth = 491
+      ClientHeight = 454
+      ClientWidth = 487
       ParentFont = False
       object PageControlWatchdog: TPageControl
         Left = 0
