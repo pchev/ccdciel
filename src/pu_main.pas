@@ -1324,6 +1324,7 @@ begin
 
   f_msg:=Tf_msg.Create(self);
   f_msg.onShowTabs:=@ShowMsgTabs;
+  f_msg.onOpenLog:=@MenuShowLogClick;
 
   fits:=TFits.Create(self);
   fits.onMsg:=@NewMessage;
