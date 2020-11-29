@@ -538,6 +538,7 @@ var tfile: TCCDconfig;
     x:string;
     i,j,m,n: integer;
 begin
+   msg('',2);
    tfile:=TCCDconfig.Create(self);
    tfile.Filename:=fn;
    CurrentSeqName:=ExtractFileNameOnly(fn);
@@ -660,9 +661,7 @@ begin
    if Targets.CheckDoneCount then begin
       msg(targets.LastDoneStep,2);
       msg(Format(rsThisSequence,['"'+CurrentSeqName+'"']), 2);
-   end
-   else
-      msg('',2);
+   end;
    tfile.Free;
 end;
 
@@ -672,15 +671,16 @@ begin
      if (not Confirm) or
        (MessageDlg(rsClearTheComp, Format(rsThisSequence2, [crlf, crlf+crlf]),mtConfirmation,mbYesNo,0)=mrYes)
        then begin
+        msg('',2);
         Targets.ClearDoneCount(true);
         SaveTargets(CurrentSequenceFile,'');
-        msg('',2);
+        LoadTargets(CurrentSequenceFile);
      end;
    end;
 end;
 
 procedure Tf_sequence.LoadPlan(p: T_plan; plan:string; donelist:TStepDone);
-var fn,buf: string;
+var fn,buf1,buf2,msgstr: string;
     i,n,m:integer;
     pfile: TCCDconfig;
     s: TStep;
@@ -692,19 +692,30 @@ begin
      pfile:=TCCDconfig.Create(self);
      pfile.Filename:=fn;
      n:=pfile.GetValue('/StepNum',0);
+     if camera.CanSetGain then begin
+       msgstr:='';
+       for i:=0 to n do begin
+          buf1:=pfile.GetValue('/Steps/Step'+inttostr(i)+'/Gain','');
+          buf2:=pfile.GetValue('/Steps/Step'+inttostr(i)+'/Offset','');
+          if (buf1='')or(buf2='') then
+            msgstr:='Plan '+plan+': Please be careful to review and set the value for the Gain and Offset';
+       end;
+       if msgstr<>'' then
+          msg(msgstr,1);
+     end;
+     msgstr:='';
      m:=Length(donelist);
      if n<>m then begin
        SetLength(donelist,n);
        for i:=m to n-1 do donelist[i]:=0;
      end;
-     buf:='';
      for i:=1 to n do begin
        s:=TStep.Create;
-       f_EditTargets.ReadStep(pfile,i,s,buf);
+       f_EditTargets.ReadStep(pfile,i,s,msgstr);
        s.donecount:=donelist[i-1];
        p.Add(s);
      end;
-     if buf>'' then ShowMessage(buf);
+     if msgstr>'' then ShowMessage(msgstr);
   end;
 end;
 

@@ -2656,7 +2656,7 @@ begin
     config.SetValue('/Sensor/CanSetGain',ok);
     config.DeleteValue('/Sensor/GainFromCamera');
     msg:='This version add Offset control for the camera that support this option.'+crlf+
-         'Please be careful of the default value for the Offset in Preview, Capture and Sequences tools, '+
+         'Please be careful to review and set the value for the Offset in Preview, Capture and Sequences tools, '+
          'and in the Autofocus and Slewing preferences.';
     NewMessage(msg,1);
     MessageDlg(caption,msg,mtWarning,[mbOK],0);
