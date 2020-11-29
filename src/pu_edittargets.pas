@@ -2190,6 +2190,7 @@ end;
 procedure Tf_EditTargets.ReadStep(pfile:TCCDconfig; i: integer; var p:TStep; var msg:string);
 var str,buf: string;
     j:integer;
+    gainmsg:boolean;
 begin
   StepsModified:=false;
   str:=pfile.GetValue('/Steps/Step'+inttostr(i)+'/Description','');
@@ -2213,8 +2214,10 @@ begin
     p.biny:=1;
   end;
   str:=pfile.GetValue('/Steps/Step'+inttostr(i)+'/Gain','');
+  gainmsg:=(str='');
   p.gain:=StrToIntDef(str,Gain);
   str:=pfile.GetValue('/Steps/Step'+inttostr(i)+'/Offset','');
+  gainmsg:=gainmsg or (str='');
   p.offset:=StrToIntDef(str,Offset);
   str:=pfile.GetValue('/Steps/Step'+inttostr(i)+'/Filter','');
   originalFilter[i]:=str;
@@ -2229,6 +2232,8 @@ begin
   p.autofocusstart:=pfile.GetValue('/Steps/Step'+inttostr(i)+'/AutofocusStart',false);
   p.autofocus:=pfile.GetValue('/Steps/Step'+inttostr(i)+'/Autofocus',false);
   p.autofocuscount:=trunc(pfile.GetValue('/Steps/Step'+inttostr(i)+'/AutofocusCount',10));
+  if gainmsg then
+     LabelMsg.Caption:='Please be careful to review and set the value for the Gain and Offset';
   // obsolete option
   if trunc(pfile.GetValue('/Steps/Step'+inttostr(i)+'/RepeatCount',1)) > 1 then
      msg:='Warning! the Repeat option at the step level as been removed. Please use the Repeat option at the target level instead.';
@@ -2250,6 +2255,7 @@ var pfile: TCCDconfig;
   end;
 begin
 ClearStepList;
+LabelMsg.Caption:='';
 if trim(PlanName.Caption)<>'' then begin
   PageControlPlan.ActivePageIndex:=pageobject;
   fn:=slash(ConfigDir)+PlanName.Caption+'.plan';
@@ -2333,7 +2339,6 @@ end;
 procedure Tf_EditTargets.SetStep(n: integer; p: TStep);
 begin
   LockStep:=true;
-  LabelMsg.Caption:='';
   StepList.Cells[pcoldesc,n]:=p.description_str;
   StepList.Cells[pcoltype,n]:=trim(FrameName[ord(p.frtype)]);
   StepList.Cells[pcolexp,n]:=formatfloat(f3,p.exposure);
