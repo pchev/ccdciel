@@ -494,7 +494,8 @@ begin
       if not LastResult then begin
          StopAstrometry;
          msg(rsFailToResolv,0);
-         break;
+         inc(i);
+         continue;
       end;
       if CancelAutofocus then exit;
       fn:=slash(TmpDir)+'ccdcielsolved.fits';

@@ -784,10 +784,8 @@ begin
     Ffits.Header.Insert(i,'FRAMEWDH',Frwidth,'Frame width');
   end;
   if (haz<>NullCoord)and(hal<>NullCoord) then begin
-    Ffits.Header.Insert(i,'CENTAZ',haz,'[deg] Azimuth of center of image');
-    Ffits.Header.Insert(i,'CENTALT',hal,'[deg] Altitude of center of image');
-    Ffits.Header.Insert(i,'OBJCTAZ',haz,'[deg] Azimuth of center of image');
-    Ffits.Header.Insert(i,'OBJCTALT',hal,'[deg] Altitude of center of image');
+    Ffits.Header.Insert(i,'CENTAZ',FormatFloat(f2,haz),'[deg] Azimuth of center of image');
+    Ffits.Header.Insert(i,'CENTALT',FormatFloat(f2,hal),'[deg] Altitude of center of image');
   end;
   if hairmass>0 then Ffits.Header.Insert(i,'AIRMASS',hairmass ,'Airmass');
   if hasfocuserpos then Ffits.Header.Insert(i,'FOCUSPOS',focuserpos ,'Focuser position in steps');

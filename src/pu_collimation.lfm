@@ -1,41 +1,40 @@
 object f_collimation: Tf_collimation
   Left = 369
-  Height = 249
+  Height = 252
   Top = 31
-  Width = 260
+  Width = 263
   Caption = 'f_collimation'
-  ClientHeight = 249
-  ClientWidth = 260
-  DesignTimePPI = 95
+  ClientHeight = 252
+  ClientWidth = 263
   FormStyle = fsStayOnTop
   OnClose = FormClose
   OnCreate = FormCreate
   object Panel1: TPanel
     Left = 0
     Height = 40
-    Top = 209
-    Width = 260
+    Top = 212
+    Width = 263
     Align = alBottom
     BevelOuter = bvNone
     ClientHeight = 40
-    ClientWidth = 260
+    ClientWidth = 263
     ParentFont = False
     TabOrder = 0
     object BtnStart: TButton
-      Left = 92
+      Left = 93
       Height = 25
       Top = 8
-      Width = 74
+      Width = 75
       Caption = 'Start'
       OnClick = BtnStartClick
       ParentFont = False
       TabOrder = 0
     end
     object BtnStop: TButton
-      Left = 175
+      Left = 177
       Height = 25
       Top = 8
-      Width = 74
+      Width = 75
       Caption = 'Stop'
       OnClick = BtnStopClick
       ParentFont = False
@@ -45,7 +44,7 @@ object f_collimation: Tf_collimation
       Left = 8
       Height = 25
       Top = 8
-      Width = 74
+      Width = 75
       Caption = 'Center'
       OnClick = BtnCenterClick
       ParentFont = False
@@ -54,30 +53,30 @@ object f_collimation: Tf_collimation
   end
   object GroupBox1: TGroupBox
     Left = 0
-    Height = 56
-    Top = 153
-    Width = 260
+    Height = 57
+    Top = 155
+    Width = 263
     Align = alBottom
-    ClientHeight = 54
-    ClientWidth = 258
+    ClientHeight = 53
+    ClientWidth = 259
     ParentFont = False
     TabOrder = 1
     object Label1: TLabel
       AnchorSideTop.Control = CircleNum
       AnchorSideTop.Side = asrCenter
       Left = 16
-      Height = 17
+      Height = 13
       Top = 14
-      Width = 105
+      Width = 106
       Caption = 'Number of circles'
       ParentColor = False
       ParentFont = False
     end
     object CircleNum: TSpinEdit
-      Left = 174
-      Height = 28
+      Left = 176
+      Height = 24
       Top = 8
-      Width = 74
+      Width = 75
       MaxValue = 15
       MinValue = 1
       OnChange = CircleNumChange
@@ -88,9 +87,9 @@ object f_collimation: Tf_collimation
   end
   object Label2: TLabel
     Left = 4
-    Height = 145
+    Height = 147
     Top = 4
-    Width = 252
+    Width = 255
     Align = alClient
     AutoSize = False
     BorderSpacing.Around = 4

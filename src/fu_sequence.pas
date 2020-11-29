@@ -538,6 +538,7 @@ var t:TTarget;
     x, str:string;
     i,j,k,m,n: integer;
 begin
+   msg('',2);
    SequenceFile.Filename:='';
    SequenceFile.Clear;
    SequenceFile.Filename:=fn;
@@ -705,9 +706,7 @@ begin
    if Targets.CheckDoneCount then begin
       msg(targets.LastDoneStep,2);
       msg(Format(rsThisSequence,['"'+CurrentSeqName+'"']), 2);
-   end
-   else
-      msg('',2);
+   end;
 end;
 
 procedure Tf_sequence.ClearRestartHistory(Confirm:boolean);
@@ -716,15 +715,16 @@ begin
      if (not Confirm) or
        (MessageDlg(rsClearTheComp, Format(rsThisSequence2, [crlf, crlf+crlf]),mtConfirmation,mbYesNo,0)=mrYes)
        then begin
+        msg('',2);
         Targets.ClearDoneCount(true);
         SaveTargets(SequenceFile.Filename,'');
-        msg('',2);
+        LoadTargets(SequenceFile.Filename);
      end;
    end;
 end;
 
 procedure Tf_sequence.CompatLoadPlan(p: T_plan; plan,obj:string);
-var fn,buf: string;
+var fn,buf1,buf2,msgstr: string;
     i,n:integer;
     pfile: TCCDconfig;
     s: TStep;
@@ -736,15 +736,26 @@ begin
      pfile:=TCCDconfig.Create(self);
      pfile.Filename:=fn;
      n:=pfile.GetValue('/StepNum',0);
-     buf:='';
+     if camera.CanSetGain then begin
+       msgstr:='';
+       for i:=0 to n do begin
+          buf1:=pfile.GetValue('/Steps/Step'+inttostr(i)+'/Gain','');
+          buf2:=pfile.GetValue('/Steps/Step'+inttostr(i)+'/Offset','');
+          if (buf1='')or(buf2='') then
+            msgstr:=rsPlan+blank+plan+': '+rsPleaseBeCare;
+       end;
+       if msgstr<>'' then
+          msg(msgstr,1);
+     end;
+     msgstr:='';
      for i:=1 to n do begin
        s:=TStep.Create;
-       f_EditTargets.ReadStep(pfile,i,s,buf);
+       f_EditTargets.ReadStep(pfile,i,s,msgstr);
        s.donecount:=0;
        p.Add(s);
      end;
-     buf:=buf+obj+' '+plan+' warning! the completion status is cleared.';
-     msg(buf,1);
+     msgstr:=msgstr+blank+obj+' '+plan+' warning! the completion status is cleared.';
+     msg(msgstr,1);
   end;
 end;
 

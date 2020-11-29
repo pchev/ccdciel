@@ -1,16 +1,15 @@
 object f_main: Tf_main
   Left = 228
-  Height = 560
+  Height = 566
   Top = 136
-  Width = 990
+  Width = 1000
   ActiveControl = PageControlRight
   AllowDropFiles = True
   Caption = 'CCD Ciel'
-  ClientHeight = 560
-  ClientWidth = 990
-  Constraints.MinHeight = 445
-  Constraints.MinWidth = 792
-  DesignTimePPI = 95
+  ClientHeight = 566
+  ClientWidth = 1000
+  Constraints.MinHeight = 450
+  Constraints.MinWidth = 800
   KeyPreview = True
   Menu = MainMenu1
   OnClose = FormClose
@@ -24,18 +23,18 @@ object f_main: Tf_main
   ShowHint = True
   object Panel1: TPanel
     Left = 0
-    Height = 540
+    Height = 546
     Top = 0
-    Width = 765
+    Width = 773
     Align = alClient
     BevelOuter = bvNone
-    ClientHeight = 540
-    ClientWidth = 765
+    ClientHeight = 546
+    ClientWidth = 773
     ParentFont = False
     TabOrder = 0
     object PanelLeft: TPanel
       Left = 0
-      Height = 532
+      Height = 538
       Top = 4
       Width = 4
       Align = alLeft
@@ -56,7 +55,7 @@ object f_main: Tf_main
       Left = 0
       Height = 4
       Top = 0
-      Width = 765
+      Width = 773
       Align = alTop
       AutoSize = True
       BevelOuter = bvNone
@@ -64,7 +63,7 @@ object f_main: Tf_main
       ChildSizing.HorizontalSpacing = 3
       ChildSizing.Layout = cclLeftToRightThenTopToBottom
       ChildSizing.ControlsPerLine = 99
-      Constraints.MaxHeight = 153
+      Constraints.MaxHeight = 155
       Constraints.MinHeight = 4
       ParentColor = False
       ParentFont = False
@@ -74,25 +73,25 @@ object f_main: Tf_main
     end
     object PanelCenter: TPanel
       Left = 4
-      Height = 532
+      Height = 538
       Top = 4
-      Width = 761
+      Width = 769
       Align = alClient
       BevelOuter = bvNone
-      ClientHeight = 532
-      ClientWidth = 761
+      ClientHeight = 538
+      ClientWidth = 769
       Color = 4197901
       ParentColor = False
       ParentFont = False
       TabOrder = 2
       object PanelMsgTabs: TPanel
-        Left = 456
+        Left = 461
         Height = 28
-        Top = 496
-        Width = 296
+        Top = 501
+        Width = 299
         BevelOuter = bvNone
         ClientHeight = 28
-        ClientWidth = 296
+        ClientWidth = 299
         ParentColor = False
         ParentFont = False
         TabOrder = 0
@@ -103,7 +102,7 @@ object f_main: Tf_main
           Left = 0
           Height = 28
           Top = 0
-          Width = 296
+          Width = 299
           OnChange = TabMsgLevelChange
           TabIndex = 0
           Tabs.Strings = (
@@ -122,8 +121,8 @@ object f_main: Tf_main
     object PanelBottom: TPanel
       Left = 0
       Height = 4
-      Top = 536
-      Width = 765
+      Top = 542
+      Width = 773
       Align = alBottom
       AutoSize = True
       BevelOuter = bvNone
@@ -131,7 +130,7 @@ object f_main: Tf_main
       ChildSizing.HorizontalSpacing = 3
       ChildSizing.Layout = cclLeftToRightThenTopToBottom
       ChildSizing.ControlsPerLine = 99
-      Constraints.MaxHeight = 153
+      Constraints.MaxHeight = 155
       Constraints.MinHeight = 4
       ParentColor = False
       ParentFont = False
@@ -141,8 +140,8 @@ object f_main: Tf_main
     end
   end
   object Splitter1: TSplitter
-    Left = 765
-    Height = 540
+    Left = 773
+    Height = 546
     Top = 0
     Width = 5
     Align = alRight
@@ -150,22 +149,22 @@ object f_main: Tf_main
     ResizeAnchor = akRight
   end
   object PanelRight: TPanel
-    Left = 770
-    Height = 540
+    Left = 778
+    Height = 546
     Top = 0
-    Width = 220
+    Width = 222
     Align = alRight
     BevelOuter = bvNone
-    ClientHeight = 540
-    ClientWidth = 220
-    Constraints.MinWidth = 220
+    ClientHeight = 546
+    ClientWidth = 222
+    Constraints.MinWidth = 222
     ParentFont = False
     TabOrder = 2
     object PageControlRight: TPageControl
       Left = 0
-      Height = 499
+      Height = 505
       Top = 41
-      Width = 220
+      Width = 222
       ActivePage = PageConnect
       Align = alClient
       Images = ImageListDay
@@ -176,15 +175,15 @@ object f_main: Tf_main
       TabOrder = 0
       Options = [nboMultiLine]
       object PageConnect: TTabSheet
-        ClientHeight = 495
-        ClientWidth = 210
+        ClientHeight = 501
+        ClientWidth = 212
         ImageIndex = 0
         ParentFont = False
         object PanelRight1: TPanel
           Left = 0
-          Height = 495
+          Height = 501
           Top = 0
-          Width = 210
+          Width = 212
           Align = alClient
           AutoSize = True
           BevelOuter = bvNone
@@ -200,8 +199,8 @@ object f_main: Tf_main
         end
       end
       object PageFocus: TTabSheet
-        ClientHeight = 495
-        ClientWidth = 210
+        ClientHeight = 501
+        ClientWidth = 212
         ImageIndex = 1
         ParentFont = False
         object PanelRight2: TPanel
@@ -224,8 +223,8 @@ object f_main: Tf_main
         end
       end
       object PageCapture: TTabSheet
-        ClientHeight = 495
-        ClientWidth = 210
+        ClientHeight = 501
+        ClientWidth = 212
         ImageIndex = 2
         ParentFont = False
         object PanelRight3: TPanel
@@ -248,8 +247,8 @@ object f_main: Tf_main
         end
       end
       object PageSequence: TTabSheet
-        ClientHeight = 495
-        ClientWidth = 210
+        ClientHeight = 501
+        ClientWidth = 212
         ImageIndex = 3
         ParentFont = False
         object PanelRight4: TPanel
@@ -272,8 +271,8 @@ object f_main: Tf_main
         end
       end
       object PageVideo: TTabSheet
-        ClientHeight = 495
-        ClientWidth = 210
+        ClientHeight = 501
+        ClientWidth = 212
         ImageIndex = 4
         ParentFont = False
         object PanelRight5: TPanel
@@ -296,7 +295,7 @@ object f_main: Tf_main
       Left = 0
       Height = 41
       Top = 0
-      Width = 220
+      Width = 222
       ButtonHeight = 38
       ButtonWidth = 38
       Images = ImageListDay
@@ -368,26 +367,26 @@ object f_main: Tf_main
   object StatusBar1: TStatusBar
     Left = 0
     Height = 20
-    Top = 540
-    Width = 990
+    Top = 546
+    Width = 1000
     BorderWidth = 1
     Panels = <    
       item
-        Width = 400
+        Width = 404
       end    
       item
-        Width = 256
+        Width = 259
       end    
       item
-        Width = 320
+        Width = 323
       end    
       item
-        Width = 59
+        Width = 60
       end    
       item
         Alignment = taRightJustify
         Style = psOwnerDraw
-        Width = 128
+        Width = 129
       end>
     ParentFont = False
     SimplePanel = False
@@ -396,7 +395,7 @@ object f_main: Tf_main
   end
   object MainMenu1: TMainMenu
     Images = ImageListDay
-    Left = 51
+    Left = 52
     Top = 41
     object MenuItem1: TMenuItem
       Caption = 'File'
@@ -1144,29 +1143,29 @@ object f_main: Tf_main
   object ConnectTimer: TTimer
     Enabled = False
     OnTimer = ConnectTimerTimer
-    Left = 205
-    Top = 318
+    Left = 207
+    Top = 321
   end
   object StatusbarTimer: TTimer
     Enabled = False
     Interval = 100
     OnTimer = StatusbarTimerTimer
-    Left = 205
-    Top = 236
+    Left = 207
+    Top = 238
   end
   object OpenDialog1: TOpenDialog
     Filter = 'Fits file|*.fits;*.fit;*.fts|All|*.*'
-    Left = 48
-    Top = 236
+    Left = 49
+    Top = 238
   end
   object SaveDialogFits: TSaveDialog
     DefaultExt = '.fits'
     Filter = 'Fits file|*.fits|All|*.*'
-    Left = 51
-    Top = 318
+    Left = 52
+    Top = 321
   end
   object ImagePopupMenu: TPopupMenu
-    Left = 344
+    Left = 348
     Top = 41
     object MenuResolve: TMenuItem
       Caption = 'Resolve'
@@ -1254,40 +1253,40 @@ object f_main: Tf_main
     Enabled = False
     Interval = 100
     OnTimer = AbortTimerTimer
-    Left = 348
-    Top = 143
+    Left = 352
+    Top = 145
   end
   object StartupTimer: TTimer
     Enabled = False
     Interval = 500
     OnTimer = StartupTimerTimer
-    Left = 205
+    Left = 207
     Top = 41
   end
   object StartSequenceTimer: TTimer
     Enabled = False
     OnTimer = StartSequenceTimerTimer
-    Left = 532
+    Left = 538
     Top = 41
   end
   object StatusTimer: TTimer
     Enabled = False
     Interval = 15000
     OnTimer = StatusTimerTimer
-    Left = 532
-    Top = 236
+    Left = 538
+    Top = 238
   end
   object TimerStampTimer: TTimer
     Enabled = False
     OnTimer = TimerStampTimerTimer
-    Left = 491
-    Top = 143
+    Left = 496
+    Top = 145
   end
   object ImageListDay: TImageList
     Height = 22
     Width = 22
-    Left = 668
-    Top = 138
+    Left = 675
+    Top = 139
     Bitmap = {
       4C690F0000001600000016000000000000000000000000000000000000000000
       0000000000000000000000000000000000000000000000000000000000000000
@@ -2202,8 +2201,8 @@ object f_main: Tf_main
   object ImageListNight: TImageList
     Height = 22
     Width = 22
-    Left = 668
-    Top = 236
+    Left = 675
+    Top = 238
     Bitmap = {
       4C690F0000001600000016000000000000000000000000000000000000000000
       0000000000000000000000000000000000000000000000000000000000000000
@@ -3118,54 +3117,54 @@ object f_main: Tf_main
   object FocuserConnectTimer: TTimer
     Enabled = False
     OnTimer = FocuserConnectTimerTimer
-    Left = 358
-    Top = 318
+    Left = 362
+    Top = 321
   end
   object CameraConnectTimer: TTimer
     Enabled = False
     OnTimer = CameraConnectTimerTimer
-    Left = 542
-    Top = 318
+    Left = 548
+    Top = 321
   end
   object OpenPictureDialog1: TOpenDialog
     Title = 'Open picture file'
     Filter = 'All supported files|*.fits;*.fit;*.fts;*.fz;*.bay;*.bmq;*.cr3;*.cr2;*.crw;*.cs1;*.dc2;*.dcr;*.dng;*.erf;*.fff;*.hdr;*.k25;*.kdc;*.mdc;*.mos;*.mrw;*.nef;*.orf;*.pef;*.pxn;*.raf;*.raw;*.rdc;*.sr2;*.srf;*.x3f;*.arw;*.3fr;*.cine;*.ia;*.kc2;*.mef;*.nrw;*.qtk;*.rw2;*.sti;*.rwl;*.srw;*.png;*.bmp;*.jpeg;*.jpg;*.jpe;*.jfif;*.tif;*.tiff;*.gif;*.tga|FITS (*.fits;*.fit;*.fts)|*.fits;*.fit;*.fts;*.fz|Camera RAW (*.arw;*.cr3;*.cr2;*.crw;*.dng;*.nef;...)|*.bay;*.bmq;*.cr3;*.cr2;*.crw;*.cs1;*.dc2;*.dcr;*.dng;*.erf;*.fff;*.hdr;*.k25;*.kdc;*.mdc;*.mos;*.mrw;*.nef;*.orf;*.pef;*.pxn;*.raf;*.raw;*.rdc;*.sr2;*.srf;*.x3f;*.arw;*.3fr;*.cine;*.ia;*.kc2;*.mef;*.nrw;*.qtk;*.rw2;*.sti;*.rwl;*.srw|Graphic (*.png;*.bmp;*.jpeg;*.jpg;*.jpe;*.jfif;*.tif;*.tiff;*.gif;*.tga)|*.png;*.bmp;*.jpeg;*.jpg;*.jpe;*.jfif;*.tif;*.tiff;*.gif;*.tga|Portable Network Graphic (*.png)|*.png|Bitmaps (*.bmp)|*.bmp|Joint Picture Expert Group (*.jpeg;*.jpg;*.jpe;*.jfif)|*.jpeg;*.jpg;*.jpe;*.jfif|Tagged Image File Format (*.tif;*.tiff)|*.tif;*.tiff|Graphics Interchange Format (*.gif)|*.gif|TGA Image File (*.tga)|*.tga|All (*.*)|*.*'
     Options = [ofEnableSizing, ofViewDetail, ofAutoPreview]
-    Left = 56
-    Top = 143
+    Left = 57
+    Top = 145
   end
   object MagnifyerTimer: TTimer
     Enabled = False
     Interval = 200
     OnTimer = MagnifyerTimerTimer
-    Left = 205
-    Top = 143
+    Left = 207
+    Top = 145
   end
   object MeasureTimer: TTimer
     Enabled = False
     Interval = 200
     OnTimer = MeasureTimerTimer
-    Left = 348
-    Top = 236
+    Left = 352
+    Top = 238
   end
   object PlotTimer: TTimer
     Enabled = False
     Interval = 100
     OnTimer = PlotTimerTimer
-    Left = 205
-    Top = 399
+    Left = 207
+    Top = 403
   end
   object ImageResizeTimer: TTimer
     Enabled = False
     Interval = 500
     OnTimer = ImageResizeTimerTimer
-    Left = 358
-    Top = 391
+    Left = 362
+    Top = 395
   end
   object SaveDialogPicture: TSaveDialog
     DefaultExt = '.png'
     Filter = 'Picture files (*.png;*.tif;*.tiff;*.jpg;*.bmp)|*.png;*.tif;*.tiff;*.jpg;*.bmp'
-    Left = 54
-    Top = 404
+    Left = 55
+    Top = 408
   end
 end

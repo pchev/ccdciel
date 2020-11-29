@@ -1325,6 +1325,7 @@ begin
 
   f_msg:=Tf_msg.Create(self);
   f_msg.onShowTabs:=@ShowMsgTabs;
+  f_msg.onOpenLog:=@MenuShowLogClick;
 
   fits:=TFits.Create(self);
   fits.onMsg:=@NewMessage;
@@ -2656,7 +2657,7 @@ begin
     config.SetValue('/Sensor/CanSetGain',ok);
     config.DeleteValue('/Sensor/GainFromCamera');
     msg:='This version add Offset control for the camera that support this option.'+crlf+
-         'Please be careful of the default value for the Offset in Preview, Capture and Sequences tools, '+
+         'Please be careful to review and set the value for the Offset in Preview, Capture and Sequences tools,'+crlf+
          'and in the Autofocus and Slewing preferences.';
     NewMessage(msg,1);
     MessageDlg(caption,msg,mtWarning,[mbOK],0);
@@ -10241,9 +10242,18 @@ begin
    exit;
  end;
  if (AutofocusMode=afNone) then begin
-   NewMessage(rsPleaseConfig2,1);
+   // do not abort if autofocus is not configured and not using a focuser
+   if focuser.Status<>devConnected then
+     result:=true;
+   NewMessage(rsAutoFocusErr+': '+rsPleaseConfig2,1);
    f_starprofile.ChkAutofocusDown(false);
    exit;
+ end;
+ if (camera.Status<>devConnected)or(focuser.Status<>devConnected) then begin
+  // abort if configured but focuser not connected
+  NewMessage(rsCameraOrFocu,1);
+  f_starprofile.ChkAutofocusDown(false);
+  exit;
  end;
  if(AutofocusMode=afVcurve) and (config.GetValue('/StarAnalysis/Vcurve/AutofocusVcBinning',AutofocusBinning)<>AutofocusBinning) then begin
    NewMessage(Format(rsPleaseRunVcu, [inttostr(AutofocusBinning)]),1);

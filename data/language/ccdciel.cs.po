@@ -2,15 +2,15 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ccdciel\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-11-09 13:54+0000\n"
-"PO-Revision-Date: 2020-10-27 07:33+0000\n"
+"POT-Creation-Date: 2020-11-29 11:06+0000\n"
+"PO-Revision-Date: 2020-11-09 16:14+0000\n"
 "Last-Translator: Stanislav Holub <Unknown>\n"
 "Language-Team: Czech <cz@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2020-11-09 14:00+0000\n"
-"X-Generator: Launchpad (build e39939c02bd86af4202bc6e2123a7708215ec8ea)\n"
+"X-Launchpad-Export-Date: 2020-11-29 11:12+0000\n"
+"X-Generator: Launchpad (build 12d09381f8e8eee3115395875b132e165fa96574)\n"
 "Language: cs\n"
 
 #: u_translation.rs32bitdriver
@@ -1954,7 +1954,7 @@ msgstr "Osu RA držáku nastavte ručně tak, aby směřovala k pólu co nejpře
 
 #: u_translation.rsmanagethegai
 msgid "Manage the Gain and Offset if available."
-msgstr ""
+msgstr "Upravit Zesílení a Offset, pokud jsou k dispozici."
 
 #: u_translation.rsmanual
 msgid "Manual"
@@ -2467,7 +2467,7 @@ msgstr "posun"
 
 #: u_translation.rsoffset2
 msgid "Offset"
-msgstr ""
+msgstr "Ofset"
 
 #: u_translation.rsok
 msgid "OK"
@@ -2700,6 +2700,10 @@ msgstr "Řešit expozici %s"
 #: u_translation.rspleaseactiva
 msgid "Please activate the log file in the preference."
 msgstr "Aktivujte protokol v nastavení."
+
+#: u_translation.rspleasebecare
+msgid "Please be careful to review and set the value for the Gain and Offset"
+msgstr ""
 
 #: u_translation.rspleaseconfig
 msgid "Please configure your"

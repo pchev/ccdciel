@@ -113,7 +113,8 @@ object f_preview: Tf_preview
         Top = 4
         Width = 90
         Constraints.MaxHeight = 28
-        MaxValue = 0
+        MaxValue = 32767
+        MinValue = -32768
         ParentFont = False
         TabOrder = 1
       end
@@ -141,7 +142,8 @@ object f_preview: Tf_preview
           Height = 28
           Top = 4
           Width = 90
-          MaxValue = 0
+          MaxValue = 32767
+          MinValue = -32768
           TabOrder = 0
         end
       end

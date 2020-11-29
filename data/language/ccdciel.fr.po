@@ -6,15 +6,15 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ccdciel\n"
 "Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
-"POT-Creation-Date: 2020-11-09 13:54+0000\n"
-"PO-Revision-Date: 2020-11-09 13:57+0000\n"
+"POT-Creation-Date: 2020-11-29 11:06+0000\n"
+"PO-Revision-Date: 2020-11-29 11:11+0000\n"
 "Last-Translator: Patrick Chevalley <Unknown>\n"
 "Language-Team: French <fr@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2020-11-09 14:00+0000\n"
-"X-Generator: Launchpad (build e39939c02bd86af4202bc6e2123a7708215ec8ea)\n"
+"X-Launchpad-Export-Date: 2020-11-29 11:12+0000\n"
+"X-Generator: Launchpad (build 12d09381f8e8eee3115395875b132e165fa96574)\n"
 
 #: u_translation.rs32bitdriver
 msgid "This driver work only in 32bit, please install the 32bit version of CCDciel."
@@ -2701,6 +2701,10 @@ msgstr "Résolution de l'image %s"
 #: u_translation.rspleaseactiva
 msgid "Please activate the log file in the preference."
 msgstr "Veuillez activer le journal dans les options."
+
+#: u_translation.rspleasebecare
+msgid "Please be careful to review and set the value for the Gain and Offset"
+msgstr "Veillez à contrôler et à définir la valeur du gain et de l'offset"
 
 #: u_translation.rspleaseconfig
 msgid "Please configure your"

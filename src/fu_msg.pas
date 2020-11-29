@@ -38,12 +38,13 @@ type
     Timer1: TTimer;
     Title: TLabel;
     procedure FrameResize(Sender: TObject);
+    procedure msgDblClick(Sender: TObject);
     procedure msgMouseEnter(Sender: TObject);
     procedure msgMouseLeave(Sender: TObject);
     procedure Timer1Timer(Sender: TObject);
   private
     { private declarations }
-    FonShowTabs: TNotifyEvent;
+    FonShowTabs, FonOpenLog: TNotifyEvent;
     FShowTabs: boolean;
   public
     { public declarations }
@@ -51,6 +52,7 @@ type
     destructor  Destroy; override;
     property ShowTabs: Boolean read FShowTabs;
     property onShowTabs: TNotifyEvent read FonShowTabs write FonShowTabs;
+    property onOpenLog: TNotifyEvent read FonOpenLog write FonOpenLog;
   end;
 
 implementation
@@ -67,6 +69,11 @@ begin
          w:=w-Tframe(TPanel(Parent).Components[i]).Width;
     Width:=w;
   end;
+end;
+
+procedure Tf_msg.msgDblClick(Sender: TObject);
+begin
+   if Assigned(FonOpenLog) then FonOpenLog(Self);
 end;
 
 procedure Tf_msg.msgMouseEnter(Sender: TObject);
