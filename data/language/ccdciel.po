@@ -4642,3 +4642,7 @@ msgstr ""
 msgid "Manage the Gain and Offset if available."
 msgstr ""
 
+#: u_translation:rspleasebecare
+msgid "Please be careful to review and set the value for the Gain and Offset"
+msgstr ""
+
