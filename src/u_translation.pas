@@ -1263,6 +1263,7 @@ resourcestring
   rsBeCarefulOft = 'Be careful of the longitude East/West setting.';
   rsOffset2 = 'Offset';
   rsManageTheGai = 'Manage the Gain and Offset if available.';
+  rsPleaseBeCare = 'Please be careful to review and set the value for the Gain and Offset';
 
 implementation
 

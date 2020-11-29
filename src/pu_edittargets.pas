@@ -2232,8 +2232,8 @@ begin
   p.autofocusstart:=pfile.GetValue('/Steps/Step'+inttostr(i)+'/AutofocusStart',false);
   p.autofocus:=pfile.GetValue('/Steps/Step'+inttostr(i)+'/Autofocus',false);
   p.autofocuscount:=trunc(pfile.GetValue('/Steps/Step'+inttostr(i)+'/AutofocusCount',10));
-  if gainmsg then
-     LabelMsg.Caption:='Please be careful to review and set the value for the Gain and Offset';
+  if gainmsg and StepList.Columns[pcolgain-1].Visible then
+     LabelMsg.Caption:=rsPleaseBeCare;
   // obsolete option
   if trunc(pfile.GetValue('/Steps/Step'+inttostr(i)+'/RepeatCount',1)) > 1 then
      msg:='Warning! the Repeat option at the step level as been removed. Please use the Repeat option at the target level instead.';
