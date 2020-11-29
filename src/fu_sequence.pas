@@ -698,7 +698,7 @@ begin
           buf1:=pfile.GetValue('/Steps/Step'+inttostr(i)+'/Gain','');
           buf2:=pfile.GetValue('/Steps/Step'+inttostr(i)+'/Offset','');
           if (buf1='')or(buf2='') then
-            msgstr:=rsPlan+plan+': '+rsPleaseBeCare;
+            msgstr:=rsPlan+blank+plan+': '+rsPleaseBeCare;
        end;
        if msgstr<>'' then
           msg(msgstr,1);
