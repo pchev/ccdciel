@@ -664,7 +664,7 @@ begin
  if IgnoreRestart then exit;
  if FResetRepeat then begin
    totalcount:=totalcount+FTargetsRepeat;
-   donecount:=donecount+FTargetsRepeatCount+1;
+   donecount:=donecount+FTargetsRepeatCount;
  end;
  if (FTargetsRepeatCount>0)and(FTargetsRepeatCount<=FTargetsRepeat) then begin
    result:=true;
@@ -730,7 +730,7 @@ var p: T_Plan;
     i: integer;
 begin
  try
-  if (FCurrentTarget<0)or(FCurrentTarget>Count) then exit;
+  if (FCurrentTarget<0)or(FCurrentTarget>=Count) then exit;
   t:=Targets[FCurrentTarget];
   if t=nil then exit;
   p:=t_plan(t.plan);
@@ -952,6 +952,8 @@ begin
      msg(Format(rsSequenceFini, [FName]),1);
      RunEndAction;
      ShowDelayMsg('');
+     Dec(FCurrentTarget);
+     SaveDoneCount(FTargetsRepeatCount);
      FCurrentTarget:=-1;
      if EmailEndSequence then begin
        r:=email(Format(rsSequenceFini, [FName]),Format(rsSequenceFini, [FName]));
