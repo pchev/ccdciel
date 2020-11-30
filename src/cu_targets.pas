@@ -665,7 +665,7 @@ begin
    tc:=tc+FTargetsRepeat;
    dc:=dc+FTargetsRepeatCount;
  end;
- if FTargetsRepeatCount>0 then begin
+ if (FTargetsRepeatCount>0)and(FTargetsRepeatCount<=FTargetsRepeat) then begin
    result:=true;
    FLastDoneStep:=rsGlobalRepeat+blank+IntToStr(FTargetsRepeatCount)+'/'+IntToStr(FTargetsRepeat);
    FDoneStatus:=FLastDoneStep;
