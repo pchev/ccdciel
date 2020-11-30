@@ -208,6 +208,8 @@ type
       property OnShutdown: TNotifyEvent read FonShutdown write FonShutdown;
   end;
 
+  function TemplateModified(p:T_Plan):boolean;
+
 implementation
 
 constructor T_Targets.Create(AOwner: TComponent);
@@ -1797,6 +1799,42 @@ end;
 function TTarget.repeatcount_str: string;
 begin
   Result:=IntToStr(repeatcount);
+end;
+
+
+function TemplateModified(p:T_Plan):boolean;
+var template,fn: string;
+    pfile: TCCDconfig;
+    i,n: integer;
+begin
+  result:=true;
+  template:=StringReplace(p.PlanName,'*','',[]);
+  fn:=slash(ConfigDir)+template+'.plan';
+  if not FileExistsUTF8(fn) then exit;
+  pfile:=TCCDconfig.Create(nil);
+  pfile.Filename:=fn;
+  if pfile.GetValue('/PlanName','')<>template then exit;
+  if pfile.GetValue('/StepNum',-1)<>p.Count then exit;
+  for i:=1 to p.Count do begin
+     if pfile.GetValue('/Steps/Step'+inttostr(i)+'/Exposure',-1)<>p.Steps[i-1].exposure then exit;
+     if pfile.GetValue('/Steps/Step'+inttostr(i)+'/Count',-1)<>p.Steps[i-1].count then exit;
+     if pfile.GetValue('/Steps/Step'+inttostr(i)+'/Dither',false)<>p.Steps[i-1].dither then exit;
+     if pfile.GetValue('/Steps/Step'+inttostr(i)+'/DitherCount',-1)<>p.Steps[i-1].dithercount then exit;
+     if pfile.GetValue('/Steps/Step'+inttostr(i)+'/AutofocusStart',false)<>p.Steps[i-1].autofocusstart then exit;
+     if pfile.GetValue('/Steps/Step'+inttostr(i)+'/Autofocus',false)<>p.Steps[i-1].autofocus then exit;
+     if pfile.GetValue('/Steps/Step'+inttostr(i)+'/AutofocusCount',-1)<>p.Steps[i-1].autofocuscount then exit;
+     if pfile.GetValue('/Steps/Step'+inttostr(i)+'/Binning','')<>IntToStr(p.Steps[i-1].binx)+'x'+IntToStr(p.Steps[i-1].biny) then exit;
+     if pfile.GetValue('/Steps/Step'+inttostr(i)+'/Gain',-99999)<>p.Steps[i-1].gain then exit;
+     if pfile.GetValue('/Steps/Step'+inttostr(i)+'/Offset',-99999)<>p.Steps[i-1].offset then exit;
+     if pfile.GetValue('/Steps/Step'+inttostr(i)+'/FrameType','')<>trim(FrameName[ord(p.Steps[i-1].frtype)]) then exit;
+     if pfile.GetValue('/Steps/Step'+inttostr(i)+'/Fstop','')<>p.Steps[i-1].fstop then exit;
+     if pfile.GetValue('/Steps/Step'+inttostr(i)+'/Description','')<>p.Steps[i-1].description then exit;
+     n:=p.Steps[i-1].filter;
+     if FilterList.Count>=n then begin
+       if pfile.GetValue('/Steps/Step'+inttostr(i)+'/Filter','')<>FilterList[n] then exit;
+     end;
+  end;
+  result:=false;
 end;
 
 

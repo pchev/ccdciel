@@ -691,6 +691,11 @@ begin
             s.donecount:=trunc(SequenceFile.Items.GetValue('/Targets/Target'+inttostr(i)+'/Plan/Steps/Step'+inttostr(j)+'/Done',0));
             p.Add(s);
           end;
+          if TemplateModified(p) and (pos('*',p.PlanName)<=0) then begin
+            p.PlanName:=p.PlanName+'*';
+            t.planname:=p.PlanName;
+            TargetsChange(nil);
+          end;
          end
          else begin
            // compatibility with old sequence format
@@ -829,8 +834,8 @@ begin
       else exit;
     end;
     SequenceFile.Filename:=fn;
-    SequenceFile.Clear;
     CurrentSeqName:=SequenceFile.CurrentName;
+    SequenceFile.Clear;
     Targets.TargetName:=CurrentSeqName;
     SequenceFile.Items.SetValue('/Version',TargetFileVersion);
     SequenceFile.Items.SetValue('/ListName',CurrentSeqName);

@@ -254,7 +254,7 @@ type
     procedure ResetSequences;
     procedure ResetSteps;
     procedure SetStep(n: integer; p: TStep);
-    procedure SavePlanModified;
+    procedure SavePlanModified(isTemplate: boolean);
     function  CheckRiseSet(n: integer; showmsg:boolean=true): boolean;
     procedure FrameTypeChange(n: integer; newtype: TFrameType);
     procedure SetStartTime(buf: string; var t:TTarget);
@@ -541,7 +541,7 @@ end;
 procedure Tf_EditTargets.SetPlanList(n: integer; pl:string);
 var i:integer;
 begin
-  i:=TargetList.Columns[colplan-1].PickList.IndexOf(pl);
+  i:=TargetList.Columns[colplan-1].PickList.IndexOf(StringReplace(pl,'*','',[]));
   if i>=0 then TargetList.Cells[colplan,n]:=pl;
 end;
 
@@ -1189,11 +1189,13 @@ var s:TStep;
 begin
   BtnSaveTemplateClick(Sender); // ensure modification are saved
   for j:=1 to TargetList.RowCount-1 do begin
-    if TargetList.Cells[colplan,j]=PlanName.Caption then begin
+    if StringReplace(TargetList.Cells[colplan,j],'*','',[])=PlanName.Caption then begin
+      TargetList.Cells[colplan,j]:=PlanName.Caption;
       t:=TTarget(TargetList.Objects[colseq,j]);
       p:=T_Plan(t.plan);
       p.Clear;
       p.PlanName:=PlanName.Caption;
+      t.PlanName:=PlanName.Caption;
       n:=StepList.RowCount-1;
       for i:=1 to n do begin
          s:=TStep.Create;
@@ -1346,7 +1348,7 @@ begin
   TargetChange(nil);
 end;
 
-procedure Tf_EditTargets.SavePlanModified;
+procedure Tf_EditTargets.SavePlanModified(isTemplate: boolean);
 var s:TStep;
     p:T_Plan;
     t: TTarget;
@@ -1356,6 +1358,11 @@ if StepsModified then begin
   t:=TTarget(TargetList.Objects[colseq,TargetList.Row]);
   p:=T_Plan(t.plan);
   p.Clear;
+  if (not isTemplate)and(pos('*',PlanName.Caption)=0) then begin
+    PlanName.Caption:=PlanName.Caption+'*';
+    t.planname:=PlanName.Caption;
+    TargetList.Cells[colplan,TargetList.Row]:=t.PlanName;
+  end;
   p.PlanName:=PlanName.Caption;
   n:=StepList.RowCount-1;
   for i:=1 to n do begin
@@ -2361,7 +2368,7 @@ var pfile: TCCDconfig;
 begin
 ClearStepList;
 LabelMsg.Caption:='';
-if trim(PlanName.Caption)<>'' then begin
+if (trim(PlanName.Caption)<>'')and(pos('*',PlanName.Caption)<=0) then begin
   PageControlPlan.ActivePageIndex:=pageobject;
   fn:=slash(ConfigDir)+PlanName.Caption+'.plan';
   if FileExistsUTF8(fn) then begin
@@ -2390,7 +2397,7 @@ if trim(PlanName.Caption)<>'' then begin
     NewTemplate;
   end;
   StepsModified:=true;
-  SavePlanModified;
+  SavePlanModified(true);
   end
   else begin
    PageControlPlan.ActivePageIndex:=pagenone;
@@ -2583,7 +2590,7 @@ begin
      p.autofocuscount:=0;
   StepList.Cells[1,n]:=p.description;
   SetStep(n,p);
-  SavePlanModified;
+  SavePlanModified(false);
 end;
 
 procedure Tf_EditTargets.StepListValidateEntry(sender: TObject; aCol, aRow: Integer; const OldValue: string; var NewValue: String);
@@ -2610,7 +2617,7 @@ procedure Tf_EditTargets.StepListColRowMoved(Sender: TObject; IsColumn: Boolean;
 begin
   ResetSteps;
   StepsModified:=true;
-  SavePlanModified;
+  SavePlanModified(false);
 end;
 
 procedure Tf_EditTargets.StepListEditingDone(Sender: TObject);
@@ -2683,7 +2690,7 @@ begin
   StepList.Row:=i;
   StepsModified:=true;
   SetStep(i,p);
-  SavePlanModified;
+  SavePlanModified(false);
 end;
 
 procedure Tf_EditTargets.BtnRemoveStepClick(Sender: TObject);
@@ -2707,7 +2714,7 @@ begin
         StepsModified:=true;
      end;
      ResetSteps;
-     SavePlanModified;
+     SavePlanModified(false);
   end;
 end;
 
@@ -2724,7 +2731,7 @@ begin
   SaveDialog1.InitialDir:=ConfigDir;
   SaveDialog1.DefaultExt:='.plan';
   SaveDialog1.filter:='Plan|*.plan';
-  SaveDialog1.FileName:=PlanName.Caption+'.plan';
+  SaveDialog1.FileName:=StringReplace(PlanName.Caption,'*','',[])+'.plan';
   if SaveDialog1.Execute then begin
      PlanName.Caption:=ExtractFileNameOnly(SaveDialog1.FileName);
      SaveTemplate;
@@ -2748,6 +2755,7 @@ var pfile: TCCDconfig;
     p: TStep;
 begin
 try
+  PlanName.Caption:=StringReplace(PlanName.Caption,'*','',[]);
   if trim(PlanName.Caption)='' then begin
     ShowMessage('No template selected!');
     exit;
@@ -2792,7 +2800,6 @@ except
   on E: Exception do ShowMessage('Error saving template: '+ E.Message);
 end;
 end;
-
 
 end.
 
