@@ -149,11 +149,14 @@ end;
 
 procedure Tkeyboard1.ListBox1DblClick(Sender: TObject);
 begin
-  if  (listbox1.itemindex)>=0 then {prevent error if nothing is selected}
+  if (listbox1.itemindex)>=0 then {prevent error if nothing is selected}
   begin
     keyboard_text:=listbox1.Items[listbox1.itemindex];{copy selection to edit }
-    object_found:=true;{must be correct since it was extracted from the database}
-    keyboard1.close; {double click, accept entry and close}
+    if find_object(keyboard_text ,ra_data,dec_data,length_data,width_data,pa_data) {find object in unit u_annotation} then
+    begin
+      object_found:=true;
+      keyboard1.close;
+    end
   end;
 end;
 
