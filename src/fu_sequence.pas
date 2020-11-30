@@ -676,6 +676,8 @@ begin
             end;
             str:=SequenceFile.Items.GetValue('/Targets/Target'+inttostr(i)+'/Plan/Steps/Step'+inttostr(j)+'/Gain','');
             s.gain:=StrToIntDef(str,Gain);
+            str:=SequenceFile.Items.GetValue('/Targets/Target'+inttostr(i)+'/Plan/Steps/Step'+inttostr(j)+'/Offset','');
+            s.offset:=StrToIntDef(str,Offset);
             s.fstop:=SequenceFile.Items.GetValue('/Targets/Target'+inttostr(i)+'/Plan/Steps/Step'+inttostr(j)+'/Fstop','');
             str:=SequenceFile.Items.GetValue('/Targets/Target'+inttostr(i)+'/Plan/Steps/Step'+inttostr(j)+'/Filter','');
             f_EditTargets.originalFilter[i]:=str;
@@ -925,6 +927,7 @@ begin
         SequenceFile.Items.SetValue('/Targets/Target'+inttostr(i)+'/Plan/Steps/Step'+inttostr(j)+'/Exposure',p.Steps[j].exposure);
         SequenceFile.Items.SetValue('/Targets/Target'+inttostr(i)+'/Plan/Steps/Step'+inttostr(j)+'/Binning',IntToStr(p.Steps[j].binx)+'x'+IntToStr(p.Steps[j].biny));
         SequenceFile.Items.SetValue('/Targets/Target'+inttostr(i)+'/Plan/Steps/Step'+inttostr(j)+'/Gain',p.Steps[j].gain);
+        SequenceFile.Items.SetValue('/Targets/Target'+inttostr(i)+'/Plan/Steps/Step'+inttostr(j)+'/Offset',p.Steps[j].offset);
         SequenceFile.Items.SetValue('/Targets/Target'+inttostr(i)+'/Plan/Steps/Step'+inttostr(j)+'/Fstop',p.Steps[j].fstop);
         SequenceFile.Items.SetValue('/Targets/Target'+inttostr(i)+'/Plan/Steps/Step'+inttostr(j)+'/Filter',p.Steps[j].filter_str);
         SequenceFile.Items.SetValue('/Targets/Target'+inttostr(i)+'/Plan/Steps/Step'+inttostr(j)+'/Count',p.Steps[j].count);
