@@ -270,7 +270,7 @@ end;
 procedure T_Plan.UpdateDoneCount(progress: boolean);
 var s: TStep;
 begin
- if (CurrentStep<0)or(FObjectName=SkyFlatTxt)or(FObjectName=ScriptTxt) then exit;
+ if (CurrentStep<0)or(FObjectName=ScriptTxt) then exit;
  s:=FSteps[CurrentStep];
  if s<>nil then begin
    // store image count

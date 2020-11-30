@@ -151,6 +151,7 @@ type
       procedure SaveDoneCount(RepeatDone: integer);
       function  CheckDoneCount:boolean;
       procedure ClearDoneCount(ClearRepeat: boolean);
+      procedure CreateSkyFlatPlan(flt: TTarget);
       property FileVersion: integer read FFileVersion write FFileVersion;
       property TargetsRepeat: integer read FTargetsRepeat write FTargetsRepeat;
       property TargetsRepeatCount: integer read FTargetsRepeatCount write FTargetsRepeatCount;
@@ -1230,24 +1231,15 @@ begin
   end;
 end;
 
-function T_Targets.InitSkyFlat: boolean;
+procedure T_Targets.CreateSkyFlatPlan(flt: TTarget);
 var i,n:integer;
-    wtok,nd,ForceNextStartTime:boolean;
-    stw: integer;
-    sra,sde,sl,hp1,hp2: double;
-    flt,nextt: TTarget;
     flp:T_Plan;
     fls:TStep;
     flfilter: TStringList;
     flexp: TFilterExp;
 begin
-  result:=false;
-  ForceNextStartTime:=false;
-  if not FRunning then exit;
-  FTargetInitializing:=true;
   try
   // create a dynamic plan with all steps to run the flats, one step per filter
-  flt:=Targets[FCurrentTarget];
   flt.autoguiding:=false;
   flp:=T_Plan(flt.plan);
   flfilter:=TStringList.Create;
@@ -1301,6 +1293,25 @@ begin
          fls.description:=flt.planname+' flat '+flfilter[i];
       flp.Add(fls);
     end;
+  finally
+    for i:=0 to flfilter.count-1 do flfilter.Objects[i].Free;
+    flfilter.Free;
+  end;
+end;
+
+function T_Targets.InitSkyFlat: boolean;
+var wtok,nd,ForceNextStartTime:boolean;
+    stw: integer;
+    sra,sde,sl,hp1,hp2: double;
+    flt,nextt: TTarget;
+begin
+  result:=false;
+  ForceNextStartTime:=false;
+  if not FRunning then exit;
+  FTargetInitializing:=true;
+  try
+  // get plan
+  flt:=Targets[FCurrentTarget];
   if flt.planname=FlatTimeName[0] then begin    // Dusk
     FlatWaitDusk:=true;
     FlatWaitDawn:=false;
@@ -1390,8 +1401,6 @@ begin
   result:=true;
   finally
     FTargetInitializing:=false;
-    for i:=0 to flfilter.count-1 do flfilter.Objects[i].Free;
-    flfilter.Free;
   end;
 end;
 

@@ -918,7 +918,8 @@ begin
       SequenceFile.Items.SetValue('/Targets/Target'+inttostr(i)+'/FlatOffset',t.FlatOffset);
       SequenceFile.Items.SetValue('/Targets/Target'+inttostr(i)+'/FlatFstop',t.FlatFstop);
       SequenceFile.Items.SetValue('/Targets/Target'+inttostr(i)+'/FlatFilters',t.FlatFilters);
-      if (t.objectname<>SkyFlatTxt)and(t.objectname<>ScriptTxt) then begin
+      if (t.objectname<>ScriptTxt) then begin
+        if (t.objectname=SkyFlatTxt) then Targets.CreateSkyFlatPlan(t);
         p:=T_Plan(t.plan);
         SequenceFile.Items.SetValue('/Targets/Target'+inttostr(i)+'/Plan/Name',p.PlanName);
         SequenceFile.Items.SetValue('/Targets/Target'+inttostr(i)+'/Plan/StepNum',p.Count);
