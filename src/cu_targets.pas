@@ -652,7 +652,7 @@ begin
 end;
 
 function T_Targets.CheckDoneCount:boolean;
-var i,j,tc,dc: integer;
+var i,j,totalcount,donecount: integer;
     t: TTarget;
     p: T_Plan;
 begin
@@ -660,11 +660,11 @@ begin
  FAllDone:=false;
  FDoneStatus:='';
  FLastDoneStep:='';
- tc:=0; dc:=0;
+ totalcount:=0; donecount:=0;
  if IgnoreRestart then exit;
  if FResetRepeat then begin
-   tc:=tc+FTargetsRepeat;
-   dc:=dc+FTargetsRepeatCount;
+   totalcount:=totalcount+FTargetsRepeat;
+   donecount:=donecount+FTargetsRepeatCount+1;
  end;
  if (FTargetsRepeatCount>0)and(FTargetsRepeatCount<=FTargetsRepeat) then begin
    result:=true;
@@ -674,31 +674,35 @@ begin
  for i:=0 to NumTargets-1 do begin
     t:=Targets[i];
     if t=nil then Continue;
-    if t.objectname<>SkyFlatTxt then begin
-      tc:=tc+t.repeatcount;
-      dc:=dc+t.repeatdone;
+    if t.objectname<>ScriptTxt then begin
+      totalcount:=totalcount+t.repeatcount;
+      donecount:=donecount+t.repeatdone;
     end;
-    if t.repeatdone>0 then begin
+    if (t.repeatdone>0) then begin
       result:=true;
-      FLastDoneStep:=t.objectname+blank+rsRepeat+':'+blank+IntToStr(t.repeatdone)+'/'+IntToStr(t.repeatcount);
-      FDoneStatus:=FDoneStatus+crlf+FLastDoneStep;
     end;
+    FLastDoneStep:=t.objectname+blank+rsRepeat+':'+blank+IntToStr(t.repeatdone)+'/'+IntToStr(t.repeatcount);
+    FDoneStatus:=FDoneStatus+crlf+FLastDoneStep;
     p:=t_plan(t.plan);
     if p=nil then Continue;
     if p.Count<=0 then Continue;
     for j:=0 to p.Count-1 do begin
-      if t.objectname<>SkyFlatTxt then begin
-        tc:=tc+p.Steps[j].count;
-        dc:=dc+p.Steps[j].donecount;
+      if t.objectname<>ScriptTxt then begin
+        totalcount:=totalcount+p.Steps[j].count;
+        donecount:=donecount+p.Steps[j].donecount;
       end;
-      if p.Steps[j].donecount>0 then begin
+      if p.Steps[j].donecount>0 then //begin
         result:=true;
-        FLastDoneStep:=t.objectname+blank+p.PlanName+blank+rsStep+':'+blank+p.Steps[j].description+blank+rsDone+':'+IntToStr(p.Steps[j].donecount)+'/'+IntToStr(p.Steps[j].count);
-        FDoneStatus:=FDoneStatus+crlf+FLastDoneStep;
-      end;
+      FLastDoneStep:=t.objectname+blank+p.PlanName+blank+rsStep+':'+blank+p.Steps[j].description+blank+rsDone+':'+IntToStr(p.Steps[j].donecount)+'/'+IntToStr(p.Steps[j].count);
+      FDoneStatus:=FDoneStatus+crlf+FLastDoneStep;
+      //end;
     end;
  end;
- FAllDone:=(tc=dc);
+ FAllDone:=(totalcount=donecount);
+ if FAllDone then begin
+   FLastDoneStep:=format(rsSequenceFini,[TargetName]);
+   FDoneStatus:=FDoneStatus+crlf+crlf+FLastDoneStep;
+ end;
 end;
 
 procedure T_Targets.ClearDoneCount(ClearRepeat: boolean);
@@ -855,6 +859,11 @@ begin
        TargetTimer.Enabled:=true;
      end
      else begin
+       if SkipTarget then begin
+         FInitializing:=false;
+         if FRunning then NextTarget;
+         exit;
+       end;
        msg(Targets[FCurrentTarget].objectname+', '+rsTargetInitia,0);
        if FUnattended then begin
          FInitializing:=false;
@@ -1306,12 +1315,19 @@ var wtok,nd,ForceNextStartTime:boolean;
     flt,nextt: TTarget;
 begin
   result:=false;
+  SkipTarget:=false;
   ForceNextStartTime:=false;
   if not FRunning then exit;
   FTargetInitializing:=true;
   try
   // get plan
   flt:=Targets[FCurrentTarget];
+  if flt.repeatdone>=flt.repeatcount then begin
+    SkipTarget:=true;
+    result:=false;
+    msg(Format(rsSkipTarget, [flt.objectname+', '+Format(rsSeqFinished,[flt.planname])]), 3);
+    exit;
+  end;
   if flt.planname=FlatTimeName[0] then begin    // Dusk
     FlatWaitDusk:=true;
     FlatWaitDawn:=false;
