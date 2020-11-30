@@ -1358,17 +1358,26 @@ if StepsModified then begin
   t:=TTarget(TargetList.Objects[colseq,TargetList.Row]);
   p:=T_Plan(t.plan);
   p.Clear;
-  if (not isTemplate)and(pos('*',PlanName.Caption)=0) then begin
-    PlanName.Caption:=PlanName.Caption+'*';
-    t.planname:=PlanName.Caption;
-    TargetList.Cells[colplan,TargetList.Row]:=t.PlanName;
-  end;
   p.PlanName:=PlanName.Caption;
   n:=StepList.RowCount-1;
   for i:=1 to n do begin
      s:=TStep.Create;
      s.Assign(TStep(StepList.Objects[0,i]));
      p.Add(s);
+  end;
+  if (not isTemplate) and TemplateModified(p) then begin
+    if (pos('*',PlanName.Caption)=0) then begin
+      PlanName.Caption:=PlanName.Caption+'*';
+      t.planname:=PlanName.Caption;
+      TargetList.Cells[colplan,TargetList.Row]:=t.PlanName;
+    end;
+  end
+  else begin
+    if (pos('*',PlanName.Caption)>0) then begin
+      PlanName.Caption:=StringReplace(PlanName.Caption,'*','',[]);
+      t.planname:=PlanName.Caption;
+      TargetList.Cells[colplan,TargetList.Row]:=t.PlanName;
+    end;
   end;
   StepsModified:=false;
 end;
