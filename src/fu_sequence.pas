@@ -721,8 +721,8 @@ begin
    TargetGridSelection(TargetGrid,0,1);
    BtnReset.Enabled:=not Targets.IgnoreRestart;
    if Targets.CheckDoneCount then begin
-      msg(targets.LastDoneStep,2);
       msg(Format(rsThisSequence,['"'+CurrentSeqName+'"']), 2);
+      msg(targets.LastDoneStep,2);
    end;
 end;
 
