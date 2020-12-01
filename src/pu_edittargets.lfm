@@ -40,12 +40,12 @@ object f_EditTargets: Tf_EditTargets
         Left = 0
         Height = 97
         Top = 0
-        Width = 528
+        Width = 532
         Align = alLeft
         Anchors = [akTop, akLeft, akRight, akBottom]
         BevelOuter = bvNone
         ClientHeight = 97
-        ClientWidth = 528
+        ClientWidth = 532
         Constraints.MaxWidth = 650
         ParentFont = False
         TabOrder = 0
@@ -53,11 +53,11 @@ object f_EditTargets: Tf_EditTargets
           Left = 0
           Height = 23
           Top = 0
-          Width = 528
+          Width = 532
           Align = alTop
           BevelOuter = bvNone
           ClientHeight = 23
-          ClientWidth = 528
+          ClientWidth = 532
           ParentFont = False
           TabOrder = 0
           object Panel3: TPanel
@@ -95,11 +95,11 @@ object f_EditTargets: Tf_EditTargets
             Left = 232
             Height = 23
             Top = 0
-            Width = 296
+            Width = 300
             Align = alClient
             BevelOuter = bvNone
             ClientHeight = 23
-            ClientWidth = 296
+            ClientWidth = 300
             ParentFont = False
             TabOrder = 1
             object CheckBoxRepeatList: TCheckBox
@@ -301,7 +301,7 @@ object f_EditTargets: Tf_EditTargets
           Left = 232
           Height = 50
           Top = 47
-          Width = 296
+          Width = 300
           Align = alClient
           BevelOuter = bvNone
           ChildSizing.LeftRightSpacing = 4
@@ -310,14 +310,14 @@ object f_EditTargets: Tf_EditTargets
           ChildSizing.Layout = cclTopToBottomThenLeftToRight
           ChildSizing.ControlsPerLine = 2
           ClientHeight = 50
-          ClientWidth = 296
+          ClientWidth = 300
           ParentFont = False
           TabOrder = 2
           object Label7: TLabel
             Left = 4
             Height = 21
             Top = 2
-            Width = 143
+            Width = 145
             Caption = 'Start options'
             ParentColor = False
             ParentFont = False
@@ -326,27 +326,27 @@ object f_EditTargets: Tf_EditTargets
             Left = 4
             Height = 21
             Top = 23
-            Width = 143
+            Width = 145
             Caption = 'ccNone'
             OnClick = StartOptionClick
             ParentFont = False
             TabOrder = 0
           end
           object ccCool: TCheckBox
-            Left = 147
+            Left = 149
             Height = 21
             Top = 2
-            Width = 145
+            Width = 147
             Caption = 'ccCool'
             OnClick = StartOptionClick
             ParentFont = False
             TabOrder = 1
           end
           object ccUnpark: TCheckBox
-            Left = 147
+            Left = 149
             Height = 21
             Top = 23
-            Width = 145
+            Width = 147
             Caption = 'ccUnpark'
             OnClick = StartOptionClick
             ParentFont = False
@@ -357,11 +357,11 @@ object f_EditTargets: Tf_EditTargets
           Left = 0
           Height = 24
           Top = 23
-          Width = 528
+          Width = 532
           Align = alTop
           BevelOuter = bvNone
           ClientHeight = 24
-          ClientWidth = 528
+          ClientWidth = 532
           ParentFont = False
           TabOrder = 3
           object CheckBoxRestartStatus: TCheckBox
@@ -377,7 +377,7 @@ object f_EditTargets: Tf_EditTargets
             Left = 0
             Height = 2
             Top = 22
-            Width = 528
+            Width = 532
             Align = alBottom
             Shape = bsBottomLine
           end
@@ -393,17 +393,17 @@ object f_EditTargets: Tf_EditTargets
         end
       end
       object PanelTermination: TPanel
-        Left = 528
+        Left = 532
         Height = 97
         Top = 0
-        Width = 460
+        Width = 456
         Align = alClient
         BevelOuter = bvNone
         ChildSizing.EnlargeHorizontal = crsHomogenousChildResize
         ChildSizing.Layout = cclLeftToRightThenTopToBottom
         ChildSizing.ControlsPerLine = 3
         ClientHeight = 97
-        ClientWidth = 460
+        ClientWidth = 456
         Constraints.MaxWidth = 606
         ParentFont = False
         TabOrder = 1
@@ -411,10 +411,10 @@ object f_EditTargets: Tf_EditTargets
           Left = 0
           Height = 91
           Top = 0
-          Width = 228
+          Width = 226
           BevelOuter = bvNone
           ClientHeight = 91
-          ClientWidth = 228
+          ClientWidth = 226
           Constraints.MaxWidth = 303
           Constraints.MinWidth = 172
           ParentFont = False
@@ -468,13 +468,13 @@ object f_EditTargets: Tf_EditTargets
           end
         end
         object Panel20: TPanel
-          Left = 228
+          Left = 226
           Height = 91
           Top = 0
-          Width = 232
+          Width = 230
           BevelOuter = bvNone
           ClientHeight = 91
-          ClientWidth = 232
+          ClientWidth = 230
           Constraints.MaxWidth = 303
           Constraints.MinWidth = 172
           ParentFont = False
@@ -510,7 +510,7 @@ object f_EditTargets: Tf_EditTargets
             TabOrder = 2
           end
           object BtnEndScript: TButton
-            Left = 204
+            Left = 206
             Height = 21
             Top = 49
             Width = 24
@@ -531,7 +531,7 @@ object f_EditTargets: Tf_EditTargets
             TabOrder = 4
           end
           object BtnUnattendedScript: TButton
-            Left = 204
+            Left = 206
             Height = 21
             Top = 70
             Width = 24
@@ -542,7 +542,7 @@ object f_EditTargets: Tf_EditTargets
             TabOrder = 5
           end
           object Bevel2: TBevel
-            Left = 227
+            Left = 225
             Height = 91
             Top = 0
             Width = 5
@@ -1280,7 +1280,7 @@ object f_EditTargets: Tf_EditTargets
               AnchorSideTop.Side = asrCenter
               Left = 4
               Height = 17
-              Top = 6
+              Top = 8
               Width = 57
               Caption = 'Template'
               ParentColor = False
@@ -1291,7 +1291,7 @@ object f_EditTargets: Tf_EditTargets
               AnchorSideTop.Side = asrCenter
               Left = 80
               Height = 17
-              Top = 6
+              Top = 8
               Width = 69
               Caption = 'PlanName'
               Font.Style = [fsBold]
@@ -1302,7 +1302,7 @@ object f_EditTargets: Tf_EditTargets
               AnchorSideTop.Control = Panel17
               Left = 480
               Height = 25
-              Top = 2
+              Top = 4
               Width = 137
               Anchors = [akLeft]
               Caption = 'Save template'
@@ -1314,7 +1314,7 @@ object f_EditTargets: Tf_EditTargets
               AnchorSideTop.Control = BtnSaveTemplate
               Left = 624
               Height = 25
-              Top = 2
+              Top = 4
               Width = 146
               Caption = 'Save template as...'
               OnClick = BtnSaveTemplateAsClick
@@ -1325,7 +1325,7 @@ object f_EditTargets: Tf_EditTargets
               AnchorSideTop.Control = BtnSaveTemplate
               Left = 280
               Height = 25
-              Top = 2
+              Top = 4
               Width = 192
               Caption = 'Save and apply to targets'
               OnClick = BtnApplyTemplateClick
@@ -1336,7 +1336,7 @@ object f_EditTargets: Tf_EditTargets
               AnchorSideTop.Control = BtnSaveTemplate
               Left = 781
               Height = 25
-              Top = 2
+              Top = 4
               Width = 154
               Caption = 'Delete template'
               OnClick = BtnDeleteTemplateClick
@@ -1717,7 +1717,7 @@ object f_EditTargets: Tf_EditTargets
     ParentFont = False
     TabOrder = 2
     object BtnCancel: TButton
-      Left = 679
+      Left = 683
       Height = 25
       Top = 2
       Width = 76
@@ -1728,7 +1728,7 @@ object f_EditTargets: Tf_EditTargets
       TabOrder = 0
     end
     object BtnSave: TButton
-      Left = 767
+      Left = 771
       Height = 25
       Hint = 'Save the list and close this window.'
       Top = 2
@@ -1740,7 +1740,7 @@ object f_EditTargets: Tf_EditTargets
       TabOrder = 1
     end
     object BtnSaveAs: TButton
-      Left = 857
+      Left = 861
       Height = 25
       Hint = 'Save the list with a new name and close this window.'
       Top = 2

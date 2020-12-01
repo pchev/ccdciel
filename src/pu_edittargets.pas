@@ -264,7 +264,8 @@ type
     procedure MoveFlat(Sender: TObject);
     procedure NewObject;
     procedure NewPlanetariumTarget(Sender: TObject);
-  public
+    procedure SetTemplateButton;
+   public
     { public declarations }
     originalFilter: array[0..99] of string;
     procedure SetLang;
@@ -527,6 +528,7 @@ var i: integer;
     s: TStringlist;
 begin
   s:=TStringlist.Create;
+  s.add('');
   TargetList.Columns[colplan-1].PickList.Clear;
   i:=FindFirstUTF8(slash(ConfigDir)+'*.plan',0,fs);
   while i=0 do begin
@@ -837,13 +839,7 @@ begin
       t.objectname:='';
     end;
   end;
-  if (t.planname='')then begin
-    if (TargetList.Columns[colplan-1].PickList.Count>0) then
-      t.planname:=TargetList.Columns[colplan-1].PickList[0]
-    else
-      t.planname := 'plan1';
-    PlanName.Caption:=t.planname;
-  end;
+  PlanName.Caption:=t.planname;
   TargetList.RowCount:=TargetList.RowCount+1;
   i:=TargetList.RowCount-1;
   TargetList.Cells[colseq,i]:=IntToStr(i);
@@ -1381,6 +1377,7 @@ if StepsModified then begin
     end;
   end;
   StepsModified:=false;
+  SetTemplateButton;
 end;
 end;
 
@@ -1647,9 +1644,10 @@ begin
     t.delay:=TDelay.Value;
     t.previewexposure:=PreviewExposure.Value;
     t.preview:=Preview.Checked;
-    if planchange and (trim(t.planname)>'') then begin
+    if planchange then begin
       PlanName.Caption:=t.planname;
-      LoadTemplate;
+      if trim(t.planname)>'' then LoadTemplate;
+      SetTemplateButton;
     end;
   end;
   TargetList.EditorMode := false;
@@ -2358,6 +2356,7 @@ begin
     end;
     StepList.Row:=1;
     StepListSelection(StepList,0,1);
+    SetTemplateButton;
   end;
 end;
 
@@ -2737,14 +2736,20 @@ begin
 end;
 
 procedure Tf_EditTargets.BtnSaveTemplateAsClick(Sender: TObject);
+var buf: string;
 begin
   SaveDialog1.InitialDir:=ConfigDir;
   SaveDialog1.DefaultExt:='.plan';
   SaveDialog1.filter:='Plan|*.plan';
   SaveDialog1.FileName:=StringReplace(PlanName.Caption,'*','',[])+'.plan';
   if SaveDialog1.Execute then begin
-     PlanName.Caption:=ExtractFileNameOnly(SaveDialog1.FileName);
-     SaveTemplate;
+     buf:=ExtractFileNameOnly(SaveDialog1.FileName);
+     if (trim(buf)<>'')and(trim(buf)<>'.plan') then begin
+       PlanName.Caption:=buf;
+       SaveTemplate;
+     end
+     else
+       ShowMessage('No template name selected!');
   end;
 end;
 
@@ -2764,8 +2769,8 @@ var pfile: TCCDconfig;
 begin
 try
   PlanName.Caption:=StringReplace(PlanName.Caption,'*','',[]);
-  if trim(PlanName.Caption)='' then begin
-    ShowMessage('No template selected!');
+  if (trim(PlanName.Caption)='')or(trim(PlanName.Caption)='.plan') then begin
+    ShowMessage('No template name selected!');
     exit;
   end;
   fn:=slash(ConfigDir)+PlanName.Caption+'.plan';
@@ -2808,6 +2813,13 @@ try
 except
   on E: Exception do ShowMessage('Error saving template: '+ E.Message);
 end;
+end;
+
+procedure Tf_EditTargets.SetTemplateButton;
+begin
+  BtnSaveTemplate.Visible:=trim(PlanName.Caption)<>'';
+  BtnDeleteTemplate.Visible:=BtnSaveTemplate.Visible;
+  BtnApplyTemplate.Visible:=BtnSaveTemplate.Visible;
 end;
 
 end.

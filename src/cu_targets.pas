@@ -1835,7 +1835,7 @@ var template,fn: string;
     pfile: TCCDconfig;
     i,n: integer;
 begin
-  if (p.objectname=SkyFlatTxt)or(p.objectname=ScriptTxt) then begin
+  if (p.PlanName='')or(p.objectname=SkyFlatTxt)or(p.objectname=ScriptTxt) then begin
     result:=false;
     exit;
   end;
