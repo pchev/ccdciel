@@ -1110,11 +1110,11 @@ object f_EditTargets: Tf_EditTargets
       Height = 198
       Top = 0
       Width = 990
-      ActivePage = PlanFlat
+      ActivePage = PlanObject
       Align = alClient
       ParentFont = False
       ShowTabs = False
-      TabIndex = 2
+      TabIndex = 0
       TabOrder = 0
       object PlanObject: TTabSheet
         Caption = 'PlanObject'
@@ -1134,8 +1134,8 @@ object f_EditTargets: Tf_EditTargets
           TabOrder = 0
           object StepList: TStringGrid
             Left = 0
-            Height = 146
-            Top = 18
+            Height = 134
+            Top = 30
             Width = 980
             Align = alClient
             AutoFillColumns = True
@@ -1233,7 +1233,7 @@ object f_EditTargets: Tf_EditTargets
                 ButtonStyle = cbsPickList
                 Title.MultiLine = True
                 Title.Caption = 'F-stop'
-                Width = 82
+                Width = 84
               end>
             DefaultColWidth = 30
             Options = [goFixedVertLine, goFixedHorzLine, goVertLine, goHorzLine, goDrawFocusSelected, goColSizing, goRowMoving, goEditing, goAlwaysShowEditor, goThumbTracking, goCellHints, goCellEllipsis]
@@ -1261,47 +1261,87 @@ object f_EditTargets: Tf_EditTargets
               80
               80
               80
-              82
+              84
             )
           end
           object Panel17: TPanel
             Left = 0
-            Height = 18
+            Height = 30
             Top = 0
             Width = 980
             Align = alTop
             BevelOuter = bvNone
-            ClientHeight = 18
+            ClientHeight = 30
             ClientWidth = 980
             ParentFont = False
             TabOrder = 1
             object Label1: TLabel
-              Left = 8
+              AnchorSideTop.Control = BtnSaveTemplate
+              AnchorSideTop.Side = asrCenter
+              Left = 4
               Height = 17
-              Top = 0
-              Width = 67
+              Top = 6
+              Width = 57
               Caption = 'Template'
               ParentColor = False
               ParentFont = False
             end
             object PlanName: TLabel
-              Left = 101
+              AnchorSideTop.Control = BtnSaveTemplate
+              AnchorSideTop.Side = asrCenter
+              Left = 80
               Height = 17
-              Top = 0
+              Top = 6
               Width = 69
               Caption = 'PlanName'
               Font.Style = [fsBold]
               ParentColor = False
               ParentFont = False
             end
-            object LabelMsg: TLabel
-              Left = 279
-              Height = 17
-              Top = 0
-              Width = 59
-              Caption = 'LabelMsg'
-              ParentColor = False
+            object BtnSaveTemplate: TButton
+              AnchorSideTop.Control = Panel17
+              Left = 480
+              Height = 25
+              Top = 2
+              Width = 137
+              Anchors = [akLeft]
+              Caption = 'Save template'
+              OnClick = BtnSaveTemplateClick
               ParentFont = False
+              TabOrder = 0
+            end
+            object BtnSaveTemplateAs: TButton
+              AnchorSideTop.Control = BtnSaveTemplate
+              Left = 624
+              Height = 25
+              Top = 2
+              Width = 146
+              Caption = 'Save template as...'
+              OnClick = BtnSaveTemplateAsClick
+              ParentFont = False
+              TabOrder = 1
+            end
+            object BtnApplyTemplate: TButton
+              AnchorSideTop.Control = BtnSaveTemplate
+              Left = 280
+              Height = 25
+              Top = 2
+              Width = 192
+              Caption = 'Save and apply to targets'
+              OnClick = BtnApplyTemplateClick
+              ParentFont = False
+              TabOrder = 2
+            end
+            object BtnDeleteTemplate: TButton
+              AnchorSideTop.Control = BtnSaveTemplate
+              Left = 781
+              Height = 25
+              Top = 2
+              Width = 154
+              Caption = 'Delete template'
+              OnClick = BtnDeleteTemplateClick
+              ParentFont = False
+              TabOrder = 3
             end
           end
           object Panel10: TPanel
@@ -1326,6 +1366,8 @@ object f_EditTargets: Tf_EditTargets
               TabOrder = 0
             end
             object BtnRemoveStep: TButton
+              AnchorSideTop.Control = BtnAddStep
+              AnchorSideTop.Side = asrCenter
               Left = 137
               Height = 25
               Top = 2
@@ -1335,45 +1377,16 @@ object f_EditTargets: Tf_EditTargets
               ParentFont = False
               TabOrder = 1
             end
-            object BtnSaveTemplate: TButton
-              Left = 251
-              Height = 25
-              Top = 2
-              Width = 137
-              Caption = 'Save template'
-              OnClick = BtnSaveTemplateClick
+            object LabelMsg: TLabel
+              AnchorSideTop.Control = BtnRemoveStep
+              AnchorSideTop.Side = asrCenter
+              Left = 279
+              Height = 17
+              Top = 6
+              Width = 59
+              Caption = 'LabelMsg'
+              ParentColor = False
               ParentFont = False
-              TabOrder = 2
-            end
-            object BtnSaveTemplateAs: TButton
-              Left = 396
-              Height = 25
-              Top = 2
-              Width = 146
-              Caption = 'Save template as...'
-              OnClick = BtnSaveTemplateAsClick
-              ParentFont = False
-              TabOrder = 3
-            end
-            object BtnDeleteTemplate: TButton
-              Left = 752
-              Height = 25
-              Top = 2
-              Width = 154
-              Caption = 'Delete template'
-              OnClick = BtnDeleteTemplateClick
-              ParentFont = False
-              TabOrder = 4
-            end
-            object BtnApplyTemplate: TButton
-              Left = 550
-              Height = 25
-              Top = 2
-              Width = 192
-              Caption = 'Apply template to targets'
-              OnClick = BtnApplyTemplateClick
-              ParentFont = False
-              TabOrder = 5
             end
           end
         end
@@ -1416,8 +1429,8 @@ object f_EditTargets: Tf_EditTargets
               Width = 186
               BevelOuter = bvNone
               Caption = ' '
-              ClientHeight = 68
-              ClientWidth = 186
+              ClientHeight = 64
+              ClientWidth = 182
               ParentFont = False
               TabOrder = 1
               Visible = False
@@ -1463,8 +1476,8 @@ object f_EditTargets: Tf_EditTargets
                 Top = 24
                 Width = 191
                 BevelOuter = bvNone
-                ClientHeight = 36
-                ClientWidth = 191
+                ClientHeight = 32
+                ClientWidth = 187
                 ParentFont = False
                 TabOrder = 2
                 object LabelOffset: TLabel
@@ -1550,8 +1563,8 @@ object f_EditTargets: Tf_EditTargets
               Top = 120
               Width = 186
               BevelOuter = bvNone
-              ClientHeight = 28
-              ClientWidth = 186
+              ClientHeight = 24
+              ClientWidth = 182
               ParentFont = False
               TabOrder = 3
               Visible = False

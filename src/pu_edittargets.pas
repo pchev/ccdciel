@@ -453,6 +453,7 @@ begin
   BtnDeleteTemplate.Caption := rsDeleteTempl;
   BtnSaveTemplate.Caption := rsSaveTempl;
   BtnSaveTemplateAs.Caption:=rsSaveTemplAs;
+  BtnApplyTemplate.Caption:=rsSaveAndApply;
   BtnRemoveStep.Caption := rsRemoveStep;
   BtnAddStep.Caption := rsAddStep;
   StepList.Columns.Items[pcoldesc-1].Title.Caption := rsDescription;
@@ -2744,8 +2745,6 @@ begin
   if SaveDialog1.Execute then begin
      PlanName.Caption:=ExtractFileNameOnly(SaveDialog1.FileName);
      SaveTemplate;
-     SetPlanList(TargetList.Row,PlanName.Caption);
-     TargetChange(nil);
   end;
 end;
 
@@ -2803,6 +2802,7 @@ try
   pfile.Flush;
   pfile.Free;
   LoadPlanList;
+  SetPlanList(TargetList.Row,PlanName.Caption);
   TargetChange(nil);
   StepsModified:=false;
 except

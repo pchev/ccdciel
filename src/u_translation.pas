@@ -1264,6 +1264,7 @@ resourcestring
   rsOffset2 = 'Offset';
   rsManageTheGai = 'Manage the Gain and Offset if available.';
   rsPleaseBeCare = 'Please be careful to review and set the value for the Gain and Offset';
+  rsSaveAndApply = 'Save and apply to targets';
 
 implementation
 
