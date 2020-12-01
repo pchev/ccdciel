@@ -50,15 +50,16 @@ type
     BtnStatus: TButton;
     led: TShape;
     Panel5: TPanel;
+    PanelPlan: TPanel;
+    Splitter1: TSplitter;
     StatusTimer: TTimer;
     StartTimer: TTimer;
     Unattended: TCheckBox;
     DelayMsg: TLabel;
     StatusMsg: TLabel;
     OpenDialog1: TOpenDialog;
-    Panel1: TPanel;
-    Panel2: TPanel;
-    Panel3: TPanel;
+    PanelTarget: TPanel;
+    PanelBtn: TPanel;
     Panel4: TPanel;
     SaveDialog1: TSaveDialog;
     Title1: TPanel;
@@ -201,10 +202,10 @@ begin
  Title1.Color:=clWindowFrame;
  Title2.Color:=clWindowFrame;
  Title3.Color:=clWindowFrame;
- Panel1.ChildSizing.LeftRightSpacing:=8;
- Panel2.ChildSizing.LeftRightSpacing:=8;
- Panel1.ChildSizing.VerticalSpacing:=4;
- Panel2.ChildSizing.VerticalSpacing:=4;
+ PanelTarget.ChildSizing.LeftRightSpacing:=8;
+ PanelBtn.ChildSizing.LeftRightSpacing:=8;
+ PanelTarget.ChildSizing.VerticalSpacing:=4;
+ PanelBtn.ChildSizing.VerticalSpacing:=4;
  TargetGrid.FixedColor := clBackground;
  PlanGrid.FixedColor := clBackground;
  {$endif}
@@ -272,7 +273,7 @@ begin
   BtnPause.Hint:=rsPauseTheSequ;
   BtnStatus.Hint:=rsShowCompleti;
   TargetGrid.Cells[0, 0]:=rsObject;
-  TargetGrid.Cells[1, 0]:=rsPlan;
+  TargetGrid.Cells[1, 0]:=rsTemplate;
   TargetGrid.Cells[2, 0]:=rsBegin;
   TargetGrid.Cells[3, 0]:=rsEnd;
   TargetGrid.Cells[4, 0]:=rsRA;

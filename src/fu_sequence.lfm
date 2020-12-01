@@ -1,16 +1,15 @@
 object f_sequence: Tf_sequence
   Left = 0
-  Height = 570
+  Height = 566
   Top = 0
   Width = 212
-  AutoSize = True
-  ClientHeight = 570
+  ClientHeight = 566
   ClientWidth = 212
   OnResize = FrameResize
   ParentFont = False
   TabOrder = 0
-  DesignLeft = -1
-  DesignTop = -1
+  DesignLeft = -7
+  DesignTop = -7
   object Title1: TLabel
     Left = 0
     Height = 20
@@ -27,20 +26,20 @@ object f_sequence: Tf_sequence
     ParentFont = False
     Transparent = False
   end
-  object Panel1: TPanel
+  object PanelTarget: TPanel
     Left = 0
-    Height = 320
+    Height = 172
     Top = 20
     Width = 212
     Align = alTop
     BevelOuter = bvNone
-    ClientHeight = 320
+    ClientHeight = 172
     ClientWidth = 212
     ParentFont = False
     TabOrder = 1
     object TargetGrid: TStringGrid
       Left = 0
-      Height = 158
+      Height = 152
       Top = 20
       Width = 212
       Align = alClient
@@ -64,157 +63,6 @@ object f_sequence: Tf_sequence
         39
       )
     end
-    object Panel3: TPanel
-      Left = 0
-      Height = 142
-      Top = 178
-      Width = 212
-      Align = alBottom
-      BevelOuter = bvNone
-      ClientHeight = 142
-      ClientWidth = 212
-      ParentFont = False
-      TabOrder = 1
-      object Unattended: TCheckBox
-        AnchorSideTop.Control = led
-        AnchorSideTop.Side = asrCenter
-        Left = 48
-        Height = 21
-        Hint = 'If checked no confirmation dialog will be presented and failed operation will abort the current step.'
-        Top = 115
-        Width = 124
-        Caption = 'Run unattended'
-        OnChange = UnattendedChange
-        ParentFont = False
-        TabOrder = 0
-      end
-      object Panel5: TPanel
-        Left = 0
-        Height = 109
-        Top = 0
-        Width = 212
-        Align = alTop
-        BevelOuter = bvNone
-        ChildSizing.EnlargeHorizontal = crsScaleChilds
-        ChildSizing.EnlargeVertical = crsScaleChilds
-        ChildSizing.ShrinkHorizontal = crsScaleChilds
-        ChildSizing.ShrinkVertical = crsScaleChilds
-        ChildSizing.Layout = cclLeftToRightThenTopToBottom
-        ChildSizing.ControlsPerLine = 3
-        ClientHeight = 109
-        ClientWidth = 212
-        ParentFont = False
-        TabOrder = 1
-        object BtnLoadTargets: TButton
-          Left = 0
-          Height = 27
-          Top = 0
-          Width = 70
-          Caption = 'Load'
-          OnClick = BtnLoadTargetsClick
-          ParentFont = False
-          TabOrder = 0
-        end
-        object BtnNewTargets: TButton
-          Left = 70
-          Height = 27
-          Top = 0
-          Width = 66
-          Caption = 'New'
-          OnClick = BtnEditTargetsClick
-          ParentFont = False
-          TabOrder = 1
-        end
-        object BtnEditTargets: TButton
-          Left = 136
-          Height = 27
-          Top = 0
-          Width = 76
-          Caption = 'Edit'
-          OnClick = BtnEditTargetsClick
-          ParentFont = False
-          TabOrder = 2
-        end
-        object BtnCopy: TButton
-          Left = 0
-          Height = 27
-          Top = 27
-          Width = 70
-          Caption = 'Copy'
-          OnClick = BtnCopyClick
-          ParentFont = False
-          TabOrder = 3
-        end
-        object BtnReset: TButton
-          Left = 70
-          Height = 27
-          Top = 27
-          Width = 66
-          Caption = 'Reset'
-          OnClick = BtnResetClick
-          ParentFont = False
-          TabOrder = 4
-        end
-        object BtnDelete: TButton
-          Left = 136
-          Height = 27
-          Top = 27
-          Width = 76
-          Caption = 'Delete'
-          OnClick = BtnDeleteClick
-          ParentFont = False
-          TabOrder = 5
-        end
-        object BtnStart: TButton
-          Left = 0
-          Height = 27
-          Top = 54
-          Width = 70
-          Caption = 'Start'
-          OnClick = BtnStartClick
-          ParentFont = False
-          TabOrder = 6
-        end
-        object BtnStop: TButton
-          Left = 70
-          Height = 27
-          Top = 54
-          Width = 66
-          Caption = 'Stop'
-          OnClick = BtnStopClick
-          ParentFont = False
-          TabOrder = 7
-        end
-        object BtnPause: TButton
-          Left = 136
-          Height = 27
-          Top = 54
-          Width = 76
-          Caption = 'Pause'
-          OnClick = BtnPauseClick
-          ParentFont = False
-          TabOrder = 8
-        end
-        object BtnStatus: TButton
-          Left = 0
-          Height = 28
-          Top = 81
-          Width = 70
-          Caption = 'Status'
-          OnClick = BtnStatusClick
-          ParentFont = False
-          TabOrder = 9
-        end
-      end
-      object led: TShape
-        Left = 8
-        Height = 14
-        Top = 118
-        Width = 14
-        Brush.Color = clRed
-        Shape = stCircle
-      end
-    end
     object Title3: TLabel
       Left = 0
       Height = 20
@@ -231,22 +79,35 @@ object f_sequence: Tf_sequence
       Transparent = False
     end
   end
-  object Panel2: TPanel
+  object PanelPlan: TPanel
     Left = 0
-    Height = 224
-    Top = 340
+    Height = 147
+    Top = 195
     Width = 212
-    Align = alTop
-    BevelOuter = bvNone
-    ClientHeight = 224
+    Align = alClient
+    ClientHeight = 147
     ClientWidth = 212
-    ParentFont = False
-    TabOrder = 0
+    TabOrder = 2
+    object Title2: TLabel
+      Left = 1
+      Height = 20
+      Top = 1
+      Width = 210
+      Align = alTop
+      Alignment = taCenter
+      AutoSize = False
+      Caption = 'Current plan'
+      Color = clBtnShadow
+      Font.Color = clBtnText
+      ParentColor = False
+      ParentFont = False
+      Transparent = False
+    end
     object PlanGrid: TStringGrid
-      Left = 0
-      Height = 123
-      Top = 20
-      Width = 212
+      Left = 1
+      Height = 125
+      Top = 21
+      Width = 210
       Align = alClient
       BorderStyle = bsNone
       DefaultRowHeight = 18
@@ -265,21 +126,18 @@ object f_sequence: Tf_sequence
         45
       )
     end
-    object Title2: TLabel
-      Left = 0
-      Height = 20
-      Top = 0
-      Width = 212
-      Align = alTop
-      Alignment = taCenter
-      AutoSize = False
-      Caption = 'Current plan'
-      Color = clBtnShadow
-      Font.Color = clBtnText
-      ParentColor = False
-      ParentFont = False
-      Transparent = False
-    end
+  end
+  object PanelBtn: TPanel
+    Left = 0
+    Height = 224
+    Top = 342
+    Width = 212
+    Align = alBottom
+    BevelOuter = bvNone
+    ClientHeight = 224
+    ClientWidth = 212
+    ParentFont = False
+    TabOrder = 0
     object Panel4: TPanel
       Left = 0
       Height = 81
@@ -290,7 +148,7 @@ object f_sequence: Tf_sequence
       ClientHeight = 81
       ClientWidth = 212
       ParentFont = False
-      TabOrder = 1
+      TabOrder = 0
       object StatusMsg: TLabel
         Left = 0
         Height = 80
@@ -312,6 +170,158 @@ object f_sequence: Tf_sequence
         ParentFont = False
       end
     end
+    object Panel5: TPanel
+      Left = 0
+      Height = 109
+      Top = 0
+      Width = 212
+      Align = alTop
+      BevelOuter = bvNone
+      ChildSizing.EnlargeHorizontal = crsScaleChilds
+      ChildSizing.EnlargeVertical = crsScaleChilds
+      ChildSizing.ShrinkHorizontal = crsScaleChilds
+      ChildSizing.ShrinkVertical = crsScaleChilds
+      ChildSizing.Layout = cclLeftToRightThenTopToBottom
+      ChildSizing.ControlsPerLine = 3
+      ClientHeight = 109
+      ClientWidth = 212
+      ParentFont = False
+      TabOrder = 1
+      object BtnLoadTargets: TButton
+        Left = 0
+        Height = 27
+        Top = 0
+        Width = 70
+        Caption = 'Load'
+        OnClick = BtnLoadTargetsClick
+        ParentFont = False
+        TabOrder = 0
+      end
+      object BtnNewTargets: TButton
+        Left = 70
+        Height = 27
+        Top = 0
+        Width = 66
+        Caption = 'New'
+        OnClick = BtnEditTargetsClick
+        ParentFont = False
+        TabOrder = 1
+      end
+      object BtnEditTargets: TButton
+        Left = 136
+        Height = 27
+        Top = 0
+        Width = 76
+        Caption = 'Edit'
+        OnClick = BtnEditTargetsClick
+        ParentFont = False
+        TabOrder = 2
+      end
+      object BtnCopy: TButton
+        Left = 0
+        Height = 27
+        Top = 27
+        Width = 70
+        Caption = 'Copy'
+        OnClick = BtnCopyClick
+        ParentFont = False
+        TabOrder = 3
+      end
+      object BtnReset: TButton
+        Left = 70
+        Height = 27
+        Top = 27
+        Width = 66
+        Caption = 'Reset'
+        OnClick = BtnResetClick
+        ParentFont = False
+        TabOrder = 4
+      end
+      object BtnDelete: TButton
+        Left = 136
+        Height = 27
+        Top = 27
+        Width = 76
+        Caption = 'Delete'
+        OnClick = BtnDeleteClick
+        ParentFont = False
+        TabOrder = 5
+      end
+      object BtnStart: TButton
+        Left = 0
+        Height = 27
+        Top = 54
+        Width = 70
+        Caption = 'Start'
+        OnClick = BtnStartClick
+        ParentFont = False
+        TabOrder = 6
+      end
+      object BtnStop: TButton
+        Left = 70
+        Height = 27
+        Top = 54
+        Width = 66
+        Caption = 'Stop'
+        OnClick = BtnStopClick
+        ParentFont = False
+        TabOrder = 7
+      end
+      object BtnPause: TButton
+        Left = 136
+        Height = 27
+        Top = 54
+        Width = 76
+        Caption = 'Pause'
+        OnClick = BtnPauseClick
+        ParentFont = False
+        TabOrder = 8
+      end
+      object BtnStatus: TButton
+        Left = 0
+        Height = 28
+        Top = 81
+        Width = 70
+        Caption = 'Status'
+        OnClick = BtnStatusClick
+        ParentFont = False
+        TabOrder = 9
+      end
+    end
+    object led: TShape
+      AnchorSideTop.Side = asrCenter
+      Left = 8
+      Height = 14
+      Top = 116
+      Width = 14
+      Brush.Color = clRed
+      Shape = stCircle
+    end
+    object Unattended: TCheckBox
+      AnchorSideTop.Control = led
+      AnchorSideTop.Side = asrCenter
+      Left = 48
+      Height = 21
+      Hint = 'If checked no confirmation dialog will be presented and failed operation will abort the current step.'
+      Top = 113
+      Width = 124
+      Caption = 'Run unattended'
+      OnChange = UnattendedChange
+      ParentFont = False
+      TabOrder = 2
+    end
+  end
+  object Splitter1: TSplitter
+    Cursor = crVSplit
+    Left = 0
+    Height = 3
+    Top = 192
+    Width = 212
+    Align = alTop
+    AutoSnap = False
+    Beveled = True
+    MinSize = 60
+    ResizeAnchor = akTop
   end
   object OpenDialog1: TOpenDialog
     Title = 'Open target list'
