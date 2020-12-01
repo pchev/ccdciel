@@ -55,6 +55,7 @@ end;
 
 procedure T_SequenceFile.Clear;
 begin
+  FItems.Filename:='';
   FItems.Clear;
   FCurrentName:='';
 end;

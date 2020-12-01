@@ -845,9 +845,9 @@ begin
       end
       else exit;
     end;
+    SequenceFile.Clear;
     SequenceFile.Filename:=fn;
     CurrentSeqName:=SequenceFile.CurrentName;
-    SequenceFile.Clear;
     Targets.TargetName:=CurrentSeqName;
     SequenceFile.Items.SetValue('/Version',TargetFileVersion);
     SequenceFile.Items.SetValue('/ListName',CurrentSeqName);
