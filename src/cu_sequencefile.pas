@@ -18,6 +18,7 @@ type
       constructor Create(AOwner: TComponent);override;
       destructor  Destroy; override;
       procedure Clear;
+      procedure ClearContent;
       procedure Save;
       property Filename: String read GetFilename write SetFilename;
       property Items: TCCDconfig read FItems write FItems;
@@ -55,6 +56,11 @@ begin
   FItems.Filename:='';
   FItems.Clear;
   FCurrentName:='';
+end;
+
+procedure T_SequenceFile.ClearContent;
+begin
+  FItems.Clear;
 end;
 
 procedure T_SequenceFile.Save;

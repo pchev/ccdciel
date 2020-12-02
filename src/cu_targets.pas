@@ -589,6 +589,7 @@ begin
  if Count>0 then begin
     FSequenceFile.Clear;
     FSequenceFile.Filename:=fn;
+    FSequenceFile.ClearContent;
     CurrentSeqName:=FSequenceFile.CurrentName;
     TargetName:=CurrentSeqName;
     FSequenceFile.Items.SetValue('/Version',TargetFileVersion);
