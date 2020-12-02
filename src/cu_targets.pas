@@ -402,15 +402,21 @@ begin
 end;
 
 procedure T_Targets.AssignTarget(Source: T_Targets);
-var i:integer;
+var i,n:integer;
+    t:TTarget;
 begin
+  // No feedback to sequence control
+{ FTargetsChange
+  FPlanChange
+  FDelayMsg
+  FonEndSequence
+  FonShutdown }
+
+  // use own sequence file
+{ FSequenceFile }
+
   // static properties
-  FTargetsChange :=  Source.FTargetsChange;
-  FPlanChange := Source.FPlanChange;
   FonMsg := Source.FonMsg;
-  FDelayMsg := Source.FDelayMsg;
-  FonEndSequence := Source.FonEndSequence;
-  FonShutdown := Source.FonShutdown;
   Fcapture := Source.Fcapture;
   Fpreview := Source.Fpreview;
   Ffilter :=  Source.Ffilter;
@@ -423,7 +429,6 @@ begin
   Fautoguider := Source.Fautoguider;
   Fastrometry := Source.Fastrometry;
   Fplanetarium := Source.Fplanetarium;
-  FSequenceFile := Source.FSequenceFile;
 
   // do not copy working variable
 { FTargetCoord
@@ -443,7 +448,11 @@ begin
   FInitializing
   FUnattended
   FTargetInitializing
-  FWaitStarting}
+  FSeqLockTwilight
+  FSeqStart
+  FSeqStop
+  FSeqStartTime
+  FWaitStarting }
 
   // sequence definition
   FName:= Source.FName;
@@ -454,10 +463,10 @@ begin
   FAtEndCloseDome := Source.FAtEndCloseDome;
   FAtEndStopTracking := Source.FAtEndStopTracking;
   FAtEndWarmCamera := Source.FAtEndWarmCamera;
-  FAtEndRunScript := Source.FAtEndRunScript;
-  FOnErrorRunScript := Source.FOnErrorRunScript;
   FAtEndShutdown := Source.FAtEndShutdown;
+  FAtEndRunScript := Source.FAtEndRunScript;
   FAtEndScript := Source.FAtEndScript;
+  FOnErrorRunScript := Source.FOnErrorRunScript;
   FOnErrorScript := Source.FOnErrorScript;
   FAtStartCool := Source.FAtStartCool;
   FAtStartUnpark := Source.FAtStartUnpark;
@@ -473,20 +482,69 @@ begin
   FResetRepeat := Source.FResetRepeat;
   FSeqStartAt := Source.FSeqStartAt;
   FSeqStopAt := Source.FSeqStopAt;
-  FSeqStartTime := Source.FSeqStartTime;
-  FSeqStart := Source.FSeqStart;
-  FSeqStop := Source.FSeqStop;
   FSeqStartTwilight := Source.FSeqStartTwilight;
   FSeqStopTwilight := Source.FSeqStopTwilight;
-  FSeqLockTwilight := Source.FSeqLockTwilight;
-  NumTargets := Source.NumTargets;
-  for i:=0 to NumTargets-1 do
-    FTargets[i].Assign(Source.Ftargets[i]);
+  n := Source.NumTargets;
+  for i:=0 to n-1 do begin
+    t:=TTarget.Create;
+    t.Assign(Source.Ftargets[i]);
+    Add(t);
+  end;
 end;
 
 procedure T_Targets.UpdateLive(Source:T_Targets);
 begin
-   { TODO :  }
+  try
+  // properties that can be changed without risk
+  FName:= Source.FName;
+  FFileVersion := Source.FFileVersion;
+  FTargetsRepeatCount := Source.FTargetsRepeatCount;
+  FAtEndPark := Source.FAtEndPark;
+  FAtEndCloseDome := Source.FAtEndCloseDome;
+  FAtEndStopTracking := Source.FAtEndStopTracking;
+  FAtEndWarmCamera := Source.FAtEndWarmCamera;
+  FAtEndShutdown := Source.FAtEndShutdown;
+  FAtEndRunScript := Source.FAtEndRunScript;
+  FAtEndScript := Source.FAtEndScript;
+  FOnErrorRunScript := Source.FOnErrorRunScript;
+  FOnErrorScript := Source.FOnErrorScript;
+
+  // change to global sequence repeat
+  { TODO :  }
+{ FIgnoreRestart := Source.FIgnoreRestart;
+  FTargetsRepeat := Source.FTargetsRepeat;
+  FResetRepeat := Source.FResetRepeat;  }
+
+  // change to start condition
+  { TODO :  }
+{ FAtStartCool := Source.FAtStartCool;
+  FAtStartUnpark := Source.FAtStartUnpark;
+  FSeqStartAt := Source.FSeqStartAt;
+  FSeqStopAt := Source.FSeqStopAt;
+  FSeqStartTwilight := Source.FSeqStartTwilight;
+  FSeqStopTwilight := Source.FSeqStopTwilight; }
+
+  // editing help, do not put back
+{ FFilterList
+  FBinningList
+  FOriginalFilter }
+
+  // the targets and steps list
+  { TODO :  }
+{  n := Source.NumTargets;
+  for i:=0 to n-1 do begin
+    t:=TTarget.Create;
+    t.Assign(Source.Ftargets[i]);
+    Add(t);
+  end;}
+
+  // save the updated file
+  SaveTargets(FSequenceFile.Filename);
+
+  except
+    on E: Exception do msg('Error updating the sequence:'+ E.Message,1);
+  end;
+
 end;
 
 procedure T_Targets.LoadTargets(fn: string);
