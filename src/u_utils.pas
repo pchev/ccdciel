@@ -237,7 +237,7 @@ begin
   if f.ModalResult=mrOK then
     result:=e.Text
   else
-    result:=defaultstr;
+    result:='';
   f.free;
 end;
 

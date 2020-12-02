@@ -37,9 +37,6 @@ resourcestring
   rsStopTheSeque = 'Stop the sequence execution';
   rsIfCheckedNoC = 'If checked no confirmation dialog will be presented and '
     +'failed operation will abort the current step.';
-  rsCopyTheSeque = 'Copy the sequence to a new one. Completion status is '
-    +'reinitialized';
-  rsDeleteTheSeq = 'Delete the sequence file';
   rsClearTheSequ = 'Clear the sequence completion status';
   rsTheSelectedS = 'The selected star luminosity profile';
   rsHistoryOfThe = 'History of the last FWHM and Intensity measurement';

@@ -2710,8 +2710,8 @@ begin
   emailconfig.Free;
   bpmconfig.Free;
   ScrBmp.Free;
-  FilterList.Free;
-  BinningList.Free;
+  FreeAndNil(FilterList);
+  FreeAndNil(BinningList);
   ReadoutList.Free;
   ISOList.Free;
   deepstring.Free;

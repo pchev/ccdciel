@@ -1265,6 +1265,9 @@ resourcestring
   rsManageTheGai = 'Manage the Gain and Offset if available.';
   rsPleaseBeCare = 'Please be careful to review and set the value for the Gain and Offset';
   rsSaveAndApply = 'Save and apply to targets';
+  rsCopyASequenc = 'Copy a sequence';
+  rsDeleteASeque = 'Delete a sequence';
+  rsEditASequenc = 'Edit a sequence';
 
 implementation
 

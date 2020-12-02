@@ -366,8 +366,8 @@ begin
   NumTargets := 0;
   FFilterList.Clear;
   FBinningList.Clear;
-  FFilterList.Assign(FilterList);
-  FBinningList.Assign(BinningList);
+  if FilterList<>nil then FFilterList.Assign(FilterList);
+  if BinningList<>nil then FBinningList.Assign(BinningList);
   FName:='';
   if Assigned(FTargetsChange) then FTargetsChange(self);
 end;

@@ -31,7 +31,7 @@ uses
   cu_mount, cu_camera, cu_autoguider, cu_astrometry, cu_rotator, pu_viewtext,
   cu_targets, cu_plan, cu_planetarium, pu_pause, fu_safety, fu_weather, cu_dome,
   Classes, SysUtils, FileUtil, Forms, Controls, Graphics, Dialogs, StdCtrls,
-  ExtCtrls, Grids;
+  ExtCtrls, Grids, Menus;
 
 type
 
@@ -41,16 +41,19 @@ type
     BtnReset: TButton;
     BtnEditTargets: TButton;
     BtnStart: TButton;
+    BtnManage: TButton;
     BtnStop: TButton;
     BtnNewTargets: TButton;
     BtnLoadTargets: TButton;
-    BtnCopy: TButton;
-    BtnDelete: TButton;
     BtnPause: TButton;
     BtnStatus: TButton;
     led: TShape;
+    MenuCopy: TMenuItem;
+    MenuDelete: TMenuItem;
+    MenuEdit: TMenuItem;
     Panel5: TPanel;
     PanelPlan: TPanel;
+    PopupMenu1: TPopupMenu;
     Splitter1: TSplitter;
     StatusTimer: TTimer;
     StartTimer: TTimer;
@@ -67,9 +70,8 @@ type
     Title3: TPanel;
     TargetGrid: TStringGrid;
     PlanGrid: TStringGrid;
-    procedure BtnCopyClick(Sender: TObject);
-    procedure BtnDeleteClick(Sender: TObject);
     procedure BtnEditTargetsClick(Sender: TObject);
+    procedure BtnManageClick(Sender: TObject);
     procedure BtnPauseClick(Sender: TObject);
     procedure BtnResetClick(Sender: TObject);
     procedure BtnStartClick(Sender: TObject);
@@ -77,6 +79,9 @@ type
     procedure BtnStopClick(Sender: TObject);
     procedure BtnStatusClick(Sender: TObject);
     procedure FrameResize(Sender: TObject);
+    procedure MenuCopyClick(Sender: TObject);
+    procedure MenuDeleteClick(Sender: TObject);
+    procedure MenuEditClick(Sender: TObject);
     procedure PlanGridDrawCell(Sender: TObject; aCol, aRow: Integer;
       aRect: TRect; aState: TGridDrawState);
     procedure StartTimerTimer(Sender: TObject);
@@ -144,6 +149,7 @@ type
     function GetPercentComplete: double;
     function GetTargetPercentComplete: double;
     procedure ClearRestartHistory(Confirm:boolean);
+    function EditTargets(et:T_Targets; out fn,defaultname:string):boolean;
   public
     { public declarations }
     StepRepeatCount, StepTotalCount: integer;
@@ -255,8 +261,9 @@ begin
   BtnStart.Caption:=rsStart;
   BtnStop.Caption:=rsStop;
   Unattended.Caption:=rsRunUnattende;
-  BtnCopy.Caption:=rsCopy;
-  BtnDelete.Caption:=rsDelete;
+  MenuCopy.Caption:=rsCopyASequenc;
+  MenuDelete.Caption:=rsDeleteASeque;
+  MenuEdit.Caption:=rsEditASequenc;
   BtnReset.Caption:=rsReset;
   BtnPause.Caption:=rsPause;
   BtnLoadTargets.Hint:=rsLoadASequenc;
@@ -266,8 +273,6 @@ begin
   BtnStop.Hint:=rsStopTheSeque;
   BtnStatus.Caption:=rsStatus2;
   Unattended.Hint:=rsIfCheckedNoC;
-  BtnCopy.Hint:=rsCopyTheSeque;
-  BtnDelete.Hint:=rsDeleteTheSeq;
   BtnReset.Hint:=rsClearTheSequ;
   BtnPause.Hint:=rsPauseTheSequ;
   BtnStatus.Hint:=rsShowCompleti;
@@ -381,10 +386,21 @@ begin
   DelayMsg.Caption:=txt;
 end;
 
-procedure Tf_sequence.BtnCopyClick(Sender: TObject);
+procedure Tf_sequence.BtnManageClick(Sender: TObject);
+begin
+  PopupMenu1.PopUp(mouse.CursorPos.X,mouse.CursorPos.Y);
+end;
+
+procedure Tf_sequence.MenuCopyClick(Sender: TObject);
 var txt,fn1,fn2: string;
 begin
-  fn1:=SequenceFile.Filename;
+  txt:=FormEntry(self, 'Copy from', ExtractFileNameOnly(SequenceFile.Filename));
+  if txt='' then exit;
+  fn1:=slash(ConfigDir)+txt+'.targets';
+  if not FileExistsUTF8(fn1) then begin
+     ShowMessage(format(rsFileNotFound,[fn1]));
+     exit;
+  end;
   txt:=FormEntry(self, rsCopyTo, '');
   if txt='' then exit;
   fn2:=slash(ConfigDir)+txt+'.targets';
@@ -393,80 +409,128 @@ begin
        mrYes then
        exit;
   end;
-  if CopyFile(fn1,fn2,false) then begin
-    SequenceFile.Filename:=fn2;
-    SequenceFile.Items.SetValue('/ListName',txt);
-    SequenceFile.Save;
-    LoadTargets(fn2);
-    ClearRestartHistory(false);
+  try
+   CopyFile(fn1,fn2,false,true);
+  except
+   on E: Exception do ShowMessage('Copyfile error :'+ E.Message);
   end;
 end;
 
-procedure Tf_sequence.BtnDeleteClick(Sender: TObject);
+procedure Tf_sequence.MenuDeleteClick(Sender: TObject);
 var fn: string;
 begin
-   fn:=SequenceFile.Filename;
-   if MessageDlg(Format(rsDoYouWantToD, [fn]), mtConfirmation, mbYesNo, 0)=
-     mrYes then begin
-      SequenceFile.Clear;
-      DeleteFileUTF8(fn);
-      ClearTargetGrid;
-      ClearPlanGrid;
-      f_EditTargets.TargetList.RowCount:=1;
-      Targets.Clear;
+  OpenDialog1.InitialDir:=ConfigDir;
+  OpenDialog1.FileName:='*.targets';
+  if OpenDialog1.Execute then begin
+    fn:=OpenDialog1.FileName;
+    if Running and (fn=SequenceFile.Filename) then begin
+      ShowMessage('Cannot delete the running sequence!');
+      exit;
+    end;
+    if MessageDlg(Format(rsDoYouWantToD, [fn]), mtConfirmation, mbYesNo, 0)=mrYes then begin
+      if DeleteFileUTF8(fn) then begin
+        if fn=SequenceFile.Filename then begin
+          SequenceFile.Clear;
+          ClearTargetGrid;
+          ClearPlanGrid;
+          f_EditTargets.TargetList.RowCount:=1;
+          Targets.Clear;
+        end;
+      end
+      else ShowMessage('Failed to delete file: '+fn);
    end;
+  end;
 end;
 
-procedure Tf_sequence.BtnResetClick(Sender: TObject);
+procedure Tf_sequence.MenuEditClick(Sender: TObject);
+var fn,defname,savefn: string;
+    t: T_Targets;
 begin
-   ClearRestartHistory(true);
+  savefn:=SequenceFile.Filename;
+  OpenDialog1.InitialDir:=ConfigDir;
+  OpenDialog1.FileName:='*.targets';
+  if OpenDialog1.Execute then begin
+    fn:=OpenDialog1.FileName;
+    if (fn=SequenceFile.Filename) then begin
+      BtnEditTargetsClick(BtnEditTargets);
+    end
+    else begin
+      t:=T_Targets.Create(self);
+      try
+        t.LoadTargets(fn);
+        if EditTargets(t,fn,defname) then begin
+          t.SaveTargets(fn);
+        end;
+      finally
+        SequenceFile.Filename:=savefn;
+        t.Free;
+      end;
+    end;
+  end;
 end;
 
 procedure Tf_sequence.BtnEditTargetsClick(Sender: TObject);
+var fn,defaultname: string;
+begin
+  if Sender=BtnNewTargets then begin
+    Targets.Clear;
+    SequenceFile.Clear;
+    CurrentSeqName:='';
+  end;
+  if EditTargets(Targets,fn,defaultname) then begin
+    SaveTargets(fn,defaultname);
+    LoadTargets(SequenceFile.Filename);
+  end
+  else begin
+    // reset last saved
+    LoadTargets(SequenceFile.Filename);
+  end;
+  BtnReset.Enabled:=not Targets.IgnoreRestart;
+end;
+
+function Tf_sequence.EditTargets(et:T_Targets; out fn,defaultname:string):boolean;
 var i,n:integer;
     t:TTarget;
-    defaultname: string;
 begin
    f_EditTargets.ClearTargetList;
    f_EditTargets.LoadPlanList;
    f_EditTargets.LoadScriptList;
-   if (Sender=BtnEditTargets)and(Targets.Count>0) then begin
+   f_EditTargets.Filename:=SequenceFile.Filename;
+   if (et.Count>0) then begin
       // Edit
-      f_EditTargets.TargetName.Caption:=Targets.TargetName;
-      f_EditTargets.CheckBoxRestartStatus.Checked:=not Targets.IgnoreRestart;
-      f_EditTargets.CheckBoxResetRepeat.Checked:=Targets.ResetRepeat;
-      f_EditTargets.TargetsRepeat:=Targets.TargetsRepeat;
-      f_EditTargets.TargetsRepeatCount:=Targets.TargetsRepeatCount;
-      f_EditTargets.TargetList.RowCount:=Targets.Count+1;
-      f_EditTargets.SeqStart.Checked:=Targets.SeqStart;
-      f_EditTargets.SeqStop.Checked:=Targets.SeqStop;
-      f_EditTargets.SeqStartTwilight.Checked:=Targets.SeqStartTwilight;
-      f_EditTargets.SeqStopTwilight.Checked:=Targets.SeqStopTwilight;
-      f_EditTargets.SeqStartAt.Text:=TimeToStr(Targets.SeqStartAt);
-      f_EditTargets.SeqStopAt.Text:=TimeToStr(Targets.SeqStopAt);
-      f_EditTargets.ccNone.Checked:=not(Targets.AtStartCool or Targets.AtStartUnpark);
-      f_EditTargets.ccCool.Checked:=Targets.AtStartCool;
-      f_EditTargets.ccUnpark.Checked:=Targets.AtStartUnpark;
-      f_EditTargets.cbNone.Checked:=not(Targets.AtEndStopTracking or Targets.AtEndPark or Targets.AtEndCloseDome or Targets.AtEndWarmCamera or Targets.AtEndRunScript);
-      f_EditTargets.cbStopTracking.Checked:=Targets.AtEndStopTracking;
-      f_EditTargets.cbParkScope.Checked:=Targets.AtEndPark;
-      f_EditTargets.cbParkDome.Checked:=Targets.AtEndCloseDome;
-      f_EditTargets.cbWarm.Checked:=Targets.AtEndWarmCamera;
-      f_EditTargets.cbScript.Checked:=Targets.AtEndRunScript;
-      f_EditTargets.cbUnattended.Checked:=Targets.OnErrorRunScript;
-      f_EditTargets.BtnEndScript.Hint:=Targets.AtEndScript;
-      f_EditTargets.BtnUnattendedScript.Hint:=Targets.OnErrorScript;
-      for i:=1 to Targets.Count do begin
+      f_EditTargets.TargetName.Caption:=et.TargetName;
+      f_EditTargets.CheckBoxRestartStatus.Checked:=not et.IgnoreRestart;
+      f_EditTargets.CheckBoxResetRepeat.Checked:=et.ResetRepeat;
+      f_EditTargets.TargetsRepeat:=et.TargetsRepeat;
+      f_EditTargets.TargetsRepeatCount:=et.TargetsRepeatCount;
+      f_EditTargets.TargetList.RowCount:=et.Count+1;
+      f_EditTargets.SeqStart.Checked:=et.SeqStart;
+      f_EditTargets.SeqStop.Checked:=et.SeqStop;
+      f_EditTargets.SeqStartTwilight.Checked:=et.SeqStartTwilight;
+      f_EditTargets.SeqStopTwilight.Checked:=et.SeqStopTwilight;
+      f_EditTargets.SeqStartAt.Text:=TimeToStr(et.SeqStartAt);
+      f_EditTargets.SeqStopAt.Text:=TimeToStr(et.SeqStopAt);
+      f_EditTargets.ccNone.Checked:=not(et.AtStartCool or et.AtStartUnpark);
+      f_EditTargets.ccCool.Checked:=et.AtStartCool;
+      f_EditTargets.ccUnpark.Checked:=et.AtStartUnpark;
+      f_EditTargets.cbNone.Checked:=not(et.AtEndStopTracking or et.AtEndPark or et.AtEndCloseDome or et.AtEndWarmCamera or et.AtEndRunScript);
+      f_EditTargets.cbStopTracking.Checked:=et.AtEndStopTracking;
+      f_EditTargets.cbParkScope.Checked:=et.AtEndPark;
+      f_EditTargets.cbParkDome.Checked:=et.AtEndCloseDome;
+      f_EditTargets.cbWarm.Checked:=et.AtEndWarmCamera;
+      f_EditTargets.cbScript.Checked:=et.AtEndRunScript;
+      f_EditTargets.cbUnattended.Checked:=et.OnErrorRunScript;
+      f_EditTargets.BtnEndScript.Hint:=et.AtEndScript;
+      f_EditTargets.BtnUnattendedScript.Hint:=et.OnErrorScript;
+      for i:=1 to et.Count do begin
         t:=TTarget.Create;
-        t.Assign(Targets.Targets[i-1]);
+        t.Assign(et.Targets[i-1]);
         f_EditTargets.SetTarget(i,t);
         f_EditTargets.TargetList.Objects[colseq,i]:=t;
       end;
     end else begin
       // New
-      Targets.Clear;
-      SequenceFile.Clear;
-      CurrentSeqName:='';
+      et.Clear;
       f_EditTargets.TargetName.Caption:='New targets';
       f_EditTargets.CheckBoxRestartStatus.Checked:=true;
       f_EditTargets.CheckBoxResetRepeat.Checked:=true;
@@ -491,44 +555,40 @@ begin
       f_EditTargets.TargetList.RowCount:=1;
     end;
     FormPos(f_EditTargets,mouse.CursorPos.X,mouse.CursorPos.Y);
-    if f_EditTargets.ShowModal=mrOK then begin
+    Result := (f_EditTargets.ShowModal=mrOK);
+    if Result then begin
       n:=f_EditTargets.TargetList.RowCount;
-      Targets.Clear;
+      et.Clear;
+      fn:=f_EditTargets.Filename;
       defaultname:=FormatDateTime('mmdd',now);
       for i:=1 to n-1 do begin
         if (f_EditTargets.TargetList.Cells[1,i]<>ScriptTxt) and (f_EditTargets.TargetList.Cells[1,i]<>SkyFlatTxt) then
            defaultname:=f_EditTargets.TargetList.Cells[1,i];
         t:=TTarget.Create;
         t.Assign(TTarget(f_EditTargets.TargetList.Objects[0,i]));
-        Targets.Add(t);
+        et.Add(t);
       end;
-      Targets.IgnoreRestart    := not f_EditTargets.CheckBoxRestartStatus.Checked;
-      Targets.ResetRepeat      := f_EditTargets.CheckBoxResetRepeat.Checked;
-      Targets.TargetsRepeat    := f_EditTargets.TargetsRepeat;
-      Targets.TargetsRepeatCount:=f_EditTargets.TargetsRepeatCount;
-      Targets.SeqStart         := f_EditTargets.SeqStart.Checked;
-      Targets.SeqStop          := f_EditTargets.SeqStop.Checked;
-      Targets.SeqStartTwilight := f_EditTargets.SeqStartTwilight.Checked;
-      Targets.SeqStopTwilight  := f_EditTargets.SeqStopTwilight.Checked;
-      Targets.SeqStartAt       := StrToTimeDef(f_EditTargets.SeqStartAt.Text,Targets.SeqStartAt);
-      Targets.SeqStopAt        := StrToTimeDef(f_EditTargets.SeqStopAt.Text,Targets.SeqStopAt);
-      Targets.AtStartCool      := f_EditTargets.ccCool.Checked;
-      Targets.AtStartUnpark    := f_EditTargets.ccUnpark.Checked;
-      Targets.AtEndStopTracking := f_EditTargets.cbStopTracking.Checked;
-      Targets.AtEndPark         := f_EditTargets.cbParkScope.Checked;
-      Targets.AtEndCloseDome    := f_EditTargets.cbParkDome.Checked;
-      Targets.AtEndWarmCamera   := f_EditTargets.cbWarm.Checked;
-      Targets.AtEndRunScript    := f_EditTargets.cbScript.Checked;
-      Targets.OnErrorRunScript  := f_EditTargets.cbUnattended.Checked;
-      Targets.AtEndScript       := f_EditTargets.BtnEndScript.Hint;
-      Targets.OnErrorScript     := f_EditTargets.BtnUnattendedScript.Hint;
-      SaveTargets(SequenceFile.Filename,defaultname);
-      LoadTargets(SequenceFile.Filename);
-    end else begin
-      // reset last saved
-      LoadTargets(SequenceFile.Filename);
+      et.IgnoreRestart    := not f_EditTargets.CheckBoxRestartStatus.Checked;
+      et.ResetRepeat      := f_EditTargets.CheckBoxResetRepeat.Checked;
+      et.TargetsRepeat    := f_EditTargets.TargetsRepeat;
+      et.TargetsRepeatCount:=f_EditTargets.TargetsRepeatCount;
+      et.SeqStart         := f_EditTargets.SeqStart.Checked;
+      et.SeqStop          := f_EditTargets.SeqStop.Checked;
+      et.SeqStartTwilight := f_EditTargets.SeqStartTwilight.Checked;
+      et.SeqStopTwilight  := f_EditTargets.SeqStopTwilight.Checked;
+      et.SeqStartAt       := StrToTimeDef(f_EditTargets.SeqStartAt.Text,et.SeqStartAt);
+      et.SeqStopAt        := StrToTimeDef(f_EditTargets.SeqStopAt.Text,et.SeqStopAt);
+      et.AtStartCool      := f_EditTargets.ccCool.Checked;
+      et.AtStartUnpark    := f_EditTargets.ccUnpark.Checked;
+      et.AtEndStopTracking := f_EditTargets.cbStopTracking.Checked;
+      et.AtEndPark         := f_EditTargets.cbParkScope.Checked;
+      et.AtEndCloseDome    := f_EditTargets.cbParkDome.Checked;
+      et.AtEndWarmCamera   := f_EditTargets.cbWarm.Checked;
+      et.AtEndRunScript    := f_EditTargets.cbScript.Checked;
+      et.OnErrorRunScript  := f_EditTargets.cbUnattended.Checked;
+      et.AtEndScript       := f_EditTargets.BtnEndScript.Hint;
+      et.OnErrorScript     := f_EditTargets.BtnUnattendedScript.Hint;
     end;
-    BtnReset.Enabled:=not Targets.IgnoreRestart;
 end;
 
 procedure Tf_sequence.LoadTargets(fn: string);
@@ -547,6 +607,11 @@ begin
       msg(Format(rsThisSequence,['"'+CurrentSeqName+'"']), 2);
       msg(targets.LastDoneStep,2);
    end;
+end;
+
+procedure Tf_sequence.BtnResetClick(Sender: TObject);
+begin
+   ClearRestartHistory(true);
 end;
 
 procedure Tf_sequence.ClearRestartHistory(Confirm:boolean);
@@ -700,8 +765,6 @@ begin
   BtnLoadTargets.Enabled:=onoff;
   BtnNewTargets.Enabled:=onoff;
   BtnEditTargets.Enabled:=onoff;
-  BtnCopy.Enabled:=onoff;
-  BtnDelete.Enabled:=onoff;
 end;
 
 procedure Tf_sequence.StartTimerTimer(Sender: TObject);

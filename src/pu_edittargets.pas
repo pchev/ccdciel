@@ -27,7 +27,7 @@ interface
 
 uses pu_planetariuminfo, u_global, u_utils, u_ccdconfig, pu_pascaleditor, u_annotation, pu_keyboard,
   pu_scriptengine, cu_astrometry, u_hints, u_translation, pu_selectscript, Classes, math, cu_targets,
-  SysUtils, FileUtil, Forms, Controls, Graphics, Dialogs, StdCtrls, UScaleDPI, cu_sequencefile, cu_plan,
+  SysUtils, FileUtil, Forms, Controls, Graphics, Dialogs, StdCtrls, UScaleDPI, cu_plan,
   LazUTF8, maskedit, Grids, ExtCtrls, ComCtrls, EditBtn, Spin, Buttons, Types;
 
 const
@@ -249,6 +249,7 @@ type
     FDoneWarning: boolean;
     FCoordWarning: boolean;
     FCoordWarningRow: integer;
+    FFilename: string;
     procedure SetPlanList(n: integer; pl:string);
     procedure SetScriptList(n: integer; sl:string);
     procedure ResetSequences;
@@ -281,6 +282,7 @@ type
     property TargetsRepeat: integer read FTargetsRepeat write FTargetsRepeat;
     property TargetsRepeatCount: integer read FTargetsRepeatCount write FTargetsRepeatCount;
     property Astrometry: TAstrometry read FAstrometry write FAstrometry;
+    property Filename: string read FFilename write FFilename;
   end;
 
 var
@@ -1303,7 +1305,7 @@ begin
 SaveDialog1.InitialDir:=ConfigDir;
 SaveDialog1.DefaultExt:='.targets';
 SaveDialog1.filter:='CCDciel Sequence|*.targets';
-if SequenceFile.Filename='' then begin
+if FFilename='' then begin
   n:=TargetList.RowCount;
   defaultname:=FormatDateTime('mmdd',now);
   for i:=1 to n-1 do begin
@@ -1323,12 +1325,12 @@ else begin
     SaveDialog1.FileName:=slash(ConfigDir)+defaultname+'.targets';
   end
   else begin
-    SaveDialog1.FileName:=SequenceFile.Filename;
+    SaveDialog1.FileName:=FFilename;
   end;
 end;
 
 if SaveDialog1.Execute then begin
-  SequenceFile.Filename:=SaveDialog1.FileName;
+  FFilename:=SaveDialog1.FileName;
   ModalResult:=mrOK;
 end;
 end;
