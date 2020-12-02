@@ -1398,12 +1398,7 @@ function Tf_scriptengine.cmd_Capture_SetFrameType(typ:string):string;
 begin
 try
 result:=msgFailed;
-typ:=UpperCase(typ);
-if typ='LIGHT' then Capture.FrameType.ItemIndex:=ord(LIGHT)
-else if typ='BIAS' then Capture.FrameType.ItemIndex:=ord(BIAS)
-else if typ='DARK' then Capture.FrameType.ItemIndex:=ord(DARK)
-else if typ='FLAT' then Capture.FrameType.ItemIndex:=ord(FLAT)
-else exit;
+Capture.FrameType.ItemIndex:=ord(Str2Frametype(typ));
 result:=msgOK;
 except
   result:=msgFailed;

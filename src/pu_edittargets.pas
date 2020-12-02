@@ -267,7 +267,7 @@ type
     procedure SetTemplateButton;
    public
     { public declarations }
-    originalFilter: array[0..99] of string;
+    originalFilter: TSaveFilter;
     procedure SetLang;
     procedure LoadPlanList;
     procedure LoadScriptList;
@@ -2285,9 +2285,7 @@ begin
   str:=pfile.GetValue('/Steps/Step'+inttostr(i)+'/Description','');
   p.description:=str;
   str:=trim(pfile.GetValue('/Steps/Step'+inttostr(i)+'/FrameType','Light'));
-  j:=StepList.Columns[pcoltype-1].PickList.IndexOf(str);
-  if j<0 then j:=0;
-  p.frtype:=TFrameType(j);
+  p.frtype:=Str2Frametype(str);
   str:=pfile.GetValue('/Steps/Step'+inttostr(i)+'/Binning','1x1');
   j:=StepList.Columns[pcolbin-1].PickList.IndexOf(str);
   if j<0 then
@@ -2309,7 +2307,7 @@ begin
   gainmsg:=gainmsg or (str='');
   p.offset:=StrToIntDef(str,Offset);
   str:=pfile.GetValue('/Steps/Step'+inttostr(i)+'/Filter','');
-  originalFilter[i]:=str;
+  if i<SaveFilterNum then originalFilter[i]:=str;
   j:=StepList.Columns[pcolfilter-1].PickList.IndexOf(str);
   if j<0 then j:=0;
   p.filter:=j;
@@ -2794,7 +2792,8 @@ try
       if (k<0)or(k>StepList.Columns[pcolfilter-1].PickList.Count-1) then str:=''
          else str:=StepList.Columns[pcolfilter-1].PickList[k];
     end else begin
-      str:=originalFilter[i];
+      if i<SaveFilterNum then str:=originalFilter[i]
+      else str:='';
     end;
     pfile.SetValue('/Steps/Step'+inttostr(i)+'/Filter',str);
     pfile.SetValue('/Steps/Step'+inttostr(i)+'/Count',p.count);

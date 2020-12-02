@@ -144,7 +144,6 @@ type
     function GetPercentComplete: double;
     function GetTargetPercentComplete: double;
     procedure ClearRestartHistory(Confirm:boolean);
-    procedure CompatLoadPlan(p: T_Plan; plan,obj:string);
   public
     { public declarations }
     StepRepeatCount, StepTotalCount: integer;
@@ -533,191 +532,14 @@ begin
 end;
 
 procedure Tf_sequence.LoadTargets(fn: string);
-var t:TTarget;
-    p:T_Plan;
-    s: TStep;
-    x, str:string;
-    i,j,k,m,n: integer;
+var i: integer;
 begin
-   msg('',2);
-   SequenceFile.Filename:='';
-   SequenceFile.Clear;
-   SequenceFile.Filename:=fn;
-   CurrentSeqName:=SequenceFile.CurrentName;
-   Targets.Clear;
-   Targets.TargetName:=CurrentSeqName;
-   n:=SequenceFile.Items.GetValue('/TargetNum',0);
-   Targets.FileVersion      :=SequenceFile.Items.GetValue('/Version',1);
-   Targets.TargetsRepeat    :=SequenceFile.Items.GetValue('/RepeatCount',1);
-   Targets.IgnoreRestart    := SequenceFile.Items.GetValue('/Targets/IgnoreRestart',true);
-   if Targets.IgnoreRestart then
-      Targets.TargetsRepeatCount:=0
-   else
-      Targets.TargetsRepeatCount:=SequenceFile.Items.GetValue('/Targets/RepeatDone',0);
-   Targets.ResetRepeat      := SequenceFile.Items.GetValue('/Targets/ResetRepeat',true);
-   Targets.SeqStart         := SequenceFile.Items.GetValue('/Startup/SeqStart',false);
-   Targets.SeqStop          := SequenceFile.Items.GetValue('/Startup/SeqStop',false);
-   Targets.SeqStartTwilight := SequenceFile.Items.GetValue('/Startup/SeqStartTwilight',false);
-   Targets.SeqStopTwilight  := SequenceFile.Items.GetValue('/Startup/SeqStopTwilight',false);
-   Targets.SeqStartAt       := StrToTimeDef(SequenceFile.Items.GetValue('/Startup/SeqStartAt','00:00:00'),0);
-   Targets.SeqStopAt        := StrToTimeDef(SequenceFile.Items.GetValue('/Startup/SeqStopAt','00:00:00'),0);
-   Targets.AtStartCool      := SequenceFile.Items.GetValue('/Startup/CoolCamera',false);
-   Targets.AtStartUnpark    := SequenceFile.Items.GetValue('/Startup/Unpark',false);
-   Targets.AtEndStopTracking:= SequenceFile.Items.GetValue('/Termination/StopTracking',true);
-   Targets.AtEndPark        := SequenceFile.Items.GetValue('/Termination/Park',false);
-   Targets.AtEndCloseDome   := SequenceFile.Items.GetValue('/Termination/CloseDome',false);
-   Targets.AtEndWarmCamera  := SequenceFile.Items.GetValue('/Termination/WarmCamera',false);
-   Targets.AtEndRunScript   := SequenceFile.Items.GetValue('/Termination/RunScript',false);
-   Targets.OnErrorRunScript := SequenceFile.Items.GetValue('/Termination/ErrorRunScript',false);
-   Targets.AtEndScript      := SequenceFile.Items.GetValue('/Termination/EndScript','');
-   Targets.OnErrorScript    := SequenceFile.Items.GetValue('/Termination/ErrorScript','');
-   if Targets.FileVersion<3 then begin
-     // compatibility with previous version
-     if FileExistsUTF8(slash(ScriptDir[1].path)+'end_sequence.script') then begin
-        Targets.AtEndStopTracking:=false;
-        Targets.AtEndRunScript:=true;
-        Targets.AtEndScript:='end_sequence';
-     end;
-   end;
-   if n>0 then begin
-     for i:=1 to n do begin
-       t:=TTarget.Create;
-       t.objectname:=trim(SequenceFile.Items.GetValue('/Targets/Target'+inttostr(i)+'/ObjectName',''));
-       t.planname:=SequenceFile.Items.GetValue('/Targets/Target'+inttostr(i)+'/Plan','');
-       t.path:=SequenceFile.Items.GetValue('/Targets/Target'+inttostr(i)+'/Path','');
-       if Targets.FileVersion>=2 then begin
-         t.starttime:=StrToTimeDef(SequenceFile.Items.GetValue('/Targets/Target'+inttostr(i)+'/StartTime',''),-1);
-         t.endtime:=StrToTimeDef(SequenceFile.Items.GetValue('/Targets/Target'+inttostr(i)+'/EndTime',''),-1);
-       end else begin
-         t.starttime:=-1;
-         t.endtime:=-1;
-       end;
-       t.startrise:=SequenceFile.Items.GetValue('/Targets/Target'+inttostr(i)+'/StartRise',false);
-       t.endset:=SequenceFile.Items.GetValue('/Targets/Target'+inttostr(i)+'/EndSet',false);
-       t.startmeridian:=SequenceFile.Items.GetValue('/Targets/Target'+inttostr(i)+'/StartMeridian',NullCoord);
-       t.endmeridian:=SequenceFile.Items.GetValue('/Targets/Target'+inttostr(i)+'/EndMeridian',NullCoord);
-       t.darknight:=SequenceFile.Items.GetValue('/Targets/Target'+inttostr(i)+'/DarkNight',false);
-       t.skip:=SequenceFile.Items.GetValue('/Targets/Target'+inttostr(i)+'/Skip',false);
-       x:=SequenceFile.Items.GetValue('/Targets/Target'+inttostr(i)+'/RA','');
-       if x='-' then
-         t.ra:=NullCoord
-       else
-         t.ra:=StrToAR(x);
-       x:=SequenceFile.Items.GetValue('/Targets/Target'+inttostr(i)+'/Dec','');
-       if x='-' then
-         t.de:=NullCoord
-       else
-         t.de:=StrToDE(x);
-       // default to rise/set if nothing indicated but valid coordinates
-       if (t.ra<>NullCoord)and(t.de<>NullCoord) then begin
-          if (t.starttime=-1)and(t.startrise=false)and(t.startmeridian=NullCoord) then
-            t.startrise:=true;
-          if (t.endtime=-1)and(t.endset=false)and(t.endmeridian=NullCoord) then
-            t.endset:=true;
-       end;
-       if (Targets.FileVersion<4)and(t.ra<>NullCoord)and(t.de<>NullCoord) then begin
-         // previous version, up to 3, store apparent coordinates
-         t.ra:=t.ra*15*deg2rad;
-         t.de:=t.de*deg2rad;
-         ApparentToJ2000(t.ra,t.de);
-         t.ra:=rad2deg*t.ra/15;
-         t.de:=rad2deg*t.de;
-       end;
-       x:=SequenceFile.Items.GetValue('/Targets/Target'+inttostr(i)+'/PA','-');
-       if x='-' then
-         t.pa:=NullCoord
-       else
-         t.pa:=StrToFloatDef(x,NullCoord);
-       t.astrometrypointing:=SequenceFile.Items.GetValue('/Targets/Target'+inttostr(i)+'/AstrometryPointing',false);
-       t.updatecoord:=SequenceFile.Items.GetValue('/Targets/Target'+inttostr(i)+'/UpdateCoord',false);
-       t.inplaceautofocus:=SequenceFile.Items.GetValue('/Targets/Target'+inttostr(i)+'/InplaceAutofocus',AutofocusInPlace);
-       t.previewexposure:=SequenceFile.Items.GetValue('/Targets/Target'+inttostr(i)+'/PreviewExposure',1.0);
-       t.preview:=SequenceFile.Items.GetValue('/Targets/Target'+inttostr(i)+'/Preview',false);
-       t.repeatcount:=trunc(SequenceFile.Items.GetValue('/Targets/Target'+inttostr(i)+'/RepeatCount',1));
-       if Targets.IgnoreRestart then
-          t.repeatdone:=0
-       else
-          t.repeatdone:=trunc(SequenceFile.Items.GetValue('/Targets/Target'+inttostr(i)+'/RepeatDone',0));
-       t.delay:=SequenceFile.Items.GetValue('/Targets/Target'+inttostr(i)+'/Delay',1.0);
-       t.FlatCount:=trunc(SequenceFile.Items.GetValue('/Targets/Target'+inttostr(i)+'/FlatCount',1));
-       t.FlatBinX:=trunc(SequenceFile.Items.GetValue('/Targets/Target'+inttostr(i)+'/FlatBinX',1));
-       t.FlatBinY:=trunc(SequenceFile.Items.GetValue('/Targets/Target'+inttostr(i)+'/FlatBinY',1));
-       t.FlatGain:=trunc(SequenceFile.Items.GetValue('/Targets/Target'+inttostr(i)+'/FlatGain',0));
-       t.FlatOffset:=trunc(SequenceFile.Items.GetValue('/Targets/Target'+inttostr(i)+'/FlatOffset',0));
-       t.FlatFstop:=SequenceFile.Items.GetValue('/Targets/Target'+inttostr(i)+'/FlatFstop','');
-       t.FlatFilters:=SequenceFile.Items.GetValue('/Targets/Target'+inttostr(i)+'/FlatFilters','');
-       if Targets.FileVersion>=5 then begin
-          Targets.Add(t);
-          p:=T_Plan(t.plan);
-          p.ObjectName:=t.objectname;
-          p.PlanName:=SequenceFile.Items.GetValue('/Targets/Target'+inttostr(i)+'/Plan/Name',t.planname);
-          m:=trunc(SequenceFile.Items.GetValue('/Targets/Target'+inttostr(i)+'/Plan/StepNum',0));
-          for j:=0 to m-1 do begin
-            s:=TStep.Create;
-            s.description:=SequenceFile.Items.GetValue('/Targets/Target'+inttostr(i)+'/Plan/Steps/Step'+inttostr(j)+'/Description','');
-            str:=UpperCase(trim(SequenceFile.Items.GetValue('/Targets/Target'+inttostr(i)+'/Plan/Steps/Step'+inttostr(j)+'/FrameType','Light')));
-            if str='LIGHT' then s.frtype:=LIGHT
-            else if str='BIAS' then s.frtype:=BIAS
-            else if str='DARK' then s.frtype:=DARK
-            else if str='FLAT' then s.frtype:=FLAT
-            else s.frtype:=LIGHT;
-            s.exposure:=SequenceFile.Items.GetValue('/Targets/Target'+inttostr(i)+'/Plan/Steps/Step'+inttostr(j)+'/Exposure',1.0);
-            str:=SequenceFile.Items.GetValue('/Targets/Target'+inttostr(i)+'/Plan/Steps/Step'+inttostr(j)+'/Binning','1x1');
-            k:=f_EditTargets.StepList.Columns[pcolbin-1].PickList.IndexOf(str);
-            if k<0 then
-              f_EditTargets.StepList.Columns[pcolbin-1].PickList.Add(str);
-            k:=pos('x',str);
-            if k>0 then begin
-               str:=trim(copy(str,1,k-1));
-               s.binx:=StrToIntDef(str,1);
-               str:=trim(copy(str,k+1,9));
-               s.biny:=StrToIntDef(str,1);
-            end else begin
-              s.binx:=1;
-              s.biny:=1;
-            end;
-            str:=SequenceFile.Items.GetValue('/Targets/Target'+inttostr(i)+'/Plan/Steps/Step'+inttostr(j)+'/Gain','');
-            s.gain:=StrToIntDef(str,Gain);
-            str:=SequenceFile.Items.GetValue('/Targets/Target'+inttostr(i)+'/Plan/Steps/Step'+inttostr(j)+'/Offset','');
-            s.offset:=StrToIntDef(str,Offset);
-            s.fstop:=SequenceFile.Items.GetValue('/Targets/Target'+inttostr(i)+'/Plan/Steps/Step'+inttostr(j)+'/Fstop','');
-            str:=SequenceFile.Items.GetValue('/Targets/Target'+inttostr(i)+'/Plan/Steps/Step'+inttostr(j)+'/Filter','');
-            f_EditTargets.originalFilter[i]:=str;
-            k:=f_EditTargets.StepList.Columns[pcolfilter-1].PickList.IndexOf(str);
-            if k<0 then k:=0;
-            s.filter:=k;
-            s.count:=trunc(SequenceFile.Items.GetValue('/Targets/Target'+inttostr(i)+'/Plan/Steps/Step'+inttostr(j)+'/Count',1));
-            s.dither:=SequenceFile.Items.GetValue('/Targets/Target'+inttostr(i)+'/Plan/Steps/Step'+inttostr(j)+'/Dither',false);
-            s.dithercount:=trunc(SequenceFile.Items.GetValue('/Targets/Target'+inttostr(i)+'/Plan/Steps/Step'+inttostr(j)+'/DitherCount',1));
-            s.autofocusstart:=SequenceFile.Items.GetValue('/Targets/Target'+inttostr(i)+'/Plan/Steps/Step'+inttostr(j)+'/AutofocusStart',false);
-            s.autofocus:=SequenceFile.Items.GetValue('/Targets/Target'+inttostr(i)+'/Plan/Steps/Step'+inttostr(j)+'/Autofocus',false);
-            s.autofocuscount:=trunc(SequenceFile.Items.GetValue('/Targets/Target'+inttostr(i)+'/Plan/Steps/Step'+inttostr(j)+'/AutofocusCount',10));
-            s.donecount:=trunc(SequenceFile.Items.GetValue('/Targets/Target'+inttostr(i)+'/Plan/Steps/Step'+inttostr(j)+'/Done',0));
-            p.Add(s);
-          end;
-          if TemplateModified(p) then begin
-            if  pos('*',p.PlanName)<=0 then begin
-              p.PlanName:=p.PlanName+'*';
-              t.planname:=p.PlanName;
-              TargetsChange(nil);
-            end;
-          end
-          else begin
-            if pos('*',p.PlanName)>0 then begin
-              p.PlanName:=StringReplace(p.PlanName,'*','',[]);
-              t.planname:=p.PlanName;
-              TargetsChange(nil);
-            end;
-          end
-         end
-         else begin
-           // compatibility with old sequence format
-           m:=trunc(SequenceFile.Items.GetValue('/Targets/Target'+inttostr(i)+'/StepDone/StepCount',0));
-           Targets.Add(t);
-           CompatLoadPlan(T_Plan(t.plan), t.planname, t.objectname);
-         end;
-     end;
-   end;
+   Targets.LoadTargets(fn);
+   f_EditTargets.StepList.Columns[pcolbin-1].PickList.Assign(Targets.BinList);
+   f_EditTargets.StepList.Columns[pcolfilter-1].PickList.Assign(Targets.FilList);
+   for i:=0 to SaveFilterNum do
+     f_EditTargets.originalFilter[i]:=Targets.OriginalFilter[i];
+   TargetsChange(nil);
    TargetGrid.Row:=1;
    TargetGridSelection(TargetGrid,0,1);
    BtnReset.Enabled:=not Targets.IgnoreRestart;
@@ -739,42 +561,6 @@ begin
         LoadTargets(SequenceFile.Filename);
      end;
    end;
-end;
-
-procedure Tf_sequence.CompatLoadPlan(p: T_plan; plan,obj:string);
-var fn,buf1,buf2,msgstr: string;
-    i,n:integer;
-    pfile: TCCDconfig;
-    s: TStep;
-begin
-  fn:=slash(ConfigDir)+plan+'.plan';
-  if FileExistsUTF8(fn) then begin
-     p.Clear;
-     p.PlanName:=plan;
-     pfile:=TCCDconfig.Create(self);
-     pfile.Filename:=fn;
-     n:=pfile.GetValue('/StepNum',0);
-     if camera.CanSetGain then begin
-       msgstr:='';
-       for i:=0 to n do begin
-          buf1:=pfile.GetValue('/Steps/Step'+inttostr(i)+'/Gain','');
-          buf2:=pfile.GetValue('/Steps/Step'+inttostr(i)+'/Offset','');
-          if (buf1='')or(buf2='') then
-            msgstr:=rsPlan+blank+plan+': '+rsPleaseBeCare;
-       end;
-       if msgstr<>'' then
-          msg(msgstr,1);
-     end;
-     msgstr:='';
-     for i:=1 to n do begin
-       s:=TStep.Create;
-       f_EditTargets.ReadStep(pfile,i,s,msgstr);
-       s.donecount:=0;
-       p.Add(s);
-     end;
-     msgstr:=msgstr+blank+obj+' '+plan+' warning! the completion status is cleared.';
-     msg(msgstr,1);
-  end;
 end;
 
 procedure Tf_sequence.TargetsChange(Sender: TObject);
@@ -833,9 +619,6 @@ begin
 end;
 
 procedure Tf_sequence.SaveTargets(fn,defaultname:string);
-var t:TTarget;
-    p:T_Plan;
-    i,j: integer;
 begin
  if TargetGrid.RowCount>1 then begin
     if fn='' then begin
@@ -846,104 +629,7 @@ begin
       end
       else exit;
     end;
-    SequenceFile.Clear;
-    SequenceFile.Filename:=fn;
-    CurrentSeqName:=SequenceFile.CurrentName;
-    Targets.TargetName:=CurrentSeqName;
-    SequenceFile.Items.SetValue('/Version',TargetFileVersion);
-    SequenceFile.Items.SetValue('/ListName',CurrentSeqName);
-    SequenceFile.Items.SetValue('/TargetNum',Targets.Count);
-    SequenceFile.Items.SetValue('/RepeatCount',Targets.TargetsRepeat);
-    SequenceFile.Items.SetValue('/Targets/IgnoreRestart',Targets.IgnoreRestart);
-    if Targets.IgnoreRestart then
-       SequenceFile.Items.SetValue('/Targets/RepeatDone',0)
-    else
-       SequenceFile.Items.SetValue('/Targets/RepeatDone',Targets.TargetsRepeatCount);
-    SequenceFile.Items.SetValue('/Targets/ResetRepeat',Targets.ResetRepeat);
-    SequenceFile.Items.SetValue('/Startup/SeqStart',Targets.SeqStart);
-    SequenceFile.Items.SetValue('/Startup/SeqStop',Targets.SeqStop);
-    SequenceFile.Items.SetValue('/Startup/SeqStartTwilight',Targets.SeqStartTwilight);
-    SequenceFile.Items.SetValue('/Startup/SeqStopTwilight',Targets.SeqStopTwilight);
-    SequenceFile.Items.SetValue('/Startup/SeqStartAt',TimeToStr(Targets.SeqStartAt));
-    SequenceFile.Items.SetValue('/Startup/SeqStopAt',TimeToStr(Targets.SeqStopAt));
-    SequenceFile.Items.SetValue('/Startup/CoolCamera',Targets.AtStartCool);
-    SequenceFile.Items.SetValue('/Startup/Unpark',Targets.AtStartUnpark);
-    SequenceFile.Items.SetValue('/Termination/StopTracking',Targets.AtEndStopTracking);
-    SequenceFile.Items.SetValue('/Termination/Park',Targets.AtEndPark);
-    SequenceFile.Items.SetValue('/Termination/CloseDome',Targets.AtEndCloseDome);
-    SequenceFile.Items.SetValue('/Termination/WarmCamera',Targets.AtEndWarmCamera);
-    SequenceFile.Items.SetValue('/Termination/RunScript',Targets.AtEndRunScript);
-    SequenceFile.Items.SetValue('/Termination/ErrorRunScript',Targets.OnErrorRunScript);
-    SequenceFile.Items.SetValue('/Termination/EndScript',Targets.AtEndScript);
-    SequenceFile.Items.SetValue('/Termination/ErrorScript',Targets.OnErrorScript);
-    for i:=1 to Targets.Count do begin
-      t:=Targets.Targets[i-1];
-      SequenceFile.Items.SetValue('/Targets/Target'+inttostr(i)+'/ObjectName',t.objectname);
-      SequenceFile.Items.SetValue('/Targets/Target'+inttostr(i)+'/Plan',t.planname);
-      SequenceFile.Items.SetValue('/Targets/Target'+inttostr(i)+'/Path',t.path);
-      if t.starttime>=0 then
-        SequenceFile.Items.SetValue('/Targets/Target'+inttostr(i)+'/StartTime',TimetoStr(t.starttime))
-      else
-        SequenceFile.Items.SetValue('/Targets/Target'+inttostr(i)+'/StartTime','');
-      if t.endtime>=0 then
-        SequenceFile.Items.SetValue('/Targets/Target'+inttostr(i)+'/EndTime',TimetoStr(t.endtime))
-      else
-        SequenceFile.Items.SetValue('/Targets/Target'+inttostr(i)+'/EndTime','');
-      SequenceFile.Items.SetValue('/Targets/Target'+inttostr(i)+'/StartRise',t.startrise);
-      SequenceFile.Items.SetValue('/Targets/Target'+inttostr(i)+'/EndSet',t.endset);
-      SequenceFile.Items.SetValue('/Targets/Target'+inttostr(i)+'/StartMeridian',t.startmeridian);
-      SequenceFile.Items.SetValue('/Targets/Target'+inttostr(i)+'/EndMeridian',t.endmeridian);
-      SequenceFile.Items.SetValue('/Targets/Target'+inttostr(i)+'/DarkNight',t.darknight);
-      SequenceFile.Items.SetValue('/Targets/Target'+inttostr(i)+'/Skip',t.skip);
-      SequenceFile.Items.SetValue('/Targets/Target'+inttostr(i)+'/RA',RAToStr(t.ra));
-      SequenceFile.Items.SetValue('/Targets/Target'+inttostr(i)+'/Dec',DEToStr(t.de));
-      if t.pa=NullCoord then
-        SequenceFile.Items.SetValue('/Targets/Target'+inttostr(i)+'/PA','-')
-      else
-        SequenceFile.Items.SetValue('/Targets/Target'+inttostr(i)+'/PA',FormatFloat(f1,t.pa));
-      SequenceFile.Items.SetValue('/Targets/Target'+inttostr(i)+'/AstrometryPointing',t.astrometrypointing);
-      SequenceFile.Items.SetValue('/Targets/Target'+inttostr(i)+'/UpdateCoord',t.updatecoord);
-      SequenceFile.Items.SetValue('/Targets/Target'+inttostr(i)+'/InplaceAutofocus',t.inplaceautofocus);
-      SequenceFile.Items.SetValue('/Targets/Target'+inttostr(i)+'/PreviewExposure',t.previewexposure);
-      SequenceFile.Items.SetValue('/Targets/Target'+inttostr(i)+'/Preview',t.preview);
-      SequenceFile.Items.SetValue('/Targets/Target'+inttostr(i)+'/RepeatCount',t.repeatcount);
-      if Targets.IgnoreRestart then
-        SequenceFile.Items.SetValue('/Targets/Target'+inttostr(i)+'/RepeatDone',0)
-      else
-        SequenceFile.Items.SetValue('/Targets/Target'+inttostr(i)+'/RepeatDone',t.repeatdone);
-      SequenceFile.Items.SetValue('/Targets/Target'+inttostr(i)+'/Delay',t.delay);
-      SequenceFile.Items.SetValue('/Targets/Target'+inttostr(i)+'/FlatCount',t.FlatCount);
-      SequenceFile.Items.SetValue('/Targets/Target'+inttostr(i)+'/FlatBinX',t.FlatBinX);
-      SequenceFile.Items.SetValue('/Targets/Target'+inttostr(i)+'/FlatBinY',t.FlatBinY);
-      SequenceFile.Items.SetValue('/Targets/Target'+inttostr(i)+'/FlatGain',t.FlatGain);
-      SequenceFile.Items.SetValue('/Targets/Target'+inttostr(i)+'/FlatOffset',t.FlatOffset);
-      SequenceFile.Items.SetValue('/Targets/Target'+inttostr(i)+'/FlatFstop',t.FlatFstop);
-      SequenceFile.Items.SetValue('/Targets/Target'+inttostr(i)+'/FlatFilters',t.FlatFilters);
-      if (t.objectname<>ScriptTxt) then begin
-        if (t.objectname=SkyFlatTxt) then Targets.CreateSkyFlatPlan(t);
-        p:=T_Plan(t.plan);
-        SequenceFile.Items.SetValue('/Targets/Target'+inttostr(i)+'/Plan/Name',p.PlanName);
-        SequenceFile.Items.SetValue('/Targets/Target'+inttostr(i)+'/Plan/StepNum',p.Count);
-        for j:=0 to p.Count-1 do begin
-          SequenceFile.Items.SetValue('/Targets/Target'+inttostr(i)+'/Plan/Steps/Step'+inttostr(j)+'/Description',p.Steps[j].description);
-          SequenceFile.Items.SetValue('/Targets/Target'+inttostr(i)+'/Plan/Steps/Step'+inttostr(j)+'/FrameType',trim(FrameName[ord(p.Steps[j].frtype)]));
-          SequenceFile.Items.SetValue('/Targets/Target'+inttostr(i)+'/Plan/Steps/Step'+inttostr(j)+'/Exposure',p.Steps[j].exposure);
-          SequenceFile.Items.SetValue('/Targets/Target'+inttostr(i)+'/Plan/Steps/Step'+inttostr(j)+'/Binning',IntToStr(p.Steps[j].binx)+'x'+IntToStr(p.Steps[j].biny));
-          SequenceFile.Items.SetValue('/Targets/Target'+inttostr(i)+'/Plan/Steps/Step'+inttostr(j)+'/Gain',p.Steps[j].gain);
-          SequenceFile.Items.SetValue('/Targets/Target'+inttostr(i)+'/Plan/Steps/Step'+inttostr(j)+'/Offset',p.Steps[j].offset);
-          SequenceFile.Items.SetValue('/Targets/Target'+inttostr(i)+'/Plan/Steps/Step'+inttostr(j)+'/Fstop',p.Steps[j].fstop);
-          SequenceFile.Items.SetValue('/Targets/Target'+inttostr(i)+'/Plan/Steps/Step'+inttostr(j)+'/Filter',p.Steps[j].filter_str);
-          SequenceFile.Items.SetValue('/Targets/Target'+inttostr(i)+'/Plan/Steps/Step'+inttostr(j)+'/Count',p.Steps[j].count);
-          SequenceFile.Items.SetValue('/Targets/Target'+inttostr(i)+'/Plan/Steps/Step'+inttostr(j)+'/Dither',p.Steps[j].dither);
-          SequenceFile.Items.SetValue('/Targets/Target'+inttostr(i)+'/Plan/Steps/Step'+inttostr(j)+'/DitherCount',p.Steps[j].dithercount);
-          SequenceFile.Items.SetValue('/Targets/Target'+inttostr(i)+'/Plan/Steps/Step'+inttostr(j)+'/AutofocusStart',p.Steps[j].autofocusstart);
-          SequenceFile.Items.SetValue('/Targets/Target'+inttostr(i)+'/Plan/Steps/Step'+inttostr(j)+'/Autofocus',p.Steps[j].autofocus);
-          SequenceFile.Items.SetValue('/Targets/Target'+inttostr(i)+'/Plan/Steps/Step'+inttostr(j)+'/AutofocusCount',p.Steps[j].autofocuscount);
-          SequenceFile.Items.SetValue('/Targets/Target'+inttostr(i)+'/Plan/Steps/Step'+inttostr(j)+'/Done',p.Steps[j].donecount)
-        end;
-      end;
-    end;
-    SequenceFile.Save;
+    Targets.SaveTargets(fn);
  end;
 end;
 

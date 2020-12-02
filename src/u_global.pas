@@ -33,6 +33,7 @@ const
   DomeOpenActionNum=5;
   DomeCloseActionNum=5;
   BPMMax=30000;
+  SaveFilterNum = 999;
 
 type
   TNotifyMsg = procedure(msg:string; level: integer=1) of object;
@@ -66,6 +67,8 @@ type
   rotmatrix = array[1..3, 1..3] of double;
 
   TBpm=array[1..BPMMax]of array[1..2] of integer;
+
+  TSaveFilter = array[0..SaveFilterNum] of string;
 
   TDouble2 = array[1..2] of double;
   TArrayDouble2 = array of TDouble2;
@@ -450,6 +453,7 @@ var
   colorGreen, colorBlue, colorRed: Tcolor;
 
   procedure globalmsg(str:string);
+  function Str2Frametype(str:string):TFrameType;
 
 implementation
 
@@ -462,6 +466,16 @@ end;
 procedure globalmsg(str:string);
 begin
   if Assigned(onMsgGlobal) then onMsgGlobal(str);
+end;
+
+function Str2Frametype(str:string):TFrameType;
+begin
+  str:=UpperCase(trim(str));
+  if str='LIGHT' then result:=LIGHT
+  else if str='BIAS' then result:=BIAS
+  else if str='DARK' then result:=DARK
+  else if str='FLAT' then result:=FLAT
+  else result:=LIGHT;
 end;
 
 ////////////////////  TStep  /////////////////////////////
