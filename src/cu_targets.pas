@@ -148,6 +148,7 @@ type
       procedure LoadTargets(fn: string);
       procedure SaveTargets(fn:string);
       function Add(t: TTarget):integer;
+      procedure UpdateLive(upd:T_Targets);
       procedure Start;
       procedure Stop;
       procedure Abort;
@@ -397,6 +398,11 @@ begin
   Ftargets[NumTargets-1]:=t;
   if Assigned(FTargetsChange) then FTargetsChange(self);
   result:=NumTargets-1;
+end;
+
+procedure T_Targets.UpdateLive(upd:T_Targets);
+begin
+   { TODO :  }
 end;
 
 procedure T_Targets.LoadTargets(fn: string);

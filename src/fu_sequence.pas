@@ -141,7 +141,6 @@ type
     procedure ShowDelayMsg(txt:string);
     procedure StopSequence;
     procedure EndSequence(Sender: TObject);
-    procedure SetEditBtn(onoff:boolean);
     function GetEndShutdown: boolean;
     procedure SetEndShutdown(value:boolean);
     function GetOnShutdown: TNotifyEvent;
@@ -405,6 +404,10 @@ begin
   txt:=FormEntry(self, rsCopyTo, '');
   if txt='' then exit;
   fn2:=slash(ConfigDir)+txt+'.targets';
+  if Running and (fn2=Targets.SequenceFile.Filename) then begin
+    ShowMessage('Cannot overwrite the running sequence!');
+    exit;
+  end;
   if FileExistsUTF8(fn2) then begin
      if MessageDlg(Format(rsSequenceAlre, [fn2]), mtConfirmation, mbYesNo, 0)<>
        mrYes then
@@ -412,6 +415,9 @@ begin
   end;
   try
    CopyFile(fn1,fn2,false,true);
+   if (fn2=Targets.SequenceFile.Filename) then begin
+     LoadTargets(fn2);
+   end;
   except
    on E: Exception do ShowMessage('Copyfile error :'+ E.Message);
   end;
@@ -472,19 +478,31 @@ end;
 
 procedure Tf_sequence.BtnEditTargetsClick(Sender: TObject);
 var fn,defaultname: string;
+    tt: T_Targets;
 begin
   if Sender=BtnNewTargets then begin
+    if Running then begin
+      ShowMessage('A sequence is already running, cannot load a new one.');
+      exit;
+    end;
     Targets.Clear;
     Targets.SequenceFile.Clear;
     CurrentSeqName:='';
   end;
-  if EditTargets(Targets,fn,defaultname) then begin
-    SaveTargets(fn,defaultname);
-    LoadTargets(Targets.SequenceFile.Filename);
+  if Running then begin
+    tt:=T_Targets.Create(self);
   end
   else begin
-    // reset last saved
-    LoadTargets(Targets.SequenceFile.Filename);
+    tt:=Targets;
+  end;
+  if EditTargets(tt,fn,defaultname) then begin
+    if Running then begin
+      Targets.UpdateLive(tt);
+    end
+    else begin
+      SaveTargets(fn,defaultname);
+      LoadTargets(Targets.SequenceFile.Filename);
+    end;
   end;
   BtnReset.Enabled:=not Targets.IgnoreRestart;
 end;
@@ -612,6 +630,10 @@ end;
 
 procedure Tf_sequence.BtnResetClick(Sender: TObject);
 begin
+   if Running then begin
+     ShowMessage('Please stop the sequence first!');
+     exit;
+   end;
    ClearRestartHistory(true);
 end;
 
@@ -677,6 +699,10 @@ end;
 
 procedure Tf_sequence.BtnLoadTargetsClick(Sender: TObject);
 begin
+ if Running then begin
+   ShowMessage('A sequence is already running, cannot load a new one.');
+   exit;
+ end;
  OpenDialog1.InitialDir:=ConfigDir;
  OpenDialog1.FileName:='*.targets';
  if OpenDialog1.Execute then begin
@@ -759,13 +785,6 @@ begin
     result:=T_Plan(Targets.Targets[Targets.CurrentTarget].plan)
   else
     result:=nil;
-end;
-
-procedure Tf_sequence.SetEditBtn(onoff:boolean);
-begin
-  BtnLoadTargets.Enabled:=onoff;
-  BtnNewTargets.Enabled:=onoff;
-  BtnEditTargets.Enabled:=onoff;
 end;
 
 procedure Tf_sequence.StartTimerTimer(Sender: TObject);
@@ -857,7 +876,6 @@ begin
  MountTrackingAlert:=false;
  Preview.StackPreview.Checked:=false;
  led.Brush.Color:=clLime;
- SetEditBtn(false);
  StatusTimer.Enabled:=true;
  Targets.Unattended:=Unattended.Checked;
  Targets.Start;
@@ -875,7 +893,6 @@ begin
  StartingSequence:=false;
  if targets.TargetInitializing or targets.WaitStarting or targets.ScriptRunning then begin
    led.Brush.Color:=clRed;
-   SetEditBtn(true);
  end;
  if Targets.Running then Targets.Stop;
  TargetRow:=-1;
@@ -901,7 +918,6 @@ begin
  TargetRow:=-1;
  PlanRow:=-1;
  led.Brush.Color:=clRed;
- SetEditBtn(true);
  if Unattended.Checked then mount.AbortMotion;
 end;
 
@@ -910,7 +926,6 @@ begin
  FlatWaitDusk:=false;
  FlatWaitDawn:=false;
  led.Brush.Color:=clRed;
- SetEditBtn(true);
  PlanGrid.Invalidate;
  TargetGrid.Invalidate;
 end;
