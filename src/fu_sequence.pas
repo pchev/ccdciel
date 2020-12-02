@@ -26,7 +26,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 interface
 
 uses
-  pu_edittargets, u_ccdconfig, u_global, u_utils, UScaleDPI, indiapi, cu_sequencefile, u_speech,
+  pu_edittargets, u_ccdconfig, u_global, u_utils, UScaleDPI, u_speech,
   fu_capture, fu_preview, fu_filterwheel, u_translation, u_hints, math,
   cu_mount, cu_camera, cu_autoguider, cu_astrometry, cu_rotator, pu_viewtext,
   cu_targets, cu_plan, cu_planetarium, pu_pause, fu_safety, fu_weather, cu_dome,
@@ -478,7 +478,8 @@ end;
 
 procedure Tf_sequence.BtnEditTargetsClick(Sender: TObject);
 var fn,defaultname: string;
-    tt: T_Targets;
+    temptarget: T_Targets;
+    ProcessLive:boolean;
 begin
   if Sender=BtnNewTargets then begin
     if Running then begin
@@ -489,15 +490,18 @@ begin
     Targets.SequenceFile.Clear;
     CurrentSeqName:='';
   end;
-  if Running then begin
-    tt:=T_Targets.Create(self);
+  ProcessLive := Running;
+  if ProcessLive then begin
+    temptarget:=T_Targets.Create(self);
+    temptarget.AssignTarget(Targets);
   end
   else begin
-    tt:=Targets;
+    temptarget:=Targets;
   end;
-  if EditTargets(tt,fn,defaultname) then begin
-    if Running then begin
-      Targets.UpdateLive(tt);
+  try
+  if EditTargets(temptarget,fn,defaultname) then begin
+    if ProcessLive then begin
+      Targets.UpdateLive(temptarget);
     end
     else begin
       SaveTargets(fn,defaultname);
@@ -505,6 +509,10 @@ begin
     end;
   end;
   BtnReset.Enabled:=not Targets.IgnoreRestart;
+  finally
+    if ProcessLive then
+      temptarget.Free;
+  end;
 end;
 
 function Tf_sequence.EditTargets(et:T_Targets; out fn,defaultname:string):boolean;

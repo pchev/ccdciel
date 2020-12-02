@@ -148,7 +148,8 @@ type
       procedure LoadTargets(fn: string);
       procedure SaveTargets(fn:string);
       function Add(t: TTarget):integer;
-      procedure UpdateLive(upd:T_Targets);
+      procedure AssignTarget(Source: T_Targets);
+      procedure UpdateLive(Source:T_Targets);
       procedure Start;
       procedure Stop;
       procedure Abort;
@@ -400,7 +401,90 @@ begin
   result:=NumTargets-1;
 end;
 
-procedure T_Targets.UpdateLive(upd:T_Targets);
+procedure T_Targets.AssignTarget(Source: T_Targets);
+var i:integer;
+begin
+  // static properties
+  FTargetsChange :=  Source.FTargetsChange;
+  FPlanChange := Source.FPlanChange;
+  FonMsg := Source.FonMsg;
+  FDelayMsg := Source.FDelayMsg;
+  FonEndSequence := Source.FonEndSequence;
+  FonShutdown := Source.FonShutdown;
+  Fcapture := Source.Fcapture;
+  Fpreview := Source.Fpreview;
+  Ffilter :=  Source.Ffilter;
+  Fweather := Source.Fweather;
+  Fsafety := Source.Fsafety;
+  Fdome := Source.Fdome;
+  Fmount := Source.Fmount;
+  Fcamera := Source.Fcamera;
+  Frotaror := Source.Frotaror;
+  Fautoguider := Source.Fautoguider;
+  Fastrometry := Source.Fastrometry;
+  Fplanetarium := Source.Fplanetarium;
+  FSequenceFile := Source.FSequenceFile;
+
+  // do not copy working variable
+{ FTargetCoord
+  FTargetRA
+  FTargetDE
+  FSlewRetry
+  SkipTarget
+  TargetForceNext
+  FDoneStatus
+  FLastDoneStep
+  FAllDone
+  FCurrentTarget
+  TargetTimeStart
+  TargetDelayEnd
+  FRunning
+  FScriptRunning
+  FInitializing
+  FUnattended
+  FTargetInitializing
+  FWaitStarting}
+
+  // sequence definition
+  FName:= Source.FName;
+  FFileVersion := Source.FFileVersion;
+  FIgnoreRestart := Source.FIgnoreRestart;
+  FTargetsRepeatCount := Source.FTargetsRepeatCount;
+  FAtEndPark := Source.FAtEndPark;
+  FAtEndCloseDome := Source.FAtEndCloseDome;
+  FAtEndStopTracking := Source.FAtEndStopTracking;
+  FAtEndWarmCamera := Source.FAtEndWarmCamera;
+  FAtEndRunScript := Source.FAtEndRunScript;
+  FOnErrorRunScript := Source.FOnErrorRunScript;
+  FAtEndShutdown := Source.FAtEndShutdown;
+  FAtEndScript := Source.FAtEndScript;
+  FOnErrorScript := Source.FOnErrorScript;
+  FAtStartCool := Source.FAtStartCool;
+  FAtStartUnpark := Source.FAtStartUnpark;
+  FFilterList.Clear;
+  for i:=0 to Source.FFilterList.Count-1 do
+    FFilterList.Add(Source.FFilterList[i]);
+  FBinningList.Clear;
+  for i:=0 to Source.FBinningList.Count-1 do
+    FBinningList.Add(Source.FBinningList[i]);
+  for i:=0 to SaveFilterNum do
+    FOriginalFilter[i] := Source.FOriginalFilter[i];
+  FTargetsRepeat := Source.FTargetsRepeat;
+  FResetRepeat := Source.FResetRepeat;
+  FSeqStartAt := Source.FSeqStartAt;
+  FSeqStopAt := Source.FSeqStopAt;
+  FSeqStartTime := Source.FSeqStartTime;
+  FSeqStart := Source.FSeqStart;
+  FSeqStop := Source.FSeqStop;
+  FSeqStartTwilight := Source.FSeqStartTwilight;
+  FSeqStopTwilight := Source.FSeqStopTwilight;
+  FSeqLockTwilight := Source.FSeqLockTwilight;
+  NumTargets := Source.NumTargets;
+  for i:=0 to NumTargets-1 do
+    FTargets[i].Assign(Source.Ftargets[i]);
+end;
+
+procedure T_Targets.UpdateLive(Source:T_Targets);
 begin
    { TODO :  }
 end;
