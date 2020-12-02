@@ -24,9 +24,6 @@ type
       property CurrentName: string read FCurrentName;
   end;
 
-var
-  SequenceFile: T_SequenceFile;
-
 implementation
 
 constructor T_SequenceFile.Create(AOwner: TComponent);

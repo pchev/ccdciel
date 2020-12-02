@@ -46,6 +46,7 @@ T_Plan = class(TComponent)
     Fcamera: T_camera;
     Fautoguider: T_autoguider;
     FonStepProgress: TNotifyEvent;
+    FSequenceFile: T_SequenceFile;
     procedure SetPlanName(val: string);
     procedure NextStep;
     procedure StartStep;
@@ -72,6 +73,7 @@ T_Plan = class(TComponent)
     procedure Start;
     procedure Stop;
     procedure UpdateDoneCount(progress: boolean);
+    property SequenceFile: T_SequenceFile read FSequenceFile write FSequenceFile;
     property Count: integer read NumSteps;
     property CurrentStep: integer read FCurrentStep;
     property Running: boolean read FRunning;
@@ -145,6 +147,7 @@ begin
  Fmount:=Source.Fmount;
  Fcamera:=Source.Fcamera;
  Fautoguider:=Source.Fautoguider;
+ FSequenceFile:=Source.FSequenceFile;
  FonStepProgress:=Source.FonStepProgress;
  NumSteps:=Source.NumSteps;
  SetLength(FSteps,NumSteps);
@@ -276,7 +279,7 @@ begin
    // store image count
    if s.donecount<>CurrentDoneCount then begin
       s.donecount:=CurrentDoneCount;
-      if FRestartTargetNum>0 then SequenceFile.Items.SetValue('/Targets/Target'+inttostr(FRestartTargetNum)+'/Plan/Steps/Step'+inttostr(CurrentStep)+'/Done',s.donecount);
+      if FRestartTargetNum>0 then FSequenceFile.Items.SetValue('/Targets/Target'+inttostr(FRestartTargetNum)+'/Plan/Steps/Step'+inttostr(CurrentStep)+'/Done',s.donecount);
       if progress and assigned(FonStepProgress) then FonStepProgress(self);
    end;
  end;

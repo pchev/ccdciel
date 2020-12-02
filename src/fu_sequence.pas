@@ -150,6 +150,7 @@ type
     function GetTargetPercentComplete: double;
     procedure ClearRestartHistory(Confirm:boolean);
     function EditTargets(et:T_Targets; out fn,defaultname:string):boolean;
+    function GetFileName: string;
   public
     { public declarations }
     StepRepeatCount, StepTotalCount: integer;
@@ -165,6 +166,7 @@ type
     procedure LoadTargets(fn: string);
     procedure AbortSequence;
     procedure WeatherChange(value:boolean);
+    property Filename: string read GetFileName;
     property Busy: boolean read GetBusy;
     property Running: boolean read GetRunning;
     property PercentComplete: double read GetPercentComplete;
@@ -246,7 +248,6 @@ begin
  f_EditTargets.Free;
  ClearTargetGrid;
  ClearPlanGrid;
- SequenceFile.Free;
  inherited Destroy;
 end;
 
@@ -394,7 +395,7 @@ end;
 procedure Tf_sequence.MenuCopyClick(Sender: TObject);
 var txt,fn1,fn2: string;
 begin
-  txt:=FormEntry(self, 'Copy from', ExtractFileNameOnly(SequenceFile.Filename));
+  txt:=FormEntry(self, 'Copy from', ExtractFileNameOnly(Targets.SequenceFile.Filename));
   if txt='' then exit;
   fn1:=slash(ConfigDir)+txt+'.targets';
   if not FileExistsUTF8(fn1) then begin
@@ -423,14 +424,14 @@ begin
   OpenDialog1.FileName:='*.targets';
   if OpenDialog1.Execute then begin
     fn:=OpenDialog1.FileName;
-    if Running and (fn=SequenceFile.Filename) then begin
+    if Running and (fn=Targets.SequenceFile.Filename) then begin
       ShowMessage('Cannot delete the running sequence!');
       exit;
     end;
     if MessageDlg(Format(rsDoYouWantToD, [fn]), mtConfirmation, mbYesNo, 0)=mrYes then begin
       if DeleteFileUTF8(fn) then begin
-        if fn=SequenceFile.Filename then begin
-          SequenceFile.Clear;
+        if fn=Targets.SequenceFile.Filename then begin
+          Targets.SequenceFile.Clear;
           ClearTargetGrid;
           ClearPlanGrid;
           f_EditTargets.TargetList.RowCount:=1;
@@ -443,18 +444,19 @@ begin
 end;
 
 procedure Tf_sequence.MenuEditClick(Sender: TObject);
-var fn,defname,savefn: string;
+var fn,defname: string;
     t: T_Targets;
 begin
-  savefn:=SequenceFile.Filename;
   OpenDialog1.InitialDir:=ConfigDir;
   OpenDialog1.FileName:='*.targets';
   if OpenDialog1.Execute then begin
     fn:=OpenDialog1.FileName;
-    if (fn=SequenceFile.Filename) then begin
+    if (fn=Targets.SequenceFile.Filename) then begin
+      // edit currently loaded sequence
       BtnEditTargetsClick(BtnEditTargets);
     end
     else begin
+      // edit another sequence file
       t:=T_Targets.Create(self);
       try
         t.LoadTargets(fn);
@@ -462,7 +464,6 @@ begin
           t.SaveTargets(fn);
         end;
       finally
-        SequenceFile.Filename:=savefn;
         t.Free;
       end;
     end;
@@ -474,16 +475,16 @@ var fn,defaultname: string;
 begin
   if Sender=BtnNewTargets then begin
     Targets.Clear;
-    SequenceFile.Clear;
+    Targets.SequenceFile.Clear;
     CurrentSeqName:='';
   end;
   if EditTargets(Targets,fn,defaultname) then begin
     SaveTargets(fn,defaultname);
-    LoadTargets(SequenceFile.Filename);
+    LoadTargets(Targets.SequenceFile.Filename);
   end
   else begin
     // reset last saved
-    LoadTargets(SequenceFile.Filename);
+    LoadTargets(Targets.SequenceFile.Filename);
   end;
   BtnReset.Enabled:=not Targets.IgnoreRestart;
 end;
@@ -495,7 +496,7 @@ begin
    f_EditTargets.ClearTargetList;
    f_EditTargets.LoadPlanList;
    f_EditTargets.LoadScriptList;
-   f_EditTargets.Filename:=SequenceFile.Filename;
+   f_EditTargets.Filename:=et.SequenceFile.Filename;
    if (et.Count>0) then begin
       // Edit
       f_EditTargets.TargetName.Caption:=et.TargetName;
@@ -622,8 +623,8 @@ begin
        then begin
         msg('',2);
         Targets.ClearDoneCount(true);
-        SaveTargets(SequenceFile.Filename,'');
-        LoadTargets(SequenceFile.Filename);
+        SaveTargets(Targets.SequenceFile.Filename,'');
+        LoadTargets(Targets.SequenceFile.Filename);
      end;
    end;
 end;
@@ -974,9 +975,9 @@ begin
    else begin
      if Targets.IgnoreRestart then begin
        Targets.ClearDoneCount(true);
-       SaveTargets(SequenceFile.Filename,'');
+       SaveTargets(Targets.SequenceFile.Filename,'');
      end;
-     Targets.TargetsRepeatCount:=SequenceFile.Items.GetValue('/Targets/RepeatDone',0);
+     Targets.TargetsRepeatCount:=Targets.SequenceFile.Items.GetValue('/Targets/RepeatDone',0);
      StartSequence;
    end;
  end
@@ -1210,6 +1211,11 @@ try
 except
   result:=0;
 end;
+end;
+
+function Tf_sequence.GetFileName: string;
+begin
+  result:=Targets.SequenceFile.Filename;
 end;
 
 end.
