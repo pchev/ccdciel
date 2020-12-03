@@ -493,6 +493,10 @@ begin
     CurrentSeqName:='';
   end;
   ProcessLive := Running;
+  if ProcessLive and (Targets.IgnoreRestart) then begin
+    ShowMessage('Cannot edit a running sequence without completion status.');
+    exit;
+  end;
   if ProcessLive then begin
     temptarget:=T_Targets.Create(self);
     temptarget.AssignTarget(Targets);
@@ -511,6 +515,7 @@ begin
     end;
   end;
   BtnReset.Enabled:=not Targets.IgnoreRestart;
+  BtnStatus.Enabled:=not Targets.IgnoreRestart;
   finally
     if ProcessLive then
       temptarget.Free;
@@ -632,6 +637,7 @@ begin
    TargetGrid.Row:=1;
    TargetGridSelection(TargetGrid,0,1);
    BtnReset.Enabled:=not Targets.IgnoreRestart;
+   BtnStatus.Enabled:=not Targets.IgnoreRestart;
    if Targets.CheckDoneCount then begin
       msg(Format(rsThisSequence,['"'+CurrentSeqName+'"']), 2);
       msg(targets.LastDoneStep,2);
