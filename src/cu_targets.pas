@@ -603,6 +603,18 @@ begin
       end;
       // set new current target
       FCurrentTarget:=newcurTarget;
+    end
+    else begin
+       // running target or step deleted, clear and apply new sequence in block
+       for i:=0 to NumTargets-1 do
+        if FTargets[i]<>nil then FTargets[i].Free;
+      SetLength(Ftargets,0);
+      NumTargets := 0;
+      for i:=0 to Source.NumTargets-1 do begin
+        t:=TTarget.Create;
+        t.Assign(Source.Ftargets[i]);
+        Add(t);
+      end;
     end;
   end
   else begin
