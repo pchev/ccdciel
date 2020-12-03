@@ -498,7 +498,7 @@ procedure T_Targets.UpdateLive(Source:T_Targets);
 var StartChange: boolean;
 begin
   try
-  // properties that can be changed without risk
+  // properties that can be changed without specific action
   FName:= Source.FName;
   FFileVersion := Source.FFileVersion;
   FTargetsRepeatCount := Source.FTargetsRepeatCount;
@@ -511,12 +511,6 @@ begin
   FAtEndScript := Source.FAtEndScript;
   FOnErrorRunScript := Source.FOnErrorRunScript;
   FOnErrorScript := Source.FOnErrorScript;
-
-  // change to global sequence repeat
-  { TODO :  }
-{ FIgnoreRestart := Source.FIgnoreRestart;
-  FTargetsRepeat := Source.FTargetsRepeat;
-  FResetRepeat := Source.FResetRepeat;  }
 
   // change to start condition
   StartChange:=
@@ -537,11 +531,6 @@ begin
   FSeqStartTwilight := Source.FSeqStartTwilight;
   FSeqStopTwilight := Source.FSeqStopTwilight;
 
-  // editing help, do not put back
-{ FFilterList
-  FBinningList
-  FOriginalFilter }
-
   // the targets and steps list
   { TODO :  }
 {  n := Source.NumTargets;
@@ -550,6 +539,13 @@ begin
     t.Assign(Source.Ftargets[i]);
     Add(t);
   end;}
+
+  // change to global sequence repeat
+  // after assigning the new targets
+  FIgnoreRestart := Source.FIgnoreRestart;
+  if FIgnoreRestart then ClearDoneCount(true);
+  FTargetsRepeat := Source.FTargetsRepeat;
+  FResetRepeat := Source.FResetRepeat; // will be applied at the next repeat
 
   // save the updated file
   SaveTargets(FSequenceFile.Filename);
