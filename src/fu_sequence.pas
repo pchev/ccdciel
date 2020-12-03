@@ -135,6 +135,7 @@ type
     function GetCurrentPlan: T_Plan;
     procedure SaveTargets(fn,defaultname:string);
     procedure StartSequence;
+    procedure RestartSequence(Sender: TObject);
     procedure ClearTargetGrid;
     procedure ClearPlanGrid;
     procedure msg(txt:string; level: integer);
@@ -235,6 +236,7 @@ begin
  Targets.DelayMsg:=@ShowDelayMsg;
  Targets.onTargetsChange:=@TargetsChange;
  Targets.onPlanChange:=@PlanChange;
+ Targets.OnRestart:=@RestartSequence;
  TargetGrid.ColWidths[2]:=0;
  TargetGrid.ColWidths[3]:=0;
  f_EditTargets:=Tf_EditTargets.Create(nil);
@@ -808,6 +810,11 @@ var ccdtemp: double;
     isCalibrationSequence, waitcooling: boolean;
     buf: string;
 begin
+ if Targets.IgnoreRestart then begin
+   Targets.ClearDoneCount(true);
+   SaveTargets(Targets.SequenceFile.Filename,'');
+ end;
+ Targets.TargetsRepeatCount:=Targets.SequenceFile.Items.GetValue('/Targets/RepeatDone',0);
  StartingSequence:=true;
  msg(Format(rsStartingSequ,['']),1);
  led.Brush.Color:=clYellow;
@@ -907,6 +914,15 @@ begin
  PlanRow:=-1;
 end;
 
+procedure Tf_sequence.RestartSequence(Sender: TObject);
+begin
+  StopSequence;
+  msg(format('Restarting sequence %s ...',[CurrentSeqName]),1);
+  StartingSequence:=true;
+  StartTimer.Interval:=5000;
+  StartTimer.Enabled:=true;
+end;
+
 procedure Tf_sequence.WeatherChange(value: boolean);
 begin
   if value then begin
@@ -996,11 +1012,6 @@ begin
       msg(rsUnsafeCondit,0);
    end
    else begin
-     if Targets.IgnoreRestart then begin
-       Targets.ClearDoneCount(true);
-       SaveTargets(Targets.SequenceFile.Filename,'');
-     end;
-     Targets.TargetsRepeatCount:=Targets.SequenceFile.Items.GetValue('/Targets/RepeatDone',0);
      StartSequence;
    end;
  end

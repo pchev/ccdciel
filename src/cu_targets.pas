@@ -68,6 +68,7 @@ type
       FDelayMsg: TNotifyStr;
       FonEndSequence: TNotifyEvent;
       FonShutdown: TNotifyEvent;
+      FonRestart: TNotifyEvent;
       Fcapture: Tf_capture;
       Fpreview: Tf_preview;
       Ffilter: Tf_filterwheel;
@@ -219,6 +220,7 @@ type
       property OnErrorScript: string read FOnErrorScript write FOnErrorScript;
       property AtEndShutdown: boolean read FAtEndShutdown write FAtEndShutdown;
       property OnShutdown: TNotifyEvent read FonShutdown write FonShutdown;
+      property OnRestart: TNotifyEvent read FonRestart write FonRestart;
   end;
 
   function TemplateModified(p:T_Plan):boolean;
@@ -449,8 +451,6 @@ begin
   FUnattended
   FTargetInitializing
   FSeqLockTwilight
-  FSeqStart
-  FSeqStop
   FSeqStartTime
   FWaitStarting }
 
@@ -480,6 +480,8 @@ begin
     FOriginalFilter[i] := Source.FOriginalFilter[i];
   FTargetsRepeat := Source.FTargetsRepeat;
   FResetRepeat := Source.FResetRepeat;
+  FSeqStart := Source.FSeqStart;
+  FSeqStop := Source.FSeqStop;
   FSeqStartAt := Source.FSeqStartAt;
   FSeqStopAt := Source.FSeqStopAt;
   FSeqStartTwilight := Source.FSeqStartTwilight;
@@ -493,6 +495,7 @@ begin
 end;
 
 procedure T_Targets.UpdateLive(Source:T_Targets);
+var StartChange: boolean;
 begin
   try
   // properties that can be changed without risk
@@ -516,13 +519,23 @@ begin
   FResetRepeat := Source.FResetRepeat;  }
 
   // change to start condition
-  { TODO :  }
-{ FAtStartCool := Source.FAtStartCool;
+  StartChange:=
+    (FAtStartCool <> Source.FAtStartCool) or
+    (FAtStartUnpark <> Source.FAtStartUnpark) or
+    (FSeqStart <> Source.FSeqStart) or
+    (FSeqStop <> Source.FSeqStop) or
+    (FSeqStartAt <> Source.FSeqStartAt) or
+    (FSeqStopAt <> Source.FSeqStopAt) or
+    (FSeqStartTwilight <> Source.FSeqStartTwilight) or
+    (FSeqStopTwilight <> Source.FSeqStopTwilight);
+  FAtStartCool := Source.FAtStartCool;
   FAtStartUnpark := Source.FAtStartUnpark;
+  FSeqStart := Source.FSeqStart;
+  FSeqStop := Source.FSeqStop;
   FSeqStartAt := Source.FSeqStartAt;
   FSeqStopAt := Source.FSeqStopAt;
   FSeqStartTwilight := Source.FSeqStartTwilight;
-  FSeqStopTwilight := Source.FSeqStopTwilight; }
+  FSeqStopTwilight := Source.FSeqStopTwilight;
 
   // editing help, do not put back
 { FFilterList
@@ -540,6 +553,11 @@ begin
 
   // save the updated file
   SaveTargets(FSequenceFile.Filename);
+
+  // Apply startup change immediatelly only if the sequence is waiting to start
+  if StartChange and WaitStarting then begin
+    if assigned(FonRestart) then FonRestart(self);
+  end;
 
   except
     on E: Exception do msg('Error updating the sequence:'+ E.Message,1);
