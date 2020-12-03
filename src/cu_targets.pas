@@ -51,6 +51,7 @@ type
               function previewexposure_str: string;
               function delay_str: string;
               function repeatcount_str: string;
+              function id: LongWord;
             end;
 
   TTargetList = array of TTarget;
@@ -161,6 +162,7 @@ type
       function  CheckDoneCount:boolean;
       procedure ClearDoneCount(ClearRepeat: boolean);
       procedure CreateSkyFlatPlan(flt: TTarget);
+      function IndexOf(id:LongWord):integer;
       property SequenceFile: T_SequenceFile read FSequenceFile write FSequenceFile;
       property FileVersion: integer read FFileVersion write FFileVersion;
       property FilList: Tstringlist read FFilterList;
@@ -494,10 +496,29 @@ begin
   end;
 end;
 
+function T_Targets.IndexOf(id:LongWord):integer;
+var i: integer;
+begin
+  result:=-1;
+  for i:=0 to NumTargets-1 do begin
+     if id=Ftargets[i].id then begin
+       result:=i;
+       break;
+     end;
+  end;
+end;
+
 procedure T_Targets.UpdateLive(Source:T_Targets);
-var StartChange: boolean;
+var StartChange,RestartCurTarget,RestartCurStep: boolean;
+    i,newcurTarget,newcurStep: integer;
+    tid,sid: LongWord;
+    t: TTarget;
+    p: TStep;
 begin
   try
+  RestartCurTarget:=false;
+  RestartCurStep:=false;
+  StartChange:=false;
   // properties that can be changed without specific action
   FName:= Source.FName;
   FFileVersion := Source.FFileVersion;
@@ -532,13 +553,71 @@ begin
   FSeqStopTwilight := Source.FSeqStopTwilight;
 
   // the targets and steps list
-  { TODO :  }
-{  n := Source.NumTargets;
-  for i:=0 to n-1 do begin
-    t:=TTarget.Create;
-    t.Assign(Source.Ftargets[i]);
-    Add(t);
-  end;}
+  if FCurrentTarget>=0 then begin
+    // identify the current target in the new sequence
+    tid:=Ftargets[FCurrentTarget].id;
+    newcurTarget:=Source.IndexOf(tid);
+    if newcurTarget>=0 then begin
+      // identify the current step in the new sequence
+      sid:=T_Plan(Ftargets[FCurrentTarget].plan).Steps[T_Plan(Ftargets[FCurrentTarget].plan).CurrentStep].id;
+      newcurStep:=T_Plan(Source.Ftargets[newcurTarget].plan).indexof(sid);
+      if newcurStep<0 then begin
+        // the running step is deleted, need to restart it
+        RestartCurStep:=true;
+      end;
+    end
+    else begin
+      // the running target is deleted, need to restart it
+      RestartCurTarget:=true;
+    end;
+    if (not RestartCurTarget)and(not RestartCurStep) then begin
+      // update targets
+      for i:=0 to NumTargets-1 do
+        if FTargets[i]<>nil then FTargets[i].Free;
+      SetLength(Ftargets,0);
+      NumTargets := 0;
+      for i:=0 to Source.NumTargets-1 do begin
+        // create new target
+        t:=TTarget.Create;
+        t.Assign(Source.Ftargets[i]);
+        if i=newcurTarget then begin
+          // this is the running target, update the value for the current step
+          // in the Capture tool for next exposure
+          T_Plan(t.plan).CurrentStep:=newcurStep;
+          p:=T_Plan(t.plan).Steps[newcurStep];
+          if p.exposure>=0 then Fcapture.ExposureTime:=p.exposure;
+          Fcapture.Binning.Text:=p.binning_str;
+          Fcapture.Gain:=p.gain;
+          Fcapture.Offset:=p.offset;
+          if p.fstop<>'' then Fcapture.Fnumber.Text:=p.fstop;
+          Fcapture.SeqNum.Value:=p.count;
+          Fcapture.SeqCount:=CurrentDoneCount+1;
+          Fcapture.FrameType.ItemIndex:=ord(p.frtype);
+          Fcapture.CheckBoxDither.Checked:=p.dither;
+          Fcapture.DitherCount.Value:=p.dithercount;
+          Fcapture.CheckBoxFocus.Checked:=p.autofocus;
+          Fcapture.FocusCount.Value:=p.autofocuscount;
+        end;
+        // add target to sequence
+        Add(t);
+      end;
+      // set new current target
+      FCurrentTarget:=newcurTarget;
+    end;
+  end
+  else begin
+    // no running target, clear and apply new sequence in block
+    for i:=0 to NumTargets-1 do
+      if FTargets[i]<>nil then FTargets[i].Free;
+    SetLength(Ftargets,0);
+    NumTargets := 0;
+    for i:=0 to Source.NumTargets-1 do begin
+      t:=TTarget.Create;
+      t.Assign(Source.Ftargets[i]);
+      Add(t);
+    end;
+    if assigned(FPlanChange) then FPlanChange(Ftargets[0].plan);
+  end;
 
   // change to global sequence repeat
   // after assigning the new targets
@@ -553,6 +632,22 @@ begin
   // Apply startup change immediatelly only if the sequence is waiting to start
   if StartChange and WaitStarting then begin
     if assigned(FonRestart) then FonRestart(self);
+    exit;
+  end;
+
+  if RestartCurTarget then begin
+    // Stop and restart the current target
+    camera.AbortExposureButNotSequence;
+    wait(5);
+    FCurrentTarget:=FCurrentTarget-1;
+    ForceNextTarget;
+  end
+  else if RestartCurStep then begin
+    // Stop and restart the current step
+    camera.AbortExposureButNotSequence;
+    wait(5);
+    T_Plan(Ftargets[FCurrentTarget].plan).CurrentStep:=T_Plan(Ftargets[FCurrentTarget].plan).CurrentStep-1;
+    T_Plan(Ftargets[FCurrentTarget].plan).ForceNextStep;
   end;
 
   except
@@ -2375,6 +2470,11 @@ begin
   Result:=IntToStr(repeatcount);
 end;
 
+function TTarget.id: LongWord;
+begin
+  // if any of this change we consider it another target
+  result:=Hash(objectname+StringReplace(planname,'*','',[])+FormatFloat(f6,ra)+FormatFloat(f6,de));
+end;
 
 function TemplateModified(p:T_Plan):boolean;
 var template,fn: string;

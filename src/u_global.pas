@@ -125,6 +125,7 @@ type
               function description_str: string;
               function dithercount_str: string;
               function autofocuscount_str: string;
+              function id: LongWord;
             end;
 
   TFocusStar = record
@@ -568,6 +569,11 @@ begin
   Result:=description;
 end;
 
+function TStep.id: LongWord;
+begin
+  // if any of this change we consider it another step
+  result:=Hash(description+frtype_str+binning_str+filter_str);
+end;
 
 end.
 
