@@ -37,6 +37,7 @@ T_Plan = class(TComponent)
   private
     PlanTimer: TTimer;
     StartTimer: TTimer;
+    RestartTimer: TTimer;
     FPlanChange: TNotifyEvent;
     FonMsg,FDelayMsg: TNotifyMsg;
     Fcapture: Tf_capture;
@@ -54,6 +55,7 @@ T_Plan = class(TComponent)
     procedure ShowDelayMsg(txt:string);
     procedure PlanTimerTimer(Sender: TObject);
     procedure StartTimerTimer(Sender: TObject);
+    procedure RestartTimerTimer(Sender: TObject);
     procedure StartCapture;
   protected
     FSteps: T_Steps;
@@ -73,7 +75,7 @@ T_Plan = class(TComponent)
     procedure Start;
     procedure Stop;
     procedure UpdateDoneCount(progress: boolean);
-    procedure ForceNextStep;
+    procedure Restart;
     function IndexOf(id:LongWord):integer;
     property SequenceFile: T_SequenceFile read FSequenceFile write FSequenceFile;
     property Count: integer read NumSteps;
@@ -112,6 +114,10 @@ begin
   StartTimer.Enabled:=false;
   StartTimer.Interval:=5000;
   StartTimer.OnTimer:=@StartTimerTimer;
+  RestartTimer:=TTimer.Create(self);
+  RestartTimer.Enabled:=false;
+  RestartTimer.Interval:=1000;
+  RestartTimer.OnTimer:=@RestartTimerTimer;
   FObjectName:='';
 end;
 
@@ -186,6 +192,12 @@ begin
   result:=NumSteps-1;
 end;
 
+procedure T_Plan.RestartTimerTimer(Sender: TObject);
+begin
+  RestartTimer.Enabled:=false;
+  Start;
+end;
+
 procedure T_Plan.Start;
 begin
   FRunning:=true;
@@ -204,9 +216,9 @@ begin
   if Capture.Running then Capture.BtnStartClick(Self);
 end;
 
-procedure T_Plan.ForceNextStep;
+procedure T_Plan.Restart;
 begin
-  NextStep;
+  RestartTimer.Enabled:=true;
 end;
 
 procedure T_Plan.NextStep;

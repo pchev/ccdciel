@@ -657,9 +657,10 @@ begin
   else if RestartCurStep then begin
     // Stop and restart the current step
     camera.AbortExposureButNotSequence;
-    wait(5);
-    T_Plan(Ftargets[FCurrentTarget].plan).CurrentStep:=T_Plan(Ftargets[FCurrentTarget].plan).CurrentStep-1;
-    T_Plan(Ftargets[FCurrentTarget].plan).ForceNextStep;
+    wait(1);
+    Capture.Running:=false;
+    T_Plan(Ftargets[FCurrentTarget].plan).CurrentStep:=-1;
+    T_Plan(Ftargets[FCurrentTarget].plan).Restart;
   end;
 
   except
