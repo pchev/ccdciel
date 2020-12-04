@@ -650,9 +650,11 @@ begin
   if RestartCurTarget then begin
     // Stop and restart the current target
     camera.AbortExposureButNotSequence;
-    wait(5);
-    FCurrentTarget:=FCurrentTarget-1;
-    ForceNextTarget;
+    wait(1);
+    T_Plan(Ftargets[FCurrentTarget].plan).Running:=false;
+    Capture.Running:=false;
+    FCurrentTarget:=-1;
+    NextTarget;
   end
   else if RestartCurStep then begin
     // Stop and restart the current step
@@ -2104,7 +2106,11 @@ begin
   t:=Targets[FCurrentTarget];
   if t<>nil then begin
     p:=T_Plan(t.plan);
-    if p.Running then exit;
+    if p.Running then begin
+      msg('Plan already running!',0);
+      Abort;
+      exit;
+    end;
     if t.objectname<>'None' then
        Fcapture.Fname.Text:=trim(t.objectname);
     p.ObjectName:=t.objectname;
