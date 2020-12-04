@@ -509,15 +509,16 @@ begin
 end;
 
 procedure T_Targets.UpdateLive(Source:T_Targets);
-var StartChange,RestartCurTarget,RestartCurStep: boolean;
+var StartChange,RestartTarget,RestartPlan: boolean;
     i,newcurTarget,newcurStep: integer;
     tid,sid: LongWord;
     t: TTarget;
     p: TStep;
 begin
   try
-  RestartCurTarget:=false;
-  RestartCurStep:=false;
+  msg('Apply editing to active sequence',1);
+  RestartTarget:=false;
+  RestartPlan:=false;
   StartChange:=false;
   // properties that can be changed without specific action
   FName:= Source.FName;
@@ -562,16 +563,19 @@ begin
       sid:=T_Plan(Ftargets[FCurrentTarget].plan).Steps[T_Plan(Ftargets[FCurrentTarget].plan).CurrentStep].id;
       newcurStep:=T_Plan(Source.Ftargets[newcurTarget].plan).indexof(sid);
       if newcurStep<0 then begin
-        // the running step is deleted, need to restart it
-        RestartCurStep:=true;
+        // the running step is no more found, need to restart all steps for current target
+        RestartPlan:=true;
       end;
     end
     else begin
-      // the running target is deleted, need to restart it
-      RestartCurTarget:=true;
+      // the running target is no more found, need to restart the full sequence from start
+      RestartTarget:=true;
     end;
-    if (not RestartCurTarget)and(not RestartCurStep) then begin
-      // update targets
+    if (not RestartTarget)and(not RestartPlan) then begin
+      // Target and plan can be updated without interruption,
+      // modification to target or step before the running one are
+      // taken into account only at the next repeat, they are not redone now.
+      msg('Update sequence without interruption',3);
       for i:=0 to NumTargets-1 do
         if FTargets[i]<>nil then FTargets[i].Free;
       SetLength(Ftargets,0);
@@ -606,6 +610,7 @@ begin
     end
     else begin
        // running target or step deleted, clear and apply new sequence in block
+       msg('Update full sequence',3);
        for i:=0 to NumTargets-1 do
         if FTargets[i]<>nil then FTargets[i].Free;
       SetLength(Ftargets,0);
@@ -619,6 +624,7 @@ begin
   end
   else begin
     // no running target, clear and apply new sequence in block
+    msg('Update full sequence',3);
     for i:=0 to NumTargets-1 do
       if FTargets[i]<>nil then FTargets[i].Free;
     SetLength(Ftargets,0);
@@ -643,12 +649,14 @@ begin
 
   // Apply startup change immediatelly only if the sequence is waiting to start
   if StartChange and WaitStarting then begin
+    msg('Restart the sequence',3);
     if assigned(FonRestart) then FonRestart(self);
     exit;
   end;
 
-  if RestartCurTarget then begin
+  if RestartTarget then begin
     // Stop and restart the current target
+    msg('Active target is replaced, restart the sequence',3);
     camera.AbortExposureButNotSequence;
     wait(1);
     T_Plan(Ftargets[FCurrentTarget].plan).Running:=false;
@@ -656,8 +664,9 @@ begin
     FCurrentTarget:=-1;
     NextTarget;
   end
-  else if RestartCurStep then begin
-    // Stop and restart the current step
+  else if RestartPlan then begin
+    // Stop and restart the current plan
+    msg('Active step is replaced, restart the target',3);
     camera.AbortExposureButNotSequence;
     wait(1);
     Capture.Running:=false;
