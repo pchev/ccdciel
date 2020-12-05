@@ -7944,6 +7944,20 @@ if (AllDevicesConnected)and(not autofocusing)and(not learningvcurve)and(not f_vi
     NewMessage(rsCaptureStopp2, 0);
     exit;
   end;
+  if f_sequence.Running and f_sequence.EditingTarget then begin
+    if canwait then begin
+       wait(1);
+       Application.QueueAsyncCall(@StartCaptureExposureAsync,0);
+       exit; // will be restarted after editing is done
+    end
+    else begin
+      exit; // cannot start now
+    end;
+  end;
+  if not f_capture.Running then begin
+    NewMessage(rsCaptureStopp2, 0);
+    exit;
+  end;
   if PauseSequence then begin
     if canwait then begin
        f_pause.Caption:=rsPauseSequenc2;
@@ -8145,6 +8159,7 @@ begin
   if PrepareCaptureExposure(true) then // do all requirement and check it's OK
      StartCaptureExposureNow
   else begin
+     if f_sequence.Running and (f_sequence.EditingTarget or f_sequence.Restarting) then exit;
      // not ready to start now
      NewMessage(rsCannotStartC+', '+rsAbort,9);
      f_capture.Stop;

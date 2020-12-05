@@ -99,7 +99,7 @@ type
       FFilterList,FBinningList: Tstringlist;
       FOriginalFilter: TSaveFilter;
       FSequenceFile: T_SequenceFile;
-      FRestarting: boolean;
+      FRestarting, FRealRestart: boolean;
       function GetBusy: boolean;
       procedure SetTargetName(val: string);
       procedure SetPreview(val: Tf_preview);
@@ -667,15 +667,20 @@ begin
     exit;
   end;
 
+  FRestarting:=true;
   if RestartTarget then begin
     // Stop and restart the current target
     msg('Active target is replaced, restart the sequence',3);
-    FRestarting:=true;
+    FRealRestart:=true;
     Capture.Running:=false;
     camera.AbortExposureButNotSequence;
     wait(1);
-    Restart;
+  end
+  else begin
+    msg('Continue the sequence',3);
+    FRealRestart:=false;
   end;
+  Restart;
 
   except
     on E: Exception do msg('Error updating the sequence:'+ E.Message,1);
@@ -1053,7 +1058,16 @@ end;
 procedure T_Targets.RestartTimerTimer(Sender: TObject);
 begin
   RestartTimer.Enabled:=false;
-  Start;
+  if FRealRestart then
+    // restart, skipping done steps
+    Start
+  else begin
+    // continue the sequence
+    T_Plan(Targets[CurrentTarget].plan).Running:=true;
+    T_Plan(Targets[CurrentTarget].plan).PlanTimer.Enabled:=true;
+    FRunning:=true;
+    FRestarting:=False;
+  end;
 end;
 
 procedure T_Targets.Start;
@@ -2308,7 +2322,7 @@ begin
    FInitializing:=false;
    t:=Targets[FCurrentTarget];
    if not TargetRepeatTimer.Enabled then begin
-      if not T_Plan(t.plan).Running then begin
+      if (not T_Plan(t.plan).Running) and (not FRestarting) then begin
         if (t<>nil) then begin
         inc(t.repeatdone);
         if (TargetForceNext)or(t.repeatdone>=t.repeatcount) then begin

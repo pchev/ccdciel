@@ -35,7 +35,6 @@ T_Steps = array of TStep;
 
 T_Plan = class(TComponent)
   private
-    PlanTimer: TTimer;
     StartTimer: TTimer;
     RestartTimer: TTimer;
     FPlanChange: TNotifyEvent;
@@ -67,6 +66,7 @@ T_Plan = class(TComponent)
     FRestartTargetNum: integer;
     FRunning: boolean;
   public
+    PlanTimer: TTimer;
     constructor Create(AOwner: TComponent);override;
     destructor  Destroy; override;
     procedure Clear;
@@ -81,7 +81,7 @@ T_Plan = class(TComponent)
     property SequenceFile: T_SequenceFile read FSequenceFile write FSequenceFile;
     property Count: integer read NumSteps;
     property CurrentStep: integer read FCurrentStep write FCurrentStep;
-    property Running: boolean read FRunning;
+    property Running: boolean read FRunning write FRunning;
     property PlanName: string read FName write SetPlanName;
     property ObjectName: string read FObjectName write FObjectName;
     property RestartTargetNum: integer read FRestartTargetNum write FRestartTargetNum;

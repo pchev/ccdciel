@@ -96,6 +96,7 @@ type
     { private declarations }
     TargetRow, PlanRow: integer;
     StartingSequence: Boolean;
+    FEditingTarget: Boolean;
     Targets: T_Targets;
     FonMsg: TNotifyMsg;
     FConnectAutoguider: TNotifyEvent;
@@ -151,6 +152,7 @@ type
     procedure ClearRestartHistory(Confirm:boolean);
     function EditTargets(et:T_Targets; out fn,defaultname:string):boolean;
     function GetFileName: string;
+    function GetRestarting: boolean;
   public
     { public declarations }
     StepRepeatCount, StepTotalCount: integer;
@@ -167,6 +169,8 @@ type
     procedure AbortSequence;
     procedure WeatherChange(value:boolean);
     property Filename: string read GetFileName;
+    property EditingTarget: Boolean read FEditingTarget;
+    property Restarting: Boolean read GetRestarting;
     property Busy: boolean read GetBusy;
     property Running: boolean read GetRunning;
     property PercentComplete: double read GetPercentComplete;
@@ -222,6 +226,7 @@ begin
  CurrentTargetName:='';
  CurrentStepName:='';
  StartingSequence:=false;
+ FEditingTarget:=false;
  Targets:=T_Targets.Create(nil);
  Targets.Preview:=Fpreview;
  Targets.Capture:=Fcapture;
@@ -498,6 +503,7 @@ begin
     exit;
   end;
   if ProcessLive then begin
+    FEditingTarget:=true;
     temptarget:=T_Targets.Create(self);
     temptarget.AssignTarget(Targets);
   end
@@ -507,6 +513,7 @@ begin
   try
   if EditTargets(temptarget,fn,defaultname) then begin
     if ProcessLive then begin
+      FEditingTarget:=false;
       Targets.UpdateLive(temptarget);
     end
     else begin
@@ -517,6 +524,7 @@ begin
   BtnReset.Enabled:=not Targets.IgnoreRestart;
   BtnStatus.Enabled:=not Targets.IgnoreRestart;
   finally
+    FEditingTarget:=false;
     if ProcessLive then
       temptarget.Free;
   end;
@@ -1261,6 +1269,14 @@ end;
 function Tf_sequence.GetFileName: string;
 begin
   result:=Targets.SequenceFile.Filename;
+end;
+
+function Tf_sequence.GetRestarting: boolean;
+begin
+  if Targets<>nil then
+     result:=targets.Restarting
+  else
+     result:=false;
 end;
 
 end.
