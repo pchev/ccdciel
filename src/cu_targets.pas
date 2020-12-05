@@ -521,7 +521,7 @@ end;
 
 procedure T_Targets.UpdateLive(Source:T_Targets);
 var StartChange,RestartTarget: boolean;
-    i,newcurTarget,newcurStep: integer;
+    i,newcurTarget,newcurStep,newdonecount: integer;
     tid,sid: LongWord;
     t: TTarget;
     p: TStep;
@@ -587,6 +587,7 @@ begin
       // modification to target or step before the running one are
       // taken into account only at the next repeat, they are not redone now.
       msg('Update sequence without interruption',3);
+      newdonecount:=T_Plan(Ftargets[FCurrentTarget].plan).Steps[T_Plan(Ftargets[FCurrentTarget].plan).CurrentStep].donecount;
       for i:=0 to NumTargets-1 do
         if FTargets[i]<>nil then FTargets[i].Free;
       SetLength(Ftargets,0);
@@ -600,6 +601,7 @@ begin
           // in the Capture tool for next exposure
           T_Plan(t.plan).CurrentStep:=newcurStep;
           p:=T_Plan(t.plan).Steps[newcurStep];
+          p.donecount:=newdonecount;
           if p.exposure>=0 then Fcapture.ExposureTime:=p.exposure;
           Fcapture.Binning.Text:=p.binning_str;
           Fcapture.Gain:=p.gain;
