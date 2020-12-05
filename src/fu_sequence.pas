@@ -499,13 +499,18 @@ begin
   end;
   ProcessLive := Running;
   if ProcessLive and (Targets.IgnoreRestart) then begin
-    ShowMessage('Cannot edit a running sequence without completion status.');
+    ShowMessage('Cannot edit the active sequence without completion status.');
+    exit;
+  end;
+  if ProcessLive and Autofocusing then begin
+    ShowMessage('Cannot edit the active sequence during autofocus');
     exit;
   end;
   if ProcessLive then begin
     FEditingTarget:=true;
     temptarget:=T_Targets.Create(self);
     temptarget.AssignTarget(Targets);
+    msg('Start to edit the active sequence',1);
   end
   else begin
     temptarget:=Targets;
