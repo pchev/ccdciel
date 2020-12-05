@@ -74,13 +74,14 @@ T_Plan = class(TComponent)
     function Add(s: TStep):integer;
     procedure Start;
     procedure Stop;
+    procedure ClearRunning;
     procedure UpdateDoneCount(progress: boolean);
     procedure Restart;
     function IndexOf(id:LongWord):integer;
     property SequenceFile: T_SequenceFile read FSequenceFile write FSequenceFile;
     property Count: integer read NumSteps;
     property CurrentStep: integer read FCurrentStep write FCurrentStep;
-    property Running: boolean read FRunning write FRunning;
+    property Running: boolean read FRunning;
     property PlanName: string read FName write SetPlanName;
     property ObjectName: string read FObjectName write FObjectName;
     property RestartTargetNum: integer read FRestartTargetNum write FRestartTargetNum;
@@ -170,7 +171,6 @@ begin
  FName:=Source.FName;
  FObjectName:=Source.FObjectName;
  FRestartTargetNum:=Source.FRestartTargetNum;
- FRunning:=Source.FRunning;
 end;
 
 procedure  T_Plan.Clear;
@@ -214,6 +214,14 @@ begin
   UpdateDoneCount(true);
   FRunning:=false;
   if Capture.Running then Capture.BtnStartClick(Self);
+end;
+
+procedure T_Plan.ClearRunning;
+begin
+  FRunning:=false;
+  PlanTimer.Enabled:=false;
+  FCurrentStep:=-1;
+  CurrentStepName:='';
 end;
 
 procedure T_Plan.Restart;

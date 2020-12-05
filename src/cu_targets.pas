@@ -60,6 +60,7 @@ type
     private
       TargetTimer: TTimer;
       TargetRepeatTimer: TTimer;
+      StartTimer: TTimer;
       StopTimer: TTimer;
       StopTargetTimer: TTimer;
       WeatherRestartTimer: TTimer;
@@ -123,11 +124,13 @@ type
       procedure TargetTimerTimer(Sender: TObject);
       procedure TargetRepeatTimerTimer(Sender: TObject);
       procedure StartPlanTimerTimer(Sender: TObject);
+      procedure StartTimerTimer(Sender: TObject);
       procedure StopTimerTimer(Sender: TObject);
       procedure StopTargetTimerTimer(Sender: TObject);
       procedure WeatherRestartTimerTimer(Sender: TObject);
       procedure PlanStepChange(Sender: TObject);
       procedure CompatLoadPlan(p: T_Plan; plan,obj:string);
+      procedure ClearRunning;
     protected
       Ftargets: TTargetList;
       NumTargets: integer;
@@ -153,6 +156,7 @@ type
       procedure AssignTarget(Source: T_Targets);
       procedure UpdateLive(Source:T_Targets);
       procedure Start;
+      procedure Restart;
       procedure Stop;
       procedure Abort;
       procedure WeatherPause;
@@ -280,6 +284,10 @@ begin
   TargetRepeatTimer.Enabled:=false;
   TargetRepeatTimer.Interval:=1000;
   TargetRepeatTimer.OnTimer:=@TargetRepeatTimerTimer;
+  StartTimer:=TTimer.Create(self);
+  StartTimer.Enabled:=false;
+  StartTimer.Interval:=1000;
+  StartTimer.OnTimer:=@StartTimerTimer;
   StartPlanTimer:=TTimer.Create(self);
   StartPlanTimer.Enabled:=false;
   StartPlanTimer.Interval:=5000;
@@ -509,7 +517,7 @@ begin
 end;
 
 procedure T_Targets.UpdateLive(Source:T_Targets);
-var StartChange,RestartTarget,RestartPlan: boolean;
+var StartChange,RestartTarget: boolean;
     i,newcurTarget,newcurStep: integer;
     tid,sid: LongWord;
     t: TTarget;
@@ -518,10 +526,8 @@ begin
   try
   msg('Apply editing to active sequence',1);
   RestartTarget:=false;
-  RestartPlan:=false;
   StartChange:=false;
   // properties that can be changed without specific action
-  FName:= Source.FName;
   FFileVersion := Source.FFileVersion;
   FTargetsRepeatCount := Source.FTargetsRepeatCount;
   FAtEndPark := Source.FAtEndPark;
@@ -563,15 +569,17 @@ begin
       sid:=T_Plan(Ftargets[FCurrentTarget].plan).Steps[T_Plan(Ftargets[FCurrentTarget].plan).CurrentStep].id;
       newcurStep:=T_Plan(Source.Ftargets[newcurTarget].plan).indexof(sid);
       if newcurStep<0 then begin
-        // the running step is no more found, need to restart all steps for current target
-        RestartPlan:=true;
+        // the running step is no more found, need to restart all
+        ClearRunning;
+        RestartTarget:=true;
       end;
     end
     else begin
-      // the running target is no more found, need to restart the full sequence from start
+      // the running target is no more found, need to restart all
+      ClearRunning;
       RestartTarget:=true;
     end;
-    if (not RestartTarget)and(not RestartPlan) then begin
+    if (not RestartTarget) then begin
       // Target and plan can be updated without interruption,
       // modification to target or step before the running one are
       // taken into account only at the next repeat, they are not redone now.
@@ -609,9 +617,9 @@ begin
       FCurrentTarget:=newcurTarget;
     end
     else begin
-       // running target or step deleted, clear and apply new sequence in block
-       msg('Update full sequence',3);
-       for i:=0 to NumTargets-1 do
+      // running target or step deleted, clear and apply new sequence in block
+      msg('Update active sequence',3);
+      for i:=0 to NumTargets-1 do
         if FTargets[i]<>nil then FTargets[i].Free;
       SetLength(Ftargets,0);
       NumTargets := 0;
@@ -644,6 +652,8 @@ begin
   FTargetsRepeat := Source.FTargetsRepeat;
   FResetRepeat := Source.FResetRepeat; // will be applied at the next repeat
 
+  TargetName:= Source.TargetName;
+
   // save the updated file
   SaveTargets(FSequenceFile.Filename);
 
@@ -659,19 +669,8 @@ begin
     msg('Active target is replaced, restart the sequence',3);
     camera.AbortExposureButNotSequence;
     wait(1);
-    T_Plan(Ftargets[FCurrentTarget].plan).Running:=false;
     Capture.Running:=false;
-    FCurrentTarget:=-1;
-    NextTarget;
-  end
-  else if RestartPlan then begin
-    // Stop and restart the current plan
-    msg('Active step is replaced, restart the target',3);
-    camera.AbortExposureButNotSequence;
-    wait(1);
-    Capture.Running:=false;
-    T_Plan(Ftargets[FCurrentTarget].plan).CurrentStep:=-1;
-    T_Plan(Ftargets[FCurrentTarget].plan).Restart;
+    Restart;
   end;
 
   except
@@ -1042,6 +1041,17 @@ begin
   end;
 end;
 
+procedure T_Targets.Restart;
+begin
+  StartTimer.Enabled:=true;
+end;
+
+procedure T_Targets.StartTimerTimer(Sender: TObject);
+begin
+  StartTimer.Enabled:=false;
+  Start;
+end;
+
 procedure T_Targets.Start;
 var hm,he,ccdtemp: double;
     twok,wtok,nd: boolean;
@@ -1232,6 +1242,33 @@ begin
      msg(rsSequencePaus, 1);
   end;
 end;
+
+procedure T_Targets.ClearRunning;
+var p: T_Plan;
+begin
+  // stop running without condition and without notifying
+  StopTimer.Enabled:=false;
+  StopTargetTimer.Enabled:=false;
+  WeatherRestartTimer.Enabled:=false;
+  InplaceAutofocus:=AutofocusInPlace;
+  FTargetsRepeatCount:=FTargetsRepeat+1;
+  FRunning:=false;
+  WeatherPauseCanceled:=true;
+  WeatherPauseCapture:=false;
+  WeatherCancelRestart:=false;
+  if WaitTillrunning then begin
+    if wt_pause<>nil
+     then wt_pause.BtnCancel.Click
+     else cancelWaitTill:=true;
+  end;
+  if FCurrentTarget>=0 then begin
+     p:=t_plan(Ftargets[FCurrentTarget].plan);
+     p.ClearRunning;
+  end;
+  CurrentTargetName:='';
+  CurrentStepName:='';
+end;
+
 
 procedure T_Targets.StopSequence(abort: boolean);
 var p: T_Plan;
