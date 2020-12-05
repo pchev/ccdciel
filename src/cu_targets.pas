@@ -60,7 +60,7 @@ type
     private
       TargetTimer: TTimer;
       TargetRepeatTimer: TTimer;
-      StartTimer: TTimer;
+      RestartTimer: TTimer;
       StopTimer: TTimer;
       StopTargetTimer: TTimer;
       WeatherRestartTimer: TTimer;
@@ -99,6 +99,7 @@ type
       FFilterList,FBinningList: Tstringlist;
       FOriginalFilter: TSaveFilter;
       FSequenceFile: T_SequenceFile;
+      FRestarting: boolean;
       function GetBusy: boolean;
       procedure SetTargetName(val: string);
       procedure SetPreview(val: Tf_preview);
@@ -124,7 +125,7 @@ type
       procedure TargetTimerTimer(Sender: TObject);
       procedure TargetRepeatTimerTimer(Sender: TObject);
       procedure StartPlanTimerTimer(Sender: TObject);
-      procedure StartTimerTimer(Sender: TObject);
+      procedure RestartTimerTimer(Sender: TObject);
       procedure StopTimerTimer(Sender: TObject);
       procedure StopTargetTimerTimer(Sender: TObject);
       procedure WeatherRestartTimerTimer(Sender: TObject);
@@ -187,6 +188,7 @@ type
       property CurrentTarget: integer read FCurrentTarget;
       property TargetName: string read FName write SetTargetName;
       property Busy: boolean read GetBusy;
+      property Restarting: boolean read FRestarting;
       property Running: boolean read FRunning;
       property ScriptRunning: boolean read FScriptRunning;
       property TargetCoord: boolean read FTargetCoord;
@@ -249,6 +251,7 @@ begin
   FTargetsRepeat:=1;
   TargetForceNext:=false;
   Frunning:=false;
+  FRestarting:=False;
   FSeqStartAt:=0;
   FSeqStopAt:=0;
   FSeqStart:=false;
@@ -284,10 +287,10 @@ begin
   TargetRepeatTimer.Enabled:=false;
   TargetRepeatTimer.Interval:=1000;
   TargetRepeatTimer.OnTimer:=@TargetRepeatTimerTimer;
-  StartTimer:=TTimer.Create(self);
-  StartTimer.Enabled:=false;
-  StartTimer.Interval:=1000;
-  StartTimer.OnTimer:=@StartTimerTimer;
+  RestartTimer:=TTimer.Create(self);
+  RestartTimer.Enabled:=false;
+  RestartTimer.Interval:=1000;
+  RestartTimer.OnTimer:=@RestartTimerTimer;
   StartPlanTimer:=TTimer.Create(self);
   StartPlanTimer.Enabled:=false;
   StartPlanTimer.Interval:=5000;
@@ -667,9 +670,10 @@ begin
   if RestartTarget then begin
     // Stop and restart the current target
     msg('Active target is replaced, restart the sequence',3);
+    FRestarting:=true;
+    Capture.Running:=false;
     camera.AbortExposureButNotSequence;
     wait(1);
-    Capture.Running:=false;
     Restart;
   end;
 
@@ -1043,12 +1047,12 @@ end;
 
 procedure T_Targets.Restart;
 begin
-  StartTimer.Enabled:=true;
+  RestartTimer.Enabled:=true;
 end;
 
-procedure T_Targets.StartTimerTimer(Sender: TObject);
+procedure T_Targets.RestartTimerTimer(Sender: TObject);
 begin
-  StartTimer.Enabled:=false;
+  RestartTimer.Enabled:=false;
   Start;
 end;
 
@@ -1067,6 +1071,7 @@ begin
   WeatherCancelRestart:=false;
   FSeqLockTwilight:=false;
   FRunning:=true;
+  FRestarting:=False;
   // look for a dawn sky flat
   for j:=0 to NumTargets-1 do begin
     if (Targets[j].objectname=SkyFlatTxt)and(Targets[j].planname=FlatTimeName[1]) then begin

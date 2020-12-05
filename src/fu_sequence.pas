@@ -1117,7 +1117,12 @@ begin
      StatusTimer.Enabled:=true;
    end;
   end
-  else StopSequence;
+  else begin
+    if Targets.Restarting then
+      StatusTimer.Enabled:=true
+    else
+      StopSequence;
+  end
 except
   AbortSequence;
 end;
