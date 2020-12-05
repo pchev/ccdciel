@@ -263,7 +263,7 @@ begin
     CurrentDoneCount:=p.donecount;
     if CurrentDoneCount>=p.count then begin
        // step already complete
-       msg('Step '+p.description+' complete',2);
+       msg(Format(rsStepComplete, [p.description]), 2);
        exit;
     end;
     if p.exposure>=0 then Fcapture.ExposureTime:=p.exposure;

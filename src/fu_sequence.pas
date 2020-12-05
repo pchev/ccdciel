@@ -27,7 +27,7 @@ interface
 
 uses
   pu_edittargets, u_ccdconfig, u_global, u_utils, UScaleDPI, u_speech,
-  fu_capture, fu_preview, fu_filterwheel, u_translation, u_hints, math,
+  fu_capture, fu_preview, fu_filterwheel, u_hints, u_translation, math,
   cu_mount, cu_camera, cu_autoguider, cu_astrometry, cu_rotator, pu_viewtext,
   cu_targets, cu_plan, cu_planetarium, pu_pause, fu_safety, fu_weather, cu_dome,
   Classes, SysUtils, FileUtil, Forms, Controls, Graphics, Dialogs, StdCtrls,
@@ -401,7 +401,7 @@ end;
 procedure Tf_sequence.MenuCopyClick(Sender: TObject);
 var txt,fn1,fn2: string;
 begin
-  txt:=FormEntry(self, 'Copy from', ExtractFileNameOnly(Targets.SequenceFile.Filename));
+  txt:=FormEntry(self, rsCopyFrom, ExtractFileNameOnly(Targets.SequenceFile.Filename));
   if txt='' then exit;
   fn1:=slash(ConfigDir)+txt+'.targets';
   if not FileExistsUTF8(fn1) then begin
@@ -412,7 +412,7 @@ begin
   if txt='' then exit;
   fn2:=slash(ConfigDir)+txt+'.targets';
   if Running and (fn2=Targets.SequenceFile.Filename) then begin
-    ShowMessage('Cannot overwrite the running sequence!');
+    ShowMessage(rsCannotOverwr);
     exit;
   end;
   if FileExistsUTF8(fn2) then begin
@@ -426,7 +426,7 @@ begin
      LoadTargets(fn2);
    end;
   except
-   on E: Exception do ShowMessage('Copyfile error :'+ E.Message);
+   on E: Exception do ShowMessage(Format(rsCopyfileErro, [E.Message]));
   end;
 end;
 
@@ -438,7 +438,7 @@ begin
   if OpenDialog1.Execute then begin
     fn:=OpenDialog1.FileName;
     if Running and (fn=Targets.SequenceFile.Filename) then begin
-      ShowMessage('Cannot delete the running sequence!');
+      ShowMessage(rsCannotDelete);
       exit;
     end;
     if MessageDlg(Format(rsDoYouWantToD, [fn]), mtConfirmation, mbYesNo, 0)=mrYes then begin
@@ -451,7 +451,7 @@ begin
           Targets.Clear;
         end;
       end
-      else ShowMessage('Failed to delete file: '+fn);
+      else ShowMessage(Format(rsFailedToDele, [fn]));
    end;
   end;
 end;
@@ -490,7 +490,7 @@ var fn,defaultname: string;
 begin
   if Sender=BtnNewTargets then begin
     if Running then begin
-      ShowMessage('A sequence is already running, cannot load a new one.');
+      ShowMessage(rsASequenceIsA);
       exit;
     end;
     Targets.Clear;
@@ -499,18 +499,18 @@ begin
   end;
   ProcessLive := Running;
   if ProcessLive and (Targets.IgnoreRestart) then begin
-    ShowMessage('Cannot edit the active sequence without completion status.');
+    ShowMessage(rsCannotEditAn);
     exit;
   end;
   if ProcessLive and Autofocusing then begin
-    ShowMessage('Cannot edit the active sequence during autofocus');
+    ShowMessage(rsCannotEditTh);
     exit;
   end;
   if ProcessLive then begin
     FEditingTarget:=true;
     temptarget:=T_Targets.Create(self);
     temptarget.AssignTarget(Targets);
-    msg('Start to edit the active sequence',1);
+    msg(rsStartToEditT, 1);
   end
   else begin
     temptarget:=Targets;
@@ -660,7 +660,7 @@ end;
 procedure Tf_sequence.BtnResetClick(Sender: TObject);
 begin
    if Running then begin
-     ShowMessage('Please stop the sequence first!');
+     ShowMessage(rsPleaseStopTh);
      exit;
    end;
    ClearRestartHistory(true);
@@ -729,7 +729,7 @@ end;
 procedure Tf_sequence.BtnLoadTargetsClick(Sender: TObject);
 begin
  if Running then begin
-   ShowMessage('A sequence is already running, cannot load a new one.');
+   ShowMessage(rsASequenceIsA);
    exit;
  end;
  OpenDialog1.InitialDir:=ConfigDir;
@@ -936,7 +936,7 @@ end;
 procedure Tf_sequence.RestartSequence(Sender: TObject);
 begin
   StopSequence;
-  msg(format('Restarting sequence %s ...',[CurrentSeqName]),1);
+  msg(format(rsRestartingSe, [CurrentSeqName]), 1);
   StartingSequence:=true;
   StartTimer.Interval:=5000;
   StartTimer.Enabled:=true;

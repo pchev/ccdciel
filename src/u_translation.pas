@@ -1268,6 +1268,26 @@ resourcestring
   rsCopyASequenc = 'Copy a sequence';
   rsDeleteASeque = 'Delete a sequence';
   rsEditASequenc = 'Edit a sequence';
+  rsCopyFrom = 'Copy from';
+  rsCannotOverwr = 'Cannot overwrite the running sequence!';
+  rsCopyfileErro = 'Copyfile error :%s';
+  rsCannotDelete = 'Cannot delete the running sequence!';
+  rsFailedToDele = 'Failed to delete file: %s';
+  rsASequenceIsA = 'A sequence is already running, cannot load a new one.';
+  rsCannotEditAn = 'Cannot edit an active sequence without completion status.';
+  rsCannotEditTh = 'Cannot edit the active sequence during autofocus';
+  rsStartToEditT = 'Start to edit the active sequence';
+  rsPleaseStopTh = 'Please stop the sequence first!';
+  rsRestartingSe = 'Restarting sequence %s ...';
+  rsApplyEditing = 'Apply editing to active sequence';
+  rsUpdateSequen = 'Update sequence without interruption';
+  rsUpdateActive = 'Update active sequence';
+  rsUpdateFullSe = 'Update full sequence';
+  rsRestartTheSe = 'Restart the sequence';
+  rsActiveTarget = 'Active target is replaced, restart the sequence';
+  rsContinueTheS = 'Continue the sequence';
+  rsErrorUpdatin = 'Error updating the sequence:%s';
+  rsStepComplete = 'Step %s complete';
 
 implementation
 

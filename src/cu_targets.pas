@@ -527,7 +527,7 @@ var StartChange,RestartTarget: boolean;
     p: TStep;
 begin
   try
-  msg('Apply editing to active sequence',1);
+  msg(rsApplyEditing, 1);
   RestartTarget:=false;
   StartChange:=false;
   // properties that can be changed without specific action
@@ -586,7 +586,7 @@ begin
       // Target and plan can be updated without interruption,
       // modification to target or step before the running one are
       // taken into account only at the next repeat, they are not redone now.
-      msg('Update sequence without interruption',3);
+      msg(rsUpdateSequen, 3);
       newdonecount:=T_Plan(Ftargets[FCurrentTarget].plan).Steps[T_Plan(Ftargets[FCurrentTarget].plan).CurrentStep].donecount;
       for i:=0 to NumTargets-1 do
         if FTargets[i]<>nil then FTargets[i].Free;
@@ -623,7 +623,7 @@ begin
     end
     else begin
       // running target or step deleted, clear and apply new sequence in block
-      msg('Update active sequence',3);
+      msg(rsUpdateActive, 3);
       for i:=0 to NumTargets-1 do
         if FTargets[i]<>nil then FTargets[i].Free;
       SetLength(Ftargets,0);
@@ -637,7 +637,7 @@ begin
   end
   else begin
     // no running target, clear and apply new sequence in block
-    msg('Update full sequence',3);
+    msg(rsUpdateFullSe, 3);
     for i:=0 to NumTargets-1 do
       if FTargets[i]<>nil then FTargets[i].Free;
     SetLength(Ftargets,0);
@@ -664,7 +664,7 @@ begin
 
   // Apply startup change immediatelly only if the sequence is waiting to start
   if StartChange and WaitStarting then begin
-    msg('Restart the sequence',3);
+    msg(rsRestartTheSe, 3);
     if assigned(FonRestart) then FonRestart(self);
     exit;
   end;
@@ -672,20 +672,20 @@ begin
   FRestarting:=true;
   if RestartTarget then begin
     // Stop and restart the current target
-    msg('Active target is replaced, restart the sequence',3);
+    msg(rsActiveTarget, 3);
     FRealRestart:=true;
     Capture.Running:=false;
     camera.AbortExposureButNotSequence;
     wait(1);
   end
   else begin
-    msg('Continue the sequence',3);
+    msg(rsContinueTheS, 3);
     FRealRestart:=false;
   end;
   Restart;
 
   except
-    on E: Exception do msg('Error updating the sequence:'+ E.Message,1);
+    on E: Exception do msg(Format(rsErrorUpdatin, [E.Message]), 1);
   end;
 
 end;
