@@ -734,6 +734,8 @@ begin
    OnErrorRunScript := FSequenceFile.Items.GetValue('/Termination/ErrorRunScript',false);
    AtEndScript      := FSequenceFile.Items.GetValue('/Termination/EndScript','');
    OnErrorScript    := FSequenceFile.Items.GetValue('/Termination/ErrorScript','');
+   if FileVersion<>TargetFileVersion then
+      msg('Upgrade sequence file '+CurrentSeqName+' from version '+IntToStr(FileVersion)+' to version '+IntToStr(TargetFileVersion),1);
    if FileVersion<3 then begin
      // compatibility with previous version
      if FileExistsUTF8(slash(ScriptDir[1].path)+'end_sequence.script') then begin
