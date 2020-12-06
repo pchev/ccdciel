@@ -51,6 +51,9 @@ type
               function previewexposure_str: string;
               function delay_str: string;
               function repeatcount_str: string;
+              function ra_str: string;
+              function de_str: string;
+              function pa_str: string;
               function id: LongWord;
             end;
 
@@ -2556,10 +2559,25 @@ begin
   Result:=IntToStr(repeatcount);
 end;
 
+function TTarget.ra_str: string;
+begin
+  Result:=FormatFloat(f5,ra);
+end;
+
+function TTarget.de_str: string;
+begin
+  Result:=FormatFloat(f5,de);
+end;
+
+function TTarget.pa_str: string;
+begin
+  Result:=FormatFloat(f2,pa);
+end;
+
 function TTarget.id: LongWord;
 begin
   // if any of this change we consider it another target
-  result:=Hash(objectname+StringReplace(planname,'*','',[])+FormatFloat(f6,ra)+FormatFloat(f6,de));
+  result:=Hash(objectname+StringReplace(planname,'*','',[])+ra_str+de_str+pa_str);
 end;
 
 function TemplateModified(p:T_Plan):boolean;

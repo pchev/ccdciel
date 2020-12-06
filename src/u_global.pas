@@ -125,6 +125,8 @@ type
               function description_str: string;
               function dithercount_str: string;
               function autofocuscount_str: string;
+              function gain_str: string;
+              function offset_str: string;
               function id: LongWord;
             end;
 
@@ -569,10 +571,20 @@ begin
   Result:=description;
 end;
 
+function TStep.gain_str: string;
+begin
+  Result:=IntToStr(gain);
+end;
+
+function TStep.offset_str: string;
+begin
+  Result:=IntToStr(offset);
+end;
+
 function TStep.id: LongWord;
 begin
   // if any of this change we consider it another step
-  result:=Hash(description+frtype_str+binning_str+filter_str);
+  result:=Hash(description+frtype_str+exposure_str+binning_str+filter_str+gain_str+offset_str);
 end;
 
 end.

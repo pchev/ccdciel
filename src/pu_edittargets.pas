@@ -2505,7 +2505,7 @@ begin
 end;
 
 procedure Tf_EditTargets.StepChange(Sender: TObject);
-var n,j,i:integer;
+var n,j,i,oldid:integer;
     p: TStep;
     x: double;
     str,buf: string;
@@ -2519,6 +2519,7 @@ begin
   if n < 1 then exit;
   p:=TStep(StepList.Objects[0,n]);
   if p=nil then exit;
+  oldid:=p.id;
   StepsModified:=StepsModified or (p.description<>StepList.Cells[pcoldesc,n]);
   p.description:=StepList.Cells[pcoldesc,n];
   str:=StepList.Cells[pcoltype,n];
@@ -2597,6 +2598,9 @@ begin
      p.autofocuscount:=j
   else
      p.autofocuscount:=0;
+  // reset donecount if the id change
+  if p.id<>oldid then
+    p.donecount:=0;
   StepList.Cells[1,n]:=p.description;
   SetStep(n,p);
   SavePlanModified(false);
