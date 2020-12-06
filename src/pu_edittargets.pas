@@ -1556,6 +1556,7 @@ end;
 
 procedure Tf_EditTargets.TargetChange(Sender: TObject);
 var i,n,j:integer;
+    oldid: LongWord;
     scdir:TScriptDir;
     sname,str,buf: string;
     t: TTarget;
@@ -1569,6 +1570,7 @@ begin
   if n < 1 then exit;
   t:=TTarget(TargetList.Objects[colseq,n]);
   if t=nil then exit;
+  oldid:=t.id;
   if t.objectname=ScriptTxt then begin
     PageControlTools.ActivePageIndex:=pagescript;
     PageControlPlan.ActivePageIndex:=pagescript;
@@ -1650,6 +1652,13 @@ begin
       PlanName.Caption:=t.planname;
       if trim(t.planname)>'' then LoadTemplate;
       SetTemplateButton;
+    end;
+  end;
+  if t.id<>oldid then begin
+    // this is another target, reset all done count
+    t.repeatdone:=0;
+    for i:=0 to T_Plan(t.plan).Count-1 do begin
+      T_Plan(t.plan).Steps[i].donecount:=0;
     end;
   end;
   TargetList.EditorMode := false;
@@ -2505,7 +2514,8 @@ begin
 end;
 
 procedure Tf_EditTargets.StepChange(Sender: TObject);
-var n,j,i,oldid:integer;
+var n,j,i:integer;
+    oldid: LongWord;
     p: TStep;
     x: double;
     str,buf: string;
