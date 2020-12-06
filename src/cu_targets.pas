@@ -103,6 +103,7 @@ type
       FOriginalFilter: TSaveFilter;
       FSequenceFile: T_SequenceFile;
       FRestarting, FRealRestart: boolean;
+      Fslewing: boolean;
       function GetBusy: boolean;
       procedure SetTargetName(val: string);
       procedure SetPreview(val: Tf_preview);
@@ -192,6 +193,7 @@ type
       property TargetName: string read FName write SetTargetName;
       property Busy: boolean read GetBusy;
       property Restarting: boolean read FRestarting;
+      property Slewing: boolean read Fslewing;
       property Running: boolean read FRunning;
       property ScriptRunning: boolean read FScriptRunning;
       property TargetCoord: boolean read FTargetCoord;
@@ -255,6 +257,7 @@ begin
   TargetForceNext:=false;
   Frunning:=false;
   FRestarting:=False;
+  Fslewing:=False;
   FSeqStartAt:=0;
   FSeqStopAt:=0;
   FSeqStart:=false;
@@ -2247,6 +2250,8 @@ var err: double;
     sgain,soffset: integer;
     fi,cormethod,bin,maxretry,delay: integer;
 begin
+ try
+  Fslewing:=true;
   // Slew to J2000 ra,de
   result:=false;
   FTargetCoord:=false;
@@ -2316,6 +2321,9 @@ begin
       end;
     end;
   end;
+ finally
+   Fslewing:=false;
+ end;
 end;
 
 procedure T_Targets.TargetTimerTimer(Sender: TObject);

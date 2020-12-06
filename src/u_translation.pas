@@ -1288,6 +1288,7 @@ resourcestring
   rsContinueTheS = 'Continue the sequence';
   rsErrorUpdatin = 'Error updating the sequence:%s';
   rsStepComplete = 'Step %s complete';
+  rsCannotEditTh2 = 'Cannot edit the active sequence when slewing';
 
 implementation
 

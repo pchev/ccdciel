@@ -506,6 +506,10 @@ begin
     ShowMessage(rsCannotEditTh);
     exit;
   end;
+  if ProcessLive and Targets.Slewing then begin
+    ShowMessage(rsCannotEditTh2);
+    exit;
+  end;
   if ProcessLive then begin
     FEditingTarget:=true;
     temptarget:=T_Targets.Create(self);
