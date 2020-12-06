@@ -6,15 +6,15 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ccdciel\n"
 "Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
-"POT-Creation-Date: 2020-11-29 11:06+0000\n"
-"PO-Revision-Date: 2020-05-11 12:47+0000\n"
+"POT-Creation-Date: 2020-12-06 20:46+0000\n"
+"PO-Revision-Date: 2020-12-06 08:19+0000\n"
 "Last-Translator: Sergey Tarantsov <tsn-ast@yandex.ru>\n"
 "Language-Team: Russian <ru@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2020-11-29 11:12+0000\n"
-"X-Generator: Launchpad (build 12d09381f8e8eee3115395875b132e165fa96574)\n"
+"X-Launchpad-Export-Date: 2020-12-06 21:08+0000\n"
+"X-Generator: Launchpad (build 15cd58601e77a273f7390fc4f4fcd16efe814a43)\n"
 
 #: u_hints.rsactivateback
 msgid "Activate backlash compensation.%sLet this disabled if your focuser driver include backlash compensation."
@@ -86,7 +86,7 @@ msgstr "ISO камеры"
 
 #: u_hints.rscameraoffset
 msgid "Camera offset"
-msgstr ""
+msgstr "Смещение камеры"
 
 #: u_hints.rscamerapositi
 msgid "Camera position angle"
@@ -120,10 +120,6 @@ msgstr "Проверять обработку всех объектов при �
 msgid "Copy the current profile to a new one.%sThis also copy every program preference to the new profile."
 msgstr "Скопировать текущий профиль в новый.%sЭто также копирует в новый профиль все настройки программы."
 
-#: u_hints.rscopytheseque
-msgid "Copy the sequence to a new one. Completion status is reinitialized"
-msgstr "Копировать задание в новый файл. Статус выполнения удаляется"
-
 #: u_hints.rscreateanewem
 msgid "Create a new empty profile.%sWarning this also clear every program preference for this new profile.%sUse the Copy button if you want to configure a different equipment but keep the program options."
 msgstr "Создание нового пустого профиля.%sВ этом случае также удаляются все настройки программы для этого профиля.%sИспользуйте кнопку «Копировать», если хотите настроить другое оборудование, но сохранить общие параметры программы."
@@ -147,10 +143,6 @@ msgstr "Текущее расположение относительно мер�
 #: u_hints.rsdeletethesel
 msgid "Delete the selected row from the list."
 msgstr "Удалить выбранную строку из списка"
-
-#: u_hints.rsdeletetheseq
-msgid "Delete the sequence file"
-msgstr "Удалить файл задания"
 
 #: u_hints.rsdeletethispr
 msgid "Delete this profile and associated program preference."
@@ -218,7 +210,7 @@ msgstr "Если флажок установлен, диалоговое окн�
 
 #: u_hints.rsifnotchecked
 msgid "If not checked the program will never change the gain/offset value set in the driver setup"
-msgstr ""
+msgstr "Если не отмечено, программа не будет изменять значения усиления/смещения, установленные в настройках драйвера"
 
 #: u_hints.rsiftheimageis
 msgid "If the image is now focused, click this button to get the current focuser position"

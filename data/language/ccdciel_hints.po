@@ -102,14 +102,6 @@ msgstr ""
 msgid "If checked no confirmation dialog will be presented and failed operation will abort the current step."
 msgstr ""
 
-#: u_hints:rscopytheseque
-msgid "Copy the sequence to a new one. Completion status is reinitialized"
-msgstr ""
-
-#: u_hints:rsdeletetheseq
-msgid "Delete the sequence file"
-msgstr ""
-
 #: u_hints:rsclearthesequ
 msgid "Clear the sequence completion status"
 msgstr ""

@@ -6,15 +6,15 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ccdciel\n"
 "Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
-"POT-Creation-Date: 2020-11-29 11:06+0000\n"
-"PO-Revision-Date: 2020-09-05 09:26+0000\n"
+"POT-Creation-Date: 2020-12-06 20:45+0000\n"
+"PO-Revision-Date: 2020-12-06 08:17+0000\n"
 "Last-Translator: Sergey Tarantsov <tsn-ast@yandex.ru>\n"
 "Language-Team: Russian <ru@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2020-11-29 11:12+0000\n"
-"X-Generator: Launchpad (build 12d09381f8e8eee3115395875b132e165fa96574)\n"
+"X-Launchpad-Export-Date: 2020-12-06 21:08+0000\n"
+"X-Generator: Launchpad (build 15cd58601e77a273f7390fc4f4fcd16efe814a43)\n"
 
 #: u_translation.rs32bitdriver
 msgid "This driver work only in 32bit, please install the 32bit version of CCDciel."
@@ -51,6 +51,10 @@ msgstr "О программе"
 #: u_translation.rsaction
 msgid "Action"
 msgstr "Действие"
+
+#: u_translation.rsactivetarget
+msgid "Active target is replaced, restart the sequence"
+msgstr ""
 
 #: u_translation.rsadd
 msgid "Add"
@@ -124,6 +128,10 @@ msgstr "Один скрипт уже запущен"
 msgid "Any time"
 msgstr "Любое время"
 
+#: u_translation.rsapplyediting
+msgid "Apply editing to active sequence"
+msgstr ""
+
 #: u_translation.rsapplytoallde
 msgid "Apply to all devices"
 msgstr "Применить ко всем устройствам"
@@ -147,6 +155,10 @@ msgstr "Отключить все устройства?"
 #: u_translation.rsascominterfa
 msgid "ASCOM interface is only available on Windows."
 msgstr "Интерфейс ASCOM доступен только в Windows."
+
+#: u_translation.rsasequenceisa
+msgid "A sequence is already running, cannot load a new one."
+msgstr ""
 
 #: u_translation.rsastrometry
 msgid "Astrometry"
@@ -406,7 +418,7 @@ msgstr "Background"
 
 #: u_translation.rsbackgroundne
 msgid "Background neutralization"
-msgstr ""
+msgstr "Выровнять фон"
 
 #: u_translation.rsbacklashcomp
 msgid "Backlash compensation"
@@ -568,9 +580,25 @@ msgstr "Невозможно рассчитать время меридиана"
 msgid "Cannot connect to autoguider, sequence will run without guiding! %sDo you want to continue anyway?"
 msgstr "Не удаётся подключиться к автогиду, задание будет выполняться без гидирования! %sПродолжить?"
 
+#: u_translation.rscannotdelete
+msgid "Cannot delete the running sequence!"
+msgstr ""
+
 #: u_translation.rscannotdetect
 msgid "Cannot detect star."
 msgstr "Не удаётся обнаружить звезду."
+
+#: u_translation.rscannoteditan
+msgid "Cannot edit an active sequence without completion status."
+msgstr ""
+
+#: u_translation.rscannoteditth
+msgid "Cannot edit the active sequence during autofocus"
+msgstr ""
+
+#: u_translation.rscannoteditth2
+msgid "Cannot edit the active sequence when slewing"
+msgstr ""
 
 #: u_translation.rscannotfindaf
 msgid "Cannot find a focus star."
@@ -587,6 +615,10 @@ msgstr "Не найдена звезда на своей позиции. Пер�
 #: u_translation.rscannotgetfoc
 msgid "Cannot get focuser absolute position"
 msgstr "Невозможно получить абсолютную позицию фокусера"
+
+#: u_translation.rscannotoverwr
+msgid "Cannot overwrite the running sequence!"
+msgstr ""
 
 #: u_translation.rscannotreachn
 msgid "Cannot reach near focus HFD, please increase Half Width or better center the curve."
@@ -852,6 +884,10 @@ msgstr "Продолжение через %s секунд"
 msgid "Continue sequence execution"
 msgstr "Продолжение выполнения задания"
 
+#: u_translation.rscontinuethes
+msgid "Continue the sequence"
+msgstr ""
+
 #: u_translation.rscontrolexpos
 msgid "Control exposure"
 msgstr "Контрольный снимок"
@@ -876,9 +912,21 @@ msgstr "Местонахождение"
 msgid "Copy"
 msgstr "Копия"
 
+#: u_translation.rscopyasequenc
+msgid "Copy a sequence"
+msgstr ""
+
 #: u_translation.rscopycurrentp
 msgid "Copy current profile to"
 msgstr "Скопировать текущий профиль в"
+
+#: u_translation.rscopyfileerro
+msgid "Copyfile error :%s"
+msgstr ""
+
+#: u_translation.rscopyfrom
+msgid "Copy from"
+msgstr ""
 
 #: u_translation.rscopyto
 msgid "Copy to "
@@ -980,9 +1028,9 @@ msgstr "Задержка после поворота телескопа, сек 
 msgid "Delete"
 msgstr "Удалить"
 
-#: u_translation.rsdeleteplan
-msgid "Delete plan"
-msgstr "Удалить план"
+#: u_translation.rsdeleteaseque
+msgid "Delete a sequence"
+msgstr ""
 
 #: u_translation.rsdeletesequen
 msgid "Delete sequence %s ?"
@@ -991,6 +1039,10 @@ msgstr "Удалить объект %s?"
 #: u_translation.rsdeletestep
 msgid "Delete step %s ?"
 msgstr "Удалить шаг %s ?"
+
+#: u_translation.rsdeletetempl
+msgid "Delete template"
+msgstr ""
 
 #: u_translation.rsdesc
 msgid "Desc."
@@ -1208,6 +1260,10 @@ msgstr "Восток (цель к западу)"
 msgid "Edit"
 msgstr "Правка"
 
+#: u_translation.rseditasequenc
+msgid "Edit a sequence"
+msgstr ""
+
 #: u_translation.rseditplan
 msgid "Edit plan"
 msgstr "Редактировать план"
@@ -1284,6 +1340,10 @@ msgstr "Ошибка запуска команды: %s"
 msgid "Error: Unknown telescope focal length, set in telescope driver or in PREFERENCE, ASTROMETRY."
 msgstr "Ошибка: неизвестное фокусное расстояние телескопа, установленное в драйвере телескопа, Настройках или Астрометрии"
 
+#: u_translation.rserrorupdatin
+msgid "Error updating the sequence:%s"
+msgstr ""
+
 #: u_translation.rsestimatedsli
 msgid "Estimated slippage since last learning"
 msgstr "Расчётное проскальзывание с момента последнего обучения"
@@ -1343,6 +1403,10 @@ msgstr "Выдержка, сек"
 #: u_translation.rsexposuretime4
 msgid "Exposure time too short for measurement, need %d seconds."
 msgstr "Время экспозиции слишком короткое для измерения, требуется %d секунд."
+
+#: u_translation.rsfailedtodele
+msgid "Failed to delete file: %s"
+msgstr ""
 
 #: u_translation.rsfailedtostar
 msgid "Failed to start guiding!"
@@ -1954,7 +2018,7 @@ msgstr "Установите ось RA монтировки вручную, чт
 
 #: u_translation.rsmanagethegai
 msgid "Manage the Gain and Offset if available."
-msgstr ""
+msgstr "Управлять усилением и смещением, если доступно"
 
 #: u_translation.rsmanual
 msgid "Manual"
@@ -2466,7 +2530,7 @@ msgstr "смещение"
 
 #: u_translation.rsoffset2
 msgid "Offset"
-msgstr ""
+msgstr "Смещение"
 
 #: u_translation.rsok
 msgid "OK"
@@ -2702,7 +2766,7 @@ msgstr "Пожалуйста, активируйте логи в настрой�
 
 #: u_translation.rspleasebecare
 msgid "Please be careful to review and set the value for the Gain and Offset"
-msgstr ""
+msgstr "Внимательно проверьте и установите значения для усиления и смещения"
 
 #: u_translation.rspleaseconfig
 msgid "Please configure your"
@@ -2760,6 +2824,10 @@ msgstr "Пожалуйста, выберите временную папку б�
 msgid "Please set the format to %s before to start the sequence."
 msgstr "Определите формат %s, прежде чем запустить задание."
 
+#: u_translation.rspleasestopth
+msgid "Please stop the sequence first!"
+msgstr ""
+
 #: u_translation.rspleasewaitun
 msgid "Please wait until the measurements are complete"
 msgstr "Подождите, пока измерения не будут завершены"
@@ -2786,7 +2854,7 @@ msgstr "Pos."
 
 #: u_translation.rspower
 msgid "Power"
-msgstr "Мощность"
+msgstr "Power"
 
 #: u_translation.rsprecisionsle
 msgid "Precision slewing options"
@@ -3080,6 +3148,14 @@ msgstr "Перезапуск автогида"
 msgid "Restart exposure"
 msgstr "Перезапуск  экспозиции"
 
+#: u_translation.rsrestartingse
+msgid "Restarting sequence %s ..."
+msgstr ""
+
+#: u_translation.rsrestartthese
+msgid "Restart the sequence"
+msgstr ""
+
 #: u_translation.rsresumeautogu
 msgid "Resume autoguider"
 msgstr "Возобновление гидирования"
@@ -3196,6 +3272,10 @@ msgstr "насыщенный"
 msgid "Save"
 msgstr "Сохранить"
 
+#: u_translation.rssaveandapply
+msgid "Save and apply to targets"
+msgstr ""
+
 #: u_translation.rssaveapngfile
 msgid "Save a bitmap file additionally to the standard FITS file"
 msgstr "Сохранять растровый файл вместе с FITS"
@@ -3224,13 +3304,13 @@ msgstr "Сохранить FITS%s"
 msgid "Save picture%s"
 msgstr "Сохранить растровое изображение %s"
 
-#: u_translation.rssaveplan
-msgid "Save plan"
-msgstr "Сохранить план"
+#: u_translation.rssavetempl
+msgid "Save template"
+msgstr ""
 
-#: u_translation.rssaveplanas
-msgid "Save plan as..."
-msgstr "Сохранить план как..."
+#: u_translation.rssavetemplas
+msgid "Save template as..."
+msgstr ""
 
 #: u_translation.rsscaletoleran
 msgid "Scale tolerance"
@@ -3800,6 +3880,10 @@ msgstr "Включить слежение"
 msgid "Start time"
 msgstr "Время начала"
 
+#: u_translation.rsstarttoeditt
+msgid "Start to edit the active sequence"
+msgstr ""
+
 #: u_translation.rsstarttracking
 msgid "start tracking"
 msgstr "Включено слежение"
@@ -3831,6 +3915,10 @@ msgstr "Std.Dev:"
 #: u_translation.rsstep
 msgid "Step"
 msgstr "Шаг"
+
+#: u_translation.rsstepcomplete
+msgid "Step %s complete"
+msgstr ""
 
 #: u_translation.rsstepdescript
 msgid "Step description"
@@ -4092,6 +4180,10 @@ msgstr "Спад температуры отменён"
 msgid "Temperature scale"
 msgstr "Шкала температуры"
 
+#: u_translation.rstemplate
+msgid "Template"
+msgstr ""
+
 #: u_translation.rstemporaryfol
 msgid "Temporary folder"
 msgstr "Папка временных файлов"
@@ -4224,10 +4316,6 @@ msgstr "Задание %s содержит статус выполнения"
 msgid "This sequence contain information about the steps already completed.%sNow you can continue after the last checkpoint.%sDo you want to clear the completion status to restart from the beginning?"
 msgstr "Это задание содержит информацию о уже выполненных шагах.%sСейчас вы можете продолжить с момента последней контрольной точки.%sВы хотите очистить статус выполнения, чтобы перезапустить задание с начала?"
 
-#: u_translation.rsthiswillbelo
-msgid "This will be lost when saving the new file.%sDo you want to save with a new name to not loss this information in the original file?"
-msgstr "Это будет потеряно при сохранении нового файла.%sВы хотите сохранить с новым именем, чтобы не потерять эту информацию в исходном файле?"
-
 #: u_translation.rstiltindicati2
 msgid "Tilt indication[hfd]=%s"
 msgstr "Наклон [hfd]=%s"
@@ -4306,7 +4394,7 @@ msgstr "Попробуйте подключиться к автогиду"
 
 #: u_translation.rstrytofixpixe
 msgid "Try to fix pixel range to match CMOS camera bit depth"
-msgstr "Попробовать установить диапазон пикселей в соответствии с битностью CMOS камеры"
+msgstr "Установить диапазон пикселей в соответствии с битностью CMOS камеры"
 
 #: u_translation.rstwilightskyf
 msgid "Twilight sky flat"
@@ -4376,9 +4464,21 @@ msgstr "Небезопасное состояние игноровано пол�
 msgid "Unslaved"
 msgstr "Unslaved"
 
+#: u_translation.rsupdateactive
+msgid "Update active sequence"
+msgstr ""
+
+#: u_translation.rsupdatefullse
+msgid "Update full sequence"
+msgstr ""
+
 #: u_translation.rsupdateradec2
 msgid "Update RA+Dec%sfrom Planetarium"
 msgstr "Обновить RA+Dec%sиз планетария"
+
+#: u_translation.rsupdatesequen
+msgid "Update sequence without interruption"
+msgstr ""
 
 #: u_translation.rsuseasfallbac
 msgid "Use as fallback if other software fail"

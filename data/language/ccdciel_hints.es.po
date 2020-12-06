@@ -6,15 +6,15 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ccdciel\n"
 "Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
-"POT-Creation-Date: 2020-11-29 11:06+0000\n"
+"POT-Creation-Date: 2020-12-06 20:46+0000\n"
 "PO-Revision-Date: 2020-08-06 21:07+0000\n"
 "Last-Translator: Víctor R. Ruiz <Unknown>\n"
 "Language-Team: Spanish <es@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2020-11-29 11:12+0000\n"
-"X-Generator: Launchpad (build 12d09381f8e8eee3115395875b132e165fa96574)\n"
+"X-Launchpad-Export-Date: 2020-12-06 21:08+0000\n"
+"X-Generator: Launchpad (build 15cd58601e77a273f7390fc4f4fcd16efe814a43)\n"
 
 #: u_hints.rsactivateback
 msgid "Activate backlash compensation.%sLet this disabled if your focuser driver include backlash compensation."
@@ -120,10 +120,6 @@ msgstr "Controlar cómo se gestionan los objetivos completos cuando se repite la
 msgid "Copy the current profile to a new one.%sThis also copy every program preference to the new profile."
 msgstr "Copiar el actual perfil a uno nuevo.%sEsto también copiará las preferencias del programa al nuevo perfil."
 
-#: u_hints.rscopytheseque
-msgid "Copy the sequence to a new one. Completion status is reinitialized"
-msgstr "Copiar la secuencia en una nueva. Se reiniciará el estado de completitud."
-
 #: u_hints.rscreateanewem
 msgid "Create a new empty profile.%sWarning this also clear every program preference for this new profile.%sUse the Copy button if you want to configure a different equipment but keep the program options."
 msgstr "Crear un perfil vacío nuevo.%sAviso: Esto también borra las preferencias de este nuevo perfil.%sUse el botón de Copiar si quiere configurar un equipo diferente pero mantener las opciones del programa."
@@ -147,10 +143,6 @@ msgstr "Lado actual de la columna del telescopio"
 #: u_hints.rsdeletethesel
 msgid "Delete the selected row from the list."
 msgstr "Borrar la fila seleccionada de la lista."
-
-#: u_hints.rsdeletetheseq
-msgid "Delete the sequence file"
-msgstr "Borrar el fichero de secuencia"
 
 #: u_hints.rsdeletethispr
 msgid "Delete this profile and associated program preference."
