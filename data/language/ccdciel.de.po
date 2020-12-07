@@ -6,15 +6,15 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ccdciel\n"
 "Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
-"POT-Creation-Date: 2020-12-06 20:45+0000\n"
-"PO-Revision-Date: 2020-09-08 14:05+0000\n"
+"POT-Creation-Date: 2020-12-07 13:25+0000\n"
+"PO-Revision-Date: 2020-12-06 21:54+0000\n"
 "Last-Translator: Thomas <email@starhopper.de>\n"
 "Language-Team: German <de@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2020-12-06 21:08+0000\n"
-"X-Generator: Launchpad (build 15cd58601e77a273f7390fc4f4fcd16efe814a43)\n"
+"X-Launchpad-Export-Date: 2020-12-07 13:36+0000\n"
+"X-Generator: Launchpad (build 4853cb86c14c5a9e513816c8a61121c639b30835)\n"
 
 #: u_translation.rs32bitdriver
 msgid "This driver work only in 32bit, please install the 32bit version of CCDciel."
@@ -54,7 +54,7 @@ msgstr "Aktion"
 
 #: u_translation.rsactivetarget
 msgid "Active target is replaced, restart the sequence"
-msgstr ""
+msgstr "Aktives Ziel wurde ersetzt, Sequenz neu starten"
 
 #: u_translation.rsadd
 msgid "Add"
@@ -130,7 +130,7 @@ msgstr "Jederzeit"
 
 #: u_translation.rsapplyediting
 msgid "Apply editing to active sequence"
-msgstr ""
+msgstr "Die Bearbeitung auf die aktive Sequenz anwenden"
 
 #: u_translation.rsapplytoallde
 msgid "Apply to all devices"
@@ -158,7 +158,7 @@ msgstr "Die ASCOM Schnittstelle ist nur unter Windows verfügbar."
 
 #: u_translation.rsasequenceisa
 msgid "A sequence is already running, cannot load a new one."
-msgstr ""
+msgstr "Eine Sequenz läuft bereits, kann keine neue laden."
 
 #: u_translation.rsastrometry
 msgid "Astrometry"
@@ -582,7 +582,7 @@ msgstr "Keine Verbindung zum Autoguider möglich, Sequenz wird ohne Guiding lauf
 
 #: u_translation.rscannotdelete
 msgid "Cannot delete the running sequence!"
-msgstr ""
+msgstr "Laufende Sequenz kann nicht gelöscht werden!"
 
 #: u_translation.rscannotdetect
 msgid "Cannot detect star."
@@ -590,15 +590,15 @@ msgstr "Kann keinen Stern finden"
 
 #: u_translation.rscannoteditan
 msgid "Cannot edit an active sequence without completion status."
-msgstr ""
+msgstr "Eine aktive Sequenz kann ohne Ende Aktion nicht bearbeitet werden."
 
 #: u_translation.rscannoteditth
 msgid "Cannot edit the active sequence during autofocus"
-msgstr ""
+msgstr "Aktive Sequenz kann während Autofokus nicht bearbeitet werden"
 
 #: u_translation.rscannoteditth2
 msgid "Cannot edit the active sequence when slewing"
-msgstr ""
+msgstr "Aktive Sequenz kann beim Schwenk nicht bearbeitet werden"
 
 #: u_translation.rscannotfindaf
 msgid "Cannot find a focus star."
@@ -618,7 +618,7 @@ msgstr "Absolute Position des Fokussierers kann nicht ermittelt werden"
 
 #: u_translation.rscannotoverwr
 msgid "Cannot overwrite the running sequence!"
-msgstr ""
+msgstr "Laufende Sequenz kann überschrieben werden!"
 
 #: u_translation.rscannotreachn
 msgid "Cannot reach near focus HFD, please increase Half Width or better center the curve."
@@ -886,7 +886,7 @@ msgstr "Setze Sequenz fort"
 
 #: u_translation.rscontinuethes
 msgid "Continue the sequence"
-msgstr ""
+msgstr "Sequenz fortführen"
 
 #: u_translation.rscontrolexpos
 msgid "Control exposure"
@@ -914,7 +914,7 @@ msgstr "Kopieren"
 
 #: u_translation.rscopyasequenc
 msgid "Copy a sequence"
-msgstr ""
+msgstr "Sequenz kopieren"
 
 #: u_translation.rscopycurrentp
 msgid "Copy current profile to"
@@ -922,11 +922,11 @@ msgstr "Kopiere das derzeitige Profil nach"
 
 #: u_translation.rscopyfileerro
 msgid "Copyfile error :%s"
-msgstr ""
+msgstr "Fehler beim Kopieren: %s"
 
 #: u_translation.rscopyfrom
 msgid "Copy from"
-msgstr ""
+msgstr "Kopieren von"
 
 #: u_translation.rscopyto
 msgid "Copy to "
@@ -1030,7 +1030,7 @@ msgstr "Löschen"
 
 #: u_translation.rsdeleteaseque
 msgid "Delete a sequence"
-msgstr ""
+msgstr "Sequenz löschen"
 
 #: u_translation.rsdeletesequen
 msgid "Delete sequence %s ?"
@@ -1042,7 +1042,7 @@ msgstr "Lösche Schritt %s ?"
 
 #: u_translation.rsdeletetempl
 msgid "Delete template"
-msgstr ""
+msgstr "Vorlage löschen"
 
 #: u_translation.rsdesc
 msgid "Desc."
@@ -1262,7 +1262,7 @@ msgstr "Bearbeiten"
 
 #: u_translation.rseditasequenc
 msgid "Edit a sequence"
-msgstr ""
+msgstr "Sequenz bearbeiten"
 
 #: u_translation.rseditplan
 msgid "Edit plan"
@@ -1341,8 +1341,9 @@ msgid "Error: Unknown telescope focal length, set in telescope driver or in PREF
 msgstr "Fehler: unbekannte Teleskopbrennweite, gesetzt im Teleskoptreiber oderin Einstellungen, Astrometrie"
 
 #: u_translation.rserrorupdatin
+#, fuzzy,badformat
 msgid "Error updating the sequence:%s"
-msgstr ""
+msgstr "Fehler beim Aktualisieren der Sequenz"
 
 #: u_translation.rsestimatedsli
 msgid "Estimated slippage since last learning"
@@ -1406,7 +1407,7 @@ msgstr "Die Belichtungszeit ist zu kurz für die Messung, benötigt werden %d Se
 
 #: u_translation.rsfailedtodele
 msgid "Failed to delete file: %s"
-msgstr ""
+msgstr "Datei konnte nicht gelöscht werden: %s"
 
 #: u_translation.rsfailedtostar
 msgid "Failed to start guiding!"
@@ -2017,9 +2018,13 @@ msgstr "Hauptsensor"
 msgid "Adjust the mount RA axis manually to point to the pole the best as possible.%sSlew the telescope to point near the pole at a declination about 89 to 90 degrees with counterweight down.%sSelect below if the telescope can already slew automatically or if it must be moved manually.%sIf automatic, select the direction and movement step. Beware it will move two time this amount."
 msgstr "Die Montierung vorher so gut wie möglich auf den Pol ausrichten. Das Teleskop anschließend auf einen Punkt nahe des Himmelspols zwischen 89-90 Grad Deklination fahren, die Gegengewichtsstange soll dabei nach unten zeigen.%sWählen Sie \"automatisch\" aus wenn das Teleskop bereits vom Programm aus geschwenkt werden kann, ansonsten muss es manuell bewegt werden.%sBei \"automatisch\" kann noch Drehrichtung und Drehwinkel eingestellt werden . Bitte aufpassen, dass kein Hindernis im weg ist, dass Teleskop dreht sich zweimal um den eingestellten Betrag."
 
+#: u_translation.rsmanage
+msgid "Manage"
+msgstr ""
+
 #: u_translation.rsmanagethegai
 msgid "Manage the Gain and Offset if available."
-msgstr ""
+msgstr "Gain und Offset einstellen falls verfügbar"
 
 #: u_translation.rsmanual
 msgid "Manual"
@@ -2377,10 +2382,6 @@ msgstr "Kein Flip bis nach dem Meridian für"
 msgid "No measurement, early start exposure not set."
 msgstr "Keine Messung, früher Start der Belichtung nicht gesetzt"
 
-#: u_translation.rsnomove
-msgid "No move"
-msgstr "Keine Bewegung"
-
 #: u_translation.rsnone2
 msgid "None"
 msgstr "Keiner"
@@ -2531,7 +2532,7 @@ msgstr "Offset"
 
 #: u_translation.rsoffset2
 msgid "Offset"
-msgstr ""
+msgstr "Offset"
 
 #: u_translation.rsok
 msgid "OK"
@@ -2767,7 +2768,7 @@ msgstr "Bitte aktivieren Sie die Protokolldatei in den Einstellungen"
 
 #: u_translation.rspleasebecare
 msgid "Please be careful to review and set the value for the Gain and Offset"
-msgstr ""
+msgstr "Bitte die Werte für Gain und Offset überprüfen und einstellen"
 
 #: u_translation.rspleaseconfig
 msgid "Please configure your"
@@ -2828,7 +2829,7 @@ msgstr "Bitte stellen Sie das Format auf % s ein, bevor Sie die Sequenz starten.
 
 #: u_translation.rspleasestopth
 msgid "Please stop the sequence first!"
-msgstr ""
+msgstr "Bitte zuerst die Sequenz stoppen!"
 
 #: u_translation.rspleasewaitun
 msgid "Please wait until the measurements are complete"
@@ -3152,11 +3153,11 @@ msgstr "Belichtung neu starten"
 
 #: u_translation.rsrestartingse
 msgid "Restarting sequence %s ..."
-msgstr ""
+msgstr "Sequenz neu starten %s..."
 
 #: u_translation.rsrestartthese
 msgid "Restart the sequence"
-msgstr ""
+msgstr "Sequenz neu starten"
 
 #: u_translation.rsresumeautogu
 msgid "Resume autoguider"
@@ -3276,7 +3277,7 @@ msgstr "Speichern"
 
 #: u_translation.rssaveandapply
 msgid "Save and apply to targets"
-msgstr ""
+msgstr "Ziele speichern und anwenden"
 
 #: u_translation.rssaveapngfile
 msgid "Save a bitmap file additionally to the standard FITS file"
@@ -3308,11 +3309,11 @@ msgstr "Speichere Bild%s"
 
 #: u_translation.rssavetempl
 msgid "Save template"
-msgstr ""
+msgstr "Vorlage speichern"
 
 #: u_translation.rssavetemplas
 msgid "Save template as..."
-msgstr ""
+msgstr "Speichere Vorlage als"
 
 #: u_translation.rsscaletoleran
 msgid "Scale tolerance"
@@ -3884,7 +3885,7 @@ msgstr "Start"
 
 #: u_translation.rsstarttoeditt
 msgid "Start to edit the active sequence"
-msgstr ""
+msgstr "Beginnen Sie mit der Bearbeitung der aktiven Sequenz"
 
 #: u_translation.rsstarttracking
 msgid "start tracking"
@@ -3920,7 +3921,7 @@ msgstr "Schritt"
 
 #: u_translation.rsstepcomplete
 msgid "Step %s complete"
-msgstr ""
+msgstr "Schritt %s abgeschlossen"
 
 #: u_translation.rsstepdescript
 msgid "Step description"
@@ -4184,7 +4185,7 @@ msgstr "Temperaturskala"
 
 #: u_translation.rstemplate
 msgid "Template"
-msgstr ""
+msgstr "Vorlage"
 
 #: u_translation.rstemporaryfol
 msgid "Temporary folder"
@@ -4469,11 +4470,11 @@ msgstr "Entkoppelt"
 
 #: u_translation.rsupdateactive
 msgid "Update active sequence"
-msgstr ""
+msgstr "Aktualisiere aktive Sequenz"
 
 #: u_translation.rsupdatefullse
 msgid "Update full sequence"
-msgstr ""
+msgstr "Aktualisiere gesamte Sequenz"
 
 #: u_translation.rsupdateradec2
 msgid "Update RA+Dec%sfrom Planetarium"
@@ -4481,7 +4482,7 @@ msgstr "Aktualisiere RA+Dec%svom Planetarium"
 
 #: u_translation.rsupdatesequen
 msgid "Update sequence without interruption"
-msgstr ""
+msgstr "Aktualisiere Sequenz ohne Unterbrechung"
 
 #: u_translation.rsuseasfallbac
 msgid "Use as fallback if other software fail"

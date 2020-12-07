@@ -2274,10 +2274,6 @@ msgstr ""
 msgid "set"
 msgstr ""
 
-#: u_translation:rsnomove
-msgid "No move"
-msgstr ""
-
 #: u_translation:rsuseastromet2
 msgid "Use astrometry to%srefine the position"
 msgstr ""
@@ -4744,5 +4740,9 @@ msgstr ""
 
 #: u_translation:rscannoteditth2
 msgid "Cannot edit the active sequence when slewing"
+msgstr ""
+
+#: u_translation:rsmanage
+msgid "Manage"
 msgstr ""
 

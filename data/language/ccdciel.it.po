@@ -6,15 +6,15 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ccdciel\n"
 "Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
-"POT-Creation-Date: 2020-12-06 20:45+0000\n"
+"POT-Creation-Date: 2020-12-07 13:25+0000\n"
 "PO-Revision-Date: 2019-12-15 12:55+0000\n"
 "Last-Translator: Mattia Verga <Unknown>\n"
 "Language-Team: Italian <it@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2020-12-06 21:08+0000\n"
-"X-Generator: Launchpad (build 15cd58601e77a273f7390fc4f4fcd16efe814a43)\n"
+"X-Launchpad-Export-Date: 2020-12-07 13:36+0000\n"
+"X-Generator: Launchpad (build 4853cb86c14c5a9e513816c8a61121c639b30835)\n"
 
 #: u_translation.rs32bitdriver
 msgid "This driver work only in 32bit, please install the 32bit version of CCDciel."
@@ -2016,6 +2016,10 @@ msgstr "Sensore principale"
 msgid "Adjust the mount RA axis manually to point to the pole the best as possible.%sSlew the telescope to point near the pole at a declination about 89 to 90 degrees with counterweight down.%sSelect below if the telescope can already slew automatically or if it must be moved manually.%sIf automatic, select the direction and movement step. Beware it will move two time this amount."
 msgstr ""
 
+#: u_translation.rsmanage
+msgid "Manage"
+msgstr ""
+
 #: u_translation.rsmanagethegai
 msgid "Manage the Gain and Offset if available."
 msgstr ""
@@ -2374,10 +2378,6 @@ msgstr "Non invertire passato il meridiano per"
 
 #: u_translation.rsnomeasuremen
 msgid "No measurement, early start exposure not set."
-msgstr ""
-
-#: u_translation.rsnomove
-msgid "No move"
 msgstr ""
 
 #: u_translation.rsnone2

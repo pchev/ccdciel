@@ -2,15 +2,15 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ccdciel\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-12-06 20:45+0000\n"
-"PO-Revision-Date: 2020-12-02 08:11+0000\n"
+"POT-Creation-Date: 2020-12-07 13:25+0000\n"
+"PO-Revision-Date: 2020-12-07 10:04+0000\n"
 "Last-Translator: Stanislav Holub <Unknown>\n"
 "Language-Team: Czech <cz@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2020-12-06 21:08+0000\n"
-"X-Generator: Launchpad (build 15cd58601e77a273f7390fc4f4fcd16efe814a43)\n"
+"X-Launchpad-Export-Date: 2020-12-07 13:36+0000\n"
+"X-Generator: Launchpad (build 4853cb86c14c5a9e513816c8a61121c639b30835)\n"
 "Language: cs\n"
 
 #: u_translation.rs32bitdriver
@@ -51,7 +51,7 @@ msgstr "Akce"
 
 #: u_translation.rsactivetarget
 msgid "Active target is replaced, restart the sequence"
-msgstr ""
+msgstr "Aktivní cíl nahrazen, restartujte sekvenci"
 
 #: u_translation.rsadd
 msgid "Add"
@@ -127,7 +127,7 @@ msgstr "Kdykoli"
 
 #: u_translation.rsapplyediting
 msgid "Apply editing to active sequence"
-msgstr ""
+msgstr "Použít úpravy na aktivní sekvenci"
 
 #: u_translation.rsapplytoallde
 msgid "Apply to all devices"
@@ -155,7 +155,7 @@ msgstr "Rozhraní ASCOM je k dispozici pouze ve Windows."
 
 #: u_translation.rsasequenceisa
 msgid "A sequence is already running, cannot load a new one."
-msgstr ""
+msgstr "Sekvence již běží, nelze načíst novou."
 
 #: u_translation.rsastrometry
 msgid "Astrometry"
@@ -581,7 +581,7 @@ msgstr "Nelze se připojit k auto-pointaci, úloha se spustí bez pointace! %sCh
 
 #: u_translation.rscannotdelete
 msgid "Cannot delete the running sequence!"
-msgstr ""
+msgstr "Běžící sekvenci nelze zmazat!"
 
 #: u_translation.rscannotdetect
 msgid "Cannot detect star."
@@ -589,15 +589,15 @@ msgstr "Nelze najít hvězdu."
 
 #: u_translation.rscannoteditan
 msgid "Cannot edit an active sequence without completion status."
-msgstr ""
+msgstr "Nelze upravit aktivní sekvenci bez stavu dokončení."
 
 #: u_translation.rscannoteditth
 msgid "Cannot edit the active sequence during autofocus"
-msgstr ""
+msgstr "Během automatického ostřování nelze upravit aktivní sekvenci"
 
 #: u_translation.rscannoteditth2
 msgid "Cannot edit the active sequence when slewing"
-msgstr ""
+msgstr "Při přejezdu nelze upravit aktivní sekvenci"
 
 #: u_translation.rscannotfindaf
 msgid "Cannot find a focus star."
@@ -617,7 +617,7 @@ msgstr "Absolutní polohu zaostřovače nelze získat"
 
 #: u_translation.rscannotoverwr
 msgid "Cannot overwrite the running sequence!"
-msgstr ""
+msgstr "Běžící sekvenci nelze přepsat!"
 
 #: u_translation.rscannotreachn
 msgid "Cannot reach near focus HFD, please increase Half Width or better center the curve."
@@ -885,7 +885,7 @@ msgstr "Pokračujte v provádění úlohy"
 
 #: u_translation.rscontinuethes
 msgid "Continue the sequence"
-msgstr ""
+msgstr "Pokračovat v sekvenci"
 
 #: u_translation.rscontrolexpos
 msgid "Control exposure"
@@ -913,7 +913,7 @@ msgstr "Kopírovat"
 
 #: u_translation.rscopyasequenc
 msgid "Copy a sequence"
-msgstr ""
+msgstr "Zkopírovat sekvenci"
 
 #: u_translation.rscopycurrentp
 msgid "Copy current profile to"
@@ -921,11 +921,11 @@ msgstr "Zkopírujte aktuální profil do"
 
 #: u_translation.rscopyfileerro
 msgid "Copyfile error :%s"
-msgstr ""
+msgstr "Chyba kopírování souboru :%s"
 
 #: u_translation.rscopyfrom
 msgid "Copy from"
-msgstr ""
+msgstr "Kopírovat z"
 
 #: u_translation.rscopyto
 msgid "Copy to "
@@ -1029,7 +1029,7 @@ msgstr "Vymazat"
 
 #: u_translation.rsdeleteaseque
 msgid "Delete a sequence"
-msgstr ""
+msgstr "Smazat sekvenci"
 
 #: u_translation.rsdeletesequen
 msgid "Delete sequence %s ?"
@@ -1041,7 +1041,7 @@ msgstr "Vymazat krok %s ?"
 
 #: u_translation.rsdeletetempl
 msgid "Delete template"
-msgstr ""
+msgstr "Odstranit šablonu"
 
 #: u_translation.rsdesc
 msgid "Desc."
@@ -1261,7 +1261,7 @@ msgstr "Upravit"
 
 #: u_translation.rseditasequenc
 msgid "Edit a sequence"
-msgstr ""
+msgstr "Upravte sekvenci"
 
 #: u_translation.rseditplan
 msgid "Edit plan"
@@ -1341,7 +1341,7 @@ msgstr "Chyba: Neznámá ohnisková vzdálenost dalekohledu, nastavená v ovlada
 
 #: u_translation.rserrorupdatin
 msgid "Error updating the sequence:%s"
-msgstr ""
+msgstr "Chyba při aktualizaci sekvence: %s"
 
 #: u_translation.rsestimatedsli
 msgid "Estimated slippage since last learning"
@@ -1404,8 +1404,9 @@ msgid "Exposure time too short for measurement, need %d seconds."
 msgstr "Doba expozice příliš krátká pro měření, potřebují %d sekund."
 
 #: u_translation.rsfailedtodele
+#, fuzzy,badformat
 msgid "Failed to delete file: %s"
-msgstr ""
+msgstr "Smazání souboru selhalo: % s"
 
 #: u_translation.rsfailedtostar
 msgid "Failed to start guiding!"
@@ -2016,6 +2017,10 @@ msgstr "Hlavní senzor"
 msgid "Adjust the mount RA axis manually to point to the pole the best as possible.%sSlew the telescope to point near the pole at a declination about 89 to 90 degrees with counterweight down.%sSelect below if the telescope can already slew automatically or if it must be moved manually.%sIf automatic, select the direction and movement step. Beware it will move two time this amount."
 msgstr "Osu RA držáku nastavte ručně tak, aby směřovala k pólu co nejpřesněji.%sNastavte dalekohled tak, aby byl blízko pólu při sklonu 89 až 90 stupňů s protizávažím dolů.%sVyberte z nabýtky, jak se dalekohled bude otáčet automaticky nebo ručně.%sPři automatické otáčení vyberte směr a krok pohybu. Pozor, otočí se dvakrát o tuto hodnotu."
 
+#: u_translation.rsmanage
+msgid "Manage"
+msgstr ""
+
 #: u_translation.rsmanagethegai
 msgid "Manage the Gain and Offset if available."
 msgstr "Upravit Zesílení a Offset, pokud jsou k dispozici."
@@ -2376,10 +2381,6 @@ msgstr "Nepřeklápět  před přechodem poledníku"
 #: u_translation.rsnomeasuremen
 msgid "No measurement, early start exposure not set."
 msgstr "Žádné měření, expozice s počátkem zahájení není nastavena."
-
-#: u_translation.rsnomove
-msgid "No move"
-msgstr "Bez pohybu"
 
 #: u_translation.rsnone2
 msgid "None"
@@ -2827,7 +2828,7 @@ msgstr "Před zahájením úlohy definujte formát %s."
 
 #: u_translation.rspleasestopth
 msgid "Please stop the sequence first!"
-msgstr ""
+msgstr "Zastavit sekvenci!"
 
 #: u_translation.rspleasewaitun
 msgid "Please wait until the measurements are complete"
@@ -3151,11 +3152,11 @@ msgstr "Znovu spouštím expozici"
 
 #: u_translation.rsrestartingse
 msgid "Restarting sequence %s ..."
-msgstr ""
+msgstr "Obnovit sekvenci %s ..."
 
 #: u_translation.rsrestartthese
 msgid "Restart the sequence"
-msgstr ""
+msgstr "Obnovit sekvenci"
 
 #: u_translation.rsresumeautogu
 msgid "Resume autoguider"
@@ -3275,7 +3276,7 @@ msgstr "Uložit"
 
 #: u_translation.rssaveandapply
 msgid "Save and apply to targets"
-msgstr ""
+msgstr "Uložit a použít na cíl"
 
 #: u_translation.rssaveapngfile
 msgid "Save a bitmap file additionally to the standard FITS file"
@@ -3307,11 +3308,11 @@ msgstr "Uložit snímek%s"
 
 #: u_translation.rssavetempl
 msgid "Save template"
-msgstr ""
+msgstr "Uložit šablonu"
 
 #: u_translation.rssavetemplas
 msgid "Save template as..."
-msgstr ""
+msgstr "Uložit šablonu jako ..."
 
 #: u_translation.rsscaletoleran
 msgid "Scale tolerance"
@@ -3884,7 +3885,7 @@ msgstr "Doba spuštění"
 
 #: u_translation.rsstarttoeditt
 msgid "Start to edit the active sequence"
-msgstr ""
+msgstr "Upravovat aktivní sekvenci"
 
 #: u_translation.rsstarttracking
 msgid "start tracking"
@@ -3920,7 +3921,7 @@ msgstr "Krok"
 
 #: u_translation.rsstepcomplete
 msgid "Step %s complete"
-msgstr ""
+msgstr "Krok %s dokončen"
 
 #: u_translation.rsstepdescript
 msgid "Step description"
@@ -4184,7 +4185,7 @@ msgstr "Teplotní stupnice"
 
 #: u_translation.rstemplate
 msgid "Template"
-msgstr ""
+msgstr "Šablona"
 
 #: u_translation.rstemporaryfol
 msgid "Temporary folder"
@@ -4468,11 +4469,11 @@ msgstr "Neřešit"
 
 #: u_translation.rsupdateactive
 msgid "Update active sequence"
-msgstr ""
+msgstr "Aktualizovat aktivní sekvenci"
 
 #: u_translation.rsupdatefullse
 msgid "Update full sequence"
-msgstr ""
+msgstr "Aktualizovat celou sekvenci"
 
 #: u_translation.rsupdateradec2
 msgid "Update RA+Dec%sfrom Planetarium"
@@ -4480,7 +4481,7 @@ msgstr "Aktualizujte RA+Dec%sz Planetária"
 
 #: u_translation.rsupdatesequen
 msgid "Update sequence without interruption"
-msgstr ""
+msgstr "Aktualizovat sekvenci bez přerušení"
 
 #: u_translation.rsuseasfallbac
 msgid "Use as fallback if other software fail"
