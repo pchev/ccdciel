@@ -1313,13 +1313,24 @@ begin
   Left:=screenconfig.GetValue('/Window/Left',0);
   if Screen.Width<1400 then begin
     // up to 1366 x 768
+    ScreenMargin:=80;
     Width:=screenconfig.GetValue('/Window/Width',Screen.Width);
     Height:=screenconfig.GetValue('/Window/Height',Screen.Height);
   end else begin
     // from 1400 x 1050 or 1440 x 900
+    ScreenMargin:=120;
     Width:=screenconfig.GetValue('/Window/Width',1280);
     Height:=screenconfig.GetValue('/Window/Height',800);
   end;
+  if width>(Screen.width-ScreenMargin) then width:=Screen.width-ScreenMargin;
+  if left<ScreenMargin then left:=ScreenMargin;
+  if left+width>(Screen.Width-ScreenMargin) then left:=Screen.Width-width-ScreenMargin;
+  if left<0 then left:=0;
+  if top<ScreenMargin then top:=ScreenMargin;
+  if height>(Screen.height-ScreenMargin) then height:=Screen.height-ScreenMargin;
+  if top+height>(Screen.height-ScreenMargin) then top:=Screen.height-height-ScreenMargin;
+  if top<0 then top:=0;
+
   PanelRight.Width:=screenconfig.GetValue('/Window/PanelRight',PanelRight.Width);
 
   f_msg:=Tf_msg.Create(self);

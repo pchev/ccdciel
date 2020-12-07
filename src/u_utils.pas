@@ -191,16 +191,17 @@ begin
 end;
 
 Procedure FormPos(form : Tform; x,y : integer);
-const margin=60; //minimal distance from screen border
 begin
 with Form do begin
-  if x>margin then left:=x
-     else left:=margin;
-  if left+width>(Screen.Width-margin) then left:=Screen.Width-width-margin;
+  if width>(Screen.width-ScreenMargin) then width:=Screen.width-ScreenMargin;
+  if x>ScreenMargin then left:=x
+     else left:=ScreenMargin;
+  if left+width>(Screen.Width-ScreenMargin) then left:=Screen.Width-width-ScreenMargin;
   if left<0 then left:=0;
-  if y>margin then top:=y
-     else top:=margin;
-  if top+height>(Screen.height-margin) then top:=Screen.height-height-margin;
+  if y>ScreenMargin then top:=y
+     else top:=ScreenMargin;
+  if height>(Screen.height-ScreenMargin) then height:=Screen.height-ScreenMargin;
+  if top+height>(Screen.height-ScreenMargin) then top:=Screen.height-height-ScreenMargin;
   if top<0 then top:=0;
 end;
 end;

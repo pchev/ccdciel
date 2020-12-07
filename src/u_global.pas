@@ -331,6 +331,7 @@ var
   profile: string;
   ProfileFromCommandLine: boolean;
   lang: string;
+  ScreenMargin: integer;
   FilterList,BinningList,ReadoutList: TStringList;
   FilterOffset: array [0..MaxFilter] of integer;
   FilterExpFact: array [0..MaxFilter] of double;
