@@ -13,7 +13,6 @@ object f_EditTargets: Tf_EditTargets
   OnDestroy = FormDestroy
   OnResize = FormResize
   OnShow = FormShow
-  Position = poDefaultPosOnly
   object PanelTarget: TPanel
     Left = 0
     Height = 354
