@@ -150,7 +150,7 @@ type
     function GetPercentComplete: double;
     function GetTargetPercentComplete: double;
     procedure ClearRestartHistory(Confirm:boolean);
-    function EditTargets(et:T_Targets; out fn,defaultname:string):boolean;
+    function EditTargets(et:T_Targets; live: boolean; out fn,defaultname:string):boolean;
     function GetFileName: string;
     function GetRestarting: boolean;
   public
@@ -473,7 +473,7 @@ begin
       t:=T_Targets.Create(self);
       try
         t.LoadTargets(fn);
-        if EditTargets(t,fn,defname) then begin
+        if EditTargets(t,false,fn,defname) then begin
           t.SaveTargets(fn);
         end;
       finally
@@ -520,7 +520,7 @@ begin
     temptarget:=Targets;
   end;
   try
-  if EditTargets(temptarget,fn,defaultname) then begin
+  if EditTargets(temptarget,ProcessLive,fn,defaultname) then begin
     if ProcessLive then begin
       FEditingTarget:=false;
       Targets.UpdateLive(temptarget);
@@ -539,7 +539,7 @@ begin
   end;
 end;
 
-function Tf_sequence.EditTargets(et:T_Targets; out fn,defaultname:string):boolean;
+function Tf_sequence.EditTargets(et:T_Targets; live: boolean; out fn,defaultname:string):boolean;
 var i,n:integer;
     t:TTarget;
 begin
@@ -547,6 +547,16 @@ begin
    f_EditTargets.LoadPlanList;
    f_EditTargets.LoadScriptList;
    f_EditTargets.Filename:=et.SequenceFile.Filename;
+   if live then begin
+     f_EditTargets.BtnSaveAs.Visible:=false;
+     f_EditTargets.BtnImportMosaic.Visible:=false;
+     f_EditTargets.BtnImportObslist.Visible:=false;
+   end
+   else begin
+     f_EditTargets.BtnSaveAs.Visible:=true;
+     f_EditTargets.BtnImportMosaic.Visible:=true;
+     f_EditTargets.BtnImportObslist.Visible:=true;
+   end;
    if (et.Count>0) then begin
       // Edit
       f_EditTargets.TargetName.Caption:=et.TargetName;
