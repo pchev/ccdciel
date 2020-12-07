@@ -273,6 +273,7 @@ begin
   MenuEdit.Caption:=rsEditASequenc;
   BtnReset.Caption:=rsReset;
   BtnPause.Caption:=rsPause;
+  BtnManage.Caption:=rsManage;
   BtnLoadTargets.Hint:=rsLoadASequenc;
   BtnNewTargets.Hint:=rsCreateANewSe;
   BtnEditTargets.Hint:=rsEditTheCurre;

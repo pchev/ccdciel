@@ -307,6 +307,7 @@ begin
   TargetList.RowHeights[0]:=DoScaleY(40);
   StepList.RowHeights[0]:=DoScaleY(40);
   keyboard1:=Tkeyboard1.Create(self);
+  targetmsg.Caption:='';
   LockTarget:=false;
   FTargetsRepeat:=1;
   LockStep:=false;
@@ -433,7 +434,7 @@ begin
   Label13.Caption := rsSeconds2;
   Label11.Caption := rsInterval;
   BtnAnytime.Caption := rsAnyTime;
-  BtnCurrentCoord.Caption := rsNoMove;
+  BtnCurrentCoord.Caption := rsNone2;
   BtnPlanetariumCoord.Caption := rsPlanetarium;
   Btn_coord_internal.Caption:=rsSearch;
   BtnImgCoord.Caption := rsCurrentImage;

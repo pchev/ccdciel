@@ -638,7 +638,6 @@ resourcestring
   rsStartTime = 'Start time';
   rsRise = 'rise';
   rsSet2 = 'set';
-  rsNoMove = 'No move';
   rsUseAstromet2 = 'Use astrometry to%srefine the position';
   rsCurrentImage = 'Current image';
   rsUpdateRADec2 = 'Update RA+Dec%sfrom Planetarium';
@@ -1289,6 +1288,7 @@ resourcestring
   rsErrorUpdatin = 'Error updating the sequence:%s';
   rsStepComplete = 'Step %s complete';
   rsCannotEditTh2 = 'Cannot edit the active sequence when slewing';
+  rsManage = 'Manage';
 
 implementation
 

@@ -739,21 +739,21 @@ object f_EditTargets: Tf_EditTargets
         ParentFont = False
         TabOrder = 1
         object PanelBot2: TPanel
-          Left = 275
+          Left = 264
           Height = 93
           Top = 0
-          Width = 713
+          Width = 724
           Align = alClient
           BevelOuter = bvNone
           ClientHeight = 93
-          ClientWidth = 713
+          ClientWidth = 724
           ParentFont = False
           TabOrder = 0
           object PageControlTools: TPageControl
             Left = 0
             Height = 93
             Top = 0
-            Width = 713
+            Width = 724
             ActivePage = ToolsObject
             Align = alClient
             ParentFont = False
@@ -763,17 +763,17 @@ object f_EditTargets: Tf_EditTargets
             object ToolsObject: TTabSheet
               Caption = 'Object'
               ClientHeight = 89
-              ClientWidth = 703
+              ClientWidth = 714
               ParentFont = False
               object GroupBoxCoord: TGroupBox
                 Left = 0
                 Height = 89
                 Top = 0
-                Width = 182
+                Width = 198
                 Align = alLeft
                 Caption = 'Coordinates'
                 ClientHeight = 69
-                ClientWidth = 180
+                ClientWidth = 196
                 ParentFont = False
                 TabOrder = 0
                 object Btn_coord_internal: TButton
@@ -781,18 +781,18 @@ object f_EditTargets: Tf_EditTargets
                   Height = 23
                   Hint = 'Get the coordinates from annotation database'
                   Top = 0
-                  Width = 65
+                  Width = 75
                   Caption = 'Search'
                   OnClick = Btn_coord_internalClick
                   ParentFont = False
                   TabOrder = 0
                 end
                 object BtnPlanetariumCoord: TButton
-                  Left = 73
+                  Left = 83
                   Height = 23
                   Hint = 'Get the coordinates and object name from the planetarium'
                   Top = 0
-                  Width = 97
+                  Width = 108
                   Caption = 'Planetarium'
                   OnClick = BtnPlanetariumCoordClick
                   ParentFont = False
@@ -803,18 +803,18 @@ object f_EditTargets: Tf_EditTargets
                   Height = 23
                   Hint = 'Do not move the telescope before to start imaging.'
                   Top = 26
-                  Width = 65
+                  Width = 75
                   Caption = 'No move'
                   OnClick = BtnCurrentCoordClick
                   ParentFont = False
                   TabOrder = 2
                 end
                 object BtnImgCoord: TButton
-                  Left = 73
+                  Left = 83
                   Height = 23
                   Hint = 'Solve the current image and get the center coordinates'
                   Top = 26
-                  Width = 98
+                  Width = 108
                   Caption = 'Current image'
                   OnClick = BtnImgCoordClick
                   ParentFont = False
@@ -822,14 +822,14 @@ object f_EditTargets: Tf_EditTargets
                 end
               end
               object GroupBox5: TGroupBox
-                Left = 423
+                Left = 439
                 Height = 89
                 Top = 0
-                Width = 280
+                Width = 275
                 Align = alClient
                 Caption = 'Repeat'
                 ClientHeight = 69
-                ClientWidth = 278
+                ClientWidth = 273
                 ParentFont = False
                 TabOrder = 1
                 object Preview: TCheckBox
@@ -889,7 +889,7 @@ object f_EditTargets: Tf_EditTargets
                 end
               end
               object Panel8: TPanel
-                Left = 182
+                Left = 198
                 Height = 89
                 Top = 0
                 Width = 241
@@ -902,18 +902,18 @@ object f_EditTargets: Tf_EditTargets
                   Left = 0
                   Height = 49
                   Top = 0
-                  Width = 113
+                  Width = 115
                   Caption = 'Time'
                   ClientHeight = 29
-                  ClientWidth = 111
+                  ClientWidth = 113
                   ParentFont = False
                   TabOrder = 0
                   object BtnAnytime: TButton
-                    Left = 8
+                    Left = 2
                     Height = 23
                     Hint = 'Clear time constraint'
                     Top = 0
-                    Width = 92
+                    Width = 112
                     Caption = 'Any time'
                     OnClick = BtnAnytimeClick
                     ParentFont = False
@@ -931,11 +931,11 @@ object f_EditTargets: Tf_EditTargets
                   ParentFont = False
                   TabOrder = 1
                   object BtnImgRot: TButton
-                    Left = 8
+                    Left = 4
                     Height = 23
                     Hint = 'Solve the current image and get the rotation of the image'
                     Top = 0
-                    Width = 101
+                    Width = 108
                     Caption = 'Current image'
                     OnClick = BtnImgRotClick
                     ParentFont = False
@@ -958,7 +958,7 @@ object f_EditTargets: Tf_EditTargets
             object ToolsScript: TTabSheet
               Caption = 'Script'
               ClientHeight = 89
-              ClientWidth = 703
+              ClientWidth = 714
               ParentFont = False
               object Panel14: TPanel
                 Left = 0
@@ -1027,11 +1027,11 @@ object f_EditTargets: Tf_EditTargets
           Left = 0
           Height = 93
           Top = 0
-          Width = 275
+          Width = 264
           Align = alLeft
           Caption = 'Insert rows'
           ClientHeight = 73
-          ClientWidth = 273
+          ClientWidth = 262
           ParentFont = False
           TabOrder = 1
           object BtnSkyFlat: TButton
@@ -1299,10 +1299,10 @@ object f_EditTargets: Tf_EditTargets
             end
             object BtnSaveTemplate: TButton
               AnchorSideTop.Control = Panel17
-              Left = 480
+              Left = 487
               Height = 25
               Top = 4
-              Width = 137
+              Width = 140
               Anchors = [akLeft]
               Caption = 'Save template'
               OnClick = BtnSaveTemplateClick
@@ -1311,10 +1311,10 @@ object f_EditTargets: Tf_EditTargets
             end
             object BtnSaveTemplateAs: TButton
               AnchorSideTop.Control = BtnSaveTemplate
-              Left = 624
+              Left = 632
               Height = 25
               Top = 4
-              Width = 146
+              Width = 188
               Caption = 'Save template as...'
               OnClick = BtnSaveTemplateAsClick
               ParentFont = False
@@ -1322,10 +1322,10 @@ object f_EditTargets: Tf_EditTargets
             end
             object BtnApplyTemplate: TButton
               AnchorSideTop.Control = BtnSaveTemplate
-              Left = 280
+              Left = 272
               Height = 25
               Top = 4
-              Width = 192
+              Width = 210
               Caption = 'Save and apply to targets'
               OnClick = BtnApplyTemplateClick
               ParentFont = False
@@ -1333,7 +1333,7 @@ object f_EditTargets: Tf_EditTargets
             end
             object BtnDeleteTemplate: TButton
               AnchorSideTop.Control = BtnSaveTemplate
-              Left = 781
+              Left = 825
               Height = 25
               Top = 4
               Width = 154
