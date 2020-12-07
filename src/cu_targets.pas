@@ -1383,6 +1383,7 @@ end;
 
 function T_Targets.CheckDoneCount:boolean;
 var i,j,totalcount,donecount: integer;
+    txt: string;
     t: TTarget;
     p: T_Plan;
 begin
@@ -1407,8 +1408,8 @@ begin
     p:=t_plan(t.plan);
     if p=nil then Continue;
     if t.objectname=ScriptTxt then begin
-      FLastDoneStep:=t.objectname+blank+p.PlanName;
-      FDoneStatus:=FDoneStatus+crlf+FLastDoneStep;
+      txt:=t.objectname+blank+p.PlanName;
+      FDoneStatus:=FDoneStatus+crlf+txt;
     end
     else begin
       totalcount:=totalcount+t.repeatcount;
@@ -1416,16 +1417,20 @@ begin
       if (t.repeatdone>0) then begin
         result:=true;
       end;
-      FLastDoneStep:=t.objectname+blank+rsRepeat+':'+blank+IntToStr(t.repeatdone)+'/'+IntToStr(t.repeatcount);
-      FDoneStatus:=FDoneStatus+crlf+FLastDoneStep;
+      txt:=t.objectname+blank+rsRepeat+':'+blank+IntToStr(t.repeatdone)+'/'+IntToStr(t.repeatcount);
+      FDoneStatus:=FDoneStatus+crlf+txt;
+      if t.repeatdone=t.repeatcount then
+        FLastDoneStep:=txt;
       if p.Count<=0 then Continue;
       for j:=0 to p.Count-1 do begin
         totalcount:=totalcount+p.Steps[j].count;
         donecount:=donecount+p.Steps[j].donecount;
-        if p.Steps[j].donecount>0 then
+        txt:=t.objectname+blank+p.PlanName+blank+rsStep+':'+blank+p.Steps[j].description+blank+rsDone+':'+IntToStr(p.Steps[j].donecount)+'/'+IntToStr(p.Steps[j].count);
+        FDoneStatus:=FDoneStatus+crlf+txt;
+        if p.Steps[j].donecount>0 then begin
           result:=true;
-        FLastDoneStep:=t.objectname+blank+p.PlanName+blank+rsStep+':'+blank+p.Steps[j].description+blank+rsDone+':'+IntToStr(p.Steps[j].donecount)+'/'+IntToStr(p.Steps[j].count);
-        FDoneStatus:=FDoneStatus+crlf+FLastDoneStep;
+          FLastDoneStep:=txt;
+        end;
       end;
     end;
  end;
