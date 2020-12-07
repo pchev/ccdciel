@@ -1299,7 +1299,7 @@ object f_EditTargets: Tf_EditTargets
             end
             object BtnSaveTemplate: TButton
               AnchorSideTop.Control = Panel17
-              Left = 487
+              Left = 475
               Height = 25
               Top = 4
               Width = 140
@@ -1311,10 +1311,10 @@ object f_EditTargets: Tf_EditTargets
             end
             object BtnSaveTemplateAs: TButton
               AnchorSideTop.Control = BtnSaveTemplate
-              Left = 632
+              Left = 620
               Height = 25
               Top = 4
-              Width = 188
+              Width = 200
               Caption = 'Save template as...'
               OnClick = BtnSaveTemplateAsClick
               ParentFont = False
@@ -1322,7 +1322,7 @@ object f_EditTargets: Tf_EditTargets
             end
             object BtnApplyTemplate: TButton
               AnchorSideTop.Control = BtnSaveTemplate
-              Left = 272
+              Left = 260
               Height = 25
               Top = 4
               Width = 210

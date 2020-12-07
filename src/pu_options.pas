@@ -863,6 +863,8 @@ begin
   GroupBox27.Caption:=rsInformation;
   GroupBox28.Caption:=rsCoordinates;
   GroupBox29.Caption:=rsRiseSetCondi;
+  Label14.Caption:=rsPresetList;
+  ObservatoryDBDelete.Caption:=rsDelete;
   Label5.Caption := rsObserverName;
   Label10.Caption := rsObservatoryN;
   Label11.Caption := rsTelescopeNam;

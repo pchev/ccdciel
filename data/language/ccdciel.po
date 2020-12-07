@@ -4746,3 +4746,15 @@ msgstr ""
 msgid "Manage"
 msgstr ""
 
+#: u_translation:rstime
+msgid "Time"
+msgstr ""
+
+#: u_translation:rspresetlist
+msgid "Preset list"
+msgstr ""
+
+#: u_translation:rsimportcdcmos
+msgid "Import CdC mosaic"
+msgstr ""
+

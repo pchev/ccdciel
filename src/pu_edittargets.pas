@@ -377,6 +377,7 @@ begin
   BtnCancel.Caption := rsCancel;
   BtnSkyFlat.Caption := rsSkyFlat;
   BtnImportObslist.Caption:=rsImportCdCObs;
+  BtnImportMosaic.Caption:=rsImportCdCMos;
   TargetList.Columns.Items[colname-1].Title.Caption := Format(rsTargetName, [crlf]);
   TargetList.Columns.Items[colplan-1].Title.Caption := rsTemplate;
   TargetList.Columns.Items[colra-1].Title.Caption := rsRA+j2000;
@@ -433,10 +434,13 @@ begin
   Preview.Caption := rsPreviewWhenW;
   Label13.Caption := rsSeconds2;
   Label11.Caption := rsInterval;
+  GroupBoxTime.Caption:=rsTime;
   BtnAnytime.Caption := rsAnyTime;
+  GroupBoxCoord.Caption:=rsCoordinates;
   BtnCurrentCoord.Caption := rsNone2;
   BtnPlanetariumCoord.Caption := rsPlanetarium;
   Btn_coord_internal.Caption:=rsSearch;
+  GroupBoxPA.Caption:=rsRotator;
   BtnImgCoord.Caption := rsCurrentImage;
   BtnImgRot.Caption := rsCurrentImage;
   ToolsScript.Caption := rsScript;

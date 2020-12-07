@@ -1289,6 +1289,9 @@ resourcestring
   rsStepComplete = 'Step %s complete';
   rsCannotEditTh2 = 'Cannot edit the active sequence when slewing';
   rsManage = 'Manage';
+  rsTime = 'Time';
+  rsPresetList = 'Preset list';
+  rsImportCdCMos = 'Import CdC mosaic';
 
 implementation
 
