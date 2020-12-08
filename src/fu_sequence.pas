@@ -434,6 +434,7 @@ end;
 procedure Tf_sequence.MenuDeleteClick(Sender: TObject);
 var fn: string;
 begin
+  OpenDialog1.Title:=rsSelectTheFil;
   OpenDialog1.InitialDir:=ConfigDir;
   OpenDialog1.FileName:='*.targets';
   if OpenDialog1.Execute then begin
@@ -461,6 +462,7 @@ procedure Tf_sequence.MenuEditClick(Sender: TObject);
 var fn,defname: string;
     t: T_Targets;
 begin
+  OpenDialog1.Title:=rsSelectTheFil2;
   OpenDialog1.InitialDir:=ConfigDir;
   OpenDialog1.FileName:='*.targets';
   if OpenDialog1.Execute then begin
@@ -747,6 +749,7 @@ begin
    ShowMessage(rsASequenceIsA);
    exit;
  end;
+ OpenDialog1.Title:=rsSelectTheFil3;
  OpenDialog1.InitialDir:=ConfigDir;
  OpenDialog1.FileName:='*.targets';
  if OpenDialog1.Execute then begin

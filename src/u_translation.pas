@@ -1292,6 +1292,9 @@ resourcestring
   rsTime = 'Time';
   rsPresetList = 'Preset list';
   rsImportCdCMos = 'Import CdC mosaic';
+  rsSelectTheFil = 'Select the file to delete';
+  rsSelectTheFil2 = 'Select the file to edit';
+  rsSelectTheFil3 = 'Select the file to load';
 
 implementation
 

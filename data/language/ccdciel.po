@@ -4758,3 +4758,15 @@ msgstr ""
 msgid "Import CdC mosaic"
 msgstr ""
 
+#: u_translation:rsselectthefil
+msgid "Select the file to delete"
+msgstr ""
+
+#: u_translation:rsselectthefil2
+msgid "Select the file to edit"
+msgstr ""
+
+#: u_translation:rsselectthefil3
+msgid "Select the file to load"
+msgstr ""
+
