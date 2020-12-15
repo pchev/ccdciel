@@ -1295,6 +1295,9 @@ resourcestring
   rsSelectTheFil = 'Select the file to delete';
   rsSelectTheFil2 = 'Select the file to edit';
   rsSelectTheFil3 = 'Select the file to load';
+  rsRetry = 'Retry';
+  rsNextTarget = 'Next target';
+  rsFailToStopTh = 'Fail to stop the autoguider';
 
 implementation
 

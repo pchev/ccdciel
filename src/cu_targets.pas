@@ -104,6 +104,7 @@ type
       FSequenceFile: T_SequenceFile;
       FRestarting, FRealRestart: boolean;
       Fslewing: boolean;
+      InitTargetError: string;
       function GetBusy: boolean;
       procedure SetTargetName(val: string);
       procedure SetPreview(val: Tf_preview);
@@ -1610,7 +1611,7 @@ begin
          f_pause.Caption:=rsTargetInitia;
          f_pause.Text:=rsTargetInitia+' '+Targets[FCurrentTarget].objectname+
            crlf+rsDoYouWantToR;
-         if f_pause.Wait(WaitResponseTime,false) then begin
+         if f_pause.Wait(WaitResponseTime,false, rsRetry, rsNextTarget) then begin
             Dec(FCurrentTarget);
          end;
          NextTarget;
@@ -1647,7 +1648,7 @@ begin
        end
        else begin
          msg(Targets[FCurrentTarget].objectname+', '+rsTargetInitia,0);
-         if EmailTargetInitialisation then email(rsTargetInitia,Targets[FCurrentTarget].objectname+', '+rsTargetInitia);
+         if EmailTargetInitialisation then email(rsTargetInitia,Targets[FCurrentTarget].objectname+', '+rsTargetInitia+', '+InitTargetError);
          if FUnattended then begin
            FInitializing:=false;
            NextTarget;
@@ -1655,9 +1656,8 @@ begin
          end else begin
            FInitializing:=false;
            f_pause.Caption:=rsTargetInitia;
-           f_pause.Text:=rsTargetInitia+' '+Targets[FCurrentTarget].objectname+
-             crlf+rsDoYouWantToR;
-           if f_pause.Wait(WaitResponseTime,false) then begin
+           f_pause.Text:=rsTargetInitia+' '+Targets[FCurrentTarget].objectname+crlf+crlf+InitTargetError+crlf+rsDoYouWantToR;
+           if f_pause.Wait(WaitResponseTime, false, rsRetry, rsNextTarget) then begin
               Dec(FCurrentTarget);
            end;
            NextTarget;
@@ -1710,6 +1710,7 @@ var t: TTarget;
     autofocusstart, astrometrypointing, autostartguider,isCalibrationTarget: boolean;
     skipmsg, buf: string;
 begin
+  InitTargetError:='';
   SkipTarget:=false;
   result:=false;
   if not FRunning then exit;
@@ -1721,13 +1722,15 @@ begin
     if t.repeatcount=0 then begin
       SkipTarget:=true;
       result:=false;
-      msg(Format(rsSkipTarget, [t.objectname+', '+rsRepeat+'=0']), 3);
+      InitTargetError:=Format(rsSkipTarget, [t.objectname+', '+rsRepeat+'=0']);
+      msg(InitTargetError, 3);
       exit;
     end;
     if t.repeatdone>=t.repeatcount then begin
       SkipTarget:=true;
       result:=false;
-      msg(Format(rsSkipTarget, [t.objectname+', '+Format(rsSeqFinished,[t.planname])]), 3);
+      InitTargetError:=Format(rsSkipTarget, [t.objectname+', '+Format(rsSeqFinished,[t.planname])]);
+      msg(InitTargetError, 3);
       exit;
     end;
     msg(Format(rsInitializeTa, [t.objectname]),1);
@@ -1778,7 +1781,8 @@ begin
        ObjRise(appra,appde,hr,ri);
        // check object visibility
        if ri=2 then begin
-          msg(Format(rsSkipTarget, [t.objectname])+', '+rsThisObjectIs2, 3);
+          InitTargetError:=Format(rsSkipTarget, [t.objectname])+', '+rsThisObjectIs2;
+          msg(InitTargetError, 3);
           SkipTarget:=true;
           result:=false;
           exit;
@@ -1850,14 +1854,16 @@ begin
         end;
       end;
       if SkipTarget then begin
-        msg(Format(rsSkipTarget, [t.objectname])+skipmsg, 3);
+        InitTargetError:=Format(rsSkipTarget, [t.objectname])+skipmsg;
+        msg(InitTargetError, 3);
         result:=false;
         exit;
       end;
     end;
     // start / stop timer
     if (intime>0) then begin
-      msg(Format(rsTargetCancel, [t.objectname])+', '+Format(rsStopTimeAlre, [TimeToStr(t.endtime)]),3);
+      InitTargetError:=Format(rsTargetCancel, [t.objectname])+', '+Format(rsStopTimeAlre, [TimeToStr(t.endtime)]);
+      msg(InitTargetError,3);
       result:=false;
       exit;
     end;
@@ -1866,7 +1872,8 @@ begin
       msg(Format(rsWaitToStartA, [TimeToStr(t.starttime)]),1);
       wtok:=WaitTill(TimeToStr(t.starttime),true);
       if not wtok then begin
-         msg(Format(rsTargetCancel, [t.objectname]),1);
+         InitTargetError:=Format(rsTargetCancel, [t.objectname]);
+         msg(InitTargetError,1);
          result:=false;
          exit;
       end;
@@ -1879,7 +1886,8 @@ begin
           StopTargetTimer.Interval:=1000*stw;
           StopTargetTimer.Enabled:=true;
        end else begin
-         msg(Format(rsTargetCancel, [t.objectname])+', '+Format(rsStopTimeAlre, [TimeToStr(t.endtime)]),3);
+         InitTargetError:=Format(rsTargetCancel, [t.objectname])+', '+Format(rsStopTimeAlre, [TimeToStr(t.endtime)]);
+         msg(InitTargetError,3);
          result:=false;
          exit;
        end;
@@ -1900,7 +1908,10 @@ begin
         if (Autoguider<>nil)and(Autoguider.AutoguiderType<>agNONE)and(Autoguider.AutoguiderType<>agDITHER) then begin
           // stop guiding
           if Autoguider.State<>GUIDER_DISCONNECTED then begin
-            if not StopGuider then exit;
+            if not StopGuider then begin
+              InitTargetError:=rsFailToStopTh;
+              exit;
+            end;
             Wait(2);
             if not FRunning then exit;
             if WeatherCancelRestart then exit;
@@ -1919,14 +1930,15 @@ begin
              buf:='Dome is: ';
              if not dome.Shutter then buf:=buf+'closed, ';
              if dome.hasSlaving and(not dome.Slave) then buf:=buf+'not slaved ';
-             msg('Dome is not ready',1);
-             msg(buf,1);
+             InitTargetError:='Dome is not ready: '+buf;
+             msg(InitTargetError,1);
              StopSequence(true);
              exit;
           end;
           // check mount not parked
           if mount.Park then begin
-             msg(rsTheTelescope, 1);
+             InitTargetError:=rsTheTelescope;
+             msg(InitTargetError, 1);
              StopSequence(true);
              exit;
           end;
@@ -1937,7 +1949,10 @@ begin
           // slew to coordinates
           FSlewRetry:=1;
           ok:=Slew(t.ra,t.de,astrometrypointing,t.astrometrypointing);
-          if not ok then exit;
+          if not ok then begin
+            InitTargetError:=rsTelescopeSle3;
+            exit;
+          end;
           Wait;
         end;
         if not FRunning then exit;
@@ -1963,7 +1978,10 @@ begin
                        ((not autofocusstart)or (InplaceAutofocus and (not AutofocusPauseGuider))) and
                        (not isCalibrationTarget);
       if autostartguider then begin
-        if not StartGuider then exit;
+        if not StartGuider then begin
+          InitTargetError:=rsFailedToStar;
+          exit;
+        end;
         Wait;
         if not FRunning then exit;
         if WeatherCancelRestart then exit;

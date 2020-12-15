@@ -1,57 +1,78 @@
 object f_pause: Tf_pause
   Left = 0
-  Height = 131
+  Height = 153
   Top = 0
-  Width = 322
+  Width = 329
   ActiveControl = BtnContinue
   AutoSize = True
-  BorderWidth = 5
+  BorderWidth = 8
   Caption = 'Pause'
-  ClientHeight = 131
-  ClientWidth = 322
+  ClientHeight = 153
+  ClientWidth = 329
   FormStyle = fsStayOnTop
   OnCloseQuery = FormCloseQuery
   OnCreate = FormCreate
   OnShow = FormShow
   Position = poMainFormCenter
-  object BtnContinue: TButton
-    Left = 213
-    Height = 25
-    Top = 101
-    Width = 91
-    Caption = 'Continue...'
-    OnClick = BtnContinueClick
-    ParentFont = False
-    TabOrder = 0
-  end
   object PauseLabel: TLabel
-    Left = 5
-    Height = 64
-    Top = 5
-    Width = 312
-    AutoSize = False
+    Left = 8
+    Height = 68
+    Top = 8
+    Width = 313
+    Align = alTop
     Caption = 'Pause'#10'2'#10'3'#10'4'
     ParentColor = False
     ParentFont = False
     WordWrap = True
   end
-  object BtnCancel: TButton
-    Left = 101
-    Height = 25
-    Top = 101
-    Width = 75
-    Caption = 'Cancel'
-    OnClick = BtnCancelClick
-    ParentFont = False
-    TabOrder = 1
-  end
   object Label1: TLabel
-    Left = 5
-    Height = 13
-    Top = 77
-    Width = 20
+    Left = 8
+    Height = 17
+    Top = 88
+    Width = 313
+    Align = alTop
     Caption = '     '
     ParentColor = False
     ParentFont = False
+  end
+  object Panel1: TPanel
+    Left = 8
+    Height = 40
+    Top = 105
+    Width = 313
+    Align = alTop
+    BevelOuter = bvNone
+    ClientHeight = 40
+    ClientWidth = 313
+    TabOrder = 0
+    object BtnContinue: TButton
+      Left = 213
+      Height = 25
+      Top = 8
+      Width = 100
+      Caption = 'Continue...'
+      OnClick = BtnContinueClick
+      ParentFont = False
+      TabOrder = 0
+    end
+    object BtnCancel: TButton
+      Left = 101
+      Height = 25
+      Top = 8
+      Width = 100
+      Caption = 'Cancel'
+      OnClick = BtnCancelClick
+      ParentFont = False
+      TabOrder = 1
+    end
+  end
+  object Panel2: TPanel
+    Left = 8
+    Height = 12
+    Top = 76
+    Width = 313
+    Align = alTop
+    BevelOuter = bvNone
+    TabOrder = 1
   end
 end

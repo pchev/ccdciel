@@ -29,7 +29,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 interface
 
 uses  u_global, UScaleDPI, u_utils, u_translation, u_speech,
-  Classes, SysUtils, FileUtil, Forms, Controls, Graphics, Dialogs, StdCtrls;
+  Classes, SysUtils, FileUtil, Forms, Controls, Graphics, Dialogs, StdCtrls, ExtCtrls;
 
 type
 
@@ -39,6 +39,8 @@ type
     BtnContinue: TButton;
     BtnCancel: TButton;
     Label1: TLabel;
+    Panel1: TPanel;
+    Panel2: TPanel;
     PauseLabel: TLabel;
     procedure BtnContinueClick(Sender: TObject);
     procedure BtnCancelClick(Sender: TObject);
