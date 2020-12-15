@@ -1317,7 +1317,7 @@ begin
     BtnStart.Enabled:=false;
     BtnStop.Enabled:=true;
     BtnPause.Enabled:=true;
-    if Targets.Slewing or Autofocusing then begin
+    if Targets.Slewing or Autofocusing or MeridianFlipping then begin
       BtnEditTargets.Enabled:=false;
     end
     else begin
