@@ -168,6 +168,7 @@ type
     procedure LoadTargets(fn: string);
     procedure AbortSequence;
     procedure WeatherChange(value:boolean);
+    procedure UpdateBtn;
     property Filename: string read GetFileName;
     property EditingTarget: Boolean read FEditingTarget;
     property Restarting: Boolean read GetRestarting;
@@ -672,6 +673,7 @@ begin
       msg(Format(rsThisSequence,['"'+CurrentSeqName+'"']), 2);
       msg(targets.LastDoneStep,2);
    end;
+   UpdateBtn;
 end;
 
 procedure Tf_sequence.BtnResetClick(Sender: TObject);
@@ -845,7 +847,6 @@ procedure Tf_sequence.StartSequence;
 var ccdtemp: double;
     i,j: integer;
     isCalibrationSequence, waitcooling: boolean;
-    buf: string;
 begin
  if Targets.IgnoreRestart then begin
    Targets.ClearDoneCount(true);
@@ -932,6 +933,7 @@ begin
  Targets.Unattended:=Unattended.Checked;
  Targets.Start;
  if not Targets.Running then AbortSequence;
+ UpdateBtn;
 end;
 
 procedure Tf_sequence.StopSequence;
@@ -949,6 +951,7 @@ begin
  if Targets.Running then Targets.Stop;
  TargetRow:=-1;
  PlanRow:=-1;
+ UpdateBtn;
 end;
 
 procedure Tf_sequence.RestartSequence(Sender: TObject);
@@ -980,6 +983,7 @@ begin
  PlanRow:=-1;
  led.Brush.Color:=clRed;
  if Unattended.Checked then mount.AbortMotion;
+ UpdateBtn;
 end;
 
 procedure Tf_sequence.EndSequence(Sender: TObject);
@@ -989,6 +993,7 @@ begin
  led.Brush.Color:=clRed;
  PlanGrid.Invalidate;
  TargetGrid.Invalidate;
+ UpdateBtn;
 end;
 
 procedure Tf_sequence.BtnStopClick(Sender: TObject);
@@ -1067,6 +1072,7 @@ begin
  try
   StatusTimer.Enabled:=false;
   TargetRow:=Targets.CurrentTarget+1;
+  UpdateBtn;
   if Targets.Running then begin
    try
    // show plan status
@@ -1300,6 +1306,33 @@ begin
      result:=targets.Restarting
   else
      result:=false;
+end;
+
+procedure Tf_sequence.UpdateBtn;
+begin
+  if targets.Running then begin
+    BtnLoadTargets.Enabled:=false;
+    BtnNewTargets.Enabled:=false;
+    BtnReset.Enabled:=false;
+    BtnStart.Enabled:=false;
+    BtnStop.Enabled:=true;
+    BtnPause.Enabled:=true;
+    if Targets.Slewing or Autofocusing then begin
+      BtnEditTargets.Enabled:=false;
+    end
+    else begin
+      BtnEditTargets.Enabled:=true;
+    end;
+  end
+  else begin
+    BtnLoadTargets.Enabled:=true;
+    BtnNewTargets.Enabled:=true;
+    BtnEditTargets.Enabled:=true;
+    BtnReset.Enabled:=true;
+    BtnStart.Enabled:=true;
+    BtnStop.Enabled:=false;
+    BtnPause.Enabled:=false;
+  end;
 end;
 
 end.
