@@ -2356,7 +2356,7 @@ var tt: double;
     t: TTarget;
     r: string;
 begin
- if FRunning then begin
+ if FRunning and (FCurrentTarget>=0) and (FCurrentTarget<NumTargets) then begin
    FInitializing:=false;
    t:=Targets[FCurrentTarget];
    if not TargetRepeatTimer.Enabled then begin
@@ -2392,6 +2392,7 @@ begin
    end;
  end
  else begin
+  FRunning:=false;
   TargetTimer.Enabled:=false;
   StopTimer.Enabled:=false;
   FCurrentTarget:=-1;
