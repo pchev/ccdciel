@@ -119,28 +119,24 @@ function Tf_pause.Wait(timeout:integer=0; defaultresult:boolean=true; TextOK:str
 var endt: TDateTime;
     n,t:integer;
 begin
+  if TextOK='' then TextOK:=rsContinue;
+  if TextCancel='' then TextCancel:=rsCancel;
   globalmsg(rsPause+': ' +PauseLabel.Caption);
   if timeout>0 then begin
     endt:=now+timeout/secperday;
     PauseLabel.Caption:=PauseLabel.Caption;
     if defaultresult then
-       label1.Caption:=Format(rsContinueInSe,[inttostr(timeout)])
+       label1.Caption:=TextOK+blank+Format(rsInSSeconds, [inttostr(timeout)])
     else
-       label1.Caption:=Format(rsCancelInSeco, [inttostr(timeout)]);
+       label1.Caption:=TextCancel+blank+Format(rsInSSeconds, [inttostr(timeout)]);
   end
   else begin
     endt:=MaxInt;
     label1.Caption:='';
   end;
   Show;
-  if TextOK<>'' then
-     BtnContinue.Caption:=TextOK
-  else
-     BtnContinue.Caption:=rsContinue;
-  if TextCancel<>'' then
-     BtnCancel.Caption:=TextCancel
-  else
-     BtnCancel.Caption:=rsCancel;
+  BtnContinue.Caption:=TextOK;
+  BtnCancel.Caption:=TextCancel;
   n:=0;
   if VoiceDialog then speak(rsPause+' . ' +PauseLabel.Caption);
   while (not FContinue) do begin
@@ -149,9 +145,9 @@ begin
       if (n mod 20) = 0 then begin
         t:=round((endt-now)*secperday);
         if defaultresult then
-           label1.Caption:=Format(rsContinueInSe,[inttostr(t)])
+           label1.Caption:=TextOK+blank+Format(rsInSSeconds, [inttostr(t)])
         else
-           label1.Caption:=Format(rsCancelInSeco, [inttostr(t)]);
+           label1.Caption:=TextCancel+blank+Format(rsInSSeconds, [inttostr(t)]);
         n:=0;
       end;
     end;

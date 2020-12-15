@@ -913,7 +913,6 @@ resourcestring
   rsWaitingForDa2 = 'Waiting for dark night';
   rsTargetWillBe = 'Target can run until %s, in %s seconds';
   rsContinue = 'Continue';
-  rsCancelInSeco = 'Cancel in %s seconds.';
   rsTomorrow = 'tomorrow';
   rsNeedToWaitUn = 'Need to wait until %s';
   rsTimeAlreadyP = 'Time already passed %s';
@@ -1298,6 +1297,7 @@ resourcestring
   rsRetry = 'Retry';
   rsNextTarget = 'Next target';
   rsFailToStopTh = 'Fail to stop the autoguider';
+  rsInSSeconds = 'in %s seconds';
 
 implementation
 
