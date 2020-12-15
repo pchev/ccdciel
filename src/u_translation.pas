@@ -174,11 +174,9 @@ resourcestring
   rsNotAutoguidi = 'Not autoguiding! dithering ignored.';
   rsStartingExpo = 'Starting %s exposure %s for %s seconds';
   rsDownloading = 'Downloading';
-  rsSeq = 'Seq:';
   rsExp = 'Exp:';
   rsSec = 'sec.';
   rsStopCapture = 'Stop capture';
-  rsSeqFinished = 'Seq: %s Finished';
   rsStackOfFrame = 'stack of %s frames';
   rsEndPreview = 'End preview';
   rsSavedFile = 'Saved file %s';
@@ -1298,6 +1296,7 @@ resourcestring
   rsNextTarget = 'Next target';
   rsFailToStopTh = 'Fail to stop the autoguider';
   rsInSSeconds = 'in %s seconds';
+  rsCaptureSFini = 'Capture %s Finished';
 
 implementation
 

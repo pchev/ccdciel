@@ -8311,7 +8311,7 @@ begin
      end;
      if Capture then begin
        if f_capture.Running then
-         StatusBar1.Panels[panelstatus].Text := rsSeq+blank+inttostr(f_capture.SeqCount)+'/'+f_capture.SeqNum.Text+' '+txt;
+         StatusBar1.Panels[panelstatus].Text := rsCapture+blank+inttostr(f_capture.SeqCount)+'/'+f_capture.SeqNum.Text+' '+txt;
      end
      else begin
         StatusBar1.Panels[panelstatus].Text := txt;
@@ -8325,7 +8325,7 @@ begin
            else txt:=FormatFloat(f1, n);
   if Capture then begin
     if f_capture.Running then
-      StatusBar1.Panels[panelstatus].Text := rsSeq+blank+inttostr(f_capture.SeqCount)+'/'+f_capture.SeqNum.Text+blank+rsExp+blank+txt+blank+rsSec;
+      StatusBar1.Panels[panelstatus].Text := rsCapture+blank+inttostr(f_capture.SeqCount)+'/'+f_capture.SeqNum.Text+blank+rsExp+blank+txt+blank+rsSec;
   end
   else begin
      StatusBar1.Panels[panelstatus].Text := rsExp+blank+txt+blank+rsSec;
@@ -8445,8 +8445,8 @@ begin
           // end capture
           Capture:=false;
           f_capture.Stop;
-          NewMessage(rsStopCapture+', '+Format(rsSeqFinished, [inttostr(f_capture.SeqCount-1)+'/'+f_capture.SeqNum.Text]),2);
-          StatusBar1.Panels[panelstatus].Text := Format(rsSeqFinished, [inttostr(f_capture.SeqCount-1)+'/'+f_capture.SeqNum.Text]);
+          NewMessage(rsStopCapture+', '+Format(rsCaptureSFini, [inttostr(f_capture.SeqCount-1)+'/'+f_capture.SeqNum.Text]), 2);
+          StatusBar1.Panels[panelstatus].Text := Format(rsCaptureSFini, [inttostr(f_capture.SeqCount-1)+'/'+f_capture.SeqNum.Text]);
           MenuCaptureStart.Caption:=f_capture.BtnStart.Caption
        end;
      end;

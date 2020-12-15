@@ -1729,7 +1729,7 @@ begin
     if t.repeatdone>=t.repeatcount then begin
       SkipTarget:=true;
       result:=false;
-      InitTargetError:=Format(rsSkipTarget, [t.objectname+', '+Format(rsSeqFinished,[t.planname])]);
+      InitTargetError:=Format(rsSkipTarget, [t.objectname+', '+Format(rsCaptureSFini,[t.planname])]);
       msg(InitTargetError, 3);
       exit;
     end;
@@ -2082,7 +2082,7 @@ begin
   if flt.repeatdone>=flt.repeatcount then begin
     SkipTarget:=true;
     result:=false;
-    msg(Format(rsSkipTarget, [flt.objectname+', '+Format(rsSeqFinished,[flt.planname])]), 3);
+    msg(Format(rsSkipTarget, [flt.objectname+', '+Format(rsCaptureSFini,[flt.planname])]), 3);
     exit;
   end;
   if flt.planname=FlatTimeName[0] then begin    // Dusk
