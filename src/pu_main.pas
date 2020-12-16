@@ -11777,9 +11777,7 @@ procedure Tf_main.StatusTimerTimer(Sender: TObject);
 begin
  // Periodic check
  StatusTimer.Enabled:=false;
- if not (f_sequence.Running and f_sequence.EditingTarget) then begin
-   CheckMeridianFlip;
- end;
+ CheckMeridianFlip;
  StatusTimer.Enabled:=true;
  StatusBar1.Invalidate;
 end;
@@ -11828,7 +11826,7 @@ begin
     f_mount.ALT.Caption:=FormatFloat(f2,h);
     if hhmin<=0 then f_mount.LabelMeridian.Caption:=rsMeridianIn
                 else f_mount.LabelMeridian.Caption:=rsMeridianSinc;
-    if (f_capture.Running  or f_sequence.Busy) and (nextexposure=0) then exit;
+    if ((f_capture.Running  or f_sequence.Busy) and (nextexposure=0)) or (f_sequence.Running and f_sequence.EditingTarget) then exit;
     if MeridianOption=0 then exit; // fork mount
     if mount.PierSide=pierEast then exit; // already on the right side
     if (MeridianOption=1) then begin
