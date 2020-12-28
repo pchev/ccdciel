@@ -460,7 +460,6 @@ type
     procedure ButtonDragOver(Sender, Source: TObject; X, Y: Integer;
       State: TDragState; var Accept: Boolean);
     procedure TabMsgLevelChange(Sender: TObject);
-    procedure TBFocusDragDrop(Sender, Source: TObject; X, Y: Integer);
     procedure TimerStampTimerTimer(Sender: TObject);
   private
     { private declarations }
@@ -7712,7 +7711,10 @@ begin
       pnl:=PanelRight3
    else
    if TToolButton(Sender)=TBSequence then
-      pnl:=PanelRight4;
+      pnl:=PanelRight4
+   else
+   if TToolButton(Sender)=TBVideo then
+      pnl:=PanelRight5;
    if pnl<>nil then
       PanelDragDrop(pnl,Source,X,Y);
  end;
@@ -7726,11 +7728,6 @@ begin
  else if Source is TDragObject then  Accept:=TDragObject(Source).Control is TFrame
  else if source is TFrame then Accept:=true
  else Accept:=false;
-end;
-
-procedure Tf_main.TBFocusDragDrop(Sender, Source: TObject; X, Y: Integer);
-begin
-
 end;
 
 Procedure Tf_main.StopExposure(Sender: TObject);

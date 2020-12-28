@@ -359,6 +359,8 @@ object f_main: Tf_main
         Grouped = True
         ImageIndex = 4
         OnClick = SelectTab
+        OnDragDrop = ButtonDragDrop
+        OnDragOver = ButtonDragOver
         Style = tbsCheck
         Visible = False
       end
