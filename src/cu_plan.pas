@@ -306,7 +306,7 @@ begin
    // store image count
    if s.donecount<>CurrentDoneCount then begin
       s.donecount:=CurrentDoneCount;
-      if FRestartTargetNum>0 then FSequenceFile.Items.SetValue('/Targets/Target'+inttostr(FRestartTargetNum)+'/Plan/Steps/Step'+inttostr(CurrentStep)+'/Done',s.donecount);
+      if FRestartTargetNum>0 then FSequenceFile.Items.SetValue('/Targets/Target'+inttostr(FRestartTargetNum)+'/Plan/Steps/Step'+inttostr(CurrentStep+1)+'/Done',s.donecount);
       if progress and assigned(FonStepProgress) then FonStepProgress(self);
    end;
  end;

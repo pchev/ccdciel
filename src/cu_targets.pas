@@ -819,7 +819,7 @@ begin
           p.ObjectName:=t.objectname;
           p.PlanName:=FSequenceFile.Items.GetValue('/Targets/Target'+inttostr(i)+'/Plan/Name',t.planname);
           m:=trunc(FSequenceFile.Items.GetValue('/Targets/Target'+inttostr(i)+'/Plan/StepNum',0));
-          for j:=0 to m-1 do begin
+          for j:=1 to m do begin
             s:=TStep.Create;
             s.description:=FSequenceFile.Items.GetValue('/Targets/Target'+inttostr(i)+'/Plan/Steps/Step'+inttostr(j)+'/Description','');
             str:=UpperCase(trim(FSequenceFile.Items.GetValue('/Targets/Target'+inttostr(i)+'/Plan/Steps/Step'+inttostr(j)+'/FrameType','Light')));
@@ -966,22 +966,22 @@ begin
         p:=T_Plan(t.plan);
         FSequenceFile.Items.SetValue('/Targets/Target'+inttostr(i)+'/Plan/Name',p.PlanName);
         FSequenceFile.Items.SetValue('/Targets/Target'+inttostr(i)+'/Plan/StepNum',p.Count);
-        for j:=0 to p.Count-1 do begin
-          FSequenceFile.Items.SetValue('/Targets/Target'+inttostr(i)+'/Plan/Steps/Step'+inttostr(j)+'/Description',p.Steps[j].description);
-          FSequenceFile.Items.SetValue('/Targets/Target'+inttostr(i)+'/Plan/Steps/Step'+inttostr(j)+'/FrameType',trim(FrameName[ord(p.Steps[j].frtype)]));
-          FSequenceFile.Items.SetValue('/Targets/Target'+inttostr(i)+'/Plan/Steps/Step'+inttostr(j)+'/Exposure',p.Steps[j].exposure);
-          FSequenceFile.Items.SetValue('/Targets/Target'+inttostr(i)+'/Plan/Steps/Step'+inttostr(j)+'/Binning',IntToStr(p.Steps[j].binx)+'x'+IntToStr(p.Steps[j].biny));
-          FSequenceFile.Items.SetValue('/Targets/Target'+inttostr(i)+'/Plan/Steps/Step'+inttostr(j)+'/Gain',p.Steps[j].gain);
-          FSequenceFile.Items.SetValue('/Targets/Target'+inttostr(i)+'/Plan/Steps/Step'+inttostr(j)+'/Offset',p.Steps[j].offset);
-          FSequenceFile.Items.SetValue('/Targets/Target'+inttostr(i)+'/Plan/Steps/Step'+inttostr(j)+'/Fstop',p.Steps[j].fstop);
-          FSequenceFile.Items.SetValue('/Targets/Target'+inttostr(i)+'/Plan/Steps/Step'+inttostr(j)+'/Filter',p.Steps[j].filter_str);
-          FSequenceFile.Items.SetValue('/Targets/Target'+inttostr(i)+'/Plan/Steps/Step'+inttostr(j)+'/Count',p.Steps[j].count);
-          FSequenceFile.Items.SetValue('/Targets/Target'+inttostr(i)+'/Plan/Steps/Step'+inttostr(j)+'/Dither',p.Steps[j].dither);
-          FSequenceFile.Items.SetValue('/Targets/Target'+inttostr(i)+'/Plan/Steps/Step'+inttostr(j)+'/DitherCount',p.Steps[j].dithercount);
-          FSequenceFile.Items.SetValue('/Targets/Target'+inttostr(i)+'/Plan/Steps/Step'+inttostr(j)+'/AutofocusStart',p.Steps[j].autofocusstart);
-          FSequenceFile.Items.SetValue('/Targets/Target'+inttostr(i)+'/Plan/Steps/Step'+inttostr(j)+'/Autofocus',p.Steps[j].autofocus);
-          FSequenceFile.Items.SetValue('/Targets/Target'+inttostr(i)+'/Plan/Steps/Step'+inttostr(j)+'/AutofocusCount',p.Steps[j].autofocuscount);
-          FSequenceFile.Items.SetValue('/Targets/Target'+inttostr(i)+'/Plan/Steps/Step'+inttostr(j)+'/Done',p.Steps[j].donecount)
+        for j:=1 to p.Count do begin
+          FSequenceFile.Items.SetValue('/Targets/Target'+inttostr(i)+'/Plan/Steps/Step'+inttostr(j)+'/Description',p.Steps[j-1].description);
+          FSequenceFile.Items.SetValue('/Targets/Target'+inttostr(i)+'/Plan/Steps/Step'+inttostr(j)+'/FrameType',trim(FrameName[ord(p.Steps[j-1].frtype)]));
+          FSequenceFile.Items.SetValue('/Targets/Target'+inttostr(i)+'/Plan/Steps/Step'+inttostr(j)+'/Exposure',p.Steps[j-1].exposure);
+          FSequenceFile.Items.SetValue('/Targets/Target'+inttostr(i)+'/Plan/Steps/Step'+inttostr(j)+'/Binning',IntToStr(p.Steps[j-1].binx)+'x'+IntToStr(p.Steps[j-1].biny));
+          FSequenceFile.Items.SetValue('/Targets/Target'+inttostr(i)+'/Plan/Steps/Step'+inttostr(j)+'/Gain',p.Steps[j-1].gain);
+          FSequenceFile.Items.SetValue('/Targets/Target'+inttostr(i)+'/Plan/Steps/Step'+inttostr(j)+'/Offset',p.Steps[j-1].offset);
+          FSequenceFile.Items.SetValue('/Targets/Target'+inttostr(i)+'/Plan/Steps/Step'+inttostr(j)+'/Fstop',p.Steps[j-1].fstop);
+          FSequenceFile.Items.SetValue('/Targets/Target'+inttostr(i)+'/Plan/Steps/Step'+inttostr(j)+'/Filter',p.Steps[j-1].filter_str);
+          FSequenceFile.Items.SetValue('/Targets/Target'+inttostr(i)+'/Plan/Steps/Step'+inttostr(j)+'/Count',p.Steps[j-1].count);
+          FSequenceFile.Items.SetValue('/Targets/Target'+inttostr(i)+'/Plan/Steps/Step'+inttostr(j)+'/Dither',p.Steps[j-1].dither);
+          FSequenceFile.Items.SetValue('/Targets/Target'+inttostr(i)+'/Plan/Steps/Step'+inttostr(j)+'/DitherCount',p.Steps[j-1].dithercount);
+          FSequenceFile.Items.SetValue('/Targets/Target'+inttostr(i)+'/Plan/Steps/Step'+inttostr(j)+'/AutofocusStart',p.Steps[j-1].autofocusstart);
+          FSequenceFile.Items.SetValue('/Targets/Target'+inttostr(i)+'/Plan/Steps/Step'+inttostr(j)+'/Autofocus',p.Steps[j-1].autofocus);
+          FSequenceFile.Items.SetValue('/Targets/Target'+inttostr(i)+'/Plan/Steps/Step'+inttostr(j)+'/AutofocusCount',p.Steps[j-1].autofocuscount);
+          FSequenceFile.Items.SetValue('/Targets/Target'+inttostr(i)+'/Plan/Steps/Step'+inttostr(j)+'/Done',p.Steps[j-1].donecount)
         end;
       end;
     end;
@@ -1006,7 +1006,7 @@ begin
      n:=pfile.GetValue('/StepNum',0);
      if camera.CanSetGain then begin
        msgstr:='';
-       for i:=0 to n do begin
+       for i:=1 to n do begin
           buf1:=pfile.GetValue('/Steps/Step'+inttostr(i)+'/Gain','');
           buf2:=pfile.GetValue('/Steps/Step'+inttostr(i)+'/Offset','');
           if (buf1='')or(buf2='') then
