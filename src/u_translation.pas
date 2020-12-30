@@ -1297,6 +1297,7 @@ resourcestring
   rsFailToStopTh = 'Fail to stop the autoguider';
   rsInSSeconds = 'in %s seconds';
   rsCaptureSFini = 'Capture %s Finished';
+  rsRecording = 'Recording';
 
 implementation
 

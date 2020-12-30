@@ -55,7 +55,7 @@ T_camera = class(TComponent)
     FonNewImage, FonNewExposure: TNotifyEvent;
     FonVideoFrame: TNotifyEvent;
     FonAbortExposure,FonCameraDisconnected: TNotifyEvent;
-    FonVideoPreviewChange,FonVideoSizeChange,FonVideoRateChange: TNotifyEvent;
+    FonVideoPreviewChange,FonVideoSizeChange,FonVideoRateChange,FonVideoRecordChange: TNotifyEvent;
     FonFPSChange,FonVideoExposureChange : TNotifyEvent;
     FonEncoderChange: TNotifyEvent;
     FImgStream: TMemoryStream;
@@ -127,6 +127,7 @@ T_camera = class(TComponent)
     function GetImageFormat: string; virtual; abstract;
     procedure SetTimeout(num:integer); virtual; abstract;
     function GetVideoPreviewRunning: boolean;  virtual; abstract;
+    function GetVideoRecordRunning: boolean;  virtual; abstract;
     function GetMissedFrameCount: cardinal; virtual; abstract;
     function GetVideoRecordDuration:integer; virtual; abstract;
     procedure SetVideoRecordDuration(value:integer); virtual; abstract;
@@ -155,6 +156,8 @@ T_camera = class(TComponent)
     function GetVideoBrightnessRange:TNumRange; virtual; abstract;
     function GetVideoPreviewDivisor:integer; virtual; abstract;
     procedure SetVideoPreviewDivisor(value:integer); virtual; abstract;
+    function GetVideoPreviewLimit:integer; virtual; abstract;
+    procedure SetVideoPreviewLimit(value:integer); virtual; abstract;
     procedure SetGain(value: integer); virtual; abstract;
     function GetGain: integer; virtual; abstract;
     procedure SetOffset(value: integer); virtual; abstract;
@@ -215,6 +218,7 @@ T_camera = class(TComponent)
     property hasVideo: boolean read FhasVideo;
     property VideoStream: TMemoryStream read FVideoStream;
     property VideoPreviewRunning: boolean read GetVideoPreviewRunning;
+    property VideoRecordRunning: boolean read GetVideoRecordRunning;
     property MissedFrameCount: Cardinal read GetMissedFrameCount;
     property VideoRecordDuration: integer read GetVideoRecordDuration write SetVideoRecordDuration;
     property VideoRecordFrames: integer read GetVideoRecordFrames write SetVideoRecordFrames;
@@ -235,6 +239,7 @@ T_camera = class(TComponent)
     property VideoBrightness: integer read GetVideoBrightness write SetVideoBrightness;
     property VideoBrightnessRange: TNumRange read GetVideoBrightnessRange;
     property VideoPreviewDivisor: integer read GetVideoPreviewDivisor write SetVideoPreviewDivisor;
+    property VideoPreviewLimit: integer read GetVideoPreviewLimit write SetVideoPreviewLimit;
     property CoolerPower: Double read GetCoolerPower;
     property Cooler: boolean read GetCooler write SetCooler;
     property Temperature: double read GetTemperature write SetTemperatureRamp;
@@ -304,6 +309,7 @@ T_camera = class(TComponent)
     property onCameraDisconnected: TNotifyEvent read FonCameraDisconnected write FonCameraDisconnected;
     property onAbortExposure: TNotifyEvent read FonAbortExposure write FonAbortExposure;
     property onVideoPreviewChange: TNotifyEvent read FonVideoPreviewChange write FonVideoPreviewChange;
+    property onVideoRecordChange: TNotifyEvent read FonVideoRecordChange write FonVideoRecordChange;
     property onVideoSizeChange: TNotifyEvent read FonVideoSizeChange write FonVideoSizeChange;
     property onVideoRateChange: TNotifyEvent read FonVideoRateChange write FonVideoRateChange;
     property onFPSChange: TNotifyEvent read FonFPSChange write FonFPSChange;

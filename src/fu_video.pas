@@ -36,6 +36,7 @@ type
     BtnStartRec: TButton;
     BtnStopRec: TButton;
     BtnOptions: TButton;
+    LabelRecording: TLabel;
     VideoEncoder: TComboBox;
     Exprange: TComboBox;
     Label10: TLabel;
@@ -108,7 +109,7 @@ type
     Frunning: boolean;
     FonMsg: TNotifyMsg;
     Ffps: double;
-    Ifps,RateDivisor: integer;
+    Ifps: integer;
     FCheckReady: TNotifyBool;
     procedure GUIdestroy(Sender: TObject);
     procedure SetFps(value:double);
@@ -146,6 +147,7 @@ begin
  Frunning:=false;
  FVideoGUIready:=false;
  Ffps:=1;
+ LabelRecording.Caption:='';
 end;
 
 destructor  Tf_video.Destroy;
@@ -317,6 +319,7 @@ begin
   if FCamera<>nil then begin
    if Preview.Checked then begin
       Ifps:=0;
+      Camera.VideoPreviewLimit:=MaxVideoPreviewRate;
       Camera.StartVideoPreview;
       Frunning:=true;
    end
@@ -355,6 +358,7 @@ begin
     FCheckReady(ok);
     if not ok then exit;
   end;
+  camera.VideoPreviewLimit:=MaxVideoPreviewRate;
   SetRecordFile;
   if Duration.Checked then begin
     camera.VideoRecordDuration:=StrToIntDef(RecDuration.Text,10);
@@ -510,21 +514,13 @@ begin
 end;
 
 procedure Tf_video.SetFps(value:double);
-var i,j,r: integer;
+var j: integer;
 begin
   j:=trunc(10*value);
   if j<>Ifps then begin
     Ifps:=j;
     Ffps:=value;
     FPSlabel.Caption:=FormatFloat(f1,Ffps)+' fps';
-    i:=trunc(value);
-    r:=i div MaxVideoPreviewRate; // target preview fps
-    if r>i then r:=i;
-    if r<0 then r:=0;
-    if r<>RateDivisor then begin
-      RateDivisor:=r;
-      camera.VideoPreviewDivisor:=RateDivisor;
-    end;
   end;
 end;
 

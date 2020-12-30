@@ -709,6 +709,7 @@ type
     function  CameraNewDomeFlat: boolean;
     procedure CameraVideoFrame(Sender: TObject);
     procedure CameraVideoPreviewChange(Sender: TObject);
+    procedure CameraVideoRecordChange(Sender: TObject);
     procedure CameraVideoSizeChange(Sender: TObject);
     procedure CameraVideoRateChange(Sender: TObject);
     procedure CameraVideoExposureChange(Sender: TObject);
@@ -730,7 +731,7 @@ type
     Procedure Redraw(Sender: TObject);
     Procedure ZoomImage(Sender: TObject);
     Procedure ClearImage;
-    Procedure DrawImage;
+    Procedure DrawImage(WaitCursor:boolean=false);
     Procedure PlotImage;
     procedure plot_north(bmp:TBGRABitmap);
     Procedure DrawHistogram(SetLevel,ResetCursor: boolean);
@@ -1643,6 +1644,7 @@ begin
    camera.onNewExposure:=@CameraNewExposure;
    camera.onVideoFrame:=@CameraVideoFrame;
    camera.onVideoPreviewChange:=@CameraVideoPreviewChange;
+   camera.onVideoRecordChange:=@CameraVideoRecordChange;
    camera.onVideoSizeChange:=@CameraVideoSizeChange;
    camera.onVideoRateChange:=@CameraVideoRateChange;
    camera.onFPSChange:=@CameraFPSChange;
@@ -5263,6 +5265,20 @@ begin
   f_video.Preview.Checked:=camera.VideoPreviewRunning;
 end;
 
+procedure Tf_main.CameraVideoRecordChange(Sender: TObject);
+begin
+ if camera.VideoRecordRunning then begin
+   f_video.BtnStartRec.Enabled:=false;
+   f_video.BtnStopRec.Enabled:=true;
+   f_video.LabelRecording.Caption:=rsRecording+' ...';
+ end
+ else begin
+  f_video.BtnStartRec.Enabled:=true;
+  f_video.BtnStopRec.Enabled:=false;
+  f_video.LabelRecording.Caption:='';
+end;
+end;
+
 procedure Tf_main.CameraVideoSizeChange(Sender: TObject);
 var i: integer;
 begin
@@ -8827,7 +8843,7 @@ ImgFrameY:=FrameY;
 ImgFrameW:=FrameW;
 ImgFrameH:=FrameH;
 DrawHistogram(true,false);
-DrawImage;
+DrawImage(false);
 end;
 
 Procedure Tf_main.RedrawHistogram(Sender: TObject);
@@ -8852,14 +8868,14 @@ begin
   PlotImage;
 end;
 
-Procedure Tf_main.DrawImage;
+Procedure Tf_main.DrawImage(WaitCursor:boolean=false);
 var tmpbmp:TBGRABitmap;
     co: TBGRAPixel;
     s,cx,cy: integer;
 begin
 if fits.HeaderInfo.naxis>0 then begin
   try
-  screen.Cursor:=crHourGlass;
+  if WaitCursor then screen.Cursor:=crHourGlass;
   trpOK:=false;
   fits.Gamma:=f_visu.Gamma.Value;
   fits.ImgDmax:=round(f_visu.ImgMax);

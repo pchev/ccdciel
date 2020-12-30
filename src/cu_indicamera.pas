@@ -110,6 +110,8 @@ private
    StreamERate,StreamExp:INumber;
    Streamframe: INumberVectorProperty;
    StreamframeX,StreamframeY,StreamframeWidth,StreamframeHeight: INumber;
+   StreamLimit: INumberVectorProperty;
+   StreamLimitBuffer,StreamLimitFPS:INumber;
    CCDIso: ISwitchVectorProperty;
    Guiderexpose: INumberVectorProperty;
    GuiderexposeValue: INumber;
@@ -206,6 +208,7 @@ private
    function GetColor: boolean;  override;
    procedure SetTimeout(num:integer); override;
    function GetVideoPreviewRunning: boolean;  override;
+   function GetVideoRecordRunning: boolean;  override;
    function GetMissedFrameCount: cardinal; override;
    function GetVideoRecordDuration:integer; override;
    procedure SetVideoRecordDuration(value:integer); override;
@@ -234,6 +237,8 @@ private
    function GetVideoBrightnessRange:TNumRange; override;
    function GetVideoPreviewDivisor:integer; override;
    procedure SetVideoPreviewDivisor(value:integer); override;
+   function GetVideoPreviewLimit:integer; override;
+   procedure SetVideoPreviewLimit(value:integer); override;
    procedure SetGain(value: integer); override;
    function GetGain: integer; override;
    procedure SetOffset(value: integer); override;
@@ -411,6 +416,7 @@ begin
     StreamExposure:=nil;
     Streamframe:=nil;
     StreamEncoder:=nil;
+    StreamLimit:=nil;
     CCDoffset:=nil;
     FhasBlob:=false;
     FhasVideo:=false;
@@ -847,6 +853,7 @@ begin
      RecordDuration:=IUFindSwitch(RecordStream,'RECORD_DURATION_ON');
      RecordFrames:=IUFindSwitch(RecordStream,'RECORD_FRAME_ON');
      if (RecordStreamOn=nil)or(RecordStreamOff=nil)or(RecordDuration=nil)or(RecordFrames=nil) then RecordStream:=nil;
+     if Assigned(FonVideoRecordChange) then FonVideoRecordChange(self);
   end
   else if (proptype=INDI_SWITCH)and(CCDVideoSize=nil)and(propname='V4L2_SIZE_DISCRETE') then begin
      CCDVideoSize:=indiProp.getSwitch;
@@ -878,6 +885,12 @@ begin
      StreamERate:=IUFindNumber(StreamExposure,'STREAMING_DIVISOR_VALUE');
      StreamExp:=IUFindNumber(StreamExposure,'STREAMING_EXPOSURE_VALUE');
      if (StreamERate=nil)or(StreamExp=nil) then StreamExposure:=nil;
+  end
+  else if (proptype=INDI_NUMBER)and(StreamLimit=nil)and(propname='LIMITS') then begin
+     StreamLimit:=indiProp.getNumber;
+     StreamLimitBuffer:=IUFindNumber(StreamLimit,'LIMITS_BUFFER_MAX');
+     StreamLimitFPS:=IUFindNumber(StreamLimit,'LIMITS_PREVIEW_FPS');
+     if (StreamLimitBuffer=nil)or(StreamLimitFPS=nil) then StreamLimit:=nil;
   end
   else if (proptype=INDI_NUMBER)and(Streamframe=nil)and(propname='CCD_STREAM_FRAME') then begin
      Streamframe:=indiProp.getNumber;
@@ -1132,6 +1145,9 @@ begin
   end
   else if svp=CCDVideoStream then begin
       if Assigned(FonVideoPreviewChange) then FonVideoPreviewChange(self);
+  end
+  else if svp=RecordStream then begin
+      if Assigned(FonVideoRecordChange) then FonVideoRecordChange(self);
   end
   else if svp=CCDVideoSize then begin
       if Assigned(FonVideoSizeChange) then FonVideoSizeChange(self);
@@ -2152,6 +2168,14 @@ begin
  end;
 end;
 
+function T_indicamera.GetVideoRecordRunning: boolean;
+begin
+ result:=false;
+ if RecordStream<>nil then begin
+   result:=(RecordStreamOff.s=ISS_OFF);
+ end;
+end;
+
 function T_indicamera.GetMissedFrameCount: cardinal;
 begin
  result:=indiclient.MissedFrameCount;
@@ -2426,6 +2450,22 @@ begin
    StreamORate.value:=value;
    indiclient.sendNewNumber(StreamOptions);
  end;
+end;
+
+function T_indicamera.GetVideoPreviewLimit:integer;
+begin
+  result:=0;
+  if StreamLimit<>nil then begin
+     result:=round(StreamLimitFPS.value);
+  end;
+end;
+
+procedure T_indicamera.SetVideoPreviewLimit(value:integer);
+begin
+  if StreamLimit<>nil then begin;
+    StreamLimitFPS.value:=value;
+    indiclient.sendNewNumber(StreamLimit);
+  end;
 end;
 
 function T_indicamera.GetStreamingExposureRange:TNumRange;

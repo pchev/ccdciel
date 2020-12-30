@@ -83,6 +83,7 @@ T_ascomrestcamera = class(T_camera)
    function GetColor: boolean;  override;
    procedure SetTimeout(num:integer); override;
    function GetVideoPreviewRunning: boolean;  override;
+   function GetVideoRecordRunning: boolean;  override;
    function GetMissedFrameCount: cardinal; override;
    function GetVideoRecordDuration:integer; override;
    procedure SetVideoRecordDuration(value:integer); override;
@@ -111,6 +112,8 @@ T_ascomrestcamera = class(T_camera)
    function GetVideoBrightnessRange:TNumRange; override;
    function GetVideoPreviewDivisor:integer; override;
    procedure SetVideoPreviewDivisor(value:integer); override;
+   function GetVideoPreviewLimit:integer; override;
+   procedure SetVideoPreviewLimit(value:integer); override;
    procedure SetGain(value: integer); override;
    function GetGain: integer; override;
    function GetGainReal: integer;
@@ -1353,6 +1356,12 @@ begin
  // todo
 end;
 
+function T_ascomrestcamera.GetVideoRecordRunning: boolean;
+begin
+ result:=false;
+ // todo
+end;
+
 function T_ascomrestcamera.GetMissedFrameCount: cardinal;
 begin
  result:=0;
@@ -1516,6 +1525,17 @@ begin
 end;
 
 procedure T_ascomrestcamera.SetVideoPreviewDivisor(value:integer);
+begin
+ // todo
+end;
+
+function T_ascomrestcamera.GetVideoPreviewLimit:integer;
+begin
+ result:=0;
+ // todo
+end;
+
+procedure T_ascomrestcamera.SetVideoPreviewLimit(value:integer);
 begin
  // todo
 end;

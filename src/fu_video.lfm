@@ -1,10 +1,10 @@
 object f_video: Tf_video
   Left = 0
-  Height = 577
+  Height = 602
   Top = 0
   Width = 190
   AutoSize = True
-  ClientHeight = 577
+  ClientHeight = 602
   ClientWidth = 190
   ParentFont = False
   TabOrder = 0
@@ -29,13 +29,13 @@ object f_video: Tf_video
   end
   object Panel1: TPanel
     Left = 0
-    Height = 554
+    Height = 568
     Top = 20
     Width = 190
     Align = alTop
     AutoSize = True
     BevelOuter = bvNone
-    ClientHeight = 554
+    ClientHeight = 568
     ClientWidth = 190
     ParentFont = False
     TabOrder = 0
@@ -60,17 +60,14 @@ object f_video: Tf_video
       end
       object StreamExp: TFloatSpinEdit
         Left = 81
-        Height = 30
+        Height = 28
         Top = 6
         Width = 101
-        MaxLength = 0
-        TabOrder = 0
-        OnChange = StreamExpChange
         DecimalPlaces = 3
         Increment = 0.1
         MaxValue = 1
-        MinValue = 0
-        Value = 0
+        OnChange = StreamExpChange
+        TabOrder = 0
       end
     end
     object PanelExposure1: TPanel
@@ -132,7 +129,7 @@ object f_video: Tf_video
         Left = 8
         Height = 21
         Top = 1
-        Width = 72
+        Width = 71
         Caption = 'Preview'
         OnChange = PreviewChange
         ParentFont = False
@@ -300,12 +297,12 @@ object f_video: Tf_video
     end
     object PanelRecord: TPanel
       Left = 0
-      Height = 165
+      Height = 179
       Top = 389
       Width = 190
       Align = alTop
       BevelOuter = bvNone
-      ClientHeight = 165
+      ClientHeight = 179
       ClientWidth = 190
       ParentFont = False
       TabOrder = 6
@@ -421,6 +418,14 @@ object f_video: Tf_video
         Caption = 'Directory'
         ParentColor = False
         ParentFont = False
+      end
+      object LabelRecording: TLabel
+        Left = 7
+        Height = 17
+        Top = 156
+        Width = 95
+        Caption = 'LabelRecording'
+        ParentColor = False
       end
     end
     object PanelMore: TPanel
