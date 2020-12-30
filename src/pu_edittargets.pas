@@ -266,6 +266,7 @@ type
     procedure NewObject;
     procedure NewPlanetariumTarget(Sender: TObject);
     procedure SetTemplateButton;
+    procedure MarkModifiedTemplate;
    public
     { public declarations }
     originalFilter: TSaveFilter;
@@ -2830,6 +2831,7 @@ try
   SetPlanList(TargetList.Row,PlanName.Caption);
   TargetChange(nil);
   StepsModified:=false;
+  MarkModifiedTemplate;
 except
   on E: Exception do ShowMessage('Error saving template: '+ E.Message);
 end;
@@ -2840,6 +2842,29 @@ begin
   BtnSaveTemplate.Visible:=trim(PlanName.Caption)<>'';
   BtnDeleteTemplate.Visible:=BtnSaveTemplate.Visible;
   BtnApplyTemplate.Visible:=BtnSaveTemplate.Visible;
+end;
+
+procedure Tf_EditTargets.MarkModifiedTemplate;
+var p:T_Plan;
+    t: TTarget;
+    i: integer;
+begin
+  for i:=1 to TargetList.RowCount-1 do begin
+    t:=TTarget(TargetList.Objects[colseq,i]);
+    p:=T_Plan(t.plan);
+    if TemplateModified(p) then begin
+      if (pos('*',t.planname)=0) then begin
+        t.planname:=t.planname+'*';
+        TargetList.Cells[colplan,i]:=t.PlanName;
+      end;
+    end
+    else begin
+      if (pos('*',t.planname)>0) then begin
+        t.planname:=StringReplace(t.planname,'*','',[]);
+        TargetList.Cells[colplan,i]:=t.PlanName;
+      end;
+    end;
+  end;
 end;
 
 end.
