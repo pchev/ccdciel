@@ -831,10 +831,8 @@ begin
               FBinningList.Add(str);
             k:=pos('x',str);
             if k>0 then begin
-               str:=trim(copy(str,1,k-1));
-               s.binx:=StrToIntDef(str,1);
-               str:=trim(copy(str,k+1,9));
-               s.biny:=StrToIntDef(str,1);
+               s.binx:=StrToIntDef(trim(copy(str,1,k-1)),1);
+               s.biny:=StrToIntDef(trim(copy(str,k+1,9)),1);
             end else begin
               s.binx:=1;
               s.biny:=1;
