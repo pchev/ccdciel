@@ -58,6 +58,7 @@ type
     MenuItem4: TMenuItem;
     Panel1: TPanel;
     Panel2: TPanel;
+    Panel3: TPanel;
     PanelDebug: TPanel;
     PopupMenu1: TPopupMenu;
     SynEdit1: TSynEdit;
@@ -182,8 +183,6 @@ procedure Tf_pascaleditor.Startdebug;
 var i: integer;
    ok: boolean;
 begin
-paneldebug.Visible:=true;
-paneldebug.BringToFront;
 DebugMemo.Clear;
 Fdbgscr.Script.Assign(SynEdit1.Lines);
 ok:=Fdbgscr.Compile;
@@ -193,7 +192,6 @@ if ok then begin
   Fdbgscr.Exec.DebugEnabled:=true;
   Fdbgscr.StepInto;
   Fdbgscr.Execute;
-  paneldebug.Visible:=false;
   FActiveLine := 0;
   SynEdit1.Refresh;
 end else begin
