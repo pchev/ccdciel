@@ -887,18 +887,18 @@ begin
     hdr[2] := 'CTYPE1  = '+#39+'RA---TAN'+#39+'           / first parameter RA , projection TANgential'+blank80;
     hdr[3] := 'CTYPE2  = '+#39+'DEC--TAN'+#39+'           / second parameter DEC, projection TANgential'+blank80;
     hdr[4] := 'CUNIT1  = '+#39+'deg '+#39+'               / Unit of coordinate '+blank80;
-    hdr[5] := 'CRPIX1  =        '+FormatFloat(e6, 0.5+Fiwidth/2)+' / X of reference pixel '+blank80;
-    hdr[6] := 'CRPIX2  =        '+FormatFloat(e6, 0.5+Fiheight/2)+' / Y of reference pixel '+blank80;
-    hdr[7] := 'CRVAL1  =        '+FormatFloat(e6,ra_radians*rad2deg)+' / RA of reference pixel (deg) '+blank80;
-    hdr[8] := 'CRVAL2  =        '+FormatFloat(e6,dec_radians*rad2deg)+' / DEC of reference pixel (deg) '+blank80;
-    hdr[9] := 'CDELT1  =        '+FormatFloat(e6,cdelt1)+' / X pixel size (deg) '+blank80;
-    hdr[10] :='CDELT2  =        '+FormatFloat(e6,cdelt2)+' / Y pixel size (deg) '+blank80;
-    hdr[11] :='CROTA1  =        '+FormatFloat(e6,crota1)+' / Image twist of X axis (deg) '+blank80;
-    hdr[12] :='CROTA2  =        '+FormatFloat(e6,crota2)+' / Image twist of Y axis (deg) '+blank80;
-    hdr[13] :='CD1_1   =        '+FormatFloat(e6,cd1_1)+ ' / CD matrix to convert (x,y) to (Ra, Dec) '+blank80;
-    hdr[14] :='CD1_2   =        '+FormatFloat(e6,cd1_2)+ ' / CD matrix to convert (x,y) to (Ra, Dec) '+blank80;
-    hdr[15] :='CD2_1   =        '+FormatFloat(e6,cd2_1)+ ' / CD matrix to convert (x,y) to (Ra, Dec) '+blank80;
-    hdr[16] :='CD2_2   =        '+FormatFloat(e6,cd2_2)+ ' / CD matrix to convert (x,y) to (Ra, Dec) '+blank80;
+    hdr[5] := 'CRPIX1  = '+Format('%20.10g',[ 0.5+Fiwidth/2])+' / X of reference pixel '+blank80;
+    hdr[6] := 'CRPIX2  = '+Format('%20.10g',[ 0.5+Fiheight/2])+' / Y of reference pixel '+blank80;
+    hdr[7] := 'CRVAL1  = '+Format('%20.10g',[ra_radians*rad2deg])+' / RA of reference pixel (deg) '+blank80;
+    hdr[8] := 'CRVAL2  = '+Format('%20.10g',[dec_radians*rad2deg])+' / DEC of reference pixel (deg) '+blank80;
+    hdr[9] := 'CDELT1  = '+Format('%20.10g',[cdelt1])+' / X pixel size (deg) '+blank80;
+    hdr[10] :='CDELT2  = '+Format('%20.10g',[cdelt2])+' / Y pixel size (deg) '+blank80;
+    hdr[11] :='CROTA1  = '+Format('%20.10g',[crota1])+' / Image twist of X axis (deg) '+blank80;
+    hdr[12] :='CROTA2  = '+Format('%20.10g',[crota2])+' / Image twist of Y axis (deg) '+blank80;
+    hdr[13] :='CD1_1   = '+Format('%20.10g',[cd1_1])+ ' / CD matrix to convert (x,y) to (Ra, Dec) '+blank80;
+    hdr[14] :='CD1_2   = '+Format('%20.10g',[cd1_2])+ ' / CD matrix to convert (x,y) to (Ra, Dec) '+blank80;
+    hdr[15] :='CD2_1   = '+Format('%20.10g',[cd2_1])+ ' / CD matrix to convert (x,y) to (Ra, Dec) '+blank80;
+    hdr[16] :='CD2_2   = '+Format('%20.10g',[cd2_2])+ ' / CD matrix to convert (x,y) to (Ra, Dec) '+blank80;
     hdr[17] :='END'+blank80;
 
     // write wcs file
