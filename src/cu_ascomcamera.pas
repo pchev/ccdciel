@@ -523,7 +523,7 @@ begin
       case state of
         0 : FonExposureProgress(0);  // iddle
         1 : FonExposureProgress(-1); // wait start
-        2 : FonExposureProgress(secperday*(Ftimeend-now)); // exposure in progress
+        2 : FonExposureProgress(max(0,secperday*(Ftimeend-now))); // exposure in progress
         3 : begin StatusTimer.Enabled:=false; FonExposureProgress(-3);  end; // read ccd
         4 : begin StatusTimer.Enabled:=false; FonExposureProgress(-4); exposuretimer.Interval:=250;  end; // downloading
         5 : FonExposureProgress(-5); // error
