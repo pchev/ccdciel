@@ -8764,7 +8764,7 @@ try
    buf:=Format(rsSaved, [fn]);
  end;
  if camera.ImageFormat<>'.fits' then buf:=UpperCase(camera.ImageFormat)+' '+buf;
- buf:=buf+' '+inttostr(fits.HeaderInfo.naxis1)+'x'+inttostr(fits.HeaderInfo.naxis2);
+ if fits.HeaderInfo.valid then buf:=buf+' '+inttostr(fits.HeaderInfo.naxis1)+'x'+inttostr(fits.HeaderInfo.naxis2);
  StatusBar1.Panels[panelfile].Text:=buf;
  StatusBar1.Panels[panelstatus].Text := '';
  // save as bitmap
