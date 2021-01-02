@@ -488,7 +488,7 @@ var ok: boolean;
     imgarray:TImageArray;
     i,j,k,c,xs,ys: integer;
     nax1,nax2,state: integer;
-    pix,piy,expt: double;
+    pix,piy,expt,rexp: double;
     dateobs,ccdname,frname:string;
     Dims,x,y: Integer;
     lii: integer;
@@ -525,7 +525,13 @@ begin
       case state of
         0 : FonExposureProgress(0);  // iddle
         1 : FonExposureProgress(-1); // wait start
-        2 : FonExposureProgress(max(0,secperday*(Ftimeend-now))); // exposure in progress
+        2 : begin                    // exposure in progress
+              rexp:=secperday*(Ftimeend-now);
+              if rexp>0 then
+                FonExposureProgress(rexp)
+              else
+                FonExposureProgress(-4);
+            end;
         3 : begin StatusTimer.Enabled:=false; FonExposureProgress(-3);  end; // read ccd
         4 : begin StatusTimer.Enabled:=false; FonExposureProgress(-4); exposuretimer.Interval:=250;  end; // downloading
         5 : FonExposureProgress(-5); // error
