@@ -29,7 +29,7 @@ interface
 
 uses
   {$ifdef mswindows}
-  ShlObj, comobj,
+  ShlObj, comobj, windows,
   {$endif}
   {$ifdef unix}
   BaseUnix,
@@ -995,6 +995,10 @@ var buf:string;
     {$ifdef darwin}
     i:integer;
     {$endif}
+    {$ifdef mswindows}
+    PIDL: LPITEMIDLIST;
+    Folder: array[0..MAX_PATH] of char;
+    {$endif}
 begin
  {$ifdef darwin}
    //  try current path
@@ -1086,7 +1090,15 @@ begin
  if not DirectoryExistsUTF8(TmpDir) then  CreateDirUTF8(TmpDir);
  LogDir:=slash(ConfigDir)+'Log';
  if not DirectoryExistsUTF8(LogDir) then  CreateDirUTF8(LogDir);
- defCapturePath:=ExpandFileNameUTF8(defCapPath);
+ {$ifdef unix}
+   HomeDir := expandfilename('~/');
+ {$endif}
+ {$ifdef mswindows}
+   SHGetSpecialFolderLocation(0, CSIDL_PERSONAL, PIDL);
+   SHGetPathFromIDList(PIDL, Folder);
+   HomeDir := trim(WinCPToUTF8(Folder));
+ {$endif}
+ defCapturePath:=HomeDir;
 end;
 
 procedure Tf_main.ScaleMainForm;
