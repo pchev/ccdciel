@@ -1092,13 +1092,14 @@ begin
  if not DirectoryExistsUTF8(LogDir) then  CreateDirUTF8(LogDir);
  {$ifdef unix}
    HomeDir := expandfilename('~/');
+   defCapturePath:=HomeDir;
  {$endif}
  {$ifdef mswindows}
    SHGetSpecialFolderLocation(0, CSIDL_PERSONAL, PIDL);
    SHGetPathFromIDList(PIDL, Folder);
    HomeDir := trim(WinCPToUTF8(Folder));
+   defCapturePath:=HomeDir+'\Documents';
  {$endif}
- defCapturePath:=HomeDir;
 end;
 
 procedure Tf_main.ScaleMainForm;
