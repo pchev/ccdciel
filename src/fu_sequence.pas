@@ -475,6 +475,7 @@ begin
     else begin
       // edit another sequence file
       t:=T_Targets.Create(self);
+      t.Camera:=Fcamera;
       try
         t.LoadTargets(fn);
         if EditTargets(t,false,fn,defname) then begin
