@@ -7130,7 +7130,7 @@ begin
      for i:=1 to n do begin
         config.SetValue('/Filters/Filter'+IntToStr(i),FilterList[i]);
         config.SetValue('/Filters/Offset'+IntToStr(i),StrToIntDef(trim(f_option.FilterList.Cells[1,i]),0));
-        config.SetValue('/Filters/ExpFact'+IntToStr(i),StrToFloatDef(trim(f_option.FilterList.Cells[2,i]),1.0));
+        config.SetValue('/Filters/ExpFact'+IntToStr(i),StrToFloatDef(trim(stringReplace(f_option.FilterList.Cells[2,i],',','.',[])),1.0));
      end;
      config.SetValue('/StarAnalysis/AutoFocusMode',ord(f_option.GetAutofocusMode));
      config.SetValue('/StarAnalysis/AutofocusMinSpeed',f_option.AutofocusMinSpeed.Value);

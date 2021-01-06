@@ -202,6 +202,7 @@ end;
 
 procedure Tf_capture.ExpTimeChange(Sender: TObject);
 begin
+  TComboBox(Sender).Text:=stringReplace(TComboBox(Sender).Text,',','.',[]);
   FExposureTime:=StrToFloatDef(ExpTime.Text,-1);
 end;
 

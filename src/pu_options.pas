@@ -1665,6 +1665,7 @@ end;
 procedure Tf_option.AutofocusExpTimeChange(Sender: TObject);
 var x: double;
 begin
+  TComboBox(Sender).Text:=stringReplace(TComboBox(Sender).Text,',','.',[]);
   x:=StrToFloatDef(AutofocusExpTime.Text,-1);
   if x>0 then FAutofocusExposure:=x;
 end;

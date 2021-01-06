@@ -2546,7 +2546,7 @@ begin
   StepsModified:=StepsModified or (p.frtype<>TFrameType(j));
   if p.frtype<>TFrameType(j) then FrameTypeChange(n,TFrameType(j));
   p.frtype:=TFrameType(j);
-  x:=StrToFloatDef(StepList.Cells[pcolexp,n],p.exposure);
+  x:=StrToFloatDef(stringReplace(StepList.Cells[pcolexp,n],',','.',[]),p.exposure);
   StepsModified:=StepsModified or (p.exposure<>x);
   p.exposure:=x;
   str:=StepList.Cells[pcolbin,n];

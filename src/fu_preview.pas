@@ -59,6 +59,7 @@ type
     Title: TLabel;
     procedure BtnLoopClick(Sender: TObject);
     procedure BtnPreviewClick(Sender: TObject);
+    procedure ExpTimeChange(Sender: TObject);
   private
     { private declarations }
     Fcamera: T_camera;
@@ -166,6 +167,11 @@ begin
      ExpectedStop:=true;
      if Assigned(FonAbortExposure) then FonAbortExposure(self);
   end;
+end;
+
+procedure Tf_preview.ExpTimeChange(Sender: TObject);
+begin
+  TComboBox(Sender).Text:=stringReplace(TComboBox(Sender).Text,',','.',[]);
 end;
 
 procedure Tf_preview.BtnLoopClick(Sender: TObject);
