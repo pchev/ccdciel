@@ -148,7 +148,7 @@ type
       FSeqStartTwilight,FSeqStopTwilight,FSeqLockTwilight: boolean;
       TargetTimeStart,TargetDelayEnd: TDateTime;
       FRunning,FScriptRunning: boolean;
-      FInitializing: boolean;
+      FInitializing, FStopping, FDawnFlatNow: boolean;
       FUnattended: boolean;
       FName: string;
     public
@@ -168,7 +168,7 @@ type
       procedure WeatherPause;
       procedure WeatherRestart;
       procedure ForceNextTarget;
-      procedure SaveDoneCount(RepeatDone: integer);
+      procedure SaveDoneCount;
       function  CheckDoneCount:boolean;
       procedure ClearDoneCount(ClearRepeat: boolean);
       procedure CreateSkyFlatPlan(flt: TTarget);
@@ -282,6 +282,8 @@ begin
   FIgnoreRestart:=true;
   FResetRepeat:=true;
   FInitializing:=false;
+  FStopping:=false;
+  FDawnFlatNow:=false;
   FTargetCoord:=false;
   FTargetRA:=NullCoord;
   FTargetDE:=NullCoord;
@@ -468,6 +470,8 @@ begin
   FRunning
   FScriptRunning
   FInitializing
+  FStopping
+  FDawnFlat
   FUnattended
   FTargetInitializing
   FSeqLockTwilight
@@ -1087,6 +1091,8 @@ begin
   try
   FWaitStarting:=true;
   FCurrentTarget:=-1;
+  FStopping:=false;
+  FDawnFlatNow:=false;
   FTargetCoord:=false;
   FTargetRA:=NullCoord;
   FTargetDE:=NullCoord;
@@ -1198,7 +1204,7 @@ begin
         // run sky flat
         FSeqLockTwilight:=false;
         FCurrentTarget:=j-1;
-        FTargetsRepeatCount:=FTargetsRepeat-1;
+        FDawnFlatNow:=true;
         NextTarget;
         exit;
      end;
@@ -1279,7 +1285,7 @@ begin
   StopTargetTimer.Enabled:=false;
   WeatherRestartTimer.Enabled:=false;
   InplaceAutofocus:=AutofocusInPlace;
-  FTargetsRepeatCount:=FTargetsRepeat+1;
+  FStopping:=true;
   FRunning:=false;
   WeatherPauseCanceled:=true;
   WeatherPauseCapture:=false;
@@ -1300,15 +1306,13 @@ end;
 
 procedure T_Targets.StopSequence(abort: boolean);
 var p: T_Plan;
-    RepeatDone:integer;
     r: string;
 begin
  StopTimer.Enabled:=false;
  StopTargetTimer.Enabled:=false;
  WeatherRestartTimer.Enabled:=false;
+ FStopping:=true;
  InplaceAutofocus:=AutofocusInPlace;
- RepeatDone:=FTargetsRepeatCount;
- FTargetsRepeatCount:=FTargetsRepeat+1;
  if FRunning then begin
    FRunning:=false;
    WeatherPauseCanceled:=true;
@@ -1372,7 +1376,7 @@ begin
        msg(r,9);
      end;
    end;
-   SaveDoneCount(RepeatDone);
+   SaveDoneCount;
    if assigned(FonEndSequence) then FonEndSequence(nil);
    CurrentTargetName:='';
    CurrentStepName:='';
@@ -1396,10 +1400,10 @@ begin
    totalcount:=totalcount+FTargetsRepeat;
    donecount:=donecount+FTargetsRepeatCount;
  end;
+ FDoneStatus:=rsGlobalRepeat+blank+IntToStr(FTargetsRepeatCount)+'/'+IntToStr(FTargetsRepeat);
  if (FTargetsRepeatCount>0)and(FTargetsRepeatCount<=FTargetsRepeat) then begin
    result:=true;
    FLastDoneStep:=rsGlobalRepeat+blank+IntToStr(FTargetsRepeatCount)+'/'+IntToStr(FTargetsRepeat);
-   FDoneStatus:=FLastDoneStep;
  end;
  for i:=0 to NumTargets-1 do begin
     t:=Targets[i];
@@ -1459,7 +1463,7 @@ begin
  end;
 end;
 
-procedure T_Targets.SaveDoneCount(RepeatDone: integer);
+procedure T_Targets.SaveDoneCount;
 var p: T_Plan;
     t: TTarget;
     i: integer;
@@ -1476,7 +1480,7 @@ begin
   if FIgnoreRestart then
      FSequenceFile.Items.SetValue('/Targets/RepeatDone',0)
   else
-     FSequenceFile.Items.SetValue('/Targets/RepeatDone',RepeatDone);
+     FSequenceFile.Items.SetValue('/Targets/RepeatDone',FTargetsRepeatCount);
   // target repeat
   if FIgnoreRestart then
      FSequenceFile.Items.SetValue('/Targets/Target'+inttostr(i)+'/RepeatDone',0)
@@ -1491,7 +1495,7 @@ end;
 
 procedure T_Targets.PlanStepChange(Sender: TObject);
 begin
-  SaveDoneCount(FTargetsRepeatCount);
+  SaveDoneCount;
 end;
 
 procedure T_Targets.ForceNextTarget;
@@ -1543,7 +1547,7 @@ begin
   NeedRecenterTarget:=false;
   InplaceAutofocus:=AutofocusInPlace;
   CancelAutofocus:=false;
-  SaveDoneCount(FTargetsRepeatCount);
+  SaveDoneCount;
   CheckDoneCount;
   inc(FCurrentTarget);
   if FRunning and (FCurrentTarget<NumTargets) then begin
@@ -1579,7 +1583,7 @@ begin
    end
    else if (Targets[FCurrentTarget].objectname=SkyFlatTxt) then begin
     if ((Targets[FCurrentTarget].planname=FlatTimeName[0])and(FTargetsRepeatCount=0)  // Dusk, run only on first repeat
-        or((Targets[FCurrentTarget].planname=FlatTimeName[1])and(FAllDone or(FTargetsRepeatCount=FTargetsRepeat-1))))  // Dawn, run only on last repeat
+        or((Targets[FCurrentTarget].planname=FlatTimeName[1])and(FAllDone or FDawnFlatNow or(FTargetsRepeatCount=FTargetsRepeat-1))))  // Dawn, run only on last repeat
     then begin
      FInitializing:=true;
      ShowDelayMsg('');
@@ -1667,7 +1671,7 @@ begin
   end
   else begin
    inc(FTargetsRepeatCount);
-   if (not FAllDone)and(FTargetsRepeatCount<FTargetsRepeat) then begin
+   if (not FAllDone)and(not FStopping)and(FTargetsRepeatCount<FTargetsRepeat) then begin
      FCurrentTarget:=-1;
      FTargetCoord:=false;
      FTargetRA:=NullCoord;
@@ -1687,7 +1691,7 @@ begin
      RunEndAction;
      ShowDelayMsg('');
      Dec(FCurrentTarget);
-     SaveDoneCount(FTargetsRepeatCount);
+     SaveDoneCount;
      FCurrentTarget:=-1;
      if EmailEndSequence then begin
        r:=email(Format(rsSequenceFini, [FName]),Format(rsSequenceFini, [FName]));

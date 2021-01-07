@@ -1008,7 +1008,7 @@ begin
   Targets.CheckDoneCount;
   f:=Tf_viewtext.Create(self);
   f.Caption:=rsStatus2;
-  f.Memo1.Text:=rsSequence+blank+Targets.TargetName+crlf+targets.DoneStatus;
+  f.Memo1.Text:=rsSequence+blank+Targets.TargetName+crlf+crlf+targets.DoneStatus;
   FormPos(f,mouse.CursorPos.X,mouse.CursorPos.Y);
   f.Show;
 end;
