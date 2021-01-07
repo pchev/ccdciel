@@ -67,6 +67,7 @@ object f_capture: Tf_capture
           '1200'
         )
         OnChange = ExpTimeChange
+        OnKeyPress = ExpTimeKeyPress
         ParentFont = False
         TabOrder = 0
         Text = '1'

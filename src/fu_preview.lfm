@@ -56,7 +56,7 @@ object f_preview: Tf_preview
           '20'
           '60'
         )
-        OnChange = ExpTimeChange
+        OnKeyPress = ExpTimeKeyPress
         ParentFont = False
         TabOrder = 0
         Text = '1'

@@ -59,7 +59,7 @@ type
     Title: TLabel;
     procedure BtnLoopClick(Sender: TObject);
     procedure BtnPreviewClick(Sender: TObject);
-    procedure ExpTimeChange(Sender: TObject);
+    procedure ExpTimeKeyPress(Sender: TObject; var Key: char);
   private
     { private declarations }
     Fcamera: T_camera;
@@ -169,9 +169,13 @@ begin
   end;
 end;
 
-procedure Tf_preview.ExpTimeChange(Sender: TObject);
+procedure Tf_preview.ExpTimeKeyPress(Sender: TObject; var Key: char);
 begin
-  TComboBox(Sender).Text:=stringReplace(TComboBox(Sender).Text,',','.',[]);
+  // Only accept positive decimal value
+  // inspired from TCustomFloatSpinEdit.KeyPress
+  inherited KeyPress(Key);
+  if (Key in ['.',',']) then Key := DefaultFormatSettings.Decimalseparator;
+  if not (Key in ['0'..'9', DefaultFormatSettings.DecimalSeparator,'+',#8,#9,^C,^X,^V,^Z]) then Key := #0;
 end;
 
 procedure Tf_preview.BtnLoopClick(Sender: TObject);

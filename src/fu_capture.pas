@@ -71,6 +71,7 @@ type
     Title: TLabel;
     procedure BtnStartClick(Sender: TObject);
     procedure ExpTimeChange(Sender: TObject);
+    procedure ExpTimeKeyPress(Sender: TObject; var Key: char);
     procedure FrameEndDrag(Sender, Target: TObject; X, Y: Integer);
     procedure FrameResize(Sender: TObject);
     procedure CheckLight(Sender: TObject);
@@ -202,8 +203,16 @@ end;
 
 procedure Tf_capture.ExpTimeChange(Sender: TObject);
 begin
-  TComboBox(Sender).Text:=stringReplace(TComboBox(Sender).Text,',','.',[]);
   FExposureTime:=StrToFloatDef(ExpTime.Text,-1);
+end;
+
+procedure Tf_capture.ExpTimeKeyPress(Sender: TObject; var Key: char);
+begin
+  // Only accept positive decimal value
+  // inspired from TCustomFloatSpinEdit.KeyPress
+  inherited KeyPress(Key);
+  if (Key in ['.',',']) then Key := DefaultFormatSettings.Decimalseparator;
+  if not (Key in ['0'..'9', DefaultFormatSettings.DecimalSeparator,'+',#8,#9,^C,^X,^V,^Z]) then Key := #0;
 end;
 
 procedure Tf_capture.SetExposureTime(val: double);
