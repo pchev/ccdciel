@@ -1171,7 +1171,7 @@ begin
       wait;
     end;
   end;
-  if AtStartUnpark then begin
+  if AtStartUnpark and Mount.Park then begin
     msg(rsUnparkTheTel,1);
     Mount.Park:=false;
     wait;
