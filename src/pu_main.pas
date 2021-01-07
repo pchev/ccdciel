@@ -4661,6 +4661,7 @@ begin
                     IntToStr(round(r.min))+'..'+IntToStr(round(r.max)) ;
     f_focuser.RelIncr.ItemIndex:=2;
   end;
+  f_focuser.Ready:=true;
   FocuserTemperatureCompensation(true);
 end;
 
@@ -5386,7 +5387,7 @@ end;
 // set exposure factor
 AutofocusExposureFact:=FilterExpFact[f];
 // adjust focus
-if (n>0)and(n<=MaxFilter)and(focuser.Status=devConnected) then begin
+if (n>0)and(n<=MaxFilter)and(focuser.Status=devConnected)and(f_focuser.Ready) then begin
  if CurrentFilterOffset<>FilterOffset[f] then begin
    if filteroffset_initialized then begin
     o:=FilterOffset[f]-CurrentFilterOffset;

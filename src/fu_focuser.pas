@@ -76,6 +76,7 @@ type
     function GetPosition:integer;
   public
     { public declarations }
+    Ready: boolean;
     constructor Create(aOwner: TComponent); override;
     destructor  Destroy; override;
     procedure SetLang;
@@ -106,6 +107,7 @@ begin
  Notebook1.PageIndex:=2;
  ScaleDPI(Self);
  SetLang;
+ Ready:=false;
 end;
 
 destructor  Tf_focuser.Destroy;
