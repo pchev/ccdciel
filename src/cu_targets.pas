@@ -881,6 +881,7 @@ begin
          end;
      end;
    end;
+   if FileVersion<5 then SaveTargets(fn);
 end;
 
 procedure T_Targets.SaveTargets(fn:string);
