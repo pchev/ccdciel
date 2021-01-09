@@ -542,10 +542,6 @@ msgstr ""
 msgid "Downloading"
 msgstr ""
 
-#: u_translation:rsseq
-msgid "Seq:"
-msgstr ""
-
 #: u_translation:rsexp
 msgid "Exp:"
 msgstr ""
@@ -556,10 +552,6 @@ msgstr ""
 
 #: u_translation:rsstopcapture
 msgid "Stop capture"
-msgstr ""
-
-#: u_translation:rsseqfinished
-msgid "Seq: %s Finished"
 msgstr ""
 
 #: u_translation:rsstackofframe
@@ -2242,10 +2234,6 @@ msgstr ""
 msgid "dawn"
 msgstr ""
 
-#: u_translation:rspreviewwhenw
-msgid "Preview when waiting to repeat"
-msgstr ""
-
 #: u_translation:rsseconds2
 msgid "[seconds]"
 msgstr ""
@@ -3262,10 +3250,6 @@ msgstr ""
 msgid "Continue"
 msgstr ""
 
-#: u_translation:rscancelinseco
-msgid "Cancel in %s seconds."
-msgstr ""
-
 #: u_translation:rstomorrow
 msgid "tomorrow"
 msgstr ""
@@ -3943,7 +3927,7 @@ msgid "Fixed sequence length"
 msgstr ""
 
 #: u_translation:rsimportcdcobs
-msgid "Import CdC observing list"
+msgid "Import observing list"
 msgstr ""
 
 #: u_translation:rsshowhints
@@ -4755,7 +4739,7 @@ msgid "Preset list"
 msgstr ""
 
 #: u_translation:rsimportcdcmos
-msgid "Import CdC mosaic"
+msgid "Import mosaic"
 msgstr ""
 
 #: u_translation:rsselectthefil
@@ -4768,5 +4752,33 @@ msgstr ""
 
 #: u_translation:rsselectthefil3
 msgid "Select the file to load"
+msgstr ""
+
+#: u_translation:rsretry
+msgid "Retry"
+msgstr ""
+
+#: u_translation:rsnexttarget
+msgid "Next target"
+msgstr ""
+
+#: u_translation:rsfailtostopth
+msgid "Fail to stop the autoguider"
+msgstr ""
+
+#: u_translation:rsinsseconds
+msgid "in %s seconds"
+msgstr ""
+
+#: u_translation:rscapturesfini
+msgid "Capture %s Finished"
+msgstr ""
+
+#: u_translation:rsrecording
+msgid "Recording"
+msgstr ""
+
+#: u_translation:rsfromplanetar
+msgid "From planetarium"
 msgstr ""
 

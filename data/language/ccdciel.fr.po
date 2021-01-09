@@ -6,15 +6,15 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ccdciel\n"
 "Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
-"POT-Creation-Date: 2020-12-08 09:54+0000\n"
-"PO-Revision-Date: 2020-12-08 09:58+0000\n"
+"POT-Creation-Date: 2021-01-09 16:03+0000\n"
+"PO-Revision-Date: 2021-01-09 16:12+0000\n"
 "Last-Translator: Patrick Chevalley <Unknown>\n"
 "Language-Team: French <fr@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2020-12-08 10:00+0000\n"
-"X-Generator: Launchpad (build 4853cb86c14c5a9e513816c8a61121c639b30835)\n"
+"X-Launchpad-Export-Date: 2021-01-09 16:16+0000\n"
+"X-Generator: Launchpad (build fd9c5a87183d01004404fa6027cd262eaa7f6fcf)\n"
 
 #: u_translation.rs32bitdriver
 msgid "This driver work only in 32bit, please install the 32bit version of CCDciel."
@@ -552,10 +552,6 @@ msgstr "Annuler"
 msgid "Cancel exposure"
 msgstr "Interrompre l'exposition"
 
-#: u_translation.rscancelinseco
-msgid "Cancel in %s seconds."
-msgstr "Abandon dans %s secondes"
-
 #: u_translation.rscancelpolara
 msgid "Cancel polar alignment"
 msgstr "Abandon de l'alignement polaire"
@@ -691,6 +687,10 @@ msgstr "L’acquisition est  déjà en cours d'exécution! veuillez l'arrêtez s
 #: u_translation.rscapturefolde
 msgid "Capture folder"
 msgstr "Dossier d'enregistrement"
+
+#: u_translation.rscapturesfini
+msgid "Capture %s Finished"
+msgstr "Acquisition %s terminée"
 
 #: u_translation.rscapturestopp
 msgid "Capture stopped during autofocus"
@@ -1417,6 +1417,10 @@ msgstr "Échec du démarrage du guidage!"
 msgid "Fail to resolve control exposure"
 msgstr "Erreur de résolution de la pose de contrôle"
 
+#: u_translation.rsfailtostopth
+msgid "Fail to stop the autoguider"
+msgstr "Échec de l'arrêt de l'autoguideur"
+
 #: u_translation.rsfalse
 msgid "False"
 msgstr "Non"
@@ -1641,6 +1645,10 @@ msgstr "Du pilote de caméra"
 msgid "From email address"
 msgstr "Adresse de l'expéditeur"
 
+#: u_translation.rsfromplanetar
+msgid "From planetarium"
+msgstr "Du planétarium"
+
 #: u_translation.rsfromplatesol
 msgid "From plate solving"
 msgstr "Depuis la solution astrométrique"
@@ -1827,12 +1835,12 @@ msgid "Image Un-debayered"
 msgstr "Image non Debayerisée"
 
 #: u_translation.rsimportcdcmos
-msgid "Import CdC mosaic"
-msgstr "Importe une mosaïque de CdC"
+msgid "Import mosaic"
+msgstr "Importe une mosaïque"
 
 #: u_translation.rsimportcdcobs
-msgid "Import CdC observing list"
-msgstr "Importe une liste d'observation de CdC"
+msgid "Import observing list"
+msgstr "Importe liste d'observation"
 
 #: u_translation.rsin
 msgid "In"
@@ -1873,6 +1881,10 @@ msgstr "La mise au point sur place a échoué!"
 #: u_translation.rsinsertrows
 msgid "Insert rows"
 msgstr "Insérer des lignes"
+
+#: u_translation.rsinsseconds
+msgid "in %s seconds"
+msgstr "dans %s secondes"
 
 #: u_translation.rsintensity
 msgid "Intensity"
@@ -2333,6 +2345,10 @@ msgstr "Nouvelle cible"
 #: u_translation.rsnext
 msgid "Next"
 msgstr "Suivant"
+
+#: u_translation.rsnexttarget
+msgid "Next target"
+msgstr "Objet suivant"
 
 #: u_translation.rsno
 msgid "No"
@@ -2902,10 +2918,6 @@ msgstr "Débayeriser la prévisualisation"
 msgid "Preview stacking"
 msgstr "Empilement de l'aperçu"
 
-#: u_translation.rspreviewwhenw
-msgid "Preview when waiting to repeat"
-msgstr "Prévisualisation pendant l'attente"
-
 #: u_translation.rsprofile
 msgid "Profile: %s"
 msgstr "Profile: %s"
@@ -2997,6 +3009,10 @@ msgstr "Recentrer un objet qui dérive durant la séquence"
 #: u_translation.rsrecentertarg
 msgid "Recenter target now"
 msgstr "Recentre l'objet maintenant"
+
+#: u_translation.rsrecording
+msgid "Recording"
+msgstr "Enregistrement"
 
 #: u_translation.rsred
 msgid "red"
@@ -3173,6 +3189,10 @@ msgstr "Reprend l'autoguidage"
 #: u_translation.rsretrieveposi
 msgid "Retrieve position from deepsky database"
 msgstr "Trouve la position dans la base de données"
+
+#: u_translation.rsretry
+msgid "Retry"
+msgstr "Réessayer"
 
 #: u_translation.rsretrywithast
 msgid "Retry with astrometry.net"
@@ -3425,14 +3445,6 @@ msgstr "Température du capteur"
 #: u_translation.rsseparator
 msgid "Separator"
 msgstr "Séparateur"
-
-#: u_translation.rsseq
-msgid "Seq:"
-msgstr "Séq:"
-
-#: u_translation.rsseqfinished
-msgid "Seq: %s Finished"
-msgstr "Séq: %s Terminée"
 
 #: u_translation.rssequence
 msgid "Sequence"

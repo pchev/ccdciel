@@ -6,15 +6,15 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ccdciel\n"
 "Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
-"POT-Creation-Date: 2020-12-08 09:54+0000\n"
-"PO-Revision-Date: 2020-12-06 08:17+0000\n"
+"POT-Creation-Date: 2021-01-09 16:03+0000\n"
+"PO-Revision-Date: 2020-12-23 19:21+0000\n"
 "Last-Translator: Sergey Tarantsov <tsn-ast@yandex.ru>\n"
 "Language-Team: Russian <ru@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2020-12-08 10:01+0000\n"
-"X-Generator: Launchpad (build 4853cb86c14c5a9e513816c8a61121c639b30835)\n"
+"X-Launchpad-Export-Date: 2021-01-09 16:16+0000\n"
+"X-Generator: Launchpad (build fd9c5a87183d01004404fa6027cd262eaa7f6fcf)\n"
 
 #: u_translation.rs32bitdriver
 msgid "This driver work only in 32bit, please install the 32bit version of CCDciel."
@@ -54,7 +54,7 @@ msgstr "Действие"
 
 #: u_translation.rsactivetarget
 msgid "Active target is replaced, restart the sequence"
-msgstr ""
+msgstr "Активный объект заменён, перезапустите задание"
 
 #: u_translation.rsadd
 msgid "Add"
@@ -74,7 +74,7 @@ msgstr ""
 
 #: u_translation.rsadjustflatex
 msgid "Adjust flat exposure time to %s and retry."
-msgstr "Настройте время выдержки до %s и повторите попытку"
+msgstr "Установлена выдержка флета в %sс"
 
 #: u_translation.rsadjusttowind
 msgid "Adjust to window"
@@ -130,7 +130,7 @@ msgstr "Любое время"
 
 #: u_translation.rsapplyediting
 msgid "Apply editing to active sequence"
-msgstr ""
+msgstr "Применить изменения активного задания"
 
 #: u_translation.rsapplytoallde
 msgid "Apply to all devices"
@@ -158,7 +158,7 @@ msgstr "Интерфейс ASCOM доступен только в Windows."
 
 #: u_translation.rsasequenceisa
 msgid "A sequence is already running, cannot load a new one."
-msgstr ""
+msgstr "Задание уже выполняется, нельзя загрузить новое"
 
 #: u_translation.rsastrometry
 msgid "Astrometry"
@@ -538,7 +538,7 @@ msgstr "Кадр основной камеры X=%s Y=%s ширина=%s выс�
 
 #: u_translation.rscameranotcoo
 msgid "Camera not cooling, set temperature to %s"
-msgstr "Камера не охлаждается, установите температуру на %s"
+msgstr "Камера не охлаждена, установлена температура %s"
 
 #: u_translation.rscameraorfocu
 msgid "Camera or focuser are not connected"
@@ -551,10 +551,6 @@ msgstr "Отмена"
 #: u_translation.rscancelexposu
 msgid "Cancel exposure"
 msgstr "Отмена экспозиции"
-
-#: u_translation.rscancelinseco
-msgid "Cancel in %s seconds."
-msgstr "Отмена через %s сек"
 
 #: u_translation.rscancelpolara
 msgid "Cancel polar alignment"
@@ -582,7 +578,7 @@ msgstr "Не удаётся подключиться к автогиду, зад
 
 #: u_translation.rscannotdelete
 msgid "Cannot delete the running sequence!"
-msgstr ""
+msgstr "Невозможно удалить запущенное задание"
 
 #: u_translation.rscannotdetect
 msgid "Cannot detect star."
@@ -590,15 +586,15 @@ msgstr "Не удаётся обнаружить звезду."
 
 #: u_translation.rscannoteditan
 msgid "Cannot edit an active sequence without completion status."
-msgstr ""
+msgstr "Невозможно редактировать активное задание без статуса завершения"
 
 #: u_translation.rscannoteditth
 msgid "Cannot edit the active sequence during autofocus"
-msgstr ""
+msgstr "Невозможно редактировать активное задание во время автофокусировки"
 
 #: u_translation.rscannoteditth2
 msgid "Cannot edit the active sequence when slewing"
-msgstr ""
+msgstr "Невозможно редактировать активное задание во время наведения"
 
 #: u_translation.rscannotfindaf
 msgid "Cannot find a focus star."
@@ -618,7 +614,7 @@ msgstr "Невозможно получить абсолютную позици�
 
 #: u_translation.rscannotoverwr
 msgid "Cannot overwrite the running sequence!"
-msgstr ""
+msgstr "Невозможно перезаписать запущенное задание!"
 
 #: u_translation.rscannotreachn
 msgid "Cannot reach near focus HFD, please increase Half Width or better center the curve."
@@ -692,6 +688,10 @@ msgstr "Съёмка уже запущена! Остановите её, есл�
 msgid "Capture folder"
 msgstr "Папка съёмки"
 
+#: u_translation.rscapturesfini
+msgid "Capture %s Finished"
+msgstr ""
+
 #: u_translation.rscapturestopp
 msgid "Capture stopped during autofocus"
 msgstr "Съёмка остановлена на время автофокусировки"
@@ -750,7 +750,7 @@ msgstr "Очистить статус выполнения?"
 
 #: u_translation.rsclickcancelt
 msgid "Click Cancel to abort the sequence."
-msgstr "Нажмите Отмена, чтобы прервать выполнение задания."
+msgstr "Нажмите Отмена, чтобы прервать выполнение задания"
 
 #: u_translation.rsclickcontinu
 msgid "Click Continue when ready."
@@ -886,7 +886,7 @@ msgstr "Продолжение выполнения задания"
 
 #: u_translation.rscontinuethes
 msgid "Continue the sequence"
-msgstr ""
+msgstr "Продолжить выполнение задания"
 
 #: u_translation.rscontrolexpos
 msgid "Control exposure"
@@ -906,7 +906,7 @@ msgstr "Охладить камеру"
 
 #: u_translation.rscoordinates
 msgid "Coordinates"
-msgstr "Местонахождение"
+msgstr "Координаты"
 
 #: u_translation.rscopy
 msgid "Copy"
@@ -914,7 +914,7 @@ msgstr "Копия"
 
 #: u_translation.rscopyasequenc
 msgid "Copy a sequence"
-msgstr ""
+msgstr "Копировать задание"
 
 #: u_translation.rscopycurrentp
 msgid "Copy current profile to"
@@ -922,11 +922,11 @@ msgstr "Скопировать текущий профиль в"
 
 #: u_translation.rscopyfileerro
 msgid "Copyfile error :%s"
-msgstr ""
+msgstr "Ошибка копирования файла: %s"
 
 #: u_translation.rscopyfrom
 msgid "Copy from"
-msgstr ""
+msgstr "Копировать из"
 
 #: u_translation.rscopyto
 msgid "Copy to "
@@ -1030,7 +1030,7 @@ msgstr "Удалить"
 
 #: u_translation.rsdeleteaseque
 msgid "Delete a sequence"
-msgstr ""
+msgstr "Удалить задание"
 
 #: u_translation.rsdeletesequen
 msgid "Delete sequence %s ?"
@@ -1262,7 +1262,7 @@ msgstr "Правка"
 
 #: u_translation.rseditasequenc
 msgid "Edit a sequence"
-msgstr ""
+msgstr "Изменить задание"
 
 #: u_translation.rseditplan
 msgid "Edit plan"
@@ -1342,7 +1342,7 @@ msgstr "Ошибка: неизвестное фокусное расстояни
 
 #: u_translation.rserrorupdatin
 msgid "Error updating the sequence:%s"
-msgstr ""
+msgstr "Ошибка обновления задания:%s"
 
 #: u_translation.rsestimatedsli
 msgid "Estimated slippage since last learning"
@@ -1406,7 +1406,7 @@ msgstr "Время экспозиции слишком короткое для �
 
 #: u_translation.rsfailedtodele
 msgid "Failed to delete file: %s"
-msgstr ""
+msgstr "Не удалось удалить файл: %s"
 
 #: u_translation.rsfailedtostar
 msgid "Failed to start guiding!"
@@ -1415,6 +1415,10 @@ msgstr "Не удалось начать гидирование!"
 #: u_translation.rsfailtoresolv
 msgid "Fail to resolve control exposure"
 msgstr "Неудачное распознавание контрольного снимка"
+
+#: u_translation.rsfailtostopth
+msgid "Fail to stop the autoguider"
+msgstr ""
 
 #: u_translation.rsfalse
 msgid "False"
@@ -1640,6 +1644,10 @@ msgstr "От драйвера камеры"
 msgid "From email address"
 msgstr "С адреса email"
 
+#: u_translation.rsfromplanetar
+msgid "From planetarium"
+msgstr ""
+
 #: u_translation.rsfromplatesol
 msgid "From plate solving"
 msgstr "Из распознавания кадра"
@@ -1825,12 +1833,12 @@ msgid "Image Un-debayered"
 msgstr "Изображение восстановлено"
 
 #: u_translation.rsimportcdcmos
-msgid "Import CdC mosaic"
+msgid "Import mosaic"
 msgstr ""
 
 #: u_translation.rsimportcdcobs
-msgid "Import CdC observing list"
-msgstr "Импорт листа наблюдений CdC"
+msgid "Import observing list"
+msgstr ""
 
 #: u_translation.rsin
 msgid "In"
@@ -1871,6 +1879,10 @@ msgstr "Автофокусировка в текущем месте не уда�
 #: u_translation.rsinsertrows
 msgid "Insert rows"
 msgstr "Вставить строки"
+
+#: u_translation.rsinsseconds
+msgid "in %s seconds"
+msgstr ""
 
 #: u_translation.rsintensity
 msgid "Intensity"
@@ -2022,7 +2034,7 @@ msgstr "Установите ось RA монтировки вручную, чт
 
 #: u_translation.rsmanage
 msgid "Manage"
-msgstr ""
+msgstr "Настроить"
 
 #: u_translation.rsmanagethegai
 msgid "Manage the Gain and Offset if available."
@@ -2331,6 +2343,10 @@ msgstr "Новая цель"
 #: u_translation.rsnext
 msgid "Next"
 msgstr "Далее"
+
+#: u_translation.rsnexttarget
+msgid "Next target"
+msgstr ""
 
 #: u_translation.rsno
 msgid "No"
@@ -2678,7 +2694,7 @@ msgstr "Приостановить задание"
 
 #: u_translation.rspausesequenc3
 msgid "Pause sequence request canceled."
-msgstr "Запрос приостановки задания отменён."
+msgstr "Запрос приостановки задания отменён"
 
 #: u_translation.rspdfdocumenta
 msgid "PDF documentation"
@@ -2770,7 +2786,7 @@ msgstr "Пожалуйста, активируйте логи в настрой�
 
 #: u_translation.rspleasebecare
 msgid "Please be careful to review and set the value for the Gain and Offset"
-msgstr "Внимательно проверьте и установите значения для усиления и смещения"
+msgstr "Внимательно проверьте и установите значения усиления и смещения"
 
 #: u_translation.rspleaseconfig
 msgid "Please configure your"
@@ -2826,11 +2842,11 @@ msgstr "Пожалуйста, выберите временную папку б�
 
 #: u_translation.rspleasesetthe
 msgid "Please set the format to %s before to start the sequence."
-msgstr "Определите формат %s, прежде чем запустить задание."
+msgstr "Определите формат %s, прежде чем запустить задание"
 
 #: u_translation.rspleasestopth
 msgid "Please stop the sequence first!"
-msgstr ""
+msgstr "Сначала остановите выполнение задания!"
 
 #: u_translation.rspleasewaitun
 msgid "Please wait until the measurements are complete"
@@ -2882,7 +2898,7 @@ msgstr "Настройки%s"
 
 #: u_translation.rspresetlist
 msgid "Preset list"
-msgstr ""
+msgstr "Список предустановок"
 
 #: u_translation.rspressure
 msgid "Pressure"
@@ -2899,10 +2915,6 @@ msgstr "Дебайеризовать превью"
 #: u_translation.rspreviewstack
 msgid "Preview stacking"
 msgstr "Сложение превью"
-
-#: u_translation.rspreviewwhenw
-msgid "Preview when waiting to repeat"
-msgstr "Превью при ожидании повтора"
 
 #: u_translation.rsprofile
 msgid "Profile: %s"
@@ -2995,6 +3007,10 @@ msgstr "Повторная центровка объекта при дрейфе
 #: u_translation.rsrecentertarg
 msgid "Recenter target now"
 msgstr "Повторная центровка"
+
+#: u_translation.rsrecording
+msgid "Recording"
+msgstr ""
 
 #: u_translation.rsred
 msgid "red"
@@ -3158,11 +3174,11 @@ msgstr "Перезапуск  экспозиции"
 
 #: u_translation.rsrestartingse
 msgid "Restarting sequence %s ..."
-msgstr ""
+msgstr "Перезапуск задания %s ..."
 
 #: u_translation.rsrestartthese
 msgid "Restart the sequence"
-msgstr ""
+msgstr "Перезапустить задание"
 
 #: u_translation.rsresumeautogu
 msgid "Resume autoguider"
@@ -3171,6 +3187,10 @@ msgstr "Возобновление гидирования"
 #: u_translation.rsretrieveposi
 msgid "Retrieve position from deepsky database"
 msgstr "Получить позицию из базы данных"
+
+#: u_translation.rsretry
+msgid "Retry"
+msgstr ""
 
 #: u_translation.rsretrywithast
 msgid "Retry with astrometry.net"
@@ -3390,15 +3410,15 @@ msgstr "Сначала выберите звезду!"
 
 #: u_translation.rsselectthefil
 msgid "Select the file to delete"
-msgstr ""
+msgstr "Выберите файл для удаления"
 
 #: u_translation.rsselectthefil2
 msgid "Select the file to edit"
-msgstr ""
+msgstr "Выберите файл для редактирования"
 
 #: u_translation.rsselectthefil3
 msgid "Select the file to load"
-msgstr ""
+msgstr "Выберите файл для загрузки"
 
 #: u_translation.rssendimagetop
 msgid "Send image to planetarium"
@@ -3423,14 +3443,6 @@ msgstr "Температура сенсора"
 #: u_translation.rsseparator
 msgid "Separator"
 msgstr "Разделитель"
-
-#: u_translation.rsseq
-msgid "Seq:"
-msgstr "Seq:"
-
-#: u_translation.rsseqfinished
-msgid "Seq: %s Finished"
-msgstr "Seq: %s завершена"
 
 #: u_translation.rssequence
 msgid "Sequence"
@@ -3518,7 +3530,7 @@ msgstr "закат"
 
 #: u_translation.rssetbinning
 msgid "Set Binning"
-msgstr "Установить бинниг"
+msgstr "Установлен бинниг"
 
 #: u_translation.rssetbinningx
 msgid "Set binning %sx%s"
@@ -3902,7 +3914,7 @@ msgstr "Время начала"
 
 #: u_translation.rsstarttoeditt
 msgid "Start to edit the active sequence"
-msgstr ""
+msgstr "Начать редактирование активного задания"
 
 #: u_translation.rsstarttracking
 msgid "start tracking"
@@ -3938,7 +3950,7 @@ msgstr "Шаг"
 
 #: u_translation.rsstepcomplete
 msgid "Step %s complete"
-msgstr ""
+msgstr "Шаг %s завершён"
 
 #: u_translation.rsstepdescript
 msgid "Step description"
@@ -3982,7 +3994,7 @@ msgstr "Остановить ведение купола"
 
 #: u_translation.rsstopflatcapt
 msgid "Stop flat capture"
-msgstr "Остановить съёмку флета"
+msgstr "Остановка съёмки флета"
 
 #: u_translation.rsstopguiding
 msgid "Stop guiding"
@@ -4266,7 +4278,7 @@ msgstr "Меню «Инструменты / Калибровка фокусер�
 
 #: u_translation.rsthemountdono
 msgid "The mount do not move enough!"
-msgstr "Монтировка не двигается достаточно!"
+msgstr "Недостаточный поворот монтировки!"
 
 #: u_translation.rsthemountindi
 msgid "the mount indicate %s"
@@ -4310,7 +4322,7 @@ msgstr "Телескоп запаркован"
 
 #: u_translation.rsthismessagec
 msgid "This message confirm the email configuration is working."
-msgstr "Это сообщение подтверждает, что электронная почта работает."
+msgstr "Это сообщение подтверждает, что электронная почта работает"
 
 #: u_translation.rsthisobjectis
 msgid "This object is never below the requested elevation"
@@ -4342,7 +4354,7 @@ msgstr "Наклон [hfd]=%s"
 
 #: u_translation.rstime
 msgid "Time"
-msgstr ""
+msgstr "Время"
 
 #: u_translation.rstimealreadyp
 msgid "Time already passed %s"
@@ -4490,7 +4502,7 @@ msgstr "Unslaved"
 
 #: u_translation.rsupdateactive
 msgid "Update active sequence"
-msgstr ""
+msgstr "Обновить активное задание"
 
 #: u_translation.rsupdatefullse
 msgid "Update full sequence"
@@ -4502,7 +4514,7 @@ msgstr "Обновить RA+Dec%sиз планетария"
 
 #: u_translation.rsupdatesequen
 msgid "Update sequence without interruption"
-msgstr ""
+msgstr "Обновить задание без остановки"
 
 #: u_translation.rsuseasfallbac
 msgid "Use as fallback if other software fail"

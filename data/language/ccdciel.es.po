@@ -6,15 +6,15 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ccdciel\n"
 "Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
-"POT-Creation-Date: 2020-12-08 09:54+0000\n"
+"POT-Creation-Date: 2021-01-09 16:03+0000\n"
 "PO-Revision-Date: 2020-08-01 19:06+0000\n"
 "Last-Translator: Víctor R. Ruiz <Unknown>\n"
 "Language-Team: Spanish <es@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2020-12-08 10:01+0000\n"
-"X-Generator: Launchpad (build 4853cb86c14c5a9e513816c8a61121c639b30835)\n"
+"X-Launchpad-Export-Date: 2021-01-09 16:16+0000\n"
+"X-Generator: Launchpad (build fd9c5a87183d01004404fa6027cd262eaa7f6fcf)\n"
 
 #: u_translation.rs32bitdriver
 msgid "This driver work only in 32bit, please install the 32bit version of CCDciel."
@@ -552,10 +552,6 @@ msgstr "Cancelar"
 msgid "Cancel exposure"
 msgstr "Cancelar exposición"
 
-#: u_translation.rscancelinseco
-msgid "Cancel in %s seconds."
-msgstr "Cancelar en %s segundos."
-
 #: u_translation.rscancelpolara
 msgid "Cancel polar alignment"
 msgstr "Cancelar alineación polar"
@@ -691,6 +687,10 @@ msgstr "¡Captura ya en marcha! Por favor, deténgala primero si quiere comenzar
 #: u_translation.rscapturefolde
 msgid "Capture folder"
 msgstr "Carpeta capturas"
+
+#: u_translation.rscapturesfini
+msgid "Capture %s Finished"
+msgstr ""
 
 #: u_translation.rscapturestopp
 msgid "Capture stopped during autofocus"
@@ -1417,6 +1417,10 @@ msgstr "¡No se pudo comenzar el guiado!"
 msgid "Fail to resolve control exposure"
 msgstr "Falló al resolver la exposición de control"
 
+#: u_translation.rsfailtostopth
+msgid "Fail to stop the autoguider"
+msgstr ""
+
 #: u_translation.rsfalse
 msgid "False"
 msgstr "Falso"
@@ -1641,6 +1645,10 @@ msgstr "Desde el controlador de la cámara"
 msgid "From email address"
 msgstr "Dirección correo remitente"
 
+#: u_translation.rsfromplanetar
+msgid "From planetarium"
+msgstr ""
+
 #: u_translation.rsfromplatesol
 msgid "From plate solving"
 msgstr "Resolución de coordenadas"
@@ -1826,12 +1834,12 @@ msgid "Image Un-debayered"
 msgstr "Imagen des-debayerizada"
 
 #: u_translation.rsimportcdcmos
-msgid "Import CdC mosaic"
+msgid "Import mosaic"
 msgstr ""
 
 #: u_translation.rsimportcdcobs
-msgid "Import CdC observing list"
-msgstr "Importar lista de observación de CdC"
+msgid "Import observing list"
+msgstr ""
 
 #: u_translation.rsin
 msgid "In"
@@ -1872,6 +1880,10 @@ msgstr "¡Falló el autoenfoque in situ!"
 #: u_translation.rsinsertrows
 msgid "Insert rows"
 msgstr "Insertar filas"
+
+#: u_translation.rsinsseconds
+msgid "in %s seconds"
+msgstr ""
 
 #: u_translation.rsintensity
 msgid "Intensity"
@@ -2332,6 +2344,10 @@ msgstr "Nuevo objetivo"
 #: u_translation.rsnext
 msgid "Next"
 msgstr "Siguiente"
+
+#: u_translation.rsnexttarget
+msgid "Next target"
+msgstr ""
 
 #: u_translation.rsno
 msgid "No"
@@ -2901,10 +2917,6 @@ msgstr "Previsualizar debayerizado"
 msgid "Preview stacking"
 msgstr "Previsualizar apilado"
 
-#: u_translation.rspreviewwhenw
-msgid "Preview when waiting to repeat"
-msgstr "Previsualizar durante la espera para repetir"
-
 #: u_translation.rsprofile
 msgid "Profile: %s"
 msgstr "Perfil: %s"
@@ -2996,6 +3008,10 @@ msgstr "Recentrar objetivo de secuencia con deriva"
 #: u_translation.rsrecentertarg
 msgid "Recenter target now"
 msgstr "Recentrar el objetivo ahora"
+
+#: u_translation.rsrecording
+msgid "Recording"
+msgstr ""
 
 #: u_translation.rsred
 msgid "red"
@@ -3172,6 +3188,10 @@ msgstr "Reanudar autoguiado"
 #: u_translation.rsretrieveposi
 msgid "Retrieve position from deepsky database"
 msgstr "Obtener posición de base de datos cielo profundo"
+
+#: u_translation.rsretry
+msgid "Retry"
+msgstr ""
 
 #: u_translation.rsretrywithast
 msgid "Retry with astrometry.net"
@@ -3424,14 +3444,6 @@ msgstr "Sensor de temperatura"
 #: u_translation.rsseparator
 msgid "Separator"
 msgstr "Separador"
-
-#: u_translation.rsseq
-msgid "Seq:"
-msgstr "Sec:"
-
-#: u_translation.rsseqfinished
-msgid "Seq: %s Finished"
-msgstr "Sec: %s finalizada"
 
 #: u_translation.rssequence
 msgid "Sequence"

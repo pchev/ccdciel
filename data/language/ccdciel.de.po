@@ -6,15 +6,15 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ccdciel\n"
 "Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
-"POT-Creation-Date: 2020-12-08 09:54+0000\n"
-"PO-Revision-Date: 2020-12-06 21:54+0000\n"
+"POT-Creation-Date: 2021-01-09 16:03+0000\n"
+"PO-Revision-Date: 2020-12-15 20:54+0000\n"
 "Last-Translator: Thomas <email@starhopper.de>\n"
 "Language-Team: German <de@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2020-12-08 10:00+0000\n"
-"X-Generator: Launchpad (build 4853cb86c14c5a9e513816c8a61121c639b30835)\n"
+"X-Launchpad-Export-Date: 2021-01-09 16:16+0000\n"
+"X-Generator: Launchpad (build fd9c5a87183d01004404fa6027cd262eaa7f6fcf)\n"
 
 #: u_translation.rs32bitdriver
 msgid "This driver work only in 32bit, please install the 32bit version of CCDciel."
@@ -552,10 +552,6 @@ msgstr "Abbrechen"
 msgid "Cancel exposure"
 msgstr "Belichtung abbrechen"
 
-#: u_translation.rscancelinseco
-msgid "Cancel in %s seconds."
-msgstr "Abbrechen in %s Sekunden"
-
 #: u_translation.rscancelpolara
 msgid "Cancel polar alignment"
 msgstr "Polar Alignment abbrechen"
@@ -691,6 +687,10 @@ msgstr "Aufnahme läuft bereits! Bitte erst stoppen bevor Sie eine neueSequenz s
 #: u_translation.rscapturefolde
 msgid "Capture folder"
 msgstr "Aufnahmeverzeichnis"
+
+#: u_translation.rscapturesfini
+msgid "Capture %s Finished"
+msgstr ""
 
 #: u_translation.rscapturestopp
 msgid "Capture stopped during autofocus"
@@ -1417,6 +1417,10 @@ msgstr "Autoguiding Start fehlgeschlagen"
 msgid "Fail to resolve control exposure"
 msgstr "Platesolving der Kontrollbelichtung fehlgeschlagen"
 
+#: u_translation.rsfailtostopth
+msgid "Fail to stop the autoguider"
+msgstr ""
+
 #: u_translation.rsfalse
 msgid "False"
 msgstr "Falsch"
@@ -1641,6 +1645,10 @@ msgstr "Vom Kameratreiber"
 msgid "From email address"
 msgstr "Absender E-Mail Adresse"
 
+#: u_translation.rsfromplanetar
+msgid "From planetarium"
+msgstr ""
+
 #: u_translation.rsfromplatesol
 msgid "From plate solving"
 msgstr "Ergebnisse Platesolving"
@@ -1826,12 +1834,12 @@ msgid "Image Un-debayered"
 msgstr "Bild Un-debayered"
 
 #: u_translation.rsimportcdcmos
-msgid "Import CdC mosaic"
+msgid "Import mosaic"
 msgstr ""
 
 #: u_translation.rsimportcdcobs
-msgid "Import CdC observing list"
-msgstr "Importiere Beobachtungsliste aus Skycharts"
+msgid "Import observing list"
+msgstr ""
 
 #: u_translation.rsin
 msgid "In"
@@ -1872,6 +1880,10 @@ msgstr "Autofokus an aktueller Stelle fehlgeschlagen"
 #: u_translation.rsinsertrows
 msgid "Insert rows"
 msgstr "Zeilen einfügen"
+
+#: u_translation.rsinsseconds
+msgid "in %s seconds"
+msgstr ""
 
 #: u_translation.rsintensity
 msgid "Intensity"
@@ -2024,7 +2036,7 @@ msgstr "Die Montierung vorher so gut wie möglich auf den Pol ausrichten. Das Te
 
 #: u_translation.rsmanage
 msgid "Manage"
-msgstr ""
+msgstr "Verwalten"
 
 #: u_translation.rsmanagethegai
 msgid "Manage the Gain and Offset if available."
@@ -2333,6 +2345,10 @@ msgstr "Neues Ziel"
 #: u_translation.rsnext
 msgid "Next"
 msgstr "Weiter"
+
+#: u_translation.rsnexttarget
+msgid "Next target"
+msgstr ""
 
 #: u_translation.rsno
 msgid "No"
@@ -2885,7 +2901,7 @@ msgstr "Einstellungen%s"
 
 #: u_translation.rspresetlist
 msgid "Preset list"
-msgstr ""
+msgstr "Voreinstellung"
 
 #: u_translation.rspressure
 msgid "Pressure"
@@ -2902,10 +2918,6 @@ msgstr "Vorschau mit Debayer"
 #: u_translation.rspreviewstack
 msgid "Preview stacking"
 msgstr "Vorschau Stacking"
-
-#: u_translation.rspreviewwhenw
-msgid "Preview when waiting to repeat"
-msgstr "Vorschau beim Warten auf Wiederholung"
 
 #: u_translation.rsprofile
 msgid "Profile: %s"
@@ -2998,6 +3010,10 @@ msgstr "Driftendes Sequenz Ziel rückzentrieren"
 #: u_translation.rsrecentertarg
 msgid "Recenter target now"
 msgstr "Jetzt Ziel rückzentrieren"
+
+#: u_translation.rsrecording
+msgid "Recording"
+msgstr ""
 
 #: u_translation.rsred
 msgid "red"
@@ -3174,6 +3190,10 @@ msgstr "Autoguiding fortsetzen"
 #: u_translation.rsretrieveposi
 msgid "Retrieve position from deepsky database"
 msgstr "Position aus Deepsky-Datenbank abrufen"
+
+#: u_translation.rsretry
+msgid "Retry"
+msgstr ""
 
 #: u_translation.rsretrywithast
 msgid "Retry with astrometry.net"
@@ -3393,15 +3413,15 @@ msgstr "Wählen Sie zuerst einen Stern aus"
 
 #: u_translation.rsselectthefil
 msgid "Select the file to delete"
-msgstr ""
+msgstr "Zu löschende Datei auswählen"
 
 #: u_translation.rsselectthefil2
 msgid "Select the file to edit"
-msgstr ""
+msgstr "Zu bearbeitende Datei auswählen"
 
 #: u_translation.rsselectthefil3
 msgid "Select the file to load"
-msgstr ""
+msgstr "Zu öffnende Datei auswählen"
 
 #: u_translation.rssendimagetop
 msgid "Send image to planetarium"
@@ -3426,14 +3446,6 @@ msgstr "Sensortemperatur"
 #: u_translation.rsseparator
 msgid "Separator"
 msgstr "Separator"
-
-#: u_translation.rsseq
-msgid "Seq:"
-msgstr "Seq:"
-
-#: u_translation.rsseqfinished
-msgid "Seq: %s Finished"
-msgstr "Seq: %s fertig"
 
 #: u_translation.rssequence
 msgid "Sequence"
@@ -4346,7 +4358,7 @@ msgstr "Bildverkippung [hfd]=%s"
 
 #: u_translation.rstime
 msgid "Time"
-msgstr ""
+msgstr "Zeit"
 
 #: u_translation.rstimealreadyp
 msgid "Time already passed %s"
