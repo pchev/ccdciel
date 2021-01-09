@@ -628,7 +628,6 @@ resourcestring
   rsStopAt = 'Stop at';
   rsDusk = 'dusk';
   rsDawn = 'dawn';
-  rsPreviewWhenW = 'Preview when waiting to repeat';
   rsSeconds2 = '[seconds]';
   rsInterval = 'Interval';
   rsAnyTime = 'Any time';
@@ -1082,7 +1081,7 @@ resourcestring
   rsCannotChange = 'Cannot change start time. Sequence will start in time for the dusk flat.';
   rsCannotChange2 = 'Cannot change stop time. Sequence will stop in time for the dawn flat.';
   rsFixedSequenc = 'Fixed sequence length';
-  rsImportCdCObs = 'Import CdC observing list';
+  rsImportCdCObs = 'Import observing list';
   rsShowHints = 'Show hints';
   rsVerboseDevic = 'Verbose device log';
   rsResolveAndPl2 = 'Resolve and annotate galaxies (Hyperleda)';
@@ -1288,7 +1287,7 @@ resourcestring
   rsManage = 'Manage';
   rsTime = 'Time';
   rsPresetList = 'Preset list';
-  rsImportCdCMos = 'Import CdC mosaic';
+  rsImportCdCMos = 'Import mosaic';
   rsSelectTheFil = 'Select the file to delete';
   rsSelectTheFil2 = 'Select the file to edit';
   rsSelectTheFil3 = 'Select the file to load';
@@ -1298,6 +1297,7 @@ resourcestring
   rsInSSeconds = 'in %s seconds';
   rsCaptureSFini = 'Capture %s Finished';
   rsRecording = 'Recording';
+  rsFromPlanetar = 'From planetarium';
 
 implementation
 

@@ -76,16 +76,26 @@ type
     FFstopbox: TComboBox;
     FlatFilterList: TCheckGroup;
     FOffsetEdit: TSpinEdit;
+    PageControl1: TPageControl;
+    Panel6: TPanel;
+    PanelRepeat: TPanel;
     GroupBoxTime: TGroupBox;
     GroupBoxPA: TGroupBox;
     GroupBoxCoord: TGroupBox;
     ImageListNight: TImageList;
     ImageListDay: TImageList;
-    Label3: TLabel;
+    Label11: TLabel;
     Label13: TLabel;
+    Label3: TLabel;
     Label5: TLabel;
     Label6: TLabel;
     Label7: TLabel;
+    LabelOffset: TLabel;
+    PanelOffset: TPanel;
+    Preview: TCheckBox;
+    PreviewExposure: TFloatSpinEdit;
+    Splitter1: TSplitter;
+    TabSheet1: TTabSheet;
     TargetMsg: TLabel;
     LabelMsg: TLabel;
     OpenDialog1: TOpenDialog;
@@ -101,10 +111,8 @@ type
     Panel22: TPanel;
     Panel3: TPanel;
     GroupboxInsert: TGroupBox;
-    Panel8: TPanel;
     PanelFstop: TPanel;
     PanelTermination: TPanel;
-    PanelSep: TPanel;
     FlatBinning: TComboBox;
     BtnAnytime: TButton;
     BtnPlanetariumCoord: TButton;
@@ -116,14 +124,12 @@ type
     BtnEditNewScript: TButton;
     BtnDeleteTemplate: TButton;
     BtnCancel: TButton;
-    GroupBox5: TGroupBox;
     GroupBox6: TGroupBox;
     GroupBox7: TGroupBox;
     Label1: TLabel;
     Label2: TLabel;
     PanelBtn: TPanel;
-    Panel10: TPanel;
-    PanelBot2: TPanel;
+    PanelTools: TPanel;
     Panel14: TPanel;
     Panel2: TPanel;
     PanelPlan: TPanel;
@@ -139,16 +145,15 @@ type
     PlanScript: TTabSheet;
     PlanFlat: TTabSheet;
     PlanNone: TTabSheet;
+    TDelay: TSpinEdit;
     ToolsNone: TTabSheet;
     TargetName: TLabel;
-    PreviewExposure: TFloatSpinEdit;
     FISObox: TComboBox;
     Label16: TLabel;
     Label18: TLabel;
     LabelGain: TLabel;
     FlatTime: TRadioGroup;
     PanelGain: TPanel;
-    TDelay: TSpinEdit;
     RepeatCountList: TSpinEdit;
     FlatCount: TSpinEdit;
     FGainEdit: TSpinEdit;
@@ -160,13 +165,11 @@ type
     SeqStartTwilight: TCheckBox;
     SeqStopTwilight: TCheckBox;
     CheckBoxRepeatList: TCheckBox;
-    Label11: TLabel;
     Label15: TLabel;
     PageControlTools: TPageControl;
-    PanelBottom: TPanel;
+    PanelTargetOptions: TPanel;
     PanelTarget: TPanel;
     ScriptList: TComboBox;
-    Preview: TCheckBox;
     SeqStartAt: TMaskEdit;
     ToolsObject: TTabSheet;
     ToolsScript: TTabSheet;
@@ -203,7 +206,6 @@ type
     procedure FlatTimeClick(Sender: TObject);
     procedure FormCreate(Sender: TObject);
     procedure FormDestroy(Sender: TObject);
-    procedure FormResize(Sender: TObject);
     procedure FormShow(Sender: TObject);
     procedure PointCoordChange(Sender: TObject);
     procedure RepeatCountListChange(Sender: TObject);
@@ -329,11 +331,6 @@ begin
   ClearStepList;
 end;
 
-procedure Tf_EditTargets.FormResize(Sender: TObject);
-begin
-  PanelTarget.Height:=PanelBottom.Height+((ClientHeight-PanelBtn.Height) div 2);
-end;
-
 procedure Tf_EditTargets.FormShow(Sender: TObject);
 begin
   LabelMsg.Caption:='';
@@ -372,7 +369,7 @@ begin
   BtnSaveAs.Caption := rsSaveAs;
   GroupboxInsert.Caption := rsInsertRows;
   BtnNewObject.Caption := rsNewObject;
-  BtnInsertPlanetarium.Caption := rsPlanetarium;
+  BtnInsertPlanetarium.Caption := rsFromPlanetar;
   BtnDeleteObject.Caption := rsRemoveObject;
   BtnNewScript.Caption := rsScript;
   BtnCancel.Caption := rsCancel;
@@ -432,7 +429,7 @@ begin
   SeqStartTwilight.Caption := rsDusk;
   SeqStopTwilight.Caption := rsDawn;
   ToolsObject.Caption := rsObject;
-  Preview.Caption := rsPreviewWhenW;
+  Preview.Caption := rsPreview;
   Label13.Caption := rsSeconds2;
   Label11.Caption := rsInterval;
   GroupBoxTime.Caption:=rsTime;
@@ -457,7 +454,6 @@ begin
   FlatTime.Items[0]:=rsAtDusk;
   FlatTime.Items[1]:=rsAtDawn;
   label2.Caption:=rsSequence;
-  GroupBox5.Caption:=rsRepeat;
   // plan
   BtnDeleteTemplate.Caption := rsDeleteTempl;
   BtnSaveTemplate.Caption := rsSaveTempl;
@@ -912,29 +908,6 @@ begin
   keyboard_question:=rsObject;
   keyboard_text:=TargetList.Cells[colname,n];
   keyboard1.showmodal; {get object data for name in keyboard_txt}
-
-//  objname:=uppercase(keyboard_text);
-//  if length(objname)>1 then {Object name length should be two or longer}
-//  begin
-//    load_deep;{Load the deepsky database once. If already loaded, no action}
-//    linepos:=2;{Set pointer to the beginning}
-//    repeat
-//      read_deepsky('T' {full database search} ,0 {ra},0 {dec},1 {cos(telescope_dec)},2*pi{fov},{var} ra0,dec0,length0,width0,pa);{Deepsky database search}
-//      if ((objname=uppercase(naam2)) or (objname=uppercase(naam3)) or (objname=uppercase(naam4))) then
-//      begin
-//        TargetList.Cells[colra,n]:=RAToStr(ra0*12/pi);{Add position}
-//        TargetList.Cells[coldec,n]:=DEToStr(dec0*180/pi);
-//        TargetList.Cells[colastrometry,n]:=BoolToStr(astrometryResolver<>ResolverNone,'1','0');
-//
-//        if naam3='' then TargetList.Cells[colname,n]:=naam2 {Add one object name only}
-//        else
-//        TargetList.Cells[colname,n]:=naam2+'_'+naam3;{Add two object names}
-
-//        linepos:=$FFFFFF; {Stop searching}
-//        TargetChange(nil);
-//     end;
-//    until linepos>=$FFFFFF;{Found object or end of database}
-//  end;
 
   if object_found {find object in database}  then
   begin
@@ -1396,6 +1369,7 @@ var i,j:integer;
 begin
   if (t=nil)or(n=0)or(n>=TargetList.RowCount) then exit;
   LockTarget:=true;
+  TargetMsg.Caption:='';
   TargetList.Cells[colseq,n]:=IntToStr(n);
   TargetList.Cells[colname,n]:=t.objectname;
   if t.objectname=ScriptTxt then begin
@@ -1496,12 +1470,13 @@ begin
     else
       TargetList.Cells[colpa,n]:=FormatFloat(f2,t.pa);
     TargetList.Cells[colrepeat,n]:=IntToStr(t.repeatcount);
-    GroupBox5.Visible:=t.repeatcount>1;
+    PanelRepeat.Visible:=t.repeatcount>1;
     TDelay.Value:=round(t.delay);
     PreviewExposure.Value:=t.previewexposure;
     Preview.Checked:=t.preview;
     PlanName.Caption:=TargetList.Cells[colplan,n];
     ShowPlan;
+    CheckRiseSet(n);
   end;
   LockTarget:=false;
 end;
@@ -1650,7 +1625,7 @@ begin
 
     t.repeatcount:=StrToIntDef(TargetList.Cells[colrepeat,n],1);
     if t.repeatcount<0 then t.repeatcount:=1;
-    GroupBox5.Visible:=t.repeatcount>1;
+    PanelRepeat.Visible:=t.repeatcount>1;
     t.delay:=TDelay.Value;
     t.previewexposure:=PreviewExposure.Value;
     t.preview:=Preview.Checked;
