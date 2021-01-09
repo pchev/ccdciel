@@ -899,67 +899,7 @@ object f_EditTargets: Tf_EditTargets
             end
             object ToolsScript: TTabSheet
               Caption = 'Script'
-              ClientHeight = 94
-              ClientWidth = 480
               ParentFont = False
-              object Panel14: TPanel
-                Left = 0
-                Height = 118
-                Top = 0
-                Width = 652
-                Align = alClient
-                BevelOuter = bvNone
-                ClientHeight = 118
-                ClientWidth = 652
-                ParentFont = False
-                TabOrder = 0
-                object Label15: TLabel
-                  AnchorSideTop.Control = ScriptList
-                  AnchorSideTop.Side = asrCenter
-                  Left = 16
-                  Height = 17
-                  Top = 25
-                  Width = 35
-                  Caption = 'Script'
-                  ParentColor = False
-                  ParentFont = False
-                end
-                object ScriptList: TComboBox
-                  Left = 80
-                  Height = 35
-                  Top = 16
-                  Width = 168
-                  ItemHeight = 0
-                  OnChange = TargetChange
-                  ParentFont = False
-                  Style = csDropDownList
-                  TabOrder = 0
-                end
-                object BtnEditScript: TButton
-                  AnchorSideTop.Control = ScriptList
-                  AnchorSideTop.Side = asrCenter
-                  Left = 267
-                  Height = 25
-                  Top = 21
-                  Width = 71
-                  Caption = 'Edit'
-                  OnClick = BtnScriptClick
-                  ParentFont = False
-                  TabOrder = 1
-                end
-                object BtnEditNewScript: TButton
-                  AnchorSideTop.Control = ScriptList
-                  AnchorSideTop.Side = asrCenter
-                  Left = 356
-                  Height = 25
-                  Top = 21
-                  Width = 81
-                  Caption = 'New'
-                  OnClick = BtnScriptClick
-                  ParentFont = False
-                  TabOrder = 2
-                end
-              end
             end
             object ToolsFlat: TTabSheet
               Caption = 'Flat'
@@ -1436,7 +1376,67 @@ object f_EditTargets: Tf_EditTargets
       end
       object PlanScript: TTabSheet
         Caption = 'PlanScript'
+        ClientHeight = 206
+        ClientWidth = 980
         ParentFont = False
+        object Panel14: TPanel
+          Left = 0
+          Height = 206
+          Top = 0
+          Width = 980
+          Align = alClient
+          BevelOuter = bvNone
+          ClientHeight = 206
+          ClientWidth = 980
+          ParentFont = False
+          TabOrder = 0
+          object Label15: TLabel
+            AnchorSideTop.Control = ScriptList
+            AnchorSideTop.Side = asrCenter
+            Left = 16
+            Height = 17
+            Top = 25
+            Width = 35
+            Caption = 'Script'
+            ParentColor = False
+            ParentFont = False
+          end
+          object ScriptList: TComboBox
+            Left = 80
+            Height = 35
+            Top = 16
+            Width = 168
+            ItemHeight = 0
+            OnChange = TargetChange
+            ParentFont = False
+            Style = csDropDownList
+            TabOrder = 0
+          end
+          object BtnEditScript: TButton
+            AnchorSideTop.Control = ScriptList
+            AnchorSideTop.Side = asrCenter
+            Left = 267
+            Height = 25
+            Top = 21
+            Width = 71
+            Caption = 'Edit'
+            OnClick = BtnScriptClick
+            ParentFont = False
+            TabOrder = 1
+          end
+          object BtnEditNewScript: TButton
+            AnchorSideTop.Control = ScriptList
+            AnchorSideTop.Side = asrCenter
+            Left = 356
+            Height = 25
+            Top = 21
+            Width = 81
+            Caption = 'New'
+            OnClick = BtnScriptClick
+            ParentFont = False
+            TabOrder = 2
+          end
+        end
       end
       object PlanFlat: TTabSheet
         Caption = 'PlanFlat'
