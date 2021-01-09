@@ -76,6 +76,7 @@ type
     FFstopbox: TComboBox;
     FlatFilterList: TCheckGroup;
     FOffsetEdit: TSpinEdit;
+    Label4: TLabel;
     PageControl1: TPageControl;
     Panel6: TPanel;
     PanelRepeat: TPanel;
@@ -431,6 +432,7 @@ begin
   ToolsObject.Caption := rsObject;
   Preview.Caption := rsPreview;
   Label13.Caption := rsSeconds2;
+  Label4.Caption:=rsRepeat+':';
   Label11.Caption := rsInterval;
   GroupBoxTime.Caption:=rsTime;
   BtnAnytime.Caption := rsAnyTime;

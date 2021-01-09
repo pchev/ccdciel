@@ -822,14 +822,13 @@ object f_EditTargets: Tf_EditTargets
                 end
               end
               object PanelRepeat: TPanel
-                Left = 0
+                Left = 72
                 Height = 26
                 Top = 68
-                Width = 480
-                Align = alBottom
+                Width = 408
                 BevelOuter = bvNone
                 ClientHeight = 26
-                ClientWidth = 480
+                ClientWidth = 408
                 ParentFont = False
                 TabOrder = 1
                 object Preview: TCheckBox
@@ -895,6 +894,14 @@ object f_EditTargets: Tf_EditTargets
                   ParentColor = False
                   ParentFont = False
                 end
+              end
+              object Label4: TLabel
+                Left = 0
+                Height = 17
+                Top = 73
+                Width = 48
+                Caption = 'Repeat:'
+                ParentColor = False
               end
             end
             object ToolsScript: TTabSheet
