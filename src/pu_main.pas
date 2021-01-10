@@ -2101,7 +2101,7 @@ begin
   f_sequence.Unattended.Checked:=config.GetValue('/Sequence/Unattended',false);
   f_EditTargets.Width:=config.GetValue('/Sequence/EditTarget/Width',f_EditTargets.Width);
   f_EditTargets.Height:=config.GetValue('/Sequence/EditTarget/Height',f_EditTargets.Height);
-  f_EditTargets.PanelPlan.Height:=config.GetValue('/Sequence/EditTarget/PlanHeight',f_EditTargets.PanelPlan.Height);
+  f_EditTargets.Splitter1.Top:=config.GetValue('/Sequence/EditTarget/SepPos',f_EditTargets.Splitter1.Top);
 
   f_planetariuminfo.planetarium:=planetarium;
 
@@ -3913,7 +3913,7 @@ begin
    config.SetValue('/Sequence/Unattended',f_sequence.Unattended.Checked);
    config.SetValue('/Sequence/EditTarget/Width',f_EditTargets.Width);
    config.SetValue('/Sequence/EditTarget/Height',f_EditTargets.Height);
-   config.SetValue('/Sequence/EditTarget/PlanHeight',f_EditTargets.PanelPlan.Height);
+   config.SetValue('/Sequence/EditTarget/SepPos',f_EditTargets.Splitter1.Top);
 
    config.SetValue('/Visu/Gamma',f_visu.Gamma.Value);
    config.SetValue('/Visu/HistBar',f_visu.HistBar.Position);

@@ -11,13 +11,16 @@ object f_EditTargets: Tf_EditTargets
   Constraints.MinWidth = 990
   OnCreate = FormCreate
   OnDestroy = FormDestroy
+  OnResize = FormResize
   OnShow = FormShow
   object PanelTarget: TPanel
+    AnchorSideBottom.Control = Splitter1
     Left = 0
     Height = 344
     Top = 0
     Width = 990
-    Align = alClient
+    Align = alTop
+    Anchors = [akLeft, akRight, akBottom]
     BevelOuter = bvNone
     ClientHeight = 344
     ClientWidth = 990
@@ -1086,22 +1089,15 @@ object f_EditTargets: Tf_EditTargets
       end
     end
   end
-  object Splitter1: TSplitter
-    Cursor = crVSplit
-    Left = 0
-    Height = 4
-    Top = 344
-    Width = 990
-    Align = alBottom
-    Beveled = True
-    ResizeAnchor = akBottom
-  end
   object PanelPlan: TPanel
+    AnchorSideTop.Control = Splitter1
+    AnchorSideTop.Side = asrBottom
     Left = 0
     Height = 210
     Top = 348
     Width = 990
     Align = alBottom
+    Anchors = [akTop, akLeft, akRight]
     BevelOuter = bvNone
     ClientHeight = 210
     ClientWidth = 990
@@ -1745,6 +1741,8 @@ object f_EditTargets: Tf_EditTargets
     end
   end
   object PanelBtn: TPanel
+    AnchorSideTop.Side = asrBottom
+    AnchorSideBottom.Side = asrBottom
     Left = 0
     Height = 30
     Top = 558
@@ -1790,6 +1788,19 @@ object f_EditTargets: Tf_EditTargets
       ParentFont = False
       TabOrder = 2
     end
+  end
+  object Splitter1: TSplitter
+    Cursor = crVSplit
+    Left = 0
+    Height = 4
+    Top = 344
+    Width = 990
+    Align = alNone
+    Anchors = [akLeft, akRight]
+    Beveled = True
+    Constraints.MaxHeight = 4
+    Constraints.MinHeight = 4
+    ResizeAnchor = akTop
   end
   object SaveDialog1: TSaveDialog
     Left = 744

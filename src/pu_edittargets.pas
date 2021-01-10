@@ -201,6 +201,7 @@ type
     procedure BtnUnattendedScriptClick(Sender: TObject);
     procedure Btn_coord_internalClick(Sender: TObject);
     procedure cbTermOptionClick(Sender: TObject);
+    procedure FormResize(Sender: TObject);
     procedure StartOptionClick(Sender: TObject);
     procedure CheckBoxRepeatListChange(Sender: TObject);
     procedure FlatFilterListItemClick(Sender: TObject; Index: integer);
@@ -969,6 +970,12 @@ begin
      cbStopTracking.Checked:=false;
   end;
   Lockcb:=false;
+end;
+
+procedure Tf_EditTargets.FormResize(Sender: TObject);
+begin
+  Splitter1.Width:=ClientWidth;
+  Splitter1.Top:=ClientHeight-PanelPlan.Height-PanelBtn.Height;
 end;
 
 procedure Tf_EditTargets.BtnSkyFlatClick(Sender: TObject);
