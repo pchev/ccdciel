@@ -56,6 +56,7 @@ type
     CheckBoxResetRepeat: TCheckBox;
     CheckBoxRestartStatus: TCheckBox;
     Label5: TLabel;
+    MenuBlankRow: TMenuItem;
     StartOpt: TCheckListBox;
     TermOpt: TCheckListBox;
     FFstopbox: TComboBox;
@@ -192,6 +193,7 @@ type
     procedure FormCreate(Sender: TObject);
     procedure FormDestroy(Sender: TObject);
     procedure FormShow(Sender: TObject);
+    procedure MenuBlankRowClick(Sender: TObject);
     procedure PointCoordChange(Sender: TObject);
     procedure RepeatCountListChange(Sender: TObject);
     procedure SeqStartChange(Sender: TObject);
@@ -353,6 +355,7 @@ begin
   BtnSaveAs.Caption := rsSaveAs;
   BtnInsert.Caption := rsInsertRows;
   MenuNewObject.Caption := rsNewObject;
+  MenuBlankRow.Caption:=rsInsertBlankR;
   MenuInsertPlanetarium.Caption := rsFromPlanetar;
   BtnDeleteObject.Caption := rsRemoveRow;
   MenuNewScript.Caption := rsScript;
@@ -801,6 +804,28 @@ begin
   ShowPlan;
   Application.ProcessMessages;
   FCoordWarning:=false;
+end;
+
+procedure Tf_EditTargets.MenuBlankRowClick(Sender: TObject);
+var i,n: integer;
+    t: TTarget;
+begin
+  PanelTools.visible:=true;
+  PageControlPlan.ActivePageIndex:=pageobject;
+  t:=TTarget.Create;
+  n:=TargetList.Row;
+  t.objectname:='';
+  PlanName.Caption:=t.planname;
+  i:=n+1;
+  TargetList.InsertColRow(false,i);
+  TargetList.Cells[colseq,i]:=IntToStr(i);
+  TargetList.Cells[colname,i]:='';
+  TargetList.Cells[colplan,i]:=t.planname;
+  if t.astrometrypointing then TargetList.Cells[colastrometry,i]:='1';
+  if t.inplaceautofocus then TargetList.Cells[colinplace,i]:='1';
+  TargetList.Objects[colseq,i]:=t;
+  TargetList.Row:=i;
+  ResetSequences;
 end;
 
 procedure Tf_EditTargets.NewObject;

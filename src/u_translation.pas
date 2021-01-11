@@ -1298,6 +1298,7 @@ resourcestring
   rsRemoveRow = 'Remove row';
   rsClearRestart = 'Clear restart information on repeat';
   rsRecordRestar = 'Record restart information';
+  rsInsertBlankR = 'Insert blank row';
 
 implementation
 

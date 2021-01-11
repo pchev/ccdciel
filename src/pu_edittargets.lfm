@@ -1529,6 +1529,10 @@ object f_EditTargets: Tf_EditTargets
       Caption = 'New object'
       OnClick = BtnNewObjectClick
     end
+    object MenuBlankRow: TMenuItem
+      Caption = 'Insert blank row'
+      OnClick = MenuBlankRowClick
+    end
     object MenuInsertPlanetarium: TMenuItem
       Caption = 'From Planetarium'
       OnClick = BtnInsertPlanetariumClick
