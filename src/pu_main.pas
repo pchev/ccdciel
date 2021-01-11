@@ -11416,8 +11416,6 @@ var i: integer;
 begin
  if TPlanetariumType(config.GetValue('/Planetarium/Software',ord(plaNONE)))=plaNONE then exit;
  if f_planetarium.BtnConnect.Caption=rsConnect then begin
-   f_planetarium.BtnConnect.Caption:=rsDisconnect;
-   MenuPlanetariumConnect.Caption:=f_planetarium.BtnConnect.Caption;
    i:=ord(planetarium.PlanetariumType);
    case TPlanetariumType(i) of
      CDC:  planetarium.Connect(config.GetValue('/Planetarium/CdChostname','localhost'),
