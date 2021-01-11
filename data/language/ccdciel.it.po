@@ -6,15 +6,15 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ccdciel\n"
 "Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
-"POT-Creation-Date: 2021-01-09 16:03+0000\n"
+"POT-Creation-Date: 2021-01-11 15:06+0000\n"
 "PO-Revision-Date: 2019-12-15 12:55+0000\n"
 "Last-Translator: Mattia Verga <Unknown>\n"
 "Language-Team: Italian <it@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2021-01-09 16:16+0000\n"
-"X-Generator: Launchpad (build fd9c5a87183d01004404fa6027cd262eaa7f6fcf)\n"
+"X-Launchpad-Export-Date: 2021-01-11 15:12+0000\n"
+"X-Generator: Launchpad (build fe617ea08df036edd5c842aded2b315e1c090677)\n"
 
 #: u_translation.rs32bitdriver
 msgid "This driver work only in 32bit, please install the 32bit version of CCDciel."
@@ -743,6 +743,10 @@ msgstr ""
 #: u_translation.rsclearreferen
 msgid "Clear reference image"
 msgstr "Pulisci immagine di riferimento"
+
+#: u_translation.rsclearrestart
+msgid "Clear restart information on repeat"
+msgstr ""
 
 #: u_translation.rsclearthecomp
 msgid "Clear the completion status?"
@@ -1876,6 +1880,10 @@ msgstr ""
 msgid "In place autofocus failed!"
 msgstr "Autofocus in posizione fallito!"
 
+#: u_translation.rsinsertblankr
+msgid "Insert blank row"
+msgstr ""
+
 #: u_translation.rsinsertrows
 msgid "Insert rows"
 msgstr ""
@@ -1942,10 +1950,6 @@ msgstr "E' consigliato muovere a una stella di messa a fuoco quando si usa la cu
 
 #: u_translation.rsitwillcontin
 msgid "It will continue after the last checkpoint."
-msgstr ""
-
-#: u_translation.rskeepcompleti
-msgid "Keep completion status"
 msgstr ""
 
 #: u_translation.rslanguage
@@ -3012,6 +3016,10 @@ msgstr ""
 msgid "Recording"
 msgstr ""
 
+#: u_translation.rsrecordrestar
+msgid "Record restart information"
+msgstr ""
+
 #: u_translation.rsred
 msgid "red"
 msgstr "rosso"
@@ -3036,8 +3044,8 @@ msgstr ""
 msgid "Remove all breakpoints"
 msgstr ""
 
-#: u_translation.rsremoveobject
-msgid "Remove object"
+#: u_translation.rsremoverow
+msgid "Remove row"
 msgstr ""
 
 #: u_translation.rsremovestep
@@ -3087,10 +3095,6 @@ msgstr ""
 #: u_translation.rsreset
 msgid "Reset"
 msgstr "Reimposta"
-
-#: u_translation.rsresetcomplet
-msgid "Reset completion status on repeat"
-msgstr ""
 
 #: u_translation.rsresettodefau
 msgid "Reset to default"
@@ -3490,6 +3494,10 @@ msgstr ""
 
 #: u_translation.rssequencestar
 msgid "Sequence %s start immediately"
+msgstr ""
+
+#: u_translation.rssequencestar2
+msgid "Sequence start / stop time"
 msgstr ""
 
 #: u_translation.rssequencestep

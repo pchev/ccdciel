@@ -358,6 +358,7 @@ begin
   MenuBlankRow.Caption:=rsInsertBlankR;
   MenuInsertPlanetarium.Caption := rsFromPlanetar;
   BtnDeleteObject.Caption := rsRemoveRow;
+  BtnOptions.Caption:=rsOptions2;
   MenuNewScript.Caption := rsScript;
   BtnCancel.Caption := rsCancel;
   MenuSkyFlat.Caption := rsSkyFlat;
@@ -411,6 +412,7 @@ begin
   CheckBoxRepeatList.Caption := rsRepeatTheWho;
   CheckBoxRestartStatus.Caption:=rsRecordRestar;
   CheckBoxResetRepeat.Caption:=rsClearRestart;
+  Label5.Caption:=rsSequenceStar2;
   SeqStart.Caption := rsStartAt;
   SeqStop.Caption := rsStopAt;
   SeqStartTwilight.Caption := rsDusk;
@@ -442,6 +444,7 @@ begin
   label2.Caption:=rsSequence;
   // plan
   BtnDeleteTemplate.Caption := rsDeleteTempl;
+  BtnSaveTemplate.Caption:=rsSaveTempl;
   MenuSaveTemplate.Caption := rsSaveTempl;
   MenuSaveTemplateAs.Caption:=rsSaveTemplAs;
   MenuApplyTemplate.Caption:=rsSaveAndApply;

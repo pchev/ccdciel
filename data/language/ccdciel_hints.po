@@ -202,36 +202,12 @@ msgstr ""
 msgid "The temporary RAM disk used to transfer the images from the Indi server"
 msgstr ""
 
-#: u_hints:rsdonotmovethe
-msgid "Do not move the telescope before to start imaging."
-msgstr ""
-
-#: u_hints:rsgetthecoordi
-msgid "Get the coordinates and object name from the planetarium"
-msgstr ""
-
 #: u_hints:rsuseplatesolv
 msgid "Use astrometric (plate) solving to improve telescope pointing accuracy"
 msgstr ""
 
-#: u_hints:rssolvethecurr
-msgid "Solve the current image and get the center coordinates"
-msgstr ""
-
-#: u_hints:rsgetthecoordi2
-msgid "Get the coordinates from the internal annotation database"
-msgstr ""
-
 #: u_hints:rsstartaprevie
 msgid "Start a preview loop when waiting for the delay to expire."
-msgstr ""
-
-#: u_hints:rssolvethecurr2
-msgid "Solve the current image and get the rotation of the image"
-msgstr ""
-
-#: u_hints:rscleartimecon
-msgid "Clear time constraint"
 msgstr ""
 
 #: u_hints:rsrepeatthewho2
@@ -274,20 +250,8 @@ msgstr ""
 msgid "Control how complete target are managed when the whole list is repeated"
 msgstr ""
 
-#: u_hints:rsaddanobjectt
-msgid "Add an object to the list"
-msgstr ""
-
 #: u_hints:rsdeletethesel
 msgid "Delete the selected row from the list."
-msgstr ""
-
-#: u_hints:rsaddascriptto
-msgid "Add a script to the list."
-msgstr ""
-
-#: u_hints:rsaddaflatsequ
-msgid "Add a flat sequence to the list."
 msgstr ""
 
 #: u_hints:rsthelistoftar

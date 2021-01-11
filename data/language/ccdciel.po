@@ -3146,10 +3146,6 @@ msgstr ""
 msgid "Save as..."
 msgstr ""
 
-#: u_translation:rsremoveobject
-msgid "Remove object"
-msgstr ""
-
 #: u_translation:rscannotcomput
 msgid "Cannot compute rise or set time."
 msgstr ""
@@ -3768,14 +3764,6 @@ msgstr ""
 
 #: u_translation:rsmode
 msgid "Mode:"
-msgstr ""
-
-#: u_translation:rskeepcompleti
-msgid "Keep completion status"
-msgstr ""
-
-#: u_translation:rsresetcomplet
-msgid "Reset completion status on repeat"
 msgstr ""
 
 #: u_translation:rsthissequence
@@ -4780,5 +4768,25 @@ msgstr ""
 
 #: u_translation:rsfromplanetar
 msgid "From planetarium"
+msgstr ""
+
+#: u_translation:rsremoverow
+msgid "Remove row"
+msgstr ""
+
+#: u_translation:rsclearrestart
+msgid "Clear restart information on repeat"
+msgstr ""
+
+#: u_translation:rsrecordrestar
+msgid "Record restart information"
+msgstr ""
+
+#: u_translation:rsinsertblankr
+msgid "Insert blank row"
+msgstr ""
+
+#: u_translation:rssequencestar2
+msgid "Sequence start / stop time"
 msgstr ""
 

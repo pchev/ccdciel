@@ -2,15 +2,15 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ccdciel\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-01-09 16:03+0000\n"
-"PO-Revision-Date: 2020-12-13 11:23+0000\n"
+"POT-Creation-Date: 2021-01-11 15:06+0000\n"
+"PO-Revision-Date: 2021-01-10 16:08+0000\n"
 "Last-Translator: Stanislav Holub <Unknown>\n"
 "Language-Team: Czech <cz@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2021-01-09 16:16+0000\n"
-"X-Generator: Launchpad (build fd9c5a87183d01004404fa6027cd262eaa7f6fcf)\n"
+"X-Launchpad-Export-Date: 2021-01-11 15:12+0000\n"
+"X-Generator: Launchpad (build fe617ea08df036edd5c842aded2b315e1c090677)\n"
 "Language: cs\n"
 
 #: u_translation.rs32bitdriver
@@ -689,7 +689,7 @@ msgstr "Zachytávat do složky"
 
 #: u_translation.rscapturesfini
 msgid "Capture %s Finished"
-msgstr ""
+msgstr "Záznam %s Dokončen"
 
 #: u_translation.rscapturestopp
 msgid "Capture stopped during autofocus"
@@ -742,6 +742,10 @@ msgstr "Smazat Drak snímek"
 #: u_translation.rsclearreferen
 msgid "Clear reference image"
 msgstr "Vymazat referenční snímek"
+
+#: u_translation.rsclearrestart
+msgid "Clear restart information on repeat"
+msgstr ""
 
 #: u_translation.rsclearthecomp
 msgid "Clear the completion status?"
@@ -1418,7 +1422,7 @@ msgstr "Selhala kontrolní  expozice vyřešení"
 
 #: u_translation.rsfailtostopth
 msgid "Fail to stop the autoguider"
-msgstr ""
+msgstr "Autopointaci se nepodařilo zastavit"
 
 #: u_translation.rsfalse
 msgid "False"
@@ -1562,7 +1566,7 @@ msgstr "Zahájena kalibrace zaostřovače"
 
 #: u_translation.rsfocusercalib3
 msgid "Focuser calibration started, please wait..."
-msgstr "Kalibrace ostření zahájena, počkejte prosím ..."
+msgstr "Kalibrace ostření zahájena, počkejte..."
 
 #: u_translation.rsfocusercalib4
 msgid "Focuser calibration completed, click Next to see the result."
@@ -1647,7 +1651,7 @@ msgstr "Z e-mailové adresy"
 
 #: u_translation.rsfromplanetar
 msgid "From planetarium"
-msgstr ""
+msgstr "Z planetária"
 
 #: u_translation.rsfromplatesol
 msgid "From plate solving"
@@ -1835,11 +1839,11 @@ msgstr "Obrázek Obnoven"
 
 #: u_translation.rsimportcdcmos
 msgid "Import mosaic"
-msgstr ""
+msgstr "Importovat mozaiku"
 
 #: u_translation.rsimportcdcobs
 msgid "Import observing list"
-msgstr ""
+msgstr "Importovat pozorovací seznam"
 
 #: u_translation.rsin
 msgid "In"
@@ -1877,13 +1881,17 @@ msgstr "V montáži"
 msgid "In place autofocus failed!"
 msgstr "Automatické ostření selhalo!"
 
+#: u_translation.rsinsertblankr
+msgid "Insert blank row"
+msgstr ""
+
 #: u_translation.rsinsertrows
 msgid "Insert rows"
 msgstr "Vložit řádky"
 
 #: u_translation.rsinsseconds
 msgid "in %s seconds"
-msgstr ""
+msgstr "za %s sekund"
 
 #: u_translation.rsintensity
 msgid "Intensity"
@@ -1944,10 +1952,6 @@ msgstr "Při použití V-křivky se doporučuje zaostřit na zaostřovací hvěz
 #: u_translation.rsitwillcontin
 msgid "It will continue after the last checkpoint."
 msgstr "Pokračování od posledního kontrolního bodu."
-
-#: u_translation.rskeepcompleti
-msgid "Keep completion status"
-msgstr "Zachovat stav dokončení"
 
 #: u_translation.rslanguage
 msgid "Language"
@@ -2348,7 +2352,7 @@ msgstr "Další"
 
 #: u_translation.rsnexttarget
 msgid "Next target"
-msgstr ""
+msgstr "Další cíl"
 
 #: u_translation.rsno
 msgid "No"
@@ -3012,6 +3016,10 @@ msgstr "Recentrovat cíl"
 
 #: u_translation.rsrecording
 msgid "Recording"
+msgstr "Záznam"
+
+#: u_translation.rsrecordrestar
+msgid "Record restart information"
 msgstr ""
 
 #: u_translation.rsred
@@ -3038,9 +3046,9 @@ msgstr "Číslo vzdáleného zařízení"
 msgid "Remove all breakpoints"
 msgstr "Odstranit všechny body přerušení"
 
-#: u_translation.rsremoveobject
-msgid "Remove object"
-msgstr "Odebrat objekt"
+#: u_translation.rsremoverow
+msgid "Remove row"
+msgstr ""
 
 #: u_translation.rsremovestep
 msgid "Remove step"
@@ -3089,10 +3097,6 @@ msgstr "Požadavek na zastavení automatického ostření ..."
 #: u_translation.rsreset
 msgid "Reset"
 msgstr "Restartovat"
-
-#: u_translation.rsresetcomplet
-msgid "Reset completion status on repeat"
-msgstr "Obnovit stav dokončení při opakování"
 
 #: u_translation.rsresettodefau
 msgid "Reset to default"
@@ -3192,7 +3196,7 @@ msgstr "Načíst pozici z DSO databáze"
 
 #: u_translation.rsretry
 msgid "Retry"
-msgstr ""
+msgstr "Opakovat"
 
 #: u_translation.rsretrywithast
 msgid "Retry with astrometry.net"
@@ -3493,6 +3497,10 @@ msgstr "Sekvence pozastavena kvůli špatnému počasí ..."
 #: u_translation.rssequencestar
 msgid "Sequence %s start immediately"
 msgstr "Sekvence %s  se spustí okamžitě"
+
+#: u_translation.rssequencestar2
+msgid "Sequence start / stop time"
+msgstr ""
 
 #: u_translation.rssequencestep
 msgid "Sequence steps"

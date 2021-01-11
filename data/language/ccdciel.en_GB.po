@@ -6,15 +6,15 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ccdciel\n"
 "Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
-"POT-Creation-Date: 2021-01-09 16:03+0000\n"
+"POT-Creation-Date: 2021-01-11 15:06+0000\n"
 "PO-Revision-Date: 2020-09-13 16:20+0000\n"
 "Last-Translator: Stephan Woidowski <swoidowski@t-online.de>\n"
 "Language-Team: English (United Kingdom) <en_GB@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2021-01-09 16:16+0000\n"
-"X-Generator: Launchpad (build fd9c5a87183d01004404fa6027cd262eaa7f6fcf)\n"
+"X-Launchpad-Export-Date: 2021-01-11 15:12+0000\n"
+"X-Generator: Launchpad (build fe617ea08df036edd5c842aded2b315e1c090677)\n"
 "Language: en_GB\n"
 
 #: u_translation.rs32bitdriver
@@ -744,6 +744,10 @@ msgstr "Clear Dark frame"
 #: u_translation.rsclearreferen
 msgid "Clear reference image"
 msgstr "Clear reference image"
+
+#: u_translation.rsclearrestart
+msgid "Clear restart information on repeat"
+msgstr ""
 
 #: u_translation.rsclearthecomp
 msgid "Clear the completion status?"
@@ -1877,6 +1881,10 @@ msgstr "In mount"
 msgid "In place autofocus failed!"
 msgstr "In place autofocus failed!"
 
+#: u_translation.rsinsertblankr
+msgid "Insert blank row"
+msgstr ""
+
 #: u_translation.rsinsertrows
 msgid "Insert rows"
 msgstr "Insert rows"
@@ -1944,10 +1952,6 @@ msgstr "It is suggest to slew to focus star when using Vcurve"
 #: u_translation.rsitwillcontin
 msgid "It will continue after the last checkpoint."
 msgstr "It will continue after the last checkpoint."
-
-#: u_translation.rskeepcompleti
-msgid "Keep completion status"
-msgstr "Keep completion status"
 
 #: u_translation.rslanguage
 msgid "Language"
@@ -3013,6 +3017,10 @@ msgstr "Recenter target now"
 msgid "Recording"
 msgstr ""
 
+#: u_translation.rsrecordrestar
+msgid "Record restart information"
+msgstr ""
+
 #: u_translation.rsred
 msgid "red"
 msgstr "red"
@@ -3037,9 +3045,9 @@ msgstr "Remote device number"
 msgid "Remove all breakpoints"
 msgstr "Remove all breakpoints"
 
-#: u_translation.rsremoveobject
-msgid "Remove object"
-msgstr "Remove object"
+#: u_translation.rsremoverow
+msgid "Remove row"
+msgstr ""
 
 #: u_translation.rsremovestep
 msgid "Remove step"
@@ -3088,10 +3096,6 @@ msgstr "Request to stop autofocus ..."
 #: u_translation.rsreset
 msgid "Reset"
 msgstr "Reset"
-
-#: u_translation.rsresetcomplet
-msgid "Reset completion status on repeat"
-msgstr "Reset completion status on repeat"
 
 #: u_translation.rsresettodefau
 msgid "Reset to default"
@@ -3492,6 +3496,10 @@ msgstr "Sequence paused for bad weather ..."
 #: u_translation.rssequencestar
 msgid "Sequence %s start immediately"
 msgstr "Sequence %s start immediately"
+
+#: u_translation.rssequencestar2
+msgid "Sequence start / stop time"
+msgstr ""
 
 #: u_translation.rssequencestep
 msgid "Sequence steps"
