@@ -2135,7 +2135,7 @@ begin
     if (acol>=0)and(acol<TargetList.ColCount)and(arow>0)and(arow<TargetList.RowCount) then begin
       TargetList.Row:=arow;
       TargetChange(TargetList);
-      if acol=0 then
+      if acol<=1 then
         PopupInsert.PopUp(mouse.CursorPos.X,mouse.CursorPos.Y)
       else
         PopupOptions.PopUp(mouse.CursorPos.X,mouse.CursorPos.Y);
