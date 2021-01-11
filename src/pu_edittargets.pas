@@ -2137,7 +2137,7 @@ begin
       TargetChange(TargetList);
       if acol<=1 then
         PopupInsert.PopUp(mouse.CursorPos.X,mouse.CursorPos.Y)
-      else
+      else if (TargetList.Cells[colname,arow]<>SkyFlatTxt)and(TargetList.Cells[colname,arow]<>ScriptTxt) then
         PopupOptions.PopUp(mouse.CursorPos.X,mouse.CursorPos.Y);
     end;
   end;
