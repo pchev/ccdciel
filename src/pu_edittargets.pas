@@ -28,102 +28,90 @@ interface
 uses pu_planetariuminfo, u_global, u_utils, u_ccdconfig, pu_pascaleditor, u_annotation, pu_keyboard,
   pu_scriptengine, cu_astrometry, u_hints, u_translation, pu_selectscript, Classes, math, cu_targets,
   SysUtils, FileUtil, Forms, Controls, Graphics, Dialogs, StdCtrls, UScaleDPI, cu_plan,
-  LazUTF8, maskedit, Grids, ExtCtrls, ComCtrls, EditBtn, Spin, Buttons, Types;
+  LazUTF8, maskedit, Grids, ExtCtrls, ComCtrls, EditBtn, Spin, Buttons, Menus, CheckLst, Types;
 
 const
   colseq=0; colname=1; colplan=2; colra=3; coldec=4; colpa=5; colstart=6; colend=7; coldark=8; colskip=9; colrepeat=10; colastrometry=11; colinplace=12; colupdcoord=13;
   pcolseq=0; pcoldesc=1; pcoltype=2; pcolexp=3; pcolbin=4; pcolfilter=5; pcolcount=6; pcolafstart=7; pcolafevery=8; pcoldither=9; pcolgain=10; pcoloffset=11; pcolfstop=12;
   titleadd=0; titledel=1;
   pageobject=0; pagescript=1; pageflat=2; pagenone=3;
+  cbNone=0; cbStopTracking=1; cbWarm=2; cbParkScope=3; cbParkDome=4; cbScript=5; cbUnattended=6;
+  ccNone=0; ccCool=1; ccUnpark=2;
 
 type
 
   { Tf_EditTargets }
 
   Tf_EditTargets = class(TForm)
-    Bevel1: TBevel;
-    Bevel2: TBevel;
     Bevel3: TBevel;
     Bevel4: TBevel;
     BtnAddStep: TButton;
     BtnDeleteObject: TButton;
-    BtnImportMosaic: TButton;
-    BtnInsertPlanetarium: TButton;
-    BtnNewObject: TButton;
-    BtnNewScript: TButton;
-    BtnApplyTemplate: TButton;
-    BtnSkyFlat: TButton;
-    Btn_coord_internal: TButton;
-    BtnUnattendedScript: TButton;
+    BtnDeleteTemplate: TButton;
+    BtnInsert: TButton;
+    BtnOptions: TButton;
+    BtnRemoveStep: TButton;
     BtnSaveAs: TButton;
     BtnSaveTemplate: TButton;
-    BtnRemoveStep: TButton;
-    BtnSaveTemplateAs: TButton;
-    BtnImportObslist: TButton;
-    BtnEndScript: TButton;
-    cbNone: TCheckBox;
-    cbStopTracking: TCheckBox;
-    cbParkScope: TCheckBox;
-    cbParkDome: TCheckBox;
-    cbWarm: TCheckBox;
-    cbScript: TCheckBox;
-    cbUnattended: TCheckBox;
-    ccNone: TCheckBox;
-    ccCool: TCheckBox;
-    ccUnpark: TCheckBox;
     CheckBoxResetRepeat: TCheckBox;
     CheckBoxRestartStatus: TCheckBox;
+    Label5: TLabel;
+    StartOpt: TCheckListBox;
+    TermOpt: TCheckListBox;
     FFstopbox: TComboBox;
     FlatFilterList: TCheckGroup;
     FOffsetEdit: TSpinEdit;
     Label4: TLabel;
-    PageControl1: TPageControl;
+    MenuApplyTemplate: TMenuItem;
+    MenuSaveTemplate: TMenuItem;
+    MenuSaveTemplateAs: TMenuItem;
+    MenuNewObject: TMenuItem;
+    MenuSearchCoord: TMenuItem;
+    MenuPlanetariumCoord: TMenuItem;
+    MenuImgCoord: TMenuItem;
+    MenuNoMove: TMenuItem;
+    MenuAnyTime: TMenuItem;
+    MenuImgRot: TMenuItem;
+    MenuInsertPlanetarium: TMenuItem;
+    MenuSkyFlat: TMenuItem;
+    MenuNewScript: TMenuItem;
+    MenuImportObsList: TMenuItem;
+    MenuImportMosaic: TMenuItem;
+    MenuCoordinates: TMenuItem;
+    MenuTime: TMenuItem;
+    MenuRotator: TMenuItem;
     Panel6: TPanel;
+    Panel8: TPanel;
     PanelRepeat: TPanel;
-    GroupBoxTime: TGroupBox;
-    GroupBoxPA: TGroupBox;
-    GroupBoxCoord: TGroupBox;
     ImageListNight: TImageList;
     ImageListDay: TImageList;
     Label11: TLabel;
     Label13: TLabel;
     Label3: TLabel;
-    Label5: TLabel;
     Label6: TLabel;
     Label7: TLabel;
     LabelOffset: TLabel;
     PanelOffset: TPanel;
+    PopupInsert: TPopupMenu;
+    PopupSaveTemplate: TPopupMenu;
+    PopupOptions: TPopupMenu;
     Preview: TCheckBox;
     PreviewExposure: TFloatSpinEdit;
     Splitter1: TSplitter;
-    TabSheet1: TTabSheet;
     TargetMsg: TLabel;
     LabelMsg: TLabel;
     OpenDialog1: TOpenDialog;
     PageControlPlan: TPageControl;
     Panel1: TPanel;
     Panel11: TPanel;
-    Panel15: TPanel;
-    Panel16: TPanel;
+    PanelSeq: TPanel;
     Panel17: TPanel;
-    Panel18: TPanel;
-    Panel19: TPanel;
-    Panel20: TPanel;
-    Panel22: TPanel;
-    Panel3: TPanel;
-    GroupboxInsert: TGroupBox;
     PanelFstop: TPanel;
     PanelTermination: TPanel;
     FlatBinning: TComboBox;
-    BtnAnytime: TButton;
-    BtnPlanetariumCoord: TButton;
-    BtnImgCoord: TButton;
-    BtnCurrentCoord: TButton;
     BtnEditScript: TButton;
-    BtnImgRot: TButton;
     BtnSave: TButton;
     BtnEditNewScript: TButton;
-    BtnDeleteTemplate: TButton;
     BtnCancel: TButton;
     GroupBox6: TGroupBox;
     GroupBox7: TGroupBox;
@@ -135,8 +123,8 @@ type
     Panel2: TPanel;
     PanelPlan: TPanel;
     Panel4: TPanel;
-    Panel5: TPanel;
-    Panel7: TPanel;
+    PanelStartStop: TPanel;
+    PanelStartOption: TPanel;
     Panel9: TPanel;
     PlanName: TLabel;
     SaveDialog1: TSaveDialog;
@@ -147,7 +135,6 @@ type
     PlanFlat: TTabSheet;
     PlanNone: TTabSheet;
     TDelay: TSpinEdit;
-    ToolsNone: TTabSheet;
     TargetName: TLabel;
     FISObox: TComboBox;
     Label16: TLabel;
@@ -159,7 +146,6 @@ type
     FlatCount: TSpinEdit;
     FGainEdit: TSpinEdit;
     StepList: TStringGrid;
-    ToolsFlat: TTabSheet;
     SeqStart: TCheckBox;
     SeqStopAt: TMaskEdit;
     SeqStop: TCheckBox;
@@ -167,24 +153,22 @@ type
     SeqStopTwilight: TCheckBox;
     CheckBoxRepeatList: TCheckBox;
     Label15: TLabel;
-    PageControlTools: TPageControl;
     PanelTargetOptions: TPanel;
     PanelTarget: TPanel;
     ScriptList: TComboBox;
     SeqStartAt: TMaskEdit;
-    ToolsObject: TTabSheet;
-    ToolsScript: TTabSheet;
     TargetList: TStringGrid;
     procedure BtnAddStepClick(Sender: TObject);
     procedure BtnAnytimeClick(Sender: TObject);
     procedure BtnApplyTemplateClick(Sender: TObject);
     procedure BtnCancelClick(Sender: TObject);
+    procedure BtnInsertPopup(Sender: TObject);
     procedure BtnInsertPlanetariumClick(Sender: TObject);
+    procedure BtnOptionsPopup(Sender: TObject);
     procedure BtnPlanetariumCoordClick(Sender: TObject);
     procedure BtnCurrentCoordClick(Sender: TObject);
     procedure BtnDeleteTemplateClick(Sender: TObject);
     procedure BtnDeleteObjectClick(Sender: TObject);
-    procedure BtnEndScriptClick(Sender: TObject);
     procedure BtnImportMosaicClick(Sender: TObject);
     procedure BtnImportObslistClick(Sender: TObject);
     procedure BtnRemoveStepClick(Sender: TObject);
@@ -194,15 +178,14 @@ type
     procedure BtnSaveClick(Sender: TObject);
     procedure BtnSaveTemplateAsClick(Sender: TObject);
     procedure BtnSaveTemplateClick(Sender: TObject);
+    procedure BtnSaveTemplatePopup(Sender: TObject);
     procedure BtnSkyFlatClick(Sender: TObject);
     procedure BtnScriptClick(Sender: TObject);
     procedure BtnNewObjectClick(Sender: TObject);
     procedure BtnNewScriptClick(Sender: TObject);
-    procedure BtnUnattendedScriptClick(Sender: TObject);
     procedure Btn_coord_internalClick(Sender: TObject);
-    procedure cbTermOptionClick(Sender: TObject);
+    procedure CheckRestartStatus(Sender: TObject);
     procedure FormResize(Sender: TObject);
-    procedure StartOptionClick(Sender: TObject);
     procedure CheckBoxRepeatListChange(Sender: TObject);
     procedure FlatFilterListItemClick(Sender: TObject; Index: integer);
     procedure FlatTimeClick(Sender: TObject);
@@ -216,6 +199,7 @@ type
     procedure SeqStopChange(Sender: TObject);
     procedure SeqStopTwilightChange(Sender: TObject);
     procedure BtnRepeatInfClick(Sender: TObject);
+    procedure StartOptItemClick(Sender: TObject; Index: integer);
     procedure StepListCheckboxToggled(sender: TObject; aCol, aRow: Integer; aState: TCheckboxState);
     procedure StepListColRowMoved(Sender: TObject; IsColumn: Boolean; sIndex,
       tIndex: Integer);
@@ -237,11 +221,13 @@ type
     procedure TargetListEditingDone(Sender: TObject);
     procedure TargetListGetCellHint(Sender: TObject; ACol, ARow: Integer; var HintText: String);
     procedure TargetListHeaderClick(Sender: TObject; IsColumn: Boolean; Index: Integer);
+    procedure TargetListMouseDown(Sender: TObject; Button: TMouseButton; Shift: TShiftState; X, Y: Integer);
     procedure TargetListSelectEditor(Sender: TObject; aCol, aRow: Integer;
       var Editor: TWinControl);
     procedure TargetListSelection(Sender: TObject; aCol, aRow: Integer);
     procedure TargetListValidateEntry(sender: TObject; aCol, aRow: Integer;
       const OldValue: string; var NewValue: String);
+    procedure TermOptItemClick(Sender: TObject; Index: integer);
   private
     { private declarations }
     FAstrometry: TAstrometry;
@@ -271,9 +257,11 @@ type
     procedure NewPlanetariumTarget(Sender: TObject);
     procedure SetTemplateButton;
     procedure MarkModifiedTemplate;
+    procedure SetScriptName;
    public
     { public declarations }
     originalFilter: TSaveFilter;
+    EndScript, UnattendedScript: string;
     procedure SetLang;
     procedure LoadPlanList;
     procedure LoadScriptList;
@@ -321,7 +309,7 @@ begin
   SortDirection:=-1;
   FCoordWarning:=false;
   f_selectscript:=Tf_selectscript.Create(self);
-  cbStopTracking.Checked:=true;
+  TermOpt.Checked[cbStopTracking]:=true;
   SetLang;
   LoadPlanList;
   LoadScriptList;
@@ -344,7 +332,7 @@ begin
      TargetListSelection(nil,0,1);
   end
   else begin
-    PageControlTools.ActivePageIndex:=pagenone;
+    PanelTools.Visible:=false;
     PageControlPlan.ActivePageIndex:=pagenone;
   end;
   SeqStopAt.Enabled:=SeqStop.Checked and (not SeqStopTwilight.Checked);
@@ -354,14 +342,8 @@ begin
   RepeatCountList.Enabled:=CheckBoxRepeatList.Checked;
   BtnRepeatInf.Enabled:=CheckBoxRepeatList.Checked;
   FlatFilterList.ClientHeight:=ceil(FlatFilterList.Items.Count/FlatFilterList.Columns)*DoScaleY(25);
-  if BtnEndScript.Hint='' then
-     BtnEndScript.Caption:='.?.'
-  else
-     BtnEndScript.Caption:='...';
-  if BtnUnattendedScript.Hint='' then
-     BtnUnattendedScript.Caption:='.?.'
-  else
-     BtnUnattendedScript.Caption:='...';
+  SetScriptName;
+  CheckRestartStatus(nil);
 end;
 
 procedure Tf_EditTargets.SetLang;
@@ -369,15 +351,15 @@ begin
   Caption := rsEditTargetLi;
   BtnSave.Caption := rsSave;
   BtnSaveAs.Caption := rsSaveAs;
-  GroupboxInsert.Caption := rsInsertRows;
-  BtnNewObject.Caption := rsNewObject;
-  BtnInsertPlanetarium.Caption := rsFromPlanetar;
-  BtnDeleteObject.Caption := rsRemoveObject;
-  BtnNewScript.Caption := rsScript;
+  BtnInsert.Caption := rsInsertRows;
+  MenuNewObject.Caption := rsNewObject;
+  MenuInsertPlanetarium.Caption := rsFromPlanetar;
+  BtnDeleteObject.Caption := rsRemoveRow;
+  MenuNewScript.Caption := rsScript;
   BtnCancel.Caption := rsCancel;
-  BtnSkyFlat.Caption := rsSkyFlat;
-  BtnImportObslist.Caption:=rsImportCdCObs;
-  BtnImportMosaic.Caption:=rsImportCdCMos;
+  MenuSkyFlat.Caption := rsSkyFlat;
+  MenuImportObslist.Caption:=rsImportCdCObs;
+  MenuImportMosaic.Caption:=rsImportCdCMos;
   TargetList.Columns.Items[colname-1].Title.Caption := Format(rsTargetName, [crlf]);
   TargetList.Columns.Items[colplan-1].Title.Caption := rsTemplate;
   TargetList.Columns.Items[colra-1].Title.Caption := rsRA+j2000;
@@ -424,27 +406,25 @@ begin
   TargetList.Columns.Items[colend-1].PickList.Add(MeridianCrossing+'+3.0h');
   TargetList.Columns.Items[colend-1].PickList.Add(MeridianCrossing+'+4.0h');
   CheckBoxRepeatList.Caption := rsRepeatTheWho;
-  CheckBoxRestartStatus.Caption:=rsKeepCompleti;
-  CheckBoxResetRepeat.Caption:=rsResetComplet;
+  CheckBoxRestartStatus.Caption:=rsRecordRestar;
+  CheckBoxResetRepeat.Caption:=rsClearRestart;
   SeqStart.Caption := rsStartAt;
   SeqStop.Caption := rsStopAt;
   SeqStartTwilight.Caption := rsDusk;
   SeqStopTwilight.Caption := rsDawn;
-  ToolsObject.Caption := rsObject;
   Preview.Caption := rsPreview;
   Label13.Caption := rsSeconds2;
   Label4.Caption:=rsRepeat+':';
   Label11.Caption := rsInterval;
-  GroupBoxTime.Caption:=rsTime;
-  BtnAnytime.Caption := rsAnyTime;
-  GroupBoxCoord.Caption:=rsCoordinates;
-  BtnCurrentCoord.Caption := rsNone2;
-  BtnPlanetariumCoord.Caption := rsPlanetarium;
-  Btn_coord_internal.Caption:=rsSearch;
-  GroupBoxPA.Caption:=rsRotator;
-  BtnImgCoord.Caption := rsCurrentImage;
-  BtnImgRot.Caption := rsCurrentImage;
-  ToolsScript.Caption := rsScript;
+  MenuTime.Caption:=rsTime;
+  MenuAnytime.Caption := rsAnyTime;
+  MenuCoordinates.Caption:=rsCoordinates;
+  MenuNoMove.Caption := rsNone2;
+  MenuPlanetariumCoord.Caption := rsPlanetarium;
+  MenuSearchCoord.Caption:=rsSearch;
+  MenuRotator.Caption:=rsRotator;
+  MenuImgCoord.Caption := rsCurrentImage;
+  MenuImgRot.Caption := rsCurrentImage;
   Label15.Caption := rsScript;
   BtnEditScript.Caption := rsEdit;
   BtnEditNewScript.Caption := rsNew;
@@ -459,9 +439,9 @@ begin
   label2.Caption:=rsSequence;
   // plan
   BtnDeleteTemplate.Caption := rsDeleteTempl;
-  BtnSaveTemplate.Caption := rsSaveTempl;
-  BtnSaveTemplateAs.Caption:=rsSaveTemplAs;
-  BtnApplyTemplate.Caption:=rsSaveAndApply;
+  MenuSaveTemplate.Caption := rsSaveTempl;
+  MenuSaveTemplateAs.Caption:=rsSaveTemplAs;
+  MenuApplyTemplate.Caption:=rsSaveAndApply;
   BtnRemoveStep.Caption := rsRemoveStep;
   BtnAddStep.Caption := rsAddStep;
   StepList.Columns.Items[pcoldesc-1].Title.Caption := rsDescription;
@@ -480,26 +460,20 @@ begin
   Label1.Caption := rsTemplate;
   // start options
   Label7.Caption:=rsStartOptions;
-  ccNone.Caption:=rsDoNothing;
-  ccCool.Caption:=rsCoolTheCamer;
-  ccUnpark.Caption:=rsUnparkTheTel;
+  StartOpt.Items[ccNone]:=rsDoNothing;
+  StartOpt.Items[ccCool]:=rsCoolTheCamer;
+  StartOpt.Items[ccUnpark]:=rsUnparkTheTel;
   // termination options
   Label3.Caption:=rsTerminationO;
-  cbNone.Caption:=rsDoNothing;
-  cbStopTracking.Caption:=rsStopTelescop2;
-  cbParkScope.Caption:=rsParkTheTeles2;
-  cbParkDome.Caption:=rsParkAndClose;
-  cbWarm.Caption:=rsWarmTheCamer;
-  cbScript.Caption:=rsRunAScript;
-  cbUnattended.Caption:=rsUnattendedEr;
+  TermOpt.Items[cbNone]:=rsDoNothing;
+  TermOpt.Items[cbStopTracking]:=rsStopTelescop2;
+  TermOpt.Items[cbParkScope]:=rsParkTheTeles2;
+  TermOpt.Items[cbParkDome]:=rsParkAndClose;
+  TermOpt.Items[cbWarm]:=rsWarmTheCamer;
+  TermOpt.Items[cbScript]:=rsRunAScript;
+  TermOpt.Items[cbUnattended]:=rsUnattendedEr;
   // hint
-  BtnCurrentCoord.Hint:=rsDoNotMoveThe;
-  BtnPlanetariumCoord.Hint:=rsGetTheCoordi;
-  BtnImgCoord.Hint:=rsSolveTheCurr;
-  Btn_coord_internal.Hint:=rsGetTheCoordi2;
   Preview.Hint:=rsStartAPrevie;
-  BtnImgRot.Hint:=rsSolveTheCurr2;
-  BtnAnytime.Hint:=rsClearTimeCon;
   FISObox.Hint:=rsCameraISO;
   FGainEdit.Hint:=rsCameraGain;
   CheckBoxRepeatList.Hint:=rsRepeatTheWho2;
@@ -512,10 +486,7 @@ begin
   SeqStopTwilight.Hint:=rsSetTheStopTi;
   CheckBoxRestartStatus.Hint:=rsThisAllowToR;
   CheckBoxResetRepeat.Hint:=rsControlHowCo;
-  BtnNewObject.Hint:=rsAddAnObjectT;
   BtnDeleteObject.Hint:=rsDeleteTheSel;
-  BtnNewScript.Hint:=rsAddAScriptTo;
-  BtnSkyFlat.Hint:=rsAddAFlatSequ;
   TargetList.Hint:=rsTheListOfTar;
   BtnSave.Hint:=rsSaveTheListA;
   BtnSaveAs.Hint:=rsSaveTheListW;
@@ -791,7 +762,7 @@ procedure Tf_EditTargets.BtnNewObjectClick(Sender: TObject);
 var i,n: integer;
     chkobj: string;
 begin
-  PageControlTools.ActivePageIndex:=pageobject;
+  PanelTools.visible:=true;
   PageControlPlan.ActivePageIndex:=pageobject;
   NewObject;
   n:=TargetList.Row;
@@ -815,7 +786,6 @@ begin
     chkobj:=keyboard_text+'##%%##';
     TargetList.Cells[colname,n]:=chkobj;
   end;
-  MoveFlat(nil);
   if FCoordWarning then begin
     // search if warning row is moved
     for i:=0 to TargetList.RowCount-1 do begin
@@ -847,8 +817,8 @@ begin
     end;
   end;
   PlanName.Caption:=t.planname;
-  TargetList.RowCount:=TargetList.RowCount+1;
-  i:=TargetList.RowCount-1;
+  i:=n+1;
+  TargetList.InsertColRow(false,i);
   TargetList.Cells[colseq,i]:=IntToStr(i);
   TargetList.Cells[colname,i]:='';
   TargetList.Cells[colplan,i]:=t.planname;
@@ -856,13 +826,14 @@ begin
   if t.inplaceautofocus then TargetList.Cells[colinplace,i]:='1';
   TargetList.Objects[colseq,i]:=t;
   TargetList.Row:=i;
+  ResetSequences;
 end;
 
 procedure Tf_EditTargets.BtnNewScriptClick(Sender: TObject);
 var i: integer;
     t: TTarget;
 begin
-  PageControlTools.ActivePageIndex:=pagescript;
+  PanelTools.visible:=false;
   PageControlPlan.ActivePageIndex:=pagescript;
   t:=TTarget.Create;
   t.objectname:=ScriptTxt;
@@ -874,32 +845,6 @@ begin
   TargetList.Objects[colseq,i]:=t;
   TargetList.Row:=i;
   TargetChange(nil);
-end;
-
-procedure Tf_EditTargets.BtnEndScriptClick(Sender: TObject);
-begin
-  f_selectscript.SetScript(BtnEndScript.Hint);
-  FormPos(f_selectscript,mouse.CursorPos.X,mouse.CursorPos.Y);
-  if f_selectscript.ShowModal=mrOK then begin
-     BtnEndScript.Hint:=f_selectscript.ComboBoxScript.Items[f_selectscript.ComboBoxScript.ItemIndex];
-  end;
-  if BtnEndScript.Hint='' then
-     BtnEndScript.Caption:='.?.'
-  else
-     BtnEndScript.Caption:='...';
-end;
-
-procedure Tf_EditTargets.BtnUnattendedScriptClick(Sender: TObject);
-begin
-  f_selectscript.SetScript(BtnUnattendedScript.Hint);
-  FormPos(f_selectscript,mouse.CursorPos.X,mouse.CursorPos.Y);
-  if f_selectscript.ShowModal=mrOK then begin
-     BtnUnattendedScript.Hint:=f_selectscript.ComboBoxScript.Items[f_selectscript.ComboBoxScript.ItemIndex];
-  end;
-  if BtnUnattendedScript.Hint='' then
-     BtnUnattendedScript.Caption:='.?.'
-  else
-     BtnUnattendedScript.Caption:='...';
 end;
 
 procedure Tf_EditTargets.Btn_coord_internalClick(Sender: TObject);{Retrieve position from deepsky database}
@@ -931,45 +876,100 @@ begin
   FCoordWarning:=false;
 end;
 
-procedure Tf_EditTargets.StartOptionClick(Sender: TObject);
+procedure Tf_EditTargets.BtnInsertPopup(Sender: TObject);
+var p: TPoint;
 begin
-  if not(Sender is TCheckBox) then exit;
-  if Lockcb then exit;
-  Lockcb:=true;
-  if (Sender=ccNone) then begin
-     ccNone.Checked:=true;
-     ccCool.Checked:=false;
-     ccUnpark.Checked:=false;
-  end;
-  if (Sender<>ccNone) and TCheckBox(Sender).Checked then begin
-     ccNone.Checked:=false;
-  end;
-  Lockcb:=false;
+p:=Point(Tcontrol(Sender).Left,Tcontrol(Sender).Top+Tcontrol(Sender).Height);
+p:=Tcontrol(Sender).Parent.ClientToScreen(p);
+PopupInsert.PopUp(p.x,p.y);
 end;
 
-procedure Tf_EditTargets.cbTermOptionClick(Sender: TObject);
+procedure Tf_EditTargets.BtnOptionsPopup(Sender: TObject);
+var p: TPoint;
 begin
-  if not(Sender is TCheckBox) then exit;
+p:=Point(Tcontrol(Sender).Left,Tcontrol(Sender).Top+Tcontrol(Sender).Height);
+p:=Tcontrol(Sender).Parent.ClientToScreen(p);
+PopupOptions.PopUp(p.x,p.y);
+end;
+
+procedure Tf_EditTargets.BtnSaveTemplatePopup(Sender: TObject);
+var p: TPoint;
+begin
+p:=Point(Tcontrol(Sender).Left,Tcontrol(Sender).Top+Tcontrol(Sender).Height);
+p:=Tcontrol(Sender).Parent.ClientToScreen(p);
+PopupSaveTemplate.PopUp(p.x,p.y);
+end;
+
+procedure Tf_EditTargets.StartOptItemClick(Sender: TObject; Index: integer);
+begin
   if Lockcb then exit;
+  try
   Lockcb:=true;
-  if (Sender=cbNone) then begin
-     cbNone.Checked:=true;
-     cbStopTracking.Checked:=false;
-     cbParkScope.Checked:=false;
-     cbParkDome.Checked:=false;
-     cbWarm.Checked:=false;
-     cbScript.Checked:=false;
+  if (Index=ccNone) then begin
+     StartOpt.Checked[ccNone]:=true;
+     StartOpt.Checked[ccCool]:=false;
+     StartOpt.Checked[ccUnpark]:=false;
   end;
-  if (Sender<>cbNone) and TCheckBox(Sender).Checked then begin
-     cbNone.Checked:=false;
+  if (Index<>ccNone) and StartOpt.Checked[Index] then begin
+     StartOpt.Checked[ccNone]:=false;
   end;
-  if (Sender=cbStopTracking) and cbStopTracking.Checked then begin
-     cbParkScope.Checked:=false;
-  end;
-  if (Sender=cbParkScope) and cbParkScope.Checked then begin
-     cbStopTracking.Checked:=false;
-  end;
+  finally
   Lockcb:=false;
+  end;
+end;
+
+procedure Tf_EditTargets.TermOptItemClick(Sender: TObject; Index: integer);
+begin
+  if Lockcb then exit;
+  try
+  Lockcb:=true;
+  if (Index=cbNone) then begin
+     TermOpt.Checked[cbNone]:=true;
+     TermOpt.Checked[cbStopTracking]:=false;
+     TermOpt.Checked[cbParkScope]:=false;
+     TermOpt.Checked[cbParkDome]:=false;
+     TermOpt.Checked[cbWarm]:=false;
+     TermOpt.Checked[cbScript]:=false;
+  end;
+  if (Index<>cbNone) and TermOpt.Checked[Index] then begin
+     TermOpt.Checked[cbNone]:=false;
+  end;
+  if (Index=cbStopTracking) and TermOpt.Checked[cbStopTracking] then begin
+     TermOpt.Checked[cbParkScope]:=false;
+  end;
+  if (Index=cbParkScope) and TermOpt.Checked[cbParkScope] then begin
+     TermOpt.Checked[cbStopTracking]:=false;
+  end;
+  if (Index=cbScript) and TermOpt.Checked[cbScript] then begin
+     f_selectscript.SetScript(EndScript);
+     FormPos(f_selectscript,mouse.CursorPos.X,mouse.CursorPos.Y);
+     if f_selectscript.ShowModal=mrOK then begin
+        EndScript:=f_selectscript.ComboBoxScript.Items[f_selectscript.ComboBoxScript.ItemIndex];
+     end;
+  end;
+  if (Index=cbUnattended) and TermOpt.Checked[cbUnattended] then begin
+     f_selectscript.SetScript(UnattendedScript);
+     FormPos(f_selectscript,mouse.CursorPos.X,mouse.CursorPos.Y);
+     if f_selectscript.ShowModal=mrOK then begin
+        UnattendedScript:=f_selectscript.ComboBoxScript.Items[f_selectscript.ComboBoxScript.ItemIndex];
+     end;
+  end;
+  SetScriptName;
+  finally
+  Lockcb:=false;
+  end;
+end;
+
+procedure Tf_EditTargets.SetScriptName;
+begin
+  if TermOpt.Checked[cbScript] then
+    TermOpt.Items[cbScript]:=rsRunAScript+': '+EndScript
+  else
+    TermOpt.Items[cbScript]:=rsRunAScript;
+  if TermOpt.Checked[cbUnattended] then
+    TermOpt.Items[cbUnattended]:=rsUnattendedEr+': '+UnattendedScript
+  else
+    TermOpt.Items[cbUnattended]:=rsUnattendedEr;
 end;
 
 procedure Tf_EditTargets.FormResize(Sender: TObject);
@@ -1027,7 +1027,7 @@ begin
     ShowMessage(rsCanOnlyAddOn);
     exit;
   end;
-  PageControlTools.ActivePageIndex:=pageflat;
+  PanelTools.visible:=false;
   PageControlPlan.ActivePageIndex:=pageflat;
   t:=TTarget.Create;
   t.objectname:=SkyFlatTxt;
@@ -1247,7 +1247,6 @@ begin
   if f_planetariuminfo.Obj.Text<>'' then TargetList.Cells[colname,n]:=trim(f_planetariuminfo.Obj.Text);
   TargetList.Cells[colastrometry,n]:=BoolToStr(astrometryResolver<>ResolverNone,'1','0');
   TargetChange(nil);
-  MoveFlat(Sender);
 end;
 
 procedure Tf_EditTargets.BtnImgCoordClick(Sender: TObject);
@@ -1393,12 +1392,12 @@ begin
     TargetList.Cells[colastrometry,n]:='';
     TargetList.Cells[colinplace,n]:='';
     TargetList.Cells[colupdcoord,n]:='';
-    PageControlTools.ActivePageIndex:=pagescript;
+    PanelTools.visible:=false;
     PageControlPlan.ActivePageIndex:=pagescript;
     SetScriptList(n,t.planname);
   end
   else if t.objectname=SkyFlatTxt then begin
-    PageControlTools.ActivePageIndex:=pageflat;
+    PanelTools.visible:=false;
     PageControlPlan.ActivePageIndex:=pageflat;
     if t.planname=FlatTimeName[0]
        then FlatTime.ItemIndex:=0
@@ -1440,7 +1439,7 @@ begin
     filterlst.Free;
   end
   else begin
-    PageControlTools.ActivePageIndex:=pageobject;
+    PanelTools.visible:=true;
     PageControlPlan.ActivePageIndex:=pageobject;
     SetPlanList(n,t.planname);
     if t.starttime>=0 then
@@ -1562,7 +1561,7 @@ begin
   if t=nil then exit;
   oldid:=t.id;
   if t.objectname=ScriptTxt then begin
-    PageControlTools.ActivePageIndex:=pagescript;
+    PanelTools.visible:=false;
     PageControlPlan.ActivePageIndex:=pagescript;
     i:=ScriptList.ItemIndex;
     sname:=ScriptList.Items[i];
@@ -1573,7 +1572,7 @@ begin
                  else t.path:=scdir.path;
   end
   else if t.objectname=SkyFlatTxt then begin
-    PageControlTools.ActivePageIndex:=pageflat;
+    PanelTools.visible:=false;
     PageControlPlan.ActivePageIndex:=pageflat;
     t.planname:=FlatTimeName[FlatTime.ItemIndex];
     t.FlatCount:=FlatCount.Value;
@@ -1603,7 +1602,7 @@ begin
     end;
   end
   else begin
-    PageControlTools.ActivePageIndex:=pageobject;
+    PanelTools.visible:=true;
     PageControlPlan.ActivePageIndex:=pageobject;
     CheckRiseSet(n);
     if (t.objectname=CurrentSeqName)and(trim(TargetList.Cells[colname,n])<>CurrentSeqName) then
@@ -2103,6 +2102,22 @@ begin
  TargetList.EditorMode := false;
 end;
 
+procedure Tf_EditTargets.TargetListMouseDown(Sender: TObject; Button: TMouseButton; Shift: TShiftState; X, Y: Integer);
+var acol,arow: integer;
+begin
+  if Button=mbRight then begin
+    TargetList.MouseToCell(x,y,acol,arow);
+    if (acol>=0)and(acol<TargetList.ColCount)and(arow>0)and(arow<TargetList.RowCount) then begin
+      TargetList.Row:=arow;
+      TargetChange(TargetList);
+      if acol=0 then
+        PopupInsert.PopUp(mouse.CursorPos.X,mouse.CursorPos.Y)
+      else
+        PopupOptions.PopUp(mouse.CursorPos.X,mouse.CursorPos.Y);
+    end;
+  end;
+end;
+
 procedure Tf_EditTargets.TargetListSelectEditor(Sender: TObject; aCol,
   aRow: Integer; var Editor: TWinControl);
 begin
@@ -2178,25 +2193,32 @@ begin
   end;
 end;
 
-procedure Tf_EditTargets.CheckBoxRepeatListChange(Sender: TObject);
+procedure Tf_EditTargets.CheckRestartStatus(Sender: TObject);
 begin
   RepeatCountList.Enabled:=CheckBoxRepeatList.Checked;
-  BtnRepeatInf.Enabled:=CheckBoxRepeatList.Checked;
+  BtnRepeatInf.Enabled:=RepeatCountList.Enabled;
+  CheckBoxResetRepeat.Enabled:=CheckBoxRestartStatus.Checked and CheckBoxRepeatList.Checked and (RepeatCountList.Value>1);
+end;
+
+procedure Tf_EditTargets.CheckBoxRepeatListChange(Sender: TObject);
+begin
+  CheckRestartStatus(nil);
   if CheckBoxRepeatList.Checked then
     FTargetsRepeat:=RepeatCountList.Value
   else
     FTargetsRepeat:=1;
 end;
 
+procedure Tf_EditTargets.RepeatCountListChange(Sender: TObject);
+begin
+  CheckRestartStatus(nil);
+  if CheckBoxRepeatList.Checked then
+    FTargetsRepeat:=RepeatCountList.Value;
+end;
+
 procedure Tf_EditTargets.FlatFilterListItemClick(Sender: TObject; Index: integer);
 begin
   TargetChange(Sender);
-end;
-
-procedure Tf_EditTargets.RepeatCountListChange(Sender: TObject);
-begin
-  if CheckBoxRepeatList.Checked then
-    FTargetsRepeat:=RepeatCountList.Value;
 end;
 
 function Tf_EditTargets.AsDuskFlat:boolean;
@@ -2274,6 +2296,7 @@ procedure Tf_EditTargets.BtnRepeatInfClick(Sender: TObject);
 begin
   RepeatCountList.Value:=RepeatCountList.MaxValue;
 end;
+
 
 ///////////// Plan /////////////////
 
@@ -2408,7 +2431,8 @@ if (trim(PlanName.Caption)<>'')and(pos('*',PlanName.Caption)<=0) then begin
   SavePlanModified(true);
   end
   else begin
-   PageControlPlan.ActivePageIndex:=pagenone;
+   ClearStepList;
+   PageControlPlan.ActivePageIndex:=pageobject;
   end;
 end;
 
@@ -2823,9 +2847,9 @@ end;
 
 procedure Tf_EditTargets.SetTemplateButton;
 begin
-  BtnSaveTemplate.Visible:=trim(PlanName.Caption)<>'';
-  BtnDeleteTemplate.Visible:=BtnSaveTemplate.Visible;
-  BtnApplyTemplate.Visible:=BtnSaveTemplate.Visible;
+  MenuSaveTemplate.Visible:=trim(PlanName.Caption)<>'';
+  BtnDeleteTemplate.Visible:=MenuSaveTemplate.Visible;
+  MenuApplyTemplate.Visible:=MenuSaveTemplate.Visible;
 end;
 
 procedure Tf_EditTargets.MarkModifiedTemplate;

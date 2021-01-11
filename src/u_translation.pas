@@ -884,7 +884,6 @@ resourcestring
   rsLightOFF = 'Light OFF';
   rsResolveAndPl = 'Resolve and annotate DSO';
   rsSaveAs = 'Save as...';
-  rsRemoveObject = 'Remove object';
   rsCannotComput = 'Cannot compute rise or set time.';
   rsDeleteTempl = 'Delete template';
   rsSaveTempl = 'Save template';
@@ -1042,8 +1041,6 @@ resourcestring
   rsStdDev = 'Std.Dev:';
   rsImageStatist = 'Image statistic';
   rsMode = 'Mode:';
-  rsKeepCompleti = 'Keep completion status';
-  rsResetComplet = 'Reset completion status on repeat';
   rsThisSequence = 'This sequence %s contain completion status.';
   rsClearTheComp = 'Clear the completion status?';
   rsThisSequence2 = 'This sequence contain information about the steps already completed.%sNow you can continue after the last checkpoint.%sDo you want to clear the completion status to restart from the beginning?';
@@ -1298,6 +1295,9 @@ resourcestring
   rsCaptureSFini = 'Capture %s Finished';
   rsRecording = 'Recording';
   rsFromPlanetar = 'From planetarium';
+  rsRemoveRow = 'Remove row';
+  rsClearRestart = 'Clear restart information on repeat';
+  rsRecordRestar = 'Record restart information';
 
 implementation
 

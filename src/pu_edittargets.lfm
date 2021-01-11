@@ -37,519 +37,292 @@ object f_EditTargets: Tf_EditTargets
       ClientWidth = 990
       ParentFont = False
       TabOrder = 0
-      object Panel16: TPanel
+      object PanelSeq: TPanel
         Left = 1
         Height = 95
         Top = 1
-        Width = 533
+        Width = 287
         Align = alLeft
-        Anchors = [akTop, akLeft, akRight, akBottom]
         BevelOuter = bvNone
         ClientHeight = 95
-        ClientWidth = 533
-        Constraints.MaxWidth = 650
+        ClientWidth = 287
         ParentFont = False
         TabOrder = 0
-        object Panel15: TPanel
-          Left = 0
-          Height = 23
+        object TargetName: TLabel
+          Left = 81
+          Height = 17
           Top = 0
-          Width = 533
-          Align = alTop
-          BevelOuter = bvNone
-          ClientHeight = 23
-          ClientWidth = 533
+          Width = 83
+          Caption = 'TargetName'
+          Font.Style = [fsBold]
+          ParentColor = False
+          ParentFont = False
+        end
+        object Label2: TLabel
+          Left = 8
+          Height = 17
+          Top = 0
+          Width = 61
+          Caption = 'Sequence'
+          ParentColor = False
+          ParentFont = False
+        end
+        object CheckBoxResetRepeat: TCheckBox
+          Left = 8
+          Height = 21
+          Top = 70
+          Width = 240
+          Caption = 'Clear restart information on repeat'
           ParentFont = False
           TabOrder = 0
-          object Panel3: TPanel
-            Left = 0
-            Height = 23
-            Top = 0
-            Width = 232
-            Align = alLeft
-            BevelOuter = bvNone
-            ClientHeight = 23
-            ClientWidth = 232
-            ParentFont = False
-            TabOrder = 0
-            object Label2: TLabel
-              Left = 8
-              Height = 17
-              Top = 0
-              Width = 61
-              Caption = 'Sequence'
-              ParentColor = False
-              ParentFont = False
-            end
-            object TargetName: TLabel
-              Left = 81
-              Height = 17
-              Top = 0
-              Width = 83
-              Caption = 'TargetName'
-              Font.Style = [fsBold]
-              ParentColor = False
-              ParentFont = False
-            end
-          end
-          object Panel22: TPanel
-            Left = 232
-            Height = 23
-            Top = 0
-            Width = 301
-            Align = alClient
-            BevelOuter = bvNone
-            ClientHeight = 23
-            ClientWidth = 301
-            ParentFont = False
-            TabOrder = 1
-            object CheckBoxRepeatList: TCheckBox
-              Left = 4
-              Height = 21
-              Hint = 'Repeat the whole list a number of time.'
-              Top = 0
-              Width = 155
-              Caption = 'Repeat the whole list '
-              OnChange = CheckBoxRepeatListChange
-              ParentFont = False
-              TabOrder = 0
-            end
-            object RepeatCountList: TSpinEdit
-              Left = 182
-              Height = 24
-              Top = 0
-              Width = 85
-              Constraints.MaxHeight = 24
-              MaxValue = 999999
-              MinValue = 1
-              OnChange = RepeatCountListChange
-              ParentFont = False
-              TabOrder = 1
-              Value = 1
-            end
-            object BtnRepeatInf: TSpeedButton
-              Left = 267
-              Height = 22
-              Top = 0
-              Width = 23
-              Glyph.Data = {
-                C6070000424DC607000000000000360000002800000016000000160000000100
-                2000000000009007000064000000640000000000000000000000000000000000
-                0000000000000000000000000000000000000000000000000000000000000000
-                0000000000000000000000000000000000000000000000000000000000000000
-                0000000000000000000000000000000000000000000000000000000000000000
-                0000000000000000000000000000000000000000000000000000000000000000
-                0000000000000000000000000000000000000000000000000000000000000000
-                0000000000000000000000000000000000000000000000000000000000000000
-                0000000000000000000000000000000000000000000000000000000000000000
-                0000000000000000000000000000000000000000000000000000000000000000
-                0000000000000000000000000000000000000000000000000000000000000000
-                0000000000000000000000000000000000000000000000000000000000000000
-                0000000000000000000000000000000000000000000000000000000000000000
-                0000000000000000000000000000000000000000000000000000000000000000
-                0000000000000000000000000000000000000000000000000000000000000000
-                0000000000000000000000000000000000000000000000000000000000000000
-                0000000000000000000000000000000000000000000000000000000000000000
-                0000000000000000000000000000000000000000000000000000000000000000
-                0000000000000000000000000000000000000000000000000000000000000000
-                0000000000000000000000000000000000000000000000000000000000000000
-                0000000000000000000000000000000000000000000000000000000000000000
-                00000000000000000000000000000000000000000000353535443333339B3333
-                33B03333337C3737370E00000000000000000000000132323260333333A63333
-                33A9323232665555550300000000000000000000000000000000000000000000
-                000000000000000000003333337E333333FE333333FF333333FF333333FF3333
-                33E23232322E3737370E333333BA333333FF333333FF333333FF333333FF3232
-                32C0333333050000000000000000000000000000000000000000000000003131
-                312F333333FC333333FF323232AC33333381333333E7333333FF333333EE3333
-                33CF333333FF333333FA323232933232328E333333F7333333FF323232750000
-                0000000000000000000000000000000000000000000033333373333333FF3333
-                33C800000000000000003333331E333333DA333333FF333333FF333333F63434
-                344A000000000000000033333382333333FF323232C500000000000000000000
-                000000000000000000000000000033333373333333FF333333C7000000000000
-                00003333331E333333DA333333FF333333FF333333F634343449000000000000
-                000033333381333333FF323232BB000000000000000000000000000000000000
-                00000000000035353530333333FD333333FF333333A93333337C333333E63333
-                33FF333333EE333333CF333333FF333333F9333333923333338D333333F73333
-                33FF323232750000000000000000000000000000000000000000000000000000
-                00003333337E333333FE333333FF333333FF333333FF333333E13232322E3737
-                370E323232BB333333FF333333FF333333FF333333FF343434C1333333050000
-                0000000000000000000000000000000000000000000000000000000000003434
-                34453333339B323232B13333337D3737370E0000000000000000000000013232
-                3260333333A6333333A934343467555555030000000000000000000000000000
-                0000000000000000000000000000000000000000000000000000000000000000
-                0000000000000000000000000000000000000000000000000000000000000000
-                0000000000000000000000000000000000000000000000000000000000000000
-                0000000000000000000000000000000000000000000000000000000000000000
-                0000000000000000000000000000000000000000000000000000000000000000
-                0000000000000000000000000000000000000000000000000000000000000000
-                0000000000000000000000000000000000000000000000000000000000000000
-                0000000000000000000000000000000000000000000000000000000000000000
-                0000000000000000000000000000000000000000000000000000000000000000
-                0000000000000000000000000000000000000000000000000000000000000000
-                0000000000000000000000000000000000000000000000000000000000000000
-                0000000000000000000000000000000000000000000000000000000000000000
-                0000000000000000000000000000000000000000000000000000000000000000
-                0000000000000000000000000000000000000000000000000000000000000000
-                0000000000000000000000000000000000000000000000000000000000000000
-                0000000000000000000000000000000000000000000000000000000000000000
-                0000000000000000000000000000000000000000000000000000000000000000
-                0000000000000000000000000000000000000000000000000000000000000000
-                0000000000000000000000000000000000000000000000000000000000000000
-                00000000000000000000
-              }
-              OnClick = BtnRepeatInfClick
-              ParentFont = False
-            end
-          end
         end
-        object Panel5: TPanel
-          Left = 0
-          Height = 48
-          Top = 47
-          Width = 232
-          Align = alLeft
-          BevelOuter = bvNone
-          ClientHeight = 48
-          ClientWidth = 232
+        object CheckBoxRestartStatus: TCheckBox
+          Left = 8
+          Height = 21
+          Top = 22
+          Width = 188
+          Caption = 'Record restart information'
+          OnChange = CheckRestartStatus
           ParentFont = False
           TabOrder = 1
-          object SeqStart: TCheckBox
-            Left = 4
-            Height = 21
-            Hint = 'Activate the start time'
-            Top = 2
-            Width = 72
-            Caption = 'Start at '
-            OnChange = SeqStartChange
-            ParentFont = False
-            TabOrder = 0
-          end
-          object SeqStartAt: TMaskEdit
-            Left = 81
-            Height = 26
-            Hint = 'Wait to this time before to start to process the list.'
-            Top = 0
-            Width = 71
-            CharCase = ecNormal
-            Constraints.MaxHeight = 26
-            MaxLength = 8
-            ParentFont = False
-            TabOrder = 1
-            EditMask = '99:99:99;1;_'
-            Text = '  :  :  '
-            SpaceChar = '_'
-          end
-          object SeqStartTwilight: TCheckBox
-            Left = 156
-            Height = 21
-            Hint = 'Set the start time at astronomical dusk, recomputed for the date you run the sequence.'
-            Top = 2
-            Width = 53
-            Caption = 'dusk'
-            Enabled = False
-            OnChange = SeqStartTwilightChange
-            ParentFont = False
-            TabOrder = 2
-          end
-          object SeqStop: TCheckBox
-            Left = 4
-            Height = 21
-            Hint = 'Activate the stop time'
-            Top = 27
-            Width = 70
-            Caption = 'Stop at '
-            OnChange = SeqStopChange
-            ParentFont = False
-            TabOrder = 3
-          end
-          object SeqStopAt: TMaskEdit
-            Left = 81
-            Height = 26
-            Hint = 'Stop at this time even if the processing is not finished.'
-            Top = 25
-            Width = 71
-            CharCase = ecNormal
-            Constraints.MaxHeight = 26
-            MaxLength = 8
-            ParentFont = False
-            TabOrder = 4
-            EditMask = '99:99:99;1;_'
-            Text = '  :  :  '
-            SpaceChar = '_'
-          end
-          object SeqStopTwilight: TCheckBox
-            Left = 156
-            Height = 21
-            Hint = 'Set the stop time at astronomical dawn, recomputed for the date you run the sequence.'
-            Top = 27
-            Width = 57
-            Caption = 'dawn'
-            Enabled = False
-            OnChange = SeqStopTwilightChange
-            ParentFont = False
-            TabOrder = 5
-          end
-          object Bevel3: TBevel
-            Left = 225
-            Height = 48
-            Top = 0
-            Width = 7
-            Align = alRight
-            Shape = bsRightLine
-          end
         end
-        object Panel7: TPanel
-          Left = 232
-          Height = 48
-          Top = 47
-          Width = 301
-          Align = alClient
-          BevelOuter = bvNone
-          ChildSizing.LeftRightSpacing = 4
-          ChildSizing.TopBottomSpacing = 2
-          ChildSizing.EnlargeHorizontal = crsHomogenousChildResize
-          ChildSizing.Layout = cclTopToBottomThenLeftToRight
-          ChildSizing.ControlsPerLine = 2
-          ClientHeight = 48
-          ClientWidth = 301
+        object BtnRepeatInf: TSpeedButton
+          AnchorSideTop.Control = CheckBoxRepeatList
+          AnchorSideTop.Side = asrCenter
+          Left = 255
+          Height = 22
+          Top = 45
+          Width = 23
+          OnClick = BtnRepeatInfClick
+          ParentFont = False
+        end
+        object CheckBoxRepeatList: TCheckBox
+          Left = 8
+          Height = 21
+          Hint = 'Repeat the whole list a number of time.'
+          Top = 46
+          Width = 155
+          Caption = 'Repeat the whole list '
+          OnChange = CheckBoxRepeatListChange
           ParentFont = False
           TabOrder = 2
-          object Label7: TLabel
-            Left = 4
-            Height = 21
-            Top = 2
-            Width = 145
-            Caption = 'Start options'
-            ParentColor = False
-            ParentFont = False
-          end
-          object ccNone: TCheckBox
-            Left = 4
-            Height = 21
-            Top = 23
-            Width = 145
-            Caption = 'ccNone'
-            OnClick = StartOptionClick
-            ParentFont = False
-            TabOrder = 0
-          end
-          object ccCool: TCheckBox
-            Left = 149
-            Height = 21
-            Top = 2
-            Width = 148
-            Caption = 'ccCool'
-            OnClick = StartOptionClick
-            ParentFont = False
-            TabOrder = 1
-          end
-          object ccUnpark: TCheckBox
-            Left = 149
-            Height = 21
-            Top = 23
-            Width = 148
-            Caption = 'ccUnpark'
-            OnClick = StartOptionClick
-            ParentFont = False
-            TabOrder = 2
-          end
         end
-        object Panel18: TPanel
-          Left = 0
+        object RepeatCountList: TSpinEdit
+          AnchorSideTop.Control = CheckBoxRepeatList
+          AnchorSideTop.Side = asrCenter
+          Left = 170
           Height = 24
-          Top = 23
-          Width = 533
-          Align = alTop
-          BevelOuter = bvNone
-          ClientHeight = 24
-          ClientWidth = 533
+          Top = 44
+          Width = 85
+          Constraints.MaxHeight = 24
+          MaxValue = 999999
+          MinValue = 1
+          OnChange = RepeatCountListChange
           ParentFont = False
           TabOrder = 3
-          object CheckBoxRestartStatus: TCheckBox
-            Left = 4
-            Height = 21
-            Top = 0
-            Width = 168
-            Caption = 'Keep completion status'
-            ParentFont = False
-            TabOrder = 0
-          end
-          object Bevel4: TBevel
-            Left = 0
-            Height = 2
-            Top = 22
-            Width = 533
-            Align = alBottom
-            Shape = bsBottomLine
-          end
-          object CheckBoxResetRepeat: TCheckBox
-            Left = 236
-            Height = 21
-            Top = 0
-            Width = 234
-            Caption = 'Reset completion status on repeat'
-            ParentFont = False
-            TabOrder = 1
-          end
+          Value = 1
+        end
+        object Bevel4: TBevel
+          Left = 280
+          Height = 95
+          Top = 0
+          Width = 7
+          Align = alRight
+          Shape = bsRightLine
+        end
+      end
+      object PanelStartStop: TPanel
+        Left = 288
+        Height = 95
+        Top = 1
+        Width = 232
+        Align = alLeft
+        BevelOuter = bvNone
+        ClientHeight = 95
+        ClientWidth = 232
+        ParentFont = False
+        TabOrder = 3
+        object SeqStart: TCheckBox
+          Left = 4
+          Height = 21
+          Hint = 'Activate the start time'
+          Top = 29
+          Width = 72
+          Caption = 'Start at '
+          OnChange = SeqStartChange
+          ParentFont = False
+          TabOrder = 0
+        end
+        object SeqStartAt: TMaskEdit
+          AnchorSideTop.Control = SeqStart
+          AnchorSideTop.Side = asrCenter
+          Left = 81
+          Height = 26
+          Hint = 'Wait to this time before to start to process the list.'
+          Top = 26
+          Width = 71
+          CharCase = ecNormal
+          Constraints.MaxHeight = 26
+          MaxLength = 8
+          ParentFont = False
+          TabOrder = 1
+          EditMask = '99:99:99;1;_'
+          Text = '  :  :  '
+          SpaceChar = '_'
+        end
+        object SeqStartTwilight: TCheckBox
+          AnchorSideTop.Control = SeqStart
+          AnchorSideTop.Side = asrCenter
+          Left = 156
+          Height = 21
+          Hint = 'Set the start time at astronomical dusk, recomputed for the date you run the sequence.'
+          Top = 29
+          Width = 53
+          Caption = 'dusk'
+          Enabled = False
+          OnChange = SeqStartTwilightChange
+          ParentFont = False
+          TabOrder = 2
+        end
+        object SeqStop: TCheckBox
+          Left = 4
+          Height = 21
+          Hint = 'Activate the stop time'
+          Top = 61
+          Width = 70
+          Caption = 'Stop at '
+          OnChange = SeqStopChange
+          ParentFont = False
+          TabOrder = 3
+        end
+        object SeqStopAt: TMaskEdit
+          AnchorSideTop.Control = SeqStop
+          AnchorSideTop.Side = asrCenter
+          Left = 81
+          Height = 26
+          Hint = 'Stop at this time even if the processing is not finished.'
+          Top = 58
+          Width = 71
+          CharCase = ecNormal
+          Constraints.MaxHeight = 26
+          MaxLength = 8
+          ParentFont = False
+          TabOrder = 4
+          EditMask = '99:99:99;1;_'
+          Text = '  :  :  '
+          SpaceChar = '_'
+        end
+        object SeqStopTwilight: TCheckBox
+          AnchorSideTop.Control = SeqStop
+          AnchorSideTop.Side = asrCenter
+          Left = 156
+          Height = 21
+          Hint = 'Set the stop time at astronomical dawn, recomputed for the date you run the sequence.'
+          Top = 61
+          Width = 57
+          Caption = 'dawn'
+          Enabled = False
+          OnChange = SeqStopTwilightChange
+          ParentFont = False
+          TabOrder = 5
+        end
+        object Bevel3: TBevel
+          Left = 225
+          Height = 95
+          Top = 0
+          Width = 7
+          Align = alRight
+          Shape = bsRightLine
+        end
+        object Label5: TLabel
+          Left = 4
+          Height = 17
+          Top = 0
+          Width = 162
+          Caption = 'Sequence start / stop time'
+          ParentColor = False
+        end
+      end
+      object PanelStartOption: TPanel
+        Left = 520
+        Height = 95
+        Top = 1
+        Width = 186
+        Align = alLeft
+        BevelOuter = bvNone
+        ClientHeight = 95
+        ClientWidth = 186
+        ParentFont = False
+        TabOrder = 2
+        object Label7: TLabel
+          Left = 4
+          Height = 17
+          Top = 0
+          Width = 79
+          Caption = 'Start options'
+          ParentColor = False
+          ParentFont = False
+        end
+        object StartOpt: TCheckListBox
+          Left = 4
+          Height = 79
+          Top = 16
+          Width = 172
+          Items.Strings = (
+            'ccNone'
+            'ccCool'
+            'ccUnpark'
+          )
+          ItemHeight = 23
+          OnItemClick = StartOptItemClick
+          TabOrder = 0
+          Data = {
+            03000000000000
+          }
         end
       end
       object PanelTermination: TPanel
-        Left = 534
+        Left = 706
         Height = 95
         Top = 1
-        Width = 455
+        Width = 283
         Align = alClient
         BevelOuter = bvNone
-        ChildSizing.EnlargeHorizontal = crsHomogenousChildResize
-        ChildSizing.Layout = cclLeftToRightThenTopToBottom
-        ChildSizing.ControlsPerLine = 3
         ClientHeight = 95
-        ClientWidth = 455
-        Constraints.MaxWidth = 606
+        ClientWidth = 283
+        Constraints.MaxWidth = 500
         ParentFont = False
         TabOrder = 1
-        object Panel19: TPanel
+        object TermOpt: TCheckListBox
           Left = 0
-          Height = 91
-          Top = 0
-          Width = 226
-          BevelOuter = bvNone
-          ClientHeight = 91
-          ClientWidth = 226
-          Constraints.MaxWidth = 303
-          Constraints.MinWidth = 172
-          ParentFont = False
+          Height = 79
+          Top = 16
+          Width = 283
+          Align = alBottom
+          Items.Strings = (
+            'cbNone'
+            'cbStopTracking'
+            'cbWarm'
+            'cbParkScope'
+            'cbParkDome'
+            'cdScript'
+            'cbUnatendedErrorScript'
+          )
+          ItemHeight = 23
+          OnItemClick = TermOptItemClick
           TabOrder = 0
-          object Label3: TLabel
-            Left = 8
-            Height = 17
-            Top = 0
-            Width = 123
-            Caption = 'Termination options'
-            ParentColor = False
-            ParentFont = False
-          end
-          object cbNone: TCheckBox
-            Left = 8
-            Height = 21
-            Top = 24
-            Width = 72
-            Caption = 'cbNone'
-            OnClick = cbTermOptionClick
-            ParentFont = False
-            TabOrder = 0
-          end
-          object cbStopTracking: TCheckBox
-            Left = 8
-            Height = 21
-            Top = 47
-            Width = 117
-            Caption = 'cbStopTracking'
-            OnClick = cbTermOptionClick
-            ParentFont = False
-            TabOrder = 1
-          end
-          object Bevel1: TBevel
-            Left = 0
-            Height = 91
-            Top = 0
-            Width = 5
-            Align = alLeft
-            Shape = bsLeftLine
-          end
-          object cbWarm: TCheckBox
-            Left = 8
-            Height = 21
-            Top = 70
-            Width = 75
-            Caption = 'cbWarm'
-            OnClick = cbTermOptionClick
-            ParentFont = False
-            TabOrder = 2
-          end
+          Data = {
+            0700000000000000000000
+          }
         end
-        object Panel20: TPanel
-          Left = 226
-          Height = 91
+        object Label3: TLabel
+          Left = 8
+          Height = 17
           Top = 0
-          Width = 229
-          BevelOuter = bvNone
-          ClientHeight = 91
-          ClientWidth = 229
-          Constraints.MaxWidth = 303
-          Constraints.MinWidth = 172
+          Width = 123
+          Caption = 'Termination options'
+          ParentColor = False
           ParentFont = False
-          TabOrder = 1
-          object cbParkScope: TCheckBox
-            Left = 4
-            Height = 21
-            Top = 0
-            Width = 103
-            Caption = 'cbParkScope'
-            OnClick = cbTermOptionClick
-            ParentFont = False
-            TabOrder = 0
-          end
-          object cbParkDome: TCheckBox
-            Left = 4
-            Height = 21
-            Top = 24
-            Width = 104
-            Caption = 'cbParkDome'
-            OnClick = cbTermOptionClick
-            ParentFont = False
-            TabOrder = 1
-          end
-          object cbScript: TCheckBox
-            Left = 4
-            Height = 21
-            Top = 47
-            Width = 73
-            Caption = 'cbScript'
-            OnClick = cbTermOptionClick
-            ParentFont = False
-            TabOrder = 2
-          end
-          object BtnEndScript: TButton
-            Left = 202
-            Height = 21
-            Top = 49
-            Width = 24
-            Anchors = [akTop, akRight]
-            Caption = '...'
-            OnClick = BtnEndScriptClick
-            ParentFont = False
-            TabOrder = 3
-          end
-          object cbUnattended: TCheckBox
-            Left = 4
-            Height = 21
-            Top = 70
-            Width = 172
-            Caption = 'Unattended error script'
-            OnClick = cbTermOptionClick
-            ParentFont = False
-            TabOrder = 4
-          end
-          object BtnUnattendedScript: TButton
-            Left = 202
-            Height = 21
-            Top = 70
-            Width = 24
-            Anchors = [akTop, akRight]
-            Caption = '...'
-            OnClick = BtnUnattendedScriptClick
-            ParentFont = False
-            TabOrder = 5
-          end
-          object Bevel2: TBevel
-            Left = 224
-            Height = 91
-            Top = 0
-            Width = 5
-            Align = alRight
-            Shape = bsRightLine
-          end
         end
       end
     end
@@ -566,367 +339,177 @@ object f_EditTargets: Tf_EditTargets
       TabOrder = 1
       object PanelTargetOptions: TPanel
         Left = 0
-        Height = 100
+        Height = 48
         Top = 0
         Width = 990
         Align = alTop
-        ClientHeight = 100
+        ClientHeight = 48
         ClientWidth = 990
         ParentFont = False
         TabOrder = 1
         object Panel6: TPanel
           Left = 1
-          Height = 98
+          Height = 46
           Top = 1
-          Width = 498
+          Width = 260
           Align = alLeft
           BevelOuter = bvNone
-          ClientHeight = 98
-          ClientWidth = 498
+          ClientHeight = 46
+          ClientWidth = 260
           TabOrder = 1
-          object PageControl1: TPageControl
-            Left = 0
-            Height = 98
-            Top = 0
-            Width = 498
-            ActivePage = TabSheet1
-            Align = alClient
-            ShowTabs = False
-            TabIndex = 0
+          object BtnInsert: TButton
+            Left = 4
+            Height = 25
+            Top = 8
+            Width = 120
+            Caption = 'Insert rows'
+            OnClick = BtnInsertPopup
             TabOrder = 0
-            object TabSheet1: TTabSheet
-              Caption = 'TabSheet1'
-              ClientHeight = 94
-              ClientWidth = 488
-              object GroupboxInsert: TGroupBox
-                Left = 0
-                Height = 94
-                Top = 0
-                Width = 488
-                Align = alClient
-                Caption = 'Insert rows'
-                ClientHeight = 74
-                ClientWidth = 486
-                ParentFont = False
-                TabOrder = 0
-                object BtnSkyFlat: TButton
-                  Left = 326
-                  Height = 23
-                  Hint = 'Add a flat sequence to the list.'
-                  Top = 2
-                  Width = 158
-                  Caption = 'Sky Flat'
-                  OnClick = BtnSkyFlatClick
-                  ParentFont = False
-                  TabOrder = 0
-                end
-                object BtnNewObject: TButton
-                  Left = 2
-                  Height = 23
-                  Hint = 'Add an object to the list'
-                  Top = 2
-                  Width = 158
-                  Caption = 'New object'
-                  OnClick = BtnNewObjectClick
-                  ParentFont = False
-                  TabOrder = 1
-                end
-                object BtnDeleteObject: TButton
-                  Left = 2
-                  Height = 23
-                  Hint = 'Delete the selected row from the list.'
-                  Top = 52
-                  Width = 158
-                  Caption = 'Remove object'
-                  OnClick = BtnDeleteObjectClick
-                  ParentFont = False
-                  TabOrder = 2
-                end
-                object BtnNewScript: TButton
-                  Left = 326
-                  Height = 23
-                  Hint = 'Add a script to the list.'
-                  Top = 28
-                  Width = 158
-                  Caption = 'Script'
-                  OnClick = BtnNewScriptClick
-                  ParentFont = False
-                  TabOrder = 3
-                end
-                object BtnInsertPlanetarium: TButton
-                  Left = 164
-                  Height = 23
-                  Top = 2
-                  Width = 158
-                  Caption = 'From planetarium'
-                  OnClick = BtnInsertPlanetariumClick
-                  ParentFont = False
-                  TabOrder = 4
-                end
-                object BtnImportObslist: TButton
-                  Left = 2
-                  Height = 25
-                  Top = 26
-                  Width = 158
-                  Caption = 'Import observing list'
-                  OnClick = BtnImportObslistClick
-                  ParentFont = False
-                  TabOrder = 5
-                end
-                object BtnImportMosaic: TButton
-                  Left = 164
-                  Height = 25
-                  Top = 26
-                  Width = 158
-                  Caption = 'Import mosaic'
-                  OnClick = BtnImportMosaicClick
-                  ParentFont = False
-                  TabOrder = 6
-                end
-                object TargetMsg: TLabel
-                  Left = 164
-                  Height = 21
-                  Top = 52
-                  Width = 320
-                  AutoSize = False
-                  Caption = 'TargetMsg'
-                  ParentColor = False
-                  ParentFont = False
-                  WordWrap = True
-                end
-              end
-            end
+          end
+          object BtnDeleteObject: TButton
+            Left = 132
+            Height = 25
+            Hint = 'Delete the selected row from the list.'
+            Top = 8
+            Width = 120
+            Caption = 'Remove row'
+            OnClick = BtnDeleteObjectClick
+            ParentFont = False
+            TabOrder = 1
           end
         end
         object PanelTools: TPanel
-          Left = 499
-          Height = 98
+          Left = 261
+          Height = 46
           Top = 1
-          Width = 490
+          Width = 728
           Align = alClient
           BevelOuter = bvNone
-          ClientHeight = 98
-          ClientWidth = 490
+          ClientHeight = 46
+          ClientWidth = 728
           ParentFont = False
           TabOrder = 0
-          object PageControlTools: TPageControl
-            Left = 0
-            Height = 98
+          object Panel8: TPanel
+            Left = 128
+            Height = 48
             Top = 0
-            Width = 490
-            ActivePage = ToolsObject
-            Align = alClient
-            ParentFont = False
-            ShowTabs = False
-            TabIndex = 0
+            Width = 592
+            BevelOuter = bvNone
+            ClientHeight = 48
+            ClientWidth = 592
             TabOrder = 0
-            object ToolsObject: TTabSheet
-              Caption = 'Object'
-              ClientHeight = 94
-              ClientWidth = 480
+            object PanelRepeat: TPanel
+              Left = 0
+              Height = 26
+              Top = 0
+              Width = 592
+              Align = alTop
+              BevelOuter = bvNone
+              ClientHeight = 26
+              ClientWidth = 592
               ParentFont = False
-              object GroupBoxCoord: TGroupBox
-                Left = 0
-                Height = 68
-                Top = 0
-                Width = 248
-                Caption = 'Coordinates'
-                ClientHeight = 48
-                ClientWidth = 246
+              TabOrder = 0
+              object Preview: TCheckBox
+                AnchorSideTop.Control = TDelay
+                AnchorSideTop.Side = asrCenter
+                Left = 205
+                Height = 21
+                Hint = 'Start a preview loop when waiting for the delay to expire.'
+                Top = 3
+                Width = 71
+                Caption = 'Preview'
+                OnChange = TargetChange
                 ParentFont = False
+                ParentBidiMode = False
                 TabOrder = 0
-                object Btn_coord_internal: TButton
-                  Left = 0
-                  Height = 23
-                  Hint = 'Get the coordinates from annotation database'
-                  Top = 2
-                  Width = 120
-                  Caption = 'Search'
-                  OnClick = Btn_coord_internalClick
-                  ParentFont = False
-                  TabOrder = 0
-                end
-                object BtnPlanetariumCoord: TButton
-                  Left = 0
-                  Height = 23
-                  Hint = 'Get the coordinates and object name from the planetarium'
-                  Top = 26
-                  Width = 120
-                  Caption = 'Planetarium'
-                  OnClick = BtnPlanetariumCoordClick
-                  ParentFont = False
-                  TabOrder = 1
-                end
-                object BtnCurrentCoord: TButton
-                  Left = 122
-                  Height = 23
-                  Hint = 'Do not move the telescope before to start imaging.'
-                  Top = 26
-                  Width = 120
-                  Caption = 'No move'
-                  OnClick = BtnCurrentCoordClick
-                  ParentFont = False
-                  TabOrder = 2
-                end
-                object BtnImgCoord: TButton
-                  Left = 122
-                  Height = 23
-                  Hint = 'Solve the current image and get the center coordinates'
-                  Top = 2
-                  Width = 120
-                  Caption = 'Current image'
-                  OnClick = BtnImgCoordClick
-                  ParentFont = False
-                  TabOrder = 3
-                end
               end
-              object GroupBoxTime: TGroupBox
-                Left = 249
-                Height = 68
-                Top = 0
-                Width = 115
-                Caption = 'Time'
-                ClientHeight = 48
-                ClientWidth = 113
+              object Label11: TLabel
+                AnchorSideTop.Control = TDelay
+                AnchorSideTop.Side = asrCenter
+                Left = 56
+                Height = 17
+                Top = 5
+                Width = 49
+                Caption = 'Interval'
+                ParentColor = False
                 ParentFont = False
-                TabOrder = 2
-                object BtnAnytime: TButton
-                  Left = 2
-                  Height = 23
-                  Hint = 'Clear time constraint'
-                  Top = 2
-                  Width = 112
-                  Caption = 'Any time'
-                  OnClick = BtnAnytimeClick
-                  ParentFont = False
-                  TabOrder = 0
-                end
               end
-              object GroupBoxPA: TGroupBox
-                Left = 365
-                Height = 68
-                Top = 0
-                Width = 118
-                Caption = 'Rotator'
-                ClientHeight = 48
-                ClientWidth = 116
-                ParentFont = False
-                TabOrder = 3
-                object BtnImgRot: TButton
-                  Left = 4
-                  Height = 23
-                  Hint = 'Solve the current image and get the rotation of the image'
-                  Top = 2
-                  Width = 108
-                  Caption = 'Current image'
-                  OnClick = BtnImgRotClick
-                  ParentFont = False
-                  TabOrder = 0
-                end
-              end
-              object PanelRepeat: TPanel
-                Left = 72
+              object TDelay: TSpinEdit
+                Left = 141
                 Height = 26
-                Top = 68
-                Width = 408
-                BevelOuter = bvNone
-                ClientHeight = 26
-                ClientWidth = 408
+                Top = 0
+                Width = 54
+                Constraints.MaxHeight = 26
+                MaxValue = 100000
+                OnChange = TargetChange
                 ParentFont = False
                 TabOrder = 1
-                object Preview: TCheckBox
-                  AnchorSideTop.Control = TDelay
-                  AnchorSideTop.Side = asrCenter
-                  Left = 152
-                  Height = 21
-                  Hint = 'Start a preview loop when waiting for the delay to expire.'
-                  Top = 3
-                  Width = 71
-                  Caption = 'Preview'
-                  OnChange = TargetChange
-                  ParentFont = False
-                  ParentBidiMode = False
-                  TabOrder = 0
-                end
-                object Label11: TLabel
-                  AnchorSideTop.Control = TDelay
-                  AnchorSideTop.Side = asrCenter
-                  Left = 3
-                  Height = 17
-                  Top = 5
-                  Width = 49
-                  Caption = 'Interval'
-                  ParentColor = False
-                  ParentFont = False
-                end
-                object TDelay: TSpinEdit
-                  Left = 88
-                  Height = 26
-                  Top = 0
-                  Width = 54
-                  Constraints.MaxHeight = 26
-                  MaxValue = 100000
-                  OnChange = TargetChange
-                  ParentFont = False
-                  TabOrder = 1
-                end
-                object PreviewExposure: TFloatSpinEdit
-                  AnchorSideTop.Control = TDelay
-                  AnchorSideTop.Side = asrCenter
-                  Left = 252
-                  Height = 26
-                  Top = 0
-                  Width = 63
-                  Constraints.MaxHeight = 26
-                  Increment = 0.1
-                  MaxValue = 60
-                  MinValue = 0.001
-                  OnChange = TargetChange
-                  ParentFont = False
-                  TabOrder = 2
-                  Value = 0.001
-                end
-                object Label13: TLabel
-                  AnchorSideTop.Control = TDelay
-                  AnchorSideTop.Side = asrCenter
-                  Left = 326
-                  Height = 17
-                  Top = 5
-                  Width = 58
-                  Caption = '[seconds]'
-                  ParentColor = False
-                  ParentFont = False
-                end
+              end
+              object PreviewExposure: TFloatSpinEdit
+                AnchorSideTop.Control = TDelay
+                AnchorSideTop.Side = asrCenter
+                Left = 305
+                Height = 26
+                Top = 0
+                Width = 63
+                Constraints.MaxHeight = 26
+                Increment = 0.1
+                MaxValue = 60
+                MinValue = 0.001
+                OnChange = TargetChange
+                ParentFont = False
+                TabOrder = 2
+                Value = 0.001
+              end
+              object Label13: TLabel
+                AnchorSideTop.Control = TDelay
+                AnchorSideTop.Side = asrCenter
+                Left = 379
+                Height = 17
+                Top = 5
+                Width = 58
+                Caption = '[seconds]'
+                ParentColor = False
+                ParentFont = False
               end
               object Label4: TLabel
+                AnchorSideTop.Control = TDelay
+                AnchorSideTop.Side = asrCenter
                 Left = 0
                 Height = 17
-                Top = 73
+                Top = 5
                 Width = 48
                 Caption = 'Repeat:'
                 ParentColor = False
               end
             end
-            object ToolsScript: TTabSheet
-              Caption = 'Script'
+            object TargetMsg: TLabel
+              Left = 0
+              Height = 17
+              Top = 26
+              Width = 592
+              Align = alTop
+              AutoSize = False
+              Caption = 'TargetMsg'
+              ParentColor = False
               ParentFont = False
             end
-            object ToolsFlat: TTabSheet
-              Caption = 'Flat'
-              ParentFont = False
-            end
-            object ToolsNone: TTabSheet
-              Caption = 'ToolsNone'
-              ParentFont = False
-            end
+          end
+          object BtnOptions: TSpeedButton
+            Left = 2
+            Height = 25
+            Top = 8
+            Width = 120
+            Caption = 'Options'
+            OnClick = BtnOptionsPopup
           end
         end
       end
       object TargetList: TStringGrid
         Left = 0
-        Height = 147
+        Height = 199
         Hint = 'The list of target to process in sequence.'
-        Top = 100
+        Top = 48
         Width = 990
         Align = alClient
         AutoFillColumns = True
@@ -1067,6 +650,7 @@ object f_EditTargets: Tf_EditTargets
         OnEditingDone = TargetListEditingDone
         OnGetCellHint = TargetListGetCellHint
         OnHeaderClick = TargetListHeaderClick
+        OnMouseDown = TargetListMouseDown
         OnSelectEditor = TargetListSelectEditor
         OnSelection = TargetListSelection
         OnValidateEntry = TargetListValidateEntry
@@ -1278,7 +862,7 @@ object f_EditTargets: Tf_EditTargets
               AnchorSideTop.Side = asrCenter
               Left = 4
               Height = 17
-              Top = 4
+              Top = 6
               Width = 57
               Anchors = [akLeft]
               Caption = 'Template'
@@ -1290,89 +874,65 @@ object f_EditTargets: Tf_EditTargets
               AnchorSideTop.Side = asrCenter
               Left = 80
               Height = 17
-              Top = 4
+              Top = 6
               Width = 69
               Caption = 'PlanName'
               Font.Style = [fsBold]
               ParentColor = False
               ParentFont = False
             end
-            object BtnSaveTemplate: TButton
-              AnchorSideTop.Control = BtnAddStep
-              Left = 475
-              Height = 25
-              Top = 28
-              Width = 140
-              Caption = 'Save template'
-              OnClick = BtnSaveTemplateClick
-              ParentFont = False
-              TabOrder = 0
-            end
-            object BtnSaveTemplateAs: TButton
-              AnchorSideTop.Control = BtnAddStep
-              Left = 620
-              Height = 25
-              Top = 28
-              Width = 200
-              Caption = 'Save template as...'
-              OnClick = BtnSaveTemplateAsClick
-              ParentFont = False
-              TabOrder = 1
-            end
-            object BtnApplyTemplate: TButton
-              AnchorSideTop.Control = BtnAddStep
-              Left = 260
-              Height = 25
-              Top = 28
-              Width = 210
-              Caption = 'Save and apply to targets'
-              OnClick = BtnApplyTemplateClick
-              ParentFont = False
-              TabOrder = 2
-            end
-            object BtnDeleteTemplate: TButton
-              AnchorSideTop.Control = BtnAddStep
-              Left = 825
-              Height = 25
-              Top = 28
-              Width = 154
-              Caption = 'Delete template'
-              OnClick = BtnDeleteTemplateClick
-              ParentFont = False
-              TabOrder = 3
-            end
             object LabelMsg: TLabel
               AnchorSideTop.Control = Label1
               AnchorSideTop.Side = asrCenter
               Left = 260
               Height = 17
-              Top = 4
+              Top = 6
               Width = 59
               Caption = 'LabelMsg'
               ParentColor = False
               ParentFont = False
             end
-            object BtnRemoveStep: TButton
+            object BtnSaveTemplate: TButton
               AnchorSideTop.Control = BtnAddStep
-              AnchorSideTop.Side = asrCenter
-              Left = 136
+              Left = 320
               Height = 25
               Top = 28
-              Width = 105
-              Caption = 'Remove step'
-              OnClick = BtnRemoveStepClick
-              ParentFont = False
-              TabOrder = 4
+              Width = 150
+              Caption = 'Save template'
+              OnClick = BtnSaveTemplatePopup
+              TabOrder = 0
             end
             object BtnAddStep: TButton
               Left = 4
               Height = 25
               Top = 28
-              Width = 121
+              Width = 150
               Caption = 'Add step'
               OnClick = BtnAddStepClick
               ParentFont = False
-              TabOrder = 5
+              TabOrder = 1
+            end
+            object BtnRemoveStep: TButton
+              AnchorSideTop.Control = BtnAddStep
+              Left = 162
+              Height = 25
+              Top = 28
+              Width = 150
+              Caption = 'Remove step'
+              OnClick = BtnRemoveStepClick
+              ParentFont = False
+              TabOrder = 2
+            end
+            object BtnDeleteTemplate: TButton
+              AnchorSideTop.Control = BtnAddStep
+              Left = 478
+              Height = 25
+              Top = 28
+              Width = 150
+              Caption = 'Delete template'
+              OnClick = BtnDeleteTemplateClick
+              ParentFont = False
+              TabOrder = 3
             end
           end
         end
@@ -1725,18 +1285,7 @@ object f_EditTargets: Tf_EditTargets
       end
       object PlanNone: TTabSheet
         Caption = 'PlanNone'
-        ClientHeight = 206
-        ClientWidth = 980
         ParentFont = False
-        object Label5: TLabel
-          Left = 8
-          Height = 19
-          Top = 0
-          Width = 349
-          Caption = 'Please select a plan or type a new name in the Plan column'
-          ParentColor = False
-          ParentFont = False
-        end
       end
     end
   end
@@ -1754,7 +1303,7 @@ object f_EditTargets: Tf_EditTargets
     ParentFont = False
     TabOrder = 2
     object BtnCancel: TButton
-      Left = 592
+      Left = 600
       Height = 25
       Top = 2
       Width = 120
@@ -1765,7 +1314,7 @@ object f_EditTargets: Tf_EditTargets
       TabOrder = 0
     end
     object BtnSave: TButton
-      Left = 728
+      Left = 736
       Height = 25
       Hint = 'Save the list and close this window.'
       Top = 2
@@ -1777,7 +1326,7 @@ object f_EditTargets: Tf_EditTargets
       TabOrder = 1
     end
     object BtnSaveAs: TButton
-      Left = 861
+      Left = 869
       Height = 25
       Hint = 'Save the list with a new name and close this window.'
       Top = 2
@@ -1972,5 +1521,86 @@ object f_EditTargets: Tf_EditTargets
       0000000000000000000000000000000000000000000000000000000000000000
       0000000000000000000000000000
     }
+  end
+  object PopupInsert: TPopupMenu
+    Left = 152
+    Top = 280
+    object MenuNewObject: TMenuItem
+      Caption = 'New object'
+      OnClick = BtnNewObjectClick
+    end
+    object MenuInsertPlanetarium: TMenuItem
+      Caption = 'From Planetarium'
+      OnClick = BtnInsertPlanetariumClick
+    end
+    object MenuSkyFlat: TMenuItem
+      Caption = 'Sky Flat'
+      OnClick = BtnSkyFlatClick
+    end
+    object MenuNewScript: TMenuItem
+      Caption = 'Script'
+      OnClick = BtnNewScriptClick
+    end
+    object MenuImportObsList: TMenuItem
+      Caption = 'Import observing list'
+      OnClick = BtnImportObslistClick
+    end
+    object MenuImportMosaic: TMenuItem
+      Caption = 'Import mosaic'
+      OnClick = BtnImportMosaicClick
+    end
+  end
+  object PopupOptions: TPopupMenu
+    Left = 280
+    Top = 275
+    object MenuCoordinates: TMenuItem
+      Caption = 'Coordinates'
+      object MenuSearchCoord: TMenuItem
+        Caption = 'Search'
+        OnClick = Btn_coord_internalClick
+      end
+      object MenuPlanetariumCoord: TMenuItem
+        Caption = 'From planetarium'
+        OnClick = BtnPlanetariumCoordClick
+      end
+      object MenuImgCoord: TMenuItem
+        Caption = 'Current image'
+        OnClick = BtnImgCoordClick
+      end
+      object MenuNoMove: TMenuItem
+        Caption = 'No move'
+        OnClick = BtnCurrentCoordClick
+      end
+    end
+    object MenuTime: TMenuItem
+      Caption = 'Time'
+      object MenuAnyTime: TMenuItem
+        Caption = 'Any time'
+        OnClick = BtnAnytimeClick
+      end
+    end
+    object MenuRotator: TMenuItem
+      Caption = 'Rotator'
+      object MenuImgRot: TMenuItem
+        Caption = 'Current image'
+        OnClick = BtnImgRotClick
+      end
+    end
+  end
+  object PopupSaveTemplate: TPopupMenu
+    Left = 280
+    Top = 469
+    object MenuApplyTemplate: TMenuItem
+      Caption = 'MenuApplyTemplate'
+      OnClick = BtnApplyTemplateClick
+    end
+    object MenuSaveTemplate: TMenuItem
+      Caption = 'MenuSaveTemplate'
+      OnClick = BtnSaveTemplateClick
+    end
+    object MenuSaveTemplateAs: TMenuItem
+      Caption = 'MenuSaveTemplateAs'
+      OnClick = BtnSaveTemplateAsClick
+    end
   end
 end

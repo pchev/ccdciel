@@ -554,13 +554,13 @@ begin
    f_EditTargets.Filename:=et.SequenceFile.Filename;
    if live then begin
      f_EditTargets.BtnSaveAs.Visible:=false;
-     f_EditTargets.BtnImportMosaic.Visible:=false;
-     f_EditTargets.BtnImportObslist.Visible:=false;
+     f_EditTargets.MenuImportMosaic.Visible:=false;
+     f_EditTargets.MenuImportObsList.Visible:=false;
    end
    else begin
      f_EditTargets.BtnSaveAs.Visible:=true;
-     f_EditTargets.BtnImportMosaic.Visible:=true;
-     f_EditTargets.BtnImportObslist.Visible:=true;
+     f_EditTargets.MenuImportMosaic.Visible:=true;
+     f_EditTargets.MenuImportObslist.Visible:=true;
    end;
    if (et.Count>0) then begin
       // Edit
@@ -576,18 +576,18 @@ begin
       f_EditTargets.SeqStopTwilight.Checked:=et.SeqStopTwilight;
       f_EditTargets.SeqStartAt.Text:=TimeToStr(et.SeqStartAt);
       f_EditTargets.SeqStopAt.Text:=TimeToStr(et.SeqStopAt);
-      f_EditTargets.ccNone.Checked:=not(et.AtStartCool or et.AtStartUnpark);
-      f_EditTargets.ccCool.Checked:=et.AtStartCool;
-      f_EditTargets.ccUnpark.Checked:=et.AtStartUnpark;
-      f_EditTargets.cbNone.Checked:=not(et.AtEndStopTracking or et.AtEndPark or et.AtEndCloseDome or et.AtEndWarmCamera or et.AtEndRunScript);
-      f_EditTargets.cbStopTracking.Checked:=et.AtEndStopTracking;
-      f_EditTargets.cbParkScope.Checked:=et.AtEndPark;
-      f_EditTargets.cbParkDome.Checked:=et.AtEndCloseDome;
-      f_EditTargets.cbWarm.Checked:=et.AtEndWarmCamera;
-      f_EditTargets.cbScript.Checked:=et.AtEndRunScript;
-      f_EditTargets.cbUnattended.Checked:=et.OnErrorRunScript;
-      f_EditTargets.BtnEndScript.Hint:=et.AtEndScript;
-      f_EditTargets.BtnUnattendedScript.Hint:=et.OnErrorScript;
+      f_EditTargets.StartOpt.Checked[ccNone]:=not(et.AtStartCool or et.AtStartUnpark);
+      f_EditTargets.StartOpt.Checked[ccCool]:=et.AtStartCool;
+      f_EditTargets.StartOpt.Checked[ccUnpark]:=et.AtStartUnpark;
+      f_EditTargets.TermOpt.Checked[cbNone]:=not(et.AtEndStopTracking or et.AtEndPark or et.AtEndCloseDome or et.AtEndWarmCamera or et.AtEndRunScript);
+      f_EditTargets.TermOpt.Checked[cbStopTracking]:=et.AtEndStopTracking;
+      f_EditTargets.TermOpt.Checked[cbParkScope]:=et.AtEndPark;
+      f_EditTargets.TermOpt.Checked[cbParkDome]:=et.AtEndCloseDome;
+      f_EditTargets.TermOpt.Checked[cbWarm]:=et.AtEndWarmCamera;
+      f_EditTargets.TermOpt.Checked[cbScript]:=et.AtEndRunScript;
+      f_EditTargets.TermOpt.Checked[cbUnattended]:=et.OnErrorRunScript;
+      f_EditTargets.EndScript:=et.AtEndScript;
+      f_EditTargets.UnattendedScript:=et.OnErrorScript;
       for i:=1 to et.Count do begin
         t:=TTarget.Create;
         t.Assign(et.Targets[i-1]);
@@ -608,16 +608,18 @@ begin
       f_EditTargets.SeqStopTwilight.Checked:=false;
       f_EditTargets.SeqStartAt.Text:='00:00:00';
       f_EditTargets.SeqStopAt.Text:='00:00:00';
-      f_EditTargets.ccNone.Checked:=false;
-      f_EditTargets.ccCool.Checked:=true;
-      f_EditTargets.ccUnpark.Checked:=true;
-      f_EditTargets.cbNone.Checked:=false;
-      f_EditTargets.cbStopTracking.Checked:=true;
-      f_EditTargets.cbParkScope.Checked:=false;
-      f_EditTargets.cbParkDome.Checked:=false;
-      f_EditTargets.cbWarm.Checked:=false;
-      f_EditTargets.cbScript.Checked:=false;
-      f_EditTargets.cbUnattended.Checked:=false;
+      f_EditTargets.StartOpt.Checked[ccNone]:=false;
+      f_EditTargets.StartOpt.Checked[ccCool]:=true;
+      f_EditTargets.StartOpt.Checked[ccUnpark]:=true;
+      f_EditTargets.TermOpt.Checked[cbNone]:=false;
+      f_EditTargets.TermOpt.Checked[cbStopTracking]:=true;
+      f_EditTargets.TermOpt.Checked[cbParkScope]:=false;
+      f_EditTargets.TermOpt.Checked[cbParkDome]:=false;
+      f_EditTargets.TermOpt.Checked[cbWarm]:=false;
+      f_EditTargets.TermOpt.Checked[cbScript]:=false;
+      f_EditTargets.TermOpt.Checked[cbUnattended]:=false;
+      f_EditTargets.EndScript:='';
+      f_EditTargets.UnattendedScript:='';
       f_EditTargets.TargetList.RowCount:=1;
     end;
     FormPos(f_EditTargets,mouse.CursorPos.X,mouse.CursorPos.Y);
@@ -644,16 +646,16 @@ begin
       et.SeqStopTwilight  := f_EditTargets.SeqStopTwilight.Checked;
       et.SeqStartAt       := StrToTimeDef(f_EditTargets.SeqStartAt.Text,et.SeqStartAt);
       et.SeqStopAt        := StrToTimeDef(f_EditTargets.SeqStopAt.Text,et.SeqStopAt);
-      et.AtStartCool      := f_EditTargets.ccCool.Checked;
-      et.AtStartUnpark    := f_EditTargets.ccUnpark.Checked;
-      et.AtEndStopTracking := f_EditTargets.cbStopTracking.Checked;
-      et.AtEndPark         := f_EditTargets.cbParkScope.Checked;
-      et.AtEndCloseDome    := f_EditTargets.cbParkDome.Checked;
-      et.AtEndWarmCamera   := f_EditTargets.cbWarm.Checked;
-      et.AtEndRunScript    := f_EditTargets.cbScript.Checked;
-      et.OnErrorRunScript  := f_EditTargets.cbUnattended.Checked;
-      et.AtEndScript       := f_EditTargets.BtnEndScript.Hint;
-      et.OnErrorScript     := f_EditTargets.BtnUnattendedScript.Hint;
+      et.AtStartCool      := f_EditTargets.StartOpt.Checked[ccCool];
+      et.AtStartUnpark    := f_EditTargets.StartOpt.Checked[ccUnpark];
+      et.AtEndStopTracking := f_EditTargets.TermOpt.Checked[cbStopTracking];
+      et.AtEndPark         := f_EditTargets.TermOpt.Checked[cbParkScope];
+      et.AtEndCloseDome    := f_EditTargets.TermOpt.Checked[cbParkDome];
+      et.AtEndWarmCamera   := f_EditTargets.TermOpt.Checked[cbWarm];
+      et.AtEndRunScript    := f_EditTargets.TermOpt.Checked[cbScript];
+      et.OnErrorRunScript  := f_EditTargets.TermOpt.Checked[cbUnattended];
+      et.AtEndScript       := f_EditTargets.EndScript;
+      et.OnErrorScript     := f_EditTargets.UnattendedScript;
     end;
 end;
 

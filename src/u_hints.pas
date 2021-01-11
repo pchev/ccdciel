@@ -70,14 +70,8 @@ resourcestring
     +'connected to a remote Indi server)';
   rsTheTemporary = 'The temporary RAM disk used to transfer the images from '
     +'the Indi server';
-  rsDoNotMoveThe = 'Do not move the telescope before to start imaging.';
-  rsGetTheCoordi = 'Get the coordinates and object name from the planetarium';
   rsUsePlateSolv = 'Use astrometric (plate) solving to improve telescope pointing accuracy';
-  rsSolveTheCurr = 'Solve the current image and get the center coordinates';
-  rsGetTheCoordi2 = 'Get the coordinates from the internal annotation database';
   rsStartAPrevie = 'Start a preview loop when waiting for the delay to expire.';
-  rsSolveTheCurr2 = 'Solve the current image and get the rotation of the image';
-  rsClearTimeCon = 'Clear time constraint';
   rsRepeatTheWho2 = 'Repeat the whole list a number of time.';
   rsInfiniteNumb = 'Infinite number of repetition';
   rsActivateTheS = 'Activate the start time';
@@ -92,10 +86,7 @@ resourcestring
     +'it was stopped';
   rsControlHowCo = 'Control how complete target are managed when the whole '
     +'list is repeated';
-  rsAddAnObjectT = 'Add an object to the list';
   rsDeleteTheSel = 'Delete the selected row from the list.';
-  rsAddAScriptTo = 'Add a script to the list.';
-  rsAddAFlatSequ = 'Add a flat sequence to the list.';
   rsTheListOfTar = 'The list of target to process in sequence.';
   rsSaveTheListA = 'Save the list and close this window.';
   rsSaveTheListW = 'Save the list with a new name and close this window.';
