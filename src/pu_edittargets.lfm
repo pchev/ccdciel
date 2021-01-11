@@ -637,7 +637,7 @@ object f_EditTargets: Tf_EditTargets
           end>
         DefaultColWidth = 30
         HeaderHotZones = [gzFixedCols, gzFixedCells]
-        Options = [goFixedVertLine, goFixedHorzLine, goVertLine, goHorzLine, goDrawFocusSelected, goColSizing, goRowMoving, goEditing, goAlwaysShowEditor, goThumbTracking, goCellHints, goCellEllipsis]
+        Options = [goFixedVertLine, goFixedHorzLine, goVertLine, goHorzLine, goDrawFocusSelected, goColSizing, goRowMoving, goEditing, goTabs, goAlwaysShowEditor, goThumbTracking, goCellHints, goCellEllipsis]
         ParentFont = False
         RowCount = 2
         ScrollBars = ssAutoVertical
@@ -819,7 +819,7 @@ object f_EditTargets: Tf_EditTargets
                 Width = 84
               end>
             DefaultColWidth = 30
-            Options = [goFixedVertLine, goFixedHorzLine, goVertLine, goHorzLine, goDrawFocusSelected, goColSizing, goRowMoving, goEditing, goAlwaysShowEditor, goThumbTracking, goCellHints, goCellEllipsis]
+            Options = [goFixedVertLine, goFixedHorzLine, goVertLine, goHorzLine, goDrawFocusSelected, goColSizing, goRowMoving, goEditing, goTabs, goAlwaysShowEditor, goThumbTracking, goCellHints, goCellEllipsis]
             ParentFont = False
             RowCount = 1
             ScrollBars = ssAutoVertical
