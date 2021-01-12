@@ -27,7 +27,7 @@ interface
 
 uses pu_planetariuminfo, u_global, u_utils, u_ccdconfig, pu_pascaleditor, u_annotation, pu_keyboard,
   pu_scriptengine, cu_astrometry, u_hints, u_translation, pu_selectscript, Classes, math, cu_targets,
-  SysUtils, FileUtil, Forms, Controls, Graphics, Dialogs, StdCtrls, UScaleDPI, cu_plan,
+  SysUtils, FileUtil, Forms, Controls, Graphics, Dialogs, StdCtrls, UScaleDPI, cu_plan, LCLType,
   LazUTF8, maskedit, Grids, ExtCtrls, ComCtrls, EditBtn, Spin, Buttons, Menus, CheckLst, Types;
 
 const
@@ -223,6 +223,7 @@ type
     procedure TargetListEditingDone(Sender: TObject);
     procedure TargetListGetCellHint(Sender: TObject; ACol, ARow: Integer; var HintText: String);
     procedure TargetListHeaderClick(Sender: TObject; IsColumn: Boolean; Index: Integer);
+    procedure TargetListKeyDown(Sender: TObject; var Key: Word; Shift: TShiftState);
     procedure TargetListMouseDown(Sender: TObject; Button: TMouseButton; Shift: TShiftState; X, Y: Integer);
     procedure TargetListSelectEditor(Sender: TObject; aCol, aRow: Integer;
       var Editor: TWinControl);
@@ -2128,6 +2129,26 @@ begin
   end;
  end;
  TargetList.EditorMode := false;
+end;
+
+procedure Tf_EditTargets.TargetListKeyDown(Sender: TObject; var Key: Word; Shift: TShiftState);
+begin
+ if (Shift = [ssCtrl]) and (key <> VK_CONTROL) then
+ begin
+   // Ctrl + key handling
+   case key of
+     VK_A: begin  // ctrl+a
+           MenuBlankRowClick(Sender);
+           TargetList.SetFocus;
+           TargetList.EditorMode:=True;
+       end;
+     VK_O: begin  // ctrl+o
+           BtnNewObjectClick(Sender);
+           TargetList.SetFocus;
+           TargetList.EditorMode:=True;
+       end;
+   end;
+ end;
 end;
 
 procedure Tf_EditTargets.TargetListMouseDown(Sender: TObject; Button: TMouseButton; Shift: TShiftState; X, Y: Integer);
