@@ -295,7 +295,6 @@ uses LazFileUtils;
 procedure Tf_EditTargets.FormCreate(Sender: TObject);
 begin
   {$ifdef lclcocoa}
-  PageControlTools.BorderSpacing.Around:=8;
   TargetList.FixedColor:=clBackground;
   StepList.FixedColor:=clBackground;
   {$endif}
