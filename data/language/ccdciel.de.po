@@ -13,8 +13,8 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2021-01-11 15:12+0000\n"
-"X-Generator: Launchpad (build fe617ea08df036edd5c842aded2b315e1c090677)\n"
+"X-Launchpad-Export-Date: 2021-01-13 16:16+0000\n"
+"X-Generator: Launchpad (build 511b4a3b6512aa3d421c5f7d74f3527e78bff26e)\n"
 
 #: u_translation.rs32bitdriver
 msgid "This driver work only in 32bit, please install the 32bit version of CCDciel."

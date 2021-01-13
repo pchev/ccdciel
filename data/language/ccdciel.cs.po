@@ -3,14 +3,14 @@ msgstr ""
 "Project-Id-Version: ccdciel\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-01-11 15:06+0000\n"
-"PO-Revision-Date: 2021-01-10 16:08+0000\n"
+"PO-Revision-Date: 2021-01-11 16:24+0000\n"
 "Last-Translator: Stanislav Holub <Unknown>\n"
 "Language-Team: Czech <cz@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2021-01-11 15:12+0000\n"
-"X-Generator: Launchpad (build fe617ea08df036edd5c842aded2b315e1c090677)\n"
+"X-Launchpad-Export-Date: 2021-01-13 16:16+0000\n"
+"X-Generator: Launchpad (build 511b4a3b6512aa3d421c5f7d74f3527e78bff26e)\n"
 "Language: cs\n"
 
 #: u_translation.rs32bitdriver
@@ -745,7 +745,7 @@ msgstr "Vymazat referenční snímek"
 
 #: u_translation.rsclearrestart
 msgid "Clear restart information on repeat"
-msgstr ""
+msgstr "Vymazat informace při resetu o opakování"
 
 #: u_translation.rsclearthecomp
 msgid "Clear the completion status?"
@@ -1498,7 +1498,7 @@ msgstr "Automatická expozice Flat snímků"
 
 #: u_translation.rsflatimagemea
 msgid "Flat image mean level"
-msgstr "Flat snímek střední úroveň"
+msgstr "Flat snímek úroveň průměru"
 
 #: u_translation.rsflatlevel
 msgid "Flat level=%s"
@@ -1883,7 +1883,7 @@ msgstr "Automatické ostření selhalo!"
 
 #: u_translation.rsinsertblankr
 msgid "Insert blank row"
-msgstr ""
+msgstr "Vložit prázdný řádek"
 
 #: u_translation.rsinsertrows
 msgid "Insert rows"
@@ -2103,7 +2103,7 @@ msgstr "Max. offset"
 
 #: u_translation.rsmean
 msgid "Mean:"
-msgstr "Průměrný:"
+msgstr "Průměr:"
 
 #: u_translation.rsmeasurement
 msgid "Measurement"
@@ -3020,7 +3020,7 @@ msgstr "Záznam"
 
 #: u_translation.rsrecordrestar
 msgid "Record restart information"
-msgstr ""
+msgstr "Zaznamenat informace o resetu"
 
 #: u_translation.rsred
 msgid "red"
@@ -3048,7 +3048,7 @@ msgstr "Odstranit všechny body přerušení"
 
 #: u_translation.rsremoverow
 msgid "Remove row"
-msgstr ""
+msgstr "Odstranit řádek"
 
 #: u_translation.rsremovestep
 msgid "Remove step"
@@ -3500,7 +3500,7 @@ msgstr "Sekvence %s  se spustí okamžitě"
 
 #: u_translation.rssequencestar2
 msgid "Sequence start / stop time"
-msgstr ""
+msgstr "Čas spuštění / zastavení sekvence"
 
 #: u_translation.rssequencestep
 msgid "Sequence steps"
@@ -3601,7 +3601,7 @@ msgstr "Nastavení teploty dokončeno"
 
 #: u_translation.rssetthemeandi
 msgid "Set the mean dithering pulse duration in seconds."
-msgstr "Nastavit střední dithering doba trvání pulsu v sekundách."
+msgstr "Nastavit průměr dithering pulsu v sekundách."
 
 #: u_translation.rssettletolera
 msgid "Settle tolerance"
