@@ -1350,6 +1350,7 @@ object f_EditTargets: Tf_EditTargets
     Beveled = True
     Constraints.MaxHeight = 4
     Constraints.MinHeight = 4
+    OnMoved = Splitter1Moved
     ResizeAnchor = akTop
   end
   object SaveDialog1: TSaveDialog

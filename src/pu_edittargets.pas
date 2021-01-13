@@ -201,6 +201,7 @@ type
     procedure SeqStopChange(Sender: TObject);
     procedure SeqStopTwilightChange(Sender: TObject);
     procedure BtnRepeatInfClick(Sender: TObject);
+    procedure Splitter1Moved(Sender: TObject);
     procedure StartOptItemClick(Sender: TObject; Index: integer);
     procedure StepListCheckboxToggled(sender: TObject; aCol, aRow: Integer; aState: TCheckboxState);
     procedure StepListColRowMoved(Sender: TObject; IsColumn: Boolean; sIndex,
@@ -238,7 +239,7 @@ type
     FTargetsRepeat,FTargetsRepeatCount: integer;
     LockStep, StepsModified, ObjectNameChange: boolean;
     Lockcb: boolean;
-    SortDirection: integer;
+    SortDirection,planheight: integer;
     FDoneWarning: boolean;
     FCoordWarning: boolean;
     FCoordWarningRow: integer;
@@ -310,6 +311,7 @@ begin
   Lockcb:=false;
   SortDirection:=-1;
   FCoordWarning:=false;
+  planheight:=-1;
   f_selectscript:=Tf_selectscript.Create(self);
   TermOpt.Checked[cbStopTracking]:=true;
   SetLang;
@@ -1002,8 +1004,14 @@ end;
 
 procedure Tf_EditTargets.FormResize(Sender: TObject);
 begin
+  if planheight<0 then planheight:=PanelPlan.Height;
   Splitter1.Width:=ClientWidth;
-  Splitter1.Top:=ClientHeight-PanelPlan.Height-PanelBtn.Height;
+  Splitter1.Top:=ClientHeight-planheight-PanelBtn.Height-Splitter1.Height;
+end;
+
+procedure Tf_EditTargets.Splitter1Moved(Sender: TObject);
+begin
+  planheight:=PanelPlan.Height
 end;
 
 procedure Tf_EditTargets.BtnSkyFlatClick(Sender: TObject);
@@ -2343,7 +2351,6 @@ procedure Tf_EditTargets.BtnRepeatInfClick(Sender: TObject);
 begin
   RepeatCountList.Value:=RepeatCountList.MaxValue;
 end;
-
 
 ///////////// Plan /////////////////
 
