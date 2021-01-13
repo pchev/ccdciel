@@ -1678,7 +1678,6 @@ begin
       T_Plan(t.plan).Steps[i].donecount:=0;
     end;
   end;
-  TargetList.EditorMode := false;
 end;
 
 procedure Tf_EditTargets.TargetListCheckboxToggled(sender: TObject; aCol,
