@@ -2056,7 +2056,9 @@ begin
   NewMessage(AscomVersion,9);
   {$endif}
   {$ifdef unix}
-  NewMessage(IndiVersion,9);
+   {$ifndef darwin}
+   NewMessage(IndiVersion,9);
+   {$endif}
   {$endif}
 
   NewMessage('CCDciel '+ccdciel_version+' Copyright (C) '+cdate+' Patrick Chevalley. This is free software, you can redistribute it under certain conditions.');
