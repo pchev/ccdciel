@@ -1919,6 +1919,7 @@ begin
    FilenameName[4]:=rsSensorTemperatu;
    FilenameName[5]:=rsDateUTSequen;
    FilenameName[6]:=rsGain;
+   FilenameName[7]:=rsFocusPositio;
    TBConnect.Hint := rsConnect;
    TBFocus.Hint := rsFocus;
    TBCapture.Hint := rsCapture;
@@ -8665,7 +8666,7 @@ procedure Tf_main.CameraSaveNewImage;
 var dt,dn: Tdatetime;
     fn,fd,buf,fileseqstr,fileseqext,blankrep: string;
     ccdtemp: double;
-    fileseqnum,i: integer;
+    fileseqnum,i,n: integer;
     UseFileSequenceNumber: boolean;
 begin
 try
@@ -8740,6 +8741,11 @@ try
                 UseFileSequenceNumber:=true;
      fnGain: if FileNameActive[i] and fits.Header.Valueof('GAIN',buf) then begin
                 fn:=fn+trim(buf)+FilenameSep;
+             end;
+     fnFocuspos: if FileNameActive[i] and (focuser.Status=devConnected) then begin
+                n:=f_focuser.FocusPosition;
+                if n>0 then
+                  fn:=fn+inttostr(n)+FilenameSep;
              end;
    end;
  end;

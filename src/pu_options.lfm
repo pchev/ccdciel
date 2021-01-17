@@ -251,7 +251,7 @@ object f_option: Tf_option
       ParentFont = False
       object FileFolderOpt: TPageControl
         Left = 0
-        Height = 335
+        Height = 368
         Top = 56
         Width = 520
         ActivePage = FileOpt
@@ -261,8 +261,8 @@ object f_option: Tf_option
         TabOrder = 0
         object FileOpt: TTabSheet
           Caption = 'File name options'
-          ClientHeight = 331
-          ClientWidth = 516
+          ClientHeight = 337
+          ClientWidth = 510
           ParentFont = False
           object BtnFileDefault: TButton
             Left = 394
@@ -276,7 +276,7 @@ object f_option: Tf_option
           end
           object FileOptions: TStringGrid
             Left = 8
-            Height = 194
+            Height = 218
             Top = 8
             Width = 372
             ColCount = 3
@@ -295,8 +295,8 @@ object f_option: Tf_option
             FixedRows = 0
             Options = [goFixedVertLine, goFixedHorzLine, goHorzLine, goRangeSelect, goRowMoving, goAlwaysShowEditor, goSmoothScroll]
             ParentFont = False
-            RowCount = 7
-            ScrollBars = ssNone
+            RowCount = 8
+            ScrollBars = ssAutoVertical
             TabOrder = 1
             OnClick = FileOrFolderOptionsClick
             OnColRowMoved = FileOrFolderOptionsColRowMoved
@@ -311,7 +311,7 @@ object f_option: Tf_option
             AnchorSideTop.Side = asrCenter
             Left = 8
             Height = 17
-            Top = 212
+            Top = 246
             Width = 61
             Caption = 'Separator'
             ParentColor = False
@@ -320,7 +320,7 @@ object f_option: Tf_option
           object FilenameSep: TComboBox
             Left = 89
             Height = 28
-            Top = 206
+            Top = 240
             Width = 79
             Constraints.MaxHeight = 28
             ItemHeight = 0
@@ -340,7 +340,7 @@ object f_option: Tf_option
             AnchorSideTop.Side = asrCenter
             Left = 388
             Height = 28
-            Top = 206
+            Top = 240
             Width = 58
             Constraints.MaxHeight = 28
             MaxValue = 5
@@ -354,7 +354,7 @@ object f_option: Tf_option
             AnchorSideTop.Side = asrCenter
             Left = 192
             Height = 21
-            Top = 210
+            Top = 244
             Width = 163
             Caption = 'Fixed sequence length'
             OnClick = UseFileSequenceWidthClick
@@ -364,7 +364,7 @@ object f_option: Tf_option
           object FilePack: TCheckBox
             Left = 8
             Height = 21
-            Top = 243
+            Top = 277
             Width = 231
             Caption = 'Compress the FITS files with fpack'
             ParentFont = False
@@ -373,7 +373,7 @@ object f_option: Tf_option
           object WantExif: TCheckBox
             Left = 8
             Height = 21
-            Top = 272
+            Top = 306
             Width = 255
             Caption = 'Add FITS keywords for DSLR EXIF tags'
             ParentFont = False
@@ -382,8 +382,8 @@ object f_option: Tf_option
         end
         object FolderOpt: TTabSheet
           Caption = 'Folder name options'
-          ClientHeight = 331
-          ClientWidth = 516
+          ClientHeight = 337
+          ClientWidth = 510
           ParentFont = False
           object BtnFolderDefault: TButton
             Left = 394
@@ -417,7 +417,7 @@ object f_option: Tf_option
             Options = [goFixedVertLine, goFixedHorzLine, goHorzLine, goRangeSelect, goRowMoving, goAlwaysShowEditor, goSmoothScroll]
             ParentFont = False
             RowCount = 8
-            ScrollBars = ssNone
+            ScrollBars = ssAutoVertical
             TabOrder = 1
             OnClick = FileOrFolderOptionsClick
             OnColRowMoved = FileOrFolderOptionsColRowMoved
@@ -470,11 +470,11 @@ object f_option: Tf_option
       end
       object Panel8: TPanel
         Left = 0
-        Height = 146
-        Top = 391
+        Height = 113
+        Top = 424
         Width = 520
         Align = alClient
-        ClientHeight = 146
+        ClientHeight = 113
         ClientWidth = 520
         ParentFont = False
         TabOrder = 2
