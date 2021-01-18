@@ -228,11 +228,35 @@ object f_devicesconnection: Tf_devicesconnection
         ParentFont = False
         OnMouseDown = DeviceMouseDown
       end
+      object LabelSwitch: TLabel
+        Tag = 10
+        Left = 101
+        Height = 17
+        Top = 23
+        Width = 25
+        Caption = 'Sw.'
+        Font.Color = clRed
+        ParentColor = False
+        ParentFont = False
+        OnMouseDown = DeviceMouseDown
+      end
+      object LabelCover: TLabel
+        Tag = 11
+        Left = 130
+        Height = 17
+        Top = 23
+        Width = 29
+        Caption = 'Cov.'
+        Font.Color = clRed
+        ParentColor = False
+        ParentFont = False
+        OnMouseDown = DeviceMouseDown
+      end
     end
   end
   object PopupMenu1: TPopupMenu
-    Left = 112
-    Top = 101
+    Left = 193
+    Top = 24
     object MenuConnectDevice: TMenuItem
       Caption = 'Connect'
       OnClick = MenuConnectDeviceClick

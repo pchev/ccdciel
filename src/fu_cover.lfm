@@ -1,0 +1,104 @@
+object f_cover: Tf_cover
+  Left = 0
+  Height = 46
+  Top = 0
+  Width = 194
+  AutoSize = True
+  ClientHeight = 46
+  ClientWidth = 194
+  ParentFont = False
+  TabOrder = 0
+  DesignLeft = -2
+  DesignTop = -2
+  object Title: TLabel
+    Left = 0
+    Height = 20
+    Top = 0
+    Width = 194
+    Align = alTop
+    Alignment = taCenter
+    AutoSize = False
+    Caption = 'Cover calibrator'
+    Color = clBtnShadow
+    DragMode = dmAutomatic
+    Font.Color = clBtnText
+    Layout = tlCenter
+    ParentColor = False
+    ParentFont = False
+    Transparent = False
+  end
+  object Panel1: TPanel
+    Left = 0
+    Height = 22
+    Top = 20
+    Width = 194
+    Align = alTop
+    AutoSize = True
+    ChildSizing.Layout = cclLeftToRightThenTopToBottom
+    ChildSizing.ControlsPerLine = 99
+    ClientHeight = 22
+    ClientWidth = 194
+    ParentFont = False
+    TabOrder = 0
+    object Panel2: TPanel
+      Left = 0
+      Height = 21
+      Top = 0
+      Width = 86
+      BevelOuter = bvNone
+      ClientHeight = 21
+      ClientWidth = 86
+      ParentFont = False
+      TabOrder = 0
+      object ledCover: TShape
+        AnchorSideTop.Control = Label1
+        AnchorSideTop.Side = asrCenter
+        Left = 72
+        Height = 14
+        Top = 5
+        Width = 14
+        Brush.Color = clRed
+        Shape = stCircle
+      end
+      object Label1: TLabel
+        Left = 8
+        Height = 17
+        Top = 4
+        Width = 37
+        Caption = 'Cover'
+        ParentColor = False
+        ParentFont = False
+      end
+    end
+    object Panel3: TPanel
+      Left = 86
+      Height = 21
+      Top = 0
+      Width = 86
+      BevelOuter = bvNone
+      ClientHeight = 21
+      ClientWidth = 86
+      ParentFont = False
+      TabOrder = 1
+      object ledCalibrator: TShape
+        AnchorSideTop.Control = Label2
+        AnchorSideTop.Side = asrCenter
+        Left = 72
+        Height = 14
+        Top = 5
+        Width = 14
+        Brush.Color = clRed
+        Shape = stCircle
+      end
+      object Label2: TLabel
+        Left = 8
+        Height = 17
+        Top = 4
+        Width = 60
+        Caption = 'Calibrator'
+        ParentColor = False
+        ParentFont = False
+      end
+    end
+  end
+end

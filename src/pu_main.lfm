@@ -397,7 +397,7 @@ object f_main: Tf_main
   end
   object MainMenu1: TMainMenu
     Images = ImageListDay
-    Left = 52
+    Left = 55
     Top = 41
     object MenuItem1: TMenuItem
       Caption = 'File'
@@ -540,6 +540,16 @@ object f_main: Tf_main
         Caption = 'MenuAscomDomeSetup'
         OnClick = MenuAscomSetupClick
       end
+      object MenuAscomSwitchSetup: TMenuItem
+        Tag = 10
+        Caption = 'MenuAscomSwitchSetup'
+        OnClick = MenuAscomSetupClick
+      end
+      object MenuAscomCoverSetup: TMenuItem
+        Tag = 11
+        Caption = 'MenuAscomCoverSetup'
+        OnClick = MenuAscomSetupClick
+      end
       object MenuAlpacaServerSetup: TMenuItem
         Caption = 'MenuAlpacaServerSetup'
         OnClick = MenuAlpacaSetupClick
@@ -582,6 +592,16 @@ object f_main: Tf_main
       object MenuAlpacaDomeSetup: TMenuItem
         Tag = 8
         Caption = 'MenuAlpacaDomeSetup'
+        OnClick = MenuAlpacaSetupClick
+      end
+      object MenuAlpacaSwitchSetup: TMenuItem
+        Tag = 10
+        Caption = 'MenuAlpacaSwitchSetup'
+        OnClick = MenuAlpacaSetupClick
+      end
+      object MenuAlpacaCoverSetup: TMenuItem
+        Tag = 11
+        Caption = 'MenuAlpacaCoverSetup'
         OnClick = MenuAlpacaSetupClick
       end
       object N2: TMenuItem
@@ -796,6 +816,13 @@ object f_main: Tf_main
         ShowAlwaysCheckable = True
         OnClick = MenuViewRotatorClick
       end
+      object MenuViewCover: TMenuItem
+        AutoCheck = True
+        Caption = 'Cover calibrator'
+        Checked = True
+        ShowAlwaysCheckable = True
+        OnClick = MenuViewCoverClick
+      end
       object MenuViewCCDtemp: TMenuItem
         AutoCheck = True
         Caption = 'CCD Temperature'
@@ -816,6 +843,13 @@ object f_main: Tf_main
         Checked = True
         ShowAlwaysCheckable = True
         OnClick = MenuViewDomeClick
+      end
+      object MenuViewSwitch: TMenuItem
+        AutoCheck = True
+        Caption = 'Switch'
+        Checked = True
+        ShowAlwaysCheckable = True
+        OnClick = MenuViewSwitchClick
       end
       object MenuViewSequence: TMenuItem
         AutoCheck = True

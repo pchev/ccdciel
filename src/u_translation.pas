@@ -1300,6 +1300,12 @@ resourcestring
   rsRecordRestar = 'Record restart information';
   rsInsertBlankR = 'Insert blank row';
   rsSequenceStar2 = 'Sequence start / stop time';
+  rsSwitch = 'Switch';
+  rsCoverCalibra = 'Cover calibrator';
+  rsUseSwitch = 'Use switch';
+  rsUseCoverCali = 'Use Cover calibrator';
+  rsCover = 'Cover';
+  rsCalibrator = 'Calibrator';
 
 implementation
 

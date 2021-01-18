@@ -35,7 +35,7 @@ uses
   BaseUnix,
   {$endif}
   fu_devicesconnection, fu_preview, fu_capture, fu_msg, fu_visu, fu_frame, fu_magnifyer,
-  fu_starprofile, fu_filterwheel, fu_focuser, fu_mount, fu_ccdtemp, fu_autoguider,
+  fu_starprofile, fu_filterwheel, fu_focuser, fu_mount, fu_ccdtemp, fu_autoguider, fu_cover, fu_switch,
   fu_sequence, fu_planetarium, fu_script, u_ccdconfig, pu_edittargets, pu_scriptengine,
   fu_video, pu_devicesetup, pu_options, pu_indigui, cu_fits, cu_camera, pu_pause, cu_tcpserver,
   pu_viewtext, cu_wheel, cu_mount, cu_focuser, XMLConf, u_utils, u_global, UScaleDPI,
@@ -48,6 +48,7 @@ uses
   cu_planetarium_cdc, cu_planetarium_samp, cu_planetarium_hnsky, pu_planetariuminfo, indiapi,
   cu_ascomrestcamera, cu_ascomrestdome, cu_ascomrestfocuser, cu_ascomrestmount, cu_manualwheel,
   cu_ascomrestrotator, cu_ascomrestsafety, cu_ascomrestweather, cu_ascomrestwheel, pu_polaralign, pu_collimation,
+  cu_switch, cu_ascomswitch, cu_ascomrestswitch, cu_indiswitch, cu_cover, cu_ascomcover, cu_ascomrestcover, cu_indicover,
   u_annotation, BGRABitmap, BGRABitmapTypes, LCLVersion, InterfaceBase, lclplatformdef,
   LazUTF8, Classes, dynlibs, LCLType, LMessages, IniFiles, IntfGraphics, FPImage, GraphType,
   SysUtils, LazFileUtils, Forms, Controls, Math, Graphics, Dialogs, u_speech,
@@ -115,6 +116,12 @@ type
     MenuImage: TMenuItem;
     MenuItem15: TMenuItem;
     MenuCollimation: TMenuItem;
+    MenuAscomSwitchSetup: TMenuItem;
+    MenuAscomCoverSetup: TMenuItem;
+    MenuAlpacaCoverSetup: TMenuItem;
+    MenuAlpacaSwitchSetup: TMenuItem;
+    MenuViewCover: TMenuItem;
+    MenuViewSwitch: TMenuItem;
     MenuSavePicture: TMenuItem;
     MenuPolarAlignment: TMenuItem;
     MenuItem18: TMenuItem;
@@ -419,6 +426,7 @@ type
     procedure MenuViewCCDtempClick(Sender: TObject);
     procedure MenuViewClockClick(Sender: TObject);
     procedure MenuViewConnectionClick(Sender: TObject);
+    procedure MenuViewCoverClick(Sender: TObject);
     procedure MenuViewDomeClick(Sender: TObject);
     procedure MenuViewFiltersClick(Sender: TObject);
     procedure MenuViewFocuserClick(Sender: TObject);
@@ -438,6 +446,7 @@ type
     procedure MenuViewScriptClick(Sender: TObject);
     procedure MenuViewSequenceClick(Sender: TObject);
     procedure MenuViewStarProfileClick(Sender: TObject);
+    procedure MenuViewSwitchClick(Sender: TObject);
     procedure MenuViewWeatherClick(Sender: TObject);
     procedure MenuVisuZoom12Click(Sender: TObject);
     procedure MenuVisuZoom1Click(Sender: TObject);
@@ -472,10 +481,12 @@ type
     watchdog: T_watchdog;
     weather: T_weather;
     safety: T_safety;
+    switch: T_switch;
+    cover: T_cover;
     autoguider:T_autoguider;
     planetarium:TPlanetarium;
     astrometry:TAstrometry;
-    WantCamera,WantWheel,WantFocuser,WantRotator, WantMount, WantDome, WantWeather, WantSafety, WantWatchdog: boolean;
+    WantCamera,WantWheel,WantFocuser,WantRotator, WantMount, WantDome, WantWeather, WantSafety, WantSwitch, WantCover, WantWatchdog: boolean;
     CameraInitialized: boolean;
     FOpenSetup: boolean;
     f_devicesconnection: Tf_devicesconnection;
@@ -495,6 +506,8 @@ type
     f_dome: Tf_dome;
     f_weather: Tf_weather;
     f_safety: Tf_safety;
+    f_cover: Tf_cover;
+    f_switch: Tf_switch;
     f_autoguider: Tf_autoguider;
     f_planetarium: Tf_planetarium;
     f_script: Tf_script;
@@ -618,6 +631,10 @@ type
     Procedure DisconnectWeather(Sender: TObject);
     Procedure ConnectSafety(Sender: TObject);
     Procedure DisconnectSafety(Sender: TObject);
+    Procedure ConnectSwitch(Sender: TObject);
+    Procedure DisconnectSwitch(Sender: TObject);
+    Procedure ConnectCover(Sender: TObject);
+    Procedure DisconnectCover(Sender: TObject);
     Procedure ConnectDome(Sender: TObject);
     Procedure DisconnectDome(Sender: TObject);
     Procedure SetFilter(Sender: TObject);
@@ -685,6 +702,10 @@ type
     Procedure WeatherClearChange(Sender: TObject);
     Procedure SafetyStatus(Sender: TObject);
     Procedure SafetySafeChange(Sender: TObject);
+    Procedure SwitchStatus(Sender: TObject);
+    Procedure SwitchChange(Sender: TObject);
+    Procedure CoverStatus(Sender: TObject);
+    Procedure CoverChange(Sender: TObject);
     Procedure AutoguiderConnectClick(Sender: TObject);
     Procedure AutoguiderCalibrateClick(Sender: TObject);
     Procedure AutoguiderGuideClick(Sender: TObject);
@@ -1475,6 +1496,8 @@ begin
   if mount<>nil then mount.Safety:=f_safety;
   if dome<>nil then dome.Safety:=f_safety;
 
+  f_cover:=Tf_cover.Create(self);
+  f_switch:=Tf_switch.Create(self);
 
   f_autoguider:=Tf_autoguider.Create(self);
   f_autoguider.onConnect:=@AutoguiderConnectClick;
@@ -1604,6 +1627,28 @@ begin
    safety.onStatusChange:=@SafetyStatus;
    safety.onSafeChange:=@SafetySafeChange;
 
+   aInt:=TDevInterface(config.GetValue('/SwitchInterface',ord(DefaultInterface)));
+   case aInt of
+     INDI:  switch:=T_indiswitch.Create(nil);
+     ASCOM: switch:=T_ascomswitch.Create(nil);
+     ASCOMREST: switch:=T_ascomrestswitch.Create(nil);
+   end;
+   switch.onMsg:=@NewMessage;
+   switch.onDeviceMsg:=@DeviceMessage;
+   switch.onStatusChange:=@SwitchStatus;
+   switch.onSwitchChange:=@SwitchChange;
+
+   aInt:=TDevInterface(config.GetValue('/CoverInterface',ord(DefaultInterface)));
+   case aInt of
+     INDI:  cover:=T_indicover.Create(nil);
+     ASCOM: cover:=T_ascomcover.Create(nil);
+     ASCOMREST: cover:=T_ascomrestcover.Create(nil);
+   end;
+   cover.onMsg:=@NewMessage;
+   cover.onDeviceMsg:=@DeviceMessage;
+   cover.onStatusChange:=@CoverStatus;
+   cover.onCoverChange:=@CoverChange;
+
    aInt:=TDevInterface(config.GetValue('/MountInterface',ord(DefaultInterface)));
    case aInt of
      INDI:  mount:=T_indimount.Create(nil);
@@ -1730,6 +1775,8 @@ begin
  watchdog.Free;
  weather.Free;
  safety.Free;
+ switch.Free;
+ cover.Free;
  except
  end;
 end;
@@ -1983,6 +2030,8 @@ begin
    if  f_weather<>nil then f_weather.SetLang;
    if  f_dome<>nil then f_dome.SetLang;
    if  f_safety<>nil then f_safety.SetLang;
+   if  f_cover<>nil then f_cover.SetLang;
+   if  f_switch<>nil then f_switch.SetLang;
    if  f_about<>nil then f_about.SetLang;
    if  f_goto<>nil then f_goto.SetLang;
    if  f_photometry<>nil then f_photometry.SetLang;
@@ -2136,6 +2185,8 @@ begin
   WantDome:=config.GetValue('/Devices/Dome',false);
   WantWeather:=config.GetValue('/Devices/Weather',false);
   WantSafety:=config.GetValue('/Devices/Safety',false);
+  WantSwitch:=config.GetValue('/Devices/Switch',false);
+  WantCover:=config.GetValue('/Devices/Cover',false);
   WantWatchdog:=(watchdog<>nil) and config.GetValue('/Devices/Watchdog',false);
 
   MenuAscomCameraSetup.Visible:=WantCamera and (camera.CameraInterface=ASCOM);
@@ -2146,6 +2197,8 @@ begin
   MenuAscomWeatherSetup.Visible:=WantWeather and (weather.WeatherInterface=ASCOM);
   MenuAscomSafetySetup.Visible:=WantSafety and (safety.SafetyInterface=ASCOM);
   MenuAscomDomeSetup.Visible:=WantDome and (dome.DomeInterface=ASCOM);
+  MenuAscomSwitchSetup.Visible:=WantSwitch and (switch.SwitchInterface=ASCOM);
+  MenuAscomCoverSetup.Visible:=WantCover and (cover.CoverInterface=ASCOM);
 
   MenuAlpacaServerSetup.Visible:=WantCamera and (camera.CameraInterface=ASCOMREST);
   MenuAlpacaCameraSetup.Visible:=WantCamera and (camera.CameraInterface=ASCOMREST);
@@ -2156,10 +2209,12 @@ begin
   MenuAlpacaWeatherSetup.Visible:=WantWeather and (weather.WeatherInterface=ASCOMREST);
   MenuAlpacaSafetySetup.Visible:=WantSafety and (safety.SafetyInterface=ASCOMREST);
   MenuAlpacaDomeSetup.Visible:=WantDome and (dome.DomeInterface=ASCOMREST);
+  MenuAlpacaSwitchSetup.Visible:=WantSwitch and (switch.SwitchInterface=ASCOMREST);
+  MenuAlpacaCoverSetup.Visible:=WantCover and (cover.CoverInterface=ASCOMREST);
 
   MenuIndiSettings.Visible:= (camera.CameraInterface=INDI)or(wheel.WheelInterface=INDI)or(focuser.FocuserInterface=INDI)or
                              (mount.MountInterface=INDI)or(rotator.RotatorInterface=INDI)or(weather.WeatherInterface=INDI)or
-                             (safety.SafetyInterface=INDI)or(dome.DomeInterface=INDI);
+                             (safety.SafetyInterface=INDI)or(dome.DomeInterface=INDI)or(switch.SwitchInterface=INDI)or(cover.CoverInterface=INDI);
 
   SetTool(f_visu,'Histogram',PanelBottom,0,MenuViewHistogram,MenuHistogram,true);
   SetTool(f_msg,'Messages',PanelBottom,f_visu.left+1,MenuViewMessages,nil,true);
@@ -2172,6 +2227,8 @@ begin
   SetTool(f_dome,'Dome',PanelRight1,f_script.top+1,MenuViewDome,nil,WantDome);
   SetTool(f_weather,'Weather',PanelRight1,f_dome.top+1,MenuViewWeather,nil,WantWeather);
   SetTool(f_safety,'Safety',PanelRight1,f_weather.top+1,MenuViewSafety,nil,WantSafety);
+  SetTool(f_cover,'Cover',PanelRight1,f_safety.top+1,MenuViewCover,nil,WantCover);
+  SetTool(f_switch,'Switch',PanelRight1,f_cover.top+1,MenuViewSwitch,nil,WantSwitch);
 
   SetTool(f_focuser,'Focuser',PanelRight2,0,MenuViewFocuser,MenuFocuser,WantFocuser);
   SetTool(f_starprofile,'Starprofile',PanelRight2,f_focuser.top+1,MenuViewStarProfile,MenuStarProfile,true);
@@ -2263,6 +2320,8 @@ begin
    if f_dome<>nil then f_dome.Title.Color:=clBtnShadow;
    if f_weather<>nil then f_weather.Title.Color:=clBtnShadow;
    if f_safety<>nil then f_safety.Title.Color:=clBtnShadow;
+   if f_cover<>nil then f_cover.Title.Color:=clBtnShadow;
+   if f_switch<>nil then f_switch.Title.Color:=clBtnShadow;
    if f_autoguider<>nil then f_autoguider.Title.Color:=clBtnShadow;
    if f_planetarium<>nil then f_planetarium.Title.Color:=clBtnShadow;
    if f_script<>nil then f_script.Title.Color:=clBtnShadow;
@@ -2445,6 +2504,8 @@ if sender is TMenuItem then begin
     SetTool(f_dome,'',PanelRight1,f_script.top+1,MenuViewDome,nil,WantDome);
     SetTool(f_weather,'',PanelRight1,f_dome.top+1,MenuViewWeather,nil,WantWeather);
     SetTool(f_safety,'',PanelRight1,f_weather.top+1,MenuViewSafety,nil,WantSafety);
+    SetTool(f_cover,'',PanelRight1,f_safety.top+1,MenuViewCover,nil,WantCover);
+    SetTool(f_switch,'',PanelRight1,f_cover.top+1,MenuViewSwitch,nil,WantSwitch);
 
     SetTool(f_focuser,'',PanelRight2,0,MenuViewFocuser,MenuFocuser,WantFocuser);
     SetTool(f_starprofile,'',PanelRight2,f_focuser.top+1,MenuViewStarProfile,MenuStarProfile,true);
@@ -2480,6 +2541,8 @@ if sender is TMenuItem then begin
    SetTool(f_weather,'',PanelRight1,f_preview.top+1,MenuViewWeather,nil,WantWeather);
    SetTool(f_safety,'',PanelRight1,f_weather.top+1,MenuViewSafety,nil,WantSafety);
    SetTool(f_dome,'',PanelRight1,f_safety.top+1,MenuViewDome,nil,WantDome);
+   SetTool(f_cover,'',PanelRight1,f_dome.top+1,MenuViewCover,nil,WantCover);
+   SetTool(f_switch,'',PanelRight1,f_cover.top+1,MenuViewSwitch,nil,WantSwitch);
 
    SetTool(f_starprofile,'',PanelRight2,0,MenuViewStarProfile,MenuStarProfile,true);
    SetTool(f_magnifyer,'',PanelRight2,f_starprofile.top+1,MenuViewMagnifyer,nil,true);
@@ -3306,6 +3369,10 @@ if config.GetValue('/INDIcamera/Server','')='' then begin
    config.SetValue('/INDIweather/ServerPort',defaultindiport);
    config.SetValue('/INDIsafety/Server',defautindiserver);
    config.SetValue('/INDIsafety/ServerPort',defaultindiport);
+   config.SetValue('/INDIswitch/Server',defautindiserver);
+   config.SetValue('/INDIswitch/ServerPort',defaultindiport);
+   config.SetValue('/INDIcover/Server',defautindiserver);
+   config.SetValue('/INDIcover/ServerPort',defaultindiport);
 end;
 case camera.CameraInterface of
    INDI : CameraName:=config.GetValue('/INDIcamera/Device','');
@@ -3354,6 +3421,16 @@ case safety.SafetyInterface of
    ASCOM: SafetyName:=config.GetValue('/ASCOMsafety/Device','');
    ASCOMREST: SafetyName:='SafetyMonitor/'+IntToStr(config.GetValue('/ASCOMRestsafety/Device',0));
 end;
+case switch.SwitchInterface of
+   INDI : SwitchName:=config.GetValue('/INDIswitch/Device','');
+   ASCOM: SwitchName:=config.GetValue('/ASCOMswitch/Device','');
+   ASCOMREST: SwitchName:='Switch/'+IntToStr(config.GetValue('/ASCOMRestswitch/Device',0));
+end;
+case cover.CoverInterface of
+   INDI : CoverName:=config.GetValue('/INDIcover/Device','');
+   ASCOM: CoverName:=config.GetValue('/ASCOMcover/Device','');
+   ASCOMREST: CoverName:='CoverCalibrator/'+IntToStr(config.GetValue('/ASCOMRestcover/Device',0));
+end;
 DeviceTimeout:=config.GetValue('/Devices/Timeout',100);
 camera.Timeout:=DeviceTimeout;
 focuser.Timeout:=DeviceTimeout;
@@ -3363,6 +3440,8 @@ mount.Timeout:=DeviceTimeout;
 dome.Timeout:=DeviceTimeout;
 weather.Timeout:=DeviceTimeout;
 safety.Timeout:=DeviceTimeout;
+switch.Timeout:=DeviceTimeout;
+cover.Timeout:=DeviceTimeout;
 wheel.AutoLoadConfig:=config.GetValue('/INDIwheel/AutoLoadConfig',false);
 focuser.AutoLoadConfig:=config.GetValue('/INDIfocuser/AutoLoadConfig',false);
 rotator.AutoLoadConfig:=config.GetValue('/INDIrotator/AutoLoadConfig',false);
@@ -3385,6 +3464,8 @@ if wheel.WheelInterface=MANUAL then begin
 end;
 weather.AutoLoadConfig:=config.GetValue('/INDIweather/AutoLoadConfig',false);
 safety.AutoLoadConfig:=config.GetValue('/INDIsafety/AutoLoadConfig',false);
+switch.AutoLoadConfig:=config.GetValue('/INDIswitch/AutoLoadConfig',false);
+cover.AutoLoadConfig:=config.GetValue('/INDIcover/AutoLoadConfig',false);
 if watchdog<>nil then begin
   watchdog.Timeout:=DeviceTimeout;
   WatchdogName:=config.GetValue('/INDIwatchdog/Device','');
@@ -3875,6 +3956,16 @@ begin
  screenconfig.SetValue('/Tools/Dome/Top',f_dome.Top);
  screenconfig.SetValue('/Tools/Dome/Left',f_dome.Left);
 
+ screenconfig.SetValue('/Tools/Cover/Parent',f_cover.Parent.Name);
+ screenconfig.SetValue('/Tools/Cover/Visible',f_cover.Visible or (not WantCover));
+ screenconfig.SetValue('/Tools/Cover/Top',f_cover.Top);
+ screenconfig.SetValue('/Tools/Cover/Left',f_cover.Left);
+
+ screenconfig.SetValue('/Tools/Switch/Parent',f_switch.Parent.Name);
+ screenconfig.SetValue('/Tools/Switch/Visible',f_switch.Visible or (not WantSwitch));
+ screenconfig.SetValue('/Tools/Switch/Top',f_switch.Top);
+ screenconfig.SetValue('/Tools/Switch/Left',f_switch.Left);
+
  screenconfig.SetValue('/Tools/Clock/Visible',MenuViewClock.Checked);
 
  screenconfig.SetValue('/Window/Top',Top);
@@ -4051,6 +4142,18 @@ begin
     MenuSetup.Click;
     exit;
   end;
+  if WantSwitch and (SwitchName='') then begin
+    f_devicesconnection.BtnConnect.Caption:=rsConnect;
+    ShowMessage(rsPleaseConfig+blank+rsSwitch);
+    MenuSetup.Click;
+    exit;
+  end;
+  if WantCover and (CoverName='') then begin
+    f_devicesconnection.BtnConnect.Caption:=rsConnect;
+    ShowMessage(rsPleaseConfig+blank+rsCoverCalibra);
+    MenuSetup.Click;
+    exit;
+  end;
 
   f_devicesconnection.LabelCamera.Visible:=WantCamera;
   f_devicesconnection.LabelWheel.Visible:=WantWheel;
@@ -4060,6 +4163,8 @@ begin
   f_devicesconnection.LabelDome.Visible:=WantDome;
   f_devicesconnection.LabelWeather.Visible:=WantWeather;
   f_devicesconnection.LabelSafety.Visible:=WantSafety;
+  f_devicesconnection.LabelSwitch.Visible:=WantSwitch;
+  f_devicesconnection.LabelCover.Visible:=WantCover;
   f_devicesconnection.LabelWatchdog.Visible:=WantWatchdog;
   f_devicesconnection.PanelDev.Visible:=true;
 
@@ -4078,6 +4183,10 @@ begin
   if WantWeather then ConnectWeather(Sender);
   Application.ProcessMessages;
   if WantSafety  then ConnectSafety(Sender);
+  Application.ProcessMessages;
+  if WantSwitch  then ConnectSwitch(Sender);
+  Application.ProcessMessages;
+  if WantCover  then ConnectCover(Sender);
   Application.ProcessMessages;
   if WantWatchdog then ConnectWatchdog(Sender);
   if f_autoguider.BtnConnect.Caption=rsConnect then AutoguiderConnectClick(Sender);
@@ -4101,6 +4210,8 @@ begin
      DisconnectDome(Sender);
      DisconnectWeather(Sender);
      DisconnectSafety(Sender);
+     DisconnectSwitch(Sender);
+     DisconnectCover(Sender);
      DisconnectWatchdog(Sender);
    end;
 end;
@@ -4117,6 +4228,8 @@ begin
      7:  if WantWatchdog then ConnectWatchdog(nil);
      8:  if WantWeather then ConnectWeather(nil);
      9:  if WantSafety  then ConnectSafety(nil);
+     10: if WantSwitch  then ConnectSwitch(nil);
+     11: if WantCover   then ConnectCover(nil);
   end;
 end;
 
@@ -4132,6 +4245,8 @@ begin
     7:  DisconnectWatchdog(nil);
     8:  DisconnectWeather(nil);
     9:  DisconnectSafety(nil);
+    10: DisconnectSwitch(nil);
+    11: DisconnectCover(nil);
  end;
 end;
 
@@ -4218,7 +4333,7 @@ allcount:=0; upcount:=0; downcount:=0; concount:=0;
     devConnecting: inc(concount);
   end;
  end;
-  if WantWeather then begin
+ if WantWeather then begin
   inc(allcount);
   case weather.Status of
     devConnected: inc(upcount);
@@ -4226,14 +4341,30 @@ allcount:=0; upcount:=0; downcount:=0; concount:=0;
     devConnecting: inc(concount);
   end;
  end;
-  if WantSafety then begin
+ if WantSafety then begin
    inc(allcount);
    case safety.Status of
      devConnected: inc(upcount);
      devDisconnected: inc(downcount);
      devConnecting: inc(concount);
    end;
-  end;
+ end;
+ if WantSwitch then begin
+   inc(allcount);
+   case switch.Status of
+     devConnected: inc(upcount);
+     devDisconnected: inc(downcount);
+     devConnecting: inc(concount);
+   end;
+ end;
+ if WantCover then begin
+   inc(allcount);
+   case cover.Status of
+     devConnected: inc(upcount);
+     devDisconnected: inc(downcount);
+     devConnecting: inc(concount);
+   end;
+ end;
  if allcount=0 then SetDisconnected
  else if (upcount=allcount) then begin
    SetConnected;
@@ -5050,6 +5181,108 @@ begin
      end;
     end;
   end;
+end;
+
+Procedure Tf_main.ConnectSwitch(Sender: TObject);
+begin
+  case switch.SwitchInterface of
+    INDI : switch.Connect(config.GetValue('/INDIswitch/Server',''),
+                          config.GetValue('/INDIswitch/ServerPort',''),
+                          config.GetValue('/INDIswitch/Device',''),
+                          '');
+    ASCOM: switch.Connect(config.GetValue('/ASCOMswitch/Device',''));
+    ASCOMREST: switch.Connect(config.GetValue('/ASCOMRestswitch/Host',''),
+                          IntToStr(config.GetValue('/ASCOMRestswitch/Port',0)),
+                          ProtocolName[config.GetValue('/ASCOMRestswitch/Protocol',0)],
+                          'switch/'+IntToStr(config.GetValue('/ASCOMRestswitch/Device',0)),
+                          DecryptStr(hextostr(credentialconfig.GetValue('/ASCOMRestswitch/User','')), encryptpwd),
+                          DecryptStr(hextostr(credentialconfig.GetValue('/ASCOMRestswitch/Pass','')), encryptpwd));
+  end;
+end;
+
+Procedure Tf_main.DisconnectSwitch(Sender: TObject);
+begin
+ if switch.Status<>devDisconnected then switch.Disconnect;
+end;
+
+Procedure Tf_main.SwitchStatus(Sender: TObject);
+begin
+case switch.Status of
+  devDisconnected:begin
+                      f_devicesconnection.LabelSwitch.Font.Color:=clRed;
+                      f_switch.Connected:=false;
+                  end;
+  devConnecting:  begin
+                      NewMessage(Format(rsConnecting, [rsSwitch+' '+DevInterfaceName[ord(switch.SwitchInterface)]+' "'+switch.DeviceName+'" '+ellipsis]), 2);
+                      f_devicesconnection.LabelSwitch.Font.Color:=clOrange;
+                   end;
+  devConnected:   begin
+                      if f_devicesconnection.LabelSwitch.Font.Color=clGreen then exit;
+                      f_devicesconnection.LabelSwitch.Font.Color:=clGreen;
+                      f_switch.Connected:=true;
+                      NewMessage(Format(rsConnected, [rsSwitch]),1);
+                   end;
+end;
+SwitchChange(Sender);
+CheckConnectionStatus;
+end;
+
+Procedure Tf_main.SwitchChange(Sender: TObject);
+begin
+ if f_switch.Connected then begin
+   f_switch.NumSwitch:=switch.NumSwitch;
+   f_switch.Switch:=switch.Switch;
+ end;
+end;
+
+Procedure Tf_main.ConnectCover(Sender: TObject);
+begin
+  case cover.CoverInterface of
+    INDI : cover.Connect(config.GetValue('/INDIcover/Server',''),
+                          config.GetValue('/INDIcover/ServerPort',''),
+                          config.GetValue('/INDIcover/Device',''),
+                          '');
+    ASCOM: cover.Connect(config.GetValue('/ASCOMcover/Device',''));
+    ASCOMREST: cover.Connect(config.GetValue('/ASCOMRestcover/Host',''),
+                          IntToStr(config.GetValue('/ASCOMRestcover/Port',0)),
+                          ProtocolName[config.GetValue('/ASCOMRestcover/Protocol',0)],
+                          'covercalibrator/'+IntToStr(config.GetValue('/ASCOMRestcover/Device',0)),
+                          DecryptStr(hextostr(credentialconfig.GetValue('/ASCOMRestcover/User','')), encryptpwd),
+                          DecryptStr(hextostr(credentialconfig.GetValue('/ASCOMRestcover/Pass','')), encryptpwd));
+  end;
+end;
+
+Procedure Tf_main.DisconnectCover(Sender: TObject);
+begin
+ if cover.Status<>devDisconnected then cover.Disconnect;
+end;
+
+Procedure Tf_main.CoverStatus(Sender: TObject);
+begin
+case cover.Status of
+  devDisconnected:begin
+                      f_devicesconnection.LabelCover.Font.Color:=clRed;
+                      f_cover.Connected:=false;
+                  end;
+  devConnecting:  begin
+                      NewMessage(Format(rsConnecting, [rsCoverCalibra+' '+DevInterfaceName[ord(cover.CoverInterface)]+' "'+cover.DeviceName+'" '+ellipsis]), 2);
+                      f_devicesconnection.LabelCover.Font.Color:=clOrange;
+                   end;
+  devConnected:   begin
+                      if f_devicesconnection.LabelCover.Font.Color=clGreen then exit;
+                      f_devicesconnection.LabelCover.Font.Color:=clGreen;
+                      f_cover.Connected:=true;
+                      NewMessage(Format(rsConnected, [rsCoverCalibra]),1);
+                   end;
+end;
+CoverChange(Sender);
+CheckConnectionStatus;
+end;
+
+Procedure Tf_main.CoverChange(Sender: TObject);
+begin
+  f_cover.Cover:=cover.CoverState;
+  f_cover.Calibrator:=cover.CalibratorState;
 end;
 
 procedure Tf_main.TabMsgLevelChange(Sender: TObject);
@@ -6485,6 +6718,8 @@ begin
   f_setup.DefaultRotatorInterface:=rotator.RotatorInterface;
   f_setup.DefaultWeatherInterface:=weather.WeatherInterface;
   f_setup.DefaultSafetyInterface:=safety.SafetyInterface;
+  f_setup.DefaultSwitchInterface:=switch.SwitchInterface;
+  f_setup.DefaultCoverInterface:=cover.CoverInterface;
   f_setup.profile:=profile;
   f_setup.LoadProfileList;
   f_setup.Loadconfig(config,credentialconfig);
@@ -6534,6 +6769,8 @@ begin
     config.SetValue('/Devices/Watchdog',f_setup.DeviceWatchdog.Checked);
     config.SetValue('/Devices/Weather',f_setup.DeviceWeather.Checked);
     config.SetValue('/Devices/Safety',f_setup.DeviceSafety.Checked);
+    config.SetValue('/Devices/Switch',f_setup.DeviceSwitch.Checked);
+    config.SetValue('/Devices/Cover',f_setup.DeviceCover.Checked);
 
     config.SetValue('/CameraInterface',ord(f_setup.CameraConnection));
     config.SetValue('/INDIcamera/Server',f_setup.CameraIndiServer.Text);
@@ -6647,6 +6884,28 @@ begin
     config.SetValue('/ASCOMRestsafety/Port',f_setup.SafetyARestPort.Value);
     config.SetValue('/ASCOMRestsafety/Device',f_setup.SafetyARestDevice.Value);
 
+    config.SetValue('/SwitchInterface',ord(f_setup.SwitchConnection));
+    config.SetValue('/INDIswitch/Server',f_setup.SwitchIndiServer.Text);
+    config.SetValue('/INDIswitch/ServerPort',f_setup.SwitchIndiPort.Text);
+    if f_setup.SwitchIndiDevice.Text<>'' then config.SetValue('/INDIswitch/Device',f_setup.SwitchIndiDevice.Text);
+    config.SetValue('/INDIswitch/AutoLoadConfig',f_setup.SwitchAutoLoadConfig.Checked);
+    config.SetValue('/ASCOMswitch/Device',f_setup.AscomSwitch.Text);
+    config.SetValue('/ASCOMRestswitch/Protocol',f_setup.SwitchARestProtocol.ItemIndex);
+    config.SetValue('/ASCOMRestswitch/Host',f_setup.SwitchARestHost.Text);
+    config.SetValue('/ASCOMRestswitch/Port',f_setup.SwitchARestPort.Value);
+    config.SetValue('/ASCOMRestswitch/Device',f_setup.SwitchARestDevice.Value);
+
+    config.SetValue('/CoverInterface',ord(f_setup.CoverConnection));
+    config.SetValue('/INDIcover/Server',f_setup.CoverIndiServer.Text);
+    config.SetValue('/INDIcover/ServerPort',f_setup.CoverIndiPort.Text);
+    if f_setup.CoverIndiDevice.Text<>'' then config.SetValue('/INDIcover/Device',f_setup.CoverIndiDevice.Text);
+    config.SetValue('/INDIcover/AutoLoadConfig',f_setup.CoverAutoLoadConfig.Checked);
+    config.SetValue('/ASCOMcover/Device',f_setup.AscomCover.Text);
+    config.SetValue('/ASCOMRestcover/Protocol',f_setup.CoverARestProtocol.ItemIndex);
+    config.SetValue('/ASCOMRestcover/Host',f_setup.CoverARestHost.Text);
+    config.SetValue('/ASCOMRestcover/Port',f_setup.CoverARestPort.Value);
+    config.SetValue('/ASCOMRestcover/Device',f_setup.CoverARestDevice.Value);
+
     credentialconfig.Filename:=config.Filename+'.credential';
     credentialconfig.SetValue('/ASCOMRestcamera/User',strtohex(encryptStr(f_setup.CameraARestUser.Text, encryptpwd)));
     credentialconfig.SetValue('/ASCOMRestwheel/User',strtohex(encryptStr(f_setup.WheelARestUser.Text, encryptpwd)));
@@ -6656,6 +6915,8 @@ begin
     credentialconfig.SetValue('/ASCOMRestdome/User',strtohex(encryptStr(f_setup.DomeARestUser.Text, encryptpwd)));
     credentialconfig.SetValue('/ASCOMRestweather/User',strtohex(encryptStr(f_setup.WeatherARestUser.Text, encryptpwd)));
     credentialconfig.SetValue('/ASCOMRestsafety/User',strtohex(encryptStr(f_setup.SafetyARestUser.Text, encryptpwd)));
+    credentialconfig.SetValue('/ASCOMRestswitch/User',strtohex(encryptStr(f_setup.SwitchARestUser.Text, encryptpwd)));
+    credentialconfig.SetValue('/ASCOMRestcover/User',strtohex(encryptStr(f_setup.CoverARestUser.Text, encryptpwd)));
     credentialconfig.SetValue('/ASCOMRestcamera/Pass',strtohex(encryptStr(f_setup.CameraARestPass.Text, encryptpwd)));
     credentialconfig.SetValue('/ASCOMRestwheel/Pass',strtohex(encryptStr(f_setup.WheelARestPass.Text, encryptpwd)));
     credentialconfig.SetValue('/ASCOMRestfocuser/Pass',strtohex(encryptStr(f_setup.FocuserARestPass.Text, encryptpwd)));
@@ -6664,6 +6925,8 @@ begin
     credentialconfig.SetValue('/ASCOMRestdome/Pass',strtohex(encryptStr(f_setup.DomeARestPass.Text, encryptpwd)));
     credentialconfig.SetValue('/ASCOMRestweather/Pass',strtohex(encryptStr(f_setup.WeatherARestPass.Text, encryptpwd)));
     credentialconfig.SetValue('/ASCOMRestsafety/Pass',strtohex(encryptStr(f_setup.SafetyARestPass.Text, encryptpwd)));
+    credentialconfig.SetValue('/ASCOMRestswitch/Pass',strtohex(encryptStr(f_setup.SwitchARestPass.Text, encryptpwd)));
+    credentialconfig.SetValue('/ASCOMRestcover/Pass',strtohex(encryptStr(f_setup.CoverARestPass.Text, encryptpwd)));
 
     DestroyDevices;
     CreateDevices;
@@ -7589,6 +7852,16 @@ end;
 procedure Tf_main.MenuViewSafetyClick(Sender: TObject);
 begin
   f_safety.Visible:=MenuViewSafety.Checked;
+end;
+
+procedure Tf_main.MenuViewCoverClick(Sender: TObject);
+begin
+  f_cover.Visible:=MenuViewCover.Checked;
+end;
+
+procedure Tf_main.MenuViewSwitchClick(Sender: TObject);
+begin
+  f_switch.Visible:=MenuViewSwitch.Checked;
 end;
 
 procedure Tf_main.MenuViewPlanetariumClick(Sender: TObject);
@@ -9356,6 +9629,8 @@ begin
     6 : begin dev:=widestring(config.GetValue('/ASCOMweather/Device',''));IsConnected:=(weather<>nil)and(weather.Status<>devDisconnected); end;
     7 : begin dev:=widestring(config.GetValue('/ASCOMsafety/Device',''));IsConnected:=(safety<>nil)and(safety.Status<>devDisconnected); end;
     8 : begin dev:=widestring(config.GetValue('/ASCOMdome/Device',''));IsConnected:=(dome<>nil)and(dome.Status<>devDisconnected); end;
+    10: begin dev:=widestring(config.GetValue('/ASCOMswitch/Device',''));IsConnected:=(switch<>nil)and(switch.Status<>devDisconnected); end;
+    11: begin dev:=widestring(config.GetValue('/ASCOMcover/Device',''));IsConnected:=(cover<>nil)and(cover.Status<>devDisconnected); end;
     else begin dev:=''; IsConnected:=false; end;
   end;
   if dev='' then exit;
@@ -9371,6 +9646,8 @@ begin
         6 : DisConnectWeather(nil);
         7 : DisConnectSafety(nil);
         8 : DisConnectDome(nil);
+        10: DisConnectSwitch(nil);
+        11: DisConnectCover(nil);
       end;
     end
     else begin
@@ -9399,6 +9676,8 @@ begin
       6 : ConnectWeather(nil);
       7 : ConnectSafety(nil);
       8 : ConnectDome(nil);
+      10: ConnectSwitch(nil);
+      11: ConnectCover(nil);
     end;
   end;
 {$endif}
@@ -9420,6 +9699,8 @@ case n of
   6 : begin devt:='ASCOMRestweather'; dev:='observingconditions'; end;
   7 : begin devt:='ASCOMRestsafety'; dev:='safetymonitor'; end;
   8 : begin devt:='ASCOMRestdome'; dev:='dome'; end;
+  10: begin devt:='ASCOMRestswitch'; dev:='switch'; end;
+  11: begin devt:='ASCOMRestcover'; dev:='covercalibrator'; end;
   else begin dev:=''; end;
 end;
 if dev='' then exit;

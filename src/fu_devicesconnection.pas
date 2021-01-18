@@ -37,6 +37,8 @@ type
     BtnProfile: TButton;
     LabelDome: TLabel;
     LabelSafety: TLabel;
+    LabelSwitch: TLabel;
+    LabelCover: TLabel;
     LabelWeather: TLabel;
     LabelWatchdog: TLabel;
     LabelRotator: TLabel;
@@ -146,6 +148,8 @@ begin
       7:  txt:=rsWatchdog;
       8:  txt:=rsWeatherStati;
       9:  txt:=rsSafetyMonito;
+      10: txt:=rsSwitch;
+      11: txt:=rsCoverCalibra;
    end;
    MenuConnectDevice.Caption:=rsConnect+': '+txt;
    MenuDisconnectDevice.Caption:=rsDisconnect+': '+txt;

@@ -316,7 +316,7 @@ var
   onMsgGlobal: TNotifyMsg;
   Appdir,ConfigDir,LogDir,TmpDir,DataDir,HomeDir: UTF8String;
   defCapturePath: string;
-  CameraName,WheelName,FocuserName,RotatorName,MountName,DomeName,WatchdogName,WeatherName,SafetyName: string;
+  CameraName,WheelName,FocuserName,RotatorName,MountName,DomeName,WatchdogName,WeatherName,SafetyName,SwitchName,CoverName: string;
   ConfigDarkFile,cdate: string;
   isAdmin, debug_msg: boolean;
   AllDevicesConnected: boolean;

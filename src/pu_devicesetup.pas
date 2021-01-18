@@ -38,6 +38,8 @@ type
   { Tf_setup }
 
   Tf_setup = class(TForm)
+    AlpacaSwitchList: TComboBox;
+    AlpacaCoverList: TComboBox;
     AlpacaWheelList: TComboBox;
     AlpacaFocuserList: TComboBox;
     AlpacaRotatorList: TComboBox;
@@ -45,7 +47,15 @@ type
     AlpacaDomeList: TComboBox;
     AlpacaWeatherList: TComboBox;
     AlpacaSafetyList: TComboBox;
+    AscomSwitch: TEdit;
+    AscomCover: TEdit;
+    BtnAboutSwitch: TButton;
+    BtnAboutCover: TButton;
+    BtnChooseSwitch: TButton;
+    BtnChooseCover: TButton;
     BtnDiscover: TButton;
+    BtnSetupSwitch: TButton;
+    BtnSetupCover: TButton;
     ButtonHelp: TButton;
     CameraARestPass: TEdit;
     AlpacaServers: TComboBox;
@@ -53,15 +63,41 @@ type
     AlpacaDiscoveryPort: TSpinEdit;
     CameraDateObs: TCheckBox;
     CameraDateObs1: TCheckBox;
+    DeviceSwitch: TCheckBox;
+    DeviceCover: TCheckBox;
     FixPixelRange: TCheckBox;
     FixPixelRange1: TCheckBox;
     FocuserExternalTemperature: TCheckBox;
     DefaultARestPass: TEdit;
     DefaultARestUser: TEdit;
+    GetIndi10: TButton;
+    GetIndi9: TButton;
     Label107: TLabel;
     Label108: TLabel;
+    Label109: TLabel;
+    Label110: TLabel;
+    Label111: TLabel;
+    Label112: TLabel;
+    Label113: TLabel;
+    Label114: TLabel;
+    Label115: TLabel;
+    Label116: TLabel;
+    Label117: TLabel;
+    Label118: TLabel;
+    Label119: TLabel;
+    Label120: TLabel;
+    Label121: TLabel;
+    Label122: TLabel;
+    Label123: TLabel;
+    Label124: TLabel;
+    Label125: TLabel;
+    Label126: TLabel;
     Label26: TLabel;
+    Label27: TLabel;
+    Label28: TLabel;
     Label8: TLabel;
+    PageControlSwitch: TPageControl;
+    PageControlCover: TPageControl;
     Panel20: TPanel;
     Panel21: TPanel;
     Panel22: TPanel;
@@ -76,7 +112,47 @@ type
     Panel31: TPanel;
     Panel32: TPanel;
     ManualFilterName: TStringGrid;
+    Panel33: TPanel;
+    Panel34: TPanel;
+    Panel35: TPanel;
+    Panel36: TPanel;
+    Panel37: TPanel;
+    Panel38: TPanel;
     PanelLeft: TPanel;
+    PanelSwitchAscom: TPanel;
+    PanelCoverAscom: TPanel;
+    PanelSwitchIndi: TPanel;
+    PanelCoverIndi: TPanel;
+    SwitchARestDevice: TSpinEdit;
+    CoverARestDevice: TSpinEdit;
+    SwitchARestHost: TEdit;
+    CoverARestHost: TEdit;
+    SwitchARestPass: TEdit;
+    CoverARestPass: TEdit;
+    SwitchARestPort: TSpinEdit;
+    CoverARestPort: TSpinEdit;
+    SwitchARestProtocol: TComboBox;
+    CoverARestProtocol: TComboBox;
+    SwitchARestUser: TEdit;
+    CoverARestUser: TEdit;
+    SwitchAscom: TTabSheet;
+    CoverAscom: TTabSheet;
+    SwitchAscomRest: TTabSheet;
+    CoverAscomRest: TTabSheet;
+    SwitchAutoLoadConfig: TCheckBox;
+    CoverAutoLoadConfig: TCheckBox;
+    SwitchIndi: TTabSheet;
+    CoverIndi: TTabSheet;
+    SwitchIndiDevice: TComboBox;
+    CoverIndiDevice: TComboBox;
+    SwitchIndiPort: TEdit;
+    CoverIndiPort: TEdit;
+    SwitchIndiServer: TEdit;
+    CoverIndiServer: TEdit;
+    SwitchMsg: TLabel;
+    CoverMsg: TLabel;
+    Switch: TTabSheet;
+    Cover: TTabSheet;
     WheelMslot: TSpinEdit;
     WheelManual: TTabSheet;
     WheelARestPass: TEdit;
@@ -431,12 +507,14 @@ type
     Camera: TTabSheet;
     Filterwheel: TTabSheet;
     procedure AlpacaCameraListChange(Sender: TObject);
+    procedure AlpacaCoverListChange(Sender: TObject);
     procedure AlpacaDomeListChange(Sender: TObject);
     procedure AlpacaFocuserListChange(Sender: TObject);
     procedure AlpacaMountListChange(Sender: TObject);
     procedure AlpacaRotatorListChange(Sender: TObject);
     procedure AlpacaSafetyListChange(Sender: TObject);
     procedure AlpacaServersChange(Sender: TObject);
+    procedure AlpacaSwitchListChange(Sender: TObject);
     procedure AlpacaWeatherListChange(Sender: TObject);
     procedure AlpacaWheelListChange(Sender: TObject);
     procedure ApplyIndiClick(Sender: TObject);
@@ -451,6 +529,7 @@ type
     procedure ButtonHelpClick(Sender: TObject);
     procedure CameraARestProtocolChange(Sender: TObject);
     procedure CameraIndiTransfertClick(Sender: TObject);
+    procedure CoverARestProtocolChange(Sender: TObject);
     procedure DefaultARestProtocolChange(Sender: TObject);
     procedure DomeARestProtocolChange(Sender: TObject);
     procedure FocuserARestProtocolChange(Sender: TObject);
@@ -465,11 +544,13 @@ type
     procedure MountSetObservatoryClick(Sender: TObject);
     procedure Pagecontrol1Change(Sender: TObject);
     procedure PageControlCameraChange(Sender: TObject);
+    procedure PageControlCoverChange(Sender: TObject);
     procedure PageControlDomeChange(Sender: TObject);
     procedure PageControlFocuserChange(Sender: TObject);
     procedure PageControlMountChange(Sender: TObject);
     procedure PageControlRotatorChange(Sender: TObject);
     procedure PageControlSafetyChange(Sender: TObject);
+    procedure PageControlSwitchChange(Sender: TObject);
     procedure PageControlWatchdogChange(Sender: TObject);
     procedure PageControlWeatherChange(Sender: TObject);
     procedure PageControlWheelChange(Sender: TObject);
@@ -478,15 +559,18 @@ type
     procedure AscomWeatherTypeClick(Sender: TObject);
     procedure RotatorARestProtocolChange(Sender: TObject);
     procedure SafetyARestProtocolChange(Sender: TObject);
+    procedure SwitchARestProtocolChange(Sender: TObject);
     procedure WeatherARestProtocolChange(Sender: TObject);
     procedure WheelARestProtocolChange(Sender: TObject);
     procedure WheelMslotChange(Sender: TObject);
   private
     { private declarations }
     indiclient: TIndiBaseClient;
-    camsavedev,wheelsavedev,focusersavedev,mountsavedev,domesavedev,rotatorsavedev,weathersavedev,safetysavedev,watchdogsavedev,FCameraSensor: string;
+    camsavedev,wheelsavedev,focusersavedev,mountsavedev,domesavedev,rotatorsavedev,weathersavedev,
+      safetysavedev,watchdogsavedev,switchsavedev,coversavedev,FCameraSensor: string;
     LockInterfaceChange,InitialLock,ProfileLock: boolean;
-    FCameraConnection,FWheelConnection,FFocuserConnection,FMountConnection,FDomeConnection,FRotatorConnection,FWeatherConnection,FSafetyConnection: TDevInterface;
+    FCameraConnection,FWheelConnection,FFocuserConnection,FMountConnection,FDomeConnection,FRotatorConnection,
+      FWeatherConnection,FSafetyConnection,FSwitchConnection,FCoverConnection: TDevInterface;
     IndiTimerCount,GetDeviceType:integer;
     receiveindidevice: boolean;
     FShowHelp: TNotifyEvent;
@@ -503,6 +587,8 @@ type
     procedure SetDomeConnection(value: TDevInterface);
     procedure SetWeatherConnection(value: TDevInterface);
     procedure SetSafetyConnection(value: TDevInterface);
+    procedure SetSwitchConnection(value: TDevInterface);
+    procedure SetCoverConnection(value: TDevInterface);
     procedure SetCameraSensor(value: string);
     procedure SelectPage(Sender: TObject);
     procedure IncPage(Sender: TObject);
@@ -510,7 +596,8 @@ type
     procedure msg(txt: string; level:integer=3);
   public
     { public declarations }
-    DefaultCameraInterface, DefaultMountInterface, DefaultDomeInterface, DefaultWheelInterface, DefaultFocuserInterface, DefaultRotatorInterface, DefaultWeatherInterface, DefaultSafetyInterface: TDevInterface;
+    DefaultCameraInterface, DefaultMountInterface, DefaultDomeInterface, DefaultWheelInterface, DefaultFocuserInterface,
+      DefaultRotatorInterface, DefaultWeatherInterface, DefaultSafetyInterface, DefaultSwitchInterface, DefaultCoverInterface: TDevInterface;
     profile: string;
     procedure SetLang;
     procedure LoadProfileList;
@@ -525,6 +612,8 @@ type
     property DomeConnection: TDevInterface read FDomeConnection write SetDomeConnection;
     property WeatherConnection: TDevInterface read FWeatherConnection write SetWeatherConnection;
     property SafetyConnection: TDevInterface read FSafetyConnection write SetSafetyConnection;
+    property SwitchConnection: TDevInterface read FSwitchConnection write SetSwitchConnection;
+    property CoverConnection: TDevInterface read FCoverConnection write SetCoverConnection;
     property onShowHelp: TNotifyEvent read FShowHelp write FShowHelp;
     property onMsg: TNotifyMsg read FonMsg write FonMsg;
   end;
@@ -559,6 +648,8 @@ begin
   DomeAscom.TabVisible:=false;
   WeatherAscom.TabVisible:=false;
   SafetyAscom.TabVisible:=false;
+  SwitchAscom.TabVisible:=false;
+  CoverAscom.TabVisible:=false;
   {$endif}
   b:=TSpeedButton.Create(self);
   b.GroupIndex:=94876;
@@ -829,6 +920,39 @@ begin
   WatchdogAutoLoadConfig.Caption:=rsLoadConfigur;
   Label20.Caption:=rsHeartBeatThr;
   DeviceWatchdog.Caption:=rsUseWatchdog+': '+DevInterfaceName[0];
+  Switch.Caption:=rsSwitch;
+  DeviceSwitch.Caption:=rsUseSwitch;
+  Label109.Caption:=rsServer;
+  Label110.Caption:=rsPort;
+  GetIndi9.Caption:=rsGet;
+  Label27.Caption:=rsDevices;
+  SwitchAutoLoadConfig.Caption:=rsLoadConfigur;
+  BtnChooseSwitch.Caption:=rsChoose;
+  BtnAboutSwitch.Caption:=rsAbout;
+  BtnSetupSwitch.Caption:=rsSetup;
+  Label111.Caption:=rsProtocol;
+  Label112.Caption:=rsServer;
+  Label113.Caption:=rsPort;
+  Label114.Caption:=rsRemoteDevice;
+  Label116.Caption:=rsUserName;
+  Label117.Caption:=rsPassword;
+  Cover.Caption:=rsCoverCalibra;
+  DeviceCover.Caption:=rsUseCoverCali;
+  Label118.Caption:=rsServer;
+  Label119.Caption:=rsPort;
+  GetIndi10.Caption:=rsGet;
+  Label28.Caption:=rsDevices;
+  CoverAutoLoadConfig.Caption:=rsLoadConfigur;
+  BtnChooseCover.Caption:=rsChoose;
+  BtnAboutCover.Caption:=rsAbout;
+  BtnSetupCover.Caption:=rsSetup;
+  Label120.Caption:=rsProtocol;
+  Label121.Caption:=rsServer;
+  Label122.Caption:=rsPort;
+  Label123.Caption:=rsRemoteDevice;
+  Label125.Caption:=rsUserName;
+  Label126.Caption:=rsPassword;
+
   CameraIndi.Caption:=DevInterfaceName[0];
   CameraAscom.Caption:=DevInterfaceName[1];
   CameraAscomRest.Caption:=DevInterfaceName[4];
@@ -856,6 +980,12 @@ begin
   SafetyIndi.Caption:=DevInterfaceName[0];
   SafetyAscom.Caption:=DevInterfaceName[1];
   SafetyAscomRest.Caption:=DevInterfaceName[4];
+  SwitchIndi.Caption:=DevInterfaceName[0];
+  SwitchAscom.Caption:=DevInterfaceName[1];
+  SwitchAscomRest.Caption:=DevInterfaceName[4];
+  CoverIndi.Caption:=DevInterfaceName[0];
+  CoverAscom.Caption:=DevInterfaceName[1];
+  CoverAscomRest.Caption:=DevInterfaceName[4];
   WatchdogIndi.Caption:=DevInterfaceName[0];
   ProfileList.Hint:=rsListOfProfil;
   BtnNewProfile.Hint:=Format(rsCreateANewEm, [crlf, crlf]);
@@ -910,7 +1040,8 @@ DeviceDome.Checked:=conf.GetValue('/Devices/Dome',false);
 DeviceWeather.Checked:=conf.GetValue('/Devices/Weather',false);
 DeviceSafety.Checked:=conf.GetValue('/Devices/Safety',false);
 DeviceWatchdog.Checked:=conf.GetValue('/Devices/Watchdog',false);
-
+DeviceSwitch.Checked:=conf.GetValue('/Devices/Switch',false);
+DeviceCover.Checked:=conf.GetValue('/Devices/Cover',false);
 CameraConnection:=TDevInterface(conf.GetValue('/CameraInterface',ord(DefaultCameraInterface)));
 CameraIndiServer.Text:=conf.GetValue('/INDIcamera/Server',defautindiserver);
 CameraIndiPort.Text:=conf.GetValue('/INDIcamera/ServerPort',defaultindiport);
@@ -1056,6 +1187,36 @@ SafetyARestHost.Text:=conf.GetValue('/ASCOMRestsafety/Host','127.0.0.1');
 SafetyARestPort.Value:=conf.GetValue('/ASCOMRestsafety/Port',11111);
 SafetyARestDevice.Value:=conf.GetValue('/ASCOMRestsafety/Device',0);
 
+SwitchConnection:=TDevInterface(conf.GetValue('/SwitchInterface',ord(DefaultSwitchInterface)));
+SwitchIndiServer.Text:=conf.GetValue('/INDIswitch/Server',defautindiserver);
+SwitchIndiPort.Text:=conf.GetValue('/INDIswitch/ServerPort',defaultindiport);
+if SwitchIndiDevice.Items.Count=0 then begin
+  SwitchIndiDevice.Items.Add(conf.GetValue('/INDIswitch/Device',''));
+  SwitchIndiDevice.ItemIndex:=0;
+end;
+SwitchIndiDevice.Text:=conf.GetValue('/INDIswitch/Device','');
+SwitchAutoLoadConfig.Checked:=conf.GetValue('/INDIswitch/AutoLoadConfig',false);
+AscomSwitch.Text:=conf.GetValue('/ASCOMswitch/Device','');
+SwitchARestProtocol.ItemIndex:=conf.GetValue('/ASCOMRestswitch/Protocol',0);
+SwitchARestHost.Text:=conf.GetValue('/ASCOMRestswitch/Host','127.0.0.1');
+SwitchARestPort.Value:=conf.GetValue('/ASCOMRestswitch/Port',11111);
+SwitchARestDevice.Value:=conf.GetValue('/ASCOMRestswitch/Device',0);
+
+CoverConnection:=TDevInterface(conf.GetValue('/CoverInterface',ord(DefaultCoverInterface)));
+CoverIndiServer.Text:=conf.GetValue('/INDIcover/Server',defautindiserver);
+CoverIndiPort.Text:=conf.GetValue('/INDIcover/ServerPort',defaultindiport);
+if CoverIndiDevice.Items.Count=0 then begin
+  CoverIndiDevice.Items.Add(conf.GetValue('/INDIcover/Device',''));
+  CoverIndiDevice.ItemIndex:=0;
+end;
+CoverIndiDevice.Text:=conf.GetValue('/INDIcover/Device','');
+CoverAutoLoadConfig.Checked:=conf.GetValue('/INDIcover/AutoLoadConfig',false);
+AscomCover.Text:=conf.GetValue('/ASCOMcover/Device','');
+CoverARestProtocol.ItemIndex:=conf.GetValue('/ASCOMRestcover/Protocol',0);
+CoverARestHost.Text:=conf.GetValue('/ASCOMRestcover/Host','127.0.0.1');
+CoverARestPort.Value:=conf.GetValue('/ASCOMRestcover/Port',11111);
+CoverARestDevice.Value:=conf.GetValue('/ASCOMRestcover/Device',0);
+
 WatchdogIndiServer.Text:=conf.GetValue('/INDIwatchdog/Server',defautindiserver);
 WatchdogIndiPort.Text:=conf.GetValue('/INDIwatchdog/ServerPort',defaultindiport);
 if WatchdogIndiDevice.Items.Count=0 then begin
@@ -1074,6 +1235,8 @@ DeviceMount.Caption:=rsUseMount+': '+DevInterfaceName[ord(FMountConnection)];
 DeviceFocuser.Caption:=rsUseFocuser+': '+DevInterfaceName[ord(FocuserConnection)];
 DeviceDome.Caption:=rsUseDome+': '+DevInterfaceName[ord(FocuserConnection)];
 DeviceCamera.Caption:=rsCamera+': '+DevInterfaceName[ord(FCameraConnection)];
+DeviceSwitch.Caption:=rsUseSwitch+': '+DevInterfaceName[ord(FSwitchConnection)];
+DeviceCover.Caption:=rsUseCoverCali+': '+DevInterfaceName[ord(FCoverConnection)];
 
 CameraARestUser.Text:=DecryptStr(hextostr(credentialconf.GetValue('/ASCOMRestcamera/User','')), encryptpwd);
 WheelARestUser.Text:=DecryptStr(hextostr(credentialconf.GetValue('/ASCOMRestwheel/User','')), encryptpwd);
@@ -1083,6 +1246,8 @@ MountARestUser.Text:=DecryptStr(hextostr(credentialconf.GetValue('/ASCOMRestmoun
 DomeARestUser.Text:=DecryptStr(hextostr(credentialconf.GetValue('/ASCOMRestdome/User','')), encryptpwd);
 WeatherARestUser.Text:=DecryptStr(hextostr(credentialconf.GetValue('/ASCOMRestweather/User','')), encryptpwd);
 SafetyARestUser.Text:=DecryptStr(hextostr(credentialconf.GetValue('/ASCOMRestsafety/User','')), encryptpwd);
+SwitchARestUser.Text:=DecryptStr(hextostr(credentialconf.GetValue('/ASCOMRestswitch/User','')), encryptpwd);
+CoverARestUser.Text:=DecryptStr(hextostr(credentialconf.GetValue('/ASCOMRestcover/User','')), encryptpwd);
 CameraARestPass.Text:=DecryptStr(hextostr(credentialconf.GetValue('/ASCOMRestcamera/Pass','')), encryptpwd);
 WheelARestPass.Text:=DecryptStr(hextostr(credentialconf.GetValue('/ASCOMRestwheel/Pass','')), encryptpwd);
 FocuserARestPass.Text:=DecryptStr(hextostr(credentialconf.GetValue('/ASCOMRestfocuser/Pass','')), encryptpwd);
@@ -1091,6 +1256,8 @@ MountARestPass.Text:=DecryptStr(hextostr(credentialconf.GetValue('/ASCOMRestmoun
 DomeARestPass.Text:=DecryptStr(hextostr(credentialconf.GetValue('/ASCOMRestdome/Pass','')), encryptpwd);
 WeatherARestPass.Text:=DecryptStr(hextostr(credentialconf.GetValue('/ASCOMRestweather/Pass','')), encryptpwd);
 SafetyARestPass.Text:=DecryptStr(hextostr(credentialconf.GetValue('/ASCOMRestsafety/Pass','')), encryptpwd);
+SwitchARestPass.Text:=DecryptStr(hextostr(credentialconf.GetValue('/ASCOMRestswitch/Pass','')), encryptpwd);
+CoverARestPass.Text:=DecryptStr(hextostr(credentialconf.GetValue('/ASCOMRestcover/Pass','')), encryptpwd);
 DefaultARestUser.Text:=CameraARestUser.Text;
 DefaultARestPass.Text:=CameraARestPass.Text;
 
@@ -1146,6 +1313,32 @@ begin
    INDI: PageControlSafety.ActivePageIndex:=0;
    ASCOM: PageControlSafety.ActivePageIndex:=1;
    ASCOMREST: PageControlSafety.ActivePageIndex:=2;
+  end;
+end;
+
+procedure Tf_setup.SetSwitchConnection(value: TDevInterface);
+begin
+{$ifndef mswindows}
+  if value=ASCOM then value:=INDI;
+{$endif}
+  FSwitchConnection:=value;
+  case FSwitchConnection of
+   INDI: PageControlSwitch.ActivePageIndex:=0;
+   ASCOM: PageControlSwitch.ActivePageIndex:=1;
+   ASCOMREST: PageControlSwitch.ActivePageIndex:=2;
+  end;
+end;
+
+procedure Tf_setup.SetCoverConnection(value: TDevInterface);
+begin
+{$ifndef mswindows}
+  if value=ASCOM then value:=INDI;
+{$endif}
+  FCoverConnection:=value;
+  case FCoverConnection of
+   INDI: PageControlCover.ActivePageIndex:=0;
+   ASCOM: PageControlCover.ActivePageIndex:=1;
+   ASCOMREST: PageControlCover.ActivePageIndex:=2;
   end;
 end;
 
@@ -1227,6 +1420,9 @@ begin
         end;
     7 : begin t:='SafetyMonitor'; dev:=widestring(AscomSafety.Text); end;
     8 : begin t:='Dome'; dev:=widestring(AscomDome.Text); end;
+    // 9: watchdog
+    10: begin t:='Switch'; dev:=widestring(AscomSwitch.Text); end;
+    11: begin t:='CoverCalibrator'; dev:=widestring(AscomCover.Text); end;
   end;
   try
     try
@@ -1246,6 +1442,9 @@ begin
       6 : begin AscomWeather.Text:=string(dev); DeviceWeather.Checked:=true; end;
       7 : begin AscomSafety.Text:=string(dev); DeviceSafety.Checked:=true; end;
       8 : begin AscomDome.Text:=string(dev); DeviceDome.Checked:=true; end;
+      // 9: watchdog
+      10 : begin AscomSwitch.Text:=string(dev); DeviceSwitch.Checked:=true; end;
+      11 : begin AscomCover.Text:=string(dev); DeviceCover.Checked:=true; end;
     end;
   except
     on E: Exception do begin
@@ -1273,6 +1472,9 @@ begin
     6 : begin dev:=widestring(AscomWeather.Text); end;
     7 : begin dev:=widestring(AscomSafety.Text); end;
     8 : begin dev:=widestring(AscomDome.Text); end;
+    // 9: watchdog
+    10: begin dev:=widestring(AscomSwitch.Text); end;
+    11: begin dev:=widestring(AscomCover.Text); end;
   end;
 
   try
@@ -1314,6 +1516,9 @@ begin
     6 : begin dev:=widestring(AscomWeather.Text); end;
     7 : begin dev:=widestring(AscomSafety.Text); end;
     8 : begin dev:=widestring(AscomDome.Text); end;
+    // 9: watchdog
+    10: begin dev:=widestring(AscomSwitch.Text); end;
+    11: begin dev:=widestring(AscomCover.Text); end;
   end;
 
   try
@@ -1341,6 +1546,8 @@ begin
    DomeARestProtocol.ItemIndex:=DefaultARestProtocol.ItemIndex;
    WeatherARestProtocol.ItemIndex:=DefaultARestProtocol.ItemIndex;
    SafetyARestProtocol.ItemIndex:=DefaultARestProtocol.ItemIndex;
+   SwitchARestProtocol.ItemIndex:=DefaultARestProtocol.ItemIndex;
+   CoverARestProtocol.ItemIndex:=DefaultARestProtocol.ItemIndex;
    CameraARestHost.Text:=DefaultARestHost.Text;
    WheelARestHost.Text:=DefaultARestHost.Text;
    FocuserARestHost.Text:=DefaultARestHost.Text;
@@ -1349,6 +1556,8 @@ begin
    DomeARestHost.Text:=DefaultARestHost.Text;
    WeatherARestHost.Text:=DefaultARestHost.Text;
    SafetyARestHost.Text:=DefaultARestHost.Text;
+   SwitchARestHost.Text:=DefaultARestHost.Text;
+   CoverARestHost.Text:=DefaultARestHost.Text;
    CameraARestPort.Value:=DefaultARestPort.Value;
    WheelARestPort.Value:=DefaultARestPort.Value;
    FocuserARestPort.Value:=DefaultARestPort.Value;
@@ -1357,6 +1566,8 @@ begin
    DomeARestPort.Value:=DefaultARestPort.Value;
    WeatherARestPort.Value:=DefaultARestPort.Value;
    SafetyARestPort.Value:=DefaultARestPort.Value;
+   SwitchARestPort.Value:=DefaultARestPort.Value;
+   CoverARestPort.Value:=DefaultARestPort.Value;
    CameraARestUser.Text:=DefaultARestUser.Text;
    WheelARestUser.Text:=DefaultARestUser.Text;
    FocuserARestUser.Text:=DefaultARestUser.Text;
@@ -1365,6 +1576,8 @@ begin
    DomeARestUser.Text:=DefaultARestUser.Text;
    WeatherARestUser.Text:=DefaultARestUser.Text;
    SafetyARestUser.Text:=DefaultARestUser.Text;
+   SwitchARestUser.Text:=DefaultARestUser.Text;
+   CoverARestUser.Text:=DefaultARestUser.Text;
    CameraARestPass.Text:=DefaultARestPass.Text;
    WheelARestPass.Text:=DefaultARestPass.Text;
    FocuserARestPass.Text:=DefaultARestPass.Text;
@@ -1373,6 +1586,8 @@ begin
    DomeARestPass.Text:=DefaultARestPass.Text;
    WeatherARestPass.Text:=DefaultARestPass.Text;
    SafetyARestPass.Text:=DefaultARestPass.Text;
+   SwitchARestPass.Text:=DefaultARestPass.Text;
+   CoverARestPass.Text:=DefaultARestPass.Text;
 end;
 
 procedure Tf_setup.ButtonHelpClick(Sender: TObject);
@@ -1398,6 +1613,8 @@ begin
   DomeIndiServer.text:=IndiServer.text;
   WeatherIndiServer.text:=IndiServer.text;
   SafetyIndiServer.text:=IndiServer.text;
+  SwitchIndiServer.text:=IndiServer.text;
+  CoverIndiServer.text:=IndiServer.text;
   WatchdogIndiServer.text:=IndiServer.text;
   CameraIndiPort.text:=IndiPort.text;
   WheelIndiPort.text:=IndiPort.text;
@@ -1407,6 +1624,8 @@ begin
   DomeIndiPort.text:=IndiPort.text;
   WeatherIndiPort.text:=IndiPort.text;
   SafetyIndiPort.text:=IndiPort.text;
+  SwitchIndiPort.text:=IndiPort.text;
+  CoverIndiPort.text:=IndiPort.text;
   WatchdogIndiPort.text:=IndiPort.text;
 end;
 
@@ -1481,6 +1700,8 @@ begin
   domesavedev:=DomeIndiDevice.Text;
   weathersavedev:=WeatherIndiDevice.Text;
   safetysavedev:=SafetyIndiDevice.Text;
+  switchsavedev:=SafetyIndiDevice.Text;
+  coversavedev:=SafetyIndiDevice.Text;
   watchdogsavedev:=WatchdogIndiDevice.Text;
   indiclient:=TIndiBaseClient.Create;
   indiclient.onNewDevice:=@IndiNewDevice;
@@ -1531,6 +1752,16 @@ begin
         WatchdogIndiDevice.Clear;
         indiclient.SetServer(WatchdogIndiServer.Text,WatchdogIndiPort.Text);
         msg('Get driver list from server '+WatchdogIndiServer.Text+':'+WatchdogIndiPort.Text,9);
+       end;
+    10: begin
+        SwitchIndiDevice.Clear;
+        indiclient.SetServer(SwitchIndiServer.Text,SwitchIndiPort.Text);
+        msg('Get driver list from server '+SwitchIndiServer.Text+':'+SwitchIndiPort.Text,9);
+       end;
+    11: begin
+        CoverIndiDevice.Clear;
+        indiclient.SetServer(CoverIndiServer.Text,CoverIndiPort.Text);
+        msg('Get driver list from server '+CoverIndiServer.Text+':'+CoverIndiPort.Text,9);
        end;
   end;
   indiclient.ConnectServer;
@@ -1609,6 +1840,16 @@ begin
        WatchdogIndiDevice.Items.Add(watchdogsavedev);
        WatchdogIndiDevice.ItemIndex:=0;
     end;
+    if (GetDeviceType=10) then begin
+       SwitchMsg.Caption:=rsNoResponseFr;
+       SwitchIndiDevice.Items.Add(switchsavedev);
+       SwitchIndiDevice.ItemIndex:=0;
+    end;
+    if (GetDeviceType=11) then begin
+       CoverMsg.Caption:=rsNoResponseFr;
+       CoverIndiDevice.Items.Add(coversavedev);
+       CoverIndiDevice.ItemIndex:=0;
+    end;
     exit;
   end;
   try
@@ -1633,6 +1874,10 @@ begin
         SafetyIndiDevice.Items.Add(BaseDevice(indiclient.devices[i]).getDeviceName);
      if (GetDeviceType=9)and((drint and AUX_INTERFACE)<>0) then
         WatchdogIndiDevice.Items.Add(BaseDevice(indiclient.devices[i]).getDeviceName);
+     if (GetDeviceType=10)and((drint and AUX_INTERFACE)<>0) then
+        SwitchIndiDevice.Items.Add(BaseDevice(indiclient.devices[i]).getDeviceName);
+     if (GetDeviceType=11)and(((drint and DUSTCAP_INTERFACE)<>0)or((drint and LIGHTBOX_INTERFACE)<>0)) then
+        CoverIndiDevice.Items.Add(BaseDevice(indiclient.devices[i]).getDeviceName);
   end;
   if (GetDeviceType=1) then begin
     if CameraIndiDevice.Items.Count>0 then
@@ -1740,6 +1985,30 @@ begin
     for i:=0 to WatchdogIndiDevice.Items.Count-1 do
        if WatchdogIndiDevice.Items[i]=watchdogsavedev then WatchdogIndiDevice.ItemIndex:=i;
   end;
+  if (GetDeviceType=10) then begin
+    if SwitchIndiDevice.Items.Count>0 then begin
+       SwitchIndiDevice.ItemIndex:=0;
+       DeviceSwitch.Checked:=true;
+    end
+    else begin
+       SwitchIndiDevice.Items.Add(switchsavedev);
+       SwitchMsg.Caption:=rsNoDevice;
+    end;
+    for i:=0 to SwitchIndiDevice.Items.Count-1 do
+       if SwitchIndiDevice.Items[i]=switchsavedev then SwitchIndiDevice.ItemIndex:=i;
+  end;
+  if (GetDeviceType=11) then begin
+    if CoverIndiDevice.Items.Count>0 then begin
+       CoverIndiDevice.ItemIndex:=0;
+       DeviceCover.Checked:=true;
+    end
+    else begin
+       CoverIndiDevice.Items.Add(coversavedev);
+       CoverMsg.Caption:=rsNoDevice;
+    end;
+    for i:=0 to CoverIndiDevice.Items.Count-1 do
+       if CoverIndiDevice.Items[i]=coversavedev then CoverIndiDevice.ItemIndex:=i;
+  end;
   indiclient.onServerDisconnected:=nil;
   indiclient.DisconnectServer;
   except
@@ -1840,6 +2109,26 @@ begin
   DeviceSafety.Caption:=rsUseSafetyMon+': '+DevInterfaceName[ord(FSafetyConnection)];
 end;
 
+procedure Tf_setup.PageControlSwitchChange(Sender: TObject);
+begin
+  case PageControlSwitch.ActivePageIndex of
+    0: FSwitchConnection:=INDI;
+    1: FSwitchConnection:=ASCOM;
+    2: FSwitchConnection:=ASCOMREST;
+  end;
+  DeviceSwitch.Caption:=rsUseSwitch+': '+DevInterfaceName[ord(FSwitchConnection)];
+end;
+
+procedure Tf_setup.PageControlCoverChange(Sender: TObject);
+begin
+  case PageControlCover.ActivePageIndex of
+    0: FCoverConnection:=INDI;
+    1: FCoverConnection:=ASCOM;
+    2: FCoverConnection:=ASCOMREST;
+  end;
+  DeviceCover.Caption:=rsUseCoverCali+': '+DevInterfaceName[ord(FCoverConnection)];
+end;
+
 procedure Tf_setup.PageControlWeatherChange(Sender: TObject);
 begin
   case PageControlWeather.ActivePageIndex of
@@ -1909,6 +2198,22 @@ begin
   case SafetyARestProtocol.ItemIndex of
     0: SafetyARestPort.Value:=11111;
     1: SafetyARestPort.Value:=443;
+  end;
+end;
+
+procedure Tf_setup.SwitchARestProtocolChange(Sender: TObject);
+begin
+  case SwitchARestProtocol.ItemIndex of
+    0: SwitchARestPort.Value:=11111;
+    1: SwitchARestPort.Value:=443;
+  end;
+end;
+
+procedure Tf_setup.CoverARestProtocolChange(Sender: TObject);
+begin
+  case CoverARestProtocol.ItemIndex of
+    0: CoverARestPort.Value:=11111;
+    1: CoverARestPort.Value:=443;
   end;
 end;
 
@@ -2021,6 +2326,10 @@ try
     AlpacaWeatherList.Items.Add('Discovered weather monitor...');
     AlpacaSafetyList.Clear;
     AlpacaSafetyList.Items.Add('Discovered safety monitor...');
+    AlpacaSwitchList.Clear;
+    AlpacaSwitchList.Items.Add('Discovered switch...');
+    AlpacaCoverList.Clear;
+    AlpacaCoverList.Items.Add('Discovered cover calibrator...');
     AlpacaServers.Items.Add('Found '+inttostr(n)+' servers');
     for i:=0 to length(AlpacaServerList)-1 do begin
       AlpacaServers.Items.Add(AlpacaServerList[i].servername+', '+AlpacaServerList[i].location+', '+AlpacaServerList[i].ip+':'+AlpacaServerList[i].port);
@@ -2049,6 +2358,12 @@ try
         end
         else if devtype='SAFETYMONITOR' then begin
           AlpacaSafetyList.Items.Add(AlpacaServerList[i].devices[j].DeviceName+tab+AlpacaServerList[i].ip+tab+AlpacaServerList[i].port+tab+'safetymonitor/'+tab+IntToStr(AlpacaServerList[i].devices[j].DeviceNumber));
+        end
+        else if devtype='SWITCH' then begin
+          AlpacaSwitchList.Items.Add(AlpacaServerList[i].devices[j].DeviceName+tab+AlpacaServerList[i].ip+tab+AlpacaServerList[i].port+tab+'switch/'+tab+IntToStr(AlpacaServerList[i].devices[j].DeviceNumber));
+        end
+        else if devtype='COVERCALIBRATOR' then begin
+          AlpacaCoverList.Items.Add(AlpacaServerList[i].devices[j].DeviceName+tab+AlpacaServerList[i].ip+tab+AlpacaServerList[i].port+tab+'covercalibrator/'+tab+IntToStr(AlpacaServerList[i].devices[j].DeviceNumber));
         end;
       end;
     end;
@@ -2061,6 +2376,8 @@ try
     AlpacaDomeList.ItemIndex:=0;
     AlpacaWeatherList.ItemIndex:=0;
     AlpacaSafetyList.ItemIndex:=0;
+    AlpacaSwitchList.ItemIndex:=0;
+    AlpacaCoverList.ItemIndex:=0;
   end else begin
     AlpacaServers.Clear;
     AlpacaServers.Items.Add('No Alpaca server found');
@@ -2214,6 +2531,40 @@ begin
     SafetyARestDevice.Value:=StrToInt(lst[4]);
     SafetyARestProtocol.ItemIndex:=0;
     DeviceSafety.Checked:=true;
+    lst.Free;
+  end;
+end;
+
+procedure Tf_setup.AlpacaSwitchListChange(Sender: TObject);
+var i: integer;
+    lst:TStringList;
+begin
+  i:=AlpacaSwitchList.ItemIndex;
+  if i>0 then begin
+    lst:=TStringList.Create;
+    SplitRec(AlpacaSwitchList.Items[i],tab,lst);
+    SwitchARestHost.Text:=lst[1];
+    SwitchARestPort.Text:=lst[2];
+    SwitchARestDevice.Value:=StrToInt(lst[4]);
+    SwitchARestProtocol.ItemIndex:=0;
+    DeviceSwitch.Checked:=true;
+    lst.Free;
+  end;
+end;
+
+procedure Tf_setup.AlpacaCoverListChange(Sender: TObject);
+var i: integer;
+    lst:TStringList;
+begin
+  i:=AlpacaCoverList.ItemIndex;
+  if i>0 then begin
+    lst:=TStringList.Create;
+    SplitRec(AlpacaCoverList.Items[i],tab,lst);
+    CoverARestHost.Text:=lst[1];
+    CoverARestPort.Text:=lst[2];
+    CoverARestDevice.Value:=StrToInt(lst[4]);
+    CoverARestProtocol.ItemIndex:=0;
+    DeviceCover.Checked:=true;
     lst.Free;
   end;
 end;
