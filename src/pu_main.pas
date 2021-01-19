@@ -2770,7 +2770,7 @@ begin
   if autoguider.Running then begin
     autoguider.Disconnect;
     autoguider.Terminate;
-  end else begin
+  end else if (autoguider.AutoguiderType<>agNONE)and(autoguider.AutoguiderType<>agDITHER) then begin
     autoguider.Terminate;
     autoguider.Connect('','');
   end;
