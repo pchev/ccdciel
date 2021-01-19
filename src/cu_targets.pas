@@ -2631,6 +2631,7 @@ begin
   fn:=slash(ConfigDir)+template+'.plan';
   if not FileExistsUTF8(fn) then exit;
   pfile:=TCCDconfig.Create(nil);
+  try
   pfile.Filename:=fn;
   if pfile.GetValue('/PlanName','')<>template then exit;
   if pfile.GetValue('/StepNum',-1)<>p.Count then exit;
@@ -2654,6 +2655,9 @@ begin
      end;
   end;
   result:=false;
+  finally
+    pfile.Free;
+  end;
 end;
 
 
