@@ -1,9 +1,9 @@
 object f_switch: Tf_switch
   Left = 0
-  Height = 166
+  Height = 196
   Top = 0
   Width = 194
-  ClientHeight = 166
+  ClientHeight = 196
   ClientWidth = 194
   ParentFont = False
   TabOrder = 0
@@ -36,5 +36,26 @@ object f_switch: Tf_switch
     Align = alClient
     AutoSize = True
     TabOrder = 0
+  end
+  object Panel1: TPanel
+    Left = 0
+    Height = 30
+    Top = 166
+    Width = 194
+    Align = alBottom
+    ClientHeight = 30
+    ClientWidth = 194
+    TabOrder = 1
+    object BtnSet: TButton
+      AnchorSideTop.Control = Panel1
+      AnchorSideTop.Side = asrCenter
+      Left = 53
+      Height = 25
+      Top = 3
+      Width = 75
+      Caption = 'Set'
+      OnClick = BtnSetClick
+      TabOrder = 0
+    end
   end
 end

@@ -704,6 +704,7 @@ type
     Procedure SafetySafeChange(Sender: TObject);
     Procedure SwitchStatus(Sender: TObject);
     Procedure SwitchChange(Sender: TObject);
+    Procedure SetSwitch(Sender: TObject);
     Procedure CoverStatus(Sender: TObject);
     Procedure CoverChange(Sender: TObject);
     Procedure AutoguiderConnectClick(Sender: TObject);
@@ -1498,6 +1499,7 @@ begin
 
   f_cover:=Tf_cover.Create(self);
   f_switch:=Tf_switch.Create(self);
+  f_switch.onSetSwitch:=@SetSwitch;
 
   f_autoguider:=Tf_autoguider.Create(self);
   f_autoguider.onConnect:=@AutoguiderConnectClick;
@@ -5241,6 +5243,13 @@ begin
  if f_switch.Connected then begin
    f_switch.NumSwitch:=switch.NumSwitch;
    f_switch.Switch:=switch.Switch;
+ end;
+end;
+
+Procedure Tf_main.SetSwitch(Sender: TObject);
+begin
+ if f_switch.Connected then begin
+   switch.Switch:=f_switch.Switch;
  end;
 end;
 

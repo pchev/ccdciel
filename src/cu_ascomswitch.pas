@@ -227,7 +227,8 @@ begin
       changed:=false;
       for i:=0 to FNumSwitch-1 do begin
          changed:=changed or (s[i].Checked<>FSwitch[i].Checked) or (s[i].Value<>FSwitch[i].Value);
-         FSwitch[i]:=s[i];
+         FSwitch[i].Value:=s[i].Value;
+         FSwitch[i].Checked:=s[i].Checked;
       end;
       if changed and Assigned(FonSwitchChange) then FonSwitchChange(self);
      except
@@ -254,11 +255,14 @@ begin
      result[i].Min        := FSwitch[i].Min;
      result[i].Max        := FSwitch[i].Max;
      result[i].Step       := FSwitch[i].Step;
-     result[i].Checked    := V.GetSwitch(i);
-     if FSwitch[i].MultiState then
+     if FSwitch[i].MultiState then begin
        result[i].Value    := V.GetSwitchValue(i)
-     else
+       result[i].Checked  := (result[i].Value = result[i].Max);
+     end
+     else begin
        result[i].Value    := FSwitch[i].Value;
+       result[i].Checked  := V.GetSwitch(i);
+     end;
    end;
    except
     on E: Exception do msg('GetSwitch error: ' + E.Message,0);
@@ -271,14 +275,16 @@ procedure T_ascomswitch.SetSwitch(value: TSwitchList);
 var i: Int16;
 begin
  {$ifdef mswindows}
- if not VarIsEmpty(V) then begin
+ if (not VarIsEmpty(V)) and (FNumSwitch>0)then begin
  try
    for i:=0 to FNumSwitch-1 do begin
-     if FSwitch[i].MultiState then begin
-       V.SetSwitchValue(i,value[i].Value);
-     end
-     else begin
-       V.SetSwitch(i,value[i].Checked);
+     if value[i].CanWrite and ((value[i].Value<>FSwitch[i].Value)or(value[i].Checked<>FSwitch[i].Checked)) then begin
+       if FSwitch[i].MultiState then begin
+         V.SetSwitchValue(i,value[i].Value);
+       end
+       else begin
+         V.SetSwitch(i,value[i].Checked);
+       end;
      end;
    end;
    except

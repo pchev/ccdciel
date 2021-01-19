@@ -219,7 +219,8 @@ begin
      changed:=false;
      for i:=0 to FNumSwitch-1 do begin
         changed:=changed or (s[i].Checked<>FSwitch[i].Checked) or (s[i].Value<>FSwitch[i].Value);
-        FSwitch[i]:=s[i];
+        FSwitch[i].Value:=s[i].Value;
+        FSwitch[i].Checked:=s[i].Checked;
      end;
      if changed and Assigned(FonSwitchChange) then FonSwitchChange(self);
     except
@@ -260,19 +261,24 @@ end;
 
 procedure T_ascomrestswitch.SetSwitch(value: TSwitchList);
 var i: integer;
-    p: array[0..1]of string;
+    p: array[0..3]of string;
 begin
  if (FStatus<>devConnected)or(FNumSwitch=0) then exit;
  try
    for i:=0 to FNumSwitch-1 do begin
-     p[0]:='Id='+inttostr(i);
-     if FSwitch[i].MultiState then begin
-       p[1]:='Value='+FloatToStr(value[i].Value);
-       V.Put('setswitchvalue',p);
-     end
-     else begin
-       p[1]:='State='+BoolToStr(value[i].Checked,true);
-       V.Put('setswitch',p);
+     if value[i].CanWrite and ((value[i].Value<>FSwitch[i].Value)or(value[i].Checked<>FSwitch[i].Checked)) then begin
+       p[0]:='Id';
+       p[1]:=inttostr(i);
+       if FSwitch[i].MultiState then begin
+         p[2]:='Value';
+         p[3]:=FloatToStr(value[i].Value);
+         V.Put('setswitchvalue',p);
+       end
+       else begin
+         p[2]:='State';
+         p[3]:=BoolToStr(value[i].Checked,true);
+         V.Put('setswitch',p);
+       end;
      end;
    end;
  except

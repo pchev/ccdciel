@@ -33,14 +33,18 @@ type
   { Tf_switch }
 
   Tf_switch = class(TFrame)
+    BtnSet: TButton;
+    Panel1: TPanel;
     ScrollBox1: TScrollBox;
     Title: TLabel;
+    procedure BtnSetClick(Sender: TObject);
   private
     { private declarations }
     FConnected, initialized: boolean;
     FNumSwitch: integer;
     FSwitch: TSwitchList;
     CtrlList: TStringList;
+    FonSetSwitch: TNotifyEvent;
     procedure SetConnected(value:boolean);
     procedure SetNumSwitch(value:integer);
     procedure SetSwitch(value:TSwitchList);
@@ -52,6 +56,7 @@ type
     property Connected: boolean read FConnected write SetConnected;
     property NumSwitch: integer read FNumSwitch write SetNumSwitch;
     property Switch: TSwitchList read FSwitch write SetSwitch;
+    property onSetSwitch: TNotifyEvent read FonSetSwitch write FonSetSwitch;
   end;
 
 implementation
@@ -115,6 +120,8 @@ var i:integer;
 begin
  if initialized then begin
    for i:=0 to FNumSwitch-1 do begin
+     FSwitch[i].Checked := value[i].Checked;
+     FSwitch[i].Value   := value[i].Value;
      if CtrlList.Objects[i] is TCheckBox then
        TCheckBox(CtrlList.Objects[i]).Checked:=value[i].Checked;
      if CtrlList.Objects[i] is TPanel then begin
@@ -174,6 +181,31 @@ begin
   end;
   initialized:=true;
  end;
+end;
+
+procedure Tf_switch.BtnSetClick(Sender: TObject);
+var i:integer;
+    s: TFloatSpinEdit;
+    swchanged: boolean;
+begin
+  if (not initialized)or(FNumSwitch=0) then exit;
+  swchanged:=false;
+  for i:=0 to FNumSwitch-1 do begin
+    if FSwitch[i].CanWrite then begin
+      if CtrlList.Objects[i] is TCheckBox then begin
+        swchanged:=swchanged or (TCheckBox(CtrlList.Objects[i]).Checked<>FSwitch[i].Checked);
+        FSwitch[i].Checked:=TCheckBox(CtrlList.Objects[i]).Checked;
+      end;
+      if CtrlList.Objects[i] is TPanel then begin
+        s:=TFloatSpinEdit(FindComponent('Switch_'+IntToStr(i)));
+        if s<>nil then begin
+          swchanged:=swchanged or (s.Value<>FSwitch[i].Value);
+          FSwitch[i].Value:=s.Value;
+        end;
+      end;
+    end;
+  end;
+  if swchanged and (Assigned(FonSetSwitch)) then FonSetSwitch(self);
 end;
 
 end.
