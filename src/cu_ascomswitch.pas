@@ -148,7 +148,7 @@ begin
            FSwitch[i].Min:=0;
          end;
          try
-         FSwitch[i].Max:=V.MaxSwitchValue(1);
+         FSwitch[i].Max:=V.MaxSwitchValue(i);
          except
            FSwitch[i].Max:=1;
          end;
@@ -256,7 +256,7 @@ begin
      result[i].Max        := FSwitch[i].Max;
      result[i].Step       := FSwitch[i].Step;
      if FSwitch[i].MultiState then begin
-       result[i].Value    := V.GetSwitchValue(i)
+       result[i].Value    := V.GetSwitchValue(i);
        result[i].Checked  := (result[i].Value = result[i].Max);
      end
      else begin

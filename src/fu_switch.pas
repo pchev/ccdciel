@@ -53,6 +53,7 @@ type
     constructor Create(aOwner: TComponent); override;
     destructor  Destroy; override;
     procedure SetLang;
+    procedure Clear;
     property Connected: boolean read FConnected write SetConnected;
     property NumSwitch: integer read FNumSwitch write SetNumSwitch;
     property Switch: TSwitchList read FSwitch write SetSwitch;
@@ -80,12 +81,23 @@ begin
 end;
 
 destructor  Tf_switch.Destroy;
+begin
+ Clear;
+ CtrlList.Free;
+ inherited Destroy;
+end;
+
+procedure Tf_switch.Clear;
 var i: integer;
 begin
  for i:=0 to CtrlList.Count-1 do
    CtrlList.Objects[i].Free;
- CtrlList.Free;
- inherited Destroy;
+ CtrlList.Clear;
+ FNumSwitch:=0;
+ SetLength(FSwitch,FNumSwitch);
+ initialized:=false;
+ BtnSet.Enabled:=false;
+ Height:=DoScaleY(80);
 end;
 
 procedure Tf_switch.SetLang;
@@ -113,6 +125,7 @@ end;
 
 procedure Tf_switch.SetSwitch(value:TSwitchList);
 var i:integer;
+    c:TControl;
     cb: TCheckBox;
     p: TPanel;
     l: TLabel;
@@ -162,9 +175,13 @@ begin
       s.Enabled:=FSwitch[i].CanWrite;
       s.Value:=FSwitch[i].Value;
       s.Width:=80;
+      s.Constraints.MaxHeight:=DoScaleY(28);
+      s.BringToFront;
       s.Align:=alRight;
       s.Parent:=p;
+      s.BringToFront;
       p.Parent:=ScrollBox1;
+      c:=p;
       CtrlList.AddObject(p.Name,p);
     end
     else begin
@@ -176,10 +193,14 @@ begin
       cb.Enabled:=FSwitch[i].CanWrite;
       cb.Checked:=value[i].Checked;
       cb.Parent:=ScrollBox1;
+      c:=cb;
       CtrlList.AddObject(cb.Name,cb);
     end;
   end;
+  // try to adjust the size, limited by Constraints
+  Height:=Title.Height+Panel1.Height+c.Top+c.Height+8;
   initialized:=true;
+  BtnSet.Enabled:=true;
  end;
 end;
 

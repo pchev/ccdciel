@@ -5214,6 +5214,7 @@ end;
 Procedure Tf_main.DisconnectSwitch(Sender: TObject);
 begin
  if switch.Status<>devDisconnected then switch.Disconnect;
+ f_switch.Clear;
 end;
 
 Procedure Tf_main.SwitchStatus(Sender: TObject);
