@@ -2767,21 +2767,30 @@ begin
   NewMessage(rsConfiguratio,1);
 
   TerminateVcurve:=true;
+  try
   if autoguider.Running then begin
     autoguider.Disconnect;
     autoguider.Terminate;
-  end else if (autoguider.AutoguiderType<>agNONE)and(autoguider.AutoguiderType<>agDITHER) then begin
+  end else begin
     autoguider.Terminate;
     autoguider.Connect('','');
   end;
+  except
+  end;
+  try
   if planetarium.Running then begin
     planetarium.Disconnect;
   end else begin
     planetarium.Terminate;
     planetarium.Connect('','');
   end;
+  except
+  end;
+  try
   if astrometry.Busy then begin
     astrometry.StopAstrometry;
+  end;
+  except
   end;
   wait(2); // time for other thread to terminate
   astrometry.Free;
