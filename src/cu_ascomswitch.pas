@@ -89,6 +89,7 @@ begin
 end;
 
 procedure T_ascomswitch.Connect(cp1: string; cp2:string=''; cp3:string=''; cp4:string=''; cp5:string=''; cp6:string='');
+var i: Int16;
 begin
  {$ifdef mswindows}
   try
@@ -120,6 +121,46 @@ begin
      SetLength(FSwitch,FNumSwitch);
      except
        FNumSwitch:=0;
+     end;
+     for i:=0 to FNumSwitch-1 do begin
+       try
+       FSwitch[i].Name:=V.GetSwitchName(i);
+       except
+         FSwitch[i].Name:='Switch-'+IntToStr(i+1);
+       end;
+       if FInterfaceVersion=1 then begin
+         FSwitch[i].CanWrite:=True;
+         FSwitch[i].MultiState:=false;
+         FSwitch[i].Min:=0;
+         FSwitch[i].Max:=0;
+         FSwitch[i].Step:=0;
+         FSwitch[i].Value:=0;
+       end
+       else begin
+         try
+         FSwitch[i].CanWrite:=V.CanWrite(i);
+         except
+           FSwitch[i].CanWrite:=False;
+         end;
+         try
+         FSwitch[i].Min:=V.MinSwitchValue(i);
+         except
+           FSwitch[i].Min:=0;
+         end;
+         try
+         FSwitch[i].Max:=V.MaxSwitchValue(1);
+         except
+           FSwitch[i].Max:=1;
+         end;
+         try
+         FSwitch[i].Step:=V.SwitchStep(i);
+         except
+           FSwitch[i].Step:=1;
+         end;
+         if FSwitch[i].Step=0 then FSwitch[i].Step:=FSwitch[i].Max;
+         if FSwitch[i].Step=0 then FSwitch[i].Step:=1;
+         FSwitch[i].MultiState:=((FSwitch[i].Max-FSwitch[i].Min)/FSwitch[i].Step)>1;
+       end;
      end;
      msg(rsConnected3);
      FStatus := devConnected;
@@ -185,7 +226,7 @@ begin
       s:=GetSwitch;
       changed:=false;
       for i:=0 to FNumSwitch-1 do begin
-         changed:=changed or (s[i]<>FSwitch[i]);
+         changed:=changed or (s[i].Checked<>FSwitch[i].Checked) or (s[i].Value<>FSwitch[i].Value);
          FSwitch[i]:=s[i];
       end;
       if changed and Assigned(FonSwitchChange) then FonSwitchChange(self);
@@ -200,14 +241,24 @@ begin
 end;
 
 function  T_ascomswitch.GetSwitch: TSwitchList;
-var i: integer;
+var i: Int16;
 begin
  SetLength(result,FNumSwitch);
  {$ifdef mswindows}
  if not VarIsEmpty(V) then begin
  try
    for i:=0 to FNumSwitch-1 do begin
-     result[i]:=V.GetSwitch(i);
+     result[i].Name       := FSwitch[i].Name;
+     result[i].CanWrite   := FSwitch[i].CanWrite;
+     result[i].MultiState := FSwitch[i].MultiState;
+     result[i].Min        := FSwitch[i].Min;
+     result[i].Max        := FSwitch[i].Max;
+     result[i].Step       := FSwitch[i].Step;
+     result[i].Checked    := V.GetSwitch(i);
+     if FSwitch[i].MultiState then
+       result[i].Value    := V.GetSwitchValue(i)
+     else
+       result[i].Value    := FSwitch[i].Value;
    end;
    except
     on E: Exception do msg('GetSwitch error: ' + E.Message,0);
@@ -217,13 +268,18 @@ begin
 end;
 
 procedure T_ascomswitch.SetSwitch(value: TSwitchList);
-var i: integer;
+var i: Int16;
 begin
  {$ifdef mswindows}
  if not VarIsEmpty(V) then begin
  try
    for i:=0 to FNumSwitch-1 do begin
-     V.SetSwitch(i,value[i]);
+     if FSwitch[i].MultiState then begin
+       V.SetSwitchValue(i,value[i].Value);
+     end
+     else begin
+       V.SetSwitch(i,value[i].Checked);
+     end;
    end;
    except
     on E: Exception do msg('SetSwitch error: ' + E.Message,0);

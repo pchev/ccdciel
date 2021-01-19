@@ -29,7 +29,15 @@ uses u_global, indiapi, Classes, SysUtils;
 
 type
 
-TSwitchList = array of boolean;
+TSwitchRec = record
+               Name: shortstring;
+               CanWrite: boolean;
+               MultiState: boolean;
+               Checked: boolean;
+               Min, Max, Step: double;
+               Value: double;
+             end;
+TSwitchList = array of TSwitchRec;
 
 T_switch = class(TComponent)
  private

@@ -83,6 +83,7 @@ begin
 end;
 
 procedure T_ascomrestswitch.Connect(cp1: string; cp2:string=''; cp3:string=''; cp4:string=''; cp5:string=''; cp6:string='');
+var i: integer;
 begin
   try
   FStatus := devConnecting;
@@ -119,6 +120,46 @@ begin
      SetLength(FSwitch,FNumSwitch);
      except
        FNumSwitch:=0;
+     end;
+     for i:=0 to FNumSwitch-1 do begin
+       try
+       FSwitch[i].Name:=V.Get('getswitchname','Id='+IntToStr(i)).AsString;
+       except
+         FSwitch[i].Name:='Switch-'+IntToStr(i+1);
+       end;
+       if FInterfaceVersion=1 then begin
+         FSwitch[i].CanWrite:=True;
+         FSwitch[i].MultiState:=false;
+         FSwitch[i].Min:=0;
+         FSwitch[i].Max:=0;
+         FSwitch[i].Step:=0;
+         FSwitch[i].Value:=0;
+       end
+       else begin
+         try
+         FSwitch[i].CanWrite:=V.Get('canwrite','Id='+IntToStr(i)).AsBool;
+         except
+           FSwitch[i].CanWrite:=False;
+         end;
+         try
+         FSwitch[i].Min:=V.Get('minswitchvalue','Id='+IntToStr(i)).AsFloat;
+         except
+           FSwitch[i].Min:=0;
+         end;
+         try
+         FSwitch[i].Max:=V.Get('maxswitchvalue','Id='+IntToStr(i)).AsFloat;
+         except
+           FSwitch[i].Max:=1;
+         end;
+         try
+         FSwitch[i].Step:=V.Get('switchstep','Id='+IntToStr(i)).AsFloat;
+         except
+           FSwitch[i].Step:=1;
+         end;
+         if FSwitch[i].Step=0 then FSwitch[i].Step:=FSwitch[i].Max;
+         if FSwitch[i].Step=0 then FSwitch[i].Step:=1;
+         FSwitch[i].MultiState:=((FSwitch[i].Max-FSwitch[i].Min)/FSwitch[i].Step)>1;
+       end;
      end;
      msg(rsConnected3);
      FStatus := devConnected;
@@ -177,7 +218,7 @@ begin
      s:=GetSwitch;
      changed:=false;
      for i:=0 to FNumSwitch-1 do begin
-        changed:=changed or (s[i]<>FSwitch[i]);
+        changed:=changed or (s[i].Checked<>FSwitch[i].Checked) or (s[i].Value<>FSwitch[i].Value);
         FSwitch[i]:=s[i];
      end;
      if changed and Assigned(FonSwitchChange) then FonSwitchChange(self);
@@ -197,7 +238,20 @@ begin
   try
     SetLength(result,FNumSwitch);
     for i:=0 to FNumSwitch-1 do begin
-      result[i]:=V.Get('getswitch','Id='+IntToStr(i)).AsBool;
+      result[i].Name       := FSwitch[i].Name;
+      result[i].CanWrite   := FSwitch[i].CanWrite;
+      result[i].MultiState := FSwitch[i].MultiState;
+      result[i].Min        := FSwitch[i].Min;
+      result[i].Max        := FSwitch[i].Max;
+      result[i].Step       := FSwitch[i].Step;
+      if result[i].MultiState then begin
+        result[i].Value    := V.Get('getswitchvalue','Id='+IntToStr(i)).AsFloat;
+        result[i].Checked  := (result[i].Value = result[i].Max);
+      end
+      else begin
+        result[i].Value    := FSwitch[i].Value;
+        result[i].Checked  := V.Get('getswitch','Id='+IntToStr(i)).AsBool;
+      end;
     end;
   except
    on E: Exception do msg('GetSwitch error: ' + E.Message,0);
@@ -211,9 +265,15 @@ begin
  if (FStatus<>devConnected)or(FNumSwitch=0) then exit;
  try
    for i:=0 to FNumSwitch-1 do begin
-     p[0]:=inttostr(i);
-     p[1]:=BoolToStr(value[i],true);
-     V.Put('setswitch',p);
+     p[0]:='Id='+inttostr(i);
+     if FSwitch[i].MultiState then begin
+       p[1]:='Value='+FloatToStr(value[i].Value);
+       V.Put('setswitchvalue',p);
+     end
+     else begin
+       p[1]:='State='+BoolToStr(value[i].Checked,true);
+       V.Put('setswitch',p);
+     end;
    end;
  except
   on E: Exception do msg('SetSwitch error: ' + E.Message,0);

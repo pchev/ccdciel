@@ -263,6 +263,7 @@ var propname: string;
     TxtProp: ITextVectorProperty;
     Txt: IText;
     buf: string;
+    i: integer;
 begin
   propname:=indiProp.getName;
   proptype:=indiProp.getType;
@@ -290,6 +291,15 @@ begin
      Switches:=indiProp.getSwitch;
      FNumSwitch:=Switches.nsp;
      SetLength(FSwitch,FNumSwitch);
+     for i:=0 to FNumSwitch-1 do begin
+       FSwitch[i].Name:=Switches.sp[i].lbl;
+       FSwitch[i].CanWrite:=Switches.p<>IP_RO;
+       FSwitch[i].MultiState:=false;
+       FSwitch[i].Min:=0;
+       FSwitch[i].Max:=0;
+       FSwitch[i].Step:=0;
+       FSwitch[i].Value:=0;
+     end;
   end;
   CheckStatus;
 end;
@@ -327,8 +337,14 @@ begin
  SetLength(result,FNumSwitch);
  if (Switches=nil)or(FNumSwitch=0) then exit;
  for i:=0 to FNumSwitch-1 do begin
-   result[i]:=(Switches.sp[i].s=ISS_ON);
-   FSwitch[i]:=(Switches.sp[i].s=ISS_ON);
+   result[i].Name       := FSwitch[i].Name;
+   result[i].CanWrite   := FSwitch[i].CanWrite;
+   result[i].MultiState := FSwitch[i].MultiState;
+   result[i].Min        := FSwitch[i].Min;
+   result[i].Max        := FSwitch[i].Max;
+   result[i].Step       := FSwitch[i].Step;
+   result[i].Value      := FSwitch[i].Value;
+   result[i].Checked    :=(Switches.sp[i].s=ISS_ON);
  end;
 end;
 
@@ -337,7 +353,7 @@ var i: integer;
 begin
  if (Switches=nil)or(FNumSwitch=0) then exit;
  for i:=0 to FNumSwitch-1 do begin
-   if value[i] then
+   if value[i].Checked then
      Switches.sp[i].s:=ISS_ON
    else
      Switches.sp[i].s:=ISS_OFF;
