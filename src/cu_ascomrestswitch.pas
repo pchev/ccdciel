@@ -216,6 +216,7 @@ begin
   else begin
     try
      s:=GetSwitch;
+     if (FStatus<>devConnected)or(FNumSwitch=0) then exit;
      changed:=false;
      for i:=0 to FNumSwitch-1 do begin
         changed:=changed or (s[i].Checked<>FSwitch[i].Checked) or (s[i].Value<>FSwitch[i].Value);
@@ -247,11 +248,13 @@ begin
       result[i].Step       := FSwitch[i].Step;
       if result[i].MultiState then begin
         result[i].Value    := V.Get('getswitchvalue','Id='+IntToStr(i)).AsFloat;
+        if (FStatus<>devConnected)or(FNumSwitch=0) then exit;
         result[i].Checked  := (result[i].Value = result[i].Max);
       end
       else begin
         result[i].Value    := FSwitch[i].Value;
         result[i].Checked  := V.Get('getswitch','Id='+IntToStr(i)).AsBool;
+        if (FStatus<>devConnected)or(FNumSwitch=0) then exit;
       end;
     end;
   except

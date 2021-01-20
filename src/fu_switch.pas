@@ -156,8 +156,8 @@ begin
     FSwitch[i].Value      := value[i].Value;
     if FSwitch[i].MultiState then begin
       p:=TPanel.Create(self);
-      l:=TLabel.Create(self);
-      s:=TFloatSpinEdit.Create(self);
+      l:=TLabel.Create(p);
+      s:=TFloatSpinEdit.Create(p);
       p.Name:='Panel_'+IntToStr(i);
       p.Caption:='';
       p.Top:=i*30;
