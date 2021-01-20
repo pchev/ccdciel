@@ -707,6 +707,10 @@ type
     Procedure SetSwitch(Sender: TObject);
     Procedure CoverStatus(Sender: TObject);
     Procedure CoverChange(Sender: TObject);
+    Procedure OpenCover(Sender: TObject);
+    Procedure CloseCover(Sender: TObject);
+    Procedure BrightnessChange(Sender: TObject);
+    Procedure SetCalibratorLight(Sender: TObject);
     Procedure AutoguiderConnectClick(Sender: TObject);
     Procedure AutoguiderCalibrateClick(Sender: TObject);
     Procedure AutoguiderGuideClick(Sender: TObject);
@@ -1498,6 +1502,11 @@ begin
   if dome<>nil then dome.Safety:=f_safety;
 
   f_cover:=Tf_cover.Create(self);
+  f_cover.onOpenCover:=@OpenCover;
+  f_cover.onCloseCover:=@CloseCover;
+  f_cover.onSetLight:=@SetCalibratorLight;
+  f_cover.onChangeBrightness:=@BrightnessChange;
+
   f_switch:=Tf_switch.Create(self);
   f_switch.onSetSwitch:=@SetSwitch;
 
@@ -5291,19 +5300,68 @@ case cover.Status of
                       if f_devicesconnection.LabelCover.Font.Color=clGreen then exit;
                       f_devicesconnection.LabelCover.Font.Color:=clGreen;
                       f_cover.Connected:=true;
+                      CoverChange(Sender);
                       NewMessage(Format(rsConnected, [rsCoverCalibra]),1);
                    end;
 end;
-CoverChange(Sender);
 CheckConnectionStatus;
 end;
 
 Procedure Tf_main.CoverChange(Sender: TObject);
 begin
-  f_cover.PanelCover.Visible:=cover.HasCover;
-  f_cover.PanelCalibrator.Visible:=cover.HasCalibrator;
-  f_cover.Cover:=cover.CoverState;
-  f_cover.Calibrator:=cover.CalibratorState;
+ try
+  f_cover.lock:=true;
+
+  if cover.HasCover then begin
+    f_cover.PanelCover.Visible:=true;
+    f_cover.Cover:=cover.CoverState;
+  end
+  else f_cover.PanelCover.Visible:=false;
+
+  if cover.HasCalibrator then begin
+    f_cover.PanelCalibrator.Visible:=true;
+    f_cover.Calibrator:=cover.CalibratorState;
+    f_cover.Brightness.MaxValue:=cover.MaxBrightness;
+    if f_cover.Calibrator<>calOff then f_cover.Brightness.Value:=cover.Brightness;
+  end
+  else f_cover.PanelCalibrator.Visible:=false;
+
+ finally
+  f_cover.lock:=false;
+ end;
+end;
+
+Procedure Tf_main.OpenCover(Sender: TObject);
+begin
+  if cover.HasCalibrator and ((cover.CalibratorState=calReady)or(cover.CalibratorState=calNotReady)) then
+    cover.CalibratorOff;
+  cover.OpenCover;
+  CoverChange(Sender);
+end;
+
+Procedure Tf_main.CloseCover(Sender: TObject);
+begin
+  cover.CloseCover;
+  CoverChange(Sender);
+end;
+
+Procedure Tf_main.BrightnessChange(Sender: TObject);
+begin
+  cover.Brightness:=f_cover.Brightness.Value;
+  if f_cover.Light.Checked then
+    cover.CalibratorOn;
+end;
+
+Procedure Tf_main.SetCalibratorLight(Sender: TObject);
+begin
+  if f_cover.Light.Checked then begin
+    cover.Brightness:=f_cover.Brightness.Value;
+    cover.CalibratorOn;
+  end
+  else begin
+    cover.CalibratorOff;
+  end;
+  CoverChange(Sender);
 end;
 
 procedure Tf_main.TabMsgLevelChange(Sender: TObject);

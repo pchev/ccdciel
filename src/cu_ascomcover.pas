@@ -51,6 +51,12 @@ public
    destructor  Destroy; override;
    Procedure Connect(cp1: string; cp2:string=''; cp3:string=''; cp4:string=''; cp5:string=''; cp6:string='');  override;
    procedure Disconnect; override;
+   Procedure OpenCover; override;
+   Procedure CloseCover; override;
+   function GetBrightness: integer; override;
+   procedure SetBrightness(value: integer); override;
+   Procedure CalibratorOn; override;
+   Procedure CalibratorOff; override;
 end;
 
 const statusinterval=2000;
@@ -126,6 +132,13 @@ begin
        st_cal:=calNotPresent;
      end;
      FHasCalibrator:=(st_cal<>calNotPresent);
+     if FHasCalibrator then begin
+       try
+       FMaxBrightness:=V.MaxBrightness;
+       except
+         FMaxBrightness:=0;
+       end;
+     end;
      msg('Interface version: '+inttostr(FInterfaceVersion),9);
      msg(rsConnected3);
      FStatus := devConnected;
@@ -236,6 +249,78 @@ procedure T_ascomcover.SetTimeout(num:integer);
 begin
  FTimeOut:=num;
 end;
+
+Procedure T_ascomcover.OpenCover;
+begin
+ {$ifdef mswindows}
+ if not VarIsEmpty(V) then begin
+ try
+   V.OpenCover;
+   except
+    on E: Exception do msg('OpenCover error: ' + E.Message,0);
+   end;
+ end;
+ {$endif}
+end;
+
+Procedure T_ascomcover.CloseCover;
+begin
+ {$ifdef mswindows}
+ if not VarIsEmpty(V) then begin
+ try
+   V.CloseCover;
+   except
+    on E: Exception do msg('CloseCover error: ' + E.Message,0);
+   end;
+ end;
+ {$endif}
+end;
+
+function T_ascomcover.GetBrightness: integer;
+begin
+ result:=0;
+ {$ifdef mswindows}
+ if not VarIsEmpty(V) then begin
+ try
+   result:=V.Brightness;
+   except
+    on E: Exception do msg('Get Brightness error: ' + E.Message,0);
+   end;
+ end;
+ {$endif}
+end;
+
+procedure T_ascomcover.SetBrightness(value: integer);
+begin
+ FSetBrightness := value;
+end;
+
+Procedure T_ascomcover.CalibratorOn;
+begin
+ {$ifdef mswindows}
+ if not VarIsEmpty(V) then begin
+   try
+     V.CalibratorOn(FSetBrightness);
+   except
+     on E: Exception do msg('CalibratorOn error: ' + E.Message,0);
+   end;
+ end;
+ {$endif}
+end;
+
+Procedure T_ascomcover.CalibratorOff;
+begin
+ {$ifdef mswindows}
+ if not VarIsEmpty(V) then begin
+   try
+     V.CalibratorOff;
+   except
+     on E: Exception do msg('CalibratorOff error: ' + E.Message,0);
+   end;
+ end;
+ {$endif}
+end;
+
 
 initialization
 {$ifdef mswindows}

@@ -1,10 +1,10 @@
 object f_cover: Tf_cover
   Left = 0
-  Height = 46
+  Height = 148
   Top = 0
   Width = 194
   AutoSize = True
-  ClientHeight = 46
+  ClientHeight = 148
   ClientWidth = 194
   ParentFont = False
   TabOrder = 0
@@ -29,25 +29,24 @@ object f_cover: Tf_cover
   end
   object Panel1: TPanel
     Left = 0
-    Height = 22
+    Height = 111
     Top = 20
     Width = 194
     Align = alTop
     AutoSize = True
-    ChildSizing.Layout = cclLeftToRightThenTopToBottom
-    ChildSizing.ControlsPerLine = 99
-    ClientHeight = 22
+    ClientHeight = 111
     ClientWidth = 194
     ParentFont = False
     TabOrder = 0
     object PanelCover: TPanel
-      Left = 0
-      Height = 21
-      Top = 0
-      Width = 86
+      Left = 1
+      Height = 54
+      Top = 1
+      Width = 192
+      Align = alTop
       BevelOuter = bvNone
-      ClientHeight = 21
-      ClientWidth = 86
+      ClientHeight = 54
+      ClientWidth = 192
       ParentFont = False
       TabOrder = 0
       object ledCover: TShape
@@ -69,15 +68,44 @@ object f_cover: Tf_cover
         ParentColor = False
         ParentFont = False
       end
+      object BtnOpenCover: TButton
+        Left = 8
+        Height = 25
+        Top = 24
+        Width = 75
+        Caption = 'Open'
+        OnClick = BtnOpenCoverClick
+        TabOrder = 0
+      end
+      object BtnCloseCover: TButton
+        AnchorSideTop.Control = BtnOpenCover
+        Left = 104
+        Height = 25
+        Top = 24
+        Width = 75
+        Caption = 'Close'
+        OnClick = BtnCloseCoverClick
+        TabOrder = 1
+      end
+      object LabelCover: TLabel
+        AnchorSideTop.Control = Label1
+        Left = 104
+        Height = 17
+        Top = 4
+        Width = 70
+        Caption = 'LabelCover'
+        ParentColor = False
+      end
     end
     object PanelCalibrator: TPanel
-      Left = 86
-      Height = 21
-      Top = 0
-      Width = 86
+      Left = 1
+      Height = 55
+      Top = 55
+      Width = 192
+      Align = alTop
       BevelOuter = bvNone
-      ClientHeight = 21
-      ClientWidth = 86
+      ClientHeight = 55
+      ClientWidth = 192
       ParentFont = False
       TabOrder = 1
       object ledCalibrator: TShape
@@ -91,6 +119,7 @@ object f_cover: Tf_cover
         Shape = stCircle
       end
       object Label2: TLabel
+        AnchorSideTop.Side = asrCenter
         Left = 8
         Height = 17
         Top = 4
@@ -98,6 +127,36 @@ object f_cover: Tf_cover
         Caption = 'Calibrator'
         ParentColor = False
         ParentFont = False
+      end
+      object Brightness: TSpinEdit
+        AnchorSideTop.Control = Light
+        AnchorSideTop.Side = asrCenter
+        Left = 104
+        Height = 28
+        Top = 22
+        Width = 72
+        Enabled = False
+        OnChange = BrightnessChange
+        TabOrder = 0
+      end
+      object LabelCalibrator: TLabel
+        AnchorSideTop.Control = Label2
+        Left = 104
+        Height = 17
+        Top = 4
+        Width = 93
+        Caption = 'LabelCalibrator'
+        ParentColor = False
+      end
+      object Light: TCheckBox
+        Left = 8
+        Height = 21
+        Top = 26
+        Width = 55
+        Caption = 'Light'
+        Enabled = False
+        OnClick = LightClick
+        TabOrder = 1
       end
     end
   end

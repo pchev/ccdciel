@@ -39,6 +39,7 @@ T_indicover = class(T_cover)
    CoverDevice: Basedevice;
    CoverStatus,LightStatus: ISwitchVectorProperty;
    CoverPark,CoverUnpark,LightOn,LightOff: ISwitch;
+   LightIntensity: INumberVectorProperty;
    configprop: ISwitchVectorProperty;
    configload,configsave: ISwitch;
    Fready,Fconnected: boolean;
@@ -70,7 +71,12 @@ T_indicover = class(T_cover)
    destructor  Destroy; override;
    Procedure Connect(cp1: string; cp2:string=''; cp3:string=''; cp4:string=''; cp5:string=''; cp6:string='');  override;
    Procedure Disconnect; override;
-
+   Procedure OpenCover; override;
+   Procedure CloseCover; override;
+   function GetBrightness: integer; override;
+   procedure SetBrightness(value: integer); override;
+   Procedure CalibratorOn; override;
+   Procedure CalibratorOff; override;
 end;
 
 implementation
@@ -133,6 +139,7 @@ begin
     CoverDevice:=nil;
     CoverStatus:=nil;
     LightStatus:=nil;
+    LightIntensity:=nil;
     configprop:=nil;
     Fready:=false;
     Fconnected := false;
@@ -302,6 +309,10 @@ begin
      LightOn:=IUFindSwitch(LightStatus,'FLAT_LIGHT_ON');
      LightOff:=IUFindSwitch(LightStatus,'FLAT_LIGHT_OFF');
      if (LightOn=nil)or(LightOff=nil) then LightStatus:=nil;
+  end
+  else if (proptype=INDI_NUMBER)and(LightIntensity=nil)and(propname='FLAT_LIGHT_INTENSITY') then begin
+     LightIntensity:=indiProp.getNumber;
+     FMaxBrightness:=round(LightIntensity.np[0].max);
   end;
   CheckStatus;
 end;
@@ -340,10 +351,16 @@ function T_indicover.GetCoverState: TCoverStatus;
 begin
  result:=covUnknown;
  if CoverStatus<>nil then begin
-   if CoverPark.s=ISS_ON then
-     result:=covClosed
-   else
-     result:=covOpen;
+   if CoverStatus.s=IPS_BUSY then
+      result:=covMoving
+   else if CoverStatus.s=IPS_ALERT then
+      result:=covError
+   else begin
+     if CoverPark.s=ISS_ON then
+       result:=covClosed
+     else
+       result:=covOpen;
+   end;
  end;
 end;
 
@@ -371,6 +388,59 @@ begin
     configload.s:=ISS_ON;
     indiclient.sendNewSwitch(configprop);
   end;
+end;
+
+
+Procedure T_indicover.OpenCover;
+begin
+ if CoverStatus<>nil then begin
+   IUResetSwitch(CoverStatus);
+   CoverUnpark.s:=ISS_ON;
+   indiclient.sendNewSwitch(CoverStatus);
+ end;
+end;
+
+Procedure T_indicover.CloseCover;
+begin
+ if CoverStatus<>nil then begin
+   IUResetSwitch(CoverStatus);
+   CoverPark.s:=ISS_ON;
+   indiclient.sendNewSwitch(CoverStatus);
+ end;
+end;
+
+function T_indicover.GetBrightness: integer;
+begin
+ result:=0;
+ if LightIntensity<>nil then begin
+   result:=round(LightIntensity.np[0].Value);
+ end;
+end;
+
+procedure T_indicover.SetBrightness(value: integer);
+begin
+ if LightIntensity<>nil then begin
+   LightIntensity.np[0].Value:=value;
+   indiclient.sendNewNumber(LightIntensity);
+ end;
+end;
+
+Procedure T_indicover.CalibratorOn;
+begin
+ if LightStatus<>nil then begin
+   IUResetSwitch(LightStatus);
+   LightOn.s:=ISS_ON;
+   indiclient.sendNewSwitch(LightStatus);
+ end;
+end;
+
+Procedure T_indicover.CalibratorOff;
+begin
+ if LightStatus<>nil then begin
+   IUResetSwitch(LightStatus);
+   LightOff.s:=ISS_ON;
+   indiclient.sendNewSwitch(LightStatus);
+ end;
 end;
 
 end.

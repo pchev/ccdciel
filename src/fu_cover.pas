@@ -26,23 +26,34 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 interface
 
 uses  UScaleDPI, u_global, Graphics, Dialogs, u_translation, cu_cover,
-  Classes, SysUtils, FileUtil, Forms, Controls, StdCtrls, ExtCtrls;
+  Classes, SysUtils, FileUtil, Forms, Controls, StdCtrls, ExtCtrls, Spin;
 
 type
 
   { Tf_cover }
 
   Tf_cover = class(TFrame)
+    BtnOpenCover: TButton;
+    BtnCloseCover: TButton;
+    Light: TCheckBox;
     Label2: TLabel;
+    LabelCover: TLabel;
+    LabelCalibrator: TLabel;
     ledCalibrator: TShape;
     PanelCover: TPanel;
     Label1: TLabel;
     ledCover: TShape;
     Panel1: TPanel;
     PanelCalibrator: TPanel;
+    Brightness: TSpinEdit;
     Title: TLabel;
+    procedure BrightnessChange(Sender: TObject);
+    procedure BtnCloseCoverClick(Sender: TObject);
+    procedure BtnOpenCoverClick(Sender: TObject);
+    procedure LightClick(Sender: TObject);
   private
     { private declarations }
+    FOpenCover, FCloseCover, FChangeBrightness, FSetLight: TNotifyEvent;
     FConnected: boolean;
     FCover: TCoverStatus;
     FCalibrator: TCalibratorStatus;
@@ -53,12 +64,17 @@ type
     procedure SetCalibratorLed;
   public
     { public declarations }
+    lock: boolean;
     constructor Create(aOwner: TComponent); override;
     destructor  Destroy; override;
     procedure SetLang;
     property Connected: boolean read FConnected write SetConnected;
     property Cover: TCoverStatus read FCover write SetCover;
     property Calibrator: TCalibratorStatus read FCalibrator write SetCalibrator;
+    property onOpenCover: TNotifyEvent read FOpenCover write FOpenCover;
+    property onCloseCover: TNotifyEvent read FCloseCover write FCloseCover;
+    property onChangeBrightness: TNotifyEvent read FChangeBrightness write FChangeBrightness;
+    property onSetLight: TNotifyEvent read FSetLight write FSetLight;
   end;
 
 implementation
@@ -75,9 +91,12 @@ begin
  Panel1.ChildSizing.LeftRightSpacing:=8;
  Panel1.ChildSizing.VerticalSpacing:=4;
  {$endif}
+ lock:=false;
  FConnected:=false;
  FCover:=covUnknown;;
  FCalibrator:=calUnknown;
+ LabelCover.Caption:='';
+ LabelCalibrator.Caption:='';
  ledCover.Brush.Color:=clGray;
  ledCalibrator.Brush.Color:=clGray;
  ScaleDPI(Self);
@@ -103,7 +122,7 @@ begin
         ledCover.Brush.Color:=clLime;
      end
      else if FCover=covClosed then begin
-        ledCover.Brush.Color:=clGreen;
+        ledCover.Brush.Color:=clYellow;
      end
      else if FCover=covError then begin
         ledCover.Brush.Color:=clRed;
@@ -115,6 +134,8 @@ begin
   else begin
      ledCover.Brush.Color:=clGray;
   end;
+  Light.Enabled:=FConnected and (FCover=covClosed);
+  Brightness.Enabled:=Light.Enabled;
 end;
 
 procedure Tf_cover.SetCalibratorLed;
@@ -124,7 +145,7 @@ begin
         ledCalibrator.Brush.Color:=clLime;
      end
      else if FCalibrator=calReady then begin
-        ledCalibrator.Brush.Color:=clGreen;
+        ledCalibrator.Brush.Color:=clYellow;
      end
      else if FCalibrator=calError then begin
         ledCalibrator.Brush.Color:=clRed;
@@ -136,6 +157,17 @@ begin
   else begin
      ledCalibrator.Brush.Color:=clGray;
   end;
+  Light.Checked:=(FCalibrator=calReady);
+end;
+
+procedure Tf_cover.BtnOpenCoverClick(Sender: TObject);
+begin
+  if (not lock) and FConnected and Assigned(FOpenCover) then FOpenCover(self);
+end;
+
+procedure Tf_cover.BtnCloseCoverClick(Sender: TObject);
+begin
+  if (not lock) and FConnected and Assigned(FCloseCover) then FCloseCover(self);
 end;
 
 procedure Tf_cover.SetConnected(value:boolean);
@@ -148,14 +180,27 @@ end;
 procedure Tf_cover.SetCover(value:TCoverStatus);
 begin
   FCover:=value;
+  LabelCover.Caption:=CoverLabel[ord(FCover)];
   SetCoverLed;
 end;
 
 procedure Tf_cover.SetCalibrator(value:TCalibratorStatus);
 begin
   FCalibrator:=value;
+  LabelCalibrator.Caption:=CalibratorLabel[ord(FCalibrator)];
   SetCalibratorLed;
 end;
+
+procedure Tf_cover.BrightnessChange(Sender: TObject);
+begin
+  if (not lock) and FConnected and Brightness.Enabled and Assigned(FChangeBrightness) then FChangeBrightness(self);
+end;
+
+procedure Tf_cover.LightClick(Sender: TObject);
+begin
+  if (not lock) and FConnected and Light.Enabled and Assigned(FSetLight) then FSetLight(self);
+end;
+
 
 end.
 

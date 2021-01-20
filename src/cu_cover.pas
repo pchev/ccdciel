@@ -27,6 +27,11 @@ interface
 
 uses u_global, indiapi, Classes, SysUtils;
 
+const
+
+  CoverLabel: array[0..5] of string = ('Not present','Closed','Moving','Open','','Error');
+  CalibratorLabel: array[0..5] of string = ('Not present','Off','Not ready','Ready','','Error');
+
 type
 
 TCoverStatus = (covNotPresent,covClosed,covMoving,covOpen,covUnknown,covError);
@@ -44,16 +49,23 @@ T_cover = class(TComponent)
     FHasCover, FHasCalibrator: boolean;
     st_cov: TCoverStatus;
     st_cal: TCalibratorStatus;
+    FMaxBrightness, FSetBrightness: integer;
     FAutoLoadConfig: boolean;
     procedure msg(txt: string; level:integer=3);
     procedure SetTimeout(num:integer); virtual; abstract;
     function GetCoverState: TCoverStatus; virtual; abstract;
     function GetCalibratorState: TCalibratorStatus; virtual; abstract;
+    function GetBrightness: integer; virtual; abstract;
+    procedure SetBrightness(value: integer); virtual; abstract;
   public
     constructor Create(AOwner: TComponent);override;
     destructor  Destroy; override;
     Procedure Connect(cp1: string; cp2:string=''; cp3:string=''; cp4:string=''; cp5:string=''; cp6:string=''); virtual; abstract;
     Procedure Disconnect; virtual; abstract;
+    Procedure OpenCover; virtual; abstract;
+    Procedure CloseCover; virtual; abstract;
+    Procedure CalibratorOn; virtual; abstract;
+    Procedure CalibratorOff; virtual; abstract;
     property DeviceName: string read FDevice;
     property CoverInterface: TDevInterface read FCoverInterface;
     property Status: TDeviceStatus read FStatus;
@@ -63,6 +75,8 @@ T_cover = class(TComponent)
     property HasCalibrator: boolean read FHasCalibrator;
     property CoverState: TCoverStatus read GetCoverState;
     property CalibratorState: TCalibratorStatus read GetCalibratorState;
+    property MaxBrightness: integer read FMaxBrightness;
+    property Brightness: integer read GetBrightness write SetBrightness;
     property onMsg: TNotifyMsg read FonMsg write FonMsg;
     property onDeviceMsg: TNotifyMsg read FonDeviceMsg write FonDeviceMsg;
     property onStatusChange: TNotifyEvent read FonStatusChange write FonStatusChange;
@@ -79,6 +93,8 @@ begin
   FHasCalibrator:=false;
   st_cov := covUnknown;
   st_cal := calUnknown;
+  FMaxBrightness := 0;
+  FSetBrightness := 0;
 end;
 
 destructor  T_cover.Destroy;

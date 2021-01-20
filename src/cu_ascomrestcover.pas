@@ -47,6 +47,12 @@ public
    destructor  Destroy; override;
    Procedure Connect(cp1: string; cp2:string=''; cp3:string=''; cp4:string=''; cp5:string=''; cp6:string='');  override;
    procedure Disconnect; override;
+   Procedure OpenCover; override;
+   Procedure CloseCover; override;
+   function GetBrightness: integer; override;
+   procedure SetBrightness(value: integer); override;
+   Procedure CalibratorOn; override;
+   Procedure CalibratorOff; override;
 end;
 
 const statusinterval=10000;
@@ -126,6 +132,13 @@ begin
        st_cal:=calNotPresent;
      end;
      FHasCalibrator:=(st_cal<>calNotPresent);
+     if FHasCalibrator then begin
+       try
+       FMaxBrightness:=V.Get('maxbrightness').AsInt;
+       except
+         FMaxBrightness:=0;
+       end;
+     end;
      msg(rsConnected3);
      FStatus := devConnected;
      if Assigned(FonStatusChange) then FonStatusChange(self);
@@ -218,6 +231,62 @@ end;
 procedure T_ascomrestcover.SetTimeout(num:integer);
 begin
  FTimeOut:=num;
+end;
+
+Procedure T_ascomrestcover.OpenCover;
+begin
+ if FStatus<>devConnected then exit;
+ try
+   V.Put('opencover');
+ except
+   on E: Exception do msg('OpenCover error: ' + E.Message,0);
+ end;
+end;
+
+Procedure T_ascomrestcover.CloseCover;
+begin
+ if FStatus<>devConnected then exit;
+ try
+   V.Put('closecover');
+ except
+   on E: Exception do msg('CloseCover error: ' + E.Message,0);
+ end;
+end;
+
+function T_ascomrestcover.GetBrightness: integer;
+begin
+ result:=0;
+ if FStatus<>devConnected then exit;
+ try
+   result:=V.Get('brightness').AsInt;
+   except
+    on E: Exception do msg('Get Brightness error: ' + E.Message,0);
+   end;
+end;
+
+procedure T_ascomrestcover.SetBrightness(value: integer);
+begin
+  FSetBrightness := value;
+end;
+
+Procedure T_ascomrestcover.CalibratorOn;
+begin
+ if FStatus<>devConnected then exit;
+ try
+   V.Put('calibratoron',['Brightness',inttostr(FSetBrightness)]);
+ except
+   on E: Exception do msg('CalibratorOn error: ' + E.Message,0);
+ end;
+end;
+
+Procedure T_ascomrestcover.CalibratorOff;
+begin
+ if FStatus<>devConnected then exit;
+ try
+   V.Put('calibratoroff');
+ except
+   on E: Exception do msg('CalibratorOff error: ' + E.Message,0);
+ end;
 end;
 
 end.
