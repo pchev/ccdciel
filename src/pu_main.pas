@@ -5300,6 +5300,8 @@ end;
 
 Procedure Tf_main.CoverChange(Sender: TObject);
 begin
+  f_cover.PanelCover.Visible:=cover.HasCover;
+  f_cover.PanelCalibrator.Visible:=cover.HasCalibrator;
   f_cover.Cover:=cover.CoverState;
   f_cover.Calibrator:=cover.CalibratorState;
 end;

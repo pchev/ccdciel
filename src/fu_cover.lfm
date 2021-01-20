@@ -40,7 +40,7 @@ object f_cover: Tf_cover
     ClientWidth = 194
     ParentFont = False
     TabOrder = 0
-    object Panel2: TPanel
+    object PanelCover: TPanel
       Left = 0
       Height = 21
       Top = 0
@@ -70,7 +70,7 @@ object f_cover: Tf_cover
         ParentFont = False
       end
     end
-    object Panel3: TPanel
+    object PanelCalibrator: TPanel
       Left = 86
       Height = 21
       Top = 0

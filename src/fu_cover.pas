@@ -35,11 +35,11 @@ type
   Tf_cover = class(TFrame)
     Label2: TLabel;
     ledCalibrator: TShape;
-    Panel2: TPanel;
+    PanelCover: TPanel;
     Label1: TLabel;
     ledCover: TShape;
     Panel1: TPanel;
-    Panel3: TPanel;
+    PanelCalibrator: TPanel;
     Title: TLabel;
   private
     { private declarations }
@@ -49,7 +49,8 @@ type
     procedure SetConnected(value:boolean);
     procedure SetCover(value:TCoverStatus);
     procedure SetCalibrator(value:TCalibratorStatus);
-    procedure SetLed;
+    procedure SetCoverLed;
+    procedure SetCalibratorLed;
   public
     { public declarations }
     constructor Create(aOwner: TComponent); override;
@@ -95,7 +96,7 @@ begin
   label2.Caption:=rsCalibrator;
 end;
 
-procedure Tf_cover.SetLed;
+procedure Tf_cover.SetCoverLed;
 begin
   if FConnected then begin
      if FCover=covOpen then begin
@@ -110,6 +111,15 @@ begin
      else begin
         ledCover.Brush.Color:=clGray;
      end;
+  end
+  else begin
+     ledCover.Brush.Color:=clGray;
+  end;
+end;
+
+procedure Tf_cover.SetCalibratorLed;
+begin
+  if FConnected then begin
      if FCalibrator=calOff then begin
         ledCalibrator.Brush.Color:=clLime;
      end
@@ -124,7 +134,6 @@ begin
      end;
   end
   else begin
-     ledCover.Brush.Color:=clGray;
      ledCalibrator.Brush.Color:=clGray;
   end;
 end;
@@ -132,19 +141,20 @@ end;
 procedure Tf_cover.SetConnected(value:boolean);
 begin
   FConnected:=value;
-  SetLed;
+  SetCoverLed;
+  SetCalibratorLed;
 end;
 
 procedure Tf_cover.SetCover(value:TCoverStatus);
 begin
   FCover:=value;
-  SetLed;
+  SetCoverLed;
 end;
 
 procedure Tf_cover.SetCalibrator(value:TCalibratorStatus);
 begin
   FCalibrator:=value;
-  SetLed;
+  SetCalibratorLed;
 end;
 
 end.

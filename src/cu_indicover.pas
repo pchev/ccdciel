@@ -132,10 +132,13 @@ procedure T_indicover.ClearStatus;
 begin
     CoverDevice:=nil;
     CoverStatus:=nil;
+    LightStatus:=nil;
     configprop:=nil;
     Fready:=false;
     Fconnected := false;
     FStatus := devDisconnected;
+    FHasCalibrator:=false;
+    FHasCover:=false;
     if Assigned(FonStatusChange) then FonStatusChange(self);
 end;
 
@@ -159,6 +162,8 @@ begin
     if FAutoloadConfig then begin
       LoadConfig;
     end;
+    FHasCalibrator:=(LightStatus<>nil);
+    FHasCover:=(CoverStatus<>nil);
     if Assigned(FonStatusChange) then FonStatusChange(self);
   end;
 end;

@@ -114,6 +114,18 @@ begin
      except
        FInterfaceVersion:=1;
      end;
+     try
+       st_cov:=TCoverStatus(V.CoverState);
+     except
+       st_cov:=covNotPresent;
+     end;
+     FHasCover:=(st_cov<>covNotPresent);
+     try
+       st_cal:=TCalibratorStatus(V.CalibratorState);
+     except
+       st_cal:=calNotPresent;
+     end;
+     FHasCalibrator:=(st_cal<>calNotPresent);
      msg('Interface version: '+inttostr(FInterfaceVersion),9);
      msg(rsConnected3);
      FStatus := devConnected;

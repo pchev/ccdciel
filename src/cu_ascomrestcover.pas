@@ -114,6 +114,18 @@ begin
        FInterfaceVersion:=1;
      end;
      msg('Interface version: '+inttostr(FInterfaceVersion),9);
+     try
+       st_cov:=TCoverStatus(V.Get('coverstate').AsInt);
+     except
+       st_cov:=covNotPresent;
+     end;
+     FHasCover:=(st_cov<>covNotPresent);
+     try
+       st_cal:=TCalibratorStatus(V.Get('calibratorstate').AsInt);
+     except
+       st_cal:=calNotPresent;
+     end;
+     FHasCalibrator:=(st_cal<>calNotPresent);
      msg(rsConnected3);
      FStatus := devConnected;
      if Assigned(FonStatusChange) then FonStatusChange(self);
@@ -185,7 +197,7 @@ function T_ascomrestcover.GetCoverState: TCoverStatus;
 begin
  result:=covUnknown;
  if FStatus<>devConnected then exit;
- try
+   try
    result:=TCoverStatus(V.Get('coverstate').AsInt);
    except
     on E: Exception do msg('CoverState error: ' + E.Message,0);

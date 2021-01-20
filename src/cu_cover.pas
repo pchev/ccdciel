@@ -41,6 +41,7 @@ T_cover = class(TComponent)
     FonStatusChange, FonCoverChange: TNotifyEvent;
     FTimeOut: integer;
     Fdevice: string;
+    FHasCover, FHasCalibrator: boolean;
     st_cov: TCoverStatus;
     st_cal: TCalibratorStatus;
     FAutoLoadConfig: boolean;
@@ -58,6 +59,8 @@ T_cover = class(TComponent)
     property Status: TDeviceStatus read FStatus;
     property Timeout: integer read FTimeout write SetTimeout;
     property AutoLoadConfig: boolean read FAutoLoadConfig write FAutoLoadConfig;
+    property HasCover: boolean read FHasCover;
+    property HasCalibrator: boolean read FHasCalibrator;
     property CoverState: TCoverStatus read GetCoverState;
     property CalibratorState: TCalibratorStatus read GetCalibratorState;
     property onMsg: TNotifyMsg read FonMsg write FonMsg;
@@ -72,6 +75,8 @@ constructor T_cover.Create(AOwner: TComponent);
 begin
   inherited Create(AOwner);
   FStatus := devDisconnected;
+  FHasCover:=false;
+  FHasCalibrator:=false;
   st_cov := covUnknown;
   st_cal := calUnknown;
 end;
