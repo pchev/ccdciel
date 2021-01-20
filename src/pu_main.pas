@@ -9017,6 +9017,7 @@ end;
 procedure Tf_main.CameraSaveNewImage;
 var dt,dn: Tdatetime;
     fn,fd,buf,fileseqstr,fileseqext,blankrep: string;
+    framestr,objectstr,binstr,expstr,filterstr: string;
     ccdtemp: double;
     fileseqnum,i,n: integer;
     UseFileSequenceNumber: boolean;
@@ -9028,17 +9029,27 @@ try
  // construct path
  fd:=slash(config.GetValue('/Files/CapturePath',defCapturePath));
  if copy(fd,1,1)='.' then fd:=ExpandFileName(slash(Appdir)+fd);
+ if not fits.Header.Valueof('FRAME',framestr) then framestr:=f_capture.FrameType.Text;
+ framestr:=trim(framestr);
+ if not fits.Header.Valueof('OBJECT',objectstr) then objectstr:=f_capture.Fname.Text;
+ objectstr:=StringReplace(objectstr,' ','',[rfReplaceAll]);
+ objectstr:=StringReplace(objectstr,'/','_',[rfReplaceAll]);
+ objectstr:=StringReplace(objectstr,'\','_',[rfReplaceAll]);
+ objectstr:=StringReplace(objectstr,':','_',[rfReplaceAll]);
+ if not fits.Header.Valueof('EXPTIME',expstr) then expstr:=f_capture.ExpTime.Text;
+ expstr:=trim(expstr);
+ if fits.Header.Valueof('XBINNING',binstr) then begin
+   if not fits.Header.Valueof('YBINNING',buf) then buf:=binstr;
+   binstr:=trim(binstr)+'x'+trim(buf);
+ end
+ else binstr:=trim(f_capture.Binning.Text);
+ if not fits.Header.Valueof('FILTER',filterstr) then filterstr:='';
+ filterstr:=trim(filterstr);
  for i:=0 to SubDirCount-1 do begin
    case SubDirOpt[i] of
      sdSeq : if SubDirActive[i] and f_sequence.Running then fd:=slash(fd+trim(CurrentSeqName));
-     sdFrt : if SubDirActive[i] then fd:=slash(fd+trim(f_capture.FrameType.Text));
-     sdObj : if SubDirActive[i] then begin
-               buf:=StringReplace(f_capture.fname.Text,' ','',[rfReplaceAll]);
-               buf:=StringReplace(buf,'/','_',[rfReplaceAll]);
-               buf:=StringReplace(buf,'\','_',[rfReplaceAll]);
-               buf:=StringReplace(buf,':','_',[rfReplaceAll]);
-               fd:=slash(fd+buf);
-             end;
+     sdFrt : if SubDirActive[i] then fd:=slash(fd+framestr);
+     sdObj : if SubDirActive[i] then fd:=slash(fd+objectstr);
      sdStep: if SubDirActive[i] and f_sequence.Running then begin
                 if f_sequence.StepTotalCount>1 then begin
                   fd:=slash(fd+trim(CurrentStepName)+'_'+IntToStr(f_sequence.StepRepeatCount))
@@ -9048,12 +9059,12 @@ try
                 end;
              end;
      sdExp : if SubDirActive[i] then begin
-               if FlatAutoExposure and (camera.FrameType=FLAT) then
+               if FlatAutoExposure and (framestr=trim(FrameName[3])) then
                   fd:=slash(fd+'auto')
                else
-                  fd:=slash(fd+StringReplace(f_capture.ExpTime.Text,'.','_',[])+'s');
+                  fd:=slash(fd+StringReplace(expstr,'.','_',[])+'s');
              end;
-     sdBin : if SubDirActive[i] then fd:=slash(fd+f_capture.Binning.Text);
+     sdBin : if SubDirActive[i] then fd:=slash(fd+binstr);
      sdDate: if SubDirActive[i] then fd:=fd+slash(FormatDateTime('yyyymmdd',dt));
      sdNight: if SubDirActive[i] then fd:=fd+slash(FormatDateTime('yyyymmdd',dn));
    end;
@@ -9065,22 +9076,25 @@ try
  for i:=0 to FileNameCount-1 do begin
    case FileNameOpt[i] of
      fnObj : if FileNameActive[i] then begin
-             if trim(f_capture.FrameType.Text)=trim(FrameName[0]) then begin
-                fn:=fn+wordspace(trim(f_capture.Fname.Text))+FilenameSep;
+             if framestr=trim(FrameName[0]) then begin
+                 fn:=fn+wordspace(objectstr)+FilenameSep;
              end
              else
-                fn:=fn+trim(f_capture.FrameType.Text)+FilenameSep;
+                fn:=fn+framestr+FilenameSep;
              end;
-     fnFilter: if FileNameActive[i] and (wheel.Status=devConnected)and(f_capture.FrameType.ItemIndex<>1)and(f_capture.FrameType.ItemIndex<>2) then
-                fn:=fn+trim(wheel.CurrentFilterName)+FilenameSep;
+     fnFilter: if FileNameActive[i] and (filterstr<>'')and(framestr<>trim(FrameName[1]))and(framestr<>trim(FrameName[2])) then
+                fn:=fn+filterstr+FilenameSep;
 
      fnExp : if FileNameActive[i] then begin
-               if FlatAutoExposure and (camera.FrameType=FLAT) then
+               if FlatAutoExposure and (framestr=trim(FrameName[3])) then
                   fn:=fn+'auto'+FilenameSep
-               else
-                  fn:=fn+StringReplace(f_capture.ExpTime.Text,'.',FilenameSep,[])+'s'+FilenameSep;
+               else begin
+                  fn:=fn+StringReplace(expstr,'.',FilenameSep,[])+'s'+FilenameSep;
+               end;
              end;
-     fnBin : if FileNameActive[i] then fn:=fn+f_capture.Binning.Text+FilenameSep;
+     fnBin : if FileNameActive[i] then begin
+               fn:=fn+binstr+FilenameSep;
+             end;
      fnTemp: if FileNameActive[i] and fits.Header.Valueof('CCD-TEMP',ccdtemp) then
                 fn:=fn+formatfloat(f1,ccdtemp)+'C'+FilenameSep;
      fnDate: if FileNameActive[i] then begin
@@ -9094,10 +9108,8 @@ try
      fnGain: if FileNameActive[i] and fits.Header.Valueof('GAIN',buf) then begin
                 fn:=fn+trim(buf)+FilenameSep;
              end;
-     fnFocuspos: if FileNameActive[i] and (focuser.Status=devConnected) then begin
-                n:=f_focuser.FocusPosition;
-                if n>0 then
-                  fn:=fn+inttostr(n)+FilenameSep;
+     fnFocuspos: if FileNameActive[i] and fits.Header.Valueof('FOCUSPOS',buf) then begin
+                  fn:=fn+trim(buf)+FilenameSep;
              end;
    end;
  end;
