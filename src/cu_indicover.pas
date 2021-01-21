@@ -207,8 +207,8 @@ begin
     end
     else if (configprop=nil) then
        msg('Cover '+Findidevice+' Missing property CONFIG_PROCESS',0)
-    else if (CoverStatus=nil) then
-       msg('Cover '+Findidevice+' Missing property CAP_PARK',0);
+    else if (CoverStatus=nil)and(LightStatus=nil) then
+       msg('Cover '+Findidevice+' One of the property CAP_PARK or FLAT_LIGHT_CONTROL is required',0);
     Disconnect;
   end;
 end;
