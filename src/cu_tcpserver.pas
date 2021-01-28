@@ -46,7 +46,7 @@ type
     CSock: TSocket;
     cmd: string;
     cmdresult: string;
-    FHttpRequest, FJSONRequest, FJSONid: string;
+    FHttpRequest, Fbody, FJSONRequest, FJSONid: string;
     JsonRecurseLevel: integer;
     FGetImage: TGetImage;
     FConnectTime: double;
@@ -63,6 +63,7 @@ type
     procedure SendData(str: string);
     procedure ExecuteCmd;
     procedure ProcessHttp;
+    procedure ProcessPost;
     procedure ProcessJSON;
     property sock: TTCPBlockSocket read FSock;
     property ConnectTime: double read FConnectTime;
@@ -290,6 +291,15 @@ begin
                Synchronize(@ProcessHttp);
                break;
             end
+            else if copy(su,1,4)='POST' then begin
+              Fbody:='';
+              repeat
+                Fbody:=Fbody+RecvPacket(1);
+              until LastError<>0;
+               FHttpRequest:=s;
+               Synchronize(@ProcessPost);
+               break;
+            end
             else if copy(s,1,1)='{' then begin
                FJSONRequest:=s;
                Synchronize(@ProcessJSON);
@@ -454,6 +464,40 @@ begin
     img.Position:=0;
     Fsock.SendStreamRaw(img);
     img.free;
+  end
+  else begin
+    Fsock.SendString('HTTP/1.0 404' + CRLF);
+    Fsock.SendString('' + CRLF);
+    Fsock.SendString('Not Found' + CRLF);
+  end;
+end;
+
+procedure TTCPThrd.ProcessPost;
+var method, uri, protocol,Doc: string;
+   i: integer;
+   img: TMemoryStream;
+begin
+  method := fetch(FHttpRequest, ' ');
+  uri := fetch(FHttpRequest, ' ');
+  protocol := fetch(FHttpRequest, ' ');
+  if uri='/jsonrpc' then begin
+    i:=pos(CRLF+CRLF,Fbody);
+    if i<=0 then begin
+      Fsock.SendString('HTTP/1.0 405' + CRLF);
+      Fsock.SendString('' + CRLF);
+      Fsock.SendString('Invalid request' + CRLF);
+    end;
+    FJSONRequest:=copy(Fbody,i+4,9999);
+    ProcessJSON;
+    Doc:=cmdresult;
+    Fsock.SendString('HTTP/1.0 200' + CRLF);
+    Fsock.SendString('Content-type: application/json' + CRLF);
+    Fsock.SendString('Content-length: ' + IntTostr(Length(Doc)) + CRLF);
+    Fsock.SendString('Connection: close' + CRLF);
+    Fsock.SendString('Date: ' + Rfc822DateTime(now) + CRLF);
+    Fsock.SendString('Server: CCDciel' + CRLF);
+    Fsock.SendString('' + CRLF);
+    Fsock.SendString(Doc);
   end
   else begin
     Fsock.SendString('HTTP/1.0 404' + CRLF);
