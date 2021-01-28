@@ -13029,8 +13029,10 @@ begin
 end;
 
 function Tf_main.TCPjsoncmd(id:string; attrib,value:Tstringlist):string;
-var p: integer;
-    rpcversion,method:string;
+var p,i: integer;
+    rpcversion,method,buf,buf1,buf2:string;
+const tr='true';
+      fa='false';
 begin
 try
   p:=attrib.IndexOf('jsonrpc');
@@ -13045,17 +13047,58 @@ try
   result:='{"jsonrpc": "2.0", ';
   p:=attrib.IndexOf('method');
   if p>=0 then
-    method:=value[p]
+    method:=uppercase(value[p])
   else
     method:='';
 
-  if method='status' then begin
-    result:=result+jsoncmd_status(attrib,value)+', "id": '+id+'}';
+  if method='STATUS' then begin
+    result:=result+jsoncmd_status(attrib,value);
+  end
+  else if method='TELESCOPE_CONNECTED' then result:=result+'"result": '+BoolToStr(mount.Status=devConnected,tr,fa)
+  else if method='TELESCOPE_PARKED' then result:=result+'"result": '+BoolToStr(mount.Park,tr,fa)
+  else if method='TELESCOPE_EQMOD' then result:=result+'"result": '+BoolToStr(mount.IsEqmod,tr,fa)
+  else if method='AUTOGUIDER_CONNECTED' then result:=result+'"result": '+BoolToStr((Autoguider.State<>GUIDER_DISCONNECTED),tr,fa)
+  else if method='AUTOGUIDER_RUNNING' then result:=result+'"result": '+BoolToStr(Autoguider.Running,tr,fa)
+  else if method='AUTOGUIDER_GUIDING' then result:=result+'"result": '+BoolToStr((Autoguider.State=GUIDER_GUIDING),tr,fa)
+  else if method='WHEEL_CONNECTED' then result:=result+'"result": '+BoolToStr((wheel.Status=devConnected),tr,fa)
+  else if method='FOCUSER_CONNECTED' then result:=result+'"result": '+BoolToStr((Focuser.Status=devConnected),tr,fa)
+  else if method='CAMERA_CONNECTED' then result:=result+'"result": '+BoolToStr((Camera.Status=devConnected),tr,fa)
+  else if method='PLANETARIUM_CONNECTED' then result:=result+'"result": '+BoolToStr(Planetarium.Connected,tr,fa)
+  else if method='PREVIEW_RUNNING' then result:=result+'"result": '+BoolToStr(f_Preview.Running,tr,fa)
+  else if method='PREVIEW_LOOP' then result:=result+'"result": '+BoolToStr(f_Preview.Loop,tr,fa)
+  else if method='CAPTURE_RUNNING' then result:=result+'"result": '+BoolToStr(f_Capture.Running,tr,fa)
+  else if method='TELESCOPERA' then result:=result+'"result": '+FormatFloat(f6,mount.RA)
+  else if method='TELESCOPEDE' then result:=result+'"result": '+FormatFloat(f6,mount.Dec)
+  else if method='DIRECTORYSEPARATOR' then result:=result+'"result": "'+DirectorySeparator+'"'
+  else if method='APPDIR' then result:=result+'"result": "'+Appdir+'"'
+  else if method='TMPDIR' then result:=result+'"result": "'+TmpDir+'"'
+  else if method='CAPTUREDIR' then result:=result+'"result": "'+config.GetValue('/Files/CapturePath',defCapturePath)+'"'
+  else if method='DEVICESCONNECTION' then begin
+    if uppercase(trim(value[attrib.IndexOf('params.0')]))='TRUE' then buf:='ON' else buf:='OFF';
+    buf:=f_scriptengine.cmd_DevicesConnection(buf);
+    result:=result+'"result":{"status": "'+buf+'"}';
+  end
+  else if method='MOUNTPARK' then begin
+    if uppercase(trim(value[attrib.IndexOf('params.0')]))='TRUE' then buf:='ON' else buf:='OFF';
+    buf:=f_scriptengine.cmd_MountPark(buf);
+    result:=result+'"result":{"status": "'+buf+'"}';
+  end
+  else if method='MOUNTTRACK' then begin
+    buf:=f_scriptengine.cmd_MountTrack;
+    result:=result+'"result":{"status": "'+buf+'"}';
+  end
+  else if method='MOUNTSLEW' then begin
+    buf1:=trim(value[attrib.IndexOf('params.0')]);
+    buf2:=trim(value[attrib.IndexOf('params.1')]);
+    buf:=f_scriptengine.cmd_MountSlew(buf1,buf2);
+    result:=result+'"result":{"status": "'+buf+'"}';
   end
 
+
   else begin
-    result:=result+'"error": {"code": -32601, "message": "Method not found"}, "id": '+id+'}';
+    result:=result+'"error": {"code": -32601, "message": "Method not found"}';
   end;
+  result:=result+', "id": '+id+'}'
 
 except
   on E: Exception do result := '{"jsonrpc": "2.0", "error": {"code": -32603, "message": "Internal error:'+E.Message+'"}, "id": '+id+'}';

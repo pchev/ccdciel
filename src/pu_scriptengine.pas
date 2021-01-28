@@ -128,6 +128,10 @@ type
     function Cmd(cname:string):string;
     function CmdArg(cname:string; var arg:Tstringlist):string;
     function CompileScripts: boolean;
+  public
+    { public declarations }
+    dbgscr: TPSScriptDebugger;
+    scr: TPSScript;
     function cmd_DevicesConnection(onoff:string):string;
     function cmd_MountPark(onoff:string):string;
     function cmd_MountTrack:string;
@@ -181,10 +185,6 @@ type
     function cmd_AutoFocus:string;
     function cmd_AutomaticAutoFocus:string;
     function cmd_ListFiles(var lf:TStringList):string;
-  public
-    { public declarations }
-    dbgscr: TPSScriptDebugger;
-    scr: TPSScript;
     function  RunScript(sname,path: string):boolean;
     procedure StopScript;
     property onMsg: TNotifyMsg read FonMsg write FonMsg;
@@ -930,12 +930,16 @@ begin
 try
 result:=msgFailed;
 connect:=(onoff='ON');
-if connect then
- Fdevicesconnection.Connect
-else
+if connect then begin
+ Fdevicesconnection.Connect;
+ wait(1);
+ result:=msgOK;
+end
+else begin
  Fdevicesconnection.Disconnect(false);
-wait(10);
-result:=msgOK;
+ wait(1);
+ result:=msgOK;
+end;
 except
   result:=msgFailed;
 end;
