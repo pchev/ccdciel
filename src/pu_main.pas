@@ -789,6 +789,7 @@ type
     procedure TCPShowSocket(var msg: string);
     function TCPcmd(s: string):string;
     function TCPjsoncmd(id:string; attrib,value:Tstringlist):string;
+    function jsoncmd_status(attrib,value:Tstringlist):string;
     procedure TCPgetimage(n: string;  var img: Tmemorystream);
     procedure SetLang;
     procedure UpdateMagnifyer(x,y:integer);
@@ -12888,22 +12889,150 @@ begin
   end;
 end;
 
-function Tf_main.TCPjsoncmd(id:string; attrib,value:Tstringlist):string;
-var p,frx,fry,frw,frh,i,j,n: integer;
-    rpcversion,method,resp:string;
+function Tf_main.jsoncmd_status(attrib,value:Tstringlist):string;
+var frx,fry,frw,frh,i,j,n: integer;
+    resp:string;
     noparams:boolean;
-function CleanText(str:string):string;
+  function CleanText(str:string):string;
+  begin
+   result:=StringReplace(str,'"','''',[rfReplaceAll]);
+   result:=StringReplace(result,';','.',[rfReplaceAll]);
+   result:=StringReplace(result,CRLF,'; ',[rfReplaceAll]);
+   result:=StringReplace(result,CR,' ',[rfReplaceAll]);
+   result:=StringReplace(result,LF,' ',[rfReplaceAll]);
+  end;
 begin
- result:=StringReplace(str,'"','''',[rfReplaceAll]);
- result:=StringReplace(result,';','.',[rfReplaceAll]);
- result:=StringReplace(result,CRLF,'; ',[rfReplaceAll]);
- result:=StringReplace(result,CR,' ',[rfReplaceAll]);
- result:=StringReplace(result,LF,' ',[rfReplaceAll]);
+  result:='';
+  resp:='';
+  noparams:=attrib.IndexOf('params.0')<0;
+
+  if noparams or (value.IndexOf('devices')>0) then
+    resp:=resp+'"devices": {"connected": '+BoolToStr(AllDevicesConnected,'true','false')+'}, ';
+  if noparams or (value.IndexOf('planetarium')>0) then begin
+    resp:=resp+'"planetarium": {"connected": '+BoolToStr((f_planetarium<>nil)and(not planetarium.Terminated)and(planetarium.Connected),'true','false')+'}, ';
+  end;
+  if noparams or (value.IndexOf('autoguider')>0) then begin
+    resp:=resp+'"autoguider": {"connected": '+BoolToStr((f_autoguider<>nil)and(autoguider.State<>GUIDER_DISCONNECTED),'true','false');
+    if (f_autoguider<>nil)and(autoguider.State<>GUIDER_DISCONNECTED) then
+       resp:=resp+', "guiding": '+BoolToStr((autoguider.State=GUIDER_GUIDING),'true','false')+
+                  ', "alert": '+BoolToStr((autoguider.State=GUIDER_ALERT),'true','false');
+    resp:=resp+'}, ';
+  end;
+  if (noparams and WantSafety) or (value.IndexOf('safety')>0) then begin
+    resp:=resp+'"safety": {"connected": '+BoolToStr((safety.Status=devConnected),'true','false');
+    if safety.Status=devConnected then
+       resp:=resp+', "safe": '+BoolToStr((f_safety.Safe),'true','false');
+    resp:=resp+'}, ';
+  end;
+  if (noparams and WantWeather) or (value.IndexOf('weather')>0) then begin
+    resp:=resp+'"weather": {"connected": '+BoolToStr((weather.Status=devConnected),'true','false');
+    if weather.Status=devConnected then begin
+      resp:=resp+', "clear": '+BoolToStr((f_weather.Clear),'true','false');
+      if (not f_weather.Clear) then
+         resp:=resp+', "weathermessage": "'+CleanText(weather.WeatherMessage)+'"';
+    end;
+    resp:=resp+'}, ';
+  end;
+  if (noparams and WantDome) or (value.IndexOf('dome')>0) then begin
+    resp:=resp+'"dome": {"connected": '+BoolToStr((dome.Status=devConnected),'true','false');
+    if dome.Status=devConnected then
+      resp:=resp+', "shutter": '+BoolToStr((f_dome.Shutter),'true','false') +
+                 ', "slaving": '+BoolToStr((f_dome.CanSlave)and(f_dome.Slave),'true','false');
+    resp:=resp+'}, ';
+  end;
+  if (noparams and WantMount) or (value.IndexOf('mount')>0) then begin
+    resp:=resp+'"mount": {"connected": '+BoolToStr((mount.Status=devConnected),'true','false');
+    if mount.Status=devConnected then begin
+      resp:=resp+', "park": '+BoolToStr((mount.Park),'true','false');
+      if not mount.Park then begin
+        resp:=resp+', "ra": "'+CleanText(trim(f_mount.RA.Caption))+'"';
+        resp:=resp+', "dec": "'+CleanText(trim(f_mount.DE.Caption))+'"';
+        resp:=resp+', "pierside": "'+CleanText(trim(f_mount.Pierside.Caption))+'"';
+        resp:=resp+', "timetomeridian": "'+CleanText(trim(f_mount.LabelMeridian.Caption)+' '+trim(f_mount.TimeToMeridian.Caption)+' '+trim(f_mount.label4.Caption))+'"';
+      end;
+    end;
+    resp:=resp+'}, ';
+  end;
+  if (noparams and WantCamera) or (value.IndexOf('camera')>0) then begin
+    resp:=resp+'"camera": {"connected": '+BoolToStr(camera.Status=devConnected,'true','false');
+    if camera.Status=devConnected then begin
+      resp:=resp+', "binning": "'+inttostr(camera.BinX)+'x'+inttostr(camera.BinY)+'"';
+      camera.GetFrame(frx,fry,frw,frh);
+      resp:=resp+', "frame": "'+inttostr(frx)+'/'+inttostr(fry)+'/'+inttostr(frw)+'/'+inttostr(frh)+'"';
+      resp:=resp+', "cooler": '+BoolToStr(f_ccdtemp.CCDcooler.Checked,'true','false');
+      resp:=resp+', "temperature": '+f_ccdtemp.Current.Caption;
+    end;
+    resp:=resp+'}, ';
+  end;
+  if (noparams and WantWheel) or (value.IndexOf('wheel')>0) then begin
+    resp:=resp+'"wheel": {"connected": '+BoolToStr(wheel.Status=devConnected,'true','false');
+    if wheel.Status=devConnected then begin
+       resp:=resp+', "filter": "'+CleanText(f_filterwheel.Filters.Text)+'"';
+    end;
+    resp:=resp+'}, ';
+  end;
+  if (noparams and WantRotator) or (value.IndexOf('rotator')>0) then begin
+    resp:=resp+'"rotator": {"connected": '+BoolToStr(rotator.Status=devConnected,'true','false');
+    if rotator.Status=devConnected then begin
+       resp:=resp+', "position": '+CleanText(f_rotator.Angle.Text);
+    end;
+    resp:=resp+'}, ';
+  end;
+  if (noparams and WantFocuser) or (value.IndexOf('focuser')>0) then begin
+    resp:=resp+'"focuser": {"connected": '+BoolToStr(focuser.Status=devConnected,'true','false');
+    if focuser.Status=devConnected then begin
+       if focuser.hasAbsolutePosition then resp:=resp+', "position": '+f_focuser.Position.Text;
+       if focuser.hasTemperature then resp:=resp+', "temperature": '+f_focuser.Temp.Text;
+       resp:=resp+', "focusermessage": "'+CleanText(f_starprofile.LastFocusMsg)+'"';
+    end;
+    resp:=resp+'}, ';
+  end;
+  if noparams or (value.IndexOf('sequence')>0) then begin
+    resp:=resp+'"sequence": {"running": '+BoolToStr(f_sequence.Running,'true','false');
+    if f_sequence.Running then begin
+      resp:=resp+', "name": "'+CleanText(trim(CurrentSeqName))+'"';
+      resp:=resp+', "target": "'+CleanText(trim(CurrentTargetName))+'"';
+      resp:=resp+', "step": "'+CleanText(trim(CurrentStepName))+'"';
+      resp:=resp+', "status": "'+CleanText(trim(f_sequence.StatusMsg.Caption))+'"';
+      resp:=resp+', "delay": "'+CleanText(trim(f_sequence.DelayMsg.Caption))+'"';
+      resp:=resp+', "sequencecompletion": '+FormatFloat(f0,f_sequence.PercentComplete*100);
+      resp:=resp+', "targetcompletion": '+FormatFloat(f0,f_sequence.TargetPercentComplete*100);
+    end;
+    resp:=resp+'}, ';
+  end;
+  if noparams or (value.IndexOf('sequence')>0) or (value.IndexOf('capture')>0) then begin
+    resp:=resp+'"capture": {"running": '+BoolToStr(f_capture.Running,'true','false');
+    if f_capture.Running then begin
+       resp:=resp+', "total": '+f_capture.SeqNum.Text;
+       resp:=resp+', "current": '+inttostr(f_capture.SeqCount);
+       resp:=resp+', "exposure": '+formatfloat(f3,f_capture.ExposureTime);
+       resp:=resp+', "exposureremain": '+formatfloat(f3,CameraExposureRemain);
+    end;
+    resp:=resp+'}, ';
+  end;
+  if noparams or (value.IndexOf('log')>0) then begin
+    n:=f_msg.msg.Lines.Count-1;
+    if n<30 then j:=0
+            else j:=n-30;
+    resp:=resp+'"log": [';
+    for i:=j to n do
+      resp:=resp+'"'+CleanText(f_msg.msg.Lines[i])+'",';
+    delete(resp,length(resp),1);
+    resp:=resp+'], ';
+  end;
+  if resp>'' then begin
+    delete(resp,length(resp)-1,2);
+    result:=result+'"result": {'+resp+'}'
+  end
+  else
+    result:=result+'"error": {"code": -32602, "message": "Invalid params"}';
 end;
 
+function Tf_main.TCPjsoncmd(id:string; attrib,value:Tstringlist):string;
+var p: integer;
+    rpcversion,method:string;
 begin
 try
-  resp:='';
   p:=attrib.IndexOf('jsonrpc');
   if p>=0 then
     rpcversion:=value[p]
@@ -12921,129 +13050,7 @@ try
     method:='';
 
   if method='status' then begin
-    p:=attrib.IndexOf('params.0');
-    noparams:=attrib.IndexOf('params.0')<0;
-
-    if noparams or (value.IndexOf('devices')>0) then
-      resp:=resp+'"devices": {"connected": '+BoolToStr(AllDevicesConnected,'true','false')+'}, ';
-    if noparams or (value.IndexOf('planetarium')>0) then begin
-      resp:=resp+'"planetarium": {"connected": '+BoolToStr((f_planetarium<>nil)and(not planetarium.Terminated)and(planetarium.Connected),'true','false')+'}, ';
-    end;
-    if noparams or (value.IndexOf('autoguider')>0) then begin
-      resp:=resp+'"autoguider": {"connected": '+BoolToStr((f_autoguider<>nil)and(autoguider.State<>GUIDER_DISCONNECTED),'true','false');
-      if (f_autoguider<>nil)and(autoguider.State<>GUIDER_DISCONNECTED) then
-         resp:=resp+', "guiding": '+BoolToStr((autoguider.State=GUIDER_GUIDING),'true','false')+
-                    ', "alert": '+BoolToStr((autoguider.State=GUIDER_ALERT),'true','false');
-      resp:=resp+'}, ';
-    end;
-    if (noparams and WantSafety) or (value.IndexOf('safety')>0) then begin
-      resp:=resp+'"safety": {"connected": '+BoolToStr((safety.Status=devConnected),'true','false');
-      if safety.Status=devConnected then
-         resp:=resp+', "safe": '+BoolToStr((f_safety.Safe),'true','false');
-      resp:=resp+'}, ';
-    end;
-    if (noparams and WantWeather) or (value.IndexOf('weather')>0) then begin
-      resp:=resp+'"weather": {"connected": '+BoolToStr((weather.Status=devConnected),'true','false');
-      if weather.Status=devConnected then begin
-        resp:=resp+', "clear": '+BoolToStr((f_weather.Clear),'true','false');
-        if (not f_weather.Clear) then
-           resp:=resp+', "weathermessage": "'+CleanText(weather.WeatherMessage)+'"';
-      end;
-      resp:=resp+'}, ';
-    end;
-    if (noparams and WantDome) or (value.IndexOf('dome')>0) then begin
-      resp:=resp+'"dome": {"connected": '+BoolToStr((dome.Status=devConnected),'true','false');
-      if dome.Status=devConnected then
-        resp:=resp+', "shutter": '+BoolToStr((f_dome.Shutter),'true','false') +
-                   ', "slaving": '+BoolToStr((f_dome.CanSlave)and(f_dome.Slave),'true','false');
-      resp:=resp+'}, ';
-    end;
-    if (noparams and WantMount) or (value.IndexOf('mount')>0) then begin
-      resp:=resp+'"mount": {"connected": '+BoolToStr((mount.Status=devConnected),'true','false');
-      if mount.Status=devConnected then begin
-        resp:=resp+', "park": '+BoolToStr((mount.Park),'true','false');
-        if not mount.Park then begin
-          resp:=resp+', "ra": "'+CleanText(trim(f_mount.RA.Caption))+'"';
-          resp:=resp+', "dec": "'+CleanText(trim(f_mount.DE.Caption))+'"';
-          resp:=resp+', "pierside": "'+CleanText(trim(f_mount.Pierside.Caption))+'"';
-          resp:=resp+', "timetomeridian": "'+CleanText(trim(f_mount.LabelMeridian.Caption)+' '+trim(f_mount.TimeToMeridian.Caption)+' '+trim(f_mount.label4.Caption))+'"';
-        end;
-      end;
-      resp:=resp+'}, ';
-    end;
-    if (noparams and WantCamera) or (value.IndexOf('camera')>0) then begin
-      resp:=resp+'"camera": {"connected": '+BoolToStr(camera.Status=devConnected,'true','false');
-      if camera.Status=devConnected then begin
-        resp:=resp+', "binning": "'+inttostr(camera.BinX)+'x'+inttostr(camera.BinY)+'"';
-        camera.GetFrame(frx,fry,frw,frh);
-        resp:=resp+', "frame": "'+inttostr(frx)+'/'+inttostr(fry)+'/'+inttostr(frw)+'/'+inttostr(frh)+'"';
-        resp:=resp+', "cooler": '+BoolToStr(f_ccdtemp.CCDcooler.Checked,'true','false');
-        resp:=resp+', "temperature": '+f_ccdtemp.Current.Caption;
-      end;
-      resp:=resp+'}, ';
-    end;
-    if (noparams and WantWheel) or (value.IndexOf('wheel')>0) then begin
-      resp:=resp+'"wheel": {"connected": '+BoolToStr(wheel.Status=devConnected,'true','false');
-      if wheel.Status=devConnected then begin
-         resp:=resp+', "filter": "'+CleanText(f_filterwheel.Filters.Text)+'"';
-      end;
-      resp:=resp+'}, ';
-    end;
-    if (noparams and WantRotator) or (value.IndexOf('rotator')>0) then begin
-      resp:=resp+'"rotator": {"connected": '+BoolToStr(rotator.Status=devConnected,'true','false');
-      if rotator.Status=devConnected then begin
-         resp:=resp+', "position": '+CleanText(f_rotator.Angle.Text);
-      end;
-      resp:=resp+'}, ';
-    end;
-    if (noparams and WantFocuser) or (value.IndexOf('focuser')>0) then begin
-      resp:=resp+'"focuser": {"connected": '+BoolToStr(focuser.Status=devConnected,'true','false');
-      if focuser.Status=devConnected then begin
-         if focuser.hasAbsolutePosition then resp:=resp+', "position": '+f_focuser.Position.Text;
-         if focuser.hasTemperature then resp:=resp+', "temperature": '+f_focuser.Temp.Text;
-         resp:=resp+', "focusermessage": "'+CleanText(f_starprofile.LastFocusMsg)+'"';
-      end;
-      resp:=resp+'}, ';
-    end;
-    if noparams or (value.IndexOf('sequence')>0) then begin
-      resp:=resp+'"sequence": {"running": '+BoolToStr(f_sequence.Running,'true','false');
-      if f_sequence.Running then begin
-        resp:=resp+', "name": "'+CleanText(trim(CurrentSeqName))+'"';
-        resp:=resp+', "target": "'+CleanText(trim(CurrentTargetName))+'"';
-        resp:=resp+', "step": "'+CleanText(trim(CurrentStepName))+'"';
-        resp:=resp+', "status": "'+CleanText(trim(f_sequence.StatusMsg.Caption))+'"';
-        resp:=resp+', "delay": "'+CleanText(trim(f_sequence.DelayMsg.Caption))+'"';
-        resp:=resp+', "sequencecompletion": '+FormatFloat(f0,f_sequence.PercentComplete*100);
-        resp:=resp+', "targetcompletion": '+FormatFloat(f0,f_sequence.TargetPercentComplete*100);
-      end;
-      resp:=resp+'}, ';
-    end;
-    if noparams or (value.IndexOf('sequence')>0) or (value.IndexOf('capture')>0) then begin
-      resp:=resp+'"capture": {"running": '+BoolToStr(f_capture.Running,'true','false');
-      if f_capture.Running then begin
-         resp:=resp+', "total": '+f_capture.SeqNum.Text;
-         resp:=resp+', "current": '+inttostr(f_capture.SeqCount);
-         resp:=resp+', "exposure": '+formatfloat(f3,f_capture.ExposureTime);
-         resp:=resp+', "exposureremain": '+formatfloat(f3,CameraExposureRemain);
-      end;
-      resp:=resp+'}, ';
-    end;
-    if noparams or (value.IndexOf('log')>0) then begin
-      n:=f_msg.msg.Lines.Count-1;
-      if n<30 then j:=0
-              else j:=n-30;
-      resp:=resp+'"log": [';
-      for i:=j to n do
-        resp:=resp+'"'+CleanText(f_msg.msg.Lines[i])+'",';
-      delete(resp,length(resp),1);
-      resp:=resp+'], ';
-    end;
-    if resp>'' then begin
-      delete(resp,length(resp)-1,2);
-      result:=result+'"result": {'+resp+'}, "id": '+id+'}'
-    end
-    else
-      result:=result+'"error": {"code": -32602, "message": "Invalid params"}, "id": '+id+'}';
+    result:=result+jsoncmd_status(attrib,value)+', "id": '+id+'}';
   end
 
   else begin
