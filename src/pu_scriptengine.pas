@@ -930,16 +930,15 @@ begin
 try
 result:=msgFailed;
 connect:=(onoff='ON');
-if connect then begin
+if connect and (Fdevicesconnection.BtnConnect.Caption=rsConnect) then begin
  Fdevicesconnection.Connect;
  wait(1);
- result:=msgOK;
-end
-else begin
+end;
+if (not connect) and (Fdevicesconnection.BtnConnect.Caption=rsDisconnect) then begin
  Fdevicesconnection.Disconnect(false);
  wait(1);
- result:=msgOK;
 end;
+result:=msgOK;
 except
   result:=msgFailed;
 end;

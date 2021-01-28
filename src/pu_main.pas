@@ -13054,6 +13054,7 @@ try
   if method='STATUS' then begin
     result:=result+jsoncmd_status(attrib,value);
   end
+  else if method='DEVICES_CONNECTED' then result:=result+'"result": '+BoolToStr(AllDevicesConnected,tr,fa)
   else if method='TELESCOPE_CONNECTED' then result:=result+'"result": '+BoolToStr(mount.Status=devConnected,tr,fa)
   else if method='TELESCOPE_PARKED' then result:=result+'"result": '+BoolToStr(mount.Park,tr,fa)
   else if method='TELESCOPE_EQMOD' then result:=result+'"result": '+BoolToStr(mount.IsEqmod,tr,fa)
