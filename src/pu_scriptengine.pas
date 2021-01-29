@@ -1428,10 +1428,7 @@ begin
 try
 result:=msgFailed;
 if Capture.Running then exit;
-if Assigned(Capture.onStartExposure) then
-  Capture.onStartExposure(Self)
- else
-  exit;
+Capture.BtnStart.Click;
 wait(1);
 result:=msgOK;
 except
@@ -1444,9 +1441,7 @@ begin
 try
 result:=msgFailed;
 if not Capture.Running then exit;
-Capture.Stop;
-if Assigned(Capture.onAbortExposure) then
-  Capture.onAbortExposure(Self);
+Capture.BtnStart.Click;
 wait(1);
 result:=msgOK;
 except

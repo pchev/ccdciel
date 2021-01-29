@@ -13029,7 +13029,7 @@ begin
 end;
 
 function Tf_main.TCPjsoncmd(id:string; attrib,value:Tstringlist):string;
-var p,i: integer;
+var p: integer;
     rpcversion,method,buf,buf1,buf2:string;
 const tr='true';
       fa='false';
@@ -13054,6 +13054,7 @@ try
   if method='STATUS' then begin
     result:=result+jsoncmd_status(attrib,value);
   end
+  // return variable value
   else if method='DEVICES_CONNECTED' then result:=result+'"result": '+BoolToStr(AllDevicesConnected,tr,fa)
   else if method='TELESCOPE_CONNECTED' then result:=result+'"result": '+BoolToStr(mount.Status=devConnected,tr,fa)
   else if method='TELESCOPE_PARKED' then result:=result+'"result": '+BoolToStr(mount.Park,tr,fa)
@@ -13066,36 +13067,149 @@ try
   else if method='CAMERA_CONNECTED' then result:=result+'"result": '+BoolToStr((Camera.Status=devConnected),tr,fa)
   else if method='PLANETARIUM_CONNECTED' then result:=result+'"result": '+BoolToStr(Planetarium.Connected,tr,fa)
   else if method='PREVIEW_RUNNING' then result:=result+'"result": '+BoolToStr(f_Preview.Running,tr,fa)
-  else if method='PREVIEW_LOOP' then result:=result+'"result": '+BoolToStr(f_Preview.Loop,tr,fa)
+  else if method='PREVIEW_LOOP_RUNNING' then result:=result+'"result": '+BoolToStr(f_Preview.Loop,tr,fa)
   else if method='CAPTURE_RUNNING' then result:=result+'"result": '+BoolToStr(f_Capture.Running,tr,fa)
   else if method='TELESCOPERA' then result:=result+'"result": '+FormatFloat(f6,mount.RA)
   else if method='TELESCOPEDE' then result:=result+'"result": '+FormatFloat(f6,mount.Dec)
+  else if method='CCDTEMP' then result:=result+'"result": '+FormatFloat(f2,camera.Temperature)
+  else if method='FOCUSERPOSITION' then result:=result+'"result": '+IntToStr(focuser.Position)
+  else if method='TIMENOW' then result:=result+'"result": "'+FormatDateTime(dateiso,now)+'"'
   else if method='DIRECTORYSEPARATOR' then result:=result+'"result": "'+DirectorySeparator+'"'
   else if method='APPDIR' then result:=result+'"result": "'+Appdir+'"'
   else if method='TMPDIR' then result:=result+'"result": "'+TmpDir+'"'
   else if method='CAPTUREDIR' then result:=result+'"result": "'+config.GetValue('/Files/CapturePath',defCapturePath)+'"'
+  // execute command without parameter
+  else if method='TELESCOPE_ABORTMOTION' then result:=result+'"result":{"status": "'+f_scriptengine.cmd_MountAbortMotion+'"}'
+  else if method='TELESCOPE_TRACK' then result:=result+'"result":{"status": "'+f_scriptengine.cmd_MountTrack+'"}'
+  else if method='EQMOD_CLEARPOINTS' then result:=result+'"result":{"status": "'+ f_scriptengine.cmd_EqmodClearPoints+'"}'
+  else if method='EQMOD_CLEARSYNCDELTA' then result:=result+'"result":{"status": "'+ f_scriptengine.cmd_EqmodClearSyncDelta+'"}'
+  else if method='EQMOD_STDSYNC' then result:=result+'"result":{"status": "'+ f_scriptengine.cmd_EqmodStdSync+'"}'
+  else if method='EQMOD_APPENDSYNC' then result:=result+'"result":{"status": "'+ f_scriptengine.cmd_EqmodAppendSync+'"}'
+  else if method='AUTOGUIDER_CONNECT' then result:=result+'"result":{"status": "'+f_scriptengine.cmd_AutoguiderConnect+'"}'
+  else if method='AUTOGUIDER_CALIBRATE' then result:=result+'"result":{"status": "'+f_scriptengine.cmd_AutoguiderCalibrate+'"}'
+  else if method='AUTOGUIDER_STARTGUIDING' then result:=result+'"result":{"status": "'+f_scriptengine.cmd_AutoguiderStartGuiding+'"}'
+  else if method='AUTOGUIDER_STOPGUIDING' then result:=result+'"result":{"status": "'+f_scriptengine.cmd_AutoguiderStopGuiding+'"}'
+  else if method='AUTOGUIDER_PAUSE' then result:=result+'"result":{"status": "'+f_scriptengine.cmd_AutoguiderPause+'"}'
+  else if method='AUTOGUIDER_UNPAUSE' then result:=result+'"result":{"status": "'+f_scriptengine.cmd_AutoguiderUnPause+'"}'
+  else if method='AUTOGUIDER_DITHER' then result:=result+'"result":{"status": "'+f_scriptengine.cmd_AutoguiderDither+'"}'
+  else if method='AUTOGUIDER_SHUTDOWN' then result:=result+'"result":{"status": "'+f_scriptengine.cmd_AutoguiderShutdown+'"}'
+  else if method='WHEEL_GETFILTER' then result:=result+'"result":{"status": "'+f_scriptengine.cmd_Wheel_GetFilter+'"}'
+  else if method='PREVIEW_SINGLE' then result:=result+'"result":{"status": "'+f_scriptengine.cmd_Preview_Single+'"}'
+  else if method='PREVIEW_LOOP' then result:=result+'"result":{"status": "'+f_scriptengine.cmd_Preview_Loop+'"}'
+  else if method='PREVIEW_WAITLOOP' then result:=result+'"result":{"status": "'+f_scriptengine.cmd_Preview_WaitLoop+'"}'
+  else if method='PREVIEW_STOP' then result:=result+'"result":{"status": "'+f_scriptengine.cmd_Preview_Stop+'"}'
+  else if method='CAPTURE_START' then result:=result+'"result":{"status": "'+f_scriptengine.cmd_Capture_Start+'"}'
+  else if method='CAPTURE_STOP' then result:=result+'"result":{"status": "'+f_scriptengine.cmd_Capture_Stop+'"}'
+  else if method='ASTROMETRY_SOLVE' then result:=result+'"result":{"status": "'+f_scriptengine.cmd_AstrometrySolve+'"}'
+  else if method='ASTROMETRY_SYNC' then result:=result+'"result":{"status": "'+f_scriptengine.cmd_AstrometrySync+'"}'
+  else if method='ASTROMETRY_SLEW_IMAGE_CENTER' then result:=result+'"result":{"status": "'+f_scriptengine.cmd_AstrometrySlewImageCenter+'"}'
+  else if method='PLANETARIUM_CONNECT' then result:=result+'"result":{"status": "'+f_scriptengine.cmd_PlanetariumConnect+'"}'
+  else if method='PLANETARIUM_SHOWIMAGE' then result:=result+'"result":{"status": "'+f_scriptengine.cmd_PlanetariumShowImage+'"}'
+  else if method='PLANETARIUM_SHUTDOWN' then result:=result+'"result":{"status": "'+f_scriptengine.cmd_PlanetariumShutdown+'"}'
+  else if method='PROGRAM_SHUTDOWN' then result:=result+'"result":{"status": "'+f_scriptengine.cmd_ProgramShutdown+'"}'
+  else if method='CLEAR_REFERENCE_IMAGE' then result:=result+'"result":{"status": "'+f_scriptengine.cmd_ClearReferenceImage+'"}'
+  else if method='AUTOFOCUS' then result:=result+'"result":{"status": "'+f_scriptengine.cmd_AutoFocus+'"}'
+  else if method='AUTOMATICAUTOFOCUS' then result:=result+'"result":{"status": "'+f_scriptengine.cmd_AutomaticAutoFocus+'"}'
+  // execute command with parameter
   else if method='DEVICESCONNECTION' then begin
     if uppercase(trim(value[attrib.IndexOf('params.0')]))='TRUE' then buf:='ON' else buf:='OFF';
     buf:=f_scriptengine.cmd_DevicesConnection(buf);
     result:=result+'"result":{"status": "'+buf+'"}';
   end
-  else if method='MOUNTPARK' then begin
+  else if method='TELESCOPE_PARK' then begin
     if uppercase(trim(value[attrib.IndexOf('params.0')]))='TRUE' then buf:='ON' else buf:='OFF';
     buf:=f_scriptengine.cmd_MountPark(buf);
     result:=result+'"result":{"status": "'+buf+'"}';
   end
-  else if method='MOUNTTRACK' then begin
-    buf:=f_scriptengine.cmd_MountTrack;
-    result:=result+'"result":{"status": "'+buf+'"}';
-  end
-  else if method='MOUNTSLEW' then begin
+  else if method='TELESCOPE_SLEW' then begin
     buf1:=trim(value[attrib.IndexOf('params.0')]);
     buf2:=trim(value[attrib.IndexOf('params.1')]);
     buf:=f_scriptengine.cmd_MountSlew(buf1,buf2);
     result:=result+'"result":{"status": "'+buf+'"}';
   end
+  else if method='TELESCOPE_SYNC' then begin
+    buf1:=trim(value[attrib.IndexOf('params.0')]);
+    buf2:=trim(value[attrib.IndexOf('params.1')]);
+    buf:=f_scriptengine.cmd_MountSync(buf1,buf2);
+    result:=result+'"result":{"status": "'+buf+'"}';
+  end
+  else if method='WHEEL_SETFILTER' then begin
+    buf1:=trim(value[attrib.IndexOf('params.0')]);
+    buf:=f_scriptengine.cmd_Wheel_SetFilter(buf1);
+    result:=result+'"result":{"status": "'+buf+'"}';
+  end
+  else if method='FOCUSER_SETPOSITION' then begin
+    buf1:=trim(value[attrib.IndexOf('params.0')]);
+    buf:=f_scriptengine.cmd_Focuser_SetPosition(buf1);
+    result:=result+'"result":{"status": "'+buf+'"}';
+  end
+  else if method='CCD_SETTEMPERATURE' then begin
+    buf1:=trim(value[attrib.IndexOf('params.0')]);
+    buf:=f_scriptengine.cmd_Ccd_SetTemperature(buf1);
+    result:=result+'"result":{"status": "'+buf+'"}';
+  end
+  else if method='PREVIEW_SETEXPOSURE' then begin
+    buf1:=trim(value[attrib.IndexOf('params.0')]);
+    buf:=f_scriptengine.cmd_Preview_SetExposure(buf1);
+    result:=result+'"result":{"status": "'+buf+'"}';
+  end
+  else if method='PREVIEW_SETBINNING' then begin
+    buf1:=trim(value[attrib.IndexOf('params.0')]);
+    buf:=f_scriptengine.cmd_Preview_SetBinning(buf1);
+    result:=result+'"result":{"status": "'+buf+'"}';
+  end
+  else if method='CAPTURE_SETEXPOSURE' then begin
+    buf1:=trim(value[attrib.IndexOf('params.0')]);
+    buf:=f_scriptengine.cmd_Capture_SetExposure(buf1);
+    result:=result+'"result":{"status": "'+buf+'"}';
+  end
+  else if method='CAPTURE_SETBINNING' then begin
+    buf1:=trim(value[attrib.IndexOf('params.0')]);
+    buf:=f_scriptengine.cmd_Capture_SetBinning(buf1);
+    result:=result+'"result":{"status": "'+buf+'"}';
+  end
+  else if method='CAPTURE_SETOBJECTNAME' then begin
+    buf1:=trim(value[attrib.IndexOf('params.0')]);
+    buf:=f_scriptengine.cmd_Capture_SetObjectName(buf1);
+    result:=result+'"result":{"status": "'+buf+'"}';
+  end
+  else if method='CAPTURE_SETCOUNT' then begin
+    buf1:=trim(value[attrib.IndexOf('params.0')]);
+    buf:=f_scriptengine.cmd_Capture_SetCount(buf1);
+    result:=result+'"result":{"status": "'+buf+'"}';
+  end
+  else if method='CAPTURE_SETFRAMETYPE' then begin
+    buf1:=trim(value[attrib.IndexOf('params.0')]);
+    buf:=f_scriptengine.cmd_Capture_SetFrameType(buf1);
+    result:=result+'"result":{"status": "'+buf+'"}';
+  end
+  else if method='CAPTURE_SETDITHER' then begin
+    buf1:=trim(value[attrib.IndexOf('params.0')]);
+    buf:=f_scriptengine.cmd_Capture_SetDither(buf1);
+    result:=result+'"result":{"status": "'+buf+'"}';
+  end
+  else if method='SEQUENCE_START' then begin
+    buf1:=trim(value[attrib.IndexOf('params.0')]);
+    buf:=f_scriptengine.cmd_SequenceStart(buf1);
+    result:=result+'"result":{"status": "'+buf+'"}';
+  end
+  else if method='SAVE_FITS_FILE' then begin
+    buf1:=trim(value[attrib.IndexOf('params.0')]);
+    buf:=f_scriptengine.cmd_SaveFitsFile(buf1);
+    result:=result+'"result":{"status": "'+buf+'"}';
+  end
+  else if method='OPEN_FITS_FILE' then begin
+    buf1:=trim(value[attrib.IndexOf('params.0')]);
+    buf:=f_scriptengine.cmd_OpenFitsFile(buf1);
+    result:=result+'"result":{"status": "'+buf+'"}';
+  end
+  else if method='OPEN_REFERENCE_IMAGE' then begin
+    buf1:=trim(value[attrib.IndexOf('params.0')]);
+    buf:=f_scriptengine.cmd_OpenReferenceImage(buf1);
+    result:=result+'"result":{"status": "'+buf+'"}';
+  end
 
-
+  // method not found
   else begin
     result:=result+'"error": {"code": -32601, "message": "Method not found"}';
   end;
