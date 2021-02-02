@@ -10,7 +10,7 @@ id = 0
 
 # Define the function to call CCDciel method
 def ccdciel(method, params):
-    global ccdcielresult
+    # increment the request id
     global id
     id += 1
     
@@ -20,30 +20,30 @@ def ccdciel(method, params):
         "method": method,
         "params": [params] }
     
-    # global variable "ccdcielresult" contain the result of the method
-    ccdcielresult = requests.post(ccdciel_url, json=cmd).json()
+    # Send the request and return the result
+    return requests.post(ccdciel_url, json=cmd).json()
     
 def main():
+
+    connected = (ccdciel("Devices_Connected","")["result"])
+    print("Devices_Connected %r" %(connected))
     
-    # Connect the devices to CCDciel if this is not already done
-    ccdciel("devicesconnection","true")
-    print("devicesconnection %r" %(ccdcielresult["result"]))
+    if not connected :
+       # Connect the devices to CCDciel if this is not already done   
+       print("DevicesConnection %r" %(ccdciel("DevicesConnection","true")["result"]))
     
-    # Wait unitl the devices are connected
-    wait = True
-    while wait:
-        time.sleep(1)
-        ccdciel("devices_connected","")
-        print("devices_connected %r" %(ccdcielresult["result"]))
-        wait = not(ccdcielresult["result"])
+       # Wait unitl the devices are connected
+       wait = True
+       while wait:
+           time.sleep(1)      
+           wait = not(ccdciel("Devices_Connected","")["result"])
+           print("Devices_Connected %r" %(not wait))
     
     # Get the telescope RA position
-    ccdciel("telescopera","")
-    ra=ccdcielresult["result"]
+    ra = ccdciel("TelescopeRA","")["result"]
     
     # Get the telescope DEC position
-    ccdciel("telescopede","")
-    de=ccdcielresult["result"]
+    de = ccdciel("TelescopeDE","")["result"]
     
     # Print the telescope position
     print("Telescope RA=%6.4f DEC=%6.4f" %(ra, de))
