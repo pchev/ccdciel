@@ -742,6 +742,7 @@ type
     procedure CameraVideoEncoderChange(Sender: TObject);
     procedure CameraFPSChange(Sender: TObject);
     procedure ShowLastImage(Sender: TObject);
+    procedure ShowFullRange(Sender: TObject);
     procedure ResetPreviewStack(Sender: TObject);
     Procedure StopExposure(Sender: TObject);
     Procedure StartPreviewExposure(Sender: TObject);
@@ -1430,6 +1431,7 @@ begin
   f_visu.onRedrawHistogram:=@RedrawHistogram;
   f_visu.onShowHistogramPos:=@ShowHistogramPos;
   f_visu.onShowLastImage:=@ShowLastImage;
+  f_visu.onShowFullRange:=@ShowFullRange;
 
   f_frame:=Tf_frame.Create(self);
   f_frame.onSet:=@SetFrame;
@@ -2077,6 +2079,8 @@ begin
   f_visu.HistBar.Position:=config.GetValue('/Visu/HistBar',50);
   f_visu.FlipHorz:=config.GetValue('/Visu/FlipHorz',false);
   f_visu.FlipVert:=config.GetValue('/Visu/FlipVert',false);
+  f_visu.BtnFullrange.Down:=config.GetValue('/Visu/Fullrange',false);
+  fits.ImgFullRange:=f_visu.BtnFullrange.Down;
 
   LogLevel:=config.GetValue('/Log/LogLevel',LogLevel);
   TabMsgLevel.TabIndex:=LogLevel-1;
@@ -2297,6 +2301,8 @@ begin
   f_visu.BtnZoomAdjust.Glyph.Assign(btn);
   TBTabs.Images.GetBitmap(6, btn);
   f_visu.BtnBullsEye.Glyph.Assign(btn);
+  TBTabs.Images.GetBitmap(7, btn);
+  f_visu.BtnFullrange.Glyph.Assign(btn);
   TBTabs.Images.GetBitmap(8, btn);
   f_visu.BtnClipping.Glyph.Assign(btn);
   TBTabs.Images.GetBitmap(11, btn);
@@ -4034,6 +4040,7 @@ begin
    config.SetValue('/Visu/HistBar',f_visu.HistBar.Position);
    config.SetValue('/Visu/FlipHorz',f_visu.FlipHorz);
    config.SetValue('/Visu/FlipVert',f_visu.FlipVert);
+   config.SetValue('/Visu/Fullrange',f_visu.BtnFullrange.Down);
 
    n:=FilterList.Count-1;
    config.SetValue('/Filters/Num',n);
@@ -8749,6 +8756,14 @@ begin
   ClearImage;
   Image1.Invalidate;
  end;
+end;
+
+procedure Tf_main.ShowFullRange(Sender: TObject);
+begin
+ fits.ImgFullRange:=f_visu.BtnFullrange.Down;
+ DrawHistogram(true,true);
+ DrawImage;
+ Image1.Invalidate;
 end;
 
 procedure Tf_main.CameraNewImageAsync(Data: PtrInt);

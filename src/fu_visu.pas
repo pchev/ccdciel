@@ -33,6 +33,7 @@ type
   { Tf_visu }
 
   Tf_visu = class(TFrame)
+    BtnFullrange: TSpeedButton;
     BtnClipping: TSpeedButton;
     BtnInvert: TSpeedButton;
     BtnFlipHorz: TSpeedButton;
@@ -61,6 +62,7 @@ type
     procedure BtnClippingClick(Sender: TObject);
     procedure BtnFlipHorzClick(Sender: TObject);
     procedure BtnFlipVertClick(Sender: TObject);
+    procedure BtnFullrangeClick(Sender: TObject);
     procedure BtnInvertClick(Sender: TObject);
     procedure BtnShowImageClick(Sender: TObject);
     procedure BtnZoomClick(Sender: TObject);
@@ -97,6 +99,7 @@ type
     FRedrawHistogram: TNotifyEvent;
     FShowHistogramPos: TNotifyStr;
     FShowLastImage: TNotifyEvent;
+    FShowFullRange: TNotifyEvent;
     procedure SetZoom(value: double);
     procedure SetFlipHorz(value:boolean);
     procedure SetFlipVert(value:boolean);
@@ -122,6 +125,7 @@ type
     property onRedrawHistogram: TNotifyEvent read FRedrawHistogram write FRedrawHistogram;
     property onShowHistogramPos: TNotifyStr read FShowHistogramPos write FShowHistogramPos;
     property onShowLastImage: TNotifyEvent read FShowLastImage write FShowLastImage;
+    property onShowFullRange: TNotifyEvent read FShowFullRange write FShowFullRange;
   end;
 
 implementation
@@ -193,6 +197,7 @@ begin
   BtnFlipHorz.Hint:=rsFlipTheImageH;
   BtnFlipVert.Hint:=rsFlipTheImageV;
   BtnShowImage.Hint:=rsShowLastCapt;
+  BtnFullrange.Hint:=rsHistogramFul;
 end;
 
 procedure Tf_visu.SetLimit(SetLevel:boolean);
@@ -445,6 +450,11 @@ end;
 procedure Tf_visu.BtnFlipVertClick(Sender: TObject);
 begin
   TimerRedraw.Enabled:=true;
+end;
+
+procedure Tf_visu.BtnFullrangeClick(Sender: TObject);
+begin
+  if assigned(FShowFullRange) then FShowFullRange(self);
 end;
 
 procedure Tf_visu.BtnInvertClick(Sender: TObject);
