@@ -98,7 +98,7 @@ type
       SkipTarget: boolean;
       TargetForceNext: boolean;
       FDoneStatus, FLastDoneStep: string;
-      FAllDone: boolean;
+      FAllDone, FAllStepsDone: boolean;
       FFilterList,FBinningList: Tstringlist;
       FOriginalFilter: TSaveFilter;
       FSequenceFile: T_SequenceFile;
@@ -192,6 +192,7 @@ type
       property Count: integer read NumTargets;
       property CurrentTarget: integer read FCurrentTarget;
       property TargetName: string read FName write SetTargetName;
+      property AllDone: boolean read FAllDone;
       property Busy: boolean read GetBusy;
       property Restarting: boolean read FRestarting;
       property Slewing: boolean read Fslewing;
@@ -1102,6 +1103,7 @@ begin
   FSeqLockTwilight:=false;
   FRunning:=true;
   FRestarting:=False;
+  TargetForceNext:=false;
   // look for a dawn sky flat
   for j:=0 to NumTargets-1 do begin
     if (Targets[j].objectname=SkyFlatTxt)and(Targets[j].planname=FlatTimeName[1]) then begin
@@ -1386,16 +1388,18 @@ begin
 end;
 
 function T_Targets.CheckDoneCount:boolean;
-var i,j,totalcount,donecount: integer;
+var i,j,totalcount,donecount,totalspteps,donesteps : integer;
     txt: string;
     t: TTarget;
     p: T_Plan;
 begin
  result:=false;
  FAllDone:=false;
+ FAllStepsDone:=false;
  FDoneStatus:='';
  FLastDoneStep:='';
  totalcount:=0; donecount:=0;
+ totalspteps:=0; donesteps:=0;
  if IgnoreRestart then exit;
  if FResetRepeat then begin
    totalcount:=totalcount+FTargetsRepeat;
@@ -1418,6 +1422,8 @@ begin
     else begin
       totalcount:=totalcount+t.repeatcount;
       donecount:=donecount+t.repeatdone;
+      totalspteps:=totalspteps+t.repeatcount;
+      donesteps:=donesteps+t.repeatdone;
       if (t.repeatdone>0) then begin
         result:=true;
       end;
@@ -1429,6 +1435,8 @@ begin
       for j:=0 to p.Count-1 do begin
         totalcount:=totalcount+p.Steps[j].count;
         donecount:=donecount+p.Steps[j].donecount;
+        totalspteps:=totalspteps+p.Steps[j].count;
+        donesteps:=donesteps+p.Steps[j].donecount;
         txt:=t.objectname+blank+p.PlanName+blank+rsStep+':'+blank+p.Steps[j].description+blank+rsDone+':'+IntToStr(p.Steps[j].donecount)+'/'+IntToStr(p.Steps[j].count);
         FDoneStatus:=FDoneStatus+crlf+txt;
         if p.Steps[j].donecount>0 then begin
@@ -1438,7 +1446,10 @@ begin
       end;
     end;
  end;
- FAllDone:=(totalcount=donecount);
+ // all exposure steps done
+ FAllStepsDone:=(totalspteps<=donesteps);
+ // all done including global repeat
+ FAllDone:=(totalcount<=donecount);
  if FAllDone then begin
    FLastDoneStep:=format(rsSequenceFini,[TargetName]);
    FDoneStatus:=FDoneStatus+crlf+crlf+FLastDoneStep;
@@ -1548,12 +1559,17 @@ begin
   NeedRecenterTarget:=false;
   InplaceAutofocus:=AutofocusInPlace;
   CancelAutofocus:=false;
+  // save current state
   SaveDoneCount;
+  // refresh alldone count
   CheckDoneCount;
+  // try next target
   inc(FCurrentTarget);
   if FRunning and (FCurrentTarget<NumTargets) then begin
+   // there is more target to process
    CurrentTargetName:=Targets[FCurrentTarget].objectname;
    if Targets[FCurrentTarget].objectname=ScriptTxt then begin
+     // process script
      FInitializing:=false;
      TargetForceNext:=false;
      Targets[FCurrentTarget].autoguiding:=false;
@@ -1586,6 +1602,7 @@ begin
     if ((Targets[FCurrentTarget].planname=FlatTimeName[0])and(FTargetsRepeatCount=0)  // Dusk, run only on first repeat
         or((Targets[FCurrentTarget].planname=FlatTimeName[1])and(FAllDone or FDawnFlatNow or(FTargetsRepeatCount=FTargetsRepeat-1))))  // Dawn, run only on last repeat
     then begin
+     // process sky flat
      FInitializing:=true;
      ShowDelayMsg('');
      TargetForceNext:=false;
@@ -1632,24 +1649,30 @@ begin
     end;
    end
    else begin
+     // process target
      FInitializing:=true;
      ShowDelayMsg('');
      TargetForceNext:=false;
+     // initialize target
      initok:=InitTarget;
      if not FRunning then begin
        exit;
      end;
      if initok then begin
+       // start target
        StartPlan;
        TargetTimer.Enabled:=true;
      end
      else begin
+       // not initialized
        if SkipTarget then begin
+         // skip expected, try next target
          FInitializing:=false;
          if FRunning then NextTarget;
          exit;
        end
        else begin
+         // unexpected error, show message and try next
          msg(Targets[FCurrentTarget].objectname+', '+rsTargetInitia,0);
          if EmailTargetInitialisation then email(rsTargetInitia,Targets[FCurrentTarget].objectname+', '+rsTargetInitia+', '+InitTargetError);
          if FUnattended then begin
@@ -1671,8 +1694,11 @@ begin
    end;
   end
   else begin
-   inc(FTargetsRepeatCount);
-   if (not FAllDone)and(not FStopping)and(FTargetsRepeatCount<FTargetsRepeat) then begin
+   // there is no more target to process
+   if (not TargetForceNext) then // do not mark an interrupted target as complete
+     Inc(FTargetsRepeatCount);
+   if (not TargetForceNext)and(not FAllDone)and(not FStopping)and(FTargetsRepeatCount<FTargetsRepeat) then begin
+     // do global repeat
      FCurrentTarget:=-1;
      FTargetCoord:=false;
      FTargetRA:=NullCoord;
@@ -1684,6 +1710,7 @@ begin
      NextTarget;
    end
    else begin
+     // nothing more to do, stop the sequence
      FRunning:=false;
      TargetTimer.Enabled:=false;
      StopTimer.Enabled:=false;
@@ -1691,7 +1718,10 @@ begin
      msg(Format(rsSequenceFini, [FName]),1);
      RunEndAction;
      ShowDelayMsg('');
+     if (not TargetForceNext)and(not FAllStepsDone) then // do not mark the global sequence done if some step are incomplete
+       Dec(FTargetsRepeatCount);
      Dec(FCurrentTarget);
+     // save status
      SaveDoneCount;
      FCurrentTarget:=-1;
      if EmailEndSequence then begin
@@ -2365,7 +2395,8 @@ begin
    if not TargetRepeatTimer.Enabled then begin
       if (not T_Plan(t.plan).Running) and (not FRestarting) then begin
         if (t<>nil) then begin
-        inc(t.repeatdone);
+        if not TargetForceNext then  // do not mark an interrupted target as complete
+          inc(t.repeatdone);
         if (TargetForceNext)or(t.repeatdone>=t.repeatcount) then begin
            NextTarget;
         end

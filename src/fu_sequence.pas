@@ -865,9 +865,19 @@ begin
  end;
  if not StartingSequence then exit;
  if Targets.CheckDoneCount then begin
-    msg(targets.DoneStatus,2);
-    msg(Format(rsThisSequence,['"'+CurrentSeqName+'"']),2);
-    msg(rsItWillContin, 2);
+   if targets.AllDone then begin
+     // sequence complete, do not start
+     msg(targets.LastDoneStep,1);
+     StartingSequence:=false;
+     led.Brush.Color:=clRed;
+     exit;
+   end
+   else begin
+     // some steps already done
+     msg(targets.DoneStatus,2);
+     msg(Format(rsThisSequence,['"'+CurrentSeqName+'"']),2);
+     msg(rsItWillContin, 2);
+   end;
  end;
  if preview.Running then begin
      msg(rsStopPreview,2);
