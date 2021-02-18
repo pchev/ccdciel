@@ -4090,7 +4090,8 @@ var inif:TIniFile;
 begin
   screenconfig.Flush;
   config.Flush;
-  credentialconfig.Flush;
+  if credentialconfig.Filename<>'' then
+    credentialconfig.Flush;
   emailconfig.Flush;
   bpmconfig.Flush;
   if not ProfileFromCommandLine then begin
@@ -4108,7 +4109,8 @@ begin
  config.Filename:=slash(ConfigDir)+n;
  configver:=config.GetValue('/Configuration/Version','');
  screenconfig.Filename:=slash(ConfigDir)+'ScreenLayout.cfg';
- credentialconfig.Filename:=config.Filename+'.credential';
+ if FileExists(config.Filename+'.credential') then
+   credentialconfig.Filename:=config.Filename+'.credential';
  emailconfig.Filename:=slash(ConfigDir)+'email.cfg';
  bpmconfig.Filename:=config.Filename+'.bpm';
  UpdConfig(configver);
@@ -6993,27 +6995,38 @@ begin
     config.SetValue('/ASCOMRestcover/Port',f_setup.CoverARestPort.Value);
     config.SetValue('/ASCOMRestcover/Device',f_setup.CoverARestDevice.Value);
 
-    credentialconfig.Filename:=config.Filename+'.credential';
-    credentialconfig.SetValue('/ASCOMRestcamera/User',strtohex(encryptStr(f_setup.CameraARestUser.Text, encryptpwd)));
-    credentialconfig.SetValue('/ASCOMRestwheel/User',strtohex(encryptStr(f_setup.WheelARestUser.Text, encryptpwd)));
-    credentialconfig.SetValue('/ASCOMRestfocuser/User',strtohex(encryptStr(f_setup.FocuserARestUser.Text, encryptpwd)));
-    credentialconfig.SetValue('/ASCOMRestrotator/User',strtohex(encryptStr(f_setup.RotatorARestUser.Text, encryptpwd)));
-    credentialconfig.SetValue('/ASCOMRestmount/User',strtohex(encryptStr(f_setup.MountARestUser.Text, encryptpwd)));
-    credentialconfig.SetValue('/ASCOMRestdome/User',strtohex(encryptStr(f_setup.DomeARestUser.Text, encryptpwd)));
-    credentialconfig.SetValue('/ASCOMRestweather/User',strtohex(encryptStr(f_setup.WeatherARestUser.Text, encryptpwd)));
-    credentialconfig.SetValue('/ASCOMRestsafety/User',strtohex(encryptStr(f_setup.SafetyARestUser.Text, encryptpwd)));
-    credentialconfig.SetValue('/ASCOMRestswitch/User',strtohex(encryptStr(f_setup.SwitchARestUser.Text, encryptpwd)));
-    credentialconfig.SetValue('/ASCOMRestcover/User',strtohex(encryptStr(f_setup.CoverARestUser.Text, encryptpwd)));
-    credentialconfig.SetValue('/ASCOMRestcamera/Pass',strtohex(encryptStr(f_setup.CameraARestPass.Text, encryptpwd)));
-    credentialconfig.SetValue('/ASCOMRestwheel/Pass',strtohex(encryptStr(f_setup.WheelARestPass.Text, encryptpwd)));
-    credentialconfig.SetValue('/ASCOMRestfocuser/Pass',strtohex(encryptStr(f_setup.FocuserARestPass.Text, encryptpwd)));
-    credentialconfig.SetValue('/ASCOMRestrotator/Pass',strtohex(encryptStr(f_setup.RotatorARestPass.Text, encryptpwd)));
-    credentialconfig.SetValue('/ASCOMRestmount/Pass',strtohex(encryptStr(f_setup.MountARestPass.Text, encryptpwd)));
-    credentialconfig.SetValue('/ASCOMRestdome/Pass',strtohex(encryptStr(f_setup.DomeARestPass.Text, encryptpwd)));
-    credentialconfig.SetValue('/ASCOMRestweather/Pass',strtohex(encryptStr(f_setup.WeatherARestPass.Text, encryptpwd)));
-    credentialconfig.SetValue('/ASCOMRestsafety/Pass',strtohex(encryptStr(f_setup.SafetyARestPass.Text, encryptpwd)));
-    credentialconfig.SetValue('/ASCOMRestswitch/Pass',strtohex(encryptStr(f_setup.SwitchARestPass.Text, encryptpwd)));
-    credentialconfig.SetValue('/ASCOMRestcover/Pass',strtohex(encryptStr(f_setup.CoverARestPass.Text, encryptpwd)));
+    credentialconfig.Clear;
+    if (f_setup.CameraARestUser.Text+f_setup.WheelARestUser.Text+f_setup.FocuserARestUser.Text+f_setup.RotatorARestUser.Text+
+       f_setup.MountARestUser.Text+f_setup.DomeARestUser.Text+f_setup.WeatherARestUser.Text+f_setup.SafetyARestUser.Text+
+       f_setup.SwitchARestUser.Text+f_setup.CoverARestUser.Text <> '')
+       then
+       begin
+          credentialconfig.Filename:=config.Filename+'.credential';
+          credentialconfig.SetValue('/ASCOMRestcamera/User',strtohex(encryptStr(f_setup.CameraARestUser.Text, encryptpwd)));
+          credentialconfig.SetValue('/ASCOMRestwheel/User',strtohex(encryptStr(f_setup.WheelARestUser.Text, encryptpwd)));
+          credentialconfig.SetValue('/ASCOMRestfocuser/User',strtohex(encryptStr(f_setup.FocuserARestUser.Text, encryptpwd)));
+          credentialconfig.SetValue('/ASCOMRestrotator/User',strtohex(encryptStr(f_setup.RotatorARestUser.Text, encryptpwd)));
+          credentialconfig.SetValue('/ASCOMRestmount/User',strtohex(encryptStr(f_setup.MountARestUser.Text, encryptpwd)));
+          credentialconfig.SetValue('/ASCOMRestdome/User',strtohex(encryptStr(f_setup.DomeARestUser.Text, encryptpwd)));
+          credentialconfig.SetValue('/ASCOMRestweather/User',strtohex(encryptStr(f_setup.WeatherARestUser.Text, encryptpwd)));
+          credentialconfig.SetValue('/ASCOMRestsafety/User',strtohex(encryptStr(f_setup.SafetyARestUser.Text, encryptpwd)));
+          credentialconfig.SetValue('/ASCOMRestswitch/User',strtohex(encryptStr(f_setup.SwitchARestUser.Text, encryptpwd)));
+          credentialconfig.SetValue('/ASCOMRestcover/User',strtohex(encryptStr(f_setup.CoverARestUser.Text, encryptpwd)));
+          credentialconfig.SetValue('/ASCOMRestcamera/Pass',strtohex(encryptStr(f_setup.CameraARestPass.Text, encryptpwd)));
+          credentialconfig.SetValue('/ASCOMRestwheel/Pass',strtohex(encryptStr(f_setup.WheelARestPass.Text, encryptpwd)));
+          credentialconfig.SetValue('/ASCOMRestfocuser/Pass',strtohex(encryptStr(f_setup.FocuserARestPass.Text, encryptpwd)));
+          credentialconfig.SetValue('/ASCOMRestrotator/Pass',strtohex(encryptStr(f_setup.RotatorARestPass.Text, encryptpwd)));
+          credentialconfig.SetValue('/ASCOMRestmount/Pass',strtohex(encryptStr(f_setup.MountARestPass.Text, encryptpwd)));
+          credentialconfig.SetValue('/ASCOMRestdome/Pass',strtohex(encryptStr(f_setup.DomeARestPass.Text, encryptpwd)));
+          credentialconfig.SetValue('/ASCOMRestweather/Pass',strtohex(encryptStr(f_setup.WeatherARestPass.Text, encryptpwd)));
+          credentialconfig.SetValue('/ASCOMRestsafety/Pass',strtohex(encryptStr(f_setup.SafetyARestPass.Text, encryptpwd)));
+          credentialconfig.SetValue('/ASCOMRestswitch/Pass',strtohex(encryptStr(f_setup.SwitchARestPass.Text, encryptpwd)));
+          credentialconfig.SetValue('/ASCOMRestcover/Pass',strtohex(encryptStr(f_setup.CoverARestPass.Text, encryptpwd)));
+       end
+       else begin
+          credentialconfig.Filename:='';
+          DeleteFile(config.Filename+'.credential');
+       end;
 
     DestroyDevices;
     CreateDevices;

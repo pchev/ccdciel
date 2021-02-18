@@ -2292,7 +2292,9 @@ begin
   fn:=slash(ConfigDir)+fn;
   if MessageDlgPos(Format(rsDoYouWantToD, [fn]), mtConfirmation, mbYesNo, 0,
     mouse.CursorPos.x, mouse.CursorPos.y)=mrYes then begin
-     DeleteFileUTF8(fn);
+     DeleteFile(fn);
+     DeleteFile(fn+'.credential');
+     DeleteFile(fn+'.bpm');
      LoadProfileList;
      n:=ProfileList.Items.IndexOf('default');
      ProfileList.ItemIndex:=n;
