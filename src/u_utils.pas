@@ -68,6 +68,8 @@ Function ExecuteFile(const FileName: string): integer;
 procedure Wait(wt:single=5);
 function GetCdCPort:string;
 function  Rmod(x,y:Double):Double;
+function  to180(x:Extended):Extended;
+function  to360(x:Extended):Extended;
 function  RoundFloat(x:Double;prec:integer):Double;
 function IsNumber(n : string) : boolean;
 Function PadZeros(x : string ; l :integer) : string;
@@ -1110,6 +1112,17 @@ function  Rmod(x,y:Double):Double;
 BEGIN
     Rmod := x - Int(x/y) * y ;
 END  ;
+
+function to360(x:Extended):Extended;
+begin
+ result:=rmod(x+3600000000,360);
+end;
+
+function to180(x:Extended):Extended;
+begin
+ result:=rmod(x+3600000000,360);
+ if result>180 then result:=result-360;
+end;
 
 function RoundFloat(x:Double;prec:integer):Double;
 begin

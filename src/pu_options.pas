@@ -1248,11 +1248,13 @@ end;
 procedure Tf_option.longChange(Sender: TObject);
 begin
   if LockChange then exit;
+  if longdeg.Value=180 then longdeg.Text:='180';
   if frac(longdeg.Value)>0 then
      Flongitude:=longdeg.value
   else
      Flongitude:=longdeg.value+longmin.value/60+longsec.value/3600;
   if long.Itemindex>0 then Flongitude:=-Flongitude;
+  Flongitude:=to180(Flongitude);
   CheckLongitude;
 end;
 

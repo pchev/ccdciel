@@ -6365,7 +6365,7 @@ case mount.Status of
                       end
                       else if config.GetValue('/Mount/GetObservatory',false) then begin
                          if mount.GetSite(ObsLongitude, ObsLatitude, ObsElevation) then begin
-                           ObsLongitude:=-ObsLongitude;
+                           ObsLongitude:=to180(-ObsLongitude);
                            config.SetValue('/Info/ObservatoryLatitude',ObsLatitude);
                            config.SetValue('/Info/ObservatoryLongitude',ObsLongitude);
                            config.SetValue('/Info/ObservatoryElevation',ObsElevation);
