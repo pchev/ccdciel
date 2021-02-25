@@ -12226,7 +12226,7 @@ end;
 function Tf_main.CheckMeridianFlip(nextexposure:double; canwait:boolean; out waittime:integer):boolean;
 var ra,de,hh,a,h,tra,tde,err: double;
     CurSt: double;
-    MeridianDelay1,MeridianDelay2,NextDelay,hhmin,waittimeout: integer;
+    MeridianDelay1,MeridianDelay2,NextDelay,hhmin,waittimeout,nretry: integer;
     slewtopos,slewtoimg, restartguider, SaveCapture, ok: boolean;
   procedure DoAbort;
   begin
@@ -12235,6 +12235,7 @@ var ra,de,hh,a,h,tra,tde,err: double;
     if f_capture.Running then CameraExposureAborted(nil);
     if autoguider.Running and (autoguider.State=GUIDER_GUIDING) then autoguider.Guide(false);
     meridianflipping:=false;
+    if f_sequence.Running then f_sequence.ForceNextTarget;
   end;
 begin
   waittime:=-1;
@@ -12355,17 +12356,31 @@ begin
           end;
         end;
         // flip
+        nretry:=0;
         NewMessage(rsMeridianFlip4,1);
         StatusBar1.Panels[panelstatus].Text := rsMeridianFlip5;
         mount.FlipMeridian;
         wait(2);
-        if mount.PierSide=pierWest then begin
-          f_pause.Caption:=rsPause;
-          f_pause.Text:=rsMeridianFlip6+blank+Format(rsTheMountIndi, [rsWestPointing]);
+        while (mount.PierSide=pierWest) do begin
+          // if still on wrong side wait the target move further and retry
+          mount.AbortMotion;
+          inc(nretry);
+          if nretry>5 then begin
+            NewMessage(format(rsMeridianFlip11, [5]), 1);
+            DoAbort;
+            exit;
+          end;
+          f_pause.Caption:=rsMeridianFlip6;
+          f_pause.Text:=Format(rsTheMountIndi, [rsWestPointing])+'. '+Format(rsWaitDSeconds, [300]) ;
           NewMessage(f_pause.Text,1);
-          if not f_pause.Wait(120) then begin
-             DoAbort;
-             exit;
+          if f_pause.Wait(300,true,rsRetry,rsAbort) then begin
+            NewMessage(rsMeridianFlip4,1);
+            StatusBar1.Panels[panelstatus].Text := rsMeridianFlip5;
+            mount.FlipMeridian;
+            wait(2);
+          end else begin
+            DoAbort;
+            exit;
           end;
         end;
         if mount.PierSide=pierUnknown then begin

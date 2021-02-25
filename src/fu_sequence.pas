@@ -168,6 +168,7 @@ type
     procedure LoadTargets(fn: string);
     procedure AbortSequence;
     procedure WeatherChange(value:boolean);
+    procedure ForceNextTarget;
     procedure UpdateBtn;
     property Filename: string read GetFileName;
     property EditingTarget: Boolean read FEditingTarget;
@@ -986,6 +987,12 @@ begin
     // bad weather, pause the sequence
     Targets.WeatherPause;
   end;
+end;
+
+procedure Tf_sequence.ForceNextTarget;
+begin
+  msg(rsTryNextTarge,1);
+  f_sequence.Targets.ForceNextTarget;
 end;
 
 procedure Tf_sequence.AbortSequence;

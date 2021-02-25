@@ -1306,6 +1306,8 @@ resourcestring
   rsUseCoverCali = 'Use Cover calibrator';
   rsCover = 'Cover';
   rsCalibrator = 'Calibrator';
+  rsMeridianFlip11 = 'Meridian flip aborted after %d retries';
+  rsWaitDSeconds = 'Wait %d seconds and retry';
 
 implementation
 
