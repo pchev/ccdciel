@@ -12,7 +12,7 @@ function dopng {
     do
          fsvg=$1/${iconlist[i]}.svg
          fpng=$2/${iconlist[i]}.png
-         inkscape -f $fsvg  -w $3 -h $3 -e  $fpng > /dev/null 2>&1
+         inkscape -w $3 -h $3 -o $fpng $fsvg > /dev/null 2>&1
          if [[ $? != 0 ]] 
             then  echo Error:  $i ${iconlist[i]}
          fi
@@ -20,7 +20,7 @@ function dopng {
 }
 
 
-iconlist=(adjust bullseye capture center clipping-info focus hist pin plan video inf invert flip-horizontal flip-vertical show-images)
+iconlist=(adjust bullseye capture center clipping-info focus hist histdec pin plan video inf invert flip-horizontal flip-vertical show-images)
 
 dopng svg/daylight icons/daylight 22
 dopng svg/night-vision icons/night-vision 22
