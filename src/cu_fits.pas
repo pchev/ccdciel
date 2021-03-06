@@ -1918,11 +1918,12 @@ procedure TFits.GetBayerBgColor(t:TBayerMode; rmult,gmult,bmult:double; out r,g,
 var i,j,xs,ys,row,col,pix,thr: integer;
     sr,sg,sb: double;
     nr,ng,nb: integer;
-const subsample=3;
+const subsample=5;
 begin
  r:=0;
  b:=0;
  g:=0;
+ if (FFitsInfo.bitpix<>8)and(FFitsInfo.bitpix<>16) then exit;
  sr:=0; sg:=0; sb:=0;
  nr:=0; ng:=0; nb:=0;
  xs:= Fwidth div subsample;
@@ -1933,8 +1934,8 @@ begin
    for j:=0 to xs-1 do begin
      col:=subsample*j;
      case FFitsInfo.bitpix of
-       8: pix:=round( max(0,min(MaxWord,(FFitsInfo.bzero+FFitsInfo.bscale*imai8[0,subsample*i,subsample*j]-FimageMin) * FimageC )) );
-      16: pix:=round( max(0,min(MaxWord,(FFitsInfo.bzero+FFitsInfo.bscale*imai16[0,subsample*i,subsample*j]-FimageMin) * FimageC )) );
+       8: pix:=round( max(0,min(MaxWord,FFitsInfo.bzero+FFitsInfo.bscale*imai8[0,subsample*i,subsample*j])) );
+      16: pix:=round( max(0,min(MaxWord,FFitsInfo.bzero+FFitsInfo.bscale*imai16[0,subsample*i,subsample*j])) );
      end;
      if pix<thr then begin
      if not odd(row) then begin //ligne paire
@@ -1976,9 +1977,9 @@ begin
      end;
    end;
  end;
- if nr>0 then r:=round(sr/nr);
- if ng>0 then g:=round(sg/ng);
- if nb>0 then b:=round(sb/nb);
+ if nr>0 then r:=round((sr/nr-FimageMin) * FimageC);
+ if ng>0 then g:=round((sg/ng-FimageMin) * FimageC);
+ if nb>0 then b:=round((sb/nb-FimageMin) * FimageC);
 end;
 
 procedure TFits.BayerInterpolation(t:TBayerMode; rmult,gmult,bmult:double; rbg,gbg,bbg:integer; pix1,pix2,pix3,pix4,pix5,pix6,pix7,pix8,pix9:word; row,col:integer; out pixr,pixg,pixb:word); inline;
