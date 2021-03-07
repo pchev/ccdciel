@@ -1695,7 +1695,7 @@ var i,j: integer;
     t: TBayerMode;
     debayer: boolean;
 begin
-  if FImgFullRange then begin
+  if FImgFullRange and ((FFitsInfo.bitpix=16)or(FFitsInfo.bitpix=8)) then begin
     Fdmin:=0;
     if FFitsInfo.bitpix=8 then
       Fdmax:=MaxByte
