@@ -21,7 +21,12 @@ def ccdciel(method, params):
         "params": [params] }
     
     # Send the request and return the result
-    return requests.post(ccdciel_url, json=cmd).json()
+    try:
+      return requests.post(ccdciel_url, json=cmd).json()
+    except Exception as inst:
+      print(type(inst))
+      print(inst.args)
+      exit(1)
     
 def main():
 
