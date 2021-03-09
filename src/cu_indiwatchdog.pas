@@ -38,6 +38,8 @@ T_indiwatchdog = class(T_watchdog)
    ReadyTimer: TTimer;
    HeartbeatTimer: TTimer;
    WatchdogDevice: Basedevice;
+   connectprop: ISwitchVectorProperty;
+   connecton,connectoff: ISwitch;
    heartbeat: INumberVectorProperty;
    heartbeatvalue: INumber;
    configprop: ISwitchVectorProperty;
@@ -109,7 +111,7 @@ begin
  InitTimer.OnTimer:=@InitTimerTimer;
  ConnectTimer:=TTimer.Create(nil);
  ConnectTimer.Enabled:=false;
- ConnectTimer.Interval:=3000;
+ ConnectTimer.Interval:=1000;
  ConnectTimer.OnTimer:=@ConnectTimerTimer;
  ReadyTimer:=TTimer.Create(nil);
  ReadyTimer.Enabled:=false;
@@ -140,6 +142,7 @@ begin
     WatchdogDevice:=nil;
     heartbeat:=nil;
     heartbeatvalue:=nil;
+    connectprop:=nil;
     configprop:=nil;
     Fready:=false;
     Fconnected := false;
@@ -150,7 +153,6 @@ end;
 procedure T_indiwatchdog.CheckStatus;
 begin
     if Fconnected and
-       ((configprop<>nil)or(not FAutoloadConfig)) and
        (heartbeat<>nil) and
        (heartbeatvalue<>nil)
     then begin
@@ -165,9 +167,6 @@ begin
   FStatus := devConnected;
   if (not Fready) then begin
     Fready:=true;
-    if FAutoloadConfig then begin
-      LoadConfig;
-    end;
     HeartbeatTimer.Enabled:=true;
     SetHeartbeat(FThreshold);
     if Assigned(FonStatusChange) then FonStatusChange(self);
@@ -234,7 +233,16 @@ end;
 procedure T_indiwatchdog.ConnectTimerTimer(Sender: TObject);
 begin
   ConnectTimer.Enabled:=False;
-  indiclient.connectDevice(Findidevice);
+  if (connectprop<>nil) then begin
+    if (connectoff.s=ISS_ON) then begin
+      indiclient.connectDevice(Findidevice);
+      exit;
+    end;
+  end
+  else begin
+    ConnectTimer.Enabled:=true;
+    exit;
+  end;
 end;
 
 procedure T_indiwatchdog.ServerDisconnected(Sender: TObject);
@@ -286,6 +294,12 @@ begin
      configload:=IUFindSwitch(configprop,'CONFIG_LOAD');
      configsave:=IUFindSwitch(configprop,'CONFIG_SAVE');
      if (configload=nil)or(configsave=nil) then configprop:=nil;
+  end
+  else if (proptype=INDI_SWITCH)and(connectprop=nil)and(propname='CONNECTION') then begin
+     connectprop:=indiProp.getSwitch;
+     connecton:=IUFindSwitch(connectprop,'CONNECT');
+     connectoff:=IUFindSwitch(connectprop,'DISCONNECT');
+     if (connecton=nil)or(connectoff=nil) then connectprop:=nil;
   end
   else if (proptype=INDI_TEXT)and(propname='DRIVER_INFO') then begin
      buf:='';

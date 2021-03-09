@@ -36,6 +36,8 @@ T_indicover = class(T_cover)
    InitTimer: TTimer;
    ConnectTimer: TTimer;
    ReadyTimer: TTimer;
+   connectprop: ISwitchVectorProperty;
+   connecton,connectoff: ISwitch;
    CoverDevice: Basedevice;
    CoverStatus,LightStatus: ISwitchVectorProperty;
    CoverPark,CoverUnpark,LightOn,LightOff: ISwitch;
@@ -114,7 +116,7 @@ begin
  InitTimer.OnTimer:=@InitTimerTimer;
  ConnectTimer:=TTimer.Create(nil);
  ConnectTimer.Enabled:=false;
- ConnectTimer.Interval:=3000;
+ ConnectTimer.Interval:=1000;
  ConnectTimer.OnTimer:=@ConnectTimerTimer;
  ReadyTimer:=TTimer.Create(nil);
  ReadyTimer.Enabled:=false;
@@ -140,6 +142,7 @@ begin
     CoverStatus:=nil;
     LightStatus:=nil;
     LightIntensity:=nil;
+    connectprop:=nil;
     configprop:=nil;
     Fready:=false;
     Fconnected := false;
@@ -152,7 +155,6 @@ end;
 procedure T_indicover.CheckStatus;
 begin
     if Fconnected and
-       ((configprop<>nil)or(not FAutoloadConfig)) and
        (CoverStatus<>nil)
     then begin
       ReadyTimer.Enabled := false;
@@ -166,9 +168,6 @@ begin
   FStatus := devConnected;
   if (not Fready) then begin
     Fready:=true;
-    if FAutoloadConfig then begin
-      LoadConfig;
-    end;
     FHasCalibrator:=(LightStatus<>nil);
     FHasCover:=(CoverStatus<>nil);
     if Assigned(FonStatusChange) then FonStatusChange(self);
@@ -229,10 +228,17 @@ end;
 procedure T_indicover.ConnectTimerTimer(Sender: TObject);
 begin
   ConnectTimer.Enabled:=False;
-  if (not Fready) and InitTimer.Enabled then begin
+  if (connectprop<>nil) then begin
+    if (connectoff.s=ISS_ON) then begin
+      if FAutoloadConfig then LoadConfig;
+      indiclient.connectDevice(Findidevice);
+      exit;
+    end;
+  end
+  else begin
     ConnectTimer.Enabled:=true;
+    exit;
   end;
-  indiclient.connectDevice(Findidevice);
 end;
 
 procedure T_indicover.ServerDisconnected(Sender: TObject);
@@ -291,6 +297,12 @@ begin
        if Txt<>nil then buf:=buf+Txt.lbl+': '+Txt.Text;
        msg(buf,9);
      end;
+  end
+  else if (proptype=INDI_SWITCH)and(connectprop=nil)and(propname='CONNECTION') then begin
+     connectprop:=indiProp.getSwitch;
+     connecton:=IUFindSwitch(connectprop,'CONNECT');
+     connectoff:=IUFindSwitch(connectprop,'DISCONNECT');
+     if (connecton=nil)or(connectoff=nil) then connectprop:=nil;
   end
   else if (proptype=INDI_SWITCH)and(configprop=nil)and(propname='CONFIG_PROCESS') then begin
      configprop:=indiProp.getSwitch;

@@ -57,8 +57,9 @@ private
    indiws: TIndiWebSocketClientConnection;
    InitTimer: TTimer;
    ConnectTimer: TTimer;
-   ConfigTimer: TTimer;
    CCDDevice: Basedevice;
+   connectprop: ISwitchVectorProperty;
+   connecton,connectoff: ISwitch;
    CCDexpose: INumberVectorProperty;
    CCDexposeValue: INumber;
    CCDbinning: INumberVectorProperty;
@@ -144,7 +145,7 @@ private
    CCDoffset:INumberVectorProperty;
    CCDoffsetValue:INumber;
    FRAWformat: integer;
-   FhasBlob,Fready,FWheelReady,Fconnected,UseMainSensor: boolean;
+   FhasBlob,Fready,FWheelReady,Fconnected,UseMainSensor,Fconnectsend: boolean;
    Findiserver, Findiserverport, Findidevice, Findisensor: string;
    FVideoMsg: boolean;
    lockvideostream:boolean;
@@ -158,7 +159,6 @@ private
    procedure CreateIndiClient;
    procedure InitTimerTimer(Sender: TObject);
    procedure ConnectTimerTimer(Sender: TObject);
-   procedure ConfigTimerTimer(Sender: TObject);
    procedure ClearStatus;
    procedure CheckStatus;
    procedure NewBlobProperty(indiProp: IndiProperty);
@@ -333,16 +333,12 @@ begin
  InitTimer.OnTimer:=@InitTimerTimer;
  ConnectTimer:=TTimer.Create(nil);
  ConnectTimer.Enabled:=false;
- ConnectTimer.Interval:=3000;
+ ConnectTimer.Interval:=1000;
  ConnectTimer.OnTimer:=@ConnectTimerTimer;
  ExposureTimer:=TTimer.Create(nil);
  ExposureTimer.Enabled:=false;
  ExposureTimer.Interval:=1000;
  ExposureTimer.OnTimer:=@ExposureTimerTimer;
- ConfigTimer:=TTimer.Create(nil);
- ConfigTimer.Enabled:=false;
- ConfigTimer.Interval:=100;
- ConfigTimer.OnTimer:=@ConfigTimerTimer;
  lockvideostream:=false;
  FVideoMsg:=false;
 end;
@@ -352,13 +348,11 @@ begin
  InitTimer.Enabled:=false;
  ConnectTimer.Enabled:=false;
  ExposureTimer.Enabled:=false;
- ConfigTimer.Enabled:=false;
  if indiclient<>nil then indiclient.onServerDisconnected:=nil;
  FSensorList.Free;
  FreeAndNil(ExposureTimer);
  FreeAndNil(InitTimer);
  FreeAndNil(ConnectTimer);
- FreeAndNil(ConfigTimer);
  inherited Destroy;
 end;
 
@@ -407,6 +401,7 @@ begin
     UploadMode:=nil;
     UploadSettings:=nil;
     CCDfilepath:=nil;
+    connectprop:=nil;
     configprop:=nil;
     CameraFnumber:=nil;
     FhasFnumber:=false;
@@ -423,6 +418,7 @@ begin
     Fready:=false;
     FWheelReady:=false;
     Fconnected := false;
+    Fconnectsend := false;
     FStatus := devDisconnected;
     FWheelStatus:=devDisconnected;
     CCDIso:=nil;
@@ -438,6 +434,7 @@ begin
     stWidth:=-1;
     stHeight:=-1;
     FSensorList.Clear;
+    UseMainSensor:=true;
     FNotAbortSequence:=false;
     FISOInitialized:=false;
     FReadOutList.Clear;
@@ -456,12 +453,9 @@ begin
        ((Findisensor='CCD2')and(Guiderexpose<>nil))or
        ((Findisensor<>'CCD2')and(CCDexpose<>nil))
         ) and
-       (CCDframe<>nil) and
-       (FCameraXSize<0) and
-       (FCameraYSize<0) and
-       (not ConfigTimer.Enabled)
+       (CCDframe<>nil)
     then begin
-       ConfigTimer.Enabled:=true;
+       Fready:=true;
        UseMainSensor:=(Findisensor<>'CCD2');
     end;
     if Fconnected and
@@ -552,28 +546,27 @@ begin
    ConnectTimer.Enabled:=True;
 end;
 
-procedure T_indicamera.ConfigTimerTimer(Sender: TObject);
-begin
- ConfigTimer.Enabled:=false;
- FCameraXSize:=0;
- FCameraYSize:=0;
- if (not Fready) then begin
-    Fready:=true;
-    if FAutoloadConfig then begin
-      LoadConfig;
-    end;
- end;
-end;
-
 procedure T_indicamera.ConnectTimerTimer(Sender: TObject);
 var i: integer;
     xr,yr,widthr,heightr: TNumRange;
 begin
  ConnectTimer.Enabled:=False;
- if (not FhasBlob) and (not Fready) and InitTimer.Enabled then begin
+ if (connectprop<>nil) then begin
+   if (connectoff.s=ISS_ON) and (not Fconnectsend) then begin
+     if FAutoloadConfig then LoadConfig;
+     indiclient.connectDevice(Findidevice);
+     Fconnectsend:=true;
+     ConnectTimer.Enabled:=true;
+     exit;
+   end;
+ end
+ else begin
+   ConnectTimer.Enabled:=true;
+   exit;
+ end;
+ if ((not FhasBlob) or (not Fready)) and InitTimer.Enabled then begin
    ConnectTimer.Enabled:=true;
  end;
- indiclient.connectDevice(Findidevice);
  if FhasBlob then begin
    indiblob.setBLOBMode(B_ONLY,Findidevice);
    for i:=0 to FSensorList.Count-1 do begin
@@ -663,6 +656,12 @@ begin
        if Txt<>nil then buf:=buf+Txt.lbl+': '+Txt.Text;
        msg(buf,9);
      end;
+  end
+  else if (proptype=INDI_SWITCH)and(connectprop=nil)and(propname='CONNECTION') then begin
+     connectprop:=indiProp.getSwitch;
+     connecton:=IUFindSwitch(connectprop,'CONNECT');
+     connectoff:=IUFindSwitch(connectprop,'DISCONNECT');
+     if (connecton=nil)or(connectoff=nil) then connectprop:=nil;
   end
   else if (proptype=INDI_SWITCH)and(configprop=nil)and(propname='CONFIG_PROCESS') then begin
      configprop:=indiProp.getSwitch;

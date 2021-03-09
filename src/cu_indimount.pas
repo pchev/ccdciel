@@ -37,6 +37,8 @@ T_indimount = class(T_mount)
    ConnectTimer: TTimer;
    ReadyTimer: TTimer;
    MountDevice: Basedevice;
+   connectprop: ISwitchVectorProperty;
+   connecton,connectoff: ISwitch;
    coord_prop: INumberVectorProperty;
    coord_ra:   INumber;
    coord_dec:  INumber;
@@ -173,7 +175,7 @@ begin
  InitTimer.OnTimer:=@InitTimerTimer;
  ConnectTimer:=TTimer.Create(nil);
  ConnectTimer.Enabled:=false;
- ConnectTimer.Interval:=3000;
+ ConnectTimer.Interval:=1000;
  ConnectTimer.OnTimer:=@ConnectTimerTimer;
  ReadyTimer:=TTimer.Create(nil);
  ReadyTimer.Enabled:=false;
@@ -202,6 +204,7 @@ begin
     coord_prop:=nil;
     CoordSet:=nil;
     AbortmotionProp:=nil;
+    connectprop:=nil;
     configprop:=nil;
     SyncManage:=nil;
     AlignList:=nil;
@@ -222,7 +225,6 @@ end;
 procedure T_indimount.CheckStatus;
 begin
     if Fconnected and
-       ((configprop<>nil)or(not FAutoloadConfig)) and
        (coord_prop<>nil)
     then begin
       ReadyTimer.Enabled := false;
@@ -236,12 +238,25 @@ begin
   FStatus := devConnected;
   if (not Fready) then begin
      Fready:=true;
-     if FAutoloadConfig then begin
-       LoadConfig;
-     end;
      if Assigned(FonStatusChange) then FonStatusChange(self);
   end;
   FIsEqmod:=(SyncManage<>nil)and(AlignList<>nil)and(AlignSyncMode<>nil)and(AlignMode<>nil);
+end;
+
+procedure T_indimount.ConnectTimerTimer(Sender: TObject);
+begin
+  ConnectTimer.Enabled:=False;
+  if (connectprop<>nil) then begin
+    if (connectoff.s=ISS_ON) then begin
+      if FAutoloadConfig then LoadConfig;
+      indiclient.connectDevice(Findidevice);
+      exit;
+    end;
+  end
+  else begin
+    ConnectTimer.Enabled:=true;
+    exit;
+  end;
 end;
 
 Procedure T_indimount.Connect(cp1: string; cp2:string=''; cp3:string=''; cp4:string=''; cp5:string=''; cp6:string='');
@@ -295,14 +310,6 @@ begin
    ConnectTimer.Enabled:=True;
 end;
 
-procedure T_indimount.ConnectTimerTimer(Sender: TObject);
-begin
-  ConnectTimer.Enabled:=False;
-  if (not Fready) and InitTimer.Enabled then begin
-    ConnectTimer.Enabled:=true;
-  end;
- indiclient.connectDevice(Findidevice);
-end;
 
 procedure T_indimount.ServerDisconnected(Sender: TObject);
 begin
@@ -360,6 +367,12 @@ begin
        if Txt<>nil then buf:=buf+Txt.lbl+': '+Txt.Text;
        msg(buf,9);
      end;
+  end
+  else if (proptype=INDI_SWITCH)and(connectprop=nil)and(propname='CONNECTION') then begin
+     connectprop:=indiProp.getSwitch;
+     connecton:=IUFindSwitch(connectprop,'CONNECT');
+     connectoff:=IUFindSwitch(connectprop,'DISCONNECT');
+     if (connecton=nil)or(connectoff=nil) then connectprop:=nil;
   end
   else if (proptype=INDI_SWITCH)and(configprop=nil)and(propname='CONFIG_PROCESS') then begin
      configprop:=indiProp.getSwitch;
