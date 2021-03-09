@@ -465,7 +465,6 @@ resourcestring
   rsDefault = 'Default';
   rsFileNameOpti = 'File name options';
   rsFolderNameOp = 'Folder name options';
-  rsAllowToGetPr = 'Allow to get program status from TCP/IP internal server';
   rsLanguage = 'Language';
   rsObservatory = 'Observatory';
   rsObserverName = 'Observer name';

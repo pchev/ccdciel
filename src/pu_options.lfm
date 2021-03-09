@@ -142,11 +142,11 @@ object f_option: Tf_option
       end
       object Panel10: TPanel
         Left = 0
-        Height = 152
+        Height = 120
         Top = 136
         Width = 520
         Align = alTop
-        ClientHeight = 152
+        ClientHeight = 120
         ClientWidth = 520
         ParentFont = False
         TabOrder = 1
@@ -162,38 +162,29 @@ object f_option: Tf_option
         object Debug_msg: TCheckBox
           Left = 8
           Height = 21
-          Top = 44
+          Top = 48
           Width = 140
           Caption = 'Verbose device log'
           ParentFont = False
           TabOrder = 1
         end
-        object UseTcpServer: TCheckBox
-          Left = 8
-          Height = 21
-          Top = 72
-          Width = 365
-          Caption = 'Allow to get program status from TCP/IP internal server'
-          ParentFont = False
-          TabOrder = 2
-        end
         object CbShowHints: TCheckBox
           Left = 8
           Height = 21
-          Top = 101
+          Top = 80
           Width = 90
           Caption = 'Show hints'
           ParentFont = False
-          TabOrder = 3
+          TabOrder = 2
         end
       end
       object Panel11: TPanel
         Left = 0
-        Height = 249
-        Top = 288
+        Height = 281
+        Top = 256
         Width = 520
         Align = alClient
-        ClientHeight = 249
+        ClientHeight = 281
         ClientWidth = 520
         ParentFont = False
         TabOrder = 2
@@ -261,8 +252,8 @@ object f_option: Tf_option
         TabOrder = 0
         object FileOpt: TTabSheet
           Caption = 'File name options'
-          ClientHeight = 337
-          ClientWidth = 510
+          ClientHeight = 364
+          ClientWidth = 516
           ParentFont = False
           object BtnFileDefault: TButton
             Left = 394
@@ -382,8 +373,8 @@ object f_option: Tf_option
         end
         object FolderOpt: TTabSheet
           Caption = 'Folder name options'
-          ClientHeight = 337
-          ClientWidth = 510
+          ClientHeight = 364
+          ClientWidth = 516
           ParentFont = False
           object BtnFolderDefault: TButton
             Left = 394

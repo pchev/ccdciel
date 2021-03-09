@@ -405,7 +405,6 @@ type
     UseW8: TCheckBox;
     UseW9: TCheckBox;
     VideoPreviewRate: TSpinEdit;
-    UseTcpServer: TCheckBox;
     FocuserBacklashActive: TCheckBox;
     FocuserBacklashDirection: TComboBox;
     GroupBox19: TGroupBox;
@@ -851,7 +850,6 @@ begin
   label123.Caption := rsSeparator;
   FolderOpt.Caption := rsFolderNameOp;
   BtnFolderDefault.Caption := rsDefault;
-  UseTcpServer.Caption := rsAllowToGetPr;
   UseFileSequenceWidth.Caption:=rsFixedSequenc;
   FilePack.Caption:=rsCompressTheF;
   WantExif.Caption:=rsAddFITSKeywo;

@@ -1217,6 +1217,7 @@ begin
   GUIready:=false;
   filteroffset_initialized:=false;
   MsgHandle:=handle;
+  UseTcpServer:=True;
   meridianflipping:=false;
   TemperatureScale:=0;
   TempLabel:=sdeg+'C';
@@ -3669,7 +3670,6 @@ begin
     WriteDeviceLog('');
   end;
   debug_msg:=config.GetValue('/Log/debug_msg',false);
-  UseTcpServer:=config.GetValue('/Log/UseTcpServer',false);
   DitherPixel:=config.GetValue('/Autoguider/Dither/Pixel',1.0);
   DitherRAonly:=config.GetValue('/Autoguider/Dither/RAonly',true);
   DitherWaitTime:=config.GetValue('/Autoguider/Dither/WaitTime',5);
@@ -7130,7 +7130,6 @@ begin
    else if buf='jpg' then f_option.SaveBitmapFormat.ItemIndex:=2
    else if buf='bmp' then f_option.SaveBitmapFormat.ItemIndex:=3
    else f_option.SaveBitmapFormat.ItemIndex:=0;
-   f_option.UseTcpServer.Checked:=config.GetValue('/Log/UseTcpServer',false);
    f_option.Logtofile.Checked:=config.GetValue('/Log/Messages',true);
    f_option.Logtofile.Hint:=Format(rsLogFilesAreS, [ExtractFilePath(LogFile)]);
    f_option.debug_msg.Checked:=config.GetValue('/Log/debug_msg',debug_msg);
@@ -7554,7 +7553,6 @@ begin
        else buf:='png';
      end;
      config.SetValue('/Files/SaveBitmapFormat',buf);
-     config.SetValue('/Log/UseTcpServer',f_option.UseTcpServer.Checked);
      config.SetValue('/Info/ObservatoryName',f_option.ObservatoryName.Text);
      config.SetValue('/Info/ObservatoryLatitude',f_option.Latitude);
      config.SetValue('/Info/ObservatoryLongitude',f_option.Longitude);
