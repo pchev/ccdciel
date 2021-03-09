@@ -273,8 +273,8 @@ end;
 
 procedure T_indifocuser.NewDevice(dp: Basedevice);
 begin
-  msg('INDI server send new device: "'+dp.getDeviceName+'"',9);
   if dp.getDeviceName=Findidevice then begin
+     msg('INDI server send new device: "'+dp.getDeviceName+'"',9);
      Fconnected:=true;
      FocuserDevice:=dp;
   end;
