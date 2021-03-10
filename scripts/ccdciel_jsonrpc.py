@@ -2,9 +2,10 @@
 # For more information and reference of the available methods see: 
 # https://www.ap-i.net/ccdciel/en/documentation/jsonrpc_reference
 
-import requests
+from urllib import request
 import json
 import time
+import sys
 
 id = 0
 
@@ -13,21 +14,26 @@ def ccdciel(method, params):
     # increment the request id
     global id
     id += 1
-    
+
     # To use remotely, replace "localhost" by the hostname of the computer where CCDciel is running
     ccdciel_url = "http://localhost:3277/jsonrpc"
-    cmd = { "jsonrpc": "2.0", "id": id,
+
+    jsondata = json.dumps({"jsonrpc": "2.0", "id": id,
         "method": method,
         "params": [params] }
-    
-    # Send the request and return the result
+        ).encode('utf8')
+
     try:
-      return requests.post(ccdciel_url, json=cmd).json()
+      req = request.Request(ccdciel_url)
+      req.add_header('Content-Type', 'application/json; charset=utf-8')
+      res = request.urlopen(req, jsondata).read()
     except Exception as inst:
       print(type(inst))
       print(inst.args)
-      exit(1)
-    
+      sys.exit(1)
+
+    return json.loads(res.decode("utf8"))
+
 def main():
 
     connected = (ccdciel("Devices_Connected","")["result"])
