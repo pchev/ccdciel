@@ -37,6 +37,23 @@ uses  u_global, u_utils, cu_fits, indiapi, cu_planetarium, fu_ccdtemp, fu_device
 
 type
 
+  TNotifyOutput = procedure(msg:TStringList; r: integer) of object;
+
+  TPythonThread = class(TThread)
+  protected
+    procedure Execute; override;
+    procedure ShowOutput;
+  public
+    PyProcess: TProcess;
+    pycmd, pyscript, pypath: string;
+    host,port: string;
+    output: TStringList;
+    rc: integer;
+    FRunning: boolean;
+    FOnShowOutput: TNotifyOutput;
+    constructor Create;
+  end;
+
   { Tf_scriptengine }
 
   Tf_scriptengine = class(TForm)
@@ -132,6 +149,9 @@ type
     { public declarations }
     dbgscr: TPSScriptDebugger;
     scr: TPSScript;
+    PythonScr: TPythonThread;
+    PythonResult: integer;
+    PythonOutput: TStringList;
     function cmd_DevicesConnection(onoff:string):string;
     function cmd_MountPark(onoff:string):string;
     function cmd_MountTrack:string;
@@ -185,7 +205,13 @@ type
     function cmd_AutoFocus:string;
     function cmd_AutomaticAutoFocus:string;
     function cmd_ListFiles(var lf:TStringList):string;
+    function ScriptType(fn: string): TScriptType;
     function  RunScript(sname,path: string):boolean;
+    function ScriptRunning: boolean;
+    function RunPython(pycmd, pyscript, pypath: string): boolean;
+    procedure StopPython;
+    function PythonRunning: boolean;
+    procedure ShowPythonOutput(output: TStringList; exitcode: integer);
     procedure StopScript;
     property onMsg: TNotifyMsg read FonMsg write FonMsg;
     property onStartSequence: TNotifyStr read FonStartSequence write FonStartSequence;
@@ -225,6 +251,7 @@ implementation
 procedure Tf_scriptengine.FormCreate(Sender: TObject);
 var i: integer;
 begin
+  PythonOutput:=TStringList.Create;
   SetLength(ilist,10);
   SetLength(dlist,10);
   SetLength(slist,10);
@@ -247,6 +274,7 @@ end;
 procedure Tf_scriptengine.FormDestroy(Sender: TObject);
 var i: integer;
 begin
+  PythonOutput.Free;
   scr.Free;
   dbgscr.Free;
   SetLength(ilist,0);
@@ -723,42 +751,90 @@ begin
   result:=CreateDirUTF8(NewDir);
 end;
 
+function Tf_scriptengine.ScriptType(fn: string): TScriptType;
+var
+ f: textfile;
+ buf: string;
+begin
+ result:=stUnknown;
+ AssignFile(f,fn);
+ Reset(f);
+ repeat
+   ReadLn(f,buf);
+   if LowerCase(trim(buf))='begin' then begin
+     result:=stPascal;
+     break;
+   end;
+   if pos('from ccdciel import ccdciel',buf)>0 then begin
+     result:=stPython;
+     break;
+   end;
+ until eof(f);
+ CloseFile(f);
+end;
+
 function Tf_scriptengine.RunScript(sname,path: string):boolean;
-var fn: string;
+var fn,buf: string;
     i: integer;
     ok: boolean;
+    st: TScriptType;
 begin
  try
   result:=false;
   msg(Format(rsRunScript2, [sname]));
   FScriptFilename:=sname;
   fn:=slash(path)+sname+'.script';
-  scr.Script.LoadFromFile(fn);
-  ok:=scr.Compile;
-  ScriptCancel:=false;
-  if ok then begin
-    if GetCurrentThreadId=MainThreadID then Application.ProcessMessages;
-    result:=scr.Execute;
-    wait(2);
+  st:=ScriptType(fn);
+  if st=stPython then begin
+    ScriptCancel:=false;
+    result:=RunPython(PythonCmd, fn, slash(ScriptsDir));
     result:=result and (not ScriptCancel);
+    for i:=0 to PythonOutput.Count-1 do
+       msg(PythonOutput[i]);
     if result then
        msg(Format(rsScriptFinish, [sname]))
     else begin
-       msg(Format(rsScriptExecut, [inttostr(scr.ExecErrorRow),
-         scr.ExecErrorToString]));
+       msg(Format(rsScriptError,[inttostr(PythonResult)]));
        msg(Format(rsScriptFinish, [sname]));
     end;
-  end else begin
-    for i:=0 to scr.CompilerMessageCount-1 do begin
-       msg(Format(rsCompilationE, [scr.CompilerErrorToStr(i)]));
+  end
+  else if st=stPascal then begin
+    scr.Script.LoadFromFile(fn);
+    ok:=scr.Compile;
+    ScriptCancel:=false;
+    if ok then begin
+      if GetCurrentThreadId=MainThreadID then Application.ProcessMessages;
+      result:=scr.Execute;
+      wait(2);
+      result:=result and (not ScriptCancel);
+      if result then
+         msg(Format(rsScriptFinish, [sname]))
+      else begin
+         msg(Format(rsScriptExecut, [inttostr(scr.ExecErrorRow),
+           scr.ExecErrorToString]));
+         msg(Format(rsScriptFinish, [sname]));
+      end;
+    end else begin
+      for i:=0 to scr.CompilerMessageCount-1 do begin
+         msg(Format(rsCompilationE, [scr.CompilerErrorToStr(i)]));
+      end;
+      result:=false;
     end;
+  end
+  else begin
     result:=false;
+    msg('Unknown script language '+fn);
   end;
  except
    on E: Exception do begin
     msg(Format(rsScriptError, [E.Message]));
    end;
  end;
+end;
+
+function Tf_scriptengine.ScriptRunning: boolean;
+begin
+ result:= (scr.Running or PythonRunning);
 end;
 
 Procedure Tf_scriptengine.StopScript;
@@ -779,8 +855,14 @@ begin
     Autoguider.WaitBusy(15);
   end;
   msg(rsScriptTermin);
-  ScriptCancel:=true;
-  scr.Stop;
+  if scr.Running then begin
+    ScriptCancel:=true;
+    scr.Stop;
+  end
+  else if PythonRunning then begin
+     ScriptCancel:=true;
+     StopPython;
+  end;
   if Waitrunning then cancelWait:=true;
   if WaitTillrunning then begin
     if f_pause<>nil
@@ -1616,6 +1698,137 @@ begin
   result:=msgFailed;
 end;
 
+
+///// Python scripts ///////
+
+function Tf_scriptengine.RunPython(pycmd, pyscript, pypath: string): boolean;
+begin
+result:=false;
+try
+  PythonResult:=-1;
+  PythonScr:=TPythonThread.Create;
+  PythonScr.FOnShowOutput:=@ShowPythonOutput;
+  PythonScr.pycmd:=pycmd;
+  PythonScr.pyscript:=pyscript;
+  PythonScr.pypath:=pypath;
+  PythonScr.Start;
+  if assigned(FonScriptExecute) then FonScriptExecute(self);
+  repeat
+    wait(1);
+  until not PythonRunning;
+  result:=(PythonResult=0);
+  FreeAndNil(PythonScr);
+except
+  FreeAndNil(PythonScr);
+end;
+end;
+
+function Tf_scriptengine.PythonRunning: boolean;
+begin
+try
+  result:=(PythonScr<>nil) and (PythonScr.FRunning);
+except
+  result:=false;
+end;
+end;
+
+procedure Tf_scriptengine.StopPython;
+begin
+  if PythonRunning then PythonScr.PyProcess.Terminate(1);
+end;
+
+procedure Tf_scriptengine.ShowPythonOutput(output: TStringList; exitcode: integer);
+var i: integer;
+begin
+PythonResult:=exitcode;
+PythonOutput.Clear;
+if output<>nil then
+  PythonOutput.Assign(output);
+if assigned(FonScriptAfterExecute) then FonScriptAfterExecute(self);
+end;
+
+constructor TPythonThread.Create;
+begin
+inherited Create(true);
+FreeOnTerminate := false;
+FRunning:=false;
+end;
+
+procedure TPythonThread.Execute;
+const READ_BYTES = 2048;
+var
+  M: TMemoryStream;
+  param: TStringList;
+  n: LongInt;
+  i,r: integer;
+  BytesRead: LongInt;
+  buf:string;
+begin
+FRunning:=true;
+M := TMemoryStream.Create;
+PyProcess := TProcess.Create(nil);
+param:=TStringList.Create;
+output:=TStringList.Create;
+rc:=1;
+try
+  BytesRead := 0;
+  param.Add(pyscript);
+  PyProcess.Executable:=pycmd;
+  PyProcess.Parameters:=param;
+  PyProcess.Environment.Clear;
+  for i:=0 to GetEnvironmentVariableCount-1 do
+    PyProcess.Environment.Add(GetEnvironmentString(i));
+  PyProcess.Environment.Add('PYTHONPATH='+pypath);
+  PyProcess.Environment.Add('CCDCIEL_HOST=localhost');
+  PyProcess.Environment.Add('CCDCIEL_PORT='+TCPIPServerPort);
+  PyProcess.ShowWindow:=swoHIDE;
+  if output<>nil then PyProcess.Options := [poUsePipes, poStdErrToOutPut];
+  PyProcess.Execute;
+  while PyProcess.Running do begin
+    if (output<>nil) and (PyProcess.Output<>nil) then begin
+      M.SetSize(BytesRead + READ_BYTES);
+      n := PyProcess.Output.Read((M.Memory + BytesRead)^, READ_BYTES);
+      if n > 0 then inc(BytesRead, n);
+    end;
+  end;
+  r:=PyProcess.ExitStatus;
+  rc:=PyProcess.ExitCode;
+  if (output<>nil) and (r<>127)and(PyProcess.Output<>nil) then repeat
+    M.SetSize(BytesRead + READ_BYTES);
+    n := PyProcess.Output.Read((M.Memory + BytesRead)^, READ_BYTES);
+    if n > 0
+    then begin
+      Inc(BytesRead, n);
+    end;
+  until (n<=0)or(PyProcess.Output=nil);
+  if (output<>nil) then begin
+    M.SetSize(BytesRead);
+    output.LoadFromStream(M);
+  end;
+  if Assigned(FOnShowOutput) then Synchronize(@ShowOutput);
+  FreeAndNil(PyProcess);
+  M.Free;
+  param.Free;
+  output.Free;
+  FRunning:=false;
+except
+  on E: Exception do begin
+    rc:=-1;
+    if (output<>nil) then output.add(E.Message);
+    if Assigned(FOnShowOutput) then Synchronize(@ShowOutput);
+    FreeAndNil(PyProcess);
+    M.Free;
+    param.Free;
+    output.Free;
+    FRunning:=false;
+  end;
+end;
+end;
+
+procedure TPythonThread.ShowOutput;
+begin
+  if Assigned(FOnShowOutput) then FOnShowOutput(output,rc);
+end;
 
 end.
 

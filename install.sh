@@ -35,10 +35,10 @@ install -m 755 -d $destdir/share/ccdciel/data/resources
 install -m 755 -d $destdir/share/ccdciel/doc
 
 install -v -m 755 -s src/ccdciel  $destdir/bin/ccdciel
+install -v -m 644 scripts/ccdciel.py  $destdir/share/ccdciel/scripts/ccdciel.py
 install -v -m 644 scripts/scope_park.script  $destdir/share/ccdciel/scripts/scope_park.script
 install -v -m 644 scripts/scope_unpark.script  $destdir/share/ccdciel/scripts/scope_unpark.script
-install -v -m 644 scripts/T_ccd_temp_down.script  $destdir/share/ccdciel/scripts/T_ccd_temp_down.script
-install -v -m 644 scripts/T_ccd_temp_up.script  $destdir/share/ccdciel/scripts/T_ccd_temp_up.script
+install -v -m 644 scripts/scope_position.script  $destdir/share/ccdciel/scripts/scope_position.script
 install -v -m 644 scripts/T_scope_alignment.script  $destdir/share/ccdciel/scripts/T_scope_alignment.script 
 install -v -m 644 scripts/T_eqmod_alignment.script  $destdir/share/ccdciel/scripts/T_eqmod_alignment.script 
 install -v -m 755 scripts/astrometry.sh  $destdir/share/ccdciel/scripts/astrometry.sh

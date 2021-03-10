@@ -33,10 +33,10 @@ install -d -m 755 $destdir/data/language
 install -m 755 -d $destdir/data/resources
 install -d -m 755 $destdir/doc
 
+install -v -m 644 scripts/ccdciel.py  $destdir/scripts/ccdciel.py
 install -v -m 644 scripts/scope_park.script  $destdir/scripts/scope_park.script
 install -v -m 644 scripts/scope_unpark.script  $destdir/scripts/scope_unpark.script
-install -v -m 644 scripts/T_ccd_temp_down.script  $destdir/scripts/T_ccd_temp_down.script
-install -v -m 644 scripts/T_ccd_temp_up.script  $destdir/scripts/T_ccd_temp_up.script
+install -v -m 644 scripts/scope_position.script  $destdir/scripts/scope_position.script
 install -v -m 644 scripts/T_scope_alignment.script  $destdir/scripts/T_scope_alignment.script 
 install -v -m 644 scripts/T_eqmod_alignment.script  $destdir/scripts/T_eqmod_alignment.script 
 install -v -m 755 scripts/astrometry.sh  $destdir/scripts/astrometry.sh

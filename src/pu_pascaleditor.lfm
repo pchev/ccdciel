@@ -972,4 +972,10 @@ object f_pascaleditor: Tf_pascaleditor
       FF00FFFFFF000000FF090000FFCB
     }
   end
+  object SynPythonSyn1: TSynPythonSyn
+    DefaultFilter = 'Python Files (*.py)|*.py'
+    Enabled = False
+    Left = 350
+    Top = 49
+  end
 end

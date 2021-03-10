@@ -1331,7 +1331,7 @@ begin
    Camera.AbortExposure;
    if Mount.MountSlewing then Mount.AbortMotion;
    if Astrometry.Busy then Astrometry.StopAstrometry;
-   if f_scriptengine.scr.Running then begin
+   if f_scriptengine.ScriptRunning then begin
       f_scriptengine.StopScript;
    end;
    if FCurrentTarget>=0 then
@@ -1369,7 +1369,7 @@ begin
         Preview.Stop;
      end;
      StopGuider;
-     if f_scriptengine.scr.Running then f_scriptengine.StopScript;
+     if f_scriptengine.ScriptRunning then f_scriptengine.StopScript;
      msg(rsSequenceAbor,0);
      RunErrorAction;
      ShowDelayMsg('');

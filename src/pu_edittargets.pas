@@ -25,7 +25,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 interface
 
-uses pu_planetariuminfo, u_global, u_utils, u_ccdconfig, pu_pascaleditor, u_annotation, pu_keyboard,
+uses pu_planetariuminfo, u_global, u_utils, u_ccdconfig, pu_pascaleditor, u_annotation, pu_keyboard, pu_newscript,
   pu_scriptengine, cu_astrometry, u_hints, u_translation, pu_selectscript, Classes, math, cu_targets,
   SysUtils, FileUtil, Forms, Controls, Graphics, Dialogs, StdCtrls, UScaleDPI, cu_plan, LCLType,
   LazUTF8, maskedit, Grids, ExtCtrls, ComCtrls, EditBtn, Spin, Buttons, Menus, CheckLst, Types;
@@ -1095,6 +1095,8 @@ var txt,fn: string;
     i,n:integer;
     newscript: boolean;
     s: TStringList;
+    ns: Tf_newscript;
+    st: TScriptType;
 begin
   n:=TargetList.Row;
   newscript:=(Sender=BtnEditNewScript)or(ScriptList.Text='');
@@ -1105,44 +1107,66 @@ begin
   end;
   if newscript then begin
     s.Clear;
-    txt:=FormEntry(self, rsNewScript, '');
+    ns:=Tf_newscript.Create(self);
+    ns.ShowModal;
+    if ns.ModalResult<>mrOK then exit;
+    txt:=trim(ns.Edit1.text);
     if txt='' then exit;
+    st:=TScriptType(ns.ScriptLanguage.ItemIndex+1);
+    ns.free;
     scdir:=ScriptDir[1];
     if copy(txt,1,2)='T_' then delete(txt,1,2);
     fn:=scdir.path+txt+'.script';
     if FileExistsUTF8(fn) then begin
-       if MessageDlg(Format(rsScriptAlread2, [txt]), mtConfirmation, mbYesNo, 0)
-         =mrYes then
+       if MessageDlg(Format(rsScriptAlread2, [fn]), mtConfirmation, mbYesNo, 0)=mrYes then
          s.LoadFromFile(fn)
        else
          exit;
+    end
+    else begin
+      if st=stPascal then begin
+        s.Add('# Pascal script for CCDciel');
+        s.Add('# see: https://www.ap-i.net/ccdciel/en/documentation/script_reference');
+        s.Add('begin');
+        s.Add('');
+        s.Add('end.');
+      end
+      else if st=stPython then begin
+        s.Add('# Python program for CCDciel');
+        s.Add('# see: https://www.ap-i.net/ccdciel/en/documentation/jsonrpc_reference');
+        s.Add('');
+        s.Add('from ccdciel import ccdciel');
+        s.Add('');
+      end;
     end;
     f_pascaleditor.ScriptName:=txt;
+    f_pascaleditor.ScriptType:=st;
   end
   else begin
-      i:=ScriptList.ItemIndex;
-      if i<0 then exit;
-      txt:=ScriptList.Items[i];
-      scdir:=TScriptDir(ScriptList.Items.Objects[i]);
-      if (txt='')or(scdir=nil) then exit;
-      fn:=scdir.path+txt+'.script';
-      s.LoadFromFile(fn);
-      if scdir<>ScriptDir[1] then begin
-         if copy(txt,1,2)='T_' then
-            delete(txt,1,2)
-         else begin
-           if txt[1]<>'_' then txt:='_'+txt
-         end;
-         scdir:=ScriptDir[1];
-         fn:=scdir.path+txt+'.script';
-         newscript:=true;
-         if FileExistsUTF8(fn) then begin
-            if MessageDlg(Format(rsScriptAlread3, [fn]), mtConfirmation,
-              mbYesNo, 0)<>mrYes then
-              exit;
-         end;
-      end;
-      f_pascaleditor.ScriptName:=txt;
+    i:=ScriptList.ItemIndex;
+    if i<0 then exit;
+    txt:=ScriptList.Items[i];
+    scdir:=TScriptDir(ScriptList.Items.Objects[i]);
+    if (txt='')or(scdir=nil) then exit;
+    fn:=scdir.path+txt+'.script';
+    s.LoadFromFile(fn);
+    f_pascaleditor.ScriptType:=f_scriptengine.ScriptType(fn);
+    if scdir<>ScriptDir[1] then begin
+       if copy(txt,1,2)='T_' then
+          delete(txt,1,2)
+       else begin
+         if txt[1]<>'_' then txt:='_'+txt
+       end;
+       scdir:=ScriptDir[1];
+       fn:=scdir.path+txt+'.script';
+       newscript:=true;
+       if FileExistsUTF8(fn) then begin
+          if MessageDlg(Format(rsScriptAlread3, [fn]), mtConfirmation,
+            mbYesNo, 0)<>mrYes then
+            exit;
+       end;
+    end;
+    f_pascaleditor.ScriptName:=txt;
   end;
   f_pascaleditor.SynEdit1.Lines.Assign(s);
   FormPos(f_pascaleditor,mouse.CursorPos.X,mouse.CursorPos.Y);
@@ -1158,7 +1182,6 @@ begin
   end;
   s.Free;
 end;
-
 
 procedure Tf_EditTargets.BtnDeleteObjectClick(Sender: TObject);
 var i,j: integer;

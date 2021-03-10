@@ -1,31 +1,18 @@
-{
-  This script park the telescope mount.
-  Beware the action is immediate and without confirmation message!
-}
+#  This script park the telescope mount.
+#  Beware the action is immediate and without confirmation message!
 
-var ok,parked: boolean;
-    arg: TStringList;
-    r: string;
-begin
+from ccdciel import ccdciel
+import sys
 
-  // telescope connected?
-  GetB('TELESCOPE_CONNECTED',ok);
-  if not ok then begin
-    logMsg('Telescope not connected!');
-    exit;
-  end;
+connected = (ccdciel('Telescope_Connected')['result'])
+if not connected :
+   ccdciel('LogMsg','Telescope not connected!')
+   sys.exit(1)
+   
+parked = (ccdciel('Telescope_Parked')['result'])
+if parked :
+   ccdciel('LogMsg','Telescope already parked!')
+   sys.exit(0)
 
-  // get park status
-  GetB('TELESCOPE_PARKED',parked);
-
-  if parked then begin
-    logMsg('Telescope already parked');
-  end
-  else begin
-    getSl('STRL1',arg);
-    arg.clear;
-    arg.add('ON');
-    r:=cmdArg('TELESCOPE_PARK',arg);
-    if r<>msgOK then logMsg('Telescope park: '+r);
-  end;
-end.
+r = (ccdciel('Telescope_Park',True)['result']['status'])
+ccdciel('LogMsg','Telescope Park %r' %(r))

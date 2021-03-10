@@ -1,30 +1,17 @@
-{
-  This script unpark the telescope mount
-}
+#  This script unpark the telescope mount
 
-var ok,parked: boolean;
-    arg: TStringList;
-    r: string;
-begin
+from ccdciel import ccdciel
+import sys
 
-  // telescope connected?
-  GetB('TELESCOPE_CONNECTED',ok);
-  if not ok then begin
-    logMsg('Telescope not connected!');
-    exit;
-  end;
+connected = (ccdciel('Telescope_Connected')['result'])
+if not connected :
+   ccdciel('LogMsg','Telescope not connected!')
+   sys.exit(1)
+   
+parked = (ccdciel('Telescope_Parked')['result'])
+if not parked :
+   ccdciel('LogMsg','Telescope already unparked')
+   sys.exit(0)
 
-  // get park status
-  GetB('TELESCOPE_PARKED',parked);
-
-  if parked then begin
-    getSl('STRL1',arg);
-    arg.clear;
-    arg.add('OFF');
-    r:=cmdArg('TELESCOPE_PARK',arg);
-    if r<>msgOK then logMsg('Telescope park: '+r);
-  end
-  else begin
-    logMsg('Telescope already unparked');
-  end;
-end.
+r = (ccdciel('Telescope_Park',False)['result']['status'])
+ccdciel('LogMsg','Telescope Park %r' %(r))

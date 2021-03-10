@@ -300,7 +300,7 @@
         <PackageName Value="LCL"/>
       </Item11>
     </RequiredPackages>
-    <Units Count="116">
+    <Units Count="117">
       <Unit0>
         <Filename Value="ccdciel.lpr"/>
         <IsPartOfProject Value="True"/>
@@ -892,6 +892,13 @@
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Frame"/>
       </Unit115>
+      <Unit116>
+        <Filename Value="pu_newscript.pas"/>
+        <IsPartOfProject Value="True"/>
+        <ComponentName Value="f_newscript"/>
+        <HasResources Value="True"/>
+        <ResourceBaseClass Value="Form"/>
+      </Unit116>
     </Units>
   </ProjectOptions>
   <CompilerOptions>

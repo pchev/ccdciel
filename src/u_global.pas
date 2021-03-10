@@ -88,6 +88,8 @@ type
                  path: string;
                end;
 
+  TScriptType = (stUnknown, stPascal, stPython);
+
   TFilterExp = Class(TObject)
                public
                  ExpFact: double;
@@ -314,8 +316,8 @@ const
 
 var
   onMsgGlobal: TNotifyMsg;
-  Appdir,ConfigDir,LogDir,TmpDir,DataDir,HomeDir: UTF8String;
-  defCapturePath: string;
+  Appdir,ConfigDir,LogDir,TmpDir,DataDir,ScriptsDir,HomeDir: UTF8String;
+  defCapturePath, defPython, TCPIPServerPort: string;
   CameraName,WheelName,FocuserName,RotatorName,MountName,DomeName,WatchdogName,WeatherName,SafetyName,SwitchName,CoverName: string;
   ConfigDarkFile,cdate: string;
   isAdmin, debug_msg: boolean;
@@ -323,6 +325,7 @@ var
   ConfirmClose, ScreenScaling, LogToFile: boolean;
   LogLevel: integer;
   ScriptDir: array[1..MaxScriptDir] of TScriptDir;
+  PythonCmd: string;
   config,screenconfig,credentialconfig,emailconfig,bpmconfig: TCCDConfig;
   profile: string;
   ProfileFromCommandLine: boolean;

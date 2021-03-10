@@ -34,9 +34,11 @@ type
   { Tf_option }
 
   Tf_option = class(TForm)
+    PythonCmd: TEdit;
     GroupBox31: TGroupBox;
     GroupBox32: TPanel;
     hemis: TComboBox;
+    Label124: TLabel;
     Label28: TLabel;
     Label29: TLabel;
     latdeg: TFloatEdit;
@@ -51,6 +53,7 @@ type
     Panel22: TPanel;
     Panel23: TPanel;
     Panel24: TPanel;
+    Panel25: TPanel;
     SlewGainEdit: TSpinEdit;
     SlewISObox: TComboBox;
     SlewOffsetEdit: TSpinEdit;

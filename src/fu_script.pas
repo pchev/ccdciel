@@ -26,7 +26,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 interface
 
 uses  u_global, u_utils, pu_scriptengine, pu_pascaleditor, UScaleDPI, u_translation,
-  fu_capture, fu_preview, cu_mount, cu_camera, cu_autoguider, cu_astrometry,
+  fu_capture, fu_preview, cu_mount, cu_camera, cu_autoguider, cu_astrometry, pu_newscript,
   LCLType, Classes, Dialogs, SysUtils, FileUtil, Forms, Graphics, Controls, StdCtrls, ExtCtrls;
 
 type
@@ -147,7 +147,7 @@ var sname: string;
 begin
   i:=ComboBoxScript.ItemIndex;
   if i>=0 then begin
-    if f_scriptengine.scr.Running then begin
+    if f_scriptengine.ScriptRunning then begin
       msg(rsAnotherScrip);
     end else begin
       sname:=ComboBoxScript.Items[i];
@@ -161,7 +161,7 @@ end;
 
 procedure Tf_script.BtnStopClick(Sender: TObject);
 begin
-  if f_scriptengine.scr.Running then begin
+  if f_scriptengine.ScriptRunning then begin
     f_scriptengine.StopScript;
   end
   else msg(rsNoScriptAreR);
@@ -225,6 +225,8 @@ var txt,fn: string;
     i:integer;
     newscript: boolean;
     s: TStringList;
+    ns: Tf_newscript;
+    st: TScriptType;
 begin
   newscript:=(Sender=BtnNew)or(ComboBoxScript.Text='');
   s:=TStringList.Create;
@@ -234,8 +236,13 @@ begin
   end;
   if newscript then begin
     s.Clear;
-    txt:=FormEntry(self, rsNewScript, '');
+    ns:=Tf_newscript.Create(self);
+    ns.ShowModal;
+    if ns.ModalResult<>mrOK then exit;
+    txt:=trim(ns.Edit1.text);
     if txt='' then exit;
+    st:=TScriptType(ns.ScriptLanguage.ItemIndex+1);
+    ns.free;
     scdir:=ScriptDir[1];
     if copy(txt,1,2)='T_' then delete(txt,1,2);
     fn:=scdir.path+txt+'.script';
@@ -245,8 +252,25 @@ begin
          s.LoadFromFile(fn)
        else
          exit;
+    end
+    else begin
+      if st=stPascal then begin
+        s.Add('# Pascal script for CCDciel');
+        s.Add('# see: https://www.ap-i.net/ccdciel/en/documentation/script_reference');
+        s.Add('begin');
+        s.Add('');
+        s.Add('end.');
+      end
+      else if st=stPython then begin
+        s.Add('# Python program for CCDciel');
+        s.Add('# see: https://www.ap-i.net/ccdciel/en/documentation/jsonrpc_reference');
+        s.Add('');
+        s.Add('from ccdciel import ccdciel');
+        s.Add('');
+      end;
     end;
     f_pascaleditor.ScriptName:=txt;
+    f_pascaleditor.ScriptType:=st;
   end
   else begin
     i:=ComboBoxScript.ItemIndex;
@@ -256,6 +280,7 @@ begin
     if (txt='')or(scdir=nil) then exit;
     fn:=scdir.path+txt+'.script';
     s.LoadFromFile(fn);
+    f_pascaleditor.ScriptType:=f_scriptengine.ScriptType(fn);
     if scdir<>ScriptDir[1] then begin
        if copy(txt,1,2)='T_' then
           delete(txt,1,2)
@@ -266,8 +291,7 @@ begin
        fn:=scdir.path+txt+'.script';
        newscript:=true;
        if FileExistsUTF8(fn) then begin
-          if MessageDlg(Format(rsScriptAlread3, [fn]), mtConfirmation, mbYesNo,
-            0)<>mrYes then
+          if MessageDlg(Format(rsScriptAlread3, [fn]), mtConfirmation, mbYesNo, 0)<>mrYes then
             exit;
        end;
     end;

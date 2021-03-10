@@ -28,8 +28,20 @@ AppID={{6570df38-f18f-11e4-9532-fb2d36b55e00}
 Name: desktopicon; Description: {cm:CreateDesktopIcon}; GroupDescription: {cm:AdditionalIcons}
 
 [Files]
-Source: Data\*; DestDir: {app}; Flags: ignoreversion recursesubdirs createallsubdirs restartreplace
-; NOTE: Don't use "Flags: ignoreversion" on any shared system files
+Source: Data\ccdciel.exe; DestDir: {app}; Flags: ignoreversion recursesubdirs createallsubdirs restartreplace; AfterInstall: UpdateFirewallRules
+Source: Data\exiv2.exe; DestDir: {app}; Flags: ignoreversion recursesubdirs createallsubdirs restartreplace;
+Source: Data\FPack.exe; DestDir: {app}; Flags: ignoreversion recursesubdirs createallsubdirs restartreplace;
+Source: Data\Funpack.exe; DestDir: {app}; Flags: ignoreversion recursesubdirs createallsubdirs restartreplace;
+Source: Data\cfitsio.dll; DestDir: {app}; Flags: ignoreversion recursesubdirs createallsubdirs restartreplace;
+Source: Data\libccdcielwcs.dll; DestDir: {app}; Flags: ignoreversion recursesubdirs createallsubdirs restartreplace;
+Source: Data\libeay32.dll; DestDir: {app}; Flags: ignoreversion recursesubdirs createallsubdirs restartreplace;
+Source: Data\libexpat.dll; DestDir: {app}; Flags: ignoreversion recursesubdirs createallsubdirs restartreplace;
+Source: Data\libpasraw.dll; DestDir: {app}; Flags: ignoreversion recursesubdirs createallsubdirs restartreplace;
+Source: Data\ssleay32.dll; DestDir: {app}; Flags: ignoreversion recursesubdirs createallsubdirs restartreplace;
+Source: Data\zlib1.dll; DestDir: {app}; Flags: ignoreversion recursesubdirs createallsubdirs restartreplace;
+Source: Data\data\*; DestDir: {app}\data; Flags: ignoreversion recursesubdirs createallsubdirs restartreplace;
+Source: Data\doc\*; DestDir: {app}\doc; Flags: ignoreversion recursesubdirs createallsubdirs restartreplace;
+Source: Data\scripts\*; DestDir: {app}\scripts; Flags: ignoreversion recursesubdirs createallsubdirs restartreplace;
 
 [Icons]
 Name: {group}\CCDciel; Filename: {app}\ccdciel.exe; WorkingDir: {app}
@@ -71,4 +83,12 @@ begin
       Exec(ExpandConstant(sUnInstallString), '/SILENT', '', SW_SHOW, ewWaitUntilTerminated, iResultCode);
       Result := True; 
   end;
+end;
+
+procedure UpdateFirewallRules();
+var
+  ResultCode: Integer;
+begin
+  Exec('netsh.exe', 'advfirewall firewall delete rule name="CCDciel" dir=in program=' + AddQuotes(ExpandConstant('{app}\ccdciel.exe')), '', SW_HIDE, ewWaitUntilTerminated, ResultCode);
+  Exec('netsh.exe', 'advfirewall firewall add rule name="CCDCiel" dir=in action=allow program=' + AddQuotes(ExpandConstant('{app}\ccdciel.exe')) + ' profile=private', '', SW_HIDE, ewWaitUntilTerminated, ResultCode);
 end;

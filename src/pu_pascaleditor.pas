@@ -31,10 +31,10 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 interface
 
-uses  Classes, SysUtils, FileUtil, SynEdit, UScaleDPI, u_translation,
+uses  Classes, SysUtils, FileUtil, SynEdit, UScaleDPI, u_translation, u_global, u_utils, pu_scriptengine,
   SynHighlighterPas, Forms, Controls, Graphics, Dialogs, ExtCtrls, StdCtrls,
   Menus, ActnList, StdActns, Buttons, ComCtrls, uPSComponent, uPSDebugger,
-  uPSRuntime, SynEditMarks, SynEditTypes;
+  uPSRuntime, SynEditMarks, SynEditTypes, SynHighlighterPython;
 
 type
 
@@ -63,6 +63,7 @@ type
     PopupMenu1: TPopupMenu;
     SynEdit1: TSynEdit;
     SynPasSyn1: TSynPasSyn;
+    SynPythonSyn1: TSynPythonSyn;
     ToolBar1: TToolBar;
     ToolButton1: TToolButton;
     ToolButton10: TToolButton;
@@ -97,7 +98,9 @@ type
     FDebugResume: Boolean;
     FActiveLine: integer;
     FScriptName: string;
+    FScriptType: TScriptType;
     procedure SetScriptName(value:string);
+    procedure SetScriptType(value:TScriptType);
     procedure DebugLineInfo(Sender: TObject; const fn: String; Pos, Row, Col: Cardinal);
     procedure DebugBreakpoint(Sender: TObject; const fn: String; Pos, Row, Col: Cardinal);
     procedure DebugIdle(Sender: TObject);
@@ -107,6 +110,7 @@ type
     procedure SetLang;
     property DebugScript: TPSScriptDebugger read Fdbgscr write Fdbgscr;
     property ScriptName: string read FScriptName write SetScriptName;
+    property ScriptType: TScriptType read FScriptType write SetScriptType;
   end;
 
 var
@@ -124,6 +128,7 @@ begin
   ScaleDPI(Self);
   FDebugResume:=false;
   SetLang;
+  button3.Visible:=false;
 end;
 
 procedure Tf_pascaleditor.FormShow(Sender: TObject);
@@ -132,6 +137,7 @@ Fdbgscr.OnLineInfo:=@DebugLineInfo;
 Fdbgscr.OnBreakpoint:=@DebugBreakpoint;
 Fdbgscr.OnIdle:=@DebugIdle;
 FActiveLine := 0;
+DebugMemo.Clear;
 SynEdit1.Modified:=False;
 end;
 
@@ -154,6 +160,25 @@ begin
   if FScriptName<>value then ButtonRemoveBreakpoints(nil);
   FScriptName:=value;
   Caption:=rsScriptEditor+': '+FScriptName;
+end;
+
+procedure Tf_pascaleditor.SetScriptType(value:TScriptType);
+begin
+  FScriptType:=value;
+  if FScriptType=stPascal then begin
+    ToolButton2.Visible:=true;
+    ToolButton4.Visible:=true;
+    ToolButton5.Visible:=true;
+    ToolButton6.Visible:=true;
+    SynEdit1.Highlighter:=SynPasSyn1;
+  end
+  else begin
+    ToolButton2.Visible:=false;
+    ToolButton4.Visible:=false;
+    ToolButton5.Visible:=false;
+    ToolButton6.Visible:=false;
+    SynEdit1.Highlighter:=SynPythonSyn1;
+  end;
 end;
 
 function GetErrorRowCol(const inStr: string): TPoint;
@@ -207,10 +232,26 @@ end;
 end;
 
 procedure Tf_pascaleditor.ButtonRunClick(Sender: TObject);
+var i: integer;
+    fn:string;
 begin
-if Fdbgscr.Running then
- FDebugResume:=true
-else Startdebug;
+if FScriptType=stPascal then begin
+  if Fdbgscr.Running then
+    FDebugResume:=true
+  else
+    Startdebug;
+end
+else if FScriptType=stPython then begin
+  fn:=slash(TmpDir)+'tmpscript';
+  SynEdit1.Lines.SaveToFile(fn);
+  DebugMemo.Clear;
+  DebugMemo.Lines.Add('running...');
+  Application.ProcessMessages;
+  f_scriptengine.RunPython(PythonCmd, fn, slash(ScriptsDir));
+  for i:=0 to f_scriptengine.PythonOutput.Count-1 do
+     DebugMemo.Lines.Add(f_scriptengine.PythonOutput[i]);
+     DebugMemo.Lines.Add('Exit code: '+inttostr(f_scriptengine.PythonResult));
+end;
 end;
 
 procedure Tf_pascaleditor.ButtonPauseClick(Sender: TObject);
@@ -249,8 +290,13 @@ end;
 
 procedure Tf_pascaleditor.ButtonStopClick(Sender: TObject);
 begin
-if Fdbgscr.Exec.Status in isRunningOrPaused then
-  Fdbgscr.Stop;
+if FScriptType=stPascal then begin
+  if Fdbgscr.Exec.Status in isRunningOrPaused then
+    Fdbgscr.Stop;
+end
+else if FScriptType=stPython then begin
+  f_scriptengine.StopPython;
+end;
 end;
 
 procedure Tf_pascaleditor.FormCloseQuery(Sender: TObject; var CanClose: boolean);
@@ -273,6 +319,7 @@ end;
 procedure Tf_pascaleditor.SynEdit1GutterClick(Sender: TObject; X, Y, Line: integer; mark: TSynEditMark);
 var  m: TSynEditMark;
 begin
+if FScriptType=stPascal then begin
   if SynEdit1.Marks.Line[Line]<>nil then m:=SynEdit1.Marks.Line[Line][0] else m:=nil;
   if m=nil then begin
     m := TSynEditMark.Create(SynEdit1);
@@ -290,13 +337,14 @@ begin
     Fdbgscr.SetBreakPoint('',Line);
   end;
 end;
+end;
 
 procedure Tf_pascaleditor.SynEdit1MouseUp(Sender: TObject;
   Button: TMouseButton; Shift: TShiftState; X, Y: Integer);
 var pt:Tpoint;
     str,val:string;
 begin
-if Fdbgscr.Exec.Status in isRunningOrPaused then begin
+if (FScriptType=stPascal) and (Fdbgscr.Exec.Status in isRunningOrPaused) then begin
   if SynEdit1.SelText<>'' then
     str:=SynEdit1.SelText
   else begin
@@ -314,7 +362,7 @@ end;
 procedure Tf_pascaleditor.SynEdit1SpecialLineColors(Sender: TObject;
   Line: integer; var Special: boolean; var FG, BG: TColor);
 begin
-  if Fdbgscr.Exec.Status in isRunningOrPaused then begin
+  if (FScriptType=stPascal) and (Fdbgscr.Exec.Status in isRunningOrPaused) then begin
     if Fdbgscr.HasBreakPoint('', Line) then
     begin
       Special := True;

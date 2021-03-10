@@ -528,7 +528,7 @@ type
     FrameX,FrameY,FrameW,FrameH: integer;
     DeviceTimeout: integer;
     MouseMoving, MouseFrame, LockTimerPlot, LockMouseWheel, LockRestartExposure, PolarMoving: boolean;
-    Capture,Preview,learningvcurve,UseTcpServer: boolean;
+    Capture,Preview,learningvcurve: boolean;
     LogFileOpen,DeviceLogFileOpen: Boolean;
     NeedRestart, GUIready, AppClose: boolean;
     LogFile,DeviceLogFile : UTF8String;
@@ -1109,6 +1109,7 @@ begin
    end;
  end;
  DataDir:=slash(Appdir)+slash('data');
+ ScriptsDir:=slash(Appdir)+slash('scripts');
  ConfigDir:=GetAppConfigDirUTF8(false,true);
  if Application.HasOption('b', 'basedir') then begin
    buf:=Application.GetOptionValue('b', 'basedir');
@@ -1121,12 +1122,14 @@ begin
  {$ifdef unix}
    HomeDir := expandfilename('~/');
    defCapturePath:=HomeDir;
+   defPython:='python';
  {$endif}
  {$ifdef mswindows}
    SHGetSpecialFolderLocation(0, CSIDL_PERSONAL, PIDL);
    SHGetPathFromIDList(PIDL, Folder);
    HomeDir := trim(WinCPToUTF8(Folder));
    defCapturePath:=HomeDir+'\Documents';
+   defPython:=slash(ScriptsDir)+slash('python')+'python.exe';
  {$endif}
 end;
 
@@ -1217,7 +1220,6 @@ begin
   GUIready:=false;
   filteroffset_initialized:=false;
   MsgHandle:=handle;
-  UseTcpServer:=True;
   meridianflipping:=false;
   TemperatureScale:=0;
   TempLabel:=sdeg+'C';
@@ -1345,7 +1347,7 @@ begin
   LogFileOpen:=false;
   for i:=1 to MaxScriptDir do ScriptDir[i]:=TScriptDir.Create;
   ScriptDir[1].path:=slash(ConfigDir);
-  ScriptDir[2].path:=slash(Appdir)+slash('scripts');
+  ScriptDir[2].path:=slash(ScriptsDir);
 
   lang:=config.GetValue('/Language','');;
   lang:=u_translation.translate(lang);
@@ -3523,6 +3525,7 @@ begin
     if not ok then NewMessage('Cannot create directory '+TmpDir,1);
   end;
   if pos(' ', TmpDir)>0 then NewMessage(rsPleaseSelect2,1);
+  PythonCmd:=config.GetValue('/Script/PythonCmd',defPython);
   SaveBitmap:=config.GetValue('/Files/SaveBitmap',false);
   SaveBitmapFormat:=config.GetValue('/Files/SaveBitmapFormat','png');
   OpenPictureDialog1.InitialDir:=config.GetValue('/Files/CapturePath',defCapturePath);
@@ -3730,8 +3733,7 @@ begin
   FileSequenceWidth:=config.GetValue('/Files/FileSequenceWidth',0);
   FilePack:=config.GetValue('/Files/Pack',false);
   WantExif:=config.GetValue('/Files/Exif',WantExif);
-  if UseTcpServer and ((TCPDaemon=nil)or(TCPDaemon.stoping)) then StartServer;
-  if (not UseTcpServer) and (TCPDaemon<>nil) then StopServer;
+  if ((TCPDaemon=nil)or(TCPDaemon.stoping)) then StartServer;
   WeatherRestartDelay:=config.GetValue('/Weather/RestartDelay',5);
   weather.UseCloudCover:=config.GetValue('/Weather/Use/CloudCover',false);
   weather.UseDewPoint:=config.GetValue('/Weather/Use/DewPoint',false);
@@ -6572,6 +6574,8 @@ begin
    autoguider.onDisconnect:=@AutoguiderDisconnect;
    autoguider.onShowMessage:=@NewMessage;
    f_sequence.Autoguider:=autoguider;
+   f_scriptengine.Autoguider:=autoguider;
+   f_script.Autoguider:=autoguider;
    f_autoguider.Status.Text:=autoguider.Status;
    f_autoguider.DitherOnly:=autoguider.AutoguiderType=agDITHER;
    NewMessage(Format(rsAutoguider+': %s', [autoguider.Status]),1);
@@ -7090,6 +7094,7 @@ begin
    f_option.CbShowHints.Checked:=screenconfig.GetValue('/Hint/Show',true);
    f_option.CaptureDir.Text:=config.GetValue('/Files/CapturePath',defCapturePath);
    f_option.TempDir.Text:=config.GetValue('/Files/TmpDir',TmpDir);
+   f_option.PythonCmd.Text:=config.GetValue('/Script/PythonCmd',PythonCmd);
    f_option.FolderOptions.RowCount:=SubDirCount;
    for i:=0 to SubDirCount-1 do begin
      f_option.FolderOptions.Cells[2,i]:=SubDirName[ord(SubDirOpt[i])];
@@ -7472,6 +7477,7 @@ begin
      screenconfig.SetValue('/Hint/Show',f_option.CbShowHints.Checked);
      config.SetValue('/Files/CapturePath',f_option.CaptureDir.Text);
      config.SetValue('/Files/TmpDir',f_option.TempDir.Text);
+     config.SetValue('/Script/PythonCmd',f_option.PythonCmd.Text);
      for i:=0 to SubDirCount-1 do begin
        for n:=0 to SubDirCount-1 do
          if SubDirName[n]=f_option.FolderOptions.Cells[2,i] then break;
@@ -7818,6 +7824,8 @@ begin
        autoguider.onDisconnect:=@AutoguiderDisconnect;
        autoguider.onShowMessage:=@NewMessage;
        f_sequence.Autoguider:=autoguider;
+       f_scriptengine.Autoguider:=autoguider;
+       f_script.Autoguider:=autoguider;
        f_autoguider.Status.Text:=autoguider.Status;
        f_autoguider.DitherOnly:=autoguider.AutoguiderType=agDITHER;
        NewMessage(Format(rsAutoguider+': %s', [autoguider.Status]),1);
@@ -12869,6 +12877,7 @@ begin
     TCPDaemon.onGetImage:=@TCPgetimage;
     TCPDaemon.IPaddr := '0.0.0.0';
     TCPDaemon.IPport := '3277';
+    TCPIPServerPort := TCPDaemon.IPport;
     TCPDaemon.Start;
   except
 
@@ -12904,6 +12913,7 @@ end;
 
 procedure Tf_main.TCPShowSocket(var msg: string);
 begin
+  TCPIPServerPort:=trim(msg);
   NewMessage(Format(rsTCPIPServerL, [msg]),1);
 end;
 
@@ -13248,6 +13258,11 @@ try
     buf1:=trim(value[attrib.IndexOf('params.0')]);
     buf:=f_scriptengine.cmd_OpenReferenceImage(buf1);
     result:=result+'"result":{"status": "'+buf+'"}';
+  end
+  else if method='LOGMSG' then begin
+    buf1:=trim(value[attrib.IndexOf('params.0')]);
+    NewMessage(buf1);
+    result:=result+'"result":{"status": "'+msgOK+'"}';
   end
 
   // method not found
