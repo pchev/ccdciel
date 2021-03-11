@@ -3526,6 +3526,11 @@ begin
   end;
   if pos(' ', TmpDir)>0 then NewMessage(rsPleaseSelect2,1);
   PythonCmd:=config.GetValue('/Script/PythonCmd',defPython);
+  {$ifdef mswindows}
+  // reset python path when switching between 32 and 64 bit version
+  if (pos('CCDCIEL\SCRIPTS',uppercase(PythonCmd))>0)and(not FileExists(PythonCmd)) then
+    PythonCmd:=defPython;
+  {$endif}
   SaveBitmap:=config.GetValue('/Files/SaveBitmap',false);
   SaveBitmapFormat:=config.GetValue('/Files/SaveBitmapFormat','png');
   OpenPictureDialog1.InitialDir:=config.GetValue('/Files/CapturePath',defCapturePath);
