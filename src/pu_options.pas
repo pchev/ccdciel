@@ -93,6 +93,7 @@ type
     SlewPanelOffset: TPanel;
     SlewPrec: TFloatSpinEdit;
     SlewRetry: TSpinEdit;
+    PythonDefault: TButton;
     WantExif: TCheckBox;
     LabelTestVoice: TLabel;
     LowQualityDisplay: TCheckBox;
@@ -674,6 +675,7 @@ type
     procedure PanelLeftMouseWheel(Sender: TObject; Shift: TShiftState; WheelDelta: Integer; MousePos: TPoint; var Handled: Boolean);
     procedure PixelSizeFromCameraChange(Sender: TObject);
     procedure PlanetariumBoxClick(Sender: TObject);
+    procedure PythonDefaultClick(Sender: TObject);
     procedure rbLinSocketChange(Sender: TObject);
     procedure BalanceChange(Sender: TObject);
     procedure ResolverBoxClick(Sender: TObject);
@@ -1464,6 +1466,11 @@ end;
 procedure Tf_option.PlanetariumBoxClick(Sender: TObject);
 begin
   Notebook2.PageIndex:=PlanetariumBox.ItemIndex;
+end;
+
+procedure Tf_option.PythonDefaultClick(Sender: TObject);
+begin
+  PythonCmd.Text:=defPython;
 end;
 
 procedure Tf_option.CheckBoxLocalCdcChange(Sender: TObject);
