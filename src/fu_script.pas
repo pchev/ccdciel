@@ -322,7 +322,7 @@ begin
   for k:=1 to MaxScriptDir do begin
     i:=FindFirstUTF8(ScriptDir[k].path+'*.script',0,fs);
     while i=0 do begin
-      {$ifdef cpuarm}
+      {$if defined(CPUARM) or defined(CPUAARCH64)}
       if f_scriptengine.ScriptType(ScriptDir[k].path+fs.name)<>stPascal then
       {$endif}
         begin

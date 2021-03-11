@@ -799,7 +799,7 @@ begin
     end;
   end
   else if st=stPascal then begin
-    {$ifdef cpuarm}
+    {$if defined(CPUARM) or defined(CPUAARCH64)}
       msg('Pascal language script are not supported on ARM processor');
       exit;
     {$endif}

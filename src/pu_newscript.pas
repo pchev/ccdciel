@@ -53,7 +53,7 @@ end;
 
 procedure Tf_newscript.ScriptLanguageClick(Sender: TObject);
 begin
-{$ifdef cpuarm}
+{$if defined(CPUARM) or defined(CPUAARCH64)}
   ScriptLanguage.ItemIndex:=1;  // Pascalscript do not work on ARM
 {$endif}
 end;
