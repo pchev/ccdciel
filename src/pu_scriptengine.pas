@@ -799,6 +799,10 @@ begin
     end;
   end
   else if st=stPascal then begin
+    {$ifdef cpuarm}
+      msg('Pascal language script are not supported on ARM processor');
+      exit;
+    {$endif}
     scr.Script.LoadFromFile(fn);
     ok:=scr.Compile;
     ScriptCancel:=false;

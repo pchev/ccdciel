@@ -29,42 +29,42 @@ object f_scriptengine: Tf_scriptengine
         Plugin = PSImport_StdCtrls1
       end>
     UsePreProcessor = False
-    left = 49
-    top = 29
+    Left = 49
+    Top = 29
   end
   object PSImport_Classes1: TPSImport_Classes
     EnableStreams = True
     EnableClasses = True
-    left = 57
-    top = 105
+    Left = 57
+    Top = 105
   end
   object PSImport_DateUtils1: TPSImport_DateUtils
-    left = 57
-    top = 178
+    Left = 57
+    Top = 178
   end
   object PSImport_Forms1: TPSImport_Forms
     EnableForms = True
     EnableMenus = True
-    left = 57
-    top = 243
+    Left = 57
+    Top = 243
   end
   object PSImport_Controls1: TPSImport_Controls
     EnableStreams = True
     EnableGraphics = True
     EnableControls = True
-    left = 226
-    top = 105
+    Left = 226
+    Top = 105
   end
   object PSImport_StdCtrls1: TPSImport_StdCtrls
     EnableExtCtrls = True
     EnableButtons = True
-    left = 226
-    top = 178
+    Left = 226
+    Top = 178
   end
   object ShutdownTimer: TTimer
     Enabled = False
     OnTimer = ShutdownTimerTimer
-    left = 211
-    top = 37
+    Left = 211
+    Top = 37
   end
 end

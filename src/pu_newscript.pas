@@ -22,6 +22,7 @@ type
     Panel3: TPanel;
     ScriptLanguage: TRadioGroup;
     procedure FormCreate(Sender: TObject);
+    procedure ScriptLanguageClick(Sender: TObject);
   private
     procedure SetLang;
   public
@@ -40,7 +41,7 @@ implementation
 procedure Tf_newscript.SetLang;
 begin
   label1.caption:=rsNewScript;
-  ScriptLanguage.Caption:=rsScriptLangua;
+  label2.Caption:=rsScriptLangua;
   BtnOK.Caption:=rsOK;
   BtnCancel.Caption:=rsCancel;
 end;
@@ -48,6 +49,13 @@ end;
 procedure Tf_newscript.FormCreate(Sender: TObject);
 begin
  SetLang;
+end;
+
+procedure Tf_newscript.ScriptLanguageClick(Sender: TObject);
+begin
+{$ifdef cpuarm}
+  ScriptLanguage.ItemIndex:=1;  // Pascalscript do not work on ARM
+{$endif}
 end;
 
 end.

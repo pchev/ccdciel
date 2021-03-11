@@ -545,9 +545,14 @@ begin
   for k:=1 to MaxScriptDir do begin
     i:=FindFirstUTF8(ScriptDir[k].path+'*.script',0,fs);
     while i=0 do begin
-      scr:=ExtractFileNameOnly(fs.Name);
-      if s.IndexOf(scr)<0 then begin
-        s.AddObject(scr,ScriptDir[k]);
+      {$ifdef cpuarm}
+      if f_scriptengine.ScriptType(ScriptDir[k].path+fs.name)<>stPascal then
+      {$endif}
+      begin
+        scr:=ExtractFileNameOnly(fs.Name);
+        if s.IndexOf(scr)<0 then begin
+          s.AddObject(scr,ScriptDir[k]);
+        end;
       end;
       i:=FindNextUTF8(fs);
     end;
