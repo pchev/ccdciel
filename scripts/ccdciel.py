@@ -2,10 +2,18 @@
 # For more information and reference of the available methods see: 
 # https://www.ap-i.net/ccdciel/en/documentation/jsonrpc_reference
 
-from urllib import request
-import json
 import sys
 import os
+try:
+  from urllib import request
+except:
+  print('Cannot import urllib.request, your version of python is probably too old, try python3')
+  sys.exit(1)
+try:
+  import json
+except:
+  print('Cannot import json, your version of python is probably too old, try python3')
+  sys.exit(1)
 
 id = 0
 
