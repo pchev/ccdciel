@@ -3528,8 +3528,10 @@ begin
   PythonCmd:=config.GetValue('/Script/PythonCmd',defPython);
   {$ifdef mswindows}
   // reset python path when switching between 32 and 64 bit version
-  if (pos('CCDCIEL\SCRIPTS',uppercase(PythonCmd))>0)and(not FileExists(PythonCmd)) then
+  if (pos('CCDCIEL\SCRIPTS',uppercase(PythonCmd))>0)and(not FileExists(PythonCmd)) then  begin
     PythonCmd:=defPython;
+    config.SetValue('/Script/PythonCmd',defPython);
+  end;
   {$endif}
   SaveBitmap:=config.GetValue('/Files/SaveBitmap',false);
   SaveBitmapFormat:=config.GetValue('/Files/SaveBitmapFormat','png');
