@@ -530,3 +530,7 @@ msgstr ""
 msgid "If not checked the program will never change the gain/offset value set in the driver setup"
 msgstr ""
 
+#: u_hints:rshistogramful
+msgid "Histogram full range or clipped to available data"
+msgstr ""
+

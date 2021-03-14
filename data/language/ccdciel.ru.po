@@ -6,15 +6,15 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ccdciel\n"
 "Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
-"POT-Creation-Date: 2021-01-11 15:06+0000\n"
-"PO-Revision-Date: 2020-12-23 19:21+0000\n"
+"POT-Creation-Date: 2021-03-14 15:39+0000\n"
+"PO-Revision-Date: 2021-02-13 10:38+0000\n"
 "Last-Translator: Sergey Tarantsov <tsn-ast@yandex.ru>\n"
 "Language-Team: Russian <ru@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2021-01-13 16:16+0000\n"
-"X-Generator: Launchpad (build 511b4a3b6512aa3d421c5f7d74f3527e78bff26e)\n"
+"X-Launchpad-Export-Date: 2021-03-14 15:48+0000\n"
+"X-Generator: Launchpad (build d4fcb062545ed29d3cd7773e52e43615e042623f)\n"
 
 #: u_translation.rs32bitdriver
 msgid "This driver work only in 32bit, please install the 32bit version of CCDciel."
@@ -103,10 +103,6 @@ msgstr "Опорная звезда потеряна"
 #: u_translation.rsall
 msgid "All"
 msgstr "Всё"
-
-#: u_translation.rsallowtogetpr
-msgid "Allow to get program status from TCP/IP internal server"
-msgstr "Разрешить получать статус программы с внутреннего TCP/IP сервера"
 
 #: u_translation.rsallowtoopent
 msgid "Allow to open the dome when safety status is bad or unknown"
@@ -508,6 +504,10 @@ msgstr "Откалибровано"
 msgid "Calibration %sdelay"
 msgstr "Задержка%sкалибровки"
 
+#: u_translation.rscalibrator
+msgid "Calibrator"
+msgstr ""
+
 #: u_translation.rscallexternal
 msgid "Call external command"
 msgstr "Вызвать внешнюю команду"
@@ -690,7 +690,7 @@ msgstr "Папка съёмки"
 
 #: u_translation.rscapturesfini
 msgid "Capture %s Finished"
-msgstr ""
+msgstr "Съёмка %s завершена"
 
 #: u_translation.rscapturestopp
 msgid "Capture stopped during autofocus"
@@ -746,7 +746,7 @@ msgstr "Очистить опорное изображение"
 
 #: u_translation.rsclearrestart
 msgid "Clear restart information on repeat"
-msgstr ""
+msgstr "Удалить информацию для перезапуска при повторе"
 
 #: u_translation.rsclearthecomp
 msgid "Clear the completion status?"
@@ -944,6 +944,14 @@ msgstr "Метод коррекции"
 msgid "Count"
 msgstr "Кадры"
 
+#: u_translation.rscover
+msgid "Cover"
+msgstr ""
+
+#: u_translation.rscovercalibra
+msgid "Cover calibrator"
+msgstr ""
+
 #: u_translation.rscoverthecame
 msgid "Cover the camera and set the exposure time and binning in the Preview pane now."
 msgstr "Закройте камеру и установите выдержку и биннинг на панели Превью."
@@ -1046,7 +1054,7 @@ msgstr "Удалить шаг %s ?"
 
 #: u_translation.rsdeletetempl
 msgid "Delete template"
-msgstr ""
+msgstr "Удалить шаблон"
 
 #: u_translation.rsdesc
 msgid "Desc."
@@ -1422,7 +1430,7 @@ msgstr "Неудачное распознавание контрольного �
 
 #: u_translation.rsfailtostopth
 msgid "Fail to stop the autoguider"
-msgstr ""
+msgstr "Не удалось остановить автогид"
 
 #: u_translation.rsfalse
 msgid "False"
@@ -1650,7 +1658,7 @@ msgstr "С адреса email"
 
 #: u_translation.rsfromplanetar
 msgid "From planetarium"
-msgstr ""
+msgstr "Из планетария"
 
 #: u_translation.rsfromplatesol
 msgid "From plate solving"
@@ -1838,11 +1846,11 @@ msgstr "Изображение восстановлено"
 
 #: u_translation.rsimportcdcmos
 msgid "Import mosaic"
-msgstr ""
+msgstr "Мозаика"
 
 #: u_translation.rsimportcdcobs
 msgid "Import observing list"
-msgstr ""
+msgstr "Лист наблюдений"
 
 #: u_translation.rsin
 msgid "In"
@@ -1882,15 +1890,15 @@ msgstr "Автофокусировка в текущем месте не уда�
 
 #: u_translation.rsinsertblankr
 msgid "Insert blank row"
-msgstr ""
+msgstr "Пустая строка"
 
 #: u_translation.rsinsertrows
 msgid "Insert rows"
-msgstr "Вставить строки"
+msgstr "Вставить строку"
 
 #: u_translation.rsinsseconds
 msgid "in %s seconds"
-msgstr ""
+msgstr "через %s сек."
 
 #: u_translation.rsintensity
 msgid "Intensity"
@@ -2135,6 +2143,10 @@ msgstr "Перекладка прервана!"
 #: u_translation.rsmeridianflip10
 msgid "Meridian flip completed"
 msgstr "Перекладка завершена"
+
+#: u_translation.rsmeridianflip11
+msgid "Meridian flip aborted after %d retries"
+msgstr ""
 
 #: u_translation.rsmeridianflip2
 msgid "Meridian flip will occur now."
@@ -3014,11 +3026,11 @@ msgstr "Повторная центровка"
 
 #: u_translation.rsrecording
 msgid "Recording"
-msgstr ""
+msgstr "Запись"
 
 #: u_translation.rsrecordrestar
 msgid "Record restart information"
-msgstr ""
+msgstr "Записать информацию для перезапуска"
 
 #: u_translation.rsred
 msgid "red"
@@ -3046,7 +3058,7 @@ msgstr "Удалить все точки останова"
 
 #: u_translation.rsremoverow
 msgid "Remove row"
-msgstr ""
+msgstr "Удалить строку"
 
 #: u_translation.rsremovestep
 msgid "Remove step"
@@ -3194,7 +3206,7 @@ msgstr "Получить позицию из базы данных"
 
 #: u_translation.rsretry
 msgid "Retry"
-msgstr ""
+msgstr "Повторить"
 
 #: u_translation.rsretrywithast
 msgid "Retry with astrometry.net"
@@ -3338,11 +3350,11 @@ msgstr "Сохранить растровое изображение %s"
 
 #: u_translation.rssavetempl
 msgid "Save template"
-msgstr ""
+msgstr "Сохранить шаблон"
 
 #: u_translation.rssavetemplas
 msgid "Save template as..."
-msgstr ""
+msgstr "Сохранить шаблон как..."
 
 #: u_translation.rsscaletoleran
 msgid "Scale tolerance"
@@ -3383,6 +3395,10 @@ msgstr "Скрипт %s не выполнен!"
 #: u_translation.rsscriptfinish
 msgid "Script %s finished"
 msgstr "Скрипт %s завершён"
+
+#: u_translation.rsscriptlangua
+msgid "Script language"
+msgstr ""
 
 #: u_translation.rsscripttermin
 msgid "Script terminating..."
@@ -3498,7 +3514,7 @@ msgstr "Задание %s начинается немедленно"
 
 #: u_translation.rssequencestar2
 msgid "Sequence start / stop time"
-msgstr ""
+msgstr "Время начала/окончания задания"
 
 #: u_translation.rssequencestep
 msgid "Sequence steps"
@@ -4092,6 +4108,10 @@ msgstr "Краткая информация"
 msgid "Suspend dome slaving"
 msgstr "Приостановить ведение купола"
 
+#: u_translation.rsswitch
+msgid "Switch"
+msgstr ""
+
 #: u_translation.rssynctoeq
 msgid "Sync to %s %s/%s"
 msgstr "Синхронизация с %s %s/%s"
@@ -4222,7 +4242,7 @@ msgstr "Шкала температуры"
 
 #: u_translation.rstemplate
 msgid "Template"
-msgstr ""
+msgstr "Шаблон"
 
 #: u_translation.rstemporaryfol
 msgid "Temporary folder"
@@ -4536,6 +4556,10 @@ msgstr "Использовать в качестве опорной звезды
 msgid "Use astrometry to%srefine the position"
 msgstr "Астрометрия для%sуточнения позиции"
 
+#: u_translation.rsusecovercali
+msgid "Use Cover calibrator"
+msgstr ""
+
 #: u_translation.rsusecustomscr
 msgid "Use custom script"
 msgstr "Использовать собственный скрипт"
@@ -4587,6 +4611,10 @@ msgstr "Использовать ротатор"
 #: u_translation.rsusesafetymon
 msgid "Use safety monitor"
 msgstr "Использовать монитор безопасности"
+
+#: u_translation.rsuseswitch
+msgid "Use switch"
+msgstr ""
 
 #: u_translation.rsusewatchdog
 msgid "Use watchdog"
@@ -4660,6 +4688,10 @@ msgstr "Ожидание 1 минута..."
 #, fuzzy,badformat
 msgid "Wait after solve"
 msgstr "Ожидание после%sраспознавания"
+
+#: u_translation.rswaitdseconds
+msgid "Wait %d seconds and retry"
+msgstr ""
 
 #: u_translation.rswaitingdseco
 msgid "Waiting %d seconds before to restart the exposure"

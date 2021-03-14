@@ -6,15 +6,15 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ccdciel\n"
 "Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
-"POT-Creation-Date: 2021-01-11 15:06+0000\n"
-"PO-Revision-Date: 2021-01-11 15:08+0000\n"
+"POT-Creation-Date: 2021-03-14 15:39+0000\n"
+"PO-Revision-Date: 2021-03-14 15:45+0000\n"
 "Last-Translator: Patrick Chevalley <Unknown>\n"
 "Language-Team: French <fr@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2021-01-13 16:16+0000\n"
-"X-Generator: Launchpad (build 511b4a3b6512aa3d421c5f7d74f3527e78bff26e)\n"
+"X-Launchpad-Export-Date: 2021-03-14 15:48+0000\n"
+"X-Generator: Launchpad (build d4fcb062545ed29d3cd7773e52e43615e042623f)\n"
 
 #: u_translation.rs32bitdriver
 msgid "This driver work only in 32bit, please install the 32bit version of CCDciel."
@@ -103,10 +103,6 @@ msgstr "Étoile d'alignement perdue"
 #: u_translation.rsall
 msgid "All"
 msgstr "Tout"
-
-#: u_translation.rsallowtogetpr
-msgid "Allow to get program status from TCP/IP internal server"
-msgstr "Permet d'obtenir l'état du programme depuis le serveur interne TCP/IP"
 
 #: u_translation.rsallowtoopent
 msgid "Allow to open the dome when safety status is bad or unknown"
@@ -507,6 +503,10 @@ msgstr "Calibré"
 #: u_translation.rscalibrationd
 msgid "Calibration %sdelay"
 msgstr "Delai%scalibration"
+
+#: u_translation.rscalibrator
+msgid "Calibrator"
+msgstr "Calibrateur"
 
 #: u_translation.rscallexternal
 msgid "Call external command"
@@ -944,6 +944,14 @@ msgstr "Méthode de correction"
 #: u_translation.rscount
 msgid "Count"
 msgstr "Nombre"
+
+#: u_translation.rscover
+msgid "Cover"
+msgstr "Cache"
+
+#: u_translation.rscovercalibra
+msgid "Cover calibrator"
+msgstr "Cache calibrateur"
 
 #: u_translation.rscoverthecame
 msgid "Cover the camera and set the exposure time and binning in the Preview pane now."
@@ -2137,6 +2145,10 @@ msgstr "Retournement méridien interrompu!"
 #: u_translation.rsmeridianflip10
 msgid "Meridian flip completed"
 msgstr "Le retournement méridien est terminé"
+
+#: u_translation.rsmeridianflip11
+msgid "Meridian flip aborted after %d retries"
+msgstr "Retournement méridien interrompu après %d essais"
 
 #: u_translation.rsmeridianflip2
 msgid "Meridian flip will occur now."
@@ -3386,6 +3398,10 @@ msgstr "Script %s échoué!"
 msgid "Script %s finished"
 msgstr "Script %s terminé"
 
+#: u_translation.rsscriptlangua
+msgid "Script language"
+msgstr "Langue de script"
+
 #: u_translation.rsscripttermin
 msgid "Script terminating..."
 msgstr "Terminaison du script..."
@@ -4094,6 +4110,10 @@ msgstr "Résumé"
 msgid "Suspend dome slaving"
 msgstr "Suspendre l'asservissement du dôme"
 
+#: u_translation.rsswitch
+msgid "Switch"
+msgstr "Commutateur"
+
 #: u_translation.rssynctoeq
 msgid "Sync to %s %s/%s"
 msgstr "Sync à %s %s %s"
@@ -4538,6 +4558,10 @@ msgstr "Utiliser comme étoile de référence"
 msgid "Use astrometry to%srefine the position"
 msgstr "Astrométrie pour%saffiner la position"
 
+#: u_translation.rsusecovercali
+msgid "Use Cover calibrator"
+msgstr "Utilise le Cache calibrateur"
+
 #: u_translation.rsusecustomscr
 msgid "Use custom script"
 msgstr "Utiliser un script"
@@ -4589,6 +4613,10 @@ msgstr "Utilise le rotateur"
 #: u_translation.rsusesafetymon
 msgid "Use safety monitor"
 msgstr "Utilise le contrôle de sécurité"
+
+#: u_translation.rsuseswitch
+msgid "Use switch"
+msgstr "Utilise le commutateur"
 
 #: u_translation.rsusewatchdog
 msgid "Use watchdog"
@@ -4661,6 +4689,10 @@ msgstr "Attend 1 minute ..."
 #: u_translation.rswaitaftersol
 msgid "Wait after solve"
 msgstr "Attente après résolution"
+
+#: u_translation.rswaitdseconds
+msgid "Wait %d seconds and retry"
+msgstr "Attend %d secondes et réessaye"
 
 #: u_translation.rswaitingdseco
 msgid "Waiting %d seconds before to restart the exposure"

@@ -6,15 +6,15 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ccdciel\n"
 "Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
-"POT-Creation-Date: 2021-01-11 15:06+0000\n"
+"POT-Creation-Date: 2021-03-14 15:39+0000\n"
 "PO-Revision-Date: 2018-05-14 09:37+0000\n"
 "Last-Translator: Rokar ✌ <Unknown>\n"
 "Language-Team: Kurdish <ku@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2021-01-13 16:16+0000\n"
-"X-Generator: Launchpad (build 511b4a3b6512aa3d421c5f7d74f3527e78bff26e)\n"
+"X-Launchpad-Export-Date: 2021-03-14 15:48+0000\n"
+"X-Generator: Launchpad (build d4fcb062545ed29d3cd7773e52e43615e042623f)\n"
 
 #: u_translation.rs32bitdriver
 msgid "This driver work only in 32bit, please install the 32bit version of CCDciel."
@@ -102,10 +102,6 @@ msgstr ""
 
 #: u_translation.rsall
 msgid "All"
-msgstr ""
-
-#: u_translation.rsallowtogetpr
-msgid "Allow to get program status from TCP/IP internal server"
 msgstr ""
 
 #: u_translation.rsallowtoopent
@@ -506,6 +502,10 @@ msgstr ""
 
 #: u_translation.rscalibrationd
 msgid "Calibration %sdelay"
+msgstr ""
+
+#: u_translation.rscalibrator
+msgid "Calibrator"
 msgstr ""
 
 #: u_translation.rscallexternal
@@ -942,6 +942,14 @@ msgstr ""
 
 #: u_translation.rscount
 msgid "Count"
+msgstr ""
+
+#: u_translation.rscover
+msgid "Cover"
+msgstr ""
+
+#: u_translation.rscovercalibra
+msgid "Cover calibrator"
 msgstr ""
 
 #: u_translation.rscoverthecame
@@ -2134,6 +2142,10 @@ msgstr ""
 
 #: u_translation.rsmeridianflip10
 msgid "Meridian flip completed"
+msgstr ""
+
+#: u_translation.rsmeridianflip11
+msgid "Meridian flip aborted after %d retries"
 msgstr ""
 
 #: u_translation.rsmeridianflip2
@@ -3384,6 +3396,10 @@ msgstr ""
 msgid "Script %s finished"
 msgstr ""
 
+#: u_translation.rsscriptlangua
+msgid "Script language"
+msgstr ""
+
 #: u_translation.rsscripttermin
 msgid "Script terminating..."
 msgstr ""
@@ -4092,6 +4108,10 @@ msgstr ""
 msgid "Suspend dome slaving"
 msgstr ""
 
+#: u_translation.rsswitch
+msgid "Switch"
+msgstr ""
+
 #: u_translation.rssynctoeq
 msgid "Sync to %s %s/%s"
 msgstr ""
@@ -4536,6 +4556,10 @@ msgstr ""
 msgid "Use astrometry to%srefine the position"
 msgstr ""
 
+#: u_translation.rsusecovercali
+msgid "Use Cover calibrator"
+msgstr ""
+
 #: u_translation.rsusecustomscr
 msgid "Use custom script"
 msgstr ""
@@ -4586,6 +4610,10 @@ msgstr ""
 
 #: u_translation.rsusesafetymon
 msgid "Use safety monitor"
+msgstr ""
+
+#: u_translation.rsuseswitch
+msgid "Use switch"
 msgstr ""
 
 #: u_translation.rsusewatchdog
@@ -4658,6 +4686,10 @@ msgstr ""
 
 #: u_translation.rswaitaftersol
 msgid "Wait after solve"
+msgstr ""
+
+#: u_translation.rswaitdseconds
+msgid "Wait %d seconds and retry"
 msgstr ""
 
 #: u_translation.rswaitingdseco

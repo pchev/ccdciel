@@ -6,15 +6,15 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ccdciel\n"
 "Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
-"POT-Creation-Date: 2021-01-11 15:06+0000\n"
+"POT-Creation-Date: 2021-03-14 15:39+0000\n"
 "PO-Revision-Date: 2020-09-13 16:20+0000\n"
 "Last-Translator: Stephan Woidowski <swoidowski@t-online.de>\n"
 "Language-Team: English (United Kingdom) <en_GB@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2021-01-13 16:16+0000\n"
-"X-Generator: Launchpad (build 511b4a3b6512aa3d421c5f7d74f3527e78bff26e)\n"
+"X-Launchpad-Export-Date: 2021-03-14 15:48+0000\n"
+"X-Generator: Launchpad (build d4fcb062545ed29d3cd7773e52e43615e042623f)\n"
 "Language: en_GB\n"
 
 #: u_translation.rs32bitdriver
@@ -104,10 +104,6 @@ msgstr "Alignment star lost"
 #: u_translation.rsall
 msgid "All"
 msgstr "All"
-
-#: u_translation.rsallowtogetpr
-msgid "Allow to get program status from TCP/IP internal server"
-msgstr "Allow to get program status from TCP/IP internal server"
 
 #: u_translation.rsallowtoopent
 msgid "Allow to open the dome when safety status is bad or unknown"
@@ -508,6 +504,10 @@ msgstr "Calibrated"
 #: u_translation.rscalibrationd
 msgid "Calibration %sdelay"
 msgstr "Calibration %sdelay"
+
+#: u_translation.rscalibrator
+msgid "Calibrator"
+msgstr ""
 
 #: u_translation.rscallexternal
 msgid "Call external command"
@@ -944,6 +944,14 @@ msgstr "Correction method"
 #: u_translation.rscount
 msgid "Count"
 msgstr "Count"
+
+#: u_translation.rscover
+msgid "Cover"
+msgstr ""
+
+#: u_translation.rscovercalibra
+msgid "Cover calibrator"
+msgstr ""
 
 #: u_translation.rscoverthecame
 msgid "Cover the camera and set the exposure time and binning in the Preview pane now."
@@ -2136,6 +2144,10 @@ msgstr "Meridian flip aborted!"
 #: u_translation.rsmeridianflip10
 msgid "Meridian flip completed"
 msgstr "Meridian flip completed"
+
+#: u_translation.rsmeridianflip11
+msgid "Meridian flip aborted after %d retries"
+msgstr ""
 
 #: u_translation.rsmeridianflip2
 msgid "Meridian flip will occur now."
@@ -3385,6 +3397,10 @@ msgstr "Script %s failed!"
 msgid "Script %s finished"
 msgstr "Script %s finished"
 
+#: u_translation.rsscriptlangua
+msgid "Script language"
+msgstr ""
+
 #: u_translation.rsscripttermin
 msgid "Script terminating..."
 msgstr "Script terminating..."
@@ -4093,6 +4109,10 @@ msgstr "Summary"
 msgid "Suspend dome slaving"
 msgstr "Suspend dome slaving"
 
+#: u_translation.rsswitch
+msgid "Switch"
+msgstr ""
+
 #: u_translation.rssynctoeq
 msgid "Sync to %s %s/%s"
 msgstr "Sync to %s %s/%s"
@@ -4537,6 +4557,10 @@ msgstr "Use as reference star"
 msgid "Use astrometry to%srefine the position"
 msgstr "Use astrometry to%srefine the position"
 
+#: u_translation.rsusecovercali
+msgid "Use Cover calibrator"
+msgstr ""
+
 #: u_translation.rsusecustomscr
 msgid "Use custom script"
 msgstr "Use custom script"
@@ -4588,6 +4612,10 @@ msgstr "Use rotator"
 #: u_translation.rsusesafetymon
 msgid "Use safety monitor"
 msgstr "Use safety monitor"
+
+#: u_translation.rsuseswitch
+msgid "Use switch"
+msgstr ""
 
 #: u_translation.rsusewatchdog
 msgid "Use watchdog"
@@ -4660,6 +4688,10 @@ msgstr "Wait 1 minute ..."
 #: u_translation.rswaitaftersol
 msgid "Wait after solve"
 msgstr "Wait after solve"
+
+#: u_translation.rswaitdseconds
+msgid "Wait %d seconds and retry"
+msgstr ""
 
 #: u_translation.rswaitingdseco
 msgid "Waiting %d seconds before to restart the exposure"

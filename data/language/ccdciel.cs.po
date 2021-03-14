@@ -2,15 +2,15 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ccdciel\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-01-11 15:06+0000\n"
-"PO-Revision-Date: 2021-01-11 16:24+0000\n"
+"POT-Creation-Date: 2021-03-14 15:39+0000\n"
+"PO-Revision-Date: 2021-02-10 20:21+0000\n"
 "Last-Translator: Stanislav Holub <Unknown>\n"
 "Language-Team: Czech <cz@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2021-01-13 16:16+0000\n"
-"X-Generator: Launchpad (build 511b4a3b6512aa3d421c5f7d74f3527e78bff26e)\n"
+"X-Launchpad-Export-Date: 2021-03-14 15:48+0000\n"
+"X-Generator: Launchpad (build d4fcb062545ed29d3cd7773e52e43615e042623f)\n"
 "Language: cs\n"
 
 #: u_translation.rs32bitdriver
@@ -100,10 +100,6 @@ msgstr "Ztracená zarovnávací hvězda"
 #: u_translation.rsall
 msgid "All"
 msgstr "Vše"
-
-#: u_translation.rsallowtogetpr
-msgid "Allow to get program status from TCP/IP internal server"
-msgstr "Získat stav programu z interního serveru TCP/IP"
 
 #: u_translation.rsallowtoopent
 msgid "Allow to open the dome when safety status is bad or unknown"
@@ -507,6 +503,10 @@ msgstr "Kalibrováno"
 msgid "Calibration %sdelay"
 msgstr "Kalibrace %szpoždění"
 
+#: u_translation.rscalibrator
+msgid "Calibrator"
+msgstr ""
+
 #: u_translation.rscallexternal
 msgid "Call external command"
 msgstr "Volat externí příkaz"
@@ -565,7 +565,7 @@ msgstr "Čas zastavení nelze změnit. Úloha se zastaví včas za svítání."
 
 #: u_translation.rscannotcomput
 msgid "Cannot compute rise or set time."
-msgstr "Nelze spočítat východ nebo západ Slunce."
+msgstr "Nelze spočítat východ nebo západ"
 
 #: u_translation.rscannotcomput2
 msgid "Cannot compute meridian time"
@@ -942,6 +942,14 @@ msgstr "Metoda korekce"
 #: u_translation.rscount
 msgid "Count"
 msgstr "Počet"
+
+#: u_translation.rscover
+msgid "Cover"
+msgstr ""
+
+#: u_translation.rscovercalibra
+msgid "Cover calibrator"
+msgstr ""
 
 #: u_translation.rscoverthecame
 msgid "Cover the camera and set the exposure time and binning in the Preview pane now."
@@ -2137,6 +2145,10 @@ msgstr "Překlopení poledníku selhalo!"
 msgid "Meridian flip completed"
 msgstr "Překlopení poledníku dokončeno"
 
+#: u_translation.rsmeridianflip11
+msgid "Meridian flip aborted after %d retries"
+msgstr ""
+
 #: u_translation.rsmeridianflip2
 msgid "Meridian flip will occur now."
 msgstr "Poledník se překlápí."
@@ -3220,7 +3232,7 @@ msgstr "vzestup"
 
 #: u_translation.rsrisesetcondi
 msgid "Rise/Set condition"
-msgstr "Východ/Západ Slunce"
+msgstr "Stav východu/západu"
 
 #: u_translation.rsrot
 msgid "Rot."
@@ -3385,6 +3397,10 @@ msgstr "Skript %s selhal!"
 #: u_translation.rsscriptfinish
 msgid "Script %s finished"
 msgstr "Skript %s dokončen"
+
+#: u_translation.rsscriptlangua
+msgid "Script language"
+msgstr ""
 
 #: u_translation.rsscripttermin
 msgid "Script terminating..."
@@ -4095,6 +4111,10 @@ msgstr "Souhrn"
 msgid "Suspend dome slaving"
 msgstr "Pozastavit přejíždění kupole"
 
+#: u_translation.rsswitch
+msgid "Switch"
+msgstr ""
+
 #: u_translation.rssynctoeq
 msgid "Sync to %s %s/%s"
 msgstr "Synchronizovat s %s %s/%s"
@@ -4317,7 +4337,7 @@ msgstr "Již existuje úsvitový Flat plán"
 
 #: u_translation.rsthesafetymon
 msgid "The safety monitor report unsafe condition.%sSelect %s to run the safety actions now, or %s to ignore them."
-msgstr "Monitor zabezpečení hlásí nebezpečný stav.%sVybrat %s pro provedení ochranných opatření, nebo %s je ignorovat."
+msgstr "Monitor bezpečnosti hlásí nebezpečný stav.%sVybrat %s pro provedení ochranných opatření, nebo %s je ignorovat."
 
 #: u_translation.rsthesequencei
 msgid "The sequence is now in pause."
@@ -4539,6 +4559,10 @@ msgstr "Použít jako referenční hvězdu"
 msgid "Use astrometry to%srefine the position"
 msgstr "Pomocí astrometrie%s upřesněte polohu"
 
+#: u_translation.rsusecovercali
+msgid "Use Cover calibrator"
+msgstr ""
+
 #: u_translation.rsusecustomscr
 msgid "Use custom script"
 msgstr "Použíte vlastní skript"
@@ -4590,6 +4614,10 @@ msgstr "Použít rotátor"
 #: u_translation.rsusesafetymon
 msgid "Use safety monitor"
 msgstr "Použít bezpečnostní monitor"
+
+#: u_translation.rsuseswitch
+msgid "Use switch"
+msgstr ""
 
 #: u_translation.rsusewatchdog
 msgid "Use watchdog"
@@ -4662,6 +4690,10 @@ msgstr "Čekat 1 minutu ..."
 #: u_translation.rswaitaftersol
 msgid "Wait after solve"
 msgstr "Vyčkat na řešení"
+
+#: u_translation.rswaitdseconds
+msgid "Wait %d seconds and retry"
+msgstr ""
 
 #: u_translation.rswaitingdseco
 msgid "Waiting %d seconds before to restart the exposure"

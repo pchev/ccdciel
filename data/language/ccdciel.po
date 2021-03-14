@@ -1598,10 +1598,6 @@ msgstr ""
 msgid "Folder name options"
 msgstr ""
 
-#: u_translation:rsallowtogetpr
-msgid "Allow to get program status from TCP/IP internal server"
-msgstr ""
-
 #: u_translation:rslanguage
 msgid "Language"
 msgstr ""
@@ -4788,5 +4784,41 @@ msgstr ""
 
 #: u_translation:rssequencestar2
 msgid "Sequence start / stop time"
+msgstr ""
+
+#: u_translation:rsswitch
+msgid "Switch"
+msgstr ""
+
+#: u_translation:rscovercalibra
+msgid "Cover calibrator"
+msgstr ""
+
+#: u_translation:rsuseswitch
+msgid "Use switch"
+msgstr ""
+
+#: u_translation:rsusecovercali
+msgid "Use Cover calibrator"
+msgstr ""
+
+#: u_translation:rscover
+msgid "Cover"
+msgstr ""
+
+#: u_translation:rscalibrator
+msgid "Calibrator"
+msgstr ""
+
+#: u_translation:rsmeridianflip11
+msgid "Meridian flip aborted after %d retries"
+msgstr ""
+
+#: u_translation:rswaitdseconds
+msgid "Wait %d seconds and retry"
+msgstr ""
+
+#: u_translation:rsscriptlangua
+msgid "Script language"
 msgstr ""
 
