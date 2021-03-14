@@ -26,6 +26,7 @@ tar xvzf system_integration/MacOSX/data/exiv2-mac.tgz -C $destdir/ccdciel.app/Co
 
 install -d -m 755 $destdir/scripts
 install -m 755 -d $destdir/scripts/siril
+install -m 755 -d $destdir/scripts/example
 install -d -m 755 $destdir/data
 install -d -m 755 $destdir/data/stars
 install -d -m 755 $destdir/data/dso

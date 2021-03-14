@@ -17,6 +17,7 @@ install -m 755 -d $destdir
 install -m 755 -d $destdir/scripts
 install -m 755 -d $destdir/scripts/siril
 install -m 755 -d $destdir/scripts/python
+install -m 755 -d $destdir/scripts/example
 install -m 755 -d $destdir/data
 install -m 755 -d $destdir/data/stars
 install -d -m 755 $destdir/data/dso
