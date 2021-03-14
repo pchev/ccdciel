@@ -27,6 +27,8 @@ install -m 755 -d $destdir/share/icons/hicolor/scalable/apps
 install -m 755 -d $destdir/share/ccdciel
 install -m 755 -d $destdir/share/ccdciel/scripts
 install -m 755 -d $destdir/share/ccdciel/scripts/siril
+install -m 755 -d $destdir/share/ccdciel/scripts/indi
+install -m 755 -d $destdir/share/ccdciel/scripts/example
 install -m 755 -d $destdir/share/ccdciel/data
 install -m 755 -d $destdir/share/ccdciel/data/stars
 install -m 755 -d $destdir/share/ccdciel/data/dso
@@ -52,6 +54,9 @@ install -v -m 755 scripts/siril/template_bias.ssf  $destdir/share/ccdciel/script
 install -v -m 755 scripts/siril/template_dark.ssf  $destdir/share/ccdciel/scripts/siril/template_dark.ssf
 install -v -m 755 scripts/siril/template_flat.ssf  $destdir/share/ccdciel/scripts/siril/template_flat.ssf
 install -v -m 755 scripts/siril/template_light.ssf  $destdir/share/ccdciel/scripts/siril/template_light.ssf
+install -v -m 644 scripts/example/startup.script  $destdir/share/ccdciel/scripts/example/startup.script
+install -v -m 644 scripts/example/shutdown.script  $destdir/share/ccdciel/scripts/example/shutdown.script
+install -v -m 644 scripts/indi/build_indi.sh  $destdir/share/ccdciel/scripts/indi/build_indi.sh
 install -v -m 644 data/stars/focus_star_4  $destdir/share/ccdciel/data/stars/focus_star_4 
 install -v -m 644 data/stars/focus_star_5  $destdir/share/ccdciel/data/stars/focus_star_5 
 install -v -m 644 data/stars/focus_star_6  $destdir/share/ccdciel/data/stars/focus_star_6 

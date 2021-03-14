@@ -64,6 +64,8 @@ install -v -m 755 scripts/siril/template_bias.ssf  $destdir/scripts/siril/templa
 install -v -m 755 scripts/siril/template_dark.ssf  $destdir/scripts/siril/template_dark.ssf
 install -v -m 755 scripts/siril/template_flat.ssf  $destdir/scripts/siril/template_flat.ssf
 install -v -m 755 scripts/siril/template_light.ssf  $destdir/scripts/siril/template_light.ssf
+install -v -m 644 scripts/example/startup.script  $destdir/scripts/example/startup.script
+install -v -m 644 scripts/example/shutdown.script  $destdir/scripts/example/shutdown.script
 install -v -m 644 data/stars/focus_star_4   $destdir/data/stars/focus_star_4
 install -v -m 644 data/stars/focus_star_5   $destdir/data/stars/focus_star_5
 install -v -m 644 data/stars/focus_star_6   $destdir/data/stars/focus_star_6
