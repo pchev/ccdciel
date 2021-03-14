@@ -5,36 +5,18 @@
 # On Linux copy to ~/.config/ccdciel
 
 from ccdciel import ccdciel
+from ccdciel import IsRunning
+from ccdciel import StartProgram
+from ccdciel import StopProgram
+from ccdciel import IsWindows
+from ccdciel import IsDarwin
 import sys
 import time
-import subprocess
-import platform
-IsWindows = False
-IsDarwin = False
-if platform.system() == 'Windows':
-    IsWindows = True
-elif platform.system() == 'Darwin':
-    IsDarwin = True
 
 if IsDarwin:
     print('This script is not tested for MacOs')
     print('Please contribute to the project if you make it work')
     sys.exit(1)
-
-if not IsWindows:
-    import psutil
-
-def StopProgram(pgm) :
-    if IsWindows:
-        subprocess.Popen(['taskkill', '/IM', pgm], stdout=subprocess.PIPE, stderr=subprocess.PIPE, stdin=subprocess.PIPE)
-    else:
-        for proc in psutil.process_iter():
-            if proc.name() ==  pgm :
-                try:
-                    proc.terminate()
-                except Exception as inst:
-                    print(type(inst))
-                    print(inst.args)
 
 # Disconnect and close autoguider and planetarium program
 ccdciel('Autoguider_shutdown')

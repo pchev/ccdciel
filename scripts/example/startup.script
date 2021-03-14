@@ -5,66 +5,33 @@
 # On Linux copy to ~/.config/ccdciel
 
 from ccdciel import ccdciel
-import subprocess
+from ccdciel import IsRunning
+from ccdciel import StartProgram
+from ccdciel import StopProgram
+from ccdciel import IsWindows
+from ccdciel import IsDarwin
 import sys
 import time
-import platform
-IsWindows = False
-IsDarwin = False
-if platform.system() == 'Windows':
-    IsWindows = True
-elif platform.system() == 'Darwin':
-    IsDarwin = True
 
 if IsDarwin:
     print('This script is not tested for MacOs')
     print('Please contribute to the project if you make it work')
     sys.exit(1)
 
-if not IsWindows:
-    import psutil
-
 if IsWindows:
     # define here the path the program are installed
     skychartpath = 'C:\Program Files (x86)\Ciel'
     phd2path = 'C:\Program Files (x86)\PHDGuiding2'
-    # do not modify the program name
+    # the program name
     skychart = 'skychart.exe'
     phd2 = 'phd2.exe'
 else:
-    # on Linux the program do not need the install path 
+    # on Linux the program do not need the path
     skychartpath = ''
     phd2path = ''
     skychart = 'skychart' 
     phd2 = 'phd2'   
 
-def IsRunning (pgm):
-    alreadyrunning = False   
-    if IsWindows:
-        Data = subprocess.check_output(['wmic', 'process', 'get', 'name'])
-        a = str(Data)	
-        try:
-            for i in range(len(a)): 
-                if a.split('\\r\\r\\n')[i].strip() == pgm:
-                    alreadyrunning = True
-        except:
-            pass  
-    else:
-        for proc in psutil.process_iter():
-            if proc.name() == pgm :
-                alreadyrunning = True
-    return alreadyrunning
-   
-def StartProgram(pgm, pgmpath='') :
-    if not IsRunning(pgm):
-        ccdciel('LOGMSG','Start '+pgm)
-        if IsWindows:
-            subprocess.Popen(pgmpath+'\\'+pgm, close_fds=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE, stdin=subprocess.PIPE)
-        else:
-            subprocess.Popen(pgm, close_fds=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE, stdin=subprocess.PIPE)
-    else:
-        ccdciel('LOGMSG',pgm+' is already running')
-      
 ccdciel('LOGMSG','Start required program')
 
 if not IsWindows:

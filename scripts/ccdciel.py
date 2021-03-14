@@ -1,6 +1,12 @@
 # Python function to use the CCDciel JSON-RPC interface.
 # For more information and reference of the available methods see: 
 # https://www.ap-i.net/ccdciel/en/documentation/jsonrpc_reference
+#
+# The following function can be imported:
+# ccdciel()
+# IsRunning()
+# StartProgram()
+# StopProgram()
 
 import sys
 import os
@@ -14,6 +20,22 @@ try:
 except:
   print('Cannot import json, your version of python is probably too old, try python3')
   sys.exit(1)
+try:
+  import subprocess
+except:
+  print('Cannot import subprocess, your version of python is probably too old, try python3')
+  sys.exit(1)
+
+import platform
+IsWindows = False
+IsDarwin = False
+if platform.system() == 'Windows':
+    IsWindows = True
+elif platform.system() == 'Darwin':
+    IsDarwin = True
+
+if not IsWindows:
+    import psutil
 
 id = 0
 
@@ -53,3 +75,54 @@ def ccdciel(method, params=''):
     
     # Return result as JSON
     return json.loads(res.decode("utf8"))
+
+
+# Utility function to test if a program is running
+# parameter is exe name without the path
+def IsRunning (pgm):
+    alreadyrunning = False
+    if IsWindows:
+        Data = subprocess.check_output(['wmic', 'process', 'get', 'name'])
+        a = str(Data)
+        try:
+            for i in range(len(a)):
+                if a.split('\\r\\r\\n')[i].strip() == pgm:
+                    alreadyrunning = True
+        except:
+            pass
+    else:
+        for proc in psutil.process_iter():
+            if proc.name() == pgm :
+                alreadyrunning = True
+    return alreadyrunning
+
+
+# Utility function to start a program
+# parameters are exe name and path, if path is not specified this use the PATH environment
+def StartProgram(pgm, pgmpath='') :
+    if not IsRunning(pgm):
+        if pgmpath:
+            pgm = os.path.join(pgmpath,pgm)
+        if IsWindows:
+            subprocess.Popen(pgm, close_fds=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE, stdin=subprocess.PIPE)
+        else:
+            subprocess.Popen(pgm, close_fds=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE, stdin=subprocess.PIPE)
+        started = True
+    else:
+        started = False
+    return started
+
+
+# Utility function to stop a program
+# parameter is exe name without the path
+def StopProgram(pgm) :
+    if IsWindows:
+        subprocess.Popen(['taskkill', '/IM', pgm], stdout=subprocess.PIPE, stderr=subprocess.PIPE, stdin=subprocess.PIPE)
+    else:
+        for proc in psutil.process_iter():
+            if proc.name() ==  pgm :
+                try:
+                    proc.terminate()
+                except Exception as inst:
+                    print(type(inst))
+                    print(inst.args)
