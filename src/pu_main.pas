@@ -7799,8 +7799,11 @@ begin
      end;
 
      if PlanetariumChange and (not planetarium.Connected) then begin
+        try
         planetarium.Terminate;
         planetarium.Connect('');
+        except
+        end;
         i:=config.GetValue('/Planetarium/Software',ord(plaNONE));
         case TPlanetariumType(i) of
           CDC,plaNONE: planetarium:=TPlanetarium_cdc.Create;
@@ -7815,9 +7818,12 @@ begin
         f_sequence.Planetarium:=planetarium;
      end;
      if AutoguiderChange then begin
+       try
        autoguider.Terminate;
        autoguider.Connect('');
        f_sequence.AutoguiderDisconnected;
+       except
+       end;
        i:=config.GetValue('/Autoguider/Software',2);
        case TAutoguiderType(i) of
          agPHD: autoguider:=T_autoguider_phd.Create;
