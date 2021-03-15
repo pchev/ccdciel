@@ -234,9 +234,11 @@ begin
      f_pascaleditor:=Tf_pascaleditor.Create(self);
      f_pascaleditor.DebugScript:=f_scriptengine.dbgscr;
   end;
+  f_pascaleditor.ShowHint:=ShowHint;
   if newscript then begin
     s.Clear;
     ns:=Tf_newscript.Create(self);
+    FormPos(ns,mouse.CursorPos.x,mouse.CursorPos.y);
     ns.ShowModal;
     if ns.ModalResult<>mrOK then exit;
     txt:=trim(ns.Edit1.text);

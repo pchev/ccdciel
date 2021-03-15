@@ -170,13 +170,15 @@ begin
     ToolButton4.Visible:=true;
     ToolButton5.Visible:=true;
     ToolButton6.Visible:=true;
+    ToolButton4.Hint:=rsStepInto;
     SynEdit1.Highlighter:=SynPasSyn1;
   end
   else begin
     ToolButton2.Visible:=false;
-    ToolButton4.Visible:=false;
+    ToolButton4.Visible:=true;
     ToolButton5.Visible:=false;
     ToolButton6.Visible:=false;
+    ToolButton4.Hint:='Debug';
     SynEdit1.Highlighter:=SynPythonSyn1;
   end;
 end;
@@ -250,7 +252,29 @@ else if FScriptType=stPython then begin
   f_scriptengine.RunPython(PythonCmd, fn, slash(ScriptsDir));
   for i:=0 to f_scriptengine.PythonOutput.Count-1 do
      DebugMemo.Lines.Add(f_scriptengine.PythonOutput[i]);
-     DebugMemo.Lines.Add('Exit code: '+inttostr(f_scriptengine.PythonResult));
+  DebugMemo.Lines.Add('Exit code: '+inttostr(f_scriptengine.PythonResult));
+end;
+end;
+
+procedure Tf_pascaleditor.ButtonStepIntoClick(Sender: TObject);
+var fn:string;
+begin
+if FScriptType=stPascal then begin
+  if Fdbgscr.Exec.Status in isRunningOrPaused then
+    Fdbgscr.StepInto
+  else
+  begin
+    Startdebug;
+  end;
+end
+else if FScriptType=stPython then begin
+  fn:=slash(TmpDir)+'tmpscript';
+  SynEdit1.Lines.SaveToFile(fn);
+  DebugMemo.Clear;
+  DebugMemo.Lines.Add('debugging...');
+  Application.ProcessMessages;
+  f_scriptengine.RunPython(PythonCmd, fn, slash(ScriptsDir),true);
+  DebugMemo.Lines.Add('Exit code: '+inttostr(f_scriptengine.PythonResult));
 end;
 end;
 
@@ -266,16 +290,6 @@ end;
 procedure Tf_pascaleditor.Button3Click(Sender: TObject);
 begin
   ShowHelp;
-end;
-
-procedure Tf_pascaleditor.ButtonStepIntoClick(Sender: TObject);
-begin
-if Fdbgscr.Exec.Status in isRunningOrPaused then
-  Fdbgscr.StepInto
-else
-begin
-  Startdebug;
-end;
 end;
 
 procedure Tf_pascaleditor.ButtonStepOverClick(Sender: TObject);

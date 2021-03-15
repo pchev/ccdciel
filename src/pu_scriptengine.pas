@@ -46,6 +46,7 @@ type
   public
     PyProcess: TProcess;
     pycmd, pyscript, pypath: string;
+    debug: boolean;
     host,port: string;
     output: TStringList;
     rc: integer;
@@ -208,7 +209,7 @@ type
     function ScriptType(fn: string): TScriptType;
     function  RunScript(sname,path: string):boolean;
     function ScriptRunning: boolean;
-    function RunPython(pycmd, pyscript, pypath: string): boolean;
+    function RunPython(pycmd, pyscript, pypath: string; debug:boolean=false): boolean;
     procedure StopPython;
     function PythonRunning: boolean;
     procedure ShowPythonOutput(output: TStringList; exitcode: integer);
@@ -1705,7 +1706,7 @@ end;
 
 ///// Python scripts ///////
 
-function Tf_scriptengine.RunPython(pycmd, pyscript, pypath: string): boolean;
+function Tf_scriptengine.RunPython(pycmd, pyscript, pypath: string; debug:boolean=false): boolean;
 begin
 result:=false;
 try
@@ -1715,6 +1716,7 @@ try
   PythonScr.pycmd:=pycmd;
   PythonScr.pyscript:=pyscript;
   PythonScr.pypath:=pypath;
+  PythonScr.debug:=debug;
   PythonScr.Start;
   if assigned(FonScriptExecute) then FonScriptExecute(self);
   repeat
@@ -1766,7 +1768,6 @@ var
   n: LongInt;
   i,r: integer;
   BytesRead: LongInt;
-  buf:string;
 begin
 FRunning:=true;
 M := TMemoryStream.Create;
@@ -1776,7 +1777,19 @@ output:=TStringList.Create;
 rc:=1;
 try
   BytesRead := 0;
-  param.Add(pyscript);
+  if debug then begin
+     param.Add('-m');
+     param.Add('pdb');
+     param.Add(pyscript);
+     PyProcess.ShowWindow:=swoShowNormal;
+     PyProcess.Options := [poNewConsole];
+     PyProcess.StartupOptions:=[suoUseShowWindow];
+  end
+  else begin
+     param.Add(pyscript);
+     PyProcess.ShowWindow:=swoHIDE;
+     if output<>nil then PyProcess.Options := [poUsePipes, poStdErrToOutPut];
+  end;
   PyProcess.Executable:=pycmd;
   PyProcess.Parameters:=param;
   PyProcess.Environment.Clear;
@@ -1785,8 +1798,6 @@ try
   PyProcess.Environment.Add('PYTHONPATH='+pypath);
   PyProcess.Environment.Add('CCDCIEL_HOST=localhost');
   PyProcess.Environment.Add('CCDCIEL_PORT='+TCPIPServerPort);
-  PyProcess.ShowWindow:=swoHIDE;
-  if output<>nil then PyProcess.Options := [poUsePipes, poStdErrToOutPut];
   PyProcess.Execute;
   while PyProcess.Running do begin
     if (output<>nil) and (PyProcess.Output<>nil) then begin
