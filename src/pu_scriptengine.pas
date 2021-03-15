@@ -1768,6 +1768,9 @@ var
   n: LongInt;
   i,r: integer;
   BytesRead: LongInt;
+  {$ifdef mswindows}
+  fs : TSearchRec;
+  {$endif}
 begin
 FRunning:=true;
 M := TMemoryStream.Create;
@@ -1784,6 +1787,15 @@ try
      PyProcess.ShowWindow:=swoShowNormal;
      PyProcess.Options := [poNewConsole];
      PyProcess.StartupOptions:=[suoUseShowWindow];
+     {$ifdef mswindows}
+     // with embeddable python pdb loss the path to zip module
+     if pycmd=defPython then begin
+       i:=FindFirst(slash(ScriptsDir)+slash('python')+'python*.zip',0,fs);
+       if i=0 then
+         pypath:=pypath+';'+slash(ScriptsDir)+slash('python')+fs.name;
+       FindClose(fs);
+     end;
+     {$endif}
   end
   else begin
      param.Add(pyscript);

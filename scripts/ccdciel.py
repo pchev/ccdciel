@@ -10,6 +10,15 @@
 
 import sys
 import os
+import platform
+IsWindows = False
+IsDarwin = False
+if platform.system() == 'Windows':
+    IsWindows = True
+    sys.path.extend(os.getenv("PYTHONPATH").split(os.pathsep))
+elif platform.system() == 'Darwin':
+    IsDarwin = True
+
 try:
   from urllib import request
 except:
@@ -25,14 +34,6 @@ try:
 except:
   print('Cannot import subprocess, your version of python is probably too old, try python3')
   sys.exit(1)
-
-import platform
-IsWindows = False
-IsDarwin = False
-if platform.system() == 'Windows':
-    IsWindows = True
-elif platform.system() == 'Darwin':
-    IsDarwin = True
 
 if not IsWindows:
     import psutil
