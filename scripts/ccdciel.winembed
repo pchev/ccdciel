@@ -10,6 +10,9 @@
 
 import sys
 import os
+# with embeddable python pdb loss the path to zip module
+sys.path.extend(os.getenv("PYTHONPATH").split(os.pathsep))
+
 try:
   from urllib import request
 except:
@@ -25,7 +28,7 @@ try:
 except:
   print('Cannot import subprocess, your version of python is probably too old, try python3')
   sys.exit(1)
-
+  
 import platform
 IsWindows = False
 IsDarwin = False
@@ -33,7 +36,7 @@ if platform.system() == 'Windows':
     IsWindows = True
 elif platform.system() == 'Darwin':
     IsDarwin = True
-
+    
 if not IsWindows:
     import psutil
 

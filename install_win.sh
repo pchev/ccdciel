@@ -48,7 +48,7 @@ if [ $OS_TARGET = win64 ]; then
 fi
 
 install -v -m 644 scripts/ccdciel.py  $destdir/scripts/ccdciel.py
-install -v -m 644 scripts/ccdciel.py  $destdir/scripts/python/ccdciel.py
+install -v -m 644 scripts/ccdciel.winembed  $destdir/scripts/python/ccdciel.py
 install -v -m 644 scripts/scope_park.script  $destdir/scripts/scope_park.script
 install -v -m 644 scripts/scope_unpark.script  $destdir/scripts/scope_unpark.script
 install -v -m 644 scripts/scope_position.script  $destdir/scripts/scope_position.script
