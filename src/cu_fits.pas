@@ -1928,7 +1928,7 @@ begin
  nr:=0; ng:=0; nb:=0;
  xs:= Fwidth div subsample;
  ys:= FHeight div subsample;
- thr:=min(round(Fmean+5*Fsigma),round(FimageMax/3));
+ thr:=round(Fmean+5*Fsigma);
  for i:=0 to ys-1 do begin
    row:=subsample*i;
    for j:=0 to xs-1 do begin
