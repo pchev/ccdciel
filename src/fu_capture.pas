@@ -218,7 +218,7 @@ end;
 procedure Tf_capture.SetExposureTime(val: double);
 begin
   FExposureTime:=val;
-  ExpTime.Text:=FormatFloat('0.###',val);
+  ExpTime.Text:=FormatFloat(f9v,val);
 end;
 
 function Tf_capture.GetGain:integer;

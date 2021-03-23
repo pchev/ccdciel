@@ -224,15 +224,7 @@ end;
 
 procedure Tf_preview.SetExposure(value:double);
 begin
-  if value>=10 then
-    ExpTime.Text:=FormatFloat(f0,value)
-  else if value>=1 then
-      ExpTime.Text:=FormatFloat(f1,value)
-  else if value>=0.1 then
-      ExpTime.Text:=FormatFloat(f2,value)
-  else if value>=0.01 then
-      ExpTime.Text:=FormatFloat(f3,value)
-  else ExpTime.Text:=FormatFloat(f4,value);
+  ExpTime.Text:=FormatFloat(f9v,value);
 end;
 
 function Tf_preview.GetBinning: integer;
