@@ -642,6 +642,7 @@ end;
 
 procedure T_ascomrestmount.AbortMotion;
 begin
+ MountTrackingAlert:=false;
  if FStatus<>devConnected then exit;
  if CanSlew then begin
    try

@@ -455,6 +455,11 @@ var
   CollimationCircle: integer;
   AutoguiderStat: array of array[1..3] of double;
   colorGreen, colorBlue, colorRed: Tcolor;
+  AutoguiderAlert,AutoguiderStarting: boolean;
+  AutoguiderAlertTime,AutoguiderMsgTime: double;
+  MountTrackingAlert: boolean;
+  MountTrackingAlertTime: double;
+
 
   procedure globalmsg(str:string);
   function Str2Frametype(str:string):TFrameType;

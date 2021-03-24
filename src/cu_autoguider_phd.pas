@@ -604,6 +604,7 @@ try
     buf:=buf+'"id": 2003}';
     Send(buf);
   end else begin
+    AutoguiderAlert:=false;
     FStopGuiding:=true;
     buf:='{"method": "stop_capture","id":2001}';
     Send(buf);

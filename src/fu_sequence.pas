@@ -112,10 +112,6 @@ type
     Fautoguider: T_autoguider;
     Fastrometry: TAstrometry;
     Fplanetarium: TPlanetarium;
-    AutoguiderAlert,AutoguiderStarting: boolean;
-    AutoguiderAlertTime,AutoguiderMsgTime: double;
-    MountTrackingAlert: boolean;
-    MountTrackingAlertTime: double;
     procedure SetPreview(val: Tf_preview);
     procedure SetCapture(val: Tf_capture);
     procedure SetMount(val: T_mount);

@@ -660,6 +660,7 @@ end;
 procedure T_ascommount.AbortMotion;
 begin
  {$ifdef mswindows}
+ MountTrackingAlert:=false;
  if CanSlew then begin
    try
    msg(rsStopTelescop);

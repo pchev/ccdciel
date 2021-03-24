@@ -732,6 +732,7 @@ end;
 procedure T_indimount.AbortMotion;
 var ab: ISwitch;
 begin
+ MountTrackingAlert:=false;
  if AbortmotionProp<>nil then begin
    ab:=IUFindSwitch(AbortmotionProp,'ABORT');
    if ab<>nil then begin

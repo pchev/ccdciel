@@ -350,6 +350,7 @@ if not FRunning then exit;
      buf:=LinGuiderCmd(LIN_GUIDER,'start');
      DisplayMessage('Guide start: '+buf);
   end else begin
+     AutoguiderAlert:=false;
      FStopGuiding:=true;
      buf:=LinGuiderCmd(LIN_GUIDER,'stop');
      DisplayMessage('Guide stop: '+buf);
