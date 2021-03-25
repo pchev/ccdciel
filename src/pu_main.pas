@@ -1122,7 +1122,7 @@ begin
  {$ifdef unix}
    HomeDir := expandfilename('~/');
    defCapturePath:=HomeDir;
-   defPython:='python';
+   defPython:='python3';
  {$endif}
  {$ifdef mswindows}
    SHGetSpecialFolderLocation(0, CSIDL_PERSONAL, PIDL);
