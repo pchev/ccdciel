@@ -164,6 +164,7 @@ begin
   FStatus := devConnected;
   if (not Fready) then begin
     Fready:=true;
+    if FAutoloadConfig then LoadConfig;
     if Assigned(FonStatusChange) then FonStatusChange(self);
   end;
 end;
@@ -226,7 +227,6 @@ begin
   ConnectTimer.Enabled:=False;
   if (connectprop<>nil) then begin
     if (connectoff.s=ISS_ON) then begin
-      if FAutoloadConfig then LoadConfig;
       indiclient.connectDevice(Findidevice);
       exit;
     end;
