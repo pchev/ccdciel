@@ -46,7 +46,7 @@ type
     procedure Disconnect; override;
     procedure Shutdown; override;
     function Cmd(const Value: string):string; override;
-    function ShowImage(fn: string):boolean; override;
+    function ShowImage(fn: string; fovdeg:double=0):boolean; override;
     function DrawFrame(frra,frde,frsizeH,frsizeV,frrot: double):boolean; override;
     function GetEqSys: double; override;
     function Search(sname: string; out sra,sde: double): boolean; override;
@@ -254,7 +254,7 @@ begin
   result:=(copy(resp,1,Length(comp))=comp);
 end;
 
-function TPlanetarium_cdc.ShowImage(fn: string):boolean;
+function TPlanetarium_cdc.ShowImage(fn: string; fovdeg:double=0):boolean;
 var buf:string;
 begin
   result:=false;
@@ -264,9 +264,19 @@ begin
   buf:='LOADBGIMAGE '+fn;
   FLastErrorTxt:=Cmd(buf);
   if not CompareResult(FLastErrorTxt,msgOK) then begin FLastErrorTxt:=buf+': '+FLastErrorTxt; exit; end;
-  buf:='SHOWBGIMAGE ON';
-  FLastErrorTxt:=Cmd(buf);
-  if not CompareResult(FLastErrorTxt,msgOK) then begin FLastErrorTxt:=buf+': '+FLastErrorTxt; exit; end;
+  if fovdeg=0 then begin
+    buf:='SHOWBGIMAGE ON';
+    FLastErrorTxt:=Cmd(buf);
+    if not CompareResult(FLastErrorTxt,msgOK) then begin FLastErrorTxt:=buf+': '+FLastErrorTxt; exit; end;
+  end
+  else begin
+    buf:='SetFOV '+FormatFloat(f4,fovdeg);
+    FLastErrorTxt:=Cmd(buf);
+    if not CompareResult(FLastErrorTxt,msgOK) then begin FLastErrorTxt:=buf+': '+FLastErrorTxt; exit; end;
+    buf:='SHOWBGIMAGE ON OFF';
+    FLastErrorTxt:=Cmd(buf);
+    if not CompareResult(FLastErrorTxt,msgOK) then begin FLastErrorTxt:=buf+': '+FLastErrorTxt; exit; end;
+  end;
   FLastErrorTxt:='';
   result:=true;
 end;

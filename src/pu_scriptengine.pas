@@ -195,7 +195,7 @@ type
     function cmd_AstrometrySync:string;
     function cmd_AstrometrySlewImageCenter:string;
     function cmd_PlanetariumConnect:string;
-    function cmd_PlanetariumShowImage:string;
+    function cmd_PlanetariumShowImage(fov:string=''):string;
     function cmd_PlanetariumShutdown:string;
     function cmd_ProgramShutdown:string;
     function cmd_SequenceStart(seq:string):string;
@@ -1007,6 +1007,7 @@ else if cname='SAVE_FITS_FILE' then result:=cmd_SaveFitsFile(arg[0])
 else if cname='OPEN_FITS_FILE' then result:=cmd_OpenFitsFile(arg[0])
 else if cname='OPEN_REFERENCE_IMAGE' then result:=cmd_OpenReferenceImage(arg[0])
 else if cname='LIST_FILES' then result:=cmd_ListFiles(arg)
+else if cname='PLANETARIUM_SHOWIMAGE_FOV' then result:=cmd_PlanetariumShowImage(arg[0])
 ;
 LastErr:='cmdarg('+cname+'): '+result;
 end;
@@ -1592,13 +1593,15 @@ except
 end;
 end;
 
-function Tf_scriptengine.cmd_PlanetariumShowImage:string;
+function Tf_scriptengine.cmd_PlanetariumShowImage(fov:string=''):string;
+var fovdeg: double;
 begin
 try
 result:=msgFailed;
 Astrometry.SolveCurrentImage(true);
 if astrometry.LastResult and planetarium.Connected then begin
-  if planetarium.ShowImage(slash(TmpDir)+'ccdcielsolved.fits') then
+  fovdeg:=StrToFloatDef(trim(fov),0);
+  if planetarium.ShowImage(slash(TmpDir)+'ccdcielsolved.fits',fovdeg) then
      result:=msgOK;
 end;
 wait(1);

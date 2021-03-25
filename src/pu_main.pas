@@ -13277,7 +13277,11 @@ try
     NewMessage(buf1);
     result:=result+'"result":{"status": "'+msgOK+'"}';
   end
-
+  else if method='PLANETARIUM_SHOWIMAGE_FOV' then begin
+    buf1:=trim(value[attrib.IndexOf('params.0')]);
+    buf:=f_scriptengine.cmd_PlanetariumShowImage(buf1);
+    result:=result+'"result":{"status": "'+buf+'"}';
+  end
   // method not found
   else begin
     result:=result+'"error": {"code": -32601, "message": "Method not found"}';

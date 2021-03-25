@@ -46,7 +46,7 @@ type
     procedure Disconnect; override;
     procedure Shutdown; override;
     function Cmd(const Value: string):string; override;
-    function ShowImage(fn: string):boolean; override;
+    function ShowImage(fn: string; fovdeg:double=0):boolean; override;
     function DrawFrame(frra,frde,frsizeH,frsizeV,frrot: double):boolean; override;
     function GetEqSys: double; override;
     function Search(sname: string; out sra,sde: double): boolean; override;
@@ -205,7 +205,7 @@ begin
   end;
 end;
 
-function TPlanetarium_hnsky.ShowImage(fn: string):boolean;
+function TPlanetarium_hnsky.ShowImage(fn: string; fovdeg:double=0):boolean;
 var buf: string;
 begin
 result:=false;

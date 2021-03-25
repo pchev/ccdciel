@@ -51,7 +51,7 @@ type
     procedure Connect(cp1: string; cp2:string=''); override;
     procedure Disconnect; override;
     procedure Shutdown; override;
-    function ShowImage(fn: string):boolean; override;
+    function ShowImage(fn: string; fovdeg:double=0):boolean; override;
     function DrawFrame(frra,frde,frsizeH,frsizeV,frrot: double):boolean; override;
     function Cmd(const Value: string):string; override;
     function GetEqSys: double; override;
@@ -187,7 +187,7 @@ begin
   else DisplayMessage('SAMP error '+inttostr(SampClient.LastErrorcode)+SampClient.LastError);
 end;
 
-function TPlanetarium_samp.ShowImage(fn: string):boolean;
+function TPlanetarium_samp.ShowImage(fn: string; fovdeg:double=0):boolean;
 var client,imgname,imgid,url: string;
 begin
   client:=''; // broadcast
