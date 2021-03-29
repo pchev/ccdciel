@@ -15,10 +15,12 @@
 # User Setup 
 # you can change here how you want to build INDI 
 
-# The INDI version to compile, use "latest" for the last release, "master" for the development code or any version tag
+# The INDI version to compile, use "latest" for the last release, "master" for the development code or any version tag like v1.8.7
+# developer must specify "local" to use any local change, otherwise they are reverted before the compilation!
 indiversion=latest
 #indiversion=master
 #indiversion=v1.8.7
+#indiversion=local
 
 # The list of additional library and drivers to install from indi-3rdparty
 # The name to put here is the directory name from https://github.com/indilib/indi-3rdparty
@@ -52,23 +54,27 @@ fi
 # update the source code
 cd $indisrc/indi
 if [[ $? != 0 ]]; then echo error ; exit; fi
-git checkout .
-git checkout -q master
-git pull
-if [[ $indiversion = 'latest' ]]; then
-   indiversion=$(git describe --tags --abbrev=0)
-fi   
-git checkout -q $indiversion
-if [[ $? != 0 ]]; then echo error ; exit; fi
+if [[ $indiversion != 'local' ]]; then
+  git checkout .
+  git checkout -q master
+  git pull
+  if [[ $indiversion = 'latest' ]]; then
+     indiversion=$(git describe --tags --abbrev=0)
+  fi
+  git checkout -q $indiversion
+  if [[ $? != 0 ]]; then echo error ; exit; fi
+fi
 git status
 
 cd $indisrc/indi-3rdparty
 if [[ $? != 0 ]]; then echo error ; exit; fi
-git checkout .
-git checkout -q master
-git pull
-git checkout -q $indiversion
-if [[ $? != 0 ]]; then echo error ; exit; fi
+if [[ $indiversion != 'local' ]]; then
+  git checkout .
+  git checkout -q master
+  git pull
+  git checkout -q $indiversion
+  if [[ $? != 0 ]]; then echo error ; exit; fi
+fi
 git status
 
 # prepare the build directory
