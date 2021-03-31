@@ -35,7 +35,10 @@ elif platform.system() == 'Darwin':
     IsDarwin = True
 
 if not IsWindows:
-    import psutil
+    try:
+        import psutil
+    except:
+        pass
 
 id = 0
 
@@ -91,9 +94,16 @@ def IsRunning (pgm):
         except:
             pass
     else:
+      try:
         for proc in psutil.process_iter():
             if proc.name() == pgm :
                 alreadyrunning = True
+      except Exception as inst:
+        print(type(inst))
+        print(inst.args)
+        print('Be sure the module psutil is installed before to use this function')
+        sys.exit(1)
+
     return alreadyrunning
 
 
@@ -119,6 +129,7 @@ def StopProgram(pgm) :
     if IsWindows:
         subprocess.Popen(['taskkill', '/IM', pgm], stdout=subprocess.PIPE, stderr=subprocess.PIPE, stdin=subprocess.PIPE)
     else:
+      try:
         for proc in psutil.process_iter():
             if proc.name() ==  pgm :
                 try:
@@ -126,3 +137,8 @@ def StopProgram(pgm) :
                 except Exception as inst:
                     print(type(inst))
                     print(inst.args)
+      except Exception as inst:
+        print(type(inst))
+        print(inst.args)
+        print('Be sure the module psutil is installed before to use this function')
+        sys.exit(1)
