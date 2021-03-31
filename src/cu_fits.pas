@@ -2232,6 +2232,7 @@ var
   iterations, counter,i,j,r1_square,r2_square,r2,distance : integer;
   sd_old,bg_average,val  : double;
 begin
+  rs:=round(rs*1.4);{Circumscribed circle}
   r1_square:=rs*rs;;{square radius}
   r2:=rs+wd;{outer radius annulus}
   r2_square:=r2*r2;
@@ -2284,7 +2285,7 @@ begin
     until (((sd_old-sd)<0.1*sd) or (iterations>=3));{repeat until sd is stable or enough iterations}
     sd:=max(sd,0.1); {prevent sd=0 for images with zero noise background. This will prevent that background is seen as a star.}
   except
-    {should not happen, sd=99999999999}
+    {may happen for a star very near the image edge, sd=99999999999}
   end;
 end;
 
@@ -2320,7 +2321,12 @@ var SumVal,SumValX,SumValY,val,vmax,bg,sd, Xg, Yg: double;
 begin
 
   try
+
     calculate_bg_sd(fimage,x,y,ri,2,bg,sd); {calculate background and standard deviation for an annulus at position x,y with an innner diameter rs+1 and an outer diameter rs+1+wd}
+    if sd>999999 then begin
+      result:=true;
+      exit;
+    end;
     bg:=FimageMin+bg/FimageC;
 
     SumVal:=0;
@@ -2372,6 +2378,10 @@ begin
  try
   // average background
   calculate_bg_sd(fimage,x,y,rs,wd {2},bg,sd); {calculate background and standard deviation for an annulus at position x,y with an inner radius rs+1 and outer radius ra+1+wd. }
+  if sd>999999 then begin
+    vmax:=0;
+    exit;
+  end;
   sd:=sd/FimageC;
   bg:=FimageMin+bg/FimageC;
 
@@ -2444,6 +2454,10 @@ begin
 
   try
     calculate_bg_sd(fimage,x,y,rs,2,bg,sd);  {calculate background and standard deviation for an annulus at position x,y with an innner diameter rs+1 and an outer diameter rs+1+wd}
+    if sd>999999 then begin
+      vmax:=0;
+      exit;
+    end;
     sd:=sd/FimageC;
     bg:=FimageMin+bg/FimageC;
 
@@ -2553,6 +2567,9 @@ begin
 
   try
     calculate_bg_sd(fimage,x,y,rs,2,bg,sd);  {calculate background and standard deviation for an annulus at position x,y with an innner diameter rs+1 and an outer diameter rs+1+wd}
+    if sd>999999 then begin
+      exit;
+    end;
 
     repeat {## reduce box size till symmetry to remove stars}
       // Get center of gravity whithin star detection box and count signal pixels
