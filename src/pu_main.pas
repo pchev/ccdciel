@@ -3174,10 +3174,10 @@ begin
     bpmAxis:=f.HeaderInfo.naxis;
     for x:=0 to f.HeaderInfo.naxis1-1 do begin
        for y:=0 to f.HeaderInfo.naxis2-1 do begin
-          val:=f.imageMin+f.image[0,y,x]/f.imageC;
+          val:=f.rawimage[0,y,x];
           if f.HeaderInfo.naxis=3 then begin
-            val1:=f.imageMin+f.image[1,y,x]/f.imageC;
-            val2:=f.imageMin+f.image[2,y,x]/f.imageC;
+            val1:=f.rawimage[1,y,x];
+            val2:=f.rawimage[2,y,x];
             val:=maxvalue([val,val1,val2]);
           end;
           if val>lb then begin
@@ -12758,19 +12758,19 @@ begin
     end
     else if (fits.preview_axis=3) then begin
       if fits.HeaderInfo.bitpix>0 then begin
-        val:=trunc(fits.rawimage[0,yy,xx]);
+        val:=trunc(fits.imageMin+fits.image[0,yy,xx]/fits.imageC);
         sval:=inttostr(val);
-        val:=trunc(fits.rawimage[1,yy,xx]);
+        val:=trunc(fits.imageMin+fits.image[1,yy,xx]/fits.imageC);
         sval:=sval+'/'+inttostr(val);
-        val:=trunc(fits.rawimage[2,yy,xx]);
+        val:=trunc(fits.imageMin+fits.image[2,yy,xx]/fits.imageC);
         sval:=sval+'/'+inttostr(val);
       end
       else begin
-       dval:=fits.rawimage[0,yy,xx];
+       dval:=fits.imageMin+fits.image[0,yy,xx]/fits.imageC;
        sval:=FormatFloat(f3,dval);
-       dval:=fits.rawimage[1,yy,xx];
+       dval:=fits.imageMin+fits.image[1,yy,xx]/fits.imageC;
        sval:=sval+'/'+FormatFloat(f3,dval);
-       dval:=fits.rawimage[2,yy,xx];
+       dval:=fits.imageMin+fits.image[2,yy,xx]/fits.imageC;
        sval:=sval+'/'+FormatFloat(f3,dval);
       end;
     end
