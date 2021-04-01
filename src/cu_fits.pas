@@ -56,8 +56,8 @@ type
          end;
  TStarList = array of TStar;
 
- Timai8 = array of array of array of byte; TPimai8 = ^Timai8;
- Timar32 = array of array of array of single; TPimar32 = ^Timar32;
+ Timabyte = array of array of array of byte;
+ Timafloat = array of array of array of single;
 
  THistogram = array[0..high(word)] of integer;
 
@@ -114,9 +114,9 @@ type
     d32 : array[1..720] of Longword;
     d64 : array[1..360] of Int64;
     // Original image data
-    Frawimage: Timar32;
+    Frawimage: Timafloat;
     // 16bit image scaled min/max unsigned
-    Fimage : Timar32;
+    Fimage : Timafloat;
     // Fimage scaling factor
     FimageC, FimageMin,FimageMax : double;
     // Histogram of Fimage
@@ -204,7 +204,7 @@ type
      property ImgDmax : Word read FImgDmax write FImgDmax;
      property Gamma: single read FGamma write SetGamma;
      property ImageValid: boolean read FImageValid;
-     property image : Timar32 read Fimage;
+     property image : Timafloat read Fimage;
      property imageC : double read FimageC;
      property imageMin : double read FimageMin;
      property imageMax : double read FimageMax;
@@ -272,7 +272,7 @@ type
       fits: TFits;
       StarList: TStarList;
       rx,ry,overlap,s: integer;
-      img_temp: Timai8;
+      img_temp: Timabyte;
       procedure Execute; override;
       constructor Create(CreateSuspended: boolean);
     end;
@@ -778,13 +778,13 @@ for i:=startline to endline do begin
    for j := 0 to xs-1 do begin
        if fits.preview_axis=3 then begin
          // 3 chanel color image
-         xx:=fits.image[0,i,j];
+         xx:=fits.Fimage[0,i,j];
          x:=round(max(0,min(MaxWord,(xx-FImgDmin) * c )) );
          p^.red:=fits.GammaCorr(x);
-         xxg:=fits.image[1,i,j];
+         xxg:=fits.Fimage[1,i,j];
          x:=round(max(0,min(MaxWord,(xxg-FImgDmin) * c )) );
          p^.green:=fits.GammaCorr(x);
-         xxb:=fits.image[2,i,j];
+         xxb:=fits.Fimage[2,i,j];
          x:=round(max(0,min(MaxWord,(xxb-FImgDmin) * c )) );
          p^.blue:=fits.GammaCorr(x);
          if fits.MarkOverflow then begin
@@ -795,7 +795,7 @@ for i:=startline to endline do begin
          end;
        end else begin
            // B/W image
-           xx:=fits.image[0,i,j];
+           xx:=fits.Fimage[0,i,j];
            x:=round(max(0,min(MaxWord,(xx-FImgDmin) * c )) );
            p^.red:=fits.GammaCorr(x);
            p^.green:=p^.red;
@@ -845,18 +845,18 @@ for i:=startline to endline do begin
    for j := 0 to xs-1 do begin
        if fits.preview_axis=3 then begin
          // 3 chanel color image
-         xx:=fits.imageMin+fits.image[0,i,j]/fits.imageC;
+         xx:=fits.imageMin+fits.Fimage[0,i,j]/fits.imageC;
          x:=round(max(0,min(MaxWord,xx)) );
          p^.red:=x;
-         xxg:=fits.imageMin+fits.image[1,i,j]/fits.imageC;
+         xxg:=fits.imageMin+fits.Fimage[1,i,j]/fits.imageC;
          x:=round(max(0,min(MaxWord,xxg)) );
          p^.green:=x;
-         xxb:=fits.imageMin+fits.image[2,i,j]/fits.imageC;
+         xxb:=fits.imageMin+fits.Fimage[2,i,j]/fits.imageC;
          x:=round(max(0,min(MaxWord,xxb)) );
          p^.blue:=x;
        end else begin
            // B/W image
-           xx:=fits.imageMin+fits.image[0,i,j]/fits.imageC;
+           xx:=fits.imageMin+fits.Fimage[0,i,j]/fits.imageC;
            x:=round(max(0,min(MaxWord,xx)));
            p^.red:=x;
            p^.green:=x;
@@ -1682,10 +1682,10 @@ if (FBPMcount>0)and(FBPMnax=FFitsInfo.naxis) then begin
     x:=Fbpm[i,1]-x0;
     y:=Fbpm[i,2]-y0;
     if (x>0)and(x<Fwidth-2)and(y>0)and(y<Fheight-2) then begin
-      image[0,y,x]:=(image[0,y-1,x]+image[0,y+1,x]+image[0,y,x-1]+image[0,y,x+1]) / 4;
+      Fimage[0,y,x]:=(Fimage[0,y-1,x]+Fimage[0,y+1,x]+Fimage[0,y,x-1]+Fimage[0,y,x+1]) / 4;
       if n_axis=3 then begin
-        image[1,y,x]:=(image[1,y-1,x]+image[1,y+1,x]+image[1,y,x-1]+image[1,y,x+1]) / 4;
-        image[2,y,x]:=(image[2,y-1,x]+image[2,y+1,x]+image[2,y,x-1]+image[2,y,x+1]) / 4;
+        Fimage[1,y,x]:=(Fimage[1,y-1,x]+Fimage[1,y+1,x]+Fimage[1,y,x-1]+Fimage[1,y,x+1]) / 4;
+        Fimage[2,y,x]:=(Fimage[2,y-1,x]+Fimage[2,y+1,x]+Fimage[2,y,x-1]+Fimage[2,y,x+1]) / 4;
       end;
     end;
   end;
@@ -2066,7 +2066,7 @@ setlength(Fimage,0,0,0);
 FStream.Clear;
 end;
 
-procedure calculate_bg_sd(fimage: Timar32; x,y,rs,wd :integer; var bg,sd : double);{calculate background and standard deviation for position x,y around box rs x rs. wd is the measuring range outside the box }
+procedure calculate_bg_sd(fimage: Timafloat; x,y,rs,wd :integer; var bg,sd : double);{calculate background and standard deviation for position x,y around box rs x rs. wd is the measuring range outside the box }
 var
   iterations, counter,i,j : integer;
   sd_old,bg_average,val   : double;
@@ -2578,7 +2578,7 @@ procedure TFits.GetStarList(rx,ry,s: integer);
 var
  i,j,n,nhfd: integer;
  overlap: integer;
- img_temp: Timai8;
+ img_temp: Timabyte;
  working, timingout: boolean;
  timelimit: TDateTime;
  thread: array[0..15] of TGetStarList;
