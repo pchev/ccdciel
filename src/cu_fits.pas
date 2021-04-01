@@ -1,7 +1,7 @@
 unit cu_fits;
 
 {
-Copyright (C) 2005-2021 Patrick Chevalley
+Copyright (C) 2005-2020 Patrick Chevalley
 
 http://www.ap-i.net
 pch@ap-i.net
@@ -2227,16 +2227,11 @@ setlength(Fimage,0,0,0);
 FStream.Clear;
 end;
 
-procedure calculate_bg_sd(fimage: Timaw16; x,y,rs,wd :integer; var bg,sd : double);{version 2021-03-26. calculate background and standard deviation for an annulus at position x,y with innner radius rs+1 and outer radius rs+1+wd. wd should be 1 or larger}
+procedure calculate_bg_sd(fimage: Timaw16; x,y,rs,wd :integer; var bg,sd : double);{calculate background and standard deviation for position x,y around box rs x rs. wd is the measuring range outside the box }
 var
-  iterations, counter,i,j,r1_square,r2_square,r2,distance : integer;
-  sd_old,bg_average,val  : double;
+  iterations, counter,i,j : integer;
+  sd_old,bg_average,val   : double;
 begin
-  rs:=round(rs*1.4);{Circumscribed circle}
-  r1_square:=rs*rs;;{square radius}
-  r2:=rs+wd;{outer radius annulus}
-  r2_square:=r2*r2;
-
   sd:=99999999999;
   bg:=0;
   iterations:=0;
@@ -2244,12 +2239,10 @@ begin
     repeat {Sigma clipping, find background and sd value by repeat and exclude values above 3*sd}
       counter:=0;
       bg_average:=0;
-
-      for i:=-r2 to r2 do {calculate standard deviation background outside the detection area}
-      for j:=-r2 to r2 do
+      for i:=-rs-wd to rs+wd do {calculate mean at square boundaries of detection box}
+      for j:=-rs-wd to rs+wd do
       begin
-        distance:=i*i+j*j;{working with sqr(distance) is faster then applying sqrt}
-        if ((distance>r1_square) and (distance<=r2_square)) then {annulus, circular area outside rs, typical one pixel wide}
+        if ( (abs(i)>rs) and (abs(j)>rs) ) then {measure only outside the box}
         begin
           val:=Fimage[0,y+i,x+j];
           if  ((iterations=0) or (abs(val-bg)<=3*sd)) then  {ignore extreme outliers after first run}
@@ -2264,11 +2257,10 @@ begin
       counter:=0;
       sd_old:=sd;
       sd:=0;
-      for i:=-r2 to r2 do {calculate the mean outside the the detection area}
-      for j:=-r2 to r2 do
-      begin
-        distance:=i*i+j*j;
-        if ((distance>r1_square) and (distance<=r2_square)) then {circular area outside rs, typical one pixel wide}
+      for i:=-rs-wd to rs+wd do {calculate standard deviation background at the square boundaries of detection box}
+        for j:=-rs-wd to rs+wd do
+        begin
+          if ( (abs(i)>rs) and (abs(j)>rs) ) then {measure only outside the box}
           begin
               val:=Fimage[0,y+i,x+j];
               if val<=2*bg then {not an extreme outlier}
@@ -2285,7 +2277,7 @@ begin
     until (((sd_old-sd)<0.1*sd) or (iterations>=3));{repeat until sd is stable or enough iterations}
     sd:=max(sd,0.1); {prevent sd=0 for images with zero noise background. This will prevent that background is seen as a star.}
   except
-    {may happen for a star very near the image edge, sd=99999999999}
+    {should not happen, sd=99999999999}
   end;
 end;
 
@@ -2303,10 +2295,10 @@ begin
   if (x_trunc<=0) or (x_trunc>=(Fwidth-2)) or (y_trunc<=0) or (y_trunc>=(Fheight-2)) then exit;
   x_frac :=frac(x1);
   y_frac :=frac(y1);
-  result:=         Fimage[0,y_trunc  ,x_trunc  ]* (1-x_frac)*(1-y_frac);{pixel left top, 1}
-  result:=result + Fimage[0,y_trunc  ,x_trunc+1]* (  x_frac)*(1-y_frac);{pixel right top, 2}
-  result:=result + Fimage[0,y_trunc+1,x_trunc  ]* (1-x_frac)*(  y_frac);{pixel left bottom, 3}
-  result:=result + Fimage[0,y_trunc+1,x_trunc+1]* (  x_frac)*(  y_frac);{pixel right bottom, 4}
+  result:= Fimage[0,y_trunc ,x_trunc ] * (1-x_frac)*(1-y_frac);{pixel left top, 1}
+  result:=result + Fimage[0,y_trunc ,x_trunc+1] * ( x_frac)*(1-y_frac);{pixel right top, 2}
+  result:=result + Fimage[0,y_trunc+1,x_trunc ] * (1-x_frac)*( y_frac);{pixel left bottom, 3}
+  result:=result + Fimage[0,y_trunc+1,x_trunc+1] * ( x_frac)*( y_frac);{pixel right bottom, 4}
   except
     on E: Exception do begin
         result:=0;
@@ -2321,12 +2313,7 @@ var SumVal,SumValX,SumValY,val,vmax,bg,sd, Xg, Yg: double;
 begin
 
   try
-
-    calculate_bg_sd(fimage,x,y,ri,2,bg,sd); {calculate background and standard deviation for an annulus at position x,y with an innner diameter rs+1 and an outer diameter rs+1+wd}
-    if sd>999999 then begin
-      result:=true;
-      exit;
-    end;
+    calculate_bg_sd(fimage,x,y,ri,4,bg,sd); {calculate background and standard deviation for position x,y around box 2rs x 2rs. }
     bg:=FimageMin+bg/FimageC;
 
     SumVal:=0;
@@ -2362,11 +2349,11 @@ var i,j,rs,xm,ym: integer;
     bg,bg_average,sd: double;
     val :double;
 const
-    wd =2; {wd is the width of the area outside box rs used for calculating the mean value of the background}
+    wd =4; {wd is the width of the area outside box rs used for calculating the mean value of the background}
 
 begin
  rs:= s div 2;{box size is s x s pixels}
- if (x-rs)<(3+wd) then x:=rs+(3+wd); {stay 3 pixels away from the sides. wd is the width of the annulus with radius rs+1 for calculating the mean value of the background}
+ if (x-rs)<(3+wd) then x:=rs+(3+wd); {stay 3 pixels away from the sides. wd is the width of the area outside box 2rs x 2rs used for calculating the mean value of the background}
  if (x+rs)>(Fwidth-(3+wd)) then x:=Fwidth-rs-(3+wd);
  if (y-rs)<(3+wd) then y:=rs+(3+wd);
  if (y+rs)>(Fheight-(3+wd)) then y:=Fheight-rs-(3+wd);
@@ -2376,12 +2363,8 @@ begin
  ym:=0;
 
  try
-  // average background
-  calculate_bg_sd(fimage,x,y,rs,wd {2},bg,sd); {calculate background and standard deviation for an annulus at position x,y with an inner radius rs+1 and outer radius ra+1+wd. }
-  if sd>999999 then begin
-    vmax:=0;
-    exit;
-  end;
+   // average background
+  calculate_bg_sd(fimage,x,y,rs,wd {4},bg,sd); {calculate background and standard deviation for position x,y around box 2rs x 2rs. }
   sd:=sd/FimageC;
   bg:=FimageMin+bg/FimageC;
 
@@ -2453,11 +2436,7 @@ begin
   if (y+s)>(Fheight-1) then y:=Fheight-s-1;
 
   try
-    calculate_bg_sd(fimage,x,y,rs,2,bg,sd);  {calculate background and standard deviation for an annulus at position x,y with an innner diameter rs+1 and an outer diameter rs+1+wd}
-    if sd>999999 then begin
-      vmax:=0;
-      exit;
-    end;
+    calculate_bg_sd(fimage,x,y,rs,4,bg,sd); {calculate background and standard deviation for position x,y around box rs x rs. }
     sd:=sd/FimageC;
     bg:=FimageMin+bg/FimageC;
 
@@ -2566,10 +2545,7 @@ begin
   if (y+s)>(Fheight-1-4) then y:=Fheight-s-1-4;
 
   try
-    calculate_bg_sd(fimage,x,y,rs,2,bg,sd);  {calculate background and standard deviation for an annulus at position x,y with an innner diameter rs+1 and an outer diameter rs+1+wd}
-    if sd>999999 then begin
-      exit;
-    end;
+    calculate_bg_sd(fimage,x,y,rs,4,bg,sd); {calculate background and standard deviation for position x,y around box rs x rs. }
 
     repeat {## reduce box size till symmetry to remove stars}
       // Get center of gravity whithin star detection box and count signal pixels
@@ -2586,7 +2562,7 @@ begin
       for j:=-rs to rs do
       begin
         val:=Fimage[0,y+j,x+i]-bg;
-        if val>(3)*sd then {just above noise level. }
+        if val>(3.5)*sd then {just above noise level. }
         begin
           if val>=valsaturation then inc(saturated_counter);
           if val>valmax then valmax:=val;
