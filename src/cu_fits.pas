@@ -1023,7 +1023,6 @@ end;
 procedure TFits.SetStream(value:TMemoryStream);
 begin
 try
-msg('setstream');
  FImageValid:=false;
  ClearFitsInfo;
  setlength(Frawimage,0,0,0);
@@ -1031,11 +1030,8 @@ msg('setstream');
  FStream.Clear;
  FStream.Position:=0;
  value.Position:=0;
- msg('setstream startcopy');
  FStream.CopyFrom(value,value.Size);
- msg('setstream endcopy');
  Fhdr_end:=FHeader.ReadHeader(FStream);
- msg('setstream endheader');
  FStreamValid:=true;
 except
  ClearFitsInfo;
@@ -1044,12 +1040,9 @@ end;
 
 Procedure TFits.LoadStream;
 begin
-msg('loadstream');
   GetFitsInfo;
   if FFitsInfo.valid then begin
-    msg('ReadFitsImage');
     ReadFitsImage;
-    msg('ReadFitsImage end');
   end;
 end;
 
@@ -1548,7 +1541,6 @@ var i,j: integer;
     t: TBayerMode;
     debayer: boolean;
 begin
-msg('getimage');
   if FImgFullRange and ((FFitsInfo.bitpix=16)or(FFitsInfo.bitpix=8)) then begin
     Fdmin:=0;
     if FFitsInfo.bitpix=8 then
@@ -1655,7 +1647,6 @@ msg('getimage');
   end;
   // cleanup
   for i := 0 to tc - 1 do thread[i].Free;
-  msg('getimage end');
 end;
 
 procedure TFits.FreeDark;
