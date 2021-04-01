@@ -1678,15 +1678,16 @@ if (FBPMcount>0)and(FBPMnax=FFitsInfo.naxis) then begin
     x:=Fbpm[i,1]-x0;
     y:=Fbpm[i,2]-y0;
     if (x>0)and(x<Fwidth-2)and(y>0)and(y<Fheight-2) then begin
-      Fimage[0,y,x]:=(Fimage[0,y-1,x]+Fimage[0,y+1,x]+Fimage[0,y,x-1]+Fimage[0,y,x+1]) / 4;
+      Frawimage[0,y,x]:=(Frawimage[0,y-1,x]+Frawimage[0,y+1,x]+Frawimage[0,y,x-1]+Frawimage[0,y,x+1]) / 4;
       if n_axis=3 then begin
-        Fimage[1,y,x]:=(Fimage[1,y-1,x]+Fimage[1,y+1,x]+Fimage[1,y,x-1]+Fimage[1,y,x+1]) / 4;
-        Fimage[2,y,x]:=(Fimage[2,y-1,x]+Fimage[2,y+1,x]+Fimage[2,y,x-1]+Fimage[2,y,x+1]) / 4;
+        Frawimage[1,y,x]:=(Frawimage[1,y-1,x]+Frawimage[1,y+1,x]+Frawimage[1,y,x-1]+Frawimage[1,y,x+1]) / 4;
+        Frawimage[2,y,x]:=(Frawimage[2,y-1,x]+Frawimage[2,y+1,x]+Frawimage[2,y,x-1]+Frawimage[2,y,x+1]) / 4;
       end;
     end;
   end;
   FBPMProcess:=true;
   FHeader.Insert( FHeader.Indexof('END'),'COMMENT','Corrected with Bap Pixel Map','');
+  GetImage;
 end;
 end;
 
