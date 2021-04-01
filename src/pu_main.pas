@@ -12748,29 +12748,29 @@ begin
  if (xx>0)and(xx<fits.HeaderInfo.naxis1)and(yy>0)and(yy<fits.HeaderInfo.naxis2) then
     if fits.preview_axis=2 then begin
       if fits.HeaderInfo.bitpix>0 then begin
-        val:=trunc(fits.imageMin+fits.image[0,yy,xx]/fits.imageC);
+        val:=trunc(fits.rawimage[0,yy,xx]);
         sval:=inttostr(val);
       end
       else begin
-       dval:=fits.imageMin+fits.image[0,yy,xx]/fits.imageC;
+       dval:=fits.rawimage[0,yy,xx];
        sval:=FormatFloat(f3,dval);
       end;
     end
     else if (fits.preview_axis=3) then begin
       if fits.HeaderInfo.bitpix>0 then begin
-        val:=trunc(fits.imageMin+fits.image[0,yy,xx]/fits.imageC);
+        val:=trunc(fits.rawimage[0,yy,xx]);
         sval:=inttostr(val);
-        val:=trunc(fits.imageMin+fits.image[1,yy,xx]/fits.imageC);
+        val:=trunc(fits.rawimage[1,yy,xx]);
         sval:=sval+'/'+inttostr(val);
-        val:=trunc(fits.imageMin+fits.image[2,yy,xx]/fits.imageC);
+        val:=trunc(fits.rawimage[2,yy,xx]);
         sval:=sval+'/'+inttostr(val);
       end
       else begin
-       dval:=fits.imageMin+fits.image[0,yy,xx]/fits.imageC;
+       dval:=fits.rawimage[0,yy,xx];
        sval:=FormatFloat(f3,dval);
-       dval:=fits.imageMin+fits.image[1,yy,xx]/fits.imageC;
+       dval:=fits.rawimage[1,yy,xx];
        sval:=sval+'/'+FormatFloat(f3,dval);
-       dval:=fits.imageMin+fits.image[2,yy,xx]/fits.imageC;
+       dval:=fits.rawimage[2,yy,xx];
        sval:=sval+'/'+FormatFloat(f3,dval);
       end;
     end
@@ -12816,10 +12816,10 @@ begin
            f_photometry.Memo1.Lines.Add('');
            f_photometry.Memo1.Lines.Add(rsStar+' X/Y'+' : '+FormatFloat(f3, xc)+' / '+FormatFloat(f3, img_Height-yc));
            if fits.HeaderInfo.floatingpoint then
-             f_photometry.Memo1.Lines.Add(rsMaximumInten+' : '+FormatFloat(f3, fits.imageMin+(vmax+bg)/fits.imageC))
+             f_photometry.Memo1.Lines.Add(rsMaximumInten+' : '+FormatFloat(f3, (vmax+bg)))
            else
-             f_photometry.Memo1.Lines.Add(rsMaximumInten+' : '+FormatFloat(f0, fits.imageMin+(vmax+bg)/fits.imageC));
-           f_photometry.Memo1.Lines.Add(rsBackground+' : '+FormatFloat(f3, bg/fits.imageC+fits.imageMin)+', '+rsStdDev+blank+FormatFloat(f3, bgdev/fits.imageC));
+             f_photometry.Memo1.Lines.Add(rsMaximumInten+' : '+FormatFloat(f0, (vmax+bg)));
+           f_photometry.Memo1.Lines.Add(rsBackground+' : '+FormatFloat(f3, bg)+', '+rsStdDev+blank+FormatFloat(f3, bgdev));
            if fits.HeaderInfo.floatingpoint then
              f_photometry.Memo1.Lines.Add(rsFlux+' : '+FormatFloat(f3, flux))
            else

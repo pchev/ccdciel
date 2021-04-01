@@ -205,6 +205,7 @@ type
      property Gamma: single read FGamma write SetGamma;
      property ImageValid: boolean read FImageValid;
      property image : Timafloat read Fimage;
+     property rawimage : Timafloat read Frawimage;
      property imageC : double read FimageC;
      property imageMin : double read FimageMin;
      property imageMax : double read FimageMax;
@@ -845,18 +846,18 @@ for i:=startline to endline do begin
    for j := 0 to xs-1 do begin
        if fits.preview_axis=3 then begin
          // 3 chanel color image
-         xx:=fits.imageMin+fits.Fimage[0,i,j]/fits.imageC;
+         xx:=fits.Frawimage[0,i,j];
          x:=round(max(0,min(MaxWord,xx)) );
          p^.red:=x;
-         xxg:=fits.imageMin+fits.Fimage[1,i,j]/fits.imageC;
+         xxg:=fits.Frawimage[1,i,j];
          x:=round(max(0,min(MaxWord,xxg)) );
          p^.green:=x;
-         xxb:=fits.imageMin+fits.Fimage[2,i,j]/fits.imageC;
+         xxb:=fits.Frawimage[2,i,j];
          x:=round(max(0,min(MaxWord,xxb)) );
          p^.blue:=x;
        end else begin
            // B/W image
-           xx:=fits.imageMin+fits.Fimage[0,i,j]/fits.imageC;
+           xx:=fits.Frawimage[0,i,j];
            x:=round(max(0,min(MaxWord,xx)));
            p^.red:=x;
            p^.green:=x;
@@ -908,11 +909,6 @@ begin
        fitsX:=fx*s;
 
        fits.GetHFD2(fitsX,fitsY,s+overlap,xc,yc,bg,bgdev,hfd1,star_fwhm,vmax,snr,flux,false);{2018-3-21, calculate HFD}
-
-       {scale the result as GetHFD2 work with internal 16 bit values}
-       vmax:=vmax/fits.imageC;
-       bg:=bg/fits.imageC+fits.FimageMin;
-       bgdev:=bgdev/fits.imageC;
 
        {check valid hfd }
        if ((hfd1>0)and (Undersampled or (hfd1>0.7)))
@@ -2066,7 +2062,7 @@ setlength(Fimage,0,0,0);
 FStream.Clear;
 end;
 
-procedure calculate_bg_sd(fimage: Timafloat; x,y,rs,wd :integer; var bg,sd : double);{calculate background and standard deviation for position x,y around box rs x rs. wd is the measuring range outside the box }
+procedure calculate_bg_sd(img: Timafloat; x,y,rs,wd :integer; var bg,sd : double);{calculate background and standard deviation for position x,y around box rs x rs. wd is the measuring range outside the box }
 var
   iterations, counter,i,j : integer;
   sd_old,bg_average,val   : double;
@@ -2083,7 +2079,7 @@ begin
       begin
         if ( (abs(i)>rs) and (abs(j)>rs) ) then {measure only outside the box}
         begin
-          val:=Fimage[0,y+i,x+j];
+          val:=img[0,y+i,x+j];
           if  ((iterations=0) or (abs(val-bg)<=3*sd)) then  {ignore extreme outliers after first run}
           begin
             bg_average:=bg_average+val;
@@ -2101,7 +2097,7 @@ begin
         begin
           if ( (abs(i)>rs) and (abs(j)>rs) ) then {measure only outside the box}
           begin
-              val:=Fimage[0,y+i,x+j];
+              val:=img[0,y+i,x+j];
               if val<=2*bg then {not an extreme outlier}
               if ((iterations=0) or (abs(val-bg)<=3*sd_old)) then {ignore extreme outliers after first run}
               begin
@@ -2134,10 +2130,10 @@ begin
   if (x_trunc<=0) or (x_trunc>=(Fwidth-2)) or (y_trunc<=0) or (y_trunc>=(Fheight-2)) then exit;
   x_frac :=frac(x1);
   y_frac :=frac(y1);
-  result:= Fimage[0,y_trunc ,x_trunc ] * (1-x_frac)*(1-y_frac);{pixel left top, 1}
-  result:=result + Fimage[0,y_trunc ,x_trunc+1] * ( x_frac)*(1-y_frac);{pixel right top, 2}
-  result:=result + Fimage[0,y_trunc+1,x_trunc ] * (1-x_frac)*( y_frac);{pixel left bottom, 3}
-  result:=result + Fimage[0,y_trunc+1,x_trunc+1] * ( x_frac)*( y_frac);{pixel right bottom, 4}
+  result:= Frawimage[0,y_trunc ,x_trunc ] * (1-x_frac)*(1-y_frac);{pixel left top, 1}
+  result:=result + Frawimage[0,y_trunc ,x_trunc+1] * ( x_frac)*(1-y_frac);{pixel right top, 2}
+  result:=result + Frawimage[0,y_trunc+1,x_trunc ] * (1-x_frac)*( y_frac);{pixel left bottom, 3}
+  result:=result + Frawimage[0,y_trunc+1,x_trunc+1] * ( x_frac)*( y_frac);{pixel right bottom, 4}
   except
     on E: Exception do begin
         result:=0;
@@ -2152,8 +2148,7 @@ var SumVal,SumValX,SumValY,val,vmax,bg,sd, Xg, Yg: double;
 begin
 
   try
-    calculate_bg_sd(fimage,x,y,ri,4,bg,sd); {calculate background and standard deviation for position x,y around box 2rs x 2rs. }
-    bg:=FimageMin+bg/FimageC;
+    calculate_bg_sd(Frawimage,x,y,ri,4,bg,sd); {calculate background and standard deviation for position x,y around box 2rs x 2rs. }
 
     SumVal:=0;
     SumValX:=0;
@@ -2162,7 +2157,7 @@ begin
     for i:=-ri to ri do
       for j:=-ri to ri do
       begin
-        val:=FimageMin+Fimage[0,y+j,x+i]/FimageC-bg;
+        val:=Frawimage[0,y+j,x+i]-bg;
         if val<0 then val:=0;
         if val>vmax then vmax:=val;
         SumVal:=SumVal+val;
@@ -2203,18 +2198,16 @@ begin
 
  try
    // average background
-  calculate_bg_sd(fimage,x,y,rs,wd {4},bg,sd); {calculate background and standard deviation for position x,y around box 2rs x 2rs. }
-  sd:=sd/FimageC;
-  bg:=FimageMin+bg/FimageC;
+  calculate_bg_sd(Frawimage,x,y,rs,wd {4},bg,sd); {calculate background and standard deviation for position x,y around box 2rs x 2rs. }
 
  // try with double star exclusion
  for i:=-rs to rs do
    for j:=-rs to rs do begin
-     val:=(Fimage[0,y+j-1 ,x+i-1]+Fimage[0,y+j-1 ,x+i]+Fimage[0,y+j-1 ,x+i+1]+
-           Fimage[0,y+j ,x+i-1]+Fimage[0,y+j ,x+i]+Fimage[0,y+j ,x+i+1]+
-           Fimage[0,y+j+1 ,x+i-1]+Fimage[0,y+j+1 ,x+i]+Fimage[0,y+j+1 ,x+i+1])/9;
+     val:=(Frawimage[0,y+j-1 ,x+i-1]+Frawimage[0,y+j-1 ,x+i]+Frawimage[0,y+j-1 ,x+i+1]+
+           Frawimage[0,y+j ,x+i-1]+Frawimage[0,y+j ,x+i]+Frawimage[0,y+j ,x+i+1]+
+           Frawimage[0,y+j+1 ,x+i-1]+Frawimage[0,y+j+1 ,x+i]+Frawimage[0,y+j+1 ,x+i+1])/9;
 
-     Val:=FimageMin+Val/FimageC-bg;
+     Val:=Val-bg;
      // huge performance improvement by checking only the pixels above the noise
      if (val>((5*sd))) and (Val>vmax) then
      begin
@@ -2232,11 +2225,10 @@ begin
  if vmax=0 then
    for i:=-rs to rs do
      for j:=-rs to rs do begin
-       val:=(Fimage[0,y+j-1 ,x+i-1]+Fimage[0,y+j-1 ,x+i]+Fimage[0,y+j-1 ,x+i+1]+
-             Fimage[0,y+j ,x+i-1]+Fimage[0,y+j ,x+i]+Fimage[0,y+j ,x+i+1]+
-             Fimage[0,y+j+1 ,x+i-1]+Fimage[0,y+j+1 ,x+i]+Fimage[0,y+j+1 ,x+i+1])/9;
+       val:=(Frawimage[0,y+j-1 ,x+i-1]+Frawimage[0,y+j-1 ,x+i]+Frawimage[0,y+j-1 ,x+i+1]+
+             Frawimage[0,y+j ,x+i-1]+Frawimage[0,y+j ,x+i]+Frawimage[0,y+j ,x+i+1]+
+             Frawimage[0,y+j+1 ,x+i-1]+Frawimage[0,y+j+1 ,x+i]+Frawimage[0,y+j+1 ,x+i+1])/9;
 
-       Val:=FimageMin+Val/FimageC;
        if Val>vmax then
        begin
          vmax:=Val;
@@ -2275,9 +2267,7 @@ begin
   if (y+s)>(Fheight-1) then y:=Fheight-s-1;
 
   try
-    calculate_bg_sd(fimage,x,y,rs,4,bg,sd); {calculate background and standard deviation for position x,y around box rs x rs. }
-    sd:=sd/FimageC;
-    bg:=FimageMin+bg/FimageC;
+    calculate_bg_sd(Frawimage,x,y,rs,4,bg,sd); {calculate background and standard deviation for position x,y around box rs x rs. }
 
     // Get center of gravity whithin star detection box
     SumVal:=0;
@@ -2286,7 +2276,7 @@ begin
     vmax:=0;
     for i:=-rs to rs do
      for j:=-rs to rs do begin
-       val:=FimageMin+Fimage[0,y+j,x+i]/FimageC-bg;
+       val:=Frawimage[0,y+j,x+i]-bg;
        if val>((3*sd)) then  {>3 * sd should be signal }
        begin
          if val>vmax then vmax:=val;
@@ -2313,7 +2303,7 @@ begin
 
    for i:=-rs to rs do begin
      for j:=-rs to rs do begin
-       val:=FimageMin+Fimage[0,yc+j,xc+i]/FimageC-bg;
+       val:=Frawimage[0,yc+j,xc+i]-bg;
        if val>((3*sd)) then {>3 * sd should be signal }
        begin
          distance:=round((sqrt(1+ i*i + j*j )));{distance from gravity center }
@@ -2356,7 +2346,7 @@ procedure TFits.GetHFD2(x,y,s: integer; out xc,yc,bg,sd,hfd,star_fwhm,valmax,snr
 const
     max_ri=100;
 var i,j,rs,distance,ri, distance_top_value, illuminated_pixels, saturated_counter, max_saturated : integer;
-    valsaturation:Int64;
+    valsaturation:double;
     SumVal,SumValX,SumValY,SumvalR,val,xg,yg, pixel_counter,r, val_00,val_01,val_10,val_11,af,
     faintA,faintB, brightA,brightB,faintest,brightest : double;
     distance_histogram  : array [0..max_ri] of integer;
@@ -2384,7 +2374,7 @@ begin
   if (y+s)>(Fheight-1-4) then y:=Fheight-s-1-4;
 
   try
-    calculate_bg_sd(fimage,x,y,rs,4,bg,sd); {calculate background and standard deviation for position x,y around box rs x rs. }
+    calculate_bg_sd(Frawimage,x,y,rs,4,bg,sd); {calculate background and standard deviation for position x,y around box rs x rs. }
 
     repeat {## reduce box size till symmetry to remove stars}
       // Get center of gravity whithin star detection box and count signal pixels
@@ -2394,13 +2384,13 @@ begin
       valmax:=0;
       saturated_counter:=0;
       if FFitsInfo.floatingpoint then
-        valsaturation:=round(FimageC*(FimageMax-FimageMin)-bg)
+        valsaturation:=MaxDouble
       else
-        valsaturation:=round(FimageC*(MaxADU-1-FimageMin)-bg);
+        valsaturation:=MaxADU-1-bg;
       for i:=-rs to rs do
       for j:=-rs to rs do
       begin
-        val:=Fimage[0,y+j,x+i]-bg;
+        val:=Frawimage[0,y+j,x+i]-bg;
         if val>(3.5)*sd then {just above noise level. }
         begin
           if val>=valsaturation then inc(saturated_counter);
@@ -2448,7 +2438,7 @@ begin
     if (not Undersampled) then   {check on single hot pixels}
     for i:=-1 to +1 do
       for j:=-1 to +1 do begin
-        val:=Fimage[0,round(yc)+j,round(xc)+i]-bg; {no subpixel calculation here}
+        val:=Frawimage[0,round(yc)+j,round(xc)+i]-bg; {no subpixel calculation here}
         if val>0.5*sumval then exit;
       end;
 
@@ -2507,8 +2497,8 @@ begin
     hfd:=max(0.7,hfd); // minimum value for a star size of 1 pixel
     star_fwhm:=2*sqrt(pixel_counter/pi);{The surface is calculated by counting pixels above half max. The diameter of that surface called FWHM is then 2*sqrt(surface/pi) }
     if (SumVal>0.00001)and(saturated_counter<=max_saturated) then begin
-      flux:=Sumval/FimageC;
-      snr:=flux/sqrt(flux +sqr(ri)*pi*sqr(sd/FimageC)); {For both bright stars (shot-noise limited) or skybackground limited situations
+      flux:=Sumval;
+      snr:=flux/sqrt(flux +sqr(ri)*pi*sqr(sd)); {For both bright stars (shot-noise limited) or skybackground limited situations
                                                                        snr:=signal/sqrt(signal + r*r*pi* SKYsignal) equals snr:=flux/sqrt(flux + r*r*pi* sd^2).}
     end else begin
       flux:=-1;
@@ -2654,11 +2644,6 @@ for i:=0 to Length(list)-1 do
 
    GetHFD2(fitsX,fitsY,s,xc,yc,bg,bgdev,hfd1,star_fwhm,vmax,snr,flux,false);
 
-   // normalize value
-   vmax:=vmax/FimageC; // include bg subtraction
-   bg:=FimageMin+bg/FimageC;
-
-
    {check valid hfd, snr}
    if ((hfd1>0)and (Undersampled or (hfd1>0.7)))
       and (hfd1<99)
@@ -2697,8 +2682,7 @@ begin
 end;
 
 procedure TFits.Bitpix8to16;
-var i,j,k,ii: integer;
-    x: smallint;
+var i: integer;
 begin
  FFitsInfo.bitpix:=16;
  FFitsInfo.bscale:=1;

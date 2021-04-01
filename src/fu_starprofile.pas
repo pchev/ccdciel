@@ -463,9 +463,9 @@ try
 // labels
 LabelHFD.Caption:=FormatFloat(f1,Fhfd);
 if f.HeaderInfo.floatingpoint then
-  LabelImax.Caption:=FormatFloat(f3,f.imageMin+FValMaxCalibrated)
+  LabelImax.Caption:=FormatFloat(f3,FValMaxCalibrated)
 else
-  LabelImax.Caption:=FormatFloat(f0,f.imageMin+FValMaxCalibrated);
+  LabelImax.Caption:=FormatFloat(f0,FValMaxCalibrated);
 if Fsnr>0 then
    LabelSNR.Caption:=FormatFloat(f1,Fsnr)
 else
@@ -490,9 +490,9 @@ if FValMax>0 then begin
   j:=trunc(FStarY);
   i0:=trunc(FStarX)-(s div 2);
   ProfileSource.Clear;
-  ProfileSource.Add(0,f.image[0,j,i0]-bg);
+  ProfileSource.Add(0,f.rawimage[0,j,i0]-bg);
   for i:=0 to s-1 do begin
-    ProfileSource.Add(i,f.image[0,j,i0+i]-bg);
+    ProfileSource.Add(i,f.rawimage[0,j,i0+i]-bg);
   end;
 end;
 except
@@ -561,7 +561,7 @@ begin
  if FValMax=0 then exit;
 
  f.GetHFD2(xm,ym,2*ri,xg,yg,bg,bgdev,Fhfd,Ffwhm,FValMax,Fsnr,flux);
- FValMaxCalibrated:=(FValMax+bg)/f.imageC;
+ FValMaxCalibrated:=FValMax+bg;
  if (Ffwhm>0)and(focal>0)and(pxsize>0) then begin
    Ffwhmarcsec:=Ffwhm*3600*rad2deg*arctan(pxsize/1000/focal);
  end
