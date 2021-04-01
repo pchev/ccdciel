@@ -57,11 +57,7 @@ type
  TStarList = array of TStar;
 
  Timai8 = array of array of array of byte; TPimai8 = ^Timai8;
- Timai16 = array of array of array of smallint; TPimai16 = ^Timai16;
- Timaw16 = array of array of array of word; TPimaw16 = ^Timaw16;
- Timai32 = array of array of array of longint; TPimai32 = ^Timai32;
  Timar32 = array of array of array of single; TPimar32 = ^Timar32;
- Timar64 = array of array of array of double; TPimar64 = ^Timar64;
 
  THistogram = array[0..high(word)] of integer;
 
@@ -118,13 +114,9 @@ type
     d32 : array[1..720] of Longword;
     d64 : array[1..360] of Int64;
     // Original image data
-    imai8 : Timai8;
-    imai16 : Timai16;
-    imai32 : Timai32;
-    imar32 : Timar32;
-    imar64 : Timar64;
+    Frawimage: Timar32;
     // 16bit image scaled min/max unsigned
-    Fimage : Timaw16;
+    Fimage : Timar32;
     // Fimage scaling factor
     FimageC, FimageMin,FimageMax : double;
     // Histogram of Fimage
@@ -136,7 +128,7 @@ type
     // Fits header values
     FFitsInfo : TFitsInfo;
     //
-    n_axis,cur_axis,Fwidth,Fheight,Fhdr_end,colormode,Fpreview_axis : Integer;
+    n_axis,Fwidth,Fheight,Fhdr_end,colormode,Fpreview_axis : Integer;
     FTitle : string;
     Fmean,Fsigma,Fdmin,Fdmax : double;
     FImgDmin, FImgDmax: Word;
@@ -212,7 +204,7 @@ type
      property ImgDmax : Word read FImgDmax write FImgDmax;
      property Gamma: single read FGamma write SetGamma;
      property ImageValid: boolean read FImageValid;
-     property image : Timaw16 read Fimage;
+     property image : Timar32 read Fimage;
      property imageC : double read FimageC;
      property imageMin : double read FimageMin;
      property imageMax : double read FimageMax;
@@ -707,163 +699,51 @@ else
   endline := (id + 1) * i - 1;
 FillByte(hist,sizeof(THistogram),0);
 // process the rows range for this thread
-case fits.FFitsInfo.bitpix of
-   -64 : begin
-         for i:=startline to endline do begin
-         for j := 0 to xs-1 do begin
-             xx:=fits.FFitsInfo.bzero+fits.FFitsInfo.bscale*fits.imar64[0,i,j];
-             x:=round(max(0,min(MaxWord,(xx-Fdmin) * c )) );
-             fits.Fimage[0,i,j]:=x;
-             if fits.n_axis=3 then begin
-               inc(hist[x]);
-               xx:=fits.FFitsInfo.bzero+fits.FFitsInfo.bscale*fits.imar64[1,i,j];
-               x:=round(max(0,min(MaxWord,(xx-Fdmin) * c )) );
-               fits.Fimage[1,i,j]:=x;
-               inc(hist[x]);
-               xx:=fits.FFitsInfo.bzero+fits.FFitsInfo.bscale*fits.imar64[2,i,j];
-               x:=round(max(0,min(MaxWord,(xx-Fdmin) * c )) );
-               fits.Fimage[2,i,j]:=x;
-             end;
-             inc(hist[x]);
-         end;
-         end;
-         end;
-   -32 : begin
-         for i:=startline to endline do begin
-         for j := 0 to xs-1 do begin
-             xx:=fits.FFitsInfo.bzero+fits.FFitsInfo.bscale*fits.imar32[0,i,j];
-             x:=round(max(0,min(MaxWord,(xx-Fdmin) * c )) );
-             fits.Fimage[0,i,j]:=x;
-             if fits.n_axis=3 then begin
-               inc(hist[x]);
-               xx:=fits.FFitsInfo.bzero+fits.FFitsInfo.bscale*fits.imar32[1,i,j];
-               x:=round(max(0,min(MaxWord,(xx-Fdmin) * c )) );
-               fits.Fimage[1,i,j]:=x;
-               inc(hist[x]);
-               xx:=fits.FFitsInfo.bzero+fits.FFitsInfo.bscale*fits.imar32[2,i,j];
-               x:=round(max(0,min(MaxWord,(xx-Fdmin) * c )) );
-               fits.Fimage[2,i,j]:=x;
-             end;
-             inc(hist[x]);
-         end;
-         end;
-         end;
-     8 : begin
-         for i:=startline to endline do begin
-           if debayer then begin
-            i1:=max(i-1,0);
-            i2:=i;
-            i3:= min(i+1,ys-1);
-           end;
-           for j := 0 to xs-1 do begin
-             if debayer then begin
-               j1:=max(j-1,0);
-               j2:=j;
-               j3:=min(j+1,xs-1);
-               pix1:=round( max(0,min(MaxWord,(fits.FFitsInfo.bzero+fits.FFitsInfo.bscale*fits.imai8[0,i1,j1]-Fdmin) * c )) );
-               pix2:=round( max(0,min(MaxWord,(fits.FFitsInfo.bzero+fits.FFitsInfo.bscale*fits.imai8[0,i1,j2]-Fdmin) * c )) );
-               pix3:=round( max(0,min(MaxWord,(fits.FFitsInfo.bzero+fits.FFitsInfo.bscale*fits.imai8[0,i1,j3]-Fdmin) * c )) );
-               pix4:=round( max(0,min(MaxWord,(fits.FFitsInfo.bzero+fits.FFitsInfo.bscale*fits.imai8[0,i2,j1]-Fdmin) * c )) );
-               pix5:=round( max(0,min(MaxWord,(fits.FFitsInfo.bzero+fits.FFitsInfo.bscale*fits.imai8[0,i2,j2]-Fdmin) * c )) );
-               pix6:=round( max(0,min(MaxWord,(fits.FFitsInfo.bzero+fits.FFitsInfo.bscale*fits.imai8[0,i2,j3]-Fdmin) * c )) );
-               pix7:=round( max(0,min(MaxWord,(fits.FFitsInfo.bzero+fits.FFitsInfo.bscale*fits.imai8[0,i3,j1]-Fdmin) * c )) );
-               pix8:=round( max(0,min(MaxWord,(fits.FFitsInfo.bzero+fits.FFitsInfo.bscale*fits.imai8[0,i3,j2]-Fdmin) * c )) );
-               pix9:=round( max(0,min(MaxWord,(fits.FFitsInfo.bzero+fits.FFitsInfo.bscale*fits.imai8[0,i3,j3]-Fdmin) * c )) );
-               fits.BayerInterpolation(t,rmult,gmult,bmult,rbg,gbg,bbg,pix1,pix2,pix3,pix4,pix5,pix6,pix7,pix8,pix9,i,j,pixr,pixg,pixb);
-               inc(hist[pixr]);
-               inc(hist[pixg]);
-               inc(hist[pixb]);
-               fits.Fimage[0,i,j]:=pixr;
-               fits.Fimage[1,i,j]:=pixg;
-               fits.Fimage[2,i,j]:=pixb;
-             end else begin
-               xx:=fits.FFitsInfo.bzero+fits.FFitsInfo.bscale*fits.imai8[0,i,j];
-               x:=round(max(0,min(MaxWord,(xx-Fdmin) * c )) );
-               fits.Fimage[0,i,j]:=x;
-               if fits.n_axis=3 then begin
-                 inc(hist[x]);
-                 xx:=fits.FFitsInfo.bzero+fits.FFitsInfo.bscale*fits.imai8[1,i,j];
-                 x:=round(max(0,min(MaxWord,(xx-Fdmin) * c )) );
-                 fits.Fimage[1,i,j]:=x;
-                 inc(hist[x]);
-                 xx:=fits.FFitsInfo.bzero+fits.FFitsInfo.bscale*fits.imai8[2,i,j];
-                 x:=round(max(0,min(MaxWord,(xx-Fdmin) * c )) );
-                 fits.Fimage[2,i,j]:=x;
-               end;
-               inc(hist[x]);
-            end;
-           end;
-         end;
-         end;
-    16 : begin
-         for i:=startline to endline do begin
-          if debayer then begin
-           i1:=max(i-1,0);
-           i2:=i;
-           i3:= min(i+1,ys-1);
-          end;
-          for j := 0 to xs-1 do begin
-           if debayer then begin
-             j1:=max(j-1,0);
-             j2:=j;
-             j3:=min(j+1,xs-1);
-             pix1:=round( max(0,min(MaxWord,(fits.FFitsInfo.bzero+fits.FFitsInfo.bscale*fits.imai16[0,i1,j1]-Fdmin) * c )) );
-             pix2:=round( max(0,min(MaxWord,(fits.FFitsInfo.bzero+fits.FFitsInfo.bscale*fits.imai16[0,i1,j2]-Fdmin) * c )) );
-             pix3:=round( max(0,min(MaxWord,(fits.FFitsInfo.bzero+fits.FFitsInfo.bscale*fits.imai16[0,i1,j3]-Fdmin) * c )) );
-             pix4:=round( max(0,min(MaxWord,(fits.FFitsInfo.bzero+fits.FFitsInfo.bscale*fits.imai16[0,i2,j1]-Fdmin) * c )) );
-             pix5:=round( max(0,min(MaxWord,(fits.FFitsInfo.bzero+fits.FFitsInfo.bscale*fits.imai16[0,i2,j2]-Fdmin) * c )) );
-             pix6:=round( max(0,min(MaxWord,(fits.FFitsInfo.bzero+fits.FFitsInfo.bscale*fits.imai16[0,i2,j3]-Fdmin) * c )) );
-             pix7:=round( max(0,min(MaxWord,(fits.FFitsInfo.bzero+fits.FFitsInfo.bscale*fits.imai16[0,i3,j1]-Fdmin) * c )) );
-             pix8:=round( max(0,min(MaxWord,(fits.FFitsInfo.bzero+fits.FFitsInfo.bscale*fits.imai16[0,i3,j2]-Fdmin) * c )) );
-             pix9:=round( max(0,min(MaxWord,(fits.FFitsInfo.bzero+fits.FFitsInfo.bscale*fits.imai16[0,i3,j3]-Fdmin) * c )) );
-             fits.BayerInterpolation(t,rmult,gmult,bmult,rbg,gbg,bbg,pix1,pix2,pix3,pix4,pix5,pix6,pix7,pix8,pix9,i,j,pixr,pixg,pixb);
-             inc(hist[pixr]);
-             inc(hist[pixg]);
-             inc(hist[pixb]);
-             fits.Fimage[0,i,j]:=pixr;
-             fits.Fimage[1,i,j]:=pixg;
-             fits.Fimage[2,i,j]:=pixb;
-           end else begin
-             xx:=fits.FFitsInfo.bzero+fits.FFitsInfo.bscale*fits.imai16[0,i,j];
-             x:=round(max(0,min(MaxWord,(xx-Fdmin) * c )) );
-             fits.Fimage[0,i,j]:=x;
-             if fits.n_axis=3 then begin
-               inc(hist[x]);
-               xx:=fits.FFitsInfo.bzero+fits.FFitsInfo.bscale*fits.imai16[1,i,j];
-               x:=round(max(0,min(MaxWord,(xx-Fdmin) * c )) );
-               fits.Fimage[1,i,j]:=x;
-               inc(hist[x]);
-               xx:=fits.FFitsInfo.bzero+fits.FFitsInfo.bscale*fits.imai16[2,i,j];
-               x:=round(max(0,min(MaxWord,(xx-Fdmin) * c )) );
-               fits.Fimage[2,i,j]:=x;
-             end;
-             inc(hist[x]);
-           end;
-         end;
-         end;
-         end;
-    32 : begin
-         for i:=startline to endline do begin
-         for j := 0 to xs-1 do begin
-             xx:=fits.FFitsInfo.bzero+fits.FFitsInfo.bscale*fits.imai32[0,i,j];
-             x:=round(max(0,min(MaxWord,(xx-Fdmin) * c )) );
-             fits.Fimage[0,i,j]:=x;
-             if fits.n_axis=3 then begin
-               inc(hist[x]);
-               xx:=fits.FFitsInfo.bzero+fits.FFitsInfo.bscale*fits.imai32[1,i,j];
-               x:=round(max(0,min(MaxWord,(xx-Fdmin) * c )) );
-               fits.Fimage[1,i,j]:=x;
-               inc(hist[x]);
-               xx:=fits.FFitsInfo.bzero+fits.FFitsInfo.bscale*fits.imai32[2,i,j];
-               x:=round(max(0,min(MaxWord,(xx-Fdmin) * c )) );
-               fits.Fimage[2,i,j]:=x;
-             end;
-             inc(hist[x]);
-         end;
-         end;
-         end;
-    end;
-
+for i:=startline to endline do begin
+  if debayer then begin
+    i1:=max(i-1,0);
+    i2:=i;
+    i3:= min(i+1,ys-1);
+  end;
+  for j := 0 to xs-1 do begin
+   if debayer then begin
+     j1:=max(j-1,0);
+     j2:=j;
+     j3:=min(j+1,xs-1);
+     pix1:=round( max(0,min(MaxWord,(fits.Frawimage[0,i1,j1]-Fdmin) * c )) );
+     pix2:=round( max(0,min(MaxWord,(fits.Frawimage[0,i1,j2]-Fdmin) * c )) );
+     pix3:=round( max(0,min(MaxWord,(fits.Frawimage[0,i1,j3]-Fdmin) * c )) );
+     pix4:=round( max(0,min(MaxWord,(fits.Frawimage[0,i2,j1]-Fdmin) * c )) );
+     pix5:=round( max(0,min(MaxWord,(fits.Frawimage[0,i2,j2]-Fdmin) * c )) );
+     pix6:=round( max(0,min(MaxWord,(fits.Frawimage[0,i2,j3]-Fdmin) * c )) );
+     pix7:=round( max(0,min(MaxWord,(fits.Frawimage[0,i3,j1]-Fdmin) * c )) );
+     pix8:=round( max(0,min(MaxWord,(fits.Frawimage[0,i3,j2]-Fdmin) * c )) );
+     pix9:=round( max(0,min(MaxWord,(fits.Frawimage[0,i3,j3]-Fdmin) * c )) );
+     fits.BayerInterpolation(t,rmult,gmult,bmult,rbg,gbg,bbg,pix1,pix2,pix3,pix4,pix5,pix6,pix7,pix8,pix9,i,j,pixr,pixg,pixb);
+     inc(hist[pixr]);
+     inc(hist[pixg]);
+     inc(hist[pixb]);
+     fits.Fimage[0,i,j]:=pixr;
+     fits.Fimage[1,i,j]:=pixg;
+     fits.Fimage[2,i,j]:=pixb;
+   end else begin
+     xx:=fits.Frawimage[0,i,j];
+     x:=round(max(0,min(MaxWord,(xx-Fdmin) * c )) );
+     fits.Fimage[0,i,j]:=x;
+     if fits.n_axis=3 then begin
+       inc(hist[x]);
+       xx:=fits.Frawimage[1,i,j];
+       x:=round(max(0,min(MaxWord,(xx-Fdmin) * c )) );
+       fits.Fimage[1,i,j]:=x;
+       inc(hist[x]);
+       xx:=fits.Frawimage[2,i,j];
+       x:=round(max(0,min(MaxWord,(xx-Fdmin) * c )) );
+       fits.Fimage[2,i,j]:=x;
+     end;
+     inc(hist[x]);
+   end;
+  end;
+end;
 working := False;
 end;
 
@@ -1097,11 +977,7 @@ end;
 destructor  TFits.Destroy; 
 begin
 try
-setlength(imar64,0,0,0);
-setlength(imar32,0,0,0);
-setlength(imai8,0,0,0);
-setlength(imai16,0,0,0);
-setlength(imai32,0,0,0);
+setlength(Frawimage,0,0,0);
 setlength(Fimage,0,0,0);
 FHeader.Free;
 FStream.Free;
@@ -1123,12 +999,7 @@ procedure TFits.SetVideoStream(value:TMemoryStream);
 var buf: array[0..80] of char;
 begin
 FImageValid:=false;
-cur_axis:=1;
-setlength(imar64,0,0,0);
-setlength(imar32,0,0,0);
-setlength(imai8,0,0,0);
-setlength(imai16,0,0,0);
-setlength(imai32,0,0,0);
+setlength(Frawimage,0,0,0);
 setlength(Fimage,0,0,0);
 FStream.Clear;
 FStream.Position:=0;
@@ -1152,20 +1023,19 @@ end;
 procedure TFits.SetStream(value:TMemoryStream);
 begin
 try
+msg('setstream');
  FImageValid:=false;
  ClearFitsInfo;
- cur_axis:=1;
- setlength(imar64,0,0,0);
- setlength(imar32,0,0,0);
- setlength(imai8,0,0,0);
- setlength(imai16,0,0,0);
- setlength(imai32,0,0,0);
+ setlength(Frawimage,0,0,0);
  setlength(Fimage,0,0,0);
  FStream.Clear;
  FStream.Position:=0;
  value.Position:=0;
+ msg('setstream startcopy');
  FStream.CopyFrom(value,value.Size);
+ msg('setstream endcopy');
  Fhdr_end:=FHeader.ReadHeader(FStream);
+ msg('setstream endheader');
  FStreamValid:=true;
 except
  ClearFitsInfo;
@@ -1174,9 +1044,12 @@ end;
 
 Procedure TFits.LoadStream;
 begin
+msg('loadstream');
   GetFitsInfo;
   if FFitsInfo.valid then begin
+    msg('ReadFitsImage');
     ReadFitsImage;
+    msg('ReadFitsImage end');
   end;
 end;
 
@@ -1417,43 +1290,18 @@ FBPMProcess:=false;
 dmin:=1.0E100;
 dmax:=-1.0E100;
 sum:=0; sum2:=0; ni:=0;
-if n_axis=3 then cur_axis:=1
-else begin
-  cur_axis:=trunc(min(cur_axis,FFitsInfo.naxis3));
-  cur_axis:=trunc(max(cur_axis,1));
-end;
 if (FFitsInfo.naxis1>maxl)or(FFitsInfo.naxis2>maxl) then
   raise exception.Create(Format('Image too big! limit is currently %dx%d %sPlease open an issue to request an extension.',[maxl,maxl,crlf]));
 Fheight:=FFitsInfo.naxis2;
 Fwidth :=FFitsInfo.naxis1;
 FStream.Position:=0;
-case FFitsInfo.bitpix of
-  -64 : begin
-        setlength(imar64,n_axis,Fheight,Fwidth);
-        FStream.Seek(Fhdr_end+FFitsInfo.naxis2*FFitsInfo.naxis1*8*(cur_axis-1),soFromBeginning);
-        end;
-  -32 : begin
-        setlength(imar32,n_axis,Fheight,Fwidth);
-        FStream.Seek(Fhdr_end+FFitsInfo.naxis2*FFitsInfo.naxis1*4*(cur_axis-1),soFromBeginning);
-        end;
-    8 : begin
-        setlength(imai8,n_axis,Fheight,Fwidth);
-        FStream.Seek(Fhdr_end+FFitsInfo.naxis2*FFitsInfo.naxis1*(cur_axis-1),soFromBeginning);
-        end;
-   16 : begin
-        setlength(imai16,n_axis,Fheight,Fwidth);
-        FStream.Seek(Fhdr_end+FFitsInfo.naxis2*FFitsInfo.naxis1*2*(cur_axis-1),soFromBeginning);
-        end;
-   32 : begin
-        setlength(imai32,n_axis,Fheight,Fwidth);
-        FStream.Seek(Fhdr_end+FFitsInfo.naxis2*FFitsInfo.naxis1*4*(cur_axis-1),soFromBeginning);
-        end;
-end;
+setlength(Frawimage,n_axis,Fheight,Fwidth);
+FStream.Seek(Fhdr_end,soFromBeginning);
 npix:=0;
 b8:=round(FFitsInfo.blank);
 b16:=round(FFitsInfo.blank);
 case FFitsInfo.bitpix of
-    -64:for k:=cur_axis-1 to cur_axis+n_axis-2 do begin
+    -64:for k:=0 to n_axis-1 do begin
         for i:=0 to FFitsInfo.naxis2-1 do begin
          ii:=FFitsInfo.naxis2-1-i;
          for j := 0 to FFitsInfo.naxis1-1 do begin
@@ -1464,8 +1312,8 @@ case FFitsInfo.bitpix of
            inc(npix);
            x:=InvertF64(d64[npix]);
            if x=FFitsInfo.blank then x:=0;
-           imar64[k,ii,j] := x ;
            x:=FFitsInfo.bzero+FFitsInfo.bscale*x;
+           Frawimage[k,ii,j] := x ;
            dmin:=min(x,dmin);
            dmax:=max(x,dmax);
            sum:=sum+x;
@@ -1474,7 +1322,7 @@ case FFitsInfo.bitpix of
           end;
          end;
          end;
-    -32: for k:=cur_axis-1 to cur_axis+n_axis-2 do begin
+    -32: for k:=0 to n_axis-1 do begin
         for i:=0 to FFitsInfo.naxis2-1 do begin
          ii:=FFitsInfo.naxis2-1-i;
          for j := 0 to FFitsInfo.naxis1-1 do begin
@@ -1485,8 +1333,8 @@ case FFitsInfo.bitpix of
            inc(npix);
            x:=InvertF32(d32[npix]);
            if x=FFitsInfo.blank then x:=0;
-           imar32[k,ii,j] := x ;
            x:=FFitsInfo.bzero+FFitsInfo.bscale*x;
+           Frawimage[k,ii,j] := x ;
            dmin:=min(x,dmin);
            dmax:=max(x,dmax);
            sum:=sum+x;
@@ -1496,7 +1344,7 @@ case FFitsInfo.bitpix of
          end;
          end;
      8 : if colormode=1 then
-        for k:=cur_axis-1 to cur_axis+n_axis-2 do begin
+        for k:=0 to n_axis-1 do begin
         for i:=0 to FFitsInfo.naxis2-1 do begin
          ii:=FFitsInfo.naxis2-1-i;
          for j := 0 to FFitsInfo.naxis1-1 do begin
@@ -1507,8 +1355,9 @@ case FFitsInfo.bitpix of
            inc(npix);
            x8:=d8[npix];
            if x8=b8 then x8:=0;
-           imai8[k,ii,j] := x8;
+           Frawimage[k,ii,j] := x8;
            x:=FFitsInfo.bzero+FFitsInfo.bscale*x8;
+           Frawimage[k,ii,j] := x;
            dmin:=min(x,dmin);
            dmax:=max(x,dmax);
            sum:=sum+x;
@@ -1525,7 +1374,7 @@ case FFitsInfo.bitpix of
           for i:=0 to FFitsInfo.naxis2-1 do begin
            ii:=FFitsInfo.naxis2-1-i;
            for j := 0 to FFitsInfo.naxis1-1 do begin
-             for k:=cur_axis+n_axis-2 downto cur_axis-1 do begin
+             for k:=n_axis-1 downto 0 do begin
              if (npix mod 2880 = 0) then begin
                FStream.Read(d8,sizeof(d8));
                npix:=0;
@@ -1535,8 +1384,8 @@ case FFitsInfo.bitpix of
              if km<0 then continue; // skip A
              x8:=d8[npix];
              if x8=b8 then x8:=0;
-             imai8[km,ii,j] := x8;
              x:=FFitsInfo.bzero+FFitsInfo.bscale*x8;
+             Frawimage[km,ii,j] := x;
              dmin:=min(x,dmin);
              dmax:=max(x,dmax);
              sum:=sum+x;
@@ -1548,7 +1397,7 @@ case FFitsInfo.bitpix of
           if colormode=3 then n_axis:=3; // restore value
          end;
 
-     16 : for k:=cur_axis-1 to cur_axis+n_axis-2 do begin
+     16 : for k:=0 to n_axis-1 do begin
         for i:=0 to FFitsInfo.naxis2-1 do begin
          ii:=FFitsInfo.naxis2-1-i;
          for j := 0 to FFitsInfo.naxis1-1 do begin
@@ -1559,8 +1408,8 @@ case FFitsInfo.bitpix of
            inc(npix);
            x16:=BEtoN(d16[npix]);
            if x16=b16 then x16:=0;
-           imai16[k,ii,j] := x16;
            x:=FFitsInfo.bzero+FFitsInfo.bscale*x16;
+           Frawimage[k,ii,j] := x;
            dmin:=min(x,dmin);
            dmax:=max(x,dmax);
            sum:=sum+x;
@@ -1569,7 +1418,7 @@ case FFitsInfo.bitpix of
          end;
          end;
          end;
-     32 : for k:=cur_axis-1 to cur_axis+n_axis-2 do begin
+     32 : for k:=0 to n_axis-1 do begin
         for i:=0 to FFitsInfo.naxis2-1 do begin
          ii:=FFitsInfo.naxis2-1-i;
          for j := 0 to FFitsInfo.naxis1-1 do begin
@@ -1580,8 +1429,8 @@ case FFitsInfo.bitpix of
            inc(npix);
            x:=BEtoN(LongInt(d32[npix]));
            if x=FFitsInfo.blank then x:=0;
-           imai32[k,ii,j] := round(x);
            x:=FFitsInfo.bzero+FFitsInfo.bscale*x;
+           Frawimage[k,ii,j] := round(x);
            dmin:=min(x,dmin);
            dmax:=max(x,dmax);
            sum:=sum+x;
@@ -1614,6 +1463,7 @@ end;
 Procedure TFits.WriteFitsImage;
 var hdrmem: TMemoryStream;
     i,j,k,ii,npix: integer;
+    x:double;
     first:boolean;
 begin
   hdrmem:=FHeader.GetStream;
@@ -1627,7 +1477,7 @@ begin
   first:=true;
   case FFitsInfo.bitpix of
      8 : begin
-          for k:=cur_axis-1 to cur_axis+n_axis-2 do begin
+          for k:=0 to n_axis-1 do begin
           for i:=0 to FFitsInfo.naxis2-1 do begin
            ii:=FFitsInfo.naxis2-1-i;
            for j := 0 to FFitsInfo.naxis1-1 do begin
@@ -1638,14 +1488,15 @@ begin
                first:=false;
              end;
              inc(npix);
-             d8[npix]:=imai8[k,ii,j];
+             x:=max(min(round((Frawimage[k,ii,j]-FFitsInfo.bzero)/FFitsInfo.bscale),MAXBYTE),0);
+             d8[npix]:=byte(round(x));
            end;
            end;
            end;
            if npix>0 then  FStream.Write(d8,sizeof(d8));
            end;
      16 : begin
-          for k:=cur_axis-1 to cur_axis+n_axis-2 do begin
+          for k:=0 to n_axis-1 do begin
           for i:=0 to FFitsInfo.naxis2-1 do begin
            ii:=FFitsInfo.naxis2-1-i;
            for j := 0 to FFitsInfo.naxis1-1 do begin
@@ -1656,14 +1507,15 @@ begin
                first:=false;
              end;
              inc(npix);
-             d16[npix]:=NtoBE(imai16[k,ii,j]);
+             x:=max(min(round((Frawimage[k,ii,j]-FFitsInfo.bzero)/FFitsInfo.bscale),maxSmallint),-maxSmallint-1);
+             d16[npix]:=NtoBE(smallint(round(x)));
            end;
            end;
            end;
            if npix>0 then  FStream.Write(d16,sizeof(d16));
            end;
      32 : begin
-          for k:=cur_axis-1 to cur_axis+n_axis-2 do begin
+          for k:=0 to n_axis-1 do begin
           for i:=0 to FFitsInfo.naxis2-1 do begin
            ii:=FFitsInfo.naxis2-1-i;
            for j := 0 to FFitsInfo.naxis1-1 do begin
@@ -1674,7 +1526,8 @@ begin
                first:=false;
              end;
              inc(npix);
-             d32[npix]:=NtoBE(imai32[k,ii,j]);
+             x:= max(min(round((Frawimage[k,ii,j]-FFitsInfo.bzero)/FFitsInfo.bscale),maxLongint),-maxLongint-1);
+             d32[npix]:=NtoBE(Longword(round(x)));
            end;
            end;
            end;
@@ -1695,6 +1548,7 @@ var i,j: integer;
     t: TBayerMode;
     debayer: boolean;
 begin
+msg('getimage');
   if FImgFullRange and ((FFitsInfo.bitpix=16)or(FFitsInfo.bitpix=8)) then begin
     Fdmin:=0;
     if FFitsInfo.bitpix=8 then
@@ -1801,6 +1655,7 @@ begin
   end;
   // cleanup
   for i := 0 to tc - 1 do thread[i].Free;
+  msg('getimage end');
 end;
 
 procedure TFits.FreeDark;
@@ -1836,10 +1691,10 @@ if (FBPMcount>0)and(FBPMnax=FFitsInfo.naxis) then begin
     x:=Fbpm[i,1]-x0;
     y:=Fbpm[i,2]-y0;
     if (x>0)and(x<Fwidth-2)and(y>0)and(y<Fheight-2) then begin
-      image[0,y,x]:=(image[0,y-1,x]+image[0,y+1,x]+image[0,y,x-1]+image[0,y,x+1]) div 4;
+      image[0,y,x]:=(image[0,y-1,x]+image[0,y+1,x]+image[0,y,x-1]+image[0,y,x+1]) / 4;
       if n_axis=3 then begin
-        image[1,y,x]:=(image[1,y-1,x]+image[1,y+1,x]+image[1,y,x-1]+image[1,y,x+1]) div 4;
-        image[2,y,x]:=(image[2,y-1,x]+image[2,y+1,x]+image[2,y,x-1]+image[2,y,x+1]) div 4;
+        image[1,y,x]:=(image[1,y-1,x]+image[1,y+1,x]+image[1,y,x-1]+image[1,y,x+1]) / 4;
+        image[2,y,x]:=(image[2,y-1,x]+image[2,y+1,x]+image[2,y,x-1]+image[2,y,x+1]) / 4;
       end;
     end;
   end;
@@ -1933,10 +1788,7 @@ begin
    row:=subsample*i;
    for j:=0 to xs-1 do begin
      col:=subsample*j;
-     case FFitsInfo.bitpix of
-       8: pix:=round( max(0,min(MaxWord,FFitsInfo.bzero+FFitsInfo.bscale*imai8[0,subsample*i,subsample*j])) );
-      16: pix:=round( max(0,min(MaxWord,FFitsInfo.bzero+FFitsInfo.bscale*imai16[0,subsample*i,subsample*j])) );
-     end;
+     pix:=round( max(0,min(MaxWord,Frawimage[0,subsample*i,subsample*j])) );
      if pix<thr then begin
      if not odd(row) then begin //ligne paire
         if not odd(col) then begin //colonne paire et ligne paire
@@ -2218,16 +2070,12 @@ FImageValid:=false;
 Fheight:=0;
 Fwidth:=0;
 ClearFitsInfo;
-setlength(imar64,0,0,0);
-setlength(imar32,0,0,0);
-setlength(imai8,0,0,0);
-setlength(imai16,0,0,0);
-setlength(imai32,0,0,0);
+setlength(Frawimage,0,0,0);
 setlength(Fimage,0,0,0);
 FStream.Clear;
 end;
 
-procedure calculate_bg_sd(fimage: Timaw16; x,y,rs,wd :integer; var bg,sd : double);{calculate background and standard deviation for position x,y around box rs x rs. wd is the measuring range outside the box }
+procedure calculate_bg_sd(fimage: Timar32; x,y,rs,wd :integer; var bg,sd : double);{calculate background and standard deviation for position x,y around box rs x rs. wd is the measuring range outside the box }
 var
   iterations, counter,i,j : integer;
   sd_old,bg_average,val   : double;
@@ -2861,18 +2709,6 @@ procedure TFits.Bitpix8to16;
 var i,j,k,ii: integer;
     x: smallint;
 begin
- if FFitsInfo.bitpix = 8 then begin
-   setlength(imai16,n_axis,Fheight,Fwidth);
-   for k:=cur_axis-1 to cur_axis+n_axis-2 do begin
-     for i:=0 to FFitsInfo.naxis2-1 do begin
-      ii:=FFitsInfo.naxis2-1-i;
-      for j := 0 to FFitsInfo.naxis1-1 do begin
-        x:=-32767+imai8[k,ii,j];
-        imai16[k,ii,j]:=x;
-      end;
-     end;
-   end;
- end;
  FFitsInfo.bitpix:=16;
  FFitsInfo.bscale:=1;
  FFitsInfo.bzero:=32768;
@@ -2885,7 +2721,6 @@ begin
  i:=FHeader.Indexof('BZERO');
  if i>=0 then FHeader.Delete(i);
  FHeader.Insert(i,'BZERO',32768,'');
- setlength(imai8,0,0,0);
  WriteFitsImage;
 end;
 
@@ -2908,33 +2743,12 @@ begin
     dmax:=-1.0E100;
     sum:=0; sum2:=0; ni:=0;
     minoffset:=operand.FFitsInfo.dmin-FFitsInfo.dmin;
-    for k:=cur_axis-1 to cur_axis+n_axis-2 do begin
+    for k:=0 to n_axis-1 do begin
       for i:=0 to FFitsInfo.naxis2-1 do begin
        ii:=FFitsInfo.naxis2-1-i;
        for j := 0 to FFitsInfo.naxis1-1 do begin
-         case FFitsInfo.bitpix of
-          -64 : begin
-                x:=FFitsInfo.bzero+FFitsInfo.bscale*imar64[k,ii,j];
-                y:=operand.FFitsInfo.bzero+operand.FFitsInfo.bscale*operand.imar64[k,ii,j];
-                end;
-          -32 : begin
-                x:=FFitsInfo.bzero+FFitsInfo.bscale*imar32[k,ii,j];
-                y:=operand.FFitsInfo.bzero+operand.FFitsInfo.bscale*operand.imar32[k,ii,j];
-                end;
-            8 : begin
-                x:=FFitsInfo.bzero+FFitsInfo.bscale*imai8[k,ii,j];
-                y:=operand.FFitsInfo.bzero+operand.FFitsInfo.bscale*operand.imai8[k,ii,j];
-                end;
-           16 : begin
-                x:=FFitsInfo.bzero+FFitsInfo.bscale*imai16[k,ii,j];
-                y:=operand.FFitsInfo.bzero+operand.FFitsInfo.bscale*operand.imai16[k,ii,j];
-                end;
-           32 : begin
-                x:=FFitsInfo.bzero+FFitsInfo.bscale*imai32[k,ii,j];
-                y:=operand.FFitsInfo.bzero+operand.FFitsInfo.bscale*operand.imai32[k,ii,j];
-                end;
-           else begin x:=0; y:=0; end;
-         end;
+         x:=Frawimage[k,ii,j];
+         y:=operand.Frawimage[k,ii,j];
          case MathOperator of
            moAdd: x:=x+y;
            moSub: x:=x-y+minoffset;
@@ -2942,14 +2756,7 @@ begin
            moMult: x:=x*y;
            moDiv : x:=x/y;
          end;
-         x:=(x-FFitsInfo.bzero)/FFitsInfo.bscale;
-         case FFitsInfo.bitpix of
-          -64 : imar64[k,ii,j] := x;
-          -32 : imar32[k,ii,j] := x;
-            8 : begin x:=max(min(round(x),MAXBYTE),0); imai8[k,ii,j] := round(x); end;
-           16 : begin x:=max(min(round(x),maxSmallint),-maxSmallint-1);  imai16[k,ii,j] :=round(x); end;
-           32 : begin x:= max(min(round(x),maxLongint),-maxLongint-1); imai32[k,ii,j] := round(x); end;
-         end;
+         Frawimage[k,ii,j] := x;
          dmin:=min(x,dmin);
          dmax:=max(x,dmax);
          sum:=sum+x;
@@ -2959,10 +2766,8 @@ begin
       end;
     end;
     FStreamValid:=false;
-    dmin:=FFitsInfo.bzero+FFitsInfo.bscale*dmin;
-    dmax:=FFitsInfo.bzero+FFitsInfo.bscale*dmax;
-    Fmean:=FFitsInfo.bzero+FFitsInfo.bscale*(sum/ni);
-    Fsigma:=FFitsInfo.bscale*(sqrt((sum2/ni)-((sum/ni)*(sum/ni))));
+    Fmean:=(sum/ni);
+    Fsigma:=sqrt((sum2/ni)-((sum/ni)*(sum/ni)));
     if dmin>=dmax then dmax:=dmin+1;
     FFitsInfo.dmin:=dmin;
     FFitsInfo.dmax:=dmax;
@@ -2985,49 +2790,17 @@ begin
   imgshift.onMsg:=onMsg;
   imgshift.SetStream(FStream);
   imgshift.LoadStream;
-  for k:=cur_axis-1 to cur_axis+n_axis-2 do begin
+  for k:=0 to n_axis-1 do begin
     for i:=0 to FFitsInfo.naxis2-1 do begin
      ii:=FFitsInfo.naxis2-1-i;
      for j := 0 to FFitsInfo.naxis1-1 do begin
        x:=j-dx;
        y:=ii-dy;
        if (x>0)and(x<FFitsInfo.naxis1)and(y>0)and(y<FFitsInfo.naxis2) then begin
-         case FFitsInfo.bitpix of
-          -64 : begin
-                imgshift.imar64[k,ii,j]:=imar64[k,y,x];
-                end;
-          -32 : begin
-                imgshift.imar32[k,ii,j]:=imar32[k,y,x];
-                end;
-            8 : begin
-                imgshift.imai8[k,ii,j]:=imai8[k,y,x];
-                end;
-           16 : begin
-                imgshift.imai16[k,ii,j]:=imai16[k,y,x];
-                end;
-           32 : begin
-                imgshift.imai32[k,ii,j]:=imai32[k,y,x];
-                end;
-         end;
+         imgshift.Frawimage[k,ii,j]:=Frawimage[k,y,x];
        end
        else begin
-        case FFitsInfo.bitpix of
-         -64 : begin
-               imgshift.imar64[k,ii,j]:=-FFitsInfo.bzero;
-               end;
-         -32 : begin
-               imgshift.imar32[k,ii,j]:=-FFitsInfo.bzero;
-               end;
-           8 : begin
-               imgshift.imai8[k,ii,j]:=0;
-               end;
-          16 : begin
-               imgshift.imai16[k,ii,j]:=-maxSmallint;
-               end;
-          32 : begin
-               imgshift.imai32[k,ii,j]:=-maxLongint;
-               end;
-        end;
+        imgshift.Frawimage[k,ii,j]:=0;
        end;
      end;
     end;

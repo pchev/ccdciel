@@ -26,7 +26,7 @@ uses
   Classes, SysUtils;
 
 type
-  image_array = array of array of array of word;
+  image_array = array of array of array of single;
 
 function image_sharpness(img: image_array): double;{measure the sharpeness of an image. Result is reversed and scaled to be roughly identical to a HFD measurment. So value decreases with sharpness}
 
