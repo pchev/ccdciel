@@ -120,7 +120,7 @@ type
     // Fimage scaling factor
     FimageC, FimageMin,FimageMax : double;
     FimageScaled: boolean;
-    FDebayer : boolean;
+    FimageDebayer : boolean;
     // Histogram of Fimage
     FHistogram: THistogram;
     // Fits header
@@ -132,9 +132,9 @@ type
     //
     n_axis,Fwidth,Fheight,Fhdr_end,colormode,Fpreview_axis : Integer;
     FTitle : string;
-    Fmean,Fsigma,Fdmin,Fdmax : double;
-    FImgDmin, FImgDmax: Word;
-    FImgFullRange,FStreamValid,FImageValid: Boolean;
+    Fmean,Fsigma : double;
+    FVisuMin, FVisuMax: Word;
+    FStreamValid,FImageValid: Boolean;
     Fbpm: TBpm;
     FBPMcount,FBPMnx,FBPMny,FBPMnax: integer;
     gamma_c : array[0..32768] of single; {prepared power values for gamma correction}
@@ -155,7 +155,6 @@ type
     Procedure ReadFitsImage;
     Procedure WriteFitsImage;
     function GammaCorr(value: Word):byte;
-    procedure SetImgFullRange(value: boolean);
     function GetHasBPM: boolean;
     procedure SetGamma(value: single);
     function GetBayerMode: TBayerMode;
@@ -202,8 +201,8 @@ type
      Property Stream : TMemoryStream read GetStream write SetStream;
      Property VideoStream : TMemoryStream write SetVideoStream;
      property Histogram : THistogram read FHistogram;
-     property ImgDmin : Word read FImgDmin write FImgDmin;
-     property ImgDmax : Word read FImgDmax write FImgDmax;
+     property VisuMin : Word read FVisuMin write FVisuMin;
+     property VisuMax : Word read FVisuMax write FVisuMax;
      property Gamma: single read FGamma write SetGamma;
      property ImageValid: boolean read FImageValid;
      property image : Timafloat read Fimage;
@@ -214,7 +213,6 @@ type
      property imageMean: double read Fmean;
      property imageSigma: double read Fsigma;
      property preview_axis: integer read Fpreview_axis;
-     property ImgFullRange: Boolean read FImgFullRange write SetImgFullRange;
      property MaxADU: double read FMaxADU write FMaxADU;
      property Invert: boolean read FInvert write FInvert;
      property MarkOverflow: boolean read FMarkOverflow write FMarkOverflow;
@@ -251,7 +249,7 @@ type
       bgra: TBGRABitmap;
       HighOverflow,LowOverflow: TBGRAPixel;
       c,overflow,underflow: double;
-      FImgDmin: word;
+      vmin: word;
       procedure Execute; override;
       constructor Create(CreateSuspended: boolean);
     end;
@@ -755,13 +753,13 @@ for i:=startline to endline do begin
        if fits.preview_axis=3 then begin
          // 3 chanel color image
          xx:=fits.Fimage[0,i,j];
-         x:=round(max(0,min(MaxWord,(xx-FImgDmin) * c )) );
+         x:=round(max(0,min(MaxWord,(xx-vmin) * c )) );
          p^.red:=fits.GammaCorr(x);
          xxg:=fits.Fimage[1,i,j];
-         x:=round(max(0,min(MaxWord,(xxg-FImgDmin) * c )) );
+         x:=round(max(0,min(MaxWord,(xxg-vmin) * c )) );
          p^.green:=fits.GammaCorr(x);
          xxb:=fits.Fimage[2,i,j];
-         x:=round(max(0,min(MaxWord,(xxb-FImgDmin) * c )) );
+         x:=round(max(0,min(MaxWord,(xxb-vmin) * c )) );
          p^.blue:=fits.GammaCorr(x);
          if fits.MarkOverflow then begin
            if maxvalue([xx,xxg,xxb])>=overflow then
@@ -772,7 +770,7 @@ for i:=startline to endline do begin
        end else begin
            // B/W image
            xx:=fits.Fimage[0,i,j];
-           x:=round(max(0,min(MaxWord,(xx-FImgDmin) * c )) );
+           x:=round(max(0,min(MaxWord,(xx-vmin) * c )) );
            p^.red:=fits.GammaCorr(x);
            p^.green:=p^.red;
            p^.blue:=p^.red;
@@ -923,13 +921,12 @@ begin
 inherited Create(AOwner);
 Fheight:=0;
 Fwidth:=0;
-ImgDmin:=0;
+FVisuMin:=0;
+FVisuMax:=MaxWord;
 FBPMcount:=0;
 FBPMProcess:=false;
 FDarkProcess:=false;
 FDarkOn:=false;
-ImgDmax:=MaxWord;
-FImgFullRange:=false;
 FStreamValid:=false;
 FImageValid:=false;
 FMarkOverflow:=false;
@@ -1419,42 +1416,41 @@ Fmean:=sum/ni;
 Fsigma:=sqrt( (sum2/ni)-(Fmean*Fmean) );
 if dmin>=dmax then begin
    if dmin=0 then
-     dmax:=dmin+1
+     dmax:=dmin+1  // black if all 0
    else
-     dmin:=dmax-1;
+     dmin:=dmax-1; // white if all same value
 end;
-if (FFitsInfo.dmin=0)and(FFitsInfo.dmax=0) then begin
+if (FFitsInfo.dmin=0)and(FFitsInfo.dmax=0) then begin  // do not replace existing header data range
   FFitsInfo.dmin:=dmin;
   FFitsInfo.dmax:=dmax;
 end;
 SetLength(FStarList,0); {reset object list}
 {$ifdef debug_raw}writeln(FormatDateTime(dateiso,Now)+blank+'GetImage');{$endif}
-if FImgFullRange and ((FFitsInfo.bitpix=16)or(FFitsInfo.bitpix=8)) then begin
-  Fdmin:=0;
+// do not scale 8 or 16 bit images
+FimageScaled:=(FFitsInfo.bscale<>1)or((FFitsInfo.bitpix<>16)and(FFitsInfo.bitpix<>8));
+if FimageScaled then begin
+  FimageMin:=FFitsInfo.dmin;
+  FimageMax:=FFitsInfo.dmax;
+end
+else begin
+  FimageMin:=0;
   if FFitsInfo.bitpix=8 then
-    Fdmax:=MaxByte
+    FimageMax:=MaxByte
   else
-    Fdmax:=MaxWord;
-end else begin
-  Fdmin:=FFitsInfo.dmin;
-  Fdmax:=FFitsInfo.dmax;
+    FimageMax:=MaxWord;
 end;
-if Fdmax>Fdmin then
-  FimageC:=MaxWord/(Fdmax-Fdmin)
+if FimageMax>FimageMin then
+  FimageC:=MaxWord/(FimageMax-FimageMin)
 else
   FimageC:=1;
-FimageMin:=Fdmin;
-FimageMax:=Fdmax;
-FimageScaled:=false;
 if FimageMin<0 then FimageMin:=0;
 fpreview_axis:=FFitsInfo.naxis;
-FDebayer:=BayerColor and (not FDisableBayer) and (GetBayerMode<>bayerUnsupported) and ((FFitsInfo.bitpix=16)or(FFitsInfo.bitpix=8)) and (FFitsInfo.bscale=1);
-if FDebayer then begin
+FimageDebayer:=BayerColor and (not FDisableBayer) and (GetBayerMode<>bayerUnsupported) and (not FimageScaled);
+if FimageDebayer then begin
    Debayer;
 end
 else begin
-  if (FFitsInfo.bscale<>1)or((FFitsInfo.bitpix<>16)and(FFitsInfo.bitpix<>8)) then begin
-    FimageScaled:=true;
+  if FimageScaled then begin
     for i:=0 to high(word) do FHistogram[i]:=1;
     for k:=0 to n_axis-1 do begin
        for i:=0 to FFitsInfo.naxis2-1 do begin
@@ -1685,7 +1681,7 @@ if (FBPMcount>0)and(FBPMnax=FFitsInfo.naxis) then begin
   end;
   FBPMProcess:=true;
   FHeader.Insert( FHeader.Indexof('END'),'COMMENT','Corrected with Bap Pixel Map','');
-  if FDebayer then Debayer;
+  if FimageDebayer then Debayer;
 end;
 end;
 
@@ -1705,12 +1701,6 @@ end;
 function TFits.GetHasBPM: boolean;
 begin
   result:=FBPMcount>0;
-end;
-
-procedure TFits.SetImgFullRange(value: boolean);
-begin
-  FImgFullRange:=value;
-  if (Fheight>0)and(Fwidth>0) then ReadFitsImage;
 end;
 
 function TFits.GammaCorr(value: Word):byte;
@@ -1996,8 +1986,8 @@ begin
   overflow:=(FOverflow-FimageMin)*FimageC;
   underflow:=(FUnderflow-FimageMin)*FimageC;
   bgra.SetSize(Fwidth,Fheight);
-  if FImgDmin>=FImgDmax then FImgDmax:=FImgDmin+1;
-  c:=MaxWord/(FImgDmax-FImgDmin);
+  if FVisumin>=FVisuMax then FVisuMax:=FVisumin+1;
+  c:=MaxWord/(FVisuMax-FVisumin);
   thread[0]:=nil;
   // number of thread
    tc := max(1,min(16, MaxThreadCount)); // based on number of core
@@ -2014,7 +2004,7 @@ begin
     thread[i].overflow := overflow;
     thread[i].underflow := underflow;
     thread[i].bgra := bgra;
-    thread[i].FImgDmin := FImgDmin;
+    thread[i].vmin := FVisuMin;
     thread[i].c := c;
     thread[i].Start;
   end;
@@ -2750,7 +2740,7 @@ begin
     if dmin>=dmax then dmax:=dmin+1;
     FFitsInfo.dmin:=dmin;
     FFitsInfo.dmax:=dmax;
-    if FDebayer then Debayer;
+    if FimageDebayer then Debayer;
  end;
 end;
 

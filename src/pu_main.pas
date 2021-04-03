@@ -2083,7 +2083,6 @@ begin
   f_visu.FlipHorz:=config.GetValue('/Visu/FlipHorz',false);
   f_visu.FlipVert:=config.GetValue('/Visu/FlipVert',false);
   f_visu.BtnFullrange.Down:=config.GetValue('/Visu/Fullrange',false);
-  fits.ImgFullRange:=f_visu.BtnFullrange.Down;
 
   LogLevel:=config.GetValue('/Log/LogLevel',LogLevel);
   TabMsgLevel.TabIndex:=LogLevel-1;
@@ -8792,7 +8791,6 @@ end;
 
 procedure Tf_main.ShowFullRange(Sender: TObject);
 begin
- fits.ImgFullRange:=f_visu.BtnFullrange.Down;
  DrawHistogram(true,true);
  DrawImage;
  Image1.Invalidate;
@@ -9314,8 +9312,8 @@ if fits.HeaderInfo.naxis>0 then begin
   if WaitCursor then screen.Cursor:=crHourGlass;
   trpOK:=false;
   fits.Gamma:=f_visu.Gamma.Value;
-  fits.ImgDmax:=round(f_visu.ImgMax);
-  fits.ImgDmin:=round(f_visu.ImgMin);
+  fits.VisuMax:=round(f_visu.ImgMax);
+  fits.VisuMin:=round(f_visu.ImgMin);
   fits.MaxADU:=MaxADU;
   fits.Overflow:= 0.9995*ClippingOverflow;
   fits.Underflow:=ClippingUnderflow;
@@ -9987,8 +9985,8 @@ if refmask then begin
   f.LoadStream;
   if f.HeaderInfo.naxis>0 then begin
     f.Gamma:=f_visu.Gamma.Value;
-    f.ImgDmax:=round(f_visu.ImgMax);
-    f.ImgDmin:=round(f_visu.ImgMin);
+    f.VisuMax:=round(f_visu.ImgMax);
+    f.VisuMin:=round(f_visu.ImgMin);
     f.GetBGRABitmap(refbmp);
     p:=refbmp.data;
     for i:=0 to refbmp.NbPixels-1 do begin
