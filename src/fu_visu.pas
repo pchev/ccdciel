@@ -106,6 +106,7 @@ type
     function  GetFlipHorz: boolean;
     function  GetFlipVert: boolean;
     procedure SetLimit(SetLevel:boolean);
+    procedure PlotHistogram;
   public
     { public declarations }
     constructor Create(aOwner: TComponent); override;
@@ -264,27 +265,15 @@ begin
 end;
 
 procedure Tf_visu.DrawHistogram(f: TFits; SetLevel,ResetCursor: boolean);
-var i,j,h,hd2,l: integer;
-    hc: integer;
-    sh: double;
-    iC: double;
-    iMin,iMax: integer;
-    isFloatingPoint: boolean;
+var i: integer;
 begin
 try
 LockSpinEdit:=true;
 if ResetCursor then HistogramAdjusted:=false;
-isFloatingPoint:=f.HeaderInfo.floatingpoint;
+FisFloatingPoint:=f.HeaderInfo.floatingpoint;
 FimageC:=f.imageC;
-if BtnFullrange.Down then begin
-  FimageMin:=f.imageMin;
-  FimageMax:=f.imageMax;
-end
-else begin
-  FimageMin:=f.HeaderInfo.dmin;
-  FimageMax:=f.HeaderInfo.dmax;
-end;
-FisFloatingPoint:=isFloatingPoint;
+FimageMin:=f.imageMin;
+FimageMax:=f.imageMax;
 Fmaxh:=0;
 Fsum:=0;
 for i:=0 to high(word) do begin
@@ -299,7 +288,18 @@ if Fmaxh=0 then exit;
 if Fmaxp>(high(word) div 10) then Fmaxp:=0; // peak is probably not sky background
 
 SetLimit(SetLevel);
+PlotHistogram;
 
+finally
+  LockSpinEdit:=false;
+end;
+end;
+
+procedure Tf_visu.PlotHistogram;
+var i,j,h,hd2,l: integer;
+    hc: integer;
+    sh: double;
+begin
 Histogram.Picture.Bitmap.Width:=Histogram.Width;
 Histogram.Picture.Bitmap.Height:=Histogram.Height;
 with Histogram.Picture.Bitmap do begin
@@ -334,9 +334,7 @@ with Histogram.Picture.Bitmap do begin
   Canvas.Line(i,0,i,Height);
   Finitialized:=true;
 end;
-finally
-  LockSpinEdit:=false;
-end;
+
 end;
 
 procedure Tf_visu.FrameEndDrag(Sender, Target: TObject; X, Y: Integer);
@@ -464,7 +462,8 @@ end;
 
 procedure Tf_visu.BtnFullrangeClick(Sender: TObject);
 begin
-  if assigned(FShowFullRange) then FShowFullRange(self);
+  //if assigned(FShowFullRange) then FShowFullRange(self);
+  PlotHistogram;
 end;
 
 procedure Tf_visu.BtnInvertClick(Sender: TObject);

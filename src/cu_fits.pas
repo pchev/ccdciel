@@ -1986,7 +1986,12 @@ begin
   overflow:=(FOverflow-FimageMin)*FimageC;
   underflow:=(FUnderflow-FimageMin)*FimageC;
   bgra.SetSize(Fwidth,Fheight);
-  if FVisumin>=FVisuMax then FVisuMax:=FVisumin+1;
+  if FVisumin>=FVisuMax then begin
+    if FVisuMin=0 then
+      FVisuMax:=FVisuMin+1
+    else
+      FVisuMin:=FVisuMax-1
+  end;
   c:=MaxWord/(FVisuMax-FVisumin);
   thread[0]:=nil;
   // number of thread
