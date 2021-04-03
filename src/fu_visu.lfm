@@ -20,8 +20,8 @@ object f_visu: Tf_visu
     AutoSize = True
     ChildSizing.Layout = cclLeftToRightThenTopToBottom
     ChildSizing.ControlsPerLine = 99
-    ClientHeight = 93
-    ClientWidth = 405
+    ClientHeight = 89
+    ClientWidth = 401
     ParentFont = False
     TabOrder = 0
     object Panel3: TPanel
@@ -30,8 +30,8 @@ object f_visu: Tf_visu
       Top = 0
       Width = 259
       BevelOuter = bvNone
-      ClientHeight = 90
-      ClientWidth = 259
+      ClientHeight = 86
+      ClientWidth = 255
       Color = clBlack
       Constraints.MaxWidth = 259
       Constraints.MinWidth = 259
@@ -49,6 +49,63 @@ object f_visu: Tf_visu
         OnMouseDown = HistogramMouseDown
         OnMouseMove = HistogramMouseMove
         OnMouseUp = HistogramMouseUp
+      end
+      object HistGraph: TChart
+        Left = 0
+        Height = 90
+        Top = 0
+        Width = 259
+        AllowZoom = False
+        AxisList = <        
+          item
+            Visible = False
+            Marks.LabelBrush.Style = bsClear
+            Minors = <>
+            Title.LabelFont.Orientation = 900
+            Title.LabelBrush.Style = bsClear
+          end        
+          item
+            Visible = False
+            Alignment = calBottom
+            Marks.LabelBrush.Style = bsClear
+            Minors = <>
+            Title.LabelBrush.Style = bsClear
+          end>
+        BackColor = clBlack
+        Foot.Brush.Color = clBtnFace
+        Foot.Font.Color = clBlue
+        MarginsExternal.Left = 0
+        MarginsExternal.Top = 0
+        MarginsExternal.Right = 0
+        MarginsExternal.Bottom = 0
+        Title.Brush.Color = clBtnFace
+        Title.Font.Color = clBlue
+        Title.Text.Strings = (
+          'TAChart'
+        )
+        Align = alClient
+        OnMouseDown = HistogramMouseDown
+        OnMouseMove = HistogramMouseMove
+        OnMouseUp = HistogramMouseUp
+        object HistGraphMinLine: TConstantLine
+          Legend.Visible = False
+          LineStyle = lsVertical
+          Pen.Color = clRed
+        end
+        object HistGraphMaxLine: TConstantLine
+          LineStyle = lsVertical
+          Pen.Color = clGreen
+          Position = 65535
+        end
+        object HistGraphAreaSeries1: TAreaSeries
+          Legend.Visible = False
+          AreaBrush.Color = clBlack
+          AreaContourPen.Color = clYellow
+          AreaContourPen.Mode = pmNop
+          AreaLinesPen.Color = clWhite
+          Stacked = False
+          UseZeroLevel = True
+        end
       end
       object SpinEditMin: TFloatSpinEdit
         Left = 0
@@ -87,8 +144,8 @@ object f_visu: Tf_visu
       Top = 0
       Width = 144
       BevelOuter = bvNone
-      ClientHeight = 90
-      ClientWidth = 144
+      ClientHeight = 86
+      ClientWidth = 140
       ParentFont = False
       TabOrder = 0
       object Panel4: TPanel
@@ -98,8 +155,8 @@ object f_visu: Tf_visu
         Width = 116
         Align = alClient
         BevelOuter = bvNone
-        ClientHeight = 90
-        ClientWidth = 116
+        ClientHeight = 86
+        ClientWidth = 112
         TabOrder = 0
         object Panel5: TPanel
           Left = 2
@@ -107,8 +164,8 @@ object f_visu: Tf_visu
           Top = 0
           Width = 114
           BevelOuter = bvNone
-          ClientHeight = 21
-          ClientWidth = 114
+          ClientHeight = 17
+          ClientWidth = 110
           TabOrder = 1
           object HistBar: TTrackBar
             AnchorSideTop.Control = Panel5
@@ -279,8 +336,8 @@ object f_visu: Tf_visu
         Width = 28
         Align = alRight
         BevelOuter = bvNone
-        ClientHeight = 90
-        ClientWidth = 28
+        ClientHeight = 86
+        ClientWidth = 24
         TabOrder = 1
         Visible = False
         object BtnShowImage: TSpeedButton

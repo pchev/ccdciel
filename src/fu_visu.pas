@@ -25,7 +25,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 interface
 
-uses Graphics, cu_fits, math, UScaleDPI, Classes, SysUtils, FileUtil, u_translation, u_hints,
+uses Graphics, cu_fits, math, UScaleDPI, Classes, SysUtils, FileUtil, TAGraph, TASeries, u_translation, u_hints,
   u_global, Forms, Controls, ExtCtrls, StdCtrls, Buttons, Spin, ComCtrls;
 
 type
@@ -41,7 +41,11 @@ type
     BtnShowImage: TSpeedButton;
     BtnZoom05: TSpeedButton;
     BtnBullsEye: TSpeedButton;
+    HistGraph: TChart;
+    HistGraphAreaSeries1: TAreaSeries;
     Gamma: TFloatSpinEdit;
+    HistGraphMaxLine: TConstantLine;
+    HistGraphMinLine: TConstantLine;
     Histogram: TImage;
     Panel1: TPanel;
     BtnZoomAdjust: TSpeedButton;
@@ -296,45 +300,29 @@ end;
 end;
 
 procedure Tf_visu.PlotHistogram;
-var i,j,h,hd2,l: integer;
-    hc: integer;
-    sh: double;
+var i,start,stop: integer;
 begin
-Histogram.Picture.Bitmap.Width:=Histogram.Width;
-Histogram.Picture.Bitmap.Height:=Histogram.Height;
-with Histogram.Picture.Bitmap do begin
-  Canvas.Brush.Color:=clBlack;
-  Canvas.Pen.Color:=clBlack;
-  Canvas.Pen.Mode:=pmCopy;
-  Canvas.FillRect(0,0,Width,Height);
-  sh:=height/ln(Fmaxh);
-  Canvas.Pen.Color:=clWhite;
-  hd2:=0;
-  for i:=0 to 255 do begin
-    hc:=1;
-    for j:=0 to 255 do
-       if Fhist[255*i+j]>hc then hc:=Fhist[255*i+j];
-    h:=trunc(ln(hc)*sh);
-    if (Histogram.Width=128) then begin
-      if ((i mod 2)=0) then begin
-        h:=(h+hd2) div 2;
-        l:=i div 2;
-        Canvas.Line(l,Height,l,Height-h);
-      end else begin
-        hd2:=h;
-      end;
-    end
-    else Canvas.Line(i,Height,i,Height-h);
-  end;
-  Canvas.Pen.Color:=clRed;
-  i:=round(ImgMin/255);
-  Canvas.Line(i,0,i,Height);
-  Canvas.Pen.Color:=clGreen;
-  i:=round(ImgMax/255-1);
-  Canvas.Line(i,0,i,Height);
-  Finitialized:=true;
+HistGraphAreaSeries1.Clear;
+start:=0;
+stop:=0;
+for i:=0 to high(word) do begin
+  if (start=0)and(Fhist[i]>0) then start:=i;
+  if (Fhist[i]>0) then stop:=i;
+  HistGraphAreaSeries1.Add(ln(Fhist[i]+1));
 end;
-
+HistGraphMinLine.Position:=FimgMin;
+HistGraphMaxLine.Position:=FimgMax;
+if BtnFullrange.Down then begin
+  HistGraph.Extent.XMin:=start;
+  HistGraph.Extent.XMax:=stop;
+  HistGraph.Extent.UseXMax:=true;
+  HistGraph.Extent.UseXMin:=true;
+end
+else begin
+  HistGraph.Extent.UseXMax:=false;
+  HistGraph.Extent.UseXMin:=false;
+end;
+Finitialized:=true;
 end;
 
 procedure Tf_visu.FrameEndDrag(Sender, Target: TObject; X, Y: Integer);
