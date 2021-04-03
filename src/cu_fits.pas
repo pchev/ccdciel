@@ -1100,7 +1100,7 @@ begin
     // mode, median
     median:=0; maxh:=0;  npx:=0; maxp:=0;
     for i:=0 to high(word) do begin
-      npx:=npx+FHistogram[i]-1;
+      npx:=npx+FHistogram[i];
       if (median=0) and (npx>sz2) then
           median:=i;
       if FHistogram[i]>maxh then begin
@@ -1261,7 +1261,7 @@ FStream.Position:=0;
 setlength(Frawimage,n_axis,Fheight,Fwidth);
 setlength(Fimage,n_axis,Fheight,Fwidth);
 FStream.Seek(Fhdr_end,soFromBeginning);
-for i:=0 to high(word) do FHistogram[i]:=1;
+FillByte(FHistogram,sizeof(THistogram),0);
 npix:=0;
 b8:=round(FFitsInfo.blank);
 b16:=round(FFitsInfo.blank);
@@ -1451,7 +1451,7 @@ if FimageDebayer then begin
 end
 else begin
   if FimageScaled then begin
-    for i:=0 to high(word) do FHistogram[i]:=1;
+    FillByte(FHistogram,sizeof(THistogram),0);
     for k:=0 to n_axis-1 do begin
        for i:=0 to FFitsInfo.naxis2-1 do begin
          for j := 0 to FFitsInfo.naxis1-1 do begin
@@ -1489,7 +1489,7 @@ begin
            for j := 0 to FFitsInfo.naxis1-1 do begin
              if (npix mod 1440 = 0) then begin
                if not first then FStream.Write(d8,sizeof(d8));
-               FillWord(d8,sizeof(d8),0);
+               FillByte(d8,sizeof(d8),0);
                npix:=0;
                first:=false;
              end;
@@ -1508,7 +1508,7 @@ begin
            for j := 0 to FFitsInfo.naxis1-1 do begin
              if (npix mod 1440 = 0) then begin
                if not first then FStream.Write(d16,sizeof(d16));
-               FillWord(d16,sizeof(d16),0);
+               FillByte(d16,sizeof(d16),0);
                npix:=0;
                first:=false;
              end;
@@ -1527,7 +1527,7 @@ begin
            for j := 0 to FFitsInfo.naxis1-1 do begin
              if (npix mod 1440 = 0) then begin
                if not first then FStream.Write(d32,sizeof(d32));
-               FillWord(d32,sizeof(d32),0);
+               FillByte(d32,sizeof(d32),0);
                npix:=0;
                first:=false;
              end;
@@ -1586,7 +1586,7 @@ begin
    end;
   end;
   setlength(Fimage,preview_axis,Fheight,Fwidth);
-  for i:=0 to high(word) do FHistogram[i]:=1; // minimum 1 to take the log
+  FillByte(FHistogram,sizeof(THistogram),0);
 
   if BGneutralization then begin
     GetBayerBgColor(t,rmult,gmult,bmult,rbg,gbg,bbg);
