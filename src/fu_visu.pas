@@ -301,7 +301,7 @@ with Histogram.Picture.Bitmap do begin
   Canvas.Pen.Color:=clWhite;
   hd2:=0;
   for i:=0 to 255 do begin
-    hc:=0;
+    hc:=1;
     for j:=0 to 255 do
        if Fhist[255*i+j]>hc then hc:=Fhist[255*i+j];
     h:=trunc(ln(hc)*sh);

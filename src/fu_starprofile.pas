@@ -490,9 +490,9 @@ if FValMax>0 then begin
   j:=trunc(FStarY);
   i0:=trunc(FStarX)-(s div 2);
   ProfileSource.Clear;
-  ProfileSource.Add(0,f.rawimage[0,j,i0]-bg);
+  ProfileSource.Add(0,f.image[0,j,i0]-bg);
   for i:=0 to s-1 do begin
-    ProfileSource.Add(i,f.rawimage[0,j,i0+i]-bg);
+    ProfileSource.Add(i,f.image[0,j,i0+i]-bg);
   end;
 end;
 except

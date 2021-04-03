@@ -9894,7 +9894,7 @@ begin
  if TMenuItem(Sender).Checked then begin
   BayerColor:=True;
   if fits.HeaderInfo.naxis>0 then begin
-    fits.GetImage;
+    fits.LoadStream;
     DrawHistogram(true,true);
     DrawImage;
     NewMessage(rsImageDebayer,1);
@@ -9903,7 +9903,7 @@ begin
  else begin
   BayerColor:=False;
   if fits.HeaderInfo.naxis>0 then begin
-    fits.GetImage;
+    fits.LoadStream;
     DrawHistogram(true,true);
     DrawImage;
     NewMessage(rsImageUnDebay,1);

@@ -441,38 +441,38 @@ object f_starprofile: Tf_starprofile
     end
   end
   object PtSourceComp: TListChartSource
-    left = 105
-    top = 264
+    Left = 105
+    Top = 264
   end
   object FitSourceComp: TListChartSource
-    left = 145
-    top = 264
+    Left = 145
+    Top = 264
   end
   object FitSourceMeasure: TListChartSource
-    left = 24
-    top = 264
+    Left = 24
+    Top = 264
   end
   object PtSourceMeasure: TListChartSource
-    left = 65
-    top = 264
+    Left = 65
+    Top = 264
   end
   object TimerHideGraph: TTimer
     Enabled = False
     Interval = 5000
     OnTimer = TimerHideGraphTimer
-    left = 24
-    top = 312
+    Left = 24
+    Top = 312
   end
   object ProfileSource: TListChartSource
-    left = 80
-    top = 32
+    Left = 80
+    Top = 32
   end
   object HistSourceHfd: TListChartSource
-    left = 32
-    top = 112
+    Left = 32
+    Top = 112
   end
   object HistSourceImax: TListChartSource
-    left = 112
-    top = 112
+    Left = 112
+    Top = 112
   end
 end

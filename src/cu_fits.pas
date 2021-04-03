@@ -119,6 +119,8 @@ type
     Fimage : Timafloat;
     // Fimage scaling factor
     FimageC, FimageMin,FimageMax : double;
+    FimageScaled: boolean;
+    FDebayer : boolean;
     // Histogram of Fimage
     FHistogram: THistogram;
     // Fits header
@@ -157,7 +159,7 @@ type
     function GetHasBPM: boolean;
     procedure SetGamma(value: single);
     function GetBayerMode: TBayerMode;
-    procedure GetBayerBgColor(t:TBayerMode; rmult,gmult,bmult:double; out r,g,b: integer);
+    procedure GetBayerBgColor(t:TBayerMode; rmult,gmult,bmult:double; out r,g,b: single);
   protected
     { Protected declarations }
   public
@@ -168,8 +170,8 @@ type
      Procedure LoadStream;
      procedure ClearFitsInfo;
      procedure GetFitsInfo;
-     procedure BayerInterpolation(t:TBayerMode; rmult,gmult,bmult:double; rbg,gbg,bbg:integer; pix1,pix2,pix3,pix4,pix5,pix6,pix7,pix8,pix9:word; row,col:integer; out pixr,pixg,pixb:word); inline;
-     Procedure GetImage;
+     procedure BayerInterpolation(t:TBayerMode; rmult,gmult,bmult:double; rbg,gbg,bbg:single; pix1,pix2,pix3,pix4,pix5,pix6,pix7,pix8,pix9:single; row,col:integer; out pixr,pixg,pixb:single); inline;
+     Procedure Debayer;
      procedure GetExpBitmap(var bgra: TExpandedBitmap);
      procedure GetBGRABitmap(var bgra: TBGRABitmap);
      procedure SaveToBitmap(fn: string);
@@ -228,16 +230,14 @@ type
      property onMsg: TNotifyMsg read FonMsg write FonMsg;
   end;
 
-  TGetImage = class(TThread)
+  TDebayerImage = class(TThread)
   public
     working: boolean;
     num, id: integer;
     fits: TFits;
     hist: THistogram;
-    Fdmin,c: double;
     rmult,gmult,bmult: double;
-    rbg,gbg,bbg: integer;
-    debayer: boolean;
+    rbg,gbg,bbg: single;
     t: TBayerMode;
     procedure Execute; override;
     constructor Create(CreateSuspended: boolean);
@@ -260,6 +260,7 @@ type
     public
       working: boolean;
       num, id: integer;
+      minv,c: double;
       fits: TFits;
       bgra: TExpandedBitmap;
       procedure Execute; override;
@@ -673,22 +674,20 @@ begin
   FComments.Delete(idx);
 end;
 
-//////////////////// TGetImage /////////////////////////
+//////////////////// TDebayerImage /////////////////////////
 
-constructor TGetImage.Create(CreateSuspended: boolean);
+constructor TDebayerImage.Create(CreateSuspended: boolean);
 begin
   FreeOnTerminate := False;
   inherited Create(CreateSuspended);
   working := True;
 end;
 
-procedure TGetImage.Execute;
+procedure TDebayerImage.Execute;
 var
   i, j, startline, endline, xs,ys: integer;
-  x : word;
-  xx: extended;
   i1,i2,i3,j1,j2,j3 : integer;
-  pix1,pix2,pix3,pix4,pix5,pix6,pix7,pix8,pix9,pixr,pixg,pixb:word;
+  pixr,pixg,pixb:single;
 begin
 xs:= fits.Fwidth;
 ys:= fits.FHeight;
@@ -701,48 +700,24 @@ else
 FillByte(hist,sizeof(THistogram),0);
 // process the rows range for this thread
 for i:=startline to endline do begin
-  if debayer then begin
-    i1:=max(i-1,0);
-    i2:=i;
-    i3:= min(i+1,ys-1);
-  end;
+  i1:=max(i-1,0);
+  i2:=i;
+  i3:= min(i+1,ys-1);
   for j := 0 to xs-1 do begin
-   if debayer then begin
      j1:=max(j-1,0);
      j2:=j;
      j3:=min(j+1,xs-1);
-     pix1:=round( max(0,min(MaxWord,(fits.Frawimage[0,i1,j1]-Fdmin) * c )) );
-     pix2:=round( max(0,min(MaxWord,(fits.Frawimage[0,i1,j2]-Fdmin) * c )) );
-     pix3:=round( max(0,min(MaxWord,(fits.Frawimage[0,i1,j3]-Fdmin) * c )) );
-     pix4:=round( max(0,min(MaxWord,(fits.Frawimage[0,i2,j1]-Fdmin) * c )) );
-     pix5:=round( max(0,min(MaxWord,(fits.Frawimage[0,i2,j2]-Fdmin) * c )) );
-     pix6:=round( max(0,min(MaxWord,(fits.Frawimage[0,i2,j3]-Fdmin) * c )) );
-     pix7:=round( max(0,min(MaxWord,(fits.Frawimage[0,i3,j1]-Fdmin) * c )) );
-     pix8:=round( max(0,min(MaxWord,(fits.Frawimage[0,i3,j2]-Fdmin) * c )) );
-     pix9:=round( max(0,min(MaxWord,(fits.Frawimage[0,i3,j3]-Fdmin) * c )) );
-     fits.BayerInterpolation(t,rmult,gmult,bmult,rbg,gbg,bbg,pix1,pix2,pix3,pix4,pix5,pix6,pix7,pix8,pix9,i,j,pixr,pixg,pixb);
-     inc(hist[pixr]);
-     inc(hist[pixg]);
-     inc(hist[pixb]);
+     fits.BayerInterpolation(t,rmult,gmult,bmult,rbg,gbg,bbg,
+          fits.Frawimage[0,i1,j1],fits.Frawimage[0,i1,j2],fits.Frawimage[0,i1,j3],
+          fits.Frawimage[0,i2,j1],fits.Frawimage[0,i2,j2],fits.Frawimage[0,i2,j3],
+          fits.Frawimage[0,i3,j1],fits.Frawimage[0,i3,j2],fits.Frawimage[0,i3,j3],
+          i,j,pixr,pixg,pixb);
+     inc(hist[round(pixr)]);
+     inc(hist[round(pixg)]);
+     inc(hist[round(pixb)]);
      fits.Fimage[0,i,j]:=pixr;
      fits.Fimage[1,i,j]:=pixg;
      fits.Fimage[2,i,j]:=pixb;
-   end else begin
-     xx:=fits.Frawimage[0,i,j];
-     x:=round(max(0,min(MaxWord,(xx-Fdmin) * c )) );
-     fits.Fimage[0,i,j]:=x;
-     if fits.n_axis=3 then begin
-       inc(hist[x]);
-       xx:=fits.Frawimage[1,i,j];
-       x:=round(max(0,min(MaxWord,(xx-Fdmin) * c )) );
-       fits.Fimage[1,i,j]:=x;
-       inc(hist[x]);
-       xx:=fits.Frawimage[2,i,j];
-       x:=round(max(0,min(MaxWord,(xx-Fdmin) * c )) );
-       fits.Fimage[2,i,j]:=x;
-     end;
-     inc(hist[x]);
-   end;
   end;
 end;
 working := False;
@@ -822,6 +797,8 @@ begin
   FreeOnTerminate := True;
   inherited Create(CreateSuspended);
   working := True;
+  minv:=0;
+  c:=1;
 end;
 
 procedure TGetExpThread.Execute;
@@ -846,18 +823,18 @@ for i:=startline to endline do begin
    for j := 0 to xs-1 do begin
        if fits.preview_axis=3 then begin
          // 3 chanel color image
-         xx:=fits.Frawimage[0,i,j];
+         xx:=(fits.Frawimage[0,i,j]-minv)*c;
          x:=round(max(0,min(MaxWord,xx)) );
          p^.red:=x;
-         xxg:=fits.Frawimage[1,i,j];
+         xxg:=(fits.Frawimage[1,i,j]-minv)*c;
          x:=round(max(0,min(MaxWord,xxg)) );
          p^.green:=x;
-         xxb:=fits.Frawimage[2,i,j];
+         xxb:=(fits.Frawimage[2,i,j]-minv)*c;
          x:=round(max(0,min(MaxWord,xxb)) );
          p^.blue:=x;
        end else begin
            // B/W image
-           xx:=fits.Frawimage[0,i,j];
+           xx:=(fits.Frawimage[0,i,j]-minv)*c;
            x:=round(max(0,min(MaxWord,xx)));
            p^.red:=x;
            p^.green:=x;
@@ -1285,7 +1262,9 @@ Fheight:=FFitsInfo.naxis2;
 Fwidth :=FFitsInfo.naxis1;
 FStream.Position:=0;
 setlength(Frawimage,n_axis,Fheight,Fwidth);
+setlength(Fimage,n_axis,Fheight,Fwidth);
 FStream.Seek(Fhdr_end,soFromBeginning);
+for i:=0 to high(word) do FHistogram[i]:=1;
 npix:=0;
 b8:=round(FFitsInfo.blank);
 b16:=round(FFitsInfo.blank);
@@ -1347,6 +1326,8 @@ case FFitsInfo.bitpix of
            Frawimage[k,ii,j] := x8;
            x:=FFitsInfo.bzero+FFitsInfo.bscale*x8;
            Frawimage[k,ii,j] := x;
+           Fimage[k,ii,j] := x;
+           inc(FHistogram[round(max(0,min(maxword,x)))]);
            dmin:=min(x,dmin);
            dmax:=max(x,dmax);
            sum:=sum+x;
@@ -1375,6 +1356,8 @@ case FFitsInfo.bitpix of
              if x8=b8 then x8:=0;
              x:=FFitsInfo.bzero+FFitsInfo.bscale*x8;
              Frawimage[km,ii,j] := x;
+             Fimage[km,ii,j] := x;
+             inc(FHistogram[round(max(0,min(maxword,x)))]);
              dmin:=min(x,dmin);
              dmax:=max(x,dmax);
              sum:=sum+x;
@@ -1399,6 +1382,8 @@ case FFitsInfo.bitpix of
            if x16=b16 then x16:=0;
            x:=FFitsInfo.bzero+FFitsInfo.bscale*x16;
            Frawimage[k,ii,j] := x;
+           Fimage[k,ii,j] := x;
+           inc(FHistogram[round(max(0,min(maxword,x)))]);
            dmin:=min(x,dmin);
            dmax:=max(x,dmax);
            sum:=sum+x;
@@ -1419,7 +1404,7 @@ case FFitsInfo.bitpix of
            x:=BEtoN(LongInt(d32[npix]));
            if x=FFitsInfo.blank then x:=0;
            x:=FFitsInfo.bzero+FFitsInfo.bscale*x;
-           Frawimage[k,ii,j] := round(x);
+           Frawimage[k,ii,j] := x;
            dmin:=min(x,dmin);
            dmax:=max(x,dmax);
            sum:=sum+x;
@@ -1444,7 +1429,43 @@ if (FFitsInfo.dmin=0)and(FFitsInfo.dmax=0) then begin
 end;
 SetLength(FStarList,0); {reset object list}
 {$ifdef debug_raw}writeln(FormatDateTime(dateiso,Now)+blank+'GetImage');{$endif}
-GetImage;
+if FImgFullRange and ((FFitsInfo.bitpix=16)or(FFitsInfo.bitpix=8)) then begin
+  Fdmin:=0;
+  if FFitsInfo.bitpix=8 then
+    Fdmax:=MaxByte
+  else
+    Fdmax:=MaxWord;
+end else begin
+  Fdmin:=FFitsInfo.dmin;
+  Fdmax:=FFitsInfo.dmax;
+end;
+if Fdmax>Fdmin then
+  FimageC:=MaxWord/(Fdmax-Fdmin)
+else
+  FimageC:=1;
+FimageMin:=Fdmin;
+FimageMax:=Fdmax;
+FimageScaled:=false;
+if FimageMin<0 then FimageMin:=0;
+fpreview_axis:=FFitsInfo.naxis;
+FDebayer:=BayerColor and (not FDisableBayer) and (GetBayerMode<>bayerUnsupported) and ((FFitsInfo.bitpix=16)or(FFitsInfo.bitpix=8)) and (FFitsInfo.bscale=1);
+if FDebayer then begin
+   Debayer;
+end
+else begin
+  if (FFitsInfo.bscale<>1)or((FFitsInfo.bitpix<>16)and(FFitsInfo.bitpix<>8)) then begin
+    FimageScaled:=true;
+    for i:=0 to high(word) do FHistogram[i]:=1;
+    for k:=0 to n_axis-1 do begin
+       for i:=0 to FFitsInfo.naxis2-1 do begin
+         for j := 0 to FFitsInfo.naxis1-1 do begin
+            Fimage[k,i,j]:=(Frawimage[k,i,j]-FimageMin)*FimageC;
+            inc(FHistogram[round(max(0,min(maxword,Fimage[k,i,j])))])
+         end;
+       end;
+    end;
+  end;
+end;
 {$ifdef debug_raw}writeln(FormatDateTime(dateiso,Now)+blank+'GetImage end');{$endif}
 FImageValid:=true;
 end;
@@ -1525,78 +1546,55 @@ begin
   end;
 end;
 
-procedure TFits.GetImage;
+procedure TFits.Debayer;
 var i,j: integer;
     c: double;
     working, timingout: boolean;
     timelimit: TDateTime;
-    thread: array[0..15] of TGetImage;
+    thread: array[0..15] of TDebayerImage;
     tc,timeout: integer;
     rmult,gmult,bmult,mx: double;
-    rbg,gbg,bbg,bgm,offsety: integer;
+    offsety: integer;
+    rbg,gbg,bbg,bgm: single;
     t: TBayerMode;
-    debayer: boolean;
 begin
-  if FImgFullRange and ((FFitsInfo.bitpix=16)or(FFitsInfo.bitpix=8)) then begin
-    Fdmin:=0;
-    if FFitsInfo.bitpix=8 then
-      Fdmax:=MaxByte
-    else
-      Fdmax:=MaxWord;
-  end else begin
-    Fdmin:=FFitsInfo.dmin;
-    Fdmax:=FFitsInfo.dmax;
-  end;
-  fpreview_axis:=FFitsInfo.naxis;
   t:=GetBayerMode;
-  debayer:=BayerColor and (not FDisableBayer) and (t<>bayerUnsupported) and ((FFitsInfo.bitpix=16)or(FFitsInfo.bitpix=8));
   rmult:=0; gmult:=0; bmult:=0; rbg:=0; gbg:=0; bbg:=0;
-  if debayer then begin
-     fpreview_axis:=3;
-     if (BalanceFromCamera)and(FFitsInfo.rmult>0)and(FFitsInfo.gmult>0)and(FFitsInfo.bmult>0) then begin
-       rmult:=FFitsInfo.rmult;
-       gmult:=FFitsInfo.gmult;
-       bmult:=FFitsInfo.bmult;
-     end else begin
-       mx:=minvalue([RedBalance,GreenBalance,BlueBalance]);
-       rmult:=RedBalance/mx;
-       gmult:=GreenBalance/mx;
-       bmult:=BlueBalance/mx;
-     end;
-     if ((FFitsInfo.bayeroffsetx mod 2) = 1) and (not odd(Fwidth)) then begin
-       case t of
-         bayerGR: t:=bayerRG;
-         bayerRG: t:=bayerGR;
-         bayerBG: t:=bayerGB;
-         bayerGB: t:=bayerBG;
-       end;
-     end;
-     offsety:=FFitsInfo.bayeroffsety;
-     if FFitsInfo.roworder<>bottomup then offsety:=(offsety+1) mod 2;
-     if ((offsety mod 2) = 1) and (not odd(Fheight)) then begin
-       case t of
-         bayerGR: t:=bayerBG;
-         bayerRG: t:=bayerGB;
-         bayerBG: t:=bayerGR;
-         bayerGB: t:=bayerRG;
-       end;
-     end;
+  fpreview_axis:=3;
+  if (BalanceFromCamera)and(FFitsInfo.rmult>0)and(FFitsInfo.gmult>0)and(FFitsInfo.bmult>0) then begin
+   rmult:=FFitsInfo.rmult;
+   gmult:=FFitsInfo.gmult;
+   bmult:=FFitsInfo.bmult;
+  end else begin
+   mx:=minvalue([RedBalance,GreenBalance,BlueBalance]);
+   rmult:=RedBalance/mx;
+   gmult:=GreenBalance/mx;
+   bmult:=BlueBalance/mx;
+  end;
+  if ((FFitsInfo.bayeroffsetx mod 2) = 1) and (not odd(Fwidth)) then begin
+   case t of
+     bayerGR: t:=bayerRG;
+     bayerRG: t:=bayerGR;
+     bayerBG: t:=bayerGB;
+     bayerGB: t:=bayerBG;
+   end;
+  end;
+  offsety:=FFitsInfo.bayeroffsety;
+  if FFitsInfo.roworder<>bottomup then offsety:=(offsety+1) mod 2;
+  if ((offsety mod 2) = 1) and (not odd(Fheight)) then begin
+   case t of
+     bayerGR: t:=bayerBG;
+     bayerRG: t:=bayerGB;
+     bayerBG: t:=bayerGR;
+     bayerGB: t:=bayerRG;
+   end;
   end;
   setlength(Fimage,preview_axis,Fheight,Fwidth);
   for i:=0 to high(word) do FHistogram[i]:=1; // minimum 1 to take the log
 
-  if Fdmax>Fdmin then
-    c:=MaxWord/(Fdmax-Fdmin)
-  else
-    c:=1;
-  FimageC:=c;
-  FimageMin:=Fdmin;
-  FimageMax:=Fdmax;
-  if FimageMin<0 then FimageMin:=0;
-
-  if debayer and BGneutralization then begin
+  if BGneutralization then begin
     GetBayerBgColor(t,rmult,gmult,bmult,rbg,gbg,bbg);
-    bgm:=MaxIntValue([rbg,gbg,bbg]);
+    bgm:=MaxValue([rbg,gbg,bbg]);
     rbg:=rbg-bgm;
     gbg:=gbg-bgm;
     bbg:=bbg-bgm;
@@ -1609,11 +1607,10 @@ begin
   // start thread
   for i := 0 to tc - 1 do
   begin
-    thread[i] := TGetImage.Create(True);
+    thread[i] := TDebayerImage.Create(True);
     thread[i].fits := self;
     thread[i].num := tc;
     thread[i].id := i;
-    thread[i].debayer := debayer;
     thread[i].rmult := rmult;
     thread[i].gmult := gmult;
     thread[i].bmult := bmult;
@@ -1621,8 +1618,6 @@ begin
     thread[i].gbg := gbg;
     thread[i].bbg := bbg;
     thread[i].t := t;
-    thread[i].c := c;
-    thread[i].Fdmin := Fdmin;
     thread[i].Start;
   end;
   // wait complete
@@ -1679,15 +1674,18 @@ if (FBPMcount>0)and(FBPMnax=FFitsInfo.naxis) then begin
     y:=Fbpm[i,2]-y0;
     if (x>0)and(x<Fwidth-2)and(y>0)and(y<Fheight-2) then begin
       Frawimage[0,y,x]:=(Frawimage[0,y-1,x]+Frawimage[0,y+1,x]+Frawimage[0,y,x-1]+Frawimage[0,y,x+1]) / 4;
+      Fimage[0,y,x]:=(Fimage[0,y-1,x]+Fimage[0,y+1,x]+Fimage[0,y,x-1]+Fimage[0,y,x+1]) / 4;
       if n_axis=3 then begin
         Frawimage[1,y,x]:=(Frawimage[1,y-1,x]+Frawimage[1,y+1,x]+Frawimage[1,y,x-1]+Frawimage[1,y,x+1]) / 4;
         Frawimage[2,y,x]:=(Frawimage[2,y-1,x]+Frawimage[2,y+1,x]+Frawimage[2,y,x-1]+Frawimage[2,y,x+1]) / 4;
+        Fimage[1,y,x]:=(Fimage[1,y-1,x]+Fimage[1,y+1,x]+Fimage[1,y,x-1]+Fimage[1,y,x+1]) / 4;
+        Fimage[2,y,x]:=(Fimage[2,y-1,x]+Fimage[2,y+1,x]+Fimage[2,y,x-1]+Fimage[2,y,x+1]) / 4;
       end;
     end;
   end;
   FBPMProcess:=true;
   FHeader.Insert( FHeader.Indexof('END'),'COMMENT','Corrected with Bap Pixel Map','');
-  GetImage;
+  if FDebayer then Debayer;
 end;
 end;
 
@@ -1712,7 +1710,7 @@ end;
 procedure TFits.SetImgFullRange(value: boolean);
 begin
   FImgFullRange:=value;
-  if (Fheight>0)and(Fwidth>0) then GetImage;
+  if (Fheight>0)and(Fwidth>0) then ReadFitsImage;
 end;
 
 function TFits.GammaCorr(value: Word):byte;
@@ -1757,7 +1755,7 @@ begin
   end;
 end;
 
-procedure TFits.GetBayerBgColor(t:TBayerMode; rmult,gmult,bmult:double; out r,g,b: integer);
+procedure TFits.GetBayerBgColor(t:TBayerMode; rmult,gmult,bmult:double; out r,g,b: single);
 var i,j,xs,ys,row,col,pix,thr: integer;
     sr,sg,sb: double;
     nr,ng,nb: integer;
@@ -1817,13 +1815,13 @@ begin
      end;
    end;
  end;
- if nr>0 then r:=round((sr/nr-FimageMin) * FimageC);
- if ng>0 then g:=round((sg/ng-FimageMin) * FimageC);
- if nb>0 then b:=round((sb/nb-FimageMin) * FimageC);
+ if nr>0 then r:=sr/nr;
+ if ng>0 then g:=sg/ng;
+ if nb>0 then b:=sb/nb;
 end;
 
-procedure TFits.BayerInterpolation(t:TBayerMode; rmult,gmult,bmult:double; rbg,gbg,bbg:integer; pix1,pix2,pix3,pix4,pix5,pix6,pix7,pix8,pix9:word; row,col:integer; out pixr,pixg,pixb:word); inline;
-var r,g,b: integer;
+procedure TFits.BayerInterpolation(t:TBayerMode; rmult,gmult,bmult:double; rbg,gbg,bbg:single; pix1,pix2,pix3,pix4,pix5,pix6,pix7,pix8,pix9:single; row,col:integer; out pixr,pixg,pixb:single); inline;
+var r,g,b: double;
 begin
    if not odd(row) then begin //ligne paire
       if not odd(col) then begin //colonne paire et ligne paire
@@ -1963,6 +1961,10 @@ begin
   thread[i].num := tc;
   thread[i].id := i;
   thread[i].bgra := bgra;
+  if FimageScaled then begin
+    thread[i].minv := FimageMin;
+    thread[i].c := FimageC;
+  end;
   thread[i].Start;
 end;
 // wait complete
@@ -2131,10 +2133,10 @@ begin
   if (x_trunc<=0) or (x_trunc>=(Fwidth-2)) or (y_trunc<=0) or (y_trunc>=(Fheight-2)) then exit;
   x_frac :=frac(x1);
   y_frac :=frac(y1);
-  result:= Frawimage[0,y_trunc ,x_trunc ] * (1-x_frac)*(1-y_frac);{pixel left top, 1}
-  result:=result + Frawimage[0,y_trunc ,x_trunc+1] * ( x_frac)*(1-y_frac);{pixel right top, 2}
-  result:=result + Frawimage[0,y_trunc+1,x_trunc ] * (1-x_frac)*( y_frac);{pixel left bottom, 3}
-  result:=result + Frawimage[0,y_trunc+1,x_trunc+1] * ( x_frac)*( y_frac);{pixel right bottom, 4}
+  result:= Fimage[0,y_trunc ,x_trunc ] * (1-x_frac)*(1-y_frac);{pixel left top, 1}
+  result:=result + Fimage[0,y_trunc ,x_trunc+1] * ( x_frac)*(1-y_frac);{pixel right top, 2}
+  result:=result + Fimage[0,y_trunc+1,x_trunc ] * (1-x_frac)*( y_frac);{pixel left bottom, 3}
+  result:=result + Fimage[0,y_trunc+1,x_trunc+1] * ( x_frac)*( y_frac);{pixel right bottom, 4}
   except
     on E: Exception do begin
         result:=0;
@@ -2149,7 +2151,7 @@ var SumVal,SumValX,SumValY,val,vmax,bg,sd, Xg, Yg: double;
 begin
 
   try
-    calculate_bg_sd(Frawimage,x,y,ri,4,bg,sd); {calculate background and standard deviation for position x,y around box 2rs x 2rs. }
+    calculate_bg_sd(Fimage,x,y,ri,4,bg,sd); {calculate background and standard deviation for position x,y around box 2rs x 2rs. }
 
     SumVal:=0;
     SumValX:=0;
@@ -2158,7 +2160,7 @@ begin
     for i:=-ri to ri do
       for j:=-ri to ri do
       begin
-        val:=Frawimage[0,y+j,x+i]-bg;
+        val:=Fimage[0,y+j,x+i]-bg;
         if val<0 then val:=0;
         if val>vmax then vmax:=val;
         SumVal:=SumVal+val;
@@ -2199,14 +2201,14 @@ begin
 
  try
    // average background
-  calculate_bg_sd(Frawimage,x,y,rs,wd {4},bg,sd); {calculate background and standard deviation for position x,y around box 2rs x 2rs. }
+  calculate_bg_sd(Fimage,x,y,rs,wd {4},bg,sd); {calculate background and standard deviation for position x,y around box 2rs x 2rs. }
 
  // try with double star exclusion
  for i:=-rs to rs do
    for j:=-rs to rs do begin
-     val:=(Frawimage[0,y+j-1 ,x+i-1]+Frawimage[0,y+j-1 ,x+i]+Frawimage[0,y+j-1 ,x+i+1]+
-           Frawimage[0,y+j ,x+i-1]+Frawimage[0,y+j ,x+i]+Frawimage[0,y+j ,x+i+1]+
-           Frawimage[0,y+j+1 ,x+i-1]+Frawimage[0,y+j+1 ,x+i]+Frawimage[0,y+j+1 ,x+i+1])/9;
+     val:=(Fimage[0,y+j-1 ,x+i-1]+Fimage[0,y+j-1 ,x+i]+Fimage[0,y+j-1 ,x+i+1]+
+           Fimage[0,y+j ,x+i-1]+Fimage[0,y+j ,x+i]+Fimage[0,y+j ,x+i+1]+
+           Fimage[0,y+j+1 ,x+i-1]+Fimage[0,y+j+1 ,x+i]+Fimage[0,y+j+1 ,x+i+1])/9;
 
      Val:=Val-bg;
      // huge performance improvement by checking only the pixels above the noise
@@ -2226,9 +2228,9 @@ begin
  if vmax=0 then
    for i:=-rs to rs do
      for j:=-rs to rs do begin
-       val:=(Frawimage[0,y+j-1 ,x+i-1]+Frawimage[0,y+j-1 ,x+i]+Frawimage[0,y+j-1 ,x+i+1]+
-             Frawimage[0,y+j ,x+i-1]+Frawimage[0,y+j ,x+i]+Frawimage[0,y+j ,x+i+1]+
-             Frawimage[0,y+j+1 ,x+i-1]+Frawimage[0,y+j+1 ,x+i]+Frawimage[0,y+j+1 ,x+i+1])/9;
+       val:=(Fimage[0,y+j-1 ,x+i-1]+Fimage[0,y+j-1 ,x+i]+Fimage[0,y+j-1 ,x+i+1]+
+             Fimage[0,y+j ,x+i-1]+Fimage[0,y+j ,x+i]+Fimage[0,y+j ,x+i+1]+
+             Fimage[0,y+j+1 ,x+i-1]+Fimage[0,y+j+1 ,x+i]+Fimage[0,y+j+1 ,x+i+1])/9;
 
        if Val>vmax then
        begin
@@ -2268,7 +2270,7 @@ begin
   if (y+s)>(Fheight-1) then y:=Fheight-s-1;
 
   try
-    calculate_bg_sd(Frawimage,x,y,rs,4,bg,sd); {calculate background and standard deviation for position x,y around box rs x rs. }
+    calculate_bg_sd(Fimage,x,y,rs,4,bg,sd); {calculate background and standard deviation for position x,y around box rs x rs. }
 
     // Get center of gravity whithin star detection box
     SumVal:=0;
@@ -2277,7 +2279,7 @@ begin
     vmax:=0;
     for i:=-rs to rs do
      for j:=-rs to rs do begin
-       val:=Frawimage[0,y+j,x+i]-bg;
+       val:=Fimage[0,y+j,x+i]-bg;
        if val>((3*sd)) then  {>3 * sd should be signal }
        begin
          if val>vmax then vmax:=val;
@@ -2304,7 +2306,7 @@ begin
 
    for i:=-rs to rs do begin
      for j:=-rs to rs do begin
-       val:=Frawimage[0,yc+j,xc+i]-bg;
+       val:=Fimage[0,yc+j,xc+i]-bg;
        if val>((3*sd)) then {>3 * sd should be signal }
        begin
          distance:=round((sqrt(1+ i*i + j*j )));{distance from gravity center }
@@ -2375,7 +2377,7 @@ begin
   if (y+s)>(Fheight-1-4) then y:=Fheight-s-1-4;
 
   try
-    calculate_bg_sd(Frawimage,x,y,rs,4,bg,sd); {calculate background and standard deviation for position x,y around box rs x rs. }
+    calculate_bg_sd(Fimage,x,y,rs,4,bg,sd); {calculate background and standard deviation for position x,y around box rs x rs. }
 
     repeat {## reduce box size till symmetry to remove stars}
       // Get center of gravity whithin star detection box and count signal pixels
@@ -2391,7 +2393,7 @@ begin
       for i:=-rs to rs do
       for j:=-rs to rs do
       begin
-        val:=Frawimage[0,y+j,x+i]-bg;
+        val:=Fimage[0,y+j,x+i]-bg;
         if val>(3.5)*sd then {just above noise level. }
         begin
           if val>=valsaturation then inc(saturated_counter);
@@ -2439,7 +2441,7 @@ begin
     if (not Undersampled) then   {check on single hot pixels}
     for i:=-1 to +1 do
       for j:=-1 to +1 do begin
-        val:=Frawimage[0,round(yc)+j,round(xc)+i]-bg; {no subpixel calculation here}
+        val:=Fimage[0,round(yc)+j,round(xc)+i]-bg; {no subpixel calculation here}
         if val>0.5*sumval then exit;
       end;
 
@@ -2733,6 +2735,7 @@ begin
            moDiv : x:=x/y;
          end;
          Frawimage[k,ii,j] := x;
+         Fimage[k,ii,j] := x;
          dmin:=min(x,dmin);
          dmax:=max(x,dmax);
          sum:=sum+x;
@@ -2747,7 +2750,7 @@ begin
     if dmin>=dmax then dmax:=dmin+1;
     FFitsInfo.dmin:=dmin;
     FFitsInfo.dmax:=dmax;
-    GetImage;
+    if FDebayer then Debayer;
  end;
 end;
 
@@ -2785,7 +2788,6 @@ begin
   m:=imgshift.Stream;
   SetStream(m);
   LoadStream;
-  GetImage;
   imgshift.Free;
   m.free;
 end;
