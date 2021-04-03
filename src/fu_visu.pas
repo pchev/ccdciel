@@ -111,7 +111,7 @@ type
     constructor Create(aOwner: TComponent); override;
     destructor  Destroy; override;
     procedure SetLang;
-    procedure DrawHistogram(hist:Thistogram; SetLevel,isFloatingPoint,ResetCursor: boolean; iC,iMin,iMax: double);
+    procedure DrawHistogram(f: TFits; SetLevel,ResetCursor: boolean);
     property Zoom: double read FZoom write SetZoom;
     property ImgMin: double read FimgMin write FimgMin;
     property ImgMax: double read FimgMax write FimgMax;
@@ -263,25 +263,35 @@ begin
   LockHistogram:=false;
 end;
 
-procedure Tf_visu.DrawHistogram(hist:Thistogram; SetLevel,isFloatingPoint,ResetCursor: boolean; iC,iMin,iMax: double);
+procedure Tf_visu.DrawHistogram(f: TFits; SetLevel,ResetCursor: boolean);
 var i,j,h,hd2,l: integer;
     hc: integer;
     sh: double;
+    iC: double;
+    iMin,iMax: integer;
+    isFloatingPoint: boolean;
 begin
 try
 LockSpinEdit:=true;
 if ResetCursor then HistogramAdjusted:=false;
-FimageC:=iC;
-FimageMin:=iMin;
-FimageMax:=iMax;
+isFloatingPoint:=f.HeaderInfo.floatingpoint;
+FimageC:=f.imageC;
+if BtnFullrange.Down then begin
+  FimageMin:=f.imageMin;
+  FimageMax:=f.imageMax;
+end
+else begin
+  FimageMin:=f.HeaderInfo.dmin;
+  FimageMax:=f.HeaderInfo.dmax;
+end;
 FisFloatingPoint:=isFloatingPoint;
 Fmaxh:=0;
 Fsum:=0;
 for i:=0 to high(word) do begin
-  Fhist[i]:=hist[i];
-  Fsum:=Fsum+hist[i];
-  if hist[i]>Fmaxh then begin
-      Fmaxh:=hist[i];
+  Fhist[i]:=f.Histogram[i];
+  Fsum:=Fsum+Fhist[i];
+  if Fhist[i]>Fmaxh then begin
+      Fmaxh:=Fhist[i];
       Fmaxp:=i;
   end;
 end;
