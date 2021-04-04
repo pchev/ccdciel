@@ -2060,55 +2060,37 @@ setlength(Fimage,0,0,0);
 FStream.Clear;
 end;
 
-procedure calculate_bg_sd(img: Timafloat; x,y,rs,wd :integer; var bg,sd : double);{calculate background and standard deviation for position x,y around box rs x rs. wd is the measuring range outside the box }
+procedure calculate_bg_sd(Fimage: Timafloat; x,y,rs,wd :integer; var bg,sd : double);{version 2021-03-26. calculate background and standard deviation for an annulus at position x,y with innner radius rs+1 and outer radius rs+1+wd. wd should be 1 or larger}
 var
-  iterations, counter,i,j : integer;
-  sd_old,bg_average,val   : double;
+  counter,i,j,r1_square,r2_square,r2,distance : integer;
+  mad_bg  : double;
+  background : array [0..1000] of double; {fixed size array for fast execution}
+
 begin
+  r1_square:=rs*rs;;{square radius}
+  r2:=rs+wd;{outer radius annulus}
+  r2_square:=r2*r2;
+
   sd:=99999999999;
   bg:=0;
-  iterations:=0;
   try
-    repeat {Sigma clipping, find background and sd value by repeat and exclude values above 3*sd}
-      counter:=0;
-      bg_average:=0;
-      for i:=-rs-wd to rs+wd do {calculate mean at square boundaries of detection box}
-      for j:=-rs-wd to rs+wd do
-      begin
-        if ( (abs(i)>rs) and (abs(j)>rs) ) then {measure only outside the box}
-        begin
-          val:=img[0,y+i,x+j];
-          if  ((iterations=0) or (abs(val-bg)<=3*sd)) then  {ignore extreme outliers after first run}
-          begin
-            bg_average:=bg_average+val;
-            inc(counter);
-          end;
-        end;
-      end;
-      bg:=bg_average/counter; {mean value background}
+  counter:=0;
+  for i:=-r2 to r2 do {calculate the mean outside the the detection area}
+  for j:=-r2 to r2 do
+  begin
+    distance:=i*i+j*j; {working with sqr(distance) is faster then applying sqrt}
+    if ((distance>r1_square) and (distance<=r2_square)) then {annulus, circular area outside rs, typical one pixel wide}
+    begin
+      background[counter]:=Fimage[0,y+i,x+j];
+      inc(counter);
+    end;
+  end;
 
-      counter:=0;
-      sd_old:=sd;
-      sd:=0;
-      for i:=-rs-wd to rs+wd do {calculate standard deviation background at the square boundaries of detection box}
-        for j:=-rs-wd to rs+wd do
-        begin
-          if ( (abs(i)>rs) and (abs(j)>rs) ) then {measure only outside the box}
-          begin
-              val:=img[0,y+i,x+j];
-              if val<=2*bg then {not an extreme outlier}
-              if ((iterations=0) or (abs(val-bg)<=3*sd_old)) then {ignore extreme outliers after first run}
-              begin
-                sd:=sd+sqr(val-bg);
-                inc(counter);
-              end;
-          end;
-      end;
-      sd:=sqrt(sd/(counter+0.0001)); {standard deviation in background}
-
-      inc(iterations);
-    until (((sd_old-sd)<0.1*sd) or (iterations>=3));{repeat until sd is stable or enough iterations}
-    sd:=max(sd,0.1); {prevent sd=0 for images with zero noise background. This will prevent that background is seen as a star.}
+  bg:=Smedian2(background,counter);
+  for i:=0 to counter-1 do background[i]:=abs(background[i] - bg);{fill background with offsets}
+  mad_bg:=Smedian2(background,counter); //median absolute deviation (MAD)
+  sd:=mad_bg*1.4826; {Conversion from mad to sd. See https://en.wikipedia.org/wiki/Median_absolute_deviation}
+  sd:=max(sd,0.1); {add some value for images with zero noise background. This will prevent that background is seen as a star. E.g. some jpg processed by nova.astrometry.net}
   except
     {should not happen, sd=99999999999}
   end;

@@ -144,6 +144,8 @@ procedure MountToLocal(mountjd:double; var ra, de: double);
 procedure LocalToMount(mountjd:double; var ra, de: double);
 procedure MountToJ2000(mountjd:double; var ra, de: double);
 procedure J2000ToMount(mountjd:double; var ra, de: double);
+procedure quicksort(var list: array of double; lo,hi: integer);
+function SMedian2(list: array of double; leng: integer): double;
 procedure Sort(var list: array of double);
 function SMedian(list: array of double): double;
 procedure SortFilterListInc(var list: TStringList);
@@ -2761,6 +2763,54 @@ begin
 
   end;
 
+end;
+
+procedure quicksort(var list: array of double; lo,hi: integer);{ Fast quick sort. Sorts elements in the array list with indices between lo and hi}
+  procedure sort ( left, right : integer); {processing takes place in the sort procedure which executes itself recursively.}
+  var
+    i, j       : integer;
+    tmp, pivot : double;    { tmp & pivot are the same type as the elements of array }
+  begin
+    i:=left;
+    j:=right;
+    pivot := list[(left + right) div 2];
+    repeat
+      while pivot > list[i] do inc(i);
+      while pivot < list[j] do dec(j);
+      if i<=j Then Begin
+        tmp:=list[i]; list[i]:=list[j]; list[j]:=tmp; {swap}
+        dec(j); inc(i);
+      end;
+    until i>j;
+    if left<j then sort(left,j);
+    if i<right then sort(i,right);
+  end;
+begin {quicksort};
+  sort(lo,hi);
+end;
+
+function SMedian2(list: array of double; leng: integer): double;{get median of an array of double. Taken from CCDciel code but slightly modified}
+var
+  mid : integer;
+begin
+ if leng=0 then result:=nan
+ else
+   if leng=1 then result:=list[0]
+   else
+   begin
+     quickSort(list,0,leng-1);
+     mid := (leng-1) div 2; //(high(list) - low(list)) div 2;
+     if Odd(leng) then
+     begin
+       if leng<=3 then  result:=list[mid]
+       else
+       begin
+         result:=(list[mid-1]+list[mid]+list[mid+1])/3;
+       end;
+     end
+     else
+     result:=(list[mid]+list[mid+1])/2;
+  end;
 end;
 
 procedure Sort(var list: array of double);
