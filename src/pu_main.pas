@@ -2080,7 +2080,7 @@ begin
   f_visu.HistBar.Position:=config.GetValue('/Visu/HistBar',50);
   f_visu.FlipHorz:=config.GetValue('/Visu/FlipHorz',false);
   f_visu.FlipVert:=config.GetValue('/Visu/FlipVert',false);
-  f_visu.BtnClipRange.Down:=config.GetValue('/Visu/ClipRange',true);
+  f_visu.BtnClipRange.Down:=config.GetValue('/Visu/ClipRange',false);
 
   LogLevel:=config.GetValue('/Log/LogLevel',LogLevel);
   TabMsgLevel.TabIndex:=LogLevel-1;
