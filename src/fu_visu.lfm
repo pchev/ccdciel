@@ -20,18 +20,18 @@ object f_visu: Tf_visu
     AutoSize = True
     ChildSizing.Layout = cclLeftToRightThenTopToBottom
     ChildSizing.ControlsPerLine = 99
-    ClientHeight = 89
-    ClientWidth = 401
+    ClientHeight = 93
+    ClientWidth = 405
     ParentFont = False
     TabOrder = 0
     object Panel3: TPanel
       Left = 0
-      Height = 90
+      Height = 89
       Top = 0
       Width = 259
       BevelOuter = bvNone
-      ClientHeight = 86
-      ClientWidth = 255
+      ClientHeight = 89
+      ClientWidth = 259
       Color = clBlack
       Constraints.MaxWidth = 259
       Constraints.MinWidth = 259
@@ -39,20 +39,9 @@ object f_visu: Tf_visu
       ParentColor = False
       ParentFont = False
       TabOrder = 1
-      object Histogram: TImage
-        Left = 0
-        Height = 90
-        Hint = 'Histogram of the current image.'#10'Click and move to adjust the visualisation threshold.'
-        Top = 0
-        Width = 259
-        Align = alClient
-        OnMouseDown = HistogramMouseDown
-        OnMouseMove = HistogramMouseMove
-        OnMouseUp = HistogramMouseUp
-      end
       object HistGraph: TChart
         Left = 0
-        Height = 90
+        Height = 89
         Top = 0
         Width = 259
         AllowZoom = False
@@ -140,23 +129,23 @@ object f_visu: Tf_visu
     end
     object Panel2: TPanel
       Left = 259
-      Height = 90
+      Height = 89
       Top = 0
       Width = 144
       BevelOuter = bvNone
-      ClientHeight = 86
-      ClientWidth = 140
+      ClientHeight = 89
+      ClientWidth = 144
       ParentFont = False
       TabOrder = 0
       object Panel4: TPanel
         Left = 0
-        Height = 90
+        Height = 89
         Top = 0
         Width = 116
         Align = alClient
         BevelOuter = bvNone
-        ClientHeight = 86
-        ClientWidth = 112
+        ClientHeight = 89
+        ClientWidth = 116
         TabOrder = 0
         object Panel5: TPanel
           Left = 2
@@ -164,8 +153,8 @@ object f_visu: Tf_visu
           Top = 0
           Width = 114
           BevelOuter = bvNone
-          ClientHeight = 17
-          ClientWidth = 110
+          ClientHeight = 21
+          ClientWidth = 114
           TabOrder = 1
           object HistBar: TTrackBar
             AnchorSideTop.Control = Panel5
@@ -316,28 +305,27 @@ object f_visu: Tf_visu
           OnClick = BtnFlipHorzClick
           ParentFont = False
         end
-        object BtnFullrange: TSpeedButton
+        object BtnClipRange: TSpeedButton
           Left = 59
           Height = 22
-          Hint = 'Full range histogram'
           Top = 22
           Width = 28
           AllowAllUp = True
           Color = clDefault
           GroupIndex = 110
-          OnClick = BtnFullrangeClick
+          OnClick = BtnClipRangeClick
           ParentFont = False
         end
       end
       object PanelNoDisplay: TPanel
         Left = 116
-        Height = 90
+        Height = 89
         Top = 0
         Width = 28
         Align = alRight
         BevelOuter = bvNone
-        ClientHeight = 86
-        ClientWidth = 24
+        ClientHeight = 89
+        ClientWidth = 28
         TabOrder = 1
         Visible = False
         object BtnShowImage: TSpeedButton

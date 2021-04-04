@@ -25,7 +25,8 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 interface
 
-uses Graphics, cu_fits, math, UScaleDPI, Classes, SysUtils, FileUtil, TAGraph, TASeries, u_translation, u_hints,
+uses Graphics, cu_fits, math, UScaleDPI, Classes, SysUtils, FileUtil, TAGraph,
+  TASeries, TAChartUtils, u_translation, u_hints, LCLType,
   u_global, Forms, Controls, ExtCtrls, StdCtrls, Buttons, Spin, ComCtrls;
 
 type
@@ -33,7 +34,7 @@ type
   { Tf_visu }
 
   Tf_visu = class(TFrame)
-    BtnFullrange: TSpeedButton;
+    BtnClipRange: TSpeedButton;
     BtnClipping: TSpeedButton;
     BtnInvert: TSpeedButton;
     BtnFlipHorz: TSpeedButton;
@@ -46,7 +47,6 @@ type
     Gamma: TFloatSpinEdit;
     HistGraphMaxLine: TConstantLine;
     HistGraphMinLine: TConstantLine;
-    Histogram: TImage;
     Panel1: TPanel;
     BtnZoomAdjust: TSpeedButton;
     Panel2: TPanel;
@@ -66,7 +66,7 @@ type
     procedure BtnClippingClick(Sender: TObject);
     procedure BtnFlipHorzClick(Sender: TObject);
     procedure BtnFlipVertClick(Sender: TObject);
-    procedure BtnFullrangeClick(Sender: TObject);
+    procedure BtnClipRangeClick(Sender: TObject);
     procedure BtnInvertClick(Sender: TObject);
     procedure BtnShowImageClick(Sender: TObject);
     procedure BtnZoomClick(Sender: TObject);
@@ -76,12 +76,9 @@ type
     procedure HistBarKeyUp(Sender: TObject; var Key: Word; Shift: TShiftState);
     procedure HistBarMouseUp(Sender: TObject; Button: TMouseButton; Shift: TShiftState; X, Y: Integer);
     procedure histminmaxClick(Sender: TObject);
-    procedure HistogramMouseDown(Sender: TObject; Button: TMouseButton;
-      Shift: TShiftState; X, Y: Integer);
-    procedure HistogramMouseMove(Sender: TObject; Shift: TShiftState; X, Y: Integer
-      );
-    procedure HistogramMouseUp(Sender: TObject; Button: TMouseButton;
-      Shift: TShiftState; X, Y: Integer);
+    procedure HistogramMouseDown(Sender: TObject; Button: TMouseButton; Shift: TShiftState; X, Y: Integer);
+    procedure HistogramMouseMove(Sender: TObject; Shift: TShiftState; X, Y: Integer);
+    procedure HistogramMouseUp(Sender: TObject; Button: TMouseButton; Shift: TShiftState; X, Y: Integer);
     procedure SpinEditMaxChange(Sender: TObject);
     procedure SpinEditMinChange(Sender: TObject);
     procedure TimerMinMaxTimer(Sender: TObject);
@@ -103,7 +100,6 @@ type
     FRedrawHistogram: TNotifyEvent;
     FShowHistogramPos: TNotifyStr;
     FShowLastImage: TNotifyEvent;
-    FShowFullRange: TNotifyEvent;
     procedure SetZoom(value: double);
     procedure SetFlipHorz(value:boolean);
     procedure SetFlipVert(value:boolean);
@@ -130,7 +126,6 @@ type
     property onRedrawHistogram: TNotifyEvent read FRedrawHistogram write FRedrawHistogram;
     property onShowHistogramPos: TNotifyStr read FShowHistogramPos write FShowHistogramPos;
     property onShowLastImage: TNotifyEvent read FShowLastImage write FShowLastImage;
-    property onShowFullRange: TNotifyEvent read FShowFullRange write FShowFullRange;
   end;
 
 implementation
@@ -172,13 +167,6 @@ begin
  FClipping:=false;
  FInvert:=false;
  LockSpinEdit:=true;
- with Histogram.Picture.Bitmap do begin
-   Width:=Histogram.Width;
-   Height:=Histogram.Height;
-   Canvas.Brush.Color:=clBlack;
-   Canvas.Pen.Color:=clBlack;
-   Canvas.FillRect(0,0,Width,Height);
- end;
 end;
 
 destructor  Tf_visu.Destroy;
@@ -189,7 +177,7 @@ end;
 procedure Tf_visu.SetLang;
 begin
   Title.Caption:=rsVisualisatio;
-  Histogram.Hint:=Format(rsHistogramOfT, [crlf]);
+  HistGraph.Hint:=Format(rsHistogramOfT, [crlf]);
   BtnZoomAdjust.Hint:=rsZoomToAdjust;
   HistBar.Hint:=rsImageLuminos;
   BtnZoom2.Hint:=rsZoomTwoTime;
@@ -202,15 +190,18 @@ begin
   BtnFlipHorz.Hint:=rsFlipTheImageH;
   BtnFlipVert.Hint:=rsFlipTheImageV;
   BtnShowImage.Hint:=rsShowLastCapt;
-  BtnFullrange.Hint:=rsHistogramFul;
+  BtnClipRange.Hint:=rsHistogramFul;
 end;
 
 procedure Tf_visu.SetLimit(SetLevel:boolean);
 var hval: double;
     i,sum,slh,shh,lh,hh: integer;
-
 begin
-  hval:=(101-power(10,HistBar.Position/100))/100;
+  if HistBar.Position<60 then
+    hval:=(101-power(2,HistBar.Position/100))/100
+  else
+    hval:=(99.484-((HistBar.Position-60)/10))/100;
+  globalmsg(FormatFloat(f5,hval));
   slh:=round((1-hval)*Fsum); lh:=0;
   shh:=round(hval*Fsum); hh:=0;
   sum:=0;
@@ -310,15 +301,17 @@ for i:=0 to high(word) do begin
   if (Fhist[i]>0) then stop:=i;
   HistGraphAreaSeries1.Add(ln(Fhist[i]+1));
 end;
-HistGraphMinLine.Position:=FimgMin;
-HistGraphMaxLine.Position:=FimgMax;
-if BtnFullrange.Down then begin
+if BtnClipRange.Down then begin
+  HistGraphMinLine.Position:=max(start,FimgMin);
+  HistGraphMaxLine.Position:=min(stop,FimgMax);
   HistGraph.Extent.XMin:=start;
   HistGraph.Extent.XMax:=stop;
   HistGraph.Extent.UseXMax:=true;
   HistGraph.Extent.UseXMin:=true;
 end
 else begin
+  HistGraphMinLine.Position:=FimgMin;
+  HistGraphMaxLine.Position:=FimgMax;
   HistGraph.Extent.UseXMax:=false;
   HistGraph.Extent.UseXMin:=false;
 end;
@@ -448,9 +441,8 @@ begin
   TimerRedraw.Enabled:=true;
 end;
 
-procedure Tf_visu.BtnFullrangeClick(Sender: TObject);
+procedure Tf_visu.BtnClipRangeClick(Sender: TObject);
 begin
-  //if assigned(FShowFullRange) then FShowFullRange(self);
   PlotHistogram;
 end;
 
@@ -472,15 +464,16 @@ begin
   TimerRedraw.Enabled:=true;
 end;
 
-procedure Tf_visu.HistogramMouseDown(Sender: TObject; Button: TMouseButton;
-  Shift: TShiftState; X, Y: Integer);
+procedure Tf_visu.HistogramMouseDown(Sender: TObject; Button: TMouseButton; Shift: TShiftState; X, Y: Integer);
 var dx1,dx2: double;
+    pt: TDoublePoint;
 begin
   if not Finitialized then exit;
-  dx1:=abs(ImgMin/255-X);
-  dx2:=abs(ImgMax/255-X);
+  pt:=HistGraph.ImageToGraph(point(X,Y));
+  dx1:=abs(ImgMin-pt.X);
+  dx2:=abs(ImgMax-pt.X);
   if dx1=dx2 then begin
-    Updmax:=X>=(ImgMax/255);
+    Updmax:=pt.X>=(ImgMax);
   end
   else begin
     Updmax:=dx2<dx1;
@@ -489,44 +482,42 @@ begin
   StartUpd:=true;
 end;
 
-procedure Tf_visu.HistogramMouseMove(Sender: TObject; Shift: TShiftState; X,
-  Y: Integer);
+procedure Tf_visu.HistogramMouseMove(Sender: TObject; Shift: TShiftState; X, Y: Integer);
 var xpos,val: double;
+    pt: TDoublePoint;
     txt: string;
 begin
 if not Finitialized then exit;
 if StartUpd then begin
-  with Histogram.Picture.Bitmap do begin
-    Canvas.Pen.Color:=clWhite;
-    Canvas.Pen.Mode:=pmXor;
-    Canvas.Line(XP,0,XP,Height);
-    Canvas.Line(X,0,X,Height);
-    XP:=X;
-    if Updmax then xpos:=min(high(word),X*255)
-              else xpos:=max(0,X*255);
-    val:=FimageMin+xpos/FimageC;
-    if FisFloatingPoint then
-      txt:=FormatFloat(f3,val)
-    else
-      txt:=FormatFloat(f0,round(val));
-    if Assigned(FShowHistogramPos) then FShowHistogramPos(txt);
-  end;
+  pt:=HistGraph.ImageToGraph(point(X,Y));
+  xpos:=max(0,min(MAXWORD,pt.X));
+  if Updmax then
+    HistGraphMaxLine.Position:=xpos
+  else
+    HistGraphMinLine.Position:=xpos;
+  val:=FimageMin+xpos/FimageC;
+  if FisFloatingPoint then
+    txt:=FormatFloat(f3,val)
+  else
+    txt:=FormatFloat(f0,round(val));
+  if Assigned(FShowHistogramPos) then FShowHistogramPos(txt);
 end else begin
   SpinEditMin.Visible:=(y<SpinEditMin.Height)and(x<SpinEditMin.Width);
   SpinEditMax.Visible:=(y<SpinEditMax.Height)and(x>SpinEditMax.Left);
 end;
 end;
 
-procedure Tf_visu.HistogramMouseUp(Sender: TObject; Button: TMouseButton;
-  Shift: TShiftState; X, Y: Integer);
+procedure Tf_visu.HistogramMouseUp(Sender: TObject; Button: TMouseButton; Shift: TShiftState; X, Y: Integer);
+var pt: TDoublePoint;
 begin
   if not Finitialized then exit;
+  pt:=HistGraph.ImageToGraph(point(X,Y));
   if Updmax then begin
-    ImgMax:=min(high(word),X*255);
+    ImgMax:=max(0,min(MAXWORD,pt.X));
     ImgMax:=max(ImgMax,ImgMin);
   end
   else begin
-    ImgMin:=max(0,X*255);
+    ImgMin:=max(0,min(MAXWORD,pt.X));
     ImgMin:=min(ImgMin,ImgMax);
   end;
   StartUpd:=false;
