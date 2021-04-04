@@ -2064,7 +2064,7 @@ procedure calculate_bg_sd(Fimage: Timafloat; x,y,rs,wd :integer; var bg,sd : dou
 var
   counter,i,j,r1_square,r2_square,r2,distance : integer;
   mad_bg  : double;
-  background : array [0..1000] of double; {fixed size array for fast execution}
+  background : array [0..2000] of double; {fixed size array for fast execution}
 
 begin
   r1_square:=rs*rs;;{square radius}
