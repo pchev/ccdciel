@@ -91,6 +91,7 @@ type
     FimageC, FimageMin, FimageMax : double;
     FisFloatingPoint, Finitialized: boolean;
     FimgMin, FimgMax: double;
+    FHistStart,FHistStop,FHistStep: integer;
     FBullsEye, LockSpinEdit, FClipping, FInvert: Boolean;
     FZoom: double;
     StartUpd,Updmax,HistogramAdjusted, LockHistogram: boolean;
@@ -270,9 +271,13 @@ FimageMin:=f.imageMin;
 FimageMax:=f.imageMax;
 Fmaxh:=0;
 Fsum:=0;
+FHistStart:=0;
+FHistStop:=0;
 for i:=0 to high(word) do begin
   Fhist[i]:=f.Histogram[i];
   Fsum:=Fsum+Fhist[i];
+  if (FHistStart=0)and(Fhist[i]>0) then FHistStart:=i;
+  if (Fhist[i]>0) then FHistStop:=i;
   if Fhist[i]>Fmaxh then begin
       Fmaxh:=Fhist[i];
       Fmaxp:=i;
@@ -290,27 +295,36 @@ end;
 end;
 
 procedure Tf_visu.PlotHistogram;
-var i,start,stop: integer;
+var i,j,r: integer;
+    x: double;
 begin
 HistGraphAreaSeries1.Clear;
-start:=0;
-stop:=0;
-for i:=0 to high(word) do begin
-  if (start=0)and(Fhist[i]>0) then start:=i;
-  if (Fhist[i]>0) then stop:=i;
-  HistGraphAreaSeries1.Add(ln(Fhist[i]+1));
-end;
 if BtnClipRange.Down then begin
-  HistGraphMinLine.Position:=max(start,FimgMin);
-  HistGraphMaxLine.Position:=min(stop,FimgMax);
-  HistGraph.Extent.XMin:=start;
-  HistGraph.Extent.XMax:=stop;
+  r:=FHistStop-FHistStart;
+  FHistStep:=max(1,r div 256);
+  for i:=0 to (r div FHistStep)-1 do begin
+    x:=0;
+    for j:=0 to FHistStep-1 do
+      x:=x+Fhist[FHistStart+i*FHistStep+j];
+    HistGraphAreaSeries1.Add(ln(x+1));
+  end;
+  HistGraphMinLine.Position:=max(0,(FimgMin-FHistStart)/FHistStep);
+  HistGraphMaxLine.Position:=min(r/FHistStep,(FimgMax-FHistStart)/FHistStep);
+  HistGraph.Extent.XMin:=0;
+  HistGraph.Extent.XMax:=r/FHistStep;
   HistGraph.Extent.UseXMax:=true;
   HistGraph.Extent.UseXMin:=true;
 end
 else begin
-  HistGraphMinLine.Position:=FimgMin;
-  HistGraphMaxLine.Position:=FimgMax;
+  FHistStep:=255;
+  for i:=0 to 255 do begin
+    x:=0;
+    for j:=0 to FHistStep do
+      x:=x+Fhist[i*FHistStep+j];
+    HistGraphAreaSeries1.Add(ln(x+1));
+  end;
+  HistGraphMinLine.Position:=FimgMin/FHistStep;
+  HistGraphMaxLine.Position:=FimgMax/FHistStep;
   HistGraph.Extent.UseXMax:=false;
   HistGraph.Extent.UseXMin:=false;
 end;
@@ -464,15 +478,21 @@ begin
 end;
 
 procedure Tf_visu.HistogramMouseDown(Sender: TObject; Button: TMouseButton; Shift: TShiftState; X, Y: Integer);
-var dx1,dx2: double;
+var xpos,dx1,dx2: double;
     pt: TDoublePoint;
 begin
   if not Finitialized then exit;
   pt:=HistGraph.ImageToGraph(point(X,Y));
-  dx1:=abs(ImgMin-pt.X);
-  dx2:=abs(ImgMax-pt.X);
+  if BtnClipRange.Down then begin
+    xpos:=FHistStart+pt.X*FHistStep;
+  end
+  else begin
+    xpos:=pt.X*FHistStep;
+  end;
+  dx1:=abs(ImgMin-xpos);
+  dx2:=abs(ImgMax-xpos);
   if dx1=dx2 then begin
-    Updmax:=pt.X>=(ImgMax);
+    Updmax:=(xpos>=ImgMax);
   end
   else begin
     Updmax:=dx2<dx1;
@@ -489,11 +509,16 @@ begin
 if not Finitialized then exit;
 if StartUpd then begin
   pt:=HistGraph.ImageToGraph(point(X,Y));
-  xpos:=max(0,min(MAXWORD,pt.X));
+  if BtnClipRange.Down then begin
+    xpos:=max(0,min(MAXWORD,FHistStart+pt.X*FHistStep));
+  end
+  else begin
+    xpos:=max(0,min(MAXWORD,pt.X*FHistStep));
+  end;
   if Updmax then
-    HistGraphMaxLine.Position:=xpos
+    HistGraphMaxLine.Position:=pt.X
   else
-    HistGraphMinLine.Position:=xpos;
+    HistGraphMinLine.Position:=pt.X;
   val:=FimageMin+xpos/FimageC;
   if FisFloatingPoint then
     txt:=FormatFloat(f3,val)
@@ -508,15 +533,22 @@ end;
 
 procedure Tf_visu.HistogramMouseUp(Sender: TObject; Button: TMouseButton; Shift: TShiftState; X, Y: Integer);
 var pt: TDoublePoint;
+    xpos: double;
 begin
   if not Finitialized then exit;
   pt:=HistGraph.ImageToGraph(point(X,Y));
+  if BtnClipRange.Down then begin
+    xpos:=max(0,min(MAXWORD,FHistStart+pt.X*FHistStep));
+  end
+  else begin
+    xpos:=max(0,min(MAXWORD,pt.X*FHistStep));
+  end;
   if Updmax then begin
-    ImgMax:=max(0,min(MAXWORD,pt.X));
+    ImgMax:=xpos;
     ImgMax:=max(ImgMax,ImgMin);
   end
   else begin
-    ImgMin:=max(0,min(MAXWORD,pt.X));
+    ImgMin:=xpos;
     ImgMin:=min(ImgMin,ImgMax);
   end;
   StartUpd:=false;
