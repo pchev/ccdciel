@@ -204,7 +204,6 @@ begin
     hval:=1.018E-3+(101-power(2,HistBar.Position/100))/100
   else
     hval:=(99.484-((HistBar.Position-60)/10))/100;
-  globalmsg(inttostr(HistBar.Position)+' '+FormatFloat(f6,hval));
   slh:=round((1-hval)*Fsum); lh:=0;
   shh:=round(hval*Fsum); hh:=0;
   sum:=0;
