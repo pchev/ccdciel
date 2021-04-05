@@ -198,10 +198,13 @@ procedure Tf_visu.SetLimit(SetLevel:boolean);
 var hval: double;
     i,sum,slh,shh,lh,hh: integer;
 begin
-  if HistBar.Position<60 then
-    hval:=(101-power(2,HistBar.Position/100))/100
+  if HistBar.Position<30 then
+    hval:=(101-power(1.5,HistBar.Position/100))/100
+  else if HistBar.Position<60 then
+    hval:=1.018E-3+(101-power(2,HistBar.Position/100))/100
   else
     hval:=(99.484-((HistBar.Position-60)/10))/100;
+  globalmsg(inttostr(HistBar.Position)+' '+FormatFloat(f6,hval));
   slh:=round((1-hval)*Fsum); lh:=0;
   shh:=round(hval*Fsum); hh:=0;
   sum:=0;
