@@ -10,6 +10,7 @@
 
 import sys
 import os
+
 try:
   from urllib import request
 except:
@@ -43,19 +44,21 @@ if not IsWindows:
 id = 0
 
 # Define the function to call CCDciel method
-def ccdciel(method, params=''):
+def ccdciel(method, params='', host=None, port=None):
     
     # Increment the request id
     global id
     id += 1
 
-    # Get host and port from environment variable
-    host = os.getenv('CCDCIEL_HOST')
+    # Get host and port from parameter or environment variable
     if host == None :
-       host='localhost' 
-    port = os.getenv('CCDCIEL_PORT')
+       host = os.getenv('CCDCIEL_HOST')
+       if host == None :
+          host='localhost'
     if port == None :
-       port='3277'
+       port = os.getenv('CCDCIEL_PORT')
+       if port == None :
+          port='3277'
        
     # The request URL
     ccdciel_url = "http://" + host + ":" + port + "/jsonrpc"

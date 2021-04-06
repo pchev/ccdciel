@@ -28,7 +28,7 @@ try:
 except:
   print('Cannot import subprocess, your version of python is probably too old, try python3')
   sys.exit(1)
-  
+
 import platform
 IsWindows = False
 IsDarwin = False
@@ -36,26 +36,31 @@ if platform.system() == 'Windows':
     IsWindows = True
 elif platform.system() == 'Darwin':
     IsDarwin = True
-    
+
 if not IsWindows:
-    import psutil
+    try:
+        import psutil
+    except:
+        pass
 
 id = 0
 
 # Define the function to call CCDciel method
-def ccdciel(method, params=''):
+def ccdciel(method, params='', host=None, port=None):
     
     # Increment the request id
     global id
     id += 1
 
-    # Get host and port from environment variable
-    host = os.getenv('CCDCIEL_HOST')
+    # Get host and port from parameter or environment variable
     if host == None :
-       host='localhost' 
-    port = os.getenv('CCDCIEL_PORT')
+       host = os.getenv('CCDCIEL_HOST')
+       if host == None :
+          host='localhost'
     if port == None :
-       port='3277'
+       port = os.getenv('CCDCIEL_PORT')
+       if port == None :
+          port='3277'
        
     # The request URL
     ccdciel_url = "http://" + host + ":" + port + "/jsonrpc"
@@ -94,9 +99,16 @@ def IsRunning (pgm):
         except:
             pass
     else:
+      try:
         for proc in psutil.process_iter():
             if proc.name() == pgm :
                 alreadyrunning = True
+      except Exception as inst:
+        print(type(inst))
+        print(inst.args)
+        print('Be sure the module psutil is installed before to use this function')
+        sys.exit(1)
+
     return alreadyrunning
 
 
@@ -122,6 +134,7 @@ def StopProgram(pgm) :
     if IsWindows:
         subprocess.Popen(['taskkill', '/IM', pgm], stdout=subprocess.PIPE, stderr=subprocess.PIPE, stdin=subprocess.PIPE)
     else:
+      try:
         for proc in psutil.process_iter():
             if proc.name() ==  pgm :
                 try:
@@ -129,3 +142,8 @@ def StopProgram(pgm) :
                 except Exception as inst:
                     print(type(inst))
                     print(inst.args)
+      except Exception as inst:
+        print(type(inst))
+        print(inst.args)
+        print('Be sure the module psutil is installed before to use this function')
+        sys.exit(1)
