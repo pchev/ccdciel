@@ -13124,6 +13124,8 @@ try
   else if method='DEVICES_CONNECTED' then result:=result+'"result": '+BoolToStr(AllDevicesConnected,tr,fa)
   else if method='TELESCOPE_CONNECTED' then result:=result+'"result": '+BoolToStr(mount.Status=devConnected,tr,fa)
   else if method='TELESCOPE_PARKED' then result:=result+'"result": '+BoolToStr(mount.Park,tr,fa)
+  else if method='TELESCOPE_TRACKING' then result:=result+'"result": '+BoolToStr(mount.Tracking,tr,fa)
+  else if method='TELESCOPE_SLEWING' then result:=result+'"result": '+BoolToStr(mount.MountSlewing,tr,fa)
   else if method='TELESCOPE_EQMOD' then result:=result+'"result": '+BoolToStr(mount.IsEqmod,tr,fa)
   else if method='AUTOGUIDER_CONNECTED' then result:=result+'"result": '+BoolToStr((Autoguider.State<>GUIDER_DISCONNECTED),tr,fa)
   else if method='AUTOGUIDER_RUNNING' then result:=result+'"result": '+BoolToStr(Autoguider.Running,tr,fa)
@@ -13191,6 +13193,12 @@ try
     buf1:=trim(value[attrib.IndexOf('params.0')]);
     buf2:=trim(value[attrib.IndexOf('params.1')]);
     buf:=f_scriptengine.cmd_MountSlew(buf1,buf2);
+    result:=result+'"result":{"status": "'+buf+'"}';
+  end
+  else if method='TELESCOPE_SLEWASYNC' then begin
+    buf1:=trim(value[attrib.IndexOf('params.0')]);
+    buf2:=trim(value[attrib.IndexOf('params.1')]);
+    buf:=f_scriptengine.cmd_MountSlewAsync(buf1,buf2);
     result:=result+'"result":{"status": "'+buf+'"}';
   end
   else if method='TELESCOPE_SYNC' then begin

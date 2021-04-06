@@ -157,6 +157,7 @@ type
     function cmd_MountPark(onoff:string):string;
     function cmd_MountTrack:string;
     function cmd_MountSlew(RA,DE:string):string;
+    function cmd_MountSlewAsync(RA,DE:string):string;
     function cmd_MountSync(RA,DE:string):string;
     function cmd_MountAbortMotion:string;
     function cmd_EqmodClearPoints:string;
@@ -1068,6 +1069,25 @@ d:=StrToFloatDef(DE,9999);
 if (abs(r)<=24)and(abs(d)<=90) then begin
  if Fmount.Slew(r,d) then begin
    wait(2);
+   result:=msgOK;
+ end;
+end
+else result:=Format(rsOutOfRange, [msgFailed]);
+except
+  result:=msgFailed;
+end;
+end;
+
+function Tf_scriptengine.cmd_MountSlewAsync(RA,DE:string):string;
+var r,d: double;
+begin
+try
+result:=msgFailed;
+r:=StrToFloatDef(RA,9999);
+d:=StrToFloatDef(DE,9999);
+if (abs(r)<=24)and(abs(d)<=90) then begin
+ if Fmount.SlewAsync(r,d) then begin
+   wait(1);
    result:=msgOK;
  end;
 end
