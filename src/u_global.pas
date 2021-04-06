@@ -275,7 +275,7 @@ const
   URL_BUGREPORT='https://www.ap-i.net/mantis/set_project.php?project_id=3';
   URL_ONLINEHELP='https://www.ap-i.net/ccdciel/en/documentation/start';
   URL_USERGROUP='https://groups.io/g/ccdciel';
-  URL_PROGRAMSTATUS='http://localhost:3277';
+  URL_PROGRAMSTATUS='http://localhost:$port';
   SkyFlatTxt='SkyFlat';
   ScriptTxt='Script';
   SubDirCount=8;
@@ -318,7 +318,7 @@ const
 var
   onMsgGlobal: TNotifyMsg;
   Appdir,ConfigDir,LogDir,TmpDir,DataDir,ScriptsDir,HomeDir: UTF8String;
-  defCapturePath, defPython, TCPIPServerPort: string;
+  defCapturePath, defPython, TCPIPConfigPort, TCPIPServerPort: string;
   CameraName,WheelName,FocuserName,RotatorName,MountName,DomeName,WatchdogName,WeatherName,SafetyName,SwitchName,CoverName: string;
   ConfigDarkFile,cdate: string;
   isAdmin, debug_msg: boolean;

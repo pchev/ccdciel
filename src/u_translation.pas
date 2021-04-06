@@ -1308,6 +1308,7 @@ resourcestring
   rsMeridianFlip11 = 'Meridian flip aborted after %d retries';
   rsWaitDSeconds = 'Wait %d seconds and retry';
   rsScriptLangua = 'Script language';
+  rsTCPIPServerP = 'TCP/IP server port';
 
 implementation
 

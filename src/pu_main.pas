@@ -785,6 +785,7 @@ type
     procedure CheckMeridianFlip; overload;
     procedure StartServer;
     procedure StopServer;
+    procedure RestartServer;
     procedure TCPShowError(var msg: string);
     procedure TCPShowSocket(var msg: string);
     function TCPcmd(s: string):string;
@@ -3530,6 +3531,7 @@ begin
     config.SetValue('/Script/PythonCmd',defPython);
   end;
   {$endif}
+  TCPIPConfigPort:=config.GetValue('/Files/TCPIPConfigPort','3277');
   SaveBitmap:=config.GetValue('/Files/SaveBitmap',false);
   SaveBitmapFormat:=config.GetValue('/Files/SaveBitmapFormat','png');
   OpenPictureDialog1.InitialDir:=config.GetValue('/Files/CapturePath',defCapturePath);
@@ -3737,7 +3739,10 @@ begin
   FileSequenceWidth:=config.GetValue('/Files/FileSequenceWidth',0);
   FilePack:=config.GetValue('/Files/Pack',false);
   WantExif:=config.GetValue('/Files/Exif',WantExif);
-  if ((TCPDaemon=nil)or(TCPDaemon.stoping)) then StartServer;
+  if ((TCPDaemon=nil)or(TCPDaemon.stoping)) then
+     StartServer
+  else if (TCPIPConfigPort<>TCPIPServerPort) then
+     RestartServer;
   WeatherRestartDelay:=config.GetValue('/Weather/RestartDelay',5);
   weather.UseCloudCover:=config.GetValue('/Weather/Use/CloudCover',false);
   weather.UseDewPoint:=config.GetValue('/Weather/Use/DewPoint',false);
@@ -5792,11 +5797,10 @@ begin
 end;
 
 procedure Tf_main.MenuStatusClick(Sender: TObject);
-var port,url: string;
+var url: string;
 begin
   if (TCPDaemon<>nil)and(not TCPDaemon.Finished) then begin
-    port:=TCPDaemon.IPport;
-    url:=StringReplace(URL_PROGRAMSTATUS,'3277',port,[]);
+    url:=StringReplace(URL_PROGRAMSTATUS,'$port',TCPIPServerPort,[]);
     ExecuteFile(url);
   end
   else begin
@@ -7098,6 +7102,7 @@ begin
    f_option.CbShowHints.Checked:=screenconfig.GetValue('/Hint/Show',true);
    f_option.CaptureDir.Text:=config.GetValue('/Files/CapturePath',defCapturePath);
    f_option.TempDir.Text:=config.GetValue('/Files/TmpDir',TmpDir);
+   f_option.TCPIPport.Value:=config.GetValue('/Files/TCPIPConfigPort',3277);
    f_option.PythonCmd.Text:=config.GetValue('/Script/PythonCmd',PythonCmd);
    f_option.FolderOptions.RowCount:=SubDirCount;
    for i:=0 to SubDirCount-1 do begin
@@ -7481,6 +7486,7 @@ begin
      screenconfig.SetValue('/Hint/Show',f_option.CbShowHints.Checked);
      config.SetValue('/Files/CapturePath',f_option.CaptureDir.Text);
      config.SetValue('/Files/TmpDir',f_option.TempDir.Text);
+     config.SetValue('/Files/TCPIPConfigPort',f_option.TCPIPport.Value);
      config.SetValue('/Script/PythonCmd',f_option.PythonCmd.Text);
      for i:=0 to SubDirCount-1 do begin
        for n:=0 to SubDirCount-1 do
@@ -12878,7 +12884,7 @@ begin
     TCPDaemon.onExecuteJSON:=@TCPjsoncmd;
     TCPDaemon.onGetImage:=@TCPgetimage;
     TCPDaemon.IPaddr := '0.0.0.0';
-    TCPDaemon.IPport := '3277';
+    TCPDaemon.IPport := TCPIPConfigPort;
     TCPIPServerPort := TCPDaemon.IPport;
     TCPDaemon.Start;
   except
@@ -12906,6 +12912,13 @@ begin
   except
     screen.cursor := crDefault;
   end;
+end;
+
+procedure Tf_main.RestartServer;
+begin
+  StopServer;
+  wait(2);
+  StartServer;
 end;
 
 procedure Tf_main.TCPShowError(var msg: string);

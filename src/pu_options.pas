@@ -34,6 +34,8 @@ type
   { Tf_option }
 
   Tf_option = class(TForm)
+    Label150: TLabel;
+    Panel26: TPanel;
     PythonCmd: TEdit;
     GroupBox31: TGroupBox;
     GroupBox32: TPanel;
@@ -54,6 +56,7 @@ type
     Panel23: TPanel;
     Panel24: TPanel;
     Panel25: TPanel;
+    TCPIPportDefault: TButton;
     SlewGainEdit: TSpinEdit;
     SlewISObox: TComboBox;
     SlewOffsetEdit: TSpinEdit;
@@ -94,6 +97,7 @@ type
     SlewPrec: TFloatSpinEdit;
     SlewRetry: TSpinEdit;
     PythonDefault: TButton;
+    TCPIPport: TSpinEdit;
     WantExif: TCheckBox;
     LabelTestVoice: TLabel;
     LowQualityDisplay: TCheckBox;
@@ -675,6 +679,7 @@ type
     procedure PanelLeftMouseWheel(Sender: TObject; Shift: TShiftState; WheelDelta: Integer; MousePos: TPoint; var Handled: Boolean);
     procedure PixelSizeFromCameraChange(Sender: TObject);
     procedure PlanetariumBoxClick(Sender: TObject);
+    procedure TCPIPportDefaultClick(Sender: TObject);
     procedure PythonDefaultClick(Sender: TObject);
     procedure rbLinSocketChange(Sender: TObject);
     procedure BalanceChange(Sender: TObject);
@@ -850,6 +855,8 @@ begin
   Logtofile.Caption := rsLogAllMessag;
   Label99.Caption := rsTemporaryFol;
   TmpDirDefault.Caption := rsDefault;
+  Label150.Caption := rsTCPIPServerP;
+  TCPIPportDefault.Caption := rsDefault;
   FileOpt.Caption := rsFileNameOpti;
   BtnFileDefault.Caption := rsDefault;
   label123.Caption := rsSeparator;
@@ -1466,6 +1473,11 @@ end;
 procedure Tf_option.PlanetariumBoxClick(Sender: TObject);
 begin
   Notebook2.PageIndex:=PlanetariumBox.ItemIndex;
+end;
+
+procedure Tf_option.TCPIPportDefaultClick(Sender: TObject);
+begin
+  TCPIPport.Value:=3277;
 end;
 
 procedure Tf_option.PythonDefaultClick(Sender: TObject);

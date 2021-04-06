@@ -180,11 +180,11 @@ object f_option: Tf_option
       end
       object Panel11: TPanel
         Left = 0
-        Height = 231
-        Top = 306
+        Height = 181
+        Top = 356
         Width = 520
         Align = alClient
-        ClientHeight = 231
+        ClientHeight = 181
         ClientWidth = 520
         ParentFont = False
         TabOrder = 2
@@ -270,6 +270,49 @@ object f_option: Tf_option
           Width = 61
           Caption = 'Default'
           OnClick = PythonDefaultClick
+          ParentFont = False
+          TabOrder = 1
+        end
+      end
+      object Panel26: TPanel
+        Left = 0
+        Height = 50
+        Top = 306
+        Width = 520
+        Align = alTop
+        ClientHeight = 50
+        ClientWidth = 520
+        TabOrder = 4
+        object Label150: TLabel
+          AnchorSideTop.Control = TCPIPport
+          AnchorSideTop.Side = asrCenter
+          Left = 8
+          Height = 17
+          Top = 17
+          Width = 115
+          Caption = 'TCP/IP server port'
+          ParentColor = False
+          ParentFont = False
+        end
+        object TCPIPport: TSpinEdit
+          AnchorSideTop.Control = Panel26
+          AnchorSideTop.Side = asrCenter
+          Left = 162
+          Height = 28
+          Top = 11
+          Width = 106
+          MaxValue = 100000
+          TabOrder = 0
+        end
+        object TCPIPportDefault: TButton
+          AnchorSideTop.Control = TCPIPport
+          AnchorSideTop.Side = asrCenter
+          Left = 404
+          Height = 25
+          Top = 13
+          Width = 61
+          Caption = 'Default'
+          OnClick = TCPIPportDefaultClick
           ParentFont = False
           TabOrder = 1
         end
