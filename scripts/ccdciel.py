@@ -64,9 +64,11 @@ def ccdciel(method, params='', host=None, port=None):
     ccdciel_url = "http://" + host + ":" + port + "/jsonrpc"
 
     # Prepare JSON request
+    if type(params) != list:
+      params = [params]
     jsondata = json.dumps({"jsonrpc": "2.0", "id": id,
         "method": method,
-        "params": [params] }
+        "params": params }
         ).encode('utf8')
 
     try:
