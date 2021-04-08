@@ -250,6 +250,7 @@ begin
  FBusy:=false;
  FLastError:=trim(errstr);
  if (FLastError<>'') and (logfile<>'') and FileExistsUTF8(logfile) then begin
+   try
    AssignFile(f,logfile);
    Reset(f);
    while not EOF(f) do begin
@@ -257,6 +258,8 @@ begin
      msg(buf,9);
    end;
    CloseFile(f);
+   except
+   end;
  end;
  if Assigned(FonEndAstrometry) then FonEndAstrometry(self);
  if Assigned(Fterminatecmd) then Fterminatecmd(self);
