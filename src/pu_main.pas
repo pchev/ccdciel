@@ -1385,6 +1385,7 @@ begin
   fits.onMsg:=@NewMessage;
   if FileExistsUTF8(ConfigDarkFile) then begin
      fits.DarkFrame:=TFits.Create(nil);
+     fits.DarkFrame.DarkOn:=false;
      fits.DarkFrame.onMsg:=@NewMessage;
      fits.DarkFrame.LoadFromFile(ConfigDarkFile);
   end;
@@ -3172,10 +3173,10 @@ begin
     bpmAxis:=f.HeaderInfo.naxis;
     for x:=0 to f.HeaderInfo.naxis1-1 do begin
        for y:=0 to f.HeaderInfo.naxis2-1 do begin
-          val:=f.rawimage[0,y,x];
+          val:=f.imageMin+f.image[0,y,x]/f.imageC;
           if f.HeaderInfo.naxis=3 then begin
-            val1:=f.rawimage[1,y,x];
-            val2:=f.rawimage[2,y,x];
+            val1:=f.imageMin+f.image[1,y,x]/f.imageC;
+            val2:=f.imageMin+f.image[2,y,x]/f.imageC;
             val:=maxvalue([val,val1,val2]);
           end;
           if val>lb then begin
@@ -3216,11 +3217,16 @@ if f_pause.Wait then begin
   camera.ResetFrame;
   fits.SetBPM(bpm,0,0,0,0);
   fits.DarkOn:=false;
+  fits.DisableBayer:=true;
+  try
   if f_preview.ControlExposure(f_preview.Exposure,bin,bin,DARK,ReadoutModeCapture,f_preview.Gain,f_preview.Offset) then begin
     CreateBPM(fits);
   end
   else
     NewMessage(rsExposureFail,1);
+  finally
+   fits.DisableBayer:=false;
+  end;
 end;
 end;
 
@@ -3232,6 +3238,8 @@ begin
     fn:=OpenDialog1.FileName;
     fits.SetBPM(bpm,0,0,0,0);
     fits.DarkOn:=false;
+    fits.DisableBayer:=true;
+    try
     fits.LoadFromFile(fn);
     if fits.HeaderInfo.valid then begin
       DrawHistogram(true,true);
@@ -3242,6 +3250,9 @@ begin
     end
     else begin
       NewMessage(Format(rsInvalidOrUns, [fn]),1);
+    end;
+    finally
+      fits.DisableBayer:=false;
     end;
   end;
 end;
@@ -3285,7 +3296,7 @@ begin
  hasBPM:=fits.hasBPM;
  if not hasBPM then
     fits.SetBPM(bpm,bpmNum,bpmX,bpmY,bpmAxis);
- fits.ApplyBPM;
+ fits.LoadStream;
  DrawImage;
  if not hasBPM then
     fits.SetBPM(bpm,0,0,0,0);
@@ -3296,7 +3307,7 @@ begin
  if fits.DarkProcess then exit; // already applied
  try
  fits.DarkOn:=true;
- fits.ApplyDark;
+ fits.LoadStream;
  DrawHistogram(true,false);
  DrawImage;
  finally
@@ -3669,6 +3680,8 @@ begin
      AutofocusSlippageOffset:=config.GetValue('/StarAnalysis/AutofocusSlippageOffset',0)
   else
     AutofocusSlippageOffset:=0;
+  AutofocusGain:=config.GetValue('/StarAnalysis/AutofocusGain',f_preview.Gain);
+  AutofocusOffset:=config.GetValue('/StarAnalysis/AutofocusOffset',f_preview.Offset);
 
   MagnitudeCalibration:=config.GetValue('/StarAnalysis/MagnitudeCalibration',MagnitudeCalibration);
 
@@ -3883,8 +3896,6 @@ begin
     OffsetMin:=config.GetValue('/Offset/OffsetMin',0);
     OffsetMax:=config.GetValue('/Offset/OffsetMax',0);
     SetGainList;
-    AutofocusGain:=config.GetValue('/StarAnalysis/AutofocusGain',f_preview.Gain);
-    AutofocusOffset:=config.GetValue('/StarAnalysis/AutofocusOffset',f_preview.Offset);
     ShowFnumber;
   end;
 end;
@@ -12741,13 +12752,13 @@ var xx,yy,n: integer;
 begin
  Screen2fits(x,y,f_visu.FlipHorz,f_visu.FlipVert,xx,yy);
  if (xx>0)and(xx<fits.HeaderInfo.naxis1)and(yy>0)and(yy<fits.HeaderInfo.naxis2) then
-    if fits.preview_axis=2 then begin
+    if fits.preview_axis=1 then begin
       if fits.HeaderInfo.bitpix>0 then begin
-        val:=trunc(fits.rawimage[0,yy,xx]);
+        val:=trunc(fits.image[0,yy,xx]);
         sval:=inttostr(val);
       end
       else begin
-       dval:=fits.rawimage[0,yy,xx];
+       dval:=fits.imageMin+fits.image[0,yy,xx]/fits.imageC;
        sval:=FormatFloat(f3,dval);
       end;
     end

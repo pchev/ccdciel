@@ -475,14 +475,12 @@ if FAddFrames then begin  // stack preview frames
   // load temporary image
   f:=TFits.Create(nil);
   f.onMsg:=onMsg;
+  f.DarkOn:=true;
   f.Stream:=ImgStream;
   f.LoadStream;
   // convert 8bit to 16bit to avoid quick overflow
   if f.HeaderInfo.bitpix=8 then
      f.Bitpix8to16;
-  // substract dark if loaded and compatible
-  if f.SameFormat(FFits.DarkFrame) then
-     f.Math(FFits.DarkFrame,moSub);
   // check frame is compatible
   if FFits.SameFormat(f) then begin
      if FStackAlign then begin
@@ -542,8 +540,6 @@ else begin  // normal capture
   Ffits.Stream:=ImgStream;
   {$ifdef debug_raw}writeln(FormatDateTime(dateiso,Now)+blank+'write headers');{$endif}
   WriteHeaders;
-  FFits.ApplyDark;
-  FFits.ApplyBPM;
   end;
   {$ifdef debug_raw}writeln(FormatDateTime(dateiso,Now)+blank+'process new image');{$endif}
   if Assigned(FonNewImage) then FonNewImage(self);

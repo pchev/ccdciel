@@ -114,8 +114,9 @@ type
     d32 : array[1..720] of Longword;
     d64 : array[1..360] of Int64;
     // Original image data
+    FUseRawImage: boolean;
     Frawimage: Timafloat;
-    // 16bit image scaled min/max unsigned
+    // 16bit image scaled min/max, unsigned, debayered
     Fimage : Timafloat;
     // Fimage scaling factor
     FimageC, FimageMin,FimageMax : double;
@@ -156,6 +157,8 @@ type
     Procedure WriteFitsImage;
     function GammaCorr(value: Word):byte;
     function GetHasBPM: boolean;
+    procedure ApplyBPM;
+    procedure ApplyDark;
     procedure SetGamma(value: single);
     function GetBayerMode: TBayerMode;
     procedure GetBayerBgColor(t:TBayerMode; rmult,gmult,bmult:double; out r,g,b: single);
@@ -177,8 +180,6 @@ type
      procedure SaveToFile(fn: string; pack: boolean=false);
      procedure LoadFromFile(fn:string);
      procedure SetBPM(value: TBpm; count,nx,ny,nax:integer);
-     procedure ApplyBPM;
-     procedure ApplyDark;
      procedure FreeDark;
      procedure ClearImage;
      procedure Math(operand: TFits; MathOperator:TMathOperator; new: boolean=false);
@@ -206,7 +207,6 @@ type
      property Gamma: single read FGamma write SetGamma;
      property ImageValid: boolean read FImageValid;
      property image : Timafloat read Fimage;
-     property rawimage : Timafloat read Frawimage;
      property imageC : double read FimageC;
      property imageMin : double read FimageMin;
      property imageMax : double read FimageMax;
@@ -821,18 +821,18 @@ for i:=startline to endline do begin
    for j := 0 to xs-1 do begin
        if fits.preview_axis=3 then begin
          // 3 chanel color image
-         xx:=(fits.Frawimage[0,i,j]-minv)*c;
+         xx:=(fits.Fimage[0,i,j]-minv)*c;
          x:=round(max(0,min(MaxWord,xx)) );
          p^.red:=x;
-         xxg:=(fits.Frawimage[1,i,j]-minv)*c;
+         xxg:=(fits.Fimage[1,i,j]-minv)*c;
          x:=round(max(0,min(MaxWord,xxg)) );
          p^.green:=x;
-         xxb:=(fits.Frawimage[2,i,j]-minv)*c;
+         xxb:=(fits.Fimage[2,i,j]-minv)*c;
          x:=round(max(0,min(MaxWord,xxb)) );
          p^.blue:=x;
        end else begin
            // B/W image
-           xx:=(fits.Frawimage[0,i,j]-minv)*c;
+           xx:=(fits.Fimage[0,i,j]-minv)*c;
            x:=round(max(0,min(MaxWord,xx)));
            p^.red:=x;
            p^.green:=x;
@@ -1257,10 +1257,16 @@ if (FFitsInfo.naxis1>maxl)or(FFitsInfo.naxis2>maxl) then
   raise exception.Create(Format('Image too big! limit is currently %dx%d %sPlease open an issue to request an extension.',[maxl,maxl,crlf]));
 Fheight:=FFitsInfo.naxis2;
 Fwidth :=FFitsInfo.naxis1;
-FStream.Position:=0;
-setlength(Frawimage,n_axis,Fheight,Fwidth);
+// do not scale 8 or 16 bit images
+FimageScaled:=(FFitsInfo.bscale<>1)or((FFitsInfo.bitpix<>16)and(FFitsInfo.bitpix<>8));
+FimageDebayer:=BayerColor and (not FDisableBayer) and (GetBayerMode<>bayerUnsupported) and (not FimageScaled);
+FUseRawImage:=FimageScaled or FimageDebayer;
+if FUseRawImage then
+  setlength(Frawimage,n_axis,Fheight,Fwidth)
+else
+   setlength(Frawimage,0,0,0);
 setlength(Fimage,n_axis,Fheight,Fwidth);
-FStream.Seek(Fhdr_end,soFromBeginning);
+FStream.Position:=fhdr_end;
 FillByte(FHistogram,sizeof(THistogram),0);
 npix:=0;
 b8:=round(FFitsInfo.blank);
@@ -1320,9 +1326,8 @@ case FFitsInfo.bitpix of
            inc(npix);
            x8:=d8[npix];
            if x8=b8 then x8:=0;
-           Frawimage[k,ii,j] := x8;
            x:=FFitsInfo.bzero+FFitsInfo.bscale*x8;
-           Frawimage[k,ii,j] := x;
+           if FUseRawImage then Frawimage[k,ii,j] := x;
            Fimage[k,ii,j] := x;
            inc(FHistogram[round(max(0,min(maxword,x)))]);
            dmin:=min(x,dmin);
@@ -1352,7 +1357,7 @@ case FFitsInfo.bitpix of
              x8:=d8[npix];
              if x8=b8 then x8:=0;
              x:=FFitsInfo.bzero+FFitsInfo.bscale*x8;
-             Frawimage[km,ii,j] := x;
+             if FUseRawImage then Frawimage[km,ii,j] := x;
              Fimage[km,ii,j] := x;
              inc(FHistogram[round(max(0,min(maxword,x)))]);
              dmin:=min(x,dmin);
@@ -1378,7 +1383,7 @@ case FFitsInfo.bitpix of
            x16:=BEtoN(d16[npix]);
            if x16=b16 then x16:=0;
            x:=FFitsInfo.bzero+FFitsInfo.bscale*x16;
-           Frawimage[k,ii,j] := x;
+           if FUseRawImage then Frawimage[k,ii,j] := x;
            Fimage[k,ii,j] := x;
            inc(FHistogram[round(max(0,min(maxword,x)))]);
            dmin:=min(x,dmin);
@@ -1426,8 +1431,8 @@ if (FFitsInfo.dmin=0)and(FFitsInfo.dmax=0) then begin  // do not replace existin
 end;
 SetLength(FStarList,0); {reset object list}
 {$ifdef debug_raw}writeln(FormatDateTime(dateiso,Now)+blank+'GetImage');{$endif}
-// do not scale 8 or 16 bit images
-FimageScaled:=(FFitsInfo.bscale<>1)or((FFitsInfo.bitpix<>16)and(FFitsInfo.bitpix<>8));
+fpreview_axis:=FFitsInfo.naxis3;
+ApplyDark;
 if FimageScaled then begin
   FimageMin:=FFitsInfo.dmin;
   FimageMax:=FFitsInfo.dmax;
@@ -1444,8 +1449,7 @@ if FimageMax>FimageMin then
 else
   FimageC:=1;
 if FimageMin<0 then FimageMin:=0;
-fpreview_axis:=FFitsInfo.naxis;
-FimageDebayer:=BayerColor and (not FDisableBayer) and (GetBayerMode<>bayerUnsupported) and (not FimageScaled);
+ApplyBPM;
 if FimageDebayer then begin
    Debayer;
 end
@@ -1462,6 +1466,8 @@ else begin
     end;
   end;
 end;
+FUseRawImage:=false;
+setlength(Frawimage,0,0,0);
 {$ifdef debug_raw}writeln(FormatDateTime(dateiso,Now)+blank+'GetImage end');{$endif}
 FImageValid:=true;
 end;
@@ -1494,7 +1500,7 @@ begin
                first:=false;
              end;
              inc(npix);
-             x:=max(min(round((Frawimage[k,ii,j]-FFitsInfo.bzero)/FFitsInfo.bscale),MAXBYTE),0);
+             x:=max(min(round((Fimage[k,ii,j]-FFitsInfo.bzero)/FFitsInfo.bscale),MAXBYTE),0);
              d8[npix]:=byte(round(x));
            end;
            end;
@@ -1513,7 +1519,7 @@ begin
                first:=false;
              end;
              inc(npix);
-             x:=max(min(round((Frawimage[k,ii,j]-FFitsInfo.bzero)/FFitsInfo.bscale),maxSmallint),-maxSmallint-1);
+             x:=max(min(round((Fimage[k,ii,j]-FFitsInfo.bzero)/FFitsInfo.bscale),maxSmallint),-maxSmallint-1);
              d16[npix]:=NtoBE(smallint(round(x)));
            end;
            end;
@@ -1532,7 +1538,7 @@ begin
                first:=false;
              end;
              inc(npix);
-             x:= max(min(round((Frawimage[k,ii,j]-FFitsInfo.bzero)/FFitsInfo.bscale),maxLongint),-maxLongint-1);
+             x:= max(min(round((Fimage[k,ii,j]-FFitsInfo.bzero)/FFitsInfo.bscale),maxLongint),-maxLongint-1);
              d32[npix]:=NtoBE(Longword(round(x)));
            end;
            end;
@@ -1657,7 +1663,6 @@ var i,x,y,x0,y0: integer;
 begin
 if (FBPMcount>0)and(FBPMnax=FFitsInfo.naxis) then begin
   {$ifdef debug_raw}writeln(FormatDateTime(dateiso,Now)+blank+'apply BPM');{$endif}
-  if not FImageValid then LoadStream;
   if (FFitsInfo.Frwidth>0)and(FFitsInfo.Frheight>0)and(FFitsInfo.Frx>=0)and(FFitsInfo.Fry>=0) then begin
     x0:=FFitsInfo.Frx;
     y0:=FBPMny-FFitsInfo.Fry-FFitsInfo.Frheight;
@@ -1669,19 +1674,24 @@ if (FBPMcount>0)and(FBPMnax=FFitsInfo.naxis) then begin
     x:=Fbpm[i,1]-x0;
     y:=Fbpm[i,2]-y0;
     if (x>0)and(x<Fwidth-2)and(y>0)and(y<Fheight-2) then begin
-      Frawimage[0,y,x]:=(Frawimage[0,y-1,x]+Frawimage[0,y+1,x]+Frawimage[0,y,x-1]+Frawimage[0,y,x+1]) / 4;
-      Fimage[0,y,x]:=(Fimage[0,y-1,x]+Fimage[0,y+1,x]+Fimage[0,y,x-1]+Fimage[0,y,x+1]) / 4;
+      if FUseRawImage then
+        Frawimage[0,y,x]:=(Frawimage[0,y-1,x]+Frawimage[0,y+1,x]+Frawimage[0,y,x-1]+Frawimage[0,y,x+1]) / 4
+      else
+        Fimage[0,y,x]:=(Fimage[0,y-1,x]+Fimage[0,y+1,x]+Fimage[0,y,x-1]+Fimage[0,y,x+1]) / 4;
       if n_axis=3 then begin
-        Frawimage[1,y,x]:=(Frawimage[1,y-1,x]+Frawimage[1,y+1,x]+Frawimage[1,y,x-1]+Frawimage[1,y,x+1]) / 4;
-        Frawimage[2,y,x]:=(Frawimage[2,y-1,x]+Frawimage[2,y+1,x]+Frawimage[2,y,x-1]+Frawimage[2,y,x+1]) / 4;
-        Fimage[1,y,x]:=(Fimage[1,y-1,x]+Fimage[1,y+1,x]+Fimage[1,y,x-1]+Fimage[1,y,x+1]) / 4;
-        Fimage[2,y,x]:=(Fimage[2,y-1,x]+Fimage[2,y+1,x]+Fimage[2,y,x-1]+Fimage[2,y,x+1]) / 4;
+        if FUseRawImage then begin
+          Frawimage[1,y,x]:=(Frawimage[1,y-1,x]+Frawimage[1,y+1,x]+Frawimage[1,y,x-1]+Frawimage[1,y,x+1]) / 4;
+          Frawimage[2,y,x]:=(Frawimage[2,y-1,x]+Frawimage[2,y+1,x]+Frawimage[2,y,x-1]+Frawimage[2,y,x+1]) / 4;
+        end
+        else begin
+          Fimage[1,y,x]:=(Fimage[1,y-1,x]+Fimage[1,y+1,x]+Fimage[1,y,x-1]+Fimage[1,y,x+1]) / 4;
+          Fimage[2,y,x]:=(Fimage[2,y-1,x]+Fimage[2,y+1,x]+Fimage[2,y,x-1]+Fimage[2,y,x+1]) / 4;
+        end;
       end;
     end;
   end;
   FBPMProcess:=true;
   FHeader.Insert( FHeader.Indexof('END'),'COMMENT','Corrected with Bap Pixel Map','');
-  if FimageDebayer then Debayer;
 end;
 end;
 
@@ -2061,10 +2071,11 @@ FStream.Clear;
 end;
 
 procedure calculate_bg_sd(Fimage: Timafloat; x,y,rs,wd :integer; var bg,sd : double);{version 2021-03-26. calculate background and standard deviation for an annulus at position x,y with innner radius rs+1 and outer radius rs+1+wd. wd should be 1 or larger}
+const maxbg=2000;
 var
   counter,i,j,r1_square,r2_square,r2,distance : integer;
   mad_bg  : double;
-  background : array [0..2000] of double; {fixed size array for fast execution}
+  background : array [0..maxbg] of double; {fixed size array for fast execution}
 
 begin
   r1_square:=rs*rs;;{square radius}
@@ -2082,6 +2093,7 @@ begin
     if ((distance>r1_square) and (distance<=r2_square)) then {annulus, circular area outside rs, typical one pixel wide}
     begin
       background[counter]:=Fimage[0,y+i,x+j];
+      if counter>=maxbg then break;
       inc(counter);
     end;
   end;
@@ -2680,7 +2692,7 @@ begin
 end;
 
 procedure TFits.Math(operand: TFits; MathOperator:TMathOperator; new: boolean=false);
-var i,j,k,ii: integer;
+var i,j,k,ii,nax,naxo,ko: integer;
     x,y,dmin,dmax,minoffset : double;
     ni,sum,sum2 : extended;
     m: TMemoryStream;
@@ -2693,17 +2705,37 @@ begin
  end
  else begin  // do operation
 
-   if not FImageValid then LoadStream;
-   dmin:=1.0E100;
+//   if not FImageValid then LoadStream;
+    dmin:=1.0E100;
     dmax:=-1.0E100;
     sum:=0; sum2:=0; ni:=0;
+    FillByte(FHistogram,sizeof(THistogram),0);
     minoffset:=operand.FFitsInfo.dmin-FFitsInfo.dmin;
-    for k:=0 to n_axis-1 do begin
+    if FUseRawImage then
+      nax:=n_axis
+    else
+      nax:=Fpreview_axis;
+    if operand.FUseRawImage then
+      naxo:=operand.n_axis
+    else
+      naxo:=operand.Fpreview_axis;
+    for k:=0 to nax-1 do begin
+      ko:=min(k,naxo-1);
       for i:=0 to FFitsInfo.naxis2-1 do begin
        ii:=FFitsInfo.naxis2-1-i;
        for j := 0 to FFitsInfo.naxis1-1 do begin
-         x:=Frawimage[k,ii,j];
-         y:=operand.Frawimage[k,ii,j];
+         if FUseRawImage then begin
+           x:=Frawimage[k,ii,j];
+         end
+         else begin
+           x:=Fimage[k,ii,j];
+         end;
+         if operand.FUseRawImage then begin
+           y:=operand.Frawimage[ko,ii,j];
+         end
+         else begin
+           y:=operand.Fimage[ko,ii,j];
+         end;
          case MathOperator of
            moAdd: x:=x+y;
            moSub: x:=x-y+minoffset;
@@ -2711,8 +2743,11 @@ begin
            moMult: x:=x*y;
            moDiv : x:=x/y;
          end;
-         Frawimage[k,ii,j] := x;
-         Fimage[k,ii,j] := x;
+         if FUseRawImage then
+           Frawimage[k,ii,j] := x
+         else
+           Fimage[k,ii,j] := x;
+         inc(FHistogram[round(max(0,min(maxword,x)))]);
          dmin:=min(x,dmin);
          dmax:=max(x,dmax);
          sum:=sum+x;
@@ -2727,7 +2762,6 @@ begin
     if dmin>=dmax then dmax:=dmin+1;
     FFitsInfo.dmin:=dmin;
     FFitsInfo.dmax:=dmax;
-    if FimageDebayer then Debayer;
  end;
 end;
 
@@ -2753,10 +2787,10 @@ begin
        x:=j-dx;
        y:=ii-dy;
        if (x>0)and(x<FFitsInfo.naxis1)and(y>0)and(y<FFitsInfo.naxis2) then begin
-         imgshift.Frawimage[k,ii,j]:=Frawimage[k,y,x];
+         imgshift.Fimage[k,ii,j]:=Fimage[k,y,x];
        end
        else begin
-        imgshift.Frawimage[k,ii,j]:=0;
+        imgshift.Fimage[k,ii,j]:=0;
        end;
      end;
     end;
