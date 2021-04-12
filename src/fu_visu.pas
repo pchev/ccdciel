@@ -196,7 +196,7 @@ end;
 
 procedure Tf_visu.SetLimit(SetLevel:boolean);
 var hval: double;
-    i,sum,slh,shh,lh,hh: integer;
+    i,sum,slh,shh,lh,hh,startp: integer;
 begin
   if HistBar.Position<30 then
     hval:=(101-power(1.5,HistBar.Position/100))/100
@@ -207,9 +207,10 @@ begin
   slh:=round((1-hval)*Fsum); lh:=0;
   shh:=round(hval*Fsum); hh:=0;
   sum:=0;
+  startp:=round(FHistStart+0.95*(max(0,Fmaxp-FHistStart)));
   for i:=0 to high(word) do begin
     sum:=sum+Fhist[i];
-    if i>(0.7*Fmaxp) then begin
+    if i>startp then begin
       if (lh=0) and (sum>=slh) then lh:=i;
       if (hh=0) and (sum>=shh) then hh:=i;
     end;
