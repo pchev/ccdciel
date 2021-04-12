@@ -207,7 +207,7 @@ begin
   slh:=round((1-hval)*Fsum); lh:=0;
   shh:=round(hval*Fsum); hh:=0;
   sum:=0;
-  startp:=round(FHistStart+0.95*(max(0,Fmaxp-FHistStart)));
+  startp:=round(FHistStart+0.90*(max(0,Fmaxp-FHistStart)));
   for i:=0 to high(word) do begin
     sum:=sum+Fhist[i];
     if i>startp then begin
