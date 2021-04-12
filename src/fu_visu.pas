@@ -226,6 +226,7 @@ begin
     end;
   end;
   // adjust spinedit for data range
+  LockHistogram:=true;
   if FisFloatingPoint then begin
     SpinEditMin.DecimalPlaces:=3;
     SpinEditMax.DecimalPlaces:=3;
@@ -250,7 +251,6 @@ begin
       SpinEditMax.Increment:=10;
     end;
   end;
-  LockHistogram:=true;
   // histogram is always 0-65535, show real pixel value in the spinedit
   SpinEditMin.minValue:=FimageMin;
   SpinEditMin.maxValue:=FimageMax;
@@ -402,6 +402,7 @@ end;
 
 procedure Tf_visu.GammaChange(Sender: TObject);
 begin
+  TimerRedraw.Enabled:=false;
   TimerRedraw.Enabled:=true;
 end;
 
@@ -418,12 +419,14 @@ end;
 procedure Tf_visu.BtnBullsEyeClick(Sender: TObject);
 begin
   FBullsEye:=not FBullsEye;
+  TimerRedraw.Enabled:=false;
   TimerRedraw.Enabled:=true;
 end;
 
 procedure Tf_visu.BtnClippingClick(Sender: TObject);
 begin
   FClipping:=BtnClipping.Down;
+  TimerRedraw.Enabled:=false;
   TimerRedraw.Enabled:=true;
 end;
 
@@ -449,11 +452,13 @@ end;
 
 procedure Tf_visu.BtnFlipHorzClick(Sender: TObject);
 begin
+  TimerRedraw.Enabled:=false;
   TimerRedraw.Enabled:=true;
 end;
 
 procedure Tf_visu.BtnFlipVertClick(Sender: TObject);
 begin
+  TimerRedraw.Enabled:=false;
   TimerRedraw.Enabled:=true;
 end;
 
@@ -465,6 +470,7 @@ end;
 procedure Tf_visu.BtnInvertClick(Sender: TObject);
 begin
   FInvert:=BtnInvert.Down;
+  TimerRedraw.Enabled:=false;
   TimerRedraw.Enabled:=true;
 end;
 
@@ -477,6 +483,7 @@ procedure Tf_visu.histminmaxClick(Sender: TObject);
 begin
   ImgMin:=0;
   ImgMax:=high(word);
+  TimerRedraw.Enabled:=false;
   TimerRedraw.Enabled:=true;
 end;
 
@@ -556,6 +563,7 @@ begin
   end;
   StartUpd:=false;
   HistogramAdjusted:=true;
+  TimerRedraw.Enabled:=false;
   TimerRedraw.Enabled:=true;
 end;
 
@@ -564,6 +572,7 @@ begin
   if LockSpinEdit then exit;
   SpinEditMin.maxValue:=min(FimageMax,SpinEditMax.Value);
   if not LockHistogram then HistogramAdjusted:=true;
+  TimerMinMax.Enabled:=false;
   TimerMinMax.Enabled:=true;
 end;
 
@@ -572,6 +581,7 @@ begin
   if LockSpinEdit then exit;
   SpinEditMax.minValue:=max(FimageMin,SpinEditMin.Value);
   if not LockHistogram then HistogramAdjusted:=true;
+  TimerMinMax.Enabled:=false;
   TimerMinMax.Enabled:=true;
 end;
 
@@ -581,7 +591,8 @@ begin
   // scale from image min-max to 0-65535
   FImgMin:=round(FimageC*(SpinEditMin.Value-FimageMin));
   FImgMax:=round(FimageC*(SpinEditMax.Value-FimageMin));
-  if Assigned(FRedraw) then FRedraw(self);
+  TimerRedraw.Enabled:=false;
+  TimerRedraw.Enabled:=true;
 end;
 
 procedure Tf_visu.TimerRedrawTimer(Sender: TObject);
