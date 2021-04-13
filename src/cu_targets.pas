@@ -1526,6 +1526,7 @@ begin
      if Astrometry.Busy then Astrometry.StopAstrometry;
      wait(30);
    end;
+   if Astrometry.Busy then Astrometry.StopAstrometry;
    if p.Running then begin
      msg(Format(rsStopPlan, [Ftargets[FCurrentTarget].planname]),1);
      p.Stop;
