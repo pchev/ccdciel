@@ -1309,6 +1309,7 @@ resourcestring
   rsWaitDSeconds = 'Wait %d seconds and retry';
   rsScriptLangua = 'Script language';
   rsTCPIPServerP = 'TCP/IP server port';
+  rsFoundDStars = 'Found %d stars';
 
 implementation
 

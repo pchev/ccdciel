@@ -12657,7 +12657,7 @@ begin
     end;
 
 
-    NewMessage(Format(rsImageMedianH, [formatfloat(f1, SMedian(hfdList))+ mess2+mess1]),1); {Report median HFD, tilt and off-axis aberration (was curvature}
+    NewMessage(Format(rsFoundDStars, [nhfd])+': '+Format(rsImageMedianH, [formatfloat(f1, SMedian(hfdList))+ mess2+mess1]), 1); {Report median HFD, tilt and off-axis aberration (was curvature}
   end
   else
     NewMessage(rsNoStarDetect,1);
