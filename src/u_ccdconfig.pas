@@ -30,13 +30,15 @@ uses XMLConf, DOM,
 
 type
   TCCDconfig = class(TXMLConfig)
+     public
+     destructor Destroy; override;
      function  GetValue(const APath: String; const ADefault: String): String; overload;
      function  GetValue(const APath: String; const ADefault: Double): Double; overload;
      function  GetValue(const APath: String; const ADefault: Boolean): Boolean; overload;
      procedure SetValue(const APath: String; const AValue: String); overload;
      procedure SetValue(const APath: String; const AValue: Double); overload;
      procedure SetValue(const APath: String; const AValue: Boolean); overload;
-     procedure Flush; overload;
+     procedure Flush;
   end;
 
 implementation
@@ -84,9 +86,9 @@ else
   SetValue(DOMString(APath),DOMString('False'));
 end;
 
-procedure TCCDconfig.Flush; overload;
+procedure TCCDconfig.Flush;
 var originalfilename,tmpfilename,backupfilename: string;
-    F : TFileStream;
+    F : TMemoryStream;
 begin
 if Modified and not ReadOnly then
   if (FileName<>'') then begin
@@ -94,16 +96,30 @@ if Modified and not ReadOnly then
     tmpfilename:=originalfilename+'.tmp';
     backupfilename:=originalfilename+'.bak';
     DeleteFile(tmpfilename);
-    F:=TFileStream.Create(tmpfilename,fmCreate);
+    F:=TMemoryStream.Create;
     try
-      SaveToStream(F);
-    finally
-      F.Free;
-    end;
+    SaveToStream(F);
+    F.SaveToFile(tmpfilename);
     DeleteFile(backupfilename);
     RenameFile(originalfilename,backupfilename);
     RenameFile(tmpfilename,originalfilename);
+    finally
+      F.Free;
+    end;
   end;
+end;
+
+destructor TCCDconfig.Destroy;
+begin
+ try
+  if Assigned(Doc) then
+  begin
+    Flush;
+    Doc.Free;
+  end;
+  inherited Destroy;
+ except
+ end;
 end;
 
 end.
