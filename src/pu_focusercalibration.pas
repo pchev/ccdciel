@@ -282,6 +282,7 @@ end;
 
 procedure Tf_focusercalibration.Saveconfig;
 begin
+  try
   config.SetValue('/StarAnalysis/Window',Starwindow);
   config.SetValue('/StarAnalysis/Focus',Focuswindow);
   config.SetValue('/StarAnalysis/AutoFocusMode',ord(AutofocusMode));
@@ -309,6 +310,9 @@ begin
   config.SetValue('/StarAnalysis/FocuserBacklashDirection',Ffocuser.BacklashDirection);
 
   config.Flush;
+  except
+    on E: Exception do ShowMessage('Error saving focuser calibration: '+ E.Message);
+  end;
 end;
 
 end.

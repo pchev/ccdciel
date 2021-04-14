@@ -890,6 +890,7 @@ var t:TTarget;
     p:T_Plan;
     i,j: integer;
 begin
+try
  if Count>0 then begin
     FSequenceFile.Clear;
     FSequenceFile.Filename:=fn;
@@ -991,6 +992,9 @@ begin
     end;
     FSequenceFile.Save;
  end;
+except
+  on E: Exception do msg('Error saving target file: '+ E.Message,1);
+end;
 end;
 
 procedure T_Targets.CompatLoadPlan(p: T_plan; plan,obj:string);

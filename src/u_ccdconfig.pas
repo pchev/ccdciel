@@ -36,6 +36,7 @@ type
      procedure SetValue(const APath: String; const AValue: String); overload;
      procedure SetValue(const APath: String; const AValue: Double); overload;
      procedure SetValue(const APath: String; const AValue: Boolean); overload;
+     procedure Flush; overload;
   end;
 
 implementation
@@ -81,6 +82,22 @@ if AValue then
   SetValue(DOMString(APath),DOMString('True'))
 else
   SetValue(DOMString(APath),DOMString('False'));
+end;
+
+procedure TCCDconfig.Flush; overload;
+var originalfilename,tmpfilename,backupfilename: string;
+begin
+if Modified and not ReadOnly then
+  if (FileName<>'') then begin
+    originalfilename:=Filename;
+    tmpfilename:=originalfilename+'.tmp';
+    backupfilename:=originalfilename+'.bak';
+    DeleteFile(tmpfilename);
+    SaveToFile(tmpfilename);
+    DeleteFile(backupfilename);
+    RenameFile(originalfilename,backupfilename);
+    RenameFile(tmpfilename,originalfilename);
+  end;
 end;
 
 end.

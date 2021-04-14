@@ -1308,6 +1308,7 @@ var obsdb: TCCDconfig;
     obsname, obskey: string;
     i,n: integer;
 begin
+try
   obsname:=f_option.ObservatoryName.Text;
   obskey:='';
   obsdb:=TCCDConfig.Create(self);
@@ -1334,6 +1335,9 @@ begin
   obsdb.SetValue('/'+obskey+'/ElevationMin',f_option.ElevationMin.Value);
   obsdb.Flush;
   obsdb.Free;
+  except
+    on E: Exception do msg('Error saving observatory database: '+ E.Message);
+  end;
 end;
 
 procedure Tf_option.ObservatoryDBChange(Sender: TObject);
@@ -1363,6 +1367,7 @@ var obsdb: TCCDconfig;
     obskey,v1,v2,v3,v4,v5,v6,v7,v8: string;
     i,k,n,d: integer;
 begin
+try
  d:=ObservatoryDB.ItemIndex+1;
  if (d<1) then exit;
  obsdb:=TCCDConfig.Create(self);
@@ -1397,6 +1402,9 @@ begin
  obsdb.Flush;
  obsdb.Free;
  LoadObservatoryDB('');
+ except
+   on E: Exception do msg('Error saving observatory database: '+ E.Message);
+ end;
 end;
 
 procedure Tf_option.PageControl1Changing(Sender: TObject; var AllowChange: Boolean);

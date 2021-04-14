@@ -2593,6 +2593,7 @@ begin
   screenconfig.SetValue('/Tools/'+widestring(tool)+'/Visible',config.GetValue('/Tools/'+widestring(tool)+'/Visible',true));
 end;
 begin
+try
   if trim(oldver)='' then
      exit;
   if oldver<'0.0.1a' then begin
@@ -2775,6 +2776,9 @@ begin
   end;
   if config.Modified then
      SaveConfig;
+except
+  on E: Exception do NewMessage('Error upgrading configuration: '+ E.Message,1);
+end;
 end;
 
 procedure Tf_main.FormClose(Sender: TObject; var CloseAction: TCloseAction);
@@ -2784,7 +2788,6 @@ begin
 
   SaveSettings;
   SaveConfig;
-  NewMessage(rsConfiguratio,1);
 
   TerminateVcurve:=true;
   try
@@ -4110,6 +4113,7 @@ end;
 procedure Tf_main.SaveConfig;
 var inif:TIniFile;
 begin
+  try
   screenconfig.Flush;
   config.Flush;
   if credentialconfig.Filename<>'' then
@@ -4117,10 +4121,18 @@ begin
   emailconfig.Flush;
   bpmconfig.Flush;
   if not ProfileFromCommandLine then begin
-    inif:=TIniFile.Create(slash(ConfigDir)+'ccdciel.rc');
+    DeleteFile(slash(ConfigDir)+'ccdciel.rc.tmp');
+    inif:=TIniFile.Create(slash(ConfigDir)+'ccdciel.rc.tmp');
     inif.WriteString('main','profile',profile);
     inif.UpdateFile;
     inif.Free;
+    DeleteFile(slash(ConfigDir)+'ccdciel.rc.bak');
+    RenameFile(slash(ConfigDir)+'ccdciel.rc',slash(ConfigDir)+'ccdciel.rc.bak');
+    RenameFile(slash(ConfigDir)+'ccdciel.rc.tmp',slash(ConfigDir)+'ccdciel.rc');
+  end;
+  NewMessage(rsConfiguratio,1);
+  except
+    on E: Exception do NewMessage('Error saving configuration: '+ E.Message,1);
   end;
 end;
 
@@ -6258,6 +6270,7 @@ Procedure Tf_main.SaveVcurve;
 var i:integer;
 begin
  if AutofocusVcNum>0 then begin
+  try
   config.DeletePath('/StarAnalysis/Vcurve');
   config.SetValue('/StarAnalysis/Vcurve/AutofocusVcDir',AutofocusVcDir);
   config.SetValue('/StarAnalysis/Vcurve/AutofocusVcBinning',AutofocusBinning);
@@ -6281,6 +6294,9 @@ begin
   config.SetValue('/StarAnalysis/Vcurve/AutofocusVcpiR',AutofocusVcpiR);
   config.SetValue('/StarAnalysis/Vcurve/AutofocusVcpiL',AutofocusVcpiL);
   config.Flush;
+  except
+    on E: Exception do NewMessage('Error saving Vcurve: '+ E.Message,1);
+  end;
  end;
  // move the focuser at the center point as we like this curve
  focuser.Position:=round((AutofocusVcpiL+AutofocusVcpiR)/2);
@@ -6802,7 +6818,6 @@ procedure Tf_main.MenuSaveConfigClick(Sender: TObject);
 begin
  SaveSettings;
  SaveConfig;
- NewMessage(rsConfiguratio,1);
 end;
 
 procedure Tf_main.MenuQuitClick(Sender: TObject);
