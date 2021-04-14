@@ -1375,6 +1375,8 @@ begin
   if top+height>(Screen.height-ScreenMargin) then top:=Screen.height-height-ScreenMargin;
   if top<0 then top:=0;
 
+  if screenconfig.GetValue('/Window/Maximized',false) then WindowState := wsMaximized;
+
   PanelRight.Width:=screenconfig.GetValue('/Window/PanelRight',PanelRight.Width);
 
   f_msg:=Tf_msg.Create(self);
@@ -4020,6 +4022,7 @@ begin
 
  screenconfig.SetValue('/Tools/Clock/Visible',MenuViewClock.Checked);
 
+ screenconfig.SetValue('/Window/Maximized', WindowState=wsMaximized);
  screenconfig.SetValue('/Window/Top',Top);
  screenconfig.SetValue('/Window/Left',Left);
  screenconfig.SetValue('/Window/Width',Width);
