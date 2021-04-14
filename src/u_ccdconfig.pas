@@ -116,6 +116,7 @@ begin
   begin
     Flush;
     Doc.Free;
+    Doc:=nil;
   end;
   inherited Destroy;
  except
