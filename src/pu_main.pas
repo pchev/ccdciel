@@ -898,9 +898,12 @@ begin
     end;
   except
     {$I-}
-    LogFileOpen:=false;
-    LogToFile:=false;
-    CloseFile(MsgLog);
+    on E: Exception do begin
+      LogFileOpen:=false;
+      LogToFile:=false;
+      NewMessage('Error writing log file: '+ E.Message,1);
+      CloseFile(MsgLog);
+    end;
     {$I+}
   end;
 end;
