@@ -86,6 +86,7 @@ end;
 
 procedure TCCDconfig.Flush; overload;
 var originalfilename,tmpfilename,backupfilename: string;
+    F : TFileStream;
 begin
 if Modified and not ReadOnly then
   if (FileName<>'') then begin
@@ -93,7 +94,12 @@ if Modified and not ReadOnly then
     tmpfilename:=originalfilename+'.tmp';
     backupfilename:=originalfilename+'.bak';
     DeleteFile(tmpfilename);
-    SaveToFile(tmpfilename);
+    F:=TFileStream.Create(tmpfilename,fmCreate);
+    try
+      SaveToStream(F);
+    finally
+      F.Free;
+    end;
     DeleteFile(backupfilename);
     RenameFile(originalfilename,backupfilename);
     RenameFile(tmpfilename,originalfilename);
