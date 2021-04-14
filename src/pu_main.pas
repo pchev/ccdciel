@@ -9239,7 +9239,12 @@ try
  end;
 {$ifdef debug_raw}writeln(FormatDateTime(dateiso,Now)+blank+'Image saved');{$endif}
  except
-   on E: Exception do NewMessage('CameraNewImage, SaveImage :'+ E.Message,1);
+   on E: Exception do begin
+     NewMessage('Error saving image to disk: '+ E.Message,1);
+     f_capture.Stop;
+     Capture:=false;
+     if f_sequence.Running then f_sequence.AbortSequence;
+   end;
  end;
 end;
 
