@@ -421,8 +421,9 @@ begin
   end;
   try
    CopyFile(fn1,fn2,false,true);
-   if (fn2=Targets.SequenceFile.Filename) then begin
+   if (not running) then begin
      LoadTargets(fn2);
+     ClearRestartHistory(true);
    end;
   except
    on E: Exception do ShowMessage(Format(rsCopyfileErro, [E.Message]));
