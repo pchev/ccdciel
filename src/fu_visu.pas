@@ -93,7 +93,7 @@ type
     FBullsEye, LockSpinEdit, FClipping, FInvert: Boolean;
     FZoom: double;
     StartUpd,Updmax,HistogramAdjusted, LockHistogram: boolean;
-    XP: integer;
+    LockRedraw: boolean;
     FRedraw: TNotifyEvent;
     FonZoom: TNotifyEvent;
     FRedrawHistogram: TNotifyEvent;
@@ -166,6 +166,7 @@ begin
  FClipping:=false;
  FInvert:=false;
  LockSpinEdit:=true;
+ LockRedraw:=false;
 end;
 
 destructor  Tf_visu.Destroy;
@@ -495,7 +496,6 @@ begin
   else begin
     Updmax:=dx2<dx1;
   end;
-  if Updmax then XP:=round(ImgMax) else XP:=round(ImgMin);
   StartUpd:=true;
 end;
 
@@ -586,8 +586,18 @@ end;
 procedure Tf_visu.TimerRedrawTimer(Sender: TObject);
 begin
   TimerRedraw.Enabled:=false;
-  if Assigned(FShowHistogramPos) then FShowHistogramPos('');
-  if Assigned(FRedraw) then FRedraw(self);
+  if LockRedraw then begin
+    TimerRedraw.Enabled:=true;
+  end
+  else begin
+    try
+     LockRedraw:=true;
+     if Assigned(FShowHistogramPos) then FShowHistogramPos('');
+     if Assigned(FRedraw) then FRedraw(self);
+    finally
+     LockRedraw:=false;
+    end;
+  end;
 end;
 
 end.
