@@ -198,11 +198,11 @@ var hval: double;
 begin
   if SetLevel and (not HistogramAdjusted) then begin
     if HistBar.Position<30 then
-      hval:=(101-power(1.5,HistBar.Position/100))/100
-    else if HistBar.Position<60 then
-      hval:=1.018E-3+(101-power(2,HistBar.Position/100))/100
+      hval:=(101-power(1.2,HistBar.Position/100))/100
+    else if HistBar.Position<70 then
+      hval:=7.3127E-4+(101-power(1.5,HistBar.Position/100))/100
     else
-      hval:=(99.484-((HistBar.Position-60)/10))/100;
+      hval:=(99.672-((HistBar.Position-70)/4))/100;
     if hval=1 then begin
       FImgMin:=0;
       FImgMax:=high(word);
