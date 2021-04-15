@@ -203,8 +203,6 @@ begin
       hval:=1.018E-3+(101-power(2,HistBar.Position/100))/100
     else
       hval:=(99.484-((HistBar.Position-60)/10))/100;
-    globalmsg(formatfloat(f6,hval));
-
     if hval=1 then begin
       FImgMin:=0;
       FImgMax:=high(word);
