@@ -12743,7 +12743,7 @@ var xx,yy,px,py: integer;
     z: double;
     tmpbmp,str: TBGRABitmap;
 begin
-if (f_magnifyer.Visible)and(fits.HeaderInfo.naxis1>0)and(ImgScale0<>0)and(x>0)and(y>0) then begin
+if (f_magnifyer.isVisible)and(fits.HeaderInfo.naxis1>0)and(ImgScale0<>0)and(x>0)and(y>0) then begin
  Screen2fits(x,y,f_visu.FlipHorz,f_visu.FlipVert,xx,yy);
  z:=max(2,3*ImgZoom);
  tmpbmp:=TBGRABitmap.Create(round(f_magnifyer.Image1.Width/z),round(f_magnifyer.Image1.Height/z),clDarkBlue);
