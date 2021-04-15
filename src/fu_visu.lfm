@@ -164,11 +164,10 @@ object f_visu: Tf_visu
             Top = -11
             Width = 114
             Max = 100
+            OnChange = HistBarChange
             Position = 0
             TickStyle = tsNone
             Constraints.MaxHeight = 26
-            OnMouseUp = HistBarMouseUp
-            OnKeyUp = HistBarKeyUp
             TabOrder = 0
           end
         end
@@ -360,7 +359,7 @@ object f_visu: Tf_visu
   end
   object TimerMinMax: TTimer
     Enabled = False
-    Interval = 250
+    Interval = 500
     OnTimer = TimerMinMaxTimer
     Left = 40
     Top = 49

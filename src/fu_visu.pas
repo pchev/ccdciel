@@ -73,8 +73,6 @@ type
     procedure FrameEndDrag(Sender, Target: TObject; X, Y: Integer);
     procedure FrameResize(Sender: TObject);
     procedure GammaChange(Sender: TObject);
-    procedure HistBarKeyUp(Sender: TObject; var Key: Word; Shift: TShiftState);
-    procedure HistBarMouseUp(Sender: TObject; Button: TMouseButton; Shift: TShiftState; X, Y: Integer);
     procedure histminmaxClick(Sender: TObject);
     procedure HistogramMouseDown(Sender: TObject; Button: TMouseButton; Shift: TShiftState; X, Y: Integer);
     procedure HistogramMouseMove(Sender: TObject; Shift: TShiftState; X, Y: Integer);
@@ -198,29 +196,31 @@ procedure Tf_visu.SetLimit(SetLevel:boolean);
 var hval: double;
     i,sum,slh,shh,lh,hh,startp: integer;
 begin
-  if HistBar.Position<30 then
-    hval:=(101-power(1.5,HistBar.Position/100))/100
-  else if HistBar.Position<60 then
-    hval:=1.018E-3+(101-power(2,HistBar.Position/100))/100
-  else
-    hval:=(99.484-((HistBar.Position-60)/10))/100;
-  slh:=round((1-hval)*Fsum); lh:=0;
-  shh:=round(hval*Fsum); hh:=0;
-  sum:=0;
-  startp:=round(FHistStart+0.90*(max(0,Fmaxp-FHistStart)));
-  for i:=0 to high(word) do begin
-    sum:=sum+Fhist[i];
-    if i>startp then begin
-      if (lh=0) and (sum>=slh) then lh:=i;
-      if (hh=0) and (sum>=shh) then hh:=i;
-    end;
-  end;
   if SetLevel and (not HistogramAdjusted) then begin
+    if HistBar.Position<30 then
+      hval:=(101-power(1.5,HistBar.Position/100))/100
+    else if HistBar.Position<60 then
+      hval:=1.018E-3+(101-power(2,HistBar.Position/100))/100
+    else
+      hval:=(99.484-((HistBar.Position-60)/10))/100;
+    globalmsg(formatfloat(f6,hval));
+
     if hval=1 then begin
       FImgMin:=0;
       FImgMax:=high(word);
     end
     else begin
+      slh:=round((1-hval)*Fsum); lh:=0;
+      shh:=round(hval*Fsum); hh:=0;
+      sum:=0;
+      startp:=round(FHistStart+0.90*(max(0,Fmaxp-FHistStart)));
+      for i:=0 to high(word) do begin
+        sum:=sum+Fhist[i];
+        if i>startp then begin
+          if (lh=0) and (sum>=slh) then lh:=i;
+          if (hh=0) and (sum>=shh) then hh:=i;
+        end;
+      end;
       FimgMin:=lh;
       FImgMax:=hh;
     end;
@@ -402,18 +402,8 @@ end;
 
 procedure Tf_visu.GammaChange(Sender: TObject);
 begin
-  TimerRedraw.Enabled:=false;
-  TimerRedraw.Enabled:=true;
-end;
-
-procedure Tf_visu.HistBarKeyUp(Sender: TObject; var Key: Word; Shift: TShiftState);
-begin
-  HistBarChange(Sender);
-end;
-
-procedure Tf_visu.HistBarMouseUp(Sender: TObject; Button: TMouseButton; Shift: TShiftState; X, Y: Integer);
-begin
-HistBarChange(Sender);
+  TimerMinMax.Enabled:=false;
+  TimerMinMax.Enabled:=true;
 end;
 
 procedure Tf_visu.BtnBullsEyeClick(Sender: TObject);
