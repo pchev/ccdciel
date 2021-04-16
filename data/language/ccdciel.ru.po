@@ -6,15 +6,15 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ccdciel\n"
 "Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
-"POT-Creation-Date: 2021-03-14 15:39+0000\n"
-"PO-Revision-Date: 2021-02-13 10:38+0000\n"
+"POT-Creation-Date: 2021-04-16 14:42+0000\n"
+"PO-Revision-Date: 2021-04-08 18:42+0000\n"
 "Last-Translator: Sergey Tarantsov <tsn-ast@yandex.ru>\n"
 "Language-Team: Russian <ru@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2021-03-14 15:48+0000\n"
-"X-Generator: Launchpad (build d4fcb062545ed29d3cd7773e52e43615e042623f)\n"
+"X-Launchpad-Export-Date: 2021-04-16 15:00+0000\n"
+"X-Generator: Launchpad (build 929bdb49da44562d032228b8f93c5c598dae8678)\n"
 
 #: u_translation.rs32bitdriver
 msgid "This driver work only in 32bit, please install the 32bit version of CCDciel."
@@ -1640,6 +1640,10 @@ msgstr "Параметры имени папки"
 msgid "Found %s devices"
 msgstr "Найдено %s устройств"
 
+#: u_translation.rsfounddstars
+msgid "Found %d stars"
+msgstr ""
+
 #: u_translation.rsfov
 msgid "FOV"
 msgstr "FOV"
@@ -2146,7 +2150,7 @@ msgstr "Перекладка завершена"
 
 #: u_translation.rsmeridianflip11
 msgid "Meridian flip aborted after %d retries"
-msgstr ""
+msgstr "Перекладка прервана после %d повторов"
 
 #: u_translation.rsmeridianflip2
 msgid "Meridian flip will occur now."
@@ -4164,6 +4168,10 @@ msgstr "Повторная центровка перед следующим сн
 msgid "TCP/IP server listen on port: %s"
 msgstr "Сервер TCP/IP прослушивает порт: %s"
 
+#: u_translation.rstcpipserverp
+msgid "TCP/IP server port"
+msgstr ""
+
 #: u_translation.rstcpipservers
 msgid "TCP/IP server stopped"
 msgstr "TCP/IP сервер остановлен"
@@ -4663,6 +4671,10 @@ msgstr "Частота кадров видео "
 #: u_translation.rsviewheader
 msgid "View header"
 msgstr "Заголовок файла"
+
+#: u_translation.rsviewlastauto
+msgid "View last autofocus"
+msgstr ""
 
 #: u_translation.rsviewlastreso
 msgid "View last resolver log"

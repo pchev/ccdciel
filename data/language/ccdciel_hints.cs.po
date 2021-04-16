@@ -2,15 +2,15 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ccdceil\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-03-14 15:39+0000\n"
-"PO-Revision-Date: 2020-12-09 08:04+0000\n"
+"POT-Creation-Date: 2021-04-16 14:42+0000\n"
+"PO-Revision-Date: 2021-03-27 07:36+0000\n"
 "Last-Translator: Stanislav Holub <Unknown>\n"
 "Language-Team: Czech <cz@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2021-03-14 15:48+0000\n"
-"X-Generator: Launchpad (build d4fcb062545ed29d3cd7773e52e43615e042623f)\n"
+"X-Launchpad-Export-Date: 2021-04-16 15:00+0000\n"
+"X-Generator: Launchpad (build 929bdb49da44562d032228b8f93c5c598dae8678)\n"
 "Language: cs\n"
 
 #: u_hints.rsactivateback
@@ -51,11 +51,11 @@ msgstr "Automatické zaostření, pokud je změna teploty větší než nakonfig
 
 #: u_hints.rsautoguiderst
 msgid "Autoguider status"
-msgstr "Stav autopointování"
+msgstr "Stav auto navádění"
 
 #: u_hints.rsbesuretopaus
 msgid "Be sure to pause guiding when using a OAG. You can continue guiding when using a separate guide scope."
-msgstr "Při použití pointace mimo osu OAG je nutná pauza. Při použití samostatné pointace můžete pokračovat v pointaci."
+msgstr "Při použití navádění mimo osu OAG je nutná pauza. Při použití samostatného navádění můžete pokračovat v navádění."
 
 #: u_hints.rscamerabinnin
 msgid "Camera binning"
@@ -163,11 +163,11 @@ msgstr "Globální parametry serveru INDI"
 
 #: u_hints.rsguidinghisto
 msgid "Guiding history in arcsecond %s - blue: RA error %s - red: Dec error %s - yellow: Star mass"
-msgstr "Historie pointace v obloukových sekundách %s - modrá: Chyba RA %s - červená: Chyba DEC %s - žlutá: Velikost hvězdy"
+msgstr "Historie navádění v obloukových sekundách %s - modrá: Chyba RA %s - červená: Chyba DEC %s - žlutá: Velikost hvězdy"
 
 #: u_hints.rshistogramful
 msgid "Histogram full range or clipped to available data"
-msgstr ""
+msgstr "Histogram v plném rozsahu nebo oříznutý na dostupná data"
 
 #: u_hints.rshistogramoft
 msgid "Histogram of the current image.%sClick and move to adjust the visualisation threshold."
@@ -311,7 +311,7 @@ msgstr "Zobrazit stav dokončení"
 
 #: u_hints.rsshowguidings
 msgid "Show guiding statistics"
-msgstr "Zobrazit statistiku pointace"
+msgstr "Zobrazit statistiku navádění"
 
 #: u_hints.rsshowhighligh
 msgid "Show highlight and shadow clipping"
@@ -516,7 +516,7 @@ msgstr "Použít Iterativní metodu, je vhodné, pokud první dvě možnosti nef
 
 #: u_hints.rsuseplatesolv
 msgid "Use astrometric (plate) solving to improve telescope pointing accuracy"
-msgstr "Pomocí platesolvingu obrazu můžete zlepšit přesnost pointace dalekohledu"
+msgstr "Pomocí platesolvingu obrazu můžete zlepšit přesnost navádění dalekohledu"
 
 #: u_hints.rsusevcurvewi2
 msgid "Vcurve can only work with an absolute position focuser, it require to learn the curve."

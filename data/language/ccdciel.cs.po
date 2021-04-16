@@ -2,15 +2,15 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ccdciel\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-03-14 15:39+0000\n"
-"PO-Revision-Date: 2021-02-10 20:21+0000\n"
+"POT-Creation-Date: 2021-04-16 14:42+0000\n"
+"PO-Revision-Date: 2021-03-27 10:00+0000\n"
 "Last-Translator: Stanislav Holub <Unknown>\n"
 "Language-Team: Czech <cz@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2021-03-14 15:48+0000\n"
-"X-Generator: Launchpad (build d4fcb062545ed29d3cd7773e52e43615e042623f)\n"
+"X-Launchpad-Export-Date: 2021-04-16 15:00+0000\n"
+"X-Generator: Launchpad (build 929bdb49da44562d032228b8f93c5c598dae8678)\n"
 "Language: cs\n"
 
 #: u_translation.rs32bitdriver
@@ -236,7 +236,7 @@ msgstr "Automatické ostření selhalo, zkuste jinou hvězdou ..."
 
 #: u_translation.rsautofocusfai3
 msgid "Autofocus failed after %s retries, continue without focusing."
-msgstr "Ostření selhalo po %s pokusech, pokračuje bez zaostření."
+msgstr "Automatické ostření selhalo po %s pokusech, pokračuji bez zaostření."
 
 #: u_translation.rsautofocusfin
 msgid "Autofocus finished, POS=%s HFD=%s PEAK:%s SNR:%s TEMP:%s"
@@ -260,7 +260,7 @@ msgstr "Graf automatického ostření"
 
 #: u_translation.rsautofocusmea
 msgid "Autofocus mean frame %s/%s, hfd=%s peak:%s snr:%s"
-msgstr "Automatické zaostření průměrného rámece %s/%s, hfd=%s vrch:%s snr:%s"
+msgstr "Automatické zaostření průměrného snímku %s/%s, hfd=%s vrch:%s snr:%s"
 
 #: u_translation.rsautofocusmea2
 msgid "Autofocus measurement %s : HFD=%s position=%s"
@@ -325,43 +325,43 @@ msgstr "Tolerance ostření "
 
 #: u_translation.rsautoguider
 msgid "Autoguider"
-msgstr "Autopointace"
+msgstr "Auto navádění"
 
 #: u_translation.rsautoguiderer
 msgid "Autoguider error"
-msgstr "Chyba Autopointace"
+msgstr "Chyba Auto navádění"
 
 #: u_translation.rsautoguiderno
 msgid "Autoguider not connected"
-msgstr "Autopointace nepřipojena"
+msgstr "Auto navádění nepřipojeno"
 
 #: u_translation.rsautoguiderno2
 msgid "Autoguider not guiding %s seconds after requested to start.%sDo you want to retry?"
-msgstr "Auto-pointace nepointuje %s sekund po žádosti o  spuštění.%sOpakovat?"
+msgstr "Auto navádění nenavádí %s sekund po žádosti o spuštění.%sOpakovat?"
 
 #: u_translation.rsautoguidersh
 msgid "Autoguider shutdown"
-msgstr "Vypnout autopointaci"
+msgstr "Vypnout auto naváděbí"
 
 #: u_translation.rsautoguiderst2
 msgid "Autoguider Start"
-msgstr "Auto-poitace spuštěna"
+msgstr "Auto navádění spuštěno"
 
 #: u_translation.rsautoguiderwa
 msgid "Autoguider was still not guiding after %s minutes."
-msgstr "Auto-pointace po %s minutách stále nepointuje."
+msgstr "Auto navádění po %s minutách stále nenavádí."
 
 #: u_translation.rsautoguiding
 msgid "Auto-guiding"
-msgstr "Auto-pointace"
+msgstr "Auto-navádění"
 
 #: u_translation.rsautoguidingr
 msgid "Autoguiding restarted."
-msgstr "Autopointace restartuje."
+msgstr "Auto navádění restartuje"
 
 #: u_translation.rsautoguidings
 msgid "Autoguiding stopped for %s minutes, sequence timeout in %s minutes."
-msgstr "Auto-pointace se zastavila na %s minut, časový limit sekvence %s minutách."
+msgstr "Auto navádění se zastavilo na %s minut, časový limit sekvence %s minutách."
 
 #: u_translation.rsautomatic
 msgid "Automatic"
@@ -493,7 +493,7 @@ msgstr "Kalibrovat"
 
 #: u_translation.rscalibrateaut
 msgid "Calibrate autoguider after meridian flip"
-msgstr "Kalibrovat autopointaci po překlopení poledníku"
+msgstr "Kalibrovat auto navádění po překlopení poledníku"
 
 #: u_translation.rscalibrated
 msgid "Calibrated"
@@ -505,7 +505,7 @@ msgstr "Kalibrace %szpoždění"
 
 #: u_translation.rscalibrator
 msgid "Calibrator"
-msgstr ""
+msgstr "Kalibrátor"
 
 #: u_translation.rscallexternal
 msgid "Call external command"
@@ -573,7 +573,7 @@ msgstr "Nelze spočítat čas průchodu poledníkem"
 
 #: u_translation.rscannotconnec
 msgid "Cannot connect to autoguider, sequence will run without guiding! %sDo you want to continue anyway?"
-msgstr "Nelze připojit auto-pointaci, sekvence se spustí bez pointace! %sPřesto pokračovat?"
+msgstr "Nelze připojit auto navádění, sekvence se spustí bez navádění! %sPřesto pokračovat?"
 
 #: u_translation.rscannotdelete
 msgid "Cannot delete the running sequence!"
@@ -945,11 +945,11 @@ msgstr "Počet"
 
 #: u_translation.rscover
 msgid "Cover"
-msgstr ""
+msgstr "Kryt"
 
 #: u_translation.rscovercalibra
 msgid "Cover calibrator"
-msgstr ""
+msgstr "Kryt Kalibrátoru"
 
 #: u_translation.rscoverthecame
 msgid "Cover the camera and set the exposure time and binning in the Preview pane now."
@@ -1021,7 +1021,7 @@ msgstr "Výchozí"
 
 #: u_translation.rsdefaultbehav
 msgid "Default behavior"
-msgstr "Výchozí chování"
+msgstr "Výchozí vlastnosti"
 
 #: u_translation.rsdegree
 msgid "degree"
@@ -1422,7 +1422,7 @@ msgstr "Smazání souboru selhalo: % s"
 
 #: u_translation.rsfailedtostar
 msgid "Failed to start guiding!"
-msgstr "Pointace selhala!"
+msgstr "Navádění selhalo!"
 
 #: u_translation.rsfailtoresolv
 msgid "Fail to resolve control exposure"
@@ -1430,7 +1430,7 @@ msgstr "Selhala kontrolní  expozice vyřešení"
 
 #: u_translation.rsfailtostopth
 msgid "Fail to stop the autoguider"
-msgstr "Autopointaci se nepodařilo zastavit"
+msgstr "Auto navádění se nepodařilo zastavit"
 
 #: u_translation.rsfalse
 msgid "False"
@@ -1641,6 +1641,10 @@ msgstr "Možnosti názvu složky"
 msgid "Found %s devices"
 msgstr "Nalezeno %s zařízení"
 
+#: u_translation.rsfounddstars
+msgid "Found %d stars"
+msgstr ""
+
 #: u_translation.rsfov
 msgid "FOV"
 msgstr "FOV"
@@ -1735,15 +1739,15 @@ msgstr "zelená"
 
 #: u_translation.rsguide
 msgid "Guide"
-msgstr "Pointace"
+msgstr "Navádění"
 
 #: u_translation.rsguidersensor
 msgid "Guider sensor;"
-msgstr "Senzor pointace;"
+msgstr "Naváděcí senzor;"
 
 #: u_translation.rsguiding
 msgid "%s guiding"
-msgstr "%s pointace"
+msgstr "%s navádění"
 
 #: u_translation.rshalt
 msgid "Halt"
@@ -2147,7 +2151,7 @@ msgstr "Překlopení poledníku dokončeno"
 
 #: u_translation.rsmeridianflip11
 msgid "Meridian flip aborted after %d retries"
-msgstr ""
+msgstr "Překlopení poledníku bylo přerušeno %d opakovat"
 
 #: u_translation.rsmeridianflip2
 msgid "Meridian flip will occur now."
@@ -2380,7 +2384,7 @@ msgstr "Dnes na tomto místě není astronomický soumrak"
 
 #: u_translation.rsnoautoguidin
 msgid "No auto-guiding, only dither by sending pulse guide directly to the mount."
-msgstr "Žádná auto-pointace, pouze posílat pulzy přímo do montáže."
+msgstr "Žádné auto navádění, pouze posílat pulzy přímo do montáže."
 
 #: u_translation.rsnobacklash
 msgid "No backlash"
@@ -2464,7 +2468,7 @@ msgstr "%s montáž není eqmod"
 
 #: u_translation.rsnotautoguidi
 msgid "Not autoguiding! dithering ignored."
-msgstr "Není auto-pointace! dithering je ignorován."
+msgstr "Chybí auto-navádění! dithering je ignorován."
 
 #: u_translation.rsnotconnected
 msgid "%s not connected!"
@@ -2692,7 +2696,7 @@ msgstr "Pozastavit po překlopení poledníku "
 
 #: u_translation.rspauseautogui
 msgid "Pause autoguider"
-msgstr "Pauza auto-pointace"
+msgstr "Pauza auto navádění"
 
 #: u_translation.rspausebeforem
 msgid "Pause before meridian flip "
@@ -2912,7 +2916,7 @@ msgstr "Preferovaný směr zaostření"
 
 #: u_translation.rspreferences
 msgid "Preferences%s"
-msgstr "Nastavení%s"
+msgstr "Předvolby%s"
 
 #: u_translation.rspresetlist
 msgid "Preset list"
@@ -3140,11 +3144,11 @@ msgstr "Vyřešit a zobrazit obraz rámce  v planetáriu"
 
 #: u_translation.rsresolveandsl
 msgid "Resolve and Slew to image center"
-msgstr "Vyřešit a Přejed na střed snímku"
+msgstr "Vyřešit a Přejezd na střed snímku"
 
 #: u_translation.rsresolveandsl2
 msgid "Resolve and Slew to cursor"
-msgstr "Vyřešit a Přejed na pozici kurzoru"
+msgstr "Vyřešit a Přejezd na pozici kurzoru"
 
 #: u_translation.rsresolveandsy
 msgid "Resolve and Sync the mount"
@@ -3160,7 +3164,7 @@ msgstr "Vyřešit kontrolní expozice"
 
 #: u_translation.rsresolveerror
 msgid "%s resolve error."
-msgstr "%s chyba řešení."
+msgstr "%s chyba opětovného řešení."
 
 #: u_translation.rsresolveralre
 msgid "Resolver already running, cannot start astrometry now!"
@@ -3184,7 +3188,7 @@ msgstr "Restartovat po dobrém počasí"
 
 #: u_translation.rsrestartautog
 msgid "Restart autoguider"
-msgstr "Restart autopointace"
+msgstr "Restart auto navádění"
 
 #: u_translation.rsrestartexpos
 msgid "Restart exposure"
@@ -3200,7 +3204,7 @@ msgstr "Obnovit sekvenci"
 
 #: u_translation.rsresumeautogu
 msgid "Resume autoguider"
-msgstr "Obnovit auto-pointaci"
+msgstr "Obnovit auto navádění"
 
 #: u_translation.rsretrieveposi
 msgid "Retrieve position from deepsky database"
@@ -3400,7 +3404,7 @@ msgstr "Skript %s dokončen"
 
 #: u_translation.rsscriptlangua
 msgid "Script language"
-msgstr ""
+msgstr "Skriptový jazyk"
 
 #: u_translation.rsscripttermin
 msgid "Script terminating..."
@@ -3480,7 +3484,7 @@ msgstr "Sekvence přerušena."
 
 #: u_translation.rssequenceabor2
 msgid "Sequence aborted because the autoguider was not reconnected after %s minutes."
-msgstr "Úloha přerušena, protože auto-pointace nebyla po %s minutách znovu připojena."
+msgstr "Úloha přerušena, protože auto navádění nebylo po %s minutách znovu připojena."
 
 #: u_translation.rssequencealre
 msgid "Sequence %s already exist. Do you want to replace this file?"
@@ -3540,7 +3544,7 @@ msgstr "Sekvence pokračuje s aktuální pozicí ostření."
 
 #: u_translation.rssequencewill2
 msgid "Sequence will run without guiding!"
-msgstr "Sekvence se spustí bez pointace!"
+msgstr "Sekvence se spustí bez navádění!"
 
 #: u_translation.rsserver
 msgid "Server"
@@ -3825,7 +3829,7 @@ msgstr "Přidání referenční hvězdy v %s/%s"
 
 #: u_translation.rsstackofframe
 msgid "stack of %s frames"
-msgstr "skládání rámců %s"
+msgstr "skládání snímků %s"
 
 #: u_translation.rsstar
 msgid "Star"
@@ -3861,7 +3865,7 @@ msgstr "Spustit v "
 
 #: u_translation.rsstartautogui
 msgid "Start autoguider"
-msgstr "Spustit auto-pointaci"
+msgstr "Spustit auto navádění"
 
 #: u_translation.rsstartcapture
 msgid "Start capture"
@@ -4009,7 +4013,7 @@ msgstr "Konec v"
 
 #: u_translation.rsstopautoguid
 msgid "Stop autoguider"
-msgstr "Zastavit autopointaci"
+msgstr "Zastavit auto navádění"
 
 #: u_translation.rsstopcapture
 msgid "Stop capture"
@@ -4025,7 +4029,7 @@ msgstr "Zastavit  Flat snímání"
 
 #: u_translation.rsstopguiding
 msgid "Stop guiding"
-msgstr "Zastavit pointaci"
+msgstr "Zastavit navádění"
 
 #: u_translation.rsstoploop
 msgid "Stop Loop"
@@ -4113,7 +4117,7 @@ msgstr "Pozastavit přejíždění kupole"
 
 #: u_translation.rsswitch
 msgid "Switch"
-msgstr ""
+msgstr "Přepínač"
 
 #: u_translation.rssynctoeq
 msgid "Sync to %s %s/%s"
@@ -4166,6 +4170,10 @@ msgstr "Cíl re centrovat před dalším snímkem"
 #: u_translation.rstcpipserverl
 msgid "TCP/IP server listen on port: %s"
 msgstr "Naslouchám server TCP / IP na portu: %s"
+
+#: u_translation.rstcpipserverp
+msgid "TCP/IP server port"
+msgstr ""
 
 #: u_translation.rstcpipservers
 msgid "TCP/IP server stopped"
@@ -4457,7 +4465,7 @@ msgstr "Zkusit další cíl"
 
 #: u_translation.rstrytoconnect
 msgid "Try to connect to autoguider"
-msgstr "Zkusím připojit k autopointaci"
+msgstr "Připojit k auto navádění"
 
 #: u_translation.rstrytofixpixe
 msgid "Try to fix pixel range to match CMOS camera bit depth"
@@ -4473,7 +4481,7 @@ msgstr "Typ"
 
 #: u_translation.rsunabletofind
 msgid "Unable to find resolve data!"
-msgstr "Nelze najít rozlišující data!"
+msgstr "Nelze najít údaje o řešení!"
 
 #: u_translation.rsunattendeder
 msgid "Unattended error script"
@@ -4561,7 +4569,7 @@ msgstr "Pomocí astrometrie%s upřesněte polohu"
 
 #: u_translation.rsusecovercali
 msgid "Use Cover calibrator"
-msgstr ""
+msgstr "Použít Kryt kalibrátoru"
 
 #: u_translation.rsusecustomscr
 msgid "Use custom script"
@@ -4617,7 +4625,7 @@ msgstr "Použít bezpečnostní monitor"
 
 #: u_translation.rsuseswitch
 msgid "Use switch"
-msgstr ""
+msgstr "Použít přepínač"
 
 #: u_translation.rsusewatchdog
 msgid "Use watchdog"
@@ -4665,7 +4673,11 @@ msgstr "Rychlost snímání videa "
 
 #: u_translation.rsviewheader
 msgid "View header"
-msgstr "Záhlaví souboru"
+msgstr "Zobrazit hlavičku"
+
+#: u_translation.rsviewlastauto
+msgid "View last autofocus"
+msgstr ""
 
 #: u_translation.rsviewlastreso
 msgid "View last resolver log"
@@ -4693,7 +4705,7 @@ msgstr "Vyčkat na řešení"
 
 #: u_translation.rswaitdseconds
 msgid "Wait %d seconds and retry"
-msgstr ""
+msgstr "Počkejte %d sekund a zkuste to znovu"
 
 #: u_translation.rswaitingdseco
 msgid "Waiting %d seconds before to restart the exposure"
@@ -4757,7 +4769,7 @@ msgstr "Vyčkat na spuštění sekvence %s v %s"
 
 #: u_translation.rswarmthecamer
 msgid "Warm the camera"
-msgstr "Teplá kamera"
+msgstr "Zahřát kameru"
 
 #: u_translation.rswarningimage
 msgid "Warning! %s image received"

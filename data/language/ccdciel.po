@@ -4822,3 +4822,15 @@ msgstr ""
 msgid "Script language"
 msgstr ""
 
+#: u_translation:rstcpipserverp
+msgid "TCP/IP server port"
+msgstr ""
+
+#: u_translation:rsfounddstars
+msgid "Found %d stars"
+msgstr ""
+
+#: u_translation:rsviewlastauto
+msgid "View last autofocus"
+msgstr ""
+

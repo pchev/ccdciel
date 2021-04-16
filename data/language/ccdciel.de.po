@@ -6,15 +6,15 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ccdciel\n"
 "Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
-"POT-Creation-Date: 2021-03-14 15:39+0000\n"
-"PO-Revision-Date: 2021-02-12 19:27+0000\n"
+"POT-Creation-Date: 2021-04-16 14:42+0000\n"
+"PO-Revision-Date: 2021-03-15 21:16+0000\n"
 "Last-Translator: Thomas <email@starhopper.de>\n"
 "Language-Team: German <de@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2021-03-14 15:48+0000\n"
-"X-Generator: Launchpad (build d4fcb062545ed29d3cd7773e52e43615e042623f)\n"
+"X-Launchpad-Export-Date: 2021-04-16 15:00+0000\n"
+"X-Generator: Launchpad (build 929bdb49da44562d032228b8f93c5c598dae8678)\n"
 
 #: u_translation.rs32bitdriver
 msgid "This driver work only in 32bit, please install the 32bit version of CCDciel."
@@ -506,7 +506,7 @@ msgstr "Kalibrierung %sVerzögerung"
 
 #: u_translation.rscalibrator
 msgid "Calibrator"
-msgstr ""
+msgstr "Kalibrator"
 
 #: u_translation.rscallexternal
 msgid "Call external command"
@@ -946,11 +946,11 @@ msgstr "Anzahl"
 
 #: u_translation.rscover
 msgid "Cover"
-msgstr ""
+msgstr "Deckel"
 
 #: u_translation.rscovercalibra
 msgid "Cover calibrator"
-msgstr ""
+msgstr "Deckel Kalibrator"
 
 #: u_translation.rscoverthecame
 msgid "Cover the camera and set the exposure time and binning in the Preview pane now."
@@ -1641,6 +1641,10 @@ msgstr "Ordnernamen Optionen"
 msgid "Found %s devices"
 msgstr "%s Geräte gefunden"
 
+#: u_translation.rsfounddstars
+msgid "Found %d stars"
+msgstr ""
+
 #: u_translation.rsfov
 msgid "FOV"
 msgstr "FOV"
@@ -2148,7 +2152,7 @@ msgstr "Meridianflip abgeschlossen"
 
 #: u_translation.rsmeridianflip11
 msgid "Meridian flip aborted after %d retries"
-msgstr ""
+msgstr "Merdianflip nach %d Wiederholungen abgebrochen"
 
 #: u_translation.rsmeridianflip2
 msgid "Meridian flip will occur now."
@@ -3401,7 +3405,7 @@ msgstr "Skript %s beendet"
 
 #: u_translation.rsscriptlangua
 msgid "Script language"
-msgstr ""
+msgstr "Skriptsprache"
 
 #: u_translation.rsscripttermin
 msgid "Script terminating..."
@@ -4113,7 +4117,7 @@ msgstr "Kuppelkopplung aussetzen"
 
 #: u_translation.rsswitch
 msgid "Switch"
-msgstr ""
+msgstr "Schalter"
 
 #: u_translation.rssynctoeq
 msgid "Sync to %s %s/%s"
@@ -4166,6 +4170,10 @@ msgstr "Ziel wird vor der nächsten Aufnahme rückzentiert"
 #: u_translation.rstcpipserverl
 msgid "TCP/IP server listen on port: %s"
 msgstr "TCP/IP Server hört auf Port: %s"
+
+#: u_translation.rstcpipserverp
+msgid "TCP/IP server port"
+msgstr ""
 
 #: u_translation.rstcpipservers
 msgid "TCP/IP server stopped"
@@ -4562,7 +4570,7 @@ msgstr "Astrometrie zur%sPositionsverbesserung nutzen"
 
 #: u_translation.rsusecovercali
 msgid "Use Cover calibrator"
-msgstr ""
+msgstr "Benutze Deckel Kalibrator"
 
 #: u_translation.rsusecustomscr
 msgid "Use custom script"
@@ -4618,7 +4626,7 @@ msgstr "Sicherheitsmonitor verwenden"
 
 #: u_translation.rsuseswitch
 msgid "Use switch"
-msgstr ""
+msgstr "Benutze Schalter"
 
 #: u_translation.rsusewatchdog
 msgid "Use watchdog"
@@ -4668,6 +4676,10 @@ msgstr "Video Vorschau Bildrate "
 msgid "View header"
 msgstr "Zeige Header"
 
+#: u_translation.rsviewlastauto
+msgid "View last autofocus"
+msgstr ""
+
 #: u_translation.rsviewlastreso
 msgid "View last resolver log"
 msgstr "Letztes Platesolve Protokoll anzeigen"
@@ -4693,8 +4705,9 @@ msgid "Wait after solve"
 msgstr "Warten nach erfolgreicher Astrometrie"
 
 #: u_translation.rswaitdseconds
+#, fuzzy,badformat
 msgid "Wait %d seconds and retry"
-msgstr ""
+msgstr "Warte &d Sekunden und versuche es nochmal"
 
 #: u_translation.rswaitingdseco
 msgid "Waiting %d seconds before to restart the exposure"

@@ -6,15 +6,15 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ccdciel\n"
 "Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
-"POT-Creation-Date: 2021-03-14 15:39+0000\n"
+"POT-Creation-Date: 2021-04-16 14:42+0000\n"
 "PO-Revision-Date: 2020-08-01 19:06+0000\n"
 "Last-Translator: Víctor R. Ruiz <Unknown>\n"
 "Language-Team: Spanish <es@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2021-03-14 15:48+0000\n"
-"X-Generator: Launchpad (build d4fcb062545ed29d3cd7773e52e43615e042623f)\n"
+"X-Launchpad-Export-Date: 2021-04-16 15:00+0000\n"
+"X-Generator: Launchpad (build 929bdb49da44562d032228b8f93c5c598dae8678)\n"
 
 #: u_translation.rs32bitdriver
 msgid "This driver work only in 32bit, please install the 32bit version of CCDciel."
@@ -1640,6 +1640,10 @@ msgstr "Opciones nombre carpetas"
 #: u_translation.rsfounddevices
 msgid "Found %s devices"
 msgstr "Encontrados %s dispositivos"
+
+#: u_translation.rsfounddstars
+msgid "Found %d stars"
+msgstr ""
 
 #: u_translation.rsfov
 msgid "FOV"
@@ -4165,6 +4169,10 @@ msgstr "Se recentrará el objetivo antes de la siguiente imagen"
 msgid "TCP/IP server listen on port: %s"
 msgstr "Servidor TCP/IP escucha en puerto: %s"
 
+#: u_translation.rstcpipserverp
+msgid "TCP/IP server port"
+msgstr ""
+
 #: u_translation.rstcpipservers
 msgid "TCP/IP server stopped"
 msgstr "Servidor TCP/IP detenido"
@@ -4664,6 +4672,10 @@ msgstr "Frecuencia vídeo previsualización "
 #: u_translation.rsviewheader
 msgid "View header"
 msgstr "Ver cabecera"
+
+#: u_translation.rsviewlastauto
+msgid "View last autofocus"
+msgstr ""
 
 #: u_translation.rsviewlastreso
 msgid "View last resolver log"
