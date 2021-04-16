@@ -1310,6 +1310,7 @@ resourcestring
   rsScriptLangua = 'Script language';
   rsTCPIPServerP = 'TCP/IP server port';
   rsFoundDStars = 'Found %d stars';
+  rsViewLastAuto = 'View last autofocus';
 
 implementation
 

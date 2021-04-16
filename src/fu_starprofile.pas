@@ -37,6 +37,8 @@ type
   { Tf_starprofile }
 
   Tf_starprofile = class(TFrame)
+    BtnMeasureImage: TButton;
+    BtnViewAutofocus: TButton;
     FitSourceMeasure: TListChartSource;
     FitSourceComp: TListChartSource;
     HistoryChartImax: TLineSeries;
@@ -65,7 +67,6 @@ type
     Panel2: TPanel;
     ChkFocus: TSpeedButton;
     ChkAutofocus: TSpeedButton;
-    BtnMeasureImage: TSpeedButton;
     PtSourceMeasure: TListChartSource;
     PtSourceComp: TListChartSource;
     BtnPinGraph: TSpeedButton;
@@ -81,6 +82,7 @@ type
     VcChartRegMeasure: TLineSeries;
     VcChartRegComp: TLineSeries;
     procedure BtnPinGraphClick(Sender: TObject);
+    procedure BtnViewAutofocusClick(Sender: TObject);
     procedure ChkAutofocusChange(Sender: TObject);
     procedure ChkFocusChange(Sender: TObject);
     procedure BtnMeasureImageClick(Sender: TObject);
@@ -174,10 +176,8 @@ begin
  Panel1.ChildSizing.LeftRightSpacing:=8;
  Panel1.ChildSizing.VerticalSpacing:=4;
  BtnPinGraph.Flat:=true;
- BtnMeasureImage.Flat:=true;
  ChkFocus.Flat:=true;
  ChkAutofocus.Flat:=true;
- BtnMeasureImage.Transparent:=false;
  ChkFocus.Transparent:=false;
  ChkAutofocus.Transparent:=false;
  {$endif}
@@ -218,6 +218,7 @@ begin
   BtnMeasureImage.Caption:=rsImageInspect;
   ChkFocus.Caption:=rsManualFocusA;
   ChkAutofocus.Caption:=rsAutofocus;
+  BtnViewAutofocus.Caption:=rsViewLastAuto;
   ProfileChart.Hint:=rsTheSelectedS;
   HistoryChart.Hint:=rsHistoryOfThe;
   LabelHFD.Hint:=rsTheHalfFluxD;
@@ -343,6 +344,12 @@ end;
 procedure Tf_starprofile.BtnPinGraphClick(Sender: TObject);
 begin
   if BtnPinGraph.Down then PanelGraphDblClick(Sender);
+end;
+
+procedure Tf_starprofile.BtnViewAutofocusClick(Sender: TObject);
+begin
+ PanelGraph.Visible:=not PanelGraph.Visible;
+ PanelFWHM.Visible:=not PanelGraph.Visible;
 end;
 
 procedure Tf_starprofile.PanelGraphDblClick(Sender: TObject);
