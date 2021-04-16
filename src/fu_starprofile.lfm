@@ -403,10 +403,12 @@ object f_starprofile: Tf_starprofile
       TabOrder = 4
       object BtnMeasureImage: TSpeedButton
         Left = 0
-        Height = 23
+        Height = 25
         Hint = 'Inspect the repartition of the HFD across the image'
         Top = 3
-        Width = 190
+        Width = 192
+        Align = alTop
+        BorderSpacing.Top = 3
         Caption = 'Image inspection'
         Layout = blGlyphBottom
         OnClick = BtnMeasureImageClick
@@ -414,11 +416,13 @@ object f_starprofile: Tf_starprofile
       end
       object ChkFocus: TSpeedButton
         Left = 0
-        Height = 23
+        Height = 25
         Hint = 'Start image loop centered on selected star'
-        Top = 28
-        Width = 190
+        Top = 31
+        Width = 192
+        Align = alTop
         AllowAllUp = True
+        BorderSpacing.Top = 3
         Caption = 'Manual focus aid'
         GroupIndex = 500
         Layout = blGlyphBottom
@@ -427,11 +431,13 @@ object f_starprofile: Tf_starprofile
       end
       object ChkAutofocus: TSpeedButton
         Left = 0
-        Height = 23
+        Height = 25
         Hint = 'Start the auto-focus procedure'
-        Top = 53
-        Width = 190
+        Top = 59
+        Width = 192
+        Align = alTop
         AllowAllUp = True
+        BorderSpacing.Top = 3
         Caption = 'Autofocus'
         GroupIndex = 501
         Layout = blGlyphBottom
