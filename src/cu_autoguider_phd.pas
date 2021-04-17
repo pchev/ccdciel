@@ -626,6 +626,18 @@ begin
   end else begin
     buf:='{"method": "set_paused","params":[false],"id":2002}';
     Send(buf);
+    wait(1);
+    buf:='{"method": "guide", "params": [';
+    buf:=buf+'{"pixels": '+FSettlePix+',';     // settle tolerance
+    buf:=buf+'"time": '+FSettleTmin+',';       // min time
+    buf:=buf+'"timeout": '+FSettleTmax+'},';   // max time
+    buf:=buf+'false';                          // don't calibrate
+    buf:=buf+'],';
+    buf:=buf+'"id": 2003}';
+    Send(buf);
+    FStatus:='Settling';
+    FState:=GUIDER_BUSY;
+    WaitGuiding(StrToInt(FSettleTmax)+5);
   end;
 end;
 
