@@ -200,6 +200,7 @@ begin
  LabelImax.Caption:='-';
  LabelSNR.Caption:='-';
  ClearGraph;
+ BtnViewAutofocus.Enabled:=false;
 end;
 
 destructor  Tf_starprofile.Destroy;
@@ -250,6 +251,8 @@ begin
    exit;
  end;
  if ChkFocus.Down then begin
+    PanelFWHM.Visible:=true;
+    PanelGraph.Visible:=false;
     if Assigned(FFocusStart) then FFocusStart(self);
  end else begin
    if Assigned(FFocusStop) then FFocusStop(self);
@@ -263,9 +266,11 @@ begin
     exit;
  end;
  if ChkAutofocus.Down then begin
+    BtnViewAutofocus.Enabled:=false;
     if Assigned(FAutoFocusStart) then FAutoFocusStart(self);
  end else begin
    terminated:=true;
+   BtnViewAutofocus.Enabled:=true;
    if Assigned(FAutoFocusStop) then FAutoFocusStop(self);
  end;
 end;
