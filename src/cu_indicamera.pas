@@ -1025,10 +1025,8 @@ begin
     end;
   end
   else if nvp=CCDinfo then begin
-     stWidth:=max(stWidth,round(CCDmaxx.Value));
-     stHeight:=max(stHeight,round(CCDmaxy.Value));
-     FCameraXSize:=max(FCameraXSize,stWidth);
-     FCameraYSize:=max(FCameraYSize,stHeight);
+     FCameraXSize:=round(CCDmaxx.Value);
+     FCameraYSize:=round(CCDmaxy.Value);
      if Assigned(FonFrameChange) then FonFrameChange(Self);
   end
   else if nvp=WheelSlot then begin
