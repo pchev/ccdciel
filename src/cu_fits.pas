@@ -112,7 +112,6 @@ type
     d8  : array[1..2880] of byte;
     d16 : array[1..1440] of smallint;
     d32 : array[1..720] of Longword;
-    d64 : array[1..360] of Int64;
     // Original image data
     FUseRawImage: boolean;
     Frawimage: Timafloat;
@@ -131,7 +130,7 @@ type
     // Fits header values
     FFitsInfo : TFitsInfo;
     //
-    n_axis,Fwidth,Fheight,Fhdr_end,colormode,Fpreview_axis : Integer;
+    n_plane,Fwidth,Fheight,Fhdr_end,colormode,Fpreview_axis : Integer;
     FTitle : string;
     Fmean,Fsigma : double;
     FVisuMin, FVisuMax: Word;
@@ -149,6 +148,7 @@ type
     FDarkOn: boolean;
     FDarkProcess, FBPMProcess: boolean;
     FonMsg: TNotifyMsg;
+    ReadFitsCS : TRTLCriticalSection;
     procedure msg(txt: string; level:integer=3);
     procedure SetStream(value:TMemoryStream);
     function GetStream: TMemoryStream;
@@ -226,6 +226,18 @@ type
      property DarkOn: boolean read FDarkOn write FDarkOn;
      property DarkFrame: TFits read FDark write FDark;
      property onMsg: TNotifyMsg read FonMsg write FonMsg;
+  end;
+
+  TReadFits = class(TThread)
+  public
+    working: boolean;
+    num, id: integer;
+    fits: TFits;
+    hist: THistogram;
+    dmin,dmax : double;
+    ni,sum,sum2 : extended;
+    procedure Execute; override;
+    constructor Create(CreateSuspended: boolean);
   end;
 
   TDebayerImage = class(TThread)
@@ -1234,57 +1246,71 @@ begin
   naxis3:=3;
   colormode:=3;
  end;
- if (naxis=3)and(naxis3=3) then n_axis:=3 else n_axis:=1;
+ if (naxis=3)and(naxis3=3) then n_plane:=3 else n_plane:=1;
 end;
 end;
 
-Procedure TFits.ReadFitsImage;
-var i,ii,j,npix,k,km,kk : integer;
-    x,dmin,dmax : double;
-    ni,sum,sum2 : extended;
+constructor TReadFits.Create(CreateSuspended: boolean);
+begin
+  FreeOnTerminate := False;
+  inherited Create(CreateSuspended);
+  working := True;
+end;
+
+procedure TReadFits.Execute;
+var i,ii,j,npix,k,km,kk,streaminc : integer;
+    streamstart,startline, endline, xs,ys: integer;
     x16,b16:smallint;
     x8,b8:byte;
+    x : double;
+    d8  : array[1..2880] of byte;
+    d16 : array[1..1440] of smallint;
+    d32 : array[1..720] of Longword;
+    d64 : array[1..360] of Int64;
 begin
-{$ifdef debug_raw}writeln(FormatDateTime(dateiso,Now)+blank+'ReadFitsImage');{$endif}
-FImageValid:=false;
-if FFitsInfo.naxis1=0 then exit;
-FDarkProcess:=false;
-FBPMProcess:=false;
+// image size
+xs:= fits.Fwidth;
+ys:= fits.FHeight;
+// height per thread
+i := ys div num;
+// this thread range
+startline := id * i;
+if id = (num - 1) then
+  endline := ys - 1
+else
+  endline := (id + 1) * i - 1;
+// start position of this range
+streamstart:=fits.fhdr_end+round(xs*startline*abs(fits.FFitsInfo.bitpix/8));
 dmin:=1.0E100;
 dmax:=-1.0E100;
 sum:=0; sum2:=0; ni:=0;
-if (FFitsInfo.naxis1>maxl)or(FFitsInfo.naxis2>maxl) then
-  raise exception.Create(Format('Image too big! limit is currently %dx%d %sPlease open an issue to request an extension.',[maxl,maxl,crlf]));
-Fheight:=FFitsInfo.naxis2;
-Fwidth :=FFitsInfo.naxis1;
-// do not scale 8 or 16 bit images
-FimageScaled:=(FFitsInfo.bscale<>1)or((FFitsInfo.bitpix<>16)and(FFitsInfo.bitpix<>8));
-FimageDebayer:=BayerColor and (not FDisableBayer) and (GetBayerMode<>bayerUnsupported) and (not FimageScaled);
-FUseRawImage:=FimageScaled or FimageDebayer;
-if FUseRawImage then
-  setlength(Frawimage,n_axis,Fheight,Fwidth)
-else
-   setlength(Frawimage,0,0,0);
-setlength(Fimage,n_axis,Fheight,Fwidth);
-FStream.Position:=fhdr_end;
-FillByte(FHistogram,sizeof(THistogram),0);
+FillByte(hist,sizeof(THistogram),0);
 npix:=0;
-b8:=round(FFitsInfo.blank);
-b16:=round(FFitsInfo.blank);
-case FFitsInfo.bitpix of
-    -64:for k:=0 to n_axis-1 do begin
-        for i:=0 to FFitsInfo.naxis2-1 do begin
-         ii:=FFitsInfo.naxis2-1-i;
-         for j := 0 to FFitsInfo.naxis1-1 do begin
+streaminc:=0;
+b8:=round(fits.FFitsInfo.blank);
+b16:=round(fits.FFitsInfo.blank);
+try
+case fits.FFitsInfo.bitpix of
+    -64:for k:=0 to fits.n_plane-1 do begin
+        for i:=startline to endline do begin
+         ii:=ys-1-i;
+         for j := 0 to xs-1 do begin
            if (npix mod 360 = 0) then begin
-             FStream.Read(d64,sizeof(d64));
+             EnterCriticalSection(fits.ReadFitsCS);
+             try
+             fits.FStream.Position:=streamstart+streaminc*sizeof(d64);
+             fits.FStream.Read(d64,sizeof(d64));
+             finally
+               LeaveCriticalSection(fits.ReadFitsCS);
+             end;
+             inc(streaminc);
              npix:=0;
            end;
            inc(npix);
            x:=InvertF64(d64[npix]);
-           if x=FFitsInfo.blank then x:=0;
-           x:=FFitsInfo.bzero+FFitsInfo.bscale*x;
-           Frawimage[k,ii,j] := x ;
+           if x=fits.FFitsInfo.blank then x:=0;
+           x:=fits.FFitsInfo.bzero+fits.FFitsInfo.bscale*x;
+           fits.Frawimage[k,ii,j] := x ;
            dmin:=min(x,dmin);
            dmax:=max(x,dmax);
            sum:=sum+x;
@@ -1293,19 +1319,26 @@ case FFitsInfo.bitpix of
           end;
          end;
          end;
-    -32: for k:=0 to n_axis-1 do begin
-        for i:=0 to FFitsInfo.naxis2-1 do begin
-         ii:=FFitsInfo.naxis2-1-i;
-         for j := 0 to FFitsInfo.naxis1-1 do begin
+    -32: for k:=0 to fits.n_plane-1 do begin
+        for i:=startline to endline do begin
+         ii:=ys-1-i;
+         for j := 0 to xs-1 do begin
            if (npix mod 720 = 0) then begin
-             FStream.Read(d32,sizeof(d32));
+             EnterCriticalSection(fits.ReadFitsCS);
+             try
+             fits.FStream.Position:=streamstart+streaminc*sizeof(d32);
+             fits.FStream.Read(d32,sizeof(d32));
+             finally
+               LeaveCriticalSection(fits.ReadFitsCS);
+             end;
+             inc(streaminc);
              npix:=0;
            end;
            inc(npix);
            x:=InvertF32(d32[npix]);
-           if x=FFitsInfo.blank then x:=0;
-           x:=FFitsInfo.bzero+FFitsInfo.bscale*x;
-           Frawimage[k,ii,j] := x ;
+           if x=fits.FFitsInfo.blank then x:=0;
+           x:=fits.FFitsInfo.bzero+fits.FFitsInfo.bscale*x;
+           fits.Frawimage[k,ii,j] := x ;
            dmin:=min(x,dmin);
            dmax:=max(x,dmax);
            sum:=sum+x;
@@ -1314,22 +1347,29 @@ case FFitsInfo.bitpix of
          end;
          end;
          end;
-     8 : if colormode=1 then
-        for k:=0 to n_axis-1 do begin
-        for i:=0 to FFitsInfo.naxis2-1 do begin
-         ii:=FFitsInfo.naxis2-1-i;
-         for j := 0 to FFitsInfo.naxis1-1 do begin
+     8 : if fits.colormode=1 then
+        for k:=0 to fits.n_plane-1 do begin
+        for i:=startline to endline do begin
+         ii:=ys-1-i;
+         for j := 0 to xs-1 do begin
            if (npix mod 2880 = 0) then begin
-             FStream.Read(d8,sizeof(d8));
+             EnterCriticalSection(fits.ReadFitsCS);
+             try
+             fits.FStream.Position:=streamstart+streaminc*sizeof(d8);
+             fits.FStream.Read(d8,sizeof(d8));
+             finally
+               LeaveCriticalSection(fits.ReadFitsCS);
+             end;
+             inc(streaminc);
              npix:=0;
            end;
            inc(npix);
            x8:=d8[npix];
            if x8=b8 then x8:=0;
-           x:=FFitsInfo.bzero+FFitsInfo.bscale*x8;
-           if FUseRawImage then Frawimage[k,ii,j] := x;
-           Fimage[k,ii,j] := x;
-           inc(FHistogram[round(max(0,min(maxword,x)))]);
+           x:=fits.FFitsInfo.bzero+fits.FFitsInfo.bscale*x8;
+           if fits.FUseRawImage then fits.Frawimage[k,ii,j] := x;
+           fits.Fimage[k,ii,j] := x;
+           inc(hist[round(max(0,min(maxword,x)))]);
            dmin:=min(x,dmin);
            dmax:=max(x,dmax);
            sum:=sum+x;
@@ -1339,16 +1379,23 @@ case FFitsInfo.bitpix of
          end;
          end else begin
           kk:=0;
-          if colormode=3 then begin  // output RGB from RGBA
-             n_axis:=4;
+          if fits.colormode=3 then begin  // output RGB from RGBA
+             fits.n_plane:=4;
              kk:=1;
           end;
-          for i:=0 to FFitsInfo.naxis2-1 do begin
-           ii:=FFitsInfo.naxis2-1-i;
-           for j := 0 to FFitsInfo.naxis1-1 do begin
-             for k:=n_axis-1 downto 0 do begin
+          for i:=startline to endline do begin
+           ii:=ys-1-i;
+           for j := 0 to xs-1 do begin
+             for k:=fits.n_plane-1 downto 0 do begin
              if (npix mod 2880 = 0) then begin
-               FStream.Read(d8,sizeof(d8));
+               EnterCriticalSection(fits.ReadFitsCS);
+               try
+               fits.FStream.Position:=streamstart+streaminc*sizeof(d8);
+               fits.FStream.Read(d8,sizeof(d8));
+               finally
+                 LeaveCriticalSection(fits.ReadFitsCS);
+               end;
+               inc(streaminc);
                npix:=0;
              end;
              inc(npix);
@@ -1356,10 +1403,10 @@ case FFitsInfo.bitpix of
              if km<0 then continue; // skip A
              x8:=d8[npix];
              if x8=b8 then x8:=0;
-             x:=FFitsInfo.bzero+FFitsInfo.bscale*x8;
-             if FUseRawImage then Frawimage[km,ii,j] := x;
-             Fimage[km,ii,j] := x;
-             inc(FHistogram[round(max(0,min(maxword,x)))]);
+             x:=fits.FFitsInfo.bzero+fits.FFitsInfo.bscale*x8;
+             if fits.FUseRawImage then fits.Frawimage[km,ii,j] := x;
+             fits.Fimage[km,ii,j] := x;
+             inc(hist[round(max(0,min(maxword,x)))]);
              dmin:=min(x,dmin);
              dmax:=max(x,dmax);
              sum:=sum+x;
@@ -1368,24 +1415,31 @@ case FFitsInfo.bitpix of
              end;
            end;
           end;
-          if colormode=3 then n_axis:=3; // restore value
+          if fits.colormode=3 then fits.n_plane:=3; // restore value
          end;
 
-     16 : for k:=0 to n_axis-1 do begin
-        for i:=0 to FFitsInfo.naxis2-1 do begin
-         ii:=FFitsInfo.naxis2-1-i;
-         for j := 0 to FFitsInfo.naxis1-1 do begin
+     16 : for k:=0 to fits.n_plane-1 do begin
+        for i:=startline to endline do begin
+         ii:=ys-1-i;
+         for j := 0 to xs-1 do begin
            if (npix mod 1440 = 0) then begin
-             FStream.Read(d16,sizeof(d16));
+             EnterCriticalSection(fits.ReadFitsCS);
+             try
+             fits.FStream.Position:=streamstart+streaminc*sizeof(d16);
+             fits.FStream.Read(d16,sizeof(d16));
+             finally
+               LeaveCriticalSection(fits.ReadFitsCS);
+             end;
+             inc(streaminc);
              npix:=0;
            end;
            inc(npix);
            x16:=BEtoN(d16[npix]);
            if x16=b16 then x16:=0;
-           x:=FFitsInfo.bzero+FFitsInfo.bscale*x16;
-           if FUseRawImage then Frawimage[k,ii,j] := x;
-           Fimage[k,ii,j] := x;
-           inc(FHistogram[round(max(0,min(maxword,x)))]);
+           x:=fits.FFitsInfo.bzero+fits.FFitsInfo.bscale*x16;
+           if fits.FUseRawImage then fits.Frawimage[k,ii,j] := x;
+           fits.Fimage[k,ii,j] := x;
+           inc(hist[round(max(0,min(maxword,x)))]);
            dmin:=min(x,dmin);
            dmax:=max(x,dmax);
            sum:=sum+x;
@@ -1394,19 +1448,26 @@ case FFitsInfo.bitpix of
          end;
          end;
          end;
-     32 : for k:=0 to n_axis-1 do begin
-        for i:=0 to FFitsInfo.naxis2-1 do begin
-         ii:=FFitsInfo.naxis2-1-i;
-         for j := 0 to FFitsInfo.naxis1-1 do begin
+     32 : for k:=0 to fits.n_plane-1 do begin
+        for i:=startline to endline do begin
+         ii:=ys-1-i;;
+         for j := 0 to xs-1 do begin
            if (npix mod 720 = 0) then begin
-             FStream.Read(d32,sizeof(d32));
+             EnterCriticalSection(fits.ReadFitsCS);
+             try
+             fits.FStream.Position:=streamstart+streaminc*sizeof(d32);
+             fits.FStream.Read(d32,sizeof(d32));
+             finally
+               LeaveCriticalSection(fits.ReadFitsCS);
+             end;
+             inc(streaminc);
              npix:=0;
            end;
            inc(npix);
            x:=BEtoN(LongInt(d32[npix]));
-           if x=FFitsInfo.blank then x:=0;
-           x:=FFitsInfo.bzero+FFitsInfo.bscale*x;
-           Frawimage[k,ii,j] := x;
+           if x=fits.FFitsInfo.blank then x:=0;
+           x:=fits.FFitsInfo.bzero+fits.FFitsInfo.bscale*x;
+           fits.Frawimage[k,ii,j] := x;
            dmin:=min(x,dmin);
            dmax:=max(x,dmax);
            sum:=sum+x;
@@ -1416,6 +1477,90 @@ case FFitsInfo.bitpix of
          end;
          end;
 end;
+finally
+working := False;
+end;
+end;
+
+Procedure TFits.ReadFitsImage;
+var i,j,k : integer;
+    dmin,dmax : double;
+    ni,sum,sum2 : extended;
+    working, timingout: boolean;
+    timelimit: TDateTime;
+    thread: array[0..15] of TReadFits;
+    tc,timeout: integer;
+begin
+{$ifdef debug_raw}writeln(FormatDateTime(dateiso,Now)+blank+'ReadFitsImage');{$endif}
+FImageValid:=false;
+if FFitsInfo.naxis1=0 then exit;
+FDarkProcess:=false;
+FBPMProcess:=false;
+if (FFitsInfo.naxis1>maxl)or(FFitsInfo.naxis2>maxl) then
+  raise exception.Create(Format('Image too big! limit is currently %dx%d %sPlease open an issue to request an extension.',[maxl,maxl,crlf]));
+Fheight:=FFitsInfo.naxis2;
+Fwidth :=FFitsInfo.naxis1;
+// do not scale 8 or 16 bit images
+FimageScaled:=(FFitsInfo.bscale<>1)or((FFitsInfo.bitpix<>16)and(FFitsInfo.bitpix<>8));
+// debayer supported for this image
+FimageDebayer:=BayerColor and (not FDisableBayer) and (GetBayerMode<>bayerUnsupported) and (not FimageScaled);
+// fill raw image only if debayer or scaled
+FUseRawImage:=FimageScaled or FimageDebayer;
+if FUseRawImage then
+  setlength(Frawimage,n_plane,Fheight,Fwidth)
+else
+  setlength(Frawimage,0,0,0);
+// initialize image
+setlength(Fimage,n_plane,Fheight,Fwidth);
+FillByte(FHistogram,sizeof(THistogram),0);
+dmin:=1.0E100;
+dmax:=-1.0E100;
+sum:=0; sum2:=0; ni:=0;
+
+// number of thread
+if n_plane>1 then
+  tc := 1
+else begin
+  tc := max(1,min(16, MaxThreadCount)); // based on number of core
+  tc := max(1,min(tc,Fheight div 100)); // do not split the image too much
+end;
+InitCriticalSection(ReadFitsCS);
+// start thread
+for i := 0 to tc - 1 do
+begin
+  thread[i] := TReadFits.Create(True);
+  thread[i].fits := self;
+  thread[i].num := tc;
+  thread[i].id := i;
+  thread[i].Start;
+end;
+// wait complete
+timeout:=60;
+timelimit := now + timeout / secperday;
+repeat
+  sleep(100);
+  working := False;
+  for i := 0 to tc - 1 do
+    working := working or thread[i].working;
+  timingout := (now > timelimit);
+until (not working) or timingout;
+// total statistics and histogram
+for i:=0 to tc - 1 do begin
+  dmin:=min(thread[i].dmin,dmin);
+  dmax:=max(thread[i].dmax,dmax);
+  sum:=sum+thread[i].sum;
+  sum2:=sum2+thread[i].sum2;
+  ni:=ni+thread[i].ni;
+  for j:=0 to high(word) do begin
+     FHistogram[j]:=FHistogram[j]+thread[i].hist[j];
+  end;
+end;
+// cleanup
+DoneCriticalSection(ReadFitsCS);
+for i := 0 to tc - 1 do begin
+  thread[i].Free;
+end;
+
 FStreamValid:=true;
 Fmean:=sum/ni;
 Fsigma:=sqrt( (sum2/ni)-(Fmean*Fmean) );
@@ -1456,7 +1601,7 @@ end
 else begin
   if FimageScaled then begin
     FillByte(FHistogram,sizeof(THistogram),0);
-    for k:=0 to n_axis-1 do begin
+    for k:=0 to n_plane-1 do begin
        for i:=0 to FFitsInfo.naxis2-1 do begin
          for j := 0 to FFitsInfo.naxis1-1 do begin
             Fimage[k,i,j]:=(Frawimage[k,i,j]-FimageMin)*FimageC;
@@ -1489,7 +1634,7 @@ begin
   first:=true;
   case FFitsInfo.bitpix of
      8 : begin
-          for k:=0 to n_axis-1 do begin
+          for k:=0 to n_plane-1 do begin
           for i:=0 to FFitsInfo.naxis2-1 do begin
            ii:=FFitsInfo.naxis2-1-i;
            for j := 0 to FFitsInfo.naxis1-1 do begin
@@ -1508,7 +1653,7 @@ begin
            if npix>0 then  FStream.Write(d8,sizeof(d8));
            end;
      16 : begin
-          for k:=0 to n_axis-1 do begin
+          for k:=0 to n_plane-1 do begin
           for i:=0 to FFitsInfo.naxis2-1 do begin
            ii:=FFitsInfo.naxis2-1-i;
            for j := 0 to FFitsInfo.naxis1-1 do begin
@@ -1527,7 +1672,7 @@ begin
            if npix>0 then  FStream.Write(d16,sizeof(d16));
            end;
      32 : begin
-          for k:=0 to n_axis-1 do begin
+          for k:=0 to n_plane-1 do begin
           for i:=0 to FFitsInfo.naxis2-1 do begin
            ii:=FFitsInfo.naxis2-1-i;
            for j := 0 to FFitsInfo.naxis1-1 do begin
@@ -1550,7 +1695,6 @@ end;
 
 procedure TFits.Debayer;
 var i,j: integer;
-    c: double;
     working, timingout: boolean;
     timelimit: TDateTime;
     thread: array[0..15] of TDebayerImage;
@@ -1678,7 +1822,7 @@ if (FBPMcount>0)and(FBPMnax=FFitsInfo.naxis) then begin
         Frawimage[0,y,x]:=(Frawimage[0,y-1,x]+Frawimage[0,y+1,x]+Frawimage[0,y,x-1]+Frawimage[0,y,x+1]) / 4
       else
         Fimage[0,y,x]:=(Fimage[0,y-1,x]+Fimage[0,y+1,x]+Fimage[0,y,x-1]+Fimage[0,y,x+1]) / 4;
-      if n_axis=3 then begin
+      if n_plane=3 then begin
         if FUseRawImage then begin
           Frawimage[1,y,x]:=(Frawimage[1,y-1,x]+Frawimage[1,y+1,x]+Frawimage[1,y,x-1]+Frawimage[1,y,x+1]) / 4;
           Frawimage[2,y,x]:=(Frawimage[2,y-1,x]+Frawimage[2,y+1,x]+Frawimage[2,y,x-1]+Frawimage[2,y,x+1]) / 4;
@@ -2172,7 +2316,7 @@ end;{double star detection}
 procedure TFits.FindBrightestPixel(x,y,s,starwindow2: integer; out xc,yc:integer; out vmax: double; accept_double: boolean=true);
 // brightest 3x3 pixels in area s*s centered on x,y
 var i,j,rs,xm,ym: integer;
-    bg,bg_average,sd: double;
+    bg,sd: double;
     val :double;
 const
     wd =4; {wd is the width of the area outside box rs used for calculating the mean value of the background}
@@ -2712,11 +2856,11 @@ begin
     FillByte(FHistogram,sizeof(THistogram),0);
     minoffset:=operand.FFitsInfo.dmin-FFitsInfo.dmin;
     if FUseRawImage then
-      nax:=n_axis
+      nax:=n_plane
     else
       nax:=Fpreview_axis;
     if operand.FUseRawImage then
-      naxo:=operand.n_axis
+      naxo:=operand.n_plane
     else
       naxo:=operand.Fpreview_axis;
     for k:=0 to nax-1 do begin
@@ -2780,7 +2924,7 @@ begin
   imgshift.onMsg:=onMsg;
   imgshift.SetStream(FStream);
   imgshift.LoadStream;
-  for k:=0 to n_axis-1 do begin
+  for k:=0 to n_plane-1 do begin
     for i:=0 to FFitsInfo.naxis2-1 do begin
      ii:=FFitsInfo.naxis2-1-i;
      for j := 0 to FFitsInfo.naxis1-1 do begin
