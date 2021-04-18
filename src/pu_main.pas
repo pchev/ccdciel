@@ -12800,7 +12800,7 @@ begin
       end;
     end
  else sval:='';
- s:=Starwindow;
+ s:=Starwindow div 2;
  if (xx>s)and(xx<(fits.HeaderInfo.naxis1-s))and(yy>s)and(yy<(fits.HeaderInfo.naxis2-s)) then begin
    fits.FindStarPos(xx,yy,s,xxc,yyc,rc,vmax,bg,bgdev);
    if vmax>0 then begin
