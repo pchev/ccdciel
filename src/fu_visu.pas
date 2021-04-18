@@ -284,7 +284,7 @@ for i:=0 to high(word) do begin
   end;
 end;
 if Fmaxh=0 then exit;
-if Fmaxp>(high(word) div 10) then Fmaxp:=0; // peak is probably not sky background
+if Fmaxp>(FHistStart+(FHistStop-FHistStart)/10) then Fmaxp:=0; // peak is probably not sky background
 
 SetLimit(SetLevel);
 PlotHistogram;
