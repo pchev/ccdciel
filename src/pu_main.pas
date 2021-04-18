@@ -752,7 +752,6 @@ type
     Procedure StartCaptureExposureNow;
     procedure CancelRestartExposure(delay: integer);
     Procedure RecenterTarget;
-    Procedure RedrawHistogram(Sender: TObject);
     Procedure ShowHistogramPos(msg:string);
     Procedure Redraw(Sender: TObject);
     Procedure ZoomImage(Sender: TObject);
@@ -1437,7 +1436,6 @@ begin
   f_visu:=Tf_visu.Create(self);
   f_visu.onRedraw:=@Redraw;
   f_visu.onZoom:=@ZoomImage;
-  f_visu.onRedrawHistogram:=@RedrawHistogram;
   f_visu.onShowHistogramPos:=@ShowHistogramPos;
   f_visu.onShowLastImage:=@ShowLastImage;
 
@@ -9312,11 +9310,6 @@ ImgFrameW:=FrameW;
 ImgFrameH:=FrameH;
 DrawHistogram(true,false);
 DrawImage(false);
-end;
-
-Procedure Tf_main.RedrawHistogram(Sender: TObject);
-begin
-  DrawHistogram(false,false);
 end;
 
 Procedure Tf_main.ShowHistogramPos(msg:string);

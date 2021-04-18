@@ -96,7 +96,6 @@ type
     LockRedraw: boolean;
     FRedraw: TNotifyEvent;
     FonZoom: TNotifyEvent;
-    FRedrawHistogram: TNotifyEvent;
     FShowHistogramPos: TNotifyStr;
     FShowLastImage: TNotifyEvent;
     procedure SetZoom(value: double);
@@ -122,7 +121,6 @@ type
     property FlipVert: boolean read GetFlipVert write SetFlipVert;
     property onZoom: TNotifyEvent read FonZoom write FonZoom;
     property onRedraw: TNotifyEvent read FRedraw write FRedraw;
-    property onRedrawHistogram: TNotifyEvent read FRedrawHistogram write FRedrawHistogram;
     property onShowHistogramPos: TNotifyStr read FShowHistogramPos write FShowHistogramPos;
     property onShowLastImage: TNotifyEvent read FShowLastImage write FShowLastImage;
   end;
@@ -348,7 +346,6 @@ begin
         Panel1.ChildSizing.Layout:=cclTopToBottomThenLeftToRight;
      end;
   end;
-  if Assigned(FRedrawHistogram) then FRedrawHistogram(self);
 end;
 
 procedure Tf_visu.FrameResize(Sender: TObject);
@@ -366,7 +363,6 @@ begin
         Panel1.ChildSizing.Layout:=cclTopToBottomThenLeftToRight;
      end;
   end;
-  if Assigned(FRedrawHistogram) then FRedrawHistogram(self);
 end;
 
 procedure Tf_visu.HistBarChange(Sender: TObject);
