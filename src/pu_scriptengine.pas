@@ -466,6 +466,8 @@ begin
   varname:=uppercase(varname);
   if varname='TELESCOPE_CONNECTED' then x:=(mount.Status=devConnected)
   else if varname='TELESCOPE_PARKED' then x:=mount.Park
+  else if varname='TELESCOPE_TRACKING' then x:=mount.Tracking
+  else if varname='TELESCOPE_SLEWING' then x:=mount.MountSlewing
   else if varname='TELESCOPE_EQMOD' then x:=mount.IsEqmod
   else if varname='AUTOGUIDER_CONNECTED' then x:=(Autoguider.State<>GUIDER_DISCONNECTED)
   else if varname='AUTOGUIDER_RUNNING' then x:=Autoguider.Running
@@ -988,6 +990,7 @@ for i:=arg.count to MaxCmdArg do arg.add('');
 result:=msgFailed;
 if cname='DEVICES_CONNECTION' then result:=cmd_DevicesConnection(arg[0])
 else if cname='TELESCOPE_SLEW' then result:=cmd_MountSlew(arg[0],arg[1])
+else if cname='TELESCOPE_SLEWASYNC' then result:=cmd_MountSlewAsync(arg[0],arg[1])
 else if cname='TELESCOPE_SYNC' then result:=cmd_MountSync(arg[0],arg[1])
 else if cname='TELESCOPE_PARK' then result:=cmd_MountPark(arg[0])
 else if cname='WHEEL_SETFILTER' then result:=cmd_Wheel_SetFilter(arg[0])
