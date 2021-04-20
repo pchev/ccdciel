@@ -300,7 +300,7 @@
         <PackageName Value="LCL"/>
       </Item11>
     </RequiredPackages>
-    <Units Count="117">
+    <Units Count="118">
       <Unit0>
         <Filename Value="ccdciel.lpr"/>
         <IsPartOfProject Value="True"/>
@@ -601,7 +601,7 @@
         <IsPartOfProject Value="True"/>
       </Unit54>
       <Unit55>
-        <Filename Value="cu_planetarium_cdc.pas"/>
+        <Filename Value="cu_planetarium_none.pas"/>
         <IsPartOfProject Value="True"/>
       </Unit55>
       <Unit56>
@@ -899,6 +899,10 @@
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Form"/>
       </Unit116>
+      <Unit117>
+        <Filename Value="cu_planetarium_cdc.pas"/>
+        <IsPartOfProject Value="True"/>
+      </Unit117>
     </Units>
   </ProjectOptions>
   <CompilerOptions>

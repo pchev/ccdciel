@@ -45,7 +45,7 @@ uses
   cu_dome, cu_ascomdome, cu_indidome, fu_dome, pu_about, pu_goto, pu_photometry, u_libraw, pu_image_sharpness,
   cu_indiwheel, cu_ascomwheel, cu_incamerawheel, cu_indicamera, cu_ascomcamera, cu_astrometry,
   cu_autoguider, cu_autoguider_phd, cu_autoguider_linguider, cu_autoguider_none, cu_autoguider_dither, cu_planetarium,
-  cu_planetarium_cdc, cu_planetarium_samp, cu_planetarium_hnsky, pu_planetariuminfo, indiapi,
+  cu_planetarium_cdc, cu_planetarium_samp, cu_planetarium_hnsky, cu_planetarium_none, pu_planetariuminfo, indiapi,
   cu_ascomrestcamera, cu_ascomrestdome, cu_ascomrestfocuser, cu_ascomrestmount, cu_manualwheel,
   cu_ascomrestrotator, cu_ascomrestsafety, cu_ascomrestweather, cu_ascomrestwheel, pu_polaralign, pu_collimation,
   cu_switch, cu_ascomswitch, cu_ascomrestswitch, cu_indiswitch, cu_cover, cu_ascomcover, cu_ascomrestcover, cu_indicover,
@@ -1416,9 +1416,10 @@ begin
 
   i:=config.GetValue('/Planetarium/Software',ord(plaNONE));
   case TPlanetariumType(i) of
-    CDC,plaNONE: planetarium:=TPlanetarium_cdc.Create;
+    CDC: planetarium:=TPlanetarium_cdc.Create;
     SAMP:planetarium:=TPlanetarium_samp.Create;
     HNSKY:planetarium:=TPlanetarium_hnsky.Create;
+    plaNONE: planetarium:=TPlanetarium_none.Create;
   end;
   planetarium.onConnect:=@PlanetariumConnect;
   planetarium.onDisconnect:=@PlanetariumDisconnect;
@@ -3903,6 +3904,58 @@ begin
     OffsetMax:=config.GetValue('/Offset/OffsetMax',0);
     SetGainList;
     ShowFnumber;
+  end;
+  if (planetarium.PlanetariumType<>TPlanetariumType(config.GetValue('/Planetarium/Software',ord(plaNONE)))) and (not planetarium.Connected) then begin
+     try
+     planetarium.Terminate;
+     planetarium.Connect('');
+     except
+     end;
+     i:=config.GetValue('/Planetarium/Software',ord(plaNONE));
+     case TPlanetariumType(i) of
+       CDC: planetarium:=TPlanetarium_cdc.Create;
+       SAMP:planetarium:=TPlanetarium_samp.Create;
+       HNSKY:planetarium:=TPlanetarium_hnsky.Create;
+       plaNONE: planetarium:=TPlanetarium_none.Create;
+     end;
+     planetarium.onConnect:=@PlanetariumConnect;
+     planetarium.onDisconnect:=@PlanetariumDisconnect;
+     planetarium.onShowMessage:=@NewMessage;
+     f_planetariuminfo.planetarium:=planetarium;
+     f_scriptengine.Planetarium:=planetarium;
+     f_sequence.Planetarium:=planetarium;
+  end;
+  if autoguider.AutoguiderType<>TAutoguiderType(config.GetValue('/Autoguider/Software',2)) then begin
+    try
+    autoguider.Terminate;
+    autoguider.Connect('');
+    f_sequence.AutoguiderDisconnected;
+    except
+    end;
+    i:=config.GetValue('/Autoguider/Software',2);
+    case TAutoguiderType(i) of
+      agPHD: autoguider:=T_autoguider_phd.Create;
+      agLINGUIDER: autoguider:=T_autoguider_linguider.Create;
+      agNONE: autoguider:=T_autoguider_none.Create;
+      agDITHER: autoguider:=T_autoguider_dither.Create;
+    end;
+    autoguider.Mount:=mount;
+    autoguider.onStatusChange:=@AutoguiderStatus;
+    autoguider.onConnect:=@AutoguiderConnect;
+    autoguider.onDisconnect:=@AutoguiderDisconnect;
+    autoguider.onShowMessage:=@NewMessage;
+    f_sequence.Autoguider:=autoguider;
+    f_scriptengine.Autoguider:=autoguider;
+    f_script.Autoguider:=autoguider;
+    f_autoguider.Status.Text:=autoguider.Status;
+    f_autoguider.DitherOnly:=autoguider.AutoguiderType=agDITHER;
+    NewMessage(Format(rsAutoguider+': %s', [autoguider.Status]),1);
+    f_autoguider.BtnConnect.Caption:=rsConnect;
+    f_autoguider.BtnGuide.Caption:='Guide';
+    f_autoguider.led.Brush.Color:=clGray;
+    MenuAutoguiderConnect.Caption:=f_autoguider.BtnConnect.Caption;
+    MenuAutoguiderGuide.Caption:=f_autoguider.BtnGuide.Caption;
+    StatusBar1.Invalidate;
   end;
 end;
 
@@ -7087,15 +7140,13 @@ begin
 end;
 
 procedure Tf_main.MenuOptionsClick(Sender: TObject);
-var ok,PlanetariumChange,AutoguiderChange: boolean;
+var ok: boolean;
     i,n,k,FocusStarMagIndex: integer;
     x:double;
     buf,langname:string;
     fs : TSearchRec;
     pt: TPoint;
 begin
-   PlanetariumChange:=false;
-   AutoguiderChange:=false;
    f_option.ShowHint:=ShowHint;
    f_option.LockTemp:=true;
    f_option.Caption:=Format(rsOptions, [profile]);
@@ -7699,7 +7750,6 @@ begin
      config.SetValue('/Meridian/MeridianFlipCalibrate',f_option.MeridianFlipCalibrate.Checked);
      config.SetValue('/Meridian/MeridianFlipAutofocus',f_option.MeridianFlipAutofocus.Checked);
      config.SetValue('/Meridian/MeridianFlipStopSlaving',f_option.MeridianFlipStopSlaving.Checked);
-     AutoguiderChange := (f_option.AutoguiderBox.ItemIndex <> config.GetValue('/Autoguider/Software',2));
      config.SetValue('/Autoguider/Software',f_option.AutoguiderBox.ItemIndex);
      config.SetValue('/Autoguider/PHDhostname',f_option.PHDhostname.Text);
      config.SetValue('/Autoguider/PHDport',f_option.PHDport.Text);
@@ -7720,7 +7770,6 @@ begin
      config.SetValue('/Autoguider/Recovery/MaxGuideDrift',f_option.GuideDriftMax.Value);
      config.SetValue('/Autoguider/Recovery/CancelExposure',f_option.GuideDriftCancelExposure.Checked);
      config.SetValue('/Autoguider/Recovery/RestartDelay',f_option.GuideDriftRestartDelay.Value);
-     PlanetariumChange := (f_option.PlanetariumBox.ItemIndex <> config.GetValue('/Planetarium/Software',ord(plaNONE)));
      config.SetValue('/Planetarium/Software',f_option.PlanetariumBox.ItemIndex);
      config.SetValue('/Planetarium/CdChostname',f_option.CdChostname.Text);
      config.SetValue('/Planetarium/CdCport',trim(f_option.CdCport.Text));
@@ -7829,58 +7878,6 @@ begin
        lang:=config.GetValue('/Language',lang);
        lang:=u_translation.translate(lang);
        SetLang;
-     end;
-
-     if PlanetariumChange and (not planetarium.Connected) then begin
-        try
-        planetarium.Terminate;
-        planetarium.Connect('');
-        except
-        end;
-        i:=config.GetValue('/Planetarium/Software',ord(plaNONE));
-        case TPlanetariumType(i) of
-          CDC,plaNONE: planetarium:=TPlanetarium_cdc.Create;
-          SAMP:planetarium:=TPlanetarium_samp.Create;
-          HNSKY:planetarium:=TPlanetarium_hnsky.Create;
-        end;
-        planetarium.onConnect:=@PlanetariumConnect;
-        planetarium.onDisconnect:=@PlanetariumDisconnect;
-        planetarium.onShowMessage:=@NewMessage;
-        f_planetariuminfo.planetarium:=planetarium;
-        f_scriptengine.Planetarium:=planetarium;
-        f_sequence.Planetarium:=planetarium;
-     end;
-     if AutoguiderChange then begin
-       try
-       autoguider.Terminate;
-       autoguider.Connect('');
-       f_sequence.AutoguiderDisconnected;
-       except
-       end;
-       i:=config.GetValue('/Autoguider/Software',2);
-       case TAutoguiderType(i) of
-         agPHD: autoguider:=T_autoguider_phd.Create;
-         agLINGUIDER: autoguider:=T_autoguider_linguider.Create;
-         agNONE: autoguider:=T_autoguider_none.Create;
-         agDITHER: autoguider:=T_autoguider_dither.Create;
-       end;
-       autoguider.Mount:=mount;
-       autoguider.onStatusChange:=@AutoguiderStatus;
-       autoguider.onConnect:=@AutoguiderConnect;
-       autoguider.onDisconnect:=@AutoguiderDisconnect;
-       autoguider.onShowMessage:=@NewMessage;
-       f_sequence.Autoguider:=autoguider;
-       f_scriptengine.Autoguider:=autoguider;
-       f_script.Autoguider:=autoguider;
-       f_autoguider.Status.Text:=autoguider.Status;
-       f_autoguider.DitherOnly:=autoguider.AutoguiderType=agDITHER;
-       NewMessage(Format(rsAutoguider+': %s', [autoguider.Status]),1);
-       f_autoguider.BtnConnect.Caption:=rsConnect;
-       f_autoguider.BtnGuide.Caption:='Guide';
-       f_autoguider.led.Brush.Color:=clGray;
-       MenuAutoguiderConnect.Caption:=f_autoguider.BtnConnect.Caption;
-       MenuAutoguiderGuide.Caption:=f_autoguider.BtnGuide.Caption;
-       StatusBar1.Invalidate;
      end;
 
    end;
@@ -11904,9 +11901,10 @@ begin
    wait(1);
    i:=config.GetValue('/Planetarium/Software',ord(plaNONE));
    case TPlanetariumType(i) of
-     CDC,plaNONE: planetarium:=TPlanetarium_cdc.Create;
+     CDC: planetarium:=TPlanetarium_cdc.Create;
      SAMP:planetarium:=TPlanetarium_samp.Create;
      HNSKY:planetarium:=TPlanetarium_hnsky.Create;
+     plaNONE: planetarium:=TPlanetarium_none.Create;
    end;
    planetarium.onConnect:=@PlanetariumConnect;
    planetarium.onDisconnect:=@PlanetariumDisconnect;
