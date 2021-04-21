@@ -4541,12 +4541,12 @@ object f_option: Tf_option
           TabOrder = 2
           object GroupBox5: TGroupBox
             Left = 0
-            Height = 57
+            Height = 88
             Top = 0
             Width = 303
             Align = alTop
             Caption = 'Dithering'
-            ClientHeight = 37
+            ClientHeight = 68
             ClientWidth = 301
             ParentFont = False
             TabOrder = 0
@@ -4596,15 +4596,23 @@ object f_option: Tf_option
               ParentColor = False
               ParentFont = False
             end
+            object EarlyDither: TCheckBox
+              Left = 8
+              Height = 21
+              Top = 36
+              Width = 286
+              Caption = 'Dither while downloading from the camera'
+              TabOrder = 2
+            end
           end
           object GroupBox13: TGroupBox
             Left = 0
-            Height = 185
-            Top = 57
+            Height = 154
+            Top = 88
             Width = 303
             Align = alClient
             Caption = 'Star lost recovery'
-            ClientHeight = 165
+            ClientHeight = 134
             ClientWidth = 301
             ParentFont = False
             TabOrder = 1

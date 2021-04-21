@@ -747,6 +747,7 @@ type
     Procedure StartPreviewExposure(Sender: TObject);
     Procedure StartPreviewExposureAsync(Data: PtrInt);
     function  PrepareCaptureExposure(canwait:boolean):boolean;
+    procedure CaptureDither;
     Procedure StartCaptureExposure(Sender: TObject);
     procedure StartCaptureExposureAsync(Data: PtrInt);
     Procedure StartCaptureExposureNow;
@@ -1276,6 +1277,7 @@ begin
   DisplayCapture:=true;
   LowQualityDisplay:={$ifdef cpuarm}true{$else}false{$endif};
   ConfigExpEarlyStart:=true;
+  EarlyDither:=true;
   CameraProcessingImage:=false;
   WantExif:=true;
   MagnitudeCalibration:=NullCoord;
@@ -3702,6 +3704,7 @@ begin
   DitherPixel:=config.GetValue('/Autoguider/Dither/Pixel',1.0);
   DitherRAonly:=config.GetValue('/Autoguider/Dither/RAonly',true);
   DitherWaitTime:=config.GetValue('/Autoguider/Dither/WaitTime',5);
+  EarlyDither:=config.GetValue('/Autoguider/Dither/EarlyDither',EarlyDither);
   SettlePixel:=config.GetValue('/Autoguider/Settle/Pixel',1.0);
   SettleMinTime:=config.GetValue('/Autoguider/Settle/MinTime',5);
   SettleMaxTime:=config.GetValue('/Autoguider/Settle/MaxTime',30);
@@ -7449,6 +7452,7 @@ begin
    f_option.DitherPixel.Value:=config.GetValue('/Autoguider/Dither/Pixel',1.0);
    f_option.DitherRAonly.Checked:=config.GetValue('/Autoguider/Dither/RAonly',true);
    f_option.DitherWaitTime.Value:=config.GetValue('/Autoguider/Dither/WaitTime',5);
+   f_option.EarlyDither.checked:=config.GetValue('/Autoguider/Dither/EarlyDither',EarlyDither);
    f_option.SettlePixel.Value:=config.GetValue('/Autoguider/Settle/Pixel',1.0);
    f_option.SettleMinTime.Value:=config.GetValue('/Autoguider/Settle/MinTime',5);
    f_option.SettleMaxTime.Value:=config.GetValue('/Autoguider/Settle/MaxTime',30);
@@ -7760,6 +7764,7 @@ begin
      config.SetValue('/Autoguider/Dither/Pixel',f_option.DitherPixel.Value);
      config.SetValue('/Autoguider/Dither/RAonly',f_option.DitherRAonly.Checked);
      config.SetValue('/Autoguider/Dither/WaitTime',f_option.DitherWaitTime.Value);
+     config.SetValue('/Autoguider/Dither/EarlyDither',f_option.EarlyDither.checked);
      config.SetValue('/Autoguider/Settle/Pixel',f_option.SettlePixel.Value);
      config.SetValue('/Autoguider/Settle/MinTime',f_option.SettleMinTime.Value);
      config.SetValue('/Autoguider/Settle/MaxTime',f_option.SettleMaxTime.Value);
@@ -8515,6 +8520,25 @@ if (AllDevicesConnected)and(not autofocusing)and(not learningvcurve)and(not f_vi
     NewMessage(rsCaptureStopp2, 0);
     exit;
   end;
+  // check if dithering is required
+  if f_capture.CheckBoxDither.Checked and (f_capture.DitherNum>=f_capture.DitherCount.Value) then begin
+   if canwait then begin
+    CaptureDither;
+   end
+   else begin
+    exit; // cannot start now
+   end;
+  end;
+  // check if dithering running, can also be started from CameraProgress;
+  if autoguider.Dithering then begin
+   if canwait then begin
+     autoguider.WaitDithering(SettleMaxTime);
+     wait(1);
+   end
+   else begin
+    exit; // cannot start now
+   end;
+  end;
   // check if refocusing is required
   if (ftype=LIGHT) and ( // only for light frame
      f_capture.FocusNow  // start of step
@@ -8592,24 +8616,6 @@ if (AllDevicesConnected)and(not autofocusing)and(not learningvcurve)and(not f_vi
     NewMessage(rsCaptureStopp2, 0);
     exit;
   end;
-  // check if dithering is required
-  if f_capture.CheckBoxDither.Checked and (f_capture.DitherNum>=f_capture.DitherCount.Value) then begin
-   if canwait then begin
-    f_capture.DitherNum:=0;
-    if autoguider.State=GUIDER_GUIDING then begin
-      NewMessage(rsDithering+ellipsis,1);
-      StatusBar1.Panels[panelstatus].Text:=rsDithering+ellipsis;
-      autoguider.Dither(DitherPixel, DitherRAonly, DitherWaitTime);
-      autoguider.WaitDithering(SettleMaxTime);
-      Wait(1);
-    end else begin
-      NewMessage(rsNotAutoguidi,1);
-    end;
-   end
-   else begin
-    exit; // cannot start now
-   end;
-  end;
   if not f_capture.Running then begin
     NewMessage(rsCaptureStopp2, 0);
     exit;
@@ -8617,6 +8623,20 @@ if (AllDevicesConnected)and(not autofocusing)and(not learningvcurve)and(not f_vi
   // All OK
   result:=true;
 end;
+end;
+
+procedure Tf_main.CaptureDither;
+begin
+  // reset frame counter
+  f_capture.DitherNum:=0;
+  if autoguider.State=GUIDER_GUIDING then begin
+    // start dithering
+    NewMessage(rsDithering+ellipsis,1);
+    StatusBar1.Panels[panelstatus].Text:=rsDithering+ellipsis;
+    autoguider.Dither(DitherPixel, DitherRAonly, DitherWaitTime);
+  end else begin
+    NewMessage(rsNotAutoguidi,1);
+  end;
 end;
 
 Procedure Tf_main.StartCaptureExposure(Sender: TObject);
@@ -8730,6 +8750,8 @@ if (AllDevicesConnected)and(not autofocusing)and (not learningvcurve) then begin
   fits.DarkOn:=false;
   f_preview.StackPreview.Checked:=false;
   camera.AddFrames:=false;
+  // increment dither
+  f_capture.DitherNum:=f_capture.DitherNum+1;
   // start exposure for time e
   camera.StartExposure(e);
 end
@@ -8764,8 +8786,11 @@ begin
        else txt:=rsUnknownStatu+ellipsis;
      end;
      if Capture then begin
-       if f_capture.Running then
-         StatusBar1.Panels[panelstatus].Text := rsCapture+blank+inttostr(f_capture.SeqCount)+'/'+f_capture.SeqNum.Text+' '+txt;
+       StatusBar1.Panels[panelstatus].Text := rsCapture+blank+inttostr(f_capture.SeqCount)+'/'+f_capture.SeqNum.Text+' '+txt;
+       if (i=-4) and EarlyDither and f_capture.CheckBoxDither.Checked and (f_capture.DitherNum>=f_capture.DitherCount.Value) then begin
+         StatusBar1.Panels[panelstatus].Text:=rsDithering+ellipsis;
+         CaptureDither;
+       end;
      end
      else begin
         StatusBar1.Panels[panelstatus].Text := txt;
@@ -8890,7 +8915,6 @@ begin
        // start the exposure now
        {$ifdef debug_raw}writeln(FormatDateTime(dateiso,Now)+blank+'start exposure');{$endif}
        f_capture.SeqCount:=f_capture.SeqCount+1;
-       f_capture.DitherNum:=f_capture.DitherNum+1;
        f_capture.FocusNum:=f_capture.FocusNum+1;
        if f_capture.SeqCount<=f_capture.SeqNum.Value then begin
           // next exposure
@@ -8944,7 +8968,6 @@ begin
     if f_capture.SeqCount<=f_capture.SeqNum.Value then begin
        // next exposure
        if f_capture.Running then begin
-         f_capture.DitherNum:=f_capture.DitherNum+1;
          f_capture.FocusNum:=f_capture.FocusNum+1;
          // only check if an operation is need before the next exposure
          if PrepareCaptureExposure(false) then begin
@@ -8956,7 +8979,6 @@ begin
            // Some operation is need.
            // process later in CameraNewImage
            f_capture.SeqCount:=f_capture.SeqCount-1;
-           f_capture.DitherNum:=f_capture.DitherNum-1;
            f_capture.FocusNum:=f_capture.FocusNum-1;
            SkipEarlyExposure:=true;
          end;

@@ -34,6 +34,7 @@ type
   { Tf_option }
 
   Tf_option = class(TForm)
+    EarlyDither: TCheckBox;
     Label150: TLabel;
     Panel26: TPanel;
     PythonCmd: TEdit;

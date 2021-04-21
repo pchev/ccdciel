@@ -539,7 +539,7 @@ begin
 result:=false;
 try
   endt:=now+maxwait/secperday;
-  FonShowMessage('Enter dithering wait loop,  FDithering='+BoolToStr(FDithering, rsTrue, rsFalse)+' terminated='+BoolToStr(terminated, rsTrue, rsFalse)+' CancelAutofocus='+BoolToStr(CancelAutofocus, rsTrue, rsFalse)+' FStopGuiding='+BoolToStr(FStopGuiding, rsTrue, rsFalse),9);
+//  FonShowMessage('Enter dithering wait loop,  FDithering='+BoolToStr(FDithering, rsTrue, rsFalse)+' terminated='+BoolToStr(terminated, rsTrue, rsFalse)+' CancelAutofocus='+BoolToStr(CancelAutofocus, rsTrue, rsFalse)+' FStopGuiding='+BoolToStr(FStopGuiding, rsTrue, rsFalse),9);
   while now<endt do begin
     Sleep(100);
     if GetCurrentThreadId=MainThreadID then Application.ProcessMessages;
@@ -548,7 +548,7 @@ try
     if FStopGuiding then break;
     if not FDithering then break;
   end;
-  FonShowMessage('Exit dithering wait loop,  FDithering='+BoolToStr(FDithering, rsTrue, rsFalse)+' terminated='+BoolToStr(terminated, rsTrue, rsFalse)+' CancelAutofocus='+BoolToStr(CancelAutofocus, rsTrue, rsFalse)+' FStopGuiding='+BoolToStr(FStopGuiding, rsTrue, rsFalse),9);
+//  FonShowMessage('Exit dithering wait loop,  FDithering='+BoolToStr(FDithering, rsTrue, rsFalse)+' terminated='+BoolToStr(terminated, rsTrue, rsFalse)+' CancelAutofocus='+BoolToStr(CancelAutofocus, rsTrue, rsFalse)+' FStopGuiding='+BoolToStr(FStopGuiding, rsTrue, rsFalse),9);
   result:=(not FDithering);
 except
 end;

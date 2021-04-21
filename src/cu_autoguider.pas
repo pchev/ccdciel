@@ -83,6 +83,7 @@ type
     property Mount: T_mount read FMount write FMount;
     property Running: boolean read FRunning;
     property Recovering: boolean read FRecovering;
+    property Dithering: boolean read FDithering;
     property TargetHost : string read FTargetHost;
     property TargetPort : string read FTargetPort;
     property Timeout : integer read FTimeout write FTimeout;
