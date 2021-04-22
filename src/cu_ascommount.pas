@@ -311,11 +311,13 @@ function  T_ascommount.GetPark:Boolean;
 begin
  result:=false;
  {$ifdef mswindows}
+ if not VarIsEmpty(V) then begin
    try
    result:=V.AtPark;
    except
     result:=false;
    end;
+ end;
  {$endif}
 end;
 
@@ -323,11 +325,13 @@ function  T_ascommount.GetRA:double;
 begin
  result:=NullCoord;
  {$ifdef mswindows}
+ if not VarIsEmpty(V) then begin
    try
    result:=V.RightAscension;
    except
     result:=NullCoord;
    end;
+ end;
  {$endif}
 end;
 
@@ -335,11 +339,13 @@ function  T_ascommount.GetDec:double;
 begin
  result:=NullCoord;
  {$ifdef mswindows}
+ if not VarIsEmpty(V) then begin
    try
    result:=V.Declination;
    except
     result:=NullCoord;
    end;
+ end;
  {$endif}
 end;
 
@@ -350,6 +356,7 @@ var i: integer;
 begin
  result:=pierUnknown;
  {$ifdef mswindows}
+ if not VarIsEmpty(V) then begin
    try
    i:=V.SideOfPier;  // pascal enum may have different size
    case i of
@@ -360,6 +367,7 @@ begin
    except
     result:=pierUnknown;
    end;
+ end;
  {$endif}
 end;
 
@@ -370,6 +378,7 @@ var i: Integer;
 begin
  result:=0;
 {$ifdef mswindows}
+if not VarIsEmpty(V) then begin
   try
   i:=V.EquatorialSystem;
   case i of
@@ -382,6 +391,7 @@ begin
   except
    result:=0;
   end;
+end;
 {$endif}
 end;
 
@@ -389,11 +399,13 @@ function  T_ascommount.GetAperture:double;
 begin
  result:=-1;
  {$ifdef mswindows}
+ if not VarIsEmpty(V) then begin
    try
    result:=V.ApertureDiameter*1000;
    except
     result:=-1;
    end;
+ end;
  {$endif}
 end;
 
@@ -401,11 +413,13 @@ function  T_ascommount.GetFocaleLength:double;
 begin
  result:=-1;
  {$ifdef mswindows}
+ if not VarIsEmpty(V) then begin
    try
    result:=V.FocalLength*1000;
    except
     result:=-1;
    end;
+ end;
  {$endif}
 end;
 
@@ -630,10 +644,12 @@ function T_ascommount.GetTracking:Boolean;
 begin
  result:=true;
  {$ifdef mswindows}
+ if not VarIsEmpty(V) then begin
    try
    result:=V.tracking;
    except
    end;
+ end;
  {$endif}
 end;
 
