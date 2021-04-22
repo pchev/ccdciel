@@ -29,7 +29,7 @@ interface
 uses  cu_camera, u_global,
   {$ifdef mswindows}
     u_translation, u_utils, cu_fits, indiapi, math,
-    Variants, comobj, ActiveX, LCLVersion,
+    Variants, comobj, LCLVersion,
   {$endif}
    Forms, ExtCtrls, Classes, SysUtils, LCLType;
 
@@ -484,9 +484,7 @@ var ok: boolean;
     nax1,nax2,state: integer;
     pix,piy,expt,ElectronsPerADU,rexp: double;
     dateobs,ccdname,frname:string;
-    img: PSafeArray;
-    img2: array of array of LongInt;
-    Dims, es, LBoundX, HBoundX,LBoundY, HBoundY : Integer;
+    img: array of array of LongInt;
     lii: integer;
     ii: smallint;
     b: array[0..2880]of char;
@@ -553,7 +551,7 @@ begin
    if assigned(FonExposureProgress) then FonExposureProgress(-10);
    if debug_msg then msg('read image.');
    try
-   img:=TVariantArg(V.ImageArray).parray;
+   img:=V.ImageArray;
    except
      on E: Exception do begin
        msg('Error accessing ImageArray: ' + E.Message,0);
@@ -561,35 +559,9 @@ begin
        exit;
      end;
    end;
-   Dims:=SafeArrayGetDim(img);
-   if (Dims<>2) then begin
-     msg('Error ImageArray unsupported Dimension=' + inttostr(Dims));
-     if assigned(FonAbortExposure) then FonAbortExposure(self);
-     exit;
-   end;
-   es:=SafeArrayGetElemsize(img);
-   if es<>4 then begin
-     msg('Error ImageArray unsupported element size=' + inttostr(es));
-     if assigned(FonAbortExposure) then FonAbortExposure(self);
-     exit;
-   end;
-   SafeArrayGetLBound(img, 1, LBoundX);
-   SafeArrayGetUBound(img, 1, HBoundX);
-   xs:=HBoundX-LBoundX+1;
-   SafeArrayGetLBound(img, 2, LBoundY);
-   SafeArrayGetUBound(img, 2, HBoundY);
-   ys:=HBoundY-LBoundY+1;
+   xs:=length(img);
+   ys:=length(img[0]);
    if debug_msg then msg('width:'+inttostr(xs)+' height:'+inttostr(ys));
-   try
-   if debug_msg then msg('get array');
-   img2:=V.ImageArray;
-   except
-     on E: Exception do begin
-       msg('Error, cannot allocate image of size '+inttostr(xs)+'/'+inttostr(ys)+' : '+ E.Message,0);
-       if assigned(FonAbortExposure) then FonAbortExposure(self);
-       exit;
-     end;
-   end;
    nax1:=xs;
    nax2:=ys;
    pix:=FPixelSizeX;
@@ -622,9 +594,9 @@ begin
    if FFixPixelRange then begin
      nb:=16;
      w:=0;
-     for i:=LBoundY to ys-1 do begin
-       for j := LBoundX to xs-1 do begin
-         ww:=img2[j,i];
+     for i:=0 to ys-1 do begin
+       for j := 0 to xs-1 do begin
+         ww:=img[j,i];
          if ww<65535 then
            w:=w or ww;
        end;
@@ -680,24 +652,21 @@ begin
    hdrmem.Free;
    hdr.Free;
    if debug_msg then msg('write image');
-
-   if Dims=2 then begin
-     for i:=LBoundY to ys-1 do begin
-        if FASCOMFlipImage then
-           ix:=ys-1-i
+   for i:=0 to ys-1 do begin
+      if FASCOMFlipImage then
+         ix:=ys-1-i
+      else
+         ix:=i;
+      for j:=0 to xs-1 do begin
+        lii:=img[j,ix];
+        if FFixPixelRange then lii:=lii div pxdiv;
+        if lii>0 then
+           ii:=lii-32768
         else
-           ix:=i;
-        for j:=LBoundX to xs-1 do begin
-          lii:=img2[j,ix];
-          if FFixPixelRange then lii:=lii div pxdiv;
-          if lii>0 then
-             ii:=lii-32768
-          else
-             ii:=-32768;
-          ii:=NtoBE(ii);
-          FImgStream.Write(ii,sizeof(smallint));
-        end;
-     end;
+           ii:=-32768;
+        ii:=NtoBE(ii);
+        FImgStream.Write(ii,sizeof(smallint));
+      end;
    end;
    if debug_msg then msg('pad fits');
    b:='';
@@ -707,8 +676,6 @@ begin
      FillChar(b,c,0);
      FImgStream.Write(b,c);
    end;
-   if debug_msg then msg('release imagearray');
-   SafeArrayDestroyData(img);
    // if possible start next exposure now
    TryNextExposure(FImgNum);
    if debug_msg then msg('display image');
