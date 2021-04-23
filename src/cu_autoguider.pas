@@ -73,7 +73,7 @@ type
     procedure SettleTolerance(pixel:double; mintime,maxtime: integer); virtual; abstract;
     procedure Calibrate; virtual; abstract;
     procedure Guide(onoff:boolean; recalibrate:boolean=false); virtual; abstract;
-    procedure Pause(onoff:boolean); virtual; abstract;
+    procedure Pause(onoff:boolean; settle:boolean=true); virtual; abstract;
     procedure Dither(pixel:double; raonly:boolean; waittime:double); virtual; abstract;
     function WaitBusy(maxwait:integer=5):boolean; virtual; abstract;
     function WaitGuiding(maxwait:integer=5):boolean; virtual; abstract;

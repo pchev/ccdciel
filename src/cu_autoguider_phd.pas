@@ -55,7 +55,7 @@ type
     procedure SettleTolerance(pixel:double; mintime,maxtime: integer); override;
     procedure Calibrate; override;
     procedure Guide(onoff:boolean; recalibrate:boolean=false); override;
-    procedure Pause(onoff:boolean); override;
+    procedure Pause(onoff:boolean; settle:boolean=true); override;
     procedure Dither(pixel:double; raonly:boolean; waittime:double); override;
     function WaitBusy(maxwait:integer=5):boolean; override;
     function WaitGuiding(maxwait:integer=5):boolean; override;
@@ -572,7 +572,7 @@ try
        ConnectGear;
        Wait(10);
     end;
-    Pause(false);
+    Pause(false, false);
     wait(1);
     FStarLostCancelExposure:=config.GetValue('/Autoguider/Recovery/StarLostCancelExposure',0);
     FStarLostTimeoutRestart:=config.GetValue('/Autoguider/Recovery/RestartTimeout',0);
@@ -616,7 +616,7 @@ except
 end;
 end;
 
-procedure T_autoguider_phd.Pause(onoff:boolean);
+procedure T_autoguider_phd.Pause(onoff:boolean; settle:boolean=true);
 var buf:string;
 begin
   FStopGuiding:=false;
@@ -627,17 +627,19 @@ begin
     buf:='{"method": "set_paused","params":[false],"id":2002}';
     Send(buf);
     wait(1);
-    buf:='{"method": "guide", "params": [';
-    buf:=buf+'{"pixels": '+FSettlePix+',';     // settle tolerance
-    buf:=buf+'"time": '+FSettleTmin+',';       // min time
-    buf:=buf+'"timeout": '+FSettleTmax+'},';   // max time
-    buf:=buf+'false';                          // don't calibrate
-    buf:=buf+'],';
-    buf:=buf+'"id": 2003}';
-    Send(buf);
-    FStatus:='Settling';
-    FState:=GUIDER_BUSY;
-    WaitGuiding(StrToInt(FSettleTmax)+5);
+    if settle then begin
+      buf:='{"method": "guide", "params": [';
+      buf:=buf+'{"pixels": '+FSettlePix+',';     // settle tolerance
+      buf:=buf+'"time": '+FSettleTmin+',';       // min time
+      buf:=buf+'"timeout": '+FSettleTmax+'},';   // max time
+      buf:=buf+'false';                          // don't calibrate
+      buf:=buf+'],';
+      buf:=buf+'"id": 2003}';
+      Send(buf);
+      FStatus:='Settling';
+      FState:=GUIDER_BUSY;
+      WaitGuiding(StrToInt(FSettleTmax)+5);
+    end;
   end;
 end;
 

@@ -48,7 +48,7 @@ type
     procedure SettleTolerance(pixel:double; mintime,maxtime: integer); override;
     procedure Calibrate; override;
     procedure Guide(onoff:boolean; recalibrate:boolean=false); override;
-    procedure Pause(onoff:boolean); override;
+    procedure Pause(onoff:boolean; settle:boolean=true); override;
     procedure Dither(pixel:double; raonly:boolean; waittime:double); override;
     function WaitBusy(maxwait:integer=5):boolean; override;
     function WaitGuiding(maxwait:integer=5):boolean; override;
@@ -134,7 +134,7 @@ procedure T_autoguider_dither.Guide(onoff:boolean; recalibrate:boolean=false);
 begin
 end;
 
-procedure T_autoguider_dither.Pause(onoff:boolean);
+procedure T_autoguider_dither.Pause(onoff:boolean; settle:boolean=true);
 begin
 end;
 
