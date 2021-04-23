@@ -805,6 +805,7 @@ type
     procedure CollimationCenterStar(Sender: TObject);
     procedure CollimationCircleChange(Sender: TObject);
     procedure ReadyForVideo(var v: boolean);
+    procedure ShowStatus(str: string);
   public
     { public declarations }
   end;
@@ -1486,6 +1487,7 @@ begin
   f_starprofile.onAbsolutePosition:=@FocusSetAbsolutePosition;
   f_starprofile.onMeasureImage:=@MeasureImage;
   f_starprofile.onStarSelection:=@StarSelection;
+  f_starprofile.onStatus:=@ShowStatus;
 
   f_magnifyer:=Tf_magnifyer.Create(self);
 
@@ -13548,6 +13550,11 @@ begin
  end
  else
    NewMessage('Program shutdown canceled.',1);
+end;
+
+procedure Tf_main.ShowStatus(str: string);
+begin
+StatusBar1.Panels[panelcursor].Text := str;
 end;
 
 end.

@@ -46,6 +46,8 @@ type
     Label2: TLabel;
     Label3: TLabel;
     Label4: TLabel;
+    Label5: TLabel;
+    LabelHistHFD: TLabel;
     LabelCoord: TLabel;
     LabelFWHM: TLabel;
     LabelSNR: TLabel;
@@ -87,6 +89,7 @@ type
     procedure ChkFocusChange(Sender: TObject);
     procedure BtnMeasureImageClick(Sender: TObject);
     procedure HistoryChartDblClick(Sender: TObject);
+    procedure HistoryChartMouseMove(Sender: TObject; Shift: TShiftState; X, Y: Integer);
     procedure PanelGraphDblClick(Sender: TObject);
     procedure TimerHideGraphTimer(Sender: TObject);
     procedure VcChartMouseMove(Sender: TObject; Shift: TShiftState; X,
@@ -101,6 +104,7 @@ type
     FonMeasureImage: TNotifyBoolConst;
     FonStarSelection: TNotifyEvent;
     FonMsg: TNotifyMsg;
+    FonStatus: TNotifyStr;
     Fpreview:Tf_preview;
     Ffocuser:Tf_focuser;
     emptybmp:Tbitmap;
@@ -151,6 +155,7 @@ type
     property preview:Tf_preview read Fpreview write Fpreview;
     property focuser:Tf_focuser read Ffocuser write Ffocuser;
     property onMsg: TNotifyMsg read FonMsg write FonMsg;
+    property onStatus: TNotifyStr read FonStatus write FonStatus;
     property onFocusStart: TNotifyEvent read FFocusStart write FFocusStart;
     property onFocusStop: TNotifyEvent read FFocusStop write FFocusStop;
     property onAutoFocusStart: TNotifyEvent read FAutoFocusStart write FAutoFocusStart;
@@ -196,6 +201,7 @@ begin
  focuserdirection:=FocusDirIn;
  FLastHfd:=MaxInt;
  LabelHFD.Caption:='-';
+ LabelHistHFD.Caption:='';
  LabelFWHM.Caption:='-';
  LabelImax.Caption:='-';
  LabelSNR.Caption:='-';
@@ -214,6 +220,7 @@ procedure Tf_starprofile.SetLang;
 begin
   Title.Caption:=rsStarProfile;
   Label1.Caption:=rsHFD+':';
+  Label5.Caption:=rsHistory;
   Label2.Caption:=rsIntensity+':';
   Label3.Caption:=rsFWHM+':';
   BtnMeasureImage.Caption:=rsImageInspect;
@@ -339,6 +346,23 @@ begin
  maxfwhm:=0;
  maximax:=0;
  ClearGraph;
+end;
+
+procedure Tf_starprofile.HistoryChartMouseMove(Sender: TObject; Shift: TShiftState; X, Y: Integer);
+var dx,d,vhfd,vimax: Double;
+    i: integer;
+begin
+ d:=99999;
+ vhfd:=-1;
+ for i:=0 to HistSourceHfd.Count-1 do begin
+   dx:=abs(X-HistoryChart.XGraphToImage(HistSourceHfd.Item[i]^.X));
+   if dx<d then begin
+     d:=dx;
+     vhfd:=HistSourceHfd.Item[i]^.Y*maxfwhm;
+     vimax:=HistSourceImax.Item[i]^.Y*maximax;
+   end;
+ end;
+ if (vhfd>0) and assigned(FonStatus) then FonStatus(rsHFD+':'+formatfloat(f1,vhfd)+' '+rsIntensity+':'+formatfloat(f0,vimax));
 end;
 
 procedure Tf_starprofile.BtnMeasureImageClick(Sender: TObject);
@@ -474,6 +498,11 @@ if (FStarX<0)or(FStarY<0)or(s<0) then exit;
 try
 // labels
 LabelHFD.Caption:=FormatFloat(f1,Fhfd);
+LabelHistHFD.Caption:='';
+for i:=1 to 3 do begin
+  j:=curhist-i;
+  if j>=0 then LabelHistHFD.Caption:=LabelHistHFD.Caption+' '+FormatFloat(f1,histfwhm[j]);
+end;
 if f.HeaderInfo.floatingpoint then
   LabelImax.Caption:=FormatFloat(f3,FValMaxCalibrated)
 else
@@ -526,7 +555,7 @@ if curhist>maxhist then
     curhist:=maxhist;
   end;
 histfwhm[curhist]:=Fhfd;
-histimax[curhist]:=FValMax;
+histimax[curhist]:=FValMaxCalibrated;
 if histfwhm[curhist] > maxfwhm then maxfwhm:=histfwhm[curhist];
 if histimax[curhist] > maximax then maximax:=histimax[curhist];
 if FValMax>0 then begin
@@ -553,6 +582,7 @@ begin
   FValMax:=f.imageMax;
   PlotHistory;
   LabelHFD.Caption:=FormatFloat(f2,Fhfd);
+  LabelHistHFD.Caption:='';
   LabelImax.Caption:=FormatFloat(f0,FValMax);
   LabelFWHM.Caption:='-';
 end;
@@ -589,6 +619,7 @@ begin
  end else begin
    FFindStar:=false;
    LabelHFD.Caption:='-';
+   LabelHistHFD.Caption:='';
    LabelFWHM.Caption:='-';
    LabelImax.Caption:='-';
    ClearGraph;
@@ -743,6 +774,7 @@ begin
   // plot progress
   if InplaceAutofocus then begin
     LabelHFD.Caption:=FormatFloat(f1,Fhfd);
+    LabelHistHFD.Caption:='';
     if FValMax>1 then
        LabelImax.Caption:=FormatFloat(f0,FValMax+bg)
     else

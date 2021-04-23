@@ -1311,6 +1311,7 @@ resourcestring
   rsTCPIPServerP = 'TCP/IP server port';
   rsFoundDStars = 'Found %d stars';
   rsViewLastAuto = 'View last autofocus';
+  rsHistory = 'History';
 
 implementation
 
