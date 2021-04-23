@@ -2286,7 +2286,7 @@ function T_Targets.StartGuider:boolean;
 begin
  result:=false;
  if Autoguider=nil then exit;
- if not Mount.Tracking then exit;
+ if (mount.Status=devConnected)and(not mount.Tracking) then exit;
   msg(rsStartAutogui,2);
   Autoguider.Guide(true);
   result:=Autoguider.WaitGuiding(CalibrationDelay+SettleMaxTime);
