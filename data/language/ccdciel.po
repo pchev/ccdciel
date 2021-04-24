@@ -4834,3 +4834,11 @@ msgstr ""
 msgid "View last autofocus"
 msgstr ""
 
+#: u_translation:rshistory
+msgid "History"
+msgstr ""
+
+#: u_translation:rsditherwhiled
+msgid "Dither while downloading from the camera"
+msgstr ""
+

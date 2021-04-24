@@ -6,15 +6,15 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ccdciel\n"
 "Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
-"POT-Creation-Date: 2021-04-16 14:42+0000\n"
+"POT-Creation-Date: 2021-04-24 09:12+0000\n"
 "PO-Revision-Date: 2018-05-14 09:37+0000\n"
 "Last-Translator: Rokar ✌ <Unknown>\n"
 "Language-Team: Kurdish <ku@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2021-04-16 15:00+0000\n"
-"X-Generator: Launchpad (build 929bdb49da44562d032228b8f93c5c598dae8678)\n"
+"X-Launchpad-Export-Date: 2021-04-24 09:16+0000\n"
+"X-Generator: Launchpad (build f9f562f07f129de414c16be22a405ff0964e0018)\n"
 
 #: u_translation.rs32bitdriver
 msgid "This driver work only in 32bit, please install the 32bit version of CCDciel."
@@ -1176,6 +1176,10 @@ msgstr ""
 msgid "Dither only"
 msgstr ""
 
+#: u_translation.rsditherwhiled
+msgid "Dither while downloading from the camera"
+msgstr ""
+
 #: u_translation.rsdome
 msgid "Dome"
 msgstr ""
@@ -1770,6 +1774,10 @@ msgstr ""
 
 #: u_translation.rshighlightadu
 msgid "Highlight ADU"
+msgstr ""
+
+#: u_translation.rshistory
+msgid "History"
 msgstr ""
 
 #: u_translation.rshorizonprofi

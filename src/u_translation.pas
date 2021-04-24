@@ -1312,6 +1312,7 @@ resourcestring
   rsFoundDStars = 'Found %d stars';
   rsViewLastAuto = 'View last autofocus';
   rsHistory = 'History';
+  rsDitherWhileD = 'Dither while downloading from the camera';
 
 implementation
 

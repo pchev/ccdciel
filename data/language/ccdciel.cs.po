@@ -2,15 +2,15 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ccdciel\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-04-16 14:42+0000\n"
-"PO-Revision-Date: 2021-03-27 10:00+0000\n"
+"POT-Creation-Date: 2021-04-24 09:12+0000\n"
+"PO-Revision-Date: 2021-04-16 17:52+0000\n"
 "Last-Translator: Stanislav Holub <Unknown>\n"
 "Language-Team: Czech <cz@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2021-04-16 15:00+0000\n"
-"X-Generator: Launchpad (build 929bdb49da44562d032228b8f93c5c598dae8678)\n"
+"X-Launchpad-Export-Date: 2021-04-24 09:16+0000\n"
+"X-Generator: Launchpad (build f9f562f07f129de414c16be22a405ff0964e0018)\n"
 "Language: cs\n"
 
 #: u_translation.rs32bitdriver
@@ -1175,6 +1175,10 @@ msgstr "Dithering"
 msgid "Dither only"
 msgstr "Jen Dithering"
 
+#: u_translation.rsditherwhiled
+msgid "Dither while downloading from the camera"
+msgstr ""
+
 #: u_translation.rsdome
 msgid "Dome"
 msgstr "Kopule"
@@ -1642,8 +1646,9 @@ msgid "Found %s devices"
 msgstr "Nalezeno %s zařízení"
 
 #: u_translation.rsfounddstars
+#, fuzzy,badformat
 msgid "Found %d stars"
-msgstr ""
+msgstr "Nalezeno %hvězd"
 
 #: u_translation.rsfov
 msgid "FOV"
@@ -1772,6 +1777,10 @@ msgstr "HFD"
 #: u_translation.rshighlightadu
 msgid "Highlight ADU"
 msgstr "ADU pro vyvážení bílé"
+
+#: u_translation.rshistory
+msgid "History"
+msgstr ""
 
 #: u_translation.rshorizonprofi
 msgid "Horizon profile"
@@ -4173,7 +4182,7 @@ msgstr "Naslouchám server TCP / IP na portu: %s"
 
 #: u_translation.rstcpipserverp
 msgid "TCP/IP server port"
-msgstr ""
+msgstr "Port serveru TCP/IP"
 
 #: u_translation.rstcpipservers
 msgid "TCP/IP server stopped"
@@ -4677,7 +4686,7 @@ msgstr "Zobrazit hlavičku"
 
 #: u_translation.rsviewlastauto
 msgid "View last autofocus"
-msgstr ""
+msgstr "Zobrazit poslední automatické ostření"
 
 #: u_translation.rsviewlastreso
 msgid "View last resolver log"

@@ -1085,6 +1085,7 @@ begin
   Label120.Caption:= rsNoAutoGuidin+crlf+rsSetTheMeanDi;
   GroupBox5.Caption := rsDithering;
   Label23.Caption := rsPixels;
+  EarlyDither.Caption:=rsDitherWhileD;
   Label122.Caption:='';
   DitherRAonly.Caption := rsRAOnly;
   GroupBox11.Caption := rsSettleTolera;
