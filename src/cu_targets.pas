@@ -1212,6 +1212,7 @@ begin
         FSeqLockTwilight:=false;
         FCurrentTarget:=j-1;
         FDawnFlatNow:=true;
+        FStopping:=true;
         NextTarget;
         exit;
      end;
