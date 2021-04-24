@@ -16,7 +16,7 @@ object f_viewtext: Tf_viewtext
     Align = alClient
     Color = clWindow
     Font.Color = clWindowText
-    Font.Name = 'Courier'
+    Font.Name = 'Courier New'
     Font.Pitch = fpFixed
     ParentFont = False
     ReadOnly = True

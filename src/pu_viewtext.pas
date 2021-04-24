@@ -56,6 +56,9 @@ implementation
 
 procedure Tf_viewtext.FormCreate(Sender: TObject);
 begin
+  {$ifdef linux}
+  Memo1.Font.Name:='Monospace';
+  {$endif}
   ScaleDPI(Self);
   Button1.Caption:=rsClose;
 end;

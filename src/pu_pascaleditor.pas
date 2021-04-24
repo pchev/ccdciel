@@ -125,6 +125,9 @@ const
 
 procedure Tf_pascaleditor.FormCreate(Sender: TObject);
 begin
+  {$ifdef linux}
+  SynEdit1.Font.Name:='Monospace';
+  {$endif}
   ScaleDPI(Self);
   FDebugResume:=false;
   SetLang;
