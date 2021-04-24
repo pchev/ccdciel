@@ -47,7 +47,8 @@ TAstrometry_engine = class(TThread)
      Fparam: TStringList;
      process: TProcessUTF8;
      Ftmpfits: TFits;
-     FFallback,Fretry: boolean;
+     FFallback,Fretry,FKilled: boolean;
+     FRetryEngine:TAstrometry_engine;
    protected
      procedure Execute; override;
      function Apm2Wcs: boolean;
@@ -174,7 +175,8 @@ var  Kcmd,Kpos: string;
 {$endif}
 begin
 try
-if FResolver=ResolverAstrometryNet then begin
+FKilled:=true;
+if (FResolver=ResolverAstrometryNet) or Fretry then begin
 {$ifdef unix}
   // Kill all child process
   if (process<>nil) and process.Running then begin
@@ -241,6 +243,7 @@ else begin
   if (process<>nil) and process.Running then
     process.Terminate(1);
 end;
+if (FRetryEngine<>nil)and(not FRetryEngine.Finished) then FRetryEngine.Stop;
 except
 end;
 end;
@@ -468,10 +471,10 @@ var n: LongInt;
     i,nside,available: integer;
     endtime: double;
     mem: TMemoryStream;
-    newengine:TAstrometry_engine;
 begin
 try
 err:='';
+FKilled:=false;
 if (FResolver=ResolverAstrometryNet)or Fretry then begin
   cbuf:='';
   if (FLogFile<>'') then begin
@@ -509,6 +512,7 @@ if (FResolver=ResolverAstrometryNet)or Fretry then begin
     end;
     if now>endtime then begin
        Stop;
+       FKilled:=false;
        err:=rsTimeout+'!';
        if logok then begin
          buf:=rsTimeout+'!';
@@ -642,6 +646,7 @@ else if FResolver=ResolverPlateSolve then begin
     if now>endtime then begin
        err:=rsTimeout+'!';
        Stop;
+       FKilled:=false;
        break;
     end;
     sleep(100);
@@ -691,16 +696,16 @@ else if FResolver=ResolverPlateSolve then begin
       end;
     end
     else begin
-      if FFallback and (not Fretry) then begin
+      if FFallback and (not Fretry) and (not FKilled) then begin
         PostMessage(MsgHandle, LM_CCDCIEL, M_AstrometryMsg, PtrInt( strnew(PChar(err+crlf+rsRetryWithAst))));
-        newengine:=TAstrometry_engine.Create;
-        newengine.Assign(self);
-        newengine.Fallback:=false;
-        newengine.Fretry:=true;
-        newengine.Resolve;
+        FRetryEngine:=TAstrometry_engine.Create;
+        FRetryEngine.Assign(self);
+        FRetryEngine.Fallback:=false;
+        FRetryEngine.Fretry:=true;
+        FRetryEngine.Resolve;
         repeat
           sleep(100);
-        until newengine.Finished;
+        until FRetryEngine.Finished;
         exit;
       end;
     end;
@@ -717,6 +722,7 @@ else if FResolver=ResolverAstap then begin
     if now>endtime then begin
        err:=rsTimeout+'!';
        Stop;
+       FKilled:=false;
        break;
     end;
     sleep(100);
@@ -763,16 +769,16 @@ else if FResolver=ResolverAstap then begin
     end;
   end
   else begin
-    if FFallback and (not Fretry) then begin
+    if FFallback and (not Fretry) and (not FKilled) then begin
       PostMessage(MsgHandle, LM_CCDCIEL, M_AstrometryMsg, PtrInt( strnew(PChar(err+crlf+rsRetryWithAst))));
-      newengine:=TAstrometry_engine.Create;
-      newengine.Assign(self);
-      newengine.Fallback:=false;
-      newengine.Fretry:=true;
-      newengine.Resolve;
+      FRetryEngine:=TAstrometry_engine.Create;
+      FRetryEngine.Assign(self);
+      FRetryEngine.Fallback:=false;
+      FRetryEngine.Fretry:=true;
+      FRetryEngine.Resolve;
       repeat
         sleep(100);
-      until newengine.Finished;
+      until FRetryEngine.Finished;
       exit;
     end;
   end;
