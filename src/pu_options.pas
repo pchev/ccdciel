@@ -36,6 +36,7 @@ type
   Tf_option = class(TForm)
     EarlyDither: TCheckBox;
     Label150: TLabel;
+    Label67: TLabel;
     Panel26: TPanel;
     PythonCmd: TEdit;
     GroupBox31: TGroupBox;
@@ -1015,6 +1016,7 @@ begin
   Label50.Caption := rsBinning;
   Label54.Caption := rsAutofocusTol;
   Label81.Caption := rsMinSNR;
+  Label67.Caption := rsWhenPerformi;
   Label52.Caption:=rsDefaultBehav;
   AutofocusSlew.Caption:=rsSlewToFocusS2;
   AutofocusInPlace.Caption:=rsStayInPlace;

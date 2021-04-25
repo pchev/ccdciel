@@ -1313,6 +1313,7 @@ resourcestring
   rsViewLastAuto = 'View last autofocus';
   rsHistory = 'History';
   rsDitherWhileD = 'Dither while downloading from the camera';
+  rsWhenPerformi = 'When performing autofocus from a sequence';
 
 implementation
 

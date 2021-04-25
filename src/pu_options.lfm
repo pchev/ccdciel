@@ -2253,12 +2253,12 @@ object f_option: Tf_option
       end
       object PanelAutofocus: TPanel
         Left = 0
-        Height = 277
+        Height = 269
         Top = 87
         Width = 520
         Align = alTop
         BevelOuter = bvNone
-        ClientHeight = 277
+        ClientHeight = 269
         ClientWidth = 520
         ParentFont = False
         TabOrder = 1
@@ -2324,7 +2324,7 @@ object f_option: Tf_option
         object PanelNearFocus: TPanel
           Left = 0
           Height = 31
-          Top = 155
+          Top = 147
           Width = 520
           Align = alBottom
           BevelOuter = bvNone
@@ -2441,7 +2441,7 @@ object f_option: Tf_option
         object AutofocusNotebook: TNotebook
           Left = 0
           Height = 91
-          Top = 186
+          Top = 178
           Width = 520
           PageIndex = 0
           Align = alBottom
@@ -2520,7 +2520,7 @@ object f_option: Tf_option
               Left = 8
               Height = 21
               Hint = 'Try to correct for focuser slippage since the last Vcurve learning.'#10'Beware you must set the focuser temperature correction and the filters offset before to use this option.'
-              Top = 40
+              Top = 32
               Width = 145
               Caption = 'Slippage correction '
               ParentFont = False
@@ -2531,7 +2531,7 @@ object f_option: Tf_option
               AnchorSideTop.Side = asrCenter
               Left = 8
               Height = 17
-              Top = 64
+              Top = 59
               Width = 227
               Caption = 'Estimated slippage since last learning'
               ParentColor = False
@@ -2581,9 +2581,11 @@ object f_option: Tf_option
               Value = 1
             end
             object AutofocusSlippageOffset: TSpinEdit
+              AnchorSideTop.Control = AutofocusSlippageCorrection
+              AnchorSideTop.Side = asrBottom
               Left = 356
               Height = 28
-              Top = 58
+              Top = 53
               Width = 61
               Constraints.MaxHeight = 28
               MaxValue = 10000
@@ -2792,18 +2794,18 @@ object f_option: Tf_option
       end
       object PanelFocusStar: TPanel
         Left = 0
-        Height = 173
-        Top = 364
+        Height = 181
+        Top = 356
         Width = 520
         Align = alClient
-        ClientHeight = 173
+        ClientHeight = 181
         ClientWidth = 520
         ParentFont = False
         TabOrder = 2
         object AutofocusMultistar: TGroupBox
           Left = 1
           Height = 113
-          Top = 59
+          Top = 67
           Width = 518
           Align = alClient
           Caption = 'Focus star selection'
@@ -2842,7 +2844,7 @@ object f_option: Tf_option
         object AutofocusSlewStar: TGroupBox
           Left = 1
           Height = 113
-          Top = 59
+          Top = 67
           Width = 518
           Align = alClient
           Caption = 'Focus star selection'
@@ -2928,11 +2930,12 @@ object f_option: Tf_option
         end
         object Panel16: TPanel
           Left = 1
-          Height = 58
+          Height = 66
           Top = 1
           Width = 518
           Align = alTop
-          ClientHeight = 58
+          BevelOuter = bvNone
+          ClientHeight = 66
           ClientWidth = 518
           ParentFont = False
           TabOrder = 2
@@ -2941,7 +2944,7 @@ object f_option: Tf_option
             AnchorSideTop.Side = asrCenter
             Left = 1
             Height = 17
-            Top = 8
+            Top = 25
             Width = 104
             Caption = 'Default behavior'
             ParentColor = False
@@ -2952,7 +2955,7 @@ object f_option: Tf_option
             AnchorSideTop.Side = asrCenter
             Left = 170
             Height = 21
-            Top = 6
+            Top = 23
             Width = 130
             Caption = 'Slew to focus star'
             Checked = True
@@ -2962,23 +2965,37 @@ object f_option: Tf_option
             TabStop = True
           end
           object AutofocusInPlace: TRadioButton
-            Left = 356
+            AnchorSideTop.Control = Label67
+            AnchorSideTop.Side = asrBottom
+            Left = 352
             Height = 21
-            Top = 6
+            Top = 23
             Width = 99
+            BorderSpacing.Top = 4
             Caption = 'Stay in place'
             OnClick = ChangeAutofocusInPlace
             ParentFont = False
             TabOrder = 1
           end
           object LabelMultistarWarning: TLabel
+            AnchorSideTop.Control = AutofocusInPlace
+            AnchorSideTop.Side = asrBottom
             Left = 4
             Height = 17
-            Top = 30
+            Top = 46
             Width = 6
+            BorderSpacing.Top = 2
             Caption = '  '
             ParentColor = False
             ParentFont = False
+          end
+          object Label67: TLabel
+            Left = 1
+            Height = 17
+            Top = 2
+            Width = 281
+            Caption = 'When performing autofocus from a sequence'
+            ParentColor = False
           end
         end
       end
