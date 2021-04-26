@@ -717,6 +717,10 @@ object f_main: Tf_main
         Caption = 'Image cleanup'
         OnClick = MenuItemCleanupClick
       end
+      object MenuItemUnselect2: TMenuItem
+        Caption = 'Unselect star'
+        OnClick = MenuItemUnselectClick
+      end
     end
     object MenuItem4: TMenuItem
       Caption = 'Display'
@@ -1283,6 +1287,10 @@ object f_main: Tf_main
     object MenuItemCleanup: TMenuItem
       Caption = 'Image cleanup'
       OnClick = MenuItemCleanupClick
+    end
+    object MenuItemUnselect: TMenuItem
+      Caption = 'Unselect star'
+      OnClick = MenuItemUnselectClick
     end
   end
   object AbortTimer: TTimer

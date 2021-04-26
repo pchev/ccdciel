@@ -1314,6 +1314,7 @@ resourcestring
   rsHistory = 'History';
   rsDitherWhileD = 'Dither while downloading from the camera';
   rsWhenPerformi = 'When performing autofocus from a sequence';
+  rsUnselectStar = 'Unselect star';
 
 implementation
 

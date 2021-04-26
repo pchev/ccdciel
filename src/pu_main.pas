@@ -120,6 +120,8 @@ type
     MenuAscomCoverSetup: TMenuItem;
     MenuAlpacaCoverSetup: TMenuItem;
     MenuAlpacaSwitchSetup: TMenuItem;
+    MenuItemUnselect2: TMenuItem;
+    MenuItemUnselect: TMenuItem;
     MenuViewCover: TMenuItem;
     MenuViewSwitch: TMenuItem;
     MenuSavePicture: TMenuItem;
@@ -373,6 +375,7 @@ type
     procedure MenuHelpAboutClick(Sender: TObject);
     procedure MenuImgStatClick(Sender: TObject);
     procedure MenuIndiSettingsClick(Sender: TObject);
+    procedure MenuItemUnselectClick(Sender: TObject);
     procedure MenuPolarAlignmentClick(Sender: TObject);
     procedure MenuItemCleanupClick(Sender: TObject);
     procedure MenuItemPhotometryClick(Sender: TObject);
@@ -1974,6 +1977,8 @@ begin
    MenuItemDebayer2.Caption := rsPreviewDebay;
    MenuItemCleanup.Caption:=rsImageCleanup;
    MenuItemCleanup2.Caption:=rsImageCleanup;
+   MenuItemUnselect.Caption:=rsUnselectStar;
+   MenuItemUnselect2.Caption:=rsUnselectStar;
    SubDirName[0]:=rsSubfolderByS;
    SubDirName[1]:=rsSubfolderByF;
    SubDirName[2]:=rsSubfolderByO;
@@ -9914,9 +9919,14 @@ end;
 
 procedure Tf_main.MenuItemCleanupClick(Sender: TObject);
 begin
-   f_starprofile.FindStar:=false;
    fits.ClearStarList;
    DrawImage;
+end;
+
+procedure Tf_main.MenuItemUnselectClick(Sender: TObject);
+begin
+  f_starprofile.FindStar:=false;
+  DrawImage;
 end;
 
 procedure Tf_main.MenuItemPhotometryClick(Sender: TObject);
