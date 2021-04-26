@@ -349,20 +349,37 @@ begin
 end;
 
 procedure Tf_visu.FrameResize(Sender: TObject);
+var btnw: integer;
 begin
   if Parent is TPanel then begin
      if TPanel(Parent).Width>TPanel(Parent).Height then begin
-        Panel3.Constraints.MaxWidth:=256;
-        Panel3.Constraints.MinWidth:=256;
+        Panel3.Constraints.MaxWidth:=DoScaleX(256);
+        Panel3.Constraints.MinWidth:=DoScaleX(256);
         Panel1.ChildSizing.ControlsPerLine:=99;
         Panel1.ChildSizing.Layout:=cclLeftToRightThenTopToBottom;
+        Panel2.Constraints.MaxWidth:=DoScaleX(144);
+        Panel2.Constraints.MinWidth:=DoScaleX(144);
      end else begin
-        Panel3.Constraints.MaxWidth:=192;
-        Panel3.Constraints.MinWidth:=192;
+        Panel3.Constraints.MaxWidth:=DoScaleX(192);
+        Panel3.Constraints.MinWidth:=DoScaleX(192);
         Panel1.ChildSizing.ControlsPerLine:=99;
         Panel1.ChildSizing.Layout:=cclTopToBottomThenLeftToRight;
+        Panel2.Constraints.MaxWidth:=DoScaleX(192);
+        Panel2.Constraints.MinWidth:=DoScaleX(192);
      end;
      SpinEditMax.Left:=Panel3.Width-SpinEditMax.Width;
+     btnw:=(Panel4.ClientWidth-DoScaleX(3)) div 4;
+     gamma.Width:=2*btnw+DoScaleX(1);
+     BtnFlipVert.Width:=btnw;
+     BtnZoomAdjust.Width:=btnw;
+     BtnZoom2.Width:=btnw;
+     BtnZoom1.Width:=btnw;
+     BtnZoom05.Width:=btnw;
+     BtnBullsEye.Width:=btnw;
+     BtnClipping.Width:=btnw;
+     BtnInvert.Width:=btnw;
+     BtnFlipHorz.Width:=btnw;
+     BtnClipRange.Width:=btnw;
   end;
 end;
 

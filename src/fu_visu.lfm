@@ -138,53 +138,63 @@ object f_visu: Tf_visu
       Left = 259
       Height = 89
       Top = 0
-      Width = 144
+      Width = 143
       BevelOuter = bvNone
       ClientHeight = 89
-      ClientWidth = 144
+      ClientWidth = 143
+      ParentColor = False
       ParentFont = False
       TabOrder = 0
       object Panel4: TPanel
         Left = 0
         Height = 89
         Top = 0
-        Width = 116
+        Width = 115
         Align = alClient
         BevelOuter = bvNone
         ClientHeight = 89
-        ClientWidth = 116
+        ClientWidth = 115
+        ParentColor = False
         TabOrder = 0
         object Panel5: TPanel
-          Left = 2
+          Left = 0
           Height = 21
           Top = 0
-          Width = 114
+          Width = 115
+          Align = alTop
           BevelOuter = bvNone
           ClientHeight = 21
-          ClientWidth = 114
+          ClientWidth = 115
           TabOrder = 1
           object HistBar: TTrackBar
+            AnchorSideLeft.Control = Panel5
             AnchorSideTop.Control = Panel5
             AnchorSideTop.Side = asrCenter
+            AnchorSideRight.Control = Panel5
+            AnchorSideRight.Side = asrBottom
             Left = 0
             Height = 43
             Top = -11
-            Width = 114
+            Width = 115
             Max = 100
             OnChange = HistBarChange
             Position = 0
             TickStyle = tsNone
+            Anchors = [akTop, akLeft, akRight]
             Constraints.MaxHeight = 26
             TabOrder = 0
           end
         end
         object BtnFlipVert: TSpeedButton
+          AnchorSideLeft.Control = BtnFlipHorz
+          AnchorSideLeft.Side = asrBottom
           Left = 29
           Height = 22
           Hint = 'Flip the image vertically'
           Top = 67
           Width = 28
           AllowAllUp = True
+          BorderSpacing.Left = 1
           Color = clDefault
           GroupIndex = 107
           OnClick = BtnFlipVertClick
@@ -204,12 +214,15 @@ object f_visu: Tf_visu
         end
         object BtnZoom2: TSpeedButton
           Tag = 3
-          Left = 88
+          AnchorSideLeft.Control = BtnZoom1
+          AnchorSideLeft.Side = asrBottom
+          Left = 87
           Height = 22
           Hint = 'Zoom two time'
           Top = 44
           Width = 28
           AllowAllUp = True
+          BorderSpacing.Left = 1
           Caption = '2:1'
           Color = clDefault
           GroupIndex = 102
@@ -219,12 +232,15 @@ object f_visu: Tf_visu
         end
         object BtnZoom1: TSpeedButton
           Tag = 2
-          Left = 59
+          AnchorSideLeft.Control = BtnZoom05
+          AnchorSideLeft.Side = asrBottom
+          Left = 58
           Height = 22
           Hint = 'Zoom to original scale'
           Top = 44
           Width = 28
           AllowAllUp = True
+          BorderSpacing.Left = 1
           Caption = '1:1'
           Color = clDefault
           GroupIndex = 102
@@ -234,12 +250,15 @@ object f_visu: Tf_visu
         end
         object BtnZoom05: TSpeedButton
           Tag = 1
+          AnchorSideLeft.Control = BtnZoomAdjust
+          AnchorSideLeft.Side = asrBottom
           Left = 29
           Height = 22
           Hint = 'Zoom to half size'
           Top = 44
           Width = 28
           AllowAllUp = True
+          BorderSpacing.Left = 1
           Caption = '1:2'
           Color = clDefault
           GroupIndex = 102
@@ -248,24 +267,30 @@ object f_visu: Tf_visu
           ParentFont = False
         end
         object BtnBullsEye: TSpeedButton
-          Left = 59
+          AnchorSideLeft.Control = BtnFlipVert
+          AnchorSideLeft.Side = asrBottom
+          Left = 58
           Height = 22
           Hint = 'Show bulls eye'
           Top = 67
           Width = 28
           AllowAllUp = True
+          BorderSpacing.Left = 1
           Color = clDefault
           GroupIndex = 103
           OnClick = BtnBullsEyeClick
           ParentFont = False
         end
         object BtnClipping: TSpeedButton
-          Left = 88
+          AnchorSideLeft.Control = BtnBullsEye
+          AnchorSideLeft.Side = asrBottom
+          Left = 87
           Height = 22
           Hint = 'Show highlight and shadow clipping'
           Top = 67
           Width = 28
           AllowAllUp = True
+          BorderSpacing.Left = 1
           Color = clDefault
           GroupIndex = 104
           OnClick = BtnClippingClick
@@ -288,12 +313,15 @@ object f_visu: Tf_visu
           Value = 1
         end
         object BtnInvert: TSpeedButton
-          Left = 88
+          AnchorSideLeft.Control = BtnClipRange
+          AnchorSideLeft.Side = asrBottom
+          Left = 87
           Height = 22
           Hint = 'Invert image display'
           Top = 22
           Width = 28
           AllowAllUp = True
+          BorderSpacing.Left = 1
           Color = clDefault
           GroupIndex = 105
           OnClick = BtnInvertClick
@@ -312,11 +340,14 @@ object f_visu: Tf_visu
           ParentFont = False
         end
         object BtnClipRange: TSpeedButton
-          Left = 59
+          AnchorSideLeft.Control = Gamma
+          AnchorSideLeft.Side = asrBottom
+          Left = 58
           Height = 22
           Top = 22
           Width = 28
           AllowAllUp = True
+          BorderSpacing.Left = 1
           Color = clDefault
           GroupIndex = 110
           OnClick = BtnClipRangeClick
@@ -324,7 +355,7 @@ object f_visu: Tf_visu
         end
       end
       object PanelNoDisplay: TPanel
-        Left = 116
+        Left = 115
         Height = 89
         Top = 0
         Width = 28
@@ -332,6 +363,7 @@ object f_visu: Tf_visu
         BevelOuter = bvNone
         ClientHeight = 89
         ClientWidth = 28
+        ParentColor = False
         TabOrder = 1
         Visible = False
         object BtnShowImage: TSpeedButton

@@ -3588,7 +3588,9 @@ begin
   end;
   MaxADU:=config.GetValue('/Sensor/MaxADU',MAXWORD);
   DisplayCapture:=config.GetValue('/Visu/DisplayCapture',DisplayCapture);
+  ok:=f_visu.PanelNoDisplay.Visible<>(not DisplayCapture);
   f_visu.PanelNoDisplay.Visible:=not DisplayCapture;
+  if ok then f_visu.FrameResize(nil);
   LowQualityDisplay:=config.GetValue('/Visu/LowQualityDisplay',LowQualityDisplay);
   ConfigExpEarlyStart:=config.GetValue('/Sensor/ExpEarlyStart',ConfigExpEarlyStart);
   MeasureNewImage:=config.GetValue('/Files/MeasureNewImage',false) and ConfigExpEarlyStart;
