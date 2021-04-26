@@ -596,6 +596,8 @@ begin
 
  try
 
+ s:=s div 2;
+
  if s>=(f.HeaderInfo.naxis1 div 2) then s:=f.HeaderInfo.naxis1 div 2;
  if s>=(f.HeaderInfo.naxis2 div 2) then s:=f.HeaderInfo.naxis2 div 2;
 
@@ -614,7 +616,7 @@ begin
    FFindStar:=true;
    FStarX:=round(xg);
    FStarY:=round(yg);
-   PlotProfile(f,bg,s);
+   PlotProfile(f,bg,max(s,round(3*Fhfd)));
    PlotHistory;
  end else begin
    FFindStar:=false;
