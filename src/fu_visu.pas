@@ -357,11 +357,12 @@ begin
         Panel1.ChildSizing.ControlsPerLine:=99;
         Panel1.ChildSizing.Layout:=cclLeftToRightThenTopToBottom;
      end else begin
-        Panel3.Constraints.MaxWidth:=128;
-        Panel3.Constraints.MinWidth:=128;
+        Panel3.Constraints.MaxWidth:=192;
+        Panel3.Constraints.MinWidth:=192;
         Panel1.ChildSizing.ControlsPerLine:=99;
         Panel1.ChildSizing.Layout:=cclTopToBottomThenLeftToRight;
      end;
+     SpinEditMax.Left:=Panel3.Width-SpinEditMax.Width;
   end;
 end;
 

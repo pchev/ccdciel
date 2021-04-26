@@ -27,6 +27,7 @@ object f_msg: Tf_msg
       Width = 598
       Align = alClient
       Color = clWindow
+      Constraints.MinHeight = 100
       Font.Color = clWindowText
       OnDblClick = msgDblClick
       OnMouseEnter = msgMouseEnter
