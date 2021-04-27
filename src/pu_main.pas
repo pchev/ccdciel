@@ -1282,7 +1282,6 @@ begin
   LowQualityDisplay:={$ifdef cpuarm}true{$else}false{$endif};
   ConfigExpEarlyStart:=true;
   EarlyDither:=true;
-  CameraProcessingImage:=false;
   WantExif:=true;
   MagnitudeCalibration:=NullCoord;
   Collimation:=false;
@@ -8217,6 +8216,7 @@ end;
 procedure Tf_main.ResetPreviewStack(Sender: TObject);
 begin
    fits.ClearImage;
+   camera.StackStarted:=0;
 end;
 
 Procedure Tf_main.StartPreviewExposureAsync(Data: PtrInt);
@@ -8770,11 +8770,12 @@ if (AllDevicesConnected)and(not autofocusing)and (not learningvcurve) then begin
   fits.DarkOn:=camera.AddFrames;
   // show message
   cc:=f_capture.SeqCount;
-  if (camera.AddFrames)and(EarlyNextExposure and (not SkipEarlyExposure))and(cc>1) then cc:=cc-1;
-  if  camera.AddFrames then begin
-    cs:=camera.StackCount+1;
-    if cs>camera.StackNum then cs:=1;
-    NewMessage(Format(rsStartingExpo, [f_capture.FrameType.Text, inttostr(cc)+'/'+f_capture.SeqNum.Text, f_capture.ExpTime.Text])+' '+Format('Stack %d / %d',[cs,camera.StackNum]),1)
+  if camera.AddFrames then begin
+    camera.StackStarted:=camera.StackStarted+1;
+    if (camera.StackStarted=1)or(camera.StackStarted>camera.StackNum) then begin
+      camera.StackStarted:=1;
+      NewMessage(Format(rsStartingExpo, [f_capture.FrameType.Text, inttostr(cc)+'/'+f_capture.SeqNum.Text, IntToStr(camera.StackNum)+' x '+f_capture.ExpTime.Text]));
+    end;
   end
   else
     NewMessage(Format(rsStartingExpo, [f_capture.FrameType.Text, inttostr(cc)+'/'+f_capture.SeqNum.Text, f_capture.ExpTime.Text]),1);

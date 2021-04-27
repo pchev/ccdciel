@@ -66,7 +66,7 @@ T_camera = class(TComponent)
     FImageFormat: string;
     FCameraXSize,FCameraYSize: integer;
     FFits: TFits;
-    FStackCount, FStackNum: integer;
+    FStackCount, FStackNum, FStackStarted: integer;
     FStackStart: string;
     FStackAlign: boolean;
     FStackAlignX,FStackAlignY,FStackStarX,FStackStarY: double;
@@ -263,6 +263,7 @@ T_camera = class(TComponent)
     property FPS: double read GetFPS;
     property StackNum: integer read FStackNum write FStackNum;
     property StackCount: integer read FStackCount;
+    property StackStarted: integer read FStackStarted write FStackStarted;
     property Filter: integer read GetFilter write SetFilter;
     property FilterNames: TStringList read FFilterNames write SetFilterNames;
     property Timeout: integer read FTimeout write SetTimeout;
@@ -506,6 +507,7 @@ if FAddFrames then begin  // stack preview frames
      end;
      FFits.Math(f,moAdd);       // add frame
      inc(FStackCount);
+     msg(Format('%d frame stacked',[FStackCount]));
   end
   else begin
      FStackStart:=FormatDateTime(dateiso,Ftimestart);
@@ -529,6 +531,7 @@ if FAddFrames then begin  // stack preview frames
        end;
      end;
      if not FStackAlign then msg(rsNoAlignmentS,0);
+     msg(Format('%d frame stacked',[FStackCount]));
   end;
   // update image
   FFits.Header.Assign(f.Header);
@@ -555,6 +558,7 @@ begin
  if EarlyNextExposure and Assigned(FonNewExposure) and(not Autofocusing) then begin
    if CameraProcessingImage and (CameraProcessingNum=FImgNum-1) then begin
      sleep(10);
+     msg('wait CameraProcessingImage');
      CheckSynchronize;
      Application.QueueAsyncCall(@TryNextExposure,Data);
    end
