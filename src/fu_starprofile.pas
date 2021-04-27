@@ -105,13 +105,14 @@ type
     procedure HistoryChartMouseMove(Sender: TObject; Shift: TShiftState; X, Y: Integer);
     procedure PageControlProfileChange(Sender: TObject);
     procedure PanelGraphDblClick(Sender: TObject);
+    procedure Star2DResize(Sender: TObject);
     procedure TimerHideGraphTimer(Sender: TObject);
     procedure VcChartMouseMove(Sender: TObject; Shift: TShiftState; X,
       Y: Integer);
   private
     { private declarations }
     FFindStar: boolean;
-    FStarX,FStarY,FValMax,FValMaxCalibrated: double;
+    FStarX,FStarY,FValMax,FValMaxCalibrated,Fbg: double;
     FFocusStart,FFocusStop: TNotifyEvent;
     FAutoFocusStop,FAutoFocusStart: TNotifyEvent;
     FonFocusIN, FonFocusOUT, FonAbsolutePosition: TNotifyEvent;
@@ -126,16 +127,17 @@ type
     maxfwhm,maximax: double;
     Fhfd,Ffwhm,Ffwhmarcsec,FLastHfd,Fsnr,FMinSnr,FminPeak:double;
     FhfdList: array of double;
-    curhist,FfocuserSpeed,FnumHfd,FPreFocusPos,FnumGraph,FAutofocusRestart: integer;
+    curhist,FfocuserSpeed,FnumHfd,FPreFocusPos,FnumGraph,FAutofocusRestart,Fsize: integer;
     focuserdirection,terminated,FirstFrame: boolean;
     FAutofocusResult, FAutofocusDone: boolean;
     dyn_v_curve:array of TDouble2;
     aminhfd,amaxhfd:double;
     afmpos,aminpos,DynAbsStartPos,DynAbsStep:integer;
-    ColorImg: TBGRABitmap;
+    FFits: TFits;
     procedure msg(txt:string; level: integer);
     function  getRunning:boolean;
     procedure PlotProfile(f: TFits; bg: double; s:integer);
+    procedure PlotStar2D;
     procedure PlotHistory;
     procedure ClearGraph;
     procedure doAutofocusVcurve;
@@ -208,7 +210,6 @@ begin
  SetLang;
  emptybmp:=Tbitmap.Create;
  emptybmp.SetSize(1,1);
- ColorImg:=TBGRABitmap.Create;
  LastFocusimage:=TBGRABitmap.Create(1,1);
  LastFocusMsg:='Autofocus not run';
  FAutofocusDone:=false;
@@ -233,7 +234,6 @@ destructor  Tf_starprofile.Destroy;
 begin
  emptybmp.Free;
  LastFocusimage.Free;
- ColorImg.Free;
  inherited Destroy;
 end;
 
@@ -516,6 +516,11 @@ begin
  end;
 end;
 
+procedure Tf_starprofile.Star2DResize(Sender: TObject);
+begin
+  PlotStar2D;
+end;
+
 procedure Tf_starprofile.PanelGraphClose(Sender: TObject; var CloseAction: TCloseAction);
 begin
   CloseAction:=caFree;
@@ -606,12 +611,12 @@ begin
 end;
 
 procedure Tf_starprofile.PlotProfile(f: TFits; bg: double; s:integer);
-var i,j,i0,j0,rs:integer;
-    v, valsaturation: double;
-    col:TBGRAPixel;
+var i,j,i0,rs:integer;
     txt:string;
 begin
 if (FStarX<0)or(FStarY<0)or(s<0) then exit;
+FFits:=f;
+Fsize:=s;
 try
 // labels
 LabelHFD.Caption:=FormatFloat(f1,Fhfd);
@@ -652,32 +657,59 @@ if FValMax>0 then begin
   for i:=0 to s-1 do begin
     ProfileSource.Add(i,f.image[0,j,i0+i]-bg);
   end;
-  // color profile
-  if f.HeaderInfo.floatingpoint then
+  PlotStar2D;
+end;
+except
+  on E: Exception do begin
+    msg('PlotProfile :'+ E.Message,0);
+  end;
+end;
+end;
+
+procedure Tf_starprofile.PlotStar2D;
+var i,j,i0,j0,rs,ds:integer;
+    v,valsaturation,bg: double;
+    s: integer;
+    tmpbmp,str: TBGRABitmap;
+    col:TBGRAPixel;
+ begin
+if (FFits<>nil)and(FValMax>0) then begin
+  bg:=max(Fbg,0);
+  rs:=Fsize div 2;
+  if (FStarX-rs)<0 then rs:=round(FStarX);
+  if (FStarX+rs)>(img_Width-1) then rs:=img_Width-1-integer(round(FStarX));
+  if (FStarY-rs)<0 then rs:=round(FStarY);
+  if (FStarY+rs)>(img_Height-1) then rs:=img_Height-1-integer(round(FStarY));
+  if rs<=0 then exit;
+  if FFits.HeaderInfo.floatingpoint then
     valsaturation:=MaxDouble
   else
     valsaturation:=MaxADU-1-bg;
   s:=max(10,round(4*Fhfd));
   j0:=trunc(FStarY)-(s div 2);
   i0:=trunc(FStarX)-(s div 2);
-  ColorImg.SetSize(s,s);
+  ds:=min(Star2D.Width,Star2D.Height);
+  tmpbmp:=TBGRABitmap.Create(s,s);
+  str:=TBGRABitmap.Create(ds,ds);
+  try
   for j:=0 to s-1 do begin
     for i:=0 to s-1 do begin
-      v:=f.image[0,j0+j,i0+i]-bg;
+      v:=FFits.image[0,j0+j,i0+i]-bg;
       if v>=valsaturation then col:=VGAPurple
       else if v>=FValMax/2 then col:=VGALime
       else if v>=FValMax*0.09 then col:=VGAYellow
       else if v>=FValMax*0.03 then col:=VGARed
       else col:=BGRABlack;
-      ColorImg.Canvas.Pixels[i,j]:=col;
+      tmpbmp.Canvas.Pixels[i,j]:=col;
     end;
   end;
-  Star2D.Picture.Assign(ColorImg);
+  tmpbmp.ResampleFilter:=rfCosine;
+  str:=tmpbmp.Resample(ds,ds,rmFineResample) as TBGRABitmap;
+  Star2D.Picture.Assign(str);
   Star2D.Invalidate;
-end;
-except
-  on E: Exception do begin
-    msg('PlotProfile :'+ E.Message,0);
+  finally
+    tmpbmp.free;
+    str.free;
   end;
 end;
 end;
@@ -715,6 +747,7 @@ end;
 
 procedure Tf_starprofile.ShowSharpness(f: TFits);
 begin
+  FFits:=f;
   Fhfd:=image_sharpness(f.image);
   FValMax:=f.imageMax;
   PlotHistory;
@@ -743,6 +776,7 @@ begin
 
  f.GetHFD2(xm,ym,2*ri,xg,yg,bg,bgdev,Fhfd,Ffwhm,FValMax,Fsnr,flux);
  FValMaxCalibrated:=FValMax+bg;
+ Fbg:=bg;
  if (Ffwhm>0)and(focal>0)and(pxsize>0) then begin
    Ffwhmarcsec:=Ffwhm*3600*rad2deg*arctan(pxsize/1000/focal);
  end
@@ -777,7 +811,6 @@ var bg,bgdev,star_fwhm,focuspos,tempcomp: double;
   hfdlist: array of double;
   txt:string;
 begin
-
  // Canceling autofocus if no fits file
  if f=nil then begin
    FAutofocusResult:=false;
@@ -865,6 +898,7 @@ begin
      exit;
   end;
   f.GetHFD2(xm,ym,2*ri,xg,yg,bg,bgdev,Fhfd,star_fwhm,FValMax,Fsnr,flux,false);
+  Fbg:=bg;
   // process this measurement
   if (Fhfd<=0) then begin
     msg(rsAutofocusCan4,0);
