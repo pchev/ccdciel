@@ -37,6 +37,7 @@ type
     BtnStart: TButton;
     CheckBoxDither: TCheckBox;
     CheckBoxFocus: TCheckBox;
+    StackNum: TSpinEdit;
     Fnumber: TComboBox;
     ISObox: TComboBox;
     FrameType: TComboBox;
@@ -47,11 +48,13 @@ type
     Label4: TLabel;
     Label5: TLabel;
     Label6: TLabel;
+    Label7: TLabel;
     LabelGain: TLabel;
     LabelOffset: TLabel;
     led: TShape;
     OffsetEdit: TSpinEdit;
     Panel1: TPanel;
+    PanelStack: TPanel;
     PanelFnumber: TPanel;
     PanelGain: TPanel;
     Panel2: TPanel;
@@ -182,7 +185,7 @@ begin
           Mount.SlewToDomeFlatPosition;
     end;
     if Assigned(FonMsg) then FonMsg(rsStartCapture,2);
-    EarlyNextExposure:=((TFrameType(FrameType.ItemIndex)=LIGHT)or(TFrameType(FrameType.ItemIndex)=DARK)) and ConfigExpEarlyStart;
+    EarlyNextExposure:=((TFrameType(FrameType.ItemIndex)=LIGHT)or(TFrameType(FrameType.ItemIndex)=DARK)) and not(PanelStack.Visible and (StackNum.Value>1)) and ConfigExpEarlyStart;
     if Assigned(FonStartExposure) then FonStartExposure(self);
     if (not Frunning) and Assigned(FonMsg) then FonMsg(rsCannotStartC,0);
   end else begin

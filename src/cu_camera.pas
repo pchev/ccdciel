@@ -66,7 +66,8 @@ T_camera = class(TComponent)
     FImageFormat: string;
     FCameraXSize,FCameraYSize: integer;
     FFits: TFits;
-    FStackCount: integer;
+    FStackCount, FStackNum: integer;
+    FStackStart: string;
     FStackAlign: boolean;
     FStackAlignX,FStackAlignY,FStackStarX,FStackStarY: double;
     FMount: T_mount;
@@ -260,6 +261,7 @@ T_camera = class(TComponent)
     property BitperPixel: double read GetBitperPixel;
     property Color: boolean read GetColor;
     property FPS: double read GetFPS;
+    property StackNum: integer read FStackNum write FStackNum;
     property StackCount: integer read FStackCount;
     property Filter: integer read GetFilter write SetFilter;
     property FilterNames: TStringList read FFilterNames write SetFilterNames;
@@ -352,6 +354,7 @@ begin
   FTemperatureRampActive:=false;
   FCancelTemperatureRamp:=false;
   FStackCount:=0;
+  FStackNum:=-1;
   FISOList:=TStringList.Create;
   FGainMin:=0;
   FGainMax:=0;
@@ -472,6 +475,7 @@ var f:TFits;
 begin
 {$ifdef debug_raw}writeln(FormatDateTime(dateiso,Now)+blank+'NewImage');{$endif}
 if FAddFrames then begin  // stack preview frames
+  if FStackCount>=FStackNum then FFits.ClearImage;
   // load temporary image
   f:=TFits.Create(nil);
   f.onMsg:=onMsg;
@@ -504,6 +508,7 @@ if FAddFrames then begin  // stack preview frames
      inc(FStackCount);
   end
   else begin
+     FStackStart:=FormatDateTime(dateiso,Ftimestart);
      FFits.Math(f,moAdd,true);  // start a new stack
      FStackCount:=1;
      FStackAlign:=false;
@@ -519,8 +524,7 @@ if FAddFrames then begin  // stack preview frames
             FStackAlignY:=ys;
             FStackStarX:=xs;
             FStackStarY:=ys;
-            msg(Format(rsStackingWith, [inttostr(round(xs)), inttostr(round(ys))
-              ]));
+            msg(Format(rsStackingWith, [inttostr(round(xs)), inttostr(round(FFits.HeaderInfo.naxis2-ys))]));
          end;
        end;
      end;
@@ -743,21 +747,29 @@ begin
   Ffits.Header.Insert(i,'SWCREATE','CCDciel '+ccdciel_version+'-'+RevisionStr+blank+compile_system,'');
   if objname<>'' then Ffits.Header.Insert(i,'OBJECT',objname,'Observed object name');
   Ffits.Header.Insert(i,'IMAGETYP',hframe,'Image Type');
-  if FhasLastExposureStartTime then
-    Ffits.Header.Insert(i,'DATE-OBS',hdateobs,'UTC start date from camera')
-  else
-    Ffits.Header.Insert(i,'DATE-OBS',hdateobs,'UTC start date of observation');
-  if shutter>0 then begin
-    Ffits.Header.Insert(i,'EXPTIME',shutter,'[s] Camera Exposure Time');
-    if hexp>0 then Ffits.Header.Insert(i,'REQTIME',hexp,'[s] Requested Exposure Time');
+  if FStackCount=1 then begin
+    if FhasLastExposureStartTime then
+      Ffits.Header.Insert(i,'DATE-OBS',hdateobs,'UTC start date from camera')
+    else
+      Ffits.Header.Insert(i,'DATE-OBS',hdateobs,'UTC start date of observation');
+    if shutter>0 then begin
+      Ffits.Header.Insert(i,'EXPTIME',shutter,'[s] Camera Exposure Time');
+      if hexp>0 then Ffits.Header.Insert(i,'REQTIME',hexp,'[s] Requested Exposure Time');
+    end
+    else begin
+      if FhasLastExposureDuration then
+         Ffits.Header.Insert(i,'EXPTIME',hexp,'[s] Exposure Time from camera')
+      else
+         Ffits.Header.Insert(i,'EXPTIME',hexp,'[s] Total Exposure Time');
+    end;
   end
   else begin
-    if FhasLastExposureDuration then
-       Ffits.Header.Insert(i,'EXPTIME',hexp,'[s] Exposure Time from camera')
-    else
-       Ffits.Header.Insert(i,'EXPTIME',hexp,'[s] Total Exposure Time');
+    Ffits.Header.Insert(i,'DATE-OBS',FStackStart,'UTC start date of observation');
+    Ffits.Header.Insert(i,'EXPTIME',hexp*FStackCount,'[s] Total Exposure Time');
+    Ffits.Header.Insert(i,'STACKCNT',FStackCount,'Number of stacked frames');
+    Ffits.Header.Insert(i,'STACKEXP',hexp,'[s] Individual frame exposure Time');
+    if FStackAlign then Ffits.Header.Insert(i,'STACKALN',FormatFloat(f0,FStackAlignX)+'/'+FormatFloat(f0,hnaxis2-FStackAlignY),'Alignment star x/y position');
   end;
-  if FStackCount>1 then Ffits.Header.Insert(i,'STACKCNT',FStackCount,'Number of stacked frames');
   if cgain<>NullInt then Ffits.Header.Insert(i,'GAIN',cgain,'Camera gain setting in manufacturer units');
   if siso<>'' then Ffits.Header.Insert(i,'GAIN',siso,'Camera ISO');
   if gamma<>NullInt then Ffits.Header.Insert(i,'GAMMA',gamma,'Video gamma');

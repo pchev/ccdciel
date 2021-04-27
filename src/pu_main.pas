@@ -2088,6 +2088,7 @@ begin
   f_ccdtemp.Setpoint.Value:=config.GetValue('/Temperature/Setpoint',0);
   f_preview.ExpTime.Text:=config.GetValue('/Preview/Exposure','1');
   f_capture.ExposureTime:=config.GetValue('/Capture/Exposure',1.0);
+  f_capture.StackNum.Value:=config.GetValue('/Capture/StackNum',1);
   f_capture.Fname.Text:=config.GetValue('/Capture/FileName','');
   f_capture.SeqNum.Value:=config.GetValue('/Capture/Count',1);
 
@@ -3603,6 +3604,7 @@ begin
   refcolor:=config.GetValue('/RefImage/Color',0);
   BPMsigma:=config.GetValue('/BadPixel/Sigma',5);
   f_preview.StackPreview.Visible:=config.GetValue('/PreviewStack/StackShow',false);
+  f_capture.PanelStack.Visible:=f_preview.StackPreview.Visible;
   MaxVideoPreviewRate:=config.GetValue('/Video/PreviewRate',5);
   i:=TemperatureScale;
   TemperatureScale:=config.GetValue('/Cooler/TemperatureScale',0);
@@ -4113,6 +4115,7 @@ begin
    else
      config.SetValue('/Preview/Gain',f_preview.GainEdit.Value);
    config.SetValue('/Capture/Exposure',f_capture.ExpTime.Text);
+   config.SetValue('/Capture/StackNum',f_capture.StackNum.Value);
    config.SetValue('/Capture/Binning',f_capture.Binning.Text);
    config.SetValue('/Capture/FileName',f_capture.Fname.Text);
    config.SetValue('/Capture/Count',f_capture.SeqNum.Value);
@@ -8296,6 +8299,7 @@ if (camera.Status=devConnected) and ((not f_capture.Running) or autofocusing) an
   if camera.FrameType<>LIGHT then camera.FrameType:=LIGHT;
   camera.ObjectName:=rsPreview;
   fits.SetBPM(bpm,bpmNum,bpmX,bpmY,bpmAxis);
+  camera.StackNum:=-1; //unlimited
   camera.AddFrames:=f_preview.StackPreview.Checked;
   camera.StartExposure(e);
 end
@@ -8667,7 +8671,7 @@ end;
 Procedure Tf_main.StartCaptureExposureNow;
 var e: double;
     buf,f: string;
-    p,binx,biny,i,x,y,w,h,sx,sy,sw,sh: integer;
+    p,binx,biny,i,x,y,w,h,sx,sy,sw,sh,cc,cs: integer;
     ftype:TFrameType;
 begin
 if (AllDevicesConnected)and(not autofocusing)and (not learningvcurve) then begin
@@ -8753,15 +8757,28 @@ if (AllDevicesConnected)and(not autofocusing)and (not learningvcurve) then begin
   end;
   // set object for filename
   camera.ObjectName:=f_capture.Fname.Text;
-  NewMessage(Format(rsStartingExpo, [f_capture.FrameType.Text, inttostr(f_capture.SeqCount)+'/'+f_capture.SeqNum.Text, f_capture.ExpTime.Text]),1);
   // disable BPM
   fits.SetBPM(bpm,0,0,0,0);
-  // disable dark
-  fits.DarkOn:=false;
+  // stacking
   f_preview.StackPreview.Checked:=false;
-  camera.AddFrames:=false;
+  camera.AddFrames:=f_capture.PanelStack.Visible and (f_capture.StackNum.Value>1);
+  if camera.AddFrames then
+    camera.StackNum:=f_capture.StackNum.Value
+  else
+    camera.StackNum:=1;
+  fits.DarkOn:=camera.AddFrames;
+  // show message
+  cc:=f_capture.SeqCount;
+  if (camera.AddFrames)and(EarlyNextExposure and (not SkipEarlyExposure))and(cc>1) then cc:=cc-1;
+  if  camera.AddFrames then begin
+    cs:=camera.StackCount+1;
+    if cs>camera.StackNum then cs:=1;
+    NewMessage(Format(rsStartingExpo, [f_capture.FrameType.Text, inttostr(cc)+'/'+f_capture.SeqNum.Text, f_capture.ExpTime.Text])+' '+Format('Stack %d / %d',[cs,camera.StackNum]),1)
+  end
+  else
+    NewMessage(Format(rsStartingExpo, [f_capture.FrameType.Text, inttostr(cc)+'/'+f_capture.SeqNum.Text, f_capture.ExpTime.Text]),1);
   // increment dither
-  f_capture.DitherNum:=f_capture.DitherNum+1;
+  if (not camera.AddFrames)or(camera.StackCount>=camera.StackNum) then f_capture.DitherNum:=f_capture.DitherNum+1;
   // start exposure for time e
   camera.StartExposure(e);
 end
@@ -8828,7 +8845,7 @@ begin
     // save file first
     if not ((FlatAutoExposure and (camera.FrameType=FLAT))or(SaveBitmap)) then begin
       {$ifdef debug_raw}writeln(FormatDateTime(dateiso,Now)+blank+'save fits file');{$endif}
-      CameraSaveNewImage;
+      if (not camera.AddFrames)or(camera.StackCount>=camera.StackNum) then CameraSaveNewImage;
       {$ifdef debug_raw}writeln(FormatDateTime(dateiso,Now)+blank+'saved');{$endif}
       ImageSaved:=true;
     end
@@ -8924,8 +8941,10 @@ begin
        // Next exposure delayed after image display
        // start the exposure now
        {$ifdef debug_raw}writeln(FormatDateTime(dateiso,Now)+blank+'start exposure');{$endif}
-       f_capture.SeqCount:=f_capture.SeqCount+1;
-       f_capture.FocusNum:=f_capture.FocusNum+1;
+       if (not camera.AddFrames)or(camera.StackCount>=camera.StackNum) then begin
+         f_capture.SeqCount:=f_capture.SeqCount+1;
+         f_capture.FocusNum:=f_capture.FocusNum+1;
+       end;
        if f_capture.SeqCount<=f_capture.SeqNum.Value then begin
           // next exposure
           if f_capture.Running then Application.QueueAsyncCall(@StartCaptureExposureAsync,0);
@@ -8936,6 +8955,12 @@ begin
           NewMessage(rsStopCapture+', '+Format(rsCaptureSFini, [inttostr(f_capture.SeqCount-1)+'/'+f_capture.SeqNum.Text]), 2);
           StatusBar1.Panels[panelstatus].Text := Format(rsCaptureSFini, [inttostr(f_capture.SeqCount-1)+'/'+f_capture.SeqNum.Text]);
           MenuCaptureStart.Caption:=f_capture.BtnStart.Caption
+       end;
+     end
+     else begin
+       if (camera.AddFrames)and(camera.StackCount<camera.StackNum) then begin
+         f_capture.SeqCount:=f_capture.SeqCount-1;
+         f_capture.FocusNum:=f_capture.FocusNum-1;
        end;
      end;
   end
