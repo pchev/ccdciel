@@ -475,7 +475,7 @@ var f:TFits;
 begin
 {$ifdef debug_raw}writeln(FormatDateTime(dateiso,Now)+blank+'NewImage');{$endif}
 if FAddFrames then begin  // stack preview frames
-  if FStackCount>=FStackNum then FFits.ClearImage;
+  if (FStackNum>0)and(FStackCount>=FStackNum) then FFits.ClearImage;
   // load temporary image
   f:=TFits.Create(nil);
   f.onMsg:=onMsg;

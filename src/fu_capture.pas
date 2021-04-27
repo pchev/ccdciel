@@ -90,6 +90,7 @@ type
     FonMsg: TNotifyMsg;
     FonStartExposure: TNotifyEvent;
     FonAbortExposure: TNotifyEvent;
+    FonResetStack: TNotifyEvent;
     procedure SetExposureTime(val: double);
     function GetGain:integer;
     procedure SetGain(value:integer);
@@ -112,6 +113,7 @@ type
     property FocusNow: boolean read FFocusNow write FFocusNow;
     property onStartExposure: TNotifyEvent read FonStartExposure write FonStartExposure;
     property onAbortExposure: TNotifyEvent read FonAbortExposure write FonAbortExposure;
+    property onResetStack: TNotifyEvent read FonResetStack write FonResetStack;
     property onMsg: TNotifyMsg read FonMsg write FonMsg;
 end;
 
@@ -186,6 +188,7 @@ begin
     end;
     if Assigned(FonMsg) then FonMsg(rsStartCapture,2);
     EarlyNextExposure:=((TFrameType(FrameType.ItemIndex)=LIGHT)or(TFrameType(FrameType.ItemIndex)=DARK)) and not(PanelStack.Visible and (StackNum.Value>1)) and ConfigExpEarlyStart;
+    if PanelStack.Visible and (StackNum.Value>1) and Assigned(FonResetStack) then FonResetStack(self);
     if Assigned(FonStartExposure) then FonStartExposure(self);
     if (not Frunning) and Assigned(FonMsg) then FonMsg(rsCannotStartC,0);
   end else begin

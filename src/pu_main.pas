@@ -1460,6 +1460,7 @@ begin
   astrometry.visu:=f_visu;
 
   f_capture:=Tf_capture.Create(self);
+  f_capture.onResetStack:=@ResetPreviewStack;
   f_capture.onStartExposure:=@StartCaptureExposure;
   f_capture.onAbortExposure:=@StopExposure;
   f_capture.onMsg:=@NewMessage;
