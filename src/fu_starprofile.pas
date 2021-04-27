@@ -38,11 +38,16 @@ type
 
   Tf_starprofile = class(TFrame)
     BtnMeasureImage: TButton;
+    BtnPin2D: TSpeedButton;
+    BtnPinProfile: TSpeedButton;
+    BtnPinTrend: TSpeedButton;
     BtnViewAutofocus: TButton;
     FitSourceMeasure: TListChartSource;
     FitSourceComp: TListChartSource;
     HistoryChartImax: TLineSeries;
     Panel2: TPanel;
+    Panel3: TPanel;
+    Panel8: TPanel;
     Star2D: TImage;
     Label1: TLabel;
     Label2: TLabel;
@@ -75,7 +80,7 @@ type
     BtnPinGraph: TSpeedButton;
     TSprofile: TTabSheet;
     TS2d: TTabSheet;
-    TSfocustrend: TTabSheet;
+    TStrend: TTabSheet;
     Title: TLabel;
     TimerHideGraph: TTimer;
     VcChart: TChart;
@@ -87,7 +92,10 @@ type
     VcChartR: TFitSeries;
     VcChartRegMeasure: TLineSeries;
     VcChartRegComp: TLineSeries;
+    procedure BtnPin2DClick(Sender: TObject);
     procedure BtnPinGraphClick(Sender: TObject);
+    procedure BtnPinProfileClick(Sender: TObject);
+    procedure BtnPinTrendClick(Sender: TObject);
     procedure BtnViewAutofocusClick(Sender: TObject);
     procedure ChkAutofocusChange(Sender: TObject);
     procedure ChkFocusChange(Sender: TObject);
@@ -133,6 +141,9 @@ type
     procedure doAutofocusIterative;
     procedure doAutofocusPlanet;
     procedure PanelGraphClose(Sender: TObject; var CloseAction: TCloseAction);
+    procedure Panel2DClose(Sender: TObject; var CloseAction: TCloseAction);
+    procedure PanelProfileClose(Sender: TObject; var CloseAction: TCloseAction);
+    procedure PanelTrendClose(Sender: TObject; var CloseAction: TCloseAction);
   public
     { public declarations }
     LastFocusimage: TBGRABitmap;
@@ -229,7 +240,7 @@ begin
   Title.Caption:=rsFocus;
   TSprofile.Caption:=rsProfile2;
   TS2d.Caption:=rs2D;
-  TSfocustrend.Caption:=rsTrend;
+  TStrend.Caption:=rsTrend;
   Label1.Caption:=rsHFD+':';
   Label5.Caption:=rsHistory;
   Label2.Caption:=rsIntensity+':';
@@ -379,6 +390,85 @@ end;
 procedure Tf_starprofile.BtnMeasureImageClick(Sender: TObject);
 begin
   if assigned(FonMeasureImage) then FonMeasureImage(true);
+end;
+
+procedure Tf_starprofile.BtnPin2DClick(Sender: TObject);
+var f: TForm;
+begin
+  if Star2D.Parent=Panel2 then begin
+   f:=TForm.Create(self);
+   f.FormStyle:=fsStayOnTop;
+   f.OnClose:=@Panel2DClose;
+   f.Width:=DoScaleX(400);
+   f.Height:=DoScaleY(300);
+   f.Caption:=rs2D;
+   f.Color:=clBlack;
+   Star2D.Parent:=f;
+   Star2D.Align:=alClient;
+   FormPos(f,mouse.CursorPos.x,mouse.CursorPos.y);
+   f.Show;
+  end
+  else if Star2D.Parent is TForm then
+   TForm(Star2D.Parent).Close;
+end;
+
+procedure Tf_starprofile.Panel2DClose(Sender: TObject; var CloseAction: TCloseAction);
+begin
+  CloseAction:=caFree;
+  Star2D.Parent:=Panel2;
+  BtnPin2D.BringToFront;
+end;
+
+procedure Tf_starprofile.BtnPinProfileClick(Sender: TObject);
+var f: TForm;
+begin
+  if ProfileChart.Parent=TSprofile then begin
+   f:=TForm.Create(self);
+   f.FormStyle:=fsStayOnTop;
+   f.OnClose:=@PanelProfileClose;
+   f.Width:=DoScaleX(400);
+   f.Height:=DoScaleY(300);
+   f.Caption:=rsProfile2;
+   ProfileChart.Parent:=f;
+   ProfileChart.Align:=alClient;
+   FormPos(f,mouse.CursorPos.x,mouse.CursorPos.y);
+   f.Show;
+  end
+  else if ProfileChart.Parent is TForm then
+   TForm(ProfileChart.Parent).Close;
+end;
+
+procedure Tf_starprofile.PanelProfileClose(Sender: TObject; var CloseAction: TCloseAction);
+begin
+  CloseAction:=caFree;
+  ProfileChart.Parent:=TSprofile;
+  Panel3.BringToFront;
+end;
+
+procedure Tf_starprofile.BtnPinTrendClick(Sender: TObject);
+var f: TForm;
+begin
+  if HistoryChart.Parent=TStrend then begin
+   f:=TForm.Create(self);
+   f.FormStyle:=fsStayOnTop;
+   f.OnClose:=@PanelTrendClose;
+   f.Width:=DoScaleX(400);
+   f.Height:=DoScaleY(300);
+   f.Caption:=rsTrend;
+   HistoryChart.Parent:=f;
+   HistoryChart.Align:=alClient;
+   FormPos(f,mouse.CursorPos.x,mouse.CursorPos.y);
+   f.Show;
+  end
+  else if HistoryChart.Parent is TForm then
+   TForm(HistoryChart.Parent).Close;
+end;
+
+procedure Tf_starprofile.PanelTrendClose(Sender: TObject; var CloseAction: TCloseAction);
+begin
+  CloseAction:=caFree;
+  HistoryChart.Parent:=TStrend;
+  Panel8.BringToFront;
 end;
 
 procedure Tf_starprofile.BtnPinGraphClick(Sender: TObject);
