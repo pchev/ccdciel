@@ -1315,6 +1315,9 @@ resourcestring
   rsDitherWhileD = 'Dither while downloading from the camera';
   rsWhenPerformi = 'When performing autofocus from a sequence';
   rsUnselectStar = 'Unselect star';
+  rsProfile2 = 'Profile';
+  rsTrend = 'Trend';
+  rs2D = '2D';
 
 implementation
 

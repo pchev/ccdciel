@@ -1,10 +1,10 @@
 object f_starprofile: Tf_starprofile
   Left = 0
-  Height = 479
+  Height = 486
   Top = 0
   Width = 194
   AutoSize = True
-  ClientHeight = 479
+  ClientHeight = 486
   ClientWidth = 194
   ParentFont = False
   TabOrder = 0
@@ -18,7 +18,7 @@ object f_starprofile: Tf_starprofile
     Align = alTop
     Alignment = taCenter
     AutoSize = False
-    Caption = 'Star profile'
+    Caption = 'Focus'
     Color = clBtnShadow
     DragMode = dmAutomatic
     Font.Color = clBtnText
@@ -28,139 +28,18 @@ object f_starprofile: Tf_starprofile
   end
   object Panel1: TPanel
     Left = 0
-    Height = 459
+    Height = 466
     Top = 20
     Width = 194
     Align = alClient
-    ClientHeight = 459
+    ClientHeight = 466
     ClientWidth = 194
     ParentFont = False
     TabOrder = 0
-    object Panel2: TPanel
-      Left = 1
-      Height = 100
-      Top = 1
-      Width = 192
-      Align = alTop
-      BevelOuter = bvNone
-      ClientHeight = 100
-      ClientWidth = 192
-      ParentColor = False
-      ParentFont = False
-      TabOrder = 0
-      object ProfileChart: TChart
-        Left = 0
-        Height = 100
-        Top = 0
-        Width = 192
-        AntialiasingMode = amOn
-        AxisList = <        
-          item
-            Visible = False
-            Marks.LabelFont.Height = 8
-            Marks.LabelBrush.Style = bsClear
-            Minors = <>
-            Title.LabelFont.Orientation = 900
-            Title.LabelBrush.Style = bsClear
-          end        
-          item
-            Intervals.NiceSteps = '1|10|50|100|500|1000|5000'
-            Intervals.Options = [aipUseCount, aipUseNiceSteps]
-            Visible = False
-            Alignment = calBottom
-            Marks.LabelFont.Height = 8
-            Marks.LabelBrush.Style = bsClear
-            Minors = <>
-            Title.LabelBrush.Style = bsClear
-          end>
-        Extent.UseYMin = True
-        Foot.Brush.Color = clBtnFace
-        Foot.Font.Color = clBlue
-        Legend.GridHorizontal.Visible = True
-        Title.Brush.Color = clBtnFace
-        Title.Font.Color = clBlue
-        Title.Text.Strings = (
-          'TAChart'
-        )
-        Align = alClient
-        object ProfileChartLine: TLineSeries
-          Legend.Visible = False
-          Marks.Visible = False
-          LinePen.Color = clRed
-          Pointer.Brush.Style = bsClear
-          Pointer.OverrideColor = [ocPen]
-          Pointer.Style = psCircle
-          Source = ProfileSource
-        end
-      end
-    end
-    object Panel3: TPanel
-      Left = 1
-      Height = 50
-      Top = 101
-      Width = 192
-      Align = alTop
-      BevelOuter = bvNone
-      ClientHeight = 50
-      ClientWidth = 192
-      ParentFont = False
-      TabOrder = 1
-      object HistoryChart: TChart
-        Left = 0
-        Height = 50
-        Top = 0
-        Width = 192
-        AntialiasingMode = amOn
-        AxisList = <        
-          item
-            Visible = False
-            Marks.LabelFont.Height = 8
-            Marks.LabelBrush.Style = bsClear
-            Minors = <>
-            Title.LabelFont.Orientation = 900
-            Title.LabelBrush.Style = bsClear
-          end        
-          item
-            Intervals.NiceSteps = '1|10|50|100|500|1000|5000'
-            Intervals.Options = [aipUseCount, aipUseNiceSteps]
-            Visible = False
-            Alignment = calBottom
-            Marks.LabelFont.Height = 8
-            Marks.LabelBrush.Style = bsClear
-            Minors = <>
-            Title.LabelBrush.Style = bsClear
-          end>
-        Extent.UseYMin = True
-        Foot.Brush.Color = clBtnFace
-        Foot.Font.Color = clBlue
-        Legend.GridHorizontal.Visible = True
-        Title.Brush.Color = clBtnFace
-        Title.Font.Color = clBlue
-        Title.Text.Strings = (
-          'TAChart'
-        )
-        Align = alClient
-        OnDblClick = HistoryChartDblClick
-        OnMouseMove = HistoryChartMouseMove
-        object HistoryChartHfd: TLineSeries
-          Legend.Visible = False
-          Marks.Visible = False
-          LinePen.Color = clRed
-          Pointer.Brush.Style = bsClear
-          Pointer.OverrideColor = [ocPen]
-          Pointer.Style = psCircle
-          Source = HistSourceHfd
-        end
-        object HistoryChartImax: TLineSeries
-          LinePen.Color = clGreen
-          Source = HistSourceImax
-        end
-      end
-    end
     object Panel4: TPanel
       Left = 1
       Height = 66
-      Top = 151
+      Top = 161
       Width = 192
       Align = alTop
       BevelOuter = bvNone
@@ -168,7 +47,7 @@ object f_starprofile: Tf_starprofile
       ClientHeight = 66
       ClientWidth = 192
       ParentFont = False
-      TabOrder = 2
+      TabOrder = 0
       object LabelHFD: TLabel
         Left = 8
         Height = 48
@@ -225,7 +104,7 @@ object f_starprofile: Tf_starprofile
     object Panel6: TPanel
       Left = 1
       Height = 121
-      Top = 217
+      Top = 227
       Width = 192
       Align = alTop
       BevelOuter = bvNone
@@ -233,7 +112,7 @@ object f_starprofile: Tf_starprofile
       ClientHeight = 121
       ClientWidth = 192
       ParentFont = False
-      TabOrder = 3
+      TabOrder = 1
       object PanelFWHM: TPanel
         Left = 0
         Height = 121
@@ -426,13 +305,13 @@ object f_starprofile: Tf_starprofile
     object Panel7: TPanel
       Left = 1
       Height = 118
-      Top = 338
+      Top = 348
       Width = 192
       Align = alTop
       BevelOuter = bvNone
       ClientHeight = 118
       ClientWidth = 192
-      TabOrder = 4
+      TabOrder = 2
       object ChkFocus: TSpeedButton
         Left = 0
         Height = 25
@@ -488,6 +367,156 @@ object f_starprofile: Tf_starprofile
         TabOrder = 1
       end
     end
+    object PageControlProfile: TPageControl
+      Left = 1
+      Height = 160
+      Top = 1
+      Width = 192
+      ActivePage = TSprofile
+      Align = alTop
+      TabIndex = 0
+      TabOrder = 3
+      object TSprofile: TTabSheet
+        Caption = 'Profile'
+        ClientHeight = 129
+        ClientWidth = 182
+        object ProfileChart: TChart
+          Left = 0
+          Height = 129
+          Top = 0
+          Width = 182
+          AntialiasingMode = amOn
+          AxisList = <          
+            item
+              Visible = False
+              Marks.LabelFont.Height = 8
+              Marks.LabelBrush.Style = bsClear
+              Minors = <>
+              Title.LabelFont.Orientation = 900
+              Title.LabelBrush.Style = bsClear
+            end          
+            item
+              Intervals.NiceSteps = '1|10|50|100|500|1000|5000'
+              Intervals.Options = [aipUseCount, aipUseNiceSteps]
+              Visible = False
+              Alignment = calBottom
+              Marks.LabelFont.Height = 8
+              Marks.LabelBrush.Style = bsClear
+              Minors = <>
+              Title.LabelBrush.Style = bsClear
+            end>
+          Extent.UseYMin = True
+          Foot.Brush.Color = clBtnFace
+          Foot.Font.Color = clBlue
+          Legend.GridHorizontal.Visible = True
+          Title.Brush.Color = clBtnFace
+          Title.Font.Color = clBlue
+          Title.Text.Strings = (
+            'TAChart'
+          )
+          Align = alClient
+          object ProfileChartLine: TLineSeries
+            Legend.Visible = False
+            Marks.Visible = False
+            LinePen.Color = clRed
+            Pointer.Brush.Style = bsClear
+            Pointer.OverrideColor = [ocPen]
+            Pointer.Style = psCircle
+            Source = ProfileSource
+          end
+        end
+      end
+      object TS2d: TTabSheet
+        Caption = '2D'
+        ClientHeight = 129
+        ClientWidth = 182
+        object Panel2: TPanel
+          Left = 0
+          Height = 129
+          Top = 0
+          Width = 182
+          Align = alClient
+          BevelOuter = bvNone
+          Caption = 'Panel2'
+          ClientHeight = 129
+          ClientWidth = 182
+          Color = clBlack
+          ParentColor = False
+          TabOrder = 0
+          object Star2D: TImage
+            Left = 0
+            Height = 129
+            Top = 0
+            Width = 182
+            Align = alClient
+            Center = True
+            Proportional = True
+            Stretch = True
+          end
+        end
+      end
+      object TSfocustrend: TTabSheet
+        Caption = 'Trend'
+        ClientHeight = 129
+        ClientWidth = 182
+        object HistoryChart: TChart
+          Left = 0
+          Height = 129
+          Top = 0
+          Width = 182
+          AllowZoom = False
+          AntialiasingMode = amOn
+          AxisList = <          
+            item
+              AtDataOnly = True
+              Marks.LabelFont.Height = 8
+              Marks.LabelBrush.Style = bsClear
+              Minors = <>
+              Title.LabelFont.Orientation = 900
+              Title.LabelBrush.Style = bsClear
+            end          
+            item
+              Intervals.NiceSteps = '1|10|50|100|500|1000|5000'
+              Intervals.Options = [aipUseCount, aipUseNiceSteps]
+              Visible = False
+              Alignment = calBottom
+              Marks.LabelFont.Height = 8
+              Marks.LabelBrush.Style = bsClear
+              Minors = <>
+              Title.LabelBrush.Style = bsClear
+            end>
+          Extent.UseYMin = True
+          Foot.Brush.Color = clBtnFace
+          Foot.Font.Color = clBlue
+          Legend.GridHorizontal.Visible = True
+          Title.Brush.Color = clBtnFace
+          Title.Font.Color = clBlue
+          Title.Text.Strings = (
+            'TAChart'
+          )
+          Align = alClient
+          OnDblClick = HistoryChartDblClick
+          OnMouseMove = HistoryChartMouseMove
+          object HistoryChartHfd: TLineSeries
+            Legend.Visible = False
+            Marks.Visible = False
+            AxisIndexY = 0
+            LinePen.Color = clRed
+            Pointer.Brush.Style = bsClear
+            Pointer.OverrideColor = [ocPen]
+            Pointer.Pen.Color = clRed
+            Pointer.Style = psCross
+            Pointer.Visible = True
+            ShowPoints = True
+            Source = HistSourceHfd
+          end
+          object HistoryChartImax: TLineSeries
+            LinePen.Color = clGreen
+            Source = HistSourceImax
+          end
+        end
+      end
+    end
   end
   object PtSourceComp: TListChartSource
     Left = 105
@@ -513,8 +542,8 @@ object f_starprofile: Tf_starprofile
     Top = 312
   end
   object ProfileSource: TListChartSource
-    Left = 80
-    Top = 32
+    Left = 65
+    Top = 112
   end
   object HistSourceHfd: TListChartSource
     Left = 32

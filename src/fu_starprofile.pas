@@ -25,10 +25,10 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 interface
 
-uses BGRABitmap, BGRABitmapTypes, u_global, u_utils, math, UScaleDPI, u_translation, u_hints,
+uses BGRABitmap, BGRABitmapTypes, u_global, u_utils, math, UScaleDPI, u_hints, u_translation,
   fu_preview, fu_focuser, Graphics, Classes, SysUtils, FPImage, cu_fits, pu_hyperbola, pu_image_sharpness,
   FileUtil, TAGraph, TAFuncSeries, TASeries, TASources, TAChartUtils, Forms, Controls,
-  StdCtrls, ExtCtrls, Buttons, LCLType;
+  StdCtrls, ExtCtrls, Buttons, LCLType, ComCtrls;
 
 const maxhist=50;
 
@@ -42,6 +42,8 @@ type
     FitSourceMeasure: TListChartSource;
     FitSourceComp: TListChartSource;
     HistoryChartImax: TLineSeries;
+    Panel2: TPanel;
+    Star2D: TImage;
     Label1: TLabel;
     Label2: TLabel;
     Label3: TLabel;
@@ -55,9 +57,9 @@ type
     HistoryChartHfd: TLineSeries;
     HistSourceHfd: TListChartSource;
     HistSourceImax: TListChartSource;
+    PageControlProfile: TPageControl;
     Panel7: TPanel;
     ProfileSource: TListChartSource;
-    Panel3: TPanel;
     Panel4: TPanel;
     Panel5: TPanel;
     PanelGraph: TPanel;
@@ -66,12 +68,14 @@ type
     LabelHFD: TLabel;
     LabelImax: TLabel;
     Panel1: TPanel;
-    Panel2: TPanel;
     ChkFocus: TSpeedButton;
     ChkAutofocus: TSpeedButton;
     PtSourceMeasure: TListChartSource;
     PtSourceComp: TListChartSource;
     BtnPinGraph: TSpeedButton;
+    TSprofile: TTabSheet;
+    TS2d: TTabSheet;
+    TSfocustrend: TTabSheet;
     Title: TLabel;
     TimerHideGraph: TTimer;
     VcChart: TChart;
@@ -118,6 +122,7 @@ type
     dyn_v_curve:array of TDouble2;
     aminhfd,amaxhfd:double;
     afmpos,aminpos,DynAbsStartPos,DynAbsStep:integer;
+    ColorImg: TBGRABitmap;
     procedure msg(txt:string; level: integer);
     function  getRunning:boolean;
     procedure PlotProfile(f: TFits; bg: double; s:integer);
@@ -190,13 +195,14 @@ begin
  SetLang;
  emptybmp:=Tbitmap.Create;
  emptybmp.SetSize(1,1);
+ ColorImg:=TBGRABitmap.Create;
  LastFocusimage:=TBGRABitmap.Create(1,1);
  LastFocusMsg:='Autofocus not run';
  FAutofocusDone:=false;
  FFindStar:=false;
  curhist:=0;
- maxfwhm:=0;
- maximax:=0;
+ maxfwhm:=0.0001;
+ maximax:=0.0001;
  FPreFocusPos:=-1;
  focuserdirection:=FocusDirIn;
  FLastHfd:=MaxInt;
@@ -207,18 +213,23 @@ begin
  LabelSNR.Caption:='-';
  ClearGraph;
  BtnViewAutofocus.Enabled:=false;
+ PageControlProfile.ActivePageIndex:=0;
 end;
 
 destructor  Tf_starprofile.Destroy;
 begin
  emptybmp.Free;
  LastFocusimage.Free;
+ ColorImg.Free;
  inherited Destroy;
 end;
 
 procedure Tf_starprofile.SetLang;
 begin
-  Title.Caption:=rsStarProfile;
+  Title.Caption:=rsFocus;
+  TSprofile.Caption:=rsProfile2;
+  TS2d.Caption:=rs2D;
+  TSfocustrend.Caption:=rsTrend;
   Label1.Caption:=rsHFD+':';
   Label5.Caption:=rsHistory;
   Label2.Caption:=rsIntensity+':';
@@ -343,8 +354,8 @@ end;
 procedure Tf_starprofile.HistoryChartDblClick(Sender: TObject);
 begin
  curhist:=0;
- maxfwhm:=0;
- maximax:=0;
+ maxfwhm:=0.0001;
+ maximax:=0.0001;
  ClearGraph;
 end;
 
@@ -358,8 +369,8 @@ begin
    dx:=abs(X-HistoryChart.XGraphToImage(HistSourceHfd.Item[i]^.X));
    if dx<d then begin
      d:=dx;
-     vhfd:=HistSourceHfd.Item[i]^.Y*maxfwhm;
-     vimax:=HistSourceImax.Item[i]^.Y*maximax;
+     vhfd:=HistSourceHfd.Item[i]^.Y;
+     vimax:=HistSourceImax.Item[i]^.Y*maximax/maxfwhm;
    end;
  end;
  if (vhfd>0) and assigned(FonStatus) then FonStatus(rsHFD+':'+formatfloat(f1,vhfd)+' '+rsIntensity+':'+formatfloat(f0,vimax));
@@ -491,7 +502,9 @@ begin
 end;
 
 procedure Tf_starprofile.PlotProfile(f: TFits; bg: double; s:integer);
-var i,j,i0,rs:integer;
+var i,j,i0,j0,rs:integer;
+    v, valsaturation: double;
+    col:TBGRAPixel;
     txt:string;
 begin
 if (FStarX<0)or(FStarY<0)or(s<0) then exit;
@@ -535,6 +548,28 @@ if FValMax>0 then begin
   for i:=0 to s-1 do begin
     ProfileSource.Add(i,f.image[0,j,i0+i]-bg);
   end;
+  // color profile
+  if f.HeaderInfo.floatingpoint then
+    valsaturation:=MaxDouble
+  else
+    valsaturation:=MaxADU-1-bg;
+  s:=max(10,round(4*Fhfd));
+  j0:=trunc(FStarY)-(s div 2);
+  i0:=trunc(FStarX)-(s div 2);
+  ColorImg.SetSize(s,s);
+  for j:=0 to s-1 do begin
+    for i:=0 to s-1 do begin
+      v:=f.image[0,j0+j,i0+i]-bg;
+      if v>=valsaturation then col:=VGAPurple
+      else if v>=FValMax/2 then col:=VGALime
+      else if v>=FValMax*0.09 then col:=VGAYellow
+      else if v>=FValMax*0.03 then col:=VGARed
+      else col:=BGRABlack;
+      ColorImg.Canvas.Pixels[i,j]:=col;
+    end;
+  end;
+  Star2D.Picture.Assign(ColorImg);
+  Star2D.Invalidate;
 end;
 except
   on E: Exception do begin
@@ -545,7 +580,6 @@ end;
 
 procedure Tf_starprofile.PlotHistory;
 var i:integer;
-    ys1,ys2: double;
 begin
 try
 if curhist>maxhist then
@@ -559,15 +593,14 @@ histimax[curhist]:=FValMaxCalibrated;
 if histfwhm[curhist] > maxfwhm then maxfwhm:=histfwhm[curhist];
 if histimax[curhist] > maximax then maximax:=histimax[curhist];
 if FValMax>0 then begin
-  ys1:=1/maxfwhm;
-  ys2:=1/maximax;
   HistSourceHfd.Clear;
   HistSourceImax.Clear;
   for i:=0 to curhist do begin
-    HistSourceHfd.Add(i,histfwhm[i]*ys1);
-    HistSourceImax.Add(i,histimax[i]*ys2);
+    HistSourceHfd.Add(i,histfwhm[i]);
+    HistSourceImax.Add(i,histimax[i]*maxfwhm/maximax);
   end;
 end;
+HistoryChartHfd.Pointer.Visible:=(curhist<10);
 inc(curhist);
 except
   on E: Exception do begin
@@ -624,7 +657,6 @@ begin
    LabelHistHFD.Caption:='';
    LabelFWHM.Caption:='-';
    LabelImax.Caption:='-';
-   ClearGraph;
  end;
  if assigned(FonStarSelection) then FonStarSelection(self);
  except
