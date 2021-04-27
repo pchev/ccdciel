@@ -520,7 +520,6 @@ object f_starprofile: Tf_starprofile
           AxisList = <          
             item
               AtDataOnly = True
-              Marks.LabelFont.Height = 8
               Marks.LabelBrush.Style = bsClear
               Minors = <>
               Title.LabelFont.Orientation = 900
@@ -531,7 +530,6 @@ object f_starprofile: Tf_starprofile
               Intervals.Options = [aipUseCount, aipUseNiceSteps]
               Visible = False
               Alignment = calBottom
-              Marks.LabelFont.Height = 8
               Marks.LabelBrush.Style = bsClear
               Minors = <>
               Title.LabelBrush.Style = bsClear
