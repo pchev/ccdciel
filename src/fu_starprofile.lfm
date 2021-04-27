@@ -426,14 +426,15 @@ object f_starprofile: Tf_starprofile
           end
         end
         object Panel3: TPanel
-          AnchorSideLeft.Control = TSprofile
+          AnchorSideRight.Control = TSprofile
+          AnchorSideRight.Side = asrBottom
           AnchorSideBottom.Control = TSprofile
           AnchorSideBottom.Side = asrBottom
-          Left = 0
+          Left = 163
           Height = 19
           Top = 110
           Width = 19
-          Anchors = [akLeft, akBottom]
+          Anchors = [akRight, akBottom]
           BevelOuter = bvNone
           Caption = 'Panel3'
           ClientHeight = 19
@@ -477,10 +478,15 @@ object f_starprofile: Tf_starprofile
             Stretch = True
           end
           object BtnPin2D: TSpeedButton
-            Left = 0
+            AnchorSideRight.Control = Panel2
+            AnchorSideRight.Side = asrBottom
+            AnchorSideBottom.Control = Panel2
+            AnchorSideBottom.Side = asrBottom
+            Left = 163
             Height = 19
             Top = 110
             Width = 19
+            Anchors = [akTop, akRight, akBottom]
             OnClick = BtnPin2DClick
             ParentFont = False
           end
@@ -547,12 +553,15 @@ object f_starprofile: Tf_starprofile
           end
         end
         object Panel8: TPanel
+          AnchorSideRight.Control = TStrend
+          AnchorSideRight.Side = asrBottom
+          AnchorSideBottom.Control = TStrend
           AnchorSideBottom.Side = asrBottom
-          Left = 0
+          Left = 163
           Height = 19
           Top = 110
           Width = 19
-          Anchors = [akLeft, akBottom]
+          Anchors = [akRight, akBottom]
           BevelOuter = bvNone
           Caption = 'Panel8'
           ClientHeight = 19
