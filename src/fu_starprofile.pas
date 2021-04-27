@@ -46,8 +46,9 @@ type
     FitSourceComp: TListChartSource;
     HistoryChartImax: TLineSeries;
     Panel2: TPanel;
-    Panel3: TPanel;
-    Panel8: TPanel;
+    PanelBtnPin2D: TPanel;
+    PanelBtnProfile: TPanel;
+    PanelBtnTrend: TPanel;
     Star2D: TImage;
     Label1: TLabel;
     Label2: TLabel;
@@ -102,6 +103,7 @@ type
     procedure BtnMeasureImageClick(Sender: TObject);
     procedure HistoryChartDblClick(Sender: TObject);
     procedure HistoryChartMouseMove(Sender: TObject; Shift: TShiftState; X, Y: Integer);
+    procedure PageControlProfileChange(Sender: TObject);
     procedure PanelGraphDblClick(Sender: TObject);
     procedure TimerHideGraphTimer(Sender: TObject);
     procedure VcChartMouseMove(Sender: TObject; Shift: TShiftState; X,
@@ -387,6 +389,15 @@ begin
  if (vhfd>0) and assigned(FonStatus) then FonStatus(rsHFD+':'+formatfloat(f1,vhfd)+' '+rsIntensity+':'+formatfloat(f0,vimax));
 end;
 
+procedure Tf_starprofile.PageControlProfileChange(Sender: TObject);
+begin
+  case PageControlProfile.ActivePageIndex of
+    0: begin PanelBtnProfile.SendToBack; PanelBtnProfile.BringToFront; end;
+    1: begin BtnPin2D.SendToBack; BtnPin2D.BringToFront; end;
+    2: begin PanelBtnTrend.SendToBack; PanelBtnTrend.BringToFront; end;
+  end;
+end;
+
 procedure Tf_starprofile.BtnMeasureImageClick(Sender: TObject);
 begin
   if assigned(FonMeasureImage) then FonMeasureImage(true);
@@ -416,7 +427,8 @@ procedure Tf_starprofile.Panel2DClose(Sender: TObject; var CloseAction: TCloseAc
 begin
   CloseAction:=caFree;
   Star2D.Parent:=Panel2;
-  BtnPin2D.BringToFront;
+  PanelBtnPin2D.SendToBack;
+  PanelBtnPin2D.BringToFront;
 end;
 
 procedure Tf_starprofile.BtnPinProfileClick(Sender: TObject);
@@ -442,7 +454,8 @@ procedure Tf_starprofile.PanelProfileClose(Sender: TObject; var CloseAction: TCl
 begin
   CloseAction:=caFree;
   ProfileChart.Parent:=TSprofile;
-  Panel3.BringToFront;
+  PanelBtnProfile.SendToBack;
+  PanelBtnProfile.BringToFront;
 end;
 
 procedure Tf_starprofile.BtnPinTrendClick(Sender: TObject);
@@ -468,7 +481,8 @@ procedure Tf_starprofile.PanelTrendClose(Sender: TObject; var CloseAction: TClos
 begin
   CloseAction:=caFree;
   HistoryChart.Parent:=TStrend;
-  Panel8.BringToFront;
+  PanelBtnTrend.SendToBack;
+  PanelBtnTrend.BringToFront;
 end;
 
 procedure Tf_starprofile.BtnPinGraphClick(Sender: TObject);
