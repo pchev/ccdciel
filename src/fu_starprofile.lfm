@@ -32,8 +32,8 @@ object f_starprofile: Tf_starprofile
     Top = 20
     Width = 194
     Align = alClient
-    ClientHeight = 462
-    ClientWidth = 190
+    ClientHeight = 466
+    ClientWidth = 194
     ParentFont = False
     TabOrder = 0
     object Panel4: TPanel
@@ -44,8 +44,8 @@ object f_starprofile: Tf_starprofile
       Align = alTop
       BevelOuter = bvNone
       ChildSizing.ControlsPerLine = 1
-      ClientHeight = 62
-      ClientWidth = 188
+      ClientHeight = 66
+      ClientWidth = 192
       ParentFont = False
       TabOrder = 0
       object LabelHFD: TLabel
@@ -109,8 +109,8 @@ object f_starprofile: Tf_starprofile
       Align = alTop
       BevelOuter = bvNone
       ChildSizing.ControlsPerLine = 1
-      ClientHeight = 117
-      ClientWidth = 188
+      ClientHeight = 121
+      ClientWidth = 192
       ParentFont = False
       TabOrder = 1
       object PanelFWHM: TPanel
@@ -120,8 +120,8 @@ object f_starprofile: Tf_starprofile
         Width = 192
         Align = alClient
         BevelOuter = bvNone
-        ClientHeight = 117
-        ClientWidth = 188
+        ClientHeight = 121
+        ClientWidth = 192
         ParentFont = False
         TabOrder = 0
         object LabelImax: TLabel
@@ -195,8 +195,8 @@ object f_starprofile: Tf_starprofile
         Width = 192
         Align = alClient
         BevelOuter = bvNone
-        ClientHeight = 117
-        ClientWidth = 188
+        ClientHeight = 121
+        ClientWidth = 192
         ParentFont = False
         TabOrder = 1
         Visible = False
@@ -272,8 +272,8 @@ object f_starprofile: Tf_starprofile
           Width = 192
           Align = alBottom
           BevelOuter = bvNone
-          ClientHeight = 15
-          ClientWidth = 188
+          ClientHeight = 19
+          ClientWidth = 192
           ParentFont = False
           TabOrder = 1
           object LabelCoord: TLabel
@@ -309,8 +309,8 @@ object f_starprofile: Tf_starprofile
       Width = 192
       Align = alTop
       BevelOuter = bvNone
-      ClientHeight = 114
-      ClientWidth = 188
+      ClientHeight = 118
+      ClientWidth = 192
       TabOrder = 2
       object ChkFocus: TSpeedButton
         Left = 0
@@ -379,8 +379,8 @@ object f_starprofile: Tf_starprofile
       OnChange = PageControlProfileChange
       object TSprofile: TTabSheet
         Caption = 'Profile'
-        ClientHeight = 156
-        ClientWidth = 188
+        ClientHeight = 129
+        ClientWidth = 182
         object ProfileChart: TChart
           Left = 0
           Height = 129
@@ -437,8 +437,8 @@ object f_starprofile: Tf_starprofile
           Width = 19
           Anchors = [akRight, akBottom]
           BevelOuter = bvNone
-          ClientHeight = 15
-          ClientWidth = 15
+          ClientHeight = 19
+          ClientWidth = 19
           TabOrder = 0
           object BtnPinProfile: TSpeedButton
             Left = 0
@@ -453,8 +453,8 @@ object f_starprofile: Tf_starprofile
       end
       object TS2d: TTabSheet
         Caption = '2D'
-        ClientHeight = 156
-        ClientWidth = 188
+        ClientHeight = 129
+        ClientWidth = 182
         object Panel2: TPanel
           Left = 0
           Height = 129
@@ -462,8 +462,8 @@ object f_starprofile: Tf_starprofile
           Width = 182
           Align = alClient
           BevelOuter = bvNone
-          ClientHeight = 125
-          ClientWidth = 178
+          ClientHeight = 129
+          ClientWidth = 182
           Color = clBlack
           ParentColor = False
           TabOrder = 0
@@ -487,13 +487,13 @@ object f_starprofile: Tf_starprofile
           Top = 110
           Width = 19
           Anchors = [akRight, akBottom]
-          ClientHeight = 15
-          ClientWidth = 15
+          ClientHeight = 19
+          ClientWidth = 19
           TabOrder = 1
           object BtnPin2D: TSpeedButton
             AnchorSideRight.Side = asrBottom
             AnchorSideBottom.Side = asrBottom
-            Left = 0
+            Left = 2
             Height = 19
             Top = 0
             Width = 19
@@ -506,8 +506,8 @@ object f_starprofile: Tf_starprofile
       end
       object TStrend: TTabSheet
         Caption = 'Trend'
-        ClientHeight = 156
-        ClientWidth = 188
+        ClientHeight = 129
+        ClientWidth = 182
         object HistoryChart: TChart
           Left = 0
           Height = 129
@@ -573,8 +573,8 @@ object f_starprofile: Tf_starprofile
           Width = 19
           Anchors = [akRight, akBottom]
           BevelOuter = bvNone
-          ClientHeight = 15
-          ClientWidth = 15
+          ClientHeight = 19
+          ClientWidth = 19
           TabOrder = 1
           object BtnPinTrend: TSpeedButton
             Left = 0

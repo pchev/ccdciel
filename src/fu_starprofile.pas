@@ -410,8 +410,8 @@ begin
    f:=TForm.Create(self);
    f.FormStyle:=fsStayOnTop;
    f.OnClose:=@Panel2DClose;
-   f.Width:=DoScaleX(400);
-   f.Height:=DoScaleY(300);
+   f.Width:=DoScaleX(200);
+   f.Height:=DoScaleY(200);
    f.Caption:=rs2D;
    f.Color:=clBlack;
    Star2D.Parent:=f;
@@ -685,7 +685,7 @@ if (FFits<>nil)and(FValMax>0) then begin
     valsaturation:=MaxDouble
   else
     valsaturation:=MaxADU-1-bg;
-  s:=max(10,round(4*Fhfd));
+  s:=Fsize;
   j0:=trunc(FStarY)-(s div 2);
   i0:=trunc(FStarX)-(s div 2);
   ds:=min(Star2D.Width,Star2D.Height);
@@ -703,7 +703,7 @@ if (FFits<>nil)and(FValMax>0) then begin
       tmpbmp.Canvas.Pixels[i,j]:=col;
     end;
   end;
-  tmpbmp.ResampleFilter:=rfCosine;
+  tmpbmp.ResampleFilter:=rfLinear;
   str:=tmpbmp.Resample(ds,ds,rmFineResample) as TBGRABitmap;
   Star2D.Picture.Assign(str);
   Star2D.Invalidate;
