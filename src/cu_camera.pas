@@ -96,7 +96,7 @@ T_camera = class(TComponent)
     procedure msg(txt: string; level:integer=3);
     procedure NewImage;
     procedure TryNextExposure(Data: PtrInt);
-    procedure WriteHeaders;
+    procedure WriteHeaders(UpdateFromCamera:Boolean=true);
     procedure NewVideoFrame(rawframe: boolean);
     procedure WriteVideoHeader(width,height,naxis,bitpix: integer);
     function GetBinX:integer; virtual; abstract;
@@ -483,7 +483,10 @@ if FAddFrames then begin  // stack preview frames
   f.DarkOn:=true;
   f.DarkFrame:=FFits.DarkFrame;
   f.Stream:=ImgStream;
+  // load, subtract dark and debayer
   f.LoadStream;
+  // if debayered, load the new color stream
+  if (f.preview_axis<>f.HeaderInfo.naxis)and(f.preview_axis=3) then f.LoadRGB;
   // convert 8bit to 16bit to avoid quick overflow
   if f.HeaderInfo.bitpix=8 then
      f.Bitpix8to16;
@@ -536,7 +539,7 @@ if FAddFrames then begin  // stack preview frames
   end;
   // update image
   FFits.Header.Assign(f.Header);
-  WriteHeaders;
+  WriteHeaders(false);
   Ffits.GetFitsInfo;
   f.free;
   if Assigned(FonNewImage) then FonNewImage(self);
@@ -571,7 +574,7 @@ begin
  end;
 end;
 
-procedure T_camera.WriteHeaders;
+procedure T_camera.WriteHeaders(UpdateFromCamera:Boolean=true);
 var origin,observer,telname,objname,siso,CType,roworder: string;
     focal_length,pixscale1,pixscale2,ccdtemp,st,ra,de,fstop,shutter,multr,multg,multb: double;
     hbitpix,hnaxis,hnaxis1,hnaxis2,hnaxis3,hbin1,hbin2,cgain,focuserpos: integer;
@@ -712,7 +715,7 @@ begin
   if hasFnumber and (fstop<0) then begin
     fstop:=StrToFloatDef(GetFnumber,-1);
   end;
-  if CType='' then begin
+  if UpdateFromCamera and (CType='') then begin
     try
      if FhasCfaInfo and (hbin1<=1) and (hbin2<=1)  then begin
        CfaInfo(OffsetX,OffsetY,CType);

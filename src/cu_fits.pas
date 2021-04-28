@@ -170,6 +170,7 @@ type
      destructor  Destroy; override;
      function  GetStatistics: string;
      Procedure LoadStream;
+     Procedure LoadRGB;
      procedure ClearFitsInfo;
      procedure GetFitsInfo;
      procedure BayerInterpolation(t:TBayerMode; rmult,gmult,bmult:double; rbg,gbg,bbg:single; pix1,pix2,pix3,pix4,pix5,pix6,pix7,pix8,pix9:single; row,col:integer; out pixr,pixg,pixb:single); inline;
@@ -1028,6 +1029,35 @@ begin
   GetFitsInfo;
   if FFitsInfo.valid then begin
     ReadFitsImage;
+  end;
+end;
+
+Procedure TFits.LoadRGB;
+var i: integer;
+begin
+// reload stream from debayered image data
+  if preview_axis=3 then begin
+    // set new header
+    FHeader.Insert(-1,'NAXIS',3,'');
+    i:=FHeader.Indexof('NAXIS2')+1;
+    FHeader.Insert(i,'NAXIS3',3,'');
+    i:=FHeader.Indexof('BAYERPAT');
+    if i>0 then FHeader.Delete(i);
+    i:=FHeader.Indexof('XBAYROFF');
+    if i>0 then FHeader.Delete(i);
+    i:=FHeader.Indexof('YBAYROFF');
+    if i>0 then FHeader.Delete(i);
+    i:=FHeader.Indexof('MULT_R');
+    if i>0 then FHeader.Delete(i);
+    i:=FHeader.Indexof('MULT_G');
+    if i>0 then FHeader.Delete(i);
+    i:=FHeader.Indexof('MULT_B');
+    if i>0 then FHeader.Delete(i);
+    // reload header
+    GetFitsInfo;
+    FStreamValid:=false;
+    // reload stream
+    GetStream;
   end;
 end;
 
