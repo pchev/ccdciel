@@ -668,10 +668,10 @@ end;
 
 procedure Tf_starprofile.PlotStar2D;
 var i,j,i0,j0,rs,ds:integer;
-    v,valsaturation,bg: double;
+    v,bg,val1,val2,val3: double;
     s: integer;
-    tmpbmp,str: TBGRABitmap;
-    col:TBGRAPixel;
+    bmp: TBGRABitmap;
+    dark:TBGRAPixel;
  begin
 if (FFits<>nil)and(FValMax>0) then begin
   bg:=max(Fbg,0);
@@ -681,35 +681,31 @@ if (FFits<>nil)and(FValMax>0) then begin
   if (FStarY-rs)<0 then rs:=round(FStarY);
   if (FStarY+rs)>(img_Height-1) then rs:=img_Height-1-integer(round(FStarY));
   if rs<=0 then exit;
-  if FFits.HeaderInfo.floatingpoint then
-    valsaturation:=MaxDouble
-  else
-    valsaturation:=MaxADU-1-bg;
+  val1:=(ValMax)/2+bg;
+  val2:=(ValMax)*0.09+bg;
+  val3:=(ValMax)*0.025+bg;
   s:=Fsize;
   j0:=trunc(FStarY)-(s div 2);
   i0:=trunc(FStarX)-(s div 2);
   ds:=min(Star2D.Width,Star2D.Height);
-  tmpbmp:=TBGRABitmap.Create(s,s);
-  str:=TBGRABitmap.Create(ds,ds);
+  bmp:=TBGRABitmap.Create(s,s);
+  dark.red:=1;dark.green:=1;dark.blue:=1;dark.alpha:=255;
   try
   for j:=0 to s-1 do begin
     for i:=0 to s-1 do begin
-      v:=FFits.image[0,j0+j,i0+i]-bg;
-      if v>=valsaturation then col:=CSSGray
-      else if v>=FValMax/2 then col:=CSSLimeGreen
-      else if v>=FValMax*0.09 then col:=CSSYellow
-      else if v>=FValMax*0.03 then col:=CSSFireBrick
-      else col:=BGRABlack;
-      tmpbmp.Canvas.Pixels[i,j]:=col;
+      v:=FFits.image[0,j0+j,i0+i];
+      if v<val3 then bmp.Canvas.Pixels[i,j]:=dark
+      else if v<val2 then bmp.Canvas.Pixels[i,j]:=CSSFireBrick
+      else if v<val1 then bmp.Canvas.Pixels[i,j]:=CSSYellow
+      else bmp.Canvas.Pixels[i,j]:=CSSLime;
     end;
   end;
-  tmpbmp.ResampleFilter:=rfLinear;
-  str:=tmpbmp.Resample(ds,ds,rmFineResample) as TBGRABitmap;
-  Star2D.Picture.Assign(str);
+  bmp.ResampleFilter:=rfHalfCosine;
+  BGRAReplace(bmp, bmp.Resample(ds,ds,rmFineResample));
+  Star2D.Picture.Assign(bmp);
   Star2D.Invalidate;
   finally
-    tmpbmp.free;
-    str.free;
+    bmp.free;
   end;
 end;
 end;
