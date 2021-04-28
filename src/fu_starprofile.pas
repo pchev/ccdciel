@@ -443,6 +443,7 @@ begin
    f.Caption:=rsProfile2;
    ProfileChart.Parent:=f;
    ProfileChart.Align:=alClient;
+   ProfileChartLine.LinePen.Width:=2;
    FormPos(f,mouse.CursorPos.x,mouse.CursorPos.y);
    f.Show;
   end
@@ -454,6 +455,7 @@ procedure Tf_starprofile.PanelProfileClose(Sender: TObject; var CloseAction: TCl
 begin
   CloseAction:=caFree;
   ProfileChart.Parent:=TSprofile;
+  ProfileChartLine.LinePen.Width:=1;
   PanelBtnProfile.SendToBack;
   PanelBtnProfile.BringToFront;
 end;
@@ -470,6 +472,8 @@ begin
    f.Caption:=rsTrend;
    HistoryChart.Parent:=f;
    HistoryChart.Align:=alClient;
+   HistoryChartHfd.LinePen.Width:=2;
+   HistoryChartImax.LinePen.Width:=2;
    FormPos(f,mouse.CursorPos.x,mouse.CursorPos.y);
    f.Show;
   end
@@ -481,6 +485,8 @@ procedure Tf_starprofile.PanelTrendClose(Sender: TObject; var CloseAction: TClos
 begin
   CloseAction:=caFree;
   HistoryChart.Parent:=TStrend;
+  HistoryChartHfd.LinePen.Width:=1;
+  HistoryChartImax.LinePen.Width:=1;
   PanelBtnTrend.SendToBack;
   PanelBtnTrend.BringToFront;
 end;
