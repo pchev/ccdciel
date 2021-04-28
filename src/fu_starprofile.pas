@@ -695,10 +695,10 @@ if (FFits<>nil)and(FValMax>0) then begin
   for j:=0 to s-1 do begin
     for i:=0 to s-1 do begin
       v:=FFits.image[0,j0+j,i0+i]-bg;
-      if v>=valsaturation then col:=VGAPurple
-      else if v>=FValMax/2 then col:=VGALime
-      else if v>=FValMax*0.09 then col:=VGAYellow
-      else if v>=FValMax*0.03 then col:=VGARed
+      if v>=valsaturation then col:=CSSGray
+      else if v>=FValMax/2 then col:=CSSLimeGreen
+      else if v>=FValMax*0.09 then col:=CSSYellow
+      else if v>=FValMax*0.03 then col:=CSSFireBrick
       else col:=BGRABlack;
       tmpbmp.Canvas.Pixels[i,j]:=col;
     end;
