@@ -1393,10 +1393,7 @@ begin
   fits:=TFits.Create(self);
   fits.onMsg:=@NewMessage;
   if FileExistsUTF8(ConfigDarkFile) then begin
-     fits.DarkFrame:=TFits.Create(nil);
-     fits.DarkFrame.DarkOn:=false;
-     fits.DarkFrame.onMsg:=@NewMessage;
-     fits.DarkFrame.LoadFromFile(ConfigDarkFile);
+     fits.LoadDark(ConfigDarkFile);
   end;
 
   CreateDevices;
@@ -3347,11 +3344,7 @@ begin
    fits.DarkOn:=false;
    if f_preview.ControlExposure(f_preview.Exposure,bin,bin,DARK,ReadoutModeCapture,f_preview.Gain,f_preview.Offset) then begin
      fits.SaveToFile(ConfigDarkFile);
-     if fits.DarkFrame=nil then begin
-        fits.DarkFrame:=TFits.Create(nil);
-        fits.DarkFrame.onMsg:=@NewMessage;
-     end;
-     fits.DarkFrame.LoadFromFile(ConfigDarkFile);
+     fits.LoadDark(ConfigDarkFile);
    end
    else
      NewMessage(rsExposureFail,1);
@@ -3372,11 +3365,7 @@ begin
     fn:=OpenDialog1.FileName;
     fits.SetBPM(bpm,0,0,0,0);
     fits.DarkOn:=false;
-    if fits.DarkFrame=nil then begin
-       fits.DarkFrame:=TFits.Create(nil);
-       fits.DarkFrame.onMsg:=@NewMessage;
-    end;
-    fits.DarkFrame.LoadFromFile(fn);
+    fits.LoadDark(fn);
     if fits.DarkFrame.HeaderInfo.valid then begin
       fits.DarkFrame.SaveToFile(ConfigDarkFile);
     end
@@ -6948,11 +6937,7 @@ begin
       caption:='CCDciel '+ccdcielver+blank+profile;
       ConfigDarkFile:=slash(ConfigDir)+'darkframe_'+profile+'.fits';
       if FileExistsUTF8(ConfigDarkFile) then begin
-        if fits.DarkFrame=nil then begin
-           fits.DarkFrame:=TFits.Create(nil);
-           fits.DarkFrame.onMsg:=@NewMessage;
-        end;
-        fits.DarkFrame.LoadFromFile(ConfigDarkFile);
+        fits.LoadDark(ConfigDarkFile);
       end
       else begin
         fits.FreeDark;

@@ -481,6 +481,7 @@ if FAddFrames then begin  // stack preview frames
   f:=TFits.Create(nil);
   f.onMsg:=onMsg;
   f.DarkOn:=true;
+  f.DarkFrame:=FFits.DarkFrame;
   f.Stream:=ImgStream;
   f.LoadStream;
   // convert 8bit to 16bit to avoid quick overflow

@@ -146,7 +146,7 @@ type
     FStarList: TStarList;
     FDark: TFits;
     FDarkOn: boolean;
-    FDarkProcess, FBPMProcess: boolean;
+    FDarkProcess, FBPMProcess, FPrivateDark: boolean;
     FonMsg: TNotifyMsg;
     ReadFitsCS : TRTLCriticalSection;
     procedure msg(txt: string; level:integer=3);
@@ -195,6 +195,7 @@ type
      procedure GetStarList(rx,ry,s: integer);
      procedure MeasureStarList(s: integer; list: TArrayDouble2);
      procedure ClearStarList;
+     procedure LoadDark(fn: string);
      property IntfImg: TLazIntfImage read FIntfImg;
      property Title : string read FTitle write FTitle;
      Property HeaderInfo : TFitsInfo read FFitsInfo;
@@ -225,6 +226,7 @@ type
      property DarkProcess: boolean read FDarkProcess;
      property DarkOn: boolean read FDarkOn write FDarkOn;
      property DarkFrame: TFits read FDark write FDark;
+     property PrivateDark: boolean read FPrivateDark write FPrivateDark;
      property onMsg: TNotifyMsg read FonMsg write FonMsg;
   end;
 
@@ -939,6 +941,7 @@ FBPMcount:=0;
 FBPMProcess:=false;
 FDarkProcess:=false;
 FDarkOn:=false;
+FPrivateDark:=false;
 FStreamValid:=false;
 FImageValid:=false;
 FMarkOverflow:=false;
@@ -1786,9 +1789,18 @@ begin
   for i := 0 to tc - 1 do thread[i].Free;
 end;
 
+procedure TFits.LoadDark(fn: string);
+begin
+  FreeDark;
+  FDark:=TFits.Create(nil);
+  FDark.onMsg:=FonMsg;
+  PrivateDark:=true;
+  FDark.LoadFromFile(fn);
+end;
+
 procedure TFits.FreeDark;
 begin
-  if FDark<>nil then FreeAndNil(FDark);
+  if FPrivateDark and (FDark<>nil) then FreeAndNil(FDark);
 end;
 
 procedure TFits.ApplyDark;
