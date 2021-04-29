@@ -101,17 +101,17 @@ object f_capture: Tf_capture
         Left = 4
         Height = 17
         Top = 7
-        Width = 70
-        Caption = 'Stack count'
+        Width = 89
+        Caption = 'Stacking count'
         ParentColor = False
         ParentFont = False
       end
       object StackNum: TSpinEdit
-        Left = 89
+        Left = 135
         Height = 28
         Hint = 'Number of exposure to stack'
         Top = 1
-        Width = 101
+        Width = 55
         Constraints.MaxHeight = 28
         MaxValue = 1000
         MinValue = 1

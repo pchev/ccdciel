@@ -25,7 +25,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 interface
 
-uses u_global, Graphics, UScaleDPI, u_translation, u_hints, cu_mount, u_utils,
+uses u_global, Graphics, UScaleDPI, u_hints, u_translation, cu_mount, u_utils,
   Classes, SysUtils, FileUtil, Forms, Controls, ExtCtrls, StdCtrls, Spin;
 
 type
@@ -147,6 +147,7 @@ procedure Tf_capture.SetLang;
 begin
   Title.Caption:=rsCapture;
   Label1.Caption:=rsExposure;
+  Label7.Caption:=rsStackingCoun;
   LabelGain.Caption:=rsGain;
   Label2.Caption:=rsBinning;
   Label6.Caption:=rsFStop;

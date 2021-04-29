@@ -2,16 +2,20 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ccdciel\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-04-24 09:12+0000\n"
-"PO-Revision-Date: 2021-04-16 17:52+0000\n"
+"POT-Creation-Date: 2021-04-29 09:42+0000\n"
+"PO-Revision-Date: 2021-04-27 09:56+0000\n"
 "Last-Translator: Stanislav Holub <Unknown>\n"
 "Language-Team: Czech <cz@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2021-04-24 09:16+0000\n"
-"X-Generator: Launchpad (build f9f562f07f129de414c16be22a405ff0964e0018)\n"
+"X-Launchpad-Export-Date: 2021-04-29 09:48+0000\n"
+"X-Generator: Launchpad (build 02afa4875ac52c169f5cddf0d1bcdd6e149a3754)\n"
 "Language: cs\n"
+
+#: u_translation.rs2d
+msgid "2D"
+msgstr ""
 
 #: u_translation.rs32bitdriver
 msgid "This driver work only in 32bit, please install the 32bit version of CCDciel."
@@ -1177,7 +1181,7 @@ msgstr "Jen Dithering"
 
 #: u_translation.rsditherwhiled
 msgid "Dither while downloading from the camera"
-msgstr ""
+msgstr "Dithering při stahování z kamery"
 
 #: u_translation.rsdome
 msgid "Dome"
@@ -1780,7 +1784,7 @@ msgstr "ADU pro vyvážení bílé"
 
 #: u_translation.rshistory
 msgid "History"
-msgstr ""
+msgstr "Historie"
 
 #: u_translation.rshorizonprofi
 msgid "Horizon profile"
@@ -2951,6 +2955,10 @@ msgstr "Skládání náhledů"
 msgid "Profile: %s"
 msgstr "Profil: %s"
 
+#: u_translation.rsprofile2
+msgid "Profile"
+msgstr ""
+
 #: u_translation.rsprogramfolde
 msgid "Program folder "
 msgstr "Složka programu "
@@ -3832,6 +3840,10 @@ msgstr "Zpoždění stabilizace po pohybu"
 msgid "Stack"
 msgstr "Skládání"
 
+#: u_translation.rsstackingcoun
+msgid "Stacking count"
+msgstr ""
+
 #: u_translation.rsstackingwith
 msgid "Stacking with alignment star at %s/%s"
 msgstr "Přidání referenční hvězdy v %s/%s"
@@ -4452,6 +4464,10 @@ msgstr "Sledovat"
 msgid "tracking"
 msgstr "sleduji"
 
+#: u_translation.rstrend
+msgid "Trend"
+msgstr ""
+
 #: u_translation.rstreshold
 msgid "Treshold :"
 msgstr "Práh :"
@@ -4543,6 +4559,10 @@ msgstr "Byl zjištěn nebezpečný stav!"
 #: u_translation.rsunsafecondit2
 msgid "Unsafe condition ignored by user"
 msgstr "Nebezpečný stav ignorován uživatelem"
+
+#: u_translation.rsunselectstar
+msgid "Unselect star"
+msgstr ""
 
 #: u_translation.rsunslaved
 msgid "Unslaved"
@@ -4827,6 +4847,10 @@ msgstr "Západ (Cílový V)"
 #: u_translation.rswhenaskedmov
 msgid "When asked, move the mount manually only along the RA axis, always in the same direction, by about 15 to 45 degrees each time."
 msgstr "Po výzvě ručně překlopte montáž pouze podél osy RA, vždy ve stejném směru, pokaždé o 15 až 45 stupňů."
+
+#: u_translation.rswhenperformi
+msgid "When performing autofocus from a sequence"
+msgstr ""
 
 #: u_translation.rswidth
 msgid "Width"

@@ -6,16 +6,20 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ccdciel\n"
 "Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
-"POT-Creation-Date: 2021-04-24 09:12+0000\n"
+"POT-Creation-Date: 2021-04-29 09:42+0000\n"
 "PO-Revision-Date: 2020-09-13 16:20+0000\n"
 "Last-Translator: Stephan Woidowski <swoidowski@t-online.de>\n"
 "Language-Team: English (United Kingdom) <en_GB@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2021-04-24 09:16+0000\n"
-"X-Generator: Launchpad (build f9f562f07f129de414c16be22a405ff0964e0018)\n"
+"X-Launchpad-Export-Date: 2021-04-29 09:48+0000\n"
+"X-Generator: Launchpad (build 02afa4875ac52c169f5cddf0d1bcdd6e149a3754)\n"
 "Language: en_GB\n"
+
+#: u_translation.rs2d
+msgid "2D"
+msgstr ""
 
 #: u_translation.rs32bitdriver
 msgid "This driver work only in 32bit, please install the 32bit version of CCDciel."
@@ -2949,6 +2953,10 @@ msgstr "Preview stacking"
 msgid "Profile: %s"
 msgstr "Profile: %s"
 
+#: u_translation.rsprofile2
+msgid "Profile"
+msgstr ""
+
 #: u_translation.rsprogramfolde
 msgid "Program folder "
 msgstr "Program folder "
@@ -3829,6 +3837,10 @@ msgstr "Stabilisation delay after move"
 msgid "Stack"
 msgstr "Stack"
 
+#: u_translation.rsstackingcoun
+msgid "Stacking count"
+msgstr ""
+
 #: u_translation.rsstackingwith
 msgid "Stacking with alignment star at %s/%s"
 msgstr "Stacking with alignment star at %s/%s"
@@ -4449,6 +4461,10 @@ msgstr "Track"
 msgid "tracking"
 msgstr "tracking"
 
+#: u_translation.rstrend
+msgid "Trend"
+msgstr ""
+
 #: u_translation.rstreshold
 msgid "Treshold :"
 msgstr "Treshold :"
@@ -4540,6 +4556,10 @@ msgstr "Unsafe condition detected!"
 #: u_translation.rsunsafecondit2
 msgid "Unsafe condition ignored by user"
 msgstr "Unsafe condition ignored by user"
+
+#: u_translation.rsunselectstar
+msgid "Unselect star"
+msgstr ""
 
 #: u_translation.rsunslaved
 msgid "Unslaved"
@@ -4824,6 +4844,10 @@ msgstr "West (Pointing East)"
 #: u_translation.rswhenaskedmov
 msgid "When asked, move the mount manually only along the RA axis, always in the same direction, by about 15 to 45 degrees each time."
 msgstr "When asked, move the mount manually only along the RA axis, always in the same direction, by about 15 to 45 degrees each time."
+
+#: u_translation.rswhenperformi
+msgid "When performing autofocus from a sequence"
+msgstr ""
 
 #: u_translation.rswidth
 msgid "Width"

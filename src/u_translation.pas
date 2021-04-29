@@ -1318,6 +1318,7 @@ resourcestring
   rsProfile2 = 'Profile';
   rsTrend = 'Trend';
   rs2D = '2D';
+  rsStackingCoun = 'Stacking count';
 
 implementation
 

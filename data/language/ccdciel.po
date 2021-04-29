@@ -4842,3 +4842,27 @@ msgstr ""
 msgid "Dither while downloading from the camera"
 msgstr ""
 
+#: u_translation:rswhenperformi
+msgid "When performing autofocus from a sequence"
+msgstr ""
+
+#: u_translation:rsunselectstar
+msgid "Unselect star"
+msgstr ""
+
+#: u_translation:rsprofile2
+msgid "Profile"
+msgstr ""
+
+#: u_translation:rstrend
+msgid "Trend"
+msgstr ""
+
+#: u_translation:rs2d
+msgid "2D"
+msgstr ""
+
+#: u_translation:rsstackingcoun
+msgid "Stacking count"
+msgstr ""
+
