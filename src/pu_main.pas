@@ -722,6 +722,7 @@ type
     Procedure AutoguiderDisconnect(Sender: TObject);
     Procedure AutoguiderStatus(Sender: TObject);
     Procedure AutoguiderGetSigma(axis:integer; out sigma: double);
+    function  AutoguiderGetOsc: double;
     Procedure AutoguiderGuideStat;
     Procedure AutoguiderGuideGraph(Sender: TObject);
     Procedure AutoguiderClearStat(Sender: TObject);
@@ -6755,6 +6756,31 @@ begin
  sigma:=sqrt(runningS / (count - 1));
 end;
 
+function Tf_main.AutoguiderGetOsc: double;
+var i,n,count,sameside: integer;
+    cur,val: double;
+begin
+ // compute RA oscillation
+ // use the same method as PHD2 to get the same number
+ // see GraphLogClientWindow::RecalculateTrendLines() and GraphLogClientWindow::UpdateStats in graph.cpp
+ result:=0;
+ sameside:=0;
+ count:=0;
+ n:=Length(AutoguiderStat);
+ if n<2 then exit;
+ for i:=0 to n-1 do begin
+   if i=0 then cur:=AutoguiderStat[i].RAdistance
+   else begin
+     inc(count);
+     val:=AutoguiderStat[i].RAdistance;
+     if cur*val>0  then inc(sameside);
+     cur:=val;
+   end;
+ end;
+ if count<1 then exit;
+ result:=1.0-sameside/(count);
+end;
+
 Procedure Tf_main.AutoguiderGuideStat;
 var i,n: integer;
 
@@ -6779,7 +6805,7 @@ end;
 
 Procedure Tf_main.AutoguiderGuideGraph(Sender: TObject);
 var i,n: integer;
-    ma,mi,smmax,ras,des,tots: double;
+    ma,mi,smmax,ras,des,tots,osc: double;
 begin
    n:=Length(AutoguiderStat);
    if (n>0) and f_autoguider.ShowStat.Checked then begin
@@ -6788,7 +6814,8 @@ begin
        AutoguiderGetSigma(1,ras);
        AutoguiderGetSigma(2,des);
        tots:=sqrt(ras*ras+des*des);
-       f_autoguider.Label1.Caption:='RA:'+FormatFloat(f2,ras)+'" Dec:'+FormatFloat(f2,des)+'" Tot:'+FormatFloat(f2,tots)+'"';
+       osc:=AutoguiderGetOsc;
+       f_autoguider.Label1.Caption:='RA:'+FormatFloat(f2,ras)+'" Dec:'+FormatFloat(f2,des)+'" Tot:'+FormatFloat(f2,tots)+'"'+' Osc:'+FormatFloat(f2,osc);
      end
      else begin
        f_autoguider.Label1.Caption:=' ';
