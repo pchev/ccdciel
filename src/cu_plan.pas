@@ -267,6 +267,7 @@ begin
        exit;
     end;
     if p.exposure>=0 then Fcapture.ExposureTime:=p.exposure;
+    Fcapture.StackNum.Value:=1;
     Fcapture.Binning.Text:=p.binning_str;
     Fcapture.Gain:=p.gain;
     Fcapture.Offset:=p.offset;
