@@ -7,18 +7,18 @@ msgstr ""
 "Project-Id-Version: ccdciel\n"
 "Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
 "POT-Creation-Date: 2021-04-29 09:42+0000\n"
-"PO-Revision-Date: 2021-03-15 21:16+0000\n"
+"PO-Revision-Date: 2021-04-30 14:52+0000\n"
 "Last-Translator: Thomas <email@starhopper.de>\n"
 "Language-Team: German <de@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2021-04-29 09:48+0000\n"
+"X-Launchpad-Export-Date: 2021-05-01 16:28+0000\n"
 "X-Generator: Launchpad (build 02afa4875ac52c169f5cddf0d1bcdd6e149a3754)\n"
 
 #: u_translation.rs2d
 msgid "2D"
-msgstr ""
+msgstr "2D"
 
 #: u_translation.rs32bitdriver
 msgid "This driver work only in 32bit, please install the 32bit version of CCDciel."
@@ -1182,7 +1182,7 @@ msgstr "Nur Dither"
 
 #: u_translation.rsditherwhiled
 msgid "Dither while downloading from the camera"
-msgstr ""
+msgstr "Während des Kamerdownloads dithern"
 
 #: u_translation.rsdome
 msgid "Dome"
@@ -1651,7 +1651,7 @@ msgstr "%s Geräte gefunden"
 
 #: u_translation.rsfounddstars
 msgid "Found %d stars"
-msgstr ""
+msgstr "%d Sterne gefunden"
 
 #: u_translation.rsfov
 msgid "FOV"
@@ -1783,7 +1783,7 @@ msgstr "ADU für Weißwert"
 
 #: u_translation.rshistory
 msgid "History"
-msgstr ""
+msgstr "Verlauf"
 
 #: u_translation.rshorizonprofi
 msgid "Horizon profile"
@@ -2957,7 +2957,7 @@ msgstr "Profil: %s"
 
 #: u_translation.rsprofile2
 msgid "Profile"
-msgstr ""
+msgstr "Profil"
 
 #: u_translation.rsprogramfolde
 msgid "Program folder "
@@ -3841,7 +3841,7 @@ msgstr "Stapel"
 
 #: u_translation.rsstackingcoun
 msgid "Stacking count"
-msgstr ""
+msgstr "Anzahl summierter Bilder"
 
 #: u_translation.rsstackingwith
 msgid "Stacking with alignment star at %s/%s"
@@ -4193,7 +4193,7 @@ msgstr "TCP/IP Server hört auf Port: %s"
 
 #: u_translation.rstcpipserverp
 msgid "TCP/IP server port"
-msgstr ""
+msgstr "TCP/IP Server Port"
 
 #: u_translation.rstcpipservers
 msgid "TCP/IP server stopped"
@@ -4466,7 +4466,7 @@ msgstr "Nachführen"
 
 #: u_translation.rstrend
 msgid "Trend"
-msgstr ""
+msgstr "Trend"
 
 #: u_translation.rstreshold
 msgid "Treshold :"
@@ -4562,7 +4562,7 @@ msgstr "Unsicherer Zustand vom Benutzer ignoriert"
 
 #: u_translation.rsunselectstar
 msgid "Unselect star"
-msgstr ""
+msgstr "Sternauswahl aufheben"
 
 #: u_translation.rsunslaved
 msgid "Unslaved"
@@ -4706,7 +4706,7 @@ msgstr "Zeige Header"
 
 #: u_translation.rsviewlastauto
 msgid "View last autofocus"
-msgstr ""
+msgstr "Letzten Autofokus anzeigen"
 
 #: u_translation.rsviewlastreso
 msgid "View last resolver log"
@@ -4851,7 +4851,7 @@ msgstr "Bei Aufforderung, die Montierung manuell nur entlang der RA-Achse bewege
 
 #: u_translation.rswhenperformi
 msgid "When performing autofocus from a sequence"
-msgstr ""
+msgstr "Beim Ausführen des Autofokus aus einer Sequenz"
 
 #: u_translation.rswidth
 msgid "Width"
