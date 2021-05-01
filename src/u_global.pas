@@ -139,6 +139,13 @@ type
 
   Thorizonlist = array [0..361] of single;
 
+  TAutoguiderStatistics = record
+       RAdistance, Decdistance: single;
+       Starmass: single;
+       Guiding: boolean;
+  end;
+
+
 
   // libcdcwcs
  type
@@ -453,7 +460,7 @@ var
   WantExif: boolean;
   Collimation: boolean;
   CollimationCircle: integer;
-  AutoguiderStat: array of array[1..3] of double;
+  AutoguiderStat: array of TAutoguiderStatistics;
   colorGreen, colorBlue, colorRed: Tcolor;
   AutoguiderAlert,AutoguiderStarting: boolean;
   AutoguiderAlertTime,AutoguiderMsgTime: double;

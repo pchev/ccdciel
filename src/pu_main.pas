@@ -6734,8 +6734,12 @@ begin
  n:=Length(AutoguiderStat);
  if n<2 then exit;
  for i:=0 to n-1 do begin
+   if not AutoguiderStat[i].Guiding then continue;
    count:=i+1;
-   Val:=AutoguiderStat[i,axis];
+   if axis=1 then
+     Val:=AutoguiderStat[i].RAdistance
+   else
+     Val:=AutoguiderStat[i].Decdistance;
    if count=1 then begin
      runningMean := Val;
      newMean := Val;
@@ -6747,12 +6751,13 @@ begin
      runningS := newS;
    end;
  end;
+ if count<2 then exit;
  sigma:=sqrt(runningS / (count - 1));
 end;
 
 Procedure Tf_main.AutoguiderGuideStat;
 var i,n: integer;
-    ma,mi,smmax,ras,des,tots: double;
+
 begin
    // Add current point to list, keep last 100 points
    n:=Length(AutoguiderStat);
@@ -6764,9 +6769,10 @@ begin
        AutoguiderStat[i-1]:=AutoguiderStat[i];
      n:=n-1;
    end;
-   AutoguiderStat[n,1]:=autoguider.RAdistance;
-   AutoguiderStat[n,2]:=autoguider.Decdistance;
-   AutoguiderStat[n,3]:=autoguider.Starmass;
+   AutoguiderStat[n].RAdistance:=autoguider.RAdistance;
+   AutoguiderStat[n].Decdistance:=autoguider.Decdistance;
+   AutoguiderStat[n].Starmass:=autoguider.Starmass;
+   AutoguiderStat[n].Guiding:=autoguider.Status='Guiding';
    // show graph and stats
    AutoguiderGuideGraph(nil);
 end;
@@ -6794,14 +6800,14 @@ begin
      smmax:=0; ma:=0; mi:=0;
      for i:=0 to Length(AutoguiderStat)-1 do begin
         // add ra and dec points
-        f_autoguider.GuideChartRAdist.Add(AutoguiderStat[i,1]);
-        f_autoguider.GuideChartDecdist.Add(AutoguiderStat[i,2]);
+        f_autoguider.GuideChartRAdist.Add(AutoguiderStat[i].RAdistance);
+        f_autoguider.GuideChartDecdist.Add(AutoguiderStat[i].Decdistance);
         // max values for starmass scaling
-        ma:=max(ma,AutoguiderStat[i,1]);
-        ma:=max(ma,AutoguiderStat[i,2]);
-        mi:=min(mi,AutoguiderStat[i,1]);
-        mi:=min(mi,AutoguiderStat[i,2]);
-        smmax:=max(smmax,AutoguiderStat[i,3]);
+        ma:=max(ma,AutoguiderStat[i].RAdistance);
+        ma:=max(ma,AutoguiderStat[i].Decdistance);
+        mi:=min(mi,AutoguiderStat[i].RAdistance);
+        mi:=min(mi,AutoguiderStat[i].Decdistance);
+        smmax:=max(smmax,AutoguiderStat[i].Starmass);
      end;
      // restrict vertical scale to +/- 2"
      if ma<2 then begin
@@ -6819,7 +6825,7 @@ begin
      ma:=ma/smmax;
      for i:=0 to Length(AutoguiderStat)-1 do begin
         // add scaled starmass points
-        f_autoguider.GuideChartStarmass.Add(AutoguiderStat[i,3]*ma);
+        f_autoguider.GuideChartStarmass.Add(AutoguiderStat[i].Starmass*ma);
      end;
    end;
 end;
