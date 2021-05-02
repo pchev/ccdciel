@@ -1130,8 +1130,10 @@ begin
     end
     else begin
       if st=stPascal then begin
-        s.Add('# Pascal script for CCDciel');
-        s.Add('# see: https://www.ap-i.net/ccdciel/en/documentation/script_reference');
+        s.Add('{');
+        s.Add('Pascal script for CCDciel');
+        s.Add('see: https://www.ap-i.net/ccdciel/en/documentation/script_reference');
+        s.Add('}');
         s.Add('begin');
         s.Add('');
         s.Add('end.');
