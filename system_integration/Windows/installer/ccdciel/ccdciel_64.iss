@@ -91,5 +91,6 @@ var
   ResultCode: Integer;
 begin
   Exec('netsh.exe', 'advfirewall firewall delete rule name="CCDciel" dir=in program=' + AddQuotes(ExpandConstant('{app}\ccdciel.exe')), '', SW_HIDE, ewWaitUntilTerminated, ResultCode);
+  Exec('netsh.exe', 'advfirewall firewall add rule name="CCDCiel" dir=in action=block program=' + AddQuotes(ExpandConstant('{app}\ccdciel.exe')) + ' profile=public,Domain', '', SW_HIDE, ewWaitUntilTerminated, ResultCode);
   Exec('netsh.exe', 'advfirewall firewall add rule name="CCDCiel" dir=in action=allow program=' + AddQuotes(ExpandConstant('{app}\ccdciel.exe')) + ' profile=private', '', SW_HIDE, ewWaitUntilTerminated, ResultCode);
 end;
