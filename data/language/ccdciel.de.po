@@ -385,7 +385,7 @@ msgid "Automatic cooling "
 msgstr "Automatische Kühlung "
 
 #: u_translation.rsautomaticfla
-msgid "Automatic flat exposure is required fot the twilight flat."
+msgid "Automatic flat exposure is required for the twilight flat."
 msgstr "Automatische Belichtung der Flats ist nötig für Dämmerungsflats"
 
 #: u_translation.rsautomaticfli
