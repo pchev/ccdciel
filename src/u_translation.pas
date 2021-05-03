@@ -502,7 +502,7 @@ resourcestring
   rsMax = 'Max:';
   rsMin2 = 'Min:';
   rsFlatImageMea = 'Flat image mean level';
-  rsAutomaticFla = 'Automatic flat exposure is required fot the twilight flat.';
+  rsAutomaticFla = 'Automatic flat exposure is required for the twilight flat.';
   rsStarDetectio = 'Star detection window size ';
   rsFocusWindowS = 'Focus window size';
   rsFocuserCorre = 'Focuser correction';

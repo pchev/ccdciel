@@ -1859,7 +1859,7 @@ object f_option: Tf_option
           Top = 8
           Width = 364
           AutoSize = False
-          Caption = 'Automatic flat exposure is required fot the twilight flat.'
+          Caption = 'Automatic flat exposure is required for the twilight flat.'
           ParentColor = False
           ParentFont = False
           WordWrap = True
