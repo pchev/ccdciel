@@ -13249,6 +13249,9 @@ try
   else if method='CAPTURE_RUNNING' then result:=result+'"result": '+BoolToStr(f_Capture.Running,tr,fa)
   else if method='TELESCOPERA' then result:=result+'"result": '+FormatFloat(f6,mount.RA)
   else if method='TELESCOPEDE' then result:=result+'"result": '+FormatFloat(f6,mount.Dec)
+  else if method='OBS_LATITUDE' then result:=result+'"result": '+FormatFloat(f6,ObsLatitude)
+  else if method='OBS_LONGITUDE' then result:=result+'"result": '+FormatFloat(f6,-ObsLongitude)
+  else if method='OBS_ELEVATION' then result:=result+'"result": '+FormatFloat(f1,ObsElevation)
   else if method='CCDTEMP' then result:=result+'"result": '+FormatFloat(f2,camera.Temperature)
   else if method='FOCUSERPOSITION' then result:=result+'"result": '+IntToStr(focuser.Position)
   else if method='TIMENOW' then result:=result+'"result": "'+FormatDateTime(dateiso,now)+'"'
