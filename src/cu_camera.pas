@@ -755,7 +755,7 @@ begin
   Ffits.Header.Insert(i,'SWCREATE','CCDciel '+ccdciel_version+'-'+RevisionStr+blank+compile_system,'');
   if objname<>'' then Ffits.Header.Insert(i,'OBJECT',objname,'Observed object name');
   Ffits.Header.Insert(i,'IMAGETYP',hframe,'Image Type');
-  if FStackCount=1 then begin
+  if FStackCount<=1 then begin
     if FhasLastExposureStartTime then
       Ffits.Header.Insert(i,'DATE-OBS',hdateobs,'UTC start date from camera')
     else
