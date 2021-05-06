@@ -13207,6 +13207,7 @@ end;
 function Tf_main.TCPjsoncmd(id:string; attrib,value:Tstringlist):string;
 var p: integer;
     rpcversion,method,buf,buf1,buf2:string;
+    x1,x2,x3,x4: double;
 const tr='true';
       fa='false';
 begin
@@ -13404,6 +13405,18 @@ try
     buf1:=trim(value[attrib.IndexOf('params.0')]);
     buf:=f_scriptengine.cmd_PlanetariumShowImage(buf1);
     result:=result+'"result":{"status": "'+buf+'"}';
+  end
+  else if method='EQ2HZ' then begin
+    x1:=StrToFloat(trim(value[attrib.IndexOf('params.0')]));
+    x2:=StrToFloat(trim(value[attrib.IndexOf('params.1')]));
+    cmdEq2Hz(x1,x2,x3,x4);
+    result:=result+'"result":{"alt": '+FormatFloat(f9v,x3)+', "az": '+FormatFloat(f9v,x4)+'}';
+  end
+  else if method='HZ2EQ' then begin
+    x1:=StrToFloat(trim(value[attrib.IndexOf('params.0')]));
+    x2:=StrToFloat(trim(value[attrib.IndexOf('params.1')]));
+    cmdHz2Eq(x1,x2,x3,x4);
+    result:=result+'"result":{"ra": '+FormatFloat(f9v,x3)+', "dec": '+FormatFloat(f9v,x4)+'}';
   end
   // method not found
   else begin
