@@ -395,6 +395,9 @@ begin
   else if varname='TELESCOPEDE' then x:=Fmount.Dec
   else if varname='CCDTEMP' then x:=TempDisplay(TemperatureScale,Fcamera.Temperature)
   else if varname='TIMENOW' then x:=now
+  else if varname='OBS_LATITUDE' then x:=ObsLatitude
+  else if varname='OBS_LONGITUDE' then x:=-ObsLongitude
+  else if varname='OBS_ELEVATION' then x:=ObsElevation
   else if varname='DOUBLE1' then x:=dlist[0]
   else if varname='DOUBLE2' then x:=dlist[1]
   else if varname='DOUBLE3' then x:=dlist[2]
