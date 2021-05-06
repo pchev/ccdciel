@@ -13410,7 +13410,7 @@ try
     x1:=StrToFloat(trim(value[attrib.IndexOf('params.0')]));
     x2:=StrToFloat(trim(value[attrib.IndexOf('params.1')]));
     cmdEq2Hz(x1,x2,x3,x4);
-    result:=result+'"result":{"alt": '+FormatFloat(f9v,x3)+', "az": '+FormatFloat(f9v,x4)+'}';
+    result:=result+'"result":{"az": '+FormatFloat(f9v,x3)+', "alt": '+FormatFloat(f9v,x4)+'}';
   end
   else if method='HZ2EQ' then begin
     x1:=StrToFloat(trim(value[attrib.IndexOf('params.0')]));
