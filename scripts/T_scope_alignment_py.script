@@ -1,0 +1,90 @@
+from ccdciel import ccdciel
+import sys
+
+MSG_OK = 'OK!'
+
+def SyncAzAlt(az, alt):
+   r = (ccdciel('Hz2Eq', [az, alt])['result'])
+   ccdciel('LogMsg','Slew to AZ=%s ALT=%s, RA=%6.4f DEC=%6.4f'
+           %(az, alt, r['ra'], r['dec']))
+
+   r = (ccdciel('Telescope_slew',
+                [str(r['ra']), str(r['dec'])])['result']['status'])
+   ccdciel('LogMsg','Telescope_slew %r' %(r))
+   if r != MSG_OK :
+      return False
+
+   r = (ccdciel('Preview_single')['result']['status'])
+   ccdciel('LogMsg','Preview_single %r' %(r))
+   if r != MSG_OK :
+      return False
+
+   r = (ccdciel('Astrometry_sync')['result']['status'])
+   ccdciel('LogMsg','Astrometry_sync %r' %(r))
+   if r != MSG_OK :
+      return False
+
+   return True
+
+def Setup(exptime, binning):
+   connected = (ccdciel('Camera_Connected')['result'])
+   if not connected :
+      ccdciel('LogMsg','Camera not connected!')
+      sys.exit(1)
+
+   connected = (ccdciel('Telescope_Connected')['result'])
+   if not connected :
+      ccdciel('LogMsg','Telescope not connected!')
+      sys.exit(1)
+
+   parked = (ccdciel('Telescope_Parked')['result'])
+   if parked :
+      r = (ccdciel('Telescope_Park', False)['result']['status'])
+      if r != MSG_OK :
+         ccdciel('LogMsg','Telescope cannot be unparked!')
+         sys.exit(1)
+
+   r = (ccdciel('Preview_setexposure', exptime)['result']['status'])
+   ccdciel('LogMsg','Preview_setexposure %r' %(r))
+   if r != MSG_OK :
+      sys.exit(1)
+
+   r = (ccdciel('Preview_setbinning', binning)['result']['status'])
+   ccdciel('LogMsg','Preview_setbinning %r' %(r))
+   if r != MSG_OK :
+      sys.exit(1)
+
+
+# Main settings
+EXPTIME_SEC = 5
+BINNING = '1x1'
+AZ_ALT_EAST = ([45.0,  35.0],
+               [90.0,  60.0],
+               [110.0, 30.0],
+               [140.0, 30.0],
+               [170.0, 30.0],
+               [170.0, 50.0],
+               [170.0, 70.0],
+               [90.0, 80.0],
+               [10.0, 60.0])
+AZ_ALT_WEST = ([340.0,  60.0],
+               [240.0,  75.0],
+               [210.0,  30.0],
+               [245.0,  30.0],
+               [300.0,  60.0])
+DO_EAST_ALIGN = True
+DO_WEST_ALIGN = False
+
+# Connect and setup.
+Setup(EXPTIME_SEC, BINNING)
+
+# Perform telescope alignment on east/west side.
+if DO_EAST_ALIGN:
+   for az_alt in AZ_ALT_EAST:
+      ccdciel('LogMsg','Sync telescope east AZ,ALT (%s,%s) %s'
+              %(az_alt[0], az_alt[1], (SyncAzAlt(az_alt[0], az_alt[1]) and 'successful' or 'failed')))
+
+if DO_WEST_ALIGN:
+   for az_alt in AZ_ALT_WEST:
+      ccdciel('LogMsg','Sync telescope west AZ,ALT (%s,%s) %s'
+              %(az_alt[0], az_alt[1], (SyncAzAlt(az_alt[0], az_alt[1]) and 'successful' or 'failed')))
