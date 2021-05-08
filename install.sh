@@ -8,7 +8,7 @@ if [ -z "$destdir" ]; then
    export destdir=/tmp/ccdciel
 fi
 
-echo Install ccdciel to $destdir
+echo Install ccdciel $cpu_target to $destdir
 
 install -m 755 -d $destdir
 install -m 755 -d $destdir/bin
