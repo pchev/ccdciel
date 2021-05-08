@@ -42,6 +42,7 @@ install -v -m 644 scripts/scope_park.script  $destdir/share/ccdciel/scripts/scop
 install -v -m 644 scripts/scope_unpark.script  $destdir/share/ccdciel/scripts/scope_unpark.script
 install -v -m 644 scripts/scope_position.script  $destdir/share/ccdciel/scripts/scope_position.script
 install -v -m 644 scripts/T_scope_alignment.script  $destdir/share/ccdciel/scripts/T_scope_alignment.script 
+install -v -m 644 scripts/T_scope_alignment_py.script  $destdir/share/ccdciel/scripts/T_scope_alignment_py.script 
 install -v -m 644 scripts/T_eqmod_alignment.script  $destdir/share/ccdciel/scripts/T_eqmod_alignment.script 
 install -v -m 755 scripts/astrometry.sh  $destdir/share/ccdciel/scripts/astrometry.sh
 install -v -m 755 scripts/astrometry-online.sh  $destdir/share/ccdciel/scripts/astrometry-online.sh
