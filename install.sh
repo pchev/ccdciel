@@ -3,6 +3,10 @@
 destdir=$1
 
 cpu_target=$2
+unset armproc
+if [[ $cpu_target =~ "arm" ]] || [[ $cpu_target =~ "aarch" ]]; then
+   armproc=1
+fi
 
 if [ -z "$destdir" ]; then
    export destdir=/tmp/ccdciel
@@ -37,27 +41,29 @@ install -m 755 -d $destdir/share/ccdciel/data/resources
 install -m 755 -d $destdir/share/ccdciel/doc
 
 install -v -m 755 -s src/ccdciel  $destdir/bin/ccdciel
+install -v -m 755 scripts/astrometry.sh  $destdir/share/ccdciel/scripts/astrometry.sh
+install -v -m 755 scripts/astrometry-online.sh  $destdir/share/ccdciel/scripts/astrometry-online.sh
+install -v -m 755 scripts/astrometry-macos.sh  $destdir/share/ccdciel/scripts/astrometry-macos.sh
 install -v -m 644 scripts/ccdciel.py  $destdir/share/ccdciel/scripts/ccdciel.py
 install -v -m 644 scripts/scope_park.script  $destdir/share/ccdciel/scripts/scope_park.script
 install -v -m 644 scripts/scope_unpark.script  $destdir/share/ccdciel/scripts/scope_unpark.script
 install -v -m 644 scripts/scope_position.script  $destdir/share/ccdciel/scripts/scope_position.script
-install -v -m 644 scripts/T_scope_alignment.script  $destdir/share/ccdciel/scripts/T_scope_alignment.script 
 install -v -m 644 scripts/T_scope_alignment_py.script  $destdir/share/ccdciel/scripts/T_scope_alignment_py.script 
-install -v -m 644 scripts/T_eqmod_alignment.script  $destdir/share/ccdciel/scripts/T_eqmod_alignment.script 
-install -v -m 755 scripts/astrometry.sh  $destdir/share/ccdciel/scripts/astrometry.sh
-install -v -m 755 scripts/astrometry-online.sh  $destdir/share/ccdciel/scripts/astrometry-online.sh
-install -v -m 755 scripts/astrometry-macos.sh  $destdir/share/ccdciel/scripts/astrometry-macos.sh
-install -v -m 755 scripts/siril_bias.script  $destdir/share/ccdciel/scripts/siril_bias.script
-install -v -m 755 scripts/siril_dark.script $destdir/share/ccdciel/scripts/siril_dark.script
-install -v -m 755 scripts/siril_flat.script $destdir/share/ccdciel/scripts/siril_flat.script
-install -v -m 755 scripts/siril_light.script $destdir/share/ccdciel/scripts/siril_light.script
-install -v -m 755 scripts/siril/template_bias.ssf  $destdir/share/ccdciel/scripts/siril/template_bias.ssf
-install -v -m 755 scripts/siril/template_dark.ssf  $destdir/share/ccdciel/scripts/siril/template_dark.ssf
-install -v -m 755 scripts/siril/template_flat.ssf  $destdir/share/ccdciel/scripts/siril/template_flat.ssf
-install -v -m 755 scripts/siril/template_light.ssf  $destdir/share/ccdciel/scripts/siril/template_light.ssf
 install -v -m 644 scripts/example/startup.script  $destdir/share/ccdciel/scripts/example/startup.script
 install -v -m 644 scripts/example/shutdown.script  $destdir/share/ccdciel/scripts/example/shutdown.script
 install -v -m 644 scripts/indi/build_indi.sh  $destdir/share/ccdciel/scripts/indi/build_indi.sh
+if ((! armproc)) ; then
+  install -v -m 644 scripts/T_scope_alignment.script  $destdir/share/ccdciel/scripts/T_scope_alignment.script 
+  install -v -m 644 scripts/T_eqmod_alignment.script  $destdir/share/ccdciel/scripts/T_eqmod_alignment.script 
+  install -v -m 644 scripts/siril_bias.script  $destdir/share/ccdciel/scripts/siril_bias.script
+  install -v -m 644 scripts/siril_dark.script $destdir/share/ccdciel/scripts/siril_dark.script
+  install -v -m 644 scripts/siril_flat.script $destdir/share/ccdciel/scripts/siril_flat.script
+  install -v -m 644 scripts/siril_light.script $destdir/share/ccdciel/scripts/siril_light.script
+  install -v -m 644 scripts/siril/template_bias.ssf  $destdir/share/ccdciel/scripts/siril/template_bias.ssf
+  install -v -m 644 scripts/siril/template_dark.ssf  $destdir/share/ccdciel/scripts/siril/template_dark.ssf
+  install -v -m 644 scripts/siril/template_flat.ssf  $destdir/share/ccdciel/scripts/siril/template_flat.ssf
+  install -v -m 644 scripts/siril/template_light.ssf  $destdir/share/ccdciel/scripts/siril/template_light.ssf
+fi
 install -v -m 644 data/stars/focus_star_4  $destdir/share/ccdciel/data/stars/focus_star_4 
 install -v -m 644 data/stars/focus_star_5  $destdir/share/ccdciel/data/stars/focus_star_5 
 install -v -m 644 data/stars/focus_star_6  $destdir/share/ccdciel/data/stars/focus_star_6 
