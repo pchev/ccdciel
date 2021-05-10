@@ -25,7 +25,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 interface
 
-uses UScaleDPI,  u_translation, u_hints,
+uses UScaleDPI,  u_translation, u_hints, u_global, u_utils,
   Classes, SysUtils, FileUtil, Forms, Controls, StdCtrls, ExtCtrls, Dialogs, Graphics, Buttons;
 
 type
@@ -60,14 +60,20 @@ type
     procedure BtnTrackClick(Sender: TObject);
   private
     { private declarations }
+    FCurrentRA,FCurrentDec: double;
     FonPark  : TNotifyEvent;
     FonTrack  : TNotifyEvent;
     FonGoto  : TNotifyEvent;
+    procedure SetCurrentRA(value:double);
+    procedure SetCurrentDec(value:double);
+    procedure ShowAltAz;
   public
     { public declarations }
     constructor Create(aOwner: TComponent); override;
     destructor  Destroy; override;
     procedure SetLang;
+    property CurrentRA: double read FCurrentRA write SetCurrentRA;
+    property CurrentDec: double read FCurrentDec write SetCurrentDec;
     property onPark  : TNotifyEvent read FonPark write FonPark;
     property onTrack  : TNotifyEvent read FonTrack write FonTrack;
     property onGoto  : TNotifyEvent read FonGoto write FonGoto;
@@ -89,6 +95,8 @@ begin
  {$endif}
  ScaleDPI(Self);
  SetLang;
+ FCurrentRA:=NullCoord;
+ FCurrentDec:=NullCoord;
 end;
 
 destructor  Tf_mount.Destroy;
@@ -113,6 +121,30 @@ begin
   DE.Hint:=rsCurrentTeles2;
   Pierside.Hint:=rsCurrentTeles3;
   TimeToMeridian.Hint:=rsTimeFromMeri;
+end;
+
+procedure Tf_mount.SetCurrentRA(value:double);
+begin
+  FCurrentRA:=value;
+  RA.Caption:=RAToStr(FCurrentRA);
+  ShowAltAz;
+end;
+
+procedure Tf_mount.SetCurrentDec(value:double);
+begin
+  FCurrentDec:=value;
+  DE.Caption:=DEToStr(FCurrentDec);
+  ShowAltAz;
+end;
+
+procedure Tf_mount.ShowAltAz;
+var a,h: double;
+begin
+ if (FCurrentRA<>NullCoord)and(FCurrentDec<>NullCoord) then begin
+   cmdEq2Hz(FCurrentRA,FCurrentDec,a,h);
+   AZ.Caption:=FormatFloat(f2,a);
+   ALT.Caption:=FormatFloat(f2,h);
+ end;
 end;
 
 procedure Tf_mount.BtnParkClick(Sender: TObject);

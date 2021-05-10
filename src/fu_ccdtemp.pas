@@ -25,7 +25,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 interface
 
-uses   UScaleDPI, Dialogs, u_translation, u_global,
+uses   UScaleDPI, Dialogs, u_translation, u_global, u_utils,
   Classes, SysUtils, FileUtil, Forms, Graphics, Controls, StdCtrls, ExtCtrls, Spin;
 
 type
@@ -50,12 +50,15 @@ type
     procedure CCDcoolerChange(Sender: TObject);
   private
     { private declarations }
+    FCurrentTemperature: double;
     FonSetTemperature,FonSetCooler: TNotifyEvent;
+    procedure SetCurrentTemperature(value:double);
   public
     { public declarations }
     constructor Create(aOwner: TComponent); override;
     destructor  Destroy; override;
     procedure SetLang;
+    property CurrentTemperature: double read FCurrentTemperature write SetCurrentTemperature;
     property onSetTemperature: TNotifyEvent read FonSetTemperature write FonSetTemperature;
     property onSetCooler: TNotifyEvent read FonSetCooler write FonSetCooler;
   end;
@@ -92,6 +95,12 @@ begin
   Label2.Caption:=rsSetpoint;
   BtnSet.Caption:=rsSet;
   Label3.Caption:=rsPower;
+end;
+
+procedure Tf_ccdtemp.SetCurrentTemperature(value:double);
+begin
+  FCurrentTemperature:=value;
+  Current.Caption:=FormatFloat(f1,TempDisplay(TemperatureScale,FCurrentTemperature));
 end;
 
 procedure Tf_ccdtemp.BtnSetClick(Sender: TObject);

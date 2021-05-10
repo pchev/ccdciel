@@ -1569,6 +1569,7 @@ begin
   f_scriptengine.Preview:=f_preview;
   f_scriptengine.Capture:=f_capture;
   f_scriptengine.Ccdtemp:=f_ccdtemp;
+  f_scriptengine.Fomount:=f_mount;
   f_scriptengine.Autoguider:=autoguider;
   f_scriptengine.Astrometry:=astrometry;
   f_scriptengine.Planetarium:=planetarium;
@@ -4567,7 +4568,7 @@ procedure Tf_main.ShowTemperatureRange;
 var buf: string;
 begin
   if camera.Temperature=NullCoord then f_ccdtemp.Visible:=False;
-  f_ccdtemp.Current.Caption:=FormatFloat(f1,TempDisplay(TemperatureScale,camera.Temperature));
+  f_ccdtemp.CurrentTemperature:=camera.Temperature;
   buf:=FormatFloat(f0,TempDisplay(TemperatureScale,camera.TemperatureRange.min))+'...'+FormatFloat(f0,TempDisplay(TemperatureScale,camera.TemperatureRange.max));
   f_ccdtemp.Setpoint.Hint:=rsDesiredTempe+crlf+buf;
 end;
@@ -5674,7 +5675,7 @@ end;
 
 procedure  Tf_main.CameraTemperatureChange(t:double);
 begin
- f_ccdtemp.Current.Caption:=FormatFloat(f1,TempDisplay(TemperatureScale,t));
+ f_ccdtemp.CurrentTemperature:=t;
  if camera.TemperatureRampActive then f_ccdtemp.BtnSet.Caption:=rsCancel else f_ccdtemp.BtnSet.Caption:=rsSet;
 end;
 
@@ -6481,15 +6482,9 @@ CheckConnectionStatus;
 end;
 
 Procedure Tf_main.MountCoordChange(Sender: TObject);
-var ra,de,a,h: double;
 begin
- ra:=mount.RA;
- de:=mount.Dec;
- cmdEq2Hz(ra,de,a,h);
- f_mount.RA.Caption:=RAToStr(ra);
- f_mount.DE.Caption:=DEToStr(de);
- f_mount.AZ.Caption:=FormatFloat(f2,a);
- f_mount.ALT.Caption:=FormatFloat(f2,h);
+ f_mount.CurrentRA:=mount.RA;
+ f_mount.CurrentDec:=mount.Dec;
 end;
 
 Procedure Tf_main.MountPiersideChange(Sender: TObject);
@@ -13248,12 +13243,12 @@ try
   else if method='PREVIEW_RUNNING' then result:=result+'"result": '+BoolToStr(f_Preview.Running,tr,fa)
   else if method='PREVIEW_LOOP_RUNNING' then result:=result+'"result": '+BoolToStr(f_Preview.Loop,tr,fa)
   else if method='CAPTURE_RUNNING' then result:=result+'"result": '+BoolToStr(f_Capture.Running,tr,fa)
-  else if method='TELESCOPERA' then result:=result+'"result": '+FormatFloat(f6,mount.RA)
-  else if method='TELESCOPEDE' then result:=result+'"result": '+FormatFloat(f6,mount.Dec)
+  else if method='TELESCOPERA' then result:=result+'"result": '+FormatFloat(f6,f_mount.CurrentRA)
+  else if method='TELESCOPEDE' then result:=result+'"result": '+FormatFloat(f6,f_mount.CurrentDec)
   else if method='OBS_LATITUDE' then result:=result+'"result": '+FormatFloat(f6,ObsLatitude)
   else if method='OBS_LONGITUDE' then result:=result+'"result": '+FormatFloat(f6,-ObsLongitude)
   else if method='OBS_ELEVATION' then result:=result+'"result": '+FormatFloat(f1,ObsElevation)
-  else if method='CCDTEMP' then result:=result+'"result": '+FormatFloat(f2,camera.Temperature)
+  else if method='CCDTEMP' then result:=result+'"result": '+FormatFloat(f2,f_ccdtemp.CurrentTemperature)
   else if method='FOCUSERPOSITION' then result:=result+'"result": '+IntToStr(focuser.Position)
   else if method='TIMENOW' then result:=result+'"result": "'+FormatDateTime(dateiso,now)+'"'
   else if method='DIRECTORYSEPARATOR' then result:=result+'"result": "'+DirectorySeparator+'"'

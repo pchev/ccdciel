@@ -30,7 +30,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 interface
 
 uses  u_global, u_utils, cu_fits, indiapi, cu_planetarium, fu_ccdtemp, fu_devicesconnection, pu_pause,
-  fu_capture, fu_preview, cu_wheel, cu_mount, cu_camera, cu_focuser, cu_autoguider, cu_astrometry,
+  fu_capture, fu_preview, fu_mount, cu_wheel, cu_mount, cu_camera, cu_focuser, cu_autoguider, cu_astrometry,
   Classes, SysUtils, FileUtil, uPSComponent, uPSComponent_Default, LazFileUtils,
   uPSComponent_Forms, uPSComponent_Controls, uPSComponent_StdCtrls, Forms, process,
   u_translation, Controls, Graphics, Dialogs, ExtCtrls;
@@ -80,6 +80,7 @@ type
     Fcapture: Tf_capture;
     Fpreview: Tf_preview;
     Fccdtemp: Tf_ccdtemp;
+    f_mount: Tf_mount;
     Ffilter: T_wheel;
     Fmount: T_mount;
     Fcamera: T_camera;
@@ -231,6 +232,7 @@ type
     property Ccdtemp: Tf_ccdtemp read Fccdtemp write Fccdtemp;
     property Preview: Tf_preview read Fpreview write Fpreview;
     property Capture: Tf_capture read Fcapture write Fcapture;
+    property Fomount: Tf_mount read f_mount write f_mount;
     property Mount: T_mount read Fmount write Fmount;
     property Camera: T_camera read Fcamera write Fcamera;
     property Focuser: T_focuser read FFocuser write FFocuser;
@@ -391,9 +393,9 @@ function  Tf_scriptengine.doGetD(varname:string; var x: double):boolean;
 begin
   result:=true;
   varname:=uppercase(varname);
-  if varname='TELESCOPERA' then x:=Fmount.RA
-  else if varname='TELESCOPEDE' then x:=Fmount.Dec
-  else if varname='CCDTEMP' then x:=TempDisplay(TemperatureScale,Fcamera.Temperature)
+  if varname='TELESCOPERA' then x:=f_mount.CurrentRA
+  else if varname='TELESCOPEDE' then x:=f_mount.CurrentDec
+  else if varname='CCDTEMP' then x:=TempDisplay(TemperatureScale,Fccdtemp.CurrentTemperature)
   else if varname='TIMENOW' then x:=now
   else if varname='OBS_LATITUDE' then x:=ObsLatitude
   else if varname='OBS_LONGITUDE' then x:=-ObsLongitude
