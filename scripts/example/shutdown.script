@@ -24,7 +24,7 @@ ccdciel('Planetarium_shutdown')
 
 # Disconnect devices
 ccdciel('LOGMSG','Disconnect devices')
-ccdciel('DEVICESCONNECTION',False)
+ccdciel('DEVICES_CONNECTION',False)
 
 time.sleep(2)
 
