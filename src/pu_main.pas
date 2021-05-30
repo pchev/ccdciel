@@ -13288,7 +13288,7 @@ try
   else if method='AUTOFOCUS' then result:=result+'"result":{"status": "'+f_scriptengine.cmd_AutoFocus+'"}'
   else if method='AUTOMATICAUTOFOCUS' then result:=result+'"result":{"status": "'+f_scriptengine.cmd_AutomaticAutoFocus+'"}'
   // execute command with parameter
-  else if method='DEVICESCONNECTION' then begin
+  else if method='DEVICES_CONNECTION' then begin
     if uppercase(trim(value[attrib.IndexOf('params.0')]))='TRUE' then buf:='ON' else buf:='OFF';
     buf:=f_scriptengine.cmd_DevicesConnection(buf);
     result:=result+'"result":{"status": "'+buf+'"}';

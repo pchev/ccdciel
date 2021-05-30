@@ -50,6 +50,6 @@ time.sleep(15)
 
 # Connect devices, this also connect PHD2 and Skychart if they are running
 ccdciel('LOGMSG','Connect devices')
-ccdciel('DEVICESCONNECTION',True)
+ccdciel('DEVICES_CONNECTION',True)
 
 ccdciel('LOGMSG','Startup complete')
