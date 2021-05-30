@@ -767,7 +767,7 @@ begin
   b.AllowAllUp:=true;
   b.Constraints.MinHeight:=DoScaleY(24);
   b.Layout:=blGlyphBottom;
-  b.Caption:='^';
+  b.Caption:='↑';
   b.tag:=1001;
   b.OnClick:=@IncPage;
   b.Parent:=PanelLeft;
@@ -787,7 +787,7 @@ begin
   b.AllowAllUp:=true;
   b.Constraints.MinHeight:=DoScaleY(24);
   b.Layout:=blGlyphBottom;
-  b.Caption:='v';
+  b.Caption:='↓';
   b.tag:=1002;
   b.OnClick:=@IncPage;
   b.Parent:=PanelLeft;
