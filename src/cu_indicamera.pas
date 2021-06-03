@@ -921,9 +921,10 @@ begin
         if assigned(FonGainStatus) then FonGainStatus(self);
      end;
   end
-  else if (proptype=INDI_NUMBER)and(CCDoffset=nil)and(propname='CCD_OFFSET') then begin
+  else if (proptype=INDI_NUMBER)and(CCDoffset=nil)and((propname='CCD_OFFSET')or(propname='CCD_CONTROLS')) then begin
      CCDoffset:=indiProp.getNumber;
      CCDoffsetValue:=IUFindNumber(CCDoffset,'OFFSET');
+     if (CCDoffsetValue=nil) then CCDoffsetValue:=IUFindNumber(CCDoffset,'Offset');
      if (CCDoffsetValue=nil) then CCDoffset:=nil;
      FhasOffset:=(CCDoffset<>nil);
      if FhasOffset then begin
