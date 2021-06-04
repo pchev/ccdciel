@@ -920,11 +920,21 @@ begin
         FGainMax:=round(IGain.max);
         if assigned(FonGainStatus) then FonGainStatus(self);
      end;
+     if (CCDoffset=nil) then begin
+        // specific for ASI driver
+        CCDoffsetValue:=IUFindNumber(ImageAdjustments,'Offset');
+        if CCDoffsetValue<>nil then begin
+          CCDoffset:=ImageAdjustments;
+          FhasOffset:=true;
+          FOffsetMin:=round(CCDoffsetValue.min);
+          FOffsetMax:=round(CCDoffsetValue.max);
+          if assigned(FonGainStatus) then FonGainStatus(self);
+        end;
+     end;
   end
-  else if (proptype=INDI_NUMBER)and(CCDoffset=nil)and((propname='CCD_OFFSET')or(propname='CCD_CONTROLS')) then begin
+  else if (proptype=INDI_NUMBER)and(CCDoffset=nil)and(propname='CCD_OFFSET') then begin
      CCDoffset:=indiProp.getNumber;
      CCDoffsetValue:=IUFindNumber(CCDoffset,'OFFSET');
-     if (CCDoffsetValue=nil) then CCDoffsetValue:=IUFindNumber(CCDoffset,'Offset');
      if (CCDoffsetValue=nil) then CCDoffset:=nil;
      FhasOffset:=(CCDoffset<>nil);
      if FhasOffset then begin
