@@ -530,7 +530,7 @@ resourcestring
   rsAstrometry = 'Astrometry';
   rsAstrometryOp = 'Astrometry options';
   rsFromTelescop = 'From telescope driver';
-  rsFocaleLength = 'Focale length';
+  rsFocaleLength = 'Focal length';
   rsStartFocus = 'Start focus';
   rsPixelSize = 'Pixel size';
   rsFromCameraDr = 'From camera driver';
