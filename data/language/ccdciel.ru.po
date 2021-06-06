@@ -6,19 +6,19 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ccdciel\n"
 "Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
-"POT-Creation-Date: 2021-04-29 09:42+0000\n"
-"PO-Revision-Date: 2021-04-19 18:04+0000\n"
-"Last-Translator: Sergey Tarantsov <tsn-ast@yandex.ru>\n"
+"POT-Creation-Date: 2021-06-06 18:45+0000\n"
+"PO-Revision-Date: 2021-06-06 18:54+0000\n"
+"Last-Translator: Patrick Chevalley <Unknown>\n"
 "Language-Team: Russian <ru@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2021-05-01 16:28+0000\n"
-"X-Generator: Launchpad (build 02afa4875ac52c169f5cddf0d1bcdd6e149a3754)\n"
+"X-Launchpad-Export-Date: 2021-06-06 18:56+0000\n"
+"X-Generator: Launchpad (build b45bdbe3a00b6b668fa7f2069bd545c35c41f7f4)\n"
 
 #: u_translation.rs2d
 msgid "2D"
-msgstr ""
+msgstr "2D"
 
 #: u_translation.rs32bitdriver
 msgid "This driver work only in 32bit, please install the 32bit version of CCDciel."
@@ -1182,7 +1182,7 @@ msgstr "Только подвижки"
 
 #: u_translation.rsditherwhiled
 msgid "Dither while downloading from the camera"
-msgstr ""
+msgstr "Выполнять во время загрузки снимка"
 
 #: u_translation.rsdome
 msgid "Dome"
@@ -1782,7 +1782,7 @@ msgstr "Света ADU"
 
 #: u_translation.rshistory
 msgid "History"
-msgstr ""
+msgstr "История"
 
 #: u_translation.rshorizonprofi
 msgid "Horizon profile"
@@ -2954,7 +2954,7 @@ msgstr "Профиль: %s"
 
 #: u_translation.rsprofile2
 msgid "Profile"
-msgstr ""
+msgstr "Профиль"
 
 #: u_translation.rsprogramfolde
 msgid "Program folder "
@@ -3838,7 +3838,7 @@ msgstr "Сумма"
 
 #: u_translation.rsstackingcoun
 msgid "Stacking count"
-msgstr ""
+msgstr "Кадры в сумме"
 
 #: u_translation.rsstackingwith
 msgid "Stacking with alignment star at %s/%s"
@@ -4190,7 +4190,7 @@ msgstr "Сервер TCP/IP прослушивает порт: %s"
 
 #: u_translation.rstcpipserverp
 msgid "TCP/IP server port"
-msgstr ""
+msgstr "TCP/IP порт"
 
 #: u_translation.rstcpipservers
 msgid "TCP/IP server stopped"
@@ -4462,7 +4462,7 @@ msgstr "слежение"
 
 #: u_translation.rstrend
 msgid "Trend"
-msgstr ""
+msgstr "Тренд"
 
 #: u_translation.rstreshold
 msgid "Treshold :"
@@ -4558,7 +4558,7 @@ msgstr "Небезопасное состояние игноровано пол�
 
 #: u_translation.rsunselectstar
 msgid "Unselect star"
-msgstr ""
+msgstr "Снять отметку со звезды"
 
 #: u_translation.rsunslaved
 msgid "Unslaved"
@@ -4702,7 +4702,7 @@ msgstr "Заголовок файла"
 
 #: u_translation.rsviewlastauto
 msgid "View last autofocus"
-msgstr ""
+msgstr "Кривая последней фокусировки"
 
 #: u_translation.rsviewlastreso
 msgid "View last resolver log"
@@ -4847,7 +4847,7 @@ msgstr "При появлении запроса перемещайте монт
 
 #: u_translation.rswhenperformi
 msgid "When performing autofocus from a sequence"
-msgstr ""
+msgstr "При выполнении автофокусировки из задания"
 
 #: u_translation.rswidth
 msgid "Width"
