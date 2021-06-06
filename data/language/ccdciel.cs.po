@@ -1541,7 +1541,7 @@ msgid "Foc."
 msgstr "Ostř."
 
 #: u_translation.rsfocalelength
-msgid "Focale length"
+msgid "Focal length"
 msgstr "Ohnisko přístroje"
 
 #: u_translation.rsfocus

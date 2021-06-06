@@ -1542,7 +1542,7 @@ msgid "Foc."
 msgstr "Fok."
 
 #: u_translation.rsfocalelength
-msgid "Focale length"
+msgid "Focal length"
 msgstr "Brennweite"
 
 #: u_translation.rsfocus

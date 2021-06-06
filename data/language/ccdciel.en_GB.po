@@ -1542,8 +1542,8 @@ msgid "Foc."
 msgstr "Foc."
 
 #: u_translation.rsfocalelength
-msgid "Focale length"
-msgstr "Focale length"
+msgid "Focal length"
+msgstr "Focal length"
 
 #: u_translation.rsfocus
 msgid "Focus"

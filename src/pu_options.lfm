@@ -3056,7 +3056,7 @@ object f_option: Tf_option
           Height = 17
           Top = 14
           Width = 82
-          Caption = 'Focale length'
+          Caption = 'Focal length'
           ParentColor = False
           ParentFont = False
         end
