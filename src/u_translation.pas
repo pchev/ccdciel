@@ -1319,6 +1319,8 @@ resourcestring
   rsTrend = 'Trend';
   rs2D = '2D';
   rsStackingCoun = 'Stacking count';
+  rsForGuidanceA = 'For guidance adjust the azimuth knob along the turquoise '
+    +'line and the altitude knob along the yellow line';
 
 implementation
 

@@ -716,6 +716,7 @@ begin
   PolarAlignmentLock:=false;
   Memo1.Lines.Add(rsMoveTheGreen);
   Memo1.Lines.Add(rsThenAdjustTh);
+  Memo1.Lines.Add(rsForGuidanceA);
   Memo1.Lines.Add(rsYouCanCloseT);
   {$ifdef test_polaralignment}
   Tf_main(Application.MainForm).Image1.Invalidate;
