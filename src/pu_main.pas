@@ -9592,7 +9592,7 @@ begin
      r:=DoScaleX(2);
      Image1.Canvas.brush.Style:=bsClear;
      Image1.Canvas.Pen.Color:=clGreen;
-     Image1.Canvas.Pen.Mode:=pmCopy;
+     Image1.Canvas.Pen.Mode:=pmXor;
      Image1.Canvas.Pen.Style:=psSolid;
      Image1.Canvas.Pen.Width:=r;
      r:=4*r;
@@ -9604,13 +9604,14 @@ begin
      Image1.Canvas.Pen.Color:=clPurple;
      image1.Canvas.Ellipse(x2-r,y2-r,x2+r,y2+r);
      if (PlaneDistance(x1,y1,x3,y3)>r)and(PlaneDistance(x2,y2,x3,y3)>r) then begin
-       Image1.Canvas.Pen.Color:=clAqua;
+       Image1.Canvas.Pen.Color:=clBlue;
        CircleIntersect(x1,y1,r,x3,y3,xr3,yr3);
        Image1.Canvas.Line(xr3,yr3,x3,y3);
-       Image1.Canvas.Pen.Color:=clYellow;
+       Image1.Canvas.Pen.Color:=clMaroon;
        CircleIntersect(x2,y2,r,x3,y3,xr4,yr4);
        Image1.Canvas.Line(x3,y3,xr4,yr4);
      end;
+     Image1.Canvas.Pen.Mode:=pmCopy;
   end;
   if f_starprofile.FindStar and(f_starprofile.StarX>0)and(f_starprofile.StarY>0) then begin
      Fits2Screen(round(f_starprofile.StarX),round(f_starprofile.StarY),f_visu.FlipHorz,f_visu.FlipVert,x,y);
