@@ -23,6 +23,8 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 }
 
+//{$define test_polaralignment}
+
 interface
 
 uses u_translation, u_utils, u_global, fu_preview, cu_fits, cu_astrometry, cu_mount, cu_wheel, fu_visu, indiapi, UScaleDPI,
@@ -92,7 +94,7 @@ type
     Fx, Fy: array[1..3] of double;
     FSidtimStart,Fac,Fdc,FDateStart: double;
     FOffsetAz, FOffsetH, FCameraRotation: double;
-    Fstartx,Fstarty,Fendx,Fendy:double;
+    Fstartx,Fstarty,Fendx,Fendy,Fazx,Fazy:double;
     procedure msg(txt:string; level: integer);
     procedure tracemsg(txt: string);
     procedure InitAlignment;
@@ -119,6 +121,8 @@ type
     property StartY: double read Fstarty;
     property EndX: double read Fendx;
     property EndY: double read Fendy;
+    property AzX: double read Fazx;
+    property AzY: double read Fazy;
     property onShowMessage: TNotifyMsg read FonShowMessage write FonShowMessage;
     property onClose: TNotifyEvent read FonClose write FonClose;
 
@@ -128,6 +132,10 @@ var
   f_polaralign: Tf_polaralign;
 
 implementation
+
+{$ifdef test_polaralignment}
+uses pu_main;
+{$endif}
 
 {$R *.lfm}
 
@@ -393,6 +401,11 @@ var exp:double;
     bin,filter,pgain,poffset: integer;
     fn: string;
 begin
+{$ifdef test_polaralignment}
+fn:=slash('/home/pch/fits-test/polaralign')+'PolarAlign_210314'+'_'+inttostr(1+(FExposeStep div 3))+'.fits';
+Tf_main(Application.MainForm).LoadFitsFile(fn);
+exit;
+{$endif}
 // Start an exposure
 fits.SetBPM(bpm,bpmNum,bpmX,bpmY,bpmAxis);
 fits.DarkOn:=true;
@@ -514,6 +527,9 @@ end;
 procedure Tf_polaralign.Rotate;
 var cra,cde: double;
 begin
+  {$ifdef test_polaralignment}
+  exit;
+  {$endif}
   if MountSlewing.ItemIndex=0 then begin
     // Rotate mount in RA by configured angle
     cra:=FMount.RA;
@@ -553,7 +569,7 @@ var bisect1, bisect2, bisect3: TLineDouble;
     txt: string;
     n: integer;
     p: TcdcWCScoord;
-    rotRa, rotDec, ra, de: double;
+    rotRa, rotDec, ra, de, azRa, azDec: double;
 begin
   // Compute the polar offset from the measurement
   tracemsg('Start computation');
@@ -618,6 +634,10 @@ begin
   rotRa:=rad2deg*rotRa/15;
   rotDec:=rad2deg*rotDec;
   tracemsg('Rotation center JNOW coordinates:  RA='+FormatFloat(f6,rotRa)+' DEC='+FormatFloat(f6,rotDec));
+  // position of Az point
+  InvProj(deg2rad*FOffsetAz,0,Fac,Fdc,azRa,azDec);
+  azRa:=rad2deg*azRa/15;
+  azDec:=rad2deg*azDec;
   // display result
   Memo1.Lines.Add(rsComputationR);
   Memo1.Lines.Add('');
@@ -661,6 +681,15 @@ begin
     msg(txt,1);
     exit;
   end;
+  // To Az point
+  ra:=deg2rad*azRa*15;
+  de:=deg2rad*azDec;
+  PrecessionFK5(jdtoday,jd2000,ra,de);
+  p.ra:=rad2deg*ra;
+  p.dec:=rad2deg*de;
+  n:=cdcwcs_sky2xy(@p,0);
+  Fazx:=p.x;
+  Fazy:=fits.HeaderInfo.naxis2-p.y;
   // To mount axis
   ra:=deg2rad*rotRa*15;
   de:=deg2rad*rotDec;
@@ -688,6 +717,10 @@ begin
   Memo1.Lines.Add(rsMoveTheGreen);
   Memo1.Lines.Add(rsThenAdjustTh);
   Memo1.Lines.Add(rsYouCanCloseT);
+  {$ifdef test_polaralignment}
+  Tf_main(Application.MainForm).Image1.Invalidate;
+  exit;
+  {$endif}
   // start image loop
   FVisu.BtnZoomAdjust.Click;
   preview.Exposure:=config.GetValue('/PrecSlew/Exposure',1.0);

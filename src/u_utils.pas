@@ -82,6 +82,7 @@ function DateIso2DateTime(dt: string): double;
 function jddate(jd: double) : string;
 PROCEDURE PrecessionFK5(ti,tf : double; VAR ari,dei : double);  // Lieske 77
 function AngularDistance(ar1,de1,ar2,de2 : Double) : Double;
+function PlaneDistance(x1,y1,x2,y2: double): double;
 function SidTim(jd0,ut,long : double; eqeq: double=0): double;
 Function CurrentSidTim: double;
 Function SidTimT(t:TDateTime): double;
@@ -1295,6 +1296,15 @@ else begin
 end;
 except
   result:=pi2;
+end;
+end;
+
+function PlaneDistance(x1,y1,x2,y2: double): double;
+begin
+try
+  result:=sqrt(sqr(x1-x2)+sqr(y1-y2));
+except
+  result:=0;
 end;
 end;
 

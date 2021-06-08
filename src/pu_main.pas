@@ -542,7 +542,6 @@ type
     SaveAutofocusGain, SaveAutofocusOffset, SaveAutofocusPreviewGain, SaveAutofocusPreviewOffset: integer;
     TerminateVcurve: boolean;
     ScrBmp: TBGRABitmap;
-    Image1: TImgDrawingControl;
     ImageSaved: boolean;
 
     trpx1,trpx2,trpx3,trpx4,trpy1,trpy2,trpy3,trpy4: integer;{for image inspection}
@@ -777,7 +776,6 @@ type
     procedure ResolveRotate(Sender: TObject);
     procedure LoadPictureFile(fn:string);
     procedure LoadRawFile(fn:string);
-    procedure LoadFitsFile(fn:string);
     procedure SaveFitsFile(fn:string);
     procedure OpenRefImage(fn:string);
     procedure ClearRefImage(Sender: TObject);
@@ -812,6 +810,8 @@ type
     procedure ShowStatus(str: string);
   public
     { public declarations }
+    Image1: TImgDrawingControl;
+    procedure LoadFitsFile(fn:string);
   end;
 
 var
@@ -9581,13 +9581,14 @@ if fits.HeaderInfo.solved and
 end;
 
 procedure Tf_main.Image1Paint(Sender: TObject);
-var x,y,x1,y1,x2,y2,xr1,yr1,xr2,yr2,xxc,yyc,s,r,rc: integer;
+var x,y,x1,y1,x2,y2,x3,y3,xr1,yr1,xr2,yr2,xr3,yr3,xr4,yr4,xxc,yyc,s,r,rc: integer;
     i,size: integer;
 begin
   ScrBmp.Draw(Image1.Canvas,0,0,true);
   if PolarAlignmentOverlay then begin
      Fits2Screen(round(f_polaralign.StartX+PolarAlignmentOverlayOffsetX),round(f_polaralign.StartY+PolarAlignmentOverlayOffsetY),f_visu.FlipHorz,f_visu.FlipVert,x1,y1);
      Fits2Screen(round(f_polaralign.EndX+PolarAlignmentOverlayOffsetX),round(f_polaralign.EndY+PolarAlignmentOverlayOffsetY),f_visu.FlipHorz,f_visu.FlipVert,x2,y2);
+     Fits2Screen(round(f_polaralign.AzX+PolarAlignmentOverlayOffsetX),round(f_polaralign.AzY+PolarAlignmentOverlayOffsetY),f_visu.FlipHorz,f_visu.FlipVert,x3,y3);
      r:=DoScaleX(2);
      Image1.Canvas.brush.Style:=bsClear;
      Image1.Canvas.Pen.Color:=clGreen;
@@ -9597,10 +9598,19 @@ begin
      r:=4*r;
      CircleIntersect(x1,y1,r,x2,y2,xr1,yr1);
      CircleIntersect(x2,y2,r,x1,y1,xr2,yr2);
-     Image1.Canvas.Line(xr1,yr1,xr2,yr2);
+     if (PlaneDistance(x1,y1,x2,y2)>r) then
+       Image1.Canvas.Line(xr1,yr1,xr2,yr2);
      image1.Canvas.Ellipse(x1-r,y1-r,x1+r,y1+r);
      Image1.Canvas.Pen.Color:=clPurple;
      image1.Canvas.Ellipse(x2-r,y2-r,x2+r,y2+r);
+     if (PlaneDistance(x1,y1,x3,y3)>r)and(PlaneDistance(x2,y2,x3,y3)>r) then begin
+       Image1.Canvas.Pen.Color:=clAqua;
+       CircleIntersect(x1,y1,r,x3,y3,xr3,yr3);
+       Image1.Canvas.Line(xr3,yr3,x3,y3);
+       Image1.Canvas.Pen.Color:=clYellow;
+       CircleIntersect(x2,y2,r,x3,y3,xr4,yr4);
+       Image1.Canvas.Line(x3,y3,xr4,yr4);
+     end;
   end;
   if f_starprofile.FindStar and(f_starprofile.StarX>0)and(f_starprofile.StarY>0) then begin
      Fits2Screen(round(f_starprofile.StarX),round(f_starprofile.StarY),f_visu.FlipHorz,f_visu.FlipVert,x,y);
