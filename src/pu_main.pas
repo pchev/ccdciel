@@ -1243,8 +1243,8 @@ begin
   CheckRecenterBusy:=false;
   CheckRecenterTarget:=false;
   RecenteringTarget:=false;
-  SlewPrecision:=5;
-  RecenterTargetDistance:=10;
+  SlewPrecision:=0.5;
+  RecenterTargetDistance:=1.0;
   FocuserLastTemp:=NullCoord;
   AutoFocusLastTime:=NullCoord;
   FocusStarMag:=-1;
@@ -3653,8 +3653,8 @@ begin
     f_starprofile.Label3.Caption:=rsFWHM+':';
     f_starprofile.Label4.Caption:='SNR:';
   end;
-  AutofocusMinSpeed:=config.GetValue('/StarAnalysis/AutofocusMinSpeed',500);
-  AutofocusMaxSpeed:=config.GetValue('/StarAnalysis/AutofocusMaxSpeed',5000);
+  AutofocusMinSpeed:=config.GetValue('/StarAnalysis/AutofocusMinSpeed',10);
+  AutofocusMaxSpeed:=config.GetValue('/StarAnalysis/AutofocusMaxSpeed',100);
   AutofocusStartHFD:=config.GetValue('/StarAnalysis/AutofocusStartHFD',20.0);
   AutofocusNearHFD:=config.GetValue('/StarAnalysis/AutofocusNearHFD',10.0);
   AutofocusExposure:=config.GetValue('/StarAnalysis/AutofocusExposure',5.0);
@@ -3721,8 +3721,8 @@ begin
   MeridianFlipCalibrate:=config.GetValue('/Meridian/MeridianFlipCalibrate',false);
   MeridianFlipAutofocus:=config.GetValue('/Meridian/MeridianFlipAutofocus',false);
   MeridianFlipStopSlaving:=config.GetValue('/Meridian/MeridianFlipStopSlaving',false);
-  astrometryResolver:=config.GetValue('/Astrometry/Resolver',ResolverAstrometryNet);
-  AstrometryTimeout:=config.GetValue('/Astrometry/Timeout',60.0);
+  astrometryResolver:=config.GetValue('/Astrometry/Resolver',ResolverAstap);
+  AstrometryTimeout:=config.GetValue('/Astrometry/Timeout',30.0);
   LastPixelSize:=config.GetValue('/Astrometry/LastPixelSize',1.0);
   buf:=config.GetValue('/Astrometry/OtherOptions','');
   if (astrometryResolver=ResolverAstrometryNet)and(pos('--no-fits2fits',buf)>0) then begin
@@ -3734,8 +3734,8 @@ begin
       end;
     end;
   end;
-  SlewPrecision:=config.GetValue('/PrecSlew/Precision',5.0);
-  RecenterTargetDistance:=config.GetValue('/PrecSlew/RecenterTargetDistance',10.0);
+  SlewPrecision:=config.GetValue('/PrecSlew/Precision',SlewPrecision);
+  RecenterTargetDistance:=config.GetValue('/PrecSlew/RecenterTargetDistance',RecenterTargetDistance);
   if (autoguider<>nil)and(autoguider.State<>GUIDER_DISCONNECTED) then autoguider.SettleTolerance(SettlePixel,SettleMinTime, SettleMaxTime);
   if refmask then SetRefImage;
   if f_focuser<>nil then f_focuser.BtnVcurve.Visible:=(AutoFocusMode=afVcurve);
@@ -7393,7 +7393,7 @@ begin
    f_option.PixelSize.Value:=config.GetValue('/Astrometry/PixelSize',0.0);
    f_option.Focale.Value:=config.GetValue('/Astrometry/FocaleLength',0.0);
    f_option.PixelSizeFromCamera.Checked:=config.GetValue('/Astrometry/PixelSizeFromCamera',true);
-   f_option.Resolver:=config.GetValue('/Astrometry/Resolver',ResolverAstrometryNet);
+   f_option.Resolver:=config.GetValue('/Astrometry/Resolver',ResolverAstap);
    if f_option.MaxAduFromCamera.Checked and (camera.Status=devConnected) then
       f_option.MaxAdu.Value:=round(camera.MaxAdu);
    if f_option.PixelSizeFromCamera.Checked and (camera.Status=devConnected) and (camera.PixelSizeX>0) then
@@ -7431,9 +7431,9 @@ begin
       {$endif}
       );
    f_option.ASTAPSearchRadius.Value:=config.GetValue('/Astrometry/ASTAPSearchRadius',30);
-   f_option.ASTAPdownsample.Value:=config.GetValue('/Astrometry/ASTAPdownsample',2);{0 is automatic selection but gives an runtime error in old ASTAP versions. Make 0 default after 9/2020}
+   f_option.ASTAPdownsample.Value:=config.GetValue('/Astrometry/ASTAPdownsample',0);{0 is automatic selection but gives an runtime error in old ASTAP versions. Make 0 default after 9/2020}
    f_option.PrecSlewBox.ItemIndex:=config.GetValue('/PrecSlew/Method',0);
-   f_option.SlewPrec.Value:=config.GetValue('/PrecSlew/Precision',5.0);
+   f_option.SlewPrec.Value:=config.GetValue('/PrecSlew/Precision',SlewPrecision);
    f_option.SlewRetry.Value:=config.GetValue('/PrecSlew/Retry',3);
    f_option.SlewExp.Value:=config.GetValue('/PrecSlew/Exposure',10);
    if hasGainISO then
@@ -7449,7 +7449,7 @@ begin
    f_option.SlewDelay.Value:=config.GetValue('/PrecSlew/Delay',5);
    f_option.SlewFilter.Items.Assign(FilterList);
    f_option.SlewFilter.ItemIndex:=config.GetValue('/PrecSlew/Filter',0);
-   f_option.RecenterTargetDistance.value:=config.GetValue('/PrecSlew/RecenterTargetDistance',10.0);
+   f_option.RecenterTargetDistance.value:=config.GetValue('/PrecSlew/RecenterTargetDistance',RecenterTargetDistance);
    if (mount.Status=devConnected)and(mount.PierSide=pierUnknown) then begin
       f_option.Panel13.Visible:=true;
       f_option.MeridianWarning.caption:='Mount is not reporting pier side, meridian process is unreliable.'

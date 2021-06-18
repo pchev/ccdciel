@@ -178,7 +178,7 @@ begin
    DeleteFileUTF8(outfile);
    DeleteFileUTF8(solvefile);
    engine:=TAstrometry_engine.Create;
-   engine.Resolver:=config.GetValue('/Astrometry/Resolver',ResolverAstrometryNet);
+   engine.Resolver:=config.GetValue('/Astrometry/Resolver',ResolverAstap);
    FResolverName:=ResolverName[engine.Resolver];
    engine.Fallback:=config.GetValue('/Astrometry/Fallback',false);
    engine.AstrometryPath:=config.GetValue('/Astrometry/AstrometryPath','');
@@ -188,8 +188,8 @@ begin
    engine.PlateSolveFolder:=config.GetValue('/Astrometry/PlatesolveFolder','');
    engine.PlateSolveWait:=config.GetValue('/Astrometry/PlatesolveWait',0);
    engine.ASTAPFolder:=config.GetValue('/Astrometry/ASTAPFolder','');
-   engine.ASTAPSearchRadius:=config.GetValue('/Astrometry/ASTAPSearchRadius',5);
-   engine.ASTAPdownsample:=config.GetValue('/Astrometry/ASTAPdownsample',2);
+   engine.ASTAPSearchRadius:=config.GetValue('/Astrometry/ASTAPSearchRadius',30);
+   engine.ASTAPdownsample:=config.GetValue('/Astrometry/ASTAPdownsample',0);
    engine.LogFile:=logfile;
    engine.InFile:=infile;
    engine.OutFile:=outfile;
@@ -425,7 +425,7 @@ if LastResult and (cdcwcs_xy2sky<>nil) then begin
        ra:=c.ra/15;
        de:=c.dec;
        J2000ToMount(mount.EquinoxJD,ra,de);
-       prec:=config.GetValue('/PrecSlew/Precision',5.0)/60;
+       prec:=config.GetValue('/PrecSlew/Precision',SlewPrecision)/60;
        cormethod:=config.GetValue('/PrecSlew/Method',1);
        maxretry:=config.GetValue('/PrecSlew/Retry',3);
        exp:=config.GetValue('/PrecSlew/Exposure',10.0);
@@ -589,7 +589,7 @@ var prec,exp:double;
     fi,cormethod,bin,maxretry: integer;
     sgain,soffset: integer;
 begin
-  prec:=config.GetValue('/PrecSlew/Precision',5.0)/60;
+  prec:=config.GetValue('/PrecSlew/Precision',SlewPrecision)/60;
   cormethod:=config.GetValue('/PrecSlew/Method',1);
   maxretry:=config.GetValue('/PrecSlew/Retry',3);
   exp:=config.GetValue('/PrecSlew/Exposure',10.0);

@@ -108,7 +108,7 @@ begin
   Fra:=NullCoord;
   Fde:=NullCoord;
   Fradius:=NullCoord;
-  FResolver:=ResolverAstrometryNet;
+  FResolver:=ResolverAstap;
   FObjs:=0;
   FDown:=0;
   Fscalelow:=0;

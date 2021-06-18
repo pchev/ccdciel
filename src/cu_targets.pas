@@ -2330,7 +2330,7 @@ begin
     exit;
   end;
   J2000ToMount(mount.EquinoxJD,ra,de);
-  prec:=config.GetValue('/PrecSlew/Precision',5.0)/60;
+  prec:=config.GetValue('/PrecSlew/Precision',SlewPrecision)/60;
   if precision then begin
     cormethod:=config.GetValue('/PrecSlew/Method',1);
     maxretry:=config.GetValue('/PrecSlew/Retry',3);
