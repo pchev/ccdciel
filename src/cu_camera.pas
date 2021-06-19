@@ -445,9 +445,17 @@ begin
 end;
 
 procedure T_camera.RampTimerTimer(Sender: TObject);
+var finished: boolean;
 begin
   RampTimer.Enabled:=false;
-  if Nstep>0 then begin
+  finished:=(Nstep<=0)or((TempRamp>0)and(GetCoolerPower<1));
+  if finished then begin
+    SetTemperature(TempFinal);
+    msg(rsSetTemperatu3);
+    FTemperatureRampActive:=false;
+    if Assigned(FonTemperatureChange) then FonTemperatureChange(GetTemperature);
+  end
+  else begin
     if FCancelTemperatureRamp then begin
        FCancelTemperatureRamp:=false;
        FTemperatureRampActive:=false;
@@ -459,12 +467,6 @@ begin
     SetTemperature(TempNow);
     dec(Nstep);
     RampTimer.Enabled:=true;
-  end
-  else begin
-    SetTemperature(TempFinal);
-    msg(rsSetTemperatu3);
-    FTemperatureRampActive:=false;
-    if Assigned(FonTemperatureChange) then FonTemperatureChange(GetTemperature);
   end;
 end;
 
