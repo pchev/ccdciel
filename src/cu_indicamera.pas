@@ -149,6 +149,7 @@ private
    Findiserver, Findiserverport, Findidevice, Findisensor: string;
    FVideoMsg: boolean;
    lockvideostream:boolean;
+   FWantCooler: boolean;
    timedout: double;
    ExposureTimer: TTimer;
    stX,stY,stWidth,stHeight: integer;
@@ -441,6 +442,7 @@ begin
     FhasReadOut:=false;
     isASI:=false;
     FVideoEncoder.Clear;
+    FWantCooler:=false;
     if Assigned(FonStatusChange) then FonStatusChange(self);
     if Assigned(FonWheelStatusChange) then FonWheelStatusChange(self);
 end;
@@ -1771,6 +1773,7 @@ end;
 procedure T_indicamera.SetTemperature(value:double);
 begin
  if CCDTemperature<>nil then begin
+    FWantCooler:=true;
     CCDTemperature.np[0].value:=value;
     indiclient.sendNewNumber(CCDTemperature);
  end;
@@ -1787,7 +1790,7 @@ end;
 function  T_indicamera.GetCooler: boolean;
 begin
  if CCDCooler<>nil then begin
-    result:=(CCDCoolerOn.s=ISS_ON)and((CCDCoolerOn.s=ISS_ON)xor(CCDCoolerOff.s=ISS_ON)); // sometime both are ON, bug in driver?
+    result:=(CCDCoolerOn.s=ISS_ON) or (FWantCooler) // INDI CCD_COOLER perm is WO, try to store the status
  end
  else result:=false;
 end;
@@ -1795,6 +1798,7 @@ end;
 procedure T_indicamera.SetCooler(value:boolean);
 begin
  if CCDCooler<>nil then begin
+    FWantCooler:=value;
     msg(Format(rsSetCooler, [': '+BoolToStr(value, rsTrue, rsFalse)]));
     IUResetSwitch(CCDCooler);
     if value then CCDCoolerOn.s:=ISS_ON
