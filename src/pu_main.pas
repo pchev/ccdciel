@@ -8246,9 +8246,6 @@ begin
 if (camera.Status=devConnected) and ((not f_capture.Running) or autofocusing) and (not learningvcurve)and(not f_video.Running) then begin
   Preview:=true;
   ExpectedStop:=false;
-  // be sure mount is tracking, but not repeat after every frame
-  if (Sender<>nil)and(not mount.Tracking) then
-    mount.Track;
   // check exposure time
   e:=f_preview.Exposure;
   if e<0 then begin
