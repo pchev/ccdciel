@@ -13208,8 +13208,9 @@ begin
 end;
 
 function Tf_main.TCPjsoncmd(id:string; attrib,value:Tstringlist):string;
-var p: integer;
+var p,i: integer;
     rpcversion,method,buf,buf1,buf2:string;
+    sl:Tstringlist;
     x1,x2,x3,x4: double;
 const tr='true';
       fa='false';
@@ -13267,6 +13268,17 @@ try
   else if method='BIASDIR' then result:=result+'"result": "'+f_capture.FrameType.Items[ord(BIAS)]+'"'
   else if method='DARKDIR' then result:=result+'"result": "'+f_capture.FrameType.Items[ord(DARK)]+'"'
   else if method='FLATDIR' then result:=result+'"result": "'+f_capture.FrameType.Items[ord(FLAT)]+'"'
+  else if method='WHEEL_GETFILTERSNAME' then begin
+    sl:=Tstringlist.Create;
+    if f_scriptengine.cmd_Wheel_GetFiltersName(sl)<>msgOK then raise(Exception.Create(msgFailed));
+    result:=result+'"result": [';
+    for i:=0 to sl.Count-1 do begin
+       result:=result+'"'+sl[i]+'",';
+    end;
+    if copy(result,Length(result),1)=',' then delete(result,Length(result),1);
+    result:=result+']';
+    sl.Free;
+  end
   // execute command without parameter
   else if method='TELESCOPE_ABORTMOTION' then result:=result+'"result":{"status": "'+f_scriptengine.cmd_MountAbortMotion+'"}'
   else if method='TELESCOPE_TRACK' then result:=result+'"result":{"status": "'+f_scriptengine.cmd_MountTrack+'"}'
