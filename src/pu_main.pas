@@ -13263,6 +13263,10 @@ try
   else if method='APPDIR' then result:=result+'"result": "'+Appdir+'"'
   else if method='TMPDIR' then result:=result+'"result": "'+TmpDir+'"'
   else if method='CAPTUREDIR' then result:=result+'"result": "'+config.GetValue('/Files/CapturePath',defCapturePath)+'"'
+  else if method='LIGHTDIR' then result:=result+'"result": "'+f_capture.FrameType.Items[ord(LIGHT)]+'"'
+  else if method='BIASDIR' then result:=result+'"result": "'+f_capture.FrameType.Items[ord(BIAS)]+'"'
+  else if method='DARKDIR' then result:=result+'"result": "'+f_capture.FrameType.Items[ord(DARK)]+'"'
+  else if method='FLATDIR' then result:=result+'"result": "'+f_capture.FrameType.Items[ord(FLAT)]+'"'
   // execute command without parameter
   else if method='TELESCOPE_ABORTMOTION' then result:=result+'"result":{"status": "'+f_scriptengine.cmd_MountAbortMotion+'"}'
   else if method='TELESCOPE_TRACK' then result:=result+'"result":{"status": "'+f_scriptengine.cmd_MountTrack+'"}'
