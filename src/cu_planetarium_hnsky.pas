@@ -52,11 +52,11 @@ type
     function Search(sname: string; out sra,sde: double): boolean; override;
   end;
 
+implementation
+
 const msgTimeout='Timeout';
       msgOK='OK';
       msgFailed='?';
-
-implementation
 
 /////////////////// TPlanetarium_hnsky ///////////////////////////
 
