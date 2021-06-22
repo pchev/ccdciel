@@ -13260,10 +13260,10 @@ try
   else if method='CCDTEMP' then result:=result+'"result": '+FormatFloat(f2,f_ccdtemp.CurrentTemperature)
   else if method='FOCUSERPOSITION' then result:=result+'"result": '+IntToStr(focuser.Position)
   else if method='TIMENOW' then result:=result+'"result": "'+FormatDateTime(dateiso,now)+'"'
-  else if method='DIRECTORYSEPARATOR' then result:=result+'"result": "'+DirectorySeparator+'"'
-  else if method='APPDIR' then result:=result+'"result": "'+Appdir+'"'
-  else if method='TMPDIR' then result:=result+'"result": "'+TmpDir+'"'
-  else if method='CAPTUREDIR' then result:=result+'"result": "'+config.GetValue('/Files/CapturePath',defCapturePath)+'"'
+  else if method='DIRECTORYSEPARATOR' then result:=result+'"result": "'+stringreplace(DirectorySeparator,'\','\\',[rfReplaceAll])+'"'
+  else if method='APPDIR' then result:=result+'"result": "'+stringreplace(Appdir,'\','\\',[rfReplaceAll])+'"'
+  else if method='TMPDIR' then result:=result+'"result": "'+stringreplace(TmpDir,'\','\\',[rfReplaceAll])+'"'
+  else if method='CAPTUREDIR' then result:=result+'"result": "'+stringreplace(config.GetValue('/Files/CapturePath',defCapturePath),'\','\\',[rfReplaceAll])+'"'
   else if method='LIGHTDIR' then result:=result+'"result": "'+f_capture.FrameType.Items[ord(LIGHT)]+'"'
   else if method='BIASDIR' then result:=result+'"result": "'+f_capture.FrameType.Items[ord(BIAS)]+'"'
   else if method='DARKDIR' then result:=result+'"result": "'+f_capture.FrameType.Items[ord(DARK)]+'"'
