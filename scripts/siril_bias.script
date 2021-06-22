@@ -1,55 +1,63 @@
-// CCDciel script to process files with Siril
-//
-// Create Master Bias
-//
-var
-  buf,sirilcmd: string;
-  script,log: Tstringlist;
-  i: Integer;
-  appdir,tmpdir,siriltemplatedir,DirectorySeparator: string;
-  basedir,biasdir,biasprefix: string;
+# CCDciel script to process files with Siril
+#
+# Create Master Bias
 
-begin
+from ccdciel import ccdciel
+from ccdciel import IsWindows
+import sys
+import os
+try:
+  import subprocess
+except:
+  print('Cannot import subprocess, your version of python is probably too old, try python3')
+  sys.exit(1)
+try: 
+  from pathlib import Path
+except:
+  print('Cannot import pathlib, your version of python is probably too old, try python3')
+  sys.exit(1)
 
-  // Get capture directories.
-  // CCDciel must be configured to use only subfolder by frame type
-  //
-  GetS('DIRECTORYSEPARATOR', DirectorySeparator);
-  GetS('CAPTUREDIR', basedir);
-  GetS('BIASDIR', biasdir);
-  biasprefix := biasdir;
-  if DirectorySeparator='\' then
-      sirilcmd:='C:\Program Files\SiriL\bin\siril.exe'
-  else
-      sirilcmd:='siril';
+DirectorySeparator = ccdciel('DirectorySeparator')['result']
+basedir = ccdciel('CaptureDir')['result']
+biasdir = ccdciel('BiasDir')['result']
+biasprefix = biasdir
 
-  // Get scripts directory
-  GetS('APPDIR', appdir);
-  siriltemplatedir:=appdir+DirectorySeparator+'scripts'+DirectorySeparator+'siril';
-  GetS('TMPDIR', tmpdir);
+if IsWindows :
+   sirilcmd = "C:\Program Files\SiriL\bin\siril.exe"
+else :
+   sirilcmd  = "siril"
 
+# Get scripts directory
+appdir = ccdciel('AppDir')['result']
+siriltemplatedir = appdir+DirectorySeparator+"scripts"+DirectorySeparator+"siril"
+tmpdir = ccdciel('TmpDir')['result']
 
-  // Replace variable in template
-  script:= Tstringlist.create;
-  script.loadfromfile(siriltemplatedir+DirectorySeparator+'template_bias.ssf');
-  for i:=0 to script.count-1 do begin
-    buf:=script[i];
-    buf:=StringReplace(buf, '$BASEDIR', basedir);
-    buf:=StringReplace(buf, '$BIASDIR', biasdir);
-    buf:=StringReplace(buf, '$BIASPREFIX', biasprefix);
-    script[i]:=buf;
-  end;
-  SaveSL(tmpdir+DirectorySeparator+'tmp.ssf',script);
-  script.free;
+# Replace variable in template
+templatefile = siriltemplatedir+DirectorySeparator+"template_bias.ssf"
+f = open(templatefile, 'r')
+script = f.read()
+f.close()
+script = script.replace("$BASEDIR", basedir)
+script = script.replace("$BIASDIR", biasdir)
+script = script.replace("$BIASPREFIX", biasprefix)
+tmpfile = tmpdir+DirectorySeparator+"tmp.ssf"
+f = open(tmpfile, 'w')
+f.write(script)
+f.close()
 
-  // Run Siril
-  log:=Tstringlist.Create;
-  RunOutput(sirilcmd+' -s '+tmpdir+DirectorySeparator+'tmp.ssf',log);
-  log.savetofile(basedir+DirectorySeparator+'siril_bias.log');
-  log.free;
+# Run Siril
+logfile = basedir+DirectorySeparator+"siril_bias.log"
+f = open(logfile, 'wb')
+pp = subprocess.Popen(sirilcmd+" -s "+tmpfile, shell=True, stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
+for line in pp.stdout.readlines():
+  f.write(line)
+f.close()  
 
-  // Cleanup
-  Deletefile(basedir+DirectorySeparator+biasdir+DirectorySeparator+biasprefix+'_.seq');
-  Deletefile(basedir+DirectorySeparator+biasdir+DirectorySeparator+biasprefix+'_stacked.fits');
+# Cleanup
+p = Path(basedir+DirectorySeparator+biasdir+DirectorySeparator+biasprefix+"_.seq")
+if p.is_file():
+  p.unlink()
+p = Path(basedir+DirectorySeparator+biasdir+DirectorySeparator+biasprefix+"_stacked.fits")
+if p.is_file():
+  p.unlink()
 
-end.

@@ -4,6 +4,7 @@
 # Create master bias
 ############################################
 
+requires 0.99.1
 setext fits
 
 cd $BASEDIR

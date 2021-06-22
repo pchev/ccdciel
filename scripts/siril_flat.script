@@ -1,85 +1,86 @@
-// CCDciel script to process files with Siril
-//
-// Create Master Flat with filter
-//
+# CCDciel script to process files with Siril
+#
+# Create Master Bias
 
-var
-  buf,sirilcmd: string;
-  script,log, filterlist: Tstringlist;
-  i,f: Integer;
-  DirectorySeparator,appdir,tmpdir,siriltemplatedir,r: string;
-  basedir,biasdir,flatdir,masterbias,flatprefix,filter: string;
+from ccdciel import ccdciel
+from ccdciel import IsWindows
+import sys
+import os
+try:
+  import subprocess
+except:
+  print('Cannot import subprocess, your version of python is probably too old, try python3')
+  sys.exit(1)
+try: 
+  from pathlib import Path
+except:
+  print('Cannot import pathlib, your version of python is probably too old, try python3')
+  sys.exit(1)
 
-begin
+DirectorySeparator = ccdciel('DirectorySeparator')['result']
+basedir = ccdciel('CaptureDir')['result']
+biasdir = ccdciel('BiasDir')['result']
+flatdir = ccdciel('FlatDir')['result']
+flatprefix = flatdir
+masterbias = '..'+DirectorySeparator+biasdir+DirectorySeparator+'Master_Bias';
 
-  // Get capture directories.
-  // CCDciel must be configured to use only subfolder by frame type
-  //
-  GetS('DIRECTORYSEPARATOR', DirectorySeparator);
-  GetS('CAPTUREDIR', basedir);
-  GetS('BIASDIR', biasdir);
-  GetS('FLATDIR', flatdir);
-  masterbias := '..'+DirectorySeparator+Biasdir+DirectorySeparator+'Master_Bias';
-  flatprefix:=flatdir;
-  if DirectorySeparator='\' then
-      sirilcmd:='C:\Program Files\SiriL\bin\siril.exe'
-  else
-      sirilcmd:='siril';
+if IsWindows :
+   sirilcmd = "C:\Program Files\SiriL\bin\siril.exe"
+else :
+   sirilcmd  = "siril"
+
+# Get scripts directory
+appdir = ccdciel('AppDir')['result']
+siriltemplatedir = appdir+DirectorySeparator+"scripts"+DirectorySeparator+"siril"
+tmpdir = ccdciel('TmpDir')['result']
+
+
+# Get the list of filter name
+listfilter = ccdciel('WHEEL_GETFILTERSNAME')['result']
+# Add images without filter
+filters = [""]
+filters.extend(listfilter)
+
+#Loop for filter name
+for fi in filters:
+   if fi != "":
+      fi = "_"+fi
+      
+   # count files with this filter 
+   filecount = len(list(Path(basedir+DirectorySeparator+flatdir).glob(flatprefix+fi+"_[0..9]*.fits")))   
+   if filecount<1 :
+      continue  
   
-  // Get scripts directory
-  GetS('APPDIR', appdir);
-  siriltemplatedir:=appdir+DirectorySeparator+'scripts'+DirectorySeparator+'siril';
-  GetS('TMPDIR', tmpdir);
+   ccdciel('LogMsg','Process Flat'+fi)
 
-  // Get the list of filter name
-  //
-  filterlist:= Tstringlist.create;
-  r:=cmdArg('WHEEL_GETFILTERSNAME',filterlist);
-  if r<>msgOK then exit;
+   # Replace variable in template
+   templatefile = siriltemplatedir+DirectorySeparator+"template_flat.ssf"
+   f = open(templatefile, 'r')
+   script = f.read()
+   f.close()
+   script = script.replace("$BASEDIR", basedir)
+   script = script.replace("$FLATDIR", flatdir)
+   script = script.replace("$MASTERBIAS", masterbias)
+   script = script.replace("$FLATPREFIX", flatprefix)
+   script = script.replace("$FILTER", fi)
+   tmpfile = tmpdir+DirectorySeparator+"tmp.ssf"
+   f = open(tmpfile, 'w')
+   f.write(script)
+   f.close()   
+   
+   # Run Siril
+   logfile = basedir+DirectorySeparator+"siril_flat"+fi+".log"
+   f = open(logfile, 'wb')
+   pp = subprocess.Popen(sirilcmd+" -s "+tmpfile, shell=True, stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
+   for line in pp.stdout.readlines():
+     f.write(line)
+   f.close()  
 
-
-  // Loop for filter name
-  //
-  for f:=-1 to filterlist.count-1 do begin
-
-    if f<0 then 
-       filter:=''
-    else begin   
-      filter :=filterlist[f];
-      if trim(filter)='' then continue;
-      filter:='_'+filter;
-    end;  
-    logmsg('Process Flat'+filter);
-
-    // Replace variable in template
-    script:= Tstringlist.create;
-    script.loadfromfile(siriltemplatedir+DirectorySeparator+'template_flat.ssf');
-    for i:=0 to script.count-1 do begin
-      buf:=script[i];
-      buf:=StringReplace(buf, '$BASEDIR', basedir);
-      buf:=StringReplace(buf, '$FLATDIR', flatdir);
-      buf:=StringReplace(buf, '$MASTERBIAS', masterbias);
-      buf:=StringReplace(buf, '$FLATPREFIX', flatprefix);
-      buf:=StringReplace(buf, '$FILTER', filter);
-      script[i]:=buf;
-    end;
-    SaveSL(tmpdir+DirectorySeparator+'tmp.ssf',script);
-    script.free;
-
-    // Run Siril
-    log:=Tstringlist.Create;
-    RunOutput(sirilcmd+' -s '+tmpdir+DirectorySeparator+'tmp.ssf',log);
-    log.savetofile(basedir+DirectorySeparator+'siril_flat'+filter+'.log');
-    log.free;
-
-    // Cleanup
-    Deletefile(basedir+DirectorySeparator+flatdir+DirectorySeparator+flatprefix+'*_.seq');
-    Deletefile(basedir+DirectorySeparator+flatdir+DirectorySeparator+'pp_'+flatprefix+filter+'_stacked.fits');
-    Deletefile(basedir+DirectorySeparator+flatdir+DirectorySeparator+'pp_'+flatprefix+filter+'_*.fits');
-    Deletefile(basedir+DirectorySeparator+flatdir+DirectorySeparator+'pp_'+flatprefix+filter+'_.seq');
-
-  end;
-
-  filterlist.free;
-
-end.
+   # Cleanup
+   for p in Path(basedir+DirectorySeparator+flatdir).glob(flatprefix+"*_.seq"):
+      p.unlink()
+   p = Path(basedir+DirectorySeparator+flatdir+DirectorySeparator+"pp_"+flatprefix+fi+"_.seq")
+   if p.is_file():
+     p.unlink()
+   for p in Path(basedir+DirectorySeparator+flatdir).glob("pp_"+flatprefix+fi+"*.fits"):
+      p.unlink()

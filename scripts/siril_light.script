@@ -1,130 +1,119 @@
-// CCDciel script to process files with Siril
-//
-// Process light frames with different filters
-//
+# CCDciel script to process files with Siril
+#
+# Create Master Bias
 
-var
-  buf,r,DirectorySeparator,sirilcmd: string;
-  script,log, filterlist, lf, lightlist: Tstringlist;
-  i,f,o,p: Integer;
-  homedir,basedir,processdir,lightdir,biasdir,darkdir,flatdir: string;
-  masterbias,masterdark,masterflat,lightprefix,filter: string;
-  appdir, tmpdir, siriltemplatedir: string;
+from ccdciel import ccdciel
+from ccdciel import IsWindows
+import sys
+import os
+try:
+  import subprocess
+except:
+  print('Cannot import subprocess, your version of python is probably too old, try python3')
+  sys.exit(1)
+try: 
+  from pathlib import Path
+except:
+  print('Cannot import pathlib, your version of python is probably too old, try python3')
+  sys.exit(1)
 
-begin
+# Get capture directories.
+# CCDciel must be configured to use only subfolder by frame type
+DirectorySeparator = ccdciel('DirectorySeparator')['result']
+basedir = ccdciel('CaptureDir')['result']
+lightdir = ccdciel('LightDir')['result']
+biasdir = ccdciel('BiasDir')['result']
+darkdir = ccdciel('DarkDir')['result']
+flatdir = ccdciel('FlatDir')['result']
+flatprefix = flatdir
+masterbias = '..'+DirectorySeparator+biasdir+DirectorySeparator+'Master_Bias'
+masterdark = '..'+DirectorySeparator+darkdir+DirectorySeparator+'Master_Dark'
+masterflat = '..'+DirectorySeparator+flatdir+DirectorySeparator+'Master_Flat'
 
-  // Get capture directories.
-  // CCDciel must be configured to use only subfolder by frame type
-  //
-  GetS('DIRECTORYSEPARATOR', DirectorySeparator);
-  GetS('CAPTUREDIR', basedir);
-  GetS('LIGHTDIR', lightdir);
-  GetS('BIASDIR', biasdir);
-  GetS('DARKDIR', darkdir);
-  GetS('FLATDIR', flatdir);
-  masterbias := '..'+DirectorySeparator+Biasdir+DirectorySeparator+'Master_Bias';
-  masterdark := '..'+DirectorySeparator+darkdir+DirectorySeparator+'Master_Dark';
-  masterflat := '..'+DirectorySeparator+flatdir+DirectorySeparator+'Master_Flat';
-  if DirectorySeparator='\' then
-      sirilcmd:='C:\Program Files\SiriL\bin\siril.exe'
-  else
-      sirilcmd:='siril';
+if IsWindows :
+   sirilcmd = "C:\Program Files\SiriL\bin\siril.exe"
+else :
+   sirilcmd  = "siril"
 
-  processdir:=basedir+DirectorySeparator+'processed';
-  CreateDir(processdir);
+# Get scripts directory
+appdir = ccdciel('AppDir')['result']
+siriltemplatedir = appdir+DirectorySeparator+"scripts"+DirectorySeparator+"siril"
+tmpdir = ccdciel('TmpDir')['result']
 
-  // List unique prefix in the Light directory
-  // CCDciel must be configured to make file name with Object and Filter only
-  //
-  lightlist:=Tstringlist.create;
-  lf:=Tstringlist.create;
-  lightlist.clear;
-  lf.clear;
-  lf.add(basedir+DirectorySeparator+lightdir+DirectorySeparator+'*.fits');
-  r:=cmdArg('LIST_FILES',lf);
-  if r<>msgOK then exit;
-  for i:=0 to lf.count-1 do begin
-    buf:=lf[i];
-    if copy(buf,1,3)='pp_' then continue;  // skip preprocessed
-    if copy(buf,1,2)='r_' then continue;   // skip registred
-    p:=pos('_',buf);
-    if p<0 then continue;
-    buf:=copy(buf,1,p-1);
-    if lightlist.IndexOf(buf)<0 then
-      lightlist.add(buf);
-  end;
+processdir = basedir+DirectorySeparator+'processed'
+processpath = Path(processdir)
+processpath.mkdir(exist_ok=True)
 
-  // Get scripts directory
-  GetS('APPDIR', appdir);
-  siriltemplatedir:=appdir+DirectorySeparator+'scripts'+DirectorySeparator+'siril';
-  GetS('TMPDIR', tmpdir);
+# List unique prefix in the Light directory
+# CCDciel must be configured to make file name with Object and Filter only
+lightlist = []
+for p in Path(basedir+DirectorySeparator+lightdir).glob("*.fits"):
+   buf = str(p.name)
+   if buf[0:3] == 'pp_' :   # skip preprocessed
+      continue
+   if buf[0:2] == 'r_' :    # skip registred
+      continue
+   p = buf.find("_")
+   if p < 0 :
+      continue 
+   obj = buf[0:p]
+   if obj in lightlist:
+      continue 
+   lightlist.append(obj)
 
-  // Get the list of filter name
-  //
-  filterlist:= Tstringlist.create;
-  r:=cmdArg('WHEEL_GETFILTERSNAME',filterlist);
-  if r<>msgOK then exit;
+# Get the list of filter name
+listfilter = ccdciel('WHEEL_GETFILTERSNAME')['result']
+# Add images without filter
+filters = [""]
+filters.extend(listfilter)
 
+# Loop for Light prefix
+for lightprefix in lightlist:
+    # Loop for filter name
+    for fi in filters:
+       if fi != "":
+          fi = "_"+fi
+          
+       # count files with this filter 
+       filecount = len(list(Path(basedir+DirectorySeparator+lightdir).glob(lightprefix+fi+"_[0..9]*.fits")))   
+       if filecount<1 :
+          continue  
+          
+       ccdciel('LogMsg','Process '+lightprefix+fi)
+       
+       # Replace variable in template
+       templatefile = siriltemplatedir+DirectorySeparator+"template_light.ssf"
+       f = open(templatefile, 'r')
+       script = f.read()
+       f.close()
+       script = script.replace("$BASEDIR", basedir)
+       script = script.replace("$LIGHTDIR", lightdir)
+       script = script.replace("$MASTERDARK", masterdark)
+       script = script.replace("$MASTERFLAT", masterflat)
+       script = script.replace("$LIGHTPREFIX", lightprefix)
+       script = script.replace("$FILTER", fi)
+       tmpfile = tmpdir+DirectorySeparator+"tmp.ssf"
+       f = open(tmpfile, 'w')
+       f.write(script)
+       f.close()   
 
-  // Loop for Light prefix
-  //
-  for o:=0 to lightlist.count-1 do begin
-    lightprefix:= lightlist[o];
+       # Run Siril
+       logfile = basedir+DirectorySeparator+"siril_"+lightprefix+fi+".log"
+       f = open(logfile, 'wb')
+       pp = subprocess.Popen(sirilcmd+" -s "+tmpfile, shell=True, stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
+       for line in pp.stdout.readlines():
+         f.write(line)
+       f.close()  
 
-    // Loop for filter name
-    //
-    for f:=-1 to filterlist.count-1 do begin
+       # Move processed files
+       for p in Path(basedir+DirectorySeparator+lightdir).glob("pp_"+lightprefix+fi+"_*.fits"):
+          p.rename(processpath.joinpath(p.name)) 
+       p = Path(basedir+DirectorySeparator+lightdir+DirectorySeparator+"r_pp_"+lightprefix+fi+"_stacked.fits")
+       if p.is_file():
+          p.rename(processpath.joinpath(p.name)) 
 
-      if f<0 then 
-        filter:=''
-      else begin   
-        filter :=filterlist[f];
-        if trim(filter)='' then continue;
-        filter:='_'+filter;
-      end;  
-      logmsg('Process '+lightprefix+filter );
-
-      // Replace variable in template
-      script:= Tstringlist.create;
-      script.loadfromfile(siriltemplatedir+DirectorySeparator+'template_light.ssf');
-      for i:=0 to script.count-1 do begin
-        buf:=script[i];
-        buf:=StringReplace(buf, '$BASEDIR', basedir);
-        buf:=StringReplace(buf, '$LIGHTDIR', lightdir);
-        buf:=StringReplace(buf, '$MASTERDARK', masterdark);
-        buf:=StringReplace(buf, '$MASTERFLAT', masterflat);
-        buf:=StringReplace(buf, '$LIGHTPREFIX', lightprefix);
-        buf:=StringReplace(buf, '$FILTER', filter);
-        script[i]:=buf;
-      end;
-      SaveSL(tmpdir+DirectorySeparator+'tmp.ssf',script);
-      script.free;
-
-      // Run Siril
-      log:=Tstringlist.Create;
-      RunOutput(sirilcmd+' -s '+tmpdir+DirectorySeparator+'tmp.ssf',log);
-      log.savetofile(basedir+DirectorySeparator+'siril_'+lightprefix+filter+'.log');
-      log.free;
-
-      // Cleanup
-      Deletefile(basedir+DirectorySeparator+lightdir+DirectorySeparator+lightprefix+'*_.seq');
-      Deletefile(basedir+DirectorySeparator+lightdir+DirectorySeparator+'pp_'+lightprefix+'*_.seq');
-
-      // Move processed files
-      lf.clear;
-      lf.add(basedir+DirectorySeparator+lightdir+DirectorySeparator+'pp_'+lightprefix+filter+'_*.fits');
-      r:=cmdArg('LIST_FILES',lf);
-      for i:=0 to lf.count-1 do begin
-        buf:=lf[i];
-        RenameFile(basedir+DirectorySeparator+lightdir+DirectorySeparator+buf,processdir+DirectorySeparator+buf);
-      end;
-
-    end; // filterlist
-
-  end; // lightlist
-
-  lightlist.free;
-  lf.free;
-  filterlist.free;
-
-end.
+       # Cleanup
+       for p in Path(basedir+DirectorySeparator+lightdir).glob("*_.seq"):
+          p.unlink()
+       for p in Path(basedir+DirectorySeparator+lightdir).glob("r_pp_*.fits"):
+          p.unlink()

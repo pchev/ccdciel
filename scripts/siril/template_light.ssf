@@ -4,6 +4,7 @@
 # Preprocess a series
 ############################################
 
+requires 0.99.1
 setext fits
 
 cd $BASEDIR
@@ -12,13 +13,11 @@ cd $BASEDIR
 cd $LIGHTDIR
 preprocess $LIGHTPREFIX$FILTER_ -dark=$MASTERDARK -flat=$MASTERFLAT$FILTER
 
-## stop here because stacking probably need some manual selection
-## but you can uncomment the register and stack command if you want
+#stacking probably need some manual selection but it not hurt to try with all the images
+#align lights
+register pp_$LIGHTPREFIX$FILTER_
 
-##align lights
-#register pp_$LIGHTPREFIX$FILTER_
-
-##stack calibrated lights
-#stack r_pp_$LIGHTPREFIX$FILTER_ rej 3 3 -norm=addscale
+#stack calibrated lights
+stack r_pp_$LIGHTPREFIX$FILTER_ rej 3 3 -norm=addscale
 
 close

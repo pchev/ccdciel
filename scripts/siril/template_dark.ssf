@@ -4,6 +4,7 @@
 # Create master dark
 ############################################
 
+requires 0.99.1
 setext fits
 
 cd $BASEDIR
