@@ -29,7 +29,7 @@ interface
 
 uses
   {$ifdef mswindows}
-  ShlObj, comobj, windows,
+  ShlObj, comobj, windows, Registry,
   {$endif}
   {$ifdef unix}
   BaseUnix,
@@ -1185,6 +1185,9 @@ procedure Tf_main.FormCreate(Sender: TObject);
 var inif: TIniFile;
     configfile: string;
     i:integer;
+    {$ifdef mswindows}
+    Registry :TRegistry;
+    {$endif}
 begin
   DefaultFormatSettings.DecimalSeparator:='.';
   DefaultFormatSettings.TimeSeparator:=':';
@@ -1195,10 +1198,21 @@ begin
   cdate:={$I %DATE%};
   cdate:=copy(cdate,1,4);
   isAdmin := False;
+  UacEnabled := True;
   debug_msg := false;
   {$ifdef mswindows}
   Application.{%H-}UpdateFormatSettings := False;
   isAdmin := IsUserAnAdmin;
+  try
+  Registry := TRegistry.Create;
+  Registry.RootKey := HKEY_LOCAL_MACHINE;
+  if Registry.OpenKeyReadOnly('\Software\Microsoft\Windows\CurrentVersion\Policies\System\') then begin
+    UacEnabled := (Registry.ReadInteger('EnableLUA')=1);
+    Registry.CloseKey;
+  end;
+  Registry.Free;
+  except
+  end;
   {$endif}
   {$ifdef unix}
   isAdmin := (FpGetuid=0);
@@ -1213,11 +1227,23 @@ begin
     TBTabs.Color:=clBtnHighlight; // on Mac highlight is darker...
   {$endif}
   if isAdmin then begin
-     {$ifdef mswindows}
-     Caption := Format(rsDoNotRunAsAd, [Caption, rsAdministrato])
-     {$else}
-     Caption := Format(rsDoNotRunAsAd, [Caption, 'root'])
-     {$endif}
+     if UacEnabled then begin
+        MessageDlg('Error, running as administrator!','CCDciel, like any other astronomy software, should never be run as an administrator, '+
+           'this is unnecessary, dangerous and a source of many unwanted problems.'+crlf+
+           'The program will close now.'+crlf+crlf+
+           'Please fix the start icon or command before trying again.',
+           mtError,[mbClose],0,mbClose);
+        halt;
+     end
+     else begin
+        MessageDlg('Error, running as administrator!','CCDciel, like any other astronomy software, should never be run as an administrator, '+
+           'this is unnecessary, dangerous and a source of many unwanted problems.'+crlf+
+           'The program will close now.'+crlf+crlf+
+           'UAC is disabled in the system, this is a very dangerous choice.'+crlf+
+           'Please enable UAC, or run the program from a standard, non-administrative user',
+           mtError,[mbClose],0,mbClose);
+        halt;
+     end;
   end;
   PageControlRight.ActivePageIndex:=0;
   AppClose:=false;
