@@ -25,7 +25,7 @@ flatprefix = flatdir
 masterbias = '..'+DirectorySeparator+biasdir+DirectorySeparator+'Master_Bias';
 
 if IsWindows :
-   sirilcmd = "C:\Program Files\SiriL\bin\siril.exe"
+   sirilcmd = r'C:\Program Files\SiriL\bin\siril.exe'
 else :
    sirilcmd  = "siril"
 
@@ -71,7 +71,7 @@ for fi in filters:
    # Run Siril
    logfile = basedir+DirectorySeparator+"siril_flat"+fi+".log"
    f = open(logfile, 'wb')
-   pp = subprocess.Popen(sirilcmd+" -s "+tmpfile, shell=True, stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
+   pp = subprocess.Popen('"'+sirilcmd+'"'+' -s "'+tmpfile+'"', shell=True, stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
    for line in pp.stdout.readlines():
      f.write(line)
    f.close()  

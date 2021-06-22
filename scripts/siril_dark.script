@@ -23,7 +23,7 @@ darkdir = ccdciel('DarkDir')['result']
 darkprefix = darkdir
 
 if IsWindows :
-   sirilcmd = "C:\Program Files\SiriL\bin\siril.exe"
+   sirilcmd = r'C:\Program Files\SiriL\bin\siril.exe'
 else :
    sirilcmd  = "siril"
 
@@ -48,7 +48,7 @@ f.close()
 # Run Siril
 logfile = basedir+DirectorySeparator+"siril_dark.log"
 f = open(logfile, 'wb')
-pp = subprocess.Popen(sirilcmd+" -s "+tmpfile, shell=True, stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
+pp = subprocess.Popen('"'+sirilcmd+'"'+' -s "'+tmpfile+'"', shell=True, stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
 for line in pp.stdout.readlines():
   f.write(line)
 f.close()  
