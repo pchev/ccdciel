@@ -75,7 +75,7 @@ for lightprefix in lightlist:
           fi = "_"+fi
           
        # count files with this filter 
-       filecount = len(list(Path(basedir+DirectorySeparator+lightdir).glob(lightprefix+fi+"_[0..9]*.fits")))   
+       filecount = len(list(Path(basedir+DirectorySeparator+lightdir).glob(lightprefix+fi+"_[0-9]*.fits")))   
        if filecount<1 :
           continue  
           
