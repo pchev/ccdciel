@@ -6562,17 +6562,11 @@ procedure Tf_main.MountGoto(Sender: TObject);
 var ra,de,err:double;
     tra,tde,objn: string;
 begin
+if f_mount.BtnGoto.Caption=rsGoto then begin
  if (AllDevicesConnected) and (mount.Status=devConnected) then begin
    if Mount.Park then begin
      NewMessage(rsTheTelescope);
      exit;
-   end;
-   if f_preview.Running then begin
-     if f_preview.Loop then
-       f_preview.BtnLoopClick(nil)
-     else
-       f_preview.BtnPreviewClick(nil);
-     wait(2);
    end;
    if  astrometry.Busy then begin
      NewMessage(rsResolverAlre,1);
@@ -6582,6 +6576,13 @@ begin
       NewMessage(rsCannotStartW, 1);
       exit;
    end;
+   if f_preview.Running then begin
+     if f_preview.Loop then
+       f_preview.BtnLoopClick(nil)
+     else
+       f_preview.BtnPreviewClick(nil);
+     wait(2);
+   end;
    FormPos(f_goto,mouse.CursorPos.X,mouse.CursorPos.Y);
    f_goto.Caption:=rsGoto;
    f_goto.msginfo.Caption:='';
@@ -6590,7 +6591,10 @@ begin
    f_goto.ButtonOK.Caption:=rsGoto;
    f_goto.ShowModal;
    if f_goto.ModalResult=mrok then begin
+     try
      CancelAutofocus:=false;
+     CancelGoto:=false;
+     f_mount.BtnGoto.Caption:=rsStop;
      tra:= f_goto.Ra.Text;
      tde:=f_goto.De.Text;
      objn:=trim(f_goto.Obj.Text);
@@ -6608,6 +6612,7 @@ begin
          autoguider.Guide(false);
          autoguider.WaitBusy(15);
        end;
+       if CancelGoto then exit;
        NewMessage(rsGoto+': '+objn,1);
        J2000ToMount(mount.EquinoxJD,ra,de);
        if astrometry.PrecisionSlew(ra,de,err) then begin
@@ -6616,8 +6621,19 @@ begin
        else NewMessage(format(rsError,[rsGoto+': '+objn]) ,1);
      end
      else NewMessage(rsInvalidCoord,1);
+     finally
+      CancelGoto:=false;
+      f_mount.BtnGoto.Caption:=rsGoto;
+     end;
    end;
  end;
+end
+else begin
+  CancelGoto:=true;
+  mount.AbortMotion;
+  camera.AbortExposure;
+  astrometry.StopAstrometry;
+end;
 end;
 
 Procedure Tf_main.AutoguiderConnectClick(Sender: TObject);

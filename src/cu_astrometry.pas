@@ -464,7 +464,7 @@ begin
       msg(rsNoResolverCo,2);
       msg(Format(rsDoSimpleSlew, [ARToStr3(ra), DEToStr(de)]),2);
       if not Mount.Slew(ra, de) then exit;
-      if CancelAutofocus then exit;
+      if CancelAutofocus or CancelGoto then exit;
       Wait(delay);
       dist:=0;
    end else begin
@@ -477,19 +477,19 @@ begin
     ar1:=deg2rad*15*ra;
     de1:=deg2rad*de;
     if not Mount.Slew(ra, de) then exit;
-    if CancelAutofocus then exit;
+    if CancelAutofocus or CancelGoto then exit;
     i:=1;
     fits.SetBPM(bpm,bpmNum,bpmX,bpmY,bpmAxis);
     RetryMeridianSyncCount:=0;
     repeat
       RetryMeridianSync:=false;
       Wait(delay);
-      if CancelAutofocus then exit;
+      if CancelAutofocus or CancelGoto then exit;
       if not Fpreview.ControlExposure(exp,binx,biny,LIGHT,ReadoutModeAstrometry,sgain,soffset) then begin
         msg(rsExposureFail,0);
         exit;
       end;
-      if CancelAutofocus then exit;
+      if CancelAutofocus or CancelGoto then exit;
       msg(rsResolveContr,3);
       FFits.SaveToFile(slash(TmpDir)+'ccdcieltmp.fits');
       if StartAstrometry(slash(TmpDir)+'ccdcieltmp.fits',slash(TmpDir)+'ccdcielsolved.fits',nil) then
@@ -500,7 +500,7 @@ begin
          inc(i);
          continue;
       end;
-      if CancelAutofocus then exit;
+      if CancelAutofocus or CancelGoto then exit;
       fn:=slash(TmpDir)+'ccdcielsolved.fits';
       n:=cdcwcs_initfitsfile(pchar(fn),0);
       if n<>0 then begin
@@ -517,16 +517,16 @@ begin
       de2:=deg2rad*cde;
       dist:=rad2deg*rmod(AngularDistance(ar1,de1,ar2,de2)+pi2,pi2);
       msg(Format(rsDistanceToTa, [FormatFloat(f5, 60*dist)]),3);
-      if CancelAutofocus then exit;
+      if CancelAutofocus or CancelGoto then exit;
       if dist>prec then begin
         case method of
          0: begin
                SyncOK:=mount.Sync(cra,cde);
                if SyncOK then begin
                   Wait(2);
-                  if CancelAutofocus then exit;
+                  if CancelAutofocus or CancelGoto then exit;
                   if not Mount.Slew(ra, de) then exit;
-                  if CancelAutofocus then exit;
+                  if CancelAutofocus or CancelGoto then exit;
                end
                else begin
                  if NearMeridian then begin        // some mount cannot sync across the meridian
@@ -535,7 +535,7 @@ begin
                      msg('Mount Sync failed near the meridian.',2);
                      msg('Waiting 1 minute before to retry',2);
                      Wait(60);
-                     if CancelAutofocus then exit;
+                     if CancelAutofocus or CancelGoto then exit;
                      RetryMeridianSync:=true;
                      dec(i);
                    end
@@ -552,7 +552,7 @@ begin
                end;
             end;
          else begin
-               if CancelAutofocus then exit;
+               if CancelAutofocus or CancelGoto then exit;
                raoffset:=ra+raoffset-cra;
                deoffset:=de+deoffset-cde;
                newra:=rmod(ra+raoffset+24,24.0);
@@ -562,11 +562,11 @@ begin
                msg(Format(rsSlewWithOffs, [FormatFloat(f5, raoffset),
                  FormatFloat(f5, deoffset)]),3);
                if not Mount.Slew(newra,newde) then exit;
-               if CancelAutofocus then exit;
+               if CancelAutofocus or CancelGoto then exit;
             end;
          end;
       end;
-      if CancelAutofocus then exit;
+      if CancelAutofocus or CancelGoto then exit;
       inc(i);
     until (not RetryMeridianSync)and((dist<=prec)or(i>maxslew));
 
