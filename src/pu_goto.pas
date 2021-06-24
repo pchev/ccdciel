@@ -58,6 +58,7 @@ type
     Ra: TEdit;
     procedure BtnSearchClick(Sender: TObject);
     procedure BtnComputeClick(Sender: TObject);
+    procedure ButtonOKClick(Sender: TObject);
     procedure FormCreate(Sender: TObject);
     procedure CenterChange(Sender: TObject);
     procedure FormShow(Sender: TObject);
@@ -197,6 +198,21 @@ begin
   if f_compute.ModalResult=mrOK then begin
     pxsz.Text:=f_compute.ImgScale.Text;
   end;
+end;
+
+procedure Tf_goto.ButtonOKClick(Sender: TObject);
+begin
+  if PanelAltAz.Visible then begin
+    if LabelAlt.Caption='-' then begin
+      ShowMessage('Cannot slew to unknown coordinates');
+      exit;
+    end;
+    if StrToFloatDef(LabelAlt.Caption,-1)<0 then begin
+      ShowMessage('Cannot slew below the horizon');
+      exit;
+    end;
+  end;
+  ModalResult:=mrOK;
 end;
 
 end.
