@@ -51,6 +51,7 @@ T_ascomrestcamera = class(T_camera)
    FCType: string;
    ExposureTimer: TTimer;
    StatusTimer: TTimer;
+   statusinterval: integer;
    function Connected: boolean;
    procedure ExposureTimerTimer(sender: TObject);
    procedure StatusTimerTimer(sender: TObject);
@@ -156,8 +157,6 @@ public
    procedure StopVideoRecord; override;
 end;
 
-const statusinterval=5000;
-
 implementation
 
 uses
@@ -198,6 +197,7 @@ begin
  ExposureTimer.Enabled:=false;
  ExposureTimer.Interval:=1000;
  ExposureTimer.OnTimer:=@ExposureTimerTimer;
+ statusinterval:=1000;
  StatusTimer:=TTimer.Create(nil);
  StatusTimer.Enabled:=false;
  StatusTimer.Interval:=statusinterval;
@@ -366,6 +366,10 @@ begin
     except
       FhasCfaInfo:=false;
     end;
+    if isLocalIP(V.RemoteIP) then
+      statusinterval:=1000
+    else
+      statusinterval:=5000;
     FStatus := devConnected;
     if Assigned(FonStatusChange) then FonStatusChange(self);
     StatusTimer.Interval:=10;

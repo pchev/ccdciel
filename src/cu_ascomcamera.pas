@@ -154,7 +154,7 @@ public
    procedure StopVideoRecord; override;
 end;
 
-const statusinterval=5000;
+const statusinterval=1000;
 
 implementation
 

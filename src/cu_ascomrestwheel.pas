@@ -25,7 +25,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 interface
 
-uses  cu_wheel, cu_ascomrest, u_global, indiapi,
+uses  cu_wheel, cu_ascomrest, u_global, indiapi,  u_utils,
      u_translation, math,
      ExtCtrls, Forms, Classes, SysUtils;
 
@@ -37,6 +37,7 @@ T_ascomrestwheel = class(T_wheel)
    stFilter,CheckFiltername: integer;
    FInterfaceVersion: integer;
    StatusTimer: TTimer;
+   statusinterval,waitpoll: integer;
    function Connected: boolean;
    procedure StatusTimerTimer(sender: TObject);
    procedure GetAscomFilterNames(var value:TStringList; var n: integer);
@@ -57,9 +58,6 @@ T_ascomrestwheel = class(T_wheel)
    procedure Disconnect; override;
 end;
 
-const waitpoll=1000;
-      statusinterval=3000;
-
 implementation
 
 constructor T_ascomrestwheel.Create(AOwner: TComponent);
@@ -68,6 +66,8 @@ begin
  V:=TAscomRest.Create(self);
  V.ClientId:=3207;
  FWheelInterface:=ASCOMREST;
+ waitpoll:=500;
+ statusinterval:=2000;
  StatusTimer:=TTimer.Create(nil);
  StatusTimer.Enabled:=false;
  StatusTimer.Interval:=statusinterval;
@@ -111,6 +111,14 @@ begin
      FInterfaceVersion:=V.Get('interfaceversion').AsInt;
      except
        FInterfaceVersion:=1;
+     end;
+     if isLocalIP(V.RemoteIP) then begin
+       waitpoll:=500;
+       statusinterval:=2000;
+     end
+     else begin
+       waitpoll:=1000;
+       statusinterval:=3000;
      end;
      msg('Interface version: '+inttostr(FInterfaceVersion),9);
      msg(rsConnected3);

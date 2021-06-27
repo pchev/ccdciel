@@ -25,7 +25,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 interface
 
-uses cu_safety, cu_ascomrest, u_global,
+uses cu_safety, cu_ascomrest, u_global, u_utils,
     u_translation, indiapi,
     Forms, ExtCtrls,Classes, SysUtils;
 
@@ -36,6 +36,7 @@ T_ascomrestsafety = class(T_safety)
    stSafe: boolean;
    FInterfaceVersion: integer;
    StatusTimer: TTimer;
+   statusinterval: integer;
    procedure StatusTimerTimer(sender: TObject);
    function  Connected: boolean;
    function  InterfaceVersion: integer;
@@ -49,8 +50,6 @@ public
    procedure Disconnect; override;
 end;
 
-const statusinterval=10000;
-
 implementation
 
 constructor T_ascomrestsafety.Create(AOwner: TComponent);
@@ -60,6 +59,7 @@ begin
  V.ClientId:=3205;
  FSafetyInterface:=ASCOMREST;
  FInterfaceVersion:=1;
+ statusinterval:=2000;
  StatusTimer:=TTimer.Create(nil);
  StatusTimer.Enabled:=false;
  StatusTimer.Interval:=statusinterval;
@@ -113,6 +113,10 @@ begin
      except
        FInterfaceVersion:=1;
      end;
+     if isLocalIP(V.RemoteIP) then
+       statusinterval:=2000
+     else
+       statusinterval:=10000;
      msg('Interface version: '+inttostr(FInterfaceVersion),9);
      msg(rsConnected3);
      FStatus := devConnected;

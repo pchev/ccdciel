@@ -42,6 +42,7 @@ T_ascomrestmount = class(T_mount)
    StatusTimer: TTimer;
    StatusCount: integer;
    FDeviceName: string;
+   statusinterval,waitpoll: integer;
    function Connected: boolean;
    procedure StatusTimerTimer(sender: TObject);
    procedure CheckEqmod;
@@ -90,9 +91,6 @@ public
    function PulseGuide(direction,duration:integer): boolean; override;
 end;
 
-const waitpoll=1000;
-      statusinterval=3000;
-
 implementation
 
 constructor T_ascomrestmount.Create(AOwner: TComponent);
@@ -113,6 +111,8 @@ begin
  CanSetPierSide:=false;
  CanSync:=false;
  CanSetTracking:=false;
+ waitpoll:=500;
+ statusinterval:=2000;
  StatusTimer:=TTimer.Create(nil);
  StatusTimer.Enabled:=false;
  StatusTimer.Interval:=statusinterval;
@@ -185,6 +185,14 @@ begin
      j:=GetEquinox;
      if j=0 then buf:=buf+'EquatorialSystem: Local '
             else buf:=buf+'EquatorialSystem: '+FormatFloat(f0,j)+' ';
+     if isLocalIP(V.RemoteIP) then begin
+       waitpoll:=500;
+       statusinterval:=2000;
+     end
+     else begin
+       waitpoll:=1000;
+       statusinterval:=3000;
+     end;
      msg(rsConnected3);
      msg(Format(rsMountCapabil, [buf]));
      if Assigned(FonStatusChange) then FonStatusChange(self);

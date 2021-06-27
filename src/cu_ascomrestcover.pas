@@ -25,7 +25,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 interface
 
-uses cu_cover, cu_ascomrest, u_global,
+uses cu_cover, cu_ascomrest, u_global, u_utils,
     u_translation, indiapi,
     Forms, ExtCtrls,Classes, SysUtils;
 
@@ -35,6 +35,7 @@ T_ascomrestcover = class(T_cover)
    V: TAscomRest;
    FInterfaceVersion: integer;
    StatusTimer: TTimer;
+   statusinterval: integer;
    procedure StatusTimerTimer(sender: TObject);
    function  Connected: boolean;
    function  InterfaceVersion: integer;
@@ -55,8 +56,6 @@ public
    Procedure CalibratorOff; override;
 end;
 
-const statusinterval=10000;
-
 implementation
 
 constructor T_ascomrestcover.Create(AOwner: TComponent);
@@ -66,6 +65,7 @@ begin
  V.ClientId:=3208;
  FCoverInterface:=ASCOMREST;
  FInterfaceVersion:=1;
+ statusinterval:=1000;
  StatusTimer:=TTimer.Create(nil);
  StatusTimer.Enabled:=false;
  StatusTimer.Interval:=statusinterval;
@@ -139,6 +139,10 @@ begin
          FMaxBrightness:=0;
        end;
      end;
+     if isLocalIP(V.RemoteIP) then
+       statusinterval:=1000
+     else
+       statusinterval:=5000;
      msg(rsConnected3);
      FStatus := devConnected;
      if Assigned(FonStatusChange) then FonStatusChange(self);

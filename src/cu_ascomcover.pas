@@ -59,7 +59,7 @@ public
    Procedure CalibratorOff; override;
 end;
 
-const statusinterval=2000;
+const statusinterval=1000;
 
 implementation
 

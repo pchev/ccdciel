@@ -159,6 +159,7 @@ function TempDisplay(cf:integer; t:double):double;
 function TempCelsius(cf:integer; t:double):double;
 function GetThreadCount: integer;
 function email(Subject,Msg:string):string;
+function isLocalIP(ip:string): boolean;
 
 implementation
 
@@ -3308,6 +3309,26 @@ finally
   result:=error;
 end;
 if VoiceEmail then speak(Subject+' . '+Msg);
+end;
+
+function isLocalIP(ip:string): boolean;
+var ipstr:Tstringlist;
+begin
+  result:=false;
+  ipstr:=Tstringlist.Create;
+  try
+  SplitRec(ip,'.',ipstr);
+  if ipstr[0]='127' then
+    result:=true
+  else if ipstr[0]='10' then
+    result:=true
+  else if (ipstr[0]='192')and(ipstr[1]='168') then
+    result:=true
+  else if (ipstr[0]='172')and(ipstr[1]>='16')and(ipstr[1]<='31') then
+    result:=true;
+  finally
+    ipstr.Free;
+  end;
 end;
 
 end.

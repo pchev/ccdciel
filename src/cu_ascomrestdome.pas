@@ -25,7 +25,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 interface
 
-uses cu_dome, cu_ascomrest, u_global,
+uses cu_dome, cu_ascomrest, u_global, u_utils,
     u_translation, indiapi,
     Forms, ExtCtrls,Classes, SysUtils;
 type
@@ -35,7 +35,7 @@ T_ascomrestdome = class(T_dome)
    stShutter,stSlave,stPark: boolean;
    FInterfaceVersion: integer;
    StatusTimer: TTimer;
-
+   statusinterval,waitpoll: integer;
    procedure StatusTimerTimer(sender: TObject);
    function  Connected: boolean;
  protected
@@ -55,9 +55,6 @@ public
    procedure Disconnect; override;
 end;
 
-const statusinterval=10000;
-      waitpoll=1000;
-
 implementation
 
 constructor T_ascomrestdome.Create(AOwner: TComponent);
@@ -70,6 +67,8 @@ begin
  stShutter:=false;
  stSlave:=false;
  stPark:=false;
+ statusinterval:=1000;
+ waitpoll:=500;
  StatusTimer:=TTimer.Create(nil);
  StatusTimer.Enabled:=false;
  StatusTimer.Interval:=statusinterval;
@@ -127,6 +126,14 @@ begin
      FhasShutter:=V.Get('cansetshutter').AsBool;
      except
        FhasShutter:=false;
+     end;
+     if isLocalIP(V.RemoteIP) then begin
+       statusinterval:=1000;
+       waitpoll:=500;
+     end
+     else begin
+       statusinterval:=5000;
+       waitpoll:=1000;
      end;
      msg(rsConnected3);
      FStatus := devConnected;

@@ -41,6 +41,7 @@ T_ascomrestfocuser = class(T_focuser)
    FhasAbsolutePosition,FhasRelativePosition: boolean;
    FRelIncr: integer;
    FmsgTemp,FmsgAPos,FmsgRPos: integer;
+   waitpoll,statusinterval: integer;
    StatusTimer: TTimer;
    FDeviceName: string;
    procedure StatusTimerTimer(sender: TObject);
@@ -76,9 +77,6 @@ public
    procedure FocusOut; override;
 end;
 
-const waitpoll=1000;
-      statusinterval=3000;
-
 implementation
 
 constructor T_ascomrestfocuser.Create(AOwner: TComponent);
@@ -97,6 +95,8 @@ begin
  FmsgRPos:=-1;
  stPosition:=NullInt;
  stTemperature:=NullCoord;
+ waitpoll:=500;
+ statusinterval:=2000;
  StatusTimer:=TTimer.Create(nil);
  StatusTimer.Enabled:=false;
  StatusTimer.Interval:=statusinterval;
@@ -158,6 +158,14 @@ begin
      GetTemperatureInt;
      FhasAbsolutePosition:=GethasAbsolutePositionReal;
      FhasRelativePosition:=GethasRelativePositionReal;
+     if isLocalIP(V.RemoteIP) then begin
+       waitpoll:=500;
+       statusinterval:=2000;
+     end
+     else begin
+       waitpoll:=1000;
+       statusinterval:=3000;
+     end;
      msg(rsConnected3);
      if Assigned(FonStatusChange) then FonStatusChange(self);
      CheckTemp:=0;

@@ -25,7 +25,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 interface
 
-uses cu_weather, cu_ascomrest, u_global,
+uses cu_weather, cu_ascomrest, u_global, u_utils,
     u_translation, indiapi,
     Forms, ExtCtrls,Classes, SysUtils;
 
@@ -36,6 +36,7 @@ T_ascomrestweather = class(T_weather)
    stClear: boolean;
    FInterfaceVersion: integer;
    StatusTimer: TTimer;
+   statusinterval: integer;
    procedure StatusTimerTimer(sender: TObject);
    function  Connected: boolean;
  protected
@@ -63,8 +64,6 @@ public
    procedure Disconnect; override;
 end;
 
-const statusinterval=20000;
-
 implementation
 
 constructor T_ascomrestweather.Create(AOwner: TComponent);
@@ -74,6 +73,7 @@ begin
  V.ClientId:=3206;
  FweatherInterface:=ASCOMREST;
  FInterfaceVersion:=1;
+ statusinterval:=2000;
  StatusTimer:=TTimer.Create(nil);
  StatusTimer.Enabled:=false;
  StatusTimer.Interval:=statusinterval;
@@ -116,6 +116,10 @@ begin
      except
        FInterfaceVersion:=1;
      end;
+     if isLocalIP(V.RemoteIP) then
+       statusinterval:=2000
+     else
+       statusinterval:=20000;
      msg('Interface version: '+inttostr(FInterfaceVersion),9);
      msg(rsConnected3);
      FStatus := devConnected;

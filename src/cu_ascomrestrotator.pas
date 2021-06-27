@@ -25,7 +25,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 interface
 
-uses cu_rotator, cu_ascomrest, u_global,
+uses cu_rotator, cu_ascomrest, u_global, u_utils,
     u_translation, indiapi,
     Forms, ExtCtrls,Classes, SysUtils;
 
@@ -36,6 +36,7 @@ T_ascomrestrotator = class(T_rotator)
    stAngle: double;
    FInterfaceVersion: integer;
    StatusTimer: TTimer;
+   statusinterval,waitpoll: integer;
    procedure StatusTimerTimer(sender: TObject);
    function  Connected: boolean;
    function  InterfaceVersion: integer;
@@ -55,9 +56,6 @@ public
    Procedure Halt; override;
 end;
 
-const waitpoll=1000;
-      statusinterval=3000;
-
 implementation
 
 constructor T_ascomrestrotator.Create(AOwner: TComponent);
@@ -67,6 +65,8 @@ begin
  V.ClientId:=3204;
  FRotatorInterface:=ASCOMREST;
  FInterfaceVersion:=1;
+ waitpoll:=500;
+ statusinterval:=2000;
  StatusTimer:=TTimer.Create(nil);
  StatusTimer.Enabled:=false;
  StatusTimer.Interval:=statusinterval;
@@ -121,6 +121,14 @@ begin
      FInterfaceVersion:=V.Get('interfaceversion').AsInt;
      except
        FInterfaceVersion:=1;
+     end;
+     if isLocalIP(V.RemoteIP) then begin
+       waitpoll:=500;
+       statusinterval:=2000;
+     end
+     else begin
+       waitpoll:=1000;
+       statusinterval:=3000;
      end;
      msg('Interface version: '+inttostr(FInterfaceVersion),9);
      msg(rsConnected3);
