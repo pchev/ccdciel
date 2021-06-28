@@ -8929,6 +8929,7 @@ end;
 procedure Tf_main.CameraNewImageAsync(Data: PtrInt);
 var buf: string;
     loadimage,displayimage: boolean;
+    tt:double;
 begin
  try
   StatusBar1.Panels[panelstatus].Text:='';
@@ -8942,7 +8943,9 @@ begin
     {$ifdef debug_raw}writeln(FormatDateTime(dateiso,Now)+blank+'fits loadstream');{$endif}
     try
      fits.DisableBayer:=loadimage and (not displayimage);
+     tt:=now;
      fits.LoadStream;
+     if fits.DisableBayer then NewMessage('Image load and measurement time: '+formatfloat(f3,(now-tt)*secperday)+' seconds');
     finally
      fits.DisableBayer:=false;
     end;
