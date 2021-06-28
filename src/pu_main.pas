@@ -8928,7 +8928,7 @@ end;
 
 procedure Tf_main.CameraNewImageAsync(Data: PtrInt);
 var buf: string;
-    displayimage: boolean;
+    loadimage,displayimage: boolean;
 begin
  try
   StatusBar1.Panels[panelstatus].Text:='';
@@ -8936,10 +8936,16 @@ begin
   ImgFrameY:=FrameY;
   ImgFrameW:=FrameW;
   ImgFrameH:=FrameH;
-  displayimage:=DisplayCapture or f_visu.BtnShowImage.Down or (not capture) or (Autofocusing) or (FlatAutoExposure and (camera.FrameType=FLAT));
-  if displayimage and (not fits.ImageValid) then begin
+  loadimage:=DisplayCapture or f_visu.BtnShowImage.Down or (not capture) or (Autofocusing) or (FlatAutoExposure and (camera.FrameType=FLAT));
+  displayimage:=DisplayCapture or f_visu.BtnShowImage.Down or (not capture) or (Autofocusing);
+  if loadimage and (not fits.ImageValid) then begin
     {$ifdef debug_raw}writeln(FormatDateTime(dateiso,Now)+blank+'fits loadstream');{$endif}
+    try
+     fits.DisableBayer:=loadimage and (not displayimage);
      fits.LoadStream;
+    finally
+     fits.DisableBayer:=false;
+    end;
   end;
   if displayimage then begin
   try
