@@ -8913,7 +8913,7 @@ procedure Tf_main.ShowLastImage(Sender: TObject);
 begin
  if f_visu.BtnShowImage.Down then begin
   fits.LoadStream;
-  DrawHistogram(true,true);
+  DrawHistogram(true,false);
   DrawImage;
   Image1.Invalidate;
  end
@@ -12132,9 +12132,12 @@ var imgsize: string;
     n,oldw,oldh:integer;
     c: TcdcWCScoord;
     x1,y1,x2,y2,ulra,uldec: double;
+    oldmean,oldsigma: double;
 begin
    oldw:=fits.HeaderInfo.naxis1;
    oldh:=fits.HeaderInfo.naxis2;
+   oldmean:=fits.imageMean;
+   oldsigma:=fits.imageSigma;
    StatusBar1.Panels[panelstatus].Text:='';
    fits.LoadFromFile(fn);
    if fits.HeaderInfo.valid then begin
@@ -12231,7 +12234,10 @@ begin
        ImgCx:=0;
        ImgCy:=0;
      end;
-     DrawHistogram(true,true);
+     if (abs(oldmean-fits.imageMean)<100)and(abs(oldsigma-fits.imageSigma)<100) then
+        DrawHistogram(true,false)  // images are similar, do not reset manual luminosity adjustment
+     else
+        DrawHistogram(true,true);
      DrawImage;
      imgsize:=inttostr(fits.HeaderInfo.naxis1)+'x'+inttostr(fits.HeaderInfo.naxis2);
      NewMessage(Format(rsOpenFile, [fn]),2);
@@ -12245,8 +12251,11 @@ end;
 procedure Tf_main.LoadRawFile(fn:string);
 var RawStream, FitsStream: TMemoryStream;
     imgsize, rmsg, ext: string;
+    oldmean,oldsigma: double;
 begin
  {$ifdef debug_raw}writeln(FormatDateTime(dateiso,Now)+blank+'LoadRawFile'+blank+fn);{$endif}
+ oldmean:=fits.imageMean;
+ oldsigma:=fits.imageSigma;
  // create resources
  RawStream:=TMemoryStream.Create;
  FitsStream:=TMemoryStream.Create;
@@ -12268,7 +12277,10 @@ begin
      fits.LoadStream;
      // draw new image
      {$ifdef debug_raw}writeln(FormatDateTime(dateiso,Now)+blank+'DrawHistogram');{$endif}
-     DrawHistogram(true,true);
+     if (abs(oldmean-fits.imageMean)<100)and(abs(oldsigma-fits.imageSigma)<100) then
+        DrawHistogram(true,false)  // images are similar, do not reset manual luminosity adjustment
+     else
+        DrawHistogram(true,true);
      {$ifdef debug_raw}writeln(FormatDateTime(dateiso,Now)+blank+'DrawImage');{$endif}
      DrawImage;
      {$ifdef debug_raw}writeln(FormatDateTime(dateiso,Now)+blank+'DrawImage end');{$endif}
@@ -12287,7 +12299,10 @@ end;
 procedure Tf_main.LoadPictureFile(fn:string);
 var PictStream, FitsStream: TMemoryStream;
     imgsize,ext: string;
+    oldmean,oldsigma: double;
 begin
+ oldmean:=fits.imageMean;
+ oldsigma:=fits.imageSigma;
  // create resources
  PictStream:=TMemoryStream.Create;
  FitsStream:=TMemoryStream.Create;
@@ -12303,7 +12318,10 @@ begin
      fits.Stream:=FitsStream;
      fits.LoadStream;
      // draw new image
-     DrawHistogram(true,true);
+     if (abs(oldmean-fits.imageMean)<100)and(abs(oldsigma-fits.imageSigma)<100) then
+        DrawHistogram(true,false)  // images are similar, do not reset manual luminosity adjustment
+     else
+        DrawHistogram(true,true);
      DrawImage;
      imgsize:=inttostr(fits.HeaderInfo.naxis1)+'x'+inttostr(fits.HeaderInfo.naxis2);
      NewMessage(Format(rsOpenFile, [fn]),2);
