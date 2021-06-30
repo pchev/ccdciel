@@ -301,7 +301,7 @@ end;
 procedure TAstrometry.SolveCurrentImage(wait: boolean);
 var n: integer;
 begin
-  if (not FBusy) and (FFits.HeaderInfo.naxis>0) then begin
+  if (not FBusy) and (FFits.HeaderInfo.naxis>0) and FFits.ImageValid then begin
    if fits.HeaderInfo.solved and (cdcwcs_initfitsfile<>nil) then begin
      fits.SaveToFile(slash(TmpDir)+'ccdcielsolved.fits');
      n:=cdcwcs_initfitsfile(pchar(slash(TmpDir)+'ccdcielsolved.fits'),0);
@@ -338,7 +338,7 @@ end;
 
 procedure TAstrometry.SyncCurrentImage(wait: boolean);
 begin
-  if (not FBusy) and (FFits.HeaderInfo.naxis>0) and (Mount.Status=devConnected) then begin
+  if (not FBusy) and (FFits.HeaderInfo.naxis>0) and FFits.ImageValid and (Mount.Status=devConnected) then begin
    if fits.HeaderInfo.solved then begin
      FFits.SaveToFile(slash(TmpDir)+'ccdcielsolved.fits');
      AstrometrySync(nil);
@@ -377,7 +377,7 @@ end;
 
 procedure TAstrometry.SlewScreenXY(x,y: integer);
 begin
-  if (not FSlewBusy) and (not FBusy) and (FFits.HeaderInfo.naxis>0) and AllDevicesConnected and(Mount.Status=devConnected)and(Camera.Status=devConnected) then begin
+  if (not FSlewBusy) and (not FBusy) and (FFits.HeaderInfo.naxis>0) and FFits.ImageValid and AllDevicesConnected and(Mount.Status=devConnected)and(Camera.Status=devConnected) then begin
    FSlewBusy:=true;
    Xslew:=x;
    Yslew:=y;

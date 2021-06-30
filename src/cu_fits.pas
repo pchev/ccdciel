@@ -100,6 +100,7 @@ type
  end;
 
 const    maxl = 20000;
+         cropsize = 1000;
          bottomup = 'BOTTOM-UP';
          topdown = 'TOP-DOWN';
 
@@ -154,6 +155,7 @@ type
     procedure SetStream(value:TMemoryStream);
     function GetStream: TMemoryStream;
     procedure SetVideoStream(value:TMemoryStream);
+    Procedure MeasureImageCenter;
     Procedure ReadFitsImage;
     Procedure WriteFitsImage;
     function GammaCorr(value: Word):byte;
@@ -171,6 +173,7 @@ type
      destructor  Destroy; override;
      function  GetStatistics: string;
      Procedure LoadStream;
+     Procedure MeasureStreamCenter;
      Procedure LoadRGB;
      procedure ClearFitsInfo;
      procedure GetFitsInfo;
@@ -1315,6 +1318,14 @@ begin
   end;
 end;
 
+Procedure TFits.MeasureStreamCenter;
+begin
+  GetFitsInfo;
+  if FFitsInfo.valid then begin
+    MeasureImageCenter;
+  end;
+end;
+
 Procedure TFits.LoadRGB;
 var i: integer;
 begin
@@ -1586,6 +1597,47 @@ begin
  Fheight:=FFitsInfo.naxis2;
  Fwidth :=FFitsInfo.naxis1;
  setlength(Fimage,n_plane,Fheight,Fwidth);
+end;
+
+Procedure TFits.MeasureImageCenter;
+var ni,sum,sum2 : extended;
+    i,j : integer;
+    startline,endline,startcol: integer;
+    x16,b16:smallint;
+    x : double;
+    d16 : array[1..cropsize] of smallint;
+begin
+{$ifdef debug_raw}writeln(FormatDateTime(dateiso,Now)+blank+'MeasureFitsImage');{$endif}
+if FFitsInfo.naxis1=0 then exit;
+if (FFitsInfo.naxis1>maxl)or(FFitsInfo.naxis2>maxl) then
+  raise exception.Create(Format('Image too big! limit is currently %dx%d %sPlease open an issue to request an extension.',[maxl,maxl,crlf]));
+Fheight:=FFitsInfo.naxis2;
+Fwidth :=FFitsInfo.naxis1;
+// only 16 bit B/W images bigger than cropsize, otherwise read full
+if (FFitsInfo.bitpix<>16)or(n_plane<>1)or(Fheight<=cropsize)or(Fwidth<=cropsize) then begin
+   ReadFitsImage;
+   exit;
+end;
+// image size
+startline := (Fheight-cropsize) div 2;
+endline := startline+cropsize;
+startcol := (Fwidth-cropsize) div 2;
+sum:=0; sum2:=0; ni:=0;
+b16:=round(FFitsInfo.blank);
+for i:=startline to endline do begin
+   FStream.Position:=fhdr_end+(Fwidth*i+startcol)*sizeof(SmallInt);
+   FStream.Read(d16,sizeof(d16));
+   for j := 1 to cropsize do begin
+     x16:=BEtoN(d16[j]);
+     if x16=b16 then x16:=0;
+     x:=FFitsInfo.bzero+FFitsInfo.bscale*x16;
+     sum:=sum+x;
+     sum2:=sum2+x*x;
+     ni:=ni+1;
+   end;
+end;
+Fmean:=sum/ni;
+Fsigma:=sqrt( (sum2/ni)-(Fmean*Fmean) );
 end;
 
 Procedure TFits.ReadFitsImage;

@@ -2927,7 +2927,7 @@ end;
 procedure Tf_main.Image1DblClick(Sender: TObject);
 var x,y: integer;
 begin
- if fits.HeaderInfo.valid and (not f_starprofile.AutofocusRunning) then begin
+if fits.HeaderInfo.valid and fits.ImageValid and (not f_starprofile.AutofocusRunning) then begin
    if f_photometry.Visible then begin
       MeasureAtPos(Mx,My,true);
    end
@@ -2982,7 +2982,7 @@ var px,py,dx,dy: integer;
     z: double;
 begin
  MagnifyerTimer.Enabled:=true;
- if PolarMoving  and fits.HeaderInfo.valid then begin
+ if PolarMoving  and fits.HeaderInfo.valid and fits.ImageValid then begin
     Screen2Fits(X,Y,false,false,px,py);
     dx:=px-PolX;
     dy:=py-PolY;
@@ -2998,7 +2998,7 @@ begin
       PolarAlignmentOverlayOffsetY:=PolarAlignmentOverlayOffsetY + dy;
     Image1.Invalidate;
  end
- else if MouseMoving and fits.HeaderInfo.valid then begin
+ else if MouseMoving and fits.HeaderInfo.valid and fits.ImageValid then begin
     if f_visu.FlipHorz then
       ImgCx:=ImgCx - (X-Mx) / ImgZoom
     else
@@ -3018,7 +3018,7 @@ begin
     scrbmp.Rectangle(StartX,StartY,EndX,EndY,BGRAWhite,dmXor);
     image1.Invalidate;
  end
- else if (fits.HeaderInfo.naxis1>0)and(ImgScale0<>0) then begin
+ else if (fits.HeaderInfo.naxis1>0)and(ImgScale0<>0) and fits.ImageValid then begin
    MeasureTimer.Enabled:=true;
  end;
 Mx:=X;
@@ -3042,14 +3042,14 @@ if PolarMoving then begin
     Mx:=X;
     My:=Y;
 end;
-if MouseMoving and fits.HeaderInfo.valid then begin
+if MouseMoving and fits.HeaderInfo.valid and fits.ImageValid then begin
     ImgCx:=ImgCx + (X-Mx) / ImgZoom;
     ImgCy:=ImgCy + (Y-My) / ImgZoom;
     PlotImage;
     Mx:=X;
     My:=Y;
 end;
-if MouseFrame and fits.HeaderInfo.valid then begin
+if MouseFrame and fits.HeaderInfo.valid and fits.ImageValid then begin
   Image1.Canvas.Pen.Color:=clBlack;
   Image1.Canvas.Pen.Mode:=pmCopy;
   EndX:=X;
@@ -3087,7 +3087,7 @@ procedure Tf_main.Image1MouseWheel(Sender: TObject; Shift: TShiftState;
 var
   zf,r1,r2: double;
 begin
-if (fits.HeaderInfo.naxis>0) then begin
+if (fits.HeaderInfo.naxis>0) and fits.ImageValid then begin
   if LockMouseWheel then
     exit;
   LockMouseWheel := True;
@@ -6919,7 +6919,7 @@ procedure Tf_main.MenuImgStatClick(Sender: TObject);
 var f: Tf_viewtext;
     txt: string;
 begin
- if fits.HeaderInfo.valid then begin
+ if fits.HeaderInfo.valid and fits.ImageValid then begin
    f:=Tf_viewtext.Create(self);
    f.Width:=DoScaleX(250);
    f.Height:=DoScaleY(250);
@@ -8941,13 +8941,13 @@ begin
   displayimage:=DisplayCapture or f_visu.BtnShowImage.Down or (not capture) or (Autofocusing);
   if loadimage and (not fits.ImageValid) then begin
     {$ifdef debug_raw}writeln(FormatDateTime(dateiso,Now)+blank+'fits loadstream');{$endif}
-    try
-     fits.DisableBayer:=loadimage and (not displayimage);
-     tt:=now;
-     fits.LoadStream;
-     if fits.DisableBayer then NewMessage('Image load and measurement time: '+formatfloat(f3,(now-tt)*secperday)+' seconds');
-    finally
-     fits.DisableBayer:=false;
+    if loadimage and (not displayimage) then begin
+      tt:=now;
+      fits.MeasureStreamCenter;
+      NewMessage('Image measurement time: '+formatfloat(f3,(now-tt)*secperday)+' seconds');
+    end
+    else begin
+      fits.LoadStream;
     end;
   end;
   if displayimage then begin
@@ -9451,7 +9451,7 @@ var tmpbmp:TBGRABitmap;
     co: TBGRAPixel;
     s,cx,cy: integer;
 begin
-if fits.HeaderInfo.naxis>0 then begin
+if (fits.HeaderInfo.naxis>0) and fits.ImageValid then begin
   try
   if WaitCursor then screen.Cursor:=crHourGlass;
   trpOK:=false;
@@ -9774,7 +9774,7 @@ end;
 
 Procedure Tf_main.DrawHistogram(SetLevel,ResetCursor: boolean);
 begin
-  if fits.HeaderInfo.naxis>0 then begin
+  if (fits.HeaderInfo.naxis>0) and fits.ImageValid then begin
      f_visu.DrawHistogram(fits,SetLevel,ResetCursor);
   end;
 end;
@@ -10033,7 +10033,7 @@ end;
 
 procedure Tf_main.MenuItemPhotometryClick(Sender: TObject);
 begin
-if fits.HeaderInfo.valid then begin
+if fits.HeaderInfo.valid and fits.ImageValid then begin
   f_photometry.Show;
   MeasureAtPos(MouseDownX,MouseDownY,true);
   Image1.Invalidate;
@@ -10051,7 +10051,7 @@ procedure Tf_main.MenuItemDebayerClick(Sender: TObject);
 begin
  if TMenuItem(Sender).Checked then begin
   BayerColor:=True;
-  if fits.HeaderInfo.naxis>0 then begin
+  if (fits.HeaderInfo.naxis>0) and fits.ImageValid then begin
     fits.LoadStream;
     DrawHistogram(true,true);
     DrawImage;
@@ -10060,7 +10060,7 @@ begin
  end
  else begin
   BayerColor:=False;
-  if fits.HeaderInfo.naxis>0 then begin
+  if (fits.HeaderInfo.naxis>0) and fits.ImageValid then begin
     fits.LoadStream;
     DrawHistogram(true,true);
     DrawImage;
@@ -10108,7 +10108,7 @@ end;
 procedure Tf_main.MenuSaveClick(Sender: TObject);
 var fn: string;
 begin
-if fits.HeaderInfo.naxis>0 then begin
+if (fits.HeaderInfo.naxis>0) and fits.ImageValid then begin
    if SaveDialogFits.Execute then begin
       fn:=SaveDialogFits.FileName;
       SaveFitsFile(fn);
@@ -10119,7 +10119,7 @@ end;
 procedure Tf_main.MenuSavePictureClick(Sender: TObject);
 var fn: string;
 begin
-if fits.HeaderInfo.naxis>0 then begin
+if (fits.HeaderInfo.naxis>0) and fits.ImageValid then begin
    if SaveDialogPicture.Execute then begin
       fn:=SaveDialogPicture.FileName;
       fits.SaveToBitmap(fn);
@@ -11632,7 +11632,7 @@ function Tf_main.CheckImageInfo: boolean;
 var ra,dec,px,p,fl: double;
     i: integer;
 begin
-  if fits.HeaderInfo.valid then begin
+  if fits.HeaderInfo.valid and fits.ImageValid then begin
     ra:=fits.HeaderInfo.ra;
     dec:=fits.HeaderInfo.dec;
     px:=fits.HeaderInfo.scale;
@@ -11694,7 +11694,7 @@ begin
    exit;
  end;
  wt:=(Sender<>nil);
- if fits.HeaderInfo.valid then begin
+ if fits.HeaderInfo.valid and fits.ImageValid then begin
    xx:=fits.HeaderInfo.naxis1 div 2;
    yy:=fits.HeaderInfo.naxis2 div 2;
    Fits2Screen(xx,yy,f_visu.FlipHorz,f_visu.FlipVert,x,y);
@@ -11729,7 +11729,7 @@ begin
    NewMessage(rsCameraAndRot,1);
    exit;
  end;
- if fits.HeaderInfo.valid then begin
+ if fits.HeaderInfo.valid and fits.ImageValid then begin
    astrometry.SolveCurrentImage(true);
    if astrometry.CurrentCoord(ra,de,eq,pa) then begin
      rotator.Angle:=pa;
@@ -11750,7 +11750,7 @@ end;
 
 procedure Tf_main.MenuResolveSyncRotatorClick(Sender: TObject);
 begin
- if fits.HeaderInfo.valid then begin
+ if fits.HeaderInfo.valid and fits.ImageValid then begin
   if rotator.Status=devConnected then begin
      if fits.HeaderInfo.solved then begin
        fits.SaveToFile(slash(TmpDir)+'ccdcielsolved.fits');
@@ -11779,7 +11779,7 @@ procedure Tf_main.MenuResolveDSOClick(Sender: TObject);
 var
   Save_Cursor:TCursor;
 begin
-  if fits.HeaderInfo.valid then begin
+  if fits.HeaderInfo.valid and fits.ImageValid then begin
      Save_Cursor := Screen.Cursor; {loading Hyperleda could take some time}
      Screen.Cursor := crHourglass; { Show hourglass cursor }
      if fits.HeaderInfo.solved then begin
@@ -11826,7 +11826,7 @@ end;
 
 procedure Tf_main.MenuResolvePlanetariumClick(Sender: TObject);
 begin
-  if fits.HeaderInfo.valid then begin
+  if fits.HeaderInfo.valid and fits.ImageValid then begin
    if planetarium.Connected then begin
       if fits.HeaderInfo.solved then begin
         fits.SaveToFile(slash(TmpDir)+'ccdcielsolved.fits');
@@ -11849,7 +11849,7 @@ end;
 
 procedure Tf_main.MenuShowCCDFrameClick(Sender: TObject);
 begin
-  if fits.HeaderInfo.valid then begin
+  if fits.HeaderInfo.valid and fits.ImageValid then begin
    if planetarium.Connected then begin
       if fits.HeaderInfo.solved then begin
         fits.SaveToFile(slash(TmpDir)+'ccdcielsolved.fits');
@@ -12118,7 +12118,7 @@ procedure Tf_main.SaveFitsFile(fn:string);
 var fext:string;
     pack: boolean;
 begin
-  if fits.HeaderInfo.valid then begin
+  if fits.HeaderInfo.valid and fits.ImageValid then begin
      fext:=uppercase(extractfileext(fn));
      pack:= (fext='.FZ');
      if pack then fn:=copy(fn,1,length(fn)-3);
@@ -12712,7 +12712,7 @@ var
  mess1,mess2 : string;
 begin
 
-  if not fits.HeaderInfo.valid then exit;
+  if not (fits.HeaderInfo.valid and fits.ImageValid) then exit;
 
   Saved_Cursor := Screen.Cursor;
   Screen.Cursor := crHourglass; { Show hourglass cursor since analysing will take some time}
