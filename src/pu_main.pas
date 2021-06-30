@@ -10177,7 +10177,6 @@ if refmask then begin
     DrawImage;
   end;
   finally
-    mem.Free;
     f.free;
   end;
 end;
@@ -12291,7 +12290,6 @@ begin
  finally
    // Free resources
    RawStream.Free;
-   FitsStream.Free;
  end;
  {$ifdef debug_raw}writeln(FormatDateTime(dateiso,Now)+blank+'LoadRawFile end');{$endif}
 end;
@@ -12330,7 +12328,6 @@ begin
  finally
    // Free resources
    PictStream.Free;
-   FitsStream.Free;
  end;
 end;
 

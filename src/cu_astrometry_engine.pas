@@ -470,7 +470,7 @@ var n: LongInt;
     fn,imgdir,txt: string;
     i,nside,available: integer;
     endtime: double;
-    mem: TMemoryStream;
+    mem,mwcs: TMemoryStream;
 begin
 try
 err:='';
@@ -554,13 +554,13 @@ if (FResolver=ResolverAstrometryNet)or Fretry then begin
     try
     mem.LoadFromFile(FInFile);
     Ftmpfits.Stream:=mem;
-    mem.clear;
-    mem.LoadFromFile(wcsfile);
-    Ftmpfits.Header.NewWCS(mem);
+    mwcs:=TMemoryStream.Create;
+    mwcs.LoadFromFile(wcsfile);
+    Ftmpfits.Header.NewWCS(mwcs);
     Ftmpfits.SaveToFile(FOutFile);
     finally
       Ftmpfits.Free;
-      mem.Free;
+      mwcs.Free;
     end;
   end;
   PostMessage(MsgHandle, LM_CCDCIEL, M_AstrometryDone, PtrInt(strnew(PChar(err))));
@@ -686,13 +686,13 @@ else if FResolver=ResolverPlateSolve then begin
       try
       mem.LoadFromFile(FInFile);
       Ftmpfits.Stream:=mem;
-      mem.clear;
-      mem.LoadFromFile(wcsfile);
-      Ftmpfits.Header.NewWCS(mem);
+      mwcs:=TMemoryStream.Create;
+      mwcs.LoadFromFile(wcsfile);
+      Ftmpfits.Header.NewWCS(mwcs);
       Ftmpfits.SaveToFile(FOutFile);
       finally
         Ftmpfits.Free;
-        mem.Free;
+        mwcs.Free;
       end;
     end
     else begin
@@ -751,7 +751,7 @@ else if FResolver=ResolverAstap then begin
     try
     mem.LoadFromFile(FInFile);
     Ftmpfits.Stream:=mem;
-    mem.clear;
+    mwcs:=TMemoryStream.Create;
     AstapWcs(warn);
     if warn<>'' then begin
       err:=err+' '+warn;
@@ -760,12 +760,12 @@ else if FResolver=ResolverAstap then begin
       WriteLn(ft,warn);
       CloseFile(ft);
     end;
-    mem.LoadFromFile(wcsfile);
-    Ftmpfits.Header.NewWCS(mem);
+    mwcs.LoadFromFile(wcsfile);
+    Ftmpfits.Header.NewWCS(mwcs);
     Ftmpfits.SaveToFile(FOutFile);
     finally
       Ftmpfits.Free;
-      mem.Free;
+      mwcs.Free;
     end;
   end
   else begin

@@ -385,7 +385,7 @@ end;
 
 destructor  T_camera.Destroy;
 begin
-  FImgStream.Free;
+  if FImgStream<>nil then FreeAndNil(FImgStream);
   FFilterNames.Free;
   FVideoStream.Free;
   FVideoSizes.Free;
@@ -484,7 +484,8 @@ if FAddFrames then begin  // stack preview frames
   f.onMsg:=onMsg;
   f.DarkOn:=true;
   f.DarkFrame:=FFits.DarkFrame;
-  f.Stream:=ImgStream;
+  f.Stream:=FImgStream;
+  FImgStream:=TMemoryStream.Create;
   // load, subtract dark and debayer
   f.LoadStream;
   // if debayered, load the new color stream
@@ -550,7 +551,8 @@ else begin  // normal capture
   FStackCount:=0;
   if ImgStream.Size>0 then begin
   {$ifdef debug_raw}writeln(FormatDateTime(dateiso,Now)+blank+'set fits stream');{$endif}
-  Ffits.Stream:=ImgStream;
+  Ffits.Stream:=FImgStream;
+  FImgStream:=TMemoryStream.Create;
   {$ifdef debug_raw}writeln(FormatDateTime(dateiso,Now)+blank+'write headers');{$endif}
   WriteHeaders;
   end;

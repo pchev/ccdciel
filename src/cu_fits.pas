@@ -45,6 +45,7 @@ type
             pixsz1,pixsz2,pixratio,focallen,scale: double;
             exptime,airmass: double;
             objects,ctype1,ctype2 : string;
+            procedure Assign(Source:TFitsInfo);
             end;
 
  THeaderBlock = array[1..36,1..80] of char;
@@ -173,6 +174,7 @@ type
      Procedure LoadRGB;
      procedure ClearFitsInfo;
      procedure GetFitsInfo;
+     procedure CreateImage(info: TFitsInfo; hdr:TFitsHeader);
      procedure BayerInterpolation(t:TBayerMode; rmult,gmult,bmult:double; rbg,gbg,bbg:single; pix1,pix2,pix3,pix4,pix5,pix6,pix7,pix8,pix9:single; row,col:integer; out pixr,pixg,pixb:single); inline;
      Procedure Debayer;
      procedure GetExpBitmap(var bgra: TExpandedBitmap);
@@ -687,6 +689,287 @@ begin
   FComments.Delete(idx);
 end;
 
+//////////////////// TFitsInfo /////////////////////////
+
+procedure TFitsInfo.Assign(Source:TFitsInfo);
+begin
+  valid := Source.valid ;
+  solved := Source.solved ;
+  floatingpoint := Source.floatingpoint ;
+  bitpix := Source.bitpix ;
+  naxis := Source.naxis ;
+  naxis1 := Source.naxis1 ;
+  naxis2 := Source.naxis2 ;
+  naxis3 := Source.naxis3 ;
+  Frx := Source.Frx ;
+  Fry := Source.Fry ;
+  Frwidth := Source.Frwidth ;
+  Frheight := Source.Frheight ;
+  BinX := Source.BinX ;
+  BinY := Source.BinY ;
+  bzero := Source.bzero ;
+  bscale := Source.bscale ;
+  dmax := Source.dmax ;
+  dmin := Source.dmin ;
+  blank := Source.blank ;
+  bayerpattern := Source.bayerpattern ;
+  roworder := Source.roworder ;
+  bayeroffsetx := Source.bayeroffsetx ;
+  bayeroffsety := Source.bayeroffsety ;
+  rmult := Source.rmult ;
+  gmult := Source.gmult ;
+  bmult := Source.bmult ;
+  equinox := Source.equinox ;
+  ra := Source.ra ;
+  dec := Source.dec ;
+  crval1 := Source.crval1 ;
+  crval2 := Source.crval2 ;
+  pixsz1 := Source.pixsz1 ;
+  pixsz2 := Source.pixsz2 ;
+  pixratio := Source.pixratio ;
+  focallen := Source.focallen ;
+  scale := Source.scale ;
+  exptime := Source.exptime ;
+  airmass := Source.airmass ;
+  objects := Source.objects ;
+  ctype1 := Source.ctype1 ;
+  ctype2 := Source.ctype2 ;
+end;
+
+//////////////////// TReadFits /////////////////////////
+
+constructor TReadFits.Create(CreateSuspended: boolean);
+begin
+  FreeOnTerminate := False;
+  inherited Create(CreateSuspended);
+  working := True;
+end;
+
+procedure TReadFits.Execute;
+var i,ii,j,npix,k,km,kk,streaminc : integer;
+    streamstart,startline, endline, xs,ys: integer;
+    x16,b16:smallint;
+    x8,b8:byte;
+    x : double;
+    d8  : array[1..2880] of byte;
+    d16 : array[1..1440] of smallint;
+    d32 : array[1..720] of Longword;
+    d64 : array[1..360] of Int64;
+begin
+// image size
+xs:= fits.Fwidth;
+ys:= fits.FHeight;
+// height per thread
+i := ys div num;
+// this thread range
+startline := id * i;
+if id = (num - 1) then
+  endline := ys - 1
+else
+  endline := (id + 1) * i - 1;
+// start position of this range
+streamstart:=fits.fhdr_end+round(xs*startline*abs(fits.FFitsInfo.bitpix/8));
+dmin:=1.0E100;
+dmax:=-1.0E100;
+sum:=0; sum2:=0; ni:=0;
+FillByte(hist,sizeof(THistogram),0);
+npix:=0;
+streaminc:=0;
+b8:=round(fits.FFitsInfo.blank);
+b16:=round(fits.FFitsInfo.blank);
+try
+case fits.FFitsInfo.bitpix of
+    -64:for k:=0 to fits.n_plane-1 do begin
+        for i:=startline to endline do begin
+         ii:=ys-1-i;
+         for j := 0 to xs-1 do begin
+           if (npix mod 360 = 0) then begin
+             EnterCriticalSection(fits.ReadFitsCS);
+             try
+             fits.FStream.Position:=streamstart+streaminc*sizeof(d64);
+             fits.FStream.Read(d64,sizeof(d64));
+             finally
+               LeaveCriticalSection(fits.ReadFitsCS);
+             end;
+             inc(streaminc);
+             npix:=0;
+           end;
+           inc(npix);
+           x:=InvertF64(d64[npix]);
+           if x=fits.FFitsInfo.blank then x:=0;
+           x:=fits.FFitsInfo.bzero+fits.FFitsInfo.bscale*x;
+           fits.Frawimage[k,ii,j] := x ;
+           dmin:=min(x,dmin);
+           dmax:=max(x,dmax);
+           sum:=sum+x;
+           sum2:=sum2+x*x;
+           ni:=ni+1;
+          end;
+         end;
+         end;
+    -32: for k:=0 to fits.n_plane-1 do begin
+        for i:=startline to endline do begin
+         ii:=ys-1-i;
+         for j := 0 to xs-1 do begin
+           if (npix mod 720 = 0) then begin
+             EnterCriticalSection(fits.ReadFitsCS);
+             try
+             fits.FStream.Position:=streamstart+streaminc*sizeof(d32);
+             fits.FStream.Read(d32,sizeof(d32));
+             finally
+               LeaveCriticalSection(fits.ReadFitsCS);
+             end;
+             inc(streaminc);
+             npix:=0;
+           end;
+           inc(npix);
+           x:=InvertF32(d32[npix]);
+           if x=fits.FFitsInfo.blank then x:=0;
+           x:=fits.FFitsInfo.bzero+fits.FFitsInfo.bscale*x;
+           fits.Frawimage[k,ii,j] := x ;
+           dmin:=min(x,dmin);
+           dmax:=max(x,dmax);
+           sum:=sum+x;
+           sum2:=sum2+x*x;
+           ni:=ni+1;
+         end;
+         end;
+         end;
+     8 : if fits.colormode=1 then
+        for k:=0 to fits.n_plane-1 do begin
+        for i:=startline to endline do begin
+         ii:=ys-1-i;
+         for j := 0 to xs-1 do begin
+           if (npix mod 2880 = 0) then begin
+             EnterCriticalSection(fits.ReadFitsCS);
+             try
+             fits.FStream.Position:=streamstart+streaminc*sizeof(d8);
+             fits.FStream.Read(d8,sizeof(d8));
+             finally
+               LeaveCriticalSection(fits.ReadFitsCS);
+             end;
+             inc(streaminc);
+             npix:=0;
+           end;
+           inc(npix);
+           x8:=d8[npix];
+           if x8=b8 then x8:=0;
+           x:=fits.FFitsInfo.bzero+fits.FFitsInfo.bscale*x8;
+           if fits.FUseRawImage then fits.Frawimage[k,ii,j] := x;
+           fits.Fimage[k,ii,j] := x;
+           inc(hist[round(max(0,min(maxword,x)))]);
+           dmin:=min(x,dmin);
+           dmax:=max(x,dmax);
+           sum:=sum+x;
+           sum2:=sum2+x*x;
+           ni:=ni+1;
+         end;
+         end;
+         end else begin
+          kk:=0;
+          if fits.colormode=3 then begin  // output RGB from RGBA
+             fits.n_plane:=4;
+             kk:=1;
+          end;
+          for i:=startline to endline do begin
+           ii:=ys-1-i;
+           for j := 0 to xs-1 do begin
+             for k:=fits.n_plane-1 downto 0 do begin
+             if (npix mod 2880 = 0) then begin
+               EnterCriticalSection(fits.ReadFitsCS);
+               try
+               fits.FStream.Position:=streamstart+streaminc*sizeof(d8);
+               fits.FStream.Read(d8,sizeof(d8));
+               finally
+                 LeaveCriticalSection(fits.ReadFitsCS);
+               end;
+               inc(streaminc);
+               npix:=0;
+             end;
+             inc(npix);
+             km:=k-kk;
+             if km<0 then continue; // skip A
+             x8:=d8[npix];
+             if x8=b8 then x8:=0;
+             x:=fits.FFitsInfo.bzero+fits.FFitsInfo.bscale*x8;
+             if fits.FUseRawImage then fits.Frawimage[km,ii,j] := x;
+             fits.Fimage[km,ii,j] := x;
+             inc(hist[round(max(0,min(maxword,x)))]);
+             dmin:=min(x,dmin);
+             dmax:=max(x,dmax);
+             sum:=sum+x;
+             sum2:=sum2+x*x;
+             ni:=ni+1;
+             end;
+           end;
+          end;
+          if fits.colormode=3 then fits.n_plane:=3; // restore value
+         end;
+
+     16 : for k:=0 to fits.n_plane-1 do begin
+        for i:=startline to endline do begin
+         ii:=ys-1-i;
+         for j := 0 to xs-1 do begin
+           if (npix mod 1440 = 0) then begin
+             EnterCriticalSection(fits.ReadFitsCS);
+             try
+             fits.FStream.Position:=streamstart+streaminc*sizeof(d16);
+             fits.FStream.Read(d16,sizeof(d16));
+             finally
+               LeaveCriticalSection(fits.ReadFitsCS);
+             end;
+             inc(streaminc);
+             npix:=0;
+           end;
+           inc(npix);
+           x16:=BEtoN(d16[npix]);
+           if x16=b16 then x16:=0;
+           x:=fits.FFitsInfo.bzero+fits.FFitsInfo.bscale*x16;
+           if fits.FUseRawImage then fits.Frawimage[k,ii,j] := x;
+           fits.Fimage[k,ii,j] := x;
+           inc(hist[round(max(0,min(maxword,x)))]);
+           dmin:=min(x,dmin);
+           dmax:=max(x,dmax);
+           sum:=sum+x;
+           sum2:=sum2+x*x;
+           ni:=ni+1;
+         end;
+         end;
+         end;
+     32 : for k:=0 to fits.n_plane-1 do begin
+        for i:=startline to endline do begin
+         ii:=ys-1-i;;
+         for j := 0 to xs-1 do begin
+           if (npix mod 720 = 0) then begin
+             EnterCriticalSection(fits.ReadFitsCS);
+             try
+             fits.FStream.Position:=streamstart+streaminc*sizeof(d32);
+             fits.FStream.Read(d32,sizeof(d32));
+             finally
+               LeaveCriticalSection(fits.ReadFitsCS);
+             end;
+             inc(streaminc);
+             npix:=0;
+           end;
+           inc(npix);
+           x:=BEtoN(LongInt(d32[npix]));
+           if x=fits.FFitsInfo.blank then x:=0;
+           x:=fits.FFitsInfo.bzero+fits.FFitsInfo.bscale*x;
+           fits.Frawimage[k,ii,j] := x;
+           dmin:=min(x,dmin);
+           dmax:=max(x,dmax);
+           sum:=sum+x;
+           sum2:=sum2+x*x;
+           ni:=ni+1;
+         end;
+         end;
+         end;
+end;
+finally
+working := False;
+end;
+end;
+
 //////////////////// TDebayerImage /////////////////////////
 
 constructor TDebayerImage.Create(CreateSuspended: boolean);
@@ -970,7 +1253,7 @@ try
 setlength(Frawimage,0,0,0);
 setlength(Fimage,0,0,0);
 FHeader.Free;
-FStream.Free;
+if FStream<>nil then FreeAndNil(FStream);
 FIntfImg.Free;
 emptybmp.Free;
 FreeDark;
@@ -991,10 +1274,8 @@ begin
 FImageValid:=false;
 setlength(Frawimage,0,0,0);
 setlength(Fimage,0,0,0);
-FStream.Clear;
-FStream.Position:=0;
-value.Position:=0;
-FStream.CopyFrom(value,value.Size);
+if FStream<>nil then FreeAndNil(FStream);
+FStream:=value;
 FStream.Position:=0;
 FStream.Read(buf,80);
 FStream.Position:=0;
@@ -1017,10 +1298,8 @@ try
  ClearFitsInfo;
  setlength(Frawimage,0,0,0);
  setlength(Fimage,0,0,0);
- FStream.Clear;
- FStream.Position:=0;
- value.Position:=0;
- FStream.CopyFrom(value,value.Size);
+ if FStream<>nil then FreeAndNil(FStream);
+ FStream:=value;
  Fhdr_end:=FHeader.ReadHeader(FStream);
  FStreamValid:=true;
 except
@@ -1105,9 +1384,8 @@ var mem: TMemoryStream;
     i: integer;
 begin
 if FileExistsUTF8(fn) then begin
- mem:=TMemoryStream.Create;
- pack:=uppercase(ExtractFileExt(fn))='.FZ';
- try
+   mem:=TMemoryStream.Create;
+   pack:=uppercase(ExtractFileExt(fn))='.FZ';
    if pack then begin
      i:=UnpackFits(fn,mem,rmsg);
      if i<>0 then begin
@@ -1122,9 +1400,6 @@ if FileExistsUTF8(fn) then begin
    FDarkOn:=false;
    SetStream(mem);
    LoadStream;
- finally
-   mem.free;
- end;
 end
 else begin
  ClearImage;
@@ -1287,236 +1562,30 @@ begin
 end;
 end;
 
-constructor TReadFits.Create(CreateSuspended: boolean);
+procedure TFits.CreateImage(info: TFitsInfo; hdr:TFitsHeader);
 begin
-  FreeOnTerminate := False;
-  inherited Create(CreateSuspended);
-  working := True;
-end;
-
-procedure TReadFits.Execute;
-var i,ii,j,npix,k,km,kk,streaminc : integer;
-    streamstart,startline, endline, xs,ys: integer;
-    x16,b16:smallint;
-    x8,b8:byte;
-    x : double;
-    d8  : array[1..2880] of byte;
-    d16 : array[1..1440] of smallint;
-    d32 : array[1..720] of Longword;
-    d64 : array[1..360] of Int64;
-begin
-// image size
-xs:= fits.Fwidth;
-ys:= fits.FHeight;
-// height per thread
-i := ys div num;
-// this thread range
-startline := id * i;
-if id = (num - 1) then
-  endline := ys - 1
-else
-  endline := (id + 1) * i - 1;
-// start position of this range
-streamstart:=fits.fhdr_end+round(xs*startline*abs(fits.FFitsInfo.bitpix/8));
-dmin:=1.0E100;
-dmax:=-1.0E100;
-sum:=0; sum2:=0; ni:=0;
-FillByte(hist,sizeof(THistogram),0);
-npix:=0;
-streaminc:=0;
-b8:=round(fits.FFitsInfo.blank);
-b16:=round(fits.FFitsInfo.blank);
-try
-case fits.FFitsInfo.bitpix of
-    -64:for k:=0 to fits.n_plane-1 do begin
-        for i:=startline to endline do begin
-         ii:=ys-1-i;
-         for j := 0 to xs-1 do begin
-           if (npix mod 360 = 0) then begin
-             EnterCriticalSection(fits.ReadFitsCS);
-             try
-             fits.FStream.Position:=streamstart+streaminc*sizeof(d64);
-             fits.FStream.Read(d64,sizeof(d64));
-             finally
-               LeaveCriticalSection(fits.ReadFitsCS);
-             end;
-             inc(streaminc);
-             npix:=0;
-           end;
-           inc(npix);
-           x:=InvertF64(d64[npix]);
-           if x=fits.FFitsInfo.blank then x:=0;
-           x:=fits.FFitsInfo.bzero+fits.FFitsInfo.bscale*x;
-           fits.Frawimage[k,ii,j] := x ;
-           dmin:=min(x,dmin);
-           dmax:=max(x,dmax);
-           sum:=sum+x;
-           sum2:=sum2+x*x;
-           ni:=ni+1;
-          end;
-         end;
-         end;
-    -32: for k:=0 to fits.n_plane-1 do begin
-        for i:=startline to endline do begin
-         ii:=ys-1-i;
-         for j := 0 to xs-1 do begin
-           if (npix mod 720 = 0) then begin
-             EnterCriticalSection(fits.ReadFitsCS);
-             try
-             fits.FStream.Position:=streamstart+streaminc*sizeof(d32);
-             fits.FStream.Read(d32,sizeof(d32));
-             finally
-               LeaveCriticalSection(fits.ReadFitsCS);
-             end;
-             inc(streaminc);
-             npix:=0;
-           end;
-           inc(npix);
-           x:=InvertF32(d32[npix]);
-           if x=fits.FFitsInfo.blank then x:=0;
-           x:=fits.FFitsInfo.bzero+fits.FFitsInfo.bscale*x;
-           fits.Frawimage[k,ii,j] := x ;
-           dmin:=min(x,dmin);
-           dmax:=max(x,dmax);
-           sum:=sum+x;
-           sum2:=sum2+x*x;
-           ni:=ni+1;
-         end;
-         end;
-         end;
-     8 : if fits.colormode=1 then
-        for k:=0 to fits.n_plane-1 do begin
-        for i:=startline to endline do begin
-         ii:=ys-1-i;
-         for j := 0 to xs-1 do begin
-           if (npix mod 2880 = 0) then begin
-             EnterCriticalSection(fits.ReadFitsCS);
-             try
-             fits.FStream.Position:=streamstart+streaminc*sizeof(d8);
-             fits.FStream.Read(d8,sizeof(d8));
-             finally
-               LeaveCriticalSection(fits.ReadFitsCS);
-             end;
-             inc(streaminc);
-             npix:=0;
-           end;
-           inc(npix);
-           x8:=d8[npix];
-           if x8=b8 then x8:=0;
-           x:=fits.FFitsInfo.bzero+fits.FFitsInfo.bscale*x8;
-           if fits.FUseRawImage then fits.Frawimage[k,ii,j] := x;
-           fits.Fimage[k,ii,j] := x;
-           inc(hist[round(max(0,min(maxword,x)))]);
-           dmin:=min(x,dmin);
-           dmax:=max(x,dmax);
-           sum:=sum+x;
-           sum2:=sum2+x*x;
-           ni:=ni+1;
-         end;
-         end;
-         end else begin
-          kk:=0;
-          if fits.colormode=3 then begin  // output RGB from RGBA
-             fits.n_plane:=4;
-             kk:=1;
-          end;
-          for i:=startline to endline do begin
-           ii:=ys-1-i;
-           for j := 0 to xs-1 do begin
-             for k:=fits.n_plane-1 downto 0 do begin
-             if (npix mod 2880 = 0) then begin
-               EnterCriticalSection(fits.ReadFitsCS);
-               try
-               fits.FStream.Position:=streamstart+streaminc*sizeof(d8);
-               fits.FStream.Read(d8,sizeof(d8));
-               finally
-                 LeaveCriticalSection(fits.ReadFitsCS);
-               end;
-               inc(streaminc);
-               npix:=0;
-             end;
-             inc(npix);
-             km:=k-kk;
-             if km<0 then continue; // skip A
-             x8:=d8[npix];
-             if x8=b8 then x8:=0;
-             x:=fits.FFitsInfo.bzero+fits.FFitsInfo.bscale*x8;
-             if fits.FUseRawImage then fits.Frawimage[km,ii,j] := x;
-             fits.Fimage[km,ii,j] := x;
-             inc(hist[round(max(0,min(maxword,x)))]);
-             dmin:=min(x,dmin);
-             dmax:=max(x,dmax);
-             sum:=sum+x;
-             sum2:=sum2+x*x;
-             ni:=ni+1;
-             end;
-           end;
-          end;
-          if fits.colormode=3 then fits.n_plane:=3; // restore value
-         end;
-
-     16 : for k:=0 to fits.n_plane-1 do begin
-        for i:=startline to endline do begin
-         ii:=ys-1-i;
-         for j := 0 to xs-1 do begin
-           if (npix mod 1440 = 0) then begin
-             EnterCriticalSection(fits.ReadFitsCS);
-             try
-             fits.FStream.Position:=streamstart+streaminc*sizeof(d16);
-             fits.FStream.Read(d16,sizeof(d16));
-             finally
-               LeaveCriticalSection(fits.ReadFitsCS);
-             end;
-             inc(streaminc);
-             npix:=0;
-           end;
-           inc(npix);
-           x16:=BEtoN(d16[npix]);
-           if x16=b16 then x16:=0;
-           x:=fits.FFitsInfo.bzero+fits.FFitsInfo.bscale*x16;
-           if fits.FUseRawImage then fits.Frawimage[k,ii,j] := x;
-           fits.Fimage[k,ii,j] := x;
-           inc(hist[round(max(0,min(maxword,x)))]);
-           dmin:=min(x,dmin);
-           dmax:=max(x,dmax);
-           sum:=sum+x;
-           sum2:=sum2+x*x;
-           ni:=ni+1;
-         end;
-         end;
-         end;
-     32 : for k:=0 to fits.n_plane-1 do begin
-        for i:=startline to endline do begin
-         ii:=ys-1-i;;
-         for j := 0 to xs-1 do begin
-           if (npix mod 720 = 0) then begin
-             EnterCriticalSection(fits.ReadFitsCS);
-             try
-             fits.FStream.Position:=streamstart+streaminc*sizeof(d32);
-             fits.FStream.Read(d32,sizeof(d32));
-             finally
-               LeaveCriticalSection(fits.ReadFitsCS);
-             end;
-             inc(streaminc);
-             npix:=0;
-           end;
-           inc(npix);
-           x:=BEtoN(LongInt(d32[npix]));
-           if x=fits.FFitsInfo.blank then x:=0;
-           x:=fits.FFitsInfo.bzero+fits.FFitsInfo.bscale*x;
-           fits.Frawimage[k,ii,j] := x;
-           dmin:=min(x,dmin);
-           dmax:=max(x,dmax);
-           sum:=sum+x;
-           sum2:=sum2+x*x;
-           ni:=ni+1;
-         end;
-         end;
-         end;
-end;
-finally
-working := False;
-end;
+ FFitsInfo.Assign(info);
+ FHeader.Assign(hdr);
+ // set color image type
+ colormode:=1;
+ with FFitsInfo do begin
+   if (naxis=3)and(naxis1=3) then begin // contiguous color RGB
+    naxis1:=naxis2;
+    naxis2:=naxis3;
+    naxis3:=3;
+    colormode:=2;
+   end;
+   if (naxis=3)and(naxis1=4) then begin // contiguous color RGBA
+    naxis1:=naxis2;
+    naxis2:=naxis3;
+    naxis3:=3;
+    colormode:=3;
+   end;
+   if (naxis=3)and(naxis3=3) then n_plane:=3 else n_plane:=1;
+ end;
+ Fheight:=FFitsInfo.naxis2;
+ Fwidth :=FFitsInfo.naxis1;
+ setlength(Fimage,n_plane,Fheight,Fwidth);
 end;
 
 Procedure TFits.ReadFitsImage;
@@ -2888,14 +2957,11 @@ var i,j,k,ii,nax,naxo,ko: integer;
     m: TMemoryStream;
 begin
  if new or (Fheight=0)or(Fwidth=0)then begin  // first frame, just store the operand
-   m:=operand.Stream;
-   SetStream(m);
-   LoadStream;
-   m.free;
+    m:=operand.Stream;
+    SetStream(m);
+    LoadStream;
  end
  else begin  // do operation
-
-//   if not FImageValid then LoadStream;
     dmin:=1.0E100;
     dmax:=-1.0E100;
     sum:=0; sum2:=0; ni:=0;
@@ -2968,8 +3034,7 @@ var imgshift: TFits;
 begin
   imgshift:=TFits.Create(nil);
   imgshift.onMsg:=onMsg;
-  imgshift.SetStream(FStream);
-  imgshift.LoadStream;
+  imgshift.CreateImage(FFitsInfo,FHeader);
   for k:=0 to n_plane-1 do begin
     for i:=0 to FFitsInfo.naxis2-1 do begin
      ii:=FFitsInfo.naxis2-1-i;
@@ -2990,7 +3055,6 @@ begin
   SetStream(m);
   LoadStream;
   imgshift.Free;
-  m.free;
 end;
 
 procedure PictureToFits(pict:TMemoryStream; ext: string; var ImgStream:TMemoryStream; flip:boolean=false;pix:double=-1;piy:double=-1;binx:integer=-1;biny:integer=-1;bayer:string='';rmult:string='';gmult:string='';bmult:string='';origin:string='';exifkey:TStringList=nil;exifvalue:TStringList=nil);
