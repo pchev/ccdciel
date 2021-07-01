@@ -9,7 +9,7 @@ You can use CCDciel on Windows, macOS or Linux.
 The program is still in beta version but it is now quit stable and run smoothly on every platform
 In any case I will appreciate your help for testing this software and reporting any bug or other problem you may encounter. 
 
-It is build with Freepascal compiler and Lazarus IDE and library.
+It is build with Freepascal compiler and Lazarus IDE and library. https://www.lazarus-ide.org/
 
 For more information and precompiled version:
 https://www.ap-i.net/ccdciel
