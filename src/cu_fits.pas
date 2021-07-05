@@ -1158,7 +1158,7 @@ end;
 procedure TGetStarList.Execute;
 var
   i, j, starty, endy, ss, xs,ys: integer;
-  fitsX,fitsY,fx,fy,nhfd,size,marginx,marginy: integer;
+  fitsX,fitsY,fx,fy,nhfd,marginx,marginy,xci,yci,n,m,radius,sqr_radius: integer;
   hfd1,star_fwhm,vmax,bg,bgdev,xc,yc,snr,flux: double;
 begin
   xs:= fits.Fwidth;
@@ -1203,10 +1203,18 @@ begin
          StarList[nhfd-1].snr:=snr;
          StarList[nhfd-1].vmax:=vmax;
          StarList[nhfd-1].bg:=bg;
-         size:=round(2*hfd1);
-         for j:=max(0,round(yc)-size) to min(ys-1,integer(round(yc))+size) do {mark the whole star area as surveyed}
-            for i:=max(0,round(xc)-size) to min(xs-1,integer(round(xc))+size) do
-               img_temp[0,i,j]:=1;
+         radius:=round(3.0*hfd1);{for marking star area. A value between 2.5*hfd and 3.5*hfd gives same performance. Note in practice a star PSF has larger wings then predicted by a Gaussian function}
+         sqr_radius:=sqr(radius);
+         xci:=round(xc);{star center as integer}
+         yci:=round(yc);
+         for n:=-radius to +radius do {mark the whole circular star area as occupied to prevent double detection's}
+           for m:=-radius to +radius do
+           begin
+             j:=n+yci;
+             i:=m+xci;
+             if ((j>=0) and (i>=0) and (j<ys) and (i<xs) and (sqr(m)+sqr(n)<=sqr_radius)) then
+              img_temp[0,i,j]:=1;
+           end;
 
       end;
      end;
