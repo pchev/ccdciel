@@ -1357,9 +1357,8 @@ begin
     if i>0 then FHeader.Delete(i);
     // reload header
     GetFitsInfo;
-    FStreamValid:=false;
     // reload stream
-    GetStream;
+    WriteFitsImage;
   end;
 end;
 
@@ -1669,7 +1668,7 @@ Fwidth :=FFitsInfo.naxis1;
 // do not scale 8 or 16 bit images
 FimageScaled:=(FFitsInfo.bscale<>1)or((FFitsInfo.bitpix<>16)and(FFitsInfo.bitpix<>8));
 // debayer supported for this image
-FimageDebayer:=BayerColor and (not FDisableBayer) and (GetBayerMode<>bayerUnsupported) and (not FimageScaled);
+FimageDebayer:=BayerColor and (n_plane=1) and (not FDisableBayer) and (GetBayerMode<>bayerUnsupported) and (not FimageScaled);
 // fill raw image only if debayer or scaled
 FUseRawImage:=FimageScaled or FimageDebayer;
 if FUseRawImage then
