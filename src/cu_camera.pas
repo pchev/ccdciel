@@ -67,7 +67,7 @@ T_camera = class(TComponent)
     FCameraXSize,FCameraYSize: integer;
     FFits: TFits;
     FStackCount, FStackNum, FStackStarted: integer;
-    FStackStart: string;
+    FStackStart, FStackSaveDir: string;
     FStackAlign: boolean;
     FStackAlignX,FStackAlignY,FStackStarX,FStackStarY: double;
     FMount: T_mount;
@@ -78,7 +78,7 @@ T_camera = class(TComponent)
     FhasVideo: boolean;
     FVerticalFlip: boolean;
     FASCOMFlipImage: boolean;
-    FAddFrames: boolean;
+    FAddFrames,FSaveFrames: boolean;
     FVideoSizes, FVideoRates,FFNumberList,FVideoEncoder:TStringList;
     FTemperatureRampActive, FCancelTemperatureRamp: boolean;
     FIndiTransfert: TIndiTransfert;
@@ -214,6 +214,7 @@ T_camera = class(TComponent)
     property ImgStream: TMemoryStream read FImgStream;
     property ImageFormat: string read GetImageFormat;
     property AddFrames: boolean read FAddFrames write FAddFrames;
+    property SaveFrames: boolean read FSaveFrames write FSaveFrames;
     property VerticalFlip: boolean read FVerticalFlip;
     property ASCOMFlipImage: boolean read FASCOMFlipImage write FASCOMFlipImage;
     property hasVideo: boolean read FhasVideo;
@@ -345,6 +346,8 @@ begin
   FFilterNames:=TStringList.Create;
   FImgStream:=TMemoryStream.Create;
   FAddFrames:=false;
+  FSaveFrames:=false;
+  FStackSaveDir:='';
   FhasVideo:=false;
   FVideoStream:=TMemoryStream.Create;;
   lockvideoframe:=false;
@@ -475,10 +478,18 @@ var f:TFits;
     xi,yi,xc,yc,ri: integer;
     xs,ys,hfd,fwhm,vmax,snr,bg,bgdev,flux : double;
     alok: boolean;
+    mem: TMemoryStream;
+const datefmt = 'yyyy"-"mm"-"dd"T"hh"-"nn"-"ss';
 begin
 {$ifdef debug_raw}writeln(FormatDateTime(dateiso,Now)+blank+'NewImage');{$endif}
 if FAddFrames then begin  // stack preview frames
   if (FStackNum>0)and(FStackCount>=FStackNum) then FFits.ClearImage;
+  if FSaveFrames then begin
+    // save original image
+    mem:=TMemoryStream.Create;
+    FImgStream.Position:=0;
+    mem.CopyFrom(FImgStream,FImgStream.Size);
+  end;
   // load temporary image
   f:=TFits.Create(nil);
   f.onMsg:=onMsg;
@@ -545,6 +556,17 @@ if FAddFrames then begin  // stack preview frames
   WriteHeaders(false);
   Ffits.GetFitsInfo;
   f.free;
+  if FSaveFrames and (mem<>nil) then begin
+    // save image
+    if FStackCount=1 then begin
+      FStackSaveDir:=slash(config.GetValue('/Files/CapturePath',defCapturePath))+'stack_'+FormatDateTime(datefmt,Ftimestart);
+      if copy(FStackSaveDir,1,1)='.' then FStackSaveDir:=ExpandFileName(slash(Appdir)+FStackSaveDir);
+      ForceDirectories(FStackSaveDir);
+      msg('Saving files to '+FStackSaveDir);
+    end;
+    mem.SaveToFile(slash(FStackSaveDir)+'stack_'+PadZeros(IntToStr(FStackCount),5)+'.fits');
+    FreeAndNil(mem);
+  end;
   if Assigned(FonNewImage) then FonNewImage(self);
 end
 else begin  // normal capture

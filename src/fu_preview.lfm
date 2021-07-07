@@ -264,6 +264,10 @@ object f_preview: Tf_preview
       ParentFont = False
       TabOrder = 2
       object led: TShape
+        AnchorSideLeft.Control = PanelStack
+        AnchorSideLeft.Side = asrBottom
+        AnchorSideTop.Control = PanelStack
+        AnchorSideTop.Side = asrCenter
         Left = 164
         Height = 14
         Hint = 'Uncalibrated'
@@ -273,17 +277,49 @@ object f_preview: Tf_preview
         Brush.Color = clGray
         Shape = stCircle
       end
-      object StackPreview: TCheckBox
-        Left = 6
-        Height = 21
-        Hint = 'Stack the preview frames to a single image.'#10'A new stack is started when you start a loop or if you uncheck this button.'
-        Top = 1
-        Width = 56
-        BidiMode = bdRightToLeft
-        Caption = 'Stack'
-        ParentFont = False
-        ParentBidiMode = False
+      object PanelStack: TPanel
+        Left = 0
+        Height = 22
+        Top = 0
+        Width = 160
+        Align = alLeft
+        AutoSize = True
+        BevelOuter = bvNone
+        ClientHeight = 22
+        ClientWidth = 160
+        Constraints.MinWidth = 160
         TabOrder = 0
+        object StackPreview: TCheckBox
+          Left = 4
+          Height = 21
+          Hint = 'Stack the preview frames to a single image.'#10'A new stack is started when you start a loop or if you uncheck this button.'
+          Top = 0
+          Width = 56
+          BidiMode = bdRightToLeft
+          BorderSpacing.Left = 4
+          BorderSpacing.Right = 4
+          Caption = 'Stack'
+          OnChange = StackPreviewChange
+          ParentFont = False
+          ParentBidiMode = False
+          TabOrder = 0
+        end
+        object StackSave: TCheckBox
+          AnchorSideLeft.Control = StackPreview
+          AnchorSideLeft.Side = asrBottom
+          AnchorSideTop.Control = StackPreview
+          Left = 64
+          Height = 21
+          Top = 0
+          Width = 53
+          BidiMode = bdRightToLeft
+          BorderSpacing.Left = 4
+          BorderSpacing.Right = 4
+          Caption = 'Save'
+          Enabled = False
+          ParentBidiMode = False
+          TabOrder = 1
+        end
       end
     end
   end

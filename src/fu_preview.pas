@@ -35,12 +35,14 @@ type
   Tf_preview = class(TFrame)
     BtnPreview: TButton;
     BtnLoop: TButton;
+    StackSave: TCheckBox;
     Fnumber: TComboBox;
     ISObox: TComboBox;
     Label3: TLabel;
     LabelOffset: TLabel;
     LabelGain: TLabel;
     Panel5: TPanel;
+    PanelStack: TPanel;
     PanelOffset: TPanel;
     PanelFnumber: TPanel;
     PanelGain: TPanel;
@@ -60,6 +62,7 @@ type
     procedure BtnLoopClick(Sender: TObject);
     procedure BtnPreviewClick(Sender: TObject);
     procedure ExpTimeKeyPress(Sender: TObject; var Key: char);
+    procedure StackPreviewChange(Sender: TObject);
   private
     { private declarations }
     Fcamera: T_camera;
@@ -133,6 +136,7 @@ begin
   Label3.Caption:=rsFStop;
   BtnPreview.Caption:=rsPreview;
   StackPreview.Caption:=rsStack;
+  StackSave.Caption:=rsSave;
   BtnLoop.Caption:=rsLoop;
   ExpTime.Hint:=rsExposureTime;
   ISObox.Hint:=rsCameraISO;
@@ -141,6 +145,7 @@ begin
   BtnPreview.Hint:=rsStartOnePrev;
   BtnLoop.Hint:=rsLoopPreviewE;
   StackPreview.Hint:=Format(rsStackThePrev, [crlf]);
+  StackSave.Hint:=rsSaveIndividu;
   led.Hint:='';
 end;
 
@@ -178,6 +183,11 @@ begin
   if not (Key in ['0'..'9', DefaultFormatSettings.DecimalSeparator,'+',#8,#9,^C,^X,^V,^Z]) then Key := #0;
 end;
 
+procedure Tf_preview.StackPreviewChange(Sender: TObject);
+begin
+  StackSave.Enabled:=StackPreview.Checked and (not FRunning);
+end;
+
 procedure Tf_preview.BtnLoopClick(Sender: TObject);
 begin
   Frunning:=not Frunning;
@@ -189,6 +199,7 @@ begin
         CancelAutofocus:=false;
         led.Brush.Color:=clLime;
         BtnLoop.Caption:=rsStopLoop;
+        StackSave.Enabled:=false;
         FLoop:=True;
         Msg(rsStartPreview,2);
      end else begin
@@ -202,6 +213,7 @@ begin
      if Assigned(FonAbortExposure) then FonAbortExposure(self);
      led.Brush.Color:=clGray;
      BtnLoop.Caption:=rsLoop;
+     StackSave.Enabled:=StackPreview.Checked;
      FLoop:=False;
      Msg(rsStopPreviewL,2);
   end;
@@ -215,6 +227,7 @@ begin
   WaitExposure:=false;
   led.Brush.Color:=clGray;
   BtnLoop.Caption:=rsLoop;
+  StackSave.Enabled:=StackPreview.Checked;
 end;
 
 function Tf_preview.GetExposure:double;

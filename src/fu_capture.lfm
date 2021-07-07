@@ -115,8 +115,6 @@ object f_capture: Tf_capture
         Constraints.MaxHeight = 28
         MaxValue = 1000
         MinValue = 1
-        OnChange = ExpTimeChange
-        OnKeyPress = ExpTimeKeyPress
         ParentFont = False
         TabOrder = 0
         Value = 1
@@ -128,7 +126,6 @@ object f_capture: Tf_capture
       Top = 58
       Width = 191
       BevelOuter = bvNone
-      Caption = ' '
       ClientHeight = 68
       ClientWidth = 191
       ParentFont = False

@@ -174,6 +174,7 @@ resourcestring
   rsCameraOffset = 'Camera offset';
   rsIfNotChecked = 'If not checked the program will never change the gain/offset value set in the driver setup';
   rsHistogramFul = 'Histogram full range or clipped to available data';
+  rsSaveIndividu = 'Save individual images before stacking';
 
 implementation
 
