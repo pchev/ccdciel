@@ -642,6 +642,8 @@ type
     Procedure SetFilter(Sender: TObject);
     Procedure SetFilterMenu;
     procedure ShowMsgTabs(Sender: TObject);
+    procedure SwitchImageFullscreen(Data: PtrInt = 0);
+    procedure ImageFormKeyDown(Sender: TObject; var Key: Word; Shift: TShiftState);
     Procedure NewMessage(msg: string; level: integer=1);
     Procedure DeviceMessage(msg: string; level: integer=1);
     Procedure WatchdogStatus(Sender: TObject);
@@ -2915,6 +2917,7 @@ begin
     VK_F2 : TBFocus.Click;
     VK_F3 : TBCapture.Click;
     VK_F4 : TBSequence.Click;
+    VK_F11: SwitchImageFullscreen;
   end;
 end;
 
@@ -5561,6 +5564,33 @@ end;
 procedure Tf_main.PanelMsgTabsMouseLeave(Sender: TObject);
 begin
  f_msg.msgMouseLeave(sender);
+end;
+
+procedure Tf_main.SwitchImageFullscreen(Data: PtrInt = 0);
+var f: TForm;
+begin
+ if PanelCenter.Parent is TForm then begin
+   f:=TForm(PanelCenter.Parent);
+   PanelCenter.Parent:=Panel1;
+   f.Close;
+   f.Free;
+ end
+ else begin
+   f:=TForm.Create(self);
+   f.BorderStyle:=bsNone;
+   f.FormStyle:=fsSystemStayOnTop;
+   f.OnKeyDown:=@ImageFormKeyDown;
+   f.KeyPreview:=True;
+   PanelCenter.Parent:=f;
+   PanelMsgTabs.Visible:=False;
+   f.WindowState:=wsMaximized;
+   f.Show;
+ end;
+end;
+
+procedure Tf_main.ImageFormKeyDown(Sender: TObject; var Key: Word; Shift: TShiftState);
+begin
+  Application.QueueAsyncCall(@SwitchImageFullscreen,0);
 end;
 
 procedure Tf_main.NewMessage(msg: string; level: integer=1);
