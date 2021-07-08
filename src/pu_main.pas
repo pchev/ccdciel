@@ -8966,7 +8966,6 @@ end;
 procedure Tf_main.CameraNewImageAsync(Data: PtrInt);
 var buf: string;
     loadimage,displayimage: boolean;
-    tt:double;
 begin
  try
   StatusBar1.Panels[panelstatus].Text:='';
@@ -8979,9 +8978,7 @@ begin
   if loadimage and (not fits.ImageValid) then begin
     {$ifdef debug_raw}writeln(FormatDateTime(dateiso,Now)+blank+'fits loadstream');{$endif}
     if loadimage and (not displayimage) then begin
-      tt:=now;
-      fits.MeasureStreamCenter;
-      NewMessage('Image measurement time: '+formatfloat(f3,(now-tt)*secperday)+' seconds');
+      fits.MeasureFlatLevel;
     end
     else begin
       fits.LoadStream;
@@ -9140,14 +9137,14 @@ function Tf_main.CameraNewDomeFlat: boolean;
 var exp,newexp: double;
 begin
   result:=false;
-  NewMessage(Format(rsFlatLevel, [inttostr(round(fits.imageMean))]),2);
+  NewMessage(Format(rsFlatLevel, [inttostr(round(fits.imageFlatLevel))]),2);
   if AdjustDomeFlat then begin
     // adjust exposure time only once per series
     exp:=StrToFloatDef(f_capture.ExpTime.Text,FlatMinExp);
-    if ((fits.imageMean<FlatLevelMin)or(fits.imageMean>FlatLevelMax))
+    if ((fits.imageFlatLevel<FlatLevelMin)or(fits.imageFlatLevel>FlatLevelMax))
        and ((exp>FlatMinExp)or(exp<FlatMaxExp))
     then begin
-      newexp:=exp*((FlatLevelMin+FlatLevelMax)/2)/fits.imageMean;
+      newexp:=exp*((FlatLevelMin+FlatLevelMax)/2)/fits.imageFlatLevel;
       if newexp<FlatMinExp then begin
          // min configured value
          newexp:=FlatMinExp;
@@ -9181,12 +9178,12 @@ function Tf_main.CameraNewSkyFlat: boolean;
 var exp,newexp: double;
 begin
  result:=false;
- NewMessage(Format(rsFlatLevel, [inttostr(round(fits.imageMean))]),2);
+ NewMessage(Format(rsFlatLevel, [inttostr(round(fits.imageFlatLevel))]),2);
  // new exposure time from image level
  exp:=StrToFloatDef(f_capture.ExpTime.Text,FlatMinExp);
- newexp:=exp*((FlatLevelMin+FlatLevelMax)/2)/fits.imageMean;
+ newexp:=exp*((FlatLevelMin+FlatLevelMax)/2)/fits.imageFlatLevel;
  // check if current image level is in range
- if (fits.imageMean<FlatLevelMin)or(fits.imageMean>FlatLevelMax) then begin
+ if (fits.imageFlatLevel<FlatLevelMin)or(fits.imageFlatLevel>FlatLevelMax) then begin
    // will need a too short exposure
    if newexp<FlatMinExp then begin
       newexp:=FlatMinExp;

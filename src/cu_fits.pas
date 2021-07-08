@@ -45,6 +45,7 @@ type
             pixsz1,pixsz2,pixratio,focallen,scale: double;
             exptime,airmass: double;
             objects,ctype1,ctype2 : string;
+            frametype: TFrameType;
             procedure Assign(Source:TFitsInfo);
             end;
 
@@ -100,7 +101,8 @@ type
  end;
 
 const    maxl = 20000;
-         cropsize = 1000;
+         maxcropsizex = 3000;
+         maxcropsizey = 2000;
          bottomup = 'BOTTOM-UP';
          topdown = 'TOP-DOWN';
 
@@ -134,7 +136,7 @@ type
     //
     n_plane,Fwidth,Fheight,Fhdr_end,colormode,Fpreview_axis : Integer;
     FTitle : string;
-    Fmean,Fsigma : double;
+    Fmean,Fsigma,FFlatLevel : double;
     FVisuMin, FVisuMax: Word;
     FStreamValid,FImageValid: Boolean;
     Fbpm: TBpm;
@@ -155,7 +157,7 @@ type
     procedure SetStream(value:TMemoryStream);
     function GetStream: TMemoryStream;
     procedure SetVideoStream(value:TMemoryStream);
-    Procedure MeasureImageCenter;
+    Procedure GetFlatLevel;
     Procedure ReadFitsImage;
     Procedure WriteFitsImage;
     function GammaCorr(value: Word):byte;
@@ -173,7 +175,7 @@ type
      destructor  Destroy; override;
      function  GetStatistics: string;
      Procedure LoadStream;
-     Procedure MeasureStreamCenter;
+     Procedure MeasureFlatLevel;
      Procedure LoadRGB;
      procedure ClearFitsInfo;
      procedure GetFitsInfo;
@@ -219,6 +221,7 @@ type
      property imageMax : double read FimageMax;
      property imageMean: double read Fmean;
      property imageSigma: double read Fsigma;
+     property imageFlatLevel: double read FFlatLevel;
      property preview_axis: integer read Fpreview_axis;
      property MaxADU: double read FMaxADU write FMaxADU;
      property Invert: boolean read FInvert write FInvert;
@@ -737,6 +740,7 @@ begin
   objects := Source.objects ;
   ctype1 := Source.ctype1 ;
   ctype2 := Source.ctype2 ;
+  frametype := Source.frametype;
 end;
 
 //////////////////// TReadFits /////////////////////////
@@ -1322,15 +1326,16 @@ Procedure TFits.LoadStream;
 begin
   GetFitsInfo;
   if FFitsInfo.valid then begin
+    if FFitsInfo.frametype=FLAT then GetFlatLevel;
     ReadFitsImage;
   end;
 end;
 
-Procedure TFits.MeasureStreamCenter;
+Procedure TFits.MeasureFlatLevel;
 begin
   GetFitsInfo;
   if FFitsInfo.valid then begin
-    MeasureImageCenter;
+    GetFlatLevel;
   end;
 end;
 
@@ -1481,6 +1486,7 @@ with FFitsInfo do begin
    pixsz1:=0; pixsz2:=0; pixratio:=1; focallen:=0; scale:=0;
    exptime:=0; airmass:=0;
    objects:=''; ctype1:=''; ctype2:='';
+   frametype:=LIGHT;
 end;
 end;
 
@@ -1536,6 +1542,7 @@ begin
     if (keyword='CRVAL2') then crval2:=strtofloat(buf);
     if (keyword='SCALE')  then scale:=strtofloat(buf);
     if (scale=0) and (keyword='SECPIX1')then scale:=strtofloat(buf);
+    if (keyword='FRAME')or(keyword='IMAGETYP') then frametype:=Str2Frametype(buf);
     if (keyword='A_ORDER') or
        (keyword='AMDX1') or
        (keyword='CD1_1')
@@ -1606,45 +1613,56 @@ begin
  setlength(Fimage,n_plane,Fheight,Fwidth);
 end;
 
-Procedure TFits.MeasureImageCenter;
-var ni,sum,sum2 : extended;
-    i,j : integer;
-    startline,endline,startcol: integer;
+Procedure TFits.GetFlatLevel;
+var sum,flatlimit : extended;
+    i,j,w,h : integer;
+    startline,endline,startcol,cropsizex,cropsizey,rowlen: integer;
     x16,b16:smallint;
     x : double;
-    d16 : array[1..cropsize] of smallint;
+    d16 : array[1..maxcropsizex] of smallint;
 begin
+// measure central part of image for flat level
+FFlatLevel:=0;
 {$ifdef debug_raw}writeln(FormatDateTime(dateiso,Now)+blank+'MeasureFitsImage');{$endif}
 if FFitsInfo.naxis1=0 then exit;
 if (FFitsInfo.naxis1>maxl)or(FFitsInfo.naxis2>maxl) then
   raise exception.Create(Format('Image too big! limit is currently %dx%d %sPlease open an issue to request an extension.',[maxl,maxl,crlf]));
-Fheight:=FFitsInfo.naxis2;
-Fwidth :=FFitsInfo.naxis1;
-// only 16 bit B/W images bigger than cropsize, otherwise read full
-if (FFitsInfo.bitpix<>16)or(n_plane<>1)or(Fheight<=cropsize)or(Fwidth<=cropsize) then begin
-   ReadFitsImage;
+// only 16 bit B/W images
+if (FFitsInfo.bitpix<>16)or(n_plane<>1) then
    exit;
-end;
 // image size
-startline := (Fheight-cropsize) div 2;
-endline := startline+cropsize;
-startcol := (Fwidth-cropsize) div 2;
-sum:=0; sum2:=0; ni:=0;
+w:=FFitsInfo.naxis1;
+h:=FFitsInfo.naxis2;
+// size of central crop
+cropsizex:=min(maxcropsizex,w div 2);
+cropsizey:=min(maxcropsizey,h div 2);
+startline := (h-cropsizey) div 2;
+endline := startline+cropsizey;
+startcol := (w-cropsizex) div 2;
+rowlen:=sizeof(SmallInt)*cropsizex;
 b16:=round(FFitsInfo.blank);
+FillByte(FHistogram,sizeof(THistogram),0);
+// fill histogram
 for i:=startline to endline do begin
-   FStream.Position:=fhdr_end+(Fwidth*i+startcol)*sizeof(SmallInt);
-   FStream.Read(d16,sizeof(d16));
-   for j := 1 to cropsize do begin
+   FStream.Position:=fhdr_end+(w*i+startcol)*sizeof(SmallInt);
+   FStream.Read(d16,rowlen);
+   for j := 1 to cropsizex do begin
      x16:=BEtoN(d16[j]);
      if x16=b16 then x16:=0;
      x:=FFitsInfo.bzero+FFitsInfo.bscale*x16;
-     sum:=sum+x;
-     sum2:=sum2+x*x;
-     ni:=ni+1;
+     inc(FHistogram[round(max(0,min(maxword,x)))]);
    end;
 end;
-Fmean:=sum/ni;
-Fsigma:=sqrt( (sum2/ni)-(Fmean*Fmean) );
+// get level at 90%
+flatlimit:=0.9*cropsizex*cropsizey;
+sum:=0;
+for i:=0 to high(word) do begin
+  sum:=sum+FHistogram[i];
+  if sum>=flatlimit then begin
+    FFlatLevel:=i;
+    break;
+  end;
+end;
 end;
 
 Procedure TFits.ReadFitsImage;
