@@ -1311,8 +1311,6 @@ begin
 try
  FImageValid:=false;
  ClearFitsInfo;
- setlength(Frawimage,0,0,0);
- setlength(Fimage,0,0,0);
  if FStream<>nil then FreeAndNil(FStream);
  FStream:=value;
  Fhdr_end:=FHeader.ReadHeader(FStream);
