@@ -1,10 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <CONFIG>
   <ProjectOptions>
-    <Version Value="11"/>
+    <Version Value="12"/>
     <General>
+      <Flags>
+        <CompatibilityMode Value="True"/>
+      </Flags>
       <SessionStorage Value="InProjectDir"/>
-      <MainUnit Value="0"/>
       <Title Value="ccdciel"/>
       <ResourceType Value="res"/>
       <UseXPManifest Value="True"/>
@@ -34,6 +36,9 @@
             <TargetOS Value="win32"/>
           </CodeGeneration>
           <Linking>
+            <Debugging>
+              <DebugInfoType Value="dsDwarf2"/>
+            </Debugging>
             <Options>
               <Win32>
                 <GraphicApplication Value="True"/>
@@ -67,6 +72,9 @@
             <TargetOS Value="win64"/>
           </CodeGeneration>
           <Linking>
+            <Debugging>
+              <DebugInfoType Value="dsDwarf2"/>
+            </Debugging>
             <Options>
               <Win32>
                 <GraphicApplication Value="True"/>
@@ -142,8 +150,8 @@
           </CodeGeneration>
           <Linking>
             <Debugging>
+              <DebugInfoType Value="dsDwarf2"/>
               <UseHeaptrc Value="True"/>
-              <UseExternalDbgSyms Value="True"/>
             </Debugging>
             <Options>
               <Win32>
@@ -156,6 +164,10 @@
               <IgnoredMessages idx5024="True"/>
             </CompilerMessages>
             <CustomOptions Value="-dUseCThreads -dUseHeapTrc"/>
+            <OtherDefines Count="2">
+              <Define0 Value="UseCThreads"/>
+              <Define1 Value="debug_raw"/>
+            </OtherDefines>
           </Other>
         </CompilerOptions>
       </Item5>
@@ -188,7 +200,7 @@
           </CodeGeneration>
           <Linking>
             <Debugging>
-              <UseExternalDbgSyms Value="True"/>
+              <DebugInfoType Value="dsDwarf2"/>
             </Debugging>
             <Options>
               <Win32>
@@ -263,7 +275,6 @@
     </PublishOptions>
     <RunParams>
       <FormatVersion Value="2"/>
-      <Modes Count="0"/>
     </RunParams>
     <RequiredPackages Count="11">
       <Item1>
@@ -930,7 +941,7 @@
     </CodeGeneration>
     <Linking>
       <Debugging>
-        <UseExternalDbgSyms Value="True"/>
+        <DebugInfoType Value="dsDwarf2"/>
       </Debugging>
       <Options>
         <Win32>
