@@ -141,6 +141,7 @@ object keyboard1: Tkeyboard1
     Top = 240
     Width = 72
     ItemHeight = 0
+    ItemIndex = 4
     Items.Strings = (
       'B'
       'HCG'
@@ -148,7 +149,8 @@ object keyboard1: Tkeyboard1
       'M'
       'NGC'
       'PGC'
-      'PK'
+      'PK_'
+      'PN_'
       'Sh2-'
     )
     OnChange = prefix1Change
@@ -166,9 +168,10 @@ object keyboard1: Tkeyboard1
     Width = 72
     DropDownCount = 30
     ItemHeight = 0
-    ItemIndex = 3
+    ItemIndex = 4
     Items.Strings = (
       '-'
+      '_'
       '.'
       '+'
       'A'
@@ -247,11 +250,10 @@ object keyboard1: Tkeyboard1
   end
   object keyboard_question1: TLabel
     Left = 7
-    Height = 17
+    Height = 19
     Top = 5
     Width = 121
     Caption = 'keyboard_question:'
-    ParentColor = False
     ParentFont = False
   end
   object ListBox1: TListBox
@@ -268,7 +270,7 @@ object keyboard1: Tkeyboard1
     OnDblClick = ListBox1DblClick
     ParentColor = True
     ParentShowHint = False
-    ScrollWidth = 273
+    ScrollWidth = 270
     ShowHint = True
     Sorted = True
     TabOrder = 16
