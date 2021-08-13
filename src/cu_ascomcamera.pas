@@ -29,7 +29,7 @@ interface
 uses  cu_camera, u_global,
   {$ifdef mswindows}
     u_translation, u_utils, cu_fits, indiapi, math,
-    Variants, comobj, LCLVersion,
+    Variants, comobj, LCLVersion, ActiveX,
   {$endif}
    Forms, ExtCtrls, Classes, SysUtils, LCLType;
 
@@ -479,12 +479,19 @@ end;
 
 procedure T_ascomcamera.ExposureTimerTimer(sender: TObject);
 {$ifdef mswindows}
+type Timgdata = array of longint;
 var ok: boolean;
     i,ix,j,c,xs,ys: integer;
     nax1,nax2,state: integer;
     pix,piy,expt,ElectronsPerADU,rexp: double;
     dateobs,ccdname,frname:string;
-    img: array of array of LongInt;
+
+    imgarray: PSafeArray;
+    pimgdata: pointer;
+    Dims, es, LBoundX, HBoundX,LBoundY, HBoundY : Integer;
+    p2:array[0..1] of integer;
+    p3:array[0..2] of integer;
+
     lii: integer;
     ii: smallint;
     b: array[0..2880]of char;
@@ -549,9 +556,10 @@ begin
    FImageFormat:='.fits';
    FMidExposureTime:=(Ftimestart+NowUTC)/2;
    if assigned(FonExposureProgress) then FonExposureProgress(-10);
-   if debug_msg then msg('read image.');
+   msg('read image.');
+
    try
-   img:=V.ImageArray;
+   imgarray:=TVariantArg(V.ImageArray).parray;
    except
      on E: Exception do begin
        msg('Error accessing ImageArray: ' + E.Message,0);
@@ -559,9 +567,26 @@ begin
        exit;
      end;
    end;
-   xs:=length(img);
-   ys:=length(img[0]);
-   if debug_msg then msg('width:'+inttostr(xs)+' height:'+inttostr(ys));
+   Dims:=SafeArrayGetDim(imgarray);
+   if (Dims<2)or(Dims>3) then begin
+     msg('Error ImageArray unsupported Dimension=' + inttostr(Dims));
+     if assigned(FonAbortExposure) then FonAbortExposure(self);
+     exit;
+   end;
+   es:=SafeArrayGetElemsize(imgarray);
+   if es<>4 then begin
+     msg('Error ImageArray unsupported element size=' + inttostr(es));
+     if assigned(FonAbortExposure) then FonAbortExposure(self);
+     exit;
+   end;
+   SafeArrayGetLBound(imgarray, 1, LBoundX);
+   SafeArrayGetUBound(imgarray, 1, HBoundX);
+   xs:=HBoundX-LBoundX+1;
+   SafeArrayGetLBound(imgarray, 2, LBoundY);
+   SafeArrayGetUBound(imgarray, 2, HBoundY);
+   ys:=HBoundY-LBoundY+1;
+   msg('width:'+inttostr(xs)+' height:'+inttostr(ys));
+
    nax1:=xs;
    nax2:=ys;
    pix:=FPixelSizeX;
@@ -589,28 +614,7 @@ begin
    except
      ElectronsPerADU:=-1;
    end;
-   // count used bit by pixel
    pxdiv:=1;
-   if FFixPixelRange then begin
-     nb:=16;
-     w:=0;
-     for i:=0 to ys-1 do begin
-       for j := 0 to xs-1 do begin
-         ww:=img[j,i];
-         if ww<65535 then
-           w:=w or ww;
-       end;
-     end;
-     for n:=16 downto 1 do begin
-       if w and 1 <>0 then begin
-         nb:=n;
-         break;
-       end;
-       w:=w div 2;
-     end;
-     pxdiv:=2**(16-nb); // divisor need to recover original pixel range
-     newsaturation:=2**nb-1; // new saturation value to replace 65535
-   end;
    if debug_msg then msg('set fits header');
    hdr:=TFitsHeader.Create;
    hdr.ClearHeader;
@@ -651,23 +655,48 @@ begin
    FImgStream.CopyFrom(hdrmem,hdrmem.Size);
    hdrmem.Free;
    hdr.Free;
-   if debug_msg then msg('write image');
-   for i:=0 to ys-1 do begin
-      if FASCOMFlipImage then
-         ix:=ys-1-i
-      else
-         ix:=i;
-      for j:=0 to xs-1 do begin
-        lii:=img[j,ix];
-        if FFixPixelRange then lii:=lii div pxdiv;
-        if lii>0 then
-           ii:=lii-32768
+   msg('write image');
+
+   if Dims=2 then begin
+     for i:=LBoundY to ys-1 do begin
+        if FASCOMFlipImage then
+           p2[1]:=ys-1-i
         else
-           ii:=-32768;
-        ii:=NtoBE(ii);
-        FImgStream.Write(ii,sizeof(smallint));
-      end;
+           p2[1]:=i;
+        for j:=LBoundX to xs-1 do begin
+          p2[0]:=j;
+          lii:=Timgdata(pimgdata)[p2[0]+p2[1]*xs];
+          if FFixPixelRange then lii:=lii div pxdiv;
+          if lii>0 then
+             ii:=lii-32768
+          else
+             ii:=-32768;
+          ii:=NtoBE(ii);
+          FImgStream.Write(ii,sizeof(smallint));
+        end;
+     end;
+   end
+   else if Dims=3 then begin
+     p3[2]:=0; // only the first plane
+     for i:=LBoundY to ys-1 do begin
+        if FASCOMFlipImage then
+           p3[1]:=ys-1-i
+        else
+           p3[1]:=i;
+        for j:=LBoundX to xs-1 do begin
+          p3[0]:=j;
+          lii:=Timgdata(pimgdata)[p3[0]+p3[1]*xs];
+          if FFixPixelRange then lii:=lii div pxdiv;
+          if lii>0 then
+             ii:=lii-32768
+          else
+             ii:=-32768;
+          ii:=NtoBE(ii);
+          FImgStream.Write(ii,sizeof(smallint));
+        end;
+     end;
    end;
+
    if debug_msg then msg('pad fits');
    b:='';
    c:=FImgStream.Size mod 2880;
@@ -676,6 +705,10 @@ begin
      FillChar(b,c,0);
      FImgStream.Write(b,c);
    end;
+
+   msg('release imagearray');
+   SafeArrayUnaccessData(imgarray);
+
    // if possible start next exposure now
    TryNextExposure(FImgNum);
    if debug_msg then msg('display image');
