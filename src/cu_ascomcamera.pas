@@ -23,7 +23,7 @@ You should have received a copy of the GNU General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>. 
 
 }
-
+{$WARN 6058 off : Call to subroutine "$1" marked as inline is not inlined}
 interface
 
 uses  cu_camera, u_global,
@@ -481,14 +481,14 @@ procedure T_ascomcamera.ExposureTimerTimer(sender: TObject);
 {$ifdef mswindows}
 type Timgdata = array of longint;
 var ok: boolean;
-    i,ix,j,c,xs,ys: integer;
+    i,j,c,xs,ys: integer;
     nax1,nax2,state: integer;
     pix,piy,expt,ElectronsPerADU,rexp: double;
     dateobs,ccdname,frname:string;
 
-    imgarray: PSafeArray;
-    pimgdata: pointer;
-    Dims, es, LBoundX, HBoundX,LBoundY, HBoundY : Integer;
+    imgvar: Variant;
+    pimgdata: ^Timgdata;
+    Dims, LBoundX, HBoundX,LBoundY, HBoundY : Integer;
     p2:array[0..1] of integer;
     p3:array[0..2] of integer;
 
@@ -559,7 +559,9 @@ begin
    msg('read image.');
 
    try
-   imgarray:=TVariantArg(V.ImageArray).parray;
+
+   imgvar:=V.ImageArray;
+
    except
      on E: Exception do begin
        msg('Error accessing ImageArray: ' + E.Message,0);
@@ -567,23 +569,18 @@ begin
        exit;
      end;
    end;
-   Dims:=SafeArrayGetDim(imgarray);
+   dims:=VarArrayDimCount(imgvar);
    if (Dims<2)or(Dims>3) then begin
      msg('Error ImageArray unsupported Dimension=' + inttostr(Dims));
      if assigned(FonAbortExposure) then FonAbortExposure(self);
      exit;
    end;
-   es:=SafeArrayGetElemsize(imgarray);
-   if es<>4 then begin
-     msg('Error ImageArray unsupported element size=' + inttostr(es));
-     if assigned(FonAbortExposure) then FonAbortExposure(self);
-     exit;
-   end;
-   SafeArrayGetLBound(imgarray, 1, LBoundX);
-   SafeArrayGetUBound(imgarray, 1, HBoundX);
+
+   LBoundX:=VarArrayLowBound(imgvar,1);
+   HBoundX:=VarArrayHighBound(imgvar,1);
    xs:=HBoundX-LBoundX+1;
-   SafeArrayGetLBound(imgarray, 2, LBoundY);
-   SafeArrayGetUBound(imgarray, 2, HBoundY);
+   LBoundY:=VarArrayLowBound(imgvar,2);
+   HBoundY:=VarArrayHighBound(imgvar,2);
    ys:=HBoundY-LBoundY+1;
    msg('width:'+inttostr(xs)+' height:'+inttostr(ys));
 
@@ -614,6 +611,33 @@ begin
    except
      ElectronsPerADU:=-1;
    end;
+
+
+   pimgdata:=VarArrayLock(imgvar);
+
+   // count used bit by pixel
+   pxdiv:=1;
+   if FFixPixelRange then begin
+     nb:=16;
+     w:=0;
+     for i:=LBoundY to ys-1 do begin
+       for j := LBoundX to xs-1 do begin
+         ww:=Timgdata(pimgdata)[j+i*xs];
+         if ww<65535 then
+           w:=w or ww;
+       end;
+     end;
+     for n:=16 downto 1 do begin
+       if w and 1 <>0 then begin
+         nb:=n;
+         break;
+       end;
+       w:=w div 2;
+     end;
+     pxdiv:=2**(16-nb); // divisor need to recover original pixel range
+     newsaturation:=2**nb-1; // new saturation value to replace 65535
+   end;
+
    pxdiv:=1;
    if debug_msg then msg('set fits header');
    hdr:=TFitsHeader.Create;
@@ -707,7 +731,7 @@ begin
    end;
 
    msg('release imagearray');
-   SafeArrayUnaccessData(imgarray);
+   VarArrayUnlock(imgvar);
 
    // if possible start next exposure now
    TryNextExposure(FImgNum);
