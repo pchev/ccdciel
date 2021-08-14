@@ -479,6 +479,7 @@ end;
 
 procedure T_ascomcamera.ExposureTimerTimer(sender: TObject);
 {$ifdef mswindows}
+{$define DirectOleaut32}
 type Timgdata = array of longint;
 var ok: boolean;
     i,j,c,xs,ys: integer;
@@ -487,6 +488,9 @@ var ok: boolean;
     dateobs,ccdname,frname:string;
 
     imgvar: Variant;
+    {$ifdef DirectOleaut32}
+    imgsafearray: PSafeArray;
+    {$endif}
     pimgdata: ^Timgdata;
     Dims, LBoundX, HBoundX,LBoundY, HBoundY : Integer;
     p2:array[0..1] of integer;
@@ -561,6 +565,9 @@ begin
    try
 
    imgvar:=V.ImageArray;
+   {$ifdef DirectOleaut32}
+   imgsafearray:=PSafeArray(VarArrayAsPSafeArray(imgvar));
+   {$endif}
 
    except
      on E: Exception do begin
@@ -569,18 +576,29 @@ begin
        exit;
      end;
    end;
+   {$ifdef DirectOleaut32}
+   dims:=SafeArrayGetDim(imgsafearray);
+   {$else}
    dims:=VarArrayDimCount(imgvar);
+   {$endif}
    if (Dims<2)or(Dims>3) then begin
      msg('Error ImageArray unsupported Dimension=' + inttostr(Dims));
      if assigned(FonAbortExposure) then FonAbortExposure(self);
      exit;
    end;
 
+   {$ifdef DirectOleaut32}
+   SafeArrayGetLBound(imgsafearray,1,LBoundX);
+   SafeArrayGetUBound(imgsafearray,1,HBoundX);
+   SafeArrayGetLBound(imgsafearray,2,LBoundY);
+   SafeArrayGetUBound(imgsafearray,2,HBoundY);
+   {$else}
    LBoundX:=VarArrayLowBound(imgvar,1);
    HBoundX:=VarArrayHighBound(imgvar,1);
-   xs:=HBoundX-LBoundX+1;
    LBoundY:=VarArrayLowBound(imgvar,2);
    HBoundY:=VarArrayHighBound(imgvar,2);
+   {$endif}
+   xs:=HBoundX-LBoundX+1;
    ys:=HBoundY-LBoundY+1;
    msg('width:'+inttostr(xs)+' height:'+inttostr(ys));
 
@@ -613,8 +631,24 @@ begin
    end;
 
 
+   {$ifdef DirectOleaut32}
+   i:=SafeArrayAccessData(imgsafearray,pimgdata);
+   if i<>0 then begin
+     msg('Error SafeArray AccessData: ' +  hexStr(i,10));
+     if assigned(FonAbortExposure) then FonAbortExposure(self);
+     exit;
+   end;
+   {$else}
+   try
    pimgdata:=VarArrayLock(imgvar);
-
+   except
+     on E: Exception do begin
+       msg('Error SafeArray AccessData: ' + E.Message,0);
+       if assigned(FonAbortExposure) then FonAbortExposure(self);
+       exit;
+     end;
+   end;
+   {$endif}
    // count used bit by pixel
    pxdiv:=1;
    if FFixPixelRange then begin
@@ -731,7 +765,11 @@ begin
    end;
 
    msg('release imagearray');
+   {$ifdef DirectOleaut32}
+   SafeArrayUnaccessData(imgsafearray);
+   {$else}
    VarArrayUnlock(imgvar);
+   {$endif}
 
    // if possible start next exposure now
    TryNextExposure(FImgNum);
