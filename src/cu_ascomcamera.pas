@@ -479,19 +479,26 @@ end;
 
 procedure T_ascomcamera.ExposureTimerTimer(sender: TObject);
 {$ifdef mswindows}
-{$define DirectOleaut32}
+  //{$define DirectArray}        // Use FPC SafeArray to dynamic array, this is limited to 2D images
+  {$ifndef DirectArray}
+    //{$define DirectOleaut32}    // Call SafeArray functions in oleaut32.dll directly
+                                // else use FPC wrapper to oleaut32
+{$endif}
 type Timgdata = array of longint;
 var ok: boolean;
     i,j,c,xs,ys: integer;
     nax1,nax2,state: integer;
     pix,piy,expt,ElectronsPerADU,rexp: double;
     dateobs,ccdname,frname:string;
-
-    imgvar: Variant;
-    {$ifdef DirectOleaut32}
-    imgsafearray: PSafeArray;
+    {$ifdef DirectArray}
+      img: array of array of LongInt;     // 2D dynamic array for the image data
+    {$else}
+      imgvar: Variant;                    // ImageArray variant
+      pimgdata: ^Timgdata;                // pointer to image data
+      {$ifdef DirectOleaut32}
+        imgsafearray: PSafeArray;         // SafeArray object for direct call
+      {$endif}
     {$endif}
-    pimgdata: ^Timgdata;
     Dims, LBoundX, HBoundX,LBoundY, HBoundY : Integer;
     p2:array[0..1] of integer;
     p3:array[0..2] of integer;
@@ -560,13 +567,17 @@ begin
    FImageFormat:='.fits';
    FMidExposureTime:=(Ftimestart+NowUTC)/2;
    if assigned(FonExposureProgress) then FonExposureProgress(-10);
-   msg('read image.');
+   if debug_msg then msg('read image.');
 
    try
 
-   imgvar:=V.ImageArray;
-   {$ifdef DirectOleaut32}
-   imgsafearray:=PSafeArray(VarArrayAsPSafeArray(imgvar));
+   {$ifdef DirectArray}
+      img:=V.ImageArray;
+   {$else}
+     imgvar:=V.ImageArray;
+     {$ifdef DirectOleaut32}
+        imgsafearray:=PSafeArray(VarArrayAsPSafeArray(imgvar));
+     {$endif}
    {$endif}
 
    except
@@ -576,31 +587,54 @@ begin
        exit;
      end;
    end;
-   {$ifdef DirectOleaut32}
-   dims:=SafeArrayGetDim(imgsafearray);
+
+   Dims:=0;
+   {$ifdef DirectArray}
+      Dims:=2;   // cannot get array dimension in advance, this limit this method to 2D images
    {$else}
-   dims:=VarArrayDimCount(imgvar);
+     {$ifdef DirectOleaut32}
+       dims:=SafeArrayGetDim(imgsafearray);
+     {$else}
+       dims:=VarArrayDimCount(imgvar);
+     {$endif}
    {$endif}
+
    if (Dims<2)or(Dims>3) then begin
      msg('Error ImageArray unsupported Dimension=' + inttostr(Dims));
      if assigned(FonAbortExposure) then FonAbortExposure(self);
      exit;
    end;
 
-   {$ifdef DirectOleaut32}
-   SafeArrayGetLBound(imgsafearray,1,LBoundX);
-   SafeArrayGetUBound(imgsafearray,1,HBoundX);
-   SafeArrayGetLBound(imgsafearray,2,LBoundY);
-   SafeArrayGetUBound(imgsafearray,2,HBoundY);
-   {$else}
-   LBoundX:=VarArrayLowBound(imgvar,1);
-   HBoundX:=VarArrayHighBound(imgvar,1);
-   LBoundY:=VarArrayLowBound(imgvar,2);
-   HBoundY:=VarArrayHighBound(imgvar,2);
-   {$endif}
-   xs:=HBoundX-LBoundX+1;
-   ys:=HBoundY-LBoundY+1;
-   msg('width:'+inttostr(xs)+' height:'+inttostr(ys));
+   try
+     {$ifdef DirectArray}
+       LBoundX:=0;
+       LBoundY:=0;
+       HBoundX:=length(img);
+       HBoundY:=length(img[0]);
+     {$else}
+       {$ifdef DirectOleaut32}
+         SafeArrayGetLBound(imgsafearray,1,LBoundX);
+         SafeArrayGetUBound(imgsafearray,1,HBoundX);
+         SafeArrayGetLBound(imgsafearray,2,LBoundY);
+         SafeArrayGetUBound(imgsafearray,2,HBoundY);
+       {$else}
+         LBoundX:=VarArrayLowBound(imgvar,1);
+         HBoundX:=VarArrayHighBound(imgvar,1);
+         LBoundY:=VarArrayLowBound(imgvar,2);
+         HBoundY:=VarArrayHighBound(imgvar,2);
+       {$endif}
+     {$endif}
+     xs:=HBoundX-LBoundX+1;
+     ys:=HBoundY-LBoundY+1;
+     if (xs<=0) or (ys<=0) then raise Exception.Create('Null size image');
+   except
+     on E: Exception do begin
+       msg('Error reading ImageArray size: ' + E.Message,0);
+       if assigned(FonAbortExposure) then FonAbortExposure(self);
+       exit;
+     end;
+   end;
+   if debug_msg then msg('width:'+inttostr(xs)+' height:'+inttostr(ys));
 
    nax1:=xs;
    nax2:=ys;
@@ -630,25 +664,27 @@ begin
      ElectronsPerADU:=-1;
    end;
 
-
-   {$ifdef DirectOleaut32}
-   i:=SafeArrayAccessData(imgsafearray,pimgdata);
-   if i<>0 then begin
-     msg('Error SafeArray AccessData: ' +  hexStr(i,10));
-     if assigned(FonAbortExposure) then FonAbortExposure(self);
-     exit;
-   end;
-   {$else}
-   try
-   pimgdata:=VarArrayLock(imgvar);
-   except
-     on E: Exception do begin
-       msg('Error SafeArray AccessData: ' + E.Message,0);
+   {$ifndef DirectArray}
+     {$ifdef DirectOleaut32}
+     i:=SafeArrayAccessData(imgsafearray,pimgdata);
+     if i<>0 then begin
+       msg('Error SafeArray AccessData: ' +  hexStr(i,10));
        if assigned(FonAbortExposure) then FonAbortExposure(self);
        exit;
      end;
-   end;
+     {$else}
+     try
+     pimgdata:=VarArrayLock(imgvar);
+     except
+       on E: Exception do begin
+         msg('Error SafeArray AccessData: ' + E.Message,0);
+         if assigned(FonAbortExposure) then FonAbortExposure(self);
+         exit;
+       end;
+     end;
+     {$endif}
    {$endif}
+
    // count used bit by pixel
    pxdiv:=1;
    if FFixPixelRange then begin
@@ -656,7 +692,11 @@ begin
      w:=0;
      for i:=LBoundY to ys-1 do begin
        for j := LBoundX to xs-1 do begin
-         ww:=Timgdata(pimgdata)[j+i*xs];
+         {$ifdef DirectArray}
+           ww:=img[j,i];
+         {$else}
+           ww:=Timgdata(pimgdata)[j+i*xs];
+         {$endif}
          if ww<65535 then
            w:=w or ww;
        end;
@@ -713,7 +753,7 @@ begin
    FImgStream.CopyFrom(hdrmem,hdrmem.Size);
    hdrmem.Free;
    hdr.Free;
-   msg('write image');
+   if debug_msg then msg('write image');
 
    if Dims=2 then begin
      for i:=LBoundY to ys-1 do begin
@@ -723,7 +763,11 @@ begin
            p2[1]:=i;
         for j:=LBoundX to xs-1 do begin
           p2[0]:=j;
-          lii:=Timgdata(pimgdata)[p2[0]+p2[1]*xs];
+          {$ifdef DirectArray}
+            lii:=img[p2[0],p2[1]];
+          {$else}
+            lii:=Timgdata(pimgdata)[p2[0]+p2[1]*xs];
+          {$endif}
           if FFixPixelRange then lii:=lii div pxdiv;
           if lii>0 then
              ii:=lii-32768
@@ -733,9 +777,10 @@ begin
           FImgStream.Write(ii,sizeof(smallint));
         end;
      end;
+   {$ifndef DirectArray}
    end
    else if Dims=3 then begin
-     p3[2]:=0; // only the first plane
+     p3[2]:=0; // only the first plane { #todo : implement full color if someday a camera use this format }
      for i:=LBoundY to ys-1 do begin
         if FASCOMFlipImage then
            p3[1]:=ys-1-i
@@ -753,6 +798,7 @@ begin
           FImgStream.Write(ii,sizeof(smallint));
         end;
      end;
+     {$endif}
    end;
 
    if debug_msg then msg('pad fits');
@@ -764,11 +810,13 @@ begin
      FImgStream.Write(b,c);
    end;
 
-   msg('release imagearray');
-   {$ifdef DirectOleaut32}
-   SafeArrayUnaccessData(imgsafearray);
-   {$else}
-   VarArrayUnlock(imgvar);
+   {$ifndef DirectArray}
+     if debug_msg then msg('release imagearray');
+     {$ifdef DirectOleaut32}
+       SafeArrayUnaccessData(imgsafearray);
+     {$else}
+       VarArrayUnlock(imgvar);
+     {$endif}
    {$endif}
 
    // if possible start next exposure now
