@@ -609,8 +609,8 @@ begin
      {$ifdef DirectArray}
        LBoundX:=0;
        LBoundY:=0;
-       HBoundX:=length(img);
-       HBoundY:=length(img[0]);
+       HBoundX:=length(img)-1;
+       HBoundY:=length(img[0])-1;
      {$else}
        {$ifdef DirectOleaut32}
          SafeArrayGetLBound(imgsafearray,1,LBoundX);
