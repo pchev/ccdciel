@@ -98,7 +98,7 @@ begin
   Label4.Caption:=rsAzimuth;
   Label5.Caption:=rsElevation;
   Label7.Caption:=rsImageScale;
-  Label8.Caption:=ssec+'/'+rsPixels;
+  Label8.Caption:=ssec+'/'+rsPixel;
   msginfo.Caption:='';
   BtnCompute.Caption:=rsCompute;
   if f_compute<>nil then f_compute.Setlang;

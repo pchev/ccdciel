@@ -570,6 +570,7 @@ resourcestring
   rsCalibrateAut = 'Calibrate autoguider after meridian flip';
   rsAutoGuiding = 'Auto-guiding';
   rsPixels = 'Pixels';
+  rsPixel = 'pixel';
   rsRAOnly = 'RA only';
   rsSettleTolera = 'Settle tolerance';
   rsMinTime = 'Min. time';

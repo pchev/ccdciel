@@ -6967,7 +6967,7 @@ begin
           txt:=txt+rsFOV+':'+blank+FormatFloat(f2, WCSwidth*60)+'x'+FormatFloat(f2, WCSheight*60)+smin+crlf;
      end;
      if cdcWCSinfo.secpix>0 then begin
-       txt:=txt+rsImageScale+':'+blank+FormatFloat(f2, cdcWCSinfo.secpix)+blank+ssec+'/'+rsPixels+crlf;
+       txt:=txt+rsImageScale+':'+blank+FormatFloat(f2, cdcWCSinfo.secpix)+ssec+'/'+rsPixel+crlf;
      end;
    end;
    f.Memo1.Text:=txt;
@@ -11585,7 +11585,7 @@ begin
           resulttxt:=resulttxt+' , '+rsFOV+blank+FormatFloat(f2, WCSwidth*60)+'x'+FormatFloat(f2, WCSheight*60)+smin;
      end;
      if cdcWCSinfo.secpix>0 then
-        resulttxt:=resulttxt+' , '+FormatFloat(f2, cdcWCSinfo.secpix)+blank+ssec+'/'+rsPixels;
+        resulttxt:=resulttxt+' , '+FormatFloat(f2, cdcWCSinfo.secpix)+ssec+'/'+rsPixel;
      if astrometry.LastError>'' then NewMessage(astrometry.Resolver+': '+astrometry.LastError,1);
      NewMessage(Format(rsResolveSucce, [rsAstrometry])+resulttxt,3);
   end else begin
