@@ -177,6 +177,7 @@ begin
     if Sender<>nil then FSeqCount:=1; // otherwise set by plan
     FDitherNum:=0;
     FFocusNum:=0;
+    doFlatAutoExposure:=(TFrameType(FrameType.ItemIndex)=FLAT) and FlatAutoExposure;
     if (TFrameType(FrameType.ItemIndex)=FLAT)and(FlatType=ftDome) then begin
        if DomeFlatSetLight and (DomeFlatSetLightON<>'') then begin
           AdjustFlatLight:=true;

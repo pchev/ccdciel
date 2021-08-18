@@ -8934,7 +8934,7 @@ procedure Tf_main.CameraNewImage(Sender: TObject);
 begin
   if Capture then begin
     // save file first
-    if not ((FlatAutoExposure and (camera.FrameType=FLAT))or(SaveBitmap)) then begin
+    if not ((doFlatAutoExposure and (camera.FrameType=FLAT))or(SaveBitmap)) then begin
       {$ifdef debug_raw}writeln(FormatDateTime(dateiso,Now)+blank+'save fits file');{$endif}
       if (not camera.AddFrames)or(camera.StackCount>=camera.StackNum) then CameraSaveNewImage;
       {$ifdef debug_raw}writeln(FormatDateTime(dateiso,Now)+blank+'saved');{$endif}
@@ -8965,15 +8965,16 @@ end;
 
 procedure Tf_main.CameraNewImageAsync(Data: PtrInt);
 var buf: string;
-    loadimage,displayimage: boolean;
+    loadimage,displayimage,DomeFlatExposureOK: boolean;
 begin
  try
+  DomeFlatExposureOK:=false;
   StatusBar1.Panels[panelstatus].Text:='';
   ImgFrameX:=FrameX;
   ImgFrameY:=FrameY;
   ImgFrameW:=FrameW;
   ImgFrameH:=FrameH;
-  loadimage:=DisplayCapture or f_visu.BtnShowImage.Down or (not capture) or (Autofocusing) or (FlatAutoExposure and (camera.FrameType=FLAT));
+  loadimage:=DisplayCapture or f_visu.BtnShowImage.Down or (not capture) or (Autofocusing) or (doFlatAutoExposure and (camera.FrameType=FLAT));
   displayimage:=DisplayCapture or f_visu.BtnShowImage.Down or (not capture) or (Autofocusing);
   if loadimage and (not fits.ImageValid) then begin
     {$ifdef debug_raw}writeln(FormatDateTime(dateiso,Now)+blank+'fits loadstream');{$endif}
@@ -9014,7 +9015,7 @@ begin
   if Capture then begin
      if not ImageSaved then begin
      // process automatic flat
-       if FlatAutoExposure and (camera.FrameType=FLAT) then begin
+       if doFlatAutoExposure and (camera.FrameType=FLAT) then begin
          {$ifdef debug_raw}writeln(FormatDateTime(dateiso,Now)+blank+'flat auto exposure');{$endif}
          case FlatType of
            ftSKY : begin
@@ -9022,6 +9023,7 @@ begin
                    end;
            ftDome :begin
                    if not CameraNewDomeFlat then exit;
+                   DomeFlatExposureOK:=not doFlatAutoExposure;
                    end;
          end;
          {$ifdef debug_raw}writeln(FormatDateTime(dateiso,Now)+blank+'save flat image');{$endif}
@@ -9034,7 +9036,9 @@ begin
      {$ifdef debug_raw}writeln(FormatDateTime(dateiso,Now)+blank+'image measurement');{$endif}
      if displayimage then CameraMeasureNewImage;
      {$ifdef debug_raw}writeln(FormatDateTime(dateiso,Now)+blank+'image measurement end');{$endif}
-     if (not EarlyNextExposure) or SkipEarlyExposure then begin
+     if (not EarlyNextExposure) or SkipEarlyExposure or DomeFlatExposureOK then begin
+       // dome flat exposure found, we can continue with early start
+       if DomeFlatExposureOK then EarlyNextExposure:=ConfigExpEarlyStart;
        // Next exposure delayed after image display
        // start the exposure now
        {$ifdef debug_raw}writeln(FormatDateTime(dateiso,Now)+blank+'start exposure');{$endif}
@@ -9149,6 +9153,7 @@ begin
          // min configured value
          newexp:=FlatMinExp;
          AdjustDomeFlat:=false;
+         doFlatAutoExposure:=false;
          NewMessage(rsReachConfigu,1);
          NewMessage(rsStopFlatCapt,1);
          exit;
@@ -9157,6 +9162,7 @@ begin
         // max configured value
          newexp:=FlatMaxExp;
          AdjustDomeFlat:=false;
+         doFlatAutoExposure:=false;
          NewMessage(rsReachConfigu2,1);
          NewMessage(rsStopFlatCapt,1);
          exit;
@@ -9167,8 +9173,10 @@ begin
       // retry with new exposure
       exit;
     end
-    else
+    else begin
       AdjustDomeFlat:=false;
+      doFlatAutoExposure:=false;
+    end;
   end;
   // save this flat
   result:=true;

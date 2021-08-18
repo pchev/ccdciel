@@ -416,7 +416,7 @@ var
   jdtoday,nutl,nuto,abp,abe,ecl,sunl: double;
   NutMAT: rotmatrix;
   ConfigExpEarlyStart, EarlyNextExposure, SkipEarlyExposure, EarlyDither: boolean;
-  FlatAutoExposure,FlatWaitDusk,FlatWaitDawn,AdjustDomeFlat,DomeFlatTelescopeSlew,DomeFlatSetLight,AdjustFlatLight: boolean;
+  FlatAutoExposure,doFlatAutoExposure,FlatWaitDusk,FlatWaitDawn,AdjustDomeFlat,DomeFlatTelescopeSlew,DomeFlatSetLight,AdjustFlatLight: boolean;
   FlatType: TFlatType;
   FlatMinExp,FlatMaxExp,DomeFlatTelescopeAz,DomeFlatTelescopeAlt: double;
   FlatLevelMin,FlatLevelMax: integer;
