@@ -1541,9 +1541,11 @@ begin
     if (keyword='SCALE')  then scale:=strtofloat(buf);
     if (scale=0) and (keyword='SECPIX1')then scale:=strtofloat(buf);
     if (keyword='FRAME')or(keyword='IMAGETYP') then frametype:=Str2Frametype(buf);
-    if (keyword='A_ORDER') or
+    if ((keyword='PLTSOLVD')and(copy(buf,1,1)='T')) or
+       (keyword='A_ORDER') or
        (keyword='AMDX1') or
-       (keyword='CD1_1')
+       (keyword='CD1_1') or
+       (keyword='PC1_1')
         then solved:=true; // the image must be astrometry solved.
  end;
  if (pixsz1<>0)and(pixsz2<>0) then pixratio:=pixsz1/pixsz2;
