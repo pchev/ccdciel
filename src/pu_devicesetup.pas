@@ -123,6 +123,7 @@ type
     PanelCoverAscom: TPanel;
     PanelSwitchIndi: TPanel;
     PanelCoverIndi: TPanel;
+    ScrollBox1: TScrollBox;
     SwitchARestDevice: TSpinEdit;
     CoverARestDevice: TSpinEdit;
     SwitchARestHost: TEdit;

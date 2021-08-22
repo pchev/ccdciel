@@ -180,6 +180,7 @@ type
     PlotTimer: TTimer;
     ImageResizeTimer: TTimer;
     SaveDialogPicture: TSaveDialog;
+    ScrollBox1: TScrollBox;
     Splitter1: TSplitter;
     TabMsgLevel: TTabControl;
     TimerStampTimer: TTimer;

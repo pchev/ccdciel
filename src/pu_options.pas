@@ -272,6 +272,7 @@ type
     ReadOutFocus: TComboBox;
     ReadOutAstrometry: TComboBox;
     SafetyActions: TStringGrid;
+    ScrollBox1: TScrollBox;
     ScrollBoxWeather: TScrollBox;
     WeatherRestartDelay: TSpinEdit;
     PageSafety: TTabSheet;
