@@ -1542,11 +1542,8 @@ begin
     if (scale=0) and (keyword='SECPIX1')then scale:=strtofloat(buf);
     if (keyword='FRAME')or(keyword='IMAGETYP') then frametype:=Str2Frametype(buf);
     if ((keyword='PLTSOLVD')and(copy(buf,1,1)='T')) or
-       (keyword='A_ORDER') or
-       (keyword='AMDX1') or
-       (keyword='CD1_1') or
-       (keyword='PC1_1')
-        then solved:=true; // the image must be astrometry solved.
+       (keyword='CRPIX1')
+       then solved:=true; // the image must be astrometry solved.
  end;
  if (pixsz1<>0)and(pixsz2<>0) then pixratio:=pixsz1/pixsz2;
  valid:=valid and (naxis>0); // do not process file without primary array
