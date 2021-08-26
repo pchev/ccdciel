@@ -9028,6 +9028,24 @@ begin
                    end;
          end;
          {$ifdef debug_raw}writeln(FormatDateTime(dateiso,Now)+blank+'save flat image');{$endif}
+         if (FlatType=ftSKY) and ConfigExpEarlyStart then begin
+            f_capture.SeqCount:=f_capture.SeqCount+1;
+            if f_capture.SeqCount<=f_capture.SeqNum.Value then begin
+               // start next exposure before to save
+               // be sure to stay in main thread without interruption so current flat cannot be replaced before it is saved
+               StartCaptureExposure(nil);
+               CameraSaveNewImage;
+            end else begin
+               // end capture
+               CameraSaveNewImage;
+               Capture:=false;
+               f_capture.Stop;
+               NewMessage(rsStopCapture+', '+Format(rsCaptureSFini, [inttostr(f_capture.SeqCount-1)+'/'+f_capture.SeqNum.Text]), 2);
+               StatusBar1.Panels[panelstatus].Text := Format(rsCaptureSFini, [inttostr(f_capture.SeqCount-1)+'/'+f_capture.SeqNum.Text]);
+               MenuCaptureStart.Caption:=f_capture.BtnStart.Caption
+            end;
+            exit;
+         end;
          CameraSaveNewImage;
        end
        else
