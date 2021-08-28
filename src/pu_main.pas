@@ -3623,7 +3623,7 @@ begin
   ClippingOverflow:=min(ClippingOverflow,MaxADU);
   reftreshold:=config.GetValue('/RefImage/Treshold',128);
   refcolor:=config.GetValue('/RefImage/Color',0);
-  BPMsigma:=config.GetValue('/BadPixel/Sigma',5);
+  BPMsigma:=config.GetValue('/BadPixel/Sigma',5.0);
   f_preview.PanelStack.Visible:=config.GetValue('/PreviewStack/StackShow',false);
   f_capture.PanelStack.Visible:=f_preview.StackPreview.Visible;
   MaxVideoPreviewRate:=config.GetValue('/Video/PreviewRate',5);
@@ -7348,7 +7348,7 @@ begin
    f_option.BGneutralization.Checked:=config.GetValue('/Color/BGneutralization',true);
    f_option.ClippingHigh.Value:=config.GetValue('/Color/ClippingOverflow',MAXWORD);
    f_option.ClippingLow.Value:=config.GetValue('/Color/ClippingUnderflow',0);
-   f_option.BPMsigma.Value:=config.GetValue('/BadPixel/Sigma',5);
+   f_option.BPMsigma.Value:=config.GetValue('/BadPixel/Sigma',5.0);
    f_option.StackShow.Checked:=config.GetValue('/PreviewStack/StackShow',false);
    f_option.VideoPreviewRate.Value:=config.GetValue('/Video/PreviewRate',5);
    f_option.VideoGroup.Visible:=(camera.CameraInterface=INDI);
@@ -8382,13 +8382,16 @@ if (camera.Status=devConnected) and ((not f_capture.Running) or autofocusing) an
   end;
   if camera.FrameType<>LIGHT then camera.FrameType:=LIGHT;
   camera.ObjectName:=rsPreview;
-  fits.SetBPM(bpm,bpmNum,bpmX,bpmY,bpmAxis);
   camera.StackNum:=-1; //unlimited
   camera.AddFrames:=f_preview.StackPreview.Checked;
-  if camera.AddFrames then
-     camera.SaveFrames:=f_preview.StackSave.Checked
-  else
+  if camera.AddFrames then begin
+     camera.SaveFrames:=f_preview.StackSave.Checked;
+     fits.SetBPM(bpm,0,0,0,0);  // bpm used during addition
+  end
+  else begin
      camera.SaveFrames:=false;
+     fits.SetBPM(bpm,bpmNum,bpmX,bpmY,bpmAxis);
+  end;
   camera.StartExposure(e);
 end
 else begin
@@ -8847,17 +8850,17 @@ if (AllDevicesConnected)and(not autofocusing)and (not learningvcurve) then begin
   camera.ObjectName:=f_capture.Fname.Text;
   // disable BPM
   fits.SetBPM(bpm,0,0,0,0);
+  fits.DarkOn:=false;
   // stacking
   f_preview.StackPreview.Checked:=false;
   camera.AddFrames:=f_capture.PanelStack.Visible and (f_capture.StackNum.Value>1);
   if camera.AddFrames then begin
     camera.SaveFrames:=false;
-    camera.StackNum:=f_capture.StackNum.Value
+    camera.StackNum:=f_capture.StackNum.Value;
   end else begin
     camera.StackNum:=1;
     camera.SaveFrames:=false;
   end;
-  fits.DarkOn:=camera.AddFrames;
   // show message
   cc:=f_capture.SeqCount;
   if camera.AddFrames then begin

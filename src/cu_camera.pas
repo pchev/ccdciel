@@ -495,10 +495,13 @@ if FAddFrames then begin  // stack preview frames
   f.onMsg:=onMsg;
   f.DarkOn:=true;
   f.DarkFrame:=FFits.DarkFrame;
+  f.SetBPM(bpm,bpmNum,bpmX,bpmY,bpmAxis);
   f.Stream:=FImgStream;
   FImgStream:=TMemoryStream.Create;
   // load, subtract dark and debayer
   f.LoadStream;
+  f.DarkOn:=false;
+  f.SetBPM(bpm,0,0,0,0);
   // if debayered, load the new color stream
   if (f.preview_axis<>f.HeaderInfo.naxis)and(f.preview_axis=3) then f.LoadRGB;
   // convert 8bit to 16bit to avoid quick overflow

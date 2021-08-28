@@ -1987,7 +1987,7 @@ if (FDarkOn)and(FDark<>nil)and(SameFormat(FDark))
     {$ifdef debug_raw}writeln(FormatDateTime(dateiso,Now)+blank+'apply dark');{$endif}
      Math(FDark,moSub);
      FDarkProcess:=true;
-     FHeader.Insert( FHeader.Indexof('END'),'COMMENT','Dark substracted','');
+     FHeader.Insert( FHeader.Indexof('END'),'COMMENT','Dark subtracted','');
    end;
 end;
 
