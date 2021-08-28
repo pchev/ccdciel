@@ -2006,6 +2006,10 @@ msgstr ""
 msgid "Pixels"
 msgstr ""
 
+#: u_translation:rspixel
+msgid "pixel"
+msgstr ""
+
 #: u_translation:rsraonly
 msgid "RA only"
 msgstr ""
@@ -4864,5 +4868,17 @@ msgstr ""
 
 #: u_translation:rsstackingcoun
 msgid "Stacking count"
+msgstr ""
+
+#: u_translation:rsforguidancea
+msgid "For guidance adjust the azimuth knob along the blue line and the altitude knob along the red line"
+msgstr ""
+
+#: u_translation:rsstarts
+msgid "Start %s"
+msgstr ""
+
+#: u_translation:rsprogrampath
+msgid "Program path"
 msgstr ""
 

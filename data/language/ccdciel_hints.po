@@ -534,3 +534,7 @@ msgstr ""
 msgid "Histogram full range or clipped to available data"
 msgstr ""
 
+#: u_hints:rssaveindividu
+msgid "Save individual images before stacking"
+msgstr ""
+

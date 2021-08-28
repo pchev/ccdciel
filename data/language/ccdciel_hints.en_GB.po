@@ -6,17 +6,18 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ccdciel\n"
 "Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
-"POT-Creation-Date: 2021-06-06 18:46+0000\n"
+"POT-Creation-Date: 2021-08-28 20:06+0000\n"
 "PO-Revision-Date: 2020-05-14 20:03+0000\n"
 "Last-Translator: Stephan Woidowski <swoidowski@t-online.de>\n"
 "Language-Team: English (United Kingdom) <en_GB@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2021-06-06 18:56+0000\n"
-"X-Generator: Launchpad (build b45bdbe3a00b6b668fa7f2069bd545c35c41f7f4)\n"
+"X-Launchpad-Export-Date: 2021-08-28 20:12+0000\n"
+"X-Generator: Launchpad (build 76ef73296f01d64cdfe5c48bfc4daf35cdfde808)\n"
 
 #: u_hints.rsactivateback
+#, object-pascal-format
 msgid "Activate backlash compensation.%sLet this disabled if your focuser driver include backlash compensation."
 msgstr "Activate backlash compensation.%sLet this disabled if your focuser driver include backlash compensation."
 
@@ -29,6 +30,7 @@ msgid "Activate the stop time"
 msgstr "Activate the stop time"
 
 #: u_hints.rsactiveonlyif
+#, object-pascal-format
 msgid "Active only if the target use astrometry positioning%sand the exposure time is longer than the astrometry timeout"
 msgstr "Active only if the target use astrometry positioning%sand the exposure time is longer than the astrometry timeout"
 
@@ -37,6 +39,7 @@ msgid "A description for this step"
 msgstr "A description for this step"
 
 #: u_hints.rsafterlearnin
+#, object-pascal-format
 msgid "After learning is completed you can use this cursor to better adjust to the linear part of the curve.%sThe fit must be particularly good near the horizontal blue line position."
 msgstr "After learning is completed you can use this cursor to better adjust to the linear part of the curve.%sThe fit must be particularly good near the horizontal blue line position."
 
@@ -89,6 +92,7 @@ msgid "Click to set value for all the targets"
 msgstr "Click to set value for all the targets"
 
 #: u_hints.rsclicktosortb
+#, object-pascal-format
 msgid "Click to sort by %s"
 msgstr "Click to sort by %s"
 
@@ -101,10 +105,12 @@ msgid "Control how complete target are managed when the whole list is repeated"
 msgstr "Control how complete target are managed when the whole list is repeated"
 
 #: u_hints.rscopythecurre
+#, object-pascal-format
 msgid "Copy the current profile to a new one.%sThis also copy every program preference to the new profile."
 msgstr "Copy the current profile to a new one.%sThis also copy every program preference to the new profile."
 
 #: u_hints.rscreateanewem
+#, object-pascal-format
 msgid "Create a new empty profile.%sWarning this also clear every program preference for this new profile.%sUse the Copy button if you want to configure a different equipment but keep the program options."
 msgstr "Create a new empty profile.%sWarning this also clear every program preference for this new profile.%sUse the Copy button if you want to configure a different equipment but keep the program options."
 
@@ -165,6 +171,7 @@ msgid "Global INDI server parameters"
 msgstr "Global INDI server parameters"
 
 #: u_hints.rsguidinghisto
+#, object-pascal-format
 msgid "Guiding history in arcsecond %s - blue: RA error %s - red: Dec error %s - yellow: Star mass"
 msgstr "Guiding history in arcsecond %s - blue: RA error %s - red: Dec error %s - yellow: Star mass"
 
@@ -173,6 +180,7 @@ msgid "Histogram full range or clipped to available data"
 msgstr ""
 
 #: u_hints.rshistogramoft
+#, object-pascal-format
 msgid "Histogram of the current image.%sClick and move to adjust the visualisation threshold."
 msgstr "Histogram of the current image.%sClick and move to adjust the visualisation threshold."
 
@@ -233,6 +241,7 @@ msgid "Loop preview exposures"
 msgstr "Loop preview exposures"
 
 #: u_hints.rsmaketesttode
+#, object-pascal-format
 msgid "Make test to determine the most performant option depending on your computer.%s(Network is mandatory if the camera is connected to a remote Indi server)"
 msgstr "Make test to determine the most performant option depending on your computer.%s(Network is mandatory if the camera is connected to a remote Indi server)"
 
@@ -257,6 +266,7 @@ msgid "Planetarium status"
 msgstr "Planetarium status"
 
 #: u_hints.rspriortoslewi
+#, object-pascal-format
 msgid "Prior to slewing retrieve actual comet or asteroid coordinates from planetarium program.%sPlanetarium program should be connected and following system time.%sTarget name should be searchable within the planetarium."
 msgstr "Prior to slewing retrieve actual comet or asteroid coordinates from planetarium program.%sPlanetarium program should be connected and following system time.%sTarget name should be searchable within the planetarium."
 
@@ -265,12 +275,17 @@ msgid "Redo autofocus after a number of frames"
 msgstr "Redo autofocus after a number of frames"
 
 #: u_hints.rsrepeatthepla
+#, object-pascal-format
 msgid "Repeat the plan for this object.%sSet to zero to not process this target."
 msgstr "Repeat the plan for this object.%sSet to zero to not process this target."
 
 #: u_hints.rsrepeatthewho2
 msgid "Repeat the whole list a number of time."
 msgstr "Repeat the whole list a number of time."
+
+#: u_hints.rssaveindividu
+msgid "Save individual images before stacking"
+msgstr ""
 
 #: u_hints.rssavethelista
 msgid "Save the list and close this window."
@@ -325,10 +340,12 @@ msgid "Show captured image"
 msgstr "Show captured image"
 
 #: u_hints.rsshowtheoptio
+#, object-pascal-format
 msgid "Show the option to stack the preview frame in real time.%sThis feature is normally use for demonstration in public event.%sYou can let this option disabled to not risk an unwanted use during your imaging session."
 msgstr "Show the option to stack the preview frame in real time.%sThis feature is normally use for demonstration in public event.%sYou can let this option disabled to not risk an unwanted use during your imaging session."
 
 #: u_hints.rsstacktheprev
+#, object-pascal-format
 msgid "Stack the preview frames to a single image.%sA new stack is started when you start a loop or if you uncheck this button."
 msgstr "Stack the preview frames to a single image.%sA new stack is started when you start a loop or if you uncheck this button."
 
@@ -373,10 +390,12 @@ msgid "Start Y"
 msgstr "Start Y"
 
 #: u_hints.rsstayatthetar
+#, object-pascal-format
 msgid "Stay at the target position for autofocus.%sA medium bright star should be visible.%sElse slew to a bright database star."
 msgstr "Stay at the target position for autofocus.%sA medium bright star should be visible.%sElse slew to a bright database star."
 
 #: u_hints.rsstepplanfor
+#, object-pascal-format
 msgid "Step plan for capturing the images.%sThe step plan details are specified in the list below"
 msgstr "Step plan for capturing the images.%sThe step plan details are specified in the list below"
 
@@ -401,6 +420,7 @@ msgid "The base folder where the images are recorded"
 msgstr "The base folder where the images are recorded"
 
 #: u_hints.rsthedirection
+#, object-pascal-format
 msgid "The direction the focuser will always finish to move.%sIf using auto-focus set the same move direction."
 msgstr "The direction the focuser will always finish to move.%sIf using auto-focus set the same move direction."
 
@@ -425,6 +445,7 @@ msgid "The list of target to process in sequence."
 msgstr "The list of target to process in sequence."
 
 #: u_hints.rsthemagnitude
+#, object-pascal-format
 msgid "The magnitude of the star used to run the autofocus.%sUsing a faint star can minimize the telescope movement but prefer the brightest to avoid trouble with nearby stars."
 msgstr "The magnitude of the star used to run the autofocus.%sUsing a faint star can minimize the telescope movement but prefer the brightest to avoid trouble with nearby stars."
 
@@ -505,14 +526,17 @@ msgid "Time from meridian transit (hour angle)"
 msgstr "Time from meridian transit (hour angle)"
 
 #: u_hints.rstrytocorrect
+#, object-pascal-format
 msgid "Try to correct for focuser slippage since the last Vcurve learning.%sBeware you must set the focuser temperature correction and the filters offset before to use this option."
 msgstr "Try to correct for focuser slippage since the last Vcurve learning.%sBeware you must set the focuser temperature correction and the filters offset before to use this option."
 
 #: u_hints.rsusedynamic2
+#, object-pascal-format
 msgid "Dynamic can be use with an absolute or relative position focuser,%s this method require the starting position is near the focus position.%s This is the preferred method."
 msgstr "Dynamic can be use with an absolute or relative position focuser,%s this method require the starting position is near the focus position.%s This is the preferred method."
 
 #: u_hints.rsuseiterati2
+#, object-pascal-format
 msgid "Use Iterative if the first two options do not work for you or if you start with really bad focus.%s This is the slowest and less precise method."
 msgstr "Use Iterative if the first two options do not work for you or if you start with really bad focus.%s This is the slowest and less precise method."
 

@@ -4948,10 +4948,10 @@ object f_option: Tf_option
                   TabOrder = 0
                 end
                 object CdCPath: TEdit
-                  Left = 125
+                  Left = 160
                   Height = 30
                   Top = 40
-                  Width = 341
+                  Width = 306
                   TabOrder = 1
                 end
                 object Label68: TLabel
@@ -4982,10 +4982,10 @@ object f_option: Tf_option
               TabOrder = 0
             end
             object SAMPPath: TEdit
-              Left = 125
+              Left = 160
               Height = 30
               Top = 40
-              Width = 341
+              Width = 306
               TabOrder = 1
             end
           end
@@ -5007,10 +5007,10 @@ object f_option: Tf_option
               TabOrder = 0
             end
             object HNSKYPath: TEdit
-              Left = 125
+              Left = 160
               Height = 30
               Top = 40
-              Width = 341
+              Width = 306
               TabOrder = 1
             end
           end
