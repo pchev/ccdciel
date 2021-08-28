@@ -6673,7 +6673,10 @@ begin
  if f_autoguider.BtnConnect.Caption=rsConnect then begin
    i:=config.GetValue('/Autoguider/Software',2);
    case TAutoguiderType(i) of
-    agPHD:       autoguider.Connect(config.GetValue('/Autoguider/PHDhostname','localhost'),config.GetValue('/Autoguider/PHDport','4400'));
+    agPHD:       autoguider.Connect(config.GetValue('/Autoguider/PHDhostname','localhost'),
+                                    config.GetValue('/Autoguider/PHDport','4400'),
+                                    config.GetValue('/Autoguider/PHDpath',''),
+                                    config.GetValue('/Autoguider/PHDstart',false));
     agLINGUIDER: begin
                if config.GetValue('/Autoguider/LinGuiderUseUnixSocket',true) then begin
                  autoguider.Connect(config.GetValue('/Autoguider/Autoguider/LinGuiderSocket','/tmp/lg_ss'));
@@ -7544,6 +7547,8 @@ begin
    f_option.AutoguiderBox.ItemIndex:=config.GetValue('/Autoguider/Software',2);
    f_option.PHDhostname.Text:=config.GetValue('/Autoguider/PHDhostname','localhost');
    f_option.PHDport.Text:=config.GetValue('/Autoguider/PHDport','4400');
+   f_option.StartPHD.Checked:=config.GetValue('/Autoguider/PHDstart',false);
+   f_option.PHDpath.Text:=config.GetValue('/Autoguider/PHDpath',defPHDpath);
    f_option.LinGuiderUseUnixSocket:=config.GetValue('/Autoguider/LinGuiderUseUnixSocket',true);
    f_option.LinGuiderSocket.Text:=config.GetValue('/Autoguider/LinGuiderSocket','/tmp/lg_ss');
    f_option.LinGuiderHostname.Text:=config.GetValue('/Autoguider/LinGuiderHostname','localhost');
@@ -7565,8 +7570,15 @@ begin
    f_option.PlanetariumBox.ItemIndex:=config.GetValue('/Planetarium/Software',ord(plaNONE));
    f_option.CdChostname.Text:=config.GetValue('/Planetarium/CdChostname','localhost');
    f_option.CdCport.Text:=config.GetValue('/Planetarium/CdCport','');
+   f_option.StartCdC.Checked:=config.GetValue('/Planetarium/CdCstart',false);
+   f_option.CdCPath.Text:=config.GetValue('/Planetarium/CdCpath',defCdCpath);
+   f_option.StartHNSKY.Checked:=config.GetValue('/Planetarium/HNSKYstart',false);
+   f_option.HNSKYPath.Text:=config.GetValue('/Planetarium/HNSKYpath',defHNSKYpath);
+   f_option.StartSAMP.Checked:=config.GetValue('/Planetarium/SAMPstart',false);
+   f_option.SAMPPath.Text:=config.GetValue('/Planetarium/SAMPpath',defSAMPpath);
    f_option.CheckBoxLocalCdc.Checked:=f_option.CdCport.Text='';
    f_option.PanelRemoteCdc.Visible:=not f_option.CheckBoxLocalCdc.Checked;
+   f_option.PanelLocalCdC.Visible:=not f_option.PanelRemoteCdc.Visible;
    f_option.WeatherRestartDelay.Value:=config.GetValue('/Weather/RestartDelay',5);
    f_option.ScrollBoxWeather.Visible:=(weather.Status=devConnected)and(not weather.hasStatus);
    if f_option.ScrollBoxWeather.Visible then begin
@@ -7856,6 +7868,8 @@ begin
      config.SetValue('/Autoguider/Software',f_option.AutoguiderBox.ItemIndex);
      config.SetValue('/Autoguider/PHDhostname',f_option.PHDhostname.Text);
      config.SetValue('/Autoguider/PHDport',f_option.PHDport.Text);
+     config.SetValue('/Autoguider/PHDstart',f_option.StartPHD.Checked);
+     config.SetValue('/Autoguider/PHDpath',f_option.PHDpath.Text);
      config.SetValue('/Autoguider/LinGuiderUseUnixSocket',f_option.LinGuiderUseUnixSocket);
      config.SetValue('/Autoguider/LinGuiderSocket',f_option.LinGuiderSocket.Text);
      config.SetValue('/Autoguider/LinGuiderHostname',f_option.LinGuiderHostname.Text);
@@ -7877,6 +7891,12 @@ begin
      config.SetValue('/Planetarium/Software',f_option.PlanetariumBox.ItemIndex);
      config.SetValue('/Planetarium/CdChostname',f_option.CdChostname.Text);
      config.SetValue('/Planetarium/CdCport',trim(f_option.CdCport.Text));
+     config.SetValue('/Planetarium/CdCstart',f_option.StartCdC.Checked);
+     config.SetValue('/Planetarium/CdCpath',f_option.CdCPath.Text);
+     config.SetValue('/Planetarium/HNSKYstart',f_option.StartHNSKY.Checked);
+     config.SetValue('/Planetarium/HNSKYpath',f_option.HNSKYPath.Text);
+     config.SetValue('/Planetarium/SAMPstart',f_option.StartSAMP.Checked);
+     config.SetValue('/Planetarium/SAMPpath',f_option.SAMPPath.Text);
      config.SetValue('/Weather/RestartDelay',f_option.WeatherRestartDelay.Value);
      if f_option.ScrollBoxWeather.Visible then begin
         config.SetValue('/Weather/Use/CloudCover',f_option.UseW1.Checked);
@@ -12069,9 +12089,13 @@ begin
    i:=ord(planetarium.PlanetariumType);
    case TPlanetariumType(i) of
      CDC:  planetarium.Connect(config.GetValue('/Planetarium/CdChostname','localhost'),
-                      config.GetValue('/Planetarium/CdCport',''));
-     SAMP: planetarium.Connect('');
-     HNSKY: planetarium.Connect('');
+                      config.GetValue('/Planetarium/CdCport',''),
+                      config.GetValue('/Planetarium/CdCpath',''),
+                      config.GetValue('/Planetarium/CdCstart',false));
+     SAMP: planetarium.Connect('','',config.GetValue('/Planetarium/SAMPpath',''),
+                      config.GetValue('/Planetarium/SAMPstart',false));
+     HNSKY: planetarium.Connect('','',config.GetValue('/Planetarium/HNSKYpath',''),
+                      config.GetValue('/Planetarium/HNSKYstart',false));
    end;
  end else begin
    planetarium.Disconnect;

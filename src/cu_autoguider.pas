@@ -36,6 +36,8 @@ type
     FVersion,FMsgVersion,FStatus : String;
     FSettlePix,FSettleTmin,FSettleTmax: string;
     FRunning, FRecovering,FDithering,FStopGuiding: boolean;
+    FProgramPath,FProgramName: string;
+    FStartedProgram: boolean;
     FState: TAutoguiderState;
     FAutoguiderType: TAutoguiderType;
     FTimeout : integer;
@@ -66,7 +68,7 @@ type
   public
     Constructor Create;
     Destructor Destroy; override;
-    Procedure Connect(cp1: string; cp2:string=''); virtual; abstract;
+    Procedure Connect(cp1: string; cp2:string=''; cp3:string=''; cb1:boolean=False); virtual; abstract;
     procedure Disconnect; virtual; abstract;
     procedure Shutdown; virtual; abstract;
     procedure ConnectGear; virtual; abstract;
@@ -115,6 +117,7 @@ FRecovering:=false;
 FDithering:=false;
 FStatus:='Disconnected';
 FState:=GUIDER_DISCONNECTED;
+FStartedProgram:=false;
 FTimeout:=500;
 FLastError:='';
 FErrorDesc:='';

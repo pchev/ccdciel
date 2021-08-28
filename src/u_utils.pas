@@ -160,6 +160,9 @@ function TempCelsius(cf:integer; t:double):double;
 function GetThreadCount: integer;
 function email(Subject,Msg:string):string;
 function isLocalIP(ip:string): boolean;
+function IsProgramRunning(pgm: string): boolean;
+function StartProgram(pgm, path: string): boolean;
+procedure StopProgram(pgm: string);
 
 implementation
 
@@ -3329,6 +3332,55 @@ begin
   finally
     ipstr.Free;
   end;
+end;
+
+function IsProgramRunning(pgm: string): boolean;
+var proclist: TStringList;
+    i:integer;
+begin
+  result:=false;
+  try
+  proclist:=TStringList.Create;
+  try
+  {$ifdef mswindows}
+     ExecProcess('wmic process get name',proclist);
+  {$else}
+     ExecProcess('ps -e -o comm',proclist);
+     {$ifdef darwin}
+       for i:=0 to proclist.Count-1 do proclist[i]:=ExtractFileName(proclist[i]);
+     {$endif}
+  {$endif}
+  for i:=0 to proclist.Count-1 do begin
+    if proclist[i]=pgm then begin
+      result:=true;
+      break;
+    end;
+  end;
+  finally
+    proclist.Free;
+  end;
+  except
+  end;
+end;
+
+function StartProgram(pgm, path: string): boolean;
+begin
+  if not IsProgramRunning(pgm) then begin
+    if path<>'' then pgm:=slash(path)+pgm;
+    ExecNoWait(pgm,'',false);
+    result:=true;
+  end
+  else
+    result:=false;
+end;
+
+procedure StopProgram(pgm: string);
+begin
+{$ifdef mswindows}
+  ExecNoWait('taskkill /IM '+pgm);
+{$else}
+  ExecNoWait('pkill '+pgm);
+{$endif}
 end;
 
 end.

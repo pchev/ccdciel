@@ -37,6 +37,8 @@ protected
   FCmdTimeout : double;
   FStatus: boolean;
   FRunning: boolean;
+  FProgramPath,FProgramName: string;
+  FStartedProgram: boolean;
   Fra, Fde, Fpa: double;
   FplanetariumEquinox, FplanetariumJD: double;
   Fobjname, FLastErrorTxt: string;
@@ -59,7 +61,7 @@ public
   InitTimer: TTimer;
   Constructor Create;
   destructor Destroy; override;
-  Procedure Connect(cp1: string; cp2:string=''); virtual; abstract;
+  Procedure Connect(cp1: string; cp2:string=''; cp3:string=''; cb1:boolean=False); virtual; abstract;
   procedure Disconnect; virtual; abstract;
   procedure Shutdown; virtual; abstract;
   function Cmd(const Value: string):string; virtual; abstract;
@@ -107,6 +109,7 @@ Fobjname:='';
 FLastErrorTxt:='';
 FplanetariumEquinox:=0;  // 0 = equinox of date
 FplanetariumJD:=0;
+FStartedProgram:=false;
 InitTimer:=TTimer.Create(Application);
 InitTimer.Enabled:=false;
 InitTimer.Interval:=500;

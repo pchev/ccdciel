@@ -39,7 +39,7 @@ type
   public
     Constructor Create;
     Destructor Destroy; override;
-    Procedure Connect(cp1: string; cp2:string=''); override;
+    Procedure Connect(cp1: string; cp2:string=''; cp3:string=''; cb1:boolean=False); override;
     procedure Disconnect; override;
     procedure Shutdown; override;
     procedure ConnectGear; override;
@@ -68,7 +68,7 @@ begin
   inherited Destroy;
 end;
 
-Procedure T_autoguider_none.Connect(cp1: string; cp2:string='');
+Procedure T_autoguider_none.Connect(cp1: string; cp2:string=''; cp3:string=''; cb1:boolean=False);
 begin
   start;
 end;

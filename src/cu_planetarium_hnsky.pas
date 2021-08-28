@@ -42,7 +42,7 @@ type
     procedure ProcessDataSyn; override;
   public
     Constructor Create;
-    procedure Connect(cp1: string; cp2:string=''); override;
+    procedure Connect(cp1: string; cp2:string=''; cp3:string=''; cb1:boolean=False); override;
     procedure Disconnect; override;
     procedure Shutdown; override;
     function Cmd(const Value: string):string; override;
@@ -76,9 +76,18 @@ begin
   result:=2000.0;
 end;
 
-procedure TPlanetarium_hnsky.Connect(cp1: string; cp2:string='');
+procedure TPlanetarium_hnsky.Connect(cp1: string; cp2:string=''; cp3:string=''; cb1:boolean=False);
 begin
   if started then exit;
+  started:=true;
+  if cb1 and (cp3<>'') then begin
+    FProgramPath:=ExtractFilePath(cp3);
+    FProgramName:=ExtractFileName(cp3);
+    if FProgramName<>'' then begin
+      FStartedProgram:=StartProgram(FProgramName,FProgramPath);
+      if FStartedProgram then wait(10);
+    end;
+  end;
   Start;
 end;
 
@@ -152,6 +161,7 @@ finally
   tcpclient.Disconnect;
   tcpclient.Free;
 end;
+if FStartedProgram then StopProgram(FProgramName);
 end;
 
 procedure TPlanetarium_hnsky.ProcessDataSyn;

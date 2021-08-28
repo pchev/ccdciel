@@ -60,7 +60,7 @@ type
   public
     Constructor Create;
     Destructor Destroy; override;
-    Procedure Connect(cp1: string; cp2:string=''); override;
+    Procedure Connect(cp1: string; cp2:string=''; cp3:string=''; cb1:boolean=False); override;
     procedure Disconnect; override;
     procedure Shutdown; override;
     procedure ConnectGear; override;
@@ -177,7 +177,7 @@ begin
  end;
 end;
 
-Procedure T_autoguider_linguider.Connect(cp1: string; cp2:string='');
+Procedure T_autoguider_linguider.Connect(cp1: string; cp2:string=''; cp3:string=''; cb1:boolean=False);
 var buf: string;
 begin
   if FRunning then exit;

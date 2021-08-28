@@ -1195,9 +1195,11 @@ function Tf_scriptengine.cmd_AutoguiderConnect:string;
 begin
 try
  result:=msgFailed;
- if Autoguider=nil then exit;
+ if (Autoguider=nil)or(Autoguider.AutoguiderType<>agPHD) then exit;
  autoguider.Connect(config.GetValue('/Autoguider/PHDhostname','localhost'),
-                    config.GetValue('/Autoguider/PHDport','4400'));
+                    config.GetValue('/Autoguider/PHDport','4400'),
+                    config.GetValue('/Autoguider/PHDpath',''),
+                    config.GetValue('/Autoguider/PHDstart',false));
  result:=msgOK;
  wait(2);
 except
@@ -1609,9 +1611,13 @@ result:=msgFailed;
 i:=config.GetValue('/Planetarium/Software',ord(plaNONE));
 case TPlanetariumType(i) of
   CDC:  planetarium.Connect(config.GetValue('/Planetarium/CdChostname','localhost'),
-                   config.GetValue('/Planetarium/CdCport',''));
-  SAMP: planetarium.Connect('');
-  HNSKY: planetarium.Connect('');
+                   config.GetValue('/Planetarium/CdCport',''),
+                   config.GetValue('/Planetarium/CdCpath',''),
+                   config.GetValue('/Planetarium/CdCstart',false));
+  SAMP: planetarium.Connect('','',config.GetValue('/Planetarium/SAMPpath',''),
+                   config.GetValue('/Planetarium/SAMPstart',false));
+  HNSKY: planetarium.Connect('','',config.GetValue('/Planetarium/HNSKYpath',''),
+                   config.GetValue('/Planetarium/HNSKYstart',false));
   plaNONE: exit;
 end;
 wait(1);

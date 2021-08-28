@@ -1322,6 +1322,8 @@ resourcestring
   rsStackingCoun = 'Stacking count';
   rsForGuidanceA = 'For guidance adjust the azimuth knob along the blue '
     +'line and the altitude knob along the red line';
+  rsStartS = 'Start %s';
+  rsProgramPath = 'Program path';
 
 implementation
 

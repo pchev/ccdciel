@@ -34,10 +34,21 @@ type
   { Tf_option }
 
   Tf_option = class(TForm)
+    CdCPath: TEdit;
+    Page6: TPage;
+    PHDpath: TEdit;
+    StartPHD: TCheckBox;
+    HNSKYPath: TEdit;
+    Label151: TLabel;
+    SAMPPath: TEdit;
+    Label68: TLabel;
+    Label69: TLabel;
+    StartCdC: TCheckBox;
     EarlyDither: TCheckBox;
     Label150: TLabel;
     Label67: TLabel;
     Panel26: TPanel;
+    PanelLocalCdC: TPanel;
     PythonCmd: TEdit;
     GroupBox31: TGroupBox;
     GroupBox32: TPanel;
@@ -58,6 +69,8 @@ type
     Panel23: TPanel;
     Panel24: TPanel;
     Panel25: TPanel;
+    StartHNSKY: TCheckBox;
+    StartSAMP: TCheckBox;
     TCPIPportDefault: TButton;
     SlewGainEdit: TSpinEdit;
     SlewISObox: TComboBox;
@@ -682,6 +695,9 @@ type
     procedure PanelLeftMouseWheel(Sender: TObject; Shift: TShiftState; WheelDelta: Integer; MousePos: TPoint; var Handled: Boolean);
     procedure PixelSizeFromCameraChange(Sender: TObject);
     procedure PlanetariumBoxClick(Sender: TObject);
+    procedure StartCdCChange(Sender: TObject);
+    procedure StartHNSKYChange(Sender: TObject);
+    procedure StartSAMPChange(Sender: TObject);
     procedure TCPIPportDefaultClick(Sender: TObject);
     procedure PythonDefaultClick(Sender: TObject);
     procedure rbLinSocketChange(Sender: TObject);
@@ -1107,9 +1123,16 @@ begin
   Label17.Caption := rsPort;
   Label89.Caption := rsServer;
   Label90.Caption := rsPort;
+  StartPHD.Caption := Format(rsStartS, ['PHD2']);
   PagePlanetarium.Caption := rsPlanetarium;
   PlanetariumBox.Caption := rsSoftware;
   CheckBoxLocalCdc.Caption := rsSkychartOnLo;
+  StartCdC.Caption := Format(rsStartS,['Skychart']);
+  StartHNSKY.Caption := Format(rsStartS,['HNSKY']);
+  StartSAMP.Caption := Format(rsStartS,['SAMP']);
+  label68.Caption := rsProgramPath;
+  label69.Caption := rsProgramPath;
+  label151.Caption := rsProgramPath;
   Label25.Caption := rsPort;
   Label24.Caption := rsServer;
   hemis.Items[0]:=rsNorth;
@@ -1488,6 +1511,21 @@ begin
   Notebook2.PageIndex:=PlanetariumBox.ItemIndex;
 end;
 
+procedure Tf_option.StartCdCChange(Sender: TObject);
+begin
+  CdCPath.Enabled:=StartCdC.Checked;
+end;
+
+procedure Tf_option.StartHNSKYChange(Sender: TObject);
+begin
+ HNSKYPath.Enabled:=StartHNSKY.Checked;
+end;
+
+procedure Tf_option.StartSAMPChange(Sender: TObject);
+begin
+ SAMPPath.Enabled:=StartSAMP.Checked;
+end;
+
 procedure Tf_option.TCPIPportDefaultClick(Sender: TObject);
 begin
   TCPIPport.Value:=3277;
@@ -1507,6 +1545,7 @@ begin
   end else begin
     PanelRemoteCdc.Visible:=true;
   end;
+  PanelLocalCdC.Visible:=not PanelRemoteCdc.Visible;
 end;
 
 procedure Tf_option.DomeSlaveToMountChange(Sender: TObject);

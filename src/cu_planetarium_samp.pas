@@ -28,7 +28,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 interface
 
-uses u_global, cu_planetarium, cu_sampclient, Classes, SysUtils,
+uses u_global, u_utils, cu_planetarium, cu_sampclient, Classes, SysUtils,
     LazFileUtils, ExtCtrls, Forms;
 
 type
@@ -37,6 +37,7 @@ type
   private
     SampClient : TSampClient;
     FClientChange: boolean;
+    started: boolean;
     procedure DoClientChange;
     procedure ClientChange(Sender: TObject);
     procedure ClientDisconnected(Sender: TObject);
@@ -48,7 +49,7 @@ type
   public
     Constructor Create;
     Destructor Destroy; override;
-    procedure Connect(cp1: string; cp2:string=''); override;
+    procedure Connect(cp1: string; cp2:string=''; cp3:string=''; cb1:boolean=False); override;
     procedure Disconnect; override;
     procedure Shutdown; override;
     function ShowImage(fn: string; fovdeg:double=0):boolean; override;
@@ -103,8 +104,8 @@ begin
   if Terminated then exit;
   SampClient.appname:='ccdciel';
   SampClient.appdesc:='CCDciel image capture software';
-  SampClient.appicon:='http://a.fsdn.com/allura/p/ccdciel/icon';
-  SampClient.appdoc:='http://sourceforge.net/projects/ccdciel/';
+  SampClient.appicon:='https://a.fsdn.com/allura/p/ccdciel/icon';
+  SampClient.appdoc:='https://sourceforge.net/projects/ccdciel/';
   SampClient.onClientChange:=@ClientChange;
   SampClient.onDisconnect:=@ClientDisconnected;
   SampClient.oncoordpointAtsky:=@coordpointAtsky;
@@ -137,10 +138,21 @@ begin
    SampClient.free;
    Terminate;
  end;
+ if FStartedProgram then StopProgram(FProgramName);
 end;
 
-procedure TPlanetarium_samp.Connect(cp1: string; cp2:string='');
+procedure TPlanetarium_samp.Connect(cp1: string; cp2:string=''; cp3:string=''; cb1:boolean=False);
 begin
+ if started then exit;
+ started:=true;
+ if cb1 and (cp3<>'') then begin
+   FProgramPath:=ExtractFilePath(cp3);
+   FProgramName:=ExtractFileName(cp3);
+   if FProgramName<>'' then begin
+     FStartedProgram:=StartProgram(FProgramName,FProgramPath);
+     if FStartedProgram then wait(10);
+   end;
+ end;
  Start;
 end;
 

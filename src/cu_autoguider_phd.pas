@@ -48,7 +48,7 @@ type
   public
     Constructor Create;
     Destructor Destroy; override;
-    Procedure Connect(cp1: string; cp2:string=''); override;
+    Procedure Connect(cp1: string; cp2:string=''; cp3:string=''; cb1:boolean=False); override;
     procedure Disconnect; override;
     procedure Shutdown; override;
     procedure ConnectGear; override;
@@ -79,12 +79,20 @@ begin
   inherited Destroy;
 end;
 
-Procedure T_autoguider_phd.Connect(cp1: string; cp2:string='');
+Procedure T_autoguider_phd.Connect(cp1: string; cp2:string=''; cp3:string=''; cb1:boolean=False);
 begin
   if FRunning then exit;
   FTargetHost:=cp1;
   FTargetPort:=cp2;
   FStatus:='Connecting';
+  if cb1 and (FTargetHost='localhost')and(cp3<>'') then begin
+     FProgramPath:=ExtractFilePath(cp3);
+     FProgramName:=ExtractFileName(cp3);
+     if FProgramName<>'' then begin
+       FStartedProgram:=StartProgram(FProgramName,FProgramPath);
+       if FStartedProgram then wait(10);
+     end;
+  end;
   Start;
 end;
 
@@ -132,6 +140,7 @@ FStatus:='Disconnected';
 ProcessDisconnect;
 tcpclient.Free;
 end;
+if FStartedProgram then StopProgram(FProgramName);
 except
   on E: Exception do DisplayMessage('Main loop error: '+ E.Message);
 end;

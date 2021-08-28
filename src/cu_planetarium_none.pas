@@ -41,7 +41,7 @@ type
     procedure ProcessDataSyn; override;
   public
     Constructor Create;
-    procedure Connect(cp1: string; cp2:string=''); override;
+    procedure Connect(cp1: string; cp2:string=''; cp3:string=''; cb1:boolean=False); override;
     procedure Disconnect; override;
     procedure Shutdown; override;
     function Cmd(const Value: string):string; override;
@@ -63,7 +63,7 @@ started:=false;
 FPlanetariumType:=plaNONE;
 end;
 
-procedure TPlanetarium_none.Connect(cp1: string; cp2:string='');
+procedure TPlanetarium_none.Connect(cp1: string; cp2:string=''; cp3:string=''; cb1:boolean=False);
 begin
   if started then exit;
   Start;

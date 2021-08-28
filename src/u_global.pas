@@ -298,6 +298,10 @@ const
     libz = 'libz.so.1';
     fpackcmd = 'fpack';
     funpackcmd = 'funpack';
+    defCdCpath = 'skychart';
+    defHNSKYpath = 'hnsky';
+    defSAMPpath = 'aladin';
+    defPHDpath = 'phd2';
   {$endif}
   {$ifdef darwin}
     SharedDir = './';
@@ -306,6 +310,10 @@ const
     libz = 'libz.dylib';
     fpackcmd = 'fpack';
     funpackcmd = 'funpack';
+    defCdCpath = '/Applications/Cartes du Ciel/skychart.app/Contents/MacOS/skychart';
+    defHNSKYpath = 'hnsky';
+    defSAMPpath = '/Applications/Aladin.app/Contents/MacOS/Aladin';
+    defPHDpath = '/Applications/PHD2.app/Contents/MacOS/PHD2';
   {$endif}
   {$ifdef mswindows}
     SharedDir = '.\';
@@ -314,6 +322,10 @@ const
     libz = 'zlib1.dll';
     fpackcmd = 'fpack.exe';
     funpackcmd = 'funpack.exe';
+    defCdCpath = 'C:\Program Files\Ciel\skychart.exe';
+    defHNSKYpath = 'C:\Program Files\hnsky\hnsky.exe';
+    defSAMPpath = 'C:\Program Files\Aladin\Aladin.exe';
+    defPHDpath = 'C:\Program Files (x86)/PHDGuiding2/phd2.exe';
   {$endif}
   {$ifdef darwin}
     OpenFileCMD: string = 'open';
