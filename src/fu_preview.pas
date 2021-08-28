@@ -296,6 +296,10 @@ if AllDevicesConnected then begin
   savebinx:=Camera.BinX;
   savebiny:=Camera.BinY;
   Camera.onNewImage:=@EndExposure;
+  // set readout first so it can be overridden by specific binning or gain
+  if camera.hasReadOut then begin
+     camera.readoutmode:=readoutmode;
+  end;
   if (binx<>savebinx)or(biny<>savebiny) then Camera.SetBinning(binx,biny);
   WaitExposure:=true;
   ExpectedStop:=false;
@@ -316,9 +320,6 @@ if AllDevicesConnected then begin
        if poffset=NullInt then poffset:=OffsetEdit.Value;
        if saveoffset<>poffset then camera.Offset:=poffset;
     end;
-  end;
-  if camera.hasReadOut then begin
-     camera.readoutmode:=readoutmode;
   end;
   if camera.FrameType<>frmt then camera.FrameType:=frmt;
   Camera.StartExposure(exp);

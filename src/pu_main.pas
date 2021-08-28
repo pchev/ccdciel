@@ -8331,6 +8331,10 @@ if (camera.Status=devConnected) and ((not f_capture.Running) or autofocusing) an
   if (camera.FrameType=LIGHT) and not (autofocusing or learningvcurve or f_starprofile.ChkAutofocus.Down) then begin
     FocuserTemperatureCompensation(true);
   end;
+  // set readout first so it can be overridden by specific binning or gain
+  if camera.hasReadOut then begin
+     camera.readoutmode:=ReadoutModePreview;
+  end;
   p:=pos('x',f_preview.Binning.Text);
   if p>0 then begin
      buf:=trim(copy(f_preview.Binning.Text,1,p-1));
@@ -8376,9 +8380,6 @@ if (camera.Status=devConnected) and ((not f_capture.Running) or autofocusing) an
     if camera.hasOffset then begin
        if camera.Offset<>f_preview.Offset then camera.Offset:=f_preview.Offset;
     end;
-  end;
-  if camera.hasReadOut then begin
-     camera.readoutmode:=ReadoutModePreview;
   end;
   if camera.FrameType<>LIGHT then camera.FrameType:=LIGHT;
   camera.ObjectName:=rsPreview;
@@ -8786,6 +8787,10 @@ if (AllDevicesConnected)and(not autofocusing)and (not learningvcurve) then begin
     exit;
   end;
   CameraExposureRemain:=e;
+  // set readout first so it can be overridden by specific binning or gain
+  if camera.hasReadOut then begin
+     camera.readoutmode:=ReadoutModeCapture;
+  end;
   // check and set binning
   p:=pos('x',f_capture.Binning.Text);
   if p>0 then begin
@@ -8841,10 +8846,6 @@ if (AllDevicesConnected)and(not autofocusing)and (not learningvcurve) then begin
   if ftype<>LIGHT then begin
      f_capture.CheckBoxDither.Checked:=false;
      f_capture.CheckBoxFocus.Checked:=false;
-  end;
-  // set readout mode
-  if camera.hasReadOut then begin
-     camera.readoutmode:=ReadoutModeCapture;
   end;
   // set object for filename
   camera.ObjectName:=f_capture.Fname.Text;
