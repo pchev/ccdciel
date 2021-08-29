@@ -3366,7 +3366,7 @@ end;
 function StartProgram(pgm, path: string): boolean;
 begin
   if not IsProgramRunning(pgm) then begin
-    if path<>'' then pgm:=slash(path)+pgm;
+    if path<>'' then pgm:='"'+slash(path)+pgm+'"';
     ExecNoWait(pgm,'',false);
     result:=true;
   end
