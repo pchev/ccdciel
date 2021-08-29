@@ -435,6 +435,17 @@ object f_main: Tf_main
           Caption = 'Apply to current image'
           OnClick = MenuApplyBPMClick
         end
+        object MenuBPMInfo: TMenuItem
+          Caption = 'Info'
+          object MenuBPMInfo1: TMenuItem
+            Caption = 'MenuBPMInfo1'
+            Enabled = False
+          end
+          object MenuBPMInfo2: TMenuItem
+            Caption = 'MenuBPMInfo2'
+            Enabled = False
+          end
+        end
         object MenuItem11: TMenuItem
           Caption = '-'
         end
@@ -456,6 +467,17 @@ object f_main: Tf_main
         object MenuDarkApply: TMenuItem
           Caption = 'Apply to current image'
           OnClick = MenuDarkApplyClick
+        end
+        object MenuDarkInfo: TMenuItem
+          Caption = 'Info'
+          object MenuDarkInfo1: TMenuItem
+            Caption = 'MenuDarkInfo1'
+            Enabled = False
+          end
+          object MenuDarkInfo2: TMenuItem
+            Caption = 'MenuDarkInfo2'
+            Enabled = False
+          end
         end
         object MenuItem13: TMenuItem
           Caption = '-'

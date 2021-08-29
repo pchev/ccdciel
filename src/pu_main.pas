@@ -120,6 +120,12 @@ type
     MenuAscomCoverSetup: TMenuItem;
     MenuAlpacaCoverSetup: TMenuItem;
     MenuAlpacaSwitchSetup: TMenuItem;
+    MenuBPMInfo: TMenuItem;
+    MenuBPMInfo1: TMenuItem;
+    MenuBPMInfo2: TMenuItem;
+    MenuDarkInfo: TMenuItem;
+    MenuDarkInfo1: TMenuItem;
+    MenuDarkInfo2: TMenuItem;
     MenuItemUnselect2: TMenuItem;
     MenuItemUnselect: TMenuItem;
     MenuViewCover: TMenuItem;
@@ -365,6 +371,7 @@ type
     procedure MenuDarkCameraClick(Sender: TObject);
     procedure MenuDarkClearClick(Sender: TObject);
     procedure MenuDarkFileClick(Sender: TObject);
+    procedure ShowDarkInfo;
     procedure MenuDownloadClick(Sender: TObject);
     procedure MenuFilterClick(Sender: TObject);
     procedure MenuFocusaidClick(Sender: TObject);
@@ -585,6 +592,7 @@ type
     procedure LoadVcurve;
     procedure CreateBPM(f: TFits);
     procedure LoadBPM;
+    procedure ShowBPMInfo;
     procedure ComputeVcSlope;
     procedure OptionGetMaxADU(Sender: TObject);
     procedure OptionGetPixelSize(Sender: TObject);
@@ -1425,6 +1433,7 @@ begin
   if FileExistsUTF8(ConfigDarkFile) then begin
      fits.LoadDark(ConfigDarkFile);
   end;
+  ShowDarkInfo;
 
   CreateDevices;
 
@@ -3254,6 +3263,7 @@ begin
       bpmconfig.SetValue('/BadPixelData/BPMY'+IntToStr(i),bpm[i,2]);
     end;
     SaveConfig;
+    ShowBPMInfo;
 end;
 
 procedure Tf_main.MenuBPMClick(Sender: TObject);
@@ -3322,6 +3332,7 @@ begin
     bpmconfig.SetValue('/BadPixelMap/CCDHeight',bpmY);
     bpmconfig.SetValue('/BadPixelMap/CCDAxis',bpmAxis);
     SaveConfig;
+    ShowBPMInfo;
   end;
 end;
 
@@ -3336,6 +3347,21 @@ begin
    bpm[i,1]:=round(bpmconfig.GetValue('/BadPixelData/BPMX'+IntToStr(i),0));
    bpm[i,2]:=round(bpmconfig.GetValue('/BadPixelData/BPMY'+IntToStr(i),0));
  end;
+ ShowBPMInfo;
+end;
+
+procedure Tf_main.ShowBPMInfo;
+begin
+  if bpmNum=0 then begin
+    MenuBPMInfo1.Caption:=rsNoBadPixelMa;
+    MenuBPMInfo2.Caption:='';
+  end
+  else begin
+    MenuBPMInfo1.Caption:=Format(rsBadPixelDete,[inttostr(bpmNum)]);
+    if bpmAxis>2 then MenuBPMInfo2.Caption:=rsFromColorIma
+       else MenuBPMInfo2.Caption:=rsFromImage;
+    MenuBPMInfo2.Caption:=MenuBPMInfo2.Caption+' '+rsSize+': '+inttostr(bpmX)+'x'+inttostr(bpmY);
+  end;
 end;
 
 procedure Tf_main.MenuApplyBPMClick(Sender: TObject);
@@ -3381,12 +3407,14 @@ begin
    else
      NewMessage(rsExposureFail,1);
  end;
+ ShowDarkInfo;
 end;
 
 procedure Tf_main.MenuDarkClearClick(Sender: TObject);
 begin
   fits.FreeDark;
   DeleteFile(ConfigDarkFile);
+  ShowDarkInfo;
 end;
 
 procedure Tf_main.MenuDarkFileClick(Sender: TObject);
@@ -3405,6 +3433,22 @@ begin
       fits.FreeDark;
       NewMessage(Format(rsInvalidOrUns, [fn]),1);
     end;
+  end;
+  ShowDarkInfo;
+end;
+
+procedure Tf_main.ShowDarkInfo;
+begin
+  if (fits.DarkFrame<>nil)and(fits.DarkFrame.HeaderInfo.valid) then begin
+    MenuDarkInfo1.Caption:=rsDarkFileLoad;
+    if fits.DarkFrame.HeaderInfo.naxis>2 then MenuDarkInfo2.Caption:=rsFromColorIma
+       else MenuDarkInfo2.Caption:=rsFromImage;
+    MenuDarkInfo2.Caption:=MenuDarkInfo2.Caption+' '+rsSize+': '+inttostr(fits.DarkFrame.HeaderInfo.naxis1)+'x'+inttostr(fits.DarkFrame.HeaderInfo.naxis2);
+    MenuDarkInfo2.Caption:=MenuDarkInfo2.Caption+', '+rsExposureTime2+': '+FormatFloat(f3,fits.DarkFrame.HeaderInfo.exptime);
+  end
+  else begin
+   MenuDarkInfo1.Caption:=rsNoDark;
+   MenuDarkInfo2.Caption:='';
   end;
 end;
 
@@ -7047,6 +7091,7 @@ begin
         fits.FreeDark;
       end;
     end;
+    ShowDarkInfo;
     config.SetValue('/Devices/Timeout',f_setup.IndiTimeout.Text);
 
     config.SetValue('/Devices/Camera',true);

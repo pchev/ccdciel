@@ -4882,3 +4882,27 @@ msgstr ""
 msgid "Program path"
 msgstr ""
 
+#: u_translation:rsdarkfileload
+msgid "Dark file loaded"
+msgstr ""
+
+#: u_translation:rsfromcolorima
+msgid "From color image"
+msgstr ""
+
+#: u_translation:rsfromimage
+msgid "From image"
+msgstr ""
+
+#: u_translation:rssize
+msgid "size"
+msgstr ""
+
+#: u_translation:rsnodark
+msgid "No dark"
+msgstr ""
+
+#: u_translation:rsnobadpixelma
+msgid "No bad pixel map"
+msgstr ""
+

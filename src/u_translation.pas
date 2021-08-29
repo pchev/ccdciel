@@ -1324,6 +1324,12 @@ resourcestring
     +'line and the altitude knob along the red line';
   rsStartS = 'Start %s';
   rsProgramPath = 'Program path';
+  rsDarkFileLoad = 'Dark file loaded';
+  rsFromColorIma = 'From color image';
+  rsFromImage = 'From image';
+  rsSize = 'size';
+  rsNoDark = 'No dark';
+  rsNoBadPixelMa = 'No bad pixel map';
 
 implementation
 
