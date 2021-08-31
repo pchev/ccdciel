@@ -4906,3 +4906,15 @@ msgstr ""
 msgid "No bad pixel map"
 msgstr ""
 
+#: u_translation:rsazimuthorigi
+msgid "Azimuth origin"
+msgstr ""
+
+#: u_translation:rsgotoinprogre
+msgid "GOTO in progress"
+msgstr ""
+
+#: u_translation:rsrotating
+msgid "Rotating"
+msgstr ""
+
