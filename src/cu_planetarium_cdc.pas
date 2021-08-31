@@ -92,7 +92,10 @@ end;
 
 procedure TPlanetarium_cdc.Disconnect;
 begin
- Terminate;
+ if FStartedProgram then
+   Shutdown
+ else
+   Terminate;
 end;
 
 
@@ -197,7 +200,6 @@ finally
   tcpclient.Disconnect;
   tcpclient.Free;
 end;
-if FStartedProgram then StopProgram(FProgramName);
 end;
 
 procedure TPlanetarium_cdc.ProcessDataSyn;

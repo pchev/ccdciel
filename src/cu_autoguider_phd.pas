@@ -90,7 +90,7 @@ begin
      FProgramName:=ExtractFileName(cp3);
      if FProgramName<>'' then begin
        FStartedProgram:=StartProgram(FProgramName,FProgramPath);
-       if FStartedProgram then wait(10);
+       if FStartedProgram then wait(5);
      end;
   end;
   Start;
@@ -98,7 +98,10 @@ end;
 
 procedure T_autoguider_phd.Disconnect;
 begin
- Terminate;
+  if FStartedProgram then
+    Shutdown
+  else
+    Terminate;
 end;
 
 procedure T_autoguider_phd.Execute;
@@ -140,7 +143,6 @@ FStatus:='Disconnected';
 ProcessDisconnect;
 tcpclient.Free;
 end;
-if FStartedProgram then StopProgram(FProgramName);
 except
   on E: Exception do DisplayMessage('Main loop error: '+ E.Message);
 end;

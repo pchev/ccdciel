@@ -85,7 +85,7 @@ begin
     FProgramName:=ExtractFileName(cp3);
     if FProgramName<>'' then begin
       FStartedProgram:=StartProgram(FProgramName,FProgramPath);
-      if FStartedProgram then wait(10);
+      if FStartedProgram then wait(5);
     end;
   end;
   Start;
@@ -93,7 +93,10 @@ end;
 
 procedure TPlanetarium_hnsky.Disconnect;
 begin
- Terminate;
+ if FStartedProgram then
+   Shutdown
+ else
+   Terminate;
 end;
 
 procedure TPlanetarium_hnsky.Shutdown;
@@ -161,7 +164,6 @@ finally
   tcpclient.Disconnect;
   tcpclient.Free;
 end;
-if FStartedProgram then StopProgram(FProgramName);
 end;
 
 procedure TPlanetarium_hnsky.ProcessDataSyn;
