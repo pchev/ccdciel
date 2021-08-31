@@ -206,7 +206,7 @@ begin
    PanelExposure2.Visible:=(r.max>0);
    if PanelExposure2.Visible then begin
      PanelExposure1.Visible:=false;
-     StreamExp.Hint:=FormatFloat(f3,r.min)+'...'+FormatFloat(f3,r.max);
+     StreamExp.Hint:=FormatFloat(f3,r.min)+ellipsis+FormatFloat(f3,r.max);
      StreamExp.MinValue:=r.min;
      StreamExp.MaxValue:=r.max;
      StreamExp.Value:=camera.StreamingExposure;

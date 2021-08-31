@@ -279,7 +279,7 @@ const
   sdeg = #$C2+#$B0;
   smin = '''';
   ssec = '"';
-  ellipsis = '...';
+  ellipsis = #$E2+#$80+#$A6;
   URL_DOWNLOAD='https://sourceforge.net/projects/ccdciel/files/';
   URL_BUGREPORT='https://www.ap-i.net/mantis/set_project.php?project_id=3';
   URL_ONLINEHELP='https://www.ap-i.net/ccdciel/en/documentation/start';
@@ -408,7 +408,7 @@ var
   AutofocusInPlace, InplaceAutofocus, AutofocusPauseGuider, AutofocusMultiStarCenter: boolean;
   AutofocusStarList: TArrayDouble2;
   CancelAutofocus, Autofocusing, TerminateFocuserCalibration: Boolean;
-  CancelGoto: boolean;
+  GotoInProgress, CancelGoto: boolean;
   ExpectedStop: boolean;
   CameraProcessingImage: boolean;
   CameraProcessingNum: PtrInt;

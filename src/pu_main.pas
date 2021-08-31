@@ -4646,7 +4646,7 @@ var buf: string;
 begin
   if camera.Temperature=NullCoord then f_ccdtemp.Visible:=False;
   f_ccdtemp.CurrentTemperature:=camera.Temperature;
-  buf:=FormatFloat(f0,TempDisplay(TemperatureScale,camera.TemperatureRange.min))+'...'+FormatFloat(f0,TempDisplay(TemperatureScale,camera.TemperatureRange.max));
+  buf:=FormatFloat(f0,TempDisplay(TemperatureScale,camera.TemperatureRange.min))+ellipsis+FormatFloat(f0,TempDisplay(TemperatureScale,camera.TemperatureRange.max));
   f_ccdtemp.Setpoint.Hint:=rsDesiredTempe+crlf+buf;
 end;
 
@@ -4671,7 +4671,7 @@ var buf: string;
     r: TNumRange;
 begin
  r:=camera.ExposureRange;
- buf:=FormatFloat(f0,r.min)+'...'+FormatFloat(f0,r.max);
+ buf:=FormatFloat(f0,r.min)+ellipsis+FormatFloat(f0,r.max);
  buf:=rsExposureTime+crlf+buf;
  f_capture.ExpTime.Hint:=buf;
  f_preview.ExpTime.Hint:=buf;
@@ -4699,10 +4699,10 @@ procedure Tf_main.ShowFrameRange;
 var rx,ry,rw,rh:TNumRange;
 begin
  camera.GetFrameRange(rx,ry,rw,rh);
- f_frame.FX.Hint:=FormatFloat(f0,rx.min)+'...'+FormatFloat(f0,rx.max);
- f_frame.FY.Hint:=FormatFloat(f0,ry.min)+'...'+FormatFloat(f0,ry.max);
- f_frame.FWidth.Hint:=FormatFloat(f0,rw.min)+'...'+FormatFloat(f0,rw.max);
- f_frame.FHeight.Hint:=FormatFloat(f0,rh.min)+'...'+FormatFloat(f0,rh.max);
+ f_frame.FX.Hint:=FormatFloat(f0,rx.min)+ellipsis+FormatFloat(f0,rx.max);
+ f_frame.FY.Hint:=FormatFloat(f0,ry.min)+ellipsis+FormatFloat(f0,ry.max);
+ f_frame.FWidth.Hint:=FormatFloat(f0,rw.min)+ellipsis+FormatFloat(f0,rw.max);
+ f_frame.FHeight.Hint:=FormatFloat(f0,rh.min)+ellipsis+FormatFloat(f0,rh.max);
  ShowFrame;
 end;
 
@@ -4859,19 +4859,19 @@ begin
  if hasGain and (not hasGainISO) then begin
    f_capture.ISObox.Visible:=false;
    f_capture.GainEdit.Visible:=true;
-   f_capture.GainEdit.Hint:=IntToStr(GainMin)+'...'+IntToStr(GainMax);
+   f_capture.GainEdit.Hint:=IntToStr(GainMin)+ellipsis+IntToStr(GainMax);
    f_preview.ISObox.Visible:=false;
    f_preview.GainEdit.Visible:=true;
-   f_preview.GainEdit.Hint:=IntToStr(GainMin)+'...'+IntToStr(GainMax);
+   f_preview.GainEdit.Hint:=IntToStr(GainMin)+ellipsis+IntToStr(GainMax);
    f_EditTargets.FISObox.Visible:=false;
    f_EditTargets.FGainEdit.Visible:=true;
-   f_EditTargets.FGainEdit.Hint:=IntToStr(GainMin)+'...'+IntToStr(GainMax);
+   f_EditTargets.FGainEdit.Hint:=IntToStr(GainMin)+ellipsis+IntToStr(GainMax);
    f_option.AutofocusISObox.Visible:=false;
    f_option.AutofocusGainEdit.Visible:=true;
-   f_option.AutofocusGainEdit.Hint:=IntToStr(GainMin)+'...'+IntToStr(GainMax);
+   f_option.AutofocusGainEdit.Hint:=IntToStr(GainMin)+ellipsis+IntToStr(GainMax);
    f_option.SlewISObox.Visible:=false;
    f_option.SlewGainEdit.Visible:=true;
-   f_option.SlewGainEdit.Hint:=IntToStr(GainMin)+'...'+IntToStr(GainMax);
+   f_option.SlewGainEdit.Hint:=IntToStr(GainMin)+ellipsis+IntToStr(GainMax);
    posprev:=StrToIntDef(gainprev,gain);
    poscapt:=StrToIntDef(gaincapt,gain);
    f_capture.GainEdit.Value:=poscapt;
@@ -4881,11 +4881,11 @@ begin
    f_option.SlewGainEdit.Value:=posprev;
  end;
  if hasOffset then begin
-   f_preview.OffsetEdit.Hint:=IntToStr(OffsetMin)+'...'+IntToStr(OffsetMax);
-   f_capture.OffsetEdit.Hint:=IntToStr(OffsetMin)+'...'+IntToStr(OffsetMax);
-   f_EditTargets.FOffsetEdit.Hint:=IntToStr(OffsetMin)+'...'+IntToStr(OffsetMax);
-   f_option.AutofocusOffsetEdit.Hint:=IntToStr(OffsetMin)+'...'+IntToStr(OffsetMax);
-   f_option.SlewOffsetEdit.Hint:=IntToStr(OffsetMin)+'...'+IntToStr(OffsetMax);
+   f_preview.OffsetEdit.Hint:=IntToStr(OffsetMin)+ellipsis+IntToStr(OffsetMax);
+   f_capture.OffsetEdit.Hint:=IntToStr(OffsetMin)+ellipsis+IntToStr(OffsetMax);
+   f_EditTargets.FOffsetEdit.Hint:=IntToStr(OffsetMin)+ellipsis+IntToStr(OffsetMax);
+   f_option.AutofocusOffsetEdit.Hint:=IntToStr(OffsetMin)+ellipsis+IntToStr(OffsetMax);
+   f_option.SlewOffsetEdit.Hint:=IntToStr(OffsetMin)+ellipsis+IntToStr(OffsetMax);
    poffprev:=StrToIntDef(offsetprev,Offset);
    poffcapt:=StrToIntDef(offsetcapt,Offset);
    f_preview.OffsetEdit.Value:=poffprev;
@@ -4991,7 +4991,7 @@ begin
    FocuserPositionMin:=round(r.min);
    FocuserPositionMax:=round(r.max);
    f_focuser.Position.Hint:=rsCurrentFocus+', '+
-                   IntToStr(round(r.min))+'..'+IntToStr(round(r.max)) ;
+                   IntToStr(round(r.min))+ellipsis+IntToStr(round(r.max)) ;
     f_focuser.PosIncr.ItemIndex:=2;
   end;
   f_focuser.speed.Value:=focuser.Speed;
@@ -4999,7 +4999,7 @@ begin
   r:=focuser.RelPositionRange;
   if r.step>0 then begin
     f_focuser.RelIncr.Hint:=rsRelativeIncr+', '+
-                    IntToStr(round(r.min))+'..'+IntToStr(round(r.max)) ;
+                    IntToStr(round(r.min))+ellipsis+IntToStr(round(r.max)) ;
     f_focuser.RelIncr.ItemIndex:=2;
   end;
   f_focuser.Ready:=true;
@@ -5899,7 +5899,7 @@ f:=round(n);
 if f=-1 then begin
   // wheel moving
   f:=0;
-  f_filterwheel.Filters.Items[0]:=rsRotate+'...';
+  f_filterwheel.Filters.Items[0]:=rsRotate+ellipsis;
 end
 else begin
   f_filterwheel.Filters.Items[0]:=Filter0;
@@ -6593,11 +6593,15 @@ end;
 
 Procedure Tf_main.MountPiersideChange(Sender: TObject);
 begin
+if GotoInProgress then
+  f_mount.Pierside.Caption:=rsGOTOInProgre+ellipsis
+else begin
   case mount.PierSide of
     pierEast: f_mount.Pierside.Caption:=rsEastPointing;
     pierWest: f_mount.Pierside.Caption:=rsWestPointing;
     pierUnknown: f_mount.Pierside.Caption:=rsUnknowPierSi;
   end;
+end;
 end;
 
 Procedure Tf_main.MountTrackingChange(Sender: TObject);
@@ -6670,9 +6674,12 @@ if f_mount.BtnGoto.Caption=rsGoto then begin
    f_goto.ShowModal;
    if f_goto.ModalResult=mrok then begin
      try
+     GotoInProgress:=true;
      CancelAutofocus:=false;
      CancelGoto:=false;
      f_mount.BtnGoto.Caption:=rsStop;
+     f_mount.Pierside.Caption:=rsGOTOInProgre+ellipsis;
+     f_mount.Pierside.Font.Color:=clRed;
      tra:= f_goto.Ra.Text;
      tde:=f_goto.De.Text;
      objn:=trim(f_goto.Obj.Text);
@@ -6700,8 +6707,11 @@ if f_mount.BtnGoto.Caption=rsGoto then begin
      end
      else NewMessage(rsInvalidCoord,1);
      finally
+      GotoInProgress:=false;
       CancelGoto:=false;
       f_mount.BtnGoto.Caption:=rsGoto;
+      f_mount.Pierside.Font.Color:=clDefault;
+      MountPiersideChange(nil);
      end;
    end;
  end;

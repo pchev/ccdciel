@@ -1331,6 +1331,7 @@ resourcestring
   rsNoDark = 'No dark';
   rsNoBadPixelMa = 'No bad pixel map';
   rsAzimuthOrigi = 'Azimuth origin';
+  rsGOTOInProgre = 'GOTO in progress';
 
 implementation
 
