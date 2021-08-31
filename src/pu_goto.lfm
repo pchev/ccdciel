@@ -20,38 +20,34 @@ object f_goto: Tf_goto
     TabOrder = 5
     object Label4: TLabel
       Left = 19
-      Height = 17
+      Height = 19
       Top = 8
       Width = 41
       Caption = 'Label4'
-      ParentColor = False
       ParentFont = False
     end
     object LabelAz: TLabel
       Left = 121
-      Height = 17
+      Height = 19
       Top = 8
       Width = 4
       Caption = '-'
-      ParentColor = False
       ParentFont = False
     end
     object Label5: TLabel
       Left = 19
-      Height = 17
+      Height = 19
       Top = 42
       Width = 41
       Caption = 'Label5'
-      ParentColor = False
       ParentFont = False
     end
     object LabelAlt: TLabel
       Left = 121
-      Height = 17
+      Height = 19
       Top = 42
       Width = 4
       Caption = '-'
-      ParentColor = False
       ParentFont = False
     end
   end
@@ -75,20 +71,18 @@ object f_goto: Tf_goto
     end
     object Label7: TLabel
       Left = 19
-      Height = 17
+      Height = 19
       Top = 8
       Width = 73
       Caption = 'Image scale'
-      ParentColor = False
       ParentFont = False
     end
     object Label8: TLabel
       Left = 19
-      Height = 17
+      Height = 19
       Top = 32
       Width = 58
       Caption = 'arcsec/px'
-      ParentColor = False
       ParentFont = False
     end
     object BtnCompute: TButton
@@ -150,33 +144,30 @@ object f_goto: Tf_goto
     AnchorSideTop.Control = Ra
     AnchorSideTop.Side = asrCenter
     Left = 19
-    Height = 17
-    Top = 75
+    Height = 19
+    Top = 74
     Width = 63
     Caption = 'Center RA'
-    ParentColor = False
     ParentFont = False
   end
   object Label2: TLabel
     AnchorSideTop.Control = De
     AnchorSideTop.Side = asrCenter
     Left = 19
-    Height = 17
-    Top = 109
+    Height = 19
+    Top = 108
     Width = 70
     Caption = 'Center Dec'
-    ParentColor = False
     ParentFont = False
   end
   object Label3: TLabel
     AnchorSideTop.Control = Obj
     AnchorSideTop.Side = asrCenter
     Left = 19
-    Height = 17
-    Top = 38
+    Height = 19
+    Top = 37
     Width = 78
     Caption = 'Object name'
-    ParentColor = False
     ParentFont = False
   end
   object Panel1: TPanel
@@ -216,31 +207,28 @@ object f_goto: Tf_goto
     AnchorSideTop.Control = Ra
     AnchorSideTop.Side = asrCenter
     Left = 246
-    Height = 17
-    Top = 75
+    Height = 19
+    Top = 74
     Width = 36
     Caption = 'J2000'
-    ParentColor = False
     ParentFont = False
   end
   object Label16: TLabel
     AnchorSideTop.Control = De
     AnchorSideTop.Side = asrCenter
     Left = 246
-    Height = 17
-    Top = 109
+    Height = 19
+    Top = 108
     Width = 36
     Caption = 'J2000'
-    ParentColor = False
     ParentFont = False
   end
   object msginfo: TLabel
     Left = 19
-    Height = 17
+    Height = 19
     Top = 4
     Width = 50
     Caption = 'msginfo'
-    ParentColor = False
     ParentFont = False
   end
 end

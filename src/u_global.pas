@@ -238,6 +238,8 @@ const
   f9v = '0.#########';
   f1mc= '+0.0h;-0.0h; ';
   MeridianCrossing='MC';
+  azNorth=0;
+  azSouth=1;
   b80 ='                                                                                ';
   FocusDirIn=true;
   FocusDirOut=false;
@@ -426,6 +428,7 @@ var
   horizonlist: Thorizonlist;
   HorizonMax, HorizonMin, ElevationMin: double;
   jdtoday,nutl,nuto,abp,abe,ecl,sunl: double;
+  AzimuthOrigin: integer;
   NutMAT: rotmatrix;
   ConfigExpEarlyStart, EarlyNextExposure, SkipEarlyExposure, EarlyDither: boolean;
   FlatAutoExposure,doFlatAutoExposure,FlatWaitDusk,FlatWaitDawn,AdjustDomeFlat,DomeFlatTelescopeSlew,DomeFlatSetLight,AdjustFlatLight: boolean;

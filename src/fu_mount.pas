@@ -142,6 +142,7 @@ var a,h: double;
 begin
  if (FCurrentRA<>NullCoord)and(FCurrentDec<>NullCoord) then begin
    cmdEq2Hz(FCurrentRA,FCurrentDec,a,h);
+   if AzimuthOrigin=azSouth then a:=rmod(180+a,360);
    AZ.Caption:=FormatFloat(f2,a);
    ALT.Caption:=FormatFloat(f2,h);
  end;

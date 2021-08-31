@@ -1330,6 +1330,7 @@ resourcestring
   rsSize = 'size';
   rsNoDark = 'No dark';
   rsNoBadPixelMa = 'No bad pixel map';
+  rsAzimuthOrigi = 'Azimuth origin';
 
 implementation
 

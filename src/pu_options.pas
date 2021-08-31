@@ -37,6 +37,7 @@ type
     CdCPath: TEdit;
     Page6: TPage;
     PHDpath: TEdit;
+    AzimuthOrigin: TRadioGroup;
     StartPHD: TCheckBox;
     HNSKYPath: TEdit;
     Label151: TLabel;
@@ -902,6 +903,9 @@ begin
   Label108.Caption := rsElevation;
   Label76.Caption := rsHorizonProfi;
   Label77.Caption := rsMinimumObser;
+  AzimuthOrigin.Caption:=rsAzimuthOrigi;
+  AzimuthOrigin.Items[0]:=rsNorth;
+  AzimuthOrigin.Items[1]:=rsSouth;
   PageDome.Caption:=rsDome;
   DomeNoSafetyCheck.Caption:=rsAllowToOpenT;
   DomeSlaveToMount.Caption:=rsAutomaticall;

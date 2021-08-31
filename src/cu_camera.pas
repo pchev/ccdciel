@@ -835,7 +835,7 @@ begin
     Ffits.Header.Insert(i,'FRAMEWDH',Frwidth,'Frame width');
   end;
   if (haz<>NullCoord)and(hal<>NullCoord) then begin
-    Ffits.Header.Insert(i,'CENTAZ',FormatFloat(f2,haz),'[deg] Azimuth of center of image');
+    Ffits.Header.Insert(i,'CENTAZ',FormatFloat(f2,haz),'[deg] Azimuth of center of image, origin North');
     Ffits.Header.Insert(i,'CENTALT',FormatFloat(f2,hal),'[deg] Altitude of center of image');
   end;
   if hairmass>0 then Ffits.Header.Insert(i,'AIRMASS',hairmass ,'Airmass');

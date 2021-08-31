@@ -175,6 +175,7 @@ begin
     gra:=rad2deg*gra/15;
     gde:=rad2deg*gde;
     cmdEq2Hz(gra,gde,az,alt);
+    if AzimuthOrigin=azSouth then az:=rmod(180+az,360);
     LabelAz.Caption:=FormatFloat(f2,az);
     LabelAlt.Caption:=FormatFloat(f2,alt);
   end

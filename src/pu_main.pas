@@ -3817,6 +3817,7 @@ begin
   if f_focuser<>nil then f_focuser.BtnVcurve.Visible:=(AutoFocusMode=afVcurve);
   LoadHorizon(config.GetValue('/Info/HorizonFile',''));
   ElevationMin:=config.GetValue('/Info/ElevationMin',10.0);
+  AzimuthOrigin:=config.GetValue('/Info/AzimuthOrigin',azNorth);
   FlatType:=TFlatType(config.GetValue('/Flat/FlatType',ord(ftNone)));
   FlatAutoExposure:=config.GetValue('/Flat/FlatAutoExposure',false);
   FlatMinExp:=config.GetValue('/Flat/FlatMinExp',1.0);
@@ -7389,6 +7390,7 @@ begin
    f_option.TelescopeName.Text:=config.GetValue('/Info/TelescopeName','');
    f_option.HorizonFile.FileName:=config.GetValue('/Info/HorizonFile','');
    f_option.ElevationMin.Value:=config.GetValue('/Info/ElevationMin',10.0);
+   f_option.AzimuthOrigin.ItemIndex:=config.GetValue('/Info/AzimuthOrigin',azNorth);
    f_option.DebayerPreview.Checked:=config.GetValue('/Color/Bayer',false);
    f_option.BayerMode.ItemIndex:=config.GetValue('/Color/BayerMode',4);
    f_option.RedBalance.Position:=round(100*config.GetValue('/Color/RedBalance',1.0));
@@ -7821,6 +7823,7 @@ begin
      config.SetValue('/Info/HorizonFile',f_option.HorizonFile.FileName);
      config.SetValue('/Info/ElevationMin',f_option.ElevationMin.Value);
      f_option.SaveObservatoryDB;
+     config.SetValue('/Info/AzimuthOrigin',f_option.AzimuthOrigin.ItemIndex);
      config.SetValue('/Color/Bayer',f_option.DebayerPreview.Checked);
      config.SetValue('/Color/BayerMode',f_option.BayerMode.ItemIndex);
      config.SetValue('/Color/RedBalance',f_option.RedBalance.Position/100);
@@ -12588,6 +12591,7 @@ begin
     if hh<-pi then hh:=hh+pi2;
     hhmin:=round(rad2deg*60*hh/15);
     f_mount.TimeToMeridian.Caption:=inttostr(abs(hhmin));
+    if AzimuthOrigin=azSouth then a:=rmod(180+a,360);
     f_mount.AZ.Caption:=FormatFloat(f2,a);
     f_mount.ALT.Caption:=FormatFloat(f2,h);
     if hhmin<=0 then f_mount.LabelMeridian.Caption:=rsMeridianIn

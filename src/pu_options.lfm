@@ -609,12 +609,12 @@ object f_option: Tf_option
         ParentFont = False
         object GroupBox27: TGroupBox
           Left = 0
-          Height = 152
+          Height = 128
           Top = 50
           Width = 529
           Align = alTop
           Caption = 'Information'
-          ClientHeight = 132
+          ClientHeight = 108
           ClientWidth = 527
           ParentFont = False
           TabOrder = 0
@@ -623,7 +623,7 @@ object f_option: Tf_option
             AnchorSideTop.Side = asrCenter
             Left = 8
             Height = 19
-            Top = 21
+            Top = 10
             Width = 97
             Caption = 'Observer name'
             ParentFont = False
@@ -631,7 +631,7 @@ object f_option: Tf_option
           object ObserverName: TEdit
             Left = 146
             Height = 28
-            Top = 16
+            Top = 5
             Width = 220
             Constraints.MaxHeight = 28
             ParentFont = False
@@ -642,7 +642,7 @@ object f_option: Tf_option
             AnchorSideTop.Side = asrCenter
             Left = 8
             Height = 19
-            Top = 61
+            Top = 45
             Width = 116
             Caption = 'Observatory name'
             ParentFont = False
@@ -650,7 +650,7 @@ object f_option: Tf_option
           object ObservatoryName: TEdit
             Left = 146
             Height = 28
-            Top = 56
+            Top = 40
             Width = 220
             Constraints.MaxHeight = 28
             ParentFont = False
@@ -661,7 +661,7 @@ object f_option: Tf_option
             AnchorSideTop.Side = asrCenter
             Left = 8
             Height = 19
-            Top = 101
+            Top = 77
             Width = 99
             Caption = 'Telescope name'
             ParentFont = False
@@ -669,7 +669,7 @@ object f_option: Tf_option
           object TelescopeName: TEdit
             Left = 146
             Height = 28
-            Top = 96
+            Top = 72
             Width = 220
             Constraints.MaxHeight = 28
             ParentFont = False
@@ -678,29 +678,31 @@ object f_option: Tf_option
         end
         object GroupBox28: TGroupBox
           Left = 0
-          Height = 224
-          Top = 202
+          Height = 184
+          Top = 178
           Width = 529
           Align = alTop
           Caption = 'Coordinates'
-          ClientHeight = 204
+          ClientHeight = 164
           ClientWidth = 527
           ParentFont = False
           TabOrder = 1
           object Label35: TLabel
+            AnchorSideTop.Control = LatitudeGroup
             AnchorSideTop.Side = asrCenter
             Left = 8
             Height = 19
-            Top = 18
+            Top = 12
             Width = 51
             Caption = 'Latitude'
             ParentFont = False
           end
           object Label36: TLabel
+            AnchorSideTop.Control = LongitudeGroup
             AnchorSideTop.Side = asrCenter
             Left = 8
             Height = 19
-            Top = 70
+            Top = 47
             Width = 63
             Caption = 'Longitude'
             ParentFont = False
@@ -708,7 +710,7 @@ object f_option: Tf_option
           object ObsElev: TFloatSpinEdit
             Left = 146
             Height = 28
-            Top = 111
+            Top = 75
             Width = 105
             Constraints.MaxHeight = 28
             DecimalPlaces = 1
@@ -722,16 +724,17 @@ object f_option: Tf_option
             AnchorSideTop.Side = asrCenter
             Left = 8
             Height = 19
-            Top = 116
+            Top = 80
             Width = 55
             Caption = 'Elevation'
             ParentFont = False
           end
           object LongitudeError: TLabel
-            Left = 8
-            Height = 52
-            Top = 148
-            Width = 503
+            Left = 0
+            Height = 56
+            Top = 108
+            Width = 527
+            Align = alBottom
             AutoSize = False
             ParentFont = False
             WordWrap = True
@@ -739,7 +742,7 @@ object f_option: Tf_option
           object LatitudeGroup: TPanel
             Left = 146
             Height = 32
-            Top = 8
+            Top = 5
             Width = 257
             BevelOuter = bvNone
             ClientHeight = 32
@@ -827,7 +830,7 @@ object f_option: Tf_option
           object LongitudeGroup: TPanel
             Left = 146
             Height = 32
-            Top = 60
+            Top = 40
             Width = 257
             BevelOuter = bvNone
             ClientHeight = 32
@@ -915,19 +918,19 @@ object f_option: Tf_option
         end
         object GroupBox29: TGroupBox
           Left = 0
-          Height = 124
-          Top = 426
+          Height = 90
+          Top = 362
           Width = 529
-          Align = alClient
+          Align = alTop
           Caption = 'Rise / Set'
-          ClientHeight = 104
+          ClientHeight = 70
           ClientWidth = 527
           ParentFont = False
           TabOrder = 2
           object HorizonFile: TFileNameEdit
             Left = 146
             Height = 28
-            Top = 8
+            Top = 4
             Width = 255
             FilterIndex = 0
             HideDirectories = False
@@ -943,7 +946,7 @@ object f_option: Tf_option
             AnchorSideTop.Side = asrCenter
             Left = 8
             Height = 19
-            Top = 13
+            Top = 9
             Width = 92
             Caption = 'Horizon profile'
             ParentFont = False
@@ -953,7 +956,7 @@ object f_option: Tf_option
             AnchorSideTop.Side = asrCenter
             Left = 8
             Height = 19
-            Top = 51
+            Top = 41
             Width = 185
             Caption = 'Minimum observing elevation '
             ParentFont = False
@@ -962,7 +965,7 @@ object f_option: Tf_option
           object ElevationMin: TFloatSpinEdit
             Left = 288
             Height = 28
-            Top = 46
+            Top = 36
             Width = 82
             Constraints.MaxHeight = 28
             DecimalPlaces = 1
@@ -1014,6 +1017,30 @@ object f_option: Tf_option
             ParentFont = False
             TabOrder = 1
           end
+        end
+        object AzimuthOrigin: TRadioGroup
+          Left = 0
+          Height = 60
+          Top = 452
+          Width = 529
+          Align = alTop
+          AutoFill = True
+          Caption = 'Azimuth origin'
+          ChildSizing.LeftRightSpacing = 6
+          ChildSizing.EnlargeHorizontal = crsHomogenousChildResize
+          ChildSizing.EnlargeVertical = crsHomogenousChildResize
+          ChildSizing.ShrinkHorizontal = crsScaleChilds
+          ChildSizing.ShrinkVertical = crsScaleChilds
+          ChildSizing.Layout = cclLeftToRightThenTopToBottom
+          ChildSizing.ControlsPerLine = 2
+          ClientHeight = 40
+          ClientWidth = 527
+          Columns = 2
+          Items.Strings = (
+            'North'
+            'South'
+          )
+          TabOrder = 4
         end
       end
       object PageCamera: TTabSheet
