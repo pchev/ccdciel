@@ -4555,7 +4555,7 @@ msgid "Number of circles"
 msgstr ""
 
 #: u_translation:rscenterabrigh
-msgid "Center a bright star. %s Defocus until the ring are clearly visible. %s Click Start button. %s Adjust the collimation. %s The star must be centered in full frame for the final adjustement."
+msgid "Center a bright star. Defocus until the rings are clearly visible. Click the Start button. %s Slowly adjust the position of the star in the image field using the telescope fine movement until all the circles are concentric. %s Then move the star to the image center using the mirror adjustment screws."
 msgstr ""
 
 #: u_translation:rstargetscoord
@@ -4916,5 +4916,21 @@ msgstr ""
 
 #: u_translation:rsrotating
 msgid "Rotating"
+msgstr ""
+
+#: u_translation:rssinglestar
+msgid "Single star"
+msgstr ""
+
+#: u_translation:rs9panelimage
+msgid "9 panel image"
+msgstr ""
+
+#: u_translation:rssplittheimag
+msgid "Split the image in 9 panel to better show the aberration in each corner. %s You can change the zoom level and the margin offset from the image edge."
+msgstr ""
+
+#: u_translation:rsmarginoffset
+msgid "Margin offset"
 msgstr ""
 

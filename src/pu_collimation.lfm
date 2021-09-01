@@ -1,47 +1,47 @@
 object f_collimation: Tf_collimation
   Left = 369
-  Height = 297
+  Height = 320
   Top = 31
-  Width = 324
+  Width = 350
   Caption = 'f_collimation'
-  ClientHeight = 297
-  ClientWidth = 324
+  ClientHeight = 320
+  ClientWidth = 350
   FormStyle = fsStayOnTop
   OnClose = FormClose
   OnCreate = FormCreate
   object PageControl1: TPageControl
     Left = 0
-    Height = 297
+    Height = 320
     Top = 0
-    Width = 324
+    Width = 350
     ActivePage = TabSheet1
     Align = alClient
     TabIndex = 0
     TabOrder = 0
     object TabSheet1: TTabSheet
       Caption = 'Single star'
-      ClientHeight = 266
-      ClientWidth = 314
+      ClientHeight = 289
+      ClientWidth = 340
       object Label2: TLabel
         Left = 4
-        Height = 161
+        Height = 184
         Top = 4
-        Width = 306
+        Width = 332
         Align = alClient
         AutoSize = False
         BorderSpacing.Around = 4
-        Caption = 'Center a bright star.'#10'Defocus until the ring are clearly visible.'#10'Click Start button.'#10'Adjust the collimation.'#10'The star must be centered in full frame for the final adjustement.'
+        Caption = 'Center a bright star. Defocus until the rings are clearly visible. Click the Start button.'#10'Slowly adjust the position of the star in the image field using the telescope fine movement until all the circles are concentric.'#10'Then move the star to the image center using the mirror adjustment screws.'
         ParentFont = False
         WordWrap = True
       end
       object GroupBox1: TGroupBox
         Left = 0
         Height = 57
-        Top = 169
-        Width = 314
+        Top = 192
+        Width = 340
         Align = alBottom
         ClientHeight = 55
-        ClientWidth = 312
+        ClientWidth = 338
         ParentFont = False
         TabOrder = 0
         object Label1: TLabel
@@ -70,12 +70,12 @@ object f_collimation: Tf_collimation
       object Panel1: TPanel
         Left = 0
         Height = 40
-        Top = 226
-        Width = 314
+        Top = 249
+        Width = 340
         Align = alBottom
         BevelOuter = bvNone
         ClientHeight = 40
-        ClientWidth = 314
+        ClientWidth = 340
         ParentFont = False
         TabOrder = 1
         object BtnStart: TButton
@@ -112,17 +112,17 @@ object f_collimation: Tf_collimation
     end
     object TabSheet2: TTabSheet
       Caption = '9 panel image'
-      ClientHeight = 266
-      ClientWidth = 314
+      ClientHeight = 289
+      ClientWidth = 340
       object Panel2: TPanel
         Left = 0
         Height = 40
-        Top = 226
-        Width = 314
+        Top = 249
+        Width = 340
         Align = alBottom
         BevelOuter = bvNone
         ClientHeight = 40
-        ClientWidth = 314
+        ClientWidth = 340
         ParentFont = False
         TabOrder = 0
         object BtnStartSplit: TButton
@@ -156,58 +156,69 @@ object f_collimation: Tf_collimation
           TabOrder = 2
         end
       end
-      object TrackBarZoom: TTrackBar
-        Left = 20
-        Height = 43
-        Top = 104
-        Width = 260
-        Max = 50
-        Min = 10
-        OnChange = TrackBarZoomChange
-        Position = 10
-        TickStyle = tsNone
-        TabOrder = 1
-      end
-      object TrackBarMargin: TTrackBar
-        Left = 20
-        Height = 43
-        Top = 176
-        Width = 264
-        Max = 100
-        OnChange = TrackBarMarginChange
-        Position = 0
-        TickStyle = tsNone
-        TabOrder = 2
-      end
-      object Label3: TLabel
-        AnchorSideLeft.Control = TrackBarZoom
-        AnchorSideBottom.Control = TrackBarZoom
-        Left = 20
-        Height = 19
-        Top = 85
-        Width = 36
-        Anchors = [akLeft, akBottom]
-        Caption = 'Zoom'
-      end
-      object Label4: TLabel
-        AnchorSideLeft.Control = TrackBarMargin
-        AnchorSideBottom.Control = TrackBarMargin
-        Left = 20
-        Height = 19
-        Top = 157
-        Width = 82
-        Anchors = [akLeft, akBottom]
-        Caption = 'Margin offset'
-      end
       object Label5: TLabel
         Left = 0
-        Height = 80
+        Height = 104
         Top = 0
-        Width = 314
-        Align = alTop
+        Width = 340
+        Align = alClient
         AutoSize = False
-        Caption = 'Label5'
+        Caption = 'Split the image in 9 panel to better show the aberration in each corner.'#10'You can change the zoom level and the margin offset from the image edge.'
         WordWrap = True
+      end
+      object Panel3: TPanel
+        Left = 0
+        Height = 145
+        Top = 104
+        Width = 340
+        Align = alBottom
+        BevelOuter = bvNone
+        ClientHeight = 145
+        ClientWidth = 340
+        TabOrder = 1
+        object TrackBarZoom: TTrackBar
+          Left = 24
+          Height = 43
+          Top = 27
+          Width = 260
+          Max = 50
+          Min = 10
+          OnChange = TrackBarZoomChange
+          Position = 10
+          TickStyle = tsNone
+          TabOrder = 0
+        end
+        object Label3: TLabel
+          AnchorSideLeft.Control = TrackBarZoom
+          AnchorSideBottom.Control = TrackBarZoom
+          Left = 24
+          Height = 19
+          Top = 8
+          Width = 36
+          Anchors = [akLeft, akBottom]
+          Caption = 'Zoom'
+        end
+        object Label4: TLabel
+          AnchorSideLeft.Control = TrackBarMargin
+          AnchorSideBottom.Control = TrackBarMargin
+          Left = 24
+          Height = 19
+          Top = 80
+          Width = 82
+          Anchors = [akLeft, akBottom]
+          Caption = 'Margin offset'
+        end
+        object TrackBarMargin: TTrackBar
+          Left = 24
+          Height = 43
+          Top = 99
+          Width = 264
+          Max = 100
+          OnChange = TrackBarMarginChange
+          Position = 0
+          TickStyle = tsNone
+          TabOrder = 1
+        end
       end
     end
   end

@@ -6,14 +6,14 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ccdciel\n"
 "Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
-"POT-Creation-Date: 2021-08-31 20:30+0000\n"
+"POT-Creation-Date: 2021-09-01 12:15+0000\n"
 "PO-Revision-Date: 2021-08-31 19:22+0000\n"
 "Last-Translator: Thomas <email@starhopper.de>\n"
 "Language-Team: German <de@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2021-08-31 20:40+0000\n"
+"X-Launchpad-Export-Date: 2021-09-01 12:24+0000\n"
 "X-Generator: Launchpad (build 0c8f1877ebb14058529e2f7e30ad87ef8ef878a7)\n"
 
 #: u_translation.rs2d
@@ -23,6 +23,10 @@ msgstr "2D"
 #: u_translation.rs32bitdriver
 msgid "This driver work only in 32bit, please install the 32bit version of CCDciel."
 msgstr "Dieser Treiber funktioniert nur in 32-Bit, bitte installieren Sie die 32-Bit Version von CCDciel."
+
+#: u_translation.rs9panelimage
+msgid "9 panel image"
+msgstr ""
 
 #: u_translation.rsabort
 msgid "Abort"
@@ -751,8 +755,8 @@ msgstr "Zentrum"
 
 #: u_translation.rscenterabrigh
 #, object-pascal-format
-msgid "Center a bright star. %s Defocus until the ring are clearly visible. %s Click Start button. %s Adjust the collimation. %s The star must be centered in full frame for the final adjustement."
-msgstr "Einen hellen Stern zentrieren. %s Defokussieren bis der Ring deutlich sichtbar ist. %s Auf die Schaltfläche Start drücken. %s Die Kollimation anpassen. %s Der Stern muss für die endgültige Justage in der Mitte des Bildfeldes liegen."
+msgid "Center a bright star. Defocus until the rings are clearly visible. Click the Start button. %s Slowly adjust the position of the star in the image field using the telescope fine movement until all the circles are concentric. %s Then move the star to the image center using the mirror adjustment screws."
+msgstr ""
 
 #: u_translation.rscenterappare
 #, object-pascal-format
@@ -2199,6 +2203,10 @@ msgstr "Manuelle Fokussierhilfe"
 #: u_translation.rsmanyfunction
 msgid "Many functions will not work reliably without an astrometry software."
 msgstr "Viele Funktionen funktionieren ohne Astrometrie-Software nicht zuverlässig."
+
+#: u_translation.rsmarginoffset
+msgid "Margin offset"
+msgstr ""
 
 #: u_translation.rsmax
 msgid "Max:"
@@ -3894,6 +3902,10 @@ msgstr "Vereinfachte Fotometrie, unkalibriert"
 msgid "Simplified photometry taking account for only the calibration"
 msgstr "Vereinfachte Photometrie, die nur die Kalibrierung berücksichtigt"
 
+#: u_translation.rssinglestar
+msgid "Single star"
+msgstr ""
+
 #: u_translation.rssitesendtote
 msgid "Site send to telescope."
 msgstr "Standort wurde an das Teleskop gesendet."
@@ -4039,6 +4051,11 @@ msgstr "Süd"
 #: u_translation.rsspeed
 msgid "Speed"
 msgstr "Geschwindigkeit"
+
+#: u_translation.rssplittheimag
+#, object-pascal-format
+msgid "Split the image in 9 panel to better show the aberration in each corner. %s You can change the zoom level and the margin offset from the image edge."
+msgstr ""
 
 #: u_translation.rsssltlsnotsup
 msgid "SSL/TLS not supported, try to uncheck the corresponding box."

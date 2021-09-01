@@ -2,14 +2,14 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ccdciel\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-08-31 20:30+0000\n"
-"PO-Revision-Date: 2021-08-30 03:58+0000\n"
+"POT-Creation-Date: 2021-09-01 12:15+0000\n"
+"PO-Revision-Date: 2021-09-01 03:25+0000\n"
 "Last-Translator: Stanislav Holub <Unknown>\n"
 "Language-Team: Czech <cz@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2021-08-31 20:40+0000\n"
+"X-Launchpad-Export-Date: 2021-09-01 12:24+0000\n"
 "X-Generator: Launchpad (build 0c8f1877ebb14058529e2f7e30ad87ef8ef878a7)\n"
 "Language: cs\n"
 
@@ -20,6 +20,10 @@ msgstr "2D"
 #: u_translation.rs32bitdriver
 msgid "This driver work only in 32bit, please install the 32bit version of CCDciel."
 msgstr "Tento ovladač funguje pouze v 32bitech, nainstalujte 32bitovou verzi CCDciel."
+
+#: u_translation.rs9panelimage
+msgid "9 panel image"
+msgstr ""
 
 #: u_translation.rsabort
 msgid "Abort"
@@ -433,7 +437,7 @@ msgstr "Azimut"
 
 #: u_translation.rsazimuthorigi
 msgid "Azimuth origin"
-msgstr ""
+msgstr "Počátek azimutu"
 
 #: u_translation.rsback
 msgid "Back"
@@ -750,8 +754,8 @@ msgstr "Střed"
 
 #: u_translation.rscenterabrigh
 #, object-pascal-format
-msgid "Center a bright star. %s Defocus until the ring are clearly visible. %s Click Start button. %s Adjust the collimation. %s The star must be centered in full frame for the final adjustement."
-msgstr "Vycentrujte jasnou hvězdu. %s Rozostřete ji, dokud není prsten okolo hvězdy jasně viditelný. %s Klikněte na tlačítko Start. %s Upravte kolimaci. %s Hvězda musí být po konečném nastavení vystředěna kolem kruhů."
+msgid "Center a bright star. Defocus until the rings are clearly visible. Click the Start button. %s Slowly adjust the position of the star in the image field using the telescope fine movement until all the circles are concentric. %s Then move the star to the image center using the mirror adjustment screws."
+msgstr ""
 
 #: u_translation.rscenterappare
 #, object-pascal-format
@@ -1841,7 +1845,7 @@ msgstr "Přejít na"
 
 #: u_translation.rsgotoinprogre
 msgid "GOTO in progress"
-msgstr ""
+msgstr "GOTO probíhá"
 
 #: u_translation.rsgreen
 msgid "green"
@@ -2198,6 +2202,10 @@ msgstr "Ruční zaostření"
 #: u_translation.rsmanyfunction
 msgid "Many functions will not work reliably without an astrometry software."
 msgstr "Mnoho funkcí nebude bez astrometrického softwaru spolehlivě fungovat."
+
+#: u_translation.rsmarginoffset
+msgid "Margin offset"
+msgstr ""
 
 #: u_translation.rsmax
 msgid "Max:"
@@ -3443,7 +3451,7 @@ msgstr "Otočit dalekohled"
 
 #: u_translation.rsrotating
 msgid "Rotating"
-msgstr ""
+msgstr "Otáčení"
 
 #: u_translation.rsrotator
 msgid "Rotator"
@@ -3893,6 +3901,10 @@ msgstr "Zjednodušená fotometrie, nekalibrováno"
 msgid "Simplified photometry taking account for only the calibration"
 msgstr "Zjednodušená fotometrie zohledňující pouze kalibraci"
 
+#: u_translation.rssinglestar
+msgid "Single star"
+msgstr ""
+
 #: u_translation.rssitesendtote
 msgid "Site send to telescope."
 msgstr "Poloha poslána do dalekohledu."
@@ -4038,6 +4050,11 @@ msgstr "Jih"
 #: u_translation.rsspeed
 msgid "Speed"
 msgstr "Rychlost"
+
+#: u_translation.rssplittheimag
+#, object-pascal-format
+msgid "Split the image in 9 panel to better show the aberration in each corner. %s You can change the zoom level and the margin offset from the image edge."
+msgstr ""
 
 #: u_translation.rsssltlsnotsup
 msgid "SSL/TLS not supported, try to uncheck the corresponding box."

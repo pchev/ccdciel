@@ -48,6 +48,7 @@ type
     PageControl1: TPageControl;
     Panel1: TPanel;
     Panel2: TPanel;
+    Panel3: TPanel;
     TabSheet1: TTabSheet;
     TabSheet2: TTabSheet;
     TrackBarZoom: TTrackBar;
