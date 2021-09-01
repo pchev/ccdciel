@@ -817,6 +817,9 @@ type
     procedure CollimationStop(Sender: TObject);
     procedure CollimationCenterStar(Sender: TObject);
     procedure CollimationCircleChange(Sender: TObject);
+    procedure CollimationStartSplit(Sender: TObject);
+    procedure CollimationStopSplit(Sender: TObject);
+    procedure CollimationApplySplit(Sender: TObject);
     procedure ReadyForVideo(var v: boolean);
     procedure ShowStatus(str: string);
   public
@@ -1300,6 +1303,9 @@ begin
   ZoomMin:=1;
   LogLevel:=2;
   LogToFile:=false;
+  SplitImage:=false;
+  SplitMargin:=0;
+  SplitZoom:=1;
   AllMsg:=TStringList.Create;
   AllMsg.OwnsObjects:=true;
   refmask:=false;
@@ -2942,6 +2948,7 @@ end;
 procedure Tf_main.Image1DblClick(Sender: TObject);
 var x,y: integer;
 begin
+if SplitImage then exit;
 if fits.HeaderInfo.valid and fits.ImageValid and (not f_starprofile.AutofocusRunning) then begin
    if f_photometry.Visible then begin
       MeasureAtPos(Mx,My,true);
@@ -2957,6 +2964,7 @@ end;
 procedure Tf_main.Image1MouseDown(Sender: TObject; Button: TMouseButton;
   Shift: TShiftState; X, Y: Integer);
 begin
+if SplitImage then exit;
 MouseDownX:=X;
 MouseDownY:=Y;
 if Shift=[ssLeft] then begin
@@ -2996,6 +3004,7 @@ procedure Tf_main.Image1MouseMove(Sender: TObject; Shift: TShiftState; X,
 var px,py,dx,dy: integer;
     z: double;
 begin
+ if SplitImage then exit;
  MagnifyerTimer.Enabled:=true;
  if PolarMoving  and fits.HeaderInfo.valid and fits.ImageValid then begin
     Screen2Fits(X,Y,false,false,px,py);
@@ -3053,6 +3062,7 @@ procedure Tf_main.Image1MouseUp(Sender: TObject; Button: TMouseButton;
   Shift: TShiftState; X, Y: Integer);
 var xx,x1,y1,x2,y2,w,h: integer;
 begin
+if SplitImage then exit;
 if PolarMoving then begin
     Mx:=X;
     My:=Y;
@@ -3102,6 +3112,7 @@ procedure Tf_main.Image1MouseWheel(Sender: TObject; Shift: TShiftState;
 var
   zf,r1,r2: double;
 begin
+if SplitImage then exit;
 if (fits.HeaderInfo.naxis>0) and fits.ImageValid then begin
   if LockMouseWheel then
     exit;
@@ -3614,6 +3625,7 @@ begin
   if f_setup<>nil then f_setup.ShowHint:=ShowHint;
   if f_EditTargets<>nil then f_EditTargets.ShowHint:=ShowHint;
   if f_vcurve<>nil then f_vcurve.ShowHint:=ShowHint;
+  if f_collimation<>nil then f_collimation.ShowHint:=ShowHint;
   TmpDir:=config.GetValue('/Files/TmpDir',TmpDir);
   if copy(TmpDir,1,1)='.' then TmpDir:=ExpandFileName(slash(Appdir)+TmpDir);
   if not DirectoryExistsUTF8(TmpDir) then begin
@@ -9656,7 +9668,7 @@ end;
 
 Procedure Tf_main.PlotImage;
 var r1,r2: double;
-    w,h,px,py: integer;
+    w,h,px,py,w3,h3,ww3,hh3,i,j: integer;
     tmpbmp,str: TBGRABitmap;
     rmode: TResampleMode;
 begin
@@ -9675,7 +9687,29 @@ else begin
   imabmp.ResampleFilter:=rfBestQuality;
   rmode:=rmFineResample;
 end;
-if ImgZoom=0 then begin
+
+if SplitImage then begin
+   // 9 panel split image
+   w3:=round(ScrBmp.Width/3);
+   h3:=round(ScrBmp.Height/3);
+   ww3:=round(ScrBmp.Width/3/SplitZoom);
+   hh3:=round(ScrBmp.Height/3/SplitZoom);
+   tmpbmp:=TBGRABitmap.Create(ww3,hh3,clDarkBlue);
+   for i:=0 to 2 do begin
+     px:=SplitMargin+i*((img_Width-(2*SplitMargin)-ww3) div 2);
+     for j:=0 to 2 do begin
+       py:=SplitMargin+j*((img_Height-(2*SplitMargin)-hh3) div 2);
+       tmpbmp.PutImage(-px,-py,ImaBmp,dmSet);
+       ScrBmp.StretchPutImage(rect(i*w3,j*h3,(i+1)*w3,(j+1)*h3),tmpbmp,dmSet);
+     end;
+   end;
+   tmpbmp.Free;
+   for i:=1 to 2 do
+     ScrBmp.HorizLine(0,i*h3,scrbmp.Width,VGAGray,dmset);
+   for i:=1 to 2 do
+     ScrBmp.VertLine(i*w3,0,ScrBmp.Height,VGAGray,dmset);
+end
+else if ImgZoom=0 then begin
   // adjust
   r1:=img_Width/img_Height;
   w:=ScrBmp.width;
@@ -9971,10 +10005,6 @@ end;
 procedure Tf_main.MenuCollimationClick(Sender: TObject);
 var pt: TPoint;
 begin
-  if camera.Status<>devConnected then begin
-    ShowMessage(Format(rsNotConnected, [rsCamera]));
-    exit;
-  end;
   pt.x:=0;
   pt.y:=PanelCenter.top;
   pt:=ClientToScreen(pt);
@@ -9982,12 +10012,24 @@ begin
   f_collimation.onStop:=@CollimationStop;
   f_collimation.onCenterStar:=@CollimationCenterStar;
   f_collimation.onCircleChange:=@CollimationCircleChange;
+  f_collimation.onStartSplit:=@CollimationStartSplit;
+  f_collimation.onStopSplit:=@CollimationStopSplit;
+  f_collimation.onApplySplit:=@CollimationApplySplit;
+  if img_Width>0 then f_collimation.TrackBarMargin.Max:=img_Width div 6;
+  f_collimation.TrackBarMargin.Position := min(SplitMargin,f_collimation.TrackBarMargin.Max);
+  f_collimation.TrackBarMargin.Hint:='0'+ellipsis+IntToStr(f_collimation.TrackBarMargin.Max);
+  f_collimation.TrackBarZoom.Position := round(SplitZoom*10);
+
   FormPos(f_collimation,pt.X,pt.Y);
   f_collimation.Show;
 end;
 
 procedure Tf_main.CollimationCenterStar(Sender: TObject);
 begin
+  if camera.Status<>devConnected then begin
+    ShowMessage(Format(rsNotConnected, [rsCamera]));
+    exit;
+  end;
   if Collimation then begin
     CollimationStop(Sender);
     wait(2);
@@ -10009,6 +10051,10 @@ end;
 
 procedure Tf_main.CollimationStart(Sender: TObject);
 begin
+  if camera.Status<>devConnected then begin
+    ShowMessage(Format(rsNotConnected, [rsCamera]));
+    exit;
+  end;
   if not Collimation then begin
     Collimation:=true;
     if f_preview.Running then begin
@@ -10027,6 +10073,9 @@ end;
 
 procedure Tf_main.CollimationStop(Sender: TObject);
 begin
+  if camera.Status<>devConnected then begin
+    exit;
+  end;
  if Collimation then begin
    Collimation:=false;
    FocusStop(nil);
@@ -10038,6 +10087,39 @@ begin
  end;
 end;
 
+procedure Tf_main.CollimationStartSplit(Sender: TObject);
+begin
+  if camera.Status<>devConnected then begin
+    ShowMessage(Format(rsNotConnected, [rsCamera]));
+    exit;
+  end;
+  SplitImage:=true;
+  if not f_preview.Loop then f_preview.Loop:=true;
+  if not f_preview.Running then begin
+    f_preview.Running:=true;
+    StartPreviewExposure(self);
+  end;
+end;
+
+procedure Tf_main.CollimationStopSplit(Sender: TObject);
+begin
+  SplitImage:=false;
+  PlotImage;
+  if camera.Status<>devConnected then begin
+    exit;
+  end;
+  if f_preview.Running then begin
+    f_preview.Running:=false;
+    f_preview.Loop:=false;
+    StopExposure(Sender);
+  end;
+end;
+
+procedure Tf_main.CollimationApplySplit(Sender: TObject);
+begin
+  SplitImage:=true;
+  PlotImage;
+end;
 
 procedure Tf_main.MenuAscomSetupClick(Sender: TObject);
 {$ifdef mswindows}
@@ -10178,6 +10260,7 @@ end;
 
 procedure Tf_main.MenuItemPhotometryClick(Sender: TObject);
 begin
+if SplitImage then exit;
 if fits.HeaderInfo.valid and fits.ImageValid then begin
   f_photometry.Show;
   MeasureAtPos(MouseDownX,MouseDownY,true);
@@ -11716,6 +11799,7 @@ end;
 
 procedure Tf_main.MenuStopAstrometryClick(Sender: TObject);
 begin
+  if SplitImage then exit;
   astrometry.StopAstrometry;
 end;
 
@@ -11762,6 +11846,7 @@ procedure Tf_main.MenuViewAstrometryLogClick(Sender: TObject);
 var logf: string;
     f: Tf_viewtext;
 begin
+  if SplitImage then exit;
   logf:=slash(TmpDir)+'ccdcieltmp.log';
   if FileExistsUTF8(logf) then begin
     f:=Tf_viewtext.Create(self);
@@ -11825,7 +11910,8 @@ end;
 
 procedure Tf_main.MenuResolveClick(Sender: TObject);
 begin
-  if not CheckImageInfo then exit;
+  if SplitImage then exit;
+  if (not CheckImageInfo) then exit;
   astrometry.SolveCurrentImage(false);
 end;
 
@@ -11834,6 +11920,7 @@ var xx,yy,x,y,Timeout: integer;
     wt: boolean;
     endt: TDateTime;
 begin
+ if SplitImage then exit;
  if (Mount.Status<>devConnected)or(Camera.Status<>devConnected) then begin
    NewMessage(rsCameraAndMou,1);
    exit;
@@ -11863,7 +11950,8 @@ end;
 
 procedure Tf_main.MenuResolveSyncClick(Sender: TObject);
 begin
-  if not CheckImageInfo then exit;
+ if SplitImage then exit;
+ if not CheckImageInfo then exit;
   astrometry.SyncCurrentImage(false);
 end;
 
@@ -11884,6 +11972,7 @@ end;
 
 procedure Tf_main.MenuResolveRotateClick(Sender: TObject);
 begin
+  if SplitImage then exit;
   if not CheckImageInfo then exit;
   ResolveRotate(Sender);
 end;
@@ -11895,6 +11984,7 @@ end;
 
 procedure Tf_main.MenuResolveSyncRotatorClick(Sender: TObject);
 begin
+ if SplitImage then exit;
  if fits.HeaderInfo.valid and fits.ImageValid then begin
   if rotator.Status=devConnected then begin
      if fits.HeaderInfo.solved then begin
@@ -11916,7 +12006,8 @@ end;
 
 procedure Tf_main.MenuResolveSlewClick(Sender: TObject);
 begin
-  if not CheckImageInfo then exit;
+ if SplitImage then exit;
+ if not CheckImageInfo then exit;
   astrometry.SlewScreenXY(MouseDownX,MouseDownY);
 end;
 
@@ -11924,6 +12015,7 @@ procedure Tf_main.MenuResolveDSOClick(Sender: TObject);
 var
   Save_Cursor:TCursor;
 begin
+  if SplitImage then exit;
   if fits.HeaderInfo.valid and fits.ImageValid then begin
      Save_Cursor := Screen.Cursor; {loading Hyperleda could take some time}
      Screen.Cursor := crHourglass; { Show hourglass cursor }
@@ -11971,6 +12063,7 @@ end;
 
 procedure Tf_main.MenuResolvePlanetariumClick(Sender: TObject);
 begin
+  if SplitImage then exit;
   if fits.HeaderInfo.valid and fits.ImageValid then begin
    if planetarium.Connected then begin
       if fits.HeaderInfo.solved then begin
@@ -11994,6 +12087,7 @@ end;
 
 procedure Tf_main.MenuShowCCDFrameClick(Sender: TObject);
 begin
+  if SplitImage then exit;
   if fits.HeaderInfo.valid and fits.ImageValid then begin
    if planetarium.Connected then begin
       if fits.HeaderInfo.solved then begin
@@ -13035,7 +13129,7 @@ var xx,yy,px,py: integer;
     z: double;
     tmpbmp,str: TBGRABitmap;
 begin
-if (f_magnifyer.isVisible)and(fits.HeaderInfo.naxis1>0)and(ImgScale0<>0)and(x>0)and(y>0) then begin
+if (f_magnifyer.isVisible)and(not SplitImage)and(fits.HeaderInfo.naxis1>0)and(ImgScale0<>0)and(x>0)and(y>0) then begin
  Screen2fits(x,y,f_visu.FlipHorz,f_visu.FlipVert,xx,yy);
  z:=max(2,3*ImgZoom);
  tmpbmp:=TBGRABitmap.Create(round(f_magnifyer.Image1.Width/z),round(f_magnifyer.Image1.Height/z),clDarkBlue);

@@ -371,8 +371,9 @@ var
   OrigX, OrigY,img_Height,img_Width : integer;
   ImgFrameX,ImgFrameY,ImgFrameW,ImgFrameH: integer;
   ImgScale0,ImgPixRatio: double;
-  ImgZoom,ZoomMin: double;
-  ScrWidth,ScrHeigth: integer;
+  ImgZoom,ZoomMin,SplitZoom: double;
+  SplitImage: boolean;
+  ScrWidth,ScrHeigth, SplitMargin: integer;
   MaxADU, ClippingOverflow, ClippingUnderflow: double;
   MsgHandle: THandle;
   ObsLongitude, ObsLatitude, ObsElevation, ObsTimeZone: double;

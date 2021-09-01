@@ -1241,7 +1241,7 @@ resourcestring
   rsPower = 'Power';
   rsCollimation = 'Collimation';
   rsNumberOfCirc = 'Number of circles';
-  rsCenterABrigh = 'Center a bright star. %s Defocus until the ring are clearly visible. %s Click Start button. %s Adjust the collimation. %s The star must be centered in full frame for the final adjustement.';
+  rsCenterABrigh = 'Center a bright star. Defocus until the rings are clearly visible. Click the Start button. %s Slowly adjust the position of the star in the image field using the telescope fine movement until all the circles are concentric. %s Then move the star to the image center using the mirror adjustment screws.';
   rsTargetSCoord = 'Target %s coordinates not updated';
   rsUseOnlyStarN = 'Use only star near the image center';
   rsDATEOBSFromC = 'DATE-OBS from camera driver';
@@ -1333,6 +1333,10 @@ resourcestring
   rsAzimuthOrigi = 'Azimuth origin';
   rsGOTOInProgre = 'GOTO in progress';
   rsRotating = 'Rotating';
+  rsSingleStar = 'Single star';
+  rs9PanelImage = '9 panel image';
+  rsSplitTheImag = 'Split the image in 9 panel to better show the aberration in each corner. %s You can change the zoom level and the margin offset from the image edge.';
+  rsMarginOffset = 'Margin offset';
 
 implementation
 
