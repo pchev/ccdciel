@@ -843,8 +843,8 @@ begin
  {$ifdef mswindows}
    try
    if debug_msg then msg('Request binning '+inttostr(sbinX)+','+inttostr(sbinY));
-   oldx:=FBinX;
-   oldy:=FBinY;
+   oldx:=GetBinX;
+   oldy:=GetBinY;
    if debug_msg then msg('Old binning '+inttostr(oldx)+','+inttostr(oldy));
    if (oldx<>sbinX)or(oldy<>sbinY) then begin
      msg(Format(rsSetBinningX, [inttostr(sbinX), inttostr(sbinY)]));
@@ -883,8 +883,8 @@ begin
    if debug_msg then msg('Request frame '+inttostr(x)+','+inttostr(y)+'/'+inttostr(width)+'x'+inttostr(height));
    w:=FCameraXSize;
    h:=FCameraYSize;
-   bx:=FBinX;
-   by:=FBinY;
+   bx:=GetBinX;
+   by:=GetBinY;
    if debug_msg then msg('XSize='+inttostr(w)+' YSize='+inttostr(h)+' BinX='+inttostr(bx)+' BinY='+inttostr(by));
    Xmax:= w div bx;
    Ymax:= h div by;
@@ -1017,6 +1017,11 @@ function T_ascomcamera.GetBinX:integer;
 begin
  result:=1;
  {$ifdef mswindows}
+  try
+   FBinX:=V.BinX;
+   except
+    on E: Exception do msg('Get BinX error: ' + E.Message,0);
+   end;
    result:=FBinX;
  {$endif}
 end;
@@ -1025,6 +1030,11 @@ function T_ascomcamera.GetBinY:integer;
 begin
  result:=1;
  {$ifdef mswindows}
+  try
+   FBinY:=V.BinY;
+   except
+    on E: Exception do msg('Get BinY error: ' + E.Message,0);
+   end;
    result:=FBinY;
  {$endif}
 end;
