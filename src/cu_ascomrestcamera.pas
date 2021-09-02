@@ -738,8 +738,8 @@ begin
    if FStatus<>devConnected then exit;
    try
    if debug_msg then msg('Request binning '+inttostr(sbinX)+','+inttostr(sbinY));
-   oldx:=GetBinX;
-   oldy:=GetBinY;
+   oldx:=FBinX;
+   oldy:=FBinY;
    if debug_msg then msg('Old binning '+inttostr(oldx)+','+inttostr(oldy));
    if (oldx<>sbinX)or(oldy<>sbinY) then begin
      msg(Format(rsSetBinningX, [inttostr(sbinX), inttostr(sbinY)]));
@@ -775,8 +775,8 @@ begin
    if debug_msg then msg('Request frame '+inttostr(x)+','+inttostr(y)+'/'+inttostr(width)+'x'+inttostr(height));
    w:=FCameraXSize;
    h:=FCameraYSize;
-   bx:=GetBinX;
-   by:=GetBinY;
+   bx:=FBinX;
+   by:=FBinY;
    if debug_msg then msg('XSize='+inttostr(w)+' YSize='+inttostr(h)+' BinX='+inttostr(bx)+' BinY='+inttostr(by));
    Xmax:= w div bx;
    Ymax:= h div by;
@@ -912,21 +912,11 @@ end;
 
 function T_ascomrestcamera.GetBinX:integer;
 begin
- try
- FBinX:=V.Get('binx').AsInt;
- except
-  on E: Exception do msg('Get BinX error: ' + E.Message,0);
- end;
  result:=FBinX;
 end;
 
 function T_ascomrestcamera.GetBinY:integer;
 begin
- try
- FBinY:=V.Get('biny').AsInt;
- except
-  on E: Exception do msg('Get BinY error: ' + E.Message,0);
- end;
  result:=FBinY;
 end;
 
