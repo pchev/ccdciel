@@ -1320,6 +1320,7 @@ begin
   ReadoutModePreview:=0;
   ReadoutModeFocus:=0;
   ReadoutModeAstrometry:=0;
+  UseReadoutMode:=false;
   DomeNoSafetyCheck:=false;
   EarlyNextExposure:=false;
   DisplayCapture:=true;
@@ -2836,6 +2837,13 @@ try
     NewMessage(msg,1);
     MessageDlg(caption,msg,mtWarning,[mbOK],0);
   end;
+  if oldver<'0.9.76' then begin
+    UseReadoutMode := (config.GetValue('/Readout/Capture',0)<>0) or
+                      (config.GetValue('/Readout/Preview',0)<>0) or
+                      (config.GetValue('/Readout/Focus',0)<>0) or
+                      (config.GetValue('/Readout/Astrometry',0)<>0);
+    config.SetValue('/Readout/UseReadoutMode',UseReadoutMode);
+  end;
   if config.Modified then
      SaveConfig;
 except
@@ -3714,6 +3722,7 @@ begin
   ReadoutModePreview:=config.GetValue('/Readout/Preview',0);
   ReadoutModeFocus:=config.GetValue('/Readout/Focus',0);
   ReadoutModeAstrometry:=config.GetValue('/Readout/Astrometry',0);
+  UseReadoutMode:=config.GetValue('/Readout/UseReadoutMode',false);
   Starwindow:=config.GetValue('/StarAnalysis/Window',60);
   Focuswindow:=config.GetValue('/StarAnalysis/Focus',400);
   Focuswindow:=max(Focuswindow,4*Starwindow);
@@ -7442,11 +7451,17 @@ begin
      f_option.ReadOutAstrometry.ItemIndex:=config.GetValue('/Readout/Astrometry',0);
    end
    else begin
+     UseReadoutMode:=false;
      f_option.ReadOutCapture.ItemIndex:=-1;
      f_option.ReadOutPreview.ItemIndex:=-1;
      f_option.ReadOutFocus.ItemIndex:=-1;
      f_option.ReadOutAstrometry.ItemIndex:=-1;
    end;
+   f_option.UseReadoutMode.Checked:=config.GetValue('/Readout/UseReadoutMode',UseReadoutMode);
+   f_option.ReadOutCapture.Enabled:=f_option.UseReadoutMode.Checked;
+   f_option.ReadOutPreview.Enabled:=f_option.UseReadoutMode.Checked;
+   f_option.ReadOutAstrometry.Enabled:=f_option.UseReadoutMode.Checked;
+   f_option.ReadOutFocus.Enabled:=f_option.UseReadoutMode.Checked;
    f_option.FlatType.ItemIndex:=config.GetValue('/Flat/FlatType',ord(FlatType));
    f_option.FlatAutoExposure.Checked:=config.GetValue('/Flat/FlatAutoExposure',FlatAutoExposure);
    f_option.FlatMinExp.Value:=config.GetValue('/Flat/FlatMinExp',FlatMinExp);
@@ -7870,6 +7885,7 @@ begin
        config.SetValue('/Readout/Focus',f_option.ReadOutFocus.ItemIndex);
        config.SetValue('/Readout/Astrometry',f_option.ReadOutAstrometry.ItemIndex);
      end;
+     config.SetValue('/Readout/UseReadoutMode',f_option.UseReadoutMode.Checked);
      config.SetValue('/Flat/FlatType',f_option.FlatType.ItemIndex);
      config.SetValue('/Flat/FlatAutoExposure',f_option.FlatAutoExposure.Checked);
      config.SetValue('/Flat/FlatMinExp',f_option.FlatMinExp.Value);
@@ -8424,7 +8440,7 @@ if (camera.Status=devConnected) and ((not f_capture.Running) or autofocusing) an
     FocuserTemperatureCompensation(true);
   end;
   // set readout first so it can be overridden by specific binning or gain
-  if camera.hasReadOut then begin
+  if UseReadoutMode and camera.hasReadOut then begin
      camera.readoutmode:=ReadoutModePreview;
   end;
   p:=pos('x',f_preview.Binning.Text);
@@ -8880,7 +8896,7 @@ if (AllDevicesConnected)and(not autofocusing)and (not learningvcurve) then begin
   end;
   CameraExposureRemain:=e;
   // set readout first so it can be overridden by specific binning or gain
-  if camera.hasReadOut then begin
+  if UseReadoutMode and camera.hasReadOut then begin
      camera.readoutmode:=ReadoutModeCapture;
   end;
   // check and set binning

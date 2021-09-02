@@ -297,7 +297,7 @@ if AllDevicesConnected then begin
   savebiny:=Camera.BinY;
   Camera.onNewImage:=@EndExposure;
   // set readout first so it can be overridden by specific binning or gain
-  if camera.hasReadOut then begin
+  if UseReadoutMode and camera.hasReadOut then begin
      camera.readoutmode:=readoutmode;
   end;
   if (binx<>savebinx)or(biny<>savebiny) then Camera.SetBinning(binx,biny);

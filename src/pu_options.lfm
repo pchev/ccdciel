@@ -1168,7 +1168,7 @@ object f_option: Tf_option
           object Label19: TLabel
             AnchorSideTop.Control = MaxAdu
             AnchorSideTop.Side = asrCenter
-            Left = 8
+            Left = 16
             Height = 19
             Top = 35
             Width = 96
@@ -1200,7 +1200,7 @@ object f_option: Tf_option
           object Label3: TLabel
             AnchorSideTop.Control = PixelSize
             AnchorSideTop.Side = asrCenter
-            Left = 8
+            Left = 16
             Height = 19
             Top = 6
             Width = 55
@@ -1245,17 +1245,17 @@ object f_option: Tf_option
           object Label112: TLabel
             AnchorSideTop.Control = ReadOutCapture
             AnchorSideTop.Side = asrCenter
-            Left = 8
+            Left = 16
             Height = 19
-            Top = 9
+            Top = 45
             Width = 49
             Caption = 'Capture'
             ParentFont = False
           end
           object ReadOutCapture: TComboBox
-            Left = 97
+            Left = 105
             Height = 28
-            Top = 4
+            Top = 40
             Width = 121
             Constraints.MaxHeight = 28
             ItemHeight = 0
@@ -1266,9 +1266,9 @@ object f_option: Tf_option
           object ReadOutPreview: TComboBox
             AnchorSideTop.Control = ReadOutCapture
             AnchorSideTop.Side = asrCenter
-            Left = 331
+            Left = 339
             Height = 28
-            Top = 4
+            Top = 40
             Width = 121
             Constraints.MaxHeight = 28
             ItemHeight = 0
@@ -1279,17 +1279,17 @@ object f_option: Tf_option
           object Label113: TLabel
             AnchorSideTop.Control = ReadOutCapture
             AnchorSideTop.Side = asrCenter
-            Left = 234
+            Left = 242
             Height = 19
-            Top = 9
+            Top = 45
             Width = 47
             Caption = 'Preview'
             ParentFont = False
           end
           object ReadOutFocus: TComboBox
-            Left = 97
+            Left = 105
             Height = 28
-            Top = 40
+            Top = 76
             Width = 121
             Constraints.MaxHeight = 28
             ItemHeight = 0
@@ -1300,9 +1300,9 @@ object f_option: Tf_option
           object Label114: TLabel
             AnchorSideTop.Control = ReadOutFocus
             AnchorSideTop.Side = asrCenter
-            Left = 8
+            Left = 16
             Height = 19
-            Top = 45
+            Top = 81
             Width = 35
             Caption = 'Focus'
             ParentFont = False
@@ -1310,9 +1310,9 @@ object f_option: Tf_option
           object ReadOutAstrometry: TComboBox
             AnchorSideTop.Control = ReadOutFocus
             AnchorSideTop.Side = asrCenter
-            Left = 331
+            Left = 339
             Height = 28
-            Top = 40
+            Top = 76
             Width = 121
             Constraints.MaxHeight = 28
             ItemHeight = 0
@@ -1323,12 +1323,21 @@ object f_option: Tf_option
           object Label115: TLabel
             AnchorSideTop.Control = ReadOutFocus
             AnchorSideTop.Side = asrCenter
-            Left = 234
+            Left = 242
             Height = 19
-            Top = 45
+            Top = 81
             Width = 71
             Caption = 'Astrometry'
             ParentFont = False
+          end
+          object UseReadoutMode: TCheckBox
+            Left = 16
+            Height = 21
+            Top = 7
+            Width = 315
+            Caption = 'Use specific Readout mode for different actions'
+            OnChange = UseReadoutModeChange
+            TabOrder = 4
           end
         end
         object GroupBox31: TGroupBox
@@ -6308,23 +6317,23 @@ object f_option: Tf_option
           TabOrder = 0
           object TabSheetEmail: TTabSheet
             Caption = 'Email'
-            ClientHeight = 546
+            ClientHeight = 519
             ClientWidth = 519
             ParentFont = False
             object GroupBox25: TGroupBox
               Left = 0
-              Height = 262
+              Height = 235
               Top = 284
               Width = 519
               Align = alClient
               Caption = 'Email on :'
-              ClientHeight = 242
+              ClientHeight = 215
               ClientWidth = 517
               ParentFont = False
               TabOrder = 0
               object EmailCondition: TCheckListBox
                 Left = 0
-                Height = 201
+                Height = 174
                 Top = 0
                 Width = 517
                 Align = alClient
@@ -6336,10 +6345,9 @@ object f_option: Tf_option
                   'Meridian flip error'
                   'Target initialisation'
                 )
-                ItemHeight = 0
+                ItemHeight = 23
                 ParentFont = False
                 TabOrder = 0
-                TopIndex = -1
                 Data = {
                   06000000000000000000
                 }
@@ -6347,7 +6355,7 @@ object f_option: Tf_option
               object Panel6: TPanel
                 Left = 0
                 Height = 41
-                Top = 201
+                Top = 174
                 Width = 517
                 Align = alBottom
                 ClientHeight = 41
@@ -6548,7 +6556,7 @@ object f_option: Tf_option
           end
           object TabSheetVoice: TTabSheet
             Caption = 'Voice'
-            ClientHeight = 546
+            ClientHeight = 519
             ClientWidth = 519
             ParentFont = False
             object CheckGroupVoice: TCheckGroup

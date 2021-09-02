@@ -35,6 +35,7 @@ type
 
   Tf_option = class(TForm)
     CdCPath: TEdit;
+    UseReadoutMode: TCheckBox;
     Page6: TPage;
     PHDpath: TEdit;
     AzimuthOrigin: TRadioGroup;
@@ -713,6 +714,7 @@ type
     procedure TemperatureSlopeActiveClick(Sender: TObject);
     procedure TmpDirDefaultClick(Sender: TObject);
     procedure UseFileSequenceWidthClick(Sender: TObject);
+    procedure UseReadoutModeChange(Sender: TObject);
   private
     { private declarations }
     FGetMaxADU, FGetPixelSize, FGetFocale, FShowHelp: TNotifyEvent;
@@ -1661,6 +1663,15 @@ end;
 procedure Tf_option.UseFileSequenceWidthClick(Sender: TObject);
 begin
   FileSequenceWidth.Enabled:=UseFileSequenceWidth.Checked;
+end;
+
+procedure Tf_option.UseReadoutModeChange(Sender: TObject);
+begin
+  if ReadOutCapture.Items.Count=0 then UseReadoutMode.Checked:=false;
+  ReadOutCapture.Enabled:=UseReadoutMode.Checked;
+  ReadOutPreview.Enabled:=UseReadoutMode.Checked;
+  ReadOutAstrometry.Enabled:=UseReadoutMode.Checked;
+  ReadOutFocus.Enabled:=UseReadoutMode.Checked;
 end;
 
 procedure Tf_option.FileOrFolderOptionsClick(Sender: TObject);
