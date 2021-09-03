@@ -1337,6 +1337,7 @@ resourcestring
   rs9PanelImage = '9 panel image';
   rsSplitTheImag = 'Split the image in 9 panel to better show the aberration in each corner. %s You can change the zoom level and the margin offset from the image edge.';
   rsMarginOffset = 'Margin offset';
+  rsUseSpecificR = 'Use specific Readout mode for different actions';
 
 implementation
 

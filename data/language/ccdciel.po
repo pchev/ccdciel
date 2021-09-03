@@ -4934,3 +4934,7 @@ msgstr ""
 msgid "Margin offset"
 msgstr ""
 
+#: u_translation:rsusespecificr
+msgid "Use specific Readout mode for different actions"
+msgstr ""
+

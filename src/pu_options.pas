@@ -966,6 +966,7 @@ begin
   GroupBox31.Caption:=rsGain+' / '+rsOffset2;
   CanSetGain.Caption:=rsManageTheGai;
   GroupBoxReadOut.Caption:=rsReadoutModes;
+  UseReadoutMode.Caption:=rsUseSpecificR;
   Label112.Caption:=rsCapture;
   Label113.Caption:=rsPreview;
   Label114.Caption:=rsFocus;

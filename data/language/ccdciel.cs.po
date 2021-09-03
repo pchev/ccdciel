@@ -2,15 +2,15 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ccdciel\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-09-01 12:15+0000\n"
-"PO-Revision-Date: 2021-09-01 03:25+0000\n"
+"POT-Creation-Date: 2021-09-03 07:30+0000\n"
+"PO-Revision-Date: 2021-09-01 17:31+0000\n"
 "Last-Translator: Stanislav Holub <Unknown>\n"
 "Language-Team: Czech <cz@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2021-09-01 12:24+0000\n"
-"X-Generator: Launchpad (build 0c8f1877ebb14058529e2f7e30ad87ef8ef878a7)\n"
+"X-Launchpad-Export-Date: 2021-09-03 07:36+0000\n"
+"X-Generator: Launchpad (build 9129de2d4260ee33e0eb60e0cee9608e07e89e19)\n"
 "Language: cs\n"
 
 #: u_translation.rs2d
@@ -23,7 +23,7 @@ msgstr "Tento ovladač funguje pouze v 32bitech, nainstalujte 32bitovou verzi CC
 
 #: u_translation.rs9panelimage
 msgid "9 panel image"
-msgstr ""
+msgstr "9 panelový obrázek"
 
 #: u_translation.rsabort
 msgid "Abort"
@@ -755,7 +755,7 @@ msgstr "Střed"
 #: u_translation.rscenterabrigh
 #, object-pascal-format
 msgid "Center a bright star. Defocus until the rings are clearly visible. Click the Start button. %s Slowly adjust the position of the star in the image field using the telescope fine movement until all the circles are concentric. %s Then move the star to the image center using the mirror adjustment screws."
-msgstr ""
+msgstr "Vycentrujte jasnou hvězdu. Rozostřujte, dokud nejsou prsteny jasně viditelné. Klikněte na tlačítko Start. %s Pomocí jemného pohybu dalekohledu pomalu upravujte polohu hvězdy v obrazovém poli, dokud nejsou všechny kruhy soustředné. %s Poté pomocí šroubů pro nastavení zrcadla přesuňte hvězdu do středu obrazu."
 
 #: u_translation.rscenterappare
 #, object-pascal-format
@@ -2205,7 +2205,7 @@ msgstr "Mnoho funkcí nebude bez astrometrického softwaru spolehlivě fungovat.
 
 #: u_translation.rsmarginoffset
 msgid "Margin offset"
-msgstr ""
+msgstr "Okraj offsetu"
 
 #: u_translation.rsmax
 msgid "Max:"
@@ -3903,7 +3903,7 @@ msgstr "Zjednodušená fotometrie zohledňující pouze kalibraci"
 
 #: u_translation.rssinglestar
 msgid "Single star"
-msgstr ""
+msgstr "Jedna hvězda"
 
 #: u_translation.rssitesendtote
 msgid "Site send to telescope."
@@ -4054,7 +4054,7 @@ msgstr "Rychlost"
 #: u_translation.rssplittheimag
 #, object-pascal-format
 msgid "Split the image in 9 panel to better show the aberration in each corner. %s You can change the zoom level and the margin offset from the image edge."
-msgstr ""
+msgstr "Rozdělte obrázek na 9 panelů, aby se lépe zobrazovala aberace v každém rohu. %s Můžete změnit úroveň přiblížení a offset okraje od okraje obrázku."
 
 #: u_translation.rsssltlsnotsup
 msgid "SSL/TLS not supported, try to uncheck the corresponding box."
@@ -4923,6 +4923,10 @@ msgstr "Použít rotátor"
 #: u_translation.rsusesafetymon
 msgid "Use safety monitor"
 msgstr "Použít bezpečnostní monitor"
+
+#: u_translation.rsusespecificr
+msgid "Use specific Readout mode for different actions"
+msgstr ""
 
 #: u_translation.rsuseswitch
 msgid "Use switch"
