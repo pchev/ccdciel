@@ -93,10 +93,6 @@ resourcestring
   rsUseDynamic2 = 'Dynamic can be use with an absolute or relative position focuser,%s this method require the starting position is near the focus position.%s This is the preferred method.';
   rsUseVcurveWi2 = 'Vcurve can only work with an absolute position focuser, it require to learn the curve.';
   rsUseIterati2 = 'Use Iterative if the first two options do not work for you or if you start with really bad focus.%s This is the slowest and less precise method.';
-  rsShowTheOptio = 'Show the option to stack the preview frame in real time.%'
-    +'sThis feature is normally use for demonstration in public event.%sYou '
-    +'can let this option disabled to not risk an unwanted use during your '
-    +'imaging session.';
   rsTheDirection = 'The direction the focuser will always finish to move.%sIf '
     +'using auto-focus set the same move direction.';
   rsActivateBack = 'Activate backlash compensation.%sLet this disabled if your'

@@ -103,6 +103,7 @@ type
   TStep   = Class(TObject)
               public
               exposure : double;
+              stackcount: integer;
               count: integer;
               donecount: integer;
               dither: boolean;
@@ -120,6 +121,7 @@ type
               constructor Create;
               procedure Assign(Source: Tstep);
               function exposure_str: string;
+              function stackcount_str: string;
               function count_str: string;
               function filter_str: string;
               function binning_str: string;
@@ -362,7 +364,6 @@ var
   ReadoutModeCapture,ReadoutModePreview,ReadoutModeFocus,ReadoutModeAstrometry: integer;
   UseReadoutMode: boolean;
   compile_time, compile_version, compile_system, lclver: string;
-//  CurrentSequenceFile: string;
   DitherPixel, SettlePixel, DitherWaitTime: double;
   DitherRAonly: boolean;
   SettleMinTime, SettleMaxTime, CalibrationDelay: integer;
@@ -484,6 +485,7 @@ var
   AutoguiderAlertTime,AutoguiderMsgTime: double;
   MountTrackingAlert: boolean;
   MountTrackingAlertTime: double;
+  SaveStack: boolean;
 
 
   procedure globalmsg(str:string);
@@ -517,6 +519,7 @@ end;
 constructor TStep.Create;
 begin
   exposure:=1;
+  stackcount:=1;
   count:=1;
   donecount:=0;
   filter:=0;
@@ -537,6 +540,7 @@ end;
 procedure TStep.Assign(Source: Tstep);
 begin
   exposure:=Source.exposure;
+  stackcount:=Source.stackcount;
   count:=Source.count;
   donecount:=Source.donecount;
   filter:=Source.filter;
@@ -557,6 +561,11 @@ end;
 function TStep.exposure_str: string;
 begin
  Result:=FloatToStr(exposure);
+end;
+
+function TStep.stackcount_str: string;
+begin
+  Result:=IntToStr(stackcount);
 end;
 
 function TStep.count_str: string;

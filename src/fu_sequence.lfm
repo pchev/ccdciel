@@ -22,7 +22,6 @@ object f_sequence: Tf_sequence
     Color = clBtnShadow
     DragMode = dmAutomatic
     Font.Color = clBtnText
-    ParentColor = False
     ParentFont = False
     Transparent = False
   end
@@ -74,7 +73,6 @@ object f_sequence: Tf_sequence
       Caption = 'Targets'
       Color = clBtnShadow
       Font.Color = clBtnText
-      ParentColor = False
       ParentFont = False
       Transparent = False
     end
@@ -99,7 +97,6 @@ object f_sequence: Tf_sequence
       Caption = 'Current plan'
       Color = clBtnShadow
       Font.Color = clBtnText
-      ParentColor = False
       ParentFont = False
       Transparent = False
     end
@@ -156,7 +153,6 @@ object f_sequence: Tf_sequence
         Width = 212
         Align = alClient
         AutoSize = False
-        ParentColor = False
         ParentFont = False
         WordWrap = True
       end
@@ -166,7 +162,6 @@ object f_sequence: Tf_sequence
         Top = 80
         Width = 212
         Align = alBottom
-        ParentColor = False
         ParentFont = False
       end
     end

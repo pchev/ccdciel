@@ -35,6 +35,9 @@ type
 
   Tf_option = class(TForm)
     CdCPath: TEdit;
+    StackGroup: TGroupBox;
+    SaveStack: TCheckBox;
+    StackShow: TCheckBox;
     UseReadoutMode: TCheckBox;
     Page6: TPage;
     PHDpath: TEdit;
@@ -463,7 +466,6 @@ type
     Label97: TLabel;
     Label98: TLabel;
     Label99: TLabel;
-    StackShow: TCheckBox;
     GroupBox16: TGroupBox;
     GroupBox17: TGroupBox;
     Label81: TLabel;
@@ -550,7 +552,6 @@ type
     GreenBalance: TTrackBar;
     BlueBalance: TTrackBar;
     PageCamera: TTabSheet;
-    StackGroup: TGroupBox;
     VideoGroup: TGroupBox;
     Label44: TLabel;
     Label45: TLabel;
@@ -646,7 +647,6 @@ type
     astrometrynet: TGroupBox;
     Label2: TLabel;
     Label4: TLabel;
-    Logtofile: TCheckBox;
     GroupBox2: TGroupBox;
     Label1: TLabel;
     Panel1: TPanel;
@@ -697,6 +697,7 @@ type
     procedure PanelLeftMouseWheel(Sender: TObject; Shift: TShiftState; WheelDelta: Integer; MousePos: TPoint; var Handled: Boolean);
     procedure PixelSizeFromCameraChange(Sender: TObject);
     procedure PlanetariumBoxClick(Sender: TObject);
+    procedure StackShowChange(Sender: TObject);
     procedure StartCdCChange(Sender: TObject);
     procedure StartHNSKYChange(Sender: TObject);
     procedure StartSAMPChange(Sender: TObject);
@@ -864,6 +865,10 @@ begin
   AutoguiderBoxClick(nil);
   ExpEarlyStartClick(nil);
   BalanceChange(nil);
+  StartCdCChange(nil);
+  StartHNSKYChange(nil);
+  StartSAMPChange(nil);
+  StackShowChange(nil);
 end;
 
 procedure Tf_option.Setlang;
@@ -874,7 +879,6 @@ begin
   ButtonHelp.Caption:=rsHelp;
   PageFile.Caption := rsFiles;
   Label1.Caption := rsCaptureFolde;
-  Logtofile.Caption := rsLogAllMessag;
   Label99.Caption := rsTemporaryFol;
   TmpDirDefault.Caption := rsDefault;
   Label150.Caption := rsTCPIPServerP;
@@ -946,8 +950,9 @@ begin
   GroupBox10.Caption := rsBadPixelsDet;
   Label62.Caption := rsBadPixelThre;
   Label63.Caption := rsSigma;
-  StackGroup.Caption := rsPreviewStack;
-  StackShow.Caption := rsShowPreviewS;
+  StackGroup.Caption := rsShortExposur;
+  StackShow.Caption := rsShowStacking;
+  SaveStack.Caption := rsSaveIndividu;
   GroupBox19.Caption := rsClippingIndi;
   Label37.Caption := rsShadowADU;
   Label100.Caption := rsHighlightADU;
@@ -1259,7 +1264,6 @@ begin
   HorizonFile.Hint:=rsTheHorizonPr;
   ElevationMin.Hint:=rsTheMinimalOb;
   CanSetGain.Hint:=rsIfNotChecked;
-  StackShow.Hint:=Format(rsShowTheOptio, [crlf, crlf]);
   FocuserBacklashDirection.Hint:=Format(rsTheDirection, [crlf]);
   FocuserBacklashActive.Hint:=Format(rsActivateBack, [crlf]);
   AutofocusMoveDirIn.Hint:=rsThePreferedF;
@@ -1516,6 +1520,11 @@ end;
 procedure Tf_option.PlanetariumBoxClick(Sender: TObject);
 begin
   Notebook2.PageIndex:=PlanetariumBox.ItemIndex;
+end;
+
+procedure Tf_option.StackShowChange(Sender: TObject);
+begin
+  SaveStack.Enabled:=StackShow.Checked;
 end;
 
 procedure Tf_option.StartCdCChange(Sender: TObject);

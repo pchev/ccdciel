@@ -32,7 +32,7 @@ uses pu_planetariuminfo, u_global, u_utils, u_ccdconfig, pu_pascaleditor, u_anno
 
 const
   colseq=0; colname=1; colplan=2; colra=3; coldec=4; colpa=5; colstart=6; colend=7; coldark=8; colskip=9; colrepeat=10; colastrometry=11; colinplace=12; colupdcoord=13;
-  pcolseq=0; pcoldesc=1; pcoltype=2; pcolexp=3; pcolbin=4; pcolfilter=5; pcolcount=6; pcolafstart=7; pcolafevery=8; pcoldither=9; pcolgain=10; pcoloffset=11; pcolfstop=12;
+  pcolseq=0; pcoldesc=1; pcoltype=2; pcolexp=3; pcolstack=4; pcolbin=5; pcolfilter=6; pcolcount=7; pcolafstart=8; pcolafevery=9; pcoldither=10; pcolgain=11; pcoloffset=12; pcolfstop=13;
   titleadd=0; titledel=1;
   pageobject=0; pagescript=1; pageflat=2; pagenone=3;
   cbNone=0; cbStopTracking=1; cbWarm=2; cbParkScope=3; cbParkDome=4; cbScript=5; cbUnattended=6;
@@ -455,6 +455,7 @@ begin
   StepList.Columns.Items[pcoldesc-1].Title.Caption := rsDescription;
   StepList.Columns.Items[pcoltype-1].Title.Caption := rsType;
   StepList.Columns.Items[pcolexp-1].Title.Caption := rsExposure;
+  StepList.Columns.Items[pcolstack-1].Title.Caption := rsStack;
   StepList.Columns.Items[pcolbin-1].Title.Caption := rsBinning;
   StepList.Columns.Items[pcolfilter-1].Title.Caption := rsFilter;
   StepList.Columns.Items[pcolcount-1].Title.Caption := rsCount;
@@ -2421,6 +2422,7 @@ begin
   p.filter:=j;
   p.fstop:=pfile.GetValue('/Steps/Step'+inttostr(i)+'/Fstop','');
   p.exposure:=pfile.GetValue('/Steps/Step'+inttostr(i)+'/Exposure',1.0);
+  p.stackcount:=trunc(pfile.GetValue('/Steps/Step'+inttostr(i)+'/StackCount',1));
   p.count:=trunc(pfile.GetValue('/Steps/Step'+inttostr(i)+'/Count',1));
   p.dither:=pfile.GetValue('/Steps/Step'+inttostr(i)+'/Dither',false);
   p.dithercount:=trunc(pfile.GetValue('/Steps/Step'+inttostr(i)+'/DitherCount',1));
@@ -2583,6 +2585,7 @@ begin
   StepList.Cells[pcoldesc,n]:=p.description_str;
   StepList.Cells[pcoltype,n]:=trim(FrameName[ord(p.frtype)]);
   StepList.Cells[pcolexp,n]:=formatfloat(f3,p.exposure);
+  StepList.Cells[pcolstack,n]:=inttostr(p.stackcount);
   StepList.Cells[pcolbin,n]:=p.binning_str;
   if hasGainISO then begin
     if (p.gain<StepList.Columns[pcolgain-1].PickList.Count) then
@@ -2641,6 +2644,9 @@ begin
   x:=StrToFloatDef(stringReplace(StepList.Cells[pcolexp,n],',','.',[]),p.exposure);
   StepsModified:=StepsModified or (p.exposure<>x);
   p.exposure:=x;
+  j:=StrToIntDef(StepList.Cells[pcolstack,n],p.stackcount);
+  StepsModified:=StepsModified or (p.stackcount<>j);
+  p.stackcount:=j;
   str:=StepList.Cells[pcolbin,n];
   j:=pos('x',str);
   if j>0 then begin
@@ -2754,6 +2760,7 @@ begin
     pcoldesc    : HintText:=rsADescription;
     pcoltype    : HintText:=rsTheTypeOfFra;
     pcolexp     : HintText:=rsExposureTime;
+    pcolstack   : HintText:=rsStackingCoun ;
     pcolbin     : HintText:=rsPixelBinning;
     pcolfilter  : HintText:=rsFilterName;
     pcolcount   : HintText:=rsTheNumberOfI4;
@@ -2897,6 +2904,7 @@ try
     pfile.SetValue('/Steps/Step'+inttostr(i)+'/Description',p.description);
     pfile.SetValue('/Steps/Step'+inttostr(i)+'/FrameType',trim(FrameName[ord(p.frtype)]));
     pfile.SetValue('/Steps/Step'+inttostr(i)+'/Exposure',p.exposure);
+    pfile.SetValue('/Steps/Step'+inttostr(i)+'/StackCount',p.stackcount);
     pfile.SetValue('/Steps/Step'+inttostr(i)+'/Binning',IntToStr(p.binx)+'x'+IntToStr(p.biny));
     pfile.SetValue('/Steps/Step'+inttostr(i)+'/Gain',p.gain);
     pfile.SetValue('/Steps/Step'+inttostr(i)+'/Offset',p.offset);

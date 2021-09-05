@@ -460,7 +460,6 @@ resourcestring
   rsOK = 'OK';
   rsFiles = 'Files';
   rsCaptureFolde = 'Capture folder';
-  rsLogAllMessag = 'Log all messages to file ';
   rsTemporaryFol = 'Temporary folder';
   rsDefault = 'Default';
   rsFileNameOpti = 'File name options';
@@ -483,8 +482,6 @@ resourcestring
   rsBadPixelsDet = 'Bad pixels detection';
   rsBadPixelThre = 'Bad pixel threshold';
   rsSigma = 'sigma';
-  rsPreviewStack = 'Preview stacking';
-  rsShowPreviewS = 'Show preview stack option';
   rsClippingIndi = 'Clipping indicator';
   rsShadowADU = 'Shadow ADU';
   rsHighlightADU = 'Highlight ADU';
@@ -675,7 +672,6 @@ resourcestring
   rsFileNotFound = 'File not found %s';
   rsClose = 'Close';
   rsFITSHeader = 'FITS header';
-  rsLogFilesAreS = 'Log files are saved in %s';
   rsFocuserCalib3 = 'Focuser calibration started, please wait...';
   rsFocuserCalib4 = 'Focuser calibration completed, click Next to see the '
     +'result.';
@@ -1338,6 +1334,8 @@ resourcestring
   rsSplitTheImag = 'Split the image in 9 panel to better show the aberration in each corner. %s You can change the zoom level and the margin offset from the image edge.';
   rsMarginOffset = 'Margin offset';
   rsUseSpecificR = 'Use specific Readout mode for different actions';
+  rsShortExposur = 'Short exposure stacking';
+  rsShowStacking = 'Show stacking option for Preview/Capture/Sequence';
 
 implementation
 

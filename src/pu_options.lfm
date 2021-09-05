@@ -66,7 +66,7 @@ object f_option: Tf_option
     Top = 0
     Width = 689
     HorzScrollBar.Page = 679
-    VertScrollBar.Page = 533
+    VertScrollBar.Page = 544
     Align = alClient
     BorderStyle = bsNone
     ClientHeight = 554
@@ -92,12 +92,12 @@ object f_option: Tf_option
       Height = 554
       Top = 0
       Width = 539
-      ActivePage = PagePref
+      ActivePage = PageCamera
       Align = alClient
       MultiLine = True
       ParentFont = False
       ShowTabs = False
-      TabIndex = 0
+      TabIndex = 3
       TabOrder = 1
       OnChanging = PageControl1Changing
       Options = [nboMultiLine]
@@ -166,49 +166,40 @@ object f_option: Tf_option
         end
         object Panel10: TPanel
           Left = 0
-          Height = 120
+          Height = 80
           Top = 136
           Width = 529
           Align = alTop
-          ClientHeight = 120
+          ClientHeight = 80
           ClientWidth = 529
           ParentFont = False
           TabOrder = 1
-          object Logtofile: TCheckBox
-            Left = 8
-            Height = 21
-            Top = 16
-            Width = 168
-            Caption = 'Log all messages to file '
-            ParentFont = False
-            TabOrder = 0
-          end
           object Debug_msg: TCheckBox
             Left = 8
             Height = 21
-            Top = 48
+            Top = 16
             Width = 140
             Caption = 'Verbose device log'
             ParentFont = False
-            TabOrder = 1
+            TabOrder = 0
           end
           object CbShowHints: TCheckBox
             Left = 8
             Height = 21
-            Top = 80
+            Top = 48
             Width = 90
             Caption = 'Show hints'
             ParentFont = False
-            TabOrder = 2
+            TabOrder = 1
           end
         end
         object Panel11: TPanel
           Left = 0
-          Height = 194
-          Top = 356
+          Height = 234
+          Top = 316
           Width = 529
           Align = alClient
-          ClientHeight = 194
+          ClientHeight = 234
           ClientWidth = 529
           ParentFont = False
           TabOrder = 2
@@ -260,7 +251,7 @@ object f_option: Tf_option
         object Panel25: TPanel
           Left = 0
           Height = 50
-          Top = 256
+          Top = 216
           Width = 529
           Align = alTop
           ClientHeight = 50
@@ -298,7 +289,7 @@ object f_option: Tf_option
         object Panel26: TPanel
           Left = 0
           Height = 50
-          Top = 306
+          Top = 266
           Width = 529
           Align = alTop
           ClientHeight = 50
@@ -355,7 +346,7 @@ object f_option: Tf_option
           TabOrder = 0
           object FileOpt: TTabSheet
             Caption = 'File name options'
-            ClientHeight = 334
+            ClientHeight = 337
             ClientWidth = 519
             ParentFont = False
             object BtnFileDefault: TButton
@@ -475,7 +466,7 @@ object f_option: Tf_option
           end
           object FolderOpt: TTabSheet
             Caption = 'Folder name options'
-            ClientHeight = 334
+            ClientHeight = 337
             ClientWidth = 519
             ParentFont = False
             object BtnFolderDefault: TButton
@@ -1061,12 +1052,12 @@ object f_option: Tf_option
           TabOrder = 0
           object GroupBox14: TGroupBox
             Left = 0
-            Height = 91
+            Height = 83
             Top = 83
             Width = 527
-            Align = alClient
+            Align = alTop
             Caption = 'Automatic cooling '
-            ClientHeight = 71
+            ClientHeight = 63
             ClientWidth = 525
             ParentFont = False
             TabOrder = 0
@@ -1156,12 +1147,12 @@ object f_option: Tf_option
         end
         object GroupBox20: TGroupBox
           Left = 0
-          Height = 96
-          Top = 264
+          Height = 84
+          Top = 194
           Width = 529
           Align = alTop
           Caption = 'Sensors properties'
-          ClientHeight = 76
+          ClientHeight = 64
           ClientWidth = 527
           ParentFont = False
           TabOrder = 1
@@ -1233,12 +1224,12 @@ object f_option: Tf_option
         end
         object GroupBoxReadOut: TGroupBox
           Left = 0
-          Height = 190
-          Top = 360
+          Height = 128
+          Top = 422
           Width = 529
           Align = alClient
           Caption = 'Readout modes'
-          ClientHeight = 170
+          ClientHeight = 108
           ClientWidth = 527
           ParentFont = False
           TabOrder = 2
@@ -1247,15 +1238,15 @@ object f_option: Tf_option
             AnchorSideTop.Side = asrCenter
             Left = 16
             Height = 19
-            Top = 45
+            Top = 39
             Width = 49
             Caption = 'Capture'
             ParentFont = False
           end
           object ReadOutCapture: TComboBox
-            Left = 105
+            Left = 104
             Height = 28
-            Top = 40
+            Top = 34
             Width = 121
             Constraints.MaxHeight = 28
             ItemHeight = 0
@@ -1268,7 +1259,7 @@ object f_option: Tf_option
             AnchorSideTop.Side = asrCenter
             Left = 339
             Height = 28
-            Top = 40
+            Top = 34
             Width = 121
             Constraints.MaxHeight = 28
             ItemHeight = 0
@@ -1281,7 +1272,7 @@ object f_option: Tf_option
             AnchorSideTop.Side = asrCenter
             Left = 242
             Height = 19
-            Top = 45
+            Top = 39
             Width = 47
             Caption = 'Preview'
             ParentFont = False
@@ -1289,7 +1280,7 @@ object f_option: Tf_option
           object ReadOutFocus: TComboBox
             Left = 105
             Height = 28
-            Top = 76
+            Top = 70
             Width = 121
             Constraints.MaxHeight = 28
             ItemHeight = 0
@@ -1302,7 +1293,7 @@ object f_option: Tf_option
             AnchorSideTop.Side = asrCenter
             Left = 16
             Height = 19
-            Top = 81
+            Top = 75
             Width = 35
             Caption = 'Focus'
             ParentFont = False
@@ -1312,7 +1303,7 @@ object f_option: Tf_option
             AnchorSideTop.Side = asrCenter
             Left = 339
             Height = 28
-            Top = 76
+            Top = 70
             Width = 121
             Constraints.MaxHeight = 28
             ItemHeight = 0
@@ -1325,7 +1316,7 @@ object f_option: Tf_option
             AnchorSideTop.Side = asrCenter
             Left = 242
             Height = 19
-            Top = 81
+            Top = 75
             Width = 71
             Caption = 'Astrometry'
             ParentFont = False
@@ -1340,14 +1331,49 @@ object f_option: Tf_option
             TabOrder = 4
           end
         end
+        object StackGroup: TGroupBox
+          Left = 0
+          Height = 88
+          Top = 334
+          Width = 529
+          Align = alTop
+          Caption = 'Short exposure stacking'
+          ClientHeight = 68
+          ClientWidth = 527
+          ParentFont = False
+          TabOrder = 4
+          object StackShow: TCheckBox
+            Left = 16
+            Height = 21
+            Hint = 'Show the option to stack the preview frame in real time.'#10'This feature is normally use for demonstration in public event. '#10'You can let this option disabled to not risk  an unwanted use during your imaging session.'
+            Top = 8
+            Width = 345
+            Caption = 'Show stacking option for Preview/Capture/Sequence'
+            OnChange = StackShowChange
+            ParentFont = False
+            TabOrder = 0
+          end
+          object SaveStack: TCheckBox
+            AnchorSideLeft.Side = asrBottom
+            Left = 16
+            Height = 21
+            Top = 40
+            Width = 259
+            BorderSpacing.Left = 4
+            BorderSpacing.Right = 4
+            Caption = 'Save individual images before stacking'
+            ParentBidiMode = False
+            TabOrder = 1
+          end
+        end
         object GroupBox31: TGroupBox
           Left = 0
-          Height = 70
-          Top = 194
+          Height = 56
+          Top = 278
           Width = 529
           Align = alTop
           Caption = 'Gain / Offset'
-          ClientHeight = 50
+          ClientHeight = 36
           ClientWidth = 527
           TabOrder = 3
           object CanSetGain: TCheckBox
@@ -1527,12 +1553,12 @@ object f_option: Tf_option
         end
         object VideoGroup: TGroupBox
           Left = 0
-          Height = 133
-          Top = 417
+          Height = 198
+          Top = 352
           Width = 529
           Align = alClient
           Caption = 'Video'
-          ClientHeight = 113
+          ClientHeight = 178
           ClientWidth = 527
           ParentFont = False
           TabOrder = 2
@@ -1605,28 +1631,6 @@ object f_option: Tf_option
             Value = 1
           end
         end
-        object StackGroup: TGroupBox
-          Left = 0
-          Height = 65
-          Top = 352
-          Width = 529
-          Align = alTop
-          Caption = 'Preview stacking'
-          ClientHeight = 45
-          ClientWidth = 527
-          ParentFont = False
-          TabOrder = 4
-          object StackShow: TCheckBox
-            Left = 16
-            Height = 21
-            Hint = 'Show the option to stack the preview frame in real time.'#10'This feature is normally use for demonstration in public event. '#10'You can let this option disabled to not risk  an unwanted use during your imaging session.'
-            Top = 8
-            Width = 184
-            Caption = 'Show preview stack option'
-            ParentFont = False
-            TabOrder = 0
-          end
-        end
         object GroupBox19: TGroupBox
           Left = 0
           Height = 57
@@ -1637,7 +1641,7 @@ object f_option: Tf_option
           ClientHeight = 37
           ClientWidth = 527
           ParentFont = False
-          TabOrder = 5
+          TabOrder = 4
           object Label37: TLabel
             AnchorSideTop.Control = ClippingHigh
             AnchorSideTop.Side = asrCenter
@@ -6317,23 +6321,23 @@ object f_option: Tf_option
           TabOrder = 0
           object TabSheetEmail: TTabSheet
             Caption = 'Email'
-            ClientHeight = 519
+            ClientHeight = 546
             ClientWidth = 519
             ParentFont = False
             object GroupBox25: TGroupBox
               Left = 0
-              Height = 235
+              Height = 262
               Top = 284
               Width = 519
               Align = alClient
               Caption = 'Email on :'
-              ClientHeight = 215
+              ClientHeight = 242
               ClientWidth = 517
               ParentFont = False
               TabOrder = 0
               object EmailCondition: TCheckListBox
                 Left = 0
-                Height = 174
+                Height = 201
                 Top = 0
                 Width = 517
                 Align = alClient
@@ -6345,9 +6349,10 @@ object f_option: Tf_option
                   'Meridian flip error'
                   'Target initialisation'
                 )
-                ItemHeight = 23
+                ItemHeight = 0
                 ParentFont = False
                 TabOrder = 0
+                TopIndex = -1
                 Data = {
                   06000000000000000000
                 }
@@ -6355,7 +6360,7 @@ object f_option: Tf_option
               object Panel6: TPanel
                 Left = 0
                 Height = 41
-                Top = 174
+                Top = 201
                 Width = 517
                 Align = alBottom
                 ClientHeight = 41
@@ -6556,7 +6561,7 @@ object f_option: Tf_option
           end
           object TabSheetVoice: TTabSheet
             Caption = 'Voice'
-            ClientHeight = 519
+            ClientHeight = 546
             ClientWidth = 519
             ParentFont = False
             object CheckGroupVoice: TCheckGroup

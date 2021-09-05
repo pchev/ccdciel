@@ -1301,11 +1301,12 @@ begin
   ImgPixRatio:=1;
   Undersampled:=false;
   ZoomMin:=1;
-  LogLevel:=2;
-  LogToFile:=false;
+  LogLevel:=3;
+  LogToFile:=true;
   SplitImage:=false;
   SplitMargin:=0;
   SplitZoom:=1;
+  SaveStack:=false;
   AllMsg:=TStringList.Create;
   AllMsg.OwnsObjects:=true;
   refmask:=false;
@@ -1434,6 +1435,10 @@ begin
   f_msg:=Tf_msg.Create(self);
   f_msg.onShowTabs:=@ShowMsgTabs;
   f_msg.onOpenLog:=@MenuShowLogClick;
+
+  NewMessage('CCDciel '+ccdciel_version+' Copyright (C) '+cdate+' Patrick Chevalley. This is free software, you can redistribute it under certain conditions.');
+  NewMessage('This program comes with ABSOLUTELY NO WARRANTY; for details see '+rsHelp+'/'+rsAbout);
+  NewMessage(Format(rsUsingConfigu, [config.Filename]), 3);
 
   fits:=TFits.Create(self);
   fits.onMsg:=@NewMessage;
@@ -2146,6 +2151,7 @@ begin
 
   LogLevel:=config.GetValue('/Log/LogLevel',LogLevel);
   TabMsgLevel.TabIndex:=LogLevel-1;
+  TabMsgLevelChange(nil);
 
   ImaBmp:=TBGRABitmap.Create(1,1);
   LockTimerPlot:=false;
@@ -2188,10 +2194,6 @@ begin
    NewMessage(IndiVersion,9);
    {$endif}
   {$endif}
-
-  NewMessage('CCDciel '+ccdciel_version+' Copyright (C) '+cdate+' Patrick Chevalley. This is free software, you can redistribute it under certain conditions.');
-  NewMessage('This program comes with ABSOLUTELY NO WARRANTY; for details see '+rsHelp+'/'+rsAbout);
-  NewMessage(Format(rsUsingConfigu, [config.Filename]), 3);
 
   if (cdcwcs_initfitsfile=nil)or(cdcwcs_release=nil)or(cdcwcs_sky2xy=nil)or(cdcwcs_xy2sky=nil)or(cdcwcs_getinfo=nil) then begin
      NewMessage('Could not load '+libwcs+crlf+'Some astrometry function are not available.',1);
@@ -3382,6 +3384,7 @@ begin
     if bpmAxis>2 then MenuBPMInfo2.Caption:=rsFromColorIma
        else MenuBPMInfo2.Caption:=rsFromImage;
     MenuBPMInfo2.Caption:=MenuBPMInfo2.Caption+' '+rsSize+': '+inttostr(bpmX)+'x'+inttostr(bpmY);
+    NewMessage(MenuBPMInfo1.Caption+blank+MenuBPMInfo2.Caption,3);
   end;
 end;
 
@@ -3466,6 +3469,7 @@ begin
        else MenuDarkInfo2.Caption:=rsFromImage;
     MenuDarkInfo2.Caption:=MenuDarkInfo2.Caption+' '+rsSize+': '+inttostr(fits.DarkFrame.HeaderInfo.naxis1)+'x'+inttostr(fits.DarkFrame.HeaderInfo.naxis2);
     MenuDarkInfo2.Caption:=MenuDarkInfo2.Caption+', '+rsExposureTime2+': '+FormatFloat(f3,fits.DarkFrame.HeaderInfo.exptime);
+    NewMessage(MenuDarkInfo1.Caption+blank+MenuDarkInfo2.Caption,3);
   end
   else begin
    MenuDarkInfo1.Caption:=rsNoDark;
@@ -3691,7 +3695,9 @@ begin
   refcolor:=config.GetValue('/RefImage/Color',0);
   BPMsigma:=config.GetValue('/BadPixel/Sigma',5.0);
   f_preview.PanelStack.Visible:=config.GetValue('/PreviewStack/StackShow',false);
-  f_capture.PanelStack.Visible:=f_preview.StackPreview.Visible;
+  f_capture.PanelStack.Visible:=f_preview.PanelStack.Visible;
+  f_EditTargets.StepList.Columns[pcolstack-1].Visible:=f_preview.PanelStack.Visible;
+  SaveStack:=config.GetValue('/PreviewStack/SaveStack',false);
   MaxVideoPreviewRate:=config.GetValue('/Video/PreviewRate',5);
   i:=TemperatureScale;
   TemperatureScale:=config.GetValue('/Cooler/TemperatureScale',0);
@@ -3794,12 +3800,6 @@ begin
 
   MagnitudeCalibration:=config.GetValue('/StarAnalysis/MagnitudeCalibration',MagnitudeCalibration);
 
-  LogToFile:=config.GetValue('/Log/Messages',true);
-  if LogToFile<>LogFileOpen then CloseLog;
-  if LogToFile then begin
-    WriteLog('');
-    WriteDeviceLog('');
-  end;
   debug_msg:=config.GetValue('/Log/debug_msg',false);
   DitherPixel:=config.GetValue('/Autoguider/Dither/Pixel',1.0);
   DitherRAonly:=config.GetValue('/Autoguider/Dither/RAonly',true);
@@ -7124,8 +7124,10 @@ begin
       else begin
         fits.FreeDark;
       end;
+      LoadBPM;
     end;
     ShowDarkInfo;
+
     config.SetValue('/Devices/Timeout',f_setup.IndiTimeout.Text);
 
     config.SetValue('/Devices/Camera',true);
@@ -7409,8 +7411,6 @@ begin
    else if buf='jpg' then f_option.SaveBitmapFormat.ItemIndex:=2
    else if buf='bmp' then f_option.SaveBitmapFormat.ItemIndex:=3
    else f_option.SaveBitmapFormat.ItemIndex:=0;
-   f_option.Logtofile.Checked:=config.GetValue('/Log/Messages',true);
-   f_option.Logtofile.Hint:=Format(rsLogFilesAreS, [ExtractFilePath(LogFile)]);
    f_option.debug_msg.Checked:=config.GetValue('/Log/debug_msg',debug_msg);
    f_option.LoadObservatoryDB(config.GetValue('/Info/ObservatoryName',''));
    f_option.ObservatoryName.Text:=config.GetValue('/Info/ObservatoryName','');
@@ -7433,6 +7433,7 @@ begin
    f_option.ClippingLow.Value:=config.GetValue('/Color/ClippingUnderflow',0);
    f_option.BPMsigma.Value:=config.GetValue('/BadPixel/Sigma',5.0);
    f_option.StackShow.Checked:=config.GetValue('/PreviewStack/StackShow',false);
+   f_option.SaveStack.checked:=config.GetValue('/PreviewStack/SaveStack',false);
    f_option.VideoPreviewRate.Value:=config.GetValue('/Video/PreviewRate',5);
    f_option.VideoGroup.Visible:=(camera.CameraInterface=INDI);
    f_option.RefTreshold.Position:=config.GetValue('/RefImage/Treshold',128);
@@ -7840,7 +7841,6 @@ begin
      config.SetValue('/StarAnalysis/AutofocusDynamicMovement',f_option.AutofocusDynamicMovement.Value);
      config.SetValue('/StarAnalysis/AutofocusPlanetNumPoint',f_option.AutofocusPlanetNumPoint.Value);
      config.SetValue('/StarAnalysis/AutofocusPlanetMovement',f_option.AutofocusPlanetMovement.Value);
-     config.SetValue('/Log/Messages',f_option.Logtofile.Checked);
      config.SetValue('/Log/debug_msg',f_option.debug_msg.Checked);
      config.SetValue('/Files/SaveBitmap',f_option.SaveBitmap.Checked);
      case f_option.SaveBitmapFormat.ItemIndex of
@@ -7872,6 +7872,7 @@ begin
      config.SetValue('/Color/ClippingUnderflow',f_option.ClippingLow.Value);
      config.SetValue('/BadPixel/Sigma',f_option.BPMsigma.Value);
      config.SetValue('/PreviewStack/StackShow',f_option.StackShow.Checked);
+     config.SetValue('/PreviewStack/SaveStack',f_option.SaveStack.checked);
      config.SetValue('/Video/PreviewRate',f_option.VideoPreviewRate.Value);
      config.SetValue('/RefImage/Treshold',f_option.RefTreshold.Position);
      config.SetValue('/RefImage/Color',f_option.RefColor.ItemIndex);
@@ -8494,7 +8495,7 @@ if (camera.Status=devConnected) and ((not f_capture.Running) or autofocusing) an
   camera.StackNum:=-1; //unlimited
   camera.AddFrames:=f_preview.StackPreview.Checked;
   if camera.AddFrames then begin
-     camera.SaveFrames:=f_preview.StackSave.Checked;
+     camera.SaveFrames:=SaveStack;
      fits.SetBPM(bpm,0,0,0,0);  // bpm used during addition
   end
   else begin
@@ -8964,7 +8965,7 @@ if (AllDevicesConnected)and(not autofocusing)and (not learningvcurve) then begin
   f_preview.StackPreview.Checked:=false;
   camera.AddFrames:=f_capture.PanelStack.Visible and (f_capture.StackNum.Value>1);
   if camera.AddFrames then begin
-    camera.SaveFrames:=false;
+    camera.SaveFrames:=SaveStack;
     camera.StackNum:=f_capture.StackNum.Value;
   end else begin
     camera.StackNum:=1;
