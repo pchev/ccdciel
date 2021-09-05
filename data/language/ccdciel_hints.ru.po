@@ -6,15 +6,15 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ccdciel\n"
 "Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
-"POT-Creation-Date: 2021-09-03 07:30+0000\n"
+"POT-Creation-Date: 2021-09-05 14:18+0000\n"
 "PO-Revision-Date: 2020-12-06 08:19+0000\n"
 "Last-Translator: Sergey Tarantsov <tsn-ast@yandex.ru>\n"
 "Language-Team: Russian <ru@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2021-09-03 07:36+0000\n"
-"X-Generator: Launchpad (build 9129de2d4260ee33e0eb60e0cee9608e07e89e19)\n"
+"X-Launchpad-Export-Date: 2021-09-05 14:24+0000\n"
+"X-Generator: Launchpad (build e03bf5183af335943ccf1ef70ad0534f46a635c6)\n"
 
 #: u_hints.rsactivateback
 #, object-pascal-format
@@ -338,11 +338,6 @@ msgstr "Клиппинг теней и светов"
 #: u_hints.rsshowlastcapt
 msgid "Show captured image"
 msgstr "Показать захваченное изображение"
-
-#: u_hints.rsshowtheoptio
-#, object-pascal-format
-msgid "Show the option to stack the preview frame in real time.%sThis feature is normally use for demonstration in public event.%sYou can let this option disabled to not risk an unwanted use during your imaging session."
-msgstr "Показать кнопку сложения превью-кадров в режиме реального времени.%sЭту функцию часто используют для демонстрации объектов на публичных мероприятиях.%sМожно отключить эту опцию для предотвращения нежелательного использования вычислительных ресурсов во время основной съёмки."
 
 #: u_hints.rsstacktheprev
 #, object-pascal-format

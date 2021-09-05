@@ -6,15 +6,15 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ccdciel\n"
 "Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
-"POT-Creation-Date: 2021-09-03 07:30+0000\n"
+"POT-Creation-Date: 2021-09-05 14:18+0000\n"
 "PO-Revision-Date: 2021-08-31 20:36+0000\n"
 "Last-Translator: Patrick Chevalley <Unknown>\n"
 "Language-Team: Spanish <es@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2021-09-03 07:36+0000\n"
-"X-Generator: Launchpad (build 9129de2d4260ee33e0eb60e0cee9608e07e89e19)\n"
+"X-Launchpad-Export-Date: 2021-09-05 14:24+0000\n"
+"X-Generator: Launchpad (build e03bf5183af335943ccf1ef70ad0534f46a635c6)\n"
 
 #: u_translation.rs2d
 msgid "2D"
@@ -2142,15 +2142,6 @@ msgstr "Cargar archivo toma oscura"
 msgid "Lock overlay"
 msgstr "Fijar superposición"
 
-#: u_translation.rslogallmessag
-msgid "Log all messages to file "
-msgstr "Registrar todos los mensajes al archivo "
-
-#: u_translation.rslogfilesares
-#, object-pascal-format
-msgid "Log files are saved in %s"
-msgstr "Los archivos de los registros se guardan en %s"
-
 #: u_translation.rslongitude
 msgid "Longitude"
 msgstr "Longitud"
@@ -3112,10 +3103,6 @@ msgstr "Vista previa"
 msgid "Preview debayer"
 msgstr "Previsualizar debayerizado"
 
-#: u_translation.rspreviewstack
-msgid "Preview stacking"
-msgstr "Previsualizar apilado"
-
 #: u_translation.rsprofile
 #, object-pascal-format
 msgid "Profile: %s"
@@ -3866,6 +3853,10 @@ msgstr ""
 msgid "Sharpness"
 msgstr "Nitidez"
 
+#: u_translation.rsshortexposur
+msgid "Short exposure stacking"
+msgstr ""
+
 #: u_translation.rsshowcurrentl
 msgid "Show current log"
 msgstr "Mostrar registros actuales"
@@ -3878,13 +3869,13 @@ msgstr "Mostrar sugerencias"
 msgid "Show INDI log"
 msgstr "Mostrar registros de INDI"
 
-#: u_translation.rsshowpreviews
-msgid "Show preview stack option"
-msgstr "Mostrar opción previsualización apilado"
-
 #: u_translation.rsshowprompt
 msgid "Show prompt"
 msgstr "Mostrar diálogo"
+
+#: u_translation.rsshowstacking
+msgid "Show stacking option for Preview/Capture/Sequence"
+msgstr ""
 
 #: u_translation.rssigma
 msgid "sigma"

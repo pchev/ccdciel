@@ -92,12 +92,12 @@ object f_option: Tf_option
       Height = 554
       Top = 0
       Width = 539
-      ActivePage = PageCamera
+      ActivePage = PagePref
       Align = alClient
       MultiLine = True
       ParentFont = False
       ShowTabs = False
-      TabIndex = 3
+      TabIndex = 0
       TabOrder = 1
       OnChanging = PageControl1Changing
       Options = [nboMultiLine]
@@ -346,7 +346,7 @@ object f_option: Tf_option
           TabOrder = 0
           object FileOpt: TTabSheet
             Caption = 'File name options'
-            ClientHeight = 337
+            ClientHeight = 334
             ClientWidth = 519
             ParentFont = False
             object BtnFileDefault: TButton
@@ -466,7 +466,7 @@ object f_option: Tf_option
           end
           object FolderOpt: TTabSheet
             Caption = 'Folder name options'
-            ClientHeight = 337
+            ClientHeight = 334
             ClientWidth = 519
             ParentFont = False
             object BtnFolderDefault: TButton
@@ -1345,7 +1345,6 @@ object f_option: Tf_option
           object StackShow: TCheckBox
             Left = 16
             Height = 21
-            Hint = 'Show the option to stack the preview frame in real time.'#10'This feature is normally use for demonstration in public event. '#10'You can let this option disabled to not risk  an unwanted use during your imaging session.'
             Top = 8
             Width = 345
             Caption = 'Show stacking option for Preview/Capture/Sequence'

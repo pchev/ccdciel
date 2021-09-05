@@ -1578,10 +1578,6 @@ msgstr ""
 msgid "Capture folder"
 msgstr ""
 
-#: u_translation:rslogallmessag
-msgid "Log all messages to file "
-msgstr ""
-
 #: u_translation:rstemporaryfol
 msgid "Temporary folder"
 msgstr ""
@@ -1668,14 +1664,6 @@ msgstr ""
 
 #: u_translation:rssigma
 msgid "sigma"
-msgstr ""
-
-#: u_translation:rspreviewstack
-msgid "Preview stacking"
-msgstr ""
-
-#: u_translation:rsshowpreviews
-msgid "Show preview stack option"
 msgstr ""
 
 #: u_translation:rsclippingindi
@@ -2420,10 +2408,6 @@ msgstr ""
 
 #: u_translation:rsfitsheader
 msgid "FITS header"
-msgstr ""
-
-#: u_translation:rslogfilesares
-msgid "Log files are saved in %s"
 msgstr ""
 
 #: u_translation:rsfocusercalib3
@@ -4936,5 +4920,13 @@ msgstr ""
 
 #: u_translation:rsusespecificr
 msgid "Use specific Readout mode for different actions"
+msgstr ""
+
+#: u_translation:rsshortexposur
+msgid "Short exposure stacking"
+msgstr ""
+
+#: u_translation:rsshowstacking
+msgid "Show stacking option for Preview/Capture/Sequence"
 msgstr ""
 

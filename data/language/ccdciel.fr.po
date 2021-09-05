@@ -6,15 +6,15 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ccdciel\n"
 "Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
-"POT-Creation-Date: 2021-09-03 07:30+0000\n"
-"PO-Revision-Date: 2021-09-03 07:32+0000\n"
+"POT-Creation-Date: 2021-09-05 14:18+0000\n"
+"PO-Revision-Date: 2021-09-05 14:22+0000\n"
 "Last-Translator: Patrick Chevalley <Unknown>\n"
 "Language-Team: French <fr@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2021-09-03 07:36+0000\n"
-"X-Generator: Launchpad (build 9129de2d4260ee33e0eb60e0cee9608e07e89e19)\n"
+"X-Launchpad-Export-Date: 2021-09-05 14:24+0000\n"
+"X-Generator: Launchpad (build e03bf5183af335943ccf1ef70ad0534f46a635c6)\n"
 
 #: u_translation.rs2d
 msgid "2D"
@@ -2142,15 +2142,6 @@ msgstr "Charger un fichier d'image noire"
 msgid "Lock overlay"
 msgstr "Verrouille la ligne"
 
-#: u_translation.rslogallmessag
-msgid "Log all messages to file "
-msgstr "Enregistrer tous les messages dans un fichier "
-
-#: u_translation.rslogfilesares
-#, object-pascal-format
-msgid "Log files are saved in %s"
-msgstr "Les messages sont enregistré dans %s"
-
 #: u_translation.rslongitude
 msgid "Longitude"
 msgstr "Longitude"
@@ -3112,10 +3103,6 @@ msgstr "Prévisualisation"
 msgid "Preview debayer"
 msgstr "Débayeriser la prévisualisation"
 
-#: u_translation.rspreviewstack
-msgid "Preview stacking"
-msgstr "Empilement de l'aperçu"
-
 #: u_translation.rsprofile
 #, object-pascal-format
 msgid "Profile: %s"
@@ -3866,6 +3853,10 @@ msgstr "ADU des ombres"
 msgid "Sharpness"
 msgstr "Netteté"
 
+#: u_translation.rsshortexposur
+msgid "Short exposure stacking"
+msgstr "Empilement de pose courte"
+
 #: u_translation.rsshowcurrentl
 msgid "Show current log"
 msgstr "Afficher le journal courant"
@@ -3878,13 +3869,13 @@ msgstr "Afficher les indications"
 msgid "Show INDI log"
 msgstr "Afficher le journal des messages INDI"
 
-#: u_translation.rsshowpreviews
-msgid "Show preview stack option"
-msgstr "Voir l'option d’empilement"
-
 #: u_translation.rsshowprompt
 msgid "Show prompt"
 msgstr "Demande de confirmation"
+
+#: u_translation.rsshowstacking
+msgid "Show stacking option for Preview/Capture/Sequence"
+msgstr "Affiche l'option d'empilement pour Prévisualisation/Acquisition/Séquence"
 
 #: u_translation.rssigma
 msgid "sigma"
