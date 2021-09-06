@@ -1307,6 +1307,7 @@ begin
   SplitMargin:=0;
   SplitZoom:=1;
   SaveStack:=false;
+  StackAlign:=true;
   AllMsg:=TStringList.Create;
   AllMsg.OwnsObjects:=true;
   refmask:=false;
@@ -3698,6 +3699,7 @@ begin
   f_capture.PanelStack.Visible:=f_preview.PanelStack.Visible;
   f_EditTargets.StepList.Columns[pcolstack-1].Visible:=f_preview.PanelStack.Visible;
   SaveStack:=config.GetValue('/PreviewStack/SaveStack',false);
+  StackAlign:=config.GetValue('/PreviewStack/StackAlign',true);
   MaxVideoPreviewRate:=config.GetValue('/Video/PreviewRate',5);
   i:=TemperatureScale;
   TemperatureScale:=config.GetValue('/Cooler/TemperatureScale',0);
@@ -7434,6 +7436,7 @@ begin
    f_option.BPMsigma.Value:=config.GetValue('/BadPixel/Sigma',5.0);
    f_option.StackShow.Checked:=config.GetValue('/PreviewStack/StackShow',false);
    f_option.SaveStack.checked:=config.GetValue('/PreviewStack/SaveStack',false);
+   f_option.StackAlign.Checked:=config.GetValue('/PreviewStack/StackAlign',true);
    f_option.VideoPreviewRate.Value:=config.GetValue('/Video/PreviewRate',5);
    f_option.VideoGroup.Visible:=(camera.CameraInterface=INDI);
    f_option.RefTreshold.Position:=config.GetValue('/RefImage/Treshold',128);
@@ -7873,6 +7876,7 @@ begin
      config.SetValue('/BadPixel/Sigma',f_option.BPMsigma.Value);
      config.SetValue('/PreviewStack/StackShow',f_option.StackShow.Checked);
      config.SetValue('/PreviewStack/SaveStack',f_option.SaveStack.checked);
+     config.SetValue('/PreviewStack/StackAlign',f_option.StackAlign.Checked);
      config.SetValue('/Video/PreviewRate',f_option.VideoPreviewRate.Value);
      config.SetValue('/RefImage/Treshold',f_option.RefTreshold.Position);
      config.SetValue('/RefImage/Color',f_option.RefColor.ItemIndex);
@@ -8496,10 +8500,12 @@ if (camera.Status=devConnected) and ((not f_capture.Running) or autofocusing) an
   camera.AddFrames:=f_preview.StackPreview.Checked;
   if camera.AddFrames then begin
      camera.SaveFrames:=SaveStack;
+     camera.AlignFrames:=StackAlign;
      fits.SetBPM(bpm,0,0,0,0);  // bpm used during addition
   end
   else begin
      camera.SaveFrames:=false;
+     camera.AlignFrames:=false;
      fits.SetBPM(bpm,bpmNum,bpmX,bpmY,bpmAxis);
   end;
   camera.StartExposure(e);
@@ -8966,10 +8972,12 @@ if (AllDevicesConnected)and(not autofocusing)and (not learningvcurve) then begin
   camera.AddFrames:=f_capture.PanelStack.Visible and (f_capture.StackNum.Value>1);
   if camera.AddFrames then begin
     camera.SaveFrames:=SaveStack;
+    camera.AlignFrames:=StackAlign;
     camera.StackNum:=f_capture.StackNum.Value;
   end else begin
     camera.StackNum:=1;
     camera.SaveFrames:=false;
+    camera.AlignFrames:=false;
   end;
   // show message
   cc:=f_capture.SeqCount;

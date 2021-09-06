@@ -78,7 +78,7 @@ T_camera = class(TComponent)
     FhasVideo: boolean;
     FVerticalFlip: boolean;
     FASCOMFlipImage: boolean;
-    FAddFrames,FSaveFrames: boolean;
+    FAddFrames,FSaveFrames,FAlignFrames: boolean;
     FVideoSizes, FVideoRates,FFNumberList,FVideoEncoder:TStringList;
     FTemperatureRampActive, FCancelTemperatureRamp: boolean;
     FIndiTransfert: TIndiTransfert;
@@ -215,6 +215,7 @@ T_camera = class(TComponent)
     property ImageFormat: string read GetImageFormat;
     property AddFrames: boolean read FAddFrames write FAddFrames;
     property SaveFrames: boolean read FSaveFrames write FSaveFrames;
+    property AlignFrames: boolean read FAlignFrames write FAlignFrames;
     property VerticalFlip: boolean read FVerticalFlip;
     property ASCOMFlipImage: boolean read FASCOMFlipImage write FASCOMFlipImage;
     property hasVideo: boolean read FhasVideo;
@@ -346,6 +347,7 @@ begin
   FFilterNames:=TStringList.Create;
   FImgStream:=TMemoryStream.Create;
   FAddFrames:=false;
+  FAlignFrames:=false;
   FSaveFrames:=false;
   FStackSaveDir:='';
   FhasVideo:=false;
@@ -535,23 +537,25 @@ if FAddFrames then begin  // stack preview frames
      FFits.Math(f,moAdd,true);  // start a new stack
      FStackCount:=1;
      FStackAlign:=false;
-     // search alignment star
-     FFits.FindBrightestPixel(FFits.HeaderInfo.naxis1 div 2, FFits.HeaderInfo.naxis2 div 2,min(FFits.HeaderInfo.naxis1,FFits.HeaderInfo.naxis2) div 2,20,xi,yi,vmax);
-     if vmax>0 then begin
-       FFits.FindStarPos(xi,yi,20,xc,yc,ri,vmax,bg,bgdev);
+     if FAlignFrames then begin
+       // search alignment star
+       FFits.FindBrightestPixel(FFits.HeaderInfo.naxis1 div 2, FFits.HeaderInfo.naxis2 div 2,min(FFits.HeaderInfo.naxis1,FFits.HeaderInfo.naxis2) div 2,20,xi,yi,vmax);
        if vmax>0 then begin
-         FFits.GetHFD2(xc,yc,2*ri,xs,ys,bg,bgdev,hfd,fwhm,vmax,snr,flux,false);
-         if ((hfd>0)and(Undersampled or (hfd>0.7))) and (hfd<10) then begin
-            FStackAlign:=true;
-            FStackAlignX:=xs;
-            FStackAlignY:=ys;
-            FStackStarX:=xs;
-            FStackStarY:=ys;
-            msg(Format(rsStackingWith, [inttostr(round(xs)), inttostr(round(FFits.HeaderInfo.naxis2-ys))]));
+         FFits.FindStarPos(xi,yi,20,xc,yc,ri,vmax,bg,bgdev);
+         if vmax>0 then begin
+           FFits.GetHFD2(xc,yc,2*ri,xs,ys,bg,bgdev,hfd,fwhm,vmax,snr,flux,false);
+           if ((hfd>0)and(Undersampled or (hfd>0.7))) and (hfd<10) then begin
+              FStackAlign:=true;
+              FStackAlignX:=xs;
+              FStackAlignY:=ys;
+              FStackStarX:=xs;
+              FStackStarY:=ys;
+              msg(Format(rsStackingWith, [inttostr(round(xs)), inttostr(round(FFits.HeaderInfo.naxis2-ys))]));
+           end;
          end;
        end;
+       if not FStackAlign then msg(rsNoAlignmentS,0);
      end;
-     if not FStackAlign then msg(rsNoAlignmentS,0);
      msg(Format('%d frame stacked',[FStackCount]));
   end;
   // update image

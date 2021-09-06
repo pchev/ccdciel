@@ -1354,7 +1354,7 @@ object f_option: Tf_option
           end
           object SaveStack: TCheckBox
             AnchorSideLeft.Side = asrBottom
-            Left = 16
+            Left = 200
             Height = 21
             Top = 40
             Width = 259
@@ -1363,6 +1363,14 @@ object f_option: Tf_option
             Caption = 'Save individual images before stacking'
             ParentBidiMode = False
             TabOrder = 1
+          end
+          object StackAlign: TCheckBox
+            Left = 16
+            Height = 21
+            Top = 40
+            Width = 114
+            Caption = 'Star alignment'
+            TabOrder = 2
           end
         end
         object GroupBox31: TGroupBox

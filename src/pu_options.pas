@@ -35,6 +35,7 @@ type
 
   Tf_option = class(TForm)
     CdCPath: TEdit;
+    StackAlign: TCheckBox;
     StackGroup: TGroupBox;
     SaveStack: TCheckBox;
     StackShow: TCheckBox;
@@ -1525,6 +1526,7 @@ end;
 procedure Tf_option.StackShowChange(Sender: TObject);
 begin
   SaveStack.Enabled:=StackShow.Checked;
+  StackAlign.Enabled:=StackShow.Checked;
 end;
 
 procedure Tf_option.StartCdCChange(Sender: TObject);

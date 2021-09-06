@@ -485,7 +485,7 @@ var
   AutoguiderAlertTime,AutoguiderMsgTime: double;
   MountTrackingAlert: boolean;
   MountTrackingAlertTime: double;
-  SaveStack: boolean;
+  SaveStack, StackAlign: boolean;
 
 
   procedure globalmsg(str:string);
