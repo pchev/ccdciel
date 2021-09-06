@@ -9591,8 +9591,7 @@ try
             end;
           end
           else NewMessage(rsNoCenteringM, 3);
-        end
-        else NewMessage(rsNoCenteringM2, 3);
+        end;
       end
       else NewMessage(rsNoCenteringM3, 3);
  end;
