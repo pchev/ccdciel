@@ -3040,7 +3040,7 @@ begin
     dmax:=-1.0E100;
     sum:=0; sum2:=0; ni:=0;
     FillByte(FHistogram,sizeof(THistogram),0);
-    minoffset:=operand.FFitsInfo.dmin-FFitsInfo.dmin;
+    minoffset:=max(0,operand.FFitsInfo.dmin-FFitsInfo.dmin);
     if FUseRawImage then
       nax:=n_plane
     else
