@@ -3026,7 +3026,7 @@ end;
 
 procedure TFits.Math(operand: TFits; MathOperator:TMathOperator; new: boolean=false);
 var i,j,k,ii,nax,naxo,ko: integer;
-    x,y,dmin,dmax,minoffset : double;
+    x,y,dmin,dmax : double;
     ni,sum,sum2 : extended;
     m: TMemoryStream;
 begin
@@ -3040,7 +3040,6 @@ begin
     dmax:=-1.0E100;
     sum:=0; sum2:=0; ni:=0;
     FillByte(FHistogram,sizeof(THistogram),0);
-    minoffset:=max(0,operand.FFitsInfo.dmin-FFitsInfo.dmin);
     if FUseRawImage then
       nax:=n_plane
     else
@@ -3068,7 +3067,7 @@ begin
          end;
          case MathOperator of
            moAdd: x:=x+y;
-           moSub: x:=x-y+minoffset;
+           moSub: x:=x-y;
            moMean: x:=(x+y)/2;
            moMult: x:=x*y;
            moDiv : x:=x/y;
