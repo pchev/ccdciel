@@ -9852,7 +9852,7 @@ begin
      r:=DoScaleX(2);
      Image1.Canvas.brush.Style:=bsClear;
      Image1.Canvas.Pen.Color:=clGreen;
-     Image1.Canvas.Pen.Mode:=pmXor;
+     Image1.Canvas.Pen.Mode:=pmMerge;
      Image1.Canvas.Pen.Style:=psSolid;
      Image1.Canvas.Pen.Width:=r;
      r:=4*r;
