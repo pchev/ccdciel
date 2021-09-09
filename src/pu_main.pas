@@ -5587,6 +5587,8 @@ begin
         if TIntList(AllMsg.Objects[i]).value<=LogLevel then
            f_msg.msg.Lines.Add(AllMsg[i]);
      end;
+     f_msg.msg.SelStart:=f_msg.msg.GetTextLen-1;
+     f_msg.msg.SelLength:=0;
    end;
 end;
 
@@ -13385,7 +13387,7 @@ end;
 procedure Tf_main.TCPShowSocket(var msg: string);
 begin
   TCPIPServerPort:=trim(msg);
-  NewMessage(Format(rsTCPIPServerL, [msg]),1);
+  NewMessage(Format(rsTCPIPServerL, [msg]),2);
 end;
 
 procedure Tf_main.TCPgetimage(n: string;  var img: Tmemorystream);
