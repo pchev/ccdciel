@@ -36,8 +36,8 @@ TAstrometry = class(TComponent)
     Fpreview:Tf_preview;
     Fvisu: Tf_visu;
     Fterminatecmd: TNotifyEvent;
-    FonStartAstrometry: TNotifyEvent;
-    FonEndAstrometry: TNotifyEvent;
+    FonStartAstrometry,FonEndAstrometry: TNotifyEvent;
+    FonStartGoto,FonEndGoto: TNotifyEvent;
     FonShowMessage: TNotifyMsg;
     FBusy, FSlewBusy, FLastResult: Boolean;
     FLastError: string;
@@ -90,6 +90,8 @@ TAstrometry = class(TComponent)
     property onShowMessage: TNotifyMsg read FonShowMessage write FonShowMessage;
     property onAstrometryStart: TNotifyEvent read FonStartAstrometry write FonStartAstrometry;
     property onAstrometryEnd: TNotifyEvent read FonEndAstrometry write FonEndAstrometry;
+    property onGotoStart: TNotifyEvent read FonStartGoto write FonStartGoto;
+    property onGotoEnd: TNotifyEvent read FonEndGoto write FonEndGoto;
 end;
 
 implementation
@@ -456,6 +458,7 @@ begin
   end;
   oldfilter:=0;
   try
+  if assigned(FonStartGoto) then FonStartGoto(self);
   delay:=config.GetValue('/PrecSlew/Delay',5);
   dist:=abs(NullCoord/60);
   FLastSlewErr:=dist;
@@ -577,6 +580,7 @@ begin
   finally
     err:=dist;
     FLastSlewErr:=dist;
+    if assigned(FonEndGoto) then FonEndGoto(self);
     if result then msg(rsPrecisionSle2,2)
               else msg(rsPrecisionSle3,0);
     fits.SetBPM(bpm,0,0,0,0);

@@ -777,6 +777,8 @@ type
     Procedure DrawHistogram(SetLevel,ResetCursor: boolean);
     procedure AstrometryStart(Sender: TObject);
     procedure AstrometryEnd(Sender: TObject);
+    procedure GotoStart(Sender: TObject);
+    procedure GotoEnd(Sender: TObject);
     procedure EndControlExposure(Sender: TObject);
     procedure AstrometryPlotDSO(Sender: TObject);
     procedure AstrometryPlotHyperleda(Sender: TObject);
@@ -1454,6 +1456,8 @@ begin
   astrometry.Fits:=fits;
   astrometry.onAstrometryStart:=@AstrometryStart;
   astrometry.onAstrometryEnd:=@AstrometryEnd;
+  astrometry.onGotoStart:=@GotoStart;
+  astrometry.onGotoEnd:=@GotoEnd;
   astrometry.onShowMessage:=@NewMessage;
 
   i:=config.GetValue('/Autoguider/Software',2);
@@ -6663,6 +6667,25 @@ begin
  mount.Track;
 end;
 
+procedure Tf_main.GotoStart(Sender: TObject);
+begin
+  GotoInProgress:=true;
+  CancelAutofocus:=false;
+  CancelGoto:=false;
+  f_mount.BtnGoto.Caption:=rsStop;
+  f_mount.Pierside.Caption:=rsGOTOInProgre+ellipsis;
+  f_mount.Pierside.Font.Color:=clRed;
+end;
+
+procedure Tf_main.GotoEnd(Sender: TObject);
+begin
+  GotoInProgress:=false;
+  CancelGoto:=false;
+  f_mount.BtnGoto.Caption:=rsGoto;
+  f_mount.Pierside.Font.Color:=clDefault;
+  MountPiersideChange(nil);
+end;
+
 procedure Tf_main.MountGoto(Sender: TObject);
 var ra,de,err:double;
     tra,tde,objn: string;
@@ -6696,13 +6719,6 @@ if f_mount.BtnGoto.Caption=rsGoto then begin
    f_goto.ButtonOK.Caption:=rsGoto;
    f_goto.ShowModal;
    if f_goto.ModalResult=mrok then begin
-     try
-     GotoInProgress:=true;
-     CancelAutofocus:=false;
-     CancelGoto:=false;
-     f_mount.BtnGoto.Caption:=rsStop;
-     f_mount.Pierside.Caption:=rsGOTOInProgre+ellipsis;
-     f_mount.Pierside.Font.Color:=clRed;
      tra:= f_goto.Ra.Text;
      tde:=f_goto.De.Text;
      objn:=trim(f_goto.Obj.Text);
@@ -6729,13 +6745,6 @@ if f_mount.BtnGoto.Caption=rsGoto then begin
        else NewMessage(format(rsError,[rsGoto+': '+objn]) ,1);
      end
      else NewMessage(rsInvalidCoord,1);
-     finally
-      GotoInProgress:=false;
-      CancelGoto:=false;
-      f_mount.BtnGoto.Caption:=rsGoto;
-      f_mount.Pierside.Font.Color:=clDefault;
-      MountPiersideChange(nil);
-     end;
    end;
  end;
 end
