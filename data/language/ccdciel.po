@@ -4402,10 +4402,6 @@ msgstr ""
 msgid "No centering measurement, exposure time shorter than astrometry timeout."
 msgstr ""
 
-#: u_translation:rsnocenteringm2
-msgid "No centering measurement, no sequence or target not using precision slew."
-msgstr ""
-
 #: u_translation:rsnocenteringm3
 msgid "No centering measurement, astrometry not configured."
 msgstr ""

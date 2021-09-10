@@ -3,14 +3,14 @@ msgstr ""
 "Project-Id-Version: ccdciel\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-09-05 14:18+0000\n"
-"PO-Revision-Date: 2021-09-03 07:58+0000\n"
+"PO-Revision-Date: 2021-09-05 18:32+0000\n"
 "Last-Translator: Stanislav Holub <Unknown>\n"
 "Language-Team: Czech <cz@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2021-09-05 14:24+0000\n"
-"X-Generator: Launchpad (build e03bf5183af335943ccf1ef70ad0534f46a635c6)\n"
+"X-Launchpad-Export-Date: 2021-09-10 14:44+0000\n"
+"X-Generator: Launchpad (build aca2013fd8cd2fea408d75f89f9bc012fbab307d)\n"
 "Language: cs\n"
 
 #: u_translation.rs2d
@@ -2533,10 +2533,6 @@ msgstr "Žádná mapa chybných pixelů"
 msgid "No centering measurement, exposure time shorter than astrometry timeout."
 msgstr "Žádné měření centrování, doba expozice je kratší než časový limit astrometrie."
 
-#: u_translation.rsnocenteringm2
-msgid "No centering measurement, no sequence or target not using precision slew."
-msgstr "Žádné měření centrování, žádná sekvence ani cíl, nepoužívající přesné najíždění."
-
 #: u_translation.rsnocenteringm3
 msgid "No centering measurement, astrometry not configured."
 msgstr "Žádné centrování, astrometrie není nakonfigurována."
@@ -3854,7 +3850,7 @@ msgstr "Ostrost"
 
 #: u_translation.rsshortexposur
 msgid "Short exposure stacking"
-msgstr ""
+msgstr "Stohování s krátkou expozicí"
 
 #: u_translation.rsshowcurrentl
 msgid "Show current log"
@@ -3874,7 +3870,7 @@ msgstr "Zobrazit výzvu"
 
 #: u_translation.rsshowstacking
 msgid "Show stacking option for Preview/Capture/Sequence"
-msgstr ""
+msgstr "Zobrazit možnost stohování pro Náhled/Zachytit/Sekvence"
 
 #: u_translation.rssigma
 msgid "sigma"

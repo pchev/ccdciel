@@ -13,8 +13,8 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2021-09-05 14:24+0000\n"
-"X-Generator: Launchpad (build e03bf5183af335943ccf1ef70ad0534f46a635c6)\n"
+"X-Launchpad-Export-Date: 2021-09-10 14:44+0000\n"
+"X-Generator: Launchpad (build aca2013fd8cd2fea408d75f89f9bc012fbab307d)\n"
 
 #: u_translation.rs2d
 msgid "2D"
@@ -2533,10 +2533,6 @@ msgstr ""
 #: u_translation.rsnocenteringm
 msgid "No centering measurement, exposure time shorter than astrometry timeout."
 msgstr "Sin medición de centrado, tiempo de exposición más corto que el tiempo de espera de la astrometría."
-
-#: u_translation.rsnocenteringm2
-msgid "No centering measurement, no sequence or target not using precision slew."
-msgstr ""
 
 #: u_translation.rsnocenteringm3
 msgid "No centering measurement, astrometry not configured."
