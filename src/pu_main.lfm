@@ -660,6 +660,10 @@ object f_main: Tf_main
         Caption = 'MenuPolarAlignment'
         OnClick = MenuPolarAlignmentClick
       end
+      object MenuPolarAlignment2: TMenuItem
+        Caption = 'Polar alignment 2'
+        OnClick = MenuPolarAlignment2Click
+      end
       object MenuCollimation: TMenuItem
         Caption = 'Collimation'
         OnClick = MenuCollimationClick

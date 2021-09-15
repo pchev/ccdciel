@@ -311,7 +311,7 @@
         <PackageName Value="LCL"/>
       </Item11>
     </RequiredPackages>
-    <Units Count="118">
+    <Units Count="119">
       <Unit0>
         <Filename Value="ccdciel.lpr"/>
         <IsPartOfProject Value="True"/>
@@ -914,6 +914,13 @@
         <Filename Value="cu_planetarium_cdc.pas"/>
         <IsPartOfProject Value="True"/>
       </Unit117>
+      <Unit118>
+        <Filename Value="pu_polaralign2.pas"/>
+        <IsPartOfProject Value="True"/>
+        <ComponentName Value="f_polaralign2"/>
+        <HasResources Value="True"/>
+        <ResourceBaseClass Value="Form"/>
+      </Unit118>
     </Units>
   </ProjectOptions>
   <CompilerOptions>

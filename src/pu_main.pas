@@ -47,7 +47,7 @@ uses
   cu_autoguider, cu_autoguider_phd, cu_autoguider_linguider, cu_autoguider_none, cu_autoguider_dither, cu_planetarium,
   cu_planetarium_cdc, cu_planetarium_samp, cu_planetarium_hnsky, cu_planetarium_none, pu_planetariuminfo, indiapi,
   cu_ascomrestcamera, cu_ascomrestdome, cu_ascomrestfocuser, cu_ascomrestmount, cu_manualwheel,
-  cu_ascomrestrotator, cu_ascomrestsafety, cu_ascomrestweather, cu_ascomrestwheel, pu_polaralign, pu_collimation,
+  cu_ascomrestrotator, cu_ascomrestsafety, cu_ascomrestweather, cu_ascomrestwheel, pu_polaralign, pu_polaralign2, pu_collimation,
   cu_switch, cu_ascomswitch, cu_ascomrestswitch, cu_indiswitch, cu_cover, cu_ascomcover, cu_ascomrestcover, cu_indicover,
   u_annotation, BGRABitmap, BGRABitmapTypes, LCLVersion, InterfaceBase, lclplatformdef,
   LazUTF8, Classes, dynlibs, LCLType, LMessages, IniFiles, IntfGraphics, FPImage, GraphType,
@@ -126,6 +126,7 @@ type
     MenuDarkInfo: TMenuItem;
     MenuDarkInfo1: TMenuItem;
     MenuDarkInfo2: TMenuItem;
+    MenuPolarAlignment2: TMenuItem;
     MenuItemUnselect2: TMenuItem;
     MenuItemUnselect: TMenuItem;
     MenuViewCover: TMenuItem;
@@ -371,6 +372,7 @@ type
     procedure MenuDarkCameraClick(Sender: TObject);
     procedure MenuDarkClearClick(Sender: TObject);
     procedure MenuDarkFileClick(Sender: TObject);
+    procedure MenuPolarAlignment2Click(Sender: TObject);
     procedure ShowDarkInfo;
     procedure MenuDownloadClick(Sender: TObject);
     procedure MenuFilterClick(Sender: TObject);
@@ -814,6 +816,7 @@ type
     procedure ShutdownProgram(Sender: TObject);
     function  CheckImageInfo:boolean;
     procedure PolaralignClose(Sender: TObject);
+    procedure Polaralign2Close(Sender: TObject);
     procedure PhotometryClose(Sender: TObject);
     procedure CollimationStart(Sender: TObject);
     procedure CollimationStop(Sender: TObject);
@@ -2256,6 +2259,12 @@ begin
   f_polaralign.Astrometry:=astrometry;
   f_polaralign.onShowMessage:=@NewMessage;
   f_polaralign.onClose:=@PolaralignClose;
+  f_polaralign2.Fits:=fits;
+  f_polaralign2.Preview:=f_preview;
+  f_polaralign2.Visu:=f_visu;
+  f_polaralign2.Astrometry:=astrometry;
+  f_polaralign2.onShowMessage:=@NewMessage;
+  f_polaralign2.onClose:=@Polaralign2Close;
 
   StartupTimer.Enabled:=true;
 end;
@@ -10028,6 +10037,32 @@ begin
 end;
 
 procedure Tf_main.PolaralignClose(Sender: TObject);
+begin
+  image1.Invalidate;
+end;
+
+procedure Tf_main.MenuPolarAlignment2Click(Sender: TObject);
+var pt: TPoint;
+begin
+  if camera.Status<>devConnected then begin
+    ShowMessage(Format(rsNotConnected, [rsCamera]));
+    exit;
+  end;
+  if (mount.Status=devConnected)and(mount.Park) then begin
+    NewMessage(rsTheTelescope);
+    exit;
+  end;
+  if f_preview.Loop then f_preview.BtnLoopClick(nil);
+  f_polaralign2.Mount:=mount;
+  f_polaralign2.Wheel:=wheel;
+  pt.x:=0;
+  pt.y:=PanelCenter.top;
+  pt:=ClientToScreen(pt);
+  FormPos(f_polaralign2,pt.X,pt.Y);
+  f_polaralign2.Show;
+end;
+
+procedure Tf_main.Polaralign2Close(Sender: TObject);
 begin
   image1.Invalidate;
 end;

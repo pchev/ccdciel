@@ -204,6 +204,7 @@ type
      procedure MeasureStarList(s: integer; list: TArrayDouble2);
      procedure ClearStarList;
      procedure LoadDark(fn: string);
+     function dateobs: double;
      property IntfImg: TLazIntfImage read FIntfImg;
      property Title : string read FTitle write FTitle;
      Property HeaderInfo : TFitsInfo read FFitsInfo;
@@ -3128,6 +3129,26 @@ begin
   SetStream(m);
   LoadStream;
   imgshift.Free;
+end;
+
+function TFits.dateobs: double;
+var buf: string;
+    y,m,d: integer;
+    h: double;
+begin
+try
+  if FHeader.Valueof('DATE-OBS',buf) then begin
+    y:=StrToInt(copy(buf,1,4));
+    m:=StrToInt(copy(buf,6,2));
+    d:=StrToInt(copy(buf,9,2));
+    h:=StrToInt(copy(buf,12,2))+StrToInt(copy(buf,15,2))/60+StrToFloat(copy(buf,18,6))/3600;
+    result:=Jd(y,m,d,h);
+  end
+  else
+    result:=0;
+except
+  result:=0;
+end;
 end;
 
 procedure PictureToFits(pict:TMemoryStream; ext: string; var ImgStream:TMemoryStream; flip:boolean=false;pix:double=-1;piy:double=-1;binx:integer=-1;biny:integer=-1;bayer:string='';rmult:string='';gmult:string='';bmult:string='';origin:string='';exifkey:TStringList=nil;exifvalue:TStringList=nil);
