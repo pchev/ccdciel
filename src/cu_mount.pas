@@ -172,7 +172,7 @@ begin
    if Equinox=0 then
     FEquinoxJD:=jdtoday
    else
-    FEquinoxJD:=Jd(trunc(Equinox),0,0,0);
+    FEquinoxJD:=Jd(trunc(Equinox),1,1,12);
  end;
  result:=FEquinoxJD;
 end;
