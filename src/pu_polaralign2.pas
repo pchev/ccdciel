@@ -197,8 +197,10 @@ begin
 end;
 
 procedure Tf_polaralign2.Compute;
-var determinant,delta_ra, delta_dec, h_1, h_2 : double;
+var determinant,delta_ra, delta_dec, h_1, h_2, lat_rad : double;
+    ew,ns : string;
 begin
+  lat_rad:=ObsLatitude*deg2rad;{obs latitude in radians}
 
   delta_ra:=(FMountRa[2]-FRa[2]) - (FMountRa[1]-FRa[1]);
   delta_dec:=(FmountDe[2]-FDe[2]) - (FmountDe[1]-FDe[1]);
@@ -206,17 +208,19 @@ begin
   h_1:=FMountRa[1]-FSidt[1];
   h_2:=FMountRa[2]-FSidt[2];
 
-  determinant:=COS(ObsLatitude)*(TAN(FmountDe[1])+TAN(FmountDe[2]))*(1-COS(h_1-h_2));
-  if determinant<0.1 then
+  determinant:=COS(lat_rad)*(TAN(FmountDe[1])+TAN(FmountDe[2]))*(1-COS(h_1-h_2));
+  if abs(determinant)<0.1 then
      memo1.lines.add('Warning the calculation determinant is close to zero! Select other celestial locations. Avoid locations with similar hour angles, locations close to the celestial equator and locations whose declinations are close to negatives of each other.');
 
-  corr_alt:=delta_ra*COS(ObsLatitude)*(SIN(h_2)-SIN(h_1))/determinant - delta_dec*COS(ObsLatitude)*( TAN(FmountDe[1])*COS(h_1) - TAN(FmountDe[2])*COS(h_2) )/determinant;
+  corr_alt:=delta_ra*COS(lat_rad)*(SIN(h_2)-SIN(h_1))/determinant - delta_dec*COS(lat_rad)*( TAN(FmountDe[1])*COS(h_1) - TAN(FmountDe[2])*COS(h_2) )/determinant;
   corr_az :=delta_ra*(COS(h_1)-COS(h_2))/determinant + delta_dec*( TAN(FmountDe[2])*SIN(h_2)- TAN(FmountDe[1])*SIN(h_1) )/determinant;
 
-  memo1.Lines.add('Determinant: '+FormatFloat(f6,determinant));
-  memo1.Lines.add('Polar error Az: '+FormatFloat(f6,rad2deg*corr_az*60)+' arcminutes');
-  memo1.Lines.add('Polar error Alt: '+FormatFloat(f6,rad2deg*corr_alt*60)+' arcminutes');
+  if corr_az>0 then ew:=' east of the celestial pole.' else ew:=' west of the celestial pole.';
+  if corr_alt>0 then ns:=' above the celestial pole' else ns:=' below the celestial pole';
 
+  memo1.Lines.add('Determinant: '+FormatFloat(f6,determinant));
+  memo1.Lines.add('Polar error Az: '+FormatFloat(f6,rad2deg*abs(corr_az)*60)+' arcminutes'+ew);
+  memo1.Lines.add('Polar error Alt: '+FormatFloat(f6,rad2deg*abs(corr_alt)*60)+' arcminutes'+ns);
 end;
 
 procedure Tf_polaralign2.InitAlignment;
