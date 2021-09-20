@@ -62,6 +62,7 @@ type
     procedure tracemsg(txt: string);
     procedure TakeExposure;
     procedure Solve(step: integer);
+    procedure Sync(step: integer);
     procedure MountPosition(step: integer);
     procedure Compute;
     procedure InitAlignment;
@@ -89,9 +90,10 @@ implementation
 procedure Tf_polaralign2.Measurement1Click(Sender: TObject);
 begin
   memo1.Clear;
-  MountPosition(1);
   TakeExposure;
   Solve(1);
+  Sync(1);
+  MountPosition(1);
 end;
 
 procedure Tf_polaralign2.Measurement2Click(Sender: TObject);
@@ -183,6 +185,16 @@ begin
     msg(rsFailToResolv,1);
     AbortAlignment;
   end;
+end;
+
+procedure Tf_polaralign2.Sync(step: integer);
+var ra,de: double;
+begin
+  ra:=rad2deg*FRa[step]/15;
+  de:=rad2deg*FDe[step];
+  tracemsg('Mount sync to local '+RAToStr(ra)+'/'+DEToStr(de));
+  LocalToMount(mount.EquinoxJD,ra,de);
+  mount.Sync(ra,de);
 end;
 
 procedure Tf_polaralign2.MountPosition(step: integer);
