@@ -196,31 +196,90 @@ begin
   memo1.Lines.Add('Mount position '+inttostr(step)+': '+RAToStr(tra)+'/'+DEToStr(tde));
 end;
 
-procedure Tf_polaralign2.Compute;
-var determinant,delta_ra, delta_dec, h_1, h_2, lat_rad : double;
-    ew,ns : string;
-begin
-  lat_rad:=ObsLatitude*deg2rad;{obs latitude in radians}
 
+{Polar error calculation based on two celestial reference points and the error of the telescope mount at these point(s).
+ Based on formulas from Ralph Pass documented at https://rppass.com/align.pdf.
+ They are based on the book “Telescope Control’ by Trueblood and Genet, p.111
+ Ralph added sin(latitude) term in the equation for the error in RA.
+
+
+ For one reference image the difference in RA and DEC caused by the misalignment of the polar axis, formula (3):
+   delta_ra:= de * TAN(dec)*SIN(h)  + da * (sin(lat)- COS(lat)*(TAN(dec1)*COS(h_1))
+   delta_dec:=de * COS(h)  + da * COS(lat)*SIN(h))
+
+   where de is the polar error in elevation (altitude)
+   where da is the polar error in azimuth
+   where h is the hour angle of the reference point equal ra - local_sidereal_time
+
+ Using the above formula calculate the difference in RA and DEC by subtracting the first image postion from the second reference image. The common term sin(lat) will be nulified. Formula (4)
+   delta_ra:= de * (TAN(dec)*SIN(h_2)-TAN(dec1)*SIN(h_1))  + da * COS(lat)*(TAN(dec1)*COS(h_1)-TAN(dec2)*COS(h_2));
+   delta_dec:=de * (COS(h_2)-COS(h_1))  + da * COS(lat)*(SIN(h_2)-SIN(h_1));
+
+ Writing the above formulas in matrix notation:
+   [delta_Ra;delta_Dec]= C * [delta_Elv;delta_Azm]
+   then
+   [delta_Elv;delta_Az] = inv(C)*[delta_Ra;delta_Dec]
+
+ Mount is assumed to be ideal. Mount fabrication error & cone errors are assumed to be zero. Meridian crossing between the two images should be avoided}
+procedure Tf_polaralign2.Compute;
+var determinant,delta_ra, delta_dec, h_1, h_2, lat_rad: double;
+    ew,ns  : string;
+    A,B,C, C_inv : array[0..1,0..1] of double;
+begin
+  lat_rad:=ObsLatitude*pi/180;{obs latitude in radians}
   delta_ra:=(FMountRa[2]-FRa[2]) - (FMountRa[1]-FRa[1]);
   delta_dec:=(FmountDe[2]-FDe[2]) - (FmountDe[1]-FDe[1]);
 
   h_1:=FMountRa[1]-FSidt[1];
   h_2:=FMountRa[2]-FSidt[2];
 
-  determinant:=COS(lat_rad)*(TAN(FmountDe[1])+TAN(FmountDe[2]))*(1-COS(h_1-h_2));
+  // [delta_Ra;delta_Dec]= A * [delta_Elv;delta_Azm]
+  // Fill matrix image 1 with data.
+  A[0,0]:=TAN(FmountDe[1])*SIN(h_1);
+  A[1,0]:=COS(lat_rad)*(SIN(LAT_rad)-TAN(FmountDe[1])*COS(h_1));{keep the sin(lat_rad) for the calculation of star movement in the last step}
+  A[0,1]:=COS(h_1);
+  A[1,1]:=COS(lat_rad)*SIN(h_1);
+
+  // Fill matrix image 2 with data.
+  B[0,0]:=TAN(FmountDe[2])*SIN(h_2);
+  B[1,0]:=COS(lat_rad)*(SIN(LAT_rad)-TAN(FmountDe[2])*COS(h_2)) ;
+  B[0,1]:=COS(h_2);
+  B[1,1]:=COS(lat_rad)*SIN(h_2);
+
+  //difference,  image 2 - image 1
+  C[0,0]:=B[0,0]-A[0,0];
+  C[1,0]:=B[1,0]-A[1,0];
+  C[0,1]:=B[0,1]-A[0,1];
+  C[1,1]:=B[1,1]-A[1,1];
+
+
+  // Calculate the inverse matrix inv(C)
+  determinant:=C[0,0]*C[1,1]-C[0,1]*C[1,0];
+  C_inv[0,0]:=+C[1,1]/determinant;
+  C_inv[1,1]:=+C[0,0]/determinant;
+  C_inv[1,0]:=-C[1,0]/determinant;
+  C_inv[0,1]:=-C[0,1]/determinant;
+
+  // [delta_Elv;delta_Az] = inv(C)*[delta_Ra;delta_Dec]
+  // Use the inverse matrix to calculate the polar axis elevation and azimuth error from the delta_dec and delta_ra between the two image positions.
+  corr_alt:=C_inv[0,0]*delta_ra+C_inv[1,0]*delta_Dec;{delta_Elv}
+  corr_az :=C_inv[0,1]*delta_ra+C_inv[1,1]*delta_Dec; {delta_Az}
+
   if abs(determinant)<0.1 then
      memo1.lines.add('Warning the calculation determinant is close to zero! Select other celestial locations. Avoid locations with similar hour angles, locations close to the celestial equator and locations whose declinations are close to negatives of each other.');
 
-  corr_alt:=delta_ra*COS(lat_rad)*(SIN(h_2)-SIN(h_1))/determinant - delta_dec*COS(lat_rad)*( TAN(FmountDe[1])*COS(h_1) - TAN(FmountDe[2])*COS(h_2) )/determinant;
-  corr_az :=delta_ra*(COS(h_1)-COS(h_2))/determinant + delta_dec*( TAN(FmountDe[2])*SIN(h_2)- TAN(FmountDe[1])*SIN(h_1) )/determinant;
-
   if corr_az>0 then ew:=' east of the celestial pole.' else ew:=' west of the celestial pole.';
-  if corr_alt>0 then ns:=' above the celestial pole' else ns:=' below the celestial pole';
+  if corr_alt>0  then ns:=' above the celestial pole' else ns:=' below the celestial pole';
 
-  memo1.Lines.add('Determinant: '+FormatFloat(f6,determinant));
-  memo1.Lines.add('Polar error Az: '+FormatFloat(f6,rad2deg*abs(corr_az)*60)+' arcminutes'+ew);
-  memo1.Lines.add('Polar error Alt: '+FormatFloat(f6,rad2deg*abs(corr_alt)*60)+' arcminutes'+ns);
+  memo1.Lines.add('Determinant: '+FormatFloat(f2,determinant));
+  memo1.Lines.add('Polar error Az: '+FormatFloat(f2,rad2deg*abs(corr_az)*60)+' arcminutes'+ew);
+  memo1.Lines.add('Polar error Alt: '+FormatFloat(f2,rad2deg*abs(corr_alt)*60)+' arcminutes'+ns);
+
+  //calculate the Ra, Dec correction for stars in image 2
+  corr_ra:=B[0,0]*corr_alt + B[1,0]*corr_az;
+  corr_de:=B[0,1]*corr_alt+  B[1,1]*corr_az;
+  memo1.Lines.add('Stars in image 2 have to move: '+FormatFloat(f2,rad2deg*(corr_ra)*60)+' arcminutes in RA and '+FormatFloat(f2,rad2deg*(corr_de)*60)+' arcminutes in DEC by the correction.');
+  //Warning avoid the zenith for the second image!! Azimuth changes will not create any change at zenith
 end;
 
 procedure Tf_polaralign2.InitAlignment;
