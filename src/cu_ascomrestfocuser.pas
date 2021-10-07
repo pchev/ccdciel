@@ -224,13 +224,15 @@ begin
     try
     if hasAbsolutePosition then begin
       p:=GetPositionReal;
-      if p<>stPosition then begin
+      if p<>stPosition then
+      begin
         stPosition:=p;
         if Assigned(FonPositionChange) then FonPositionChange(p);
       end;
     end else begin
       p:=FRelIncr;
-      if p<>stPosition then begin
+      if p<>stPosition then
+      begin
         stPosition:=p;
         if Assigned(FonPositionChange) then FonPositionChange(p);
       end;
@@ -316,12 +318,13 @@ begin
    end;
    if debug_msg then msg('Move '+inttostr(p));
    V.Put('move',['Position',IntToStr(p)]);
+
    FocuserLastTemp:=FocuserTemp;
    WaitFocuserMoving(60000);
-   stPosition:=GetPositionReal;
+
    // Fix for usb-focus
    if pos('USB_Focus',FDeviceName)>0 then begin
-     np:=stPosition;
+     np:=GetPositionReal;
      if (np<>p) then begin
        msg('Error, new position is '+IntToStr(np)+' instead of '+IntToStr(p),0);
      end; {fix for some poor written focuser drivers. The getposition is already sufficient to fix the problem, so message should never occur.}
