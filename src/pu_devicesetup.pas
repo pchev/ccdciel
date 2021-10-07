@@ -72,6 +72,7 @@ type
     DefaultARestUser: TEdit;
     GetIndi10: TButton;
     GetIndi9: TButton;
+    Label10: TLabel;
     Label107: TLabel;
     Label108: TLabel;
     Label109: TLabel;
@@ -92,9 +93,29 @@ type
     Label124: TLabel;
     Label125: TLabel;
     Label126: TLabel;
+    Label127: TLabel;
+    Label128: TLabel;
+    Label129: TLabel;
+    Label13: TLabel;
+    Label130: TLabel;
+    Label131: TLabel;
+    Label132: TLabel;
+    Label133: TLabel;
+    Label134: TLabel;
+    Label135: TLabel;
+    Label136: TLabel;
+    Label137: TLabel;
+    Label138: TLabel;
+    Label139: TLabel;
+    Label14: TLabel;
+    Label140: TLabel;
+    Label141: TLabel;
+    Label23: TLabel;
     Label26: TLabel;
     Label27: TLabel;
     Label28: TLabel;
+    Label4: TLabel;
+    Label7: TLabel;
     Label8: TLabel;
     PageControlSwitch: TPageControl;
     PageControlCover: TPageControl;
@@ -515,6 +536,27 @@ type
     procedure AlpacaRotatorListChange(Sender: TObject);
     procedure AlpacaSafetyListChange(Sender: TObject);
     procedure AlpacaServersChange(Sender: TObject);
+    procedure AlpacaServerSetupCamera(Sender: TObject);
+    procedure AlpacaServerSetupClick(Sender: TObject);
+    procedure AlpacaServerSetupCover(Sender: TObject);
+    procedure AlpacaServerSetupDome(Sender: TObject);
+    procedure AlpacaServerSetupFocuser(Sender: TObject);
+    procedure AlpacaServerSetupMount(Sender: TObject);
+    procedure AlpacaServerSetupRotator(Sender: TObject);
+    procedure AlpacaServerSetupSafety(Sender: TObject);
+    procedure AlpacaServerSetupSwitch(Sender: TObject);
+    procedure AlpacaServerSetupWeather(Sender: TObject);
+    procedure AlpacaServerSetupWheel(Sender: TObject);
+    procedure AlpacaSetupCamera(Sender: TObject);
+    procedure AlpacaSetupCover(Sender: TObject);
+    procedure AlpacaSetupDome(Sender: TObject);
+    procedure AlpacaSetupFocuser(Sender: TObject);
+    procedure AlpacaSetupMount(Sender: TObject);
+    procedure AlpacaSetupRotator(Sender: TObject);
+    procedure AlpacaSetupSafety(Sender: TObject);
+    procedure AlpacaSetupSwitch(Sender: TObject);
+    procedure AlpacaSetupWeather(Sender: TObject);
+    procedure AlpacaSetupWheel(Sender: TObject);
     procedure AlpacaSwitchListChange(Sender: TObject);
     procedure AlpacaWeatherListChange(Sender: TObject);
     procedure AlpacaWheelListChange(Sender: TObject);
@@ -595,6 +637,7 @@ type
     procedure IncPage(Sender: TObject);
     procedure SelectNextPage(direction: integer);
     procedure msg(txt: string; level:integer=3);
+    procedure AlpacaSetup(protocol,host,port,device,num: string);
   public
     { public declarations }
     DefaultCameraInterface, DefaultMountInterface, DefaultDomeInterface, DefaultWheelInterface, DefaultFocuserInterface,
@@ -996,6 +1039,30 @@ begin
   Panel10.Hint:=rsGlobalALPACA;
   CameraIndiTransfert.Hint:=rsDoNotSetThis+crlf+crlf+Format(rsMakeTestToDe, [crlf]);
   CameraIndiTransfertDir.Hint:=rsTheTemporary;
+
+  label4.Caption:='Alpaca '+rsServer+blank+rsSetup;
+  label7.Caption:='Alpaca '+rsServer+blank+rsSetup;
+  label10.Caption:='Alpaca '+rsServer+blank+rsSetup;
+  label13.Caption:='Alpaca '+rsServer+blank+rsSetup;
+  label14.Caption:='Alpaca '+rsServer+blank+rsSetup;
+  label23.Caption:='Alpaca '+rsServer+blank+rsSetup;
+  label127.Caption:='Alpaca '+rsServer+blank+rsSetup;
+  label128.Caption:='Alpaca '+rsServer+blank+rsSetup;
+  label129.Caption:='Alpaca '+rsServer+blank+rsSetup;
+  label130.Caption:='Alpaca '+rsServer+blank+rsSetup;
+  label131.Caption:='Alpaca '+rsServer+blank+rsSetup;
+
+  label132.Caption:='Alpaca '+rsCamera+blank+rsSetup;
+  label133.Caption:='Alpaca '+rsFilterWheel+blank+rsSetup;
+  label134.Caption:='Alpaca '+rsFocuser+blank+rsSetup;
+  label135.Caption:='Alpaca '+rsRotator+blank+rsSetup;
+  label136.Caption:='Alpaca '+rsMount+blank+rsSetup;
+  label137.Caption:='Alpaca '+rsDome+blank+rsSetup;
+  label138.Caption:='Alpaca '+rsWeatherStati+blank+rsSetup;
+  label139.Caption:='Alpaca '+rsSafetyMonito+blank+rsSetup;
+  label140.Caption:='Alpaca '+rsSwitch+blank+rsSetup;
+  label141.Caption:='Alpaca '+rsCalibrator+blank+rsSetup;
+
 end;
 
 procedure Tf_setup.LoadProfileList;
@@ -2570,6 +2637,124 @@ begin
     DeviceCover.Checked:=true;
     lst.Free;
   end;
+end;
+
+procedure Tf_setup.AlpacaServerSetupClick(Sender: TObject);
+begin
+  AlpacaSetup(DefaultARestProtocol.Text,DefaultARestHost.Text,DefaultARestPort.Text,'','');
+end;
+
+procedure Tf_setup.AlpacaServerSetupCamera(Sender: TObject);
+begin
+  AlpacaSetup(CameraARestProtocol.Text,CameraARestHost.Text,CameraARestPort.Text,'','');
+end;
+
+procedure Tf_setup.AlpacaServerSetupWheel(Sender: TObject);
+begin
+  AlpacaSetup(WheelARestProtocol.Text,WheelARestHost.Text,WheelARestPort.Text,'','');
+end;
+
+procedure Tf_setup.AlpacaServerSetupFocuser(Sender: TObject);
+begin
+  AlpacaSetup(FocuserARestProtocol.Text,FocuserARestHost.Text,FocuserARestPort.Text,'','');
+end;
+
+procedure Tf_setup.AlpacaServerSetupRotator(Sender: TObject);
+begin
+  AlpacaSetup(RotatorARestProtocol.Text,RotatorARestHost.Text,RotatorARestPort.Text,'','');
+end;
+
+procedure Tf_setup.AlpacaServerSetupMount(Sender: TObject);
+begin
+  AlpacaSetup(MountARestProtocol.Text,MountARestHost.Text,MountARestPort.Text,'','');
+end;
+
+procedure Tf_setup.AlpacaServerSetupDome(Sender: TObject);
+begin
+  AlpacaSetup(DomeARestProtocol.Text,DomeARestHost.Text,DomeARestPort.Text,'','');
+end;
+
+procedure Tf_setup.AlpacaServerSetupWeather(Sender: TObject);
+begin
+  AlpacaSetup(WeatherARestProtocol.Text,WeatherARestHost.Text,WeatherARestPort.Text,'','');
+end;
+
+procedure Tf_setup.AlpacaServerSetupSafety(Sender: TObject);
+begin
+  AlpacaSetup(SafetyARestProtocol.Text,SafetyARestHost.Text,SafetyARestPort.Text,'','');
+end;
+
+procedure Tf_setup.AlpacaServerSetupSwitch(Sender: TObject);
+begin
+  AlpacaSetup(SwitchARestProtocol.Text,SwitchARestHost.Text,SwitchARestPort.Text,'','');
+end;
+
+procedure Tf_setup.AlpacaServerSetupCover(Sender: TObject);
+begin
+  AlpacaSetup(CoverARestProtocol.Text,CoverARestHost.Text,CoverARestPort.Text,'','');
+end;
+
+procedure Tf_setup.AlpacaSetupCamera(Sender: TObject);
+begin
+  AlpacaSetup(CameraARestProtocol.Text,CameraARestHost.Text,CameraARestPort.Text,'camera',CameraARestDevice.Text);
+end;
+
+procedure Tf_setup.AlpacaSetupWheel(Sender: TObject);
+begin
+  AlpacaSetup(WheelARestProtocol.Text,WheelARestHost.Text,WheelARestPort.Text,'filterwheel',WheelARestDevice.Text);
+end;
+
+procedure Tf_setup.AlpacaSetupFocuser(Sender: TObject);
+begin
+  AlpacaSetup(FocuserARestProtocol.Text,FocuserARestHost.Text,FocuserARestPort.Text,'focuser',FocuserARestDevice.Text);
+end;
+
+procedure Tf_setup.AlpacaSetupRotator(Sender: TObject);
+begin
+  AlpacaSetup(RotatorARestProtocol.Text,RotatorARestHost.Text,RotatorARestPort.Text,'rotator',RotatorARestDevice.Text);
+end;
+
+procedure Tf_setup.AlpacaSetupMount(Sender: TObject);
+begin
+  AlpacaSetup(MountARestProtocol.Text,MountARestHost.Text,MountARestPort.Text,'telescope',MountARestDevice.Text);
+end;
+
+procedure Tf_setup.AlpacaSetupDome(Sender: TObject);
+begin
+  AlpacaSetup(DomeARestProtocol.Text,DomeARestHost.Text,DomeARestPort.Text,'dome',DomeARestDevice.Text);
+end;
+
+procedure Tf_setup.AlpacaSetupWeather(Sender: TObject);
+begin
+ case AscomRestWeatherType.ItemIndex of
+   0: AlpacaSetup(WeatherARestProtocol.Text,WeatherARestHost.Text,WeatherARestPort.Text,'observingconditions',WeatherARestDevice.Text);
+   1: AlpacaSetup(WeatherARestProtocol.Text,WeatherARestHost.Text,WeatherARestPort.Text,'safetymonitor',WeatherARestDevice.Text);
+ end;
+end;
+
+procedure Tf_setup.AlpacaSetupSafety(Sender: TObject);
+begin
+  AlpacaSetup(SafetyARestProtocol.Text,SafetyARestHost.Text,SafetyARestPort.Text,'safetymonitor',SafetyARestDevice.Text);
+end;
+
+procedure Tf_setup.AlpacaSetupSwitch(Sender: TObject);
+begin
+  AlpacaSetup(SwitchARestProtocol.Text,SwitchARestHost.Text,SwitchARestPort.Text,'switch',SwitchARestDevice.Text);
+end;
+
+procedure Tf_setup.AlpacaSetupCover(Sender: TObject);
+begin
+  AlpacaSetup(CoverARestProtocol.Text,CoverARestHost.Text,CoverARestPort.Text,'covercalibrator',CoverARestDevice.Text);
+end;
+
+procedure Tf_setup.AlpacaSetup(protocol,host,port,device,num: string);
+var url:string;
+begin
+  if device='' then
+    url:=trim(protocol)+'//'+trim(host)+':'+trim(port)+'/setup'
+  else
+    url:=trim(protocol)+'//'+trim(host)+':'+trim(port)+'/setup/v1/'+trim(device)+'/'+trim(num)+'/setup';
+  ExecuteFile(url);
 end;
 
 initialization
