@@ -435,7 +435,6 @@ var fn: string;
 begin
   OpenDialog1.Title:=rsSelectTheFil;
   OpenDialog1.InitialDir:=ConfigDir;
-  OpenDialog1.FileName:='*.targets';
   if OpenDialog1.Execute then begin
     fn:=OpenDialog1.FileName;
     if Running and (fn=Targets.SequenceFile.Filename) then begin
@@ -463,7 +462,6 @@ var fn,defname: string;
 begin
   OpenDialog1.Title:=rsSelectTheFil2;
   OpenDialog1.InitialDir:=ConfigDir;
-  OpenDialog1.FileName:='*.targets';
   if OpenDialog1.Execute then begin
     fn:=OpenDialog1.FileName;
     if (fn=Targets.SequenceFile.Filename) then begin
@@ -756,7 +754,6 @@ begin
  end;
  OpenDialog1.Title:=rsSelectTheFil3;
  OpenDialog1.InitialDir:=ConfigDir;
- OpenDialog1.FileName:='*.targets';
  if OpenDialog1.Execute then begin
    LoadTargets(OpenDialog1.FileName);
  end;
