@@ -611,7 +611,7 @@ procedure T_camera.WriteHeaders(UpdateFromCamera:Boolean=true);
 var origin,observer,telname,objname,siso,CType,roworder: string;
     focal_length,pixscale1,pixscale2,ccdtemp,st,ra,de,fstop,shutter,multr,multg,multb: double;
     hbitpix,hnaxis,hnaxis1,hnaxis2,hnaxis3,hbin1,hbin2,cgain,focuserpos: integer;
-    hfilter,hframe,hinstr,hdateobs : string;
+    hfilter,hframe,hinstr,hdateobs,pierside : string;
     hbzero,hbscale,hdmin,hdmax,hra,hdec,hexp,hpix1,hpix2,hairmass,focusertemp: double;
     haz,hal: double;
     gamma,voffset,coffset,OffsetX,OffsetY: integer;
@@ -655,8 +655,13 @@ begin
   if not Ffits.Header.Valueof('DATE-OBS',hdateobs) then hdateobs:=FormatDateTime(dateisoshort,NowUTC);
   if not Ffits.Header.Valueof('AIRMASS',hairmass) then hairmass:=-1;
   // get other values
+  pierside:='';
   hra:=NullCoord; hdec:=NullCoord;
   if (FMount<>nil)and(Fmount.Status=devConnected) then begin
+     case mount.PierSide of
+       pierEast: pierside:='EAST';
+       pierWest: pierside:='WEST';
+     end;
      hra:=Fmount.RA;
      hdec:=Fmount.Dec;
      MountToJ2000(Fmount.EquinoxJD,hra,hdec);
@@ -845,6 +850,7 @@ begin
   if hairmass>0 then Ffits.Header.Insert(i,'AIRMASS',hairmass ,'Airmass');
   if hasfocuserpos then Ffits.Header.Insert(i,'FOCUSPOS',focuserpos ,'Focuser position in steps');
   if hasfocusertemp then Ffits.Header.Insert(i,'FOCUSTEM',focusertemp ,'Focuser temperature (Celsius)');
+  if pierside<>'' then Ffits.Header.Insert(i,'PIERSIDE',pierside,'Telescope side of pier');
   if (hra<>NullCoord)and(hdec<>NullCoord) then begin
     Ffits.Header.Insert(i,'EQUINOX',2000.0,'');
     Ffits.Header.Insert(i,'RA',hra,'[deg] Telescope pointing RA');
