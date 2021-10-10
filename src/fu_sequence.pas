@@ -402,14 +402,14 @@ var txt,fn1,fn2: string;
 begin
   txt:=FormEntry(self, rsCopyFrom, ExtractFileNameOnly(Targets.SequenceFile.Filename));
   if txt='' then exit;
-  fn1:=slash(ConfigDir)+txt+'.targets';
+  fn1:=slash(SequenceDir)+txt+'.targets';
   if not FileExistsUTF8(fn1) then begin
      ShowMessage(format(rsFileNotFound,[fn1]));
      exit;
   end;
   txt:=FormEntry(self, rsCopyTo, '');
   if txt='' then exit;
-  fn2:=slash(ConfigDir)+txt+'.targets';
+  fn2:=slash(SequenceDir)+txt+'.targets';
   if Running and (fn2=Targets.SequenceFile.Filename) then begin
     ShowMessage(rsCannotOverwr);
     exit;
@@ -434,7 +434,7 @@ procedure Tf_sequence.MenuDeleteClick(Sender: TObject);
 var fn: string;
 begin
   OpenDialog1.Title:=rsSelectTheFil;
-  OpenDialog1.InitialDir:=ConfigDir;
+  OpenDialog1.InitialDir:=SequenceDir;
   if OpenDialog1.Execute then begin
     fn:=OpenDialog1.FileName;
     if Running and (fn=Targets.SequenceFile.Filename) then begin
@@ -461,7 +461,7 @@ var fn,defname: string;
     t: T_Targets;
 begin
   OpenDialog1.Title:=rsSelectTheFil2;
-  OpenDialog1.InitialDir:=ConfigDir;
+  OpenDialog1.InitialDir:=SequenceDir;
   if OpenDialog1.Execute then begin
     fn:=OpenDialog1.FileName;
     if (fn=Targets.SequenceFile.Filename) then begin
@@ -753,7 +753,7 @@ begin
    exit;
  end;
  OpenDialog1.Title:=rsSelectTheFil3;
- OpenDialog1.InitialDir:=ConfigDir;
+ OpenDialog1.InitialDir:=SequenceDir;
  if OpenDialog1.Execute then begin
    LoadTargets(OpenDialog1.FileName);
  end;
@@ -763,8 +763,8 @@ procedure Tf_sequence.SaveTargets(fn,defaultname:string);
 begin
  if TargetGrid.RowCount>1 then begin
     if fn='' then begin
-      SaveDialog1.InitialDir:=ConfigDir;
-      SaveDialog1.FileName:=slash(ConfigDir)+defaultname+'.targets';
+      SaveDialog1.InitialDir:=SequenceDir;
+      SaveDialog1.FileName:=slash(SequenceDir)+defaultname+'.targets';
       if SaveDialog1.Execute then begin
         fn:=SaveDialog1.FileName;
       end

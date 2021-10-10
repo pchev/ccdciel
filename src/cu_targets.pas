@@ -1007,7 +1007,7 @@ var fn,buf1,buf2,msgstr,str,buf: string;
     s: TStep;
 begin
   // Load the plan from the template for pre V5 files compatibility
-  fn:=slash(ConfigDir)+plan+'.plan';
+  fn:=slash(SequenceDir)+plan+'.plan';
   if FileExistsUTF8(fn) then begin
      p.Clear;
      p.SequenceFile:=FSequenceFile;
@@ -2671,7 +2671,7 @@ begin
   end;
   result:=true;
   template:=StringReplace(p.PlanName,'*','',[]);
-  fn:=slash(ConfigDir)+template+'.plan';
+  fn:=slash(SequenceDir)+template+'.plan';
   if not FileExistsUTF8(fn) then exit;
   pfile:=TCCDconfig.Create(nil);
   try

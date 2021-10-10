@@ -34,11 +34,16 @@ type
   { Tf_option }
 
   Tf_option = class(TForm)
+    ButtonSeqDir: TButton;
     CdCPath: TEdit;
+    Label152: TLabel;
+    Panel27: TPanel;
     StackAlign: TCheckBox;
     StackGroup: TGroupBox;
     SaveStack: TCheckBox;
     StackShow: TCheckBox;
+    SeqDir: TEdit;
+    SeqDirDefault: TButton;
     UseReadoutMode: TCheckBox;
     Page6: TPage;
     PHDpath: TEdit;
@@ -664,6 +669,7 @@ type
     procedure BtnFileDefaultClick(Sender: TObject);
     procedure BtnFolderDefaultClick(Sender: TObject);
     procedure BtnMaxDriftDisableClick(Sender: TObject);
+    procedure ButtonSeqDirClick(Sender: TObject);
     procedure ObservatoryDBDeleteClick(Sender: TObject);
     procedure ButtonNotificationAllClick(Sender: TObject);
     procedure ButtonHelpClick(Sender: TObject);
@@ -698,6 +704,7 @@ type
     procedure PanelLeftMouseWheel(Sender: TObject; Shift: TShiftState; WheelDelta: Integer; MousePos: TPoint; var Handled: Boolean);
     procedure PixelSizeFromCameraChange(Sender: TObject);
     procedure PlanetariumBoxClick(Sender: TObject);
+    procedure SeqDirDefaultClick(Sender: TObject);
     procedure StackShowChange(Sender: TObject);
     procedure StartCdCChange(Sender: TObject);
     procedure StartHNSKYChange(Sender: TObject);
@@ -1523,6 +1530,11 @@ begin
   Notebook2.PageIndex:=PlanetariumBox.ItemIndex;
 end;
 
+procedure Tf_option.SeqDirDefaultClick(Sender: TObject);
+begin
+  SeqDir.text:=ConfigDir;
+end;
+
 procedure Tf_option.StackShowChange(Sender: TObject);
 begin
   SaveStack.Enabled:=StackShow.Checked;
@@ -1844,6 +1856,13 @@ end;
 procedure Tf_option.BtnMaxDriftDisableClick(Sender: TObject);
 begin
   GuideDriftMax.Value:=100;
+end;
+
+procedure Tf_option.ButtonSeqDirClick(Sender: TObject);
+begin
+ SelectDirectoryDialog1.InitialDir:=SeqDir.text;
+ SelectDirectoryDialog1.FileName:=SeqDir.text;
+ if SelectDirectoryDialog1.Execute then SeqDir.text:=SelectDirectoryDialog1.FileName;
 end;
 
 procedure Tf_option.ButtonHelpClick(Sender: TObject);

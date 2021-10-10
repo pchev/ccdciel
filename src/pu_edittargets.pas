@@ -517,7 +517,7 @@ begin
   s:=TStringlist.Create;
   s.add('');
   TargetList.Columns[colplan-1].PickList.Clear;
-  i:=FindFirstUTF8(slash(ConfigDir)+'*.plan',0,fs);
+  i:=FindFirstUTF8(slash(SequenceDir)+'*.plan',0,fs);
   while i=0 do begin
     s.Add(ExtractFileNameOnly(fs.Name));
     i:=FindNextUTF8(fs);
@@ -581,7 +581,7 @@ begin
   n:=TargetList.Row;
   txt:=trim(TargetList.Cells[colplan,n]);
   if txt='' then exit;
-  fn:=slash(ConfigDir)+txt+'.plan';
+  fn:=slash(SequenceDir)+txt+'.plan';
   if not FileExistsUTF8(fn) then exit;
   if MessageDlg(Format(rsDoYouWantToD, [fn]), mtConfirmation, mbYesNo, 0)=mrYes
     then begin
@@ -1356,7 +1356,7 @@ procedure Tf_EditTargets.BtnSaveAsClick(Sender: TObject);
 var defaultname: string;
     i,n: integer;
 begin
-SaveDialog1.InitialDir:=ConfigDir;
+SaveDialog1.InitialDir:=SequenceDir;
 SaveDialog1.DefaultExt:='.targets';
 SaveDialog1.filter:='CCDciel Sequence|*.targets';
 if FFilename='' then begin
@@ -1366,7 +1366,7 @@ if FFilename='' then begin
     if (TargetList.Cells[1,i]<>ScriptTxt) and (TargetList.Cells[1,i]<>SkyFlatTxt) then
        defaultname:=TargetList.Cells[1,i];
   end;
-  SaveDialog1.FileName:=slash(ConfigDir)+defaultname+'.targets';
+  SaveDialog1.FileName:=slash(SequenceDir)+defaultname+'.targets';
 end
 else begin
   if ObjectNameChange then begin
@@ -1376,7 +1376,7 @@ else begin
       if (TargetList.Cells[1,i]<>ScriptTxt) and (TargetList.Cells[1,i]<>SkyFlatTxt) then
          defaultname:=TargetList.Cells[1,i];
     end;
-    SaveDialog1.FileName:=slash(ConfigDir)+defaultname+'.targets';
+    SaveDialog1.FileName:=slash(SequenceDir)+defaultname+'.targets';
   end
   else begin
     SaveDialog1.FileName:=FFilename;
@@ -2487,7 +2487,7 @@ ClearStepList;
 LabelMsg.Caption:='';
 if (trim(PlanName.Caption)<>'')and(pos('*',PlanName.Caption)<=0) then begin
   PageControlPlan.ActivePageIndex:=pageobject;
-  fn:=slash(ConfigDir)+PlanName.Caption+'.plan';
+  fn:=slash(SequenceDir)+PlanName.Caption+'.plan';
   if FileExistsUTF8(fn) then begin
     pfile:=TCCDconfig.Create(self);
     pfile.Filename:=fn;
@@ -2857,7 +2857,7 @@ end;
 procedure Tf_EditTargets.BtnSaveTemplateAsClick(Sender: TObject);
 var buf: string;
 begin
-  SaveDialog1.InitialDir:=ConfigDir;
+  SaveDialog1.InitialDir:=SequenceDir;
   SaveDialog1.DefaultExt:='.plan';
   SaveDialog1.filter:='Plan|*.plan';
   SaveDialog1.FileName:=StringReplace(PlanName.Caption,'*','',[])+'.plan';
@@ -2892,7 +2892,7 @@ try
     ShowMessage('No template name selected!');
     exit;
   end;
-  fn:=slash(ConfigDir)+PlanName.Caption+'.plan';
+  fn:=slash(SequenceDir)+PlanName.Caption+'.plan';
   pfile:=TCCDconfig.Create(self);
   pfile.Filename:=fn;
   pfile.Clear;

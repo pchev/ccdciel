@@ -340,7 +340,7 @@ const
 
 var
   onMsgGlobal: TNotifyMsg;
-  Appdir,ConfigDir,LogDir,TmpDir,DataDir,ScriptsDir,HomeDir: UTF8String;
+  Appdir,ConfigDir,LogDir,TmpDir,DataDir,ScriptsDir,HomeDir,SequenceDir: UTF8String;
   defCapturePath, defPython, TCPIPConfigPort, TCPIPServerPort: string;
   CameraName,WheelName,FocuserName,RotatorName,MountName,DomeName,WatchdogName,WeatherName,SafetyName,SwitchName,CoverName: string;
   ConfigDarkFile,cdate: string;
@@ -350,7 +350,7 @@ var
   LogLevel: integer;
   ScriptDir: array[1..MaxScriptDir] of TScriptDir;
   PythonCmd: string;
-  config,screenconfig,credentialconfig,emailconfig,bpmconfig: TCCDConfig;
+  config,screenconfig,credentialconfig,emailconfig,bpmconfig,globalconfig: TCCDConfig;
   profile: string;
   ProfileFromCommandLine: boolean;
   lang: string;

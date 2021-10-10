@@ -51,7 +51,7 @@ uses
   cu_switch, cu_ascomswitch, cu_ascomrestswitch, cu_indiswitch, cu_cover, cu_ascomcover, cu_ascomrestcover, cu_indicover,
   u_annotation, BGRABitmap, BGRABitmapTypes, LCLVersion, InterfaceBase, lclplatformdef,
   LazUTF8, Classes, dynlibs, LCLType, LMessages, IniFiles, IntfGraphics, FPImage, GraphType,
-  SysUtils, LazFileUtils, Forms, Controls, Math, Graphics, Dialogs, u_speech,
+  SysUtils, FileUtil, LazFileUtils, Forms, Controls, Math, Graphics, Dialogs, u_speech,
   StdCtrls, ExtCtrls, Menus, ComCtrls, Buttons, Types, u_translation;
 
 type
@@ -589,6 +589,7 @@ type
     procedure SaveScreenConfig;
     procedure SaveSettings;
     procedure SaveConfig;
+    procedure SetSequenceDir(newdir:string);
     procedure ShowActiveTools;
     procedure SaveVcurve;
     procedure LoadVcurve;
@@ -1385,6 +1386,7 @@ begin
   credentialconfig:=TCCDConfig.Create(self);
   emailconfig:=TCCDConfig.Create(self);
   bpmconfig:=TCCDconfig.Create(self);
+  globalconfig:=TCCDconfig.Create(self);
   ProfileFromCommandLine:=false;
   if Application.HasOption('c', 'config') then begin
     profile:=Application.GetOptionValue('c', 'config');
@@ -1407,6 +1409,8 @@ begin
   for i:=1 to MaxScriptDir do ScriptDir[i]:=TScriptDir.Create;
   ScriptDir[1].path:=slash(ConfigDir);
   ScriptDir[2].path:=slash(ScriptsDir);
+
+  SequenceDir:=globalconfig.GetValue('/Files/Sequence',ConfigDir);
 
   lang:=config.GetValue('/Language','');;
   lang:=u_translation.translate(lang);
@@ -2569,7 +2573,7 @@ end;
 Procedure Tf_main.StartSequence(SeqName: string);
 begin
   if f_sequence.Running then exit;
-  f_sequence.LoadTargets(slash(ConfigDir)+SeqName+'.targets');
+  f_sequence.LoadTargets(slash(SequenceDir)+SeqName+'.targets');
   StartSequenceTimer.Enabled:=true;
 end;
 
@@ -2918,6 +2922,7 @@ begin
   credentialconfig.Free;
   emailconfig.Free;
   bpmconfig.Free;
+  globalconfig.Free;
   ScrBmp.Free;
   FreeAndNil(FilterList);
   FreeAndNil(BinningList);
@@ -4297,6 +4302,7 @@ begin
     credentialconfig.Flush;
   emailconfig.Flush;
   bpmconfig.Flush;
+  globalconfig.Flush;
   if not ProfileFromCommandLine then begin
     DeleteFile(slash(ConfigDir)+'ccdciel.rc.tmp');
     inif:=TIniFile.Create(slash(ConfigDir)+'ccdciel.rc.tmp');
@@ -4324,6 +4330,7 @@ begin
    credentialconfig.Filename:=config.Filename+'.credential';
  emailconfig.Filename:=slash(ConfigDir)+'email.cfg';
  bpmconfig.Filename:=config.Filename+'.bpm';
+ globalconfig.Filename:=slash(ConfigDir)+'Global.cfg';
  UpdConfig(configver);
 end;
 
@@ -7405,6 +7412,7 @@ begin
    f_option.CbShowHints.Checked:=screenconfig.GetValue('/Hint/Show',true);
    f_option.CaptureDir.Text:=config.GetValue('/Files/CapturePath',defCapturePath);
    f_option.TempDir.Text:=config.GetValue('/Files/TmpDir',TmpDir);
+   f_option.SeqDir.Text:=globalconfig.GetValue('/Files/Sequence',SequenceDir);
    f_option.TCPIPport.Value:=config.GetValue('/Files/TCPIPConfigPort',3277);
    f_option.PythonCmd.Text:=config.GetValue('/Script/PythonCmd',PythonCmd);
    f_option.FolderOptions.RowCount:=SubDirCount;
@@ -8121,6 +8129,8 @@ begin
      config.SetValue('/Voice/Error',f_option.CheckGroupVoice.Checked[2]);
      config.SetValue('/Voice/Email',f_option.CheckGroupVoice.Checked[3]);
 
+     SetSequenceDir(f_option.SeqDir.Text);
+
      SaveConfig;
 
      SetOptions;
@@ -8132,6 +8142,47 @@ begin
      end;
 
    end;
+end;
+
+procedure Tf_main.SetSequenceDir(newdir:string);
+var i: integer;
+    fs : TSearchRec;
+
+  procedure movefile(fn: string);
+  var fn1,fn2,fn3: string;
+  begin
+  fn1:=slash(SequenceDir)+fn;
+  fn2:=slash(newdir)+fn;
+  CopyFile(fn1,fn2,[cffOverwriteFile],true);
+  fn3:=slash(SequenceDir)+fn+'.bak';
+  DeleteFile(fn3);
+  RenameFile(fn1,fn3);
+  end;
+
+begin
+ if slash(trim(newdir))=slash(trim(SequenceDir)) then exit;
+ newdir:=trim(newdir);
+ try
+ i:=FindFirst(slash(SequenceDir)+'*.plan',0,fs);
+ while i=0 do begin
+   movefile(fs.Name);
+   i:=FindNext(fs);
+ end;
+ FindClose(fs);
+ i:=FindFirst(slash(SequenceDir)+'*.targets',0,fs);
+ while i=0 do begin
+   movefile(fs.Name);
+   i:=FindNext(fs);
+ end;
+ FindClose(fs);
+ SequenceDir:=newdir;
+ globalconfig.SetValue('/Files/Sequence',SequenceDir);
+ globalconfig.Flush;
+ if CurrentSeqName<>'' then
+    f_sequence.LoadTargets(slash(SequenceDir)+CurrentSeqName+'.targets');
+ except
+   on E: Exception do ShowMessage(Format(rsCopyfileErro, [E.Message]));
+ end;
 end;
 
 procedure Tf_main.MenuPdfHelpClick(Sender: TObject);
