@@ -76,6 +76,7 @@ type
     function GetExposure:double;
     procedure SetExposure(value:double);
     function GetBinning: integer;
+    procedure SetBinning(value:integer);
     function GetGain:integer;
     procedure SetGain(value:integer);
     function GetOffset:integer;
@@ -93,7 +94,7 @@ type
     property Exposure: double read GetExposure write SetExposure;
     property Gain: integer read GetGain write SetGain;
     property Offset: integer read GetOffset write SetOffset;
-    property Bin: integer read GetBinning;
+    property Bin: integer read GetBinning write SetBinning;
     property onResetStack: TNotifyEvent read FonResetStack write FonResetStack;
     property onStartExposure: TNotifyEvent read FonStartExposure write FonStartExposure;
     property onAbortExposure: TNotifyEvent read FonAbortExposure write FonAbortExposure;
@@ -238,6 +239,15 @@ begin
      result:=StrToIntDef(buf,1);
   end
   else result:=1;
+end;
+
+procedure Tf_preview.SetBinning(value:integer);
+var buf:String;
+    i: integer;
+begin
+  buf:=IntToStr(value)+'x'+IntToStr(value);
+  i:=Binning.Items.IndexOf(buf);
+  if i>=0 then Binning.ItemIndex:=i;
 end;
 
 function Tf_preview.GetGain:integer;

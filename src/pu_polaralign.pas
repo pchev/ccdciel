@@ -725,6 +725,9 @@ begin
   // start image loop
   FVisu.BtnZoomAdjust.Click;
   preview.Exposure:=config.GetValue('/PrecSlew/Exposure',1.0);
+  preview.Bin:=config.GetValue('/PrecSlew/Binning',1);
+  preview.Gain:=config.GetValue('/PrecSlew/Gain',NullInt);
+  preview.Offset:=config.GetValue('/PrecSlew/Offset',NullInt);
   if not preview.Loop then preview.BtnLoopClick(nil);
   FInProgress:=false;
   tracemsg('Computation complete');
