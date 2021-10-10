@@ -37,6 +37,7 @@ type
     BtnCompute: TButton;
     ButtonOK: TButton;
     Button2: TButton;
+    GotoAstrometry: TCheckBox;
     De: TEdit;
     Label8: TLabel;
     msginfo: TLabel;

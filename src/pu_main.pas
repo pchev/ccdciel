@@ -6728,6 +6728,7 @@ if f_mount.BtnGoto.Caption=rsGoto then begin
    f_goto.PanelPxSz.Visible:=false;
    f_goto.PanelAltAz.Visible:=true;
    f_goto.ButtonOK.Caption:=rsGoto;
+   f_goto.GotoAstrometry.Checked:=true;
    f_goto.ShowModal;
    if f_goto.ModalResult=mrok then begin
      tra:= f_goto.Ra.Text;
@@ -6750,10 +6751,23 @@ if f_mount.BtnGoto.Caption=rsGoto then begin
        if CancelGoto then exit;
        NewMessage(rsGoto+': '+objn,1);
        J2000ToMount(mount.EquinoxJD,ra,de);
-       if astrometry.PrecisionSlew(ra,de,err) then begin
-         f_capture.Fname.Text:=objn;
-        end
-       else NewMessage(format(rsError,[rsGoto+': '+objn]) ,1);
+       if f_goto.GotoAstrometry.Checked then begin
+         if astrometry.PrecisionSlew(ra,de,err) then
+           f_capture.Fname.Text:=objn
+         else
+           NewMessage(format(rsError,[rsGoto+': '+objn]) ,1);
+       end
+       else begin
+         GotoStart(nil);
+         try
+         if mount.Slew(ra,de) then
+           f_capture.Fname.Text:=objn
+         else
+           NewMessage(format(rsError,[rsGoto+': '+objn]) ,1);
+         finally
+         GotoEnd(nil);
+         end;
+       end;
      end
      else NewMessage(rsInvalidCoord,1);
    end;
