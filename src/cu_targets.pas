@@ -2482,7 +2482,8 @@ begin
 end;
 
 procedure T_Targets.RunErrorAction;
-var path,sname: string;
+var scriptfound:boolean;
+    i:integer;
 begin
   f_pause.Caption:=rsTerminationO;
   f_pause.Text := rsDoYouWantToR2;
@@ -2493,10 +2494,16 @@ begin
   msg(rsExecutingThe,1);
   RunEndAction(false);
   if OnErrorRunScript then begin
-    path:=ScriptDir[1].path;
-    sname:=OnErrorScript;
-    if FileExistsUTF8(slash(path)+sname+'.script') then begin
-       f_scriptengine.RunScript(sname,path);
+    scriptfound:=false;
+    for i:=1 to MaxScriptDir do begin
+      if FileExistsUTF8(slash(ScriptDir[i].path)+OnErrorScript+'.script') then begin
+         scriptfound:=true;
+         f_scriptengine.RunScript(OnErrorScript,ScriptDir[i].path);
+         break;
+      end;
+    end;
+    if not scriptfound then begin
+      msg(Format(rsFileNotFound,[OnErrorScript+'.script']),1);
     end;
   end;
 end;
@@ -2545,8 +2552,7 @@ if AtEndStopTracking or AtEndPark or AtEndCloseDome or AtEndWarmCamera or AtEndR
       end;
     end;
     if not scriptfound then begin
-      msg(Format(rsFileNotFound,[AtEndScript+'.script'])
-      if pos(' ', AtEndScript)>0 then msg(rsAvoidSpacesI, 1);
+      msg(Format(rsFileNotFound,[AtEndScript+'.script']),1);
     end;
   end;
   if AtEndShutdown then begin

@@ -123,6 +123,7 @@ end;
 procedure Tf_script.RunStartupScript;
 var path,sname: string;
 begin
+  // Always run user customized script, never try to run the distribution sample script
   path:=ScriptDir[1].path;
   sname:='startup';
   if FileExistsUTF8(slash(path)+sname+'.script') then begin
@@ -133,6 +134,7 @@ end;
 procedure Tf_script.RunShutdownScript;
 var path,sname: string;
 begin
+  // Always run user customized script, never try to run the distribution sample script
   path:=ScriptDir[1].path;
   sname:='shutdown';
   if FileExistsUTF8(slash(path)+sname+'.script') then begin
@@ -153,6 +155,10 @@ begin
       sname:=ComboBoxScript.Items[i];
       scdir:=TScriptDir(ComboBoxScript.Items.Objects[i]);
       if (sname='')or(scdir=nil) then exit;
+      if not FileExistsUTF8(slash(scdir.path)+sname+'.script') then begin
+        msg(Format(rsFileNotFound,[sname+'.script']));
+        exit;
+      end;
       f_scriptengine.RunScript(sname,scdir.path);
    end;
   end
