@@ -764,12 +764,21 @@ function Tf_scriptengine.ScriptType(fn: string): TScriptType;
 var
  f: textfile;
  buf: string;
+ p: integer;
 begin
  result:=stUnknown;
  AssignFile(f,fn);
  Reset(f);
  repeat
    ReadLn(f,buf);
+   p:=pos(';',buf);
+   if p>0 then buf:=copy(buf,1,p-1);
+   p:=pos('{',buf);
+   if p>0 then buf:=copy(buf,1,p-1);
+   p:=pos('//',buf);
+   if p>0 then buf:=copy(buf,1,p-1);
+   p:=pos('(*',buf);
+   if p>0 then buf:=copy(buf,1,p-1);
    if LowerCase(trim(buf))='begin' then begin
      result:=stPascal;
      break;
