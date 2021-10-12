@@ -2503,6 +2503,7 @@ end;
 
 procedure T_Targets.RunEndAction(confirm: boolean=true);
 var i: integer;
+    scriptfound: boolean;
 begin
 if AtEndStopTracking or AtEndPark or AtEndCloseDome or AtEndWarmCamera or AtEndRunScript or AtEndShutdown then begin
   if confirm then begin
@@ -2535,11 +2536,17 @@ if AtEndStopTracking or AtEndPark or AtEndCloseDome or AtEndWarmCamera or AtEndR
     Camera.Temperature:=20.0;
   end;
   if AtEndRunScript then begin
+    scriptfound:=false;
     for i:=1 to MaxScriptDir do begin
       if FileExistsUTF8(slash(ScriptDir[i].path)+AtEndScript+'.script') then begin
+         scriptfound:=true;
          f_scriptengine.RunScript(AtEndScript,ScriptDir[i].path);
          break;
       end;
+    end;
+    if not scriptfound then begin
+      msg(Format(rsFileNotFound,[AtEndScript+'.script'])
+      if pos(' ', AtEndScript)>0 then msg(rsAvoidSpacesI, 1);
     end;
   end;
   if AtEndShutdown then begin

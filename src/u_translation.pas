@@ -1335,6 +1335,7 @@ resourcestring
   rsUseSpecificR = 'Use specific Readout mode for different actions';
   rsShortExposur = 'Short exposure stacking';
   rsShowStacking = 'Show stacking option for Preview/Capture/Sequence';
+  rsAvoidSpacesI = 'Avoid spaces in the filename.';
 
 implementation
 
