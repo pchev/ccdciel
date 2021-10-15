@@ -261,7 +261,8 @@ end;
 
 procedure TTCPThrd.Execute;
 var
-  s,su: string;
+  s,su,buf,hdr: string;
+  cl: integer;
 begin
   try
     Fsock := TTCPBlockSocket.Create;
@@ -279,7 +280,6 @@ begin
           if stoping or terminated then
             break;
           s := RecvString(500);
-          //if s<>'' then writeln(s);   // for debuging only, not thread safe!
           if lastError = 0 then
           begin
             su:=uppercase(s);
@@ -287,18 +287,40 @@ begin
               break;
             end
             else if copy(su,1,3)='GET' then begin
-               FHttpRequest:=s;
-               Synchronize(@ProcessHttp);
-               break;
+              hdr:='';
+              repeat
+                buf:=RecvString(500);
+                if trim(buf)='' then break;
+                hdr:=hdr+crlf+buf;
+              until LastError<>0;
+              FHttpRequest:=s;
+              Synchronize(@ProcessHttp);
+              break;
             end
             else if copy(su,1,4)='POST' then begin
-              Fbody:='';
+              hdr:='';
+              cl:=-1;
               repeat
-                Fbody:=Fbody+RecvPacket(1);
+                buf:=RecvString(500);
+                if trim(buf)='' then break;
+                hdr:=hdr+crlf+buf;
+                if Pos('CONTENT-LENGTH:',UpperCase(buf))=1 then begin
+                  delete(buf,1,15);
+                  cl:=StrToIntDef(trim(buf),0);
+                end;
               until LastError<>0;
-               FHttpRequest:=s;
-               Synchronize(@ProcessPost);
-               break;
+              Fbody:='';
+              if cl>0 then begin
+                Fbody:=RecvBufferStr(cl,500);
+              end
+              else if cl=0 then begin
+                repeat
+                  Fbody:=Fbody+RecvPacket(500);
+                until LastError<>0;
+              end;
+              FHttpRequest:=s;
+              Synchronize(@ProcessPost);
+              break;
             end
             else if copy(s,1,1)='{' then begin
                FJSONRequest:=s;
@@ -474,20 +496,17 @@ end;
 
 procedure TTCPThrd.ProcessPost;
 var method, uri, protocol,Doc: string;
-   i: integer;
-   img: TMemoryStream;
 begin
   method := fetch(FHttpRequest, ' ');
   uri := fetch(FHttpRequest, ' ');
   protocol := fetch(FHttpRequest, ' ');
   if uri='/jsonrpc' then begin
-    i:=pos(CRLF+CRLF,Fbody);
-    if i<=0 then begin
+    if trim(Fbody)='' then begin
       Fsock.SendString('HTTP/1.0 405' + CRLF);
       Fsock.SendString('' + CRLF);
       Fsock.SendString('Invalid request' + CRLF);
     end;
-    FJSONRequest:=copy(Fbody,i+4,9999);
+    FJSONRequest:=trim(Fbody);
     ProcessJSON;
     Doc:=cmdresult;
     Fsock.SendString('HTTP/1.0 200' + CRLF);
