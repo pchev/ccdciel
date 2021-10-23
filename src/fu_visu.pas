@@ -156,6 +156,7 @@ begin
  Finitialized:=false;
  ImgMax:=high(word);
  ImgMin:=0;
+ FimageC:=1;
  HistogramAdjusted:=false;
  LockHistogram:=false;
  StartUpd:=false;
