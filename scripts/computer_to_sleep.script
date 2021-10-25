@@ -1,0 +1,31 @@
+{ CCDciel script to put the computer to sleep }
+var connected: boolean;
+    hostOS: string;
+begin
+ // Get operating system we are running
+  GetS('hostOS',hostOS);
+  if (hostOS<>'linux') and (hostOS<>'windows') then begin
+    logMsg('This script is not supported on '+hostOS);
+    exit;
+  end;
+
+ // telescope connected?
+  GetB('TELESCOPE_CONNECTED',connected);
+  if connected then begin
+    logMsg('Telescope connected, stopping all mount movement including tracking');
+    logMsg(cmd('TELESCOPE_ABORTMOTION'));
+  end;
+ 
+  logMsg('Will shutdown in 120 seconds');
+  // wait 1/720 part of a day
+   if not waittill(formatdatetime('hh":"nn":"ss',now+1.0/720),true) then exit; 
+
+   if hostOS='windows' then
+     Run('rundll32.exe powrprof.dll,SetSuspendState 0,1,0');
+
+   if hostOS='linux' then
+     Run('sudo /usr/sbin/hibernate');
+     {install the package hibernate, configure the swap and kernel parameter resume= }
+     {use visudo to allow to run this command without password}
+
+end.
