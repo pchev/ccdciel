@@ -306,6 +306,7 @@ begin
   else if varname='BIASDIR' then str:=Fcapture.FrameType.Items[ord(BIAS)]
   else if varname='DARKDIR' then str:=Fcapture.FrameType.Items[ord(DARK)]
   else if varname='FLATDIR' then str:=Fcapture.FrameType.Items[ord(FLAT)]
+  else if varname='HOSTOS' then str:=hostOS
   else if varname='STR1' then str:=slist[0]
   else if varname='STR2' then str:=slist[1]
   else if varname='STR3' then str:=slist[2]

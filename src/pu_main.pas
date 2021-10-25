@@ -13713,6 +13713,7 @@ try
   else if method='BIASDIR' then result:=result+'"result": "'+f_capture.FrameType.Items[ord(BIAS)]+'"'
   else if method='DARKDIR' then result:=result+'"result": "'+f_capture.FrameType.Items[ord(DARK)]+'"'
   else if method='FLATDIR' then result:=result+'"result": "'+f_capture.FrameType.Items[ord(FLAT)]+'"'
+  else if method='HOSTOS' then result:=result+'"result": "'+hostOS+'"'
   else if method='WHEEL_GETFILTERSNAME' then begin
     sl:=Tstringlist.Create;
     if f_scriptengine.cmd_Wheel_GetFiltersName(sl)<>msgOK then raise(Exception.Create(msgFailed));

@@ -306,6 +306,7 @@ const
     defHNSKYpath = 'hnsky';
     defSAMPpath = 'aladin';
     defPHDpath = 'phd2';
+    hostOS = 'linux';
   {$endif}
   {$ifdef darwin}
     SharedDir = './';
@@ -318,6 +319,7 @@ const
     defHNSKYpath = 'hnsky';
     defSAMPpath = '/Applications/Aladin.app/Contents/MacOS/Aladin';
     defPHDpath = '/Applications/PHD2.app/Contents/MacOS/PHD2';
+    hostOS = 'darwin';
   {$endif}
   {$ifdef mswindows}
     SharedDir = '.\';
@@ -330,6 +332,7 @@ const
     defHNSKYpath = 'C:\Program Files\hnsky\hnsky.exe';
     defSAMPpath = 'C:\Program Files\Aladin\Aladin.exe';
     defPHDpath = 'C:\Program Files (x86)/PHDGuiding2/phd2.exe';
+    hostOS = 'windows';
   {$endif}
   {$ifdef darwin}
     OpenFileCMD: string = 'open';
