@@ -6,7 +6,7 @@ CCDciel has all functionality required for advanced imaging of celestial objects
 For devices connection it uses the INDI and ASCOM standards drivers. It can control the CCD/CMOS camera, focuser, filter wheel, rotator and telescope mount and uses image resolving software such astrometry.net for accurate positioning. It can serve both the beginner astro photographer as the advanced who can take a nap while the equipment is imaging.
 
 You can use CCDciel on Windows, macOS or Linux.
-The program is still in beta version but it is now quit stable and run smoothly on every platform
+The program is still in beta version but it is now quite stable and runs smoothly on every platform
 In any case I will appreciate your help for testing this software and reporting any bug or other problem you may encounter. 
 
 It is build with Freepascal compiler and Lazarus IDE and library. https://www.lazarus-ide.org/
