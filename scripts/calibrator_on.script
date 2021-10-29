@@ -1,0 +1,43 @@
+// This script turn on the calibrator light at the specifed brightness
+// Require a CoverCalibrator driver
+
+// Set here the desired calibrator brightness
+
+const brightness = -1 ;
+
+// No change required below this line
+
+var i: integer;
+    txt,resp: string;
+    arg: tstringlist;
+
+procedure exiterror;
+var errtxt: string;
+begin
+getS('LastError',errtxt);
+raiseexception(erCustomError, errtxt);
+end;
+
+begin
+  GetSL('STRL1',arg);
+
+  GetS('coverstatus',txt);
+  if txt<>'Closed' then raiseexception(erCustomError, 'Cover is not closed');
+
+  if brightness>=0 then begin
+    arg.clear;
+    arg.add(InttoStr(brightness));
+    resp:=CmdArg('CALIBRATOR_BRIGHTNESS',arg);
+    if resp<>msgOK then exiterror;
+    wait(1);
+  end;
+
+  resp:=Cmd('CALIBRATOR_LIGHT_ON');
+  if resp<>msgOK then exiterror;
+  wait(1);
+
+  GetS('calibratorstatus',txt);
+  GetI('calibratorbrightness',i);
+  logMsg('Calibrator is '+txt+', brightness='+inttostr(i));
+
+end.

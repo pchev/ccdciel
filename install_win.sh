@@ -55,6 +55,12 @@ install -v -m 644 scripts/scope_position.script  $destdir/scripts/scope_position
 install -v -m 644 scripts/T_scope_alignment.script  $destdir/scripts/T_scope_alignment.script 
 install -v -m 644 scripts/T_scope_alignment_py.script  $destdir/scripts/T_scope_alignment_py.script 
 install -v -m 644 scripts/T_eqmod_alignment.script  $destdir/scripts/T_eqmod_alignment.script 
+install -v -m 644 scripts/computer_shutdown.script  $destdir/scripts/computer_shutdown.script  
+install -v -m 644 scripts/computer_to_sleep.script  $destdir/scripts/computer_to_sleep.script
+install -v -m 644 scripts/cover_open.script  $destdir/scripts/cover_open.script 
+install -v -m 644 scripts/cover_close.script  $destdir/scripts/cover_close.script 
+install -v -m 644 scripts/calibrator_on.script  $destdir/scripts/calibrator_on.script
+install -v -m 644 scripts/calibrator_off.script  $destdir/scripts/calibrator_off.script 
 install -v -m 755 scripts/astrometry.sh  $destdir/scripts/astrometry.sh
 install -v -m 755 scripts/astrometry-online.sh  $destdir/scripts/astrometry-online.sh
 install -v -m 755 scripts/astrometry-macos.sh  $destdir/scripts/astrometry-macos.sh

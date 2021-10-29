@@ -1,0 +1,21 @@
+// This script turn off the calibrator light
+// Require a CoverCalibrator driver
+
+var txt,resp: string;
+
+procedure exiterror;
+var errtxt: string;
+begin
+getS('LastError',errtxt);
+raiseexception(erCustomError, errtxt);
+end;
+
+begin
+
+  resp:=Cmd('CALIBRATOR_LIGHT_OFF');
+  if resp<>msgOK then exiterror;
+
+  GetS('calibratorstatus',txt);
+  logMsg('Calibrator is '+txt);
+
+end.

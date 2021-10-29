@@ -1,0 +1,23 @@
+// This script close the telescope cover
+// Require a CoverCalibrator driver
+
+var txt,resp: string;
+
+procedure exiterror;
+var errtxt: string;
+begin
+getS('LastError',errtxt);
+raiseexception(erCustomError, errtxt);
+end;
+
+begin
+
+  // Close cover
+  resp := cmd('COVER_CLOSE');
+  if resp<>msgOK then exiterror;
+
+  // Show status
+  GetS('coverstatus',txt);
+  logMsg('Cover is now '+txt);
+
+end.

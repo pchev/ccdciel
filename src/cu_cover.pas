@@ -29,8 +29,8 @@ uses u_global, indiapi, Classes, SysUtils;
 
 const
 
-  CoverLabel: array[0..5] of string = ('Not present','Closed','Moving','Open','','Error');
-  CalibratorLabel: array[0..5] of string = ('Not present','Off','Not ready','Ready','','Error');
+  CoverLabel: array[0..5] of string = ('Not present','Closed','Moving','Open','Unknown','Error');
+  CalibratorLabel: array[0..5] of string = ('Not present','Off','Not ready','Ready','Unknown','Error');
 
 type
 

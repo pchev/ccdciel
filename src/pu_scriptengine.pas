@@ -31,6 +31,7 @@ interface
 
 uses  u_global, u_utils, cu_fits, indiapi, cu_planetarium, fu_ccdtemp, fu_devicesconnection, pu_pause,
   fu_capture, fu_preview, fu_mount, cu_wheel, cu_mount, cu_camera, cu_focuser, cu_autoguider, cu_astrometry,
+  fu_cover, cu_cover,
   Classes, SysUtils, FileUtil, uPSComponent, uPSComponent_Default, LazFileUtils,
   uPSComponent_Forms, uPSComponent_Controls, uPSComponent_StdCtrls, Forms, process,
   u_translation, Controls, Graphics, Dialogs, ExtCtrls;
@@ -81,6 +82,7 @@ type
     Fpreview: Tf_preview;
     Fccdtemp: Tf_ccdtemp;
     f_mount: Tf_mount;
+    f_cover: Tf_cover;
     Ffilter: T_wheel;
     Fmount: T_mount;
     Fcamera: T_camera;
@@ -208,6 +210,14 @@ type
     function cmd_AutoFocus:string;
     function cmd_AutomaticAutoFocus:string;
     function cmd_ListFiles(var lf:TStringList):string;
+    function cmd_coverstatus: string;
+    function cmd_coveropen: string;
+    function cmd_coverclose: string;
+    function cmd_calibratorstatus: string;
+    function cmd_getcalibratorbrightness: integer;
+    function cmd_setcalibratorbrightness(value:string): string;
+    function cmd_calibratorlighton: string;
+    function cmd_calibratorlightoff: string;
     function ScriptType(fn: string): TScriptType;
     function  RunScript(sname,path: string):boolean;
     function ScriptRunning: boolean;
@@ -234,6 +244,7 @@ type
     property Capture: Tf_capture read Fcapture write Fcapture;
     property Fomount: Tf_mount read f_mount write f_mount;
     property Mount: T_mount read Fmount write Fmount;
+    property Cover: Tf_cover read f_cover write f_cover;
     property Camera: T_camera read Fcamera write Fcamera;
     property Focuser: T_focuser read FFocuser write FFocuser;
     property Filter: T_wheel read Ffilter write Ffilter;
@@ -307,6 +318,8 @@ begin
   else if varname='DARKDIR' then str:=Fcapture.FrameType.Items[ord(DARK)]
   else if varname='FLATDIR' then str:=Fcapture.FrameType.Items[ord(FLAT)]
   else if varname='HOSTOS' then str:=hostOS
+  else if varname='COVERSTATUS' then str:=cmd_coverstatus
+  else if varname='CALIBRATORSTATUS' then str:=cmd_calibratorstatus
   else if varname='STR1' then str:=slist[0]
   else if varname='STR2' then str:=slist[1]
   else if varname='STR3' then str:=slist[2]
@@ -436,6 +449,7 @@ begin
   result:=true;
   varname:=uppercase(varname);
   if varname='FOCUSERPOSITION' then i:=FFocuser.Position
+  else if varname='CALIBRATORBRIGHTNESS' then i:=cmd_getcalibratorbrightness
   else if varname='INT1' then i:=ilist[0]
   else if varname='INT2' then i:=ilist[1]
   else if varname='INT3' then i:=ilist[2]
@@ -793,7 +807,7 @@ begin
 end;
 
 function Tf_scriptengine.RunScript(sname,path: string):boolean;
-var fn,buf: string;
+var fn: string;
     i: integer;
     ok: boolean;
     st: TScriptType;
@@ -993,6 +1007,10 @@ else if cname='PROGRAM_SHUTDOWN' then result:=cmd_ProgramShutdown
 else if cname='CLEAR_REFERENCE_IMAGE' then result:=cmd_ClearReferenceImage
 else if cname='AUTOFOCUS' then result:=cmd_AutoFocus
 else if cname='AUTOMATICAUTOFOCUS' then result:=cmd_AutomaticAutoFocus
+else if cname='COVER_OPEN' then result:=cmd_coveropen
+else if cname='COVER_CLOSE' then result:=cmd_coverclose
+else if cname='CALIBRATOR_LIGHT_ON' then result:=cmd_calibratorlighton
+else if cname='CALIBRATOR_LIGHT_OFF' then result:=cmd_calibratorlightoff
 ;
 LastErr:='cmd('+cname+'): '+result;
 end;
@@ -1027,6 +1045,7 @@ else if cname='OPEN_FITS_FILE' then result:=cmd_OpenFitsFile(arg[0])
 else if cname='OPEN_REFERENCE_IMAGE' then result:=cmd_OpenReferenceImage(arg[0])
 else if cname='LIST_FILES' then result:=cmd_ListFiles(arg)
 else if cname='PLANETARIUM_SHOWIMAGE_FOV' then result:=cmd_PlanetariumShowImage(arg[0])
+else if cname='CALIBRATOR_BRIGHTNESS' then result:=cmd_setcalibratorbrightness(arg[0])
 ;
 LastErr:='cmdarg('+cname+'): '+result;
 end;
@@ -1750,6 +1769,101 @@ begin
   result:=msgFailed;
 end;
 
+function Tf_scriptengine.cmd_coverstatus: string;
+begin
+ result:=CoverLabel[ord(f_cover.Cover)];
+end;
+
+function Tf_scriptengine.cmd_coveropen: string;
+var timeout: double;
+begin
+  result:=msgFailed;
+  if f_cover.Connected then begin
+    timeout:=now+60/secperday;
+    f_cover.BtnOpenCoverClick(nil);
+    repeat
+      wait(1);
+      if now>timeout then break;
+    until (f_cover.Cover<>covMoving);
+    if f_cover.Cover=covOpen then result:=msgOK;
+  end;
+end;
+
+function Tf_scriptengine.cmd_coverclose: string;
+var timeout: double;
+begin
+  result:=msgFailed;
+  if f_cover.Connected then begin
+    timeout:=now+60/secperday;
+    f_cover.BtnCloseCoverClick(nil);
+    repeat
+      wait(1);
+      if now>timeout then break;
+    until (f_cover.Cover<>covMoving);
+    if f_cover.Cover=covClosed then result:=msgOK;
+  end;
+end;
+
+function Tf_scriptengine.cmd_calibratorstatus: string;
+begin
+  result:=CalibratorLabel[ord(f_cover.Calibrator)]
+end;
+
+function Tf_scriptengine.cmd_calibratorlighton: string;
+var timeout: double;
+begin
+  result:=msgFailed;
+  if f_cover.Connected then begin
+    timeout:=now+60/secperday;
+    f_cover.Light.Checked:=true;
+    f_cover.LightClick(nil);
+    repeat
+      wait(1);
+      if now>timeout then break;
+    until (f_cover.Calibrator<>calNotReady);
+    if f_cover.Calibrator=calReady then result:=msgOK;
+  end;
+end;
+
+function Tf_scriptengine.cmd_calibratorlightoff: string;
+var timeout: double;
+begin
+  result:=msgFailed;
+  if f_cover.Connected then begin
+    timeout:=now+60/secperday;
+    f_cover.Light.Checked:=false;
+    f_cover.LightClick(nil);
+    repeat
+      wait(1);
+      if now>timeout then break;
+    until (f_cover.Calibrator<>calNotReady);
+    if f_cover.Calibrator=calOff then result:=msgOK;
+  end;
+end;
+
+function Tf_scriptengine.cmd_getcalibratorbrightness: integer;
+begin
+  result:=f_cover.Brightness.Value;
+end;
+
+function Tf_scriptengine.cmd_setcalibratorbrightness(value:string): string;
+var timeout: double;
+    i,n: integer;
+begin
+  result:=msgFailed;
+  if f_cover.Connected then begin
+    val(value,i,n);
+    if n<>0 then exit;
+    timeout:=now+60/secperday;
+    f_cover.Brightness.Value:=i;
+    f_cover.BrightnessChange(nil);
+    repeat
+      wait(1);
+      if now>timeout then break;
+    until (f_cover.Calibrator<>calNotReady);
+    if (f_cover.Calibrator=calReady)or(f_cover.Calibrator=calOff) then result:=msgOK;
+  end;
+end;
 
 ///// Python scripts ///////
 
@@ -1791,7 +1905,6 @@ begin
 end;
 
 procedure Tf_scriptengine.ShowPythonOutput(output: TStringList; exitcode: integer);
-var i: integer;
 begin
 PythonResult:=exitcode;
 PythonOutput.Clear;

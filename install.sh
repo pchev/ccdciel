@@ -53,6 +53,12 @@ install -v -m 644 scripts/example/startup.script  $destdir/share/ccdciel/scripts
 install -v -m 644 scripts/example/shutdown.script  $destdir/share/ccdciel/scripts/example/shutdown.script
 install -v -m 644 scripts/indi/build_indi.sh  $destdir/share/ccdciel/scripts/indi/build_indi.sh
 if ((! armproc)) ; then
+  install -v -m 644 scripts/computer_shutdown.script  $destdir/share/ccdciel/scripts/computer_shutdown.script  
+  install -v -m 644 scripts/computer_to_sleep.script  $destdir/share/ccdciel/scripts/computer_to_sleep.script
+  install -v -m 644 scripts/cover_open.script  $destdir/share/ccdciel/scripts/cover_open.script 
+  install -v -m 644 scripts/cover_close.script  $destdir/share/ccdciel/scripts/cover_close.script 
+  install -v -m 644 scripts/calibrator_on.script  $destdir/share/ccdciel/scripts/calibrator_on.script
+  install -v -m 644 scripts/calibrator_off.script  $destdir/share/ccdciel/scripts/calibrator_off.script 
   install -v -m 644 scripts/T_scope_alignment.script  $destdir/share/ccdciel/scripts/T_scope_alignment.script 
   install -v -m 644 scripts/T_eqmod_alignment.script  $destdir/share/ccdciel/scripts/T_eqmod_alignment.script 
   install -v -m 644 scripts/siril_bias.script  $destdir/share/ccdciel/scripts/siril_bias.script

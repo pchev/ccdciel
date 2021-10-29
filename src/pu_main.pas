@@ -1632,6 +1632,7 @@ begin
   f_scriptengine.Capture:=f_capture;
   f_scriptengine.Ccdtemp:=f_ccdtemp;
   f_scriptengine.Fomount:=f_mount;
+  f_scriptengine.Cover:=f_cover;
   f_scriptengine.Autoguider:=autoguider;
   f_scriptengine.Astrometry:=astrometry;
   f_scriptengine.Planetarium:=planetarium;
@@ -13714,6 +13715,9 @@ try
   else if method='DARKDIR' then result:=result+'"result": "'+f_capture.FrameType.Items[ord(DARK)]+'"'
   else if method='FLATDIR' then result:=result+'"result": "'+f_capture.FrameType.Items[ord(FLAT)]+'"'
   else if method='HOSTOS' then result:=result+'"result": "'+hostOS+'"'
+  else if method='COVERSTATUS' then result:=f_scriptengine.cmd_coverstatus
+  else if method='CALIBRATORSTATUS' then result:=f_scriptengine.cmd_calibratorstatus
+  else if method='CALIBRATORBRIGHTNESS' then result:=InttoStr(f_scriptengine.cmd_getcalibratorbrightness)
   else if method='WHEEL_GETFILTERSNAME' then begin
     sl:=Tstringlist.Create;
     if f_scriptengine.cmd_Wheel_GetFiltersName(sl)<>msgOK then raise(Exception.Create(msgFailed));
@@ -13757,6 +13761,10 @@ try
   else if method='CLEAR_REFERENCE_IMAGE' then result:=result+'"result":{"status": "'+f_scriptengine.cmd_ClearReferenceImage+'"}'
   else if method='AUTOFOCUS' then result:=result+'"result":{"status": "'+f_scriptengine.cmd_AutoFocus+'"}'
   else if method='AUTOMATICAUTOFOCUS' then result:=result+'"result":{"status": "'+f_scriptengine.cmd_AutomaticAutoFocus+'"}'
+  else if method='COVER_OPEN' then result:=f_scriptengine.cmd_coveropen
+  else if method='COVER_CLOSE' then result:=f_scriptengine.cmd_coverclose
+  else if method='CALIBRATOR_LIGHT_ON' then result:=f_scriptengine.cmd_calibratorlighton
+  else if method='CALIBRATOR_LIGHT_OFF' then result:=f_scriptengine.cmd_calibratorlightoff
   // execute command with parameter
   else if method='DEVICES_CONNECTION' then begin
     if uppercase(trim(value[attrib.IndexOf('params.0')]))='TRUE' then buf:='ON' else buf:='OFF';
@@ -13882,6 +13890,11 @@ try
     x2:=StrToFloat(trim(value[attrib.IndexOf('params.1')]));
     cmdHz2Eq(x1,x2,x3,x4);
     result:=result+'"result":{"ra": '+FormatFloat(f9v,x3)+', "dec": '+FormatFloat(f9v,x4)+'}';
+  end
+  else if method='CALIBRATOR_BRIGHTNESS' then begin
+   buf1:=trim(value[attrib.IndexOf('params.0')]);
+   buf:=f_scriptengine.cmd_setcalibratorbrightness(buf1);
+   result:=result+'"result":{"status": "'+buf+'"}';
   end
   // method not found
   else begin
