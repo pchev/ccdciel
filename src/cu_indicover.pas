@@ -76,8 +76,7 @@ T_indicover = class(T_cover)
    Procedure OpenCover; override;
    Procedure CloseCover; override;
    function GetBrightness: integer; override;
-   procedure SetBrightness(value: integer); override;
-   Procedure CalibratorOn; override;
+   Procedure CalibratorOn(value: integer); override;
    Procedure CalibratorOff; override;
 end;
 
@@ -429,16 +428,12 @@ begin
  end;
 end;
 
-procedure T_indicover.SetBrightness(value: integer);
+Procedure T_indicover.CalibratorOn(value: integer);
 begin
  if LightIntensity<>nil then begin
    LightIntensity.np[0].Value:=value;
    indiclient.sendNewNumber(LightIntensity);
  end;
-end;
-
-Procedure T_indicover.CalibratorOn;
-begin
  if LightStatus<>nil then begin
    IUResetSwitch(LightStatus);
    LightOn.s:=ISS_ON;

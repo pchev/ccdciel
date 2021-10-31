@@ -53,7 +53,7 @@ type
     procedure LightClick(Sender: TObject);
   private
     { private declarations }
-    FOpenCover, FCloseCover, FChangeBrightness, FSetLight: TNotifyEvent;
+    FOpenCover, FCloseCover, FSetLight, FChangeBrightness: TNotifyEvent;
     FConnected: boolean;
     FCover: TCoverStatus;
     FCalibrator: TCalibratorStatus;
@@ -73,8 +73,8 @@ type
     property Calibrator: TCalibratorStatus read FCalibrator write SetCalibrator;
     property onOpenCover: TNotifyEvent read FOpenCover write FOpenCover;
     property onCloseCover: TNotifyEvent read FCloseCover write FCloseCover;
-    property onChangeBrightness: TNotifyEvent read FChangeBrightness write FChangeBrightness;
     property onSetLight: TNotifyEvent read FSetLight write FSetLight;
+    property onChangeBrightness: TNotifyEvent read FChangeBrightness write FChangeBrightness;
   end;
 
 implementation

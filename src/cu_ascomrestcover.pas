@@ -51,8 +51,7 @@ public
    Procedure OpenCover; override;
    Procedure CloseCover; override;
    function GetBrightness: integer; override;
-   procedure SetBrightness(value: integer); override;
-   Procedure CalibratorOn; override;
+   Procedure CalibratorOn(value: integer); override;
    Procedure CalibratorOff; override;
 end;
 
@@ -268,16 +267,11 @@ begin
    end;
 end;
 
-procedure T_ascomrestcover.SetBrightness(value: integer);
-begin
-  FSetBrightness := value;
-end;
-
-Procedure T_ascomrestcover.CalibratorOn;
+Procedure T_ascomrestcover.CalibratorOn(value: integer);
 begin
  if FStatus<>devConnected then exit;
  try
-   V.Put('calibratoron',['Brightness',inttostr(FSetBrightness)]);
+   V.Put('calibratoron',['Brightness',inttostr(value)]);
  except
    on E: Exception do msg('CalibratorOn error: ' + E.Message,0);
  end;

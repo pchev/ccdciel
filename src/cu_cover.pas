@@ -49,14 +49,13 @@ T_cover = class(TComponent)
     FHasCover, FHasCalibrator: boolean;
     st_cov: TCoverStatus;
     st_cal: TCalibratorStatus;
-    FMaxBrightness, FSetBrightness: integer;
+    FMaxBrightness: integer;
     FAutoLoadConfig: boolean;
     procedure msg(txt: string; level:integer=3);
     procedure SetTimeout(num:integer); virtual; abstract;
     function GetCoverState: TCoverStatus; virtual; abstract;
     function GetCalibratorState: TCalibratorStatus; virtual; abstract;
     function GetBrightness: integer; virtual; abstract;
-    procedure SetBrightness(value: integer); virtual; abstract;
   public
     constructor Create(AOwner: TComponent);override;
     destructor  Destroy; override;
@@ -64,7 +63,7 @@ T_cover = class(TComponent)
     Procedure Disconnect; virtual; abstract;
     Procedure OpenCover; virtual; abstract;
     Procedure CloseCover; virtual; abstract;
-    Procedure CalibratorOn; virtual; abstract;
+    Procedure CalibratorOn(value: integer); virtual; abstract;
     Procedure CalibratorOff; virtual; abstract;
     property DeviceName: string read FDevice;
     property CoverInterface: TDevInterface read FCoverInterface;
@@ -76,7 +75,7 @@ T_cover = class(TComponent)
     property CoverState: TCoverStatus read GetCoverState;
     property CalibratorState: TCalibratorStatus read GetCalibratorState;
     property MaxBrightness: integer read FMaxBrightness;
-    property Brightness: integer read GetBrightness write SetBrightness;
+    property Brightness: integer read GetBrightness;
     property onMsg: TNotifyMsg read FonMsg write FonMsg;
     property onDeviceMsg: TNotifyMsg read FonDeviceMsg write FonDeviceMsg;
     property onStatusChange: TNotifyEvent read FonStatusChange write FonStatusChange;
@@ -94,7 +93,6 @@ begin
   st_cov := covUnknown;
   st_cal := calUnknown;
   FMaxBrightness := 0;
-  FSetBrightness := 0;
 end;
 
 destructor  T_cover.Destroy;

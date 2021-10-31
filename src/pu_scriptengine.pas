@@ -215,8 +215,7 @@ type
     function cmd_coverclose: string;
     function cmd_calibratorstatus: string;
     function cmd_getcalibratorbrightness: integer;
-    function cmd_setcalibratorbrightness(value:string): string;
-    function cmd_calibratorlighton: string;
+    function cmd_calibratorlighton(value:string): string;
     function cmd_calibratorlightoff: string;
     function ScriptType(fn: string): TScriptType;
     function  RunScript(sname,path: string):boolean;
@@ -1009,7 +1008,6 @@ else if cname='AUTOFOCUS' then result:=cmd_AutoFocus
 else if cname='AUTOMATICAUTOFOCUS' then result:=cmd_AutomaticAutoFocus
 else if cname='COVER_OPEN' then result:=cmd_coveropen
 else if cname='COVER_CLOSE' then result:=cmd_coverclose
-else if cname='CALIBRATOR_LIGHT_ON' then result:=cmd_calibratorlighton
 else if cname='CALIBRATOR_LIGHT_OFF' then result:=cmd_calibratorlightoff
 ;
 LastErr:='cmd('+cname+'): '+result;
@@ -1045,7 +1043,7 @@ else if cname='OPEN_FITS_FILE' then result:=cmd_OpenFitsFile(arg[0])
 else if cname='OPEN_REFERENCE_IMAGE' then result:=cmd_OpenReferenceImage(arg[0])
 else if cname='LIST_FILES' then result:=cmd_ListFiles(arg)
 else if cname='PLANETARIUM_SHOWIMAGE_FOV' then result:=cmd_PlanetariumShowImage(arg[0])
-else if cname='CALIBRATOR_BRIGHTNESS' then result:=cmd_setcalibratorbrightness(arg[0])
+else if cname='CALIBRATOR_LIGHT_ON' then result:=cmd_calibratorlighton(arg[0])
 ;
 LastErr:='cmdarg('+cname+'): '+result;
 end;
@@ -1809,14 +1807,18 @@ begin
   result:=CalibratorLabel[ord(f_cover.Calibrator)]
 end;
 
-function Tf_scriptengine.cmd_calibratorlighton: string;
+function Tf_scriptengine.cmd_calibratorlighton(value:string): string;
 var timeout: double;
+    i,n: integer;
 begin
   result:=msgFailed;
   if f_cover.Connected then begin
     timeout:=now+60/secperday;
+    val(value,i,n);
+    if n<>0 then exit;
     try
     f_cover.lock:=true;
+    f_cover.Brightness.Value:=i;
     f_cover.Light.Checked:=true;
     finally
     f_cover.lock:=false;
@@ -1854,30 +1856,6 @@ end;
 function Tf_scriptengine.cmd_getcalibratorbrightness: integer;
 begin
   result:=f_cover.Brightness.Value;
-end;
-
-function Tf_scriptengine.cmd_setcalibratorbrightness(value:string): string;
-var timeout: double;
-    i,n: integer;
-begin
-  result:=msgFailed;
-  if f_cover.Connected then begin
-    val(value,i,n);
-    if n<>0 then exit;
-    timeout:=now+60/secperday;
-    try
-    f_cover.lock:=true;
-    f_cover.Brightness.Value:=i;
-    finally
-    f_cover.lock:=false;
-    end;
-    f_cover.BrightnessChange(nil);
-    repeat
-      wait(1);
-      if now>timeout then break;
-    until (f_cover.Calibrator<>calNotReady);
-    if (f_cover.Calibrator=calReady)or(f_cover.Calibrator=calOff) then result:=msgOK;
-  end;
 end;
 
 ///// Python scripts ///////

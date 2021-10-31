@@ -5537,6 +5537,7 @@ CheckConnectionStatus;
 end;
 
 Procedure Tf_main.CoverChange(Sender: TObject);
+var i: integer;
 begin
  try
   if f_cover.lock then exit;
@@ -5552,7 +5553,11 @@ begin
     f_cover.PanelCalibrator.Visible:=true;
     f_cover.Calibrator:=cover.CalibratorState;
     f_cover.Brightness.MaxValue:=cover.MaxBrightness;
-    if f_cover.Calibrator<>calOff then f_cover.Brightness.Value:=cover.Brightness;
+    if f_cover.Calibrator<>calOff then
+      i:=cover.Brightness
+    else
+      i:=0;
+    if i>0 then f_cover.Brightness.Value:=i;
   end
   else f_cover.PanelCalibrator.Visible:=false;
 
@@ -5577,16 +5582,14 @@ end;
 
 Procedure Tf_main.BrightnessChange(Sender: TObject);
 begin
-  cover.Brightness:=f_cover.Brightness.Value;
   if f_cover.Light.Checked then
-    cover.CalibratorOn;
+    cover.CalibratorOn(f_cover.Brightness.Value);
 end;
 
 Procedure Tf_main.SetCalibratorLight(Sender: TObject);
 begin
   if f_cover.Light.Checked then begin
-    cover.Brightness:=f_cover.Brightness.Value;
-    cover.CalibratorOn;
+    cover.CalibratorOn(f_cover.Brightness.Value);
   end
   else begin
     cover.CalibratorOff;
@@ -13764,7 +13767,6 @@ try
   else if method='AUTOMATICAUTOFOCUS' then result:=result+'"result":{"status": "'+f_scriptengine.cmd_AutomaticAutoFocus+'"}'
   else if method='COVER_OPEN' then result:=f_scriptengine.cmd_coveropen
   else if method='COVER_CLOSE' then result:=f_scriptengine.cmd_coverclose
-  else if method='CALIBRATOR_LIGHT_ON' then result:=f_scriptengine.cmd_calibratorlighton
   else if method='CALIBRATOR_LIGHT_OFF' then result:=f_scriptengine.cmd_calibratorlightoff
   // execute command with parameter
   else if method='DEVICES_CONNECTION' then begin
@@ -13892,9 +13894,9 @@ try
     cmdHz2Eq(x1,x2,x3,x4);
     result:=result+'"result":{"ra": '+FormatFloat(f9v,x3)+', "dec": '+FormatFloat(f9v,x4)+'}';
   end
-  else if method='CALIBRATOR_BRIGHTNESS' then begin
+  else if method='CALIBRATOR_LIGHT_ON' then begin
    buf1:=trim(value[attrib.IndexOf('params.0')]);
-   buf:=f_scriptengine.cmd_setcalibratorbrightness(buf1);
+   buf:=f_scriptengine.cmd_calibratorlighton(buf1);
    result:=result+'"result":{"status": "'+buf+'"}';
   end
   // method not found

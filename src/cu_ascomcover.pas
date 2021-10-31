@@ -54,8 +54,7 @@ public
    Procedure OpenCover; override;
    Procedure CloseCover; override;
    function GetBrightness: integer; override;
-   procedure SetBrightness(value: integer); override;
-   Procedure CalibratorOn; override;
+   Procedure CalibratorOn(value: integer); override;
    Procedure CalibratorOff; override;
 end;
 
@@ -290,17 +289,12 @@ begin
  {$endif}
 end;
 
-procedure T_ascomcover.SetBrightness(value: integer);
-begin
- FSetBrightness := value;
-end;
-
-Procedure T_ascomcover.CalibratorOn;
+Procedure T_ascomcover.CalibratorOn(value: integer);
 begin
  {$ifdef mswindows}
  if not VarIsEmpty(V) then begin
    try
-     V.CalibratorOn(FSetBrightness);
+     V.CalibratorOn(value);
    except
      on E: Exception do msg('CalibratorOn error: ' + E.Message,0);
    end;

@@ -23,7 +23,6 @@ object f_cover: Tf_cover
     DragMode = dmAutomatic
     Font.Color = clBtnText
     Layout = tlCenter
-    ParentColor = False
     ParentFont = False
     Transparent = False
   end
@@ -54,18 +53,17 @@ object f_cover: Tf_cover
         AnchorSideTop.Side = asrCenter
         Left = 72
         Height = 14
-        Top = 5
+        Top = 6
         Width = 14
         Brush.Color = clRed
         Shape = stCircle
       end
       object Label1: TLabel
         Left = 8
-        Height = 17
+        Height = 19
         Top = 4
         Width = 37
         Caption = 'Cover'
-        ParentColor = False
         ParentFont = False
       end
       object BtnOpenCover: TButton
@@ -90,11 +88,10 @@ object f_cover: Tf_cover
       object LabelCover: TLabel
         AnchorSideTop.Control = Label1
         Left = 104
-        Height = 17
+        Height = 19
         Top = 4
         Width = 70
         Caption = 'LabelCover'
-        ParentColor = False
       end
     end
     object PanelCalibrator: TPanel
@@ -113,7 +110,7 @@ object f_cover: Tf_cover
         AnchorSideTop.Side = asrCenter
         Left = 72
         Height = 14
-        Top = 5
+        Top = 6
         Width = 14
         Brush.Color = clRed
         Shape = stCircle
@@ -121,11 +118,10 @@ object f_cover: Tf_cover
       object Label2: TLabel
         AnchorSideTop.Side = asrCenter
         Left = 8
-        Height = 17
+        Height = 19
         Top = 4
         Width = 60
         Caption = 'Calibrator'
-        ParentColor = False
         ParentFont = False
       end
       object Brightness: TSpinEdit
@@ -142,11 +138,10 @@ object f_cover: Tf_cover
       object LabelCalibrator: TLabel
         AnchorSideTop.Control = Label2
         Left = 104
-        Height = 17
+        Height = 19
         Top = 4
         Width = 93
         Caption = 'LabelCalibrator'
-        ParentColor = False
       end
       object Light: TCheckBox
         Left = 8
