@@ -1,0 +1,23 @@
+############################################
+# Script for Siril
+# Template for CCDciel preprocessing 
+# Preprocess a color series
+############################################
+
+requires 0.99.1
+setext fits
+
+cd $BASEDIR
+
+#preprocess lights
+cd $LIGHTDIR
+preprocess $LIGHTPREFIX$FILTER_ -dark=$MASTERDARK -flat=$MASTERFLAT$FILTER -equalize_cfa -debayer
+
+#stacking probably need some manual selection but it not hurt to try with all the images
+#align lights
+register pp_$LIGHTPREFIX$FILTER_
+
+#stack calibrated lights
+stack r_pp_$LIGHTPREFIX$FILTER_ rej 3 3 -norm=addscale
+
+close

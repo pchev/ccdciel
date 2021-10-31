@@ -1,6 +1,6 @@
 # CCDciel script to process files with Siril
 #
-# Create Master Bias
+# Create Master Flat
 
 from ccdciel import ccdciel
 from ccdciel import IsWindows
