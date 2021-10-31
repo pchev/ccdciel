@@ -2,6 +2,7 @@
 // Require a CoverCalibrator driver
 
 // Set here the desired calibrator brightness
+// It is best to first copy this script to include the brightness in the name, for example calibrator_on_65
 
 const brightness = -1 ;
 
@@ -24,17 +25,17 @@ begin
   GetS('coverstatus',txt);
   if txt<>'Closed' then raiseexception(erCustomError, 'Cover is not closed');
 
-  if brightness>=0 then begin
+  if brightness>0 then begin
     arg.clear;
     arg.add(InttoStr(brightness));
-    resp:=CmdArg('CALIBRATOR_BRIGHTNESS',arg);
+    resp:=CmdArg('CALIBRATOR_LIGHT_ON',arg);
     if resp<>msgOK then exiterror;
     wait(1);
+  end
+  else begin
+    logmsg('Please configure the desired brightness at the top the script');
+    exit;
   end;
-
-  resp:=Cmd('CALIBRATOR_LIGHT_ON');
-  if resp<>msgOK then exiterror;
-  wait(1);
 
   GetS('calibratorstatus',txt);
   GetI('calibratorbrightness',i);
