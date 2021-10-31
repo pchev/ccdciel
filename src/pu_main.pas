@@ -5553,6 +5553,7 @@ begin
     f_cover.PanelCalibrator.Visible:=true;
     f_cover.Calibrator:=cover.CalibratorState;
     f_cover.Brightness.MaxValue:=cover.MaxBrightness;
+    f_cover.Brightness.Hint:='0'+ellipsis+inttostr(f_cover.Brightness.MaxValue);
     if f_cover.Calibrator<>calOff then
       i:=cover.Brightness
     else
