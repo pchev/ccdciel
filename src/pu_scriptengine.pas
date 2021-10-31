@@ -1815,7 +1815,12 @@ begin
   result:=msgFailed;
   if f_cover.Connected then begin
     timeout:=now+60/secperday;
+    try
+    f_cover.lock:=true;
     f_cover.Light.Checked:=true;
+    finally
+    f_cover.lock:=false;
+    end;
     f_cover.LightClick(nil);
     repeat
       wait(1);
@@ -1831,7 +1836,12 @@ begin
   result:=msgFailed;
   if f_cover.Connected then begin
     timeout:=now+60/secperday;
+    try
+    f_cover.lock:=true;
     f_cover.Light.Checked:=false;
+    finally
+    f_cover.lock:=false;
+    end;
     f_cover.LightClick(nil);
     repeat
       wait(1);
@@ -1855,7 +1865,12 @@ begin
     val(value,i,n);
     if n<>0 then exit;
     timeout:=now+60/secperday;
+    try
+    f_cover.lock:=true;
     f_cover.Brightness.Value:=i;
+    finally
+    f_cover.lock:=false;
+    end;
     f_cover.BrightnessChange(nil);
     repeat
       wait(1);

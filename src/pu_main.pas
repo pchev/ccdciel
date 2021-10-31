@@ -5539,6 +5539,7 @@ end;
 Procedure Tf_main.CoverChange(Sender: TObject);
 begin
  try
+  if f_cover.lock then exit;
   f_cover.lock:=true;
 
   if cover.HasCover then begin
