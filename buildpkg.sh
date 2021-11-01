@@ -16,7 +16,6 @@ unset extratarget
 
 unset make_linux32
 unset make_linux64
-unset make_win_dual
 unset make_win32
 unset make_win64
 
@@ -25,7 +24,6 @@ if [[ $arch == i686 ]]; then
 fi
 if [[ $arch == x86_64 ]]; then 
    make_linux64=1
-#   make_win_dual=1
    make_win32=1
    make_win64=1
    extratarget=",x86_64-linux"
@@ -160,42 +158,6 @@ if [[ $make_linux64 ]]; then
   if [[ $? -ne 0 ]]; then exit 1;fi
   mv RPMS/x86_64/ccdciel*.rpm $wd
   if [[ $? -ne 0 ]]; then exit 1;fi
-
-  cd $wd
-  rm -rf $builddir
-fi
-
-# make Windows dual x86_64 and i386 version
-if [[ $make_win_dual ]]; then
-  rsync -a --exclude=.svn system_integration/Windows/installer/ccdciel/* $builddir
-  mkdir $builddir/Data
-  mkdir $builddir/Prog
-  # i386
-  export PATH=$mingw32:$save_PATH
-  ./configure $configopt prefix=$builddir/Data target=i386-win32$extratarget
-  if [[ $? -ne 0 ]]; then exit 1;fi
-  make OS_TARGET=win32 CPU_TARGET=i386 clean
-  make OS_TARGET=win32 CPU_TARGET=i386
-  if [[ $? -ne 0 ]]; then exit 1;fi
-  make install_win_dual32
-  if [[ $? -ne 0 ]]; then exit 1;fi
-  # x86_64
-  export PATH=$mingw64:$save_PATH
-  ./configure $configopt prefix=$builddir/Data target=x86_64-win64$extratarget
-  if [[ $? -ne 0 ]]; then exit 1;fi
-  make OS_TARGET=win64 CPU_TARGET=x86_64 clean
-  make OS_TARGET=win64 CPU_TARGET=x86_64
-  if [[ $? -ne 0 ]]; then exit 1;fi
-  make install_win_dual64
-  if [[ $? -ne 0 ]]; then exit 1;fi
-  # exe
-  cd $builddir
-  sed -i "/AppVerName/ s/V3/V$version/" ccdciel_dual.iss
-  sed -i "/OutputBaseFilename/ s/windows/$version-$currentrev-windows/" ccdciel_dual.iss
-  sed -i "s/ccdciel_version/$version/" Presetup/readme.txt
-  wine "$innosetup" "$wine_build\ccdciel_dual.iss"
-  if [[ $? -ne 0 ]]; then exit 1;fi
-  mv $builddir/ccdciel*.exe $wd
 
   cd $wd
   rm -rf $builddir
