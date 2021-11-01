@@ -4,7 +4,7 @@
 // Set here the desired calibrator brightness
 // It is best to first copy this script to include the brightness in the name, for example calibrator_on_65
 
-const brightness = -1 ;
+const brightness = 0 ;
 
 // No change required below this line
 
