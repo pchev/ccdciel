@@ -42,7 +42,7 @@ T_indisafety = class(T_safety)
    SafetyStatus: ILightVectorProperty;
    configprop: ISwitchVectorProperty;
    configload,configsave: ISwitch;
-   Fready,Fconnected: boolean;
+   Fready,Fconnected,FConnectDevice: boolean;
    Findiserver, Findiserverport, Findidevice: string;
    stSafe: boolean;
    procedure CreateIndiClient;
@@ -137,6 +137,7 @@ begin
     configprop:=nil;
     Fready:=false;
     Fconnected := false;
+    FConnectDevice:=false;
     stSafe:=false;
     FStatus := devDisconnected;
     if Assigned(FonStatusChange) then FonStatusChange(self);
@@ -158,6 +159,7 @@ begin
   FStatus := devConnected;
   if (not Fready) then begin
     Fready:=true;
+    if FAutoloadConfig and FConnectDevice then LoadConfig;
     if Assigned(FonStatusChange) then FonStatusChange(self);
   end;
 end;
@@ -218,7 +220,7 @@ begin
   ConnectTimer.Enabled:=False;
   if (connectprop<>nil) then begin
     if (connectoff.s=ISS_ON) then begin
-      if FAutoloadConfig then LoadConfig;
+      FConnectDevice:=true;
       indiclient.connectDevice(Findidevice);
       exit;
     end;

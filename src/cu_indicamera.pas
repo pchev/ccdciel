@@ -145,7 +145,7 @@ private
    CCDoffset:INumberVectorProperty;
    CCDoffsetValue:INumber;
    FRAWformat: integer;
-   FhasBlob,Fready,FWheelReady,Fconnected,UseMainSensor,Fconnectsend: boolean;
+   FhasBlob,Fready,FWheelReady,Fconnected,UseMainSensor,Fconnectsend,FConnectDevice: boolean;
    Findiserver, Findiserverport, Findidevice, Findisensor: string;
    FVideoMsg: boolean;
    lockvideostream:boolean;
@@ -419,6 +419,7 @@ begin
     Fready:=false;
     FWheelReady:=false;
     Fconnected := false;
+    FConnectDevice:=false;
     Fconnectsend := false;
     FStatus := devDisconnected;
     FWheelStatus:=devDisconnected;
@@ -459,6 +460,7 @@ begin
     then begin
        Fready:=true;
        UseMainSensor:=(Findisensor<>'CCD2');
+       if FAutoloadConfig and FConnectDevice then LoadConfig;
     end;
     if Fconnected and
        (WheelSlot<>nil) and
@@ -555,8 +557,8 @@ begin
  ConnectTimer.Enabled:=False;
  if (connectprop<>nil) then begin
    if (connectoff.s=ISS_ON) and (not Fconnectsend) then begin
-     if FAutoloadConfig then LoadConfig;
      indiclient.connectDevice(Findidevice);
+     FConnectDevice:=true;
      Fconnectsend:=true;
      ConnectTimer.Enabled:=true;
      exit;
