@@ -3565,6 +3565,7 @@ case rotator.RotatorInterface of
    ASCOM: RotatorName:=config.GetValue('/ASCOMrotator/Device','');
    ASCOMREST: RotatorName:='Rotator/'+IntToStr(config.GetValue('/ASCOMRestrotator/Device',0));
 end;
+UseRotator:=config.GetValue('/Devices/Rotator',false);
 case mount.MountInterface of
    INDI : MountName:=config.GetValue('/INDImount/Device','');
    ASCOM: MountName:=config.GetValue('/ASCOMmount/Device','');
@@ -3696,9 +3697,9 @@ begin
   BlueBalance:=config.GetValue('/Color/BlueBalance',0.9);
   ClippingOverflow:=config.GetValue('/Color/ClippingOverflow',MAXWORD);
   ClippingUnderflow:=config.GetValue('/Color/ClippingUnderflow',0);
-  ok:=config.GetValue('/Sensor/CanSetGain',false);
-  if ok<>camera.CanSetGain then begin
-    camera.CanSetGain:=ok;
+  CanSetGainOffset:=config.GetValue('/Sensor/CanSetGain',false);
+  if CanSetGainOffset<>camera.CanSetGain then begin
+    camera.CanSetGain:=CanSetGainOffset;
     Showgain;
   end;
   MaxADU:=config.GetValue('/Sensor/MaxADU',MAXWORD);

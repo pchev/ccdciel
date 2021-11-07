@@ -82,7 +82,7 @@ type
       Fdome: T_dome;
       Fmount: T_mount;
       Fcamera: T_camera;
-      Frotaror: T_rotator;
+      Frotator: T_rotator;
       Fautoguider: T_autoguider;
       Fastrometry: TAstrometry;
       Fplanetarium: TPlanetarium;
@@ -212,7 +212,7 @@ type
       property Capture: Tf_capture read Fcapture write Setcapture;
       property Mount: T_mount read Fmount write SetMount;
       property Camera: T_camera read Fcamera write SetCamera;
-      property Rotaror: T_rotator read Frotaror write Frotaror;
+      property Rotator: T_rotator read Frotator write Frotator;
       property Filter: Tf_filterwheel read Ffilter write SetFilter;
       property Weather: Tf_weather read Fweather write Fweather;
       property Safety: Tf_safety read Fsafety write Fsafety;
@@ -450,7 +450,7 @@ begin
   Fdome := Source.Fdome;
   Fmount := Source.Fmount;
   Fcamera := Source.Fcamera;
-  Frotaror := Source.Frotaror;
+  Frotator := Source.Frotator;
   Fautoguider := Source.Fautoguider;
   Fastrometry := Source.Fastrometry;
   Fplanetarium := Source.Fplanetarium;
@@ -1961,8 +1961,8 @@ begin
           end;
         end;
         // set rotator position
-        if (t.pa<>NullCoord)and(Frotaror.Status=devConnected) then begin
-          Frotaror.Angle:=t.pa;
+        if (t.pa<>NullCoord)and(Frotator.Status=devConnected) then begin
+          Frotator.Angle:=t.pa;
         end;
         // set coordinates
         if ((t.ra<>NullCoord)and(t.de<>NullCoord)) then begin
@@ -2669,9 +2669,12 @@ begin
 end;
 
 function TTarget.id: LongWord;
+var buf: string;
 begin
   // if any of this change we consider it another target
-  result:=Hash(objectname+StringReplace(planname,'*','',[])+ra_str+de_str+pa_str);
+  buf:=trim(objectname)+StringReplace(trim(planname),'*','',[])+ra_str+de_str;
+  if UseRotator then buf:=buf+pa_str;
+  result:=Hash(buf);
 end;
 
 function TemplateModified(p:T_Plan):boolean;

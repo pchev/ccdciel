@@ -322,7 +322,7 @@ end;
 procedure Tf_sequence.SetRotator(val: T_rotator);
 begin
   Frotator:=val;
-  Targets.Rotaror:=Frotator;
+  Targets.Rotator:=Frotator;
 end;
 
 procedure Tf_sequence.SetFilter(val: Tf_filterwheel);

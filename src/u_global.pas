@@ -451,7 +451,8 @@ var
   FilenameSep: String;
   FilePack: boolean;
   FileSequenceWidth: integer;
-  hasGain, hasGainISO, hasOffset: boolean;
+  UseRotator: boolean;
+  CanSetGainOffset, hasGain, hasGainISO, hasOffset: boolean;
   ISOList: TStringList;
   Gain,GainMin,GainMax: integer;
   Offset,OffsetMin,OffsetMax: integer;
@@ -625,9 +626,15 @@ begin
 end;
 
 function TStep.id: LongWord;
+var buf: string;
 begin
   // if any of this change we consider it another step
-  result:=Hash(description+frtype_str+exposure_str+binning_str+filter_str+gain_str+offset_str);
+  buf:=trim(description)+frtype_str+exposure_str+binning_str+filter_str;
+  if CanSetGainOffset then begin
+    if hasGain or hasGainISO then buf:=buf+gain_str;
+    if hasOffset then buf:=buf+offset_str;
+  end;
+  result:=Hash(buf);
 end;
 
 end.
