@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<component type="desktop-application">
+  <id>net.ap_i.ccdciel</id>
+  <metadata_license>CC0-1.0</metadata_license>
+  <project_license>GPL-3.0+</project_license>
+  <name>CCDciel</name>
+  <summary>CCD capture software for the amateur astronomer</summary>
+
+  <description>
+    <p>
+      A CCD capture software intended for the amateur astronomer.
+    </p>
+    <p>
+      It includes all the features required to perform digital imaging CCD observation
+      of celestial objects.
+    </p>
+    <p>
+      Using the standard drivers protocol INDI and ASCOM it can connect and control the CCD camera,
+      the focuser, the filter wheel and the telescope mount.
+    </p>
+  </description>
+
+  <launchable type="desktop-id">net.ap_i.ccdciel.desktop</launchable>
+
+  <screenshots>
+    <screenshot type="default">
+      <caption>The main window of CCDciel</caption>
+      <image>http://www.ap-i.net/ccdciel/_media/en/ccdciel.png</image>
+    </screenshot>
+  </screenshots>
+
+  <screenshots>
+    <screenshot>
+      <caption>The autofocus can help reaching optimal focusing</caption>
+      <image>http://www.ap-i.net/ccdciel/_media/en/screenshot/ccdciel_2.jpg</image>
+    </screenshot>
+  </screenshots>
+
+  <screenshots>
+    <screenshot>
+      <caption>CCDciel while acquiring a new image</caption>
+      <image>http://www.ap-i.net/ccdciel/_media/en/screenshot/ccdciel_3.jpg</image>
+    </screenshot>
+  </screenshots>
+
+  <screenshots>
+    <screenshot>
+      <caption>The sequence planner window</caption>
+      <image>http://www.ap-i.net/ccdciel/_media/en/screenshot/ccdciel_4.jpg</image>
+    </screenshot>
+  </screenshots>
+
+  <url type="homepage">http://www.ap-i.net/ccdciel/</url>
+  <developer_name>Patrick Chevalley</developer_name>
+  <updatecontact>pch_AT_ap-i.net</updatecontact>
+
+  <provides>
+    <binary>ccdciel</binary>
+  </provides>
+</component>

@@ -96,8 +96,8 @@ install -v -m 644 data/language/ccdciel_hints.fr.po  $destdir/share/ccdciel/data
 install -v -m 644 data/language/ccdciel_hints.it.po  $destdir/share/ccdciel/data/language/ccdciel_hints.it.po
 install -v -m 644 data/language/ccdciel_hints.ru.po  $destdir/share/ccdciel/data/language/ccdciel_hints.ru.po
 install -v -m 644 doc/doc_ccdciel_en.pdf $destdir/share/ccdciel/doc/doc_ccdciel_en.pdf
-install -v -m 644 system_integration/Linux/share/applications/ccdciel.desktop $destdir/share/applications/ccdciel.desktop
-install -v -m 644 system_integration/Linux/share/metainfo/ccdciel.appdata.xml $destdir/share/metainfo/ccdciel.appdata.xml
+install -v -m 644 system_integration/Linux/share/applications/net.ap_i.ccdciel.desktop $destdir/share/applications/net.ap_i.ccdciel.desktop
+install -v -m 644 system_integration/Linux/share/metainfo/net.ap_i.ccdciel.metainfo.xml $destdir/share/metainfo/net.ap_i.ccdciel.metainfo.xml
 install -v -m 644 system_integration/Linux/share/doc/ccdciel/changelog $destdir/share/doc/ccdciel/changelog
 install -v -m 644 system_integration/Linux/share/doc/ccdciel/copyright $destdir/share/doc/ccdciel/copyright
 install -v -m 644 system_integration/Linux/share/pixmaps/ccdciel.png $destdir/share/pixmaps/ccdciel.png

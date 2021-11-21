@@ -20,8 +20,8 @@ Using the standard drivers protocol INDI and ASCOM it can connect and control th
 %defattr(-,root,root)
 /usr/bin/ccdciel
 /usr/share/ccdciel
-/usr/share/metainfo/ccdciel.appdata.xml
-/usr/share/applications/ccdciel.desktop
+/usr/share/metainfo/net.ap_i.ccdciel.metainfo.xml
+/usr/share/applications/net.ap_i.ccdciel.desktop
 /usr/share/pixmaps/ccdciel.png
 /usr/share/icons/hicolor/48x48/apps/ccdciel.png
 /usr/share/doc/ccdciel
