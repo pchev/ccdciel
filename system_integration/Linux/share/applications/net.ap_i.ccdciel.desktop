@@ -1,11 +1,11 @@
 [Desktop Entry]
-Version=1.0
-Encoding=UTF-8
+Version=1.4
+Type=Application
 Name=CCDciel
+GenericName=Image Acquisition
 Comment=A CCD capture application for the amateur astronomer
+TryExec=ccdciel
 Exec=ccdciel
 Icon=ccdciel
 Terminal=false
-Type=Application
-Categories=Education;Science;Astronomy;
-GenericName=CCDciel
+Categories=Science;Astronomy;
