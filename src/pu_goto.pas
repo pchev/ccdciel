@@ -107,21 +107,28 @@ end;
 
 procedure Tf_goto.FormShow(Sender: TObject);
 begin
-  obj.SetFocus;
+  Obj.SetFocus;
 end;
 
 procedure Tf_goto.ObjKeyDown(Sender: TObject; var Key: Word; Shift: TShiftState);
 begin
-  if key=VK_RETURN then BtnSearchClick(Sender);
+  if key=VK_RETURN then begin
+    ActiveControl:=BtnSearch;
+    BtnSearchClick(Sender);
+    Obj.SetFocus;
+  end;
 end;
 
 procedure Tf_goto.BtnSearchClick(Sender: TObject);
 var ra0,dec0,length0,width0,pa : double;
     objname : string;
     found: boolean;
+    p: integer;
 begin
   found:=false;
   objname:=uppercase(trim(Obj.Text));
+  p:=pos('_',objname);
+  if p>0 then objname:=copy(objname,1,p-1);
   if length(objname)>1 then {Object name length should be two or longer}
   begin
     load_deep;{Load the deepsky database once. If already loaded, no action}

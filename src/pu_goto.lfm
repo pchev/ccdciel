@@ -20,7 +20,7 @@ object f_goto: Tf_goto
     TabOrder = 6
     object PxSz: TEdit
       Left = 120
-      Height = 34
+      Height = 30
       Top = 8
       Width = 111
       ParentFont = False
@@ -28,17 +28,17 @@ object f_goto: Tf_goto
     end
     object Label7: TLabel
       Left = 19
-      Height = 17
+      Height = 19
       Top = 8
-      Width = 78
+      Width = 73
       Caption = 'Image scale'
       ParentFont = False
     end
     object Label8: TLabel
       Left = 19
-      Height = 17
+      Height = 19
       Top = 32
-      Width = 66
+      Width = 58
       Caption = 'arcsec/px'
       ParentFont = False
     end
@@ -47,7 +47,7 @@ object f_goto: Tf_goto
       AnchorSideTop.Side = asrCenter
       Left = 246
       Height = 25
-      Top = 13
+      Top = 11
       Width = 75
       Caption = 'Compute'
       OnClick = BtnComputeClick
@@ -101,9 +101,9 @@ object f_goto: Tf_goto
     AnchorSideTop.Control = Ra
     AnchorSideTop.Side = asrCenter
     Left = 19
-    Height = 17
-    Top = 75
-    Width = 67
+    Height = 19
+    Top = 74
+    Width = 63
     Caption = 'Center RA'
     ParentFont = False
   end
@@ -111,9 +111,9 @@ object f_goto: Tf_goto
     AnchorSideTop.Control = De
     AnchorSideTop.Side = asrCenter
     Left = 19
-    Height = 17
-    Top = 109
-    Width = 73
+    Height = 19
+    Top = 108
+    Width = 70
     Caption = 'Center Dec'
     ParentFont = False
   end
@@ -121,9 +121,9 @@ object f_goto: Tf_goto
     AnchorSideTop.Control = Obj
     AnchorSideTop.Side = asrCenter
     Left = 19
-    Height = 17
-    Top = 38
-    Width = 85
+    Height = 19
+    Top = 37
+    Width = 78
     Caption = 'Object name'
     ParentFont = False
   end
@@ -164,9 +164,9 @@ object f_goto: Tf_goto
     AnchorSideTop.Control = Ra
     AnchorSideTop.Side = asrCenter
     Left = 246
-    Height = 17
-    Top = 75
-    Width = 39
+    Height = 19
+    Top = 74
+    Width = 36
     Caption = 'J2000'
     ParentFont = False
   end
@@ -174,17 +174,17 @@ object f_goto: Tf_goto
     AnchorSideTop.Control = De
     AnchorSideTop.Side = asrCenter
     Left = 246
-    Height = 17
-    Top = 109
-    Width = 39
+    Height = 19
+    Top = 108
+    Width = 36
     Caption = 'J2000'
     ParentFont = False
   end
   object msginfo: TLabel
     Left = 19
-    Height = 17
+    Height = 19
     Top = 4
-    Width = 55
+    Width = 50
     Caption = 'msginfo'
     ParentFont = False
   end
@@ -200,15 +200,15 @@ object f_goto: Tf_goto
     TabOrder = 5
     object Label4: TLabel
       Left = 19
-      Height = 17
+      Height = 19
       Top = 8
-      Width = 45
+      Width = 41
       Caption = 'Label4'
       ParentFont = False
     end
     object LabelAz: TLabel
       Left = 121
-      Height = 17
+      Height = 19
       Top = 8
       Width = 4
       Caption = '-'
@@ -216,15 +216,15 @@ object f_goto: Tf_goto
     end
     object Label5: TLabel
       Left = 19
-      Height = 17
+      Height = 19
       Top = 42
-      Width = 45
+      Width = 41
       Caption = 'Label5'
       ParentFont = False
     end
     object LabelAlt: TLabel
       Left = 121
-      Height = 17
+      Height = 19
       Top = 42
       Width = 4
       Caption = '-'
@@ -232,9 +232,9 @@ object f_goto: Tf_goto
     end
     object GotoAstrometry: TCheckBox
       Left = 19
-      Height = 23
+      Height = 21
       Top = 68
-      Width = 274
+      Width = 252
       Caption = 'Use astrometry to refine the position'
       Checked = True
       State = cbChecked
