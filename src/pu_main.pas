@@ -13908,7 +13908,10 @@ try
   result:=result+', "id": '+id+'}'
 
 except
-  on E: Exception do result := '{"jsonrpc": "2.0", "error": {"code": -32603, "message": "Internal error:'+E.Message+'"}, "id": '+id+'}';
+  on E: Exception do result :=
+     '{"jsonrpc": "2.0", "error": {"code": -32603, "message": "Internal error:'+
+     StringReplace(E.Message,'"','',[rfReplaceAll]) +
+     '"}, "id": '+id+'}';
 end;
 end;
 
