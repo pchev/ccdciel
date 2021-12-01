@@ -4338,6 +4338,7 @@ end;
 
 Procedure Tf_main.Connect(Sender: TObject);
 begin
+try
   if WantCamera and (CameraName='') then begin
     f_devicesconnection.BtnConnect.Caption:=rsConnect;
     ShowMessage(rsPleaseConfig+blank+rsCamera);
@@ -4441,6 +4442,8 @@ begin
   if WantWatchdog then ConnectWatchdog(Sender);
   if f_autoguider.BtnConnect.Caption=rsConnect then AutoguiderConnectClick(Sender);
   if f_planetarium.BtnConnect.Caption=rsConnect then PlanetariumConnectClick(Sender);
+except
+end;
 end;
 
 Procedure Tf_main.Disconnect(Sender: TObject);
