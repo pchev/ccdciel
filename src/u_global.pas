@@ -490,6 +490,7 @@ var
   MountTrackingAlert: boolean;
   MountTrackingAlertTime: double;
   SaveStack, StackAlign: boolean;
+  RunningCapture,RunningPreview: boolean;
 
 
   procedure globalmsg(str:string);

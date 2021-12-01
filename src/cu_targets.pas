@@ -690,6 +690,7 @@ begin
     msg(rsActiveTarget, 3);
     FRealRestart:=true;
     Capture.Running:=false;
+    RunningCapture:=false;
     camera.AbortExposureButNotSequence;
     wait(1);
   end
