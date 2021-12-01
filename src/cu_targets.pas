@@ -585,12 +585,14 @@ begin
       newcurStep:=T_Plan(Source.Ftargets[newcurTarget].plan).indexof(sid);
       if newcurStep<0 then begin
         // the running step is no more found, need to restart all
+        msg('Running step of active target no more found.', 9);
         ClearRunning;
         RestartTarget:=true;
       end;
     end
     else begin
       // the running target is no more found, need to restart all
+      msg('Running target no more found.', 9);
       ClearRunning;
       RestartTarget:=true;
     end;
