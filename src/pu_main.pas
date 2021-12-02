@@ -540,7 +540,7 @@ type
     StartX, StartY, EndX, EndY, MouseDownX,MouseDownY: integer;
     FrameX,FrameY,FrameW,FrameH: integer;
     DeviceTimeout: integer;
-    MouseMoving, MouseFrame, LockTimerPlot, LockMouseWheel, LockRestartExposure, PolarMoving: boolean;
+    MouseMoving, MouseFrame, MouseSpectra, LockTimerPlot, LockMouseWheel, LockRestartExposure, PolarMoving: boolean;
     learningvcurve: boolean;
     LogFileOpen,DeviceLogFileOpen: Boolean;
     NeedRestart, GUIready, AppClose: boolean;
@@ -3017,11 +3017,18 @@ else if (ssCtrl in Shift) then begin
      screen.Cursor:=crHandPoint;
   end;
 end
-else if (ssShift in Shift)and(not (f_capture.Running or f_preview.Running)) then begin
+else if (ssShift in Shift)and(not (f_capture.Running or f_preview.Running))and(not f_starprofile.SpectraProfile) then begin
    if EndX>0 then begin
       scrbmp.Rectangle(StartX,StartY,EndX,EndY,BGRAWhite,dmXor);
    end;
    MouseFrame:=true;
+   Startx:=X;
+   Starty:=y;
+   EndX:=-1;
+   EndY:=-1
+end
+else if (ssShift in Shift)and(f_starprofile.SpectraProfile) then begin
+   MouseSpectra:=true;
    Startx:=X;
    Starty:=y;
    EndX:=-1;
@@ -3063,7 +3070,7 @@ begin
       ImgCy:=ImgCy + (Y-My) / ImgZoom;
     PlotTimer.Enabled:=true;
  end
- else if MouseFrame then begin
+ else if MouseFrame or MouseSpectra then begin
     if EndX>0 then begin
        scrbmp.Rectangle(StartX,StartY,EndX,EndY,BGRAWhite,dmXor);
     end;
@@ -3131,8 +3138,32 @@ if MouseFrame and fits.HeaderInfo.valid and fits.ImageValid then begin
   f_frame.FWidth.Text:=inttostr(w);
   f_frame.FHeight.Text:=inttostr(h);
 end;
+if MouseSpectra and fits.HeaderInfo.valid and fits.ImageValid then begin
+  Image1.Canvas.Pen.Color:=clBlack;
+  Image1.Canvas.Pen.Mode:=pmCopy;
+  EndX:=X;
+  EndY:=Y;
+  scrbmp.Rectangle(StartX,StartY,EndX,EndY,BGRAWhite,dmXor);
+  Screen2Fits(StartX,StartY,f_visu.FlipHorz,f_visu.FlipVert,x1,y1);
+  Screen2Fits(EndX,EndY,f_visu.FlipHorz,f_visu.FlipVert,x2,y2);
+  if x1>x2 then begin
+    xx:=x1; x1:=x2; x2:=xx;
+  end;
+  if y1>y2 then begin
+    xx:=y1; y1:=y2; y2:=xx;
+  end;
+  x1:=max(0,x1);
+  x2:=min(fits.HeaderInfo.naxis1-1,x2);
+  y1:=max(0,y1);
+  y2:=min(fits.HeaderInfo.naxis2-1,y2);
+  w:=x2-x1;
+  h:=y2-y1;
+  f_starprofile.SetSpectra(x1,y1,w,h,fits);
+  Image1.Invalidate;
+end;
 MouseMoving:=false;
 MouseFrame:=false;
+MouseSpectra:=false;
 PolarMoving:=false;
 screen.Cursor:=crDefault;
 end;
@@ -9773,6 +9804,9 @@ if (fits.HeaderInfo.naxis>0) and fits.ImageValid then begin
   {$ifdef debug_raw}writeln(FormatDateTime(dateiso,Now)+blank+'PlotImage');{$endif}
   PlotImage;
   {$ifdef debug_raw}writeln(FormatDateTime(dateiso,Now)+blank+'PlotImage end');{$endif}
+  if f_starprofile.SpectraProfile then begin
+    f_starprofile.showSpectraProfile(fits);
+  end;
   finally
   screen.Cursor:=crDefault;
   end;
@@ -9990,6 +10024,14 @@ begin
      with Image1.Canvas do begin
         Pen.Color:=clTeal;
         Frame(x-s,y-s,x+s,y+s);
+     end;
+  end;
+  if f_starprofile.SpectraProfile and (f_starprofile.SpectraWidth>0) then begin
+     Fits2Screen(f_starprofile.SpectraX,f_starprofile.SpectraY,f_visu.FlipHorz,f_visu.FlipVert,x1,y1);
+     Fits2Screen(f_starprofile.SpectraX+f_starprofile.SpectraWidth,f_starprofile.SpectraY+f_starprofile.SpectraHeight,f_visu.FlipHorz,f_visu.FlipVert,x2,y2);
+     with Image1.Canvas do begin
+        Pen.Color:=clRed;
+        Frame(x1,y1,x2,y2);
      end;
   end;
   if Length(fits.StarList)>0 then begin

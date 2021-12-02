@@ -41,6 +41,7 @@ type
     BtnPin2D: TSpeedButton;
     BtnPinProfile: TSpeedButton;
     BtnPinTrend: TSpeedButton;
+    BtnSpectraProfile: TSpeedButton;
     BtnViewAutofocus: TButton;
     FitSourceMeasure: TListChartSource;
     FitSourceComp: TListChartSource;
@@ -97,6 +98,7 @@ type
     procedure BtnPinGraphClick(Sender: TObject);
     procedure BtnPinProfileClick(Sender: TObject);
     procedure BtnPinTrendClick(Sender: TObject);
+    procedure BtnSpectraProfileClick(Sender: TObject);
     procedure BtnViewAutofocusClick(Sender: TObject);
     procedure ChkAutofocusChange(Sender: TObject);
     procedure ChkFocusChange(Sender: TObject);
@@ -112,7 +114,9 @@ type
   private
     { private declarations }
     FFindStar: boolean;
+    FSpectraProfile: boolean;
     FStarX,FStarY,FValMax,FValMaxCalibrated,Fbg: double;
+    FSpectraX, FSpectraY, FSpectraWidth, FSpectraHeight: integer;
     FFocusStart,FFocusStop: TNotifyEvent;
     FAutoFocusStop,FAutoFocusStart: TNotifyEvent;
     FonFocusIN, FonFocusOUT, FonAbsolutePosition: TNotifyEvent;
@@ -156,6 +160,8 @@ type
     destructor  Destroy; override;
     procedure SetLang;
     procedure ShowProfile(f: TFits; x,y,s: integer; focal:double=-1; pxsize:double=-1);
+    procedure SetSpectra(x,y,w,h: integer; f: TFits);
+    procedure ShowSpectraProfile(f: TFits);
     procedure ShowSharpness(f: TFits);
     procedure Autofocus(f: TFits; x,y,s: integer);
     procedure InitAutofocus(restart: boolean);
@@ -163,6 +169,7 @@ type
     procedure ChkAutoFocusDown(value:boolean);
     property AutofocusRunning: boolean read getRunning;
     property FindStar : boolean read FFindStar write FFindStar;
+    property SpectraProfile: boolean read FSpectraProfile;
     property HFD:double read Fhfd;
     property SNR:double read Fsnr;
     property ValMax: double read FValMax;
@@ -170,6 +177,10 @@ type
     property PreFocusPos: integer read FPreFocusPos write FPreFocusPos;
     property StarX: double read FStarX write FStarX;
     property StarY: double read FStarY write FStarY;
+    property SpectraX: integer read FSpectraX;
+    property SpectraY: integer read FSpectraY;
+    property SpectraWidth: integer read FSpectraWidth;
+    property SpectraHeight: integer read FSpectraHeight;
     property AutofocusResult: boolean read FAutofocusResult write FAutofocusResult;
     property AutofocusDone: boolean read FAutofocusDone;
     property preview:Tf_preview read Fpreview write Fpreview;
@@ -214,6 +225,7 @@ begin
  LastFocusMsg:='Autofocus not run';
  FAutofocusDone:=false;
  FFindStar:=false;
+ FSpectraProfile:=false;
  curhist:=0;
  maxfwhm:=0.0001;
  maximax:=0.0001;
@@ -481,6 +493,13 @@ begin
    TForm(HistoryChart.Parent).Close;
 end;
 
+procedure Tf_starprofile.BtnSpectraProfileClick(Sender: TObject);
+begin
+  FSpectraProfile:=BtnSpectraProfile.Down;
+  FSpectraHeight:=0;
+  FSpectraWidth:=0;
+end;
+
 procedure Tf_starprofile.PanelTrendClose(Sender: TObject; var CloseAction: TCloseAction);
 begin
   CloseAction:=caFree;
@@ -670,6 +689,29 @@ except
     msg('PlotProfile :'+ E.Message,0);
   end;
 end;
+end;
+
+procedure Tf_starprofile.SetSpectra(x,y,w,h: integer; f: TFits);
+begin
+  FSpectraX:=x;
+  FSpectraY:=y;
+  FSpectraWidth:=w;
+  FSpectraHeight:=h;
+  ShowSpectraProfile(f);
+end;
+
+procedure Tf_starprofile.ShowSpectraProfile(f: TFits);
+var i,j:integer;
+    value: double;
+begin
+ ProfileSource.Clear;
+ for i:=FSpectraX to FSpectraX+FSpectraWidth do begin
+   value:=0;
+   for j:=FSpectraY to FSpectraY+FSpectraHeight do begin
+     value:=value+f.image[0,j,i];
+   end;
+   ProfileSource.Add(i,value);
+ end;
 end;
 
 procedure Tf_starprofile.PlotStar2D;
