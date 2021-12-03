@@ -281,7 +281,6 @@ end;
 
 function Tf_preview.ControlExposure(exp:double; binx,biny: integer; frmt:TFrameType; readoutmode,pgain,poffset:integer):boolean;
 var SaveonNewImage: TNotifyEvent;
-    savebinx,savebiny,savegain,saveoffset,i: integer;
     endt: TDateTime;
 begin
 result:=false;
@@ -291,32 +290,28 @@ if AllDevicesConnected then begin
   else
     msg(Format(rsTakeControlE, [FormatFloat(f4, exp)]),3);
   SaveonNewImage:=Camera.onNewImage;
-  savebinx:=Camera.BinX;
-  savebiny:=Camera.BinY;
   Camera.onNewImage:=@EndExposure;
   // set readout first so it can be overridden by specific binning or gain
   if UseReadoutMode and camera.hasReadOut then begin
      camera.readoutmode:=readoutmode;
   end;
-  if (binx<>savebinx)or(biny<>savebiny) then Camera.SetBinning(binx,biny);
+  if (binx<>Camera.BinX)or(biny<>Camera.BinY) then Camera.SetBinning(binx,biny);
   WaitExposure:=true;
   ExpectedStop:=false;
   ControlExposureOK:=false;
   camera.AddFrames:=false;
   if camera.CanSetGain then begin
-    savegain:=camera.Gain;
     if camera.hasGainISO then begin
        if pgain=NullInt then pgain:=ISObox.ItemIndex;
-       if savegain<>pgain then camera.Gain:=pgain;
+       if camera.Gain<>pgain then camera.Gain:=pgain;
     end;
     if camera.hasGain and (not camera.hasGainISO) then begin
        if pgain=NullInt then pgain:=GainEdit.Value;
-       if savegain<>pgain then camera.Gain:=pgain;
+       if camera.Gain<>pgain then camera.Gain:=pgain;
     end;
     if camera.hasOffset then begin
-       saveoffset:=camera.Offset;
        if poffset=NullInt then poffset:=OffsetEdit.Value;
-       if saveoffset<>poffset then camera.Offset:=poffset;
+       if camera.Offset<>poffset then camera.Offset:=poffset;
     end;
   end;
   if camera.FrameType<>frmt then camera.FrameType:=frmt;
@@ -328,11 +323,6 @@ if AllDevicesConnected then begin
   end;
   result:=ControlExposureOK;
   Camera.onNewImage:=SaveonNewImage;
-  if (binx<>savebinx)or(biny<>savebiny) then Camera.SetBinning(savebinx,savebiny);
-  if camera.CanSetGain then begin
-    if (savegain<>pgain) then camera.Gain:=savegain;
-    if camera.hasOffset and (saveoffset<>poffset) then camera.Offset:=saveoffset;
-  end;
   if result and Assigned(SaveonNewImage) then SaveonNewImage(self);
   Wait(1);
 end;
