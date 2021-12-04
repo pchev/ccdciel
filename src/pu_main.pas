@@ -9966,9 +9966,9 @@ var x,y,x1,y1,x2,y2,x3,y3,xr1,yr1,xr2,yr2,xr3,yr3,xr4,yr4,xxc,yyc,s,r,rc: intege
 begin
   ScrBmp.Draw(Image1.Canvas,0,0,true);
   if PolarAlignmentOverlay then begin
-     Fits2Screen(round(f_polaralign.StartX+PolarAlignmentOverlayOffsetX),round(f_polaralign.StartY+PolarAlignmentOverlayOffsetY),f_visu.FlipHorz,f_visu.FlipVert,x1,y1);
-     Fits2Screen(round(f_polaralign.EndX+PolarAlignmentOverlayOffsetX),round(f_polaralign.EndY+PolarAlignmentOverlayOffsetY),f_visu.FlipHorz,f_visu.FlipVert,x2,y2);
-     Fits2Screen(round(f_polaralign.AzX+PolarAlignmentOverlayOffsetX),round(f_polaralign.AzY+PolarAlignmentOverlayOffsetY),f_visu.FlipHorz,f_visu.FlipVert,x3,y3);
+     Fits2Screen(round(PolarAlignmentStartX+PolarAlignmentOverlayOffsetX),round(PolarAlignmentStartY+PolarAlignmentOverlayOffsetY),f_visu.FlipHorz,f_visu.FlipVert,x1,y1);
+     Fits2Screen(round(PolarAlignmentEndX+PolarAlignmentOverlayOffsetX),round(PolarAlignmentEndY+PolarAlignmentOverlayOffsetY),f_visu.FlipHorz,f_visu.FlipVert,x2,y2);
+     Fits2Screen(round(PolarAlignmentAzX+PolarAlignmentOverlayOffsetX),round(PolarAlignmentAzY+PolarAlignmentOverlayOffsetY),f_visu.FlipHorz,f_visu.FlipVert,x3,y3);
      r:=DoScaleX(2);
      Image1.Canvas.brush.Style:=bsClear;
      Image1.Canvas.Pen.Color:=clGreen;

@@ -26,24 +26,31 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 interface
 
 uses u_translation, u_utils, u_global, fu_preview, cu_fits, cu_astrometry, cu_mount, cu_wheel,
-     fu_visu, indiapi, UScaleDPI, math,
-     Classes, SysUtils, Forms, Controls, Graphics, Dialogs, StdCtrls, ExtCtrls;
+     fu_visu, indiapi, UScaleDPI, math, LazSysUtils,
+     Classes, SysUtils, Forms, Controls, Graphics, Dialogs, StdCtrls, ExtCtrls, ComCtrls;
 
 type
 
   { Tf_polaralign2 }
 
   Tf_polaralign2 = class(TForm)
-    Memo1: TMemo;
-    Label1: TLabel;
-    Label2: TLabel;
-    Measurement2: TButton;
-    Measurement1: TButton;
+    BtnLock: TToggleBox;
+    ButtonStart: TButton;
+    LabelPol2: TLabel;
+    LabelQ: TLabel;
+    LabelPol1: TLabel;
+    Instruction: TMemo;
+    QualityBar: TPanel;
+    PanelQuality: TPanel;
     Panel1: TPanel;
+    DeterminantTimer: TTimer;
+    QualityShape: TShape;
+    procedure BtnLockClick(Sender: TObject);
+    procedure ButtonStartClick(Sender: TObject);
+    procedure DeterminantTimerTimer(Sender: TObject);
+    procedure FormClose(Sender: TObject; var CloseAction: TCloseAction);
     procedure FormCreate(Sender: TObject);
     procedure FormShow(Sender: TObject);
-    procedure Measurement1Click(Sender: TObject);
-    procedure Measurement2Click(Sender: TObject);
   private
     FFits: TFits;
     Fpreview: Tf_preview;
@@ -53,20 +60,31 @@ type
     FMount: T_mount;
     FonShowMessage: TNotifyMsg;
     FonClose: TNotifyEvent;
+    CurrentStep: integer;
     FSidt,FRa,FDe,FMountRa,FmountDe: array[1..2] of double;
     corr_alt, corr_az, corr_ra, corr_de: double;
     FInProgress: boolean;
     FTerminate: boolean;
+    lockbutton: boolean;
     procedure SetLang;
     procedure msg(txt:string; level: integer);
     procedure tracemsg(txt: string);
+    procedure ButtonStartAsync(Data: PtrInt);
     procedure TakeExposure;
     procedure Solve(step: integer);
     procedure Sync(step: integer);
     procedure MountPosition(step: integer);
+    procedure Measurement1;
+    procedure Measurement2;
+    procedure StartAdjustement;
     procedure Compute;
+    procedure ComputeCorrection;
+    Function  CurrentDeterminant: double;
+    procedure CurrentAdjustement(out cra,cde,caza,cazd: double);
     procedure InitAlignment;
     procedure AbortAlignment;
+    procedure StartImageLoop;
+    procedure StopImageLoop;
   public
     property Fits: TFits read FFits write FFits;
     property Preview:Tf_preview read Fpreview write Fpreview;
@@ -87,27 +105,51 @@ implementation
 
 { Tf_polaralign2 }
 
-procedure Tf_polaralign2.Measurement1Click(Sender: TObject);
+procedure Tf_polaralign2.Measurement1;
 begin
-  memo1.Clear;
+  FInProgress:=true;
   TakeExposure;
   Solve(1);
   Sync(1);
   MountPosition(1);
+  CurrentStep:=1;
+  DeterminantTimer.Enabled:=true;
 end;
 
-procedure Tf_polaralign2.Measurement2Click(Sender: TObject);
+procedure Tf_polaralign2.Measurement2;
 begin
+  DeterminantTimer.Enabled:=false;
   MountPosition(2);
   TakeExposure;
   Solve(2);
+  CurrentStep:=2;
   Compute;
+  FInProgress:=true;
+  StartImageLoop;
+end;
+
+procedure Tf_polaralign2.StartAdjustement;
+var cra,cde,eq,pa: double;
+begin
+  StopImageLoop;
+  TakeExposure;
+  FAstrometry.SolveCurrentImage(true);
+  if FAstrometry.Busy or (not FAstrometry.LastResult) or
+    (not FAstrometry.CurrentCoord(cra,cde,eq,pa)) then begin
+    msg(rsFailToResolv,1);
+    AbortAlignment;
+  end;
+  J2000ToMount(mount.EquinoxJD,cra,cde);
+  mount.Sync(cra,cde);
+  ComputeCorrection;
+  StartImageLoop;
 end;
 
 procedure Tf_polaralign2.FormCreate(Sender: TObject);
 begin
   ScaleDPI(Self);
   SetLang;
+  lockbutton:=false;
 end;
 
 procedure Tf_polaralign2.FormShow(Sender: TObject);
@@ -127,8 +169,7 @@ end;
 
 procedure Tf_polaralign2.msg(txt:string; level: integer);
 begin
- memo1.lines.add(txt);
- if assigned(FonShowMessage) then FonShowMessage(txt,level);
+ if assigned(FonShowMessage) then FonShowMessage('PolarAlign: '+txt,level);
 end;
 
 procedure Tf_polaralign2.TakeExposure;
@@ -174,7 +215,7 @@ begin
        Djd(FFits.dateobs+FFits.HeaderInfo.exptime/secperday/2,y,m,d,h);
        jd0:=jd(y,m,d,0);
        FSidt[step]:=Sidtim(jd0,h,ObsLongitude);
-       memo1.Lines.Add('Image position '+inttostr(step)+': '+RAToStr(FRa[step]*rad2deg/15)+'/'+DEToStr(FDe[step]*rad2deg)+' sidereal time: '+RAToStr(FSidt[step]*rad2deg/15));
+       tracemsg('Image position '+inttostr(step)+': '+RAToStr(FRa[step]*rad2deg/15)+'/'+DEToStr(FDe[step]*rad2deg)+' sidereal time: '+RAToStr(FSidt[step]*rad2deg/15));
      end
      else begin
        msg(rsFailToResolv,1);
@@ -205,9 +246,61 @@ begin
   MountToLocal(mount.EquinoxJD,tra,tde);
   FMountRa[step]:=deg2rad*15*tra;
   FmountDe[step]:=deg2rad*tde;
-  memo1.Lines.Add('Mount position '+inttostr(step)+': '+RAToStr(tra)+'/'+DEToStr(tde));
+  tracemsg('Mount position '+inttostr(step)+': '+RAToStr(tra)+'/'+DEToStr(tde));
 end;
 
+procedure Tf_polaralign2.DeterminantTimerTimer(Sender: TObject);
+begin
+  LabelQ.Caption:='Quality: '+formatfloat(f2,CurrentDeterminant);
+  QualityShape.Width:=max(5,min(100,round(100*CurrentDeterminant)));
+  if QualityShape.Width<20 then QualityShape.Brush.Color:=clRed
+  else if QualityShape.Width<60 then QualityShape.Brush.Color:=clYellow
+  else QualityShape.Brush.Color:=clLime;
+end;
+
+procedure Tf_polaralign2.FormClose(Sender: TObject; var CloseAction: TCloseAction);
+begin
+  PolarAlignmentOverlay:=false;
+  tracemsg('Close polar alignment form');
+  if preview.Loop then preview.BtnLoopClick(nil);
+  if Assigned(FonClose) then FonClose(self);
+end;
+
+Function Tf_polaralign2.CurrentDeterminant: double;
+var A,B,C: array[0..1,0..1] of double;
+    RA2,DE2,SIDT2,jd0,h,lat_rad,h_1,h_2: double;
+    y,m,d: word;
+begin
+  RA2:=mount.RA;
+  DE2:=mount.Dec;
+  MountToLocal(mount.EquinoxJD,RA2,DE2);
+  RA2:=RA2*deg2rad*15;
+  DE2:=DE2*deg2rad;
+  DecodeDate(now,y,m,d);
+  jd0:=jd(y,m,d,0);
+  h:=frac(NowUTC)*24;
+  SIDT2:=Sidtim(jd0,h,ObsLongitude);
+  lat_rad:=ObsLatitude*pi/180;
+  h_1:=FMountRa[1]-FSidt[1];
+  h_2:=RA2-SIDT2;
+  // Fill matrix 1 with data.
+  A[0,0]:=TAN(FmountDe[1])*SIN(h_1);
+  A[1,0]:=COS(lat_rad)*(SIN(LAT_rad)-TAN(FmountDe[1])*COS(h_1));
+  A[0,1]:=COS(h_1);
+  A[1,1]:=COS(lat_rad)*SIN(h_1);
+  // Fill matrix 2 with telescope position.
+  B[0,0]:=TAN(DE2)*SIN(h_2);
+  B[1,0]:=COS(lat_rad)*(SIN(LAT_rad)-TAN(DE2)*COS(h_2)) ;
+  B[0,1]:=COS(h_2);
+  B[1,1]:=COS(lat_rad)*SIN(h_2);
+  //difference,  matrix 2 - matrix 1
+  C[0,0]:=B[0,0]-A[0,0];
+  C[1,0]:=B[1,0]-A[1,0];
+  C[0,1]:=B[0,1]-A[0,1];
+  C[1,1]:=B[1,1]-A[1,1];
+  // Calculate the determinant
+  result:=C[0,0]*C[1,1]-C[0,1]*C[1,0];
+end;
 
 {Polar error calculation based on two celestial reference points and the error of the telescope mount at these point(s).
  Based on formulas from Ralph Pass documented at https://rppass.com/align.pdf.
@@ -278,28 +371,186 @@ begin
   corr_az :=C_inv[0,1]*delta_ra+C_inv[1,1]*delta_Dec; {delta_Az}
 
   if abs(determinant)<0.1 then
-     memo1.lines.add('Warning the calculation determinant is close to zero! Select other celestial locations. Avoid locations with similar hour angles, locations close to the celestial equator and locations whose declinations are close to negatives of each other.');
+     msg('Warning the calculation determinant is close to zero! Select other celestial locations. Avoid locations with similar hour angles, locations close to the celestial equator and locations whose declinations are close to negatives of each other.',1);
 
   if corr_az>0 then ew:=' east of the celestial pole.' else ew:=' west of the celestial pole.';
   if corr_alt>0  then ns:=' above the celestial pole' else ns:=' below the celestial pole';
 
-  memo1.Lines.add('Determinant: '+FormatFloat(f2,determinant));
-  memo1.Lines.add('Polar error Az: '+FormatFloat(f2,rad2deg*abs(corr_az)*60)+' arcminutes'+ew);
-  memo1.Lines.add('Polar error Alt: '+FormatFloat(f2,rad2deg*abs(corr_alt)*60)+' arcminutes'+ns);
+  tracemsg('Determinant: '+FormatFloat(f2,determinant));
+  LabelPol1.Caption:='Polar error Az: '+FormatFloat(f2,rad2deg*abs(corr_az)*60)+' arcminutes'+ew;
+  LabelPol2.Caption:='Polar error Alt: '+FormatFloat(f2,rad2deg*abs(corr_alt)*60)+' arcminutes'+ns;
+  tracemsg(LabelPol1.Caption);
+  tracemsg(LabelPol2.Caption);
 
   //calculate the Ra, Dec correction for stars in image 2
   corr_ra:=B[0,0]*corr_alt + B[1,0]*corr_az;
   corr_de:=B[0,1]*corr_alt+  B[1,1]*corr_az;
-  memo1.Lines.add('Stars in image 2 have to move: '+FormatFloat(f2,rad2deg*(corr_ra)*60)+' arcminutes in RA and '+FormatFloat(f2,rad2deg*(corr_de)*60)+' arcminutes in DEC by the correction.');
+  tracemsg('Stars in image 2 have to move: '+FormatFloat(f2,rad2deg*(corr_ra)*60)+' arcminutes in RA and '+FormatFloat(f2,rad2deg*(corr_de)*60)+' arcminutes in DEC by the correction.');
   //Warning avoid the zenith for the second image!! Azimuth changes will not create any change at zenith
+end;
+
+procedure Tf_polaralign2.CurrentAdjustement(out cra,cde,caza,cazd: double);
+var B: array[0..1,0..1] of double;
+    RA2,DE2,SIDT2,jd0,h,lat_rad,h_2: double;
+    y,m,d: word;
+begin
+  RA2:=mount.RA;
+  DE2:=mount.Dec;
+  MountToLocal(mount.EquinoxJD,RA2,DE2);
+  RA2:=RA2*deg2rad*15;
+  DE2:=DE2*deg2rad;
+  DecodeDate(now,y,m,d);
+  jd0:=jd(y,m,d,0);
+  h:=frac(NowUTC)*24;
+  SIDT2:=Sidtim(jd0,h,ObsLongitude);
+  lat_rad:=ObsLatitude*pi/180;
+  h_2:=RA2-SIDT2;
+  // Fill matrix 2 with telescope position.
+  B[0,0]:=TAN(DE2)*SIN(h_2);
+  B[1,0]:=COS(lat_rad)*(SIN(LAT_rad)-TAN(DE2)*COS(h_2)) ;
+  B[0,1]:=COS(h_2);
+  B[1,1]:=COS(lat_rad)*SIN(h_2);
+  //calculate the Ra, Dec correction for stars in image 2
+  cra:=B[0,0]*corr_alt + B[1,0]*corr_az;
+  cde:=B[0,1]*corr_alt+  B[1,1]*corr_az;
+  caza:=B[1,0]*corr_az;
+  cazd:=B[1,1]*corr_az;
+end;
+
+procedure Tf_polaralign2.ComputeCorrection;
+var p: TcdcWCScoord;
+    ra,de,cazr,cazd: double;
+    n: integer;
+begin
+  CurrentAdjustement(corr_ra,corr_de,cazr,cazd);
+  tracemsg('Stars in image 3 have to move: '+FormatFloat(f2,rad2deg*(corr_ra)*60)+' arcminutes in RA and '+FormatFloat(f2,rad2deg*(corr_de)*60)+' arcminutes in DEC by the correction.');
+  ra:=mount.RA;
+  de:=mount.Dec;
+  MountToJ2000(mount.EquinoxJD,ra,de);
+  p.ra:=ra*15;
+  p.dec:=de;
+  n:=cdcwcs_sky2xy(@p,0);
+  PolarAlignmentStartx:=p.x;
+  PolarAlignmentStarty:=fits.HeaderInfo.naxis2-p.y;
+  p.ra:=ra*15+rad2deg*corr_ra;
+  p.dec:=de+rad2deg*corr_de;
+  n:=cdcwcs_sky2xy(@p,0);
+  PolarAlignmentEndx:=p.x;
+  PolarAlignmentEndy:=fits.HeaderInfo.naxis2-p.y;
+  p.ra:=ra*15+rad2deg*cazr;
+  p.dec:=de+rad2deg*cazd;
+  n:=cdcwcs_sky2xy(@p,0);
+  PolarAlignmentAzx:=p.x;
+  PolarAlignmentAzy:=fits.HeaderInfo.naxis2-p.y;
+
+  PolarAlignmentOverlay:=true;
+end;
+
+procedure Tf_polaralign2.ButtonStartClick(Sender: TObject);
+begin
+  if lockbutton then exit;
+  lockbutton:=true;
+  Application.QueueAsyncCall(@ButtonStartAsync,0);
+end;
+
+procedure Tf_polaralign2.BtnLockClick(Sender: TObject);
+begin
+  PolarAlignmentLock:=BtnLock.Checked;
+  if PolarAlignmentLock then begin
+    tracemsg('Overlay locked');
+    tracemsg('Overlay offset X='+FormatFloat(f6,PolarAlignmentOverlayOffsetX)+' Y='+FormatFloat(f6,PolarAlignmentOverlayOffsetY));
+  end
+  else begin
+    tracemsg('Overlay unlocked');
+  end;
+end;
+
+procedure Tf_polaralign2.ButtonStartAsync(Data: PtrInt);
+begin
+ try
+ case ButtonStart.tag of
+   1: begin
+      Instruction.Clear;
+      Instruction.Lines.Add('Measuring first position, please wait...');
+      Application.ProcessMessages;
+      Measurement1;
+      Instruction.Clear;
+      Instruction.Lines.Add('Point the telescope for the second measurement.');
+      Instruction.Lines.Add('The ideal position is near the zenit');
+      Instruction.Lines.Add('at a declination near '+FormatFloat(f0,ObsLatitude)+'°');
+      Instruction.Lines.Add('Look to make the Quality indicator the highest as possible.');
+      Instruction.Lines.Add('Be careful to not cross the meridian.');
+      Instruction.Lines.Add('');
+      Instruction.Lines.Add('When ready click the Next button');
+      PanelQuality.Visible:=true;
+      BtnLock.Visible:=false;
+      ButtonStart.Caption:='Next';
+      ButtonStart.tag:=2;
+      end;
+   2: begin
+      Instruction.Clear;
+      Instruction.Lines.Add('Measuring second position, please wait...');
+      Application.ProcessMessages;
+      Measurement2;
+      Instruction.Clear;
+      Instruction.Lines.Add('Point the telescope at the adjustement position.');
+      Instruction.Lines.Add('The ideal position is near the meridian');
+      Instruction.Lines.Add('at a declination near '+FormatFloat(f0,(ObsLatitude-90)/2)+'°');
+      Instruction.Lines.Add('Be careful to not cross the meridian.');
+      Instruction.Lines.Add('');
+      Instruction.Lines.Add('When ready click the Next button');
+      PanelQuality.Visible:=false;
+      BtnLock.Visible:=false;
+      ButtonStart.Caption:='Next';
+      ButtonStart.tag:=3;
+      end;
+   3: begin
+      Instruction.Clear;
+      Instruction.Lines.Add('Measuring third position, please wait...');
+      Application.ProcessMessages;
+      StartAdjustement;
+      Instruction.Clear;
+      Instruction.Lines.Add(rsMoveTheGreen);
+      Instruction.Lines.Add(rsThenAdjustTh);
+      Instruction.Lines.Add(rsForGuidanceA);
+      Instruction.Lines.Add(rsYouCanCloseT);
+      PanelQuality.Visible:=false;
+      BtnLock.Visible:=true;
+      ButtonStart.Caption:='Close';
+      ButtonStart.tag:=4;
+      end;
+   4: begin
+      Close;
+      end;
+   else Close;
+ end;
+ finally
+   lockbutton:=false;
+ end;
 end;
 
 procedure Tf_polaralign2.InitAlignment;
 var i: integer;
 begin
-  memo1.Clear;
+  Instruction.clear;
+  Instruction.Lines.Add('Point the telescope for the first measurement.');
+  Instruction.Lines.Add('The ideal position is  near the East or West horizon.');
+  Instruction.Lines.Add('at an elevation of 30° and a declination near '+FormatFloat(f0,ObsLatitude)+'°');
+  Instruction.Lines.Add('');
+  Instruction.Lines.Add('When ready click the Start button');
+  ButtonStart.Caption:='Start';
+  ButtonStart.tag:=1;
+  LabelQ.Caption:='';
+  LabelPol1.Caption:='';
+  LabelPol2.Caption:='';
+  PanelQuality.Visible:=false;
+  BtnLock.Visible:=false;
+  DeterminantTimer.Enabled:=false;
+  PolarAlignmentOverlay:=false;
+  StopImageLoop;
   FInProgress:=false;
   FTerminate:=false;
+  CurrentStep:=0;
   for i:=1 to 2 do begin
     FMountRa[i]:=0;
     FmountDe[i]:=0;
@@ -309,11 +560,33 @@ begin
   end;
 end;
 
+procedure Tf_polaralign2.StartImageLoop;
+begin
+  // start image loop
+  FVisu.BtnZoomAdjust.Click;
+  preview.Exposure:=config.GetValue('/PrecSlew/Exposure',1.0);
+  preview.Bin:=config.GetValue('/PrecSlew/Binning',1);
+  preview.Gain:=config.GetValue('/PrecSlew/Gain',NullInt);
+  preview.Offset:=config.GetValue('/PrecSlew/Offset',NullInt);
+  if not preview.Loop then preview.BtnLoopClick(nil);
+end;
+
+procedure Tf_polaralign2.StopImageLoop;
+begin
+  // stop image loop
+  if preview.Loop then begin
+     preview.BtnLoopClick(nil);
+     wait;
+  end;
+end;
+
 procedure Tf_polaralign2.AbortAlignment;
 begin
   if FTerminate then exit;
   FTerminate:=true;
   msg(rsCancelPolarA,1);
+  DeterminantTimer.Enabled:=false;
+  PolarAlignmentOverlay:=false;
   if FInProgress then begin
     if Mount.MountSlewing then Mount.AbortMotion;
     if Astrometry.Busy then Astrometry.StopAstrometry;

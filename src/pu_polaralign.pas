@@ -94,7 +94,6 @@ type
     Fx, Fy: array[1..3] of double;
     FSidtimStart,Fac,Fdc,FDateStart: double;
     FOffsetAz, FOffsetH, FCameraRotation: double;
-    Fstartx,Fstarty,Fendx,Fendy,Fazx,Fazy:double;
     procedure msg(txt:string; level: integer);
     procedure tracemsg(txt: string);
     procedure InitAlignment;
@@ -114,15 +113,7 @@ type
     property Wheel: T_wheel read Fwheel write Fwheel;
     property Astrometry: TAstrometry read FAstrometry write FAstrometry;
     property Mount: T_mount read Fmount write Fmount;
-    property OffsetH: double read FOffsetH;
-    property OffsetAz: double read FOffsetAz;
     property CameraRotation: double read FCameraRotation;
-    property StartX: double read Fstartx;
-    property StartY: double read Fstarty;
-    property EndX: double read Fendx;
-    property EndY: double read Fendy;
-    property AzX: double read Fazx;
-    property AzY: double read Fazy;
     property onShowMessage: TNotifyMsg read FonShowMessage write FonShowMessage;
     property onClose: TNotifyEvent read FonClose write FonClose;
 
@@ -673,9 +664,9 @@ begin
   tracemsg('Pole J2000:  RA='+FormatFloat(f6,p.ra)+' DEC='+FormatFloat(f6,p.dec));
   n:=cdcwcs_sky2xy(@p,0);
   tracemsg('Pole in image plane X='+FormatFloat(f6,p.x)+' Y='+FormatFloat(f6,p.y));
-  Fstartx:=p.x;
-  Fstarty:=fits.HeaderInfo.naxis2-p.y;
-  tracemsg('Overlay start X='+FormatFloat(f6,Fstartx)+' Y='+FormatFloat(f6,Fstarty));
+  PolarAlignmentStartx:=p.x;
+  PolarAlignmentStarty:=fits.HeaderInfo.naxis2-p.y;
+  tracemsg('Overlay start X='+FormatFloat(f6,PolarAlignmentStartx)+' Y='+FormatFloat(f6,PolarAlignmentStarty));
   if n=1 then begin
     txt:='Pole is outside the image coordinates range, point the telescope closer to the pole.';
     msg(txt,1);
@@ -688,8 +679,8 @@ begin
   p.ra:=rad2deg*ra;
   p.dec:=rad2deg*de;
   n:=cdcwcs_sky2xy(@p,0);
-  Fazx:=p.x;
-  Fazy:=fits.HeaderInfo.naxis2-p.y;
+  PolarAlignmentAzx:=p.x;
+  PolarAlignmentAzy:=fits.HeaderInfo.naxis2-p.y;
   // To mount axis
   ra:=deg2rad*rotRa*15;
   de:=deg2rad*rotDec;
@@ -699,17 +690,17 @@ begin
   tracemsg('Rotation center J2000:  RA='+FormatFloat(f6,p.ra)+' DEC='+FormatFloat(f6,p.dec));
   n:=cdcwcs_sky2xy(@p,0);
   tracemsg('Rotation center in image plane X='+FormatFloat(f6,p.x)+' Y='+FormatFloat(f6,p.y)+' image height='+IntToStr(fits.HeaderInfo.naxis2));
-  Fendx:=p.x;
-  Fendy:=fits.HeaderInfo.naxis2-p.y;
-  tracemsg('Overlay end X='+FormatFloat(f6,Fendx)+' Y='+FormatFloat(f6,Fendy));
+  PolarAlignmentEndx:=p.x;
+  PolarAlignmentEndy:=fits.HeaderInfo.naxis2-p.y;
+  tracemsg('Overlay end X='+FormatFloat(f6,PolarAlignmentEndx)+' Y='+FormatFloat(f6,PolarAlignmentEndy));
   if n=1 then begin
     txt:='Mount axis is outside the image coordinates range, point the telescope closer to the pole.';
     msg(txt,1);
     exit;
   end;
   // line origin centered on screen
-  PolarAlignmentOverlayOffsetX:=(FFits.HeaderInfo.naxis1 div 2)-Fstartx;
-  PolarAlignmentOverlayOffsetY:=(FFits.HeaderInfo.naxis2 div 2)-Fstarty;
+  PolarAlignmentOverlayOffsetX:=(FFits.HeaderInfo.naxis1 div 2)-PolarAlignmentStartx;
+  PolarAlignmentOverlayOffsetY:=(FFits.HeaderInfo.naxis2 div 2)-PolarAlignmentStarty;
   tracemsg('Overlay offset X='+FormatFloat(f6,PolarAlignmentOverlayOffsetX)+' Y='+FormatFloat(f6,PolarAlignmentOverlayOffsetY));
   // draw offset overlay
   PolarAlignmentOverlay:=true;

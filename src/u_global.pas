@@ -473,6 +473,7 @@ var
   CheckRecenterTarget,NeedRecenterTarget,RecenteringTarget,CheckRecenterBusy: boolean;
   AstrometryTimeout,RecenterTargetDistance,SlewPrecision: double;
   PolarAlignmentOverlay, PolarAlignmentLock: boolean;
+  PolarAlignmentStartx,PolarAlignmentStarty,PolarAlignmentEndx,PolarAlignmentEndy,PolarAlignmentAzx,PolarAlignmentAzy:double;
   PolarAlignmentOverlayOffsetX,PolarAlignmentOverlayOffsetY: double;
   MailTo,MailFrom,SMTPHost,SMTPPort,SMTPUser,SMTPPasswd : String;
   SMTPSSLTLS: boolean;
