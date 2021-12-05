@@ -2,27 +2,27 @@ object f_polaralign2: Tf_polaralign2
   Left = 369
   Height = 300
   Top = 31
-  Width = 354
+  Width = 370
   Caption = 'f_polaralign2'
   ClientHeight = 300
-  ClientWidth = 354
+  ClientWidth = 370
   FormStyle = fsStayOnTop
   OnClose = FormClose
   OnCreate = FormCreate
   OnShow = FormShow
   object Panel1: TPanel
     Left = 0
-    Height = 93
-    Top = 207
-    Width = 354
+    Height = 92
+    Top = 208
+    Width = 370
     Align = alBottom
-    ClientHeight = 93
-    ClientWidth = 354
+    ClientHeight = 92
+    ClientWidth = 370
     TabOrder = 0
     object LabelPol1: TLabel
       Left = 8
       Height = 19
-      Top = 48
+      Top = 40
       Width = 60
       Caption = 'LabelPol1'
     end
@@ -38,7 +38,7 @@ object f_polaralign2: Tf_polaralign2
     object LabelPol2: TLabel
       Left = 8
       Height = 19
-      Top = 69
+      Top = 64
       Width = 60
       Caption = 'LabelPol2'
     end
@@ -92,12 +92,21 @@ object f_polaralign2: Tf_polaralign2
       ParentFont = False
       TabOrder = 2
     end
+    object IgnoreMount: TCheckBox
+      Left = 8
+      Height = 21
+      Top = 12
+      Width = 110
+      Caption = 'Ignore mount'
+      OnClick = IgnoreMountClick
+      TabOrder = 3
+    end
   end
   object Instruction: TMemo
     Left = 0
-    Height = 207
+    Height = 208
     Top = 0
-    Width = 354
+    Width = 370
     Align = alClient
     Lines.Strings = (
       'Instruction'

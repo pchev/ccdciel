@@ -25,7 +25,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 interface
 
-uses u_utils, u_global, UScaleDPI, u_translation, u_annotation, LCLType, pu_compute,
+uses u_utils, u_global, cu_fits, UScaleDPI, u_translation, u_annotation, LCLType, pu_compute,
   Classes, SysUtils, Forms, Controls, Graphics, Dialogs, StdCtrls, ExtCtrls;
 
 type
@@ -62,6 +62,7 @@ type
     procedure ButtonOKClick(Sender: TObject);
     procedure FormCreate(Sender: TObject);
     procedure CenterChange(Sender: TObject);
+    function CheckImageInfo(fits:Tfits): boolean;
     procedure FormShow(Sender: TObject);
     procedure ObjKeyDown(Sender: TObject; var Key: Word; Shift: TShiftState);
   private
@@ -222,6 +223,56 @@ begin
     end;
   end;
   ModalResult:=mrOK;
+end;
+
+function Tf_goto.CheckImageInfo(fits:Tfits): boolean;
+var fra,fdec,px,p,fl: double;
+    i: integer;
+begin
+  if fits.HeaderInfo.valid and fits.ImageValid then begin
+    fra:=fits.HeaderInfo.ra;
+    fdec:=fits.HeaderInfo.dec;
+    px:=fits.HeaderInfo.scale;
+    p:=fits.HeaderInfo.pixsz1;
+    fl:=fits.HeaderInfo.focallen;
+    if px=0 then px:=LastPixelSize;
+    if (fra=NullCoord)or(fdec=NullCoord)or(px=0) then begin
+      FormPos(self,mouse.CursorPos.X,mouse.CursorPos.Y);
+      Caption:=rsResolve;
+      PanelAltAz.Visible:=false;
+      PanelPxSz.Visible:=true;
+      ButtonOK.Caption:=rsResolve;
+      msginfo.Caption:=rsApproximateC;
+      Obj.Text:='';
+      focallength:=fl;
+      pixelsize:=p;
+      if fra<>NullCoord then Ra.Text:=RAToStr(fra/15) else Ra.Text:='';
+      if fdec<>NullCoord then De.Text:=DEToStr(fdec) else De.Text:='';
+      if px<>0 then PxSz.Text:=FormatFloat(f2,px) else PxSz.Text:='';
+      ActiveControl:=Obj;
+      ShowModal;
+      if ModalResult=mrok then begin
+        fra:=StrToAR(Ra.Text);
+        fdec:=StrToDE(De.Text);
+        px:=StrToFloatDef(PxSz.Text,0);
+        LastPixelSize:=px;
+        i:=fits.Header.Indexof('END');
+        if i<7 then i:=7;  // skip mandatory keywords
+        if i>=fits.Header.Rows.Count then
+          i:=fits.Header.Rows.Count-1;
+        if px<>0 then fits.Header.Insert(i,'SECPIX1',px,'');
+        if fdec<>NullCoord then fits.Header.Insert(i,'DEC',fdec,'');
+        if fra<>NullCoord then fits.Header.Insert(i,'RA',15*fra,'');
+        result:=true;
+      end
+      else begin
+        globalmsg(rsStopAstromet2);
+        result:=false;
+      end;
+    end
+    else
+      result:=true;
+  end;
 end;
 
 end.

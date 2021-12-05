@@ -557,7 +557,6 @@ type
     trpx1,trpx2,trpx3,trpx4,trpy1,trpy2,trpy3,trpy4: integer;{for image inspection}
     median_center,median_top_left, median_top_right,median_bottom_left,median_bottom_right : double;{for image inspection}
 
-    LastPixelSize: double;
     trpOK: boolean;
     AllMsg: TStringList;
     CameraExposureRemain:double;
@@ -815,7 +814,6 @@ type
     procedure MagnitudeCalibrationChange(Sender: TObject);
     procedure MeasureAtPos(x,y:integer; photometry:boolean);
     procedure ShutdownProgram(Sender: TObject);
-    function  CheckImageInfo:boolean;
     procedure PolaralignClose(Sender: TObject);
     procedure Polaralign2Close(Sender: TObject);
     procedure PhotometryClose(Sender: TObject);
@@ -10143,6 +10141,10 @@ begin
     NewMessage(rsTheTelescope);
     exit;
   end;
+  if (ObsLatitude=0)and(ObsLongitude=0)and(ObsElevation=0) then begin
+    NewMessage(rsPleaseConfig3);
+    exit;
+  end;
   if f_preview.Loop then f_preview.BtnLoopClick(nil);
   f_polaralign.Mount:=mount;
   f_polaralign.Wheel:=wheel;
@@ -10167,6 +10169,10 @@ begin
   end;
   if (mount.Status=devConnected)and(mount.Park) then begin
     NewMessage(rsTheTelescope);
+    exit;
+  end;
+  if (ObsLatitude=0)and(ObsLongitude=0)and(ObsElevation=0) then begin
+    NewMessage(rsPleaseConfig3);
     exit;
   end;
   if f_preview.Loop then f_preview.BtnLoopClick(nil);
@@ -12045,60 +12051,10 @@ begin
   end;
 end;
 
-function Tf_main.CheckImageInfo: boolean;
-var ra,dec,px,p,fl: double;
-    i: integer;
-begin
-  if fits.HeaderInfo.valid and fits.ImageValid then begin
-    ra:=fits.HeaderInfo.ra;
-    dec:=fits.HeaderInfo.dec;
-    px:=fits.HeaderInfo.scale;
-    p:=fits.HeaderInfo.pixsz1;
-    fl:=fits.HeaderInfo.focallen;
-    if px=0 then px:=LastPixelSize;
-    if (ra=NullCoord)or(dec=NullCoord)or(px=0) then begin
-      FormPos(f_goto,mouse.CursorPos.X,mouse.CursorPos.Y);
-      f_goto.Caption:=rsResolve;
-      f_goto.PanelAltAz.Visible:=false;
-      f_goto.PanelPxSz.Visible:=true;
-      f_goto.ButtonOK.Caption:=rsResolve;
-      f_goto.msginfo.Caption:=rsApproximateC;
-      f_goto.Obj.Text:='';
-      f_goto.focallength:=fl;
-      f_goto.pixelsize:=p;
-      if ra<>NullCoord then f_goto.Ra.Text:=RAToStr(ra/15) else f_goto.Ra.Text:='';
-      if dec<>NullCoord then f_goto.De.Text:=DEToStr(dec) else f_goto.De.Text:='';
-      if px<>0 then f_goto.PxSz.Text:=FormatFloat(f2,px) else f_goto.PxSz.Text:='';
-      f_goto.ActiveControl:=f_goto.Obj;
-      f_goto.ShowModal;
-      if f_goto.ModalResult=mrok then begin
-        ra:=StrToAR(f_goto.Ra.Text);
-        dec:=StrToDE(f_goto.De.Text);
-        px:=StrToFloatDef(f_goto.PxSz.Text,0);
-        LastPixelSize:=px;
-        i:=fits.Header.Indexof('END');
-        if i<7 then i:=7;  // skip mandatory keywords
-        if i>=fits.Header.Rows.Count then
-          i:=fits.Header.Rows.Count-1;
-        if px<>0 then fits.Header.Insert(i,'SECPIX1',px,'');
-        if dec<>NullCoord then fits.Header.Insert(i,'DEC',dec,'');
-        if ra<>NullCoord then fits.Header.Insert(i,'RA',15*ra,'');
-        result:=true;
-      end
-      else begin
-        NewMessage(rsStopAstromet2);
-        result:=false;
-      end;
-    end
-    else
-      result:=true;
-  end;
-end;
-
 procedure Tf_main.MenuResolveClick(Sender: TObject);
 begin
   if SplitImage then exit;
-  if (not CheckImageInfo) then exit;
+  if (not f_goto.CheckImageInfo(fits)) then exit;
   astrometry.SolveCurrentImage(false);
 end;
 
@@ -12131,14 +12087,14 @@ end;
 
 procedure Tf_main.MenuResolveSlewCenterClick(Sender: TObject);
 begin
- if not CheckImageInfo then exit;
+ if not f_goto.CheckImageInfo(fits) then exit;
  ResolveSlewCenter(nil);
 end;
 
 procedure Tf_main.MenuResolveSyncClick(Sender: TObject);
 begin
  if SplitImage then exit;
- if not CheckImageInfo then exit;
+ if not f_goto.CheckImageInfo(fits) then exit;
   astrometry.SyncCurrentImage(false);
 end;
 
@@ -12160,7 +12116,7 @@ end;
 procedure Tf_main.MenuResolveRotateClick(Sender: TObject);
 begin
   if SplitImage then exit;
-  if not CheckImageInfo then exit;
+  if not f_goto.CheckImageInfo(fits) then exit;
   ResolveRotate(Sender);
 end;
 
@@ -12179,7 +12135,7 @@ begin
        ResolveSyncRotator(self);
      end else begin
        if (not astrometry.Busy) and (fits.HeaderInfo.naxis>0) then begin
-         if not CheckImageInfo then exit;
+         if not f_goto.CheckImageInfo(fits) then exit;
          fits.SaveToFile(slash(TmpDir)+'ccdcieltmp.fits');
          astrometry.StartAstrometry(slash(TmpDir)+'ccdcieltmp.fits',slash(TmpDir)+'ccdcielsolved.fits',@ResolveSyncRotator);
        end;
@@ -12194,7 +12150,7 @@ end;
 procedure Tf_main.MenuResolveSlewClick(Sender: TObject);
 begin
  if SplitImage then exit;
- if not CheckImageInfo then exit;
+ if not f_goto.CheckImageInfo(fits) then exit;
   astrometry.SlewScreenXY(MouseDownX,MouseDownY);
 end;
 
@@ -12216,7 +12172,7 @@ begin
         PlotImage;
      end else begin
        if (not astrometry.Busy) and (fits.HeaderInfo.naxis>0) then begin
-         if not CheckImageInfo then exit;
+         if not f_goto.CheckImageInfo(fits) then exit;
          fits.SaveToFile(slash(TmpDir)+'ccdcieltmp.fits');
          if sender=MenuResolveHyperLeda then
            astrometry.StartAstrometry(slash(TmpDir)+'ccdcieltmp.fits',slash(TmpDir)+'ccdcielsolved.fits',@AstrometryPlotHyperleda)
@@ -12261,7 +12217,7 @@ begin
            NewMessage(rsPlanetariumE+blank+planetarium.LastErrorTxt,1);
       end else begin
         if (not astrometry.Busy) and (fits.HeaderInfo.naxis>0) then begin
-          if not CheckImageInfo then exit;
+          if not f_goto.CheckImageInfo(fits) then exit;
           fits.SaveToFile(slash(TmpDir)+'ccdcieltmp.fits');
           astrometry.StartAstrometry(slash(TmpDir)+'ccdcieltmp.fits',slash(TmpDir)+'ccdcielsolved.fits',@AstrometryToPlanetarium);
         end;
@@ -12282,7 +12238,7 @@ begin
         AstrometryToPlanetariumFrame(Sender);
       end else begin
         if (not astrometry.Busy) and (fits.HeaderInfo.naxis>0) then begin
-          if not CheckImageInfo then exit;
+          if not f_goto.CheckImageInfo(fits) then exit;
           fits.SaveToFile(slash(TmpDir)+'ccdcieltmp.fits');
           astrometry.StartAstrometry(slash(TmpDir)+'ccdcieltmp.fits',slash(TmpDir)+'ccdcielsolved.fits',@AstrometryToPlanetariumFrame);
         end;

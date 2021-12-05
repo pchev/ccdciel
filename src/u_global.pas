@@ -381,6 +381,7 @@ var
   ScrWidth,ScrHeigth, SplitMargin: integer;
   MaxADU, ClippingOverflow, ClippingUnderflow: double;
   MsgHandle: THandle;
+  LastPixelSize: double;
   ObsLongitude, ObsLatitude, ObsElevation, ObsTimeZone: double;
   BayerColor: boolean;
   DefaultBayerMode:TBayerMode;

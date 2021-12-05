@@ -187,6 +187,7 @@ type
      procedure SaveToBitmap(fn: string);
      procedure SaveToFile(fn: string; pack: boolean=false);
      procedure LoadFromFile(fn:string);
+     procedure LoadHeaderFromFile(fn:string);
      procedure SetBPM(value: TBpm; count,nx,ny,nax:integer);
      procedure FreeDark;
      procedure ClearImage;
@@ -1425,6 +1426,44 @@ if FileExistsUTF8(fn) then begin
 end
 else begin
  ClearImage;
+ msg(Format(rsFileNotFound, [fn]),1);
+end;
+end;
+
+procedure TFits.LoadHeaderFromFile(fn:string);
+var mem: TMemoryStream;
+    pack: boolean;
+    rmsg: string;
+    i: integer;
+begin
+if FileExistsUTF8(fn) then begin
+   mem:=TMemoryStream.Create;
+   try
+   pack:=uppercase(ExtractFileExt(fn))='.FZ';
+   if pack then begin
+     i:=UnpackFits(fn,mem,rmsg);
+     if i<>0 then begin
+       ClearImage;
+       msg('funpack error '+inttostr(i)+': '+rmsg,1);
+       exit;
+     end;
+   end
+   else
+     mem.LoadFromFile(fn);
+   try
+    FImageValid:=false;
+    FStreamValid:=false;
+    FHeader.ReadHeader(mem);
+    GetFitsInfo;
+   except
+    ClearFitsInfo;
+   end;
+   finally
+     mem.Free;
+   end;
+end
+else begin
+ ClearFitsInfo;
  msg(Format(rsFileNotFound, [fn]),1);
 end;
 end;

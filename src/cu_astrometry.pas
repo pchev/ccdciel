@@ -137,35 +137,26 @@ end;
 
 function TAstrometry.StartAstrometry(infile,outfile: string; terminatecmd:TNotifyEvent): boolean;
 var pixsize,pixscale,telescope_focal_length,tolerance,MaxRadius,ra,de: double;
-    n,nn,iwidth,iheight:integer;
-    info: TcdcWCSinfo;
-    c: TcdcWCScoord;
+    iwidth,iheight:integer;
+    f: TFits;
 begin
  if (not FBusy) then begin
    Fterminatecmd:=terminatecmd;
-   n:=cdcwcs_initfitsfile(PChar(infile),0);
    ra:=NullCoord;
    de:=NullCoord;
    pixscale:=NullCoord;
    iwidth:=1000;
    iheight:=1000;
-   if n=0 then begin
-     n:=cdcwcs_getinfo(addr(info),0);
-     if n=0 then begin
-       // center
-       c.x:=0.5+info.wp/2;
-       c.y:=0.5+info.hp/2;
-       nn:=cdcwcs_xy2sky(@c,0);
-       if nn=0 then begin
-         ra:=c.ra;
-         de:=c.dec;
-       end;
-       iwidth:=info.wp;
-       iheight:=info.hp;
-       pixscale:=info.secpix;
-       if pixscale>300 then pixscale:=0; // missing or invalid value in header
-     end;
+   f:=TFits.Create(nil);
+   f.LoadHeaderFromFile(infile);
+   if f.HeaderInfo.valid then begin
+     ra:=f.HeaderInfo.ra;
+     de:=f.HeaderInfo.dec;
+     pixscale:=f.HeaderInfo.scale;
+     iwidth:=f.HeaderInfo.naxis1;
+     iheight:=f.HeaderInfo.naxis2;
    end;
+   f.free;
    if (ra=NullCoord)or(de=NullCoord) then begin
        msg(Format(rsCannotFindAp, [crlf]),2);
    end;
