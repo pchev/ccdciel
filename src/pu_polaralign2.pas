@@ -111,13 +111,13 @@ implementation
 procedure Tf_polaralign2.Measurement1;
 begin
   FInProgress:=true;
+  if (not IgnoreMount.Checked) then begin
+    MountPosition(1);
+  end;
   TakeExposure;
   Solve(1);
-  if (not IgnoreMount.Checked) then begin
-    Sync(1);
-    MountPosition(1);
-    DeterminantTimer.Enabled:=true;
-  end
+  if (not IgnoreMount.Checked) then
+    DeterminantTimer.Enabled:=true
   else
     NoMountPosition(1);
   CurrentStep:=1;
