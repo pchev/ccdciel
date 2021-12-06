@@ -481,7 +481,7 @@ try
 
   // intermediate point
   p.ra:=ra*15-rad2deg*cazr;
-  p.dec:=de+rad2deg*cazd;
+  p.dec:=de-rad2deg*cazd;
   n:=cdcwcs_sky2xy(@p,0);
   if n=1 then begin ok:=false; exit; end;
   PolarAlignmentAzx:=p.x;
