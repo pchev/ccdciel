@@ -450,6 +450,7 @@ begin
   //calculate the Ra, Dec correction for stars in image 2
   cra:=B[0,0]*corr_alt + B[1,0]*corr_az;
   cde:=B[0,1]*corr_alt+  B[1,1]*corr_az;
+  // same with corr_alt=0 for intermediate point
   caza:=B[1,0]*corr_az;
   cazd:=B[1,1]*corr_az;
 end;
@@ -466,27 +467,35 @@ try
   lra:=ra*15*deg2rad;
   lde:=de*deg2rad;
   J2000ToApparent(lra,lde);
+  // adjustement at current position
   CurrentAdjustement(lra,lde,corr_ra,corr_de,cazr,cazd);
   tracemsg('Stars in image 3 have to move: '+FormatFloat(f2,rad2deg*(corr_ra)*60)+' arcminutes in RA and '+FormatFloat(f2,rad2deg*(corr_de)*60)+' arcminutes in DEC by the correction.');
+
+  // start point
   p.ra:=ra*15;
   p.dec:=de;
   n:=cdcwcs_sky2xy(@p,0);
   if n=1 then begin ok:=false; exit; end;
   PolarAlignmentStartx:=p.x;
   PolarAlignmentStarty:=fits.HeaderInfo.naxis2-p.y;
-  p.ra:=ra*15+rad2deg*corr_ra;
-  p.dec:=de+rad2deg*corr_de;
-  n:=cdcwcs_sky2xy(@p,0);
-  if n=1 then begin ok:=false; exit; end;
-  PolarAlignmentEndx:=p.x;
-  PolarAlignmentEndy:=fits.HeaderInfo.naxis2-p.y;
-  p.ra:=ra*15+rad2deg*cazr;
+
+  // intermediate point
+  p.ra:=ra*15-rad2deg*cazr;
   p.dec:=de+rad2deg*cazd;
   n:=cdcwcs_sky2xy(@p,0);
   if n=1 then begin ok:=false; exit; end;
   PolarAlignmentAzx:=p.x;
   PolarAlignmentAzy:=fits.HeaderInfo.naxis2-p.y;
   PolarAlignmentOverlay:=true;
+
+  // end point
+  p.ra:=ra*15-rad2deg*corr_ra;
+  p.dec:=de-rad2deg*corr_de;
+  n:=cdcwcs_sky2xy(@p,0);
+  if n=1 then begin ok:=false; exit; end;
+  PolarAlignmentEndx:=p.x;
+  PolarAlignmentEndy:=fits.HeaderInfo.naxis2-p.y;
+
 finally
   if not ok then begin
     msg('WCS error, offscale',1);
