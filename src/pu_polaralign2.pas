@@ -286,7 +286,7 @@ procedure Tf_polaralign2.DeterminantTimerTimer(Sender: TObject);
 var det: double;
 begin
 if (not IgnoreMount.Checked) then begin
-  det:=CurrentDeterminant;
+  det:=abs(CurrentDeterminant);
   LabelQ.Caption:='Quality: '+formatfloat(f2,det);
   QualityShape.Width:=max(5,min(100,round(100*det)));
   if QualityShape.Width<20 then QualityShape.Brush.Color:=clRed
@@ -327,12 +327,12 @@ begin
   h_2:=RA2-SIDT2;
   // Fill matrix 1 with data.
   A[0,0]:=TAN(FMountDe[1])*SIN(h_1);
-  A[1,0]:=COS(lat_rad)*(SIN(LAT_rad)-TAN(FMountDe[1])*COS(h_1));
+  A[1,0]:={SIN(LAT_rad)}-COS(lat_rad)*TAN(FMountDe[1])*COS(h_1);{sin(lat_rad) will be nulified anyhow}
   A[0,1]:=COS(h_1);
   A[1,1]:=COS(lat_rad)*SIN(h_1);
   // Fill matrix 2 with telescope position.
   B[0,0]:=TAN(DE2)*SIN(h_2);
-  B[1,0]:=COS(lat_rad)*(SIN(LAT_rad)-TAN(DE2)*COS(h_2)) ;
+  B[1,0]:={SIN(LAT_rad)}-COS(lat_rad)*TAN(FMountDe[2])*COS(h_2);{sin(lat_rad) will be nulified anyhow}
   B[0,1]:=COS(h_2);
   B[1,1]:=COS(lat_rad)*SIN(h_2);
   //difference,  matrix 2 - matrix 1
@@ -359,13 +359,13 @@ end;
    where h is the hour angle of the reference point equal ra - local_sidereal_time
 
  Using the above formula calculate the difference in RA and DEC by subtracting the first image postion from the second reference image. The common term sin(lat) will be nulified. Formula (4)
-   delta_ra:= de * (TAN(dec)*SIN(h_2)-TAN(dec1)*SIN(h_1))  + da * COS(lat)*(TAN(dec1)*COS(h_1)-TAN(dec2)*COS(h_2));
+ delta_ra:= de * (TAN(dec)*SIN(h_2)-TAN(dec1)*SIN(h_1))  + da * COS(lat)*(TAN(dec1)*COS(h_1)-TAN(dec2)*COS(h_2));
    delta_dec:=de * (COS(h_2)-COS(h_1))  + da * COS(lat)*(SIN(h_2)-SIN(h_1));
 
  Writing the above formulas in matrix notation:
-   [delta_Ra;delta_Dec]= C * [delta_Elv;delta_Azm]
+  [delta_Ra;delta_Dec]= C * [de;da]
    then
-   [delta_Elv;delta_Az] = inv(C)*[delta_Ra;delta_Dec]
+   [de;da] = inv(C)*[delta_Ra;delta_Dec]
 
  Mount is assumed to be ideal. Mount fabrication error & cone errors are assumed to be zero. Meridian crossing between the two images should be avoided}
 procedure Tf_polaralign2.Compute;
@@ -383,13 +383,13 @@ begin
   // [delta_Ra;delta_Dec]= A * [delta_Elv;delta_Azm]
   // Fill matrix image 1 with data.
   A[0,0]:=TAN(FMountDe[1])*SIN(h_1);
-  A[1,0]:=COS(lat_rad)*(SIN(LAT_rad)-TAN(FMountDe[1])*COS(h_1));{keep the sin(lat_rad) for the calculation of star movement in the last step}
+  A[1,0]:=SIN(LAT_rad)-COS(lat_rad)*TAN(FMountDe[1])*COS(h_1);{keep the sin(lat_rad) for the calculation of star movement in the last step}
   A[0,1]:=COS(h_1);
   A[1,1]:=COS(lat_rad)*SIN(h_1);
 
   // Fill matrix image 2 with data.
   B[0,0]:=TAN(FMountDe[2])*SIN(h_2);
-  B[1,0]:=COS(lat_rad)*(SIN(LAT_rad)-TAN(FMountDe[2])*COS(h_2)) ;
+  B[1,0]:=SIN(LAT_rad)-COS(lat_rad)*TAN(FMountDe[2])*COS(h_2);
   B[0,1]:=COS(h_2);
   B[1,1]:=COS(lat_rad)*SIN(h_2);
 
@@ -407,7 +407,7 @@ begin
   C_inv[1,0]:=-C[1,0]/determinant;
   C_inv[0,1]:=-C[0,1]/determinant;
 
-  // [delta_Elv;delta_Az] = inv(C)*[delta_Ra;delta_Dec]
+  // [de;da] = inv(C)*[delta_Ra;delta_Dec]
   // Use the inverse matrix to calculate the polar axis elevation and azimuth error from the delta_dec and delta_ra between the two image positions.
   corr_alt:=C_inv[0,0]*delta_ra+C_inv[1,0]*delta_Dec;{delta_Elv}
   corr_az :=C_inv[0,1]*delta_ra+C_inv[1,1]*delta_Dec; {delta_Az}
@@ -427,6 +427,12 @@ begin
   //calculate the Ra, Dec correction for stars in image 2
   corr_ra:=B[0,0]*corr_alt + B[1,0]*corr_az;
   corr_de:=B[0,1]*corr_alt+  B[1,1]*corr_az;
+
+//  dRa:=de*(TAN(dec4)*SIN(sidereal_time-ra4) ) +azimuth_error*(sin(latitude)-COS(latitude)*TAN(dec4)*COS(sidereal_time-ra4));
+//  dDec:=de*(COS(sidereal_time-ra4))  +azimuth_error*COS(latitude)*(SIN(sidereal_time-ra4));
+
+
+
   tracemsg('Stars in image 2 have to move: '+FormatFloat(f2,rad2deg*(corr_ra)*60)+' arcminutes in RA and '+FormatFloat(f2,rad2deg*(corr_de)*60)+' arcminutes in DEC by the correction.');
   //Warning avoid the zenith for the second image!! Azimuth changes will not create any change at zenith
 end;
@@ -444,9 +450,10 @@ begin
   h_2:=RA-SIDT2;
   // Fill matrix 2 with telescope position.
   B[0,0]:=TAN(DE)*SIN(h_2);
-  B[1,0]:=COS(lat_rad)*(SIN(LAT_rad)-TAN(DE)*COS(h_2)) ;
+  B[1,0]:=SIN(LAT_rad)-COS(lat_rad)*TAN(FMountDe[2])*COS(h_2);
   B[0,1]:=COS(h_2);
   B[1,1]:=COS(lat_rad)*SIN(h_2);
+
   //calculate the Ra, Dec correction for stars in image 2
   cra:=B[0,0]*corr_alt + B[1,0]*corr_az;
   cde:=B[0,1]*corr_alt+  B[1,1]*corr_az;
@@ -489,7 +496,7 @@ try
   PolarAlignmentOverlay:=true;
 
   // end point
-  p.ra:=ra*15-rad2deg*corr_ra;
+  p.ra:=ra*15-rad2deg*corr_ra/max(0.00000000001,cos(de*deg2rad));
   p.dec:=de-rad2deg*corr_de;
   n:=cdcwcs_sky2xy(@p,0);
   if n=1 then begin ok:=false; exit; end;
