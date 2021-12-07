@@ -332,7 +332,7 @@ begin
   A[1,1]:=COS(lat_rad)*SIN(h_1);
   // Fill matrix 2 with telescope position.
   B[0,0]:=TAN(DE2)*SIN(h_2);
-  B[1,0]:={SIN(LAT_rad)}-COS(lat_rad)*TAN(FMountDe[2])*COS(h_2);{sin(lat_rad) will be nulified anyhow}
+  B[1,0]:={SIN(LAT_rad)}-COS(lat_rad)*TAN(DE2)*COS(h_2);{sin(lat_rad) will be nulified anyhow}
   B[0,1]:=COS(h_2);
   B[1,1]:=COS(lat_rad)*SIN(h_2);
   //difference,  matrix 2 - matrix 1
@@ -450,7 +450,7 @@ begin
   h_2:=RA-SIDT2;
   // Fill matrix 2 with telescope position.
   B[0,0]:=TAN(DE)*SIN(h_2);
-  B[1,0]:=SIN(LAT_rad)-COS(lat_rad)*TAN(FMountDe[2])*COS(h_2);
+  B[1,0]:=SIN(LAT_rad)-COS(lat_rad)*TAN(DE)*COS(h_2);
   B[0,1]:=COS(h_2);
   B[1,1]:=COS(lat_rad)*SIN(h_2);
 
@@ -487,7 +487,7 @@ try
   PolarAlignmentStarty:=fits.HeaderInfo.naxis2-p.y;
 
   // intermediate point
-  p.ra:=ra*15-rad2deg*cazr;
+  p.ra:=ra*15-rad2deg*cazr/max(0.00000000001,cos(de*deg2rad));
   p.dec:=de-rad2deg*cazd;
   n:=cdcwcs_sky2xy(@p,0);
   if n=1 then begin ok:=false; exit; end;
