@@ -503,7 +503,7 @@ var ok: boolean;
     p2:array[0..1] of integer;
     p3:array[0..2] of integer;
 
-    lii: integer;
+    lii,es: integer;
     ii: smallint;
     b: array[0..2880]of char;
     hdr: TFitsHeader;
@@ -586,6 +586,22 @@ begin
        if assigned(FonAbortExposure) then FonAbortExposure(self);
        exit;
      end;
+   end;
+
+   es:=0;
+   {$ifdef DirectArray}
+      es:=4;   // cannot get array type, this may crash later
+   {$else}
+     {$ifdef DirectOleaut32}
+       es:=SafeArrayGetElemsize(imgsafearray);
+     {$else}
+       es:=SafeArrayGetElemsize(PSafeArray(VarArrayAsPSafeArray(imgvar)));
+     {$endif}
+   {$endif}
+   if es<>4 then begin
+     msg('Error ImageArray unsupported element size=' + inttostr(es));
+     if assigned(FonAbortExposure) then FonAbortExposure(self);
+     exit;
    end;
 
    Dims:=0;
