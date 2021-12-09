@@ -145,6 +145,7 @@ type
     PanelSwitchIndi: TPanel;
     PanelCoverIndi: TPanel;
     ScrollBox1: TScrollBox;
+    DiscoverLed: TShape;
     SwitchARestDevice: TSpinEdit;
     CoverARestDevice: TSpinEdit;
     SwitchARestHost: TEdit;
@@ -620,6 +621,7 @@ type
     AlpacaServerList: TAlpacaServerList;
     FonMsg: TNotifyMsg;
     procedure GetIndiDevicesStart;
+    procedure AlpacaDiscoverAsync(data:PtrInt);
     procedure IndiNewDevice(dp: Basedevice);
     procedure IndiDisconnected(Sender: TObject);
     procedure SetCameraConnection(value: TDevInterface);
@@ -1729,6 +1731,7 @@ end;
 procedure Tf_setup.FormShow(Sender: TObject);
 begin
   InitialLock:=false;
+  Application.QueueAsyncCall(@AlpacaDiscoverAsync,0);
 end;
 
 procedure Tf_setup.IndiSensorChange(Sender: TObject);
@@ -2371,11 +2374,18 @@ begin
 end;
 
 procedure Tf_setup.BtnDiscoverClick(Sender: TObject);
+begin
+  Screen.Cursor:=crHourGlass;
+  Application.ProcessMessages;
+  Application.QueueAsyncCall(@AlpacaDiscoverAsync,0);
+end;
+
+procedure Tf_setup.AlpacaDiscoverAsync(data:PtrInt);
 var i,j,n:integer;
     devtype: string;
 begin
 try
-  Screen.Cursor:=crHourGlass;
+  DiscoverLed.Visible:=true;
   AlpacaServerList:=AlpacaDiscover(AlpacaDiscoveryPort.Value);
   n:=length(AlpacaServerList);
   if n>0 then begin
@@ -2454,6 +2464,7 @@ try
     AlpacaServers.ItemIndex:=0;
   end;
 finally
+  DiscoverLed.Visible:=false;
   Screen.Cursor:=crDefault;
 end;
 end;

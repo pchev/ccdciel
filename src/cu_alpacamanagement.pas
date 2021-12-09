@@ -36,7 +36,7 @@ uses cu_ascomrest, u_utils,
 const AlpacaCurrentVersion = 1;
       DefaultPort = 32227;
       AlpacaDiscStr = 'alpacadiscovery1';
-      DiscoverTimeout = 3000;
+      DiscoverTimeout = 1000;
 
 Type
   TAlpacaDevice = record
@@ -46,11 +46,21 @@ Type
   TAlpacaDeviceList = array of TAlpacaDevice;
   TAlpacaServer = record
      ip,port: string;
-     servername,manufacturer,version,location: string;
+     servername,manufacturer,version,location,errormsg: string;
      apiversion, devicecount: integer;
      devices: TAlpacaDeviceList;
   end;
   TAlpacaServerList = array of TAlpacaServer;
+
+  TDiscoverThread = class(TThread)
+  public
+    working: boolean;
+    port: integer;
+    ServerList: TAlpacaServerList;
+    procedure Execute; override;
+    constructor Create(CreateSuspended: boolean);
+  end;
+
 
 var
     AlpacaDiscPort: string;
@@ -70,6 +80,22 @@ procedure AlpacaDeviceSetup(srv: TAlpacaServer; dev:TAlpacaDevice);
 implementation
 
 function AlpacaDiscover(dport:integer=DefaultPort): TAlpacaServerList;
+var thread:TDiscoverThread;
+    timelimit: double;
+begin
+  thread:=TDiscoverThread.Create(true);
+  thread.port:=dport;
+  thread.Start;
+  timelimit:=now+15/SecsPerDay;
+  repeat
+    sleep(50);
+    Application.ProcessMessages;
+  until (not thread.working) or (now > timelimit);
+  result:=thread.ServerList;
+  thread.Free;
+end;
+
+function AlpacaDiscoverBlocking(dport:integer=DefaultPort): TAlpacaServerList;
 var apiversions: array of integer;
     i,j: integer;
 begin
@@ -94,7 +120,7 @@ begin
       result[i].devices:=AlpacaDevices(result[i].ip,result[i].port,IntToStr(result[i].apiversion));
       result[i].devicecount:=length(result[i].devices);
       except
-        on E: Exception do ShowMessage('Alpaca server at '+result[i].ip+':'+result[i].port+' report: '+CRLF+ E.Message);
+        on E: Exception do result[i].errormsg:=E.Message;
       end;
     end;
   end;
@@ -378,6 +404,24 @@ end;
 procedure AlpacaDeviceSetup(srv: TAlpacaServer; dev:TAlpacaDevice);
 begin
   ExecuteFile('http://'+srv.ip+':'+srv.port+'/setup/v'+IntToStr(srv.apiversion)+'/'+LowerCase(dev.DeviceType)+'/'+IntToStr(dev.DeviceNumber)+'/setup');
+end;
+
+//////////////////// TDiscoverThread /////////////////////////
+
+constructor TDiscoverThread.Create(CreateSuspended: boolean);
+begin
+  FreeOnTerminate := False;
+  inherited Create(CreateSuspended);
+  working := True;
+end;
+
+procedure TDiscoverThread.Execute;
+begin
+  try
+  ServerList:=AlpacaDiscoverBlocking(port);
+  finally
+  working := False;
+  end;
 end;
 
 end.
