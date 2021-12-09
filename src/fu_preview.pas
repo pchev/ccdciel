@@ -25,7 +25,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 interface
 
-uses u_global, u_utils, Graphics, UScaleDPI, cu_camera, u_translation, u_hints,
+uses u_global, u_utils, Graphics, UScaleDPI, cu_camera, u_translation, u_hints, indiapi,
   Classes, SysUtils, FileUtil, Forms, Controls, ExtCtrls, StdCtrls, Spin;
 
 type
@@ -284,7 +284,7 @@ var SaveonNewImage: TNotifyEvent;
     endt: TDateTime;
 begin
 result:=false;
-if AllDevicesConnected then begin
+if camera.Status=devConnected then begin
   if exp>=1 then
     msg(Format(rsTakeControlE, [FormatFloat(f1, exp)]),3)
   else

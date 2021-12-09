@@ -10178,6 +10178,7 @@ begin
   if f_preview.Loop then f_preview.BtnLoopClick(nil);
   f_polaralign2.Mount:=mount;
   f_polaralign2.Wheel:=wheel;
+  f_polaralign2.Camera:=camera;
   pt.x:=0;
   pt.y:=PanelCenter.top;
   pt:=ClientToScreen(pt);

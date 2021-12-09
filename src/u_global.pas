@@ -147,7 +147,10 @@ type
        Guiding: boolean;
   end;
 
-
+  TAltAzPosition = class(TObject)
+    az1,alt1: double;
+    az2,alt2: double;
+  end;
 
   // libcdcwcs
  type
