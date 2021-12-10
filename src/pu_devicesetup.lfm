@@ -380,8 +380,7 @@ object f_setup: Tf_setup
             Width = 72
             Anchors = [akLeft, akBottom]
             BorderSpacing.Bottom = 4
-            Brush.Color = clRed
-            Visible = False
+            Brush.Color = clSilver
           end
         end
         object Panel20: TPanel

@@ -2385,7 +2385,7 @@ var i,j,n:integer;
     devtype: string;
 begin
 try
-  DiscoverLed.Visible:=true;
+  DiscoverLed.Brush.Color:=clYellow;
   AlpacaServerList:=AlpacaDiscover(AlpacaDiscoveryPort.Value);
   n:=length(AlpacaServerList);
   if n>0 then begin
@@ -2458,13 +2458,14 @@ try
     AlpacaSafetyList.ItemIndex:=0;
     AlpacaSwitchList.ItemIndex:=0;
     AlpacaCoverList.ItemIndex:=0;
+    DiscoverLed.Brush.Color:=clLime;
   end else begin
     AlpacaServers.Clear;
     AlpacaServers.Items.Add('No Alpaca server found');
     AlpacaServers.ItemIndex:=0;
+    DiscoverLed.Brush.Color:=clRed;
   end;
 finally
-  DiscoverLed.Visible:=false;
   Screen.Cursor:=crDefault;
 end;
 end;
