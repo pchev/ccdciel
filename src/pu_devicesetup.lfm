@@ -973,6 +973,29 @@ object f_setup: Tf_setup
                 ParentFont = False
                 OnClick = AlpacaSetupCamera
               end
+              object DiscoverLed1: TShape
+                AnchorSideLeft.Control = BtnDiscover1
+                AnchorSideLeft.Side = asrCenter
+                AnchorSideBottom.Control = BtnDiscover1
+                Left = 389
+                Height = 8
+                Top = 54
+                Width = 72
+                Anchors = [akLeft, akBottom]
+                BorderSpacing.Bottom = 4
+                Brush.Color = clSilver
+              end
+              object BtnDiscover1: TButton
+                AnchorSideTop.Side = asrCenter
+                Left = 384
+                Height = 25
+                Top = 66
+                Width = 82
+                Caption = 'Discover'
+                OnClick = BtnDiscoverClick
+                ParentFont = False
+                TabOrder = 10
+              end
             end
           end
         end
@@ -1404,6 +1427,29 @@ object f_setup: Tf_setup
                 Font.Style = [fsUnderline]
                 ParentFont = False
                 OnClick = AlpacaSetupWheel
+              end
+              object BtnDiscover2: TButton
+                AnchorSideTop.Side = asrCenter
+                Left = 384
+                Height = 25
+                Top = 66
+                Width = 82
+                Caption = 'Discover'
+                OnClick = BtnDiscoverClick
+                ParentFont = False
+                TabOrder = 7
+              end
+              object DiscoverLed2: TShape
+                AnchorSideLeft.Control = BtnDiscover2
+                AnchorSideLeft.Side = asrCenter
+                AnchorSideBottom.Control = BtnDiscover2
+                Left = 389
+                Height = 8
+                Top = 54
+                Width = 72
+                Anchors = [akLeft, akBottom]
+                BorderSpacing.Bottom = 4
+                Brush.Color = clSilver
               end
             end
           end
@@ -1931,6 +1977,29 @@ object f_setup: Tf_setup
                   ParentFont = False
                   OnClick = AlpacaSetupFocuser
                 end
+                object BtnDiscover3: TButton
+                  AnchorSideTop.Side = asrCenter
+                  Left = 384
+                  Height = 25
+                  Top = 66
+                  Width = 82
+                  Caption = 'Discover'
+                  OnClick = BtnDiscoverClick
+                  ParentFont = False
+                  TabOrder = 7
+                end
+                object DiscoverLed3: TShape
+                  AnchorSideLeft.Control = BtnDiscover3
+                  AnchorSideLeft.Side = asrCenter
+                  AnchorSideBottom.Control = BtnDiscover3
+                  Left = 389
+                  Height = 8
+                  Top = 54
+                  Width = 72
+                  Anchors = [akLeft, akBottom]
+                  BorderSpacing.Bottom = 4
+                  Brush.Color = clSilver
+                end
               end
             end
           end
@@ -2316,6 +2385,29 @@ object f_setup: Tf_setup
                 Font.Style = [fsUnderline]
                 ParentFont = False
                 OnClick = AlpacaSetupRotator
+              end
+              object BtnDiscover4: TButton
+                AnchorSideTop.Side = asrCenter
+                Left = 384
+                Height = 25
+                Top = 66
+                Width = 82
+                Caption = 'Discover'
+                OnClick = BtnDiscoverClick
+                ParentFont = False
+                TabOrder = 7
+              end
+              object DiscoverLed4: TShape
+                AnchorSideLeft.Control = BtnDiscover4
+                AnchorSideLeft.Side = asrCenter
+                AnchorSideBottom.Control = BtnDiscover4
+                Left = 389
+                Height = 8
+                Top = 54
+                Width = 72
+                Anchors = [akLeft, akBottom]
+                BorderSpacing.Bottom = 4
+                Brush.Color = clSilver
               end
             end
           end
@@ -2784,6 +2876,29 @@ object f_setup: Tf_setup
                   ParentFont = False
                   OnClick = AlpacaSetupMount
                 end
+                object BtnDiscover5: TButton
+                  AnchorSideTop.Side = asrCenter
+                  Left = 384
+                  Height = 25
+                  Top = 66
+                  Width = 82
+                  Caption = 'Discover'
+                  OnClick = BtnDiscoverClick
+                  ParentFont = False
+                  TabOrder = 7
+                end
+                object DiscoverLed5: TShape
+                  AnchorSideLeft.Control = BtnDiscover5
+                  AnchorSideLeft.Side = asrCenter
+                  AnchorSideBottom.Control = BtnDiscover5
+                  Left = 389
+                  Height = 8
+                  Top = 54
+                  Width = 72
+                  Anchors = [akLeft, akBottom]
+                  BorderSpacing.Bottom = 4
+                  Brush.Color = clSilver
+                end
               end
             end
           end
@@ -3169,6 +3284,29 @@ object f_setup: Tf_setup
                 Font.Style = [fsUnderline]
                 ParentFont = False
                 OnClick = AlpacaSetupDome
+              end
+              object BtnDiscover6: TButton
+                AnchorSideTop.Side = asrCenter
+                Left = 384
+                Height = 25
+                Top = 66
+                Width = 82
+                Caption = 'Discover'
+                OnClick = BtnDiscoverClick
+                ParentFont = False
+                TabOrder = 7
+              end
+              object DiscoverLed6: TShape
+                AnchorSideLeft.Control = BtnDiscover6
+                AnchorSideLeft.Side = asrCenter
+                AnchorSideBottom.Control = BtnDiscover6
+                Left = 389
+                Height = 8
+                Top = 54
+                Width = 72
+                Anchors = [akLeft, akBottom]
+                BorderSpacing.Bottom = 4
+                Brush.Color = clSilver
               end
             end
           end
@@ -3617,6 +3755,29 @@ object f_setup: Tf_setup
                 ParentFont = False
                 OnClick = AlpacaSetupWeather
               end
+              object BtnDiscover7: TButton
+                AnchorSideTop.Side = asrCenter
+                Left = 384
+                Height = 25
+                Top = 66
+                Width = 82
+                Caption = 'Discover'
+                OnClick = BtnDiscoverClick
+                ParentFont = False
+                TabOrder = 8
+              end
+              object DiscoverLed7: TShape
+                AnchorSideLeft.Control = BtnDiscover7
+                AnchorSideLeft.Side = asrCenter
+                AnchorSideBottom.Control = BtnDiscover7
+                Left = 389
+                Height = 8
+                Top = 54
+                Width = 72
+                Anchors = [akLeft, akBottom]
+                BorderSpacing.Bottom = 4
+                Brush.Color = clSilver
+              end
             end
           end
         end
@@ -4022,6 +4183,29 @@ object f_setup: Tf_setup
                 Font.Style = [fsUnderline]
                 ParentFont = False
                 OnClick = AlpacaSetupSafety
+              end
+              object BtnDiscover8: TButton
+                AnchorSideTop.Side = asrCenter
+                Left = 384
+                Height = 25
+                Top = 66
+                Width = 82
+                Caption = 'Discover'
+                OnClick = BtnDiscoverClick
+                ParentFont = False
+                TabOrder = 7
+              end
+              object DiscoverLed8: TShape
+                AnchorSideLeft.Control = BtnDiscover8
+                AnchorSideLeft.Side = asrCenter
+                AnchorSideBottom.Control = BtnDiscover8
+                Left = 389
+                Height = 8
+                Top = 54
+                Width = 72
+                Anchors = [akLeft, akBottom]
+                BorderSpacing.Bottom = 4
+                Brush.Color = clSilver
               end
             end
           end
@@ -4631,6 +4815,29 @@ object f_setup: Tf_setup
                 ParentFont = False
                 OnClick = AlpacaSetupSwitch
               end
+              object BtnDiscover9: TButton
+                AnchorSideTop.Side = asrCenter
+                Left = 384
+                Height = 25
+                Top = 66
+                Width = 82
+                Caption = 'Discover'
+                OnClick = BtnDiscoverClick
+                ParentFont = False
+                TabOrder = 7
+              end
+              object DiscoverLed9: TShape
+                AnchorSideLeft.Control = BtnDiscover9
+                AnchorSideLeft.Side = asrCenter
+                AnchorSideBottom.Control = BtnDiscover9
+                Left = 389
+                Height = 8
+                Top = 54
+                Width = 72
+                Anchors = [akLeft, akBottom]
+                BorderSpacing.Bottom = 4
+                Brush.Color = clSilver
+              end
             end
           end
         end
@@ -5035,6 +5242,29 @@ object f_setup: Tf_setup
                 Font.Style = [fsUnderline]
                 ParentFont = False
                 OnClick = AlpacaSetupCover
+              end
+              object BtnDiscover10: TButton
+                AnchorSideTop.Side = asrCenter
+                Left = 384
+                Height = 25
+                Top = 66
+                Width = 82
+                Caption = 'Discover'
+                OnClick = BtnDiscoverClick
+                ParentFont = False
+                TabOrder = 7
+              end
+              object DiscoverLed10: TShape
+                AnchorSideLeft.Control = BtnDiscover10
+                AnchorSideLeft.Side = asrCenter
+                AnchorSideBottom.Control = BtnDiscover10
+                Left = 389
+                Height = 8
+                Top = 54
+                Width = 72
+                Anchors = [akLeft, akBottom]
+                BorderSpacing.Bottom = 4
+                Brush.Color = clSilver
               end
             end
           end

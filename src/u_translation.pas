@@ -1336,6 +1336,10 @@ resourcestring
   rsShortExposur = 'Short exposure stacking';
   rsShowStacking = 'Show stacking option for Preview/Capture/Sequence';
   rsPleaseConfig3 = 'Please configure the observatory location.';
+  rsNoDeviceFoun = 'No device found';
+  rsDiscoveredS = 'Discovered %s ...';
+  rsFoundServers = 'Found %s servers';
+  rsNoAlpacaServ = 'No Alpaca server found';
 
 implementation
 
