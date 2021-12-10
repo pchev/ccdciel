@@ -2458,6 +2458,16 @@ try
     AlpacaSafetyList.ItemIndex:=0;
     AlpacaSwitchList.ItemIndex:=0;
     AlpacaCoverList.ItemIndex:=0;
+    if AlpacaCameraList.Items.Count=1 then AlpacaCameraList.Items[0]:='No device found';
+    if AlpacaWheelList.Items.Count=1 then AlpacaWheelList.Items[0]:='No device found';
+    if AlpacaFocuserList.Items.Count=1 then AlpacaFocuserList.Items[0]:='No device found';
+    if AlpacaRotatorList.Items.Count=1 then AlpacaRotatorList.Items[0]:='No device found';
+    if AlpacaMountList.Items.Count=1 then AlpacaMountList.Items[0]:='No device found';
+    if AlpacaDomeList.Items.Count=1 then AlpacaDomeList.Items[0]:='No device found';
+    if AlpacaWeatherList.Items.Count=1 then AlpacaWeatherList.Items[0]:='No device found';
+    if AlpacaSafetyList.Items.Count=1 then AlpacaSafetyList.Items[0]:='No device found';
+    if AlpacaSwitchList.Items.Count=1 then AlpacaSwitchList.Items[0]:='No device found';
+    if AlpacaCoverList.Items.Count=1 then AlpacaCoverList.Items[0]:='No device found';
     DiscoverLed.Brush.Color:=clLime;
   end else begin
     AlpacaServers.Clear;
