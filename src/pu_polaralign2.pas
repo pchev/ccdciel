@@ -144,15 +144,15 @@ implementation
 
 procedure Tf_polaralign2.Measurement1;
 begin
-  if (not IgnoreMount) then begin
-    MountPosition(1);
-  end;
   TakeExposure;
   if FTerminate then exit;
   Solve(1);
   if FTerminate then exit;
-  if (not IgnoreMount) then
-    DeterminantTimer.Enabled:=true
+  if (not IgnoreMount) then begin
+    Sync(1);
+    MountPosition(1);
+    DeterminantTimer.Enabled:=true;
+  end
   else
     NoMountPosition(1);
   CurrentStep:=1;
