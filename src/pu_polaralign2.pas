@@ -196,6 +196,7 @@ var altaz: TAltAzPosition;
       Eq2Hz(h*15*deg2rad,d*deg2rad,az,al);
       az:=rad2deg*rmod(az+pi,pi2);
       al:=al*rad2deg;
+      al:=max(al,30); {stay 30 degrees above horizon}
       if n=1 then begin
         azp.az1:=az;
         azp.alt1:=al;
@@ -215,64 +216,73 @@ begin
   GotoPosition.items.AddObject('Manual position',altaz);
   GotoPosition.ItemIndex:=0;
   if not IgnoreMount then begin
-    if abs(ObsLatitude)>25 then
+    if ObsLatitude>30 then
     begin
       {high latitude}
       altaz:=TAltAzPosition.Create;
-      GetAE(-4,ObsLatitude,1,altaz);
-      GetAE(-0.5,ObsLatitude/2,2,altaz);
-      if ObsLatitude>0 then
-        GotoPosition.items.AddObject('Measure in the East and South',altaz)
-      else
-        GotoPosition.items.AddObject('Measure in the East and North',altaz);
+      GetAE(-5,15,1,altaz); {15 degrees above celestial equator}
+      GetAE(-0.5,0,2,altaz);{celestial equator, stay away from zenith for azimuth adjustment. altitude is limited to30 degrees minimum}
+      GotoPosition.items.AddObject('Measure in the East and South',altaz);
+
       altaz:=TAltAzPosition.Create;
-      GetAE(4,ObsLatitude,1,altaz);
-      GetAE(0.5,ObsLatitude/2,2,altaz);
-      if ObsLatitude>0 then
-        GotoPosition.items.AddObject('Measure in the West and South',altaz)
-      else
-        GotoPosition.items.AddObject('Measure in the West and North',altaz);
+      GetAE(+5,15,1,altaz); {15 degrees above celestial equator}
+      GetAE(+0.5,0,2,altaz);{celestial equator, stay away from zenith for azimuth adjustment}
+      GotoPosition.items.AddObject('Measure in the West and South',altaz);
+    end
+    else
+    if ObsLatitude<-30 then {southern hemisphere}
+    begin
+      {high latitude}
+      altaz:=TAltAzPosition.Create;
+      GetAE(-5,15,1,altaz); {15 degrees above celestial equator}
+      GetAE(-0.5,0,2,altaz);{celestial equator, stay away from zenith for azimuth adjustment. altitude is limited to 30 degrees minimum}
+      GotoPosition.items.AddObject('Measure in the East and North',altaz);
+
+      altaz:=TAltAzPosition.Create;
+      GetAE(+5,15,1,altaz); {15 degrees above celestial equator}
+      GetAE(+0.5,0,2,altaz);{celestial equator, stay away from zenith for azimuth adjustment}
+      GotoPosition.items.AddObject('Measure in the West and North',altaz);
     end
     else
     begin
       {Near equator}
       if ObsLatitude>0 then begin
         {North, preference for south horizon}
+        GetAE(-4,0,1,altaz);
+        GetAE(-0.5,-40,2,altaz);{avoid zenith for azimuth adjustment}
+        GotoPosition.items.AddObject('Measure in the East and South',altaz);
         altaz:=TAltAzPosition.Create;
-        GetAE(-4,-25,1,altaz);
-        GetAE(-0.5,-25,2,altaz);
-        GotoPosition.items.AddObject('Measure in the South-East and South',altaz);
+        GetAE(4,0,1,altaz);
+        GetAE(0.5,-40,2,altaz);{avoid zenith for azimuth adjustment}
+        GotoPosition.items.AddObject('Measure in the West and South',altaz);
         altaz:=TAltAzPosition.Create;
-        GetAE(4,-25,1,altaz);
-        GetAE(0.5,-25,2,altaz);
-        GotoPosition.items.AddObject('Measure in the South-West and South',altaz);
-        altaz:=TAltAzPosition.Create;
-        GetAE(-4,25,1,altaz);
-        GetAE(-0.5,25,2,altaz);
-        GotoPosition.items.AddObject('Measure in the North-East and North',altaz);
+        GetAE(-4,0,1,altaz);
+        GetAE(-0.5,70,2,altaz);{avoid zenith for azimuth adjustment}
+        GotoPosition.items.AddObject('Measure in the East and North',altaz);
         altaz:=TAltAzPosition.Create;
         GetAE(4,25,1,altaz);
-        GetAE(0.5,25,2,altaz);
-        GotoPosition.items.AddObject('Measure in the North-West and North',altaz);
+        GetAE(0.5,70,2,altaz);{avoid zenith for azimuth adjustment}
+        GotoPosition.items.AddObject('Measure in the West and North',altaz);
       end
       else begin
         {South, preference for north horizon}
         altaz:=TAltAzPosition.Create;
-        GetAE(-4,25,1,altaz);
-        GetAE(-0.5,25,2,altaz);
-        GotoPosition.items.AddObject('Measure in the North-East and North',altaz);
         altaz:=TAltAzPosition.Create;
-        GetAE(4,25,1,altaz);
-        GetAE(0.5,25,2,altaz);
-        GotoPosition.items.AddObject('Measure in the North-West and North',altaz);
+        GetAE(-4,0,1,altaz);
+        GetAE(-0.5,70,2,altaz);
+        GotoPosition.items.AddObject('Measure in the East and North',altaz);
         altaz:=TAltAzPosition.Create;
-        GetAE(-4,-25,1,altaz);
-        GetAE(-0.5,-25,2,altaz);
-        GotoPosition.items.AddObject('Measure in the South-East and South',altaz);
+        GetAE(4,0,1,altaz);
+        GetAE(0.5,70,2,altaz);
+        GotoPosition.items.AddObject('Measure in the West and North',altaz);
+        altaz:=TAltAzPosition.Create;
+        GetAE(-4,0,1,altaz);
+        GetAE(-0.5,-40,2,altaz);
+        GotoPosition.items.AddObject('Measure in the East and South',altaz);
         altaz:=TAltAzPosition.Create;
         GetAE(4,-25,1,altaz);
-        GetAE(0.5,-25,2,altaz);
-        GotoPosition.items.AddObject('Measure in the South-West and South',altaz);
+        GetAE(0.5,-40,2,altaz);
+        GotoPosition.items.AddObject('Measure in the West and South',altaz);
       end;
     end;
     GotoPosition.ItemIndex:=1;
