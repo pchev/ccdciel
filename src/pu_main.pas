@@ -1897,6 +1897,7 @@ begin
    MenuItem2.Caption := rsEdit;
    MenuOptions.Caption := Format(rsPreferences, [ellipsis]);
    MenuPolarAlignment.Caption:=rsPolarAlignme;
+   MenuPolarAlignment2.Caption:='Polar alignment without pole visibility';
    MenuIndiSettings.Caption := rsINDISettings;
    MenuAscomCameraSetup.Caption:='ASCOM '+rsCamera+blank+rsSetup;
    MenuAscomWheelSetup.Caption:='ASCOM '+rsFilterWheel+blank+rsSetup;
