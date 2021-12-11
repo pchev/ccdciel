@@ -527,8 +527,8 @@ begin
   if corr_alt>0  then ns:=' above the celestial pole' else ns:=' below the celestial pole';
 
   msg('Determinant: '+FormatFloat(f2,determinant),1);
-  LabelPol1.Caption:='Polar error Az: '+FormatFloat(f2,rad2deg*abs(corr_az)*60)+' arcminutes'+ew;
-  LabelPol2.Caption:='Polar error Alt: '+FormatFloat(f2,rad2deg*abs(corr_alt)*60)+' arcminutes'+ns;
+  LabelPol1.Caption:='Polar error Az: '+DEToStrShort(rad2deg*abs(corr_az),0)+' '+ew;
+  LabelPol2.Caption:='Polar error Alt: '+DEToStrShort(rad2deg*abs(corr_alt),0)+' '+ns;
   tracemsg(LabelPol1.Caption);
   tracemsg(LabelPol2.Caption);
   LabelPol3.Caption:=LabelPol1.Caption;
@@ -747,8 +747,24 @@ begin
 end;
 
 procedure Tf_polaralign2.ButtonNext3Click(Sender: TObject);
+var txt: string;
 begin
   Instruction.Clear;
+  Instruction.Lines.Add(rsHorizontalCo);
+  if corr_az>0 then
+     txt:=rsMoveWestBy
+  else
+     txt:=rsMoveEastBy;
+  txt:=txt+DEToStrShort(rad2deg*abs(corr_az),0);
+  Instruction.Lines.Add(txt);
+  Instruction.Lines.Add(rsVerticalCorr);
+  if corr_alt>0 then
+     txt:=rsMoveDownBy
+  else
+     txt:=rsMoveUpBy;
+  txt:=txt+DEToStrShort(rad2deg*abs(corr_alt),0);
+  Instruction.Lines.Add(txt);
+  Instruction.Lines.Add('');
   Instruction.Lines.Add(rsMoveTheGreen);
   Instruction.Lines.Add(rsThenAdjustTh);
   Instruction.Lines.Add(rsForGuidanceA);
@@ -775,13 +791,7 @@ begin
   Application.ProcessMessages;
   StartAdjustement;
   if FTerminate then exit;
-  Instruction.Clear;
-  Instruction.Lines.Add(rsMoveTheGreen);
-  Instruction.Lines.Add(rsThenAdjustTh);
-  Instruction.Lines.Add(rsForGuidanceA);
-  Instruction.Lines.Add(rsYouCanCloseT);
-  PageControl1.ActivePage:=TabSheetAdjust;
-  FInProgress:=false;
+  ButtonNext3Click(Sender);
 end;
 
 procedure Tf_polaralign2.ManualMeasurementAsync(Data: PtrInt);

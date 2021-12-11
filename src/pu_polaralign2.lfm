@@ -1,10 +1,10 @@
 object f_polaralign2: Tf_polaralign2
   Left = 137
-  Height = 350
+  Height = 422
   Top = 167
   Width = 499
   Caption = 'f_polaralign2'
-  ClientHeight = 350
+  ClientHeight = 422
   ClientWidth = 499
   FormStyle = fsStayOnTop
   OnClose = FormClose
@@ -14,7 +14,7 @@ object f_polaralign2: Tf_polaralign2
   object Panel1: TPanel
     Left = 0
     Height = 134
-    Top = 216
+    Top = 288
     Width = 499
     Align = alBottom
     ClientHeight = 134
@@ -280,13 +280,10 @@ object f_polaralign2: Tf_polaralign2
   end
   object Instruction: TMemo
     Left = 0
-    Height = 216
+    Height = 288
     Top = 0
     Width = 499
     Align = alClient
-    Lines.Strings = (
-      'Instruction'
-    )
     TabOrder = 1
   end
   object DeterminantTimer: TTimer
