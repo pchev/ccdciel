@@ -536,15 +536,13 @@ begin
 
   //calculate the Ra, Dec correction for stars in image 2
   corr_ra:=B[0,0]*corr_alt + B[1,0]*corr_az;
-  //  corr_ra:=corr_ra/max(0.00000000000000000001,cos(FDe[2]));{convert RA angle to distance in arcradians}
   corr_de:=B[0,1]*corr_alt+  B[1,1]*corr_az;
 
   // same with corr_alt=0 for intermediate point
   corr_rai:=B[1,0]*corr_az;
- //  caza:=caza/max(0.00000000000000000001,cos(DE));
   corr_dei:=B[1,1]*corr_az;
 
-  tracemsg('Stars in image 2 have to move: '+FormatFloat(f2,rad2deg*(corr_ra)*60)+' arcminutes in RA and '+FormatFloat(f2,rad2deg*(corr_de)*60)+' arcminutes in DEC by the correction.');
+  tracemsg('Stars in image 2 have to move: '+FormatFloat(f2,rad2deg*(corr_ra/max(0.00000000000000000001,cos(FDe[2])))*60)+' arcminutes in RA and '+FormatFloat(f2,rad2deg*(corr_de)*60)+' arcminutes in DEC by the correction.');
   //Warning avoid the zenith for the second image!! Azimuth changes will not create any change at zenith
 end;
 
@@ -567,11 +565,9 @@ begin
   B[1,1]:=COS(lat_rad)*SIN(h_2);
   //calculate the Ra, Dec correction for stars in image 2
   corr_ra:=B[0,0]*corr_alt + B[1,0]*corr_az;
-//  cra:=cra/max(0.00000000000000000001,cos(DE));
   corr_de:=B[0,1]*corr_alt+  B[1,1]*corr_az;
   // same with corr_alt=0 for intermediate point
   corr_rai:=B[1,0]*corr_az;
-//  caza:=caza/max(0.00000000000000000001,cos(DE));
   corr_dei:=B[1,1]*corr_az;
 end;
 
@@ -595,7 +591,7 @@ begin
   J2000ToApparent(cra,cde);
   // adjustement at current position
   CurrentAdjustement(cra,cde);
-  tracemsg('Stars in new image have to move: '+FormatFloat(f2,rad2deg*(corr_ra)*60)+' arcminutes in RA and '+FormatFloat(f2,rad2deg*(corr_de)*60)+' arcminutes in DEC by the correction.');
+  tracemsg('Stars in new image have to move: '+FormatFloat(f2,rad2deg*(corr_ra/max(0.00000000000000000001,cos(FDe[2])))*60)+' arcminutes in RA and '+FormatFloat(f2,rad2deg*(corr_de)*60)+' arcminutes in DEC by the correction.');
   ComputeCorrection;
   StartImageLoop;
 end;
