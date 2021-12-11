@@ -36,7 +36,11 @@ type
   Tf_option = class(TForm)
     ButtonSeqDir: TButton;
     CdCPath: TEdit;
+    ImageCursor: TComboBox;
+    GroupBox33: TGroupBox;
     Label152: TLabel;
+    Label153: TLabel;
+    Label154: TLabel;
     Panel27: TPanel;
     StackAlign: TCheckBox;
     StackGroup: TGroupBox;

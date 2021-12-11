@@ -83,6 +83,7 @@ install -v -m 644 data/stars/focus_star_7  $destdir/share/ccdciel/data/stars/foc
 install -v -m 644 data/stars/focus_star_8  $destdir/share/ccdciel/data/stars/focus_star_8 
 install -v -m 644 data/dso/deep_sky.csv  $destdir/share/ccdciel/data/dso/deep_sky.csv
 install -v -m 644 data/resources/smallcross.cur  $destdir/share/ccdciel/data/resources/smallcross.cur
+install -v -m 644 data/resources/bigcross.cur  $destdir/share/ccdciel/data/resources/bigcross.cur
 install -v -m 644 data/language/ccdciel.po     $destdir/share/ccdciel/data/language/ccdciel.en.po
 install -v -m 644 data/language/ccdciel.en_GB.po $destdir/share/ccdciel/data/language/ccdciel.en_GB.po
 install -v -m 644 data/language/ccdciel.cs.po  $destdir/share/ccdciel/data/language/ccdciel.cs.po

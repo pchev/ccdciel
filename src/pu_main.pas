@@ -1350,6 +1350,7 @@ begin
   Image1.OnResize := @Image1Resize;
   Image1.OnPaint := @Image1Paint;
   Image1.PopupMenu := ImagePopupMenu;
+  CursorImage1 := TCursorImage.Create;
   GetAppDir;
   chdir(Appdir);
   cdcwcs_initfitsfile:=nil;
@@ -2132,7 +2133,7 @@ begin
 end;
 
 procedure Tf_main.FormShow(Sender: TObject);
-var str: string;
+var str,fn: string;
     i: integer;
 begin
 
@@ -2176,15 +2177,19 @@ begin
   EndY:=0;
   RunningCapture:=false;
   RunningPreview:=false;
-  MenuIndiSettings.Enabled:=true;//(camera.CameraInterface=INDI);
-  MenuShowINDIlog.Visible:=true;//(camera.CameraInterface=INDI);
+  MenuIndiSettings.Enabled:=true;
+  MenuShowINDIlog.Visible:=true;
   ObsTimeZone:=-GetLocalTimeOffset/60;
   crRetic:=6;
-  CursorImage1 := TCursorImage.Create;
-  if fileexists(slash(DataDir) + slash('resources') + 'smallcross.cur') then
+  if screenconfig.GetValue('/Cursor/ImageCursor',0)=0 then
+    fn:=slash(DataDir) + slash('resources') + 'smallcross.cur'
+  else if screenconfig.GetValue('/Cursor/ImageCursor',0)=1 then
+    fn:=slash(DataDir) + slash('resources') + 'bigcross.cur'
+  else fn:='';
+  if (fn<>'')and fileexists(fn) then
   begin
     try
-      CursorImage1.LoadFromFile(SysToUTF8(slash(DataDir) + slash('resources') + 'smallcross.cur'));
+      CursorImage1.LoadFromFile(fn);
       Screen.Cursors[crRetic] := CursorImage1.Handle;
     except
       crRetic := crCross;
@@ -7522,6 +7527,7 @@ begin
    f_option.VideoGroup.Visible:=(camera.CameraInterface=INDI);
    f_option.RefTreshold.Position:=config.GetValue('/RefImage/Treshold',128);
    f_option.RefColor.ItemIndex:=config.GetValue('/RefImage/Color',0);
+   f_option.ImageCursor.ItemIndex:=screenconfig.GetValue('/Cursor/ImageCursor',0);
    x:=config.GetValue('/Cooler/TemperatureSlope',TemperatureSlope);
    if abs(x)<0.001 then x:=0;
    f_option.TemperatureSlope.Value:=x;
@@ -7961,6 +7967,7 @@ begin
      config.SetValue('/Video/PreviewRate',f_option.VideoPreviewRate.Value);
      config.SetValue('/RefImage/Treshold',f_option.RefTreshold.Position);
      config.SetValue('/RefImage/Color',f_option.RefColor.ItemIndex);
+     screenconfig.SetValue('/Cursor/ImageCursor',f_option.ImageCursor.ItemIndex);
      config.SetValue('/Cooler/TemperatureSlope',f_option.TemperatureSlope.Value);
      config.SetValue('/Cooler/CameraAutoCool',f_option.CameraAutoCool.Checked);
      config.SetValue('/Cooler/CameraAutoCoolTemp',f_option.CameraAutoCoolTemp.Value);
