@@ -10155,7 +10155,7 @@ begin
   if f_preview.Loop then f_preview.BtnLoopClick(nil);
   f_polaralign.Mount:=mount;
   f_polaralign.Wheel:=wheel;
-  pt.x:=0;
+  pt.x:=-f_polaralign.Width-8;
   pt.y:=PanelCenter.top;
   pt:=ClientToScreen(pt);
   FormPos(f_polaralign,pt.X,pt.Y);
@@ -10186,7 +10186,7 @@ begin
   f_polaralign2.Mount:=mount;
   f_polaralign2.Wheel:=wheel;
   f_polaralign2.Camera:=camera;
-  pt.x:=0;
+  pt.x:=-f_polaralign2.Width-8;
   pt.y:=PanelCenter.top;
   pt:=ClientToScreen(pt);
   FormPos(f_polaralign2,pt.X,pt.Y);
