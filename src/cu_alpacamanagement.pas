@@ -131,7 +131,7 @@ var
   AProcess: TProcess;
   s: string;
   sl: TStringList;
-  i, n: integer;
+  i,n,l: integer;
   {$IFDEF WINDOWS}
   j: integer;
   ip,mask: string;
@@ -207,10 +207,12 @@ begin
   Result.Add('127.255.255.255'); // always add local loopback
   for i:=0 to sl.Count-1 do
   begin
+    l:=10;
     n:=Pos('broadcast ', sl[i]);
+    if n=0 then begin n:=Pos('Bcast:', sl[i]); l:=6; end;
     if n=0 then Continue;
     s:=sl[i];
-    s:=Copy(s, n+Length('broadcast '), 999);
+    s:=Copy(s, n+l, 999);
     n:=Pos(' ', s);
     if n>0 then s:=Copy(s, 1, n);
     Result.Add(Trim(s));
