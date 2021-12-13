@@ -369,13 +369,22 @@ begin
   LocalToMount(mount.EquinoxJD,ra,de);
   if not mount.Sync(ra,de) then
     AbortAlignment;
+  wait(1); // let time to the mount to update the coordinates
 end;
 
 procedure Tf_polaralign2.MountPosition(step: integer);
 var tra,tde: double;
 begin
-  tra:=mount.RA;
-  tde:=mount.Dec;
+  if step=1 then begin
+    // use sync coordinates to remove mount error
+    tra:=rad2deg*FRa[step]/15;
+    tde:=rad2deg*FDe[step];
+    LocalToMount(mount.EquinoxJD,tra,tde);
+  end
+  else begin
+    tra:=mount.RA;
+    tde:=mount.Dec;
+  end;
   if (tra=NullCoord)or(tde=NullCoord) then begin
     msg('Error reading mount coordinates',1);
     AbortAlignment;
