@@ -64,6 +64,7 @@ uses
 {$endif}
 
 begin
+  (* // To stdout by default, uncomment to write to file
   {$ifdef USEHEAPTRC}
     {$ifdef mswindows}
       DeleteFile('C:\Temp\ccdciel_heap.trc');
@@ -73,6 +74,7 @@ begin
       SetHeapTraceOutput('/tmp/ccdciel_heap.trc');
     {$endif}
   {$endif}
+  *)
 
   RequireDerivedFormResource := True;
   Application.Initialize;
