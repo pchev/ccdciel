@@ -296,12 +296,12 @@ end;
 
 procedure Tf_polaralign2.tracemsg(txt: string);
 begin
-  if assigned(FonShowMessage) then FonShowMessage('PolarAlign: '+txt,9);
+  if assigned(FonShowMessage) then FonShowMessage('PolarAlign2: '+txt,9);
 end;
 
 procedure Tf_polaralign2.msg(txt:string; level: integer);
 begin
- if assigned(FonShowMessage) then FonShowMessage('PolarAlign: '+txt,level);
+ if assigned(FonShowMessage) then FonShowMessage('PolarAlign2: '+txt,level);
 end;
 
 procedure Tf_polaralign2.TakeExposure;
