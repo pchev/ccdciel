@@ -224,7 +224,8 @@ begin
  if V.connected then begin
     FStatus := devConnected;
     try
-    msg(V.DriverInfo,9);
+    FDriverInfo:=V.DriverInfo;
+    msg(FDriverInfo,9);
     except
     end;
     try

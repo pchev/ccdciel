@@ -235,7 +235,8 @@ begin
   if V.Get('connected').AsBool then begin
     V.Timeout:=120000;
     try
-    msg(V.Get('driverinfo').AsString,9);
+    FDriverInfo:=V.Get('driverinfo').AsString;
+    msg(FDriverInfo,9);
     except
     end;
     try

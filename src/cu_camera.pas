@@ -64,6 +64,7 @@ T_camera = class(TComponent)
     FObjectName: string;
     Fdevice: string;
     FImageFormat: string;
+    FDriverInfo: string;
     FCameraXSize,FCameraYSize: integer;
     FFits: TFits;
     FStackCount, FStackNum, FStackStarted: integer;
@@ -203,6 +204,7 @@ T_camera = class(TComponent)
     procedure StartVideoRecord(mode:TVideoRecordMode); virtual; abstract;
     procedure StopVideoRecord; virtual; abstract;
     property DeviceName: string read FDevice;
+    property DriverInfo: string read FDriverInfo;
     property Fits: TFits read FFits write FFits;
     property Mount: T_mount read FMount write FMount;
     property Wheel: T_wheel read Fwheel write Fwheel;
@@ -344,6 +346,7 @@ begin
   FVerticalFlip:=false;
   FASCOMFlipImage:=false;
   FStatus := devDisconnected;
+  FDriverInfo := '';
   FFilterNames:=TStringList.Create;
   FImgStream:=TMemoryStream.Create;
   FAddFrames:=false;

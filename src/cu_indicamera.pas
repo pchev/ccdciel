@@ -658,6 +658,7 @@ begin
        if Txt<>nil then buf:=buf+Txt.lbl+': '+Txt.Text+', ';
        Txt:=IUFindText(TxtProp,'DRIVER_INTERFACE');
        if Txt<>nil then buf:=buf+Txt.lbl+': '+Txt.Text;
+       FDriverInfo:=buf;
        msg(buf,9);
      end;
   end

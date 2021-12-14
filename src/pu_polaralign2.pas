@@ -149,7 +149,7 @@ begin
   Solve(1);
   if FTerminate then exit;
   if (not IgnoreMount) then begin
-    Sync(1);
+    if camera.DriverInfo<>'Sky simulator for ASCOM and Alpaca' then Sync(1);
     MountPosition(1);
     DeterminantTimer.Enabled:=true;
   end
@@ -336,6 +336,7 @@ begin
   FAstrometry.SolveCurrentImage(true);
   if (not FAstrometry.Busy)and FAstrometry.LastResult then begin
      if FAstrometry.CurrentCoord(cra,cde,eq,pa) then begin
+       wait(1); // show solve messages now
        tracemsg('Plate solve successful for image '+inttostr(step));
        tracemsg('Image center J2000: RA='+FormatFloat(f6,cra)+' DEC='+FormatFloat(f6,cde)+' PA='+FormatFloat(f6,pa));
        cra:=cra*15*deg2rad;
@@ -369,13 +370,13 @@ begin
   LocalToMount(mount.EquinoxJD,ra,de);
   if not mount.Sync(ra,de) then
     AbortAlignment;
-  wait(1); // let time to the mount to update the coordinates
+  wait(5); // let time to the mount to update the coordinates
 end;
 
 procedure Tf_polaralign2.MountPosition(step: integer);
 var tra,tde: double;
 begin
-  if step=1 then begin
+  if (step=1)and(camera.DriverInfo<>'Sky simulator for ASCOM and Alpaca') then begin
     // use sync coordinates to remove mount error
     tra:=rad2deg*FRa[step]/15;
     tde:=rad2deg*FDe[step];
