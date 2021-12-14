@@ -726,6 +726,7 @@ begin
     Instruction.Lines.Add('Moving to ra,dec '+floattostrF(ra,ffgeneral,3,0)+'  '+floattostrF(de,ffgeneral,3,0));
     if not FMount.Slew(ra,de) then AbortAlignment;
     if FTerminate then exit;
+    wait(2);
 
     Instruction.Lines.Add('Measuring first position, please wait...');
     Application.ProcessMessages;
@@ -740,6 +741,7 @@ begin
     Instruction.Lines.Add('Moving to ra,dec '+floattostrF(ra,ffgeneral,3,0)+'  '+floattostrF(de,ffgeneral,3,0));
     if not FMount.Slew(ra,de) then AbortAlignment;
     if FTerminate then exit;
+    wait(2);
 
     Instruction.Lines.Add('Measuring second position, please wait...');
     Application.ProcessMessages;
