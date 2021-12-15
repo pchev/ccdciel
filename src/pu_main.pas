@@ -5234,7 +5234,7 @@ end;
 Procedure Tf_main.DisconnectWatchdog(Sender: TObject);
 begin
  if watchdog=nil then exit;
- watchdog.Disconnect;
+ if watchdog.Status<>devDisconnected then watchdog.Disconnect;
 end;
 
 Procedure Tf_main.WatchdogStatus(Sender: TObject);
