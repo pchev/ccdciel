@@ -495,6 +495,7 @@ var
   MountTrackingAlert: boolean;
   MountTrackingAlertTime: double;
   SaveStack, StackAlign: boolean;
+  StackOperation: integer;
   RunningCapture,RunningPreview: boolean;
 
 

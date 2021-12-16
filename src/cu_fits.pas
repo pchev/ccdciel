@@ -63,7 +63,7 @@ type
 
  THistogram = array[0..high(word)] of integer;
 
- TMathOperator = (moAdd,moSub,moMean,moMult,moDiv);
+ TMathOperator = (moAdd,moSub,moMean,moMult,moDiv,moRunMean);
 
  TFitsHeader = class(TObject)
     private
@@ -191,7 +191,7 @@ type
      procedure SetBPM(value: TBpm; count,nx,ny,nax:integer);
      procedure FreeDark;
      procedure ClearImage;
-     procedure Math(operand: TFits; MathOperator:TMathOperator; new: boolean=false);
+     procedure Math(operand: TFits; MathOperator:TMathOperator; new: boolean=false; seqnum: integer=1);
      procedure Shift(dx,dy: double);
      procedure ShiftInteger(dx,dy: integer);
      procedure Bitpix8to16;
@@ -3064,7 +3064,7 @@ begin
  WriteFitsImage;
 end;
 
-procedure TFits.Math(operand: TFits; MathOperator:TMathOperator; new: boolean=false);
+procedure TFits.Math(operand: TFits; MathOperator:TMathOperator; new: boolean=false; seqnum: integer=1);
 var i,j,k,ii,nax,naxo,ko: integer;
     x,y,dmin,dmax : double;
     ni,sum,sum2 : extended;
@@ -3111,6 +3111,7 @@ begin
            moMean: x:=(x+y)/2;
            moMult: x:=x*y;
            moDiv : x:=x/y;
+           moRunMean: x:=((seqnum-1)*x+y)/seqnum;
          end;
          if FUseRawImage then
            Frawimage[k,ii,j] := x

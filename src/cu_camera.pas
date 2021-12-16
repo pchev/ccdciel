@@ -67,7 +67,7 @@ T_camera = class(TComponent)
     FDriverInfo: string;
     FCameraXSize,FCameraYSize: integer;
     FFits: TFits;
-    FStackCount, FStackNum, FStackStarted: integer;
+    FStackCount, FStackNum, FStackStarted, FStackOperation: integer;
     FStackStart, FStackSaveDir: string;
     FStackAlign: boolean;
     FStackAlignX,FStackAlignY,FStackStarX,FStackStarY: double;
@@ -218,6 +218,7 @@ T_camera = class(TComponent)
     property AddFrames: boolean read FAddFrames write FAddFrames;
     property SaveFrames: boolean read FSaveFrames write FSaveFrames;
     property AlignFrames: boolean read FAlignFrames write FAlignFrames;
+    property StackOperation: integer read FStackOperation write FStackOperation;
     property VerticalFlip: boolean read FVerticalFlip;
     property ASCOMFlipImage: boolean read FASCOMFlipImage write FASCOMFlipImage;
     property hasVideo: boolean read FhasVideo;
@@ -531,8 +532,11 @@ if FAddFrames then begin  // stack preview frames
        end;
        if not alok then msg(rsAlignmentSta,0);
      end;
-     FFits.Math(f,moAdd);       // add frame
      inc(FStackCount);
+     case FStackOperation of
+      0 : FFits.Math(f,moAdd);                       // add frame
+      1 : FFits.Math(f,moRunMean,false,FStackCount); // mean of frames
+     end;
      msg(Format('%d frame stacked',[FStackCount]));
   end
   else begin
@@ -817,6 +821,10 @@ begin
     Ffits.Header.Insert(i,'EXPTIME',hexp*FStackCount,'[s] Total Exposure Time');
     Ffits.Header.Insert(i,'STACKCNT',FStackCount,'Number of stacked frames');
     Ffits.Header.Insert(i,'STACKEXP',hexp,'[s] Individual frame exposure Time');
+    case FStackOperation of
+      0: Ffits.Header.Insert(i,'STACKOP','ADD','Stacking operation');
+      1: Ffits.Header.Insert(i,'STACKOP','MEAN','Stacking operation');
+    end;
     if FStackAlign then Ffits.Header.Insert(i,'STACKALN',FormatFloat(f0,FStackAlignX)+'/'+FormatFloat(f0,hnaxis2-FStackAlignY),'Alignment star x/y position');
   end;
   if cgain<>NullInt then Ffits.Header.Insert(i,'GAIN',cgain,'Camera gain setting in manufacturer units');

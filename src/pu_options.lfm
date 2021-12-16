@@ -66,7 +66,7 @@ object f_option: Tf_option
     Top = 0
     Width = 695
     HorzScrollBar.Page = 679
-    VertScrollBar.Page = 544
+    VertScrollBar.Page = 533
     Align = alClient
     BorderStyle = bsNone
     ClientHeight = 554
@@ -1095,24 +1095,24 @@ object f_option: Tf_option
         ParentFont = False
         object GroupBox1: TGroupBox
           Left = 0
-          Height = 194
+          Height = 112
           Top = 0
           Width = 535
           Align = alTop
           Caption = 'CCD temperature'
-          ClientHeight = 174
+          ClientHeight = 92
           ClientWidth = 533
           ParentFont = False
           TabOrder = 0
           object GroupBox14: TGroupBox
-            Left = 0
-            Height = 83
-            Top = 83
-            Width = 533
-            Align = alTop
+            Left = 240
+            Height = 92
+            Top = 0
+            Width = 293
+            Align = alClient
             Caption = 'Automatic cooling '
-            ClientHeight = 63
-            ClientWidth = 531
+            ClientHeight = 72
+            ClientWidth = 291
             ParentFont = False
             TabOrder = 0
             object CameraAutoCool: TCheckBox
@@ -1127,7 +1127,7 @@ object f_option: Tf_option
             object Label75: TLabel
               AnchorSideTop.Control = CameraAutoCoolTemp
               AnchorSideTop.Side = asrCenter
-              Left = 129
+              Left = 104
               Height = 19
               Top = 35
               Width = 45
@@ -1135,7 +1135,7 @@ object f_option: Tf_option
               ParentFont = False
             end
             object CameraAutoCoolTemp: TFloatSpinEdit
-              Left = 40
+              Left = 16
               Height = 28
               Top = 30
               Width = 73
@@ -1147,13 +1147,13 @@ object f_option: Tf_option
           end
           object GroupBox15: TGroupBox
             Left = 0
-            Height = 83
+            Height = 92
             Top = 0
-            Width = 533
-            Align = alTop
+            Width = 240
+            Align = alLeft
             Caption = 'Maximum temperature change '
-            ClientHeight = 63
-            ClientWidth = 531
+            ClientHeight = 72
+            ClientWidth = 238
             ParentFont = False
             TabOrder = 1
             object TemperatureSlopeActive: TCheckBox
@@ -1170,16 +1170,16 @@ object f_option: Tf_option
               Left = 16
               Height = 30
               Top = 30
-              Width = 331
+              Width = 240
               BevelOuter = bvNone
               ClientHeight = 30
-              ClientWidth = 331
+              ClientWidth = 240
               ParentFont = False
               TabOrder = 1
               object Label74: TLabel
                 AnchorSideTop.Control = TemperatureSlope
                 AnchorSideTop.Side = asrCenter
-                Left = 113
+                Left = 80
                 Height = 19
                 Top = 5
                 Width = 125
@@ -1187,7 +1187,7 @@ object f_option: Tf_option
                 ParentFont = False
               end
               object TemperatureSlope: TFloatSpinEdit
-                Left = 24
+                Left = 0
                 Height = 28
                 Top = 0
                 Width = 73
@@ -1202,7 +1202,7 @@ object f_option: Tf_option
         object GroupBox20: TGroupBox
           Left = 0
           Height = 84
-          Top = 194
+          Top = 112
           Width = 535
           Align = alTop
           Caption = 'Sensors properties'
@@ -1278,12 +1278,12 @@ object f_option: Tf_option
         end
         object GroupBoxReadOut: TGroupBox
           Left = 0
-          Height = 128
-          Top = 422
+          Height = 182
+          Top = 368
           Width = 535
           Align = alClient
           Caption = 'Readout modes'
-          ClientHeight = 108
+          ClientHeight = 162
           ClientWidth = 533
           ParentFont = False
           TabOrder = 2
@@ -1387,12 +1387,12 @@ object f_option: Tf_option
         end
         object StackGroup: TGroupBox
           Left = 0
-          Height = 88
-          Top = 334
+          Height = 116
+          Top = 252
           Width = 535
           Align = alTop
           Caption = 'Short exposure stacking'
-          ClientHeight = 68
+          ClientHeight = 96
           ClientWidth = 533
           ParentFont = False
           TabOrder = 4
@@ -1426,11 +1426,34 @@ object f_option: Tf_option
             Caption = 'Star alignment'
             TabOrder = 2
           end
+          object StackOperation: TRadioGroup
+            Left = 8
+            Height = 30
+            Top = 63
+            Width = 410
+            AutoFill = True
+            ChildSizing.LeftRightSpacing = 6
+            ChildSizing.EnlargeHorizontal = crsHomogenousChildResize
+            ChildSizing.EnlargeVertical = crsHomogenousChildResize
+            ChildSizing.ShrinkHorizontal = crsScaleChilds
+            ChildSizing.ShrinkVertical = crsScaleChilds
+            ChildSizing.Layout = cclLeftToRightThenTopToBottom
+            ChildSizing.ControlsPerLine = 2
+            ClientHeight = 28
+            ClientWidth = 408
+            Columns = 2
+            ItemIndex = 0
+            Items.Strings = (
+              'Add images'
+              'Mean of images'
+            )
+            TabOrder = 3
+          end
         end
         object GroupBox31: TGroupBox
           Left = 0
           Height = 56
-          Top = 278
+          Top = 196
           Width = 535
           Align = alTop
           Caption = 'Gain / Offset'
