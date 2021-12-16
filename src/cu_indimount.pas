@@ -665,6 +665,7 @@ begin
   if pierside1=pierEast then exit; // already right side
   if (sra=NullCoord)or(sde=NullCoord) then exit;
   msg(rsMeridianFlip5);
+  // Use Goto, TELESCOPE_PIER_SIDE property is always readonly
   // point one hour to the east of meridian
   ra1:=rmod(24+1+rad2deg*CurrentSidTim/15,24);
   slew(ra1,sde);

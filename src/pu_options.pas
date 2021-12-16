@@ -41,6 +41,7 @@ type
     Label152: TLabel;
     Label153: TLabel;
     Label154: TLabel;
+    WantSetPierSide: TCheckBox;
     Panel27: TPanel;
     StackAlign: TCheckBox;
     StackGroup: TGroupBox;

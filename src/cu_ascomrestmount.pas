@@ -564,23 +564,22 @@ begin
   if Connected then begin
     sra:=GetRA;
     sde:=GetDec;
-    pierside1:=GetPierSide;
+    pierside1:=GetPierSideReal;
     if pierside1=pierEast then exit; // already right side
     if (sra=NullCoord)or(sde=NullCoord) then exit;
     msg(rsMeridianFlip5);
-    {TODO: someone with a mount that support this feature can test it}
-{    if CanSetPierSide then begin
+    if FWantSetPierSide and CanSetPierSide and CanSlewAsync then begin
        // do the flip
-       V.SideOfPier:=0; // pierEast
+       V.Put('sideofpier',0); // pierEast
        WaitMountSlewing(240000);
        // return to position
-       slew(sra,sde);
-       WaitMountSlewing(240000);
+      { slew(sra,sde);
+       WaitMountSlewing(240000);}
        // check result
-       pierside2:=GetPierSide;
+       pierside2:=GetPierSideReal;
        result:=(pierside2<>pierside1);
     end
-    else} begin
+    else begin
       // point one hour to the east of meridian
       ra1:=rmod(24+1+rad2deg*CurrentSidTim/15,24);
       slew(ra1,sde);
