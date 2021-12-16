@@ -11,6 +11,7 @@ object f_polaralign2: Tf_polaralign2
   OnCreate = FormCreate
   OnDestroy = FormDestroy
   OnShow = FormShow
+  LCLVersion = '2.2.0.3'
   object Panel1: TPanel
     Left = 0
     Height = 134
@@ -32,7 +33,7 @@ object f_polaralign2: Tf_polaralign2
       TabOrder = 0
       object TabSheetStart: TTabSheet
         Caption = 'TabSheetStart'
-        ClientHeight = 128
+        ClientHeight = 98
         ClientWidth = 487
         object ButtonStart: TButton
           AnchorSideTop.Control = GotoPosition
@@ -150,7 +151,7 @@ object f_polaralign2: Tf_polaralign2
       end
       object TabSheetAuto: TTabSheet
         Caption = 'TabSheetAuto'
-        ClientHeight = 128
+        ClientHeight = 98
         ClientWidth = 487
         object ButtonAbort2: TButton
           Left = 368
@@ -203,7 +204,7 @@ object f_polaralign2: Tf_polaralign2
       end
       object TabSheetMove1: TTabSheet
         Caption = 'TabSheetMove1'
-        ClientHeight = 128
+        ClientHeight = 98
         ClientWidth = 487
         object ButtonMove: TButton
           Left = 208
@@ -250,7 +251,7 @@ object f_polaralign2: Tf_polaralign2
       end
       object TabSheetAdjust: TTabSheet
         Caption = 'TabSheetAdjust'
-        ClientHeight = 128
+        ClientHeight = 98
         ClientWidth = 487
         object LabelPol1: TLabel
           Left = 8
@@ -288,7 +289,7 @@ object f_polaralign2: Tf_polaralign2
       end
       object TabSheetMove2: TTabSheet
         Caption = 'TabSheetMove2'
-        ClientHeight = 128
+        ClientHeight = 98
         ClientWidth = 487
         object ButtonContinue: TButton
           Left = 192

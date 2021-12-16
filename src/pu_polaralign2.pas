@@ -149,7 +149,7 @@ begin
   if FAborted then exit;
   Solve(1);
   if FAborted then exit;
-  if camera.DriverInfo<>'Sky simulator for ASCOM and Alpaca' then Sync(1);
+  Sync(1);
   MountPosition(1);
   DeterminantTimer.Enabled:=true;
   CurrentStep:=1;
@@ -375,7 +375,7 @@ end;
 procedure Tf_polaralign2.MountPosition(step: integer);
 var tra,tde: double;
 begin
-  if (step=1)and(camera.DriverInfo<>'Sky simulator for ASCOM and Alpaca') then begin
+  if step=1 then begin
     // use sync coordinates to remove mount error
     tra:=rad2deg*FRa[step]/15;
     tde:=rad2deg*FDe[step];
