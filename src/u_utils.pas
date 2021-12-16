@@ -163,6 +163,8 @@ function isLocalIP(ip:string): boolean;
 function IsProgramRunning(pgm: string): boolean;
 function StartProgram(pgm, path: string): boolean;
 procedure StopProgram(pgm: string);
+function SafeFileName(fn:string): string;
+
 
 implementation
 
@@ -3382,6 +3384,14 @@ begin
 {$else}
   ExecNoWait('pkill '+pgm);
 {$endif}
+end;
+
+function SafeFileName(fn:string): string;
+begin
+result:=StringReplace(fn,' ','',[rfReplaceAll]);
+result:=StringReplace(result,'/','_',[rfReplaceAll]);
+result:=StringReplace(result,'\','_',[rfReplaceAll]);
+result:=StringReplace(result,':','_',[rfReplaceAll]);
 end;
 
 end.

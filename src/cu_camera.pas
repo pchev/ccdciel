@@ -485,6 +485,7 @@ var f:TFits;
     xs,ys,hfd,fwhm,vmax,snr,bg,bgdev,flux : double;
     alok: boolean;
     mem: TMemoryStream;
+    objectstr: string;
 const datefmt = 'yyyy"-"mm"-"dd"T"hh"-"nn"-"ss';
 begin
 {$ifdef debug_raw}writeln(FormatDateTime(dateiso,Now)+blank+'NewImage');{$endif}
@@ -572,13 +573,14 @@ if FAddFrames then begin  // stack preview frames
   f.free;
   if FSaveFrames and (mem<>nil) then begin
     // save image
+    objectstr:=SafeFileName(FObjectName);
     if FStackCount=1 then begin
-      FStackSaveDir:=slash(config.GetValue('/Files/CapturePath',defCapturePath))+'stack_'+FormatDateTime(datefmt,Ftimestart);
+      FStackSaveDir:=slash(config.GetValue('/Files/CapturePath',defCapturePath))+'stack_'+objectstr+'_'+FormatDateTime(datefmt,Ftimestart);
       if copy(FStackSaveDir,1,1)='.' then FStackSaveDir:=ExpandFileName(slash(Appdir)+FStackSaveDir);
       ForceDirectories(FStackSaveDir);
       msg('Saving files to '+FStackSaveDir);
     end;
-    mem.SaveToFile(slash(FStackSaveDir)+'stack_'+PadZeros(IntToStr(FStackCount),5)+'.fits');
+    mem.SaveToFile(slash(FStackSaveDir)+'stack_'+objectstr+'_'+PadZeros(IntToStr(FStackCount),5)+'.fits');
     FreeAndNil(mem);
   end;
   if Assigned(FonNewImage) then FonNewImage(self);

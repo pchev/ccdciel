@@ -9546,10 +9546,7 @@ try
  if not fits.Header.Valueof('FRAME',framestr) then framestr:=f_capture.FrameType.Text;
  framestr:=trim(framestr);
  if not fits.Header.Valueof('OBJECT',objectstr) then objectstr:=f_capture.Fname.Text;
- objectstr:=StringReplace(objectstr,' ','',[rfReplaceAll]);
- objectstr:=StringReplace(objectstr,'/','_',[rfReplaceAll]);
- objectstr:=StringReplace(objectstr,'\','_',[rfReplaceAll]);
- objectstr:=StringReplace(objectstr,':','_',[rfReplaceAll]);
+ objectstr:=SafeFileName(objectstr);
  if not fits.Header.Valueof('EXPTIME',expstr) then expstr:=f_capture.ExpTime.Text;
  expstr:=trim(expstr);
  if fits.Header.Valueof('XBINNING',binstr) then begin
