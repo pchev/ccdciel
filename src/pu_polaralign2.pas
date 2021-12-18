@@ -537,8 +537,11 @@ begin
   corr_alt:=C_inv[0,0]*delta_ra+C_inv[1,0]*delta_Dec;{delta_Elv}
   corr_az :=C_inv[0,1]*delta_ra+C_inv[1,1]*delta_Dec; {delta_Az}
 
-  if abs(determinant)<0.1 then
+  if abs(determinant)<0.1 then begin
      msg('Warning the calculation determinant is close to zero! Select other celestial locations. Avoid locations with similar hour angles, locations close to the celestial equator and locations whose declinations are close to negatives of each other.',1);
+     AbortAlignment;
+     exit;
+  end;
 
   if corr_az>0 then ew:=' east of the celestial pole.' else ew:=' west of the celestial pole.';
   if corr_alt>0  then ns:=' above the celestial pole' else ns:=' below the celestial pole';
