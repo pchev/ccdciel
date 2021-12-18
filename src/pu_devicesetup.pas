@@ -1096,6 +1096,7 @@ begin
 ProfileLock:=true;
 try
 ProfileList.Clear;
+ProfileList.Sorted:=true;
 ProfileList.Items.Add('default');
 i:=FindFirstUTF8(slash(ConfigDir)+'ccdciel_*.conf',0,fs);
 while i=0 do begin
@@ -1105,6 +1106,7 @@ while i=0 do begin
   i:=FindNextUTF8(fs);
 end;
 FindCloseUTF8(fs);
+ProfileList.Sorted:=false;
 n:=ProfileList.Items.IndexOf(profile);
 if n>=0 then ProfileList.ItemIndex:=n
         else ProfileList.ItemIndex:=0;
