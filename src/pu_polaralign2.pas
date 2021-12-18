@@ -36,13 +36,13 @@ type
 
   Tf_polaralign2 = class(TForm)
     BtnLock: TToggleBox;
+    ButtonAbort1: TButton;
+    ButtonAbort3: TButton;
     ButtonAbort2: TButton;
-    ButtonAbort6: TButton;
-    ButtonAbort7: TButton;
     ButtonContinue: TButton;
     ButtonClose: TButton;
     ButtonMove: TButton;
-    ButtonNext3: TButton;
+    ButtonNext: TButton;
     FloatSpinEditAz1: TFloatSpinEdit;
     FloatSpinEditAz2: TFloatSpinEdit;
     FloatSpinEditAlt1: TFloatSpinEdit;
@@ -69,7 +69,7 @@ type
     procedure ButtonCloseClick(Sender: TObject);
     procedure ButtonContinueClick(Sender: TObject);
     procedure ButtonMoveClick(Sender: TObject);
-    procedure ButtonNext3Click(Sender: TObject);
+    procedure ButtonNextClick(Sender: TObject);
     procedure GotoPositionChange(Sender: TObject);
     procedure ButtonStartClick(Sender: TObject);
     procedure FormClose(Sender: TObject; var CloseAction: TCloseAction);
@@ -91,7 +91,6 @@ type
     corr_alt, corr_az, corr_ra, corr_de, corr_rai, corr_dei: double;
     FInProgress: boolean;
     FAborted: boolean;
-    procedure SetLang;
     procedure msg(txt:string; level: integer);
     procedure tracemsg(txt: string);
     procedure AutoMeasurementAsync(Data: PtrInt);
@@ -112,6 +111,7 @@ type
     procedure StopImageLoop;
     procedure SaveConfig;
   public
+    procedure SetLang;
     property Fits: TFits read FFits write FFits;
     property Preview:Tf_preview read Fpreview write Fpreview;
     property Visu: Tf_visu read Fvisu write Fvisu;
@@ -143,7 +143,6 @@ var i: integer;
 begin
   for i:=0 to GotoPosition.items.Count-1 do
      GotoPosition.items.Objects[i].free;
-
 end;
 
 procedure Tf_polaralign2.FormShow(Sender: TObject);
@@ -167,23 +166,26 @@ var altaz: TAltAzPosition;
   end;
 begin
   InitAlignment;
+  // Refresh the combobox every time if the observatory latitude change
+  for i:=0 to GotoPosition.items.Count-1 do
+     GotoPosition.items.Objects[i].free;
   GotoPosition.clear;
   altaz:=TAltAzPosition.Create;
   altaz.az1:=-1; altaz.alt1:=-1;
   altaz.az2:=-1; altaz.alt2:=-1;
-  GotoPosition.items.AddObject('Custom position',altaz);
+  GotoPosition.items.AddObject(rsCustomPositi, altaz);
   if ObsLatitude>30 then
   begin
     {high latitude}
     altaz:=TAltAzPosition.Create;
     GetAE(-5,15,1,altaz); {15 degrees above celestial equator}
     GetAE(-0.5,0,2,altaz);{celestial equator, stay away from zenith for azimuth adjustment. altitude is limited to30 degrees minimum}
-    GotoPosition.items.AddObject('Measure in the East and South',altaz);
+    GotoPosition.items.AddObject(rsMeasureES, altaz);
 
     altaz:=TAltAzPosition.Create;
     GetAE(+5,15,1,altaz); {15 degrees above celestial equator}
     GetAE(+0.5,0,2,altaz);{celestial equator, stay away from zenith for azimuth adjustment}
-    GotoPosition.items.AddObject('Measure in the West and South',altaz);
+    GotoPosition.items.AddObject(rsMeasureWS, altaz);
   end
   else
   if ObsLatitude<-30 then {southern hemisphere}
@@ -192,12 +194,12 @@ begin
     altaz:=TAltAzPosition.Create;
     GetAE(-5,15,1,altaz); {15 degrees above celestial equator}
     GetAE(-0.5,0,2,altaz);{celestial equator, stay away from zenith for azimuth adjustment. altitude is limited to 30 degrees minimum}
-    GotoPosition.items.AddObject('Measure in the East and North',altaz);
+    GotoPosition.items.AddObject(rsMeasureEN, altaz);
 
     altaz:=TAltAzPosition.Create;
     GetAE(+5,15,1,altaz); {15 degrees above celestial equator}
     GetAE(+0.5,0,2,altaz);{celestial equator, stay away from zenith for azimuth adjustment}
-    GotoPosition.items.AddObject('Measure in the West and North',altaz);
+    GotoPosition.items.AddObject(rsMeasureWN, altaz);
   end
   else
   begin
@@ -206,19 +208,19 @@ begin
       {North, preference for south horizon}
       GetAE(-4,0,1,altaz);
       GetAE(-0.5,-40,2,altaz);{avoid zenith for azimuth adjustment}
-      GotoPosition.items.AddObject('Measure in the East and South',altaz);
+      GotoPosition.items.AddObject(rsMeasureES, altaz);
       altaz:=TAltAzPosition.Create;
       GetAE(4,0,1,altaz);
       GetAE(0.5,-40,2,altaz);{avoid zenith for azimuth adjustment}
-      GotoPosition.items.AddObject('Measure in the West and South',altaz);
+      GotoPosition.items.AddObject(rsMeasureWS, altaz);
       altaz:=TAltAzPosition.Create;
       GetAE(-4,0,1,altaz);
       GetAE(-0.5,70,2,altaz);{avoid zenith for azimuth adjustment}
-      GotoPosition.items.AddObject('Measure in the East and North',altaz);
+      GotoPosition.items.AddObject(rsMeasureEN, altaz);
       altaz:=TAltAzPosition.Create;
       GetAE(4,25,1,altaz);
       GetAE(0.5,70,2,altaz);{avoid zenith for azimuth adjustment}
-      GotoPosition.items.AddObject('Measure in the West and North',altaz);
+      GotoPosition.items.AddObject(rsMeasureWN, altaz);
     end
     else begin
       {South, preference for north horizon}
@@ -226,19 +228,19 @@ begin
       altaz:=TAltAzPosition.Create;
       GetAE(-4,0,1,altaz);
       GetAE(-0.5,70,2,altaz);
-      GotoPosition.items.AddObject('Measure in the East and North',altaz);
+      GotoPosition.items.AddObject(rsMeasureEN, altaz);
       altaz:=TAltAzPosition.Create;
       GetAE(4,0,1,altaz);
       GetAE(0.5,70,2,altaz);
-      GotoPosition.items.AddObject('Measure in the West and North',altaz);
+      GotoPosition.items.AddObject(rsMeasureWN, altaz);
       altaz:=TAltAzPosition.Create;
       GetAE(-4,0,1,altaz);
       GetAE(-0.5,-40,2,altaz);
-      GotoPosition.items.AddObject('Measure in the East and South',altaz);
+      GotoPosition.items.AddObject(rsMeasureES, altaz);
       altaz:=TAltAzPosition.Create;
       GetAE(4,-25,1,altaz);
       GetAE(0.5,-40,2,altaz);
-      GotoPosition.items.AddObject('Measure in the West and South',altaz);
+      GotoPosition.items.AddObject(rsMeasureWS, altaz);
     end;
   end;
   FloatSpinEditAz1.Value:=config.GetValue('/PolarAlignment2/Az1',TAltAzPosition(GotoPosition.Items.Objects[1]).az1);
@@ -255,7 +257,22 @@ end;
 
 procedure Tf_polaralign2.SetLang;
 begin
-
+  Caption:=rsPolarAlignme;
+  ButtonStart.Caption:=rsStart;
+  ButtonAbort1.Caption:=rsCancel;
+  ButtonAbort2.Caption:=rsCancel;
+  ButtonAbort3.Caption:=rsCancel;
+  ButtonNext.Caption:=rsNext;
+  ButtonMove.Caption:=rsMove;
+  ButtonContinue.Caption:=rsContinue;
+  BtnLock.Caption:=rsLockOverlay;
+  ButtonClose.Caption:=rsClose;
+  label1.Caption:=rsPosition+' 1';
+  label2.Caption:=rsPosition+' 2';
+  label3.Caption:=rsAz;
+  label4.Caption:=rsAz;
+  label5.Caption:=rsAlt;
+  label6.Caption:=rsAlt;
 end;
 
 procedure Tf_polaralign2.SaveConfig;
@@ -658,30 +675,32 @@ begin
     decode_combobox(az1,alt1,az2,alt2);
     if az1>999 then close;{something wrong}
 
-    Instruction.Lines.Add('Moving to first position, please wait...');
-    Instruction.Lines.Add('Moving to az,alt '+floattostrF(az1,ffgeneral,3,0)+'  '+floattostrF(alt1,ffgeneral,3,0));
+    Instruction.Lines.Add(rsMovingToFirs+', '+rsPleaseWait+'...');
+    Instruction.Lines.Add(rsMovingTo+' '+rsAz+','+rsAlt + DEToStr(az1)+'  '+DEToStr(alt1));
     cmdHz2Eq(az1,alt1,ra,de);
-    Instruction.Lines.Add('Moving to ra,dec '+floattostrF(ra,ffgeneral,3,0)+'  '+floattostrF(de,ffgeneral,3,0));
+    Instruction.Lines.Add(rsMovingTo+' '+rsRA+','+rsDec +RAToStr(ra)+'  '+DEToStr(de));
     if not FMount.Slew(ra,de) then AbortAlignment;
     if FAborted then exit;
     wait(2);
 
-    Instruction.Lines.Add('Measuring first position, please wait...');
+    Instruction.Lines.Add('');
+    Instruction.Lines.Add(rsMeasuringFir+', '+rsPleaseWait+'...');
     Application.ProcessMessages;
     Measurement1;
     if FAborted then exit;
 
  // 2
     Instruction.Clear;
-    Instruction.Lines.Add('Moving to second position, please wait...');
-    Instruction.Lines.Add('Moving to az, alt '+floattostrF(az2,ffgeneral,3,0)+'  '+floattostrF(alt2,ffgeneral,3,0));
+    Instruction.Lines.Add(rsMovingToSeco+', '+rsPleaseWait+'...');
+    Instruction.Lines.Add(rsMovingTo+' '+rsAz+','+rsAlt + DEToStr(az2)+'  '+DEToStr(alt2));
     cmdHz2Eq(az2,alt2,ra,de);
-    Instruction.Lines.Add('Moving to ra,dec '+floattostrF(ra,ffgeneral,3,0)+'  '+floattostrF(de,ffgeneral,3,0));
+    Instruction.Lines.Add(rsMovingTo+' '+rsRA+','+rsDec +RAToStr(ra)+'  '+DEToStr(de));
     if not FMount.Slew(ra,de) then AbortAlignment;
     if FAborted then exit;
     wait(2);
 
-    Instruction.Lines.Add('Measuring second position, please wait...');
+    Instruction.Lines.Add('');
+    Instruction.Lines.Add(rsMeasuringSec+', '+rsPleaseWait+'...');
     Application.ProcessMessages;
     Measurement2;
     if FAborted then exit;
@@ -691,10 +710,10 @@ begin
     if FAborted then exit;
     PageControl1.ActivePage:=TabSheetMove1;
     Instruction.Clear;
-    Instruction.Lines.Add('If you want you can manually slew to a bright star and reduce the exposure time.');
-    Instruction.Lines.Add('For that click the Move button now.');
+    Instruction.Lines.Add(rsIfYouWantYou);
+    Instruction.Lines.Add(rsForThatClick);
     Instruction.Lines.Add('');
-    Instruction.Lines.Add('Otherwise click Next.');
+    Instruction.Lines.Add(rsOtherwiseCli);
     StartImageLoop;
 
  except
@@ -705,7 +724,7 @@ begin
  end;
 end;
 
-procedure Tf_polaralign2.ButtonNext3Click(Sender: TObject);
+procedure Tf_polaralign2.ButtonNextClick(Sender: TObject);
 var txt: string;
 begin
   Instruction.Clear;
@@ -740,8 +759,8 @@ end;
 procedure Tf_polaralign2.ButtonMoveClick(Sender: TObject);
 begin
   Instruction.Clear;
-  Instruction.Lines.Add('Move the telescope to the new position.');
-  Instruction.Lines.Add('When ready click OK');
+  Instruction.Lines.Add(rsMoveTheTeles);
+  Instruction.Lines.Add(rsWhenReadyCli+': '+rsOK);
   Instruction.Lines.Add('');
   PageControl1.ActivePage:=TabSheetMove2;
   PolarAlignmentOverlay:=false;
@@ -751,22 +770,23 @@ end;
 procedure Tf_polaralign2.ButtonContinueClick(Sender: TObject);
 begin
   Instruction.Clear;
-  Instruction.Lines.Add('Measuring the new position, please wait...');
+  Instruction.Lines.Add(rsMeasuringThe+', '+rsPleaseWait+'...');
   Application.ProcessMessages;
   StartAdjustement;
   if FAborted then exit;
-  ButtonNext3Click(Sender);
+  ButtonNextClick(Sender);
 end;
 
 procedure Tf_polaralign2.InitAlignment;
 var i: integer;
 begin
   Instruction.Clear;
-  Instruction.Lines.Add('Select one of the measurement options:');
-  Instruction.Lines.Add('- one of the predefined sky area for automatic slewing');
-  Instruction.Lines.Add('- or Manual to freely move the telescope at each step');
+  Instruction.Lines.Add(rsSelectOneOfT);
   Instruction.Lines.Add('');
-  Instruction.Lines.Add('When ready click the Start button');
+  Instruction.Lines.Add(' - '+rsOneOfThePred);
+  Instruction.Lines.Add(' - '+rsOrCustomToDe);
+  Instruction.Lines.Add('');
+  Instruction.Lines.Add(rsWhenReadyCli+': '+rsStart);
   PageControl1.ActivePage:=TabSheetStart;
   PolarAlignmentOverlay:=false;
   PolarAlignmentLock:=false;

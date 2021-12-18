@@ -1898,8 +1898,8 @@ begin
    MenuQuit.Caption := rsQuit;
    MenuItem2.Caption := rsEdit;
    MenuOptions.Caption := Format(rsPreferences, [ellipsis]);
-   MenuPolarAlignment.Caption:=rsPolarAlignme+' near the pole';
-   MenuPolarAlignment2.Caption:='Polar alignment without pole visibility';
+   MenuPolarAlignment.Caption:=rsPolarAlignme+', '+rsNearThePole;
+   MenuPolarAlignment2.Caption:=rsPolarAlignme+', '+rsWithoutPoleV;
    MenuIndiSettings.Caption := rsINDISettings;
    MenuAscomCameraSetup.Caption:='ASCOM '+rsCamera+blank+rsSetup;
    MenuAscomWheelSetup.Caption:='ASCOM '+rsFilterWheel+blank+rsSetup;
@@ -2133,6 +2133,7 @@ begin
    if  f_photometry<>nil then f_photometry.SetLang;
    if  f_polaralign<>nil then f_polaralign.SetLang;
    if  f_collimation<>nil then f_collimation.SetLang;
+   if  f_polaralign2<>nil then f_polaralign2.SetLang;
 end;
 
 procedure Tf_main.FormShow(Sender: TObject);

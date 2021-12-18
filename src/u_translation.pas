@@ -1340,6 +1340,30 @@ resourcestring
   rsDiscoveredS = 'Discovered %s ...';
   rsFoundServers = 'Found %s servers';
   rsNoAlpacaServ = 'No Alpaca server found';
+  rsMove = 'Move';
+  rsPosition = 'Position';
+  rsMeasureES = 'Measure in the East and South';
+  rsMeasureWS = 'Measure in the West and South';
+  rsMeasureEN = 'Measure in the East and North';
+  rsMeasureWN = 'Measure in the West and North';
+  rsCustomPositi = 'Custom position';
+  rsNearThePole = 'near the pole';
+  rsWithoutPoleV = 'without pole visibility';
+  rsMovingToFirs = 'Moving to first position';
+  rsPleaseWait = 'please wait';
+  rsMovingTo = 'Moving to';
+  rsMeasuringFir = 'Measuring first position';
+  rsMovingToSeco = 'Moving to second position';
+  rsMeasuringSec = 'Measuring second position';
+  rsIfYouWantYou = 'If you want you can now manually slew to a bright star and reduce the exposure time.';
+  rsForThatClick = 'For that click the Move button now.';
+  rsOtherwiseCli = 'Otherwise click Next.';
+  rsMoveTheTeles = 'Move the telescope to the new position.';
+  rsWhenReadyCli = 'When ready click';
+  rsMeasuringThe = 'Measuring the new position';
+  rsSelectOneOfT = 'Select one of the measurement options:';
+  rsOneOfThePred = 'one of the predefined sky area';
+  rsOrCustomToDe = 'or Custom to define the telescope positions';
 
 implementation
 
