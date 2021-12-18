@@ -99,8 +99,8 @@ type
     procedure Sync(step: integer);
     procedure MountPosition(step: integer);
     procedure decode_combobox(out caz1,calt1,caz2,calt2: double);
-    procedure Measurement1;
-    procedure Measurement2;
+    procedure Measurement1(ra,de: double);
+    procedure Measurement2(ra,de: double);
     procedure StartAdjustement;
     procedure Compute;
     procedure ComputeCorrection;
@@ -306,19 +306,57 @@ begin
  if assigned(FonShowMessage) then FonShowMessage('PolarAlign2: '+txt,level);
 end;
 
-procedure Tf_polaralign2.Measurement1;
+procedure Tf_polaralign2.Measurement1(ra,de: double);
+var mra,mde: double;
 begin
+  mra:=ra;
+  mde:=de;
+  LocalToMount(mount.EquinoxJD,mra,mde);
+  Instruction.Lines.Add(rsMovingTo+' '+rsRA+','+rsDec +': '+RAToStr(mra)+'  '+DEToStr(mde));
+  if not FMount.Slew(mra,mde) then AbortAlignment;
+  if FAborted then exit;
+  wait(2);
+
+  Instruction.Lines.Add('');
+  Instruction.Lines.Add(rsMeasuringFir+', '+rsPleaseWait+'...');
+  Application.ProcessMessages;
+
   TakeExposure;
   if FAborted then exit;
   Solve(1);
   if FAborted then exit;
+  if rad2deg*AngularDistance(FRa[1],FDe[1],ra*15*deg2rad,de*deg2rad)>2 then begin
+    // reposition if the mount position error is bigger than 2 degrees
+    Sync(1);
+    if not FMount.Slew(mra,mde) then AbortAlignment;
+    if FAborted then exit;
+    wait(2);
+    TakeExposure;
+    if FAborted then exit;
+    Solve(1);
+    if FAborted then exit;
+  end;
+
   Sync(1);
   MountPosition(1);
   CurrentStep:=1;
 end;
 
-procedure Tf_polaralign2.Measurement2;
+procedure Tf_polaralign2.Measurement2(ra,de: double);
+var mra,mde: double;
 begin
+  mra:=ra;
+  mde:=de;
+  LocalToMount(mount.EquinoxJD,mra,mde);
+  Instruction.Lines.Add(rsMovingTo+' '+rsRA+','+rsDec +': '+RAToStr(mra)+'  '+DEToStr(mde));
+  if not FMount.Slew(mra,mde) then AbortAlignment;
+  if FAborted then exit;
+  wait(2);
+
+  Instruction.Lines.Add('');
+  Instruction.Lines.Add(rsMeasuringSec+', '+rsPleaseWait+'...');
+  Application.ProcessMessages;
+
   MountPosition(2);
   TakeExposure;
   if FAborted then exit;
@@ -365,7 +403,7 @@ begin
        tracemsg('Image center J2000: RA='+FormatFloat(f6,cra)+' DEC='+FormatFloat(f6,cde)+' PA='+FormatFloat(f6,pa));
        cra:=cra*15*deg2rad;
        cde:=cde*deg2rad;
-       PrecessionFK5(jd2000,jdtoday,cra,cde);
+       J2000ToApparent(cra,cde);
        tracemsg('Image center JNOW: RA='+FormatFloat(f6,rad2deg*cra/15)+' DEC='+FormatFloat(f6,rad2deg*cde));
        FRa[step]:=cra;
        FDe[step]:=cde;
@@ -676,33 +714,17 @@ begin
     if az1>999 then close;{something wrong}
 
     Instruction.Lines.Add(rsMovingToFirs+', '+rsPleaseWait+'...');
-    Instruction.Lines.Add(rsMovingTo+' '+rsAz+','+rsAlt + DEToStr(az1)+'  '+DEToStr(alt1));
+    Instruction.Lines.Add(rsMovingTo+' '+rsAz+','+rsAlt +': '+ DEToStr(az1)+'  '+DEToStr(alt1));
     cmdHz2Eq(az1,alt1,ra,de);
-    Instruction.Lines.Add(rsMovingTo+' '+rsRA+','+rsDec +RAToStr(ra)+'  '+DEToStr(de));
-    if not FMount.Slew(ra,de) then AbortAlignment;
-    if FAborted then exit;
-    wait(2);
-
-    Instruction.Lines.Add('');
-    Instruction.Lines.Add(rsMeasuringFir+', '+rsPleaseWait+'...');
-    Application.ProcessMessages;
-    Measurement1;
+    Measurement1(ra,de);
     if FAborted then exit;
 
  // 2
     Instruction.Clear;
     Instruction.Lines.Add(rsMovingToSeco+', '+rsPleaseWait+'...');
-    Instruction.Lines.Add(rsMovingTo+' '+rsAz+','+rsAlt + DEToStr(az2)+'  '+DEToStr(alt2));
+    Instruction.Lines.Add(rsMovingTo+' '+rsAz+','+rsAlt +': '+ DEToStr(az2)+'  '+DEToStr(alt2));
     cmdHz2Eq(az2,alt2,ra,de);
-    Instruction.Lines.Add(rsMovingTo+' '+rsRA+','+rsDec +RAToStr(ra)+'  '+DEToStr(de));
-    if not FMount.Slew(ra,de) then AbortAlignment;
-    if FAborted then exit;
-    wait(2);
-
-    Instruction.Lines.Add('');
-    Instruction.Lines.Add(rsMeasuringSec+', '+rsPleaseWait+'...');
-    Application.ProcessMessages;
-    Measurement2;
+    Measurement2(ra,de);
     if FAborted then exit;
 
  // show correction
