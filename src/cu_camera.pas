@@ -68,7 +68,7 @@ T_camera = class(TComponent)
     FCameraXSize,FCameraYSize: integer;
     FFits: TFits;
     FStackCount, FStackNum, FStackStarted, FStackOperation: integer;
-    FStackStart, FStackSaveDir: string;
+    FStackExpStart, FStackDate, FStackSaveDir: string;
     FStackAlign: boolean;
     FStackAlignX,FStackAlignY,FStackStarX,FStackStarY: double;
     FMount: T_mount;
@@ -541,7 +541,8 @@ if FAddFrames then begin  // stack preview frames
      msg(Format('%d frame stacked',[FStackCount]));
   end
   else begin
-     FStackStart:=FormatDateTime(dateiso,Ftimestart);
+     FStackExpStart:=FormatDateTime(dateiso,Ftimestart);
+     FStackDate:=FormatDateTime(datefmt,Ftimestart);
      FFits.Math(f,moAdd,true);  // start a new stack
      FStackCount:=1;
      FStackAlign:=false;
@@ -575,12 +576,12 @@ if FAddFrames then begin  // stack preview frames
     // save image
     objectstr:=SafeFileName(FObjectName);
     if FStackCount=1 then begin
-      FStackSaveDir:=slash(config.GetValue('/Files/CapturePath',defCapturePath))+'stack_'+objectstr+'_'+FormatDateTime(datefmt,Ftimestart);
+      FStackSaveDir:=slash(config.GetValue('/Files/CapturePath',defCapturePath))+'stack_'+objectstr+'_'+FStackDate;
       if copy(FStackSaveDir,1,1)='.' then FStackSaveDir:=ExpandFileName(slash(Appdir)+FStackSaveDir);
       ForceDirectories(FStackSaveDir);
       msg('Saving files to '+FStackSaveDir);
     end;
-    mem.SaveToFile(slash(FStackSaveDir)+'stack_'+objectstr+'_'+PadZeros(IntToStr(FStackCount),5)+'.fits');
+    mem.SaveToFile(slash(FStackSaveDir)+'stack_'+objectstr+'_'+FStackDate+'_'+PadZeros(IntToStr(FStackCount),5)+'.fits');
     FreeAndNil(mem);
   end;
   if Assigned(FonNewImage) then FonNewImage(self);
@@ -819,7 +820,7 @@ begin
     end;
   end
   else begin
-    Ffits.Header.Insert(i,'DATE-OBS',FStackStart,'UTC start date of observation');
+    Ffits.Header.Insert(i,'DATE-OBS',FStackExpStart,'UTC start date of observation');
     Ffits.Header.Insert(i,'EXPTIME',hexp*FStackCount,'[s] Total Exposure Time');
     Ffits.Header.Insert(i,'STACKCNT',FStackCount,'Number of stacked frames');
     Ffits.Header.Insert(i,'STACKEXP',hexp,'[s] Individual frame exposure Time');
