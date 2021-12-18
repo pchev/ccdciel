@@ -94,7 +94,8 @@ type
       FFileVersion, FSlewRetry: integer;
       FAtEndPark, FAtEndCloseDome, FAtEndStopTracking,FAtEndWarmCamera,FAtEndRunScript,FOnErrorRunScript,FAtEndShutdown: boolean;
       FAtEndScript, FOnErrorScript: string;
-      FAtStartCool,FAtStartUnpark: boolean;
+      FAtStartCool,FAtStartUnpark, FAtStartRunScript: boolean;
+      FAtStartScript: string;
       SkipTarget: boolean;
       TargetForceNext: boolean;
       FDoneStatus, FLastDoneStep: string;
@@ -225,6 +226,8 @@ type
       property onEndSequence: TNotifyEvent read FonEndSequence write FonEndSequence;
       property AtStartCool: boolean  read FAtStartCool write FAtStartCool;
       property AtStartUnpark: boolean read FAtStartUnpark write FAtStartUnpark;
+      property AtStartRunScript: boolean read FAtStartRunScript write FAtStartRunScript;
+      property AtStartScript: string read FAtStartScript write FAtStartScript;
       property AtEndPark: boolean read FAtEndPark write FAtEndPark;
       property AtEndCloseDome: boolean read FAtEndCloseDome write FAtEndCloseDome;
       property AtEndStopTracking: boolean read FAtEndStopTracking write FAtEndStopTracking;
@@ -269,6 +272,8 @@ begin
   FSeqLockTwilight:=false;
   FAtStartCool:=false;
   FAtStartUnpark:=false;
+  FAtStartRunScript:=false;
+  FAtStartScript:='';
   FAtEndPark:=false;
   FAtEndCloseDome:=false;
   FAtEndStopTracking:=true;
@@ -495,6 +500,8 @@ begin
   FOnErrorScript := Source.FOnErrorScript;
   FAtStartCool := Source.FAtStartCool;
   FAtStartUnpark := Source.FAtStartUnpark;
+  FAtStartRunScript := Source.FAtStartRunScript;
+  FAtStartScript := Source.FAtStartScript;
   FFilterList.Clear;
   for i:=0 to Source.FFilterList.Count-1 do
     FFilterList.Add(Source.FFilterList[i]);
@@ -559,6 +566,8 @@ begin
   StartChange:=
     (FAtStartCool <> Source.FAtStartCool) or
     (FAtStartUnpark <> Source.FAtStartUnpark) or
+    (FAtStartRunScript <> Source.FAtStartRunScript) or
+    (FAtStartScript <> Source.FAtStartScript) or
     (FSeqStart <> Source.FSeqStart) or
     (FSeqStop <> Source.FSeqStop) or
     (FSeqStartAt <> Source.FSeqStartAt) or
@@ -567,6 +576,8 @@ begin
     (FSeqStopTwilight <> Source.FSeqStopTwilight);
   FAtStartCool := Source.FAtStartCool;
   FAtStartUnpark := Source.FAtStartUnpark;
+  FAtStartRunScript := Source.FAtStartRunScript;
+  FAtStartScript := Source.FAtStartScript;
   FSeqStart := Source.FSeqStart;
   FSeqStop := Source.FSeqStop;
   FSeqStartAt := Source.FSeqStartAt;
@@ -736,6 +747,8 @@ begin
    SeqStopAt        := StrToTimeDef(FSequenceFile.Items.GetValue('/Startup/SeqStopAt','00:00:00'),0);
    AtStartCool      := FSequenceFile.Items.GetValue('/Startup/CoolCamera',false);
    AtStartUnpark    := FSequenceFile.Items.GetValue('/Startup/Unpark',false);
+   AtStartRunScript := FSequenceFile.Items.GetValue('/Startup/RunScript',false);
+   AtStartScript    := FSequenceFile.Items.GetValue('/Startup/StartScript','');
    AtEndStopTracking:= FSequenceFile.Items.GetValue('/Termination/StopTracking',true);
    AtEndPark        := FSequenceFile.Items.GetValue('/Termination/Park',false);
    AtEndCloseDome   := FSequenceFile.Items.GetValue('/Termination/CloseDome',false);
@@ -920,6 +933,8 @@ try
     FSequenceFile.Items.SetValue('/Startup/SeqStopAt',TimeToStr(SeqStopAt));
     FSequenceFile.Items.SetValue('/Startup/CoolCamera',AtStartCool);
     FSequenceFile.Items.SetValue('/Startup/Unpark',AtStartUnpark);
+    FSequenceFile.Items.SetValue('/Startup/RunScript',AtStartRunScript);
+    FSequenceFile.Items.SetValue('/Startup/StartScript',AtStartScript);
     FSequenceFile.Items.SetValue('/Termination/StopTracking',AtEndStopTracking);
     FSequenceFile.Items.SetValue('/Termination/Park',AtEndPark);
     FSequenceFile.Items.SetValue('/Termination/CloseDome',AtEndCloseDome);
@@ -1098,8 +1113,8 @@ end;
 
 procedure T_Targets.Start;
 var hm,he,ccdtemp: double;
-    twok,wtok,nd: boolean;
-    j,stw:integer;
+    twok,wtok,nd,scriptfound: boolean;
+    i,j,stw:integer;
 begin
   try
   FWaitStarting:=true;
@@ -1189,6 +1204,19 @@ begin
     msg(rsUnparkTheTel,1);
     Mount.Park:=false;
     wait;
+  end;
+  if AtStartRunScript then begin
+    scriptfound:=false;
+    for i:=1 to MaxScriptDir do begin
+      if FileExistsUTF8(slash(ScriptDir[i].path)+AtStartScript+'.script') then begin
+         scriptfound:=true;
+         f_scriptengine.RunScript(AtStartScript,ScriptDir[i].path);
+         break;
+      end;
+    end;
+    if not scriptfound then begin
+      msg(Format(rsFileNotFound,[AtStartScript+'.script']),1);
+    end;
   end;
   finally
     FWaitStarting:=false;

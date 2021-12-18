@@ -242,11 +242,11 @@ object f_EditTargets: Tf_EditTargets
         Left = 552
         Height = 95
         Top = 1
-        Width = 186
+        Width = 220
         Align = alLeft
         BevelOuter = bvNone
         ClientHeight = 95
-        ClientWidth = 186
+        ClientWidth = 220
         ParentFont = False
         TabOrder = 2
         object Label7: TLabel
@@ -258,32 +258,34 @@ object f_EditTargets: Tf_EditTargets
           ParentFont = False
         end
         object StartOpt: TCheckListBox
-          Left = 4
+          Left = 0
           Height = 79
           Top = 16
-          Width = 172
+          Width = 220
+          Align = alBottom
           Items.Strings = (
             'ccNone'
             'ccCool'
             'ccUnpark'
+            'ccScript'
           )
           ItemHeight = 23
           OnItemClick = StartOptItemClick
           TabOrder = 0
           Data = {
-            03000000000000
+            0400000000000000
           }
         end
       end
       object PanelTermination: TPanel
-        Left = 738
+        Left = 772
         Height = 95
         Top = 1
-        Width = 251
+        Width = 217
         Align = alClient
         BevelOuter = bvNone
         ClientHeight = 95
-        ClientWidth = 251
+        ClientWidth = 217
         Constraints.MaxWidth = 500
         ParentFont = False
         TabOrder = 1
@@ -291,7 +293,7 @@ object f_EditTargets: Tf_EditTargets
           Left = 0
           Height = 79
           Top = 16
-          Width = 251
+          Width = 217
           Align = alBottom
           Items.Strings = (
             'cbNone'

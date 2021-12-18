@@ -36,7 +36,7 @@ const
   titleadd=0; titledel=1;
   pageobject=0; pagescript=1; pageflat=2; pagenone=3;
   cbNone=0; cbStopTracking=1; cbWarm=2; cbParkScope=3; cbParkDome=4; cbScript=5; cbUnattended=6;
-  ccNone=0; ccCool=1; ccUnpark=2;
+  ccNone=0; ccCool=1; ccUnpark=2; ccScript=3;
 
 type
 
@@ -261,11 +261,12 @@ type
     procedure NewPlanetariumTarget(Sender: TObject);
     procedure SetTemplateButton;
     procedure MarkModifiedTemplate;
-    procedure SetScriptName;
+    procedure SetStartScriptName;
+    procedure SetEndScriptName;
    public
     { public declarations }
     originalFilter: TSaveFilter;
-    EndScript, UnattendedScript: string;
+    EndScript, UnattendedScript, StartScript: string;
     procedure SetLang;
     procedure LoadPlanList;
     procedure LoadScriptList;
@@ -346,7 +347,8 @@ begin
   RepeatCountList.Enabled:=CheckBoxRepeatList.Checked;
   BtnRepeatInf.Enabled:=CheckBoxRepeatList.Checked;
   FlatFilterList.ClientHeight:=ceil(FlatFilterList.Items.Count/FlatFilterList.Columns)*DoScaleY(25);
-  SetScriptName;
+  SetStartScriptName;
+  SetEndScriptName;
   CheckRestartStatus(nil);
 end;
 
@@ -472,6 +474,7 @@ begin
   StartOpt.Items[ccNone]:=rsDoNothing;
   StartOpt.Items[ccCool]:=rsCoolTheCamer;
   StartOpt.Items[ccUnpark]:=rsUnparkTheTel;
+  StartOpt.Items[ccScript]:=rsRunAScript;
   // termination options
   Label3.Caption:=rsTerminationO;
   TermOpt.Items[cbNone]:=rsDoNothing;
@@ -945,13 +948,30 @@ begin
      StartOpt.Checked[ccNone]:=true;
      StartOpt.Checked[ccCool]:=false;
      StartOpt.Checked[ccUnpark]:=false;
+     StartOpt.Checked[ccScript]:=false;
   end;
   if (Index<>ccNone) and StartOpt.Checked[Index] then begin
      StartOpt.Checked[ccNone]:=false;
   end;
+  if (Index=ccScript) and StartOpt.Checked[ccScript] then begin
+     f_selectscript.SetScript(StartScript);
+     FormPos(f_selectscript,mouse.CursorPos.X,mouse.CursorPos.Y);
+     if f_selectscript.ShowModal=mrOK then begin
+        StartScript:=f_selectscript.ComboBoxScript.Items[f_selectscript.ComboBoxScript.ItemIndex];
+     end;
+  end;
+  SetStartScriptName;
   finally
   Lockcb:=false;
   end;
+end;
+
+procedure Tf_EditTargets.SetStartScriptName;
+begin
+  if StartOpt.Checked[ccScript] then
+    StartOpt.Items[ccScript]:=rsRunAScript+': '+StartScript
+  else
+    StartOpt.Items[ccScript]:=rsRunAScript;
 end;
 
 procedure Tf_EditTargets.TermOptItemClick(Sender: TObject; Index: integer);
@@ -990,13 +1010,13 @@ begin
         UnattendedScript:=f_selectscript.ComboBoxScript.Items[f_selectscript.ComboBoxScript.ItemIndex];
      end;
   end;
-  SetScriptName;
+  SetEndScriptName;
   finally
   Lockcb:=false;
   end;
 end;
 
-procedure Tf_EditTargets.SetScriptName;
+procedure Tf_EditTargets.SetEndScriptName;
 begin
   if TermOpt.Checked[cbScript] then
     TermOpt.Items[cbScript]:=rsRunAScript+': '+EndScript

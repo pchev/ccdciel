@@ -575,6 +575,8 @@ begin
       f_EditTargets.StartOpt.Checked[ccNone]:=not(et.AtStartCool or et.AtStartUnpark);
       f_EditTargets.StartOpt.Checked[ccCool]:=et.AtStartCool;
       f_EditTargets.StartOpt.Checked[ccUnpark]:=et.AtStartUnpark;
+      f_EditTargets.StartOpt.Checked[ccScript]:=et.AtStartRunScript;
+      f_EditTargets.StartScript:=et.AtStartScript;
       f_EditTargets.TermOpt.Checked[cbNone]:=not(et.AtEndStopTracking or et.AtEndPark or et.AtEndCloseDome or et.AtEndWarmCamera or et.AtEndRunScript);
       f_EditTargets.TermOpt.Checked[cbStopTracking]:=et.AtEndStopTracking;
       f_EditTargets.TermOpt.Checked[cbParkScope]:=et.AtEndPark;
@@ -607,6 +609,8 @@ begin
       f_EditTargets.StartOpt.Checked[ccNone]:=false;
       f_EditTargets.StartOpt.Checked[ccCool]:=true;
       f_EditTargets.StartOpt.Checked[ccUnpark]:=true;
+      f_EditTargets.StartOpt.Checked[ccScript]:=false;
+      f_EditTargets.StartScript:='';
       f_EditTargets.TermOpt.Checked[cbNone]:=false;
       f_EditTargets.TermOpt.Checked[cbStopTracking]:=true;
       f_EditTargets.TermOpt.Checked[cbParkScope]:=false;
@@ -644,6 +648,8 @@ begin
       et.SeqStopAt        := StrToTimeDef(f_EditTargets.SeqStopAt.Text,et.SeqStopAt);
       et.AtStartCool      := f_EditTargets.StartOpt.Checked[ccCool];
       et.AtStartUnpark    := f_EditTargets.StartOpt.Checked[ccUnpark];
+      et.AtStartRunScript := f_EditTargets.StartOpt.Checked[ccScript];
+      et.AtStartScript    := f_EditTargets.StartScript;
       et.AtEndStopTracking := f_EditTargets.TermOpt.Checked[cbStopTracking];
       et.AtEndPark         := f_EditTargets.TermOpt.Checked[cbParkScope];
       et.AtEndCloseDome    := f_EditTargets.TermOpt.Checked[cbParkDome];
