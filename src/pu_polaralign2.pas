@@ -55,19 +55,10 @@ type
     Label4: TLabel;
     Label5: TLabel;
     Label6: TLabel;
-    LabelPol2: TLabel;
-    LabelPol3: TLabel;
-    LabelPol4: TLabel;
-    LabelQ: TLabel;
-    LabelPol1: TLabel;
     Instruction: TMemo;
     PageControl1: TPageControl;
     PanelCustomPosition: TPanel;
-    QualityBar: TPanel;
-    PanelQuality: TPanel;
     Panel1: TPanel;
-    DeterminantTimer: TTimer;
-    QualityShape: TShape;
     TabSheetMove1: TTabSheet;
     TabSheetStart: TTabSheet;
     TabSheetAuto: TTabSheet;
@@ -81,7 +72,6 @@ type
     procedure ButtonNext3Click(Sender: TObject);
     procedure GotoPositionChange(Sender: TObject);
     procedure ButtonStartClick(Sender: TObject);
-    procedure DeterminantTimerTimer(Sender: TObject);
     procedure FormClose(Sender: TObject; var CloseAction: TCloseAction);
     procedure FormCreate(Sender: TObject);
     procedure FormDestroy(Sender: TObject);
@@ -115,7 +105,6 @@ type
     procedure StartAdjustement;
     procedure Compute;
     procedure ComputeCorrection;
-    Function  CurrentDeterminant: double;
     procedure CurrentAdjustement(RA,DE: double);
     procedure InitAlignment;
     procedure AbortAlignment;
@@ -142,30 +131,6 @@ implementation
 {$R *.lfm}
 
 { Tf_polaralign2 }
-
-procedure Tf_polaralign2.Measurement1;
-begin
-  TakeExposure;
-  if FAborted then exit;
-  Solve(1);
-  if FAborted then exit;
-  Sync(1);
-  MountPosition(1);
-  DeterminantTimer.Enabled:=true;
-  CurrentStep:=1;
-end;
-
-procedure Tf_polaralign2.Measurement2;
-begin
-  DeterminantTimer.Enabled:=false;
-  MountPosition(2);
-  TakeExposure;
-  if FAborted then exit;
-  Solve(2);
-  if FAborted then exit;
-  CurrentStep:=2;
-  Compute;
-end;
 
 procedure Tf_polaralign2.FormCreate(Sender: TObject);
 begin
@@ -293,6 +258,27 @@ begin
 
 end;
 
+procedure Tf_polaralign2.SaveConfig;
+begin
+ config.SetValue('/PolarAlignment2/Az1',FloatSpinEditAz1.Value);
+ config.SetValue('/PolarAlignment2/Alt1',FloatSpinEditAlt1.Value);
+ config.SetValue('/PolarAlignment2/Az2',FloatSpinEditAz2.Value);
+ config.SetValue('/PolarAlignment2/Alt2',FloatSpinEditAlt2.Value);
+ config.SetValue('/PolarAlignment2/Method',GotoPosition.ItemIndex);
+end;
+
+procedure Tf_polaralign2.FormClose(Sender: TObject; var CloseAction: TCloseAction);
+begin
+  PolarAlignmentOverlay:=false;
+  tracemsg('Close polar alignment form');
+  if FInProgress then
+    AbortAlignment;
+  if not FAborted then
+    SaveConfig;
+  if preview.Loop then preview.BtnLoopClick(nil);
+  if Assigned(FonClose) then FonClose(self);
+end;
+
 procedure Tf_polaralign2.tracemsg(txt: string);
 begin
   if assigned(FonShowMessage) then FonShowMessage('PolarAlign2: '+txt,9);
@@ -301,6 +287,28 @@ end;
 procedure Tf_polaralign2.msg(txt:string; level: integer);
 begin
  if assigned(FonShowMessage) then FonShowMessage('PolarAlign2: '+txt,level);
+end;
+
+procedure Tf_polaralign2.Measurement1;
+begin
+  TakeExposure;
+  if FAborted then exit;
+  Solve(1);
+  if FAborted then exit;
+  Sync(1);
+  MountPosition(1);
+  CurrentStep:=1;
+end;
+
+procedure Tf_polaralign2.Measurement2;
+begin
+  MountPosition(2);
+  TakeExposure;
+  if FAborted then exit;
+  Solve(2);
+  if FAborted then exit;
+  CurrentStep:=2;
+  Compute;
 end;
 
 procedure Tf_polaralign2.TakeExposure;
@@ -396,79 +404,6 @@ begin
   tracemsg('Mount position '+inttostr(step)+': '+RAToStr(tra)+'/'+DEToStr(tde));
 end;
 
-procedure Tf_polaralign2.DeterminantTimerTimer(Sender: TObject);
-var det: double;
-begin
-  det:=abs(CurrentDeterminant);
-  LabelQ.Caption:='Quality: '+formatfloat(f2,det);
-  QualityShape.Width:=max(5,min(100,round(100*2*det)));
-  if QualityShape.Width<20 then QualityShape.Brush.Color:=clRed
-  else if QualityShape.Width<60 then QualityShape.Brush.Color:=clYellow
-  else QualityShape.Brush.Color:=clLime;
-end;
-
-procedure Tf_polaralign2.SaveConfig;
-begin
- config.SetValue('/PolarAlignment2/Az1',FloatSpinEditAz1.Value);
- config.SetValue('/PolarAlignment2/Alt1',FloatSpinEditAlt1.Value);
- config.SetValue('/PolarAlignment2/Az2',FloatSpinEditAz2.Value);
- config.SetValue('/PolarAlignment2/Alt2',FloatSpinEditAlt2.Value);
- config.SetValue('/PolarAlignment2/Method',GotoPosition.ItemIndex);
-end;
-
-procedure Tf_polaralign2.FormClose(Sender: TObject; var CloseAction: TCloseAction);
-begin
-  PolarAlignmentOverlay:=false;
-  tracemsg('Close polar alignment form');
-  if FInProgress then
-    AbortAlignment;
-  if not FAborted then
-    SaveConfig;
-  if preview.Loop then preview.BtnLoopClick(nil);
-  if Assigned(FonClose) then FonClose(self);
-end;
-
-Function Tf_polaralign2.CurrentDeterminant: double;
-var A,B,C: array[0..1,0..1] of double;
-    RA2,DE2,SIDT2,jd0,h,lat_rad,h_1,h_2: double;
-    y,m,d: word;
-begin
-  RA2:=mount.RA;
-  DE2:=mount.Dec;
-  if (RA2=NullCoord)or(DE2=NullCoord) then begin
-    msg('Error reading mount coordinates',1);
-    AbortAlignment;
-    exit;
-  end;
-  MountToLocal(mount.EquinoxJD,RA2,DE2);
-  RA2:=RA2*deg2rad*15;
-  DE2:=DE2*deg2rad;
-  DecodeDate(now,y,m,d);
-  jd0:=jd(y,m,d,0);
-  h:=frac(NowUTC)*24;
-  SIDT2:=Sidtim(jd0,h,ObsLongitude);
-  lat_rad:=ObsLatitude*pi/180;
-  h_1:=FMountRa[1]-FSidt[1];
-  h_2:=RA2-SIDT2;
-  // Fill matrix 1 with data.
-  A[0,0]:=TAN(FMountDe[1])*SIN(h_1);
-  A[1,0]:={SIN(LAT_rad)}-COS(lat_rad)*TAN(FMountDe[1])*COS(h_1);{sin(lat_rad) will be nulified anyhow}
-  A[0,1]:=COS(h_1);
-  A[1,1]:=COS(lat_rad)*SIN(h_1);
-  // Fill matrix 2 with telescope position.
-  B[0,0]:=TAN(DE2)*SIN(h_2);
-  B[1,0]:={SIN(LAT_rad)}-COS(lat_rad)*TAN(DE2)*COS(h_2);{sin(lat_rad) will be nulified anyhow}
-  B[0,1]:=COS(h_2);
-  B[1,1]:=COS(lat_rad)*SIN(h_2);
-  //difference,  matrix 2 - matrix 1
-  C[0,0]:=B[0,0]-A[0,0];
-  C[1,0]:=B[1,0]-A[1,0];
-  C[0,1]:=B[0,1]-A[0,1];
-  C[1,1]:=B[1,1]-A[1,1];
-  // Calculate the determinant
-  result:=C[0,0]*C[1,1]-C[0,1]*C[1,0];
-end;
-
 {Polar error calculation based on two celestial reference points and the error of the telescope mount at these point(s).
  Based on formulas from Ralph Pass documented at https://rppass.com/align.pdf.
  They are based on the book “Telescope Control’ by Trueblood and Genet, p.111
@@ -547,12 +482,8 @@ begin
   if corr_alt>0  then ns:=' above the celestial pole' else ns:=' below the celestial pole';
 
   msg('Determinant: '+FormatFloat(f2,determinant),1);
-  LabelPol1.Caption:='Polar error Az: '+DEToStrShort(rad2deg*abs(corr_az),0)+' '+ew;
-  LabelPol2.Caption:='Polar error Alt: '+DEToStrShort(rad2deg*abs(corr_alt),0)+' '+ns;
-  tracemsg(LabelPol1.Caption);
-  tracemsg(LabelPol2.Caption);
-  LabelPol3.Caption:=LabelPol1.Caption;
-  LabelPol4.Caption:=LabelPol2.Caption;
+  msg('Polar error Az: '+DEToStrShort(rad2deg*abs(corr_az),0)+' '+ew,1);
+  msg('Polar error Alt: '+DEToStrShort(rad2deg*abs(corr_alt),0)+' '+ns,1);
 
   //calculate the Ra, Dec correction for stars in image 2
   corr_ra:=B[0,0]*corr_alt + B[1,0]*corr_az;
@@ -665,22 +596,6 @@ finally
 end;
 end;
 
-procedure Tf_polaralign2.ButtonStartClick(Sender: TObject);
-begin
-  FInProgress:=true;
-  if GotoPosition.ItemIndex=0 then begin
-    with GotoPosition.Items.Objects[0] as TAltAzPosition do begin
-      // update custom position
-      az1:=FloatSpinEditAz1.Value;
-      alt1:=FloatSpinEditAlt1.Value;
-      az2:=FloatSpinEditAz2.Value;
-      alt2:=FloatSpinEditAlt2.Value;
-    end;
-  end;
-  Application.QueueAsyncCall(@AutoMeasurementAsync,0)
-end;
-
-
 procedure Tf_polaralign2.BtnLockClick(Sender: TObject);
 begin
   PolarAlignmentLock:=BtnLock.Checked;
@@ -717,6 +632,21 @@ except
 end;
 end;
 
+procedure Tf_polaralign2.ButtonStartClick(Sender: TObject);
+begin
+  FInProgress:=true;
+  if GotoPosition.ItemIndex=0 then begin
+    with GotoPosition.Items.Objects[0] as TAltAzPosition do begin
+      // update custom position
+      az1:=FloatSpinEditAz1.Value;
+      alt1:=FloatSpinEditAlt1.Value;
+      az2:=FloatSpinEditAz2.Value;
+      alt2:=FloatSpinEditAlt2.Value;
+    end;
+  end;
+  Application.QueueAsyncCall(@AutoMeasurementAsync,0)
+end;
+
 procedure Tf_polaralign2.AutoMeasurementAsync(Data: PtrInt);
 var
   az1,alt1,az2,alt2,ra,de : double;
@@ -724,7 +654,6 @@ begin
  try
  // 1
     PageControl1.ActivePage:=TabSheetAuto;
-    PanelQuality.Visible:=false;
     Instruction.Clear;
     decode_combobox(az1,alt1,az2,alt2);
     if az1>999 then close;{something wrong}
@@ -743,7 +672,6 @@ begin
     if FAborted then exit;
 
  // 2
-    PanelQuality.Visible:=true;
     Instruction.Clear;
     Instruction.Lines.Add('Moving to second position, please wait...');
     Instruction.Lines.Add('Moving to az, alt '+floattostrF(az2,ffgeneral,3,0)+'  '+floattostrF(alt2,ffgeneral,3,0));
@@ -840,12 +768,6 @@ begin
   Instruction.Lines.Add('');
   Instruction.Lines.Add('When ready click the Start button');
   PageControl1.ActivePage:=TabSheetStart;
-  LabelQ.Caption:='';
-  LabelPol1.Caption:='';
-  LabelPol2.Caption:='';
-  LabelPol3.Caption:='';
-  LabelPol4.Caption:='';
-  DeterminantTimer.Enabled:=false;
   PolarAlignmentOverlay:=false;
   PolarAlignmentLock:=false;
   BtnLock.Checked:=false;
@@ -886,7 +808,6 @@ procedure Tf_polaralign2.AbortAlignment;
 begin
   if FAborted then exit; // do not do this action multiple time
   FAborted:=true;
-  DeterminantTimer.Enabled:=false;
   PolarAlignmentOverlay:=false;
   if FInProgress then begin
     if Mount.MountSlewing then Mount.AbortMotion;
