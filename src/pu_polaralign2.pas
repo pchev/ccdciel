@@ -337,7 +337,11 @@ begin
     if FAborted then exit;
   end;
 
-  Sync(1);
+  {do not sync in ASCOM simulation since it will move the mount in the Sky simulator.
+  Not required for the Sky Simulator Alpaca mount simulation in since it maintains a
+  separate ra, dec position for the indication and mount}
+  if pos('simulator',LowerCase(camera.DriverInfo))=0 then Sync(1);
+
   MountPosition(1);
   CurrentStep:=1;
 end;
