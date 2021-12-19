@@ -442,7 +442,7 @@ end;
 procedure Tf_polaralign2.MountPosition(step: integer);
 var tra,tde: double;
 begin
-  if step=1 then begin
+  if (step=1)and(pos('simulator',LowerCase(camera.DriverInfo))=0) then begin
     // use sync coordinates to remove mount error
     tra:=rad2deg*FRa[step]/15;
     tde:=rad2deg*FDe[step];
