@@ -95,6 +95,7 @@ install -v -m 644 data/language/ccdciel.ru.po   $destdir/data/language/ccdciel.r
 install -v -m 644 data/language/ccdciel_hints.po      $destdir/data/language/ccdciel_hints.en.po
 install -v -m 644 data/language/ccdciel_hints.en_GB.po $destdir/data/language/ccdciel_hints.en_GB.po
 install -v -m 644 data/language/ccdciel_hints.cs.po   $destdir/data/language/ccdciel_hints.cs.po
+install -v -m 644 data/language/ccdciel_hints.da.po   $destdir/data/language/ccdciel_hints.da.po
 install -v -m 644 data/language/ccdciel_hints.de.po   $destdir/data/language/ccdciel_hints.de.po
 install -v -m 644 data/language/ccdciel_hints.es.po   $destdir/data/language/ccdciel_hints.es.po
 install -v -m 644 data/language/ccdciel_hints.fr.po   $destdir/data/language/ccdciel_hints.fr.po

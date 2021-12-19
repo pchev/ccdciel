@@ -6,15 +6,15 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ccdciel\n"
 "Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
-"POT-Creation-Date: 2021-09-05 14:18+0000\n"
+"POT-Creation-Date: 2021-12-19 16:54+0000\n"
 "PO-Revision-Date: 2021-08-31 20:35+0000\n"
 "Last-Translator: Patrick Chevalley <Unknown>\n"
 "Language-Team: Kurdish <ku@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2021-09-10 14:44+0000\n"
-"X-Generator: Launchpad (build aca2013fd8cd2fea408d75f89f9bc012fbab307d)\n"
+"X-Launchpad-Export-Date: 2021-12-19 17:36+0000\n"
+"X-Generator: Launchpad (build adb364d6a74a28e7b95d51cd30446ec16160de6c)\n"
 
 #: u_translation.rs2d
 msgid "2D"
@@ -86,6 +86,10 @@ msgstr ""
 #: u_translation.rsadjustflatex
 #, object-pascal-format
 msgid "Adjust flat exposure time to %s and retry."
+msgstr ""
+
+#: u_translation.rsadjustthemou
+msgid "Adjust the mount in azimuth and elevation such that the star moves from the green circle to the pink circle."
 msgstr ""
 
 #: u_translation.rsadjusttowind
@@ -843,6 +847,10 @@ msgstr ""
 msgid "Close dome sequence when mount is asked to park"
 msgstr ""
 
+#: u_translation.rsclosethewind
+msgid "Close the window when ready."
+msgstr ""
+
 #: u_translation.rscloudcover
 msgid "Cloud cover"
 msgstr ""
@@ -1038,6 +1046,14 @@ msgstr ""
 msgid "Current plan"
 msgstr ""
 
+#: u_translation.rscustom
+msgid "Custom"
+msgstr ""
+
+#: u_translation.rscustompositi
+msgid "Custom position"
+msgstr ""
+
 #: u_translation.rscygwinpath
 msgid "Cygwin path"
 msgstr ""
@@ -1204,6 +1220,11 @@ msgstr ""
 
 #: u_translation.rsdiscover
 msgid "Discover"
+msgstr ""
+
+#: u_translation.rsdiscovereds
+#, object-pascal-format
+msgid "Discovered %s ..."
 msgstr ""
 
 #: u_translation.rsdiscoverypor
@@ -1746,6 +1767,11 @@ msgstr ""
 msgid "Found %d stars"
 msgstr ""
 
+#: u_translation.rsfoundservers
+#, object-pascal-format
+msgid "Found %s servers"
+msgstr ""
+
 #: u_translation.rsfov
 msgid "FOV"
 msgstr ""
@@ -1914,6 +1940,14 @@ msgstr ""
 msgid "Idle"
 msgstr ""
 
+#: u_translation.rsifabrightsta
+msgid "If a bright star is visible click NEXT."
+msgstr ""
+
+#: u_translation.rsifnobrightst
+msgid "If no bright star is visible click MOVE."
+msgstr ""
+
 #: u_translation.rsifyourfocuse
 msgid "If your focuser driver do not offer this option, set here the number of steps necessary to clean the backlash when the direction change. This not need to be a precise value, it is better to set it higher than the actual backlash."
 msgstr ""
@@ -2049,6 +2083,10 @@ msgstr ""
 
 #: u_translation.rsinterval
 msgid "Interval"
+msgstr ""
+
+#: u_translation.rsinthenextscr
+msgid "In the next screen you have to move the triangle such that the green circle is marking a bright star or object."
 msgstr ""
 
 #: u_translation.rsinvalid
@@ -2243,6 +2281,14 @@ msgstr ""
 msgid "Mean:"
 msgstr ""
 
+#: u_translation.rsmeasureen
+msgid "Measure in the East and North"
+msgstr ""
+
+#: u_translation.rsmeasurees
+msgid "Measure in the East and South"
+msgstr ""
+
 #: u_translation.rsmeasurement
 msgid "Measurement"
 msgstr ""
@@ -2259,6 +2305,26 @@ msgstr ""
 #: u_translation.rsmeasurementp
 #, object-pascal-format
 msgid "Measurement %s pos:%s step:%s hfd:%s peak:%s snr:%s"
+msgstr ""
+
+#: u_translation.rsmeasurewn
+msgid "Measure in the West and North"
+msgstr ""
+
+#: u_translation.rsmeasurews
+msgid "Measure in the West and South"
+msgstr ""
+
+#: u_translation.rsmeasuringfir
+msgid "Measuring first position"
+msgstr ""
+
+#: u_translation.rsmeasuringsec
+msgid "Measuring second position"
+msgstr ""
+
+#: u_translation.rsmeasuringthe
+msgid "Measuring the new position"
 msgstr ""
 
 #: u_translation.rsmedian
@@ -2411,6 +2477,10 @@ msgstr ""
 msgid "Mount was still not tracking after %s minutes."
 msgstr ""
 
+#: u_translation.rsmove
+msgid "Move"
+msgstr ""
+
 #: u_translation.rsmovedirectio
 msgid "Move direction"
 msgstr ""
@@ -2435,12 +2505,16 @@ msgstr ""
 msgid "Move outward"
 msgstr ""
 
-#: u_translation.rsmovethegreen
-msgid "Move the green circle to a star using the mouse."
-msgstr ""
-
 #: u_translation.rsmovethemount
 msgid "Move the mount manually in RA, click Continue when ready"
+msgstr ""
+
+#: u_translation.rsmovetheteles
+msgid "Slew the telescope to the nearby position with a bright star."
+msgstr ""
+
+#: u_translation.rsmovethetrian
+msgid "Move the triangle with the mouse (left button down) such that the green circle is marking a bright star."
 msgstr ""
 
 #: u_translation.rsmovetonewpla
@@ -2460,12 +2534,28 @@ msgstr ""
 msgid "Moving mount"
 msgstr ""
 
+#: u_translation.rsmovingto
+msgid "Moving to"
+msgstr ""
+
+#: u_translation.rsmovingtofirs
+msgid "Moving to first position"
+msgstr ""
+
+#: u_translation.rsmovingtoseco
+msgid "Moving to second position"
+msgstr ""
+
 #: u_translation.rsnearfocus
 msgid "Near focus"
 msgstr ""
 
 #: u_translation.rsnearhfdmustb
 msgid "Near HFD must be smaller than Start HFD!"
+msgstr ""
+
+#: u_translation.rsnearthepole
+msgid "near the pole"
 msgstr ""
 
 #: u_translation.rsneedtowaitun
@@ -2514,6 +2604,10 @@ msgstr ""
 msgid "No alignment star found for stacking"
 msgstr ""
 
+#: u_translation.rsnoalpacaserv
+msgid "No Alpaca server found"
+msgstr ""
+
 #: u_translation.rsnoastronomic
 msgid "No astronomical twilight at this location today"
 msgstr ""
@@ -2548,6 +2642,10 @@ msgstr ""
 
 #: u_translation.rsnodevice
 msgid "No device"
+msgstr ""
+
+#: u_translation.rsnodevicefoun
+msgid "No device found"
 msgstr ""
 
 #: u_translation.rsnodusktoday
@@ -2979,6 +3077,10 @@ msgstr ""
 msgid "Please configure the Autofocus options."
 msgstr ""
 
+#: u_translation.rspleaseconfig3
+msgid "Please configure the observatory location."
+msgstr ""
+
 #: u_translation.rspleaseconfir
 #, object-pascal-format
 msgid "Please confirm you want to slew the telescope to %s at coordinates %s/%s"
@@ -3034,6 +3136,10 @@ msgstr ""
 msgid "Please stop the sequence first!"
 msgstr ""
 
+#: u_translation.rspleasewait
+msgid "please wait"
+msgstr ""
+
 #: u_translation.rspleasewaitun
 msgid "Please wait until the measurements are complete"
 msgstr ""
@@ -3058,6 +3164,10 @@ msgstr ""
 msgid "Pos."
 msgstr ""
 
+#: u_translation.rsposition
+msgid "Position"
+msgstr ""
+
 #: u_translation.rspower
 msgid "Power"
 msgstr ""
@@ -3072,6 +3182,10 @@ msgstr ""
 
 #: u_translation.rsprecisionsle3
 msgid "Precision slew failed!"
+msgstr ""
+
+#: u_translation.rspredefined
+msgid "Predefined (recommended)"
 msgstr ""
 
 #: u_translation.rspreferedfocu
@@ -3630,6 +3744,10 @@ msgstr ""
 
 #: u_translation.rsselectastarf
 msgid "Select a star first!"
+msgstr ""
+
+#: u_translation.rsselectoneoft
+msgid "Select one of the measurement options:"
 msgstr ""
 
 #: u_translation.rsselectthefil
@@ -4594,10 +4712,6 @@ msgstr ""
 msgid "the mount indicate %s"
 msgstr ""
 
-#: u_translation.rsthenadjustth
-msgid "Then adjust the mount polar adjustment knob to move the star to the pink circle at the other extremity of the line."
-msgstr ""
-
 #: u_translation.rstheplanismod
 #, object-pascal-format
 msgid "The plan %s is modified. Do you want to save the change ?"
@@ -5130,6 +5244,10 @@ msgstr ""
 msgid "When performing autofocus from a sequence"
 msgstr ""
 
+#: u_translation.rswhenreadycli
+msgid "When ready click"
+msgstr ""
+
 #: u_translation.rswidth
 msgid "Width"
 msgstr ""
@@ -5146,12 +5264,12 @@ msgstr ""
 msgid "Wind speed"
 msgstr ""
 
-#: u_translation.rsyes
-msgid "Yes"
+#: u_translation.rswithoutpolev
+msgid "without pole visibility"
 msgstr ""
 
-#: u_translation.rsyoucancloset
-msgid "You can close this window after you finish to move the mount polar axis."
+#: u_translation.rsyes
+msgid "Yes"
 msgstr ""
 
 #: u_translation.rsyoucansetthe

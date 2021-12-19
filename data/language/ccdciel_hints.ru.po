@@ -6,15 +6,15 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ccdciel\n"
 "Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
-"POT-Creation-Date: 2021-09-05 14:18+0000\n"
-"PO-Revision-Date: 2020-12-06 08:19+0000\n"
+"POT-Creation-Date: 2021-12-19 16:54+0000\n"
+"PO-Revision-Date: 2021-10-31 17:06+0000\n"
 "Last-Translator: Sergey Tarantsov <tsn-ast@yandex.ru>\n"
 "Language-Team: Russian <ru@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2021-09-10 14:44+0000\n"
-"X-Generator: Launchpad (build aca2013fd8cd2fea408d75f89f9bc012fbab307d)\n"
+"X-Launchpad-Export-Date: 2021-12-19 17:36+0000\n"
+"X-Generator: Launchpad (build adb364d6a74a28e7b95d51cd30446ec16160de6c)\n"
 
 #: u_hints.rsactivateback
 #, object-pascal-format
@@ -285,7 +285,7 @@ msgstr "Повторить весь список несколько раз"
 
 #: u_hints.rssaveindividu
 msgid "Save individual images before stacking"
-msgstr ""
+msgstr "Сохранить исходные снимки перед сложением"
 
 #: u_hints.rssavethelista
 msgid "Save the list and close this window."
@@ -321,7 +321,7 @@ msgstr "Установить время остановки на астроном
 
 #: u_hints.rsshowbullseye
 msgid "Show bulls eye"
-msgstr "Перекрестье"
+msgstr "Визир"
 
 #: u_hints.rsshowcompleti
 msgid "Show completion status"

@@ -4162,16 +4162,16 @@ msgstr ""
 msgid "move Up by "
 msgstr ""
 
-#: u_translation:rsmovethegreen
-msgid "Move the green circle to a star using the mouse."
+#: u_translation:rsmovethetrian
+msgid "Move the triangle with the mouse (left button down) such that the green circle is marking a bright star."
 msgstr ""
 
-#: u_translation:rsthenadjustth
-msgid "Then adjust the mount polar adjustment knob to move the star to the pink circle at the other extremity of the line."
+#: u_translation:rsadjustthemou
+msgid "Adjust the mount in azimuth and elevation such that the star moves from the green circle to the pink circle."
 msgstr ""
 
-#: u_translation:rsyoucancloset
-msgid "You can close this window after you finish to move the mount polar axis."
+#: u_translation:rsclosethewind
+msgid "Close the window when ready."
 msgstr ""
 
 #: u_translation:rspolaralignme
@@ -4924,5 +4924,121 @@ msgstr ""
 
 #: u_translation:rsshowstacking
 msgid "Show stacking option for Preview/Capture/Sequence"
+msgstr ""
+
+#: u_translation:rspleaseconfig3
+msgid "Please configure the observatory location."
+msgstr ""
+
+#: u_translation:rsnodevicefoun
+msgid "No device found"
+msgstr ""
+
+#: u_translation:rsdiscovereds
+msgid "Discovered %s ..."
+msgstr ""
+
+#: u_translation:rsfoundservers
+msgid "Found %s servers"
+msgstr ""
+
+#: u_translation:rsnoalpacaserv
+msgid "No Alpaca server found"
+msgstr ""
+
+#: u_translation:rsmove
+msgid "Move"
+msgstr ""
+
+#: u_translation:rsposition
+msgid "Position"
+msgstr ""
+
+#: u_translation:rsmeasurees
+msgid "Measure in the East and South"
+msgstr ""
+
+#: u_translation:rsmeasurews
+msgid "Measure in the West and South"
+msgstr ""
+
+#: u_translation:rsmeasureen
+msgid "Measure in the East and North"
+msgstr ""
+
+#: u_translation:rsmeasurewn
+msgid "Measure in the West and North"
+msgstr ""
+
+#: u_translation:rscustompositi
+msgid "Custom position"
+msgstr ""
+
+#: u_translation:rsnearthepole
+msgid "near the pole"
+msgstr ""
+
+#: u_translation:rswithoutpolev
+msgid "without pole visibility"
+msgstr ""
+
+#: u_translation:rsmovingtofirs
+msgid "Moving to first position"
+msgstr ""
+
+#: u_translation:rspleasewait
+msgid "please wait"
+msgstr ""
+
+#: u_translation:rsmovingto
+msgid "Moving to"
+msgstr ""
+
+#: u_translation:rsmeasuringfir
+msgid "Measuring first position"
+msgstr ""
+
+#: u_translation:rsmovingtoseco
+msgid "Moving to second position"
+msgstr ""
+
+#: u_translation:rsmeasuringsec
+msgid "Measuring second position"
+msgstr ""
+
+#: u_translation:rsinthenextscr
+msgid "In the next screen you have to move the triangle such that the green circle is marking a bright star or object."
+msgstr ""
+
+#: u_translation:rsifnobrightst
+msgid "If no bright star is visible click MOVE."
+msgstr ""
+
+#: u_translation:rsifabrightsta
+msgid "If a bright star is visible click NEXT."
+msgstr ""
+
+#: u_translation:rsmovetheteles
+msgid "Slew the telescope to the nearby position with a bright star."
+msgstr ""
+
+#: u_translation:rswhenreadycli
+msgid "When ready click"
+msgstr ""
+
+#: u_translation:rsmeasuringthe
+msgid "Measuring the new position"
+msgstr ""
+
+#: u_translation:rsselectoneoft
+msgid "Select one of the measurement options:"
+msgstr ""
+
+#: u_translation:rspredefined
+msgid "Predefined (recommended)"
+msgstr ""
+
+#: u_translation:rscustom
+msgid "Custom"
 msgstr ""
 

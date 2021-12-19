@@ -87,6 +87,7 @@ install -v -m 644 data/resources/bigcross.cur  $destdir/share/ccdciel/data/resou
 install -v -m 644 data/language/ccdciel.po     $destdir/share/ccdciel/data/language/ccdciel.en.po
 install -v -m 644 data/language/ccdciel.en_GB.po $destdir/share/ccdciel/data/language/ccdciel.en_GB.po
 install -v -m 644 data/language/ccdciel.cs.po  $destdir/share/ccdciel/data/language/ccdciel.cs.po
+install -v -m 644 data/language/ccdciel.da.po  $destdir/share/ccdciel/data/language/ccdciel.da.po
 install -v -m 644 data/language/ccdciel.de.po  $destdir/share/ccdciel/data/language/ccdciel.de.po
 install -v -m 644 data/language/ccdciel.es.po  $destdir/share/ccdciel/data/language/ccdciel.es.po
 install -v -m 644 data/language/ccdciel.fr.po  $destdir/share/ccdciel/data/language/ccdciel.fr.po

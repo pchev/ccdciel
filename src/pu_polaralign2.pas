@@ -737,6 +737,7 @@ begin
     PageControl1.ActivePage:=TabSheetMove1;
     Instruction.Clear;
     Instruction.Lines.Add(rsInTheNextScr);
+    Instruction.Lines.Add('');
     Instruction.Lines.Add(rsIfaBrightsta);
     Instruction.Lines.Add('');
     Instruction.Lines.Add(rsIfNoBrightSt);

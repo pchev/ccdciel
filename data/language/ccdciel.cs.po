@@ -2,15 +2,15 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ccdciel\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-09-05 14:18+0000\n"
-"PO-Revision-Date: 2021-09-05 18:32+0000\n"
+"POT-Creation-Date: 2021-12-19 16:54+0000\n"
+"PO-Revision-Date: 2021-11-03 10:17+0000\n"
 "Last-Translator: Stanislav Holub <Unknown>\n"
 "Language-Team: Czech <cz@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2021-09-10 14:44+0000\n"
-"X-Generator: Launchpad (build aca2013fd8cd2fea408d75f89f9bc012fbab307d)\n"
+"X-Launchpad-Export-Date: 2021-12-19 17:36+0000\n"
+"X-Generator: Launchpad (build adb364d6a74a28e7b95d51cd30446ec16160de6c)\n"
 "Language: cs\n"
 
 #: u_translation.rs2d
@@ -84,6 +84,10 @@ msgstr "Upravit velikost hvězdy automatického ostřením:%s, faktor expozice:%
 #, object-pascal-format
 msgid "Adjust flat exposure time to %s and retry."
 msgstr "Upravit dobu expozice na %s a opakujte."
+
+#: u_translation.rsadjustthemou
+msgid "Adjust the mount in azimuth and elevation such that the star moves from the green circle to the pink circle."
+msgstr ""
 
 #: u_translation.rsadjusttowind
 msgid "Adjust to window"
@@ -842,6 +846,10 @@ msgstr "Zavřít štěrbinu kopule"
 msgid "Close dome sequence when mount is asked to park"
 msgstr "Když je montáž požádána o zaparkování, zavřít sekvenci  kopule"
 
+#: u_translation.rsclosethewind
+msgid "Close the window when ready."
+msgstr ""
+
 #: u_translation.rscloudcover
 msgid "Cloud cover"
 msgstr "Oblačnost"
@@ -1037,6 +1045,14 @@ msgstr "Aktuální snímek"
 msgid "Current plan"
 msgstr "Aktuální plán"
 
+#: u_translation.rscustom
+msgid "Custom"
+msgstr ""
+
+#: u_translation.rscustompositi
+msgid "Custom position"
+msgstr ""
+
 #: u_translation.rscygwinpath
 msgid "Cygwin path"
 msgstr "Cygwinová cesta"
@@ -1204,6 +1220,11 @@ msgstr "Před změnou konfigurace odpojit kameru."
 #: u_translation.rsdiscover
 msgid "Discover"
 msgstr "Najít"
+
+#: u_translation.rsdiscovereds
+#, object-pascal-format
+msgid "Discovered %s ..."
+msgstr ""
 
 #: u_translation.rsdiscoverypor
 msgid "Discovery port"
@@ -1566,7 +1587,7 @@ msgstr "Filtry"
 
 #: u_translation.rsfilterwheel
 msgid "Filter wheel"
-msgstr "Filtrační kolo"
+msgstr "Filtrové kolo"
 
 #: u_translation.rsfinalmovemen
 msgid "Final movement (steps)"
@@ -1745,6 +1766,11 @@ msgstr "Nalezeno %s zařízení"
 msgid "Found %d stars"
 msgstr "Nalezeno %hvězd"
 
+#: u_translation.rsfoundservers
+#, object-pascal-format
+msgid "Found %s servers"
+msgstr ""
+
 #: u_translation.rsfov
 msgid "FOV"
 msgstr "FOV"
@@ -1913,6 +1939,14 @@ msgstr "Zaostření křivky HYPERBOLA %s, zbývající chyba přizpůsobení kř
 msgid "Idle"
 msgstr "Nečinný"
 
+#: u_translation.rsifabrightsta
+msgid "If a bright star is visible click NEXT."
+msgstr ""
+
+#: u_translation.rsifnobrightst
+msgid "If no bright star is visible click MOVE."
+msgstr ""
+
 #: u_translation.rsifyourfocuse
 msgid "If your focuser driver do not offer this option, set here the number of steps necessary to clean the backlash when the direction change. This not need to be a precise value, it is better to set it higher than the actual backlash."
 msgstr "Pokud ovladač zaostřovače tuto možnost nenabízí, nastavte zde počet kroků potřebných k vyčištění vůle při změně směru. Nemusí to být přesná hodnota, je lepší ji nastavit vyšší než skutečná zpětná vůle."
@@ -2049,6 +2083,10 @@ msgstr "Typ rozhraní"
 #: u_translation.rsinterval
 msgid "Interval"
 msgstr "Interval"
+
+#: u_translation.rsinthenextscr
+msgid "In the next screen you have to move the triangle such that the green circle is marking a bright star or object."
+msgstr ""
 
 #: u_translation.rsinvalid
 msgid "Invalid"
@@ -2242,6 +2280,14 @@ msgstr "Max. offset"
 msgid "Mean:"
 msgstr "Průměr:"
 
+#: u_translation.rsmeasureen
+msgid "Measure in the East and North"
+msgstr ""
+
+#: u_translation.rsmeasurees
+msgid "Measure in the East and South"
+msgstr ""
+
 #: u_translation.rsmeasurement
 msgid "Measurement"
 msgstr "Měření"
@@ -2259,6 +2305,26 @@ msgstr "Měření na nových snímcích"
 #, object-pascal-format
 msgid "Measurement %s pos:%s step:%s hfd:%s peak:%s snr:%s"
 msgstr "Měření %s pos:%s krok:%s hfd:%s peak:%s snr:%s"
+
+#: u_translation.rsmeasurewn
+msgid "Measure in the West and North"
+msgstr ""
+
+#: u_translation.rsmeasurews
+msgid "Measure in the West and South"
+msgstr ""
+
+#: u_translation.rsmeasuringfir
+msgid "Measuring first position"
+msgstr ""
+
+#: u_translation.rsmeasuringsec
+msgid "Measuring second position"
+msgstr ""
+
+#: u_translation.rsmeasuringthe
+msgid "Measuring the new position"
+msgstr ""
 
 #: u_translation.rsmedian
 #, object-pascal-format
@@ -2410,6 +2476,10 @@ msgstr "Sledování zastaveno! časový limit sekvence v %s minutách."
 msgid "Mount was still not tracking after %s minutes."
 msgstr "Montáž po %s minutách stále nesleduje."
 
+#: u_translation.rsmove
+msgid "Move"
+msgstr ""
+
 #: u_translation.rsmovedirectio
 msgid "Move direction"
 msgstr "Směr pohybu"
@@ -2434,13 +2504,17 @@ msgstr "Pohyb mezi body"
 msgid "Move outward"
 msgstr "Pohyb ven↑"
 
-#: u_translation.rsmovethegreen
-msgid "Move the green circle to a star using the mouse."
-msgstr "Přesuňte zelený kruh na hvězdu pomocí myši."
-
 #: u_translation.rsmovethemount
 msgid "Move the mount manually in RA, click Continue when ready"
 msgstr "Ručně přeložte montáž v RA a poté klikněte na Pokračovat"
+
+#: u_translation.rsmovetheteles
+msgid "Slew the telescope to the nearby position with a bright star."
+msgstr ""
+
+#: u_translation.rsmovethetrian
+msgid "Move the triangle with the mouse (left button down) such that the green circle is marking a bright star."
+msgstr ""
 
 #: u_translation.rsmovetonewpla
 #, object-pascal-format
@@ -2459,6 +2533,18 @@ msgstr "pohyb na Západ o "
 msgid "Moving mount"
 msgstr "Pohyb montáže"
 
+#: u_translation.rsmovingto
+msgid "Moving to"
+msgstr ""
+
+#: u_translation.rsmovingtofirs
+msgid "Moving to first position"
+msgstr ""
+
+#: u_translation.rsmovingtoseco
+msgid "Moving to second position"
+msgstr ""
+
 #: u_translation.rsnearfocus
 msgid "Near focus"
 msgstr "Blízké zaostření"
@@ -2466,6 +2552,10 @@ msgstr "Blízké zaostření"
 #: u_translation.rsnearhfdmustb
 msgid "Near HFD must be smaller than Start HFD!"
 msgstr "HFD s nejbližším zaměřením by mělo být menší než počáteční HFD!"
+
+#: u_translation.rsnearthepole
+msgid "near the pole"
+msgstr ""
 
 #: u_translation.rsneedtowaitun
 #, object-pascal-format
@@ -2513,6 +2603,10 @@ msgstr "Ne"
 msgid "No alignment star found for stacking"
 msgstr "Pro stohování nebyla nalezena žádná hvězda zarovnání"
 
+#: u_translation.rsnoalpacaserv
+msgid "No Alpaca server found"
+msgstr ""
+
 #: u_translation.rsnoastronomic
 msgid "No astronomical twilight at this location today"
 msgstr "Dnes na tomto místě není astronomický soumrak"
@@ -2548,6 +2642,10 @@ msgstr "Dnes není úsvit"
 #: u_translation.rsnodevice
 msgid "No device"
 msgstr "Žádné zařízení"
+
+#: u_translation.rsnodevicefoun
+msgid "No device found"
+msgstr ""
 
 #: u_translation.rsnodusktoday
 msgid "No dusk today"
@@ -2978,6 +3076,10 @@ msgstr "Nakonfigurujte"
 msgid "Please configure the Autofocus options."
 msgstr "Nakonfigurujte možnosti automatického zaostření."
 
+#: u_translation.rspleaseconfig3
+msgid "Please configure the observatory location."
+msgstr ""
+
 #: u_translation.rspleaseconfir
 #, object-pascal-format
 msgid "Please confirm you want to slew the telescope to %s at coordinates %s/%s"
@@ -3033,6 +3135,10 @@ msgstr "Před zahájením sekvence definujte formát %s."
 msgid "Please stop the sequence first!"
 msgstr "Zastavit sekvenci!"
 
+#: u_translation.rspleasewait
+msgid "please wait"
+msgstr ""
+
 #: u_translation.rspleasewaitun
 msgid "Please wait until the measurements are complete"
 msgstr "Počkat na dokončení měření"
@@ -3057,6 +3163,10 @@ msgstr "Port"
 msgid "Pos."
 msgstr "Poz."
 
+#: u_translation.rsposition
+msgid "Position"
+msgstr ""
+
 #: u_translation.rspower
 msgid "Power"
 msgstr "Energie"
@@ -3072,6 +3182,10 @@ msgstr "Přesné přejetí dokončeno."
 #: u_translation.rsprecisionsle3
 msgid "Precision slew failed!"
 msgstr "Přesné přejetí selhalo!"
+
+#: u_translation.rspredefined
+msgid "Predefined (recommended)"
+msgstr ""
 
 #: u_translation.rspreferedfocu
 msgid "Prefered focuser direction"
@@ -3630,6 +3744,10 @@ msgstr "Zabezpečené připojení SSL/TLS"
 #: u_translation.rsselectastarf
 msgid "Select a star first!"
 msgstr "Vybbrat hvězdu!"
+
+#: u_translation.rsselectoneoft
+msgid "Select one of the measurement options:"
+msgstr ""
 
 #: u_translation.rsselectthefil
 msgid "Select the file to delete"
@@ -4593,10 +4711,6 @@ msgstr "Montáž se dost nepohybuje!"
 msgid "the mount indicate %s"
 msgstr "montáž ukazuje %s"
 
-#: u_translation.rsthenadjustth
-msgid "Then adjust the mount polar adjustment knob to move the star to the pink circle at the other extremity of the line."
-msgstr "Upravte odchylku pomocí nastavovacích šroubů s polární osou, abyste přesunuli hvězdu do růžového kruhu na druhém konci linie."
-
 #: u_translation.rstheplanismod
 #, object-pascal-format
 msgid "The plan %s is modified. Do you want to save the change ?"
@@ -4877,7 +4991,7 @@ msgstr "Použití externího příkazu k rozsvícení/vypnutí panelu"
 
 #: u_translation.rsusefilterwhe
 msgid "Use filter wheel"
-msgstr "Použiítfiltrační kolo"
+msgstr "Použít filtrové kolo"
 
 #: u_translation.rsuseflatautom
 msgid "Use flat automatic exposure"
@@ -5129,6 +5243,10 @@ msgstr "Po výzvě ručně přeložte montáž pouze podél osy RA, vždy ve ste
 msgid "When performing autofocus from a sequence"
 msgstr "Automatické ostření ze sekvence"
 
+#: u_translation.rswhenreadycli
+msgid "When ready click"
+msgstr ""
+
 #: u_translation.rswidth
 msgid "Width"
 msgstr "Šířka"
@@ -5145,13 +5263,13 @@ msgstr "Poryv větru"
 msgid "Wind speed"
 msgstr "Rychlost větru"
 
+#: u_translation.rswithoutpolev
+msgid "without pole visibility"
+msgstr ""
+
 #: u_translation.rsyes
 msgid "Yes"
 msgstr "Ano"
-
-#: u_translation.rsyoucancloset
-msgid "You can close this window after you finish to move the mount polar axis."
-msgstr "Po dokončení můžete toto okno zavřít, abyste překlopili polární osu montáže."
 
 #: u_translation.rsyoucansetthe
 #, object-pascal-format
