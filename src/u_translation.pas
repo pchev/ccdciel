@@ -1355,15 +1355,15 @@ resourcestring
   rsMeasuringFir = 'Measuring first position';
   rsMovingToSeco = 'Moving to second position';
   rsMeasuringSec = 'Measuring second position';
-  rsIfYouWantYou = 'If you want you can now manually slew to a bright star and reduce the exposure time.';
-  rsForThatClick = 'For that click the Move button now.';
-  rsOtherwiseCli = 'Otherwise click Next.';
-  rsMoveTheTeles = 'Move the telescope to the new position.';
+  rsInTheNextScr = 'In the next screen you have to move the triangle such that the green circle is marking a bright star or object.';
+  rsIfNoBrightSt = 'If no bright star is visible click MOVE.';
+  rsIfaBrightsta = 'If a bright star is visible click NEXT.';
+  rsMoveTheTeles = 'Slew the telescope to the nearby position with a bright star.';
   rsWhenReadyCli = 'When ready click';
   rsMeasuringThe = 'Measuring the new position';
   rsSelectOneOfT = 'Select one of the measurement options:';
-  rsOneOfThePred = 'one of the predefined sky area';
-  rsOrCustomToDe = 'or Custom to define the telescope positions';
+  rsPredefined = 'Predefined (recommended)';
+  rsCustom = 'Custom';
 
 implementation
 

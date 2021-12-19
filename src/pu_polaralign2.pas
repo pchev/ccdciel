@@ -736,10 +736,10 @@ begin
     if FAborted then exit;
     PageControl1.ActivePage:=TabSheetMove1;
     Instruction.Clear;
-    Instruction.Lines.Add(rsIfYouWantYou);
-    Instruction.Lines.Add(rsForThatClick);
+    Instruction.Lines.Add(rsInTheNextScr);
+    Instruction.Lines.Add(rsIfaBrightsta);
     Instruction.Lines.Add('');
-    Instruction.Lines.Add(rsOtherwiseCli);
+    Instruction.Lines.Add(rsIfNoBrightSt);
     StartImageLoop;
 
  except
@@ -786,7 +786,7 @@ procedure Tf_polaralign2.ButtonMoveClick(Sender: TObject);
 begin
   Instruction.Clear;
   Instruction.Lines.Add(rsMoveTheTeles);
-  Instruction.Lines.Add(rsWhenReadyCli+': '+rsOK);
+  Instruction.Lines.Add(rsWhenReadyCli+': '+rsContinue);
   Instruction.Lines.Add('');
   PageControl1.ActivePage:=TabSheetMove2;
   PolarAlignmentOverlay:=false;
@@ -809,8 +809,8 @@ begin
   Instruction.Clear;
   Instruction.Lines.Add(rsSelectOneOfT);
   Instruction.Lines.Add('');
-  Instruction.Lines.Add(' - '+rsOneOfThePred);
-  Instruction.Lines.Add(' - '+rsOrCustomToDe);
+  Instruction.Lines.Add(' - '+rsPredefined);
+  Instruction.Lines.Add(' - '+rsCustom);
   Instruction.Lines.Add('');
   Instruction.Lines.Add(rsWhenReadyCli+': '+rsStart);
   PageControl1.ActivePage:=TabSheetStart;
