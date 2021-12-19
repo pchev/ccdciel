@@ -705,10 +705,10 @@ begin
   // draw offset overlay
   PolarAlignmentOverlay:=true;
   PolarAlignmentLock:=false;
-  Memo1.Lines.Add(rsMoveTheGreen);
-  Memo1.Lines.Add(rsThenAdjustTh);
+  Memo1.Lines.Add(rsMoveTheTrian);
+  Memo1.Lines.Add(rsAdjustTheMou);
   Memo1.Lines.Add(rsForGuidanceA);
-  Memo1.Lines.Add(rsYouCanCloseT);
+  Memo1.Lines.Add(rsCloseTheWind);
   {$ifdef test_polaralignment}
   Tf_main(Application.MainForm).Image1.Invalidate;
   exit;

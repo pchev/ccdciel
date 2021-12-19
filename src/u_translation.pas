@@ -1140,9 +1140,9 @@ resourcestring
   rsVerticalCorr = 'Vertical correction :';
   rsMoveDownBy = 'move Down by ';
   rsMoveUpBy = 'move Up by ';
-  rsMoveTheGreen = 'Move the green circle to a star using the mouse.';
-  rsThenAdjustTh = 'Then adjust the mount polar adjustment knob to move the star to the pink circle at the other extremity of the line.';
-  rsYouCanCloseT = 'You can close this window after you finish to move the mount polar axis.';
+  rsMoveTheTrian = 'Move the triangle with the mouse (left button down) such that the green circle is marking a bright star.';
+  rsAdjustTheMou = 'Adjust the mount in azimuth and elevation such that the star moves from the green circle to the pink circle.';
+  rsCloseTheWind = 'Close the window when ready.';
   rsPolarAlignme = 'Polar alignment';
   rsMakeAFirstPo = 'Adjust the mount RA axis manually to point to the pole the best as possible.%s'+
                    'Slew the telescope to point near the pole at a declination about 89 to 90 degrees with counterweight down.%s'+

@@ -769,10 +769,10 @@ begin
   txt:=txt+DEToStrShort(rad2deg*abs(corr_alt),0);
   Instruction.Lines.Add(txt);
   Instruction.Lines.Add('');
-  Instruction.Lines.Add(rsMoveTheGreen);
-  Instruction.Lines.Add(rsThenAdjustTh);
+  Instruction.Lines.Add(rsMoveTheTrian);
+  Instruction.Lines.Add(rsAdjustTheMou);
   Instruction.Lines.Add(rsForGuidanceA);
-  Instruction.Lines.Add(rsYouCanCloseT);
+  Instruction.Lines.Add(rsCloseTheWind);
   PageControl1.ActivePage:=TabSheetAdjust;
   FInProgress:=false;
 end;
