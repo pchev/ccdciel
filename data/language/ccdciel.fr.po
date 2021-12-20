@@ -6,14 +6,14 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ccdciel\n"
 "Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
-"POT-Creation-Date: 2021-12-20 13:39+0000\n"
-"PO-Revision-Date: 2021-12-20 13:43+0000\n"
+"POT-Creation-Date: 2021-12-20 14:12+0000\n"
+"PO-Revision-Date: 2021-12-20 14:26+0000\n"
 "Last-Translator: Patrick Chevalley <Unknown>\n"
 "Language-Team: French <fr@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2021-12-20 13:44+0000\n"
+"X-Launchpad-Export-Date: 2021-12-20 14:28+0000\n"
 "X-Generator: Launchpad (build adb364d6a74a28e7b95d51cd30446ec16160de6c)\n"
 
 #: u_translation.rs2d
@@ -971,7 +971,7 @@ msgstr "Exposition de contrôle"
 
 #: u_translation.rscooldownwhen
 msgid "Cool down when camera is connected"
-msgstr "Refroidit la caméra lorsqu'elle est connectée"
+msgstr "Refroidit la caméra lors de la connection"
 
 #: u_translation.rscooler
 msgid "Cooler"
@@ -2182,7 +2182,7 @@ msgstr "(limité à 1.5x la précision de pointage)"
 
 #: u_translation.rslimittempera
 msgid "Limit temperature change"
-msgstr "Limite le changement de température"
+msgstr "Limite le changement"
 
 #: u_translation.rsload
 msgid "Load"
@@ -2295,7 +2295,7 @@ msgstr "Nombre maximum de sources"
 
 #: u_translation.rsmaximumtempe
 msgid "Maximum temperature change "
-msgstr "Changement maximum de température "
+msgstr "Changement maximum "
 
 #: u_translation.rsmaxoffset
 msgid "Max offset"
@@ -3265,6 +3265,10 @@ msgstr "Protocole"
 #: u_translation.rspulseduratio
 msgid "Pulse duration"
 msgstr "Durée d'impulsion"
+
+#: u_translation.rspythoncomman
+msgid "Python command"
+msgstr "Commande Python"
 
 #: u_translation.rsquality
 msgid "Quality:"
@@ -4244,6 +4248,10 @@ msgstr "empilement de %s images"
 #: u_translation.rsstar
 msgid "Star"
 msgstr "Étoile"
+
+#: u_translation.rsstaralignmen
+msgid "Star alignment"
+msgstr "Registration stellaire"
 
 #: u_translation.rsstardatabase
 msgid "Star database is empty, check path to star database files!!"

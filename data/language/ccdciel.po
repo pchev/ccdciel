@@ -5102,3 +5102,11 @@ msgstr ""
 msgid "Restart delay"
 msgstr ""
 
+#: u_translation:rspythoncomman
+msgid "Python command"
+msgstr ""
+
+#: u_translation:rsstaralignmen
+msgid "Star alignment"
+msgstr ""
+
