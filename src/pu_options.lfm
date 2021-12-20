@@ -1439,7 +1439,7 @@ object f_option: Tf_option
             ChildSizing.ShrinkVertical = crsScaleChilds
             ChildSizing.Layout = cclLeftToRightThenTopToBottom
             ChildSizing.ControlsPerLine = 2
-            ClientHeight = 28
+            ClientHeight = 10
             ClientWidth = 408
             Columns = 2
             ItemIndex = 0
@@ -2356,8 +2356,8 @@ object f_option: Tf_option
             TabOrder = 0
             ColWidths = (
               123
-              194
-              194
+              201
+              202
             )
           end
         end
@@ -4427,8 +4427,8 @@ object f_option: Tf_option
             Left = 208
             Height = 19
             Top = 13
-            Width = 15
-            Caption = 'px'
+            Width = 29
+            Caption = 'pixel'
             ParentFont = False
           end
           object Label920: TLabel
@@ -4495,7 +4495,7 @@ object f_option: Tf_option
           object BtnMaxDriftDisable: TButton
             AnchorSideTop.Control = GuideDriftMax
             AnchorSideTop.Side = asrCenter
-            Left = 248
+            Left = 360
             Height = 25
             Top = 10
             Width = 75
@@ -4910,7 +4910,7 @@ object f_option: Tf_option
                   MinSize = 101
                   MaxSize = 202
                   Title.Caption = 'Action'
-                  Width = 478
+                  Width = 480
                 end>
               DefaultColWidth = 51
               Options = [goFixedVertLine, goFixedHorzLine, goVertLine, goHorzLine, goRowMoving, goEditing, goAlwaysShowEditor, goSmoothScroll, goFixedRowNumbering]
@@ -4919,7 +4919,7 @@ object f_option: Tf_option
               TabOrder = 0
               ColWidths = (
                 51
-                478
+                480
               )
             end
           end
@@ -4949,7 +4949,7 @@ object f_option: Tf_option
                   MinSize = 101
                   MaxSize = 202
                   Title.Caption = 'Action'
-                  Width = 478
+                  Width = 480
                 end>
               DefaultColWidth = 51
               Options = [goFixedVertLine, goFixedHorzLine, goVertLine, goHorzLine, goRowMoving, goEditing, goAlwaysShowEditor, goSmoothScroll, goFixedRowNumbering]
@@ -4958,7 +4958,7 @@ object f_option: Tf_option
               TabOrder = 0
               ColWidths = (
                 51
-                478
+                480
               )
             end
           end

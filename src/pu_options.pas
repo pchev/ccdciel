@@ -968,7 +968,7 @@ begin
   Label63.Caption := rsSigma;
   GroupBox33.Caption:=rsImageCursor;
   Label153.Caption:=rsSelectTheCur;
-  Label153.Caption:='('+rsTheProgramNe+')';
+  Label154.Caption:='('+rsTheProgramNe+')';
   ImageCursor.Items[0]:=rsSmallCross;
   ImageCursor.Items[1]:=rsBigCross;
   ImageCursor.Items[2]:=rsSystemCross;
@@ -976,7 +976,7 @@ begin
   StackShow.Caption := rsShowStacking;
   SaveStack.Caption := rsSaveIndividu;
   StackOperation.Items[0]:=rsAddImages;
-  StackOperation.Items[0]:=rsMeanOfImages;
+  StackOperation.Items[1]:=rsMeanOfImages;
   GroupBox19.Caption := rsClippingIndi;
   Label37.Caption := rsShadowADU;
   Label100.Caption := rsHighlightADU;
@@ -1156,11 +1156,19 @@ begin
   Label71.Caption := rsRestartAfter;
   Label72.Caption := rsS;
   Label73.Caption := rsAbortAfter;
+  BtnDisableStarLost.Caption:=rsDisable;
   Label16.Caption := rsServer;
   Label17.Caption := rsPort;
   Label89.Caption := rsServer;
   Label90.Caption := rsPort;
   StartPHD.Caption := Format(rsStartS, ['PHD2']);
+  GroupBoxDrift.Caption:=rsGuidingDrift;
+  Label1119.Caption:=rsPixel;
+  Label920.Caption:=rsMaxGuideDrif;
+  GuideDriftCancelExposure.Caption:=rsCancelAndRes;
+  Label143.Caption:=rsRestartDelay;
+  Label144.Caption:=rsS;
+  BtnMaxDriftDisable.Caption:=rsDisable;
   PagePlanetarium.Caption := rsPlanetarium;
   PlanetariumBox.Caption := rsSoftware;
   CheckBoxLocalCdc.Caption := rsSkychartOnLo;
