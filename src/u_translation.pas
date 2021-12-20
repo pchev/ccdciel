@@ -1375,7 +1375,7 @@ resourcestring
   rsAddImages = 'Add images';
   rsMeanOfImages = 'Mean of images';
   rsSpectralProf = 'Spectral profile';
-  rsMaxGuideDrif = 'Max guide drift';
+  rsMaximumDrift = 'Maximum drift';
   rsGuidingDrift = 'Guiding drift control';
   rsCancelAndRes = 'Cancel and restart exposure';
   rsRestartDelay = 'Restart delay';

@@ -2,14 +2,14 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ccdciel\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-12-20 12:54+0000\n"
+"POT-Creation-Date: 2021-12-20 13:39+0000\n"
 "PO-Revision-Date: 2021-11-03 10:17+0000\n"
 "Last-Translator: Stanislav Holub <Unknown>\n"
 "Language-Team: Czech <cz@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2021-12-20 13:04+0000\n"
+"X-Launchpad-Export-Date: 2021-12-20 13:44+0000\n"
 "X-Generator: Launchpad (build adb364d6a74a28e7b95d51cd30446ec16160de6c)\n"
 "Language: cs\n"
 
@@ -600,6 +600,10 @@ msgstr "Kamera nebo zaostřovač neřipojeny"
 #: u_translation.rscancel
 msgid "Cancel"
 msgstr "Zrušit"
+
+#: u_translation.rscancelandres
+msgid "Cancel and restart exposure"
+msgstr ""
 
 #: u_translation.rscancelexposu
 msgid "Cancel exposure"
@@ -1898,6 +1902,10 @@ msgstr "Naváděcí senzor;"
 msgid "%s guiding"
 msgstr "%s navádění"
 
+#: u_translation.rsguidingdrift
+msgid "Guiding drift control"
+msgstr ""
+
 #: u_translation.rshalt
 msgid "Halt"
 msgstr "Stop"
@@ -2263,6 +2271,10 @@ msgstr "Maximální ADU"
 #: u_translation.rsmaximumdefoc
 msgid "Maximum defocused HFD the focuser can safely reach"
 msgstr "Maximální rozostření HFD, na které může zaostřovač dosáhnout"
+
+#: u_translation.rsmaximumdrift
+msgid "Maximum drift"
+msgstr ""
 
 #: u_translation.rsmaximuminten
 msgid "Maximum intensity"
@@ -3495,6 +3507,10 @@ msgstr "Restartovat po dobrém počasí"
 #: u_translation.rsrestartautog
 msgid "Restart autoguider"
 msgstr "Restart automatického navádění"
+
+#: u_translation.rsrestartdelay
+msgid "Restart delay"
+msgstr ""
 
 #: u_translation.rsrestartexpos
 msgid "Restart exposure"

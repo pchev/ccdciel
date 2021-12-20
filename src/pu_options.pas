@@ -1164,7 +1164,7 @@ begin
   StartPHD.Caption := Format(rsStartS, ['PHD2']);
   GroupBoxDrift.Caption:=rsGuidingDrift;
   Label1119.Caption:=rsPixel;
-  Label920.Caption:=rsMaxGuideDrif;
+  Label920.Caption:=rsMaximumDrift;
   GuideDriftCancelExposure.Caption:=rsCancelAndRes;
   Label143.Caption:=rsRestartDelay;
   Label144.Caption:=rsS;

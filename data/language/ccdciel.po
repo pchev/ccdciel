@@ -5086,3 +5086,19 @@ msgstr ""
 msgid "Spectral profile"
 msgstr ""
 
+#: u_translation:rsmaximumdrift
+msgid "Maximum drift"
+msgstr ""
+
+#: u_translation:rsguidingdrift
+msgid "Guiding drift control"
+msgstr ""
+
+#: u_translation:rscancelandres
+msgid "Cancel and restart exposure"
+msgstr ""
+
+#: u_translation:rsrestartdelay
+msgid "Restart delay"
+msgstr ""
+
