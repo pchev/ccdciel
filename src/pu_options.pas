@@ -893,6 +893,8 @@ begin
   ButtonHelp.Caption:=rsHelp;
   PageFile.Caption := rsFiles;
   Label1.Caption := rsCaptureFolde;
+  SeqDirDefault.Caption := rsDefault;
+  Label152.Caption:=rsSequenceFold;
   Label99.Caption := rsTemporaryFol;
   TmpDirDefault.Caption := rsDefault;
   Label150.Caption := rsTCPIPServerP;
@@ -964,9 +966,17 @@ begin
   GroupBox10.Caption := rsBadPixelsDet;
   Label62.Caption := rsBadPixelThre;
   Label63.Caption := rsSigma;
+  GroupBox33.Caption:=rsImageCursor;
+  Label153.Caption:=rsSelectTheCur;
+  Label153.Caption:='('+rsTheProgramNe+')';
+  ImageCursor.Items[0]:=rsSmallCross;
+  ImageCursor.Items[1]:=rsBigCross;
+  ImageCursor.Items[2]:=rsSystemCross;
   StackGroup.Caption := rsShortExposur;
   StackShow.Caption := rsShowStacking;
   SaveStack.Caption := rsSaveIndividu;
+  StackOperation.Items[0]:=rsAddImages;
+  StackOperation.Items[0]:=rsMeanOfImages;
   GroupBox19.Caption := rsClippingIndi;
   Label37.Caption := rsShadowADU;
   Label100.Caption := rsHighlightADU;
@@ -1122,6 +1132,7 @@ begin
   Label43.Caption := rsMinutes;
   Label59.Caption := rsNoFlipUntilP;
   Label60.Caption := rsMinutes;
+  WantSetPierSide.Caption:=Format(rsSetMountIfAv, ['SideOfPier']);
   MeridianFlipAutofocus.Caption := rsAutofocusAft;
   MeridianFlipCalibrate.Caption := rsCalibrateAut;
   MeridianFlipStopSlaving.Caption:=rsSuspendDomeS;

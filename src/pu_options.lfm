@@ -2356,8 +2356,8 @@ object f_option: Tf_option
             TabOrder = 0
             ColWidths = (
               123
-              201
-              202
+              194
+              194
             )
           end
         end
@@ -3478,14 +3478,14 @@ object f_option: Tf_option
           end
           object Page2: TPage
             object elbrus: TGroupBox
-              Left = 0
-              Height = 345
-              Top = 0
-              Width = 520
+              Left = 1
+              Height = 351
+              Top = 1
+              Width = 535
               Align = alClient
               Caption = 'Elbrus Star Locator'
-              ClientHeight = 325
-              ClientWidth = 518
+              ClientHeight = 331
+              ClientWidth = 533
               ParentFont = False
               TabOrder = 0
               object ElbrusFolder: TEdit
@@ -3538,10 +3538,10 @@ object f_option: Tf_option
           end
           object Page3: TPage
             object Label44: TLabel
-              Left = 0
-              Height = 337
-              Top = 8
-              Width = 520
+              Left = 1
+              Height = 343
+              Top = 9
+              Width = 535
               Align = alClient
               AutoSize = False
               BorderSpacing.Top = 8
@@ -3552,14 +3552,14 @@ object f_option: Tf_option
           end
           object Page4: TPage
             object platesolve: TGroupBox
-              Left = 0
-              Height = 345
-              Top = 0
-              Width = 520
+              Left = 1
+              Height = 351
+              Top = 1
+              Width = 535
               Align = alClient
               Caption = 'PlateSolve 2'
-              ClientHeight = 325
-              ClientWidth = 518
+              ClientHeight = 331
+              ClientWidth = 533
               ParentFont = False
               TabOrder = 0
               object Label78: TLabel
@@ -3613,14 +3613,14 @@ object f_option: Tf_option
           end
           object Page5: TPage
             object astap: TGroupBox
-              Left = 0
-              Height = 345
-              Top = 0
-              Width = 520
+              Left = 1
+              Height = 351
+              Top = 1
+              Width = 535
               Align = alClient
               Caption = 'ASTAP'
-              ClientHeight = 325
-              ClientWidth = 518
+              ClientHeight = 331
+              ClientWidth = 533
               ParentFont = False
               TabOrder = 0
               object Label105: TLabel
@@ -4317,14 +4317,14 @@ object f_option: Tf_option
           end
           object PageLinGuider: TPage
             object GroupBox17: TGroupBox
-              Left = 0
-              Height = 90
-              Top = 0
-              Width = 526
+              Left = 1
+              Height = 86
+              Top = 1
+              Width = 535
               Align = alClient
               Caption = 'Lin_Guider'
-              ClientHeight = 70
-              ClientWidth = 524
+              ClientHeight = 66
+              ClientWidth = 533
               ParentFont = False
               TabOrder = 0
               object LinGuiderSocket: TEdit
@@ -4398,10 +4398,10 @@ object f_option: Tf_option
           end
           object PageDitherOnly: TPage
             object Label120: TLabel
-              Left = 0
-              Height = 108
-              Top = 0
-              Width = 489
+              Left = 1
+              Height = 86
+              Top = 1
+              Width = 535
               Align = alClient
               AutoSize = False
               Caption = 'Set the mean dithering pulse duration in seconds '
@@ -6244,7 +6244,7 @@ object f_option: Tf_option
           object GroupBox16: TGroupBox
             Left = 0
             Height = 88
-            Top = 52
+            Top = 0
             Width = 533
             Align = alTop
             Caption = 'Focuser temperature compensation'
@@ -6365,7 +6365,7 @@ object f_option: Tf_option
           object Label148: TLabel
             Left = 6
             Height = 40
-            Top = 6
+            Top = 94
             Width = 501
             Align = alTop
             AutoSize = False

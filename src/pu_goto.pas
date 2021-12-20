@@ -101,6 +101,7 @@ begin
   Label5.Caption:=rsElevation;
   Label7.Caption:=rsImageScale;
   Label8.Caption:=ssec+'/'+rsPixel;
+  GotoAstrometry.Caption:=rsUseAstrometr;
   msginfo.Caption:='';
   BtnCompute.Caption:=rsCompute;
   if f_compute<>nil then f_compute.Setlang;

@@ -1364,6 +1364,17 @@ resourcestring
   rsSelectOneOfT = 'Select one of the measurement options:';
   rsPredefined = 'Predefined (recommended)';
   rsCustom = 'Custom';
+  rsSequenceFold = 'Sequence folder';
+  rsUseAstrometr = 'Use astrometry to refine the position';
+  rsSetMountIfAv = 'Set mount %s if available';
+  rsImageCursor = 'Image cursor';
+  rsSelectTheCur = 'Select the cursor to use ';
+  rsSmallCross = 'Small cross';
+  rsBigCross = 'Big cross';
+  rsSystemCross = 'System cross';
+  rsAddImages = 'Add images';
+  rsMeanOfImages = 'Mean of images';
+  rsSpectralProf = 'Spectral profile';
 
 implementation
 

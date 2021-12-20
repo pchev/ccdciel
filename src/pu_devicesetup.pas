@@ -810,6 +810,16 @@ begin
   Label1.Caption:=rsTimeout;
   ApplyIndi.Caption:=rsApplyToAllDe;
   BtnDiscover.Caption:=rsDiscover;
+  BtnDiscover1.Caption:=rsDiscover;
+  BtnDiscover2.Caption:=rsDiscover;
+  BtnDiscover3.Caption:=rsDiscover;
+  BtnDiscover4.Caption:=rsDiscover;
+  BtnDiscover5.Caption:=rsDiscover;
+  BtnDiscover6.Caption:=rsDiscover;
+  BtnDiscover7.Caption:=rsDiscover;
+  BtnDiscover8.Caption:=rsDiscover;
+  BtnDiscover9.Caption:=rsDiscover;
+  BtnDiscover10.Caption:=rsDiscover;
   Label26.Caption:=rsDiscoveryPor;
   Label70.Caption:=rsProtocol;
   Label71.Caption:=rsServer;

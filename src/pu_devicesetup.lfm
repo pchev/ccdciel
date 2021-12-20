@@ -3821,17 +3821,17 @@ object f_setup: Tf_setup
           OnChange = PageControlSafetyChange
           object SafetyIndi: TTabSheet
             Caption = 'SafetyIndi'
-            ClientHeight = 410
+            ClientHeight = 383
             ClientWidth = 477
             ParentFont = False
             object PanelSafetyIndi: TPanel
               Left = 0
-              Height = 410
+              Height = 383
               Top = 0
               Width = 477
               Align = alClient
               BevelOuter = bvNone
-              ClientHeight = 410
+              ClientHeight = 383
               ClientWidth = 477
               ParentFont = False
               TabOrder = 0
@@ -3945,7 +3945,7 @@ object f_setup: Tf_setup
           end
           object SafetyAscom: TTabSheet
             Caption = 'SafetyAscom'
-            ClientHeight = 410
+            ClientHeight = 383
             ClientWidth = 477
             ParentFont = False
             object PanelSafetyAscom: TPanel
@@ -3954,8 +3954,8 @@ object f_setup: Tf_setup
               Top = 16
               Width = 368
               BevelOuter = bvNone
-              ClientHeight = 139
-              ClientWidth = 364
+              ClientHeight = 143
+              ClientWidth = 368
               ParentFont = False
               TabOrder = 0
               object BtnChooseSafety: TButton
@@ -4006,17 +4006,17 @@ object f_setup: Tf_setup
           end
           object SafetyAscomRest: TTabSheet
             Caption = 'SafetyAscomRest'
-            ClientHeight = 410
+            ClientHeight = 383
             ClientWidth = 477
             ParentFont = False
             object Panel9: TPanel
               Left = 0
-              Height = 410
+              Height = 383
               Top = 0
               Width = 477
               Align = alClient
               BevelOuter = bvNone
-              ClientHeight = 410
+              ClientHeight = 383
               ClientWidth = 477
               ParentFont = False
               TabOrder = 0
@@ -4880,17 +4880,17 @@ object f_setup: Tf_setup
           OnChange = PageControlCoverChange
           object CoverIndi: TTabSheet
             Caption = 'CoverIndi'
-            ClientHeight = 410
+            ClientHeight = 383
             ClientWidth = 477
             ParentFont = False
             object PanelCoverIndi: TPanel
               Left = 0
-              Height = 410
+              Height = 383
               Top = 0
               Width = 477
               Align = alClient
               BevelOuter = bvNone
-              ClientHeight = 410
+              ClientHeight = 383
               ClientWidth = 477
               ParentFont = False
               TabOrder = 0
@@ -5004,7 +5004,7 @@ object f_setup: Tf_setup
           end
           object CoverAscom: TTabSheet
             Caption = 'CoverAscom'
-            ClientHeight = 410
+            ClientHeight = 383
             ClientWidth = 477
             ParentFont = False
             object PanelCoverAscom: TPanel
@@ -5013,8 +5013,8 @@ object f_setup: Tf_setup
               Top = 16
               Width = 368
               BevelOuter = bvNone
-              ClientHeight = 139
-              ClientWidth = 364
+              ClientHeight = 143
+              ClientWidth = 368
               ParentFont = False
               TabOrder = 0
               object BtnChooseCover: TButton
@@ -5065,17 +5065,17 @@ object f_setup: Tf_setup
           end
           object CoverAscomRest: TTabSheet
             Caption = 'CoverAscomRest'
-            ClientHeight = 410
+            ClientHeight = 383
             ClientWidth = 477
             ParentFont = False
             object Panel38: TPanel
               Left = 0
-              Height = 410
+              Height = 383
               Top = 0
               Width = 477
               Align = alClient
               BevelOuter = bvNone
-              ClientHeight = 410
+              ClientHeight = 383
               ClientWidth = 477
               ParentFont = False
               TabOrder = 0

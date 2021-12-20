@@ -263,6 +263,7 @@ begin
   ChkFocus.Caption:=rsManualFocusA;
   ChkAutofocus.Caption:=rsAutofocus;
   BtnViewAutofocus.Caption:=rsViewLastAuto;
+  BtnSpectraProfile.Caption:=rsSpectralProf;
   ProfileChart.Hint:=rsTheSelectedS;
   HistoryChart.Hint:=rsHistoryOfThe;
   LabelHFD.Hint:=rsTheHalfFluxD;
