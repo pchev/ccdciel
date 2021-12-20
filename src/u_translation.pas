@@ -1379,6 +1379,8 @@ resourcestring
   rsGuidingDrift = 'Guiding drift control';
   rsCancelAndRes = 'Cancel and restart exposure';
   rsRestartDelay = 'Restart delay';
+  rsPythonComman = 'Python command';
+  rsStarAlignmen = 'Star alignment';
 
 implementation
 

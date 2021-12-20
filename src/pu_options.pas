@@ -899,6 +899,8 @@ begin
   TmpDirDefault.Caption := rsDefault;
   Label150.Caption := rsTCPIPServerP;
   TCPIPportDefault.Caption := rsDefault;
+  Label124.Caption:=rsPythonComman;
+  PythonDefault.Caption:=rsDefault;
   FileOpt.Caption := rsFileNameOpti;
   BtnFileDefault.Caption := rsDefault;
   label123.Caption := rsSeparator;
@@ -975,6 +977,7 @@ begin
   StackGroup.Caption := rsShortExposur;
   StackShow.Caption := rsShowStacking;
   SaveStack.Caption := rsSaveIndividu;
+  StackAlign.Caption:= rsStarAlignmen;
   StackOperation.Items[0]:=rsAddImages;
   StackOperation.Items[1]:=rsMeanOfImages;
   GroupBox19.Caption := rsClippingIndi;
