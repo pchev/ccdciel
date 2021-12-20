@@ -6,14 +6,14 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ccdciel\n"
 "Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
-"POT-Creation-Date: 2021-12-19 16:54+0000\n"
+"POT-Creation-Date: 2021-12-20 12:54+0000\n"
 "PO-Revision-Date: 2021-09-26 07:42+0000\n"
 "Last-Translator: Thomas <email@starhopper.de>\n"
 "Language-Team: German <de@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2021-12-19 17:36+0000\n"
+"X-Launchpad-Export-Date: 2021-12-20 13:04+0000\n"
 "X-Generator: Launchpad (build adb364d6a74a28e7b95d51cd30446ec16160de6c)\n"
 
 #: u_translation.rs2d
@@ -73,6 +73,10 @@ msgstr "Hinzufügen"
 #: u_translation.rsaddfitskeywo
 msgid "Add FITS keyword for DSLR EXIF tags"
 msgstr "FITS Schlüsselwort für DSLR EXIF tags hinzufügen"
+
+#: u_translation.rsaddimages
+msgid "Add images"
+msgstr ""
 
 #: u_translation.rsaddstep
 msgid "Add step"
@@ -513,6 +517,10 @@ msgstr "Stellen Sie sicher, dass der Computer die lokale Zeitzone verwendet und 
 #: u_translation.rsbesuretoconf
 msgid "Be sure to configure the camera connection."
 msgstr "Stellen Sie sicher, dass Sie die Kameraverbindung konfigurieren."
+
+#: u_translation.rsbigcross
+msgid "Big cross"
+msgstr ""
 
 #: u_translation.rsbin
 msgid "Bin"
@@ -1965,6 +1973,10 @@ msgstr "Bild"
 msgid "Image cleanup"
 msgstr "Einblendungen löschen"
 
+#: u_translation.rsimagecursor
+msgid "Image cursor"
+msgstr ""
+
 #: u_translation.rsimagedebayer
 msgid "Image Debayered"
 msgstr "Bild Debayered"
@@ -2280,6 +2292,10 @@ msgstr "Max Offset"
 #: u_translation.rsmean
 msgid "Mean:"
 msgstr "Mittel:"
+
+#: u_translation.rsmeanofimages
+msgid "Mean of images"
+msgstr ""
 
 #: u_translation.rsmeasureen
 msgid "Measure in the East and North"
@@ -3750,6 +3766,10 @@ msgstr "Wählen Sie zuerst einen Stern aus"
 msgid "Select one of the measurement options:"
 msgstr ""
 
+#: u_translation.rsselectthecur
+msgid "Select the cursor to use "
+msgstr ""
+
 #: u_translation.rsselectthefil
 msgid "Select the file to delete"
 msgstr "Zu löschende Datei auswählen"
@@ -3821,6 +3841,10 @@ msgstr "Sequenz %s vor Start abgebrochen"
 #, object-pascal-format
 msgid "Sequence %s finished."
 msgstr "Sequenz %s fertig."
+
+#: u_translation.rssequencefold
+msgid "Sequence folder"
+msgstr ""
 
 #: u_translation.rssequenceigno
 #, object-pascal-format
@@ -3916,6 +3940,11 @@ msgstr "Bildtyp einstellen %s"
 #: u_translation.rssetmagnitude
 msgid "Set magnitude"
 msgstr "Sternhelligkeit einstellen"
+
+#: u_translation.rssetmountifav
+#, object-pascal-format
+msgid "Set mount %s if available"
+msgstr ""
 
 #: u_translation.rssetmountsite
 msgid "Set mount site long/lat from configuration"
@@ -4123,6 +4152,10 @@ msgstr "Steigung"
 msgid "Slot"
 msgstr "Filterposition"
 
+#: u_translation.rssmallcross
+msgid "Small cross"
+msgstr ""
+
 #: u_translation.rssmtpserverad
 msgid "SMTP server address"
 msgstr "SMTP Server Adresse"
@@ -4152,6 +4185,10 @@ msgstr "Einige vordefinierte Geräte sind nicht verbunden"
 #: u_translation.rssouth
 msgid "South"
 msgstr "Süd"
+
+#: u_translation.rsspectralprof
+msgid "Spectral profile"
+msgstr ""
 
 #: u_translation.rsspeed
 msgid "Speed"
@@ -4499,6 +4536,10 @@ msgstr "Schalter"
 #, object-pascal-format
 msgid "Sync to %s %s/%s"
 msgstr "Synchronisiere auf %s %s/%s"
+
+#: u_translation.rssystemcross
+msgid "System cross"
+msgstr ""
 
 #: u_translation.rssystemisunde
 msgid "System is undersampled, accept 1 pixel star"
@@ -4969,6 +5010,10 @@ msgstr "Als Referenzstern verwenden"
 #, object-pascal-format
 msgid "Use astrometry to%srefine the position"
 msgstr "Astrometrie zur%sPositionsverbesserung nutzen"
+
+#: u_translation.rsuseastrometr
+msgid "Use astrometry to refine the position"
+msgstr ""
 
 #: u_translation.rsusecovercali
 msgid "Use Cover calibrator"

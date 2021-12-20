@@ -6,14 +6,14 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ccdciel\n"
 "Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
-"POT-Creation-Date: 2021-12-19 16:54+0000\n"
-"PO-Revision-Date: 2021-12-19 17:34+0000\n"
+"POT-Creation-Date: 2021-12-20 12:54+0000\n"
+"PO-Revision-Date: 2021-12-20 13:02+0000\n"
 "Last-Translator: Patrick Chevalley <Unknown>\n"
 "Language-Team: French <fr@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2021-12-19 17:36+0000\n"
+"X-Launchpad-Export-Date: 2021-12-20 13:04+0000\n"
 "X-Generator: Launchpad (build adb364d6a74a28e7b95d51cd30446ec16160de6c)\n"
 
 #: u_translation.rs2d
@@ -73,6 +73,10 @@ msgstr "Ajouter"
 #: u_translation.rsaddfitskeywo
 msgid "Add FITS keyword for DSLR EXIF tags"
 msgstr "Ajoute des mots clés FITS pour les tags EXIF des APN"
+
+#: u_translation.rsaddimages
+msgid "Add images"
+msgstr "Addition des images"
 
 #: u_translation.rsaddstep
 msgid "Add step"
@@ -513,6 +517,10 @@ msgstr "Assurez-vous que l'ordinateur utilise le fuseau horaire local et que l'e
 #: u_translation.rsbesuretoconf
 msgid "Be sure to configure the camera connection."
 msgstr "Assurez-vous de configurer la connexion de la caméra."
+
+#: u_translation.rsbigcross
+msgid "Big cross"
+msgstr "Grande croix"
 
 #: u_translation.rsbin
 msgid "Bin"
@@ -1965,6 +1973,10 @@ msgstr "Image"
 msgid "Image cleanup"
 msgstr "Nettoyage de l'image"
 
+#: u_translation.rsimagecursor
+msgid "Image cursor"
+msgstr "Curseur de l'image"
+
 #: u_translation.rsimagedebayer
 msgid "Image Debayered"
 msgstr "Image Debayerisée"
@@ -2280,6 +2292,10 @@ msgstr "Décalage max."
 #: u_translation.rsmean
 msgid "Mean:"
 msgstr "Moyenne:"
+
+#: u_translation.rsmeanofimages
+msgid "Mean of images"
+msgstr "Moyenne des images"
 
 #: u_translation.rsmeasureen
 msgid "Measure in the East and North"
@@ -2606,7 +2622,7 @@ msgstr "Aucune étoile de référence trouvée pour l'empilement"
 
 #: u_translation.rsnoalpacaserv
 msgid "No Alpaca server found"
-msgstr "Aucun server ALpaca trouvé"
+msgstr "Aucun server Alpaca trouvé"
 
 #: u_translation.rsnoastronomic
 msgid "No astronomical twilight at this location today"
@@ -3750,6 +3766,10 @@ msgstr "Choisir d'abord une étoile!"
 msgid "Select one of the measurement options:"
 msgstr "Choisir une des options de mesure:"
 
+#: u_translation.rsselectthecur
+msgid "Select the cursor to use "
+msgstr "Choisir le curseur "
+
 #: u_translation.rsselectthefil
 msgid "Select the file to delete"
 msgstr "Sélection du fichier à supprimer"
@@ -3821,6 +3841,10 @@ msgstr "Séquence %s annulée avant le démarrage"
 #, object-pascal-format
 msgid "Sequence %s finished."
 msgstr "La séquence %s est terminée."
+
+#: u_translation.rssequencefold
+msgid "Sequence folder"
+msgstr "Dossier des séquences"
 
 #: u_translation.rssequenceigno
 #, object-pascal-format
@@ -3916,6 +3940,11 @@ msgstr "Règle le type d'image à %s"
 #: u_translation.rssetmagnitude
 msgid "Set magnitude"
 msgstr "Définir la magnitude"
+
+#: u_translation.rssetmountifav
+#, object-pascal-format
+msgid "Set mount %s if available"
+msgstr "Utilise %s si disponible"
 
 #: u_translation.rssetmountsite
 msgid "Set mount site long/lat from configuration"
@@ -4123,6 +4152,10 @@ msgstr "Pente"
 msgid "Slot"
 msgstr "Emplacement"
 
+#: u_translation.rssmallcross
+msgid "Small cross"
+msgstr "Petite croix"
+
 #: u_translation.rssmtpserverad
 msgid "SMTP server address"
 msgstr "Adresse du serveur SMTP"
@@ -4152,6 +4185,10 @@ msgstr "Certains périphériques de la configuration ne sont pas connectés"
 #: u_translation.rssouth
 msgid "South"
 msgstr "Sud"
+
+#: u_translation.rsspectralprof
+msgid "Spectral profile"
+msgstr "Profile spectral"
 
 #: u_translation.rsspeed
 msgid "Speed"
@@ -4499,6 +4536,10 @@ msgstr "Commutateur"
 #, object-pascal-format
 msgid "Sync to %s %s/%s"
 msgstr "Sync à %s %s %s"
+
+#: u_translation.rssystemcross
+msgid "System cross"
+msgstr "Croix du système"
 
 #: u_translation.rssystemisunde
 msgid "System is undersampled, accept 1 pixel star"
@@ -4969,6 +5010,10 @@ msgstr "Utiliser comme étoile de référence"
 #, object-pascal-format
 msgid "Use astrometry to%srefine the position"
 msgstr "Astrométrie pour%saffiner la position"
+
+#: u_translation.rsuseastrometr
+msgid "Use astrometry to refine the position"
+msgstr "Utilise l'astrométrie pour affiner la posiiton"
 
 #: u_translation.rsusecovercali
 msgid "Use Cover calibrator"

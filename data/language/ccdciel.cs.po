@@ -2,14 +2,14 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ccdciel\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-12-19 16:54+0000\n"
+"POT-Creation-Date: 2021-12-20 12:54+0000\n"
 "PO-Revision-Date: 2021-11-03 10:17+0000\n"
 "Last-Translator: Stanislav Holub <Unknown>\n"
 "Language-Team: Czech <cz@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2021-12-19 17:36+0000\n"
+"X-Launchpad-Export-Date: 2021-12-20 13:04+0000\n"
 "X-Generator: Launchpad (build adb364d6a74a28e7b95d51cd30446ec16160de6c)\n"
 "Language: cs\n"
 
@@ -70,6 +70,10 @@ msgstr "Přidat"
 #: u_translation.rsaddfitskeywo
 msgid "Add FITS keyword for DSLR EXIF tags"
 msgstr "Přidat klíčové slovo FITS pro značky DSLR EXIF"
+
+#: u_translation.rsaddimages
+msgid "Add images"
+msgstr ""
 
 #: u_translation.rsaddstep
 msgid "Add step"
@@ -512,6 +516,10 @@ msgstr "Ujistěte se, že počítač používá místní časové pásmo a umís
 #: u_translation.rsbesuretoconf
 msgid "Be sure to configure the camera connection."
 msgstr "Nezapomeňte nakonfigurovat připojení kamery."
+
+#: u_translation.rsbigcross
+msgid "Big cross"
+msgstr ""
 
 #: u_translation.rsbin
 msgid "Bin"
@@ -1964,6 +1972,10 @@ msgstr "Snímek"
 msgid "Image cleanup"
 msgstr "Vyčistit snímek"
 
+#: u_translation.rsimagecursor
+msgid "Image cursor"
+msgstr ""
+
 #: u_translation.rsimagedebayer
 msgid "Image Debayered"
 msgstr "Obraz Debayered"
@@ -2279,6 +2291,10 @@ msgstr "Max. offset"
 #: u_translation.rsmean
 msgid "Mean:"
 msgstr "Průměr:"
+
+#: u_translation.rsmeanofimages
+msgid "Mean of images"
+msgstr ""
 
 #: u_translation.rsmeasureen
 msgid "Measure in the East and North"
@@ -3749,6 +3765,10 @@ msgstr "Vybbrat hvězdu!"
 msgid "Select one of the measurement options:"
 msgstr ""
 
+#: u_translation.rsselectthecur
+msgid "Select the cursor to use "
+msgstr ""
+
 #: u_translation.rsselectthefil
 msgid "Select the file to delete"
 msgstr "Vybrat soubor k odstranění"
@@ -3820,6 +3840,10 @@ msgstr "Sekvence %s zrušena před začátkem"
 #, object-pascal-format
 msgid "Sequence %s finished."
 msgstr "Sekvence %s dokončena."
+
+#: u_translation.rssequencefold
+msgid "Sequence folder"
+msgstr ""
 
 #: u_translation.rssequenceigno
 #, object-pascal-format
@@ -3915,6 +3939,11 @@ msgstr "Nastavit typ rámce %s"
 #: u_translation.rssetmagnitude
 msgid "Set magnitude"
 msgstr "Nastavit magnitudu"
+
+#: u_translation.rssetmountifav
+#, object-pascal-format
+msgid "Set mount %s if available"
+msgstr ""
 
 #: u_translation.rssetmountsite
 msgid "Set mount site long/lat from configuration"
@@ -4122,6 +4151,10 @@ msgstr "Sklon"
 msgid "Slot"
 msgstr "Slot"
 
+#: u_translation.rssmallcross
+msgid "Small cross"
+msgstr ""
+
 #: u_translation.rssmtpserverad
 msgid "SMTP server address"
 msgstr "Adresa serveru SMTP"
@@ -4151,6 +4184,10 @@ msgstr "Některá nadefinovaná zařízení nejsou připojeny"
 #: u_translation.rssouth
 msgid "South"
 msgstr "Jih"
+
+#: u_translation.rsspectralprof
+msgid "Spectral profile"
+msgstr ""
 
 #: u_translation.rsspeed
 msgid "Speed"
@@ -4498,6 +4535,10 @@ msgstr "Přepínač"
 #, object-pascal-format
 msgid "Sync to %s %s/%s"
 msgstr "Synchronizovat s %s %s/%s"
+
+#: u_translation.rssystemcross
+msgid "System cross"
+msgstr ""
 
 #: u_translation.rssystemisunde
 msgid "System is undersampled, accept 1 pixel star"
@@ -4968,6 +5009,10 @@ msgstr "Použít jako referenční hvězdu"
 #, object-pascal-format
 msgid "Use astrometry to%srefine the position"
 msgstr "Pomocí astrometrie%s upřesněte polohu"
+
+#: u_translation.rsuseastrometr
+msgid "Use astrometry to refine the position"
+msgstr ""
 
 #: u_translation.rsusecovercali
 msgid "Use Cover calibrator"

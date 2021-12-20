@@ -6,14 +6,14 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ccdciel\n"
 "Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
-"POT-Creation-Date: 2021-12-19 16:54+0000\n"
+"POT-Creation-Date: 2021-12-20 12:54+0000\n"
 "PO-Revision-Date: 2021-09-24 16:13+0000\n"
 "Last-Translator: Jimmy Frydkær Jensen <jimmy@frydkaer.net>\n"
 "Language-Team: Danish <da@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2021-12-19 17:36+0000\n"
+"X-Launchpad-Export-Date: 2021-12-20 13:04+0000\n"
 "X-Generator: Launchpad (build adb364d6a74a28e7b95d51cd30446ec16160de6c)\n"
 
 #: u_translation.rs2d
@@ -72,6 +72,10 @@ msgstr ""
 
 #: u_translation.rsaddfitskeywo
 msgid "Add FITS keyword for DSLR EXIF tags"
+msgstr ""
+
+#: u_translation.rsaddimages
+msgid "Add images"
 msgstr ""
 
 #: u_translation.rsaddstep
@@ -512,6 +516,10 @@ msgstr ""
 
 #: u_translation.rsbesuretoconf
 msgid "Be sure to configure the camera connection."
+msgstr ""
+
+#: u_translation.rsbigcross
+msgid "Big cross"
 msgstr ""
 
 #: u_translation.rsbin
@@ -1965,6 +1973,10 @@ msgstr ""
 msgid "Image cleanup"
 msgstr ""
 
+#: u_translation.rsimagecursor
+msgid "Image cursor"
+msgstr ""
+
 #: u_translation.rsimagedebayer
 msgid "Image Debayered"
 msgstr "Billede Debayered"
@@ -2279,6 +2291,10 @@ msgstr ""
 
 #: u_translation.rsmean
 msgid "Mean:"
+msgstr ""
+
+#: u_translation.rsmeanofimages
+msgid "Mean of images"
 msgstr ""
 
 #: u_translation.rsmeasureen
@@ -3750,6 +3766,10 @@ msgstr ""
 msgid "Select one of the measurement options:"
 msgstr ""
 
+#: u_translation.rsselectthecur
+msgid "Select the cursor to use "
+msgstr ""
+
 #: u_translation.rsselectthefil
 msgid "Select the file to delete"
 msgstr ""
@@ -3820,6 +3840,10 @@ msgstr ""
 #: u_translation.rssequencefini
 #, object-pascal-format
 msgid "Sequence %s finished."
+msgstr ""
+
+#: u_translation.rssequencefold
+msgid "Sequence folder"
 msgstr ""
 
 #: u_translation.rssequenceigno
@@ -3915,6 +3939,11 @@ msgstr ""
 
 #: u_translation.rssetmagnitude
 msgid "Set magnitude"
+msgstr ""
+
+#: u_translation.rssetmountifav
+#, object-pascal-format
+msgid "Set mount %s if available"
 msgstr ""
 
 #: u_translation.rssetmountsite
@@ -4123,6 +4152,10 @@ msgstr ""
 msgid "Slot"
 msgstr ""
 
+#: u_translation.rssmallcross
+msgid "Small cross"
+msgstr ""
+
 #: u_translation.rssmtpserverad
 msgid "SMTP server address"
 msgstr ""
@@ -4151,6 +4184,10 @@ msgstr ""
 
 #: u_translation.rssouth
 msgid "South"
+msgstr ""
+
+#: u_translation.rsspectralprof
+msgid "Spectral profile"
 msgstr ""
 
 #: u_translation.rsspeed
@@ -4498,6 +4535,10 @@ msgstr ""
 #: u_translation.rssynctoeq
 #, object-pascal-format
 msgid "Sync to %s %s/%s"
+msgstr ""
+
+#: u_translation.rssystemcross
+msgid "System cross"
 msgstr ""
 
 #: u_translation.rssystemisunde
@@ -4968,6 +5009,10 @@ msgstr ""
 #: u_translation.rsuseastromet2
 #, object-pascal-format
 msgid "Use astrometry to%srefine the position"
+msgstr ""
+
+#: u_translation.rsuseastrometr
+msgid "Use astrometry to refine the position"
 msgstr ""
 
 #: u_translation.rsusecovercali

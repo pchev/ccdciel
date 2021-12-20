@@ -5042,3 +5042,47 @@ msgstr ""
 msgid "Custom"
 msgstr ""
 
+#: u_translation:rssequencefold
+msgid "Sequence folder"
+msgstr ""
+
+#: u_translation:rsuseastrometr
+msgid "Use astrometry to refine the position"
+msgstr ""
+
+#: u_translation:rssetmountifav
+msgid "Set mount %s if available"
+msgstr ""
+
+#: u_translation:rsimagecursor
+msgid "Image cursor"
+msgstr ""
+
+#: u_translation:rsselectthecur
+msgid "Select the cursor to use "
+msgstr ""
+
+#: u_translation:rssmallcross
+msgid "Small cross"
+msgstr ""
+
+#: u_translation:rsbigcross
+msgid "Big cross"
+msgstr ""
+
+#: u_translation:rssystemcross
+msgid "System cross"
+msgstr ""
+
+#: u_translation:rsaddimages
+msgid "Add images"
+msgstr ""
+
+#: u_translation:rsmeanofimages
+msgid "Mean of images"
+msgstr ""
+
+#: u_translation:rsspectralprof
+msgid "Spectral profile"
+msgstr ""
+
