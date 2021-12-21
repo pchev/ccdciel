@@ -28,7 +28,7 @@ interface
 
 uses  cu_camera, cu_ascomrest, u_global,
     u_translation, u_utils, cu_fits, indiapi, math,
-    LCLVersion,
+    LazSysUtils,
    Forms, ExtCtrls, Classes, SysUtils, LCLType;
 
 type
@@ -158,13 +158,6 @@ public
 end;
 
 implementation
-
-uses
-{$if lcl_major > 1}
-LazSysUtils;
-{$else}
-LazUTF8SysUtils;
-{$endif}
 
 constructor T_ascomrestcamera.Create(AOwner: TComponent);
 begin

@@ -28,7 +28,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 interface
 
 uses cu_camera, indibaseclient, indiblobclient, indibasedevice, indiapi, indicom, ws_websocket2, u_libraw,
-     cu_fits, u_global, u_utils, math, ExtCtrls, Forms, Classes, SysUtils, LCLType, LCLVersion, u_translation;
+     cu_fits, u_global, u_utils, math, ExtCtrls, Forms, Classes, SysUtils, LazSysUtils, LCLType, u_translation;
 
 type
 
@@ -280,12 +280,6 @@ private
 end;
 
 implementation
-uses
-{$if lcl_major > 1}
-LazSysUtils;
-{$else}
-LazUTF8SysUtils;
-{$endif}
 
 procedure T_indicamera.CreateIndiClient;
 begin

@@ -29,7 +29,7 @@ interface
 uses  cu_camera, u_global,
   {$ifdef mswindows}
     u_translation, u_utils, cu_fits, indiapi, math,
-    Variants, comobj, LCLVersion, ActiveX,
+    Variants, comobj, LazSysUtils, ActiveX,
   {$endif}
    Forms, ExtCtrls, Classes, SysUtils, LCLType;
 
@@ -158,20 +158,12 @@ const statusinterval=1000;
 
 implementation
 
-{$ifdef mswindows}
-uses
-{$if lcl_major > 1}
-LazSysUtils;
-{$else}
-LazUTF8SysUtils;
-{$endif}
-{$endif}
-
 constructor T_ascomcamera.Create(AOwner: TComponent);
 begin
  inherited Create(AOwner);
  stCooler:=false;
  stCCDtemp:=NullCoord;
+ stCoolerPower:=NullCoord;
  FInterfaceVersion:=1;
  FCameraXSize:=-1;
  FCameraYSize:=-1;

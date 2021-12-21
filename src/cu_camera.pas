@@ -29,7 +29,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 interface
 
 uses  cu_fits, cu_mount, cu_wheel, cu_focuser, u_global, u_utils,  indiapi, math, u_translation,
-  LCLVersion, Classes, Forms, SysUtils, ExtCtrls;
+  LazSysUtils, Classes, Forms, SysUtils, ExtCtrls;
 
 type
 
@@ -328,13 +328,6 @@ end;
 const CameraTimeout=60; // in seconds, must be enough to download image from any camers
 
 implementation
-
-uses
-{$if lcl_major > 1}
-LazSysUtils;
-{$else}
-LazUTF8SysUtils;
-{$endif}
 
 constructor T_camera.Create(AOwner: TComponent);
 begin

@@ -51,7 +51,7 @@ uses
   cu_switch, cu_ascomswitch, cu_ascomrestswitch, cu_indiswitch, cu_cover, cu_ascomcover, cu_ascomrestcover, cu_indicover,
   u_annotation, BGRABitmap, BGRABitmapTypes, LCLVersion, InterfaceBase, lclplatformdef,
   LazUTF8, Classes, dynlibs, LCLType, LMessages, IniFiles, IntfGraphics, FPImage, GraphType,
-  SysUtils, FileUtil, LazFileUtils, Forms, Controls, Math, Graphics, Dialogs, u_speech,
+  SysUtils, FileUtil, LazFileUtils, LazSysUtils, Forms, Controls, Math, Graphics, Dialogs, u_speech,
   StdCtrls, ExtCtrls, Menus, ComCtrls, Buttons, Types, u_translation;
 
 type
@@ -836,13 +836,6 @@ var
   f_main: Tf_main;
 
 implementation
-
-uses
-{$if lcl_major > 1}
-LazSysUtils;
-{$else}
-LazUTF8SysUtils;
-{$endif}
 
 {$R *.lfm}
 
