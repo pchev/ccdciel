@@ -34,7 +34,7 @@ uses
   {$ifdef unix}
   BaseUnix,
   {$endif}
-  fu_devicesconnection, fu_preview, fu_capture, fu_msg, fu_visu, fu_frame, fu_magnifyer, pu_compute,
+  fu_devicesconnection, fu_preview, fu_capture, fu_msg, fu_visu, fu_frame, fu_magnifyer,
   fu_starprofile, fu_filterwheel, fu_focuser, fu_mount, fu_ccdtemp, fu_autoguider, fu_cover, fu_switch,
   fu_sequence, fu_planetarium, fu_script, u_ccdconfig, pu_edittargets, pu_scriptengine,
   fu_video, pu_devicesetup, pu_options, pu_indigui, cu_fits, cu_camera, pu_pause, cu_tcpserver,
@@ -1259,6 +1259,7 @@ begin
   PageControlRight.ActivePageIndex:=0;
   AppClose:=false;
   ConfirmClose:=true;
+  ScaleMainForm;
   NeedRestart:=false;
   AllDevicesConnected:=false;
   GUIready:=false;
@@ -2132,21 +2133,6 @@ procedure Tf_main.FormShow(Sender: TObject);
 var str,fn: string;
     i: integer;
 begin
-  // scale only after the canvas is activated
-  ScaleMainForm;
-  // create other form after scalling
-  Application.CreateForm(Tf_setup, f_setup);
-  Application.CreateForm(Tf_option, f_option);
-  Application.CreateForm(Tf_planetariuminfo, f_planetariuminfo);
-  Application.CreateForm(Tf_pause, f_pause);
-  Application.CreateForm(Tf_focusercalibration, f_focusercalibration);
-  Application.CreateForm(Tf_about, f_about);
-  Application.CreateForm(Tf_goto, f_goto);
-  Application.CreateForm(Tf_photometry, f_photometry);
-  Application.CreateForm(Tf_polaralign, f_polaralign);
-  Application.CreateForm(Tf_compute, f_compute);
-  Application.CreateForm(Tf_collimation, f_collimation);
-  Application.CreateForm(Tf_polaralign2, f_polaralign2);
 
   SetDevices;
 

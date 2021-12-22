@@ -79,7 +79,18 @@ begin
   RequireDerivedFormResource := True;
   Application.Initialize;
   Application.CreateForm(Tf_main, f_main);
-  // create other form in Tf_main.FormShow
+  Application.CreateForm(Tf_setup, f_setup);
+  Application.CreateForm(Tf_option, f_option);
+  Application.CreateForm(Tf_planetariuminfo, f_planetariuminfo);
+  Application.CreateForm(Tf_pause, f_pause);
+  Application.CreateForm(Tf_focusercalibration, f_focusercalibration);
+  Application.CreateForm(Tf_about, f_about);
+  Application.CreateForm(Tf_goto, f_goto);
+  Application.CreateForm(Tf_photometry, f_photometry);
+  Application.CreateForm(Tf_polaralign, f_polaralign);
+  Application.CreateForm(Tf_compute, f_compute);
+  Application.CreateForm(Tf_collimation, f_collimation);
+  Application.CreateForm(Tf_polaralign2, f_polaralign2);
   Application.Run;
 end.
 
