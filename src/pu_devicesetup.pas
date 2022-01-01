@@ -2460,7 +2460,7 @@ try
     AlpacaCoverList.Items.Add(Format(rsDiscoveredS, [rsCoverCalibra]));
     AlpacaServers.Items.Add(Format(rsFoundServers, [inttostr(n)]));
     for i:=0 to length(AlpacaServerList)-1 do begin
-      AlpacaServers.Items.Add(AlpacaServerList[i].servername+', '+AlpacaServerList[i].location+', '+AlpacaServerList[i].ip+':'+AlpacaServerList[i].port);
+      AlpacaServers.Items.Add(AlpacaServerList[i].ip+':'+AlpacaServerList[i].port+', '+AlpacaServerList[i].servername+', '+AlpacaServerList[i].location);
       for j:=0 to AlpacaServerList[i].devicecount-1 do begin
         devtype:=UpperCase(AlpacaServerList[i].devices[j].DeviceType);
         if devtype='CAMERA' then begin
