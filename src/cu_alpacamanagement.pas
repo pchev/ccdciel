@@ -129,17 +129,19 @@ end;
 function GetBroadcastAddrList: TStringList;
 var
   AProcess: TProcess;
-  s: string;
+  processok: boolean;
+  s,buf: string;
+  jl,ja: TJSONData;
   sl: TStringList;
-  i,n,l: integer;
+  i,j,n,l: integer;
   {$IFDEF WINDOWS}
-  j: integer;
   ip,mask: string;
   b,b1,b2: byte;
   hasIP, hasMask: boolean;
   {$ENDIF}
 begin
   Result:=TStringList.Create;
+  Result.Add('127.255.255.255'); // always add local loopback
   sl:=TStringList.Create();
   {$IFDEF WINDOWS}
   AProcess:=TProcess.Create(nil);
@@ -152,7 +154,6 @@ begin
   finally
     AProcess.Free();
   end;
-  Result.Add('127.255.255.255'); // always add local loopback
   hasIP:=false;
   hasMask:=false;
   for i:=0 to sl.Count-1 do //!response text are localized!
@@ -194,28 +195,70 @@ begin
   end;
   {$ENDIF}
   {$IFDEF UNIX}
+  // Try to use ip
   AProcess:=TProcess.Create(nil);
-  AProcess.Executable := '/sbin/ifconfig';
-  AProcess.Parameters.Add('-a');
+  AProcess.Executable := '/sbin/ip';
+  AProcess.Parameters.Add('-json');
+  AProcess.Parameters.Add('address');
   AProcess.Options := AProcess.Options + [poUsePipes, poWaitOnExit];
   try
+    try
     AProcess.Execute();
+    processok:=(AProcess.ExitStatus=0);
+    except
+      processok:=false;
+    end;
     sl.LoadFromStream(AProcess.Output);
   finally
     AProcess.Free();
   end;
-  Result.Add('127.255.255.255'); // always add local loopback
-  for i:=0 to sl.Count-1 do
-  begin
-    l:=10;
-    n:=Pos('broadcast ', sl[i]);
-    if n=0 then begin n:=Pos('Bcast:', sl[i]); l:=6; end;
-    if n=0 then Continue;
-    s:=sl[i];
-    s:=Copy(s, n+l, 999);
-    n:=Pos(' ', s);
-    if n>0 then s:=Copy(s, 1, n);
-    Result.Add(Trim(s));
+  if processok then begin
+    buf:='';
+    for i:=0 to sl.Count-1 do
+      buf:=buf+sl[i];
+    jl:=GetJSON(buf);
+    for i:=0 to jl.Count-1 do begin
+      ja:=jl.Items[i].FindPath('addr_info');
+      if ja<>nil then for j:=0 to ja.Count-1 do begin
+        if ja.Items[j].FindPath('family')=nil then Continue;
+        buf:=ja.Items[j].FindPath('family').AsString;
+        if buf='inet' then begin
+          if ja.Items[j].FindPath('broadcast')=nil then Continue;
+          s:=ja.Items[j].FindPath('broadcast').AsString;
+          Result.Add(Trim(s));
+        end;
+      end;
+    end;
+  end
+  else begin
+    // try to use ifconfig
+    AProcess:=TProcess.Create(nil);
+    AProcess.Executable := '/sbin/ifconfig';
+    AProcess.Parameters.Add('-a');
+    AProcess.Options := AProcess.Options + [poUsePipes, poWaitOnExit];
+    try
+      try
+      AProcess.Execute();
+      processok:=(AProcess.ExitStatus=0);
+      except
+        processok:=false;
+      end;
+      sl.LoadFromStream(AProcess.Output);
+    finally
+      AProcess.Free();
+    end;
+    for i:=0 to sl.Count-1 do
+    begin
+      l:=10;
+      n:=Pos('broadcast ', sl[i]);
+      if n=0 then begin n:=Pos('Bcast:', sl[i]); l:=6; end;
+      if n=0 then Continue;
+      s:=sl[i];
+      s:=Copy(s, n+l, 999);
+      n:=Pos(' ', s);
+      if n>0 then s:=Copy(s, 1, n);
+      Result.Add(Trim(s));
+    end;
   end;
   {$ENDIF}
   sl.Free();
