@@ -29,7 +29,11 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 interface
 
-uses cu_ascomrest, u_utils,
+uses
+ {$IFDEF WINDOWS}
+ Variants, comobj, ActiveX,
+ {$ENDIF}
+  cu_ascomrest, u_utils, synaip,
   httpsend, synautil, fpjson, jsonparser, blcksock, synsock,
   process, Forms, Dialogs, Classes, SysUtils;
 
@@ -128,70 +132,69 @@ end;
 
 function GetBroadcastAddrList: TStringList;
 var
+  sl: TStringList;
+  s: string;
+  i: integer;
+  {$IFDEF UNIX}
   AProcess: TProcess;
   processok: boolean;
-  s,buf: string;
+  buf: string;
   jl,ja: TJSONData;
-  sl: TStringList;
-  i,j,n,l: integer;
+  j,n,l: integer;
+  {$ENDIF}
   {$IFDEF WINDOWS}
   ip,mask: string;
-  b,b1,b2: byte;
+  ipb,maskb,br: DWord;
   hasIP, hasMask: boolean;
+  FSWbemLocator : OLEVariant;
+  FWMIService   : OLEVariant;
+  FWbemObjectSet: OLEVariant;
+  FWbemObject   : OLEVariant;
+  oEnum         : IEnumvariant;
+  iValue        : LongWord;
+const
+  wbemFlagForwardOnly = $00000020;
   {$ENDIF}
 begin
   Result:=TStringList.Create;
   Result.Add('127.255.255.255'); // always add local loopback
   sl:=TStringList.Create();
   {$IFDEF WINDOWS}
-  AProcess:=TProcess.Create(nil);
-  AProcess.Executable := 'ipconfig.exe';
-  AProcess.Options := AProcess.Options + [poUsePipes, poNoConsole];
-  try
-    AProcess.Execute();
-    Sleep(500); // poWaitOnExit not working as expected
-    sl.LoadFromStream(AProcess.Output);
-  finally
-    AProcess.Free();
-  end;
-  hasIP:=false;
-  hasMask:=false;
-  for i:=0 to sl.Count-1 do //!response text are localized!
+  FSWbemLocator := CreateOleObject('WbemScripting.SWbemLocator');
+  FWMIService   := FSWbemLocator.ConnectServer('localhost', 'root\CIMV2', '', '');
+  FWbemObjectSet:= FWMIService.ExecQuery('SELECT IPAddress,IPSubnet FROM Win32_NetworkAdapterConfiguration','WQL',wbemFlagForwardOnly);
+  oEnum         := IUnknown(FWbemObjectSet._NewEnum) as IEnumVariant;
+  // loop all interfaces
+  while oEnum.Next(1, FWbemObject, iValue) = 0 do
   begin
-    if (Pos('IPv4', sl[i])>0) or (Pos('IP-', sl[i])>0) or (Pos('IP Address', sl[i])>0) then begin
-      s:=sl[i];
-      ip:=Trim(Copy(s, Pos(':', s)+1, 999));
-      if Pos(':', ip)>0 then Continue; // TODO: IPv6
-      hasIP:=true;
-    end;
-    if (Pos('Mask', sl[i])>0) or (Pos(': 255', sl[i])>0) then begin
-      s:=sl[i];
-      mask:=Trim(Copy(s, Pos(':', s)+1, 999));
-      if Pos(':', mask)>0 then Continue; // TODO: IPv6
-      hasMask:=true;
-    end;
-    if hasIP and hasMask then begin
-      s:='';
-      try
-      for j:=1 to 4 do begin
-        n:=pos('.',ip);
-        if n=0 then b1:=strtoint(ip)
-               else b1:=strtoint(copy(ip,1,n-1));
-        delete(ip,1,n);
-        n:=pos('.',mask);
-        if n=0 then b2:=strtoint(mask)
-               else b2:=strtoint(copy(mask,1,n-1));
-        delete(mask,1,n);
-        b:=b1 or (not b2);
-        s:=s+inttostr(b)+'.';
+    hasIP:=false;
+    hasMask:=false;
+    if not VarIsClear(FWbemObject.IPAddress) and not VarIsNull(FWbemObject.IPAddress) then begin
+     // this interface address is assigned
+     for i := VarArrayLowBound(FWbemObject.IPAddress, 1) to VarArrayHighBound(FWbemObject.IPAddress, 1) do begin
+       ip:=String(FWbemObject.IPAddress[i]);
+       if pos(':',ip)>0 then continue; // TODO: IPv6
+       hasIP:=true;
+       break;
+     end;
+     if not VarIsClear(FWbemObject.IPSubnet) and not VarIsNull(FWbemObject.IPSubnet) then begin
+      // mask assigned
+      for i := VarArrayLowBound(FWbemObject.IPSubnet, 1) to VarArrayHighBound(FWbemObject.IPSubnet, 1) do begin
+        mask:=String(FWbemObject.IPSubnet[i]);
+        if pos('.',mask)=0 then continue; // TODO: IPv6
+        hasMask:=true;
+        break;
       end;
-      delete(s,length(s),1);
-      Result.Add(Trim(s));
-      except
-      end;
-      hasIP:=false;
-      hasMask:=false;
+     end;
+     if hasIP and hasMask then begin
+       ipb:=StrToIp(ip);
+       maskb:=StrToIp(mask);
+       br:=(ipb and maskb) or (not maskb);
+       s:=IpToStr(br);
+       Result.Add(Trim(s));
+     end;
     end;
+    FWbemObject:=Unassigned;
   end;
   {$ENDIF}
   {$IFDEF UNIX}
