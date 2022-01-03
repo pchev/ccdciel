@@ -2056,6 +2056,7 @@ begin
    FilenameName[5]:=rsDateUTSequen;
    FilenameName[6]:=rsGain;
    FilenameName[7]:=rsFocusPositio;
+   FilenameName[8]:=rsSideOfPier;
    TBConnect.Hint := rsConnect;
    TBFocus.Hint := rsFocus;
    TBCapture.Hint := rsCapture;
@@ -9615,6 +9616,9 @@ try
                 fn:=fn+trim(buf)+FilenameSep;
              end;
      fnFocuspos: if FileNameActive[i] and fits.Header.Valueof('FOCUSPOS',buf) then begin
+                  fn:=fn+trim(buf)+FilenameSep;
+             end;
+     fnPierSide: if FileNameActive[i] and fits.Header.Valueof('PIERSIDE',buf) then begin
                   fn:=fn+trim(buf)+FilenameSep;
              end;
    end;

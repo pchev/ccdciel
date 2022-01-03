@@ -1381,6 +1381,7 @@ resourcestring
   rsRestartDelay = 'Restart delay';
   rsPythonComman = 'Python command';
   rsStarAlignmen = 'Star alignment';
+  rsSideOfPier = 'Side of pier';
 
 implementation
 

@@ -415,8 +415,8 @@ object f_option: Tf_option
             end
             object FileOptions: TStringGrid
               Left = 8
-              Height = 218
-              Top = 8
+              Height = 240
+              Top = 2
               Width = 372
               ColCount = 3
               Columns = <              
@@ -434,7 +434,7 @@ object f_option: Tf_option
               FixedRows = 0
               Options = [goFixedVertLine, goFixedHorzLine, goHorzLine, goRangeSelect, goRowMoving, goAlwaysShowEditor, goSmoothScroll]
               ParentFont = False
-              RowCount = 8
+              RowCount = 9
               ScrollBars = ssAutoVertical
               TabOrder = 1
               OnClick = FileOrFolderOptionsClick
@@ -450,15 +450,15 @@ object f_option: Tf_option
               AnchorSideTop.Side = asrCenter
               Left = 8
               Height = 19
-              Top = 245
+              Top = 250
               Width = 61
               Caption = 'Separator'
               ParentFont = False
             end
             object FilenameSep: TComboBox
-              Left = 89
+              Left = 88
               Height = 28
-              Top = 240
+              Top = 245
               Width = 79
               Constraints.MaxHeight = 28
               ItemHeight = 0
@@ -476,9 +476,9 @@ object f_option: Tf_option
             object FileSequenceWidth: TSpinEdit
               AnchorSideTop.Control = FilenameSep
               AnchorSideTop.Side = asrCenter
-              Left = 388
+              Left = 384
               Height = 28
-              Top = 240
+              Top = 245
               Width = 58
               Constraints.MaxHeight = 28
               MaxValue = 5
@@ -492,7 +492,7 @@ object f_option: Tf_option
               AnchorSideTop.Side = asrCenter
               Left = 192
               Height = 21
-              Top = 244
+              Top = 249
               Width = 163
               Caption = 'Fixed sequence length'
               OnClick = UseFileSequenceWidthClick
@@ -536,7 +536,7 @@ object f_option: Tf_option
             object FolderOptions: TStringGrid
               Left = 8
               Height = 218
-              Top = 8
+              Top = 2
               Width = 372
               ColCount = 3
               Columns = <              
