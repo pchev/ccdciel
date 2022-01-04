@@ -9974,7 +9974,7 @@ end;
 
 procedure Tf_main.Image1Paint(Sender: TObject);
 var x,y,x1,y1,x2,y2,x3,y3,xr1,yr1,xr2,yr2,xr3,yr3,xr4,yr4,xxc,yyc,s,r,rc: integer;
-    i,size: integer;
+    i,j,k,size: integer;
     labeloverlap: array of array of Byte;
     labellimit,lox,loy,mlox,mloy: integer;
 begin
@@ -10056,7 +10056,7 @@ begin
      Image1.Canvas.Brush.Style:=bsClear;
      Image1.Canvas.Font.Color:=clYellow;
      Image1.Canvas.Font.Size:=DoScaleX(10);
-     labellimit:=DoScaleX(30);
+     labellimit:=DoScaleX(15);
      mlox:=image1.Width div labellimit;
      mloy:=image1.Height div labellimit;
      SetLength(labeloverlap,1+mlox, 1+mloy);
@@ -10067,13 +10067,15 @@ begin
            (fits.StarList[i].snr<AutofocusMinSNR)  // do not plot stars not used by autofocus
            then continue;
         Fits2Screen(round(fits.StarList[i].x),round(fits.StarList[i].y),f_visu.FlipHorz,f_visu.FlipVert,x,y);
-        lox:=min(max(0,x div labellimit),mlox);
-        loy:=min(max(0,y div labellimit),mloy);
+        lox:=min(max(1,x div labellimit),mlox-1);
+        loy:=min(max(1,y div labellimit),mloy-1);
         if labeloverlap[lox,loy]=0 then begin
           size:=max(3,round(max(ImgZoom,ImgScale0)*2.5*fits.StarList[i].hfd));
           Image1.Canvas.Rectangle(x-size,y-size, x+size, y+size);
           Image1.Canvas.TextOut(x+size,y+size,floattostrf(fits.StarList[i].hfd, ffgeneral, 2,1));
-          labeloverlap[lox,loy]:=1;
+          for j:=-1 to 1 do
+            for k:=-1 to 1 do
+              labeloverlap[lox+j,loy+k]:=1;
         end;
      end;
      SetLength(labeloverlap,0,0);
