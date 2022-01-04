@@ -203,6 +203,7 @@ type
      procedure GetHFD2(x,y,s: integer; out xc,yc,bg,sd,hfd,star_fwhm,valmax,snr,flux: double; strict_saturation: boolean=true);{han.k 2018-3-21}
      procedure GetStarList(rx,ry,s: integer);
      procedure MeasureStarList(s: integer; list: TArrayDouble2);
+     procedure SortStarlist;
      procedure ClearStarList;
      procedure LoadDark(fn: string);
      function dateobs: double;
@@ -2989,6 +2990,8 @@ begin
   // cleanup
   for i:=0 to tc - 1 do SetLength(thread[i].StarList,0);
   for i := 0 to tc - 1 do thread[i].Free;
+  // sort brighter first
+  SortStarlist;
 end;
 
 procedure TFits.MeasureStarList(s: integer; list: TArrayDouble2);
@@ -3031,6 +3034,32 @@ for i:=0 to Length(list)-1 do
     end;
  end;
  SetLength(FStarList,nhfd);  {set length to new number of elements}
+end;
+
+procedure TFits.SortStarlist;
+  // sort star list by vmax, brighter first
+  procedure sort ( left, right : integer);
+  var
+    i, j  : integer;
+    pivot : double;
+    tmp: TStar;
+  begin
+    i:=left;
+    j:=right;
+    pivot := StarList[(left + right) div 2].vmax;
+    repeat
+      while pivot < StarList[i].vmax do inc(i);
+      while pivot > StarList[j].vmax do dec(j);
+      if i<=j Then Begin
+        tmp:=StarList[i]; StarList[i]:=StarList[j]; StarList[j]:=tmp;
+        dec(j); inc(i);
+      end;
+    until i>j;
+    if left<j then sort(left,j);
+    if i<right then sort(i,right);
+  end;
+begin
+  sort(0,Length(StarList)-1);
 end;
 
 function TFits.SameFormat(f:TFits): boolean;

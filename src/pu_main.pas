@@ -10056,7 +10056,7 @@ begin
      Image1.Canvas.Brush.Style:=bsClear;
      Image1.Canvas.Font.Color:=clYellow;
      Image1.Canvas.Font.Size:=DoScaleX(10);
-     labellimit:=DoScaleX(15);
+     labellimit:=DoScaleX(30);
      mlox:=image1.Width div labellimit;
      mloy:=image1.Height div labellimit;
      SetLength(labeloverlap,1+mlox, 1+mloy);
@@ -10067,6 +10067,7 @@ begin
            (fits.StarList[i].snr<AutofocusMinSNR)  // do not plot stars not used by autofocus
            then continue;
         Fits2Screen(round(fits.StarList[i].x),round(fits.StarList[i].y),f_visu.FlipHorz,f_visu.FlipVert,x,y);
+        if (x<0)or(x>image1.Width)or(y<0)or(y>image1.Height) then continue;
         lox:=min(max(1,x div labellimit),mlox-1);
         loy:=min(max(1,y div labellimit),mloy-1);
         if labeloverlap[lox,loy]=0 then begin
