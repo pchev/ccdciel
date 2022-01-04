@@ -9773,7 +9773,7 @@ begin
 if (fits.HeaderInfo.naxis>0) and fits.ImageValid then begin
   try
   if WaitCursor then screen.Cursor:=crHourGlass;
-  trpOK:=false;
+  if Length(fits.StarList)=0 then trpOK:=false;
   fits.Gamma:=f_visu.Gamma.Value;
   fits.VisuMax:=round(f_visu.ImgMax);
   fits.VisuMin:=round(f_visu.ImgMin);
