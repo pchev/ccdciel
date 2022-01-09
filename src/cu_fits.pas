@@ -3059,7 +3059,8 @@ procedure TFits.SortStarlist;
     if i<right then sort(i,right);
   end;
 begin
-  sort(0,Length(StarList)-1);
+  if length(StarList)>1 then
+    sort(0,Length(StarList)-1);
 end;
 
 function TFits.SameFormat(f:TFits): boolean;
