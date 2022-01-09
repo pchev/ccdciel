@@ -1,4 +1,4 @@
-﻿ASTAP/CCDCIEL DEEPSKY DATABASE (extract from HNSKY level 3 database), 30000 objects. Based on SAC81, Wolfgang Steinicke's REV NGC&IC, Leda, Sh2,vdB,HCG,LND,PK.DWB. GX>=1_arcmin. IAU named stars included. GC of M31, M33 added. Version 2021-08-03.
+﻿ASTAP/CCDCIEL DEEPSKY DATABASE (extract from HNSKY level 3 database), 30000 objects. Based on SAC81, Wolfgang Steinicke's REV NGC&IC, Leda, Sh2,vdB,HCG,LND,PK.DWB. GX>=1_arcmin. IAU named stars included. GC of M31, M33 added. Version 2022-01-02.
 RA[0..864000], DEC[-324000..324000], name(s), length [0.1 min], width[0.1 min], orientation[degrees]
 863691,323599,NP_2020
 431691,-323599,SP_2020
@@ -28560,7 +28560,7 @@ RA[0..864000], DEC[-324000..324000], name(s), length [0.1 min], width[0.1 min], 
 630182,-108953,Sh2-14,20
 803477,227824,Sh2-140,300
 809104,221917,Sh2-141/LBN509,50
-820555,209016,Sh2-142,300
+820555,209016,Sh2-142/Wizard_nebula,300
 821660,215741,Sh2-146/LBN514,20
 825780,210671,Sh2-148,20
 825867,210730,Sh2-149,10
@@ -28704,6 +28704,7 @@ RA[0..864000], DEC[-324000..324000], name(s), length [0.1 min], width[0.1 min], 
 680820,19980,Archinal1,15
 254580,-71100,Auner1,25
 850680,174840,Av-Hunter1,470
+851222,175200,LBN111.05-12.46/LBN534,700,150,45
 649800,-107880,Baade's_Window,600
 752220,165720,Bark1,200
 782160,183840,Bark2,50
