@@ -12873,9 +12873,13 @@ begin
     f_mount.ALT.Caption:=FormatFloat(f2,h);
     if hhmin<=0 then f_mount.LabelMeridian.Caption:=rsMeridianIn
                 else f_mount.LabelMeridian.Caption:=rsMeridianSinc;
-    if ((f_capture.Running  or f_sequence.Busy) and (nextexposure=0)) or (f_sequence.Running and f_sequence.EditingTarget) then exit;
+    // check condition to not flip
     if MeridianOption=0 then exit; // fork mount
     if mount.PierSide=pierEast then exit; // already on the right side
+    if ((f_capture.Running  or f_sequence.Busy) and (nextexposure=0)) or  // flip synced with exposure
+       (f_sequence.Running and f_sequence.EditingTarget)
+       then exit;
+    // check delay
     if (MeridianOption=1) then begin
       MeridianDelay1:=MinutesPastMeridianMin-hhmin;
       if mount.PierSide=pierUnknown

@@ -149,7 +149,7 @@ type
       FSeqStartTwilight,FSeqStopTwilight,FSeqLockTwilight: boolean;
       TargetTimeStart,TargetDelayEnd: TDateTime;
       FRunning,FScriptRunning: boolean;
-      FInitializing, FStopping, FDawnFlatNow: boolean;
+      FInitializing, FFinalizing, FStopping, FDawnFlatNow: boolean;
       FUnattended: boolean;
       FName: string;
     public
@@ -288,6 +288,7 @@ begin
   FIgnoreRestart:=true;
   FResetRepeat:=true;
   FInitializing:=false;
+  FFinalizing:=false;
   FStopping:=false;
   FDawnFlatNow:=false;
   FTargetCoord:=false;
@@ -476,6 +477,7 @@ begin
   FRunning
   FScriptRunning
   FInitializing
+  FFinalizing
   FStopping
   FDawnFlat
   FUnattended
@@ -1130,6 +1132,7 @@ begin
   FRunning:=true;
   FRestarting:=False;
   TargetForceNext:=false;
+  FFinalizing:=false;
   // look for a dawn sky flat
   for j:=0 to NumTargets-1 do begin
     if (Targets[j].objectname=SkyFlatTxt)and(Targets[j].planname=FlatTimeName[1]) then begin
@@ -1752,6 +1755,8 @@ begin
    end
    else begin
      // nothing more to do, stop the sequence
+     try
+     FFinalizing:=true;
      FRunning:=false;
      TargetTimer.Enabled:=false;
      StopTimer.Enabled:=false;
@@ -1771,6 +1776,9 @@ begin
        msg(r,9);
      end;
      if assigned(FonEndSequence) then FonEndSequence(nil);
+     finally
+       FFinalizing:=false;
+     end;
    end;
   end;
 end;
@@ -2301,6 +2309,7 @@ var t: TTarget;
     p: T_Plan;
 begin
   result:= FInitializing and FTargetInitializing;
+  result:= result or FFinalizing;
   if FRunning and(FCurrentTarget>=0) then begin
     t:=Targets[FCurrentTarget];
     if t<>nil then begin
