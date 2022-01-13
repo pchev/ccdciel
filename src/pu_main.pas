@@ -9310,6 +9310,10 @@ begin
        else
          CameraSaveNewImage;
      end;
+     if (camera.AddFrames)and(camera.StackNum>1)and(camera.StackCount<camera.StackNum) then begin
+       buf:=Format(rsStackOfFrame, [inttostr(camera.StackCount)+'/'+inttostr(camera.StackNum)]);
+       StatusBar1.Panels[panelfile].Text:=buf;
+     end;
      // image measurement
      {$ifdef debug_raw}writeln(FormatDateTime(dateiso,Now)+blank+'image measurement');{$endif}
      if displayimage and ((not camera.AddFrames)or(camera.StackCount>=camera.StackNum)) then CameraMeasureNewImage;
