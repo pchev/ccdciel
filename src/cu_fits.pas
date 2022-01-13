@@ -116,6 +116,7 @@ type
     d8  : array[1..2880] of byte;
     d16 : array[1..1440] of smallint;
     d32 : array[1..720] of Longword;
+    dm32 : array[1..720] of Single;
     // Original image data
     FUseRawImage: boolean;
     Frawimage: Timafloat;
@@ -1383,7 +1384,26 @@ procedure TFits.SaveToFile(fn: string; pack: boolean=false);
 var mem: TMemoryStream;
     tmpf,rmsg: string;
     i: integer;
+    asFloat: boolean;
 begin
+  asFloat := FHeader.Valueof('STACKCNT',i) and (i>1);  // save stack result as 32bit float
+  if asFloat and (FFitsInfo.bitpix>0) then begin
+    // set new header
+    FFitsInfo.bitpix:=-32;
+    FFitsInfo.bscale:=1;
+    FFitsInfo.bzero:=0;
+    i:=FHeader.Indexof('BITPIX');
+    if i>=0 then FHeader.Delete(i);
+    FHeader.Insert(i,'BITPIX',FFitsInfo.bitpix,'');
+    i:=FHeader.Indexof('BSCALE');
+    if i>=0 then FHeader.Delete(i);
+    FHeader.Insert(i,'BSCALE',FFitsInfo.bscale,'');
+    i:=FHeader.Indexof('BZERO');
+    if i>=0 then FHeader.Delete(i);
+    FHeader.Insert(i,'BZERO',FFitsInfo.bzero,'');
+    // force reloading
+    FStreamValid:=false;
+  end;
   mem:=GetStream;
   if pack then begin
     tmpf:=slash(TmpDir)+'tmppack.fits';
@@ -1842,6 +1862,7 @@ Procedure TFits.WriteFitsImage;
 var hdrmem: TMemoryStream;
     i,j,k,ii,npix: integer;
     x:double;
+    xs:single;
     first:boolean;
 begin
   hdrmem:=FHeader.GetStream;
@@ -1859,7 +1880,7 @@ begin
           for i:=0 to FFitsInfo.naxis2-1 do begin
            ii:=FFitsInfo.naxis2-1-i;
            for j := 0 to FFitsInfo.naxis1-1 do begin
-             if (npix mod 1440 = 0) then begin
+             if (npix mod 2880 = 0) then begin
                if not first then FStream.Write(d8,sizeof(d8));
                FillByte(d8,sizeof(d8),0);
                npix:=0;
@@ -1897,7 +1918,7 @@ begin
           for i:=0 to FFitsInfo.naxis2-1 do begin
            ii:=FFitsInfo.naxis2-1-i;
            for j := 0 to FFitsInfo.naxis1-1 do begin
-             if (npix mod 1440 = 0) then begin
+             if (npix mod 720 = 0) then begin
                if not first then FStream.Write(d32,sizeof(d32));
                FillByte(d32,sizeof(d32),0);
                npix:=0;
@@ -1906,6 +1927,25 @@ begin
              inc(npix);
              x:= max(min(round((Fimage[k,ii,j]-FFitsInfo.bzero)/FFitsInfo.bscale),maxLongint),-maxLongint-1);
              d32[npix]:=NtoBE(Longword(round(x)));
+           end;
+           end;
+           end;
+           if npix>0 then  FStream.Write(d32,sizeof(d32));
+           end;
+     -32 :begin
+          for k:=0 to n_plane-1 do begin
+          for i:=0 to FFitsInfo.naxis2-1 do begin
+           ii:=FFitsInfo.naxis2-1-i;
+           for j := 0 to FFitsInfo.naxis1-1 do begin
+             if (npix mod 720 = 0) then begin
+               if not first then FStream.Write(dm32,sizeof(dm32));
+               FillByte(dm32,sizeof(dm32),0);
+               npix:=0;
+               first:=false;
+             end;
+             inc(npix);
+             xs:=(Fimage[k,ii,j]-FFitsInfo.bzero)/FFitsInfo.bscale;
+             dm32[npix]:=single(NtoBE(longword(xs)));
            end;
            end;
            end;
