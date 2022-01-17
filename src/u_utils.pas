@@ -1421,8 +1421,16 @@ end;
 
 function AirMass(h: double): double;
 begin
+if h>0 then begin
+  try
   // Pickering, 2002
   result := 1 / sin(deg2rad * (h + (244 / (165 + 47 * h ** 1.1))));
+  except
+   result:=-1;
+  end;
+end
+else
+  result:=-1;
 end;
 
 function atmospheric_absorption(airmass: double):double;{magnitudes}
