@@ -638,19 +638,19 @@ if p=0 then
   result:=StrToFloatDef(trim(dms),NullCoord)
 else begin
   t:=copy(dms,1,p-1); delete(dms,1,p);
-  result:=StrToFloatDef(trim(t),0);
+  result:=StrToFloat(trim(t));
   p:=pos(sep[2],dms);
   if p=0 then
-    result:=result+ s * StrToFloatDef(trim(dms),0) / 60
+    result:=result+ s * StrToFloat(trim(dms)) / 60
   else begin
     t:=copy(dms,1,p-1); delete(dms,1,p);
-    result:=result+ s * StrToFloatDef(trim(t),0) / 60;
+    result:=result+ s * StrToFloat(trim(t)) / 60;
     p:=pos(sep[3],dms);
     if p=0 then
       t:=dms
     else
       t:=copy(dms,1,p-1);
-    result:=result+ s * StrToFloatDef(trim(t),0) / 3600;
+    result:=result+ s * StrToFloat(trim(t)) / 3600;
   end;
 end;
 except
@@ -699,19 +699,19 @@ if p=0 then
   result:=StrToFloatDef(trim(dms),NullCoord)
 else begin
   t:=copy(dms,1,p-1); delete(dms,1,p+d1);
-  result:=StrToFloatDef(trim(t),0);
+  result:=StrToFloat(trim(t));
   p:=pos(sep[2],dms);
   if p=0 then
-    result:=result+ s * StrToFloatDef(trim(dms),0) / 60
+    result:=result+ s * StrToFloat(trim(dms)) / 60
   else begin
     t:=copy(dms,1,p-1); delete(dms,1,p);
-    result:=result+ s * StrToFloatDef(trim(t),0) / 60;
+    result:=result+ s * StrToFloat(trim(t)) / 60;
     p:=pos(sep[3],dms);
     if p=0 then
       t:=dms
     else
       t:=copy(dms,1,p-1);
-    result:=result+ s * StrToFloatDef(trim(t),0) / 3600;
+    result:=result+ s * StrToFloat(trim(t)) / 3600;
   end;
 end;
 except
