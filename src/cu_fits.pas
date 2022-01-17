@@ -1592,8 +1592,24 @@ begin
     if (keyword='MULT_B') then bmult:=strtofloat(buf);
     if (keyword='AIRMASS') then airmass:=strtofloat(buf);
     if (keyword='OBJECT') then objects:=trim(buf);
-    if (keyword='RA') then ra:=StrToFloatDef(buf,NullCoord);
-    if (keyword='DEC') then dec:=StrToFloatDef(buf,NullCoord);
+    if (keyword='RA') then begin
+       ra:=StrToFloatDef(buf,NullCoord);
+       if ra=NullCoord then begin
+         ra:=StrToAR(buf);
+         if ra<>NullCoord then ra:=ra*15;
+       end;
+    end;
+    if (ra=NullCoord)and(keyword='OBJCTRA') then begin
+       ra:=StrToAR(buf);
+       if ra<>NullCoord then ra:=ra*15;
+    end;
+    if (keyword='DEC') then begin
+       dec:=StrToFloatDef(buf,NullCoord);
+       if dec=NullCoord then dec:=StrToDE(buf);
+    end;
+    if (dec=NullCoord)and(keyword='OBJCTDEC') then begin
+       dec:=StrToDE(buf);
+    end;
     if (keyword='EQUINOX') then equinox:=StrToFloatDef(buf,2000);
     if (keyword='CTYPE1') then ctype1:=buf;
     if (keyword='CTYPE2') then ctype2:=buf;
@@ -1618,6 +1634,10 @@ begin
  if dec=NullCoord then begin
    if (copy(ctype2,1,4)='DEC-')and(crval2<>NullCoord) then
       dec:=crval2;
+ end;
+ // if scale is missing guess it from pixel size and focal length
+ if (scale=0)and(focallen>0)and(pixsz1>0) then begin
+   scale:=3600*rad2deg*arctan(pixsz1/focallen/1000);
  end;
  // remove unsupported ASCOM SensorType for debayering. Correct SensorType is still written in header for further processing
  if (bayerpattern='CMYG') or
