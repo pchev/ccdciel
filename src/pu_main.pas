@@ -8564,6 +8564,7 @@ procedure Tf_main.ResetPreviewStack(Sender: TObject);
 begin
    fits.ClearImage;
    camera.StackStarted:=0;
+   camera.PrepareStack:=true;
 end;
 
 Procedure Tf_main.StartPreviewExposureAsync(Data: PtrInt);
@@ -8734,6 +8735,11 @@ if not f_capture.Running then begin
   exit;
 end;
 if (AllDevicesConnected)and(not autofocusing)and(not learningvcurve)and(not f_video.Running) then begin
+  // do not interrupt the current stack, run prepare only on the start of a new stack
+  if (camera.AddFrames)and(not camera.PrepareStack) then begin
+     result:=true;
+     exit;
+  end;
   if (f_capture.FrameType.ItemIndex>=0)and(f_capture.FrameType.ItemIndex<=ord(High(TFrameType))) then
     ftype:=TFrameType(f_capture.FrameType.ItemIndex)
   else
@@ -9133,19 +9139,25 @@ if (AllDevicesConnected)and(not autofocusing)and (not learningvcurve) then begin
     camera.SaveFrames:=false;
     camera.AlignFrames:=false;
   end;
-  // show message
   cc:=f_capture.SeqCount;
   if camera.AddFrames then begin
+    // increment sub exposure
     camera.StackStarted:=camera.StackStarted+1;
+    camera.PrepareStack:=(camera.StackStarted=camera.StackNum); // last sub, next one is a new stack
     if (camera.StackStarted=1)or(camera.StackStarted>camera.StackNum) then begin
+      // increment dither
+      f_capture.DitherNum:=f_capture.DitherNum+1;
+      // start message
       camera.StackStarted:=1;
       NewMessage(Format(rsStartingExpo, [f_capture.FrameType.Text, inttostr(cc)+'/'+f_capture.SeqNum.Text, IntToStr(camera.StackNum)+' x '+f_capture.ExpTime.Text]));
     end;
   end
-  else
+  else begin
+    // increment dither
+    f_capture.DitherNum:=f_capture.DitherNum+1;
+    // show message
     NewMessage(Format(rsStartingExpo, [f_capture.FrameType.Text, inttostr(cc)+'/'+f_capture.SeqNum.Text, f_capture.ExpTime.Text]),1);
-  // increment dither
-  if (not camera.AddFrames)or(camera.StackCount>=camera.StackNum) then f_capture.DitherNum:=f_capture.DitherNum+1;
+  end;
   // start exposure for time e
   camera.StartExposure(e);
 end
@@ -9181,7 +9193,7 @@ begin
      end;
      if RunningCapture then begin
        StatusBar1.Panels[panelstatus].Text := rsCapture+blank+inttostr(f_capture.SeqCount)+'/'+f_capture.SeqNum.Text+' '+txt;
-       if (i=-4) and EarlyDither and f_capture.CheckBoxDither.Checked and (f_capture.DitherNum>=f_capture.DitherCount.Value) then begin
+       if (i=-4) and EarlyDither and (not camera.AddFrames) and f_capture.CheckBoxDither.Checked and (f_capture.DitherNum>=f_capture.DitherCount.Value) then begin
          StatusBar1.Panels[panelstatus].Text:=rsDithering+ellipsis;
          CaptureDither;
        end;

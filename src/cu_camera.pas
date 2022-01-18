@@ -79,7 +79,7 @@ T_camera = class(TComponent)
     FhasVideo: boolean;
     FVerticalFlip: boolean;
     FASCOMFlipImage: boolean;
-    FAddFrames,FSaveFrames,FAlignFrames: boolean;
+    FAddFrames,FSaveFrames,FAlignFrames,FPrepareStack: boolean;
     FVideoSizes, FVideoRates,FFNumberList,FVideoEncoder:TStringList;
     FTemperatureRampActive, FCancelTemperatureRamp: boolean;
     FIndiTransfert: TIndiTransfert;
@@ -216,6 +216,7 @@ T_camera = class(TComponent)
     property ImgStream: TMemoryStream read FImgStream;
     property ImageFormat: string read GetImageFormat;
     property AddFrames: boolean read FAddFrames write FAddFrames;
+    property PrepareStack: boolean read FPrepareStack write FPrepareStack;
     property SaveFrames: boolean read FSaveFrames write FSaveFrames;
     property AlignFrames: boolean read FAlignFrames write FAlignFrames;
     property StackOperation: integer read FStackOperation write FStackOperation;
@@ -346,6 +347,7 @@ begin
   FFilterNames:=TStringList.Create;
   FImgStream:=TMemoryStream.Create;
   FAddFrames:=false;
+  FPrepareStack:=false;
   FAlignFrames:=false;
   FStackUseDark:=false;
   FStackDebayer:=false;
