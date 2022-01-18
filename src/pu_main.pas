@@ -1304,8 +1304,10 @@ begin
   SplitMargin:=0;
   SplitZoom:=1;
   SaveStack:=false;
-  StackAlign:=true;
+  StackAlign:=false;
   StackOperation:=1;
+  StackUseDark:=false;
+  StackDebayer:=false;
   FileStackFloat:=false;
   AllMsg:=TStringList.Create;
   AllMsg.OwnsObjects:=true;
@@ -3752,9 +3754,11 @@ begin
   f_capture.PanelStack.Visible:=f_preview.PanelStack.Visible;
   f_EditTargets.StepList.Columns[pcolstack-1].Visible:=f_preview.PanelStack.Visible;
   SaveStack:=config.GetValue('/PreviewStack/SaveStack',false);
-  StackAlign:=config.GetValue('/PreviewStack/StackAlign',true);
+  StackAlign:=config.GetValue('/PreviewStack/StackAlign',false);
   StackOperation:=config.GetValue('/PreviewStack/StackOperation',1);
   FileStackFloat:=config.GetValue('/PreviewStack/FileStackFloat',false);
+  StackUseDark:=config.GetValue('/PreviewStack/StackUseDark',false);
+  StackDebayer:=config.GetValue('/PreviewStack/StackDebayer',false);
   MaxVideoPreviewRate:=config.GetValue('/Video/PreviewRate',5);
   i:=TemperatureScale;
   TemperatureScale:=config.GetValue('/Cooler/TemperatureScale',0);
@@ -7525,7 +7529,9 @@ begin
    f_option.BPMsigma.Value:=config.GetValue('/BadPixel/Sigma',5.0);
    f_option.StackShow.Checked:=config.GetValue('/PreviewStack/StackShow',false);
    f_option.SaveStack.checked:=config.GetValue('/PreviewStack/SaveStack',false);
-   f_option.StackAlign.Checked:=config.GetValue('/PreviewStack/StackAlign',true);
+   f_option.StackAlign.Checked:=config.GetValue('/PreviewStack/StackAlign',false);
+   f_option.StackUseDark.Checked:=config.GetValue('/PreviewStack/StackUseDark',false);
+   f_option.StackDebayer.Checked:=config.GetValue('/PreviewStack/StackDebayer',false);
    f_option.StackOperation.itemindex:=config.GetValue('/PreviewStack/StackOperation',1);
    f_option.FileStackFloat.Checked:=config.GetValue('/PreviewStack/FileStackFloat',false);
    f_option.VideoPreviewRate.Value:=config.GetValue('/Video/PreviewRate',5);
@@ -7970,6 +7976,8 @@ begin
      config.SetValue('/PreviewStack/StackShow',f_option.StackShow.Checked);
      config.SetValue('/PreviewStack/SaveStack',f_option.SaveStack.checked);
      config.SetValue('/PreviewStack/StackAlign',f_option.StackAlign.Checked);
+     config.SetValue('/PreviewStack/StackUseDark',f_option.StackUseDark.Checked);
+     config.SetValue('/PreviewStack/StackDebayer',f_option.StackDebayer.Checked);
      config.SetValue('/PreviewStack/StackOperation',f_option.StackOperation.itemindex);
      config.SetValue('/PreviewStack/FileStackFloat',f_option.FileStackFloat.Checked);
      config.SetValue('/Video/PreviewRate',f_option.VideoPreviewRate.Value);
@@ -8642,6 +8650,8 @@ if (camera.Status=devConnected) and ((not f_capture.Running) or autofocusing) an
      camera.SaveFrames:=SaveStack;
      camera.AlignFrames:=StackAlign;
      camera.StackOperation:=StackOperation;
+     camera.StackUseDark:=StackUseDark;
+     camera.StackDebayer:=StackDebayer;
      fits.SetBPM(bpm,0,0,0,0);  // bpm used during addition
   end
   else begin
@@ -9115,6 +9125,8 @@ if (AllDevicesConnected)and(not autofocusing)and (not learningvcurve) then begin
     camera.SaveFrames:=SaveStack;
     camera.AlignFrames:=StackAlign;
     camera.StackOperation:=StackOperation;
+    camera.StackUseDark:=StackUseDark;
+    camera.StackDebayer:=StackDebayer;
     camera.StackNum:=f_capture.StackNum.Value;
   end else begin
     camera.StackNum:=1;

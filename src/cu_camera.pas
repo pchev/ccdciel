@@ -69,7 +69,7 @@ T_camera = class(TComponent)
     FFits: TFits;
     FStackCount, FStackNum, FStackStarted, FStackOperation: integer;
     FStackExpStart, FStackDate, FStackSaveDir: string;
-    FStackAlign: boolean;
+    FStackAlign, FStackUseDark, FStackDebayer: boolean;
     FStackAlignX,FStackAlignY,FStackStarX,FStackStarY: double;
     FMount: T_mount;
     Fwheel: T_wheel;
@@ -219,6 +219,8 @@ T_camera = class(TComponent)
     property SaveFrames: boolean read FSaveFrames write FSaveFrames;
     property AlignFrames: boolean read FAlignFrames write FAlignFrames;
     property StackOperation: integer read FStackOperation write FStackOperation;
+    property StackUseDark: boolean read FStackUseDark write FStackUseDark;
+    property StackDebayer: boolean read FStackDebayer write FStackDebayer;
     property VerticalFlip: boolean read FVerticalFlip;
     property ASCOMFlipImage: boolean read FASCOMFlipImage write FASCOMFlipImage;
     property hasVideo: boolean read FhasVideo;
@@ -345,6 +347,8 @@ begin
   FImgStream:=TMemoryStream.Create;
   FAddFrames:=false;
   FAlignFrames:=false;
+  FStackUseDark:=false;
+  FStackDebayer:=false;
   FSaveFrames:=false;
   FStackSaveDir:='';
   FhasVideo:=false;
@@ -476,7 +480,7 @@ procedure T_camera.NewImage;
 var f:TFits;
     xi,yi,xc,yc,ri: integer;
     xs,ys,hfd,fwhm,vmax,snr,bg,bgdev,flux : double;
-    alok: boolean;
+    alok,savebayer: boolean;
     mem: TMemoryStream;
     objectstr: string;
 const datefmt = 'yyyy"-"mm"-"dd"T"hh"-"nn"-"ss';
@@ -493,15 +497,25 @@ if FAddFrames then begin  // stack preview frames
   // load temporary image
   f:=TFits.Create(nil);
   f.onMsg:=onMsg;
-  f.DarkOn:=true;
-  f.DarkFrame:=FFits.DarkFrame;
-  f.SetBPM(bpm,bpmNum,bpmX,bpmY,bpmAxis);
+  if FStackUseDark then begin
+    f.DarkOn:=true;
+    f.DarkFrame:=FFits.DarkFrame;
+    f.SetBPM(bpm,bpmNum,bpmX,bpmY,bpmAxis);
+  end
+  else begin
+    f.DarkOn:=false;
+    f.SetBPM(bpm,0,0,0,0);
+  end;
+  savebayer:=BayerColor;
+  BayerColor:=FStackDebayer;
+  f.DisableBayer:=not FStackDebayer;
   f.Stream:=FImgStream;
   FImgStream:=TMemoryStream.Create;
   // load, subtract dark and debayer
   f.LoadStream;
   f.DarkOn:=false;
   f.SetBPM(bpm,0,0,0,0);
+  BayerColor:=savebayer;
   // if debayered, load the new color stream
   if (f.preview_axis<>f.HeaderInfo.naxis)and(f.preview_axis=3) then f.LoadRGB;
   // convert 8bit to 16bit to avoid quick overflow

@@ -494,7 +494,7 @@ var
   AutoguiderAlertTime,AutoguiderMsgTime: double;
   MountTrackingAlert: boolean;
   MountTrackingAlertTime: double;
-  SaveStack, StackAlign: boolean;
+  SaveStack, StackAlign, StackUseDark, StackDebayer: boolean;
   StackOperation: integer;
   RunningCapture,RunningPreview: boolean;
 

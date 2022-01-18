@@ -1278,12 +1278,12 @@ object f_option: Tf_option
         end
         object GroupBoxReadOut: TGroupBox
           Left = 0
-          Height = 182
-          Top = 368
+          Height = 150
+          Top = 400
           Width = 560
           Align = alClient
           Caption = 'Readout modes'
-          ClientHeight = 162
+          ClientHeight = 130
           ClientWidth = 558
           ParentFont = False
           TabOrder = 2
@@ -1387,15 +1387,27 @@ object f_option: Tf_option
         end
         object StackGroup: TGroupBox
           Left = 0
-          Height = 116
+          Height = 148
           Top = 252
           Width = 560
           Align = alTop
           Caption = 'Short exposure stacking'
-          ClientHeight = 96
+          ClientHeight = 128
           ClientWidth = 558
           ParentFont = False
           TabOrder = 4
+          object SaveStack: TCheckBox
+            AnchorSideLeft.Side = asrBottom
+            Left = 16
+            Height = 21
+            Top = 95
+            Width = 259
+            BorderSpacing.Left = 4
+            BorderSpacing.Right = 4
+            Caption = 'Save individual images before stacking'
+            ParentBidiMode = False
+            TabOrder = 1
+          end
           object StackShow: TCheckBox
             Left = 16
             Height = 21
@@ -1406,30 +1418,28 @@ object f_option: Tf_option
             ParentFont = False
             TabOrder = 0
           end
-          object SaveStack: TCheckBox
-            AnchorSideLeft.Side = asrBottom
-            Left = 201
-            Height = 21
-            Top = 40
-            Width = 259
-            BorderSpacing.Left = 4
-            BorderSpacing.Right = 4
-            Caption = 'Save individual images before stacking'
-            ParentBidiMode = False
-            TabOrder = 1
-          end
           object StackAlign: TCheckBox
             Left = 16
             Height = 21
-            Top = 40
+            Top = 37
             Width = 114
             Caption = 'Star alignment'
             TabOrder = 2
           end
+          object FileStackFloat: TCheckBox
+            AnchorSideTop.Control = StackOperation
+            AnchorSideTop.Side = asrCenter
+            Left = 16
+            Height = 21
+            Top = 66
+            Width = 154
+            Caption = 'Save as floating point'
+            TabOrder = 4
+          end
           object StackOperation: TRadioGroup
             Left = 201
             Height = 30
-            Top = 64
+            Top = 61
             Width = 338
             AutoFill = True
             ChildSizing.LeftRightSpacing = 6
@@ -1449,15 +1459,21 @@ object f_option: Tf_option
             )
             TabOrder = 3
           end
-          object FileStackFloat: TCheckBox
-            AnchorSideTop.Control = StackOperation
-            AnchorSideTop.Side = asrCenter
-            Left = 16
+          object StackUseDark: TCheckBox
+            Left = 201
             Height = 21
-            Top = 69
-            Width = 154
-            Caption = 'Save as floating point'
-            TabOrder = 4
+            Top = 37
+            Width = 150
+            Caption = 'Apply Dark and BPM'
+            TabOrder = 5
+          end
+          object StackDebayer: TCheckBox
+            Left = 400
+            Height = 21
+            Top = 37
+            Width = 78
+            Caption = 'Debayer'
+            TabOrder = 6
           end
         end
         object GroupBox31: TGroupBox
