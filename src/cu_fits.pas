@@ -186,7 +186,7 @@ type
      procedure GetExpBitmap(var bgra: TExpandedBitmap);
      procedure GetBGRABitmap(var bgra: TBGRABitmap);
      procedure SaveToBitmap(fn: string);
-     procedure SaveToFile(fn: string; pack: boolean=false);
+     procedure SaveToFile(fn: string; pack: boolean=false; StackFloat:boolean=false);
      procedure LoadFromFile(fn:string);
      procedure LoadHeaderFromFile(fn:string);
      procedure SetBPM(value: TBpm; count,nx,ny,nax:integer);
@@ -1380,13 +1380,13 @@ begin
   result.CopyFrom(FStream,FStream.Size-Fhdr_end);
 end;
 
-procedure TFits.SaveToFile(fn: string; pack: boolean=false);
+procedure TFits.SaveToFile(fn: string; pack: boolean=false; StackFloat:boolean=false);
 var mem: TMemoryStream;
     tmpf,rmsg: string;
     i: integer;
     asFloat: boolean;
 begin
-  asFloat := FHeader.Valueof('STACKCNT',i) and (i>1);  // save stack result as 32bit float
+  asFloat := StackFloat and FHeader.Valueof('STACKCNT',i) and (i>1);  // save stack result as 32bit float
   if asFloat and (FFitsInfo.bitpix>0) then begin
     // set new header
     FFitsInfo.bitpix:=-32;

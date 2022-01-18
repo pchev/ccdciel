@@ -1305,7 +1305,8 @@ begin
   SplitZoom:=1;
   SaveStack:=false;
   StackAlign:=true;
-  StackOperation:=0;
+  StackOperation:=1;
+  FileStackFloat:=false;
   AllMsg:=TStringList.Create;
   AllMsg.OwnsObjects:=true;
   refmask:=false;
@@ -3752,7 +3753,8 @@ begin
   f_EditTargets.StepList.Columns[pcolstack-1].Visible:=f_preview.PanelStack.Visible;
   SaveStack:=config.GetValue('/PreviewStack/SaveStack',false);
   StackAlign:=config.GetValue('/PreviewStack/StackAlign',true);
-  StackOperation:=config.GetValue('/PreviewStack/StackOperation',0);
+  StackOperation:=config.GetValue('/PreviewStack/StackOperation',1);
+  FileStackFloat:=config.GetValue('/PreviewStack/FileStackFloat',false);
   MaxVideoPreviewRate:=config.GetValue('/Video/PreviewRate',5);
   i:=TemperatureScale;
   TemperatureScale:=config.GetValue('/Cooler/TemperatureScale',0);
@@ -7524,7 +7526,8 @@ begin
    f_option.StackShow.Checked:=config.GetValue('/PreviewStack/StackShow',false);
    f_option.SaveStack.checked:=config.GetValue('/PreviewStack/SaveStack',false);
    f_option.StackAlign.Checked:=config.GetValue('/PreviewStack/StackAlign',true);
-   f_option.StackOperation.itemindex:=config.GetValue('/PreviewStack/StackOperation',0);
+   f_option.StackOperation.itemindex:=config.GetValue('/PreviewStack/StackOperation',1);
+   f_option.FileStackFloat.Checked:=config.GetValue('/PreviewStack/FileStackFloat',false);
    f_option.VideoPreviewRate.Value:=config.GetValue('/Video/PreviewRate',5);
    f_option.VideoGroup.Visible:=(camera.CameraInterface=INDI);
    f_option.RefTreshold.Position:=config.GetValue('/RefImage/Treshold',128);
@@ -7968,6 +7971,7 @@ begin
      config.SetValue('/PreviewStack/SaveStack',f_option.SaveStack.checked);
      config.SetValue('/PreviewStack/StackAlign',f_option.StackAlign.Checked);
      config.SetValue('/PreviewStack/StackOperation',f_option.StackOperation.itemindex);
+     config.SetValue('/PreviewStack/FileStackFloat',f_option.FileStackFloat.Checked);
      config.SetValue('/Video/PreviewRate',f_option.VideoPreviewRate.Value);
      config.SetValue('/RefImage/Treshold',f_option.RefTreshold.Position);
      config.SetValue('/RefImage/Color',f_option.RefColor.ItemIndex);
@@ -9655,7 +9659,7 @@ try
  end;
  fn:=slash(fd)+fn+'.fits';
  // save the file
- fits.SaveToFile(fn,FilePack);
+ fits.SaveToFile(fn,FilePack,FileStackFloat);
  inc(CurrentDoneCount);
  if FilePack then begin
    NewMessage(Format(rsSavedFile, [fn+'.fz']),1);

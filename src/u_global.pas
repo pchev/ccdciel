@@ -453,7 +453,7 @@ var
   FilenameOpt: array[0..FileNameCount-1] of TFilenameList;
   FilenameActive: array[0..FileNameCount-1] of Boolean;
   FilenameSep: String;
-  FilePack: boolean;
+  FilePack,FileStackFloat: boolean;
   FileSequenceWidth: integer;
   UseRotator: boolean;
   CanSetGainOffset, hasGain, hasGainISO, hasOffset: boolean;

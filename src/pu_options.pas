@@ -36,6 +36,7 @@ type
   Tf_option = class(TForm)
     ButtonSeqDir: TButton;
     CdCPath: TEdit;
+    FileStackFloat: TCheckBox;
     ImageCursor: TComboBox;
     GroupBox33: TGroupBox;
     Label152: TLabel;
@@ -1567,6 +1568,8 @@ procedure Tf_option.StackShowChange(Sender: TObject);
 begin
   SaveStack.Enabled:=StackShow.Checked;
   StackAlign.Enabled:=StackShow.Checked;
+  StackOperation.Enabled:=StackShow.Checked;
+  FileStackFloat.Enabled:=StackShow.Checked;
 end;
 
 procedure Tf_option.StartCdCChange(Sender: TObject);
