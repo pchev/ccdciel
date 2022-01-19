@@ -1569,6 +1569,13 @@ begin
      if Astrometry.Busy then Astrometry.StopAstrometry;
      wait(30);
    end;
+   if RecenteringTarget then begin
+     CancelAutofocus:=true;
+     msg('Stop target recenter',1);
+     if Mount.MountSlewing then Mount.AbortMotion;
+     if Astrometry.Busy then Astrometry.StopAstrometry;
+     wait(30);
+   end;
    if Astrometry.Busy then Astrometry.StopAstrometry;
    if p.Running then begin
      msg(Format(rsStopPlan, [Ftargets[FCurrentTarget].planname]),1);
