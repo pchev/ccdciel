@@ -1382,6 +1382,9 @@ resourcestring
   rsPythonComman = 'Python command';
   rsStarAlignmen = 'Star alignment';
   rsSideOfPier = 'Side of pier';
+  rsFloatingPoin = 'Floating point file';
+  rsApplyDarkAnd = 'Apply Dark and BPM';
+  rsDebayer = 'Debayer';
 
 implementation
 

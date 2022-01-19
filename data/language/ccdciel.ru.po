@@ -6,15 +6,15 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ccdciel\n"
 "Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
-"POT-Creation-Date: 2021-12-20 14:12+0000\n"
-"PO-Revision-Date: 2021-11-26 17:16+0000\n"
+"POT-Creation-Date: 2022-01-19 10:30+0000\n"
+"PO-Revision-Date: 2022-01-02 11:41+0000\n"
 "Last-Translator: Sergey Tarantsov <tsn-ast@yandex.ru>\n"
 "Language-Team: Russian <ru@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2021-12-20 14:28+0000\n"
-"X-Generator: Launchpad (build adb364d6a74a28e7b95d51cd30446ec16160de6c)\n"
+"X-Launchpad-Export-Date: 2022-01-19 10:36+0000\n"
+"X-Generator: Launchpad (build 26073c1e760cd9ba5d9f68c5529d7984f691d826)\n"
 
 #: u_translation.rs2d
 msgid "2D"
@@ -94,7 +94,7 @@ msgstr "Установлена выдержка флета в %sс"
 
 #: u_translation.rsadjustthemou
 msgid "Adjust the mount in azimuth and elevation such that the star moves from the green circle to the pink circle."
-msgstr ""
+msgstr "Отрегулируйте монтировку по азимуту и ​​высоте так, чтобы звезда сместилась с зеленого круга на розовый."
 
 #: u_translation.rsadjusttowind
 msgid "Adjust to window"
@@ -144,6 +144,10 @@ msgstr "Один скрипт уже запущен"
 #: u_translation.rsanytime
 msgid "Any time"
 msgstr "Любое время"
+
+#: u_translation.rsapplydarkand
+msgid "Apply Dark and BPM"
+msgstr ""
 
 #: u_translation.rsapplyediting
 msgid "Apply editing to active sequence"
@@ -604,7 +608,7 @@ msgstr "Отмена"
 
 #: u_translation.rscancelandres
 msgid "Cancel and restart exposure"
-msgstr ""
+msgstr "Прервать и перезапустить экспозицию"
 
 #: u_translation.rscancelexposu
 msgid "Cancel exposure"
@@ -861,7 +865,7 @@ msgstr "Последовательность закрытия купола, ко
 
 #: u_translation.rsclosethewind
 msgid "Close the window when ready."
-msgstr ""
+msgstr "Закройте окно, когда будете готовы."
 
 #: u_translation.rscloudcover
 msgid "Cloud cover"
@@ -1024,7 +1028,7 @@ msgstr ""
 
 #: u_translation.rscovercalibra
 msgid "Cover calibrator"
-msgstr ""
+msgstr "Крышка-калибратор"
 
 #: u_translation.rscoverthecame
 msgid "Cover the camera and set the exposure time and binning in the Preview pane now."
@@ -1060,7 +1064,7 @@ msgstr "Текущий план"
 
 #: u_translation.rscustom
 msgid "Custom"
-msgstr ""
+msgstr "Настроить"
 
 #: u_translation.rscustompositi
 msgid "Custom position"
@@ -1094,6 +1098,10 @@ msgstr "Дата (UT) / задание"
 #: u_translation.rsdawn
 msgid "dawn"
 msgstr "рассвет"
+
+#: u_translation.rsdebayer
+msgid "Debayer"
+msgstr ""
 
 #: u_translation.rsdebayerthepr
 msgid "Debayer the preview image"
@@ -1647,6 +1655,10 @@ msgstr "Зеркально по горизонтали"
 msgid "Flip the image vertically"
 msgstr "Зеркально по вертикали"
 
+#: u_translation.rsfloatingpoin
+msgid "Floating point file"
+msgstr ""
+
 #: u_translation.rsflux
 msgid "Flux"
 msgstr "Flux"
@@ -1958,11 +1970,11 @@ msgstr "Ожидание"
 
 #: u_translation.rsifabrightsta
 msgid "If a bright star is visible click NEXT."
-msgstr ""
+msgstr "Если видна яркая звезда, нажмите NEXT."
 
 #: u_translation.rsifnobrightst
 msgid "If no bright star is visible click MOVE."
-msgstr ""
+msgstr "Если яркой звезды не видно, нажмите MOVE."
 
 #: u_translation.rsifyourfocuse
 msgid "If your focuser driver do not offer this option, set here the number of steps necessary to clean the backlash when the direction change. This not need to be a precise value, it is better to set it higher than the actual backlash."
@@ -2107,7 +2119,7 @@ msgstr "Интервал"
 
 #: u_translation.rsinthenextscr
 msgid "In the next screen you have to move the triangle such that the green circle is marking a bright star or object."
-msgstr ""
+msgstr "На следующем экране вам нужно переместить треугольник так, чтобы зеленый кружок отмечал яркую звезду или объект."
 
 #: u_translation.rsinvalid
 msgid "Invalid"
@@ -2345,15 +2357,15 @@ msgstr ""
 
 #: u_translation.rsmeasuringfir
 msgid "Measuring first position"
-msgstr ""
+msgstr "Измерение первой позиции"
 
 #: u_translation.rsmeasuringsec
 msgid "Measuring second position"
-msgstr ""
+msgstr "Измерение второй позиции"
 
 #: u_translation.rsmeasuringthe
 msgid "Measuring the new position"
-msgstr ""
+msgstr "Измерение новой позиции"
 
 #: u_translation.rsmedian
 #, object-pascal-format
@@ -2539,11 +2551,11 @@ msgstr "Вручную переместите монтировку по RA, за
 
 #: u_translation.rsmovetheteles
 msgid "Slew the telescope to the nearby position with a bright star."
-msgstr ""
+msgstr "Наведите телескоп на ближайшую точку с яркой звездой."
 
 #: u_translation.rsmovethetrian
 msgid "Move the triangle with the mouse (left button down) such that the green circle is marking a bright star."
-msgstr ""
+msgstr "Переместите треугольник с помощью мыши (левая кнопка) так, чтобы зеленый кружок отмечал яркую звезду."
 
 #: u_translation.rsmovetonewpla
 #, object-pascal-format
@@ -2564,15 +2576,15 @@ msgstr "Поворот телескопа"
 
 #: u_translation.rsmovingto
 msgid "Moving to"
-msgstr ""
+msgstr "Переход к"
 
 #: u_translation.rsmovingtofirs
 msgid "Moving to first position"
-msgstr ""
+msgstr "Переход на первую позицию"
 
 #: u_translation.rsmovingtoseco
 msgid "Moving to second position"
-msgstr ""
+msgstr "Переход на вторую позицию"
 
 #: u_translation.rsnearfocus
 msgid "Near focus"
@@ -2584,7 +2596,7 @@ msgstr "HFD ближайшего фокуса должен быть меньше
 
 #: u_translation.rsnearthepole
 msgid "near the pole"
-msgstr ""
+msgstr "около полюса"
 
 #: u_translation.rsneedtowaitun
 #, object-pascal-format
@@ -2634,7 +2646,7 @@ msgstr "Опорная звезда не найдена"
 
 #: u_translation.rsnoalpacaserv
 msgid "No Alpaca server found"
-msgstr ""
+msgstr "Сервер Alpaca не найден"
 
 #: u_translation.rsnoastronomic
 msgid "No astronomical twilight at this location today"
@@ -2674,7 +2686,7 @@ msgstr "Нет устройств"
 
 #: u_translation.rsnodevicefoun
 msgid "No device found"
-msgstr ""
+msgstr "Устройство не найдено"
 
 #: u_translation.rsnodusktoday
 msgid "No dusk today"
@@ -3107,7 +3119,7 @@ msgstr "Настройте параметры автофокусировки"
 
 #: u_translation.rspleaseconfig3
 msgid "Please configure the observatory location."
-msgstr ""
+msgstr "Укажите местоположение обсерватории"
 
 #: u_translation.rspleaseconfir
 #, object-pascal-format
@@ -3166,7 +3178,7 @@ msgstr "Сначала остановите выполнение задания!
 
 #: u_translation.rspleasewait
 msgid "please wait"
-msgstr ""
+msgstr "подождите"
 
 #: u_translation.rspleasewaitun
 msgid "Please wait until the measurements are complete"
@@ -3214,7 +3226,7 @@ msgstr "Уточнение позиции не выполнено!"
 
 #: u_translation.rspredefined
 msgid "Predefined (recommended)"
-msgstr ""
+msgstr "Предопределено (рекомендуется)"
 
 #: u_translation.rspreferedfocu
 msgid "Prefered focuser direction"
@@ -3464,11 +3476,11 @@ msgstr "Распознать и показать границу изображе
 
 #: u_translation.rsresolveandsl
 msgid "Resolve and Slew to image center"
-msgstr "Распознать и повернуть к центру изображения"
+msgstr "Распознать и навести телескоп в центр изображения"
 
 #: u_translation.rsresolveandsl2
 msgid "Resolve and Slew to cursor"
-msgstr "Распознать и повернуть в точку курсора"
+msgstr "Распознать и навести телескоп в точку курсора"
 
 #: u_translation.rsresolveandsy
 msgid "Resolve and Sync the mount"
@@ -3515,7 +3527,7 @@ msgstr "Перезапуск автогида"
 
 #: u_translation.rsrestartdelay
 msgid "Restart delay"
-msgstr ""
+msgstr "Задержка перезапуска"
 
 #: u_translation.rsrestartexpos
 msgid "Restart exposure"
@@ -3661,7 +3673,7 @@ msgstr "Сохранить"
 
 #: u_translation.rssaveandapply
 msgid "Save and apply to targets"
-msgstr ""
+msgstr "Сохранить и применить в задании"
 
 #: u_translation.rssaveapngfile
 msgid "Save a bitmap file additionally to the standard FITS file"
@@ -3784,7 +3796,7 @@ msgstr "Сначала выберите звезду!"
 
 #: u_translation.rsselectoneoft
 msgid "Select one of the measurement options:"
-msgstr ""
+msgstr "Выберите один из вариантов измерения:"
 
 #: u_translation.rsselectthecur
 msgid "Select the cursor to use "
@@ -3964,7 +3976,7 @@ msgstr "Установить величину"
 #: u_translation.rssetmountifav
 #, object-pascal-format
 msgid "Set mount %s if available"
-msgstr ""
+msgstr "Установить монтировку %s, если доступно"
 
 #: u_translation.rssetmountsite
 msgid "Set mount site long/lat from configuration"
@@ -4039,6 +4051,10 @@ msgstr "Показать подсказку"
 #: u_translation.rsshowstacking
 msgid "Show stacking option for Preview/Capture/Sequence"
 msgstr "Показать параметры сложения для Превью/Съёмки/Задания"
+
+#: u_translation.rssideofpier
+msgid "Side of pier"
+msgstr ""
 
 #: u_translation.rssigma
 msgid "sigma"
@@ -4251,7 +4267,7 @@ msgstr "Звезда"
 
 #: u_translation.rsstaralignmen
 msgid "Star alignment"
-msgstr ""
+msgstr "Выравнивать по звёздам"
 
 #: u_translation.rsstardatabase
 msgid "Star database is empty, check path to star database files!!"
@@ -4567,7 +4583,7 @@ msgstr ""
 
 #: u_translation.rssystemisunde
 msgid "System is undersampled, accept 1 pixel star"
-msgstr "Система субдискретна, допускать звёзды размером в 1 пиксель"
+msgstr "Допускать звёзды размером в 1 пиксел"
 
 #: u_translation.rstakecontrole
 #, object-pascal-format
@@ -4947,7 +4963,7 @@ msgstr "Невозможно распознать!"
 
 #: u_translation.rsunattendeder
 msgid "Unattended error script"
-msgstr ""
+msgstr "Скрипт при ошибке"
 
 #: u_translation.rsunavailable
 msgid "unavailable"
@@ -5037,11 +5053,11 @@ msgstr "Астрометрия для%sуточнения позиции"
 
 #: u_translation.rsuseastrometr
 msgid "Use astrometry to refine the position"
-msgstr ""
+msgstr "Используовать астрометрию для уточнения позиции"
 
 #: u_translation.rsusecovercali
 msgid "Use Cover calibrator"
-msgstr ""
+msgstr "Использовать крышку-калибратор"
 
 #: u_translation.rsusecustomscr
 msgid "Use custom script"
@@ -5101,7 +5117,7 @@ msgstr "Использовать определённый режим считы�
 
 #: u_translation.rsuseswitch
 msgid "Use switch"
-msgstr ""
+msgstr "Использовать switch"
 
 #: u_translation.rsusewatchdog
 msgid "Use watchdog"
@@ -5316,7 +5332,7 @@ msgstr "При выполнении автофокусировки из зада
 
 #: u_translation.rswhenreadycli
 msgid "When ready click"
-msgstr ""
+msgstr "Когда все будет готово, нажмите"
 
 #: u_translation.rswidth
 msgid "Width"
@@ -5336,7 +5352,7 @@ msgstr "Скорость ветра"
 
 #: u_translation.rswithoutpolev
 msgid "without pole visibility"
-msgstr ""
+msgstr "без видимости полюса"
 
 #: u_translation.rsyes
 msgid "Yes"

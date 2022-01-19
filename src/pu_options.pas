@@ -981,6 +981,9 @@ begin
   StackShow.Caption := rsShowStacking;
   SaveStack.Caption := rsSaveIndividu;
   StackAlign.Caption:= rsStarAlignmen;
+  FileStackFloat.Caption:=rsFloatingPoin;
+  StackUseDark.Caption:=rsApplyDarkAnd;
+  StackDebayer.Caption:=rsDebayer;
   StackOperation.Items[0]:=rsAddImages;
   StackOperation.Items[1]:=rsMeanOfImages;
   GroupBox19.Caption := rsClippingIndi;

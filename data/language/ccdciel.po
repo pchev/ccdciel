@@ -5110,3 +5110,19 @@ msgstr ""
 msgid "Star alignment"
 msgstr ""
 
+#: u_translation:rssideofpier
+msgid "Side of pier"
+msgstr ""
+
+#: u_translation:rsfloatingpoin
+msgid "Floating point file"
+msgstr ""
+
+#: u_translation:rsapplydarkand
+msgid "Apply Dark and BPM"
+msgstr ""
+
+#: u_translation:rsdebayer
+msgid "Debayer"
+msgstr ""
+

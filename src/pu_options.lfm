@@ -1432,8 +1432,8 @@ object f_option: Tf_option
             Left = 16
             Height = 21
             Top = 66
-            Width = 154
-            Caption = 'Save as floating point'
+            Width = 130
+            Caption = 'Floating point file'
             TabOrder = 4
           end
           object StackOperation: TRadioGroup

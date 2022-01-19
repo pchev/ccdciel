@@ -6,15 +6,15 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ccdciel\n"
 "Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
-"POT-Creation-Date: 2021-12-20 14:12+0000\n"
-"PO-Revision-Date: 2021-12-20 14:26+0000\n"
+"POT-Creation-Date: 2022-01-19 10:30+0000\n"
+"PO-Revision-Date: 2022-01-19 10:34+0000\n"
 "Last-Translator: Patrick Chevalley <Unknown>\n"
 "Language-Team: French <fr@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2021-12-20 14:28+0000\n"
-"X-Generator: Launchpad (build adb364d6a74a28e7b95d51cd30446ec16160de6c)\n"
+"X-Launchpad-Export-Date: 2022-01-19 10:36+0000\n"
+"X-Generator: Launchpad (build 26073c1e760cd9ba5d9f68c5529d7984f691d826)\n"
 
 #: u_translation.rs2d
 msgid "2D"
@@ -144,6 +144,10 @@ msgstr "Un autre script est déjà en cours"
 #: u_translation.rsanytime
 msgid "Any time"
 msgstr "N'importe quand"
+
+#: u_translation.rsapplydarkand
+msgid "Apply Dark and BPM"
+msgstr "Applique le Dark et BPM"
 
 #: u_translation.rsapplyediting
 msgid "Apply editing to active sequence"
@@ -1095,6 +1099,10 @@ msgstr "Date (TU) / Séquence"
 msgid "dawn"
 msgstr "aube"
 
+#: u_translation.rsdebayer
+msgid "Debayer"
+msgstr "Débayeriser"
+
 #: u_translation.rsdebayerthepr
 msgid "Debayer the preview image"
 msgstr "Débayeriser l'aperçu"
@@ -1646,6 +1654,10 @@ msgstr "Retourner l'image horizontalement"
 #: u_translation.rsfliptheimagev
 msgid "Flip the image vertically"
 msgstr "Retourner l'image verticalement"
+
+#: u_translation.rsfloatingpoin
+msgid "Floating point file"
+msgstr "Fichier point flottant"
 
 #: u_translation.rsflux
 msgid "Flux"
@@ -4039,6 +4051,10 @@ msgstr "Demande de confirmation"
 #: u_translation.rsshowstacking
 msgid "Show stacking option for Preview/Capture/Sequence"
 msgstr "Affiche l'option d'empilement pour Prévisualisation/Acquisition/Séquence"
+
+#: u_translation.rssideofpier
+msgid "Side of pier"
+msgstr "Côté du pied"
 
 #: u_translation.rssigma
 msgid "sigma"
