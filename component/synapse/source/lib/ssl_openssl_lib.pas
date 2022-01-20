@@ -113,8 +113,8 @@ const
 var
   {$IFNDEF MSWINDOWS}
     {$IFDEF DARWIN}
-    DLLSSLName: string = 'libssl.dylib';
-    DLLUtilName: string = 'libcrypto.dylib';
+    DLLSSLName: string = 'libssl.1.1.dylib';       // versioned library required since Big Sur
+    DLLUtilName: string = 'libcrypto.1.1.dylib';
     {$ELSE}
      {$IFDEF OS2}
       {$IFDEF OS2GCC}
@@ -1860,7 +1860,7 @@ end;
 
 function InitSSLInterface: Boolean;
 var
-  s,lver: string;
+  s,lver,buf: string;
   x,lver1,lver2,lver3: integer;
 begin
   {pf}
@@ -1872,6 +1872,7 @@ begin
   {/pf}  
   SSLCS.Enter;
   try
+  try
     if not IsSSLloaded then
     begin
 {$IFDEF CIL}
@@ -1880,6 +1881,16 @@ begin
 {$ELSE}
       SSLUtilHandle := LoadLib(DLLUtilName);
       SSLLibHandle := LoadLib(DLLSSLName);
+      {$IFDEF DARWIN}
+      if SSLLibHandle=0 then begin
+        // try to load libraries from Frameworks
+        buf:=extractfilepath(paramstr(0));
+        DLLSSLName:=expandfilename(buf+'/../Frameworks')+'/'+DLLSSLName;
+        DLLUtilName:=expandfilename(buf+'/../Frameworks')+'/'+DLLUtilName;
+        SSLUtilHandle := LoadLib(DLLUtilName);
+        SSLLibHandle := LoadLib(DLLSSLName);
+      end;
+      {$ENDIF}
       {$IFDEF Linux}
          if SSLLibHandle=0 then begin    // try versioned library name
            for lver1:=1 downto 0 do begin
@@ -2073,6 +2084,10 @@ begin
       Result := true;
   finally
     SSLCS.Leave;
+  end;
+  except
+    SSLLibHandle := 0;
+    Result := False;
   end;
 end;
 
