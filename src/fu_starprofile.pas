@@ -136,7 +136,7 @@ type
     FAutofocusResult, FAutofocusDone: boolean;
     dyn_v_curve:array of TDouble2;
     aminhfd,amaxhfd:double;
-    afmpos,aminpos,DynAbsStartPos,DynAbsStep:integer;
+    afmpos,aminpos,DynAbsStartPos,DynAbsStep,DynCurrentPos:integer;
     FFits: TFits;
     procedure msg(txt:string; level: integer);
     function  getRunning:boolean;
@@ -1243,10 +1243,11 @@ begin
 end;
 
 procedure Tf_starprofile.doAutofocusDynamic;
-var i,k,step,sumpos,numpos: integer;
+var i,k,step,sumpos,numpos,focuspos: integer;
     p_hyp,a_hyp,b_hyp,x: double;
   procedure ResetPos;
   begin
+   if FPreFocusPos=-1 then begin
     k:=round(AutofocusDynamicMovement*(AutofocusDynamicNumPoint-aminpos));
     if k>0 then begin
       focuser.FocusSpeed:=k;
@@ -1258,6 +1259,11 @@ var i,k,step,sumpos,numpos: integer;
       end;
       Wait(1);
     end;
+   end
+   else begin
+     focuser.FocusPosition:=FPreFocusPos;
+     FonAbsolutePosition(self);
+   end;
   end;
 begin
   case AutofocusDynamicStep of
@@ -1267,23 +1273,39 @@ begin
               if AutofocusDynamicNumPoint<5 then AutofocusDynamicNumPoint:=5;
               SetLength(dyn_v_curve,AutofocusDynamicNumPoint+1);
               // set initial position
-              DynAbsStartPos:=focuser.FocusPosition;  //return -1 for relative focuser
+              DynAbsStartPos:=FPreFocusPos;  //return -1 for relative focuser
               k:=AutofocusDynamicNumPoint div 2;
-              focuser.FocusSpeed:=AutofocusDynamicMovement*k;
-              if AutofocusMoveDir=FocusDirIn then begin
-                onFocusOUT(self);
-                if DynAbsStartPos>0 then DynAbsStartPos:=DynAbsStartPos+AutofocusDynamicMovement*k;
-                DynAbsStep:=-AutofocusDynamicMovement;
+              if FPreFocusPos=-1 then begin
+                focuser.FocusSpeed:=AutofocusDynamicMovement*k;
+                if AutofocusMoveDir=FocusDirIn then begin
+                  onFocusOUT(self);
+                  DynAbsStep:=-AutofocusDynamicMovement;
+                end
+                else begin
+                  onFocusIN(self);
+                  DynAbsStep:=AutofocusDynamicMovement;
+                end;
+                focuser.FocusSpeed:=AutofocusDynamicMovement;
               end
               else begin
-                onFocusIN(self);
-                if DynAbsStartPos>0 then DynAbsStartPos:=DynAbsStartPos-AutofocusDynamicMovement*k;
-                DynAbsStep:=AutofocusDynamicMovement;
+                if AutofocusMoveDir=FocusDirIn then begin
+                  DynAbsStartPos:=DynAbsStartPos+AutofocusDynamicMovement*k;
+                  DynAbsStep:=-AutofocusDynamicMovement;
+                  DynCurrentPos:=DynAbsStartPos;
+                  focuser.FocusPosition:=DynCurrentPos;
+                  FonAbsolutePosition(self);
+                end
+                else begin
+                  DynAbsStartPos:=DynAbsStartPos-AutofocusDynamicMovement*k;
+                  DynAbsStep:=AutofocusDynamicMovement;
+                  DynCurrentPos:=DynAbsStartPos;
+                  focuser.FocusPosition:=DynCurrentPos;
+                  FonAbsolutePosition(self);
+                end;
               end;
               afmpos:=0;
               aminhfd:=9999;
               amaxhfd:=-1;
-              focuser.FocusSpeed:=AutofocusDynamicMovement;
               AutofocusDynamicStep:=afdMeasure;
               end;
     afdMeasure: begin
@@ -1304,11 +1326,18 @@ begin
                 exit
               end;
               // increment position
-              if AutofocusMoveDir=FocusDirIn then
-                onFocusIN(self)
-              else
-                onFocusOUT(self);
+              if FPreFocusPos=-1 then begin
+                if AutofocusMoveDir=FocusDirIn then
+                  onFocusIN(self)
+                else
+                  onFocusOUT(self);
+              end
+              else begin
+                DynCurrentPos:=DynCurrentPos+DynAbsStep;
+                focuser.FocusPosition:=DynCurrentPos;
+                FonAbsolutePosition(self);
               end;
+            end;
     afdEnd: begin
               sumpos:=0;
               numpos:=0;
@@ -1353,6 +1382,7 @@ begin
                 x:=DynAbsStartPos+(p_hyp-1)*DynAbsStep
               else
                 x:=p_hyp;
+              focuspos:=round(x);
               msg(Format(rsHYPERBOLACur, [FormatFloat(f3, x), FormatFloat(f4, lowest_error), inttostr(iteration_cycles)]),3 );
               if DynAbsStartPos>0 then
                 PtSourceComp.Add(DynAbsStartPos+(p_hyp-1)*DynAbsStep,a_hyp,'',clFuchsia)
@@ -1366,30 +1396,36 @@ begin
                 FitSourceComp.Add(x,hfd_calc(i/10,p_hyp,a_hyp,b_hyp));
               end;
               // focus position with last move in focus direction
-              step:=round(AutofocusDynamicMovement*(AutofocusDynamicNumPoint-p_hyp)); //require steps from current position at the end of the curve
-              if focuser.BacklashActive then begin
-                focuser.FocusSpeed:=step;
-                 if AutofocusMoveDir=FocusDirIn then begin
-                   onFocusOUT(self);  // wrong direction but compensated by backlash correction
-                 end
-                 else begin
-                   onFocusIN(self);   // wrong direction but compensated by backlash correction
-                 end;
-              end
-              else begin
-                focuser.FocusSpeed:=step+AutofocusDynamicMovement;  // move a bit more
-                if AutofocusMoveDir=FocusDirIn then begin
-                  onFocusOUT(self);
-                  wait; // let time for position refresh
-                  focuser.FocusSpeed:=AutofocusDynamicMovement;     // got to position in right direction
-                  onFocusIN(self);
+              if DynAbsStartPos<0 then begin
+                step:=round(AutofocusDynamicMovement*(AutofocusDynamicNumPoint-p_hyp)); //require steps from current position at the end of the curve
+                if focuser.BacklashActive then begin
+                  focuser.FocusSpeed:=step;
+                   if AutofocusMoveDir=FocusDirIn then begin
+                     onFocusOUT(self);  // wrong direction but compensated by backlash correction
+                   end
+                   else begin
+                     onFocusIN(self);   // wrong direction but compensated by backlash correction
+                   end;
                 end
                 else begin
-                  onFocusIN(self);
-                  wait; // let time for position refresh
-                  focuser.FocusSpeed:=AutofocusDynamicMovement;     // got to position in right direction
-                  onFocusOUT(self)
+                  focuser.FocusSpeed:=step+AutofocusDynamicMovement;  // move a bit more
+                  if AutofocusMoveDir=FocusDirIn then begin
+                    onFocusOUT(self);
+                    wait; // let time for position refresh
+                    focuser.FocusSpeed:=AutofocusDynamicMovement;     // got to position in right direction
+                    onFocusIN(self);
+                  end
+                  else begin
+                    onFocusIN(self);
+                    wait; // let time for position refresh
+                    focuser.FocusSpeed:=AutofocusDynamicMovement;     // got to position in right direction
+                    onFocusOUT(self)
+                  end;
                 end;
+              end
+              else begin
+                focuser.FocusPosition:=focuspos;
+                FonAbsolutePosition(self);
               end;
               terminated:=true;
               end;
