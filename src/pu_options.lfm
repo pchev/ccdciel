@@ -1449,7 +1449,7 @@ object f_option: Tf_option
             ChildSizing.ShrinkVertical = crsScaleChilds
             ChildSizing.Layout = cclLeftToRightThenTopToBottom
             ChildSizing.ControlsPerLine = 2
-            ClientHeight = 28
+            ClientHeight = 10
             ClientWidth = 336
             Columns = 2
             ItemIndex = 0
@@ -6268,7 +6268,7 @@ object f_option: Tf_option
           object GroupBox16: TGroupBox
             Left = 0
             Height = 88
-            Top = 0
+            Top = 52
             Width = 558
             Align = alTop
             Caption = 'Focuser temperature compensation'
@@ -6389,7 +6389,7 @@ object f_option: Tf_option
           object Label148: TLabel
             Left = 6
             Height = 40
-            Top = 94
+            Top = 6
             Width = 526
             Align = alTop
             AutoSize = False
