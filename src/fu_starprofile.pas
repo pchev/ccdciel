@@ -325,7 +325,7 @@ begin
 end;
 
 procedure Tf_starprofile.InitAutofocus(restart: boolean);
-var i: integer;
+var i,p1,p2: integer;
 begin
  FnumHfd:=0;
  FnumGraph:=0;
@@ -335,7 +335,15 @@ begin
  terminated:=false;
  FirstFrame:=true;
  FAutofocusResult:=false;
- FPreFocusPos:=focuser.FocusPosition;
+ i:=0;
+ p1:=focuser.FocusPosition;
+ repeat
+   inc(i);
+   wait;
+   p2:=p1;
+   p1:=focuser.FocusPosition;
+ until (p1=p2)or(i>3);
+ FPreFocusPos:=p1;
  focuserdirection:=AutofocusMoveDir;
  PtSourceMeasure.Clear;
  FitSourceMeasure.Clear;
