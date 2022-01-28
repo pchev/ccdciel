@@ -475,6 +475,7 @@ type
     procedure StartSequenceTimerTimer(Sender: TObject);
     procedure StartupTimerTimer(Sender: TObject);
     procedure StatusBar1DrawPanel(StatusBar: TStatusBar; Panel: TStatusPanel; const Rect: TRect);
+    procedure StatusBar1MouseMove(Sender: TObject; Shift: TShiftState; X, Y: Integer);
     procedure StatusBar1Resize(Sender: TObject);
     procedure StatusbarTimerTimer(Sender: TObject);
     procedure StatusTimerTimer(Sender: TObject);
@@ -2547,6 +2548,11 @@ begin
       statusbar.Hint:=msg;
     end;
   end;
+end;
+
+procedure Tf_main.StatusBar1MouseMove(Sender: TObject; Shift: TShiftState; X, Y: Integer);
+begin
+  StatusBar1.ShowHint:=ShowHint and (StatusBar1.GetPanelIndexAt(x,y)=panelled);
 end;
 
 procedure Tf_main.StatusBar1Resize(Sender: TObject);

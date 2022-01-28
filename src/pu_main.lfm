@@ -406,6 +406,7 @@ object f_main: Tf_main
     ParentFont = False
     SimplePanel = False
     OnDrawPanel = StatusBar1DrawPanel
+    OnMouseMove = StatusBar1MouseMove
     OnResize = StatusBar1Resize
   end
   object MainMenu1: TMainMenu
