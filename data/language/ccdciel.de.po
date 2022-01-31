@@ -7,14 +7,14 @@ msgstr ""
 "Project-Id-Version: ccdciel\n"
 "Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
 "POT-Creation-Date: 2022-01-19 10:30+0000\n"
-"PO-Revision-Date: 2022-01-05 21:35+0000\n"
+"PO-Revision-Date: 2022-01-21 19:05+0000\n"
 "Last-Translator: Thomas <email@starhopper.de>\n"
 "Language-Team: German <de@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2022-01-19 10:36+0000\n"
-"X-Generator: Launchpad (build 26073c1e760cd9ba5d9f68c5529d7984f691d826)\n"
+"X-Launchpad-Export-Date: 2022-01-31 12:44+0000\n"
+"X-Generator: Launchpad (build 464e4acf6ea83683a507f3bcaee75fe55e2a617c)\n"
 
 #: u_translation.rs2d
 msgid "2D"
@@ -147,7 +147,7 @@ msgstr "Jederzeit"
 
 #: u_translation.rsapplydarkand
 msgid "Apply Dark and BPM"
-msgstr ""
+msgstr "Dark und BPM anwenden"
 
 #: u_translation.rsapplyediting
 msgid "Apply editing to active sequence"
@@ -1101,7 +1101,7 @@ msgstr "Morgendämmerung"
 
 #: u_translation.rsdebayer
 msgid "Debayer"
-msgstr ""
+msgstr "Debayer"
 
 #: u_translation.rsdebayerthepr
 msgid "Debayer the preview image"
@@ -1657,7 +1657,7 @@ msgstr "Vertikal spiegeln"
 
 #: u_translation.rsfloatingpoin
 msgid "Floating point file"
-msgstr ""
+msgstr "Datei im Gleitkomma Format"
 
 #: u_translation.rsflux
 msgid "Flux"
@@ -4054,7 +4054,7 @@ msgstr "Zeige Stacking Optionen für Voransicht/Aufnahme/Sequenz"
 
 #: u_translation.rssideofpier
 msgid "Side of pier"
-msgstr ""
+msgstr "Seite der Säule"
 
 #: u_translation.rssigma
 msgid "sigma"
