@@ -657,13 +657,13 @@ object f_main: Tf_main
       object N5: TMenuItem
         Caption = '-'
       end
-      object MenuPolarAlignment: TMenuItem
-        Caption = 'MenuPolarAlignment'
-        OnClick = MenuPolarAlignmentClick
-      end
       object MenuPolarAlignment2: TMenuItem
-        Caption = 'Polar alignment 2'
+        Caption = 'Polar alignment without pole visibility'
         OnClick = MenuPolarAlignment2Click
+      end
+      object MenuPolarAlignment: TMenuItem
+        Caption = 'Polar alignment near the pole'
+        OnClick = MenuPolarAlignmentClick
       end
       object MenuCollimation: TMenuItem
         Caption = 'Collimation'
