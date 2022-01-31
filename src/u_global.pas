@@ -287,6 +287,7 @@ const
   ellipsis = #$E2+#$80+#$A6;
   URL_DOWNLOAD='https://sourceforge.net/projects/ccdciel/files/';
   URL_BUGREPORT='https://www.ap-i.net/mantis/set_project.php?project_id=3';
+  URL_CHANGELOG='https://groups.io/g/ccdciel/search?q=%23newversion&ct=1';
   URL_ONLINEHELP='https://www.ap-i.net/ccdciel/en/documentation/start';
   URL_USERGROUP='https://groups.io/g/ccdciel';
   URL_PROGRAMSTATUS='http://localhost:$port';

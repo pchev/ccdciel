@@ -1203,6 +1203,10 @@ object f_main: Tf_main
       object MenuItem9: TMenuItem
         Caption = '-'
       end
+      object MenuChangelog: TMenuItem
+        Caption = 'Changelog'
+        OnClick = MenuChangelogClick
+      end
       object MenuBugReport: TMenuItem
         Caption = 'Report a problem'
         OnClick = MenuBugReportClick

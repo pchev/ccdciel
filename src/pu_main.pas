@@ -126,6 +126,7 @@ type
     MenuDarkInfo: TMenuItem;
     MenuDarkInfo1: TMenuItem;
     MenuDarkInfo2: TMenuItem;
+    MenuChangelog: TMenuItem;
     MenuPolarAlignment2: TMenuItem;
     MenuItemUnselect2: TMenuItem;
     MenuItemUnselect: TMenuItem;
@@ -364,6 +365,7 @@ type
     procedure MenuBugReportClick(Sender: TObject);
     procedure MenuCaptureStartClick(Sender: TObject);
     procedure MenuCCDtempSetClick(Sender: TObject);
+    procedure MenuChangelogClick(Sender: TObject);
     procedure MenuClearBPMClick(Sender: TObject);
     procedure MenuClearRefClick(Sender: TObject);
     procedure MenuCollimationClick(Sender: TObject);
@@ -6076,6 +6078,11 @@ end;
 procedure Tf_main.MenuDownloadClick(Sender: TObject);
 begin
   ExecuteFile(URL_DOWNLOAD);
+end;
+
+procedure Tf_main.MenuChangelogClick(Sender: TObject);
+begin
+  ExecuteFile(URL_CHANGELOG);
 end;
 
 procedure Tf_main.MenuBugReportClick(Sender: TObject);
