@@ -10175,6 +10175,15 @@ begin
      Image1.Canvas.pen.Width:=1;
      Image1.Canvas.pen.Mode:=pmCopy;
   end;
+  if f_visu.BtnClipping.Down then begin
+    Image1.Canvas.Brush.Color:=clBlack;
+    Image1.Canvas.Brush.Style:=bsSolid;
+    Image1.Canvas.Font.Color:=clSilver;
+    Image1.Canvas.Font.Size:=DoScaleX(10);
+    x:=1;
+    y:=Image1.Height-DoScaleX(17);
+    Image1.Canvas.TextOut(x, y, rsClippingIndi+': '+FormatFloat(f0, ClippingUnderflow)+'/'+FormatFloat(f0, ClippingOverflow));
+  end;
 end;
 
 procedure  Tf_main.StarSelection(Sender: TObject);
