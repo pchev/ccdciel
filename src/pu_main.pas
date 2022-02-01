@@ -3754,7 +3754,6 @@ begin
   ConfigExpEarlyStart:=config.GetValue('/Sensor/ExpEarlyStart',ConfigExpEarlyStart);
   MeasureNewImage:=config.GetValue('/Files/MeasureNewImage',false) and ConfigExpEarlyStart;
   CheckRecenterTarget:=config.GetValue('/PrecSlew/CheckRecenterTarget',false) and ConfigExpEarlyStart;
-  ClippingOverflow:=min(ClippingOverflow,MaxADU);
   reftreshold:=config.GetValue('/RefImage/Treshold',128);
   refcolor:=config.GetValue('/RefImage/Color',0);
   BPMsigma:=config.GetValue('/BadPixel/Sigma',5.0);
