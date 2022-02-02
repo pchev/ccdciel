@@ -1216,7 +1216,10 @@ begin
   debug_msg := false;
   {$ifdef mswindows}
   Application.{%H-}UpdateFormatSettings := False;
-  isAdmin := IsUserAnAdmin;
+  if Win32MajorVersion>=6 then
+    isAdmin := IsUserAnAdmin    // Vista to ...
+  else
+    isAdmin := false;           // 2000, XP
   try
   Registry := TRegistry.Create;
   Registry.RootKey := HKEY_LOCAL_MACHINE;
