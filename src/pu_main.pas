@@ -10025,6 +10025,8 @@ var x,y,x1,y1,x2,y2,x3,y3,xr1,yr1,xr2,yr2,xr3,yr3,xr4,yr4,xxc,yyc,s,r,rc: intege
     labeloverlap: array of array of Byte;
     labellimit,lox,loy,mlox,mloy: integer;
 begin
+try
+  if f_starprofile=nil then exit;
   ScrBmp.Draw(Image1.Canvas,0,0,true);
   if PolarAlignmentOverlay then begin
      Fits2Screen(round(PolarAlignmentStartX+PolarAlignmentOverlayOffsetX),round(PolarAlignmentStartY+PolarAlignmentOverlayOffsetY),f_visu.FlipHorz,f_visu.FlipVert,x1,y1);
@@ -10186,6 +10188,8 @@ begin
     y:=Image1.Height-DoScaleX(17);
     Image1.Canvas.TextOut(x, y, rsClippingIndi+': '+FormatFloat(f0, ClippingUnderflow)+'/'+FormatFloat(f0, ClippingOverflow));
   end;
+except
+end;
 end;
 
 procedure  Tf_main.StarSelection(Sender: TObject);
