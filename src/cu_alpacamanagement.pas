@@ -158,6 +158,9 @@ const
 begin
   Result:=TStringList.Create;
   Result.Add('127.255.255.255'); // always add local loopback
+  {$IFDEF darwin}
+    Result.Add('127.0.0.1');
+  {$ENDIF}
   sl:=TStringList.Create();
   {$IFDEF WINDOWS}
   FSWbemLocator := CreateOleObject('WbemScripting.SWbemLocator');
