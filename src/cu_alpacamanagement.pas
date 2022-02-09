@@ -135,11 +135,12 @@ var
   sl: TStringList;
   s: string;
   i: integer;
+  f_loopback,f_broadcast: boolean;
   {$IFDEF UNIX}
   AProcess: TProcess;
-  processok: boolean;
+  processok,newformat: boolean;
   buf: string;
-  jl,ja: TJSONData;
+  jl,ja,jf: TJSONData;
   j,n,l: integer;
   {$ENDIF}
   {$IFDEF WINDOWS}
@@ -157,10 +158,6 @@ const
   {$ENDIF}
 begin
   Result:=TStringList.Create;
-  Result.Add('127.255.255.255'); // always add local loopback
-  {$IFDEF darwin}
-    Result.Add('127.0.0.1');
-  {$ENDIF}
   sl:=TStringList.Create();
   {$IFDEF WINDOWS}
   FSWbemLocator := CreateOleObject('WbemScripting.SWbemLocator');
@@ -201,7 +198,7 @@ begin
   end;
   {$ENDIF}
   {$IFDEF UNIX}
-  // Try to use ip
+  // Try to use ip with json output
   AProcess:=TProcess.Create(nil);
   AProcess.Executable := '/sbin/ip';
   AProcess.Parameters.Add('-json');
@@ -225,14 +222,30 @@ begin
     jl:=GetJSON(buf);
     try
     for i:=0 to jl.Count-1 do begin
+      f_loopback:=false; f_broadcast:=false;
+      if jl.Items[i].FindPath('flags')<>nil then begin
+        jf:=jl.Items[i].FindPath('flags');
+        for j:=0 to jf.Count-1 do begin
+          buf:=jf.Items[j].AsString;
+          if buf='LOOPBACK' then f_loopback:=true;
+          if buf='BROADCAST' then f_broadcast:=true;
+        end;
+      end;
       ja:=jl.Items[i].FindPath('addr_info');
       if ja<>nil then for j:=0 to ja.Count-1 do begin
         if ja.Items[j].FindPath('family')=nil then Continue;
         buf:=ja.Items[j].FindPath('family').AsString;
         if buf='inet' then begin
+         if f_loopback then begin
+          if ja.Items[j].FindPath('local')=nil then Continue;
+          s:=ja.Items[j].FindPath('local').AsString;
+          Result.Add(Trim(s));
+         end
+         else if f_broadcast then begin
           if ja.Items[j].FindPath('broadcast')=nil then Continue;
           s:=ja.Items[j].FindPath('broadcast').AsString;
           Result.Add(Trim(s));
+         end;
         end;
       end;
     end;
@@ -257,23 +270,69 @@ begin
     finally
       AProcess.Free();
     end;
-    for i:=0 to sl.Count-1 do
-    begin
-      l:=10;
-      n:=Pos('broadcast ', sl[i]);
-      if n=0 then begin n:=Pos('Bcast:', sl[i]); l:=6; end;
-      if n=0 then Continue;
-      s:=sl[i];
-      s:=Copy(s, n+l, 999);
-      n:=Pos(' ', s);
-      if n>0 then s:=Copy(s, 1, n);
-      Result.Add(Trim(s));
+    if sl.Count>0 then begin
+      newformat:=pos('Link encap:',sl[0])=0;
+      if newformat then begin // new ifconfig format
+        for i:=0 to sl.Count-1 do
+        begin
+          n:=pos('flags=',sl[i]);
+          if n>0 then begin // new interface
+            f_loopback:=pos('LOOPBACK',sl[i])>0;
+            f_broadcast:=pos('BROADCAST',sl[i])>0;
+          end;
+          if f_broadcast then begin
+            n:=Pos('broadcast ', sl[i]);
+            if n=0 then Continue;
+            s:=Copy(sl[i], n+10, 999);
+            n:=Pos(' ', s);
+            if n>0 then s:=Copy(s, 1, n);
+            Result.Add(Trim(s));
+          end;
+          if f_loopback then begin
+            n:=Pos('inet ', sl[i]);
+            if n=0 then Continue;
+            s:=Copy(sl[i], n+5, 999);
+            n:=Pos(' ', s);
+            if n>0 then s:=Copy(s, 1, n);
+            Result.Add(Trim(s));
+          end;
+        end;
+      end
+      else begin // old format
+        for i:=0 to sl.Count-1 do
+        begin
+          n:=pos('Link encap:',sl[i]);
+          if n>0 then begin // new interface
+            f_loopback:=pos('Local Loopback',sl[i])>0;
+            f_broadcast:=not f_loopback;
+          end;
+          if f_broadcast then begin
+            n:=Pos('Bcast:', sl[i]);
+            if n=0 then Continue;
+            s:=Copy(sl[i], n+6, 999);
+            n:=Pos(' ', s);
+            if n>0 then s:=Copy(s, 1, n);
+            Result.Add(Trim(s));
+          end;
+          if f_loopback then begin
+            n:=Pos('inet addr:', sl[i]);
+            if n=0 then Continue;
+            s:=Copy(sl[i], n+10, 999);
+            n:=Pos(' ', s);
+            if n>0 then s:=Copy(s, 1, n);
+            Result.Add(Trim(s));
+          end;
+        end;
+      end;
     end;
   end;
   {$ENDIF}
   sl.Free();
-  if Result.Count=0 then
-    Result.Add('255.255.255.255');
+  f_loopback:=false;
+  for i:=0 to Result.Count-1 do begin
+    if copy(Result[i],1,3)='127' then f_loopback:=true;
+  end;
+  if not f_loopback then Result.Add('127.0.0.1');
 end;
 
 function GetInsensitivePath(src:TJSONData; path:string):TJSONData;
