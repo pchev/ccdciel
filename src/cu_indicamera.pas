@@ -534,8 +534,11 @@ Procedure T_indicamera.Disconnect;
 begin
 InitTimer.Enabled:=False;
 ConnectTimer.Enabled:=False;
+try
 indiclient.Terminate;
 indiblob.Terminate;
+except
+end;
 ClearStatus;
 end;
 

@@ -222,7 +222,10 @@ if indiclient<>nil then begin
   wait(1);
   indiclient.disconnectDevice(Findidevice);
   wait(1);
+  try
   indiclient.Terminate;
+  except
+  end;
 end;
 ClearStatus;
 end;

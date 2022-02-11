@@ -206,7 +206,10 @@ Procedure T_indisafety.Disconnect;
 begin
 InitTimer.Enabled:=False;
 ConnectTimer.Enabled:=False;
+try
 indiclient.Terminate;
+except
+end;
 ClearStatus;
 end;
 

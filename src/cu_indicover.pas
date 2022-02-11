@@ -217,7 +217,10 @@ Procedure T_indicover.Disconnect;
 begin
 InitTimer.Enabled:=False;
 ConnectTimer.Enabled:=False;
+try
 indiclient.Terminate;
+except
+end;
 ClearStatus;
 end;
 
