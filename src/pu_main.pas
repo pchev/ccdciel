@@ -1306,6 +1306,7 @@ begin
   ZoomMin:=1;
   LogLevel:=3;
   LogToFile:=true;
+  LastPixelSize:=0;
   SplitImage:=false;
   SplitMargin:=0;
   SplitZoom:=1;
@@ -3892,7 +3893,6 @@ begin
   mount.WantSetPierSide:=config.GetValue('/Meridian/WantSetPierSide',false);
   astrometryResolver:=config.GetValue('/Astrometry/Resolver',ResolverAstap);
   AstrometryTimeout:=config.GetValue('/Astrometry/Timeout',30.0);
-  LastPixelSize:=config.GetValue('/Astrometry/LastPixelSize',1.0);
   buf:=config.GetValue('/Astrometry/OtherOptions','');
   if (astrometryResolver=ResolverAstrometryNet)and(pos('--no-fits2fits',buf)>0) then begin
     v:=AstrometryVersion(astrometryResolver,config.GetValue('/Astrometry/CygwinPath','C:\cygwin'),config.GetValue('/Astrometry/AstrometryPath',''),config.GetValue('/Astrometry/AstUseScript',false));
@@ -4341,7 +4341,6 @@ begin
 
    config.SetValue('/StarAnalysis/FocuserLastTemp',FocuserLastTemp);
    config.SetValue('/StarAnalysis/MagnitudeCalibration',MagnitudeCalibration);
-   config.SetValue('/Astrometry/LastPixelSize',LastPixelSize);
 end;
 
 procedure Tf_main.SaveConfig;
