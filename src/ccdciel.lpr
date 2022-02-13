@@ -62,6 +62,10 @@ uses
 {$SetPEFlags IMAGE_FILE_LARGE_ADDRESS_AWARE}
 {$endif}
 {$endif}
+{$ifdef LCLGTK2}
+var FArg,FSave: PPChar;
+    i,nSave: integer;
+{$endif}
 
 begin
   (* // To stdout by default, uncomment to write to file
@@ -75,9 +79,23 @@ begin
     {$endif}
   {$endif}
   *)
-
   RequireDerivedFormResource := True;
   Application.Initialize;
+  {$ifdef LCLGTK2}
+    nSave:=argc;
+    FSave:=argv;
+    try
+    argc:=argc+1;
+    ReAllocMem(FArg, argc*SizeOf(PChar));
+    argv := FArg;
+    for i:=0 to nSave-1 do
+      FArg[i]:=FSave[i];
+    FArg[argc-1]:=PChar('--disableaccurateframe');  // Fix flashing window on startup
+    except
+      argc:=nSave;
+      argv:=FSave;
+    end;
+  {$endif}
   Application.CreateForm(Tf_main, f_main);
   Application.CreateForm(Tf_setup, f_setup);
   Application.CreateForm(Tf_option, f_option);
@@ -92,5 +110,13 @@ begin
   Application.CreateForm(Tf_collimation, f_collimation);
   Application.CreateForm(Tf_polaralign2, f_polaralign2);
   Application.Run;
+  {$ifdef LCLGTK2}
+  try
+    ReAllocMem(FArg,0);
+    argc:=0;
+    argv:=nil;
+  except
+  end;
+  {$endif}
 end.
 
