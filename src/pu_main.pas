@@ -792,6 +792,7 @@ type
     procedure ResolveSlewCenter(Sender: TObject);
     procedure ResolveSyncRotator(Sender: TObject);
     procedure ResolveRotate(Sender: TObject);
+    procedure InitWCS(fn:string);
     procedure LoadPictureFile(fn:string);
     procedure LoadRawFile(fn:string);
     procedure SaveFitsFile(fn:string);
@@ -12601,11 +12602,105 @@ begin
   end;
 end;
 
+procedure Tf_main.InitWCS(fn:string);
+var n: integer;
+  c: TcdcWCScoord;
+  x1,y1,x2,y2,ulra,uldec: double;
+begin
+  if fits.HeaderInfo.solved then begin
+    try
+    n:=cdcwcs_initfitsfile(pchar(fn),0);
+    if n=0 then
+       n:=cdcwcs_getinfo(addr(cdcWCSinfo),0)
+    else begin
+      NewMessage(Format(rsErrorProcess, [fn]),9);
+    end;
+    if (n=0) and (abs(cdcWCSinfo.cdec)<89.99) then begin
+      // rotation from upper left corner
+      c.x:=0;
+      c.y:=cdcWCSinfo.hp;
+      n:=cdcwcs_xy2sky(@c,0);
+      ulra:=c.ra;
+      uldec:=c.dec;
+      n:=cdcwcs_sky2xy(@c,0);
+      x1:=c.x;
+      y1:=c.y;
+      c.ra:=ulra;
+      c.dec:=uldec+0.01;
+      n:=cdcwcs_sky2xy(@c,0);
+      x2:=c.x;
+      y2:=c.y;
+      WCSxyNrot := arctan2((x2 - x1), (y1 - y2));
+      c.ra:=ulra+0.01;
+      c.dec:=uldec;
+      n:=cdcwcs_sky2xy(@c,0);
+      x2:=c.x;
+      y2:=c.y;
+      WCSxyErot := arctan2((x2 - x1), (y1 - y2));
+      // center
+      c.x:=0.5+cdcWCSinfo.wp/2;
+      c.y:=0.5+cdcWCSinfo.hp/2;
+      n:=cdcwcs_xy2sky(@c,0);
+      WCScenterRA:=c.ra;
+      WCScenterDEC:=c.dec;
+      // FOV
+      if (cdcWCSinfo.secpix>0) then begin
+        WCSwidth:=cdcWCSinfo.wp*cdcWCSinfo.secpix/3600;
+        WCSheight:=cdcWCSinfo.hp*cdcWCSinfo.secpix/3600;
+      end else begin
+        WCSwidth:=NullCoord;
+        WCSheight:=NullCoord;
+      end;
+
+      // pole
+      c.ra:=0;
+      c.dec:=deg2rad*89.99999*Sgn(cdcWCSinfo.cdec);
+      PrecessionFK5(jdtoday,jd2000,c.ra,c.dec);
+      c.ra:=rad2deg*c.ra;
+      c.dec:=rad2deg*c.dec;
+      n:=cdcwcs_sky2xy(@c,0);
+      if n=0 then begin
+        WCSpoleX:=c.x;
+        WCSpoleY:=cdcWCSinfo.hp-c.y;
+      end
+      else begin
+        WCSpoleX:=NullCoord;
+        WCSpoleY:=NullCoord;
+      end;
+    end
+    else begin
+      cdcWCSinfo.secpix:=0;
+      WCScenterRA:=NullCoord;
+      WCScenterDEC:=NullCoord;
+      WCSpoleX:=NullCoord;
+      WCSpoleY:=NullCoord;
+      WCSwidth:=NullCoord;
+      WCSheight:=NullCoord;
+    end;
+    except
+      cdcWCSinfo.secpix:=0;
+      WCScenterRA:=NullCoord;
+      WCScenterDEC:=NullCoord;
+      WCSpoleX:=NullCoord;
+      WCSpoleY:=NullCoord;
+      WCSwidth:=NullCoord;
+      WCSheight:=NullCoord;
+    end;
+  end
+    else begin
+     cdcWCSinfo.secpix:=0;
+     WCScenterRA:=NullCoord;
+     WCScenterDEC:=NullCoord;
+     WCSpoleX:=NullCoord;
+     WCSpoleY:=NullCoord;
+     WCSwidth:=NullCoord;
+     WCSheight:=NullCoord;
+    end;
+end;
+
 procedure Tf_main.LoadFitsFile(fn:string);
 var imgsize: string;
     n,oldw,oldh:integer;
-    c: TcdcWCScoord;
-    x1,y1,x2,y2,ulra,uldec: double;
     oldmean,oldsigma: double;
 begin
    oldw:=fits.HeaderInfo.naxis1;
@@ -12615,95 +12710,7 @@ begin
    StatusBar1.Panels[panelstatus].Text:='';
    fits.LoadFromFile(fn);
    if fits.HeaderInfo.valid then begin
-     if fits.HeaderInfo.solved then begin
-       try
-       n:=cdcwcs_initfitsfile(pchar(fn),0);
-       if n=0 then
-          n:=cdcwcs_getinfo(addr(cdcWCSinfo),0)
-       else begin
-         NewMessage(Format(rsErrorProcess, [TmpDir]),1);
-       end;
-       if (n=0) and (abs(cdcWCSinfo.cdec)<89.99) then begin
-         // rotation from upper left corner
-         c.x:=0;
-         c.y:=cdcWCSinfo.hp;
-         n:=cdcwcs_xy2sky(@c,0);
-         ulra:=c.ra;
-         uldec:=c.dec;
-         n:=cdcwcs_sky2xy(@c,0);
-         x1:=c.x;
-         y1:=c.y;
-         c.ra:=ulra;
-         c.dec:=uldec+0.01;
-         n:=cdcwcs_sky2xy(@c,0);
-         x2:=c.x;
-         y2:=c.y;
-         WCSxyNrot := arctan2((x2 - x1), (y1 - y2));
-         c.ra:=ulra+0.01;
-         c.dec:=uldec;
-         n:=cdcwcs_sky2xy(@c,0);
-         x2:=c.x;
-         y2:=c.y;
-         WCSxyErot := arctan2((x2 - x1), (y1 - y2));
-         // center
-         c.x:=0.5+cdcWCSinfo.wp/2;
-         c.y:=0.5+cdcWCSinfo.hp/2;
-         n:=cdcwcs_xy2sky(@c,0);
-         WCScenterRA:=c.ra;
-         WCScenterDEC:=c.dec;
-         // FOV
-         if (cdcWCSinfo.secpix>0) then begin
-           WCSwidth:=cdcWCSinfo.wp*cdcWCSinfo.secpix/3600;
-           WCSheight:=cdcWCSinfo.hp*cdcWCSinfo.secpix/3600;
-         end else begin
-           WCSwidth:=NullCoord;
-           WCSheight:=NullCoord;
-         end;
-
-         // pole
-         c.ra:=0;
-         c.dec:=deg2rad*89.99999*Sgn(cdcWCSinfo.cdec);
-         PrecessionFK5(jdtoday,jd2000,c.ra,c.dec);
-         c.ra:=rad2deg*c.ra;
-         c.dec:=rad2deg*c.dec;
-         n:=cdcwcs_sky2xy(@c,0);
-         if n=0 then begin
-           WCSpoleX:=c.x;
-           WCSpoleY:=cdcWCSinfo.hp-c.y;
-         end
-         else begin
-           WCSpoleX:=NullCoord;
-           WCSpoleY:=NullCoord;
-         end;
-       end
-       else begin
-         cdcWCSinfo.secpix:=0;
-         WCScenterRA:=NullCoord;
-         WCScenterDEC:=NullCoord;
-         WCSpoleX:=NullCoord;
-         WCSpoleY:=NullCoord;
-         WCSwidth:=NullCoord;
-         WCSheight:=NullCoord;
-       end;
-       except
-         cdcWCSinfo.secpix:=0;
-         WCScenterRA:=NullCoord;
-         WCScenterDEC:=NullCoord;
-         WCSpoleX:=NullCoord;
-         WCSpoleY:=NullCoord;
-         WCSwidth:=NullCoord;
-         WCSheight:=NullCoord;
-       end;
-     end
-       else begin
-        cdcWCSinfo.secpix:=0;
-        WCScenterRA:=NullCoord;
-        WCScenterDEC:=NullCoord;
-        WCSpoleX:=NullCoord;
-        WCSpoleY:=NullCoord;
-        WCSwidth:=NullCoord;
-        WCSheight:=NullCoord;
-       end;
+     InitWCS(fn);
      if (oldw<>fits.HeaderInfo.naxis1)or(oldh<>fits.HeaderInfo.naxis2) then begin
        ImgCx:=0;
        ImgCy:=0;
@@ -12783,13 +12790,17 @@ begin
    // load picture
    ext:=copy(ExtractFileExt(fn),2,99);
    PictStream.LoadFromFile(fn);
-   PictureToFits(PictStream,ext,FitsStream);
+   PictureToFits(PictStream,ext,FitsStream,true);
    if FitsStream.size<2880 then
       NewMessage('Invalid file '+fn,0)
    else begin
      // assign new image
      fits.Stream:=FitsStream;
      fits.LoadStream;
+     if fits.HeaderInfo.valid and fits.HeaderInfo.solved then begin
+       fits.SaveToFile(slash(TmpDir)+'ccdcieltmp.fits');
+       InitWCS(slash(TmpDir)+'ccdcieltmp.fits');
+     end;
      // draw new image
      if (abs(oldmean-fits.imageMean)<100)and(abs(oldsigma-fits.imageSigma)<100) then
         DrawHistogram(true,false)  // images are similar, do not reset manual luminosity adjustment

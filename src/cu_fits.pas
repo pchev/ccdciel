@@ -28,7 +28,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 interface
 
 uses SysUtils, Classes, LazFileUtils, u_utils, u_global, BGRABitmap, BGRABitmapTypes, ExpandedBitmap,
-  GraphType,  FPReadJPEG, LazSysUtils, u_libraw, dateutils,
+  GraphType,  FPReadJPEG, LazSysUtils, u_libraw, dateutils, FPReadTiff,
   LazUTF8, Graphics,Math, FPImage, Controls, LCLType, Dialogs, u_translation, IntfGraphics;
 
 type
@@ -3288,11 +3288,12 @@ var img:TLazIntfImage;
     ii: smallint;
     b: array[0..2880]of char;
     hdr: TFitsHeader;
-    hdrmem: TMemoryStream;
+    hdrmem,hdrtmp: TMemoryStream;
     RedStream,GreenStream,BlueStream: TMemoryStream;
-    htyp,hext: string;
+    htyp,hext,headerdesc: string;
     ReaderClass: TFPCustomImageReaderClass;
-   Reader: TFPCustomImageReader;
+    Reader: TFPCustomImageReader;
+    buf: array[0..79] of char;
 begin
  // define raw image data
  lRawImage.Init;
@@ -3336,6 +3337,12 @@ begin
        pict.Position:=0;
        // load image from file, using the reader
        img.LoadFromStream(pict,Reader);
+       if reader is TFPReaderTiff then begin
+         headerdesc:=img.Extra['TiffImageDescription'];
+         if copy(headerdesc,1,9)<>'SIMPLE  =' then headerdesc:='';
+       end
+       else
+         headerdesc:='';
        reader.free;
        break;
        except
@@ -3364,42 +3371,65 @@ begin
    end;
    // create fits header
    hdr.ClearHeader;
-   hdr.Add('SIMPLE',true,'file does conform to FITS standard');
-   hdr.Add('BITPIX',16,'number of bits per data pixel');
-   hdr.Add('NAXIS',naxis,'number of data axes');
-   hdr.Add('NAXIS1',w ,'length of data axis 1');
-   hdr.Add('NAXIS2',h ,'length of data axis 2');
-   if naxis=3 then hdr.Add('NAXIS3',3 ,'length of data axis 3');
-   hdr.Add('BZERO',32768,'offset data range to that of unsigned short');
-   hdr.Add('BSCALE',1,'default scaling factor');
-   if flip then
-     hdr.Add('ROWORDER',bottomup,'Order of the rows in image array')
-   else
-     hdr.Add('ROWORDER',topdown,'Order of the rows in image array');
-   if pix>0 then hdr.Add('PIXSIZE1',pix ,'Pixel Size 1 (microns)');
-   if piy>0 then hdr.Add('PIXSIZE2',piy ,'Pixel Size 2 (microns)');
-   if binx>0 then hdr.Add('XBINNING',binx ,'Binning factor in width');
-   if biny>0 then hdr.Add('YBINNING',biny ,'Binning factor in height');
-   if bayer<>'' then begin
-     hdr.Add('XBAYROFF',0,'X offset of Bayer array');
-     hdr.Add('YBAYROFF',0,'Y offset of Bayer array');
-     hdr.Add('BAYERPAT',bayer,'CFA Bayer pattern');
-     if rmult<>'' then hdr.Add('MULT_R',rmult,'R multiplier');
-     if gmult<>'' then hdr.Add('MULT_G',gmult,'G multiplier');
-     if bmult<>'' then hdr.Add('MULT_B',bmult,'B multiplier');
-   end;
-   hdr.Add('DATE',FormatDateTime(dateisoshort,NowUTC),'Date data written');
-   hdr.Add('SWCREATE','CCDciel '+ccdciel_version+'-'+RevisionStr,'');
-   if (exifkey<>nil)and(exifvalue<>nil)and(exifkey.Count>0) then begin
-     for i:=0 to exifkey.Count-1 do begin
-        hdr.Add('HIERARCH',StringReplace(exifkey[i],'.',' ',[rfReplaceAll])+' = '''+exifvalue[i]+'''','');
+   if headerdesc='' then begin
+     hdr.Add('SIMPLE',true,'file does conform to FITS standard');
+     hdr.Add('BITPIX',16,'number of bits per data pixel');
+     hdr.Add('NAXIS',naxis,'number of data axes');
+     hdr.Add('NAXIS1',w ,'length of data axis 1');
+     hdr.Add('NAXIS2',h ,'length of data axis 2');
+     if naxis=3 then hdr.Add('NAXIS3',3 ,'length of data axis 3');
+     hdr.Add('BZERO',32768,'offset data range to that of unsigned short');
+     hdr.Add('BSCALE',1,'default scaling factor');
+     if flip then
+       hdr.Add('ROWORDER',bottomup,'Order of the rows in image array')
+     else
+       hdr.Add('ROWORDER',topdown,'Order of the rows in image array');
+     if pix>0 then hdr.Add('PIXSIZE1',pix ,'Pixel Size 1 (microns)');
+     if piy>0 then hdr.Add('PIXSIZE2',piy ,'Pixel Size 2 (microns)');
+     if binx>0 then hdr.Add('XBINNING',binx ,'Binning factor in width');
+     if biny>0 then hdr.Add('YBINNING',biny ,'Binning factor in height');
+     if bayer<>'' then begin
+       hdr.Add('XBAYROFF',0,'X offset of Bayer array');
+       hdr.Add('YBAYROFF',0,'Y offset of Bayer array');
+       hdr.Add('BAYERPAT',bayer,'CFA Bayer pattern');
+       if rmult<>'' then hdr.Add('MULT_R',rmult,'R multiplier');
+       if gmult<>'' then hdr.Add('MULT_G',gmult,'G multiplier');
+       if bmult<>'' then hdr.Add('MULT_B',bmult,'B multiplier');
      end;
+     hdr.Add('DATE',FormatDateTime(dateisoshort,NowUTC),'Date data written');
+     hdr.Add('SWCREATE','CCDciel '+ccdciel_version+'-'+RevisionStr,'');
+     if (exifkey<>nil)and(exifvalue<>nil)and(exifkey.Count>0) then begin
+       for i:=0 to exifkey.Count-1 do begin
+          hdr.Add('HIERARCH',StringReplace(exifkey[i],'.',' ',[rfReplaceAll])+' = '''+exifvalue[i]+'''','');
+       end;
+     end;
+     if origin='' then
+       hdr.Add('COMMENT','Converted from '+ext,'')
+     else
+       hdr.Add('COMMENT','Converted from camera RAW by '+origin,'');
+     hdr.Add('END','','');
+   end
+   else begin
+     hdrtmp:=TMemoryStream.Create;
+     j:=0;
+     repeat
+       i:=pos(#10,headerdesc);
+       if i>0 then begin
+         buf:=copy(trim(copy(headerdesc,1,i))+b80,1,80);
+         Delete(headerdesc,1,i);
+       end
+       else begin
+         buf:=copy(trim(headerdesc)+b80,1,80);
+       end;
+       hdrtmp.Write(buf,80);
+       inc(j);
+     until (trim(buf)='END')or(i<=0);
+     i:=36-(j mod 36);
+     for j:=1 to i do hdrtmp.Write(b80,80);
+     hdr.ReadHeader(hdrtmp);
+     hdrtmp.free;
    end;
-   if origin='' then
-     hdr.Add('COMMENT','Converted from '+ext,'')
-   else
-     hdr.Add('COMMENT','Converted from camera RAW by '+origin,'');
-   hdr.Add('END','','');
+
    hdrmem:=hdr.GetStream;
    try
      // put header in stream
