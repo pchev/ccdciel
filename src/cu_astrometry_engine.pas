@@ -445,7 +445,10 @@ else if FResolver=ResolverAstap then begin
   Fparam.Add('-z');
   Fparam.Add(inttostr(FASTAPdownsample));
   Fparam.Add('-r');
-  Fparam.Add(inttostr(FASTAPSearchRadius));
+  if (Fra<>NullCoord)and(Fde<>NullCoord) then
+    Fparam.Add(inttostr(FASTAPSearchRadius))
+  else
+    Fparam.Add('180');  // no coordinates, try full sky search
   Fparam.Add('-f');
   Fparam.Add(FInFile);
   FAstapLogFile:=ChangeFileExt(FInFile,'.log');
