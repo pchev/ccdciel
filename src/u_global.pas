@@ -62,6 +62,7 @@ type
   TDomeCloseAction=(dclNothing,dclStopTelescope,dclParkTelescope,dclStopDomeSlaving,dclParkDome,dclCloseDome);
   TDomeOpenActions=array[0..DomeOpenActionNum-1] of TDomeOpenAction;
   TDomeCloseActions=array[0..DomeCloseActionNum-1] of TDomeCloseAction;
+  TFileFormat = (ffFITS, ffASTROTIFF);
 
   coordvector = array[1..3] of double;
   rotmatrix = array[1..3, 1..3] of double;
@@ -467,6 +468,7 @@ var
   CurrentStepNum,CurrentDoneCount: integer;
   WeatherPauseCapture,WeatherCapturePaused,WeatherPauseCanceled,WeatherCancelRestart: boolean;
   WeatherRestartDelay: integer;
+  SaveFormat: TFileFormat;
   MeasureNewImage,SaveBitmap: boolean;
   SaveBitmapFormat:string;
   MaxThreadCount: integer;

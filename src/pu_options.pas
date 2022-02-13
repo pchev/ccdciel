@@ -36,6 +36,7 @@ type
   Tf_option = class(TForm)
     ButtonSeqDir: TButton;
     CdCPath: TEdit;
+    SaveFormat: TRadioGroup;
     StackDebayer: TCheckBox;
     StackUseDark: TCheckBox;
     FileStackFloat: TCheckBox;

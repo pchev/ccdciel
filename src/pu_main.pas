@@ -1317,6 +1317,7 @@ begin
   StackUseDark:=false;
   StackDebayer:=false;
   FileStackFloat:=false;
+  SaveFormat:=ffFITS;
   AllMsg:=TStringList.Create;
   AllMsg.OwnsObjects:=true;
   refmask:=false;
@@ -3723,6 +3724,7 @@ begin
   end;
   {$endif}
   TCPIPConfigPort:=config.GetValue('/Files/TCPIPConfigPort','3277');
+  SaveFormat:=TFileFormat(config.GetValue('/Files/SaveFormat',0));
   SaveBitmap:=config.GetValue('/Files/SaveBitmap',false);
   SaveBitmapFormat:=config.GetValue('/Files/SaveBitmapFormat','png');
   OpenPictureDialog1.InitialDir:=config.GetValue('/Files/CapturePath',defCapturePath);
@@ -7514,6 +7516,7 @@ begin
    end;
    f_option.FilePack.checked:=config.GetValue('/Files/Pack',false);
    f_option.WantExif.Checked:=config.GetValue('/Files/Exif',WantExif);
+   f_option.SaveFormat.ItemIndex:=config.GetValue('/Files/SaveFormat',0);
    f_option.SaveBitmap.Checked:=config.GetValue('/Files/SaveBitmap',false);
    buf:=config.GetValue('/Files/SaveBitmapFormat','png');
    if buf='png' then f_option.SaveBitmapFormat.ItemIndex:=0
@@ -7959,6 +7962,7 @@ begin
      config.SetValue('/StarAnalysis/AutofocusPlanetNumPoint',f_option.AutofocusPlanetNumPoint.Value);
      config.SetValue('/StarAnalysis/AutofocusPlanetMovement',f_option.AutofocusPlanetMovement.Value);
      config.SetValue('/Log/debug_msg',f_option.debug_msg.Checked);
+     config.SetValue('/Files/SaveFormat',f_option.SaveFormat.ItemIndex);
      config.SetValue('/Files/SaveBitmap',f_option.SaveBitmap.Checked);
      case f_option.SaveBitmapFormat.ItemIndex of
        0: buf:='png';
@@ -9696,9 +9700,19 @@ try
    end;
    fn:=fn+FilenameSep+fileseqstr;
  end;
- fn:=slash(fd)+fn+'.fits';
  // save the file
- fits.SaveToFile(fn,FilePack,FileStackFloat);
+ if (SaveFormat=ffFITS) or FileStackFloat then begin
+   fn:=slash(fd)+fn+'.fits';
+   fits.SaveToFile(fn,FilePack,FileStackFloat);
+ end
+ else if SaveFormat=ffASTROTIFF then begin
+   fn:=slash(fd)+fn+'.tif';
+   if not fits.ImageValid then
+     fits.LoadStream;
+   fits.SaveAstroTiff(fn);
+ end
+ else
+   raise exception.Create('Unexpected file format '+inttostr(ord(SaveFormat)));
  inc(CurrentDoneCount);
  if FilePack then begin
    NewMessage(Format(rsSavedFile, [fn+'.fz']),1);
@@ -9713,7 +9727,7 @@ try
  StatusBar1.Panels[panelfile].Text:=buf;
  StatusBar1.Panels[panelstatus].Text := '';
  // save as bitmap
- if SaveBitmap then begin
+ if SaveBitmap and not ((SaveFormat=ffASTROTIFF)and(SaveBitmapFormat='tif')) then begin
   {$ifdef debug_raw}writeln(FormatDateTime(dateiso,Now)+blank+'Save bitmap');{$endif}
    fn:=ChangeFileExt(fn,'.'+SaveBitmapFormat);
    fits.SaveToBitmap(fn);

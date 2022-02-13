@@ -390,7 +390,7 @@ object f_option: Tf_option
         ParentFont = False
         object FileFolderOpt: TPageControl
           Left = 0
-          Height = 368
+          Height = 424
           Top = 56
           Width = 560
           ActivePage = FileOpt
@@ -400,7 +400,7 @@ object f_option: Tf_option
           TabOrder = 0
           object FileOpt: TTabSheet
             Caption = 'File name options'
-            ClientHeight = 334
+            ClientHeight = 390
             ClientWidth = 550
             ParentFont = False
             object BtnFileDefault: TButton
@@ -500,27 +500,59 @@ object f_option: Tf_option
               TabOrder = 4
             end
             object FilePack: TCheckBox
+              AnchorSideTop.Control = SaveFormat
+              AnchorSideTop.Side = asrBottom
               Left = 8
               Height = 21
-              Top = 277
+              Top = 332
               Width = 231
+              BorderSpacing.Top = 4
               Caption = 'Compress the FITS files with fpack'
               ParentFont = False
               TabOrder = 5
             end
             object WantExif: TCheckBox
+              AnchorSideTop.Control = FilePack
+              AnchorSideTop.Side = asrBottom
               Left = 8
               Height = 21
-              Top = 306
+              Top = 357
               Width = 255
+              BorderSpacing.Top = 4
               Caption = 'Add FITS keywords for DSLR EXIF tags'
               ParentFont = False
               TabOrder = 6
             end
+            object SaveFormat: TRadioGroup
+              AnchorSideTop.Control = FilenameSep
+              AnchorSideTop.Side = asrBottom
+              Left = 8
+              Height = 53
+              Top = 275
+              Width = 432
+              AutoFill = True
+              BorderSpacing.Top = 2
+              Caption = 'File format'
+              ChildSizing.LeftRightSpacing = 6
+              ChildSizing.EnlargeHorizontal = crsHomogenousChildResize
+              ChildSizing.EnlargeVertical = crsHomogenousChildResize
+              ChildSizing.ShrinkHorizontal = crsScaleChilds
+              ChildSizing.ShrinkVertical = crsScaleChilds
+              ChildSizing.Layout = cclLeftToRightThenTopToBottom
+              ChildSizing.ControlsPerLine = 2
+              ClientHeight = 33
+              ClientWidth = 430
+              Columns = 2
+              Items.Strings = (
+                'FITS'
+                'TIFF with FITS header'
+              )
+              TabOrder = 7
+            end
           end
           object FolderOpt: TTabSheet
             Caption = 'Folder name options'
-            ClientHeight = 334
+            ClientHeight = 390
             ClientWidth = 550
             ParentFont = False
             object BtnFolderDefault: TButton
@@ -607,20 +639,20 @@ object f_option: Tf_option
         end
         object Panel8: TPanel
           Left = 0
-          Height = 126
-          Top = 424
+          Height = 70
+          Top = 480
           Width = 560
           Align = alClient
-          ClientHeight = 126
+          ClientHeight = 70
           ClientWidth = 560
           ParentFont = False
           TabOrder = 2
           object SaveBitmap: TCheckBox
             AnchorSideTop.Control = SaveBitmapFormat
             AnchorSideTop.Side = asrCenter
-            Left = 14
+            Left = 13
             Height = 21
-            Top = 19
+            Top = 13
             Width = 352
             Caption = 'Save a bitmap file additionally to the standard FITS file'
             ParentFont = False
@@ -629,7 +661,7 @@ object f_option: Tf_option
           object SaveBitmapFormat: TComboBox
             Left = 384
             Height = 30
-            Top = 14
+            Top = 8
             Width = 112
             Constraints.MaxHeight = 30
             ItemHeight = 0

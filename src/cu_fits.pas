@@ -28,7 +28,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 interface
 
 uses SysUtils, Classes, LazFileUtils, u_utils, u_global, BGRABitmap, BGRABitmapTypes, ExpandedBitmap,
-  GraphType,  FPReadJPEG, LazSysUtils, u_libraw, dateutils, FPReadTiff,
+  GraphType,  FPReadJPEG, LazSysUtils, u_libraw, dateutils, FPReadTiff, FPWriteTiff, FPTiffCmn,
   LazUTF8, Graphics,Math, FPImage, Controls, LCLType, Dialogs, u_translation, IntfGraphics;
 
 type
@@ -80,6 +80,7 @@ type
       function ReadHeader(ff:TMemoryStream): integer;
       function NewWCS(ff:TMemoryStream): boolean;
       function GetStream: TMemoryStream;
+      function GetString: string;
       function Indexof(key: string): integer;
       function Valueof(key: string; out val: string): boolean; overload;
       function Valueof(key: string; out val: integer): boolean; overload;
@@ -98,6 +99,7 @@ type
       property Keys:   TStringList read FKeys;
       property Values: TStringList read FValues;
       property Comments:TStringList read FComments;
+      property AsString: string read GetString;
  end;
 
 const    maxl = 20000;
@@ -186,6 +188,7 @@ type
      procedure GetExpBitmap(var bgra: TExpandedBitmap);
      procedure GetBGRABitmap(var bgra: TBGRABitmap);
      procedure SaveToBitmap(fn: string);
+     procedure SaveAstroTiff(fn: string);
      procedure SaveToFile(fn: string; pack: boolean=false; StackFloat:boolean=false);
      procedure LoadFromFile(fn:string);
      procedure LoadHeaderFromFile(fn:string);
@@ -510,6 +513,15 @@ begin
     buf:=b80;
     c:=36 - (FRows.Count mod 36);
     for i:=1 to c do result.Write(buf,80);
+  end;
+end;
+
+function TFitsHeader.GetString: string;
+var i: integer;
+begin
+  result:='';
+  for i:=0 to FRows.Count-1 do begin
+    result:=result+trim(FRows[i])+#10;
   end;
 end;
 
@@ -2477,7 +2489,10 @@ var expbmp: TExpandedBitmap;
     ext: string;
 begin
   ext:=uppercase(ExtractFileExt(fn));
-  if (ext='.PNG')or(ext='.TIF')or(ext='.TIFF') then begin
+  if (ext='.TIF')or(ext='.TIFF') then begin
+    SaveAstroTiff(fn);
+  end
+  else if (ext='.PNG') then begin
     // save 16 bit linear image
     expbmp:=TExpandedBitmap.Create;
     GetExpBitmap(expbmp);
@@ -2491,6 +2506,67 @@ begin
     bgra.SaveToFile(fn);
     bgra.Free;
   end;
+end;
+
+procedure TFits.SaveAstroTiff(fn: string);
+// From ASTAP save_tiff16()
+var
+  i, j, k,m      :integer;
+  image: TFPCustomImage;
+  writer: TFPCustomImageWriter;
+  thecolor  :Tfpcolor;
+  flip_V, flip_H: boolean;
+begin
+  flip_V:=true;
+  flip_H:=false;
+
+  Image := TFPMemoryImage.Create(Fwidth, Fheight);
+  Writer := TFPWriterTIFF.Create;
+
+  Image.Extra[TiffAlphaBits]:='0';
+  if n_plane>1 then
+  begin
+    Image.Extra[TiffRedBits]:='16';
+    Image.Extra[TiffGreenBits]:='16';
+    Image.Extra[TiffBlueBits]:='16';
+    Image.Extra[TiffGrayBits]:='16';
+   end;
+  {grayscale}
+  if n_plane=1 then
+  begin
+    Image.Extra[TiffGrayBits]:='16';   {add unit fptiffcmn to make this work. see https://bugs.freepascal.org/view.php?id=35081}
+    Image.Extra[TiffPhotoMetric]:='1'; {This is the same as Image.Extra['TiffPhotoMetricInterpretation']:='0';}
+  end;
+
+  image.Extra[TiffSoftware]:='CCDciel';
+  image.Extra[TiffImageDescription]:=FHeader.AsString; {store full header in TIFF !!!}
+
+  Image.Extra[TiffCompression]:= '5'; // compression LZW
+
+  For i:=0 to Fheight-1 do
+  begin
+    if flip_V=false then k:=Fheight-1-i else k:=i;{reverse fits down to counting}
+    for j:=0 to Fwidth-1 do
+    begin
+      if flip_H=true then m:=Fwidth-1-j else m:=j;
+      thecolor.red:=min(round(Fimage[0,k,m]), $FFFF);
+      if n_plane=3 then begin
+        thecolor.green:=min(round(Fimage[1,k,m]), $FFFF);
+        thecolor.blue:=min(round(Fimage[2,k,m]), $FFFF);
+      end
+      else begin
+        thecolor.green:=thecolor.red;
+        thecolor.blue:=thecolor.red;
+      end;
+      thecolor.alpha:=65535;
+      image.Colors[j,i]:=thecolor;
+    end;
+  end;
+
+  Image.SaveToFile(fn, Writer);
+
+  image.Free;
+  writer.Free;
 end;
 
 procedure TFits.ClearImage;
