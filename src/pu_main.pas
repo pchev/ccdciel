@@ -565,6 +565,7 @@ type
     CameraExposureRemain:double;
     CursorImage1: TCursorImage;
     crRetic: TCursor;
+    MsgStatusLed: string;
     procedure CreateDevices;
     procedure SetDevices;
     procedure DestroyDevices;
@@ -2494,12 +2495,12 @@ begin
 end;
 
 procedure Tf_main.StatusBar1DrawPanel(StatusBar: TStatusBar;  Panel: TStatusPanel; const Rect: TRect);
-var msg: string;
+var
     s,x,y: integer;
 begin
   if StatusBar=StatusBar1 then begin;
     if panel=StatusBar.Panels[panelled] then begin
-      msg:='';
+      MsgStatusLed:='';
       s:=(StatusBar.Height-6) div 2;
       y:=StatusBar.Height div 2;
       // clear
@@ -2509,18 +2510,18 @@ begin
       x:=Rect.Left+s+4;
       if (f_planetarium<>nil)and(not planetarium.Terminated)and(planetarium.Connected) then begin
         statusbar.Canvas.Brush.Color:=cllime;
-        msg:=msg+Format(rsConnected,[rsPlanetarium]);
+        MsgStatusLed:=MsgStatusLed+Format(rsConnected,[rsPlanetarium]);
       end
       else begin
         statusbar.Canvas.Brush.Color:=clRed;
-        msg:=msg+Format(rsDisconnected,[rsPlanetarium]);
+        MsgStatusLed:=MsgStatusLed+Format(rsDisconnected,[rsPlanetarium]);
       end;
       statusbar.Canvas.Ellipse(x-s,y-s,x+s,y+s);
       // guider
       x:=x+2*s+4;
       if f_autoguider=nil then begin
          statusbar.Canvas.Brush.Color:=clGray;
-         msg:=msg+', '+Format(rsDisconnected,[rsAutoguider]);
+         MsgStatusLed:=MsgStatusLed+', '+Format(rsDisconnected,[rsAutoguider]);
       end
       else begin
         if autoguider.State=GUIDER_DISCONNECTED then begin
@@ -2529,15 +2530,15 @@ begin
             statusbar.Canvas.Brush.Color:=clGray
           else
             statusbar.Canvas.Brush.Color:=clred;
-          msg:=msg+', '+Format(rsDisconnected,[rsAutoguider]);
+          MsgStatusLed:=MsgStatusLed+', '+Format(rsDisconnected,[rsAutoguider]);
         end
         else if (autoguider.State=GUIDER_GUIDING) then begin
           statusbar.Canvas.Brush.Color:=cllime;
-          msg:=msg+', '+Format(rsGuiding,[rsAutoguider]);
+          MsgStatusLed:=MsgStatusLed+', '+Format(rsGuiding,[rsAutoguider]);
         end
         else begin
           statusbar.Canvas.Brush.Color:=clYellow;
-          msg:=msg+', '+Format(rsConnected,[rsAutoguider]);
+          MsgStatusLed:=MsgStatusLed+', '+Format(rsConnected,[rsAutoguider]);
         end;
       end;
       statusbar.Canvas.Ellipse(x-s,y-s,x+s,y+s);
@@ -2545,22 +2546,39 @@ begin
       x:=x+2*s+4;
       if AllDevicesConnected then begin
         statusbar.Canvas.Brush.Color:=cllime;
-        msg:=msg+', '+Format(rsConnected, [rsDevices]);
+        MsgStatusLed:=MsgStatusLed+', '+Format(rsConnected, [rsDevices]);
       end
       else begin
         statusbar.Canvas.Brush.Color:=clred;
-        msg:=msg+', '+Format(rsDisconnected, [rsDevices]);
+        MsgStatusLed:=MsgStatusLed+', '+Format(rsDisconnected, [rsDevices]);
       end;
       statusbar.Canvas.Ellipse(x-s,y-s,x+s,y+s);
       // set hint
-      statusbar.Hint:=msg;
+      statusbar.Hint:=MsgStatusLed;
     end;
   end;
 end;
 
 procedure Tf_main.StatusBar1MouseMove(Sender: TObject; Shift: TShiftState; X, Y: Integer);
+var p: integer;
 begin
-  StatusBar1.ShowHint:=ShowHint and (StatusBar1.GetPanelIndexAt(x,y)=panelled);
+  p:=StatusBar1.GetPanelIndexAt(x,y);
+  case p of
+    panelcursor: StatusBar1.ShowHint:=false;
+    panelstatus: begin
+                 StatusBar1.Hint:=StatusBar1.Panels[panelstatus].Text;
+                 StatusBar1.ShowHint:=ShowHint;
+                 end;
+    panelfile:   begin
+                 StatusBar1.Hint:=StatusBar1.Panels[panelfile].Text;
+                 StatusBar1.ShowHint:=ShowHint;
+                 end;
+    panelclock:  StatusBar1.ShowHint:=false;
+    panelled:    begin
+                 StatusBar1.Hint:=MsgStatusLed;
+                 StatusBar1.ShowHint:=ShowHint;
+                 end;
+  end;
 end;
 
 procedure Tf_main.StatusBar1Resize(Sender: TObject);
