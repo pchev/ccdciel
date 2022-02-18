@@ -3360,7 +3360,7 @@ end;
 procedure PictureToFits(pict:TMemoryStream; ext: string; var ImgStream:TMemoryStream; flip:boolean=false;pix:double=-1;piy:double=-1;binx:integer=-1;biny:integer=-1;bayer:string='';rmult:string='';gmult:string='';bmult:string='';origin:string='';exifkey:TStringList=nil;exifvalue:TStringList=nil);
 var img:TLazIntfImage;
     lRawImage: TRawImage;
-    i,j,c,w,h,x,y,naxis: integer;
+    i,j,k,c,w,h,x,y,naxis: integer;
     ii: smallint;
     b: array[0..2880]of char;
     hdr: TFitsHeader;
@@ -3370,6 +3370,7 @@ var img:TLazIntfImage;
     ReaderClass: TFPCustomImageReaderClass;
     Reader: TFPCustomImageReader;
     buf: array[0..79] of char;
+    isAstroTiff: boolean;
 begin
  // define raw image data
  lRawImage.Init;
@@ -3398,6 +3399,8 @@ begin
  ImgStream.Position:=0;
  img:=TLazIntfImage.Create(0,0);
  ext:=uppercase(ext);
+ naxis:=0;
+ isAstroTiff:=false;
  try
    // set image data
    img.SetRawImage(lRawImage);
@@ -3415,10 +3418,29 @@ begin
        img.LoadFromStream(pict,Reader);
        if reader is TFPReaderTiff then begin
          headerdesc:=img.Extra['TiffImageDescription'];
-         if copy(headerdesc,1,9)<>'SIMPLE  =' then headerdesc:='';
-       end
-       else
-         headerdesc:='';
+         isAstroTiff:=copy(headerdesc,1,9)='SIMPLE  =';
+         if isAstroTiff then begin
+           hdrtmp:=TMemoryStream.Create;
+           j:=0;
+           repeat
+             k:=pos(#10,headerdesc);
+             if k>0 then begin
+               buf:=copy(trim(copy(headerdesc,1,k))+b80,1,80);
+               Delete(headerdesc,1,k);
+             end
+             else begin
+               buf:=copy(trim(headerdesc)+b80,1,80);
+             end;
+             hdrtmp.Write(buf,80);
+             inc(j);
+           until (trim(buf)='END')or(k<=0);
+           k:=36-(j mod 36);
+           for j:=1 to k do hdrtmp.Write(b80,80);
+           hdr.ReadHeader(hdrtmp);
+           hdrtmp.free;
+           if not hdr.Valueof('NAXIS',naxis) then naxis:=0;
+         end;
+       end;
        reader.free;
        break;
        except
@@ -3433,21 +3455,24 @@ begin
      exit;
    end;
    // detect BW or color
-   naxis:=2;
-   for i:=0 to (h-1)div 10 do begin
-      y:=10*i;
-      for j:=0 to (w-1)div 10 do begin
-        x:=10*j;
-        if (img.Colors[x,y].red <> img.Colors[x,y].green)or(img.Colors[x,y].red <> img.Colors[x,y].blue) then begin
-           naxis:=3;
-           break;
+   if naxis=0 then begin
+     naxis:=2;
+     for i:=0 to (h-1)div 10 do begin
+        y:=10*i;
+        for j:=0 to (w-1)div 10 do begin
+          x:=10*j;
+          if (img.Colors[x,y].red <> img.Colors[x,y].green)or(img.Colors[x,y].red <> img.Colors[x,y].blue) then begin
+             naxis:=3;
+             break;
+          end;
         end;
-      end;
-      if naxis=3 then break;
+        if naxis=3 then break;
+     end;
    end;
    // create fits header
-   hdr.ClearHeader;
-   if headerdesc='' then begin
+   if not isAstroTiff then begin
+     hdr.ClearHeader;
+     // create minimal header
      hdr.Add('SIMPLE',true,'file does conform to FITS standard');
      hdr.Add('BITPIX',16,'number of bits per data pixel');
      hdr.Add('NAXIS',naxis,'number of data axes');
@@ -3486,24 +3511,30 @@ begin
      hdr.Add('END','','');
    end
    else begin
-     hdrtmp:=TMemoryStream.Create;
-     j:=0;
-     repeat
-       i:=pos(#10,headerdesc);
-       if i>0 then begin
-         buf:=copy(trim(copy(headerdesc,1,i))+b80,1,80);
-         Delete(headerdesc,1,i);
-       end
-       else begin
-         buf:=copy(trim(headerdesc)+b80,1,80);
-       end;
-       hdrtmp.Write(buf,80);
-       inc(j);
-     until (trim(buf)='END')or(i<=0);
-     i:=36-(j mod 36);
-     for j:=1 to i do hdrtmp.Write(b80,80);
-     hdr.ReadHeader(hdrtmp);
-     hdrtmp.free;
+     // Sanitize the header
+     i:=1;
+     if hdr.Indexof('BITPIX')<0 then
+       hdr.Insert(i,'BITPIX',16,'number of bits per data pixel');
+     inc(i);
+     if hdr.Indexof('NAXIS')<0 then
+       hdr.Add('NAXIS',naxis,'number of data axes');
+     inc(i);
+     if hdr.Indexof('NAXIS1')<0 then
+       hdr.Add('NAXIS1',w ,'length of data axis 1');
+     inc(i);
+     if hdr.Indexof('NAXIS2')<0 then
+       hdr.Add('NAXIS2',h ,'length of data axis 2');
+     inc(i);
+     if (naxis=3) then begin
+       if hdr.Indexof('NAXIS3')<0 then
+         hdr.Add('NAXIS3',3 ,'length of data axis 3');
+       inc(i);
+     end;
+     if hdr.Indexof('BZERO')<0 then
+       hdr.Insert(i,'BZERO',32768,'offset data range to that of unsigned short');
+     inc(i);
+     if hdr.Indexof('BSCALE')<0 then
+       hdr.Insert(i,'BSCALE',1,'default scaling factor');
    end;
 
    hdrmem:=hdr.GetStream;
