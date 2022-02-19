@@ -94,7 +94,12 @@ type
       function Insert(idx: integer; key:string; val:integer; comment: string):integer; overload;
       function Insert(idx: integer; key:string; val:double; comment: string):integer; overload;
       function Insert(idx: integer; key:string; val:boolean; comment: string):integer; overload;
-      procedure Delete(idx: integer);
+      function Replace(key: string; val: string; defaultpos:integer=-1; quotedval:boolean=true): integer; overload;
+      function Replace(key: string; val: integer; defaultpos:integer=-1): integer; overload;
+      function Replace(key: string; val: double; defaultpos:integer=-1): integer; overload;
+      function Replace(key: string; val: boolean; defaultpos:integer=-1): integer; overload;
+      procedure Delete(idx: integer); overload;
+      procedure Delete(key: string); overload;
       property Rows:   TStringList read FRows;
       property Keys:   TStringList read FKeys;
       property Values: TStringList read FValues;
@@ -709,6 +714,52 @@ begin
   FKeys.Delete(idx);
   FValues.Delete(idx);
   FComments.Delete(idx);
+end;
+
+procedure TFitsHeader.Delete(key: string);
+var i: integer;
+begin
+  i:=Indexof(key);
+  if i>=0 then
+    delete(i);
+end;
+
+function TFitsHeader.Replace(key:string; val:string; defaultpos:integer=-1; quotedval:boolean=true): integer;
+var i: integer;
+    c: string;
+begin
+// Replace value for key, if key is not found it is inserted at defaultpos
+  i:=Indexof(key);
+  if i<0 then i:=defaultpos;
+  if i>=0 then begin
+    c:=FComments[i];
+    if (c<>'')and(c[1]='/') then system.delete(c,1,1);
+    Delete(i);
+    Insert(i,key,val,trim(c),quotedval);
+  end;
+  result:=i;
+end;
+
+function TFitsHeader.Replace(key: string; val: integer; defaultpos:integer=-1): integer;
+var txt: string;
+begin
+  txt:=Format('%20d',[val]);
+  result:=Replace(key,txt,defaultpos,false);
+end;
+
+function TFitsHeader.Replace(key: string; val: double; defaultpos:integer=-1): integer;
+var txt: string;
+begin
+  txt:=Format('%20.10g',[val]);
+  result:=Replace(key,txt,defaultpos,false);
+end;
+
+function TFitsHeader.Replace(key: string; val: boolean; defaultpos:integer=-1): integer;
+var txt,v: string;
+begin
+  if val then v:='T' else v:='F';
+  txt:=Format('%0:20s',[v]);
+  result:=Replace(key,txt,defaultpos,false);
 end;
 
 //////////////////// TFitsInfo /////////////////////////
@@ -3360,7 +3411,7 @@ end;
 procedure PictureToFits(pict:TMemoryStream; ext: string; var ImgStream:TMemoryStream; flip:boolean=false;pix:double=-1;piy:double=-1;binx:integer=-1;biny:integer=-1;bayer:string='';rmult:string='';gmult:string='';bmult:string='';origin:string='';exifkey:TStringList=nil;exifvalue:TStringList=nil);
 var img:TLazIntfImage;
     lRawImage: TRawImage;
-    i,j,k,c,w,h,x,y,naxis,bzero: integer;
+    i,j,k,c,w,h,x,y,naxis,bzero,imgphot: integer;
     ii: smallint;
     b: array[0..2880]of char;
     hdr: TFitsHeader;
@@ -3417,9 +3468,15 @@ begin
        pict.Position:=0;
        // load image from file, using the reader
        img.LoadFromStream(pict,Reader);
+       w:=img.Width;
+       h:=img.Height;
+       if (h=0)or(w=0) then begin
+         exit;
+       end;
        if reader is TFPReaderTiff then begin
          headerdesc:=img.Extra['TiffImageDescription'];
-         isAstroTiff:=copy(headerdesc,1,9)='SIMPLE  =';
+         imgphot:=StrToIntDef(img.Extra['TiffPhotoMetricInterpretation'],0);
+         isAstroTiff:=(copy(headerdesc,1,9)='SIMPLE  =') and ((imgphot=1) or (imgphot=2));
          if isAstroTiff then begin
            hdrtmp:=TMemoryStream.Create;
            j:=0;
@@ -3439,7 +3496,16 @@ begin
            for j:=1 to k do hdrtmp.Write(b80,80);
            hdr.ReadHeader(hdrtmp);
            hdrtmp.free;
-           if not hdr.Valueof('NAXIS',naxis) then naxis:=0;
+           if imgphot=1 then naxis:=2
+                        else naxis:=3;
+           hdr.Replace('BITPIX',16,1);
+           hdr.Replace('NAXIS',naxis,2);
+           hdr.Replace('NAXIS1',w,3);
+           hdr.Replace('NAXIS2',h,4);
+           if naxis=2 then
+             hdr.Delete('NAXIS3')
+           else
+             hdr.Replace('NAXIS3',3,5);
            if not hdr.Valueof('BZERO',bzero) then bzero:=0;
          end;
        end;
@@ -3450,11 +3516,6 @@ begin
          reader.free;
        end;
      end;
-   end;
-   w:=img.Width;
-   h:=img.Height;
-   if (h=0)or(w=0) then begin
-     exit;
    end;
    // detect BW or color
    if naxis=0 then begin
