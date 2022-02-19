@@ -3360,7 +3360,7 @@ end;
 procedure PictureToFits(pict:TMemoryStream; ext: string; var ImgStream:TMemoryStream; flip:boolean=false;pix:double=-1;piy:double=-1;binx:integer=-1;biny:integer=-1;bayer:string='';rmult:string='';gmult:string='';bmult:string='';origin:string='';exifkey:TStringList=nil;exifvalue:TStringList=nil);
 var img:TLazIntfImage;
     lRawImage: TRawImage;
-    i,j,k,c,w,h,x,y,naxis: integer;
+    i,j,k,c,w,h,x,y,naxis,bzero: integer;
     ii: smallint;
     b: array[0..2880]of char;
     hdr: TFitsHeader;
@@ -3400,6 +3400,7 @@ begin
  img:=TLazIntfImage.Create(0,0);
  ext:=uppercase(ext);
  naxis:=0;
+ bzero:=0;
  isAstroTiff:=false;
  try
    // set image data
@@ -3439,6 +3440,7 @@ begin
            hdr.ReadHeader(hdrtmp);
            hdrtmp.free;
            if not hdr.Valueof('NAXIS',naxis) then naxis:=0;
+           if not hdr.Valueof('BZERO',bzero) then bzero:=0;
          end;
        end;
        reader.free;
@@ -3479,7 +3481,8 @@ begin
      hdr.Add('NAXIS1',w ,'length of data axis 1');
      hdr.Add('NAXIS2',h ,'length of data axis 2');
      if naxis=3 then hdr.Add('NAXIS3',3 ,'length of data axis 3');
-     hdr.Add('BZERO',32768,'offset data range to that of unsigned short');
+     bzero:=32768;
+     hdr.Add('BZERO',bzero,'offset data range to that of unsigned short');
      hdr.Add('BSCALE',1,'default scaling factor');
      if flip then
        hdr.Add('ROWORDER',bottomup,'Order of the rows in image array')
@@ -3509,32 +3512,6 @@ begin
      else
        hdr.Add('COMMENT','Converted from camera RAW by '+origin,'');
      hdr.Add('END','','');
-   end
-   else begin
-     // Sanitize the header
-     i:=1;
-     if hdr.Indexof('BITPIX')<0 then
-       hdr.Insert(i,'BITPIX',16,'number of bits per data pixel');
-     inc(i);
-     if hdr.Indexof('NAXIS')<0 then
-       hdr.Add('NAXIS',naxis,'number of data axes');
-     inc(i);
-     if hdr.Indexof('NAXIS1')<0 then
-       hdr.Add('NAXIS1',w ,'length of data axis 1');
-     inc(i);
-     if hdr.Indexof('NAXIS2')<0 then
-       hdr.Add('NAXIS2',h ,'length of data axis 2');
-     inc(i);
-     if (naxis=3) then begin
-       if hdr.Indexof('NAXIS3')<0 then
-         hdr.Add('NAXIS3',3 ,'length of data axis 3');
-       inc(i);
-     end;
-     if hdr.Indexof('BZERO')<0 then
-       hdr.Insert(i,'BZERO',32768,'offset data range to that of unsigned short');
-     inc(i);
-     if hdr.Indexof('BSCALE')<0 then
-       hdr.Insert(i,'BSCALE',1,'default scaling factor');
    end;
 
    hdrmem:=hdr.GetStream;
@@ -3553,7 +3530,7 @@ begin
         if flip then y:=h-1-i
                 else y:=i;
         for j:=0 to w-1 do begin
-          ii:=img.Colors[j,y].red-32768;
+          ii:=img.Colors[j,y].red-bzero;
           ii:=NtoBE(ii);
           ImgStream.Write(ii,sizeof(smallint));
         end;
@@ -3570,13 +3547,13 @@ begin
         if flip then y:=h-1-i
                 else y:=i;
         for j:=0 to w-1 do begin
-          ii:=img.Colors[j,y].red-32768;
+          ii:=img.Colors[j,y].red-bzero;
           ii:=NtoBE(ii);
           RedStream.Write(ii,sizeof(smallint));
-          ii:=img.Colors[j,y].green-32768;
+          ii:=img.Colors[j,y].green-bzero;
           ii:=NtoBE(ii);
           GreenStream.Write(ii,sizeof(smallint));
-          ii:=img.Colors[j,y].blue-32768;
+          ii:=img.Colors[j,y].blue-bzero;
           ii:=NtoBE(ii);
           BlueStream.Write(ii,sizeof(smallint));
         end;
