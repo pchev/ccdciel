@@ -3498,15 +3498,23 @@ begin
            hdrtmp.free;
            if imgphot=1 then naxis:=2
                         else naxis:=3;
-           hdr.Replace('BITPIX',16,1);
-           hdr.Replace('NAXIS',naxis,2);
-           hdr.Replace('NAXIS1',w,3);
-           hdr.Replace('NAXIS2',h,4);
+           j:=1;
+           hdr.Replace('BITPIX',16,j);
+           inc(j);
+           hdr.Replace('NAXIS',naxis,j);
+           inc(j);
+           hdr.Replace('NAXIS1',w,j);
+           inc(j);
+           hdr.Replace('NAXIS2',h,j);
+           inc(j);
            if naxis=2 then
              hdr.Delete('NAXIS3')
-           else
-             hdr.Replace('NAXIS3',3,5);
-           if not hdr.Valueof('BZERO',bzero) then bzero:=0;
+           else begin
+             hdr.Replace('NAXIS3',3,j);
+             inc(j);
+           end;
+           bzero:=32768;
+           hdr.Replace('BZERO',bzero,j);
          end;
        end;
        reader.free;
