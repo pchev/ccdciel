@@ -2581,18 +2581,19 @@ begin
     Image.Extra[TiffGreenBits]:='16';
     Image.Extra[TiffBlueBits]:='16';
     Image.Extra[TiffGrayBits]:='16';
+    Image.Extra[TiffPhotoMetric]:='2'; {RGB color}
    end;
   {grayscale}
   if n_plane=1 then
   begin
-    Image.Extra[TiffGrayBits]:='16';   {add unit fptiffcmn to make this work. see https://bugs.freepascal.org/view.php?id=35081}
-    Image.Extra[TiffPhotoMetric]:='1'; {This is the same as Image.Extra['TiffPhotoMetricInterpretation']:='0';}
+    Image.Extra[TiffGrayBits]:='16';
+    Image.Extra[TiffPhotoMetric]:='1'; {Monochrome with black=0}
   end;
 
   image.Extra[TiffSoftware]:='CCDciel';
   image.Extra[TiffImageDescription]:=FHeader.AsString; {store full header in TIFF !!!}
 
-  Image.Extra[TiffCompression]:= '5'; // compression LZW
+  Image.Extra[TiffCompression]:= '8'; {FPWriteTiff only supports Deflate compression (Best). Any other compression setting is silently replaced in FPWriteTiff at line 465 for Deflate. FPReadTiff that can read other compressed files including LZW.}
 
   For i:=0 to Fheight-1 do
   begin
