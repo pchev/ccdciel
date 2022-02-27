@@ -88,12 +88,12 @@ if FCurrentFilter<>num then begin
     pause.Text:=Format(rsSetFilterPos,[IntToStr(num)+' : '+FFilterNames[num]]);
     if not pause.Wait then begin
       msg(rsManualFilter);
-      if Assigned(FonFilterChange) then FonFilterChange(FCurrentFilter);
       exit;
     end
     else begin
       FCurrentFilter:=num;
     end;
+    if Assigned(FonFilterChange) then FonFilterChange(FCurrentFilter);
   end
   else begin
     msg('Filter '+IntToStr(num)+' out of range');
