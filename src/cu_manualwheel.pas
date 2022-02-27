@@ -88,7 +88,6 @@ if FCurrentFilter<>num then begin
     pause.Text:=Format(rsSetFilterPos,[IntToStr(num)+' : '+FFilterNames[num]]);
     if not pause.Wait then begin
       msg(rsManualFilter);
-      exit;
     end
     else begin
       FCurrentFilter:=num;
