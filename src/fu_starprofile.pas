@@ -1253,7 +1253,7 @@ end;
 procedure Tf_starprofile.doAutofocusDynamic;
 var i,k,step,sumpos,numpos,focuspos: integer;
     p_hyp,a_hyp,b_hyp,x: double;
-  procedure ResetPos;
+  procedure BestPosition;
   begin
    if FPreFocusPos=-1 then begin
     k:=round(AutofocusDynamicMovement*(AutofocusDynamicNumPoint-aminpos));
@@ -1269,7 +1269,8 @@ var i,k,step,sumpos,numpos,focuspos: integer;
     end;
    end
    else begin
-     focuser.FocusPosition:=FPreFocusPos;
+     DynCurrentPos:=DynCurrentPos-(DynAbsStep*(AutofocusDynamicNumPoint-aminpos));
+     focuser.FocusPosition:=DynCurrentPos;
      FonAbsolutePosition(self);
    end;
   end;
@@ -1360,7 +1361,7 @@ begin
               // check measure validity
               if (aminpos<2)or((AutofocusDynamicNumPoint-aminpos)<2) then begin
                  // not enough point on one side
-                 ResetPos;
+                 BestPosition;
                  if FAutofocusRestart>0 then begin
                    // we already retry, abort now
                    msg(rsNotEnoughPoi,0);
@@ -1379,7 +1380,7 @@ begin
                  // not enough difference between min and max HFD, abort
                  msg(rsTooSmallHFDD,0);
                  msg(rsTheFocuserIs,1);
-                 ResetPos;
+                 BestPosition;
                  terminated:=true;
                  exit;
               end;
