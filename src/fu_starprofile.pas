@@ -43,6 +43,8 @@ type
     BtnPinTrend: TSpeedButton;
     BtnSpectraProfile: TSpeedButton;
     BtnViewAutofocus: TButton;
+    triangle_inspector1: TCheckBox;
+    triangle_angle1: TComboBox;
     FitSourceMeasure: TListChartSource;
     FitSourceComp: TListChartSource;
     HistoryChartImax: TLineSeries;

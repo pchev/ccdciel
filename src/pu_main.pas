@@ -557,10 +557,10 @@ type
     ScrBmp: TBGRABitmap;
     ImageSaved: boolean;
 
-    trpx1,trpx2,trpx3,trpx4,trpy1,trpy2,trpy3,trpy4: integer;{for image inspection}
-    median_center,median_top_left, median_top_right,median_bottom_left,median_bottom_right : double;{for image inspection}
+    trpxy : array[1..2,1..3,1..3] of integer;{for image inspection}
+    median: array[1..3,1..3] of double;{for image inspection}
 
-    trpOK: boolean;
+    trpOK: integer;
     AllMsg: TStringList;
     CameraExposureRemain:double;
     CursorImage1: TCursorImage;
@@ -9280,7 +9280,7 @@ begin
   Image1.Invalidate;
  end
  else begin
-  img_Width:=0;
+  img_width:=0;
   img_Height:=0;
   ImaBmp.SetSize(0,0);
   ClearImage;
@@ -9852,7 +9852,7 @@ begin
 if (fits.HeaderInfo.naxis>0) and fits.ImageValid then begin
   try
   if WaitCursor then screen.Cursor:=crHourGlass;
-  if Length(fits.StarList)=0 then trpOK:=false;
+  if Length(fits.StarList)=0 then trpOK:=0;
   fits.Gamma:=f_visu.Gamma.Value;
   fits.VisuMax:=round(f_visu.ImgMax);
   fits.VisuMin:=round(f_visu.ImgMin);
@@ -10161,52 +10161,126 @@ try
         end;
      end;
      SetLength(labeloverlap,0,0);
-     if trpOK then begin
-        {draw trapezium}
+     if trpOK=1 then begin    {draw irregular octagon}
         Image1.Canvas.pen.Color:=clYellow;
         Image1.Canvas.pen.Width:=DoScaleX(2);
         Image1.Canvas.Font.Size:=DoScaleX(30);
-        // x1,y1,x2,y2
-        Fits2Screen(trpx1,trpy1,f_visu.FlipHorz,f_visu.FlipVert,x,y);
-        image1.Canvas.textout(x,y,floattostrF(median_bottom_left, ffgeneral, 3,2));
+
+        //The nine areas. FITS 1,1 is left bottom:
+        //13   23   33
+        //12   22   32
+        //11   21   31
+
+        Fits2Screen(trpxy[1,1,1],trpxy[2,1,1],f_visu.FlipHorz,f_visu.FlipVert,x,y);
+        image1.Canvas.textout(x,y,floattostrF(median[1,1], ffgeneral, 3,2)); //text
         Image1.Canvas.MoveTo(x,y);
-        Fits2Screen(trpx2,trpy2,f_visu.FlipHorz,f_visu.FlipVert,x,y);
+
+        Fits2Screen(trpxy[1,2,1],trpxy[2,2,1],f_visu.FlipHorz,f_visu.FlipVert,x,y);
         Image1.Canvas.LineTo(x,y);
-        // x2,y2,x3,y3
-        Fits2Screen(trpx3,trpy3,f_visu.FlipHorz,f_visu.FlipVert,x,y);
+        image1.Canvas.textout(x,y,floattostrF(median[2,1], ffgeneral, 3,2));  //text
+        Image1.Canvas.MoveTo(x,y);{text out move the x,y position}
+
+
+        Fits2Screen(trpxy[1,3,1],trpxy[2,3,1],f_visu.FlipHorz,f_visu.FlipVert,x,y);
         Image1.Canvas.LineTo(x,y);
-        image1.Canvas.textout(x,y,floattostrF(median_top_right, ffgeneral, 3,2));
+        image1.Canvas.textout(x,y,floattostrF(median[3,1], ffgeneral, 3,2)); //text
+        Image1.Canvas.MoveTo(x,y);{text out move the x,y position}
+
+
+        Fits2Screen(trpxy[1,3,2],trpxy[2,3,2],f_visu.FlipHorz,f_visu.FlipVert,x,y);
+        Image1.Canvas.LineTo(x,y);
+        image1.Canvas.textout(x,y,floattostrF(median[3,2], ffgeneral, 3,2)); //text
+        Image1.Canvas.MoveTo(x,y);{text out move the x,y position}
+
+
+        Fits2Screen(trpxy[1,3,3],trpxy[2,3,3],f_visu.FlipHorz,f_visu.FlipVert,x,y);
+        Image1.Canvas.LineTo(x,y);
+        image1.Canvas.textout(x,y,floattostrF(median[3,3], ffgeneral, 3,2)); //text
+        Image1.Canvas.MoveTo(x,y);{text out move the x,y position}
+
+
+        Fits2Screen(trpxy[1,2,3],trpxy[2,2,3],f_visu.FlipHorz,f_visu.FlipVert,x,y);
+        Image1.Canvas.LineTo(x,y);
+        image1.Canvas.textout(x,y,floattostrF(median[2,3], ffgeneral, 3,2));//text
         Image1.Canvas.MoveTo(x,y);
-        // x3,y3,x4,y4
-        Fits2Screen(trpx4,trpy4,f_visu.FlipHorz,f_visu.FlipVert,x,y);
+
+        Fits2Screen(trpxy[1,1,3],trpxy[2,1,3],f_visu.FlipHorz,f_visu.FlipVert,x,y);
         Image1.Canvas.LineTo(x,y);
-        image1.Canvas.textout(x,y,floattostrF(median_top_left, ffgeneral, 3,2));
+        image1.Canvas.textout(x,y,floattostrF(median[1,3], ffgeneral, 3,2));//text
         Image1.Canvas.MoveTo(x,y);
-        // x4,y4,x1,y1
-        Fits2Screen(trpx1,trpy1,f_visu.FlipHorz,f_visu.FlipVert,x,y);
+
+        Fits2Screen(trpxy[1,1,2],trpxy[2,1,2],f_visu.FlipHorz,f_visu.FlipVert,x,y);
+        Image1.Canvas.LineTo(x,y);
+        image1.Canvas.textout(x,y,floattostrF(median[1,2], ffgeneral, 3,2));//text
+        Image1.Canvas.MoveTo(x,y);
+
+        Fits2Screen(trpxy[1,1,1],trpxy[2,1,1],f_visu.FlipHorz,f_visu.FlipVert,x,y);
         Image1.Canvas.LineTo(x,y);
 
         {draw diagonal}
         Fits2Screen(img_width div 2,img_height div 2,f_visu.FlipHorz,f_visu.FlipVert,xxc,yyc);
-        // xxc,yyc,x1,y1
-        image1.Canvas.textout(xxc,yyc,floattostrF(median_center, ffgeneral, 3,2));
-        Image1.Canvas.MoveTo(xxc,yyc);
-        Fits2Screen(trpx1,trpy1,f_visu.FlipHorz,f_visu.FlipVert,x,y);
+        image1.Canvas.textout(xxc,yyc,floattostrF(median[2,2], ffgeneral, 3,2));   //text center
+
+        {diagonal 1}
+        Fits2Screen(trpxy[1,1,1],trpxy[2,1,1],f_visu.FlipHorz,f_visu.FlipVert,x,y);
+        Image1.Canvas.MoveTo(x,y);
+
+        Fits2Screen(trpxy[1,3,3],trpxy[2,3,3],f_visu.FlipHorz,f_visu.FlipVert,x,y);
         Image1.Canvas.LineTo(x,y);
-        // xxc,yyc,x2,y2
-        Image1.Canvas.MoveTo(xxc,yyc);
-        Fits2Screen(trpx2,trpy2,f_visu.FlipHorz,f_visu.FlipVert,x,y);
+
+        {diagonal 2}
+        Fits2Screen(trpxy[1,1,3],trpxy[2,1,3],f_visu.FlipHorz,f_visu.FlipVert,x,y);
+        Image1.Canvas.MoveTo(x,y);
+
+        Fits2Screen(trpxy[1,3,1],trpxy[2,3,1],f_visu.FlipHorz,f_visu.FlipVert,x,y);
         Image1.Canvas.LineTo(x,y);
-        image1.Canvas.textout(x,y,floattostrF(median_bottom_right, ffgeneral, 3,2));
-        // xxc,yyc,x3,y3
-        Image1.Canvas.MoveTo(xxc,yyc);
-        Fits2Screen(trpx3,trpy3,f_visu.FlipHorz,f_visu.FlipVert,x,y);
-        Image1.Canvas.LineTo(x,y);
-        // xxc,yyc,x4,y4
-        Image1.Canvas.MoveTo(xxc,yyc);
-        Fits2Screen(trpx4,trpy4,f_visu.FlipHorz,f_visu.FlipVert,x,y);
-        Image1.Canvas.LineTo(x,y);
+     end
+     else
+     if trpOK=2 then{draw triangle} begin
+      Image1.Canvas.pen.Color:=clYellow;
+      Image1.Canvas.pen.Width:=DoScaleX(2);
+      Image1.Canvas.Font.Size:=DoScaleX(30);
+
+      //The nine areas. FITS 1,1 is left bottom:
+      //13   23   33
+      //12   22   32
+      //11   21   31
+
+      Fits2Screen(trpxy[1,1,1],trpxy[2,1,1],f_visu.FlipHorz,f_visu.FlipVert,x,y);
+      image1.Canvas.textout(x,y,floattostrF(median[1,1], ffgeneral, 3,2)); //text
+      Image1.Canvas.MoveTo(x,y);
+
+      Fits2Screen(trpxy[1,2,1],trpxy[2,2,1],f_visu.FlipHorz,f_visu.FlipVert,x,y);
+      Image1.Canvas.LineTo(x,y);
+      image1.Canvas.textout(x,y,floattostrF(median[2,1], ffgeneral, 3,2));  //text
+      Image1.Canvas.MoveTo(x,y);{text out move the x,y position}
+
+
+      Fits2Screen(trpxy[1,3,1],trpxy[2,3,1],f_visu.FlipHorz,f_visu.FlipVert,x,y);
+      Image1.Canvas.LineTo(x,y);
+      image1.Canvas.textout(x,y,floattostrF(median[3,1], ffgeneral, 3,2)); //text
+      Image1.Canvas.MoveTo(x,y);{text out move the x,y position}
+
+
+      Fits2Screen(trpxy[1,1,1],trpxy[2,1,1],f_visu.FlipHorz,f_visu.FlipVert,x,y);
+      Image1.Canvas.LineTo(x,y);
+
+
+      {draw three diagonals}
+      Fits2Screen(img_width div 2,img_height div 2,f_visu.FlipHorz,f_visu.FlipVert,xxc,yyc);
+      Image1.Canvas.LineTo(xxc,yyc);{1,1 to center}
+
+      image1.Canvas.textout(xxc,yyc,floattostrF(median[2,2], ffgeneral, 3,2));   //text center
+
+      Image1.Canvas.MoveTo(xxc,yyc);{center}
+      Fits2Screen(trpxy[1,2,1],trpxy[2,2,1],f_visu.FlipHorz,f_visu.FlipVert,x,y);
+      Image1.Canvas.LineTo(x,y);
+
+      Image1.Canvas.MoveTo(xxc,yyc);{center}
+      Fits2Screen(trpxy[1,3,1],trpxy[2,3,1],f_visu.FlipHorz,f_visu.FlipVert,x,y);
+      Image1.Canvas.LineTo(x,y);
      end;
+
      Image1.Canvas.brush.Style:=bsSolid;
      Image1.Canvas.pen.Width:=1;
      Image1.Canvas.pen.Mode:=pmCopy;
@@ -13226,14 +13300,36 @@ begin
  CheckMeridianFlip(0,true,t);
 end;
 
+
+function fnmodulo2(x,range: double):double;   {specifiy range=2*pi fore -pi..pi or range=360 for -180.. 180}
+begin
+  result:=x;
+  while result<-range/2 do result:=result+range;
+  while result>+range/2 do result:=result-range;
+end;
+
+
 procedure Tf_main.MeasureImage(plot: boolean); {measure the median HFD of the image and mark stars with a square proportional to HFD value}
 var
- i,rx,ry,s,nhfd,nhfd_center,nhfd_outer_ring,nhfd_top_left,nhfd_top_right,nhfd_bottom_left,nhfd_bottom_right : integer;
- hfd1,xc,yc, median_worst,median_best,scale_factor,med, median_outer_ring : double;
- hfdlist,hfdlist_top_left,hfdlist_top_right,hfdlist_bottom_left,hfdlist_bottom_right, hfdlist_center,hfdlist_outer_ring :array of double;
- Saved_Cursor : TCursor;
- mess1,mess2 : string;
+  i,rx,ry,s,nhfd,nhfd_outer_ring,
+  nhfd_11,nhfd_21,nhfd_31,
+  nhfd_12,nhfd_22,nhfd_32,
+  nhfd_13,nhfd_23,nhfd_33 : integer;
+
+  hfd1,xc,yc, median_worst,median_best,scale_factor,med, theangle,theradius,screw1,screw2,screw3,measuring_angle,sqrradius        : double;
+  hfd_median, median_outer_ring  : double;
+  hfdlist, hfdlist_outer_ring,
+  hfdlist_11,hfdlist_21,hfdlist_31,
+  hfdlist_12,hfdlist_22,hfdlist_32,
+  hfdlist_13,hfdlist_23,hfdlist_33     : array of double;
+  x_centered, y_centered,tilt_value: double;
+
+  Saved_Cursor : TCursor;
+  mess1,mess2 : string;
+  triangle: boolean;
 begin
+  triangle:=f_starprofile.triangle_inspector1.checked;
+  measuring_angle:=strtofloat(f_starprofile.triangle_angle1.text);
 
   if not (fits.HeaderInfo.valid and fits.ImageValid) then exit;
 
@@ -13270,98 +13366,222 @@ begin
   nhfd:=Length(fits.StarList);{number of stars detected for HFD statistics}
   SetLength(hfdlist,nhfd);
 
-  nhfd_center:=0;
+  if triangle then
+   begin
+     screw1:=fnmodulo2(measuring_angle,360); {make -180 to 180 range}
+     screw2:=fnmodulo2(measuring_angle+120,360);
+     screw3:=fnmodulo2(measuring_angle-120,360);
+   end;
+
+
+  nhfd_11:=0;{set counters at zero}
+  nhfd_21:=0;
+  nhfd_31:=0;
+  nhfd_12:=0;
+  nhfd_22:=0;
+  nhfd_32:=0;
+  nhfd_13:=0;
+  nhfd_23:=0;
+  nhfd_33:=0;
   nhfd_outer_ring:=0;
 
-  nhfd_top_left:=0;{set counters at zero}
-  nhfd_top_right:=0;
-  nhfd_bottom_left:=0;
-  nhfd_bottom_right:=0;
+  SetLength(hfdlist,nhfd);{set array length to maximum number of stars available}
 
-  SetLength(hfdlist_center,nhfd);{set array length to maximum number of stars available}
-  SetLength(hfdlist_outer_ring,nhfd);
+  SetLength(hfdlist_outer_ring,nhfd); {set array length to maximum number of stars available}
+  SetLength(hfdlist_11,nhfd);
+  SetLength(hfdlist_21,nhfd);
+  SetLength(hfdlist_31,nhfd);
 
-  SetLength(hfdlist_top_left,nhfd);
-  SetLength(hfdlist_top_right,nhfd);
-  SetLength(hfdlist_bottom_left,nhfd);
-  SetLength(hfdlist_bottom_right,nhfd);
+  SetLength(hfdlist_12,nhfd);
+  SetLength(hfdlist_22,nhfd);
+  SetLength(hfdlist_32,nhfd);
+
+  SetLength(hfdlist_13,nhfd);
+  SetLength(hfdlist_23,nhfd);
+  SetLength(hfdlist_33,nhfd);
 
   for i:=0 to nhfd-1 do
   begin
-     hfd1:=fits.StarList[i].hfd;
-     hfdlist[i]:=hfd1;
-     xc:=fits.StarList[i].x;
-     yc:=fits.StarList[i].y;
+    hfd1:=fits.StarList[i].hfd;
+    hfdlist[i]:=hfd1;
+    xc:=fits.StarList[i].x;
+    yc:=fits.StarList[i].y;
 
-     if  sqr(xc - (img_width div 2) )+sqr(yc - (img_height div 2))<sqr(0.25)*(sqr(img_width div 2)+sqr(img_height div 2)) then begin hfdlist_center[nhfd_center]:=hfd1; inc(nhfd_center); end {store center(<25% diameter) HFD values}
-     else
-     begin
-       if  sqr(xc - (img_width div 2) )+sqr(yc - (img_height div 2))>sqr(0.75)*(sqr(img_width div 2)+sqr(img_height div 2)) then begin hfdlist_outer_ring[nhfd_outer_ring]:=hfd1; inc(nhfd_outer_ring);  end;{store out ring (>75% diameter) HFD values}
+    if  sqr(xc - (img_width div 2) )+sqr(yc - (img_height div 2))>sqr(0.75)*(sqr(img_width div 2)+sqr(img_height div 2)) then begin hfdlist_outer_ring[nhfd_outer_ring]:=hfd1; inc(nhfd_outer_ring);  end;{store out ring (>75% diameter) HFD values}
+    if triangle=false then
+    begin
+      {store values}
+      if ( (xc<(img_width*1/3)) and (yc<(img_height*1/3)) ) then begin  hfdlist_11[nhfd_11]:=hfd1;  inc(nhfd_11);end; {store corner HFD values}
+      if ( (xc>(img_width*2/3)) and (yc<(img_height*1/3)) ) then begin  hfdlist_31[nhfd_31]:=hfd1;  inc(nhfd_31);end;
+      if ( (xc>(img_width*2/3)) and (yc>(img_height*2/3)) ) then begin  hfdlist_33[nhfd_33]:=hfd1;  inc(nhfd_33);end;
+      if ( (xc<(img_width*1/3)) and (yc>(img_height*2/3)) ) then begin  hfdlist_13[nhfd_13]:=hfd1;  inc(nhfd_13);end;
 
-       if ( (xc<(img_width div 2)) and (yc<(img_height div 2)) ) then begin hfdlist_bottom_left[nhfd_bottom_left]:=hfd1;   inc(nhfd_bottom_left); end;{store corner HFD values}
-       if ( (xc>(img_width div 2)) and (yc<(img_height div 2)) ) then begin hfdlist_bottom_right[nhfd_bottom_right]:=hfd1; inc(nhfd_bottom_right);end;
-       if ( (xc<(img_width div 2)) and (yc>(img_height div 2)) ) then begin hfdlist_top_left[nhfd_top_left]:=hfd1;         inc(nhfd_top_left);    end;
-       if ( (xc>(img_width div 2)) and (yc>(img_height div 2)) ) then begin hfdlist_top_right[nhfd_top_right]:=hfd1;       inc(nhfd_top_right);   end;
-     end;
+      if ( (xc>(img_width*1/3)) and (xc<(img_width*2/3)) and (yc>(img_height*2/3))                          ) then begin  hfdlist_23[nhfd_23]:=hfd1;  inc(nhfd_23);end;
+      if (                          (xc<(img_width*1/3)) and (yc>(img_height*1/3)) and (yc<(img_height*2/3))) then begin  hfdlist_12[nhfd_12]:=hfd1;  inc(nhfd_12);end;
+      if ( (xc>(img_width*1/3)) and (xc<(img_width*2/3)) and (yc>(img_height*1/3)) and (yc<(img_height*2/3))) then begin  hfdlist_22[nhfd_22]:=hfd1;  inc(nhfd_22);end;
+      if ( (xc>(img_width*2/3))                          and (yc>(img_height*1/3)) and (yc<(img_height*2/3))) then begin  hfdlist_32[nhfd_32]:=hfd1;  inc(nhfd_32);end;
+      if ( (xc>(img_width*1/3)) and (xc<(img_width*2/3)) and                           (yc<(img_height*1/3))) then begin  hfdlist_21[nhfd_21]:=hfd1;  inc(nhfd_21);end;
+
+    end
+    else
+    begin {triangle. Measured in a circle divided by three sectors of 120 degrees except for the circular center}
+      x_centered:=xc - (img_width div 2); {array coordinates}
+      y_centered:=yc - (img_height div 2);
+      theangle:=arctan2(x_centered,-y_centered)*180/pi;{angle in array from Y axis. So swap x, y. Take y negative since in CCDCiel array Y is inverse to FITS Y}
+      sqrradius:=sqr(x_centered)+sqr(x_centered);
+      theradius:=sqrt(sqrradius);
+
+      if  sqrradius<=sqr(0.75)*(sqr(img_width div 2)+sqr(img_height div 2))  then {within circle}
+      begin
+        if  sqrradius>=sqr(0.25)*(sqr(img_width div 2)+sqr(img_height div 2))  then  {outside center}
+        begin
+          if ( (abs(fnmodulo2(theangle-screw1,360))<30) and (theradius<img_height div 2) ) then begin  hfdlist_11[nhfd_11]:=hfd1; inc(nhfd_11);end;{sector 1}
+          if ( (abs(fnmodulo2(theangle-screw2,360))<30) and (theradius<img_height div 2) ) then begin  hfdlist_21[nhfd_21]:=hfd1; inc(nhfd_21);end;{sector 2}
+          if ( (abs(fnmodulo2(theangle-screw3,360))<30) and (theradius<img_height div 2) ) then begin  hfdlist_31[nhfd_31]:=hfd1; inc(nhfd_31);end;{sector 3}
+        end
+        else
+        begin  hfdlist_22[nhfd_22]:=hfd1;  inc(nhfd_22);if nhfd_22>=length(hfdlist_22) then SetLength(hfdlist_22,nhfd_22+100);end;{round center}
+      end;
+
+    end;
   end;
-  SetLength(hfdlist_center,nhfd_center);
-  SetLength(hfdlist_outer_ring,nhfd_outer_ring);
-  SetLength(hfdlist_bottom_left,nhfd_bottom_left);
-  SetLength(hfdlist_bottom_right,nhfd_bottom_right);
-  SetLength(hfdlist_top_left,nhfd_top_left);
-  SetLength(hfdlist_top_right,nhfd_top_right);
+  SetLength(hfdlist_outer_ring,nhfd_outer_ring); {set array length to maximum number of stars available}
+  SetLength(hfdlist_11,nhfd_11);
+  SetLength(hfdlist_21,nhfd_21);
+  SetLength(hfdlist_31,nhfd_31);
+
+  SetLength(hfdlist_12,nhfd_12);
+  SetLength(hfdlist_22,nhfd_22);
+  SetLength(hfdlist_32,nhfd_32);
+
+  SetLength(hfdlist_13,nhfd_13);
+  SetLength(hfdlist_23,nhfd_23);
+  SetLength(hfdlist_33,nhfd_33);
+
+
+  //the nine areas. FITS 1,1 is left bottom:
+  //13   23   33
+  //12   22   32
+  //11   21   31
 
   if nhfd>0 then
   begin
-    if ((nhfd_center>2) and (nhfd_outer_ring>2)) then  {enough information for curvature calculation}
+    if ((nhfd_22 {center}>2) and (nhfd_outer_ring>2)) then  {enough information for curvature calculation}
     begin
-      median_center:=SMedian(hfdlist_center);
+      median[2,2]:=SMedian(hfdlist_22);
       median_outer_ring:=SMedian(hfdlist_outer_ring);
-      mess1:='  '+Format(rsOffAxisAberr, [floattostrF(median_outer_ring-median_center, ffgeneral, 3, 2)]); {off-axis aberration measured in delta HFD. Works also for defocussed images}
+      mess1:='  '+Format(rsOffAxisAberr, [floattostrF(median_outer_ring-median[2,2], ffgeneral, 3, 2)]); {off-axis aberration measured in delta HFD. Works also for defocussed images}
     end
     else
     mess1:='';
 
+    hfd_median:=SMedian(hfdList);{all stars}
 
-    if ((nhfd_top_left>2) and (nhfd_top_right>2) and (nhfd_bottom_left>2) and (nhfd_bottom_right>2)) then {enough information for tilt calculation}
+
+    if ((triangle=true) and (nhfd_11>2)  and (nhfd_21>2) and (nhfd_31>2)) then  {enough information for tilt calculation}
     begin
-      median_top_left:=SMedian(hfdList_top_left);
-      median_top_right:=SMedian(hfdList_top_right);
-      median_bottom_left:=SMedian(hfdList_bottom_left);
-      median_bottom_right:=SMedian(hfdList_bottom_right);
+      median[1,1]:=SMedian(hfdlist_11);{screw 1}
+      median[2,1]:=SMedian(hfdlist_21);{screw 2}
+      median[3,1]:=SMedian(hfdlist_31);{screw 3}
 
-      median_best:=min(min(median_top_left, median_top_right),min(median_bottom_left,median_bottom_right));{find best corner}
-      median_worst:=max(max(median_top_left, median_top_right),max(median_bottom_left,median_bottom_right));{find worst corner}
+      median_best:=min(median[1,1],min(median[2,1],median[3,1]));{find best corner}
+      median_worst:=max(median[1,1],max(median[2,1],median[3,1]));{find worst corner}
+
+      scale_factor:=img_height*0.4/median_worst;
+      trpxy[1,1,1]:=round(median[1,1]*scale_factor*sin(screw1*pi/180)+img_width/2); {screw 1}
+      trpxy[2,1,1]:=round(median[1,1]*scale_factor*-cos(screw1*pi/180)+img_height/2);{calculate coordinates, based on rotation distance from Y axis. Inverse result because array Y is inverse to FITS Y}
+
+
+      trpxy[1,2,1]:=round(median[2,1]*scale_factor*sin(screw2*pi/180)+img_width/2); {screw 2}
+      trpxy[2,2,1]:=round(median[2,1]*scale_factor*-cos(screw2*pi/180)+img_height/2);{calculate coordinates, based on rotation distance from Y axis. Inverse result because array Y is inverse to FITS Y}
+
+      trpxy[1,3,1]:=round(median[3,1]*scale_factor*sin(screw3*pi/180)+img_width/2);{screw 3}
+      trpxy[2,3,1]:=round(median[3,1]*scale_factor*-cos(screw3*pi/180)+img_height/2);{calculate coordinates, based on rotation distance from Y axis. Inverse result because array Y is inverse to FITS Y}
+
+
+      trpOK:=2;{triangle okay}
+
+      tilt_value:=100*(median_worst-median_best)/hfd_median;
+      mess2:='  Tilt[HFD]='+floattostrF(median_worst-median_best,ffFixed,0,2)+' ('+floattostrF(tilt_value,ffFixed,0,0)+'%';{estimate tilt value}
+      if tilt_value<5 then mess2:=mess2+' none)'
+      else
+      if tilt_value<10 then mess2:=mess2+' almost none)'
+      else
+      if tilt_value<15 then mess2:=mess2+' mild)'
+      else
+      if tilt_value<20 then mess2:=mess2+' moderate)'
+      else
+      if tilt_value<30 then mess2:=mess2+' severe)'
+      else
+      mess2:=mess2+' extreme)';
+    end
+    else
+    if ((triangle=false) and (nhfd_11>2) and (nhfd_21>2) and (nhfd_31>0) and (nhfd_12>2) and (nhfd_32>2) and (nhfd_13>2) and (nhfd_22>2) and (nhfd_33>2)) then  {enough information for tilt calculation}
+    begin
+
+      median[1,1]:=SMedian(hfdlist_11);
+      median[2,1]:=SMedian(hfdlist_21);
+      median[3,1]:=SMedian(hfdlist_31);
+
+      median[1,2]:=SMedian(hfdlist_12);
+      {22 is already done and the center area}
+      median[3,2]:=SMedian(hfdlist_32);
+
+      median[1,3]:=SMedian(hfdlist_13);
+      median[2,3]:=SMedian(hfdlist_23);
+      median[3,3]:=SMedian(hfdlist_33);
+
+      median_best:=min(min(median[1,3], median[3,3]),min(median[1,1],median[3,1]));{find best corner}
+      median_worst:=max(max(median[1,3], median[3,3]),max(median[1,1],median[3,1]));{find worst corner}
 
       scale_factor:=img_height*0.33/median_worst;
-      trpx1:=round(-median_bottom_left*scale_factor+img_width/2);trpy1:=round(-median_bottom_left*scale_factor+img_height/2);{calculate coordinates counter clockwise}
-      trpx2:=round(+median_bottom_right*scale_factor+img_width/2);trpy2:=round(-median_bottom_right*scale_factor+img_height/2);
-      trpx3:=round(+median_top_right*scale_factor+img_width/2);trpy3:=round(+median_top_right*scale_factor+img_height/2);
-      trpx4:=round(-median_top_left*scale_factor+img_width/2);trpy4:=round(+median_top_left*scale_factor+img_height/2);
-      trpOK:=true;
 
+      trpxy[1,1,1]:=round(-median[1,1]*scale_factor+img_width/2);
+      trpxy[2,1,1]:=round(-median[1,1]*scale_factor+img_height/2);{calculate coordinates counter clockwise}
+
+      trpxy[1,2,1]:=round( img_width/2);
+      trpxy[2,2,1]:=round(-median[2,1]*scale_factor+img_height/2);
+
+      trpxy[1,3,1]:=round(+median[3,1]*scale_factor+img_width/2);
+      trpxy[2,3,1]:=round(-median[3,1]*scale_factor+img_height/2);
+
+      trpxy[1,1,2]:=round(-median[1,2]*scale_factor+img_width/2);
+      trpxy[2,1,2]:=round(+img_height/2);
+      trpxy[1,3,2]:=round(+median[3,2]*scale_factor+img_width/2);
+      trpxy[2,3,2]:=round(+img_height/2);
+
+      trpxy[1,1,3]:=round(-median[1,3]*scale_factor+img_width/2);
+      trpxy[2,1,3]:=round(+median[1,3]*scale_factor+img_height/2);
+      trpxy[1,2,3]:=round(img_width/2);
+      trpxy[2,2,3]:=round(+median[2,3]*scale_factor+img_height/2);
+      trpxy[1,3,3]:=round(+median[3,3]*scale_factor+img_width/2);
+      trpxy[2,3,3]:=round(+median[3,3]*scale_factor+img_height/2);
+
+      trpOK:=1;{irregular octagon okay}
       mess2:='  '+Format(rsTiltIndicati2, [floattostrF(median_worst-median_best,ffgeneral,3,2)]); {estimate tilt value in delta HFD}
     end
     else begin
-      trpOK:=false;
+      trpOK:=0;
       mess2:='';
     end;
-
 
     NewMessage(Format(rsFoundDStars, [nhfd])+': '+Format(rsImageMedianH, [formatfloat(f1, SMedian(hfdList))+ mess2+mess1]), 1); {Report median HFD, tilt and off-axis aberration (was curvature}
   end
   else
     NewMessage(rsNoStarDetect,1);
 
-  SetLength(hfdlist,0);{release memory. Could also be done with hfdlist:=nil}
+  hfdlist:=nil;{release memory}
 
-  SetLength(hfdlist_center,0);
-  SetLength(hfdlist_outer_ring,0);
-
-  SetLength(hfdlist_top_left,0);
-  SetLength(hfdlist_top_right,0);
-  SetLength(hfdlist_bottom_left,0);
-  SetLength(hfdlist_bottom_right,0);
+  hfdlist_outer_ring:=nil;
+  hfdlist_13:=nil;
+  hfdlist_23:=nil;
+  hfdlist_33:=nil;
+  hfdlist_12:=nil;
+  hfdlist_22:=nil;
+  hfdlist_32:=nil;
+  hfdlist_11:=nil;
+  hfdlist_21:=nil;
+  hfdlist_31:=nil;
 
   if plot then
     PlotImage
