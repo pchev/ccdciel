@@ -13445,19 +13445,6 @@ begin
 
     end;
   end;
-  SetLength(hfdlist_outer_ring,nhfd_outer_ring); {set array length to maximum number of stars available}
-  SetLength(hfdlist_11,nhfd_11);
-  SetLength(hfdlist_21,nhfd_21);
-  SetLength(hfdlist_31,nhfd_31);
-
-  SetLength(hfdlist_12,nhfd_12);
-  SetLength(hfdlist_22,nhfd_22);
-  SetLength(hfdlist_32,nhfd_32);
-
-  SetLength(hfdlist_13,nhfd_13);
-  SetLength(hfdlist_23,nhfd_23);
-  SetLength(hfdlist_33,nhfd_33);
-
 
   //the nine areas. FITS 1,1 is left bottom:
   //13   23   33
@@ -13468,21 +13455,21 @@ begin
   begin
     if ((nhfd_22 {center}>2) and (nhfd_outer_ring>2)) then  {enough information for curvature calculation}
     begin
-      median[2,2]:=SMedian(hfdlist_22);
-      median_outer_ring:=SMedian(hfdlist_outer_ring);
+      median[2,2]:=SMedian2(hfdlist_22,nhfd_22);
+      median_outer_ring:=SMedian2(hfdlist_outer_ring,nhfd_outer_ring);
       mess1:='  '+Format(rsOffAxisAberr, [floattostrF(median_outer_ring-median[2,2], ffgeneral, 3, 2)]); {off-axis aberration measured in delta HFD. Works also for defocussed images}
     end
     else
     mess1:='';
 
-    hfd_median:=SMedian(hfdList);{all stars}
+    hfd_median:=SMedian2(hfdList,nhfd);{all stars}
 
 
     if ((triangle=true) and (nhfd_11>2)  and (nhfd_21>2) and (nhfd_31>2)) then  {enough information for tilt calculation}
     begin
-      median[1,1]:=SMedian(hfdlist_11);{screw 1}
-      median[2,1]:=SMedian(hfdlist_21);{screw 2}
-      median[3,1]:=SMedian(hfdlist_31);{screw 3}
+      median[1,1]:=SMedian2(hfdlist_11,nhfd_11);{screw 1}
+      median[2,1]:=SMedian2(hfdlist_21,nhfd_21);{screw 2}
+      median[3,1]:=SMedian2(hfdlist_31,nhfd_31);{screw 3}
 
       median_best:=min(median[1,1],min(median[2,1],median[3,1]));{find best corner}
       median_worst:=max(median[1,1],max(median[2,1],median[3,1]));{find worst corner}
@@ -13519,17 +13506,17 @@ begin
     if ((triangle=false) and (nhfd_11>2) and (nhfd_21>2) and (nhfd_31>0) and (nhfd_12>2) and (nhfd_32>2) and (nhfd_13>2) and (nhfd_22>2) and (nhfd_33>2)) then  {enough information for tilt calculation}
     begin
 
-      median[1,1]:=SMedian(hfdlist_11);
-      median[2,1]:=SMedian(hfdlist_21);
-      median[3,1]:=SMedian(hfdlist_31);
+      median[1,1]:=SMedian2(hfdlist_11,nhfd_11);
+      median[2,1]:=SMedian2(hfdlist_21,nhfd_21);
+      median[3,1]:=SMedian2(hfdlist_31,nhfd_31);
 
-      median[1,2]:=SMedian(hfdlist_12);
+      median[1,2]:=SMedian2(hfdlist_12,nhfd_12);
       {22 is already done and the center area}
-      median[3,2]:=SMedian(hfdlist_32);
+      median[3,2]:=SMedian2(hfdlist_32,nhfd_32);
 
-      median[1,3]:=SMedian(hfdlist_13);
-      median[2,3]:=SMedian(hfdlist_23);
-      median[3,3]:=SMedian(hfdlist_33);
+      median[1,3]:=SMedian2(hfdlist_13,nhfd_13);
+      median[2,3]:=SMedian2(hfdlist_23,nhfd_23);
+      median[3,3]:=SMedian2(hfdlist_33,nhfd_33);
 
       median_best:=min(min(median[1,3], median[3,3]),min(median[1,1],median[3,1]));{find best corner}
       median_worst:=max(max(median[1,3], median[3,3]),max(median[1,1],median[3,1]));{find worst corner}
