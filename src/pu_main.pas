@@ -8253,7 +8253,7 @@ var i: integer;
   begin
   fn1:=slash(SequenceDir)+fn;
   fn2:=slash(newdir)+fn;
-  CopyFile(fn1,fn2,[cffOverwriteFile],true);
+  CopyFile(fn1,fn2,[cffOverwriteFile,cffPreserveTime],true);
   fn3:=slash(SequenceDir)+fn+'.bak';
   DeleteFile(fn3);
   RenameFile(fn1,fn3);
