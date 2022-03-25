@@ -146,9 +146,7 @@ procedure LocalToMount(mountjd:double; var ra, de: double);
 procedure MountToJ2000(mountjd:double; var ra, de: double);
 procedure J2000ToMount(mountjd:double; var ra, de: double);
 procedure quicksort(var list: array of double; lo,hi: integer);
-function SMedian2(list: array of double; leng: integer): double;
-procedure Sort(var list: array of double);
-function SMedian(list: array of double): double;
+function SMedian(list: array of double; leng: integer): double;
 procedure SortFilterListInc(var list: TStringList);
 procedure SortFilterListDec(var list: TStringList);
 function SystemInformation: string;
@@ -2814,7 +2812,7 @@ begin {quicksort};
   sort(lo,hi);
 end;
 
-function SMedian2(list: array of double; leng: integer): double;{get median of an array of double. Taken from CCDciel code but slightly modified}
+function SMedian(list: array of double; leng: integer): double;{get median of an array of double. Taken from CCDciel code but slightly modified}
 var
   mid : integer;
 begin
@@ -2836,51 +2834,6 @@ begin
      else
      result:=(list[mid]+list[mid+1])/2;
   end;
-end;
-
-procedure Sort(var list: array of double);
-var sorted: boolean;
-    tmp: double;
-    j,n: integer;
-begin
-repeat
-  sorted := True;
-  n := length(list);
-  for j := 1 to n-1 do
-  begin
-    if list[j - 1] > list[j] then
-    begin
-      tmp := list[j - 1];
-      list[j - 1] := list[j];
-      list[j] := tmp;
-      sorted := False;
-    end;
-  end;
-until sorted;
-end;
-
-function SMedian(list: array of double): double;
-var
-  n,mid: integer;
-begin
- n:=length(list);
- if n=0 then
-   result:=nan
- else if n=1 then
-   result:=list[0]
- else begin
-  Sort(list);
-  mid := (high(list) - low(list)) div 2;
-  if Odd(Length(list)) then begin
-   if n<=3 then
-    result:=list[mid]
-   else begin
-    result:=(list[mid-1]+list[mid]+list[mid+1])/3;
-   end;
-  end
-  else
-    result:=(list[mid]+list[mid+1])/2;
- end;
 end;
 
 procedure SortFilterListInc(var list: TStringList);

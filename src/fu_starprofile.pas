@@ -889,7 +889,7 @@ begin
       SetLength(hfdlist,ns);
       for i:=0 to ns-1 do
         hfdlist[i]:=f.StarList[i].hfd;
-      med:=SMedian(hfdlist);             {median of stars hfd}
+      med:=SMedian(hfdlist,ns);             {median of stars hfd}
       s:=min(max(14,round(3.0*med)),s); {reasonable window to measure this star}
     end
     else
@@ -921,7 +921,7 @@ begin
          ChkAutofocusDown(false);
          exit;
        end;
-       Fhfd:=SMedian(hfdlist);
+       Fhfd:=SMedian(hfdlist,nhfd);
        msg(Format(rsUsingMedianO, [inttostr(nhfd)]),3);
     end
     else begin
@@ -986,7 +986,7 @@ begin
     msg(Format(rsAutofocusMea, [inttostr(FnumHfd), inttostr(AutofocusNearNum),
       FormatFloat(f1, Fhfd), FormatFloat(f1, FValMax+bg), FormatFloat(f1, Fsnr)]),3);
     if FnumHfd>=AutofocusNearNum then begin  // mean of measurement
-      Fhfd:=SMedian(FhfdList);
+      Fhfd:=SMedian(FhfdList,Length(FhfdList));
       FnumHfd:=0;
       Fsnr:=FMinSnr;
       FValMax:=FminPeak;
@@ -1204,7 +1204,7 @@ begin
               dec(FnumGraph);
               SetLength(AutofocusVcCheckHFDlist,AutofocusVcCheckNum);
               AutofocusVcCheckHFDlist[AutofocusVcCheckNum-1]:=Fhfd;
-              meanhfd:=SMedian(AutofocusVcCheckHFDlist);
+              meanhfd:=SMedian(AutofocusVcCheckHFDlist,AutofocusVcCheckNum);
               newpos:=focuser.FocusPosition-(meanhfd/AutofocusVcSlopeL)+AutofocusVcPID/2;
               msg(Format(rsAutofocusMea2, [IntToStr(AutofocusVcCheckNum),
                 FormatFloat(f3, meanhfd), IntToStr(round(newpos))]),3);
@@ -1218,7 +1218,7 @@ begin
               dec(FnumGraph);
               SetLength(AutofocusVcCheckHFDlist,AutofocusVcCheckNum);
               AutofocusVcCheckHFDlist[AutofocusVcCheckNum-1]:=Fhfd;
-              meanhfd:=SMedian(AutofocusVcCheckHFDlist);
+              meanhfd:=SMedian(AutofocusVcCheckHFDlist,AutofocusVcCheckNum);
               newpos:=focuser.FocusPosition-(meanhfd/AutofocusVcSlopeR)-AutofocusVcPID/2;
               msg(Format(rsAutofocusMea2, [IntToStr(AutofocusVcCheckNum),
                 FormatFloat(f3, meanhfd), IntToStr(round(newpos))]),3);
@@ -1230,7 +1230,7 @@ begin
    vcsFocusL:begin
               // move to focus
               inc(FnumGraph);
-              meanhfd:=SMedian(AutofocusVcCheckHFDlist);
+              meanhfd:=SMedian(AutofocusVcCheckHFDlist,AutofocusVcCheckNum);
               newpos:=focuser.FocusPosition-(meanhfd/AutofocusVcSlopeL)+AutofocusVcPID/2;
               focuser.FocusPosition:=round(newpos);
               msg(Format(rsAutofocusMov3, [focuser.Position.Text]),3);
@@ -1241,7 +1241,7 @@ begin
    vcsFocusR:begin
               // move to focus
               inc(FnumGraph);
-              meanhfd:=SMedian(AutofocusVcCheckHFDlist);
+              meanhfd:=SMedian(AutofocusVcCheckHFDlist,AutofocusVcCheckNum);
               newpos:=focuser.FocusPosition-(meanhfd/AutofocusVcSlopeR)-AutofocusVcPID/2;
               focuser.FocusPosition:=round(newpos);
               msg(Format(rsAutofocusMov3, [focuser.Position.Text]),3);

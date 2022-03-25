@@ -2660,9 +2660,9 @@ begin
     end;
   end;
 
-  bg:=Smedian2(background,counter);
+  bg:=Smedian(background,counter);
   for i:=0 to counter-1 do background[i]:=abs(background[i] - bg);{fill background with offsets}
-  mad_bg:=Smedian2(background,counter); //median absolute deviation (MAD)
+  mad_bg:=Smedian(background,counter); //median absolute deviation (MAD)
   sd:=mad_bg*1.4826; {Conversion from mad to sd. See https://en.wikipedia.org/wiki/Median_absolute_deviation}
   sd:=max(sd,0.1); {add some value for images with zero noise background. This will prevent that background is seen as a star. E.g. some jpg processed by nova.astrometry.net}
   except
