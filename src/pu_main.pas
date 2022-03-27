@@ -127,6 +127,8 @@ type
     MenuDarkInfo1: TMenuItem;
     MenuDarkInfo2: TMenuItem;
     MenuChangelog: TMenuItem;
+    MenuItemImageInspection2: TMenuItem;
+    MenuItemImageInspection: TMenuItem;
     MenuPolarAlignment2: TMenuItem;
     MenuItemUnselect2: TMenuItem;
     MenuItemUnselect: TMenuItem;
@@ -374,6 +376,7 @@ type
     procedure MenuDarkCameraClick(Sender: TObject);
     procedure MenuDarkClearClick(Sender: TObject);
     procedure MenuDarkFileClick(Sender: TObject);
+    procedure MenuItemImageInspectionClick(Sender: TObject);
     procedure MenuPolarAlignment2Click(Sender: TObject);
     procedure ShowDarkInfo;
     procedure MenuDownloadClick(Sender: TObject);
@@ -829,6 +832,9 @@ type
     procedure CollimationStartSplit(Sender: TObject);
     procedure CollimationStopSplit(Sender: TObject);
     procedure CollimationApplySplit(Sender: TObject);
+    procedure CollimationStartInspection(Sender: TObject);
+    procedure CollimationStopInspection(Sender: TObject);
+    procedure CollimationApplyInspection(Sender: TObject);
     procedure ReadyForVideo(var v: boolean);
     procedure ShowStatus(str: string);
   public
@@ -1344,6 +1350,9 @@ begin
   MagnitudeCalibration:=NullCoord;
   Collimation:=false;
   CollimationCircle:=4;
+  ImageInspection:=false;
+  TriangleInspection:=false;
+  TriangleInspectionAngle:=0;
   ManualFilterNames:=TStringList.Create;
   ScrBmp := TBGRABitmap.Create;
   Image1 := TImgDrawingControl.Create(Self);
@@ -1554,7 +1563,6 @@ begin
   f_starprofile.onFocusIN:=@FocusIN;
   f_starprofile.onFocusOUT:=@FocusOUT;
   f_starprofile.onAbsolutePosition:=@FocusSetAbsolutePosition;
-  f_starprofile.onMeasureImage:=@MeasureImage;
   f_starprofile.onStarSelection:=@StarSelection;
   f_starprofile.onStatus:=@ShowStatus;
 
@@ -1906,6 +1914,7 @@ begin
    MenuOptions.Caption := Format(rsPreferences, [ellipsis]);
    MenuPolarAlignment.Caption:=rsPolarAlignme+', '+rsNearThePole;
    MenuPolarAlignment2.Caption:=rsPolarAlignme+', '+rsWithoutPoleV;
+   MenuCollimation.Caption:=rsInspectionAn;
    MenuIndiSettings.Caption := rsINDISettings;
    MenuAscomCameraSetup.Caption:='ASCOM '+rsCamera+blank+rsSetup;
    MenuAscomWheelSetup.Caption:='ASCOM '+rsFilterWheel+blank+rsSetup;
@@ -2047,6 +2056,8 @@ begin
    MenuItemPhotometry2.Caption:=rsPhotometry;
    MenuItemDebayer.Caption := rsPreviewDebay;
    MenuItemDebayer2.Caption := rsPreviewDebay;
+   MenuItemImageInspection.Caption:=rsImageInspect;
+   MenuItemImageInspection2.Caption:=rsImageInspect;
    MenuItemCleanup.Caption:=rsImageCleanup;
    MenuItemCleanup2.Caption:=rsImageCleanup;
    MenuItemUnselect.Caption:=rsUnselectStar;
@@ -2171,6 +2182,9 @@ begin
   f_visu.FlipHorz:=config.GetValue('/Visu/FlipHorz',false);
   f_visu.FlipVert:=config.GetValue('/Visu/FlipVert',false);
   f_visu.BtnClipRange.Down:=config.GetValue('/Visu/ClipRange',false);
+
+  TriangleInspection:=config.GetValue('/ImageInspection/TriangleInspection',false);
+  TriangleInspectionAngle:=config.GetValue('/ImageInspection/TriangleInspectionAngle',0);
 
   LogLevel:=config.GetValue('/Log/LogLevel',LogLevel);
   TabMsgLevel.TabIndex:=LogLevel-1;
@@ -3548,6 +3562,11 @@ begin
   ShowDarkInfo;
 end;
 
+procedure Tf_main.MenuItemImageInspectionClick(Sender: TObject);
+begin
+  MeasureImage(true);
+end;
+
 procedure Tf_main.ShowDarkInfo;
 begin
   if (fits.DarkFrame<>nil)and(fits.DarkFrame.HeaderInfo.valid) then begin
@@ -4321,6 +4340,9 @@ begin
    config.SetValue('/Visu/FlipHorz',f_visu.FlipHorz);
    config.SetValue('/Visu/FlipVert',f_visu.FlipVert);
    config.SetValue('/Visu/ClipRange',f_visu.BtnClipRange.Down);
+
+   config.SetValue('/ImageInspection/TriangleInspection',TriangleInspection);
+   config.SetValue('/ImageInspection/TriangleInspectionAngle',TriangleInspectionAngle);
 
    n:=FilterList.Count-1;
    config.SetValue('/Filters/Num',n);
@@ -9420,6 +9442,9 @@ begin
     if camera.StackCount>1 then buf:=buf+','+blank+Format(rsStackOfFrame, [inttostr(camera.StackCount)]);
     StatusBar1.Panels[panelfile].Text:=buf;
     if (not EarlyNextExposure) or Autofocusing then begin
+      // Image inspection
+      if ImageInspection then
+         MeasureImage(true);
       // Next exposure delayed after image display
       // start the exposure now
       if f_preview.Loop and f_preview.Running and (not CancelAutofocus) then begin
@@ -9474,7 +9499,7 @@ begin
   end
   else if RunningPreview then begin
     // next exposure
-    if f_preview.Loop and f_preview.Running and (not CancelAutofocus) then begin
+    if f_preview.Loop and f_preview.Running and (not CancelAutofocus) and (not ImageInspection) then begin
        Application.QueueAsyncCall(@StartPreviewExposureAsync,0)
     end
     else begin
@@ -10404,10 +10429,19 @@ begin
   f_collimation.onStartSplit:=@CollimationStartSplit;
   f_collimation.onStopSplit:=@CollimationStopSplit;
   f_collimation.onApplySplit:=@CollimationApplySplit;
+  f_collimation.onStartInspection:=@CollimationStartInspection;
+  f_collimation.onStopInspection:=@CollimationStopInspection;
+  f_collimation.onApplyInspection:=@CollimationApplyInspection;
   if img_Width>0 then f_collimation.TrackBarMargin.Max:=img_Width div 6;
   f_collimation.TrackBarMargin.Position := min(SplitMargin,f_collimation.TrackBarMargin.Max);
   f_collimation.TrackBarMargin.Hint:='0'+ellipsis+IntToStr(f_collimation.TrackBarMargin.Max);
   f_collimation.TrackBarZoom.Position := round(SplitZoom*10);
+  if TriangleInspection then
+    f_collimation.RadioGroupInspectionMode.ItemIndex:=1
+  else
+    f_collimation.RadioGroupInspectionMode.ItemIndex:=0;
+  f_collimation.TriangleAngle.Value:=TriangleInspectionAngle;
+  f_collimation.PanelTriangle.Visible:=TriangleInspection;
 
   FormPos(f_collimation,pt.X,pt.Y);
   f_collimation.Show;
@@ -10446,6 +10480,8 @@ begin
   end;
   if not Collimation then begin
     Collimation:=true;
+    ImageInspection:=false;
+    SplitImage:=false;
     if f_preview.Running then begin
       if f_preview.Loop then
         f_preview.BtnLoopClick(nil)
@@ -10482,7 +10518,10 @@ begin
     ShowMessage(Format(rsNotConnected, [rsCamera]));
     exit;
   end;
+  if Collimation then CollimationStop(nil);
   SplitImage:=true;
+  ImageInspection:=false;
+  Collimation:=false;
   if not f_preview.Loop then f_preview.Loop:=true;
   if not f_preview.Running then begin
     f_preview.Running:=true;
@@ -10506,8 +10545,45 @@ end;
 
 procedure Tf_main.CollimationApplySplit(Sender: TObject);
 begin
+  MenuItemCleanupClick(nil);
   SplitImage:=true;
   PlotImage;
+end;
+
+procedure Tf_main.CollimationStartInspection(Sender: TObject);
+begin
+  if camera.Status<>devConnected then begin
+    ShowMessage(Format(rsNotConnected, [rsCamera]));
+    exit;
+  end;
+  if Collimation then CollimationStop(nil);
+  ImageInspection:=true;
+  SplitImage:=false;
+  Collimation:=false;
+  if not f_preview.Loop then f_preview.Loop:=true;
+  if not f_preview.Running then begin
+    f_preview.Running:=true;
+    StartPreviewExposure(self);
+  end;
+end;
+
+procedure Tf_main.CollimationStopInspection(Sender: TObject);
+begin
+  ImageInspection:=false;
+  PlotImage;
+  if camera.Status<>devConnected then begin
+    exit;
+  end;
+  if f_preview.Running then begin
+    f_preview.Running:=false;
+    f_preview.Loop:=false;
+    StopExposure(Sender);
+  end;
+end;
+
+procedure Tf_main.CollimationApplyInspection(Sender: TObject);
+begin
+  MeasureImage(true);
 end;
 
 procedure Tf_main.MenuAscomSetupClick(Sender: TObject);
@@ -13316,7 +13392,7 @@ var
   nhfd_12,nhfd_22,nhfd_32,
   nhfd_13,nhfd_23,nhfd_33 : integer;
 
-  hfd1,xc,yc, median_worst,median_best,scale_factor,med, theangle,theradius,screw1,screw2,screw3,measuring_angle,sqrradius        : double;
+  hfd1,xc,yc, median_worst,median_best,scale_factor,med, theangle,theradius,screw1,screw2,screw3,sqrradius: double;
   hfd_median, median_outer_ring  : double;
   hfdlist, hfdlist_outer_ring,
   hfdlist_11,hfdlist_21,hfdlist_31,
@@ -13326,17 +13402,21 @@ var
 
   Saved_Cursor : TCursor;
   mess1,mess2 : string;
-  triangle: boolean;
 begin
-  triangle:=f_starprofile.triangle_inspector1.checked;
-  measuring_angle:=strtofloat(f_starprofile.triangle_angle1.text);
-
   if not (fits.HeaderInfo.valid and fits.ImageValid) then exit;
 
   Saved_Cursor := Screen.Cursor;
   Screen.Cursor := crHourglass; { Show hourglass cursor since analysing will take some time}
 
-  if plot then DrawImage; {draw clean image}
+  if plot then begin   {draw clean image}
+    if SplitImage then begin
+      SplitImage:=false;
+      PlotImage;
+    end
+    else begin
+      DrawImage;
+    end;
+  end;
 
   // first measurement with a big window to find median star diameter
   s:=starwindow; {use configured star window}
@@ -13366,11 +13446,11 @@ begin
   nhfd:=Length(fits.StarList);{number of stars detected for HFD statistics}
   SetLength(hfdlist,nhfd);
 
-  if triangle then
+  if TriangleInspection then
    begin
-     screw1:=fnmodulo2(measuring_angle,360); {make -180 to 180 range}
-     screw2:=fnmodulo2(measuring_angle+120,360);
-     screw3:=fnmodulo2(measuring_angle-120,360);
+     screw1:=fnmodulo2(TriangleInspectionAngle,360); {make -180 to 180 range}
+     screw2:=fnmodulo2(TriangleInspectionAngle+120,360);
+     screw3:=fnmodulo2(TriangleInspectionAngle-120,360);
    end;
 
 
@@ -13408,7 +13488,7 @@ begin
     yc:=fits.StarList[i].y;
 
     if  sqr(xc - (img_width div 2) )+sqr(yc - (img_height div 2))>sqr(0.75)*(sqr(img_width div 2)+sqr(img_height div 2)) then begin hfdlist_outer_ring[nhfd_outer_ring]:=hfd1; inc(nhfd_outer_ring);  end;{store out ring (>75% diameter) HFD values}
-    if triangle=false then
+    if TriangleInspection=false then
     begin
       {store values}
       if ( (xc<(img_width*1/3)) and (yc<(img_height*1/3)) ) then begin  hfdlist_11[nhfd_11]:=hfd1;  inc(nhfd_11);end; {store corner HFD values}
@@ -13465,7 +13545,7 @@ begin
     hfd_median:=SMedian(hfdList,nhfd);{all stars}
 
 
-    if ((triangle=true) and (nhfd_11>2)  and (nhfd_21>2) and (nhfd_31>2)) then  {enough information for tilt calculation}
+    if ((TriangleInspection=true) and (nhfd_11>2)  and (nhfd_21>2) and (nhfd_31>2)) then  {enough information for tilt calculation}
     begin
       median[1,1]:=SMedian(hfdlist_11,nhfd_11);{screw 1}
       median[2,1]:=SMedian(hfdlist_21,nhfd_21);{screw 2}
@@ -13503,7 +13583,7 @@ begin
       mess2:=mess2+' extreme)';
     end
     else
-    if ((triangle=false) and (nhfd_11>2) and (nhfd_21>2) and (nhfd_31>0) and (nhfd_12>2) and (nhfd_32>2) and (nhfd_13>2) and (nhfd_22>2) and (nhfd_33>2)) then  {enough information for tilt calculation}
+    if ((TriangleInspection=false) and (nhfd_11>2) and (nhfd_21>2) and (nhfd_31>0) and (nhfd_12>2) and (nhfd_32>2) and (nhfd_13>2) and (nhfd_22>2) and (nhfd_33>2)) then  {enough information for tilt calculation}
     begin
 
       median[1,1]:=SMedian(hfdlist_11,nhfd_11);

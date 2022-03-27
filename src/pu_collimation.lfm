@@ -14,115 +14,151 @@ object f_collimation: Tf_collimation
     Height = 320
     Top = 0
     Width = 350
-    ActivePage = TabSheet1
+    ActivePage = TabSheetInspection
     Align = alClient
     TabIndex = 0
     TabOrder = 0
-    object TabSheet1: TTabSheet
-      Caption = 'Single star'
-      ClientHeight = 289
+    object TabSheetInspection: TTabSheet
+      Caption = 'Image inspection'
+      ClientHeight = 316
       ClientWidth = 340
-      object Label2: TLabel
-        Left = 4
-        Height = 184
-        Top = 4
-        Width = 332
-        Align = alClient
-        AutoSize = False
-        BorderSpacing.Around = 4
-        Caption = 'Center a bright star. Defocus until the rings are clearly visible. Click the Start button.'#10'Slowly adjust the position of the star in the image field using the telescope fine movement until all the circles are concentric.'#10'Then move the star to the image center using the mirror adjustment screws.'
-        ParentFont = False
-        WordWrap = True
-      end
-      object GroupBox1: TGroupBox
-        Left = 0
-        Height = 57
-        Top = 192
-        Width = 340
-        Align = alBottom
-        ClientHeight = 55
-        ClientWidth = 338
-        ParentFont = False
-        TabOrder = 0
-        object Label1: TLabel
-          AnchorSideTop.Control = CircleNum
-          AnchorSideTop.Side = asrCenter
-          Left = 16
-          Height = 19
-          Top = 13
-          Width = 108
-          Caption = 'Number of circles'
-          ParentFont = False
-        end
-        object CircleNum: TSpinEdit
-          Left = 176
-          Height = 28
-          Top = 8
-          Width = 75
-          MaxValue = 15
-          MinValue = 1
-          OnChange = CircleNumChange
-          ParentFont = False
-          TabOrder = 0
-          Value = 4
-        end
-      end
-      object Panel1: TPanel
+      object Panel4: TPanel
         Left = 0
         Height = 40
-        Top = 249
+        Top = 276
         Width = 340
         Align = alBottom
         BevelOuter = bvNone
-        ClientHeight = 40
-        ClientWidth = 340
+        ClientHeight = 36
+        ClientWidth = 336
         ParentFont = False
-        TabOrder = 1
-        object BtnStart: TButton
+        TabOrder = 0
+        object BtnStartInspection: TButton
           Left = 93
           Height = 25
           Top = 8
           Width = 75
           Caption = 'Start'
-          OnClick = BtnStartClick
+          OnClick = BtnStartInspectionClick
           ParentFont = False
           TabOrder = 0
         end
-        object BtnStop: TButton
+        object BtnStopInspection: TButton
           Left = 177
           Height = 25
           Top = 8
           Width = 75
           Caption = 'Stop'
-          OnClick = BtnStopClick
+          OnClick = BtnStopInspectionClick
           ParentFont = False
           TabOrder = 1
         end
-        object BtnCenter: TButton
+        object BtnApplyInspection: TButton
           Left = 8
           Height = 25
           Top = 8
           Width = 75
-          Caption = 'Center'
-          OnClick = BtnCenterClick
+          Caption = 'Inspect'
+          OnClick = BtnApplyInspectionClick
           ParentFont = False
           TabOrder = 2
         end
       end
+      object Panel5: TPanel
+        Left = 0
+        Height = 145
+        Top = 131
+        Width = 340
+        Align = alBottom
+        BevelOuter = bvNone
+        ClientHeight = 145
+        ClientWidth = 340
+        TabOrder = 1
+        object RadioGroupInspectionMode: TRadioGroup
+          Left = 0
+          Height = 72
+          Top = 0
+          Width = 340
+          Align = alTop
+          AutoFill = True
+          Caption = 'Mode'
+          ChildSizing.LeftRightSpacing = 6
+          ChildSizing.EnlargeHorizontal = crsHomogenousChildResize
+          ChildSizing.EnlargeVertical = crsHomogenousChildResize
+          ChildSizing.ShrinkHorizontal = crsScaleChilds
+          ChildSizing.ShrinkVertical = crsScaleChilds
+          ChildSizing.Layout = cclLeftToRightThenTopToBottom
+          ChildSizing.ControlsPerLine = 2
+          ClientHeight = 52
+          ClientWidth = 338
+          Columns = 2
+          Items.Strings = (
+            'Octagon'
+            'Triangle'
+          )
+          OnClick = RadioGroupInspectionModeClick
+          TabOrder = 0
+        end
+        object PanelTriangle: TPanel
+          Left = 0
+          Height = 40
+          Top = 72
+          Width = 340
+          Align = alTop
+          BevelOuter = bvNone
+          ClientHeight = 40
+          ClientWidth = 340
+          TabOrder = 1
+          object TriangleAngle: TFloatSpinEdit
+            AnchorSideTop.Control = PanelTriangle
+            AnchorSideTop.Side = asrCenter
+            Left = 216
+            Height = 28
+            Top = 6
+            Width = 76
+            DecimalPlaces = 0
+            Increment = 10
+            MaxValue = 120
+            OnChange = TriangleAngleChange
+            TabOrder = 0
+          end
+          object Label6: TLabel
+            AnchorSideTop.Control = TriangleAngle
+            AnchorSideTop.Side = asrCenter
+            Left = 10
+            Height = 19
+            Top = 11
+            Width = 139
+            Caption = 'Triangle rotation angle'
+          end
+        end
+      end
+      object Label8: TLabel
+        Left = 4
+        Height = 119
+        Top = 8
+        Width = 332
+        Align = alClient
+        AutoSize = False
+        BorderSpacing.Top = 4
+        BorderSpacing.Around = 4
+        Caption = 'Inspect the distribution of the HFD across the image to help with coma corrector spacing and tilt adjustement.'
+        WordWrap = True
+      end
     end
-    object TabSheet2: TTabSheet
+    object TabSheet9panel: TTabSheet
       Caption = '9 panel image'
-      ClientHeight = 289
+      ClientHeight = 316
       ClientWidth = 340
       object Panel2: TPanel
         Left = 0
         Height = 40
-        Top = 249
+        Top = 276
         Width = 340
         Align = alBottom
         BevelOuter = bvNone
-        ClientHeight = 40
-        ClientWidth = 340
+        ClientHeight = 36
+        ClientWidth = 336
         ParentFont = False
         TabOrder = 0
         object BtnStartSplit: TButton
@@ -157,19 +193,21 @@ object f_collimation: Tf_collimation
         end
       end
       object Label5: TLabel
-        Left = 0
-        Height = 104
-        Top = 0
-        Width = 340
+        Left = 4
+        Height = 119
+        Top = 8
+        Width = 332
         Align = alClient
         AutoSize = False
+        BorderSpacing.Top = 4
+        BorderSpacing.Around = 4
         Caption = 'Split the image in 9 panel to better show the aberration in each corner.'#10'You can change the zoom level and the margin offset from the image edge.'
         WordWrap = True
       end
       object Panel3: TPanel
         Left = 0
         Height = 145
-        Top = 104
+        Top = 131
         Width = 340
         Align = alBottom
         BevelOuter = bvNone
@@ -218,6 +256,99 @@ object f_collimation: Tf_collimation
           Position = 0
           TickStyle = tsNone
           TabOrder = 1
+        end
+      end
+    end
+    object TabSheetSingle: TTabSheet
+      Caption = 'Single star'
+      ClientHeight = 316
+      ClientWidth = 340
+      object Label2: TLabel
+        Left = 4
+        Height = 215
+        Top = 8
+        Width = 332
+        Align = alClient
+        AutoSize = False
+        BorderSpacing.Top = 4
+        BorderSpacing.Around = 4
+        Caption = 'Center a bright star. Defocus until the rings are clearly visible. Click the Start button.'#10'Slowly adjust the position of the star in the image field using the telescope fine movement until all the circles are concentric.'#10'Then move the star to the image center using the mirror adjustment screws.'
+        ParentFont = False
+        WordWrap = True
+      end
+      object GroupBox1: TGroupBox
+        Left = 0
+        Height = 49
+        Top = 227
+        Width = 340
+        Align = alBottom
+        ClientHeight = 47
+        ClientWidth = 338
+        ParentFont = False
+        TabOrder = 0
+        object Label1: TLabel
+          AnchorSideTop.Control = CircleNum
+          AnchorSideTop.Side = asrCenter
+          Left = 16
+          Height = 19
+          Top = 13
+          Width = 108
+          Caption = 'Number of circles'
+          ParentFont = False
+        end
+        object CircleNum: TSpinEdit
+          Left = 176
+          Height = 28
+          Top = 8
+          Width = 75
+          MaxValue = 15
+          MinValue = 1
+          OnChange = CircleNumChange
+          ParentFont = False
+          TabOrder = 0
+          Value = 4
+        end
+      end
+      object Panel1: TPanel
+        Left = 0
+        Height = 40
+        Top = 276
+        Width = 340
+        Align = alBottom
+        BevelOuter = bvNone
+        ClientHeight = 36
+        ClientWidth = 336
+        ParentFont = False
+        TabOrder = 1
+        object BtnStart: TButton
+          Left = 93
+          Height = 25
+          Top = 8
+          Width = 75
+          Caption = 'Start'
+          OnClick = BtnStartClick
+          ParentFont = False
+          TabOrder = 0
+        end
+        object BtnStop: TButton
+          Left = 177
+          Height = 25
+          Top = 8
+          Width = 75
+          Caption = 'Stop'
+          OnClick = BtnStopClick
+          ParentFont = False
+          TabOrder = 1
+        end
+        object BtnCenter: TButton
+          Left = 8
+          Height = 25
+          Top = 8
+          Width = 75
+          Caption = 'Center'
+          OnClick = BtnCenterClick
+          ParentFont = False
+          TabOrder = 2
         end
       end
     end

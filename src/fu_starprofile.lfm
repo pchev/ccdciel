@@ -292,19 +292,19 @@ object f_starprofile: Tf_starprofile
     end
     object Panel7: TPanel
       Left = 1
-      Height = 142
+      Height = 118
       Top = 348
       Width = 192
       Align = alTop
       BevelOuter = bvNone
-      ClientHeight = 142
+      ClientHeight = 118
       ClientWidth = 192
       TabOrder = 2
       object ChkFocus: TSpeedButton
         Left = 0
         Height = 25
         Hint = 'Start image loop centered on selected star'
-        Top = 31
+        Top = 3
         Width = 192
         Align = alTop
         AllowAllUp = True
@@ -319,7 +319,7 @@ object f_starprofile: Tf_starprofile
         Left = 0
         Height = 25
         Hint = 'Start the auto-focus procedure'
-        Top = 59
+        Top = 31
         Width = 192
         Align = alTop
         AllowAllUp = True
@@ -330,34 +330,21 @@ object f_starprofile: Tf_starprofile
         OnClick = ChkAutofocusChange
         ParentFont = False
       end
-      object BtnMeasureImage: TButton
-        Left = 0
-        Height = 25
-        Hint = 'Inspect the repartition of the HFD across the image'
-        Top = 3
-        Width = 192
-        Align = alTop
-        BorderSpacing.Top = 3
-        Caption = 'Image inspection'
-        OnClick = BtnMeasureImageClick
-        ParentFont = False
-        TabOrder = 0
-      end
       object BtnViewAutofocus: TButton
         Left = 0
         Height = 25
-        Top = 87
+        Top = 59
         Width = 192
         Align = alTop
         BorderSpacing.Top = 3
         Caption = 'View last autofocus'
         OnClick = BtnViewAutofocusClick
-        TabOrder = 1
+        TabOrder = 0
       end
       object BtnSpectraProfile: TSpeedButton
         Left = 0
         Height = 25
-        Top = 115
+        Top = 87
         Width = 192
         Align = alTop
         AllowAllUp = True
@@ -586,40 +573,6 @@ object f_starprofile: Tf_starprofile
           end
         end
       end
-    end
-    object triangle_inspector1: TCheckBox
-      Left = 8
-      Height = 21
-      Top = 492
-      Width = 102
-      Caption = 'Triangle insp'
-      TabOrder = 4
-    end
-    object triangle_angle1: TComboBox
-      Left = 118
-      Height = 30
-      Top = 492
-      Width = 76
-      DropDownCount = 13
-      ItemHeight = 0
-      ItemIndex = 0
-      Items.Strings = (
-        '0'
-        '10'
-        '20'
-        '30'
-        '40'
-        '50'
-        '60'
-        '70'
-        '80'
-        '90'
-        '100'
-        '110'
-        '120'
-      )
-      TabOrder = 5
-      Text = '0'
     end
   end
   object PtSourceComp: TListChartSource

@@ -46,7 +46,6 @@ resourcestring
   rsTheFullWidth = 'The Full Width at Half Maximum value in pixels / arc '
     +'seconds';
   rsKeepTheGraph = 'Keep the graph visible after autofocus is completed';
-  rsInspectTheRe = 'Inspect the distribution of the HFD across the image';
   rsStartImageLo = 'Start image loop centered on selected star';
   rsStartTheAuto = 'Start the auto-focus procedure';
   rsHistogramOfT = 'Histogram of the current image.%sClick and move to adjust '

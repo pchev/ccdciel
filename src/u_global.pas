@@ -500,7 +500,8 @@ var
   SaveStack, StackAlign, StackUseDark, StackDebayer: boolean;
   StackOperation: integer;
   RunningCapture,RunningPreview: boolean;
-
+  ImageInspection, TriangleInspection: boolean;
+  TriangleInspectionAngle: double;
 
   procedure globalmsg(str:string);
   function Str2Frametype(str:string):TFrameType;

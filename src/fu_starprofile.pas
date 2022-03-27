@@ -37,14 +37,11 @@ type
   { Tf_starprofile }
 
   Tf_starprofile = class(TFrame)
-    BtnMeasureImage: TButton;
     BtnPin2D: TSpeedButton;
     BtnPinProfile: TSpeedButton;
     BtnPinTrend: TSpeedButton;
     BtnSpectraProfile: TSpeedButton;
     BtnViewAutofocus: TButton;
-    triangle_inspector1: TCheckBox;
-    triangle_angle1: TComboBox;
     FitSourceMeasure: TListChartSource;
     FitSourceComp: TListChartSource;
     HistoryChartImax: TLineSeries;
@@ -104,7 +101,6 @@ type
     procedure BtnViewAutofocusClick(Sender: TObject);
     procedure ChkAutofocusChange(Sender: TObject);
     procedure ChkFocusChange(Sender: TObject);
-    procedure BtnMeasureImageClick(Sender: TObject);
     procedure HistoryChartDblClick(Sender: TObject);
     procedure HistoryChartMouseMove(Sender: TObject; Shift: TShiftState; X, Y: Integer);
     procedure PageControlProfileChange(Sender: TObject);
@@ -122,7 +118,6 @@ type
     FFocusStart,FFocusStop: TNotifyEvent;
     FAutoFocusStop,FAutoFocusStart: TNotifyEvent;
     FonFocusIN, FonFocusOUT, FonAbsolutePosition: TNotifyEvent;
-    FonMeasureImage: TNotifyBoolConst;
     FonStarSelection: TNotifyEvent;
     FonMsg: TNotifyMsg;
     FonStatus: TNotifyStr;
@@ -196,7 +191,6 @@ type
     property onFocusIN: TNotifyEvent read FonFocusIN write FonFocusIN;
     property onFocusOUT: TNotifyEvent read FonFocusOUT write FonFocusOUT;
     property onAbsolutePosition: TNotifyEvent read FonAbsolutePosition write FonAbsolutePosition;
-    property onMeasureImage: TNotifyBoolConst read FonMeasureImage write FonMeasureImage;
     property onStarSelection: TNotifyEvent read FonStarSelection write FonStarSelection;
   end;
 
@@ -261,7 +255,6 @@ begin
   Label5.Caption:=rsHistory;
   Label2.Caption:=rsIntensity+':';
   Label3.Caption:=rsFWHM+':';
-  BtnMeasureImage.Caption:=rsImageInspect;
   ChkFocus.Caption:=rsManualFocusA;
   ChkAutofocus.Caption:=rsAutofocus;
   BtnViewAutofocus.Caption:=rsViewLastAuto;
@@ -273,7 +266,6 @@ begin
   LabelSNR.Hint:=rsTheSignalNoi;
   LabelFWHM.Hint:=rsTheFullWidth;
   BtnPinGraph.Hint:=rsKeepTheGraph;
-  BtnMeasureImage.Hint:=rsInspectTheRe;
   ChkFocus.Hint:=rsStartImageLo;
   ChkAutofocus.Hint:=rsStartTheAuto;
 end;
@@ -419,11 +411,6 @@ begin
     1: begin BtnPin2D.SendToBack; BtnPin2D.BringToFront; end;
     2: begin PanelBtnTrend.SendToBack; PanelBtnTrend.BringToFront; end;
   end;
-end;
-
-procedure Tf_starprofile.BtnMeasureImageClick(Sender: TObject);
-begin
-  if assigned(FonMeasureImage) then FonMeasureImage(true);
 end;
 
 procedure Tf_starprofile.BtnPin2DClick(Sender: TObject);

@@ -33,11 +33,14 @@ type
 
   Tf_collimation = class(TForm)
     BtnApplySplit: TButton;
+    BtnApplyInspection: TButton;
     BtnStart: TButton;
     BtnStartSplit: TButton;
+    BtnStartInspection: TButton;
     BtnStop: TButton;
     BtnCenter: TButton;
     BtnStopSplit: TButton;
+    BtnStopInspection: TButton;
     CircleNum: TSpinEdit;
     GroupBox1: TGroupBox;
     Label1: TLabel;
@@ -45,28 +48,42 @@ type
     Label3: TLabel;
     Label4: TLabel;
     Label5: TLabel;
+    Label6: TLabel;
+    Label8: TLabel;
     PageControl1: TPageControl;
     Panel1: TPanel;
     Panel2: TPanel;
     Panel3: TPanel;
-    TabSheet1: TTabSheet;
-    TabSheet2: TTabSheet;
+    Panel4: TPanel;
+    Panel5: TPanel;
+    PanelTriangle: TPanel;
+    RadioGroupInspectionMode: TRadioGroup;
+    TabSheetSingle: TTabSheet;
+    TabSheet9panel: TTabSheet;
+    TabSheetInspection: TTabSheet;
     TrackBarZoom: TTrackBar;
     TrackBarMargin: TTrackBar;
+    TriangleAngle: TFloatSpinEdit;
+    procedure BtnApplyInspectionClick(Sender: TObject);
     procedure BtnApplySplitClick(Sender: TObject);
     procedure BtnCenterClick(Sender: TObject);
     procedure BtnStartClick(Sender: TObject);
+    procedure BtnStartInspectionClick(Sender: TObject);
     procedure BtnStartSplitClick(Sender: TObject);
     procedure BtnStopClick(Sender: TObject);
+    procedure BtnStopInspectionClick(Sender: TObject);
     procedure BtnStopSplitClick(Sender: TObject);
     procedure CircleNumChange(Sender: TObject);
     procedure FormClose(Sender: TObject; var CloseAction: TCloseAction);
     procedure FormCreate(Sender: TObject);
+    procedure RadioGroupInspectionModeClick(Sender: TObject);
     procedure TrackBarMarginChange(Sender: TObject);
     procedure TrackBarZoomChange(Sender: TObject);
+    procedure TriangleAngleChange(Sender: TObject);
   private
     FonStart,FonStop,FonCircleChange,FonCenterStar: TNotifyEvent;
     FonStartSplit,FonStopSplit,FonApplySplit: TNotifyEvent;
+    FonStartInspection,FonStopInspection,FonApplyInspection: TNotifyEvent;
   public
     procedure SetLang;
     property onStart: TNotifyEvent read FonStart write FonStart;
@@ -76,6 +93,9 @@ type
     property onStartSplit: TNotifyEvent read FonStartSplit write FonStartSplit;
     property onStopSplit: TNotifyEvent read FonStopSplit write FonStopSplit;
     property onApplySplit: TNotifyEvent read FonApplySplit write FonApplySplit;
+    property onStartInspection: TNotifyEvent read FonStartInspection write FonStartInspection;
+    property onStopInspection: TNotifyEvent read FonStopInspection write FonStopInspection;
+    property onApplyInspection: TNotifyEvent read FonApplyInspection write FonApplyInspection;
   end;
 
 var
@@ -95,14 +115,15 @@ end;
 
 procedure Tf_collimation.SetLang;
 begin
-  Caption:=rsCollimation;
-  TabSheet1.Caption:=rsSingleStar;
+  Caption:=rsInspectionAn;
+  Label8.Caption:=rsInspectTheRe;
+  TabSheetSingle.Caption:=rsSingleStar;
   Label1.Caption:=rsNumberOfCirc;
-  Label2.Caption:=Format(StringReplace(rsCenterABrigh,' %s ','%s',[rfReplaceAll]),[crlf,crlf]);
+  Label2.Caption:=rsForReflector+crlf+Format(StringReplace(rsCenterABrigh, ' %s ', '%s', [rfReplaceAll]), [crlf, crlf]);
   BtnCenter.Caption:=rsCenter;
   BtnStart.Caption:=rsStart;
   BtnStop.Caption:=rsStop;
-  TabSheet2.Caption:=rs9PanelImage;
+  TabSheet9panel.Caption:=rs9PanelImage;
   label5.Caption:=Format(StringReplace(rsSplitTheImag,' %s ','%s',[rfReplaceAll]),[crlf]);
   label3.Caption:=rsZoom;
   label4.Caption:=rsMarginOffset;
@@ -136,6 +157,7 @@ procedure Tf_collimation.FormClose(Sender: TObject; var CloseAction: TCloseActio
 begin
   if Assigned(FonStop) then FonStop(self);
   if Assigned(FonStopSplit) then FonStopSplit(self);
+  if Assigned(FonStopInspection) then FonStopInspection(self);
 end;
 
 procedure Tf_collimation.BtnStartSplitClick(Sender: TObject);
@@ -161,6 +183,32 @@ end;
 procedure Tf_collimation.TrackBarZoomChange(Sender: TObject);
 begin
   SplitZoom:=TrackBarZoom.Position/10;
+end;
+
+procedure Tf_collimation.RadioGroupInspectionModeClick(Sender: TObject);
+begin
+  TriangleInspection:=(RadioGroupInspectionMode.ItemIndex=1);
+  PanelTriangle.Visible:=TriangleInspection;
+end;
+
+procedure Tf_collimation.TriangleAngleChange(Sender: TObject);
+begin
+  TriangleInspectionAngle:=TriangleAngle.Value;
+end;
+
+procedure Tf_collimation.BtnStartInspectionClick(Sender: TObject);
+begin
+  if Assigned(FonStartInspection) then FonStartInspection(self);
+end;
+
+procedure Tf_collimation.BtnStopInspectionClick(Sender: TObject);
+begin
+  if Assigned(FonStopInspection) then FonStopInspection(self);
+end;
+
+procedure Tf_collimation.BtnApplyInspectionClick(Sender: TObject);
+begin
+  if Assigned(FonApplyInspection) then FonApplyInspection(self);
 end;
 
 end.

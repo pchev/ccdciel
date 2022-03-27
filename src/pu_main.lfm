@@ -753,6 +753,10 @@ object f_main: Tf_main
       object MenuItem24: TMenuItem
         Caption = '-'
       end
+      object MenuItemImageInspection: TMenuItem
+        Caption = 'Image inspection'
+        OnClick = MenuItemImageInspectionClick
+      end
       object MenuItemCleanup2: TMenuItem
         Caption = 'Image cleanup'
         OnClick = MenuItemCleanupClick
@@ -1327,6 +1331,10 @@ object f_main: Tf_main
     end
     object MenuItem14: TMenuItem
       Caption = '-'
+    end
+    object MenuItemImageInspection2: TMenuItem
+      Caption = 'Image inspection'
+      OnClick = MenuItemImageInspectionClick
     end
     object MenuItemCleanup: TMenuItem
       Caption = 'Image cleanup'
