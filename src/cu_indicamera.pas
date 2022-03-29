@@ -24,6 +24,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 }
 
 //{$define debug_raw}
+//{$define camera_debug}
 
 interface
 
@@ -444,7 +445,7 @@ end;
 
 procedure T_indicamera.CheckStatus;
 begin
-    if Fconnected and
+    if Fconnected and (not Fready) and
        ((configprop<>nil)or(not FAutoloadConfig)) and
        FhasBlob and (
        ((Findisensor='CCD2')and(Guiderexpose<>nil))or
