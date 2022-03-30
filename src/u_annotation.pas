@@ -1,7 +1,7 @@
 unit u_annotation; {deep sky annotation of the image}
 { From ASTAP unit_deepsky with modification for CCDciel environment}
 {$mode delphi}
-{Copyright (C) 2018,2020 Han Kleijn (www.hnsky.org) and Patrick Chevalley.
+{Copyright (C) 2018,2022 Han Kleijn (www.hnsky.org) and Patrick Chevalley.
  email: han.k.. at...hnsky.org
 
 {This program is free software: you can redistribute it and/or modify
@@ -293,8 +293,6 @@ begin
   begin
     width2:=f.HeaderInfo.naxis1;
     height2:=f.HeaderInfo.naxis2;
-    fitsx:=width2/2;{for case crpix1 is not in the middle}
-    fitsy:=height2/2;
     if not f.Header.Valueof('CRPIX1',crpix1) then exit;
     if not f.Header.Valueof('CRPIX2',crpix2) then exit;
     if not f.Header.Valueof('CRVAL1',ra0) then exit;
@@ -322,11 +320,14 @@ begin
     end;
 
     {6. Passage (x,y) -> (RA,DEC) to find RA0,DEC0 for middle of the image. See http://alain.klotz.free.fr/audela/libtt/astm1-fr.htm}
-    dRa :=(cd1_1*((width2/2)-crpix1)+cd1_2*((height2/2)-crpix2))*pi/180; {also valid for case crpix1,crpix2 is not in the middle}
-    dDec:=(cd2_1*((width2/2)-crpix1)+cd2_2*((height2/2)-crpix2))*pi/180;
+    {for case crpix1,crpix2 are not in the middle}
+    fitsX:=(width2+1)/2;{range 1..width, if range 1,2,3,4  then middle is 2.5=(4+1)/2 }
+    fitsY:=(height2+1)/2;
+    dRa :=(cd1_1*(fitsX-crpix1)+cd1_2*(fitsY-crpix2))*pi/180;
+    dDec:=(cd2_1*(fitsX-crpix1)+cd2_2*(fitsY-crpix2))*pi/180;
     delta:=cos(dec0)-dDec*sin(dec0);
     gamma:=sqrt(dRa*dRa+delta*delta);
-    telescope_ra:=ra0+arctan(Dra/delta);
+    telescope_ra:=ra0+arctan(Dra/delta);{position of the middle of the image}
     telescope_dec:=arctan((sin(dec0)+dDec*cos(dec0))/gamma);
 
     cos_telescope_dec:=cos(telescope_dec);
