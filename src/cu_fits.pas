@@ -1935,8 +1935,6 @@ else begin
     end;
   end;
 end;
-FUseRawImage:=false;
-setlength(Frawimage,0,0,0);
 {$ifdef debug_raw}writeln(FormatDateTime(dateiso,Now)+blank+'GetImage end');{$endif}
 FImageValid:=true;
 end;
@@ -2567,6 +2565,7 @@ var
   writer: TFPCustomImageWriter;
   thecolor  :Tfpcolor;
   flip_V, flip_H: boolean;
+  SourceImage: Timafloat;
 begin
   flip_V:=true;
   flip_H:=false;
@@ -2595,16 +2594,20 @@ begin
 
   Image.Extra[TiffCompression]:= '8'; {FPWriteTiff only supports Deflate compression (Best). Any other compression setting is silently replaced in FPWriteTiff at line 465 for Deflate. FPReadTiff that can read other compressed files including LZW.}
 
+  if FUseRawImage then
+    SourceImage:=Frawimage
+  else
+    SourceImage:=Fimage;
   For i:=0 to Fheight-1 do
   begin
     if flip_V=false then k:=Fheight-1-i else k:=i;{reverse fits down to counting}
     for j:=0 to Fwidth-1 do
     begin
       if flip_H=true then m:=Fwidth-1-j else m:=j;
-      thecolor.red:=min(round(Fimage[0,k,m]), $FFFF);
+      thecolor.red:=min(round(SourceImage[0,k,m]), $FFFF);
       if n_plane=3 then begin
-        thecolor.green:=min(round(Fimage[1,k,m]), $FFFF);
-        thecolor.blue:=min(round(Fimage[2,k,m]), $FFFF);
+        thecolor.green:=min(round(SourceImage[1,k,m]), $FFFF);
+        thecolor.blue:=min(round(SourceImage[2,k,m]), $FFFF);
       end
       else begin
         thecolor.green:=thecolor.red;
