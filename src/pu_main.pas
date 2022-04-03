@@ -9731,10 +9731,14 @@ try
  if UseFileSequenceNumber then begin
    fileseqnum:=1;
    fileseqstr:=IntToStr(fileseqnum);
-   if FilePack then
-     fileseqext:='.fits.fz'
+   if (SaveFormat=ffFITS) or FileStackFloat then begin
+     if FilePack then
+       fileseqext:='.fits.fz'
+     else
+       fileseqext:='.fits';
+   end
    else
-     fileseqext:='.fits';
+     fileseqext:='.tif';
    if FileSequenceWidth>0 then fileseqstr:=PadZeros(IntToStr(fileseqnum),FileSequenceWidth);
    while FileExistsUTF8(slash(fd)+fn+FilenameSep+fileseqstr+fileseqext) do begin
      inc(fileseqnum);
