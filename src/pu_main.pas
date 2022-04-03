@@ -13859,8 +13859,7 @@ begin
    if n=0 then begin
      ra:=c.ra/15;
      de:=c.dec;
-     J2000ToMount(mount.EquinoxJD,ra,de);
-     StatusBar1.Panels[panelstatus].Text:=ARToStr3(ra)+' '+DEToStr(de);
+     StatusBar1.Panels[panelstatus].Text:='J2000: '+ARToStr3(ra)+' '+DEToStr(de);
    end;
  end;
  yy:=img_Height-yy;
