@@ -1234,7 +1234,7 @@ resourcestring
   rsDiscoveryPor = 'Discovery port';
   rsTemplate = 'Template';
   rsPower = 'Power';
-  rsInspectTheRe = 'Inspect the distribution of the HFD across the image to help with coma corrector spacing and tilt adjustement.';
+  rsInspectTheRe = 'Inspect the distribution of the HFD value across the image to help with coma corrector spacing and tilt adjust.';
   rsNumberOfCirc = 'Number of circles';
   rsCenterABrigh = 'Center a bright star. Defocus until the rings are clearly visible. Click the Start button. %s Slowly adjust the position of the star in the image field using the telescope fine movement until all the circles are concentric. %s Then move the star to the image center using the mirror adjustment screws.';
   rsTargetSCoord = 'Target %s coordinates not updated';
