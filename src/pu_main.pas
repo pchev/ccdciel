@@ -9697,7 +9697,7 @@ try
                fn:=fn+binstr+FilenameSep;
              end;
      fnTemp: if FileNameActive[i] and fits.Header.Valueof('CCD-TEMP',ccdtemp) then
-                fn:=fn+formatfloat(f1,ccdtemp)+'C'+FilenameSep;
+                fn:=fn+IntToStr(round(ccdtemp))+'C'+FilenameSep;
      fnDate: if FileNameActive[i] then begin
                 if f_capture.ExposureTime>=1.0 then
                    fn:=fn+FormatDateTime('yyyymmdd'+FilenameSep+'hhnnss',dt)+FilenameSep
