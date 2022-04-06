@@ -4526,8 +4526,8 @@ msgstr ""
 msgid "Power"
 msgstr ""
 
-#: u_translation:rscollimation
-msgid "Collimation"
+#: u_translation:rsinspectthere
+msgid "Inspect the distribution of the HFD value across the image to help with coma corrector spacing and tilt adjust."
 msgstr ""
 
 #: u_translation:rsnumberofcirc
@@ -5124,5 +5124,29 @@ msgstr ""
 
 #: u_translation:rsdebayer
 msgid "Debayer"
+msgstr ""
+
+#: u_translation:rsinspectionan
+msgid "Inspection and collimation"
+msgstr ""
+
+#: u_translation:rsforreflector
+msgid "For reflector collimation."
+msgstr ""
+
+#: u_translation:rsinspect
+msgid "Inspect"
+msgstr ""
+
+#: u_translation:rsoctagon
+msgid "Octagon"
+msgstr ""
+
+#: u_translation:rstriangle
+msgid "Triangle"
+msgstr ""
+
+#: u_translation:rstrianglerota
+msgid "Triangle rotation angle"
 msgstr ""
 

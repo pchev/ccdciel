@@ -6,15 +6,15 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ccdciel\n"
 "Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
-"POT-Creation-Date: 2022-01-19 10:30+0000\n"
-"PO-Revision-Date: 2022-01-02 11:41+0000\n"
+"POT-Creation-Date: 2022-04-06 14:33+0000\n"
+"PO-Revision-Date: 2022-03-05 19:36+0000\n"
 "Last-Translator: Sergey Tarantsov <tsn-ast@yandex.ru>\n"
 "Language-Team: Russian <ru@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2022-03-05 08:52+0000\n"
-"X-Generator: Launchpad (build 61f4697954ab70d633d14d8ceecff69a20b08a6b)\n"
+"X-Launchpad-Export-Date: 2022-04-06 14:41+0000\n"
+"X-Generator: Launchpad (build 98132e33014dffc15ffeea1182b7db54e65752bd)\n"
 
 #: u_translation.rs2d
 msgid "2D"
@@ -76,7 +76,7 @@ msgstr "Добавить в заголовок FITS теги из DSLR EXIF"
 
 #: u_translation.rsaddimages
 msgid "Add images"
-msgstr ""
+msgstr "Сумма"
 
 #: u_translation.rsaddstep
 msgid "Add step"
@@ -147,7 +147,7 @@ msgstr "Любое время"
 
 #: u_translation.rsapplydarkand
 msgid "Apply Dark and BPM"
-msgstr ""
+msgstr "Применить дарки и КБП"
 
 #: u_translation.rsapplyediting
 msgid "Apply editing to active sequence"
@@ -524,7 +524,7 @@ msgstr "Обязательно настройте подключение кам�
 
 #: u_translation.rsbigcross
 msgid "Big cross"
-msgstr ""
+msgstr "Большой"
 
 #: u_translation.rsbin
 msgid "Bin"
@@ -871,10 +871,6 @@ msgstr "Закройте окно, когда будете готовы."
 msgid "Cloud cover"
 msgstr "Облачность"
 
-#: u_translation.rscollimation
-msgid "Collimation"
-msgstr "Коллимация"
-
 #: u_translation.rscolorbalance
 msgid "Color balance"
 msgstr "Цветовой баланс"
@@ -1101,7 +1097,7 @@ msgstr "рассвет"
 
 #: u_translation.rsdebayer
 msgid "Debayer"
-msgstr ""
+msgstr "Дебайеризовать"
 
 #: u_translation.rsdebayerthepr
 msgid "Debayer the preview image"
@@ -1657,7 +1653,7 @@ msgstr "Зеркально по вертикали"
 
 #: u_translation.rsfloatingpoin
 msgid "Floating point file"
-msgstr ""
+msgstr "Float файл"
 
 #: u_translation.rsflux
 msgid "Flux"
@@ -1779,6 +1775,10 @@ msgstr "Параметры имени папки"
 
 #: u_translation.rsforguidancea
 msgid "For guidance adjust the azimuth knob along the blue line and the altitude knob along the red line"
+msgstr ""
+
+#: u_translation.rsforreflector
+msgid "For reflector collimation."
 msgstr ""
 
 #: u_translation.rsfounddevices
@@ -1917,7 +1917,7 @@ msgstr "%s гидирование"
 
 #: u_translation.rsguidingdrift
 msgid "Guiding drift control"
-msgstr ""
+msgstr "Контроль дрифта"
 
 #: u_translation.rshalt
 msgid "Halt"
@@ -1995,7 +1995,7 @@ msgstr "Очистить изображение"
 
 #: u_translation.rsimagecursor
 msgid "Image cursor"
-msgstr ""
+msgstr "Курсор"
 
 #: u_translation.rsimagedebayer
 msgid "Image Debayered"
@@ -2091,6 +2091,18 @@ msgstr "Пустая строка"
 #: u_translation.rsinsertrows
 msgid "Insert rows"
 msgstr "Вставить строку"
+
+#: u_translation.rsinspect
+msgid "Inspect"
+msgstr ""
+
+#: u_translation.rsinspectionan
+msgid "Inspection and collimation"
+msgstr ""
+
+#: u_translation.rsinspectthere
+msgid "Inspect the distribution of the HFD value across the image to help with coma corrector spacing and tilt adjust."
+msgstr ""
 
 #: u_translation.rsinsseconds
 #, object-pascal-format
@@ -2194,7 +2206,7 @@ msgstr "(ограничено 1,5х точностью наведения)"
 
 #: u_translation.rslimittempera
 msgid "Limit temperature change"
-msgstr "Использовать предел изменения температуры"
+msgstr "Использовать лимит"
 
 #: u_translation.rsload
 msgid "Load"
@@ -2287,7 +2299,7 @@ msgstr "Максимальный расфокусированный HFD, кот�
 
 #: u_translation.rsmaximumdrift
 msgid "Maximum drift"
-msgstr ""
+msgstr "Макс. дрифт"
 
 #: u_translation.rsmaximuminten
 msgid "Maximum intensity"
@@ -2319,7 +2331,7 @@ msgstr "Mean:"
 
 #: u_translation.rsmeanofimages
 msgid "Mean of images"
-msgstr ""
+msgstr "Среднее"
 
 #: u_translation.rsmeasureen
 msgid "Measure in the East and North"
@@ -2839,6 +2851,10 @@ msgstr "Наблюдатель"
 #: u_translation.rsobservingcon
 msgid "Observing condition"
 msgstr "Наблюдение за состоянием"
+
+#: u_translation.rsoctagon
+msgid "Octagon"
+msgstr ""
 
 #: u_translation.rsoff
 msgid "Off"
@@ -3527,7 +3543,7 @@ msgstr "Перезапуск автогида"
 
 #: u_translation.rsrestartdelay
 msgid "Restart delay"
-msgstr "Задержка перезапуска"
+msgstr "Задержка"
 
 #: u_translation.rsrestartexpos
 msgid "Restart exposure"
@@ -3800,7 +3816,7 @@ msgstr "Выберите один из вариантов измерения:"
 
 #: u_translation.rsselectthecur
 msgid "Select the cursor to use "
-msgstr ""
+msgstr "Размер "
 
 #: u_translation.rsselectthefil
 msgid "Select the file to delete"
@@ -4054,7 +4070,7 @@ msgstr "Показать параметры сложения для Превью
 
 #: u_translation.rssideofpier
 msgid "Side of pier"
-msgstr ""
+msgstr "Сторона"
 
 #: u_translation.rssigma
 msgid "sigma"
@@ -4190,7 +4206,7 @@ msgstr "Слот"
 
 #: u_translation.rssmallcross
 msgid "Small cross"
-msgstr ""
+msgstr "Маленький"
 
 #: u_translation.rssmtpserverad
 msgid "SMTP server address"
@@ -4224,7 +4240,7 @@ msgstr "Юг"
 
 #: u_translation.rsspectralprof
 msgid "Spectral profile"
-msgstr ""
+msgstr "Спектральный профиль"
 
 #: u_translation.rsspeed
 msgid "Speed"
@@ -4579,7 +4595,7 @@ msgstr "Синхронизация с %s %s/%s"
 
 #: u_translation.rssystemcross
 msgid "System cross"
-msgstr ""
+msgstr "Системный"
 
 #: u_translation.rssystemisunde
 msgid "System is undersampled, accept 1 pixel star"
@@ -4800,7 +4816,7 @@ msgstr "План %s изменён. Сохранить изменения?"
 
 #: u_translation.rstheprogramne
 msgid "The program need to be restarted"
-msgstr "Программа должна быть перезапущена"
+msgstr "Требуется перезапуск"
 
 #: u_translation.rsthereisalrea
 msgid "There is already a dusk flat plan"
@@ -4924,6 +4940,14 @@ msgstr "Тренд"
 #: u_translation.rstreshold
 msgid "Treshold :"
 msgstr "Порог:"
+
+#: u_translation.rstriangle
+msgid "Triangle"
+msgstr ""
+
+#: u_translation.rstrianglerota
+msgid "Triangle rotation angle"
+msgstr ""
 
 #: u_translation.rstrue
 msgid "True"

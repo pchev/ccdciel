@@ -6,15 +6,15 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ccdciel\n"
 "Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
-"POT-Creation-Date: 2022-01-19 10:30+0000\n"
+"POT-Creation-Date: 2022-04-06 14:33+0000\n"
 "PO-Revision-Date: 2022-01-21 19:05+0000\n"
 "Last-Translator: Thomas <email@starhopper.de>\n"
 "Language-Team: German <de@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2022-03-05 08:52+0000\n"
-"X-Generator: Launchpad (build 61f4697954ab70d633d14d8ceecff69a20b08a6b)\n"
+"X-Launchpad-Export-Date: 2022-04-06 14:41+0000\n"
+"X-Generator: Launchpad (build 98132e33014dffc15ffeea1182b7db54e65752bd)\n"
 
 #: u_translation.rs2d
 msgid "2D"
@@ -870,10 +870,6 @@ msgstr "Schließen Sie das Fenster, wenn Sie bereit sind."
 #: u_translation.rscloudcover
 msgid "Cloud cover"
 msgstr "Wolkenbedeckung"
-
-#: u_translation.rscollimation
-msgid "Collimation"
-msgstr "Kollimation"
 
 #: u_translation.rscolorbalance
 msgid "Color balance"
@@ -1781,6 +1777,10 @@ msgstr "Ordnernamen Optionen"
 msgid "For guidance adjust the azimuth knob along the blue line and the altitude knob along the red line"
 msgstr "Zur Orientierung: den azimut Knopf entlang der blauen Linie und den altitude Knopf (Höhe) entlang der roten Line verstellen."
 
+#: u_translation.rsforreflector
+msgid "For reflector collimation."
+msgstr ""
+
 #: u_translation.rsfounddevices
 #, object-pascal-format
 msgid "Found %s devices"
@@ -2091,6 +2091,18 @@ msgstr "Leere Zeile einfügen"
 #: u_translation.rsinsertrows
 msgid "Insert rows"
 msgstr "Zeilen einfügen"
+
+#: u_translation.rsinspect
+msgid "Inspect"
+msgstr ""
+
+#: u_translation.rsinspectionan
+msgid "Inspection and collimation"
+msgstr ""
+
+#: u_translation.rsinspectthere
+msgid "Inspect the distribution of the HFD value across the image to help with coma corrector spacing and tilt adjust."
+msgstr ""
 
 #: u_translation.rsinsseconds
 #, object-pascal-format
@@ -2839,6 +2851,10 @@ msgstr "Beobachter Name"
 #: u_translation.rsobservingcon
 msgid "Observing condition"
 msgstr "Beobachtungsbedingung"
+
+#: u_translation.rsoctagon
+msgid "Octagon"
+msgstr ""
 
 #: u_translation.rsoff
 msgid "Off"
@@ -4924,6 +4940,14 @@ msgstr "Trend"
 #: u_translation.rstreshold
 msgid "Treshold :"
 msgstr "Schwellwert"
+
+#: u_translation.rstriangle
+msgid "Triangle"
+msgstr ""
+
+#: u_translation.rstrianglerota
+msgid "Triangle rotation angle"
+msgstr ""
 
 #: u_translation.rstrue
 msgid "True"

@@ -134,10 +134,6 @@ msgstr ""
 msgid "Keep the graph visible after autofocus is completed"
 msgstr ""
 
-#: u_hints:rsinspectthere
-msgid "Inspect the distribution of the HFD across the image"
-msgstr ""
-
 #: u_hints:rsstartimagelo
 msgid "Start image loop centered on selected star"
 msgstr ""
