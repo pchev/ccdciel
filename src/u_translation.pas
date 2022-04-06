@@ -1387,6 +1387,10 @@ resourcestring
   rsDebayer = 'Debayer';
   rsInspectionAn = 'Inspection and collimation';
   rsForReflector = 'For reflector collimation.';
+  rsInspect = 'Inspect';
+  rsOctagon = 'Octagon';
+  rsTriangle = 'Triangle';
+  rsTriangleRota = 'Triangle rotation angle';
 
 implementation
 

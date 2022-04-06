@@ -132,6 +132,14 @@ begin
   BtnStopSplit.Caption:=rsStop;
   BtnApplySplit.Caption:=rsSet;
   TrackBarZoom.Hint:='1'+ellipsis+'5 x';
+  TabSheetInspection.Caption:=rsImageInspect;
+  BtnStartInspection.Caption:=rsStart;
+  BtnStopInspection.Caption:=rsStop;
+  BtnApplyInspection.Caption:=rsInspect;
+  RadioGroupInspectionMode.Caption:=rsMode;
+  RadioGroupInspectionMode.Items[0]:=rsOctagon;
+  RadioGroupInspectionMode.Items[1]:=rsTriangle;
+  Label6.Caption:=rsTriangleRota;
 end;
 
 procedure Tf_collimation.BtnStartClick(Sender: TObject);
