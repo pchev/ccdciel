@@ -592,6 +592,7 @@ type
     procedure ApplyAscomRemoteClick(Sender: TObject);
     procedure ButtonHelpClick(Sender: TObject);
     procedure CameraARestProtocolChange(Sender: TObject);
+    procedure CameraIndiDeviceChange(Sender: TObject);
     procedure CameraIndiTransfertClick(Sender: TObject);
     procedure CoverARestProtocolChange(Sender: TObject);
     procedure DefaultARestProtocolChange(Sender: TObject);
@@ -661,6 +662,7 @@ type
     procedure SelectNextPage(direction: integer);
     procedure msg(txt: string; level:integer=3);
     procedure AlpacaSetup(protocol,host,port,device,num: string);
+    procedure CheckDualChip;
   public
     { public declarations }
     DefaultCameraInterface, DefaultMountInterface, DefaultDomeInterface, DefaultWheelInterface, DefaultFocuserInterface,
@@ -1174,6 +1176,7 @@ FixPixelRange1.Checked:=conf.GetValue('/ASCOMRestcamera/FixPixelRange',false);
 DefaultARestProtocol.ItemIndex:=CameraARestProtocol.ItemIndex;
 DefaultARestHost.Text:=CameraARestHost.Text;
 DefaultARestPort.Value:=CameraARestPort.Value;
+CheckDualChip;
 
 WheelConnection:=TDevInterface(conf.GetValue('/FilterWheelInterface',ord(DefaultWheelInterface)));
 WheelIndiServer.Text:=conf.GetValue('/INDIwheel/Server',defautindiserver);
@@ -1706,6 +1709,20 @@ begin
   end;
 end;
 
+procedure Tf_setup.CameraIndiDeviceChange(Sender: TObject);
+begin
+  CheckDualChip;
+end;
+
+procedure Tf_setup.CheckDualChip;
+var dual: boolean;
+begin
+  dual:=pos('SBIG',UpperCase(CameraIndiDevice.Text))>0;
+  IndiSensor.Visible:=dual;
+  label15.Visible:=dual;
+  if not dual then FCameraSensor:='CCD1';
+end;
+
 procedure Tf_setup.ApplyIndiClick(Sender: TObject);
 begin
   CameraIndiServer.text:=IndiServer.text;
@@ -2115,6 +2132,7 @@ begin
   end;
   indiclient.onServerDisconnected:=nil;
   indiclient.DisconnectServer;
+  CheckDualChip;
   except
   end;
   finally
