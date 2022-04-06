@@ -49,6 +49,7 @@ type
     Label4: TLabel;
     Label5: TLabel;
     Label6: TLabel;
+    LabelErrmsg: TLabel;
     Label8: TLabel;
     PageControl1: TPageControl;
     Panel1: TPanel;
@@ -135,16 +136,19 @@ end;
 
 procedure Tf_collimation.BtnStartClick(Sender: TObject);
 begin
+  LabelErrmsg.Caption:='';
   if Assigned(FonStart) then FonStart(self);
 end;
 
 procedure Tf_collimation.BtnCenterClick(Sender: TObject);
 begin
+  LabelErrmsg.Caption:='';
   if Assigned(FonCenterStar) then FonCenterStar(self);
 end;
 
 procedure Tf_collimation.BtnStopClick(Sender: TObject);
 begin
+  LabelErrmsg.Caption:='';
   if Assigned(FonStop) then FonStop(self);
 end;
 

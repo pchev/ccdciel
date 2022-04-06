@@ -11396,9 +11396,10 @@ begin
 if  f_capture.Running  then begin
   NewMessage(rsCannotStartM,1);
   f_starprofile.ChkFocusDown(false);
+  if Collimation then CollimationStop(nil);
   exit;
  end;
-if (AutofocusMode=afPlanet)and(Sender<>nil) then begin
+if (not Collimation)and(AutofocusMode=afPlanet)and(Sender<>nil) then begin
   SaveFocusZoom:=f_visu.Zoom;
   f_preview.StackPreview.Checked:=false;
   if not f_preview.Loop then f_preview.Loop:=true;
@@ -11448,8 +11449,14 @@ else begin
      if (Sender<>nil) then NewMessage(rsFocusAidStar,1);
   end
   else begin
-    f_starprofile.ChkFocusDown(false);
-    NewMessage(rsSelectAStarF,1);
+    if Collimation then begin
+      CollimationStop(nil);
+      f_collimation.LabelErrmsg.Caption:=rsSelectAStarF;
+    end
+    else begin
+      f_starprofile.ChkFocusDown(false);
+      NewMessage(rsSelectAStarF,1);
+    end;
   end;
 end;
 end;
@@ -12143,7 +12150,9 @@ if (fits.HeaderInfo.valid)and(RunningPreview or RunningCapture) then begin // no
              sw:=round(sw+dm);
           until f_starprofile.FindStar or (sw>c);
         end;
-      end;
+      end
+      else
+        if Collimation then CollimationStop(nil);
     end;
     // recenter star
     sx:=StrToIntDef(f_frame.FX.Text,-1);
