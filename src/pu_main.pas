@@ -780,7 +780,7 @@ type
     Procedure Redraw(Sender: TObject);
     Procedure ZoomImage(Sender: TObject);
     Procedure ClearImage;
-    Procedure DrawImage(WaitCursor:boolean=false);
+    Procedure DrawImage(WaitCursor:boolean=false; videoframe:boolean=false);
     Procedure PlotImage;
     procedure plot_north(bmp:TBGRABitmap);
     Procedure DrawHistogram(SetLevel,ResetCursor: boolean);
@@ -9853,7 +9853,7 @@ ImgFrameY:=FrameY;
 ImgFrameW:=FrameW;
 ImgFrameH:=FrameH;
 DrawHistogram(true,false);
-DrawImage(false);
+DrawImage(false,true);
 end;
 
 Procedure Tf_main.ShowHistogramPos(msg:string);
@@ -9873,7 +9873,7 @@ begin
   PlotImage;
 end;
 
-Procedure Tf_main.DrawImage(WaitCursor:boolean=false);
+Procedure Tf_main.DrawImage(WaitCursor:boolean=false; videoframe:boolean=false);
 var tmpbmp:TBGRABitmap;
     co: TBGRAPixel;
     s,cx,cy: integer;
@@ -9891,7 +9891,10 @@ if (fits.HeaderInfo.naxis>0) and fits.ImageValid then begin
   fits.MarkOverflow:=f_visu.Clipping;
   fits.Invert:=f_visu.Invert;
   {$ifdef debug_raw}writeln(FormatDateTime(dateiso,Now)+blank+'FITS GetBGRABitmap');{$endif}
-  fits.GetBGRABitmap(ImaBmp);
+  if videoframe then
+    fits.GetBGRABitmap(ImaBmp,1)
+  else
+    fits.GetBGRABitmap(ImaBmp);
   {$ifdef debug_raw}writeln(FormatDateTime(dateiso,Now)+blank+'FITS GetBGRABitmap end');{$endif}
   ImgPixRatio:=fits.HeaderInfo.pixratio;
   if (fits.HeaderInfo.pixratio<>1) then begin

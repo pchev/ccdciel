@@ -908,6 +908,7 @@ begin
     end;
   end;
   FFits.VideoStream:=FVideoStream;
+  FVideoStream:=TMemoryStream.Create;
   if Assigned(FonVideoFrame) then FonVideoFrame(self);
   finally
     lockvideoframe:=false;

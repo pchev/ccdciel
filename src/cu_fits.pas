@@ -191,7 +191,7 @@ type
      procedure BayerInterpolation(t:TBayerMode; rmult,gmult,bmult:double; rbg,gbg,bbg:single; pix1,pix2,pix3,pix4,pix5,pix6,pix7,pix8,pix9:single; row,col:integer; out pixr,pixg,pixb:single); inline;
      Procedure Debayer;
      procedure GetExpBitmap(var bgra: TExpandedBitmap);
-     procedure GetBGRABitmap(var bgra: TBGRABitmap);
+     procedure GetBGRABitmap(var bgra: TBGRABitmap; maxthread:integer=-1);
      procedure SaveToBitmap(fn: string);
      procedure SaveAstroTiff(fn: string);
      procedure SaveToFile(fn: string; pack: boolean=false; StackFloat:boolean=false);
@@ -2476,7 +2476,7 @@ until (not working) or timingout;
 bgra.InvalidateBitmap;
 end;
 
-procedure TFits.GetBGRABitmap(var bgra: TBGRABitmap);
+procedure TFits.GetBGRABitmap(var bgra: TBGRABitmap; maxthread:integer=-1);
 // get stretched 8bit bitmap
 var i : integer;
     HighOverflow,LowOverflow: TBGRAPixel;
@@ -2500,8 +2500,11 @@ begin
   c:=MaxWord/(FVisuMax-FVisumin);
   thread[0]:=nil;
   // number of thread
+  if maxthread<=0 then begin
    tc := max(1,min(16, MaxThreadCount)); // based on number of core
    tc := max(1,min(tc,Fheight div 100)); // do not split the image too much
+  end
+  else tc:=maxthread;
   // start thread
   for i := 0 to tc - 1 do
   begin
