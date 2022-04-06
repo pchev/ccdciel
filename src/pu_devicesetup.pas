@@ -802,6 +802,7 @@ end;
 
 
 procedure Tf_setup.SetLang;
+var i: integer;
 begin
   DeviceInterface.Caption:=rsInterface;
   Button1.Caption:=rsOK;
@@ -1097,6 +1098,14 @@ begin
   label139.Caption:='Alpaca '+rsSafetyMonito+blank+rsSetup;
   label140.Caption:='Alpaca '+rsSwitch+blank+rsSetup;
   label141.Caption:='Alpaca '+rsCalibrator+blank+rsSetup;
+
+  for i:=0 to PanelLeft.ControlCount-1 do begin
+    if PanelLeft.Controls[i] is TSpeedButton then
+       with PanelLeft.Controls[i] as TSpeedButton do begin
+          if Tag<PageControl1.PageCount then
+            Caption:=PageControl1.Pages[Tag].Caption;
+       end;
+  end;
 
 end;
 

@@ -890,6 +890,7 @@ begin
 end;
 
 procedure Tf_option.Setlang;
+var i: integer;
 begin
   Caption := rsOptions2;
   Button1.Caption := rsOK;
@@ -1319,6 +1320,15 @@ begin
   ElbrusFolder.Hint:=rsTheElbrusIma;
   ElbrusUnixpath.Hint:=rsTheUnixPathE;
   CheckRecenterTarget.Hint:=Format(rsActiveOnlyIf, [crlf]);
+
+  for i:=0 to PanelLeft.ControlCount-1 do begin
+    if PanelLeft.Controls[i] is TSpeedButton then
+       with PanelLeft.Controls[i] as TSpeedButton do begin
+          if Tag<PageControl1.PageCount then
+            Caption:=PageControl1.Pages[Tag].Caption;
+       end;
+  end;
+
 end;
 
 procedure Tf_option.msg(txt:string);
