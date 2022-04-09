@@ -31,8 +31,8 @@
         <DefaultFilename Value="indiclient/indiclient.lpk"/>
       </Item3>
       <Item4>
-        <PackageName Value="synapse"/>
-        <DefaultFilename Value="synapse/source/lib/synapse.lpk"/>
+        <PackageName Value="laz_synapse"/>
+        <DefaultFilename Value="synapse/laz_synapse.lpk"/>
       </Item4>
       <Item5>
         <PackageName Value="vosamp"/>

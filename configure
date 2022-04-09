@@ -11,7 +11,7 @@ if [ $# -gt 0 ]; then
    export "$@"
 fi
 
-dirs="component/synapse/source/lib \
+dirs="component/synapse \
      component/indiclient \
      component/bgrabitmap \
      component/enhedits \
