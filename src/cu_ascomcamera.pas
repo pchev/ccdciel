@@ -465,7 +465,10 @@ begin
      ExposureTimer.Enabled:=true;
      StatusTimer.Enabled:=true;
   except
-     on E: Exception do msg(Format(rsStartExposur, [E.Message]),0);
+     on E: Exception do begin
+        msg(Format(rsStartExposur, [E.Message]),0);
+        if assigned(FonAbortExposure) then FonAbortExposure(self);
+     end;
   end;
 {$endif}
 end;
