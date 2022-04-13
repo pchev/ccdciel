@@ -34,10 +34,10 @@ Source: Data\FPack.exe; DestDir: {app}; Flags: ignoreversion recursesubdirs crea
 Source: Data\Funpack.exe; DestDir: {app}; Flags: ignoreversion recursesubdirs createallsubdirs restartreplace;
 Source: Data\cfitsio.dll; DestDir: {app}; Flags: ignoreversion recursesubdirs createallsubdirs restartreplace;
 Source: Data\libccdcielwcs.dll; DestDir: {app}; Flags: ignoreversion recursesubdirs createallsubdirs restartreplace;
-Source: Data\libeay32.dll; DestDir: {app}; Flags: ignoreversion recursesubdirs createallsubdirs restartreplace;
+Source: Data\libssl-3.dll; DestDir: {app}; Flags: ignoreversion recursesubdirs createallsubdirs restartreplace;
+Source: Data\libcrypto-3.dll; DestDir: {app}; Flags: ignoreversion recursesubdirs createallsubdirs restartreplace;
 Source: Data\libexpat.dll; DestDir: {app}; Flags: ignoreversion recursesubdirs createallsubdirs restartreplace;
 Source: Data\libpasraw.dll; DestDir: {app}; Flags: ignoreversion recursesubdirs createallsubdirs restartreplace;
-Source: Data\ssleay32.dll; DestDir: {app}; Flags: ignoreversion recursesubdirs createallsubdirs restartreplace;
 Source: Data\zlib1.dll; DestDir: {app}; Flags: ignoreversion recursesubdirs createallsubdirs restartreplace;
 Source: Data\data\*; DestDir: {app}\data; Flags: ignoreversion recursesubdirs createallsubdirs restartreplace;
 Source: Data\doc\*; DestDir: {app}\doc; Flags: ignoreversion recursesubdirs createallsubdirs restartreplace;
