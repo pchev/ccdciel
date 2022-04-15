@@ -10107,7 +10107,7 @@ try
      CircleIntersect(x2,y2,r,x1,y1,xr2,yr2);
      if (PlaneDistance(x1,y1,x2,y2)>r) then
        Image1.Canvas.Line(xr1,yr1,xr2,yr2);
-     image1.Canvas.Ellipse(x1-r,y1-r,x1+r,y1+r);
+     image1.Canvas.Rectangle(x1-r,y1-r,x1+r,y1+r);
      Image1.Canvas.Pen.Color:=clPurple;
      image1.Canvas.Ellipse(x2-r,y2-r,x2+r,y2+r);
      if (PlaneDistance(x1,y1,x3,y3)>r)and(PlaneDistance(x2,y2,x3,y3)>r) then begin

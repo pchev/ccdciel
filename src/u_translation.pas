@@ -1140,8 +1140,8 @@ resourcestring
   rsVerticalCorr = 'Vertical correction :';
   rsMoveDownBy = 'move Down by ';
   rsMoveUpBy = 'move Up by ';
-  rsMoveTheTrian = 'Move the triangle with the mouse (left button down) such that the green circle is marking a bright star.';
-  rsAdjustTheMou = 'Adjust the mount in azimuth and elevation such that the star moves from the green circle to the pink circle.';
+  rsMoveTheTrian = 'Move the triangle with the mouse (left button down) such that the green square is marking a bright star.';
+  rsAdjustTheMou = 'Adjust the mount in azimuth and elevation such that the star moves from the green square to the pink circle.';
   rsCloseTheWind = 'Close the window when ready.';
   rsPolarAlignme = 'Polar alignment';
   rsMakeAFirstPo = 'Adjust the mount RA axis manually to point to the pole the best as possible.%s'+
@@ -1355,7 +1355,7 @@ resourcestring
   rsMeasuringFir = 'Measuring first position';
   rsMovingToSeco = 'Moving to second position';
   rsMeasuringSec = 'Measuring second position';
-  rsInTheNextScr = 'In the next screen you have to move the triangle such that the green circle is marking a bright star or object.';
+  rsInTheNextScr = 'In the next screen you have to move the triangle such that the green square is marking a bright star or object.';
   rsIfNoBrightSt = 'If no bright star is visible click MOVE.';
   rsIfaBrightsta = 'If a bright star is visible click NEXT.';
   rsMoveTheTeles = 'Slew the telescope to the nearby position with a bright star.';
