@@ -6,15 +6,15 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ccdciel\n"
 "Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
-"POT-Creation-Date: 2022-04-06 14:33+0000\n"
+"POT-Creation-Date: 2022-04-15 14:48+0000\n"
 "PO-Revision-Date: 2021-08-31 20:35+0000\n"
 "Last-Translator: Patrick Chevalley <Unknown>\n"
 "Language-Team: Kurdish <ku@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2022-04-06 14:41+0000\n"
-"X-Generator: Launchpad (build 98132e33014dffc15ffeea1182b7db54e65752bd)\n"
+"X-Launchpad-Export-Date: 2022-04-15 14:56+0000\n"
+"X-Generator: Launchpad (build 5cc3bd61c85a328825183f316ddd801c0f7d7ef2)\n"
 
 #: u_translation.rs2d
 msgid "2D"
@@ -93,7 +93,7 @@ msgid "Adjust flat exposure time to %s and retry."
 msgstr ""
 
 #: u_translation.rsadjustthemou
-msgid "Adjust the mount in azimuth and elevation such that the star moves from the green circle to the pink circle."
+msgid "Adjust the mount in azimuth and elevation such that the star moves from the green square to the pink circle."
 msgstr ""
 
 #: u_translation.rsadjusttowind
@@ -2130,7 +2130,7 @@ msgid "Interval"
 msgstr ""
 
 #: u_translation.rsinthenextscr
-msgid "In the next screen you have to move the triangle such that the green circle is marking a bright star or object."
+msgid "In the next screen you have to move the triangle such that the green square is marking a bright star or object."
 msgstr ""
 
 #: u_translation.rsinvalid
@@ -2566,7 +2566,7 @@ msgid "Slew the telescope to the nearby position with a bright star."
 msgstr ""
 
 #: u_translation.rsmovethetrian
-msgid "Move the triangle with the mouse (left button down) such that the green circle is marking a bright star."
+msgid "Move the triangle with the mouse (left button down) such that the green square is marking a bright star."
 msgstr ""
 
 #: u_translation.rsmovetonewpla

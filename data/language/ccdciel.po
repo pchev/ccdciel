@@ -4163,11 +4163,11 @@ msgid "move Up by "
 msgstr ""
 
 #: u_translation:rsmovethetrian
-msgid "Move the triangle with the mouse (left button down) such that the green circle is marking a bright star."
+msgid "Move the triangle with the mouse (left button down) such that the green square is marking a bright star."
 msgstr ""
 
 #: u_translation:rsadjustthemou
-msgid "Adjust the mount in azimuth and elevation such that the star moves from the green circle to the pink circle."
+msgid "Adjust the mount in azimuth and elevation such that the star moves from the green square to the pink circle."
 msgstr ""
 
 #: u_translation:rsclosethewind
@@ -5007,7 +5007,7 @@ msgid "Measuring second position"
 msgstr ""
 
 #: u_translation:rsinthenextscr
-msgid "In the next screen you have to move the triangle such that the green circle is marking a bright star or object."
+msgid "In the next screen you have to move the triangle such that the green square is marking a bright star or object."
 msgstr ""
 
 #: u_translation:rsifnobrightst

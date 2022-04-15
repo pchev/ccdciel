@@ -6,15 +6,15 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ccdciel\n"
 "Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
-"POT-Creation-Date: 2022-04-06 14:33+0000\n"
+"POT-Creation-Date: 2022-04-15 14:48+0000\n"
 "PO-Revision-Date: 2022-01-21 19:05+0000\n"
 "Last-Translator: Thomas <email@starhopper.de>\n"
 "Language-Team: German <de@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2022-04-06 14:41+0000\n"
-"X-Generator: Launchpad (build 98132e33014dffc15ffeea1182b7db54e65752bd)\n"
+"X-Launchpad-Export-Date: 2022-04-15 14:56+0000\n"
+"X-Generator: Launchpad (build 5cc3bd61c85a328825183f316ddd801c0f7d7ef2)\n"
 
 #: u_translation.rs2d
 msgid "2D"
@@ -93,8 +93,8 @@ msgid "Adjust flat exposure time to %s and retry."
 msgstr "Verändere die Flatbelichtungszeit auf %s und starte erneuten Versuch."
 
 #: u_translation.rsadjustthemou
-msgid "Adjust the mount in azimuth and elevation such that the star moves from the green circle to the pink circle."
-msgstr "Die Montierung in Azimut und Elevation bewegen, so dass der Stern vom grünen Kreis zum rosafarbigen Kreis wandert"
+msgid "Adjust the mount in azimuth and elevation such that the star moves from the green square to the pink circle."
+msgstr ""
 
 #: u_translation.rsadjusttowind
 msgid "Adjust to window"
@@ -2130,8 +2130,8 @@ msgid "Interval"
 msgstr "Intervall"
 
 #: u_translation.rsinthenextscr
-msgid "In the next screen you have to move the triangle such that the green circle is marking a bright star or object."
-msgstr "Im nächsten Bildschirm das Dreieck so verschieben, dass der grüne Kreis einen hellen Stern oder ein helles Objekt markiert."
+msgid "In the next screen you have to move the triangle such that the green square is marking a bright star or object."
+msgstr ""
 
 #: u_translation.rsinvalid
 msgid "Invalid"
@@ -2566,8 +2566,8 @@ msgid "Slew the telescope to the nearby position with a bright star."
 msgstr "Das Teleskop zu einem naheliegendem, hellen Stern schwenken"
 
 #: u_translation.rsmovethetrian
-msgid "Move the triangle with the mouse (left button down) such that the green circle is marking a bright star."
-msgstr "Das Dreieck mit der linken Maustaste verschieben, so dass der grüne Kreis einen hellen Stern markiert."
+msgid "Move the triangle with the mouse (left button down) such that the green square is marking a bright star."
+msgstr ""
 
 #: u_translation.rsmovetonewpla
 #, object-pascal-format
