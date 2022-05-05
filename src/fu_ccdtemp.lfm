@@ -97,6 +97,7 @@ object f_ccdtemp: Tf_ccdtemp
         Top = 2
         Width = 68
         Constraints.MaxHeight = 28
+        MaxValue = 100
         MinValue = -100
         ParentFont = False
         TabOrder = 0
