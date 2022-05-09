@@ -1,0 +1,65 @@
+object f_internalguider: Tf_internalguider
+  Left = 0
+  Height = 156
+  Top = 0
+  Width = 234
+  AutoSize = True
+  ClientHeight = 156
+  ClientWidth = 234
+  ParentFont = False
+  TabOrder = 0
+  object Title: TLabel
+    Left = 0
+    Height = 20
+    Top = 0
+    Width = 234
+    Align = alTop
+    Alignment = taCenter
+    AutoSize = False
+    Caption = 'Internal guider'
+    Color = clBtnShadow
+    DragMode = dmAutomatic
+    Font.Color = clBtnText
+    Layout = tlCenter
+    ParentFont = False
+    Transparent = False
+  end
+  object Panel1: TPanel
+    Left = 0
+    Height = 136
+    Top = 20
+    Width = 234
+    Align = alClient
+    ClientHeight = 136
+    ClientWidth = 234
+    ParentFont = False
+    TabOrder = 0
+    object ButtonStart: TButton
+      Left = 13
+      Height = 25
+      Top = 9
+      Width = 75
+      Caption = 'Start'
+      OnClick = ButtonStartClick
+      TabOrder = 0
+    end
+    object ButtonStop: TButton
+      Left = 13
+      Height = 25
+      Top = 40
+      Width = 75
+      Caption = 'Stop'
+      OnClick = ButtonStopClick
+      TabOrder = 1
+    end
+    object ButtonCalibrate: TButton
+      Left = 13
+      Height = 25
+      Top = 72
+      Width = 75
+      Caption = 'Calibrate'
+      OnClick = ButtonCalibrateClick
+      TabOrder = 2
+    end
+  end
+end

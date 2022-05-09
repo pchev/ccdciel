@@ -34,7 +34,7 @@ uses
   {$ifdef unix}
   BaseUnix,
   {$endif}
-  fu_devicesconnection, fu_preview, fu_capture, fu_msg, fu_visu, fu_frame, fu_magnifyer,
+  fu_devicesconnection, fu_preview, fu_capture, fu_msg, fu_visu, fu_frame, fu_magnifyer, fu_internalguider,
   fu_starprofile, fu_filterwheel, fu_focuser, fu_mount, fu_ccdtemp, fu_autoguider, fu_cover, fu_switch,
   fu_sequence, fu_planetarium, fu_script, u_ccdconfig, pu_edittargets, pu_scriptengine,
   fu_video, pu_devicesetup, pu_options, pu_indigui, cu_fits, cu_camera, pu_pause, cu_tcpserver,
@@ -127,6 +127,8 @@ type
     MenuDarkInfo1: TMenuItem;
     MenuDarkInfo2: TMenuItem;
     MenuChangelog: TMenuItem;
+    MenuInternalguider: TMenuItem;
+    MenuViewInternalguider: TMenuItem;
     MenuItemImageInspection2: TMenuItem;
     MenuItemImageInspection: TMenuItem;
     MenuPolarAlignment2: TMenuItem;
@@ -378,6 +380,7 @@ type
     procedure MenuDarkFileClick(Sender: TObject);
     procedure MenuItemImageInspectionClick(Sender: TObject);
     procedure MenuPolarAlignment2Click(Sender: TObject);
+    procedure MenuViewInternalguiderClick(Sender: TObject);
     procedure ShowDarkInfo;
     procedure MenuDownloadClick(Sender: TObject);
     procedure MenuFilterClick(Sender: TObject);
@@ -527,6 +530,7 @@ type
     f_safety: Tf_safety;
     f_cover: Tf_cover;
     f_switch: Tf_switch;
+    f_internalguider: Tf_internalguider;
     f_autoguider: Tf_autoguider;
     f_planetarium: Tf_planetarium;
     f_script: Tf_script;
@@ -559,6 +563,7 @@ type
     TerminateVcurve: boolean;
     ScrBmp: TBGRABitmap;
     ImageSaved: boolean;
+    StopInternalguider: boolean;
 
     trpxy : array[1..2,1..3,1..3] of integer;{for image inspection}
     median: array[1..3,1..3] of double;{for image inspection}
@@ -837,6 +842,10 @@ type
     procedure CollimationApplyInspection(Sender: TObject);
     procedure ReadyForVideo(var v: boolean);
     procedure ShowStatus(str: string);
+    procedure InternalguiderStart(Sender: TObject);
+    procedure InternalguiderStartAsync(Data: PtrInt);
+    procedure InternalguiderStop(Sender: TObject);
+    procedure InternalguiderCalibrate(Sender: TObject);
   public
     { public declarations }
     Image1: TImgDrawingControl;
@@ -1601,6 +1610,11 @@ begin
   f_switch:=Tf_switch.Create(self);
   f_switch.onSetSwitch:=@SetSwitch;
 
+  f_internalguider:=Tf_internalguider.Create(self);
+  f_internalguider.onStart:=@InternalguiderStart;
+  f_internalguider.onStop:=@InternalguiderStop;
+  f_internalguider.onCalibrate:=@InternalguiderCalibrate;
+
   f_autoguider:=Tf_autoguider.Create(self);
   f_autoguider.onConnect:=@AutoguiderConnectClick;
   f_autoguider.onCalibrate:=@AutoguiderCalibrateClick;
@@ -2152,6 +2166,7 @@ begin
    if  f_polaralign<>nil then f_polaralign.SetLang;
    if  f_collimation<>nil then f_collimation.SetLang;
    if  f_polaralign2<>nil then f_polaralign2.SetLang;
+   if  f_internalguider<>nil then f_internalguider.SetLang;
 end;
 
 procedure Tf_main.FormShow(Sender: TObject);
@@ -2350,7 +2365,8 @@ begin
   SetTool(f_autoguider,'Autoguider',PanelRight1,f_devicesconnection.top+1,MenuViewAutoguider,MenuAutoguider,true);
   SetTool(f_planetarium,'Planetarium',PanelRight1,f_autoguider.top+1,MenuViewPlanetarium,MenuPlanetarium,true);
   SetTool(f_preview,'Preview',PanelRight1,f_planetarium.top+1,MenuViewPreview,MenuPreview,true);
-  SetTool(f_script,'Script',PanelRight1,f_preview.top+1,MenuViewScript,MenuScript,true);
+  SetTool(f_internalguider,'InternalGuider',PanelRight1,f_preview.top+1,MenuViewInternalGuider,MenuInternalGuider,true);
+  SetTool(f_script,'Script',PanelRight1,f_internalguider.top+1,MenuViewScript,MenuScript,true);
   SetTool(f_dome,'Dome',PanelRight1,f_script.top+1,MenuViewDome,nil,WantDome);
   SetTool(f_weather,'Weather',PanelRight1,f_dome.top+1,MenuViewWeather,nil,WantWeather);
   SetTool(f_safety,'Safety',PanelRight1,f_weather.top+1,MenuViewSafety,nil,WantSafety);
@@ -2454,6 +2470,7 @@ begin
    if f_safety<>nil then f_safety.Title.Color:=clBtnShadow;
    if f_cover<>nil then f_cover.Title.Color:=clBtnShadow;
    if f_switch<>nil then f_switch.Title.Color:=clBtnShadow;
+   if f_internalguider<>nil then f_internalguider.Title.Color:=clBtnShadow;
    if f_autoguider<>nil then f_autoguider.Title.Color:=clBtnShadow;
    if f_planetarium<>nil then f_planetarium.Title.Color:=clBtnShadow;
    if f_script<>nil then f_script.Title.Color:=clBtnShadow;
@@ -2654,7 +2671,8 @@ if sender is TMenuItem then begin
     SetTool(f_autoguider,'',PanelRight1,f_devicesconnection.top+1,MenuViewAutoguider,MenuAutoguider,true);
     SetTool(f_planetarium,'',PanelRight1,f_autoguider.top+1,MenuViewPlanetarium,MenuPlanetarium,true);
     SetTool(f_preview,'',PanelRight1,f_planetarium.top+1,MenuViewPreview,MenuPreview,true);
-    SetTool(f_script,'',PanelRight1,f_preview.top+1,MenuViewScript,MenuScript,true);
+    SetTool(f_internalguider,'',PanelRight1,f_preview.top+1,MenuViewInternalGuider,MenuInternalGuider,true);
+    SetTool(f_script,'',PanelRight1,f_internalguider.top+1,MenuViewScript,MenuScript,true);
     SetTool(f_dome,'',PanelRight1,f_script.top+1,MenuViewDome,nil,WantDome);
     SetTool(f_weather,'',PanelRight1,f_dome.top+1,MenuViewWeather,nil,WantWeather);
     SetTool(f_safety,'',PanelRight1,f_weather.top+1,MenuViewSafety,nil,WantSafety);
@@ -2692,7 +2710,8 @@ if sender is TMenuItem then begin
    SetTool(f_autoguider,'',PanelRight1,f_devicesconnection.top+1,MenuViewAutoguider,MenuAutoguider,true);
    SetTool(f_planetarium,'',PanelRight1,f_autoguider.top+1,MenuViewPlanetarium,MenuPlanetarium,true);
    SetTool(f_preview,'',PanelRight1,f_planetarium.top+1,MenuViewPreview,MenuPreview,true);
-   SetTool(f_weather,'',PanelRight1,f_preview.top+1,MenuViewWeather,nil,WantWeather);
+   SetTool(f_internalguider,'',PanelRight1,f_preview.top+1,MenuViewInternalGuider,MenuInternalGuider,true);
+   SetTool(f_weather,'',PanelRight1,f_internalguider.top+1,MenuViewWeather,nil,WantWeather);
    SetTool(f_safety,'',PanelRight1,f_weather.top+1,MenuViewSafety,nil,WantSafety);
    SetTool(f_dome,'',PanelRight1,f_safety.top+1,MenuViewDome,nil,WantDome);
    SetTool(f_cover,'',PanelRight1,f_dome.top+1,MenuViewCover,nil,WantCover);
@@ -4289,6 +4308,11 @@ begin
  screenconfig.SetValue('/Tools/Switch/Visible',f_switch.Visible or (not WantSwitch));
  screenconfig.SetValue('/Tools/Switch/Top',f_switch.Top);
  screenconfig.SetValue('/Tools/Switch/Left',f_switch.Left);
+
+ screenconfig.SetValue('/Tools/InternalGuider/Parent',f_internalguider.Parent.Name);
+ screenconfig.SetValue('/Tools/InternalGuider/Visible',f_internalguider.Visible);
+ screenconfig.SetValue('/Tools/InternalGuider/Top',f_internalguider.Top);
+ screenconfig.SetValue('/Tools/InternalGuider/Left',f_internalguider.Left);
 
  screenconfig.SetValue('/Tools/Clock/Visible',MenuViewClock.Checked);
 
@@ -8495,6 +8519,11 @@ end;
 procedure Tf_main.MenuViewAutoguiderClick(Sender: TObject);
 begin
   f_autoguider.Visible:=MenuViewAutoguider.Checked;
+end;
+
+procedure Tf_main.MenuViewInternalguiderClick(Sender: TObject);
+begin
+  f_internalguider.Visible:=MenuViewInternalguider.Checked;
 end;
 
 procedure Tf_main.PanelDragDrop(Sender, Source: TObject; X, Y: Integer);
@@ -14554,6 +14583,31 @@ end;
 procedure Tf_main.ShowStatus(str: string);
 begin
 StatusBar1.Panels[panelcursor].Text := str;
+end;
+
+procedure Tf_main.InternalguiderStart(Sender: TObject);
+begin
+  Application.QueueAsyncCall(@InternalguiderStartAsync,0);
+end;
+
+procedure Tf_main.InternalguiderStartAsync(Data: PtrInt);
+begin
+  StopInternalguider:=false;
+  repeat
+    f_preview.ControlExposure(f_preview.Exposure, f_preview.Bin, f_preview.Bin, LIGHT, ReadoutModePreview, f_preview.Gain, f_preview.Offset);
+    { #todo : guide process using fits.image }
+    Application.ProcessMessages;
+  until StopInternalguider;
+end;
+
+procedure Tf_main.InternalguiderStop(Sender: TObject);
+begin
+  StopInternalguider:=true;
+end;
+
+procedure Tf_main.InternalguiderCalibrate(Sender: TObject);
+begin
+{ #todo :  }
 end;
 
 end.
