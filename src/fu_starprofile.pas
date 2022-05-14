@@ -139,7 +139,7 @@ type
     function  getRunning:boolean;
     procedure PlotProfile(f: TFits; bg: double; s:integer);
     procedure PlotStar2D;
-    procedure PlotHistory;
+    procedure PlotHistory; overload;
     procedure ClearGraph;
     procedure doAutofocusVcurve;
     procedure doAutofocusDynamic;
@@ -164,6 +164,7 @@ type
     procedure InitAutofocus(restart: boolean);
     procedure ChkFocusDown(value:boolean);
     procedure ChkAutoFocusDown(value:boolean);
+    procedure PlotHistory(hfd,vmax: double); overload;
     property AutofocusRunning: boolean read getRunning;
     property FindStar : boolean read FFindStar write FFindStar;
     property SpectraProfile: boolean read FSpectraProfile;
@@ -756,6 +757,14 @@ if (FFits<>nil)and(FValMax>0) then begin
 end;
 end;
 
+procedure Tf_starprofile.PlotHistory(hfd,vmax: double);
+begin
+  Fhfd:=hfd;
+  FValMax:=vmax;
+  FValMaxCalibrated:=vmax;
+  PlotHistory;
+end;
+
 procedure Tf_starprofile.PlotHistory;
 var i:integer;
 begin
@@ -1059,6 +1068,8 @@ begin
     if FAutofocusResult then begin
       FAutofocusDone:=true;
       LastFocusMsg:=rsAutoFocusSuc+crlf+FormatDateTime('hh:nn:ss', now)+' HFD='+FormatFloat(f1, Fhfd);
+      FValMaxCalibrated:=FValMax+bg;
+      PlotHistory;
       // adjust slippage offset with current result
       if AutofocusSlippageCorrection and (AutofocusMode=afVcurve) then begin
         if AutofocusVcTemp<>NullCoord then
