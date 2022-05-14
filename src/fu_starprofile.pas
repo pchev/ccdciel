@@ -547,8 +547,8 @@ end;
 procedure Tf_starprofile.PanelGraphClose(Sender: TObject; var CloseAction: TCloseAction);
 begin
   CloseAction:=caFree;
-  PanelGraph.Align:=alNone;
   PanelGraph.Parent:=Panel6;
+  PanelGraph.Align:=alClient;
   VcChart.AxisList.Axes[0].Marks.LabelFont.Height:=8;
   VcChart.AxisList.Axes[1].Marks.LabelFont.Height:=8;
 end;
