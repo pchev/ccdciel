@@ -928,7 +928,7 @@ case fits.FFitsInfo.bitpix of
            inc(npix);
            x8:=d8[npix];
            if x8=b8 then x8:=0;
-           x:=fits.FFitsInfo.bzero+fits.FFitsInfo.bscale*x8;
+           x:=fits.FFitsInfo.bzero+fits.FFitsInfo.bscale*x8*255;
            if fits.FUseRawImage then fits.Frawimage[k,ii,j] := x;
            fits.Fimage[k,ii,j] := x;
            inc(hist[round(max(0,min(maxword,x)))]);
@@ -965,7 +965,7 @@ case fits.FFitsInfo.bitpix of
              if km<0 then continue; // skip A
              x8:=d8[npix];
              if x8=b8 then x8:=0;
-             x:=fits.FFitsInfo.bzero+fits.FFitsInfo.bscale*x8;
+             x:=fits.FFitsInfo.bzero+fits.FFitsInfo.bscale*x8*255;
              if fits.FUseRawImage then fits.Frawimage[km,ii,j] := x;
              fits.Fimage[km,ii,j] := x;
              inc(hist[round(max(0,min(maxword,x)))]);
@@ -1968,7 +1968,7 @@ begin
                first:=false;
              end;
              inc(npix);
-             x:=max(min(round((Fimage[k,ii,j]-FFitsInfo.bzero)/FFitsInfo.bscale),MAXBYTE),0);
+             x:=max(min(round(((Fimage[k,ii,j]/255)-FFitsInfo.bzero)/FFitsInfo.bscale),MAXBYTE),0);
              d8[npix]:=byte(round(x));
            end;
            end;
