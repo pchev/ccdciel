@@ -13632,7 +13632,6 @@ begin
 
     hfd_median:=SMedian(hfdList,nhfd);{all stars}
 
-
     if ((TriangleInspection=true) and (nhfd_11>2)  and (nhfd_21>2) and (nhfd_31>2)) then  {enough information for tilt calculation}
     begin
       median[1,1]:=SMedian(hfdlist_11,nhfd_11);{screw 1}
@@ -13720,7 +13719,8 @@ begin
       mess2:='';
     end;
 
-    NewMessage(Format(rsFoundDStars, [nhfd])+': '+Format(rsImageMedianH, [formatfloat(f1, SMedian(hfdList,nhfd))+ mess2+mess1]), 1); {Report median HFD, tilt and off-axis aberration (was curvature}
+    NewMessage(Format(rsFoundDStars, [nhfd])+': '+Format(rsImageMedianH, [formatfloat(f1, hfd_median)+ mess2+mess1]), 1); {Report median HFD, tilt and off-axis aberration (was curvature}
+    f_starprofile.PlotHistory(hfd_median,fits.HeaderInfo.dmax);
   end
   else
     NewMessage(rsNoStarDetect,1);
@@ -13821,6 +13821,7 @@ begin
     if fits.preview_axis=1 then begin
       if fits.HeaderInfo.bitpix>0 then begin
         val:=trunc(fits.image[0,yy,xx]);
+        if fits.HeaderInfo.bitpix=8 then val:=val div 255;
         sval:=inttostr(val);
       end
       else begin
@@ -13831,10 +13832,13 @@ begin
     else if (fits.preview_axis=3) then begin
       if fits.HeaderInfo.bitpix>0 then begin
         val:=trunc(fits.imageMin+fits.image[0,yy,xx]/fits.imageC);
+        if fits.HeaderInfo.bitpix=8 then val:=val div 255;
         sval:=inttostr(val);
         val:=trunc(fits.imageMin+fits.image[1,yy,xx]/fits.imageC);
+        if fits.HeaderInfo.bitpix=8 then val:=val div 255;
         sval:=sval+'/'+inttostr(val);
         val:=trunc(fits.imageMin+fits.image[2,yy,xx]/fits.imageC);
+        if fits.HeaderInfo.bitpix=8 then val:=val div 255;
         sval:=sval+'/'+inttostr(val);
       end
       else begin
