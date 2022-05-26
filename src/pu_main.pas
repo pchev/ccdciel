@@ -55,6 +55,8 @@ uses
   StdCtrls, ExtCtrls, Menus, ComCtrls, Buttons, Types, u_translation;
 
 type
+  star_position=record x1,y1,x2,y2,flux: double; end;//for internal guider
+  star_position_array= array of star_position;//for internal guider
 
   TImgDrawingControl = class(TGraphicControl)
   public
@@ -574,6 +576,8 @@ type
     CursorImage1: TCursorImage;
     crRetic: TCursor;
     MsgStatusLed: string;
+    xy_array,xy_array_old : star_position_array;//internal guider for measure drift
+
     procedure CreateDevices;
     procedure SetDevices;
     procedure DestroyDevices;
@@ -846,6 +850,7 @@ type
     procedure InternalguiderStartAsync(Data: PtrInt);
     procedure InternalguiderStop(Sender: TObject);
     procedure InternalguiderCalibrate(Sender: TObject);
+    function  measure_drift(var initialize: boolean; out driftX,driftY :double) : integer;
   public
     { public declarations }
     Image1: TImgDrawingControl;
@@ -860,6 +865,7 @@ implementation
 {$R *.lfm}
 
 const panelcursor=0; panelstatus=1; panelfile=2; panelclock=3; panelled=4;
+
 
 { Tf_main }
 
@@ -2298,6 +2304,24 @@ begin
   f_photometry.onMagnitudeCalibrationChange:=@MagnitudeCalibrationChange;
   f_photometry.onClosePhotometry:=@PhotometryClose;
 
+  f_internalguider.RA_gain1.Text:=config.GetValue('/InternalGuider/RaGain','70');
+  f_internalguider.DEC_gain1.Text:=config.GetValue('/InternalGuider/DecGain','70');
+  f_internalguider.RA_hysteresis1.Text:=config.GetValue('/InternalGuider/RaHysteresis','50');
+  f_internalguider.DEC_hysteresis1.Text:=config.GetValue('/InternalGuider/DecHysteresis','50');
+  f_internalguider.minimum_moveRA1.Text:=config.GetValue('/InternalGuider/MinimumMoveRa','0.2');
+  f_internalguider.minimum_moveDEC1.Text:=config.GetValue('/InternalGuider/MinimumMoveDec','0.4');
+  f_internalguider.pa1.Text:=config.GetValue('/InternalGuider/Pa','0');
+  f_internalguider.pulseGainEast1.Text:=config.GetValue('/InternalGuider/PulseGainEast','3');
+  f_internalguider.pulseGainWest1.Text:=config.GetValue('/InternalGuider/PulseGainWest','3');
+  f_internalguider.pulseGainNorth1.Text:=config.GetValue('/InternalGuider/PulseGainNorth','3');
+  f_internalguider.pulseGainSouth1.Text:=config.GetValue('/InternalGuider/PulseGainSouth','3');
+  f_internalguider.Pier_Side1.Text:=config.GetValue('/InternalGuider/PierSide','W');
+  f_internalguider.pixelsize1.Text:=config.GetValue('/InternalGuider/PixelSize','2.5');
+  f_internalguider.unitarcseconds1.checked:=config.GetValue('/InternalGuider/UnitArcSec',false);
+  f_internalguider.measure_method2.checked:=config.GetValue('/InternalGuider/Method2',false);
+  f_internalguider.trend_scale:=config.GetValue('/InternalGuider/Scale',2);
+
+
   LoadFocusStar(config.GetValue('/StarAnalysis/AutofocusStarMag',4));
   deepstring:=TStringList.Create;
 
@@ -2945,6 +2969,8 @@ procedure Tf_main.FormClose(Sender: TObject; var CloseAction: TCloseAction);
 begin
   if AppClose then exit;
   AppClose:=true;
+
+  StopInternalguider:=true;
 
   SaveSettings;
   SaveConfig;
@@ -4408,6 +4434,23 @@ begin
 
    config.SetValue('/StarAnalysis/FocuserLastTemp',FocuserLastTemp);
    config.SetValue('/StarAnalysis/MagnitudeCalibration',MagnitudeCalibration);
+
+   config.SetValue('/InternalGuider/RaGain',f_internalguider.ra_gain1.Text);
+   config.SetValue('/InternalGuider/DecGain',f_internalguider.dec_gain1.Text);
+   config.SetValue('/InternalGuider/RaHysteresis',f_internalguider.ra_hysteresis1.Text);
+   config.SetValue('/InternalGuider/DecHysteresis',f_internalguider.dec_hysteresis1.Text);
+   config.SetValue('/InternalGuider/MinimumMoveRa',f_internalguider.Minimum_MoveRa1.Text);
+   config.SetValue('/InternalGuider/MinimumMoveDec',f_internalguider.Minimum_MoveDec1.Text);
+   config.SetValue('/InternalGuider/Pa',f_internalguider.pa1.Text);
+   config.SetValue('/InternalGuider/PulseGainEast',f_internalguider.pulseGainEast1.Text);
+   config.SetValue('/InternalGuider/PulseGainWest',f_internalguider.pulseGainWest1.Text);
+   config.SetValue('/InternalGuider/PulseGainNorth',f_internalguider.pulseGainNorth1.Text);
+   config.SetValue('/InternalGuider/PulseGainSouth',f_internalguider.pulseGainSouth1.Text);
+   config.SetValue('/InternalGuider/PierSide',f_internalguider.Pier_side1.Text);
+   config.SetValue('/InternalGuider/PixelSize',f_internalguider.pixelsize1.Text);
+   config.SetValue('/InternalGuider/UnitArcSec',f_internalguider.unitarcseconds1.Checked);
+   config.SetValue('/InternalGuider/Method2',f_internalguider.measure_method2.Checked);
+   config.SetValue('/InternalGuider/Scale',f_internalguider.trend_scale);
 end;
 
 procedure Tf_main.SaveConfig;
@@ -14590,24 +14633,516 @@ begin
   Application.QueueAsyncCall(@InternalguiderStartAsync,0);
 end;
 
-procedure Tf_main.InternalguiderStartAsync(Data: PtrInt);
+
+procedure mad_median(list: array of double;leng :integer;out mad,median :double);{calculate mad and median without modifying the data}
+var  {idea from https://eurekastatistics.com/using-the-median-absolute-deviation-to-find-outliers/}
+  i        : integer;
+  list2: array of double;
 begin
-  StopInternalguider:=false;
-  repeat
-    f_preview.ControlExposure(f_preview.Exposure, f_preview.Bin, f_preview.Bin, LIGHT, ReadoutModePreview, f_preview.Gain, f_preview.Offset);
-    { #todo : guide process using fits.image }
-    Application.ProcessMessages;
-  until StopInternalguider;
+  setlength(list2,leng);
+  for i:=0 to leng-1 do list2[i]:=list[i];{copy magn offset data}
+  median:=Smedian(list2,leng);
+  for i:=0 to leng-1 do list2[i]:=abs(list[i] - median);{fill list2 with offsets}
+  mad:=Smedian(list2,leng); //median absolute deviation (MAD)
+  list2:=nil;
 end;
+
+
+procedure get_best_mean(list: array of double; leng : integer; out mean : double);{Remove outliers from polulation using MAD. }
+var  {idea from https://eurekastatistics.com/using-the-median-absolute-deviation-to-find-outliers/}
+  i,count         : integer;
+  median, mad     : double;
+
+begin
+ if leng=1 then begin mean:=list[0];exit end
+ else
+ if leng=2 then begin mean:=(list[0]+list[1])/2;exit end;
+ mad_median(list,leng,mad,median);{calculate mad and median without modifying the data}
+ count:=0;
+ mean:=0;
+ for i:=0 to leng-1 do
+   if abs(list[i]-median)<1.50*1.4826*mad then {offset less the 1.5*sigma.}
+   begin
+     mean:=mean+list[i];{Calculate mean. This gives a little less noise then calculating median again. Note weighted mean gives poorer result and is not applied.}
+     inc(count);
+   end;
+ if count>0 then  mean:=mean/count;  {mean without using outliers}
+end;
+
+
+procedure rotate2(rot,x,y :double;out  x2,y2:double);{rotate a vector point CCW}
+var
+  sin_rot, cos_rot :double;
+begin
+  sincos(rot, sin_rot, cos_rot);
+  x2:=x * cos_rot - y*sin_rot;
+  y2:=x * sin_rot + y*cos_rot;
+end;
+
+function  Tf_main.measure_drift(var initialize:boolean; out driftX,driftY :double) : integer;// ReferenceX,Y indicates the total drift, driftX,driftY to drift since previouse call. Arrays old_xy_array,xy_array are for storage star positions
+var
+  i,x,y, fitsx,fitsy,stepsize,xsize,ysize,areaX,areaY,nr_areas_inX,nr_areas_inY,star_counter,match_counter,r, rxc,ryc,len: integer;
+  drift_arrayX,drift_arrayY : array of double;
+  hfd1,star_fwhm,vmax,bg,bgdev,xc,yc,snr,flux,fluxratio  : double;
+const
+    searchA=28;//square search area
+    overlap=14;
+    maxstars=1000;
+begin
+  result:=1;// Assume no stars detected
+  Application.ProcessMessages; if StopInternalguider then
+  begin
+    newmessage('Guider stop pressed.',1);
+    result:=2;//mark stop with value 2
+    exit;
+  end;
+  star_counter:=0;
+  stepsize:=searchA-overlap;//some overlap
+
+  Image1.Canvas.Pen.Color:=clYellow;
+  Image1.Canvas.Pen.Mode:=pmMerge;
+  Image1.Canvas.Pen.Style:=psSolid;
+  Image1.Canvas.Pen.Width:=1;
+
+  f_preview.ControlExposure(f_preview.Exposure, f_preview.Bin, f_preview.Bin, LIGHT, ReadoutModePreview, f_preview.Gain, f_preview.Offset);
+
+  xsize:=fits.HeaderInfo.naxis1;// width image
+  ysize:=fits.HeaderInfo.naxis2;// height image
+
+  nr_areas_inX:=xsize div stepsize;  //number the areas in x
+  nr_areas_inY:=ysize div stepsize;  //number of areas in y
+  if initialize then
+    setlength(xy_array,maxstars);
+
+  // Divide the image in square areas. Try to detect a star in each area. Store the star position and flux in the xy_array
+  if initialize then
+  begin
+    fitsy:=stepsize div 2;
+    repeat
+      fitsx:=stepsize div 2;
+      repeat
+        areaX:=fitsX div stepsize;//area position;
+        areaY:=fitsY div stepsize;
+
+        fits.GetHFD2(fitsX,fitsY,searchA,xc,yc,bg,bgdev,hfd1,star_fwhm,vmax,snr,flux,false);{find a star in this segment}
+
+        if ((snr>10) and (abs(fitsX-xc)<stepsize div 2) and (abs(fitsY-yc)<stepsize div 2) and (star_counter<maxstars))  then //detection and no other area closer
+        begin // star in this area
+          xy_array[star_counter].x1:=xc;//store initial measured position for recovering if star is lost
+          xy_array[star_counter].y1:=yc;
+
+          xy_array[star_counter].x2:=xc;//store measured star position
+          xy_array[star_counter].y2:=yc;
+          xy_array[star_counter].flux:=flux;
+          inc(star_counter);
+
+          // Convert FITS coordinates to Screen coordinates
+          Fits2Screen(round(xc),round(yc),f_visu.FlipHorz,f_visu.FlipVert,rxc,ryc);
+          r:=round(hfd1*3);
+          image1.Canvas.Frame(rxc-r,ryc-r,rxc+r,ryc+r);
+
+          //Fits2Screen(fitsX,fitsY,f_visu.FlipHorz,f_visu.FlipVert,rxc,ryc);
+          //r:=stepsize div 2;
+          //image1.Canvas.Frame(rxc-r,ryc-r,rxc+r,ryc+r);
+        end
+        else
+        begin //no star in this area
+          xy_array[star_counter].x2:=0;
+          xy_array[star_counter].y2:=0;
+          xy_array[star_counter].flux:=0;
+        end;
+
+        inc(fitsx,stepsize);
+      until fitsx>=xsize-1+stepsize div 2;;
+      inc(fitsy,stepsize);
+    until fitsy>=ysize-1+stepsize div 2;
+    setlength(xy_array,star_counter);
+    setlength(xy_array_old,star_counter);//for later
+  end
+  else
+  begin //second, third ... call
+    for i:=0 to length(xy_array_old)-1 do
+    begin
+      if xy_array_old[i].flux<>0 then //keep tracking if star drifts away
+        fits.GetHFD2(round(xy_array_old[i].x2),round(xy_array_old[i].y2),searchA{area},xc,yc,bg,bgdev,hfd1,star_fwhm,vmax,snr,flux,false) {find a star at previous position. So keep tracking while it is drifting}
+      else // try in initial area
+        fits.GetHFD2(round(xy_array_old[i].x1),round(xy_array_old[i].y1),searchA,xc,yc,bg,bgdev,hfd1,star_fwhm,vmax,snr,flux,false);{find a star in the orginal segment}
+
+      if snr>10 then //detection
+      begin // star in this area
+        xy_array[i].x2:=xc;
+        xy_array[i].y2:=yc;
+        xy_array[i].flux:=flux;
+        inc(star_counter);
+
+        // Convert FITS coordinates to Screen coordinates
+        Fits2Screen(round(xc),round(yc),f_visu.FlipHorz,f_visu.FlipVert,rxc,ryc);
+        r:=round(hfd1*3);
+        image1.Canvas.Frame(rxc-r,ryc-r,rxc+r,ryc+r);
+      end
+      else
+      begin //Star lost temporary
+        xy_array[i].flux:=0;
+      end;
+    end;
+  end;
+  if star_counter<1 then
+  begin
+    newmessage('No stars detected!',1);
+    initialize:=true;//return initialize=true for fresh restart next call.
+    exit;
+  end
+  else
+    newmessage(inttostr(star_counter)+' stars detected',3);
+
+  // calculate movement in each area
+  match_counter:=0;
+  if ((initialize=false) and (length(xy_array_old)>0)) then//not empthy, second round or later
+  begin
+    len:=length(xy_array_old);
+    setlength(drift_arrayX,len);
+    setlength(drift_arrayY,len);
+    for i:=0 to len-1 do
+    begin
+      fluxratio:=xy_array_old[i].flux/(xy_array[i].flux+0.001);
+      if  ((fluxratio>1/1.5) and (fluxratio<1.5)) then //star flux difference is within 50%
+      begin
+        drift_arrayX[match_counter]:=xy_array[i].x2 - xy_array_old[i].x1; //drift in pixels relative to initial measurement x1,y1
+        drift_arrayY[match_counter]:=xy_array[i].y2 - xy_array_old[i].y1;
+        inc(match_counter);
+      end;
+    end;
+    application.processmessages;
+
+    if match_counter/star_counter<0.5 then  //second round and 50% of stars are still in the area
+      newmessage('Guider, warning lost track or exposure time changed!',2); //more then 7.5 pixels drift in one cycle
+
+    //Remove outliers and calculate mean drift in X and Y.
+    get_best_mean(drift_arrayX,match_counter {length},driftX );
+    get_best_mean(drift_arrayY,match_counter {length},driftY );
+  end;
+
+  {copy xy_array to xy_array_old}
+  for i:=0 to length(xy_array_old)-1 do
+      xy_array_old[i]:=xy_array[i];
+  initialize:=false;//succes, first data collected
+  result:=0; //good result
+end;
+
+
+procedure Tf_main.InternalguiderStartAsync(Data: PtrInt); {internal guider}
+var
+  i,pulseRA,pulseDEC,maxpulse  : integer;
+  driftX,driftY,driftRA,driftDec,timeend,
+  correctionRA,correctionDEC, PactionRA,PactionDEC,thecos,old_PactionRA,old_PactionDEC : double;
+  xy_trend : xy_guiderlist;{fu_internalguider}
+  initialize:boolean;
+const
+   nrpointsTrend=50; //number of trend points plotted
+   max_duration=2500;//max duration guide puls in milliseconds
+begin
+ if AllDevicesConnected=false then
+  begin
+    NewMessage('Internal guider: Devices not connected!',1);
+    exit;
+  end;
+  if f_main.mount.canpulseguide=false then
+  begin
+    NewMessage('Abort, mount does not support pulse guiding!',1);
+    exit;
+  end;
+  StopInternalguider:=false;
+
+  if mount.Tracking=false then
+  begin
+    NewMessage('Start tracking. Wait 20 seconds',2);
+    mount.Track;//start tracking
+    wait(20000);
+  end;
+
+  setlength(xy_trend,nrpointsTrend,4);
+  for i:=0 to nrpointsTrend-1 do {clear}
+  begin
+   xy_trend[i,0]:=1E100;//delta ra, 1E100 is an empthy marker
+   xy_trend[i,1]:=0;//delta dec
+   xy_trend[i,2]:=0;//ra correction
+   xy_trend[i,3]:=0 //dec correction
+  end;
+
+  old_PactionRA:=0;
+  old_PactionDEC:=0;
+
+  initialize:=true; //initialize;
+  repeat
+    f_internalguider.draw_xy(xy_trend);//plot xy values
+    f_internalguider.draw_trend(xy_trend);// plot trends
+    for i:=nrpointsTrend-2 downto 0 do {shift values and make place for new values}
+    begin
+     xy_trend[i+1,0]:=xy_trend[i,0];//x value
+     xy_trend[i+1,1]:=xy_trend[i,1];//y value
+     xy_trend[i+1,2]:=xy_trend[i,2];//x correction
+     xy_trend[i+1,3]:=xy_trend[i,3];//y correction
+    end;
+
+    //Measure drift
+    repeat
+      if measure_drift(initialize,driftX,driftY)=2 then exit;// ReferenceX,Y indicates the total drift, driftX,driftY to drift since previous call. Arrays xy_array_old,xy_array are for storage star positions
+    until initialize=false; //until star(s) detected. If no stars are detected initialize is returned true
+
+    //rotate drift if required.
+    rotate2((- f_internalguider.PA*pi/180),driftX,driftY, driftRA,driftDec);{rotate a vector point, counter clockwise}
+
+    // Apply meridian flip if required
+    if (mount.PierSide=pierWest) <> (pos('E',f_internalguider.pier_side)>0) then // Did a meridian flip occur since calibration.
+      driftRA:=-driftRA; // A meridian flip only requires RA direction to inverse! For Declination there is no change.
+
+    if f_internalguider.pulsegainNorth<0 then driftDEC:=-driftDEC;//flipped image correction. E.g. an image where north is up and east on the right size.
+
+    xy_trend[0,0]:=-DriftRa;//store RA drift in  pixels.
+    xy_trend[0,1]:=+DriftDec;//store DEC drift in pixels.
+
+    //calculate required RA correction in pixels
+    PactionRA:=driftRA*f_internalguider.RAgain/100;// Proportional action of the controller.
+    correctionRA:=-(PactionRA-old_PactionRA *f_internalguider.RA_hysteresis/100); //Hysteresis. For a higher setting the control will rely more on historical values. Typical set at 70%
+    old_PactionRA:=PactionRA;//Store for next cycle hysteresis calculation
+
+    //calculate required DEC correction in pixels
+    PactionDEC:=driftDEC*f_internalguider.DECgain/100;// proportional action of the controller.
+    correctionDEC:=-(PactionDEC-old_PactionDEC*f_internalguider.DEC_hysteresis/100); //HHysteresis. For a higher setting the control will rely more on historical values. Typical set at 70%
+    old_PactionDEC:=PactionDEC; //Store for next cycle hysteresis calculation
+
+    if f_internalguider.disable_guiding=false then //guiding enabled
+    begin
+      xy_trend[0,2]:=-correctionRA;//store RA correction in pixels for trend
+      xy_trend[0,3]:=+correctionDEC;//store DEC correction in pixels for trend
+
+      if abs(correctionRA)<f_internalguider.minimum_moveRA then correctionRA:=0;//avoid chasing the seeing. Improves the stability
+      if abs(correctionDEC)<f_internalguider.minimum_moveDEC then correctionDEC:=0;//avoid chasing the seeing. Improves the stability
+
+      thecos:=cos(mount.Dec*pi/180); if thecos=0 then thecos:=0.000001;
+      correctionRA:=correctionRA/thecos; //correct pixels with cos(dec). Rotation in pixels near celestial pole decreases with cos(dec)
+
+      pulseRA:=0;
+      pulseDEC:=0;
+
+      if correctionRA>0 then //going East increases the RA
+      begin
+         pulseRA:=min(max_duration,round(1000*abs(correctionRA/f_internalguider.pulsegainEast))); {duration msec}
+         if pulseRA>10 then //Large enough correction to follow by motors/relays. Complementary with minimum_move
+         begin
+           newmessage('East: '+inttostr(pulseRA),3);
+           mount.PulseGuide(2,pulseRA);  {0=north, 1=south, 2 East, 3 West}
+         end;
+      end
+      else
+      if correctionRA<0 then //going West
+      begin
+        pulseRA:=min(max_duration,round(1000*abs(correctionRA/f_internalguider.pulsegainWest))); {duration msec}
+        if pulseRA>10 then
+        begin
+          newmessage('West: '+inttostr(pulseRA),3);
+          mount.PulseGuide(3,pulseRA);  {0=north, 1=south, 2 East, 3 West}
+        end;
+      end;
+
+      if correctionDEC>0 then //go North increase the DEC.
+      begin
+        pulseDEC:=min(max_duration,round(1000*abs(correctionDec/f_internalguider.pulsegainNorth))); {duration msec}
+        if pulseDEC>10 then
+        begin
+          newmessage('North: '+inttostr(pulseDEC),3);
+          mount.PulseGuide(0,pulseDEC);  {0=north, 1=south, 2 East, 3 West}
+        end;
+      end
+      else
+      if correctionDEC<0 then //go South
+      begin
+        pulseDEC:=min(max_duration,round(1000*abs(correctionDec/f_internalguider.pulsegainSouth))); {duration msec}
+        if pulseDEC>10 then
+        begin
+          newmessage('South: '+inttostr(pulseDEC),3);
+          mount.PulseGuide(1,pulseDEC);  {0=north, 1=south, 2 East, 3 West}
+        end;
+      end;
+
+      // wait for puls guide move completed
+      maxpulse:=max(pulseRA,pulseDEC);
+      if maxpulse>0 then
+      begin
+        timeend:=now+(maxpulse/(secperday*1000));
+        while now<timeend do begin
+          sleep(100);
+          if GetCurrentThreadId=MainThreadID then Application.ProcessMessages;
+          if StopInternalguider then
+          begin
+            newmessage('Guider stop pressed.',3);
+            exit;
+          end;
+        end;
+      end;
+    end //guiding enabled
+    else
+    begin  //guiding disabled
+      xy_trend[0,2]:=0;
+      xy_trend[0,3]:=0;
+    end;
+  until false;
+end;
+
 
 procedure Tf_main.InternalguiderStop(Sender: TObject);
 begin
   StopInternalguider:=true;
 end;
 
+
 procedure Tf_main.InternalguiderCalibrate(Sender: TObject);
+var
+  duration,flip,count,i : integer;
+  driftX,driftY,referenceX,referenceY,drift,driftOld, paEast, paNorth, pulsegainEast,pulsegainWest,pulsegainNorth,pulsegainSouth, thecos,theangle : double;
+  initialize      : boolean;
+const
+   nrtest=8; //number stops for measuring the pixel scale in arcseconds
 begin
-{ #todo :  }
+  if AllDevicesConnected=false then
+  begin
+    NewMessage('Internal guider: Devices not connected!',1);
+    StopInternalguider:=true;
+    exit;
+  end;
+  if f_main.mount.canpulseguide=false then
+  begin
+    NewMessage('Abort, mount does not support pulse guiding!',1);
+    StopInternalguider:=true;
+    exit;
+  end;
+  StopInternalguider:=false;
+
+  f_internalguider.trend_message('Guider is in calibration mode.','This will take a few minutes.');
+
+  if mount.Tracking=false then
+  begin
+    NewMessage('Start tracking. Wait 20 seconds',3);
+    mount.Track;//start tracking
+    sleep(20000);
+  end;
+
+  thecos:=cos(mount.Dec*pi/180); if thecos=0 then thecos:=0.00000001; //prevent dividing by zero
+
+  //EAST, measure pulse guide speed
+  duration:=667; //duration of pulse guiding
+  repeat
+    duration:=round(duration*1.5);
+    NewMessage('Testing pulse guiding East for '+floattostrF(duration/1000,FFgeneral,0,2)+ ' seconds',2);
+    initialize:=true;
+    if measure_drift(initialize,driftX,driftY)>0 then exit;//measure reference star positions
+    mount.PulseGuide(2,duration {duration msec} );  {0=north, 1=south, 2 East, 3 West}
+    sleep(duration);
+    if measure_drift(initialize,driftX,driftY)>0 then exit;//measure drift
+    drift:=sqrt(sqr(driftX)+sqr(driftY));//  For image with north up and east left, driftX become negative.
+    //newmessage('DriftX ' + floattostrf(driftx,ffgeneral,0,2)+' DriftY ' + floattostrf(driftY,ffgeneral,0,2));
+  until ((drift>5) or (duration>20000));
+  if drift<2 then begin NewMessage('Abort calibration, no movement measured!',1); exit; end;
+  pulsegainEast:=drift*1000/(duration*thecos); // [px*cos(dec)/sec]
+  paEast:=arctan2(driftY,driftX);//-pi..pi, For north up and east left this gives zero angle
+
+  //WEST, measure pulse guide. Use same duration as East
+  NewMessage('Testing pulse guiding West for '+floattostrF(duration/1000,FFgeneral,0,2)+ ' seconds',2);
+  initialize:=true;
+  if measure_drift(initialize,driftX,driftY)>0 then exit;//measure reference star positions
+  mount.PulseGuide(3,duration {duration msec} );  {0=north, 1=south, 2 East, 3 West}
+  sleep(duration);
+  if measure_drift(initialize,driftX,driftY)>0 then exit;//measure drift
+  drift:=sqrt(sqr(driftX)+sqr(driftY)); //For image with north up and east left, driftX become positive.
+  pulsegainWest:=drift*1000/(duration*thecos); // [px*cos(dec)/sec]
+
+  NewMessage('Internal guider calibration:  Pulse gain measured East/West: '+ floattostrF(pulsegainEast,ffgeneral,0,2)+'/'+ floattostrF(pulsegainWest,ffgeneral,0,2)+' [px*cos(δ)/sec], Camera angle: '+floattostrF(paEast*180/pi,ffgeneral,3,1)+'°',3);
+
+  //NORTH measure pulse guide speed.
+  NewMessage('Guider, removing backlash North',3);
+  mount.PulseGuide(0,5000 {duration msec} );  {0=north, 1=south, 2 East, 3 West}
+  sleep(5000);
+  duration:=667; //duration of pulse guiding
+  repeat
+    duration:=round(duration*1.5);
+    NewMessage('Testing pulse guiding North for '+floattostrF(duration/1000,FFgeneral,0,2)+ ' seconds',3);
+    initialize:=true;//for measure drift
+    if measure_drift(initialize,driftX,driftY)>0 then exit;//measure reference star positions
+    mount.PulseGuide(0,duration {duration msec} );  {0=north, 1=south, 2 East, 3 West}
+    sleep(duration);
+    if measure_drift(initialize,driftX,driftY)>0 then exit;//measure drift
+    drift:=sqrt(sqr(driftX)+sqr(driftY));
+  until ((drift>5) or (duration>20000));
+  if drift<2 then begin NewMessage('Abort calibration, no movement measured!',1); exit; end;
+
+  paNorth:=arctan2(driftY,driftX); // Relative to the positive X axis and CCW
+  theangle:=paNorth - paEast;// CCW angles, calculate angle North relative to West
+  if theangle<pi then theangle:=theangle+pi*2;
+  if theangle>pi then theangle:=theangle-pi*2;
+  if  theangle>0 then //is turning to from West to North positive or negative pi/2
+    flip:=+1  // Normal. If North is up then East is left in the image
+  else
+    flip:=-1; // Flipped image. E.g.if North is up then East is on the right side}
+  pulsegainNorth:=flip*drift*1000/(duration); // [px/sec]
+
+  NewMessage('Removing backlash South',3);
+  mount.PulseGuide(1,5000 {duration msec} );  {0=north, 1=south, 2 East, 3 West}
+  sleep(5000);
+  //SOUTH, measure pulse guide speed.
+  NewMessage('Testing pulse guiding South for '+floattostrF(duration/1000,FFgeneral,0,2)+ ' seconds',3);
+  count:=0;
+  drift:=0;
+  repeat
+    initialize:=true;
+    driftOld:=drift;
+    if measure_drift(initialize,driftX,driftY)>0 then exit;//measure reference star positions
+    mount.PulseGuide(1,duration {duration msec} );  {0=north, 1=south, 2 East, 3 West}
+    sleep(duration);
+    if measure_drift(initialize,driftX,driftY)>0 then exit;//measure drift
+    drift:=sqrt(sqr(driftX)+sqr(driftY));
+    inc(count);
+  until ((driftOld>2) or (count>=4));
+  if drift<2 then begin NewMessage('Abort calibration, no movement measured!',1); exit; end;
+  pulsegainSouth:=flip*drift*1000/(duration); // [px*cos(dec)/sec]   Flipped is already measured
+
+  NewMessage('Internal guider calibration:  Pulse gain measured North/South: '+ floattostrF(pulsegainNorth,ffgeneral,0,2)+'/'+ floattostrF(pulsegainSouth,ffgeneral,0,2)+' [px/sec]',3);
+
+  //Display findings
+  if mount.PierSide=pierWest then f_internalguider.pier_side:='E' else f_internalguider.pier_side:='W'; //measured west or east ??
+  f_internalguider.PA:=paEast*180/pi; // this is the relative angle between the image and the mount.
+  f_internalguider.pulsegainEast:=pulsegainEast;
+  f_internalguider.pulsegainWest:=pulsegainWest;
+  f_internalguider.pulsegainNorth:=pulsegainNorth;
+  f_internalguider.pulsegainSouth:=pulsegainSouth;
+  f_internalguider.pixel_size:=0.5*15*2/(pulsegainEast+pulsegainWest);//alternative method assuming 0.5x and 1.5x pulse speed
+
+
+  //Optional, measure pixel scale guider camera in arcseconds. Do not initialize, use the position from the South measurement
+  if f_internalguider.measure_method2.checked then
+  begin
+    NewMessage('Stop tracking a few times for 0.5 seconds to measure pixel scale',1);
+    initialize:=true;
+    if measure_drift(initialize,driftX,driftY)>0 then exit;//measure reference star positions
+    for i:=1 to nrtest do
+    begin
+      mount.AbortMotion;// stop to measure the pixel scale. Assume scale is 1"/px or larger. This results in 7.5 pixel drift max.
+      sleep(500);
+      mount.Track;//start tracking again
+      if measure_drift(initialize,driftX,driftY)>0 then //sync the drift measurement with the new position.
+      begin
+        NewMessage('Ready to guide. Used alternative method to calculate the pixel scale which could be inaccurate.',1);
+        exit;
+      end;
+    end;
+    drift:=sqrt(sqr(driftX)+sqr(driftY));
+    f_internalguider.pixel_size:=nrtest*0.5*15/drift;
+    NewMessage('Total drift: '+ floattostrF(drift,ffgeneral,0,2)+ ' pixels after '+inttostr(nrtest)+ ' tracking stops of 0.5 seconds. Estimated pixel size '+floattostrF(f_internalguider.pixel_size,ffgeneral,0,2)+' "/px' ,3);
+  end;
+
+
+  Newmessage('Ready to guide!',1);
+  f_internalguider.trend_message('Calibration is ready.','');
+  f_internalguider.ButtonStart.enabled:=true;
 end;
 
 end.
