@@ -334,6 +334,9 @@ begin
               SendString(cmdresult + crlf);
               if lastError <> 0 then break;
             end
+          end
+          else begin
+            if LastError<>WSAETIMEDOUT then break;
           end;
         until False;
       end;
