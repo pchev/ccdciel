@@ -145,7 +145,7 @@ var
   {$ENDIF}
   {$IFDEF WINDOWS}
   ip,mask: string;
-  ipb,maskb,br: DWord;
+  ipb,maskb,br: Integer;
   hasIP, hasMask: boolean;
   FSWbemLocator : OLEVariant;
   FWMIService   : OLEVariant;
