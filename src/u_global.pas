@@ -350,7 +350,7 @@ var
   onMsgGlobal: TNotifyMsg;
   Appdir,ConfigDir,LogDir,TmpDir,DataDir,ScriptsDir,HomeDir,SequenceDir: UTF8String;
   defCapturePath, defPython, TCPIPConfigPort, TCPIPServerPort: string;
-  CameraName,WheelName,FocuserName,RotatorName,MountName,DomeName,WatchdogName,WeatherName,SafetyName,SwitchName,CoverName: string;
+  CameraName,WheelName,FocuserName,RotatorName,MountName,DomeName,WatchdogName,WeatherName,SafetyName,SwitchName,CoverName,GuideCameraName: string;
   ConfigDarkFile,cdate: string;
   isAdmin, UacEnabled, debug_msg: boolean;
   AllDevicesConnected: boolean;

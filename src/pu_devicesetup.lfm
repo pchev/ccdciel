@@ -108,7 +108,7 @@ object f_setup: Tf_setup
           TabOrder = 0
           object IndiServer: TEdit
             Left = 8
-            Height = 26
+            Height = 28
             Top = 43
             Width = 121
             Constraints.MaxHeight = 28
@@ -118,7 +118,7 @@ object f_setup: Tf_setup
           end
           object IndiPort: TEdit
             Left = 137
-            Height = 26
+            Height = 28
             Top = 43
             Width = 81
             Constraints.MaxHeight = 28
@@ -132,6 +132,7 @@ object f_setup: Tf_setup
             Top = 24
             Width = 42
             Caption = 'Server'
+            ParentColor = False
             ParentFont = False
           end
           object Label22: TLabel
@@ -140,6 +141,7 @@ object f_setup: Tf_setup
             Top = 24
             Width = 27
             Caption = 'Port'
+            ParentColor = False
             ParentFont = False
           end
           object Label1: TLabel
@@ -148,11 +150,12 @@ object f_setup: Tf_setup
             Top = 24
             Width = 51
             Caption = 'Timeout'
+            ParentColor = False
             ParentFont = False
           end
           object IndiTimeout: TEdit
             Left = 226
-            Height = 26
+            Height = 28
             Top = 43
             Width = 49
             Constraints.MaxHeight = 28
@@ -165,6 +168,7 @@ object f_setup: Tf_setup
             Top = 0
             Width = 75
             Caption = 'INDI Server'
+            ParentColor = False
             ParentFont = False
           end
           object ApplyIndi: TButton
@@ -194,6 +198,7 @@ object f_setup: Tf_setup
             Top = 2
             Width = 89
             Caption = 'ASCOM Alpaca'
+            ParentColor = False
             ParentFont = False
           end
           object Label70: TLabel
@@ -202,6 +207,7 @@ object f_setup: Tf_setup
             Top = 64
             Width = 51
             Caption = 'Protocol'
+            ParentColor = False
             ParentFont = False
           end
           object DefaultARestProtocol: TComboBox
@@ -228,6 +234,7 @@ object f_setup: Tf_setup
             Top = 64
             Width = 163
             Caption = 'Remote host or IP address'
+            ParentColor = False
             ParentFont = False
           end
           object DefaultARestHost: TEdit
@@ -248,6 +255,7 @@ object f_setup: Tf_setup
             Top = 64
             Width = 43
             Caption = 'IP Port'
+            ParentColor = False
             ParentFont = False
           end
           object DefaultARestPort: TSpinEdit
@@ -280,6 +288,7 @@ object f_setup: Tf_setup
             Top = 116
             Width = 68
             Caption = 'User name'
+            ParentColor = False
             ParentFont = False
           end
           object Label108: TLabel
@@ -288,6 +297,7 @@ object f_setup: Tf_setup
             Top = 116
             Width = 58
             Caption = 'Password'
+            ParentColor = False
             ParentFont = False
           end
           object DefaultARestUser: TEdit
@@ -356,6 +366,7 @@ object f_setup: Tf_setup
             Top = 2
             Width = 91
             Caption = 'Discovery port'
+            ParentColor = False
             ParentFont = False
           end
           object Label4: TLabel
@@ -367,6 +378,7 @@ object f_setup: Tf_setup
             Caption = 'Alpaca server setup'
             Font.Color = clBlue
             Font.Style = [fsUnderline]
+            ParentColor = False
             ParentFont = False
             OnClick = AlpacaServerSetupClick
           end
@@ -401,6 +413,7 @@ object f_setup: Tf_setup
             Top = 13
             Width = 47
             Caption = 'Profile :'
+            ParentColor = False
             ParentFont = False
           end
           object ProfileList: TComboBox
@@ -474,17 +487,17 @@ object f_setup: Tf_setup
           OnChange = PageControlCameraChange
           object CameraIndi: TTabSheet
             Caption = 'CameraIndi'
-            ClientHeight = 410
+            ClientHeight = 383
             ClientWidth = 477
             ParentFont = False
             object PanelCameraIndi: TPanel
               Left = 0
-              Height = 410
+              Height = 383
               Top = 0
               Width = 477
               Align = alClient
               BevelOuter = bvNone
-              ClientHeight = 410
+              ClientHeight = 383
               ClientWidth = 477
               ParentFont = False
               TabOrder = 0
@@ -508,6 +521,7 @@ object f_setup: Tf_setup
                 Top = 55
                 Width = 41
                 Caption = 'Device'
+                ParentColor = False
                 ParentFont = False
               end
               object Label15: TLabel
@@ -518,6 +532,7 @@ object f_setup: Tf_setup
                 Top = 88
                 Width = 43
                 Caption = 'Sensor'
+                ParentColor = False
                 ParentFont = False
               end
               object IndiSensor: TComboBox
@@ -587,6 +602,7 @@ object f_setup: Tf_setup
                   Top = 6
                   Width = 58
                   Caption = 'Directory'
+                  ParentColor = False
                   ParentFont = False
                 end
                 object CameraIndiTransfertDir: TEdit
@@ -619,6 +635,7 @@ object f_setup: Tf_setup
                   Top = 5
                   Width = 42
                   Caption = 'Server'
+                  ParentColor = False
                   ParentFont = False
                 end
                 object CameraIndiServer: TEdit
@@ -641,6 +658,7 @@ object f_setup: Tf_setup
                   Top = 5
                   Width = 27
                   Caption = 'Port'
+                  ParentColor = False
                   ParentFont = False
                 end
                 object CameraIndiPort: TEdit
@@ -674,6 +692,7 @@ object f_setup: Tf_setup
                 Width = 132
                 AutoSize = False
                 Caption = '   '
+                ParentColor = False
                 ParentFont = False
                 WordWrap = True
               end
@@ -681,7 +700,7 @@ object f_setup: Tf_setup
           end
           object CameraAscom: TTabSheet
             Caption = 'CameraAscom'
-            ClientHeight = 410
+            ClientHeight = 383
             ClientWidth = 477
             ParentFont = False
             object PanelCameraAscom: TPanel
@@ -690,8 +709,8 @@ object f_setup: Tf_setup
               Top = 16
               Width = 456
               BevelOuter = bvNone
-              ClientHeight = 262
-              ClientWidth = 452
+              ClientHeight = 266
+              ClientWidth = 456
               ParentFont = False
               TabOrder = 0
               object BtnChooseCamera: TButton
@@ -769,17 +788,17 @@ object f_setup: Tf_setup
           end
           object CameraAscomRest: TTabSheet
             Caption = 'CameraAscomRest'
-            ClientHeight = 410
+            ClientHeight = 383
             ClientWidth = 477
             ParentFont = False
             object Panel2: TPanel
               Left = 0
-              Height = 410
+              Height = 383
               Top = 0
               Width = 477
               Align = alClient
               BevelOuter = bvNone
-              ClientHeight = 410
+              ClientHeight = 383
               ClientWidth = 477
               ParentFont = False
               TabOrder = 0
@@ -816,6 +835,7 @@ object f_setup: Tf_setup
                 Top = 40
                 Width = 51
                 Caption = 'Protocol'
+                ParentColor = False
                 ParentFont = False
               end
               object CameraARestHost: TEdit
@@ -834,6 +854,7 @@ object f_setup: Tf_setup
                 Top = 40
                 Width = 163
                 Caption = 'Remote host or IP address'
+                ParentColor = False
                 ParentFont = False
               end
               object CameraARestPort: TSpinEdit
@@ -854,6 +875,7 @@ object f_setup: Tf_setup
                 Top = 40
                 Width = 43
                 Caption = 'IP Port'
+                ParentColor = False
                 ParentFont = False
               end
               object CameraARestDevice: TSpinEdit
@@ -872,6 +894,7 @@ object f_setup: Tf_setup
                 Top = 113
                 Width = 144
                 Caption = 'Remote device number'
+                ParentColor = False
                 ParentFont = False
               end
               object Label64: TLabel
@@ -880,6 +903,7 @@ object f_setup: Tf_setup
                 Top = 141
                 Width = 52
                 Caption = 'Camera/'
+                ParentColor = False
                 ParentFont = False
               end
               object Label92: TLabel
@@ -888,6 +912,7 @@ object f_setup: Tf_setup
                 Top = 170
                 Width = 58
                 Caption = 'Password'
+                ParentColor = False
                 ParentFont = False
               end
               object Label91: TLabel
@@ -896,6 +921,7 @@ object f_setup: Tf_setup
                 Top = 170
                 Width = 68
                 Caption = 'User name'
+                ParentColor = False
                 ParentFont = False
               end
               object CameraARestUser: TEdit
@@ -959,6 +985,7 @@ object f_setup: Tf_setup
                 Caption = 'Alpaca server setup'
                 Font.Color = clBlue
                 Font.Style = [fsUnderline]
+                ParentColor = False
                 ParentFont = False
                 OnClick = AlpacaServerSetupCamera
               end
@@ -971,6 +998,7 @@ object f_setup: Tf_setup
                 Caption = 'Alpaca camera setup'
                 Font.Color = clBlue
                 Font.Style = [fsUnderline]
+                ParentColor = False
                 ParentFont = False
                 OnClick = AlpacaSetupCamera
               end
@@ -1017,6 +1045,7 @@ object f_setup: Tf_setup
             Top = 8
             Width = 88
             Caption = 'DeviceCamera'
+            ParentColor = False
             ParentFont = False
           end
         end
@@ -1039,17 +1068,17 @@ object f_setup: Tf_setup
           OnChange = PageControlWheelChange
           object WheelIndi: TTabSheet
             Caption = 'WheelIndi'
-            ClientHeight = 410
+            ClientHeight = 383
             ClientWidth = 477
             ParentFont = False
             object PanelWheelIndi: TPanel
               Left = 0
-              Height = 410
+              Height = 383
               Top = 0
               Width = 477
               Align = alClient
               BevelOuter = bvNone
-              ClientHeight = 410
+              ClientHeight = 383
               ClientWidth = 477
               ParentFont = False
               TabOrder = 0
@@ -1072,6 +1101,7 @@ object f_setup: Tf_setup
                 Top = 56
                 Width = 41
                 Caption = 'Device'
+                ParentColor = False
                 ParentFont = False
               end
               object WheelAutoLoadConfig: TCheckBox
@@ -1101,6 +1131,7 @@ object f_setup: Tf_setup
                   Top = 5
                   Width = 42
                   Caption = 'Server'
+                  ParentColor = False
                   ParentFont = False
                 end
                 object WheelIndiServer: TEdit
@@ -1123,6 +1154,7 @@ object f_setup: Tf_setup
                   Top = 5
                   Width = 27
                   Caption = 'Port'
+                  ParentColor = False
                   ParentFont = False
                 end
                 object WheelIndiPort: TEdit
@@ -1156,6 +1188,7 @@ object f_setup: Tf_setup
                 Width = 132
                 AutoSize = False
                 Caption = '   '
+                ParentColor = False
                 ParentFont = False
                 WordWrap = True
               end
@@ -1163,7 +1196,7 @@ object f_setup: Tf_setup
           end
           object WheelAscom: TTabSheet
             Caption = 'WheelAscom'
-            ClientHeight = 410
+            ClientHeight = 383
             ClientWidth = 477
             ParentFont = False
             object PanelWheelAscom: TPanel
@@ -1172,8 +1205,8 @@ object f_setup: Tf_setup
               Top = 16
               Width = 402
               BevelOuter = bvNone
-              ClientHeight = 133
-              ClientWidth = 398
+              ClientHeight = 137
+              ClientWidth = 402
               ParentFont = False
               TabOrder = 0
               object BtnChooseFilter: TButton
@@ -1224,7 +1257,7 @@ object f_setup: Tf_setup
           end
           object WheelInCamera: TTabSheet
             Caption = 'WheelInCamera'
-            ClientHeight = 410
+            ClientHeight = 383
             ClientWidth = 477
             ParentFont = False
             object PanelWheelIncamera: TPanel
@@ -1233,8 +1266,8 @@ object f_setup: Tf_setup
               Top = 32
               Width = 404
               BevelOuter = bvNone
-              ClientHeight = 198
-              ClientWidth = 400
+              ClientHeight = 202
+              ClientWidth = 404
               ParentFont = False
               TabOrder = 0
               object Label17: TLabel
@@ -1244,6 +1277,7 @@ object f_setup: Tf_setup
                 Width = 374
                 AutoSize = False
                 Caption = 'Be sure to configure the camera connection.'
+                ParentColor = False
                 ParentFont = False
                 WordWrap = True
               end
@@ -1251,17 +1285,17 @@ object f_setup: Tf_setup
           end
           object WheelAscomRest: TTabSheet
             Caption = 'WheelAscomRest'
-            ClientHeight = 410
+            ClientHeight = 383
             ClientWidth = 477
             ParentFont = False
             object Panel3: TPanel
               Left = 0
-              Height = 410
+              Height = 383
               Top = 0
               Width = 477
               Align = alClient
               BevelOuter = bvNone
-              ClientHeight = 410
+              ClientHeight = 383
               ClientWidth = 477
               ParentFont = False
               TabOrder = 0
@@ -1289,6 +1323,7 @@ object f_setup: Tf_setup
                 Top = 40
                 Width = 51
                 Caption = 'Protocol'
+                ParentColor = False
                 ParentFont = False
               end
               object WheelARestHost: TEdit
@@ -1307,6 +1342,7 @@ object f_setup: Tf_setup
                 Top = 40
                 Width = 163
                 Caption = 'Remote host or IP address'
+                ParentColor = False
                 ParentFont = False
               end
               object WheelARestPort: TSpinEdit
@@ -1327,6 +1363,7 @@ object f_setup: Tf_setup
                 Top = 40
                 Width = 43
                 Caption = 'IP Port'
+                ParentColor = False
                 ParentFont = False
               end
               object WheelARestDevice: TSpinEdit
@@ -1345,6 +1382,7 @@ object f_setup: Tf_setup
                 Top = 113
                 Width = 144
                 Caption = 'Remote device number'
+                ParentColor = False
                 ParentFont = False
               end
               object Label63: TLabel
@@ -1353,6 +1391,7 @@ object f_setup: Tf_setup
                 Top = 141
                 Width = 76
                 Caption = 'FilterWheel/'
+                ParentColor = False
                 ParentFont = False
               end
               object Label93: TLabel
@@ -1361,6 +1400,7 @@ object f_setup: Tf_setup
                 Top = 170
                 Width = 68
                 Caption = 'User name'
+                ParentColor = False
                 ParentFont = False
               end
               object Label94: TLabel
@@ -1369,6 +1409,7 @@ object f_setup: Tf_setup
                 Top = 170
                 Width = 58
                 Caption = 'Password'
+                ParentColor = False
                 ParentFont = False
               end
               object WheelARestUser: TEdit
@@ -1414,6 +1455,7 @@ object f_setup: Tf_setup
                 Caption = 'Alpaca server setup'
                 Font.Color = clBlue
                 Font.Style = [fsUnderline]
+                ParentColor = False
                 ParentFont = False
                 OnClick = AlpacaServerSetupWheel
               end
@@ -1426,6 +1468,7 @@ object f_setup: Tf_setup
                 Caption = 'Alpaca wheel setup'
                 Font.Color = clBlue
                 Font.Style = [fsUnderline]
+                ParentColor = False
                 ParentFont = False
                 OnClick = AlpacaSetupWheel
               end
@@ -1456,7 +1499,7 @@ object f_setup: Tf_setup
           end
           object WheelManual: TTabSheet
             Caption = 'WheelManual'
-            ClientHeight = 410
+            ClientHeight = 383
             ClientWidth = 477
             ParentFont = False
             object Panel32: TPanel
@@ -1475,6 +1518,7 @@ object f_setup: Tf_setup
                 Top = 21
                 Width = 93
                 Caption = 'Number of slot'
+                ParentColor = False
                 ParentFont = False
               end
               object WheelMslot: TSpinEdit
@@ -1493,7 +1537,7 @@ object f_setup: Tf_setup
             end
             object ManualFilterName: TStringGrid
               Left = 0
-              Height = 352
+              Height = 325
               Top = 58
               Width = 477
               Align = alClient
@@ -1587,17 +1631,17 @@ object f_setup: Tf_setup
             OnChange = PageControlFocuserChange
             object FocuserIndi: TTabSheet
               Caption = 'FocuserIndi'
-              ClientHeight = 319
+              ClientHeight = 292
               ClientWidth = 477
               ParentFont = False
               object PanelFocuserIndi: TPanel
                 Left = 0
-                Height = 319
+                Height = 292
                 Top = 0
                 Width = 477
                 Align = alClient
                 BevelOuter = bvNone
-                ClientHeight = 319
+                ClientHeight = 292
                 ClientWidth = 477
                 ParentFont = False
                 TabOrder = 0
@@ -1620,6 +1664,7 @@ object f_setup: Tf_setup
                   Top = 56
                   Width = 41
                   Caption = 'Device'
+                  ParentColor = False
                   ParentFont = False
                 end
                 object FocuserAutoLoadConfig: TCheckBox
@@ -1649,6 +1694,7 @@ object f_setup: Tf_setup
                     Top = 5
                     Width = 42
                     Caption = 'Server'
+                    ParentColor = False
                     ParentFont = False
                   end
                   object FocuserIndiServer: TEdit
@@ -1671,6 +1717,7 @@ object f_setup: Tf_setup
                     Top = 5
                     Width = 27
                     Caption = 'Port'
+                    ParentColor = False
                     ParentFont = False
                   end
                   object FocuserIndiPort: TEdit
@@ -1704,6 +1751,7 @@ object f_setup: Tf_setup
                   Width = 132
                   AutoSize = False
                   Caption = '   '
+                  ParentColor = False
                   ParentFont = False
                   WordWrap = True
                 end
@@ -1711,7 +1759,7 @@ object f_setup: Tf_setup
             end
             object FocuserAscom: TTabSheet
               Caption = 'FocuserAscom'
-              ClientHeight = 319
+              ClientHeight = 292
               ClientWidth = 477
               ParentFont = False
               object PanelFocuserAscom: TPanel
@@ -1720,8 +1768,8 @@ object f_setup: Tf_setup
                 Top = 16
                 Width = 360
                 BevelOuter = bvNone
-                ClientHeight = 133
-                ClientWidth = 356
+                ClientHeight = 137
+                ClientWidth = 360
                 ParentFont = False
                 TabOrder = 0
                 object BtnChooseFocuser: TButton
@@ -1772,7 +1820,7 @@ object f_setup: Tf_setup
             end
             object FocuserInMount: TTabSheet
               Caption = 'FocuserInMount'
-              ClientHeight = 319
+              ClientHeight = 292
               ClientWidth = 477
               ParentFont = False
               TabVisible = False
@@ -1782,8 +1830,8 @@ object f_setup: Tf_setup
                 Top = 32
                 Width = 289
                 BevelOuter = bvNone
-                ClientHeight = 109
-                ClientWidth = 285
+                ClientHeight = 113
+                ClientWidth = 289
                 ParentFont = False
                 TabOrder = 0
                 object Label16: TLabel
@@ -1794,23 +1842,24 @@ object f_setup: Tf_setup
                   Caption = 'Not implemented!'
                   Font.Height = -24
                   Font.Style = [fsBold]
+                  ParentColor = False
                   ParentFont = False
                 end
               end
             end
             object FocuserAscomRest: TTabSheet
               Caption = 'FocuserAscomRest'
-              ClientHeight = 319
+              ClientHeight = 292
               ClientWidth = 477
               ParentFont = False
               object Panel4: TPanel
                 Left = 0
-                Height = 319
+                Height = 292
                 Top = 0
                 Width = 477
                 Align = alClient
                 BevelOuter = bvNone
-                ClientHeight = 319
+                ClientHeight = 292
                 ClientWidth = 477
                 ParentFont = False
                 TabOrder = 0
@@ -1838,6 +1887,7 @@ object f_setup: Tf_setup
                   Top = 40
                   Width = 51
                   Caption = 'Protocol'
+                  ParentColor = False
                   ParentFont = False
                 end
                 object FocuserARestHost: TEdit
@@ -1856,6 +1906,7 @@ object f_setup: Tf_setup
                   Top = 40
                   Width = 163
                   Caption = 'Remote host or IP address'
+                  ParentColor = False
                   ParentFont = False
                 end
                 object FocuserARestPort: TSpinEdit
@@ -1876,6 +1927,7 @@ object f_setup: Tf_setup
                   Top = 40
                   Width = 43
                   Caption = 'IP Port'
+                  ParentColor = False
                   ParentFont = False
                 end
                 object FocuserARestDevice: TSpinEdit
@@ -1894,6 +1946,7 @@ object f_setup: Tf_setup
                   Top = 113
                   Width = 144
                   Caption = 'Remote device number'
+                  ParentColor = False
                   ParentFont = False
                 end
                 object Label65: TLabel
@@ -1902,6 +1955,7 @@ object f_setup: Tf_setup
                   Top = 141
                   Width = 54
                   Caption = 'Focuser/'
+                  ParentColor = False
                   ParentFont = False
                 end
                 object Label95: TLabel
@@ -1910,6 +1964,7 @@ object f_setup: Tf_setup
                   Top = 170
                   Width = 68
                   Caption = 'User name'
+                  ParentColor = False
                   ParentFont = False
                 end
                 object Label96: TLabel
@@ -1918,6 +1973,7 @@ object f_setup: Tf_setup
                   Top = 170
                   Width = 58
                   Caption = 'Password'
+                  ParentColor = False
                   ParentFont = False
                 end
                 object FocuserARestUser: TEdit
@@ -1963,6 +2019,7 @@ object f_setup: Tf_setup
                   Caption = 'Alpaca server setup'
                   Font.Color = clBlue
                   Font.Style = [fsUnderline]
+                  ParentColor = False
                   ParentFont = False
                   OnClick = AlpacaServerSetupFocuser
                 end
@@ -1975,6 +2032,7 @@ object f_setup: Tf_setup
                   Caption = 'Alpaca focuser setup'
                   Font.Color = clBlue
                   Font.Style = [fsUnderline]
+                  ParentColor = False
                   ParentFont = False
                   OnClick = AlpacaSetupFocuser
                 end
@@ -2024,17 +2082,17 @@ object f_setup: Tf_setup
           OnChange = PageControlRotatorChange
           object RotatorIndi: TTabSheet
             Caption = 'RotatorIndi'
-            ClientHeight = 410
+            ClientHeight = 383
             ClientWidth = 477
             ParentFont = False
             object PanelRotatorIndi: TPanel
               Left = 0
-              Height = 410
+              Height = 383
               Top = 0
               Width = 477
               Align = alClient
               BevelOuter = bvNone
-              ClientHeight = 410
+              ClientHeight = 383
               ClientWidth = 477
               ParentFont = False
               TabOrder = 0
@@ -2057,6 +2115,7 @@ object f_setup: Tf_setup
                 Top = 56
                 Width = 41
                 Caption = 'Device'
+                ParentColor = False
                 ParentFont = False
               end
               object RotatorAutoLoadConfig: TCheckBox
@@ -2086,6 +2145,7 @@ object f_setup: Tf_setup
                   Top = 5
                   Width = 42
                   Caption = 'Server'
+                  ParentColor = False
                   ParentFont = False
                 end
                 object RotatorIndiServer: TEdit
@@ -2108,6 +2168,7 @@ object f_setup: Tf_setup
                   Top = 5
                   Width = 27
                   Caption = 'Port'
+                  ParentColor = False
                   ParentFont = False
                 end
                 object RotatorIndiPort: TEdit
@@ -2141,6 +2202,7 @@ object f_setup: Tf_setup
                 Width = 132
                 AutoSize = False
                 Caption = '   '
+                ParentColor = False
                 ParentFont = False
                 WordWrap = True
               end
@@ -2148,7 +2210,7 @@ object f_setup: Tf_setup
           end
           object RotatorAscom: TTabSheet
             Caption = 'RotatorAscom'
-            ClientHeight = 410
+            ClientHeight = 383
             ClientWidth = 477
             ParentFont = False
             object PanelRotatorAscom: TPanel
@@ -2157,8 +2219,8 @@ object f_setup: Tf_setup
               Top = 16
               Width = 384
               BevelOuter = bvNone
-              ClientHeight = 139
-              ClientWidth = 380
+              ClientHeight = 143
+              ClientWidth = 384
               ParentFont = False
               TabOrder = 0
               object BtnChooseRotator: TButton
@@ -2209,17 +2271,17 @@ object f_setup: Tf_setup
           end
           object RotatorAscomRest: TTabSheet
             Caption = 'RotatorAscomRest'
-            ClientHeight = 410
+            ClientHeight = 383
             ClientWidth = 477
             ParentFont = False
             object Panel5: TPanel
               Left = 0
-              Height = 410
+              Height = 383
               Top = 0
               Width = 477
               Align = alClient
               BevelOuter = bvNone
-              ClientHeight = 410
+              ClientHeight = 383
               ClientWidth = 477
               ParentFont = False
               TabOrder = 0
@@ -2247,6 +2309,7 @@ object f_setup: Tf_setup
                 Top = 40
                 Width = 51
                 Caption = 'Protocol'
+                ParentColor = False
                 ParentFont = False
               end
               object RotatorARestHost: TEdit
@@ -2265,6 +2328,7 @@ object f_setup: Tf_setup
                 Top = 40
                 Width = 163
                 Caption = 'Remote host or IP address'
+                ParentColor = False
                 ParentFont = False
               end
               object RotatorARestPort: TSpinEdit
@@ -2285,6 +2349,7 @@ object f_setup: Tf_setup
                 Top = 40
                 Width = 43
                 Caption = 'IP Port'
+                ParentColor = False
                 ParentFont = False
               end
               object RotatorARestDevice: TSpinEdit
@@ -2303,6 +2368,7 @@ object f_setup: Tf_setup
                 Top = 113
                 Width = 144
                 Caption = 'Remote device number'
+                ParentColor = False
                 ParentFont = False
               end
               object Label66: TLabel
@@ -2311,6 +2377,7 @@ object f_setup: Tf_setup
                 Top = 141
                 Width = 52
                 Caption = 'Rotator/'
+                ParentColor = False
                 ParentFont = False
               end
               object Label97: TLabel
@@ -2319,6 +2386,7 @@ object f_setup: Tf_setup
                 Top = 170
                 Width = 68
                 Caption = 'User name'
+                ParentColor = False
                 ParentFont = False
               end
               object Label98: TLabel
@@ -2327,6 +2395,7 @@ object f_setup: Tf_setup
                 Top = 170
                 Width = 58
                 Caption = 'Password'
+                ParentColor = False
                 ParentFont = False
               end
               object RotatorARestUser: TEdit
@@ -2372,6 +2441,7 @@ object f_setup: Tf_setup
                 Caption = 'Alpaca server setup'
                 Font.Color = clBlue
                 Font.Style = [fsUnderline]
+                ParentColor = False
                 ParentFont = False
                 OnClick = AlpacaServerSetupRotator
               end
@@ -2384,6 +2454,7 @@ object f_setup: Tf_setup
                 Caption = 'Alpaca rotator setup'
                 Font.Color = clBlue
                 Font.Style = [fsUnderline]
+                ParentColor = False
                 ParentFont = False
                 OnClick = AlpacaSetupRotator
               end
@@ -2514,17 +2585,17 @@ object f_setup: Tf_setup
             OnChange = PageControlMountChange
             object MountIndi: TTabSheet
               Caption = 'MountIndi'
-              ClientHeight = 260
+              ClientHeight = 233
               ClientWidth = 477
               ParentFont = False
               object PanelMountIndi: TPanel
                 Left = 0
-                Height = 260
+                Height = 233
                 Top = 0
                 Width = 477
                 Align = alClient
                 BevelOuter = bvNone
-                ClientHeight = 260
+                ClientHeight = 233
                 ClientWidth = 477
                 ParentFont = False
                 TabOrder = 0
@@ -2547,6 +2618,7 @@ object f_setup: Tf_setup
                   Top = 56
                   Width = 41
                   Caption = 'Device'
+                  ParentColor = False
                   ParentFont = False
                 end
                 object MountAutoLoadConfig: TCheckBox
@@ -2576,6 +2648,7 @@ object f_setup: Tf_setup
                     Top = 5
                     Width = 42
                     Caption = 'Server'
+                    ParentColor = False
                     ParentFont = False
                   end
                   object MountIndiServer: TEdit
@@ -2598,6 +2671,7 @@ object f_setup: Tf_setup
                     Top = 5
                     Width = 27
                     Caption = 'Port'
+                    ParentColor = False
                     ParentFont = False
                   end
                   object MountIndiPort: TEdit
@@ -2631,6 +2705,7 @@ object f_setup: Tf_setup
                   Width = 132
                   AutoSize = False
                   Caption = '   '
+                  ParentColor = False
                   ParentFont = False
                   WordWrap = True
                 end
@@ -2638,7 +2713,7 @@ object f_setup: Tf_setup
             end
             object MountAscom: TTabSheet
               Caption = 'MountAscom'
-              ClientHeight = 260
+              ClientHeight = 233
               ClientWidth = 477
               ParentFont = False
               object PanelMountAscom: TPanel
@@ -2647,8 +2722,8 @@ object f_setup: Tf_setup
                 Top = 16
                 Width = 368
                 BevelOuter = bvNone
-                ClientHeight = 157
-                ClientWidth = 364
+                ClientHeight = 161
+                ClientWidth = 368
                 ParentFont = False
                 TabOrder = 0
                 object BtnChooseMount: TButton
@@ -2699,17 +2774,17 @@ object f_setup: Tf_setup
             end
             object MountAscomRest: TTabSheet
               Caption = 'MountAscomRest'
-              ClientHeight = 260
+              ClientHeight = 233
               ClientWidth = 477
               ParentFont = False
               object Panel6: TPanel
                 Left = 0
-                Height = 260
+                Height = 233
                 Top = 0
                 Width = 477
                 Align = alClient
                 BevelOuter = bvNone
-                ClientHeight = 260
+                ClientHeight = 233
                 ClientWidth = 477
                 ParentFont = False
                 TabOrder = 0
@@ -2737,6 +2812,7 @@ object f_setup: Tf_setup
                   Top = 40
                   Width = 51
                   Caption = 'Protocol'
+                  ParentColor = False
                   ParentFont = False
                 end
                 object MountARestHost: TEdit
@@ -2755,6 +2831,7 @@ object f_setup: Tf_setup
                   Top = 40
                   Width = 163
                   Caption = 'Remote host or IP address'
+                  ParentColor = False
                   ParentFont = False
                 end
                 object MountARestPort: TSpinEdit
@@ -2775,6 +2852,7 @@ object f_setup: Tf_setup
                   Top = 40
                   Width = 43
                   Caption = 'IP Port'
+                  ParentColor = False
                   ParentFont = False
                 end
                 object MountARestDevice: TSpinEdit
@@ -2793,6 +2871,7 @@ object f_setup: Tf_setup
                   Top = 113
                   Width = 144
                   Caption = 'Remote device number'
+                  ParentColor = False
                   ParentFont = False
                 end
                 object Label67: TLabel
@@ -2801,6 +2880,7 @@ object f_setup: Tf_setup
                   Top = 141
                   Width = 66
                   Caption = 'Telescope/'
+                  ParentColor = False
                   ParentFont = False
                 end
                 object Label99: TLabel
@@ -2809,6 +2889,7 @@ object f_setup: Tf_setup
                   Top = 170
                   Width = 68
                   Caption = 'User name'
+                  ParentColor = False
                   ParentFont = False
                 end
                 object Label100: TLabel
@@ -2817,6 +2898,7 @@ object f_setup: Tf_setup
                   Top = 170
                   Width = 58
                   Caption = 'Password'
+                  ParentColor = False
                   ParentFont = False
                 end
                 object MountARestUser: TEdit
@@ -2862,6 +2944,7 @@ object f_setup: Tf_setup
                   Caption = 'Alpaca server setup'
                   Font.Color = clBlue
                   Font.Style = [fsUnderline]
+                  ParentColor = False
                   ParentFont = False
                   OnClick = AlpacaServerSetupMount
                 end
@@ -2874,6 +2957,7 @@ object f_setup: Tf_setup
                   Caption = 'Alpaca mount setup'
                   Font.Color = clBlue
                   Font.Style = [fsUnderline]
+                  ParentColor = False
                   ParentFont = False
                   OnClick = AlpacaSetupMount
                 end
@@ -2923,17 +3007,17 @@ object f_setup: Tf_setup
           OnChange = PageControlDomeChange
           object DomeIndi: TTabSheet
             Caption = 'DomeIndi'
-            ClientHeight = 410
+            ClientHeight = 383
             ClientWidth = 477
             ParentFont = False
             object PanelDomeIndi: TPanel
               Left = 0
-              Height = 410
+              Height = 383
               Top = 0
               Width = 477
               Align = alClient
               BevelOuter = bvNone
-              ClientHeight = 410
+              ClientHeight = 383
               ClientWidth = 477
               ParentFont = False
               TabOrder = 0
@@ -2956,6 +3040,7 @@ object f_setup: Tf_setup
                 Top = 56
                 Width = 41
                 Caption = 'Device'
+                ParentColor = False
                 ParentFont = False
               end
               object DomeAutoLoadConfig: TCheckBox
@@ -2985,6 +3070,7 @@ object f_setup: Tf_setup
                   Top = 5
                   Width = 42
                   Caption = 'Server'
+                  ParentColor = False
                   ParentFont = False
                 end
                 object DomeIndiServer: TEdit
@@ -3007,6 +3093,7 @@ object f_setup: Tf_setup
                   Top = 5
                   Width = 27
                   Caption = 'Port'
+                  ParentColor = False
                   ParentFont = False
                 end
                 object DomeIndiPort: TEdit
@@ -3040,6 +3127,7 @@ object f_setup: Tf_setup
                 Width = 132
                 AutoSize = False
                 Caption = '   '
+                ParentColor = False
                 ParentFont = False
                 WordWrap = True
               end
@@ -3047,7 +3135,7 @@ object f_setup: Tf_setup
           end
           object DomeAscom: TTabSheet
             Caption = 'DomeAscom'
-            ClientHeight = 410
+            ClientHeight = 383
             ClientWidth = 477
             ParentFont = False
             object PanelDomeAscom: TPanel
@@ -3056,8 +3144,8 @@ object f_setup: Tf_setup
               Top = 16
               Width = 360
               BevelOuter = bvNone
-              ClientHeight = 139
-              ClientWidth = 356
+              ClientHeight = 143
+              ClientWidth = 360
               ParentFont = False
               TabOrder = 0
               object BtnChooseDome: TButton
@@ -3108,17 +3196,17 @@ object f_setup: Tf_setup
           end
           object DomeAscomRest: TTabSheet
             Caption = 'DomeAscomRest'
-            ClientHeight = 410
+            ClientHeight = 383
             ClientWidth = 477
             ParentFont = False
             object Panel7: TPanel
               Left = 0
-              Height = 410
+              Height = 383
               Top = 0
               Width = 477
               Align = alClient
               BevelOuter = bvNone
-              ClientHeight = 410
+              ClientHeight = 383
               ClientWidth = 477
               ParentFont = False
               TabOrder = 0
@@ -3146,6 +3234,7 @@ object f_setup: Tf_setup
                 Top = 40
                 Width = 51
                 Caption = 'Protocol'
+                ParentColor = False
                 ParentFont = False
               end
               object DomeARestHost: TEdit
@@ -3164,6 +3253,7 @@ object f_setup: Tf_setup
                 Top = 40
                 Width = 163
                 Caption = 'Remote host or IP address'
+                ParentColor = False
                 ParentFont = False
               end
               object DomeARestPort: TSpinEdit
@@ -3184,6 +3274,7 @@ object f_setup: Tf_setup
                 Top = 40
                 Width = 43
                 Caption = 'IP Port'
+                ParentColor = False
                 ParentFont = False
               end
               object DomeARestDevice: TSpinEdit
@@ -3202,6 +3293,7 @@ object f_setup: Tf_setup
                 Top = 113
                 Width = 144
                 Caption = 'Remote device number'
+                ParentColor = False
                 ParentFont = False
               end
               object Label68: TLabel
@@ -3210,6 +3302,7 @@ object f_setup: Tf_setup
                 Top = 141
                 Width = 43
                 Caption = 'Dome/'
+                ParentColor = False
                 ParentFont = False
               end
               object Label101: TLabel
@@ -3218,6 +3311,7 @@ object f_setup: Tf_setup
                 Top = 170
                 Width = 68
                 Caption = 'User name'
+                ParentColor = False
                 ParentFont = False
               end
               object Label102: TLabel
@@ -3226,6 +3320,7 @@ object f_setup: Tf_setup
                 Top = 170
                 Width = 58
                 Caption = 'Password'
+                ParentColor = False
                 ParentFont = False
               end
               object DomeARestUser: TEdit
@@ -3271,6 +3366,7 @@ object f_setup: Tf_setup
                 Caption = 'Alpaca server setup'
                 Font.Color = clBlue
                 Font.Style = [fsUnderline]
+                ParentColor = False
                 ParentFont = False
                 OnClick = AlpacaServerSetupDome
               end
@@ -3283,6 +3379,7 @@ object f_setup: Tf_setup
                 Caption = 'Alpaca dome setup'
                 Font.Color = clBlue
                 Font.Style = [fsUnderline]
+                ParentColor = False
                 ParentFont = False
                 OnClick = AlpacaSetupDome
               end
@@ -3352,17 +3449,17 @@ object f_setup: Tf_setup
           OnChange = PageControlWeatherChange
           object WeatherIndi: TTabSheet
             Caption = 'WeatherIndi'
-            ClientHeight = 410
+            ClientHeight = 383
             ClientWidth = 477
             ParentFont = False
             object PanelWeatherIndi: TPanel
               Left = 0
-              Height = 410
+              Height = 383
               Top = 0
               Width = 477
               Align = alClient
               BevelOuter = bvNone
-              ClientHeight = 410
+              ClientHeight = 383
               ClientWidth = 477
               ParentFont = False
               TabOrder = 0
@@ -3385,6 +3482,7 @@ object f_setup: Tf_setup
                 Top = 56
                 Width = 41
                 Caption = 'Device'
+                ParentColor = False
                 ParentFont = False
               end
               object WeatherAutoLoadConfig: TCheckBox
@@ -3414,6 +3512,7 @@ object f_setup: Tf_setup
                   Top = 5
                   Width = 42
                   Caption = 'Server'
+                  ParentColor = False
                   ParentFont = False
                 end
                 object WeatherIndiServer: TEdit
@@ -3436,6 +3535,7 @@ object f_setup: Tf_setup
                   Top = 5
                   Width = 27
                   Caption = 'Port'
+                  ParentColor = False
                   ParentFont = False
                 end
                 object WeatherIndiPort: TEdit
@@ -3469,6 +3569,7 @@ object f_setup: Tf_setup
                 Width = 132
                 AutoSize = False
                 Caption = '   '
+                ParentColor = False
                 ParentFont = False
                 WordWrap = True
               end
@@ -3476,7 +3577,7 @@ object f_setup: Tf_setup
           end
           object WeatherAscom: TTabSheet
             Caption = 'WeatherAscom'
-            ClientHeight = 410
+            ClientHeight = 383
             ClientWidth = 477
             ParentFont = False
             object PanelWeatherAscom: TPanel
@@ -3485,8 +3586,8 @@ object f_setup: Tf_setup
               Top = 16
               Width = 348
               BevelOuter = bvNone
-              ClientHeight = 158
-              ClientWidth = 344
+              ClientHeight = 162
+              ClientWidth = 348
               ParentFont = False
               TabOrder = 0
               object BtnChooseWeather: TButton
@@ -3562,17 +3663,17 @@ object f_setup: Tf_setup
           end
           object WeatherAscomRest: TTabSheet
             Caption = 'WeatherAscomRest'
-            ClientHeight = 410
+            ClientHeight = 383
             ClientWidth = 477
             ParentFont = False
             object Panel8: TPanel
               Left = 0
-              Height = 410
+              Height = 383
               Top = 0
               Width = 477
               Align = alClient
               BevelOuter = bvNone
-              ClientHeight = 410
+              ClientHeight = 383
               ClientWidth = 477
               ParentFont = False
               TabOrder = 0
@@ -3600,6 +3701,7 @@ object f_setup: Tf_setup
                 Top = 40
                 Width = 51
                 Caption = 'Protocol'
+                ParentColor = False
                 ParentFont = False
               end
               object WeatherARestHost: TEdit
@@ -3618,6 +3720,7 @@ object f_setup: Tf_setup
                 Top = 40
                 Width = 163
                 Caption = 'Remote host or IP address'
+                ParentColor = False
                 ParentFont = False
               end
               object WeatherARestPort: TSpinEdit
@@ -3638,6 +3741,7 @@ object f_setup: Tf_setup
                 Top = 40
                 Width = 43
                 Caption = 'IP Port'
+                ParentColor = False
                 ParentFont = False
               end
               object WeatherARestDevice: TSpinEdit
@@ -3656,6 +3760,7 @@ object f_setup: Tf_setup
                 Top = 113
                 Width = 144
                 Caption = 'Remote device number'
+                ParentColor = False
                 ParentFont = False
               end
               object AscomRestWeatherType: TRadioGroup
@@ -3688,6 +3793,7 @@ object f_setup: Tf_setup
                 Top = 176
                 Width = 68
                 Caption = 'User name'
+                ParentColor = False
                 ParentFont = False
               end
               object Label104: TLabel
@@ -3696,6 +3802,7 @@ object f_setup: Tf_setup
                 Top = 176
                 Width = 58
                 Caption = 'Password'
+                ParentColor = False
                 ParentFont = False
               end
               object WeatherARestUser: TEdit
@@ -3741,6 +3848,7 @@ object f_setup: Tf_setup
                 Caption = 'Alpaca server setup'
                 Font.Color = clBlue
                 Font.Style = [fsUnderline]
+                ParentColor = False
                 ParentFont = False
                 OnClick = AlpacaServerSetupWeather
               end
@@ -3753,6 +3861,7 @@ object f_setup: Tf_setup
                 Caption = 'Alpaca weather setup'
                 Font.Color = clBlue
                 Font.Style = [fsUnderline]
+                ParentColor = False
                 ParentFont = False
                 OnClick = AlpacaSetupWeather
               end
@@ -3822,17 +3931,17 @@ object f_setup: Tf_setup
           OnChange = PageControlSafetyChange
           object SafetyIndi: TTabSheet
             Caption = 'SafetyIndi'
-            ClientHeight = 410
+            ClientHeight = 383
             ClientWidth = 477
             ParentFont = False
             object PanelSafetyIndi: TPanel
               Left = 0
-              Height = 410
+              Height = 383
               Top = 0
               Width = 477
               Align = alClient
               BevelOuter = bvNone
-              ClientHeight = 410
+              ClientHeight = 383
               ClientWidth = 477
               ParentFont = False
               TabOrder = 0
@@ -3855,6 +3964,7 @@ object f_setup: Tf_setup
                 Top = 56
                 Width = 41
                 Caption = 'Device'
+                ParentColor = False
                 ParentFont = False
               end
               object SafetyAutoLoadConfig: TCheckBox
@@ -3884,6 +3994,7 @@ object f_setup: Tf_setup
                   Top = 5
                   Width = 42
                   Caption = 'Server'
+                  ParentColor = False
                   ParentFont = False
                 end
                 object SafetyIndiServer: TEdit
@@ -3906,6 +4017,7 @@ object f_setup: Tf_setup
                   Top = 5
                   Width = 27
                   Caption = 'Port'
+                  ParentColor = False
                   ParentFont = False
                 end
                 object SafetyIndiPort: TEdit
@@ -3939,6 +4051,7 @@ object f_setup: Tf_setup
                 Width = 132
                 AutoSize = False
                 Caption = '   '
+                ParentColor = False
                 ParentFont = False
                 WordWrap = True
               end
@@ -3946,7 +4059,7 @@ object f_setup: Tf_setup
           end
           object SafetyAscom: TTabSheet
             Caption = 'SafetyAscom'
-            ClientHeight = 410
+            ClientHeight = 383
             ClientWidth = 477
             ParentFont = False
             object PanelSafetyAscom: TPanel
@@ -3955,8 +4068,8 @@ object f_setup: Tf_setup
               Top = 16
               Width = 368
               BevelOuter = bvNone
-              ClientHeight = 139
-              ClientWidth = 364
+              ClientHeight = 143
+              ClientWidth = 368
               ParentFont = False
               TabOrder = 0
               object BtnChooseSafety: TButton
@@ -4007,17 +4120,17 @@ object f_setup: Tf_setup
           end
           object SafetyAscomRest: TTabSheet
             Caption = 'SafetyAscomRest'
-            ClientHeight = 410
+            ClientHeight = 383
             ClientWidth = 477
             ParentFont = False
             object Panel9: TPanel
               Left = 0
-              Height = 410
+              Height = 383
               Top = 0
               Width = 477
               Align = alClient
               BevelOuter = bvNone
-              ClientHeight = 410
+              ClientHeight = 383
               ClientWidth = 477
               ParentFont = False
               TabOrder = 0
@@ -4045,6 +4158,7 @@ object f_setup: Tf_setup
                 Top = 40
                 Width = 51
                 Caption = 'Protocol'
+                ParentColor = False
                 ParentFont = False
               end
               object SafetyARestHost: TEdit
@@ -4063,6 +4177,7 @@ object f_setup: Tf_setup
                 Top = 40
                 Width = 163
                 Caption = 'Remote host or IP address'
+                ParentColor = False
                 ParentFont = False
               end
               object SafetyARestPort: TSpinEdit
@@ -4083,6 +4198,7 @@ object f_setup: Tf_setup
                 Top = 40
                 Width = 43
                 Caption = 'IP Port'
+                ParentColor = False
                 ParentFont = False
               end
               object SafetyARestDevice: TSpinEdit
@@ -4101,6 +4217,7 @@ object f_setup: Tf_setup
                 Top = 113
                 Width = 144
                 Caption = 'Remote device number'
+                ParentColor = False
                 ParentFont = False
               end
               object Label69: TLabel
@@ -4109,6 +4226,7 @@ object f_setup: Tf_setup
                 Top = 141
                 Width = 44
                 Caption = 'Safety/'
+                ParentColor = False
                 ParentFont = False
               end
               object Label105: TLabel
@@ -4117,6 +4235,7 @@ object f_setup: Tf_setup
                 Top = 170
                 Width = 68
                 Caption = 'User name'
+                ParentColor = False
                 ParentFont = False
               end
               object Label106: TLabel
@@ -4125,6 +4244,7 @@ object f_setup: Tf_setup
                 Top = 170
                 Width = 58
                 Caption = 'Password'
+                ParentColor = False
                 ParentFont = False
               end
               object SafetyARestUser: TEdit
@@ -4170,6 +4290,7 @@ object f_setup: Tf_setup
                 Caption = 'Alpaca server setup'
                 Font.Color = clBlue
                 Font.Style = [fsUnderline]
+                ParentColor = False
                 ParentFont = False
                 OnClick = AlpacaServerSetupSafety
               end
@@ -4182,6 +4303,7 @@ object f_setup: Tf_setup
                 Caption = 'Alpaca safety setup'
                 Font.Color = clBlue
                 Font.Style = [fsUnderline]
+                ParentColor = False
                 ParentFont = False
                 OnClick = AlpacaSetupSafety
               end
@@ -4251,17 +4373,17 @@ object f_setup: Tf_setup
           OnChange = PageControlWatchdogChange
           object WatchdogIndi: TTabSheet
             Caption = 'WatchdogIndi'
-            ClientHeight = 410
+            ClientHeight = 383
             ClientWidth = 477
             ParentFont = False
             object PanelWatchdogIndi: TPanel
               Left = 0
-              Height = 410
+              Height = 383
               Top = 0
               Width = 477
               Align = alClient
               BevelOuter = bvNone
-              ClientHeight = 410
+              ClientHeight = 383
               ClientWidth = 477
               ParentFont = False
               TabOrder = 0
@@ -4284,6 +4406,7 @@ object f_setup: Tf_setup
                 Top = 56
                 Width = 41
                 Caption = 'Device'
+                ParentColor = False
                 ParentFont = False
               end
               object WatchdogAutoLoadConfig: TCheckBox
@@ -4303,6 +4426,7 @@ object f_setup: Tf_setup
                 Top = 108
                 Width = 190
                 Caption = 'Heart beat threshold [minutes]'
+                ParentColor = False
                 ParentFont = False
               end
               object WatchdogThreshold: TEdit
@@ -4332,6 +4456,7 @@ object f_setup: Tf_setup
                   Top = 5
                   Width = 42
                   Caption = 'Server'
+                  ParentColor = False
                   ParentFont = False
                 end
                 object WatchdogIndiServer: TEdit
@@ -4354,6 +4479,7 @@ object f_setup: Tf_setup
                   Top = 5
                   Width = 27
                   Caption = 'Port'
+                  ParentColor = False
                   ParentFont = False
                 end
                 object WatchdogIndiPort: TEdit
@@ -4387,6 +4513,7 @@ object f_setup: Tf_setup
                 Width = 132
                 AutoSize = False
                 Caption = '   '
+                ParentColor = False
                 ParentFont = False
                 WordWrap = True
               end
@@ -4453,17 +4580,17 @@ object f_setup: Tf_setup
           OnChange = PageControlSwitchChange
           object SwitchIndi: TTabSheet
             Caption = 'SwitchIndi'
-            ClientHeight = 410
+            ClientHeight = 383
             ClientWidth = 477
             ParentFont = False
             object PanelSwitchIndi: TPanel
               Left = 0
-              Height = 410
+              Height = 383
               Top = 0
               Width = 477
               Align = alClient
               BevelOuter = bvNone
-              ClientHeight = 410
+              ClientHeight = 383
               ClientWidth = 477
               ParentFont = False
               TabOrder = 0
@@ -4486,6 +4613,7 @@ object f_setup: Tf_setup
                 Top = 56
                 Width = 41
                 Caption = 'Device'
+                ParentColor = False
                 ParentFont = False
               end
               object SwitchAutoLoadConfig: TCheckBox
@@ -4515,6 +4643,7 @@ object f_setup: Tf_setup
                   Top = 5
                   Width = 42
                   Caption = 'Server'
+                  ParentColor = False
                   ParentFont = False
                 end
                 object SwitchIndiServer: TEdit
@@ -4537,6 +4666,7 @@ object f_setup: Tf_setup
                   Top = 5
                   Width = 27
                   Caption = 'Port'
+                  ParentColor = False
                   ParentFont = False
                 end
                 object SwitchIndiPort: TEdit
@@ -4570,6 +4700,7 @@ object f_setup: Tf_setup
                 Width = 132
                 AutoSize = False
                 Caption = '   '
+                ParentColor = False
                 ParentFont = False
                 WordWrap = True
               end
@@ -4577,7 +4708,7 @@ object f_setup: Tf_setup
           end
           object SwitchAscom: TTabSheet
             Caption = 'SwitchAscom'
-            ClientHeight = 410
+            ClientHeight = 383
             ClientWidth = 477
             ParentFont = False
             object PanelSwitchAscom: TPanel
@@ -4586,8 +4717,8 @@ object f_setup: Tf_setup
               Top = 16
               Width = 368
               BevelOuter = bvNone
-              ClientHeight = 139
-              ClientWidth = 364
+              ClientHeight = 143
+              ClientWidth = 368
               ParentFont = False
               TabOrder = 0
               object BtnChooseSwitch: TButton
@@ -4638,17 +4769,17 @@ object f_setup: Tf_setup
           end
           object SwitchAscomRest: TTabSheet
             Caption = 'SwitchAscomRest'
-            ClientHeight = 410
+            ClientHeight = 383
             ClientWidth = 477
             ParentFont = False
             object Panel35: TPanel
               Left = 0
-              Height = 410
+              Height = 383
               Top = 0
               Width = 477
               Align = alClient
               BevelOuter = bvNone
-              ClientHeight = 410
+              ClientHeight = 383
               ClientWidth = 477
               ParentFont = False
               TabOrder = 0
@@ -4676,6 +4807,7 @@ object f_setup: Tf_setup
                 Top = 40
                 Width = 51
                 Caption = 'Protocol'
+                ParentColor = False
                 ParentFont = False
               end
               object SwitchARestHost: TEdit
@@ -4694,6 +4826,7 @@ object f_setup: Tf_setup
                 Top = 40
                 Width = 163
                 Caption = 'Remote host or IP address'
+                ParentColor = False
                 ParentFont = False
               end
               object SwitchARestPort: TSpinEdit
@@ -4714,6 +4847,7 @@ object f_setup: Tf_setup
                 Top = 40
                 Width = 43
                 Caption = 'IP Port'
+                ParentColor = False
                 ParentFont = False
               end
               object SwitchARestDevice: TSpinEdit
@@ -4732,6 +4866,7 @@ object f_setup: Tf_setup
                 Top = 113
                 Width = 144
                 Caption = 'Remote device number'
+                ParentColor = False
                 ParentFont = False
               end
               object Label115: TLabel
@@ -4740,6 +4875,7 @@ object f_setup: Tf_setup
                 Top = 141
                 Width = 44
                 Caption = 'Switch/'
+                ParentColor = False
                 ParentFont = False
               end
               object Label116: TLabel
@@ -4748,6 +4884,7 @@ object f_setup: Tf_setup
                 Top = 170
                 Width = 68
                 Caption = 'User name'
+                ParentColor = False
                 ParentFont = False
               end
               object Label117: TLabel
@@ -4756,6 +4893,7 @@ object f_setup: Tf_setup
                 Top = 170
                 Width = 58
                 Caption = 'Password'
+                ParentColor = False
                 ParentFont = False
               end
               object SwitchARestUser: TEdit
@@ -4801,6 +4939,7 @@ object f_setup: Tf_setup
                 Caption = 'Alpaca server setup'
                 Font.Color = clBlue
                 Font.Style = [fsUnderline]
+                ParentColor = False
                 ParentFont = False
                 OnClick = AlpacaServerSetupSwitch
               end
@@ -4813,6 +4952,7 @@ object f_setup: Tf_setup
                 Caption = 'Alpaca switch setup'
                 Font.Color = clBlue
                 Font.Style = [fsUnderline]
+                ParentColor = False
                 ParentFont = False
                 OnClick = AlpacaSetupSwitch
               end
@@ -4881,17 +5021,17 @@ object f_setup: Tf_setup
           OnChange = PageControlCoverChange
           object CoverIndi: TTabSheet
             Caption = 'CoverIndi'
-            ClientHeight = 410
+            ClientHeight = 383
             ClientWidth = 477
             ParentFont = False
             object PanelCoverIndi: TPanel
               Left = 0
-              Height = 410
+              Height = 383
               Top = 0
               Width = 477
               Align = alClient
               BevelOuter = bvNone
-              ClientHeight = 410
+              ClientHeight = 383
               ClientWidth = 477
               ParentFont = False
               TabOrder = 0
@@ -4914,6 +5054,7 @@ object f_setup: Tf_setup
                 Top = 56
                 Width = 41
                 Caption = 'Device'
+                ParentColor = False
                 ParentFont = False
               end
               object CoverAutoLoadConfig: TCheckBox
@@ -4943,6 +5084,7 @@ object f_setup: Tf_setup
                   Top = 5
                   Width = 42
                   Caption = 'Server'
+                  ParentColor = False
                   ParentFont = False
                 end
                 object CoverIndiServer: TEdit
@@ -4965,6 +5107,7 @@ object f_setup: Tf_setup
                   Top = 5
                   Width = 27
                   Caption = 'Port'
+                  ParentColor = False
                   ParentFont = False
                 end
                 object CoverIndiPort: TEdit
@@ -4998,6 +5141,7 @@ object f_setup: Tf_setup
                 Width = 132
                 AutoSize = False
                 Caption = '   '
+                ParentColor = False
                 ParentFont = False
                 WordWrap = True
               end
@@ -5005,7 +5149,7 @@ object f_setup: Tf_setup
           end
           object CoverAscom: TTabSheet
             Caption = 'CoverAscom'
-            ClientHeight = 410
+            ClientHeight = 383
             ClientWidth = 477
             ParentFont = False
             object PanelCoverAscom: TPanel
@@ -5014,8 +5158,8 @@ object f_setup: Tf_setup
               Top = 16
               Width = 368
               BevelOuter = bvNone
-              ClientHeight = 139
-              ClientWidth = 364
+              ClientHeight = 143
+              ClientWidth = 368
               ParentFont = False
               TabOrder = 0
               object BtnChooseCover: TButton
@@ -5066,17 +5210,17 @@ object f_setup: Tf_setup
           end
           object CoverAscomRest: TTabSheet
             Caption = 'CoverAscomRest'
-            ClientHeight = 410
+            ClientHeight = 383
             ClientWidth = 477
             ParentFont = False
             object Panel38: TPanel
               Left = 0
-              Height = 410
+              Height = 383
               Top = 0
               Width = 477
               Align = alClient
               BevelOuter = bvNone
-              ClientHeight = 410
+              ClientHeight = 383
               ClientWidth = 477
               ParentFont = False
               TabOrder = 0
@@ -5104,6 +5248,7 @@ object f_setup: Tf_setup
                 Top = 40
                 Width = 51
                 Caption = 'Protocol'
+                ParentColor = False
                 ParentFont = False
               end
               object CoverARestHost: TEdit
@@ -5122,6 +5267,7 @@ object f_setup: Tf_setup
                 Top = 40
                 Width = 163
                 Caption = 'Remote host or IP address'
+                ParentColor = False
                 ParentFont = False
               end
               object CoverARestPort: TSpinEdit
@@ -5142,6 +5288,7 @@ object f_setup: Tf_setup
                 Top = 40
                 Width = 43
                 Caption = 'IP Port'
+                ParentColor = False
                 ParentFont = False
               end
               object CoverARestDevice: TSpinEdit
@@ -5160,6 +5307,7 @@ object f_setup: Tf_setup
                 Top = 113
                 Width = 144
                 Caption = 'Remote device number'
+                ParentColor = False
                 ParentFont = False
               end
               object Label124: TLabel
@@ -5168,6 +5316,7 @@ object f_setup: Tf_setup
                 Top = 141
                 Width = 99
                 Caption = 'Covercalibrator/'
+                ParentColor = False
                 ParentFont = False
               end
               object Label125: TLabel
@@ -5176,6 +5325,7 @@ object f_setup: Tf_setup
                 Top = 170
                 Width = 68
                 Caption = 'User name'
+                ParentColor = False
                 ParentFont = False
               end
               object Label126: TLabel
@@ -5184,6 +5334,7 @@ object f_setup: Tf_setup
                 Top = 170
                 Width = 58
                 Caption = 'Password'
+                ParentColor = False
                 ParentFont = False
               end
               object CoverARestUser: TEdit
@@ -5229,6 +5380,7 @@ object f_setup: Tf_setup
                 Caption = 'Alpaca server setup'
                 Font.Color = clBlue
                 Font.Style = [fsUnderline]
+                ParentColor = False
                 ParentFont = False
                 OnClick = AlpacaServerSetupCover
               end
@@ -5241,6 +5393,7 @@ object f_setup: Tf_setup
                 Caption = 'Alpaca calibrator setup'
                 Font.Color = clBlue
                 Font.Style = [fsUnderline]
+                ParentColor = False
                 ParentFont = False
                 OnClick = AlpacaSetupCover
               end
@@ -5268,6 +5421,475 @@ object f_setup: Tf_setup
                 Brush.Color = clSilver
               end
             end
+          end
+        end
+      end
+      object GuideCamera: TTabSheet
+        Caption = 'Guide camera'
+        ClientHeight = 454
+        ClientWidth = 487
+        object PageControlGuideCamera: TPageControl
+          Left = 0
+          Height = 414
+          Top = 40
+          Width = 487
+          ActivePage = GuideCameraIndi
+          Align = alClient
+          ParentFont = False
+          TabIndex = 0
+          TabOrder = 0
+          OnChange = PageControlCameraChange
+          object GuideCameraIndi: TTabSheet
+            Caption = 'CameraIndi'
+            ClientHeight = 383
+            ClientWidth = 477
+            ParentFont = False
+            object PanelGuideCameraIndi: TPanel
+              Left = 0
+              Height = 383
+              Top = 0
+              Width = 477
+              Align = alClient
+              BevelOuter = bvNone
+              ClientHeight = 383
+              ClientWidth = 477
+              ParentFont = False
+              TabOrder = 0
+              object GuideCameraIndiDevice: TComboBox
+                Left = 96
+                Height = 28
+                Top = 50
+                Width = 170
+                Constraints.MaxHeight = 28
+                ItemHeight = 0
+                OnChange = GuideCameraIndiDeviceChange
+                ParentFont = False
+                Style = csDropDownList
+                TabOrder = 0
+              end
+              object Label142: TLabel
+                AnchorSideTop.Control = GuideCameraIndiDevice
+                AnchorSideTop.Side = asrCenter
+                Left = 8
+                Height = 19
+                Top = 55
+                Width = 41
+                Caption = 'Device'
+                ParentColor = False
+                ParentFont = False
+              end
+              object Label143: TLabel
+                AnchorSideTop.Control = GuideIndiSensor
+                AnchorSideTop.Side = asrCenter
+                Left = 8
+                Height = 19
+                Top = 88
+                Width = 43
+                Caption = 'Sensor'
+                ParentColor = False
+                ParentFont = False
+              end
+              object GuideIndiSensor: TComboBox
+                Left = 96
+                Height = 28
+                Top = 83
+                Width = 170
+                Constraints.MaxHeight = 28
+                ItemHeight = 0
+                Items.Strings = (
+                  'Main sensor'
+                  'Guider sensor'
+                )
+                OnChange = GuideIndiSensorChange
+                ParentFont = False
+                Style = csDropDownList
+                TabOrder = 1
+              end
+              object GuideCameraAutoLoadConfig: TCheckBox
+                Left = 9
+                Height = 21
+                Top = 154
+                Width = 206
+                Caption = 'Load configuration on startup'
+                ParentFont = False
+                TabOrder = 2
+              end
+              object Panel39: TPanel
+                Left = 0
+                Height = 38
+                Top = 8
+                Width = 412
+                BevelOuter = bvNone
+                ClientHeight = 38
+                ClientWidth = 412
+                ParentFont = False
+                TabOrder = 3
+                object Label145: TLabel
+                  AnchorSideTop.Control = GuideCameraIndiPort
+                  AnchorSideTop.Side = asrCenter
+                  Left = 8
+                  Height = 19
+                  Top = 5
+                  Width = 42
+                  Caption = 'Server'
+                  ParentColor = False
+                  ParentFont = False
+                end
+                object GuideCameraIndiServer: TEdit
+                  AnchorSideTop.Control = GuideCameraIndiPort
+                  AnchorSideTop.Side = asrCenter
+                  Left = 96
+                  Height = 28
+                  Top = 0
+                  Width = 121
+                  Constraints.MaxHeight = 28
+                  ParentFont = False
+                  TabOrder = 0
+                  Text = 'localhost'
+                end
+                object Label146: TLabel
+                  AnchorSideTop.Control = GuideCameraIndiPort
+                  AnchorSideTop.Side = asrCenter
+                  Left = 232
+                  Height = 19
+                  Top = 5
+                  Width = 27
+                  Caption = 'Port'
+                  ParentColor = False
+                  ParentFont = False
+                end
+                object GuideCameraIndiPort: TEdit
+                  Left = 275
+                  Height = 28
+                  Top = 0
+                  Width = 81
+                  Constraints.MaxHeight = 28
+                  ParentFont = False
+                  TabOrder = 1
+                  Text = '7624'
+                end
+              end
+              object GetIndi11: TButton
+                Tag = 12
+                AnchorSideTop.Control = GuideCameraIndiDevice
+                AnchorSideTop.Side = asrCenter
+                Left = 275
+                Height = 25
+                Top = 52
+                Width = 75
+                Caption = 'Get'
+                OnClick = GetIndiClick
+                ParentFont = False
+                TabOrder = 4
+              end
+              object GuideCameraMsg: TLabel
+                Left = 275
+                Height = 54
+                Top = 87
+                Width = 132
+                AutoSize = False
+                Caption = '   '
+                ParentColor = False
+                ParentFont = False
+                WordWrap = True
+              end
+            end
+          end
+          object GuideCameraAscom: TTabSheet
+            Caption = 'CameraAscom'
+            ClientHeight = 383
+            ClientWidth = 477
+            ParentFont = False
+            object PanelGuideCameraAscom: TPanel
+              Left = 16
+              Height = 266
+              Top = 16
+              Width = 456
+              BevelOuter = bvNone
+              ClientHeight = 266
+              ClientWidth = 456
+              ParentFont = False
+              TabOrder = 0
+              object BtnChooseGuideCamera: TButton
+                Tag = 12
+                Left = 228
+                Height = 25
+                Top = 16
+                Width = 108
+                Caption = 'Choose'
+                OnClick = BtnChooseClick
+                ParentFont = False
+                TabOrder = 0
+              end
+              object AscomGuideCamera: TEdit
+                AnchorSideTop.Control = BtnChooseGuideCamera
+                AnchorSideTop.Side = asrCenter
+                Left = 14
+                Height = 28
+                Top = 14
+                Width = 210
+                Constraints.MaxHeight = 28
+                ParentFont = False
+                TabOrder = 1
+              end
+              object BtnSetupGuideCamera: TButton
+                Tag = 12
+                Left = 228
+                Height = 25
+                Top = 49
+                Width = 108
+                Caption = 'Setup'
+                OnClick = BtnSetupAscomClick
+                ParentFont = False
+                TabOrder = 2
+              end
+              object BtnAboutGuideCamera: TButton
+                Tag = 12
+                Left = 228
+                Height = 25
+                Top = 81
+                Width = 108
+                Caption = 'About'
+                OnClick = BtnAboutAscomClick
+                ParentFont = False
+                TabOrder = 3
+              end
+            end
+          end
+          object GuideCameraAscomRest: TTabSheet
+            Caption = 'CameraAscomRest'
+            ClientHeight = 383
+            ClientWidth = 477
+            ParentFont = False
+            object Panel40: TPanel
+              Left = 0
+              Height = 383
+              Top = 0
+              Width = 477
+              Align = alClient
+              BevelOuter = bvNone
+              ClientHeight = 383
+              ClientWidth = 477
+              ParentFont = False
+              TabOrder = 0
+              object GuideCameraARestProtocol: TComboBox
+                Left = 13
+                Height = 28
+                Top = 65
+                Width = 75
+                Constraints.MaxHeight = 28
+                ItemHeight = 0
+                ItemIndex = 0
+                Items.Strings = (
+                  'http:'
+                  'https:'
+                )
+                OnChange = GuideCameraARestProtocolChange
+                ParentFont = False
+                Style = csDropDownList
+                TabOrder = 0
+                Text = 'http:'
+              end
+              object Label147: TLabel
+                Left = 13
+                Height = 19
+                Top = 40
+                Width = 51
+                Caption = 'Protocol'
+                ParentColor = False
+                ParentFont = False
+              end
+              object GuideCameraARestHost: TEdit
+                Left = 93
+                Height = 28
+                Top = 65
+                Width = 194
+                Constraints.MaxHeight = 28
+                ParentFont = False
+                TabOrder = 1
+                Text = '127.0.0.1'
+              end
+              object Label148: TLabel
+                Left = 93
+                Height = 19
+                Top = 40
+                Width = 163
+                Caption = 'Remote host or IP address'
+                ParentColor = False
+                ParentFont = False
+              end
+              object GuideCameraARestPort: TSpinEdit
+                Left = 291
+                Height = 28
+                Top = 65
+                Width = 82
+                Constraints.MaxHeight = 28
+                MaxValue = 65535
+                MinValue = 1
+                ParentFont = False
+                TabOrder = 2
+                Value = 11111
+              end
+              object Label149: TLabel
+                Left = 291
+                Height = 19
+                Top = 40
+                Width = 43
+                Caption = 'IP Port'
+                ParentColor = False
+                ParentFont = False
+              end
+              object GuideCameraARestDevice: TSpinEdit
+                Left = 93
+                Height = 28
+                Top = 137
+                Width = 82
+                Constraints.MaxHeight = 28
+                MaxValue = 65535
+                ParentFont = False
+                TabOrder = 3
+              end
+              object Label150: TLabel
+                Left = 93
+                Height = 19
+                Top = 113
+                Width = 144
+                Caption = 'Remote device number'
+                ParentColor = False
+                ParentFont = False
+              end
+              object Label151: TLabel
+                Left = 16
+                Height = 19
+                Top = 141
+                Width = 52
+                Caption = 'Camera/'
+                ParentColor = False
+                ParentFont = False
+              end
+              object Label152: TLabel
+                Left = 159
+                Height = 19
+                Top = 170
+                Width = 58
+                Caption = 'Password'
+                ParentColor = False
+                ParentFont = False
+              end
+              object Label153: TLabel
+                Left = 16
+                Height = 19
+                Top = 170
+                Width = 68
+                Caption = 'User name'
+                ParentColor = False
+                ParentFont = False
+              end
+              object GuideCameraARestUser: TEdit
+                Left = 16
+                Height = 28
+                Top = 190
+                Width = 131
+                AutoSelect = False
+                Constraints.MaxHeight = 28
+                ParentFont = False
+                TabOrder = 4
+              end
+              object GuideCameraARestPass: TEdit
+                Left = 159
+                Height = 28
+                Top = 190
+                Width = 131
+                AutoSelect = False
+                Constraints.MaxHeight = 28
+                EchoMode = emPassword
+                ParentFont = False
+                PasswordChar = '*'
+                TabOrder = 5
+              end
+              object AlpacaGuideCameraList: TComboBox
+                Left = 13
+                Height = 28
+                Top = 5
+                Width = 360
+                Constraints.MaxHeight = 28
+                ItemHeight = 0
+                OnChange = AlpacaGuideCameraListChange
+                ParentFont = False
+                Style = csDropDownList
+                TabOrder = 6
+              end
+              object Label154: TLabel
+                Cursor = crHandPoint
+                Left = 291
+                Height = 19
+                Top = 128
+                Width = 122
+                Caption = 'Alpaca server setup'
+                Font.Color = clBlue
+                Font.Style = [fsUnderline]
+                ParentColor = False
+                ParentFont = False
+                OnClick = AlpacaServerSetupGuideCamera
+              end
+              object Label155: TLabel
+                Cursor = crHandPoint
+                Left = 291
+                Height = 19
+                Top = 152
+                Width = 126
+                Caption = 'Alpaca camera setup'
+                Font.Color = clBlue
+                Font.Style = [fsUnderline]
+                ParentColor = False
+                ParentFont = False
+                OnClick = AlpacaSetupGuideCamera
+              end
+              object DiscoverLed11: TShape
+                AnchorSideLeft.Control = BtnDiscover11
+                AnchorSideLeft.Side = asrCenter
+                AnchorSideBottom.Control = BtnDiscover11
+                Left = 389
+                Height = 8
+                Top = 54
+                Width = 72
+                Anchors = [akLeft, akBottom]
+                BorderSpacing.Bottom = 4
+                Brush.Color = clSilver
+              end
+              object BtnDiscover11: TButton
+                AnchorSideTop.Side = asrCenter
+                Left = 384
+                Height = 25
+                Top = 66
+                Width = 82
+                Caption = 'Discover'
+                OnClick = BtnDiscoverClick
+                ParentFont = False
+                TabOrder = 7
+              end
+            end
+          end
+        end
+        object Panel41: TPanel
+          Left = 0
+          Height = 40
+          Top = 0
+          Width = 487
+          Align = alTop
+          BevelOuter = bvNone
+          ClientHeight = 40
+          ClientWidth = 487
+          ParentFont = False
+          TabOrder = 1
+          object DeviceGuideCamera: TCheckBox
+            Left = 16
+            Height = 21
+            Top = 8
+            Width = 134
+            Caption = 'Use guide camera'
+            ParentFont = False
+            TabOrder = 0
           end
         end
       end

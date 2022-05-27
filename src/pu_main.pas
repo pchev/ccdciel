@@ -130,6 +130,8 @@ type
     MenuDarkInfo2: TMenuItem;
     MenuChangelog: TMenuItem;
     MenuInternalguider: TMenuItem;
+    MenuAscomGuideCameraSetup: TMenuItem;
+    MenuAlpacaGuideCameraSetup: TMenuItem;
     MenuViewInternalguider: TMenuItem;
     MenuItemImageInspection2: TMenuItem;
     MenuItemImageInspection: TMenuItem;
@@ -187,6 +189,7 @@ type
     MenuRotator: TMenuItem;
     MenuViewRotator: TMenuItem;
     OpenPictureDialog1: TOpenDialog;
+    PanelRight6: TPanel;
     PanelMsgTabs: TPanel;
     PanelRight: TPanel;
     MagnifyerTimer: TTimer;
@@ -197,6 +200,7 @@ type
     ScrollBox1: TScrollBox;
     Splitter1: TSplitter;
     TabMsgLevel: TTabControl;
+    PageInternalGuider: TTabSheet;
     TimerStampTimer: TTimer;
     MenuPdfHelp: TMenuItem;
     MenuOnlineHelp: TMenuItem;
@@ -343,6 +347,7 @@ type
     TBCapture: TToolButton;
     TBSequence: TToolButton;
     TBVideo: TToolButton;
+    TBInternalGuider: TToolButton;
     procedure AbortTimerTimer(Sender: TObject);
     procedure CameraConnectTimerTimer(Sender: TObject);
     procedure ConnectTimerTimer(Sender: TObject);
@@ -496,7 +501,7 @@ type
     procedure TimerStampTimerTimer(Sender: TObject);
   private
     { private declarations }
-    camera: T_camera;
+    camera, guidecamera: T_camera;
     wheel: T_wheel;
     focuser: T_focuser;
     rotator: T_rotator;
@@ -510,7 +515,7 @@ type
     autoguider:T_autoguider;
     planetarium:TPlanetarium;
     astrometry:TAstrometry;
-    WantCamera,WantWheel,WantFocuser,WantRotator, WantMount, WantDome, WantWeather, WantSafety, WantSwitch, WantCover, WantWatchdog: boolean;
+    WantCamera,WantGuideCamera,WantWheel,WantFocuser,WantRotator, WantMount, WantDome, WantWeather, WantSafety, WantSwitch, WantCover, WantWatchdog: boolean;
     CameraInitialized: boolean;
     FOpenSetup: boolean;
     f_devicesconnection: Tf_devicesconnection;
@@ -666,6 +671,9 @@ type
     Procedure DisconnectCover(Sender: TObject);
     Procedure ConnectDome(Sender: TObject);
     Procedure DisconnectDome(Sender: TObject);
+    Procedure ConnectGuideCamera(Sender: TObject);
+    Procedure DisconnectGuideCamera(Sender: TObject);
+    Procedure GuideCameraStatus(Sender: TObject);
     Procedure SetFilter(Sender: TObject);
     Procedure SetFilterMenu;
     procedure ShowMsgTabs(Sender: TObject);
@@ -1838,6 +1846,37 @@ begin
    camera.onAbortExposure:=@CameraExposureAborted;
    camera.onGainStatus:=@GainStatus;
 
+   aInt:=TDevInterface(config.GetValue('/GuideCameraInterface',ord(DefaultInterface)));
+   case aInt of
+     INDI:  guidecamera:=T_indicamera.Create(nil);
+     ASCOM: guidecamera:=T_ascomcamera.Create(nil);
+     ASCOMREST: guidecamera:=T_ascomrestcamera.Create(nil);
+   end;
+   guidecamera.Mount:=mount;
+   guidecamera.Fits:=fits;
+   guidecamera.onMsg:=@NewMessage;
+   guidecamera.onDeviceMsg:=@DeviceMessage;
+   guidecamera.onStatusChange:=@GuideCameraStatus;
+{   camera.onExposureProgress:=@CameraProgress;
+   camera.onFrameChange:=@FrameChange;
+   camera.onTemperatureChange:=@CameraTemperatureChange;
+   camera.onCoolerPowerChange:=@CameraCoolerPowerChange;
+   camera.onCoolerChange:=@CameraCoolerChange;
+   camera.onFnumberChange:=@CameraFnumberChange;
+   camera.onNewImage:=@CameraNewImage;
+   camera.onNewExposure:=@CameraNewExposure;
+   camera.onVideoFrame:=@CameraVideoFrame;
+   camera.onVideoPreviewChange:=@CameraVideoPreviewChange;
+   camera.onVideoRecordChange:=@CameraVideoRecordChange;
+   camera.onVideoSizeChange:=@CameraVideoSizeChange;
+   camera.onVideoRateChange:=@CameraVideoRateChange;
+   camera.onFPSChange:=@CameraFPSChange;
+   camera.onVideoExposureChange:=@CameraVideoExposureChange;
+   camera.onEncoderChange:=@CameraVideoEncoderChange;
+   camera.onCameraDisconnected:=@CameraDisconnected;
+   camera.onAbortExposure:=@CameraExposureAborted;
+   camera.onGainStatus:=@GainStatus; }
+
    if config.GetValue('/Devices/Watchdog',false) then begin
      watchdog:=T_indiwatchdog.Create(nil);
      watchdog.onMsg:=@NewMessage;
@@ -1902,6 +1941,7 @@ begin
  safety.Free;
  switch.Free;
  cover.Free;
+ guidecamera.Free;
  except
  end;
 end;
@@ -2354,6 +2394,7 @@ begin
   WantSwitch:=config.GetValue('/Devices/Switch',false);
   WantCover:=config.GetValue('/Devices/Cover',false);
   WantWatchdog:=(watchdog<>nil) and config.GetValue('/Devices/Watchdog',false);
+  WantGuideCamera:=config.GetValue('/Devices/GuideCamera',false);
 
   MenuAscomCameraSetup.Visible:=WantCamera and (camera.CameraInterface=ASCOM);
   MenuAscomWheelSetup.Visible:=WantWheel and (wheel.WheelInterface=ASCOM);
@@ -2365,6 +2406,7 @@ begin
   MenuAscomDomeSetup.Visible:=WantDome and (dome.DomeInterface=ASCOM);
   MenuAscomSwitchSetup.Visible:=WantSwitch and (switch.SwitchInterface=ASCOM);
   MenuAscomCoverSetup.Visible:=WantCover and (cover.CoverInterface=ASCOM);
+  MenuAscomGuideCameraSetup.Visible:=WantGuideCamera and (guidecamera.CameraInterface=ASCOM);
 
   MenuAlpacaServerSetup.Visible:=WantCamera and (camera.CameraInterface=ASCOMREST);
   MenuAlpacaCameraSetup.Visible:=WantCamera and (camera.CameraInterface=ASCOMREST);
@@ -2377,10 +2419,14 @@ begin
   MenuAlpacaDomeSetup.Visible:=WantDome and (dome.DomeInterface=ASCOMREST);
   MenuAlpacaSwitchSetup.Visible:=WantSwitch and (switch.SwitchInterface=ASCOMREST);
   MenuAlpacaCoverSetup.Visible:=WantCover and (cover.CoverInterface=ASCOMREST);
+  MenuAlpacaGuideCameraSetup.Visible:=WantGuideCamera and (guidecamera.CameraInterface=ASCOMREST);
 
   MenuIndiSettings.Visible:= (camera.CameraInterface=INDI)or(wheel.WheelInterface=INDI)or(focuser.FocuserInterface=INDI)or
                              (mount.MountInterface=INDI)or(rotator.RotatorInterface=INDI)or(weather.WeatherInterface=INDI)or
-                             (safety.SafetyInterface=INDI)or(dome.DomeInterface=INDI)or(switch.SwitchInterface=INDI)or(cover.CoverInterface=INDI);
+                             (safety.SafetyInterface=INDI)or(dome.DomeInterface=INDI)or(switch.SwitchInterface=INDI)or
+                             (cover.CoverInterface=INDI)or(guidecamera.CameraInterface=INDI);
+
+  TBInternalGuider.Visible:=WantGuideCamera;
 
   SetTool(f_visu,'Histogram',PanelBottom,0,MenuViewHistogram,MenuHistogram,true);
   SetTool(f_msg,'Messages',PanelBottom,f_visu.left+1,MenuViewMessages,nil,true);
@@ -2389,8 +2435,7 @@ begin
   SetTool(f_autoguider,'Autoguider',PanelRight1,f_devicesconnection.top+1,MenuViewAutoguider,MenuAutoguider,true);
   SetTool(f_planetarium,'Planetarium',PanelRight1,f_autoguider.top+1,MenuViewPlanetarium,MenuPlanetarium,true);
   SetTool(f_preview,'Preview',PanelRight1,f_planetarium.top+1,MenuViewPreview,MenuPreview,true);
-  SetTool(f_internalguider,'InternalGuider',PanelRight1,f_preview.top+1,MenuViewInternalGuider,MenuInternalGuider,true);
-  SetTool(f_script,'Script',PanelRight1,f_internalguider.top+1,MenuViewScript,MenuScript,true);
+  SetTool(f_script,'Script',PanelRight1,f_preview.top+1,MenuViewScript,MenuScript,true);
   SetTool(f_dome,'Dome',PanelRight1,f_script.top+1,MenuViewDome,nil,WantDome);
   SetTool(f_weather,'Weather',PanelRight1,f_dome.top+1,MenuViewWeather,nil,WantWeather);
   SetTool(f_safety,'Safety',PanelRight1,f_weather.top+1,MenuViewSafety,nil,WantSafety);
@@ -2411,6 +2456,9 @@ begin
   SetTool(f_sequence,'Sequence',PanelRight4,0,MenuViewSequence,MenuSequence,true);
 
   SetTool(f_video,'Video',PanelRight5,0,MenuViewVideo,MenuVideo,true);
+
+  SetTool(f_internalguider,'InternalGuider',PanelRight6,0,MenuViewInternalGuider,MenuInternalGuider,WantGuideCamera);
+
 
   MenuViewClock.Checked:=screenconfig.GetValue('/Tools/Clock/Visible',true);
   MenuViewClockClick(nil);
@@ -2717,6 +2765,8 @@ if sender is TMenuItem then begin
     SetTool(f_sequence,'',PanelRight4,0,MenuViewSequence,MenuSequence,true);
 
     SetTool(f_video,'',PanelRight5,0,MenuViewVideo,MenuVideo,true);
+
+    SetTool(f_internalguider,'',PanelRight6,0,MenuViewInternalguider,MenuInternalguider,WantGuideCamera);
   end
   else if n=2 then begin
     // use left and right panel
@@ -2750,6 +2800,8 @@ if sender is TMenuItem then begin
    SetTool(f_sequence,'',PanelRight4,0,MenuViewSequence,MenuSequence,true);
 
    SetTool(f_video,'',PanelRight5,0,MenuViewVideo,MenuVideo,true);
+
+   SetTool(f_internalguider,'',PanelRight6,0,MenuViewInternalguider,MenuInternalguider,WantGuideCamera);
   end;
   for i:=0 to MaxMenulevel do AccelList[i]:='';
   SetMenuAccelerator(MainMenu1.items,0,AccelList);
@@ -3673,6 +3725,8 @@ if config.GetValue('/INDIcamera/Server','')='' then begin
    config.SetValue('/INDIswitch/ServerPort',defaultindiport);
    config.SetValue('/INDIcover/Server',defautindiserver);
    config.SetValue('/INDIcover/ServerPort',defaultindiport);
+   config.SetValue('/INDIguidecamera/Server',defautindiserver);
+   config.SetValue('/INDIguidecamera/ServerPort',defaultindiport);
 end;
 case camera.CameraInterface of
    INDI : CameraName:=config.GetValue('/INDIcamera/Device','');
@@ -3732,6 +3786,12 @@ case cover.CoverInterface of
    ASCOM: CoverName:=config.GetValue('/ASCOMcover/Device','');
    ASCOMREST: CoverName:='CoverCalibrator/'+IntToStr(config.GetValue('/ASCOMRestcover/Device',0));
 end;
+case guidecamera.CameraInterface of
+   INDI : GuideCameraName:=config.GetValue('/INDIguidecamera/Device','');
+   ASCOM: GuideCameraName:=config.GetValue('/ASCOMguidecamera/Device','');
+   ASCOMREST: GuideCameraName:='Camera/'+IntToStr(config.GetValue('/ASCOMRestguidecamera/Device',0));
+end;
+
 DeviceTimeout:=config.GetValue('/Devices/Timeout',100);
 camera.Timeout:=DeviceTimeout;
 focuser.Timeout:=DeviceTimeout;
@@ -3743,6 +3803,7 @@ weather.Timeout:=DeviceTimeout;
 safety.Timeout:=DeviceTimeout;
 switch.Timeout:=DeviceTimeout;
 cover.Timeout:=DeviceTimeout;
+guidecamera.Timeout:=DeviceTimeout;
 wheel.AutoLoadConfig:=config.GetValue('/INDIwheel/AutoLoadConfig',false);
 focuser.AutoLoadConfig:=config.GetValue('/INDIfocuser/AutoLoadConfig',false);
 rotator.AutoLoadConfig:=config.GetValue('/INDIrotator/AutoLoadConfig',false);
@@ -3767,6 +3828,7 @@ weather.AutoLoadConfig:=config.GetValue('/INDIweather/AutoLoadConfig',false);
 safety.AutoLoadConfig:=config.GetValue('/INDIsafety/AutoLoadConfig',false);
 switch.AutoLoadConfig:=config.GetValue('/INDIswitch/AutoLoadConfig',false);
 cover.AutoLoadConfig:=config.GetValue('/INDIcover/AutoLoadConfig',false);
+guidecamera.AutoLoadConfig:=config.GetValue('/INDIguidecamera/AutoLoadConfig',false);
 if watchdog<>nil then begin
   watchdog.Timeout:=DeviceTimeout;
   WatchdogName:=config.GetValue('/INDIwatchdog/Device','');
@@ -4336,7 +4398,7 @@ begin
  screenconfig.SetValue('/Tools/Switch/Left',f_switch.Left);
 
  screenconfig.SetValue('/Tools/InternalGuider/Parent',f_internalguider.Parent.Name);
- screenconfig.SetValue('/Tools/InternalGuider/Visible',f_internalguider.Visible);
+ screenconfig.SetValue('/Tools/InternalGuider/Visible',f_internalguider.Visible or (not WantGuideCamera));
  screenconfig.SetValue('/Tools/InternalGuider/Top',f_internalguider.Top);
  screenconfig.SetValue('/Tools/InternalGuider/Left',f_internalguider.Left);
 
@@ -4564,6 +4626,12 @@ try
     MenuSetup.Click;
     exit;
   end;
+  if WantGuideCamera and (GuideCameraName='') then begin
+    f_devicesconnection.BtnConnect.Caption:=rsConnect;
+    ShowMessage(rsPleaseConfig+blank+rsGuideCamera);
+    MenuSetup.Click;
+    exit;
+  end;
 
   f_devicesconnection.LabelCamera.Visible:=WantCamera;
   f_devicesconnection.LabelWheel.Visible:=WantWheel;
@@ -4575,6 +4643,7 @@ try
   f_devicesconnection.LabelSafety.Visible:=WantSafety;
   f_devicesconnection.LabelSwitch.Visible:=WantSwitch;
   f_devicesconnection.LabelCover.Visible:=WantCover;
+  f_devicesconnection.LabelGuideCamera.Visible:=WantGuideCamera;
   f_devicesconnection.LabelWatchdog.Visible:=WantWatchdog;
   f_devicesconnection.PanelDev.Visible:=true;
 
@@ -4598,6 +4667,8 @@ try
   Application.ProcessMessages;
   if WantCover  then ConnectCover(Sender);
   Application.ProcessMessages;
+  if WantGuideCamera  then ConnectGuideCamera(Sender);
+  Application.ProcessMessages;
   if WantWatchdog then ConnectWatchdog(Sender);
   if f_autoguider.BtnConnect.Caption=rsConnect then AutoguiderConnectClick(Sender);
   if f_planetarium.BtnConnect.Caption=rsConnect then PlanetariumConnectClick(Sender);
@@ -4610,8 +4681,10 @@ begin
    if (sender=nil) or (MessageDlg(rsAreYouSureYo, mtConfirmation, mbYesNo, 0)=mrYes) then begin
      NewMessage(rsDisconnectin,9);
      if camera.Status=devConnected then camera.AbortExposure;
+     if guidecamera.Status=devConnected then guidecamera.AbortExposure;
      f_preview.stop;
      f_capture.stop;
+     f_internalguider.ButtonStopClick(nil);
      RunningCapture:=false;
      StatusBar1.Panels[panelstatus].Text:='';
      DisconnectCamera(Sender); // disconnect camera first
@@ -4624,6 +4697,7 @@ begin
      DisconnectSafety(Sender);
      DisconnectSwitch(Sender);
      DisconnectCover(Sender);
+     DisconnectGuideCamera(Sender);
      DisconnectWatchdog(Sender);
    end;
 end;
@@ -4642,6 +4716,7 @@ begin
      9:  if WantSafety  then ConnectSafety(nil);
      10: if WantSwitch  then ConnectSwitch(nil);
      11: if WantCover   then ConnectCover(nil);
+     12: if WantGuideCamera then ConnectGuideCamera(nil);
   end;
 end;
 
@@ -4659,6 +4734,7 @@ begin
     9:  DisconnectSafety(nil);
     10: DisconnectSwitch(nil);
     11: DisconnectCover(nil);
+    12: DisconnectGuideCamera(nil);
  end;
 end;
 
@@ -4772,6 +4848,14 @@ allcount:=0; upcount:=0; downcount:=0; concount:=0;
  if WantCover then begin
    inc(allcount);
    case cover.Status of
+     devConnected: inc(upcount);
+     devDisconnected: inc(downcount);
+     devConnecting: inc(concount);
+   end;
+ end;
+ if WantGuideCamera then begin
+   inc(allcount);
+   case guidecamera.Status of
      devConnected: inc(upcount);
      devDisconnected: inc(downcount);
      devConnecting: inc(concount);
@@ -5124,6 +5208,60 @@ begin
   f_EditTargets.StepList.Columns[pcolfstop-1].Visible:=false;
  end;
 end;
+
+Procedure Tf_main.ConnectGuideCamera(Sender: TObject);
+begin
+   case guidecamera.CameraInterface of
+    INDI : begin
+           guidecamera.IndiTransfert:=itNetwork;
+           guidecamera.Connect(config.GetValue('/INDIguidecamera/Server',''),
+                          config.GetValue('/INDIguidecamera/ServerPort',''),
+                          config.GetValue('/INDIguidecamera/Device',''),
+                          config.GetValue('/INDIguidecamera/Sensor','CCD1'));
+           end;
+    ASCOM: begin
+           guidecamera.UseCameraStartTime:=false;
+           guidecamera.FixPixelRange:=false;
+           guidecamera.Connect(config.GetValue('/ASCOMguidecamera/Device',''));
+           end;
+    ASCOMREST: begin
+           guidecamera.UseCameraStartTime:=false;
+           guidecamera.FixPixelRange:=false;
+           guidecamera.Connect(config.GetValue('/ASCOMRestguidecamera/Host',''),
+                          IntToStr(config.GetValue('/ASCOMRestguidecamera/Port',0)),
+                          ProtocolName[config.GetValue('/ASCOMRestguidecamera/Protocol',0)],
+                          'camera/'+IntToStr(config.GetValue('/ASCOMRestguidecamera/Device',0)),
+                          DecryptStr(hextostr(credentialconfig.GetValue('/ASCOMRestguidecamera/User','')), encryptpwd),
+                          DecryptStr(hextostr(credentialconfig.GetValue('/ASCOMRestguidecamera/Pass','')), encryptpwd));
+
+           end;
+  end;
+end;
+
+Procedure Tf_main.DisconnectGuideCamera(Sender: TObject);
+begin
+if guidecamera.Status<>devDisconnected then guidecamera.Disconnect;
+end;
+
+Procedure Tf_main.GuideCameraStatus(Sender: TObject);
+begin
+case guidecamera.Status of
+  devDisconnected:begin
+                      f_devicesconnection.LabelGuideCamera.Font.Color:=clRed;
+                  end;
+  devConnecting:  begin
+                      NewMessage(Format(rsConnecting, [rsGuideCamera+' '+DevInterfaceName[ord(guidecamera.CameraInterface)]+' "'+guidecamera.DeviceName+'" '+ellipsis]), 2);
+                      f_devicesconnection.LabelGuideCamera.Font.Color:=clOrange;
+                   end;
+  devConnected:   begin
+                      if f_devicesconnection.LabelGuideCamera.Font.Color=clGreen then exit;
+                      f_devicesconnection.LabelGuideCamera.Font.Color:=clGreen;
+                      NewMessage(Format(rsConnected, [rsGuideCamera]),1);
+                   end;
+end;
+CheckConnectionStatus;
+end;
+
 
 Procedure Tf_main.ConnectWheel(Sender: TObject);
 begin
@@ -7308,6 +7446,7 @@ begin
   f_setup.DefaultSafetyInterface:=safety.SafetyInterface;
   f_setup.DefaultSwitchInterface:=switch.SwitchInterface;
   f_setup.DefaultCoverInterface:=cover.CoverInterface;
+  f_setup.DefaultGuideCameraInterface:=guidecamera.CameraInterface;
   f_setup.profile:=profile;
   f_setup.LoadProfileList;
   f_setup.Loadconfig(config,credentialconfig);
@@ -7358,6 +7497,7 @@ begin
     config.SetValue('/Devices/Safety',f_setup.DeviceSafety.Checked);
     config.SetValue('/Devices/Switch',f_setup.DeviceSwitch.Checked);
     config.SetValue('/Devices/Cover',f_setup.DeviceCover.Checked);
+    config.SetValue('/Devices/GuideCamera',f_setup.DeviceGuideCamera.Checked);
 
     config.SetValue('/CameraInterface',ord(f_setup.CameraConnection));
     config.SetValue('/INDIcamera/Server',f_setup.CameraIndiServer.Text);
@@ -7378,6 +7518,18 @@ begin
     config.SetValue('/ASCOMRestcamera/FlipImage',f_setup.FlipImage1.Checked);
     config.SetValue('/ASCOMRestcamera/CameraDateObs',f_setup.CameraDateObs1.Checked);
     config.SetValue('/ASCOMRestcamera/FixPixelRange',f_setup.FixPixelRange1.Checked);
+
+    config.SetValue('/GuideCameraInterface',ord(f_setup.GuideCameraConnection));
+    config.SetValue('/INDIguidecamera/Server',f_setup.GuideCameraIndiServer.Text);
+    config.SetValue('/INDIguidecamera/ServerPort',f_setup.GuideCameraIndiPort.Text);
+    if f_setup.GuideCameraIndiDevice.Text<>'' then config.SetValue('/INDIguidecamera/Device',f_setup.GuideCameraIndiDevice.Text);
+    config.SetValue('/INDIguidecamera/Sensor',f_setup.GuideCameraSensor);
+    config.SetValue('/INDIguidecamera/AutoLoadConfig',f_setup.GuideCameraAutoLoadConfig.Checked);
+    config.SetValue('/ASCOMguidecamera/Device',f_setup.AscomGuideCamera.Text);
+    config.SetValue('/ASCOMRestguidecamera/Protocol',f_setup.GuideCameraARestProtocol.ItemIndex);
+    config.SetValue('/ASCOMRestguidecamera/Host',f_setup.GuideCameraARestHost.Text);
+    config.SetValue('/ASCOMRestguidecamera/Port',f_setup.GuideCameraARestPort.Value);
+    config.SetValue('/ASCOMRestguidecamera/Device',f_setup.GuideCameraARestDevice.Value);
 
     config.SetValue('/FilterWheelInterface',ord(f_setup.WheelConnection));
     config.SetValue('/INDIwheel/Server',f_setup.WheelIndiServer.Text);
@@ -7510,6 +7662,7 @@ begin
           credentialconfig.SetValue('/ASCOMRestsafety/User',strtohex(encryptStr(f_setup.SafetyARestUser.Text, encryptpwd)));
           credentialconfig.SetValue('/ASCOMRestswitch/User',strtohex(encryptStr(f_setup.SwitchARestUser.Text, encryptpwd)));
           credentialconfig.SetValue('/ASCOMRestcover/User',strtohex(encryptStr(f_setup.CoverARestUser.Text, encryptpwd)));
+          credentialconfig.SetValue('/ASCOMRestguidecamera/User',strtohex(encryptStr(f_setup.GuideCameraARestUser.Text, encryptpwd)));
           credentialconfig.SetValue('/ASCOMRestcamera/Pass',strtohex(encryptStr(f_setup.CameraARestPass.Text, encryptpwd)));
           credentialconfig.SetValue('/ASCOMRestwheel/Pass',strtohex(encryptStr(f_setup.WheelARestPass.Text, encryptpwd)));
           credentialconfig.SetValue('/ASCOMRestfocuser/Pass',strtohex(encryptStr(f_setup.FocuserARestPass.Text, encryptpwd)));
@@ -7520,6 +7673,7 @@ begin
           credentialconfig.SetValue('/ASCOMRestsafety/Pass',strtohex(encryptStr(f_setup.SafetyARestPass.Text, encryptpwd)));
           credentialconfig.SetValue('/ASCOMRestswitch/Pass',strtohex(encryptStr(f_setup.SwitchARestPass.Text, encryptpwd)));
           credentialconfig.SetValue('/ASCOMRestcover/Pass',strtohex(encryptStr(f_setup.CoverARestPass.Text, encryptpwd)));
+          credentialconfig.SetValue('/ASCOMRestguidecamera/Pass',strtohex(encryptStr(f_setup.GuideCameraARestPass.Text, encryptpwd)));
        end
        else begin
           credentialconfig.Filename:='';
@@ -8667,7 +8821,10 @@ begin
       pnl:=PanelRight4
    else
    if TToolButton(Sender)=TBVideo then
-      pnl:=PanelRight5;
+      pnl:=PanelRight5
+   else
+   if TToolButton(Sender)=TBInternalGuider then
+      pnl:=PanelRight6;
    if pnl<>nil then
       PanelDragDrop(pnl,Source,X,Y);
  end;
@@ -10694,6 +10851,7 @@ begin
     8 : begin dev:=widestring(config.GetValue('/ASCOMdome/Device',''));IsConnected:=(dome<>nil)and(dome.Status<>devDisconnected); end;
     10: begin dev:=widestring(config.GetValue('/ASCOMswitch/Device',''));IsConnected:=(switch<>nil)and(switch.Status<>devDisconnected); end;
     11: begin dev:=widestring(config.GetValue('/ASCOMcover/Device',''));IsConnected:=(cover<>nil)and(cover.Status<>devDisconnected); end;
+    12: begin dev:=widestring(config.GetValue('/ASCOMguidecamera/Device',''));IsConnected:=(guidecamera<>nil)and(guidecamera.Status<>devDisconnected); end;
     else begin dev:=''; IsConnected:=false; end;
   end;
   if dev='' then exit;
@@ -10711,6 +10869,7 @@ begin
         8 : DisConnectDome(nil);
         10: DisConnectSwitch(nil);
         11: DisConnectCover(nil);
+        12: DisConnectGuideCamera(nil);
       end;
     end
     else begin
@@ -10741,6 +10900,7 @@ begin
       8 : ConnectDome(nil);
       10: ConnectSwitch(nil);
       11: ConnectCover(nil);
+      12: ConnectGuideCamera(nil);
     end;
   end;
 {$endif}
@@ -10764,6 +10924,7 @@ case n of
   8 : begin devt:='ASCOMRestdome'; dev:='dome'; end;
   10: begin devt:='ASCOMRestswitch'; dev:='switch'; end;
   11: begin devt:='ASCOMRestcover'; dev:='covercalibrator'; end;
+  12: begin devt:='ASCOMRestguidecamera'; dev:='camera'; end;
   else begin dev:=''; end;
 end;
 if dev='' then exit;

@@ -121,6 +121,7 @@ resourcestring
   rsBadPixelMapC = 'Bad pixel map cleared.';
   rsPleaseConfig = 'Please configure your';
   rsCamera = 'Camera';
+  rsGuideCamera = 'Guide camera';
   rsFilterWheel = 'Filter wheel';
   rsMount = 'Mount';
   rsWatchdog = 'Watchdog';
@@ -292,6 +293,7 @@ resourcestring
   rsRot = 'Rot.';
   rsMnt = 'Mnt.';
   rsWch = 'Wch.';
+  rsGuid= 'Guid.';
   rsGain = 'Gain';
   rsBin = 'Bin';
   rsObject = 'Object';
@@ -447,6 +449,7 @@ resourcestring
   rsNotImplement = 'Not implemented!';
   rsUseFocuser = 'Use focuser';
   rsUseRotator = 'Use rotator';
+  rsUseGuideCamera = 'Use guide camera';
   rsUseMount = 'Use mount';
   rsHeartBeatThr = 'Heart beat threshold [minutes]';
   rsUseWatchdog = 'Use watchdog';

@@ -35,6 +35,7 @@ type
   Tf_devicesconnection = class(TFrame)
     BtnConnect: TButton;
     BtnProfile: TButton;
+    LabelGuideCamera: TLabel;
     LabelDome: TLabel;
     LabelSafety: TLabel;
     LabelSwitch: TLabel;
@@ -116,6 +117,7 @@ begin
   LabelRotator.Caption:=rsRot;
   LabelMount.Caption:=rsMnt;
   LabelWatchdog.Caption:=rsWch;
+  LabelGuideCamera.Caption:=rsGuid;
 end;
 
 procedure Tf_devicesconnection.BtnProfileClick(Sender: TObject);
@@ -150,6 +152,7 @@ begin
       9:  txt:=rsSafetyMonito;
       10: txt:=rsSwitch;
       11: txt:=rsCoverCalibra;
+      12: txt:=rsGuideCamera;
    end;
    MenuConnectDevice.Caption:=rsConnect+': '+txt;
    MenuDisconnectDevice.Caption:=rsDisconnect+': '+txt;

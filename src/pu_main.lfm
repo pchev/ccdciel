@@ -177,13 +177,13 @@ object f_main: Tf_main
         Height = 504
         Top = 0
         Width = 222
-        ActivePage = PageConnect
+        ActivePage = PageInternalGuider
         Align = alClient
         Images = ImageListDay
         MultiLine = True
         ParentFont = False
         ShowTabs = False
-        TabIndex = 0
+        TabIndex = 5
         TabOrder = 0
         Options = [nboMultiLine]
         object PageConnect: TTabSheet
@@ -302,6 +302,23 @@ object f_main: Tf_main
             OnDragOver = PanelDragOver
           end
         end
+        object PageInternalGuider: TTabSheet
+          ClientHeight = 500
+          ClientWidth = 212
+          ImageIndex = 4
+          ParentFont = False
+          object PanelRight6: TPanel
+            Left = 0
+            Height = 500
+            Top = 0
+            Width = 212
+            Align = alClient
+            BevelOuter = bvNone
+            ParentColor = False
+            ParentFont = False
+            TabOrder = 0
+          end
+        end
       end
     end
     object TBTabs: TToolBar
@@ -376,6 +393,18 @@ object f_main: Tf_main
         OnDragOver = ButtonDragOver
         Style = tbsCheck
         Visible = False
+      end
+      object TBInternalGuider: TToolButton
+        Tag = 5
+        Left = 191
+        Hint = 'Internal guider'
+        Top = 2
+        Grouped = True
+        ImageIndex = 0
+        OnClick = SelectTab
+        OnDragDrop = ButtonDragDrop
+        OnDragOver = ButtonDragOver
+        Style = tbsCheck
       end
     end
   end
@@ -586,6 +615,11 @@ object f_main: Tf_main
         Caption = 'MenuAscomCoverSetup'
         OnClick = MenuAscomSetupClick
       end
+      object MenuAscomGuideCameraSetup: TMenuItem
+        Tag = 12
+        Caption = 'MenuAscomGuideCameraSetup'
+        OnClick = MenuAscomSetupClick
+      end
       object MenuAlpacaServerSetup: TMenuItem
         Caption = 'MenuAlpacaServerSetup'
         OnClick = MenuAlpacaSetupClick
@@ -638,6 +672,11 @@ object f_main: Tf_main
       object MenuAlpacaCoverSetup: TMenuItem
         Tag = 11
         Caption = 'MenuAlpacaCoverSetup'
+        OnClick = MenuAlpacaSetupClick
+      end
+      object MenuAlpacaGuideCameraSetup: TMenuItem
+        Tag = 12
+        Caption = 'MenuAlpacaGuideCameraSetup'
         OnClick = MenuAlpacaSetupClick
       end
       object N2: TMenuItem
