@@ -401,7 +401,7 @@ object f_main: Tf_main
       end
       object TBVideo: TToolButton
         Tag = 4
-        Left = 153
+        Left = 191
         Hint = 'Video'
         Top = 2
         Grouped = True
@@ -414,7 +414,7 @@ object f_main: Tf_main
       end
       object TBInternalGuider: TToolButton
         Tag = 5
-        Left = 191
+        Left = 153
         Hint = 'Internal guider'
         Top = 2
         Grouped = True

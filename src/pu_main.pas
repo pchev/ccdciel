@@ -577,8 +577,12 @@ type
     {internal guider}
     InternalguiderRunning,InternalguiderCalibrating,InternalguiderGuiding,StopInternalguider,InternalguiderInitialize: boolean;
     pulseRA,pulseDEC  : integer;
-    driftX,driftY,driftRA,driftDec,correctionRA,correctionDEC, PactionRA,PactionDEC,thecos,old_PactionRA,old_PactionDEC : double;
+    driftX,driftY,driftRA,driftDec,correctionRA,correctionDEC, PactionRA,PactionDEC,Guidethecos,old_PactionRA,old_PactionDEC : double;
     xy_trend : xy_guiderlist;{fu_internalguider}
+    InternalguiderCalibrationDirection,InternalguiderCalibrationStep: integer;
+    InternalCalibrationInitialize: boolean;
+    paEast, paNorth, pulsegainEast,pulsegainWest,pulsegainNorth,pulsegainSouth,Calthecos,Caltheangle,CaldriftOld : double;
+    CalibrationDuration,Calflip,CalCount,Calnrtest: integer;
 
     trpxy : array[1..2,1..3,1..3] of integer;{for image inspection}
     median: array[1..3,1..3] of double;{for image inspection}
@@ -872,7 +876,9 @@ type
     procedure InternalguiderStartAsync(Data: PtrInt);
     procedure InternalguiderStop(Sender: TObject);
     procedure InternalAutoguiding;
+    procedure InternalCalibration;
     procedure InternalguiderCalibrate(Sender: TObject);
+    function  WaitPulseGuiding(pulse:double): boolean;
     procedure GuideCameraNewImage(Sender: TObject);
     procedure GuideCameraNewImageAsync(Data: PtrInt);
     Procedure DrawGuideHistogram(SetLevel,ResetCursor: boolean);
@@ -14916,7 +14922,7 @@ begin
   DrawGuideHistogram(true,false);
   DrawGuideImage;
   // process autoguiding
-//  if InternalguiderCalibrating then InternalCalibrate();
+  if InternalguiderCalibrating then InternalCalibration();
   if InternalguiderGuiding then InternalAutoguiding();
 
   // draw image to screen
@@ -15319,7 +15325,6 @@ end;
 
 procedure Tf_main.InternalAutoguiding;
 var i,maxpulse: integer;
-    timeend:double;
 const
    nrpointsTrend=50; //number of trend points plotted
    max_duration=2500;//max duration guide puls in milliseconds
@@ -15368,8 +15373,8 @@ begin
       if abs(correctionRA)<f_internalguider.minimum_moveRA then correctionRA:=0;//avoid chasing the seeing. Improves the stability
       if abs(correctionDEC)<f_internalguider.minimum_moveDEC then correctionDEC:=0;//avoid chasing the seeing. Improves the stability
 
-      thecos:=cos(mount.Dec*pi/180); if thecos=0 then thecos:=0.000001;
-      correctionRA:=correctionRA/thecos; //correct pixels with cos(dec). Rotation in pixels near celestial pole decreases with cos(dec)
+      Guidethecos:=cos(mount.Dec*pi/180); if Guidethecos=0 then Guidethecos:=0.000001;
+      correctionRA:=correctionRA/Guidethecos; //correct pixels with cos(dec). Rotation in pixels near celestial pole decreases with cos(dec)
 
       pulseRA:=0;
       pulseDEC:=0;
@@ -15415,26 +15420,39 @@ begin
       end;
 
       // wait for puls guide move completed
+
       maxpulse:=max(pulseRA,pulseDEC);
       if maxpulse>0 then
       begin
-        timeend:=now+(maxpulse/(secperday*1000));
-        while now<timeend do begin
-          sleep(100);
-          if GetCurrentThreadId=MainThreadID then Application.ProcessMessages;
-          if StopInternalguider then
-          begin
-            newmessage('Guider stop pressed.',3);
-            exit;
-          end;
-        end;
+        WaitPulseGuiding(maxpulse);
       end;
+
     end //guiding enabled
     else
     begin  //guiding disabled
       xy_trend[0,2]:=0;
       xy_trend[0,3]:=0;
     end;
+end;
+
+function Tf_main.WaitPulseGuiding(pulse:double): boolean;
+var timeend:double;
+begin
+  result:=false;
+  timeend:=now+(pulse/(secperday*1000));
+  while now<timeend do begin
+    sleep(100);
+    if GetCurrentThreadId=MainThreadID then Application.ProcessMessages;
+    if StopInternalguider then
+    begin
+      newmessage('Guider stop pressed.',3);
+      exit;
+    end;
+    if not mount.PulseGuiding then begin
+      result:=true;
+      break;
+    end;
+  end;
 end;
 
 procedure Tf_main.InternalguiderStop(Sender: TObject);
@@ -15449,7 +15467,7 @@ end;
 procedure Tf_main.InternalguiderCalibrate(Sender: TObject);
 var
   duration,flip,count,i : integer;
-  drift,driftOld, paEast, paNorth, pulsegainEast,pulsegainWest,pulsegainNorth,pulsegainSouth, theangle : double;
+  drift,driftOld : double;
   initialize      : boolean;
 const
    nrtest=8; //number stops for measuring the pixel scale in arcseconds
@@ -15467,6 +15485,7 @@ begin
     exit;
   end;
   StopInternalguider:=false;
+  InternalguiderCalibrating:=true;
 
   f_internalguider.trend_message('Guider is in calibration mode.','This will take a few minutes.');
 
@@ -15477,122 +15496,228 @@ begin
     sleep(20000);
   end;
 
-  thecos:=cos(mount.Dec*pi/180); if thecos=0 then thecos:=0.00000001; //prevent dividing by zero
+  Calthecos:=cos(mount.Dec*pi/180); if Calthecos=0 then Calthecos:=0.00000001; //prevent dividing by zero
 
-  //EAST, measure pulse guide speed
-  duration:=667; //duration of pulse guiding
-  repeat
-    duration:=round(duration*1.5);
-    NewMessage('Testing pulse guiding East for '+floattostrF(duration/1000,FFgeneral,0,2)+ ' seconds',2);
-    initialize:=true;
-    if measure_drift(initialize,driftX,driftY)>0 then exit;//measure reference star positions
-    mount.PulseGuide(2,duration {duration msec} );  {0=north, 1=south, 2 East, 3 West}
-    sleep(duration);
-    if measure_drift(initialize,driftX,driftY)>0 then exit;//measure drift
-    drift:=sqrt(sqr(driftX)+sqr(driftY));//  For image with north up and east left, driftX become negative.
-    //newmessage('DriftX ' + floattostrf(driftx,ffgeneral,0,2)+' DriftY ' + floattostrf(driftY,ffgeneral,0,2));
-  until ((drift>5) or (duration>20000));
-  if drift<2 then begin NewMessage('Abort calibration, no movement measured!',1); exit; end;
-  pulsegainEast:=drift*1000/(duration*thecos); // [px*cos(dec)/sec]
-  paEast:=arctan2(driftY,driftX);//-pi..pi, For north up and east left this gives zero angle
+  InternalguiderCalibrationDirection:=1;
+  InternalguiderCalibrationStep:=0;
 
-  //WEST, measure pulse guide. Use same duration as East
-  NewMessage('Testing pulse guiding West for '+floattostrF(duration/1000,FFgeneral,0,2)+ ' seconds',2);
-  initialize:=true;
-  if measure_drift(initialize,driftX,driftY)>0 then exit;//measure reference star positions
-  mount.PulseGuide(3,duration {duration msec} );  {0=north, 1=south, 2 East, 3 West}
-  sleep(duration);
-  if measure_drift(initialize,driftX,driftY)>0 then exit;//measure drift
-  drift:=sqrt(sqr(driftX)+sqr(driftY)); //For image with north up and east left, driftX become positive.
-  pulsegainWest:=drift*1000/(duration*thecos); // [px*cos(dec)/sec]
+  InternalguiderLoop(nil);
 
-  NewMessage('Internal guider calibration:  Pulse gain measured East/West: '+ floattostrF(pulsegainEast,ffgeneral,0,2)+'/'+ floattostrF(pulsegainWest,ffgeneral,0,2)+' [px*cos(δ)/sec], Camera angle: '+floattostrF(paEast*180/pi,ffgeneral,3,1)+'°',3);
+end;
 
-  //NORTH measure pulse guide speed.
-  NewMessage('Guider, removing backlash North',3);
-  mount.PulseGuide(0,5000 {duration msec} );  {0=north, 1=south, 2 East, 3 West}
-  sleep(5000);
-  duration:=667; //duration of pulse guiding
-  repeat
-    duration:=round(duration*1.5);
-    NewMessage('Testing pulse guiding North for '+floattostrF(duration/1000,FFgeneral,0,2)+ ' seconds',3);
-    initialize:=true;//for measure drift
-    if measure_drift(initialize,driftX,driftY)>0 then exit;//measure reference star positions
-    mount.PulseGuide(0,duration {duration msec} );  {0=north, 1=south, 2 East, 3 West}
-    sleep(duration);
-    if measure_drift(initialize,driftX,driftY)>0 then exit;//measure drift
-    drift:=sqrt(sqr(driftX)+sqr(driftY));
-  until ((drift>5) or (duration>20000));
-  if drift<2 then begin NewMessage('Abort calibration, no movement measured!',1); exit; end;
-
-  paNorth:=arctan2(driftY,driftX); // Relative to the positive X axis and CCW
-  theangle:=paNorth - paEast;// CCW angles, calculate angle North relative to West
-  if theangle<pi then theangle:=theangle+pi*2;
-  if theangle>pi then theangle:=theangle-pi*2;
-  if  theangle>0 then //is turning to from West to North positive or negative pi/2
-    flip:=+1  // Normal. If North is up then East is left in the image
-  else
-    flip:=-1; // Flipped image. E.g.if North is up then East is on the right side}
-  pulsegainNorth:=flip*drift*1000/(duration); // [px/sec]
-
-  NewMessage('Removing backlash South',3);
-  mount.PulseGuide(1,5000 {duration msec} );  {0=north, 1=south, 2 East, 3 West}
-  sleep(5000);
-  //SOUTH, measure pulse guide speed.
-  NewMessage('Testing pulse guiding South for '+floattostrF(duration/1000,FFgeneral,0,2)+ ' seconds',3);
-  count:=0;
-  drift:=0;
-  repeat
-    initialize:=true;
-    driftOld:=drift;
-    if measure_drift(initialize,driftX,driftY)>0 then exit;//measure reference star positions
-    mount.PulseGuide(1,duration {duration msec} );  {0=north, 1=south, 2 East, 3 West}
-    sleep(duration);
-    if measure_drift(initialize,driftX,driftY)>0 then exit;//measure drift
-    drift:=sqrt(sqr(driftX)+sqr(driftY));
-    inc(count);
-  until ((driftOld>2) or (count>=4));
-  if drift<2 then begin NewMessage('Abort calibration, no movement measured!',1); exit; end;
-  pulsegainSouth:=flip*drift*1000/(duration); // [px*cos(dec)/sec]   Flipped is already measured
-
-  NewMessage('Internal guider calibration:  Pulse gain measured North/South: '+ floattostrF(pulsegainNorth,ffgeneral,0,2)+'/'+ floattostrF(pulsegainSouth,ffgeneral,0,2)+' [px/sec]',3);
-
-  //Display findings
-  if mount.PierSide=pierWest then f_internalguider.pier_side:='E' else f_internalguider.pier_side:='W'; //measured west or east ??
-  f_internalguider.PA:=paEast*180/pi; // this is the relative angle between the image and the mount.
-  f_internalguider.pulsegainEast:=pulsegainEast;
-  f_internalguider.pulsegainWest:=pulsegainWest;
-  f_internalguider.pulsegainNorth:=pulsegainNorth;
-  f_internalguider.pulsegainSouth:=pulsegainSouth;
-  f_internalguider.pixel_size:=0.5*15*2/(pulsegainEast+pulsegainWest);//alternative method assuming 0.5x and 1.5x pulse speed
-
-
-  //Optional, measure pixel scale guider camera in arcseconds. Do not initialize, use the position from the South measurement
-  if f_internalguider.measure_method2.checked then
+procedure Tf_main.InternalCalibration;
+var drift: double;
+  procedure StopError;
   begin
-    NewMessage('Stop tracking a few times for 0.5 seconds to measure pixel scale',1);
-    initialize:=true;
-    if measure_drift(initialize,driftX,driftY)>0 then exit;//measure reference star positions
-    for i:=1 to nrtest do
-    begin
-      mount.AbortMotion;// stop to measure the pixel scale. Assume scale is 1"/px or larger. This results in 7.5 pixel drift max.
-      sleep(500);
-      mount.Track;//start tracking again
-      if measure_drift(initialize,driftX,driftY)>0 then //sync the drift measurement with the new position.
-      begin
-        NewMessage('Ready to guide. Used alternative method to calculate the pixel scale which could be inaccurate.',1);
-        exit;
+    f_internalguider.ButtonStart.enabled:=true;
+    f_internalguider.Stop;
+    NewMessage('Calibration error');
+    raise exception.Create('Calibration error');
+  end;
+begin
+try
+case InternalguiderCalibrationDirection of
+  1:begin  //EAST, measure pulse guide speed
+      case InternalguiderCalibrationStep of
+        0: begin
+             CalibrationDuration:=667; //duration of pulse guiding
+             InternalguiderCalibrationStep:=1;
+             InternalCalibration; // iterate without new image
+           end;
+        1: begin
+             CalibrationDuration:=round(CalibrationDuration*1.5);
+             NewMessage('Testing pulse guiding East for '+floattostrF(CalibrationDuration/1000,FFgeneral,0,2)+ ' seconds',2);
+             InternalCalibrationInitialize:=true;
+             if measure_drift(InternalCalibrationInitialize,driftX,driftY)>0 then StopError;//measure reference star positions
+             mount.PulseGuide(2,CalibrationDuration {duration msec} );  {0=north, 1=south, 2 East, 3 West}
+             WaitPulseGuiding(CalibrationDuration);
+             InternalguiderCalibrationStep:=2;
+           end;
+        2: begin
+             if measure_drift(InternalCalibrationInitialize,driftX,driftY)>0 then StopError;//measure drift
+             drift:=sqrt(sqr(driftX)+sqr(driftY));//  For image with north up and east left, driftX become negative.
+             //newmessage('DriftX ' + floattostrf(driftx,ffgeneral,0,2)+' DriftY ' + floattostrf(driftY,ffgeneral,0,2));
+             if ((drift>5) or (CalibrationDuration>20000)) then begin// OK, next direction
+               if drift<2 then begin NewMessage('Abort calibration, no movement measured!',1); StopError; end;
+               pulsegainEast:=drift*1000/(CalibrationDuration*Calthecos); // [px*cos(dec)/sec]
+               paEast:=arctan2(driftY,driftX);//-pi..pi, For north up and east left this gives zero angle
+               InternalguiderCalibrationDirection:=2;
+               InternalguiderCalibrationStep:=0;
+             end
+             else begin // retry with bigger pulse
+               InternalguiderCalibrationStep:=1;
+             end;
+           end;
       end;
     end;
-    drift:=sqrt(sqr(driftX)+sqr(driftY));
-    f_internalguider.pixel_size:=nrtest*0.5*15/drift;
-    NewMessage('Total drift: '+ floattostrF(drift,ffgeneral,0,2)+ ' pixels after '+inttostr(nrtest)+ ' tracking stops of 0.5 seconds. Estimated pixel size '+floattostrF(f_internalguider.pixel_size,ffgeneral,0,2)+' "/px' ,3);
-  end;
-
-
-  Newmessage('Ready to guide!',1);
-  f_internalguider.trend_message('Calibration is ready.','');
-  f_internalguider.ButtonStart.enabled:=true;
+  2:begin  //WEST, measure pulse guide. Use same duration as East
+      case InternalguiderCalibrationStep of
+        0: begin
+             NewMessage('Testing pulse guiding West for '+floattostrF(CalibrationDuration/1000,FFgeneral,0,2)+ ' seconds',2);
+             InternalCalibrationInitialize:=true;
+             if measure_drift(InternalCalibrationInitialize,driftX,driftY)>0 then StopError;//measure reference star positions
+             mount.PulseGuide(3,CalibrationDuration {duration msec} );  {0=north, 1=south, 2 East, 3 West}
+             WaitPulseGuiding(CalibrationDuration);
+             InternalguiderCalibrationStep:=1;
+           end;
+        1: begin
+             if measure_drift(InternalCalibrationInitialize,driftX,driftY)>0 then StopError;//measure drift
+             drift:=sqrt(sqr(driftX)+sqr(driftY)); //For image with north up and east left, driftX become positive.
+             pulsegainWest:=drift*1000/(CalibrationDuration*Calthecos); // [px*cos(dec)/sec]
+             NewMessage('Internal guider calibration:  Pulse gain measured East/West: '+ floattostrF(pulsegainEast,ffgeneral,0,2)+'/'+ floattostrF(pulsegainWest,ffgeneral,0,2)+' [px*cos(δ)/sec], Camera angle: '+floattostrF(paEast*180/pi,ffgeneral,3,1)+'°',3);
+             InternalguiderCalibrationDirection:=3;
+             InternalguiderCalibrationStep:=0;
+             InternalCalibration;  // iterate without new image
+           end;
+      end;
+    end;
+  3:begin  //NORTH measure pulse guide speed.
+      case InternalguiderCalibrationStep of
+        0: begin
+             NewMessage('Guider, removing backlash North',3);
+             mount.PulseGuide(0,5000 {duration msec} );  {0=north, 1=south, 2 East, 3 West}
+             WaitPulseGuiding(5000);
+             CalibrationDuration:=667; //duration of pulse guiding
+             InternalguiderCalibrationStep:=1;
+           end;
+        1: begin
+             CalibrationDuration:=round(CalibrationDuration*1.5);
+             NewMessage('Testing pulse guiding North for '+floattostrF(CalibrationDuration/1000,FFgeneral,0,2)+ ' seconds',3);
+             InternalCalibrationInitialize:=true;//for measure drift
+             if measure_drift(InternalCalibrationInitialize,driftX,driftY)>0 then StopError;//measure reference star positions
+             mount.PulseGuide(0,CalibrationDuration {duration msec} );  {0=north, 1=south, 2 East, 3 West}
+             WaitPulseGuiding(CalibrationDuration);
+             InternalguiderCalibrationStep:=2;
+           end;
+        2: begin
+             if measure_drift(InternalCalibrationInitialize,driftX,driftY)>0 then StopError;//measure drift
+             drift:=sqrt(sqr(driftX)+sqr(driftY));
+             if ((drift>5) or (CalibrationDuration>20000)) then begin// OK, next direction
+               if drift<2 then begin NewMessage('Abort calibration, no movement measured!',1); StopError; end;
+               paNorth:=arctan2(driftY,driftX); // Relative to the positive X axis and CCW
+               Caltheangle:=paNorth - paEast;// CCW angles, calculate angle North relative to West
+               if Caltheangle<pi then Caltheangle:=Caltheangle+pi*2;
+               if Caltheangle>pi then Caltheangle:=Caltheangle-pi*2;
+               if  Caltheangle>0 then //is turning to from West to North positive or negative pi/2
+                 Calflip:=+1  // Normal. If North is up then East is left in the image
+               else
+                 Calflip:=-1; // Flipped image. E.g.if North is up then East is on the right side}
+               pulsegainNorth:=Calflip*drift*1000/(CalibrationDuration); // [px/sec]
+               InternalguiderCalibrationDirection:=4;
+               InternalguiderCalibrationStep:=0;
+               InternalCalibration;  // iterate without new image
+             end
+             else begin // retry with bigger pulse
+               InternalguiderCalibrationStep:=1;
+             end;
+           end;
+      end;
+    end;
+  4:begin  //SOUTH, measure pulse guide speed.
+      case InternalguiderCalibrationStep of
+        0: begin
+             NewMessage('Removing backlash South',3);
+             mount.PulseGuide(1,5000 {duration msec} );  {0=north, 1=south, 2 East, 3 West}
+             WaitPulseGuiding(5000);
+             CalCount:=0;
+             CaldriftOld:=0;
+             InternalguiderCalibrationStep:=1;
+             NewMessage('Testing pulse guiding South for '+floattostrF(CalibrationDuration/1000,FFgeneral,0,2)+ ' seconds',3);
+           end;
+        1: begin
+             InternalCalibrationInitialize:=true;
+             if measure_drift(InternalCalibrationInitialize,driftX,driftY)>0 then StopError;//measure reference star positions
+             mount.PulseGuide(1,CalibrationDuration {duration msec} );  {0=north, 1=south, 2 East, 3 West}
+             WaitPulseGuiding(CalibrationDuration);
+             InternalguiderCalibrationStep:=2;
+           end;
+        2: begin
+             if measure_drift(InternalCalibrationInitialize,driftX,driftY)>0 then StopError;//measure drift
+             drift:=sqrt(sqr(driftX)+sqr(driftY));
+             inc(CalCount);
+             if ((CaldriftOld>2) or (Calcount>=4)) then begin
+               if drift<2 then begin NewMessage('Abort calibration, no movement measured!',1); StopError; end;
+               pulsegainSouth:=Calflip*drift*1000/(CalibrationDuration); // [px*cos(dec)/sec]   Flipped is already measured
+               NewMessage('Internal guider calibration:  Pulse gain measured North/South: '+ floattostrF(pulsegainNorth,ffgeneral,0,2)+'/'+ floattostrF(pulsegainSouth,ffgeneral,0,2)+' [px/sec]',3);
+               InternalguiderCalibrationDirection:=5;
+               InternalguiderCalibrationStep:=0;
+               InternalCalibration;  // iterate without new image
+             end
+             else begin
+               InternalguiderCalibrationStep:=1;
+             end;
+           end;
+      end;
+    end;
+  5:begin  //Display findings
+      if mount.PierSide=pierWest then f_internalguider.pier_side:='E' else f_internalguider.pier_side:='W'; //measured west or east ??
+      f_internalguider.PA:=paEast*180/pi; // this is the relative angle between the image and the mount.
+      f_internalguider.pulsegainEast:=pulsegainEast;
+      f_internalguider.pulsegainWest:=pulsegainWest;
+      f_internalguider.pulsegainNorth:=pulsegainNorth;
+      f_internalguider.pulsegainSouth:=pulsegainSouth;
+      f_internalguider.pixel_size:=0.5*15*2/(pulsegainEast+pulsegainWest);//alternative method assuming 0.5x and 1.5x pulse speed
+      if f_internalguider.measure_method2.checked then begin
+        InternalguiderCalibrationDirection:=6;
+        InternalguiderCalibrationStep:=0;
+        InternalCalibration;  // iterate without new image
+      end
+      else begin
+        InternalguiderCalibrationDirection:=7;
+        InternalguiderCalibrationStep:=0;
+        InternalCalibration;  // iterate without new image
+      end;
+    end;
+  6:begin //Optional, measure pixel scale guider camera in arcseconds. Do not initialize, use the position from the South measurement
+      case InternalguiderCalibrationStep of
+        0: begin
+             NewMessage('Stop tracking a few times for 0.5 seconds to measure pixel scale',1);
+             InternalCalibrationInitialize:=true;
+             if measure_drift(InternalCalibrationInitialize,driftX,driftY)>0 then StopError;//measure reference star positions
+             mount.AbortMotion;// stop to measure the pixel scale. Assume scale is 1"/px or larger. This results in 7.5 pixel drift max.
+             sleep(500);
+             mount.Track;//start tracking again
+             Calnrtest:=1;
+             InternalguiderCalibrationStep:=1;
+           end;
+        1: begin
+             if measure_drift(InternalCalibrationInitialize,driftX,driftY)>0 then //sync the drift measurement with the new position.
+             begin
+               NewMessage('Ready to guide. Used alternative method to calculate the pixel scale which could be inaccurate.',1);
+               InternalguiderCalibrationDirection:=7;
+               InternalguiderCalibrationStep:=0;
+               InternalCalibration;  // iterate without new image
+             end;
+             if Calnrtest<8 then begin
+               mount.AbortMotion;// stop to measure the pixel scale. Assume scale is 1"/px or larger. This results in 7.5 pixel drift max.
+               sleep(500);
+               mount.Track;//start tracking again
+               inc(Calnrtest);
+               InternalguiderCalibrationStep:=1;
+             end
+             else begin
+               InternalguiderCalibrationStep:=2;
+             end;
+           end;
+        2: begin
+             drift:=sqrt(sqr(driftX)+sqr(driftY));
+             f_internalguider.pixel_size:=Calnrtest*0.5*15/drift;
+             NewMessage('Total drift: '+ floattostrF(drift,ffgeneral,0,2)+ ' pixels after '+inttostr(Calnrtest)+ ' tracking stops of 0.5 seconds. Estimated pixel size '+floattostrF(f_internalguider.pixel_size,ffgeneral,0,2)+' "/px' ,3);
+             InternalguiderCalibrationDirection:=7;
+             InternalguiderCalibrationStep:=0;
+             InternalCalibration;  // iterate without new image
+           end;
+      end;
+    end;
+  7:begin
+      Newmessage('Ready to guide!',1);
+      f_internalguider.trend_message('Calibration is ready.','');
+      f_internalguider.ButtonStart.enabled:=true;
+      f_internalguider.Stop;
+    end;
+end;
+except
+end;
 end;
 
 end.
