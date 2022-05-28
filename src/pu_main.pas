@@ -189,6 +189,7 @@ type
     MenuRotator: TMenuItem;
     MenuViewRotator: TMenuItem;
     OpenPictureDialog1: TOpenDialog;
+    PageControlImage: TPageControl;
     PanelRight6: TPanel;
     PanelMsgTabs: TPanel;
     PanelRight: TPanel;
@@ -201,6 +202,8 @@ type
     Splitter1: TSplitter;
     TabMsgLevel: TTabControl;
     PageInternalGuider: TTabSheet;
+    MainImage: TTabSheet;
+    GuideImage: TTabSheet;
     TimerStampTimer: TTimer;
     MenuPdfHelp: TMenuItem;
     MenuOnlineHelp: TMenuItem;
@@ -543,8 +546,8 @@ type
     f_script: Tf_script;
     f_visu: Tf_visu;
     f_msg: Tf_msg;
-    fits: TFits;
-    ImaBmp: TBGRABitmap;
+    fits, guidefits: TFits;
+    ImaBmp,ImaGuideBmp: TBGRABitmap;
     TCPDaemon: TTCPDaemon;
     refmask: boolean;
     reftreshold,refcolor: integer;
@@ -568,9 +571,14 @@ type
     SaveAutofocusFX,SaveAutofocusFY,SaveAutofocusFW,SaveAutofocusFH,SaveAutofocusBX,SaveAutofocusBY: integer;
     SaveAutofocusGain, SaveAutofocusOffset, SaveAutofocusPreviewGain, SaveAutofocusPreviewOffset: integer;
     TerminateVcurve: boolean;
-    ScrBmp: TBGRABitmap;
+    ScrBmp,ScrGuideBmp: TBGRABitmap;
     ImageSaved: boolean;
-    StopInternalguider: boolean;
+
+    {internal guider}
+    InternalguiderRunning,InternalguiderCalibrating,InternalguiderGuiding,StopInternalguider,InternalguiderInitialize: boolean;
+    pulseRA,pulseDEC  : integer;
+    driftX,driftY,driftRA,driftDec,correctionRA,correctionDEC, PactionRA,PactionDEC,thecos,old_PactionRA,old_PactionDEC : double;
+    xy_trend : xy_guiderlist;{fu_internalguider}
 
     trpxy : array[1..2,1..3,1..3] of integer;{for image inspection}
     median: array[1..3,1..3] of double;{for image inspection}
@@ -593,6 +601,7 @@ type
     procedure Image1MouseWheel(Sender: TObject; Shift: TShiftState; WheelDelta: Integer; MousePos: TPoint; var Handled: Boolean);
     procedure Image1Paint(Sender: TObject);
     procedure Image1Resize(Sender: TObject);
+    procedure ImageGuidePaint(Sender: TObject);
     Procedure GetAppDir;
     procedure ScaleMainForm;
     Procedure InitLog;
@@ -784,6 +793,8 @@ type
     procedure ShowLastImage(Sender: TObject);
     procedure ResetPreviewStack(Sender: TObject);
     Procedure StopExposure(Sender: TObject);
+    Procedure StartGuideExposure(Sender: TObject);
+    Procedure StartGuideExposureAsync(Data: PtrInt);
     Procedure StartPreviewExposure(Sender: TObject);
     Procedure StartPreviewExposureAsync(Data: PtrInt);
     function  PrepareCaptureExposure(canwait:boolean):boolean;
@@ -797,6 +808,7 @@ type
     Procedure Redraw(Sender: TObject);
     Procedure ZoomImage(Sender: TObject);
     Procedure ClearImage;
+    Procedure ClearGuideImage;
     Procedure DrawImage(WaitCursor:boolean=false; videoframe:boolean=false);
     Procedure PlotImage;
     procedure plot_north(bmp:TBGRABitmap);
@@ -854,14 +866,21 @@ type
     procedure CollimationApplyInspection(Sender: TObject);
     procedure ReadyForVideo(var v: boolean);
     procedure ShowStatus(str: string);
+    function  measure_drift(var initialize: boolean; out drX,drY :double) : integer;
+    procedure InternalguiderLoop(Sender: TObject);
     procedure InternalguiderStart(Sender: TObject);
     procedure InternalguiderStartAsync(Data: PtrInt);
     procedure InternalguiderStop(Sender: TObject);
+    procedure InternalAutoguiding;
     procedure InternalguiderCalibrate(Sender: TObject);
-    function  measure_drift(var initialize: boolean; out driftX,driftY :double) : integer;
+    procedure GuideCameraNewImage(Sender: TObject);
+    procedure GuideCameraNewImageAsync(Data: PtrInt);
+    Procedure DrawGuideHistogram(SetLevel,ResetCursor: boolean);
+    Procedure DrawGuideImage;
+    Procedure PlotGuideImage;
   public
     { public declarations }
-    Image1: TImgDrawingControl;
+    Image1, ImageGuide: TImgDrawingControl;
     procedure LoadFitsFile(fn:string);
   end;
 
@@ -1379,7 +1398,7 @@ begin
   ManualFilterNames:=TStringList.Create;
   ScrBmp := TBGRABitmap.Create;
   Image1 := TImgDrawingControl.Create(Self);
-  Image1.Parent := PanelCenter;
+  Image1.Parent := MainImage;
   Image1.Align := alClient;
   image1.OnDblClick := @Image1DblClick;
   Image1.OnMouseDown := @Image1MouseDown;
@@ -1389,6 +1408,11 @@ begin
   Image1.OnResize := @Image1Resize;
   Image1.OnPaint := @Image1Paint;
   Image1.PopupMenu := ImagePopupMenu;
+  ScrGuideBmp := TBGRABitmap.Create;
+  ImageGuide := TImgDrawingControl.Create(Self);
+  ImageGuide.Parent := GuideImage;
+  ImageGuide.Align := alClient;
+  ImageGuide.OnPaint := @ImageGuidePaint;
   CursorImage1 := TCursorImage.Create;
   GetAppDir;
   chdir(Appdir);
@@ -1494,6 +1518,9 @@ begin
      fits.LoadDark(ConfigDarkFile);
   end;
   ShowDarkInfo;
+
+  guidefits:=TFits.Create(self);
+  guidefits.onMsg:=@NewMessage;
 
   CreateDevices;
 
@@ -1625,6 +1652,7 @@ begin
   f_switch.onSetSwitch:=@SetSwitch;
 
   f_internalguider:=Tf_internalguider.Create(self);
+  f_internalguider.onLoop:=@InternalguiderLoop;
   f_internalguider.onStart:=@InternalguiderStart;
   f_internalguider.onStop:=@InternalguiderStop;
   f_internalguider.onCalibrate:=@InternalguiderCalibrate;
@@ -1853,10 +1881,11 @@ begin
      ASCOMREST: guidecamera:=T_ascomrestcamera.Create(nil);
    end;
    guidecamera.Mount:=mount;
-   guidecamera.Fits:=fits;
+   guidecamera.Fits:=guidefits;
    guidecamera.onMsg:=@NewMessage;
    guidecamera.onDeviceMsg:=@DeviceMessage;
    guidecamera.onStatusChange:=@GuideCameraStatus;
+   guidecamera.onNewImage:=@GuideCameraNewImage;
 {   camera.onExposureProgress:=@CameraProgress;
    camera.onFrameChange:=@FrameChange;
    camera.onTemperatureChange:=@CameraTemperatureChange;
@@ -2252,6 +2281,7 @@ begin
   TabMsgLevelChange(nil);
 
   ImaBmp:=TBGRABitmap.Create(1,1);
+  ImaGuideBmp:=TBGRABitmap.Create(1,1);
   LockTimerPlot:=false;
   LockMouseWheel:=false;
   LockRestartExposure:=false;
@@ -2284,6 +2314,7 @@ begin
   else
     crRetic := crCross;
   Image1.Cursor:=crRetic;
+  ImageGuide.Cursor:=crRetic;
   MaxThreadCount := GetThreadCount;
   NewMessage(Format('Using a maximum of %d parallel processor',[MaxThreadCount]),9);
   if isAdmin then NewMessage(Caption);
@@ -3064,6 +3095,7 @@ begin
   try
   DestroyDevices;
   ImaBmp.Free;
+  ImaGuideBmp.Free;
   refbmp.Free;
   config.Free;
   screenconfig.Free;
@@ -3072,6 +3104,7 @@ begin
   bpmconfig.Free;
   globalconfig.Free;
   ScrBmp.Free;
+  ScrGuideBmp.Free;
   FreeAndNil(FilterList);
   FreeAndNil(BinningList);
   ReadoutList.Free;
@@ -3416,8 +3449,16 @@ begin
   ScrWidth:=Image1.Width;
   ScrHeigth:=Image1.Height;
   ScrBmp.SetSize(ScrWidth,ScrHeigth);
+  ScrGuideWidth:=ImageGuide.Width;
+  ScrGuideHeigth:=ImageGuide.Height;
+  ScrGuideBmp.SetSize(ScrGuideWidth,ScrGuideHeigth);
   ClearImage;
   DrawImage;
+  if InternalguiderRunning then begin
+    ClearGuideImage;
+    DrawGuideImage;
+    PlotGuideImage;
+  end;
 end;
 
 procedure Tf_main.MenuAutoguiderCalibrateClick(Sender: TObject);
@@ -12534,6 +12575,10 @@ begin
   TToolButton(sender).Down:=true;
   i:=TToolButton(sender).tag;
   PageControlRight.ActivePageIndex:=i;
+  case i of
+     0..4: PageControlImage.ActivePageIndex:=0;
+     5:    PageControlImage.ActivePageIndex:=1;
+  end;
 end;
 
 procedure Tf_main.Splitter1Moved(Sender: TObject);
@@ -14793,11 +14838,244 @@ begin
 StatusBar1.Panels[panelcursor].Text := str;
 end;
 
+Procedure Tf_main.StartGuideExposureAsync(Data: PtrInt);
+begin
+  StartGuideExposure(nil);
+end;
+
+Procedure Tf_main.StartGuideExposure(Sender: TObject);
+var e: double;
+    buf,f: string;
+    p,binx,biny,i,x,y,w,h,sx,sy,sw,sh: integer;
+begin
+if (guidecamera.Status=devConnected) then begin
+  // check exposure time
+  e:=f_internalguider.Exposure.value;
+  binx:=f_internalguider.Binning.Value;
+  biny:=binx;
+  if (binx<guidecamera.BinXrange.min)or(biny<guidecamera.BinYrange.min) or
+     (binx>guidecamera.BinXrange.max)or(biny>guidecamera.BinYrange.max)
+     then begin
+        NewMessage(Format(rsInvalidBinni, [inttostr(binx)]),1);
+        f_internalguider.stop;
+        exit;
+     end;
+     if (guidecamera.BinX<>binx)or(guidecamera.BinY<>biny) then begin
+        guidecamera.SetBinning(binx,biny);
+     end;
+{  sx:=StrToIntDef(f_frame.FX.Text,-1);
+  sy:=StrToIntDef(f_frame.FY.Text,-1);
+  sw:=StrToIntDef(f_frame.FWidth.Text,-1);
+  sh:=StrToIntDef(f_frame.FHeight.Text,-1);
+  if (sx>=0)and(sy>=0)and(sw>0)and(sh>0) then begin
+    camera.GetFrame(x,y,w,h,true);
+    if (x<>sx)or(y<>sy)or(w<>sw)or(h<>sh) then
+      camera.SetFrame(sx,sy,sw,sh);
+  end;  }
+{  if camera.CanSetGain then begin
+    if camera.Gain<>f_preview.Gain then begin
+      camera.Gain:=f_preview.Gain;
+    end;
+    if camera.hasOffset then begin
+       if camera.Offset<>f_preview.Offset then camera.Offset:=f_preview.Offset;
+    end;
+  end;  }
+  if guidecamera.FrameType<>LIGHT then guidecamera.FrameType:=LIGHT;
+  guidecamera.ObjectName:=rsGuide;
+  guidecamera.StackNum:=-1;
+  guidecamera.AddFrames:=false;
+  guidecamera.SaveFrames:=false;
+  guidecamera.AlignFrames:=false;
+  //fits.SetBPM(bpm,bpmNum,bpmX,bpmY,bpmAxis);
+  guidecamera.StartExposure(e);
+end
+else begin
+   f_internalguider.stop;
+   if not AllDevicesConnected then NewMessage(rsSomeDefinedD,1);
+end;
+end;
+
+procedure Tf_main.GuideCameraNewImage(Sender: TObject);
+begin
+  Application.QueueAsyncCall(@GuideCameraNewImageAsync,0);
+end;
+
+procedure Tf_main.GuideCameraNewImageAsync(Data: PtrInt);
+begin
+  if StopInternalguider then begin
+   InternalguiderRunning:=false;
+   InternalguiderGuiding:=false;
+   InternalguiderCalibrating:=false;
+   exit;
+  end;
+
+  if (not guidefits.ImageValid) then begin
+      guidefits.LoadStream;
+  end;
+  // prepare image
+  DrawGuideHistogram(true,false);
+  DrawGuideImage;
+  // process autoguiding
+//  if InternalguiderCalibrating then InternalCalibrate();
+  if InternalguiderGuiding then InternalAutoguiding();
+
+  // draw image to screen
+  PlotGuideImage;
+  // start next exposure
+  Application.QueueAsyncCall(@StartGuideExposureAsync,0)
+end;
+
+Procedure Tf_main.DrawGuideHistogram(SetLevel,ResetCursor: boolean);
+begin
+{ #todo :  separate level setting}
+  if (guidefits.HeaderInfo.naxis>0) and guidefits.ImageValid then begin
+     f_visu.DrawHistogram(guidefits,SetLevel,ResetCursor);
+  end;
+end;
+
+Procedure Tf_main.DrawGuideImage;
+var tmpbmp:TBGRABitmap;
+    co: TBGRAPixel;
+    s,cx,cy: integer;
+begin
+if (guidefits.HeaderInfo.naxis>0) and guidefits.ImageValid then begin
+  guidefits.Gamma:=f_visu.Gamma.Value;
+  guidefits.VisuMax:=round(f_visu.ImgMax);
+  guidefits.VisuMin:=round(f_visu.ImgMin);
+  guidefits.MaxADU:=MaxADU;
+  guidefits.Overflow:= 0.9995*ClippingOverflow;
+  guidefits.Underflow:=ClippingUnderflow;
+  guidefits.MarkOverflow:=f_visu.Clipping;
+  guidefits.Invert:=f_visu.Invert;
+  {$ifdef debug_raw}writeln(FormatDateTime(dateiso,Now)+blank+'FITS GetBGRABitmap');{$endif}
+  guidefits.GetBGRABitmap(ImaGuideBmp);
+  {$ifdef debug_raw}writeln(FormatDateTime(dateiso,Now)+blank+'FITS GetBGRABitmap end');{$endif}
+  GuideImgPixRatio:=fits.HeaderInfo.pixratio;
+  if (guidefits.HeaderInfo.pixratio<>1) then begin
+    {$ifdef debug_raw}writeln(FormatDateTime(dateiso,Now)+blank+'Fix pixelratio');{$endif}
+    tmpbmp:=TBGRABitmap.Create(ImaGuideBmp);
+    ImaGuideBmp.SetSize(round(guidefits.HeaderInfo.pixratio*ImaGuideBmp.Width),ImaGuideBmp.Height);
+    ImaGuideBmp.Canvas.StretchDraw(rect(0,0,ImaGuideBmp.Width,ImaGuideBmp.Height),tmpbmp.Bitmap);
+    tmpbmp.Free;
+  end;
+  guideimg_Width:=ImaGuideBmp.Width;
+  guideimg_Height:=ImaGuideBmp.Height;
+end;
+end;
+
+Procedure Tf_main.ClearGuideImage;
+begin
+ScrGuideBmp.FillRect(0,0,ScrGuideBmp.Width,ScrGuideBmp.Height,clDarkBlue);
+end;
+
+Procedure Tf_main.PlotGuideImage;
+var r1,r2: double;
+    w,h,px,py,w3,h3,ww3,hh3,i,j: integer;
+    tmpbmp,str: TBGRABitmap;
+    rmode: TResampleMode;
+begin
+if (guideimg_Height=0)or(guideimg_Width=0) then exit;
+r1:=ScrGuideBmp.Width/ImaGuideBmp.Width;
+r2:=ScrGuideBmp.Height/ImaGuideBmp.Height;
+GuideZoomMin:=minvalue([1.0,r1,r2]);
+if (GuideZoomMin<1)and((GuideImgZoom<GuideZoomMin)or(abs(GuideImgZoom-GuideZoomMin)<0.01)) then GuideImgZoom:=0;
+{$ifdef debug_raw}writeln(FormatDateTime(dateiso,Now)+blank+'ClearImage');{$endif}
+ClearGuideImage;
+if LowQualityDisplay then begin
+  ImaGuideBmp.ResampleFilter:=rfBox;
+  rmode:=rmSimpleStretch;
+end
+else begin
+  ImaGuideBmp.ResampleFilter:=rfBestQuality;
+  rmode:=rmFineResample;
+end;
+
+GuideImgZoom:=0;
+
+if GuideImgZoom=0 then begin
+  // adjust
+  r1:=guideimg_Width/guideimg_Height;
+  w:=ScrGuideBmp.width;
+  h:=ScrGuideBmp.height;
+  r2:=w/h;
+  if r1>r2 then begin
+    h:=trunc(w/r1);
+    GuideImgScale0:=h/guideimg_Height;
+    px:=0;
+    py:=(ScrGuideBmp.Height-h) div 2;
+  end else begin
+    w:=trunc(h*r1);
+    GuideImgScale0:=w/guideimg_Width;
+    px:=(ScrGuideBmp.width-w) div 2;
+    py:=0;
+  end;
+  GuideOrigX:=round(px/GuideImgScale0);
+  GuideOrigY:=round(py/GuideImgScale0);
+  {$ifdef debug_raw}writeln(FormatDateTime(dateiso,Now)+blank+'Resample');{$endif}
+  str:=ImaGuideBmp.Resample(w,h,rmode) as TBGRABitmap;
+  {$ifdef debug_raw}writeln(FormatDateTime(dateiso,Now)+blank+'PutImage');{$endif}
+  ScrGuideBmp.PutImage(px,py,str,dmSet);
+  str.Free;
+{end
+else if ImgZoom=1 then begin
+   // zoom 1
+   px:=round(ImgCx)-((img_Width-ScrBmp.Width) div 2);
+   py:=round(ImgCy)-((img_Height-ScrBmp.Height) div 2);
+   OrigX:=px;
+   OrigY:=py;
+   {$ifdef debug_raw}writeln(FormatDateTime(dateiso,Now)+blank+'PutImage');{$endif}
+   ScrBmp.PutImage(px,py,imabmp,dmSet);
+end
+else begin
+   // other zoom
+   if ImgZoom<ZoomMin then ImgZoom:=ZoomMin;
+   tmpbmp:=TBGRABitmap.Create(round(ScrBmp.Width/ImgZoom),round(ScrBmp.Height/ImgZoom),clDarkBlue);
+   px:=round(ImgCx)-((img_Width-tmpbmp.Width) div 2);
+   py:=round(ImgCy)-((img_Height-tmpbmp.Height) div 2);
+   OrigX:=px;
+   OrigY:=py;
+   {$ifdef debug_raw}writeln(FormatDateTime(dateiso,Now)+blank+'PutImage');{$endif}
+   tmpbmp.PutImage(px,py,ImaBmp,dmSet);
+   {$ifdef debug_raw}writeln(FormatDateTime(dateiso,Now)+blank+'Resample');{$endif}
+   str:=tmpbmp.Resample(ScrBmp.Width,ScrBmp.Height,rmSimpleStretch) as TBGRABitmap;
+   {$ifdef debug_raw}writeln(FormatDateTime(dateiso,Now)+blank+'PutImage');{$endif}
+   ScrBmp.PutImage(0,0,str,dmSet);
+   str.Free;
+   tmpbmp.Free;  }
+end;
+
+if f_visu.FlipHorz then {$ifdef debug_raw}begin; writeln(FormatDateTime(dateiso,Now)+blank+'HorizontalFlip');{$endif}ScrGuideBmp.HorizontalFlip;{$ifdef debug_raw}end;{$endif}
+if f_visu.FlipVert then {$ifdef debug_raw}begin; writeln(FormatDateTime(dateiso,Now)+blank+'VerticalFlip');{$endif}ScrGuideBmp.VerticalFlip;{$ifdef debug_raw}end;{$endif}
+ImageGuide.Invalidate;
+{$ifdef debug_raw}writeln(FormatDateTime(dateiso,Now)+blank+'PlotImage end');{$endif}
+end;
+
+procedure Tf_main.ImageGuidePaint(Sender: TObject);
+begin
+try
+  if (guideimg_Height>0)and(guideimg_Width>0) then
+     ScrGuideBmp.Draw(ImageGuide.Canvas,0,0,true);
+  ImageGuide.Canvas.Brush.Color:=clBlack;
+  ImageGuide.Canvas.Brush.Style:=bsSolid;
+  ImageGuide.Canvas.Font.Color:=clSilver;
+  ImageGuide.Canvas.Font.Size:=DoScaleX(16);
+  ImageGuide.Canvas.TextOut(1, 1, rsGuideCamera);
+except
+end;
+end;
+
+
+procedure Tf_main.InternalguiderLoop(Sender: TObject);
+begin
+  StopInternalguider:=false;
+  InternalguiderRunning:=true;
+  StartGuideExposure(Sender);
+end;
+
 procedure Tf_main.InternalguiderStart(Sender: TObject);
 begin
   Application.QueueAsyncCall(@InternalguiderStartAsync,0);
 end;
-
 
 procedure mad_median(list: array of double;leng :integer;out mad,median :double);{calculate mad and median without modifying the data}
 var  {idea from https://eurekastatistics.com/using-the-median-absolute-deviation-to-find-outliers/}
@@ -14844,7 +15122,7 @@ begin
   y2:=x * sin_rot + y*cos_rot;
 end;
 
-function  Tf_main.measure_drift(var initialize:boolean; out driftX,driftY :double) : integer;// ReferenceX,Y indicates the total drift, driftX,driftY to drift since previouse call. Arrays old_xy_array,xy_array are for storage star positions
+function  Tf_main.measure_drift(var initialize:boolean; out drX,drY :double) : integer;// ReferenceX,Y indicates the total drift, drX,drY to drift since previouse call. Arrays old_xy_array,xy_array are for storage star positions
 var
   i,x,y, fitsx,fitsy,stepsize,xsize,ysize,areaX,areaY,nr_areas_inX,nr_areas_inY,star_counter,match_counter,r, rxc,ryc,len: integer;
   drift_arrayX,drift_arrayY : array of double;
@@ -14864,15 +15142,13 @@ begin
   star_counter:=0;
   stepsize:=searchA-overlap;//some overlap
 
-  Image1.Canvas.Pen.Color:=clYellow;
-  Image1.Canvas.Pen.Mode:=pmMerge;
-  Image1.Canvas.Pen.Style:=psSolid;
-  Image1.Canvas.Pen.Width:=1;
+  ImaGuideBmp.Canvas.Pen.Color:=clYellow;
+  ImaGuideBmp.Canvas.Pen.Mode:=pmMerge;
+  ImaGuideBmp.Canvas.Pen.Style:=psSolid;
+  ImaGuideBmp.Canvas.Pen.Width:=1;
 
-  f_preview.ControlExposure(f_preview.Exposure, f_preview.Bin, f_preview.Bin, LIGHT, ReadoutModePreview, f_preview.Gain, f_preview.Offset);
-
-  xsize:=fits.HeaderInfo.naxis1;// width image
-  ysize:=fits.HeaderInfo.naxis2;// height image
+  xsize:=guidefits.HeaderInfo.naxis1;// width image
+  ysize:=guidefits.HeaderInfo.naxis2;// height image
 
   nr_areas_inX:=xsize div stepsize;  //number the areas in x
   nr_areas_inY:=ysize div stepsize;  //number of areas in y
@@ -14889,7 +15165,7 @@ begin
         areaX:=fitsX div stepsize;//area position;
         areaY:=fitsY div stepsize;
 
-        fits.GetHFD2(fitsX,fitsY,searchA,xc,yc,bg,bgdev,hfd1,star_fwhm,vmax,snr,flux,false);{find a star in this segment}
+        guidefits.GetHFD2(fitsX,fitsY,searchA,xc,yc,bg,bgdev,hfd1,star_fwhm,vmax,snr,flux,false);{find a star in this segment}
 
         if ((snr>10) and (abs(fitsX-xc)<stepsize div 2) and (abs(fitsY-yc)<stepsize div 2) and (star_counter<maxstars))  then //detection and no other area closer
         begin // star in this area
@@ -14901,14 +15177,12 @@ begin
           xy_array[star_counter].flux:=flux;
           inc(star_counter);
 
-          // Convert FITS coordinates to Screen coordinates
-          Fits2Screen(round(xc),round(yc),f_visu.FlipHorz,f_visu.FlipVert,rxc,ryc);
+          // Mark star area
           r:=round(hfd1*3);
-          image1.Canvas.Frame(rxc-r,ryc-r,rxc+r,ryc+r);
+          rxc:=round(xc);
+          ryc:=round(yc);
+          ImaGuideBmp.Canvas.Frame(rxc-r,ryc-r,rxc+r,ryc+r);
 
-          //Fits2Screen(fitsX,fitsY,f_visu.FlipHorz,f_visu.FlipVert,rxc,ryc);
-          //r:=stepsize div 2;
-          //image1.Canvas.Frame(rxc-r,ryc-r,rxc+r,ryc+r);
         end
         else
         begin //no star in this area
@@ -14929,9 +15203,9 @@ begin
     for i:=0 to length(xy_array_old)-1 do
     begin
       if xy_array_old[i].flux<>0 then //keep tracking if star drifts away
-        fits.GetHFD2(round(xy_array_old[i].x2),round(xy_array_old[i].y2),searchA{area},xc,yc,bg,bgdev,hfd1,star_fwhm,vmax,snr,flux,false) {find a star at previous position. So keep tracking while it is drifting}
+        guidefits.GetHFD2(round(xy_array_old[i].x2),round(xy_array_old[i].y2),searchA{area},xc,yc,bg,bgdev,hfd1,star_fwhm,vmax,snr,flux,false) {find a star at previous position. So keep tracking while it is drifting}
       else // try in initial area
-        fits.GetHFD2(round(xy_array_old[i].x1),round(xy_array_old[i].y1),searchA,xc,yc,bg,bgdev,hfd1,star_fwhm,vmax,snr,flux,false);{find a star in the orginal segment}
+        guidefits.GetHFD2(round(xy_array_old[i].x1),round(xy_array_old[i].y1),searchA,xc,yc,bg,bgdev,hfd1,star_fwhm,vmax,snr,flux,false);{find a star in the orginal segment}
 
       if snr>10 then //detection
       begin // star in this area
@@ -14940,10 +15214,12 @@ begin
         xy_array[i].flux:=flux;
         inc(star_counter);
 
-        // Convert FITS coordinates to Screen coordinates
-        Fits2Screen(round(xc),round(yc),f_visu.FlipHorz,f_visu.FlipVert,rxc,ryc);
+        // Mark star area
         r:=round(hfd1*3);
-        image1.Canvas.Frame(rxc-r,ryc-r,rxc+r,ryc+r);
+        rxc:=round(xc);
+        ryc:=round(yc);
+        ImaGuideBmp.Canvas.Frame(rxc-r,ryc-r,rxc+r,ryc+r);
+
       end
       else
       begin //Star lost temporary
@@ -14983,8 +15259,8 @@ begin
       newmessage('Guider, warning lost track or exposure time changed!',2); //more then 7.5 pixels drift in one cycle
 
     //Remove outliers and calculate mean drift in X and Y.
-    get_best_mean(drift_arrayX,match_counter {length},driftX );
-    get_best_mean(drift_arrayY,match_counter {length},driftY );
+    get_best_mean(drift_arrayX,match_counter {length},drX );
+    get_best_mean(drift_arrayY,match_counter {length},drY );
   end;
 
   {copy xy_array to xy_array_old}
@@ -14997,11 +15273,8 @@ end;
 
 procedure Tf_main.InternalguiderStartAsync(Data: PtrInt); {internal guider}
 var
-  i,pulseRA,pulseDEC,maxpulse  : integer;
-  driftX,driftY,driftRA,driftDec,timeend,
-  correctionRA,correctionDEC, PactionRA,PactionDEC,thecos,old_PactionRA,old_PactionDEC : double;
-  xy_trend : xy_guiderlist;{fu_internalguider}
-  initialize:boolean;
+  i,maxpulse: integer;
+  timeend: double;
 const
    nrpointsTrend=50; //number of trend points plotted
    max_duration=2500;//max duration guide puls in milliseconds
@@ -15017,6 +15290,7 @@ begin
     exit;
   end;
   StopInternalguider:=false;
+  InternalguiderGuiding:=true;
 
   if mount.Tracking=false then
   begin
@@ -15037,8 +15311,19 @@ begin
   old_PactionRA:=0;
   old_PactionDEC:=0;
 
-  initialize:=true; //initialize;
-  repeat
+  InternalguiderInitialize:=true; //initialize;
+
+  InternalguiderLoop(nil);
+
+end;
+
+procedure Tf_main.InternalAutoguiding;
+var i,maxpulse: integer;
+    timeend:double;
+const
+   nrpointsTrend=50; //number of trend points plotted
+   max_duration=2500;//max duration guide puls in milliseconds
+begin
     f_internalguider.draw_xy(xy_trend);//plot xy values
     f_internalguider.draw_trend(xy_trend);// plot trends
     for i:=nrpointsTrend-2 downto 0 do {shift values and make place for new values}
@@ -15050,9 +15335,8 @@ begin
     end;
 
     //Measure drift
-    repeat
-      if measure_drift(initialize,driftX,driftY)=2 then exit;// ReferenceX,Y indicates the total drift, driftX,driftY to drift since previous call. Arrays xy_array_old,xy_array are for storage star positions
-    until initialize=false; //until star(s) detected. If no stars are detected initialize is returned true
+    if measure_drift(InternalguiderInitialize,driftX,driftY)=2 then exit;// ReferenceX,Y indicates the total drift, driftX,driftY to drift since previous call. Arrays xy_array_old,xy_array are for storage star positions
+    if InternalguiderInitialize then exit; //until star(s) detected. If no stars are detected initialize is returned true
 
     //rotate drift if required.
     rotate2((- f_internalguider.PA*pi/180),driftX,driftY, driftRA,driftDec);{rotate a vector point, counter clockwise}
@@ -15151,20 +15435,21 @@ begin
       xy_trend[0,2]:=0;
       xy_trend[0,3]:=0;
     end;
-  until false;
 end;
-
 
 procedure Tf_main.InternalguiderStop(Sender: TObject);
 begin
   StopInternalguider:=true;
+  InternalguiderRunning:=false;
+  InternalguiderGuiding:=false;
+  InternalguiderCalibrating:=false;
 end;
 
 
 procedure Tf_main.InternalguiderCalibrate(Sender: TObject);
 var
   duration,flip,count,i : integer;
-  driftX,driftY,referenceX,referenceY,drift,driftOld, paEast, paNorth, pulsegainEast,pulsegainWest,pulsegainNorth,pulsegainSouth, thecos,theangle : double;
+  drift,driftOld, paEast, paNorth, pulsegainEast,pulsegainWest,pulsegainNorth,pulsegainSouth, theangle : double;
   initialize      : boolean;
 const
    nrtest=8; //number stops for measuring the pixel scale in arcseconds

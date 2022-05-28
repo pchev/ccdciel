@@ -37,15 +37,19 @@ type
   { Tf_internalguider }
 
   Tf_internalguider = class(TFrame)
+    ButtonLoop: TButton;
     ButtonCalibrate: TButton;
     ButtonStart: TButton;
     ButtonStop: TButton;
     disable_guiding1: TCheckBox;
+    Exposure: TFloatSpinEdit;
     GroupBox1: TGroupBox;
     GroupBox2: TGroupBox;
+    Label10: TLabel;
     Label11: TLabel;
     Label12: TLabel;
     Label13: TLabel;
+    Label14: TLabel;
     Label5: TLabel;
     Label6: TLabel;
     Label7: TLabel;
@@ -69,6 +73,8 @@ type
     Label4: TLabel;
     ra_gain1: TSpinEdit;
     scale1: TUpDown;
+    Binning: TSpinEdit;
+    TabSheetCamera: TTabSheet;
     unitarcseconds1: TCheckBox;
     xy_trend1: TImage;
     xy_Panel1: TImage;
@@ -79,17 +85,18 @@ type
     Panel1: TPanel;
     Panel3: TPanel;
     dec_gain1: TSpinEdit;
-    TabSheet2: TTabSheet;
-    TabSheet1: TTabSheet;
+    TabSheetAdvanced: TTabSheet;
+    TabSheetGuider: TTabSheet;
     Title: TLabel;
     procedure ButtonCalibrateClick(Sender: TObject);
+    procedure ButtonLoopClick(Sender: TObject);
     procedure ButtonStartClick(Sender: TObject);
     procedure ButtonStopClick(Sender: TObject);
     procedure scale1Changing(Sender: TObject; var AllowChange: Boolean);
   private
     { private declarations }
     thescale : double;
-    FonStart, FonStop, FonCalibrate: TNotifyEvent;
+    FonStart, FonStop, FonCalibrate, FonLoop: TNotifyEvent;
     procedure SetLed (cl : tcolor);
 
     procedure SetRA_hysteresis(value:integer);
@@ -130,9 +137,11 @@ type
     constructor Create(aOwner: TComponent); override;
     destructor  Destroy; override;
     procedure SetLang;
+    procedure Stop;
     procedure draw_xy(xy_trend :xy_guiderlist);//draw XY points
     procedure draw_trend(xy_trend :xy_guiderlist);//draw trend
     procedure trend_message(message1,message2 :string);//clear trend and place message
+    property onLoop: TNotifyEvent read FonLoop write FonLoop;
     property onStart: TNotifyEvent read FonStart write FonStart;
     property onStop: TNotifyEvent read FonStop write FonStop;
     property onCalibrate: TNotifyEvent read FonCalibrate write FonCalibrate;
@@ -371,6 +380,10 @@ begin
   ButtonStart.enabled:=true;
 end;
 
+procedure Tf_internalguider.Stop;
+begin
+   ButtonStopClick(nil);
+end;
 
 procedure Tf_internalguider.scale1Changing(Sender: TObject;
   var AllowChange: Boolean);
@@ -385,6 +398,11 @@ begin
   setled(clYellow);
   ButtonStart.enabled:=false;
   if Assigned(FonCalibrate) then FonCalibrate(self);
+end;
+
+procedure Tf_internalguider.ButtonLoopClick(Sender: TObject);
+begin
+  if Assigned(FonLoop) then FonLoop(self);
 end;
 
 

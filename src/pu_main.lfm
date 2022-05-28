@@ -117,6 +117,24 @@ object f_main: Tf_main
           TabOrder = 0
         end
       end
+      object PageControlImage: TPageControl
+        Left = 0
+        Height = 537
+        Top = 0
+        Width = 769
+        TabStop = False
+        ActivePage = MainImage
+        Align = alClient
+        ShowTabs = False
+        TabIndex = 0
+        TabOrder = 1
+        object MainImage: TTabSheet
+          Caption = 'MainImage'
+        end
+        object GuideImage: TTabSheet
+          Caption = 'GuideImage'
+        end
+      end
     end
     object PanelBottom: TPanel
       Left = 0

@@ -378,12 +378,13 @@ var
   MeridianOption,MinutesPastMeridian, MinutesPastMeridianMin, MeridianFlipPauseTimeout: integer;
   MeridianFlipPauseBefore, MeridianFlipPauseAfter,MeridianFlipCalibrate,MeridianFlipAutofocus,MeridianFlipStopSlaving: boolean;
   astrometryResolver: integer;
-  OrigX, OrigY,img_Height,img_Width : integer;
+  OrigX, OrigY,img_Height,img_Width,GuideOrigX, GuideOrigY,guideimg_Height,guideimg_Width : integer;
   ImgFrameX,ImgFrameY,ImgFrameW,ImgFrameH: integer;
   ImgScale0,ImgPixRatio: double;
   ImgZoom,ZoomMin,SplitZoom: double;
   SplitImage: boolean;
-  ScrWidth,ScrHeigth, SplitMargin: integer;
+  GuideImgScale0,GuideImgPixRatio,GuideImgZoom,GuideZoomMin: double;
+  ScrWidth,ScrHeigth,ScrGuideWidth,ScrGuideHeigth, SplitMargin: integer;
   MaxADU, ClippingOverflow, ClippingUnderflow: double;
   MsgHandle: THandle;
   LastPixelSize: double;
