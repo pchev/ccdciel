@@ -600,7 +600,7 @@ type
     Procedure WriteLog( buf : string);
     Procedure WriteDeviceLog( buf : string);
     Procedure PurgeOldLog;
-    procedure SetTool(tool:TFrame; configname: string; defaultParent: TPanel; defaultpos: integer; chkmenu,toolmenu: TMenuItem; DeviceSelected:boolean);
+    procedure SetTool(tool:TFrame; configname: string; defaultParent: TPanel; defaultpos: integer; chkmenu,toolmenu: TMenuItem; DeviceSelected:boolean; ForceDefault:boolean=false);
     procedure UpdConfig(oldver:string);
     procedure SetConfig;
     procedure SetOptions;
@@ -1039,29 +1039,40 @@ begin
   Close;
 end;
 
-procedure Tf_main.SetTool(tool:TFrame; configname: string; defaultParent: TPanel; defaultpos: integer; chkmenu,toolmenu: TMenuItem; DeviceSelected:boolean);
+procedure Tf_main.SetTool(tool:TFrame; configname: string; defaultParent: TPanel; defaultpos: integer; chkmenu,toolmenu: TMenuItem; DeviceSelected:boolean; ForceDefault:boolean=false);
 var pn: string;
     i: integer;
     par: Tpanel;
     opm,npm: Tmenuitem;
+    vis: boolean;
 begin
-pn:=screenconfig.GetValue('/Tools/'+configname+'/Parent',defaultParent.Name);
 par:=defaultParent;
-for i:=0 to ComponentCount-1 do begin
-   if Components[i].Name=pn then begin
-      par:=TPanel(Components[i]);
-      break;
-   end;
+if not ForceDefault then begin
+  pn:=screenconfig.GetValue('/Tools/'+configname+'/Parent',defaultParent.Name);
+  for i:=0 to ComponentCount-1 do begin
+     if Components[i].Name=pn then begin
+        par:=TPanel(Components[i]);
+        break;
+     end;
+  end;
 end;
 if par.Width>par.Height then begin
    tool.Align:=alLeft;
 end else begin
    tool.Align:=alTop;
 end;
-tool.Top:=screenconfig.GetValue('/Tools/'+widestring(configname)+'/Top',defaultpos);
-tool.Left:=screenconfig.GetValue('/Tools/'+widestring(configname)+'/Left',defaultpos);
+if ForceDefault then begin
+  tool.Top:=defaultpos;
+  tool.Left:=defaultpos;
+  vis:=true;
+end
+else begin
+  tool.Top:=screenconfig.GetValue('/Tools/'+widestring(configname)+'/Top',defaultpos);
+  tool.Left:=screenconfig.GetValue('/Tools/'+widestring(configname)+'/Left',defaultpos);
+  vis:=screenconfig.GetValue('/Tools/'+widestring(configname)+'/Visible',true);
+end;
 tool.Parent:=par;
-tool.Visible:=DeviceSelected and screenconfig.GetValue('/Tools/'+widestring(configname)+'/Visible',true);
+tool.Visible:=DeviceSelected and vis;
 chkmenu.Checked:=tool.Visible;
 tool.Tag:=PtrInt(toolmenu);
 if (toolmenu<>nil)and(par.tag>0) then begin
@@ -2365,24 +2376,6 @@ begin
   f_photometry.onMagnitudeCalibrationChange:=@MagnitudeCalibrationChange;
   f_photometry.onClosePhotometry:=@PhotometryClose;
 
-  f_internalguider.RA_gain1.Text:=config.GetValue('/InternalGuider/RaGain','70');
-  f_internalguider.DEC_gain1.Text:=config.GetValue('/InternalGuider/DecGain','70');
-  f_internalguider.RA_hysteresis1.Text:=config.GetValue('/InternalGuider/RaHysteresis','50');
-  f_internalguider.DEC_hysteresis1.Text:=config.GetValue('/InternalGuider/DecHysteresis','50');
-  f_internalguider.minimum_moveRA1.Text:=config.GetValue('/InternalGuider/MinimumMoveRa','0.2');
-  f_internalguider.minimum_moveDEC1.Text:=config.GetValue('/InternalGuider/MinimumMoveDec','0.4');
-  f_internalguider.pa1.Text:=config.GetValue('/InternalGuider/Pa','0');
-  f_internalguider.pulseGainEast1.Text:=config.GetValue('/InternalGuider/PulseGainEast','3');
-  f_internalguider.pulseGainWest1.Text:=config.GetValue('/InternalGuider/PulseGainWest','3');
-  f_internalguider.pulseGainNorth1.Text:=config.GetValue('/InternalGuider/PulseGainNorth','3');
-  f_internalguider.pulseGainSouth1.Text:=config.GetValue('/InternalGuider/PulseGainSouth','3');
-  f_internalguider.Pier_Side1.Text:=config.GetValue('/InternalGuider/PierSide','W');
-  f_internalguider.pixelsize1.Text:=config.GetValue('/InternalGuider/PixelSize','2.5');
-  f_internalguider.unitarcseconds1.checked:=config.GetValue('/InternalGuider/UnitArcSec',false);
-  f_internalguider.measure_method2.checked:=config.GetValue('/InternalGuider/Method2',false);
-  f_internalguider.trend_scale:=config.GetValue('/InternalGuider/Scale',2);
-
-
   LoadFocusStar(config.GetValue('/StarAnalysis/AutofocusStarMag',4));
   deepstring:=TStringList.Create;
 
@@ -2478,7 +2471,7 @@ begin
 
   SetTool(f_video,'Video',PanelRight5,0,MenuViewVideo,MenuVideo,true);
 
-  SetTool(f_internalguider,'InternalGuider',PanelRight6,0,MenuViewInternalGuider,MenuInternalGuider,WantGuideCamera and WantMount);
+  SetTool(f_internalguider,'InternalGuider',PanelRight6,0,MenuViewInternalGuider,MenuInternalGuider,WantGuideCamera and WantMount,true);
 
 
   MenuViewClock.Checked:=screenconfig.GetValue('/Tools/Clock/Visible',true);
@@ -2786,7 +2779,7 @@ if sender is TMenuItem then begin
 
     SetTool(f_video,'',PanelRight5,0,MenuViewVideo,MenuVideo,true);
 
-    SetTool(f_internalguider,'',PanelRight6,0,MenuViewInternalguider,MenuInternalguider,WantGuideCamera and WantMount);
+    SetTool(f_internalguider,'',PanelRight6,0,MenuViewInternalguider,MenuInternalguider,WantGuideCamera and WantMount,true);
   end
   else if n=2 then begin
     // use left and right panel
@@ -2820,7 +2813,7 @@ if sender is TMenuItem then begin
 
    SetTool(f_video,'',PanelRight5,0,MenuViewVideo,MenuVideo,true);
 
-   SetTool(f_internalguider,'',PanelRight6,0,MenuViewInternalguider,MenuInternalguider,WantGuideCamera and WantMount);
+   SetTool(f_internalguider,'',PanelRight6,0,MenuViewInternalguider,MenuInternalguider,WantGuideCamera and WantMount,true);
   end;
   for i:=0 to MaxMenulevel do AccelList[i]:='';
   SetMenuAccelerator(MainMenu1.items,0,AccelList);
@@ -4061,6 +4054,24 @@ begin
   SettleMinTime:=config.GetValue('/Autoguider/Settle/MinTime',5);
   SettleMaxTime:=config.GetValue('/Autoguider/Settle/MaxTime',30);
   CalibrationDelay:=config.GetValue('/Autoguider/Settle/CalibrationDelay',300);
+
+  f_internalguider.RA_gain1.Text:=config.GetValue('/InternalGuider/RaGain','70');
+  f_internalguider.DEC_gain1.Text:=config.GetValue('/InternalGuider/DecGain','70');
+  f_internalguider.RA_hysteresis1.Text:=config.GetValue('/InternalGuider/RaHysteresis','50');
+  f_internalguider.DEC_hysteresis1.Text:=config.GetValue('/InternalGuider/DecHysteresis','50');
+  f_internalguider.minimum_moveRA1.Text:=config.GetValue('/InternalGuider/MinimumMoveRa','0.2');
+  f_internalguider.minimum_moveDEC1.Text:=config.GetValue('/InternalGuider/MinimumMoveDec','0.4');
+  f_internalguider.pa1.Text:=config.GetValue('/InternalGuider/Pa','0');
+  f_internalguider.pulseGainEast1.Text:=config.GetValue('/InternalGuider/PulseGainEast','3');
+  f_internalguider.pulseGainWest1.Text:=config.GetValue('/InternalGuider/PulseGainWest','3');
+  f_internalguider.pulseGainNorth1.Text:=config.GetValue('/InternalGuider/PulseGainNorth','3');
+  f_internalguider.pulseGainSouth1.Text:=config.GetValue('/InternalGuider/PulseGainSouth','3');
+  f_internalguider.Pier_Side1.Text:=config.GetValue('/InternalGuider/PierSide','W');
+  f_internalguider.pixelsize1.Text:=config.GetValue('/InternalGuider/PixelSize','2.5');
+  f_internalguider.unitarcseconds1.checked:=config.GetValue('/InternalGuider/UnitArcSec',false);
+  f_internalguider.measure_method2.checked:=config.GetValue('/InternalGuider/Method2',false);
+  f_internalguider.trend_scale:=config.GetValue('/InternalGuider/Scale',2);
+
   MeridianOption:=config.GetValue('/Meridian/MeridianOption',0);
   MinutesPastMeridian:=config.GetValue('/Meridian/MinutesPast',15);
   MinutesPastMeridianMin:=config.GetValue('/Meridian/MinutesPastMin',10);
@@ -4434,11 +4445,6 @@ begin
  screenconfig.SetValue('/Tools/Switch/Visible',f_switch.Visible or (not WantSwitch));
  screenconfig.SetValue('/Tools/Switch/Top',f_switch.Top);
  screenconfig.SetValue('/Tools/Switch/Left',f_switch.Left);
-
- screenconfig.SetValue('/Tools/InternalGuider/Parent',f_internalguider.Parent.Name);
- screenconfig.SetValue('/Tools/InternalGuider/Visible',f_internalguider.Visible or (not WantGuideCamera));
- screenconfig.SetValue('/Tools/InternalGuider/Top',f_internalguider.Top);
- screenconfig.SetValue('/Tools/InternalGuider/Left',f_internalguider.Left);
 
  screenconfig.SetValue('/Tools/Clock/Visible',MenuViewClock.Checked);
 
