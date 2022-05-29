@@ -425,6 +425,7 @@ begin
   SetStatus('Looping Exposures',GUIDER_IDLE);
   StopInternalguider:=false;
   InternalguiderRunning:=true;
+  Finternalguider.ButtonLoop.enabled:=false;
   Finternalguider.ButtonCalibrate.enabled:=false;
   Finternalguider.ButtonStart.enabled:=false;
   StartGuideExposure;
@@ -683,6 +684,7 @@ begin
   InternalguiderRunning:=false;
   InternalguiderGuiding:=false;
   InternalguiderCalibrating:=false;
+  Finternalguider.ButtonLoop.enabled:=true;
   Finternalguider.ButtonCalibrate.enabled:=true;
   Finternalguider.ButtonStart.enabled:=true;
   SetStatus('Stopped',GUIDER_IDLE);
@@ -735,7 +737,6 @@ procedure T_autoguider_internal.InternalCalibration;
 var drift: double;
   procedure StopError;
   begin
-    finternalguider.ButtonStart.enabled:=true;
     InternalguiderStop;
     msg('Calibration error',1);
     SetStatus('Calibration Failed',GUIDER_ALERT);
@@ -939,7 +940,6 @@ case InternalguiderCalibrationDirection of
   7:begin
       msg('Ready to guide!',1);
       finternalguider.trend_message('Calibration is ready.','');
-      finternalguider.ButtonStart.enabled:=true;
       InternalguiderStop;
       SetStatus('Calibration Complete',GUIDER_IDLE);
     end;
