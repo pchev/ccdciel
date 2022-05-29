@@ -156,6 +156,7 @@ type
     Label141: TLabel;
     Label142: TLabel;
     Label143: TLabel;
+    Label144: TLabel;
     Label145: TLabel;
     Label146: TLabel;
     Label147: TLabel;
@@ -933,6 +934,7 @@ begin
   GuideIndiSensor.Items[0]:=rsMainSensor;
   GuideIndiSensor.Items[1]:=rsGuiderSensor;
   GuideCameraAutoLoadConfig.Caption:=rsLoadConfigur;
+  label144.Caption:=rsToUseThisDev;
 
   Filterwheel.Caption:=rsFilterWheel;
   label8.Caption:=rsNumberOfSlot;

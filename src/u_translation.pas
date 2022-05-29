@@ -1396,6 +1396,8 @@ resourcestring
   rsTriangleRota = 'Triangle rotation angle';
   rsInternal = 'Internal';
   rsInternalGuid = 'Internal guider';
+  rsToUseThisDev = 'To use this device, be sure to also configure the Internal Guider in Preferences/Auto-guiding';
+  rsToUseTheInte = 'To use the Internal autoguider you need to configure a Mount and a Guide camera in the profile Devices setup';
 
 implementation
 

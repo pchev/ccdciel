@@ -36,6 +36,7 @@ type
   Tf_option = class(TForm)
     ButtonSeqDir: TButton;
     CdCPath: TEdit;
+    Label155: TLabel;
     PageInternal: TPage;
     SaveFormat: TRadioGroup;
     StackDebayer: TCheckBox;
@@ -1150,6 +1151,7 @@ begin
   MeridianFlipStopSlaving.Caption:=rsSuspendDomeS;
   PageGuide.Caption := rsAutoGuiding;
   AutoguiderBox.Caption := rsSoftware;
+  Label155.Caption:= rsToUseTheInte;
   Label120.Caption:= rsNoAutoGuidin+crlf+rsSetTheMeanDi;
   GroupBox5.Caption := rsDithering;
   Label23.Caption := rsPixels;

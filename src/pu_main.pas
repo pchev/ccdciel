@@ -2478,7 +2478,7 @@ begin
 
   SetTool(f_video,'Video',PanelRight5,0,MenuViewVideo,MenuVideo,true);
 
-  SetTool(f_internalguider,'InternalGuider',PanelRight6,0,MenuViewInternalGuider,MenuInternalGuider,WantGuideCamera);
+  SetTool(f_internalguider,'InternalGuider',PanelRight6,0,MenuViewInternalGuider,MenuInternalGuider,WantGuideCamera and WantMount);
 
 
   MenuViewClock.Checked:=screenconfig.GetValue('/Tools/Clock/Visible',true);
@@ -2764,8 +2764,7 @@ if sender is TMenuItem then begin
     SetTool(f_autoguider,'',PanelRight1,f_devicesconnection.top+1,MenuViewAutoguider,MenuAutoguider,true);
     SetTool(f_planetarium,'',PanelRight1,f_autoguider.top+1,MenuViewPlanetarium,MenuPlanetarium,true);
     SetTool(f_preview,'',PanelRight1,f_planetarium.top+1,MenuViewPreview,MenuPreview,true);
-    SetTool(f_internalguider,'',PanelRight1,f_preview.top+1,MenuViewInternalGuider,MenuInternalGuider,true);
-    SetTool(f_script,'',PanelRight1,f_internalguider.top+1,MenuViewScript,MenuScript,true);
+    SetTool(f_script,'',PanelRight1,f_preview.top+1,MenuViewScript,MenuScript,true);
     SetTool(f_dome,'',PanelRight1,f_script.top+1,MenuViewDome,nil,WantDome);
     SetTool(f_weather,'',PanelRight1,f_dome.top+1,MenuViewWeather,nil,WantWeather);
     SetTool(f_safety,'',PanelRight1,f_weather.top+1,MenuViewSafety,nil,WantSafety);
@@ -2787,7 +2786,7 @@ if sender is TMenuItem then begin
 
     SetTool(f_video,'',PanelRight5,0,MenuViewVideo,MenuVideo,true);
 
-    SetTool(f_internalguider,'',PanelRight6,0,MenuViewInternalguider,MenuInternalguider,WantGuideCamera);
+    SetTool(f_internalguider,'',PanelRight6,0,MenuViewInternalguider,MenuInternalguider,WantGuideCamera and WantMount);
   end
   else if n=2 then begin
     // use left and right panel
@@ -2805,8 +2804,7 @@ if sender is TMenuItem then begin
    SetTool(f_autoguider,'',PanelRight1,f_devicesconnection.top+1,MenuViewAutoguider,MenuAutoguider,true);
    SetTool(f_planetarium,'',PanelRight1,f_autoguider.top+1,MenuViewPlanetarium,MenuPlanetarium,true);
    SetTool(f_preview,'',PanelRight1,f_planetarium.top+1,MenuViewPreview,MenuPreview,true);
-   SetTool(f_internalguider,'',PanelRight1,f_preview.top+1,MenuViewInternalGuider,MenuInternalGuider,true);
-   SetTool(f_weather,'',PanelRight1,f_internalguider.top+1,MenuViewWeather,nil,WantWeather);
+   SetTool(f_weather,'',PanelRight1,f_preview.top+1,MenuViewWeather,nil,WantWeather);
    SetTool(f_safety,'',PanelRight1,f_weather.top+1,MenuViewSafety,nil,WantSafety);
    SetTool(f_dome,'',PanelRight1,f_safety.top+1,MenuViewDome,nil,WantDome);
    SetTool(f_cover,'',PanelRight1,f_dome.top+1,MenuViewCover,nil,WantCover);
@@ -2822,7 +2820,7 @@ if sender is TMenuItem then begin
 
    SetTool(f_video,'',PanelRight5,0,MenuViewVideo,MenuVideo,true);
 
-   SetTool(f_internalguider,'',PanelRight6,0,MenuViewInternalguider,MenuInternalguider,WantGuideCamera);
+   SetTool(f_internalguider,'',PanelRight6,0,MenuViewInternalguider,MenuInternalguider,WantGuideCamera and WantMount);
   end;
   for i:=0 to MaxMenulevel do AccelList[i]:='';
   SetMenuAccelerator(MainMenu1.items,0,AccelList);

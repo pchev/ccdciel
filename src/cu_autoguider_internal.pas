@@ -3,7 +3,7 @@ unit cu_autoguider_internal;
 {$mode objfpc}{$H+}
 
 {
-Copyright (C) 2017 Patrick Chevalley
+Copyright (C) 2022 Patrick Chevalley & Han Kleijn
 
 http://www.ap-i.net
 pch@ap-i.net
@@ -101,7 +101,7 @@ end;
 
 Procedure T_autoguider_internal.Connect(cp1: string; cp2:string=''; cp3:string=''; cb1:boolean=False);
 begin
-  // this not the thread, connect() is called only to destroy
+  // this not use the thread, connect() is called only to destroy
   start;
 end;
 
@@ -112,7 +112,7 @@ end;
 
 procedure T_autoguider_internal.Execute;
 begin
-  // this not the thread, just exit to destroy
+  // this not use the thread, just exit to destroy
 end;
 
 procedure T_autoguider_internal.Terminate;
@@ -504,6 +504,12 @@ begin
     SetStatus('Devices not connected',GUIDER_ALERT);
     exit;
   end;
+  if FCamera.Status<>devConnected then
+  begin
+    msg('Internal guider: Guide camera not connected!',1);
+    SetStatus('Guide camera not connected',GUIDER_ALERT);
+    exit;
+  end;
   if Fmount.canpulseguide=false then
   begin
     msg('Abort, mount does not support pulse guiding!',1);
@@ -689,6 +695,12 @@ begin
   begin
     msg('Internal guider: Devices not connected!',1);
     InternalguiderStop;
+    exit;
+  end;
+  if FCamera.Status<>devConnected then
+  begin
+    msg('Internal guider: Guide camera not connected!',1);
+    SetStatus('Guide camera not connected',GUIDER_ALERT);
     exit;
   end;
   if Fmount.canpulseguide=false then

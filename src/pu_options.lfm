@@ -4590,6 +4590,17 @@ object f_option: Tf_option
             end
           end
           object PageInternal: TPage
+            object Label155: TLabel
+              Left = 0
+              Height = 90
+              Top = 0
+              Width = 560
+              Align = alClient
+              AutoSize = False
+              Caption = 'Label155'
+              ParentColor = False
+              WordWrap = True
+            end
           end
         end
         object GroupBoxDrift: TGroupBox
