@@ -44,6 +44,7 @@ type
     paEast, paNorth, pulsegainEast,pulsegainWest,pulsegainNorth,pulsegainSouth,Calthecos,Caltheangle,CaldriftOld : double;
     CalibrationDuration,Calflip,CalCount,Calnrtest: integer;
     xy_array,xy_array_old : star_position_array;//internal guider for measure drift
+    Fguidespeed: double;
     function  measure_drift(var initialize: boolean; out drX,drY :double) : integer;
     Procedure StartGuideExposure;
     procedure InternalguiderStartAsync(Data: PtrInt);
@@ -428,6 +429,8 @@ begin
   Finternalguider.ButtonLoop.enabled:=false;
   Finternalguider.ButtonCalibrate.enabled:=false;
   Finternalguider.ButtonStart.enabled:=false;
+  Fguidespeed:=FMount.GuideRateRa*3600/siderealrate;
+  if Fguidespeed=0 then Fguidespeed:=0.5;
   StartGuideExposure;
 end;
 
@@ -884,7 +887,7 @@ case InternalguiderCalibrationDirection of
       finternalguider.pulsegainWest:=pulsegainWest;
       finternalguider.pulsegainNorth:=pulsegainNorth;
       finternalguider.pulsegainSouth:=pulsegainSouth;
-      finternalguider.pixel_size:=0.5*15*2/(pulsegainEast+pulsegainWest);//alternative method assuming 0.5x and 1.5x pulse speed
+      finternalguider.pixel_size:=Fguidespeed*15*2/(pulsegainEast+pulsegainWest);//alternative method assuming 0.5x and 1.5x pulse speed
       if finternalguider.measure_method2.checked then begin
         InternalguiderCalibrationDirection:=6;
         InternalguiderCalibrationStep:=0;

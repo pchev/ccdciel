@@ -14924,7 +14924,7 @@ if (guidefits.HeaderInfo.naxis>0) and guidefits.ImageValid then begin
   {$ifdef debug_raw}writeln(FormatDateTime(dateiso,Now)+blank+'FITS GetBGRABitmap');{$endif}
   guidefits.GetBGRABitmap(ImaGuideBmp);
   {$ifdef debug_raw}writeln(FormatDateTime(dateiso,Now)+blank+'FITS GetBGRABitmap end');{$endif}
-  GuideImgPixRatio:=fits.HeaderInfo.pixratio;
+  GuideImgPixRatio:=guidefits.HeaderInfo.pixratio;
   if (guidefits.HeaderInfo.pixratio<>1) then begin
     {$ifdef debug_raw}writeln(FormatDateTime(dateiso,Now)+blank+'Fix pixelratio');{$endif}
     tmpbmp:=TBGRABitmap.Create(ImaGuideBmp);
