@@ -25,7 +25,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 interface
 
-uses   UScaleDPI, Dialogs, u_translation, u_global, u_utils,
+uses   UScaleDPI, Dialogs, u_translation, u_global,
   Classes, SysUtils, FileUtil, Forms, Graphics, Controls, StdCtrls, ExtCtrls, Spin,
   math,LCLintf, ComCtrls;
 
@@ -137,7 +137,6 @@ type
     constructor Create(aOwner: TComponent); override;
     destructor  Destroy; override;
     procedure SetLang;
-    procedure Stop;
     procedure draw_xy(xy_trend :xy_guiderlist);//draw XY points
     procedure draw_trend(xy_trend :xy_guiderlist);//draw trend
     procedure trend_message(message1,message2 :string);//clear trend and place message
@@ -187,7 +186,7 @@ end;
 
 procedure Tf_internalguider.SetLang;
 begin
-  Title.Caption:='Internal guider';
+  Title.Caption:=rsInternalGuid;
 end;
 
 function Tf_internalguider.Getdisableguiding:boolean;
@@ -368,7 +367,6 @@ end;
 procedure Tf_internalguider.ButtonStartClick(Sender: TObject);
 begin
   setled(clgreen);
-  ButtonCalibrate.enabled:=false;
   if Assigned(FonStart) then FonStart(self);
 end;
 
@@ -376,13 +374,6 @@ procedure Tf_internalguider.ButtonStopClick(Sender: TObject);
 begin
   if Assigned(FonStop) then FonStop(self);
   setled(clGray);
-  ButtonCalibrate.enabled:=true;
-  ButtonStart.enabled:=true;
-end;
-
-procedure Tf_internalguider.Stop;
-begin
-   ButtonStopClick(nil);
 end;
 
 procedure Tf_internalguider.scale1Changing(Sender: TObject;
@@ -391,12 +382,9 @@ begin
   trend_scale:=scale1.position;//trigger a redraw trend
 end;
 
-
-
 procedure Tf_internalguider.ButtonCalibrateClick(Sender: TObject);
 begin
   setled(clYellow);
-  ButtonStart.enabled:=false;
   if Assigned(FonCalibrate) then FonCalibrate(self);
 end;
 
@@ -404,7 +392,6 @@ procedure Tf_internalguider.ButtonLoopClick(Sender: TObject);
 begin
   if Assigned(FonLoop) then FonLoop(self);
 end;
-
 
 procedure Tf_internalguider.draw_xy(xy_trend :xy_guiderlist);
 var
@@ -519,8 +506,6 @@ var
  i, h2, lenb, x, y, counter :integer;
  scale: double;
  scaleunit : string;
-const
-    len=2;
 begin
  with xy_trend1 do
  begin

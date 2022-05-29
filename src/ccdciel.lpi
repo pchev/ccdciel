@@ -311,7 +311,7 @@
         <PackageName Value="LCL"/>
       </Item11>
     </RequiredPackages>
-    <Units Count="120">
+    <Units Count="121">
       <Unit0>
         <Filename Value="ccdciel.lpr"/>
         <IsPartOfProject Value="True"/>
@@ -928,6 +928,10 @@
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Frame"/>
       </Unit119>
+      <Unit120>
+        <Filename Value="cu_autoguider_internal.pas"/>
+        <IsPartOfProject Value="True"/>
+      </Unit120>
     </Units>
   </ProjectOptions>
   <CompilerOptions>

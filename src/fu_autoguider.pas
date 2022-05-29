@@ -60,14 +60,14 @@ type
   private
     { private declarations }
     FonConnect,FonCalibrate,FonGuide,FonDither,FonShowStat, FonClearStat: TNotifyEvent;
-    procedure SetDitherOnly(value:boolean);
-    function  GetDitherOnly: boolean;
+    FAutoguiderType: TAutoguiderType;
+    procedure SetAutoguiderType(value:TAutoguiderType);
   public
     { public declarations }
     constructor Create(aOwner: TComponent); override;
     destructor  Destroy; override;
     procedure SetLang;
-    property DitherOnly: boolean read GetDitherOnly write SetDitherOnly;
+    property AutoguiderType: TAutoguiderType read FAutoguiderType write SetAutoguiderType;
     property onConnect: TNotifyEvent read FonConnect write FonConnect;
     property onCalibrate: TNotifyEvent read FonCalibrate write FonCalibrate;
     property onGuide: TNotifyEvent read FonGuide write FonGuide;
@@ -111,22 +111,13 @@ begin
   GuideChart.Hint:=Format(rsGuidingHisto,[crlf,crlf,crlf]);
 end;
 
-procedure Tf_autoguider.SetDitherOnly(value:boolean);
+procedure Tf_autoguider.SetAutoguiderType(value:TAutoguiderType);
 begin
-   panel3.Visible:=not value;
-   BtnGuide.Visible:=panel3.Visible;
-   if value then begin
-     BtnDither.Left:=0;
-   end
-   else begin
-     BtnDither.Left:=BtnCal.Left;
-   end;
-
-end;
-
-function  Tf_autoguider.GetDitherOnly: boolean;
-begin
-  result:=not panel3.Visible;
+  FAutoguiderType:=value;
+  panel3.Visible:=(FAutoguiderType<>agDITHER)and(FAutoguiderType<>agNONE);
+  panel4.Visible:=(FAutoguiderType<>agNONE);
+  BtnGuide.Visible:=(FAutoguiderType<>agDITHER);
+  BtnConnect.Visible:=(FAutoguiderType<>agINTERNAL);
 end;
 
 procedure Tf_autoguider.BtnConnectClick(Sender: TObject);

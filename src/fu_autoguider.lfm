@@ -85,16 +85,19 @@ object f_autoguider: Tf_autoguider
         Height = 25
         Top = 0
         Width = 90
+        Align = alLeft
+        BorderSpacing.Right = 4
         Caption = 'Connect'
         OnClick = BtnConnectClick
         ParentFont = False
         TabOrder = 0
       end
       object BtnCal: TButton
-        Left = 92
+        Left = 94
         Height = 25
         Top = 0
         Width = 90
+        Align = alLeft
         Caption = 'Calibrate'
         OnClick = BtnCalClick
         ParentFont = False
@@ -117,16 +120,19 @@ object f_autoguider: Tf_autoguider
         Height = 25
         Top = 0
         Width = 90
+        Align = alLeft
+        BorderSpacing.Right = 4
         Caption = 'Guide'
         OnClick = BtnGuideClick
         ParentFont = False
         TabOrder = 0
       end
       object BtnDither: TButton
-        Left = 92
+        Left = 94
         Height = 25
         Top = 0
         Width = 90
+        Align = alLeft
         Caption = 'Dither'
         OnClick = BtnDitherClick
         ParentFont = False

@@ -45,7 +45,7 @@ type
   TDevInterface = (INDI, ASCOM, INCAMERA, INTELESCOPE, ASCOMREST, MANUAL);
   TFrameType =(LIGHT, BIAS, DARK, FLAT);
   TFlatType=(ftNone,ftSKY,ftDome);
-  TAutoguiderType=(agPHD,agLINGUIDER,agNONE,agDITHER);
+  TAutoguiderType=(agPHD,agLINGUIDER,agNONE,agDITHER,agINTERNAL);
   TAutoguiderState=(GUIDER_DISCONNECTED,GUIDER_IDLE,GUIDER_GUIDING,GUIDER_BUSY,GUIDER_ALERT);
   TPlanetariumType=(CDC, SAMP, HNSKY,plaNONE);
   TEqmodAlign=(alADDPOINT,alSTDSYNC,alUNSUPPORTED);
@@ -503,6 +503,8 @@ var
   RunningCapture,RunningPreview: boolean;
   ImageInspection, TriangleInspection: boolean;
   TriangleInspectionAngle: double;
+  {internal guider}
+  InternalguiderRunning,InternalguiderCalibrating,InternalguiderGuiding,StopInternalguider: boolean;
 
   procedure globalmsg(str:string);
   function Str2Frametype(str:string):TFrameType;

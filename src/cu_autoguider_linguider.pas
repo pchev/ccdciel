@@ -96,7 +96,7 @@ var buf: string;
     cmd,to_read:byte;
     n,i,msgl: integer;
     srvaddr: sockaddr_un;
-    msg: array[0..255] of char;
+    msg1: array[0..255] of char;
     buffer: array[0..81] of char;
     readbuf: array[0..255] of char;  // no response >255 ?
 const hdr_sz=8;
@@ -105,15 +105,15 @@ begin
  cmd:=ord(lincmd);
  result:=msgFailed;
   // signature and command
- for i:=0 to 255 do msg[i]:=chr(0);
- msg[0] := chr(2);	// SIGNATURE
- msg[2] := chr(cmd);	// CMD
+ for i:=0 to 255 do msg1[i]:=chr(0);
+ msg1[0] := chr(2);	// SIGNATURE
+ msg1[2] := chr(cmd);	// CMD
   // add parameters
  buf:=param;
  n:=length(buf);
  buffer:=buf;
- msg[4] := chr(n);	// DATA LEN
- Move(buffer,msg[hdr_sz],n);
+ msg1[4] := chr(n);	// DATA LEN
+ Move(buffer,msg1[hdr_sz],n);
  msgl:=hdr_sz+n;
  try
  if UseUnixSocket then begin
@@ -129,7 +129,7 @@ begin
     if i<0 then exit;
 
     // send command
-    i:=fpsend(FUsock,@msg,msgl,0);
+    i:=fpsend(FUsock,@msg1,msgl,0);
     if i<>msgl then exit;
 
     // read response length
@@ -149,7 +149,7 @@ begin
  else begin
    if (tcpclient<>nil) then begin  // connected
      // send command
-     tcpclient.Sock.SendBuffer(@msg,msgl);
+     tcpclient.Sock.SendBuffer(@msg1,msgl);
      if tcpclient.Sock.LastError<>0 then begin
         DisplayMessage(tcpclient.GetErrorDesc);
         Terminate;

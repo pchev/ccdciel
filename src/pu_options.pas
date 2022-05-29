@@ -36,6 +36,7 @@ type
   Tf_option = class(TForm)
     ButtonSeqDir: TButton;
     CdCPath: TEdit;
+    PageInternal: TPage;
     SaveFormat: TRadioGroup;
     StackDebayer: TCheckBox;
     StackUseDark: TCheckBox;
@@ -1216,6 +1217,7 @@ begin
   MeridianOption.Items[2]:=rsAbort;
   AutoguiderBox.Items[2]:=rsNone2;
   AutoguiderBox.Items[3]:=rsDitherOnly;
+  AutoguiderBox.Items[4]:=rsInternal;
   PageWeather.Caption := rsWeatherStati;
   Label118.Caption:=rsPauseSequenc;
   Label116.Caption:=rsRestartAfter2;
@@ -1850,7 +1852,7 @@ begin
     Label23.Caption:=rsPulseDuratio;
     Label122.Caption:=rsS;
   end;
-  panel14.Visible:=(AutoguiderBox.ItemIndex<>2);
+  panel14.Visible:=(AutoguiderBox.ItemIndex<>2)and(AutoguiderBox.ItemIndex<>4);
   GroupBox11.Visible:=(AutoguiderBox.ItemIndex=3);
   groupbox6.Visible:=(AutoguiderBox.ItemIndex=0);
   groupbox13.Visible:=(AutoguiderBox.ItemIndex=0);

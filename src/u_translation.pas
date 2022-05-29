@@ -1394,6 +1394,8 @@ resourcestring
   rsOctagon = 'Octagon';
   rsTriangle = 'Triangle';
   rsTriangleRota = 'Triangle rotation angle';
+  rsInternal = 'Internal';
+  rsInternalGuid = 'Internal guider';
 
 implementation
 

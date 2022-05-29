@@ -25,7 +25,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 interface
 
-uses u_global, LCLIntf, u_translation, cu_mount,
+uses u_global, LCLIntf, u_translation, cu_mount, cu_camera, BGRABitmap, cu_fits, fu_internalguider,
   Forms, Classes, SysUtils, ExtCtrls;
 
 type
@@ -56,11 +56,16 @@ type
     FonGuideStat: TNotifyEvent;
     StarLostTimer: TTimer;
     FMount: T_mount;
+    FCamera: T_camera;
+    FGuideBmp: TBGRABitmap;
+    FGuideFits: Tfits;
+    Finternalguider: Tf_internalguider;
+    procedure msg(txt:string; level: integer); // Only from main thread, use displaymessage() otherwise
     procedure StarLostTimerTimer(Sender: TObject);
     procedure StatusChange;
     procedure ProcessDisconnectSyn;
     procedure ProcessDisconnect;
-    procedure DisplayMessage(msg:string);
+    procedure DisplayMessage(txt:string);
     procedure ProcessEvent(txt:string); virtual; abstract;
     procedure StarLostTimerTimer(Sender: TObject); virtual; abstract;
     procedure CancelExposure;
@@ -83,6 +88,7 @@ type
     property AutoguiderType: TAutoguiderType read FAutoguiderType;
     property Terminated;
     property Mount: T_mount read FMount write FMount;
+    property Camera: T_camera read FCamera write FCamera;
     property Running: boolean read FRunning;
     property Recovering: boolean read FRecovering;
     property Dithering: boolean read FDithering;
@@ -97,6 +103,9 @@ type
     property RAdistance: double read FRAdistance;
     property Decdistance: double read FDecdistance;
     property Starmass: double read FStarmass;
+    property GuideBmp: TBGRABitmap read FGuideBmp write FGuideBmp;
+    property GuideFits: Tfits read FGuideFits write FGuideFits;
+    property InternalGuider: Tf_internalguider read Finternalguider write Finternalguider;
     property onConnect: TNotifyEvent read FonConnect  write FonConnect;
     property onConnectError: TNotifyEvent read FonConnectError  write FonConnectError;
     property onDisconnect: TNotifyEvent read FonDisconnect  write FonDisconnect;
@@ -148,12 +157,17 @@ begin
   inherited Destroy;
 end;
 
-procedure T_autoguider.DisplayMessage(msg:string);
+procedure T_autoguider.msg(txt:string; level: integer);
+begin
+  if Assigned(FonShowMessage)and(GetCurrentThreadId=MainThreadID) then FonShowMessage(txt, level);
+end;
+
+procedure T_autoguider.DisplayMessage(txt:string);
 begin
 if FErrorDesc='' then
-  FErrorDesc:=rsAutoguider+': '+msg
+  FErrorDesc:=rsAutoguider+': '+txt
 else
-  FErrorDesc:=FErrorDesc+crlf+rsAutoguider+': '+msg;
+  FErrorDesc:=FErrorDesc+crlf+rsAutoguider+': '+txt;
 PostMessage(MsgHandle, LM_CCDCIEL, M_AutoguiderMessage, 0);
 end;
 
