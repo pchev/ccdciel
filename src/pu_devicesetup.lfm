@@ -1050,6 +1050,485 @@ object f_setup: Tf_setup
           end
         end
       end
+      object GuideCamera: TTabSheet
+        Caption = 'Guide camera'
+        ClientHeight = 454
+        ClientWidth = 487
+        object PageControlGuideCamera: TPageControl
+          Left = 0
+          Height = 414
+          Top = 40
+          Width = 487
+          ActivePage = GuideCameraIndi
+          Align = alClient
+          ParentFont = False
+          TabIndex = 0
+          TabOrder = 0
+          OnChange = PageControlCameraChange
+          object GuideCameraIndi: TTabSheet
+            Caption = 'CameraIndi'
+            ClientHeight = 383
+            ClientWidth = 477
+            ParentFont = False
+            object PanelGuideCameraIndi: TPanel
+              Left = 0
+              Height = 383
+              Top = 0
+              Width = 477
+              Align = alClient
+              BevelOuter = bvNone
+              ClientHeight = 383
+              ClientWidth = 477
+              ParentFont = False
+              TabOrder = 0
+              object GuideCameraIndiDevice: TComboBox
+                Left = 96
+                Height = 28
+                Top = 50
+                Width = 170
+                Constraints.MaxHeight = 28
+                ItemHeight = 0
+                OnChange = GuideCameraIndiDeviceChange
+                ParentFont = False
+                Style = csDropDownList
+                TabOrder = 0
+              end
+              object Label142: TLabel
+                AnchorSideTop.Control = GuideCameraIndiDevice
+                AnchorSideTop.Side = asrCenter
+                Left = 8
+                Height = 19
+                Top = 55
+                Width = 41
+                Caption = 'Device'
+                ParentColor = False
+                ParentFont = False
+              end
+              object Label143: TLabel
+                AnchorSideTop.Control = GuideIndiSensor
+                AnchorSideTop.Side = asrCenter
+                Left = 8
+                Height = 19
+                Top = 88
+                Width = 43
+                Caption = 'Sensor'
+                ParentColor = False
+                ParentFont = False
+              end
+              object GuideIndiSensor: TComboBox
+                Left = 96
+                Height = 28
+                Top = 83
+                Width = 170
+                Constraints.MaxHeight = 28
+                ItemHeight = 0
+                Items.Strings = (
+                  'Main sensor'
+                  'Guider sensor'
+                )
+                OnChange = GuideIndiSensorChange
+                ParentFont = False
+                Style = csDropDownList
+                TabOrder = 1
+              end
+              object GuideCameraAutoLoadConfig: TCheckBox
+                Left = 9
+                Height = 21
+                Top = 154
+                Width = 206
+                Caption = 'Load configuration on startup'
+                ParentFont = False
+                TabOrder = 2
+              end
+              object Panel39: TPanel
+                Left = 0
+                Height = 38
+                Top = 8
+                Width = 412
+                BevelOuter = bvNone
+                ClientHeight = 38
+                ClientWidth = 412
+                ParentFont = False
+                TabOrder = 3
+                object Label145: TLabel
+                  AnchorSideTop.Control = GuideCameraIndiPort
+                  AnchorSideTop.Side = asrCenter
+                  Left = 8
+                  Height = 19
+                  Top = 5
+                  Width = 42
+                  Caption = 'Server'
+                  ParentColor = False
+                  ParentFont = False
+                end
+                object GuideCameraIndiServer: TEdit
+                  AnchorSideTop.Control = GuideCameraIndiPort
+                  AnchorSideTop.Side = asrCenter
+                  Left = 96
+                  Height = 28
+                  Top = 0
+                  Width = 121
+                  Constraints.MaxHeight = 28
+                  ParentFont = False
+                  TabOrder = 0
+                  Text = 'localhost'
+                end
+                object Label146: TLabel
+                  AnchorSideTop.Control = GuideCameraIndiPort
+                  AnchorSideTop.Side = asrCenter
+                  Left = 232
+                  Height = 19
+                  Top = 5
+                  Width = 27
+                  Caption = 'Port'
+                  ParentColor = False
+                  ParentFont = False
+                end
+                object GuideCameraIndiPort: TEdit
+                  Left = 275
+                  Height = 28
+                  Top = 0
+                  Width = 81
+                  Constraints.MaxHeight = 28
+                  ParentFont = False
+                  TabOrder = 1
+                  Text = '7624'
+                end
+              end
+              object GetIndi11: TButton
+                Tag = 12
+                AnchorSideTop.Control = GuideCameraIndiDevice
+                AnchorSideTop.Side = asrCenter
+                Left = 275
+                Height = 25
+                Top = 52
+                Width = 75
+                Caption = 'Get'
+                OnClick = GetIndiClick
+                ParentFont = False
+                TabOrder = 4
+              end
+              object GuideCameraMsg: TLabel
+                Left = 275
+                Height = 54
+                Top = 87
+                Width = 132
+                AutoSize = False
+                Caption = '   '
+                ParentColor = False
+                ParentFont = False
+                WordWrap = True
+              end
+              object Label144: TLabel
+                Left = 15
+                Height = 99
+                Top = 198
+                Width = 401
+                AutoSize = False
+                Caption = 'Label144'
+                ParentColor = False
+                WordWrap = True
+              end
+            end
+          end
+          object GuideCameraAscom: TTabSheet
+            Caption = 'CameraAscom'
+            ClientHeight = 383
+            ClientWidth = 477
+            ParentFont = False
+            object PanelGuideCameraAscom: TPanel
+              Left = 16
+              Height = 266
+              Top = 16
+              Width = 456
+              BevelOuter = bvNone
+              ClientHeight = 266
+              ClientWidth = 456
+              ParentFont = False
+              TabOrder = 0
+              object BtnChooseGuideCamera: TButton
+                Tag = 12
+                Left = 228
+                Height = 25
+                Top = 16
+                Width = 108
+                Caption = 'Choose'
+                OnClick = BtnChooseClick
+                ParentFont = False
+                TabOrder = 0
+              end
+              object AscomGuideCamera: TEdit
+                AnchorSideTop.Control = BtnChooseGuideCamera
+                AnchorSideTop.Side = asrCenter
+                Left = 14
+                Height = 28
+                Top = 14
+                Width = 210
+                Constraints.MaxHeight = 28
+                ParentFont = False
+                TabOrder = 1
+              end
+              object BtnSetupGuideCamera: TButton
+                Tag = 12
+                Left = 228
+                Height = 25
+                Top = 49
+                Width = 108
+                Caption = 'Setup'
+                OnClick = BtnSetupAscomClick
+                ParentFont = False
+                TabOrder = 2
+              end
+              object BtnAboutGuideCamera: TButton
+                Tag = 12
+                Left = 228
+                Height = 25
+                Top = 81
+                Width = 108
+                Caption = 'About'
+                OnClick = BtnAboutAscomClick
+                ParentFont = False
+                TabOrder = 3
+              end
+            end
+          end
+          object GuideCameraAscomRest: TTabSheet
+            Caption = 'CameraAscomRest'
+            ClientHeight = 383
+            ClientWidth = 477
+            ParentFont = False
+            object Panel40: TPanel
+              Left = 0
+              Height = 383
+              Top = 0
+              Width = 477
+              Align = alClient
+              BevelOuter = bvNone
+              ClientHeight = 383
+              ClientWidth = 477
+              ParentFont = False
+              TabOrder = 0
+              object GuideCameraARestProtocol: TComboBox
+                Left = 13
+                Height = 28
+                Top = 65
+                Width = 75
+                Constraints.MaxHeight = 28
+                ItemHeight = 0
+                ItemIndex = 0
+                Items.Strings = (
+                  'http:'
+                  'https:'
+                )
+                OnChange = GuideCameraARestProtocolChange
+                ParentFont = False
+                Style = csDropDownList
+                TabOrder = 0
+                Text = 'http:'
+              end
+              object Label147: TLabel
+                Left = 13
+                Height = 19
+                Top = 40
+                Width = 51
+                Caption = 'Protocol'
+                ParentColor = False
+                ParentFont = False
+              end
+              object GuideCameraARestHost: TEdit
+                Left = 93
+                Height = 28
+                Top = 65
+                Width = 194
+                Constraints.MaxHeight = 28
+                ParentFont = False
+                TabOrder = 1
+                Text = '127.0.0.1'
+              end
+              object Label148: TLabel
+                Left = 93
+                Height = 19
+                Top = 40
+                Width = 163
+                Caption = 'Remote host or IP address'
+                ParentColor = False
+                ParentFont = False
+              end
+              object GuideCameraARestPort: TSpinEdit
+                Left = 291
+                Height = 28
+                Top = 65
+                Width = 82
+                Constraints.MaxHeight = 28
+                MaxValue = 65535
+                MinValue = 1
+                ParentFont = False
+                TabOrder = 2
+                Value = 11111
+              end
+              object Label149: TLabel
+                Left = 291
+                Height = 19
+                Top = 40
+                Width = 43
+                Caption = 'IP Port'
+                ParentColor = False
+                ParentFont = False
+              end
+              object GuideCameraARestDevice: TSpinEdit
+                Left = 93
+                Height = 28
+                Top = 137
+                Width = 82
+                Constraints.MaxHeight = 28
+                MaxValue = 65535
+                ParentFont = False
+                TabOrder = 3
+              end
+              object Label150: TLabel
+                Left = 93
+                Height = 19
+                Top = 113
+                Width = 144
+                Caption = 'Remote device number'
+                ParentColor = False
+                ParentFont = False
+              end
+              object Label151: TLabel
+                Left = 16
+                Height = 19
+                Top = 141
+                Width = 52
+                Caption = 'Camera/'
+                ParentColor = False
+                ParentFont = False
+              end
+              object Label152: TLabel
+                Left = 159
+                Height = 19
+                Top = 170
+                Width = 58
+                Caption = 'Password'
+                ParentColor = False
+                ParentFont = False
+              end
+              object Label153: TLabel
+                Left = 16
+                Height = 19
+                Top = 170
+                Width = 68
+                Caption = 'User name'
+                ParentColor = False
+                ParentFont = False
+              end
+              object GuideCameraARestUser: TEdit
+                Left = 16
+                Height = 28
+                Top = 190
+                Width = 131
+                AutoSelect = False
+                Constraints.MaxHeight = 28
+                ParentFont = False
+                TabOrder = 4
+              end
+              object GuideCameraARestPass: TEdit
+                Left = 159
+                Height = 28
+                Top = 190
+                Width = 131
+                AutoSelect = False
+                Constraints.MaxHeight = 28
+                EchoMode = emPassword
+                ParentFont = False
+                PasswordChar = '*'
+                TabOrder = 5
+              end
+              object AlpacaGuideCameraList: TComboBox
+                Left = 13
+                Height = 28
+                Top = 5
+                Width = 360
+                Constraints.MaxHeight = 28
+                ItemHeight = 0
+                OnChange = AlpacaGuideCameraListChange
+                ParentFont = False
+                Style = csDropDownList
+                TabOrder = 6
+              end
+              object Label154: TLabel
+                Cursor = crHandPoint
+                Left = 291
+                Height = 19
+                Top = 128
+                Width = 122
+                Caption = 'Alpaca server setup'
+                Font.Color = clBlue
+                Font.Style = [fsUnderline]
+                ParentColor = False
+                ParentFont = False
+                OnClick = AlpacaServerSetupGuideCamera
+              end
+              object Label155: TLabel
+                Cursor = crHandPoint
+                Left = 291
+                Height = 19
+                Top = 152
+                Width = 126
+                Caption = 'Alpaca camera setup'
+                Font.Color = clBlue
+                Font.Style = [fsUnderline]
+                ParentColor = False
+                ParentFont = False
+                OnClick = AlpacaSetupGuideCamera
+              end
+              object DiscoverLed11: TShape
+                AnchorSideLeft.Control = BtnDiscover11
+                AnchorSideLeft.Side = asrCenter
+                AnchorSideBottom.Control = BtnDiscover11
+                Left = 389
+                Height = 8
+                Top = 54
+                Width = 72
+                Anchors = [akLeft, akBottom]
+                BorderSpacing.Bottom = 4
+                Brush.Color = clSilver
+              end
+              object BtnDiscover11: TButton
+                AnchorSideTop.Side = asrCenter
+                Left = 384
+                Height = 25
+                Top = 66
+                Width = 82
+                Caption = 'Discover'
+                OnClick = BtnDiscoverClick
+                ParentFont = False
+                TabOrder = 7
+              end
+            end
+          end
+        end
+        object Panel41: TPanel
+          Left = 0
+          Height = 40
+          Top = 0
+          Width = 487
+          Align = alTop
+          BevelOuter = bvNone
+          ClientHeight = 40
+          ClientWidth = 487
+          ParentFont = False
+          TabOrder = 1
+          object DeviceGuideCamera: TCheckBox
+            Left = 16
+            Height = 21
+            Top = 8
+            Width = 134
+            Caption = 'Use guide camera'
+            ParentFont = False
+            TabOrder = 0
+          end
+        end
+      end
       object Filterwheel: TTabSheet
         Caption = 'Filter wheel'
         ClientHeight = 454
@@ -5421,485 +5900,6 @@ object f_setup: Tf_setup
                 Brush.Color = clSilver
               end
             end
-          end
-        end
-      end
-      object GuideCamera: TTabSheet
-        Caption = 'Guide camera'
-        ClientHeight = 454
-        ClientWidth = 487
-        object PageControlGuideCamera: TPageControl
-          Left = 0
-          Height = 414
-          Top = 40
-          Width = 487
-          ActivePage = GuideCameraIndi
-          Align = alClient
-          ParentFont = False
-          TabIndex = 0
-          TabOrder = 0
-          OnChange = PageControlCameraChange
-          object GuideCameraIndi: TTabSheet
-            Caption = 'CameraIndi'
-            ClientHeight = 383
-            ClientWidth = 477
-            ParentFont = False
-            object PanelGuideCameraIndi: TPanel
-              Left = 0
-              Height = 383
-              Top = 0
-              Width = 477
-              Align = alClient
-              BevelOuter = bvNone
-              ClientHeight = 383
-              ClientWidth = 477
-              ParentFont = False
-              TabOrder = 0
-              object GuideCameraIndiDevice: TComboBox
-                Left = 96
-                Height = 28
-                Top = 50
-                Width = 170
-                Constraints.MaxHeight = 28
-                ItemHeight = 0
-                OnChange = GuideCameraIndiDeviceChange
-                ParentFont = False
-                Style = csDropDownList
-                TabOrder = 0
-              end
-              object Label142: TLabel
-                AnchorSideTop.Control = GuideCameraIndiDevice
-                AnchorSideTop.Side = asrCenter
-                Left = 8
-                Height = 19
-                Top = 55
-                Width = 41
-                Caption = 'Device'
-                ParentColor = False
-                ParentFont = False
-              end
-              object Label143: TLabel
-                AnchorSideTop.Control = GuideIndiSensor
-                AnchorSideTop.Side = asrCenter
-                Left = 8
-                Height = 19
-                Top = 88
-                Width = 43
-                Caption = 'Sensor'
-                ParentColor = False
-                ParentFont = False
-              end
-              object GuideIndiSensor: TComboBox
-                Left = 96
-                Height = 28
-                Top = 83
-                Width = 170
-                Constraints.MaxHeight = 28
-                ItemHeight = 0
-                Items.Strings = (
-                  'Main sensor'
-                  'Guider sensor'
-                )
-                OnChange = GuideIndiSensorChange
-                ParentFont = False
-                Style = csDropDownList
-                TabOrder = 1
-              end
-              object GuideCameraAutoLoadConfig: TCheckBox
-                Left = 9
-                Height = 21
-                Top = 154
-                Width = 206
-                Caption = 'Load configuration on startup'
-                ParentFont = False
-                TabOrder = 2
-              end
-              object Panel39: TPanel
-                Left = 0
-                Height = 38
-                Top = 8
-                Width = 412
-                BevelOuter = bvNone
-                ClientHeight = 38
-                ClientWidth = 412
-                ParentFont = False
-                TabOrder = 3
-                object Label145: TLabel
-                  AnchorSideTop.Control = GuideCameraIndiPort
-                  AnchorSideTop.Side = asrCenter
-                  Left = 8
-                  Height = 19
-                  Top = 5
-                  Width = 42
-                  Caption = 'Server'
-                  ParentColor = False
-                  ParentFont = False
-                end
-                object GuideCameraIndiServer: TEdit
-                  AnchorSideTop.Control = GuideCameraIndiPort
-                  AnchorSideTop.Side = asrCenter
-                  Left = 96
-                  Height = 28
-                  Top = 0
-                  Width = 121
-                  Constraints.MaxHeight = 28
-                  ParentFont = False
-                  TabOrder = 0
-                  Text = 'localhost'
-                end
-                object Label146: TLabel
-                  AnchorSideTop.Control = GuideCameraIndiPort
-                  AnchorSideTop.Side = asrCenter
-                  Left = 232
-                  Height = 19
-                  Top = 5
-                  Width = 27
-                  Caption = 'Port'
-                  ParentColor = False
-                  ParentFont = False
-                end
-                object GuideCameraIndiPort: TEdit
-                  Left = 275
-                  Height = 28
-                  Top = 0
-                  Width = 81
-                  Constraints.MaxHeight = 28
-                  ParentFont = False
-                  TabOrder = 1
-                  Text = '7624'
-                end
-              end
-              object GetIndi11: TButton
-                Tag = 12
-                AnchorSideTop.Control = GuideCameraIndiDevice
-                AnchorSideTop.Side = asrCenter
-                Left = 275
-                Height = 25
-                Top = 52
-                Width = 75
-                Caption = 'Get'
-                OnClick = GetIndiClick
-                ParentFont = False
-                TabOrder = 4
-              end
-              object GuideCameraMsg: TLabel
-                Left = 275
-                Height = 54
-                Top = 87
-                Width = 132
-                AutoSize = False
-                Caption = '   '
-                ParentColor = False
-                ParentFont = False
-                WordWrap = True
-              end
-              object Label144: TLabel
-                Left = 15
-                Height = 99
-                Top = 198
-                Width = 401
-                AutoSize = False
-                Caption = 'Label144'
-                ParentColor = False
-                WordWrap = True
-              end
-            end
-          end
-          object GuideCameraAscom: TTabSheet
-            Caption = 'CameraAscom'
-            ClientHeight = 383
-            ClientWidth = 477
-            ParentFont = False
-            object PanelGuideCameraAscom: TPanel
-              Left = 16
-              Height = 266
-              Top = 16
-              Width = 456
-              BevelOuter = bvNone
-              ClientHeight = 266
-              ClientWidth = 456
-              ParentFont = False
-              TabOrder = 0
-              object BtnChooseGuideCamera: TButton
-                Tag = 12
-                Left = 228
-                Height = 25
-                Top = 16
-                Width = 108
-                Caption = 'Choose'
-                OnClick = BtnChooseClick
-                ParentFont = False
-                TabOrder = 0
-              end
-              object AscomGuideCamera: TEdit
-                AnchorSideTop.Control = BtnChooseGuideCamera
-                AnchorSideTop.Side = asrCenter
-                Left = 14
-                Height = 28
-                Top = 14
-                Width = 210
-                Constraints.MaxHeight = 28
-                ParentFont = False
-                TabOrder = 1
-              end
-              object BtnSetupGuideCamera: TButton
-                Tag = 12
-                Left = 228
-                Height = 25
-                Top = 49
-                Width = 108
-                Caption = 'Setup'
-                OnClick = BtnSetupAscomClick
-                ParentFont = False
-                TabOrder = 2
-              end
-              object BtnAboutGuideCamera: TButton
-                Tag = 12
-                Left = 228
-                Height = 25
-                Top = 81
-                Width = 108
-                Caption = 'About'
-                OnClick = BtnAboutAscomClick
-                ParentFont = False
-                TabOrder = 3
-              end
-            end
-          end
-          object GuideCameraAscomRest: TTabSheet
-            Caption = 'CameraAscomRest'
-            ClientHeight = 383
-            ClientWidth = 477
-            ParentFont = False
-            object Panel40: TPanel
-              Left = 0
-              Height = 383
-              Top = 0
-              Width = 477
-              Align = alClient
-              BevelOuter = bvNone
-              ClientHeight = 383
-              ClientWidth = 477
-              ParentFont = False
-              TabOrder = 0
-              object GuideCameraARestProtocol: TComboBox
-                Left = 13
-                Height = 28
-                Top = 65
-                Width = 75
-                Constraints.MaxHeight = 28
-                ItemHeight = 0
-                ItemIndex = 0
-                Items.Strings = (
-                  'http:'
-                  'https:'
-                )
-                OnChange = GuideCameraARestProtocolChange
-                ParentFont = False
-                Style = csDropDownList
-                TabOrder = 0
-                Text = 'http:'
-              end
-              object Label147: TLabel
-                Left = 13
-                Height = 19
-                Top = 40
-                Width = 51
-                Caption = 'Protocol'
-                ParentColor = False
-                ParentFont = False
-              end
-              object GuideCameraARestHost: TEdit
-                Left = 93
-                Height = 28
-                Top = 65
-                Width = 194
-                Constraints.MaxHeight = 28
-                ParentFont = False
-                TabOrder = 1
-                Text = '127.0.0.1'
-              end
-              object Label148: TLabel
-                Left = 93
-                Height = 19
-                Top = 40
-                Width = 163
-                Caption = 'Remote host or IP address'
-                ParentColor = False
-                ParentFont = False
-              end
-              object GuideCameraARestPort: TSpinEdit
-                Left = 291
-                Height = 28
-                Top = 65
-                Width = 82
-                Constraints.MaxHeight = 28
-                MaxValue = 65535
-                MinValue = 1
-                ParentFont = False
-                TabOrder = 2
-                Value = 11111
-              end
-              object Label149: TLabel
-                Left = 291
-                Height = 19
-                Top = 40
-                Width = 43
-                Caption = 'IP Port'
-                ParentColor = False
-                ParentFont = False
-              end
-              object GuideCameraARestDevice: TSpinEdit
-                Left = 93
-                Height = 28
-                Top = 137
-                Width = 82
-                Constraints.MaxHeight = 28
-                MaxValue = 65535
-                ParentFont = False
-                TabOrder = 3
-              end
-              object Label150: TLabel
-                Left = 93
-                Height = 19
-                Top = 113
-                Width = 144
-                Caption = 'Remote device number'
-                ParentColor = False
-                ParentFont = False
-              end
-              object Label151: TLabel
-                Left = 16
-                Height = 19
-                Top = 141
-                Width = 52
-                Caption = 'Camera/'
-                ParentColor = False
-                ParentFont = False
-              end
-              object Label152: TLabel
-                Left = 159
-                Height = 19
-                Top = 170
-                Width = 58
-                Caption = 'Password'
-                ParentColor = False
-                ParentFont = False
-              end
-              object Label153: TLabel
-                Left = 16
-                Height = 19
-                Top = 170
-                Width = 68
-                Caption = 'User name'
-                ParentColor = False
-                ParentFont = False
-              end
-              object GuideCameraARestUser: TEdit
-                Left = 16
-                Height = 28
-                Top = 190
-                Width = 131
-                AutoSelect = False
-                Constraints.MaxHeight = 28
-                ParentFont = False
-                TabOrder = 4
-              end
-              object GuideCameraARestPass: TEdit
-                Left = 159
-                Height = 28
-                Top = 190
-                Width = 131
-                AutoSelect = False
-                Constraints.MaxHeight = 28
-                EchoMode = emPassword
-                ParentFont = False
-                PasswordChar = '*'
-                TabOrder = 5
-              end
-              object AlpacaGuideCameraList: TComboBox
-                Left = 13
-                Height = 28
-                Top = 5
-                Width = 360
-                Constraints.MaxHeight = 28
-                ItemHeight = 0
-                OnChange = AlpacaGuideCameraListChange
-                ParentFont = False
-                Style = csDropDownList
-                TabOrder = 6
-              end
-              object Label154: TLabel
-                Cursor = crHandPoint
-                Left = 291
-                Height = 19
-                Top = 128
-                Width = 122
-                Caption = 'Alpaca server setup'
-                Font.Color = clBlue
-                Font.Style = [fsUnderline]
-                ParentColor = False
-                ParentFont = False
-                OnClick = AlpacaServerSetupGuideCamera
-              end
-              object Label155: TLabel
-                Cursor = crHandPoint
-                Left = 291
-                Height = 19
-                Top = 152
-                Width = 126
-                Caption = 'Alpaca camera setup'
-                Font.Color = clBlue
-                Font.Style = [fsUnderline]
-                ParentColor = False
-                ParentFont = False
-                OnClick = AlpacaSetupGuideCamera
-              end
-              object DiscoverLed11: TShape
-                AnchorSideLeft.Control = BtnDiscover11
-                AnchorSideLeft.Side = asrCenter
-                AnchorSideBottom.Control = BtnDiscover11
-                Left = 389
-                Height = 8
-                Top = 54
-                Width = 72
-                Anchors = [akLeft, akBottom]
-                BorderSpacing.Bottom = 4
-                Brush.Color = clSilver
-              end
-              object BtnDiscover11: TButton
-                AnchorSideTop.Side = asrCenter
-                Left = 384
-                Height = 25
-                Top = 66
-                Width = 82
-                Caption = 'Discover'
-                OnClick = BtnDiscoverClick
-                ParentFont = False
-                TabOrder = 7
-              end
-            end
-          end
-        end
-        object Panel41: TPanel
-          Left = 0
-          Height = 40
-          Top = 0
-          Width = 487
-          Align = alTop
-          BevelOuter = bvNone
-          ClientHeight = 40
-          ClientWidth = 487
-          ParentFont = False
-          TabOrder = 1
-          object DeviceGuideCamera: TCheckBox
-            Left = 16
-            Height = 21
-            Top = 8
-            Width = 134
-            Caption = 'Use guide camera'
-            ParentFont = False
-            TabOrder = 0
           end
         end
       end
