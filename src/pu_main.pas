@@ -4089,6 +4089,10 @@ begin
   f_internalguider.unitarcseconds1.checked:=config.GetValue('/InternalGuider/UnitArcSec',false);
   f_internalguider.measure_method2.checked:=config.GetValue('/InternalGuider/Method2',false);
   f_internalguider.trend_scale:=config.GetValue('/InternalGuider/Scale',2);
+  f_internalguider.Exposure.Value:=config.GetValue('/InternalGuider/Camera/Exposure',2);
+  f_internalguider.Binning.Value:=config.GetValue('/InternalGuider/Camera/Binning',1);
+  f_internalguider.Gain.Value:=config.GetValue('/InternalGuider/Camera/Gain',0);
+  f_internalguider.Offset.Value:=config.GetValue('/InternalGuider/Camera/Offset',0);
 
   MeridianOption:=config.GetValue('/Meridian/MeridianOption',0);
   MinutesPastMeridian:=config.GetValue('/Meridian/MinutesPast',15);
@@ -4575,6 +4579,11 @@ begin
    config.SetValue('/InternalGuider/UnitArcSec',f_internalguider.unitarcseconds1.Checked);
    config.SetValue('/InternalGuider/Method2',f_internalguider.measure_method2.Checked);
    config.SetValue('/InternalGuider/Scale',f_internalguider.trend_scale);
+   config.SetValue('/InternalGuider/Camera/Exposure',f_internalguider.Exposure.Value);
+   config.SetValue('/InternalGuider/Camera/Binning',f_internalguider.Binning.Value);
+   config.SetValue('/InternalGuider/Camera/Gain',f_internalguider.Gain.Value);
+   config.SetValue('/InternalGuider/Camera/Offset',f_internalguider.Offset.Value);
+
 end;
 
 procedure Tf_main.SaveConfig;
