@@ -428,7 +428,7 @@ begin
   InternalguiderRunning:=true;
   Finternalguider.ButtonLoop.enabled:=false;
   Finternalguider.ButtonCalibrate.enabled:=false;
-  Finternalguider.ButtonStart.enabled:=false;
+  Finternalguider.ButtonGuide.enabled:=false;
   Fguidespeed:=FMount.GuideRateRa*3600/siderealrate;
   if Fguidespeed=0 then Fguidespeed:=0.5;
   StartGuideExposure;
@@ -689,7 +689,7 @@ begin
   InternalguiderCalibrating:=false;
   Finternalguider.ButtonLoop.enabled:=true;
   Finternalguider.ButtonCalibrate.enabled:=true;
-  Finternalguider.ButtonStart.enabled:=true;
+  Finternalguider.ButtonGuide.enabled:=true;
   SetStatus('Stopped',GUIDER_IDLE);
 end;
 

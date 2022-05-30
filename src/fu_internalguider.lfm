@@ -65,21 +65,21 @@ object f_internalguider: Tf_internalguider
           ParentColor = False
           ParentFont = False
           TabOrder = 0
-          object ButtonStart: TButton
-            Left = 70
+          object ButtonGuide: TButton
+            Left = 16
             Height = 25
             Hint = 'Start guiding.'
             Top = 9
-            Width = 69
-            Caption = 'Start'
-            OnClick = ButtonStartClick
+            Width = 75
+            Caption = 'Guide'
+            OnClick = ButtonGuideClick
             ParentFont = False
             ParentShowHint = False
             ShowHint = True
             TabOrder = 0
           end
           object ButtonStop: TButton
-            Left = 239
+            Left = 232
             Height = 25
             Hint = 'Stop guidng or calibration'
             Top = 9
@@ -92,7 +92,7 @@ object f_internalguider: Tf_internalguider
             TabOrder = 1
           end
           object ButtonCalibrate: TButton
-            Left = 160
+            Left = 136
             Height = 25
             Hint = 'Calibrates the guider. Results will be written to tab advanced.'
             Top = 9
@@ -185,7 +185,7 @@ object f_internalguider: Tf_internalguider
           object led: TShape
             AnchorSideLeft.Side = asrBottom
             AnchorSideTop.Side = asrCenter
-            Left = 144
+            Left = 104
             Height = 14
             Hint = 'Uncalibrated'
             Top = 14
@@ -295,15 +295,6 @@ object f_internalguider: Tf_internalguider
             Position = 2
             TabOrder = 9
           end
-          object ButtonLoop: TButton
-            Left = 0
-            Height = 25
-            Top = 9
-            Width = 63
-            Caption = 'Loop'
-            OnClick = ButtonLoopClick
-            TabOrder = 10
-          end
         end
       end
       object TabSheetCamera: TTabSheet
@@ -329,10 +320,10 @@ object f_internalguider: Tf_internalguider
           Value = 1
         end
         object Binning: TSpinEdit
-          Left = 106
+          Left = 104
           Height = 29
           Top = 64
-          Width = 108
+          Width = 110
           MaxValue = 8
           MinValue = 1
           TabOrder = 1
@@ -345,6 +336,15 @@ object f_internalguider: Tf_internalguider
           Width = 47
           Caption = 'Binning'
           ParentColor = False
+        end
+        object ButtonLoop: TButton
+          Left = 104
+          Height = 25
+          Top = 144
+          Width = 63
+          Caption = 'Loop'
+          OnClick = ButtonLoopClick
+          TabOrder = 2
         end
       end
       object TabSheetAdvanced: TTabSheet

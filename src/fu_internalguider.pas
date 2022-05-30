@@ -37,9 +37,9 @@ type
   { Tf_internalguider }
 
   Tf_internalguider = class(TFrame)
-    ButtonLoop: TButton;
     ButtonCalibrate: TButton;
-    ButtonStart: TButton;
+    ButtonLoop: TButton;
+    ButtonGuide: TButton;
     ButtonStop: TButton;
     disable_guiding1: TCheckBox;
     Exposure: TFloatSpinEdit;
@@ -90,7 +90,7 @@ type
     Title: TLabel;
     procedure ButtonCalibrateClick(Sender: TObject);
     procedure ButtonLoopClick(Sender: TObject);
-    procedure ButtonStartClick(Sender: TObject);
+    procedure ButtonGuideClick(Sender: TObject);
     procedure ButtonStopClick(Sender: TObject);
     procedure scale1Changing(Sender: TObject; var AllowChange: Boolean);
   private
@@ -364,7 +364,7 @@ begin
 end;
 
 
-procedure Tf_internalguider.ButtonStartClick(Sender: TObject);
+procedure Tf_internalguider.ButtonGuideClick(Sender: TObject);
 begin
   setled(clgreen);
   if Assigned(FonStart) then FonStart(self);
