@@ -3107,20 +3107,22 @@ object f_option: Tf_option
             ParentFont = False
             TabOrder = 0
             object Label53: TLabel
+              AnchorSideTop.Control = FocusStarMag
+              AnchorSideTop.Side = asrCenter
               Left = 8
               Height = 19
-              Top = 4
+              Top = 5
               Width = 198
               Caption = 'Slew to a near star of magnitude'
               ParentColor = False
               ParentFont = False
             end
             object FocusStarMag: TComboBox
-              Left = 8
+              Left = 299
               Height = 28
               Hint = 'The magnitude of the star used to run the autofocus.'#10'Using a faint star can minimize the telescope movement but prefer the brightest to avoid trouble with nearby stars.'
-              Top = 28
-              Width = 81
+              Top = 0
+              Width = 77
               Constraints.MaxHeight = 28
               ItemHeight = 0
               ItemIndex = 0
@@ -3137,9 +3139,9 @@ object f_option: Tf_option
               Text = '4'
             end
             object Label85: TLabel
-              AnchorSideTop.Control = FocusStarMag
+              AnchorSideTop.Control = AutofocusPrecisionSlew
               AnchorSideTop.Side = asrCenter
-              Left = 97
+              Left = 8
               Height = 19
               Top = 33
               Width = 143
@@ -3148,9 +3150,9 @@ object f_option: Tf_option
               ParentFont = False
             end
             object Label86: TLabel
-              AnchorSideTop.Control = FocusStarMag
+              AnchorSideTop.Control = AutofocusPrecisionSlew
               AnchorSideTop.Side = asrCenter
-              Left = 373
+              Left = 384
               Height = 19
               Top = 33
               Width = 49
@@ -3159,12 +3161,12 @@ object f_option: Tf_option
               ParentFont = False
             end
             object AutofocusPrecisionSlew: TFloatSpinEdit
-              AnchorSideTop.Control = FocusStarMag
               AnchorSideTop.Side = asrCenter
               Left = 299
               Height = 28
               Top = 28
-              Width = 61
+              Width = 77
+              Anchors = [akLeft]
               Constraints.MaxHeight = 28
               DecimalPlaces = 1
               Increment = 0.1
