@@ -118,6 +118,7 @@ begin
   panel4.Visible:=(FAutoguiderType<>agNONE);
   BtnGuide.Visible:=(FAutoguiderType<>agDITHER);
   BtnConnect.Visible:=(FAutoguiderType<>agINTERNAL);
+  ShowStat.Visible:=(FAutoguiderType=agPHD);
 end;
 
 procedure Tf_autoguider.BtnConnectClick(Sender: TObject);
