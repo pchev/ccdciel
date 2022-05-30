@@ -3853,10 +3853,14 @@ rotator.AutoLoadConfig:=config.GetValue('/INDIrotator/AutoLoadConfig',false);
 mount.AutoLoadConfig:=config.GetValue('/INDImount/AutoLoadConfig',false);
 dome.AutoLoadConfig:=config.GetValue('/INDIdome/AutoLoadConfig',false);
 camera.AutoLoadConfig:=config.GetValue('/INDIcamera/AutoLoadConfig',false);
-if camera.CameraInterface=ASCOM then
+if camera.CameraInterface=ASCOM then begin
    camera.ASCOMFlipImage:=config.GetValue('/ASCOMcamera/FlipImage',true);
-if camera.CameraInterface=ASCOMREST then
+   guidecamera.ASCOMFlipImage:=camera.ASCOMFlipImage;
+end;
+if camera.CameraInterface=ASCOMREST then begin
    camera.ASCOMFlipImage:=config.GetValue('/ASCOMRestcamera/FlipImage',true);
+   guidecamera.ASCOMFlipImage:=camera.ASCOMFlipImage;
+end;
 if wheel.WheelInterface=MANUAL then begin
    ManualFilterNames.Clear;
    ManualFilterNames.Add(rsFilter0);
