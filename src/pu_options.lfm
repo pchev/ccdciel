@@ -47,6 +47,7 @@ object f_option: Tf_option
       Width = 453
       AutoSize = False
       Caption = '   '
+      ParentColor = False
       ParentFont = False
     end
     object ButtonHelp: TButton
@@ -124,6 +125,7 @@ object f_option: Tf_option
             Top = 29
             Width = 61
             Caption = 'Language'
+            ParentColor = False
             ParentFont = False
           end
           object Languages: TComboBox
@@ -211,6 +213,7 @@ object f_option: Tf_option
             Top = 22
             Width = 108
             Caption = 'Temporary folder'
+            ParentColor = False
             ParentFont = False
           end
           object TempDir: TEdit
@@ -264,11 +267,12 @@ object f_option: Tf_option
             Top = 16
             Width = 108
             Caption = 'Python command'
+            ParentColor = False
             ParentFont = False
           end
           object PythonCmd: TEdit
             Left = 162
-            Height = 30
+            Height = 31
             Top = 8
             Width = 200
             TabOrder = 0
@@ -303,13 +307,14 @@ object f_option: Tf_option
             Top = 16
             Width = 115
             Caption = 'TCP/IP server port'
+            ParentColor = False
             ParentFont = False
           end
           object TCPIPport: TSpinEdit
             AnchorSideTop.Control = Panel26
             AnchorSideTop.Side = asrCenter
             Left = 162
-            Height = 28
+            Height = 29
             Top = 11
             Width = 106
             MaxValue = 100000
@@ -355,6 +360,7 @@ object f_option: Tf_option
             Top = 16
             Width = 102
             Caption = 'Sequence folder'
+            ParentColor = False
             ParentFont = False
           end
           object ButtonSeqDir: TButton
@@ -453,6 +459,7 @@ object f_option: Tf_option
               Top = 250
               Width = 61
               Caption = 'Separator'
+              ParentColor = False
               ParentFont = False
             end
             object FilenameSep: TComboBox
@@ -615,6 +622,7 @@ object f_option: Tf_option
             Top = 22
             Width = 90
             Caption = 'Capture folder'
+            ParentColor = False
             ParentFont = False
           end
           object CaptureDir: TEdit
@@ -703,6 +711,7 @@ object f_option: Tf_option
             Top = 10
             Width = 97
             Caption = 'Observer name'
+            ParentColor = False
             ParentFont = False
           end
           object ObserverName: TEdit
@@ -722,6 +731,7 @@ object f_option: Tf_option
             Top = 45
             Width = 116
             Caption = 'Observatory name'
+            ParentColor = False
             ParentFont = False
           end
           object ObservatoryName: TEdit
@@ -741,6 +751,7 @@ object f_option: Tf_option
             Top = 77
             Width = 99
             Caption = 'Telescope name'
+            ParentColor = False
             ParentFont = False
           end
           object TelescopeName: TEdit
@@ -772,6 +783,7 @@ object f_option: Tf_option
             Top = 12
             Width = 51
             Caption = 'Latitude'
+            ParentColor = False
             ParentFont = False
           end
           object Label36: TLabel
@@ -782,6 +794,7 @@ object f_option: Tf_option
             Top = 47
             Width = 63
             Caption = 'Longitude'
+            ParentColor = False
             ParentFont = False
           end
           object ObsElev: TFloatSpinEdit
@@ -804,6 +817,7 @@ object f_option: Tf_option
             Top = 80
             Width = 55
             Caption = 'Elevation'
+            ParentColor = False
             ParentFont = False
           end
           object LongitudeError: TLabel
@@ -813,6 +827,7 @@ object f_option: Tf_option
             Width = 558
             Align = alBottom
             AutoSize = False
+            ParentColor = False
             ParentFont = False
             WordWrap = True
           end
@@ -1026,6 +1041,7 @@ object f_option: Tf_option
             Top = 9
             Width = 92
             Caption = 'Horizon profile'
+            ParentColor = False
             ParentFont = False
           end
           object Label77: TLabel
@@ -1036,6 +1052,7 @@ object f_option: Tf_option
             Top = 41
             Width = 185
             Caption = 'Minimum observing elevation '
+            ParentColor = False
             ParentFont = False
             WordWrap = True
           end
@@ -1080,6 +1097,7 @@ object f_option: Tf_option
             Top = 16
             Width = 60
             Caption = 'Preset list'
+            ParentColor = False
             ParentFont = False
           end
           object ObservatoryDBDelete: TButton
@@ -1164,6 +1182,7 @@ object f_option: Tf_option
               Top = 35
               Width = 45
               Caption = 'degree'
+              ParentColor = False
               ParentFont = False
             end
             object CameraAutoCoolTemp: TFloatSpinEdit
@@ -1216,6 +1235,7 @@ object f_option: Tf_option
                 Top = 5
                 Width = 125
                 Caption = 'Degrees per minute'
+                ParentColor = False
                 ParentFont = False
               end
               object TemperatureSlope: TFloatSpinEdit
@@ -1250,6 +1270,7 @@ object f_option: Tf_option
             Top = 35
             Width = 96
             Caption = 'Maximum ADU '
+            ParentColor = False
             ParentFont = False
           end
           object MaxAduFromCamera: TCheckBox
@@ -1282,6 +1303,7 @@ object f_option: Tf_option
             Top = 6
             Width = 55
             Caption = 'Pixel size'
+            ParentColor = False
             ParentFont = False
           end
           object PixelSizeFromCamera: TCheckBox
@@ -1327,6 +1349,7 @@ object f_option: Tf_option
             Top = 39
             Width = 49
             Caption = 'Capture'
+            ParentColor = False
             ParentFont = False
           end
           object ReadOutCapture: TComboBox
@@ -1361,6 +1384,7 @@ object f_option: Tf_option
             Top = 39
             Width = 47
             Caption = 'Preview'
+            ParentColor = False
             ParentFont = False
           end
           object ReadOutFocus: TComboBox
@@ -1382,6 +1406,7 @@ object f_option: Tf_option
             Top = 75
             Width = 35
             Caption = 'Focus'
+            ParentColor = False
             ParentFont = False
           end
           object ReadOutAstrometry: TComboBox
@@ -1405,6 +1430,7 @@ object f_option: Tf_option
             Top = 75
             Width = 71
             Caption = 'Astrometry'
+            ParentColor = False
             ParentFont = False
           end
           object UseReadoutMode: TCheckBox
@@ -1553,6 +1579,7 @@ object f_option: Tf_option
             Top = 47
             Width = 130
             Caption = 'Bayer matrix pattern'
+            ParentColor = False
             ParentFont = False
           end
           object DebayerPreview: TCheckBox
@@ -1627,6 +1654,7 @@ object f_option: Tf_option
               Top = 6
               Width = 8
               Caption = 'R'
+              ParentColor = False
               ParentFont = False
             end
             object GreenBalance: TTrackBar
@@ -1653,6 +1681,7 @@ object f_option: Tf_option
               Top = 43
               Width = 10
               Caption = 'G'
+              ParentColor = False
               ParentFont = False
             end
             object BlueBalance: TTrackBar
@@ -1679,6 +1708,7 @@ object f_option: Tf_option
               Top = 80
               Width = 9
               Caption = 'B'
+              ParentColor = False
               ParentFont = False
             end
           end
@@ -1711,6 +1741,7 @@ object f_option: Tf_option
             Top = 5
             Width = 156
             Caption = 'Video preview frame rate '
+            ParentColor = False
             ParentFont = False
           end
           object VideoPreviewRate: TSpinEdit
@@ -1745,6 +1776,7 @@ object f_option: Tf_option
             Top = 5
             Width = 118
             Caption = 'Bad pixel threshold'
+            ParentColor = False
             ParentFont = False
           end
           object Label63: TLabel
@@ -1755,6 +1787,7 @@ object f_option: Tf_option
             Top = 5
             Width = 36
             Caption = 'sigma'
+            ParentColor = False
             ParentFont = False
           end
           object BPMsigma: TFloatSpinEdit
@@ -1791,6 +1824,7 @@ object f_option: Tf_option
             Top = 5
             Width = 104
             Caption = 'Shadow low ADU'
+            ParentColor = False
             ParentFont = False
           end
           object Label100: TLabel
@@ -1801,6 +1835,7 @@ object f_option: Tf_option
             Top = 5
             Width = 118
             Caption = 'Highlight high ADU'
+            ParentColor = False
             ParentFont = False
           end
           object ClippingLow: TFloatSpinEdit
@@ -1846,6 +1881,7 @@ object f_option: Tf_option
             Top = 21
             Width = 60
             Caption = 'Treshold :'
+            ParentColor = False
             ParentFont = False
           end
           object Panel24: TPanel
@@ -1920,11 +1956,12 @@ object f_option: Tf_option
             Top = 8
             Width = 148
             Caption = 'Select the cursor to use '
+            ParentColor = False
           end
           object ImageCursor: TComboBox
             AnchorSideTop.Control = GroupBox33
             Left = 196
-            Height = 30
+            Height = 31
             Top = 2
             Width = 132
             BorderSpacing.Top = 2
@@ -1946,6 +1983,7 @@ object f_option: Tf_option
             Top = 8
             Width = 120
             Caption = '(Restart to activate)'
+            ParentColor = False
           end
         end
       end
@@ -2011,6 +2049,7 @@ object f_option: Tf_option
             Top = 97
             Width = 88
             Caption = 'Exposure time'
+            ParentColor = False
             ParentFont = False
           end
           object Label92: TLabel
@@ -2021,6 +2060,7 @@ object f_option: Tf_option
             Top = 97
             Width = 30
             Caption = 'Max:'
+            ParentColor = False
             ParentFont = False
           end
           object Label93: TLabel
@@ -2031,6 +2071,7 @@ object f_option: Tf_option
             Top = 97
             Width = 27
             Caption = 'Min:'
+            ParentColor = False
             ParentFont = False
           end
           object Label94: TLabel
@@ -2041,6 +2082,7 @@ object f_option: Tf_option
             Top = 134
             Width = 132
             Caption = 'Flat image mean level'
+            ParentColor = False
             ParentFont = False
           end
           object Label95: TLabel
@@ -2051,6 +2093,7 @@ object f_option: Tf_option
             Top = 134
             Width = 27
             Caption = 'Min:'
+            ParentColor = False
             ParentFont = False
           end
           object Label96: TLabel
@@ -2061,6 +2104,7 @@ object f_option: Tf_option
             Top = 134
             Width = 30
             Caption = 'Max:'
+            ParentColor = False
             ParentFont = False
           end
           object Label97: TLabel
@@ -2070,6 +2114,7 @@ object f_option: Tf_option
             Width = 364
             AutoSize = False
             Caption = 'Automatic flat exposure is required for the twilight flat.'
+            ParentColor = False
             ParentFont = False
             WordWrap = True
           end
@@ -2139,6 +2184,7 @@ object f_option: Tf_option
             Top = 37
             Width = 113
             Caption = 'Telescope azimuth'
+            ParentColor = False
             ParentFont = False
           end
           object Label102: TLabel
@@ -2149,6 +2195,7 @@ object f_option: Tf_option
             Top = 64
             Width = 120
             Caption = 'Telescope elevation'
+            ParentColor = False
             ParentFont = False
           end
           object DomeFlatTelescopeAz: TFloatSpinEdit
@@ -2180,6 +2227,7 @@ object f_option: Tf_option
             Top = 37
             Width = 51
             Caption = 'degrees'
+            ParentColor = False
             ParentFont = False
           end
           object Label104: TLabel
@@ -2190,6 +2238,7 @@ object f_option: Tf_option
             Top = 64
             Width = 51
             Caption = 'degrees'
+            ParentColor = False
             ParentFont = False
           end
           object DomeFlatTelescopeSlew: TCheckBox
@@ -2218,6 +2267,7 @@ object f_option: Tf_option
             Top = 118
             Width = 54
             Caption = 'Light ON'
+            ParentColor = False
             ParentFont = False
           end
           object Label110: TLabel
@@ -2228,6 +2278,7 @@ object f_option: Tf_option
             Top = 147
             Width = 58
             Caption = 'Light OFF'
+            ParentColor = False
             ParentFont = False
           end
           object DomeFlatSetLightON: TEdit
@@ -2274,6 +2325,7 @@ object f_option: Tf_option
             Top = 13
             Width = 111
             Caption = 'Focus window size'
+            ParentColor = False
             ParentFont = False
           end
           object FocusWindow: TSpinEdit
@@ -2317,6 +2369,7 @@ object f_option: Tf_option
             Top = 37
             Width = 181
             Caption = 'Stabilization delay after move'
+            ParentColor = False
             ParentFont = False
           end
           object BtnDisableDelay: TButton
@@ -2471,6 +2524,7 @@ object f_option: Tf_option
             Top = 5
             Width = 88
             Caption = 'Exposure time'
+            ParentColor = False
             ParentFont = False
           end
           object Label51: TLabel
@@ -2481,6 +2535,7 @@ object f_option: Tf_option
             Top = 5
             Width = 50
             Caption = 'seconds'
+            ParentColor = False
             ParentFont = False
           end
           object Label58: TLabel
@@ -2491,6 +2546,7 @@ object f_option: Tf_option
             Top = 92
             Width = 92
             Caption = 'Move direction'
+            ParentColor = False
             ParentFont = False
           end
           object AutofocusMoveDirIn: TRadioButton
@@ -2538,6 +2594,7 @@ object f_option: Tf_option
               Top = 5
               Width = 181
               Caption = 'Number of exposure by point'
+              ParentColor = False
               ParentFont = False
             end
             object AutofocusNearNum: TSpinEdit
@@ -2559,6 +2616,7 @@ object f_option: Tf_option
             Top = 64
             Width = 47
             Caption = 'Binning'
+            ParentColor = False
             ParentFont = False
           end
           object Label54: TLabel
@@ -2569,6 +2627,7 @@ object f_option: Tf_option
             Top = 122
             Width = 127
             Caption = 'Autofocus tolerance '
+            ParentColor = False
             ParentFont = False
           end
           object Label55: TLabel
@@ -2579,6 +2638,7 @@ object f_option: Tf_option
             Top = 122
             Width = 27
             Caption = 'HFD'
+            ParentColor = False
             ParentFont = False
           end
           object Label81: TLabel
@@ -2589,6 +2649,7 @@ object f_option: Tf_option
             Top = 122
             Width = 52
             Caption = 'min.SNR'
+            ParentColor = False
             ParentFont = False
           end
           object AutofocusBinning: TSpinEdit
@@ -2649,6 +2710,7 @@ object f_option: Tf_option
                 Top = 5
                 Width = 163
                 Caption = 'Number of dynamic points'
+                ParentColor = False
                 ParentFont = False
               end
               object Label65: TLabel
@@ -2659,11 +2721,12 @@ object f_option: Tf_option
                 Top = 37
                 Width = 167
                 Caption = 'Movement between points'
+                ParentColor = False
                 ParentFont = False
               end
               object AutofocusDynamicNumPoint: TSpinEdit
                 Left = 214
-                Height = 28
+                Height = 29
                 Top = 0
                 Width = 61
                 MaxValue = 30
@@ -2674,7 +2737,7 @@ object f_option: Tf_option
               end
               object AutofocusDynamicMovement: TSpinEdit
                 Left = 214
-                Height = 28
+                Height = 29
                 Top = 32
                 Width = 61
                 MaxValue = 10000
@@ -2693,6 +2756,7 @@ object f_option: Tf_option
                 Top = 6
                 Width = 66
                 Caption = 'Start focus'
+                ParentColor = False
                 ParentFont = False
               end
               object Label83: TLabel
@@ -2703,6 +2767,7 @@ object f_option: Tf_option
                 Top = 6
                 Width = 27
                 Caption = 'HFD'
+                ParentColor = False
                 ParentFont = False
               end
               object AutofocusSlippageCorrection: TCheckBox
@@ -2723,6 +2788,7 @@ object f_option: Tf_option
                 Top = 59
                 Width = 227
                 Caption = 'Estimated slippage since last learning'
+                ParentColor = False
                 ParentFont = False
               end
               object Label48: TLabel
@@ -2733,6 +2799,7 @@ object f_option: Tf_option
                 Top = 6
                 Width = 67
                 Caption = 'Near focus'
+                ParentColor = False
                 ParentFont = False
               end
               object AutofocusStartHFD: TFloatSpinEdit
@@ -2789,6 +2856,7 @@ object f_option: Tf_option
                 Top = 6
                 Width = 149
                 Caption = 'Initial movement (steps)'
+                ParentColor = False
                 ParentFont = False
               end
               object Label47: TLabel
@@ -2799,6 +2867,7 @@ object f_option: Tf_option
                 Top = 38
                 Width = 143
                 Caption = 'Final movement (steps)'
+                ParentColor = False
                 ParentFont = False
               end
               object AutofocusMaxSpeed: TSpinEdit
@@ -2831,6 +2900,7 @@ object f_option: Tf_option
                 Top = 6
                 Width = 109
                 Caption = 'Number of points'
+                ParentColor = False
                 ParentFont = False
               end
               object Label142: TLabel
@@ -2839,6 +2909,7 @@ object f_option: Tf_option
                 Top = 38
                 Width = 167
                 Caption = 'Movement between points'
+                ParentColor = False
                 ParentFont = False
               end
               object AutofocusPlanetNumPoint: TSpinEdit
@@ -2925,6 +2996,7 @@ object f_option: Tf_option
               Top = 7
               Width = 28
               Caption = 'Gain'
+              ParentColor = False
               ParentFont = False
             end
             object AutofocusGainEdit: TSpinEdit
@@ -2957,6 +3029,7 @@ object f_option: Tf_option
                 Top = 7
                 Width = 38
                 Caption = 'Offset'
+                ParentColor = False
               end
               object AutofocusOffsetEdit: TSpinEdit
                 AnchorSideTop.Control = AutofocusPanelOffset
@@ -3000,6 +3073,7 @@ object f_option: Tf_option
               Top = 4
               Width = 207
               Caption = 'Detect multiple stars in the image'
+              ParentColor = False
               ParentFont = False
             end
             object AutofocusPauseGuider: TCheckBox
@@ -3033,19 +3107,22 @@ object f_option: Tf_option
             ParentFont = False
             TabOrder = 0
             object Label53: TLabel
+              AnchorSideTop.Control = FocusStarMag
+              AnchorSideTop.Side = asrCenter
               Left = 8
               Height = 19
-              Top = 4
+              Top = 5
               Width = 198
               Caption = 'Slew to a near star of magnitude'
+              ParentColor = False
               ParentFont = False
             end
             object FocusStarMag: TComboBox
-              Left = 8
+              Left = 299
               Height = 28
               Hint = 'The magnitude of the star used to run the autofocus.'#10'Using a faint star can minimize the telescope movement but prefer the brightest to avoid trouble with nearby stars.'
-              Top = 28
-              Width = 81
+              Top = 0
+              Width = 77
               Constraints.MaxHeight = 28
               ItemHeight = 0
               ItemIndex = 0
@@ -3062,32 +3139,34 @@ object f_option: Tf_option
               Text = '4'
             end
             object Label85: TLabel
-              AnchorSideTop.Control = FocusStarMag
+              AnchorSideTop.Control = AutofocusPrecisionSlew
               AnchorSideTop.Side = asrCenter
-              Left = 97
+              Left = 8
               Height = 19
               Top = 33
               Width = 143
               Caption = 'Slew with a precision of '
+              ParentColor = False
               ParentFont = False
             end
             object Label86: TLabel
-              AnchorSideTop.Control = FocusStarMag
+              AnchorSideTop.Control = AutofocusPrecisionSlew
               AnchorSideTop.Side = asrCenter
-              Left = 373
+              Left = 384
               Height = 19
               Top = 33
               Width = 49
               Caption = '[arcmin]'
+              ParentColor = False
               ParentFont = False
             end
             object AutofocusPrecisionSlew: TFloatSpinEdit
-              AnchorSideTop.Control = FocusStarMag
               AnchorSideTop.Side = asrCenter
               Left = 299
               Height = 28
               Top = 28
-              Width = 61
+              Width = 77
+              Anchors = [akLeft]
               Constraints.MaxHeight = 28
               DecimalPlaces = 1
               Increment = 0.1
@@ -3124,6 +3203,7 @@ object f_option: Tf_option
               Top = 26
               Width = 104
               Caption = 'Default behavior'
+              ParentColor = False
               ParentFont = False
             end
             object AutofocusSlew: TRadioButton
@@ -3162,6 +3242,7 @@ object f_option: Tf_option
               Width = 6
               BorderSpacing.Top = 2
               Caption = '  '
+              ParentColor = False
               ParentFont = False
             end
             object Label67: TLabel
@@ -3170,6 +3251,7 @@ object f_option: Tf_option
               Top = 2
               Width = 281
               Caption = 'When performing autofocus from a sequence'
+              ParentColor = False
             end
           end
         end
@@ -3190,6 +3272,7 @@ object f_option: Tf_option
             Top = 4
             Width = 356
             Caption = 'The menu "File / Focuser calibration" help to fill this values.'
+            ParentColor = False
             ParentFont = False
           end
         end
@@ -3230,6 +3313,7 @@ object f_option: Tf_option
             Top = 13
             Width = 74
             Caption = 'Focal length'
+            ParentColor = False
             ParentFont = False
           end
           object ResolverBox: TRadioGroup
@@ -3271,6 +3355,7 @@ object f_option: Tf_option
             Width = 51
             Anchors = [akTop, akRight]
             Caption = 'Timeout'
+            ParentColor = False
             ParentFont = False
           end
           object Focale: TFloatSpinEdit
@@ -3304,6 +3389,7 @@ object f_option: Tf_option
             Top = 13
             Width = 24
             Caption = 'mm'
+            ParentColor = False
             ParentFont = False
           end
           object Label133: TLabel
@@ -3314,6 +3400,7 @@ object f_option: Tf_option
             Top = 45
             Width = 58
             Caption = '[seconds]'
+            ParentColor = False
             ParentFont = False
           end
         end
@@ -3345,6 +3432,7 @@ object f_option: Tf_option
                 Width = 167
                 AutoSize = False
                 Caption = 'Maximum search radius'
+                ParentColor = False
                 ParentFont = False
                 WordWrap = True
               end
@@ -3354,6 +3442,7 @@ object f_option: Tf_option
                 Top = 10
                 Width = 92
                 Caption = 'Scale tolerance'
+                ParentColor = False
                 ParentFont = False
               end
               object Label8: TLabel
@@ -3362,6 +3451,7 @@ object f_option: Tf_option
                 Top = 49
                 Width = 80
                 Caption = 'Downsample'
+                ParentColor = False
                 ParentFont = False
               end
               object Label9: TLabel
@@ -3371,6 +3461,7 @@ object f_option: Tf_option
                 Width = 133
                 AutoSize = False
                 Caption = 'Maximum sources'
+                ParentColor = False
                 ParentFont = False
                 WordWrap = True
               end
@@ -3380,6 +3471,7 @@ object f_option: Tf_option
                 Top = 117
                 Width = 89
                 Caption = 'Other options '
+                ParentColor = False
                 ParentFont = False
               end
               object OtherOptions: TEdit
@@ -3408,6 +3500,7 @@ object f_option: Tf_option
                   Top = 12
                   Width = 75
                   Caption = 'Cygwin path'
+                  ParentColor = False
                   ParentFont = False
                 end
                 object CygwinPath: TDirectoryEdit
@@ -3504,6 +3597,7 @@ object f_option: Tf_option
                   Top = 12
                   Width = 92
                   Caption = 'command path'
+                  ParentColor = False
                   ParentFont = False
                 end
                 object AstrometryPath: TDirectoryEdit
@@ -3560,6 +3654,7 @@ object f_option: Tf_option
                 Top = 14
                 Width = 131
                 Caption = 'Elbrus Images folder '
+                ParentColor = False
                 ParentFont = False
               end
               object Label13: TLabel
@@ -3568,6 +3663,7 @@ object f_option: Tf_option
                 Top = 45
                 Width = 149
                 Caption = 'Images folder Unix path'
+                ParentColor = False
                 ParentFont = False
               end
               object ElbrusUnixpath: TEdit
@@ -3587,6 +3683,7 @@ object f_option: Tf_option
                 Width = 402
                 AutoSize = False
                 Caption = 'Before you can use this option the Elbrus program must be calibrated for your images. Then select File / E-Wait for message.'#10'Also be sure to set the parameter: "Add the WCS in the FITS header".'
+                ParentColor = False
                 ParentFont = False
                 WordWrap = True
               end
@@ -3602,6 +3699,7 @@ object f_option: Tf_option
               AutoSize = False
               BorderSpacing.Top = 8
               Caption = 'Many functions will not work reliably without an astrometry software.'
+              ParentColor = False
               ParentFont = False
               WordWrap = True
             end
@@ -3624,6 +3722,7 @@ object f_option: Tf_option
                 Top = 28
                 Width = 97
                 Caption = 'Program folder '
+                ParentColor = False
                 ParentFont = False
               end
               object Label79: TLabel
@@ -3632,6 +3731,7 @@ object f_option: Tf_option
                 Top = 81
                 Width = 96
                 Caption = 'Wait after solve'
+                ParentColor = False
                 ParentFont = False
               end
               object Label80: TLabel
@@ -3640,6 +3740,7 @@ object f_option: Tf_option
                 Top = 81
                 Width = 50
                 Caption = 'seconds'
+                ParentColor = False
                 ParentFont = False
               end
               object PlatesolveWait: TSpinEdit
@@ -3687,6 +3788,7 @@ object f_option: Tf_option
                 Top = 30
                 Width = 97
                 Caption = 'Program folder '
+                ParentColor = False
                 ParentFont = False
               end
               object ASTAPSearchRadius: TSpinEdit
@@ -3709,6 +3811,7 @@ object f_option: Tf_option
                 Top = 127
                 Width = 80
                 Caption = 'Downsample'
+                ParentColor = False
                 ParentFont = False
               end
               object Label109: TLabel
@@ -3718,6 +3821,7 @@ object f_option: Tf_option
                 Width = 167
                 AutoSize = False
                 Caption = 'Maximum search radius'
+                ParentColor = False
                 ParentFont = False
                 WordWrap = True
               end
@@ -3834,6 +3938,7 @@ object f_option: Tf_option
               Top = 5
               Width = 28
               Caption = 'Gain'
+              ParentColor = False
               ParentFont = False
             end
             object SlewGainEdit: TSpinEdit
@@ -3864,6 +3969,7 @@ object f_option: Tf_option
                 Top = 9
                 Width = 38
                 Caption = 'Offset'
+                ParentColor = False
               end
               object SlewOffsetEdit: TSpinEdit
                 Left = 327
@@ -3909,6 +4015,7 @@ object f_option: Tf_option
               Top = 13
               Width = 152
               Caption = 'Target precision [arcmin] '
+              ParentColor = False
               ParentFont = False
             end
             object Label29: TLabel
@@ -3919,6 +4026,7 @@ object f_option: Tf_option
               Top = 45
               Width = 164
               Caption = 'Maximum number of retry'
+              ParentColor = False
               ParentFont = False
             end
             object SlewRetry: TSpinEdit
@@ -3950,6 +4058,7 @@ object f_option: Tf_option
               Top = 37
               Width = 149
               Caption = 'Exposure time [seconds]'
+              ParentColor = False
               ParentFont = False
             end
             object Label32: TLabel
@@ -3958,6 +4067,7 @@ object f_option: Tf_option
               Top = 8
               Width = 105
               Caption = 'Control exposure'
+              ParentColor = False
               ParentFont = False
             end
             object SlewExp: TFloatSpinEdit
@@ -3992,6 +4102,7 @@ object f_option: Tf_option
               Top = 13
               Width = 47
               Caption = 'Binning'
+              ParentColor = False
               ParentFont = False
             end
             object Label66: TLabel
@@ -4002,6 +4113,7 @@ object f_option: Tf_option
               Top = 54
               Width = 32
               Caption = 'Filter'
+              ParentColor = False
               ParentFont = False
             end
             object SlewFilter: TComboBox
@@ -4024,6 +4136,7 @@ object f_option: Tf_option
               Top = 102
               Width = 225
               Caption = 'Delay after telescope slew [seconds] '
+              ParentColor = False
               ParentFont = False
             end
             object SlewBin: TSpinEdit
@@ -4101,6 +4214,7 @@ object f_option: Tf_option
             Top = 15
             Width = 165
             Caption = 'Can track past meridian for'
+            ParentColor = False
             ParentFont = False
           end
           object Label41: TLabel
@@ -4111,6 +4225,7 @@ object f_option: Tf_option
             Top = 15
             Width = 50
             Caption = 'minutes'
+            ParentColor = False
             ParentFont = False
           end
           object MeridianFlipPauseBefore: TCheckBox
@@ -4139,6 +4254,7 @@ object f_option: Tf_option
             Top = 287
             Width = 51
             Caption = 'Timeout'
+            ParentColor = False
             ParentFont = False
           end
           object Label43: TLabel
@@ -4149,6 +4265,7 @@ object f_option: Tf_option
             Top = 287
             Width = 50
             Caption = 'minutes'
+            ParentColor = False
             ParentFont = False
           end
           object Label59: TLabel
@@ -4159,6 +4276,7 @@ object f_option: Tf_option
             Top = 49
             Width = 179
             Caption = 'No flip until past meridian for'
+            ParentColor = False
             ParentFont = False
           end
           object Label60: TLabel
@@ -4169,6 +4287,7 @@ object f_option: Tf_option
             Top = 49
             Width = 50
             Caption = 'minutes'
+            ParentColor = False
             ParentFont = False
           end
           object MeridianFlipAutofocus: TCheckBox
@@ -4256,6 +4375,7 @@ object f_option: Tf_option
             Top = 8
             Width = 132
             Caption = '                                            '
+            ParentColor = False
             ParentFont = False
           end
         end
@@ -4279,16 +4399,17 @@ object f_option: Tf_option
           ChildSizing.ShrinkHorizontal = crsScaleChilds
           ChildSizing.ShrinkVertical = crsScaleChilds
           ChildSizing.Layout = cclLeftToRightThenTopToBottom
-          ChildSizing.ControlsPerLine = 4
+          ChildSizing.ControlsPerLine = 5
           ClientHeight = 45
           ClientWidth = 558
-          Columns = 4
+          Columns = 5
           ItemIndex = 0
           Items.Strings = (
             'PHD2'
+            'Internal'
             'Lin_Guider'
-            'None'
             'Dither only'
+            'None'
           )
           OnClick = AutoguiderBoxClick
           ParentFont = False
@@ -4322,6 +4443,7 @@ object f_option: Tf_option
                 Top = 9
                 Width = 64
                 Caption = 'Hostname'
+                ParentColor = False
                 ParentFont = False
               end
               object Label17: TLabel
@@ -4332,6 +4454,7 @@ object f_option: Tf_option
                 Top = 9
                 Width = 27
                 Caption = 'Port'
+                ParentColor = False
                 ParentFont = False
               end
               object PHDhostname: TEdit
@@ -4364,7 +4487,7 @@ object f_option: Tf_option
                 AnchorSideTop.Control = StartPHD
                 AnchorSideTop.Side = asrCenter
                 Left = 136
-                Height = 30
+                Height = 31
                 Top = 35
                 Width = 344
                 TabOrder = 3
@@ -4407,6 +4530,7 @@ object f_option: Tf_option
                 Top = 39
                 Width = 65
                 Caption = 'Hostname'
+                ParentColor = False
                 ParentFont = False
               end
               object Label90: TLabel
@@ -4415,6 +4539,7 @@ object f_option: Tf_option
                 Top = 39
                 Width = 27
                 Caption = 'Port'
+                ParentColor = False
                 ParentFont = False
               end
               object LinGuiderPort: TEdit
@@ -4454,14 +4579,28 @@ object f_option: Tf_option
           end
           object PageDitherOnly: TPage
             object Label120: TLabel
-              Left = 1
-              Height = 86
-              Top = 1
-              Width = 535
+              Left = 0
+              Height = 90
+              Top = 0
+              Width = 560
               Align = alClient
               AutoSize = False
               Caption = 'Set the mean dithering pulse duration in seconds '
+              ParentColor = False
               ParentFont = False
+              WordWrap = True
+            end
+          end
+          object PageInternal: TPage
+            object Label155: TLabel
+              Left = 0
+              Height = 90
+              Top = 0
+              Width = 560
+              Align = alClient
+              AutoSize = False
+              Caption = 'Label155'
+              ParentColor = False
               WordWrap = True
             end
           end
@@ -4485,6 +4624,7 @@ object f_option: Tf_option
             Top = 13
             Width = 29
             Caption = 'pixel'
+            ParentColor = False
             ParentFont = False
           end
           object Label920: TLabel
@@ -4495,6 +4635,7 @@ object f_option: Tf_option
             Top = 13
             Width = 94
             Caption = 'Max guide drift'
+            ParentColor = False
             ParentFont = False
           end
           object GuideDriftMax: TFloatSpinEdit
@@ -4524,6 +4665,7 @@ object f_option: Tf_option
             Top = 48
             Width = 81
             Caption = 'Restart delay'
+            ParentColor = False
             ParentFont = False
           end
           object Label144: TLabel
@@ -4534,6 +4676,7 @@ object f_option: Tf_option
             Top = 48
             Width = 6
             Caption = 's'
+            ParentColor = False
             ParentFont = False
           end
           object GuideDriftRestartDelay: TSpinEdit
@@ -4599,6 +4742,7 @@ object f_option: Tf_option
               Top = 11
               Width = 58
               Caption = 'Wait time'
+              ParentColor = False
               ParentFont = False
             end
           end
@@ -4621,6 +4765,7 @@ object f_option: Tf_option
               Top = 9
               Width = 35
               Caption = 'Pixels'
+              ParentColor = False
               ParentFont = False
             end
             object Label21: TLabel
@@ -4631,6 +4776,7 @@ object f_option: Tf_option
               Top = 48
               Width = 58
               Caption = 'Min. time'
+              ParentColor = False
               ParentFont = False
             end
             object Label22: TLabel
@@ -4641,6 +4787,7 @@ object f_option: Tf_option
               Top = 87
               Width = 51
               Caption = 'Timeout'
+              ParentColor = False
               ParentFont = False
             end
             object Label26: TLabel
@@ -4649,6 +4796,7 @@ object f_option: Tf_option
               Top = 124
               Width = 68
               Caption = 'Calibration '#10'delay'
+              ParentColor = False
               ParentFont = False
             end
             object SettlePixel: TFloatSpinEdit
@@ -4723,6 +4871,7 @@ object f_option: Tf_option
                 Top = 5
                 Width = 35
                 Caption = 'Pixels'
+                ParentColor = False
                 ParentFont = False
               end
               object DitherRAonly: TCheckBox
@@ -4757,6 +4906,7 @@ object f_option: Tf_option
                 Top = 5
                 Width = 6
                 Caption = 's'
+                ParentColor = False
                 ParentFont = False
               end
               object EarlyDither: TCheckBox
@@ -4787,6 +4937,7 @@ object f_option: Tf_option
                 Top = 39
                 Width = 6
                 Caption = 's'
+                ParentColor = False
                 ParentFont = False
               end
               object Label71: TLabel
@@ -4797,6 +4948,7 @@ object f_option: Tf_option
                 Top = 39
                 Width = 79
                 Caption = 'Restart after'
+                ParentColor = False
                 ParentFont = False
               end
               object Label72: TLabel
@@ -4807,6 +4959,7 @@ object f_option: Tf_option
                 Top = 69
                 Width = 6
                 Caption = 's'
+                ParentColor = False
                 ParentFont = False
               end
               object Label73: TLabel
@@ -4817,6 +4970,7 @@ object f_option: Tf_option
                 Top = 69
                 Width = 70
                 Caption = 'Abort after'
+                ParentColor = False
                 ParentFont = False
               end
               object StarLostRestart: TSpinEdit
@@ -4847,6 +5001,7 @@ object f_option: Tf_option
                 Top = 9
                 Width = 134
                 Caption = 'Cancel exposure after'
+                ParentColor = False
                 ParentFont = False
               end
               object StarLostCancelExposure: TSpinEdit
@@ -4876,6 +5031,7 @@ object f_option: Tf_option
                 Top = 9
                 Width = 35
                 Caption = 'count'
+                ParentColor = False
                 ParentFont = False
               end
             end
@@ -4917,6 +5073,7 @@ object f_option: Tf_option
               Top = 9
               Width = 162
               Caption = 'Wait time between actions'
+              ParentColor = False
               ParentFont = False
             end
             object DomeActionWait: TSpinEdit
@@ -4937,6 +5094,7 @@ object f_option: Tf_option
               Top = 9
               Width = 50
               Caption = 'seconds'
+              ParentColor = False
               ParentFont = False
             end
           end
@@ -5141,6 +5299,7 @@ object f_option: Tf_option
                   Top = 47
                   Width = 27
                   Caption = 'Port'
+                  ParentColor = False
                   ParentFont = False
                 end
                 object Label24: TLabel
@@ -5151,6 +5310,7 @@ object f_option: Tf_option
                   Top = 13
                   Width = 64
                   Caption = 'Hostname'
+                  ParentColor = False
                   ParentFont = False
                 end
                 object CdChostname: TEdit
@@ -5184,7 +5344,7 @@ object f_option: Tf_option
                 end
                 object CdCPath: TEdit
                   Left = 160
-                  Height = 30
+                  Height = 31
                   Top = 40
                   Width = 306
                   TabOrder = 1
@@ -5195,6 +5355,7 @@ object f_option: Tf_option
                   Top = 47
                   Width = 84
                   Caption = 'Program path'
+                  ParentColor = False
                 end
               end
             end
@@ -5206,6 +5367,7 @@ object f_option: Tf_option
               Top = 47
               Width = 84
               Caption = 'Program path'
+              ParentColor = False
             end
             object StartSAMP: TCheckBox
               Left = 16
@@ -5231,6 +5393,7 @@ object f_option: Tf_option
               Top = 47
               Width = 84
               Caption = 'Program path'
+              ParentColor = False
             end
             object StartHNSKY: TCheckBox
               Left = 16
@@ -5288,6 +5451,7 @@ object f_option: Tf_option
               Top = 8
               Width = 58
               Caption = 'minimum'
+              ParentColor = False
               ParentFont = False
             end
             object LabelMa1: TLabel
@@ -5296,12 +5460,13 @@ object f_option: Tf_option
               Top = 8
               Width = 61
               Caption = 'maximum'
+              ParentColor = False
               ParentFont = False
             end
             object FloatSpinEditMi1: TFloatSpinEdit
               Tag = 1
               Left = 241
-              Height = 26
+              Height = 27
               Top = 4
               Width = 85
               Constraints.MaxHeight = 28
@@ -5314,7 +5479,7 @@ object f_option: Tf_option
             object FloatSpinEditMa1: TFloatSpinEdit
               Tag = 1
               Left = 415
-              Height = 26
+              Height = 27
               Top = 4
               Width = 85
               Constraints.MaxHeight = 28
@@ -5350,6 +5515,7 @@ object f_option: Tf_option
               Top = 8
               Width = 58
               Caption = 'minimum'
+              ParentColor = False
               ParentFont = False
             end
             object LabelMa2: TLabel
@@ -5358,12 +5524,13 @@ object f_option: Tf_option
               Top = 8
               Width = 61
               Caption = 'maximum'
+              ParentColor = False
               ParentFont = False
             end
             object FloatSpinEditMi2: TFloatSpinEdit
               Tag = 1
               Left = 241
-              Height = 26
+              Height = 27
               Top = 4
               Width = 85
               Constraints.MaxHeight = 28
@@ -5376,7 +5543,7 @@ object f_option: Tf_option
             object FloatSpinEditMa2: TFloatSpinEdit
               Tag = 1
               Left = 415
-              Height = 26
+              Height = 27
               Top = 4
               Width = 85
               Constraints.MaxHeight = 28
@@ -5412,6 +5579,7 @@ object f_option: Tf_option
               Top = 8
               Width = 58
               Caption = 'minimum'
+              ParentColor = False
               ParentFont = False
             end
             object LabelMa3: TLabel
@@ -5420,12 +5588,13 @@ object f_option: Tf_option
               Top = 8
               Width = 61
               Caption = 'maximum'
+              ParentColor = False
               ParentFont = False
             end
             object FloatSpinEditMi3: TFloatSpinEdit
               Tag = 1
               Left = 241
-              Height = 26
+              Height = 27
               Top = 4
               Width = 85
               Constraints.MaxHeight = 28
@@ -5438,7 +5607,7 @@ object f_option: Tf_option
             object FloatSpinEditMa3: TFloatSpinEdit
               Tag = 1
               Left = 415
-              Height = 26
+              Height = 27
               Top = 4
               Width = 85
               Constraints.MaxHeight = 28
@@ -5474,6 +5643,7 @@ object f_option: Tf_option
               Top = 8
               Width = 58
               Caption = 'minimum'
+              ParentColor = False
               ParentFont = False
             end
             object LabelMa4: TLabel
@@ -5482,12 +5652,13 @@ object f_option: Tf_option
               Top = 8
               Width = 61
               Caption = 'maximum'
+              ParentColor = False
               ParentFont = False
             end
             object FloatSpinEditMi4: TFloatSpinEdit
               Tag = 1
               Left = 241
-              Height = 26
+              Height = 27
               Top = 4
               Width = 85
               Constraints.MaxHeight = 28
@@ -5500,7 +5671,7 @@ object f_option: Tf_option
             object FloatSpinEditMa4: TFloatSpinEdit
               Tag = 1
               Left = 415
-              Height = 26
+              Height = 27
               Top = 4
               Width = 85
               Constraints.MaxHeight = 28
@@ -5536,6 +5707,7 @@ object f_option: Tf_option
               Top = 8
               Width = 58
               Caption = 'minimum'
+              ParentColor = False
               ParentFont = False
             end
             object LabelMa5: TLabel
@@ -5544,12 +5716,13 @@ object f_option: Tf_option
               Top = 8
               Width = 61
               Caption = 'maximum'
+              ParentColor = False
               ParentFont = False
             end
             object FloatSpinEditMi5: TFloatSpinEdit
               Tag = 1
               Left = 241
-              Height = 26
+              Height = 27
               Top = 4
               Width = 85
               Constraints.MaxHeight = 28
@@ -5562,7 +5735,7 @@ object f_option: Tf_option
             object FloatSpinEditMa5: TFloatSpinEdit
               Tag = 1
               Left = 415
-              Height = 26
+              Height = 27
               Top = 4
               Width = 85
               Constraints.MaxHeight = 28
@@ -5598,6 +5771,7 @@ object f_option: Tf_option
               Top = 8
               Width = 58
               Caption = 'minimum'
+              ParentColor = False
               ParentFont = False
             end
             object LabelMa6: TLabel
@@ -5606,12 +5780,13 @@ object f_option: Tf_option
               Top = 8
               Width = 61
               Caption = 'maximum'
+              ParentColor = False
               ParentFont = False
             end
             object FloatSpinEditMi6: TFloatSpinEdit
               Tag = 1
               Left = 241
-              Height = 26
+              Height = 27
               Top = 4
               Width = 85
               Constraints.MaxHeight = 28
@@ -5624,7 +5799,7 @@ object f_option: Tf_option
             object FloatSpinEditMa6: TFloatSpinEdit
               Tag = 1
               Left = 415
-              Height = 26
+              Height = 27
               Top = 4
               Width = 85
               Constraints.MaxHeight = 28
@@ -5660,6 +5835,7 @@ object f_option: Tf_option
               Top = 8
               Width = 58
               Caption = 'minimum'
+              ParentColor = False
               ParentFont = False
             end
             object LabelMa7: TLabel
@@ -5668,12 +5844,13 @@ object f_option: Tf_option
               Top = 8
               Width = 61
               Caption = 'maximum'
+              ParentColor = False
               ParentFont = False
             end
             object FloatSpinEditMi7: TFloatSpinEdit
               Tag = 1
               Left = 241
-              Height = 26
+              Height = 27
               Top = 4
               Width = 85
               Constraints.MaxHeight = 28
@@ -5686,7 +5863,7 @@ object f_option: Tf_option
             object FloatSpinEditMa7: TFloatSpinEdit
               Tag = 1
               Left = 415
-              Height = 26
+              Height = 27
               Top = 4
               Width = 85
               Constraints.MaxHeight = 28
@@ -5722,6 +5899,7 @@ object f_option: Tf_option
               Top = 8
               Width = 58
               Caption = 'minimum'
+              ParentColor = False
               ParentFont = False
             end
             object LabelMa8: TLabel
@@ -5730,12 +5908,13 @@ object f_option: Tf_option
               Top = 8
               Width = 61
               Caption = 'maximum'
+              ParentColor = False
               ParentFont = False
             end
             object FloatSpinEditMi8: TFloatSpinEdit
               Tag = 1
               Left = 241
-              Height = 26
+              Height = 27
               Top = 4
               Width = 85
               Constraints.MaxHeight = 28
@@ -5748,7 +5927,7 @@ object f_option: Tf_option
             object FloatSpinEditMa8: TFloatSpinEdit
               Tag = 1
               Left = 415
-              Height = 26
+              Height = 27
               Top = 4
               Width = 85
               Constraints.MaxHeight = 28
@@ -5784,6 +5963,7 @@ object f_option: Tf_option
               Top = 8
               Width = 58
               Caption = 'minimum'
+              ParentColor = False
               ParentFont = False
             end
             object LabelMa9: TLabel
@@ -5792,12 +5972,13 @@ object f_option: Tf_option
               Top = 8
               Width = 61
               Caption = 'maximum'
+              ParentColor = False
               ParentFont = False
             end
             object FloatSpinEditMi9: TFloatSpinEdit
               Tag = 1
               Left = 241
-              Height = 26
+              Height = 27
               Top = 4
               Width = 85
               Constraints.MaxHeight = 28
@@ -5810,7 +5991,7 @@ object f_option: Tf_option
             object FloatSpinEditMa9: TFloatSpinEdit
               Tag = 1
               Left = 415
-              Height = 26
+              Height = 27
               Top = 4
               Width = 85
               Constraints.MaxHeight = 28
@@ -5846,6 +6027,7 @@ object f_option: Tf_option
               Top = 8
               Width = 58
               Caption = 'minimum'
+              ParentColor = False
               ParentFont = False
             end
             object LabelMa10: TLabel
@@ -5854,12 +6036,13 @@ object f_option: Tf_option
               Top = 8
               Width = 61
               Caption = 'maximum'
+              ParentColor = False
               ParentFont = False
             end
             object FloatSpinEditMi10: TFloatSpinEdit
               Tag = 1
               Left = 241
-              Height = 26
+              Height = 27
               Top = 4
               Width = 85
               Constraints.MaxHeight = 28
@@ -5872,7 +6055,7 @@ object f_option: Tf_option
             object FloatSpinEditMa10: TFloatSpinEdit
               Tag = 1
               Left = 415
-              Height = 26
+              Height = 27
               Top = 4
               Width = 85
               Constraints.MaxHeight = 28
@@ -5908,6 +6091,7 @@ object f_option: Tf_option
               Top = 8
               Width = 58
               Caption = 'minimum'
+              ParentColor = False
               ParentFont = False
             end
             object LabelMa11: TLabel
@@ -5916,12 +6100,13 @@ object f_option: Tf_option
               Top = 8
               Width = 61
               Caption = 'maximum'
+              ParentColor = False
               ParentFont = False
             end
             object FloatSpinEditMi11: TFloatSpinEdit
               Tag = 1
               Left = 241
-              Height = 26
+              Height = 27
               Top = 4
               Width = 85
               Constraints.MaxHeight = 28
@@ -5934,7 +6119,7 @@ object f_option: Tf_option
             object FloatSpinEditMa11: TFloatSpinEdit
               Tag = 1
               Left = 415
-              Height = 26
+              Height = 27
               Top = 4
               Width = 85
               Constraints.MaxHeight = 28
@@ -5970,6 +6155,7 @@ object f_option: Tf_option
               Top = 8
               Width = 58
               Caption = 'minimum'
+              ParentColor = False
               ParentFont = False
             end
             object LabelMa12: TLabel
@@ -5978,12 +6164,13 @@ object f_option: Tf_option
               Top = 8
               Width = 61
               Caption = 'maximum'
+              ParentColor = False
               ParentFont = False
             end
             object FloatSpinEditMi12: TFloatSpinEdit
               Tag = 1
               Left = 241
-              Height = 26
+              Height = 27
               Top = 4
               Width = 85
               Constraints.MaxHeight = 28
@@ -5996,7 +6183,7 @@ object f_option: Tf_option
             object FloatSpinEditMa12: TFloatSpinEdit
               Tag = 1
               Left = 415
-              Height = 26
+              Height = 27
               Top = 4
               Width = 85
               Constraints.MaxHeight = 28
@@ -6032,6 +6219,7 @@ object f_option: Tf_option
               Top = 8
               Width = 58
               Caption = 'minimum'
+              ParentColor = False
               ParentFont = False
             end
             object LabelMa13: TLabel
@@ -6040,12 +6228,13 @@ object f_option: Tf_option
               Top = 8
               Width = 61
               Caption = 'maximum'
+              ParentColor = False
               ParentFont = False
             end
             object FloatSpinEditMi13: TFloatSpinEdit
               Tag = 1
               Left = 241
-              Height = 26
+              Height = 27
               Top = 4
               Width = 85
               Constraints.MaxHeight = 28
@@ -6058,7 +6247,7 @@ object f_option: Tf_option
             object FloatSpinEditMa13: TFloatSpinEdit
               Tag = 1
               Left = 415
-              Height = 26
+              Height = 27
               Top = 4
               Width = 85
               Constraints.MaxHeight = 28
@@ -6097,6 +6286,7 @@ object f_option: Tf_option
             Top = 9
             Width = 203
             Caption = 'Restart after weather is good for'
+            ParentColor = False
             ParentFont = False
           end
           object WeatherRestartDelay: TSpinEdit
@@ -6119,6 +6309,7 @@ object f_option: Tf_option
             Top = 9
             Width = 50
             Caption = 'minutes'
+            ParentColor = False
             ParentFont = False
           end
         end
@@ -6138,6 +6329,7 @@ object f_option: Tf_option
             Top = 7
             Width = 408
             Caption = 'Pause sequence when the observing condition are out of the limits'
+            ParentColor = False
             ParentFont = False
           end
         end
@@ -6199,6 +6391,7 @@ object f_option: Tf_option
             Top = 8
             Width = 477
             Caption = 'The following actions are run if the safety monitor report dangerous condition'
+            ParentColor = False
             ParentFont = False
             WordWrap = True
           end
@@ -6251,7 +6444,7 @@ object f_option: Tf_option
             end
             object RecenterTargetDistance: TFloatSpinEdit
               Left = 289
-              Height = 28
+              Height = 29
               Top = 40
               Width = 74
               Increment = 0.1
@@ -6264,6 +6457,7 @@ object f_option: Tf_option
               Top = 45
               Width = 201
               Caption = 'Recenter if the drift is more than'
+              ParentColor = False
               ParentFont = False
             end
             object Label131: TLabel
@@ -6274,6 +6468,7 @@ object f_option: Tf_option
               Top = 45
               Width = 50
               Caption = 'minutes'
+              ParentColor = False
               ParentFont = False
             end
             object Label149: TLabel
@@ -6282,6 +6477,7 @@ object f_option: Tf_option
               Top = 64
               Width = 207
               Caption = '(limited to 1.5x the slew precision)'
+              ParentColor = False
               ParentFont = False
             end
           end
@@ -6316,6 +6512,7 @@ object f_option: Tf_option
               Top = 8
               Width = 211
               Caption = 'Temperature coefficient in steps/C'
+              ParentColor = False
               ParentFont = False
             end
             object BtnDisableFocuserTemp: TButton
@@ -6350,6 +6547,7 @@ object f_option: Tf_option
               Top = 36
               Width = 244
               Caption = 'Run auto-focus if change is more than  C'
+              ParentColor = False
               ParentFont = False
             end
             object AutofocusTemp: TFloatSpinEdit
@@ -6395,6 +6593,7 @@ object f_option: Tf_option
               Top = 5
               Width = 220
               Caption = 'Automatically run auto-focus every  '
+              ParentColor = False
               ParentFont = False
             end
             object AutofocusPeriod: TSpinEdit
@@ -6415,6 +6614,7 @@ object f_option: Tf_option
               Top = 5
               Width = 50
               Caption = 'minutes'
+              ParentColor = False
               ParentFont = False
             end
           end
@@ -6428,6 +6628,7 @@ object f_option: Tf_option
             BorderSpacing.Right = 20
             BorderSpacing.Around = 6
             Caption = 'This options are in addition to the autofocus frequency available in the Plan definition'
+            ParentColor = False
             ParentFont = False
             WordWrap = True
           end
@@ -6459,6 +6660,7 @@ object f_option: Tf_option
             Top = 6
             Width = 259
             Caption = 'Global actions when a sequence is running'
+            ParentColor = False
             ParentFont = False
           end
         end
@@ -6603,6 +6805,7 @@ object f_option: Tf_option
                 Top = 29
                 Width = 129
                 Caption = 'SMTP server address'
+                ParentColor = False
                 ParentFont = False
               end
               object Label135: TLabel
@@ -6613,6 +6816,7 @@ object f_option: Tf_option
                 Top = 59
                 Width = 108
                 Caption = 'SMTP server port'
+                ParentColor = False
                 ParentFont = False
               end
               object Label136: TLabel
@@ -6623,6 +6827,7 @@ object f_option: Tf_option
                 Top = 117
                 Width = 68
                 Caption = 'User name'
+                ParentColor = False
                 ParentFont = False
               end
               object Label137: TLabel
@@ -6633,6 +6838,7 @@ object f_option: Tf_option
                 Top = 147
                 Width = 58
                 Caption = 'Password'
+                ParentColor = False
                 ParentFont = False
               end
               object Label138: TLabel
@@ -6643,6 +6849,7 @@ object f_option: Tf_option
                 Top = 177
                 Width = 119
                 Caption = 'From email address'
+                ParentColor = False
                 ParentFont = False
               end
               object Label139: TLabel
@@ -6653,6 +6860,7 @@ object f_option: Tf_option
                 Top = 208
                 Width = 158
                 Caption = 'Destination email address'
+                ParentColor = False
                 ParentFont = False
               end
               object smtp_host: TEdit
@@ -6741,6 +6949,7 @@ object f_option: Tf_option
                 Top = 2
                 Width = 420
                 Caption = 'Please look at the documentation for important security information'
+                ParentColor = False
                 ParentFont = False
               end
               object smtp_ssltls: TCheckBox
@@ -6837,6 +7046,7 @@ object f_option: Tf_option
                 Top = 40
                 Width = 3
                 Caption = ' '
+                ParentColor = False
                 ParentFont = False
               end
             end
