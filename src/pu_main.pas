@@ -862,7 +862,6 @@ type
     procedure InternalguiderCalibrate(Sender: TObject);
     procedure GuideCameraNewImage(Sender: TObject);
     procedure GuideCameraNewImageAsync(Data: PtrInt);
-    Procedure DrawGuideHistogram(SetLevel,ResetCursor: boolean);
     Procedure DrawGuideImage;
     Procedure PlotGuideImage;
   public
@@ -4093,6 +4092,8 @@ begin
   f_internalguider.Binning.Value:=config.GetValue('/InternalGuider/Camera/Binning',1);
   f_internalguider.Gain.Value:=config.GetValue('/InternalGuider/Camera/Gain',0);
   f_internalguider.Offset.Value:=config.GetValue('/InternalGuider/Camera/Offset',0);
+  f_internalguider.Gamma.Position:=config.GetValue('/InternalGuider/Visu/Gamma',50);
+  f_internalguider.Luminosity.Position:=config.GetValue('/InternalGuider/Visu/Luminosity',50);
 
   MeridianOption:=config.GetValue('/Meridian/MeridianOption',0);
   MinutesPastMeridian:=config.GetValue('/Meridian/MinutesPast',15);
@@ -4583,6 +4584,8 @@ begin
    config.SetValue('/InternalGuider/Camera/Binning',f_internalguider.Binning.Value);
    config.SetValue('/InternalGuider/Camera/Gain',f_internalguider.Gain.Value);
    config.SetValue('/InternalGuider/Camera/Offset',f_internalguider.Offset.Value);
+   config.SetValue('/InternalGuider/Visu/Gamma',f_internalguider.Gamma.Position);
+   config.SetValue('/InternalGuider/Visu/Luminosity',f_internalguider.Luminosity.Position);
 
 end;
 
@@ -14916,7 +14919,6 @@ begin
       guidefits.LoadStream;
   end;
   // prepare image
-  DrawGuideHistogram(true,false);
   DrawGuideImage;
   if InternalguiderRunning and (autoguider is T_autoguider_internal) then begin
     // process autoguiding
@@ -14930,28 +14932,18 @@ begin
   PlotGuideImage;
 end;
 
-Procedure Tf_main.DrawGuideHistogram(SetLevel,ResetCursor: boolean);
-begin
-{ #todo :  separate level setting}
-  if (guidefits.HeaderInfo.naxis>0) and guidefits.ImageValid then begin
-     f_visu.DrawHistogram(guidefits,SetLevel,ResetCursor);
-  end;
-end;
-
 Procedure Tf_main.DrawGuideImage;
 var tmpbmp:TBGRABitmap;
     co: TBGRAPixel;
     s,cx,cy: integer;
 begin
 if (guidefits.HeaderInfo.naxis>0) and guidefits.ImageValid then begin
-  guidefits.Gamma:=f_visu.Gamma.Value;
-  guidefits.VisuMax:=round(f_visu.ImgMax);
-  guidefits.VisuMin:=round(f_visu.ImgMin);
+  guidefits.Gamma:=f_internalguider.Gamma.Position/100;
+  guidefits.VisuMax:=round(max(guidefits.HeaderInfo.dmin+1,guidefits.HeaderInfo.dmax*f_internalguider.Luminosity.Position/100));
+  guidefits.VisuMin:=round(guidefits.HeaderInfo.dmin);
   guidefits.MaxADU:=MaxADU;
-  guidefits.Overflow:= 0.9995*ClippingOverflow;
-  guidefits.Underflow:=ClippingUnderflow;
-  guidefits.MarkOverflow:=f_visu.Clipping;
-  guidefits.Invert:=f_visu.Invert;
+  guidefits.MarkOverflow:=false; //f_visu.Clipping;
+  guidefits.Invert:=false; //f_visu.Invert;
   {$ifdef debug_raw}writeln(FormatDateTime(dateiso,Now)+blank+'FITS GetBGRABitmap');{$endif}
   guidefits.GetBGRABitmap(ImaGuideBmp);
   {$ifdef debug_raw}writeln(FormatDateTime(dateiso,Now)+blank+'FITS GetBGRABitmap end');{$endif}
@@ -15049,8 +15041,6 @@ else begin
    tmpbmp.Free;  }
 end;
 
-if f_visu.FlipHorz then {$ifdef debug_raw}begin; writeln(FormatDateTime(dateiso,Now)+blank+'HorizontalFlip');{$endif}ScrGuideBmp.HorizontalFlip;{$ifdef debug_raw}end;{$endif}
-if f_visu.FlipVert then {$ifdef debug_raw}begin; writeln(FormatDateTime(dateiso,Now)+blank+'VerticalFlip');{$endif}ScrGuideBmp.VerticalFlip;{$ifdef debug_raw}end;{$endif}
 ImageGuide.Invalidate;
 {$ifdef debug_raw}writeln(FormatDateTime(dateiso,Now)+blank+'PlotImage end');{$endif}
 end;

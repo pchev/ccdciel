@@ -53,6 +53,8 @@ type
     Label14: TLabel;
     Label15: TLabel;
     Label16: TLabel;
+    Label17: TLabel;
+    Label18: TLabel;
     Label5: TLabel;
     Label6: TLabel;
     Label7: TLabel;
@@ -80,6 +82,8 @@ type
     Gain: TSpinEdit;
     Offset: TSpinEdit;
     TabSheetCamera: TTabSheet;
+    Gamma: TTrackBar;
+    Luminosity: TTrackBar;
     unitarcseconds1: TCheckBox;
     xy_trend1: TImage;
     xy_Panel1: TImage;
