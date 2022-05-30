@@ -756,6 +756,8 @@ type
     procedure IncPage(Sender: TObject);
     procedure SelectNextPage(direction: integer);
     procedure CheckLongitude;
+    function  GetAutoguiderType: integer;
+    procedure SetAutoguiderType(value: integer);
   public
     { public declarations }
     LockTemp: Boolean;
@@ -769,6 +771,7 @@ type
     property Latitude: double read Flatitude write SetLatitude;
     property Longitude: double read Flongitude write SetLongitude;
     property LinGuiderUseUnixSocket: boolean read GetLinGuiderUseUnixSocket write SetLinGuiderUseUnixSocket;
+    property AutoguiderType: integer read GetAutoguiderType write SetAutoguiderType;
     property onGetMaxADU : TNotifyEvent read FGetMaxADU write FGetMaxADU;
     property onGetPixelSize : TNotifyEvent read FGetPixelSize write FGetPixelSize;
     property onGetFocale : TNotifyEvent read FGetFocale write FGetFocale;
@@ -1217,9 +1220,9 @@ begin
   MeridianOption.Items[0]:=rsDoNothing;
   MeridianOption.Items[1]:=rsAutomaticFli;
   MeridianOption.Items[2]:=rsAbort;
-  AutoguiderBox.Items[2]:=rsNone2;
+  AutoguiderBox.Items[1]:=rsInternal;
   AutoguiderBox.Items[3]:=rsDitherOnly;
-  AutoguiderBox.Items[4]:=rsInternal;
+  AutoguiderBox.Items[4]:=rsNone2;
   PageWeather.Caption := rsWeatherStati;
   Label118.Caption:=rsPauseSequenc;
   Label116.Caption:=rsRestartAfter2;
@@ -1843,10 +1846,12 @@ begin
 end;
 
 procedure Tf_option.AutoguiderBoxClick(Sender: TObject);
+var i: integer;
 begin
-  Notebook3.PageIndex:=AutoguiderBox.ItemIndex;
-  groupbox5.Visible:=(AutoguiderBox.ItemIndex<2)or(AutoguiderBox.ItemIndex=3);
-  if (AutoguiderBox.ItemIndex<2) then begin
+  i:=GetAutoguiderType;
+  Notebook3.PageIndex:=i;
+  groupbox5.Visible:=(i<2)or(i=3);
+  if (i<2) then begin
     Label23.Caption:=rsPixels;
     Label122.Caption:='';
   end
@@ -1854,12 +1859,36 @@ begin
     Label23.Caption:=rsPulseDuratio;
     Label122.Caption:=rsS;
   end;
-  panel14.Visible:=(AutoguiderBox.ItemIndex<>2)and(AutoguiderBox.ItemIndex<>4);
-  GroupBox11.Visible:=(AutoguiderBox.ItemIndex=3);
-  groupbox6.Visible:=(AutoguiderBox.ItemIndex=0);
-  groupbox13.Visible:=(AutoguiderBox.ItemIndex=0);
-  GroupBoxDrift.Visible:=(AutoguiderBox.ItemIndex=0);
-  DitherRAonly.Visible:=(AutoguiderBox.ItemIndex=0)or(AutoguiderBox.ItemIndex=3);
+  panel14.Visible:=(i<>2)and(i<>4);
+  GroupBox11.Visible:=(i=3);
+  groupbox6.Visible:=(i=0);
+  groupbox13.Visible:=(i=0);
+  GroupBoxDrift.Visible:=(i=0);
+  DitherRAonly.Visible:=(i=0)or(i=3);
+end;
+
+function Tf_option.GetAutoguiderType: integer;
+// agPHD,agLINGUIDER,agNONE,agDITHER,agINTERNAL
+// PHD2 Internal Lin_Guider Dither only None
+begin
+ case AutoguiderBox.ItemIndex of
+   0: result:=0; // PHD2
+   1: result:=4; // Internal
+   2: result:=1; // Linguider
+   3: result:=3; // Dither
+   4: result:=2; // None
+ end;
+end;
+
+procedure Tf_option.SetAutoguiderType(value: integer);
+begin
+ case value of
+   0: AutoguiderBox.ItemIndex:=0; // PHD2
+   1: AutoguiderBox.ItemIndex:=2; // Linguider
+   2: AutoguiderBox.ItemIndex:=4; // None
+   3: AutoguiderBox.ItemIndex:=3; // Dither
+   4: AutoguiderBox.ItemIndex:=1; // Internal
+ end;
 end;
 
 procedure Tf_option.BtnDisableDelayClick(Sender: TObject);

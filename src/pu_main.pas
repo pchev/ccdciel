@@ -8061,7 +8061,7 @@ begin
    f_option.MeridianFlipStopSlaving.Checked:=config.GetValue('/Meridian/MeridianFlipStopSlaving',false);
    f_option.WantSetPierSide.Checked:=config.GetValue('/Meridian/WantSetPierSide',false);
    f_option.MeridianFlipAutofocus.Checked:=config.GetValue('/Meridian/MeridianFlipAutofocus',false);
-   f_option.AutoguiderBox.ItemIndex:=config.GetValue('/Autoguider/Software',2);
+   f_option.AutoguiderType:=config.GetValue('/Autoguider/Software',2);
    f_option.PHDhostname.Text:=config.GetValue('/Autoguider/PHDhostname','localhost');
    f_option.PHDport.Text:=config.GetValue('/Autoguider/PHDport','4400');
    f_option.StartPHD.Checked:=config.GetValue('/Autoguider/PHDstart',false);
@@ -8392,7 +8392,7 @@ begin
      config.SetValue('/Meridian/MeridianFlipAutofocus',f_option.MeridianFlipAutofocus.Checked);
      config.SetValue('/Meridian/MeridianFlipStopSlaving',f_option.MeridianFlipStopSlaving.Checked);
      config.SetValue('/Meridian/WantSetPierSide',f_option.WantSetPierSide.Checked);
-     config.SetValue('/Autoguider/Software',f_option.AutoguiderBox.ItemIndex);
+     config.SetValue('/Autoguider/Software',f_option.AutoguiderType);
      config.SetValue('/Autoguider/PHDhostname',f_option.PHDhostname.Text);
      config.SetValue('/Autoguider/PHDport',f_option.PHDport.Text);
      config.SetValue('/Autoguider/PHDstart',f_option.StartPHD.Checked);

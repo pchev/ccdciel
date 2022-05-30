@@ -4404,10 +4404,10 @@ object f_option: Tf_option
           ItemIndex = 0
           Items.Strings = (
             'PHD2'
-            'Lin_Guider'
-            'None'
-            'Dither only'
             'Internal'
+            'Lin_Guider'
+            'Dither only'
+            'None'
           )
           OnClick = AutoguiderBoxClick
           ParentFont = False
@@ -4726,7 +4726,7 @@ object f_option: Tf_option
             TabOrder = 1
             object DitherWaitTime: TSpinEdit
               Left = 105
-              Height = 28
+              Height = 27
               Top = 8
               Width = 74
               Constraints.MaxHeight = 28
