@@ -663,6 +663,7 @@ type
     procedure PageControlCoverChange(Sender: TObject);
     procedure PageControlDomeChange(Sender: TObject);
     procedure PageControlFocuserChange(Sender: TObject);
+    procedure PageControlGuideCameraChange(Sender: TObject);
     procedure PageControlMountChange(Sender: TObject);
     procedure PageControlRotatorChange(Sender: TObject);
     procedure PageControlSafetyChange(Sender: TObject);
@@ -2376,6 +2377,16 @@ begin
     2: FCameraConnection:=ASCOMREST;
   end;
   DeviceCamera.Caption:=rsCamera+': '+DevInterfaceName[ord(FCameraConnection)];
+end;
+
+procedure Tf_setup.PageControlGuideCameraChange(Sender: TObject);
+begin
+  case PageControlGuideCamera.ActivePageIndex of
+    0: FGuideCameraConnection:=INDI;
+    1: FGuideCameraConnection:=ASCOM;
+    2: FGuideCameraConnection:=ASCOMREST;
+  end;
+  DeviceGuideCamera.Caption:=rsGuideCamera+': '+DevInterfaceName[ord(FGuideCameraConnection)];
 end;
 
 procedure Tf_setup.PageControlDomeChange(Sender: TObject);
