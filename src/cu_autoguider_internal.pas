@@ -441,7 +441,7 @@ end;
 
 Procedure T_autoguider_internal.StartGuideExposure;
 var e: double;
-    binx,biny: integer;
+    binx,biny,gain: integer;
 //    buf,f: string;
 //    p,i,x,y,w,h,sx,sy,sw,sh: integer;
 begin
@@ -460,23 +460,16 @@ if (FCamera.Status=devConnected) then begin
      if (FCamera.BinX<>binx)or(FCamera.BinY<>biny) then begin
         FCamera.SetBinning(binx,biny);
      end;
-{  sx:=StrToIntDef(f_frame.FX.Text,-1);
-  sy:=StrToIntDef(f_frame.FY.Text,-1);
-  sw:=StrToIntDef(f_frame.FWidth.Text,-1);
-  sh:=StrToIntDef(f_frame.FHeight.Text,-1);
-  if (sx>=0)and(sy>=0)and(sw>0)and(sh>0) then begin
-    camera.GetFrame(x,y,w,h,true);
-    if (x<>sx)or(y<>sy)or(w<>sw)or(h<>sh) then
-      camera.SetFrame(sx,sy,sw,sh);
-  end;  }
-{  if camera.CanSetGain then begin
-    if camera.Gain<>f_preview.Gain then begin
-      camera.Gain:=f_preview.Gain;
+  if FCamera.hasGain then begin
+    gain:=finternalguider.Gain.Value;
+    if FCamera.Gain<>gain then begin
+      FCamera.Gain:=gain;
     end;
-    if camera.hasOffset then begin
-       if camera.Offset<>f_preview.Offset then camera.Offset:=f_preview.Offset;
+    if FCamera.hasOffset then begin
+       if FCamera.Offset<>finternalguider.Offset.Value then
+         FCamera.Offset:=finternalguider.Offset.Value;
     end;
-  end;  }
+  end;
   if FCamera.FrameType<>LIGHT then FCamera.FrameType:=LIGHT;
   FCamera.ObjectName:=rsGuide;
   FCamera.StackNum:=-1;

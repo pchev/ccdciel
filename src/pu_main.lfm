@@ -1682,4 +1682,10 @@ object f_main: Tf_main
     Left = 55
     Top = 408
   end
+  object GuideCameraConnectTimer: TTimer
+    Enabled = False
+    OnTimer = GuideCameraConnectTimerTimer
+    Left = 548
+    Top = 395
+  end
 end

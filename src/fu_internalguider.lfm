@@ -302,9 +302,11 @@ object f_internalguider: Tf_internalguider
         ClientHeight = 404
         ClientWidth = 313
         object Label10: TLabel
+          AnchorSideTop.Control = Exposure
+          AnchorSideTop.Side = asrCenter
           Left = 16
           Height = 19
-          Top = 64
+          Top = 61
           Width = 57
           Caption = 'Exposure'
           ParentColor = False
@@ -313,7 +315,7 @@ object f_internalguider: Tf_internalguider
           Left = 103
           Height = 29
           Top = 56
-          Width = 110
+          Width = 111
           MaxValue = 30
           MinValue = 0.01
           TabOrder = 0
@@ -322,17 +324,19 @@ object f_internalguider: Tf_internalguider
         object Binning: TSpinEdit
           Left = 103
           Height = 29
-          Top = 100
-          Width = 110
+          Top = 104
+          Width = 111
           MaxValue = 8
           MinValue = 1
           TabOrder = 1
           Value = 1
         end
         object Label14: TLabel
+          AnchorSideTop.Control = Binning
+          AnchorSideTop.Side = asrCenter
           Left = 16
           Height = 19
-          Top = 104
+          Top = 109
           Width = 47
           Caption = 'Binning'
           ParentColor = False
@@ -358,6 +362,43 @@ object f_internalguider: Tf_internalguider
           ParentShowHint = False
           ShowHint = True
           TabOrder = 3
+        end
+        object Label15: TLabel
+          AnchorSideTop.Control = Gain
+          AnchorSideTop.Side = asrCenter
+          Left = 16
+          Height = 19
+          Top = 157
+          Width = 28
+          Caption = 'Gain'
+          ParentColor = False
+        end
+        object Label16: TLabel
+          AnchorSideTop.Control = Offset
+          AnchorSideTop.Side = asrCenter
+          Left = 16
+          Height = 19
+          Top = 205
+          Width = 38
+          Caption = 'Offset'
+          ParentColor = False
+        end
+        object Gain: TSpinEdit
+          Left = 103
+          Height = 29
+          Top = 152
+          Width = 111
+          MaxValue = 999999
+          MinValue = -999999
+          TabOrder = 4
+          Value = 20
+        end
+        object Offset: TSpinEdit
+          Left = 103
+          Height = 29
+          Top = 200
+          Width = 111
+          TabOrder = 5
         end
       end
       object TabSheetAdvanced: TTabSheet

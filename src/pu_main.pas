@@ -201,6 +201,7 @@ type
     PageInternalGuider: TTabSheet;
     MainImage: TTabSheet;
     GuideImage: TTabSheet;
+    GuideCameraConnectTimer: TTimer;
     TimerStampTimer: TTimer;
     MenuPdfHelp: TMenuItem;
     MenuOnlineHelp: TMenuItem;
@@ -360,6 +361,7 @@ type
     procedure FormKeyDown(Sender: TObject; var Key: Word; Shift: TShiftState);
     procedure FormResize(Sender: TObject);
     procedure FormShow(Sender: TObject);
+    procedure GuideCameraConnectTimerTimer(Sender: TObject);
     procedure ImageResizeTimerTimer(Sender: TObject);
     procedure MagnifyerTimerTimer(Sender: TObject);
     procedure MeasureTimerTimer(Sender: TObject);
@@ -3393,6 +3395,20 @@ begin
   end;
 end;
 
+procedure Tf_main.GuideCameraConnectTimerTimer(Sender: TObject);
+begin
+  GuideCameraConnectTimer.Enabled:=false;
+  guidecamera.CheckGain;
+  guidecamera.CanSetGain:=guidecamera.hasGain;
+  f_internalguider.Gain.Enabled:=guidecamera.hasGain;
+  f_internalguider.Gain.MinValue:=guidecamera.GainMin;
+  f_internalguider.Gain.MaxValue:=guidecamera.GainMax;
+  guidecamera.CheckOffset;
+  f_internalguider.Offset.Enabled:=guidecamera.hasOffset;
+  f_internalguider.Offset.MinValue:=guidecamera.OffsetMin;
+  f_internalguider.Offset.MaxValue:=guidecamera.OffsetMax;
+end;
+
 procedure Tf_main.FocuserConnectTimerTimer(Sender: TObject);
 begin
   FocuserConnectTimer.Enabled:=false;
@@ -4902,7 +4918,11 @@ allcount:=0; upcount:=0; downcount:=0; concount:=0;
  if WantGuideCamera then begin
    inc(allcount);
    case guidecamera.Status of
-     devConnected: inc(upcount);
+     devConnected: begin
+                   inc(upcount);
+                   GuideCameraConnectTimer.Enabled:=false;
+                   GuideCameraConnectTimer.Enabled:=true;
+                   end;
      devDisconnected: inc(downcount);
      devConnecting: inc(concount);
    end;

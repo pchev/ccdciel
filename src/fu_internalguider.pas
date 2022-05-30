@@ -51,6 +51,8 @@ type
     Label12: TLabel;
     Label13: TLabel;
     Label14: TLabel;
+    Label15: TLabel;
+    Label16: TLabel;
     Label5: TLabel;
     Label6: TLabel;
     Label7: TLabel;
@@ -75,6 +77,8 @@ type
     ra_gain1: TSpinEdit;
     scale1: TUpDown;
     Binning: TSpinEdit;
+    Gain: TSpinEdit;
+    Offset: TSpinEdit;
     TabSheetCamera: TTabSheet;
     unitarcseconds1: TCheckBox;
     xy_trend1: TImage;
@@ -175,6 +179,7 @@ begin
  {$ifdef lclcocoa}
  Title.Color:=clWindowFrame;
  {$endif}
+ PageControl1.ActivePageIndex:=0;
  ScaleDPI(Self);
  SetLang;
 end;
