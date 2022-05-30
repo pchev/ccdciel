@@ -41,6 +41,7 @@ type
     ButtonLoop: TButton;
     ButtonGuide: TButton;
     ButtonStop: TButton;
+    ButtonStop1: TButton;
     disable_guiding1: TCheckBox;
     Exposure: TFloatSpinEdit;
     GroupBox1: TGroupBox;

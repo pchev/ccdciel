@@ -302,17 +302,17 @@ object f_internalguider: Tf_internalguider
         ClientHeight = 404
         ClientWidth = 313
         object Label10: TLabel
-          Left = 17
+          Left = 16
           Height = 19
-          Top = 24
+          Top = 64
           Width = 57
           Caption = 'Exposure'
           ParentColor = False
         end
         object Exposure: TFloatSpinEdit
-          Left = 104
+          Left = 103
           Height = 29
-          Top = 16
+          Top = 56
           Width = 110
           MaxValue = 30
           MinValue = 0.01
@@ -320,9 +320,9 @@ object f_internalguider: Tf_internalguider
           Value = 1
         end
         object Binning: TSpinEdit
-          Left = 104
+          Left = 103
           Height = 29
-          Top = 64
+          Top = 100
           Width = 110
           MaxValue = 8
           MinValue = 1
@@ -330,21 +330,34 @@ object f_internalguider: Tf_internalguider
           Value = 1
         end
         object Label14: TLabel
-          Left = 18
+          Left = 16
           Height = 19
-          Top = 71
+          Top = 104
           Width = 47
           Caption = 'Binning'
           ParentColor = False
         end
         object ButtonLoop: TButton
-          Left = 104
+          Left = 16
           Height = 25
-          Top = 144
-          Width = 63
+          Top = 9
+          Width = 75
           Caption = 'Loop'
           OnClick = ButtonLoopClick
           TabOrder = 2
+        end
+        object ButtonStop1: TButton
+          Left = 120
+          Height = 25
+          Hint = 'Stop loop'
+          Top = 9
+          Width = 75
+          Caption = 'Stop'
+          OnClick = ButtonStopClick
+          ParentFont = False
+          ParentShowHint = False
+          ShowHint = True
+          TabOrder = 3
         end
       end
       object TabSheetAdvanced: TTabSheet
