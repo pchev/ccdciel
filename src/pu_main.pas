@@ -2008,6 +2008,7 @@ begin
    MenuCollimation.Caption:=rsInspectionAn;
    MenuIndiSettings.Caption := rsINDISettings;
    MenuAscomCameraSetup.Caption:='ASCOM '+rsCamera+blank+rsSetup;
+   MenuAscomGuideCameraSetup.Caption:='ASCOM '+rsGuideCamera+blank+rsSetup;
    MenuAscomWheelSetup.Caption:='ASCOM '+rsFilterWheel+blank+rsSetup;
    MenuAscomFocuserSetup.Caption:='ASCOM '+rsFocuser+blank+rsSetup;
    MenuAscomMountSetup.Caption:='ASCOM '+rsMount+blank+rsSetup;
@@ -2017,6 +2018,7 @@ begin
    MenuAscomDomeSetup.Caption:='ASCOM '+rsDome+blank+rsSetup;
    MenuAlpacaServerSetup.Caption:='Alpaca '+rsServer+blank+rsSetup;
    MenuAlpacaCameraSetup.Caption:='Alpaca '+rsCamera+blank+rsSetup;
+   MenuAlpacaGuideCameraSetup.Caption:='Alpaca '+rsGuideCamera+blank+rsSetup;
    MenuAlpacaWheelSetup.Caption:='Alpaca '+rsFilterWheel+blank+rsSetup;
    MenuAlpacaFocuserSetup.Caption:='Alpaca '+rsFocuser+blank+rsSetup;
    MenuAlpacaMountSetup.Caption:='Alpaca '+rsMount+blank+rsSetup;

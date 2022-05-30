@@ -588,6 +588,11 @@ object f_main: Tf_main
         Caption = 'MenuAscomCameraSetup'
         OnClick = MenuAscomSetupClick
       end
+      object MenuAscomGuideCameraSetup: TMenuItem
+        Tag = 12
+        Caption = 'MenuAscomGuideCameraSetup'
+        OnClick = MenuAscomSetupClick
+      end
       object MenuAscomWheelSetup: TMenuItem
         Tag = 2
         Caption = 'MenuAscomWheelSetup'
@@ -633,11 +638,6 @@ object f_main: Tf_main
         Caption = 'MenuAscomCoverSetup'
         OnClick = MenuAscomSetupClick
       end
-      object MenuAscomGuideCameraSetup: TMenuItem
-        Tag = 12
-        Caption = 'MenuAscomGuideCameraSetup'
-        OnClick = MenuAscomSetupClick
-      end
       object MenuAlpacaServerSetup: TMenuItem
         Caption = 'MenuAlpacaServerSetup'
         OnClick = MenuAlpacaSetupClick
@@ -645,6 +645,11 @@ object f_main: Tf_main
       object MenuAlpacaCameraSetup: TMenuItem
         Tag = 1
         Caption = 'MenuAlpacaCameraSetup'
+        OnClick = MenuAlpacaSetupClick
+      end
+      object MenuAlpacaGuideCameraSetup: TMenuItem
+        Tag = 12
+        Caption = 'MenuAlpacaGuideCameraSetup'
         OnClick = MenuAlpacaSetupClick
       end
       object MenuAlpacaWheelSetup: TMenuItem
@@ -690,11 +695,6 @@ object f_main: Tf_main
       object MenuAlpacaCoverSetup: TMenuItem
         Tag = 11
         Caption = 'MenuAlpacaCoverSetup'
-        OnClick = MenuAlpacaSetupClick
-      end
-      object MenuAlpacaGuideCameraSetup: TMenuItem
-        Tag = 12
-        Caption = 'MenuAlpacaGuideCameraSetup'
         OnClick = MenuAlpacaSetupClick
       end
       object N2: TMenuItem
