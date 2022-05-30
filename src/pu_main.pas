@@ -1407,6 +1407,8 @@ begin
   Image1.PopupMenu := ImagePopupMenu;
   ScrGuideBmp := TBGRABitmap.Create;
   ImaGuideBmp:=TBGRABitmap.Create(1,1);
+  guideimg_Height:=0;
+  guideimg_Width:=0;
   ImageGuide := TImgDrawingControl.Create(Self);
   ImageGuide.Parent := GuideImage;
   ImageGuide.Align := alClient;
