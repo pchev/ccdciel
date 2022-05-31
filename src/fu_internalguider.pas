@@ -110,7 +110,7 @@ type
     procedure ButtonLoopClick(Sender: TObject);
     procedure ButtonGuideClick(Sender: TObject);
     procedure ButtonStopClick(Sender: TObject);
-    procedure scale1Changing(Sender: TObject; var AllowChange: Boolean);
+    procedure scale1Click(Sender: TObject; Button: TUDBtnType);
   private
     { private declarations }
     thescale : double;
@@ -396,8 +396,7 @@ begin
   setled(clGray);
 end;
 
-procedure Tf_internalguider.scale1Changing(Sender: TObject;
-  var AllowChange: Boolean);
+procedure Tf_internalguider.scale1Click(Sender: TObject; Button: TUDBtnType);
 begin
   trend_scale:=scale1.position;//trigger a redraw trend
 end;

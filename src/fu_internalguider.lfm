@@ -111,6 +111,7 @@ object f_internalguider: Tf_internalguider
             Top = 144
             Width = 60
             Increment = 5
+            MaxValue = 100
             ParentFont = False
             ParentShowHint = False
             ShowHint = True
@@ -124,6 +125,7 @@ object f_internalguider: Tf_internalguider
             Top = 80
             Width = 60
             Increment = 5
+            MaxValue = 100
             ParentFont = False
             ParentShowHint = False
             ShowHint = True
@@ -175,7 +177,7 @@ object f_internalguider: Tf_internalguider
             Top = 56
             Width = 60
             Increment = 5
-            MaxValue = 200
+            MaxValue = 100
             ParentFont = False
             ParentShowHint = False
             ShowHint = True
@@ -217,6 +219,7 @@ object f_internalguider: Tf_internalguider
             Top = 168
             Width = 60
             Increment = 5
+            MaxValue = 100
             ParentFont = False
             ParentShowHint = False
             ShowHint = True
@@ -291,7 +294,7 @@ object f_internalguider: Tf_internalguider
             Width = 17
             Max = 6
             Min = 0
-            OnChanging = scale1Changing
+            OnClick = scale1Click
             Position = 2
             TabOrder = 9
           end
@@ -554,8 +557,8 @@ object f_internalguider: Tf_internalguider
               Height = 21
               Hint = 'The trend and XY scales will be in arc seconds'
               Top = 8
-              Width = 181
-              Caption = 'Trend scale in arc seconds'
+              Width = 124
+              Caption = 'Unit arc seconds'
               ParentFont = False
               ParentShowHint = False
               ShowHint = True
@@ -580,7 +583,7 @@ object f_internalguider: Tf_internalguider
             Top = 16
             Width = 288
             Caption = 'Calibration results:'
-            ClientHeight = 262
+            ClientHeight = 244
             ClientWidth = 286
             TabOrder = 2
             object Label5: TLabel
