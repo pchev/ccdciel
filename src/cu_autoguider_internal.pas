@@ -662,18 +662,21 @@ function T_autoguider_internal.WaitPulseGuiding(pulse:double): boolean;
 var timeend:double;
 begin
   result:=false;
-  timeend:=now+(pulse/(secperday*1000));
+  // wait for the pulse duration in second
+  wait(pulse/1000);
+  // wait up to 10 additional second until the mount driver report IsPulseGuiding=False
+  timeend:=now+(10/secperday);
   while now<timeend do begin
+    if not mount.PulseGuiding then begin
+      result:=true;
+      break;
+    end;
     sleep(100);
     if GetCurrentThreadId=MainThreadID then Application.ProcessMessages;
     if StopInternalguider then
     begin
       msg('Guider stop pressed.',3);
       exit;
-    end;
-    if not mount.PulseGuiding then begin
-      result:=true;
-      break;
     end;
   end;
 end;
