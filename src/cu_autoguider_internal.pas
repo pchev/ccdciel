@@ -477,6 +477,10 @@ if (FCamera.Status=devConnected) then begin
   FCamera.SaveFrames:=false;
   FCamera.AlignFrames:=false;
   //fits.SetBPM(bpm,bpmNum,bpmX,bpmY,bpmAxis);
+
+  msg('Taking exposure',3);
+
+
   FCamera.StartExposure(e);
 end
 else begin
@@ -754,12 +758,18 @@ case InternalguiderCalibrationDirection of
              InternalCalibrationInitialize:=true;
              if measure_drift(InternalCalibrationInitialize,driftX,driftY)>0 then StopError;//measure reference star positions
              mount.PulseGuide(2,CalibrationDuration {duration msec} );  {0=north, 1=south, 2 East, 3 West}
+
+             msg('waiting '+ inttostr(CalibrationDuration),3);
+
              WaitPulseGuiding(CalibrationDuration);
              InternalguiderCalibrationStep:=2;
            end;
         2: begin
              if measure_drift(InternalCalibrationInitialize,driftX,driftY)>0 then StopError;//measure drift
              drift:=sqrt(sqr(driftX)+sqr(driftY));//  For image with north up and east left, driftX become negative.
+
+             msg('Drift '+ floattostr(drift),3);
+
              //newmessage('DriftX ' + floattostrf(driftx,ffgeneral,0,2)+' DriftY ' + floattostrf(driftY,ffgeneral,0,2));
              if ((drift>5) or (CalibrationDuration>20000)) then begin// OK, next direction
                if drift<2 then begin msg('Abort calibration, no movement measured!',1); StopError; end;
@@ -781,12 +791,18 @@ case InternalguiderCalibrationDirection of
              InternalCalibrationInitialize:=true;
              if measure_drift(InternalCalibrationInitialize,driftX,driftY)>0 then StopError;//measure reference star positions
              mount.PulseGuide(3,CalibrationDuration {duration msec} );  {0=north, 1=south, 2 East, 3 West}
+
+             msg('waiting '+ inttostr(CalibrationDuration),3);
+
              WaitPulseGuiding(CalibrationDuration);
              InternalguiderCalibrationStep:=1;
            end;
         1: begin
              if measure_drift(InternalCalibrationInitialize,driftX,driftY)>0 then StopError;//measure drift
              drift:=sqrt(sqr(driftX)+sqr(driftY)); //For image with north up and east left, driftX become positive.
+
+             msg('Drift '+ floattostr(drift),3);
+
              pulsegainWest:=drift*1000/(CalibrationDuration*Calthecos); // [px*cos(dec)/sec]
              msg('Internal guider calibration:  Pulse gain measured East/West: '+ floattostrF(pulsegainEast,ffgeneral,0,2)+'/'+ floattostrF(pulsegainWest,ffgeneral,0,2)+' [px*cos(δ)/sec], Camera angle: '+floattostrF(paEast*180/pi,ffgeneral,3,1)+'°',3);
              InternalguiderCalibrationDirection:=3;
@@ -801,12 +817,15 @@ case InternalguiderCalibrationDirection of
              msg('Guider, removing backlash North',3);
              mount.PulseGuide(0,5000 {duration msec} );  {0=north, 1=south, 2 East, 3 West}
              WaitPulseGuiding(5000);
+             CaldriftOld:=0;
+             drift:=0;
              CalibrationDuration:=667; //duration of pulse guiding
              InternalguiderCalibrationStep:=1;
            end;
         1: begin
              CalibrationDuration:=round(CalibrationDuration*1.5);
              msg('Testing pulse guiding North for '+floattostrF(CalibrationDuration/1000,FFgeneral,0,2)+ ' seconds',3);
+             CaldriftOld:=drift;
              InternalCalibrationInitialize:=true;//for measure drift
              if measure_drift(InternalCalibrationInitialize,driftX,driftY)>0 then StopError;//measure reference star positions
              mount.PulseGuide(0,CalibrationDuration {duration msec} );  {0=north, 1=south, 2 East, 3 West}
@@ -816,7 +835,7 @@ case InternalguiderCalibrationDirection of
         2: begin
              if measure_drift(InternalCalibrationInitialize,driftX,driftY)>0 then StopError;//measure drift
              drift:=sqrt(sqr(driftX)+sqr(driftY));
-             if ((drift>5) or (CalibrationDuration>20000)) then begin// OK, next direction
+             if ( ((drift>5) and (CaldriftOld>2)) or (CalibrationDuration>20000)) then begin// OK both drift and CaldriftOld show movement so backlash must be fully gone. Go next direction
                if drift<2 then begin msg('Abort calibration, no movement measured!',1); StopError; end;
                paNorth:=arctan2(driftY,driftX); // Relative to the positive X axis and CCW
                Caltheangle:=paNorth - paEast;// CCW angles, calculate angle North relative to West
@@ -845,10 +864,12 @@ case InternalguiderCalibrationDirection of
              WaitPulseGuiding(5000);
              CalCount:=0;
              CaldriftOld:=0;
+             drift:=0;
              InternalguiderCalibrationStep:=1;
              msg('Testing pulse guiding South for '+floattostrF(CalibrationDuration/1000,FFgeneral,0,2)+ ' seconds',3);
            end;
         1: begin
+             CaldriftOld:=drift;
              InternalCalibrationInitialize:=true;
              if measure_drift(InternalCalibrationInitialize,driftX,driftY)>0 then StopError;//measure reference star positions
              mount.PulseGuide(1,CalibrationDuration {duration msec} );  {0=north, 1=south, 2 East, 3 West}
@@ -859,7 +880,7 @@ case InternalguiderCalibrationDirection of
              if measure_drift(InternalCalibrationInitialize,driftX,driftY)>0 then StopError;//measure drift
              drift:=sqrt(sqr(driftX)+sqr(driftY));
              inc(CalCount);
-             if ((CaldriftOld>2) or (Calcount>=4)) then begin
+             if ((CaldriftOld>2) or (Calcount>=4)) then begin  //previous cycle showed movement so backlash must be fully gone
                if drift<2 then begin msg('Abort calibration, no movement measured!',1); StopError; end;
                pulsegainSouth:=Calflip*drift*1000/(CalibrationDuration); // [px*cos(dec)/sec]   Flipped is already measured
                msg('Internal guider calibration:  Pulse gain measured North/South: '+ floattostrF(pulsegainNorth,ffgeneral,0,2)+'/'+ floattostrF(pulsegainSouth,ffgeneral,0,2)+' [px/sec]',3);
@@ -868,7 +889,7 @@ case InternalguiderCalibrationDirection of
                InternalCalibration;  // iterate without new image
              end
              else begin
-               InternalguiderCalibrationStep:=1;
+               InternalguiderCalibrationStep:=1; //repeat loop until CaldriftOld>2 and backlash is gone
              end;
            end;
       end;
