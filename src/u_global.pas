@@ -277,6 +277,7 @@ const
   MaxFilter=100;
   WaitResponseTime=120;
   ZoomMax=15;
+  GuideZoomMax=15;
   msgOK = 'OK!';
   msgFailed = 'Failed!';
   ldeg = 'd';

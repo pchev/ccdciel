@@ -27,7 +27,7 @@ interface
 
 uses   UScaleDPI, Dialogs, u_translation, u_global,
   Classes, SysUtils, FileUtil, Forms, Graphics, Controls, StdCtrls, ExtCtrls, Spin,
-  math,LCLintf, ComCtrls;
+  math,LCLintf, ComCtrls, Buttons;
 
 
 type
@@ -37,6 +37,10 @@ type
   { Tf_internalguider }
 
   Tf_internalguider = class(TFrame)
+    BtnZoom05: TSpeedButton;
+    BtnZoom1: TSpeedButton;
+    BtnZoom2: TSpeedButton;
+    BtnZoomAdjust: TSpeedButton;
     ButtonCalibrate: TButton;
     ButtonLoop: TButton;
     ButtonGuide: TButton;
@@ -55,6 +59,7 @@ type
     Label16: TLabel;
     Label17: TLabel;
     Label18: TLabel;
+    Label19: TLabel;
     Label5: TLabel;
     Label6: TLabel;
     Label7: TLabel;
@@ -97,6 +102,10 @@ type
     TabSheetAdvanced: TTabSheet;
     TabSheetGuider: TTabSheet;
     Title: TLabel;
+    procedure BtnZoom05Click(Sender: TObject);
+    procedure BtnZoom1Click(Sender: TObject);
+    procedure BtnZoom2Click(Sender: TObject);
+    procedure BtnZoomAdjustClick(Sender: TObject);
     procedure ButtonCalibrateClick(Sender: TObject);
     procedure ButtonLoopClick(Sender: TObject);
     procedure ButtonGuideClick(Sender: TObject);
@@ -105,7 +114,7 @@ type
   private
     { private declarations }
     thescale : double;
-    FonStart, FonStop, FonCalibrate, FonLoop: TNotifyEvent;
+    FonStart, FonStop, FonCalibrate, FonLoop, FonRedraw: TNotifyEvent;
     procedure SetLed (cl : tcolor);
 
     procedure SetRA_hysteresis(value:integer);
@@ -153,6 +162,7 @@ type
     property onStart: TNotifyEvent read FonStart write FonStart;
     property onStop: TNotifyEvent read FonStop write FonStop;
     property onCalibrate: TNotifyEvent read FonCalibrate write FonCalibrate;
+    property onRedraw: TNotifyEvent read FonRedraw write FonRedraw;
     property RA_hysteresis: integer read GetRA_hysteresis write SetRA_hysteresis;
     property DEC_hysteresis: integer read GetDEC_hysteresis write SetDEC_hysteresis;
     property RAgain: integer read GetRAgain write SetRAgain;
@@ -620,6 +630,30 @@ begin
      end;
    end;
  end;
+end;
+
+procedure Tf_internalguider.BtnZoomAdjustClick(Sender: TObject);
+begin
+  GuideImgZoom:=0;
+  if Assigned(FonRedraw) then FonRedraw(self);
+end;
+
+procedure Tf_internalguider.BtnZoom05Click(Sender: TObject);
+begin
+  GuideImgZoom:=0.5;
+  if Assigned(FonRedraw) then FonRedraw(self);
+end;
+
+procedure Tf_internalguider.BtnZoom1Click(Sender: TObject);
+begin
+  GuideImgZoom:=1;
+  if Assigned(FonRedraw) then FonRedraw(self);
+end;
+
+procedure Tf_internalguider.BtnZoom2Click(Sender: TObject);
+begin
+  GuideImgZoom:=2;
+  if Assigned(FonRedraw) then FonRedraw(self);
 end;
 
 

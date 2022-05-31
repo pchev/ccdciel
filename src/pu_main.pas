@@ -202,6 +202,7 @@ type
     MainImage: TTabSheet;
     GuideImage: TTabSheet;
     GuideCameraConnectTimer: TTimer;
+    GuidePlotTimer: TTimer;
     TimerStampTimer: TTimer;
     MenuPdfHelp: TMenuItem;
     MenuOnlineHelp: TMenuItem;
@@ -362,6 +363,7 @@ type
     procedure FormResize(Sender: TObject);
     procedure FormShow(Sender: TObject);
     procedure GuideCameraConnectTimerTimer(Sender: TObject);
+    procedure GuidePlotTimerTimer(Sender: TObject);
     procedure ImageResizeTimerTimer(Sender: TObject);
     procedure MagnifyerTimerTimer(Sender: TObject);
     procedure MeasureTimerTimer(Sender: TObject);
@@ -558,8 +560,12 @@ type
     Mx, My, PolX, PolY: integer;
     StartX, StartY, EndX, EndY, MouseDownX,MouseDownY: integer;
     FrameX,FrameY,FrameW,FrameH: integer;
+    GuideImgCx,GuideImgCy: double;
+    GuideMx, GuideMy: integer;
+    GuideMouseMoving: boolean;
     DeviceTimeout: integer;
     MouseMoving, MouseFrame, MouseSpectra, LockTimerPlot, LockMouseWheel, LockRestartExposure, PolarMoving: boolean;
+    LockGuideMouseWheel, LockGuideTimerPlot: boolean;
     learningvcurve: boolean;
     LogFileOpen,DeviceLogFileOpen: Boolean;
     NeedRestart, GUIready, AppClose: boolean;
@@ -594,6 +600,10 @@ type
     procedure Image1Paint(Sender: TObject);
     procedure Image1Resize(Sender: TObject);
     procedure ImageGuidePaint(Sender: TObject);
+    procedure ImageGuideMouseDown(Sender: TObject; Button: TMouseButton; Shift: TShiftState; X, Y: Integer);
+    procedure ImageGuideMouseMove(Sender: TObject; Shift: TShiftState; X, Y: Integer);
+    procedure ImageGuideMouseUp(Sender: TObject; Button: TMouseButton; Shift: TShiftState; X, Y: Integer);
+    procedure ImageGuideMouseWheel(Sender: TObject; Shift: TShiftState; WheelDelta: Integer; MousePos: TPoint; var Handled: Boolean);
     Procedure GetAppDir;
     procedure ScaleMainForm;
     Procedure InitLog;
@@ -860,6 +870,7 @@ type
     procedure InternalguiderStart(Sender: TObject);
     procedure InternalguiderStop(Sender: TObject);
     procedure InternalguiderCalibrate(Sender: TObject);
+    procedure InternalguiderRedraw(Sender: TObject);
     procedure GuideCameraNewImage(Sender: TObject);
     procedure GuideCameraNewImageAsync(Data: PtrInt);
     Procedure DrawGuideImage;
@@ -1413,6 +1424,10 @@ begin
   ImageGuide.Parent := GuideImage;
   ImageGuide.Align := alClient;
   ImageGuide.OnPaint := @ImageGuidePaint;
+  ImageGuide.OnMouseDown := @ImageGuideMouseDown;
+  ImageGuide.OnMouseMove := @ImageGuideMouseMove;
+  ImageGuide.OnMouseUp := @ImageGuideMouseUp;
+  ImageGuide.OnMouseWheel := @ImageGuideMouseWheel;
   CursorImage1 := TCursorImage.Create;
   GetAppDir;
   chdir(Appdir);
@@ -1644,6 +1659,7 @@ begin
   f_internalguider.onStart:=@InternalguiderStart;
   f_internalguider.onStop:=@InternalguiderStop;
   f_internalguider.onCalibrate:=@InternalguiderCalibrate;
+  f_internalguider.onRedraw:=@InternalguiderRedraw;
 
   i:=config.GetValue('/Autoguider/Software',2);
   case TAutoguiderType(i) of
@@ -2291,12 +2307,17 @@ begin
   LockTimerPlot:=false;
   LockMouseWheel:=false;
   LockRestartExposure:=false;
+  LockGuideTimerPlot:=false;
+  ImgZoom:=0;
   ImgCx:=0;
   ImgCy:=0;
   StartX:=0;
   StartY:=0;
   EndX:=0;
   EndY:=0;
+  GuideImgZoom:=0;
+  GuideImgCx:=0;
+  GuideImgCy:=0;
   RunningCapture:=false;
   RunningPreview:=false;
   MenuIndiSettings.Enabled:=true;
@@ -2517,6 +2538,7 @@ begin
   btn := TPortableNetworkGraphic.Create;
   TBTabs.Images.GetBitmap(5, btn);
   f_visu.BtnZoomAdjust.Glyph.Assign(btn);
+  f_internalguider.BtnZoomAdjust.Glyph.Assign(btn);
   TBTabs.Images.GetBitmap(6, btn);
   f_visu.BtnBullsEye.Glyph.Assign(btn);
   TBTabs.Images.GetBitmap(7, btn);
@@ -14906,6 +14928,10 @@ begin
    if autoguider is T_autoguider_internal then T_autoguider_internal(autoguider).InternalguiderCalibrate;
 end;
 
+procedure Tf_main.InternalguiderRedraw(Sender: TObject);
+begin
+   GuidePlotTimer.Enabled:=true;
+end;
 
 procedure Tf_main.GuideCameraNewImage(Sender: TObject);
 begin
@@ -14914,6 +14940,10 @@ end;
 
 procedure Tf_main.GuideCameraNewImageAsync(Data: PtrInt);
 begin
+  if (not guidefits.ImageValid) then begin
+     guidefits.LoadStream;
+  end;
+
   if StopInternalguider then begin
    InternalguiderRunning:=false;
    InternalguiderGuiding:=false;
@@ -14921,9 +14951,6 @@ begin
    exit;
   end;
 
-  if (not guidefits.ImageValid) then begin
-      guidefits.LoadStream;
-  end;
   // prepare image
   DrawGuideImage;
   if InternalguiderRunning and (autoguider is T_autoguider_internal) then begin
@@ -14993,8 +15020,6 @@ else begin
   rmode:=rmFineResample;
 end;
 
-GuideImgZoom:=0;
-
 if GuideImgZoom=0 then begin
   // adjust
   r1:=guideimg_Width/guideimg_Height;
@@ -15019,32 +15044,32 @@ if GuideImgZoom=0 then begin
   {$ifdef debug_raw}writeln(FormatDateTime(dateiso,Now)+blank+'PutImage');{$endif}
   ScrGuideBmp.PutImage(px,py,str,dmSet);
   str.Free;
-{end
-else if ImgZoom=1 then begin
+end
+else if GuideImgZoom=1 then begin
    // zoom 1
-   px:=round(ImgCx)-((img_Width-ScrBmp.Width) div 2);
-   py:=round(ImgCy)-((img_Height-ScrBmp.Height) div 2);
-   OrigX:=px;
-   OrigY:=py;
+   px:=round(GuideImgCx)-((guideimg_Width-ScrGuideBmp.Width) div 2);
+   py:=round(GuideImgCy)-((guideimg_Height-ScrGuideBmp.Height) div 2);
+   GuideOrigX:=px;
+   GuideOrigY:=py;
    {$ifdef debug_raw}writeln(FormatDateTime(dateiso,Now)+blank+'PutImage');{$endif}
-   ScrBmp.PutImage(px,py,imabmp,dmSet);
+   ScrGuideBmp.PutImage(px,py,ImaGuideBmp,dmSet);
 end
 else begin
    // other zoom
-   if ImgZoom<ZoomMin then ImgZoom:=ZoomMin;
-   tmpbmp:=TBGRABitmap.Create(round(ScrBmp.Width/ImgZoom),round(ScrBmp.Height/ImgZoom),clDarkBlue);
-   px:=round(ImgCx)-((img_Width-tmpbmp.Width) div 2);
-   py:=round(ImgCy)-((img_Height-tmpbmp.Height) div 2);
-   OrigX:=px;
-   OrigY:=py;
+   if GuideImgZoom<GuideZoomMin then GuideImgZoom:=GuideZoomMin;
+   tmpbmp:=TBGRABitmap.Create(round(ScrGuideBmp.Width/GuideImgZoom),round(ScrGuideBmp.Height/GuideImgZoom),clDarkBlue);
+   px:=round(GuideImgCx)-((guideimg_Width-tmpbmp.Width) div 2);
+   py:=round(GuideImgCy)-((guideimg_Height-tmpbmp.Height) div 2);
+   GuideOrigX:=px;
+   GuideOrigY:=py;
    {$ifdef debug_raw}writeln(FormatDateTime(dateiso,Now)+blank+'PutImage');{$endif}
-   tmpbmp.PutImage(px,py,ImaBmp,dmSet);
+   tmpbmp.PutImage(px,py,ImaGuideBmp,dmSet);
    {$ifdef debug_raw}writeln(FormatDateTime(dateiso,Now)+blank+'Resample');{$endif}
-   str:=tmpbmp.Resample(ScrBmp.Width,ScrBmp.Height,rmSimpleStretch) as TBGRABitmap;
+   str:=tmpbmp.Resample(ScrGuideBmp.Width,ScrGuideBmp.Height,rmSimpleStretch) as TBGRABitmap;
    {$ifdef debug_raw}writeln(FormatDateTime(dateiso,Now)+blank+'PutImage');{$endif}
-   ScrBmp.PutImage(0,0,str,dmSet);
+   ScrGuideBmp.PutImage(0,0,str,dmSet);
    str.Free;
-   tmpbmp.Free;  }
+   tmpbmp.Free;
 end;
 
 ImageGuide.Invalidate;
@@ -15065,6 +15090,95 @@ except
 end;
 end;
 
+procedure Tf_main.ImageGuideMouseDown(Sender: TObject; Button: TMouseButton;
+  Shift: TShiftState; X, Y: Integer);
+begin
+if Shift=[ssLeft] then begin
+  if (GuideImgZoom>0) then begin
+     GuideMx:=X;
+     GuideMy:=y;
+     GuideMouseMoving:=true;
+     screen.Cursor:=crHandPoint;
+  end;
+end
+else if (ssCtrl in Shift) then begin
+  if (GuideImgZoom>0) then begin
+     GuideMx:=X;
+     GuideMy:=y;
+     GuideMouseMoving:=true;
+     screen.Cursor:=crHandPoint;
+  end;
+end;
+end;
+
+procedure Tf_main.ImageGuideMouseMove(Sender: TObject; Shift: TShiftState; X,
+  Y: Integer);
+begin
+ if GuideMouseMoving and guidefits.HeaderInfo.valid and guidefits.ImageValid then begin
+    GuideImgCx:=GuideImgCx + (X-GuideMx) / GuideImgZoom;
+    GuideImgCy:=GuideImgCy + (Y-GuideMy) / GuideImgZoom;
+    GuidePlotTimer.Enabled:=true;
+ end
+ else if (guidefits.HeaderInfo.naxis1>0)and(GuideImgScale0<>0) and guidefits.ImageValid then begin
+//   MeasureTimer.Enabled:=true;
+ end;
+GuideMx:=X;
+GuideMy:=Y;
+end;
+
+procedure Tf_main.ImageGuideMouseUp(Sender: TObject; Button: TMouseButton;
+  Shift: TShiftState; X, Y: Integer);
+begin
+if GuideMouseMoving and guidefits.HeaderInfo.valid and guidefits.ImageValid then begin
+    GuideImgCx:=GuideImgCx + (X-GuideMx) / GuideImgZoom;
+    GuideImgCy:=GuideImgCy + (Y-GuideMy) / GuideImgZoom;
+    PlotGuideImage;
+    GuideMx:=X;
+    GuideMy:=Y;
+end;
+GuideMouseMoving:=false;
+screen.Cursor:=crDefault;
+end;
+
+procedure Tf_main.ImageGuideMouseWheel(Sender: TObject; Shift: TShiftState;
+  WheelDelta: Integer; MousePos: TPoint; var Handled: Boolean);
+var
+  zf,r1,r2: double;
+begin
+if (guidefits.HeaderInfo.naxis>0) and guidefits.ImageValid then begin
+  if LockGuideMouseWheel then
+    exit;
+  LockGuideMouseWheel := True;
+  try
+    handled := True;
+    if wheeldelta > 0 then
+      zf := 1.25
+    else
+      zf := 0.8;
+    if GuideImgZoom=0 then begin
+      r1:=ScrGuideBmp.Width/ImaGuideBmp.Width;
+      r2:=ScrGuideBmp.Height/ImaGuideBmp.Height;
+      GuideImgZoom:=minvalue([r1,r2]);
+    end;
+    GuideImgZoom:=GuideImgZoom*zf;
+    if GuideImgZoom>GuideZoomMax then GuideImgZoom:=GuideZoomMax;
+    if GuideImgZoom<GuideZoomMin then GuideImgZoom:=GuideZoomMin;
+    PlotGuideImage;
+    if GetCurrentThreadId=MainThreadID then Application.ProcessMessages;
+  finally
+    LockGuideMouseWheel := False;
+  end;
+end;
+end;
+
+procedure Tf_main.GuidePlotTimerTimer(Sender: TObject);
+begin
+  if LockGuideTimerPlot then exit;
+  GuidePlotTimer.Enabled:=false;
+  LockGuideTimerPlot:=true;
+  PlotGuideImage;
+  LockGuideTimerPlot:=false;
+end;
 
 end.
 
