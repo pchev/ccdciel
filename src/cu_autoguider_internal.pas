@@ -36,7 +36,7 @@ type
   T_autoguider_internal = class(T_autoguider)
   private
     InternalguiderInitialize: boolean;
-    pulseRA,pulseDEC  : integer;
+    pulseRA,pulseDEC,GuideFrameCount  : integer;
     driftX,driftY,driftRA,driftDec,correctionRA,correctionDEC, PactionRA,PactionDEC,Guidethecos,old_PactionRA,old_PactionDEC : double;
     xy_trend : xy_guiderlist;{fu_internalguider}
     InternalguiderCalibrationDirection,InternalguiderCalibrationStep: integer;
@@ -45,11 +45,17 @@ type
     CalibrationDuration,Calflip,CalCount,Calnrtest: integer;
     xy_array,xy_array_old : star_position_array;//internal guider for measure drift
     Fguidespeed: double;
+    GuideStartTime,LogSNR,LogFlux : double;
+    GuideLog: TextFile;
+    GuideLogFileOpen: boolean;
     function  measure_drift(var initialize: boolean; out drX,drY :double) : integer;
     Procedure StartGuideExposure;
     procedure InternalguiderStartAsync(Data: PtrInt);
     function  WaitPulseGuiding(pulse:longint): boolean;
     procedure SetStatus(aStatus: string ; aState: TAutoguiderState);
+    Procedure InitLog;
+    Procedure WriteLog( buf : string);
+    Procedure CloseLog;
   protected
     Procedure ProcessEvent(txt:string); override;
     procedure Execute; override;
@@ -93,10 +99,12 @@ begin
   FStatus:=rsInternal;
   FState:=GUIDER_IDLE;
   FRunning:=true;
+  InitLog;
 end;
 
 Destructor T_autoguider_internal.Destroy;
 begin
+  CloseLog;
   inherited Destroy;
 end;
 
@@ -229,6 +237,56 @@ begin
   if assigned(FonStatusChange) then FonStatusChange(self);
 end;
 
+Procedure T_autoguider_internal.InitLog;
+begin
+  try
+     Filemode:=2;
+     AssignFile(GuideLog,slash(LogDir)+'CCDciel_GuideLog_'+FormatDateTime('yyyy-mm-dd_hhnnss',now)+'.txt');
+     Rewrite(GuideLog);
+     WriteLn(GuideLog,'CCDciel '+ccdciel_version+'-'+RevisionStr+', Log version 2.5. Log enabled at '+FormatDateTime('YYYY-MM-DD HH:NN:SS',now));
+     WriteLn(GuideLog, '');
+     GuideLogFileOpen:=true;
+  except
+  {$I-}
+     GuideLogFileOpen:=false;
+     CloseFile(GuideLog);
+     IOResult;
+  {$I+}
+  end;
+end;
+
+Procedure T_autoguider_internal.CloseLog;
+begin
+  try
+    if GuideLogFileOpen then begin
+      WriteLn(GuideLog,'Log closed at '+FormatDateTime('YYYY-MM-DD HH:NN:SS',now));
+      GuideLogFileOpen:=false;
+      CloseFile(GuideLog);
+    end;
+  except
+    {$I-}
+    IOResult;
+    {$I+}
+  end;
+end;
+
+Procedure T_autoguider_internal.WriteLog( buf : string);
+begin
+  try
+     if GuideLogFileOpen then begin
+       WriteLn(GuideLog,buf);
+     end;
+  except
+    {$I-}
+    on E: Exception do begin
+      GuideLogFileOpen:=false;
+      msg('Error writing guide log file: '+ E.Message,1);
+      CloseFile(GuideLog);
+    end;
+    {$I+}
+  end;
+end;
+
 /////////////////////////////////////////////////////////////////////////////////////////
 
 
@@ -297,6 +355,10 @@ begin
   star_counter:=0;
   stepsize:=searchA-overlap;//some overlap
 
+  // for guide log
+  LogSNR:=0;
+  LogFlux:=0;
+
   FGuideBmp.Canvas.Pen.Color:=clYellow;
   FGuideBmp.Canvas.Pen.Mode:=pmMerge;
   FGuideBmp.Canvas.Pen.Style:=psSolid;
@@ -327,6 +389,10 @@ begin
           xy_array[star_counter].y2:=yc;
           xy_array[star_counter].flux:=flux;
           inc(star_counter);
+
+          // max value for guide log
+          LogSNR:=max(LogSNR,snr);
+          LogFlux:=max(LogFlux,flux);
 
           // Mark star area
           r:=round(hfd1*3);
@@ -364,6 +430,10 @@ begin
         xy_array[i].y2:=yc;
         xy_array[i].flux:=flux;
         inc(star_counter);
+
+        // max value for guide log
+        LogSNR:=max(LogSNR,snr);
+        LogFlux:=max(LogFlux,flux);
 
         // Mark star area
         r:=round(hfd1*3);
@@ -542,12 +612,25 @@ begin
 
   InternalguiderInitialize:=true; //initialize;
 
+  // initialize the guide log
+  GuideFrameCount:=0;
+  GuideStartTime:=now;
+  WriteLog('Guiding Begins at '+FormatDateTime('YYYY-MM-DD HH:NN:SS',GuideStartTime));
+  WriteLog('Equipment Profile = '+profile);
+  WriteLog('Pixel scale = '+FormatFloat(f2,Finternalguider.pixel_size)+' arc-sec/px');
+  WriteLog('RA Gain = '+IntToStr(Finternalguider.RAgain)+', RA Hyst = '+IntToStr(Finternalguider.RA_hysteresis)+', RA MinMov = '+FormatFloat(f2,Finternalguider.minimum_moveRA));
+  WriteLog('DEC Gain = '+IntToStr(Finternalguider.DECgain)+', DEC Hyst = '+IntToStr(Finternalguider.DEC_hysteresis)+', DEC MinMov = '+FormatFloat(f2,Finternalguider.minimum_moveDEC));
+  WriteLog('');
+  WriteLog('Frame,Time,mount,dx,dy,RARawDistance,DECRawDistance,RAGuideDistance,DECGuideDistance,RADuration,RADirection,DECDuration,DECDirection,XStep,YStep,StarMass,SNR,ErrorCode');
+
   InternalguiderLoop;
 
 end;
 
 procedure T_autoguider_internal.InternalAutoguiding;
 var i,maxpulse: integer;
+    RADuration,DECDuration: LongInt;
+    RADirection,DECDirection: string;
 begin
     finternalguider.draw_xy(xy_trend);//plot xy values
     finternalguider.draw_trend(xy_trend);// plot trends
@@ -601,6 +684,10 @@ begin
 
       pulseRA:=0;
       pulseDEC:=0;
+      RADuration:=0;
+      RADirection:='';
+      DECDuration:=0;
+      DECDirection:='';
 
       if correctionRA>0 then //going East increases the RA
       begin
@@ -609,6 +696,8 @@ begin
          begin
            msg('East: '+inttostr(pulseRA),3);
            mount.PulseGuide(2,pulseRA);  {0=north, 1=south, 2 East, 3 West}
+           RADuration:=abs(pulseRA);
+           RADirection:='E';
          end;
       end
       else
@@ -619,6 +708,8 @@ begin
         begin
           msg('West: '+inttostr(pulseRA),3);
           mount.PulseGuide(3,pulseRA);  {0=north, 1=south, 2 East, 3 West}
+          RADuration:=abs(pulseRA);
+          RADirection:='W';
         end;
       end;
 
@@ -629,6 +720,8 @@ begin
         begin
           msg('North: '+inttostr(pulseDEC),3);
           mount.PulseGuide(0,pulseDEC);  {0=north, 1=south, 2 East, 3 West}
+          DECDuration:=abs(pulseDEC);
+          DECDirection:='N';
         end;
       end
       else
@@ -639,6 +732,8 @@ begin
         begin
           msg('South: '+inttostr(pulseDEC),3);
           mount.PulseGuide(1,pulseDEC);  {0=north, 1=south, 2 East, 3 West}
+          DECDuration:=abs(pulseDEC);
+          DECDirection:='S';
         end;
       end;
 
@@ -649,6 +744,28 @@ begin
       begin
         WaitPulseGuiding(maxpulse);
       end;
+
+      // write log
+      inc(GuideFrameCount);
+      //Frame,Time,mount,dx,dy,RARawDistance,DECRawDistance,RAGuideDistance,DECGuideDistance,RADuration,RADirection,DECDuration,DECDirection,XStep,YStep,StarMass,SNR,ErrorCode
+      WriteLog(IntToStr(GuideFrameCount)+','+
+               FormatFloat(f3,(now-GuideStartTime)*secperday)+','+
+               '"Mount"'+','+
+               FormatFloat(f3,driftX)+','+
+               FormatFloat(f3,driftY)+','+
+               FormatFloat(f3,driftRA)+','+
+               FormatFloat(f3,driftDec)+','+
+               FormatFloat(f3,correctionRA)+','+
+               FormatFloat(f3,correctionDEC)+','+
+               IntToStr(RADuration)+','+
+               RADirection+','+
+               IntToStr(DECDuration)+','+
+               DECDirection+','+
+               ',,'+  // AO
+               FormatFloat(f0,LogFlux)+','+
+               FormatFloat(f2,LogSNR)+','+
+               '0'    // error code
+               );
 
     end //guiding enabled
     else
@@ -688,6 +805,8 @@ begin
   Finternalguider.ButtonGuide.enabled:=true;
   Finternalguider.led.Brush.Color:=clGray;
   SetStatus('Stopped',GUIDER_IDLE);
+  WriteLog('Guiding Ends at '+FormatDateTime('YYYY-MM-DD HH:NN:SS',GuideStartTime));
+  WriteLog('');
 end;
 
 
