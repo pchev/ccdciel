@@ -525,7 +525,7 @@ begin
   begin
     msg('Start tracking. Wait 20 seconds',2);
     Fmount.Track;//start tracking
-    wait(20000);
+    wait(20);
   end;
 
   setlength(xy_trend,nrpointsTrend,4);
@@ -686,6 +686,7 @@ begin
   Finternalguider.ButtonLoop.enabled:=true;
   Finternalguider.ButtonCalibrate.enabled:=true;
   Finternalguider.ButtonGuide.enabled:=true;
+  Finternalguider.led.Brush.Color:=clGray;
   SetStatus('Stopped',GUIDER_IDLE);
 end;
 
@@ -710,6 +711,13 @@ begin
     InternalguiderStop;
     exit;
   end;
+  if abs(mount.Dec)>80 then
+  begin
+    msg('Abort, calibration at high declination is not possible!',1);
+    InternalguiderStop;
+    exit;
+  end;
+
   StopInternalguider:=false;
   InternalguiderCalibrating:=true;
   SetStatus('Start Calibration',GUIDER_BUSY);
@@ -720,7 +728,7 @@ begin
   begin
     msg('Start tracking. Wait 20 seconds',3);
     mount.Track;//start tracking
-    sleep(20000);
+    wait(20);
   end;
 
   Calthecos:=cos(mount.Dec*pi/180); if Calthecos=0 then Calthecos:=0.00000001; //prevent dividing by zero
