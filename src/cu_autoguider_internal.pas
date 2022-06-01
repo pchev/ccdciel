@@ -673,11 +673,12 @@ begin
 
     if finternalguider.disable_guiding=false then //guiding enabled
     begin
-      xy_trend[0,2]:=-correctionRA;//store RA correction in pixels for trend
-      xy_trend[0,3]:=+correctionDEC;//store DEC correction in pixels for trend
 
       if abs(correctionRA)<finternalguider.minimum_moveRA then correctionRA:=0;//avoid chasing the seeing. Improves the stability
       if abs(correctionDEC)<finternalguider.minimum_moveDEC then correctionDEC:=0;//avoid chasing the seeing. Improves the stability
+
+      xy_trend[0,2]:=-correctionRA;//store RA correction in pixels for trend
+      xy_trend[0,3]:=+correctionDEC;//store DEC correction in pixels for trend
 
       Guidethecos:=cos(mount.Dec*pi/180); if Guidethecos=0 then Guidethecos:=0.000001;
       correctionRA:=correctionRA/Guidethecos; //correct pixels with cos(dec). Rotation in pixels near celestial pole decreases with cos(dec)
