@@ -48,7 +48,7 @@ type
     function  measure_drift(var initialize: boolean; out drX,drY :double) : integer;
     Procedure StartGuideExposure;
     procedure InternalguiderStartAsync(Data: PtrInt);
-    function  WaitPulseGuiding(pulse:double): boolean;
+    function  WaitPulseGuiding(pulse:longint): boolean;
     procedure SetStatus(aStatus: string ; aState: TAutoguiderState);
   protected
     Procedure ProcessEvent(txt:string); override;
@@ -658,19 +658,25 @@ begin
     end;
 end;
 
-function T_autoguider_internal.WaitPulseGuiding(pulse:double): boolean;
+function T_autoguider_internal.WaitPulseGuiding(pulse:longint): boolean;
 var timeend:double;
 begin
   result:=true;
-  // wait for the pulse duration in second
-  timeend:=now+(pulse/1000/secperday);
-  while now<timeend do begin
-    sleep(50);
-    if GetCurrentThreadId=MainThreadID then Application.ProcessMessages;
-    if StopInternalguider then
-    begin
-      msg('Guider stop pressed.',3);
-      exit;
+  if pulse<200 then begin
+    // short pulse, do a single sleep
+    sleep(pulse);
+  end
+  else begin
+    // wait for the pulse duration in second
+    timeend:=now+(pulse/1000/secperday);
+    while now<timeend do begin
+      sleep(50);
+      if GetCurrentThreadId=MainThreadID then Application.ProcessMessages;
+      if StopInternalguider then
+      begin
+        msg('Guider stop pressed.',3);
+        exit;
+      end;
     end;
   end;
 end;
