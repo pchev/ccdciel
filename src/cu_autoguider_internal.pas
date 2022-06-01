@@ -659,26 +659,22 @@ begin
 end;
 
 function T_autoguider_internal.WaitPulseGuiding(pulse:longint): boolean;
-var timeend:double;
+var
+   thesleep : integer;
 begin
-  result:=true;
-  if pulse<200 then begin
-    // short pulse, do a single sleep
-    sleep(pulse);
-  end
-  else begin
-    // wait for the pulse duration in second
-    timeend:=now+(pulse/1000/secperday);
-    while now<timeend do begin
-      sleep(50);
-      if GetCurrentThreadId=MainThreadID then Application.ProcessMessages;
-      if StopInternalguider then
-      begin
-        msg('Guider stop pressed.',3);
-        exit;
-      end;
+  result:=false;
+  repeat
+    thesleep:=(min(100,pulse));
+    sleep(thesleep);
+    dec(pulse,thesleep);
+    if GetCurrentThreadId=MainThreadID then Application.ProcessMessages;
+    if StopInternalguider then
+    begin
+      msg('Guider stop pressed.',3);
+      exit;
     end;
-  end;
+  until pulse<=0;
+  result:=true;
 end;
 
 procedure T_autoguider_internal.InternalguiderStop;
