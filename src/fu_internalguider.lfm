@@ -107,7 +107,7 @@ object f_internalguider: Tf_internalguider
           object dec_gain1: TSpinEdit
             Left = 70
             Height = 29
-            Hint = 'Proportional  corrective action of the guider controller in % of the error fro declination. Typical set at 100%'
+            Hint = 'Proportional  corrective action of the guider controller in % of the offset for declination. Typically set at 100%'
             Top = 144
             Width = 60
             Increment = 5
@@ -121,7 +121,7 @@ object f_internalguider: Tf_internalguider
           object ra_hysteresis1: TSpinEdit
             Left = 70
             Height = 29
-            Hint = 'Hysteresis. For a higher setting the control will rely more on historical values. Typical set at 30%'
+            Hint = 'The controller will rely with the specified percentage on the last corrective action and reduce the new corrective action accordingly. Typically set at 30%'
             Top = 80
             Width = 60
             Increment = 5
@@ -173,7 +173,7 @@ object f_internalguider: Tf_internalguider
           object ra_gain1: TSpinEdit
             Left = 70
             Height = 29
-            Hint = 'Proportional  corrective action of the guider controller in % of the error for right ascension. Typical set between  50 and 80%'
+            Hint = 'Proportional  corrective action of the guider controller in % of the offset for right ascension. Typically set between  50 and 80%'
             Top = 56
             Width = 60
             Increment = 5
@@ -215,7 +215,7 @@ object f_internalguider: Tf_internalguider
           object dec_hysteresis1: TSpinEdit
             Left = 70
             Height = 29
-            Hint = 'Hysteresis. For a higher setting the control will rely more on historical values. Typical set at 70%'
+            Hint = 'The controller will rely with the specified percentage on the last corrective action and reduce the new corrective action accordingly. Typically set at 70%'
             Top = 168
             Width = 60
             Increment = 5
@@ -252,7 +252,7 @@ object f_internalguider: Tf_internalguider
           object minimum_moveRA1: TFloatSpinEdit
             Left = 70
             Height = 29
-            Hint = 'Reduce control action below this value to ignore seeing. Typical value 0.6 arcseconds'
+            Hint = 'Below this offset value the control action is limited to ignore seeing effects and therefore stabilize control. Typically set at 0.6 arcseconds'
             Top = 104
             Width = 60
             Increment = 0.1
@@ -266,7 +266,7 @@ object f_internalguider: Tf_internalguider
           object minimum_moveDEC1: TFloatSpinEdit
             Left = 70
             Height = 29
-            Hint = 'Reduce control action below this value to ignore seeing. Typical value 0.6 arcseconds'
+            Hint = 'Below this offset value the control action is limited to ignore seeing effects and therefore stabilize control. Typically set at 0.6 arcseconds'
             Top = 192
             Width = 60
             Increment = 0.1
@@ -304,230 +304,242 @@ object f_internalguider: Tf_internalguider
         Caption = 'Camera'
         ClientHeight = 404
         ClientWidth = 313
-        object Label10: TLabel
-          AnchorSideTop.Control = Exposure
-          AnchorSideTop.Side = asrCenter
-          Left = 16
-          Height = 19
-          Top = 61
-          Width = 57
-          Caption = 'Exposure'
+        object Panel4: TPanel
+          Left = 0
+          Height = 404
+          Top = 0
+          Width = 313
+          Align = alClient
+          ClientHeight = 404
+          ClientWidth = 313
+          Color = clMenu
           ParentColor = False
-        end
-        object Exposure: TFloatSpinEdit
-          Left = 103
-          Height = 29
-          Top = 56
-          Width = 111
-          MaxValue = 30
-          MinValue = 0.01
           TabOrder = 0
-          Value = 1
-        end
-        object Binning: TSpinEdit
-          Left = 103
-          Height = 29
-          Top = 104
-          Width = 111
-          MaxValue = 8
-          MinValue = 1
-          TabOrder = 1
-          Value = 1
-        end
-        object Label14: TLabel
-          AnchorSideTop.Control = Binning
-          AnchorSideTop.Side = asrCenter
-          Left = 16
-          Height = 19
-          Top = 109
-          Width = 47
-          Caption = 'Binning'
-          ParentColor = False
-        end
-        object ButtonLoop: TButton
-          Left = 8
-          Height = 25
-          Top = 9
-          Width = 75
-          Caption = 'Loop'
-          OnClick = ButtonLoopClick
-          TabOrder = 2
-        end
-        object ButtonStop1: TButton
-          Left = 96
-          Height = 25
-          Hint = 'Stop loop'
-          Top = 9
-          Width = 75
-          Caption = 'Stop'
-          OnClick = ButtonStopClick
-          ParentFont = False
-          ParentShowHint = False
-          ShowHint = True
-          TabOrder = 3
-        end
-        object Label15: TLabel
-          AnchorSideTop.Control = Gain
-          AnchorSideTop.Side = asrCenter
-          Left = 16
-          Height = 19
-          Top = 157
-          Width = 28
-          Caption = 'Gain'
-          ParentColor = False
-        end
-        object Label16: TLabel
-          AnchorSideTop.Control = Offset
-          AnchorSideTop.Side = asrCenter
-          Left = 16
-          Height = 19
-          Top = 205
-          Width = 38
-          Caption = 'Offset'
-          ParentColor = False
-        end
-        object Gain: TSpinEdit
-          Left = 103
-          Height = 29
-          Top = 152
-          Width = 111
-          TabOrder = 4
-        end
-        object Offset: TSpinEdit
-          Left = 103
-          Height = 29
-          Top = 200
-          Width = 111
-          TabOrder = 5
-        end
-        object Label17: TLabel
-          AnchorSideTop.Control = Gamma
-          AnchorSideTop.Side = asrCenter
-          Left = 16
-          Height = 19
-          Top = 252
-          Width = 48
-          Caption = 'Gamma'
-          ParentColor = False
-        end
-        object Gamma: TTrackBar
-          Left = 103
-          Height = 43
-          Top = 240
-          Width = 111
-          Max = 100
-          Min = 1
-          PageSize = 10
-          Position = 50
-          Reversed = True
-          TickStyle = tsNone
-          TabOrder = 6
-        end
-        object Label18: TLabel
-          AnchorSideTop.Control = Luminosity
-          AnchorSideTop.Side = asrCenter
-          Left = 16
-          Height = 19
-          Top = 308
-          Width = 67
-          Caption = 'Luminosity'
-          ParentColor = False
-        end
-        object Luminosity: TTrackBar
-          Left = 103
-          Height = 43
-          Top = 296
-          Width = 111
-          Max = 100
-          Min = 1
-          PageSize = 10
-          Position = 50
-          Reversed = True
-          TickStyle = tsNone
-          TabOrder = 7
-        end
-        object Label19: TLabel
-          Left = 16
-          Height = 19
-          Top = 360
-          Width = 36
-          Caption = 'Zoom'
-          ParentColor = False
-        end
-        object BtnZoom05: TSpeedButton
-          Tag = 1
-          AnchorSideLeft.Control = BtnZoomAdjust
-          AnchorSideLeft.Side = asrBottom
-          Left = 132
-          Height = 22
-          Hint = 'Zoom to half size'
-          Top = 360
-          Width = 28
-          BorderSpacing.Left = 1
-          Caption = '1:2'
-          Color = clDefault
-          Layout = blGlyphBottom
-          OnClick = BtnZoom05Click
-          ParentFont = False
-        end
-        object BtnZoomAdjust: TSpeedButton
-          Left = 103
-          Height = 22
-          Hint = 'Zoom to adjust in window'
-          Top = 360
-          Width = 28
-          Color = clDefault
-          OnClick = BtnZoomAdjustClick
-          ParentFont = False
-        end
-        object BtnZoom1: TSpeedButton
-          Tag = 2
-          AnchorSideLeft.Control = BtnZoom05
-          AnchorSideLeft.Side = asrBottom
-          Left = 161
-          Height = 22
-          Hint = 'Zoom to original scale'
-          Top = 360
-          Width = 28
-          BorderSpacing.Left = 1
-          Caption = '1:1'
-          Color = clDefault
-          Layout = blGlyphBottom
-          OnClick = BtnZoom1Click
-          ParentFont = False
-        end
-        object BtnZoom2: TSpeedButton
-          Tag = 3
-          AnchorSideLeft.Control = BtnZoom1
-          AnchorSideLeft.Side = asrBottom
-          Left = 190
-          Height = 22
-          Hint = 'Zoom two time'
-          Top = 360
-          Width = 28
-          BorderSpacing.Left = 1
-          Caption = '2:1'
-          Color = clDefault
-          Layout = blGlyphBottom
-          OnClick = BtnZoom2Click
-          ParentFont = False
-        end
-        object ButtonDark: TButton
-          Left = 184
-          Height = 25
-          Top = 9
-          Width = 75
-          Caption = 'Dark'
-          OnMouseDown = ButtonDarkMouseDown
-          TabOrder = 8
-        end
-        object LabelDark: TLabel
-          Left = 11
-          Height = 19
-          Top = 36
-          Width = 63
-          Caption = 'LabelDark'
-          ParentColor = False
+          object Label10: TLabel
+            AnchorSideTop.Control = Exposure
+            AnchorSideTop.Side = asrCenter
+            Left = 16
+            Height = 19
+            Top = 61
+            Width = 57
+            Caption = 'Exposure'
+            ParentColor = False
+          end
+          object Exposure: TFloatSpinEdit
+            Left = 103
+            Height = 29
+            Top = 56
+            Width = 111
+            MaxValue = 30
+            MinValue = 0.01
+            TabOrder = 0
+            Value = 1
+          end
+          object Binning: TSpinEdit
+            Left = 103
+            Height = 29
+            Top = 104
+            Width = 111
+            MaxValue = 8
+            MinValue = 1
+            TabOrder = 1
+            Value = 1
+          end
+          object Label14: TLabel
+            AnchorSideTop.Control = Binning
+            AnchorSideTop.Side = asrCenter
+            Left = 16
+            Height = 19
+            Top = 109
+            Width = 47
+            Caption = 'Binning'
+            ParentColor = False
+          end
+          object ButtonLoop: TButton
+            Left = 8
+            Height = 25
+            Top = 9
+            Width = 75
+            Caption = 'Loop'
+            OnClick = ButtonLoopClick
+            TabOrder = 2
+          end
+          object ButtonStop1: TButton
+            Left = 96
+            Height = 25
+            Hint = 'Stop loop'
+            Top = 9
+            Width = 75
+            Caption = 'Stop'
+            OnClick = ButtonStopClick
+            ParentFont = False
+            ParentShowHint = False
+            ShowHint = True
+            TabOrder = 3
+          end
+          object Label15: TLabel
+            AnchorSideTop.Control = Gain
+            AnchorSideTop.Side = asrCenter
+            Left = 16
+            Height = 19
+            Top = 157
+            Width = 28
+            Caption = 'Gain'
+            ParentColor = False
+          end
+          object Label16: TLabel
+            AnchorSideTop.Control = Offset
+            AnchorSideTop.Side = asrCenter
+            Left = 16
+            Height = 19
+            Top = 205
+            Width = 38
+            Caption = 'Offset'
+            ParentColor = False
+          end
+          object Gain: TSpinEdit
+            Left = 103
+            Height = 29
+            Top = 152
+            Width = 111
+            TabOrder = 4
+          end
+          object Offset: TSpinEdit
+            Left = 103
+            Height = 29
+            Top = 200
+            Width = 111
+            TabOrder = 5
+          end
+          object Label17: TLabel
+            AnchorSideTop.Control = Gamma
+            AnchorSideTop.Side = asrCenter
+            Left = 16
+            Height = 19
+            Top = 252
+            Width = 48
+            Caption = 'Gamma'
+            ParentColor = False
+          end
+          object Gamma: TTrackBar
+            Left = 103
+            Height = 43
+            Top = 240
+            Width = 111
+            Max = 100
+            Min = 1
+            PageSize = 10
+            Position = 50
+            Reversed = True
+            TickStyle = tsNone
+            TabOrder = 6
+          end
+          object Label18: TLabel
+            AnchorSideTop.Control = Luminosity
+            AnchorSideTop.Side = asrCenter
+            Left = 16
+            Height = 19
+            Top = 308
+            Width = 67
+            Caption = 'Luminosity'
+            ParentColor = False
+          end
+          object Luminosity: TTrackBar
+            Left = 103
+            Height = 43
+            Top = 296
+            Width = 111
+            Max = 100
+            Min = 1
+            PageSize = 10
+            Position = 50
+            Reversed = True
+            TickStyle = tsNone
+            TabOrder = 7
+          end
+          object Label19: TLabel
+            Left = 16
+            Height = 19
+            Top = 360
+            Width = 36
+            Caption = 'Zoom'
+            ParentColor = False
+          end
+          object BtnZoom05: TSpeedButton
+            Tag = 1
+            AnchorSideLeft.Control = BtnZoomAdjust
+            AnchorSideLeft.Side = asrBottom
+            Left = 132
+            Height = 22
+            Hint = 'Zoom to half size'
+            Top = 360
+            Width = 28
+            BorderSpacing.Left = 1
+            Caption = '1:2'
+            Color = clDefault
+            Layout = blGlyphBottom
+            OnClick = BtnZoom05Click
+            ParentFont = False
+          end
+          object BtnZoomAdjust: TSpeedButton
+            Left = 103
+            Height = 22
+            Hint = 'Zoom to adjust in window'
+            Top = 360
+            Width = 28
+            Color = clDefault
+            OnClick = BtnZoomAdjustClick
+            ParentFont = False
+          end
+          object BtnZoom1: TSpeedButton
+            Tag = 2
+            AnchorSideLeft.Control = BtnZoom05
+            AnchorSideLeft.Side = asrBottom
+            Left = 161
+            Height = 22
+            Hint = 'Zoom to original scale'
+            Top = 360
+            Width = 28
+            BorderSpacing.Left = 1
+            Caption = '1:1'
+            Color = clDefault
+            Layout = blGlyphBottom
+            OnClick = BtnZoom1Click
+            ParentFont = False
+          end
+          object BtnZoom2: TSpeedButton
+            Tag = 3
+            AnchorSideLeft.Control = BtnZoom1
+            AnchorSideLeft.Side = asrBottom
+            Left = 190
+            Height = 22
+            Hint = 'Zoom two time'
+            Top = 360
+            Width = 28
+            BorderSpacing.Left = 1
+            Caption = '2:1'
+            Color = clDefault
+            Layout = blGlyphBottom
+            OnClick = BtnZoom2Click
+            ParentFont = False
+          end
+          object ButtonDark: TButton
+            Left = 184
+            Height = 25
+            Top = 9
+            Width = 75
+            Caption = 'Dark'
+            OnMouseDown = ButtonDarkMouseDown
+            TabOrder = 8
+          end
+          object LabelDark: TLabel
+            Left = 11
+            Height = 19
+            Top = 36
+            Width = 63
+            Caption = 'LabelDark'
+            ParentColor = False
+          end
         end
       end
       object TabSheetAdvanced: TTabSheet

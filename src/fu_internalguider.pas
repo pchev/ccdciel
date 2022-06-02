@@ -104,6 +104,7 @@ type
     PageControl1: TPageControl;
     Panel1: TPanel;
     Panel3: TPanel;
+    Panel4: TPanel;
     dec_gain1: TSpinEdit;
     TabSheetAdvanced: TTabSheet;
     TabSheetGuider: TTabSheet;

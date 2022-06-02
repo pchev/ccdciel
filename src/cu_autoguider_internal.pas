@@ -686,12 +686,12 @@ begin
 
     //calculate required RA correction in pixels
     PactionRA:=driftRA*finternalguider.RAgain/100;// Proportional action of the controller.
-    correctionRA:=-(PactionRA-old_PactionRA *finternalguider.RA_hysteresis/100); //Hysteresis. For a higher setting the control will rely more on historical values. Typical set at 70%
+    correctionRA:=-(PactionRA-old_PactionRA *finternalguider.RA_hysteresis/100); //Hysteresis. Each control action will be reduced with the hysteresis percentage of previous control action preventing overreaction in slow systems. Typically set at 30%
     old_PactionRA:=PactionRA;//Store for next cycle hysteresis calculation
 
     //calculate required DEC correction in pixels
     PactionDEC:=driftDEC*finternalguider.DECgain/100;// proportional action of the controller.
-    correctionDEC:=-(PactionDEC-old_PactionDEC*finternalguider.DEC_hysteresis/100); //HHysteresis. For a higher setting the control will rely more on historical values. Typical set at 70%
+    correctionDEC:=-(PactionDEC-old_PactionDEC*finternalguider.DEC_hysteresis/100); //Hysteresis. Each control action will be reduced with the hysteresis percentage of previous control action preventing overreaction in slow systems. Typically set at 70%
     old_PactionDEC:=PactionDEC; //Store for next cycle hysteresis calculation
 
     if finternalguider.disable_guiding=false then //guiding enabled
