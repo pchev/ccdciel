@@ -345,7 +345,7 @@ object f_internalguider: Tf_internalguider
           ParentColor = False
         end
         object ButtonLoop: TButton
-          Left = 16
+          Left = 8
           Height = 25
           Top = 9
           Width = 75
@@ -354,7 +354,7 @@ object f_internalguider: Tf_internalguider
           TabOrder = 2
         end
         object ButtonStop1: TButton
-          Left = 120
+          Left = 96
           Height = 25
           Hint = 'Stop loop'
           Top = 9
@@ -511,6 +511,23 @@ object f_internalguider: Tf_internalguider
           Layout = blGlyphBottom
           OnClick = BtnZoom2Click
           ParentFont = False
+        end
+        object ButtonDark: TButton
+          Left = 184
+          Height = 25
+          Top = 9
+          Width = 75
+          Caption = 'Dark'
+          OnMouseDown = ButtonDarkMouseDown
+          TabOrder = 8
+        end
+        object LabelDark: TLabel
+          Left = 11
+          Height = 19
+          Top = 36
+          Width = 63
+          Caption = 'LabelDark'
+          ParentColor = False
         end
       end
       object TabSheetAdvanced: TTabSheet
@@ -739,6 +756,18 @@ object f_internalguider: Tf_internalguider
           end
         end
       end
+    end
+  end
+  object PopupMenuDark: TPopupMenu
+    Left = 276
+    Top = 57
+    object MenuItemCaptureDark: TMenuItem
+      Caption = 'MenuItemCaptureDark'
+      OnClick = MenuItemCaptureDarkClick
+    end
+    object MenuItemClearDark: TMenuItem
+      Caption = 'MenuItemClearDark'
+      OnClick = MenuItemClearDarkClick
     end
   end
 end

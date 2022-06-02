@@ -871,8 +871,11 @@ type
     procedure InternalguiderStop(Sender: TObject);
     procedure InternalguiderCalibrate(Sender: TObject);
     procedure InternalguiderRedraw(Sender: TObject);
+    procedure InternalguiderCaptureDark(Sender: TObject);
+    procedure InternalguiderClearDark(Sender: TObject);
     procedure GuideCameraNewImage(Sender: TObject);
     procedure GuideCameraNewImageAsync(Data: PtrInt);
+    procedure ShowGuiderDarkInfo;
     Procedure DrawGuideImage;
     Procedure PlotGuideImage;
   public
@@ -1481,6 +1484,7 @@ begin
   FOpenSetup:=not FileExistsUTF8(slash(ConfigDir)+configfile);
   OpenConfig(configfile);
   ConfigDarkFile:=slash(ConfigDir)+'darkframe_'+profile+'.fits';
+  ConfigGuiderDarkFile:=slash(ConfigDir)+'darkguider_'+profile+'.fits';
 
   LogFileOpen:=false;
   for i:=1 to MaxScriptDir do ScriptDir[i]:=TScriptDir.Create;
@@ -1529,13 +1533,16 @@ begin
 
   fits:=TFits.Create(self);
   fits.onMsg:=@NewMessage;
-  if FileExistsUTF8(ConfigDarkFile) then begin
+  if FileExists(ConfigDarkFile) then begin
      fits.LoadDark(ConfigDarkFile);
   end;
   ShowDarkInfo;
 
   guidefits:=TFits.Create(self);
   guidefits.onMsg:=@NewMessage;
+  if FileExists(ConfigGuiderDarkFile) then begin
+     guidefits.LoadDark(ConfigGuiderDarkFile);
+  end;
 
   CreateDevices;
 
@@ -1660,6 +1667,9 @@ begin
   f_internalguider.onStop:=@InternalguiderStop;
   f_internalguider.onCalibrate:=@InternalguiderCalibrate;
   f_internalguider.onRedraw:=@InternalguiderRedraw;
+  f_internalguider.onCaptureDark:=@InternalguiderCaptureDark;
+  f_internalguider.onClearDark:=@InternalguiderClearDark;
+  ShowGuiderDarkInfo;
 
   i:=config.GetValue('/Autoguider/Software',2);
   case TAutoguiderType(i) of
@@ -7585,15 +7595,23 @@ begin
       f_devicesconnection.ProfileLabel.Caption:=profile;
       caption:='CCDciel '+ccdcielver+blank+profile;
       ConfigDarkFile:=slash(ConfigDir)+'darkframe_'+profile+'.fits';
-      if FileExistsUTF8(ConfigDarkFile) then begin
+      if FileExists(ConfigDarkFile) then begin
         fits.LoadDark(ConfigDarkFile);
       end
       else begin
         fits.FreeDark;
       end;
+      ConfigGuiderDarkFile:=slash(ConfigDir)+'darkguider_'+profile+'.fits';
+      if FileExists(ConfigGuiderDarkFile) then begin
+        guidefits.LoadDark(ConfigGuiderDarkFile);
+      end
+      else begin
+        guidefits.FreeDark;
+      end;
       LoadBPM;
     end;
     ShowDarkInfo;
+    ShowGuiderDarkInfo;
 
     config.SetValue('/Devices/Timeout',f_setup.IndiTimeout.Text);
 
@@ -14928,6 +14946,23 @@ begin
    if autoguider is T_autoguider_internal then T_autoguider_internal(autoguider).InternalguiderCalibrate;
 end;
 
+procedure Tf_main.InternalguiderCaptureDark(Sender: TObject);
+var bin: integer;
+begin
+ f_pause.Caption:='Dark frame';
+ f_pause.Text:='Cover the guide camera'+crlf+rsClickContinu;
+ if f_pause.Wait then begin
+   if autoguider is T_autoguider_internal then T_autoguider_internal(autoguider).InternalguiderCaptureDark;
+ end;
+end;
+
+procedure Tf_main.InternalguiderClearDark(Sender: TObject);
+begin
+  guidefits.FreeDark;
+  DeleteFile(ConfigGuiderDarkFile);
+  ShowGuiderDarkInfo;
+end;
+
 procedure Tf_main.InternalguiderRedraw(Sender: TObject);
 begin
    GuidePlotTimer.Enabled:=true;
@@ -14954,9 +14989,21 @@ begin
   // prepare image
   DrawGuideImage;
   if InternalguiderRunning and (autoguider is T_autoguider_internal) then begin
-    // process autoguiding
-    if InternalguiderCalibrating then T_autoguider_internal(autoguider).InternalCalibration;
-    if InternalguiderGuiding then T_autoguider_internal(autoguider).InternalAutoguiding;
+    if InternalguiderGuiding then
+      // process autoguiding
+      T_autoguider_internal(autoguider).InternalAutoguiding
+    else if InternalguiderCalibrating then
+      // process calibration
+      T_autoguider_internal(autoguider).InternalCalibration
+    else if InternalguiderCapturingDark then begin
+      // save dark and stop
+      guidefits.SaveToFile(ConfigGuiderDarkFile);
+      guidefits.LoadDark(ConfigGuiderDarkFile);
+      ShowGuiderDarkInfo;
+      T_autoguider_internal(autoguider).InternalguiderStop;
+      exit;
+    end;
+
     // start next exposure
     Application.QueueAsyncCall(@T_autoguider_internal(autoguider).StartGuideExposureAsync,0)
   end;
@@ -14965,15 +15012,29 @@ begin
   PlotGuideImage;
 end;
 
+procedure Tf_main.ShowGuiderDarkInfo;
+begin
+  if (guidefits.DarkFrame<>nil)and(guidefits.DarkFrame.HeaderInfo.valid) then begin
+    f_internalguider.LabelDark.Caption:='Dark ';
+    f_internalguider.LabelDark.Caption:=f_internalguider.LabelDark.Caption+' '+rsSize+': '+inttostr(guidefits.DarkFrame.HeaderInfo.naxis1)+'x'+inttostr(guidefits.DarkFrame.HeaderInfo.naxis2);
+    f_internalguider.LabelDark.Caption:=f_internalguider.LabelDark.Caption+', '+rsExposureTime2+': '+FormatFloat(f3,guidefits.DarkFrame.HeaderInfo.exptime);
+    NewMessage(rsInternalGuid+' '+f_internalguider.LabelDark.Caption,3);
+  end
+  else begin
+    f_internalguider.LabelDark.Caption:=rsNoDark;
+  end;
+end;
+
 Procedure Tf_main.DrawGuideImage;
 var tmpbmp:TBGRABitmap;
-    co: TBGRAPixel;
-    s,cx,cy: integer;
+    dmin,dmax: integer;
 begin
 if (guidefits.HeaderInfo.naxis>0) and guidefits.ImageValid then begin
   guidefits.Gamma:=f_internalguider.Gamma.Position/100;
-  guidefits.VisuMax:=round(max(guidefits.HeaderInfo.dmin+1,guidefits.HeaderInfo.dmax*f_internalguider.Luminosity.Position/100));
-  guidefits.VisuMin:=round(guidefits.HeaderInfo.dmin);
+  dmin:=round(max(0,guidefits.HeaderInfo.dmin));
+  dmax:=min(MAXWORD,round(max(dmin+1,guidefits.HeaderInfo.dmax*f_internalguider.Luminosity.Position/100)));
+  guidefits.VisuMax:=dmax;
+  guidefits.VisuMin:=dmin;
   guidefits.MaxADU:=MaxADU;
   guidefits.MarkOverflow:=false; //f_visu.Clipping;
   guidefits.Invert:=false; //f_visu.Invert;

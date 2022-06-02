@@ -79,6 +79,7 @@ type
     procedure InternalguiderCalibrate;
     procedure InternalAutoguiding;
     procedure InternalCalibration;
+    procedure InternalguiderCaptureDark;
     Procedure StartGuideExposureAsync(Data: PtrInt);
     function WaitBusy(maxwait:integer=5):boolean; override;
     function WaitGuiding(maxwait:integer=5):boolean; override;
@@ -104,6 +105,7 @@ begin
   InternalguiderRunning:=false;
   InternalguiderGuiding:=false;
   InternalguiderCalibrating:=false;
+  InternalguiderCapturingDark:=false;
 end;
 
 Destructor T_autoguider_internal.Destroy;
@@ -505,8 +507,18 @@ begin
   Finternalguider.ButtonLoop.enabled:=false;
   Finternalguider.ButtonCalibrate.enabled:=false;
   Finternalguider.ButtonGuide.enabled:=false;
+  Finternalguider.ButtonDark.enabled:=false;
   Fguidespeed:=FMount.GuideRateRa*3600/siderealrate;
   if Fguidespeed=0 then Fguidespeed:=0.5;
+  if InternalguiderCapturingDark then begin
+    FGuideFits.SetBPM(bpm,0,0,0,0);
+    FGuideFits.DarkOn:=false;
+  end
+  else begin
+    FGuideFits.SetBPM(bpm,0,0,0,0);
+    FGuideFits.DarkOn:=true;
+  end;
+
   StartGuideExposure;
 end;
 
@@ -546,16 +558,15 @@ if (FCamera.Status=devConnected) then begin
          FCamera.Offset:=finternalguider.Offset.Value;
     end;
   end;
-  if FCamera.FrameType<>LIGHT then FCamera.FrameType:=LIGHT;
+  if InternalguiderCapturingDark then
+    FCamera.FrameType:=DARK
+  else if FCamera.FrameType<>LIGHT then
+    FCamera.FrameType:=LIGHT;
   FCamera.ObjectName:=rsGuide;
   FCamera.StackNum:=-1;
   FCamera.AddFrames:=false;
   FCamera.SaveFrames:=false;
   FCamera.AlignFrames:=false;
-  //fits.SetBPM(bpm,bpmNum,bpmX,bpmY,bpmAxis);
-
-  //msg('Taking exposure',3);
-
 
   FCamera.StartExposure(e);
 end
@@ -822,7 +833,7 @@ end;
 
 procedure T_autoguider_internal.InternalguiderStop;
 begin
-  if StopInternalguider=false then begin
+  if (not InternalguiderCapturingDark)and(not StopInternalguider) then begin
     WriteLog('Guiding Ends at '+FormatDateTime('YYYY-MM-DD HH:NN:SS',now));
     WriteLog('');
   end;
@@ -830,9 +841,11 @@ begin
   InternalguiderRunning:=false;
   InternalguiderGuiding:=false;
   InternalguiderCalibrating:=false;
+  InternalguiderCapturingDark:=false;
   Finternalguider.ButtonLoop.enabled:=true;
   Finternalguider.ButtonCalibrate.enabled:=true;
   Finternalguider.ButtonGuide.enabled:=true;
+  Finternalguider.ButtonDark.enabled:=true;
   Finternalguider.led.Brush.Color:=clGray;
   SetStatus('Stopped',GUIDER_IDLE);
 end;
@@ -1120,6 +1133,21 @@ except
 end;
 end;
 
+procedure T_autoguider_internal.InternalguiderCaptureDark;
+begin
+  if FCamera.Status<>devConnected then
+  begin
+    msg('Internal guider: Guide camera not connected!',1);
+    exit;
+  end;
+
+  StopInternalguider:=false;
+  InternalguiderCapturingDark:=true;
+  SetStatus('Capture dark',GUIDER_BUSY);
+
+  InternalguiderLoop;
+
+end;
 
 end.
 

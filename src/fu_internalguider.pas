@@ -27,7 +27,7 @@ interface
 
 uses   UScaleDPI, Dialogs, u_translation, u_global,
   Classes, SysUtils, FileUtil, Forms, Graphics, Controls, StdCtrls, ExtCtrls, Spin,
-  math,LCLintf, ComCtrls, Buttons;
+  math,LCLintf, ComCtrls, Buttons, Menus;
 
 
 type
@@ -41,6 +41,7 @@ type
     BtnZoom1: TSpeedButton;
     BtnZoom2: TSpeedButton;
     BtnZoomAdjust: TSpeedButton;
+    ButtonDark: TButton;
     ButtonCalibrate: TButton;
     ButtonLoop: TButton;
     ButtonGuide: TButton;
@@ -60,18 +61,23 @@ type
     Label17: TLabel;
     Label18: TLabel;
     Label19: TLabel;
+    LabelDark: TLabel;
     Label5: TLabel;
     Label6: TLabel;
     Label7: TLabel;
     Label8: TLabel;
     label_estimate1: TLabel;
     measure_method2: TCheckBox;
+    MenuItemClearDark: TMenuItem;
+    MenuItemCaptureDark: TMenuItem;
+    MenuItem2: TMenuItem;
     minimum_moveDEC1: TFloatSpinEdit;
     pa1: TEdit;
     pier_side1: TEdit;
     minimum_moveRA1: TFloatSpinEdit;
     Label9: TLabel;
     pixelsize1: TEdit;
+    PopupMenuDark: TPopupMenu;
     pulsegainEast1: TEdit;
     pulsegainNorth1: TEdit;
     pulsegainSouth1: TEdit;
@@ -107,14 +113,17 @@ type
     procedure BtnZoom2Click(Sender: TObject);
     procedure BtnZoomAdjustClick(Sender: TObject);
     procedure ButtonCalibrateClick(Sender: TObject);
+    procedure ButtonDarkMouseDown(Sender: TObject; Button: TMouseButton; Shift: TShiftState; X, Y: Integer);
     procedure ButtonLoopClick(Sender: TObject);
     procedure ButtonGuideClick(Sender: TObject);
     procedure ButtonStopClick(Sender: TObject);
+    procedure MenuItemCaptureDarkClick(Sender: TObject);
+    procedure MenuItemClearDarkClick(Sender: TObject);
     procedure scale1Click(Sender: TObject; Button: TUDBtnType);
   private
     { private declarations }
     thescale : double;
-    FonStart, FonStop, FonCalibrate, FonLoop, FonRedraw: TNotifyEvent;
+    FonStart, FonStop, FonCalibrate, FonLoop, FonRedraw, FonCaptureDark, FonClearDark: TNotifyEvent;
     procedure SetLed (cl : tcolor);
 
     procedure SetRA_hysteresis(value:integer);
@@ -163,6 +172,8 @@ type
     property onStop: TNotifyEvent read FonStop write FonStop;
     property onCalibrate: TNotifyEvent read FonCalibrate write FonCalibrate;
     property onRedraw: TNotifyEvent read FonRedraw write FonRedraw;
+    property onCaptureDark: TNotifyEvent read FonCaptureDark write FonCaptureDark;
+    property onClearDark: TNotifyEvent read FonClearDark write FonClearDark;
     property RA_hysteresis: integer read GetRA_hysteresis write SetRA_hysteresis;
     property DEC_hysteresis: integer read GetDEC_hysteresis write SetDEC_hysteresis;
     property RAgain: integer read GetRAgain write SetRAgain;
@@ -207,6 +218,8 @@ end;
 procedure Tf_internalguider.SetLang;
 begin
   Title.Caption:=rsInternalGuid;
+  MenuItemCaptureDark.Caption:=rsCreateFromCa;
+  MenuItemClearDark.Caption:=rsClearDarkFra;
 end;
 
 function Tf_internalguider.Getdisableguiding:boolean;
@@ -394,6 +407,25 @@ procedure Tf_internalguider.ButtonStopClick(Sender: TObject);
 begin
   if Assigned(FonStop) then FonStop(self);
   setled(clGray);
+end;
+
+procedure Tf_internalguider.ButtonDarkMouseDown(Sender: TObject; Button: TMouseButton; Shift: TShiftState; X, Y: Integer);
+var p: TPoint;
+begin
+  p.x:=0;
+  p.y:=ButtonDark.Height;
+  p:=ButtonDark.ClientToScreen(p);
+  PopupMenuDark.PopUp(p.x,p.y);
+end;
+
+procedure Tf_internalguider.MenuItemCaptureDarkClick(Sender: TObject);
+begin
+  if Assigned(FonCaptureDark) then FonCaptureDark(self);
+end;
+
+procedure Tf_internalguider.MenuItemClearDarkClick(Sender: TObject);
+begin
+  if Assigned(FonClearDark) then FonClearDark(self);
 end;
 
 procedure Tf_internalguider.scale1Click(Sender: TObject; Button: TUDBtnType);
