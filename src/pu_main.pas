@@ -4101,11 +4101,11 @@ begin
   CalibrationDelay:=config.GetValue('/Autoguider/Settle/CalibrationDelay',300);
 
   f_internalguider.RA_gain1.Text:=config.GetValue('/InternalGuider/RaGain','70');
-  f_internalguider.DEC_gain1.Text:=config.GetValue('/InternalGuider/DecGain','70');
-  f_internalguider.RA_hysteresis1.Text:=config.GetValue('/InternalGuider/RaHysteresis','50');
-  f_internalguider.DEC_hysteresis1.Text:=config.GetValue('/InternalGuider/DecHysteresis','50');
-  f_internalguider.minimum_moveRA1.Text:=config.GetValue('/InternalGuider/MinimumMoveRa','0.2');
-  f_internalguider.minimum_moveDEC1.Text:=config.GetValue('/InternalGuider/MinimumMoveDec','0.4');
+  f_internalguider.DEC_gain1.Text:=config.GetValue('/InternalGuider/DecGain','100');
+  f_internalguider.RA_hysteresis1.Text:=config.GetValue('/InternalGuider/RaHysteresis','30');
+  f_internalguider.DEC_hysteresis1.Text:=config.GetValue('/InternalGuider/DecHysteresis','70');
+  f_internalguider.minimum_moveRA1.Text:=config.GetValue('/InternalGuider/MinimumMoveRa','0.6');//arc seconds
+  f_internalguider.minimum_moveDEC1.Text:=config.GetValue('/InternalGuider/MinimumMoveDec','0.6');//arc seconds
   f_internalguider.pa1.Text:=config.GetValue('/InternalGuider/Pa','0');
   f_internalguider.pulseGainEast1.Text:=config.GetValue('/InternalGuider/PulseGainEast','3');
   f_internalguider.pulseGainWest1.Text:=config.GetValue('/InternalGuider/PulseGainWest','3');

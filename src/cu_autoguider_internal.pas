@@ -631,6 +631,7 @@ procedure T_autoguider_internal.InternalAutoguiding;
 var i,maxpulse: integer;
     RADuration,DECDuration: LongInt;
     RADirection,DECDirection: string;
+    t, minmovepixelsRA, minmovepixelsDEC : double;
 begin
     finternalguider.draw_xy(xy_trend);//plot xy values
     finternalguider.draw_trend(xy_trend);// plot trends
@@ -674,8 +675,19 @@ begin
     if finternalguider.disable_guiding=false then //guiding enabled
     begin
 
-      if abs(correctionRA)<finternalguider.minimum_moveRA then correctionRA:=0;//avoid chasing the seeing. Improves the stability
-      if abs(correctionDEC)<finternalguider.minimum_moveDEC then correctionDEC:=0;//avoid chasing the seeing. Improves the stability
+      minmovepixelsRA:=internalguider.minimum_moveRA/finternalguider.pixel_size;// convert minimum move in arc seconds to pixels
+      if abs(correctionRA)<minmovepixelsRA then
+      begin//Reduce calculated correction rapidly below min.movement to avoid chasing the seeing. Improves the stability
+        t:=(correctionRA/minmovepixelsRA);
+        correctionRA:=minmovepixelsRA*t*t*t;//third order. Keeps also the sign in place
+      end;
+
+      minmovepixelsDEC:=internalguider.minimum_moveDEC/finternalguider.pixel_size;// convert minimum move in arc seconds to pixels
+      if abs(correctionDEC)<minmovepixelsDEC then
+      begin//Reduce calculated correction rapidly below min.movement to avoid chasing the seeing. Improves the stability
+        t:=(correctionDEC/minmovepixelsDEC);
+        correctionDEC:=minmovepixelsDEC*t*t*t;//third order. Keeps also the sign in place
+      end;
 
       xy_trend[0,2]:=-correctionRA;//store RA correction in pixels for trend
       xy_trend[0,3]:=+correctionDEC;//store DEC correction in pixels for trend
