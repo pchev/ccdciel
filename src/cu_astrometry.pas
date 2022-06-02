@@ -288,7 +288,9 @@ begin
         result:=true;
       end;
     end;
-  end;
+  end
+  else
+    msg('Missing library '+libwcs,1);
 end;
 
 procedure TAstrometry.SolveCurrentImage(wait: boolean);
@@ -445,6 +447,10 @@ begin
   result:=false;
   if Mount.Park then begin
     msg('Mount is parked!',1);
+    exit;
+  end;
+  if cdcwcs_xy2sky=nil then begin
+    msg('Missing library '+libwcs,1);
     exit;
   end;
   oldfilter:=0;
