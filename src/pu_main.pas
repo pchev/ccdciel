@@ -3062,8 +3062,6 @@ begin
   if AppClose then exit;
   AppClose:=true;
 
-  StopInternalguider:=true;
-
   SaveSettings;
   SaveConfig;
 
@@ -3449,6 +3447,7 @@ end else begin
    CanClose:=true;
 end;
 if CanClose then begin
+ StopInternalguider:=true;
  TerminateVcurve:=true;
  if f_capture.Running or f_preview.Running then begin
    StopExposure(nil);
