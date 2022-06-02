@@ -100,6 +100,10 @@ begin
   FState:=GUIDER_IDLE;
   FRunning:=true;
   InitLog;
+  StopInternalguider:=true;
+  InternalguiderRunning:=false;
+  InternalguiderGuiding:=false;
+  InternalguiderCalibrating:=false;
 end;
 
 Destructor T_autoguider_internal.Destroy;
@@ -245,6 +249,7 @@ begin
      Rewrite(GuideLog);
      WriteLn(GuideLog,'CCDciel '+ccdciel_version+'-'+RevisionStr+', Log version 2.5. Log enabled at '+FormatDateTime('YYYY-MM-DD HH:NN:SS',now));
      WriteLn(GuideLog, '');
+     Flush(GuideLog);
      GuideLogFileOpen:=true;
   except
   {$I-}
@@ -275,6 +280,7 @@ begin
   try
      if GuideLogFileOpen then begin
        WriteLn(GuideLog,buf);
+       Flush(GuideLog);
      end;
   except
     {$I-}
@@ -587,6 +593,11 @@ begin
     SetStatus('Mount not supported',GUIDER_ALERT);
     exit;
   end;
+  if InternalguiderGuiding then
+  begin
+    // already starting
+    exit;
+  end;
   SetStatus('Start Guiding',GUIDER_BUSY);
   StopInternalguider:=false;
   InternalguiderGuiding:=true;
@@ -758,27 +769,29 @@ begin
         WaitPulseGuiding(maxpulse);
       end;
 
-      // write log
-      inc(GuideFrameCount);
-      //Frame,Time,mount,dx,dy,RARawDistance,DECRawDistance,RAGuideDistance,DECGuideDistance,RADuration,RADirection,DECDuration,DECDirection,XStep,YStep,StarMass,SNR,ErrorCode
-      WriteLog(IntToStr(GuideFrameCount)+','+
-               FormatFloat(f3,(now-GuideStartTime)*secperday)+','+
-               '"Mount"'+','+
-               FormatFloat(f3,driftX)+','+
-               FormatFloat(f3,driftY)+','+
-               FormatFloat(f3,driftRA)+','+
-               FormatFloat(f3,driftDec)+','+
-               FormatFloat(f3,correctionRA)+','+
-               FormatFloat(f3,correctionDEC)+','+
-               IntToStr(RADuration)+','+
-               RADirection+','+
-               IntToStr(DECDuration)+','+
-               DECDirection+','+
-               ',,'+  // AO
-               FormatFloat(f0,LogFlux)+','+
-               FormatFloat(f2,LogSNR)+','+
-               '0'    // error code
-               );
+      if InternalguiderRunning then begin
+        // write log
+        inc(GuideFrameCount);
+        //Frame,Time,mount,dx,dy,RARawDistance,DECRawDistance,RAGuideDistance,DECGuideDistance,RADuration,RADirection,DECDuration,DECDirection,XStep,YStep,StarMass,SNR,ErrorCode
+        WriteLog(IntToStr(GuideFrameCount)+','+
+                 FormatFloat(f3,(now-GuideStartTime)*secperday)+','+
+                 '"Mount"'+','+
+                 FormatFloat(f3,driftX)+','+
+                 FormatFloat(f3,driftY)+','+
+                 FormatFloat(f3,driftRA)+','+
+                 FormatFloat(f3,driftDec)+','+
+                 FormatFloat(f3,correctionRA)+','+
+                 FormatFloat(f3,correctionDEC)+','+
+                 IntToStr(RADuration)+','+
+                 RADirection+','+
+                 IntToStr(DECDuration)+','+
+                 DECDirection+','+
+                 ',,'+  // AO
+                 FormatFloat(f0,LogFlux)+','+
+                 FormatFloat(f2,LogSNR)+','+
+                 '0'    // error code
+                 );
+      end;
 
     end //guiding enabled
     else
@@ -809,6 +822,10 @@ end;
 
 procedure T_autoguider_internal.InternalguiderStop;
 begin
+  if StopInternalguider=false then begin
+    WriteLog('Guiding Ends at '+FormatDateTime('YYYY-MM-DD HH:NN:SS',now));
+    WriteLog('');
+  end;
   StopInternalguider:=true;
   InternalguiderRunning:=false;
   InternalguiderGuiding:=false;
@@ -818,8 +835,6 @@ begin
   Finternalguider.ButtonGuide.enabled:=true;
   Finternalguider.led.Brush.Color:=clGray;
   SetStatus('Stopped',GUIDER_IDLE);
-  WriteLog('Guiding Ends at '+FormatDateTime('YYYY-MM-DD HH:NN:SS',GuideStartTime));
-  WriteLog('');
 end;
 
 
