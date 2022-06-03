@@ -111,7 +111,7 @@ object f_internalguider: Tf_internalguider
             Top = 144
             Width = 60
             Increment = 5
-            MaxValue = 100
+            MaxValue = 200
             ParentFont = False
             ParentShowHint = False
             ShowHint = True
@@ -177,7 +177,7 @@ object f_internalguider: Tf_internalguider
             Top = 56
             Width = 60
             Increment = 5
-            MaxValue = 100
+            MaxValue = 200
             ParentFont = False
             ParentShowHint = False
             ShowHint = True
@@ -252,7 +252,7 @@ object f_internalguider: Tf_internalguider
           object minimum_moveRA1: TFloatSpinEdit
             Left = 70
             Height = 29
-            Hint = 'Below this offset value the control action is limited to ignore seeing effects and therefore stabilize control. Typically set at 0.6 arcseconds'
+            Hint = 'Below this offset value the controller will take less action to ignore seeing effects and therefore stabilize control. Typically set at 0.6 arcseconds'
             Top = 104
             Width = 60
             Increment = 0.1
@@ -266,7 +266,7 @@ object f_internalguider: Tf_internalguider
           object minimum_moveDEC1: TFloatSpinEdit
             Left = 70
             Height = 29
-            Hint = 'Below this offset value the control action is limited to ignore seeing effects and therefore stabilize control. Typically set at 0.6 arcseconds'
+            Hint = 'Below this offset value the controller will take less action to ignore seeing effects and therefore stabilize control. Typically set at 0.6 arcseconds'
             Top = 192
             Width = 60
             Increment = 0.1

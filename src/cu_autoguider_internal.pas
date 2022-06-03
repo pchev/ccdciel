@@ -37,7 +37,7 @@ type
   private
     InternalguiderInitialize: boolean;
     pulseRA,pulseDEC,GuideFrameCount  : integer;
-    driftX,driftY,driftRA,driftDec,correctionRA,correctionDEC, PactionRA,PactionDEC,Guidethecos,old_PactionRA,old_PactionDEC : double;
+    driftX,driftY,driftRA,driftDec,moveRA,moveDEC, Guidethecos,old_moveRA,old_moveDEC : double;
     xy_trend : xy_guiderlist;{fu_internalguider}
     InternalguiderCalibrationDirection,InternalguiderCalibrationStep: integer;
     InternalCalibrationInitialize: boolean;
@@ -629,8 +629,8 @@ begin
    xy_trend[i,3]:=0 //dec correction
   end;
 
-  old_PactionRA:=0;
-  old_PactionDEC:=0;
+  old_moveRA:=0;
+  old_moveDEC:=0;
 
   InternalguiderInitialize:=true; //initialize;
 
@@ -653,7 +653,7 @@ procedure T_autoguider_internal.InternalAutoguiding;
 var i,maxpulse: integer;
     RADuration,DECDuration: LongInt;
     RADirection,DECDirection: string;
-    t, minmovepixelsRA, minmovepixelsDEC : double;
+    t, minMoveRA, minMoveDEC : double;
 begin
     finternalguider.draw_xy(xy_trend);//plot xy values
     finternalguider.draw_trend(xy_trend);// plot trends
@@ -684,38 +684,37 @@ begin
     xy_trend[0,0]:=-DriftRa;//store RA drift in  pixels.
     xy_trend[0,1]:=+DriftDec;//store DEC drift in pixels.
 
-    //calculate required RA correction in pixels
-    PactionRA:=driftRA*finternalguider.RAgain/100;// Proportional action of the controller.
-    correctionRA:=-(PactionRA-old_PactionRA *finternalguider.RA_hysteresis/100); //Hysteresis. Each control action will be reduced with the hysteresis percentage of previous control action preventing overreaction in slow systems. Typically set at 30%
-    old_PactionRA:=PactionRA;//Store for next cycle hysteresis calculation
-
-    //calculate required DEC correction in pixels
-    PactionDEC:=driftDEC*finternalguider.DECgain/100;// proportional action of the controller.
-    correctionDEC:=-(PactionDEC-old_PactionDEC*finternalguider.DEC_hysteresis/100); //Hysteresis. Each control action will be reduced with the hysteresis percentage of previous control action preventing overreaction in slow systems. Typically set at 70%
-    old_PactionDEC:=PactionDEC; //Store for next cycle hysteresis calculation
-
     if finternalguider.disable_guiding=false then //guiding enabled
     begin
-
-      minmovepixelsRA:=internalguider.minimum_moveRA/finternalguider.pixel_size;// convert minimum move in arc seconds to pixels
-      if abs(correctionRA)<minmovepixelsRA then
+      // minimum movement before controller take action. This is not a hard boundary but soft boundary
+      minMoveRA:=internalguider.minimum_moveRA/finternalguider.pixel_size;// convert minimum move in arc seconds to pixels
+      if abs(driftRA)<minMoveRA then
       begin//Reduce calculated correction rapidly below min.movement to avoid chasing the seeing. Improves the stability
-        t:=(correctionRA/minmovepixelsRA);
-        correctionRA:=minmovepixelsRA*t*t*t;//third order. Keeps also the sign in place
+        t:=(driftRA/minMoveRA);
+        driftRA:=minMoveRA*t*t*t;//third order. Keeps also the sign in place
       end;
 
-      minmovepixelsDEC:=internalguider.minimum_moveDEC/finternalguider.pixel_size;// convert minimum move in arc seconds to pixels
-      if abs(correctionDEC)<minmovepixelsDEC then
+      minMoveDEC:=internalguider.minimum_moveDEC/finternalguider.pixel_size;// convert minimum move in arc seconds to pixels
+      if abs(driftDEC)<minMoveDEC then
       begin//Reduce calculated correction rapidly below min.movement to avoid chasing the seeing. Improves the stability
-        t:=(correctionDEC/minmovepixelsDEC);
-        correctionDEC:=minmovepixelsDEC*t*t*t;//third order. Keeps also the sign in place
+        t:=(driftDEC/minMoveDEC);
+        driftDEC:=minMoveDEC*t*t*t;//third order. Keeps also the sign in place
       end;
 
-      xy_trend[0,2]:=-correctionRA;//store RA correction in pixels for trend
-      xy_trend[0,3]:=+correctionDEC;//store DEC correction in pixels for trend
+      //calculate required RA correction in pixels
+      moveRA:=-( driftRA*(1 - finternalguider.RA_hysteresis/100) +   old_moveRA * finternalguider.RA_hysteresis/100 ) * finternalguider.RAgain/100;//Hysteresis as in PHD1
+      old_moveRA:=moveRA;//Store for next cycle hysteresis calculation
+
+      //calculate required DEC correction in pixels
+      moveDEC:=-( driftDEC*(1 - finternalguider.DEC_hysteresis/100) +   old_moveDEC * finternalguider.DEC_hysteresis/100 ) * finternalguider.DECgain/100;//Hysteresis as in PHD1
+      old_moveDEC:=moveDEC;//Store for next cycle hysteresis calculation
+
+
+      xy_trend[0,2]:=-moveRA;//store RA correction in pixels for trend
+      xy_trend[0,3]:=+moveDEC;//store DEC correction in pixels for trend
 
       Guidethecos:=cos(mount.Dec*pi/180); if Guidethecos=0 then Guidethecos:=0.000001;
-      correctionRA:=correctionRA/Guidethecos; //correct pixels with cos(dec). Rotation in pixels near celestial pole decreases with cos(dec)
+      moveRA:=moveRA/Guidethecos; //correct pixels with cos(dec). Rotation in pixels near celestial pole decreases with cos(dec)
 
       pulseRA:=0;
       pulseDEC:=0;
@@ -724,9 +723,9 @@ begin
       DECDuration:=0;
       DECDirection:='';
 
-      if correctionRA>0 then //going East increases the RA
+      if moveRA>0 then //going East increases the RA
       begin
-         pulseRA:=min(max_duration,round(1000*abs(correctionRA/finternalguider.pulsegainEast))); {duration msec}
+         pulseRA:=min(max_duration,round(1000*abs(moveRA/finternalguider.pulsegainEast))); {duration msec}
          if pulseRA>10 then //Large enough correction to follow by motors/relays. Complementary with minimum_move
          begin
            msg('East: '+inttostr(pulseRA),3);
@@ -736,9 +735,9 @@ begin
          end;
       end
       else
-      if correctionRA<0 then //going West
+      if moveRA<0 then //going West
       begin
-        pulseRA:=min(max_duration,round(1000*abs(correctionRA/finternalguider.pulsegainWest))); {duration msec}
+        pulseRA:=min(max_duration,round(1000*abs(moveRA/finternalguider.pulsegainWest))); {duration msec}
         if pulseRA>10 then
         begin
           msg('West: '+inttostr(pulseRA),3);
@@ -748,9 +747,9 @@ begin
         end;
       end;
 
-      if correctionDEC>0 then //go North increase the DEC.
+      if moveDEC>0 then //go North increase the DEC.
       begin
-        pulseDEC:=min(max_duration,round(1000*abs(correctionDec/finternalguider.pulsegainNorth))); {duration msec}
+        pulseDEC:=min(max_duration,round(1000*abs(moveDEC/finternalguider.pulsegainNorth))); {duration msec}
         if pulseDEC>10 then
         begin
           msg('North: '+inttostr(pulseDEC),3);
@@ -760,9 +759,9 @@ begin
         end;
       end
       else
-      if correctionDEC<0 then //go South
+      if moveDEC<0 then //go South
       begin
-        pulseDEC:=min(max_duration,round(1000*abs(correctionDec/finternalguider.pulsegainSouth))); {duration msec}
+        pulseDEC:=min(max_duration,round(1000*abs(moveDEC/finternalguider.pulsegainSouth))); {duration msec}
         if pulseDEC>10 then
         begin
           msg('South: '+inttostr(pulseDEC),3);
@@ -791,8 +790,8 @@ begin
                  FormatFloat(f3,driftY)+','+
                  FormatFloat(f3,driftRA)+','+
                  FormatFloat(f3,driftDec)+','+
-                 FormatFloat(f3,correctionRA)+','+
-                 FormatFloat(f3,correctionDEC)+','+
+                 FormatFloat(f3,moveRA)+','+
+                 FormatFloat(f3,moveDEC)+','+
                  IntToStr(RADuration)+','+
                  RADirection+','+
                  IntToStr(DECDuration)+','+
