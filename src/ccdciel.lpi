@@ -15,7 +15,7 @@
     <i18n>
       <EnableI18N LFM="False"/>
     </i18n>
-    <BuildModes Count="7">
+    <BuildModes Count="8">
       <Item1 Name="Default" Default="True"/>
       <Item2 Name="win32">
         <MacroValues Count="1">
@@ -164,10 +164,6 @@
               <IgnoredMessages idx5024="True"/>
             </CompilerMessages>
             <CustomOptions Value="-dUseCThreads -dUseHeapTrc"/>
-            <OtherDefines Count="2">
-              <Define0 Value="UseCThreads"/>
-              <Define1 Value="debug_raw"/>
-            </OtherDefines>
           </Other>
         </CompilerOptions>
       </Item5>
@@ -263,6 +259,46 @@
           </Other>
         </CompilerOptions>
       </Item7>
+      <Item8 Name="MacOS-aarch64">
+        <CompilerOptions>
+          <Version Value="11"/>
+          <Target>
+            <Filename Value="ccdciel"/>
+          </Target>
+          <SearchPaths>
+            <IncludeFiles Value="$(ProjOutDir)"/>
+            <UnitOutputDirectory Value="units/$(TargetCPU)-$(TargetOS)-$(LCLWidgetType)"/>
+          </SearchPaths>
+          <CodeGeneration>
+            <SmartLinkUnit Value="True"/>
+            <StackSize Value="8388608"/>
+            <TargetCPU Value="aarch64"/>
+            <TargetOS Value="darwin"/>
+            <Optimizations>
+              <OptimizationLevel Value="3"/>
+            </Optimizations>
+          </CodeGeneration>
+          <Linking>
+            <Debugging>
+              <GenerateDebugInfo Value="False"/>
+              <DebugInfoType Value="dsDwarf2Set"/>
+            </Debugging>
+            <LinkSmart Value="True"/>
+            <Options>
+              <Win32>
+                <GraphicApplication Value="True"/>
+              </Win32>
+            </Options>
+          </Linking>
+          <Other>
+            <CompilerMessages>
+              <IgnoredMessages idx5024="True"/>
+            </CompilerMessages>
+            <CustomOptions Value="-dUseCThreads"/>
+            <CompilerPath Value="/usr/local/bin/ppcrossa64"/>
+          </Other>
+        </CompilerOptions>
+      </Item8>
       <SharedMatrixOptions Count="4">
         <Item1 ID="755009368669" Modes="win32" Type="IDEMacro" MacroName="LCLWidgetType" Value="win32"/>
         <Item2 ID="602360172665" Modes="win64" Type="IDEMacro" MacroName="LCLWidgetType" Value="win32"/>
