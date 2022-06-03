@@ -342,6 +342,10 @@ msgstr ""
 msgid "Camera"
 msgstr ""
 
+#: u_translation:rsguidecamera
+msgid "Guide camera"
+msgstr ""
+
 #: u_translation:rsfilterwheel
 msgid "Filter wheel"
 msgstr ""
@@ -970,6 +974,10 @@ msgstr ""
 msgid "Wch."
 msgstr ""
 
+#: u_translation:rsguid
+msgid "Guid."
+msgstr ""
+
 #: u_translation:rsgain
 msgid "Gain"
 msgstr ""
@@ -1524,6 +1532,10 @@ msgstr ""
 
 #: u_translation:rsuserotator
 msgid "Use rotator"
+msgstr ""
+
+#: u_translation:rsuseguidecamera
+msgid "Use guide camera"
 msgstr ""
 
 #: u_translation:rsusemount
@@ -5148,5 +5160,21 @@ msgstr ""
 
 #: u_translation:rstrianglerota
 msgid "Triangle rotation angle"
+msgstr ""
+
+#: u_translation:rsinternal
+msgid "Internal"
+msgstr ""
+
+#: u_translation:rsinternalguid
+msgid "Internal guider"
+msgstr ""
+
+#: u_translation:rstousethisdev
+msgid "To use this device, be sure to also configure the Internal Guider in Preferences/Auto-guiding"
+msgstr ""
+
+#: u_translation:rstousetheinte
+msgid "To use the Internal autoguider you need to configure a Mount and a Guide camera in the profile Devices setup"
 msgstr ""
 

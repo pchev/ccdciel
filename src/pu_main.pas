@@ -7853,6 +7853,7 @@ begin
      else if buf='fr' then langname:='Français'
      else if buf='it' then langname:='Italiano'
      else if buf='ru' then langname:='русский Russian'
+     else if buf='zh_CN' then langname:='Chinese (Simplified)'
      else langname:='';
      f_option.Languages.Items.Add(buf+', '+langname);
      i:=FindNextUTF8(fs);

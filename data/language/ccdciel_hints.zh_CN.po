@@ -1,15 +1,15 @@
-# Italian translation for ccdciel
-# Copyright (c) 2019 Rosetta Contributors and Canonical Ltd 2019
+# Chinese (Simplified) translation for ccdciel
+# Copyright (c) 2022 Rosetta Contributors and Canonical Ltd 2022
 # This file is distributed under the same license as the ccdciel package.
-# FIRST AUTHOR <EMAIL@ADDRESS>, 2019.
+# FIRST AUTHOR <EMAIL@ADDRESS>, 2022.
 msgid ""
 msgstr ""
 "Project-Id-Version: ccdciel\n"
 "Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
 "POT-Creation-Date: 2022-04-15 14:48+0000\n"
-"PO-Revision-Date: 2019-12-15 12:59+0000\n"
-"Last-Translator: Patrick Chevalley <Unknown>\n"
-"Language-Team: Italian <it@li.org>\n"
+"PO-Revision-Date: 2022-06-02 15:36+0000\n"
+"Last-Translator: Zachary Wu <Unknown>\n"
+"Language-Team: Chinese (Simplified) <zh_CN@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -19,551 +19,551 @@ msgstr ""
 #: u_hints.rsactivateback
 #, object-pascal-format
 msgid "Activate backlash compensation.%sLet this disabled if your focuser driver include backlash compensation."
-msgstr ""
+msgstr "激活回差补偿。%s如果您的调焦器驱动包含回差补偿，请禁用此功能。"
 
 #: u_hints.rsactivatethes
 msgid "Activate the start time"
-msgstr ""
+msgstr "激活开启时间"
 
 #: u_hints.rsactivatethes2
 msgid "Activate the stop time"
-msgstr ""
+msgstr "激活停止时间"
 
 #: u_hints.rsactiveonlyif
 #, object-pascal-format
 msgid "Active only if the target use astrometry positioning%sand the exposure time is longer than the astrometry timeout"
-msgstr ""
+msgstr "仅当目标使用解析定位%s并且曝光时间长于解析超时才处于活动状态"
 
 #: u_hints.rsadescription
 msgid "A description for this step"
-msgstr ""
+msgstr "该步骤的说明"
 
 #: u_hints.rsafterlearnin
 #, object-pascal-format
 msgid "After learning is completed you can use this cursor to better adjust to the linear part of the curve.%sThe fit must be particularly good near the horizontal blue line position."
-msgstr ""
+msgstr "学习完成后可以用这个光标更好的调整到曲线的线性部分。%s在水平蓝线位置附近的拟合一定特别好。"
 
 #: u_hints.rsatemporarydi
 msgid "A temporary directory for work files. Be sure it contain only ASCII character and no space"
-msgstr ""
+msgstr "工作文件的临时目录。确保它只包含ASCII字符并且没​​有空格"
 
 #: u_hints.rsautofocusatt
 msgid "Autofocus at the start of this step"
-msgstr ""
+msgstr "此步骤开始时自动对焦"
 
 #: u_hints.rsautofocusift
 msgid "Autofocus if the temperature change is greater than the configured value"
-msgstr ""
+msgstr "如果温度变化大于配置值，则自动对焦"
 
 #: u_hints.rsautoguiderst
 msgid "Autoguider status"
-msgstr ""
+msgstr "自动导星状态"
 
 #: u_hints.rsbesuretopaus
 msgid "Be sure to pause guiding when using a OAG. You can continue guiding when using a separate guide scope."
-msgstr ""
+msgstr "使用OAG时请务必暂停导星。使用单独的导星镜时，您可以继续导星。"
 
 #: u_hints.rscamerabinnin
 msgid "Camera binning"
-msgstr ""
+msgstr "相机像素合并"
 
 #: u_hints.rscameragain
 msgid "Camera gain"
-msgstr ""
+msgstr "相机增益"
 
 #: u_hints.rscameraiso
 msgid "Camera ISO"
-msgstr ""
+msgstr "相机ISO"
 
 #: u_hints.rscameraoffset
 msgid "Camera offset"
-msgstr ""
+msgstr "相机偏置"
 
 #: u_hints.rscamerapositi
 msgid "Camera position angle"
-msgstr ""
+msgstr "相机位置角"
 
 #: u_hints.rsclearthesequ
 msgid "Clear the sequence completion status"
-msgstr ""
+msgstr "清楚序列完成状态"
 
 #: u_hints.rsclicktosetva
 msgid "Click to set value for all the targets"
-msgstr ""
+msgstr "点击以设置所有目标的值"
 
 #: u_hints.rsclicktosortb
 #, object-pascal-format
 msgid "Click to sort by %s"
-msgstr ""
+msgstr "点击以按%s排序"
 
 #: u_hints.rsconnectallde
 msgid "Connect all devices"
-msgstr "Collegare tutti i dispositivi"
+msgstr "连接所有设备"
 
 #: u_hints.rscontrolhowco
 msgid "Control how complete target are managed when the whole list is repeated"
-msgstr ""
+msgstr "控制在整个列表重复时如何管理完整的目标"
 
 #: u_hints.rscopythecurre
 #, object-pascal-format
 msgid "Copy the current profile to a new one.%sThis also copy every program preference to the new profile."
-msgstr ""
+msgstr "将当前配置文件复制到新配置文件。%s这也将每个程序首选项复制到新配置文件。"
 
 #: u_hints.rscreateanewem
 #, object-pascal-format
 msgid "Create a new empty profile.%sWarning this also clear every program preference for this new profile.%sUse the Copy button if you want to configure a different equipment but keep the program options."
-msgstr ""
+msgstr "创建一个新的空配置文件。%s警告这也会清除此新配置文件的所有程序首选项。%s如果您想配置不同的设备但保留程序选项，请使用“复制”按钮。"
 
 #: u_hints.rscreateanewse
 msgid "Create a new sequence"
-msgstr ""
+msgstr "创建一个新序列"
 
 #: u_hints.rscurrentteles
 msgid "Current telescope Right Ascension"
-msgstr ""
+msgstr "当前望远镜赤经"
 
 #: u_hints.rscurrentteles2
 msgid "Current telescope Declination"
-msgstr ""
+msgstr "当前望远镜赤纬"
 
 #: u_hints.rscurrentteles3
 msgid "Current telescope side of pier"
-msgstr ""
+msgstr "当前望远镜基座方向"
 
 #: u_hints.rsdeletethesel
 msgid "Delete the selected row from the list."
-msgstr ""
+msgstr "从列表中删除选定的行。"
 
 #: u_hints.rsdeletethispr
 msgid "Delete this profile and associated program preference."
-msgstr ""
+msgstr "删除此配置文件和关联的程序首选项。"
 
 #: u_hints.rsditheraftert
 msgid "Dither on the specified frame interval"
-msgstr ""
+msgstr "在指定的帧间隔中抖动"
 
 #: u_hints.rsdonotsetthis
 msgid "Do not set this option if you don't know exactly what you do and without careful testing"
-msgstr ""
+msgstr "如果您不知道自己在做什么，并且没有仔细测试，请不要设置此选项"
 
 #: u_hints.rsdontwaitfort
 msgid "Process the other targets in the list instead of waiting for the start condition(s) to be met. To be used with option \"Repeat the whole list\""
-msgstr ""
+msgstr "处理列表中的其他目标，而不是等待满足启动条件。与选项“重复整个列表”一起使用"
 
 #: u_hints.rsdragdroptoch
 msgid "Drag&drop to change order"
-msgstr ""
+msgstr "拖放以更改顺序"
 
 #: u_hints.rseditthecurre
 msgid "Edit the current sequence"
-msgstr ""
+msgstr "编辑当前序列"
 
 #: u_hints.rsgammaoftheim
 msgid "Gamma of the image display"
-msgstr ""
+msgstr "图像显示的Gamma"
 
 #: u_hints.rsglobalalpaca
 msgid "Global ALPACA server parameters"
-msgstr ""
+msgstr "全局ALPACA服务器参数"
 
 #: u_hints.rsglobalindise
 msgid "Global INDI server parameters"
-msgstr ""
+msgstr "全局INDI服务器参数"
 
 #: u_hints.rsguidinghisto
 #, object-pascal-format
 msgid "Guiding history in arcsecond %s - blue: RA error %s - red: Dec error %s - yellow: Star mass"
-msgstr ""
+msgstr "以角秒为单位的导星历史 %s - 蓝色：RA 误差 %s - 红色：DEC 误差 %s - 黄色：星质"
 
 #: u_hints.rshistogramful
 msgid "Histogram full range or clipped to available data"
-msgstr ""
+msgstr "直方图全范围或裁剪到可用数据"
 
 #: u_hints.rshistogramoft
 #, object-pascal-format
 msgid "Histogram of the current image.%sClick and move to adjust the visualisation threshold."
-msgstr ""
+msgstr "当前图像的直方图。%s单击并移动以调整视觉效果阈值。"
 
 #: u_hints.rshistoryofthe
 msgid "History of the last FWHM and Intensity measurement"
-msgstr ""
+msgstr "上次FWHM和强度测量的历史"
 
 #: u_hints.rsifcheckednoc
 msgid "If checked no confirmation dialog will be presented and failed operation will abort the current step."
-msgstr ""
+msgstr "如果选中，则不会显示确认对话框，失败的操作将中止当前步骤。"
 
 #: u_hints.rsifnotchecked
 msgid "If not checked the program will never change the gain/offset value set in the driver setup"
-msgstr ""
+msgstr "如果未选中，程序将永远不会更改驱动设置中设置的增益/偏置值"
 
 #: u_hints.rsiftheimageis
 msgid "If the image is now focused, click this button to get the current focuser position"
-msgstr ""
+msgstr "如果图像现在已合焦，单击此按钮可获取当前调焦器位置"
 
 #: u_hints.rsimageluminos
 msgid "Image luminosity"
-msgstr ""
+msgstr "图像光度"
 
 #: u_hints.rsincrementste
 msgid "Increment step for the inward or outward movement"
-msgstr ""
+msgstr "向内或向外移动的增量步长"
 
 #: u_hints.rsinfinitenumb
 msgid "Infinite number of repetition"
-msgstr ""
+msgstr "无限重复"
 
 #: u_hints.rsinvertimaged
 msgid "Invert image display"
-msgstr ""
+msgstr "反转图像显示"
 
 #: u_hints.rskeepthegraph
 msgid "Keep the graph visible after autofocus is completed"
-msgstr ""
+msgstr "自动对焦完成后保持图表可见"
 
 #: u_hints.rsletblankford
 msgid "Let blank for default system search path"
-msgstr ""
+msgstr "默认系统搜索路径留空"
 
 #: u_hints.rslistofprofil
 msgid "List of profile for every different equipment configuration"
-msgstr ""
+msgstr "每个不同设备配置的配置文件列表"
 
 #: u_hints.rsloadasequenc
 msgid "Load a sequence file"
-msgstr ""
+msgstr "载入一个序列文件"
 
 #: u_hints.rslooppreviewe
 msgid "Loop preview exposures"
-msgstr ""
+msgstr "循环预览曝光"
 
 #: u_hints.rsmaketesttode
 #, object-pascal-format
 msgid "Make test to determine the most performant option depending on your computer.%s(Network is mandatory if the camera is connected to a remote Indi server)"
-msgstr ""
+msgstr "根据您的计算机进行测试以确定性能最高的选项。%s（如果相机连接到远程Indi服务器，则必须使用网络）"
 
 #: u_hints.rsmovefocuseri
 msgid "Move focuser inward"
-msgstr ""
+msgstr "向内移动调焦器"
 
 #: u_hints.rsmovefocusero
 msgid "Move focuser outward"
-msgstr ""
+msgstr "向外移动调焦器"
 
 #: u_hints.rspausethesequ
 msgid "Pause the sequence after the current exposure is complete"
-msgstr ""
+msgstr "当前曝光完成后暂停序列"
 
 #: u_hints.rspixelbinning
 msgid "Pixel binning"
-msgstr ""
+msgstr "像素合并"
 
 #: u_hints.rsplanetariums2
 msgid "Planetarium status"
-msgstr ""
+msgstr "星图状态"
 
 #: u_hints.rspriortoslewi
 #, object-pascal-format
 msgid "Prior to slewing retrieve actual comet or asteroid coordinates from planetarium program.%sPlanetarium program should be connected and following system time.%sTarget name should be searchable within the planetarium."
-msgstr ""
+msgstr "在指向之前，从星图程序中检索实际的彗星或小行星坐标。%s星图程序应该已连接并遵循系统时间。%s目标名称应该在星图内搜索。"
 
 #: u_hints.rsredoautofocu
 msgid "Redo autofocus after a number of frames"
-msgstr ""
+msgstr "多帧后重新自动对焦"
 
 #: u_hints.rsrepeatthepla
 #, object-pascal-format
 msgid "Repeat the plan for this object.%sSet to zero to not process this target."
-msgstr ""
+msgstr "对该天体重复此计划。%s设置为零可不处理此目标。"
 
 #: u_hints.rsrepeatthewho2
 msgid "Repeat the whole list a number of time."
-msgstr ""
+msgstr "多次重复整个列表。"
 
 #: u_hints.rssaveindividu
 msgid "Save individual images before stacking"
-msgstr ""
+msgstr "在叠加前保存单帧图像"
 
 #: u_hints.rssavethelista
 msgid "Save the list and close this window."
-msgstr ""
+msgstr "保存列表并关闭此窗口。"
 
 #: u_hints.rssavethelistw
 msgid "Save the list with a new name and close this window."
-msgstr ""
+msgstr "用新名称保存列表并关闭此窗口。"
 
 #: u_hints.rsselecttheinf
 msgid "Select the information used to make the image file name"
-msgstr ""
+msgstr "选择用于命名图像文件的信息"
 
 #: u_hints.rsselecttheinf2
 msgid "Select the information used to make the image directory name"
-msgstr ""
+msgstr "选择用于命名图像目录的信息"
 
 #: u_hints.rssetabsolutef
 msgid "Set absolute focuser position"
-msgstr ""
+msgstr "设置调焦器绝对位置"
 
 #: u_hints.rssetheretheac
 msgid "Set here the action to take after the sequence is terminated"
-msgstr ""
+msgstr "在此处设置序列终止后要执行的操作"
 
 #: u_hints.rssetthestartt
 msgid "Set the start time at astronomical dusk, recomputed for the date you run the sequence."
-msgstr ""
+msgstr "设置在天文黄昏时的开始时间，根据您运行序列的日期重新计算。"
 
 #: u_hints.rssetthestopti
 msgid "Set the stop time at astronomical dawn, recomputed for the date you run the sequence."
-msgstr ""
+msgstr "设置天文破晓时的停止时间，根据您运行序列的日期重新计算。"
 
 #: u_hints.rsshowbullseye
 msgid "Show bulls eye"
-msgstr ""
+msgstr "显示靶心"
 
 #: u_hints.rsshowcompleti
 msgid "Show completion status"
-msgstr ""
+msgstr "显示完成状态"
 
 #: u_hints.rsshowguidings
 msgid "Show guiding statistics"
-msgstr ""
+msgstr "显示导星统计信息"
 
 #: u_hints.rsshowhighligh
 msgid "Show highlight and shadow clipping"
-msgstr ""
+msgstr "显示高光和暗部剪裁"
 
 #: u_hints.rsshowlastcapt
 msgid "Show captured image"
-msgstr ""
+msgstr "显示已拍摄图像"
 
 #: u_hints.rsstacktheprev
 #, object-pascal-format
 msgid "Stack the preview frames to a single image.%sA new stack is started when you start a loop or if you uncheck this button."
-msgstr ""
+msgstr "将预览帧叠加成一个图像。%s当您开始循环或取消选中此按钮时，将启动一个新的叠加。"
 
 #: u_hints.rsstartaprevie
 msgid "Start a preview loop when waiting for the delay to expire."
-msgstr ""
+msgstr "等待延迟到期时开启预览循环。"
 
 #: u_hints.rsstartimagelo
 msgid "Start image loop centered on selected star"
-msgstr ""
+msgstr "以所选星为中心开始图像循环"
 
 #: u_hints.rsstartoneprev
 msgid "Start one preview exposure"
-msgstr ""
+msgstr "开启一次预览曝光"
 
 #: u_hints.rsstarttheauto
 msgid "Start the auto-focus procedure"
-msgstr ""
+msgstr "开启自动对焦程序"
 
 #: u_hints.rsstartthecapt
 msgid "Start the capture sequence"
-msgstr ""
+msgstr "开启拍摄序列"
 
 #: u_hints.rsstartthesequ
 msgid "Start the sequence execution"
-msgstr ""
+msgstr "开启序列执行"
 
 #: u_hints.rsstartthevcur
 msgid "Start the Vcurve learning process"
-msgstr ""
+msgstr "开启V曲线学习过程"
 
 #: u_hints.rsstarttimecap
 msgid "Start time capturing (MC=Meridian crossing)"
-msgstr ""
+msgstr "开始拍摄时间（MC=过中天）"
 
 #: u_hints.rsstartx
 msgid "Start X"
-msgstr ""
+msgstr "起始 X"
 
 #: u_hints.rsstarty
 msgid "Start Y"
-msgstr ""
+msgstr "起始 Y"
 
 #: u_hints.rsstayatthetar
 #, object-pascal-format
 msgid "Stay at the target position for autofocus.%sA medium bright star should be visible.%sElse slew to a bright database star."
-msgstr ""
+msgstr "保持在目标位置以进行自动对焦。%s一颗中等亮度的恒星应该是可见的。%s否则会指向到一颗明亮的数据库恒星上。"
 
 #: u_hints.rsstepplanfor
 #, object-pascal-format
 msgid "Step plan for capturing the images.%sThe step plan details are specified in the list below"
-msgstr ""
+msgstr "用于拍摄图像的步骤计划。%s步骤计划详细信息在下面的列表中指定"
 
 #: u_hints.rsstopatthisti
 msgid "Stop at this time even if the processing is not finished."
-msgstr ""
+msgstr "即使处理未完成，此时也停止。"
 
 #: u_hints.rsstoptheseque
 msgid "Stop the sequence execution"
-msgstr ""
+msgstr "停止序列执行"
 
 #: u_hints.rsstoptimecapt
 msgid "Stop time capturing (MC=Meridian crossing)"
-msgstr ""
+msgstr "停止拍摄时间（MC=过中天）"
 
 #: u_hints.rstargetpositi
 msgid "Target position (J2000)"
-msgstr ""
+msgstr "目标位置（J2000）"
 
 #: u_hints.rsthebasefolde
 msgid "The base folder where the images are recorded"
-msgstr ""
+msgstr "记录图像的基础目录"
 
 #: u_hints.rsthedirection
 #, object-pascal-format
 msgid "The direction the focuser will always finish to move.%sIf using auto-focus set the same move direction."
-msgstr ""
+msgstr "调焦器将一直完成移动的方向。%s如果使用自动调焦，请设置相同的移动方向。"
 
 #: u_hints.rstheelbrusima
 msgid "The Elbrus Images folder as set in the Elbrus parameters."
-msgstr ""
+msgstr "在Elbrus参数中设置的Elbrus图像目录。"
 
 #: u_hints.rsthefullwidth
 msgid "The Full Width at Half Maximum value in pixels / arc seconds"
-msgstr ""
+msgstr "以像素/角秒为单位的半高全宽"
 
 #: u_hints.rsthehalffluxd
 msgid "The Half Flux Diameter value in pixels"
-msgstr ""
+msgstr "以像素为单位的半通量直径"
 
 #: u_hints.rsthehorizonpr
 msgid "The horizon profile used to compute object visibility. This file is the same as used in Cartes du Ciel"
-msgstr ""
+msgstr "用于计算天体可见性的地平线配置。此文件与Cartes du Ciel中使用的文件相同"
 
 #: u_hints.rsthelistoftar
 msgid "The list of target to process in sequence."
-msgstr ""
+msgstr "要按顺序处理的目标列表。"
 
 #: u_hints.rsthemagnitude
 #, object-pascal-format
 msgid "The magnitude of the star used to run the autofocus.%sUsing a faint star can minimize the telescope movement but prefer the brightest to avoid trouble with nearby stars."
-msgstr ""
+msgstr "用于执行自动对焦的星等。%s使用一颗暗星可以最大限度地减少望远镜的移动，但更好用最亮的恒星以避免附近恒星的干扰。"
 
 #: u_hints.rsthemaximumin
 msgid "The maximum intensity value"
-msgstr ""
+msgstr "最大强度值"
 
 #: u_hints.rstheminimalob
 msgid "The minimal object elevation to start or end observing"
-msgstr ""
+msgstr "开始或结束观测的最小天体高度"
 
 #: u_hints.rsthenumberofi
 msgid "The number of images to take"
-msgstr ""
+msgstr "要拍摄的图像数量"
 
 #: u_hints.rsthenumberofi2
 msgid "The number of image to take before dither"
-msgstr ""
+msgstr "抖动前要拍摄的图像数量"
 
 #: u_hints.rsthenumberofi3
 msgid "The number of image to take before autofocus"
-msgstr ""
+msgstr "自动对焦前要拍摄的图像数量"
 
 #: u_hints.rsthenumberofi4
 msgid "The number of image for this step"
-msgstr ""
+msgstr "该步骤的图像数量"
 
 #: u_hints.rstheobjectnam
 msgid "The object name for use in FITS header and file name"
-msgstr ""
+msgstr "FITS头和文件名中使用的天体名称"
 
 #: u_hints.rstheobservato
 msgid "The observatory name for inclusion in the FITS header"
-msgstr ""
+msgstr "包含在FITS头中的观测站名称"
 
 #: u_hints.rstheobservern
 msgid "The observer name for inclusion in the FITS header"
-msgstr ""
+msgstr "包含在FITS头中的观测者名称"
 
 #: u_hints.rsthepreferedf
 msgid "The preferred focuser direction for autofocus."
-msgstr ""
+msgstr "自动对焦的首选对焦方向。"
 
 #: u_hints.rstheselecteds
 msgid "The selected star luminosity profile"
-msgstr ""
+msgstr "已选星的光度轮廓"
 
 #: u_hints.rsthesignalnoi
 msgid "The Signal/Noise ratio"
-msgstr ""
+msgstr "信噪比"
 
 #: u_hints.rsthetargetnam
 msgid "The target name to be used for capturing the images"
-msgstr ""
+msgstr "用于拍摄图像的目标名称"
 
 #: u_hints.rsthetelescopenamefori
 msgid "The telescope name for inclusion in the FITS header"
-msgstr ""
+msgstr "包含在FITS头中的望远镜名称"
 
 #: u_hints.rsthetemporary
 msgid "The temporary RAM disk used to transfer the images from the Indi server"
-msgstr ""
+msgstr "用于从Indi服务器传输图像的临时RAM磁盘"
 
 #: u_hints.rsthetypeoffra
 msgid "The type of frame"
-msgstr ""
+msgstr "帧类型"
 
 #: u_hints.rstheunixpathe
 msgid "The Unix path equivalent to the Elbrus Images folder."
-msgstr ""
+msgstr "等同于Elbrus图像目录的Unix路径。"
 
 #: u_hints.rsthisallowtor
 msgid "This allow to restart an interrupted sequence at the point it was stopped"
-msgstr ""
+msgstr "这允许在它停止的点重新启动一个中断的序列"
 
 #: u_hints.rstimefrommeri
 msgid "Time from meridian transit (hour angle)"
-msgstr ""
+msgstr "过中天时间（时角）"
 
 #: u_hints.rstrytocorrect
 #, object-pascal-format
 msgid "Try to correct for focuser slippage since the last Vcurve learning.%sBeware you must set the focuser temperature correction and the filters offset before to use this option."
-msgstr ""
+msgstr "尝试校正自上次V曲线学习以来的调焦器滑脱。%s请注意，您必须在使用此选项之前设置调焦器温度校正和滤镜偏移量。"
 
 #: u_hints.rsusedynamic2
 #, object-pascal-format
 msgid "Dynamic can be use with an absolute or relative position focuser,%s this method require the starting position is near the focus position.%s This is the preferred method."
-msgstr ""
+msgstr "动态对焦可以与绝对或相对位置调焦器一起使用，%s 这种方法要求起始位置靠近合焦位。%s 这是首选方法。"
 
 #: u_hints.rsuseiterati2
 #, object-pascal-format
 msgid "Use Iterative if the first two options do not work for you or if you start with really bad focus.%s This is the slowest and less precise method."
-msgstr ""
+msgstr "如果前两个选项对您不起作用，或者如果您从非常糟糕的焦点开始，请使用迭代对焦。%s 这是最慢且不太精确的方法。"
 
 #: u_hints.rsuseplatesolv
 msgid "Use astrometric (plate) solving to improve telescope pointing accuracy"
-msgstr ""
+msgstr "使用天体测量（解析）以提高望远镜指向精度"
 
 #: u_hints.rsusevcurvewi2
 msgid "Vcurve can only work with an absolute position focuser, it require to learn the curve."
-msgstr ""
+msgstr "V曲线对焦只能与绝对位置调焦器一起使用，它需要学习曲线。"
 
 #: u_hints.rsvcurvelearni
 msgid "V curve learning"
-msgstr ""
+msgstr "V曲线学习"
 
 #: u_hints.rswaitforfulld
 msgid "Wait for a moonless night"
-msgstr ""
+msgstr "等一个没有月亮的夜晚"
 
 #: u_hints.rswaittothisti
 msgid "Wait to this time before to start to process the list."
-msgstr ""
+msgstr "等到这个时间再开始处理列表。"
 
 #: u_hints.rszoomtoadjust
 msgid "Zoom to adjust in window"
-msgstr ""
+msgstr "缩放以在窗口中调整"
 
 #: u_hints.rszoomtohalfsi
 msgid "Zoom to half size"
-msgstr ""
+msgstr "缩放到一半大小"
 
 #: u_hints.rszoomtoorigin
 msgid "Zoom to original scale"
-msgstr ""
+msgstr "缩放至原始比例"
 
 #: u_hints.rszoomtwotime
 msgid "Zoom two time"
-msgstr ""
+msgstr "放大两次"
 

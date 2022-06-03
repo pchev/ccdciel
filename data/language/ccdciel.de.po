@@ -7,14 +7,14 @@ msgstr ""
 "Project-Id-Version: ccdciel\n"
 "Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
 "POT-Creation-Date: 2022-04-15 14:48+0000\n"
-"PO-Revision-Date: 2022-01-21 19:05+0000\n"
+"PO-Revision-Date: 2022-05-02 21:55+0000\n"
 "Last-Translator: Thomas <email@starhopper.de>\n"
 "Language-Team: German <de@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2022-04-15 14:56+0000\n"
-"X-Generator: Launchpad (build 5cc3bd61c85a328825183f316ddd801c0f7d7ef2)\n"
+"X-Launchpad-Export-Date: 2022-06-03 07:16+0000\n"
+"X-Generator: Launchpad (build 2bd3059e291a17cbaa73ca126a7af375ef8c96e5)\n"
 
 #: u_translation.rs2d
 msgid "2D"
@@ -94,7 +94,7 @@ msgstr "Verändere die Flatbelichtungszeit auf %s und starte erneuten Versuch."
 
 #: u_translation.rsadjustthemou
 msgid "Adjust the mount in azimuth and elevation such that the star moves from the green square to the pink circle."
-msgstr ""
+msgstr "Die Montierung in Azimut und Polhöhe so einstellen, dass sich der Stern vom grünen Quadrat auf den rosa Kreis bewegt"
 
 #: u_translation.rsadjusttowind
 msgid "Adjust to window"
@@ -1779,7 +1779,7 @@ msgstr "Zur Orientierung: den azimut Knopf entlang der blauen Linie und den alti
 
 #: u_translation.rsforreflector
 msgid "For reflector collimation."
-msgstr ""
+msgstr "Zur Kollimation von Reflektoren"
 
 #: u_translation.rsfounddevices
 #, object-pascal-format
@@ -1902,9 +1902,17 @@ msgstr "Teleskopschwenk läuft aktuell"
 msgid "green"
 msgstr "grün"
 
+#: u_translation.rsguid
+msgid "Guid."
+msgstr ""
+
 #: u_translation.rsguide
 msgid "Guide"
 msgstr "Nachführen"
+
+#: u_translation.rsguidecamera
+msgid "Guide camera"
+msgstr ""
 
 #: u_translation.rsguidersensor
 msgid "Guider sensor;"
@@ -2094,15 +2102,15 @@ msgstr "Zeilen einfügen"
 
 #: u_translation.rsinspect
 msgid "Inspect"
-msgstr ""
+msgstr "Prüfen"
 
 #: u_translation.rsinspectionan
 msgid "Inspection and collimation"
-msgstr ""
+msgstr "Inspektion und Kollimation"
 
 #: u_translation.rsinspectthere
 msgid "Inspect the distribution of the HFD value across the image to help with coma corrector spacing and tilt adjust."
-msgstr ""
+msgstr "Untersucht die Verteilung des HFD-Werts im Bild um Verkippung zu beseitigen und Korrektorabstand zu optimieren"
 
 #: u_translation.rsinsseconds
 #, object-pascal-format
@@ -2125,13 +2133,21 @@ msgstr "Interface"
 msgid "Interface type"
 msgstr "Schnittstellen Typ"
 
+#: u_translation.rsinternal
+msgid "Internal"
+msgstr ""
+
+#: u_translation.rsinternalguid
+msgid "Internal guider"
+msgstr ""
+
 #: u_translation.rsinterval
 msgid "Interval"
 msgstr "Intervall"
 
 #: u_translation.rsinthenextscr
 msgid "In the next screen you have to move the triangle such that the green square is marking a bright star or object."
-msgstr ""
+msgstr "Im nächsten Bild muss das Dreieck so verschoben werden, dass das grüne Quadrat einen hellen Stern oder ein helles Objekt markiert"
 
 #: u_translation.rsinvalid
 msgid "Invalid"
@@ -2567,7 +2583,7 @@ msgstr "Das Teleskop zu einem naheliegendem, hellen Stern schwenken"
 
 #: u_translation.rsmovethetrian
 msgid "Move the triangle with the mouse (left button down) such that the green square is marking a bright star."
-msgstr ""
+msgstr "Das Dreieck mit der linken Maustaste so bewegen, dass das grüne Quadrat einen hellen Stern markiert"
 
 #: u_translation.rsmovetonewpla
 #, object-pascal-format
@@ -2854,7 +2870,7 @@ msgstr "Beobachtungsbedingung"
 
 #: u_translation.rsoctagon
 msgid "Octagon"
-msgstr ""
+msgstr "Achteck"
 
 #: u_translation.rsoff
 msgid "Off"
@@ -4925,6 +4941,14 @@ msgstr "Zu kleine HFD Differenz"
 msgid "Total polar error:"
 msgstr "Gesamtfehler der Polausrichtung"
 
+#: u_translation.rstousetheinte
+msgid "To use the Internal autoguider you need to configure a Mount and a Guide camera in the profile Devices setup"
+msgstr ""
+
+#: u_translation.rstousethisdev
+msgid "To use this device, be sure to also configure the Internal Guider in Preferences/Auto-guiding"
+msgstr ""
+
 #: u_translation.rstrack
 msgid "Track"
 msgstr "Nachführen"
@@ -4943,11 +4967,11 @@ msgstr "Schwellwert"
 
 #: u_translation.rstriangle
 msgid "Triangle"
-msgstr ""
+msgstr "Dreieck"
 
 #: u_translation.rstrianglerota
 msgid "Triangle rotation angle"
-msgstr ""
+msgstr "Rotationswinkel des Dreiecks"
 
 #: u_translation.rstrue
 msgid "True"
@@ -5110,6 +5134,10 @@ msgstr "Automatisch Belichtung der Flats"
 #: u_translation.rsusefocuser
 msgid "Use focuser"
 msgstr "Fokussierer verwenden"
+
+#: u_translation.rsuseguidecamera
+msgid "Use guide camera"
+msgstr ""
 
 #: u_translation.rsusemount
 msgid "Use mount"

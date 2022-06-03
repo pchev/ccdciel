@@ -1,17 +1,20 @@
+# Chinese (Simplified) translation for ccdciel
+# Copyright (c) 2022 Rosetta Contributors and Canonical Ltd 2022
+# This file is distributed under the same license as the ccdciel package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, 2022.
 msgid ""
 msgstr ""
 "Project-Id-Version: ccdciel\n"
-"Report-Msgid-Bugs-To: \n"
+"Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
 "POT-Creation-Date: 2022-04-15 14:48+0000\n"
-"PO-Revision-Date: 2022-04-18 17:19+0000\n"
-"Last-Translator: Stanislav Holub <Unknown>\n"
-"Language-Team: Czech <cz@li.org>\n"
+"PO-Revision-Date: 2022-06-03 01:11+0000\n"
+"Last-Translator: Zachary Wu <Unknown>\n"
+"Language-Team: Chinese (Simplified) <zh_CN@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "X-Launchpad-Export-Date: 2022-06-03 07:16+0000\n"
 "X-Generator: Launchpad (build 2bd3059e291a17cbaa73ca126a7af375ef8c96e5)\n"
-"Language: cs\n"
 
 #: u_translation.rs2d
 msgid "2D"
@@ -19,1088 +22,1086 @@ msgstr "2D"
 
 #: u_translation.rs32bitdriver
 msgid "This driver work only in 32bit, please install the 32bit version of CCDciel."
-msgstr "Tento ovladač funguje pouze v 32bitech, nainstalujte 32bitovou verzi CCDciel."
+msgstr "该驱动只工作于32位模式，请安装32位版本的CCDciel。"
 
 #: u_translation.rs9panelimage
 msgid "9 panel image"
-msgstr "Snímek na 9 panelech"
+msgstr "九宫格"
 
 #: u_translation.rsabort
 msgid "Abort"
-msgstr "Přerušit"
+msgstr "中止"
 
 #: u_translation.rsabortafter
 msgid "Abort after"
-msgstr "Přerušit po"
+msgstr "终止于"
 
 #: u_translation.rsabortdome
 #, object-pascal-format
 msgid "Abort dome %s"
-msgstr "Ukončit kopuli %s"
+msgstr "中止圆顶%s"
 
 #: u_translation.rsabortexposur
 msgid "Abort exposure"
-msgstr "Přerušit expozici"
+msgstr "终止曝光"
 
 #: u_translation.rsabortmount
 #, object-pascal-format
 msgid "Abort mount%s"
-msgstr "Spojení přerušeno%s"
+msgstr "中止赤道仪%s"
 
 #: u_translation.rsabortthecurr
 msgid "Abort the current sequence"
-msgstr "Přerušit aktuální sekvenci"
+msgstr "终止当前序列"
 
 #: u_translation.rsabout
 msgid "About"
-msgstr "O aplikaci"
+msgstr "关于"
 
 #: u_translation.rsaction
 msgid "Action"
-msgstr "Akce"
+msgstr "动作"
 
 #: u_translation.rsactivetarget
 msgid "Active target is replaced, restart the sequence"
-msgstr "Aktivní cíl je nahrazen, restartujte sekvenci"
+msgstr "活动目标已被替换，重启序列"
 
 #: u_translation.rsadd
 msgid "Add"
-msgstr "Přidat"
+msgstr "增加"
 
 #: u_translation.rsaddfitskeywo
 msgid "Add FITS keyword for DSLR EXIF tags"
-msgstr "Přidat klíčové slovo FITS pro značky DSLR EXIF"
+msgstr "根据DSLR的EXIF标签添加FITS关键字"
 
 #: u_translation.rsaddimages
 msgid "Add images"
-msgstr "Přidat obrázky"
+msgstr "累加图像"
 
 #: u_translation.rsaddstep
 msgid "Add step"
-msgstr "Přidat krok"
+msgstr "添加步骤"
 
 #: u_translation.rsadjustautofo
-#, object-pascal-format
+#, object-pascal-format, fuzzy, badformat
 msgid "Adjust autofocus star magnitude:%s, exposure factor:%s"
-msgstr "Upravit velikost hvězdy automatického ostřením:%s, faktor expozice:%s"
+msgstr "调整自动对焦星等：&s，曝光系数：%s"
 
 #: u_translation.rsadjustflatex
 #, object-pascal-format
 msgid "Adjust flat exposure time to %s and retry."
-msgstr "Upravte flat expoziční čas na %s a zkuste to znovu."
+msgstr "调整平场曝光时间到%s再重试。"
 
 #: u_translation.rsadjustthemou
 msgid "Adjust the mount in azimuth and elevation such that the star moves from the green square to the pink circle."
-msgstr "Nastavte montáž v azimutu a výšce tak, aby se hvězda přesunula ze zeleného čtverce do růžového kruhu."
+msgstr "调整赤道仪方位角和高度角以使星点从绿色方框移动到粉色圆环。"
 
 #: u_translation.rsadjusttowind
 msgid "Adjust to window"
-msgstr "Upravit na okno"
+msgstr "窗口大小"
 
 #: u_translation.rsadministrato
 msgid "administrator"
-msgstr "správce"
+msgstr "管理员"
 
 #: u_translation.rsaftertelesco
 #, object-pascal-format
 msgid "After telescope pointing to target the offset relative to requested position is %s arcminutes.%sDo you want to retry the slew?"
-msgstr "Po natočení dalekohledu na cíl je offset vůči požadované poloze %s obloukových minut.%sChcete opakovat přejetí?"
+msgstr "望远镜指向目标后，相距所请求位置的偏移量为 %s 角分。%s 您是否希望重新指向？"
 
 #: u_translation.rsairmass
 msgid "Airmass"
-msgstr "Vlhkost vzduchu"
+msgstr "大气透镜"
 
 #: u_translation.rsalignmenton
 msgid "Alignment on"
-msgstr "Zarovnání na"
+msgstr "校准开启"
 
 #: u_translation.rsalignmentsta
 msgid "Alignment star lost"
-msgstr "Ztracená zarovnávací hvězda"
+msgstr "对齐星丢失"
 
 #: u_translation.rsall
 msgid "All"
-msgstr "Vše"
+msgstr "全部"
 
 #: u_translation.rsallowtoopent
 msgid "Allow to open the dome when safety status is bad or unknown"
-msgstr "Umožnit otevřít kopuli, pokud je bezpečnostní stav špatný nebo neznámý"
+msgstr "允许在安全状况不佳或未知时打开圆顶"
 
 #: u_translation.rsallowtoselec
 msgid "Allow to select a brighter star for high filter exposure factor"
-msgstr "Vybrat jasnější hvězdu pro filtry s vysokou expozicí"
+msgstr "允许为高滤镜曝光系数选择更亮的星"
 
 #: u_translation.rsalt
 msgid "Alt"
-msgstr "Výš"
+msgstr "高度角"
 
 #: u_translation.rsanotherscrip
 msgid "Another script is already running"
-msgstr "Další skript již běží"
+msgstr "另外的脚本已经在运行"
 
 #: u_translation.rsanytime
 msgid "Any time"
-msgstr "Kdykoli"
+msgstr "任何时间"
 
 #: u_translation.rsapplydarkand
 msgid "Apply Dark and BPM"
-msgstr "Použijte Dark a BPM"
+msgstr "应用暗场和坏像素图"
 
 #: u_translation.rsapplyediting
 msgid "Apply editing to active sequence"
-msgstr "Použít úpravy na aktivní sekvenci"
+msgstr "编辑活动序列"
 
 #: u_translation.rsapplytoallde
 msgid "Apply to all devices"
-msgstr "Použít na všechna zařízení"
+msgstr "应用到所有设备"
 
 #: u_translation.rsapplytocurre
 msgid "Apply to current image"
-msgstr "Použít na aktuální snímek"
+msgstr "应用于当前图像"
 
 #: u_translation.rsapproximatec
 msgid "Approximate coordinates and image scale"
-msgstr "Přibližné souřadnice a měřítko snímku"
+msgstr "近似坐标和图像比例尺"
 
 #: u_translation.rsarcmin
 msgid "[arcmin]"
-msgstr "[obl.min]"
+msgstr "[角分]"
 
 #: u_translation.rsareyousureyo
 msgid "Are you sure you want to disconnect all the devices now?"
-msgstr "Opravdu odpojit všechna zařízení?"
+msgstr "确定要立即断开所有设备的连接？"
 
 #: u_translation.rsascominterfa
 msgid "ASCOM interface is only available on Windows."
-msgstr "Rozhraní ASCOM je k dispozici pouze v systému Windows."
+msgstr "ASCOM接口只在Windows系统可用。"
 
 #: u_translation.rsasequenceisa
 msgid "A sequence is already running, cannot load a new one."
-msgstr "Sekvence již běží, nelze načíst novou."
+msgstr "已经有一个序列正在运行，无法载入新的。"
 
 #: u_translation.rsastrometry
 msgid "Astrometry"
-msgstr "Astrometrie"
+msgstr "天体测量"
 
 #: u_translation.rsastrometryop
 msgid "Astrometry options"
-msgstr "Nastavení astrometrie"
+msgstr "天体测量选项"
 
 #: u_translation.rsastrometryre
 msgid "Astrometry resolver log"
-msgstr "Protokol vyřešení"
+msgstr "解析日志"
 
 #: u_translation.rsatdawn
 msgid "at dawn"
-msgstr "za úsvitu"
+msgstr "于破晓"
 
 #: u_translation.rsatdusk
 msgid "at dusk"
-msgstr "za soumraku"
+msgstr "于黄昏"
 
 #: u_translation.rsautofocus
 msgid "Autofocus"
-msgstr "Automatické zaostření"
+msgstr "自动对焦"
 
 #: u_translation.rsautofocusaft
 msgid "Autofocus after meridian flip"
-msgstr "Automatické zaostření po překlopení poledníku"
+msgstr "中天翻转后自动对焦"
 
 #: u_translation.rsautofocusalr
 msgid "Autofocus already running."
-msgstr "Automatické ostření běží."
+msgstr "自动对焦已在运行。"
 
 #: u_translation.rsautofocusbef
 #, object-pascal-format
 msgid "Autofocus%sbefore to start"
-msgstr "Automatické zaostření %spřed spuštěním"
+msgstr "自动对焦%s启动之前"
 
 #: u_translation.rsautofocuscan
 #, object-pascal-format
 msgid "Autofocus cannot find a star!%sPlease adjust your parameters"
-msgstr "Automatické zaostření nemůže najít hvězdu!%sUpravte parametry"
+msgstr "自动对焦未找到星！%s请调整您的参数"
 
 #: u_translation.rsautofocuscan2
 msgid "Autofocus canceled because no star was selected."
-msgstr "Automatické zaostření zrušeno, protože nebyla vybrána žádná hvězda."
+msgstr "由于没有选择星点而取消自动对焦。"
 
 #: u_translation.rsautofocuscan3
 msgid "Autofocus canceled because no star was found."
-msgstr "Automatické ostření zrušeno, protože nebyla nalezena žádná hvězda."
+msgstr "由于没有找到星点而取消自动对焦。"
 
 #: u_translation.rsautofocuscan4
 msgid "Autofocus canceled because the HFD cannot be measured"
-msgstr "Automatické zaostření zrušeno, protože HFD nelze měřit"
+msgstr "由于无法测量HFD而取消自动对焦。"
 
 #: u_translation.rsautofocuscan5
 #, object-pascal-format
 msgid "Autofocus canceled because of low SNR, POS=%s HFD=%s PEAK:%s SNR:%s"
-msgstr ""
-"Automatické zaostření zrušeno kvůli nízké SNR, POZ =%s HFD =%s VRCH: %s SNR: \"r\n"
-"\"%s"
+msgstr "由于低信噪比而取消自动对焦，POS=%s HFD=%s PEAK:%s SNR:%s"
 
 #: u_translation.rsautofocusdue
 msgid "Autofocus due in"
-msgstr "Automatické ostření bude opět provedeno za"
+msgstr "自动对焦到期"
 
 #: u_translation.rsautofocuserr
 msgid "AutoFocus error"
-msgstr "Chyba automatického zaostření"
+msgstr "自动对焦错误"
 
 #: u_translation.rsautofocuserr2
 msgid "Autofocus error"
-msgstr "Chyba Automatického zaostřování"
+msgstr "自动导星错误"
 
 #: u_translation.rsautofocuseve
 #, object-pascal-format
 msgid "Autofocus%severy"
-msgstr "Automatické zaostřování%svždy"
+msgstr "自动对焦%s每"
 
 #: u_translation.rsautofocusfai
 msgid "Autofocus failed!"
-msgstr "Automatické ostření selhalo!"
+msgstr "自动对焦失败！"
 
 #: u_translation.rsautofocusfai2
 msgid "Autofocus failed, try with another star..."
-msgstr "Automatické zaostřování selhalo, zkuste to s jinou hvězdou..."
+msgstr "自动对焦失败，尝试另外一颗星..."
 
 #: u_translation.rsautofocusfai3
 #, object-pascal-format
 msgid "Autofocus failed after %s retries, continue without focusing."
-msgstr "Automatické zaostření po %s opakovaných pokusech selhalo, pokračujte bez zaostření."
+msgstr "重试%s次后自动对焦失败，无对焦下继续执行。"
 
 #: u_translation.rsautofocusfin
 #, object-pascal-format
 msgid "Autofocus finished, POS=%s HFD=%s PEAK:%s SNR:%s TEMP:%s"
-msgstr "Automatické zaostření dokončeno, POZ =%s HFD =%s VRCH:%s SNR:%s TEPL:%s"
+msgstr "自动对焦完成，POS=%s HFD=%s PEAK:%s SNR:%s TEMP:%s"
 
 #: u_translation.rsautofocusfin2
 #, object-pascal-format
 msgid "Autofocus final HFD is higher than %s"
-msgstr "Automatického zaostření HFD je vyšší než %s"
+msgstr "自动对焦最终HFD高于%s"
 
 #: u_translation.rsautofocusfoc
 #, object-pascal-format
 msgid "Autofocus focus in by %s"
-msgstr "Pohyb automatického zaostření směrem ven o %s"
+msgstr "自动对焦向内调整了%s"
 
 #: u_translation.rsautofocusfoc2
 #, object-pascal-format
 msgid "Autofocus focus out by %s"
-msgstr "Pohyb automatického zaostření směrem dovnitř o %s"
+msgstr "自动对焦向外调整了%s"
 
 #: u_translation.rsautofocusgra
 msgid "Autofocus graph"
-msgstr "Graf automatického zaostření"
+msgstr "自动对焦图表"
 
 #: u_translation.rsautofocusmea
 #, object-pascal-format
 msgid "Autofocus mean frame %s/%s, hfd=%s peak:%s snr:%s"
-msgstr "Průměrný snímek automatického ostření %s/%s, hfd=%s špič:%s snr:%s"
+msgstr "自动对焦每帧平均 %s/%s, hfd=%s peak:%s snr:%s"
 
 #: u_translation.rsautofocusmea2
 #, object-pascal-format
 msgid "Autofocus measurement %s : HFD=%s position=%s"
-msgstr "Automatické Měření ostření %s : HFD =%s pozice =%s"
+msgstr "自动调焦测量%s：HFD=%s position=%s"
 
 #: u_translation.rsautofocusmet
 msgid "Autofocus method"
-msgstr "Metoda automatického zaostřování"
+msgstr "自动对焦方法"
 
 #: u_translation.rsautofocusmov
 #, object-pascal-format
 msgid "Autofocus move to start position %s"
-msgstr "Automatické zaostření přesunout do výchozí pozice %s"
+msgstr "自动对焦移动到起始位置%s"
 
 #: u_translation.rsautofocusmov2
-#, object-pascal-format, fuzzy, badformat
+#, object-pascal-format
 msgid "Autofocus move to near focus %s"
-msgstr "Automatické zaostření přesunout na nejbližší ostřící bod %​​s"
+msgstr "自动调焦移动到临近对焦位%s"
 
 #: u_translation.rsautofocusmov3
 #, object-pascal-format
 msgid "Autofocus move to focus position %s"
-msgstr "Automatické zaostření přesunout do zaostřovacího bodu %s"
+msgstr "自动调焦移动到合焦位%s"
 
 #: u_translation.rsautofocusnow
 msgid "Autofocus now"
-msgstr "Automatické zaostření"
+msgstr "立即自动对焦"
 
 #: u_translation.rsautofocusrun
 #, object-pascal-format
 msgid "Autofocus running, hfd=%s peak:%s snr:%s"
-msgstr "Automatické zaostření spuštěno, hfd =%s špič:%s snr:%s"
+msgstr "自动对焦运行中，hfd=%s peak:%s snr:%s"
 
 #: u_translation.rsautofocussta
 #, object-pascal-format
 msgid "AutoFocus started, initial position: %s"
-msgstr "Automatické zaostření zahájeno, počáteční pozice: %s"
+msgstr "自动对焦开启，初始位置：%s"
 
 #: u_translation.rsautofocussta2
 msgid "AutoFocus started"
-msgstr "Automatické zaostření zahájeno"
+msgstr "自动对焦开启"
 
 #: u_translation.rsautofocussta3
 msgid "Autofocus start Vcurve"
-msgstr "Spuštěno Automatické zaostření Vkřivky"
+msgstr "自动对焦启动V曲线"
 
 #: u_translation.rsautofocussta4
 msgid "Autofocus start Dynamic curve"
-msgstr "Spuštěno Automatické ostření Dynamické křivky"
+msgstr "自动对焦启动动态曲线"
 
 #: u_translation.rsautofocussta5
 msgid "Autofocus start Iterative focus"
-msgstr "Spuštěno Automatické zaostření Interační ostření"
+msgstr "自动对焦启动迭代对焦"
 
 #: u_translation.rsautofocussta6
 msgid "Autofocus start Planet focus"
-msgstr "Zahájení automatického ostření Planetární ostření"
+msgstr "自动对焦启动行星对焦"
 
 #: u_translation.rsautofocussuc
 msgid "AutoFocus successful"
-msgstr "Automatické zaostření úspěšné"
+msgstr "自动对焦成功"
 
 #: u_translation.rsautofocustol
 msgid "Autofocus tolerance "
-msgstr "Tolerance AutoOstření "
+msgstr "自动对焦容差 "
 
 #: u_translation.rsautoguider
 msgid "Autoguider"
-msgstr "Automatická pointace"
+msgstr "自动导星"
 
 #: u_translation.rsautoguiderer
 msgid "Autoguider error"
-msgstr "Chyba Automatické pointace"
+msgstr "自动导星错误"
 
 #: u_translation.rsautoguiderno
 msgid "Autoguider not connected"
-msgstr "Automatická pointace nepřipojena"
+msgstr "自动导星未连接"
 
 #: u_translation.rsautoguiderno2
 #, object-pascal-format
 msgid "Autoguider not guiding %s seconds after requested to start.%sDo you want to retry?"
-msgstr "Automatické pointace nefunguje %s sekund po žádosti o spuštění.%sOpakovat?"
+msgstr "自动导星在被请求启动%s秒后未执行。%s是否要重试？"
 
 #: u_translation.rsautoguidersh
 msgid "Autoguider shutdown"
-msgstr "Vypnout auto pointaci"
+msgstr "自动导星关闭"
 
 #: u_translation.rsautoguiderst2
 msgid "Autoguider Start"
-msgstr "Auto pointace spuštěna"
+msgstr "自动导星开启"
 
 #: u_translation.rsautoguiderwa
 #, object-pascal-format
 msgid "Autoguider was still not guiding after %s minutes."
-msgstr "Automatická pointace po %s minutách stále nenavádí."
+msgstr "自动导星在%s分钟后仍无法执行。"
 
 #: u_translation.rsautoguiding
 msgid "Auto-guiding"
-msgstr "Automatická pointace"
+msgstr "自动导星"
 
 #: u_translation.rsautoguidingr
 msgid "Autoguiding restarted."
-msgstr "Automatická pointace restartuje."
+msgstr "自动导星重启。"
 
 #: u_translation.rsautoguidings
 #, object-pascal-format
 msgid "Autoguiding stopped for %s minutes, sequence timeout in %s minutes."
-msgstr "Automatická pointace zastavena na %s minut, časový limit sekvence %s minutách."
+msgstr "自动导星已停止%s分钟，序列将于%s分钟后超时。"
 
 #: u_translation.rsautomatic
 msgid "Automatic"
-msgstr "Automaticky"
+msgstr "自动"
 
 #: u_translation.rsautomaticall
 msgid "Automatically slave \"Dome Park\" to \"Mount Park\""
-msgstr "Automaticky propojit \"Kopule Park\" na \"Montáž park\""
+msgstr "自动使“圆顶驻泊”从动于“赤道仪驻泊”"
 
 #: u_translation.rsautomaticall2
 msgid "Automatically run auto-focus every"
-msgstr "Spustit automatické ostření po"
+msgstr "自动化运行自动对焦每"
 
 #: u_translation.rsautomaticcoo
 msgid "Automatic cooling "
-msgstr "Automatické chlazení "
+msgstr "自动制冷 "
 
 #: u_translation.rsautomaticfla
 msgid "Automatic flat exposure is required for the twilight flat."
-msgstr "Pro soumrakový flat snímek je nutná automatická expozice."
+msgstr "天光平场所需的自动平场曝光"
 
 #: u_translation.rsautomaticfli
 msgid "Automatic flip"
-msgstr "Automatické překlopení"
+msgstr "自动翻转"
 
 #: u_translation.rsautomatichfd
 msgid "Automatic HFD measurement for every sequence capture"
-msgstr "Automatické měření HFD pro každé snímání v sekvenci"
+msgstr "自动计算序列中每次拍摄的HFD"
 
 #: u_translation.rsavailable
 msgid "available"
-msgstr "k dispozici"
+msgstr "可用"
 
 #: u_translation.rsaz
 msgid "Az"
-msgstr "Az"
+msgstr "方位角"
 
 #: u_translation.rsazimuth
 msgid "Azimuth"
-msgstr "Azimut"
+msgstr "方位角"
 
 #: u_translation.rsazimuthorigi
 msgid "Azimuth origin"
-msgstr "Počátek azimutu"
+msgstr "方位角原点"
 
 #: u_translation.rsback
 msgid "Back"
-msgstr "Předešlý"
+msgstr "返回"
 
 #: u_translation.rsbackground
 msgid "Background"
-msgstr "Pozadí"
+msgstr "背景"
 
 #: u_translation.rsbackgroundne
 msgid "Background neutralization"
-msgstr "Neutralizace pozadí"
+msgstr "背景平衡"
 
 #: u_translation.rsbacklashcomp
 msgid "Backlash compensation"
-msgstr "Kompenzace vůle"
+msgstr "回差补偿"
 
 #: u_translation.rsbad
 msgid "Bad"
-msgstr "Špatný"
+msgstr "糟糕"
 
 #: u_translation.rsbadpixeldete
 #, object-pascal-format
 msgid "Bad pixel detection found %s hot pixels."
-msgstr "Byla nalezena chybná detekce %s horkých pixelů."
+msgstr "检测到坏像素点 %s 热像素。"
 
 #: u_translation.rsbadpixelmap
 msgid "Bad pixel map"
-msgstr "Mapa chybných pixelů"
+msgstr "坏像素图"
 
 #: u_translation.rsbadpixelmapc
 msgid "Bad pixel map cleared."
-msgstr "Mapa chybných pixelů vymazána."
+msgstr "坏像素图已清除。"
 
 #: u_translation.rsbadpixelsdet
 msgid "Bad pixels detection"
-msgstr "Zjištěny chybné pixely"
+msgstr "坏像素侦测"
 
 #: u_translation.rsbadpixelthre
 msgid "Bad pixel threshold"
-msgstr "Prahová hodnota chybných pixelů"
+msgstr "坏像素阙值"
 
 #: u_translation.rsbayermatrixp
 msgid "Bayer matrix pattern"
-msgstr "Maticový vzorec Bayer"
+msgstr "拜尔阵列模式"
 
 #: u_translation.rsbecarefuloft
 msgid "Be careful of the longitude East/West setting."
-msgstr "Pozor na nastavení zeměpisné délky  observatoře Východ/Západ."
+msgstr "注意东/西经度设置。"
 
 #: u_translation.rsbeforetouset
 msgid "Before to use this tool you must connect the camera, the mount and the planetarium"
-msgstr "Před použitím tohoto nástroje připojit kameru, montáž a planetárium"
+msgstr "在使用该工具之前您需要先连接相机、赤道仪和星图"
 
 #: u_translation.rsbeforeyoucan
 #, object-pascal-format
 msgid "Before you can use this option the Elbrus program must be calibrated for your images. Then select File / E-Wait for message.%sAlso be sure to set the parameter: \"Add the WCS in the FITS header\"."
-msgstr "Před použitím této možnosti musí být program Elbrus kalibrován pro vaše snímky. Poté vyberte Soubor / E-Čekat na zprávu.%sVyberte také parametr: \"Přidejte záhlaví WCS do záhlaví FITS\"."
+msgstr "在本选项可用之前，Elbrus程序必须已经完成校准您的图像。然后选择File/E-Wait作为信息。%s并确认设置参数：\"Add the WCS in the FITS header\"."
 
 #: u_translation.rsbegin
 msgid "Begin"
-msgstr "Pokračovat"
+msgstr "开始"
 
 #: u_translation.rsbesurethecom
 msgid "Be sure the computer use the local timezone and the observatory location is configured in the program preferences."
-msgstr "Ujistěte se, že počítač používá místní časové pásmo a umístění observatoře je nakonfigurováno v předvolbách programu."
+msgstr "确保计算机使用本地时区并且观测站位置已在首选项中配置好。"
 
 #: u_translation.rsbesuretoconf
 msgid "Be sure to configure the camera connection."
-msgstr "Nezapomeňte nakonfigurovat připojení kamery."
+msgstr "确认已配置相机连接。"
 
 #: u_translation.rsbigcross
 msgid "Big cross"
-msgstr "Velký křížek"
+msgstr "大十字"
 
 #: u_translation.rsbin
 msgid "Bin"
-msgstr "Bin"
+msgstr "合并"
 
 #: u_translation.rsbinning
 msgid "Binning"
-msgstr "Binning"
+msgstr "像素合并"
 
 #: u_translation.rsblue
 msgid "blue"
-msgstr "modrá"
+msgstr "蓝"
 
 #: u_translation.rsbrowselogfil
 msgid "Browse log files"
-msgstr "Procházet soubory protokolu"
+msgstr "浏览日志文件"
 
 #: u_translation.rscalibrate
 msgid "Calibrate"
-msgstr "Kalibrovat"
+msgstr "校准"
 
 #: u_translation.rscalibrateaut
 msgid "Calibrate autoguider after meridian flip"
-msgstr "Kalibrovat automatickou pointaci po překlopení poledníku"
+msgstr "中天翻转后校准自动导星"
 
 #: u_translation.rscalibrated
 msgid "Calibrated"
-msgstr "Kalibrováno"
+msgstr "已校准"
 
 #: u_translation.rscalibrationd
 #, object-pascal-format
 msgid "Calibration %sdelay"
-msgstr "Kalibrace %szpoždění"
+msgstr "校准%s就绪"
 
 #: u_translation.rscalibrator
 msgid "Calibrator"
-msgstr "Kalibrátor"
+msgstr "校准器"
 
 #: u_translation.rscallexternal
 msgid "Call external command"
-msgstr "Volat externí příkaz"
+msgstr "访问外部命令"
 
 #: u_translation.rscam
 msgid "Cam."
-msgstr "Kam."
+msgstr "相机"
 
 #: u_translation.rscamera
 msgid "Camera"
-msgstr "Kamera"
+msgstr "相机"
 
 #: u_translation.rscameraandmou
 msgid "Camera and mount must be connected!"
-msgstr "Kamera a montáž musí být připojeny!"
+msgstr "相机和赤道仪必须先被连接"
 
 #: u_translation.rscameraandrot
 msgid "Camera and rotator must be connected!"
-msgstr "Kamera a rotátor musí být připojeny!"
+msgstr "必须先连接相机和旋转器"
 
 #: u_translation.rscameracooler
 #, object-pascal-format
 msgid "Camera cooler %s"
-msgstr "Chladič kamery %s"
+msgstr "相机制冷 %s"
 
 #: u_translation.rscameraframex
-#, object-pascal-format
+#, object-pascal-format, fuzzy, badformat
 msgid "Camera frame x=%s y=%s width=%s height=%s"
-msgstr "Rámec kamery x =%s y =%s šířka=%s výška =%s"
+msgstr "相机幅面 x=%s y=%s width=%s height=%"
 
 #: u_translation.rscameranotcoo
 #, object-pascal-format
 msgid "Camera not cooling, set temperature to %s"
-msgstr "Kamera není vychlazená, nastavit teplotu na %s"
+msgstr "相机未制冷，设置温度为%s"
 
 #: u_translation.rscameraorfocu
 msgid "Camera or focuser are not connected"
-msgstr "Kamera nebo zaostřovač neřipojeny"
+msgstr "相机或调焦器未连接"
 
 #: u_translation.rscancel
 msgid "Cancel"
-msgstr "Zrušit"
+msgstr "取消"
 
 #: u_translation.rscancelandres
 msgid "Cancel and restart exposure"
-msgstr "Zrušit a restartovat expozici"
+msgstr "取消并重启曝光"
 
 #: u_translation.rscancelexposu
 msgid "Cancel exposure"
-msgstr "Zrušit expozici"
+msgstr "取消曝光"
 
 #: u_translation.rscancelpolara
 msgid "Cancel polar alignment"
-msgstr "Ukončit  polární zarovnání"
+msgstr "取消极轴校准"
 
 #: u_translation.rscannotchange
 msgid "Cannot change start time. Sequence will start in time for the dusk flat."
-msgstr "Čas zahájení nelze změnit. Sekvence začne včas za soumraku."
+msgstr "无法改变启动时间，序列将会在黄昏及时启动拍摄平场。"
 
 #: u_translation.rscannotchange2
 msgid "Cannot change stop time. Sequence will stop in time for the dawn flat."
-msgstr "Čas zastavení nelze změnit. Sekevnec se zastaví včas za svítání."
+msgstr "无法改变停止时间。序列会在破晓及时停止以拍摄平场。"
 
 #: u_translation.rscannotcomput
 msgid "Cannot compute rise or set time."
-msgstr "Nelze spočítat východ nebo západ."
+msgstr "无法计算升起和落下的时间。"
 
 #: u_translation.rscannotcomput2
 msgid "Cannot compute meridian time"
-msgstr "Nelze spočítat čas průchodu poledníkem"
+msgstr "无法计算中天时间"
 
 #: u_translation.rscannotconnec
 #, object-pascal-format
 msgid "Cannot connect to autoguider, sequence will run without guiding! %sDo you want to continue anyway?"
-msgstr "Nelze připojit autopointaci, sekvence se spustí bez pointace! %sChcete přesto pokračovat?"
+msgstr "无法连接到自动导星，序列将在无导星下运行！%s您仍要继续吗？"
 
 #: u_translation.rscannotdelete
 msgid "Cannot delete the running sequence!"
-msgstr "Běžící sekvenci nelze odstranit!"
+msgstr "无法删除正在运行的序列！"
 
 #: u_translation.rscannotdetect
 msgid "Cannot detect star."
-msgstr "Nelze najít hvězdu."
+msgstr "无法侦测星点。"
 
 #: u_translation.rscannoteditan
 msgid "Cannot edit an active sequence without completion status."
-msgstr "Aktivní sekvenci nelze upravit bez stavu dokončení."
+msgstr "无法编辑一个不含有完成状态的活动序列。"
 
 #: u_translation.rscannoteditth
 msgid "Cannot edit the active sequence during autofocus"
-msgstr "Během automatického zaostřování nelze upravit aktivní sekvenci"
+msgstr "无法编辑一个活动序列当自动对焦正在进行"
 
 #: u_translation.rscannoteditth2
 msgid "Cannot edit the active sequence when slewing"
-msgstr "Při přejezdu nelze upravit aktivní sekvenci"
+msgstr "正在指向时无法编辑活动序列"
 
 #: u_translation.rscannotfindaf
 msgid "Cannot find a focus star."
-msgstr "Ostřící hvězda nenalezena."
+msgstr "无法找到对焦星。"
 
 #: u_translation.rscannotfindap
 #, object-pascal-format
 msgid "Cannot find approximate coordinates for this image.%sThe astrometry resolution may take a very long time."
-msgstr "Nelze najít přibližné souřadnice tohoto snímku.%sVýpočet astrometrie může trvat dlouho."
+msgstr "无法找到接近该图像的坐标。%s解析可能会花费很长的时间。"
 
 #: u_translation.rscannotfindas
 msgid "Cannot find a star at his position. Move to a bright star or increase the preview exposure time, or the autofocus binning."
-msgstr "Hvězda nebyla ve své poloze nalezena. Přejeďte k jasnější hvězdě, zvyšte rychlost expozice nebo binning zaostřování."
+msgstr "当前位置无法找到星点。移到一颗亮星或增加预览曝光时间，或增加自动对焦的像素合并。"
 
 #: u_translation.rscannotgetfoc
 msgid "Cannot get focuser absolute position"
-msgstr "Absolutní polohu ostření nelze získat"
+msgstr "无法获得调焦器绝对位置"
 
 #: u_translation.rscannotoverwr
 msgid "Cannot overwrite the running sequence!"
-msgstr "Běžící sekvenci nelze přepsat!"
+msgstr "无法覆盖正在运行的序列！"
 
 #: u_translation.rscannotreachn
 msgid "Cannot reach near focus HFD, please increase Half Width or better center the curve."
-msgstr "Nelze dosáhnout zaostření HFD, zvětšete poloviční šířku nebo lépe vycentrujte křivku."
+msgstr "无法达到临近对焦HFD，请增加半宽或使曲线更加剧中"
 
 #: u_translation.rscannotreachs
 msgid "Cannot reach start focus HFD, please increase Half Width or decrease the start HFD"
-msgstr "Nelze dosáhnout daného počátečního HFD, zvětšit poloviční šířku nebo snížit počáteční HFD"
+msgstr "无法达到起始对焦HFD，请增加半宽或降低起始HFD"
 
 #: u_translation.rscannotruncal
 msgid "Cannot run calibration now, stop capture and retry"
-msgstr "Kalibraci nelze spustit, zastavte snímání a zkuste to znovu"
+msgstr "现在无法执行校准，停止拍摄后重试"
 
 #: u_translation.rscannotruncal2
 msgid "Cannot run calibration now, stop preview and retry"
-msgstr "Kalibraci nelze spustit , zastavte náhled a zkuste to znovu"
+msgstr "现在无法执行校准，停止预览后重试"
 
 #: u_translation.rscannotsolvec
 msgid "Cannot solve current image."
-msgstr "Nelze vyřešit aktuální snímek."
+msgstr "无法解析当前图像。"
 
 #: u_translation.rscannotstarta2
 msgid "Cannot start autofocus now, astrometry is running"
-msgstr "Nelze spustit automatické zaostření, pokud astrometrie běží"
+msgstr "现在无法启动自动导星，解析正在运行"
 
 #: u_translation.rscannotstarta3
 msgid "Cannot start autofocus now, stop capture and retry"
-msgstr "Nelze spustit automatické zaostření, zastavte snímání a zkuste to znovu"
+msgstr "现在无法启动自动对焦，停止拍摄后重试"
 
 #: u_translation.rscannotstartc
 msgid "Cannot start capture now"
-msgstr "Nelze spustit snímání"
+msgstr "现在无法启动拍摄"
 
 #: u_translation.rscannotstartm
 msgid "Cannot start manual focus now, stop capture and retry"
-msgstr "Ruční zaostření nelze spustit , zastavte snímání a opakujte akci"
+msgstr "现在无法启动手动对焦，停止拍摄后重试"
 
 #: u_translation.rscannotstartp
 msgid "Cannot start preview now"
-msgstr "Náhled nelze spustit"
+msgstr "现在无法启动预览"
 
 #: u_translation.rscannotstartp2
 msgid "Cannot start preview loop now"
-msgstr "Nelze spustit náhled cyklu"
+msgstr "现在无法启动循环预览"
 
 #: u_translation.rscannotstartw
 msgid "Cannot start when capture is running"
-msgstr "Snímání nelze spustit, když už je snímání spuštěno"
+msgstr "在拍摄运行时无法启动"
 
 #: u_translation.rscannotsyncwh
 msgid "Cannot Sync when the mount is not tracking"
-msgstr "Nelze Synchronizovat, pokud není povoleno sledování"
+msgstr "当赤道仪不在跟踪时无法同步"
 
 #: u_translation.rscanonlyaddon
 msgid "Can only add one flat serie at dusk and one at dawn"
-msgstr "Za soumraku lze přidat pouze jednu sérii a jednu za svítání"
+msgstr "只能在黄昏和破晓分别安排一个平场序列"
 
 #: u_translation.rscantrackpast
 msgid "Can track past meridian for"
-msgstr "Sledování po překlopení poledníku"
+msgstr "可以过中天后跟踪"
 
 #: u_translation.rscapture
 msgid "Capture"
-msgstr "Snímání"
+msgstr "拍摄"
 
 #: u_translation.rscapturealrea
 msgid "Capture already running! please stop it first if you want to start a new sequence."
-msgstr "Snímání již běží! Pokud chcete spustit novou sekvenci, nejprve ji zastavte."
+msgstr "拍摄已在运行！如果您想开启一个新的序列，请先停止当前拍摄。"
 
 #: u_translation.rscapturefolde
 msgid "Capture folder"
-msgstr "Složka pro snímání"
+msgstr "拍摄目录"
 
 #: u_translation.rscapturesfini
 #, object-pascal-format
 msgid "Capture %s Finished"
-msgstr "Snímání %s Dokončeno"
+msgstr "拍摄%s完成"
 
 #: u_translation.rscapturestopp
 msgid "Capture stopped during autofocus"
-msgstr "Během automatického ostření bylo snímání zastaveno"
+msgstr "自动对焦时停止拍摄"
 
 #: u_translation.rscapturestopp2
 msgid "Capture stopped unexpectedly"
-msgstr "Snímání bylo neočekávaně ukončeno"
+msgstr "拍摄意外停止"
 
 #: u_translation.rsccdframesent
 msgid "CCD frame sent to planetarium."
-msgstr "Rámec CCD odeslán do planetária."
+msgstr "CCD图像发送到星图。"
 
 #: u_translation.rscenter
 msgid "Center"
-msgstr "Střed"
+msgstr "中心"
 
 #: u_translation.rscenterabrigh
 #, object-pascal-format
 msgid "Center a bright star. Defocus until the rings are clearly visible. Click the Start button. %s Slowly adjust the position of the star in the image field using the telescope fine movement until all the circles are concentric. %s Then move the star to the image center using the mirror adjustment screws."
-msgstr "Vycentrujte jasnou hvězdu. Rozostřujte, dokud nejsou prsteny jasně viditelné. Klikněte na tlačítko Start. %s Pomocí jemného pohybu dalekohledu pomalu upravujte polohu hvězdy v obrazovém poli, dokud nejsou všechny kruhy soustředné. %s Poté pomocí šroubů pro nastavení zrcadla přesuňte hvězdu do středu obrazu."
+msgstr "使一颗亮星居中。散焦直到圆环晰可见。点击启动按钮。%s使用望远镜精调慢慢调整星点位置直到所有的圆环同轴。%s然后使用主镜校准螺丝移动星点到图像中心。"
 
 #: u_translation.rscenterappare
 #, object-pascal-format
 msgid "Center, apparent coord. RA=%s DEC=%s PA=%s"
-msgstr "Střed, zdánlivá souřadnice. RA=%s DEC=%s PA=%s"
+msgstr "居中，指定坐标。RA=%s DEC=%s PA=%s"
 
 #: u_translation.rscenterdec
 msgid "Center Dec"
-msgstr "Střed Dec"
+msgstr "中心DEC"
 
 #: u_translation.rscenterra
 msgid "Center RA"
-msgstr "Střed RA"
+msgstr "中心RA"
 
 #: u_translation.rschoose
 msgid "Choose"
-msgstr "Vybrat"
+msgstr "选择"
 
 #: u_translation.rsclearbadpixe
 msgid "Clear bad pixel map"
-msgstr "Vymazat mapu chybných pixelů"
+msgstr "清除坏像素图"
 
 #: u_translation.rsclearconditi
 msgid "Clear condition"
-msgstr "Stav Počasí"
+msgstr "晴天条件"
 
 #: u_translation.rscleardarkfra
 msgid "Clear Dark frame"
-msgstr "Smazat Drak snímek"
+msgstr "清除暗场帧"
 
 #: u_translation.rsclearreferen
 msgid "Clear reference image"
-msgstr "Vymazat referenční snímek"
+msgstr "清除参考图像"
 
 #: u_translation.rsclearrestart
 msgid "Clear restart information on repeat"
-msgstr "Vymazat informace při resetu o opakování"
+msgstr "重复时清除重启信息"
 
 #: u_translation.rsclearthecomp
 msgid "Clear the completion status?"
-msgstr "Vymazat stav dokončení?"
+msgstr "清除完成状态？"
 
 #: u_translation.rsclickcancelt
 msgid "Click Cancel to abort the sequence."
-msgstr "Klepnutím na tlačítko Storno přerušíte sekvenci."
+msgstr "点击取消以终止序列。"
 
 #: u_translation.rsclickcontinu
 msgid "Click Continue when ready."
-msgstr "Až budete připraveni, klikněte na Pokračovat."
+msgstr "准备好后点继续。"
 
 #: u_translation.rsclickcontinu2
 msgid "Click Continue when ready"
-msgstr "Až budete připraveni, klikněte na Pokračovat"
+msgstr "准备好后点击继续"
 
 #: u_translation.rsclicknexttos
 msgid "Click Next to start the measurement."
-msgstr "Chcete-li zahájit měření, klepněte na tlačítko Další."
+msgstr "点击下一步以启动测量。"
 
 #: u_translation.rsclicknexttos2
 msgid "Click Next to save this values to the configuration for this profile."
-msgstr "Klepnutím na tlačítko Další uložte tyto hodnoty do konfigurace tohoto profilu."
+msgstr "点击下一步以将该值保存到配置文件"
 
 #: u_translation.rsclicktheobje
 msgid "Click the object in planetarium"
-msgstr "Klikněte na objekt v planetáriu"
+msgstr "在星图里点击天体"
 
 #: u_translation.rsclippingindi
 msgid "Clipping indicator"
-msgstr "Indikátor ořezu"
+msgstr "裁剪指示器"
 
 #: u_translation.rsclock
 msgid "Clock"
-msgstr "Hodiny"
+msgstr "时钟"
 
 #: u_translation.rsclose
 msgid "Close"
-msgstr "Zavřít"
+msgstr "关闭"
 
 #: u_translation.rsclosedome
 msgid "Close the Dome shutter"
-msgstr "Zavřít štěrbinu kopule"
+msgstr "关闭圆顶天窗"
 
 #: u_translation.rsclosedomeseq
 msgid "Close dome sequence when mount is asked to park"
-msgstr "Když je montáž požádána o zaparkování, zavřít sekvenci kopule"
+msgstr "当赤道仪被要求启动时关闭圆顶序列"
 
 #: u_translation.rsclosethewind
 msgid "Close the window when ready."
-msgstr "Až budete připraveni, zavřete okno."
+msgstr "准备好后关闭窗口"
 
 #: u_translation.rscloudcover
 msgid "Cloud cover"
-msgstr "Oblačnost"
+msgstr "云量"
 
 #: u_translation.rscolorbalance
 msgid "Color balance"
-msgstr "Vyvážení barev"
+msgstr "色彩平衡"
 
 #: u_translation.rscolorpreview
 msgid "Color preview"
-msgstr "Barevný náhled"
+msgstr "彩色预览"
 
 #: u_translation.rscolumn
 msgid "column"
-msgstr "sloupec"
+msgstr "列"
 
 #: u_translation.rscommandpath
 msgid "Command path"
-msgstr "Příkazová cesta"
+msgstr "命令路径"
 
 #: u_translation.rscommands
 msgid "Commands"
-msgstr "Příkazy"
+msgstr "命令"
 
 #: u_translation.rscompilatione
 #, object-pascal-format
 msgid "Compilation error: %s"
-msgstr "Chyba kompilace: %s"
+msgstr "编译错误：%s"
 
 #: u_translation.rscompiledwith
 msgid "Compiled with"
-msgstr "Zkompilováno pomocí"
+msgstr "编译"
 
 #: u_translation.rscompressthef
 msgid "Compress the FITS files with fpack"
-msgstr "Komprimovat soubory FITS pomocí fpack"
+msgstr "使用fpack压缩FITS文件"
 
 #: u_translation.rscomputationr
 msgid "Computation result:"
-msgstr "Výsledek výpočtu:"
+msgstr "计算结果："
 
 #: u_translation.rscompute
 msgid "Compute"
-msgstr "Výpočet"
+msgstr "计算"
 
 #: u_translation.rsconfiguratio
 msgid "Configuration saved"
-msgstr "Konfigurace uložena"
+msgstr "配置已保存"
 
 #: u_translation.rsconnect
 msgid "Connect"
-msgstr "Připojit"
+msgstr "连接"
 
 #: u_translation.rsconnected
 #, object-pascal-format
 msgid "%s connected"
-msgstr "%s připojen"
+msgstr "%s 已连接"
 
 #: u_translation.rsconnected2
 #, object-pascal-format
 msgid "Connected %s"
-msgstr "Připojeno %s"
+msgstr "已连接%s"
 
 #: u_translation.rsconnected3
 msgid "Connected"
-msgstr "Připojeno"
+msgstr "已连接"
 
 #: u_translation.rsconnecting
 #, object-pascal-format
 msgid "Connecting %s"
-msgstr "Připojování %s"
+msgstr "连接 %s"
 
 #: u_translation.rsconnection
 msgid "Connection"
-msgstr "Připojení"
+msgstr "连接"
 
 #: u_translation.rsconnectioner
 #, object-pascal-format
 msgid "Connection error: %s"
-msgstr "Chyba připojení: %s"
+msgstr "连接错误：%s"
 
 #: u_translation.rscontinue
 msgid "Continue"
-msgstr "Pokračovat"
+msgstr "继续"
 
 #: u_translation.rscontinueinse
 #, object-pascal-format
 msgid "Continue in %s seconds"
-msgstr "Pokračovat za %s sekundách"
+msgstr "%s秒后继续"
 
 #: u_translation.rscontinuesequ
 msgid "Continue sequence execution"
-msgstr "Pokračovat v provádění sekvence"
+msgstr "继续执行序列"
 
 #: u_translation.rscontinuethes
 msgid "Continue the sequence"
-msgstr "Pokračovat v sekvenci"
+msgstr "继续序列"
 
 #: u_translation.rscontrolexpos
 msgid "Control exposure"
-msgstr "Kontrolní expozice"
+msgstr "控制曝光"
 
 #: u_translation.rscooldownwhen
 msgid "Cool down when camera is connected"
-msgstr "Po připojení kamery vychladit na"
+msgstr "相机连接后立即制冷"
 
 #: u_translation.rscooler
 msgid "Cooler"
-msgstr "Chlazení"
+msgstr "制冷"
 
 #: u_translation.rscoolthecamer
 msgid "Cool the camera"
-msgstr "Ochladit kameru"
+msgstr "制冷相机"
 
 #: u_translation.rscoordinates
 msgid "Coordinates"
-msgstr "Souřadnice"
+msgstr "坐标"
 
 #: u_translation.rscopy
 msgid "Copy"
-msgstr "Kopírovat"
+msgstr "复制"
 
 #: u_translation.rscopyasequenc
 msgid "Copy a sequence"
-msgstr "Zkopírovat sekvenci"
+msgstr "复制序列"
 
 #: u_translation.rscopycurrentp
 msgid "Copy current profile to"
-msgstr "Zkopírujte aktuální profil do"
+msgstr "复制当前配置文件到"
 
 #: u_translation.rscopyfileerro
 #, object-pascal-format
 msgid "Copyfile error :%s"
-msgstr "Chyba kopírování souboru :%s"
+msgstr "复制文件错误：%s"
 
 #: u_translation.rscopyfrom
 msgid "Copy from"
-msgstr "Kopírovat z"
+msgstr "复制自"
 
 #: u_translation.rscopyto
 msgid "Copy to "
-msgstr "Kopírovat do "
+msgstr "复制到 "
 
 #: u_translation.rscorrectionme
 msgid "Correction method"
-msgstr "Metoda korekce"
+msgstr "修正方法"
 
 #: u_translation.rscount
 msgid "Count"
-msgstr "Počet"
+msgstr "数量"
 
 #: u_translation.rscover
 msgid "Cover"
-msgstr "Kryt"
+msgstr "镜头盖"
 
 #: u_translation.rscovercalibra
 msgid "Cover calibrator"
-msgstr "Kalibrační kryt"
+msgstr "镜头盖校准器"
 
 #: u_translation.rscoverthecame
 msgid "Cover the camera and set the exposure time and binning in the Preview pane now."
-msgstr "Zakryjte kameru a nastavte čas expozice a binning v podokně Náhled."
+msgstr "盖上相机并在预览界面中设置曝光时间和像素合并。"
 
 #: u_translation.rscreatefromca
 msgid "Create from camera"
-msgstr "Vytvořit z kamery"
+msgstr "从相机创建"
 
 #: u_translation.rscreatefromda
 msgid "Create from dark file"
-msgstr "Vytvořit z Dark souboru"
+msgstr "从暗场创建"
 
 #: u_translation.rscreatenewemp
 msgid "Create new empty profile"
-msgstr "Vytvořit nový prázdný profil"
+msgstr "新建空的配置文件"
 
 #: u_translation.rscurrent
 msgid "Current"
-msgstr "Aktuální"
+msgstr "当前"
 
 #: u_translation.rscurrentfocus
 msgid "Current focuser absolute position"
-msgstr "Aktuální (absolutní) poloha ostření"
+msgstr "当前的调焦器绝对位置"
 
 #: u_translation.rscurrentimage
 msgid "Current image"
-msgstr "Aktuální snímek"
+msgstr "当前图像"
 
 #: u_translation.rscurrentplan
 msgid "Current plan"
-msgstr "Aktuální plán"
+msgstr "当前计划"
 
 #: u_translation.rscustom
 msgid "Custom"
-msgstr "Vlastní"
+msgstr "自定义"
 
 #: u_translation.rscustompositi
 msgid "Custom position"
-msgstr "Uživatelem určená pozice"
+msgstr "自定义位置"
 
 #: u_translation.rscygwinpath
 msgid "Cygwin path"
-msgstr "Cygwinová cesta"
+msgstr "Cygwin路径"
 
 #: u_translation.rsdarkfileload
 msgid "Dark file loaded"
-msgstr "Byl načten dark"
+msgstr "暗场文件已载入"
 
 #: u_translation.rsdarkframe
 msgid "Dark frame"
-msgstr "Dark snímek"
+msgstr "暗场帧"
 
 #: u_translation.rsdarknight
 #, object-pascal-format
 msgid "Dark%snight"
-msgstr "Temná%snoc"
+msgstr "暗夜%s"
 
 #: u_translation.rsdateobsfromc
 msgid "DATE-OBS from camera driver"
-msgstr "DATE-OBS z ovladače kamery"
+msgstr "来自于相机驱动的DATE-OBS"
 
 #: u_translation.rsdateutsequen
 msgid "Date (UT) / Sequence"
-msgstr "Datum (UT) / Sekvence"
+msgstr "日期(UT)/序列"
 
 #: u_translation.rsdawn
 msgid "dawn"
-msgstr "úsvit"
+msgstr "破晓"
 
 #: u_translation.rsdebayer
 msgid "Debayer"
-msgstr "Debayer"
+msgstr "去拜尔"
 
 #: u_translation.rsdebayerthepr
 msgid "Debayer the preview image"
-msgstr "Debayer"
+msgstr "预览图去拜尔"
 
 #: u_translation.rsdec
 msgid "Dec"
@@ -1108,551 +1109,551 @@ msgstr "Dec"
 
 #: u_translation.rsdefault
 msgid "Default"
-msgstr "Výchozí"
+msgstr "缺省值"
 
 #: u_translation.rsdefaultbehav
 msgid "Default behavior"
-msgstr "Výchozí vlastnosti"
+msgstr "缺省行为"
 
 #: u_translation.rsdegree
 msgid "degree"
-msgstr "°"
+msgstr "度"
 
 #: u_translation.rsdegreespermi
 #, object-pascal-format
 msgid "Degrees %s per minute"
-msgstr "Stupňů %s za minutu"
+msgstr "%s度每分钟"
 
 #: u_translation.rsdelayafterte
 msgid "Delay after telescope slew [seconds] "
-msgstr "Zpoždění po přejetí dalekohledu [sekundy] "
+msgstr "望远镜指向完成后等待[秒] "
 
 #: u_translation.rsdelete
 msgid "Delete"
-msgstr "Vymazat"
+msgstr "删除"
 
 #: u_translation.rsdeleteaseque
 msgid "Delete a sequence"
-msgstr "Smazat sekvenci"
+msgstr "删除序列"
 
 #: u_translation.rsdeletesequen
 #, object-pascal-format
 msgid "Delete sequence %s ?"
-msgstr "Vymazat sekvenci %s ?"
+msgstr "删除序列%s？"
 
 #: u_translation.rsdeletestep
 #, object-pascal-format
 msgid "Delete step %s ?"
-msgstr "Odstranit krok %s ?"
+msgstr "删除步骤%s？"
 
 #: u_translation.rsdeletetempl
 msgid "Delete template"
-msgstr "Odstranit šablonu"
+msgstr "删除模板"
 
 #: u_translation.rsdesc
 msgid "Desc."
-msgstr "Popis."
+msgstr "描述"
 
 #: u_translation.rsdescription
 msgid "Description"
-msgstr "Popis"
+msgstr "介绍"
 
 #: u_translation.rsdesiredtempe
 msgid "Desired temperature"
-msgstr "Požadovaná teplota"
+msgstr "预期温度"
 
 #: u_translation.rsdestinatione
 msgid "Destination email address"
-msgstr "Cílová e-mailová adresa"
+msgstr "目的地址"
 
 #: u_translation.rsdestroyallba
 msgid "Destroy all Bad Pixel Map data?"
-msgstr "Vymazat všechna data chybných pixelů?"
+msgstr "消除所有的坏像素图数据？"
 
 #: u_translation.rsdetails
 msgid "Details"
-msgstr "Podrobnosti"
+msgstr "详情"
 
 #: u_translation.rsdetectmultip
 msgid "Detect multiple stars in the image"
-msgstr "Rozpoznat více hvězd na snímku"
+msgstr "在图像中侦测到多个星点"
 
 #: u_translation.rsdeviceisconn
 #, object-pascal-format
 msgid "Device %s is connected.%sDo you want to disconnect now to open the setup dialog?"
-msgstr "Zařízení %s připojeno.%sChcete otevřít dialogové okno nastavení?"
+msgstr "设备%s已连接。%s是否要立即断开连接以打开设置对话框？"
 
 #: u_translation.rsdevices
 msgid "Device"
-msgstr "Zařízení"
+msgstr "设备"
 
 #: u_translation.rsdevicesconne
 msgid "Devices connection"
-msgstr "Připojení zařízení"
+msgstr "设备连接"
 
 #: u_translation.rsdevicessetup
 #, object-pascal-format
 msgid "Devices Setup%s"
-msgstr "Nastavení Zařízení%s"
+msgstr "设备配置%s"
 
 #: u_translation.rsdewpoint
 msgid "Dew point"
-msgstr "Rosný bod"
+msgstr "露点"
 
 #: u_translation.rsdirectory
 msgid "Directory"
-msgstr "Adresář"
+msgstr "目录"
 
 #: u_translation.rsdisable
 msgid "Disable"
-msgstr "Vypnout"
+msgstr "禁用"
 
 #: u_translation.rsdisconnect
 msgid "Disconnect"
-msgstr "Odpojit"
+msgstr "断开连接"
 
 #: u_translation.rsdisconnected
 #, object-pascal-format
 msgid "%s disconnected"
-msgstr "%s odpojen"
+msgstr "%s 已断开连接"
 
 #: u_translation.rsdisconnected3
 msgid "Disconnected"
-msgstr "Odpojen"
+msgstr "已断开"
 
 #: u_translation.rsdisconnectin
 msgid "Disconnecting devices"
-msgstr "Zařízení odpojeno"
+msgstr "正在断开设备连接"
 
 #: u_translation.rsdisconnectio
 #, object-pascal-format
 msgid "Disconnection error: %s"
-msgstr "Chyba odpojení: %s"
+msgstr "断开错误：%s"
 
 #: u_translation.rsdisconnectth
 msgid "Disconnect the camera before to change the configuration."
-msgstr "Před změnou konfigurace odpojit kameru."
+msgstr "改变配置之前请先断开相机连接。"
 
 #: u_translation.rsdiscover
 msgid "Discover"
-msgstr "Najít"
+msgstr "探索"
 
 #: u_translation.rsdiscovereds
 #, object-pascal-format
 msgid "Discovered %s ..."
-msgstr "Zjištěno %s..."
+msgstr "已发现%s ..."
 
 #: u_translation.rsdiscoverypor
 msgid "Discovery port"
-msgstr "Najít port"
+msgstr "发现的端口"
 
 #: u_translation.rsdisplay
 msgid "Display"
-msgstr "Zobrazit"
+msgstr "显示"
 
 #: u_translation.rsdisplayspeed
 msgid "Display speed"
-msgstr "Rychlost zobrazení"
+msgstr "显示速度"
 
 #: u_translation.rsdistancetota
 #, object-pascal-format
 msgid "Distance to target: %s arcmin"
-msgstr "Vzdálenost k cíli: %s arcmin"
+msgstr "距离目标：%s角分"
 
 #: u_translation.rsdither
 msgid "Dither"
-msgstr "Dithering"
+msgstr "抖动"
 
 #: u_translation.rsditherevery
 msgid "Dither every"
-msgstr "Dithering po"
+msgstr "抖动每隔"
 
 #: u_translation.rsditherevery2
 #, object-pascal-format
 msgid "Dither%severy"
-msgstr "Dithering%spokaždé"
+msgstr "抖动%s每隔"
 
 #: u_translation.rsdithering
 msgid "Dithering"
-msgstr "Dithering"
+msgstr "抖动"
 
 #: u_translation.rsditheronly
 msgid "Dither only"
-msgstr "Jen Dithering"
+msgstr "仅抖动"
 
 #: u_translation.rsditherwhiled
 msgid "Dither while downloading from the camera"
-msgstr "Dithering při stahování z kamery"
+msgstr "从相机下载时抖动"
 
 #: u_translation.rsdome
 msgid "Dome"
-msgstr "Kopule"
+msgstr "圆顶"
 
 #: u_translation.rsdomealready
 #, object-pascal-format
 msgid "Dome already %s"
-msgstr "Kopule připravena %s"
+msgstr "圆顶已经%s"
 
 #: u_translation.rsdomenotafter
 #, object-pascal-format
 msgid "Dome not %s after request!"
-msgstr "Kopule není %s na vyžádání!"
+msgstr "请求后圆顶未%s！"
 
 #: u_translation.rsdomepanel
 msgid "Dome/Panel"
-msgstr "Kopule/Panel"
+msgstr "圆顶/平场板"
 
 #: u_translation.rsdomeshutter
 #, object-pascal-format
 msgid "Dome shutter: %s"
-msgstr "Štěrbina kopule: %s"
+msgstr "圆顶天窗：%s"
 
 #: u_translation.rsdomeslaving
 #, object-pascal-format
 msgid "Dome slaving: %s"
-msgstr "Kopule přejíždí: %s"
+msgstr "圆顶从动：%s"
 
 #: u_translation.rsdone
 msgid "done"
-msgstr "hotovo"
+msgstr "完成"
 
 #: u_translation.rsdonotdisplay
 msgid "Do not display images during capture"
-msgstr "Během snímání nezobrazovat snímky"
+msgstr "拍摄中不显示图像"
 
 #: u_translation.rsdonothing
 msgid "Do nothing"
-msgstr "Nedělat nic"
+msgstr "无动作"
 
 #: u_translation.rsdonotrunasad
 #, object-pascal-format
 msgid "Do not run %s as %s!"
-msgstr "Nespouštět %s jako %s!"
+msgstr "不要运行%s如同%s！"
 
 #: u_translation.rsdontswait
 #, object-pascal-format
 msgid "Don't%swait"
-msgstr "Nečekat%s"
+msgstr "不要%s等待"
 
 #: u_translation.rsdosimpleslew
 #, object-pascal-format
 msgid "Do simple slew to %s/%s"
-msgstr "Použijte jednoduchý přejezd na %s/%s"
+msgstr "简单指向到 %s/%s"
 
 #: u_translation.rsdownloading
 msgid "Downloading"
-msgstr "Stahování"
+msgstr "下载中"
 
 #: u_translation.rsdownloadlate
 msgid "Download latest version"
-msgstr "Stáhnout nejnovější verzi"
+msgstr "下载最新版本"
 
 #: u_translation.rsdownsample
 msgid "Downsample"
-msgstr "Vzorek dolů"
+msgstr "降低采样"
 
 #: u_translation.rsdoyouwanttoc
 msgid "Do you want to cancel the polar alignment?"
-msgstr "Ukončit polární zarovnání?"
+msgstr "是否要取消极轴校准？"
 
 #: u_translation.rsdoyouwanttod
 #, object-pascal-format
 msgid "Do you want to delete file %s ?"
-msgstr "Vymazat soubor %s ?"
+msgstr "是否要删除文件%s？"
 
 #: u_translation.rsdoyouwanttor
 msgid "Do you want to retry?"
-msgstr "Chcete akci opakovat?"
+msgstr "您要重试吗?"
 
 #: u_translation.rsdoyouwanttor2
 msgid "Do you want to run the termination action now?"
-msgstr "Spustit ukončovací akci?"
+msgstr "您现在要运行终止动作？"
 
 #: u_translation.rsdusk
 msgid "dusk"
-msgstr "soumrak"
+msgstr "黄昏"
 
 #: u_translation.rsdynamic
 msgid "Dynamic"
-msgstr "Dynamický"
+msgstr "动态"
 
 #: u_translation.rseast
 msgid "East"
-msgstr "Východ"
+msgstr "东"
 
 #: u_translation.rseastpointing
 msgid "East (Pointing West)"
-msgstr "Východ (Směr Z)"
+msgstr "东方（指向西方）"
 
 #: u_translation.rsedit
 msgid "Edit"
-msgstr "Upravit"
+msgstr "编辑"
 
 #: u_translation.rseditasequenc
 msgid "Edit a sequence"
-msgstr "Upravit sekvenci"
+msgstr "编辑序列"
 
 #: u_translation.rseditplan
 msgid "Edit plan"
-msgstr "Upravit plán"
+msgstr "编辑计划"
 
 #: u_translation.rsedittargetli
 msgid "Edit target list"
-msgstr "Upravit seznam cílů"
+msgstr "编辑目标列表"
 
 #: u_translation.rselbrusimages
 msgid "Elbrus Images folder "
-msgstr "Složka Elbrus Obrázků "
+msgstr "Elbrus图像目录 "
 
 #: u_translation.rselevation
 msgid "Elevation"
-msgstr "Výška"
+msgstr "海拔"
 
 #: u_translation.rsemailconfigu
 msgid "Email configuration"
-msgstr "Konfigurace e-mailu"
+msgstr "电子邮件配置"
 
 #: u_translation.rsemailnotific
 msgid "Email notification text"
-msgstr "Text e-mailového oznámení"
+msgstr "邮件通知文本"
 
 #: u_translation.rsemailon
 msgid "Email on :"
-msgstr "E-mail na:"
+msgstr "发送邮件的情况："
 
 #: u_translation.rsemailsentsuc
 msgid "Email sent successfully, please check your inbox"
-msgstr "E-mail byl úspěšně odeslán. Zkontrolujte doručenou poštu"
+msgstr "邮件发送成功，请检查您的收件箱"
 
 #: u_translation.rsend
 msgid "End"
-msgstr "Konec"
+msgstr "结尾"
 
 #: u_translation.rsendpreview
 msgid "End preview"
-msgstr "Konec náhledu"
+msgstr "结束预览"
 
 #: u_translation.rsendtime
 msgid "End time"
-msgstr "Čas ukončení"
+msgstr "结束时间"
 
 #: u_translation.rserror
 #, object-pascal-format
 msgid "Error: %s"
-msgstr "Chyba: %s"
+msgstr "错误：%s"
 
 #: u_translation.rserror2
 msgid "Error"
-msgstr "Chyba"
+msgstr "错误"
 
 #: u_translation.rserrormessage
 msgid "Error messages"
-msgstr "Chybové zprávy"
+msgstr "错误信息"
 
 #: u_translation.rserrormountno
 msgid "Error! Mount not connected"
-msgstr "Chyba! Montáž nepřipojena"
+msgstr "错误！赤道仪未连接"
 
 #: u_translation.rserrorprocess
 #, object-pascal-format
 msgid "Error processing temporary file in %s"
-msgstr "Chyba při zpracování dočasného souboru v %s"
+msgstr "临时文件%s处理错误"
 
 #: u_translation.rserrorresult
 #, object-pascal-format
 msgid "Error result = %s"
-msgstr "Výsledek chyby = %s"
+msgstr "错误结果 = %s"
 
 #: u_translation.rserrorstartin
 #, object-pascal-format
 msgid "Error starting command: %s"
-msgstr "Při spuštění příkazu došlo k chybě: %s"
+msgstr "Error starting command: %s"
 
 #: u_translation.rserrorunknowt
 msgid "Error: Unknown telescope focal length, set in telescope driver or in PREFERENCE, ASTROMETRY."
-msgstr "Chyba: Neznámá ohnisková vzdálenost dalekohledu, nastavená v ovladači dalekohledu nebo v PREFERENCE, ASTROMETRY."
+msgstr "错误：未知的望远镜焦距，需在首选项的天体测量，或在望远镜驱动里配置。"
 
 #: u_translation.rserrorupdatin
 #, object-pascal-format
 msgid "Error updating the sequence:%s"
-msgstr "Při aktualizaci sekvence došlo k chybě:%s"
+msgstr "更新序列错误：%s"
 
 #: u_translation.rsestimatedsli
 msgid "Estimated slippage since last learning"
-msgstr "Odhadovaný skluz od posledního učení"
+msgstr "根据最后的学习估计的滑脱"
 
 #: u_translation.rsexecutingthe
 msgid "Executing the termination error actions."
-msgstr "Provádění chybových akcí ukončeno."
+msgstr "执行终止错误动作。"
 
 #: u_translation.rsexecutingthe2
 msgid "Executing the termination actions."
-msgstr "Provádění akcí ukončeno."
+msgstr "执行终止动作。"
 
 #: u_translation.rsexitprogram
 msgid "Exit program"
-msgstr "Ukončit program"
+msgstr "退出程序"
 
 #: u_translation.rsexp
 msgid "Exp:"
-msgstr "Exp:"
+msgstr "曝光："
 
 #: u_translation.rsexp2
 msgid "Exp."
-msgstr "Exp."
+msgstr "曝光"
 
 #: u_translation.rsexposure
 msgid "Exposure"
-msgstr "Expozice"
+msgstr "曝光"
 
 #: u_translation.rsexposureabor
 msgid "Exposure aborted!"
-msgstr "Expozice přerušena!"
+msgstr "曝光终止！"
 
 #: u_translation.rsexposurefact
 msgid "Exposure factor"
-msgstr "Faktor expozice"
+msgstr "曝光系数"
 
 #: u_translation.rsexposurefail
 msgid "Exposure fail!"
-msgstr "Expozice selhala!"
+msgstr "曝光失败！"
 
 #: u_translation.rsexposures
 #, object-pascal-format
 msgid "Exposure %s"
-msgstr "Expozice %s"
+msgstr "曝光%s"
 
 #: u_translation.rsexposuretime
 msgid "Exposure time in secondes"
-msgstr "Expoziční čas v sekundách"
+msgstr "曝光秒数"
 
 #: u_translation.rsexposuretime2
 msgid "Exposure time"
-msgstr "Čas expozice"
+msgstr "曝光时间"
 
 #: u_translation.rsexposuretime3
 msgid "Exposure time [seconds]"
-msgstr "Expoziční čas [sekundy]"
+msgstr "曝光时间[秒]"
 
 #: u_translation.rsexposuretime4
 #, object-pascal-format
 msgid "Exposure time too short for measurement, need %d seconds."
-msgstr "Doba expozice příliš krátká pro měření, potřebují %d sekund."
+msgstr "曝光时间太短，无法测量，需要%d秒。"
 
 #: u_translation.rsfailedtodele
 #, object-pascal-format
 msgid "Failed to delete file: %s"
-msgstr "Smazání souboru selhalo: %s"
+msgstr "删除文件失败：%s"
 
 #: u_translation.rsfailedtostar
 msgid "Failed to start guiding!"
-msgstr "Pointace selhala!"
+msgstr "启动导星失败！"
 
 #: u_translation.rsfailtoresolv
 msgid "Fail to resolve control exposure"
-msgstr "Nevyřešená kontrolní expozice"
+msgstr "解析控制曝光失败"
 
 #: u_translation.rsfailtostopth
 msgid "Fail to stop the autoguider"
-msgstr "Automatickou pointaci se nepodařilo zastavit"
+msgstr "无法停止自动导星"
 
 #: u_translation.rsfalse
 msgid "False"
-msgstr "Vypnuto"
+msgstr "False"
 
 #: u_translation.rsfil
 msgid "Fil."
-msgstr "Filtr. k."
+msgstr "滤镜"
 
 #: u_translation.rsfile
 msgid "File"
-msgstr "Soubor"
+msgstr "文件"
 
 #: u_translation.rsfilenameopti
 msgid "File name options"
-msgstr "Možnosti názvu souboru"
+msgstr "文件名称选项"
 
 #: u_translation.rsfilenotfound
 #, object-pascal-format
 msgid "File not found %s"
-msgstr "Soubor nebyl nalezen %s"
+msgstr "未找到文件%s"
 
 #: u_translation.rsfiles
 msgid "Files"
-msgstr "Soubor"
+msgstr "文件"
 
 #: u_translation.rsfilter
 msgid "Filter"
-msgstr "Filtr"
+msgstr "滤镜"
 
 #: u_translation.rsfilter0
 msgid "No change"
-msgstr "Beze zmeny"
+msgstr "未更改"
 
 #: u_translation.rsfiltername
 msgid "Filter name"
-msgstr "Název filtru"
+msgstr "滤镜名称"
 
 #: u_translation.rsfilteroffset
 msgid "Filter offset"
-msgstr "Posun filtru"
+msgstr "滤镜偏移量"
 
 #: u_translation.rsfilters
 msgid "Filters"
-msgstr "Filtry"
+msgstr "滤镜"
 
 #: u_translation.rsfilterwheel
 msgid "Filter wheel"
-msgstr "Filtrové kolo"
+msgstr "滤镜轮"
 
 #: u_translation.rsfinalmovemen
 msgid "Final movement (steps)"
-msgstr "Konečný pohyb (kroky)"
+msgstr "最终移动（步长）"
 
 #: u_translation.rsfit
 msgid "Fit"
-msgstr "Optimální"
+msgstr "拟合"
 
 #: u_translation.rsfitsheader
 msgid "FITS header"
-msgstr "Hlavička FITS"
+msgstr "FITS头"
 
 #: u_translation.rsfixedsequenc
 msgid "Fixed sequence length"
-msgstr "Pevná délka sekvence"
+msgstr "固定的序列长度"
 
 #: u_translation.rsflat
 msgid "Flat"
-msgstr "Flat snímky"
+msgstr "平场"
 
 #: u_translation.rsflatautoexpo
 msgid "Flat auto-exposure"
-msgstr "Automatická expozice Flat snímků"
+msgstr "平场自动曝光"
 
 #: u_translation.rsflatimagemea
 msgid "Flat image mean level"
-msgstr "Flat snímek střední úroveň"
+msgstr "平场图像平均电平"
 
 #: u_translation.rsflatlevel
 #, object-pascal-format
 msgid "Flat level=%s"
-msgstr "Flat úroveň =%s"
+msgstr "平场电平=%s"
 
 #: u_translation.rsflattime
 msgid "Flat time"
-msgstr "Časy Flat snímků"
+msgstr "平场时间"
 
 #: u_translation.rsfliptheimageh
 msgid "Flip the image horizontally"
-msgstr "Otočit snímek vodorovně"
+msgstr "水平翻转图像"
 
 #: u_translation.rsfliptheimagev
 msgid "Flip the image vertically"
-msgstr "Otočit snímek svisle"
+msgstr "垂直翻转图像"
 
 #: u_translation.rsfloatingpoin
 msgid "Floating point file"
-msgstr "Soubor s plovoucí desetinnou čárkou"
+msgstr "浮点文件"
 
 #: u_translation.rsflux
 msgid "Flux"
@@ -1660,246 +1661,246 @@ msgstr "Flux"
 
 #: u_translation.rsfoc
 msgid "Foc."
-msgstr "Ostř."
+msgstr "调焦"
 
 #: u_translation.rsfocalelength
 msgid "Focal length"
-msgstr "Ohnisko přístroje"
+msgstr "焦距"
 
 #: u_translation.rsfocus
 msgid "Focus"
-msgstr "Ostření"
+msgstr "对焦"
 
 #: u_translation.rsfocusaid
 msgid "Focus aid"
-msgstr "Asistent ostření"
+msgstr "对焦辅助"
 
 #: u_translation.rsfocusaidstar
 msgid "Focus aid started"
-msgstr "Nástroj Ostření spuštěn"
+msgstr "对焦辅助开启"
 
 #: u_translation.rsfocusaidstop
 msgid "Focus aid stopped"
-msgstr "Nástroj Ostření zastaven"
+msgstr "对焦辅助停止"
 
 #: u_translation.rsfocusdirecti
 msgid "Focus direction"
-msgstr "Směr zaostření"
+msgstr "调焦器方向"
 
 #: u_translation.rsfocusdirecti2
 msgid "Focus direction: "
-msgstr "Směr zaostření: "
+msgstr "对焦方向： "
 
 #: u_translation.rsfocuser
 msgid "Focuser"
-msgstr "Zaostřovač"
+msgstr "调焦器"
 
 #: u_translation.rsfocusercalib
 msgid "Focuser calibration"
-msgstr "Kalibrace ostření"
+msgstr "调焦器校准"
 
 #: u_translation.rsfocusercalib2
 msgid "Focuser calibration started"
-msgstr "Zahájena kalibrace ostření"
+msgstr "调焦器校准开启"
 
 #: u_translation.rsfocusercalib3
 msgid "Focuser calibration started, please wait..."
-msgstr "Kalibrace zaostření zahájena, počkejte..."
+msgstr "调焦器校准开启，请稍等..."
 
 #: u_translation.rsfocusercalib4
 msgid "Focuser calibration completed, click Next to see the result."
-msgstr "Kalibrace zaostření dokončena, výsledek zobrazíte kliknutím na tlačítko Další."
+msgstr "调焦器校准完成，点击下一步来查看结果。"
 
 #: u_translation.rsfocusercorre
 msgid "Focuser correction"
-msgstr "Oprava zaostření"
+msgstr "调焦器修正"
 
 #: u_translation.rsfocusermoveb
-#, object-pascal-format, fuzzy, badformat
+#, object-pascal-format
 msgid "Focuser move by %s"
-msgstr "Ostření přesunuto na% s"
+msgstr "调焦器移动了%s"
 
 #: u_translation.rsfocusermovet
 #, object-pascal-format
 msgid "Focuser move to %s"
-msgstr "Ostření přesunuto na %s"
+msgstr "调焦器移动到%s"
 
 #: u_translation.rsfocuseroffse
 msgid "Focuser offset"
-msgstr "Předsazení zaostřovače"
+msgstr "调焦器偏移量"
 
 #: u_translation.rsfocuserslipp
 #, object-pascal-format
 msgid "Focuser slippage offset set to %s"
-msgstr "Posunutí skluzu zaostřovače je nastaveno na %s"
+msgstr "调焦器滑脱偏移量设为%s"
 
 #: u_translation.rsfocusertempe
 #, object-pascal-format
 msgid "Focuser temperature: %s"
-msgstr "Teplota zaostřovače: %s"
+msgstr "调焦器温度：%s"
 
 #: u_translation.rsfocusertempe2
 #, object-pascal-format
 msgid "Focuser temperature: %s , adjust position by %s"
-msgstr "Teplota zaostřovače: %s, korekce pohybu o %s"
+msgstr "调焦器温度：%s，位置调整了%s"
 
 #: u_translation.rsfocusertempe3
 msgid "Focuser temperature compensation"
-msgstr "Kompenzace teploty zaostření"
+msgstr "调焦器温度补偿"
 
 #: u_translation.rsfocusevery
 msgid "Focus every"
-msgstr "Ostření po"
+msgstr "对焦每隔"
 
 #: u_translation.rsfocuspositio
 msgid "Focus position"
-msgstr "Zaostřovací pozice"
+msgstr "合焦位"
 
 #: u_translation.rsfocusquality
 #, object-pascal-format
 msgid "Focus quality = %s"
-msgstr "Kvalita zaostření = %s"
+msgstr "对焦品质 = %s"
 
 #: u_translation.rsfocusstarsel
 msgid "Focus star selection"
-msgstr "Výběr ostřovací hvězdy"
+msgstr "对焦星选择"
 
 #: u_translation.rsfocuswindows
 msgid "Focus window size"
-msgstr "Velikost zaostřovacího okna"
+msgstr "对焦窗口大小"
 
 #: u_translation.rsfoldernameop
 msgid "Folder name options"
-msgstr "Možnosti názvu složky"
+msgstr "目录名称选项"
 
 #: u_translation.rsforguidancea
 msgid "For guidance adjust the azimuth knob along the blue line and the altitude knob along the red line"
-msgstr "Pro pointaci nastavte ovládání azimutu podél modré čáry a ovladač výšky podél červené čáry"
+msgstr "沿蓝线调整方位角旋钮和沿红线调整高度旋钮以获得指导"
 
 #: u_translation.rsforreflector
 msgid "For reflector collimation."
-msgstr "Pro kolimaci reflektoru."
+msgstr "用于反射镜准直"
 
 #: u_translation.rsfounddevices
 #, object-pascal-format
 msgid "Found %s devices"
-msgstr "Nalezeno %s zařízení"
+msgstr "找到%s设备"
 
 #: u_translation.rsfounddstars
-#, object-pascal-format, fuzzy, badformat
+#, object-pascal-format
 msgid "Found %d stars"
-msgstr "Nalezeno %hvězd"
+msgstr "找到%d颗星"
 
 #: u_translation.rsfoundservers
 #, object-pascal-format
 msgid "Found %s servers"
-msgstr "Nalezeny %s servery"
+msgstr "找到%s个服务器"
 
 #: u_translation.rsfov
 msgid "FOV"
-msgstr "FOV"
+msgstr "视场"
 
 #: u_translation.rsframe
 msgid "Frame"
-msgstr "Snímek"
+msgstr "画幅"
 
 #: u_translation.rsfromcameradr
 msgid "From camera driver"
-msgstr "Z ovladače kamery"
+msgstr "来自于相机驱动"
 
 #: u_translation.rsfromcolorima
 msgid "From color image"
-msgstr "Z barevného obrázku"
+msgstr "来自于彩色图像"
 
 #: u_translation.rsfromemailadd
 msgid "From email address"
-msgstr "Z e-mailové adresy"
+msgstr "发件地址"
 
 #: u_translation.rsfromimage
 msgid "From image"
-msgstr "Z obrázku"
+msgstr "来自于图像"
 
 #: u_translation.rsfromplanetar
 msgid "From planetarium"
-msgstr "Z planetária"
+msgstr "来自于星图"
 
 #: u_translation.rsfromplatesol
 msgid "From plate solving"
-msgstr "Z platesolvingu"
+msgstr "来自于解析"
 
 #: u_translation.rsfromtelescop
 msgid "From telescope driver"
-msgstr "Z ovladače dalekohledu"
+msgstr "来自于望远镜驱动"
 
 #: u_translation.rsfromtoby
 #, object-pascal-format
 msgid "From: %s to %s by %s"
-msgstr "Od: %s do %s podle %s"
+msgstr "由：%s到%s由%s"
 
 #: u_translation.rsfstop
 msgid "F-stop"
-msgstr "Clona"
+msgstr "光圈"
 
 #: u_translation.rsfwhm
 msgid "FWHM"
-msgstr "FWMH"
+msgstr "FWHM"
 
 #: u_translation.rsgain
 msgid "Gain"
-msgstr "Zisk"
+msgstr "增益"
 
 #: u_translation.rsget
 msgid "Get"
-msgstr "Získat"
+msgstr "获取"
 
 #: u_translation.rsgetcurrent
 msgid "Get current"
-msgstr "Získejte aktuální informace"
+msgstr "获取当前"
 
 #: u_translation.rsgetcurrentpo
 msgid "Get current position from current target"
-msgstr "Získat aktuální polohu z aktuálního cíle"
+msgstr "从当前目标获取当前位置"
 
 #: u_translation.rsgetcurrentpo2
 msgid "Get current position from last image"
-msgstr "Získat aktuální polohu z posledního snímku"
+msgstr "从最后一幅图像获取当前位置"
 
 #: u_translation.rsgetcurrentpo3
 msgid "Get current position from telescope"
-msgstr "Získat aktuální polohu z dalekohledu"
+msgstr "从望远镜获取当前位置"
 
 #: u_translation.rsgetsitelongl
 msgid "Get site long/lat from the mount"
-msgstr "Získání délky/šířky místa z montáže"
+msgstr "从赤道仪获取经纬度"
 
 #: u_translation.rsglobalaction
 msgid "Global actions when a sequence is running"
-msgstr "Globální akce při provádění sekvence"
+msgstr "当一个序列正在运行时的全局动作"
 
 #: u_translation.rsglobalfocuse
 #, object-pascal-format
 msgid "Global focuser parameters.%sSet the focuser direction IN or OUT to the one that give the best result for your setup. If you plan to use temperature compensation, set the direction it need to move when the temperature drop during the night."
-msgstr "Obecné možnosti zaostření.%sNastavit směr ostření na Ven nebo Dovnitř na ten, který dává nejlepší výsledek pro vaše zařízení. Pokud plánujete použít teplotní kompenzaci, nastavte směr, kterým by se mělo postupovat, když teplota v noci klesne."
+msgstr "全局调焦器参数。%s将调焦器方向内或外设置为最适合您的设备的方向。若打算使用温度补偿，请设置夜间温度下降时需要移动的方向。"
 
 #: u_translation.rsglobalrepeat
 msgid "Global repeat:"
-msgstr "Globální opakování:"
+msgstr "全局重复："
 
 #: u_translation.rsgood
 msgid "Good"
-msgstr "Dobrý"
+msgstr "良好"
 
 #: u_translation.rsgoto
 msgid "Goto"
-msgstr "Přejít na"
+msgstr "Goto"
 
 #: u_translation.rsgotoinprogre
 msgid "GOTO in progress"
-msgstr "GOTO probíhá"
+msgstr "GOTO进行中"
 
 #: u_translation.rsgreen
 msgid "green"
-msgstr "zelená"
+msgstr "绿"
 
 #: u_translation.rsguid
 msgid "Guid."
@@ -1907,7 +1908,7 @@ msgstr ""
 
 #: u_translation.rsguide
 msgid "Guide"
-msgstr "Pointace"
+msgstr "导星"
 
 #: u_translation.rsguidecamera
 msgid "Guide camera"
@@ -1915,32 +1916,32 @@ msgstr ""
 
 #: u_translation.rsguidersensor
 msgid "Guider sensor;"
-msgstr "Pointační senzor;"
+msgstr "导星传感器"
 
 #: u_translation.rsguiding
 #, object-pascal-format
 msgid "%s guiding"
-msgstr "%s pointace"
+msgstr "%s 导星"
 
 #: u_translation.rsguidingdrift
 msgid "Guiding drift control"
-msgstr "Řízení pointačního posunu"
+msgstr "导星漂移控制"
 
 #: u_translation.rshalt
 msgid "Halt"
-msgstr "Stop"
+msgstr "停止"
 
 #: u_translation.rsheartbeatthr
 msgid "Heart beat threshold [minutes]"
-msgstr "Práh srdce [minuty]"
+msgstr "心跳间隔[分钟]"
 
 #: u_translation.rsheight
 msgid "Height"
-msgstr "Výška"
+msgstr "高"
 
 #: u_translation.rshelp
 msgid "Help"
-msgstr "Pomoc"
+msgstr "帮助"
 
 #: u_translation.rshfd
 msgid "HFD"
@@ -1948,189 +1949,189 @@ msgstr "HFD"
 
 #: u_translation.rshighlightadu
 msgid "Highlight ADU"
-msgstr "ADU pro vyvážení bílé"
+msgstr "高光ADU"
 
 #: u_translation.rshistory
 msgid "History"
-msgstr "Historie"
+msgstr "历史记录"
 
 #: u_translation.rshorizonprofi
 msgid "Horizon profile"
-msgstr "Profil horizontu"
+msgstr "地平线配置"
 
 #: u_translation.rshorizontalco
 msgid "Horizontal correction :"
-msgstr "Vodorovná oprava:"
+msgstr "水平修正："
 
 #: u_translation.rshumidity
 msgid "Humidity"
-msgstr "Vlhkost vzduchu"
+msgstr "湿度"
 
 #: u_translation.rshyperbolacur
 #, object-pascal-format
 msgid "HYPERBOLA curve fitting focus at %s,  remaining curve fit error %s,  iteration cycles %s"
-msgstr "Zaostření křivky HYPERBOLA %s, zbývající chyba přizpůsobení křivky %s, iterační cykly %s"
+msgstr "双曲线拟合焦点于%s，剩余曲线拟合错误%s，迭代轮%s"
 
 #: u_translation.rsidle
 msgid "Idle"
-msgstr "Nečinný"
+msgstr "空闲"
 
 #: u_translation.rsifabrightsta
 msgid "If a bright star is visible click NEXT."
-msgstr "Pokud je vidět jasná hvězda, klikněte na DALŠÍ."
+msgstr "如果可以看到亮星，请单击“下一步”。"
 
 #: u_translation.rsifnobrightst
 msgid "If no bright star is visible click MOVE."
-msgstr "Pokud není vidět žádná jasná hvězda, klikněte na POKRAČOVAT."
+msgstr "如果看不到亮星，请单击“移动”"
 
 #: u_translation.rsifyourfocuse
 msgid "If your focuser driver do not offer this option, set here the number of steps necessary to clean the backlash when the direction change. This not need to be a precise value, it is better to set it higher than the actual backlash."
-msgstr "Pokud ovladač zaostřovače tuto možnost nenabízí, nastavte zde počet kroků potřebných k vyčištění vůle při změně směru. Nemusí to být přesná hodnota, je lepší ji nastavit vyšší než skutečná zpětná vůle."
+msgstr "如果您的调焦器不提供该选项，在此设定能够清除回差的步数（当方向变换时）。这里并不需要精确值，最好设定比实际回差更大的值。"
 
 #: u_translation.rsignoreweathe
 #, object-pascal-format
 msgid "Ignore weather condition for image type=%s"
-msgstr "Ignorovat povětrnostní podmínky pro typ snímku =%s"
+msgstr "忽略天气条件由于图像类型=%s"
 
 #: u_translation.rsimage
 msgid "Image"
-msgstr "Snímek"
+msgstr "图像"
 
 #: u_translation.rsimagecleanup
 msgid "Image cleanup"
-msgstr "Vyčistit snímek"
+msgstr "图像清理"
 
 #: u_translation.rsimagecursor
 msgid "Image cursor"
-msgstr "Obrazový kurzor"
+msgstr "预览图光标"
 
 #: u_translation.rsimagedebayer
 msgid "Image Debayered"
-msgstr "Obraz Debayered"
+msgstr "图像已去拜尔"
 
 #: u_translation.rsimageinspect
 msgid "Image inspection"
-msgstr "Kontrola snímku"
+msgstr "图像检测"
 
 #: u_translation.rsimagemedianh
 #, object-pascal-format
 msgid "Image median hfd=%s"
-msgstr "Medián obrazu hfd=%s"
+msgstr "图像中位数hfd=%s"
 
 #: u_translation.rsimages
 msgid "images"
-msgstr "obrázky"
+msgstr "图像"
 
 #: u_translation.rsimagescale
 msgid "Image scale"
-msgstr "Měřítko snímku"
+msgstr "图像比例尺"
 
 #: u_translation.rsimagesfolder
 msgid "Images folder Unix path"
-msgstr "Složka Obrázků Unix cesta"
+msgstr "图像目录的Unix路径"
 
 #: u_translation.rsimagesharpne
 #, object-pascal-format
 msgid "Image sharpness %s"
-msgstr "Ostrost snímku %s"
+msgstr "图像清晰度%s"
 
 #: u_translation.rsimagestatist
 msgid "Image statistic"
-msgstr "Statistika snímku"
+msgstr "图像统计数据"
 
 #: u_translation.rsimagetransfe
 msgid "Image transfer"
-msgstr "Přenos snímku"
+msgstr "图像传输"
 
 #: u_translation.rsimageundebay
 msgid "Image Un-debayered"
-msgstr "Obrázek Obnoven"
+msgstr "图像未去拜尔"
 
 #: u_translation.rsimportcdcmos
 msgid "Import mosaic"
-msgstr "Import mozaiky"
+msgstr "导入马赛克"
 
 #: u_translation.rsimportcdcobs
 msgid "Import observing list"
-msgstr "Importovat pozorovací seznam"
+msgstr "导入观测列表"
 
 #: u_translation.rsin
 msgid "In"
-msgstr "Do ↓"
+msgstr "向内"
 
 #: u_translation.rsincamera
 msgid "In camera"
-msgstr "V kameře"
+msgstr "在相机"
 
 #: u_translation.rsincr
 msgid "Incr."
-msgstr "Poč. krok."
+msgstr "增量"
 
 #: u_translation.rsindisettings
 msgid "INDI settings"
-msgstr "Nastavení INDI"
+msgstr "INDI设置"
 
 #: u_translation.rsinformation
 msgid "Information"
-msgstr "Informace"
+msgstr "信息"
 
 #: u_translation.rsinitializeta
 #, object-pascal-format
 msgid "Initialize target %s"
-msgstr "Inicializace cíle %s"
+msgstr "初始化目标%s"
 
 #: u_translation.rsinitialmovem
 msgid "Initial movement (steps)"
-msgstr "Počáteční pohyb (kroky)"
+msgstr "初始移动（步长）"
 
 #: u_translation.rsinmount
 msgid "In mount"
-msgstr "V montáži"
+msgstr "在赤道仪"
 
 #: u_translation.rsinplaceautof
 msgid "In place autofocus failed!"
-msgstr "Automatické ostření na místě selhalo!"
+msgstr "原地自动导星失败！"
 
 #: u_translation.rsinsertblankr
 msgid "Insert blank row"
-msgstr "Vložit prázdný řádek"
+msgstr "插入空白行"
 
 #: u_translation.rsinsertrows
 msgid "Insert rows"
-msgstr "Vložit řádek"
+msgstr "插入行"
 
 #: u_translation.rsinspect
 msgid "Inspect"
-msgstr "Zkontrolovat"
+msgstr "检测"
 
 #: u_translation.rsinspectionan
 msgid "Inspection and collimation"
-msgstr "Kontrola a kolimace"
+msgstr "检测和准直"
 
 #: u_translation.rsinspectthere
 msgid "Inspect the distribution of the HFD value across the image to help with coma corrector spacing and tilt adjust."
-msgstr "Zkontrolujte rozložení hodnoty HFD na snímku, které vám pomůže s nastavením vzdálenosti koma-korektoru a sklonu."
+msgstr "检测图像中HFD值的分布，以帮助进行彗差镜间距和倾斜调整。"
 
 #: u_translation.rsinsseconds
 #, object-pascal-format
 msgid "in %s seconds"
-msgstr "za %s sekund"
+msgstr "在%s秒内"
 
 #: u_translation.rsintensity
 msgid "Intensity"
-msgstr "Intenzita"
+msgstr "强度"
 
 #: u_translation.rsinteractiond
 msgid "Interaction dialog"
-msgstr "Dialog interakce"
+msgstr "交互对话框"
 
 #: u_translation.rsinterface
 msgid "Interface"
-msgstr "Rozhraní"
+msgstr "交互"
 
 #: u_translation.rsinterfacetyp
 msgid "Interface type"
-msgstr "Typ rozhraní"
+msgstr "接口类型"
 
 #: u_translation.rsinternal
 msgid "Internal"
@@ -2142,751 +2143,751 @@ msgstr ""
 
 #: u_translation.rsinterval
 msgid "Interval"
-msgstr "Interval"
+msgstr "间隔"
 
 #: u_translation.rsinthenextscr
 msgid "In the next screen you have to move the triangle such that the green square is marking a bright star or object."
-msgstr "Na další obrazovce musíte posunout trojúhelník tak, aby zelený čtverec označoval jasnou hvězdu nebo objekt."
+msgstr "在下个屏幕您必须移动三角以使绿色方块标记到一个亮星或天体。"
 
 #: u_translation.rsinvalid
 msgid "Invalid"
-msgstr "Neplatný"
+msgstr "无效"
 
 #: u_translation.rsinvalidbinni
 #, object-pascal-format
 msgid "Invalid binning %s"
-msgstr "Neplatný binning %s"
+msgstr "无效的像素合并%s"
 
 #: u_translation.rsinvalidcoord
 msgid "Invalid coordinates"
-msgstr "Neplatné souřadnice"
+msgstr "无效的坐标"
 
 #: u_translation.rsinvalidexpos
 #, object-pascal-format
 msgid "Invalid exposure time %s"
-msgstr "Neplatný čas expozice %s"
+msgstr "无效的曝光时间%s"
 
 #: u_translation.rsinvalidnumer
 msgid "Invalid numeric value"
-msgstr "Neplatná číselná hodnota"
+msgstr "无效的数值"
 
 #: u_translation.rsinvalidobjec
 msgid "Invalid object coordinates!"
-msgstr "Neplatné souřadnice objektu!"
+msgstr "无效的天体坐标！"
 
 #: u_translation.rsinvalidoruns
 #, object-pascal-format
 msgid "Invalid or unsupported FITS file %s"
-msgstr "Neplatný nebo nepodporovaný soubor FITS %s"
+msgstr "无效的或不支持的FITS文件%s"
 
 #: u_translation.rsiterative
 msgid "Iterative"
-msgstr "Iterativní"
+msgstr "迭代"
 
 #: u_translation.rsitissuggestt
 msgid "It is suggest to slew to focus star when using Vcurve"
-msgstr "Při použití Vkřivky se doporučuje zaostřit na ostřící hvězdu"
+msgstr "当使用V曲线时，建议指向到对焦星"
 
 #: u_translation.rsitwillcontin
 msgid "It will continue after the last checkpoint."
-msgstr "Pokračování od posledního kontrolního bodu."
+msgstr "将在最后一个检查点之后继续。"
 
 #: u_translation.rslanguage
 msgid "Language"
-msgstr "Jazyk"
+msgstr "语言"
 
 #: u_translation.rslatitude
 msgid "Latitude"
-msgstr "Zeměpisná šířka"
+msgstr "纬度"
 
 #: u_translation.rslearn
 msgid "Learn"
-msgstr "Učit se"
+msgstr "学习"
 
 #: u_translation.rslicenseagree
 msgid "License agreement"
-msgstr "Licenční smlouva"
+msgstr "许可协议"
 
 #: u_translation.rslightoff
 msgid "Light OFF"
-msgstr "Vypnuto"
+msgstr "熄灭"
 
 #: u_translation.rslighton
 msgid "Light ON"
-msgstr "Rozsvítit"
+msgstr "点亮"
 
 #: u_translation.rslimitedto15x
 msgid "(limited to 1.5x the slew precision)"
-msgstr "(omezeno na 1,5 násobek přesnosti otočení)"
+msgstr "（限制到1.5倍指向精度）"
 
 #: u_translation.rslimittempera
 msgid "Limit temperature change"
-msgstr "Mezní změna teploty"
+msgstr "限定温度变化"
 
 #: u_translation.rsload
 msgid "Load"
-msgstr "Načíst"
+msgstr "载入"
 
 #: u_translation.rsloadconfigur
 msgid "Load configuration on startup"
-msgstr "Načíst konfiguraci při spuštění"
+msgstr "启动时载入配置"
 
 #: u_translation.rsloaddarkfile
 msgid "Load dark file"
-msgstr "Načíst Dark soubor"
+msgstr "载入暗场文件"
 
 #: u_translation.rslockoverlay
 msgid "Lock overlay"
-msgstr "Překrytí zámku"
+msgstr "锁定覆盖"
 
 #: u_translation.rslongitude
 msgid "Longitude"
-msgstr "Zeměpisná délka"
+msgstr "经度"
 
 #: u_translation.rsloop
 msgid "Loop"
-msgstr "Cyklus"
+msgstr "循环"
 
 #: u_translation.rslowqualityim
 msgid "Low quality image scaling"
-msgstr "Nízká kvalita snímku"
+msgstr "低品质图像缩放"
 
 #: u_translation.rsmagnifyer
 msgid "Magnifier"
-msgstr "Lupa"
+msgstr "放大镜"
 
 #: u_translation.rsmagnitude
 msgid "Magnitude"
-msgstr "Magnitůda"
+msgstr "星等"
 
 #: u_translation.rsmainsensor
 msgid "Main sensor"
-msgstr "Hlavní senzor"
+msgstr "主传感器"
 
 #: u_translation.rsmakeafirstpo
 #, object-pascal-format
 msgid "Adjust the mount RA axis manually to point to the pole the best as possible.%sSlew the telescope to point near the pole at a declination about 89 to 90 degrees with counterweight down.%sSelect below if the telescope can already slew automatically or if it must be moved manually.%sIf automatic, select the direction and movement step. Beware it will move two time this amount."
-msgstr "Osu RA montáže nastavte ručně tak, aby co nejlépe směřovala k pólu.%sNastavte dalekohled tak, aby směřoval do blízkosti pólu při deklinaci asi 89 až 90 stupňů se spuštěným protizávažím dolů.%sVyberte z nabídky, jak se dalekohled bude otáčet, automaticky nebo ručně.%sPři automatickém otáčení vyberte směr a krok pohybu. Pozor, otočí se dvakrát o zadanou hodnotu."
+msgstr "尽可能手动调整赤道仪RA轴指向天极。%s指向望远镜到天极附近的位置，赤纬约89至90度，重锤向下。%s在下面选择望远镜是否可以自动指向或需要手动操作。%s若自动可用，选择方向和移动步长。请注意望远镜会移动此步长两次。"
 
 #: u_translation.rsmanage
 msgid "Manage"
-msgstr "Spravovat"
+msgstr "管理"
 
 #: u_translation.rsmanagethegai
 msgid "Manage the Gain and Offset if available."
-msgstr "Upravit Zesílení a Offset, pokud jsou k dispozici."
+msgstr "管理相机的增益和偏置"
 
 #: u_translation.rsmanual
 msgid "Manual"
-msgstr "Ruční"
+msgstr "手动"
 
 #: u_translation.rsmanualfilter
 msgid "Manual filter change canceled"
-msgstr "Ruční výměna filtru byla zrušena"
+msgstr "手动改变滤镜已取消"
 
 #: u_translation.rsmanualfocusa
 msgid "Manual focus aid"
-msgstr "Ruční zaostření"
+msgstr "手动对焦辅助"
 
 #: u_translation.rsmanyfunction
 msgid "Many functions will not work reliably without an astrometry software."
-msgstr "Mnoho funkcí nebude bez astrometrického softwaru spolehlivě fungovat."
+msgstr "没有天体测量软件则很多功能无法可靠的工作。"
 
 #: u_translation.rsmarginoffset
 msgid "Margin offset"
-msgstr "Okraj offsetu"
+msgstr "边缘偏移量"
 
 #: u_translation.rsmax
 msgid "Max:"
-msgstr "Max:"
+msgstr "最大值："
 
 #: u_translation.rsmaximum
 msgid "maximum"
-msgstr "maximum"
+msgstr "最大"
 
 #: u_translation.rsmaximumadu
 msgid "Maximum ADU"
-msgstr "Maximální ADU"
+msgstr "最大ADU"
 
 #: u_translation.rsmaximumdefoc
 msgid "Maximum defocused HFD the focuser can safely reach"
-msgstr "Maximální rozostření HFD, na které může zaostřovač dosáhnout"
+msgstr "调焦器可以安全达到的最大失焦HFD"
 
 #: u_translation.rsmaximumdrift
 msgid "Maximum drift"
-msgstr "Maximální posun"
+msgstr "最大漂移"
 
 #: u_translation.rsmaximuminten
 msgid "Maximum intensity"
-msgstr "Maximální intenzita"
+msgstr "最大强度"
 
 #: u_translation.rsmaximumnumbe
 msgid "Maximum number of retry"
-msgstr "Maximální počet opakování"
+msgstr "最大重试次数"
 
 #: u_translation.rsmaximumsearc
 msgid "Maximum search radius"
-msgstr "Maximální poloměr vyhledávání"
+msgstr "最大搜索半径"
 
 #: u_translation.rsmaximumsourc
 msgid "Maximum sources"
-msgstr "Maximální zdroje"
+msgstr "最大源"
 
 #: u_translation.rsmaximumtempe
 msgid "Maximum temperature change "
-msgstr "Maximální změna teploty "
+msgstr "最大温度变化 "
 
 #: u_translation.rsmaxoffset
 msgid "Max offset"
-msgstr "Max. offset"
+msgstr "最大偏移量"
 
 #: u_translation.rsmean
 msgid "Mean:"
-msgstr "Průměr:"
+msgstr "平均值："
 
 #: u_translation.rsmeanofimages
 msgid "Mean of images"
-msgstr "Průměr snímků"
+msgstr "平均图像"
 
 #: u_translation.rsmeasureen
 msgid "Measure in the East and North"
-msgstr "Měření na Východě a Severu"
+msgstr "在东向和北向测量"
 
 #: u_translation.rsmeasurees
 msgid "Measure in the East and South"
-msgstr "Měření na Východě a Jihu"
+msgstr "在东向和南向测量"
 
 #: u_translation.rsmeasurement
 msgid "Measurement"
-msgstr "Měření"
+msgstr "测量"
 
 #: u_translation.rsmeasurementh
 #, object-pascal-format
 msgid "Measurement %s hfd:%s peak:%s snr:%s"
-msgstr "Měření %s hfd:%s špič:%s snr:%s"
+msgstr "测量%s hfd:%s peak:%s snr:%s"
 
 #: u_translation.rsmeasuremento
 msgid "Measurement on new images"
-msgstr "Měření na nových snímcích"
+msgstr "测量新图像"
 
 #: u_translation.rsmeasurementp
 #, object-pascal-format
 msgid "Measurement %s pos:%s step:%s hfd:%s peak:%s snr:%s"
-msgstr "Měření %s pos:%s krok:%s hfd:%s špičk:%s snr:%s"
+msgstr "测量%s pos:%s step:%s hfd:%s peak:%s snr:%s"
 
 #: u_translation.rsmeasurewn
 msgid "Measure in the West and North"
-msgstr "Měření na Západě a Severu"
+msgstr "在西向和北向测量"
 
 #: u_translation.rsmeasurews
 msgid "Measure in the West and South"
-msgstr "Měření na Západě a Jihu"
+msgstr "在西向和北向测量"
 
 #: u_translation.rsmeasuringfir
 msgid "Measuring first position"
-msgstr "Měření první pozice"
+msgstr "测量第一个位置"
 
 #: u_translation.rsmeasuringsec
 msgid "Measuring second position"
-msgstr "Měření druhé pozice"
+msgstr "测量第二个位置"
 
 #: u_translation.rsmeasuringthe
 msgid "Measuring the new position"
-msgstr "Měření nové polohy"
+msgstr "测量新位置"
 
 #: u_translation.rsmedian
-#, object-pascal-format
+#, object-pascal-format, fuzzy, badformat
 msgid "%sMedian:%s"
-msgstr "%sStřední:%s"
+msgstr "%中位数：%s"
 
 #: u_translation.rsmeridian
 msgid "Meridian"
-msgstr "Poledník"
+msgstr "中天"
 
 #: u_translation.rsmeridianflip
 msgid "Meridian flip aborted!"
-msgstr "Překlopení poledníku selhalo!"
+msgstr "中天翻转终止！"
 
 #: u_translation.rsmeridianflip10
 msgid "Meridian flip completed"
-msgstr "Překlopení poledníku dokončeno"
+msgstr "中天翻转已完成"
 
 #: u_translation.rsmeridianflip11
 #, object-pascal-format
 msgid "Meridian flip aborted after %d retries"
-msgstr "Překlopení poledníku bylo přerušeno %d opakovat"
+msgstr "中天翻转终止于%d次重试"
 
 #: u_translation.rsmeridianflip2
 msgid "Meridian flip will occur now."
-msgstr "Poledník se překlápí."
+msgstr "现在执行中天翻转。"
 
 #: u_translation.rsmeridianflip3
 msgid "Meridian flip canceled before flip"
-msgstr "Překlopení bylo zrušeno před provedením"
+msgstr "翻转前取消中天翻转"
 
 #: u_translation.rsmeridianflip4
 msgid "Meridian flip now"
-msgstr "Poledník se překlápí"
+msgstr "立即中天翻转"
 
 #: u_translation.rsmeridianflip5
 msgid "Meridian flip"
-msgstr "Překlopení poledníku"
+msgstr "中天翻转"
 
 #: u_translation.rsmeridianflip6
 msgid "Meridian flip error!"
-msgstr "Chyba překlopení poledníku!"
+msgstr "中天翻转错误"
 
 #: u_translation.rsmeridianflip7
 msgid "Meridian flip done"
-msgstr "Překlopení poledníku dokončeno"
+msgstr "中天翻转完成"
 
 #: u_translation.rsmeridianflip8
 msgid "Meridian flip error"
-msgstr "Chyba Překlopení poledníku"
+msgstr "中天翻转错误"
 
 #: u_translation.rsmeridianflip9
 msgid "Meridian flip canceled after flip"
-msgstr "Překlopení poledníku zrušeno po překlopení"
+msgstr "翻转后取消中天翻转"
 
 #: u_translation.rsmeridianin
 msgid "Meridian in"
-msgstr "Průchod Poled. v"
+msgstr "中天还有"
 
 #: u_translation.rsmeridiansinc
 msgid "Meridian since"
-msgstr "Po průchodu Poled"
+msgstr "中天已经"
 
 #: u_translation.rsmessages
 msgid "Messages"
-msgstr "Zprávy"
+msgstr "信息"
 
 #: u_translation.rsmin
 msgid "min."
-msgstr "min."
+msgstr "分钟"
 
 #: u_translation.rsmin2
 msgid "Min:"
-msgstr "Min:"
+msgstr "最小值："
 
 #: u_translation.rsminimum
 msgid "minimum"
-msgstr "minimum"
+msgstr "最小"
 
 #: u_translation.rsminimumobser
 msgid "Minimum observing elevation "
-msgstr "Minimální pozorovací výška "
+msgstr "最小观测高度角 "
 
 #: u_translation.rsminimumstart
 msgid "Minimum, starting point,  focuser movement"
-msgstr "Minimální výchozí pohyb zaostřovače"
+msgstr "最小量，起始点，调焦器移动"
 
 #: u_translation.rsminsnr
 msgid "min.SNR"
-msgstr "min.SNR"
+msgstr "最小SNR"
 
 #: u_translation.rsmintime
 msgid "Min. time"
-msgstr "Min. čas"
+msgstr "最小时间"
 
 #: u_translation.rsminutes
 msgid "minutes"
-msgstr "minut"
+msgstr "分钟"
 
 #: u_translation.rsmnt
 msgid "Mnt."
-msgstr "Mont."
+msgstr "赤道仪"
 
 #: u_translation.rsmode
 msgid "Mode:"
-msgstr "Režim:"
+msgstr "模式："
 
 #: u_translation.rsmount
 msgid "Mount"
-msgstr "Montáž"
+msgstr "赤道仪"
 
 #: u_translation.rsmountcapabil
 #, object-pascal-format
 msgid "Mount capabilities: %s"
-msgstr "Možnosti montáže: %s"
+msgstr "赤道仪能力：%s"
 
 #: u_translation.rsmountisnotpa
 #, object-pascal-format
 msgid "Mount is not parked.%sPark the dome anyway?"
-msgstr "Montáž není zaparkovaná.%sPřesto zaparkovat kopuli?"
+msgstr "赤道仪未驻泊。%s仍然要驻泊圆顶？"
 
 #: u_translation.rsmountisnotre
 msgid "Mount is not reporting pier side, meridian flip can be unreliable."
-msgstr "Montáž nekomunikuje, překlopení poledníku může být nespolehlivé."
+msgstr "赤道仪没有提供基座方向，中天翻转可能不可靠。"
 
 #: u_translation.rsmountrotatio
 msgid "Mount rotation center"
-msgstr "Střed otáčení montáže"
+msgstr "赤道仪旋转中心"
 
 #: u_translation.rsmountrotatio2
 msgid "Mount rotation direction"
-msgstr "Směr otočení montáže"
+msgstr "赤道仪旋转方向"
 
 #: u_translation.rsmountsync
 msgid "Mount sync"
-msgstr "Synchronizace montáže"
+msgstr "同步赤道仪"
 
 #: u_translation.rsmounttrackin
 msgid "Mount tracking restarted"
-msgstr "Sledování montáže bylo restartováno"
+msgstr "赤道仪跟踪重启"
 
 #: u_translation.rsmounttrackin2
 #, object-pascal-format
 msgid "Mount tracking stopped! sequence timeout in %s minutes."
-msgstr "Sledování zastaveno! časový limit sekvence v %s minutách."
+msgstr "赤道仪跟踪停止！序列将于%s分钟后超时。"
 
 #: u_translation.rsmountwasstil
 #, object-pascal-format
 msgid "Mount was still not tracking after %s minutes."
-msgstr "Montáž po %s minutách stále nesleduje."
+msgstr "赤道仪在%s分钟后仍未跟踪。"
 
 #: u_translation.rsmove
 msgid "Move"
-msgstr "Pohyb"
+msgstr "移动"
 
 #: u_translation.rsmovedirectio
 msgid "Move direction"
-msgstr "Směr pohybu"
+msgstr "移动方向"
 
 #: u_translation.rsmovedownby
 msgid "move Down by "
-msgstr "pohyb Dolů o "
+msgstr "向下移动 "
 
 #: u_translation.rsmoveeastby
 msgid "move East by "
-msgstr "pohyb na Východ o "
+msgstr "向东移动 "
 
 #: u_translation.rsmoveinward
 msgid "Move inward"
-msgstr "Pohyb dovnitř↓"
+msgstr "向内移动"
 
 #: u_translation.rsmovementbetw
 msgid "Movement between points"
-msgstr "Pohyb mezi body"
+msgstr "位点间移动"
 
 #: u_translation.rsmoveoutward
 msgid "Move outward"
-msgstr "Pohyb ven↑"
+msgstr "向外移动"
 
 #: u_translation.rsmovethemount
 msgid "Move the mount manually in RA, click Continue when ready"
-msgstr "Ručně přeložte montáž v RA a poté klikněte na Pokračovat"
+msgstr "手动移动赤道仪RA轴，准备好后点击继续"
 
 #: u_translation.rsmovetheteles
 msgid "Slew the telescope to the nearby position with a bright star."
-msgstr "Natočte dalekohled do blízké polohy s jasnou hvězdou."
+msgstr "指向望远镜到附近的一个亮星的位置。"
 
 #: u_translation.rsmovethetrian
 msgid "Move the triangle with the mouse (left button down) such that the green square is marking a bright star."
-msgstr "Posuňte trojúhelník myší (levým tlačítkem dolů) tak, aby zelený čtverec označoval jasnou hvězdu."
+msgstr "用鼠标移动三角形（左键向下），使绿色方框标记一颗亮星。"
 
 #: u_translation.rsmovetonewpla
 #, object-pascal-format
 msgid "Move to new planetarium object %s"
-msgstr "Přejít na nový objekt planetária %s"
+msgstr "移动到新的星图目标 %s"
 
 #: u_translation.rsmoveupby
 msgid "move Up by "
-msgstr "pohyb Nahoru o "
+msgstr "向上移动 "
 
 #: u_translation.rsmovewestby
 msgid "move West by "
-msgstr "pohyb na Západ o "
+msgstr "向西移动 "
 
 #: u_translation.rsmovingmount
 msgid "Moving mount"
-msgstr "Pohyb montáže"
+msgstr "移动赤道仪"
 
 #: u_translation.rsmovingto
 msgid "Moving to"
-msgstr "Přesunování do"
+msgstr "移动到"
 
 #: u_translation.rsmovingtofirs
 msgid "Moving to first position"
-msgstr "Přesun na první pozici"
+msgstr "移动到第一个位置"
 
 #: u_translation.rsmovingtoseco
 msgid "Moving to second position"
-msgstr "Přesun na druhou pozici"
+msgstr "移动到第二个位置"
 
 #: u_translation.rsnearfocus
 msgid "Near focus"
-msgstr "Blízké zaostření"
+msgstr "临近对焦"
 
 #: u_translation.rsnearhfdmustb
 msgid "Near HFD must be smaller than Start HFD!"
-msgstr "HFD s nejbližším zaměřením by mělo být menší než počáteční HFD!"
+msgstr "临近HFD必须小于起始HFD"
 
 #: u_translation.rsnearthepole
 msgid "near the pole"
-msgstr "poblíž pólu"
+msgstr "临近天极"
 
 #: u_translation.rsneedtowaitun
 #, object-pascal-format
 msgid "Need to wait until %s"
-msgstr "Je třeba vyčkat až %s"
+msgstr "需要等待直到%s"
 
 #: u_translation.rsnetwork
 msgid "Network"
-msgstr "Síť"
+msgstr "路网"
 
 #: u_translation.rsnew
 msgid "New"
-msgstr "Nový"
+msgstr "新建"
 
 #: u_translation.rsnewcoordinat
 #, object-pascal-format
 msgid "New coordinates from planetarium: %s %s"
-msgstr "Nové souřadnice z planetária: %s %s"
+msgstr "从星图获得的新坐标：%s %s"
 
 #: u_translation.rsnewobject
 msgid "New object"
-msgstr "Nový objekt"
+msgstr "新目标"
 
 #: u_translation.rsnewscript
 msgid "New script"
-msgstr "Nový script"
+msgstr "新脚本"
 
 #: u_translation.rsnewtarget
 msgid "New target"
-msgstr "Nový cíl"
+msgstr "新目标"
 
 #: u_translation.rsnext
 msgid "Next"
-msgstr "Další"
+msgstr "下一步"
 
 #: u_translation.rsnexttarget
 msgid "Next target"
-msgstr "Další cíl"
+msgstr "下一个目标"
 
 #: u_translation.rsno
 msgid "No"
-msgstr "Ne"
+msgstr "No"
 
 #: u_translation.rsnoalignments
 msgid "No alignment star found for stacking"
-msgstr "Nebyla nalezena žádná zarovnávací hvězda pro skládání"
+msgstr "叠加未找到对齐星"
 
 #: u_translation.rsnoalpacaserv
 msgid "No Alpaca server found"
-msgstr "Nebyl nalezen žádný server Alpaca"
+msgstr "未找到Alpca服务器"
 
 #: u_translation.rsnoastronomic
 msgid "No astronomical twilight at this location today"
-msgstr "Dnes na tomto místě není astronomický soumrak"
+msgstr "今天在本地没有天文天光"
 
 #: u_translation.rsnoautoguidin
 msgid "No auto-guiding, only dither by sending pulse guide directly to the mount."
-msgstr "Bez automatické pointaci, pouze posílat pulzy přímo do montáže."
+msgstr "没有自动导星，仅通过直接发送脉冲导星信号到赤道仪以实现抖动。"
 
 #: u_translation.rsnobacklash
 msgid "No backlash"
-msgstr "Žádná zpětná vůle"
+msgstr "无回差"
 
 #: u_translation.rsnobadpixelma
 msgid "No bad pixel map"
-msgstr "Žádná mapa chybných pixelů"
+msgstr "无坏像素图"
 
 #: u_translation.rsnocenteringm
 msgid "No centering measurement, exposure time shorter than astrometry timeout."
-msgstr "Žádné měření centrování, doba expozice je kratší než časový limit astrometrie."
+msgstr "无法定位测量中心，曝光时间短于解析超时。"
 
 #: u_translation.rsnocenteringm3
 msgid "No centering measurement, astrometry not configured."
-msgstr "Žádné centrování, astrometrie není nakonfigurována."
+msgstr "无法定位测量中心，解析引擎未配置。"
 
 #: u_translation.rsnodark
 msgid "No dark"
-msgstr "Žádný dark"
+msgstr "无暗场"
 
 #: u_translation.rsnodawntoday
 msgid "No dawn today"
-msgstr "Dnes není úsvit"
+msgstr "今天无破晓"
 
 #: u_translation.rsnodevice
 msgid "No device"
-msgstr "Žádné zařízení"
+msgstr "无设备"
 
 #: u_translation.rsnodevicefoun
 msgid "No device found"
-msgstr "Zařízení nenalezeno"
+msgstr "未找到设备"
 
 #: u_translation.rsnodusktoday
 msgid "No dusk today"
-msgstr "Dnes není soumrak"
+msgstr "今天没有黄昏"
 
 #: u_translation.rsnoflipuntilp
 msgid "No flip until past meridian for"
-msgstr "Nepřeklápět  před přechodem poledníku"
+msgstr "过中天后不翻转，直到"
 
 #: u_translation.rsnomeasuremen
 msgid "No measurement, early start exposure not set."
-msgstr "Žádné měření, expozice s počátkem zahájení není nastavena."
+msgstr "无测量值，早先启动的曝光未设置。"
 
 #: u_translation.rsnone2
 msgid "None"
-msgstr "Žádný"
+msgstr "无"
 
 #: u_translation.rsnoresolverco
 msgid "No resolver configured!"
-msgstr "Nenakonfigurováno žádné vyřešení!"
+msgstr "未配置解析程序！"
 
 #: u_translation.rsnoresponsefr
 msgid "No response from server"
-msgstr "Žádná odpověď ze serveru"
+msgstr "服务器没有响应"
 
 #: u_translation.rsnoresponsefr2
 msgid "No response from camera!"
-msgstr "Žádná odpověď z kamery!"
+msgstr "相机没有响应！"
 
 #: u_translation.rsnorth
 msgid "North"
-msgstr "Sever"
+msgstr "北"
 
 #: u_translation.rsnoscriptarer
 msgid "No script are running."
-msgstr "Nejsou spuštěny žádné skripty."
+msgstr "没有脚本在运行。"
 
 #: u_translation.rsnostardetect
 msgid "No star detected. Is the image focused and sufficiently exposed?"
-msgstr "Nedetekována žádná hvězda. Je snímek zaostřený a dostatečně exponovaný?"
+msgstr "未找到星点。图像是否合焦并充分曝光？"
 
 #: u_translation.rsnostarfound
 msgid "No star found"
-msgstr "Nebyla nalezena žádná hvězda"
+msgstr "未找到星"
 
 #: u_translation.rsnosuitableda
 msgid "No suitable dawn for automatic flat today"
-msgstr "Dnes není žádný vhodný úsvit pro flat snímek"
+msgstr "今天没有适合的破晓用于自动平场"
 
 #: u_translation.rsnosuitabledu
 msgid "No suitable dusk for automatic flat today"
-msgstr "Dnes není žádný vhodný soumrak pro automatický flat snímek"
+msgstr "今天没有适合的黄昏用于自动平场"
 
 #: u_translation.rsnotaneqmodmo
 #, object-pascal-format
 msgid "%s not an eqmod mount"
-msgstr "%s montáž není eqmod"
+msgstr "%s 不是一eqmod赤道仪"
 
 #: u_translation.rsnotautoguidi
 msgid "Not autoguiding! dithering ignored."
-msgstr "Chybí automatická pointace! dithering je ignorován."
+msgstr "没有自动导星！抖动忽略。"
 
 #: u_translation.rsnotconnected
 #, object-pascal-format
 msgid "%s not connected!"
-msgstr "%s není připojen(a)!"
+msgstr "%s未连接！"
 
 #: u_translation.rsnotenoughmea
 msgid "Not enough measurement points! Try to increase the maximum HFD or decrease the minimum start movement"
-msgstr "Nedostatek měřicích bodů! Zkuste zvýšit HFD nebo snížit minimální posun"
+msgstr "没有足够的测量点！尝试增加最大HFD或者降低最小星点移动"
 
 #: u_translation.rsnotenoughpoi
 msgid "Not enough points in or out of focus position after two try. Start with a better focus position and run the focuser calibration tool."
-msgstr "Po dvou pokusech není dostatek bodů před nebo za ostřením. Začněte s lepší polohou ostření a spusťte nástroj pro kalibraci ostření."
+msgstr "两次尝试后仍未找到足够的焦内/焦外位点。更换一个更好的调焦器位置来启动调焦器校准工具。"
 
 #: u_translation.rsnotenoughpoi2
 msgid "Not enough points in or out of focus position, retrying now."
-msgstr "Nedostatek bodů před nebo za zaostřovací polohou, zkuste to znovu."
+msgstr "没有足够的焦内/焦外位点，重试。"
 
 #: u_translation.rsnoterminatio
 msgid "No termination actions configured."
-msgstr "Nejsou nakonfigurovány žádné akce ukončení."
+msgstr "未配置终止动作"
 
 #: u_translation.rsnotification
 msgid "Notifications"
-msgstr "Oznámení"
+msgstr "通知"
 
 #: u_translation.rsnotimplement
 msgid "Not implemented!"
-msgstr "Neimplementováno!"
+msgstr "未生效！"
 
 #: u_translation.rsnotrunningno
 msgid "Not running, nothing to do."
-msgstr "Nic neběží, není co dělat."
+msgstr "未运行，无操作。"
 
 #: u_translation.rsnottracking
 msgid "not tracking"
-msgstr "nesleduji"
+msgstr "未跟踪"
 
 #: u_translation.rsnumberofcirc
 msgid "Number of circles"
-msgstr "Počet kruhů"
+msgstr "圆环数量"
 
 #: u_translation.rsnumberofdyna
 msgid "Number of dynamic points"
-msgstr "Počet dynamických bodů"
+msgstr "动态位点数量"
 
 #: u_translation.rsnumberofexpo
 msgid "Number of exposure per point"
-msgstr "Počet expozic na bod"
+msgstr "每位点的曝光数量"
 
 #: u_translation.rsnumberofslot
 msgid "Number of slot"
-msgstr "Počet slotů"
+msgstr "槽数"
 
 #: u_translation.rsnumberofstep
 msgid "Number of steps"
-msgstr "Počet kroků"
+msgstr "步数"
 
 #: u_translation.rsobject
 msgid "Object"
-msgstr "Objekt"
+msgstr "天体"
 
 #: u_translation.rsobjectname
 msgid "Object name"
-msgstr "Název objektu"
+msgstr "天体名称"
 
 #: u_translation.rsobjectplanfi
 #, object-pascal-format
 msgid "Object %s, plan %s finished."
-msgstr "Objekt %s, plán %s dokončen."
+msgstr "天体%s，计划%s完成。"
 
 #: u_translation.rsobjectstartp
 #, object-pascal-format
 msgid "Object %s, start plan %s"
-msgstr "Objekt %s, plán spuštěn %s"
+msgstr "天体%s，启动计划%s"
 
 #: u_translation.rsobservatory
 msgid "Observatory"
-msgstr "Pozice pozorovatele"
+msgstr "观测站"
 
 #: u_translation.rsobservatoryn
 msgid "Observatory name"
-msgstr "Název observatoře"
+msgstr "观测站名称"
 
 #: u_translation.rsobservername
 msgid "Observer name"
-msgstr "Jméno pozorovatele"
+msgstr "观测者姓名"
 
 #: u_translation.rsobservingcon
 msgid "Observing condition"
-msgstr "Stav pozorování"
+msgstr "观测条件"
 
 #: u_translation.rsoctagon
 msgid "Octagon"
-msgstr "Kontrola"
+msgstr "八边形"
 
 #: u_translation.rsoff
 msgid "Off"
-msgstr "Off"
+msgstr "关闭"
 
 #: u_translation.rsoffaxisaberr
 #, object-pascal-format
 msgid "Off-axis aberration[hfd]=%s"
-msgstr "Aberace mimo osu [hfd]=%s"
+msgstr "离轴像差[hfd]=%s"
 
 #: u_translation.rsoffset
 msgid "offset"
-msgstr "posun"
+msgstr "偏移量"
 
 #: u_translation.rsoffset2
 msgid "Offset"
-msgstr "Offset"
+msgstr "偏置"
 
 #: u_translation.rsok
 msgid "OK"
@@ -2894,76 +2895,76 @@ msgstr "OK"
 
 #: u_translation.rson
 msgid "On"
-msgstr "On"
+msgstr "开启"
 
 #: u_translation.rsonlinedocume
 msgid "Online documentation"
-msgstr "Online dokumentace"
+msgstr "在线文档"
 
 #: u_translation.rsonmeridiancr
 msgid "On Meridian crossing"
-msgstr "Co dělat na přechodu poledníku"
+msgstr "在中天穿越时"
 
 #: u_translation.rsopen
 msgid "Open"
-msgstr "Otevřít"
+msgstr "开启"
 
 #: u_translation.rsopendarkfile
 msgid "Open Dark file"
-msgstr "Otevřít Dark soubor"
+msgstr "打开暗场文件"
 
 #: u_translation.rsopendomesequ
 msgid "Open dome sequence when mount is asked to unpark"
-msgstr "Sekvence uzavře kopuli, když je požadavek na zaparkování montáže"
+msgstr "当赤道仪被要求启动时打开圆顶序列"
 
 #: u_translation.rsopenfile
 #, object-pascal-format
 msgid "Open file %s"
-msgstr "Otevřít soubor %s"
+msgstr "打开文件%s"
 
 #: u_translation.rsopenfitsfile
 #, object-pascal-format
 msgid "Open FITS file%s"
-msgstr "Otevřít FITS soubor%s"
+msgstr "打开FITS文件%s"
 
 #: u_translation.rsopenpicturef
 #, object-pascal-format
 msgid "Open FITS or picture file%s"
-msgstr "Otevřít soubor FITS nebo soubor snímku%s"
+msgstr "打开FITS或图片文件%s"
 
 #: u_translation.rsopenreferenc
 msgid "Open reference image"
-msgstr "Otevřít referenční snímek"
+msgstr "打开参考图像"
 
 #: u_translation.rsopenthedomes
 msgid "Open the Dome shutter"
-msgstr "Otevřít štěrbinu kopule"
+msgstr "打开圆顶天窗"
 
 #: u_translation.rsoptions
 #, object-pascal-format
 msgid "Options :%s"
-msgstr "Možnosti :%s"
+msgstr "选项：%s"
 
 #: u_translation.rsoptions2
 msgid "Options"
-msgstr "Možnosti"
+msgstr "选项"
 
 #: u_translation.rsor
 msgid "or"
-msgstr "nebo"
+msgstr "或者"
 
 #: u_translation.rsotheroptions
 msgid "Other options "
-msgstr "Další možnosti "
+msgstr "其他参数 "
 
 #: u_translation.rsout
 msgid "Out"
-msgstr "Ven ↑"
+msgstr "向外"
 
 #: u_translation.rsoutofrange
 #, object-pascal-format
 msgid "%s out of range"
-msgstr "%s mimo rozsah"
+msgstr "%s 溢出"
 
 #: u_translation.rspa
 msgid "PA"
@@ -2971,355 +2972,355 @@ msgstr "PA"
 
 #: u_translation.rsparameter
 msgid "Parameter"
-msgstr "Parametr"
+msgstr "参数"
 
 #: u_translation.rspark
 msgid "Park"
-msgstr "Park"
+msgstr "驻泊"
 
 #: u_translation.rsparkandclose
 msgid "Park and close the dome"
-msgstr "Park a zavřít kupoli"
+msgstr "驻泊并关闭圆顶"
 
 #: u_translation.rsparkdome
 msgid "Park the Dome"
-msgstr "Zaparkovat Kopuli"
+msgstr "驻泊圆顶"
 
 #: u_translation.rsparked
 msgid "Parked"
-msgstr "Parkovat"
+msgstr "已驻泊"
 
 #: u_translation.rsparktheteles
 msgid "Park the telescope now?"
-msgstr "Parkovat dalekohled?"
+msgstr "立即驻泊望远镜？"
 
 #: u_translation.rsparktheteles2
 msgid "Park the telescope"
-msgstr "Zaparkovat dalekohled"
+msgstr "驻泊望远镜"
 
 #: u_translation.rsparktheteles3
 msgid "Park the telescope and the dome"
-msgstr "Zaparkování dalekohledu a kopule"
+msgstr "驻泊望远镜和圆顶"
 
 #: u_translation.rspassword
 msgid "Password"
-msgstr "Heslo"
+msgstr "密码"
 
 #: u_translation.rspause
 msgid "Pause"
-msgstr "Pozastavit"
+msgstr "暂停"
 
 #: u_translation.rspauseafterme
 msgid "Pause after meridian flip "
-msgstr "Pozastavit po překlopení poledníku "
+msgstr "中天翻转后暂停 "
 
 #: u_translation.rspauseautogui
 msgid "Pause autoguider"
-msgstr "Pauza auto pointace"
+msgstr "暂停自动导星"
 
 #: u_translation.rspausebeforem
 msgid "Pause before meridian flip "
-msgstr "Pauza před překlopením poledníku "
+msgstr "中天翻转前暂停 "
 
 #: u_translation.rspauseguiding
 msgid "Pause guiding during autofocus"
-msgstr "Během automatického zaostření pozastavit pointaci"
+msgstr "自动对焦时暂停导星"
 
 #: u_translation.rspausesequenc
 msgid "Pause sequence when the observing condition are out of the limits"
-msgstr "Pozastavit sekvenci, když jsou podmínky pozorování mimo limity"
+msgstr "当观测条件超出下限时暂停序列"
 
 #: u_translation.rspausesequenc2
 msgid "Pause sequence"
-msgstr "Pozastavit sekvenci"
+msgstr "暂停序列"
 
 #: u_translation.rspausesequenc3
 msgid "Pause sequence request canceled."
-msgstr "Požadavek na pozastavení sekvence byl zrušen."
+msgstr "终止序列的请求已撤销。"
 
 #: u_translation.rspdfdocumenta
 msgid "PDF documentation"
-msgstr "PDF dokumentace"
+msgstr "PDF文档"
 
 #: u_translation.rsperformance
 msgid "Performance"
-msgstr "Výkon"
+msgstr "性能"
 
 #: u_translation.rsperiodicauto
 msgid "Periodic auto-focus"
-msgstr "Pravidelné automatické zaostřování"
+msgstr "周期性自动对焦"
 
 #: u_translation.rsphotometry
 msgid "Photometry"
-msgstr "Fotometrie"
+msgstr "光度测定"
 
 #: u_translation.rspixel
 msgid "pixel"
-msgstr "pixel"
+msgstr "像素"
 
 #: u_translation.rspixelcount
-#, object-pascal-format
+#, object-pascal-format, fuzzy, badformat
 msgid "%sPixel count:%s"
-msgstr "%sPočet pixelů:%s"
+msgstr "%像素数量：%s"
 
 #: u_translation.rspixels
 msgid "Pixels"
-msgstr "Pixelů"
+msgstr "像素"
 
 #: u_translation.rspixelsize
 msgid "Pixel size"
-msgstr "Velikost pixelu"
+msgstr "像素大小"
 
 #: u_translation.rsplan
 msgid "Plan"
-msgstr "Plán"
+msgstr "计划"
 
 #: u_translation.rsplanalreadye
 #, object-pascal-format
 msgid "Plan %s already exist. Do you want to replace this file?"
-msgstr "Plán%s již existuje. Chcete tento soubor nahradit?"
+msgstr "计划%s已存在。确定要替换该文件？"
 
 #: u_translation.rsplanalreadye2
 #, object-pascal-format
 msgid "Plan %s already exist. Do you want to edit this plan?"
-msgstr "Plán%s již existuje. Chcete tento plán upravit?"
+msgstr "计划%s已存在。确定要编辑该计划？"
 
 #: u_translation.rsplanet
 msgid "Planet"
-msgstr "Planeta"
+msgstr "行星"
 
 #: u_translation.rsplanetarium
 msgid "Planetarium"
-msgstr "Planetárium"
+msgstr "星图"
 
 #: u_translation.rsplanetariume
 msgid "Planetarium error."
-msgstr "Chyba planetária."
+msgstr "星图错误"
 
 #: u_translation.rsplanetariumi
 msgid "Planetarium is not connected"
-msgstr "Planetárium nepřipojeno"
+msgstr "星图未连接"
 
 #: u_translation.rsplanetariump
 msgid "Planetarium position"
-msgstr "Poloha planetária"
+msgstr "星图位置"
 
 #: u_translation.rsplanetariums
 msgid "Planetarium shutdown"
-msgstr "Vypnout planetárium"
+msgstr "星图关闭"
 
 #: u_translation.rsplanetariumt
 #, object-pascal-format
 msgid "Planetarium target set to %s"
-msgstr "Cíl planetária je nastaven na: %s"
+msgstr "星图目标设置为 %s"
 
 #: u_translation.rsplanetariumt2
 msgid "Planetarium target slew fail"
-msgstr "Neúspěšné otočení cíle v planetáriu"
+msgstr "星图目标指向失败"
 
 #: u_translation.rsplanfinished
 #, object-pascal-format
 msgid "Plan %s finished."
-msgstr "Plán %s dokončen."
+msgstr "计划%s完成。"
 
 #: u_translation.rsplanstopped
 #, object-pascal-format
 msgid "Plan %s stopped."
-msgstr "Plán %s zastaven."
+msgstr "计划%s停止。"
 
 #: u_translation.rsplatesolveex
 #, object-pascal-format
 msgid "Plate solve exposure %s"
-msgstr "Astrometrie Expozice %s"
+msgstr "解析曝光%s"
 
 #: u_translation.rspleaseactiva
 msgid "Please activate the log file in the preference."
-msgstr "Aktivujte protokol v nastavení."
+msgstr "请在首选项中激活日志文件。"
 
 #: u_translation.rspleasebecare
 msgid "Please be careful to review and set the value for the Gain and Offset"
-msgstr "Pečlivě zkontrolujte a nastavte hodnotu pro Zisk a Offset"
+msgstr "请仔细预览并设定相机的增益和偏置"
 
 #: u_translation.rspleaseconfig
 msgid "Please configure your"
-msgstr "Nakonfigurujte"
+msgstr "请配置您的"
 
 #: u_translation.rspleaseconfig2
 msgid "Please configure the Autofocus options."
-msgstr "Nakonfigurujte možnosti automatického zaostření."
+msgstr "请配置自动对焦选项。"
 
 #: u_translation.rspleaseconfig3
 msgid "Please configure the observatory location."
-msgstr "Nakonfigurujte umístění observatoře."
+msgstr "请配置观测站位置。"
 
 #: u_translation.rspleaseconfir
 #, object-pascal-format
 msgid "Please confirm you want to slew the telescope to %s at coordinates %s/%s"
-msgstr "Potvrďte, že chcete dalekohledem přejed na %s souřadnicích %s/%s"
+msgstr "请确认您要将望远镜指向到 %s 位于坐标 %s/%s"
 
 #: u_translation.rspleaseconnec
 msgid "Please connect the planetarium first"
-msgstr "Nejprve připojit planetárium"
+msgstr "请先连接星图"
 
 #: u_translation.rspleasecreate
 msgid "Please create a new bad pixel map or select a brighter star"
-msgstr "Vytvořit novou mapu chybných pixelů nebo vyberte jasnější hvězdu"
+msgstr "请创建新的坏像素图或者选择一颗更亮的星"
 
 #: u_translation.rspleaseincrea
 msgid "Please increase the threshold."
-msgstr "Zvýšit práh."
+msgstr "请提升阙值。"
 
 #: u_translation.rspleaseloador
 msgid "Please load or create a target list first."
-msgstr "Nejprve načtěte nebo vytvořte cílový seznam."
+msgstr "请先载入或者新建一个目标列表。"
 
 #: u_translation.rspleaserunthe
 msgid "Please run the V-curve learning for this focuser direction first. Button V-learn."
-msgstr "Trénink Vkřivku pro tento směr ostření. Tlačítko Učit se."
+msgstr "请先为该调焦器运行V曲线学习。V底学习。"
 
 #: u_translation.rspleaserunthe2
 msgid "Please run the Focuser Calibration procedure first"
-msgstr "Nejprve spustit Kalibraci Ostření"
+msgstr "请先执行调焦器校准程序"
 
 #: u_translation.rspleaserunvcu
 #, object-pascal-format
 msgid "Please run Vcurve learning for binning %s"
-msgstr "Spustit učení Vkřivky pro binning %s"
+msgstr "请为像素合并%s运行V曲线学习"
 
 #: u_translation.rspleaseseethe
 msgid "Please see the documentation for important security information"
-msgstr "V dokumentaci zjistíte důležité bezpečnostní informace"
+msgstr "请参阅文档以获取重要的安全信息"
 
 #: u_translation.rspleaseselect
 msgid "Please select a script!"
-msgstr "Vyberte skript!"
+msgstr "请选择一个脚本！"
 
 #: u_translation.rspleaseselect2
 msgid "Please select a temporary folder without space in the path name."
-msgstr "Vybrat dočasnou složku bez mezery v názvu cesty."
+msgstr "请选择一个路径和名字中不含有空格的临时目录"
 
 #: u_translation.rspleasesetthe
 #, object-pascal-format
 msgid "Please set the format to %s before to start the sequence."
-msgstr "Před zahájením sekvence definujte formát %s."
+msgstr "启动序列之前请将格式设置为%s"
 
 #: u_translation.rspleasestopth
 msgid "Please stop the sequence first!"
-msgstr "Zastavit sekvenci!"
+msgstr "请先停止序列！"
 
 #: u_translation.rspleasewait
 msgid "please wait"
-msgstr "počkejte prosím"
+msgstr "请稍候"
 
 #: u_translation.rspleasewaitun
 msgid "Please wait until the measurements are complete"
-msgstr "Počkat na dokončení měření"
+msgstr "请等到测量完成"
 
 #: u_translation.rspointingoffs
 msgid "Pointing offset"
-msgstr "Poloha offsetu"
+msgstr "指向偏移量"
 
 #: u_translation.rspolaralignme
 msgid "Polar alignment"
-msgstr "Polární zarovnání"
+msgstr "极轴校准"
 
 #: u_translation.rspolaralignme2
 msgid "Polar alignment instruction"
-msgstr "Pokyn k polárnímu zarovnání"
+msgstr "极轴校准操作指南"
 
 #: u_translation.rsport
 msgid "Port"
-msgstr "Port"
+msgstr "端口号"
 
 #: u_translation.rspos
 msgid "Pos."
-msgstr "Poz."
+msgstr "位置"
 
 #: u_translation.rsposition
 msgid "Position"
-msgstr "Umístění"
+msgstr "位置"
 
 #: u_translation.rspower
 msgid "Power"
-msgstr "Energie"
+msgstr "功率"
 
 #: u_translation.rsprecisionsle
 msgid "Precision slewing options"
-msgstr "Možnosti přesného přejetí dalekohledu"
+msgstr "精确指向选项"
 
 #: u_translation.rsprecisionsle2
 msgid "Precision slew finished."
-msgstr "Přesné přejetí dokončeno."
+msgstr "精确指向完成。"
 
 #: u_translation.rsprecisionsle3
 msgid "Precision slew failed!"
-msgstr "Přesné přejetí selhalo!"
+msgstr "精确指向失败！"
 
 #: u_translation.rspredefined
 msgid "Predefined (recommended)"
-msgstr "Předdefinováno (doporučeno)"
+msgstr "预设定（推荐的）"
 
 #: u_translation.rspreferedfocu
 msgid "Prefered focuser direction"
-msgstr "Preferovaný směr zaostřovače"
+msgstr "首选调焦器方向"
 
 #: u_translation.rspreferences
 #, object-pascal-format
 msgid "Preferences%s"
-msgstr "Předvolby%s"
+msgstr "首选项%s"
 
 #: u_translation.rspresetlist
 msgid "Preset list"
-msgstr "Přednastavený seznam"
+msgstr "预设列表"
 
 #: u_translation.rspressure
 msgid "Pressure"
-msgstr "Tlak"
+msgstr "气压"
 
 #: u_translation.rspreview
 msgid "Preview"
-msgstr "Náhled"
+msgstr "预览"
 
 #: u_translation.rspreviewdebay
 msgid "Preview debayer"
-msgstr "Náhled debayer"
+msgstr "预览去拜尔"
 
 #: u_translation.rsprofile
 #, object-pascal-format
 msgid "Profile: %s"
-msgstr "Profil: %s"
+msgstr "配置文件：%s"
 
 #: u_translation.rsprofile2
 msgid "Profile"
-msgstr "Profil"
+msgstr "配置文件"
 
 #: u_translation.rsprogramfolde
 msgid "Program folder "
-msgstr "Složka programu "
+msgstr "程序目录 "
 
 #: u_translation.rsprogrampath
 msgid "Program path"
-msgstr "Cesta programu"
+msgstr "程序路径"
 
 #: u_translation.rsprotocol
 msgid "Protocol"
-msgstr "Protokol"
+msgstr "协议"
 
 #: u_translation.rspulseduratio
 msgid "Pulse duration"
-msgstr "Doba trvání impulzu"
+msgstr "脉冲时长"
 
 #: u_translation.rspythoncomman
 msgid "Python command"
-msgstr "Příkaz Pythonu"
+msgstr "Python命令"
 
 #: u_translation.rsquality
 msgid "Quality:"
-msgstr "Kvalita:"
+msgstr "品质:"
 
 #: u_translation.rsquit
 msgid "Quit"
-msgstr "Konec"
+msgstr "退出"
 
 #: u_translation.rsra
 msgid "RA"
@@ -3327,765 +3328,765 @@ msgstr "RA"
 
 #: u_translation.rsrainrate
 msgid "Rain rate"
-msgstr "Míra deště"
+msgstr "降水概率"
 
 #: u_translation.rsramdisk
 msgid "RAM Disk"
-msgstr "RAM Disk"
+msgstr "内存盘"
 
 #: u_translation.rsraonly
 msgid "RA only"
-msgstr "Pouze RA"
+msgstr "只RA"
 
 #: u_translation.rsreachconfigu
 msgid "Reach configured minimum flat exposure time!"
-msgstr "Nakonfigurujte rozpětí minimální doby expozice!"
+msgstr "达到配置中的最小平场曝光时间！"
 
 #: u_translation.rsreachconfigu2
 msgid "Reach configured maximum flat exposure time!"
-msgstr "Nakonfinujte rozpětí maximálního času expozice!"
+msgstr "达到配置中的最大平场曝光时间！"
 
 #: u_translation.rsreachfocuser
 msgid "Reach focuser range limit! please better position the focuser half way on it's mechanical travel or decrease the maximum HFD"
-msgstr "Byl dosažen limit rozsahu ostření! lépe umístěte zaostřovač nejlépe do poloviny na jeho mechanickém zdvihu nebo snižte maximální HFD"
+msgstr "达到调焦器范围极限！请将调焦器机械行程调整剧中或减小其最大HFD"
 
 #: u_translation.rsreadccd
 msgid "Read CCD"
-msgstr "Číst CCD"
+msgstr "读取CCD"
 
 #: u_translation.rsreadimage
 msgid "Read image"
-msgstr "Číst snímek"
+msgstr "读取图像"
 
 #: u_translation.rsreadoutmodes
 msgid "Readout modes"
-msgstr "Režim čtení"
+msgstr "读出模式"
 
 #: u_translation.rsreceiveunkno
 #, object-pascal-format
 msgid "Receive unknown message: %s"
-msgstr "Přijmout neznámou zprávu: %s"
+msgstr "收到未知信息：%s"
 
 #: u_translation.rsrecenterifth
 msgid "Recenter if the drift is more than"
-msgstr "Znovu se zaměřte, pokud je posun větší než"
+msgstr "重定位中心，如果漂移大于"
 
 #: u_translation.rsrecenterimag
 #, object-pascal-format
 msgid "Recenter image error!%sdistance: %s"
-msgstr "Chyba opětovného centrování!%svzdálenost: %s"
+msgstr "重定位图像中心错误！%s距离：%s"
 
 #: u_translation.rsrecenteronla
 msgid "Recenter on last position"
-msgstr "Recentrovat na poslední pozici"
+msgstr "重定位中心到上一个位置"
 
 #: u_translation.rsrecenteronla2
 msgid "Recenter on last image"
-msgstr "Znovu centruj na poslední snímek"
+msgstr "重定位中心到上一幅图像"
 
 #: u_translation.rsrecentersequ
 msgid "Recenter sequence target that drift"
-msgstr "Znovu zaměřit cíl sekvence, který je posunut"
+msgstr "当序列目标漂移后重回中心位置"
 
 #: u_translation.rsrecentertarg
 msgid "Recenter target now"
-msgstr "Znovu zaměřit cíl"
+msgstr "重定位目标到中心"
 
 #: u_translation.rsrecording
 msgid "Recording"
-msgstr "Záznam"
+msgstr "录像"
 
 #: u_translation.rsrecordrestar
 msgid "Record restart information"
-msgstr "Zaznamenat informace o restartování"
+msgstr "记录重启信息"
 
 #: u_translation.rsred
 msgid "red"
-msgstr "červená"
+msgstr "红"
 
 #: u_translation.rsreferenceima
 msgid "Reference image"
-msgstr "Referenční snímek"
+msgstr "参考图像"
 
 #: u_translation.rsrefractedpol
 msgid "Refracted pole"
-msgstr "Změření pólu"
+msgstr "折射的天极"
 
 #: u_translation.rsrelativeincr
 msgid "Relative increment for the inward or outward movement"
-msgstr "Počet kroků, které se mají vykonat dovnitř nebo ven"
+msgstr "向内或向外移动的相对增量"
 
 #: u_translation.rsremotedevice
 msgid "Remote device number"
-msgstr "Číslo vzdáleného zařízení"
+msgstr "远端设备号码"
 
 #: u_translation.rsremoveallbre
 msgid "Remove all breakpoints"
-msgstr "Odstranit všechny body"
+msgstr "清除所有断点"
 
 #: u_translation.rsremoverow
 msgid "Remove row"
-msgstr "Odstranit řádek"
+msgstr "删除行"
 
 #: u_translation.rsremovestep
 msgid "Remove step"
-msgstr "Odebrat krok"
+msgstr "移除步骤"
 
 #: u_translation.rsrepeat
 msgid "Repeat"
-msgstr "Opakovat"
+msgstr "重复"
 
 #: u_translation.rsrepeatstep
 #, object-pascal-format
 msgid "Repeat step %s/%s %s"
-msgstr "Opakovat krok %s/%s %s"
+msgstr "重复步骤 %s/%s %s"
 
 #: u_translation.rsrepeattarget
 #, object-pascal-format
 msgid "Repeat target%s/%s %s"
-msgstr "Opakuji cíl%s/%s %s"
+msgstr "重复目标%s/%s %s"
 
 #: u_translation.rsrepeatthewho
 msgid "Repeat the whole list"
-msgstr "Opakování celého seznamu"
+msgstr "重复整个列表"
 
 #: u_translation.rsrepeatthisst
 msgid "Repeat this step"
-msgstr "Tento krok opakujte"
+msgstr "重复该步骤"
 
 #: u_translation.rsreportaprobl
 msgid "Report a problem"
-msgstr "Nahlášení problému"
+msgstr "报告问题"
 
 #: u_translation.rsrequestedton
 msgid "Requested to not run the termination action"
-msgstr "Požadováno, aby nedošlo k ukončení akce"
+msgstr "请求不运行终止动作"
 
 #: u_translation.rsrequesttosto
 msgid "Request to stop focuser calibration"
-msgstr "Požadavek na zastavení kalibrace ostření"
+msgstr "请求停止调焦器校准"
 
 #: u_translation.rsrequesttosto2
 msgid "Request to stop the current sequence"
-msgstr "Požadavek na zastavení aktuální sekvence"
+msgstr "请求停止当前序列"
 
 #: u_translation.rsrequesttosto3
 msgid "Request to stop autofocus ..."
-msgstr "Požadavek na zastavení automatického ostření ..."
+msgstr "请求停止自动对焦..."
 
 #: u_translation.rsreset
 msgid "Reset"
-msgstr "Restartovat"
+msgstr "重置"
 
 #: u_translation.rsresettodefau
 msgid "Reset to default"
-msgstr "Obnovit do výchozího nastavení"
+msgstr "重置为缺省设置"
 
 #: u_translation.rsresolve
 msgid "Resolve"
-msgstr "Vyřešit"
+msgstr "解析"
 
 #: u_translation.rsresolveandpl
 msgid "Resolve and annotate DSO"
-msgstr "Řešení a anotace DSO"
+msgstr "解析并标记深空天体"
 
 #: u_translation.rsresolveandpl2
 msgid "Resolve and annotate galaxies (Hyperleda)"
-msgstr "Vyřešit a anotovat galaxie (Hyperleda)"
+msgstr "解析并标注星系（Hyperleda）"
 
 #: u_translation.rsresolveandro
 msgid "Resolve and Rotate"
-msgstr "Vyřešit a Otočit"
+msgstr "解析并旋转"
 
 #: u_translation.rsresolveandsh
 msgid "Resolve and show image in planetarium"
-msgstr "Vyřešit a zobrazit snímek v planetáriu"
+msgstr "解析并在星图中显示图像"
 
 #: u_translation.rsresolveandsh2
 msgid "Resolve and show image frame in planetarium"
-msgstr "Vyřešit a zobrazit snímek v planetáriu"
+msgstr "解析并在星图中显示构图"
 
 #: u_translation.rsresolveandsl
 msgid "Resolve and Slew to image center"
-msgstr "Vyřešit a Přejet na střed snímku"
+msgstr "解析并指向到图像中心"
 
 #: u_translation.rsresolveandsl2
 msgid "Resolve and Slew to cursor"
-msgstr "Vyřešit a Přejet na pozici kurzoru"
+msgstr "解析并指向目标"
 
 #: u_translation.rsresolveandsy
 msgid "Resolve and Sync the mount"
-msgstr "Vyřešit a Synchronizovat s montáží"
+msgstr "解析并同步赤道仪"
 
 #: u_translation.rsresolveandsy2
 msgid "Resolve and Sync the rotator"
-msgstr "Vyřešit a synchronizovat rotátor"
+msgstr "解析并同步旋转器"
 
 #: u_translation.rsresolvecontr
 msgid "Resolve control exposure"
-msgstr "Vyřešit kontrolní expozice"
+msgstr "解析控制曝光"
 
 #: u_translation.rsresolveerror
 #, object-pascal-format
 msgid "%s resolve error."
-msgstr "%s chyba opětovného řešení."
+msgstr "%S解析错误。"
 
 #: u_translation.rsresolveralre
 msgid "Resolver already running, cannot start astrometry now!"
-msgstr "Řešení již běží, nelze nyní spustit astrometrii!"
+msgstr "解析已在运行，现在无法启动解析！"
 
 #: u_translation.rsresolvesucce
 #, object-pascal-format
 msgid "%s resolve successful."
-msgstr "%s řešení úspěšné."
+msgstr "%s解析成功。"
 
 #: u_translation.rsresolvingusi
 #, object-pascal-format
 msgid "Resolving using %s ..."
-msgstr "K řešení použiji %s ..."
+msgstr "解析使用%s ..."
 
 #: u_translation.rsrestartafter
 msgid "Restart after"
-msgstr "Restartovat po"
+msgstr "重启于"
 
 #: u_translation.rsrestartafter2
 msgid "Restart after weather is good for"
-msgstr "Restartovat po dobrém počasí"
+msgstr "重启当天气好转"
 
 #: u_translation.rsrestartautog
 msgid "Restart autoguider"
-msgstr "Restart automatické poitace"
+msgstr "重启自动导星"
 
 #: u_translation.rsrestartdelay
 msgid "Restart delay"
-msgstr "Zpoždění restartu"
+msgstr "重启推迟"
 
 #: u_translation.rsrestartexpos
 msgid "Restart exposure"
-msgstr "Znovu spustit expozici"
+msgstr "重启曝光"
 
 #: u_translation.rsrestartingse
 #, object-pascal-format
 msgid "Restarting sequence %s ..."
-msgstr "Obnovit sekvenci %s ..."
+msgstr "重启序列%s..."
 
 #: u_translation.rsrestartthese
 msgid "Restart the sequence"
-msgstr "Obnovit sekvenci"
+msgstr "重启序列"
 
 #: u_translation.rsresumeautogu
 msgid "Resume autoguider"
-msgstr "Obnovit auto pointaci"
+msgstr "恢复自动导星"
 
 #: u_translation.rsretrieveposi
 msgid "Retrieve position from deepsky database"
-msgstr "Načíst pozici z DSO databáze"
+msgstr "从深空数据库检索位置"
 
 #: u_translation.rsretry
 msgid "Retry"
-msgstr "Opakovat"
+msgstr "重试"
 
 #: u_translation.rsretrywithast
 msgid "Retry with astrometry.net"
-msgstr "Opakujte akci s astrometry.net"
+msgstr "使用astrometry.net重试"
 
 #: u_translation.rsreturnthefoc
 #, object-pascal-format
 msgid "Return the focuser to previous position %s"
-msgstr "Zaostření vráceno do předchozí pozici %s"
+msgstr "恢复调焦器到之前的位置%s"
 
 #: u_translation.rsreturntotarg
 msgid "Return to target position"
-msgstr "Návrat do cílové polohy"
+msgstr "回到目标位置"
 
 #: u_translation.rsreverse
 msgid "Reverse"
-msgstr "Otočit"
+msgstr "反转"
 
 #: u_translation.rsrise
 msgid "rise"
-msgstr "vzestup"
+msgstr "升起"
 
 #: u_translation.rsrisesetcondi
 msgid "Rise/Set condition"
-msgstr "Stav východu/západu"
+msgstr "升起/落下条件"
 
 #: u_translation.rsrot
 msgid "Rot."
-msgstr "Rot."
+msgstr "旋转"
 
 #: u_translation.rsrotate
 msgid "Rotate"
-msgstr "Otočit"
+msgstr "旋转"
 
 #: u_translation.rsrotateby
 msgid "rotate by"
-msgstr "otočit o"
+msgstr "旋转"
 
 #: u_translation.rsrotatetelesc
 msgid "Rotate the telescope"
-msgstr "Otočit dalekohled"
+msgstr "旋转望远镜"
 
 #: u_translation.rsrotating
 msgid "Rotating"
-msgstr "Otáčení"
+msgstr "旋转中"
 
 #: u_translation.rsrotator
 msgid "Rotator"
-msgstr "Rotátor"
+msgstr "旋转器"
 
 #: u_translation.rsrotatorisnot
 msgid "Rotator is not connected"
-msgstr "Rotátor nepřipojen"
+msgstr "旋转器未连接"
 
 #: u_translation.rsrotatormovet
 #, object-pascal-format
 msgid "Rotator move to PA %s"
-msgstr "Otočení Rotátoru na PA %s"
+msgstr "旋转器移动到PA %s"
 
 #: u_translation.rsrotatorsyncc
 #, object-pascal-format
 msgid "Rotator sync calibration = %s"
-msgstr "Kalibrace a synchronizace Rotátoru = %s"
+msgstr "旋转器同步校准=%s"
 
 #: u_translation.rsrun
 msgid "Run"
-msgstr "Start"
+msgstr "执行"
 
 #: u_translation.rsrunascript
 msgid "Run a script"
-msgstr "Spustit skript"
+msgstr "运行脚本"
 
 #: u_translation.rsrunastrometr
 msgid "Run astrometry on every image to search for drift"
-msgstr "Provádění astrometrie na každém snímku za účelem hledání posunu"
+msgstr "在每张图像上执行解析以探查漂移"
 
 #: u_translation.rsrunautofocus
 #, object-pascal-format
 msgid "Auto-focus if temp. change by more than %s"
-msgstr "Autozaostření při změně teploty o více než %s"
+msgstr "如果温度变化大于%s则自动对焦"
 
 #: u_translation.rsrunscript
 msgid "Run script"
-msgstr "Spustit script"
+msgstr "运行脚本"
 
 #: u_translation.rsrunscript2
 #, object-pascal-format
 msgid "Run script %s"
-msgstr "Spuštění skriptu %s"
+msgstr "运行脚本%s"
 
 #: u_translation.rsrununattende
 msgid "Run unattended"
-msgstr "Spuštění bez obsluhy"
+msgstr "无人值守运行"
 
 #: u_translation.rss
 msgid "s"
-msgstr "v"
+msgstr "秒"
 
 #: u_translation.rssafe
 msgid "Safe"
-msgstr "Bezpečný"
+msgstr "安全"
 
 #: u_translation.rssafeforopera
 msgid "Safe for operation"
-msgstr "Bezpečný provoz"
+msgstr "操作安全"
 
 #: u_translation.rssafetymonito
 msgid "Safety monitor"
-msgstr "Bezpečnostní monitor"
+msgstr "安全监视器"
 
 #: u_translation.rssaturated
 msgid "saturated"
-msgstr "nasycený"
+msgstr "饱和的"
 
 #: u_translation.rssave
 msgid "Save"
-msgstr "Uložit"
+msgstr "保存"
 
 #: u_translation.rssaveandapply
 msgid "Save and apply to targets"
-msgstr "Uložit a použít na cíl"
+msgstr "保存并应用于目标"
 
 #: u_translation.rssaveapngfile
 msgid "Save a bitmap file additionally to the standard FITS file"
-msgstr "Uložit bitmapový soubor navíc do standardního souboru FITS"
+msgstr "在保存FITS文件时附加保存一张位图文件"
 
 #: u_translation.rssaveas
 msgid "Save as..."
-msgstr "Uložit jako..."
+msgstr "另存为..."
 
 #: u_translation.rssaveconfigur
 msgid "Save configuration now"
-msgstr "Uložit konfiguraci"
+msgstr "立即保存配置"
 
 #: u_translation.rssaved
 #, object-pascal-format
 msgid "Saved %s"
-msgstr "Uloženo %s"
+msgstr "已保存%s"
 
 #: u_translation.rssavedfile
 #, object-pascal-format
 msgid "Saved file %s"
-msgstr "Soubor uložen %s"
+msgstr "保存文件%s"
 
 #: u_translation.rssavefitsfile
 #, object-pascal-format
 msgid "Save FITS file%s"
-msgstr "Uložit FITS soubor%s"
+msgstr "保存FITS文件%s"
 
 #: u_translation.rssavepictures
 #, object-pascal-format
 msgid "Save picture%s"
-msgstr "Uložit snímek%s"
+msgstr "保存图片%s"
 
 #: u_translation.rssavetempl
 msgid "Save template"
-msgstr "Uložit šablonu"
+msgstr "保存模板"
 
 #: u_translation.rssavetemplas
 msgid "Save template as..."
-msgstr "Uložit šablonu jako ..."
+msgstr "另存为模版..."
 
 #: u_translation.rsscaletoleran
 msgid "Scale tolerance"
-msgstr "Tolerance měřítka"
+msgstr "比例容差"
 
 #: u_translation.rsscript
 msgid "Script"
-msgstr "Skript"
+msgstr "脚本"
 
 #: u_translation.rsscriptalread
 #, object-pascal-format
 msgid "Script %s already exist. Do you want to replace this file?"
-msgstr "Skript %s již existuje. Nahradit tento soubor?"
+msgstr "脚本%s已存在。是否要替换该文件？"
 
 #: u_translation.rsscriptalread2
 #, object-pascal-format
 msgid "Script %s already exist. Do you want to edit this script?"
-msgstr "Skript %s již existuje. Upravit tento skript?"
+msgstr "脚本%s已存在。是否要编辑此脚本？"
 
 #: u_translation.rsscriptalread3
 #, object-pascal-format
 msgid "Script %s already exist. Do you want to replace this custom script by the template?"
-msgstr "Skript %s již existuje. Nahradit šablonu vlastním scriptem?"
+msgstr "脚本%s已存在。是否要用模版替换该脚本为？"
 
 #: u_translation.rsscripteditor
 msgid "Script editor"
-msgstr "Editor skriptů"
+msgstr "脚本编辑器"
 
 #: u_translation.rsscripterror
 #, object-pascal-format
 msgid "Script error: %s"
-msgstr "Chyba skriptu: %s"
+msgstr "脚本错误：%s"
 
 #: u_translation.rsscriptexecut
 #, object-pascal-format
 msgid "Script execution error, row %s: %s"
-msgstr "Chyba spuštění skriptu, %s řádků: %s"
+msgstr "脚本执行错误，行%s: %s"
 
 #: u_translation.rsscriptfailed
 #, object-pascal-format
 msgid "Script %s failed!"
-msgstr "Skript %s selhal!"
+msgstr "脚本%s失败！"
 
 #: u_translation.rsscriptfinish
 #, object-pascal-format
 msgid "Script %s finished"
-msgstr "Skript %s dokončen"
+msgstr "脚本%s完成"
 
 #: u_translation.rsscriptlangua
 msgid "Script language"
-msgstr "Jazyk skriptu"
+msgstr "脚本语言"
 
 #: u_translation.rsscripttermin
 msgid "Script terminating..."
-msgstr "Ukončení skriptu ..."
+msgstr "脚本终止..."
 
 #: u_translation.rssearch
 msgid "Search"
-msgstr "Vyhledat"
+msgstr "检索"
 
 #: u_translation.rssec
 msgid "sec."
-msgstr "sek."
+msgstr "秒"
 
 #: u_translation.rsseconds
 msgid "seconds"
-msgstr "sekundy"
+msgstr "秒"
 
 #: u_translation.rsseconds2
 msgid "[seconds]"
-msgstr "[sekundy]"
+msgstr "[秒]"
 
 #: u_translation.rssecuressltls
 msgid "Secure SSL/TLS connection"
-msgstr "Zabezpečené připojení SSL/TLS"
+msgstr "安全 SSL/TLS 连接"
 
 #: u_translation.rsselectastarf
 msgid "Select a star first!"
-msgstr "Vybbrat hvězdu!"
+msgstr "先选择一颗星！"
 
 #: u_translation.rsselectoneoft
 msgid "Select one of the measurement options:"
-msgstr "Vyberte jednu z možností měření:"
+msgstr "选择测量选项之一："
 
 #: u_translation.rsselectthecur
 msgid "Select the cursor to use "
-msgstr "Výběr kurzoru pro použití "
+msgstr "选择所使用的光标 "
 
 #: u_translation.rsselectthefil
 msgid "Select the file to delete"
-msgstr "Vybrat soubor k odstranění"
+msgstr "选择要删除的文件"
 
 #: u_translation.rsselectthefil2
 msgid "Select the file to edit"
-msgstr "Vybrat soubor k úpravě"
+msgstr "选择要编辑的文件"
 
 #: u_translation.rsselectthefil3
 msgid "Select the file to load"
-msgstr "Vybrat soubor k načtení"
+msgstr "选择要载入的文件"
 
 #: u_translation.rssendimagetop
 msgid "Send image to planetarium"
-msgstr "Snímek poslán do planetária"
+msgstr "将图像发送给星图"
 
 #: u_translation.rssendtestemai
 msgid "Send test email"
-msgstr "Odeslat zkušební e-mail"
+msgstr "发送测试邮件"
 
 #: u_translation.rssensor
 msgid "Sensor"
-msgstr "Senzor"
+msgstr "传感器"
 
 #: u_translation.rssensorsprope
 msgid "Sensors properties"
-msgstr "Vlastnosti senzorů"
+msgstr "传感器属性"
 
 #: u_translation.rssensortemperatu
 msgid "Sensor temperature"
-msgstr "Teplota senzoru"
+msgstr "传感器温度"
 
 #: u_translation.rsseparator
 msgid "Separator"
-msgstr "Oddělovač"
+msgstr "连字符"
 
 #: u_translation.rssequence
 msgid "Sequence"
-msgstr "Sekvence"
+msgstr "序列"
 
 #: u_translation.rssequenceabno
 msgid "Sequence abnormal end"
-msgstr "Sekevnec ukončena neobvykle"
+msgstr "序列非正常结束"
 
 #: u_translation.rssequenceabor
 msgid "Sequence aborted."
-msgstr "Sekvence přerušena."
+msgstr "序列终止。"
 
 #: u_translation.rssequenceabor2
 #, object-pascal-format
 msgid "Sequence aborted because the autoguider was not reconnected after %s minutes."
-msgstr "Sekvence přerušena, protože aromatická pointace ne byla po %s minutách znovu připojená."
+msgstr "序列由于自动导星离线%s分钟后终止。"
 
 #: u_translation.rssequencealre
 #, object-pascal-format
 msgid "Sequence %s already exist. Do you want to replace this file?"
-msgstr "Sekvence %s již existuje. Chcete soubor nahradit?"
+msgstr "序列 %s 已存在。您是否要替换该文件？"
 
 #: u_translation.rssequenceauto
 msgid "Sequence automatic flat"
-msgstr "Sekvence automatického Flatu"
+msgstr "序列自动拍摄平场"
 
 #: u_translation.rssequencecanc
 #, object-pascal-format
 msgid "Sequence %s canceled before start"
-msgstr "Sekvence %s zrušena před začátkem"
+msgstr "序列%s在启动前被取消"
 
 #: u_translation.rssequencefini
 #, object-pascal-format
 msgid "Sequence %s finished."
-msgstr "Sekvence %s dokončena."
+msgstr "序列%s完成。"
 
 #: u_translation.rssequencefold
 msgid "Sequence folder"
-msgstr "Složka sekvence"
+msgstr "序列目录"
 
 #: u_translation.rssequenceigno
 #, object-pascal-format
 msgid "Sequence %s ignore stop at dawn"
-msgstr "Sekvence %s ignoruje zastavení za úsvitu"
+msgstr "序列%s忽略停止于破晓时分"
 
 #: u_translation.rssequencenorm
 msgid "Sequence normal end"
-msgstr "Sekvence ukončena normálně"
+msgstr "序列正常结束"
 
 #: u_translation.rssequencepaus
 msgid "Sequence paused for bad weather ..."
-msgstr "Sekvence pozastavena pro špatné počasí ..."
+msgstr "由于坏天气导致序列暂停..."
 
 #: u_translation.rssequencestar
 #, object-pascal-format
 msgid "Sequence %s start immediately"
-msgstr "Sekvence %s  se spustí okamžitě"
+msgstr "序列%s立即启动"
 
 #: u_translation.rssequencestar2
 msgid "Sequence start / stop time"
-msgstr "Čas spuštění / zastavení sekvence"
+msgstr "序列启动/停止时间"
 
 #: u_translation.rssequencestep
 msgid "Sequence steps"
-msgstr "Kroky sekvence"
+msgstr "序列步骤"
 
 #: u_translation.rssequencestop
 msgid "Sequence stopped by user request, no termination script will be run."
-msgstr "Sekvence se zastaví na žádost uživatele, nebude spuštěn žádný ukončovací skript."
+msgstr "序列因用户请求而停止，终止脚本不会被运行。"
 
 #: u_translation.rssequencestop2
 #, object-pascal-format
 msgid "Sequence %s stopped."
-msgstr "Sekvence %s zastavena."
+msgstr "序列%s停止。"
 
 #: u_translation.rssequencewil2
 msgid "Sequence will be paused after current exposure is complete."
-msgstr "Po dokončení aktuální expozice bude sekvence pozastavena."
+msgstr "当前曝光完成之后序列将会暂停。"
 
 #: u_translation.rssequencewill
 msgid "Sequence will continue with the current focuser position."
-msgstr "Sekvence bude pokračovat s aktuální polohou zaostřovacího zařízení."
+msgstr "序列会以当前调焦器位置继续。"
 
 #: u_translation.rssequencewill2
 msgid "Sequence will run without guiding!"
-msgstr "Sekvence se spustí bez pointace!"
+msgstr "序列将在无导星下运行！"
 
 #: u_translation.rsserver
 msgid "Server"
-msgstr "Server"
+msgstr "服务器"
 
 #: u_translation.rsset
 msgid "Set"
-msgstr "Zadat"
+msgstr "设置"
 
 #: u_translation.rsset2
 msgid "set"
-msgstr "zadat"
+msgstr "落下"
 
 #: u_translation.rssetbinning
 msgid "Set Binning"
-msgstr "Nastavit Binning"
+msgstr "设置像素合并"
 
 #: u_translation.rssetbinningx
 #, object-pascal-format
 msgid "Set binning %sx%s"
-msgstr "Nastavit binning %sx%s"
+msgstr "设置像素合并%sx%s"
 
 #: u_translation.rssetcooler
 #, object-pascal-format
 msgid "Set cooler %s"
-msgstr "Chlazení nastaveno  %s"
+msgstr "设置制冷%s"
 
 #: u_translation.rssetfilterpos
 #, object-pascal-format
 msgid "Set filter position %s"
-msgstr "Nastavení polohy filtru %s"
+msgstr "设置滤镜位置%s"
 
 #: u_translation.rssetfocusdire
 msgid "Set focus direction inward"
-msgstr "Nastavit směr ostření směrem dovnitř↓"
+msgstr "设置调焦器向内移动方向"
 
 #: u_translation.rssetfocusdire2
 msgid "Set focus direction outward"
-msgstr "Nastavit směr ostření směrem ven↑"
+msgstr "设置调焦器向外移动方向"
 
 #: u_translation.rssetframetype
 #, object-pascal-format
 msgid "Set frame type %s"
-msgstr "Nastavit typ rámce %s"
+msgstr "设置帧类型%s"
 
 #: u_translation.rssetmagnitude
 msgid "Set magnitude"
-msgstr "Nastavit magnitudu"
+msgstr "设定星等"
 
 #: u_translation.rssetmountifav
 #, object-pascal-format
 msgid "Set mount %s if available"
-msgstr "Nastavte montáž %s, pokud je k dispozici"
+msgstr "设置赤道仪%s（如果可用）"
 
 #: u_translation.rssetmountsite
 msgid "Set mount site long/lat from configuration"
-msgstr "Nastavení délky/šířku místa připojení z konfigurace"
+msgstr "从配置中设置赤道仪站点经纬度"
 
 #: u_translation.rssetmounttime
 msgid "Set mount time from computer"
-msgstr "Nastavit čas montáže z počítače"
+msgstr "从计算机设置赤道仪时间"
 
 #: u_translation.rssetpoint
 msgid "Setpoint"
-msgstr "Nastavit"
+msgstr "设定值"
 
 #: u_translation.rssetrotatoran
 msgid "Set rotator angle"
-msgstr "Nastavení úhlu otočení"
+msgstr "设置旋转角度"
 
 #: u_translation.rssettemperatu
 #, object-pascal-format
 msgid "Set temperature %s"
-msgstr "Nastavit teplotu na %s"
+msgstr "设置温度%s"
 
 #: u_translation.rssettemperatu2
 #, object-pascal-format
 msgid "Set temperature ramp to %s started"
-msgstr "Nastavit teplotu rampy na %s startu"
+msgstr "设定温度渐变为%s开启"
 
 #: u_translation.rssettemperatu3
 msgid "Set temperature ramp finished"
-msgstr "Nastavení teplotní rampy dokončeno"
+msgstr "设定温度渐变完成"
 
 #: u_translation.rssetthemeandi
 msgid "Set the mean dithering pulse duration in seconds."
-msgstr "Nastavení střední doby trvání ditheringového impulzu v sekundách."
+msgstr "设置抖动的平均脉冲时长秒数。"
 
 #: u_translation.rssettletolera
 msgid "Settle tolerance"
-msgstr "Vyrovnat toleranci"
+msgstr "设备安定容差"
 
 #: u_translation.rssetup
 msgid "Setup"
-msgstr "Nastavit"
+msgstr "设置"
 
 #: u_translation.rsshadowadu
 msgid "Shadow ADU"
-msgstr "ADU pro úroveň černé"
+msgstr "暗部ADU"
 
 #: u_translation.rssharpness
 msgid "Sharpness"
-msgstr "Ostrost"
+msgstr "清晰度"
 
 #: u_translation.rsshortexposur
 msgid "Short exposure stacking"
-msgstr "Krátké skládání expozic"
+msgstr "短曝光叠加"
 
 #: u_translation.rsshowcurrentl
 msgid "Show current log"
-msgstr "Zobrazit aktuální protokol"
+msgstr "显示当前日志"
 
 #: u_translation.rsshowhints
 msgid "Show hints"
-msgstr "Zobrazit návrhy"
+msgstr "显示提示"
 
 #: u_translation.rsshowindilog
 msgid "Show INDI log"
-msgstr "Zobrazit protokol INDI"
+msgstr "显示INDI日志"
 
 #: u_translation.rsshowprompt
 msgid "Show prompt"
-msgstr "Zobrazit výzvu"
+msgstr "显示提示"
 
 #: u_translation.rsshowstacking
 msgid "Show stacking option for Preview/Capture/Sequence"
-msgstr "Zobrazení možnosti skládání pro Náhled/Snímání/Sekvence"
+msgstr "显示叠加选项于预览/拍摄/序列"
 
 #: u_translation.rssideofpier
 msgid "Side of pier"
-msgstr "Strana dal"
+msgstr "基座方向"
 
 #: u_translation.rssigma
 msgid "sigma"
@@ -4093,852 +4094,852 @@ msgstr "sigma"
 
 #: u_translation.rssimplifiedph
 msgid "Simplified photometry taking account for calibration, exposure time and airmass"
-msgstr "Zjednodušená fotometrie s ohledem na kalibraci, čas expozice a vlhkosti vzduchu"
+msgstr "考虑校准、曝光时间和大气透镜的简化光度测量"
 
 #: u_translation.rssimplifiedph2
 msgid "Simplified photometry, uncalibrated"
-msgstr "Zjednodušená fotometrie, nekalibrováno"
+msgstr "简化的光度测量，未校准"
 
 #: u_translation.rssimplifiedph3
 msgid "Simplified photometry taking account for only the calibration"
-msgstr "Zjednodušená fotometrie zohledňující pouze kalibraci"
+msgstr "仅考虑校准的简化光度测量"
 
 #: u_translation.rssinglestar
 msgid "Single star"
-msgstr "Jedna hvězda"
+msgstr "单星"
 
 #: u_translation.rssitesendtote
 msgid "Site send to telescope."
-msgstr "Poloha poslána do dalekohledu."
+msgstr "地点发送至望远镜"
 
 #: u_translation.rssitesetfromt
 msgid "Site set from the telescope."
-msgstr "Poloha nastavena z dalekohledu."
+msgstr "从望远镜获取地点"
 
 #: u_translation.rssize
 msgid "size"
-msgstr "velikost"
+msgstr "大小"
 
 #: u_translation.rsskiptarget
 #, object-pascal-format
 msgid "Skip target %s"
-msgstr "Přeskočit cíl %s"
+msgstr "跳过目标%s"
 
 #: u_translation.rsskybrightnes
 msgid "Sky brightness"
-msgstr "Jas oblohy"
+msgstr "天空亮度"
 
 #: u_translation.rsskychartonlo
 msgid "Skychart on local computer"
-msgstr "Skychart na místním počítači"
+msgstr "Skychart在本计算机"
 
 #: u_translation.rsskyflat
 msgid "Sky Flat"
-msgstr "Oblohový Flat snímek"
+msgstr "天光平场"
 
 #: u_translation.rsskyisstillto
 msgid "Sky is still too bright, waiting for dusk"
-msgstr "Obloha je stále příliš jasné, čekat na soumrak"
+msgstr "天空仍然太亮，等待黄昏"
 
 #: u_translation.rsskyisstillto2
 msgid "Sky is still too dark, waiting for dawn"
-msgstr "Obloha je stále příliš temné, čekat na úsvit"
+msgstr "天空仍然太暗，等待破晓"
 
 #: u_translation.rsskyquality
 msgid "Sky quality"
-msgstr "Kvalita oblohy"
+msgstr "天空品质"
 
 #: u_translation.rsskytemperatu
 msgid "Sky temperature"
-msgstr "Teplota oblohy"
+msgstr "天空温度"
 
 #: u_translation.rsslave
 msgid "Slave"
-msgstr "Přejezd"
+msgstr "从动"
 
 #: u_translation.rsslaved
 msgid "Slaved"
-msgstr "Přejezd"
+msgstr "已从动"
 
 #: u_translation.rsslavethedome
 msgid "Slave the Dome"
-msgstr "Přejezd Kopule"
+msgstr "圆顶从动"
 
 #: u_translation.rsslewaborteda
 msgid "Slew aborted after 3 retries!"
-msgstr "Přejezd zrušen po 3 opakování!"
+msgstr "指向终止于3次重试之后！"
 
 #: u_translation.rsslewcomplete
 msgid "Slew is complete"
-msgstr "Přejezd je dokončen"
+msgstr "指向完成"
 
 #: u_translation.rsslewing
 msgid "Slewing"
-msgstr "Přejíždění"
+msgstr "指向"
 
 #: u_translation.rsslewtelescop2
 msgid "Slew telescope to flat panel position"
-msgstr "Přejezd dalekohledem do polohy Flat panelu"
+msgstr "指向望远镜到平场板位置"
 
 #: u_translation.rsslewtoanears
 msgid "Slew to a near star of magnitude"
-msgstr "Přejezd na blízkou hvězdní velikosti"
+msgstr "指向到一个星等近似的星"
 
 #: u_translation.rsslewtoeq
 #, object-pascal-format
 msgid "Slewing to %s %s/%s"
-msgstr "Přejezd na %s %s/%s"
+msgstr "指向到 %s %s/%s"
 
 #: u_translation.rsslewtofocuss
 #, object-pascal-format
 msgid "Slew to focus star %s"
-msgstr "Přejezd na ostřící hvězdu %s"
+msgstr "指向到对焦星 %s"
 
 #: u_translation.rsslewtofocuss2
 msgid "Slew to focus star"
-msgstr "Přejezd na ostřící hvězdu"
+msgstr "指向到对焦星"
 
 #: u_translation.rsslewwithapre
 msgid "Slew with a precision of "
-msgstr "Přejezd s přesností "
+msgstr "指向精度 "
 
 #: u_translation.rsslewwithoffs
 #, object-pascal-format
 msgid "Slew with offset %s/%s"
-msgstr "Přejezd s posunem %s/%s"
+msgstr "指向偏移量 %s/%s"
 
 #: u_translation.rsslippagecorr
 msgid "Slippage correction "
-msgstr "Korekce skluzu "
+msgstr "滑脱修正 "
 
 #: u_translation.rsslope
 msgid "Slope"
-msgstr "Sklon"
+msgstr "斜率"
 
 #: u_translation.rsslot
 msgid "Slot"
-msgstr "Slot"
+msgstr "槽位"
 
 #: u_translation.rssmallcross
 msgid "Small cross"
-msgstr "Malý křížek"
+msgstr "小十字"
 
 #: u_translation.rssmtpserverad
 msgid "SMTP server address"
-msgstr "Adresa serveru SMTP"
+msgstr "SMTP服务器地址"
 
 #: u_translation.rssmtpserverpo
 msgid "SMTP server port"
-msgstr "Port serveru SMTP"
+msgstr "SMTP服务器端口号"
 
 #: u_translation.rssocketerrors
 #, object-pascal-format
 msgid "Socket error %s.  %s"
-msgstr "Chyba socketu %s.  %s"
+msgstr "Socket 错误 %s。 %s"
 
 #: u_translation.rssoftware
 msgid "Software"
-msgstr "Software"
+msgstr "软件"
 
 #: u_translation.rssolvedinseco
 #, object-pascal-format
 msgid "Solved in %s seconds"
-msgstr "Vyřešeno za %s sekund"
+msgstr "解析完成于%s秒"
 
 #: u_translation.rssomedefinedd
 msgid "Some defined devices are not connected"
-msgstr "Některá nadefinovaná zařízení nejsou připojeny"
+msgstr "某些已定义的设备未连接"
 
 #: u_translation.rssouth
 msgid "South"
-msgstr "Jih"
+msgstr "南"
 
 #: u_translation.rsspectralprof
 msgid "Spectral profile"
-msgstr "Spektrální profil"
+msgstr "光谱配置"
 
 #: u_translation.rsspeed
 msgid "Speed"
-msgstr "Rychlost"
+msgstr "速率"
 
 #: u_translation.rssplittheimag
 #, object-pascal-format
 msgid "Split the image in 9 panel to better show the aberration in each corner. %s You can change the zoom level and the margin offset from the image edge."
-msgstr "Rozdělte snímek na 9 obrazů, abyste lépe viděli aberaci v každém rohu. %s Můžete změnit úroveň přiblížení a offset od okraje obrázku."
+msgstr "用九宫格分割图像以更好的显示各角落的像差。%s您可以改变缩放级别和图像边缘偏移量。"
 
 #: u_translation.rsssltlsnotsup
 msgid "SSL/TLS not supported, try to uncheck the corresponding box."
-msgstr "Protokol SSL/TLS není podporován, zkuste zrušit zaškrtnutí odpovídajícího pole."
+msgstr "不支持 SSL/TLS，请尝试取消选中相应的框。"
 
 #: u_translation.rsstabilizatio
 msgid "Stabilization delay after move"
-msgstr "Zpoždění stabilizace po pohybu"
+msgstr "移动后稳定延迟"
 
 #: u_translation.rsstack
 msgid "Stack"
-msgstr "Skládání"
+msgstr "叠加"
 
 #: u_translation.rsstackingcoun
 msgid "Stacking count"
-msgstr "Počet vrstev"
+msgstr "叠加计数"
 
 #: u_translation.rsstackingwith
 #, object-pascal-format
 msgid "Stacking with alignment star at %s/%s"
-msgstr "Skládání se zarovnávací hvězdou na %s/%s"
+msgstr "以对齐星叠加于%s/%s"
 
 #: u_translation.rsstackofframe
 #, object-pascal-format
 msgid "stack of %s frames"
-msgstr "skládání snímků %s"
+msgstr "叠加了%s帧"
 
 #: u_translation.rsstar
 msgid "Star"
-msgstr "Hvězda"
+msgstr "星"
 
 #: u_translation.rsstaralignmen
 msgid "Star alignment"
-msgstr "Zarovnání hvězd"
+msgstr "星点对齐"
 
 #: u_translation.rsstardatabase
 msgid "Star database is empty, check path to star database files!!"
-msgstr "Databáze hvězd je prázdná, zkontrolujte cestu k souborům hvězdné databáze !!"
+msgstr "星表数据为空，检查星表数据文件路径！"
 
 #: u_translation.rsstardetectio
 msgid "Star detection window size "
-msgstr "Velikost okna detekce hvězd "
+msgstr "星点侦测窗口大小 "
 
 #: u_translation.rsstarfwhm
 msgid "Star FWHM"
-msgstr "Hvězda FWHM"
+msgstr "星点FWHM"
 
 #: u_translation.rsstarlostreco
 msgid "Star lost recovery"
-msgstr "Obnova ztracené hvězdy"
+msgstr "星点丢失恢复"
 
 #: u_translation.rsstarprofile
 msgid "Star profile"
-msgstr "Profil hvězdy"
+msgstr "星点轮廓"
 
 #: u_translation.rsstart
 msgid "Start"
-msgstr "Spustit"
+msgstr "启动"
 
 #: u_translation.rsstartat
 msgid "Start at "
-msgstr "Spustit v "
+msgstr "起始于 "
 
 #: u_translation.rsstartautogui
 msgid "Start autoguider"
-msgstr "Spustit auto pointaci"
+msgstr "启动自动导星"
 
 #: u_translation.rsstartcapture
 msgid "Start capture"
-msgstr "Spuštění snímání"
+msgstr "启动拍摄"
 
 #: u_translation.rsstartexposur
 #, object-pascal-format
 msgid "Start exposure error: %s"
-msgstr "Chyba při zahájení expozice: %s"
+msgstr "启动曝光错误：%s"
 
 #: u_translation.rsstartfocus
 msgid "Start focus"
-msgstr "Spustit zaostření"
+msgstr "启动对焦"
 
 #: u_translation.rsstartfocushf
 msgid "Start focus HFD is outside of current V curve, please decrease the start HFD value"
-msgstr "Počáteční HFD je mimo aktuální Vkřivku, snižte počáteční HFD"
+msgstr "起始对焦HFD在当前V曲线之外，请降低起始HFD值"
 
 #: u_translation.rsstartingexpo
-#, object-pascal-format, fuzzy, badformat
+#, object-pascal-format
 msgid "Starting %s exposure %s for %s seconds"
-msgstr "Zahájení expozice %s po dobu %s sekund"
+msgstr "启动%s拍摄%s曝光%s秒"
 
 #: u_translation.rsstartingsequ
 #, object-pascal-format
 msgid "Starting sequence %s"
-msgstr "Zahájení sekvence %s"
+msgstr "启动序列%s"
 
 #: u_translation.rsstartingsequ2
 #, object-pascal-format
 msgid "Starting sequence %s repeat %s/%s"
-msgstr "Spuštění sekvence %s opakovat %s/%s"
+msgstr "启动序列%s重复%s/%s"
 
 #: u_translation.rsstartlearnin
 msgid "Start learning V curve"
-msgstr "Učení Vkřivky"
+msgstr "开始学习V曲线"
 
 #: u_translation.rsstartnewexpo
 msgid "Start new exposure as early as possible"
-msgstr "Zahájit novou expozici co nejdříve"
+msgstr "尽早启动新曝光"
 
 #: u_translation.rsstartnewlog
 msgid "Start new log"
-msgstr "Spustit nový protokol"
+msgstr "开始新的日志"
 
 #: u_translation.rsstartoptions
 msgid "Start options"
-msgstr "Možnosti spuštění"
+msgstr "启动选项"
 
 #: u_translation.rsstartplan
 #, object-pascal-format
 msgid "Start plan %s"
-msgstr "Plán spuštěn %s"
+msgstr "启动计划%s"
 
 #: u_translation.rsstartpositio
 #, object-pascal-format
 msgid "Start position  pos:%s hfd:%s peak:%s snr:%s"
-msgstr "Počáteční pozice  pos:%s hfd:%s špič:%s snr:%s"
+msgstr "起始位置 pos:%s hfd:%s peak:%s snr:%s"
 
 #: u_translation.rsstartpreview
 msgid "Start preview loop"
-msgstr "Spustit náhledy cyklu"
+msgstr "启动循环预览"
 
 #: u_translation.rsstartrecord
 msgid "Start record"
-msgstr "Spustit záznam"
+msgstr "启动录像"
 
 #: u_translation.rsstarts
 #, object-pascal-format
 msgid "Start %s"
-msgstr "Start %s"
+msgstr "启动 %s"
 
 #: u_translation.rsstartsinglep
 msgid "Start single preview"
-msgstr "Pořízen jeden náhled"
+msgstr "启动单帧预览"
 
 #: u_translation.rsstartstep
 #, object-pascal-format
 msgid "Start step %s"
-msgstr "Spustit krok: %s"
+msgstr "启动步骤%s"
 
 #: u_translation.rsstarttelesco
 msgid "Start Telescope tracking"
-msgstr "Spustit sledování dalekohledu"
+msgstr "启动望远镜跟踪"
 
 #: u_translation.rsstarttime
 msgid "Start time"
-msgstr "Čas spuštění"
+msgstr "启动时间"
 
 #: u_translation.rsstarttoeditt
 msgid "Start to edit the active sequence"
-msgstr "Začněte upravovat aktivní sekvenci"
+msgstr "开始编辑活动序列"
 
 #: u_translation.rsstarttracking
 msgid "start tracking"
-msgstr "spustit sledování"
+msgstr "启动跟踪"
 
 #: u_translation.rsstatus
 #, object-pascal-format
 msgid "%s status"
-msgstr "%s stav"
+msgstr "%s状态"
 
 #: u_translation.rsstatus2
 msgid "Status"
-msgstr "Stav"
+msgstr "状态"
 
 #: u_translation.rsstayatthecur
 msgid "Stay at the current position for autofocus"
-msgstr "Při automatickém zaostření zůstat na aktuální pozici"
+msgstr "自动对焦时留在当前位置"
 
 #: u_translation.rsstayinplace
 msgid "Stay in place"
-msgstr "Zůstat na místě"
+msgstr "停留在原地"
 
 #: u_translation.rsstayinplace2
 #, object-pascal-format
 msgid "Stay in place%sfor autofocus"
-msgstr "Zůstat na místě%spři automatickém zaostření"
+msgstr "为自动对焦停留在原地%s"
 
 #: u_translation.rsstddev
 msgid "Std.Dev:"
-msgstr "Stand.Odchyl.:"
+msgstr "Std.Dev:"
 
 #: u_translation.rsstep
 msgid "Step"
-msgstr "Krok"
+msgstr "步长"
 
 #: u_translation.rsstepcomplete
 #, object-pascal-format
 msgid "Step %s complete"
-msgstr "Krok %s dokončen"
+msgstr "步骤%s完成"
 
 #: u_translation.rsstepdescript
 msgid "Step description"
-msgstr "Popis kroku"
+msgstr "步骤描述"
 
 #: u_translation.rsstepinto
 msgid "Step Into"
-msgstr "Krok Do"
+msgstr "单步执行"
 
 #: u_translation.rsstepover
 msgid "Step Over"
-msgstr "Krok Nad"
+msgstr "单步跳过"
 
 #: u_translation.rsstop
 msgid "Stop"
-msgstr "Zastavit"
+msgstr "停止"
 
 #: u_translation.rsstopastromet
 msgid "Stop astrometry resolver"
-msgstr "Zastavit astrometrické vyřešení"
+msgstr "停止解析"
 
 #: u_translation.rsstopastromet2
 msgid "Stop astrometry resolver."
-msgstr "Zastavit astrometrické řešení."
+msgstr "停止解析。"
 
 #: u_translation.rsstopat
 msgid "Stop at"
-msgstr "Konec v"
+msgstr "停止于"
 
 #: u_translation.rsstopautoguid
 msgid "Stop autoguider"
-msgstr "Zastavit automatickou pointaci"
+msgstr "停止自动导星"
 
 #: u_translation.rsstopcapture
 msgid "Stop capture"
-msgstr "Zastavit snímání"
+msgstr "停止拍摄"
 
 #: u_translation.rsstopdomeslav
 msgid "Stop Dome slaving"
-msgstr "Zastavit přejíždění Kupole"
+msgstr "停止原定从动"
 
 #: u_translation.rsstopflatcapt
 msgid "Stop flat capture"
-msgstr "Zastavit Flat snímání"
+msgstr "停止平场拍摄"
 
 #: u_translation.rsstopguiding
 msgid "Stop guiding"
-msgstr "Zastavit pointaci"
+msgstr "停止导星"
 
 #: u_translation.rsstoploop
 msgid "Stop Loop"
-msgstr "Zrušit cyklus"
+msgstr "停止循环"
 
 #: u_translation.rsstopplan
 #, object-pascal-format
 msgid "Stop plan %s"
-msgstr "Zastavit plán %s"
+msgstr "停止计划%s"
 
 #: u_translation.rsstoppreview
 msgid "Stop preview"
-msgstr "Zastavit náhled"
+msgstr "停止预览"
 
 #: u_translation.rsstoppreviewl
 msgid "Stop preview loop"
-msgstr "Zastavit náhledu cyklu"
+msgstr "停止循环预览"
 
 #: u_translation.rsstoprecord
 msgid "Stop record"
-msgstr "Zastavit záznam"
+msgstr "停止录像"
 
 #: u_translation.rsstoptelescop
 msgid "Stop telescope motion."
-msgstr "Zastavit pohyb dalekohledu."
+msgstr "停止望远镜动作"
 
 #: u_translation.rsstoptelescop2
 msgid "Stop telescope tracking"
-msgstr "Zastavit  sledování dalekohledu"
+msgstr "停止望远镜跟踪"
 
 #: u_translation.rsstopthecurre
 #, object-pascal-format
 msgid "Stop the current sequence at %s"
-msgstr "Aktuální sekvence zastavena na %s"
+msgstr "停止当前序列于%s"
 
 #: u_translation.rsstopthecurre2
 #, object-pascal-format
 msgid "Stop the current target at %s"
-msgstr "Zastavit aktuální cíl na %s"
+msgstr "通知当前目标于%s"
 
 #: u_translation.rsstoptimealre
 #, object-pascal-format
 msgid "Stop time %s already passed"
-msgstr "Čas zastavení %s již uplynul"
+msgstr "停止时间%s已经错过"
 
 #: u_translation.rsstopvcurvele
 msgid "Stop Vcurve learning"
-msgstr "Zastavit učení Vkřivky"
+msgstr "停止V曲线学习"
 
 #: u_translation.rssubfolderbyb
 msgid "Subfolder by binning"
-msgstr "Podsložka podle binningu"
+msgstr "以像素合并为子目录"
 
 #: u_translation.rssubfolderbyd
 msgid "Subfolder by date (UT)"
-msgstr "Podsložka podle data (UT)"
+msgstr "以日期（UT）为子目录"
 
 #: u_translation.rssubfolderbyd2
 msgid "Subfolder by date (local time, change at noon)"
-msgstr "Podsložka podle data (místní čas, změna v půlnoci)"
+msgstr "以日期（本地时间，正午变更）为子目录"
 
 #: u_translation.rssubfolderbye
 msgid "Subfolder by exposure time"
-msgstr "Podsložka podle času expozice"
+msgstr "以曝光时间为子目录"
 
 #: u_translation.rssubfolderbyf
 msgid "Subfolder by frame type"
-msgstr "Podsložka podle typu snímku"
+msgstr "以帧类型为子目录"
 
 #: u_translation.rssubfolderbyo
 msgid "Subfolder by object name"
-msgstr "Podsložka podle názvu objektu"
+msgstr "以天体名称为子目录"
 
 #: u_translation.rssubfolderbyp
 msgid "Subfolder by plan step"
-msgstr "Podsložka podle kroku plánu"
+msgstr "以计划步骤为子目录"
 
 #: u_translation.rssubfolderbys
 msgid "Subfolder by sequence name"
-msgstr "Podsložka podle názvu sekvence"
+msgstr "以序列名字为子目录"
 
 #: u_translation.rssummary
 msgid "Summary"
-msgstr "Souhrn"
+msgstr "摘要"
 
 #: u_translation.rssuspenddomes
 msgid "Suspend dome slaving"
-msgstr "Pozastavit přejíždění kupole"
+msgstr "暂停圆顶从动"
 
 #: u_translation.rsswitch
 msgid "Switch"
-msgstr "Přepínač"
+msgstr "电源开关"
 
 #: u_translation.rssynctoeq
 #, object-pascal-format
 msgid "Sync to %s %s/%s"
-msgstr "Synchronizovat s %s %s/%s"
+msgstr "同步到%s %s/%s"
 
 #: u_translation.rssystemcross
 msgid "System cross"
-msgstr "Systémový křížek"
+msgstr "系统十字"
 
 #: u_translation.rssystemisunde
 msgid "System is undersampled, accept 1 pixel star"
-msgstr "Systém je pod rozlišením a umožňuje 1 pixel hvězd"
+msgstr "系统前采样，得到1像素的星点"
 
 #: u_translation.rstakecontrole
 #, object-pascal-format
 msgid "Take control exposure for %s seconds"
-msgstr "Převzetí kontrolní expozice na %s sekund"
+msgstr "控制曝光时间为%s秒"
 
 #: u_translation.rstargetcancel
 #, object-pascal-format
 msgid "Target %s canceled before start"
-msgstr "Cíl %s zrušen před spuštěním"
+msgstr "目标%s在启动前取消"
 
 #: u_translation.rstargetinitia
 msgid "Target initialisation failed!"
-msgstr "Inicializace cíle selhala!"
+msgstr "目标初始化失败！"
 
 #: u_translation.rstargetinitia2
 msgid "Target initialisation error"
-msgstr "Chyba inicializace cíle"
+msgstr "目标初始化错误"
 
 #: u_translation.rstargetname
 #, object-pascal-format
 msgid "Target%sname"
-msgstr "Název cíle %s"
+msgstr "目标%s名称"
 
 #: u_translation.rstargetprecis
 msgid "Target precision [arcmin] "
-msgstr "Přesnost cíle [úhlové minuty] "
+msgstr "指向精度[角分 ] "
 
 #: u_translation.rstargets
 msgid "Targets"
-msgstr "Cíle"
+msgstr "目标"
 
 #: u_translation.rstargetscoord
 #, object-pascal-format
 msgid "Target %s coordinates not updated"
-msgstr "Souřadnice cíle %s nebyly aktualizovány"
+msgstr "目标%s坐标未更新"
 
 #: u_translation.rstargetwillbe
 #, object-pascal-format
 msgid "Target can run until %s, in %s seconds"
-msgstr "Cíl může běžet do %s, za %s sekund"
+msgstr "目标直到%s可以运行，在%s秒后"
 
 #: u_translation.rstargetwillbe2
 msgid "Target will be recentered before next image"
-msgstr "Cíl bude před dalším snímkem znovu zaměřen"
+msgstr "在下一幅图像之前，目标会重定位到中心"
 
 #: u_translation.rstcpipserverl
 #, object-pascal-format
 msgid "TCP/IP server listen on port: %s"
-msgstr "Naslouchám server TCP / IP na portu: %s"
+msgstr "TCP/IP服务器监听于端口：%s"
 
 #: u_translation.rstcpipserverp
 msgid "TCP/IP server port"
-msgstr "Port serveru TCP/IP"
+msgstr "TCP/IP服务器端口"
 
 #: u_translation.rstcpipservers
 msgid "TCP/IP server stopped"
-msgstr "Server TCP/IP byl zastaven"
+msgstr "TCP/IP服务器停止"
 
 #: u_translation.rstelescopeand
 msgid "Telescope and dome are now parked"
-msgstr "Dalekohled a kopule parkují"
+msgstr "望远镜和圆顶现已驻泊"
 
 #: u_translation.rstelescopeand2
 msgid "Telescope and dome are now unparked"
-msgstr "Dalekohled a kopule jsou nyní nezaparkované"
+msgstr "望远镜和圆顶现已启动"
 
 #: u_translation.rstelescopeazi
 msgid "Telescope azimuth"
-msgstr "Azimut dalekohledu"
+msgstr "望远镜方位角"
 
 #: u_translation.rstelescopeele
 msgid "Telescope elevation"
-msgstr "Výška dalekohledu"
+msgstr "望远镜高度角"
 
 #: u_translation.rstelescopemou
 msgid "Telescope mount"
-msgstr "Montáž dalekohledu"
+msgstr "赤道仪"
 
 #: u_translation.rstelescopenam
 msgid "Telescope name"
-msgstr "Název dalekohledu"
+msgstr "望远镜名称"
 
 #: u_translation.rstelescopenot
 #, object-pascal-format
 msgid "Telescope not %s after request!"
-msgstr "Dalekohled není dle požadavku %s!"
+msgstr "请求后望远镜未%s！"
 
 #: u_translation.rstelescopepos
 msgid "Telescope position"
-msgstr "Pozice dalekohledu"
+msgstr "望远镜位置"
 
 #: u_translation.rstelescopesle
 #, object-pascal-format
 msgid "Telescope slew error: %s arcminutes."
-msgstr "Dalekohledu najel s chybou: %s obl. minut."
+msgstr "望远镜指向误差：%s 角分。"
 
 #: u_translation.rstelescopesle2
 msgid "Telescope slew"
-msgstr "Dalekohled přejíždí"
+msgstr "望远镜指向"
 
 #: u_translation.rstelescopesle3
 msgid "Telescope slew failed"
-msgstr "Přejezd dalekohledu selhal"
+msgstr "望远镜指向失败"
 
 #: u_translation.rstemp
 msgid "Temp."
-msgstr "Tepl."
+msgstr "温度"
 
 #: u_translation.rstemperature
 msgid "Temperature"
-msgstr "Teplota"
+msgstr "温度"
 
 #: u_translation.rstemperaturec
 #, object-pascal-format
 msgid "Temperature coefficient in steps/%s"
-msgstr "Teplotní koeficient v krocích/%s"
+msgstr "温度步长系数为：步/%s"
 
 #: u_translation.rstemperaturef
 msgid "Temperature from weather station"
-msgstr "Teplota z meteorologické stanice"
+msgstr "来自气象站的温度"
 
 #: u_translation.rstemperaturer
 msgid "Temperature ramp requested to stop"
-msgstr "Požadována teplotní rampa"
+msgstr "温度渐变被请求停止"
 
 #: u_translation.rstemperaturer2
 msgid "Temperature ramp canceled"
-msgstr "Teplotní rampa zrušena"
+msgstr "温度渐变取消"
 
 #: u_translation.rstemperatures
 msgid "Temperature scale"
-msgstr "Teplotní stupnice"
+msgstr "温度单位"
 
 #: u_translation.rstemplate
 msgid "Template"
-msgstr "Šablona"
+msgstr "模板"
 
 #: u_translation.rstemporaryfol
 msgid "Temporary folder"
-msgstr "Dočasná složka"
+msgstr "临时目录"
 
 #: u_translation.rstemporaryfol2
 msgid "Temporary folder must contain only ASCII characters"
-msgstr "Dočasná složka musí obsahovat pouze znaky ASCII"
+msgstr "临时目录名必须仅含有ASCII字符"
 
 #: u_translation.rsterminationo
 msgid "Termination options"
-msgstr "Možnosti ukončení"
+msgstr "终止选项"
 
 #: u_translation.rstest
 msgid "Test"
-msgstr "Test"
+msgstr "测试"
 
 #: u_translation.rstestemailfro
 msgid "Test email from CCDciel"
-msgstr "Testovací e-mail od CCDciel"
+msgstr "来自 CCDciel 的测试电子邮件"
 
 #: u_translation.rsthecameraima
 msgid "The camera image format is"
-msgstr "Formát snímku kamery je"
+msgstr "相机图像格式为"
 
 #: u_translation.rsthecameraisc
 msgid "The camera is connected. Do you want to exit the program now?"
-msgstr "Kamera připojena! Ukončit program?"
+msgstr "相机已连接。是否要立即退出程序？"
 
 #: u_translation.rsthecomputert
 #, object-pascal-format
 msgid "The computer timezone %s and the observatory longitude %s are not compatible."
-msgstr "Časové pásmo používané počítačem %s a zeměpisná délka Observatoře %s nejsou kompatibilní."
+msgstr "计算机时区%s和观测站经度%s不兼容。"
 
 #: u_translation.rsthedataare2
 #, object-pascal-format
 msgid "The data are now recorded in the profile.%sYou can review the other auto-focus options using the menu %sEdit / Preferences / Autofocus"
-msgstr "Data jsou zaznamenána v profilu.%sDalší možnosti automatického zaostření můžete zkontrolovat pomocí nabídky %sUpravit / Předvolby / Automatické zaostření"
+msgstr "数据现已保存到配置文件。%s您可以审视其他的自动对焦选项，通过使用菜单里的%s编辑/首选项/自动对焦来"
 
 #: u_translation.rsthefocuserdo
 msgid "The focuser do not support Absolute or Relative movement, autofocus calibration is not possible."
-msgstr "Zaostřovač nepodporuje absolutní ani relativní pohyb, kalibrace automatického ostření není možná."
+msgstr "调焦器不支持绝对或相对移动，自动对焦校准无法实现。"
 
 #: u_translation.rsthefocuserdo2
 msgid "The focuser do not move enough after 30 steps! please check if the focuser is moving at all or increase the minimum movement"
-msgstr "Ostření se po 30 krocích nepohybuje dostatečně! zkontrolujte, zda se zaostřovač skutečně pohybuje, nebo zvyšte minimální pohyb"
+msgstr "调焦器移动30步仍未达到足够的距离！请检查调焦器是否确实在移动，或增加其最小移动距离"
 
 #: u_translation.rsthefocuserdo3
 msgid "The focuser do not move enough after 30 steps! please check if the focuser is moving at all or decrease the maximum HFD"
-msgstr "Ostření se po 30 krocích nepohybuje dostatečně! zkontrolujte, zda se zaostřovač skutečně pohybuje nebo snižuje maximální HFD"
+msgstr "调焦器移动30步仍未达到足够的距离！请检查调焦器是否确实在移动，或减小其最大HFD"
 
 #: u_translation.rsthefocuseris
 msgid "The focuser is now positioned at the best observed HFD position."
-msgstr "Zaostřovač je umístěn na nejlepší pozici HFD."
+msgstr "调焦器当前位于观测到的最佳HFD位置。"
 
 #: u_translation.rsthefollowing
 msgid "The following actions are run if the safety monitor report dangerous condition"
-msgstr "Následující kroky jsou provedeny, pokud bezpečnostní monitor hlásí nebezpečný stav"
+msgstr "如果安全监视器报告了危险状态，以下动作会被执行"
 
 #: u_translation.rsthemenufilef
 msgid "The menu \"Tools/Focuser calibration\" help to fill this values."
-msgstr "K vyplnění těchto hodnot slouží v menu  \"Nástroje / Kalibrace ostření \"."
+msgstr "菜单里的“工具/调焦器校准”会帮助填充这些值。"
 
 #: u_translation.rsthemountdono
 msgid "The mount do not move enough!"
-msgstr "Montáž se dost nepohybuje!"
+msgstr "赤道仪移动得不够！"
 
 #: u_translation.rsthemountindi
 #, object-pascal-format
 msgid "the mount indicate %s"
-msgstr "montáž ukazuje %s"
+msgstr "赤道仪表明%S"
 
 #: u_translation.rstheplanismod
 #, object-pascal-format
 msgid "The plan %s is modified. Do you want to save the change ?"
-msgstr "Plán %s je změněn. Chcete uložit změny?"
+msgstr "计划%s已改变。要保存修改吗？"
 
 #: u_translation.rstheprogramne
 msgid "The program need to be restarted"
-msgstr "Program je třeba restartovat"
+msgstr "程序需要重启动"
 
 #: u_translation.rsthereisalrea
 msgid "There is already a dusk flat plan"
-msgstr "Již existuje soumrakový flat plán"
+msgstr "已有一个黄昏平场计划"
 
 #: u_translation.rsthereisalrea2
 msgid "There is already a dawn flat plan"
-msgstr "Již existuje úsvitový Flat plán"
+msgstr "已有一个破晓平场计划了"
 
 #: u_translation.rsthesafetymon
-#, object-pascal-format
+#, object-pascal-format, fuzzy, badformat
 msgid "The safety monitor report unsafe condition.%sSelect %s to run the safety actions now, or %s to ignore them."
-msgstr "Monitor bezpečnosti hlásí nebezpečný stav.%sVybrat %s pro provedení ochranných opatření, nebo %s je ignorovat."
+msgstr "安全监视器报告危险状态。%选择%s现在执行安全性动作，或%s忽略，"
 
 #: u_translation.rsthesequencei
 msgid "The sequence is now in pause."
-msgstr "Sekvence pozastavena."
+msgstr "序列现已暂停。"
 
 #: u_translation.rsthesequencew
 #, object-pascal-format
 msgid "The sequence %s will be stopped at %s, in %s seconds."
-msgstr "Sekvence %s zastavena v %s, za %s sekund."
+msgstr "序列%s将会停止于%s，在%s秒后。"
 
 #: u_translation.rsthetelescope
 msgid "The telescope is parked!"
-msgstr "Dalekohled je zaparkovaný!"
+msgstr "望远镜已驻泊"
 
 #: u_translation.rsthismessagec
 msgid "This message confirm the email configuration is working."
-msgstr "Tato zpráva potvrzuje, že konfigurace e-mailu funguje."
+msgstr "本信息确认邮件配置正常工作。"
 
 #: u_translation.rsthisobjectis
 msgid "This object is never below the requested elevation"
-msgstr "Tento objekt není nikdy pod požadovanou výškou"
+msgstr "该天体从未位于请求的高度角之下"
 
 #: u_translation.rsthisobjectis2
 msgid "This object is never above the requested elevation"
-msgstr "Tento objekt není nikdy nad požadovanou výškou"
+msgstr "该天体从未位于请求的高度角之上"
 
 #: u_translation.rsthisoptionsa
 msgid "This options are in addition to the autofocus frequency available in the Plan definition"
-msgstr "Tyto možnosti jsou navíc k frekvenci automatického ostření, která je k dispozici v definici plánu"
+msgstr "该选项是对计划设定中可用的自动对焦频率的补充"
 
 #: u_translation.rsthisprocedur
 #, object-pascal-format
 msgid "This procedure will help you to  find the focuser parameters for auto-focus.%sYou only need to run it once to set this parameters.%sCenter a star with a high elevation and do a manual focusing to be as close as possible of the focus point. Use the Manual focus tool for that.%sUse the Star profile tool to check the star peak intensity is about three fourth of the camera maximum ADU but not saturated. %sAfter focusing, your focuser must be positioned about half way of it's mechanical travel. If this is not the case please adjust it now.%sThe binning you set in the Preview now will be used for the autofocusing operation. If you want to change the focusing binning later you have to run this procedure again."
-msgstr "Tento postup vám pomůže najít parametry zaostřování pro automatické zaostřování.%sChcete-li nastavit tyto parametry, postačí je spustit pouze jednou.%sZaostřete na hvězdu s vysokou výškou a proveďte ruční zaostření tak, abyste byli co nejblíže bodu zaostření.  K tomu použijte nástroj Ruční zaostření. %s Pomocí nástroje Profil hvězdy zkontrolujte, zda je maximální intenzita hvězdy asi tři čtvrtiny maximální ADU kamery, ale není nasycená. %s Po zaostření musí být váš zaostřovač umístěn přibližně v polovině mechanického zdvihu. Pokud tomu tak není, upravte to . %s Binning, který jste nyní nastavili v náhledu, se bude používat pro operaci automatického zaostřování. Chcete-li později změnit zaostřovací binning, musíte tento postup spustit znovu."
+msgstr "本程序将会帮助您找到用于自动对焦的调焦器参数。%s您只需要运行一次来设定这些参数。%s将一颗高仰角的星居中并且手动对焦到尽可能接近合焦位。通过手动对焦工具来完成。%s使用星点轮廓工具来检查峰值强度大约在相机最大ADU的四分之三而不要过曝。%s合焦后，调焦器位置必须在大约一半的机械行程。否则的话请立刻调整。%s您在预览面板所设定的像素合并将被自动对焦所使用。若想更改对焦用的像素合并，则必须在修改后重新运行本程序。"
 
 #: u_translation.rsthissequence
 #, object-pascal-format
 msgid "This sequence %s contain completion status."
-msgstr "Sekvence %s obsahuje informace o dokončení."
+msgstr "该序列%s含有完成状态。"
 
 #: u_translation.rsthissequence2
 #, object-pascal-format
 msgid "This sequence contain information about the steps already completed.%sNow you can continue after the last checkpoint.%sDo you want to clear the completion status to restart from the beginning?"
-msgstr "Sekvence obsahuje informace o již dokončených krocích.%sMůžete pokračovat od posledního kontrolního bodu.%sChcete vymazat stav dokončit a nastavit vše od začátku?"
+msgstr "该序列含有所有步骤已经完成的信息。%s现在您可以从最后一个检查点之后继续。%s您要清除完成状态并从头开始吗？"
 
 #: u_translation.rstiltindicati2
 #, object-pascal-format
 msgid "Tilt indication[hfd]=%s"
-msgstr "Indikace náklonu [hfd]=%s"
+msgstr "倾斜迹象[hfd]=%s"
 
 #: u_translation.rstime
 msgid "Time"
-msgstr "Čas"
+msgstr "时间"
 
 #: u_translation.rstimealreadyp
 #, object-pascal-format
 msgid "Time already passed %s"
-msgstr "Uplynulý čas %s"
+msgstr "时间已经过去了%s"
 
 #: u_translation.rstimeout
 msgid "Timeout"
-msgstr "Čas.limit"
+msgstr "超时"
 
 #: u_translation.rstimer
 msgid "Timer"
-msgstr "Čas"
+msgstr "定时器"
 
 #: u_translation.rstimesendtote
 msgid "Time send to telescope."
-msgstr "Čas poslán do dalekohledu."
+msgstr "时间发送至望远镜"
 
 #: u_translation.rstomorrow
 msgid "tomorrow"
-msgstr "zítra"
+msgstr "明天"
 
 #: u_translation.rstools
 msgid "Tools"
-msgstr "Nástroje"
+msgstr "工具"
 
 #: u_translation.rstoomanyhotpi
 msgid "Too many hot pixel found!"
-msgstr "Bylo nalezeno příliš mnoho horkých pixelů!"
+msgstr "发现太多热像素点！"
 
 #: u_translation.rstoosmallhfdd
 msgid "Too small HFD difference, try to increase the number of point or the movement, or run the focuser calibration tool to measure this parameters."
-msgstr "Příliš malý rozdíl HFD, zkuste zvýšit počet bodů nebo pohyb, nebo použijte kalibrační nástroj zaostřovače."
+msgstr "太小的HFD差异，尝试增加点位数量或移动距离，或运行调焦器校准工具来测定这些参数。"
 
 #: u_translation.rstoosmallhfdd2
 msgid "Too small HFD difference."
-msgstr "Příliš malý HFD rozdíl."
+msgstr "太小的HFD差异。"
 
 #: u_translation.rstotalpolarer
 msgid "Total polar error:"
-msgstr "Celková polární chyba:"
+msgstr "总体极轴误差："
 
 #: u_translation.rstousetheinte
 msgid "To use the Internal autoguider you need to configure a Mount and a Guide camera in the profile Devices setup"
@@ -4950,189 +4951,189 @@ msgstr ""
 
 #: u_translation.rstrack
 msgid "Track"
-msgstr "Sledovat"
+msgstr "跟踪"
 
 #: u_translation.rstracking
 msgid "tracking"
-msgstr "sleduji"
+msgstr "跟踪"
 
 #: u_translation.rstrend
 msgid "Trend"
-msgstr "Vývoj"
+msgstr "趋势"
 
 #: u_translation.rstreshold
 msgid "Treshold :"
-msgstr "Práh :"
+msgstr "阙值："
 
 #: u_translation.rstriangle
 msgid "Triangle"
-msgstr "Trojúhelník"
+msgstr "三角形"
 
 #: u_translation.rstrianglerota
 msgid "Triangle rotation angle"
-msgstr "Úhel natočení trojúhelníku"
+msgstr "三角形旋转角度"
 
 #: u_translation.rstrue
 msgid "True"
-msgstr "Spuštěn"
+msgstr "True"
 
 #: u_translation.rstruepole
 msgid "True pole"
-msgstr "Pravý pól"
+msgstr "真天极"
 
 #: u_translation.rstrynexttarge
 msgid "Try next target in sequence."
-msgstr "Zkuste další cíl v pořadí."
+msgstr "尝试序列中下个目标。"
 
 #: u_translation.rstrynexttarge2
 msgid "Try next target"
-msgstr "Zkusit další cíl"
+msgstr "尝试下一个目标"
 
 #: u_translation.rstrytoconnect
 msgid "Try to connect to autoguider"
-msgstr "Připojit k automatické poitaci"
+msgstr "尝试连接自动导星"
 
 #: u_translation.rstrytofixpixe
 msgid "Try to fix pixel range to match CMOS camera bit depth"
-msgstr "Nastavte rozsah pixelů tak, aby odpovídal bitové hloubce kamery CMOS"
+msgstr "尝试修复像素范围以匹配 CMOS 相机位深"
 
 #: u_translation.rstwilightskyf
 msgid "Twilight sky flat"
-msgstr "Soumrakový flat snímek"
+msgstr "天光平场"
 
 #: u_translation.rstype
 msgid "Type"
-msgstr "Typ"
+msgstr "类型"
 
 #: u_translation.rsunabletofind
 msgid "Unable to find resolve data!"
-msgstr "Nelze najít údaje o řešení!"
+msgstr "无法找到解析数据！"
 
 #: u_translation.rsunattendeder
 msgid "Unattended error script"
-msgstr "Skript bezobslužné chyby"
+msgstr "无人值守脚本错误"
 
 #: u_translation.rsunavailable
 msgid "unavailable"
-msgstr "nedostupný"
+msgstr "不可用"
 
 #: u_translation.rsuncalibrated
 msgid "Uncalibrated"
-msgstr "Nekalibrováno"
+msgstr "未校准"
 
 #: u_translation.rsunknownstatu
 msgid "Unknown status"
-msgstr "Neznámý stav"
+msgstr "未知状态"
 
 #: u_translation.rsunknowpiersi
 msgid "Unknown pier side"
-msgstr "Neznámá pozice dal"
+msgstr "未知的基座方向"
 
 #: u_translation.rsunpark
 msgid "Unpark"
-msgstr "Unpark"
+msgstr "启动"
 
 #: u_translation.rsunparked
 msgid "Unparked"
-msgstr "Odparkovat"
+msgstr "未驻泊"
 
 #: u_translation.rsunparkthedom
 msgid "Unpark the Dome"
-msgstr "Odparkovat kopuli"
+msgstr "启动圆顶"
 
 #: u_translation.rsunparkthetel
 msgid "Unpark the telescope"
-msgstr "Odparkovat dalekohled"
+msgstr "启动望远镜"
 
 #: u_translation.rsunparkthetel2
 msgid "Unpark the telescope and the dome"
-msgstr "Odparkování dalekohledu a kopule"
+msgstr "启动望远镜和圆顶"
 
 #: u_translation.rsunsafe
 msgid "Unsafe"
-msgstr "Nebezpečný"
+msgstr "不安全"
 
 #: u_translation.rsunsafecondit
 msgid "Unsafe condition detected!"
-msgstr "Byl zjištěn nebezpečný stav!"
+msgstr "检测到危险状态！"
 
 #: u_translation.rsunsafecondit2
 msgid "Unsafe condition ignored by user"
-msgstr "Nebezpečný stav ignorován uživatelem"
+msgstr "危险状态被用户忽略"
 
 #: u_translation.rsunselectstar
 msgid "Unselect star"
-msgstr "Zrušit výběr hvězdy"
+msgstr "取消选择星"
 
 #: u_translation.rsunslaved
 msgid "Unslaved"
-msgstr "Neřešit"
+msgstr "未从动"
 
 #: u_translation.rsupdateactive
 msgid "Update active sequence"
-msgstr "Aktualizovat aktivní sekvenci"
+msgstr "更新活动序列"
 
 #: u_translation.rsupdatefullse
 msgid "Update full sequence"
-msgstr "Aktualizovat celou sekvenci"
+msgstr "更新整个序列"
 
 #: u_translation.rsupdateradec2
 #, object-pascal-format
 msgid "Update RA+Dec%sfrom Planetarium"
-msgstr "Aktualizace RA+Dec%sz Planetária"
+msgstr "从星图更新 RA+Dec%s"
 
 #: u_translation.rsupdatesequen
 msgid "Update sequence without interruption"
-msgstr "Aktualizovat sekvenci bez přerušení"
+msgstr "更新序列而不中断"
 
 #: u_translation.rsuseasfallbac
 msgid "Use as fallback if other software fail"
-msgstr "Použít jako záložní, pokud selže jiný software"
+msgstr "如果其他软件失败，则用作后备"
 
 #: u_translation.rsuseasreferen
 msgid "Use as reference star"
-msgstr "Použít jako referenční hvězdu"
+msgstr "用作参考星"
 
 #: u_translation.rsuseastromet2
 #, object-pascal-format
 msgid "Use astrometry to%srefine the position"
-msgstr "Pomocí astrometrie%s upřesněte polohu"
+msgstr "利用解析%s来优化位置"
 
 #: u_translation.rsuseastrometr
 msgid "Use astrometry to refine the position"
-msgstr "Pro upřesnění polohy použijte astrometrii"
+msgstr "利用解析来优化位置"
 
 #: u_translation.rsusecovercali
 msgid "Use Cover calibrator"
-msgstr "Použít Kryt kalibrátoru"
+msgstr "使用镜头盖校准器"
 
 #: u_translation.rsusecustomscr
 msgid "Use custom script"
-msgstr "Použití vlastního skriptu"
+msgstr "使用自定义脚本"
 
 #: u_translation.rsusedome
 msgid "Use dome"
-msgstr "Použít kopuli"
+msgstr "使用圆顶"
 
 #: u_translation.rsusedslrcolor
 msgid "Use DSLR color balance"
-msgstr "Použít vyvážení barev DSLR"
+msgstr "使用DSLR色彩平衡"
 
 #: u_translation.rsuseexternalc
 msgid "Use external command to light the panel on/off"
-msgstr "Použití externího příkazu k rozsvícení/vypnutí panelu"
+msgstr "使用外部命令来开关平场板"
 
 #: u_translation.rsusefilterwhe
 msgid "Use filter wheel"
-msgstr "Použít filtrové kolo"
+msgstr "使用滤镜轮"
 
 #: u_translation.rsuseflatautom
 msgid "Use flat automatic exposure"
-msgstr "Použít automatickou expozici pro flat snímky"
+msgstr "启用平场自动曝光"
 
 #: u_translation.rsusefocuser
 msgid "Use focuser"
-msgstr "Použít zaostření"
+msgstr "使用调焦器"
 
 #: u_translation.rsuseguidecamera
 msgid "Use guide camera"
@@ -5140,284 +5141,284 @@ msgstr ""
 
 #: u_translation.rsusemount
 msgid "Use mount"
-msgstr "Použít montáž"
+msgstr "使用赤道仪"
 
 #: u_translation.rsuseonlystarn
 msgid "Use only star near the image center"
-msgstr "Použít pouze hvězdy v blízkosti středu obrázku"
+msgstr "仅使用图像中心附近的星点"
 
 #: u_translation.rsusergroup
 msgid "User group"
-msgstr "Uživatelská skupina"
+msgstr "用户组"
 
 #: u_translation.rsusername
 msgid "User name"
-msgstr "Uživatelské jméno"
+msgstr "用户名"
 
 #: u_translation.rsuserotator
 msgid "Use rotator"
-msgstr "Použít rotátor"
+msgstr "使用旋转器"
 
 #: u_translation.rsusesafetymon
 msgid "Use safety monitor"
-msgstr "Použít bezpečnostní monitor"
+msgstr "使用安全监视器"
 
 #: u_translation.rsusespecificr
 msgid "Use specific Readout mode for different actions"
-msgstr "Použijte konkrétní  Režim čtení pro různé akce"
+msgstr "为不同的动作使用特定的读出模式"
 
 #: u_translation.rsuseswitch
 msgid "Use switch"
-msgstr "Použít přepínač"
+msgstr "使用电源开关"
 
 #: u_translation.rsusewatchdog
 msgid "Use watchdog"
-msgstr "Použití hlídacího psa"
+msgstr "使用看门狗"
 
 #: u_translation.rsuseweatherst
 msgid "Use weather station"
-msgstr "Použít meteorologickou stanici"
+msgstr "使用气象站"
 
 #: u_translation.rsusingconfigu
 #, object-pascal-format
 msgid "Using configuration file %s"
-msgstr "Použít konfigurační soubor %s"
+msgstr "使用配置文件%s"
 
 #: u_translation.rsusingmediano
 #, object-pascal-format
 msgid "Using median of %s stars"
-msgstr "Použití mediánu hvězd %s"
+msgstr "使用%s颗星的中位数"
 
 #: u_translation.rsvalue
 msgid "Value"
-msgstr "Hodnota"
+msgstr "数值"
 
 #: u_translation.rsvcurve
 msgid "V curve"
-msgstr "V-křivka"
+msgstr "V曲线"
 
 #: u_translation.rsvcurvequalit
 msgid "V curve quality is low. Do you really want to save this curve?"
-msgstr "Kvalita Vkřivky je nízká. Uložit tuto křivku?"
+msgstr "V曲线品质过低。是否确定要保存该曲线？"
 
 #: u_translation.rsverbosedevic
 msgid "Verbose device log"
-msgstr "Podrobný protokol zařízení"
+msgstr "详尽的设备日志"
 
 #: u_translation.rsverticalcorr
 msgid "Vertical correction :"
-msgstr "Vertikální oprava:"
+msgstr "垂直修正："
 
 #: u_translation.rsvideo
 msgid "Video"
-msgstr "Video"
+msgstr "视频"
 
 #: u_translation.rsvideopreview
 msgid "Video preview frame rate "
-msgstr "Rychlost snímání videa "
+msgstr "视频预览帧率 "
 
 #: u_translation.rsviewheader
 msgid "View header"
-msgstr "Zobrazit hlavičku"
+msgstr "查看文件头"
 
 #: u_translation.rsviewlastauto
 msgid "View last autofocus"
-msgstr "Zobrazit poslední automatické zaostření"
+msgstr "查看最后一次自动对焦"
 
 #: u_translation.rsviewlastreso
 msgid "View last resolver log"
-msgstr "Zobrazit poslední protokol řešení"
+msgstr "查看最后的解析日志"
 
 #: u_translation.rsvisualisatio
 msgid "Visualisation"
-msgstr "Vizualizace"
+msgstr "视觉效果"
 
 #: u_translation.rsvlearn
 msgid "V-learn"
-msgstr "Učit se"
+msgstr "V学习"
 
 #: u_translation.rsvoiceconfigu
 msgid "Voice configuration"
-msgstr "Hlasová konfigurace"
+msgstr "语音配置"
 
 #: u_translation.rswait1minute
 msgid "Wait 1 minute ..."
-msgstr "Čekat 1 minutu ..."
+msgstr "等待1分钟..."
 
 #: u_translation.rswaitaftersol
 msgid "Wait after solve"
-msgstr "Vyčkat na řešení"
+msgstr "解析后等待"
 
 #: u_translation.rswaitdseconds
-#, object-pascal-format
+#, object-pascal-format, fuzzy, badformat
 msgid "Wait %d seconds and retry"
-msgstr "Počkejte %d sekund a opakujte akci"
+msgstr "等待%s秒后重试"
 
 #: u_translation.rswaitingdseco
-#, object-pascal-format
+#, object-pascal-format, fuzzy, badformat
 msgid "Waiting %d seconds before to restart the exposure"
-msgstr "Čekat %d sekund před obnovením expozice"
+msgstr "等待%s秒后重启曝光"
 
 #: u_translation.rswaitingforda
 msgid "Waiting for dawn"
-msgstr "Čekat na úsvit"
+msgstr "等待破晓"
 
 #: u_translation.rswaitingforda2
 msgid "Waiting for dark night"
-msgstr "Čekání na temnou noc"
+msgstr "等待暗夜"
 
 #: u_translation.rswaitingfordu
 msgid "Waiting for dusk"
-msgstr "Čekat na soumrak"
+msgstr "等待黄昏"
 
 #: u_translation.rswaitingformi
 #, object-pascal-format
 msgid "Waiting for %s minutes of good weather before to restart the sequence"
-msgstr "Čekat %s minut při restartování sekvence u příznivého počasí"
+msgstr "重启序列前等待%s分钟，为了好天气"
 
 #: u_translation.rswaitingfortw
 #, object-pascal-format
 msgid "Waiting for twilight at %s"
-msgstr "Čekat na soumrak v %s"
+msgstr "等待天光于%s"
 
 #: u_translation.rswaitmeridian
 #, object-pascal-format
 msgid "Wait meridian flip for %s minutes"
-msgstr "Vyčkat na překlopení poledníku %s minut"
+msgstr "等待中天翻转%s分钟"
 
 #: u_translation.rswaitmeridian2
 msgid "Wait meridian flip"
-msgstr "Čekat na překlopení poledníku"
+msgstr "等待中天翻转"
 
 #: u_translation.rswaitsecondsb
 #, object-pascal-format
 msgid "Wait %s seconds before repeated target %s"
-msgstr "Počkejte %s sekund před opakováním cíle %s"
+msgstr "等待%s秒后重复目标%s"
 
 #: u_translation.rswaitsecondsb2
 #, object-pascal-format
 msgid "Wait %s seconds before repeated sequence %s"
-msgstr "Před opakováním sekvence %s počkat %s  sekund"
+msgstr "等待%s秒后重复序列%s"
 
 #: u_translation.rswaitstart
 msgid "Wait start"
-msgstr "Počkat na začátek"
+msgstr "等待开启"
 
 #: u_translation.rswaittime
 msgid "Wait time"
-msgstr "Čekací doba"
+msgstr "等待时间"
 
 #: u_translation.rswaittimebetw
 msgid "Wait time between actions"
-msgstr "Počkat mezi akcemi"
+msgstr "动作之间等待的时间"
 
 #: u_translation.rswaittostarta
 #, object-pascal-format
 msgid "Wait to start at %s"
-msgstr "Vyčkat na spuštění v %s"
+msgstr "等待启动于%s"
 
 #: u_translation.rswaittostarts
 #, object-pascal-format
 msgid "Wait to start sequence %s at %s"
-msgstr "Vyčkat na spuštění sekvence %s v %s"
+msgstr "等待启动序列%s于%s"
 
 #: u_translation.rswarmthecamer
 msgid "Warm the camera"
-msgstr "Zahřát kameru"
+msgstr "相机回暖"
 
 #: u_translation.rswarningimage
 #, object-pascal-format
 msgid "Warning! %s image received"
-msgstr "Varování! %s přijmout obrázek"
+msgstr "警告！收到%s图像"
 
 #: u_translation.rswarningrever
 msgid "Warning, reversing the rotator will invalidated the calibration. Do you want to continue?"
-msgstr "Pozor, otočení rotátoru zruší kalibraci. Chcete pokračovat?"
+msgstr "警告，回转旋转器会使校准无效。确定要继续吗？"
 
 #: u_translation.rswatchdog
 msgid "Watchdog"
-msgstr "Hlídací pes"
+msgstr "看门狗"
 
 #: u_translation.rswch
 msgid "Wch."
-msgstr "Hl.pes."
+msgstr "天气"
 
 #: u_translation.rsweareprobabl
 msgid "We are probably trying to focus on a hot pixel!"
-msgstr "Možná se snažíme zaostřit na přepálené pixely!"
+msgstr "我们可能试图在一个热像素点上对焦！"
 
 #: u_translation.rsweathercondi
 msgid "Weather condition are bad, it is best if you stop the running capture now."
-msgstr "Povětrnostní podmínky nejsou dobré, nejlepší bude, když zastavíte běžící snímání."
+msgstr "天气条件很差，现在最好停止进行中的拍摄。"
 
 #: u_translation.rsweatherissue
 #, object-pascal-format
 msgid "Weather issue: %s"
-msgstr "Problém s počasím: %s"
+msgstr "气象问题：%s"
 
 #: u_translation.rsweathermonit
 #, object-pascal-format
 msgid "Weather monitor report: %s"
-msgstr "Zpráva o sledovaném počasí: %s"
+msgstr "气象监视器报告：%s"
 
 #: u_translation.rsweatherstati
 msgid "Weather station"
-msgstr "Meteorologická stanice"
+msgstr "气象站"
 
 #: u_translation.rswest
 msgid "West"
-msgstr "Západ"
+msgstr "西"
 
 #: u_translation.rswestpointing
 msgid "West (Pointing East)"
-msgstr "Západ (Směr V)"
+msgstr "西方（指向东方）"
 
 #: u_translation.rswhenaskedmov
 msgid "When asked, move the mount manually only along the RA axis, always in the same direction, by about 15 to 45 degrees each time."
-msgstr "Po výzvě ručně přeložte montáž pouze podél osy RA, vždy ve stejném směru, pokaždé o 15° až 45° stupňů."
+msgstr "当被问及时，仅沿 RA 轴手动移动赤道仪，始终沿同一方向，每次大约 15 到 45 度。"
 
 #: u_translation.rswhenperformi
 msgid "When performing autofocus from a sequence"
-msgstr "Automatické ostření ze sekvence"
+msgstr "当在序列中执行自动对焦"
 
 #: u_translation.rswhenreadycli
 msgid "When ready click"
-msgstr "Až budete připraveni, klikněte"
+msgstr "准备好后点击"
 
 #: u_translation.rswidth
 msgid "Width"
-msgstr "Šířka"
+msgstr "宽"
 
 #: u_translation.rswinddirectio
 msgid "Wind direction"
-msgstr "Směr větru"
+msgstr "风向"
 
 #: u_translation.rswindgust
 msgid "Wind gust"
-msgstr "Poryv větru"
+msgstr "阵风"
 
 #: u_translation.rswindspeed
 msgid "Wind speed"
-msgstr "Rychlost větru"
+msgstr "风速"
 
 #: u_translation.rswithoutpolev
 msgid "without pole visibility"
-msgstr "bez viditelnosti pólu"
+msgstr "看不到天极"
 
 #: u_translation.rsyes
 msgid "Yes"
-msgstr "Ano"
+msgstr "Yes"
 
 #: u_translation.rsyoucansetthe
 #, object-pascal-format
 msgid "You can set the parameters to define how the focuser will move.%sTry first with the default values and adjust them only if you receive an error message on the next step."
-msgstr "Parametry můžete nastavit tak, aby definovaly, jak se zaostřovač bude pohybovat. %s Nejprve vyzkoušejte výchozí hodnoty a upravte je pouze v případě, že se v dalším kroku zobrazí chybová zpráva."
+msgstr "您可以设置该参数来定义调焦器如何移动。%s首先尝试缺省值，然后只有当你在接下来的的步骤中遇到错误后调整它们。"
 
 #: u_translation.rsyoumustconfi
 msgid "You must configure your flat preference."
-msgstr "Musíte nakonfigurovat své Flaty."
+msgstr "您必须配置您的平场首选项"
 
 #: u_translation.rszoom
 msgid "Zoom"
-msgstr "Přiblížit"
+msgstr "缩放"
 

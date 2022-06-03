@@ -75,6 +75,7 @@ install -v -m 644 data/resources/bigcross.cur  $destdir/data/resources/bigcross.
 install -v -m 644 data/language/ccdciel.po      $destdir/data/language/ccdciel.en.po
 install -v -m 644 data/language/ccdciel.en_GB.po $destdir/data/language/ccdciel.en_GB.po
 install -v -m 644 data/language/ccdciel.cs.po   $destdir/data/language/ccdciel.cs.po
+install -v -m 644 data/language/ccdciel.zh_CN.po   $destdir/data/language/ccdciel.zh_CN.po
 install -v -m 644 data/language/ccdciel.de.po   $destdir/data/language/ccdciel.de.po
 install -v -m 644 data/language/ccdciel.es.po   $destdir/data/language/ccdciel.es.po
 install -v -m 644 data/language/ccdciel.fr.po   $destdir/data/language/ccdciel.fr.po
@@ -83,6 +84,7 @@ install -v -m 644 data/language/ccdciel.ru.po   $destdir/data/language/ccdciel.r
 install -v -m 644 data/language/ccdciel_hints.po      $destdir/data/language/ccdciel_hints.en.po
 install -v -m 644 data/language/ccdciel_hints.en_GB.po $destdir/data/language/ccdciel_hints.en_GB.po
 install -v -m 644 data/language/ccdciel_hints.cs.po   $destdir/data/language/ccdciel_hints.cs.po
+install -v -m 644 data/language/ccdciel_hints.zh_CN.po   $destdir/data/language/ccdciel_hints.zh_CN.po
 install -v -m 644 data/language/ccdciel_hints.de.po   $destdir/data/language/ccdciel_hints.de.po
 install -v -m 644 data/language/ccdciel_hints.da.po   $destdir/data/language/ccdciel_hints.da.po
 install -v -m 644 data/language/ccdciel_hints.es.po   $destdir/data/language/ccdciel_hints.es.po
