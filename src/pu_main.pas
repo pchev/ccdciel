@@ -7510,7 +7510,7 @@ begin
  if fits.HeaderInfo.valid and fits.ImageValid then begin
    f:=Tf_viewtext.Create(self);
    f.Width:=DoScaleX(250);
-   f.Height:=DoScaleY(250);
+   f.Height:=DoScaleY(350);
    f.Caption:=rsImageStatist;
    txt:=fits.GetStatistics;
    if (WCScenterRA<>NullCoord) and (WCScenterDEC<>NullCoord)
@@ -7526,6 +7526,9 @@ begin
      end;
      if cdcWCSinfo.secpix>0 then begin
        txt:=txt+rsImageScale+':'+blank+FormatFloat(f2, cdcWCSinfo.secpix)+ssec+'/'+rsPixel+crlf;
+       if fits.HeaderInfo.pixsz1>0 then begin
+         txt:=txt+rsActualFocalL+':'+blank+FormatFloat(f1,(fits.HeaderInfo.pixsz1*1E-3)/tan(deg2rad*cdcWCSinfo.secpix/3600))+'mm';
+       end;
      end;
    end;
    f.Memo1.Text:=txt;
