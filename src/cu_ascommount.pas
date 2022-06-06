@@ -51,6 +51,7 @@ T_ascommount = class(T_mount)
    function WaitMountPark(maxtime:integer):boolean;
  protected
    function  GetTracking:Boolean; override;
+   function  getCanSetGuideRates:Boolean; override;
    procedure SetPark(value:Boolean); override;
    function  GetPark:Boolean; override;
    function  GetRA:double; override;
@@ -651,6 +652,22 @@ begin
  end;
  {$endif}
 end;
+
+
+function T_ascommount.getCanSetGuideRates:Boolean;
+begin
+ result:=true;
+ {$ifdef mswindows}
+ if not VarIsEmpty(V) then begin
+   try
+   result:=V.CanSetGuideRates;
+   except
+   end;
+ end;
+ {$endif}
+end;
+
+
 
 function T_ascommount.Track:boolean;
 begin

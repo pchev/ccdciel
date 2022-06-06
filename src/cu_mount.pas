@@ -57,6 +57,7 @@ T_mount = class(TComponent)
     function  GetEquinoxJD: double;
     function  GetTracking:Boolean; virtual; abstract;
     function  GetPark:Boolean; virtual; abstract;
+    function  getCanSetGuideRates:Boolean; virtual; abstract;
     procedure SetPark(value:Boolean); virtual; abstract;
     procedure SetParkInterface(value:Boolean);
     function  GetRA:double; virtual; abstract;
@@ -105,6 +106,7 @@ T_mount = class(TComponent)
     property Status: TDeviceStatus read FStatus;
     property Tracking: Boolean read GetTracking;
     property Park: Boolean read GetPark write SetParkInterface;
+    property CanSetGuideRates: Boolean read GetCanSetGuideRates;
     property MountSlewing: boolean read GetMountSlewing;
     property RA: double read GetRA;
     property Dec: double read GetDec;

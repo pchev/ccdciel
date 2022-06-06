@@ -4123,6 +4123,10 @@ begin
   f_internalguider.pulseGainSouth1.Text:=config.GetValue('/InternalGuider/PulseGainSouth','3');
   f_internalguider.Pier_Side1.Text:=config.GetValue('/InternalGuider/PierSide','W');
   f_internalguider.pixelsize1.Text:=config.GetValue('/InternalGuider/PixelSize','2.5');
+  f_internalguider.cansetguiderate1.Text:=config.GetValue('/InternalGuider/CanSetGuideRate','Y');
+  f_internalguider.minEW1.caption:=config.GetValue('/InternalGuider/minEW','100');
+  f_internalguider.minNS1.caption:=config.GetValue('/InternalGuider/minNS','100');
+
   f_internalguider.unitarcseconds1.checked:=config.GetValue('/InternalGuider/UnitArcSec',false);
   f_internalguider.measure_method2.checked:=config.GetValue('/InternalGuider/Method2',false);
   f_internalguider.trend_scale:=config.GetValue('/InternalGuider/Scale',2);
@@ -4615,6 +4619,11 @@ begin
    config.SetValue('/InternalGuider/PulseGainSouth',f_internalguider.pulseGainSouth1.Text);
    config.SetValue('/InternalGuider/PierSide',f_internalguider.Pier_side1.Text);
    config.SetValue('/InternalGuider/PixelSize',f_internalguider.pixelsize1.Text);
+   config.SetValue('/InternalGuider/CanSetGuideRate',f_internalguider.cansetguiderate1.text);
+   config.SetValue('/InternalGuider/minEW',f_internalguider.minEW1.caption);
+   config.SetValue('/InternalGuider/minNS',f_internalguider.minNS1.caption);
+
+
    config.SetValue('/InternalGuider/UnitArcSec',f_internalguider.unitarcseconds1.Checked);
    config.SetValue('/InternalGuider/Method2',f_internalguider.measure_method2.Checked);
    config.SetValue('/InternalGuider/Scale',f_internalguider.trend_scale);

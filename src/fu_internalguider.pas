@@ -48,6 +48,7 @@ type
     ButtonStop: TButton;
     ButtonStop1: TButton;
     disable_guiding1: TCheckBox;
+    cansetguiderate1: TEdit;
     Exposure: TFloatSpinEdit;
     GroupBox1: TGroupBox;
     GroupBox2: TGroupBox;
@@ -61,6 +62,11 @@ type
     Label17: TLabel;
     Label18: TLabel;
     Label19: TLabel;
+    Label20: TLabel;
+    minEW1: TLabel;
+    Label21: TLabel;
+    Label22: TLabel;
+    minNS1: TLabel;
     LabelDark: TLabel;
     Label5: TLabel;
     Label6: TLabel;
@@ -73,6 +79,7 @@ type
     MenuItem2: TMenuItem;
     minimum_moveDEC1: TFloatSpinEdit;
     pa1: TEdit;
+    Panel4: TPanel;
     pier_side1: TEdit;
     minimum_moveRA1: TFloatSpinEdit;
     Label9: TLabel;
@@ -104,7 +111,6 @@ type
     PageControl1: TPageControl;
     Panel1: TPanel;
     Panel3: TPanel;
-    Panel4: TPanel;
     dec_gain1: TSpinEdit;
     TabSheetAdvanced: TTabSheet;
     TabSheetGuider: TTabSheet;
@@ -146,9 +152,15 @@ type
     procedure SetpulsegainSouthsetting(value:double);
     function Getpier_sidesetting:string;
     procedure Setpier_sidesetting(value:string);
+    function GetCansetguiderate:string;
+    procedure SetCansetguiderate(value:string);
     function GetPAsetting:double;
     procedure SetPixelSize(value:double);
     function GetPixelSize:double;
+    procedure SetminEW(value:double);
+    function GetminEW:double;
+    procedure SetminNS(value:double);
+    function GetminNS:double;
     procedure SetPAsetting(value:double);
     function Getminimum_moveRA:double;
     procedure Setminimum_moveRA(value:double);
@@ -186,7 +198,11 @@ type
     property pulsegainNorth: double read GetpulsegainNorthsetting write SetpulsegainNorthsetting; // movement in arcsec/second. Found by the calibration
     property pulsegainSouth: double read GetpulsegainSouthsetting write SetpulsegainSouthsetting; // movement in arcsec/second. Found by the calibration
     property pixel_size: double read GetPixelSize write SetPixelSize; // scale in arcsec/pixel.
+    property minPulseEW: double read GetminEW write SetminEW; // minimum pulse duaration EW in ms.
+    property minPulseNS: double read GetminNS write SetminNS;// minimum pulse duaration NS in ms.
     property pier_side: string read Getpier_sidesetting write Setpier_sidesetting; // movement in arcsec/second. Found by the calibration
+    property Cansetguiderate: string read GetCansetguiderate write SetCansetguiderate;
+
     property PA : double read GetPAsetting write SetPAsetting;// Guider image orientation in radians. Found by the calibration
     property minimum_moveRA : double read Getminimum_moveRA write Setminimum_moveRA;//to ignore seeing
     property minimum_moveDEC : double read Getminimum_moveDEC write Setminimum_moveDEC;//to ignore seeing
@@ -312,6 +328,40 @@ function Tf_internalguider.GetPixelSize:double;
 begin
   result:=strtofloat(pixelsize1.text);
 end;
+
+
+procedure Tf_internalguider.SetminEW(value:double);
+begin
+  minEW1.caption:=floattostrF(value,FFgeneral,4,4);
+end;
+
+function Tf_internalguider.GetminEW:double;
+begin
+  result:=strtofloat(minEW1.caption);
+end;
+
+
+procedure Tf_internalguider.SetminNS(value:double);
+begin
+  minNS1.caption:=floattostrF(value,FFgeneral,4,4);
+end;
+
+function Tf_internalguider.GetminNS:double;
+begin
+  result:=strtofloat(minNS1.caption);
+end;
+
+procedure Tf_internalguider.SetCansetguiderate(value:string);
+begin
+  cansetguiderate1.caption:=value;
+end;
+
+function Tf_internalguider.GetCansetguiderate:string;
+begin
+  result:=cansetguiderate1.caption;
+end;
+
+
 
 procedure Tf_internalguider.Setpier_sidesetting(value:string);
 begin

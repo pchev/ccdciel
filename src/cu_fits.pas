@@ -209,7 +209,8 @@ type
      function  value_subpixel(x1,y1:double):double;
      procedure FindBrightestPixel(x,y,s,starwindow2: integer; out xc,yc:integer; out vmax: double; accept_double: boolean=true);
      procedure FindStarPos(x,y,s: integer; out xc,yc,ri:integer; out vmax,bg,sd: double);
-     procedure GetHFD2(x,y,s: integer; out xc,yc,bg,sd,hfd,star_fwhm,valmax,snr,flux: double; strict_saturation: boolean=true);{han.k 2018-3-21}
+     procedure GetHFD3(x,y,s: integer; autoCenter :boolean; out xc,yc,bg,sd,hfd,star_fwhm,valmax,snr,flux: double; strict_saturation: boolean=true);{v2022-06}
+     procedure GetHFD2(x,y,s: integer; out xc,yc,bg,sd,hfd,star_fwhm,valmax,snr,flux: double; strict_saturation: boolean=true);{v2018}
      procedure GetStarList(rx,ry,s: integer);
      procedure MeasureStarList(s: integer; list: TArrayDouble2);
      procedure SortStarlist;
@@ -2892,6 +2893,227 @@ begin
  end;
 end;
 
+procedure TFits.GetHFD3(x,y,s: integer; autoCenter :boolean; out xc,yc,bg,sd,hfd,star_fwhm,valmax,snr,flux: double; strict_saturation: boolean=true);{v2022-06}
+// x,y, s, test location x,y and box size s x s
+// xc,yc, center of gravity
+// bg, background value
+// bf_standard_deviation, standard deviation of background
+// hfd, Half Flux Diameter of star disk
+// star_fwhm, Full Width Half Maximum of star disk
+// valmax, maximum value of brightest pixel in final test box.
+// SNR, signal noise ratio
+// flux, the total star signal
+// fluxsnr, the signal noise ratio on the total flux
+const
+    max_ri=100;
+var i,j,rs,distance,ri, distance_top_value, illuminated_pixels, saturated_counter, max_saturated,signal_counter : integer;
+    valsaturation:double;
+    SumVal,SumValX,SumValY,SumvalR,val,xg,yg, pixel_counter,r   : double;
+    distance_histogram  : array [0..max_ri] of integer;
+    HistStart,boxed             : boolean;
+begin
+  valmax:=0;
+  bg:=0;
+  snr:=0;
+  valmax:=0;
+  hfd:=-1;
+  star_fwhm:=-1;
+  flux:=-1;
+
+  if strict_saturation then
+     max_saturated:=0
+  else
+     max_saturated:=99999; //allow full saturation
+
+  rs:=s div 2;
+  if rs>max_ri then rs:=max_ri; {protection against run time error}
+
+  if (x-s)<1+4 then x:=s+1+4;
+  if (x+s)>(Fwidth-1-4) then x:=Fwidth-s-1-4;
+  if (y-s)<1+4 then y:=s+1+4;
+  if (y+s)>(Fheight-1-4) then y:=Fheight-s-1-4;
+
+  try
+    calculate_bg_sd(Fimage,x,y,rs,4,bg,sd); {calculate background and standard deviation for position x,y around box rs x rs. }
+
+    repeat {## reduce box size till symmetry to remove stars}
+      // Get center of gravity whithin star detection box and count signal pixels
+      SumVal:=0;
+      SumValX:=0;
+      SumValY:=0;
+      valmax:=0;
+      signal_counter:=0;
+      saturated_counter:=0;
+      if FFitsInfo.floatingpoint then
+        valsaturation:=MaxDouble
+      else
+        valsaturation:=MaxADU-1-bg;
+      for i:=-rs to rs do
+      for j:=-rs to rs do
+      begin
+        val:=Fimage[0,y+j,x+i]-bg;
+        if val>(3.0)*sd then {just above noise level. }
+        begin
+          if val>=valsaturation then inc(saturated_counter);
+          if val>valmax then valmax:=val;
+          SumVal:=SumVal+val;
+          SumValX:=SumValX+val*(i);
+          SumValY:=SumValY+val*(j);
+          inc(signal_counter); {how many pixels are illuminated}
+        end;
+      end;
+      if sumval<=12*sd then exit; {no star found, too noisy}
+
+      Xg:=SumValX/SumVal;
+      Yg:=SumValY/SumVal;
+      xc:=(x+Xg);
+      yc:=(y+Yg);
+
+     {center of star gravity found}
+      if autoCenter then //center on star
+      begin
+        x:=round(xc);
+        y:=round(yc);
+      end;
+
+      if ((xc-rs<=1) or (xc+rs>=Fwidth-2) or (yc-rs<=1) or (yc+rs>=Fheight-2) ) then begin exit;end;{prevent runtime errors near sides of images}
+
+      boxed:=(signal_counter>=(2/9)*sqr(rs+rs+1));{are inside the box 2 of the 9 of the pixels illuminated? Works in general better for solving then ovality measurement as used in the past}
+
+      if boxed=false then
+      begin
+        if rs>4 then dec(rs,2) else dec(rs,1); {try a smaller window to exclude nearby stars}
+      end;
+
+     until ((boxed) or (rs<=1)) ;{loop and reduce aperture radius until star is boxed}
+
+    inc(rs,2);{add some space}
+
+    if (not Undersampled) then   {check on single hot pixels}
+    for i:=-1 to +1 do
+      for j:=-1 to +1 do begin
+        val:=Fimage[0,round(yc)+j,round(xc)+i]-bg; {no subpixel calculation here}
+        if val>0.5*sumval then exit;
+      end;
+
+    // Get diameter of star above the noise level.
+    for i:=0 to rs do distance_histogram[i]:=0;{clear histogram of pixel distances}
+
+    for i:=-rs to rs do begin
+      for j:=-rs to rs do begin
+        distance:=round((sqrt(i*i + j*j )));{distance from star gravity center }
+        if distance<=rs then {build histogram for circel with radius rs}
+        begin
+          Val:=value_subpixel(xc+i,yc+j)-bg;
+          if val>((3*sd)) then {>3 * sd should be signal }
+            distance_histogram[distance]:=distance_histogram[distance]+1;{build distance histogram}
+        end;
+      end;
+    end;
+
+    ri:=-1; {will start from distance 0}
+    distance_top_value:=0;
+    HistStart:=false;
+    illuminated_pixels:=0;
+    repeat
+      inc(ri);
+      illuminated_pixels:=illuminated_pixels+distance_histogram[ri];
+      if distance_histogram[ri]>0 then HistStart:=true;{continue until we found a value>0, center of defocused star image can be black having a central obstruction in the telescope}
+      if distance_top_value<distance_histogram[ri] then distance_top_value:=distance_histogram[ri]; {this should be 2*pi*ri if it is nice defocused star disk}
+    until ((ri>=rs) or (HistStart and (distance_histogram[ri]<=0.1*distance_top_value {drop-off detection})));{find a distance where there is no pixel illuminated, so the border of the star image of interest}
+
+    if ri>=rs then {star is equal or larger then box, abort} exit; {hfd:=-1}
+    if (ri>2)and(illuminated_pixels<0.35*sqr(ri+ri-2)){35% surface} then {not a star disk but stars, abort} exit; {hfd:=-1}
+
+    if ri<3 then  {small star image}
+    begin
+     if ((not Undersampled) and (distance_histogram[1]<3)) then
+        exit; // reject single hot pixel if less then 3 pixels are detected around the center of gravity
+     ri:=3; {Minimum 6+1 x 6+1 pixel box}
+    end;
+
+    // Get HFD using the aproximation routine assuming that HFD line divides the star in equal portions of gravity:
+    SumVal:=0;
+    SumValR:=0;
+    pixel_counter:=0;
+
+    for i:=-ri to ri do {Make steps of one pixel}
+      for j:=-ri to ri do
+      begin
+        Val:=value_subpixel(xc+i,yc+j)-bg;{The calculated center of gravity is a floating point position and can be anyware, so calculate pixel values on sub-pixel level}
+        r:=sqrt(i*i+j*j);{Distance from star gravity center}
+        SumVal:=SumVal+Val;{Sumval will be star total flux value}
+        SumValR:=SumValR+Val*r; {Method Kazuhisa Miyashita, see notes of HFD calculation method}
+        if val>=valmax*0.5 then pixel_counter:=pixel_counter+1;{How many pixels are above half maximum for FWHM}
+      end;
+    if Sumval<0.00001 then Sumval:=0.00001;{prevent divide by zero}
+    hfd:=2*SumValR/SumVal;
+    hfd:=max(0.7,hfd); // minimum value for a star size of 1 pixel
+    star_fwhm:=2*sqrt(pixel_counter/pi);{The surface is calculated by counting pixels above half max. The diameter of that surface called FWHM is then 2*sqrt(surface/pi) }
+    if (SumVal>0.00001)and(saturated_counter<=max_saturated) then begin
+      flux:=Sumval;
+      snr:=flux/sqrt(flux +sqr(ri)*pi*sqr(sd)); {For both bright stars (shot-noise limited) or skybackground limited situations
+                                                                       snr:=signal/sqrt(signal + r*r*pi* SKYsignal) equals snr:=flux/sqrt(flux + r*r*pi* sd^2).}
+    end else begin
+      flux:=-1;
+      snr:=0;
+    end;
+
+
+  {==========Notes on HFD calculation method=================
+    https://en.wikipedia.org/wiki/Half_flux_diameter
+    https://astro-limovie.info/occultation_observation/halffluxdiameter/halffluxdiameter_en.html       by Kazuhisa Miyashita. No sub-pixel calculation
+    https://www.lost-infinity.com/night-sky-image-processing-part-6-measuring-the-half-flux-diameter-hfd-of-a-star-a-simple-c-implementation/
+    http://www.ccdware.com/Files/ITS%20Paper.pdf     See page 10, HFD Measurement Algorithm
+
+    HFD, Half Flux Diameter is defined as: The diameter of circle where total flux value of pixels inside is equal to the outside pixel's.
+    HFR, half flux radius:=0.5*HFD
+    The pixel_flux:=pixel_value - background.
+
+    The approximation routine assumes that the HFD line divides the star in equal portions of gravity:
+        sum(pixel_flux * (distance_from_the_centroid - HFR))=0
+    This can be rewritten as
+       sum(pixel_flux * distance_from_the_centroid) - sum(pixel_values * (HFR))=0
+       or
+       HFR:=sum(pixel_flux * distance_from_the_centroid))/sum(pixel_flux)
+       HFD:=2*HFR
+
+    This is not an exact method but a very efficient routine. Numerical checking with an a highly oversampled artificial Gaussian shaped star indicates the following:
+
+    Perfect two dimensional Gaussian shape with σ=1:   Numerical HFD=2.3548*σ                     Approximation 2.5066, an offset of +6.4%
+    Homogeneous disk of a single value  :              Numerical HFD:=disk_diameter/sqrt(2)       Approximation disk_diameter/1.5, an offset of -6.1%
+
+    The approximation routine is robust and efficient.
+
+    Since the number of pixels illuminated is small and the calculated center of star gravity is not at the center of an pixel, above summation should be calculated on sub-pixel level (as used here)
+    or the image should be re-sampled to a higher resolution.
+
+    A sufficient signal to noise is required to have valid HFD value due to background noise.
+
+    Note that for perfect Gaussian shape both the HFD and FWHM are at the same 2.3548 σ.
+    }
+
+
+     {=============Notes on FWHM:=====================
+        1)	Determine the background level by the averaging the boarder pixels.
+        2)	Calculate the standard deviation of the background.
+
+            Signal is anything 3 * standard deviation above background
+
+        3)	Determine the maximum signal level of region of interest.
+        4)	Count pixels which are equal or above half maximum level.
+        5)	Use the pixel count as area and calculate the diameter of that area  as diameter:=2 *sqrt(count/pi).}
+
+
+  except
+    on E: Exception do begin
+      hfd:=-1;
+      star_fwhm:=-1;
+    end;
+  end;
+end;{gethfd3}
+
+
 procedure TFits.GetHFD2(x,y,s: integer; out xc,yc,bg,sd,hfd,star_fwhm,valmax,snr,flux: double; strict_saturation: boolean=true);
 // x,y, s, test location x,y and box size s x s
 // xc,yc, center of gravity
@@ -3068,7 +3290,7 @@ begin
 
   {==========Notes on HFD calculation method=================
     https://en.wikipedia.org/wiki/Half_flux_diameter
-    http://www005.upp.so-net.ne.jp/k_miyash/occ02/halffluxdiameter/halffluxdiameter_en.html       by Kazuhisa Miyashita. No sub-pixel calculation
+    https://astro-limovie.info/occultation_observation/halffluxdiameter/halffluxdiameter_en.html       by Kazuhisa Miyashita. No sub-pixel calculation
     https://www.lost-infinity.com/night-sky-image-processing-part-6-measuring-the-half-flux-diameter-hfd-of-a-star-a-simple-c-implementation/
     http://www.ccdware.com/Files/ITS%20Paper.pdf     See page 10, HFD Measurement Algorithm
 
