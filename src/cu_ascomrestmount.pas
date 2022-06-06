@@ -50,6 +50,7 @@ T_ascomrestmount = class(T_mount)
    function WaitMountPark(maxtime:integer):boolean;
  protected
    function  GetTracking:Boolean; override;
+   function  getCanSetGuideRates:Boolean; override;
    procedure SetPark(value:Boolean); override;
    function  GetPark:Boolean; override;
    function  GetRA:double; override;
@@ -624,6 +625,16 @@ begin
  if FStatus<>devConnected then exit;
    try
    result:=V.Get('tracking').AsBool;
+   except
+   end;
+end;
+
+function T_ascomrestmount.getCanSetGuideRates:Boolean;
+begin
+ result:=false;
+ if FStatus<>devConnected then exit;
+   try
+   result:=V.Get('cansetguiderates').AsBool;
    except
    end;
 end;

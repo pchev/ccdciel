@@ -102,6 +102,7 @@ T_indimount = class(T_mount)
    procedure LoadConfig;
  protected
    function  GetTracking:Boolean; override;
+   function  getCanSetGuideRates:Boolean; override;
    procedure SetPark(value:Boolean); override;
    function  GetPark:Boolean; override;
    function  GetRA:double; override;
@@ -897,6 +898,14 @@ begin
     Guide_Rate_NS.value:=value*3600/siderealrate;
     indiclient.sendNewNumber(Guide_Rate);
   end;
+end;
+
+function T_indimount.getCanSetGuideRates:Boolean;
+begin
+ result:=false;
+ if Guide_Rate<>nil then begin
+   result:=Guide_Rate.p=IP_RW;
+ end;
 end;
 
 function T_indimount.PulseGuide(direction,duration:integer): boolean;
