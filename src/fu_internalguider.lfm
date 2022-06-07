@@ -298,6 +298,18 @@ object f_internalguider: Tf_internalguider
             Position = 2
             TabOrder = 9
           end
+          object unitarcseconds1: TCheckBox
+            Left = 144
+            Height = 21
+            Hint = 'The trend and XY scales will be in arc seconds'
+            Top = 200
+            Width = 29
+            Caption = '"'
+            ParentFont = False
+            ParentShowHint = False
+            ShowHint = True
+            TabOrder = 10
+          end
         end
       end
       object TabSheetCamera: TTabSheet
@@ -562,57 +574,45 @@ object f_internalguider: Tf_internalguider
           TabOrder = 0
           object GroupBox1: TGroupBox
             Left = 16
-            Height = 96
-            Top = 312
+            Height = 64
+            Top = 344
             Width = 288
             Caption = 'Options:'
-            ClientHeight = 76
+            ClientHeight = 44
             ClientWidth = 286
             TabOrder = 0
-            object unitarcseconds1: TCheckBox
-              Left = 8
-              Height = 21
-              Hint = 'The trend and XY scales will be in arc seconds'
-              Top = 8
-              Width = 124
-              Caption = 'Unit arc seconds'
-              ParentFont = False
-              ParentShowHint = False
-              ShowHint = True
-              TabOrder = 0
-            end
             object measure_method2: TCheckBox
               Left = 8
               Height = 21
               Hint = 'Use alternative method for measuring pixel scale in arc seconds during calibration. '
-              Top = 32
+              Top = 0
               Width = 279
               Caption = 'Measure pixel scale ["/px] by stop tracking'
               ParentFont = False
               ParentShowHint = False
               ShowHint = True
-              TabOrder = 1
+              TabOrder = 0
             end
             object disable_guiding1: TCheckBox
               Left = 8
               Height = 21
               Hint = 'For testing. This will disable guiding but still show the trend.'
-              Top = 56
+              Top = 24
               Width = 187
               Caption = 'Disable guiding temporary'
               ParentFont = False
               ParentShowHint = False
               ShowHint = True
-              TabOrder = 2
+              TabOrder = 1
             end
           end
           object GroupBox2: TGroupBox
             Left = 16
-            Height = 312
+            Height = 328
             Top = 0
             Width = 288
             Caption = 'Calibration results:'
-            ClientHeight = 292
+            ClientHeight = 308
             ClientWidth = 286
             TabOrder = 1
             object Label5: TLabel
@@ -648,7 +648,7 @@ object f_internalguider: Tf_internalguider
             object pulsegainEast1: TEdit
               Left = 184
               Height = 31
-              Hint = 'Pulse gain in pixels at the celestial equator.'
+              Hint = 'Pulse gain in pixels at the celestial equator. Measured at 0.5x guide rate.'
               Top = 37
               Width = 80
               ParentFont = False
@@ -669,7 +669,7 @@ object f_internalguider: Tf_internalguider
             object pulsegainWest1: TEdit
               Left = 184
               Height = 31
-              Hint = 'Pulse gain in pixels at the celestial equator.'
+              Hint = 'Pulse gain in pixels at the celestial equator. Measured at 1.5x guide rate.'
               Top = 66
               Width = 80
               ParentFont = False
@@ -690,7 +690,7 @@ object f_internalguider: Tf_internalguider
             object pulsegainNorth1: TEdit
               Left = 184
               Height = 31
-              Hint = 'A negative value indicates a flipped image. '
+              Hint = 'A negative value indicates a flipped image. Measured at 7.5"/px rate.'
               Top = 96
               Width = 80
               ParentFont = False
@@ -702,7 +702,7 @@ object f_internalguider: Tf_internalguider
             object pulsegainSouth1: TEdit
               Left = 184
               Height = 31
-              Hint = 'A negative value indicates a flipped image. '
+              Hint = 'A negative value indicates a flipped image. Measured at 7.5"/px rate.'
               Top = 126
               Width = 80
               ParentFont = False
@@ -745,8 +745,8 @@ object f_internalguider: Tf_internalguider
               Left = 8
               Height = 19
               Top = 186
-              Width = 155
-              Caption = 'Pixel scale estimate ["/px]'
+              Width = 98
+              Caption = 'Pixel scale ["/px]'
               Font.CharSet = ANSI_CHARSET
               Font.Pitch = fpVariable
               Font.Quality = fqDraft
@@ -765,54 +765,66 @@ object f_internalguider: Tf_internalguider
               TabOrder = 6
               Text = '2.5'
             end
-            object minEW1: TLabel
-              Left = 184
-              Height = 19
-              Top = 248
-              Width = 24
-              Caption = '100'
-              ParentColor = False
-            end
             object Label21: TLabel
-              Left = 8
+              Left = 10
               Height = 19
-              Top = 248
+              Top = 246
               Width = 156
               Caption = 'Min. pulse width E/W [ms]'
               ParentColor = False
             end
             object Label22: TLabel
-              Left = 8
+              Left = 10
               Height = 19
-              Top = 272
+              Top = 276
               Width = 154
               Caption = 'Min. pulse width N/S [ms]'
-              ParentColor = False
-            end
-            object minNS1: TLabel
-              Left = 184
-              Height = 19
-              Top = 272
-              Width = 24
-              Caption = '100'
               ParentColor = False
             end
             object Label20: TLabel
               Left = 8
               Height = 19
               Top = 216
-              Width = 145
-              Caption = 'Can set guide rate [Y/N]'
+              Width = 130
+              Caption = 'Auto guide rate [Y/N]'
               ParentColor = False
             end
-            object cansetguiderate1: TEdit
+            object autoguiderate1: TEdit
               Left = 184
               Height = 31
-              Hint = 'Set this to N to keep guide rate constant at 0.5 / 1.5'
+              Hint = 'Recommend to keep this at Y.  Else enter N to keep guide rate constant at 0.5x / 1.5x.'
               Top = 216
               Width = 80
+              ParentShowHint = False
+              ShowHint = True
               TabOrder = 7
               Text = 'Y'
+            end
+            object minEW1: TSpinEdit
+              Left = 182
+              Height = 29
+              Hint = 'Minimum duration used. This should be set as low as possible. Guide rate will be adapted accordingly'
+              Top = 246
+              Width = 82
+              MaxValue = 2500
+              MinValue = 20
+              ParentShowHint = False
+              ShowHint = True
+              TabOrder = 8
+              Value = 20
+            end
+            object minNS1: TSpinEdit
+              Left = 182
+              Height = 29
+              Hint = 'Minimum duration used. This should be set as low as possible. Guide rate will be adapted accordingly'
+              Top = 276
+              Width = 82
+              MaxValue = 2500
+              MinValue = 20
+              ParentShowHint = False
+              ShowHint = True
+              TabOrder = 9
+              Value = 20
             end
           end
         end

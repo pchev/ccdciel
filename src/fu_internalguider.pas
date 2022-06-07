@@ -48,7 +48,7 @@ type
     ButtonStop: TButton;
     ButtonStop1: TButton;
     disable_guiding1: TCheckBox;
-    cansetguiderate1: TEdit;
+    autoguiderate1: TEdit;
     Exposure: TFloatSpinEdit;
     GroupBox1: TGroupBox;
     GroupBox2: TGroupBox;
@@ -63,10 +63,8 @@ type
     Label18: TLabel;
     Label19: TLabel;
     Label20: TLabel;
-    minEW1: TLabel;
     Label21: TLabel;
     Label22: TLabel;
-    minNS1: TLabel;
     LabelDark: TLabel;
     Label5: TLabel;
     Label6: TLabel;
@@ -99,6 +97,8 @@ type
     Binning: TSpinEdit;
     Gain: TSpinEdit;
     Offset: TSpinEdit;
+    minEW1: TSpinEdit;
+    minNS1: TSpinEdit;
     TabSheetCamera: TTabSheet;
     Gamma: TTrackBar;
     Luminosity: TTrackBar;
@@ -132,13 +132,11 @@ type
     thescale : double;
     FonStart, FonStop, FonCalibrate, FonLoop, FonRedraw, FonCaptureDark, FonClearDark: TNotifyEvent;
     procedure SetLed (cl : tcolor);
-
     procedure SetRA_hysteresis(value:integer);
     function GetRA_hysteresis:integer;
     procedure SetDEC_hysteresis(value:integer);
     function GetDEC_hysteresis:integer;
     function GetRAgain:integer;
-
     procedure SetRAgain(value:integer);
     function GetDECgain:integer;
     procedure SetDECgain(value:integer);
@@ -152,15 +150,19 @@ type
     procedure SetpulsegainSouthsetting(value:double);
     function Getpier_sidesetting:string;
     procedure Setpier_sidesetting(value:string);
-    function GetCansetguiderate:string;
-    procedure SetCansetguiderate(value:string);
+    function GetAutoGuideRate:string;
+    procedure SetAutoGuideRate(value:string);
     function GetPAsetting:double;
     procedure SetPixelSize(value:double);
     function GetPixelSize:double;
-    procedure SetminEW(value:double);
-    function GetminEW:double;
-    procedure SetminNS(value:double);
-    function GetminNS:double;
+    procedure SetminEW(value:integer);
+    function GetminEW:integer;
+    procedure SetminValueEW(value:integer);
+    function GetminValueEW:integer;
+    procedure SetminNS(value:integer);
+    function GetminNS:integer;
+    function GetminValueNS:integer;
+    procedure SetminValueNS(value:integer);
     procedure SetPAsetting(value:double);
     function Getminimum_moveRA:double;
     procedure Setminimum_moveRA(value:double);
@@ -198,11 +200,12 @@ type
     property pulsegainNorth: double read GetpulsegainNorthsetting write SetpulsegainNorthsetting; // movement in arcsec/second. Found by the calibration
     property pulsegainSouth: double read GetpulsegainSouthsetting write SetpulsegainSouthsetting; // movement in arcsec/second. Found by the calibration
     property pixel_size: double read GetPixelSize write SetPixelSize; // scale in arcsec/pixel.
-    property minPulseEW: double read GetminEW write SetminEW; // minimum pulse duaration EW in ms.
-    property minPulseNS: double read GetminNS write SetminNS;// minimum pulse duaration NS in ms.
+    property minPulseEW: integer read GetminEW write SetminEW; // minimum pulse duaration EW in ms.
+    property minPulseNS: integer read GetminNS write SetminNS;// minimum pulse duaration NS in ms.
+    property minValuePulseEW: integer read GetminValueEW write SetminValueEW; // minimumValue pulse duaration EW in ms.
+    property minValuePulseNS: integer read GetminValueNS write SetminValueNS;// minimumValue pulse duaration NS in ms.
     property pier_side: string read Getpier_sidesetting write Setpier_sidesetting; // movement in arcsec/second. Found by the calibration
-    property Cansetguiderate: string read GetCansetguiderate write SetCansetguiderate;
-
+    property AutoGuideRate: string read GetAutoGuideRate write SetAutoGuideRate;
     property PA : double read GetPAsetting write SetPAsetting;// Guider image orientation in radians. Found by the calibration
     property minimum_moveRA : double read Getminimum_moveRA write Setminimum_moveRA;//to ignore seeing
     property minimum_moveDEC : double read Getminimum_moveDEC write Setminimum_moveDEC;//to ignore seeing
@@ -329,39 +332,50 @@ begin
   result:=strtofloat(pixelsize1.text);
 end;
 
-
-procedure Tf_internalguider.SetminEW(value:double);
+procedure Tf_internalguider.SetminEW(value:integer);
 begin
-  minEW1.caption:=floattostrF(value,FFgeneral,4,4);
+  minEW1.value:=value;
+end;
+function Tf_internalguider.GetminEW:integer;
+begin
+  result:=minEW1.value;
 end;
 
-function Tf_internalguider.GetminEW:double;
+procedure Tf_internalguider.SetminNS(value:integer);
 begin
-  result:=strtofloat(minEW1.caption);
+  minNS1.value:=value;
+end;
+function Tf_internalguider.GetminNS:integer;
+begin
+  result:=minNS1.value;
 end;
 
-
-procedure Tf_internalguider.SetminNS(value:double);
+procedure Tf_internalguider.SetminValueEW(value:integer);
 begin
-  minNS1.caption:=floattostrF(value,FFgeneral,4,4);
+  minEW1.MinValue:=value;
+end;
+function Tf_internalguider.GetminValueEW:integer;
+begin
+  result:=minEW1.minValue;
 end;
 
-function Tf_internalguider.GetminNS:double;
+function Tf_internalguider.GetminValueNS:integer;
 begin
-  result:=strtofloat(minNS1.caption);
+  result:=minNS1.minValue;
+end;
+procedure Tf_internalguider.SetminValueNS(value:integer);
+begin
+  minNS1.MinValue:=value;
 end;
 
-procedure Tf_internalguider.SetCansetguiderate(value:string);
+procedure Tf_internalguider.SetAutoGuideRate(value:string);
 begin
-  cansetguiderate1.caption:=value;
+  autoguiderate1.caption:=value;
 end;
-
-function Tf_internalguider.GetCansetguiderate:string;
+function Tf_internalguider.GetAutoGuideRate:string;
 begin
-  result:=cansetguiderate1.caption;
+  result:=autoguiderate1.caption;
 end;
-
-
 
 procedure Tf_internalguider.Setpier_sidesetting(value:string);
 begin
