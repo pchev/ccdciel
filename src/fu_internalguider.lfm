@@ -8,7 +8,7 @@ object f_internalguider: Tf_internalguider
   ClientWidth = 325
   ParentFont = False
   TabOrder = 0
-  DesignLeft = 786
+  DesignLeft = 970
   DesignTop = 184
   object Title: TLabel
     Left = 0
@@ -23,7 +23,6 @@ object f_internalguider: Tf_internalguider
     DragMode = dmAutomatic
     Font.Color = clBtnText
     Layout = tlCenter
-    ParentColor = False
     ParentFont = False
     Transparent = False
   end
@@ -49,18 +48,18 @@ object f_internalguider: Tf_internalguider
       TabOrder = 0
       object TabSheetGuider: TTabSheet
         Caption = 'Guider'
-        ClientHeight = 428
-        ClientWidth = 313
+        ClientHeight = 431
+        ClientWidth = 315
         ParentFont = False
         object Panel3: TPanel
           Left = 0
-          Height = 428
+          Height = 431
           Top = 0
-          Width = 313
+          Width = 315
           Align = alClient
           BevelOuter = bvNone
-          ClientHeight = 428
-          ClientWidth = 313
+          ClientHeight = 431
+          ClientWidth = 315
           Color = clMenu
           ParentColor = False
           ParentFont = False
@@ -106,7 +105,7 @@ object f_internalguider: Tf_internalguider
           end
           object dec_gain1: TSpinEdit
             Left = 70
-            Height = 29
+            Height = 23
             Hint = 'Proportional  corrective action of the guider controller in % of the offset for declination. Typically set at 100%'
             Top = 144
             Width = 60
@@ -115,12 +114,12 @@ object f_internalguider: Tf_internalguider
             ParentFont = False
             ParentShowHint = False
             ShowHint = True
-            TabOrder = 6
+            TabOrder = 5
             Value = 100
           end
           object ra_hysteresis1: TSpinEdit
             Left = 70
-            Height = 29
+            Height = 23
             Hint = 'The controller will rely with the specified percentage on the last corrective action and reduce the new corrective action accordingly. Typically set at 30%'
             Top = 80
             Width = 60
@@ -134,13 +133,12 @@ object f_internalguider: Tf_internalguider
           end
           object Label1: TLabel
             Left = 8
-            Height = 19
+            Height = 15
             Hint = 'Hysteresis'
             Top = 80
-            Width = 68
+            Width = 56
             Caption = 'Hysteresis:'
             Constraints.MaxWidth = 70
-            ParentColor = False
             ParentFont = False
             ParentShowHint = False
             ShowHint = True
@@ -148,31 +146,29 @@ object f_internalguider: Tf_internalguider
           end
           object Label3: TLabel
             Left = 28
-            Height = 19
+            Height = 15
             Hint = 'controller DEC gain'
             Top = 144
-            Width = 41
+            Width = 36
             Caption = 'δ gain:'
-            ParentColor = False
             ParentFont = False
             ParentShowHint = False
             ShowHint = True
           end
           object Label2: TLabel
             Left = 28
-            Height = 19
+            Height = 15
             Hint = 'controller RA gain'
             Top = 56
-            Width = 41
+            Width = 36
             Caption = 'α gain:'
-            ParentColor = False
             ParentFont = False
             ParentShowHint = False
             ShowHint = True
           end
           object ra_gain1: TSpinEdit
             Left = 70
-            Height = 29
+            Height = 23
             Hint = 'Proportional  corrective action of the guider controller in % of the offset for right ascension. Typically set between  50 and 80%'
             Top = 56
             Width = 60
@@ -214,7 +210,7 @@ object f_internalguider: Tf_internalguider
           end
           object dec_hysteresis1: TSpinEdit
             Left = 70
-            Height = 29
+            Height = 23
             Hint = 'The controller will rely with the specified percentage on the last corrective action and reduce the new corrective action accordingly. Typically set at 70%'
             Top = 168
             Width = 60
@@ -223,68 +219,21 @@ object f_internalguider: Tf_internalguider
             ParentFont = False
             ParentShowHint = False
             ShowHint = True
-            TabOrder = 7
+            TabOrder = 6
             Value = 70
           end
           object Label4: TLabel
             Left = 8
-            Height = 19
+            Height = 15
             Hint = 'Hysteresis'
             Top = 168
-            Width = 68
+            Width = 56
             Caption = 'Hysteresis:'
             Constraints.MaxWidth = 70
-            ParentColor = False
             ParentFont = False
             ParentShowHint = False
             ShowHint = True
             WordWrap = True
-          end
-          object Label9: TLabel
-            Left = 4
-            Height = 19
-            Top = 104
-            Width = 69
-            Caption = 'Min. move:'
-            ParentColor = False
-            ParentFont = False
-          end
-          object minimum_moveRA1: TFloatSpinEdit
-            Left = 70
-            Height = 29
-            Hint = 'Below this offset value the controller will take less action to ignore seeing effects and therefore stabilize control. Typically set at 0.6 arcseconds'
-            Top = 104
-            Width = 60
-            Increment = 0.1
-            MaxValue = 10
-            ParentFont = False
-            ParentShowHint = False
-            ShowHint = True
-            TabOrder = 5
-            Value = 0.6
-          end
-          object minimum_moveDEC1: TFloatSpinEdit
-            Left = 70
-            Height = 29
-            Hint = 'Below this offset value the controller will take less action to ignore seeing effects and therefore stabilize control. Typically set at 0.6 arcseconds'
-            Top = 192
-            Width = 60
-            Increment = 0.1
-            MaxValue = 10
-            ParentFont = False
-            ParentShowHint = False
-            ShowHint = True
-            TabOrder = 8
-            Value = 0.6
-          end
-          object Label11: TLabel
-            Left = 4
-            Height = 19
-            Top = 192
-            Width = 69
-            Caption = 'Min. move:'
-            ParentColor = False
-            ParentFont = False
           end
           object scale1: TUpDown
             Left = 4
@@ -296,34 +245,34 @@ object f_internalguider: Tf_internalguider
             Min = 0
             OnClick = scale1Click
             Position = 2
-            TabOrder = 9
+            TabOrder = 7
           end
           object unitarcseconds1: TCheckBox
             Left = 144
-            Height = 21
+            Height = 19
             Hint = 'The trend and XY scales will be in arc seconds'
             Top = 200
-            Width = 29
+            Width = 25
             Caption = '"'
             ParentFont = False
             ParentShowHint = False
             ShowHint = True
-            TabOrder = 10
+            TabOrder = 8
           end
         end
       end
       object TabSheetCamera: TTabSheet
         Caption = 'Camera'
-        ClientHeight = 428
-        ClientWidth = 313
+        ClientHeight = 431
+        ClientWidth = 315
         object Panel4: TPanel
           Left = 0
-          Height = 428
+          Height = 431
           Top = 0
-          Width = 313
+          Width = 315
           Align = alClient
-          ClientHeight = 428
-          ClientWidth = 313
+          ClientHeight = 431
+          ClientWidth = 315
           Color = clMenu
           ParentColor = False
           TabOrder = 0
@@ -331,15 +280,14 @@ object f_internalguider: Tf_internalguider
             AnchorSideTop.Control = Exposure
             AnchorSideTop.Side = asrCenter
             Left = 16
-            Height = 19
-            Top = 61
-            Width = 57
+            Height = 15
+            Top = 60
+            Width = 48
             Caption = 'Exposure'
-            ParentColor = False
           end
           object Exposure: TFloatSpinEdit
             Left = 103
-            Height = 29
+            Height = 23
             Top = 56
             Width = 111
             MaxValue = 30
@@ -349,7 +297,7 @@ object f_internalguider: Tf_internalguider
           end
           object Binning: TSpinEdit
             Left = 103
-            Height = 29
+            Height = 23
             Top = 104
             Width = 111
             MaxValue = 8
@@ -361,11 +309,10 @@ object f_internalguider: Tf_internalguider
             AnchorSideTop.Control = Binning
             AnchorSideTop.Side = asrCenter
             Left = 16
-            Height = 19
-            Top = 109
-            Width = 47
+            Height = 15
+            Top = 108
+            Width = 41
             Caption = 'Binning'
-            ParentColor = False
           end
           object ButtonLoop: TButton
             Left = 8
@@ -393,32 +340,30 @@ object f_internalguider: Tf_internalguider
             AnchorSideTop.Control = Gain
             AnchorSideTop.Side = asrCenter
             Left = 16
-            Height = 19
-            Top = 157
-            Width = 28
+            Height = 15
+            Top = 156
+            Width = 24
             Caption = 'Gain'
-            ParentColor = False
           end
           object Label16: TLabel
             AnchorSideTop.Control = Offset
             AnchorSideTop.Side = asrCenter
             Left = 16
-            Height = 19
-            Top = 205
-            Width = 38
+            Height = 15
+            Top = 204
+            Width = 32
             Caption = 'Offset'
-            ParentColor = False
           end
           object Gain: TSpinEdit
             Left = 103
-            Height = 29
+            Height = 23
             Top = 152
             Width = 111
             TabOrder = 4
           end
           object Offset: TSpinEdit
             Left = 103
-            Height = 29
+            Height = 23
             Top = 200
             Width = 111
             TabOrder = 5
@@ -427,11 +372,10 @@ object f_internalguider: Tf_internalguider
             AnchorSideTop.Control = Gamma
             AnchorSideTop.Side = asrCenter
             Left = 16
-            Height = 19
-            Top = 252
-            Width = 48
+            Height = 15
+            Top = 254
+            Width = 42
             Caption = 'Gamma'
-            ParentColor = False
           end
           object Gamma: TTrackBar
             Left = 103
@@ -450,11 +394,10 @@ object f_internalguider: Tf_internalguider
             AnchorSideTop.Control = Luminosity
             AnchorSideTop.Side = asrCenter
             Left = 16
-            Height = 19
-            Top = 308
-            Width = 67
+            Height = 15
+            Top = 310
+            Width = 59
             Caption = 'Luminosity'
-            ParentColor = False
           end
           object Luminosity: TTrackBar
             Left = 103
@@ -471,11 +414,10 @@ object f_internalguider: Tf_internalguider
           end
           object Label19: TLabel
             Left = 16
-            Height = 19
+            Height = 15
             Top = 360
-            Width = 36
+            Width = 32
             Caption = 'Zoom'
-            ParentColor = False
           end
           object BtnZoom05: TSpeedButton
             Tag = 1
@@ -546,47 +488,46 @@ object f_internalguider: Tf_internalguider
           end
           object LabelDark: TLabel
             Left = 11
-            Height = 19
+            Height = 15
             Top = 36
-            Width = 63
+            Width = 52
             Caption = 'LabelDark'
-            ParentColor = False
           end
         end
       end
       object TabSheetAdvanced: TTabSheet
         Caption = 'Advanced'
-        ClientHeight = 428
-        ClientWidth = 313
+        ClientHeight = 431
+        ClientWidth = 315
         ParentFont = False
         object Panel2: TPanel
           Left = 0
-          Height = 428
+          Height = 431
           Top = 0
-          Width = 313
+          Width = 315
           Align = alClient
           BevelOuter = bvNone
-          ClientHeight = 428
-          ClientWidth = 313
+          ClientHeight = 431
+          ClientWidth = 315
           Color = clMenu
           ParentColor = False
           ParentFont = False
           TabOrder = 0
           object GroupBox1: TGroupBox
             Left = 16
-            Height = 64
-            Top = 344
+            Height = 112
+            Top = 296
             Width = 288
             Caption = 'Options:'
-            ClientHeight = 44
-            ClientWidth = 286
+            ClientHeight = 92
+            ClientWidth = 284
             TabOrder = 0
             object measure_method2: TCheckBox
               Left = 8
-              Height = 21
+              Height = 19
               Hint = 'Use alternative method for measuring pixel scale in arc seconds during calibration. '
-              Top = 0
-              Width = 279
+              Top = 48
+              Width = 244
               Caption = 'Measure pixel scale ["/px] by stop tracking'
               ParentFont = False
               ParentShowHint = False
@@ -595,38 +536,58 @@ object f_internalguider: Tf_internalguider
             end
             object disable_guiding1: TCheckBox
               Left = 8
-              Height = 21
+              Height = 19
               Hint = 'For testing. This will disable guiding but still show the trend.'
-              Top = 24
-              Width = 187
+              Top = 72
+              Width = 160
               Caption = 'Disable guiding temporary'
               ParentFont = False
               ParentShowHint = False
               ShowHint = True
               TabOrder = 1
             end
+            object ShortestPulse1: TSpinEdit
+              Left = 184
+              Height = 23
+              Hint = 'Improves stability. Typical set at 40. Guide pulses shorter then this value are skipped.  Pulses shorter then this value can cause a larger error then the required correction and are not effective.'
+              Top = 8
+              Width = 80
+              Increment = 5
+              MaxValue = 100
+              MinValue = 25
+              ParentShowHint = False
+              ShowHint = True
+              TabOrder = 2
+              Value = 40
+            end
+            object Label22: TLabel
+              Left = 8
+              Height = 15
+              Top = 8
+              Width = 134
+              Caption = 'Shortest guide pulse [ms]'
+            end
           end
           object GroupBox2: TGroupBox
             Left = 16
-            Height = 328
+            Height = 256
             Top = 0
             Width = 288
             Caption = 'Calibration results:'
-            ClientHeight = 308
-            ClientWidth = 286
+            ClientHeight = 236
+            ClientWidth = 284
             TabOrder = 1
             object Label5: TLabel
               Left = 8
-              Height = 19
+              Height = 15
               Top = 8
-              Width = 101
+              Width = 89
               Caption = 'Camera angle [°]'
-              ParentColor = False
               ParentFont = False
             end
             object pa1: TEdit
               Left = 184
-              Height = 31
+              Height = 23
               Hint = 'The relative angle between the mount and the image. An image with north up and east left has an angle of zero.'
               Top = 8
               Width = 80
@@ -638,18 +599,17 @@ object f_internalguider: Tf_internalguider
             end
             object Label6: TLabel
               Left = 8
-              Height = 19
-              Top = 37
-              Width = 184
+              Height = 15
+              Top = 40
+              Width = 162
               Caption = 'pulse gain East [px*cos(δ)/sec]'
-              ParentColor = False
               ParentFont = False
             end
             object pulsegainEast1: TEdit
               Left = 184
-              Height = 31
+              Height = 23
               Hint = 'Pulse gain in pixels at the celestial equator. Measured at 0.5x guide rate.'
-              Top = 37
+              Top = 40
               Width = 80
               ParentFont = False
               ParentShowHint = False
@@ -659,18 +619,17 @@ object f_internalguider: Tf_internalguider
             end
             object Label7: TLabel
               Left = 8
-              Height = 19
-              Top = 66
-              Width = 190
+              Height = 15
+              Top = 72
+              Width = 167
               Caption = 'pulse gain West [px*cos(δ)/sec]'
-              ParentColor = False
               ParentFont = False
             end
             object pulsegainWest1: TEdit
               Left = 184
-              Height = 31
+              Height = 23
               Hint = 'Pulse gain in pixels at the celestial equator. Measured at 1.5x guide rate.'
-              Top = 66
+              Top = 72
               Width = 80
               ParentFont = False
               ParentShowHint = False
@@ -680,18 +639,17 @@ object f_internalguider: Tf_internalguider
             end
             object Label8: TLabel
               Left = 8
-              Height = 19
-              Top = 96
-              Width = 153
+              Height = 15
+              Top = 104
+              Width = 134
               Caption = 'pulse gain North [px/sec]'
-              ParentColor = False
               ParentFont = False
             end
             object pulsegainNorth1: TEdit
               Left = 184
-              Height = 31
+              Height = 23
               Hint = 'A negative value indicates a flipped image. Measured at 7.5"/px rate.'
-              Top = 96
+              Top = 104
               Width = 80
               ParentFont = False
               ParentShowHint = False
@@ -701,9 +659,9 @@ object f_internalguider: Tf_internalguider
             end
             object pulsegainSouth1: TEdit
               Left = 184
-              Height = 31
+              Height = 23
               Hint = 'A negative value indicates a flipped image. Measured at 7.5"/px rate.'
-              Top = 126
+              Top = 136
               Width = 80
               ParentFont = False
               ParentShowHint = False
@@ -713,27 +671,25 @@ object f_internalguider: Tf_internalguider
             end
             object Label13: TLabel
               Left = 8
-              Height = 19
-              Top = 126
-              Width = 152
+              Height = 15
+              Top = 136
+              Width = 134
               Caption = 'pulse gain South [px/sec]'
-              ParentColor = False
               ParentFont = False
             end
             object Label12: TLabel
               Left = 8
-              Height = 19
-              Top = 156
-              Width = 112
+              Height = 15
+              Top = 168
+              Width = 98
               Caption = 'Measured at [E/W]'
-              ParentColor = False
               ParentFont = False
             end
             object pier_side1: TEdit
               Left = 184
-              Height = 31
+              Height = 23
               Hint = 'While calibrating was the telescope pointing East or West'
-              Top = 156
+              Top = 168
               Width = 80
               ParentFont = False
               ParentShowHint = False
@@ -743,88 +699,26 @@ object f_internalguider: Tf_internalguider
             end
             object label_estimate1: TLabel
               Left = 8
-              Height = 19
-              Top = 186
-              Width = 98
+              Height = 15
+              Top = 200
+              Width = 88
               Caption = 'Pixel scale ["/px]'
               Font.CharSet = ANSI_CHARSET
               Font.Pitch = fpVariable
               Font.Quality = fqDraft
-              ParentColor = False
               ParentFont = False
             end
             object pixelsize1: TEdit
               Left = 184
-              Height = 31
+              Height = 23
               Hint = 'Based on measured pulse gain in px/sec and assuming 0.5x and 1.5x guide rates. This value is not essential for guiding'
-              Top = 186
+              Top = 200
               Width = 80
               ParentFont = False
               ParentShowHint = False
               ShowHint = True
               TabOrder = 6
               Text = '2.5'
-            end
-            object Label21: TLabel
-              Left = 10
-              Height = 19
-              Top = 246
-              Width = 156
-              Caption = 'Min. pulse width E/W [ms]'
-              ParentColor = False
-            end
-            object Label22: TLabel
-              Left = 10
-              Height = 19
-              Top = 276
-              Width = 154
-              Caption = 'Min. pulse width N/S [ms]'
-              ParentColor = False
-            end
-            object Label20: TLabel
-              Left = 8
-              Height = 19
-              Top = 216
-              Width = 130
-              Caption = 'Auto guide rate [Y/N]'
-              ParentColor = False
-            end
-            object autoguiderate1: TEdit
-              Left = 184
-              Height = 31
-              Hint = 'Recommend to keep this at Y.  Else enter N to keep guide rate constant at 0.5x / 1.5x.'
-              Top = 216
-              Width = 80
-              ParentShowHint = False
-              ShowHint = True
-              TabOrder = 7
-              Text = 'Y'
-            end
-            object minEW1: TSpinEdit
-              Left = 182
-              Height = 29
-              Hint = 'Minimum duration used. This should be set as low as possible. Guide rate will be adapted accordingly'
-              Top = 246
-              Width = 82
-              MaxValue = 2500
-              MinValue = 20
-              ParentShowHint = False
-              ShowHint = True
-              TabOrder = 8
-              Value = 20
-            end
-            object minNS1: TSpinEdit
-              Left = 182
-              Height = 29
-              Hint = 'Minimum duration used. This should be set as low as possible. Guide rate will be adapted accordingly'
-              Top = 276
-              Width = 82
-              MaxValue = 2500
-              MinValue = 20
-              ParentShowHint = False
-              ShowHint = True
-              TabOrder = 9
-              Value = 20
             end
           end
         end

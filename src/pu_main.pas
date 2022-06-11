@@ -4114,8 +4114,6 @@ begin
   f_internalguider.DECgain:=config.GetValue('/InternalGuider/DecGain',50);
   f_internalguider.RA_hysteresis:=config.GetValue('/InternalGuider/RaHysteresis',30);
   f_internalguider.DEC_hysteresis:=config.GetValue('/InternalGuider/DecHysteresis',70);
-  f_internalguider.minimum_moveRA:=config.GetValue('/InternalGuider/MinimumMoveRa',0.6);//arc seconds
-  f_internalguider.minimum_moveDEC:=config.GetValue('/InternalGuider/MinimumMoveDec',0.6);//arc seconds
   f_internalguider.pa:=config.GetValue('/InternalGuider/Pa',0.0);
   f_internalguider.pulseGainEast:=config.GetValue('/InternalGuider/PulseGainEast',3.0);
   f_internalguider.pulseGainWest:=config.GetValue('/InternalGuider/PulseGainWest',3.0);
@@ -4123,11 +4121,7 @@ begin
   f_internalguider.pulseGainSouth:=config.GetValue('/InternalGuider/PulseGainSouth',3.0);
   f_internalguider.Pier_Side:=config.GetValue('/InternalGuider/PierSide','W');
   f_internalguider.pixel_size:=config.GetValue('/InternalGuider/PixelSize',2.5);
-  f_internalguider.autoguiderate:=config.GetValue('/InternalGuider/AutoGuideRate','Y');
-  f_internalguider.minValuePulseEW:=config.GetValue('/InternalGuider/minValuePulseEW',20);
-  f_internalguider.minValuePulseNS:=config.GetValue('/InternalGuider/minValuePulseNS',20);
-  f_internalguider.minPulseEW:=config.GetValue('/InternalGuider/minPulseEW',20);
-  f_internalguider.minPulseNS:=config.GetValue('/InternalGuider/minPulseNS',20);
+  f_internalguider.shortestPulse:=config.GetValue('/InternalGuider/ShortestPulse',40);
 
   f_internalguider.unitarcseconds1.checked:=config.GetValue('/InternalGuider/UnitArcSec',false);
   f_internalguider.measure_method2.checked:=config.GetValue('/InternalGuider/Method2',false);
@@ -4612,8 +4606,6 @@ begin
    config.SetValue('/InternalGuider/DecGain',f_internalguider.decgain);
    config.SetValue('/InternalGuider/RaHysteresis',f_internalguider.ra_hysteresis);
    config.SetValue('/InternalGuider/DecHysteresis',f_internalguider.dec_hysteresis);
-   config.SetValue('/InternalGuider/MinimumMoveRa',f_internalguider.Minimum_MoveRa);
-   config.SetValue('/InternalGuider/MinimumMoveDec',f_internalguider.Minimum_MoveDec);
    config.SetValue('/InternalGuider/Pa',f_internalguider.pa);
    config.SetValue('/InternalGuider/PulseGainEast',f_internalguider.pulseGainEast);
    config.SetValue('/InternalGuider/PulseGainWest',f_internalguider.pulseGainWest);
@@ -4622,12 +4614,7 @@ begin
 
    config.SetValue('/InternalGuider/PierSide',f_internalguider.pier_side);
    config.SetValue('/InternalGuider/PixelSize',f_internalguider.pixel_size);
-   config.SetValue('/InternalGuider/AutoGuideRate',f_internalguider.AutoGuideRate);
-   config.SetValue('/InternalGuider/minValuePulseEW',f_internalguider.minValuePulseEW);
-   config.SetValue('/InternalGuider/minValuePulseNS',f_internalguider.minValuePulseNS);
-   config.SetValue('/InternalGuider/minPulseEW',f_internalguider.minPulseEW);
-   config.SetValue('/InternalGuider/minPulseNS',f_internalguider.minPulseNS);
-
+   config.SetValue('/InternalGuider/ShortestPulse',f_internalguider.shortestPulse);
 
    config.SetValue('/InternalGuider/UnitArcSec',f_internalguider.unitarcseconds1.Checked);
    config.SetValue('/InternalGuider/Method2',f_internalguider.measure_method2.Checked);

@@ -48,12 +48,10 @@ type
     ButtonStop: TButton;
     ButtonStop1: TButton;
     disable_guiding1: TCheckBox;
-    autoguiderate1: TEdit;
     Exposure: TFloatSpinEdit;
     GroupBox1: TGroupBox;
     GroupBox2: TGroupBox;
     Label10: TLabel;
-    Label11: TLabel;
     Label12: TLabel;
     Label13: TLabel;
     Label14: TLabel;
@@ -62,8 +60,6 @@ type
     Label17: TLabel;
     Label18: TLabel;
     Label19: TLabel;
-    Label20: TLabel;
-    Label21: TLabel;
     Label22: TLabel;
     LabelDark: TLabel;
     Label5: TLabel;
@@ -75,12 +71,9 @@ type
     MenuItemClearDark: TMenuItem;
     MenuItemCaptureDark: TMenuItem;
     MenuItem2: TMenuItem;
-    minimum_moveDEC1: TFloatSpinEdit;
     pa1: TEdit;
     Panel4: TPanel;
     pier_side1: TEdit;
-    minimum_moveRA1: TFloatSpinEdit;
-    Label9: TLabel;
     pixelsize1: TEdit;
     PopupMenuDark: TPopupMenu;
     pulsegainEast1: TEdit;
@@ -97,8 +90,7 @@ type
     Binning: TSpinEdit;
     Gain: TSpinEdit;
     Offset: TSpinEdit;
-    minEW1: TSpinEdit;
-    minNS1: TSpinEdit;
+    ShortestPulse1: TSpinEdit;
     TabSheetCamera: TTabSheet;
     Gamma: TTrackBar;
     Luminosity: TTrackBar;
@@ -150,24 +142,12 @@ type
     procedure SetpulsegainSouthsetting(value:double);
     function Getpier_sidesetting:string;
     procedure Setpier_sidesetting(value:string);
-    function GetAutoGuideRate:string;
-    procedure SetAutoGuideRate(value:string);
     function GetPAsetting:double;
     procedure SetPixelSize(value:double);
     function GetPixelSize:double;
-    procedure SetminEW(value:integer);
-    function GetminEW:integer;
-    procedure SetminValueEW(value:integer);
-    function GetminValueEW:integer;
-    procedure SetminNS(value:integer);
-    function GetminNS:integer;
-    function GetminValueNS:integer;
-    procedure SetminValueNS(value:integer);
+    procedure SetShortestPulse(value:integer);
+    function GetShortestPulse:integer;
     procedure SetPAsetting(value:double);
-    function Getminimum_moveRA:double;
-    procedure Setminimum_moveRA(value:double);
-    function Getminimum_moveDEC:double;
-    procedure Setminimum_moveDEC(value:double);
     function Getdisableguiding: boolean;
     function GetUseArcSeconds: boolean;
     procedure SetUseArcSeconds(value:boolean);
@@ -200,15 +180,9 @@ type
     property pulsegainNorth: double read GetpulsegainNorthsetting write SetpulsegainNorthsetting; // movement in arcsec/second. Found by the calibration
     property pulsegainSouth: double read GetpulsegainSouthsetting write SetpulsegainSouthsetting; // movement in arcsec/second. Found by the calibration
     property pixel_size: double read GetPixelSize write SetPixelSize; // scale in arcsec/pixel.
-    property minPulseEW: integer read GetminEW write SetminEW; // minimum pulse duaration EW in ms.
-    property minPulseNS: integer read GetminNS write SetminNS;// minimum pulse duaration NS in ms.
-    property minValuePulseEW: integer read GetminValueEW write SetminValueEW; // minimumValue pulse duaration EW in ms.
-    property minValuePulseNS: integer read GetminValueNS write SetminValueNS;// minimumValue pulse duaration NS in ms.
+    property ShortestPulse: integer read GetShortestPulse write SetShortestPulse; // minimum pulse duaration. If below skip.
     property pier_side: string read Getpier_sidesetting write Setpier_sidesetting; // movement in arcsec/second. Found by the calibration
-    property AutoGuideRate: string read GetAutoGuideRate write SetAutoGuideRate;
     property PA : double read GetPAsetting write SetPAsetting;// Guider image orientation in radians. Found by the calibration
-    property minimum_moveRA : double read Getminimum_moveRA write Setminimum_moveRA;//to ignore seeing
-    property minimum_moveDEC : double read Getminimum_moveDEC write Setminimum_moveDEC;//to ignore seeing
     property trend_scale: integer read Getscale write Setscale;
   end;
 
@@ -251,6 +225,7 @@ function Tf_internalguider.GetUseArcSeconds:boolean;
 begin
   result:=unitarcseconds1.checked;
 end;
+
 
 procedure Tf_internalguider.SetUseArcSeconds(value:boolean);
 begin
@@ -332,49 +307,13 @@ begin
   result:=strtofloat(pixelsize1.text);
 end;
 
-procedure Tf_internalguider.SetminEW(value:integer);
+procedure Tf_internalguider.SetShortestPulse(value:integer);
 begin
-  minEW1.value:=value;
+  ShortestPulse1.value:=value;
 end;
-function Tf_internalguider.GetminEW:integer;
+function Tf_internalguider.GetShortestPulse:integer;
 begin
-  result:=minEW1.value;
-end;
-
-procedure Tf_internalguider.SetminNS(value:integer);
-begin
-  minNS1.value:=value;
-end;
-function Tf_internalguider.GetminNS:integer;
-begin
-  result:=minNS1.value;
-end;
-
-procedure Tf_internalguider.SetminValueEW(value:integer);
-begin
-  minEW1.MinValue:=value;
-end;
-function Tf_internalguider.GetminValueEW:integer;
-begin
-  result:=minEW1.minValue;
-end;
-
-function Tf_internalguider.GetminValueNS:integer;
-begin
-  result:=minNS1.minValue;
-end;
-procedure Tf_internalguider.SetminValueNS(value:integer);
-begin
-  minNS1.MinValue:=value;
-end;
-
-procedure Tf_internalguider.SetAutoGuideRate(value:string);
-begin
-  autoguiderate1.caption:=value;
-end;
-function Tf_internalguider.GetAutoGuideRate:string;
-begin
-  result:=autoguiderate1.caption;
+  result:=ShortestPulse1.value;
 end;
 
 procedure Tf_internalguider.Setpier_sidesetting(value:string);
@@ -390,26 +329,6 @@ end;
 procedure Tf_internalguider.SetPAsetting(value:double);
 begin
   PA1.text:=floattostrF(value,FFgeneral,3,1);
-end;
-
-function Tf_internalguider.Getminimum_moveRA:double;
-begin
-  result:=minimum_moveRA1.value;
-end;
-
-procedure Tf_internalguider.Setminimum_moveRA(value:double);
-begin
-  minimum_moveRA1.value:=value;
-end;
-
-function Tf_internalguider.Getminimum_moveDEC:double;
-begin
-  result:=minimum_moveDEC1.value;
-end;
-
-procedure Tf_internalguider.Setminimum_moveDEC(value:double);
-begin
-  minimum_moveDEC1.value:=value;
 end;
 
 function Tf_internalguider.GetRAgain:integer;
