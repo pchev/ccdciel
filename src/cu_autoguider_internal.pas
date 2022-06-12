@@ -780,7 +780,7 @@ begin
                FormatFloat(f3,driftY)+','+
                FormatFloat(f3,driftRA)+','+
                FormatFloat(f3,driftDec)+','+
-               FormatFloat(f3,moveRA2)+','+
+               FormatFloat(f3,moveRA)+','+
                FormatFloat(f3,moveDEC)+','+
                IntToStr(RADuration)+','+
                RADirection+','+
