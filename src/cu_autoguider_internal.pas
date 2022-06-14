@@ -35,7 +35,7 @@ type
 
   T_autoguider_internal = class(T_autoguider)
   private
-    InternalguiderInitialize,InternalCalibrationInitialize,GuideLogFileOpen,Guiding_Stable : boolean;
+    InternalguiderInitialize,InternalCalibrationInitialize,GuideLogFileOpen : boolean;
     pulseRA,pulseDEC,GuideFrameCount, InternalguiderCalibrationDirection,InternalguiderCalibrationStep,
     CalibrationDuration,Calflip,CalCount,Calnrtest  : integer;
     driftX,driftY,driftRA,driftDec,moveRA,moveDEC, Guidethecos,old_moveRA,old_moveDEC,  paEast, paNorth,
@@ -384,7 +384,7 @@ begin
       repeat
         guidefits.GetHFD3(fitsX+6,fitsY,searchA,true{autocenter},xc,yc,bg,bgdev,hfd1,star_fwhm,vmax,snr,flux,false);//find a star in this segment. Auto center is true
 
-        if ((snr>10) and (abs(fitsX-xc)<stepsize div 2) and (abs(fitsY-yc)<stepsize div 2) and (star_counter<maxstars))  then //detection and no other area closer
+        if ((snr>15) and (abs(fitsX-xc)<stepsize div 2) and (abs(fitsY-yc)<stepsize div 2) and (star_counter<maxstars))  then //detection and no other area closer
         begin // star in this area
           xy_array[star_counter].x1:=xc;//store initial measured position for recovering if star is lost
           xy_array[star_counter].y1:=yc;
@@ -428,7 +428,7 @@ begin
       else // try in the initial area
         guidefits.GetHFD3(round(xy_array_old[i].x1),round(xy_array_old[i].y1),searchA,true{autocenter},xc,yc,bg,bgdev,hfd1,star_fwhm,vmax,snr,flux,false);// find a star in the orginal segment
 
-      if snr>10 then // star detection
+      if snr>6 then // star detection
       begin // star in this area
         xy_array[i].x2:=xc;
         xy_array[i].y2:=yc;
@@ -471,7 +471,7 @@ begin
     for i:=0 to len-1 do
     begin
       fluxratio:=xy_array_old[i].flux/(xy_array[i].flux+0.001);
-      if  ((fluxratio>1/1.5) and (fluxratio<1.5)) then //star flux difference is within 50%
+      if  ((fluxratio>0.5) and (fluxratio<2)) then //star flux difference is within 100%
       begin
         drift_arrayX[counter]:=xy_array[i].x2 - xy_array_old[i].x1; //drift in pixels relative to initial measurement x1,y1
         drift_arrayY[counter]:=xy_array[i].y2 - xy_array_old[i].y1;
@@ -938,7 +938,7 @@ begin
                drift:=sqrt(sqr(driftX)+sqr(driftY));//  For image with north up and east left, driftX become negative.
 
 
-               msg('DriftX ' + floattostrf(driftx,ffgeneral,0,2)+' DriftY ' + floattostrf(driftY,ffgeneral,0,2),3);
+               msg('Measured drift ' + floattostrf(drift,ffgeneral,0,2)+' px',3);
                if ((drift>5) or (CalibrationDuration>20000)) then begin// OK, next direction
                  if drift<2 then begin msg('Abort calibration, no movement measured!',1); StopError; end;
                  pulsegainEast:=drift*1000/(CalibrationDuration*Calthecos); // [px*cos(dec)/sec]
@@ -969,7 +969,7 @@ begin
                if measure_drift(InternalCalibrationInitialize,driftX,driftY)>0 then StopError;//measure drift
                drift:=sqrt(sqr(driftX)+sqr(driftY)); //For image with north up and east left, driftX become positive.
 
-               msg('DriftX ' + floattostrf(driftx,ffgeneral,0,2)+' DriftY ' + floattostrf(driftY,ffgeneral,0,2),3);
+               msg('Measured drift ' + floattostrf(drift,ffgeneral,0,2)+' px',3);
                pulsegainWest:=drift*1000/(CalibrationDuration*Calthecos); // [px*cos(dec)/sec]
                msg('Internal guider calibration:  Pulse gain measured East/West: '+ floattostrF(pulsegainEast,ffgeneral,0,2)+'/'+ floattostrF(pulsegainWest,ffgeneral,0,2)+' [px*cos(δ)/sec], Camera angle: '+floattostrF(paEast*180/pi,ffgeneral,3,1)+'°',3);
                InternalguiderCalibrationDirection:=3;
@@ -981,9 +981,9 @@ begin
     3:begin  //NORTH measure pulse guide speed.
         case InternalguiderCalibrationStep of
           0: begin
-               msg('Guider, removing backlash North',3);
-               mount.PulseGuide(0,5000 {duration msec} );  // 0=north, 1=south, 2 East, 3 West
-               WaitPulseGuiding(5000);
+               msg('Slew North to remove backlash',3);
+               mount.Slew(mount.ra,mount.dec+1.0);//move one degree north
+               WaitPulseGuiding(1000);//wait till vibrations are gone. Required?
                CaldriftOld:=0;
                CalibrationDuration:=667; //duration of pulse guiding
                InternalguiderCalibrationStep:=1;
@@ -1001,7 +1001,7 @@ begin
                if measure_drift(InternalCalibrationInitialize,driftX,driftY)>0 then StopError;//measure drift
                drift:=sqrt(sqr(driftX)+sqr(driftY));
 
-               msg('DriftX ' + floattostrf(driftx,ffgeneral,0,2)+' DriftY ' + floattostrf(driftY,ffgeneral,0,2),3);
+               msg('Measured drift ' + floattostrf(drift,ffgeneral,0,2)+' px',3);
                if ( ((drift>5) and (CaldriftOld>5/1.5)) or (CalibrationDuration>20000)) then begin// OK both drift and CaldriftOld show movement so backlash must be fully gone. Go next direction
                  if drift<2 then begin msg('Abort calibration, no movement measured!',1); StopError; end;
                  paNorth:=arctan2(driftY,driftX); // Relative to the positive X axis and CCW
@@ -1028,9 +1028,9 @@ begin
     4:begin  //SOUTH, measure pulse guide speed.
         case InternalguiderCalibrationStep of
           0: begin
-               msg('Removing backlash South',3);
-               mount.PulseGuide(1,5000 {duration msec} );  // 0=north, 1=south, 2 East, 3 West
-               WaitPulseGuiding(5000);
+               msg('Slew South to remove backlash',3);
+               mount.Slew(mount.ra,mount.dec-1);// move one degree south
+               WaitPulseGuiding(1000);//wait till vibrations are gone. Required?
                CalCount:=0;
                CaldriftOld:=0;
                InternalguiderCalibrationStep:=1;
@@ -1047,7 +1047,7 @@ begin
                if measure_drift(InternalCalibrationInitialize,driftX,driftY)>0 then StopError;//measure drift
                drift:=sqrt(sqr(driftX)+sqr(driftY));
                inc(CalCount);
-               msg('DriftX ' + floattostrf(driftx,ffgeneral,0,2)+' DriftY ' + floattostrf(driftY,ffgeneral,0,2),3);
+               msg('Measured drift ' + floattostrf(drift,ffgeneral,0,2)+' px',3);
                if ((CaldriftOld>3) or (Calcount>=4)) then begin  //previous cycle showed movement so backlash must be fully gone
                  if drift<2 then begin msg('Abort calibration, no movement measured!',1); StopError; end;
                  pulsegainSouth:=Calflip*drift*1000/(CalibrationDuration); // [px*cos(dec)/sec]   Flipped is already measured
