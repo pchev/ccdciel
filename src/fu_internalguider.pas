@@ -49,6 +49,7 @@ type
     ButtonStop1: TButton;
     disable_guiding1: TCheckBox;
     Exposure: TFloatSpinEdit;
+    minHFD1: TFloatSpinEdit;
     GroupBox1: TGroupBox;
     GroupBox2: TGroupBox;
     Label10: TLabel;
@@ -61,6 +62,8 @@ type
     Label18: TLabel;
     Label19: TLabel;
     Label22: TLabel;
+    Label23: TLabel;
+    Label24: TLabel;
     LabelDark: TLabel;
     Label5: TLabel;
     Label6: TLabel;
@@ -91,6 +94,7 @@ type
     Gain: TSpinEdit;
     Offset: TSpinEdit;
     ShortestPulse1: TSpinEdit;
+    minSNR1: TSpinEdit;
     TabSheetCamera: TTabSheet;
     Gamma: TTrackBar;
     Luminosity: TTrackBar;
@@ -145,8 +149,12 @@ type
     function GetPAsetting:double;
     procedure SetPixelSize(value:double);
     function GetPixelSize:double;
+    procedure SetMinHFD(value:double);
+    function GetMinHFD:double;
     procedure SetShortestPulse(value:integer);
     function GetShortestPulse:integer;
+    procedure SetMinSNR(value:integer);
+    function GetMinSNR:integer;
     procedure SetPAsetting(value:double);
     function Getdisableguiding: boolean;
     function GetUseArcSeconds: boolean;
@@ -180,7 +188,9 @@ type
     property pulsegainNorth: double read GetpulsegainNorthsetting write SetpulsegainNorthsetting; // movement in arcsec/second. Found by the calibration
     property pulsegainSouth: double read GetpulsegainSouthsetting write SetpulsegainSouthsetting; // movement in arcsec/second. Found by the calibration
     property pixel_size: double read GetPixelSize write SetPixelSize; // scale in arcsec/pixel.
+    property minHFD: double read GetMinHFD write SetMinHFD;
     property ShortestPulse: integer read GetShortestPulse write SetShortestPulse; // minimum pulse duaration. If below skip.
+    property MinSNR: integer read GetMinSNR write SetMinSNR;
     property pier_side: string read Getpier_sidesetting write Setpier_sidesetting; // movement in arcsec/second. Found by the calibration
     property PA : double read GetPAsetting write SetPAsetting;// Guider image orientation in radians. Found by the calibration
     property trend_scale: integer read Getscale write Setscale;
@@ -307,6 +317,18 @@ begin
   result:=strtofloat(pixelsize1.text);
 end;
 
+
+procedure Tf_internalguider.SetMinHFD(value:double);
+begin
+  MinHFD1.text:=floattostrF(value,FFgeneral,0,2);
+end;
+
+function Tf_internalguider.GetMinHFD:double;
+begin
+  result:=strtofloat(MinHFD1.text);
+end;
+
+
 procedure Tf_internalguider.SetShortestPulse(value:integer);
 begin
   ShortestPulse1.value:=value;
@@ -314,6 +336,16 @@ end;
 function Tf_internalguider.GetShortestPulse:integer;
 begin
   result:=ShortestPulse1.value;
+end;
+
+procedure Tf_internalguider.SetMinSNR(value:integer);
+begin
+  MinSNR1.value:=value;
+end;
+
+function Tf_internalguider.GetMinSNR:integer;
+begin
+  result:=MinSNR1.value;
 end;
 
 procedure Tf_internalguider.Setpier_sidesetting(value:string);
@@ -359,8 +391,6 @@ end;
 procedure Tf_internalguider.SetScale(value:integer);
 begin
   scale1.position:=value;
-  // thescale:=1;
-
   case value of 6: thescale:=0.25;
                 5: thescale:=0.5;
                 4: thescale:=1.0;
@@ -379,7 +409,6 @@ procedure Tf_internalguider.SetLed(cl: tcolor);
 begin
   led.Brush.Color:=cl;
 end;
-
 
 procedure Tf_internalguider.ButtonGuideClick(Sender: TObject);
 begin

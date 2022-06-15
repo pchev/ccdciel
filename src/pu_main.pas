@@ -129,6 +129,7 @@ type
     MenuInternalguider: TMenuItem;
     MenuAscomGuideCameraSetup: TMenuItem;
     MenuAlpacaGuideCameraSetup: TMenuItem;
+    GuiderSaveImage1: TMenuItem;
     MenuViewInternalguider: TMenuItem;
     MenuItemImageInspection2: TMenuItem;
     MenuItemImageInspection: TMenuItem;
@@ -194,6 +195,7 @@ type
     MeasureTimer: TTimer;
     PlotTimer: TTimer;
     ImageResizeTimer: TTimer;
+    GuiderPopUpmenu1: TPopupMenu;
     SaveDialogPicture: TSaveDialog;
     ScrollBox1: TScrollBox;
     Splitter1: TSplitter;
@@ -364,6 +366,7 @@ type
     procedure FormShow(Sender: TObject);
     procedure GuideCameraConnectTimerTimer(Sender: TObject);
     procedure GuidePlotTimerTimer(Sender: TObject);
+    procedure GuiderSaveImage1Click(Sender: TObject);
     procedure ImageResizeTimerTimer(Sender: TObject);
     procedure MagnifyerTimerTimer(Sender: TObject);
     procedure MeasureTimerTimer(Sender: TObject);
@@ -389,6 +392,7 @@ type
     procedure MenuDarkCameraClick(Sender: TObject);
     procedure MenuDarkClearClick(Sender: TObject);
     procedure MenuDarkFileClick(Sender: TObject);
+    procedure MenuItem25Click(Sender: TObject);
     procedure MenuItemImageInspectionClick(Sender: TObject);
     procedure MenuPolarAlignment2Click(Sender: TObject);
     procedure MenuViewInternalguiderClick(Sender: TObject);
@@ -3736,6 +3740,11 @@ begin
   ShowDarkInfo;
 end;
 
+procedure Tf_main.MenuItem25Click(Sender: TObject);
+begin
+  astrometry.SyncCurrentImage(false);
+end;
+
 procedure Tf_main.MenuItemImageInspectionClick(Sender: TObject);
 begin
   MeasureImage(true);
@@ -4122,6 +4131,8 @@ begin
   f_internalguider.Pier_Side:=config.GetValue('/InternalGuider/PierSide','W');
   f_internalguider.pixel_size:=config.GetValue('/InternalGuider/PixelSize',2.5);
   f_internalguider.shortestPulse:=config.GetValue('/InternalGuider/ShortestPulse',40);
+  f_internalguider.minHFD:=config.GetValue('/InternalGuider/MinHFD',1.5);
+  f_internalguider.minSNR:=config.GetValue('/InternalGuider/MinSNR',15);
 
   f_internalguider.unitarcseconds1.checked:=config.GetValue('/InternalGuider/UnitArcSec',false);
   f_internalguider.measure_method2.checked:=config.GetValue('/InternalGuider/Method2',false);
@@ -4615,6 +4626,8 @@ begin
    config.SetValue('/InternalGuider/PierSide',f_internalguider.pier_side);
    config.SetValue('/InternalGuider/PixelSize',f_internalguider.pixel_size);
    config.SetValue('/InternalGuider/ShortestPulse',f_internalguider.shortestPulse);
+   config.SetValue('/InternalGuider/MinHFD',f_internalguider.minHFD);
+   config.SetValue('/InternalGuider/MinSNR',f_internalguider.minSNR);
 
    config.SetValue('/InternalGuider/UnitArcSec',f_internalguider.unitarcseconds1.Checked);
    config.SetValue('/InternalGuider/Method2',f_internalguider.measure_method2.Checked);
@@ -15244,6 +15257,15 @@ begin
   LockGuideTimerPlot:=true;
   PlotGuideImage;
   LockGuideTimerPlot:=false;
+end;
+
+procedure Tf_main.GuiderSaveImage1Click(Sender: TObject);
+begin
+if (Guidefits.HeaderInfo.naxis>0) and Guidefits.ImageValid then begin
+   if SaveDialogFits.Execute then begin
+      GuideFits.SaveToFile(SaveDialogFits.FileName,false);
+   end;
+end;
 end;
 
 end.

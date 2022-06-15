@@ -515,36 +515,36 @@ object f_internalguider: Tf_internalguider
           TabOrder = 0
           object GroupBox1: TGroupBox
             Left = 16
-            Height = 112
-            Top = 296
+            Height = 168
+            Top = 256
             Width = 288
             Caption = 'Options:'
-            ClientHeight = 92
+            ClientHeight = 148
             ClientWidth = 284
             TabOrder = 0
             object measure_method2: TCheckBox
               Left = 8
               Height = 19
               Hint = 'Use alternative method for measuring pixel scale in arc seconds during calibration. '
-              Top = 48
+              Top = 104
               Width = 244
               Caption = 'Measure pixel scale ["/px] by stop tracking'
               ParentFont = False
               ParentShowHint = False
               ShowHint = True
-              TabOrder = 0
+              TabOrder = 3
             end
             object disable_guiding1: TCheckBox
               Left = 8
               Height = 19
               Hint = 'For testing. This will disable guiding but still show the trend.'
-              Top = 72
+              Top = 128
               Width = 160
               Caption = 'Disable guiding temporary'
               ParentFont = False
               ParentShowHint = False
               ShowHint = True
-              TabOrder = 1
+              TabOrder = 4
             end
             object ShortestPulse1: TSpinEdit
               Left = 184
@@ -557,7 +557,7 @@ object f_internalguider: Tf_internalguider
               MinValue = 25
               ParentShowHint = False
               ShowHint = True
-              TabOrder = 2
+              TabOrder = 0
               Value = 40
             end
             object Label22: TLabel
@@ -566,6 +566,44 @@ object f_internalguider: Tf_internalguider
               Top = 8
               Width = 134
               Caption = 'Shortest guide pulse [ms]'
+            end
+            object Label23: TLabel
+              Left = 8
+              Height = 15
+              Top = 40
+              Width = 79
+              Caption = 'Minimum HFD'
+            end
+            object minSNR1: TSpinEdit
+              Left = 184
+              Height = 23
+              Hint = 'Minimum signal to noise ratio'
+              Top = 72
+              Width = 80
+              Increment = 3
+              MaxValue = 100
+              MinValue = 6
+              ParentShowHint = False
+              ShowHint = True
+              TabOrder = 2
+              Value = 15
+            end
+            object Label24: TLabel
+              Left = 8
+              Height = 15
+              Top = 72
+              Width = 78
+              Caption = 'Minimum SNR'
+            end
+            object minHFD1: TFloatSpinEdit
+              Left = 184
+              Height = 23
+              Hint = 'Minimum star size. could be used to ignore hot pixels.'
+              Top = 40
+              Width = 80
+              Increment = 0.5
+              TabOrder = 1
+              Value = 1.5
             end
           end
           object GroupBox2: TGroupBox

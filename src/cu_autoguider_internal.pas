@@ -343,7 +343,7 @@ end;
 function  T_autoguider_internal.measure_drift(var initialize:boolean; out drX,drY :double) : integer;// ReferenceX,Y indicates the total drift, drX,drY to drift since previouse call. Arrays old_xy_array,xy_array are for storage star positions
 var
   i,j,m,n,fitsx,fitsy,stepsize,xsize,ysize,star_counter,counter,r, rxc,ryc,len,nrtokeep,index,match_counter: integer;
-  hfd1,star_fwhm,vmax,bg,bgdev,xc,yc,snr,flux,fluxratio,flux_min,v,value  : double;
+  hfd1,star_fwhm,vmax,bg,bgdev,xc,yc,snr,flux,fluxratio,flux_min,v,value,min_SNR,min_HFD  : double;
   drift_arrayX,drift_arrayY : array of double;
 const
     searchA=28;//square search area
@@ -375,6 +375,9 @@ begin
   if initialize then
     setlength(xy_array,maxstars);
 
+  min_SNR:=finternalguider.minSNR;//make local to reduce some CPU load
+  min_HFD:=finternalguider.minHFD;//make local to reduce some CPU load
+
   // Divide the image in square areas. Try to detect a star in each area. Store the star position and flux in the xy_array
   if initialize then
   begin
@@ -384,7 +387,7 @@ begin
       repeat
         guidefits.GetHFD3(fitsX+6,fitsY,searchA,true{autocenter},xc,yc,bg,bgdev,hfd1,star_fwhm,vmax,snr,flux,false);//find a star in this segment. Auto center is true
 
-        if ((snr>15) and (abs(fitsX-xc)<stepsize div 2) and (abs(fitsY-yc)<stepsize div 2) and (star_counter<maxstars))  then //detection and no other area closer
+        if ((snr>Min_SNR) and (hfd1>Min_HFD) and (abs(fitsX-xc)<stepsize div 2) and (abs(fitsY-yc)<stepsize div 2) and (star_counter<maxstars))  then //detection and no other area closer
         begin // star in this area
           xy_array[star_counter].x1:=xc;//store initial measured position for recovering if star is lost
           xy_array[star_counter].y1:=yc;
@@ -428,7 +431,7 @@ begin
       else // try in the initial area
         guidefits.GetHFD3(round(xy_array_old[i].x1),round(xy_array_old[i].y1),searchA,true{autocenter},xc,yc,bg,bgdev,hfd1,star_fwhm,vmax,snr,flux,false);// find a star in the orginal segment
 
-      if snr>6 then // star detection
+      if ((snr>max(min_SNR-10,6)) and (hfd1>Min_HFD)) then // star detection
       begin // star in this area
         xy_array[i].x2:=xc;
         xy_array[i].y2:=yc;
