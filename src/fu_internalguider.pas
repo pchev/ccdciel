@@ -169,7 +169,7 @@ type
     procedure SetLang;
     procedure draw_xy(xy_trend :xy_guiderlist);//draw XY points
     procedure draw_trend(xy_trend :xy_guiderlist);//draw trend
-    procedure trend_message(message1,message2 :string);//clear trend and place message
+    procedure trend_message(message1,message2,message3 :string);//clear trend and place message
     property onLoop: TNotifyEvent read FonLoop write FonLoop;
     property onStart: TNotifyEvent read FonStart write FonStart;
     property onStop: TNotifyEvent read FonStop write FonStop;
@@ -552,7 +552,7 @@ begin
  end;
 end;
 
-procedure Tf_internalguider.trend_message(message1,message2 :string);//clear trend and place message
+procedure Tf_internalguider.trend_message(message1,message2,message3 :string);//clear trend and place message
 begin
  with xy_trend1 do
  begin
@@ -561,6 +561,7 @@ begin
    canvas.font.color:=clblue;
    canvas.textout(5,10,message1);
    canvas.textout(5,35,message2);
+   canvas.textout(5,60,message3);
  end;
 end;
 

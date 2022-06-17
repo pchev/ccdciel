@@ -40,7 +40,7 @@ type
     CalibrationDuration,Calflip,CalCount,Calnrtest  : integer;
     driftX,driftY,driftRA,driftDec,moveRA,moveDEC, Guidethecos,old_moveRA,old_moveDEC,  paEast, paNorth,
     pulsegainEast,pulsegainWest,pulsegainNorth,pulsegainSouth,Calthecos, Caltheangle,CaldriftOld,
-    GuideStartTime,LogSNR,LogFlux : double;
+    GuideStartTime,LogSNR,LogFlux,mean_hfd : double;
     xy_trend : xy_guiderlist;{fu_internalguider}
     xy_array,xy_array_old : star_position_array;//internal guider for measure drift
     GuideLog: TextFile;
@@ -381,6 +381,7 @@ begin
   // Divide the image in square areas. Try to detect a star in each area. Store the star position and flux in the xy_array
   if initialize then
   begin
+    mean_hfd:=0;
     fitsy:=stepsize div 2;
     repeat
       fitsx:=stepsize div 2;
@@ -395,6 +396,8 @@ begin
           xy_array[star_counter].x2:=xc;//store measured star position
           xy_array[star_counter].y2:=yc;
           xy_array[star_counter].flux:=flux;
+          mean_hfd:=mean_hfd+hfd1;
+
           inc(star_counter);
 
           // max value for guide log
@@ -421,13 +424,22 @@ begin
 
     setlength(xy_array,star_counter);
     setlength(xy_array_old,star_counter);//for later
+    if star_counter>0 then
+    begin
+      mean_hfd:=mean_hfd/star_counter;
+      WriteLog('INFO: SETTLING STATE CHANGE, HFD='+floattostrF(mean_hfd,FFgeneral,3,3));
+    end;
   end
   else
   begin //second, third ... call
     for i:=0 to length(xy_array_old)-1 do
     begin
-      if xy_array_old[i].flux<>0 then // keep tracking if star drifts away
-        guidefits.GetHFD3(round(xy_array_old[i].x2),round(xy_array_old[i].y2),searchA{area},true{autocenter},xc,yc,bg,bgdev,hfd1,star_fwhm,vmax,snr,flux,false) // find a star at previous position. So keep tracking while it is drifting
+      if xy_array_old[i].flux<>0 then // Previouse dection, keep tracking this star while it drifts away
+      begin //try first within a small area
+        guidefits.GetHFD3(round(xy_array_old[i].x2),round(xy_array_old[i].y2),round(mean_hfd*3.5){smaller search area},true{autocenter},xc,yc,bg,bgdev,hfd1,star_fwhm,vmax,snr,flux,false);
+       if snr<1 then // no detection, look wider
+        guidefits.GetHFD3(round(xy_array_old[i].x2),round(xy_array_old[i].y2),searchA{area},true{autocenter},xc,yc,bg,bgdev,hfd1,star_fwhm,vmax,snr,flux,false) // use a larger search area
+      end
       else // try in the initial area
         guidefits.GetHFD3(round(xy_array_old[i].x1),round(xy_array_old[i].y1),searchA,true{autocenter},xc,yc,bg,bgdev,hfd1,star_fwhm,vmax,snr,flux,false);// find a star in the orginal segment
 
@@ -639,7 +651,12 @@ begin
   WriteLog('Pixel scale = '+FormatFloat(f2,Finternalguider.pixel_size)+' arc-sec/px');
   WriteLog('RA Gain = '+IntToStr(Finternalguider.RAgain)+', RA Hyst = '+IntToStr(Finternalguider.RA_hysteresis));
   WriteLog('DEC Gain = '+IntToStr(Finternalguider.DECgain)+', DEC Hyst = '+IntToStr(Finternalguider.DEC_hysteresis));
-  WriteLog('Shortest guide pulse = '+IntToStr(Finternalguider.shortestPulse));
+  WriteLog('Pulse gain East = '+FormatFloat(f2,Finternalguider.pulsegainEast)+', Pulse gain West = '+FormatFloat(f2,Finternalguider.pulsegainWest));
+  WriteLog('Pulse gain North = '+FormatFloat(f2,Finternalguider.pulsegainNorth)+', Pulse gain South = '+FormatFloat(f2,Finternalguider.pulsegainSouth));
+  WriteLog('Shortest guide pulse setting = '+IntToStr(Finternalguider.shortestPulse));
+  WriteLog('Minimum HFD setting = '+FormatFloat(f2,Finternalguider.minHFD));
+  WriteLog('Minimum SNR setting = '+FormatFloat(f2,Finternalguider.minSNR));
+
   WriteLog('');
   WriteLog('Frame,Time,mount,dx,dy,RARawDistance,DECRawDistance,RAGuideDistance,DECGuideDistance,RADuration,RADirection,DECDuration,DECDirection,XStep,YStep,StarMass,SNR,ErrorCode');
 
@@ -651,7 +668,7 @@ procedure T_autoguider_internal.InternalAutoguiding;
 var i,maxpulse: integer;
     RADuration,DECDuration: LongInt;
     RADirection,DECDirection: string;
-    t, minMoveRA, minMoveDEC,mflipcorr,moveRA2 : double;
+    mflipcorr,moveRA2 : double;
 
 begin
   finternalguider.draw_xy(xy_trend);//plot xy values
@@ -874,7 +891,7 @@ begin
   InternalguiderCalibrating:=true;
   SetStatus('Start Calibration',GUIDER_BUSY);
 
-  finternalguider.trend_message('Guider is in calibration mode.','This will take a few minutes.');
+  finternalguider.trend_message('Guider is in calibration mode.','This will take a few minutes.','');
 
   if mount.Tracking=false then
   begin
@@ -892,8 +909,9 @@ begin
 end;
 
 procedure T_autoguider_internal.InternalCalibration;
-var drift,thetime,loopLatency,ra1,dec1  : double;
+var drift,thetime,loopLatency,unequal   : double;
     i                                   : integer;
+    msgA, msgB                          : string;
             procedure StopError;
             begin
               InternalguiderStop;
@@ -926,7 +944,7 @@ begin
              end;
           1: begin
                CalibrationDuration:=round(CalibrationDuration*1.5);
-               msg('Testing pulse guiding East for '+floattostrF(CalibrationDuration/1000,FFgeneral,0,0)+ ' seconds',2);
+               msg('Testing pulse guiding East for '+floattostrF(CalibrationDuration/1000,FFgeneral,0,2)+ ' seconds',2);
                InternalCalibrationInitialize:=true;
                if measure_drift(InternalCalibrationInitialize,driftX,driftY)>0 then StopError;//measure reference star positions
                mount.PulseGuide(2,CalibrationDuration {duration msec} );  // 0=north, 1=south, 2 East, 3 West
@@ -1037,7 +1055,7 @@ begin
                CalCount:=0;
                CaldriftOld:=0;
                InternalguiderCalibrationStep:=1;
-               msg('Testing pulse guiding South for '+floattostrF(CalibrationDuration/1000,FFgeneral,0,3)+ ' seconds',3);
+               msg('Testing pulse guiding South for '+floattostrF(CalibrationDuration/1000,FFgeneral,0,2)+ ' seconds',3);
              end;
           1: begin
                InternalCalibrationInitialize:=true;
@@ -1077,8 +1095,9 @@ begin
         finternalguider.pulsegainNorth:=pulsegainNorth;
         finternalguider.pulsegainSouth:=pulsegainSouth;
 
-        finternalguider.pixel_size:=0.5*15*2/(pulsegainEast+pulsegainWest);//alternative method assuming 0.5x and 1.5x pulse speed as set previously
-        if finternalguider.measure_method2.checked then begin
+        finternalguider.pixel_size:=0.5*15*2/(pulsegainEast+pulsegainWest);//Assume 0.5x and 1.5x pulse speed as set previously
+
+        if finternalguider.measure_method2.checked then begin  //Alternative method. Measure pixel size in arc seconds by stopping tracking
           InternalguiderCalibrationDirection:=6;
           InternalguiderCalibrationStep:=0;
           InternalCalibration;  // iterate without new image
@@ -1104,7 +1123,7 @@ begin
           1: begin
                if measure_drift(InternalCalibrationInitialize,driftX,driftY)>0 then //sync the drift measurement with the new position.
                begin
-                 msg('Ready to guide. Used alternative method to calculate the pixel scale which could be inaccurate.',1);
+                 msg('Used alternative method to calculate the pixel scale.',1);
                  InternalguiderCalibrationDirection:=7;
                  InternalguiderCalibrationStep:=0;
                  InternalCalibration;  // iterate without new image
@@ -1131,8 +1150,14 @@ begin
         end;
       end;
     7:begin
+
+        unequal:=abs(1-(pulsegainEast/pulsegainWest));
+        if unequal>0.2 then begin msgA:='Warning unequal East/West pulse gain!'; msg(msgA,1); end else msgA:='';
+        unequal:=abs(1-(pulsegainNorth/pulsegainSouth));
+        if unequal>0.2 then begin msgB:='Warning unequal North/South pulse gain!'; msg(msgB,1); end else msgB:='';
+
         msg('Ready to guide!',1);
-        finternalguider.trend_message('Calibration is ready.','');
+        finternalguider.trend_message('Calibration is ready.',msgA,msgB);
         InternalguiderStop;
         SetStatus('Calibration Complete',GUIDER_IDLE);
       end;

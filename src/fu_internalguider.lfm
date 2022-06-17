@@ -8,7 +8,7 @@ object f_internalguider: Tf_internalguider
   ClientWidth = 325
   ParentFont = False
   TabOrder = 0
-  DesignLeft = 970
+  DesignLeft = 1140
   DesignTop = 184
   object Title: TLabel
     Left = 0
@@ -601,7 +601,9 @@ object f_internalguider: Tf_internalguider
               Hint = 'Minimum star size. could be used to ignore hot pixels.'
               Top = 40
               Width = 80
-              Increment = 0.5
+              Increment = 0.3
+              MaxValue = 10
+              MinValue = 0.8
               TabOrder = 1
               Value = 1.5
             end
