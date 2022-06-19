@@ -881,7 +881,7 @@ type
     procedure GuideCameraNewImage(Sender: TObject);
     procedure GuideCameraNewImageAsync(Data: PtrInt);
     procedure ShowGuiderDarkInfo;
-    Procedure DrawGuideImage;
+    Procedure DrawGuideImage(display: boolean);
     Procedure PlotGuideImage;
   public
     { public declarations }
@@ -3498,7 +3498,7 @@ begin
   DrawImage;
   if InternalguiderRunning then begin
     ClearGuideImage;
-    DrawGuideImage;
+    DrawGuideImage(true);
     PlotGuideImage;
   end;
 end;
@@ -15016,7 +15016,9 @@ begin
 end;
 
 procedure Tf_main.GuideCameraNewImageAsync(Data: PtrInt);
+var displayimage: boolean;
 begin
+  displayimage:=f_internalguider.IsVisible;
   if (not guidefits.ImageValid) then begin
      guidefits.LoadStream;
   end;
@@ -15029,7 +15031,7 @@ begin
   end;
 
   // prepare image
-  DrawGuideImage;
+  DrawGuideImage(displayimage);
   if InternalguiderRunning and (autoguider is T_autoguider_internal) then begin
     if InternalguiderGuiding then
       // process autoguiding
@@ -15039,7 +15041,7 @@ begin
       T_autoguider_internal(autoguider).InternalCalibration
     else if InternalguiderCapturingDark then begin
       if (not guidecamera.AddFrames)or(guidecamera.StackNum<1)or(guidecamera.StackCount>=guidecamera.StackNum) then begin
-        // save dark and stop
+        // Stack count reach, save dark and stop
         guidefits.SaveToFile(ConfigGuiderDarkFile);
         guidefits.LoadDark(ConfigGuiderDarkFile);
         ShowGuiderDarkInfo;
@@ -15053,7 +15055,8 @@ begin
   end;
 
   // draw image to screen
-  PlotGuideImage;
+  if displayimage then
+    PlotGuideImage;
 end;
 
 procedure Tf_main.ShowGuiderDarkInfo;
@@ -15073,7 +15076,7 @@ begin
   end;
 end;
 
-Procedure Tf_main.DrawGuideImage;
+Procedure Tf_main.DrawGuideImage(display: boolean);
 var tmpbmp:TBGRABitmap;
     dmin,dmax: integer;
 begin
@@ -15086,6 +15089,7 @@ if (guidefits.HeaderInfo.naxis>0) and guidefits.ImageValid then begin
   guidefits.MaxADU:=MaxADU;
   guidefits.MarkOverflow:=false; //f_visu.Clipping;
   guidefits.Invert:=false; //f_visu.Invert;
+  if display then begin
   {$ifdef debug_raw}writeln(FormatDateTime(dateiso,Now)+blank+'FITS GetBGRABitmap');{$endif}
   guidefits.GetBGRABitmap(ImaGuideBmp);
   {$ifdef debug_raw}writeln(FormatDateTime(dateiso,Now)+blank+'FITS GetBGRABitmap end');{$endif}
@@ -15099,6 +15103,12 @@ if (guidefits.HeaderInfo.naxis>0) and guidefits.ImageValid then begin
   end;
   guideimg_Width:=ImaGuideBmp.Width;
   guideimg_Height:=ImaGuideBmp.Height;
+ end
+ else begin
+  guideimg_Width:=guidefits.HeaderInfo.naxis1;
+  guideimg_Height:=guidefits.HeaderInfo.naxis2;
+  ImaGuideBmp.SetSize(guideimg_Width,guideimg_Height);
+ end;
 end;
 end;
 
