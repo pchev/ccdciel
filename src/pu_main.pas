@@ -654,7 +654,7 @@ type
     procedure GainStatus(Sender: TObject);
     procedure ShowFnumber;
     procedure ShowFrameRange;
-    procedure ShowFrame;
+    procedure ShowFrame(reset:boolean);
     procedure SetFrame(Sender: TObject);
     procedure ResetFrame(Sender: TObject);
     Procedure FrameChange(Sender: TObject);
@@ -2305,6 +2305,11 @@ begin
   f_capture.StackNum.Value:=config.GetValue('/Capture/StackNum',1);
   f_capture.Fname.Text:=config.GetValue('/Capture/FileName','');
   f_capture.SeqNum.Value:=config.GetValue('/Capture/Count',1);
+
+  FrameX:=config.GetValue('/CCDframe/FrameX',0);
+  FrameY:=config.GetValue('/CCDframe/FrameY',0);
+  FrameW:=config.GetValue('/CCDframe/FrameW',0);
+  FrameH:=config.GetValue('/CCDframe/FrameH',0);
 
   f_visu.Gamma.Value:=config.GetValue('/Visu/Gamma',1.0);
   f_visu.HistBar.Position:=config.GetValue('/Visu/HistBar',50);
@@ -4559,6 +4564,11 @@ begin
      config.SetValue('/Capture/Offset',f_capture.OffsetEdit.Value);
    end;
 
+   config.SetValue('/CCDframe/FrameX',FrameX);
+   config.SetValue('/CCDframe/FrameY',FrameY);
+   config.SetValue('/CCDframe/FrameW',FrameW);
+   config.SetValue('/CCDframe/FrameH',FrameH);
+
    config.SetValue('/Sequence/Targets',f_sequence.Filename);
    config.SetValue('/Sequence/Unattended',f_sequence.Unattended.Checked);
    config.SetValue('/Sequence/EditTarget/Width',f_EditTargets.Width);
@@ -5100,21 +5110,29 @@ begin
  f_preview.ExpTime.Hint:=buf;
 end;
 
-procedure Tf_main.ShowFrame;
+procedure Tf_main.ShowFrame(reset:boolean);
 var x,y,w,h: integer;
 begin
- camera.GetFrame(x,y,w,h);
- if (x<>FrameX)or(y<>FrameY)or(w<>FrameW)or(h<>FrameH) then begin
-   FrameX:=x;
-   FrameY:=y;
-   FrameW:=w;
-   FrameH:=h;
+ if reset or (FrameW=0)or(FrameH=0) then begin
+   camera.GetFrame(x,y,w,h);
+   if (x<>FrameX)or(y<>FrameY)or(w<>FrameW)or(h<>FrameH) then begin
+     FrameX:=x;
+     FrameY:=y;
+     FrameW:=w;
+     FrameH:=h;
+     f_frame.FX.Text:=inttostr(FrameX);
+     f_frame.FY.Text:=inttostr(FrameY);
+     f_frame.FWidth.Text:=inttostr(FrameW);
+     f_frame.FHeight.Text:=inttostr(FrameH);
+     NewMessage(Format(rsCameraFrameX, [f_frame.FX.Text, f_frame.FY.Text,
+       f_frame.FWidth.Text, f_frame.FHeight.Text]),2);
+   end;
+ end
+ else begin
    f_frame.FX.Text:=inttostr(FrameX);
    f_frame.FY.Text:=inttostr(FrameY);
    f_frame.FWidth.Text:=inttostr(FrameW);
    f_frame.FHeight.Text:=inttostr(FrameH);
-   NewMessage(Format(rsCameraFrameX, [f_frame.FX.Text, f_frame.FY.Text,
-     f_frame.FWidth.Text, f_frame.FHeight.Text]),2);
  end;
 end;
 
@@ -5126,12 +5144,14 @@ begin
  f_frame.FY.Hint:=FormatFloat(f0,ry.min)+ellipsis+FormatFloat(f0,ry.max);
  f_frame.FWidth.Hint:=FormatFloat(f0,rw.min)+ellipsis+FormatFloat(f0,rw.max);
  f_frame.FHeight.Hint:=FormatFloat(f0,rh.min)+ellipsis+FormatFloat(f0,rh.max);
- ShowFrame;
+ ShowFrame(false);
+ NewMessage(Format(rsCameraFrameX, [f_frame.FX.Text, f_frame.FY.Text,
+   f_frame.FWidth.Text, f_frame.FHeight.Text]),2);
 end;
 
 Procedure Tf_main.FrameChange(Sender: TObject);
 begin
- ShowFrame;
+ ShowFrame(true);
 end;
 
 procedure Tf_main.SetFrame(Sender: TObject);
