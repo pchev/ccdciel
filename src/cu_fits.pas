@@ -2450,6 +2450,7 @@ var i: integer;
     tc,timeout: integer;
 begin
 bgra.SetSize(Fwidth,Fheight);
+bgra.LoadFromBitmapIfNeeded;
 thread[0]:=nil;
 // number of thread
  tc := max(1,min(16, MaxThreadCount)); // based on number of core
@@ -2497,6 +2498,7 @@ begin
   overflow:=(FOverflow-FimageMin)*FimageC;
   underflow:=(FUnderflow-FimageMin)*FimageC;
   bgra.SetSize(Fwidth,Fheight);
+  bgra.LoadFromBitmapIfNeeded;
   if FVisumin>=FVisuMax then begin
     if FVisuMin=0 then
       FVisuMax:=FVisuMin+1
