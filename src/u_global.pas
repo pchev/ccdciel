@@ -458,6 +458,7 @@ var
   FilenameActive: array[0..FileNameCount-1] of Boolean;
   FilenameSep: String;
   FilePack,FileStackFloat: boolean;
+  FitsFileExt: string;
   FileSequenceWidth: integer;
   UseRotator: boolean;
   CanSetGainOffset, hasGain, hasGainISO, hasOffset: boolean;

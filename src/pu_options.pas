@@ -36,7 +36,9 @@ type
   Tf_option = class(TForm)
     ButtonSeqDir: TButton;
     CdCPath: TEdit;
+    FitsExt: TComboBox;
     Label155: TLabel;
+    Label156: TLabel;
     PageInternal: TPage;
     SaveFormat: TRadioGroup;
     StackDebayer: TCheckBox;
@@ -188,7 +190,6 @@ type
     Panel19: TPanel;
     Panel20: TPanel;
     Panel7: TPanel;
-    Panel8: TPanel;
     Panel9: TPanel;
     smtp_ssltls: TCheckBox;
     FilePack: TCheckBox;

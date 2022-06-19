@@ -396,17 +396,17 @@ object f_option: Tf_option
         ParentFont = False
         object FileFolderOpt: TPageControl
           Left = 0
-          Height = 424
+          Height = 494
           Top = 56
           Width = 560
           ActivePage = FileOpt
-          Align = alTop
+          Align = alClient
           ParentFont = False
           TabIndex = 0
           TabOrder = 0
           object FileOpt: TTabSheet
             Caption = 'File name options'
-            ClientHeight = 390
+            ClientHeight = 463
             ClientWidth = 550
             ParentFont = False
             object BtnFileDefault: TButton
@@ -507,11 +507,11 @@ object f_option: Tf_option
               TabOrder = 4
             end
             object FilePack: TCheckBox
-              AnchorSideTop.Control = SaveFormat
+              AnchorSideTop.Control = FitsExt
               AnchorSideTop.Side = asrBottom
               Left = 8
               Height = 21
-              Top = 332
+              Top = 366
               Width = 231
               BorderSpacing.Top = 4
               Caption = 'Compress the FITS files with fpack'
@@ -523,7 +523,7 @@ object f_option: Tf_option
               AnchorSideTop.Side = asrBottom
               Left = 8
               Height = 21
-              Top = 357
+              Top = 391
               Width = 255
               BorderSpacing.Top = 4
               Caption = 'Add FITS keywords for DSLR EXIF tags'
@@ -556,10 +556,73 @@ object f_option: Tf_option
               )
               TabOrder = 7
             end
+            object SaveBitmap: TCheckBox
+              AnchorSideTop.Control = WantExif
+              AnchorSideTop.Side = asrBottom
+              Left = 8
+              Height = 21
+              Top = 416
+              Width = 352
+              BorderSpacing.Top = 4
+              Caption = 'Save a bitmap file additionally to the standard FITS file'
+              ParentFont = False
+              TabOrder = 8
+            end
+            object SaveBitmapFormat: TComboBox
+              AnchorSideTop.Control = SaveBitmap
+              AnchorSideTop.Side = asrCenter
+              Left = 376
+              Height = 30
+              Top = 411
+              Width = 112
+              Constraints.MaxHeight = 30
+              ItemHeight = 0
+              ItemIndex = 0
+              Items.Strings = (
+                'PNG 16bit'
+                'TIFF 16bit'
+                'JPG 8bit'
+                'BMP 8bit'
+              )
+              ParentFont = False
+              Style = csDropDownList
+              TabOrder = 9
+              Text = 'PNG 16bit'
+            end
+            object Label156: TLabel
+              AnchorSideTop.Control = FitsExt
+              AnchorSideTop.Side = asrCenter
+              Left = 8
+              Height = 19
+              Top = 338
+              Width = 111
+              Caption = 'FITS file extension'
+              ParentColor = False
+            end
+            object FitsExt: TComboBox
+              AnchorSideTop.Control = SaveFormat
+              AnchorSideTop.Side = asrBottom
+              Left = 136
+              Height = 30
+              Top = 332
+              Width = 133
+              BorderSpacing.Top = 4
+              Constraints.MaxHeight = 30
+              ItemHeight = 0
+              ItemIndex = 0
+              Items.Strings = (
+                '.fits'
+                '.fit'
+                '.fts'
+              )
+              Style = csDropDownList
+              TabOrder = 10
+              Text = '.fits'
+            end
           end
           object FolderOpt: TTabSheet
             Caption = 'Folder name options'
-            ClientHeight = 390
+            ClientHeight = 463
             ClientWidth = 550
             ParentFont = False
             object BtnFolderDefault: TButton
@@ -627,7 +690,7 @@ object f_option: Tf_option
           end
           object CaptureDir: TEdit
             Left = 168
-            Height = 28
+            Height = 27
             Top = 18
             Width = 266
             Constraints.MaxHeight = 28
@@ -643,47 +706,6 @@ object f_option: Tf_option
             OnClick = ButtonDirClick
             ParentFont = False
             TabOrder = 1
-          end
-        end
-        object Panel8: TPanel
-          Left = 0
-          Height = 70
-          Top = 480
-          Width = 560
-          Align = alClient
-          ClientHeight = 70
-          ClientWidth = 560
-          ParentFont = False
-          TabOrder = 2
-          object SaveBitmap: TCheckBox
-            AnchorSideTop.Control = SaveBitmapFormat
-            AnchorSideTop.Side = asrCenter
-            Left = 13
-            Height = 21
-            Top = 13
-            Width = 352
-            Caption = 'Save a bitmap file additionally to the standard FITS file'
-            ParentFont = False
-            TabOrder = 0
-          end
-          object SaveBitmapFormat: TComboBox
-            Left = 384
-            Height = 30
-            Top = 8
-            Width = 112
-            Constraints.MaxHeight = 30
-            ItemHeight = 0
-            ItemIndex = 0
-            Items.Strings = (
-              'PNG 16bit'
-              'TIFF 16bit'
-              'JPG 8bit'
-              'BMP 8bit'
-            )
-            ParentFont = False
-            Style = csDropDownList
-            TabOrder = 1
-            Text = 'PNG 16bit'
           end
         end
       end
@@ -4728,7 +4750,7 @@ object f_option: Tf_option
             TabOrder = 1
             object DitherWaitTime: TSpinEdit
               Left = 105
-              Height = 27
+              Height = 28
               Top = 8
               Width = 74
               Constraints.MaxHeight = 28

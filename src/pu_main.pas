@@ -4202,6 +4202,7 @@ begin
     FileNameActive[i]:=config.GetValue('/Files/FileNameActive'+inttostr(i),i in [0,1,5]);
   end;
   FilenameSep:=config.GetValue('/Files/FileNameSep','_');
+  FitsFileExt:=config.GetValue('/Files/FitsFileExt','.fits');
   FileSequenceWidth:=config.GetValue('/Files/FileSequenceWidth',0);
   FilePack:=config.GetValue('/Files/Pack',false);
   WantExif:=config.GetValue('/Files/Exif',WantExif);
@@ -7944,6 +7945,10 @@ begin
       f_option.UseFileSequenceWidth.Checked:=false;
       f_option.FileSequenceWidth.Enabled:=false;
    end;
+   FitsFileExt:=config.GetValue('/Files/FitsFileExt','.fits');
+   if FitsFileExt='.fit' then f_option.FitsExt.ItemIndex:=1
+   else if FitsFileExt='.fts' then f_option.FitsExt.ItemIndex:=2
+   else f_option.FitsExt.ItemIndex:=0;
    f_option.FilePack.checked:=config.GetValue('/Files/Pack',false);
    f_option.WantExif.Checked:=config.GetValue('/Files/Exif',WantExif);
    f_option.SaveFormat.ItemIndex:=config.GetValue('/Files/SaveFormat',0);
@@ -8338,6 +8343,7 @@ begin
         config.SetValue('/Files/FileSequenceWidth',f_option.FileSequenceWidth.Text)
      else
         config.SetValue('/Files/FileSequenceWidth',0);
+     config.SetValue('/Files/FitsFileExt',f_option.FitsExt.Text);
      config.SetValue('/Files/Pack',f_option.FilePack.checked);
      config.SetValue('/Files/Exif',f_option.WantExif.Checked);
      config.SetValue('/StarAnalysis/Focus',f_option.FocusWindow.Value);
@@ -10133,9 +10139,9 @@ try
    fileseqstr:=IntToStr(fileseqnum);
    if (SaveFormat=ffFITS) or FileStackFloat then begin
      if FilePack then
-       fileseqext:='.fits.fz'
+       fileseqext:=FitsFileExt+'.fz'
      else
-       fileseqext:='.fits';
+       fileseqext:=FitsFileExt;
    end
    else
      fileseqext:='.tif';
@@ -10149,7 +10155,7 @@ try
  end;
  // save the file
  if (SaveFormat=ffFITS) or FileStackFloat then begin
-   fn:=slash(fd)+fn+'.fits';
+   fn:=slash(fd)+fn+FitsFileExt;
    fits.SaveToFile(fn,FilePack,FileStackFloat);
  end
  else if SaveFormat=ffASTROTIFF then begin
