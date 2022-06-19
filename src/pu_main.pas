@@ -876,6 +876,7 @@ type
     procedure InternalguiderCalibrate(Sender: TObject);
     procedure InternalguiderRedraw(Sender: TObject);
     procedure InternalguiderCaptureDark(Sender: TObject);
+    procedure InternalguiderLoadDark(Sender: TObject);
     procedure InternalguiderClearDark(Sender: TObject);
     procedure GuideCameraNewImage(Sender: TObject);
     procedure GuideCameraNewImageAsync(Data: PtrInt);
@@ -1672,6 +1673,7 @@ begin
   f_internalguider.onCalibrate:=@InternalguiderCalibrate;
   f_internalguider.onRedraw:=@InternalguiderRedraw;
   f_internalguider.onCaptureDark:=@InternalguiderCaptureDark;
+  f_internalguider.onLoadDark:=@InternalguiderLoadDark;
   f_internalguider.onClearDark:=@InternalguiderClearDark;
   ShowGuiderDarkInfo;
 
@@ -9088,6 +9090,7 @@ if (camera.Status=devConnected) and ((not f_capture.Running) or autofocusing) an
      camera.StackOperation:=StackOperation;
      camera.StackUseDark:=StackUseDark;
      camera.StackDebayer:=StackDebayer;
+     camera.StackAllow8bit:=false;
      fits.SetBPM(bpm,0,0,0,0);  // bpm used during addition
   end
   else begin
@@ -9568,6 +9571,7 @@ if (AllDevicesConnected)and(not autofocusing)and (not learningvcurve) then begin
     camera.StackOperation:=StackOperation;
     camera.StackUseDark:=StackUseDark;
     camera.StackDebayer:=StackDebayer;
+    camera.StackAllow8bit:=false;
     camera.StackNum:=f_capture.StackNum.Value;
   end else begin
     camera.StackNum:=1;
@@ -14974,6 +14978,26 @@ begin
  end;
 end;
 
+procedure Tf_main.InternalguiderLoadDark(Sender: TObject);
+var fn : string;
+begin
+  OpenDialog1.Title:=rsOpenDarkFile;
+  if OpenDialog1.Execute then begin
+    fn:=OpenDialog1.FileName;
+    guidefits.SetBPM(bpm,0,0,0,0);
+    guidefits.DarkOn:=false;
+    guidefits.LoadDark(fn);
+    if guidefits.DarkFrame.HeaderInfo.valid then begin
+      guidefits.DarkFrame.SaveToFile(ConfigGuiderDarkFile);
+    end
+    else begin
+      guidefits.FreeDark;
+      NewMessage(Format(rsInvalidOrUns, [fn]),1);
+    end;
+  end;
+  ShowGuiderDarkInfo;
+end;
+
 procedure Tf_main.InternalguiderClearDark(Sender: TObject);
 begin
   guidefits.FreeDark;
@@ -15014,12 +15038,14 @@ begin
       // process calibration
       T_autoguider_internal(autoguider).InternalCalibration
     else if InternalguiderCapturingDark then begin
-      // save dark and stop
-      guidefits.SaveToFile(ConfigGuiderDarkFile);
-      guidefits.LoadDark(ConfigGuiderDarkFile);
-      ShowGuiderDarkInfo;
-      T_autoguider_internal(autoguider).InternalguiderStop;
-      exit;
+      if (not guidecamera.AddFrames)or(guidecamera.StackNum<1)or(guidecamera.StackCount>=guidecamera.StackNum) then begin
+        // save dark and stop
+        guidefits.SaveToFile(ConfigGuiderDarkFile);
+        guidefits.LoadDark(ConfigGuiderDarkFile);
+        ShowGuiderDarkInfo;
+        T_autoguider_internal(autoguider).InternalguiderStop;
+        exit;
+      end;
     end;
 
     // start next exposure
@@ -15035,7 +15061,11 @@ begin
   if (guidefits.DarkFrame<>nil)and(guidefits.DarkFrame.HeaderInfo.valid) then begin
     f_internalguider.LabelDark.Caption:='Dark ';
     f_internalguider.LabelDark.Caption:=f_internalguider.LabelDark.Caption+' '+rsSize+': '+inttostr(guidefits.DarkFrame.HeaderInfo.naxis1)+'x'+inttostr(guidefits.DarkFrame.HeaderInfo.naxis2);
-    f_internalguider.LabelDark.Caption:=f_internalguider.LabelDark.Caption+', '+rsExposureTime2+': '+FormatFloat(f3,guidefits.DarkFrame.HeaderInfo.exptime);
+    f_internalguider.LabelDark.Caption:=f_internalguider.LabelDark.Caption+', '+rsExposureTime2+': ';
+    if guidefits.DarkFrame.HeaderInfo.stackcount>0 then
+      f_internalguider.LabelDark.Caption:=f_internalguider.LabelDark.Caption+FormatFloat(f3,guidefits.DarkFrame.HeaderInfo.stackexp)
+    else
+      f_internalguider.LabelDark.Caption:=f_internalguider.LabelDark.Caption+FormatFloat(f3,guidefits.DarkFrame.HeaderInfo.exptime);
     NewMessage(rsInternalGuid+' '+f_internalguider.LabelDark.Caption,3);
   end
   else begin

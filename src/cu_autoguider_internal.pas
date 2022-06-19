@@ -520,10 +520,23 @@ begin
   if InternalguiderCapturingDark then begin
     FGuideFits.SetBPM(bpm,0,0,0,0);
     FGuideFits.DarkOn:=false;
+    FCamera.AddFrames:=true;
+    FCamera.StackNum:=5;
+    FCamera.SaveFrames:=false;
+    FCamera.AlignFrames:=false;
+    FCamera.StackOperation:=1;
+    FCamera.StackAllow8bit:=true;
+    FCamera.StackUseDark:=false;
+    FCamera.StackDebayer:=false;
   end
   else begin
     FGuideFits.SetBPM(bpm,0,0,0,0);
     FGuideFits.DarkOn:=true;
+    FCamera.AddFrames:=false;
+    FCamera.StackNum:=-1;
+    FCamera.StackAllow8bit:=false;
+    FCamera.SaveFrames:=false;
+    FCamera.AlignFrames:=false;
   end;
   StartGuideExposure;
 end;
@@ -562,15 +575,13 @@ if (FCamera.Status=devConnected) then begin
          FCamera.Offset:=finternalguider.Offset.Value;
     end;
   end;
-  if InternalguiderCapturingDark then
-    FCamera.FrameType:=DARK
+  if InternalguiderCapturingDark then begin
+    if (FCamera.FrameType<>DARK) then
+      FCamera.FrameType:=DARK
+  end
   else if FCamera.FrameType<>LIGHT then
     FCamera.FrameType:=LIGHT;
   FCamera.ObjectName:=rsGuide;
-  FCamera.StackNum:=-1;
-  FCamera.AddFrames:=false;
-  FCamera.SaveFrames:=false;
-  FCamera.AlignFrames:=false;
 
   FCamera.StartExposure(e);
 

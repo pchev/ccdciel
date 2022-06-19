@@ -69,7 +69,7 @@ T_camera = class(TComponent)
     FFits: TFits;
     FStackCount, FStackNum, FStackStarted, FStackOperation: integer;
     FStackExpStart, FStackDate, FStackSaveDir: string;
-    FStackAlign, FStackUseDark, FStackDebayer: boolean;
+    FStackAlign, FStackUseDark, FStackDebayer,FStackAllow8bit: boolean;
     FStackAlignX,FStackAlignY,FStackStarX,FStackStarY: double;
     FMount: T_mount;
     Fwheel: T_wheel;
@@ -222,6 +222,7 @@ T_camera = class(TComponent)
     property StackOperation: integer read FStackOperation write FStackOperation;
     property StackUseDark: boolean read FStackUseDark write FStackUseDark;
     property StackDebayer: boolean read FStackDebayer write FStackDebayer;
+    property StackAllow8bit: boolean read FStackAllow8bit write FStackAllow8bit;
     property VerticalFlip: boolean read FVerticalFlip;
     property ASCOMFlipImage: boolean read FASCOMFlipImage write FASCOMFlipImage;
     property hasVideo: boolean read FhasVideo;
@@ -351,6 +352,7 @@ begin
   FAlignFrames:=false;
   FStackUseDark:=false;
   FStackDebayer:=false;
+  FStackAllow8bit:=false;
   FSaveFrames:=false;
   FStackSaveDir:='';
   FhasVideo:=false;
@@ -521,7 +523,7 @@ if FAddFrames then begin  // stack preview frames
   // if debayered, load the new color stream
   if (f.preview_axis<>f.HeaderInfo.naxis)and(f.preview_axis=3) then f.LoadRGB;
   // convert 8bit to 16bit to avoid quick overflow
-  if f.HeaderInfo.bitpix=8 then
+  if (not FStackAllow8bit)and(f.HeaderInfo.bitpix=8) then
      f.Bitpix8to16;
   // check frame is compatible
   if FFits.SameFormat(f) then begin

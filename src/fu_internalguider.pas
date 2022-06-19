@@ -49,6 +49,7 @@ type
     ButtonStop1: TButton;
     disable_guiding1: TCheckBox;
     Exposure: TFloatSpinEdit;
+    MenuItemLoadDark: TMenuItem;
     minHFD1: TFloatSpinEdit;
     GroupBox1: TGroupBox;
     GroupBox2: TGroupBox;
@@ -122,11 +123,12 @@ type
     procedure ButtonStopClick(Sender: TObject);
     procedure MenuItemCaptureDarkClick(Sender: TObject);
     procedure MenuItemClearDarkClick(Sender: TObject);
+    procedure MenuItemLoadDarkClick(Sender: TObject);
     procedure scale1Click(Sender: TObject; Button: TUDBtnType);
   private
     { private declarations }
     thescale : double;
-    FonStart, FonStop, FonCalibrate, FonLoop, FonRedraw, FonCaptureDark, FonClearDark: TNotifyEvent;
+    FonStart, FonStop, FonCalibrate, FonLoop, FonRedraw, FonCaptureDark, FonLoadDark, FonClearDark: TNotifyEvent;
     procedure SetLed (cl : tcolor);
     procedure SetRA_hysteresis(value:integer);
     function GetRA_hysteresis:integer;
@@ -176,6 +178,7 @@ type
     property onCalibrate: TNotifyEvent read FonCalibrate write FonCalibrate;
     property onRedraw: TNotifyEvent read FonRedraw write FonRedraw;
     property onCaptureDark: TNotifyEvent read FonCaptureDark write FonCaptureDark;
+    property onLoadDark: TNotifyEvent read FonLoadDark write FonLoadDark;
     property onClearDark: TNotifyEvent read FonClearDark write FonClearDark;
     property RA_hysteresis: integer read GetRA_hysteresis write SetRA_hysteresis;
     property DEC_hysteresis: integer read GetDEC_hysteresis write SetDEC_hysteresis;
@@ -223,6 +226,7 @@ procedure Tf_internalguider.SetLang;
 begin
   Title.Caption:=rsInternalGuid;
   MenuItemCaptureDark.Caption:=rsCreateFromCa;
+  MenuItemLoadDark.Caption:=rsLoadDarkFile;
   MenuItemClearDark.Caption:=rsClearDarkFra;
 end;
 
@@ -434,6 +438,11 @@ end;
 procedure Tf_internalguider.MenuItemCaptureDarkClick(Sender: TObject);
 begin
   if Assigned(FonCaptureDark) then FonCaptureDark(self);
+end;
+
+procedure Tf_internalguider.MenuItemLoadDarkClick(Sender: TObject);
+begin
+  if Assigned(FonLoadDark) then FonLoadDark(self);
 end;
 
 procedure Tf_internalguider.MenuItemClearDarkClick(Sender: TObject);

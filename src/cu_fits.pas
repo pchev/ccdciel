@@ -36,14 +36,14 @@ type
  TFitsInfo = record
             valid, solved, floatingpoint: boolean;
             bitpix,naxis,naxis1,naxis2,naxis3 : integer;
-            Frx,Fry,Frwidth,Frheight,BinX,BinY: integer;
+            Frx,Fry,Frwidth,Frheight,BinX,BinY,stackcount: integer;
             bzero,bscale,dmax,dmin,blank : double;
             bayerpattern,roworder: string;
             bayeroffsetx, bayeroffsety: integer;
             rmult,gmult,bmult: double;
             equinox,ra,dec,crval1,crval2: double;
             pixsz1,pixsz2,pixratio,focallen,scale: double;
-            exptime,airmass: double;
+            exptime,stackexp,airmass: double;
             objects,ctype1,ctype2 : string;
             frametype: TFrameType;
             procedure Assign(Source:TFitsInfo);
@@ -809,6 +809,8 @@ begin
   ctype1 := Source.ctype1 ;
   ctype2 := Source.ctype2 ;
   frametype := Source.frametype;
+  stackexp := Source.stackexp;
+  stackcount := Source.stackcount;
 end;
 
 //////////////////// TReadFits /////////////////////////
@@ -1607,7 +1609,8 @@ with FFitsInfo do begin
    rmult:=0; gmult:=0; bmult:=0;
    equinox:=2000; ra:=NullCoord; dec:=NullCoord; crval1:=NullCoord; crval2:=NullCoord;
    pixsz1:=0; pixsz2:=0; pixratio:=1; focallen:=0; scale:=0;
-   exptime:=0; airmass:=0;
+   exptime:=0; stackexp:=0; airmass:=0;
+   stackcount:=0;
    objects:=''; ctype1:=''; ctype2:='';
    frametype:=LIGHT;
 end;
@@ -1639,6 +1642,8 @@ begin
     if (keyword='BLANK') then blank:=strtofloat(buf);
     if (keyword='FOCALLEN') then focallen:=strtofloat(buf);
     if (keyword='EXPTIME') then exptime:=strtofloat(buf);
+    if (keyword='STACKEXP') then stackexp:=strtofloat(buf);
+    if (keyword='STACKCNT') then stackcount:=StrToInt(buf);
     if (keyword='XPIXSZ') then pixsz1:=strtofloat(buf);
     if (keyword='YPIXSZ') then pixsz2:=strtofloat(buf);
     if (keyword='XBINNING') then BinX:=round(StrToFloat(buf));
