@@ -521,7 +521,7 @@ begin
     FGuideFits.SetBPM(bpm,0,0,0,0);
     FGuideFits.DarkOn:=false;
     FCamera.AddFrames:=true;
-    FCamera.StackNum:=5;
+    FCamera.StackNum:=12;
     FCamera.SaveFrames:=false;
     FCamera.AlignFrames:=false;
     FCamera.StackOperation:=1;
