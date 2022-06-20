@@ -206,13 +206,23 @@ end;
 procedure T_mount.SlewToDomeFlatPosition;
 var zra,zde: double;
 begin
-   zra:=0; zde:=0;
-   // actual equatorial position of flat panel
-   cmdHz2Eq(DomeFlatTelescopeAz,DomeFlatTelescopeAlt,zra,zde);
-   // slew
-   Slew(zra,zde);
-   // stop tracking
-   AbortMotion;
+ case DomeFlatPosition of
+   DomeFlatPositionAltAz: begin
+           zra:=0; zde:=0;
+           // actual equatorial position of flat panel
+           cmdHz2Eq(DomeFlatTelescopeAz,DomeFlatTelescopeAlt,zra,zde);
+           // slew
+           Slew(zra,zde);
+           // stop tracking
+           AbortMotion;
+         end;
+   DomeFlatPositionPark: begin
+           SetPark(True);
+         end;
+   DomeFlatPositionHome: begin
+           { #todo : set mount home }
+         end;
+ end;
 end;
 
 procedure T_mount.SetParkInterface(value:Boolean);

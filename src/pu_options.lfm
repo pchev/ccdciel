@@ -67,7 +67,7 @@ object f_option: Tf_option
     Top = 0
     Width = 720
     HorzScrollBar.Page = 712
-    VertScrollBar.Page = 533
+    VertScrollBar.Page = 535
     Align = alClient
     BorderStyle = bsNone
     ClientHeight = 554
@@ -406,7 +406,7 @@ object f_option: Tf_option
           TabOrder = 0
           object FileOpt: TTabSheet
             Caption = 'File name options'
-            ClientHeight = 463
+            ClientHeight = 460
             ClientWidth = 550
             ParentFont = False
             object BtnFileDefault: TButton
@@ -622,7 +622,7 @@ object f_option: Tf_option
           end
           object FolderOpt: TTabSheet
             Caption = 'Folder name options'
-            ClientHeight = 463
+            ClientHeight = 460
             ClientWidth = 550
             ParentFont = False
             object BtnFolderDefault: TButton
@@ -690,7 +690,7 @@ object f_option: Tf_option
           end
           object CaptureDir: TEdit
             Left = 168
-            Height = 27
+            Height = 28
             Top = 18
             Width = 266
             Constraints.MaxHeight = 28
@@ -2198,70 +2198,14 @@ object f_option: Tf_option
           ParentFont = False
           TabOrder = 2
           Visible = False
-          object Label61: TLabel
-            AnchorSideTop.Control = DomeFlatTelescopeAz
-            AnchorSideTop.Side = asrCenter
-            Left = 18
-            Height = 19
-            Top = 37
-            Width = 113
-            Caption = 'Telescope azimuth'
-            ParentColor = False
-            ParentFont = False
-          end
-          object Label102: TLabel
-            AnchorSideTop.Control = DomeFlatTelescopeAlt
-            AnchorSideTop.Side = asrCenter
-            Left = 18
-            Height = 19
-            Top = 64
-            Width = 120
-            Caption = 'Telescope elevation'
-            ParentColor = False
-            ParentFont = False
-          end
-          object DomeFlatTelescopeAz: TFloatSpinEdit
-            Left = 226
-            Height = 28
+          object LabelFlatWarning: TLabel
+            Left = 328
+            Height = 78
             Top = 32
-            Width = 82
-            Constraints.MaxHeight = 28
-            MaxValue = 360
-            MinValue = -360
-            ParentFont = False
-            TabOrder = 0
-          end
-          object DomeFlatTelescopeAlt: TFloatSpinEdit
-            Left = 226
-            Height = 28
-            Top = 59
-            Width = 82
-            Constraints.MaxHeight = 28
-            MaxValue = 90
-            ParentFont = False
-            TabOrder = 1
-          end
-          object Label103: TLabel
-            AnchorSideTop.Control = DomeFlatTelescopeAz
-            AnchorSideTop.Side = asrCenter
-            Left = 322
-            Height = 19
-            Top = 37
-            Width = 51
-            Caption = 'degrees'
+            Width = 156
+            AutoSize = False
             ParentColor = False
-            ParentFont = False
-          end
-          object Label104: TLabel
-            AnchorSideTop.Control = DomeFlatTelescopeAlt
-            AnchorSideTop.Side = asrCenter
-            Left = 322
-            Height = 19
-            Top = 64
-            Width = 51
-            Caption = 'degrees'
-            ParentColor = False
-            ParentFont = False
+            WordWrap = True
           end
           object DomeFlatTelescopeSlew: TCheckBox
             Left = 18
@@ -2270,23 +2214,23 @@ object f_option: Tf_option
             Width = 242
             Caption = 'Slew telescope to flat panel position'
             ParentFont = False
-            TabOrder = 2
+            TabOrder = 0
           end
           object DomeFlatSetLight: TCheckBox
             Left = 18
             Height = 21
-            Top = 89
+            Top = 168
             Width = 314
             Caption = 'Use external command to light the panel on/off'
             ParentFont = False
-            TabOrder = 3
+            TabOrder = 1
           end
           object Label106: TLabel
             AnchorSideTop.Control = DomeFlatSetLightON
             AnchorSideTop.Side = asrCenter
             Left = 18
             Height = 19
-            Top = 118
+            Top = 197
             Width = 54
             Caption = 'Light ON'
             ParentColor = False
@@ -2297,7 +2241,7 @@ object f_option: Tf_option
             AnchorSideTop.Side = asrCenter
             Left = 18
             Height = 19
-            Top = 147
+            Top = 226
             Width = 58
             Caption = 'Light OFF'
             ParentColor = False
@@ -2306,19 +2250,116 @@ object f_option: Tf_option
           object DomeFlatSetLightON: TEdit
             Left = 186
             Height = 28
-            Top = 113
+            Top = 192
             Width = 201
             Constraints.MaxHeight = 28
             ParentFont = False
-            TabOrder = 4
+            TabOrder = 2
           end
           object DomeFlatSetLightOFF: TEdit
             Left = 186
             Height = 28
-            Top = 142
+            Top = 221
             Width = 201
             Constraints.MaxHeight = 28
             ParentFont = False
+            TabOrder = 3
+          end
+          object PanelFlatPositionAltAz: TPanel
+            Left = 18
+            Height = 58
+            Top = 96
+            Width = 381
+            BevelOuter = bvNone
+            ClientHeight = 58
+            ClientWidth = 381
+            TabOrder = 4
+            object Label61: TLabel
+              AnchorSideTop.Control = DomeFlatTelescopeAz
+              AnchorSideTop.Side = asrCenter
+              Left = 0
+              Height = 19
+              Top = 5
+              Width = 113
+              Caption = 'Telescope azimuth'
+              ParentColor = False
+              ParentFont = False
+            end
+            object Label102: TLabel
+              AnchorSideTop.Control = DomeFlatTelescopeAlt
+              AnchorSideTop.Side = asrCenter
+              Left = 0
+              Height = 19
+              Top = 32
+              Width = 120
+              Caption = 'Telescope elevation'
+              ParentColor = False
+              ParentFont = False
+            end
+            object DomeFlatTelescopeAlt: TFloatSpinEdit
+              Left = 208
+              Height = 28
+              Top = 27
+              Width = 82
+              Constraints.MaxHeight = 28
+              MaxValue = 90
+              ParentFont = False
+              TabOrder = 0
+            end
+            object DomeFlatTelescopeAz: TFloatSpinEdit
+              Left = 208
+              Height = 28
+              Top = 0
+              Width = 82
+              Constraints.MaxHeight = 28
+              MaxValue = 360
+              MinValue = -360
+              ParentFont = False
+              TabOrder = 1
+            end
+            object Label103: TLabel
+              AnchorSideTop.Side = asrCenter
+              Left = 304
+              Height = 19
+              Top = 5
+              Width = 51
+              Caption = 'degrees'
+              ParentColor = False
+              ParentFont = False
+            end
+            object Label104: TLabel
+              AnchorSideTop.Side = asrCenter
+              Left = 304
+              Height = 19
+              Top = 32
+              Width = 51
+              Caption = 'degrees'
+              ParentColor = False
+              ParentFont = False
+            end
+          end
+          object DomeFlatPosition: TRadioGroup
+            Left = 18
+            Height = 57
+            Top = 32
+            Width = 293
+            AutoFill = True
+            Caption = 'Position'
+            ChildSizing.LeftRightSpacing = 6
+            ChildSizing.EnlargeHorizontal = crsHomogenousChildResize
+            ChildSizing.EnlargeVertical = crsHomogenousChildResize
+            ChildSizing.ShrinkHorizontal = crsScaleChilds
+            ChildSizing.ShrinkVertical = crsScaleChilds
+            ChildSizing.Layout = cclLeftToRightThenTopToBottom
+            ChildSizing.ControlsPerLine = 2
+            ClientHeight = 37
+            ClientWidth = 291
+            Columns = 2
+            Items.Strings = (
+              'Alt/Az'
+              'Park'
+            )
+            OnClick = DomeFlatPositionClick
             TabOrder = 5
           end
         end

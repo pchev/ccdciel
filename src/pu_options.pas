@@ -39,7 +39,10 @@ type
     FitsExt: TComboBox;
     Label155: TLabel;
     Label156: TLabel;
+    LabelFlatWarning: TLabel;
     PageInternal: TPage;
+    PanelFlatPositionAltAz: TPanel;
+    DomeFlatPosition: TRadioGroup;
     SaveFormat: TRadioGroup;
     StackDebayer: TCheckBox;
     StackUseDark: TCheckBox;
@@ -683,6 +686,7 @@ type
     procedure BtnFolderDefaultClick(Sender: TObject);
     procedure BtnMaxDriftDisableClick(Sender: TObject);
     procedure ButtonSeqDirClick(Sender: TObject);
+    procedure DomeFlatPositionClick(Sender: TObject);
     procedure ObservatoryDBDeleteClick(Sender: TObject);
     procedure ButtonNotificationAllClick(Sender: TObject);
     procedure ButtonHelpClick(Sender: TObject);
@@ -1051,6 +1055,9 @@ begin
   Label97.Caption := rsAutomaticFla;
   DomeBox.Caption:=rsDomePanel;
   DomeFlatTelescopeSlew.Caption:=rsSlewTelescop2;
+  DomeFlatPosition.Caption:=rsPosition;
+  DomeFlatPosition.Items[0]:=rsAlt+'/'+rsAz;
+  DomeFlatPosition.Items[1]:=rsPark;
   Label61.Caption:=rsTelescopeAzi;
   Label102.Caption:=rsTelescopeEle;
   Label103.Caption:=rsDegree;
@@ -1946,6 +1953,15 @@ begin
  SelectDirectoryDialog1.InitialDir:=SeqDir.text;
  SelectDirectoryDialog1.FileName:=SeqDir.text;
  if SelectDirectoryDialog1.Execute then SeqDir.text:=SelectDirectoryDialog1.FileName;
+end;
+
+procedure Tf_option.DomeFlatPositionClick(Sender: TObject);
+begin
+  PanelFlatPositionAltAz.Visible:=(DomeFlatPosition.ItemIndex=0);
+  if DomeFlatPosition.ItemIndex=1 then
+    LabelFlatWarning.Caption:='Warning! the mount will be parked every time a flat capture is started.'
+  else
+    LabelFlatWarning.Caption:='';
 end;
 
 procedure Tf_option.ButtonHelpClick(Sender: TObject);

@@ -4201,6 +4201,7 @@ begin
   FlatLevelMin:=config.GetValue('/Flat/FlatLevelMin',20000);
   FlatLevelMax:=config.GetValue('/Flat/FlatLevelMax',30000);
   DomeFlatTelescopeSlew:=config.GetValue('/Flat/DomeFlatTelescopeSlew',false);
+  DomeFlatPosition:=TDomeFlatPositionType(config.GetValue('/Flat/DomeFlatPosition',0));
   DomeFlatTelescopeAz:=config.GetValue('/Flat/DomeFlatTelescopeAz',90.0);
   DomeFlatTelescopeAlt:=config.GetValue('/Flat/DomeFlatTelescopeAlt',5.0);
   DomeFlatSetLight:=config.GetValue('/Flat/DomeFlatSetLight',false);
@@ -8033,6 +8034,8 @@ begin
    f_option.FlatLevelMin.Value:=config.GetValue('/Flat/FlatLevelMin',FlatLevelMin);
    f_option.FlatLevelMax.Value:=config.GetValue('/Flat/FlatLevelMax',FlatLevelMax);
    f_option.DomeFlatTelescopeSlew.Checked:=config.GetValue('/Flat/DomeFlatTelescopeSlew',DomeFlatTelescopeSlew);
+   f_option.DomeFlatPosition.ItemIndex:=config.GetValue('/Flat/DomeFlatPosition',0);
+   f_option.PanelFlatPositionAltAz.Visible:=(f_option.DomeFlatPosition.ItemIndex=0);
    f_option.DomeFlatTelescopeAz.Value:=config.GetValue('/Flat/DomeFlatTelescopeAz',DomeFlatTelescopeAz);
    f_option.DomeFlatTelescopeAlt.Value:=config.GetValue('/Flat/DomeFlatTelescopeAlt',DomeFlatTelescopeAlt);
    f_option.DomeFlatSetLight.Checked:=config.GetValue('/Flat/DomeFlatSetLight',DomeFlatSetLight);
@@ -8466,6 +8469,7 @@ begin
      config.SetValue('/Flat/FlatLevelMin',f_option.FlatLevelMin.Value);
      config.SetValue('/Flat/FlatLevelMax',f_option.FlatLevelMax.Value);
      config.SetValue('/Flat/DomeFlatTelescopeSlew',f_option.DomeFlatTelescopeSlew.Checked);
+     config.SetValue('/Flat/DomeFlatPosition',f_option.DomeFlatPosition.ItemIndex);
      config.SetValue('/Flat/DomeFlatTelescopeAz',f_option.DomeFlatTelescopeAz.Value);
      config.SetValue('/Flat/DomeFlatTelescopeAlt',f_option.DomeFlatTelescopeAlt.Value);
      config.SetValue('/Flat/DomeFlatSetLight',f_option.DomeFlatSetLight.Checked);

@@ -45,6 +45,7 @@ type
   TDevInterface = (INDI, ASCOM, INCAMERA, INTELESCOPE, ASCOMREST, MANUAL);
   TFrameType =(LIGHT, BIAS, DARK, FLAT);
   TFlatType=(ftNone,ftSKY,ftDome);
+  TDomeFlatPositionType=(DomeFlatPositionAltAz,DomeFlatPositionPark,DomeFlatPositionHome);
   TAutoguiderType=(agPHD,agLINGUIDER,agNONE,agDITHER,agINTERNAL);
   TAutoguiderState=(GUIDER_DISCONNECTED,GUIDER_IDLE,GUIDER_GUIDING,GUIDER_BUSY,GUIDER_ALERT);
   TPlanetariumType=(CDC, SAMP, HNSKY,plaNONE);
@@ -448,6 +449,7 @@ var
   FlatAutoExposure,doFlatAutoExposure,FlatWaitDusk,FlatWaitDawn,AdjustDomeFlat,DomeFlatTelescopeSlew,DomeFlatSetLight,AdjustFlatLight: boolean;
   FlatType: TFlatType;
   FlatMinExp,FlatMaxExp,DomeFlatTelescopeAz,DomeFlatTelescopeAlt: double;
+  DomeFlatPosition: TDomeFlatPositionType;
   FlatLevelMin,FlatLevelMax: integer;
   FlatSlewTime: TDateTime;
   DomeFlatSetLightON,DomeFlatSetLightOFF: string;
