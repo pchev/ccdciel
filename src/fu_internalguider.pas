@@ -49,6 +49,7 @@ type
     ButtonStop1: TButton;
     disable_guiding1: TCheckBox;
     Exposure: TFloatSpinEdit;
+    MenuItemDarkInfo: TMenuItem;
     MenuItemLoadDark: TMenuItem;
     minHFD1: TFloatSpinEdit;
     GroupBox1: TGroupBox;
@@ -123,12 +124,13 @@ type
     procedure ButtonStopClick(Sender: TObject);
     procedure MenuItemCaptureDarkClick(Sender: TObject);
     procedure MenuItemClearDarkClick(Sender: TObject);
+    procedure MenuItemDarkInfoClick(Sender: TObject);
     procedure MenuItemLoadDarkClick(Sender: TObject);
     procedure scale1Click(Sender: TObject; Button: TUDBtnType);
   private
     { private declarations }
     thescale : double;
-    FonStart, FonStop, FonCalibrate, FonLoop, FonRedraw, FonCaptureDark, FonLoadDark, FonClearDark: TNotifyEvent;
+    FonStart, FonStop, FonCalibrate, FonLoop, FonRedraw, FonCaptureDark, FonLoadDark, FonClearDark,FonDarkInfo: TNotifyEvent;
     procedure SetLed (cl : tcolor);
     procedure SetRA_hysteresis(value:integer);
     function GetRA_hysteresis:integer;
@@ -180,6 +182,7 @@ type
     property onCaptureDark: TNotifyEvent read FonCaptureDark write FonCaptureDark;
     property onLoadDark: TNotifyEvent read FonLoadDark write FonLoadDark;
     property onClearDark: TNotifyEvent read FonClearDark write FonClearDark;
+    property onDarkInfo: TNotifyEvent read FonDarkInfo write FonDarkInfo;
     property RA_hysteresis: integer read GetRA_hysteresis write SetRA_hysteresis;
     property DEC_hysteresis: integer read GetDEC_hysteresis write SetDEC_hysteresis;
     property RAgain: integer read GetRAgain write SetRAgain;
@@ -228,6 +231,7 @@ begin
   MenuItemCaptureDark.Caption:=rsCreateFromCa;
   MenuItemLoadDark.Caption:=rsLoadDarkFile;
   MenuItemClearDark.Caption:=rsClearDarkFra;
+  MenuItemDarkInfo.Caption:=rsViewHeader;
 end;
 
 function Tf_internalguider.Getdisableguiding:boolean;
@@ -448,6 +452,11 @@ end;
 procedure Tf_internalguider.MenuItemClearDarkClick(Sender: TObject);
 begin
   if Assigned(FonClearDark) then FonClearDark(self);
+end;
+
+procedure Tf_internalguider.MenuItemDarkInfoClick(Sender: TObject);
+begin
+  if Assigned(FonDarkInfo) then FonDarkInfo(self);
 end;
 
 procedure Tf_internalguider.scale1Click(Sender: TObject; Button: TUDBtnType);

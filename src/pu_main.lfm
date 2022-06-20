@@ -1311,7 +1311,7 @@ object f_main: Tf_main
   end
   object OpenDialog1: TOpenDialog
     Filter = 'Fits file|*.fits;*.fit;*.fts|All|*.*'
-    Left = 49
+    Left = 52
     Top = 238
   end
   object SaveDialogFits: TSaveDialog
@@ -1430,14 +1430,14 @@ object f_main: Tf_main
   object StartSequenceTimer: TTimer
     Enabled = False
     OnTimer = StartSequenceTimerTimer
-    Left = 538
-    Top = 41
+    Left = 496
+    Top = 40
   end
   object StatusTimer: TTimer
     Enabled = False
     Interval = 15000
     OnTimer = StatusTimerTimer
-    Left = 538
+    Left = 496
     Top = 238
   end
   object TimerStampTimer: TTimer
@@ -1544,7 +1544,7 @@ object f_main: Tf_main
   object ImageListNight: TImageList
     Height = 22
     Width = 22
-    Left = 675
+    Left = 672
     Top = 238
     Bitmap = {
       4C7A100000001600000016000000F20900000000000078DAED5D696C55451446
@@ -1633,20 +1633,20 @@ object f_main: Tf_main
   object FocuserConnectTimer: TTimer
     Enabled = False
     OnTimer = FocuserConnectTimerTimer
-    Left = 362
+    Left = 352
     Top = 321
   end
   object CameraConnectTimer: TTimer
     Enabled = False
     OnTimer = CameraConnectTimerTimer
-    Left = 548
+    Left = 496
     Top = 321
   end
   object OpenPictureDialog1: TOpenDialog
     Title = 'Open picture file'
     Filter = 'All supported files|*.fits;*.fit;*.fts;*.fz;*.bay;*.bmq;*.cr3;*.cr2;*.crw;*.cs1;*.dc2;*.dcr;*.dng;*.erf;*.fff;*.hdr;*.k25;*.kdc;*.mdc;*.mos;*.mrw;*.nef;*.orf;*.pef;*.pxn;*.raf;*.raw;*.rdc;*.sr2;*.srf;*.x3f;*.arw;*.3fr;*.cine;*.ia;*.kc2;*.mef;*.nrw;*.qtk;*.rw2;*.sti;*.rwl;*.srw;*.png;*.bmp;*.jpeg;*.jpg;*.jpe;*.jfif;*.tif;*.tiff;*.gif;*.tga|FITS (*.fits;*.fit;*.fts)|*.fits;*.fit;*.fts;*.fz|TIFF, Astro-TIFF  (*.tif;*.tiff)|*.tif;*.tiff|Camera RAW (*.arw;*.cr3;*.cr2;*.crw;*.dng;*.nef;...)|*.bay;*.bmq;*.cr3;*.cr2;*.crw;*.cs1;*.dc2;*.dcr;*.dng;*.erf;*.fff;*.hdr;*.k25;*.kdc;*.mdc;*.mos;*.mrw;*.nef;*.orf;*.pef;*.pxn;*.raf;*.raw;*.rdc;*.sr2;*.srf;*.x3f;*.arw;*.3fr;*.cine;*.ia;*.kc2;*.mef;*.nrw;*.qtk;*.rw2;*.sti;*.rwl;*.srw|Graphic (*.png;*.bmp;*.jpeg;*.jpg;*.jpe;*.jfif;*.tif;*.tiff;*.gif;*.tga)|*.png;*.bmp;*.jpeg;*.jpg;*.jpe;*.jfif;*.gif;*.tga|Portable Network Graphic (*.png)|*.png|Bitmaps (*.bmp)|*.bmp|Joint Picture Expert Group (*.jpeg;*.jpg;*.jpe;*.jfif)|*.jpeg;*.jpg;*.jpe;*.jfif|Graphics Interchange Format (*.gif)|*.gif|TGA Image File (*.tga)|*.tga|All (*.*)|*.*'
     Options = [ofEnableSizing, ofViewDetail, ofAutoPreview]
-    Left = 57
+    Left = 55
     Top = 145
   end
   object MagnifyerTimer: TTimer
@@ -1668,14 +1668,14 @@ object f_main: Tf_main
     Interval = 100
     OnTimer = PlotTimerTimer
     Left = 207
-    Top = 403
+    Top = 408
   end
   object ImageResizeTimer: TTimer
     Enabled = False
     Interval = 500
     OnTimer = ImageResizeTimerTimer
-    Left = 362
-    Top = 395
+    Left = 352
+    Top = 408
   end
   object SaveDialogPicture: TSaveDialog
     DefaultExt = '.png'
@@ -1686,23 +1686,38 @@ object f_main: Tf_main
   object GuideCameraConnectTimer: TTimer
     Enabled = False
     OnTimer = GuideCameraConnectTimerTimer
-    Left = 548
-    Top = 395
+    Left = 496
+    Top = 408
   end
   object GuidePlotTimer: TTimer
     Enabled = False
     Interval = 100
     OnTimer = GuidePlotTimerTimer
-    Left = 681
-    Top = 400
+    Left = 672
+    Top = 408
   end
   object GuiderPopUpmenu1: TPopupMenu
-    Left = 664
-    Top = 48
-    object GuiderSaveImage1: TMenuItem
+    Left = 672
+    Top = 41
+    object MenuItemGuiderImage: TMenuItem
+      Caption = 'MenuItemGuiderImage'
+      Enabled = False
+    end
+    object Separator1: TMenuItem
+      Caption = '-'
+    end
+    object MenuItemGuiderSaveImage: TMenuItem
       Caption = 'Save guide image'
       Hint = 'Saves the guide image as FITS'
-      OnClick = GuiderSaveImage1Click
+      OnClick = MenuItemGuiderSaveImageClick
+    end
+    object MenuItemGuiderViewHeader: TMenuItem
+      Caption = 'MenuItemGuiderViewHeader'
+      OnClick = MenuItemGuiderViewHeaderClick
+    end
+    object MenuItemGuiderViewStatistics: TMenuItem
+      Caption = 'MenuItemGuiderViewStatistics'
+      OnClick = MenuItemGuiderViewStatisticsClick
     end
   end
 end

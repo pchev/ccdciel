@@ -129,7 +129,11 @@ type
     MenuInternalguider: TMenuItem;
     MenuAscomGuideCameraSetup: TMenuItem;
     MenuAlpacaGuideCameraSetup: TMenuItem;
-    GuiderSaveImage1: TMenuItem;
+    Separator1: TMenuItem;
+    MenuItemGuiderImage: TMenuItem;
+    MenuItemGuiderViewStatistics: TMenuItem;
+    MenuItemGuiderSaveImage: TMenuItem;
+    MenuItemGuiderViewHeader: TMenuItem;
     MenuViewInternalguider: TMenuItem;
     MenuItemImageInspection2: TMenuItem;
     MenuItemImageInspection: TMenuItem;
@@ -366,7 +370,8 @@ type
     procedure FormShow(Sender: TObject);
     procedure GuideCameraConnectTimerTimer(Sender: TObject);
     procedure GuidePlotTimerTimer(Sender: TObject);
-    procedure GuiderSaveImage1Click(Sender: TObject);
+    procedure MenuItemGuiderSaveImageClick(Sender: TObject);
+    procedure MenuItemGuiderViewHeaderClick(Sender: TObject);
     procedure ImageResizeTimerTimer(Sender: TObject);
     procedure MagnifyerTimerTimer(Sender: TObject);
     procedure MeasureTimerTimer(Sender: TObject);
@@ -393,6 +398,7 @@ type
     procedure MenuDarkClearClick(Sender: TObject);
     procedure MenuDarkFileClick(Sender: TObject);
     procedure MenuItem25Click(Sender: TObject);
+    procedure MenuItemGuiderViewStatisticsClick(Sender: TObject);
     procedure MenuItemImageInspectionClick(Sender: TObject);
     procedure MenuPolarAlignment2Click(Sender: TObject);
     procedure MenuViewInternalguiderClick(Sender: TObject);
@@ -878,6 +884,7 @@ type
     procedure InternalguiderCaptureDark(Sender: TObject);
     procedure InternalguiderLoadDark(Sender: TObject);
     procedure InternalguiderClearDark(Sender: TObject);
+    procedure InternalguiderDarkInfo(Sender: TObject);
     procedure GuideCameraNewImage(Sender: TObject);
     procedure GuideCameraNewImageAsync(Data: PtrInt);
     procedure ShowGuiderDarkInfo;
@@ -1675,6 +1682,7 @@ begin
   f_internalguider.onCaptureDark:=@InternalguiderCaptureDark;
   f_internalguider.onLoadDark:=@InternalguiderLoadDark;
   f_internalguider.onClearDark:=@InternalguiderClearDark;
+  f_internalguider.onDarkInfo:=@InternalguiderDarkInfo;
   ShowGuiderDarkInfo;
 
   i:=config.GetValue('/Autoguider/Software',2);
@@ -2190,6 +2198,10 @@ begin
    MenuItemCleanup2.Caption:=rsImageCleanup;
    MenuItemUnselect.Caption:=rsUnselectStar;
    MenuItemUnselect2.Caption:=rsUnselectStar;
+   MenuItemGuiderImage.Caption:='Guider image';
+   MenuItemGuiderSaveImage.Caption:=Format(rsSaveFITSFile, [ellipsis]);
+   MenuItemGuiderViewHeader.Caption:=rsViewHeader;
+   MenuItemGuiderViewStatistics.Caption:=rsImageStatist;
    SubDirName[0]:=rsSubfolderByS;
    SubDirName[1]:=rsSubfolderByF;
    SubDirName[2]:=rsSubfolderByO;
@@ -7529,12 +7541,8 @@ var f: Tf_viewtext;
 begin
  if fits.HeaderInfo.valid then begin
    f:=Tf_viewtext.Create(self);
-   f.Caption:=rsImageStatist;
+   f.Caption:=rsFITSHeader;
    f.Memo1.Lines:=fits.Header.Rows;
-   if trim(fits.Title)='' then
-      f.Caption:=rsFITSHeader
-   else
-      f.Caption:=SysToUTF8(fits.Title);
    FormPos(f,mouse.CursorPos.X,mouse.CursorPos.Y);
    f.Show;
  end;
@@ -15031,6 +15039,19 @@ begin
   ShowGuiderDarkInfo;
 end;
 
+procedure Tf_main.InternalguiderDarkInfo(Sender: TObject);
+var f: Tf_viewtext;
+begin
+ if guidefits.DarkFrame.HeaderInfo.valid then begin
+   f:=Tf_viewtext.Create(self);
+   f.FormStyle:=fsStayOnTop;
+   f.Caption:=rsFITSHeader;
+   f.Memo1.Lines:=guidefits.DarkFrame.Header.Rows;
+   FormPos(f,mouse.CursorPos.X,mouse.CursorPos.Y);
+   f.Show;
+ end;
+end;
+
 procedure Tf_main.InternalguiderRedraw(Sender: TObject);
 begin
    GuidePlotTimer.Enabled:=true;
@@ -15325,7 +15346,7 @@ begin
   LockGuideTimerPlot:=false;
 end;
 
-procedure Tf_main.GuiderSaveImage1Click(Sender: TObject);
+procedure Tf_main.MenuItemGuiderSaveImageClick(Sender: TObject);
 begin
 if (Guidefits.HeaderInfo.naxis>0) and Guidefits.ImageValid then begin
    if SaveDialogFits.Execute then begin
@@ -15333,6 +15354,35 @@ if (Guidefits.HeaderInfo.naxis>0) and Guidefits.ImageValid then begin
    end;
 end;
 end;
+
+procedure Tf_main.MenuItemGuiderViewHeaderClick(Sender: TObject);
+var f: Tf_viewtext;
+begin
+ if guidefits.HeaderInfo.valid then begin
+   f:=Tf_viewtext.Create(self);
+   f.FormStyle:=fsStayOnTop;
+   f.Caption:=rsFITSHeader;
+   f.Memo1.Lines:=guidefits.Header.Rows;
+   FormPos(f,mouse.CursorPos.X,mouse.CursorPos.Y);
+   f.Show;
+ end;
+end;
+
+procedure Tf_main.MenuItemGuiderViewStatisticsClick(Sender: TObject);
+var f: Tf_viewtext;
+begin
+ if guidefits.HeaderInfo.valid and guidefits.ImageValid then begin
+   f:=Tf_viewtext.Create(self);
+   f.FormStyle:=fsStayOnTop;
+   f.Width:=DoScaleX(250);
+   f.Height:=DoScaleY(250);
+   f.Caption:=rsImageStatist;
+   f.Memo1.Text:=guidefits.GetStatistics;
+   FormPos(f,mouse.CursorPos.X,mouse.CursorPos.Y);
+   f.Show;
+ end;
+end;
+
 
 end.
 

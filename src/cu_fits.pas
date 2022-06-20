@@ -143,7 +143,6 @@ type
     FFitsInfo : TFitsInfo;
     //
     n_plane,Fwidth,Fheight,Fhdr_end,colormode,Fpreview_axis : Integer;
-    FTitle : string;
     Fmean,Fsigma,FFlatLevel : double;
     FVisuMin, FVisuMax: Word;
     FStreamValid,FImageValid: Boolean;
@@ -218,7 +217,6 @@ type
      procedure LoadDark(fn: string);
      function dateobs: double;
      property IntfImg: TLazIntfImage read FIntfImg;
-     property Title : string read FTitle write FTitle;
      Property HeaderInfo : TFitsInfo read FFitsInfo;
      property Header: TFitsHeader read FHeader write FHeader;
      Property Stream : TMemoryStream read GetStream write SetStream;

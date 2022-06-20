@@ -791,6 +791,10 @@ object f_internalguider: Tf_internalguider
   object PopupMenuDark: TPopupMenu
     Left = 276
     Top = 57
+    object MenuItemDarkInfo: TMenuItem
+      Caption = 'MenuItemDarkInfo'
+      OnClick = MenuItemDarkInfoClick
+    end
     object MenuItemCaptureDark: TMenuItem
       Caption = 'MenuItemCaptureDark'
       OnClick = MenuItemCaptureDarkClick
