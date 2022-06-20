@@ -5178,3 +5178,71 @@ msgstr ""
 msgid "To use the Internal autoguider you need to configure a Mount and a Guide camera in the profile Devices setup"
 msgstr ""
 
+#: u_translation:rsactualfocall
+msgid "Actual focal length"
+msgstr ""
+
+#: u_translation:rsguider
+msgid "Guider"
+msgstr ""
+
+#: u_translation:rsadvanced
+msgid "Advanced"
+msgstr ""
+
+#: u_translation:rshysteresis
+msgid "Hysteresis"
+msgstr ""
+
+#: u_translation:rsdark
+msgid "Dark"
+msgstr ""
+
+#: u_translation:rsgamma
+msgid "Gamma"
+msgstr ""
+
+#: u_translation:rsluminosity
+msgid "Luminosity"
+msgstr ""
+
+#: u_translation:rscalibrationr
+msgid "Calibration results:"
+msgstr ""
+
+#: u_translation:rscameraangle
+msgid "Camera angle"
+msgstr ""
+
+#: u_translation:rspulsegain
+msgid "pulse gain"
+msgstr ""
+
+#: u_translation:rsmeasuredatew
+msgid "Measured at [E/W]"
+msgstr ""
+
+#: u_translation:rspixelscale
+msgid "Pixel scale"
+msgstr ""
+
+#: u_translation:rsminimum2
+msgid "Minimum"
+msgstr ""
+
+#: u_translation:rsshortestguid
+msgid "Shortest guide pulse"
+msgstr ""
+
+#: u_translation:rsmeasurepixel
+msgid "Measure pixel scale by stop tracking"
+msgstr ""
+
+#: u_translation:rsdisableguidi
+msgid "Disable guiding temporary"
+msgstr ""
+
+#: u_translation:rsguiderimage
+msgid "Guider image"
+msgstr ""
+

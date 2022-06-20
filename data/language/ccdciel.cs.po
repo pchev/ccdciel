@@ -2,15 +2,15 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ccdciel\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-04-15 14:48+0000\n"
+"POT-Creation-Date: 2022-06-20 13:48+0000\n"
 "PO-Revision-Date: 2022-04-18 17:19+0000\n"
 "Last-Translator: Stanislav Holub <Unknown>\n"
 "Language-Team: Czech <cz@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2022-06-03 07:16+0000\n"
-"X-Generator: Launchpad (build 2bd3059e291a17cbaa73ca126a7af375ef8c96e5)\n"
+"X-Launchpad-Export-Date: 2022-06-20 13:52+0000\n"
+"X-Generator: Launchpad (build ae54683eb2eb8ed62cda30dc44e60c5387c78159)\n"
 "Language: cs\n"
 
 #: u_translation.rs2d
@@ -63,6 +63,10 @@ msgstr "Akce"
 msgid "Active target is replaced, restart the sequence"
 msgstr "Aktivní cíl je nahrazen, restartujte sekvenci"
 
+#: u_translation.rsactualfocall
+msgid "Actual focal length"
+msgstr ""
+
 #: u_translation.rsadd
 msgid "Add"
 msgstr "Přidat"
@@ -100,6 +104,10 @@ msgstr "Upravit na okno"
 #: u_translation.rsadministrato
 msgid "administrator"
 msgstr "správce"
+
+#: u_translation.rsadvanced
+msgid "Advanced"
+msgstr ""
 
 #: u_translation.rsaftertelesco
 #, object-pascal-format
@@ -558,6 +566,10 @@ msgstr "Kalibrováno"
 msgid "Calibration %sdelay"
 msgstr "Kalibrace %szpoždění"
 
+#: u_translation.rscalibrationr
+msgid "Calibration results:"
+msgstr ""
+
 #: u_translation.rscalibrator
 msgid "Calibrator"
 msgstr "Kalibrátor"
@@ -581,6 +593,10 @@ msgstr "Kamera a montáž musí být připojeny!"
 #: u_translation.rscameraandrot
 msgid "Camera and rotator must be connected!"
 msgstr "Kamera a rotátor musí být připojeny!"
+
+#: u_translation.rscameraangle
+msgid "Camera angle"
+msgstr ""
 
 #: u_translation.rscameracooler
 #, object-pascal-format
@@ -1069,6 +1085,10 @@ msgstr "Uživatelem určená pozice"
 msgid "Cygwin path"
 msgstr "Cygwinová cesta"
 
+#: u_translation.rsdark
+msgid "Dark"
+msgstr ""
+
 #: u_translation.rsdarkfileload
 msgid "Dark file loaded"
 msgstr "Byl načten dark"
@@ -1206,6 +1226,10 @@ msgstr "Adresář"
 #: u_translation.rsdisable
 msgid "Disable"
 msgstr "Vypnout"
+
+#: u_translation.rsdisableguidi
+msgid "Disable guiding temporary"
+msgstr ""
 
 #: u_translation.rsdisconnect
 msgid "Disconnect"
@@ -1848,6 +1872,10 @@ msgstr "FWMH"
 msgid "Gain"
 msgstr "Zisk"
 
+#: u_translation.rsgamma
+msgid "Gamma"
+msgstr ""
+
 #: u_translation.rsget
 msgid "Get"
 msgstr "Získat"
@@ -1913,6 +1941,14 @@ msgstr "Pointace"
 msgid "Guide camera"
 msgstr ""
 
+#: u_translation.rsguider
+msgid "Guider"
+msgstr ""
+
+#: u_translation.rsguiderimage
+msgid "Guider image"
+msgstr ""
+
 #: u_translation.rsguidersensor
 msgid "Guider sensor;"
 msgstr "Pointační senzor;"
@@ -1970,6 +2006,10 @@ msgstr "Vlhkost vzduchu"
 #, object-pascal-format
 msgid "HYPERBOLA curve fitting focus at %s,  remaining curve fit error %s,  iteration cycles %s"
 msgstr "Zaostření křivky HYPERBOLA %s, zbývající chyba přizpůsobení křivky %s, iterační cykly %s"
+
+#: u_translation.rshysteresis
+msgid "Hysteresis"
+msgstr ""
 
 #: u_translation.rsidle
 msgid "Idle"
@@ -2251,6 +2291,10 @@ msgstr "Cyklus"
 msgid "Low quality image scaling"
 msgstr "Nízká kvalita snímku"
 
+#: u_translation.rsluminosity
+msgid "Luminosity"
+msgstr ""
+
 #: u_translation.rsmagnifyer
 msgid "Magnifier"
 msgstr "Lupa"
@@ -2348,6 +2392,10 @@ msgstr "Průměr:"
 msgid "Mean of images"
 msgstr "Průměr snímků"
 
+#: u_translation.rsmeasuredatew
+msgid "Measured at [E/W]"
+msgstr ""
+
 #: u_translation.rsmeasureen
 msgid "Measure in the East and North"
 msgstr "Měření na Východě a Severu"
@@ -2373,6 +2421,10 @@ msgstr "Měření na nových snímcích"
 #, object-pascal-format
 msgid "Measurement %s pos:%s step:%s hfd:%s peak:%s snr:%s"
 msgstr "Měření %s pos:%s krok:%s hfd:%s špičk:%s snr:%s"
+
+#: u_translation.rsmeasurepixel
+msgid "Measure pixel scale by stop tracking"
+msgstr ""
 
 #: u_translation.rsmeasurewn
 msgid "Measure in the West and North"
@@ -2471,6 +2523,10 @@ msgstr "Min:"
 #: u_translation.rsminimum
 msgid "minimum"
 msgstr "minimum"
+
+#: u_translation.rsminimum2
+msgid "Minimum"
+msgstr ""
 
 #: u_translation.rsminimumobser
 msgid "Minimum observing elevation "
@@ -3066,6 +3122,10 @@ msgstr "%sPočet pixelů:%s"
 msgid "Pixels"
 msgstr "Pixelů"
 
+#: u_translation.rspixelscale
+msgid "Pixel scale"
+msgstr ""
+
 #: u_translation.rspixelsize
 msgid "Pixel size"
 msgstr "Velikost pixelu"
@@ -3308,6 +3368,10 @@ msgstr "Protokol"
 #: u_translation.rspulseduratio
 msgid "Pulse duration"
 msgstr "Doba trvání impulzu"
+
+#: u_translation.rspulsegain
+msgid "pulse gain"
+msgstr ""
 
 #: u_translation.rspythoncomman
 msgid "Python command"
@@ -4058,6 +4122,10 @@ msgstr "ADU pro úroveň černé"
 #: u_translation.rssharpness
 msgid "Sharpness"
 msgstr "Ostrost"
+
+#: u_translation.rsshortestguid
+msgid "Shortest guide pulse"
+msgstr ""
 
 #: u_translation.rsshortexposur
 msgid "Short exposure stacking"

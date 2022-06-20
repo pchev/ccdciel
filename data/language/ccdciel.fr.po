@@ -6,15 +6,15 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ccdciel\n"
 "Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
-"POT-Creation-Date: 2022-04-15 14:48+0000\n"
-"PO-Revision-Date: 2022-04-15 14:53+0000\n"
+"POT-Creation-Date: 2022-06-20 13:48+0000\n"
+"PO-Revision-Date: 2022-06-20 13:51+0000\n"
 "Last-Translator: Patrick Chevalley <Unknown>\n"
 "Language-Team: French <fr@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2022-06-03 07:16+0000\n"
-"X-Generator: Launchpad (build 2bd3059e291a17cbaa73ca126a7af375ef8c96e5)\n"
+"X-Launchpad-Export-Date: 2022-06-20 13:52+0000\n"
+"X-Generator: Launchpad (build ae54683eb2eb8ed62cda30dc44e60c5387c78159)\n"
 
 #: u_translation.rs2d
 msgid "2D"
@@ -66,6 +66,10 @@ msgstr "Action"
 msgid "Active target is replaced, restart the sequence"
 msgstr "L'objet actif est remplacé, relance la séquence"
 
+#: u_translation.rsactualfocall
+msgid "Actual focal length"
+msgstr "Distance focale réelle"
+
 #: u_translation.rsadd
 msgid "Add"
 msgstr "Ajouter"
@@ -103,6 +107,10 @@ msgstr "Ajuster à la fenêtre"
 #: u_translation.rsadministrato
 msgid "administrator"
 msgstr "administrateur"
+
+#: u_translation.rsadvanced
+msgid "Advanced"
+msgstr "Avancé"
 
 #: u_translation.rsaftertelesco
 #, object-pascal-format
@@ -559,6 +567,10 @@ msgstr "Calibré"
 msgid "Calibration %sdelay"
 msgstr "Delai%scalibration"
 
+#: u_translation.rscalibrationr
+msgid "Calibration results:"
+msgstr "Résultat de la calibration"
+
 #: u_translation.rscalibrator
 msgid "Calibrator"
 msgstr "Calibrateur"
@@ -582,6 +594,10 @@ msgstr "La caméra et la monture doivent être connectées!"
 #: u_translation.rscameraandrot
 msgid "Camera and rotator must be connected!"
 msgstr "La caméra et le rotateur doivent être connectés!"
+
+#: u_translation.rscameraangle
+msgid "Camera angle"
+msgstr "Angle de la caméra"
 
 #: u_translation.rscameracooler
 #, object-pascal-format
@@ -1070,6 +1086,10 @@ msgstr "Position personnalisée"
 msgid "Cygwin path"
 msgstr "Dossier de Cygwin"
 
+#: u_translation.rsdark
+msgid "Dark"
+msgstr "Dark"
+
 #: u_translation.rsdarkfileload
 msgid "Dark file loaded"
 msgstr "Fichier noir chargé"
@@ -1207,6 +1227,10 @@ msgstr "Répertoire"
 #: u_translation.rsdisable
 msgid "Disable"
 msgstr "Désactiver"
+
+#: u_translation.rsdisableguidi
+msgid "Disable guiding temporary"
+msgstr "Désactive le guidage temporairement"
 
 #: u_translation.rsdisconnect
 msgid "Disconnect"
@@ -1849,6 +1873,10 @@ msgstr "FWHM"
 msgid "Gain"
 msgstr "Gain"
 
+#: u_translation.rsgamma
+msgid "Gamma"
+msgstr "Gamma"
+
 #: u_translation.rsget
 msgid "Get"
 msgstr "Obtenir"
@@ -1904,7 +1932,7 @@ msgstr "vert"
 
 #: u_translation.rsguid
 msgid "Guid."
-msgstr ""
+msgstr "Guid."
 
 #: u_translation.rsguide
 msgid "Guide"
@@ -1912,7 +1940,15 @@ msgstr "Guidage"
 
 #: u_translation.rsguidecamera
 msgid "Guide camera"
-msgstr ""
+msgstr "Caméra de guidage"
+
+#: u_translation.rsguider
+msgid "Guider"
+msgstr "Guideur"
+
+#: u_translation.rsguiderimage
+msgid "Guider image"
+msgstr "Image guide"
 
 #: u_translation.rsguidersensor
 msgid "Guider sensor;"
@@ -1971,6 +2007,10 @@ msgstr "Humidité"
 #, object-pascal-format
 msgid "HYPERBOLA curve fitting focus at %s,  remaining curve fit error %s,  iteration cycles %s"
 msgstr "Ajustement de la courbe hyperbolique, focus  à %s, erreur restante %s, cycles d'itération %s"
+
+#: u_translation.rshysteresis
+msgid "Hysteresis"
+msgstr "Hystérésis"
 
 #: u_translation.rsidle
 msgid "Idle"
@@ -2135,11 +2175,11 @@ msgstr "Type d'interface"
 
 #: u_translation.rsinternal
 msgid "Internal"
-msgstr ""
+msgstr "Interne"
 
 #: u_translation.rsinternalguid
 msgid "Internal guider"
-msgstr ""
+msgstr "Guideur interne"
 
 #: u_translation.rsinterval
 msgid "Interval"
@@ -2252,6 +2292,10 @@ msgstr "Boucle"
 msgid "Low quality image scaling"
 msgstr "Basse qualité de mise à l'échelle des images"
 
+#: u_translation.rsluminosity
+msgid "Luminosity"
+msgstr "Luminosité"
+
 #: u_translation.rsmagnifyer
 msgid "Magnifier"
 msgstr "Loupe"
@@ -2349,6 +2393,10 @@ msgstr "Moyenne:"
 msgid "Mean of images"
 msgstr "Moyenne des images"
 
+#: u_translation.rsmeasuredatew
+msgid "Measured at [E/W]"
+msgstr "Mesuré à [E/O]"
+
 #: u_translation.rsmeasureen
 msgid "Measure in the East and North"
 msgstr "Mesure à l'est et au nord"
@@ -2374,6 +2422,10 @@ msgstr "Mesure des nouvelles images"
 #, object-pascal-format
 msgid "Measurement %s pos:%s step:%s hfd:%s peak:%s snr:%s"
 msgstr "Mesure %s  pos:%s pas:%s hfd:%s pointe:%s snr:%s"
+
+#: u_translation.rsmeasurepixel
+msgid "Measure pixel scale by stop tracking"
+msgstr "Arrête le suivi pour mesurer l'échelle des pixels"
 
 #: u_translation.rsmeasurewn
 msgid "Measure in the West and North"
@@ -2472,6 +2524,10 @@ msgstr "Min:"
 #: u_translation.rsminimum
 msgid "minimum"
 msgstr "minimum"
+
+#: u_translation.rsminimum2
+msgid "Minimum"
+msgstr "Minimum"
 
 #: u_translation.rsminimumobser
 msgid "Minimum observing elevation "
@@ -3067,6 +3123,10 @@ msgstr "%sNombre de pixels:%s"
 msgid "Pixels"
 msgstr "Pixels"
 
+#: u_translation.rspixelscale
+msgid "Pixel scale"
+msgstr "Echelle des pixels"
+
 #: u_translation.rspixelsize
 msgid "Pixel size"
 msgstr "Taille des pixels"
@@ -3309,6 +3369,10 @@ msgstr "Protocole"
 #: u_translation.rspulseduratio
 msgid "Pulse duration"
 msgstr "Durée d'impulsion"
+
+#: u_translation.rspulsegain
+msgid "pulse gain"
+msgstr "gain d'impulsion"
 
 #: u_translation.rspythoncomman
 msgid "Python command"
@@ -4059,6 +4123,10 @@ msgstr "ADU des ombres"
 #: u_translation.rssharpness
 msgid "Sharpness"
 msgstr "Netteté"
+
+#: u_translation.rsshortestguid
+msgid "Shortest guide pulse"
+msgstr "Plus petite impulsion de guidage"
 
 #: u_translation.rsshortexposur
 msgid "Short exposure stacking"
@@ -4943,11 +5011,11 @@ msgstr "Erreur polaire totale:"
 
 #: u_translation.rstousetheinte
 msgid "To use the Internal autoguider you need to configure a Mount and a Guide camera in the profile Devices setup"
-msgstr ""
+msgstr "Pour utiliser l'autoguidage interne, vous devez configurer une monture et une caméra de guidage dans le profil Configuration des périphériques"
 
 #: u_translation.rstousethisdev
 msgid "To use this device, be sure to also configure the Internal Guider in Preferences/Auto-guiding"
-msgstr ""
+msgstr "Pour utiliser ce périphérique, assurez-vous de configurer également le Guideur interne dans Préférences/Auto-guidage"
 
 #: u_translation.rstrack
 msgid "Track"
@@ -5137,7 +5205,7 @@ msgstr "Utilise le focuseur"
 
 #: u_translation.rsuseguidecamera
 msgid "Use guide camera"
-msgstr ""
+msgstr "Utilise la caméra de guidage"
 
 #: u_translation.rsusemount
 msgid "Use mount"

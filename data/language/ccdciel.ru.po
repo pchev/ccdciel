@@ -6,15 +6,15 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ccdciel\n"
 "Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
-"POT-Creation-Date: 2022-04-15 14:48+0000\n"
+"POT-Creation-Date: 2022-06-20 13:48+0000\n"
 "PO-Revision-Date: 2022-03-05 19:36+0000\n"
 "Last-Translator: Sergey Tarantsov <tsn-ast@yandex.ru>\n"
 "Language-Team: Russian <ru@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2022-06-03 07:16+0000\n"
-"X-Generator: Launchpad (build 2bd3059e291a17cbaa73ca126a7af375ef8c96e5)\n"
+"X-Launchpad-Export-Date: 2022-06-20 13:52+0000\n"
+"X-Generator: Launchpad (build ae54683eb2eb8ed62cda30dc44e60c5387c78159)\n"
 
 #: u_translation.rs2d
 msgid "2D"
@@ -66,6 +66,10 @@ msgstr "Действие"
 msgid "Active target is replaced, restart the sequence"
 msgstr "Активный объект заменён, перезапустите задание"
 
+#: u_translation.rsactualfocall
+msgid "Actual focal length"
+msgstr ""
+
 #: u_translation.rsadd
 msgid "Add"
 msgstr "Добавить"
@@ -103,6 +107,10 @@ msgstr "Подогнать к окну"
 #: u_translation.rsadministrato
 msgid "administrator"
 msgstr "администратор"
+
+#: u_translation.rsadvanced
+msgid "Advanced"
+msgstr ""
 
 #: u_translation.rsaftertelesco
 #, object-pascal-format
@@ -559,6 +567,10 @@ msgstr "Откалибровано"
 msgid "Calibration %sdelay"
 msgstr "Задержка%sкалибровки"
 
+#: u_translation.rscalibrationr
+msgid "Calibration results:"
+msgstr ""
+
 #: u_translation.rscalibrator
 msgid "Calibrator"
 msgstr "Калибратор"
@@ -582,6 +594,10 @@ msgstr "Камера и монтировка должны быть подклю�
 #: u_translation.rscameraandrot
 msgid "Camera and rotator must be connected!"
 msgstr "Камера и ротатор должны быть подключены!"
+
+#: u_translation.rscameraangle
+msgid "Camera angle"
+msgstr ""
 
 #: u_translation.rscameracooler
 #, object-pascal-format
@@ -1070,6 +1086,10 @@ msgstr ""
 msgid "Cygwin path"
 msgstr "Папка Cygwin"
 
+#: u_translation.rsdark
+msgid "Dark"
+msgstr ""
+
 #: u_translation.rsdarkfileload
 msgid "Dark file loaded"
 msgstr "Дарк загружен"
@@ -1207,6 +1227,10 @@ msgstr "Папка"
 #: u_translation.rsdisable
 msgid "Disable"
 msgstr "Отключить"
+
+#: u_translation.rsdisableguidi
+msgid "Disable guiding temporary"
+msgstr ""
 
 #: u_translation.rsdisconnect
 msgid "Disconnect"
@@ -1849,6 +1873,10 @@ msgstr "FWHM"
 msgid "Gain"
 msgstr "Усиление"
 
+#: u_translation.rsgamma
+msgid "Gamma"
+msgstr ""
+
 #: u_translation.rsget
 msgid "Get"
 msgstr "Получить"
@@ -1914,6 +1942,14 @@ msgstr "Гидирование"
 msgid "Guide camera"
 msgstr ""
 
+#: u_translation.rsguider
+msgid "Guider"
+msgstr ""
+
+#: u_translation.rsguiderimage
+msgid "Guider image"
+msgstr ""
+
 #: u_translation.rsguidersensor
 msgid "Guider sensor;"
 msgstr "Сенсор гида;"
@@ -1971,6 +2007,10 @@ msgstr "Влажность"
 #, object-pascal-format
 msgid "HYPERBOLA curve fitting focus at %s,  remaining curve fit error %s,  iteration cycles %s"
 msgstr "Приблизительный фокус в позиции %s, ошибка кривой %s, итераций %s"
+
+#: u_translation.rshysteresis
+msgid "Hysteresis"
+msgstr ""
 
 #: u_translation.rsidle
 msgid "Idle"
@@ -2252,6 +2292,10 @@ msgstr "Цикл"
 msgid "Low quality image scaling"
 msgstr "Понизить качество изображений"
 
+#: u_translation.rsluminosity
+msgid "Luminosity"
+msgstr ""
+
 #: u_translation.rsmagnifyer
 msgid "Magnifier"
 msgstr "Увеличитель"
@@ -2349,6 +2393,10 @@ msgstr "Mean:"
 msgid "Mean of images"
 msgstr "Среднее"
 
+#: u_translation.rsmeasuredatew
+msgid "Measured at [E/W]"
+msgstr ""
+
 #: u_translation.rsmeasureen
 msgid "Measure in the East and North"
 msgstr ""
@@ -2374,6 +2422,10 @@ msgstr "Измерения на новых снимках"
 #, object-pascal-format
 msgid "Measurement %s pos:%s step:%s hfd:%s peak:%s snr:%s"
 msgstr "Измерение %s POS:%s STEP:%s HFD:%s PEAK:%s SNR:%s"
+
+#: u_translation.rsmeasurepixel
+msgid "Measure pixel scale by stop tracking"
+msgstr ""
 
 #: u_translation.rsmeasurewn
 msgid "Measure in the West and North"
@@ -2472,6 +2524,10 @@ msgstr "Min:"
 #: u_translation.rsminimum
 msgid "minimum"
 msgstr "минимум"
+
+#: u_translation.rsminimum2
+msgid "Minimum"
+msgstr ""
 
 #: u_translation.rsminimumobser
 msgid "Minimum observing elevation "
@@ -3067,6 +3123,10 @@ msgstr "%sPixel count:%s"
 msgid "Pixels"
 msgstr "пикс"
 
+#: u_translation.rspixelscale
+msgid "Pixel scale"
+msgstr ""
+
 #: u_translation.rspixelsize
 msgid "Pixel size"
 msgstr "Размер пикселя"
@@ -3309,6 +3369,10 @@ msgstr "Протокол"
 #: u_translation.rspulseduratio
 msgid "Pulse duration"
 msgstr "Импульс"
+
+#: u_translation.rspulsegain
+msgid "pulse gain"
+msgstr ""
 
 #: u_translation.rspythoncomman
 msgid "Python command"
@@ -4059,6 +4123,10 @@ msgstr "Тени ADU"
 #: u_translation.rssharpness
 msgid "Sharpness"
 msgstr "Резкость"
+
+#: u_translation.rsshortestguid
+msgid "Shortest guide pulse"
+msgstr ""
 
 #: u_translation.rsshortexposur
 msgid "Short exposure stacking"

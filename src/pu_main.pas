@@ -2198,7 +2198,7 @@ begin
    MenuItemCleanup2.Caption:=rsImageCleanup;
    MenuItemUnselect.Caption:=rsUnselectStar;
    MenuItemUnselect2.Caption:=rsUnselectStar;
-   MenuItemGuiderImage.Caption:='Guider image';
+   MenuItemGuiderImage.Caption:=rsGuiderImage;
    MenuItemGuiderSaveImage.Caption:=Format(rsSaveFITSFile, [ellipsis]);
    MenuItemGuiderViewHeader.Caption:=rsViewHeader;
    MenuItemGuiderViewStatistics.Caption:=rsImageStatist;
@@ -2226,6 +2226,7 @@ begin
    TBCapture.Hint := rsCapture;
    TBSequence.Hint := rsSequence;
    TBVideo.Hint := rsVideo;
+   TBInternalGuider.Hint := rsInternalGuid;
    SafetyActionName[0]:='';
    SafetyActionName[1]:=trim(rsShowPrompt);
    SafetyActionName[2]:=trim(rsAbortTheCurr);

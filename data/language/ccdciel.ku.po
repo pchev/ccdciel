@@ -6,15 +6,15 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ccdciel\n"
 "Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
-"POT-Creation-Date: 2022-04-15 14:48+0000\n"
+"POT-Creation-Date: 2022-06-20 13:48+0000\n"
 "PO-Revision-Date: 2021-08-31 20:35+0000\n"
 "Last-Translator: Patrick Chevalley <Unknown>\n"
 "Language-Team: Kurdish <ku@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2022-06-03 07:16+0000\n"
-"X-Generator: Launchpad (build 2bd3059e291a17cbaa73ca126a7af375ef8c96e5)\n"
+"X-Launchpad-Export-Date: 2022-06-20 13:52+0000\n"
+"X-Generator: Launchpad (build ae54683eb2eb8ed62cda30dc44e60c5387c78159)\n"
 
 #: u_translation.rs2d
 msgid "2D"
@@ -66,6 +66,10 @@ msgstr ""
 msgid "Active target is replaced, restart the sequence"
 msgstr ""
 
+#: u_translation.rsactualfocall
+msgid "Actual focal length"
+msgstr ""
+
 #: u_translation.rsadd
 msgid "Add"
 msgstr ""
@@ -102,6 +106,10 @@ msgstr ""
 
 #: u_translation.rsadministrato
 msgid "administrator"
+msgstr ""
+
+#: u_translation.rsadvanced
+msgid "Advanced"
 msgstr ""
 
 #: u_translation.rsaftertelesco
@@ -559,6 +567,10 @@ msgstr ""
 msgid "Calibration %sdelay"
 msgstr ""
 
+#: u_translation.rscalibrationr
+msgid "Calibration results:"
+msgstr ""
+
 #: u_translation.rscalibrator
 msgid "Calibrator"
 msgstr ""
@@ -581,6 +593,10 @@ msgstr ""
 
 #: u_translation.rscameraandrot
 msgid "Camera and rotator must be connected!"
+msgstr ""
+
+#: u_translation.rscameraangle
+msgid "Camera angle"
 msgstr ""
 
 #: u_translation.rscameracooler
@@ -1070,6 +1086,10 @@ msgstr ""
 msgid "Cygwin path"
 msgstr ""
 
+#: u_translation.rsdark
+msgid "Dark"
+msgstr ""
+
 #: u_translation.rsdarkfileload
 msgid "Dark file loaded"
 msgstr ""
@@ -1206,6 +1226,10 @@ msgstr ""
 
 #: u_translation.rsdisable
 msgid "Disable"
+msgstr ""
+
+#: u_translation.rsdisableguidi
+msgid "Disable guiding temporary"
 msgstr ""
 
 #: u_translation.rsdisconnect
@@ -1849,6 +1873,10 @@ msgstr ""
 msgid "Gain"
 msgstr ""
 
+#: u_translation.rsgamma
+msgid "Gamma"
+msgstr ""
+
 #: u_translation.rsget
 msgid "Get"
 msgstr ""
@@ -1914,6 +1942,14 @@ msgstr ""
 msgid "Guide camera"
 msgstr ""
 
+#: u_translation.rsguider
+msgid "Guider"
+msgstr ""
+
+#: u_translation.rsguiderimage
+msgid "Guider image"
+msgstr ""
+
 #: u_translation.rsguidersensor
 msgid "Guider sensor;"
 msgstr ""
@@ -1970,6 +2006,10 @@ msgstr ""
 #: u_translation.rshyperbolacur
 #, object-pascal-format
 msgid "HYPERBOLA curve fitting focus at %s,  remaining curve fit error %s,  iteration cycles %s"
+msgstr ""
+
+#: u_translation.rshysteresis
+msgid "Hysteresis"
 msgstr ""
 
 #: u_translation.rsidle
@@ -2252,6 +2292,10 @@ msgstr "Dubareya Bêdawîn"
 msgid "Low quality image scaling"
 msgstr ""
 
+#: u_translation.rsluminosity
+msgid "Luminosity"
+msgstr ""
+
 #: u_translation.rsmagnifyer
 msgid "Magnifier"
 msgstr ""
@@ -2349,6 +2393,10 @@ msgstr ""
 msgid "Mean of images"
 msgstr ""
 
+#: u_translation.rsmeasuredatew
+msgid "Measured at [E/W]"
+msgstr ""
+
 #: u_translation.rsmeasureen
 msgid "Measure in the East and North"
 msgstr ""
@@ -2373,6 +2421,10 @@ msgstr ""
 #: u_translation.rsmeasurementp
 #, object-pascal-format
 msgid "Measurement %s pos:%s step:%s hfd:%s peak:%s snr:%s"
+msgstr ""
+
+#: u_translation.rsmeasurepixel
+msgid "Measure pixel scale by stop tracking"
 msgstr ""
 
 #: u_translation.rsmeasurewn
@@ -2471,6 +2523,10 @@ msgstr ""
 
 #: u_translation.rsminimum
 msgid "minimum"
+msgstr ""
+
+#: u_translation.rsminimum2
+msgid "Minimum"
 msgstr ""
 
 #: u_translation.rsminimumobser
@@ -3067,6 +3123,10 @@ msgstr ""
 msgid "Pixels"
 msgstr ""
 
+#: u_translation.rspixelscale
+msgid "Pixel scale"
+msgstr ""
+
 #: u_translation.rspixelsize
 msgid "Pixel size"
 msgstr ""
@@ -3308,6 +3368,10 @@ msgstr ""
 
 #: u_translation.rspulseduratio
 msgid "Pulse duration"
+msgstr ""
+
+#: u_translation.rspulsegain
+msgid "pulse gain"
 msgstr ""
 
 #: u_translation.rspythoncomman
@@ -4058,6 +4122,10 @@ msgstr ""
 
 #: u_translation.rssharpness
 msgid "Sharpness"
+msgstr ""
+
+#: u_translation.rsshortestguid
+msgid "Shortest guide pulse"
 msgstr ""
 
 #: u_translation.rsshortexposur

@@ -1399,6 +1399,22 @@ resourcestring
   rsToUseThisDev = 'To use this device, be sure to also configure the Internal Guider in Preferences/Auto-guiding';
   rsToUseTheInte = 'To use the Internal autoguider you need to configure a Mount and a Guide camera in the profile Devices setup';
   rsActualFocalL = 'Actual focal length';
+  rsGuider = 'Guider';
+  rsAdvanced = 'Advanced';
+  rsHysteresis = 'Hysteresis';
+  rsDark = 'Dark';
+  rsGamma = 'Gamma';
+  rsLuminosity = 'Luminosity';
+  rsCalibrationR = 'Calibration results:';
+  rsCameraAngle = 'Camera angle';
+  rsPulseGain = 'pulse gain';
+  rsMeasuredAtEW = 'Measured at [E/W]';
+  rsPixelScale = 'Pixel scale';
+  rsMinimum2 = 'Minimum';
+  rsShortestGuid = 'Shortest guide pulse';
+  rsMeasurePixel = 'Measure pixel scale by stop tracking';
+  rsDisableGuidi = 'Disable guiding temporary';
+  rsGuiderImage = 'Guider image';
 
 implementation
 
