@@ -427,7 +427,8 @@ begin
     if star_counter>0 then
     begin
       mean_hfd:=mean_hfd/star_counter;
-      WriteLog('INFO: SETTLING STATE CHANGE, HFD='+floattostrF(mean_hfd,FFgeneral,3,3));
+      WriteLog('INFO: SETTLING STATE CHANGE, Star(s)='+inttostr(star_counter)+', HFD='+floattostrF(mean_hfd,FFgeneral,3,3));
+      msg(inttostr(star_counter)+' guide stars used',3);
     end;
   end
   else
@@ -472,9 +473,7 @@ begin
     msg('No stars detected!',1);
     initialize:=true;// Return initialize=true for fresh restart next call.
     exit;
-  end
-  else
-    msg(inttostr(star_counter)+' guide stars used',3);
+  end;
 
   // calculate movement in each area
   counter:=0;
@@ -739,7 +738,7 @@ begin
        pulseRA:=min(max_duration,round(1000*abs(moveRA2/finternalguider.pulsegainEast))); {duration msec}
        if pulseRA>finternalguider.shortestPulse then //Large enough correction to follow by motors/relays. Complementary with minimum_move
        begin
-         msg('East: '+inttostr(pulseRA),3);
+         //msg('East: '+inttostr(pulseRA),3);
          mount.PulseGuide(2,pulseRA);  // 0=north, 1=south, 2 East, 3 West
          RADuration:=abs(pulseRA);
          RADirection:='E';
@@ -752,7 +751,7 @@ begin
       pulseRA:=min(max_duration,round(1000*abs(moveRA2/finternalguider.pulsegainWest))); {duration msec}
       if pulseRA>finternalguider.shortestPulse then
       begin
-        msg('West: '+inttostr(pulseRA),3);
+        //msg('West: '+inttostr(pulseRA),3);
         mount.PulseGuide(3,pulseRA);  // 0=north, 1=south, 2 East, 3 West
         RADuration:=abs(pulseRA);
         RADirection:='W';
@@ -765,7 +764,7 @@ begin
       pulseDEC:=min(max_duration,round(1000*abs(moveDEC/finternalguider.pulsegainNorth))); {duration msec}
       if pulseDEC>finternalguider.shortestPulse then
       begin
-        msg('North: '+inttostr(pulseDEC),3);
+        //msg('North: '+inttostr(pulseDEC),3);
         mount.PulseGuide(0,pulseDEC);  // 0=north, 1=south, 2 East, 3 West
         DECDuration:=abs(pulseDEC);
         DECDirection:='N';
@@ -778,7 +777,7 @@ begin
       pulseDEC:=min(max_duration,round(1000*abs(moveDEC/finternalguider.pulsegainSouth))); {duration msec}
       if pulseDEC>finternalguider.shortestPulse then
       begin
-        msg('South: '+inttostr(pulseDEC),3);
+        //msg('South: '+inttostr(pulseDEC),3);
         mount.PulseGuide(1,pulseDEC);  // 0=north, 1=south, 2 East, 3 West
         DECDuration:=abs(pulseDEC);
         DECDirection:='S';
