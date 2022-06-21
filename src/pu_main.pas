@@ -11245,7 +11245,7 @@ begin
 if (fits.HeaderInfo.naxis>0) and fits.ImageValid then begin
    if SaveDialogPicture.Execute then begin
       fn:=SaveDialogPicture.FileName;
-      fits.SaveToBitmap(fn);
+      fits.SaveToBitmap(fn,f_visu.FlipHorz,f_visu.FlipVert);
    end;
 end;
 end;

@@ -191,7 +191,7 @@ type
      Procedure Debayer;
      procedure GetExpBitmap(var bgra: TExpandedBitmap);
      procedure GetBGRABitmap(var bgra: TBGRABitmap; maxthread:integer=-1);
-     procedure SaveToBitmap(fn: string);
+     procedure SaveToBitmap(fn: string; fliph:boolean=false; flipv:boolean=false);
      procedure SaveAstroTiff(fn: string);
      procedure SaveToFile(fn: string; pack: boolean=false; StackFloat:boolean=false);
      procedure LoadFromFile(fn:string);
@@ -2541,7 +2541,7 @@ begin
   bgra.InvalidateBitmap;
 end;
 
-procedure TFits.SaveToBitmap(fn: string);
+procedure TFits.SaveToBitmap(fn: string; fliph:boolean=false; flipv:boolean=false);
 var expbmp: TExpandedBitmap;
     bgra: TBGRABitmap;
     ext: string;
@@ -2554,6 +2554,8 @@ begin
     // save 16 bit linear image
     expbmp:=TExpandedBitmap.Create;
     GetExpBitmap(expbmp);
+    if fliph then expbmp.HorizontalFlip;
+    if flipv then expbmp.VerticalFlip;
     expbmp.SaveToFile(fn);
     expbmp.Free;
   end
@@ -2561,6 +2563,8 @@ begin
     //save 8 bit stretched image
     bgra:=TBGRABitmap.Create;
     GetBGRABitmap(bgra);
+    if fliph then bgra.HorizontalFlip;
+    if flipv then bgra.VerticalFlip;
     bgra.SaveToFile(fn);
     bgra.Free;
   end;
