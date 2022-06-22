@@ -85,8 +85,6 @@ object f_autoguider: Tf_autoguider
         Height = 25
         Top = 0
         Width = 90
-        Align = alLeft
-        BorderSpacing.Right = 4
         Caption = 'Connect'
         OnClick = BtnConnectClick
         ParentFont = False
@@ -97,7 +95,6 @@ object f_autoguider: Tf_autoguider
         Height = 25
         Top = 0
         Width = 90
-        Align = alLeft
         Caption = 'Calibrate'
         OnClick = BtnCalClick
         ParentFont = False
@@ -120,8 +117,6 @@ object f_autoguider: Tf_autoguider
         Height = 25
         Top = 0
         Width = 90
-        Align = alLeft
-        BorderSpacing.Right = 4
         Caption = 'Guide'
         OnClick = BtnGuideClick
         ParentFont = False
@@ -132,7 +127,6 @@ object f_autoguider: Tf_autoguider
         Height = 25
         Top = 0
         Width = 90
-        Align = alLeft
         Caption = 'Dither'
         OnClick = BtnDitherClick
         ParentFont = False
