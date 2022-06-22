@@ -1858,8 +1858,8 @@ var i: integer;
 begin
   i:=GetAutoguiderType;
   Notebook3.PageIndex:=i;
-  groupbox5.Visible:=(i<2)or(i=3);
-  if (i<2) then begin
+  groupbox5.Visible:=(i<2)or(i=3)or(i=4);
+  if (i<2)or(i=4) then begin
     Label23.Caption:=rsPixels;
     Label122.Caption:='';
   end
@@ -1867,12 +1867,14 @@ begin
     Label23.Caption:=rsPulseDuratio;
     Label122.Caption:=rsS;
   end;
-  panel14.Visible:=(i<>2)and(i<>4);
+  panel14.Visible:=(i<>2);
   GroupBox11.Visible:=(i=3);
-  groupbox6.Visible:=(i=0);
+  groupbox6.Visible:=(i=0)or(i=4);
   groupbox13.Visible:=(i=0);
   GroupBoxDrift.Visible:=(i=0);
-  DitherRAonly.Visible:=(i=0)or(i=3);
+  DitherRAonly.Visible:=(i=0)or(i=3)or(i=4);
+  CalibrationDelay.Visible:=(i=0);
+  label26.Visible:=(i=0);
 end;
 
 function Tf_option.GetAutoguiderType: integer;

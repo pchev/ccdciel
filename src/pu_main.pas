@@ -1278,6 +1278,7 @@ var inif: TIniFile;
 begin
   DefaultFormatSettings.DecimalSeparator:='.';
   DefaultFormatSettings.TimeSeparator:=':';
+  Randomize;
   lclver:=lcl_version;
   compile_time:={$I %DATE%}+' '+{$I %TIME%};
   compile_version:='Lazarus '+lcl_version+' Free Pascal '+{$I %FPCVERSION%}+' '+{$I %FPCTARGETOS%}+'-'+{$I %FPCTARGETCPU%}+'-'+LCLPlatformDirNames[WidgetSet.LCLPlatform];
@@ -4410,6 +4411,7 @@ begin
     autoguider.InternalGuider:=f_internalguider;
     autoguider.GuideBmp:=ImaGuideBmp;
     autoguider.GuideFits:=guidefits;
+    autoguider.SettleTolerance(SettlePixel,SettleMinTime, SettleMaxTime);
     f_sequence.Autoguider:=autoguider;
     f_scriptengine.Autoguider:=autoguider;
     f_script.Autoguider:=autoguider;

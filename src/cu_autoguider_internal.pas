@@ -44,7 +44,8 @@ type
     xy_trend : xy_guiderlist;{fu_internalguider}
     xy_array,xy_array_old : star_position_array;//internal guider for measure drift
     GuideLog: TextFile;
-
+    FPaused, FSettling, FSettlingInRange: boolean;
+    FSettleStartTime, FSettleTime: double;
     function  measure_drift(var initialize: boolean; out drX,drY :double) : integer;
     Procedure StartGuideExposure;
     procedure InternalguiderStartAsync(Data: PtrInt);
@@ -58,6 +59,7 @@ type
     procedure Execute; override;
     procedure Terminate;
     procedure StarLostTimerTimer(Sender: TObject); override;
+    procedure StartSettle;
   public
     Constructor Create;
     Destructor Destroy; override;
@@ -89,6 +91,51 @@ const
    nrpointsTrend=50; //number of trend points plotted
    max_duration=2500;//max duration guide puls in milliseconds
 
+procedure mad_median(list: array of double;leng :integer;out mad,median :double);{calculate mad and median without modifying the data}
+var  {idea from https://eurekastatistics.com/using-the-median-absolute-deviation-to-find-outliers/}
+  i        : integer;
+  list2: array of double;
+begin
+  setlength(list2,leng);
+  for i:=0 to leng-1 do list2[i]:=list[i];{copy magn offset data}
+  median:=Smedian(list2,leng);
+  for i:=0 to leng-1 do list2[i]:=abs(list[i] - median);{fill list2 with offsets}
+  mad:=Smedian(list2,leng); //median absolute deviation (MAD)
+  list2:=nil;
+end;
+
+
+procedure get_best_mean(list: array of double; leng : integer; out mean : double);{Remove outliers from polulation using MAD. }
+var  {idea from https://eurekastatistics.com/using-the-median-absolute-deviation-to-find-outliers/}
+  i,count         : integer;
+  median, mad     : double;
+
+begin
+ if leng=1 then begin mean:=list[0];exit end
+ else
+ if leng=2 then begin mean:=(list[0]+list[1])/2;exit end;
+ mad_median(list,leng,mad,median);{calculate mad and median without modifying the data}
+ count:=0;
+ mean:=0;
+ for i:=0 to leng-1 do
+   if abs(list[i]-median)<1.50*1.4826*mad then {offset less the 1.5*sigma.}
+   begin
+     mean:=mean+list[i];{Calculate mean. This gives a little less noise then calculating median again. Note weighted mean gives poorer result and is not applied.}
+     inc(count);
+   end;
+ if count>0 then  mean:=mean/count;  {mean without using outliers}
+end;
+
+
+procedure rotate2(rot,x,y :double;out  x2,y2:double);{rotate a vector point CCW}
+var
+  sin_rot, cos_rot :double;
+begin
+  sincos(rot, sin_rot, cos_rot);
+  x2:=x * cos_rot - y*sin_rot;
+  y2:=x * sin_rot + y*cos_rot;
+end;
+
 Constructor T_autoguider_internal.Create ;
 begin
   inherited Create;
@@ -96,6 +143,11 @@ begin
   FStatus:=rsInternal;
   FState:=GUIDER_IDLE;
   FRunning:=true;
+  FPaused:=false;
+  FSettling:=false;
+  FSettlePix:=1;
+  FSettleTmin:=5;
+  FSettleTmax:=30;
   InitLog;
   StopInternalguider:=true;
   InternalguiderRunning:=false;
@@ -149,7 +201,9 @@ end;
 
 procedure T_autoguider_internal.SettleTolerance(pixel:double; mintime,maxtime: integer);
 begin
-  { #todo : dither }
+  FSettlePix:=pixel;
+  FSettleTmin:=mintime;
+  FSettleTmax:=maxtime;
 end;
 
 function T_autoguider_internal.WaitBusy(maxwait:integer=5):boolean;
@@ -217,14 +271,59 @@ begin
   end;
 end;
 
+procedure T_autoguider_internal.StartSettle;
+begin
+  if InternalguiderGuiding then begin
+    FSettling:=true;
+    FSettlingInRange:=false;
+    FSettleTime:=MaxDouble;
+    FSettleStartTime:=now;
+    SetStatus('Settling',GUIDER_BUSY);
+    WriteLog('INFO: SETTLING STATE CHANGE, Settling started');
+    WaitGuiding(FSettleTmax+5);
+  end;
+end;
+
 procedure T_autoguider_internal.Pause(onoff:boolean; settle:boolean=true);
 begin
-  { #todo : guide pause }
+  if onoff then begin
+    if FState=GUIDER_GUIDING then begin
+      FPaused:=true;
+      SetStatus('Paused',GUIDER_IDLE);
+      WriteLog('INFO: Server received PAUSE');
+
+    end;
+  end else begin
+    FPaused:=false;
+    if InternalguiderGuiding then begin
+      WriteLog('INFO: Server received RESUME');
+      StartSettle;
+    end;
+  end;
 end;
 
 procedure T_autoguider_internal.Dither(pixel:double; raonly:boolean; waittime:double);
+var d,dra,ddec,ditherx,dithery,mflipcorr: double;
+    i: integer;
 begin
-  { #todo : dither }
+  if InternalguiderGuiding and (not InternalguiderInitialize) then begin
+    dra:=(2*random-1)*pixel; // in pixel
+    if raonly then
+      ddec:=0
+    else
+      ddec:=(2*random-1)*pixel;
+    if (mount.PierSide=pierWest) <> (pos('E',finternalguider.pier_side)>0) then // Did a meridian flip occur since calibration.
+      mflipcorr:=180 // A meridian flip occurred
+    else
+      mflipcorr:=0;
+    rotate2(((finternalguider.PA+mflipcorr)*pi/180),dra,ddec, ditherx,dithery);{rotate a vector point, counter clockwise}
+    WriteLog('INFO: DITHER by '+FormatFloat(f3,ditherx)+', '+FormatFloat(f3,dithery));
+    for i:=0 to length(xy_array_old)-1 do begin
+      xy_array_old[i].x1:=xy_array_old[i].x1+ditherx;
+      xy_array_old[i].y1:=xy_array_old[i].y1+dithery;
+    end;
+    StartSettle;
+  end;
 end;
 
 procedure T_autoguider_internal.StarLostTimerTimer(Sender: TObject);
@@ -291,55 +390,6 @@ begin
   end;
 end;
 
-/////////////////////////////////////////////////////////////////////////////////////////
-
-
-procedure mad_median(list: array of double;leng :integer;out mad,median :double);{calculate mad and median without modifying the data}
-var  {idea from https://eurekastatistics.com/using-the-median-absolute-deviation-to-find-outliers/}
-  i        : integer;
-  list2: array of double;
-begin
-  setlength(list2,leng);
-  for i:=0 to leng-1 do list2[i]:=list[i];{copy magn offset data}
-  median:=Smedian(list2,leng);
-  for i:=0 to leng-1 do list2[i]:=abs(list[i] - median);{fill list2 with offsets}
-  mad:=Smedian(list2,leng); //median absolute deviation (MAD)
-  list2:=nil;
-end;
-
-
-procedure get_best_mean(list: array of double; leng : integer; out mean : double);{Remove outliers from polulation using MAD. }
-var  {idea from https://eurekastatistics.com/using-the-median-absolute-deviation-to-find-outliers/}
-  i,count         : integer;
-  median, mad     : double;
-
-begin
- if leng=1 then begin mean:=list[0];exit end
- else
- if leng=2 then begin mean:=(list[0]+list[1])/2;exit end;
- mad_median(list,leng,mad,median);{calculate mad and median without modifying the data}
- count:=0;
- mean:=0;
- for i:=0 to leng-1 do
-   if abs(list[i]-median)<1.50*1.4826*mad then {offset less the 1.5*sigma.}
-   begin
-     mean:=mean+list[i];{Calculate mean. This gives a little less noise then calculating median again. Note weighted mean gives poorer result and is not applied.}
-     inc(count);
-   end;
- if count>0 then  mean:=mean/count;  {mean without using outliers}
-end;
-
-
-procedure rotate2(rot,x,y :double;out  x2,y2:double);{rotate a vector point CCW}
-var
-  sin_rot, cos_rot :double;
-begin
-  sincos(rot, sin_rot, cos_rot);
-  x2:=x * cos_rot - y*sin_rot;
-  y2:=x * sin_rot + y*cos_rot;
-end;
-
-
 function  T_autoguider_internal.measure_drift(var initialize:boolean; out drX,drY :double) : integer;// ReferenceX,Y indicates the total drift, drX,drY to drift since previouse call. Arrays old_xy_array,xy_array are for storage star positions
 var
   i,j,m,n,fitsx,fitsy,stepsize,xsize,ysize,star_counter,counter,r, rxc,ryc,len,nrtokeep,index,match_counter: integer;
@@ -351,12 +401,6 @@ const
     maxstars=1000;
 begin
   result:=1;// Assume no stars detected
-{  Application.ProcessMessages; if StopInternalguider then
-  begin
-    msg('Guider stop pressed.',1);
-    result:=2;//mark stop with value 2
-    exit;
-  end;  }
   star_counter:=0;
   stepsize:=searchA-overlap;//some overlap
 
@@ -427,7 +471,7 @@ begin
     if star_counter>0 then
     begin
       mean_hfd:=mean_hfd/star_counter;
-      WriteLog('INFO: SETTLING STATE CHANGE, Star(s)='+inttostr(star_counter)+', HFD='+floattostrF(mean_hfd,FFgeneral,3,3));
+      WriteLog('INFO: SET LOCK POSITION, Star(s)='+inttostr(star_counter)+', HFD='+floattostrF(mean_hfd,FFgeneral,3,3));
       msg(inttostr(star_counter)+' guide stars used',3);
     end;
   end
@@ -600,6 +644,7 @@ end;
 procedure T_autoguider_internal.InternalguiderStartAsync(Data: PtrInt); {internal guider}
 var
   i: integer;
+  txt: string;
 begin
   if AllDevicesConnected=false then
   begin
@@ -629,6 +674,7 @@ begin
   SetStatus('Start Guiding',GUIDER_BUSY);
   StopInternalguider:=false;
   InternalguiderGuiding:=true;
+  FPaused:=false;
 
   if Fmount.Tracking=false then
   begin
@@ -658,6 +704,13 @@ begin
   GuideStartTime:=now;
   WriteLog('Guiding Begins at '+FormatDateTime('YYYY-MM-DD HH:NN:SS',GuideStartTime));
   WriteLog('Equipment Profile = '+profile);
+  txt:='Dither = ';
+  if DitherRAonly then
+    txt:=txt+'RA only'
+  else
+    txt:=txt+'both axes';
+  txt:=txt+', Dither scale = '+formatfloat(f3,DitherPixel);
+  WriteLog(txt);
   WriteLog('Pixel scale = '+FormatFloat(f2,Finternalguider.pixel_size)+' arc-sec/px');
   WriteLog('RA Gain = '+IntToStr(Finternalguider.RAgain)+', RA Hyst = '+IntToStr(Finternalguider.RA_hysteresis));
   WriteLog('DEC Gain = '+IntToStr(Finternalguider.DECgain)+', DEC Hyst = '+IntToStr(Finternalguider.DEC_hysteresis));
@@ -671,6 +724,7 @@ begin
   WriteLog('Frame,Time,mount,dx,dy,RARawDistance,DECRawDistance,RAGuideDistance,DECGuideDistance,RADuration,RADirection,DECDuration,DECDirection,XStep,YStep,StarMass,SNR,ErrorCode');
 
   InternalguiderLoop;
+  StartSettle;
 
 end;
 
@@ -678,9 +732,10 @@ procedure T_autoguider_internal.InternalAutoguiding;
 var i,maxpulse: integer;
     RADuration,DECDuration: LongInt;
     RADirection,DECDirection: string;
-    mflipcorr,moveRA2 : double;
+    mflipcorr,moveRA2,dsettle : double;
 
 begin
+ if not FPaused then begin
   finternalguider.draw_xy(xy_trend);//plot xy values
   finternalguider.draw_trend(xy_trend);// plot trends
   for i:=nrpointsTrend-2 downto 0 do {shift values and make place for new values}
@@ -696,6 +751,41 @@ begin
   if InternalguiderInitialize then begin
      SetStatus(StarLostStatus,GUIDER_ALERT);
      exit; //until star(s) detected. If no stars are detected initialize is returned true
+  end;
+
+  // Process settling
+  if FSettling then begin
+     if ((now-FSettleStartTime)*SecsPerDay)<FSettleTmax then begin
+       // check current distance
+       dsettle:=sqrt(driftx*driftx+drifty*drifty);
+       if dsettle<=FSettlePix then begin
+         // distance in range
+         if FSettlingInRange then begin
+           // check for how long we are in range
+           if ((now-FSettleTime)*SecsPerDay)>=FSettleTmin then begin
+             // settling complete
+             FSettling:=false;
+             SetStatus('Guiding',GUIDER_GUIDING);
+             WriteLog('INFO: SETTLING STATE CHANGE, Settling complete');
+           end;
+         end
+         else begin
+           // initialize in range
+           FSettlingInRange:=true;
+           FSettleTime:=now;
+         end;
+       end
+       else begin
+         // no more in range
+         FSettlingInRange:=false;
+       end;
+     end
+     else begin
+       // timeout reach
+       FSettling:=false;
+       SetStatus('Guiding',GUIDER_GUIDING);
+       WriteLog('INFO: SETTLING STATE CHANGE, Settling failed');
+     end;
   end;
 
   // Apply camera orientation and meridian flip if required
@@ -792,8 +882,6 @@ begin
     begin
       WaitPulseGuiding(maxpulse);
     end;
-    if ((maxpulse<200) and (FSTATE<>GUIDER_GUIDING)) then
-                     SetStatus('Guiding',GUIDER_GUIDING);
 
     xy_trend[0,2]:=-moveRA;//store RA correction in pixels for trend
     xy_trend[0,3]:=+moveDEC;//store DEC correction in pixels for trend
@@ -829,6 +917,7 @@ begin
     xy_trend[0,2]:=0;
     xy_trend[0,3]:=0;
   end;
+ end;
 end;
 
 function T_autoguider_internal.WaitPulseGuiding(pulse:longint): boolean;

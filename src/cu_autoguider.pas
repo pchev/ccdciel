@@ -34,7 +34,8 @@ type
   protected
     FTargetHost,FTargetPort,FErrorDesc,FRecvData,FLastError : string;
     FVersion,FMsgVersion,FStatus : String;
-    FSettlePix,FSettleTmin,FSettleTmax: string;
+    FSettleTmin,FSettleTmax: Integer;
+    FSettlePix: double;
     FRunning, FRecovering,FDithering,FStopGuiding: boolean;
     FProgramPath,FProgramName: string;
     FStartedProgram: boolean;
@@ -131,9 +132,9 @@ FTimeout:=500;
 FLastError:='';
 FErrorDesc:='';
 FRecvData:='';
-FSettlePix:='1.0';
-FSettleTmin:='5';
-FSettleTmax:='60';
+FSettlePix:=1.0;
+FSettleTmin:=5;
+FSettleTmax:=60;
 StarLostTimer:=TTimer.Create(nil);
 StarLostTimer.Enabled:=false;
 StarLostTimer.Interval:=10000;

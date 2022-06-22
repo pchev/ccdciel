@@ -4791,7 +4791,7 @@ object f_option: Tf_option
             TabOrder = 1
             object DitherWaitTime: TSpinEdit
               Left = 105
-              Height = 28
+              Height = 27
               Top = 8
               Width = 74
               Constraints.MaxHeight = 28
@@ -4938,10 +4938,13 @@ object f_option: Tf_option
                 ParentFont = False
               end
               object DitherRAonly: TCheckBox
-                Left = 208
+                AnchorSideLeft.Control = Label122
+                AnchorSideLeft.Side = asrBottom
+                Left = 192
                 Height = 21
                 Top = 4
                 Width = 70
+                BorderSpacing.Left = 4
                 Caption = 'RA only'
                 ParentFont = False
                 TabOrder = 0
@@ -4952,7 +4955,7 @@ object f_option: Tf_option
                 Left = 112
                 Height = 28
                 Top = 0
-                Width = 72
+                Width = 68
                 Constraints.MaxHeight = 28
                 Increment = 0.1
                 MaxValue = 99
@@ -4962,12 +4965,15 @@ object f_option: Tf_option
                 Value = 0.1
               end
               object Label122: TLabel
+                AnchorSideLeft.Control = DitherPixel
+                AnchorSideLeft.Side = asrBottom
                 AnchorSideTop.Control = DitherRAonly
                 AnchorSideTop.Side = asrCenter
-                Left = 192
+                Left = 182
                 Height = 19
                 Top = 5
                 Width = 6
+                BorderSpacing.Left = 2
                 Caption = 's'
                 ParentColor = False
                 ParentFont = False

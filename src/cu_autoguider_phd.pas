@@ -496,9 +496,9 @@ end;
 
 procedure T_autoguider_phd.SettleTolerance(pixel:double; mintime,maxtime: integer);
 begin
-FSettlePix:=FormatFloat(f1,pixel);
-FSettleTmin:=IntToStr(mintime);
-FSettleTmax:=IntToStr(maxtime);
+FSettlePix:=pixel;
+FSettleTmin:=mintime;
+FSettleTmax:=maxtime;
 end;
 
 function T_autoguider_phd.WaitBusy(maxwait:integer=5):boolean;
@@ -607,9 +607,9 @@ try
     Wait(2);
     if terminated or FStopGuiding then exit;
     buf:='{"method": "guide", "params": [';
-    buf:=buf+'{"pixels": '+FSettlePix+',';      // settle tolerance
-    buf:=buf+'"time": '+FSettleTmin+',';       // min time
-    buf:=buf+'"timeout": '+FSettleTmax+'},';   // max time
+    buf:=buf+'{"pixels": '+FormatFloat(f1,FSettlePix)+',';      // settle tolerance
+    buf:=buf+'"time": '+IntToStr(FSettleTmin)+',';       // min time
+    buf:=buf+'"timeout": '+IntToStr(FSettleTmax)+'},';   // max time
     if recalibrate then buf:=buf+'true' else buf:=buf+'false';
     buf:=buf+'],';
     buf:=buf+'"id": 2003}';
@@ -640,16 +640,16 @@ begin
     wait(1);
     if settle then begin
       buf:='{"method": "guide", "params": [';
-      buf:=buf+'{"pixels": '+FSettlePix+',';     // settle tolerance
-      buf:=buf+'"time": '+FSettleTmin+',';       // min time
-      buf:=buf+'"timeout": '+FSettleTmax+'},';   // max time
+      buf:=buf+'{"pixels": '+FormatFloat(f1,FSettlePix)+',';     // settle tolerance
+      buf:=buf+'"time": '+IntToStr(FSettleTmin)+',';       // min time
+      buf:=buf+'"timeout": '+IntToStr(FSettleTmax)+'},';   // max time
       buf:=buf+'false';                          // don't calibrate
       buf:=buf+'],';
       buf:=buf+'"id": 2003}';
       Send(buf);
       FStatus:='Settling';
       FState:=GUIDER_BUSY;
-      WaitGuiding(StrToInt(FSettleTmax)+5);
+      WaitGuiding(FSettleTmax+5);
     end;
   end;
 end;
@@ -664,9 +664,9 @@ try
   buf:='{"method": "dither", "params": [';
   buf:=buf+pix+',';                    // pixels
   buf:=buf+rao+',';                    // ra only
-  buf:=buf+'{"pixels": '+FSettlePix+',';      // settle tolerance
-  buf:=buf+'"time": '+FSettleTmin+',';        // min time
-  buf:=buf+'"timeout": '+FSettleTmax+'}],';   // max time
+  buf:=buf+'{"pixels": '+FormatFloat(f1,FSettlePix)+',';      // settle tolerance
+  buf:=buf+'"time": '+IntToStr(FSettleTmin)+',';        // min time
+  buf:=buf+'"timeout": '+IntToStr(FSettleTmax)+'}],';   // max time
   buf:=buf+'"id": 2010}';
   FState:=GUIDER_BUSY;
   FDithering:=true;
