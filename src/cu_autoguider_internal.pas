@@ -529,14 +529,14 @@ begin
     for i:=0 to len-1 do
     begin
       fluxratio:=xy_array_old[i].flux/(xy_array[i].flux+0.001);
-      if  ((fluxratio>0.5) and (fluxratio<2)) then //star flux difference is within 100%
+      if  ((fluxratio>0.5) and (fluxratio<2)) then //star flux is similar
       begin
         drift_arrayX[counter]:=xy_array[i].x2 - xy_array_old[i].x1; //drift in pixels relative to initial measurement x1,y1
         drift_arrayY[counter]:=xy_array[i].y2 - xy_array_old[i].y1;
         inc(counter);
       end;
     end;
-    if counter/star_counter<0.5 then  // second round and 50% of stars are still in the area
+    if counter/star_counter<0.5 then  // second round and less the 50% of stars are detected
       msg('Guider, warning lost track or exposure time changed!',2); //more then 7.5 pixels drift in one cycle
 
     // Remove outliers and calculate mean drift in X and Y.
@@ -546,7 +546,7 @@ begin
 
   for i:=0 to length(xy_array_old)-1 do // copy xy_array to xy_array_old
       xy_array_old[i]:=xy_array[i];
-  initialize:=false;// succes, first data collected
+  initialize:=false;// success, first data collected
   result:=0; // good result
 end;
 
@@ -736,14 +736,18 @@ var i,maxpulse: integer;
 
 begin
  if not FPaused then begin
-  finternalguider.draw_xy(xy_trend);//plot xy values
-  finternalguider.draw_trend(xy_trend);// plot trends
-  for i:=nrpointsTrend-2 downto 0 do {shift values and make place for new values}
-  begin
-   xy_trend[i+1,0]:=xy_trend[i,0];//x value
-   xy_trend[i+1,1]:=xy_trend[i,1];//y value
-   xy_trend[i+1,2]:=xy_trend[i,2];//x correction
-   xy_trend[i+1,3]:=xy_trend[i,3];//y correction
+
+  // Plot graph
+  if not FSettling then begin
+    finternalguider.draw_xy(xy_trend);//plot xy values
+    finternalguider.draw_trend(xy_trend);// plot trends
+    for i:=nrpointsTrend-2 downto 0 do {shift values and make place for new values}
+    begin
+     xy_trend[i+1,0]:=xy_trend[i,0];//x value
+     xy_trend[i+1,1]:=xy_trend[i,1];//y value
+     xy_trend[i+1,2]:=xy_trend[i,2];//x correction
+     xy_trend[i+1,3]:=xy_trend[i,3];//y correction
+    end;
   end;
 
   //Measure drift

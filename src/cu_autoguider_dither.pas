@@ -161,7 +161,7 @@ try
     else begin
        newstate:=GUIDER_ALERT;
        restarttimer:=false;
-       DisplayMessage('Mount do not support pulse guiding');
+       DisplayMessage('Mount does not support pulse guiding');
    end;
   if newstate<>FState then begin
      FState:=newstate;
