@@ -927,7 +927,7 @@ begin
     thesleep:=(min(100,pulse));
     sleep(thesleep);
     dec(pulse,thesleep);
-    if GetCurrentThreadId=MainThreadID then Application.ProcessMessages;
+    CheckSynchronize();
     if StopInternalguider then
     begin
       msg('Guider stop pressed.',3);
