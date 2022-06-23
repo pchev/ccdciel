@@ -37,10 +37,10 @@ type
   private
     InternalguiderInitialize,InternalCalibrationInitialize,GuideLogFileOpen : boolean;
     pulseRA,pulseDEC,GuideFrameCount, InternalguiderCalibrationDirection,InternalguiderCalibrationStep,
-    CalibrationDuration,Calflip,CalCount,Calnrtest  : integer;
+    CalibrationDuration,Calflip,CalCount,Calnrtest           : integer;
     driftX,driftY,driftRA,driftDec,moveRA,moveDEC, Guidethecos,old_moveRA,old_moveDEC,  paEast, paNorth,
     pulsegainEast,pulsegainWest,pulsegainNorth,pulsegainSouth,Calthecos, Caltheangle,CaldriftOld,
-    GuideStartTime,LogSNR,LogFlux,mean_hfd : double;
+    GuideStartTime,LogSNR,LogFlux,mean_hfd,ditherX,ditherY : double;
     xy_trend : xy_guiderlist;{fu_internalguider}
     xy_array,xy_array_old : star_position_array;//internal guider for measure drift
     GuideLog: TextFile;
@@ -303,7 +303,7 @@ begin
 end;
 
 procedure T_autoguider_internal.Dither(pixel:double; raonly:boolean; waittime:double);
-var d,dra,ddec,ditherx,dithery,mflipcorr: double;
+var d,dra,ddec,mflipcorr: double;
     i: integer;
 begin
   if InternalguiderGuiding and (not InternalguiderInitialize) then begin
@@ -316,12 +316,8 @@ begin
       mflipcorr:=180 // A meridian flip occurred
     else
       mflipcorr:=0;
-    rotate2(((finternalguider.PA+mflipcorr)*pi/180),dra,ddec, ditherx,dithery);{rotate a vector point, counter clockwise}
-    WriteLog('INFO: DITHER by '+FormatFloat(f3,ditherx)+', '+FormatFloat(f3,dithery));
-    for i:=0 to length(xy_array_old)-1 do begin
-      xy_array_old[i].x1:=xy_array_old[i].x1+ditherx;
-      xy_array_old[i].y1:=xy_array_old[i].y1+dithery;
-    end;
+    rotate2(((finternalguider.PA+mflipcorr)*pi/180),dra,ddec, ditherX,ditherY);{rotate a vector point, counter clockwise}
+    WriteLog('INFO: DITHER by '+FormatFloat(f3,ditherX)+', '+FormatFloat(f3,ditherY));
     StartSettle;
   end;
 end;
@@ -417,7 +413,11 @@ begin
   ysize:=guidefits.HeaderInfo.naxis2;// height image
 
   if initialize then
+  begin
     setlength(xy_array,maxstars);
+    ditherx:=0;// dither offset
+    dithery:=0;
+  end;
 
   min_SNR:=finternalguider.minSNR;//make local to reduce some CPU load
   min_HFD:=finternalguider.minHFD;//make local to reduce some CPU load
@@ -453,12 +453,6 @@ begin
           rxc:=round(xc);
           ryc:=round(yc);
           FGuideBmp.Canvas.Frame(rxc-r,ryc-r,rxc+r,ryc+r);
-        end
-        else
-        begin //no star in this area
-          xy_array[star_counter].x2:=0;
-          xy_array[star_counter].y2:=0;
-          xy_array[star_counter].flux:=0;
         end;
 
         inc(fitsx,stepsize);
@@ -531,8 +525,8 @@ begin
       fluxratio:=xy_array_old[i].flux/(xy_array[i].flux+0.001);
       if  ((fluxratio>0.5) and (fluxratio<2)) then //star flux is similar
       begin
-        drift_arrayX[counter]:=xy_array[i].x2 - xy_array_old[i].x1; //drift in pixels relative to initial measurement x1,y1
-        drift_arrayY[counter]:=xy_array[i].y2 - xy_array_old[i].y1;
+        drift_arrayX[counter]:=xy_array[i].x2 - xy_array_old[i].x1+ditherX; //drift in pixels relative to initial measurement x1,y1
+        drift_arrayY[counter]:=xy_array[i].y2 - xy_array_old[i].y1+ditherY;
         inc(counter);
       end;
     end;
@@ -801,7 +795,7 @@ begin
 
   if finternalguider.pulsegainNorth<0 then driftDEC:=-driftDEC;//flipped image correction. E.g. an image where north is up and east on the right size.
 
-  xy_trend[0,0]:=-DriftRa;//store RA drift in  pixels.
+  xy_trend[0,0]:=-DriftRa;//store RA drift in pixels.
   xy_trend[0,1]:=+DriftDec;//store DEC drift in pixels.
 
 
