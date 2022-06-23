@@ -217,7 +217,7 @@ begin
            AbortMotion;
          end;
    DomeFlatPositionPark: begin
-           SetPark(True);
+           SetParkInterface(True);
          end;
    DomeFlatPositionHome: begin
            { #todo : set mount home }
