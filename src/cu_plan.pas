@@ -291,7 +291,6 @@ begin
       if words(p.description,'',1,1)='Dawn' then
         FlatWaitDawn:=true;
     end;
-    Wait;
     if not FRunning then exit;
     StepTimeStart:=now;
     msg(Format(rsStartStep, [p.description_str]),1);
