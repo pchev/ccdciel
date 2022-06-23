@@ -8664,6 +8664,7 @@ begin
 
      SetSequenceDir(f_option.SeqDir.Text);
 
+     SaveSettings;
      SaveConfig;
 
      SetOptions;
