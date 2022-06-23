@@ -9673,7 +9673,7 @@ begin
      end;
      if RunningCapture then begin
        StatusBar1.Panels[panelstatus].Text := rsCapture+blank+inttostr(f_capture.SeqCount)+'/'+f_capture.SeqNum.Text+' '+txt;
-       if (i=-4) and EarlyDither and (not camera.AddFrames) and f_capture.CheckBoxDither.Checked and (f_capture.DitherNum>=f_capture.DitherCount.Value) then begin
+       if (i=-4) and (autoguider.AutoguiderType=agPHD) and EarlyDither and (not camera.AddFrames) and f_capture.CheckBoxDither.Checked and (f_capture.DitherNum>=f_capture.DitherCount.Value) then begin
          StatusBar1.Panels[panelstatus].Text:=rsDithering+ellipsis;
          CaptureDither;
        end;

@@ -1875,6 +1875,7 @@ begin
   DitherRAonly.Visible:=(i=0)or(i=3)or(i=4);
   CalibrationDelay.Visible:=(i=0);
   label26.Visible:=(i=0);
+  EarlyDither.Visible:=(i=0);
 end;
 
 function Tf_option.GetAutoguiderType: integer;
