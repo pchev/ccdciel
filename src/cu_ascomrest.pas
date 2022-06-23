@@ -390,7 +390,7 @@ function TAscomRest.Get(method:string; param: string=''; hdr: string=''):TAscomR
    if hdr<>'' then RESTRequest.http.Headers.Add(hdr);
    RESTRequest.method:='GET';
    RESTRequest.Start;
-   WaitForThreadTerminate(RESTRequest.Handle,FTimeout);
+   RESTRequest.WaitFor;
    ok := RESTRequest.ok;
    if ok then begin
      if (RESTRequest.http.ResultCode=200) then begin
@@ -559,7 +559,7 @@ function TAscomRest.GetImagearrayBase64:TMemoryStream;
    RESTRequest.url:=url;
    RESTRequest.method:='GET';
    RESTRequest.Start;
-   WaitForThreadTerminate(RESTRequest.Handle,FTimeout);
+   RESTRequest.WaitFor;
    ok := RESTRequest.ok;
    if ok then begin
      if (RESTRequest.http.ResultCode=200) then begin
@@ -823,7 +823,7 @@ begin
   RESTRequest.url:=url;
   RESTRequest.method:='PUT';
   RESTRequest.Start;
-  WaitForThreadTerminate(RESTRequest.Handle,FTimeout);
+  RESTRequest.WaitFor;
   ok := RESTRequest.ok;
    if ok then begin
     if (RESTRequest.http.ResultCode=200) then begin
@@ -901,7 +901,7 @@ begin
   RESTRequest.url:=url;
   RESTRequest.method:='PUT';
   RESTRequest.Start;
-  WaitForThreadTerminate(RESTRequest.Handle,FTimeout);
+  RESTRequest.WaitFor;
   if method='Connected' then
     FRemoteIP:=RESTRequest.http.Sock.GetRemoteSinIP;
   ok := RESTRequest.ok;
