@@ -1251,6 +1251,7 @@ begin
         FCurrentTarget:=j-1;
         FDawnFlatNow:=true;
         FStopping:=true;
+        msg('Nexttarget 1254',9);
         NextTarget;
         exit;
      end;
@@ -2457,6 +2458,7 @@ begin
         if not TargetForceNext then  // do not mark an interrupted target as complete
           inc(t.repeatdone);
         if (TargetForceNext)or(t.repeatdone>=t.repeatcount) then begin
+           msg('Nexttarget 2461',9);
            NextTarget;
         end
         else begin
@@ -2475,6 +2477,7 @@ begin
         end;
         end
         else begin
+         msg('Nexttarget 2480',9);
          NextTarget;
         end;
       end;
