@@ -9152,6 +9152,11 @@ end;
 
 procedure Tf_main.StartCaptureExposureAsync(Data: PtrInt);
 begin
+  if (autoguider.AutoguiderType=agINTERNAL)and(autoguider.Dithering) then begin
+    CheckSynchronize();
+    Application.QueueAsyncCall(@StartCaptureExposureAsync,0);
+    exit;
+  end;
   StartCaptureExposure(nil);
 end;
 
@@ -9382,6 +9387,10 @@ if (AllDevicesConnected)and(not autofocusing)and(not learningvcurve)and(not f_vi
   if f_capture.CheckBoxDither.Checked and (f_capture.DitherNum>=f_capture.DitherCount.Value) then begin
    if canwait then begin
     CaptureDither;
+    if (autoguider.AutoguiderType=agINTERNAL)and(autoguider.Dithering) then begin
+      Application.QueueAsyncCall(@StartCaptureExposureAsync,0);
+      exit;
+    end;
    end
    else begin
     exit; // cannot start now
@@ -9502,7 +9511,7 @@ begin
   if PrepareCaptureExposure(true) then // do all requirement and check it's OK
      StartCaptureExposureNow
   else begin
-     if f_sequence.Running and (f_sequence.EditingTarget or f_sequence.Restarting) then exit;
+     if (f_sequence.Running and (f_sequence.EditingTarget or f_sequence.Restarting))or((autoguider.AutoguiderType=agINTERNAL)and(autoguider.Dithering)) then exit;
      // not ready to start now
      NewMessage(rsCannotStartC+', '+rsAbort,9);
      f_capture.Stop;

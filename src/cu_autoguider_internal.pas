@@ -280,7 +280,6 @@ begin
     FSettleStartTime:=now;
     SetStatus('Settling',GUIDER_BUSY);
     WriteLog('INFO: SETTLING STATE CHANGE, Settling started');
-    WaitGuiding(FSettleTmax+5);
   end;
 end;
 
@@ -317,6 +316,7 @@ begin
     else
       mflipcorr:=0;
     rotate2(((finternalguider.PA+mflipcorr)*pi/180),dra,ddec, ditherX,ditherY);{rotate a vector point, counter clockwise}
+    FDithering:=true;
     WriteLog('INFO: DITHER by '+FormatFloat(f3,ditherX)+', '+FormatFloat(f3,ditherY));
     StartSettle;
   end;
@@ -763,6 +763,7 @@ begin
            if ((now-FSettleTime)*SecsPerDay)>=FSettleTmin then begin
              // settling complete
              FSettling:=false;
+             FDithering:=false;
              SetStatus('Guiding',GUIDER_GUIDING);
              WriteLog('INFO: SETTLING STATE CHANGE, Settling complete');
            end;
@@ -781,6 +782,7 @@ begin
      else begin
        // timeout reach
        FSettling:=false;
+       FDithering:=false;
        SetStatus('Guiding',GUIDER_GUIDING);
        WriteLog('INFO: SETTLING STATE CHANGE, Settling failed');
      end;
