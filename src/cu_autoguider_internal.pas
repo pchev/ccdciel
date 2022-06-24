@@ -302,8 +302,7 @@ begin
 end;
 
 procedure T_autoguider_internal.Dither(pixel:double; raonly:boolean; waittime:double);
-var d,dra,ddec,mflipcorr: double;
-    i: integer;
+var dra,ddec,mflipcorr: double;
 begin
   if InternalguiderGuiding and (not InternalguiderInitialize) then begin
     dra:=(2*random-1)*pixel; // in pixel
@@ -388,8 +387,8 @@ end;
 
 function  T_autoguider_internal.measure_drift(var initialize:boolean; out drX,drY :double) : integer;// ReferenceX,Y indicates the total drift, drX,drY to drift since previouse call. Arrays old_xy_array,xy_array are for storage star positions
 var
-  i,j,m,n,fitsx,fitsy,stepsize,xsize,ysize,star_counter,counter,r, rxc,ryc,len,nrtokeep,index,match_counter: integer;
-  hfd1,star_fwhm,vmax,bg,bgdev,xc,yc,snr,flux,fluxratio,flux_min,v,value,min_SNR,min_HFD  : double;
+  i,fitsx,fitsy,stepsize,xsize,ysize,star_counter,counter,r, rxc,ryc,len: integer;
+  hfd1,star_fwhm,vmax,bg,bgdev,xc,yc,snr,flux,fluxratio,min_SNR,min_HFD  : double;
   drift_arrayX,drift_arrayY : array of double;
 const
     searchA=28;//square search area
@@ -465,7 +464,7 @@ begin
     if star_counter>0 then
     begin
       mean_hfd:=mean_hfd/star_counter;
-      WriteLog('INFO: SET LOCK POSITION, Star(s)='+inttostr(star_counter)+', HFD='+floattostrF(mean_hfd,FFgeneral,3,3));
+      WriteLog('INFO: Star(s)='+inttostr(star_counter)+', HFD='+floattostrF(mean_hfd,FFgeneral,3,3));
       msg(inttostr(star_counter)+' guide stars used',3);
     end;
   end
@@ -679,13 +678,14 @@ begin
 
   Fmount.GuideRateRa:=0.5*360/(24*60*60);//set pulse gain at 0.5x & 1.5 tracking. Same as calibration
 
-  setlength(xy_trend,nrpointsTrend,4);
+  setlength(xy_trend,nrpointsTrend);
   for i:=0 to nrpointsTrend-1 do {clear}
   begin
-   xy_trend[i,0]:=1E100;//delta ra, 1E100 is an empthy marker
-   xy_trend[i,1]:=0;//delta dec
-   xy_trend[i,2]:=0;//ra correction
-   xy_trend[i,3]:=0 //dec correction
+   xy_trend[i].ra:=1E100;//delta ra, 1E100 is an empthy marker
+   xy_trend[i].dec:=0;//delta dec
+   xy_trend[i].racorr:=0;//ra correction
+   xy_trend[i].deccorr:=0; //dec correction
+   xy_trend[i].dither:=false; //dither
   end;
 
   old_moveRA:=0;
@@ -705,6 +705,7 @@ begin
     txt:=txt+'both axes';
   txt:=txt+', Dither scale = '+formatfloat(f3,DitherPixel);
   WriteLog(txt);
+  WriteLog('Ra = '+FormatFloat(f2,mount.Ra*24/360)+' hr, Dec = '+FormatFloat(f2,mount.Dec)+' Deg');
   WriteLog('Pixel scale = '+FormatFloat(f2,Finternalguider.pixel_size)+' arc-sec/px');
   WriteLog('RA Gain = '+IntToStr(Finternalguider.RAgain)+', RA Hyst = '+IntToStr(Finternalguider.RA_hysteresis));
   WriteLog('DEC Gain = '+IntToStr(Finternalguider.DECgain)+', DEC Hyst = '+IntToStr(Finternalguider.DEC_hysteresis));
@@ -713,7 +714,8 @@ begin
   WriteLog('Shortest guide pulse setting = '+IntToStr(Finternalguider.shortestPulse));
   WriteLog('Minimum HFD setting = '+FormatFloat(f2,Finternalguider.minHFD));
   WriteLog('Minimum SNR setting = '+FormatFloat(f2,Finternalguider.minSNR));
-
+  //Following is required for correct pulse indication. Indicated pulse amplitude=xRate*RADuration. xAngle is not used and only for info.
+  WriteLog('Mount = unknown,,,xAngle = '+FormatFloat(f2,Finternalguider.PA)+', xRate = '+FormatFloat(f2,abs(cos(mount.dec*pi/180)*(Finternalguider.pulsegainEast+Finternalguider.pulsegainWest)/2))+',, yRate = '+FormatFloat(f2,abs((Finternalguider.pulsegainNorth+Finternalguider.pulsegainSouth)/2)));
   WriteLog('');
   WriteLog('Frame,Time,mount,dx,dy,RARawDistance,DECRawDistance,RAGuideDistance,DECGuideDistance,RADuration,RADirection,DECDuration,DECDirection,XStep,YStep,StarMass,SNR,ErrorCode');
 
@@ -736,13 +738,10 @@ begin
     finternalguider.draw_xy(xy_trend);//plot xy values
     finternalguider.draw_trend(xy_trend);// plot trends
     for i:=nrpointsTrend-2 downto 0 do {shift values and make place for new values}
-    begin
-     xy_trend[i+1,0]:=xy_trend[i,0];//x value
-     xy_trend[i+1,1]:=xy_trend[i,1];//y value
-     xy_trend[i+1,2]:=xy_trend[i,2];//x correction
-     xy_trend[i+1,3]:=xy_trend[i,3];//y correction
-    end;
+      xy_trend[i+1]:=xy_trend[i];//move records one position
   end;
+
+  xy_trend[0].dither:=FSettling;
 
   //Measure drift
   if measure_drift(InternalguiderInitialize,driftX,driftY)=2 then exit;// ReferenceX,Y indicates the total drift, driftX,driftY to drift since previous call. Arrays xy_array_old,xy_array are for storage star positions
@@ -797,8 +796,8 @@ begin
 
   if finternalguider.pulsegainNorth<0 then driftDEC:=-driftDEC;//flipped image correction. E.g. an image where north is up and east on the right size.
 
-  xy_trend[0,0]:=-DriftRa;//store RA drift in pixels.
-  xy_trend[0,1]:=+DriftDec;//store DEC drift in pixels.
+  xy_trend[0].ra:=-DriftRa;//store RA drift in pixels.
+  xy_trend[0].dec:=+DriftDec;//store DEC drift in pixels.
 
 
 
@@ -883,8 +882,8 @@ begin
       WaitPulseGuiding(maxpulse);
     end;
 
-    xy_trend[0,2]:=-moveRA;//store RA correction in pixels for trend
-    xy_trend[0,3]:=+moveDEC;//store DEC correction in pixels for trend
+    xy_trend[0].racorr:=-moveRA;//store RA correction in pixels for trend
+    xy_trend[0].deccorr:=+moveDEC;//store DEC correction in pixels for trend
 
 
     if InternalguiderRunning then begin
@@ -898,7 +897,7 @@ begin
                FormatFloat(f3,driftY)+','+
                FormatFloat(f3,driftRA)+','+
                FormatFloat(f3,driftDec)+','+
-               FormatFloat(f3,moveRA)+','+
+               FormatFloat(f3,moveRA2)+','+ //moveRA2 is in pixels
                FormatFloat(f3,moveDEC)+','+
                IntToStr(RADuration)+','+
                RADirection+','+
@@ -914,8 +913,8 @@ begin
   end //guiding enabled
   else
   begin  //guiding disabled
-    xy_trend[0,2]:=0;
-    xy_trend[0,3]:=0;
+    xy_trend[0].racorr:=0;
+    xy_trend[0].deccorr:=0;
   end;
  end;
 end;
@@ -1029,6 +1028,7 @@ begin
 
                thetime:=now;
                mount.PulseGuide(2,CalibrationDuration {duration msec} );  // 0=north, 1=south, 2 East, 3 West
+               i:=0;
                repeat
                  sleep(10);
                  if mount.PulseGuiding then break;

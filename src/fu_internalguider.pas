@@ -31,7 +31,9 @@ uses   UScaleDPI, Dialogs, u_translation, u_global,
 
 
 type
-  xy_guiderlist =array of array of double;
+  trend_info=record ra,dec,racorr,deccorr : double; dither:boolean; end;//for internal guider
+  xy_guiderlist =array of trend_info;
+
 
 type
   { Tf_internalguider }
@@ -567,10 +569,10 @@ begin
    mean_dec:=0;
    for i:=0 to lenb do
    begin
-     if xy_trend[i,0]<1E99 then //valid data
+     if xy_trend[i].ra<1E99 then //valid data
      begin
-     x:=w2+round(xy_trend[i,0]*10*thescale) ;
-     y:=h2-round(xy_trend[i,1]*10*thescale);
+     x:=w2+round(xy_trend[i].ra*10*thescale) ;
+     y:=h2-round(xy_trend[i].dec*10*thescale);
 
      x:=min(max(0,x),width);
      y:=min(max(0,y),height);
@@ -578,8 +580,8 @@ begin
 
      if i<>0 then canvas.lineto(x,y) else canvas.moveto(x,y);
      canvas.Ellipse(x-len,y-len,x+1+len,y+1+len);{circle, the y+1,x+1 are essential to center the circle(ellipse) at the middle of a pixel. Otherwise center is 0.5,0.5 pixel wrong in x, y}
-     mean_ra:=mean_ra+xy_trend[i,0];
-     mean_dec:=mean_dec+xy_trend[i,1];
+     mean_ra:=mean_ra+xy_trend[i].ra;
+     mean_dec:=mean_dec+xy_trend[i].dec;
      inc(counter)
     end;
    end;
@@ -592,8 +594,8 @@ begin
      rms_dec:=0;
      for i:=0 to counter-1 do
      begin
-       rms_ra:=rms_ra+sqr(xy_trend[i,0]-mean_ra);
-       rms_dec:=rms_dec+sqr(xy_trend[i,1]-mean_dec);
+       rms_ra:=rms_ra+sqr(xy_trend[i].ra-mean_ra);
+       rms_dec:=rms_dec+sqr(xy_trend[i].dec-mean_dec);
      end;
      rms_ra:=sqrt(rms_ra/counter);
      rms_dec:=sqrt(rms_dec/counter);
@@ -672,9 +674,9 @@ begin
    counter:=lenb;
    for i:=lenb downto 0  do
    begin
-     if xy_trend[i,0]<1E99 then //valid data
+     if xy_trend[i].ra<1E99 then //valid data
      begin
-       y:=h2-round(xy_trend[i,1]*10*thescale);
+       y:=h2-round(xy_trend[i].dec*10*thescale);
        y:=min(max(0,y),height);
        x:=width-counter*((width-5) div lenb)-15;
        if counter<>lenb then canvas.lineto(x,y) else canvas.moveto(x,y);
@@ -684,17 +686,20 @@ begin
 
    //drawDEC  corrective action
    Canvas.pen.color:=clRED;
+   canvas.font.color:=clBtntext;
    counter:=lenb;
    for i:=lenb downto 0  do
    begin
-     if xy_trend[i,0]<1E99 then //valid data
+     if xy_trend[i].ra<1E99 then //valid data
      begin
-       y:=h2-round(xy_trend[i,3]*10*thescale) ;
+       y:=h2-round(xy_trend[i].deccorr*10*thescale) ;
        y:=min(max(0,y),height);
        x:=width-counter*((width-5) div lenb)-15;
        canvas.moveto(x-1,h2);{one pixel behind to allow both RA and DEC action to be drawn}
        canvas.lineto(x-1,y);
        dec(counter);
+
+       if xy_trend[i].dither then canvas.textout(x,height-20,'∿');//dither indication
      end;
    end;
 
@@ -703,22 +708,23 @@ begin
    counter:=lenb;
    for i:=lenb downto 0  do
    begin
-     if xy_trend[i,0]<1E99 then //valid data
+     if xy_trend[i].ra<1E99 then //valid data
      begin
-       y:=h2-round(xy_trend[i,0]*10*thescale) ;
+       y:=h2-round(xy_trend[i].ra*10*thescale) ;
        y:=min(max(0,y),height);
        x:=width-counter*((width-5) div lenb)-15;
        if counter<>lenb then canvas.lineto(x,y) else canvas.moveto(x,y);
        dec(counter);
      end;
    end;
+
    //draw RA corrective action
    counter:=lenb;
    for i:=lenb downto 0  do
    begin
-     if xy_trend[i,0]<1E99 then //valid data
+     if xy_trend[i].ra<1E99 then //valid data
      begin
-       y:=h2-round(xy_trend[i,2]*10*thescale) ;
+       y:=h2-round(xy_trend[i].racorr*10*thescale) ;
        y:=min(max(0,y),height);
        x:=width-counter*((width-5) div lenb)-15;
        canvas.moveto(x+1,h2);{one pixel before to allow both RA and DEC action to be drawn}
