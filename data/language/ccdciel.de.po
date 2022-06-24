@@ -7,14 +7,14 @@ msgstr ""
 "Project-Id-Version: ccdciel\n"
 "Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
 "POT-Creation-Date: 2022-06-20 13:48+0000\n"
-"PO-Revision-Date: 2022-05-02 21:55+0000\n"
+"PO-Revision-Date: 2022-06-24 19:45+0000\n"
 "Last-Translator: Thomas <email@starhopper.de>\n"
 "Language-Team: German <de@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2022-06-20 13:52+0000\n"
-"X-Generator: Launchpad (build ae54683eb2eb8ed62cda30dc44e60c5387c78159)\n"
+"X-Launchpad-Export-Date: 2022-06-24 20:16+0000\n"
+"X-Generator: Launchpad (build 51a2e4fa2e9b8e45f00904ad7f53546f45ac48a5)\n"
 
 #: u_translation.rs2d
 msgid "2D"
@@ -68,7 +68,7 @@ msgstr "Aktives Ziel wurde ersetzt, Sequenz neu starten"
 
 #: u_translation.rsactualfocall
 msgid "Actual focal length"
-msgstr ""
+msgstr "Aktuelle Brennweite"
 
 #: u_translation.rsadd
 msgid "Add"
@@ -110,7 +110,7 @@ msgstr "Administrator"
 
 #: u_translation.rsadvanced
 msgid "Advanced"
-msgstr ""
+msgstr "Erweitert"
 
 #: u_translation.rsaftertelesco
 #, object-pascal-format
@@ -569,7 +569,7 @@ msgstr "Kalibrierung %sVerzögerung"
 
 #: u_translation.rscalibrationr
 msgid "Calibration results:"
-msgstr ""
+msgstr "Kalibrierungsergebnis"
 
 #: u_translation.rscalibrator
 msgid "Calibrator"
@@ -597,7 +597,7 @@ msgstr "Kamera und Rotator müssen verbunden sein!"
 
 #: u_translation.rscameraangle
 msgid "Camera angle"
-msgstr ""
+msgstr "Kamerawinkel"
 
 #: u_translation.rscameracooler
 #, object-pascal-format
@@ -1088,7 +1088,7 @@ msgstr "Dateipfad zu Cygwin"
 
 #: u_translation.rsdark
 msgid "Dark"
-msgstr ""
+msgstr "Dunkelbild"
 
 #: u_translation.rsdarkfileload
 msgid "Dark file loaded"
@@ -1230,7 +1230,7 @@ msgstr "Deaktivieren"
 
 #: u_translation.rsdisableguidi
 msgid "Disable guiding temporary"
-msgstr ""
+msgstr "Kurzfristiges Ausschalten der Nachführung"
 
 #: u_translation.rsdisconnect
 msgid "Disconnect"
@@ -1875,7 +1875,7 @@ msgstr "Gain"
 
 #: u_translation.rsgamma
 msgid "Gamma"
-msgstr ""
+msgstr "Gamma"
 
 #: u_translation.rsget
 msgid "Get"
@@ -1932,7 +1932,7 @@ msgstr "grün"
 
 #: u_translation.rsguid
 msgid "Guid."
-msgstr ""
+msgstr "Nachführen"
 
 #: u_translation.rsguide
 msgid "Guide"
@@ -1940,15 +1940,15 @@ msgstr "Nachführen"
 
 #: u_translation.rsguidecamera
 msgid "Guide camera"
-msgstr ""
+msgstr "Nachführkamera"
 
 #: u_translation.rsguider
 msgid "Guider"
-msgstr ""
+msgstr "Guider"
 
 #: u_translation.rsguiderimage
 msgid "Guider image"
-msgstr ""
+msgstr "Bild der Nachführkamera"
 
 #: u_translation.rsguidersensor
 msgid "Guider sensor;"
@@ -2010,7 +2010,7 @@ msgstr "Hyperbolische Kurvenanpassung: Fokus bei %s, verbleibender Kurvenanpassu
 
 #: u_translation.rshysteresis
 msgid "Hysteresis"
-msgstr ""
+msgstr "Hysterese"
 
 #: u_translation.rsidle
 msgid "Idle"
@@ -2175,11 +2175,11 @@ msgstr "Schnittstellen Typ"
 
 #: u_translation.rsinternal
 msgid "Internal"
-msgstr ""
+msgstr "Intern"
 
 #: u_translation.rsinternalguid
 msgid "Internal guider"
-msgstr ""
+msgstr "Interner Guider"
 
 #: u_translation.rsinterval
 msgid "Interval"
@@ -2294,7 +2294,7 @@ msgstr "Bildskalierung mit geringer Qualität"
 
 #: u_translation.rsluminosity
 msgid "Luminosity"
-msgstr ""
+msgstr "Intensität"
 
 #: u_translation.rsmagnifyer
 msgid "Magnifier"
@@ -2395,7 +2395,7 @@ msgstr "Mittelwert der Bilder"
 
 #: u_translation.rsmeasuredatew
 msgid "Measured at [E/W]"
-msgstr ""
+msgstr "Gemessen [O/W]"
 
 #: u_translation.rsmeasureen
 msgid "Measure in the East and North"
@@ -2425,7 +2425,7 @@ msgstr "Messung %s pos:%s schritt:%s hfd:%s peak:%s snr:%s"
 
 #: u_translation.rsmeasurepixel
 msgid "Measure pixel scale by stop tracking"
-msgstr ""
+msgstr "Ermittlung des Pixelmaßstabes durch Stoppen der Nachführung"
 
 #: u_translation.rsmeasurewn
 msgid "Measure in the West and North"
@@ -2527,7 +2527,7 @@ msgstr "Minimum"
 
 #: u_translation.rsminimum2
 msgid "Minimum"
-msgstr ""
+msgstr "Minimum"
 
 #: u_translation.rsminimumobser
 msgid "Minimum observing elevation "
@@ -3125,7 +3125,7 @@ msgstr "Pixel"
 
 #: u_translation.rspixelscale
 msgid "Pixel scale"
-msgstr ""
+msgstr "Pixelmaßstab"
 
 #: u_translation.rspixelsize
 msgid "Pixel size"
@@ -3372,7 +3372,7 @@ msgstr "Pulsdauer"
 
 #: u_translation.rspulsegain
 msgid "pulse gain"
-msgstr ""
+msgstr "Pulse gain"
 
 #: u_translation.rspythoncomman
 msgid "Python command"
@@ -4126,7 +4126,7 @@ msgstr "Schärfe"
 
 #: u_translation.rsshortestguid
 msgid "Shortest guide pulse"
-msgstr ""
+msgstr "Kürzester Guidingpuls"
 
 #: u_translation.rsshortexposur
 msgid "Short exposure stacking"
@@ -5011,11 +5011,11 @@ msgstr "Gesamtfehler der Polausrichtung"
 
 #: u_translation.rstousetheinte
 msgid "To use the Internal autoguider you need to configure a Mount and a Guide camera in the profile Devices setup"
-msgstr ""
+msgstr "Um den internen Guider verwenden zu können muss eine Montierung und eine Nachführkamera im Geräteprofil konfiguriert sein"
 
 #: u_translation.rstousethisdev
 msgid "To use this device, be sure to also configure the Internal Guider in Preferences/Auto-guiding"
-msgstr ""
+msgstr "Um dieses Gerät zu verwenden, sicher stellen, dass der interne Guider in den Einstellungen/Auto-guiding konfiguriert ist"
 
 #: u_translation.rstrack
 msgid "Track"
@@ -5205,7 +5205,7 @@ msgstr "Fokussierer verwenden"
 
 #: u_translation.rsuseguidecamera
 msgid "Use guide camera"
-msgstr ""
+msgstr "Benutze Nachführkamera"
 
 #: u_translation.rsusemount
 msgid "Use mount"

@@ -7,14 +7,14 @@ msgstr ""
 "Project-Id-Version: ccdciel\n"
 "Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
 "POT-Creation-Date: 2022-06-20 13:48+0000\n"
-"PO-Revision-Date: 2022-06-03 01:11+0000\n"
+"PO-Revision-Date: 2022-06-22 03:21+0000\n"
 "Last-Translator: Zachary Wu <Unknown>\n"
 "Language-Team: Chinese (Simplified) <zh_CN@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2022-06-20 13:52+0000\n"
-"X-Generator: Launchpad (build ae54683eb2eb8ed62cda30dc44e60c5387c78159)\n"
+"X-Launchpad-Export-Date: 2022-06-24 20:16+0000\n"
+"X-Generator: Launchpad (build 51a2e4fa2e9b8e45f00904ad7f53546f45ac48a5)\n"
 
 #: u_translation.rs2d
 msgid "2D"
@@ -68,7 +68,7 @@ msgstr "活动目标已被替换，重启序列"
 
 #: u_translation.rsactualfocall
 msgid "Actual focal length"
-msgstr ""
+msgstr "实际焦距"
 
 #: u_translation.rsadd
 msgid "Add"
@@ -110,7 +110,7 @@ msgstr "管理员"
 
 #: u_translation.rsadvanced
 msgid "Advanced"
-msgstr ""
+msgstr "高级设置"
 
 #: u_translation.rsaftertelesco
 #, object-pascal-format
@@ -569,7 +569,7 @@ msgstr "校准%s就绪"
 
 #: u_translation.rscalibrationr
 msgid "Calibration results:"
-msgstr ""
+msgstr "校准结果："
 
 #: u_translation.rscalibrator
 msgid "Calibrator"
@@ -597,7 +597,7 @@ msgstr "必须先连接相机和旋转器"
 
 #: u_translation.rscameraangle
 msgid "Camera angle"
-msgstr ""
+msgstr "相机视角"
 
 #: u_translation.rscameracooler
 #, object-pascal-format
@@ -1088,7 +1088,7 @@ msgstr "Cygwin路径"
 
 #: u_translation.rsdark
 msgid "Dark"
-msgstr ""
+msgstr "暗场"
 
 #: u_translation.rsdarkfileload
 msgid "Dark file loaded"
@@ -1230,7 +1230,7 @@ msgstr "禁用"
 
 #: u_translation.rsdisableguidi
 msgid "Disable guiding temporary"
-msgstr ""
+msgstr "临时禁用导星"
 
 #: u_translation.rsdisconnect
 msgid "Disconnect"
@@ -1875,7 +1875,7 @@ msgstr "增益"
 
 #: u_translation.rsgamma
 msgid "Gamma"
-msgstr ""
+msgstr "Gamma"
 
 #: u_translation.rsget
 msgid "Get"
@@ -1932,7 +1932,7 @@ msgstr "绿"
 
 #: u_translation.rsguid
 msgid "Guid."
-msgstr ""
+msgstr "导星"
 
 #: u_translation.rsguide
 msgid "Guide"
@@ -1940,15 +1940,15 @@ msgstr "导星"
 
 #: u_translation.rsguidecamera
 msgid "Guide camera"
-msgstr ""
+msgstr "导星相机"
 
 #: u_translation.rsguider
 msgid "Guider"
-msgstr ""
+msgstr "导星"
 
 #: u_translation.rsguiderimage
 msgid "Guider image"
-msgstr ""
+msgstr "导星图像"
 
 #: u_translation.rsguidersensor
 msgid "Guider sensor;"
@@ -2010,7 +2010,7 @@ msgstr "双曲线拟合焦点于%s，剩余曲线拟合错误%s，迭代轮%s"
 
 #: u_translation.rshysteresis
 msgid "Hysteresis"
-msgstr ""
+msgstr "回滞"
 
 #: u_translation.rsidle
 msgid "Idle"
@@ -2175,11 +2175,11 @@ msgstr "接口类型"
 
 #: u_translation.rsinternal
 msgid "Internal"
-msgstr ""
+msgstr "内置"
 
 #: u_translation.rsinternalguid
 msgid "Internal guider"
-msgstr ""
+msgstr "内置导星"
 
 #: u_translation.rsinterval
 msgid "Interval"
@@ -2294,7 +2294,7 @@ msgstr "低品质图像缩放"
 
 #: u_translation.rsluminosity
 msgid "Luminosity"
-msgstr ""
+msgstr "亮度"
 
 #: u_translation.rsmagnifyer
 msgid "Magnifier"
@@ -2395,7 +2395,7 @@ msgstr "平均图像"
 
 #: u_translation.rsmeasuredatew
 msgid "Measured at [E/W]"
-msgstr ""
+msgstr "测量值[E/W]"
 
 #: u_translation.rsmeasureen
 msgid "Measure in the East and North"
@@ -2425,7 +2425,7 @@ msgstr "测量%s pos:%s step:%s hfd:%s peak:%s snr:%s"
 
 #: u_translation.rsmeasurepixel
 msgid "Measure pixel scale by stop tracking"
-msgstr ""
+msgstr "通过停止跟踪测量像素比例尺"
 
 #: u_translation.rsmeasurewn
 msgid "Measure in the West and North"
@@ -2527,7 +2527,7 @@ msgstr "最小"
 
 #: u_translation.rsminimum2
 msgid "Minimum"
-msgstr ""
+msgstr "最小值"
 
 #: u_translation.rsminimumobser
 msgid "Minimum observing elevation "
@@ -3125,7 +3125,7 @@ msgstr "像素"
 
 #: u_translation.rspixelscale
 msgid "Pixel scale"
-msgstr ""
+msgstr "像素比例尺"
 
 #: u_translation.rspixelsize
 msgid "Pixel size"
@@ -3372,7 +3372,7 @@ msgstr "脉冲时长"
 
 #: u_translation.rspulsegain
 msgid "pulse gain"
-msgstr ""
+msgstr "脉冲增益"
 
 #: u_translation.rspythoncomman
 msgid "Python command"
@@ -4126,7 +4126,7 @@ msgstr "清晰度"
 
 #: u_translation.rsshortestguid
 msgid "Shortest guide pulse"
-msgstr ""
+msgstr "最短的导星脉冲"
 
 #: u_translation.rsshortexposur
 msgid "Short exposure stacking"
@@ -5011,11 +5011,11 @@ msgstr "总体极轴误差："
 
 #: u_translation.rstousetheinte
 msgid "To use the Internal autoguider you need to configure a Mount and a Guide camera in the profile Devices setup"
-msgstr ""
+msgstr "要使用内部导星，您需要在配置文件设备设置中配置赤道仪和导星相机"
 
 #: u_translation.rstousethisdev
 msgid "To use this device, be sure to also configure the Internal Guider in Preferences/Auto-guiding"
-msgstr ""
+msgstr "要使用此设备，请确保还要在首选项/自动引导中配置内置导星"
 
 #: u_translation.rstrack
 msgid "Track"
@@ -5205,7 +5205,7 @@ msgstr "使用调焦器"
 
 #: u_translation.rsuseguidecamera
 msgid "Use guide camera"
-msgstr ""
+msgstr "使用导星相机"
 
 #: u_translation.rsusemount
 msgid "Use mount"
