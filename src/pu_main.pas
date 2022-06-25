@@ -129,6 +129,7 @@ type
     MenuInternalguider: TMenuItem;
     MenuAscomGuideCameraSetup: TMenuItem;
     MenuAlpacaGuideCameraSetup: TMenuItem;
+    MenuItemGuiderStopAstrometry: TMenuItem;
     MenuItemGuiderSolve: TMenuItem;
     Separator1: TMenuItem;
     MenuItemGuiderImage: TMenuItem;
@@ -402,6 +403,7 @@ type
     procedure MenuItem25Click(Sender: TObject);
     procedure MenuItemGuiderViewStatisticsClick(Sender: TObject);
     procedure MenuItemImageInspectionClick(Sender: TObject);
+    procedure MenuItemGuiderStopAstrometryClick(Sender: TObject);
     procedure MenuPolarAlignment2Click(Sender: TObject);
     procedure MenuViewInternalguiderClick(Sender: TObject);
     procedure ShowDarkInfo;
@@ -2208,6 +2210,7 @@ begin
    MenuItemGuiderViewHeader.Caption:=rsViewHeader;
    MenuItemGuiderViewStatistics.Caption:=rsImageStatist;
    MenuItemGuiderSolve.Caption:=rsResolve;
+   MenuItemGuiderStopAstrometry.Caption:=rsStopAstromet;
    SubDirName[0]:=rsSubfolderByS;
    SubDirName[1]:=rsSubfolderByF;
    SubDirName[2]:=rsSubfolderByO;
@@ -15384,6 +15387,12 @@ begin
     astrometry.SolveGuideImage;
   end;
 end;
+
+procedure Tf_main.MenuItemGuiderStopAstrometryClick(Sender: TObject);
+begin
+  astrometry.StopAstrometry;
+end;
+
 
 procedure Tf_main.MenuItemGuiderViewHeaderClick(Sender: TObject);
 var f: Tf_viewtext;

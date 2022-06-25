@@ -1723,5 +1723,9 @@ object f_main: Tf_main
       Caption = 'MenuItemGuiderSolve'
       OnClick = MenuItemGuiderSolveClick
     end
+    object MenuItemGuiderStopAstrometry: TMenuItem
+      Caption = 'MenuItemGuiderStopAstrometry'
+      OnClick = MenuItemGuiderStopAstrometryClick
+    end
   end
 end
