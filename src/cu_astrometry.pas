@@ -378,6 +378,7 @@ if cdcwcs_xy2sky<>nil then begin
       J2000ToApparent(ra,de);
       ra:=rad2deg*ra/15;
       de:=rad2deg*de;
+      msg(rsGuideCamera+': '+rsFOV+blank+FormatFloat(f2, i.wp*i.secpix/60)+'x'+FormatFloat(f2, i.hp*i.secpix/60)+smin+', '+rsPixelScale+': '+FormatFloat(f2,i.secpix)+ssec+'/'+rsPixel,3);
       msg(rsGuideCamera+': '+Format(rsCenterAppare, [RAToStr(ra), DEToStr(de), FormatFloat(f1, pa)])+', J2000 '+rsRA+'='+RAToStr(ra2000)+' '+rsDec+'='+DEToStr(de2000),3);
     end;
   end;
