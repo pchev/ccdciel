@@ -959,6 +959,8 @@ end;
 
 
 procedure T_autoguider_internal.InternalguiderCalibrate;
+var thetime,loopLatency: double;
+    i: integer;
 begin
   if AllDevicesConnected=false then
   begin
@@ -998,6 +1000,18 @@ begin
     wait(20);
   end;
 
+  CalibrationDuration:=0;
+  thetime:=now;
+  mount.PulseGuide(2,CalibrationDuration {duration msec} );  // 0=north, 1=south, 2 East, 3 West
+  i:=0;
+  repeat
+    sleep(10);
+    if mount.PulseGuiding then break;
+    inc(i);
+  until i>200;//max 2 seconds
+  loopLatency:=(now-thetime)*secperday*1000;
+  msg('Mount loop latency '+floattostrF(loopLatency/1000,FFgeneral,0,3)+ ' ms',2);
+
   Calthecos:=cos(mount.Dec*pi/180); if Calthecos=0 then Calthecos:=0.00000001; //prevent dividing by zero
 
   InternalguiderCalibrationDirection:=1;
@@ -1007,7 +1021,7 @@ begin
 end;
 
 procedure T_autoguider_internal.InternalCalibration;
-var drift,thetime,loopLatency,unequal   : double;
+var drift,unequal   : double;
     i                                   : integer;
     msgA, msgB                          : string;
             procedure StopError;
@@ -1025,18 +1039,6 @@ begin
           0: begin
                //force speed
                Fmount.GuideRateRa:=0.5*360/(24*60*60);//set pulse gain at 0.5x & 1.5 tracking
-
-               thetime:=now;
-               mount.PulseGuide(2,CalibrationDuration {duration msec} );  // 0=north, 1=south, 2 East, 3 West
-               i:=0;
-               repeat
-                 sleep(10);
-                 if mount.PulseGuiding then break;
-                 inc(i);
-               until i>200;//max 2 seconds
-               loopLatency:=(now-thetime)*secperday*1000;
-               msg('Mount loop latency '+floattostrF(loopLatency/1000,FFgeneral,0,3)+ ' ms',2);
-
                CalibrationDuration:=667; //duration of pulse guiding
                InternalguiderCalibrationStep:=1;
                InternalCalibration; // iterate without new image
