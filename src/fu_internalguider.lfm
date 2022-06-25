@@ -311,7 +311,7 @@ object f_internalguider: Tf_internalguider
             Top = 56
             Width = 111
             MaxValue = 30
-            MinValue = 0.01
+            MinValue = 0.001
             TabOrder = 0
             Value = 1
           end
@@ -546,7 +546,7 @@ object f_internalguider: Tf_internalguider
             Top = 256
             Width = 288
             Caption = 'Options:'
-            ClientHeight = 150
+            ClientHeight = 168
             ClientWidth = 286
             TabOrder = 0
             object measure_method2: TCheckBox
@@ -650,7 +650,7 @@ object f_internalguider: Tf_internalguider
             Top = 0
             Width = 288
             Caption = 'Calibration results:'
-            ClientHeight = 236
+            ClientHeight = 254
             ClientWidth = 286
             TabOrder = 1
             object Label5: TLabel
