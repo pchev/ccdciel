@@ -618,6 +618,7 @@ if (FCamera.Status=devConnected) then begin
   else if FCamera.FrameType<>LIGHT then
     FCamera.FrameType:=LIGHT;
   FCamera.ObjectName:=rsGuide;
+  FCamera.GuidePixelScale:=Finternalguider.pixel_size;
 
   FCamera.StartExposure(e);
 

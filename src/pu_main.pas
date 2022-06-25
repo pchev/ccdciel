@@ -129,6 +129,7 @@ type
     MenuInternalguider: TMenuItem;
     MenuAscomGuideCameraSetup: TMenuItem;
     MenuAlpacaGuideCameraSetup: TMenuItem;
+    MenuItemGuiderSolve: TMenuItem;
     Separator1: TMenuItem;
     MenuItemGuiderImage: TMenuItem;
     MenuItemGuiderViewStatistics: TMenuItem;
@@ -371,6 +372,7 @@ type
     procedure GuideCameraConnectTimerTimer(Sender: TObject);
     procedure GuidePlotTimerTimer(Sender: TObject);
     procedure MenuItemGuiderSaveImageClick(Sender: TObject);
+    procedure MenuItemGuiderSolveClick(Sender: TObject);
     procedure MenuItemGuiderViewHeaderClick(Sender: TObject);
     procedure ImageResizeTimerTimer(Sender: TObject);
     procedure MagnifyerTimerTimer(Sender: TObject);
@@ -1561,6 +1563,7 @@ begin
 
   astrometry:=TAstrometry.Create(nil);
   astrometry.Fits:=fits;
+  astrometry.GuideFits:=guidefits;
   astrometry.onAstrometryStart:=@AstrometryStart;
   astrometry.onAstrometryEnd:=@AstrometryEnd;
   astrometry.onGotoStart:=@GotoStart;
@@ -1925,6 +1928,7 @@ begin
      ASCOM: guidecamera:=T_ascomcamera.Create(nil);
      ASCOMREST: guidecamera:=T_ascomrestcamera.Create(nil);
    end;
+   guidecamera.GuideCamera:=true;
    guidecamera.Mount:=mount;
    guidecamera.Fits:=guidefits;
    guidecamera.onMsg:=@NewMessage;
@@ -2203,6 +2207,7 @@ begin
    MenuItemGuiderSaveImage.Caption:=Format(rsSaveFITSFile, [ellipsis]);
    MenuItemGuiderViewHeader.Caption:=rsViewHeader;
    MenuItemGuiderViewStatistics.Caption:=rsImageStatist;
+   MenuItemGuiderSolve.Caption:=rsResolve;
    SubDirName[0]:=rsSubfolderByS;
    SubDirName[1]:=rsSubfolderByF;
    SubDirName[2]:=rsSubfolderByO;
@@ -15370,6 +15375,14 @@ if (Guidefits.HeaderInfo.naxis>0) and Guidefits.ImageValid then begin
       GuideFits.SaveToFile(SaveDialogFits.FileName,false);
    end;
 end;
+end;
+
+procedure Tf_main.MenuItemGuiderSolveClick(Sender: TObject);
+begin
+  if guidefits.HeaderInfo.valid then begin
+    if (not f_goto.CheckImageInfo(guidefits)) then exit;
+    astrometry.SolveGuideImage;
+  end;
 end;
 
 procedure Tf_main.MenuItemGuiderViewHeaderClick(Sender: TObject);

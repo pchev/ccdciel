@@ -1719,5 +1719,9 @@ object f_main: Tf_main
       Caption = 'MenuItemGuiderViewStatistics'
       OnClick = MenuItemGuiderViewStatisticsClick
     end
+    object MenuItemGuiderSolve: TMenuItem
+      Caption = 'MenuItemGuiderSolve'
+      OnClick = MenuItemGuiderSolveClick
+    end
   end
 end

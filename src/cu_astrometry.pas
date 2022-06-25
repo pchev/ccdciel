@@ -45,12 +45,12 @@ TAstrometry = class(TComponent)
     Fmount: T_mount;
     Fcamera: T_camera;
     Fwheel: T_wheel;
-    FFits: TFits;
+    FFits, FGuideFits: TFits;
     FResolverName: string;
     logfile,solvefile,savefile: string;
     Xslew, Yslew: integer;
     AstrometryTimeout: double;
-    TimerAstrometrySolve, TimerAstrometrySync, TimerAstrometrySlewScreenXY : TTimer;
+    TimerAstrometrySolve, TimerAstrometrySync, TimerAstrometrySlewScreenXY,TimerAstrometrySolveGuide : TTimer;
     procedure AstrometrySolveonTimer(Sender: TObject);
     procedure AstrometrySynconTimer(Sender: TObject);
     procedure AstrometrySlewScreenXYonTimer(Sender: TObject);
@@ -59,6 +59,8 @@ TAstrometry = class(TComponent)
     procedure AstrometrySolve(Sender: TObject);
     procedure AstrometrySync(Sender: TObject);
     procedure AstrometrySlewScreenXY(Sender: TObject);
+    procedure AstrometrySolveGuide(Sender: TObject);
+    procedure AstrometrySolveGuideonTimer(Sender: TObject);
   public
     constructor Create(AOwner: TComponent);override;
     function StartAstrometry(infile,outfile: string; terminatecmd:TNotifyEvent): boolean;
@@ -66,6 +68,7 @@ TAstrometry = class(TComponent)
     procedure AstrometryDone(errstr:string);
     function  CurrentCoord(out cra,cde,eq,pa: double):boolean;
     procedure SolveCurrentImage(wait: boolean);
+    procedure SolveGuideImage;
     procedure SyncCurrentImage(wait: boolean);
     procedure SlewScreenXY(x,y: integer);
     function PrecisionSlew(ra,de,prec,exp:double; filter,binx,biny,method,maxslew,sgain,soffset: integer; out err: double):boolean;
@@ -85,6 +88,7 @@ TAstrometry = class(TComponent)
     property Camera: T_camera read Fcamera write Fcamera;
     property Wheel: T_wheel read Fwheel write Fwheel;
     property Fits: TFits read FFits write FFits;
+    property GuideFits: TFits read FGuideFits write FGuideFits;
     property preview:Tf_preview read Fpreview write Fpreview;
     property visu:Tf_visu read Fvisu write Fvisu;
     property onShowMessage: TNotifyMsg read FonShowMessage write FonShowMessage;
@@ -109,6 +113,10 @@ begin
   TimerAstrometrySolve.Enabled:=false;
   TimerAstrometrySolve.Interval:=100;
   TimerAstrometrySolve.OnTimer:=@AstrometrySolveonTimer;
+  TimerAstrometrySolveGuide:=TTimer.Create(self);
+  TimerAstrometrySolveGuide.Enabled:=false;
+  TimerAstrometrySolveGuide.Interval:=100;
+  TimerAstrometrySolveGuide.OnTimer:=@AstrometrySolveGuideonTimer;
   TimerAstrometrySync:=TTimer.Create(self);
   TimerAstrometrySync.Enabled:=false;
   TimerAstrometrySync.Interval:=100;
@@ -224,7 +232,7 @@ begin
    FBusy:=true;
    engine.Resolve;
    msg(Format(rsResolvingUsi, [ResolverName[engine.Resolver]]),3);
-   if Assigned(FonStartAstrometry) then FonStartAstrometry(self);
+   if (Fterminatecmd<>@AstrometrySolveGuide) and Assigned(FonStartAstrometry) then FonStartAstrometry(self);
    result:=true;
  end else begin
    msg(rsResolverAlre,0);
@@ -254,7 +262,7 @@ begin
    except
    end;
  end;
- if Assigned(FonEndAstrometry) then FonEndAstrometry(self);
+ if (Fterminatecmd<>@AstrometrySolveGuide) and Assigned(FonEndAstrometry) then FonEndAstrometry(self);
  if Assigned(Fterminatecmd) then Fterminatecmd(self);
  Fterminatecmd:=nil;
 end;
@@ -297,8 +305,8 @@ procedure TAstrometry.SolveCurrentImage(wait: boolean);
 var n: integer;
 begin
   if (not FBusy) and (FFits.HeaderInfo.naxis>0) and FFits.ImageValid then begin
-   if fits.HeaderInfo.solved and (cdcwcs_initfitsfile<>nil) then begin
-     fits.SaveToFile(slash(TmpDir)+'ccdcielsolved.fits');
+   if FFits.HeaderInfo.solved and (cdcwcs_initfitsfile<>nil) then begin
+     FFits.SaveToFile(slash(TmpDir)+'ccdcielsolved.fits');
      n:=cdcwcs_initfitsfile(pchar(slash(TmpDir)+'ccdcielsolved.fits'),0);
      FLastResult:=(n=0);
    end
@@ -319,7 +327,7 @@ procedure TAstrometry.AstrometrySolveonTimer(Sender: TObject);
 var ra,de,eq,pa,ra2000,de2000: double;
 begin
 TimerAstrometrySolve.Enabled:=false;
-if fits.HeaderInfo.solved and CurrentCoord(ra,de,eq,pa) then begin
+if FFits.HeaderInfo.solved and CurrentCoord(ra,de,eq,pa) then begin
    ra2000:=ra;
    de2000:=de;
    ra:=ra*15*deg2rad;
@@ -330,6 +338,57 @@ if fits.HeaderInfo.solved and CurrentCoord(ra,de,eq,pa) then begin
    msg(Format(rsCenterAppare, [RAToStr(ra), DEToStr(de), FormatFloat(f1, pa)])+', J2000 '+rsRA+'='+RAToStr(ra2000)+' '+rsDec+'='+DEToStr(de2000),3);
 end;
 end;
+
+procedure TAstrometry.SolveGuideImage;
+begin
+  if (not FBusy) and (FGuideFits.HeaderInfo.naxis>0) and FGuideFits.ImageValid then begin
+    FGuideFits.SaveToFile(slash(TmpDir)+'guidetmp.fits');
+    StartAstrometry(slash(TmpDir)+'guidetmp.fits',slash(TmpDir)+'guidesolved.fits',@AstrometrySolveGuide);
+  end;
+end;
+
+procedure TAstrometry.AstrometrySolveGuide(Sender: TObject);
+begin
+  TimerAstrometrySolveGuide.Enabled:=true;
+end;
+
+procedure TAstrometry.AstrometrySolveGuideonTimer(Sender: TObject);
+var ra,de,pa,ra2000,de2000: double;
+    n,m: integer;
+    i: TcdcWCSinfo;
+    c: TcdcWCScoord;
+begin
+TimerAstrometrySolveGuide.Enabled:=false;
+if cdcwcs_xy2sky<>nil then begin
+  n:=cdcwcs_initfitsfile(pchar(slash(TmpDir)+'guidesolved.fits'),1);
+  try
+  if n=0 then n:=cdcwcs_getinfo(addr(i),1);
+  if (n=0)and(i.secpix<>0) then begin
+    c.x:=0.5+i.wp/2;
+    c.y:=0.5+i.hp/2;
+    m:=cdcwcs_xy2sky(@c,1);
+    if m=0 then begin
+      ra:=c.ra/15;
+      de:=c.dec;
+      pa:=i.rot;
+      ra2000:=ra;
+      de2000:=de;
+      ra:=ra*15*deg2rad;
+      de:=de*deg2rad;
+      J2000ToApparent(ra,de);
+      ra:=rad2deg*ra/15;
+      de:=rad2deg*de;
+      msg(rsGuideCamera+': '+Format(rsCenterAppare, [RAToStr(ra), DEToStr(de), FormatFloat(f1, pa)])+', J2000 '+rsRA+'='+RAToStr(ra2000)+' '+rsDec+'='+DEToStr(de2000),3);
+    end;
+  end;
+  finally
+    cdcwcs_release(1);
+  end;
+end
+else
+  msg('Missing library '+libwcs,1);
+end;
+
 
 procedure TAstrometry.SyncCurrentImage(wait: boolean);
 begin

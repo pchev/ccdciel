@@ -94,6 +94,8 @@ T_camera = class(TComponent)
     FImgNum:PtrInt;
     Fexptime: double;
     FFixPixelRange: boolean;
+    FGuideCamera: boolean;
+    FGuidePixelScale: double;
     procedure msg(txt: string; level:integer=3);
     procedure NewImage;
     procedure TryNextExposure(Data: PtrInt);
@@ -302,6 +304,8 @@ T_camera = class(TComponent)
     property VideoEncoders: TStringList read FVideoEncoder;
     property VideoEncoder: Integer read GetVideoEncoder write SetVideoEncoder;
     property FixPixelRange: boolean read FFixPixelRange write FFixPixelRange;
+    property GuideCamera: boolean read FGuideCamera write FGuideCamera;
+    property GuidePixelScale: double read FGuidePixelScale write FGuidePixelScale;
     property onMsg: TNotifyMsg read FonMsg write FonMsg;
     property onDeviceMsg: TNotifyMsg read FonDeviceMsg write FonDeviceMsg;
     property onExposureProgress: TNotifyNum read FonExposureProgress write FonExposureProgress;
@@ -391,6 +395,8 @@ begin
   RampTimer.Enabled:=false;
   RampTimer.Interval:=1000;
   RampTimer.OnTimer:=@RampTimerTimer;
+  FGuideCamera:=false;
+  FGuidePixelScale:=-1;
 end;
 
 destructor  T_camera.Destroy;
@@ -709,13 +715,13 @@ begin
     origin:=config.GetValue('/Info/ObservatoryName','');
     observer:=config.GetValue('/Info/ObserverName','');
     telname:=config.GetValue('/Info/TelescopeName','');
-    if config.GetValue('/Astrometry/FocaleFromTelescope',true)
+    if FGuideCamera or config.GetValue('/Astrometry/FocaleFromTelescope',true)
     then begin
        if focal_length<0 then focal_length:=Fmount.FocaleLength
     end
     else
        focal_length:=config.GetValue('/Astrometry/FocaleLength',0);
-    if not config.GetValue('/Astrometry/PixelSizeFromCamera',true) then begin
+    if not (FGuideCamera or config.GetValue('/Astrometry/PixelSizeFromCamera',true)) then begin
       hpix1:=config.GetValue('/Astrometry/PixelSize',5.0);
       hpix2:=hpix1;
       if (hbin1>0) then hpix1:=hpix1*hbin1;
@@ -888,6 +894,11 @@ begin
        Ffits.Header.Insert(i,'SECPIX1',pixscale1,'image scale arcseconds per pixel');
        Ffits.Header.Insert(i,'SECPIX2',pixscale2,'image scale arcseconds per pixel');
        Ffits.Header.Insert(i,'SCALE',pixscale1,'image scale arcseconds per pixel');
+    end
+    else if FGuideCamera and (FGuidePixelScale>0) then begin
+       Ffits.Header.Insert(i,'SECPIX1',FGuidePixelScale,'image scale arcseconds per pixel');
+       Ffits.Header.Insert(i,'SECPIX2',FGuidePixelScale,'image scale arcseconds per pixel');
+       Ffits.Header.Insert(i,'SCALE',FGuidePixelScale,'image scale arcseconds per pixel');
     end;
   end;
   Ffits.Header.Add('END','','');
