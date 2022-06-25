@@ -959,8 +959,6 @@ end;
 
 
 procedure T_autoguider_internal.InternalguiderCalibrate;
-var thetime,loopLatency: double;
-    i: integer;
 begin
   if AllDevicesConnected=false then
   begin
@@ -999,18 +997,6 @@ begin
     mount.Track;//start tracking
     wait(20);
   end;
-
-  CalibrationDuration:=0;
-  thetime:=now;
-  mount.PulseGuide(2,CalibrationDuration {duration msec} );  // 0=north, 1=south, 2 East, 3 West
-  i:=0;
-  repeat
-    sleep(10);
-    if mount.PulseGuiding then break;
-    inc(i);
-  until i>200;//max 2 seconds
-  loopLatency:=(now-thetime)*secperday*1000;
-  msg('Mount loop latency '+floattostrF(loopLatency/1000,FFgeneral,0,3)+ ' ms',2);
 
   Calthecos:=cos(mount.Dec*pi/180); if Calthecos=0 then Calthecos:=0.00000001; //prevent dividing by zero
 
