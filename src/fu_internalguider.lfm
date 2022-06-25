@@ -310,6 +310,7 @@ object f_internalguider: Tf_internalguider
             Height = 29
             Top = 56
             Width = 111
+            DecimalPlaces = 3
             MaxValue = 30
             MinValue = 0.001
             TabOrder = 0
