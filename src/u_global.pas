@@ -384,6 +384,7 @@ var
   ImgFrameX,ImgFrameY,ImgFrameW,ImgFrameH: integer;
   ImgScale0,ImgPixRatio: double;
   ImgZoom,ZoomMin,SplitZoom: double;
+  GuideImgCx,GuideImgCy: double;
   SplitImage: boolean;
   GuideImgScale0,GuideImgPixRatio,GuideImgZoom,GuideZoomMin: double;
   ScrWidth,ScrHeigth,ScrGuideWidth,ScrGuideHeigth, SplitMargin: integer;

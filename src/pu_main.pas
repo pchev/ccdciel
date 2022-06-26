@@ -574,7 +574,6 @@ type
     Mx, My, PolX, PolY: integer;
     StartX, StartY, EndX, EndY, MouseDownX,MouseDownY: integer;
     FrameX,FrameY,FrameW,FrameH: integer;
-    GuideImgCx,GuideImgCy: double;
     GuideMx, GuideMy: integer;
     GuideMouseMoving: boolean;
     DeviceTimeout: integer;

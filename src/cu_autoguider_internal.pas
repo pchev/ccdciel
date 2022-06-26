@@ -498,6 +498,8 @@ begin
         end;
         FCamera.SetFrame(frx,fry,frw,frh);
         GuideImgZoom:=1;
+        GuideImgCx:=0;
+        GuideImgCy:=0;
         mean_hfd:=maxSNRhfd;
         WriteLog('INFO: Single star position='+inttostr(starx)+','+inttostr(stary)+', SNR='+floattostrF(maxSNR,FFgeneral,3,3)+', HFD='+floattostrF(mean_hfd,FFgeneral,3,3));
         msg('Use guide star at position '+inttostr(starx)+','+inttostr(stary)+', HFD='+floattostrF(mean_hfd,FFgeneral,3,3),3);
