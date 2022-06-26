@@ -7668,6 +7668,10 @@ begin
         guidefits.FreeDark;
       end;
       LoadBPM;
+      FrameX:=config.GetValue('/CCDframe/FrameX',0);
+      FrameY:=config.GetValue('/CCDframe/FrameY',0);
+      FrameW:=config.GetValue('/CCDframe/FrameW',0);
+      FrameH:=config.GetValue('/CCDframe/FrameH',0);
     end;
     ShowDarkInfo;
     ShowGuiderDarkInfo;
