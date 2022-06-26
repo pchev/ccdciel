@@ -1415,6 +1415,7 @@ resourcestring
   rsMeasurePixel = 'Measure pixel scale by stop tracking';
   rsDisableGuidi = 'Disable guiding temporary';
   rsGuiderImage = 'Guider image';
+  rsUseASingleSt = 'Use a single star for guiding';
 
 implementation
 

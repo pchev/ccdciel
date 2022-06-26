@@ -1,10 +1,10 @@
 object f_internalguider: Tf_internalguider
   Left = 0
-  Height = 485
+  Height = 524
   Top = 0
   Width = 325
   AutoSize = True
-  ClientHeight = 485
+  ClientHeight = 524
   ClientWidth = 325
   ParentFont = False
   TabOrder = 0
@@ -29,17 +29,17 @@ object f_internalguider: Tf_internalguider
   end
   object Panel1: TPanel
     Left = 0
-    Height = 465
+    Height = 504
     Top = 20
     Width = 325
     Align = alClient
-    ClientHeight = 465
+    ClientHeight = 504
     ClientWidth = 325
     ParentFont = False
     TabOrder = 0
     object PageControl1: TPageControl
       Left = 1
-      Height = 463
+      Height = 502
       Top = 1
       Width = 323
       ActivePage = TabSheetGuider
@@ -49,17 +49,17 @@ object f_internalguider: Tf_internalguider
       TabOrder = 0
       object TabSheetGuider: TTabSheet
         Caption = 'Guider'
-        ClientHeight = 432
+        ClientHeight = 471
         ClientWidth = 313
         ParentFont = False
         object Panel3: TPanel
           Left = 0
-          Height = 432
+          Height = 471
           Top = 0
           Width = 313
           Align = alClient
           BevelOuter = bvNone
-          ClientHeight = 432
+          ClientHeight = 471
           ClientWidth = 313
           Color = clMenu
           ParentColor = False
@@ -282,15 +282,15 @@ object f_internalguider: Tf_internalguider
       end
       object TabSheetCamera: TTabSheet
         Caption = 'Camera'
-        ClientHeight = 432
+        ClientHeight = 471
         ClientWidth = 313
         object Panel4: TPanel
           Left = 0
-          Height = 432
+          Height = 471
           Top = 0
           Width = 313
           Align = alClient
-          ClientHeight = 432
+          ClientHeight = 471
           ClientWidth = 313
           Color = clMenu
           ParentColor = False
@@ -525,17 +525,17 @@ object f_internalguider: Tf_internalguider
       end
       object TabSheetAdvanced: TTabSheet
         Caption = 'Advanced'
-        ClientHeight = 432
+        ClientHeight = 471
         ClientWidth = 313
         ParentFont = False
         object Panel2: TPanel
           Left = 0
-          Height = 432
+          Height = 471
           Top = 0
           Width = 313
           Align = alClient
           BevelOuter = bvNone
-          ClientHeight = 432
+          ClientHeight = 471
           ClientWidth = 313
           Color = clMenu
           ParentColor = False
@@ -543,18 +543,18 @@ object f_internalguider: Tf_internalguider
           TabOrder = 0
           object GroupBox1: TGroupBox
             Left = 16
-            Height = 170
+            Height = 202
             Top = 256
             Width = 288
             Caption = 'Options:'
-            ClientHeight = 168
+            ClientHeight = 200
             ClientWidth = 286
             TabOrder = 0
             object measure_method2: TCheckBox
               Left = 8
               Height = 21
               Hint = 'Use alternative method for measuring pixel scale in arc seconds during calibration. '
-              Top = 104
+              Top = 128
               Width = 279
               Caption = 'Measure pixel scale ["/px] by stop tracking'
               ParentFont = False
@@ -566,7 +566,7 @@ object f_internalguider: Tf_internalguider
               Left = 8
               Height = 21
               Hint = 'For testing. This will disable guiding but still show the trend.'
-              Top = 128
+              Top = 152
               Width = 187
               Caption = 'Disable guiding temporary'
               ParentFont = False
@@ -643,6 +643,14 @@ object f_internalguider: Tf_internalguider
               MinValue = 0.8
               TabOrder = 1
               Value = 1.5
+            end
+            object CheckBoxSingleStar: TCheckBox
+              Left = 8
+              Height = 21
+              Top = 104
+              Width = 195
+              Caption = 'Use a single star for guiding'
+              TabOrder = 5
             end
           end
           object GroupBox2: TGroupBox

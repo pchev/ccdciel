@@ -35,7 +35,7 @@ type
 
   T_autoguider_internal = class(T_autoguider)
   private
-    InternalguiderInitialize,InternalCalibrationInitialize,GuideLogFileOpen : boolean;
+    InternalguiderInitialize,InternalCalibrationInitialize,GuideLogFileOpen,InternalguiderSingleStar : boolean;
     pulseRA,pulseDEC,GuideFrameCount, InternalguiderCalibrationDirection,InternalguiderCalibrationStep,
     CalibrationDuration,Calflip,CalCount,Calnrtest           : integer;
     driftX,driftY,driftRA,driftDec,moveRA,moveDEC, Guidethecos,old_moveRA,old_moveDEC,  paEast, paNorth,
@@ -154,6 +154,7 @@ begin
   InternalguiderGuiding:=false;
   InternalguiderCalibrating:=false;
   InternalguiderCapturingDark:=false;
+  InternalguiderSingleStar:=false;
 end;
 
 Destructor T_autoguider_internal.Destroy;
@@ -387,13 +388,15 @@ end;
 
 function  T_autoguider_internal.measure_drift(var initialize:boolean; out drX,drY :double) : integer;// ReferenceX,Y indicates the total drift, drX,drY to drift since previouse call. Arrays old_xy_array,xy_array are for storage star positions
 var
-  i,fitsx,fitsy,stepsize,xsize,ysize,star_counter,counter,r, rxc,ryc,len: integer;
-  hfd1,star_fwhm,vmax,bg,bgdev,xc,yc,snr,flux,fluxratio,min_SNR,min_HFD  : double;
+  i,fitsx,fitsy,stepsize,xsize,ysize,star_counter,counter,r, rxc,ryc,len,maxSNRstar: integer;
+  hfd1,star_fwhm,vmax,bg,bgdev,xc,yc,snr,flux,fluxratio,min_SNR,min_HFD,maxSNR,maxSNRhfd : double;
   drift_arrayX,drift_arrayY : array of double;
+  starx,stary,frx,fry,frw,frh: integer;
 const
     searchA=28;//square search area
     overlap=6;
     maxstars=1000;
+    singlestarframe=50;//single star half frame size
 begin
   result:=1;// Assume no stars detected
   star_counter:=0;
@@ -420,6 +423,9 @@ begin
 
   min_SNR:=finternalguider.minSNR;//make local to reduce some CPU load
   min_HFD:=finternalguider.minHFD;//make local to reduce some CPU load
+  maxSNR:=0;
+  maxSNRstar:=0;
+  maxSNRhfd:=0;
 
   // Divide the image in square areas. Try to detect a star in each area. Store the star position and flux in the xy_array
   if initialize then
@@ -441,6 +447,13 @@ begin
           xy_array[star_counter].flux:=flux;
           mean_hfd:=mean_hfd+hfd1;
 
+          // for single star detection
+          if (snr>maxSNR)and(xc>singlestarframe)and(xc<(xsize-singlestarframe))and(yc>singlestarframe)and(yc<(ysize-singlestarframe)) then begin
+            maxSNR:=snr;
+            maxSNRhfd:=hfd1;
+            maxSNRstar:=star_counter;
+          end;
+
           inc(star_counter);
 
           // max value for guide log
@@ -459,13 +472,54 @@ begin
       inc(fitsy,stepsize);
     until fitsy>=ysize-1+stepsize div 2;
 
-    setlength(xy_array,star_counter);
-    setlength(xy_array_old,star_counter);//for later
-    if star_counter>0 then
-    begin
-      mean_hfd:=mean_hfd/star_counter;
-      WriteLog('INFO: Star(s)='+inttostr(star_counter)+', HFD='+floattostrF(mean_hfd,FFgeneral,3,3));
-      msg(inttostr(star_counter)+' guide stars used',3);
+    if InternalguiderSingleStar and (not InternalguiderCalibrating) then begin
+      // Single star
+      xy_array[0]:=xy_array[maxSNRstar];
+      if star_counter>0 then
+      begin
+        setlength(xy_array,1);
+        setlength(xy_array_old,1);//for later
+        starx:=round(xy_array[0].x1); // guide star position
+        stary:=round(xy_array[0].y1);
+        frw:=2*singlestarframe; // camera frame size
+        frh:=2*singlestarframe;
+        frx:=starx-singlestarframe; // camera frame position
+        if FCamera.CameraInterface=INDI then
+           fry:=ysize-stary-singlestarframe //inverted INDI Fits
+        else
+           fry:=stary-singlestarframe;      //Ascom,Alpaca is not inverted
+        xy_array[0].x1:=singlestarframe; // center of frame
+        xy_array[0].y1:=singlestarframe;
+        xy_array[0].x2:=singlestarframe;
+        xy_array[0].y2:=singlestarframe;
+        if FCamera.CameraInterface=INDI then begin
+          // INDI frame in unbinned pixel
+          frx:=frx*FCamera.BinX;
+          fry:=fry*FCamera.BinX;
+          frw:=frw*FCamera.BinY;
+          frh:=frh*FCamera.BinY;
+        end;
+        FCamera.SetFrame(frx,fry,frw,frh);
+        GuideImgZoom:=1;
+        mean_hfd:=maxSNRhfd;
+        WriteLog('INFO: Single star position='+inttostr(starx)+','+inttostr(stary)+', SNR='+floattostrF(maxSNR,FFgeneral,3,3)+', HFD='+floattostrF(mean_hfd,FFgeneral,3,3));
+        msg('Use guide star at position '+inttostr(starx)+','+inttostr(stary),3);
+      end
+      else begin
+        setlength(xy_array,0);
+        setlength(xy_array_old,0);
+      end;
+    end
+    else begin
+      // Multi star
+      setlength(xy_array,star_counter);
+      setlength(xy_array_old,star_counter);//for later
+      if star_counter>0 then
+      begin
+        mean_hfd:=mean_hfd/star_counter;
+        WriteLog('INFO: Star(s)='+inttostr(star_counter)+', HFD='+floattostrF(mean_hfd,FFgeneral,3,3));
+        msg(inttostr(star_counter)+' guide stars used',3);
+      end;
     end;
   end
   else
@@ -509,6 +563,8 @@ begin
   begin
     msg('No stars detected!',1);
     initialize:=true;// Return initialize=true for fresh restart next call.
+    FCamera.ResetFrame;
+    GuideImgZoom:=0;
     exit;
   end;
 
@@ -574,6 +630,8 @@ begin
     FCamera.SaveFrames:=false;
     FCamera.AlignFrames:=false;
   end;
+  Fcamera.ResetFrame;
+  GuideImgZoom:=0;
   StartGuideExposure;
 end;
 
@@ -693,6 +751,7 @@ begin
   old_moveDEC:=0;
 
   InternalguiderInitialize:=true; //initialize;
+  InternalguiderSingleStar:=Finternalguider.SingleStar;
 
   // initialize the guide log
   GuideFrameCount:=0;
@@ -745,7 +804,7 @@ begin
   xy_trend[0].dither:=FSettling;
 
   //Measure drift
-  if measure_drift(InternalguiderInitialize,driftX,driftY)=2 then exit;// ReferenceX,Y indicates the total drift, driftX,driftY to drift since previous call. Arrays xy_array_old,xy_array are for storage star positions
+  measure_drift(InternalguiderInitialize,driftX,driftY);// ReferenceX,Y indicates the total drift, driftX,driftY to drift since previous call. Arrays xy_array_old,xy_array are for storage star positions
   if InternalguiderInitialize then begin
      SetStatus(StarLostStatus,GUIDER_ALERT);
      exit; //until star(s) detected. If no stars are detected initialize is returned true
