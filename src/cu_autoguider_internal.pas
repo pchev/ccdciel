@@ -481,7 +481,10 @@ begin
         frw:=2*singlestarframe; // camera frame size
         frh:=2*singlestarframe;
         frx:=starx-singlestarframe; // camera frame position
-        fry:=ysize-stary-singlestarframe;
+        if FCamera.VerticalFlip then
+          fry:=ysize-stary-singlestarframe
+        else
+          fry:=stary-singlestarframe;
         xy_array[0].x1:=xy_array[0].x1-frx; // new starcenter in small frame
         xy_array[0].y1:=xy_array[0].y1+fry+frh-ysize;
         xy_array[0].x2:=xy_array[0].x1;

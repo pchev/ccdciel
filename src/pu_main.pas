@@ -3931,7 +3931,7 @@ end;
 if camera.CameraInterface=ASCOMREST then begin
    camera.ASCOMFlipImage:=config.GetValue('/ASCOMRestcamera/FlipImage',true);
 end;
-guidecamera.ASCOMFlipImage:=true;
+guidecamera.ASCOMFlipImage:=false;
 if wheel.WheelInterface=MANUAL then begin
    ManualFilterNames.Clear;
    ManualFilterNames.Add(rsFilter0);

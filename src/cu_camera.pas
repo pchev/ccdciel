@@ -104,6 +104,7 @@ T_camera = class(TComponent)
     procedure WriteVideoHeader(width,height,naxis,bitpix: integer);
     function GetBinX:integer; virtual; abstract;
     function GetBinY:integer; virtual; abstract;
+    function GetVerticalFlip: boolean;
     procedure SetFrametype(f:TFrameType); virtual; abstract;
     function  GetFrametype:TFrameType; virtual; abstract;
     function GetBinXrange:TNumRange; virtual; abstract;
@@ -225,7 +226,7 @@ T_camera = class(TComponent)
     property StackUseDark: boolean read FStackUseDark write FStackUseDark;
     property StackDebayer: boolean read FStackDebayer write FStackDebayer;
     property StackAllow8bit: boolean read FStackAllow8bit write FStackAllow8bit;
-    property VerticalFlip: boolean read FVerticalFlip;
+    property VerticalFlip: boolean read GetVerticalFlip;
     property ASCOMFlipImage: boolean read FASCOMFlipImage write FASCOMFlipImage;
     property hasVideo: boolean read FhasVideo;
     property VideoStream: TMemoryStream read FVideoStream;
@@ -416,6 +417,11 @@ end;
 procedure T_camera.msg(txt: string; level:integer=3);
 begin
  if Assigned(FonMsg) then FonMsg(Fdevice+': '+txt,level);
+end;
+
+function T_camera.GetVerticalFlip: boolean;
+begin
+  result:=FVerticalFlip or (not FASCOMFlipImage);
 end;
 
 procedure T_camera.SetTemperatureRamp(value:double);
