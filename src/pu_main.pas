@@ -3927,12 +3927,11 @@ dome.AutoLoadConfig:=config.GetValue('/INDIdome/AutoLoadConfig',false);
 camera.AutoLoadConfig:=config.GetValue('/INDIcamera/AutoLoadConfig',false);
 if camera.CameraInterface=ASCOM then begin
    camera.ASCOMFlipImage:=config.GetValue('/ASCOMcamera/FlipImage',true);
-   guidecamera.ASCOMFlipImage:=camera.ASCOMFlipImage;
 end;
 if camera.CameraInterface=ASCOMREST then begin
    camera.ASCOMFlipImage:=config.GetValue('/ASCOMRestcamera/FlipImage',true);
-   guidecamera.ASCOMFlipImage:=camera.ASCOMFlipImage;
 end;
+guidecamera.ASCOMFlipImage:=true;
 if wheel.WheelInterface=MANUAL then begin
    ManualFilterNames.Clear;
    ManualFilterNames.Add(rsFilter0);

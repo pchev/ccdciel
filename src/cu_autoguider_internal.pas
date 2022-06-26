@@ -484,10 +484,7 @@ begin
         frw:=2*singlestarframe; // camera frame size
         frh:=2*singlestarframe;
         frx:=starx-singlestarframe; // camera frame position
-        if FCamera.CameraInterface=INDI then
-           fry:=ysize-stary-singlestarframe //inverted INDI Fits
-        else
-           fry:=stary-singlestarframe;      //Ascom,Alpaca is not inverted
+        fry:=ysize-stary-singlestarframe;
         xy_array[0].x1:=singlestarframe; // center of frame
         xy_array[0].y1:=singlestarframe;
         xy_array[0].x2:=singlestarframe;
