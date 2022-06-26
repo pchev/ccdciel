@@ -461,7 +461,7 @@ begin
           LogFlux:=max(LogFlux,flux);
 
           // Annotate the star
-          FGuideBmp.Canvas.Frame(round(0.5+xc-hfd1*3),round(0.5+yc-hfd1*3),round(0.5+xc+hfd1*3),round(0.5+yc+hfd1*3));
+          FGuideBmp.Canvas.Frame(trunc(1+xc-hfd1*3),trunc(1+yc-hfd1*3),trunc(1+xc+hfd1*3),trunc(1+yc+hfd1*3));
         end;
 
         inc(fitsx,stepsize);
@@ -544,8 +544,7 @@ begin
         LogFlux:=max(LogFlux,flux);
 
         // Mark star area
-        FGuideBmp.Canvas.Frame(round(0.5+xc-hfd1*3),round(0.5+yc-hfd1*3),round(0.5+xc+hfd1*3),round(0.5+yc+hfd1*3));
-
+        FGuideBmp.Canvas.Frame(trunc(1+xc-hfd1*3),trunc(1+yc-hfd1*3),trunc(1+xc+hfd1*3),trunc(1+yc+hfd1*3));
       end
       else
       begin //Star lost temporary
