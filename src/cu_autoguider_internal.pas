@@ -388,7 +388,7 @@ end;
 
 function  T_autoguider_internal.measure_drift(var initialize:boolean; out drX,drY :double) : integer;// ReferenceX,Y indicates the total drift, drX,drY to drift since previouse call. Arrays old_xy_array,xy_array are for storage star positions
 var
-  i,fitsx,fitsy,stepsize,xsize,ysize,star_counter,counter,r, rxc,ryc,len,maxSNRstar: integer;
+  i,fitsx,fitsy,stepsize,xsize,ysize,star_counter,counter,len,maxSNRstar: integer;
   hfd1,star_fwhm,vmax,bg,bgdev,xc,yc,snr,flux,fluxratio,min_SNR,min_HFD,maxSNR,maxSNRhfd : double;
   drift_arrayX,drift_arrayY : array of double;
   starx,stary,frx,fry,frw,frh: integer;
@@ -461,10 +461,7 @@ begin
           LogFlux:=max(LogFlux,flux);
 
           // Annotate the star
-          r:=round(hfd1*3);
-          rxc:=round(xc);
-          ryc:=round(yc);
-          FGuideBmp.Canvas.Frame(rxc-r,ryc-r,rxc+r,ryc+r);
+          FGuideBmp.Canvas.Frame(round(0.5+xc-hfd1*3),round(0.5+yc-hfd1*3),round(0.5+xc+hfd1*3),round(0.5+yc+hfd1*3));
         end;
 
         inc(fitsx,stepsize);
@@ -485,10 +482,10 @@ begin
         frh:=2*singlestarframe;
         frx:=starx-singlestarframe; // camera frame position
         fry:=ysize-stary-singlestarframe;
-        xy_array[0].x1:=singlestarframe; // center of frame
-        xy_array[0].y1:=singlestarframe;
-        xy_array[0].x2:=singlestarframe;
-        xy_array[0].y2:=singlestarframe;
+        xy_array[0].x1:=xy_array[0].x1-frx; // new starcenter in small frame
+        xy_array[0].y1:=xy_array[0].y1+fry+frh-ysize;
+        xy_array[0].x2:=xy_array[0].x1;
+        xy_array[0].y2:=xy_array[0].y1;
         if FCamera.CameraInterface=INDI then begin
           // INDI frame in unbinned pixel
           frx:=frx*FCamera.BinX;
@@ -500,7 +497,7 @@ begin
         GuideImgZoom:=1;
         mean_hfd:=maxSNRhfd;
         WriteLog('INFO: Single star position='+inttostr(starx)+','+inttostr(stary)+', SNR='+floattostrF(maxSNR,FFgeneral,3,3)+', HFD='+floattostrF(mean_hfd,FFgeneral,3,3));
-        msg('Use guide star at position '+inttostr(starx)+','+inttostr(stary),3);
+        msg('Use guide star at position '+inttostr(starx)+','+inttostr(stary)+', HFD='+floattostrF(mean_hfd,FFgeneral,3,3),3);
       end
       else begin
         setlength(xy_array,0);
@@ -515,7 +512,7 @@ begin
       begin
         mean_hfd:=mean_hfd/star_counter;
         WriteLog('INFO: Star(s)='+inttostr(star_counter)+', HFD='+floattostrF(mean_hfd,FFgeneral,3,3));
-        msg(inttostr(star_counter)+' guide stars used',3);
+        msg(inttostr(star_counter)+' guide stars used, HFD='+floattostrF(mean_hfd,FFgeneral,3,3),3);
       end;
     end;
   end
@@ -544,10 +541,7 @@ begin
         LogFlux:=max(LogFlux,flux);
 
         // Mark star area
-        r:=round(hfd1*3);
-        rxc:=round(xc);
-        ryc:=round(yc);
-        FGuideBmp.Canvas.Frame(rxc-r,ryc-r,rxc+r,ryc+r);
+        FGuideBmp.Canvas.Frame(round(0.5+xc-hfd1*3),round(0.5+yc-hfd1*3),round(0.5+xc+hfd1*3),round(0.5+yc+hfd1*3));
 
       end
       else
