@@ -788,14 +788,6 @@ var i,maxpulse: integer;
 begin
  if not FPaused then begin
 
-  // Plot graph
-  if not FSettling then begin
-    finternalguider.draw_xy(xy_trend);//plot xy values
-    finternalguider.draw_trend(xy_trend);// plot trends
-    for i:=nrpointsTrend-2 downto 0 do {shift values and make place for new values}
-      xy_trend[i+1]:=xy_trend[i];//move records one position
-  end;
-
   xy_trend[0].dither:=FSettling;
 
   //Measure drift
@@ -963,6 +955,15 @@ begin
                FormatFloat(f2,LogSNR)+','+
                '0'    // error code
                );
+      //Status line
+      if RADuration>0 then
+         finternalguider.LabelStatusRA.Caption:=RADirection+': '+IntToStr(RADuration)+'ms, '+FormatFloat(f1,driftRA)+'px'
+      else
+         finternalguider.LabelStatusRA.Caption:='';
+      if DECDuration>0 then
+         finternalguider.LabelStatusDec.Caption:=DECDirection+': '+IntToStr(DECDuration)+'ms, '+FormatFloat(f1,driftDec)+'px'
+      else
+         finternalguider.LabelStatusDec.Caption:='';
     end;
 
   end //guiding enabled
@@ -971,6 +972,15 @@ begin
     xy_trend[0].racorr:=0;
     xy_trend[0].deccorr:=0;
   end;
+
+  // Plot graph
+  if not FSettling then begin
+    finternalguider.draw_xy(xy_trend);//plot xy values
+    finternalguider.draw_trend(xy_trend);// plot trends
+    for i:=nrpointsTrend-2 downto 0 do {shift values and make place for new values}
+      xy_trend[i+1]:=xy_trend[i];//move records one position
+  end;
+
  end;
 end;
 

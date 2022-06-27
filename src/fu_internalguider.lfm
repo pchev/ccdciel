@@ -278,6 +278,22 @@ object f_internalguider: Tf_internalguider
             ShowHint = True
             TabOrder = 8
           end
+          object LabelStatusRA: TLabel
+            Left = 4
+            Height = 19
+            Top = 408
+            Width = 88
+            Caption = 'LabelStatusRA'
+            ParentColor = False
+          end
+          object LabelStatusDec: TLabel
+            Left = 128
+            Height = 19
+            Top = 408
+            Width = 95
+            Caption = 'LabelStatusDec'
+            ParentColor = False
+          end
         end
       end
       object TabSheetCamera: TTabSheet

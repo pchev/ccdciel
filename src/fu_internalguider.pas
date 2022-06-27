@@ -52,6 +52,8 @@ type
     CheckBoxSingleStar: TCheckBox;
     disable_guiding1: TCheckBox;
     Exposure: TFloatSpinEdit;
+    LabelStatusDec: TLabel;
+    LabelStatusRA: TLabel;
     MenuItemDarkInfo: TMenuItem;
     MenuItemLoadDark: TMenuItem;
     minHFD1: TFloatSpinEdit;
@@ -222,6 +224,8 @@ begin
  PageControl1.ActivePageIndex:=0;
  ScaleDPI(Self);
  SetLang;
+ LabelStatusRA.Caption:='';
+ LabelStatusDec.Caption:='';
 end;
 
 destructor  Tf_internalguider.Destroy;
