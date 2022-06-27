@@ -389,7 +389,7 @@ end;
 function  T_autoguider_internal.measure_drift(var initialize:boolean; out drX,drY :double) : integer;// ReferenceX,Y indicates the total drift, drX,drY to drift since previouse call. Arrays old_xy_array,xy_array are for storage star positions
 var
   i,fitsx,fitsy,stepsize,xsize,ysize,star_counter,counter,len,maxSNRstar: integer;
-  hfd1,star_fwhm,vmax,bg,bgdev,xc,yc,snr,flux,fluxratio,min_SNR,min_HFD,maxSNR,maxSNRhfd : double;
+  hfd1,star_fwhm,vmax,bg,bgdev,xc,yc,snr,flux,fluxratio,min_SNR,min_HFD,maxSNR,maxSNRhfd,margin : double;
   drift_arrayX,drift_arrayY : array of double;
   starx,stary,frx,fry,frw,frh: integer;
 const
@@ -426,6 +426,7 @@ begin
   maxSNR:=0;
   maxSNRstar:=0;
   maxSNRhfd:=0;
+  margin:=2*DitherPixel+10;
 
   // Divide the image in square areas. Try to detect a star in each area. Store the star position and flux in the xy_array
   if initialize then
@@ -448,7 +449,7 @@ begin
           mean_hfd:=mean_hfd+hfd1;
 
           // for single star detection
-          if (snr>maxSNR)and(xc>singlestarframe)and(xc<(xsize-singlestarframe))and(yc>singlestarframe)and(yc<(ysize-singlestarframe)) then begin
+          if (snr>maxSNR)and(xc>margin)and(xc<(xsize-margin))and(yc>margin)and(yc<(ysize-margin)) then begin
             maxSNR:=snr;
             maxSNRhfd:=hfd1;
             maxSNRstar:=star_counter;
@@ -485,8 +486,13 @@ begin
           fry:=ysize-stary-singlestarframe
         else
           fry:=stary-singlestarframe;
+
+        frx:=min(xsize-frw,max(0,frx)); // Keep frame within sensor
+        fry:=min(ysize-frh,max(0,fry));
+
         xy_array[0].x1:=xy_array[0].x1-frx; // new starcenter in small frame
         xy_array[0].y1:=xy_array[0].y1+fry+frh-ysize;
+
         xy_array[0].x2:=xy_array[0].x1;
         xy_array[0].y2:=xy_array[0].y1;
         if FCamera.CameraInterface=INDI then begin
