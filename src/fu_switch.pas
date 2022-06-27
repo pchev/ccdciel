@@ -103,6 +103,7 @@ end;
 procedure Tf_switch.SetLang;
 begin
   Title.Caption:=rsSwitch;
+  BtnSet.Caption:=rsSet;
 end;
 
 procedure Tf_switch.SetConnected(value:boolean);

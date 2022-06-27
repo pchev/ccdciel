@@ -6,14 +6,14 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ccdciel\n"
 "Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
-"POT-Creation-Date: 2022-06-20 13:48+0000\n"
+"POT-Creation-Date: 2022-06-27 08:33+0000\n"
 "PO-Revision-Date: 2022-06-24 19:45+0000\n"
 "Last-Translator: Thomas <email@starhopper.de>\n"
 "Language-Team: German <de@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2022-06-24 20:16+0000\n"
+"X-Launchpad-Export-Date: 2022-06-27 09:08+0000\n"
 "X-Generator: Launchpad (build 51a2e4fa2e9b8e45f00904ad7f53546f45ac48a5)\n"
 
 #: u_translation.rs2d
@@ -111,6 +111,10 @@ msgstr "Administrator"
 #: u_translation.rsadvanced
 msgid "Advanced"
 msgstr "Erweitert"
+
+#: u_translation.rsadvancedsett
+msgid "Advanced settings"
+msgstr ""
 
 #: u_translation.rsaftertelesco
 #, object-pascal-format
@@ -546,6 +550,10 @@ msgstr "Binning"
 msgid "blue"
 msgstr "blau"
 
+#: u_translation.rsbrightness
+msgid "Brightness"
+msgstr ""
+
 #: u_translation.rsbrowselogfil
 msgid "Browse log files"
 msgstr "Zeige Ereignisdateien"
@@ -629,6 +637,10 @@ msgstr "Belichtung abbrechen und neu starten"
 #: u_translation.rscancelexposu
 msgid "Cancel exposure"
 msgstr "Belichtung abbrechen"
+
+#: u_translation.rscancelexposu2
+msgid "Cancel exposure after"
+msgstr ""
 
 #: u_translation.rscancelpolara
 msgid "Cancel polar alignment"
@@ -781,9 +793,17 @@ msgstr "Aufnahme während Autofokus gestoppt"
 msgid "Capture stopped unexpectedly"
 msgstr "Aufnahme unerwartet gestoppt"
 
+#: u_translation.rsccdcielstatu
+msgid "CCDciel status"
+msgstr ""
+
 #: u_translation.rsccdframesent
 msgid "CCD frame sent to planetarium."
 msgstr "CCD Aufnahmen zum Planetarium gesendet"
+
+#: u_translation.rscelsius
+msgid "Celsius"
+msgstr ""
 
 #: u_translation.rscenter
 msgid "Center"
@@ -806,6 +826,10 @@ msgstr "Dec im Zentrum"
 #: u_translation.rscenterra
 msgid "Center RA"
 msgstr "RA im Zentrum"
+
+#: u_translation.rschangelog
+msgid "Change log"
+msgstr ""
 
 #: u_translation.rschoose
 msgid "Choose"
@@ -1033,6 +1057,10 @@ msgstr "Korrektionsmethode"
 #: u_translation.rscount
 msgid "Count"
 msgstr "Anzahl"
+
+#: u_translation.rscov
+msgid "Cov."
+msgstr ""
 
 #: u_translation.rscover
 msgid "Cover"
@@ -1393,6 +1421,10 @@ msgstr "Möchten Sie es erneut versuchen?"
 msgid "Do you want to run the termination action now?"
 msgstr "Ende-Aktionen jetzt ausführen"
 
+#: u_translation.rsduration
+msgid "Duration"
+msgstr ""
+
 #: u_translation.rsdusk
 msgid "dusk"
 msgstr "Abenddämmerung"
@@ -1448,6 +1480,10 @@ msgstr "E-Mail an:"
 #: u_translation.rsemailsentsuc
 msgid "Email sent successfully, please check your inbox"
 msgstr "E-Mail erfolgreich versendet, bitte Postfach überprüfen"
+
+#: u_translation.rsencoder
+msgid "Encoder"
+msgstr ""
 
 #: u_translation.rsend
 msgid "End"
@@ -1564,6 +1600,10 @@ msgstr "Belichtungszeit [Sekunden]"
 msgid "Exposure time too short for measurement, need %d seconds."
 msgstr "Die Belichtungszeit ist zu kurz für die Messung, benötigt werden %d Sekunden."
 
+#: u_translation.rsfahrenheit
+msgid "Fahrenheit"
+msgstr ""
+
 #: u_translation.rsfailedtodele
 #, object-pascal-format
 msgid "Failed to delete file: %s"
@@ -1592,6 +1632,10 @@ msgstr "Fil."
 #: u_translation.rsfile
 msgid "File"
 msgstr "Datei"
+
+#: u_translation.rsfileformat
+msgid "File format"
+msgstr ""
 
 #: u_translation.rsfilenameopti
 msgid "File name options"
@@ -1637,6 +1681,10 @@ msgstr "Finale Bewegung (Schritte)"
 #: u_translation.rsfit
 msgid "Fit"
 msgstr "Fit"
+
+#: u_translation.rsfitsfileexte
+msgid "FITS file extension"
+msgstr ""
 
 #: u_translation.rsfitsheader
 msgid "FITS header"
@@ -1827,6 +1875,14 @@ msgstr "FOV"
 #: u_translation.rsframe
 msgid "Frame"
 msgstr "Bild"
+
+#: u_translation.rsframerate
+msgid "Frame rate"
+msgstr ""
+
+#: u_translation.rsframes
+msgid "Frames"
+msgstr ""
 
 #: u_translation.rsfromcameradr
 msgid "From camera driver"
@@ -2248,6 +2304,10 @@ msgstr "Lernen"
 msgid "License agreement"
 msgstr "Lizenzabkommen"
 
+#: u_translation.rslight
+msgid "Light"
+msgstr ""
+
 #: u_translation.rslightoff
 msgid "Light OFF"
 msgstr "Licht AUS"
@@ -2556,6 +2616,10 @@ msgstr "Mon."
 #: u_translation.rsmode
 msgid "Mode:"
 msgstr "Modus:"
+
+#: u_translation.rsmoresettings
+msgid "More settings"
+msgstr ""
 
 #: u_translation.rsmount
 msgid "Mount"
@@ -3747,6 +3811,10 @@ msgstr "Unbeaufsichtigt ausführen"
 msgid "s"
 msgstr "s"
 
+#: u_translation.rssaf
+msgid "Saf."
+msgstr ""
+
 #: u_translation.rssafe
 msgid "Safe"
 msgstr "Sicher"
@@ -4187,6 +4255,10 @@ msgstr "Standort wurde vom Teleskop übernommen."
 #: u_translation.rssize
 msgid "size"
 msgstr "Größe"
+
+#: u_translation.rssize2
+msgid "Size"
+msgstr ""
 
 #: u_translation.rsskiptarget
 #, object-pascal-format
@@ -4668,6 +4740,10 @@ msgstr "Zusammenfassung"
 msgid "Suspend dome slaving"
 msgstr "Kuppelkopplung aussetzen"
 
+#: u_translation.rssw
+msgid "Sw."
+msgstr ""
+
 #: u_translation.rsswitch
 msgid "Switch"
 msgstr "Schalter"
@@ -4959,6 +5035,10 @@ msgstr "Diese Sequenz %s beinhaltet einen Status"
 msgid "This sequence contain information about the steps already completed.%sNow you can continue after the last checkpoint.%sDo you want to clear the completion status to restart from the beginning?"
 msgstr "Diese Sequenz enthält Informationen zu den bereits abgeschlossenen Schritten.%sSie könnten jetzt nach dem letzten Kontrollpunkt weitermachen.%sMöchten Sie den Status löschen, um einen Neustart von Anfang an durchzuführen?"
 
+#: u_translation.rstiffwithfits
+msgid "TIFF with FITS header"
+msgstr ""
+
 #: u_translation.rstiltindicati2
 #, object-pascal-format
 msgid "Tilt indication[hfd]=%s"
@@ -5157,6 +5237,10 @@ msgstr "Aktualisiere Sequenz ohne Unterbrechung"
 #: u_translation.rsuseasfallbac
 msgid "Use as fallback if other software fail"
 msgstr "Als Rückfallebene verwenden, wenn andere Software ausfällt"
+
+#: u_translation.rsuseasinglest
+msgid "Use a single star for guiding"
+msgstr ""
 
 #: u_translation.rsuseasreferen
 msgid "Use as reference star"
@@ -5403,6 +5487,10 @@ msgstr "Warnung! %s Bild empfangen"
 msgid "Warning, reversing the rotator will invalidated the calibration. Do you want to continue?"
 msgstr "Warnung: Wenn Sie den Rotator umkehren wird die Kalibrierung ungültigWollen Sie weitermachen?"
 
+#: u_translation.rswarningthemo
+msgid "Warning! the mount will be parked every time a flat capture is started."
+msgstr ""
+
 #: u_translation.rswatchdog
 msgid "Watchdog"
 msgstr "Watchdog"
@@ -5472,6 +5560,10 @@ msgstr "Windgeschwindigkeit"
 #: u_translation.rswithoutpolev
 msgid "without pole visibility"
 msgstr "Ohne sichtbaren Himmelspol"
+
+#: u_translation.rswth
+msgid "Wth."
+msgstr ""
 
 #: u_translation.rsyes
 msgid "Yes"

@@ -1056,9 +1056,6 @@ object f_main: Tf_main
           OnClick = MenuAutoguiderDitherClick
         end
       end
-      object MenuInternalguider: TMenuItem
-        Caption = 'Internal guider'
-      end
       object MenuPlanetarium: TMenuItem
         Caption = 'Planetarium'
         object MenuPlanetariumConnect: TMenuItem

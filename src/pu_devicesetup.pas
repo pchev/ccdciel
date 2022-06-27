@@ -862,6 +862,7 @@ end;
 procedure Tf_setup.SetLang;
 var i: integer;
 begin
+  Caption:=format(rsDevicesSetup,['']);
   DeviceInterface.Caption:=rsInterface;
   Button1.Caption:=rsOK;
   Button3.Caption:=rsCancel;

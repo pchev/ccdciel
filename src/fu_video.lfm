@@ -2,10 +2,10 @@ object f_video: Tf_video
   Left = 0
   Height = 602
   Top = 0
-  Width = 190
+  Width = 229
   AutoSize = True
   ClientHeight = 602
-  ClientWidth = 190
+  ClientWidth = 229
   ParentFont = False
   TabOrder = 0
   DesignLeft = -4
@@ -14,7 +14,7 @@ object f_video: Tf_video
     Left = 0
     Height = 20
     Top = 0
-    Width = 190
+    Width = 229
     Align = alTop
     Alignment = taCenter
     AutoSize = False
@@ -31,27 +31,27 @@ object f_video: Tf_video
     Left = 0
     Height = 568
     Top = 20
-    Width = 190
+    Width = 229
     Align = alTop
     AutoSize = True
     BevelOuter = bvNone
     ClientHeight = 568
-    ClientWidth = 190
+    ClientWidth = 229
     ParentFont = False
     TabOrder = 0
     object PanelExposure2: TPanel
       Left = 0
       Height = 46
       Top = 118
-      Width = 190
+      Width = 229
       Align = alTop
       BevelOuter = bvNone
       ClientHeight = 46
-      ClientWidth = 190
+      ClientWidth = 229
       TabOrder = 8
       object Label8: TLabel
         Left = 8
-        Height = 17
+        Height = 19
         Top = 10
         Width = 57
         Caption = 'Exposure'
@@ -59,9 +59,9 @@ object f_video: Tf_video
         ParentFont = False
       end
       object StreamExp: TFloatSpinEdit
-        Left = 81
-        Height = 28
-        Top = 6
+        Left = 105
+        Height = 29
+        Top = 7
         Width = 101
         DecimalPlaces = 3
         Increment = 0.1
@@ -74,16 +74,16 @@ object f_video: Tf_video
       Left = 0
       Height = 46
       Top = 72
-      Width = 190
+      Width = 229
       Align = alTop
       BevelOuter = bvNone
       ClientHeight = 46
-      ClientWidth = 190
+      ClientWidth = 229
       ParentFont = False
       TabOrder = 0
       object Label4: TLabel
         Left = 8
-        Height = 17
+        Height = 19
         Top = 0
         Width = 57
         Caption = 'Exposure'
@@ -103,9 +103,9 @@ object f_video: Tf_video
         TabOrder = 0
       end
       object Exposure: TTrackBar
-        Left = 81
+        Left = 105
         Height = 43
-        Top = 0
+        Top = 1
         Width = 101
         Position = 0
         OnMouseUp = ExposureMouseUp
@@ -118,11 +118,11 @@ object f_video: Tf_video
       Left = 0
       Height = 30
       Top = 0
-      Width = 190
+      Width = 229
       Align = alTop
       BevelOuter = bvNone
       ClientHeight = 30
-      ClientWidth = 190
+      ClientWidth = 229
       ParentFont = False
       TabOrder = 1
       object Preview: TCheckBox
@@ -136,8 +136,8 @@ object f_video: Tf_video
         TabOrder = 0
       end
       object FPSlabel: TLabel
-        Left = 101
-        Height = 17
+        Left = 144
+        Height = 19
         Top = 1
         Width = 57
         Caption = '                   '
@@ -149,16 +149,16 @@ object f_video: Tf_video
       Left = 0
       Height = 46
       Top = 164
-      Width = 190
+      Width = 229
       Align = alTop
       BevelOuter = bvNone
       ClientHeight = 46
-      ClientWidth = 190
+      ClientWidth = 229
       ParentFont = False
       TabOrder = 2
       object Label5: TLabel
         Left = 8
-        Height = 17
+        Height = 19
         Top = 0
         Width = 28
         Caption = 'Gain'
@@ -166,9 +166,9 @@ object f_video: Tf_video
         ParentFont = False
       end
       object Gain: TTrackBar
-        Left = 81
+        Left = 105
         Height = 43
-        Top = 0
+        Top = 1
         Width = 101
         Position = 0
         OnMouseUp = GainMouseUp
@@ -181,16 +181,16 @@ object f_video: Tf_video
       Left = 0
       Height = 46
       Top = 210
-      Width = 190
+      Width = 229
       Align = alTop
       BevelOuter = bvNone
       ClientHeight = 46
-      ClientWidth = 190
+      ClientWidth = 229
       ParentFont = False
       TabOrder = 3
       object Label6: TLabel
         Left = 8
-        Height = 17
+        Height = 19
         Top = 0
         Width = 48
         Caption = 'Gamma'
@@ -198,9 +198,9 @@ object f_video: Tf_video
         ParentFont = False
       end
       object Gamma: TTrackBar
-        Left = 81
+        Left = 105
         Height = 43
-        Top = 0
+        Top = 1
         Width = 101
         Position = 0
         OnMouseUp = GammaMouseUp
@@ -213,16 +213,16 @@ object f_video: Tf_video
       Left = 0
       Height = 46
       Top = 256
-      Width = 190
+      Width = 229
       Align = alTop
       BevelOuter = bvNone
       ClientHeight = 46
-      ClientWidth = 190
+      ClientWidth = 229
       ParentFont = False
       TabOrder = 4
       object Label7: TLabel
         Left = 8
-        Height = 17
+        Height = 19
         Top = 0
         Width = 67
         Caption = 'Brightness'
@@ -230,9 +230,9 @@ object f_video: Tf_video
         ParentFont = False
       end
       object Brightness: TTrackBar
-        Left = 81
+        Left = 105
         Height = 43
-        Top = 0
+        Top = 1
         Width = 101
         Position = 0
         OnMouseUp = BrightnessMouseUp
@@ -245,16 +245,16 @@ object f_video: Tf_video
       Left = 0
       Height = 59
       Top = 330
-      Width = 190
+      Width = 229
       Align = alTop
       BevelOuter = bvNone
       ClientHeight = 59
-      ClientWidth = 190
+      ClientWidth = 229
       ParentFont = False
       TabOrder = 5
       object Label2: TLabel
         Left = 8
-        Height = 17
+        Height = 19
         Top = 4
         Width = 24
         Caption = 'Size'
@@ -262,9 +262,9 @@ object f_video: Tf_video
         ParentFont = False
       end
       object VideoSize: TComboBox
-        Left = 89
+        Left = 113
         Height = 28
-        Top = 1
+        Top = 2
         Width = 92
         Constraints.MaxHeight = 28
         ItemHeight = 0
@@ -275,7 +275,7 @@ object f_video: Tf_video
       end
       object Label1: TLabel
         Left = 8
-        Height = 17
+        Height = 19
         Top = 32
         Width = 67
         Caption = 'Frame rate'
@@ -283,9 +283,9 @@ object f_video: Tf_video
         ParentFont = False
       end
       object FrameRate: TComboBox
-        Left = 89
+        Left = 113
         Height = 28
-        Top = 29
+        Top = 30
         Width = 92
         Constraints.MaxHeight = 28
         ItemHeight = 0
@@ -299,11 +299,11 @@ object f_video: Tf_video
       Left = 0
       Height = 179
       Top = 389
-      Width = 190
+      Width = 229
       Align = alTop
       BevelOuter = bvNone
       ClientHeight = 179
-      ClientWidth = 190
+      ClientWidth = 229
       ParentFont = False
       TabOrder = 6
       object Duration: TCheckBox
@@ -317,9 +317,9 @@ object f_video: Tf_video
         TabOrder = 0
       end
       object RecDuration: TComboBox
-        Left = 104
+        Left = 128
         Height = 28
-        Top = 1
+        Top = 2
         Width = 77
         Constraints.MaxHeight = 28
         ItemHeight = 0
@@ -345,9 +345,9 @@ object f_video: Tf_video
         TabOrder = 2
       end
       object RecFrames: TComboBox
-        Left = 104
+        Left = 128
         Height = 28
-        Top = 28
+        Top = 29
         Width = 77
         Constraints.MaxHeight = 28
         ItemHeight = 0
@@ -365,7 +365,7 @@ object f_video: Tf_video
       end
       object Label3: TLabel
         Left = 7
-        Height = 17
+        Height = 19
         Top = 61
         Width = 40
         Caption = 'Object'
@@ -373,9 +373,9 @@ object f_video: Tf_video
         ParentFont = False
       end
       object ObjectName: TEdit
-        Left = 69
+        Left = 93
         Height = 28
-        Top = 57
+        Top = 58
         Width = 112
         Constraints.MaxHeight = 28
         ParentFont = False
@@ -392,7 +392,7 @@ object f_video: Tf_video
         TabOrder = 5
       end
       object BtnStopRec: TButton
-        Left = 100
+        Left = 128
         Height = 25
         Top = 128
         Width = 76
@@ -402,9 +402,9 @@ object f_video: Tf_video
         TabOrder = 6
       end
       object VideoCaptureDir: TEdit
-        Left = 69
+        Left = 93
         Height = 28
-        Top = 88
+        Top = 89
         Width = 112
         Constraints.MaxHeight = 28
         ParentFont = False
@@ -412,7 +412,7 @@ object f_video: Tf_video
       end
       object Label9: TLabel
         Left = 7
-        Height = 17
+        Height = 19
         Top = 92
         Width = 58
         Caption = 'Directory'
@@ -421,7 +421,7 @@ object f_video: Tf_video
       end
       object LabelRecording: TLabel
         Left = 7
-        Height = 17
+        Height = 19
         Top = 156
         Width = 95
         Caption = 'LabelRecording'
@@ -432,18 +432,18 @@ object f_video: Tf_video
       Left = 0
       Height = 28
       Top = 302
-      Width = 190
+      Width = 229
       Align = alTop
       BevelOuter = bvNone
       ClientHeight = 28
-      ClientWidth = 190
+      ClientWidth = 229
       ParentFont = False
       TabOrder = 7
       object BtnOptions: TButton
-        Left = 75
+        Left = 32
         Height = 25
-        Top = 1
-        Width = 105
+        Top = 2
+        Width = 172
         Caption = 'More settings'
         OnClick = BtnOptionsClick
         ParentFont = False
@@ -454,24 +454,24 @@ object f_video: Tf_video
       Left = 0
       Height = 42
       Top = 30
-      Width = 190
+      Width = 229
       Align = alTop
       BevelOuter = bvNone
       ClientHeight = 42
-      ClientWidth = 190
+      ClientWidth = 229
       TabOrder = 9
       object Label10: TLabel
         Left = 8
-        Height = 17
+        Height = 19
         Top = 10
         Width = 51
         Caption = 'Encoder'
         ParentColor = False
       end
       object VideoEncoder: TComboBox
-        Left = 81
+        Left = 105
         Height = 28
-        Top = 6
+        Top = 7
         Width = 101
         Constraints.MaxHeight = 28
         ItemHeight = 0

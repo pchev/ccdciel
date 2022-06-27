@@ -5246,3 +5246,95 @@ msgstr ""
 msgid "Guider image"
 msgstr ""
 
+#: u_translation:rsuseasinglest
+msgid "Use a single star for guiding"
+msgstr ""
+
+#: u_translation:rssaf
+msgid "Saf."
+msgstr ""
+
+#: u_translation:rssw
+msgid "Sw."
+msgstr ""
+
+#: u_translation:rscov
+msgid "Cov."
+msgstr ""
+
+#: u_translation:rswth
+msgid "Wth."
+msgstr ""
+
+#: u_translation:rsencoder
+msgid "Encoder"
+msgstr ""
+
+#: u_translation:rsbrightness
+msgid "Brightness"
+msgstr ""
+
+#: u_translation:rsmoresettings
+msgid "More settings"
+msgstr ""
+
+#: u_translation:rssize2
+msgid "Size"
+msgstr ""
+
+#: u_translation:rsframerate
+msgid "Frame rate"
+msgstr ""
+
+#: u_translation:rsduration
+msgid "Duration"
+msgstr ""
+
+#: u_translation:rsframes
+msgid "Frames"
+msgstr ""
+
+#: u_translation:rscelsius
+msgid "Celsius"
+msgstr ""
+
+#: u_translation:rsfahrenheit
+msgid "Fahrenheit"
+msgstr ""
+
+#: u_translation:rsfitsfileexte
+msgid "FITS file extension"
+msgstr ""
+
+#: u_translation:rsfileformat
+msgid "File format"
+msgstr ""
+
+#: u_translation:rstiffwithfits
+msgid "TIFF with FITS header"
+msgstr ""
+
+#: u_translation:rswarningthemo
+msgid "Warning! the mount will be parked every time a flat capture is started."
+msgstr ""
+
+#: u_translation:rsadvancedsett
+msgid "Advanced settings"
+msgstr ""
+
+#: u_translation:rscancelexposu2
+msgid "Cancel exposure after"
+msgstr ""
+
+#: u_translation:rsccdcielstatu
+msgid "CCDciel status"
+msgstr ""
+
+#: u_translation:rschangelog
+msgid "Change log"
+msgstr ""
+
+#: u_translation:rslight
+msgid "Light"
+msgstr ""
+

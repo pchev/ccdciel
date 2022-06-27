@@ -1416,6 +1416,28 @@ resourcestring
   rsDisableGuidi = 'Disable guiding temporary';
   rsGuiderImage = 'Guider image';
   rsUseASingleSt = 'Use a single star for guiding';
+  rsSaf = 'Saf.';
+  rsSw = 'Sw.';
+  rsCov = 'Cov.';
+  rsWth = 'Wth.';
+  rsEncoder = 'Encoder';
+  rsBrightness = 'Brightness';
+  rsMoreSettings = 'More settings';
+  rsSize2 = 'Size';
+  rsFrameRate = 'Frame rate';
+  rsDuration = 'Duration';
+  rsFrames = 'Frames';
+  rsCelsius = 'Celsius';
+  rsFahrenheit = 'Fahrenheit';
+  rsFITSFileExte = 'FITS file extension';
+  rsFileFormat = 'File format';
+  rsTIFFWithFITS = 'TIFF with FITS header';
+  rsWarningTheMo = 'Warning! the mount will be parked every time a flat capture is started.';
+  rsAdvancedSett = 'Advanced settings';
+  rsCancelExposu2 = 'Cancel exposure after';
+  rsCCDcielStatu = 'CCDciel status';
+  rsChangeLog = 'Change log';
+  rsLight = 'Light';
 
 implementation
 

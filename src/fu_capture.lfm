@@ -76,8 +76,8 @@ object f_capture: Tf_capture
         AnchorSideTop.Control = ExpTime
         AnchorSideTop.Side = asrCenter
         Left = 4
-        Height = 17
-        Top = 7
+        Height = 19
+        Top = 6
         Width = 22
         Caption = 'Exp'
         ParentColor = False
@@ -99,8 +99,8 @@ object f_capture: Tf_capture
         AnchorSideTop.Control = StackNum
         AnchorSideTop.Side = asrCenter
         Left = 4
-        Height = 17
-        Top = 7
+        Height = 19
+        Top = 6
         Width = 89
         Caption = 'Stacking count'
         ParentColor = False
@@ -147,8 +147,8 @@ object f_capture: Tf_capture
         AnchorSideTop.Control = GainEdit
         AnchorSideTop.Side = asrCenter
         Left = 4
-        Height = 17
-        Top = 10
+        Height = 19
+        Top = 9
         Width = 28
         Caption = 'Gain'
         ParentColor = False
@@ -178,15 +178,15 @@ object f_capture: Tf_capture
           AnchorSideTop.Control = OffsetEdit
           AnchorSideTop.Side = asrCenter
           Left = 4
-          Height = 17
-          Top = 10
+          Height = 19
+          Top = 9
           Width = 38
           Caption = 'Offset'
           ParentColor = False
         end
         object OffsetEdit: TSpinEdit
           Left = 89
-          Height = 28
+          Height = 29
           Top = 4
           Width = 101
           MaxValue = 32767
@@ -226,8 +226,8 @@ object f_capture: Tf_capture
         AnchorSideTop.Control = Binning
         AnchorSideTop.Side = asrCenter
         Left = 4
-        Height = 17
-        Top = 7
+        Height = 19
+        Top = 6
         Width = 24
         Caption = 'Bin.'
         ParentColor = False
@@ -249,8 +249,8 @@ object f_capture: Tf_capture
         AnchorSideTop.Control = Fnumber
         AnchorSideTop.Side = asrCenter
         Left = 4
-        Height = 17
-        Top = 6
+        Height = 19
+        Top = 5
         Width = 38
         Caption = 'F-stop'
         ParentColor = False
@@ -290,8 +290,8 @@ object f_capture: Tf_capture
         AnchorSideTop.Control = Fname
         AnchorSideTop.Side = asrCenter
         Left = 4
-        Height = 17
-        Top = 6
+        Height = 19
+        Top = 5
         Width = 40
         Caption = 'Object'
         ParentColor = False
@@ -313,8 +313,8 @@ object f_capture: Tf_capture
         AnchorSideTop.Control = SeqNum
         AnchorSideTop.Side = asrCenter
         Left = 4
-        Height = 17
-        Top = 6
+        Height = 19
+        Top = 5
         Width = 37
         Caption = 'Count'
         ParentColor = False
@@ -347,8 +347,8 @@ object f_capture: Tf_capture
         AnchorSideTop.Control = FrameType
         AnchorSideTop.Side = asrCenter
         Left = 4
-        Height = 17
-        Top = 7
+        Height = 19
+        Top = 6
         Width = 30
         Caption = 'Type'
         ParentColor = False

@@ -149,6 +149,7 @@ begin
   Label1.Caption:=rsExposure;
   Label7.Caption:=rsStackingCoun;
   LabelGain.Caption:=rsGain;
+  LabelOffset.Caption:=rsOffset2;
   Label2.Caption:=rsBinning;
   Label6.Caption:=rsFStop;
   Label3.Caption:=rsObject;

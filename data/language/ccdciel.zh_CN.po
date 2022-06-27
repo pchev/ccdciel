@@ -6,14 +6,14 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ccdciel\n"
 "Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
-"POT-Creation-Date: 2022-06-20 13:48+0000\n"
-"PO-Revision-Date: 2022-06-22 03:21+0000\n"
+"POT-Creation-Date: 2022-06-27 08:33+0000\n"
+"PO-Revision-Date: 2022-06-26 11:12+0000\n"
 "Last-Translator: Zachary Wu <Unknown>\n"
 "Language-Team: Chinese (Simplified) <zh_CN@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2022-06-24 20:16+0000\n"
+"X-Launchpad-Export-Date: 2022-06-27 09:08+0000\n"
 "X-Generator: Launchpad (build 51a2e4fa2e9b8e45f00904ad7f53546f45ac48a5)\n"
 
 #: u_translation.rs2d
@@ -112,6 +112,10 @@ msgstr "管理员"
 msgid "Advanced"
 msgstr "高级设置"
 
+#: u_translation.rsadvancedsett
+msgid "Advanced settings"
+msgstr ""
+
 #: u_translation.rsaftertelesco
 #, object-pascal-format
 msgid "After telescope pointing to target the offset relative to requested position is %s arcminutes.%sDo you want to retry the slew?"
@@ -143,7 +147,7 @@ msgstr "允许为高滤镜曝光系数选择更亮的星"
 
 #: u_translation.rsalt
 msgid "Alt"
-msgstr "高度角"
+msgstr "高度"
 
 #: u_translation.rsanotherscrip
 msgid "Another script is already running"
@@ -450,7 +454,7 @@ msgstr "可用"
 
 #: u_translation.rsaz
 msgid "Az"
-msgstr "方位角"
+msgstr "方位"
 
 #: u_translation.rsazimuth
 msgid "Azimuth"
@@ -546,6 +550,10 @@ msgstr "像素合并"
 msgid "blue"
 msgstr "蓝"
 
+#: u_translation.rsbrightness
+msgid "Brightness"
+msgstr ""
+
 #: u_translation.rsbrowselogfil
 msgid "Browse log files"
 msgstr "浏览日志文件"
@@ -629,6 +637,10 @@ msgstr "取消并重启曝光"
 #: u_translation.rscancelexposu
 msgid "Cancel exposure"
 msgstr "取消曝光"
+
+#: u_translation.rscancelexposu2
+msgid "Cancel exposure after"
+msgstr ""
 
 #: u_translation.rscancelpolara
 msgid "Cancel polar alignment"
@@ -781,9 +793,17 @@ msgstr "自动对焦时停止拍摄"
 msgid "Capture stopped unexpectedly"
 msgstr "拍摄意外停止"
 
+#: u_translation.rsccdcielstatu
+msgid "CCDciel status"
+msgstr ""
+
 #: u_translation.rsccdframesent
 msgid "CCD frame sent to planetarium."
 msgstr "CCD图像发送到星图。"
+
+#: u_translation.rscelsius
+msgid "Celsius"
+msgstr ""
 
 #: u_translation.rscenter
 msgid "Center"
@@ -806,6 +826,10 @@ msgstr "中心DEC"
 #: u_translation.rscenterra
 msgid "Center RA"
 msgstr "中心RA"
+
+#: u_translation.rschangelog
+msgid "Change log"
+msgstr ""
 
 #: u_translation.rschoose
 msgid "Choose"
@@ -1033,6 +1057,10 @@ msgstr "修正方法"
 #: u_translation.rscount
 msgid "Count"
 msgstr "数量"
+
+#: u_translation.rscov
+msgid "Cov."
+msgstr ""
 
 #: u_translation.rscover
 msgid "Cover"
@@ -1393,6 +1421,10 @@ msgstr "您要重试吗?"
 msgid "Do you want to run the termination action now?"
 msgstr "您现在要运行终止动作？"
 
+#: u_translation.rsduration
+msgid "Duration"
+msgstr ""
+
 #: u_translation.rsdusk
 msgid "dusk"
 msgstr "黄昏"
@@ -1448,6 +1480,10 @@ msgstr "发送邮件的情况："
 #: u_translation.rsemailsentsuc
 msgid "Email sent successfully, please check your inbox"
 msgstr "邮件发送成功，请检查您的收件箱"
+
+#: u_translation.rsencoder
+msgid "Encoder"
+msgstr ""
 
 #: u_translation.rsend
 msgid "End"
@@ -1564,6 +1600,10 @@ msgstr "曝光时间[秒]"
 msgid "Exposure time too short for measurement, need %d seconds."
 msgstr "曝光时间太短，无法测量，需要%d秒。"
 
+#: u_translation.rsfahrenheit
+msgid "Fahrenheit"
+msgstr ""
+
 #: u_translation.rsfailedtodele
 #, object-pascal-format
 msgid "Failed to delete file: %s"
@@ -1592,6 +1632,10 @@ msgstr "滤镜"
 #: u_translation.rsfile
 msgid "File"
 msgstr "文件"
+
+#: u_translation.rsfileformat
+msgid "File format"
+msgstr ""
 
 #: u_translation.rsfilenameopti
 msgid "File name options"
@@ -1637,6 +1681,10 @@ msgstr "最终移动（步长）"
 #: u_translation.rsfit
 msgid "Fit"
 msgstr "拟合"
+
+#: u_translation.rsfitsfileexte
+msgid "FITS file extension"
+msgstr ""
 
 #: u_translation.rsfitsheader
 msgid "FITS header"
@@ -1827,6 +1875,14 @@ msgstr "视场"
 #: u_translation.rsframe
 msgid "Frame"
 msgstr "画幅"
+
+#: u_translation.rsframerate
+msgid "Frame rate"
+msgstr ""
+
+#: u_translation.rsframes
+msgid "Frames"
+msgstr ""
 
 #: u_translation.rsfromcameradr
 msgid "From camera driver"
@@ -2167,7 +2223,7 @@ msgstr "交互对话框"
 
 #: u_translation.rsinterface
 msgid "Interface"
-msgstr "交互"
+msgstr "接口"
 
 #: u_translation.rsinterfacetyp
 msgid "Interface type"
@@ -2247,6 +2303,10 @@ msgstr "学习"
 #: u_translation.rslicenseagree
 msgid "License agreement"
 msgstr "许可协议"
+
+#: u_translation.rslight
+msgid "Light"
+msgstr ""
 
 #: u_translation.rslightoff
 msgid "Light OFF"
@@ -2448,9 +2508,9 @@ msgid "Measuring the new position"
 msgstr "测量新位置"
 
 #: u_translation.rsmedian
-#, object-pascal-format, fuzzy, badformat
+#, object-pascal-format
 msgid "%sMedian:%s"
-msgstr "%中位数：%s"
+msgstr "%s中位数：%s"
 
 #: u_translation.rsmeridian
 msgid "Meridian"
@@ -2556,6 +2616,10 @@ msgstr "赤道仪"
 #: u_translation.rsmode
 msgid "Mode:"
 msgstr "模式："
+
+#: u_translation.rsmoresettings
+msgid "More settings"
+msgstr ""
 
 #: u_translation.rsmount
 msgid "Mount"
@@ -3115,9 +3179,9 @@ msgid "pixel"
 msgstr "像素"
 
 #: u_translation.rspixelcount
-#, object-pascal-format, fuzzy, badformat
+#, object-pascal-format
 msgid "%sPixel count:%s"
-msgstr "%像素数量：%s"
+msgstr "%s像素数量：%s"
 
 #: u_translation.rspixels
 msgid "Pixels"
@@ -3747,6 +3811,10 @@ msgstr "无人值守运行"
 msgid "s"
 msgstr "秒"
 
+#: u_translation.rssaf
+msgid "Saf."
+msgstr ""
+
 #: u_translation.rssafe
 msgid "Safe"
 msgstr "安全"
@@ -4188,6 +4256,10 @@ msgstr "从望远镜获取地点"
 msgid "size"
 msgstr "大小"
 
+#: u_translation.rssize2
+msgid "Size"
+msgstr ""
+
 #: u_translation.rsskiptarget
 #, object-pascal-format
 msgid "Skip target %s"
@@ -4324,7 +4396,7 @@ msgstr "南"
 
 #: u_translation.rsspectralprof
 msgid "Spectral profile"
-msgstr "光谱配置"
+msgstr "光谱轮廓"
 
 #: u_translation.rsspeed
 msgid "Speed"
@@ -4668,6 +4740,10 @@ msgstr "摘要"
 msgid "Suspend dome slaving"
 msgstr "暂停圆顶从动"
 
+#: u_translation.rssw
+msgid "Sw."
+msgstr ""
+
 #: u_translation.rsswitch
 msgid "Switch"
 msgstr "电源开关"
@@ -4683,7 +4759,7 @@ msgstr "系统十字"
 
 #: u_translation.rssystemisunde
 msgid "System is undersampled, accept 1 pixel star"
-msgstr "系统前采样，得到1像素的星点"
+msgstr "系统欠采样，接受1像素的星点"
 
 #: u_translation.rstakecontrole
 #, object-pascal-format
@@ -4959,6 +5035,10 @@ msgstr "该序列%s含有完成状态。"
 msgid "This sequence contain information about the steps already completed.%sNow you can continue after the last checkpoint.%sDo you want to clear the completion status to restart from the beginning?"
 msgstr "该序列含有所有步骤已经完成的信息。%s现在您可以从最后一个检查点之后继续。%s您要清除完成状态并从头开始吗？"
 
+#: u_translation.rstiffwithfits
+msgid "TIFF with FITS header"
+msgstr ""
+
 #: u_translation.rstiltindicati2
 #, object-pascal-format
 msgid "Tilt indication[hfd]=%s"
@@ -5015,7 +5095,7 @@ msgstr "要使用内部导星，您需要在配置文件设备设置中配置赤
 
 #: u_translation.rstousethisdev
 msgid "To use this device, be sure to also configure the Internal Guider in Preferences/Auto-guiding"
-msgstr "要使用此设备，请确保还要在首选项/自动引导中配置内置导星"
+msgstr "要使用此设备，请确保还要在首选项/自动导星中配置内置导星"
 
 #: u_translation.rstrack
 msgid "Track"
@@ -5157,6 +5237,10 @@ msgstr "更新序列而不中断"
 #: u_translation.rsuseasfallbac
 msgid "Use as fallback if other software fail"
 msgstr "如果其他软件失败，则用作后备"
+
+#: u_translation.rsuseasinglest
+msgid "Use a single star for guiding"
+msgstr ""
 
 #: u_translation.rsuseasreferen
 msgid "Use as reference star"
@@ -5403,6 +5487,10 @@ msgstr "警告！收到%s图像"
 msgid "Warning, reversing the rotator will invalidated the calibration. Do you want to continue?"
 msgstr "警告，回转旋转器会使校准无效。确定要继续吗？"
 
+#: u_translation.rswarningthemo
+msgid "Warning! the mount will be parked every time a flat capture is started."
+msgstr ""
+
 #: u_translation.rswatchdog
 msgid "Watchdog"
 msgstr "看门狗"
@@ -5472,6 +5560,10 @@ msgstr "风速"
 #: u_translation.rswithoutpolev
 msgid "without pole visibility"
 msgstr "看不到天极"
+
+#: u_translation.rswth
+msgid "Wth."
+msgstr ""
 
 #: u_translation.rsyes
 msgid "Yes"

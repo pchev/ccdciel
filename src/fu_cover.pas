@@ -113,6 +113,9 @@ begin
   Title.Caption:=rsCoverCalibra;
   label1.Caption:=rsCover;
   label2.Caption:=rsCalibrator;
+  BtnOpenCover.Caption:=rsOpen;
+  BtnCloseCover.Caption:=rsClose;
+  Light.Caption:=rsLight;
 end;
 
 procedure Tf_cover.SetCoverLed;

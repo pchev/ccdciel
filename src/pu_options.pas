@@ -906,6 +906,7 @@ begin
   Button1.Caption := rsOK;
   Button2.Caption := rsCancel;
   ButtonHelp.Caption:=rsHelp;
+  PagePref.Caption:=format(rsPreferences,['']);
   PageFile.Caption := rsFiles;
   Label1.Caption := rsCaptureFolde;
   SeqDirDefault.Caption := rsDefault;
@@ -923,6 +924,9 @@ begin
   BtnFolderDefault.Caption := rsDefault;
   UseFileSequenceWidth.Caption:=rsFixedSequenc;
   FilePack.Caption:=rsCompressTheF;
+  Label156.Caption:=rsFITSFileExte;
+  SaveFormat.Caption:=rsFileFormat;
+  SaveFormat.Items[1]:=rsTIFFWithFITS;
   WantExif.Caption:=rsAddFITSKeywo;
   Label18.Caption := rsLanguage;
   CbShowHints.Caption:=rsShowHints;
@@ -1006,6 +1010,8 @@ begin
   GroupBox14.Caption := rsAutomaticCoo;
   CameraAutoCool.Caption := rsCoolDownWhen;
   TemperatureScale.Caption:=rsTemperatureS;
+  TemperatureScale.Items[0]:=rsCelsius;
+  TemperatureScale.Items[1]:=rsFahrenheit;
   Label75.Caption := rsDegree;
   GroupBox15.Caption := rsMaximumTempe;
   TemperatureSlopeActive.Caption := rsLimitTempera;
@@ -1078,6 +1084,8 @@ begin
   Autofocusmode.Caption := rsAutofocusMet;
   Label49.Caption := rsExposureTime2;
   Label51.Caption := rsSeconds;
+  LabelGain.Caption:=rsGain;
+  LabelOffset.Caption:=rsOffset2;
   Label58.Caption := rsMoveDirectio;
   AutofocusMoveDirIn.Caption := rsIn;
   AutofocusMoveDirOut.Caption := rsOut;
@@ -1095,6 +1103,8 @@ begin
   Label81.Caption := rsMinSNR;
   Label67.Caption := rsWhenPerformi;
   Label52.Caption:=rsDefaultBehav;
+  Label141.Caption:=rsNumberOfDyna;
+  Label142.Caption:=rsMovementBetw;
   AutofocusSlew.Caption:=rsSlewToFocusS2;
   AutofocusInPlace.Caption:=rsStayInPlace;
   AutofocusSlewStar.Caption := rsFocusStarSel;
@@ -1136,11 +1146,14 @@ begin
   Label105.Caption := rsProgramFolde;
   Label109.Caption := rsMaximumSearc;
   Label107.Caption := rsDownsample;
+  ASTAPadvanced.Caption:=rsAdvancedSett;
   PageSlew.Caption := rsSlewing;
   GroupBox7.Caption := rsPrecisionSle;
   Label28.Caption := rsTargetPrecis;
   Label29.Caption := rsMaximumNumbe;
   Label30.Caption := rsExposureTime3;
+  LabelGain1.Caption:=rsGain;
+  LabelOffset1.Caption:=rsOffset2;
   Label31.Caption := rsBinning;
   Label32.Caption := rsControlExpos;
   PrecSlewBox.Caption := rsCorrectionMe;
@@ -1177,6 +1190,8 @@ begin
   Label22.Caption := rsTimeout;
   Label26.Caption := Format(rsCalibrationD, [#10]);
   GroupBox13.Caption := rsStarLostReco;
+  Label145.Caption:=rsCancelExposu2;
+  Label146.Caption:=rsCount;
   Label70.Caption := rsS;
   Label71.Caption := rsRestartAfter;
   Label72.Caption := rsS;
@@ -1962,7 +1977,7 @@ procedure Tf_option.DomeFlatPositionClick(Sender: TObject);
 begin
   PanelFlatPositionAltAz.Visible:=(DomeFlatPosition.ItemIndex=0);
   if DomeFlatPosition.ItemIndex=1 then
-    LabelFlatWarning.Caption:='Warning! the mount will be parked every time a flat capture is started.'
+    LabelFlatWarning.Caption:=rsWarningTheMo
   else
     LabelFlatWarning.Caption:='';
 end;

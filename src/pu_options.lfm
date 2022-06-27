@@ -67,7 +67,7 @@ object f_option: Tf_option
     Top = 0
     Width = 720
     HorzScrollBar.Page = 712
-    VertScrollBar.Page = 535
+    VertScrollBar.Page = 549
     Align = alClient
     BorderStyle = bsNone
     ClientHeight = 554
@@ -122,7 +122,7 @@ object f_option: Tf_option
             AnchorSideTop.Side = asrCenter
             Left = 8
             Height = 19
-            Top = 29
+            Top = 28
             Width = 61
             Caption = 'Language'
             ParentColor = False
@@ -130,10 +130,9 @@ object f_option: Tf_option
           end
           object Languages: TComboBox
             Left = 162
-            Height = 28
-            Top = 24
+            Height = 35
+            Top = 20
             Width = 202
-            Constraints.MaxHeight = 28
             ItemHeight = 0
             ParentFont = False
             Sorted = True
@@ -2959,7 +2958,7 @@ object f_option: Tf_option
             object PagePlanet: TPage
               object Label141: TLabel
                 Left = 8
-                Height = 17
+                Height = 19
                 Top = 6
                 Width = 109
                 Caption = 'Number of points'
@@ -2968,7 +2967,7 @@ object f_option: Tf_option
               end
               object Label142: TLabel
                 Left = 8
-                Height = 17
+                Height = 19
                 Top = 38
                 Width = 167
                 Caption = 'Movement between points'
@@ -2977,7 +2976,7 @@ object f_option: Tf_option
               end
               object AutofocusPlanetNumPoint: TSpinEdit
                 Left = 214
-                Height = 28
+                Height = 29
                 Top = 0
                 Width = 61
                 MaxValue = 30
@@ -2988,7 +2987,7 @@ object f_option: Tf_option
               end
               object AutofocusPlanetMovement: TSpinEdit
                 Left = 214
-                Height = 28
+                Height = 29
                 Top = 32
                 Width = 61
                 MaxValue = 10000
@@ -3121,12 +3120,12 @@ object f_option: Tf_option
           TabOrder = 2
           object AutofocusMultistar: TGroupBox
             Left = 1
-            Height = 126
-            Top = 67
+            Height = 110
+            Top = 83
             Width = 558
             Align = alClient
             Caption = 'Focus star selection'
-            ClientHeight = 106
+            ClientHeight = 90
             ClientWidth = 556
             ParentFont = False
             TabOrder = 1
@@ -3160,12 +3159,12 @@ object f_option: Tf_option
           end
           object AutofocusSlewStar: TGroupBox
             Left = 1
-            Height = 126
-            Top = 67
+            Height = 110
+            Top = 83
             Width = 558
             Align = alClient
             Caption = 'Focus star selection'
-            ClientHeight = 106
+            ClientHeight = 90
             ClientWidth = 556
             ParentFont = False
             TabOrder = 0
@@ -3206,7 +3205,7 @@ object f_option: Tf_option
               AnchorSideTop.Side = asrCenter
               Left = 8
               Height = 19
-              Top = 33
+              Top = 27
               Width = 143
               Caption = 'Slew with a precision of '
               ParentColor = False
@@ -3217,7 +3216,7 @@ object f_option: Tf_option
               AnchorSideTop.Side = asrCenter
               Left = 384
               Height = 19
-              Top = 33
+              Top = 27
               Width = 49
               Caption = '[arcmin]'
               ParentColor = False
@@ -3227,7 +3226,7 @@ object f_option: Tf_option
               AnchorSideTop.Side = asrCenter
               Left = 299
               Height = 28
-              Top = 28
+              Top = 22
               Width = 77
               Anchors = [akLeft]
               Constraints.MaxHeight = 28
@@ -3249,12 +3248,12 @@ object f_option: Tf_option
           end
           object Panel16: TPanel
             Left = 1
-            Height = 66
+            Height = 82
             Top = 1
             Width = 558
             Align = alTop
             BevelOuter = bvNone
-            ClientHeight = 66
+            ClientHeight = 82
             ClientWidth = 558
             ParentFont = False
             TabOrder = 2
@@ -3833,22 +3832,22 @@ object f_option: Tf_option
           end
           object Page5: TPage
             object astap: TGroupBox
-              Left = 1
-              Height = 351
-              Top = 1
-              Width = 535
+              Left = 0
+              Height = 358
+              Top = 0
+              Width = 560
               Align = alClient
               Caption = 'ASTAP'
-              ClientHeight = 331
-              ClientWidth = 533
+              ClientHeight = 338
+              ClientWidth = 558
               ParentFont = False
               TabOrder = 0
               object Label105: TLabel
                 AnchorSideTop.Control = ASTAPFolder
                 AnchorSideTop.Side = asrCenter
                 Left = 8
-                Height = 17
-                Top = 30
+                Height = 19
+                Top = 29
                 Width = 97
                 Caption = 'Program folder '
                 ParentColor = False
@@ -3870,8 +3869,8 @@ object f_option: Tf_option
                 AnchorSideTop.Control = ASTAPdownsample
                 AnchorSideTop.Side = asrCenter
                 Left = 8
-                Height = 17
-                Top = 127
+                Height = 19
+                Top = 126
                 Width = 80
                 Caption = 'Downsample'
                 ParentColor = False
@@ -4791,7 +4790,7 @@ object f_option: Tf_option
             TabOrder = 1
             object DitherWaitTime: TSpinEdit
               Left = 105
-              Height = 27
+              Height = 28
               Top = 8
               Width = 74
               Constraints.MaxHeight = 28

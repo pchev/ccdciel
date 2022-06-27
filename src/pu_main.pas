@@ -126,7 +126,6 @@ type
     MenuDarkInfo1: TMenuItem;
     MenuDarkInfo2: TMenuItem;
     MenuChangelog: TMenuItem;
-    MenuInternalguider: TMenuItem;
     MenuAscomGuideCameraSetup: TMenuItem;
     MenuAlpacaGuideCameraSetup: TMenuItem;
     MenuItemGuiderStopAstrometry: TMenuItem;
@@ -2083,8 +2082,11 @@ begin
    MenuViewConnection.Caption := rsConnection;
    MenuViewPreview.Caption := rsPreview;
    MenuViewAutoguider.Caption := rsAutoguider;
+   MenuViewInternalguider.Caption:=rsInternalGuid;
    MenuViewPlanetarium.Caption := rsPlanetarium;
    MenuViewScript.Caption := rsScript;
+   MenuViewWeather.Caption:=rsWeatherStati;
+   MenuViewSafety.Caption:=rsSafetyMonito;
    MenuViewFocuser.Caption := rsFocuser;
    MenuViewStarProfile.Caption := rsFocus;
    MenuViewMagnifyer.Caption := rsMagnifyer;
@@ -2092,9 +2094,11 @@ begin
    MenuViewFilters.Caption := rsFilters;
    MenuViewFrame.Caption := rsFrame;
    MenuViewRotator.Caption := rsRotator;
+   MenuViewCover.Caption:=rsCoverCalibra;
    MenuViewCCDtemp.Caption := rsSensorTemperatu;
    MenuViewMount.Caption := rsTelescopeMou;
    MenuViewDome.Caption := rsDome;
+   MenuViewSwitch.Caption:=rsSwitch;
    MenuViewSequence.Caption := rsSequence;
    MenuViewVideo.Caption := rsVideo;
    MenuViewHistogram.Caption := rsVisualisatio;
@@ -2164,6 +2168,8 @@ begin
    MenuPdfHelp.Caption := rsPDFDocumenta;
    MenuOnlineHelp.Caption := rsOnlineDocume;
    MenuUsergroup.Caption := rsUserGroup;
+   MenuStatus.Caption:=rsCCDcielStatu;
+   MenuChangelog.Caption:=rsChangeLog;
    MenuShowLog.Caption := rsShowCurrentL;
    MenuShowINDIlog.Caption:=rsShowINDILog;
    MenuBrowseLog.Caption := rsBrowseLogFil;
@@ -2302,6 +2308,7 @@ begin
    if  f_collimation<>nil then f_collimation.SetLang;
    if  f_polaralign2<>nil then f_polaralign2.SetLang;
    if  f_internalguider<>nil then f_internalguider.SetLang;
+   if  f_video<>nil then f_video.SetLang;
 end;
 
 procedure Tf_main.FormShow(Sender: TObject);
@@ -2540,7 +2547,7 @@ begin
 
   SetTool(f_video,'Video',PanelRight5,0,MenuViewVideo,MenuVideo,true);
 
-  SetTool(f_internalguider,'InternalGuider',PanelRight6,0,MenuViewInternalGuider,MenuInternalGuider,WantGuideCamera and WantMount,true);
+  SetTool(f_internalguider,'InternalGuider',PanelRight6,0,MenuViewInternalGuider,nil,WantGuideCamera and WantMount,true);
 
 
   MenuViewClock.Checked:=screenconfig.GetValue('/Tools/Clock/Visible',true);
@@ -2849,7 +2856,7 @@ if sender is TMenuItem then begin
 
     SetTool(f_video,'',PanelRight5,0,MenuViewVideo,MenuVideo,true);
 
-    SetTool(f_internalguider,'',PanelRight6,0,MenuViewInternalguider,MenuInternalguider,WantGuideCamera and WantMount,true);
+    SetTool(f_internalguider,'',PanelRight6,0,MenuViewInternalguider,nil,WantGuideCamera and WantMount,true);
   end
   else if n=2 then begin
     // use left and right panel
@@ -2883,7 +2890,7 @@ if sender is TMenuItem then begin
 
    SetTool(f_video,'',PanelRight5,0,MenuViewVideo,MenuVideo,true);
 
-   SetTool(f_internalguider,'',PanelRight6,0,MenuViewInternalguider,MenuInternalguider,WantGuideCamera and WantMount,true);
+   SetTool(f_internalguider,'',PanelRight6,0,MenuViewInternalguider,nil,WantGuideCamera and WantMount,true);
   end;
   for i:=0 to MaxMenulevel do AccelList[i]:='';
   SetMenuAccelerator(MainMenu1.items,0,AccelList);
@@ -7916,7 +7923,7 @@ begin
      else if buf='fr' then langname:='Français'
      else if buf='it' then langname:='Italiano'
      else if buf='ru' then langname:='русский Russian'
-     else if buf='zh_CN' then langname:='Chinese (Simplified)'
+     else if buf='zh_CN' then langname:='中文 Chinese (Simplified)'
      else langname:='';
      f_option.Languages.Items.Add(buf+', '+langname);
      i:=FindNextUTF8(fs);

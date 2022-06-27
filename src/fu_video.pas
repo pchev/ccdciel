@@ -25,7 +25,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 interface
 
-uses u_global, u_utils, UScaleDPI, cu_camera, cu_wheel, indiapi, pu_indigui, math,
+uses u_global, u_utils, UScaleDPI, cu_camera, cu_wheel, indiapi, pu_indigui, math, u_translation,
   Classes, SysUtils, LazFileUtils, Spin, Forms, Graphics, Controls, StdCtrls, ExtCtrls, ComCtrls;
 
 type
@@ -121,6 +121,7 @@ type
     { public declarations }
     constructor Create(aOwner: TComponent); override;
     destructor  Destroy; override;
+    procedure SetLang;
     procedure SetImageControls;
     procedure ShowExposure(value:double);
     property camera: T_camera read FCamera write FCamera;
@@ -148,11 +149,33 @@ begin
  FVideoGUIready:=false;
  Ffps:=1;
  LabelRecording.Caption:='';
+ SetLang;
 end;
 
 destructor  Tf_video.Destroy;
 begin
  inherited Destroy;
+end;
+
+procedure Tf_video.SetLang;
+begin
+  Title.Caption:=rsVideo;
+  preview.Caption:=rsPreview;
+  label10.Caption:=rsEncoder;
+  label4.Caption:=rsExposure;
+  label8.Caption:=rsExposure;
+  label5.Caption:=rsGain;
+  label6.Caption:=rsGamma;
+  label7.Caption:=rsBrightness;
+  BtnOptions.Caption:=rsMoreSettings;
+  label2.Caption:=rsSize2;
+  label1.Caption:=rsFrameRate;
+  Duration.Caption:=rsDuration;
+  Frames.Caption:=rsFrames;
+  label3.Caption:=rsObject;
+  label9.Caption:=rsDirectory;
+  BtnStartRec.Caption:=rsStart;
+  BtnStopRec.Caption:=rsStop;
 end;
 
 procedure Tf_video.SetImageControls;

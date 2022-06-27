@@ -2,14 +2,14 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ccdciel\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-06-20 13:48+0000\n"
+"POT-Creation-Date: 2022-06-27 08:33+0000\n"
 "PO-Revision-Date: 2022-04-18 17:19+0000\n"
 "Last-Translator: Stanislav Holub <Unknown>\n"
 "Language-Team: Czech <cz@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2022-06-24 20:16+0000\n"
+"X-Launchpad-Export-Date: 2022-06-27 09:08+0000\n"
 "X-Generator: Launchpad (build 51a2e4fa2e9b8e45f00904ad7f53546f45ac48a5)\n"
 "Language: cs\n"
 
@@ -107,6 +107,10 @@ msgstr "správce"
 
 #: u_translation.rsadvanced
 msgid "Advanced"
+msgstr ""
+
+#: u_translation.rsadvancedsett
+msgid "Advanced settings"
 msgstr ""
 
 #: u_translation.rsaftertelesco
@@ -545,6 +549,10 @@ msgstr "Binning"
 msgid "blue"
 msgstr "modrá"
 
+#: u_translation.rsbrightness
+msgid "Brightness"
+msgstr ""
+
 #: u_translation.rsbrowselogfil
 msgid "Browse log files"
 msgstr "Procházet soubory protokolu"
@@ -628,6 +636,10 @@ msgstr "Zrušit a restartovat expozici"
 #: u_translation.rscancelexposu
 msgid "Cancel exposure"
 msgstr "Zrušit expozici"
+
+#: u_translation.rscancelexposu2
+msgid "Cancel exposure after"
+msgstr ""
 
 #: u_translation.rscancelpolara
 msgid "Cancel polar alignment"
@@ -780,9 +792,17 @@ msgstr "Během automatického ostření bylo snímání zastaveno"
 msgid "Capture stopped unexpectedly"
 msgstr "Snímání bylo neočekávaně ukončeno"
 
+#: u_translation.rsccdcielstatu
+msgid "CCDciel status"
+msgstr ""
+
 #: u_translation.rsccdframesent
 msgid "CCD frame sent to planetarium."
 msgstr "Rámec CCD odeslán do planetária."
+
+#: u_translation.rscelsius
+msgid "Celsius"
+msgstr ""
 
 #: u_translation.rscenter
 msgid "Center"
@@ -805,6 +825,10 @@ msgstr "Střed Dec"
 #: u_translation.rscenterra
 msgid "Center RA"
 msgstr "Střed RA"
+
+#: u_translation.rschangelog
+msgid "Change log"
+msgstr ""
 
 #: u_translation.rschoose
 msgid "Choose"
@@ -1032,6 +1056,10 @@ msgstr "Metoda korekce"
 #: u_translation.rscount
 msgid "Count"
 msgstr "Počet"
+
+#: u_translation.rscov
+msgid "Cov."
+msgstr ""
 
 #: u_translation.rscover
 msgid "Cover"
@@ -1392,6 +1420,10 @@ msgstr "Chcete akci opakovat?"
 msgid "Do you want to run the termination action now?"
 msgstr "Spustit ukončovací akci?"
 
+#: u_translation.rsduration
+msgid "Duration"
+msgstr ""
+
 #: u_translation.rsdusk
 msgid "dusk"
 msgstr "soumrak"
@@ -1447,6 +1479,10 @@ msgstr "E-mail na:"
 #: u_translation.rsemailsentsuc
 msgid "Email sent successfully, please check your inbox"
 msgstr "E-mail byl úspěšně odeslán. Zkontrolujte doručenou poštu"
+
+#: u_translation.rsencoder
+msgid "Encoder"
+msgstr ""
 
 #: u_translation.rsend
 msgid "End"
@@ -1563,6 +1599,10 @@ msgstr "Expoziční čas [sekundy]"
 msgid "Exposure time too short for measurement, need %d seconds."
 msgstr "Doba expozice příliš krátká pro měření, potřebují %d sekund."
 
+#: u_translation.rsfahrenheit
+msgid "Fahrenheit"
+msgstr ""
+
 #: u_translation.rsfailedtodele
 #, object-pascal-format
 msgid "Failed to delete file: %s"
@@ -1591,6 +1631,10 @@ msgstr "Filtr. k."
 #: u_translation.rsfile
 msgid "File"
 msgstr "Soubor"
+
+#: u_translation.rsfileformat
+msgid "File format"
+msgstr ""
 
 #: u_translation.rsfilenameopti
 msgid "File name options"
@@ -1636,6 +1680,10 @@ msgstr "Konečný pohyb (kroky)"
 #: u_translation.rsfit
 msgid "Fit"
 msgstr "Optimální"
+
+#: u_translation.rsfitsfileexte
+msgid "FITS file extension"
+msgstr ""
 
 #: u_translation.rsfitsheader
 msgid "FITS header"
@@ -1826,6 +1874,14 @@ msgstr "FOV"
 #: u_translation.rsframe
 msgid "Frame"
 msgstr "Snímek"
+
+#: u_translation.rsframerate
+msgid "Frame rate"
+msgstr ""
+
+#: u_translation.rsframes
+msgid "Frames"
+msgstr ""
 
 #: u_translation.rsfromcameradr
 msgid "From camera driver"
@@ -2247,6 +2303,10 @@ msgstr "Učit se"
 msgid "License agreement"
 msgstr "Licenční smlouva"
 
+#: u_translation.rslight
+msgid "Light"
+msgstr ""
+
 #: u_translation.rslightoff
 msgid "Light OFF"
 msgstr "Vypnuto"
@@ -2555,6 +2615,10 @@ msgstr "Mont."
 #: u_translation.rsmode
 msgid "Mode:"
 msgstr "Režim:"
+
+#: u_translation.rsmoresettings
+msgid "More settings"
+msgstr ""
 
 #: u_translation.rsmount
 msgid "Mount"
@@ -3746,6 +3810,10 @@ msgstr "Spuštění bez obsluhy"
 msgid "s"
 msgstr "v"
 
+#: u_translation.rssaf
+msgid "Saf."
+msgstr ""
+
 #: u_translation.rssafe
 msgid "Safe"
 msgstr "Bezpečný"
@@ -4186,6 +4254,10 @@ msgstr "Poloha nastavena z dalekohledu."
 #: u_translation.rssize
 msgid "size"
 msgstr "velikost"
+
+#: u_translation.rssize2
+msgid "Size"
+msgstr ""
 
 #: u_translation.rsskiptarget
 #, object-pascal-format
@@ -4667,6 +4739,10 @@ msgstr "Souhrn"
 msgid "Suspend dome slaving"
 msgstr "Pozastavit přejíždění kupole"
 
+#: u_translation.rssw
+msgid "Sw."
+msgstr ""
+
 #: u_translation.rsswitch
 msgid "Switch"
 msgstr "Přepínač"
@@ -4958,6 +5034,10 @@ msgstr "Sekvence %s obsahuje informace o dokončení."
 msgid "This sequence contain information about the steps already completed.%sNow you can continue after the last checkpoint.%sDo you want to clear the completion status to restart from the beginning?"
 msgstr "Sekvence obsahuje informace o již dokončených krocích.%sMůžete pokračovat od posledního kontrolního bodu.%sChcete vymazat stav dokončit a nastavit vše od začátku?"
 
+#: u_translation.rstiffwithfits
+msgid "TIFF with FITS header"
+msgstr ""
+
 #: u_translation.rstiltindicati2
 #, object-pascal-format
 msgid "Tilt indication[hfd]=%s"
@@ -5156,6 +5236,10 @@ msgstr "Aktualizovat sekvenci bez přerušení"
 #: u_translation.rsuseasfallbac
 msgid "Use as fallback if other software fail"
 msgstr "Použít jako záložní, pokud selže jiný software"
+
+#: u_translation.rsuseasinglest
+msgid "Use a single star for guiding"
+msgstr ""
 
 #: u_translation.rsuseasreferen
 msgid "Use as reference star"
@@ -5402,6 +5486,10 @@ msgstr "Varování! %s přijmout obrázek"
 msgid "Warning, reversing the rotator will invalidated the calibration. Do you want to continue?"
 msgstr "Pozor, otočení rotátoru zruší kalibraci. Chcete pokračovat?"
 
+#: u_translation.rswarningthemo
+msgid "Warning! the mount will be parked every time a flat capture is started."
+msgstr ""
+
 #: u_translation.rswatchdog
 msgid "Watchdog"
 msgstr "Hlídací pes"
@@ -5471,6 +5559,10 @@ msgstr "Rychlost větru"
 #: u_translation.rswithoutpolev
 msgid "without pole visibility"
 msgstr "bez viditelnosti pólu"
+
+#: u_translation.rswth
+msgid "Wth."
+msgstr ""
 
 #: u_translation.rsyes
 msgid "Yes"

@@ -118,6 +118,11 @@ begin
   LabelMount.Caption:=rsMnt;
   LabelWatchdog.Caption:=rsWch;
   LabelGuideCamera.Caption:=rsGuid;
+  LabelDome.Caption:=rsDome;
+  LabelSafety.Caption:=rsSaf;
+  LabelSwitch.Caption:=rsSw;
+  LabelCover.Caption:=rsCov;
+  LabelWeather.Caption:=rsWth;
 end;
 
 procedure Tf_devicesconnection.BtnProfileClick(Sender: TObject);

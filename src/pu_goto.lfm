@@ -20,7 +20,7 @@ object f_goto: Tf_goto
     TabOrder = 6
     object PxSz: TEdit
       Left = 120
-      Height = 30
+      Height = 31
       Top = 8
       Width = 111
       ParentFont = False
@@ -32,6 +32,7 @@ object f_goto: Tf_goto
       Top = 8
       Width = 73
       Caption = 'Image scale'
+      ParentColor = False
       ParentFont = False
     end
     object Label8: TLabel
@@ -40,6 +41,7 @@ object f_goto: Tf_goto
       Top = 32
       Width = 58
       Caption = 'arcsec/px'
+      ParentColor = False
       ParentFont = False
     end
     object BtnCompute: TButton
@@ -105,6 +107,7 @@ object f_goto: Tf_goto
     Top = 74
     Width = 63
     Caption = 'Center RA'
+    ParentColor = False
     ParentFont = False
   end
   object Label2: TLabel
@@ -115,6 +118,7 @@ object f_goto: Tf_goto
     Top = 108
     Width = 70
     Caption = 'Center Dec'
+    ParentColor = False
     ParentFont = False
   end
   object Label3: TLabel
@@ -125,6 +129,7 @@ object f_goto: Tf_goto
     Top = 37
     Width = 78
     Caption = 'Object name'
+    ParentColor = False
     ParentFont = False
   end
   object Panel1: TPanel
@@ -168,6 +173,7 @@ object f_goto: Tf_goto
     Top = 74
     Width = 36
     Caption = 'J2000'
+    ParentColor = False
     ParentFont = False
   end
   object Label16: TLabel
@@ -178,6 +184,7 @@ object f_goto: Tf_goto
     Top = 108
     Width = 36
     Caption = 'J2000'
+    ParentColor = False
     ParentFont = False
   end
   object msginfo: TLabel
@@ -186,6 +193,7 @@ object f_goto: Tf_goto
     Top = 4
     Width = 50
     Caption = 'msginfo'
+    ParentColor = False
     ParentFont = False
   end
   object PanelAltAz: TPanel
@@ -204,6 +212,7 @@ object f_goto: Tf_goto
       Top = 8
       Width = 41
       Caption = 'Label4'
+      ParentColor = False
       ParentFont = False
     end
     object LabelAz: TLabel
@@ -212,6 +221,7 @@ object f_goto: Tf_goto
       Top = 8
       Width = 4
       Caption = '-'
+      ParentColor = False
       ParentFont = False
     end
     object Label5: TLabel
@@ -220,6 +230,7 @@ object f_goto: Tf_goto
       Top = 42
       Width = 41
       Caption = 'Label5'
+      ParentColor = False
       ParentFont = False
     end
     object LabelAlt: TLabel
@@ -228,6 +239,7 @@ object f_goto: Tf_goto
       Top = 42
       Width = 4
       Caption = '-'
+      ParentColor = False
       ParentFont = False
     end
     object GotoAstrometry: TCheckBox

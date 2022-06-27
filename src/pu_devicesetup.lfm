@@ -82,12 +82,12 @@ object f_setup: Tf_setup
       Height = 458
       Top = 0
       Width = 497
-      ActivePage = GuideCamera
+      ActivePage = DeviceInterface
       Align = alClient
       MultiLine = True
       ParentFont = False
       ShowTabs = False
-      TabIndex = 2
+      TabIndex = 0
       TabOrder = 1
       OnChange = Pagecontrol1Change
       Options = [nboMultiLine]
@@ -487,17 +487,17 @@ object f_setup: Tf_setup
           OnChange = PageControlCameraChange
           object CameraIndi: TTabSheet
             Caption = 'CameraIndi'
-            ClientHeight = 383
+            ClientHeight = 410
             ClientWidth = 477
             ParentFont = False
             object PanelCameraIndi: TPanel
               Left = 0
-              Height = 383
+              Height = 410
               Top = 0
               Width = 477
               Align = alClient
               BevelOuter = bvNone
-              ClientHeight = 383
+              ClientHeight = 410
               ClientWidth = 477
               ParentFont = False
               TabOrder = 0
@@ -700,7 +700,7 @@ object f_setup: Tf_setup
           end
           object CameraAscom: TTabSheet
             Caption = 'CameraAscom'
-            ClientHeight = 383
+            ClientHeight = 410
             ClientWidth = 477
             ParentFont = False
             object PanelCameraAscom: TPanel
@@ -709,8 +709,8 @@ object f_setup: Tf_setup
               Top = 16
               Width = 456
               BevelOuter = bvNone
-              ClientHeight = 266
-              ClientWidth = 456
+              ClientHeight = 262
+              ClientWidth = 452
               ParentFont = False
               TabOrder = 0
               object BtnChooseCamera: TButton
@@ -788,17 +788,17 @@ object f_setup: Tf_setup
           end
           object CameraAscomRest: TTabSheet
             Caption = 'CameraAscomRest'
-            ClientHeight = 383
+            ClientHeight = 410
             ClientWidth = 477
             ParentFont = False
             object Panel2: TPanel
               Left = 0
-              Height = 383
+              Height = 410
               Top = 0
               Width = 477
               Align = alClient
               BevelOuter = bvNone
-              ClientHeight = 383
+              ClientHeight = 410
               ClientWidth = 477
               ParentFont = False
               TabOrder = 0

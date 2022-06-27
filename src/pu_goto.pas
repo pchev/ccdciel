@@ -92,6 +92,7 @@ begin
   Caption:=rsGoto;
   ButtonOK.Caption:=rsGoto;
   Button2.Caption:=rsCancel;
+  BtnSearch.Caption:=rsSearch;
   Label1.Caption:=rsCenterRA;
   Label6.Caption:=j2000;
   Label2.Caption:=rsCenterDec;

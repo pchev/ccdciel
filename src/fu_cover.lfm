@@ -23,6 +23,7 @@ object f_cover: Tf_cover
     DragMode = dmAutomatic
     Font.Color = clBtnText
     Layout = tlCenter
+    ParentColor = False
     ParentFont = False
     Transparent = False
   end
@@ -64,6 +65,7 @@ object f_cover: Tf_cover
         Top = 4
         Width = 37
         Caption = 'Cover'
+        ParentColor = False
         ParentFont = False
       end
       object BtnOpenCover: TButton
@@ -92,6 +94,7 @@ object f_cover: Tf_cover
         Top = 4
         Width = 70
         Caption = 'LabelCover'
+        ParentColor = False
       end
     end
     object PanelCalibrator: TPanel
@@ -122,13 +125,14 @@ object f_cover: Tf_cover
         Top = 4
         Width = 60
         Caption = 'Calibrator'
+        ParentColor = False
         ParentFont = False
       end
       object Brightness: TSpinEdit
         AnchorSideTop.Control = Light
         AnchorSideTop.Side = asrCenter
         Left = 104
-        Height = 28
+        Height = 29
         Top = 22
         Width = 72
         Enabled = False
@@ -142,6 +146,7 @@ object f_cover: Tf_cover
         Top = 4
         Width = 93
         Caption = 'LabelCalibrator'
+        ParentColor = False
       end
       object Light: TCheckBox
         Left = 8
