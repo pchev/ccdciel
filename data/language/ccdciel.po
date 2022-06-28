@@ -5246,10 +5246,6 @@ msgstr ""
 msgid "Guider image"
 msgstr ""
 
-#: u_translation:rsuseasinglest
-msgid "Use a single star for guiding"
-msgstr ""
-
 #: u_translation:rssaf
 msgid "Saf."
 msgstr ""
@@ -5336,5 +5332,13 @@ msgstr ""
 
 #: u_translation:rslight
 msgid "Light"
+msgstr ""
+
+#: u_translation:rsframesize
+msgid "Frame size"
+msgstr ""
+
+#: u_translation:rsmax2
+msgid "Max"
 msgstr ""
 

@@ -6,14 +6,14 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ccdciel\n"
 "Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
-"POT-Creation-Date: 2022-06-27 08:33+0000\n"
+"POT-Creation-Date: 2022-06-28 06:42+0000\n"
 "PO-Revision-Date: 2022-06-24 19:45+0000\n"
 "Last-Translator: Thomas <email@starhopper.de>\n"
 "Language-Team: German <de@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2022-06-27 09:08+0000\n"
+"X-Launchpad-Export-Date: 2022-06-28 06:48+0000\n"
 "X-Generator: Launchpad (build 51a2e4fa2e9b8e45f00904ad7f53546f45ac48a5)\n"
 
 #: u_translation.rs2d
@@ -1884,6 +1884,10 @@ msgstr ""
 msgid "Frames"
 msgstr ""
 
+#: u_translation.rsframesize
+msgid "Frame size"
+msgstr ""
+
 #: u_translation.rsfromcameradr
 msgid "From camera driver"
 msgstr "Vom Kameratreiber"
@@ -2404,6 +2408,10 @@ msgstr "Randversatz"
 #: u_translation.rsmax
 msgid "Max:"
 msgstr "Max:"
+
+#: u_translation.rsmax2
+msgid "Max"
+msgstr ""
 
 #: u_translation.rsmaximum
 msgid "maximum"
@@ -5237,10 +5245,6 @@ msgstr "Aktualisiere Sequenz ohne Unterbrechung"
 #: u_translation.rsuseasfallbac
 msgid "Use as fallback if other software fail"
 msgstr "Als Rückfallebene verwenden, wenn andere Software ausfällt"
-
-#: u_translation.rsuseasinglest
-msgid "Use a single star for guiding"
-msgstr ""
 
 #: u_translation.rsuseasreferen
 msgid "Use as reference star"
