@@ -405,7 +405,7 @@ object f_option: Tf_option
           TabOrder = 0
           object FileOpt: TTabSheet
             Caption = 'File name options'
-            ClientHeight = 460
+            ClientHeight = 463
             ClientWidth = 550
             ParentFont = False
             object BtnFileDefault: TButton
@@ -437,6 +437,7 @@ object f_option: Tf_option
                   Width = 307
                 end>
               FixedRows = 0
+              MouseWheelOption = mwGrid
               Options = [goFixedVertLine, goFixedHorzLine, goHorzLine, goRangeSelect, goRowMoving, goAlwaysShowEditor, goSmoothScroll]
               ParentFont = False
               RowCount = 9
@@ -621,7 +622,7 @@ object f_option: Tf_option
           end
           object FolderOpt: TTabSheet
             Caption = 'Folder name options'
-            ClientHeight = 460
+            ClientHeight = 463
             ClientWidth = 550
             ParentFont = False
             object BtnFolderDefault: TButton
@@ -653,6 +654,7 @@ object f_option: Tf_option
                   Width = 307
                 end>
               FixedRows = 0
+              MouseWheelOption = mwGrid
               Options = [goFixedVertLine, goFixedHorzLine, goHorzLine, goRangeSelect, goRowMoving, goAlwaysShowEditor, goSmoothScroll]
               ParentFont = False
               RowCount = 8
@@ -2521,14 +2523,15 @@ object f_option: Tf_option
             AutoFillColumns = True
             ColCount = 3
             DefaultColWidth = 123
+            MouseWheelOption = mwGrid
             Options = [goFixedVertLine, goFixedHorzLine, goVertLine, goHorzLine, goRangeSelect, goEditing, goAlwaysShowEditor, goSmoothScroll]
             ParentFont = False
             RowCount = 21
             TabOrder = 0
             ColWidths = (
               123
-              214
-              214
+              206
+              207
             )
           end
         end
@@ -5192,16 +5195,17 @@ object f_option: Tf_option
                   MinSize = 101
                   MaxSize = 202
                   Title.Caption = 'Action'
-                  Width = 503
+                  Width = 505
                 end>
               DefaultColWidth = 51
+              MouseWheelOption = mwGrid
               Options = [goFixedVertLine, goFixedHorzLine, goVertLine, goHorzLine, goRowMoving, goEditing, goAlwaysShowEditor, goSmoothScroll, goFixedRowNumbering]
               ParentFont = False
               RowCount = 6
               TabOrder = 0
               ColWidths = (
                 51
-                503
+                505
               )
             end
           end
@@ -5231,16 +5235,17 @@ object f_option: Tf_option
                   MinSize = 101
                   MaxSize = 202
                   Title.Caption = 'Action'
-                  Width = 503
+                  Width = 505
                 end>
               DefaultColWidth = 51
+              MouseWheelOption = mwGrid
               Options = [goFixedVertLine, goFixedHorzLine, goVertLine, goHorzLine, goRowMoving, goEditing, goAlwaysShowEditor, goSmoothScroll, goFixedRowNumbering]
               ParentFont = False
               RowCount = 6
               TabOrder = 0
               ColWidths = (
                 51
-                503
+                505
               )
             end
           end
@@ -6422,15 +6427,16 @@ object f_option: Tf_option
               MinSize = 101
               MaxSize = 202
               Title.Caption = 'Action'
-              Width = 252
+              Width = 253
             end          
             item
               MinSize = 101
               MaxSize = 202
               Title.Caption = 'Parameters'
-              Width = 253
+              Width = 254
             end>
           DefaultColWidth = 51
+          MouseWheelOption = mwGrid
           Options = [goFixedVertLine, goFixedHorzLine, goVertLine, goHorzLine, goRowMoving, goEditing, goAlwaysShowEditor, goSmoothScroll, goFixedRowNumbering]
           ParentFont = False
           RowCount = 16
@@ -6439,8 +6445,8 @@ object f_option: Tf_option
           OnValidateEntry = SafetyActionsValidateEntry
           ColWidths = (
             51
-            252
             253
+            254
           )
         end
         object Panel18: TPanel

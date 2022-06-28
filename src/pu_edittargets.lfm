@@ -55,6 +55,7 @@ object f_EditTargets: Tf_EditTargets
           Width = 83
           Caption = 'TargetName'
           Font.Style = [fsBold]
+          ParentColor = False
           ParentFont = False
         end
         object Label2: TLabel
@@ -63,6 +64,7 @@ object f_EditTargets: Tf_EditTargets
           Top = 0
           Width = 61
           Caption = 'Sequence'
+          ParentColor = False
           ParentFont = False
         end
         object CheckBoxResetRepeat: TCheckBox
@@ -236,6 +238,7 @@ object f_EditTargets: Tf_EditTargets
           Top = 0
           Width = 162
           Caption = 'Sequence start / stop time'
+          ParentColor = False
         end
       end
       object PanelStartOption: TPanel
@@ -255,6 +258,7 @@ object f_EditTargets: Tf_EditTargets
           Top = 0
           Width = 79
           Caption = 'Start options'
+          ParentColor = False
           ParentFont = False
         end
         object StartOpt: TCheckListBox
@@ -317,6 +321,7 @@ object f_EditTargets: Tf_EditTargets
           Top = 0
           Width = 123
           Caption = 'Termination options'
+          ParentColor = False
           ParentFont = False
         end
       end
@@ -426,6 +431,7 @@ object f_EditTargets: Tf_EditTargets
                 Top = 4
                 Width = 49
                 Caption = 'Interval'
+                ParentColor = False
                 ParentFont = False
               end
               object TDelay: TSpinEdit
@@ -463,6 +469,7 @@ object f_EditTargets: Tf_EditTargets
                 Top = 4
                 Width = 58
                 Caption = '[seconds]'
+                ParentColor = False
                 ParentFont = False
               end
               object Label4: TLabel
@@ -473,6 +480,7 @@ object f_EditTargets: Tf_EditTargets
                 Top = 4
                 Width = 48
                 Caption = 'Repeat:'
+                ParentColor = False
               end
             end
             object TargetMsg: TLabel
@@ -483,6 +491,7 @@ object f_EditTargets: Tf_EditTargets
               Align = alTop
               AutoSize = False
               Caption = 'TargetMsg'
+              ParentColor = False
               ParentFont = False
             end
           end
@@ -628,6 +637,7 @@ object f_EditTargets: Tf_EditTargets
           end>
         DefaultColWidth = 30
         HeaderHotZones = [gzFixedCols, gzFixedCells]
+        MouseWheelOption = mwGrid
         Options = [goFixedVertLine, goFixedHorzLine, goVertLine, goHorzLine, goDrawFocusSelected, goColSizing, goRowMoving, goEditing, goTabs, goAlwaysShowEditor, goThumbTracking, goCellHints, goCellEllipsis]
         ParentFont = False
         RowCount = 2
@@ -819,6 +829,7 @@ object f_EditTargets: Tf_EditTargets
                 Width = 76
               end>
             DefaultColWidth = 30
+            MouseWheelOption = mwGrid
             Options = [goFixedVertLine, goFixedHorzLine, goVertLine, goHorzLine, goDrawFocusSelected, goColSizing, goRowMoving, goEditing, goTabs, goAlwaysShowEditor, goThumbTracking, goCellHints, goCellEllipsis]
             ParentFont = False
             RowCount = 1
@@ -867,6 +878,7 @@ object f_EditTargets: Tf_EditTargets
               Width = 57
               Anchors = [akLeft]
               Caption = 'Template'
+              ParentColor = False
               ParentFont = False
             end
             object PlanName: TLabel
@@ -878,6 +890,7 @@ object f_EditTargets: Tf_EditTargets
               Width = 69
               Caption = 'PlanName'
               Font.Style = [fsBold]
+              ParentColor = False
               ParentFont = False
             end
             object LabelMsg: TLabel
@@ -888,6 +901,7 @@ object f_EditTargets: Tf_EditTargets
               Top = 5
               Width = 59
               Caption = 'LabelMsg'
+              ParentColor = False
               ParentFont = False
             end
             object BtnSaveTemplate: TButton
@@ -959,6 +973,7 @@ object f_EditTargets: Tf_EditTargets
             Top = 24
             Width = 35
             Caption = 'Script'
+            ParentColor = False
             ParentFont = False
           end
           object ScriptList: TComboBox
@@ -1058,6 +1073,7 @@ object f_EditTargets: Tf_EditTargets
                 Top = 4
                 Width = 28
                 Caption = 'Gain'
+                ParentColor = False
                 ParentFont = False
               end
               object FGainEdit: TSpinEdit
@@ -1090,6 +1106,7 @@ object f_EditTargets: Tf_EditTargets
                   Top = 8
                   Width = 38
                   Caption = 'Offset'
+                  ParentColor = False
                   ParentFont = False
                 end
                 object FOffsetEdit: TSpinEdit
@@ -1114,6 +1131,7 @@ object f_EditTargets: Tf_EditTargets
               Top = 37
               Width = 47
               Caption = 'Binning'
+              ParentColor = False
               ParentFont = False
             end
             object FlatBinning: TComboBox
@@ -1141,6 +1159,7 @@ object f_EditTargets: Tf_EditTargets
               Top = 5
               Width = 37
               Caption = 'Count'
+              ParentColor = False
               ParentFont = False
             end
             object FlatCount: TSpinEdit
@@ -1175,6 +1194,7 @@ object f_EditTargets: Tf_EditTargets
                 Top = 4
                 Width = 39
                 Caption = 'F-Stop'
+                ParentColor = False
                 ParentFont = False
               end
               object FFstopbox: TComboBox
