@@ -7,13 +7,13 @@ msgstr ""
 "Project-Id-Version: ccdciel\n"
 "Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
 "POT-Creation-Date: 2022-06-28 06:42+0000\n"
-"PO-Revision-Date: 2022-06-28 01:29+0000\n"
+"PO-Revision-Date: 2022-06-28 07:25+0000\n"
 "Last-Translator: Zachary Wu <Unknown>\n"
 "Language-Team: Chinese (Simplified) <zh_CN@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2022-06-28 06:48+0000\n"
+"X-Launchpad-Export-Date: 2022-06-28 15:48+0000\n"
 "X-Generator: Launchpad (build 51a2e4fa2e9b8e45f00904ad7f53546f45ac48a5)\n"
 
 #: u_translation.rs2d
@@ -1060,7 +1060,7 @@ msgstr "数量"
 
 #: u_translation.rscov
 msgid "Cov."
-msgstr ""
+msgstr "Cov."
 
 #: u_translation.rscover
 msgid "Cover"
@@ -1886,7 +1886,7 @@ msgstr "帧"
 
 #: u_translation.rsframesize
 msgid "Frame size"
-msgstr ""
+msgstr "帧大小"
 
 #: u_translation.rsfromcameradr
 msgid "From camera driver"
@@ -2411,7 +2411,7 @@ msgstr "最大值："
 
 #: u_translation.rsmax2
 msgid "Max"
-msgstr ""
+msgstr "最大值"
 
 #: u_translation.rsmaximum
 msgid "maximum"
@@ -3821,7 +3821,7 @@ msgstr "秒"
 
 #: u_translation.rssaf
 msgid "Saf."
-msgstr ""
+msgstr "Saf."
 
 #: u_translation.rssafe
 msgid "Safe"
@@ -4750,7 +4750,7 @@ msgstr "暂停圆顶从动"
 
 #: u_translation.rssw
 msgid "Sw."
-msgstr ""
+msgstr "Sw."
 
 #: u_translation.rsswitch
 msgid "Switch"
@@ -5567,7 +5567,7 @@ msgstr "看不到天极"
 
 #: u_translation.rswth
 msgid "Wth."
-msgstr ""
+msgstr "Wth."
 
 #: u_translation.rsyes
 msgid "Yes"
