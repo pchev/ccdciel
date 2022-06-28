@@ -26,7 +26,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 interface
 
 uses cu_autoguider, u_global, u_utils, math, fu_internalguider, indiapi,
-  u_translation, Graphics, Forms, Classes, SysUtils;
+  u_translation, Graphics, Forms, Classes, SysUtils, ExtCtrls;
 
 type
   star_position=record x1,y1,x2,y2,flux: double; end;//for internal guider
@@ -44,8 +44,9 @@ type
     xy_trend : xy_guiderlist;{fu_internalguider}
     xy_array,xy_array_old : star_position_array;//internal guider for measure drift
     GuideLog: TextFile;
-    FPaused, FSettling, FSettlingInRange: boolean;
+    FPaused, FSettling, FSettlingInRange,PulseGuiding: boolean;
     FSettleStartTime, FSettleTime: double;
+    TimerWaitPulseGuiding: TTimer;
     function  measure_drift(var initialize: boolean; out drX,drY :double) : integer;
     Procedure StartGuideExposure;
     procedure InternalguiderStartAsync(Data: PtrInt);
@@ -54,6 +55,7 @@ type
     Procedure InitLog;
     Procedure WriteLog( buf : string);
     Procedure CloseLog;
+    procedure TimerWaitPulseGuidingTimer(Sender: TObject);
   protected
     Procedure ProcessEvent(txt:string); override;
     procedure Execute; override;
@@ -145,6 +147,7 @@ begin
   FRunning:=true;
   FPaused:=false;
   FSettling:=false;
+  PulseGuiding:=false;
   FSettlePix:=1;
   FSettleTmin:=5;
   FSettleTmax:=30;
@@ -155,11 +158,15 @@ begin
   InternalguiderCalibrating:=false;
   InternalguiderCapturingDark:=false;
   frame_size:=9999;
+  TimerWaitPulseGuiding:=TTimer.Create(nil);
+  TimerWaitPulseGuiding.Enabled:=false;
+  TimerWaitPulseGuiding.OnTimer:=@TimerWaitPulseGuidingTimer;
 end;
 
 Destructor T_autoguider_internal.Destroy;
 begin
   CloseLog;
+  TimerWaitPulseGuiding.Free;
   inherited Destroy;
 end;
 
@@ -657,6 +664,12 @@ var e: double;
     binx,biny,gain: integer;
 begin
 if (FCamera.Status=devConnected) then begin
+  // check internal pulse guide is in progress
+  if PulseGuiding then begin
+     CheckSynchronize();
+     Application.QueueAsyncCall(@StartGuideExposureAsync,0);
+     exit;
+  end;
   // check exposure time
   e:=finternalguider.Exposure.value;
   binx:=finternalguider.Binning.Value;
@@ -1003,22 +1016,18 @@ begin
 end;
 
 function T_autoguider_internal.WaitPulseGuiding(pulse:longint): boolean;
-var
-   thesleep : integer;
 begin
-  result:=false;
-  repeat
-    thesleep:=(min(100,pulse));
-    sleep(thesleep);
-    dec(pulse,thesleep);
-    CheckSynchronize();
-    if StopInternalguider then
-    begin
-      msg('Guider stop pressed.',3);
-      exit;
-    end;
-  until pulse<=0;
-  result:=true;
+ PulseGuiding:=true;
+ TimerWaitPulseGuiding.Interval:=pulse;
+ TimerWaitPulseGuiding.Enabled:=false;
+ TimerWaitPulseGuiding.Enabled:=true;
+ result:=true;
+end;
+
+procedure T_autoguider_internal.TimerWaitPulseGuidingTimer(Sender: TObject);
+begin
+  TimerWaitPulseGuiding.Enabled:=false;
+  PulseGuiding:=false;
 end;
 
 procedure T_autoguider_internal.InternalguiderStop;
