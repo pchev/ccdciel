@@ -1415,7 +1415,6 @@ resourcestring
   rsMeasurePixel = 'Measure pixel scale by stop tracking';
   rsDisableGuidi = 'Disable guiding temporary';
   rsGuiderImage = 'Guider image';
-  rsUseASingleSt = 'Use a single star for guiding';
   rsSaf = 'Saf.';
   rsSw = 'Sw.';
   rsCov = 'Cov.';
@@ -1438,6 +1437,8 @@ resourcestring
   rsCCDcielStatu = 'CCDciel status';
   rsChangeLog = 'Change log';
   rsLight = 'Light';
+  rsFrameSize = 'Frame size';
+  rsMax2 = 'Max';
 
 implementation
 

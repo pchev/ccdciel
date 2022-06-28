@@ -49,11 +49,12 @@ type
     ButtonGuide: TButton;
     ButtonStop: TButton;
     ButtonStop1: TButton;
-    CheckBoxSingleStar: TCheckBox;
     disable_guiding1: TCheckBox;
     Exposure: TFloatSpinEdit;
+    Label9: TLabel;
     LabelStatusDec: TLabel;
     LabelStatusRA: TLabel;
+    framesize1: TComboBox;
     MenuItemDarkInfo: TMenuItem;
     MenuItemLoadDark: TMenuItem;
     minHFD1: TFloatSpinEdit;
@@ -170,7 +171,7 @@ type
     procedure SetUseArcSeconds(value:boolean);
     function GetScale:integer;
     procedure SetScale(value:integer);
-    function GetSingleStar: boolean;
+    function GetFrameSize: integer;
 
   public
     { public declarations }
@@ -206,7 +207,7 @@ type
     property pier_side: string read Getpier_sidesetting write Setpier_sidesetting; // movement in arcsec/second. Found by the calibration
     property PA : double read GetPAsetting write SetPAsetting;// Guider image orientation in radians. Found by the calibration
     property trend_scale: integer read Getscale write Setscale;
-    property SingleStar: boolean read GetSingleStar;
+    property FrameSize: integer read GetFrameSize;
   end;
 
 implementation
@@ -275,7 +276,8 @@ begin
   Label24.Caption:=rsMinimum2+' SNR';
   measure_method2.Caption:=rsMeasurePixel;
   disable_guiding1.Caption:=rsDisableGuidi;
-  CheckBoxSingleStar.Caption:=rsUseASingleSt;
+  Label9.Caption:=rsFrameSize;
+  framesize1.Items[0]:=rsMax2;
 end;
 
 function Tf_internalguider.Getdisableguiding:boolean;
@@ -767,9 +769,12 @@ begin
   if Assigned(FonRedraw) then FonRedraw(self);
 end;
 
-function Tf_internalguider.GetSingleStar: boolean;
+function Tf_internalguider.GetFrameSize: integer;
+var
+  err, v : integer;
 begin
-  result:=CheckBoxSingleStar.Checked;
+  val(framesize1.text,v,err);
+  if err<>0 then result:=9999 else result:=v;
 end;
 
 end.

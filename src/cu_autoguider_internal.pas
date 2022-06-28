@@ -35,9 +35,9 @@ type
 
   T_autoguider_internal = class(T_autoguider)
   private
-    InternalguiderInitialize,InternalCalibrationInitialize,GuideLogFileOpen,InternalguiderSingleStar : boolean;
+    InternalguiderInitialize,InternalCalibrationInitialize,GuideLogFileOpen  : boolean;
     pulseRA,pulseDEC,GuideFrameCount, InternalguiderCalibrationDirection,InternalguiderCalibrationStep,
-    CalibrationDuration,Calflip,CalCount,Calnrtest           : integer;
+    CalibrationDuration,Calflip,CalCount,Calnrtest,frame_size           : integer;
     driftX,driftY,driftRA,driftDec,moveRA,moveDEC, Guidethecos,old_moveRA,old_moveDEC,  paEast, paNorth,
     pulsegainEast,pulsegainWest,pulsegainNorth,pulsegainSouth,Calthecos, Caltheangle,CaldriftOld,
     GuideStartTime,LogSNR,LogFlux,mean_hfd,ditherX,ditherY : double;
@@ -154,7 +154,7 @@ begin
   InternalguiderGuiding:=false;
   InternalguiderCalibrating:=false;
   InternalguiderCapturingDark:=false;
-  InternalguiderSingleStar:=false;
+  frame_size:=9999;
 end;
 
 Destructor T_autoguider_internal.Destroy;
@@ -388,15 +388,14 @@ end;
 
 function  T_autoguider_internal.measure_drift(var initialize:boolean; out drX,drY :double) : integer;// ReferenceX,Y indicates the total drift, drX,drY to drift since previouse call. Arrays old_xy_array,xy_array are for storage star positions
 var
-  i,fitsx,fitsy,stepsize,xsize,ysize,star_counter,counter,len,maxSNRstar: integer;
-  hfd1,star_fwhm,vmax,bg,bgdev,xc,yc,snr,flux,fluxratio,min_SNR,min_HFD,maxSNR,maxSNRhfd,margin : double;
+  i,fitsx,fitsy,stepsize,xsize,ysize,star_counter,star_counter2,counter,len,maxSNRstar: integer;
+  hfd1,star_fwhm,vmax,bg,bgdev,xc,yc,snr,flux,fluxratio,min_SNR,min_HFD,maxSNR,maxSNRhfd,margin,y : double;
   drift_arrayX,drift_arrayY : array of double;
   starx,stary,frx,fry,frw,frh: integer;
 const
     searchA=28;//square search area
     overlap=6;
     maxstars=1000;
-    singlestarframe=50;//single star half frame size
 begin
   result:=1;// Assume no stars detected
   star_counter:=0;
@@ -436,7 +435,7 @@ begin
     repeat
       fitsx:=stepsize div 2;
       repeat
-        guidefits.GetHFD3(fitsX+6,fitsY,searchA,true{autocenter},xc,yc,bg,bgdev,hfd1,star_fwhm,vmax,snr,flux,false);//find a star in this segment. Auto center is true
+        guidefits.GetHFD3(fitsX,fitsY,searchA,true{autocenter},xc,yc,bg,bgdev,hfd1,star_fwhm,vmax,snr,flux,false);//find a star in this segment. Auto center is true
 
         if ((snr>Min_SNR) and (hfd1>Min_HFD) and (abs(fitsX-xc)<stepsize div 2) and (abs(fitsY-yc)<stepsize div 2) and (star_counter<maxstars))  then //detection and no other area closer
         begin // star in this area
@@ -470,61 +469,73 @@ begin
       inc(fitsy,stepsize);
     until fitsy>=ysize-1+stepsize div 2;
 
-    if InternalguiderSingleStar and (not InternalguiderCalibrating) then begin
-      // Single star
-      xy_array[0]:=xy_array[maxSNRstar];
-      if star_counter>0 then
-      begin
-        setlength(xy_array,1);
-        setlength(xy_array_old,1);//for later
-        starx:=round(xy_array[0].x1); // guide star position
-        stary:=round(xy_array[0].y1);
-        frw:=2*singlestarframe; // camera frame size
-        frh:=2*singlestarframe;
-        frx:=starx-singlestarframe; // camera frame position
-        if FCamera.VerticalFlip then
-          fry:=ysize-stary-singlestarframe
-        else
-          fry:=stary-singlestarframe;
+    if star_counter>0 then
+    begin
+      mean_hfd:=mean_hfd/star_counter;
 
-        frx:=min(xsize-frw,max(0,frx)); // Keep frame within sensor
+      if ((frame_size<ysize) and (not InternalguiderCalibrating)) then //filter out stars available in the frame
+      begin
+        starx:=round(xy_array[maxSNRstar].x1); // brightest star position
+        stary:=round(xy_array[maxSNRstar].y1);
+        frw:=frame_size; // camera frame size
+        frh:=frame_size;
+        frx:=starx-(frame_size div 2); // camera frame position
+        if FCamera.VerticalFlip then
+          fry:=ysize-stary-(frame_size div 2)
+        else
+          fry:=stary-(frame_size div 2);
+
+        frx:=min(xsize-frw,max(0,frx)); // Keep frame within sensor area
         fry:=min(ysize-frh,max(0,fry));
 
-        xy_array[0].x1:=xy_array[0].x1-frx; // new starcenter in small frame
-        xy_array[0].y1:=xy_array[0].y1+fry+frh-ysize;
+        star_counter2:=0;
+        for i:=0 to star_counter-1 do
+        begin
+          if FCamera.VerticalFlip then y:=ysize-xy_array[i].y1 else  y:=xy_array[i].y1;
+          if  ((xy_array[i].x1>frx+margin) and
+               (xy_array[i].x1<frx+frw-margin) and
+               (y>fry+margin) and
+               (y<fry+frh-margin)) then //use only the stars in the frame including the bright star
+          begin
+            xy_array[star_counter2]:=xy_array[i];//sort out the stars near the brightest star
 
-        xy_array[0].x2:=xy_array[0].x1;
-        xy_array[0].y2:=xy_array[0].y1;
-        if FCamera.CameraInterface=INDI then begin
-          // INDI frame in unbinned pixel
-          frx:=frx*FCamera.BinX;
-          fry:=fry*FCamera.BinX;
-          frw:=frw*FCamera.BinY;
-          frh:=frh*FCamera.BinY;
+            xy_array[star_counter2].x1:=xy_array[i].x1-frx; // new starcenter in small frame
+            xy_array[star_counter2].y1:=xy_array[i].y1+fry+frh-ysize;
+            xy_array[star_counter2].x2:=xy_array[star_counter2].x1;
+            xy_array[star_counter2].y2:=xy_array[star_counter2].y1;
+            xy_array[star_counter2].flux:=xy_array[star_counter2].flux;
+            if FCamera.CameraInterface=INDI then
+            begin
+              // INDI frame in unbinned pixel
+              frx:=frx*FCamera.BinX;
+              fry:=fry*FCamera.BinX;
+              frw:=frw*FCamera.BinY;
+              frh:=frh*FCamera.BinY;
+            end;
+            inc(star_counter2);
+          end;
         end;
-        FCamera.SetFrame(frx,fry,frw,frh);
+        star_counter:=star_counter2;
+
+        FCamera.SetFrame(frx,fry,frw,frh);//set frame area around the brightest star
         GuideImgZoom:=1;
         GuideImgCx:=0;
         GuideImgCy:=0;
-        mean_hfd:=maxSNRhfd;
-        WriteLog('INFO: Single star position='+inttostr(starx)+','+inttostr(stary)+', SNR='+floattostrF(maxSNR,FFgeneral,3,3)+', HFD='+floattostrF(mean_hfd,FFgeneral,3,3));
-        msg('Use guide star at position '+inttostr(starx)+','+inttostr(stary)+', HFD='+floattostrF(mean_hfd,FFgeneral,3,3),3);
-      end
-      else begin
-        setlength(xy_array,0);
-        setlength(xy_array_old,0);
-      end;
-    end
-    else begin
-      // Multi star
+      end;//filter out stars
+    end;
+
+    if star_counter>0 then
+    begin
       setlength(xy_array,star_counter);
       setlength(xy_array_old,star_counter);//for later
-      if star_counter>0 then
-      begin
-        mean_hfd:=mean_hfd/star_counter;
-        WriteLog('INFO: Star(s)='+inttostr(star_counter)+', HFD='+floattostrF(mean_hfd,FFgeneral,3,3));
-        msg(inttostr(star_counter)+' guide stars used, HFD='+floattostrF(mean_hfd,FFgeneral,3,3),3);
-      end;
+
+      WriteLog('INFO: Star(s)='+inttostr(star_counter)+', HFD='+floattostrF(mean_hfd,FFgeneral,3,3));
+      msg(inttostr(star_counter)+' guide stars used, HFD='+floattostrF(mean_hfd,FFgeneral,3,3),3);
+    end //stars found
+    else
+    begin //no star(s) found
+      setlength(xy_array,0);
+      setlength(xy_array_old,0);
     end;
   end
   else
@@ -752,7 +763,8 @@ begin
   old_moveDEC:=0;
 
   InternalguiderInitialize:=true; //initialize;
-  InternalguiderSingleStar:=Finternalguider.SingleStar;
+
+  frame_size:=Finternalguider.FrameSize;
 
   // initialize the guide log
   GuideFrameCount:=0;
