@@ -1036,7 +1036,7 @@ end;
 
 procedure T_autoguider_internal.InternalguiderStop;
 begin
-  if (not InternalguiderCapturingDark)and(not StopInternalguider) then begin
+  if InternalguiderGuiding and (not InternalguiderCapturingDark)and(not StopInternalguider) then begin
     WriteLog('Guiding Ends at '+FormatDateTime('YYYY-MM-DD HH:NN:SS',now));
     WriteLog('');
   end;
