@@ -676,7 +676,6 @@ object f_internalguider: Tf_internalguider
                 '200'
                 '100'
                 '50'
-                ''
               )
               ParentFont = False
               TabOrder = 5
