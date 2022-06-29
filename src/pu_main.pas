@@ -15272,7 +15272,7 @@ else begin
    str.Free;
    tmpbmp.Free;
 end;
-
+if camera.ASCOMFlipImage then ScrGuideBmp.VerticalFlip; // same orientation as main camera
 ImageGuide.Invalidate;
 {$ifdef debug_raw}writeln(FormatDateTime(dateiso,Now)+blank+'PlotImage end');{$endif}
 end;
