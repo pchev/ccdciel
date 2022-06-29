@@ -1565,8 +1565,10 @@ begin
     result:=rsImageStatist+crlf;
     result:=Format(rsPixelCount, [result, blank+IntToStr(sz)+crlf]);
     // min, max
-    result:=result+rsMin2+blank+FormatFloat(ff,FFitsInfo.dmin)+crlf;
-    result:=result+rsMax+blank+FormatFloat(ff,FFitsInfo.dmax)+crlf;
+    x:= FimageMin+FFitsInfo.dmin/FimageC;
+    result:=result+rsMin2+blank+FormatFloat(ff,x)+crlf;
+    x:= FimageMin+FFitsInfo.dmax/FimageC;
+    result:=result+rsMax+blank+FormatFloat(ff,x)+crlf;
     // mode, median
     median:=0; maxh:=0;  npx:=0; maxp:=0;
     for i:=0 to high(word) do begin
@@ -1587,9 +1589,11 @@ begin
       result:=Format(rsMedian, [result, blank+FormatFloat(ff, x)+crlf]);
     end;
     // mean
-    result:=result+rsMean+blank+FormatFloat(f1, Fmean)+crlf;
+    x:= FimageMin+Fmean/FimageC;
+    result:=result+rsMean+blank+FormatFloat(f1, x)+crlf;
     // sigma
-    result:=result+rsStdDev+blank+FormatFloat(f1, Fsigma)+crlf;
+    x:= FimageMin+Fsigma/FimageC;
+    result:=result+rsStdDev+blank+FormatFloat(f1, x)+crlf;
   end
   else
     result:='';
