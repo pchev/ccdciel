@@ -815,6 +815,7 @@ var i,maxpulse: integer;
     RADuration,DECDuration: LongInt;
     RADirection,DECDirection: string;
     mflipcorr,moveRA2,dsettle : double;
+    meridianflip: boolean;
 
 begin
  if not FPaused then begin
@@ -866,13 +867,16 @@ begin
   end;
 
   // Apply camera orientation and meridian flip if required
-  if (mount.PierSide=pierWest) <> (pos('E',finternalguider.pier_side)>0) then // Did a meridian flip occur since calibration.
+  meridianflip:= (mount.PierSide=pierWest) <> (pos('E',finternalguider.pier_side)>0);
+  if meridianflip then // Did a meridian flip occur since calibration.
     mflipcorr:=180 // A meridian flip occurred
   else
     mflipcorr:=0;
   rotate2((- (finternalguider.PA+mflipcorr)*pi/180),driftX,driftY, driftRA,driftDec);{rotate a vector point, counter clockwise}
 
   if finternalguider.pulsegainNorth<0 then driftDEC:=-driftDEC;//flipped image correction. E.g. an image where north is up and east on the right size.
+
+  if meridianflip and (not finternalguider.ReverseDec) then driftDEC:=-driftDEC;
 
   xy_trend[0].ra:=-DriftRa;//store RA drift in pixels.
   xy_trend[0].dec:=+DriftDec;//store DEC drift in pixels.

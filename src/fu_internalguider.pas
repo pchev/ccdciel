@@ -49,6 +49,7 @@ type
     ButtonGuide: TButton;
     ButtonStop: TButton;
     ButtonStop1: TButton;
+    CheckBoxReverseDec: TCheckBox;
     disable_guiding1: TCheckBox;
     Exposure: TFloatSpinEdit;
     Label9: TLabel;
@@ -84,6 +85,7 @@ type
     MenuItem2: TMenuItem;
     pa1: TEdit;
     Panel4: TPanel;
+    Panel5: TPanel;
     pier_side1: TEdit;
     pixelsize1: TEdit;
     PopupMenuDark: TPopupMenu;
@@ -103,6 +105,7 @@ type
     Offset: TSpinEdit;
     ShortestPulse1: TSpinEdit;
     minSNR1: TSpinEdit;
+    TabSheetOptions: TTabSheet;
     TabSheetCamera: TTabSheet;
     Gamma: TTrackBar;
     Luminosity: TTrackBar;
@@ -172,6 +175,7 @@ type
     function GetScale:integer;
     procedure SetScale(value:integer);
     function GetFrameSize: integer;
+    function GetReverseDec: Boolean;
 
   public
     { public declarations }
@@ -208,6 +212,7 @@ type
     property PA : double read GetPAsetting write SetPAsetting;// Guider image orientation in radians. Found by the calibration
     property trend_scale: integer read Getscale write Setscale;
     property FrameSize: integer read GetFrameSize;
+    property ReverseDec: Boolean read GetReverseDec;
   end;
 
 implementation
@@ -775,6 +780,11 @@ var
 begin
   val(framesize1.text,v,err);
   if err<>0 then result:=9999 else result:=v;
+end;
+
+function Tf_internalguider.GetReverseDec: boolean;
+begin
+  result:=CheckBoxReverseDec.Checked;
 end;
 
 end.
