@@ -1600,7 +1600,7 @@ begin
 with FFitsInfo do begin
    valid:=false; solved:=false; floatingpoint:=false;
    bitpix:=0; naxis:=0; naxis1:=0; naxis2:=0; naxis3:=1;
-   Frx:=-1; Fry:=-1; Frwidth:=0; Frheight:=0; BinX:=1; BinY:=1;
+   Frx:=0; Fry:=0; Frwidth:=0; Frheight:=0; BinX:=1; BinY:=1;
    bzero:=0; bscale:=1; dmax:=0; dmin:=0; blank:=0;
    bayerpattern:=''; roworder:='';
    bayeroffsetx:=0; bayeroffsety:=0;
@@ -1729,6 +1729,10 @@ begin
   colormode:=3;
  end;
  if (naxis=3)and(naxis3=3) then n_plane:=3 else n_plane:=1;
+ if Frwidth=0 then
+   Frwidth:=naxis1;
+ if Frheight=0 then
+   Frheight:=naxis2;
 end;
 end;
 
@@ -3493,8 +3497,8 @@ begin
  result := (f<>nil) and f.FFitsInfo.valid and
            (f.FFitsInfo.bitpix = FFitsInfo.bitpix)  and
            (f.FFitsInfo.naxis  = FFitsInfo.naxis )  and
-           (f.FFitsInfo.naxis1 = FFitsInfo.naxis1 ) and
-           (f.FFitsInfo.naxis2 = FFitsInfo.naxis2 ) and
+           ((f.FFitsInfo.naxis1 = FFitsInfo.naxis1)or((FFitsInfo.Frx+FFitsInfo.Frwidth)<=f.FFitsInfo.naxis1))  and
+           ((f.FFitsInfo.naxis2 = FFitsInfo.naxis2 )or((FFitsInfo.Fry+FFitsInfo.Frheight)<=f.FFitsInfo.naxis2)) and
            (f.FFitsInfo.naxis3 = FFitsInfo.naxis3 ) and
            (f.FFitsInfo.bzero  = FFitsInfo.bzero )  and
            (f.FFitsInfo.roworder = FFitsInfo.roworder ) and
@@ -3520,7 +3524,7 @@ begin
 end;
 
 procedure TFits.Math(operand: TFits; MathOperator:TMathOperator; new: boolean=false; seqnum: integer=1);
-var i,j,k,ii,nax,naxo,ko: integer;
+var i,j,k,nax,naxo,ko,offsetX,offsetY: integer;
     x,y,dmin,dmax : double;
     ni,sum,sum2 : extended;
     m: TMemoryStream;
@@ -3543,22 +3547,23 @@ begin
       naxo:=operand.n_plane
     else
       naxo:=operand.Fpreview_axis;
+    offsetX:=FFitsInfo.Frx-operand.FFitsInfo.frx;
+    offsetY:=operand.FFitsInfo.naxis2-FFitsInfo.naxis2-FFitsInfo.Fry;
     for k:=0 to nax-1 do begin
       ko:=min(k,naxo-1);
       for i:=0 to FFitsInfo.naxis2-1 do begin
-       ii:=FFitsInfo.naxis2-1-i;
        for j := 0 to FFitsInfo.naxis1-1 do begin
          if FUseRawImage then begin
-           x:=Frawimage[k,ii,j];
+           x:=Frawimage[k,i,j];
          end
          else begin
-           x:=Fimage[k,ii,j];
+           x:=Fimage[k,i,j];
          end;
          if operand.FUseRawImage then begin
-           y:=operand.Frawimage[ko,ii,j];
+           y:=operand.Frawimage[ko,i+offsetY,j+offsetX];
          end
          else begin
-           y:=operand.Fimage[ko,ii,j];
+           y:=operand.Fimage[ko,i+offsetY,j+offsetX];
          end;
          case MathOperator of
            moAdd: x:=x+y;
@@ -3569,9 +3574,9 @@ begin
            moRunMean: x:=((seqnum-1)*x+y)/seqnum;
          end;
          if FUseRawImage then
-           Frawimage[k,ii,j] := x
+           Frawimage[k,i,j] := x
          else
-           Fimage[k,ii,j] := x;
+           Fimage[k,i,j] := x;
          inc(FHistogram[round(max(0,min(maxword,x)))]);
          dmin:=min(x,dmin);
          dmax:=max(x,dmax);
