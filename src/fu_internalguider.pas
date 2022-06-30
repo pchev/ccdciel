@@ -227,6 +227,12 @@ begin
  {$ifdef lclcocoa}
  Title.Color:=clWindowFrame;
  {$endif}
+ {$ifndef mswindows}
+ Panel2.Color:=clDefault;
+ Panel3.Color:=clDefault;
+ Panel4.Color:=clDefault;
+ Panel5.Color:=clDefault;
+ {$endif}
  PageControl1.ActivePageIndex:=0;
  ScaleDPI(Self);
  SetLang;
