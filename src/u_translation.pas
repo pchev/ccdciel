@@ -1439,6 +1439,7 @@ resourcestring
   rsLight = 'Light';
   rsFrameSize = 'Frame size';
   rsMax2 = 'Max';
+  rsReverseDecAf = 'Reverse Dec after meridian flip';
 
 implementation
 

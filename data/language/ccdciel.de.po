@@ -6,15 +6,15 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ccdciel\n"
 "Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
-"POT-Creation-Date: 2022-06-28 06:42+0000\n"
-"PO-Revision-Date: 2022-06-24 19:45+0000\n"
+"POT-Creation-Date: 2022-06-30 10:06+0000\n"
+"PO-Revision-Date: 2022-06-28 20:24+0000\n"
 "Last-Translator: Thomas <email@starhopper.de>\n"
 "Language-Team: German <de@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2022-06-28 15:48+0000\n"
-"X-Generator: Launchpad (build 51a2e4fa2e9b8e45f00904ad7f53546f45ac48a5)\n"
+"X-Launchpad-Export-Date: 2022-06-30 10:12+0000\n"
+"X-Generator: Launchpad (build f48158886a49da429840bcd298f0c7ed60f9ad7b)\n"
 
 #: u_translation.rs2d
 msgid "2D"
@@ -114,7 +114,7 @@ msgstr "Erweitert"
 
 #: u_translation.rsadvancedsett
 msgid "Advanced settings"
-msgstr ""
+msgstr "Erweiterte Einstellungen"
 
 #: u_translation.rsaftertelesco
 #, object-pascal-format
@@ -552,7 +552,7 @@ msgstr "blau"
 
 #: u_translation.rsbrightness
 msgid "Brightness"
-msgstr ""
+msgstr "Helligkeit"
 
 #: u_translation.rsbrowselogfil
 msgid "Browse log files"
@@ -640,7 +640,7 @@ msgstr "Belichtung abbrechen"
 
 #: u_translation.rscancelexposu2
 msgid "Cancel exposure after"
-msgstr ""
+msgstr "Belichtung beenden nach"
 
 #: u_translation.rscancelpolara
 msgid "Cancel polar alignment"
@@ -795,7 +795,7 @@ msgstr "Aufnahme unerwartet gestoppt"
 
 #: u_translation.rsccdcielstatu
 msgid "CCDciel status"
-msgstr ""
+msgstr "CCDciel Status"
 
 #: u_translation.rsccdframesent
 msgid "CCD frame sent to planetarium."
@@ -803,7 +803,7 @@ msgstr "CCD Aufnahmen zum Planetarium gesendet"
 
 #: u_translation.rscelsius
 msgid "Celsius"
-msgstr ""
+msgstr "Celsius"
 
 #: u_translation.rscenter
 msgid "Center"
@@ -829,7 +829,7 @@ msgstr "RA im Zentrum"
 
 #: u_translation.rschangelog
 msgid "Change log"
-msgstr ""
+msgstr "Änderungsprotokoll"
 
 #: u_translation.rschoose
 msgid "Choose"
@@ -1060,7 +1060,7 @@ msgstr "Anzahl"
 
 #: u_translation.rscov
 msgid "Cov."
-msgstr ""
+msgstr "Abdecken"
 
 #: u_translation.rscover
 msgid "Cover"
@@ -1423,7 +1423,7 @@ msgstr "Ende-Aktionen jetzt ausführen"
 
 #: u_translation.rsduration
 msgid "Duration"
-msgstr ""
+msgstr "Dauer"
 
 #: u_translation.rsdusk
 msgid "dusk"
@@ -1483,7 +1483,7 @@ msgstr "E-Mail erfolgreich versendet, bitte Postfach überprüfen"
 
 #: u_translation.rsencoder
 msgid "Encoder"
-msgstr ""
+msgstr "Encoder"
 
 #: u_translation.rsend
 msgid "End"
@@ -1602,7 +1602,7 @@ msgstr "Die Belichtungszeit ist zu kurz für die Messung, benötigt werden %d Se
 
 #: u_translation.rsfahrenheit
 msgid "Fahrenheit"
-msgstr ""
+msgstr "Fahrenheit"
 
 #: u_translation.rsfailedtodele
 #, object-pascal-format
@@ -1635,7 +1635,7 @@ msgstr "Datei"
 
 #: u_translation.rsfileformat
 msgid "File format"
-msgstr ""
+msgstr "Dateiformat"
 
 #: u_translation.rsfilenameopti
 msgid "File name options"
@@ -1684,7 +1684,7 @@ msgstr "Fit"
 
 #: u_translation.rsfitsfileexte
 msgid "FITS file extension"
-msgstr ""
+msgstr "FITS Dateiendung"
 
 #: u_translation.rsfitsheader
 msgid "FITS header"
@@ -1878,15 +1878,15 @@ msgstr "Bild"
 
 #: u_translation.rsframerate
 msgid "Frame rate"
-msgstr ""
+msgstr "Bildrate"
 
 #: u_translation.rsframes
 msgid "Frames"
-msgstr ""
+msgstr "Einzelbilder"
 
 #: u_translation.rsframesize
 msgid "Frame size"
-msgstr ""
+msgstr "Frame größe"
 
 #: u_translation.rsfromcameradr
 msgid "From camera driver"
@@ -2310,7 +2310,7 @@ msgstr "Lizenzabkommen"
 
 #: u_translation.rslight
 msgid "Light"
-msgstr ""
+msgstr "Hellbild"
 
 #: u_translation.rslightoff
 msgid "Light OFF"
@@ -2411,7 +2411,7 @@ msgstr "Max:"
 
 #: u_translation.rsmax2
 msgid "Max"
-msgstr ""
+msgstr "Max"
 
 #: u_translation.rsmaximum
 msgid "maximum"
@@ -2627,7 +2627,7 @@ msgstr "Modus:"
 
 #: u_translation.rsmoresettings
 msgid "More settings"
-msgstr ""
+msgstr "Weitere Einstellungen"
 
 #: u_translation.rsmount
 msgid "Mount"
@@ -3739,6 +3739,10 @@ msgstr "Zur Zielposition zurückkehren"
 msgid "Reverse"
 msgstr "Rückwärts"
 
+#: u_translation.rsreversedecaf
+msgid "Reverse Dec after meridian flip"
+msgstr ""
+
 #: u_translation.rsrise
 msgid "rise"
 msgstr "Aufgang"
@@ -3821,7 +3825,7 @@ msgstr "s"
 
 #: u_translation.rssaf
 msgid "Saf."
-msgstr ""
+msgstr "Saf."
 
 #: u_translation.rssafe
 msgid "Safe"
@@ -4266,7 +4270,7 @@ msgstr "Größe"
 
 #: u_translation.rssize2
 msgid "Size"
-msgstr ""
+msgstr "Größe"
 
 #: u_translation.rsskiptarget
 #, object-pascal-format
@@ -4750,7 +4754,7 @@ msgstr "Kuppelkopplung aussetzen"
 
 #: u_translation.rssw
 msgid "Sw."
-msgstr ""
+msgstr "Sw."
 
 #: u_translation.rsswitch
 msgid "Switch"
@@ -5045,7 +5049,7 @@ msgstr "Diese Sequenz enthält Informationen zu den bereits abgeschlossenen Schr
 
 #: u_translation.rstiffwithfits
 msgid "TIFF with FITS header"
-msgstr ""
+msgstr "TIFF mit FITS header"
 
 #: u_translation.rstiltindicati2
 #, object-pascal-format
@@ -5493,7 +5497,7 @@ msgstr "Warnung: Wenn Sie den Rotator umkehren wird die Kalibrierung ungültigWo
 
 #: u_translation.rswarningthemo
 msgid "Warning! the mount will be parked every time a flat capture is started."
-msgstr ""
+msgstr "Warnung! Die Montierung immer geparkt wenn ein Flatfieldaufnahme gestartet wird"
 
 #: u_translation.rswatchdog
 msgid "Watchdog"
@@ -5567,7 +5571,7 @@ msgstr "Ohne sichtbaren Himmelspol"
 
 #: u_translation.rswth
 msgid "Wth."
-msgstr ""
+msgstr "Wth."
 
 #: u_translation.rsyes
 msgid "Yes"

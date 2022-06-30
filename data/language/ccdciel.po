@@ -5342,3 +5342,7 @@ msgstr ""
 msgid "Max"
 msgstr ""
 
+#: u_translation:rsreversedecaf
+msgid "Reverse Dec after meridian flip"
+msgstr ""
+

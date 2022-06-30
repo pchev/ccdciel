@@ -266,6 +266,7 @@ begin
   Label17.Caption:=rsGamma;
   Label18.Caption:=rsLuminosity;
   Label19.Caption:=rsZoom;
+  TabSheetOptions.Caption:=rsOptions2;
   TabSheetAdvanced.Caption:=rsAdvanced;
   GroupBox2.Caption:=rsCalibrationR;
   Label5.Caption:=rsCameraAngle+' [°]';
@@ -283,6 +284,7 @@ begin
   disable_guiding1.Caption:=rsDisableGuidi;
   Label9.Caption:=rsFrameSize;
   framesize1.Items[0]:=rsMax2;
+  CheckBoxReverseDec.Caption:=rsReverseDecAf;
 end;
 
 function Tf_internalguider.Getdisableguiding:boolean;

@@ -6,15 +6,15 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ccdciel\n"
 "Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
-"POT-Creation-Date: 2022-06-28 06:42+0000\n"
-"PO-Revision-Date: 2022-06-28 07:25+0000\n"
+"POT-Creation-Date: 2022-06-30 10:06+0000\n"
+"PO-Revision-Date: 2022-06-29 14:07+0000\n"
 "Last-Translator: Zachary Wu <Unknown>\n"
 "Language-Team: Chinese (Simplified) <zh_CN@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2022-06-28 15:48+0000\n"
-"X-Generator: Launchpad (build 51a2e4fa2e9b8e45f00904ad7f53546f45ac48a5)\n"
+"X-Launchpad-Export-Date: 2022-06-30 10:12+0000\n"
+"X-Generator: Launchpad (build f48158886a49da429840bcd298f0c7ed60f9ad7b)\n"
 
 #: u_translation.rs2d
 msgid "2D"
@@ -147,7 +147,7 @@ msgstr "允许为高滤镜曝光系数选择更亮的星"
 
 #: u_translation.rsalt
 msgid "Alt"
-msgstr "高度"
+msgstr "Alt"
 
 #: u_translation.rsanotherscrip
 msgid "Another script is already running"
@@ -454,7 +454,7 @@ msgstr "可用"
 
 #: u_translation.rsaz
 msgid "Az"
-msgstr "方位"
+msgstr "Az"
 
 #: u_translation.rsazimuth
 msgid "Azimuth"
@@ -803,7 +803,7 @@ msgstr "CCD图像发送到星图。"
 
 #: u_translation.rscelsius
 msgid "Celsius"
-msgstr "摄氏度"
+msgstr "C摄氏度"
 
 #: u_translation.rscenter
 msgid "Center"
@@ -1060,7 +1060,7 @@ msgstr "数量"
 
 #: u_translation.rscov
 msgid "Cov."
-msgstr "Cov."
+msgstr "镜盖"
 
 #: u_translation.rscover
 msgid "Cover"
@@ -1439,7 +1439,7 @@ msgstr "东"
 
 #: u_translation.rseastpointing
 msgid "East (Pointing West)"
-msgstr "东方（指向西方）"
+msgstr "东向（基座指向西）"
 
 #: u_translation.rsedit
 msgid "Edit"
@@ -1602,7 +1602,7 @@ msgstr "曝光时间太短，无法测量，需要%d秒。"
 
 #: u_translation.rsfahrenheit
 msgid "Fahrenheit"
-msgstr "华氏度"
+msgstr "F华氏度"
 
 #: u_translation.rsfailedtodele
 #, object-pascal-format
@@ -2219,7 +2219,7 @@ msgstr "在%s秒内"
 
 #: u_translation.rsintensity
 msgid "Intensity"
-msgstr "强度"
+msgstr "Intensity"
 
 #: u_translation.rsinteractiond
 msgid "Interaction dialog"
@@ -2463,7 +2463,7 @@ msgstr "平均图像"
 
 #: u_translation.rsmeasuredatew
 msgid "Measured at [E/W]"
-msgstr "测量值[E/W]"
+msgstr "测量于[E/W]"
 
 #: u_translation.rsmeasureen
 msgid "Measure in the East and North"
@@ -2571,11 +2571,11 @@ msgstr "翻转后取消中天翻转"
 
 #: u_translation.rsmeridianin
 msgid "Meridian in"
-msgstr "中天还有"
+msgstr "离中天还有"
 
 #: u_translation.rsmeridiansinc
 msgid "Meridian since"
-msgstr "中天已经"
+msgstr "过中天已有"
 
 #: u_translation.rsmessages
 msgid "Messages"
@@ -3739,6 +3739,10 @@ msgstr "回到目标位置"
 msgid "Reverse"
 msgstr "反转"
 
+#: u_translation.rsreversedecaf
+msgid "Reverse Dec after meridian flip"
+msgstr ""
+
 #: u_translation.rsrise
 msgid "rise"
 msgstr "升起"
@@ -3821,7 +3825,7 @@ msgstr "秒"
 
 #: u_translation.rssaf
 msgid "Saf."
-msgstr "Saf."
+msgstr "安全"
 
 #: u_translation.rssafe
 msgid "Safe"
@@ -4750,7 +4754,7 @@ msgstr "暂停圆顶从动"
 
 #: u_translation.rssw
 msgid "Sw."
-msgstr "Sw."
+msgstr "电源"
 
 #: u_translation.rsswitch
 msgid "Switch"
@@ -5531,7 +5535,7 @@ msgstr "西"
 
 #: u_translation.rswestpointing
 msgid "West (Pointing East)"
-msgstr "西方（指向东方）"
+msgstr "西向（基座指向东）"
 
 #: u_translation.rswhenaskedmov
 msgid "When asked, move the mount manually only along the RA axis, always in the same direction, by about 15 to 45 degrees each time."
@@ -5567,7 +5571,7 @@ msgstr "看不到天极"
 
 #: u_translation.rswth
 msgid "Wth."
-msgstr "Wth."
+msgstr "气象"
 
 #: u_translation.rsyes
 msgid "Yes"
