@@ -269,6 +269,7 @@ const
   M_AutoguiderMessage=1001;
   M_AutoguiderCancelExposure=1002;
   M_AutoguiderGuideStat=1003;
+  M_AutoguiderAbortTarget=1004;
   M_AstrometryDone=1100;
   M_AstrometryMsg=1101;
   StarLostStatus='Star lost';
@@ -499,7 +500,7 @@ var
   CollimationCircle: integer;
   AutoguiderStat: array of TAutoguiderStatistics;
   colorGreen, colorBlue, colorRed: Tcolor;
-  AutoguiderAlert,AutoguiderStarting: boolean;
+  AutoguiderAlert,AutoguiderStarting,LockRestartExposure: boolean;
   AutoguiderAlertTime,AutoguiderMsgTime: double;
   MountTrackingAlert: boolean;
   MountTrackingAlertTime: double;

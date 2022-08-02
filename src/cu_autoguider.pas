@@ -44,8 +44,8 @@ type
     FTimeout : integer;
     FStarLostCancelExposure, FStarLostTimeoutRestart,FStarLostTimeoutCancel: integer;
     FMaxGuideDrift : double;
-    FCancelExposure : boolean;
-    FRestartDelay : integer;
+    FCancelExposure,FMaxDriftAbort : boolean;
+    FRestartDelay,FMaxDriftAbortNum,FDriftRestartCount : integer;
     FStarLostCount: integer;
     FStarLostTime: double;
     FRAdistance,FDecdistance,FStarmass: double;
@@ -70,6 +70,7 @@ type
     procedure ProcessEvent(txt:string); virtual; abstract;
     procedure StarLostTimerTimer(Sender: TObject); virtual; abstract;
     procedure CancelExposure;
+    procedure AbortTarget;
     procedure GuideStat(dra,dde,sm:double);
   public
     Constructor Create;
@@ -86,6 +87,7 @@ type
     function WaitBusy(maxwait:integer=5):boolean; virtual; abstract;
     function WaitGuiding(maxwait:integer=5):boolean; virtual; abstract;
     function WaitDithering(maxwait:integer=5):boolean; virtual; abstract;
+    procedure ResetDriftRestartCount;
     property AutoguiderType: TAutoguiderType read FAutoguiderType;
     property Terminated;
     property Mount: T_mount read FMount write FMount;
@@ -190,6 +192,16 @@ end;
 procedure T_autoguider.CancelExposure;
 begin
  PostMessage(MsgHandle, LM_CCDCIEL, M_AutoguiderCancelExposure, 0);
+end;
+
+procedure T_autoguider.AbortTarget;
+begin
+ PostMessage(MsgHandle, LM_CCDCIEL, M_AutoguiderAbortTarget, 0);
+end;
+
+procedure T_autoguider.ResetDriftRestartCount;
+begin
+ FDriftRestartCount:=0;
 end;
 
 procedure T_autoguider.GuideStat(dra,dde,sm:double);

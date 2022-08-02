@@ -277,12 +277,24 @@ if p>=0 then begin
                  if Sqrt(Sqr(Abs(StrToFloatDef(radiff,0)))+Sqr(Abs(StrToFloatDef(decdiff,0))))>FMaxGuideDrift then
                      begin
                           FStatus:='Drift ('+radiff+'/'+decdiff+')';
-                          if (FCancelExposure) then
+                          StatusChange;
+                          if (FCancelExposure) and (not LockRestartExposure) then
                               begin
-                                    // Cancel the exposure and start a new one
-                                   CancelExposure;
+                                if FMaxDriftAbort and (FDriftRestartCount>FMaxDriftAbortNum) then begin
+                                  // Abort
+                                  DisplayMessage('Maximum autoguider drift restart reach.');
+                                  AbortTarget;
+                                end
+                                else begin
+                                  // Cancel the exposure and start a new one
+                                  DisplayMessage('Restart exposure because of drift.');
+                                  inc(FDriftRestartCount);
+                                  CancelExposure;
+                                end;
                               end;
-                     end;
+                     end
+                     else
+                       FDriftRestartCount:=0;
                end;
          end;
 
@@ -591,7 +603,10 @@ try
     FMaxGuideDrift:=config.GetValue('/Autoguider/Recovery/MaxGuideDrift',100.0);
     FCancelExposure:=config.GetValue('/Autoguider/Recovery/CancelExposure',false);
     FRestartDelay:=config.GetValue('/Autoguider/Recovery/RestartDelay',15);
+    FMaxDriftAbort:=config.GetValue('/Autoguider/Recovery/MaxDriftAbort',false);
+    FMaxDriftAbortNum:=config.GetValue('/Autoguider/Recovery/MaxDriftAbortNum',10);
     FStarLostCount:=0;
+    FDriftRestartCount:=0;
     buf:='{"method": "loop","id":2004}';
     FState:=GUIDER_BUSY;
     Send(buf);

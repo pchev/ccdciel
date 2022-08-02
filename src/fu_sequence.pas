@@ -994,7 +994,7 @@ end;
 procedure Tf_sequence.ForceNextTarget;
 begin
   msg(rsTryNextTarge,1);
-  f_sequence.Targets.ForceNextTarget;
+  Targets.ForceNextTarget;
 end;
 
 procedure Tf_sequence.AbortSequence;

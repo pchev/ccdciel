@@ -1440,6 +1440,8 @@ resourcestring
   rsFrameSize = 'Frame size';
   rsMax2 = 'Max';
   rsReverseDecAf = 'Reverse Dec after meridian flip';
+  rsAbortAfterRe = 'Abort after restarting more than';
+  rsTimeInARow = 'time in a row';
 
 implementation
 

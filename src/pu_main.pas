@@ -576,7 +576,7 @@ type
     GuideMx, GuideMy: integer;
     GuideMouseMoving: boolean;
     DeviceTimeout: integer;
-    MouseMoving, MouseFrame, MouseSpectra, LockTimerPlot, LockMouseWheel, LockRestartExposure, PolarMoving: boolean;
+    MouseMoving, MouseFrame, MouseSpectra, LockTimerPlot, LockMouseWheel, PolarMoving: boolean;
     LockGuideMouseWheel, LockGuideTimerPlot: boolean;
     learningvcurve: boolean;
     LogFileOpen,DeviceLogFileOpen: Boolean;
@@ -816,6 +816,7 @@ type
     procedure StartCaptureExposureAsync(Data: PtrInt);
     Procedure StartCaptureExposureNow;
     procedure CancelRestartExposure(delay: integer);
+    procedure AbortTarget;
     Procedure RecenterTarget;
     Procedure ShowHistogramPos(msg:string);
     Procedure Redraw(Sender: TObject);
@@ -8246,6 +8247,8 @@ begin
    f_option.GuideDriftMax.Value:=config.GetValue('/Autoguider/Recovery/MaxGuideDrift',100.0);
    f_option.GuideDriftCancelExposure.Checked:=config.GetValue('/Autoguider/Recovery/CancelExposure',false);
    f_option.GuideDriftRestartDelay.Value:=config.GetValue('/Autoguider/Recovery/RestartDelay',15);
+   f_option.GuideDriftAbort.Checked:=config.GetValue('/Autoguider/Recovery/MaxDriftAbort',false);
+   f_option.GuideDriftAbortNum.Value:=config.GetValue('/Autoguider/Recovery/MaxDriftAbortNum',10);
    f_option.PlanetariumBox.ItemIndex:=config.GetValue('/Planetarium/Software',ord(plaNONE));
    f_option.CdChostname.Text:=config.GetValue('/Planetarium/CdChostname','localhost');
    f_option.CdCport.Text:=config.GetValue('/Planetarium/CdCport','');
@@ -8579,6 +8582,8 @@ begin
      config.SetValue('/Autoguider/Recovery/MaxGuideDrift',f_option.GuideDriftMax.Value);
      config.SetValue('/Autoguider/Recovery/CancelExposure',f_option.GuideDriftCancelExposure.Checked);
      config.SetValue('/Autoguider/Recovery/RestartDelay',f_option.GuideDriftRestartDelay.Value);
+     config.SetValue('/Autoguider/Recovery/MaxDriftAbort',f_option.GuideDriftAbort.Checked);
+     config.SetValue('/Autoguider/Recovery/MaxDriftAbortNum',f_option.GuideDriftAbortNum.Value);
      config.SetValue('/Planetarium/Software',f_option.PlanetariumBox.ItemIndex);
      config.SetValue('/Planetarium/CdChostname',f_option.CdChostname.Text);
      config.SetValue('/Planetarium/CdCport',trim(f_option.CdCport.Text));
@@ -9562,6 +9567,7 @@ if (AllDevicesConnected)and(not autofocusing)and (not learningvcurve) then begin
   RunningPreview:=false;
   RunningCapture:=true;
   ExpectedStop:=false;
+  autoguider.ResetDriftRestartCount;
   // check exposure time
   e:=StrToFloatDef(f_capture.ExpTime.Text,-1);
   if e<0 then begin
@@ -13510,6 +13516,13 @@ if f_capture.Running and (not LockRestartExposure) then begin
 end;
 end;
 
+procedure Tf_main.AbortTarget;
+begin
+  if f_sequence.Running then begin
+    f_sequence.ForceNextTarget;
+  end;
+end;
+
  procedure Tf_main.CCDCIELMessageHandler(var Message: TLMessage);
 var buf:string;
 begin
@@ -13523,6 +13536,9 @@ begin
                          end;
     M_AutoguiderCancelExposure: begin
                           CancelRestartExposure(autoguider.RestartDelay);
+                         end;
+    M_AutoguiderAbortTarget: begin
+                          AbortTarget;
                          end;
     M_AutoguiderGuideStat: AutoguiderGuideStat;
     M_AstrometryDone: begin

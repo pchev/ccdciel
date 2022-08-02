@@ -36,14 +36,17 @@ type
   Tf_option = class(TForm)
     ButtonSeqDir: TButton;
     CdCPath: TEdit;
+    GuideDriftAbort: TCheckBox;
     FitsExt: TComboBox;
     Label155: TLabel;
     Label156: TLabel;
+    Label157: TLabel;
     LabelFlatWarning: TLabel;
     PageInternal: TPage;
     PanelFlatPositionAltAz: TPanel;
     DomeFlatPosition: TRadioGroup;
     SaveFormat: TRadioGroup;
+    GuideDriftAbortNum: TSpinEdit;
     StackDebayer: TCheckBox;
     StackUseDark: TCheckBox;
     FileStackFloat: TCheckBox;
@@ -1209,6 +1212,8 @@ begin
   Label143.Caption:=rsRestartDelay;
   Label144.Caption:=rsS;
   BtnMaxDriftDisable.Caption:=rsDisable;
+  GuideDriftAbort.Caption:=rsAbortAfterRe;
+  Label157.Caption:=rsTimeInARow;
   PagePlanetarium.Caption := rsPlanetarium;
   PlanetariumBox.Caption := rsSoftware;
   CheckBoxLocalCdc.Caption := rsSkychartOnLo;
