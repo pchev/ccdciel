@@ -4173,6 +4173,7 @@ begin
   f_internalguider.use_arcsec:=config.GetValue('/InternalGuider/UnitArcSec',false);
   f_internalguider.FrameSize1.text:=config.GetValue('/InternalGuider/FrameSize',rsMax2);
   f_internalguider.measure_method2.checked:=config.GetValue('/InternalGuider/Method2',false);
+  f_internalguider.CheckBoxReverseDec.Checked:=config.GetValue('/InternalGuider/ReverseDec',false);
   f_internalguider.trend_scale:=config.GetValue('/InternalGuider/Scale',2);
   f_internalguider.Exposure.Value:=config.GetValue('/InternalGuider/Camera/Exposure',2);
   f_internalguider.Binning.Value:=config.GetValue('/InternalGuider/Camera/Binning',1);
@@ -4681,6 +4682,7 @@ begin
   config.SetValue('/InternalGuider/FrameSize',f_internalguider.framesize1.text);
   config.SetValue('/InternalGuider/Scale',f_internalguider.trend_scale);
   config.SetValue('/InternalGuider/Method2',f_internalguider.measure_method2.Checked);
+  config.SetValue('/InternalGuider/ReverseDec',f_internalguider.ReverseDec);
   config.SetValue('/InternalGuider/Camera/Exposure',f_internalguider.Exposure.Value);
   config.SetValue('/InternalGuider/Camera/Binning',f_internalguider.Binning.Value);
   config.SetValue('/InternalGuider/Camera/Gain',f_internalguider.Gain.Value);
