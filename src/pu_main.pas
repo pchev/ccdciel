@@ -631,6 +631,7 @@ type
     procedure OpenConfig(n: string);
     procedure SaveScreenConfig;
     procedure SaveSettings;
+    procedure SaveInternalGuiderSettings;
     procedure SaveConfig;
     procedure SetSequenceDir(newdir:string);
     procedure ShowActiveTools;
@@ -3112,6 +3113,7 @@ begin
   AppClose:=true;
 
   SaveSettings;
+  SaveInternalGuiderSettings;
   SaveConfig;
 
   TerminateVcurve:=true;
@@ -4654,34 +4656,36 @@ begin
 
    config.SetValue('/StarAnalysis/FocuserLastTemp',FocuserLastTemp);
    config.SetValue('/StarAnalysis/MagnitudeCalibration',MagnitudeCalibration);
+end;
 
-   config.SetValue('/InternalGuider/RaGain',f_internalguider.ragain);
-   config.SetValue('/InternalGuider/DecGain',f_internalguider.decgain);
-   config.SetValue('/InternalGuider/RaHysteresis',f_internalguider.ra_hysteresis);
-   config.SetValue('/InternalGuider/DecHysteresis',f_internalguider.dec_hysteresis);
-   config.SetValue('/InternalGuider/Pa',f_internalguider.pa);
-   config.SetValue('/InternalGuider/PulseGainEast',f_internalguider.pulseGainEast);
-   config.SetValue('/InternalGuider/PulseGainWest',f_internalguider.pulseGainWest);
-   config.SetValue('/InternalGuider/PulseGainNorth',f_internalguider.pulseGainNorth);
-   config.SetValue('/InternalGuider/PulseGainSouth',f_internalguider.pulsegainSouth);
+procedure Tf_main.SaveInternalGuiderSettings;
+begin
+  config.SetValue('/InternalGuider/RaGain',f_internalguider.ragain);
+  config.SetValue('/InternalGuider/DecGain',f_internalguider.decgain);
+  config.SetValue('/InternalGuider/RaHysteresis',f_internalguider.ra_hysteresis);
+  config.SetValue('/InternalGuider/DecHysteresis',f_internalguider.dec_hysteresis);
+  config.SetValue('/InternalGuider/Pa',f_internalguider.pa);
+  config.SetValue('/InternalGuider/PulseGainEast',f_internalguider.pulseGainEast);
+  config.SetValue('/InternalGuider/PulseGainWest',f_internalguider.pulseGainWest);
+  config.SetValue('/InternalGuider/PulseGainNorth',f_internalguider.pulseGainNorth);
+  config.SetValue('/InternalGuider/PulseGainSouth',f_internalguider.pulsegainSouth);
 
-   config.SetValue('/InternalGuider/PierSide',f_internalguider.pier_side);
-   config.SetValue('/InternalGuider/PixelSize',f_internalguider.pixel_size);
-   config.SetValue('/InternalGuider/ShortestPulse',f_internalguider.shortestPulse);
-   config.SetValue('/InternalGuider/MinHFD',f_internalguider.minHFD);
-   config.SetValue('/InternalGuider/MinSNR',f_internalguider.minSNR);
+  config.SetValue('/InternalGuider/PierSide',f_internalguider.pier_side);
+  config.SetValue('/InternalGuider/PixelSize',f_internalguider.pixel_size);
+  config.SetValue('/InternalGuider/ShortestPulse',f_internalguider.shortestPulse);
+  config.SetValue('/InternalGuider/MinHFD',f_internalguider.minHFD);
+  config.SetValue('/InternalGuider/MinSNR',f_internalguider.minSNR);
 
-   config.SetValue('/InternalGuider/UnitArcSec',f_internalguider.use_arcsec);
-   config.SetValue('/InternalGuider/FrameSize',f_internalguider.framesize1.text);
-   config.SetValue('/InternalGuider/Scale',f_internalguider.trend_scale);
-   config.SetValue('/InternalGuider/Method2',f_internalguider.measure_method2.Checked);
-   config.SetValue('/InternalGuider/Camera/Exposure',f_internalguider.Exposure.Value);
-   config.SetValue('/InternalGuider/Camera/Binning',f_internalguider.Binning.Value);
-   config.SetValue('/InternalGuider/Camera/Gain',f_internalguider.Gain.Value);
-   config.SetValue('/InternalGuider/Camera/Offset',f_internalguider.Offset.Value);
-   config.SetValue('/InternalGuider/Visu/Gamma',f_internalguider.Gamma.Position);
-   config.SetValue('/InternalGuider/Visu/Luminosity',f_internalguider.Luminosity.Position);
-
+  config.SetValue('/InternalGuider/UnitArcSec',f_internalguider.use_arcsec);
+  config.SetValue('/InternalGuider/FrameSize',f_internalguider.framesize1.text);
+  config.SetValue('/InternalGuider/Scale',f_internalguider.trend_scale);
+  config.SetValue('/InternalGuider/Method2',f_internalguider.measure_method2.Checked);
+  config.SetValue('/InternalGuider/Camera/Exposure',f_internalguider.Exposure.Value);
+  config.SetValue('/InternalGuider/Camera/Binning',f_internalguider.Binning.Value);
+  config.SetValue('/InternalGuider/Camera/Gain',f_internalguider.Gain.Value);
+  config.SetValue('/InternalGuider/Camera/Offset',f_internalguider.Offset.Value);
+  config.SetValue('/InternalGuider/Visu/Gamma',f_internalguider.Gamma.Position);
+  config.SetValue('/InternalGuider/Visu/Luminosity',f_internalguider.Luminosity.Position);
 end;
 
 procedure Tf_main.SaveConfig;
@@ -7603,6 +7607,7 @@ end;
 procedure Tf_main.MenuSaveConfigClick(Sender: TObject);
 begin
  SaveSettings;
+ SaveInternalGuiderSettings;
  SaveConfig;
 end;
 
@@ -8682,7 +8687,7 @@ begin
 
      SetSequenceDir(f_option.SeqDir.Text);
 
-     SaveSettings;
+     SaveInternalGuiderSettings;
      SaveConfig;
 
      SetOptions;
