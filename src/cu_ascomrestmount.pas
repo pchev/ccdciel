@@ -172,20 +172,21 @@ begin
      CanSync:=V.Get('cansync').AsBool;
      CanSetTracking:=V.Get('cansettracking').AsBool;
      FCanPulseGuide:=V.Get('canpulseguide').AsBool;
-     buf:='';
-     if IsEqmod then buf:=buf+'EQmod ';
-     if CanPark then buf:=buf+'CanPark ';
-     if CanSlew then buf:=buf+'CanSlew ';
-     if CanSlewAsync then buf:=buf+'CanSlewAsync ';
-     if CanSetPierSide then buf:=buf+'CanSetPierSide ';
-     if CanSync then buf:=buf+'CanSync ';
-     if CanSetTracking then buf:=buf+'CanSetTracking ';
+     Fcapability:='';
+     if IsEqmod then Fcapability:=Fcapability+'EQmod; ';
+     if CanPark then Fcapability:=Fcapability+'CanPark; ';
+     if CanSlew then Fcapability:=Fcapability+'CanSlew; ';
+     if CanSlewAsync then Fcapability:=Fcapability+'CanSlewAsync; ';
+     if CanSetPierSide then Fcapability:=Fcapability+'CanSetPierSide; ';
+     if CanSync then Fcapability:=Fcapability+'CanSync; ';
+     if CanSetTracking then Fcapability:=Fcapability+'CanSetTracking; ';
+     if CanPulseGuide then Fcapability:=Fcapability+'CanPulseGuide; ';
      FStatus := devConnected;
      FEquinox:=NullCoord;
      FEquinoxJD:=NullCoord;
      j:=GetEquinox;
-     if j=0 then buf:=buf+'EquatorialSystem: Local '
-            else buf:=buf+'EquatorialSystem: '+FormatFloat(f0,j)+' ';
+     if j=0 then Fcapability:=Fcapability+'EquatorialSystem: Local; '
+            else Fcapability:=Fcapability+'EquatorialSystem: '+FormatFloat(f0,j)+'; ';
      if isLocalIP(V.RemoteIP) then begin
        waitpoll:=500;
        statusinterval:=2000;
@@ -195,7 +196,7 @@ begin
        statusinterval:=3000;
      end;
      msg(rsConnected3);
-     msg(Format(rsMountCapabil, [buf]));
+     msg(Format(rsMountCapabil, [Fcapability]));
      if Assigned(FonStatusChange) then FonStatusChange(self);
      if Assigned(FonParkChange) then FonParkChange(self);
      if Assigned(FonPiersideChange) then FonPiersideChange(self);
@@ -217,6 +218,7 @@ procedure T_ascomrestmount.Disconnect;
 begin
    StatusTimer.Enabled:=false;
    FStatus := devDisconnected;
+   Fcapability:='';
    if Assigned(FonStatusChange) then FonStatusChange(self);
    try
      msg(rsDisconnected3,0);

@@ -42,7 +42,7 @@ T_mount = class(TComponent)
     FonTrackingChange: TNotifyEvent;
     FonStatusChange: TNotifyEvent;
     FStatus: TDeviceStatus;
-    Fdevice: string;
+    Fdevice, Fcapability: string;
     FMountSlewing: boolean;
     FTimeOut: integer;
     FAutoLoadConfig: boolean;
@@ -110,6 +110,7 @@ T_mount = class(TComponent)
     property MountSlewing: boolean read GetMountSlewing;
     property RA: double read GetRA;
     property Dec: double read GetDec;
+    property Capability: string read Fcapability;
     property PierSide: TPierSide read GetPierSide;
     property Equinox: double read GetEquinoxCache;
     property EquinoxJD: double read GetEquinoxJD;
@@ -151,6 +152,7 @@ begin
   FDomeActionWait:=1;
   FCanPulseGuide:=false;
   FWantSetPierSide:=false;
+  Fcapability:='';
 end;
 
 destructor  T_mount.Destroy;

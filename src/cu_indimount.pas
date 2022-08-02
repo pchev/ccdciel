@@ -221,6 +221,7 @@ begin
     Fconnected := false;
     FConnectDevice:=false;
     FStatus := devDisconnected;
+    Fcapability:='';
     if Assigned(FonStatusChange) then FonStatusChange(self);
 end;
 
@@ -244,6 +245,8 @@ begin
      if Assigned(FonStatusChange) then FonStatusChange(self);
   end;
   FIsEqmod:=(SyncManage<>nil)and(AlignList<>nil)and(AlignSyncMode<>nil)and(AlignMode<>nil);
+  if FIsEqmod then Fcapability:=Fcapability+'EQmod; ';
+  msg(Format(rsMountCapabil, [Fcapability]));
 end;
 
 procedure T_indimount.ConnectTimerTimer(Sender: TObject);
@@ -392,6 +395,7 @@ begin
       coord_dec:=IUFindNumber(coord_prop,'DEC');
       eod_coord:=true;
       if (coord_ra=nil)or(coord_dec=nil) then coord_prop:=nil;
+      if coord_prop<>nil then Fcapability:=Fcapability+'EquatorialSystem: Local; ';
    end
    else if (proptype=INDI_NUMBER)and(coord_prop=nil)and(propname='EQUATORIAL_COORD') then begin
       coord_prop:=indiProp.getNumber;
@@ -399,18 +403,25 @@ begin
       coord_dec:=IUFindNumber(coord_prop,'DEC');
       eod_coord:=false;
       if (coord_ra=nil)or(coord_dec=nil) then coord_prop:=nil;
+      if coord_prop<>nil then Fcapability:=Fcapability+'EquatorialSystem: J2000; ';
    end
    else if (proptype=INDI_SWITCH)and(CoordSet=nil)and(propname='ON_COORD_SET') then begin
       CoordSet:=indiProp.getSwitch;
       CoordSetTrack:=IUFindSwitch(CoordSet,'TRACK');
       CoordSetSlew:=IUFindSwitch(CoordSet,'SLEW');
       CoordSetSync:=IUFindSwitch(CoordSet,'SYNC');
+      if (CoordSetSlew<>nil)or(CoordSetTrack<>nil) then begin
+         Fcapability:=Fcapability+'CanSlew; ';
+         Fcapability:=Fcapability+'CanSlewAsync; ';
+      end;
+      if CoordSetSync<>nil then Fcapability:=Fcapability+'CanSync; ';
    end
    else if (proptype=INDI_SWITCH)and(parkprop=nil)and(propname='TELESCOPE_PARK') then begin
       parkprop:=indiProp.getSwitch;
       swpark:=IUFindSwitch(parkprop,'PARK');
       swunpark:=IUFindSwitch(parkprop,'UNPARK');
       if (swpark=nil)or(swunpark=nil) then parkprop:=nil;
+      if parkprop<>nil then Fcapability:=Fcapability+'CanPark; ';
       if Assigned(FonParkChange) then FonParkChange(self);
    end
    else if (proptype=INDI_SWITCH)and(TrackState=nil)and(propname='TELESCOPE_TRACK_STATE') then begin
@@ -418,6 +429,7 @@ begin
       TrackOn:=IUFindSwitch(TrackState,'TRACK_ON');
       TrackOff:=IUFindSwitch(TrackState,'TRACK_OFF');
       if (TrackOn=nil)or(TrackOff=nil) then TrackState:=nil;
+      if TrackState<>nil then Fcapability:=Fcapability+'CanSetTracking; ';
       if Assigned(FonTrackingChange) then FonTrackingChange(self);
    end
    else if (proptype=INDI_SWITCH)and(AbortmotionProp=nil)and(propname='TELESCOPE_ABORT_MOTION') then begin
@@ -463,6 +475,7 @@ begin
       Guide_E:=IUFindNumber(Guide_WE,'TIMED_GUIDE_E');
       if (Guide_W=nil)or(Guide_E=nil) then Guide_WE:=nil;
       FCanPulseGuide:=(Guide_WE<>nil); //at least guide ra is available
+      if FCanPulseGuide then Fcapability:=Fcapability+'CanPulseGuide; ';
    end
    else if (proptype=INDI_NUMBER)and(Guide_Rate=nil)and(propname='GUIDE_RATE') then begin
       Guide_Rate:=indiProp.getNumber;
