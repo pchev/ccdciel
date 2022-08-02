@@ -128,6 +128,10 @@ type
     MenuChangelog: TMenuItem;
     MenuAscomGuideCameraSetup: TMenuItem;
     MenuAlpacaGuideCameraSetup: TMenuItem;
+    MenuInternalGuider: TMenuItem;
+    MenuInternalguiderStart: TMenuItem;
+    MenuInternalGuiderStop: TMenuItem;
+    MenuTabInternalGuider: TMenuItem;
     MenuItemGuiderStopAstrometry: TMenuItem;
     MenuItemGuiderSolve: TMenuItem;
     Separator1: TMenuItem;
@@ -371,6 +375,8 @@ type
     procedure FormShow(Sender: TObject);
     procedure GuideCameraConnectTimerTimer(Sender: TObject);
     procedure GuidePlotTimerTimer(Sender: TObject);
+    procedure MenuInternalguiderStartClick(Sender: TObject);
+    procedure MenuInternalGuiderStopClick(Sender: TObject);
     procedure MenuItemGuiderSaveImageClick(Sender: TObject);
     procedure MenuItemGuiderSolveClick(Sender: TObject);
     procedure MenuItemGuiderViewHeaderClick(Sender: TObject);
@@ -2550,7 +2556,7 @@ begin
 
   SetTool(f_video,'Video',PanelRight5,0,MenuViewVideo,MenuVideo,true);
 
-  SetTool(f_internalguider,'InternalGuider',PanelRight6,0,MenuViewInternalGuider,nil,WantGuideCamera and WantMount,true);
+  SetTool(f_internalguider,'InternalGuider',PanelRight6,0,MenuViewInternalGuider,MenuInternalGuider,WantGuideCamera and WantMount);
 
 
   MenuViewClock.Checked:=screenconfig.GetValue('/Tools/Clock/Visible',true);
@@ -2859,7 +2865,7 @@ if sender is TMenuItem then begin
 
     SetTool(f_video,'',PanelRight5,0,MenuViewVideo,MenuVideo,true);
 
-    SetTool(f_internalguider,'',PanelRight6,0,MenuViewInternalguider,nil,WantGuideCamera and WantMount,true);
+    SetTool(f_internalguider,'',PanelRight6,0,MenuViewInternalguider,MenuInternalGuider,WantGuideCamera and WantMount);
   end
   else if n=2 then begin
     // use left and right panel
@@ -2893,7 +2899,7 @@ if sender is TMenuItem then begin
 
    SetTool(f_video,'',PanelRight5,0,MenuViewVideo,MenuVideo,true);
 
-   SetTool(f_internalguider,'',PanelRight6,0,MenuViewInternalguider,nil,WantGuideCamera and WantMount,true);
+   SetTool(f_internalguider,'',PanelRight6,0,MenuViewInternalguider,MenuInternalGuider,WantGuideCamera and WantMount);
   end;
   for i:=0 to MaxMenulevel do AccelList[i]:='';
   SetMenuAccelerator(MainMenu1.items,0,AccelList);
@@ -4559,6 +4565,11 @@ begin
  screenconfig.SetValue('/Tools/Switch/Visible',f_switch.Visible or (not WantSwitch));
  screenconfig.SetValue('/Tools/Switch/Top',f_switch.Top);
  screenconfig.SetValue('/Tools/Switch/Left',f_switch.Left);
+
+ screenconfig.SetValue('/Tools/InternalGuider/Parent',f_internalguider.Parent.Name);
+ screenconfig.SetValue('/Tools/InternalGuider/Visible',f_internalguider.Visible or (not WantGuideCamera));
+ screenconfig.SetValue('/Tools/InternalGuider/Top',f_internalguider.Top);
+ screenconfig.SetValue('/Tools/InternalGuider/Left',f_internalguider.Left);
 
  screenconfig.SetValue('/Tools/Clock/Visible',MenuViewClock.Checked);
 
@@ -15403,6 +15414,16 @@ begin
   LockGuideTimerPlot:=true;
   PlotGuideImage;
   LockGuideTimerPlot:=false;
+end;
+
+procedure Tf_main.MenuInternalguiderStartClick(Sender: TObject);
+begin
+  f_internalguider.ButtonGuide.Click;
+end;
+
+procedure Tf_main.MenuInternalGuiderStopClick(Sender: TObject);
+begin
+  f_internalguider.ButtonStop.Click;
 end;
 
 procedure Tf_main.MenuItemGuiderSaveImageClick(Sender: TObject);

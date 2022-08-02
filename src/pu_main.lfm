@@ -1017,7 +1017,7 @@ object f_main: Tf_main
     end
     object MenuTabConnect: TMenuItem
       Caption = 'Connect'
-      ImageIndex = 0
+      ImageIndex = 15
       OnClick = MenuTabClick
       object MenuConnection: TMenuItem
         Caption = 'Connection'
@@ -1233,6 +1233,21 @@ object f_main: Tf_main
         object MenuVideoStop: TMenuItem
           Caption = 'Stop record'
           OnClick = MenuVideoStopClick
+        end
+      end
+    end
+    object MenuTabInternalGuider: TMenuItem
+      Caption = 'Internal guider'
+      ImageIndex = 0
+      object MenuInternalGuider: TMenuItem
+        Caption = 'Internal guider'
+        object MenuInternalguiderStart: TMenuItem
+          Caption = 'Start'
+          OnClick = MenuInternalguiderStartClick
+        end
+        object MenuInternalGuiderStop: TMenuItem
+          Caption = 'Stop'
+          OnClick = MenuInternalGuiderStopClick
         end
       end
     end
