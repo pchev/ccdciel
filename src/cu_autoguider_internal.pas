@@ -874,7 +874,7 @@ begin
     mflipcorr:=0;
   rotate2((- (finternalguider.PA+mflipcorr)*pi/180),driftX,driftY, driftRA,driftDec);{rotate a vector point, counter clockwise}
 
-  if finternalguider.pulsegainNorth<0 then driftDEC:=-driftDEC;//flipped image correction. E.g. an image where north is up and east on the right size.
+  if finternalguider.pulsegainNorth>0 then driftDEC:=-driftDEC;//flipped image correction. E.g. an image where north is up and east on the right size.
 
   if meridianflip and (not finternalguider.ReverseDec) then driftDEC:=-driftDEC;
 
@@ -1210,9 +1210,9 @@ begin
                  if drift<2 then begin msg('Abort calibration, no movement measured!',1); StopError; end;
                  paNorth:=arctan2(driftY,driftX); // Relative to the positive X axis and CCW
                  Caltheangle:=paNorth - paEast;// CCW angles, calculate angle North relative to West
-                 if Caltheangle<pi then Caltheangle:=Caltheangle+pi*2;
-                 if Caltheangle>pi then Caltheangle:=Caltheangle-pi*2;
-                 if  Caltheangle>0 then //is turning to from West to North positive or negative pi/2
+                 if Caltheangle<-pi then Caltheangle:=Caltheangle+pi*2;
+                 if Caltheangle>+pi then Caltheangle:=Caltheangle-pi*2;
+                 if  Caltheangle<0 then //flipped?
                    Calflip:=+1  // Normal. If North is up then East is left in the image
                  else
                    Calflip:=-1; // Flipped image. E.g.if North is up then East is on the right side}
