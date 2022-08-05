@@ -170,6 +170,7 @@ resourcestring
   rsIfNotChecked = 'If not checked the program will never change the gain/offset value set in the driver setup';
   rsHistogramFul = 'Histogram full range or clipped to available data';
   rsSaveIndividu = 'Save individual images before stacking';
+  rsThisAutomati = 'This automatically determine the correct value for the setting "%s".';
 
 implementation
 

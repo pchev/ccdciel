@@ -1439,7 +1439,7 @@ resourcestring
   rsLight = 'Light';
   rsFrameSize = 'Frame size';
   rsMax2 = 'Max';
-  rsReverseDecAf = 'Reverse Dec after meridian flip';
+  rsReverseDecAf = 'Reverse dec output after meridian flip';
   rsAbortAfterRe = 'Abort after restarting more than';
   rsTimeInARow = 'time in a row';
 

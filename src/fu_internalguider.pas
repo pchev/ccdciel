@@ -25,7 +25,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 interface
 
-uses   UScaleDPI, Dialogs, u_translation, u_global,
+uses   UScaleDPI, Dialogs, u_hints, u_translation, u_global,
   Classes, SysUtils, FileUtil, Forms, Graphics, Controls, StdCtrls, ExtCtrls, Spin,
   math,LCLintf, ComCtrls, Buttons, Menus;
 
@@ -43,6 +43,7 @@ type
     BtnZoom1: TSpeedButton;
     BtnZoom2: TSpeedButton;
     BtnZoomAdjust: TSpeedButton;
+    ButtonCalibrateMeridianFlip: TButton;
     ButtonDark: TButton;
     ButtonCalibrate: TButton;
     ButtonLoop: TButton;
@@ -126,6 +127,7 @@ type
     procedure BtnZoom1Click(Sender: TObject);
     procedure BtnZoom2Click(Sender: TObject);
     procedure BtnZoomAdjustClick(Sender: TObject);
+    procedure ButtonCalibrateMeridianFlipClick(Sender: TObject);
     procedure ButtonCalibrateClick(Sender: TObject);
     procedure ButtonDarkMouseDown(Sender: TObject; Button: TMouseButton; Shift: TShiftState; X, Y: Integer);
     procedure ButtonLoopClick(Sender: TObject);
@@ -139,7 +141,7 @@ type
   private
     { private declarations }
     thescale : double;
-    FonStart, FonStop, FonCalibrate, FonLoop, FonRedraw, FonCaptureDark, FonLoadDark, FonClearDark,FonDarkInfo: TNotifyEvent;
+    FonStart, FonStop, FonCalibrate, FonCalibrateMeridianFlip, FonLoop, FonRedraw, FonCaptureDark, FonLoadDark, FonClearDark,FonDarkInfo: TNotifyEvent;
     procedure SetLed (cl : tcolor);
     procedure SetRA_hysteresis(value:integer);
     function GetRA_hysteresis:integer;
@@ -176,6 +178,7 @@ type
     procedure SetScale(value:integer);
     function GetFrameSize: integer;
     function GetReverseDec: Boolean;
+    procedure SetReverseDec(value: Boolean);
 
   public
     { public declarations }
@@ -189,6 +192,7 @@ type
     property onStart: TNotifyEvent read FonStart write FonStart;
     property onStop: TNotifyEvent read FonStop write FonStop;
     property onCalibrate: TNotifyEvent read FonCalibrate write FonCalibrate;
+    property onCalibrateMeridianFlip: TNotifyEvent read FonCalibrateMeridianFlip write FonCalibrateMeridianFlip;
     property onRedraw: TNotifyEvent read FonRedraw write FonRedraw;
     property onCaptureDark: TNotifyEvent read FonCaptureDark write FonCaptureDark;
     property onLoadDark: TNotifyEvent read FonLoadDark write FonLoadDark;
@@ -212,7 +216,7 @@ type
     property PA : double read GetPAsetting write SetPAsetting;// Guider image orientation in radians. Found by the calibration
     property trend_scale: integer read Getscale write Setscale;
     property FrameSize: integer read GetFrameSize;
-    property ReverseDec: Boolean read GetReverseDec;
+    property ReverseDec: Boolean read GetReverseDec write SetReverseDec;
   end;
 
 implementation
@@ -291,6 +295,7 @@ begin
   Label9.Caption:=rsFrameSize;
   framesize1.Items[0]:=rsMax2;
   CheckBoxReverseDec.Caption:=rsReverseDecAf;
+  CheckBoxReverseDec.Hint:=Format(rsThisAutomati, [rsReverseDecAf]);
 end;
 
 function Tf_internalguider.Getdisableguiding:boolean;
@@ -521,6 +526,12 @@ end;
 procedure Tf_internalguider.scale1Click(Sender: TObject; Button: TUDBtnType);
 begin
   trend_scale:=scale1.position;//trigger a redraw trend
+end;
+
+procedure Tf_internalguider.ButtonCalibrateMeridianFlipClick(Sender: TObject);
+begin
+ setled(clYellow);
+  if Assigned(FonCalibrateMeridianFlip) then FonCalibrateMeridianFlip(self);
 end;
 
 procedure Tf_internalguider.ButtonCalibrateClick(Sender: TObject);
@@ -793,6 +804,11 @@ end;
 function Tf_internalguider.GetReverseDec: boolean;
 begin
   result:=CheckBoxReverseDec.Checked;
+end;
+
+procedure Tf_internalguider.SetReverseDec(value: Boolean);
+begin
+  CheckBoxReverseDec.Checked:=value;
 end;
 
 end.
