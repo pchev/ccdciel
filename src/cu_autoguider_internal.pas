@@ -45,7 +45,7 @@ type
     xy_array,xy_array_old : star_position_array;//internal guider for measure drift
     GuideLog: TextFile;
     FPaused, FSettling, FSettlingInRange,PulseGuiding: boolean;
-    InternalguiderCalibratingMeridianFlip: boolean;
+    InternalguiderCalibratingMeridianFlip, InternalguiderCalibratingMeridianFlipNorth: boolean;
     InternalguiderCalibratingMeridianFlipStep: integer;
     InternalguiderCalibratingMeridianFlipSign1, InternalguiderCalibratingMeridianFlipSign2: double;
     FSettleStartTime, FSettleTime: double;
@@ -162,6 +162,7 @@ begin
   InternalguiderCalibrating:=false;
   InternalguiderCapturingDark:=false;
   InternalguiderCalibratingMeridianFlip:=false;
+  InternalguiderCalibratingMeridianFlipNorth:=false;
   frame_size:=9999;
   TimerWaitPulseGuiding:=TTimer.Create(nil);
   TimerWaitPulseGuiding.Enabled:=false;
@@ -1051,6 +1052,7 @@ begin
   InternalguiderCalibrating:=false;
   InternalguiderCapturingDark:=false;
   InternalguiderCalibratingMeridianFlip:=false;
+  InternalguiderCalibratingMeridianFlipNorth:=false;
   Finternalguider.ButtonLoop.enabled:=true;
   Finternalguider.ButtonCalibrate.enabled:=true;
   Finternalguider.ButtonGuide.enabled:=true;
@@ -1081,13 +1083,23 @@ begin
           InternalguiderCalibratingMeridianFlipSign1:=sgn(Finternalguider.pulsegainNorth);
           // point at equator, one hour to the east of meridian
           FMount.slew(rmod(24+rad2deg*CurrentSidTim/15+1,24),0);
-          InternalguiderCalibrate;
+          StopInternalguider:=false;
+          InternalguiderCalibrating:=true;
+          SetStatus('Start Calibration',GUIDER_BUSY);
+          finternalguider.trend_message('Guider is calibrating meridian flip.','This will take a few minutes.','');
+          Calthecos:=cos(mount.Dec*pi/180); if Calthecos=0 then Calthecos:=0.00000001; //prevent dividing by zero
+          // Go directly to North measurement
+          InternalguiderCalibratingMeridianFlipNorth:=true;
+          InternalguiderCalibrationDirection:=3;
+          InternalguiderCalibrationStep:=0;
+          InternalguiderLoop;
        end;
     2: begin
           // end of second calibration
           InternalguiderCalibratingMeridianFlip:=false;
-          msg('Meridian flip calibration, measurement East: '+FormatFloat(f2,Finternalguider.pulsegainNorth),2);
-          InternalguiderCalibratingMeridianFlipSign2:=sgn(Finternalguider.pulsegainNorth);
+          InternalguiderCalibratingMeridianFlipNorth:=false;
+          msg('Meridian flip calibration, measurement East: '+FormatFloat(f2,pulsegainNorth),2);
+          InternalguiderCalibratingMeridianFlipSign2:=sgn(pulsegainNorth);
           // option is to be checked when the two sign are equal
           Finternalguider.ReverseDec:=(InternalguiderCalibratingMeridianFlipSign1=InternalguiderCalibratingMeridianFlipSign2);
           msg('Meridian flip calibration, reverse Dec result: '+BoolToStr(Finternalguider.ReverseDec,true),2);
@@ -1288,9 +1300,17 @@ begin
                    Calflip:=-1; // Flipped image. E.g.if North is up then East is on the right side}
                  pulsegainNorth:=Calflip*drift*1000/(CalibrationDuration); // [px/sec]
 
-                 InternalguiderCalibrationDirection:=4;
-                 InternalguiderCalibrationStep:=0;
-                 InternalCalibration;  // iterate without new image
+                 if InternalguiderCalibratingMeridianFlipNorth then begin
+                   // North gain mesured, stop here
+                   InternalguiderCalibrationDirection:=8;
+                   InternalguiderCalibrationStep:=0;
+                   InternalCalibration;  // iterate without new image
+                 end
+                 else begin
+                   InternalguiderCalibrationDirection:=4;
+                   InternalguiderCalibrationStep:=0;
+                   InternalCalibration;  // iterate without new image
+                 end;
                end
                else begin // retry with bigger pulse
                  CaldriftOld:=drift;
@@ -1444,6 +1464,15 @@ begin
           inc(InternalguiderCalibratingMeridianFlipStep);
           InternalguiderCalibrateMeridianFlipStep;
         end;
+      end;
+    8:begin
+        // complete meridian flip calibration
+        msg('Ready to guide!',1);
+        finternalguider.trend_message('Meridian flip calibration is ready.','','');
+        InternalguiderStop;
+        SetStatus('Calibration Complete',GUIDER_IDLE);
+        inc(InternalguiderCalibratingMeridianFlipStep);
+        InternalguiderCalibrateMeridianFlipStep;
       end;
   end;
   except
