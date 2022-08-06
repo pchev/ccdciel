@@ -721,12 +721,15 @@ begin
     origin:=config.GetValue('/Info/ObservatoryName','');
     observer:=config.GetValue('/Info/ObserverName','');
     telname:=config.GetValue('/Info/TelescopeName','');
-    if FGuideCamera or config.GetValue('/Astrometry/FocaleFromTelescope',true)
-    then begin
-       if focal_length<0 then focal_length:=Fmount.FocaleLength
-    end
-    else
-       focal_length:=config.GetValue('/Astrometry/FocaleLength',0);
+    if not FGuideCamera then begin
+      if config.GetValue('/Astrometry/FocaleFromTelescope',true)
+      then begin
+         if focal_length<0 then focal_length:=Fmount.FocaleLength;
+      end
+      else begin
+         focal_length:=config.GetValue('/Astrometry/FocaleLength',0);
+      end;
+    end;
     if not (FGuideCamera or config.GetValue('/Astrometry/PixelSizeFromCamera',true)) then begin
       hpix1:=config.GetValue('/Astrometry/PixelSize',5.0);
       hpix2:=hpix1;
@@ -872,7 +875,7 @@ begin
      if multg>0 then Ffits.Header.Insert(i,'MULT_G',multg ,'G multiplier');
      if multb>0 then Ffits.Header.Insert(i,'MULT_B',multb ,'B multiplier');
   end;
-  Ffits.Header.Insert(i,'FOCALLEN',focal_length,'[mm] Telescope focal length');
+  if (focal_length>0) then Ffits.Header.Insert(i,'FOCALLEN',focal_length,'[mm] Telescope focal length');
   if ccdtemp<>NullCoord then Ffits.Header.Insert(i,'CCD-TEMP',ccdtemp ,'CCD temperature (Celsius)');
   if Frwidth<>0 then begin
     Ffits.Header.Insert(i,'FRAMEX',Frx,'Frame start x');
