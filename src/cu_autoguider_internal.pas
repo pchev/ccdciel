@@ -1273,7 +1273,7 @@ begin
                  // start North measurement
                  CaldriftOld:=0;
                  if InternalguiderCalibratingMeridianFlipNorth then
-                    CalibrationDuration:=CalibrationDuration/1.5;
+                    CalibrationDuration:=round(CalibrationDuration/1.5)
                  else
                     CalibrationDuration:=667; //duration of pulse guiding
                  InternalguiderCalibrationStep:=2;
