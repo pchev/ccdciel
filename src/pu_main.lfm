@@ -336,6 +336,8 @@ object f_main: Tf_main
             ParentColor = False
             ParentFont = False
             TabOrder = 0
+            OnDragDrop = PanelDragDrop
+            OnDragOver = PanelDragOver
           end
         end
       end
