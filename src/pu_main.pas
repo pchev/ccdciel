@@ -3541,8 +3541,8 @@ begin
   ScrGuideBmp.SetSize(ScrGuideWidth,ScrGuideHeigth);
   ClearImage;
   DrawImage;
+  ClearGuideImage;
   if InternalguiderRunning then begin
-    ClearGuideImage;
     DrawGuideImage(true);
     PlotGuideImage;
   end;
@@ -15324,7 +15324,7 @@ end;
 procedure Tf_main.ImageGuidePaint(Sender: TObject);
 begin
 try
-  if (guideimg_Height>0)and(guideimg_Width>0) then
+  if (ScrGuideBmp.Height>0)and(ScrGuideBmp.Width>0) then
      ScrGuideBmp.Draw(ImageGuide.Canvas,0,0,true);
   ImageGuide.Canvas.Brush.Color:=clBlack;
   ImageGuide.Canvas.Brush.Style:=bsSolid;
