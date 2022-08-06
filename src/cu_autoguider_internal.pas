@@ -1053,12 +1053,14 @@ begin
   InternalguiderCapturingDark:=false;
   InternalguiderCalibratingMeridianFlip:=false;
   InternalguiderCalibratingMeridianFlipNorth:=false;
+  Wait(Finternalguider.Exposure.Value);
   Finternalguider.ButtonLoop.enabled:=true;
   Finternalguider.ButtonCalibrate.enabled:=true;
   Finternalguider.ButtonGuide.enabled:=true;
   Finternalguider.ButtonDark.enabled:=true;
   Finternalguider.led.Brush.Color:=clGray;
   SetStatus('Stopped',GUIDER_IDLE);
+
 end;
 
 procedure T_autoguider_internal.InternalguiderCalibrateMeridianFlip;
