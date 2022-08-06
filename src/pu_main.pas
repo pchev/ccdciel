@@ -1082,7 +1082,7 @@ var pn: string;
     i: integer;
     par: Tpanel;
     opm,npm: Tmenuitem;
-    vis: boolean;
+    vis,isHorz: boolean;
 begin
 par:=defaultParent;
 if not ForceDefault then begin
@@ -1094,7 +1094,8 @@ if not ForceDefault then begin
      end;
   end;
 end;
-if par.Width>par.Height then begin
+isHorz:=(par=PanelTop)or(par=PanelBottom);
+if isHorz then begin
    tool.Align:=alLeft;
 end else begin
    tool.Align:=alTop;
@@ -8963,18 +8964,20 @@ end;
 procedure Tf_main.PanelDragDrop(Sender, Source: TObject; X, Y: Integer);
 var toolmenu,opm,npm: TMenuItem;
     i: integer;
+    isHorz: boolean;
 begin
 npm:=nil;
 opm:=nil;
 toolmenu:=nil;
 if sender is TPanel then begin
+    isHorz:=(TPanel(Sender)=PanelTop)or(TPanel(Sender)=PanelBottom);
     if TPanel(Sender).Tag>0 then npm:=TMenuItem(TPanel(Sender).tag);
     if source is TLabel then begin
      if TFrame(TLabel(Source).Parent).tag>0 then toolmenu:=TMenuItem(TFrame(TLabel(Source).Parent).tag);
      TFrame(TLabel(Source).Parent).Parent:=TPanel(Sender);
      TFrame(TLabel(Source).Parent).Top:=Y;
      TFrame(TLabel(Source).Parent).Left:=X;
-     if TPanel(Sender).Width>TPanel(Sender).Height then begin
+     if isHorz then begin
         TFrame(TLabel(Source).Parent).Align:=alLeft;
      end else begin
         TFrame(TLabel(Source).Parent).Align:=alTop;
@@ -8985,7 +8988,7 @@ if sender is TPanel then begin
       TFrame(TPanel(TMemo(Source).Parent).Parent).Parent:=TPanel(Sender);
       TFrame(TPanel(TMemo(Source).Parent).Parent).Top:=Y;
       TFrame(TPanel(TMemo(Source).Parent).Parent).Left:=X;
-      if TPanel(Sender).Width>TPanel(Sender).Height then begin
+      if isHorz then begin
          TFrame(TPanel(TMemo(Source).Parent).Parent).Align:=alLeft;
       end else begin
          TFrame(TPanel(TMemo(Source).Parent).Parent).Align:=alTop;
@@ -8996,7 +8999,7 @@ if sender is TPanel then begin
       TFrame(TDragObject(Source).Control).Parent:=TPanel(Sender);
       TFrame(TDragObject(Source).Control).Top:=Y;
       TFrame(TDragObject(Source).Control).Left:=X;
-      if TPanel(Sender).Width>TPanel(Sender).Height then begin
+      if isHorz then begin
          TFrame(TDragObject(Source).Control).Align:=alLeft;
       end else begin
          TFrame(TDragObject(Source).Control).Align:=alTop;
@@ -9007,7 +9010,7 @@ if sender is TPanel then begin
      TFrame(Source).Parent:=TPanel(Sender);
      TFrame(Source).Top:=Y;
      TFrame(Source).Left:=X;
-     if TPanel(Sender).Width>TPanel(Sender).Height then begin
+     if isHorz then begin
         TFrame(Source).Align:=alLeft;
      end else begin
         TFrame(Source).Align:=alTop;
