@@ -1088,6 +1088,9 @@ begin
           SetStatus('Start Calibration',GUIDER_BUSY);
           finternalguider.trend_message('Guider is calibrating meridian flip.','This will take a few minutes.','');
           Calthecos:=cos(mount.Dec*pi/180); if Calthecos=0 then Calthecos:=0.00000001; //prevent dividing by zero
+          paEast:=paEast+pi;
+          if paEast<-pi then paEast:=paEast+pi*2;
+          if paEast>+pi then paEast:=paEast-pi*2;
           // Go directly to North measurement
           InternalguiderCalibratingMeridianFlipNorth:=true;
           InternalguiderCalibrationDirection:=3;
@@ -1269,7 +1272,10 @@ begin
                else begin
                  // start North measurement
                  CaldriftOld:=0;
-                 CalibrationDuration:=667; //duration of pulse guiding
+                 if InternalguiderCalibratingMeridianFlipNorth then
+                    CalibrationDuration:=CalibrationDuration/1.5;
+                 else
+                    CalibrationDuration:=667; //duration of pulse guiding
                  InternalguiderCalibrationStep:=2;
                  InternalCalibration;  // iterate without new image
                end;
