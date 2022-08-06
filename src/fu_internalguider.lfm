@@ -42,10 +42,10 @@ object f_internalguider: Tf_internalguider
       Height = 465
       Top = 1
       Width = 323
-      ActivePage = TabSheetOptions
+      ActivePage = TabSheetGuider
       Align = alClient
       ParentFont = False
-      TabIndex = 2
+      TabIndex = 0
       TabOrder = 0
       object TabSheetGuider: TTabSheet
         Caption = 'Guider'
@@ -557,18 +557,18 @@ object f_internalguider: Tf_internalguider
           TabOrder = 0
           object GroupBox1: TGroupBox
             Left = 16
-            Height = 274
+            Height = 328
             Top = 0
-            Width = 288
+            Width = 296
             Caption = 'Options:'
-            ClientHeight = 254
-            ClientWidth = 286
+            ClientHeight = 308
+            ClientWidth = 294
             TabOrder = 0
             object measure_method2: TCheckBox
               Left = 8
               Height = 21
               Hint = 'Use alternative method for measuring pixel scale in arc seconds during calibration. '
-              Top = 136
+              Top = 176
               Width = 279
               Caption = 'Measure pixel scale ["/px] by stop tracking'
               ParentFont = False
@@ -580,7 +580,7 @@ object f_internalguider: Tf_internalguider
               Left = 8
               Height = 21
               Hint = 'For testing. This will disable guiding but still show the trend.'
-              Top = 160
+              Top = 200
               Width = 187
               Caption = 'Disable guiding temporary'
               ParentFont = False
@@ -617,7 +617,7 @@ object f_internalguider: Tf_internalguider
               AnchorSideTop.Side = asrCenter
               Left = 8
               Height = 19
-              Top = 45
+              Top = 77
               Width = 88
               Caption = 'Minimum HFD'
               ParentColor = False
@@ -626,7 +626,7 @@ object f_internalguider: Tf_internalguider
               Left = 200
               Height = 29
               Hint = 'Minimum signal to noise ratio'
-              Top = 72
+              Top = 104
               Width = 72
               Increment = 3
               MaxValue = 100
@@ -641,7 +641,7 @@ object f_internalguider: Tf_internalguider
               AnchorSideTop.Side = asrCenter
               Left = 8
               Height = 19
-              Top = 77
+              Top = 109
               Width = 86
               Caption = 'Minimum SNR'
               ParentColor = False
@@ -650,7 +650,7 @@ object f_internalguider: Tf_internalguider
               Left = 200
               Height = 29
               Hint = 'Minimum star size. could be used to ignore hot pixels.'
-              Top = 40
+              Top = 72
               Width = 72
               Increment = 0.3
               MaxValue = 10
@@ -662,7 +662,7 @@ object f_internalguider: Tf_internalguider
               Left = 200
               Height = 29
               Hint = 'Use smaller frame to speedup and reduce CPU load.'
-              Top = 104
+              Top = 136
               Width = 72
               BorderSpacing.Around = 5
               Constraints.MaxHeight = 29
@@ -686,7 +686,7 @@ object f_internalguider: Tf_internalguider
               AnchorSideTop.Side = asrCenter
               Left = 8
               Height = 19
-              Top = 109
+              Top = 141
               Width = 65
               Caption = 'Frame size'
               ParentColor = False
@@ -694,7 +694,7 @@ object f_internalguider: Tf_internalguider
             object CheckBoxReverseDec: TCheckBox
               Left = 8
               Height = 21
-              Top = 184
+              Top = 224
               Width = 258
               Caption = 'Reverse dec output after meridian flip'
               TabOrder = 6
@@ -703,11 +703,32 @@ object f_internalguider: Tf_internalguider
               Left = 32
               Height = 25
               Hint = 'This automatically determine the correct value for the setting ''Reverse Dec output after meridian flip''.'
-              Top = 212
+              Top = 252
               Width = 191
               Caption = 'Calibrate meridian flip'
               OnClick = ButtonCalibrateMeridianFlipClick
               TabOrder = 7
+            end
+            object Label11: TLabel
+              Left = 8
+              Height = 19
+              Top = 45
+              Width = 153
+              Caption = 'Longest guide pulse [ms]'
+              ParentColor = False
+            end
+            object LongestPulse1: TSpinEdit
+              Left = 200
+              Height = 29
+              Top = 40
+              Width = 72
+              Increment = 100
+              MaxValue = 10000
+              MinValue = 500
+              ParentShowHint = False
+              ShowHint = True
+              TabOrder = 8
+              Value = 500
             end
           end
         end
@@ -736,7 +757,7 @@ object f_internalguider: Tf_internalguider
             Top = 0
             Width = 288
             Caption = 'Calibration results:'
-            ClientHeight = 254
+            ClientHeight = 236
             ClientWidth = 286
             TabOrder = 0
             object Label5: TLabel

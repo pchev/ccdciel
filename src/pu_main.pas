@@ -4176,7 +4176,8 @@ begin
   f_internalguider.pulseGainSouth:=config.GetValue('/InternalGuider/PulseGainSouth',3.0);
   f_internalguider.Pier_Side:=config.GetValue('/InternalGuider/PierSide','W');
   f_internalguider.pixel_size:=config.GetValue('/InternalGuider/PixelSize',2.5);
-  f_internalguider.shortestPulse:=config.GetValue('/InternalGuider/ShortestPulse',40);
+  f_internalguider.ShortestPulse:=config.GetValue('/InternalGuider/ShortestPulse',40);
+  f_internalguider.LongestPulse:=config.GetValue('/InternalGuider/LongestPulse',2500);
   f_internalguider.minHFD:=config.GetValue('/InternalGuider/MinHFD',1.5);
   f_internalguider.minSNR:=config.GetValue('/InternalGuider/MinSNR',15);
   f_internalguider.use_arcsec:=config.GetValue('/InternalGuider/UnitArcSec',false);
@@ -4688,7 +4689,8 @@ begin
 
   config.SetValue('/InternalGuider/PierSide',f_internalguider.pier_side);
   config.SetValue('/InternalGuider/PixelSize',f_internalguider.pixel_size);
-  config.SetValue('/InternalGuider/ShortestPulse',f_internalguider.shortestPulse);
+  config.SetValue('/InternalGuider/ShortestPulse',f_internalguider.ShortestPulse);
+  config.SetValue('/InternalGuider/LongestPulse',f_internalguider.LongestPulse);
   config.SetValue('/InternalGuider/MinHFD',f_internalguider.minHFD);
   config.SetValue('/InternalGuider/MinSNR',f_internalguider.minSNR);
 

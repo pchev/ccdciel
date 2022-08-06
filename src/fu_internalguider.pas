@@ -53,6 +53,7 @@ type
     CheckBoxReverseDec: TCheckBox;
     disable_guiding1: TCheckBox;
     Exposure: TFloatSpinEdit;
+    Label11: TLabel;
     Label9: TLabel;
     LabelStatusDec: TLabel;
     LabelStatusRA: TLabel;
@@ -106,6 +107,7 @@ type
     Offset: TSpinEdit;
     ShortestPulse1: TSpinEdit;
     minSNR1: TSpinEdit;
+    LongestPulse1: TSpinEdit;
     TabSheetOptions: TTabSheet;
     TabSheetCamera: TTabSheet;
     Gamma: TTrackBar;
@@ -168,6 +170,8 @@ type
     function GetMinHFD:double;
     procedure SetShortestPulse(value:integer);
     function GetShortestPulse:integer;
+    procedure SetLongestPulse(value:integer);
+    function GetLongestPulse:integer;
     procedure SetMinSNR(value:integer);
     function GetMinSNR:integer;
     procedure SetPAsetting(value:double);
@@ -210,7 +214,8 @@ type
     property pulsegainSouth: double read GetpulsegainSouthsetting write SetpulsegainSouthsetting; // movement in arcsec/second. Found by the calibration
     property pixel_size: double read GetPixelSize write SetPixelSize; // scale in arcsec/pixel.
     property minHFD: double read GetMinHFD write SetMinHFD;
-    property ShortestPulse: integer read GetShortestPulse write SetShortestPulse; // minimum pulse duaration. If below skip.
+    property ShortestPulse: integer read GetShortestPulse write SetShortestPulse; // minimum pulse duration. If below skip.
+    property LongestPulse: integer read GetLongestPulse write SetLongestPulse;    // maximum pulse duration. Truncated if above.
     property MinSNR: integer read GetMinSNR write SetMinSNR;
     property pier_side: string read Getpier_sidesetting write Setpier_sidesetting; // movement in arcsec/second. Found by the calibration
     property PA : double read GetPAsetting write SetPAsetting;// Guider image orientation in radians. Found by the calibration
@@ -405,9 +410,20 @@ procedure Tf_internalguider.SetShortestPulse(value:integer);
 begin
   ShortestPulse1.value:=value;
 end;
+
 function Tf_internalguider.GetShortestPulse:integer;
 begin
   result:=ShortestPulse1.value;
+end;
+
+procedure Tf_internalguider.SetLongestPulse(value:integer);
+begin
+  LongestPulse1.value:=value;
+end;
+
+function Tf_internalguider.GetLongestPulse:integer;
+begin
+  result:=LongestPulse1.value;
 end;
 
 procedure Tf_internalguider.SetMinSNR(value:integer);

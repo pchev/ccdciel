@@ -37,7 +37,7 @@ type
   private
     InternalguiderInitialize,InternalCalibrationInitialize,GuideLogFileOpen  : boolean;
     pulseRA,pulseDEC,GuideFrameCount, InternalguiderCalibrationDirection,InternalguiderCalibrationStep,
-    CalibrationDuration,Calflip,CalCount,Calnrtest,frame_size           : integer;
+    CalibrationDuration,Calflip,CalCount,Calnrtest,frame_size,BacklashStep: integer;
     driftX,driftY,driftRA,driftDec,moveRA,moveDEC, Guidethecos,old_moveRA,old_moveDEC,  paEast, paNorth,
     pulsegainEast,pulsegainWest,pulsegainNorth,pulsegainSouth,Calthecos, Caltheangle,CaldriftOld,
     GuideStartTime,LogSNR,LogFlux,mean_hfd,ditherX,ditherY : double;
@@ -96,7 +96,6 @@ implementation
 
 const
    nrpointsTrend=50; //number of trend points plotted
-   max_duration=2500;//max duration guide puls in milliseconds
 
 procedure mad_median(list: array of double;leng :integer;out mad,median :double);{calculate mad and median without modifying the data}
 var  {idea from https://eurekastatistics.com/using-the-median-absolute-deviation-to-find-outliers/}
@@ -912,7 +911,7 @@ begin
 
     if moveRA2>0 then //going East increases the RA
     begin
-       pulseRA:=min(max_duration,round(1000*abs(moveRA2/finternalguider.pulsegainEast))); {duration msec}
+       pulseRA:=min(finternalguider.LongestPulse,round(1000*abs(moveRA2/finternalguider.pulsegainEast))); {duration msec}
        if pulseRA>finternalguider.shortestPulse then //Large enough correction to follow by motors/relays. Complementary with minimum_move
        begin
          //msg('East: '+inttostr(pulseRA),3);
@@ -925,7 +924,7 @@ begin
     else
     if moveRA2<0 then //going West
     begin
-      pulseRA:=min(max_duration,round(1000*abs(moveRA2/finternalguider.pulsegainWest))); {duration msec}
+      pulseRA:=min(finternalguider.LongestPulse,round(1000*abs(moveRA2/finternalguider.pulsegainWest))); {duration msec}
       if pulseRA>finternalguider.shortestPulse then
       begin
         //msg('West: '+inttostr(pulseRA),3);
@@ -938,7 +937,7 @@ begin
 
     if moveDEC>0 then //go North increase the DEC.
     begin
-      pulseDEC:=min(max_duration,round(1000*abs(moveDEC/finternalguider.pulsegainNorth))); {duration msec}
+      pulseDEC:=min(finternalguider.LongestPulse,round(1000*abs(moveDEC/finternalguider.pulsegainNorth))); {duration msec}
       if pulseDEC>finternalguider.shortestPulse then
       begin
         //msg('North: '+inttostr(pulseDEC),3);
@@ -951,7 +950,7 @@ begin
     else
     if moveDEC<0 then //go South
     begin
-      pulseDEC:=min(max_duration,round(1000*abs(moveDEC/finternalguider.pulsegainSouth))); {duration msec}
+      pulseDEC:=min(finternalguider.LongestPulse,round(1000*abs(moveDEC/finternalguider.pulsegainSouth))); {duration msec}
       if pulseDEC>finternalguider.shortestPulse then
       begin
         //msg('South: '+inttostr(pulseDEC),3);
@@ -1231,23 +1230,48 @@ begin
     3:begin  //NORTH measure pulse guide speed.
         case InternalguiderCalibrationStep of
           0: begin
-               msg('Slew North to remove backlash',3);
-               mount.Slew(mount.ra,mount.dec+1.0);//move one degree north
-               WaitPulseGuiding(1000);//wait till vibrations are gone. Required?
-               CaldriftOld:=0;
-               CalibrationDuration:=667; //duration of pulse guiding
+               msg('Remove backlash North',3);
+               InternalCalibrationInitialize:=true;
+               if measure_drift(InternalCalibrationInitialize,driftX,driftY)>0 then StopError;
+               mount.PulseGuide(0,finternalguider.LongestPulse);
+               WaitPulseGuiding(finternalguider.LongestPulse);
                InternalguiderCalibrationStep:=1;
+               BacklashStep:=1;
              end;
           1: begin
+               if measure_drift(InternalCalibrationInitialize,driftX,driftY)>0 then StopError;
+               drift:=sqrt(sqr(driftX)+sqr(driftY));
+               msg('Backlash step '+inttostr(BacklashStep)+' drift '+FormatFloat(f1,drift),3);
+               if drift<3 then begin
+                 // more backlash
+                 inc(BacklashStep);
+                 if BacklashStep>30 then begin
+                   msg('Mount do not move after '+inttostr(BacklashStep-1)+' steps, try to fix mechanical backlash or increase "Longest guide pulse"',3);
+                   StopError;
+                 end
+                 else begin
+                   mount.PulseGuide(0,finternalguider.LongestPulse);
+                   WaitPulseGuiding(finternalguider.LongestPulse);
+                 end;
+               end
+               else begin
+                 // start North measurement
+                 CaldriftOld:=0;
+                 CalibrationDuration:=667; //duration of pulse guiding
+                 InternalguiderCalibrationStep:=2;
+                 InternalCalibration;  // iterate without new image
+               end;
+             end;
+          2: begin
                CalibrationDuration:=round(CalibrationDuration*1.5);
                msg('Testing pulse guiding North for '+floattostrF(CalibrationDuration/1000,FFgeneral,0,2)+ ' seconds',3);
                InternalCalibrationInitialize:=true;//for measure drift
                if measure_drift(InternalCalibrationInitialize,driftX,driftY)>0 then StopError;//measure reference star positions
                mount.PulseGuide(0,CalibrationDuration {duration msec} );  // 0=north, 1=south, 2 East, 3 West
                WaitPulseGuiding(CalibrationDuration);
-               InternalguiderCalibrationStep:=2;
+               InternalguiderCalibrationStep:=3;
              end;
-          2: begin
+          3: begin
                if measure_drift(InternalCalibrationInitialize,driftX,driftY)>0 then StopError;//measure drift
                drift:=sqrt(sqr(driftX)+sqr(driftY));
 
@@ -1270,7 +1294,7 @@ begin
                end
                else begin // retry with bigger pulse
                  CaldriftOld:=drift;
-                 InternalguiderCalibrationStep:=1;
+                 InternalguiderCalibrationStep:=2;
                end;
              end;
         end;
@@ -1278,22 +1302,47 @@ begin
     4:begin  //SOUTH, measure pulse guide speed.
         case InternalguiderCalibrationStep of
           0: begin
-               msg('Slew South to remove backlash',3);
-               mount.Slew(mount.ra,mount.dec-1);// move one degree south
-               WaitPulseGuiding(1000);//wait till vibrations are gone. Required?
-               CalCount:=0;
-               CaldriftOld:=0;
+               msg('Remove backlash South',3);
+               InternalCalibrationInitialize:=true;
+               if measure_drift(InternalCalibrationInitialize,driftX,driftY)>0 then StopError;
+               mount.PulseGuide(1,finternalguider.LongestPulse);
+               WaitPulseGuiding(finternalguider.LongestPulse);
                InternalguiderCalibrationStep:=1;
-               msg('Testing pulse guiding South for '+floattostrF(CalibrationDuration/1000,FFgeneral,0,2)+ ' seconds',3);
+               BacklashStep:=1;
              end;
           1: begin
+               if measure_drift(InternalCalibrationInitialize,driftX,driftY)>0 then StopError;
+               drift:=sqrt(sqr(driftX)+sqr(driftY));
+               msg('Backlash step '+inttostr(BacklashStep)+' drift '+FormatFloat(f1,drift),3);
+               if drift<3 then begin
+                 // more backlash
+                 inc(BacklashStep);
+                 if BacklashStep>30 then begin
+                   msg('Mount do not move after '+inttostr(BacklashStep-1)+' steps, try to fix mechanical backlash or increase "Longest guide pulse"',3);
+                   StopError;
+                 end
+                 else begin
+                   mount.PulseGuide(1,finternalguider.LongestPulse);
+                   WaitPulseGuiding(finternalguider.LongestPulse);
+                 end;
+               end
+               else begin
+                 // start South measurement
+                 CalCount:=0;
+                 CaldriftOld:=0;
+                 InternalguiderCalibrationStep:=2;
+                 msg('Testing pulse guiding South for '+floattostrF(CalibrationDuration/1000,FFgeneral,0,2)+ ' seconds',3);
+                 InternalCalibration;  // iterate without new image
+               end;
+             end;
+          2: begin
                InternalCalibrationInitialize:=true;
                if measure_drift(InternalCalibrationInitialize,driftX,driftY)>0 then StopError;//measure reference star positions
                mount.PulseGuide(1,CalibrationDuration {duration msec} );  // 0=north, 1=south, 2 East, 3 West
                WaitPulseGuiding(CalibrationDuration);
-               InternalguiderCalibrationStep:=2;
+               InternalguiderCalibrationStep:=3;
              end;
-          2: begin
+          3: begin
                if measure_drift(InternalCalibrationInitialize,driftX,driftY)>0 then StopError;//measure drift
                drift:=sqrt(sqr(driftX)+sqr(driftY));
                inc(CalCount);
@@ -1311,7 +1360,7 @@ begin
                end
                else begin
                  CaldriftOld:=drift;
-                 InternalguiderCalibrationStep:=1; //repeat loop until CaldriftOld>2 and backlash is gone
+                 InternalguiderCalibrationStep:=2; //repeat loop until CaldriftOld>2 and backlash is gone
                end;
              end;
         end;
