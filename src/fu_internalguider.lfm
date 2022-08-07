@@ -699,16 +699,6 @@ object f_internalguider: Tf_internalguider
               Caption = 'Reverse dec output after meridian flip'
               TabOrder = 6
             end
-            object ButtonCalibrateMeridianFlip: TButton
-              Left = 32
-              Height = 25
-              Hint = 'This automatically determine the correct value for the setting ''Reverse Dec output after meridian flip''.'
-              Top = 252
-              Width = 191
-              Caption = 'Calibrate meridian flip'
-              OnClick = ButtonCalibrateMeridianFlipClick
-              TabOrder = 7
-            end
             object Label11: TLabel
               Left = 8
               Height = 19
@@ -727,7 +717,7 @@ object f_internalguider: Tf_internalguider
               MinValue = 500
               ParentShowHint = False
               ShowHint = True
-              TabOrder = 8
+              TabOrder = 7
               Value = 500
             end
           end
@@ -757,7 +747,7 @@ object f_internalguider: Tf_internalguider
             Top = 0
             Width = 288
             Caption = 'Calibration results:'
-            ClientHeight = 236
+            ClientHeight = 254
             ClientWidth = 286
             TabOrder = 0
             object Label5: TLabel

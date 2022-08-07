@@ -43,7 +43,6 @@ type
     BtnZoom1: TSpeedButton;
     BtnZoom2: TSpeedButton;
     BtnZoomAdjust: TSpeedButton;
-    ButtonCalibrateMeridianFlip: TButton;
     ButtonDark: TButton;
     ButtonCalibrate: TButton;
     ButtonLoop: TButton;
@@ -129,7 +128,6 @@ type
     procedure BtnZoom1Click(Sender: TObject);
     procedure BtnZoom2Click(Sender: TObject);
     procedure BtnZoomAdjustClick(Sender: TObject);
-    procedure ButtonCalibrateMeridianFlipClick(Sender: TObject);
     procedure ButtonCalibrateClick(Sender: TObject);
     procedure ButtonDarkMouseDown(Sender: TObject; Button: TMouseButton; Shift: TShiftState; X, Y: Integer);
     procedure ButtonLoopClick(Sender: TObject);
@@ -544,16 +542,28 @@ begin
   trend_scale:=scale1.position;//trigger a redraw trend
 end;
 
-procedure Tf_internalguider.ButtonCalibrateMeridianFlipClick(Sender: TObject);
-begin
- setled(clYellow);
-  if Assigned(FonCalibrateMeridianFlip) then FonCalibrateMeridianFlip(self);
-end;
-
 procedure Tf_internalguider.ButtonCalibrateClick(Sender: TObject);
 begin
-  setled(clYellow);
-  if Assigned(FonCalibrate) then FonCalibrate(self);
+ case QuestionDlg ('Guider calibration','Select a calibration option:'+#10 +#10+
+                   'Option 1: Calibration at current position.'+#10+
+                   'Option 2: Slew automatically to SSE and SSW for calibration and meridian flip setting.'+#10+
+                   'Option 3: Cancel.', mtCustom,
+                   {$ifdef lclgtk2}
+                   [22,'Cancel','IsCancel', 21, 'Slew + Calibration + Meridian flip setting', 20,'Calibration'],
+                   {$else}
+                   [20,'Calibration', 21, 'Slew + Calibration + Meridian flip setting',22,'Cancel','IsCancel'],
+                   {$endif}
+                   '') of
+      20:begin
+          setled(clYellow);
+          if Assigned(FonCalibrate) then FonCalibrate(self);
+         end;
+      21:begin
+          setled(clYellow);
+          if Assigned(FonCalibrateMeridianFlip) then FonCalibrateMeridianFlip(self);
+         end;
+      22:exit;
+   end;
 end;
 
 procedure Tf_internalguider.ButtonLoopClick(Sender: TObject);
