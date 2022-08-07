@@ -655,6 +655,7 @@ begin
     FCamera.SaveFrames:=false;
     FCamera.AlignFrames:=false;
   end;
+  Binning:=Finternalguider.Binning.Value;
   Fcamera.ResetFrame;
   GuideImgZoom:=0;
   Application.QueueAsyncCall(@StartGuideExposureAsync,0);
