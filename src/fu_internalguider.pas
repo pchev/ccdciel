@@ -814,7 +814,7 @@ var
   err, v : integer;
 begin
   val(framesize1.text,v,err);
-  if err<>0 then result:=9999 else result:=v;
+  if err<>0 then result:=999999 else result:=v;
 end;
 
 function Tf_internalguider.GetReverseDec: boolean;

@@ -37,7 +37,7 @@ type
   private
     InternalguiderInitialize,InternalCalibrationInitialize,GuideLogFileOpen  : boolean;
     pulseRA,pulseDEC,GuideFrameCount, InternalguiderCalibrationDirection,InternalguiderCalibrationStep,
-    CalibrationDuration,Calflip,CalCount,Calnrtest,frame_size,BacklashStep: integer;
+    CalibrationDuration,Calflip,CalCount,Calnrtest,frame_size,Binning,BacklashStep: integer;
     driftX,driftY,driftRA,driftDec,moveRA,moveDEC, Guidethecos,old_moveRA,old_moveDEC,  paEast, paNorth,
     pulsegainEast,pulsegainWest,pulsegainNorth,pulsegainSouth,Calthecos, Caltheangle,CaldriftOld,
     GuideStartTime,LogSNR,LogFlux,mean_hfd,ditherX,ditherY : double;
@@ -163,7 +163,7 @@ begin
   InternalguiderCapturingDark:=false;
   InternalguiderCalibratingMeridianFlip:=false;
   InternalguiderCalibratingMeridianFlipNorth:=false;
-  frame_size:=9999;
+  frame_size:=999999;
   TimerWaitPulseGuiding:=TTimer.Create(nil);
   TimerWaitPulseGuiding.Enabled:=false;
   TimerWaitPulseGuiding.OnTimer:=@TimerWaitPulseGuidingTimer;
@@ -486,7 +486,7 @@ begin
     begin
       mean_hfd:=mean_hfd/star_counter;
 
-      if ((frame_size<ysize) and (not InternalguiderCalibrating)) then //filter out stars available in the frame
+      if ((frame_size<(ysize-1)) and (frame_size<(xsize-1)) and (not InternalguiderCalibrating)) then //filter out stars available in the frame
       begin
         starx:=round(xy_array[maxSNRstar].x1); // brightest star position
         stary:=round(xy_array[maxSNRstar].y1);
@@ -678,7 +678,7 @@ if (FCamera.Status=devConnected) then begin
   end;
   // check exposure time
   e:=finternalguider.Exposure.value;
-  binx:=finternalguider.Binning.Value;
+  binx:=Binning;
   biny:=binx;
   if (binx<FCamera.BinXrange.min)or(biny<FCamera.BinYrange.min) or
      (binx>FCamera.BinXrange.max)or(biny>FCamera.BinYrange.max)
@@ -783,7 +783,8 @@ begin
 
   InternalguiderInitialize:=true; //initialize;
 
-  frame_size:=Finternalguider.FrameSize;
+  Binning:=Finternalguider.Binning.Value;
+  frame_size:=Finternalguider.FrameSize div Binning;
 
   // initialize the guide log
   GuideFrameCount:=0;
