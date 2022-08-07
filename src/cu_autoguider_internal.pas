@@ -900,7 +900,7 @@ begin
     old_moveDEC:=moveDEC;//Store for next cycle hysteresis calculation
 
 
-    Guidethecos:=cos(mount.Dec*pi/180); if Guidethecos=0 then Guidethecos:=0.000001;
+    Guidethecos:=cos(mount.Dec*pi/180); if Guidethecos<0.000001 then Guidethecos:=0.000001;
     moveRA2:=moveRA/Guidethecos; //correct pixels with cos(dec). Rotation in pixels near celestial pole decreases with cos(dec)
 
     pulseRA:=0;
