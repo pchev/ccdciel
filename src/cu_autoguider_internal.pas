@@ -657,7 +657,7 @@ begin
   end;
   Fcamera.ResetFrame;
   GuideImgZoom:=0;
-  StartGuideExposure;
+  Application.QueueAsyncCall(@StartGuideExposureAsync,0);
 end;
 
 Procedure T_autoguider_internal.StartGuideExposureAsync(Data: PtrInt);
