@@ -1442,6 +1442,13 @@ resourcestring
   rsReverseDecAf = 'Reverse dec output after meridian flip';
   rsAbortAfterRe = 'Abort after restarting more than';
   rsTimeInARow = 'time in a row';
+  rsSelectACalib = 'Select a calibration option:';
+  rsOption1Calib = 'Option 1: Calibration at current position.';
+  rsOption2SlewA = 'Option 2: Slew automatically to SSE and SSW for calibration and meridian flip setting.';
+  rsOption3Cance = 'Option 3: Cancel.';
+  rsSlewCalibrat = 'Slew + Calibration + Meridian flip setting';
+  rsCalibration = 'Calibration';
+  rsGuiderCalibr = 'Guider calibration';
 
 implementation
 

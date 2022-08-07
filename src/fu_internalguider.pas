@@ -181,6 +181,8 @@ type
     function GetFrameSize: integer;
     function GetReverseDec: Boolean;
     procedure SetReverseDec(value: Boolean);
+    function GetIsGem: Boolean;
+    procedure SetIsGem(value: Boolean);
 
   public
     { public declarations }
@@ -220,6 +222,7 @@ type
     property trend_scale: integer read Getscale write Setscale;
     property FrameSize: integer read GetFrameSize;
     property ReverseDec: Boolean read GetReverseDec write SetReverseDec;
+    property isGEM: Boolean read GetIsGem write SetIsGem;
   end;
 
 implementation
@@ -543,17 +546,73 @@ begin
 end;
 
 procedure Tf_internalguider.ButtonCalibrateClick(Sender: TObject);
+var txt: string;
+    btn: array of TVarRec;
 begin
- case QuestionDlg ('Guider calibration','Select a calibration option:'+#10 +#10+
-                   'Option 1: Calibration at current position.'+#10+
-                   'Option 2: Slew automatically to SSE and SSW for calibration and meridian flip setting.'+#10+
-                   'Option 3: Cancel.', mtCustom,
-                   {$ifdef lclgtk2}
-                   [22,'Cancel','IsCancel', 21, 'Slew + Calibration + Meridian flip setting', 20,'Calibration'],
-                   {$else}
-                   [20,'Calibration', 21, 'Slew + Calibration + Meridian flip setting',22,'Cancel','IsCancel'],
-                   {$endif}
-                   '') of
+ txt:= rsSelectACalib+#10 +#10+
+       rsOption1Calib+#10;
+ if isGEM then
+   txt:=txt+rsOption2SlewA+#10;
+ txt:=txt+rsOption3Cance;
+ {$ifdef lclgtk2}
+ // inverted button with GTK2
+ if isGEM then
+   SetLength(btn,7)
+ else
+   SetLength(btn,5);
+ btn[0].VInteger:= 22;
+ btn[0].VType:=vtInteger;
+ btn[1].VPChar:= PChar(rsCancel);
+ btn[1].VType:=vtPChar;
+ btn[2].VPChar:= 'IsCancel';
+ btn[2].VType:=vtPChar;
+ if isGEM then begin
+   btn[3].VInteger:=21;
+   btn[3].VType:=vtInteger;
+   btn[4].VPChar:=PChar(rsSlewCalibrat);
+   btn[4].VType:=vtPChar;
+   btn[5].VInteger:=20;
+   btn[5].VType:=vtInteger;
+   btn[6].VPChar:=PChar(rsCalibration);
+   btn[6].VType:=vtPChar;
+ end
+ else begin
+   btn[3].VInteger:=20;
+   btn[3].VType:=vtInteger;
+   btn[4].VPChar:=PChar(rsCalibration);
+   btn[4].VType:=vtPChar;
+ end;
+ {$else}
+ if isGEM then
+   SetLength(btn,7)
+ else
+   SetLength(btn,5);
+ btn[0].VInteger:=20;
+ btn[0].VType:=vtInteger;
+ btn[1].VPChar:=PChar(rsCalibration);
+ btn[1].VType:=vtPChar;
+ if isGEM then begin
+   btn[2].VInteger:=21;
+   btn[2].VType:=vtInteger;
+   btn[3].VPChar:=PChar(rsSlewCalibrat);
+   btn[3].VType:=vtPChar;
+   btn[4].VInteger:= 22;
+   btn[4].VType:=vtInteger;
+   btn[5].VPChar:= PChar(rsCancel);
+   btn[5].VType:=vtPChar;
+   btn[6].VPChar:= 'IsCancel';
+   btn[6].VType:=vtPChar;
+ end
+ else begin
+   btn[2].VInteger:= 22;
+   btn[2].VType:=vtInteger;
+   btn[3].VPChar:= PChar(rsCancel);
+   btn[3].VType:=vtPChar;
+   btn[4].VPChar:= 'IsCancel';
+   btn[4].VType:=vtPChar;
+ end;
+ {$endif}
+ case QuestionDlg (rsGuiderCalibr, txt, mtCustom, btn, '') of
       20:begin
           setled(clYellow);
           if Assigned(FonCalibrate) then FonCalibrate(self);
@@ -829,12 +888,22 @@ end;
 
 function Tf_internalguider.GetReverseDec: boolean;
 begin
-  result:=CheckBoxReverseDec.Checked;
+  result:=CheckBoxReverseDec.Enabled and CheckBoxReverseDec.Checked;
 end;
 
 procedure Tf_internalguider.SetReverseDec(value: Boolean);
 begin
   CheckBoxReverseDec.Checked:=value;
+end;
+
+function Tf_internalguider.GetIsGem: Boolean;
+begin
+  result:=CheckBoxReverseDec.Enabled;
+end;
+
+procedure Tf_internalguider.SetIsGem(value: Boolean);
+begin
+  CheckBoxReverseDec.Enabled:=value;
 end;
 
 end.

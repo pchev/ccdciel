@@ -69,6 +69,7 @@ T_ascommount = class(T_mount)
    procedure SetGuideRateRa(value:double); override;
    procedure SetGuideRateDe(value:double); override;
    function GetPulseGuiding: boolean; override;
+   function GetAlignmentMode: TAlignmentMode; override;
 public
    constructor Create(AOwner: TComponent);override;
    destructor  Destroy; override;
@@ -169,6 +170,7 @@ begin
      CanSetTracking:=V.CanSetTracking;
      if debug_msg then msg('Get pulse guiding capability');
      FCanPulseGuide:=V.CanPulseGuide;
+     FisGem:=(GetAlignmentMode=algGermanPolar)and(GetPierSide<>pierUnknown);
      Fcapability:='';
      if IsEqmod then Fcapability:=Fcapability+'EQmod; ';
      if CanPark then Fcapability:=Fcapability+'CanPark; ';
@@ -178,6 +180,7 @@ begin
      if CanSync then Fcapability:=Fcapability+'CanSync; ';
      if CanSetTracking then Fcapability:=Fcapability+'CanSetTracking; ';
      if CanPulseGuide then Fcapability:=Fcapability+'CanPulseGuide; ';
+     if FIsGem then Fcapability:=Fcapability+'GEM; ';
      FEquinox:=NullCoord;
      FEquinoxJD:=NullCoord;
      j:=GetEquinox;
@@ -938,6 +941,26 @@ begin
    if debug_msg then msg('IsPulseGuiding = '+BoolToStr(result, rsTrue, rsFalse));
    except
      on E: Exception do msg('Cannot get pulse guide state: ' + E.Message,0);
+   end;
+ {$endif}
+end;
+
+function T_ascommount.GetAlignmentMode: TAlignmentMode;
+var i: integer;
+begin
+ // Default to GEM and let availability of PierSide make further difference
+ result:=algGermanPolar;
+ {$ifdef mswindows}
+   try
+   i:=V.AlignmentMode;
+   case i of
+      0: result:=algAltAz;
+      1: result:=algPolar;
+      2: result:=algGermanPolar;
+   end;
+   if debug_msg then msg('AlignmentMode = '+inttostr(i));
+   except
+     result:=algGermanPolar;
    end;
  {$endif}
 end;

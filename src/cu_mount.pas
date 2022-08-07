@@ -46,7 +46,7 @@ T_mount = class(TComponent)
     FMountSlewing: boolean;
     FTimeOut: integer;
     FAutoLoadConfig: boolean;
-    FIsEqmod: boolean;
+    FIsEqmod, FIsGem: boolean;
     FEquinox,FEquinoxJD: double;
     FSlaveDome: boolean;
     FDomeActionWait: integer;
@@ -75,6 +75,7 @@ T_mount = class(TComponent)
     function GetPulseGuiding: boolean; virtual; abstract;
     procedure SetGuideRateRa(value:double); virtual; abstract;
     procedure SetGuideRateDe(value:double); virtual; abstract;
+    function GetAlignmentMode: TAlignmentMode; virtual; abstract;
  public
     DomeOpenActions: TDomeOpenActions;
     DomeCloseActions: TDomeCloseActions;
@@ -99,6 +100,7 @@ T_mount = class(TComponent)
     function ClearAlignment:boolean; virtual; abstract;
     function ClearDelta:boolean; virtual; abstract;
     property IsEqmod: boolean read FIsEqmod;
+    property isGem: boolean read FIsGem;
     property SyncMode:TEqmodAlign read GetSyncMode write SetSyncMode;
     // Eqmod specific
     property DeviceName: string read FDevice;
@@ -116,6 +118,7 @@ T_mount = class(TComponent)
     property EquinoxJD: double read GetEquinoxJD;
     property Aperture: double read GetAperture;
     property FocaleLength: double read GetFocaleLength;
+    property AlignmentMode: TAlignmentMode read GetAlignmentMode;
     property GuideRateRa: double read GetGuideRateRa write SetGuideRateRa;
     property GuideRateDe: double read GetGuideRateDe write SetGuideRateDe;
     property CanPulseGuide: boolean read FCanPulseGuide;

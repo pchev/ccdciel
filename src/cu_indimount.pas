@@ -120,6 +120,7 @@ T_indimount = class(T_mount)
    procedure SetGuideRateRa(value:double); override;
    procedure SetGuideRateDe(value:double); override;
    function GetPulseGuiding: boolean; override;
+   function GetAlignmentMode: TAlignmentMode; override;
  public
    constructor Create(AOwner: TComponent);override;
    destructor  Destroy; override;
@@ -239,13 +240,15 @@ procedure T_indimount.ReadyTimerTimer(Sender: TObject);
 begin
   ReadyTimer.Enabled := false;
   FStatus := devConnected;
+  FIsEqmod:=(SyncManage<>nil)and(AlignList<>nil)and(AlignSyncMode<>nil)and(AlignMode<>nil);
+  FisGem:=(GetAlignmentMode=algGermanPolar)and(GetPierSide<>pierUnknown);
   if (not Fready) then begin
      Fready:=true;
      if FAutoloadConfig and FConnectDevice then LoadConfig;
      if Assigned(FonStatusChange) then FonStatusChange(self);
   end;
-  FIsEqmod:=(SyncManage<>nil)and(AlignList<>nil)and(AlignSyncMode<>nil)and(AlignMode<>nil);
   if FIsEqmod then Fcapability:=Fcapability+'EQmod; ';
+  if FIsGem then Fcapability:=Fcapability+'GEM; ';
   msg(Format(rsMountCapabil, [Fcapability]));
 end;
 
@@ -966,6 +969,13 @@ begin
   if Guide_WE<>nil then
     result:=result or (Guide_WE.s=IPS_BUSY);
 end;
+
+function T_indimount.GetAlignmentMode: TAlignmentMode;
+begin
+   // Not implemented by INDI, suppose it is GEM and let availability of PierSide make further difference
+   result:=algGermanPolar;
+end;
+
 
 end.
 

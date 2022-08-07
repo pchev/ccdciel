@@ -324,7 +324,7 @@ begin
       ddec:=0
     else
       ddec:=(2*random-1)*pixel;
-    if (mount.PierSide=pierWest) <> (pos('E',finternalguider.pier_side)>0) then // Did a meridian flip occur since calibration.
+    if Finternalguider.isGEM and ((mount.PierSide=pierWest) <> (pos('E',finternalguider.pier_side)>0)) then // Did a meridian flip occur since calibration.
       mflipcorr:=180 // A meridian flip occurred
     else
       mflipcorr:=0;
@@ -875,7 +875,7 @@ begin
   end;
 
   // Apply camera orientation and meridian flip if required
-  meridianflip:= (mount.PierSide=pierWest) <> (pos('E',finternalguider.pier_side)>0);
+  meridianflip:= Finternalguider.isGEM and ((mount.PierSide=pierWest) <> (pos('E',finternalguider.pier_side)>0));
   if meridianflip then // Did a meridian flip occur since calibration.
     mflipcorr:=180 // A meridian flip occurred
   else
@@ -1394,7 +1394,12 @@ begin
         end;
       end;
     5:begin  //Display findings
-        if mount.PierSide=pierWest then finternalguider.pier_side:='E' else finternalguider.pier_side:='W'; //measured west or east ??
+        if mount.PierSide=pierWest then  //measured west or east ??
+           finternalguider.pier_side:='E'
+        else if mount.PierSide=pierEast then
+          finternalguider.pier_side:='W'
+        else
+          finternalguider.pier_side:='NA';
         finternalguider.PA:=paEast*180/pi; // this is the relative angle between the image and the mount.
         finternalguider.pulsegainEast:=pulsegainEast;
         finternalguider.pulsegainWest:=pulsegainWest;

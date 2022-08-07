@@ -7141,6 +7141,7 @@ case mount.Status of
                            NewMessage(rsSiteSetFromT, 3);
                          end;
                       end;
+                      f_internalguider.isGEM:=mount.isGem;
                       MountCoordChange(Sender);
                       StatusTimer.Enabled:=false; // let time to initialize before to do too much
                       StatusTimer.Enabled:=true;
