@@ -1067,11 +1067,26 @@ procedure T_autoguider_internal.InternalguiderCalibrateMeridianFlip;
 begin
    // calibrate Reverse Dec output after meridian flip
    // this use two calibration on each side of the meridian
+   msg('Start meridian flip calibration',1);
+   // point at equator, one hour to the west of meridian (SideOfPier=pierEast)
+   FMount.slew(rmod(24+rad2deg*CurrentSidTim/15-1,24),0);
+   if FMount.PierSide=pierWest then begin // ignore pierUnknown
+     if FMount.CanSetPierSide then begin
+       FMount.PierSide:=pierEast;
+       if FMount.PierSide<>pierEast then begin
+         msg('Setting mount SideOfPier failed!',1);
+         InternalguiderStop;
+         exit;
+      end;
+     end
+     else begin
+       msg('Mount do not slew on the right side of the meridian!',1);
+       InternalguiderStop;
+       exit;
+     end;
+   end;
    InternalguiderCalibratingMeridianFlip:=true;
    InternalguiderCalibratingMeridianFlipStep:=0;
-   msg('Start meridian flip calibration',1);
-   // point at equator, one hour to the west of meridian
-   FMount.slew(rmod(24+rad2deg*CurrentSidTim/15-1,24),0);
    InternalguiderCalibrate;
 end;
 
@@ -1083,8 +1098,23 @@ begin
           // store Dec sign of first calibration
           msg('Meridian flip calibration, measurement West: '+FormatFloat(f2,Finternalguider.pulsegainNorth),2);
           InternalguiderCalibratingMeridianFlipSign1:=sgn(Finternalguider.pulsegainNorth);
-          // point at equator, one hour to the east of meridian
+          // point at equator, one hour to the east of meridian (SideOfPier=pierWest)
           FMount.slew(rmod(24+rad2deg*CurrentSidTim/15+1,24),0);
+          if FMount.PierSide=pierEast then begin // ignore pierUnknown
+             if FMount.CanSetPierSide then begin
+               FMount.PierSide:=pierWest;
+               if FMount.PierSide<>pierWest then begin
+                 msg('Setting mount SideOfPier failed!',1);
+                 InternalguiderStop;
+                 exit;
+              end;
+             end
+             else begin
+               msg('Mount do not slew on the right side of the meridian!',1);
+               InternalguiderStop;
+               exit;
+             end;
+          end;
           StopInternalguider:=false;
           InternalguiderCalibrating:=true;
           SetStatus('Start Calibration',GUIDER_BUSY);
@@ -1110,7 +1140,6 @@ begin
           msg('Meridian flip calibration, reverse Dec result: '+BoolToStr(Finternalguider.ReverseDec,true),2);
        end;
     else begin
-      InternalguiderCalibratingMeridianFlip:=false;
       InternalguiderStop;
     end;
   end;

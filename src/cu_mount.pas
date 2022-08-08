@@ -50,7 +50,7 @@ T_mount = class(TComponent)
     FEquinox,FEquinoxJD: double;
     FSlaveDome: boolean;
     FDomeActionWait: integer;
-    FCanPulseGuide: boolean;
+    FCanPulseGuide,FCanSetPierSide: boolean;
     FWantSetPierSide: Boolean;
     procedure msg(txt: string; level:integer=3);
     function  GetEquinoxCache: double;
@@ -70,6 +70,7 @@ T_mount = class(TComponent)
     procedure SetSyncMode(value:TEqmodAlign); virtual; abstract;
     function GetMountSlewing:boolean; virtual; abstract;
     function GetPierSide: TPierSide; virtual; abstract;
+    procedure SetPierSide(value: TPierSide); virtual; abstract;
     function GetGuideRateRa: double; virtual; abstract;
     function GetGuideRateDe: double; virtual; abstract;
     function GetPulseGuiding: boolean; virtual; abstract;
@@ -113,7 +114,8 @@ T_mount = class(TComponent)
     property RA: double read GetRA;
     property Dec: double read GetDec;
     property Capability: string read Fcapability;
-    property PierSide: TPierSide read GetPierSide;
+    property PierSide: TPierSide read GetPierSide write SetPierSide;
+    property CanSetPierSide: boolean read FCanSetPierSide;
     property Equinox: double read GetEquinoxCache;
     property EquinoxJD: double read GetEquinoxJD;
     property Aperture: double read GetAperture;
@@ -139,6 +141,9 @@ T_mount = class(TComponent)
     property onStatusChange: TNotifyEvent read FonStatusChange write FonStatusChange;
 end;
 
+const
+   SlewDelay=180000; // 3 minutes
+
 implementation
 
 constructor T_mount.Create(AOwner: TComponent);
@@ -154,6 +159,7 @@ begin
   FSlaveDome:=false;
   FDomeActionWait:=1;
   FCanPulseGuide:=false;
+  FCanSetPierSide:=false;
   FWantSetPierSide:=false;
   Fcapability:='';
 end;

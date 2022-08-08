@@ -37,7 +37,7 @@ T_ascommount = class(T_mount)
    {$ifdef mswindows}
    V: variant;
    {$endif}
-   CanPark,CanSlew,CanSlewAsync,CanSetPierSide,CanSync,CanSetTracking: boolean;
+   CanPark,CanSlew,CanSlewAsync,CanSync,CanSetTracking: boolean;
    stRA,stDE: double;
    stPark:boolean;
    stPierside: TPierSide;
@@ -57,6 +57,7 @@ T_ascommount = class(T_mount)
    function  GetRA:double; override;
    function  GetDec:double; override;
    function  GetPierSide: TPierSide; override;
+   procedure SetPierSide(value: TPierSide); override;
    function  GetEquinox: double; override;
    function  GetAperture:double; override;
    function  GetFocaleLength:double; override;
@@ -107,7 +108,6 @@ begin
  CanPark:=false;
  CanSlew:=false;
  CanSlewAsync:=false;
- CanSetPierSide:=false;
  CanSync:=false;
  CanSetTracking:=false;
  StatusTimer:=TTimer.Create(nil);
@@ -163,7 +163,7 @@ begin
      if debug_msg then msg('Get slewasync capability');
      CanSlewAsync:=V.CanSlewAsync;
      if debug_msg then msg('Get side of pier');
-     CanSetPierSide:=V.CanSetPierSide;
+     FCanSetPierSide:=V.CanSetPierSide;
      if debug_msg then msg('Get sync capability');
      CanSync:=V.CanSync;
      if debug_msg then msg('Get set tracking capability');
@@ -176,7 +176,7 @@ begin
      if CanPark then Fcapability:=Fcapability+'CanPark; ';
      if CanSlew then Fcapability:=Fcapability+'CanSlew; ';
      if CanSlewAsync then Fcapability:=Fcapability+'CanSlewAsync; ';
-     if CanSetPierSide then Fcapability:=Fcapability+'CanSetPierSide; ';
+     if FCanSetPierSide then Fcapability:=Fcapability+'CanSetPierSide; ';
      if CanSync then Fcapability:=Fcapability+'CanSync; ';
      if CanSetTracking then Fcapability:=Fcapability+'CanSetTracking; ';
      if CanPulseGuide then Fcapability:=Fcapability+'CanPulseGuide; ';
@@ -301,7 +301,7 @@ begin
       if value then begin
          msg(rsPark);
          V.Park;
-         WaitMountPark(120000);
+         WaitMountPark(SlewDelay);
       end else begin
          msg(rsUnpark);
          V.UnPark;
@@ -373,6 +373,26 @@ begin
    except
     result:=pierUnknown;
    end;
+ end;
+ {$endif}
+end;
+
+procedure T_ascommount.SetPierSide(value: TPierSide);
+{$ifdef mswindows}
+var i: integer;
+{$endif}
+begin
+ {$ifdef mswindows}
+ try
+ case value of
+   pierEast: i:=0;
+   pierWest: i:=1;
+   else raise Exception.Create('Invalid value');
+ end;
+ if debug_msg then msg('Set sideofpier = '+IntToStr(i));
+ V.SideOfPier:=i;
+ WaitMountSlewing(SlewDelay);
+ except
  end;
  {$endif}
 end;
@@ -487,7 +507,7 @@ begin
    if CanSlewAsync then begin
      if debug_msg then msg('slew async');
      V.SlewToCoordinatesAsync(sra,sde);
-     WaitMountSlewing(120000);
+     WaitMountSlewing(SlewDelay);
      if debug_msg then msg('slew async complete');
    end
    else begin
@@ -591,13 +611,9 @@ begin
     if pierside1=pierEast then exit; // already right side
     if (sra=NullCoord)or(sde=NullCoord) then exit;
     msg(rsMeridianFlip5);
-    if FWantSetPierSide and CanSetPierSide and CanSlewAsync then begin
+    if FWantSetPierSide and FCanSetPierSide and CanSlewAsync then begin
        // do the flip
-       V.SideOfPier:=0; // pierEast
-       WaitMountSlewing(240000);
-       {// return to position
-       slew(sra,sde);
-       WaitMountSlewing(240000);}
+       SetPierSide(pierEast);
        // check result
        pierside2:=GetPierSide;
        result:=(pierside2<>pierside1);

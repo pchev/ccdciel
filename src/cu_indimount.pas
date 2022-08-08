@@ -108,6 +108,7 @@ T_indimount = class(T_mount)
    function  GetRA:double; override;
    function  GetDec:double; override;
    function  GetPierSide: TPierSide; override;
+   procedure SetPierSide(value: TPierSide); override;
    function  GetEquinox: double;  override;
    function  GetAperture:double;  override;
    function  GetFocaleLength:double; override;
@@ -562,8 +563,8 @@ if parkprop<>nil then begin
     swunpark.s:=ISS_ON;
  end;
  indiclient.sendNewSwitch(parkprop);
- indiclient.WaitBusy(parkprop,120000,2000);
- indiclient.WaitBusy(coord_prop,120000,2000);
+ indiclient.WaitBusy(parkprop,SlewDelay,2000);
+ indiclient.WaitBusy(coord_prop,SlewDelay,2000);
 end;
 end;
 
@@ -598,6 +599,11 @@ if Pier_Side<>nil then begin
   if Pier_East.s=ISS_ON then result:=pierEast
   else if Pier_West.s=ISS_ON then result:=pierWest;
 end;
+end;
+
+procedure T_indimount.SetPierSide(value: TPierSide);
+begin
+  // Not implemented by INDI
 end;
 
 function  T_indimount.GetEquinox: double;
@@ -653,7 +659,7 @@ begin
     IUResetSwitch(CoordSet);
     CoordSetTrack.s:=ISS_ON;
     indiclient.sendNewSwitch(CoordSet);
-    if (15*abs(coord_ra.value-sra)+abs(coord_dec.value-sde))>0.5 then slewtimeout:=240000 else slewtimeout:=30000;
+    if (15*abs(coord_ra.value-sra)+abs(coord_dec.value-sde))>0.5 then slewtimeout:=SlewDelay else slewtimeout:=30000;
     coord_ra.value:=sra;
     coord_dec.value:=sde;
     indiclient.sendNewNumber(coord_prop);

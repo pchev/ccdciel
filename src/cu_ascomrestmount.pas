@@ -33,7 +33,7 @@ type
 T_ascomrestmount = class(T_mount)
  private
    V: TAscomRest;
-   CanPark,CanSlew,CanSlewAsync,CanSetPierSide,CanSync,CanSetTracking: boolean;
+   CanPark,CanSlew,CanSlewAsync,CanSync,CanSetTracking: boolean;
    stRA,stDE,stFocalLength: double;
    FInterfaceVersion: integer;
    stPark:boolean;
@@ -56,6 +56,7 @@ T_ascomrestmount = class(T_mount)
    function  GetRA:double; override;
    function  GetDec:double; override;
    function  GetPierSide: TPierSide; override;
+   procedure SetPierSide(value: TPierSide); override;
    function  GetEquinox: double; override;
    function  GetAperture:double; override;
    function  GetFocaleLength:double; override;
@@ -110,7 +111,6 @@ begin
  CanPark:=false;
  CanSlew:=false;
  CanSlewAsync:=false;
- CanSetPierSide:=false;
  CanSync:=false;
  CanSetTracking:=false;
  waitpoll:=500;
@@ -170,7 +170,7 @@ begin
      CanPark:=V.Get('canpark').AsBool;
      CanSlew:=V.Get('canslew').AsBool;
      CanSlewAsync:=V.Get('canslewasync').AsBool;
-     CanSetPierSide:=V.Get('cansetpierside').AsBool;
+     FCanSetPierSide:=V.Get('cansetpierside').AsBool;
      CanSync:=V.Get('cansync').AsBool;
      CanSetTracking:=V.Get('cansettracking').AsBool;
      FCanPulseGuide:=V.Get('canpulseguide').AsBool;
@@ -180,7 +180,7 @@ begin
      if CanPark then Fcapability:=Fcapability+'CanPark; ';
      if CanSlew then Fcapability:=Fcapability+'CanSlew; ';
      if CanSlewAsync then Fcapability:=Fcapability+'CanSlewAsync; ';
-     if CanSetPierSide then Fcapability:=Fcapability+'CanSetPierSide; ';
+     if FCanSetPierSide then Fcapability:=Fcapability+'CanSetPierSide; ';
      if CanSync then Fcapability:=Fcapability+'CanSync; ';
      if CanSetTracking then Fcapability:=Fcapability+'CanSetTracking; ';
      if CanPulseGuide then Fcapability:=Fcapability+'CanPulseGuide; ';
@@ -301,7 +301,7 @@ begin
       if value then begin
          msg(rsPark);
          V.Put('park');
-         WaitMountPark(120000);
+         WaitMountPark(SlewDelay);
       end else begin
          msg(rsUnpark);
          V.Put('unpark');
@@ -388,6 +388,22 @@ begin
     result:=stPierside
  else
     result:=pierUnknown;
+end;
+
+procedure T_ascomrestmount.SetPierSide(value: TPierSide);
+var i: integer;
+begin
+ try
+ case value of
+   pierEast: i:=0;
+   pierWest: i:=1;
+   else raise Exception.Create('Invalid value');
+ end;
+ if debug_msg then msg('Set sideofpier = '+IntToStr(i));
+ V.Put('sideofpier',i);
+ WaitMountSlewing(SlewDelay);
+ except
+ end;
 end;
 
 function  T_ascomrestmount.GetFocaleLength:double;
@@ -488,7 +504,7 @@ begin
       msg(Format(rsSlewToEQ, ['J'+inttostr(round(Equinox)) ,ARToStr3(sra), DEToStr(sde)]));
    if CanSlewAsync then begin
      V.Put('slewtocoordinatesasync',['RightAscension',FormatFloat(f6,sra),'Declination',FormatFloat(f6,sde)]);
-     WaitMountSlewing(120000);
+     WaitMountSlewing(SlewDelay);
    end
    else
      V.Put('slewtocoordinates',['RightAscension',FormatFloat(f6,sra),'Declination',FormatFloat(f6,sde)]);
@@ -576,11 +592,7 @@ begin
     msg(rsMeridianFlip5);
     if FWantSetPierSide and CanSetPierSide and CanSlewAsync then begin
        // do the flip
-       V.Put('sideofpier',0); // pierEast
-       WaitMountSlewing(240000);
-       // return to position
-      { slew(sra,sde);
-       WaitMountSlewing(240000);}
+       SetPierSide(pierEast);
        // check result
        pierside2:=GetPierSideReal;
        result:=(pierside2<>pierside1);
