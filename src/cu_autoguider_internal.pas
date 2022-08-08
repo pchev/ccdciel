@@ -1072,6 +1072,7 @@ begin
    FMount.slew(rmod(24+rad2deg*CurrentSidTim/15-1,24),0);
    if FMount.PierSide=pierWest then begin // ignore pierUnknown
      if FMount.CanSetPierSide then begin
+       msg('Adjust mount meridian side for current position',1);
        FMount.PierSide:=pierEast;
        if FMount.PierSide<>pierEast then begin
          msg('Setting mount SideOfPier failed!',1);
@@ -1096,12 +1097,13 @@ begin
     1: begin
           // end of first calibration
           // store Dec sign of first calibration
-          msg('Meridian flip calibration, measurement West: '+FormatFloat(f2,Finternalguider.pulsegainNorth),2);
+          msg('Meridian flip calibration, North gain measured West: '+FormatFloat(f2,Finternalguider.pulsegainNorth),2);
           InternalguiderCalibratingMeridianFlipSign1:=sgn(Finternalguider.pulsegainNorth);
           // point at equator, one hour to the east of meridian (SideOfPier=pierWest)
           FMount.slew(rmod(24+rad2deg*CurrentSidTim/15+1,24),0);
           if FMount.PierSide=pierEast then begin // ignore pierUnknown
              if FMount.CanSetPierSide then begin
+               msg('Adjust mount meridian side for current position',1);
                FMount.PierSide:=pierWest;
                if FMount.PierSide<>pierWest then begin
                  msg('Setting mount SideOfPier failed!',1);
@@ -1133,7 +1135,7 @@ begin
           // end of second calibration
           InternalguiderCalibratingMeridianFlip:=false;
           InternalguiderCalibratingMeridianFlipNorth:=false;
-          msg('Meridian flip calibration, measurement East: '+FormatFloat(f2,pulsegainNorth),2);
+          msg('Meridian flip calibration, North gain measured East: '+FormatFloat(f2,pulsegainNorth),2);
           InternalguiderCalibratingMeridianFlipSign2:=sgn(pulsegainNorth);
           // option is to be checked when the two sign are equal
           Finternalguider.ReverseDec:=(InternalguiderCalibratingMeridianFlipSign1=InternalguiderCalibratingMeridianFlipSign2);
