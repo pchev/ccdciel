@@ -223,6 +223,7 @@ begin
     Fconnected := false;
     FConnectDevice:=false;
     FStatus := devDisconnected;
+    FCanSetPierSide:=false;
     Fcapability:='';
     if Assigned(FonStatusChange) then FonStatusChange(self);
 end;
@@ -450,6 +451,9 @@ begin
       Pier_East:=IUFindSwitch(Pier_Side,'PIER_EAST');
       Pier_West:=IUFindSwitch(Pier_Side,'PIER_WEST');
       if (Pier_East=nil)or(Pier_West=nil) then Pier_Side:=nil;
+      if Pier_Side<>nil then begin
+         FCanSetPierSide:=(Pier_Side.p=IP_RW);
+      end;
       if Assigned(FonPiersideChange) then FonPiersideChange(self);
    end
    else if (proptype = INDI_NUMBER) and(GeographicCoord_prop=nil)and (propname = 'GEOGRAPHIC_COORD') then
@@ -603,7 +607,16 @@ end;
 
 procedure T_indimount.SetPierSide(value: TPierSide);
 begin
-  // Not implemented by INDI
+  // Not implemented by any INDI driver but do it already for the case
+  if FCanSetPierSide and (Pier_Side<>nil) then begin
+    IUResetSwitch(Pier_Side);
+    case value of
+      pierEast: Pier_East.s:=ISS_ON;
+      pierWest: Pier_West.s:=ISS_ON;
+    end;
+    indiclient.sendNewSwitch(Pier_Side);
+    indiclient.WaitBusy(Pier_Side,SlewDelay,10000);
+  end;
 end;
 
 function  T_indimount.GetEquinox: double;
