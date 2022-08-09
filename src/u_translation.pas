@@ -1369,7 +1369,6 @@ resourcestring
   rsCustom = 'Custom';
   rsSequenceFold = 'Sequence folder';
   rsUseAstrometr = 'Use astrometry to refine the position';
-  rsSetMountIfAv = 'Set mount %s if available';
   rsImageCursor = 'Image cursor';
   rsSelectTheCur = 'Select the cursor to use ';
   rsSmallCross = 'Small cross';

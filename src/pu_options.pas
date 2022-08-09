@@ -56,7 +56,6 @@ type
     Label153: TLabel;
     Label154: TLabel;
     StackOperation: TRadioGroup;
-    WantSetPierSide: TCheckBox;
     Panel27: TPanel;
     StackAlign: TCheckBox;
     StackGroup: TGroupBox;
@@ -1172,7 +1171,6 @@ begin
   Label43.Caption := rsMinutes;
   Label59.Caption := rsNoFlipUntilP;
   Label60.Caption := rsMinutes;
-  WantSetPierSide.Caption:=Format(rsSetMountIfAv, ['SideOfPier']);
   MeridianFlipAutofocus.Caption := rsAutofocusAft;
   MeridianFlipCalibrate.Caption := rsCalibrateAut;
   MeridianFlipStopSlaving.Caption:=rsSuspendDomeS;

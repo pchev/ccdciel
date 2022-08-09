@@ -611,7 +611,7 @@ begin
     if pierside1=pierEast then exit; // already right side
     if (sra=NullCoord)or(sde=NullCoord) then exit;
     msg(rsMeridianFlip5);
-    if FWantSetPierSide and FCanSetPierSide and CanSlewAsync then begin
+    if FCanSetPierSide and CanSlewAsync then begin
        // do the flip
        SetPierSide(pierEast);
        // check result

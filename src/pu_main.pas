@@ -1875,7 +1875,6 @@ begin
      ASCOM: mount:=T_ascommount.Create(nil);
      ASCOMREST: mount:=T_ascomrestmount.Create(nil);
    end;
-   mount.WantSetPierSide:=config.GetValue('/Meridian/WantSetPierSide',false);
    mount.onMsg:=@NewMessage;
    mount.onDeviceMsg:=@DeviceMessage;
    mount.onCoordChange:=@MountCoordChange;
@@ -4202,7 +4201,6 @@ begin
   MeridianFlipCalibrate:=config.GetValue('/Meridian/MeridianFlipCalibrate',false);
   MeridianFlipAutofocus:=config.GetValue('/Meridian/MeridianFlipAutofocus',false);
   MeridianFlipStopSlaving:=config.GetValue('/Meridian/MeridianFlipStopSlaving',false);
-  mount.WantSetPierSide:=config.GetValue('/Meridian/WantSetPierSide',false);
   astrometryResolver:=config.GetValue('/Astrometry/Resolver',ResolverAstap);
   AstrometryTimeout:=config.GetValue('/Astrometry/Timeout',30.0);
   buf:=config.GetValue('/Astrometry/OtherOptions','');
@@ -8242,7 +8240,6 @@ begin
    f_option.MeridianFlipPanel.Visible:=(f_option.MeridianOption.ItemIndex=1);
    f_option.MeridianFlipCalibrate.Checked:=config.GetValue('/Meridian/MeridianFlipCalibrate',false);
    f_option.MeridianFlipStopSlaving.Checked:=config.GetValue('/Meridian/MeridianFlipStopSlaving',false);
-   f_option.WantSetPierSide.Checked:=config.GetValue('/Meridian/WantSetPierSide',false);
    f_option.MeridianFlipAutofocus.Checked:=config.GetValue('/Meridian/MeridianFlipAutofocus',false);
    f_option.AutoguiderType:=config.GetValue('/Autoguider/Software',2);
    f_option.PHDhostname.Text:=config.GetValue('/Autoguider/PHDhostname','localhost');
@@ -8578,7 +8575,6 @@ begin
      config.SetValue('/Meridian/MeridianFlipCalibrate',f_option.MeridianFlipCalibrate.Checked);
      config.SetValue('/Meridian/MeridianFlipAutofocus',f_option.MeridianFlipAutofocus.Checked);
      config.SetValue('/Meridian/MeridianFlipStopSlaving',f_option.MeridianFlipStopSlaving.Checked);
-     config.SetValue('/Meridian/WantSetPierSide',f_option.WantSetPierSide.Checked);
      config.SetValue('/Autoguider/Software',f_option.AutoguiderType);
      config.SetValue('/Autoguider/PHDhostname',f_option.PHDhostname.Text);
      config.SetValue('/Autoguider/PHDport',f_option.PHDport.Text);

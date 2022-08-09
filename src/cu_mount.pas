@@ -51,7 +51,6 @@ T_mount = class(TComponent)
     FSlaveDome: boolean;
     FDomeActionWait: integer;
     FCanPulseGuide,FCanSetPierSide: boolean;
-    FWantSetPierSide: Boolean;
     procedure msg(txt: string; level:integer=3);
     function  GetEquinoxCache: double;
     function  GetEquinoxJD: double;
@@ -125,7 +124,6 @@ T_mount = class(TComponent)
     property GuideRateDe: double read GetGuideRateDe write SetGuideRateDe;
     property CanPulseGuide: boolean read FCanPulseGuide;
     property PulseGuiding: boolean read GetPulseGuiding;
-    property WantSetPierSide: Boolean read FWantSetPierSide write FWantSetPierSide;
     property Timeout: integer read FTimeout write SetTimeout;
     property AutoLoadConfig: boolean read FAutoLoadConfig write FAutoLoadConfig;
     property Safety: Tf_safety read Fsafety write Fsafety;
@@ -160,7 +158,6 @@ begin
   FDomeActionWait:=1;
   FCanPulseGuide:=false;
   FCanSetPierSide:=false;
-  FWantSetPierSide:=false;
   Fcapability:='';
 end;
 
