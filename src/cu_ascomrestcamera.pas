@@ -507,7 +507,9 @@ begin
     try
       state:=V.Get('camerastate').AsInt;
     except
-      msg('Error reading camera state '+inttostr(state),0);
+      on E: Exception do begin
+         msg('Error reading camera state '+E.Message,0);
+      end;
     end;
     ok:=false;
     try
