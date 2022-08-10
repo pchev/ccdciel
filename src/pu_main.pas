@@ -704,6 +704,7 @@ type
     Procedure ConnectGuideCamera(Sender: TObject);
     Procedure DisconnectGuideCamera(Sender: TObject);
     Procedure GuideCameraStatus(Sender: TObject);
+    Procedure GuideCameraExposureAborted(Sender: TObject);
     Procedure SetFilter(Sender: TObject);
     Procedure SetFilterMenu;
     procedure ShowMsgTabs(Sender: TObject);
@@ -1946,13 +1947,13 @@ begin
    guidecamera.onDeviceMsg:=@DeviceMessage;
    guidecamera.onStatusChange:=@GuideCameraStatus;
    guidecamera.onNewImage:=@GuideCameraNewImage;
+   guidecamera.onAbortExposure:=@GuideCameraExposureAborted;
 {   camera.onExposureProgress:=@CameraProgress;
    camera.onFrameChange:=@FrameChange;
    camera.onTemperatureChange:=@CameraTemperatureChange;
    camera.onCoolerPowerChange:=@CameraCoolerPowerChange;
    camera.onCoolerChange:=@CameraCoolerChange;
    camera.onFnumberChange:=@CameraFnumberChange;
-   camera.onNewImage:=@CameraNewImage;
    camera.onNewExposure:=@CameraNewExposure;
    camera.onVideoFrame:=@CameraVideoFrame;
    camera.onVideoPreviewChange:=@CameraVideoPreviewChange;
@@ -5467,6 +5468,10 @@ end;
 CheckConnectionStatus;
 end;
 
+Procedure Tf_main.GuideCameraExposureAborted(Sender: TObject);
+begin
+  InternalguiderStop(Sender);
+end;
 
 Procedure Tf_main.ConnectWheel(Sender: TObject);
 begin

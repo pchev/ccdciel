@@ -1048,7 +1048,10 @@ begin
     WriteLog('Guiding Ends at '+FormatDateTime('YYYY-MM-DD HH:NN:SS',now));
     WriteLog('');
   end;
-  StopInternalguider:=true;
+  if not StopInternalguider then begin
+    StopInternalguider:=true;
+    FCamera.AbortExposure;
+  end;
   InternalguiderRunning:=false;
   InternalguiderGuiding:=false;
   InternalguiderCalibrating:=false;
