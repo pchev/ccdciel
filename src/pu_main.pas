@@ -6318,6 +6318,7 @@ begin
     ExpectedStop:=false;
     if RunningCapture and f_capture.Running then NewMessage(rsExposureAbor,1);
     if f_starprofile.AutofocusRunning then f_starprofile.Autofocus(nil,-1,-1,-1);
+    if astrometry.Busy then astrometry.StopAstrometry;
     NewMessage(rsAbort,9);
   end;
   f_preview.stop;
