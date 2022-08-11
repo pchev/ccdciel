@@ -4193,7 +4193,7 @@ begin
   f_internalguider.Gamma.Position:=config.GetValue('/InternalGuider/Visu/Gamma',50);
   f_internalguider.Luminosity.Position:=config.GetValue('/InternalGuider/Visu/Luminosity',50);
 
-  MeridianOption:=config.GetValue('/Meridian/MeridianOption',0);
+  MeridianOption:=config.GetValue('/Meridian/MeridianOption',2);
   MinutesPastMeridian:=config.GetValue('/Meridian/MinutesPast',15);
   MinutesPastMeridianMin:=config.GetValue('/Meridian/MinutesPastMin',10);
   MeridianFlipPauseBefore:=config.GetValue('/Meridian/MeridianFlipPauseBefore',false);
@@ -4202,6 +4202,15 @@ begin
   MeridianFlipCalibrate:=config.GetValue('/Meridian/MeridianFlipCalibrate',false);
   MeridianFlipAutofocus:=config.GetValue('/Meridian/MeridianFlipAutofocus',false);
   MeridianFlipStopSlaving:=config.GetValue('/Meridian/MeridianFlipStopSlaving',false);
+
+  if (mount.Status=devConnected)and(MeridianOption=1)and(MinutesPastMeridianMin<0)and(not mount.CanSetPierSide) then begin
+    MeridianOption:=2; // Abort
+    config.SetValue('/Meridian/MeridianOption',MeridianOption);
+    f_pause.Caption:=format(rsError,[rsOnMeridianCr]);
+    f_pause.Text:=rsMountDoNotSu+crlf+Format(rsChangedTo, [rsOnMeridianCr, rsAbort]);
+    f_pause.Wait(30);
+  end;
+
   astrometryResolver:=config.GetValue('/Astrometry/Resolver',ResolverAstap);
   AstrometryTimeout:=config.GetValue('/Astrometry/Timeout',30.0);
   buf:=config.GetValue('/Astrometry/OtherOptions','');
@@ -7146,6 +7155,13 @@ case mount.Status of
                          end;
                       end;
                       f_internalguider.isGEM:=mount.isGem;
+                      if (MeridianOption=1)and(MinutesPastMeridianMin<0)and(not mount.CanSetPierSide) then begin
+                        MeridianOption:=2; // Abort
+                        config.SetValue('/Meridian/MeridianOption',MeridianOption);
+                        f_pause.Caption:=format(rsError,[rsOnMeridianCr]);
+                        f_pause.Text:=rsMountDoNotSu+crlf+Format(rsChangedTo, [rsOnMeridianCr, rsAbort]);
+                        f_pause.Wait(30);
+                      end;
                       MountCoordChange(Sender);
                       StatusTimer.Enabled:=false; // let time to initialize before to do too much
                       StatusTimer.Enabled:=true;
@@ -8237,7 +8253,7 @@ begin
       f_option.MeridianWarning.caption:='';
       f_option.Panel13.Visible:=false;
    end;
-   f_option.MeridianOption.ItemIndex:=config.GetValue('/Meridian/MeridianOption',0);
+   f_option.MeridianOption.ItemIndex:=config.GetValue('/Meridian/MeridianOption',2);
    f_option.MinutesPastMeridian.Value:=config.GetValue('/Meridian/MinutesPast',MinutesPastMeridian);
    f_option.MinutesPastMeridianMin.Value:=config.GetValue('/Meridian/MinutesPastMin',MinutesPastMeridianMin);
    f_option.MeridianFlipPauseBefore.Checked:=config.GetValue('/Meridian/MeridianFlipPauseBefore',false);

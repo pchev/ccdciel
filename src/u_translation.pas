@@ -1448,7 +1448,9 @@ resourcestring
   rsSlewCalibrat = 'Slew + Calibration + Meridian flip setting';
   rsCalibration = 'Calibration';
   rsGuiderCalibr = 'Guider calibration';
-  rsWarningDoNot = 'Warning! do not set a negative value if you are not sure the mount driver can flip in advance before the meridian.';
+  rsWarningDoNot = 'Warning! to use a negative value, be sure the mount driver allow to set SideOfPier before the meridian.';
+  rsChangedTo = '%s changed to %s';
+  rsMountDoNotSu = 'Mount do not support to set SideOfPier, it is not possible to flip before the meridian!';
 
 implementation
 
