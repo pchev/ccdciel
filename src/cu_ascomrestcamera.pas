@@ -885,7 +885,10 @@ begin
    try
     ExposureTimer.Enabled:=false;
     StatusTimer.Enabled:=true;
-    V.Put('abortexposure');
+    if V.Get('canabortexposure').AsBool then
+      V.Put('abortexposure')
+    else if V.Get('canstopexposure').AsBool then
+      V.Put('stopexposure');
    except
     on E: Exception do msg('Abort exposure error: ' + E.Message,0);
    end;
@@ -897,8 +900,11 @@ begin
    try
     ExposureTimer.Enabled:=false;
     StatusTimer.Enabled:=true;
-    V.Put('abortexposure');
-    if assigned(FonAbortExposure) then FonAbortExposure(self);
+    if V.Get('canabortexposure').AsBool then
+      V.Put('abortexposure')
+    else if V.Get('canstopexposure').AsBool then
+      V.Put('stopexposure');
+   if assigned(FonAbortExposure) then FonAbortExposure(self);
    except
     on E: Exception do msg('Abort exposure error: ' + E.Message,0);
    end;

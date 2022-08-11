@@ -1001,7 +1001,10 @@ begin
    try
     ExposureTimer.Enabled:=false;
     StatusTimer.Enabled:=true;
-    V.AbortExposure;
+    if V.CanAbortExposure then
+      V.AbortExposure
+    else if V.CanStopExposure then
+      V.StopExposure;
    except
     on E: Exception do msg('Abort exposure error: ' + E.Message,0);
    end;
@@ -1014,7 +1017,10 @@ begin
    try
     ExposureTimer.Enabled:=false;
     StatusTimer.Enabled:=true;
-    V.AbortExposure;
+    if V.CanAbortExposure then
+      V.AbortExposure
+    else if V.CanStopExposure then
+      V.StopExposure;
     if assigned(FonAbortExposure) then FonAbortExposure(self);
    except
     on E: Exception do msg('Abort exposure error: ' + E.Message,0);
