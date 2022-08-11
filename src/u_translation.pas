@@ -1448,6 +1448,7 @@ resourcestring
   rsSlewCalibrat = 'Slew + Calibration + Meridian flip setting';
   rsCalibration = 'Calibration';
   rsGuiderCalibr = 'Guider calibration';
+  rsWarningDoNot = 'Warning! do not set a negative value if you are not sure the mount driver can flip in advance before the meridian.';
 
 implementation
 

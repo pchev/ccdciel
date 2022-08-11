@@ -4296,7 +4296,7 @@ object f_option: Tf_option
           object MeridianFlipPauseBefore: TCheckBox
             Left = 8
             Height = 21
-            Top = 193
+            Top = 233
             Width = 189
             Caption = 'Pause before meridian flip '
             ParentFont = False
@@ -4305,7 +4305,7 @@ object f_option: Tf_option
           object MeridianFlipPauseAfter: TCheckBox
             Left = 8
             Height = 21
-            Top = 225
+            Top = 265
             Width = 178
             Caption = 'Pause after meridian flip '
             ParentFont = False
@@ -4316,7 +4316,7 @@ object f_option: Tf_option
             AnchorSideTop.Side = asrCenter
             Left = 49
             Height = 19
-            Top = 263
+            Top = 303
             Width = 51
             Caption = 'Timeout'
             ParentColor = False
@@ -4327,7 +4327,7 @@ object f_option: Tf_option
             AnchorSideTop.Side = asrCenter
             Left = 214
             Height = 19
-            Top = 263
+            Top = 303
             Width = 50
             Caption = 'minutes'
             ParentColor = False
@@ -4358,7 +4358,7 @@ object f_option: Tf_option
           object MeridianFlipAutofocus: TCheckBox
             Left = 8
             Height = 21
-            Top = 128
+            Top = 168
             Width = 201
             Caption = 'Autofocus after meridian flip'
             ParentFont = False
@@ -4367,7 +4367,7 @@ object f_option: Tf_option
           object MeridianFlipCalibrate: TCheckBox
             Left = 8
             Height = 21
-            Top = 161
+            Top = 201
             Width = 266
             Caption = 'Calibrate autoguider after medidian flip'
             ParentFont = False
@@ -4391,6 +4391,7 @@ object f_option: Tf_option
             Width = 66
             Constraints.MaxHeight = 28
             MaxValue = 110
+            MinValue = -90
             OnChange = MinutesPastMeridianMinChange
             ParentFont = False
             TabOrder = 5
@@ -4398,7 +4399,7 @@ object f_option: Tf_option
           object MeridianFlipPauseTimeout: TSpinEdit
             Left = 143
             Height = 28
-            Top = 258
+            Top = 298
             Width = 58
             Constraints.MaxHeight = 28
             MaxValue = 10
@@ -4408,11 +4409,21 @@ object f_option: Tf_option
           object MeridianFlipStopSlaving: TCheckBox
             Left = 8
             Height = 21
-            Top = 96
+            Top = 136
             Width = 161
             Caption = 'Suspend dome slaving'
             ParentFont = False
             TabOrder = 7
+          end
+          object Label158: TLabel
+            Left = 8
+            Height = 41
+            Top = 79
+            Width = 504
+            AutoSize = False
+            Caption = 'Warning! do not set a negative value if you are not sure the mount driver can flip in advance before the meridian.'
+            ParentColor = False
+            WordWrap = True
           end
         end
         object Panel13: TPanel

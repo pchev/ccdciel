@@ -13691,7 +13691,7 @@ begin
      if canwait then begin
       // Do meridian action
       if MeridianOption=1 then begin  // Flip
-       if abs(MeridianDelay1)<150 then begin // maximum flip time + 30min
+       if abs(MeridianDelay1)<240 then begin // maximum flip time + 30min
         try
         meridianflipping:=true;
         if mount.PierSide=pierUnknown then begin

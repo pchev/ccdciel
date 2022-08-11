@@ -41,6 +41,7 @@ type
     Label155: TLabel;
     Label156: TLabel;
     Label157: TLabel;
+    Label158: TLabel;
     LabelFlatWarning: TLabel;
     PageInternal: TPage;
     PanelFlatPositionAltAz: TPanel;
@@ -1165,6 +1166,7 @@ begin
   MeridianOption.Caption := rsOnMeridianCr;
   Label40.Caption := rsCanTrackPast;
   Label41.Caption := rsMinutes;
+  Label158.Caption:= '';
   MeridianFlipPauseBefore.Caption := rsPauseBeforeM;
   MeridianFlipPauseAfter.Caption := rsPauseAfterMe;
   Label42.Caption := rsTimeout;
@@ -1401,11 +1403,17 @@ end;
 procedure Tf_option.MinutesPastMeridianChange(Sender: TObject);
 begin
   MinutesPastMeridianMin.MaxValue:=MinutesPastMeridian.Value-1;
+  label41.Caption:=rsMinutes+' ('+FormatFloat(f1,15*MinutesPastMeridian.Value/60)+'°)';
 end;
 
 procedure Tf_option.MinutesPastMeridianMinChange(Sender: TObject);
 begin
   MinutesPastMeridian.MinValue:=MinutesPastMeridianMin.Value+1;
+  label60.Caption:=rsMinutes+' ('+FormatFloat(f1,15*MinutesPastMeridianMin.Value/60)+'°)';
+  if MinutesPastMeridianMin.Value<0 then
+     Label158.Caption:=rsWarningDoNot
+  else
+     Label158.Caption:='';
 end;
 
 procedure Tf_option.LoadObservatoryDB(defaultobs:string);
