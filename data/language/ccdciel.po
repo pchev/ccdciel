@@ -5062,10 +5062,6 @@ msgstr ""
 msgid "Use astrometry to refine the position"
 msgstr ""
 
-#: u_translation:rssetmountifav
-msgid "Set mount %s if available"
-msgstr ""
-
 #: u_translation:rsimagecursor
 msgid "Image cursor"
 msgstr ""
@@ -5343,6 +5339,54 @@ msgid "Max"
 msgstr ""
 
 #: u_translation:rsreversedecaf
-msgid "Reverse Dec after meridian flip"
+msgid "Reverse dec output after meridian flip"
+msgstr ""
+
+#: u_translation:rsabortafterre
+msgid "Abort after restarting more than"
+msgstr ""
+
+#: u_translation:rstimeinarow
+msgid "time in a row"
+msgstr ""
+
+#: u_translation:rsselectacalib
+msgid "Select a calibration option:"
+msgstr ""
+
+#: u_translation:rsoption1calib
+msgid "Option 1: Calibration at current position."
+msgstr ""
+
+#: u_translation:rsoption2slewa
+msgid "Option 2: Slew automatically to SSE and SSW for calibration and meridian flip setting."
+msgstr ""
+
+#: u_translation:rsoption3cance
+msgid "Option 3: Cancel."
+msgstr ""
+
+#: u_translation:rsslewcalibrat
+msgid "Slew + Calibration + Meridian flip setting"
+msgstr ""
+
+#: u_translation:rscalibration
+msgid "Calibration"
+msgstr ""
+
+#: u_translation:rsguidercalibr
+msgid "Guider calibration"
+msgstr ""
+
+#: u_translation:rswarningdonot
+msgid "Warning! to use a negative value, be sure the mount driver allow to set SideOfPier before the meridian."
+msgstr ""
+
+#: u_translation:rschangedto
+msgid "%s changed to %s"
+msgstr ""
+
+#: u_translation:rsmountdonotsu
+msgid "Mount do not support to set SideOfPier, it is not possible to flip before the meridian!"
 msgstr ""
 

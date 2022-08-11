@@ -2,15 +2,15 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ccdciel\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-06-30 10:06+0000\n"
-"PO-Revision-Date: 2022-04-18 17:19+0000\n"
+"POT-Creation-Date: 2022-08-11 17:18+0000\n"
+"PO-Revision-Date: 2022-07-19 16:17+0000\n"
 "Last-Translator: Stanislav Holub <Unknown>\n"
 "Language-Team: Czech <cz@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2022-06-30 10:12+0000\n"
-"X-Generator: Launchpad (build f48158886a49da429840bcd298f0c7ed60f9ad7b)\n"
+"X-Launchpad-Export-Date: 2022-08-11 17:32+0000\n"
+"X-Generator: Launchpad (build 70fcfda0dab878e9072e0f29b48d0ec714e91034)\n"
 "Language: cs\n"
 
 #: u_translation.rs2d
@@ -32,6 +32,10 @@ msgstr "Přerušit"
 #: u_translation.rsabortafter
 msgid "Abort after"
 msgstr "Přerušit po"
+
+#: u_translation.rsabortafterre
+msgid "Abort after restarting more than"
+msgstr ""
 
 #: u_translation.rsabortdome
 #, object-pascal-format
@@ -65,7 +69,7 @@ msgstr "Aktivní cíl je nahrazen, restartujte sekvenci"
 
 #: u_translation.rsactualfocall
 msgid "Actual focal length"
-msgstr ""
+msgstr "Skutečná ohnisková vzdálenost"
 
 #: u_translation.rsadd
 msgid "Add"
@@ -107,11 +111,11 @@ msgstr "správce"
 
 #: u_translation.rsadvanced
 msgid "Advanced"
-msgstr ""
+msgstr "Pokročilé"
 
 #: u_translation.rsadvancedsett
 msgid "Advanced settings"
-msgstr ""
+msgstr "Pokročilá nastavení"
 
 #: u_translation.rsaftertelesco
 #, object-pascal-format
@@ -551,7 +555,7 @@ msgstr "modrá"
 
 #: u_translation.rsbrightness
 msgid "Brightness"
-msgstr ""
+msgstr "Jas"
 
 #: u_translation.rsbrowselogfil
 msgid "Browse log files"
@@ -569,6 +573,10 @@ msgstr "Kalibrovat automatickou pointaci po překlopení poledníku"
 msgid "Calibrated"
 msgstr "Kalibrováno"
 
+#: u_translation.rscalibration
+msgid "Calibration"
+msgstr ""
+
 #: u_translation.rscalibrationd
 #, object-pascal-format
 msgid "Calibration %sdelay"
@@ -576,7 +584,7 @@ msgstr "Kalibrace %szpoždění"
 
 #: u_translation.rscalibrationr
 msgid "Calibration results:"
-msgstr ""
+msgstr "Výsledky kalibrace:"
 
 #: u_translation.rscalibrator
 msgid "Calibrator"
@@ -604,7 +612,7 @@ msgstr "Kamera a rotátor musí být připojeny!"
 
 #: u_translation.rscameraangle
 msgid "Camera angle"
-msgstr ""
+msgstr "Výsledky kalibrace:"
 
 #: u_translation.rscameracooler
 #, object-pascal-format
@@ -639,7 +647,7 @@ msgstr "Zrušit expozici"
 
 #: u_translation.rscancelexposu2
 msgid "Cancel exposure after"
-msgstr ""
+msgstr "Zrušení expozice po"
 
 #: u_translation.rscancelpolara
 msgid "Cancel polar alignment"
@@ -794,7 +802,7 @@ msgstr "Snímání bylo neočekávaně ukončeno"
 
 #: u_translation.rsccdcielstatu
 msgid "CCDciel status"
-msgstr ""
+msgstr "Stav CCDciel"
 
 #: u_translation.rsccdframesent
 msgid "CCD frame sent to planetarium."
@@ -802,7 +810,7 @@ msgstr "Rámec CCD odeslán do planetária."
 
 #: u_translation.rscelsius
 msgid "Celsius"
-msgstr ""
+msgstr "Stupně Celsia"
 
 #: u_translation.rscenter
 msgid "Center"
@@ -826,9 +834,14 @@ msgstr "Střed Dec"
 msgid "Center RA"
 msgstr "Střed RA"
 
+#: u_translation.rschangedto
+#, object-pascal-format
+msgid "%s changed to %s"
+msgstr ""
+
 #: u_translation.rschangelog
 msgid "Change log"
-msgstr ""
+msgstr "Protokol změn"
 
 #: u_translation.rschoose
 msgid "Choose"
@@ -1115,7 +1128,7 @@ msgstr "Cygwinová cesta"
 
 #: u_translation.rsdark
 msgid "Dark"
-msgstr ""
+msgstr "Dark"
 
 #: u_translation.rsdarkfileload
 msgid "Dark file loaded"
@@ -1257,7 +1270,7 @@ msgstr "Vypnout"
 
 #: u_translation.rsdisableguidi
 msgid "Disable guiding temporary"
-msgstr ""
+msgstr "Zakázat dočasně pointaci"
 
 #: u_translation.rsdisconnect
 msgid "Disconnect"
@@ -1422,7 +1435,7 @@ msgstr "Spustit ukončovací akci?"
 
 #: u_translation.rsduration
 msgid "Duration"
-msgstr ""
+msgstr "Doba trvání"
 
 #: u_translation.rsdusk
 msgid "dusk"
@@ -1482,7 +1495,7 @@ msgstr "E-mail byl úspěšně odeslán. Zkontrolujte doručenou poštu"
 
 #: u_translation.rsencoder
 msgid "Encoder"
-msgstr ""
+msgstr "Enkodér"
 
 #: u_translation.rsend
 msgid "End"
@@ -1601,7 +1614,7 @@ msgstr "Doba expozice příliš krátká pro měření, potřebují %d sekund."
 
 #: u_translation.rsfahrenheit
 msgid "Fahrenheit"
-msgstr ""
+msgstr "Stupně Farenheita"
 
 #: u_translation.rsfailedtodele
 #, object-pascal-format
@@ -1634,7 +1647,7 @@ msgstr "Soubor"
 
 #: u_translation.rsfileformat
 msgid "File format"
-msgstr ""
+msgstr "Formát souboru"
 
 #: u_translation.rsfilenameopti
 msgid "File name options"
@@ -1683,7 +1696,7 @@ msgstr "Optimální"
 
 #: u_translation.rsfitsfileexte
 msgid "FITS file extension"
-msgstr ""
+msgstr "Koncovka souboru FITS"
 
 #: u_translation.rsfitsheader
 msgid "FITS header"
@@ -1877,15 +1890,15 @@ msgstr "Snímek"
 
 #: u_translation.rsframerate
 msgid "Frame rate"
-msgstr ""
+msgstr "Snímková frekvence"
 
 #: u_translation.rsframes
 msgid "Frames"
-msgstr ""
+msgstr "Snímků"
 
 #: u_translation.rsframesize
 msgid "Frame size"
-msgstr ""
+msgstr "Velikost rámce"
 
 #: u_translation.rsfromcameradr
 msgid "From camera driver"
@@ -1934,7 +1947,7 @@ msgstr "Zisk"
 
 #: u_translation.rsgamma
 msgid "Gamma"
-msgstr ""
+msgstr "Gamma"
 
 #: u_translation.rsget
 msgid "Get"
@@ -1991,7 +2004,7 @@ msgstr "zelená"
 
 #: u_translation.rsguid
 msgid "Guid."
-msgstr ""
+msgstr "Point."
 
 #: u_translation.rsguide
 msgid "Guide"
@@ -1999,15 +2012,19 @@ msgstr "Pointace"
 
 #: u_translation.rsguidecamera
 msgid "Guide camera"
-msgstr ""
+msgstr "Pointační kamera"
 
 #: u_translation.rsguider
 msgid "Guider"
+msgstr "Pointace"
+
+#: u_translation.rsguidercalibr
+msgid "Guider calibration"
 msgstr ""
 
 #: u_translation.rsguiderimage
 msgid "Guider image"
-msgstr ""
+msgstr "Obraz pointace"
 
 #: u_translation.rsguidersensor
 msgid "Guider sensor;"
@@ -2069,7 +2086,7 @@ msgstr "Zaostření křivky HYPERBOLA %s, zbývající chyba přizpůsobení kř
 
 #: u_translation.rshysteresis
 msgid "Hysteresis"
-msgstr ""
+msgstr "Hystereze"
 
 #: u_translation.rsidle
 msgid "Idle"
@@ -2234,11 +2251,11 @@ msgstr "Typ rozhraní"
 
 #: u_translation.rsinternal
 msgid "Internal"
-msgstr ""
+msgstr "Vnitřní"
 
 #: u_translation.rsinternalguid
 msgid "Internal guider"
-msgstr ""
+msgstr "Vnitřní pointace"
 
 #: u_translation.rsinterval
 msgid "Interval"
@@ -2309,7 +2326,7 @@ msgstr "Licenční smlouva"
 
 #: u_translation.rslight
 msgid "Light"
-msgstr ""
+msgstr "Light"
 
 #: u_translation.rslightoff
 msgid "Light OFF"
@@ -2357,7 +2374,7 @@ msgstr "Nízká kvalita snímku"
 
 #: u_translation.rsluminosity
 msgid "Luminosity"
-msgstr ""
+msgstr "Světelnost"
 
 #: u_translation.rsmagnifyer
 msgid "Magnifier"
@@ -2410,7 +2427,7 @@ msgstr "Max:"
 
 #: u_translation.rsmax2
 msgid "Max"
-msgstr ""
+msgstr "Max"
 
 #: u_translation.rsmaximum
 msgid "maximum"
@@ -2462,7 +2479,7 @@ msgstr "Průměr snímků"
 
 #: u_translation.rsmeasuredatew
 msgid "Measured at [E/W]"
-msgstr ""
+msgstr "Měřeno na [V/Z]"
 
 #: u_translation.rsmeasureen
 msgid "Measure in the East and North"
@@ -2492,7 +2509,7 @@ msgstr "Měření %s pos:%s krok:%s hfd:%s špičk:%s snr:%s"
 
 #: u_translation.rsmeasurepixel
 msgid "Measure pixel scale by stop tracking"
-msgstr ""
+msgstr "Měření měřítka pixelů pomocí stop sledování"
 
 #: u_translation.rsmeasurewn
 msgid "Measure in the West and North"
@@ -2594,7 +2611,7 @@ msgstr "minimum"
 
 #: u_translation.rsminimum2
 msgid "Minimum"
-msgstr ""
+msgstr "Minimum"
 
 #: u_translation.rsminimumobser
 msgid "Minimum observing elevation "
@@ -2626,7 +2643,7 @@ msgstr "Režim:"
 
 #: u_translation.rsmoresettings
 msgid "More settings"
-msgstr ""
+msgstr "Další nastavení"
 
 #: u_translation.rsmount
 msgid "Mount"
@@ -2636,6 +2653,10 @@ msgstr "Montáž"
 #, object-pascal-format
 msgid "Mount capabilities: %s"
 msgstr "Možnosti montáže: %s"
+
+#: u_translation.rsmountdonotsu
+msgid "Mount do not support to set SideOfPier, it is not possible to flip before the meridian!"
+msgstr ""
 
 #: u_translation.rsmountisnotpa
 #, object-pascal-format
@@ -3067,6 +3088,18 @@ msgstr "Otevřít referenční snímek"
 msgid "Open the Dome shutter"
 msgstr "Otevřít štěrbinu kopule"
 
+#: u_translation.rsoption1calib
+msgid "Option 1: Calibration at current position."
+msgstr ""
+
+#: u_translation.rsoption2slewa
+msgid "Option 2: Slew automatically to SSE and SSW for calibration and meridian flip setting."
+msgstr ""
+
+#: u_translation.rsoption3cance
+msgid "Option 3: Cancel."
+msgstr ""
+
 #: u_translation.rsoptions
 #, object-pascal-format
 msgid "Options :%s"
@@ -3196,7 +3229,7 @@ msgstr "Pixelů"
 
 #: u_translation.rspixelscale
 msgid "Pixel scale"
-msgstr ""
+msgstr "Měřítko pixelů"
 
 #: u_translation.rspixelsize
 msgid "Pixel size"
@@ -3443,7 +3476,7 @@ msgstr "Doba trvání impulzu"
 
 #: u_translation.rspulsegain
 msgid "pulse gain"
-msgstr ""
+msgstr "pulzní zesílení"
 
 #: u_translation.rspythoncomman
 msgid "Python command"
@@ -3739,7 +3772,7 @@ msgid "Reverse"
 msgstr "Otočit"
 
 #: u_translation.rsreversedecaf
-msgid "Reverse Dec after meridian flip"
+msgid "Reverse dec output after meridian flip"
 msgstr ""
 
 #: u_translation.rsrise
@@ -3824,7 +3857,7 @@ msgstr "v"
 
 #: u_translation.rssaf
 msgid "Saf."
-msgstr ""
+msgstr "Bezpeč."
 
 #: u_translation.rssafe
 msgid "Safe"
@@ -3964,6 +3997,10 @@ msgstr "[sekundy]"
 #: u_translation.rssecuressltls
 msgid "Secure SSL/TLS connection"
 msgstr "Zabezpečené připojení SSL/TLS"
+
+#: u_translation.rsselectacalib
+msgid "Select a calibration option:"
+msgstr ""
 
 #: u_translation.rsselectastarf
 msgid "Select a star first!"
@@ -4148,11 +4185,6 @@ msgstr "Nastavit typ rámce %s"
 msgid "Set magnitude"
 msgstr "Nastavit magnitudu"
 
-#: u_translation.rssetmountifav
-#, object-pascal-format
-msgid "Set mount %s if available"
-msgstr "Nastavte montáž %s, pokud je k dispozici"
-
 #: u_translation.rssetmountsite
 msgid "Set mount site long/lat from configuration"
 msgstr "Nastavení délky/šířku místa připojení z konfigurace"
@@ -4205,7 +4237,7 @@ msgstr "Ostrost"
 
 #: u_translation.rsshortestguid
 msgid "Shortest guide pulse"
-msgstr ""
+msgstr "Nejkratší vodicí puls"
 
 #: u_translation.rsshortexposur
 msgid "Short exposure stacking"
@@ -4269,7 +4301,7 @@ msgstr "velikost"
 
 #: u_translation.rssize2
 msgid "Size"
-msgstr ""
+msgstr "Velikost"
 
 #: u_translation.rsskiptarget
 #, object-pascal-format
@@ -4319,6 +4351,10 @@ msgstr "Přejezd Kopule"
 #: u_translation.rsslewaborteda
 msgid "Slew aborted after 3 retries!"
 msgstr "Přejezd zrušen po 3 opakování!"
+
+#: u_translation.rsslewcalibrat
+msgid "Slew + Calibration + Meridian flip setting"
+msgstr ""
 
 #: u_translation.rsslewcomplete
 msgid "Slew is complete"
@@ -5048,7 +5084,7 @@ msgstr "Sekvence obsahuje informace o již dokončených krocích.%sMůžete pok
 
 #: u_translation.rstiffwithfits
 msgid "TIFF with FITS header"
-msgstr ""
+msgstr "TIFF se záhlavím FITS"
 
 #: u_translation.rstiltindicati2
 #, object-pascal-format
@@ -5063,6 +5099,10 @@ msgstr "Čas"
 #, object-pascal-format
 msgid "Time already passed %s"
 msgstr "Uplynulý čas %s"
+
+#: u_translation.rstimeinarow
+msgid "time in a row"
+msgstr ""
 
 #: u_translation.rstimeout
 msgid "Timeout"
@@ -5102,11 +5142,11 @@ msgstr "Celková polární chyba:"
 
 #: u_translation.rstousetheinte
 msgid "To use the Internal autoguider you need to configure a Mount and a Guide camera in the profile Devices setup"
-msgstr ""
+msgstr "Chcete-li používat interní autopointaci, musíte v nastavení profilu Zařízení nakonfigurovat kameru Montáž a Pointaci."
 
 #: u_translation.rstousethisdev
 msgid "To use this device, be sure to also configure the Internal Guider in Preferences/Auto-guiding"
-msgstr ""
+msgstr "Chcete-li toto zařízení používat, nezapomeňte také nakonfigurovat interní pointaci v části Předvolby/Automatická pointace."
 
 #: u_translation.rstrack
 msgid "Track"
@@ -5296,7 +5336,7 @@ msgstr "Použít zaostření"
 
 #: u_translation.rsuseguidecamera
 msgid "Use guide camera"
-msgstr ""
+msgstr "Použití pointační kamery"
 
 #: u_translation.rsusemount
 msgid "Use mount"
@@ -5485,6 +5525,10 @@ msgstr "Vyčkat na spuštění sekvence %s v %s"
 msgid "Warm the camera"
 msgstr "Zahřát kameru"
 
+#: u_translation.rswarningdonot
+msgid "Warning! to use a negative value, be sure the mount driver allow to set SideOfPier before the meridian."
+msgstr ""
+
 #: u_translation.rswarningimage
 #, object-pascal-format
 msgid "Warning! %s image received"
@@ -5496,7 +5540,7 @@ msgstr "Pozor, otočení rotátoru zruší kalibraci. Chcete pokračovat?"
 
 #: u_translation.rswarningthemo
 msgid "Warning! the mount will be parked every time a flat capture is started."
-msgstr ""
+msgstr "Pozor! montáž se zaparkuje při každém spuštění snímání flatu."
 
 #: u_translation.rswatchdog
 msgid "Watchdog"

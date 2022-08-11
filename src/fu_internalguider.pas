@@ -301,7 +301,6 @@ begin
   Label9.Caption:=rsFrameSize;
   framesize1.Items[0]:=rsMax2;
   CheckBoxReverseDec.Caption:=rsReverseDecAf;
-  CheckBoxReverseDec.Hint:=Format(rsThisAutomati, [rsReverseDecAf]);
 end;
 
 function Tf_internalguider.Getdisableguiding:boolean;

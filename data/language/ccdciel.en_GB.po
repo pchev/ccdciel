@@ -6,15 +6,15 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ccdciel\n"
 "Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
-"POT-Creation-Date: 2022-06-30 10:06+0000\n"
+"POT-Creation-Date: 2022-08-11 17:18+0000\n"
 "PO-Revision-Date: 2021-08-31 20:37+0000\n"
 "Last-Translator: Patrick Chevalley <Unknown>\n"
 "Language-Team: English (United Kingdom) <en_GB@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2022-06-30 10:12+0000\n"
-"X-Generator: Launchpad (build f48158886a49da429840bcd298f0c7ed60f9ad7b)\n"
+"X-Launchpad-Export-Date: 2022-08-11 17:32+0000\n"
+"X-Generator: Launchpad (build 70fcfda0dab878e9072e0f29b48d0ec714e91034)\n"
 "Language: en_GB\n"
 
 #: u_translation.rs2d
@@ -36,6 +36,10 @@ msgstr "Abort"
 #: u_translation.rsabortafter
 msgid "Abort after"
 msgstr "Abort after"
+
+#: u_translation.rsabortafterre
+msgid "Abort after restarting more than"
+msgstr ""
 
 #: u_translation.rsabortdome
 #, object-pascal-format
@@ -571,6 +575,10 @@ msgstr "Calibrate autoguider after meridian flip"
 msgid "Calibrated"
 msgstr "Calibrated"
 
+#: u_translation.rscalibration
+msgid "Calibration"
+msgstr ""
+
 #: u_translation.rscalibrationd
 #, object-pascal-format
 msgid "Calibration %sdelay"
@@ -827,6 +835,11 @@ msgstr "Center Dec"
 #: u_translation.rscenterra
 msgid "Center RA"
 msgstr "Center RA"
+
+#: u_translation.rschangedto
+#, object-pascal-format
+msgid "%s changed to %s"
+msgstr ""
 
 #: u_translation.rschangelog
 msgid "Change log"
@@ -2007,6 +2020,10 @@ msgstr ""
 msgid "Guider"
 msgstr ""
 
+#: u_translation.rsguidercalibr
+msgid "Guider calibration"
+msgstr ""
+
 #: u_translation.rsguiderimage
 msgid "Guider image"
 msgstr ""
@@ -2639,6 +2656,10 @@ msgstr "Mount"
 msgid "Mount capabilities: %s"
 msgstr "Mount capabilities: %s"
 
+#: u_translation.rsmountdonotsu
+msgid "Mount do not support to set SideOfPier, it is not possible to flip before the meridian!"
+msgstr ""
+
 #: u_translation.rsmountisnotpa
 #, object-pascal-format
 msgid "Mount is not parked.%sPark the dome anyway?"
@@ -3068,6 +3089,18 @@ msgstr "Open reference image"
 #: u_translation.rsopenthedomes
 msgid "Open the Dome shutter"
 msgstr "Open the Dome shutter"
+
+#: u_translation.rsoption1calib
+msgid "Option 1: Calibration at current position."
+msgstr ""
+
+#: u_translation.rsoption2slewa
+msgid "Option 2: Slew automatically to SSE and SSW for calibration and meridian flip setting."
+msgstr ""
+
+#: u_translation.rsoption3cance
+msgid "Option 3: Cancel."
+msgstr ""
 
 #: u_translation.rsoptions
 #, object-pascal-format
@@ -3741,7 +3774,7 @@ msgid "Reverse"
 msgstr "Reverse"
 
 #: u_translation.rsreversedecaf
-msgid "Reverse Dec after meridian flip"
+msgid "Reverse dec output after meridian flip"
 msgstr ""
 
 #: u_translation.rsrise
@@ -3967,6 +4000,10 @@ msgstr "[seconds]"
 msgid "Secure SSL/TLS connection"
 msgstr "Secure SSL/TLS connection"
 
+#: u_translation.rsselectacalib
+msgid "Select a calibration option:"
+msgstr ""
+
 #: u_translation.rsselectastarf
 msgid "Select a star first!"
 msgstr "Select a star first!"
@@ -4150,11 +4187,6 @@ msgstr "Set frame type %s"
 msgid "Set magnitude"
 msgstr "Set magnitude"
 
-#: u_translation.rssetmountifav
-#, object-pascal-format
-msgid "Set mount %s if available"
-msgstr ""
-
 #: u_translation.rssetmountsite
 msgid "Set mount site long/lat from configuration"
 msgstr "Set mount site long/lat from configuration"
@@ -4321,6 +4353,10 @@ msgstr "Slave the Dome"
 #: u_translation.rsslewaborteda
 msgid "Slew aborted after 3 retries!"
 msgstr "Slew aborted after 3 retries!"
+
+#: u_translation.rsslewcalibrat
+msgid "Slew + Calibration + Meridian flip setting"
+msgstr ""
 
 #: u_translation.rsslewcomplete
 msgid "Slew is complete"
@@ -5066,6 +5102,10 @@ msgstr ""
 msgid "Time already passed %s"
 msgstr "Time already passed %s"
 
+#: u_translation.rstimeinarow
+msgid "time in a row"
+msgstr ""
+
 #: u_translation.rstimeout
 msgid "Timeout"
 msgstr "Timeout"
@@ -5486,6 +5526,10 @@ msgstr "Wait to start sequence %s at %s"
 #: u_translation.rswarmthecamer
 msgid "Warm the camera"
 msgstr "Warm the camera"
+
+#: u_translation.rswarningdonot
+msgid "Warning! to use a negative value, be sure the mount driver allow to set SideOfPier before the meridian."
+msgstr ""
 
 #: u_translation.rswarningimage
 #, object-pascal-format
