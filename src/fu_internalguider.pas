@@ -53,6 +53,7 @@ type
     disable_guiding1: TCheckBox;
     Exposure: TFloatSpinEdit;
     Label11: TLabel;
+    Label20: TLabel;
     Label9: TLabel;
     LabelStatusDec: TLabel;
     LabelStatusRA: TLabel;
@@ -138,6 +139,7 @@ type
     procedure MenuItemDarkInfoClick(Sender: TObject);
     procedure MenuItemLoadDarkClick(Sender: TObject);
     procedure scale1Click(Sender: TObject; Button: TUDBtnType);
+    procedure MinMoveChange(Sender: TObject);
   private
     { private declarations }
     thescale : double;
@@ -294,6 +296,7 @@ begin
   label_estimate1.Caption:=rsPixelScale+' ["/px]';
   GroupBox1.Caption:=rsOptions2+':';
   Label22.Caption:=rsShortestGuid+' [ms]';
+  Label20.Caption:=rsMinimumMove;
   Label23.Caption:=rsMinimum2+' HFD';
   Label24.Caption:=rsMinimum2+' SNR';
   measure_method2.Caption:=rsMeasurePixel;
@@ -542,6 +545,14 @@ end;
 procedure Tf_internalguider.scale1Click(Sender: TObject; Button: TUDBtnType);
 begin
   trend_scale:=scale1.position;//trigger a redraw trend
+end;
+
+procedure Tf_internalguider.MinMoveChange(Sender: TObject);
+var px,asec: double;
+begin
+  px:=ShortestPulse*pulsegainEast/1000;
+  asec:=px*pixel_size;
+  label20.Caption:=rsMinimumMove+': '+FormatFloat(f2, px)+' '+rsPixel+', '+FormatFloat(f2, asec)+' "';
 end;
 
 procedure Tf_internalguider.ButtonCalibrateClick(Sender: TObject);

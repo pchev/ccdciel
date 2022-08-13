@@ -1451,6 +1451,7 @@ resourcestring
   rsWarningDoNot = 'Warning! to use a negative value, be sure the mount driver allow to set SideOfPier before the meridian.';
   rsChangedTo = '%s changed to %s';
   rsMountDoNotSu = 'Mount do not support to set SideOfPier, it is not possible to flip before the meridian!';
+  rsMinimumMove = 'Minimum move';
 
 implementation
 

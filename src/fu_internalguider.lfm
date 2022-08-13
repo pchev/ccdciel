@@ -568,7 +568,7 @@ object f_internalguider: Tf_internalguider
               Left = 8
               Height = 21
               Hint = 'Use alternative method for measuring pixel scale in arc seconds during calibration. '
-              Top = 176
+              Top = 200
               Width = 279
               Caption = 'Measure pixel scale ["/px] by stop tracking'
               ParentFont = False
@@ -580,7 +580,7 @@ object f_internalguider: Tf_internalguider
               Left = 8
               Height = 21
               Hint = 'For testing. This will disable guiding but still show the trend.'
-              Top = 200
+              Top = 224
               Width = 187
               Caption = 'Disable guiding temporary'
               ParentFont = False
@@ -597,6 +597,7 @@ object f_internalguider: Tf_internalguider
               Increment = 5
               MaxValue = 100
               MinValue = 10
+              OnChange = MinMoveChange
               ParentShowHint = False
               ShowHint = True
               TabOrder = 0
@@ -617,7 +618,7 @@ object f_internalguider: Tf_internalguider
               AnchorSideTop.Side = asrCenter
               Left = 8
               Height = 19
-              Top = 77
+              Top = 101
               Width = 88
               Caption = 'Minimum HFD'
               ParentColor = False
@@ -626,7 +627,7 @@ object f_internalguider: Tf_internalguider
               Left = 200
               Height = 29
               Hint = 'Minimum signal to noise ratio'
-              Top = 104
+              Top = 128
               Width = 72
               Increment = 3
               MaxValue = 100
@@ -641,7 +642,7 @@ object f_internalguider: Tf_internalguider
               AnchorSideTop.Side = asrCenter
               Left = 8
               Height = 19
-              Top = 109
+              Top = 133
               Width = 86
               Caption = 'Minimum SNR'
               ParentColor = False
@@ -650,7 +651,7 @@ object f_internalguider: Tf_internalguider
               Left = 200
               Height = 29
               Hint = 'Minimum star size. could be used to ignore hot pixels.'
-              Top = 72
+              Top = 96
               Width = 72
               Increment = 0.3
               MaxValue = 10
@@ -662,7 +663,7 @@ object f_internalguider: Tf_internalguider
               Left = 200
               Height = 29
               Hint = 'Use smaller frame to speedup and reduce CPU load.'
-              Top = 136
+              Top = 160
               Width = 72
               BorderSpacing.Around = 5
               Constraints.MaxHeight = 29
@@ -686,7 +687,7 @@ object f_internalguider: Tf_internalguider
               AnchorSideTop.Side = asrCenter
               Left = 8
               Height = 19
-              Top = 141
+              Top = 165
               Width = 65
               Caption = 'Frame size'
               ParentColor = False
@@ -694,7 +695,7 @@ object f_internalguider: Tf_internalguider
             object CheckBoxReverseDec: TCheckBox
               Left = 8
               Height = 21
-              Top = 224
+              Top = 248
               Width = 258
               Caption = 'Reverse dec output after meridian flip'
               TabOrder = 6
@@ -702,7 +703,7 @@ object f_internalguider: Tf_internalguider
             object Label11: TLabel
               Left = 8
               Height = 19
-              Top = 45
+              Top = 69
               Width = 153
               Caption = 'Longest guide pulse [ms]'
               ParentColor = False
@@ -710,7 +711,7 @@ object f_internalguider: Tf_internalguider
             object LongestPulse1: TSpinEdit
               Left = 200
               Height = 29
-              Top = 40
+              Top = 64
               Width = 72
               Increment = 100
               MaxValue = 10000
@@ -719,6 +720,14 @@ object f_internalguider: Tf_internalguider
               ShowHint = True
               TabOrder = 7
               Value = 500
+            end
+            object Label20: TLabel
+              Left = 8
+              Height = 19
+              Top = 40
+              Width = 100
+              Caption = 'Minimum move:'
+              ParentColor = False
             end
           end
         end
@@ -790,6 +799,7 @@ object f_internalguider: Tf_internalguider
               Hint = 'Pulse gain in pixels at the celestial equator. Measured at 0.5x guide rate.'
               Top = 40
               Width = 60
+              OnChange = MinMoveChange
               ParentFont = False
               ParentShowHint = False
               ShowHint = True
@@ -908,6 +918,7 @@ object f_internalguider: Tf_internalguider
               Hint = 'Based on measured pulse gain in px/sec and assuming 0.5x and 1.5x guide rates. This value is not essential for guiding'
               Top = 200
               Width = 60
+              OnChange = MinMoveChange
               ParentFont = False
               ParentShowHint = False
               ShowHint = True
