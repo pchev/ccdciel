@@ -41,6 +41,8 @@ type
     driftX,driftY,driftRA,driftDec,moveRA,moveDEC, Guidethecos,old_moveRA,old_moveDEC,  paEast, paNorth,
     pulsegainEast,pulsegainWest,pulsegainNorth,pulsegainSouth,Calthecos, Caltheangle,CaldriftOld,
     GuideStartTime,LogSNR,LogFlux,mean_hfd,ditherX,ditherY : double;
+    LastDecSign: double;
+    SameDecSignCount: integer;
     xy_trend : xy_guiderlist;{fu_internalguider}
     xy_array,xy_array_old : star_position_array;//internal guider for measure drift
     GuideLog: TextFile;
@@ -781,6 +783,8 @@ begin
 
   old_moveRA:=0;
   old_moveDEC:=0;
+  LastDecSign:=0;
+  SameDecSignCount:=3;
 
   InternalguiderInitialize:=true; //initialize;
 
@@ -824,6 +828,8 @@ var i,maxpulse: integer;
     RADirection,DECDirection: string;
     mflipcorr,moveRA2,dsettle : double;
     meridianflip: boolean;
+    DecSign: double;
+    largepulse: boolean;
 
 begin
  if not FPaused then begin
@@ -938,6 +944,28 @@ begin
        else moveRA:=0; // for trend in pixels
     end;
 
+    // to prevent Dec oscillation, wait 3 corrections in the same direction,
+    // except if the correction is more than 3X shortestpulse
+    DecSign:=sgn(moveDEC);
+    largepulse:=round(1000*abs(moveDEC/finternalguider.pulsegainNorth))>(3*finternalguider.ShortestPulse);
+    if largepulse then begin
+      LastDecSign:=DecSign;
+      SameDecSignCount:=3;
+    end;
+    if LastDecSign<>0 then begin
+      if (LastDecSign=DecSign) then begin
+        inc(SameDecSignCount);
+        if SameDecSignCount<3 then begin
+          moveDEC:=0;
+        end;
+      end
+      else begin
+        SameDecSignCount:=0;
+        moveDEC:=0;
+      end;
+    end;
+    LastDecSign:=DecSign;
+
     if moveDEC>0 then //go North increase the DEC.
     begin
       pulseDEC:=min(finternalguider.LongestPulse,round(1000*abs(moveDEC/finternalguider.pulsegainNorth))); {duration msec}
@@ -1005,8 +1033,20 @@ begin
          finternalguider.LabelStatusRA.Caption:='';
       if DECDuration>0 then
          finternalguider.LabelStatusDec.Caption:=DECDirection+': '+IntToStr(DECDuration)+'ms, '+FormatFloat(f1,driftDec)+'px'
-      else
-         finternalguider.LabelStatusDec.Caption:='';
+      else begin
+         if SameDecSignCount>3 then
+           finternalguider.LabelStatusDec.Caption:=''
+         else begin
+           if LastDecSign>0 then
+             DECDirection:='N'
+           else
+             DECDirection:='S';
+           if SameDecSignCount=0 then
+             finternalguider.LabelStatusDec.Caption:='Reversal: '+DECDirection
+           else
+             finternalguider.LabelStatusDec.Caption:='Wait reversal: '+DECDirection+', '+IntToStr(SameDecSignCount);
+         end;
+      end;
     end;
 
   end //guiding enabled
