@@ -1111,8 +1111,10 @@ begin
    // calibrate Reverse Dec output after meridian flip
    // this use two calibration on each side of the meridian
    msg('Start meridian flip calibration',1);
+   Fdelay:=config.GetValue('/PrecSlew/Delay',5);
    // point at equator, one hour to the west of meridian (SideOfPier=pierEast)
    FMount.slew(rmod(24+rad2deg*CurrentSidTim/15-1,24),0);
+   wait(Fdelay);
    if FMount.PierSide=pierWest then begin // ignore pierUnknown
      if FMount.CanSetPierSide then begin
        msg('Adjust mount meridian side for current position',1);
@@ -1144,6 +1146,7 @@ begin
           InternalguiderCalibratingMeridianFlipSign1:=sgn(Finternalguider.pulsegainNorth);
           // point at equator, one hour to the east of meridian (SideOfPier=pierWest)
           FMount.slew(rmod(24+rad2deg*CurrentSidTim/15+1,24),0);
+          wait(Fdelay);
           if FMount.PierSide=pierEast then begin // ignore pierUnknown
              if FMount.CanSetPierSide then begin
                msg('Adjust mount meridian side for current position',1);

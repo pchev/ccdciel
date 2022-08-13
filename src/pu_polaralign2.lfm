@@ -178,6 +178,7 @@ object f_polaralign2: Tf_polaralign2
       Top = 7
       Width = 60
       Caption = 'Position 1'
+      ParentColor = False
     end
     object Label2: TLabel
       Left = 9
@@ -185,6 +186,7 @@ object f_polaralign2: Tf_polaralign2
       Top = 37
       Width = 60
       Caption = 'Position 2'
+      ParentColor = False
     end
     object Label3: TLabel
       Left = 88
@@ -192,6 +194,7 @@ object f_polaralign2: Tf_polaralign2
       Top = 8
       Width = 19
       Caption = 'Az:'
+      ParentColor = False
     end
     object Label4: TLabel
       Left = 88
@@ -199,10 +202,11 @@ object f_polaralign2: Tf_polaralign2
       Top = 37
       Width = 19
       Caption = 'Az:'
+      ParentColor = False
     end
     object FloatSpinEditAz1: TFloatSpinEdit
       Left = 116
-      Height = 28
+      Height = 29
       Top = 2
       Width = 70
       DecimalPlaces = 1
@@ -212,7 +216,7 @@ object f_polaralign2: Tf_polaralign2
     end
     object FloatSpinEditAz2: TFloatSpinEdit
       Left = 116
-      Height = 28
+      Height = 29
       Top = 32
       Width = 70
       DecimalPlaces = 1
@@ -222,7 +226,7 @@ object f_polaralign2: Tf_polaralign2
     end
     object FloatSpinEditAlt1: TFloatSpinEdit
       Left = 240
-      Height = 28
+      Height = 29
       Top = 2
       Width = 70
       DecimalPlaces = 1
@@ -232,7 +236,7 @@ object f_polaralign2: Tf_polaralign2
     end
     object FloatSpinEditAlt2: TFloatSpinEdit
       Left = 240
-      Height = 28
+      Height = 29
       Top = 32
       Width = 70
       DecimalPlaces = 1
@@ -246,6 +250,7 @@ object f_polaralign2: Tf_polaralign2
       Top = 8
       Width = 21
       Caption = 'Alt:'
+      ParentColor = False
     end
     object Label6: TLabel
       Left = 208
@@ -253,6 +258,7 @@ object f_polaralign2: Tf_polaralign2
       Top = 37
       Width = 21
       Caption = 'Alt:'
+      ParentColor = False
     end
   end
 end

@@ -35,6 +35,7 @@ object f_polaralign: Tf_polaralign
         Align = alTop
         AutoSize = False
         Caption = 'Polar alignment instruction'
+        ParentColor = False
         ParentFont = False
       end
       object Label1: TLabel
@@ -45,6 +46,7 @@ object f_polaralign: Tf_polaralign
         Align = alClient
         AutoSize = False
         Caption = '...'
+        ParentColor = False
         ParentFont = False
         WordWrap = True
       end
@@ -74,6 +76,7 @@ object f_polaralign: Tf_polaralign
           Top = 0
           Width = 67
           Caption = 'LabelMsg1'
+          ParentColor = False
           ParentFont = False
         end
         object SaveImages: TCheckBox
@@ -144,6 +147,7 @@ object f_polaralign: Tf_polaralign
             Width = 342
             Align = alClient
             AutoSize = False
+            ParentColor = False
             ParentFont = False
             WordWrap = True
           end
@@ -217,6 +221,7 @@ object f_polaralign: Tf_polaralign
               Top = 13
               Width = 62
               Caption = 'Rotate by '
+              ParentColor = False
               ParentFont = False
             end
             object Label4: TLabel
@@ -227,6 +232,7 @@ object f_polaralign: Tf_polaralign
               Top = 13
               Width = 41
               Caption = 'Label4'
+              ParentColor = False
               ParentFont = False
             end
           end
@@ -316,6 +322,7 @@ object f_polaralign: Tf_polaralign
           Top = 0
           Width = 67
           Caption = 'LabelMsg2'
+          ParentColor = False
           ParentFont = False
         end
         object BtnContinue: TButton
@@ -361,6 +368,7 @@ object f_polaralign: Tf_polaralign
           Top = 0
           Width = 67
           Caption = 'LabelMsg3'
+          ParentColor = False
           ParentFont = False
         end
         object BtnLock: TToggleBox

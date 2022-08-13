@@ -61,6 +61,7 @@ type
     FGuideBmp: TBGRABitmap;
     FGuideFits: Tfits;
     Finternalguider: Tf_internalguider;
+    Fdelay: single;
     procedure msg(txt:string; level: integer); // Only from main thread, use displaymessage() otherwise
     procedure StarLostTimerTimer(Sender: TObject);
     procedure StatusChange;
@@ -152,6 +153,7 @@ FStarLostCount:=0;
 FRAdistance:=0;
 FDecdistance:=0;
 FStarmass:=0;
+Fdelay:=0;
 end;
 
 Destructor T_autoguider.Destroy;

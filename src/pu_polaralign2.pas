@@ -91,6 +91,7 @@ type
     corr_alt, corr_az, corr_ra, corr_de, corr_rai, corr_dei: double;
     FInProgress: boolean;
     FAborted: boolean;
+    Fdelay: single;
     procedure msg(txt:string; level: integer);
     procedure tracemsg(txt: string);
     procedure AutoMeasurementAsync(Data: PtrInt);
@@ -136,6 +137,7 @@ procedure Tf_polaralign2.FormCreate(Sender: TObject);
 begin
   ScaleDPI(Self);
   SetLang;
+  Fdelay:=0;
 end;
 
 procedure Tf_polaralign2.FormDestroy(Sender: TObject);
@@ -315,7 +317,7 @@ begin
   Instruction.Lines.Add(rsMovingTo+' '+rsRA+','+rsDec +': '+RAToStr(mra)+'  '+DEToStr(mde));
   if not FMount.Slew(mra,mde) then AbortAlignment;
   if FAborted then exit;
-  wait(2);
+  wait(Fdelay);
 
   Instruction.Lines.Add('');
   Instruction.Lines.Add(rsMeasuringFir+', '+rsPleaseWait+'...');
@@ -330,7 +332,7 @@ begin
     Sync(1);
     if not FMount.Slew(mra,mde) then AbortAlignment;
     if FAborted then exit;
-    wait(2);
+    wait(Fdelay);
     TakeExposure;
     if FAborted then exit;
     Solve(1);
@@ -355,7 +357,7 @@ begin
   Instruction.Lines.Add(rsMovingTo+' '+rsRA+','+rsDec +': '+RAToStr(mra)+'  '+DEToStr(mde));
   if not FMount.Slew(mra,mde) then AbortAlignment;
   if FAborted then exit;
-  wait(2);
+  wait(Fdelay);
 
   Instruction.Lines.Add('');
   Instruction.Lines.Add(rsMeasuringSec+', '+rsPleaseWait+'...');
@@ -694,6 +696,7 @@ end;
 procedure Tf_polaralign2.ButtonStartClick(Sender: TObject);
 begin
   FInProgress:=true;
+  Fdelay:=config.GetValue('/PrecSlew/Delay',5);
   if GotoPosition.ItemIndex=0 then begin
     with GotoPosition.Items.Objects[0] as TAltAzPosition do begin
       // update custom position

@@ -94,6 +94,7 @@ type
     Fx, Fy: array[1..3] of double;
     FSidtimStart,Fac,Fdc,FDateStart: double;
     FOffsetAz, FOffsetH, FCameraRotation: double;
+    Fdelay: single;
     procedure msg(txt:string; level: integer);
     procedure tracemsg(txt: string);
     procedure InitAlignment;
@@ -227,6 +228,7 @@ begin
   ScaleDPI(Self);
   SetLang;
   FFirstInit:=true;
+  Fdelay:=0;
 end;
 
 procedure Tf_polaralign.FormShow(Sender: TObject);
@@ -334,6 +336,7 @@ begin
   // Start the measurement
   FInProgress:=true;
   tracemsg('Start polar alignment. Slewing='+inttostr(MountSlewing.ItemIndex));
+  Fdelay:=config.GetValue('/PrecSlew/Delay',5);
   if MountSlewing.ItemIndex=0 then tracemsg('Direction='+inttostr(RotDir.ItemIndex)+' Angle='+RotAngle.Text);
   //projection center on the pole
   FDateStart:=now;
@@ -535,6 +538,7 @@ begin
       msg(rsTelescopeSle3,1);
       AbortAlignment;
     end;
+    Wait(Fdelay);
   end
   else begin
     tracemsg('Wait for manual slew');
