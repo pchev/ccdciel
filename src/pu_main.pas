@@ -728,6 +728,7 @@ type
     Procedure FocuserCalibrationClose(Sender: TObject);
     Procedure FocusStart(Sender: TObject);
     Procedure FocusStop(Sender: TObject);
+    Procedure AutoAutoFocusStart(Sender: TObject);
     Procedure AutoFocusStart(Sender: TObject);
     Procedure AutoFocusStop(Sender: TObject);
     Procedure DoAutoFocus;
@@ -1646,6 +1647,7 @@ begin
   f_starprofile.onMsg:=@NewMessage;
   f_starprofile.onFocusStart:=@FocusStart;
   f_starprofile.onFocusStop:=@FocusStop;
+  f_starprofile.onAutoAutoFocusStart:=@AutoAutoFocusStart;
   f_starprofile.onAutoFocusStart:=@AutoFocusStart;
   f_starprofile.onAutoFocusStop:=@AutoFocusStop;
   f_starprofile.onFocusIN:=@FocusIN;
@@ -12369,6 +12371,11 @@ begin
   ok:=AutoAutofocus;
 end;
 
+Procedure Tf_main.AutoAutoFocusStart(Sender: TObject);
+begin
+  AutoAutofocus;
+end;
+
 procedure Tf_main.cmdAutofocus(var ok: boolean);
 begin
  f_starprofile.ChkAutofocusDown(true);
@@ -12623,7 +12630,6 @@ begin
        Wait(1);
      end;
    end;
-   if (not f_capture.Running)and(not CancelAutofocus) then StartPreviewExposure(nil);
    f_starprofile.TimerHideGraph.Interval:=5000;
    f_starprofile.TimerHideGraph.Enabled:=true;
  end;

@@ -27,7 +27,7 @@ interface
 
 uses BGRABitmap, BGRABitmapTypes, u_global, u_utils, math, UScaleDPI, u_hints, u_translation,
   fu_preview, fu_focuser, Graphics, Classes, SysUtils, FPImage, cu_fits, pu_hyperbola, pu_image_sharpness,
-  FileUtil, TAGraph, TAFuncSeries, TASeries, TASources, TAChartUtils, Forms, Controls,
+  FileUtil, TAGraph, TAFuncSeries, TASeries, TASources, TAChartUtils, Forms, Controls, Dialogs,
   StdCtrls, ExtCtrls, Buttons, LCLType, ComCtrls;
 
 const maxhist=50;
@@ -116,7 +116,7 @@ type
     FStarX,FStarY,FValMax,FValMaxCalibrated,Fbg: double;
     FSpectraX, FSpectraY, FSpectraWidth, FSpectraHeight: integer;
     FFocusStart,FFocusStop: TNotifyEvent;
-    FAutoFocusStop,FAutoFocusStart: TNotifyEvent;
+    FAutoFocusStop,FAutoFocusStart,FAutoAutoFocusStart: TNotifyEvent;
     FonFocusIN, FonFocusOUT, FonAbsolutePosition: TNotifyEvent;
     FonStarSelection: TNotifyEvent;
     FonMsg: TNotifyMsg;
@@ -187,6 +187,7 @@ type
     property onStatus: TNotifyStr read FonStatus write FonStatus;
     property onFocusStart: TNotifyEvent read FFocusStart write FFocusStart;
     property onFocusStop: TNotifyEvent read FFocusStop write FFocusStop;
+    property onAutoAutoFocusStart: TNotifyEvent read FAutoAutoFocusStart write FAutoAutoFocusStart;
     property onAutoFocusStart: TNotifyEvent read FAutoFocusStart write FAutoFocusStart;
     property onAutoFocusStop: TNotifyEvent read FAutoFocusStop write FAutoFocusStop;
     property onFocusIN: TNotifyEvent read FonFocusIN write FonFocusIN;
@@ -280,7 +281,7 @@ end;
 procedure Tf_starprofile.ChkAutoFocusDown(value:boolean);
 begin
  ChkAutofocus.Down:=value;
- ChkAutofocusChange(ChkAutofocus);
+ ChkAutofocusChange(nil);
 end;
 
 procedure Tf_starprofile.ChkFocusChange(Sender: TObject);
@@ -305,9 +306,19 @@ begin
     exit;
  end;
  if ChkAutofocus.Down then begin
-    BtnViewAutofocus.Enabled:=false;
-    if Assigned(FAutoFocusStart) then FAutoFocusStart(self);
+    if (sender<>nil) and (not InplaceAutofocus) and
+      (MessageDlg(rsAutofocusLoc, rsMoveToBright, mtConfirmation, mbYesNo, 0)=mrYes)
+    then begin
+      BtnViewAutofocus.Enabled:=false;
+      if Assigned(FAutoAutoFocusStart) then FAutoAutoFocusStart(self);
+    end
+    else begin
+      BtnViewAutofocus.Enabled:=false;
+      if Assigned(FAutoFocusStart) then FAutoFocusStart(self);
+    end;
  end else begin
+   if sender<>nil then
+     CancelAutofocus:=true;
    terminated:=true;
    BtnViewAutofocus.Enabled:=true;
    if Assigned(FAutoFocusStop) then FAutoFocusStop(self);

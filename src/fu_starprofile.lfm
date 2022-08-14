@@ -22,6 +22,7 @@ object f_starprofile: Tf_starprofile
     Color = clBtnShadow
     DragMode = dmAutomatic
     Font.Color = clBtnText
+    ParentColor = False
     ParentFont = False
     Transparent = False
   end
@@ -56,6 +57,7 @@ object f_starprofile: Tf_starprofile
         Caption = '1'
         Font.Height = 36
         Font.Style = [fsBold]
+        ParentColor = False
         ParentFont = False
       end
       object Label1: TLabel
@@ -64,6 +66,7 @@ object f_starprofile: Tf_starprofile
         Top = 0
         Width = 31
         Caption = 'HFD:'
+        ParentColor = False
         ParentFont = False
       end
       object LabelHistHFD: TLabel
@@ -78,6 +81,7 @@ object f_starprofile: Tf_starprofile
         Caption = '2'
         Font.Height = 24
         Font.Style = [fsBold]
+        ParentColor = False
         ParentFont = False
       end
       object Label5: TLabel
@@ -94,6 +98,7 @@ object f_starprofile: Tf_starprofile
         Anchors = [akTop, akLeft, akRight]
         AutoSize = False
         Caption = 'History'
+        ParentColor = False
       end
     end
     object Panel6: TPanel
@@ -128,6 +133,7 @@ object f_starprofile: Tf_starprofile
           Caption = ' '
           Font.Height = 18
           Font.Style = [fsBold]
+          ParentColor = False
           ParentFont = False
         end
         object Label2: TLabel
@@ -136,6 +142,7 @@ object f_starprofile: Tf_starprofile
           Top = 73
           Width = 59
           Caption = 'Intensity:'
+          ParentColor = False
           ParentFont = False
         end
         object Label4: TLabel
@@ -144,6 +151,7 @@ object f_starprofile: Tf_starprofile
           Top = 73
           Width = 25
           Caption = 'SNR'
+          ParentColor = False
           ParentFont = False
         end
         object LabelSNR: TLabel
@@ -155,6 +163,7 @@ object f_starprofile: Tf_starprofile
           Caption = ' '
           Font.Height = 18
           Font.Style = [fsBold]
+          ParentColor = False
           ParentFont = False
         end
         object Label3: TLabel
@@ -163,6 +172,7 @@ object f_starprofile: Tf_starprofile
           Top = 0
           Width = 45
           Caption = 'FWHM:'
+          ParentColor = False
           ParentFont = False
         end
         object LabelFWHM: TLabel
@@ -174,6 +184,7 @@ object f_starprofile: Tf_starprofile
           Caption = ' '
           Font.Height = 36
           Font.Style = [fsBold]
+          ParentColor = False
           ParentFont = False
         end
       end
@@ -272,6 +283,7 @@ object f_starprofile: Tf_starprofile
             Width = 173
             Align = alClient
             AutoSize = False
+            ParentColor = False
             ParentFont = False
           end
           object BtnPinGraph: TSpeedButton
