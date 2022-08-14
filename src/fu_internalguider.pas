@@ -296,6 +296,7 @@ begin
   label_estimate1.Caption:=rsPixelScale+' ["/px]';
   GroupBox1.Caption:=rsOptions2+':';
   Label22.Caption:=rsShortestGuid+' [ms]';
+  label11.Caption:=rsLongestGuide+' [ms]';
   Label20.Caption:=rsMinimumMove;
   Label23.Caption:=rsMinimum2+' HFD';
   Label24.Caption:=rsMinimum2+' SNR';

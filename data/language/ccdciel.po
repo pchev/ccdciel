@@ -5390,3 +5390,19 @@ msgstr ""
 msgid "Mount do not support to set SideOfPier, it is not possible to flip before the meridian!"
 msgstr ""
 
+#: u_translation:rsminimummove
+msgid "Minimum move"
+msgstr ""
+
+#: u_translation:rsautofocusloc
+msgid "Autofocus location"
+msgstr ""
+
+#: u_translation:rsmovetobright
+msgid "Move to bright focus star now?"
+msgstr ""
+
+#: u_translation:rslongestguide
+msgid "Longest guide pulse"
+msgstr ""
+

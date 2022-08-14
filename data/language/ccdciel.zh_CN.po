@@ -6,14 +6,14 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ccdciel\n"
 "Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
-"POT-Creation-Date: 2022-08-11 17:18+0000\n"
+"POT-Creation-Date: 2022-08-14 15:06+0000\n"
 "PO-Revision-Date: 2022-07-05 09:35+0000\n"
 "Last-Translator: Zachary Wu <Unknown>\n"
 "Language-Team: Chinese (Simplified) <zh_CN@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2022-08-11 17:32+0000\n"
+"X-Launchpad-Export-Date: 2022-08-14 15:12+0000\n"
 "X-Generator: Launchpad (build 70fcfda0dab878e9072e0f29b48d0ec714e91034)\n"
 
 #: u_translation.rs2d
@@ -309,6 +309,10 @@ msgstr "自动对焦向外调整了%s"
 #: u_translation.rsautofocusgra
 msgid "Autofocus graph"
 msgstr "自动对焦图表"
+
+#: u_translation.rsautofocusloc
+msgid "Autofocus location"
+msgstr ""
 
 #: u_translation.rsautofocusmea
 #, object-pascal-format
@@ -2361,6 +2365,10 @@ msgstr "载入暗场文件"
 msgid "Lock overlay"
 msgstr "锁定覆盖"
 
+#: u_translation.rslongestguide
+msgid "Longest guide pulse"
+msgstr ""
+
 #: u_translation.rslongitude
 msgid "Longitude"
 msgstr "经度"
@@ -2614,6 +2622,10 @@ msgstr "最小"
 msgid "Minimum"
 msgstr "最小值"
 
+#: u_translation.rsminimummove
+msgid "Minimum move"
+msgstr ""
+
 #: u_translation.rsminimumobser
 msgid "Minimum observing elevation "
 msgstr "最小观测高度角 "
@@ -2733,6 +2745,10 @@ msgstr "指向望远镜到附近的一个亮星的位置。"
 #: u_translation.rsmovethetrian
 msgid "Move the triangle with the mouse (left button down) such that the green square is marking a bright star."
 msgstr "用鼠标移动三角形（左键向下），使绿色方框标记一颗亮星。"
+
+#: u_translation.rsmovetobright
+msgid "Move to bright focus star now?"
+msgstr ""
 
 #: u_translation.rsmovetonewpla
 #, object-pascal-format

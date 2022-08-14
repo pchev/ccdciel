@@ -2,14 +2,14 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ccdciel\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-08-11 17:18+0000\n"
+"POT-Creation-Date: 2022-08-14 15:06+0000\n"
 "PO-Revision-Date: 2022-07-19 16:17+0000\n"
 "Last-Translator: Stanislav Holub <Unknown>\n"
 "Language-Team: Czech <cz@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2022-08-11 17:32+0000\n"
+"X-Launchpad-Export-Date: 2022-08-14 15:12+0000\n"
 "X-Generator: Launchpad (build 70fcfda0dab878e9072e0f29b48d0ec714e91034)\n"
 "Language: cs\n"
 
@@ -308,6 +308,10 @@ msgstr "Pohyb automatického zaostření směrem dovnitř o %s"
 #: u_translation.rsautofocusgra
 msgid "Autofocus graph"
 msgstr "Graf automatického zaostření"
+
+#: u_translation.rsautofocusloc
+msgid "Autofocus location"
+msgstr ""
 
 #: u_translation.rsautofocusmea
 #, object-pascal-format
@@ -2360,6 +2364,10 @@ msgstr "Načíst Dark soubor"
 msgid "Lock overlay"
 msgstr "Překrytí zámku"
 
+#: u_translation.rslongestguide
+msgid "Longest guide pulse"
+msgstr ""
+
 #: u_translation.rslongitude
 msgid "Longitude"
 msgstr "Zeměpisná délka"
@@ -2613,6 +2621,10 @@ msgstr "minimum"
 msgid "Minimum"
 msgstr "Minimum"
 
+#: u_translation.rsminimummove
+msgid "Minimum move"
+msgstr ""
+
 #: u_translation.rsminimumobser
 msgid "Minimum observing elevation "
 msgstr "Minimální pozorovací výška "
@@ -2732,6 +2744,10 @@ msgstr "Natočte dalekohled do blízké polohy s jasnou hvězdou."
 #: u_translation.rsmovethetrian
 msgid "Move the triangle with the mouse (left button down) such that the green square is marking a bright star."
 msgstr "Posuňte trojúhelník myší (levým tlačítkem dolů) tak, aby zelený čtverec označoval jasnou hvězdu."
+
+#: u_translation.rsmovetobright
+msgid "Move to bright focus star now?"
+msgstr ""
 
 #: u_translation.rsmovetonewpla
 #, object-pascal-format

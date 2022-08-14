@@ -1454,6 +1454,7 @@ resourcestring
   rsMinimumMove = 'Minimum move';
   rsAutofocusLoc = 'Autofocus location';
   rsMoveToBright = 'Move to bright focus star now?';
+  rsLongestGuide = 'Longest guide pulse';
 
 implementation
 
