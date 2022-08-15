@@ -174,6 +174,7 @@ type
     procedure SetGamma(value: single);
     function GetBayerMode: TBayerMode;
     procedure GetBayerBgColor(t:TBayerMode; rmult,gmult,bmult:double; out r,g,b: single);
+    procedure SetMaxADU(value: double);
   protected
     { Protected declarations }
   public
@@ -234,7 +235,7 @@ type
      property imageSigma: double read Fsigma;
      property imageFlatLevel: double read FFlatLevel;
      property preview_axis: integer read Fpreview_axis;
-     property MaxADU: double read FMaxADU write FMaxADU;
+     property MaxADU: double read FMaxADU write SetMaxADU;
      property Invert: boolean read FInvert write FInvert;
      property MarkOverflow: boolean read FMarkOverflow write FMarkOverflow;
      property Overflow: double read FOverflow write FOverflow;
@@ -2238,6 +2239,14 @@ begin
     for i:=0 to 32768 do
       gamma_c[i]:=power(i/32768.0, gamma);
   end;
+end;
+
+procedure TFits.SetMaxADU(value: double);
+begin
+  if FFitsInfo.valid and (FFitsInfo.bitpix=16) and (value<=255) then begin
+    value:=MAXWORD;  // some camera driver report wrong value
+  end;
+  FMaxADU:=value;
 end;
 
 function TFits.GetBayerMode: TBayerMode;
