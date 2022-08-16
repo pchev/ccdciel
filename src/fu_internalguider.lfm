@@ -107,7 +107,7 @@ object f_internalguider: Tf_internalguider
           object dec_gain1: TSpinEdit
             Left = 80
             Height = 29
-            Hint = 'Proportional  corrective action of the guider controller in % of the offset for declination. Typically set at 100%'
+            Hint = 'Proportional corrective action of the guider controller in % of the offset for declination. Typically set at 50-70%'
             Top = 144
             Width = 50
             Increment = 5
@@ -561,7 +561,7 @@ object f_internalguider: Tf_internalguider
             Top = 0
             Width = 296
             Caption = 'Options:'
-            ClientHeight = 308
+            ClientHeight = 326
             ClientWidth = 294
             TabOrder = 0
             object measure_method2: TCheckBox
