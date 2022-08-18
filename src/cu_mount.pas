@@ -50,7 +50,7 @@ T_mount = class(TComponent)
     FEquinox,FEquinoxJD: double;
     FSlaveDome: boolean;
     FDomeActionWait: integer;
-    FCanPulseGuide,FCanSetPierSide: boolean;
+    FCanPulseGuide: boolean;
     procedure msg(txt: string; level:integer=3);
     function  GetEquinoxCache: double;
     function  GetEquinoxJD: double;
@@ -76,6 +76,7 @@ T_mount = class(TComponent)
     procedure SetGuideRateRa(value:double); virtual; abstract;
     procedure SetGuideRateDe(value:double); virtual; abstract;
     function GetAlignmentMode: TAlignmentMode; virtual; abstract;
+    function GetCanSetPierSide: boolean; virtual; abstract;
  public
     DomeOpenActions: TDomeOpenActions;
     DomeCloseActions: TDomeCloseActions;
@@ -114,7 +115,7 @@ T_mount = class(TComponent)
     property Dec: double read GetDec;
     property Capability: string read Fcapability;
     property PierSide: TPierSide read GetPierSide write SetPierSide;
-    property CanSetPierSide: boolean read FCanSetPierSide;
+    property CanSetPierSide: boolean read GetCanSetPierSide;
     property Equinox: double read GetEquinoxCache;
     property EquinoxJD: double read GetEquinoxJD;
     property Aperture: double read GetAperture;
@@ -157,7 +158,6 @@ begin
   FSlaveDome:=false;
   FDomeActionWait:=1;
   FCanPulseGuide:=false;
-  FCanSetPierSide:=false;
   Fcapability:='';
 end;
 

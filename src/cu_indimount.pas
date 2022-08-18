@@ -122,6 +122,7 @@ T_indimount = class(T_mount)
    procedure SetGuideRateDe(value:double); override;
    function GetPulseGuiding: boolean; override;
    function GetAlignmentMode: TAlignmentMode; override;
+   function GetCanSetPierSide: boolean; override;
  public
    constructor Create(AOwner: TComponent);override;
    destructor  Destroy; override;
@@ -223,7 +224,6 @@ begin
     Fconnected := false;
     FConnectDevice:=false;
     FStatus := devDisconnected;
-    FCanSetPierSide:=false;
     Fcapability:='';
     if Assigned(FonStatusChange) then FonStatusChange(self);
 end;
@@ -451,9 +451,6 @@ begin
       Pier_East:=IUFindSwitch(Pier_Side,'PIER_EAST');
       Pier_West:=IUFindSwitch(Pier_Side,'PIER_WEST');
       if (Pier_East=nil)or(Pier_West=nil) then Pier_Side:=nil;
-      if Pier_Side<>nil then begin
-         FCanSetPierSide:=(Pier_Side.p=IP_RW);
-      end;
       if Assigned(FonPiersideChange) then FonPiersideChange(self);
    end
    else if (proptype = INDI_NUMBER) and(GeographicCoord_prop=nil)and (propname = 'GEOGRAPHIC_COORD') then
@@ -608,7 +605,7 @@ end;
 procedure T_indimount.SetPierSide(value: TPierSide);
 begin
   // Not implemented by any INDI driver but do it already for the case
-  if FCanSetPierSide and (Pier_Side<>nil) then begin
+  if CanSetPierSide and (Pier_Side<>nil) then begin
     IUResetSwitch(Pier_Side);
     case value of
       pierEast: Pier_East.s:=ISS_ON;
@@ -995,6 +992,13 @@ begin
    result:=algGermanPolar;
 end;
 
+function T_indimount.GetCanSetPierSide: boolean;
+begin
+  result:=false;
+  if Pier_Side<>nil then begin
+     result:=(Pier_Side.p=IP_RW);
+end;
+end;
 
 end.
 

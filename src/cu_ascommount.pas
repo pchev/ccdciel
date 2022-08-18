@@ -71,6 +71,7 @@ T_ascommount = class(T_mount)
    procedure SetGuideRateDe(value:double); override;
    function GetPulseGuiding: boolean; override;
    function GetAlignmentMode: TAlignmentMode; override;
+   function GetCanSetPierSide: boolean; override;
 public
    constructor Create(AOwner: TComponent);override;
    destructor  Destroy; override;
@@ -163,7 +164,6 @@ begin
      if debug_msg then msg('Get slewasync capability');
      CanSlewAsync:=V.CanSlewAsync;
      if debug_msg then msg('Get side of pier');
-     FCanSetPierSide:=V.CanSetPierSide;
      if debug_msg then msg('Get sync capability');
      CanSync:=V.CanSync;
      if debug_msg then msg('Get set tracking capability');
@@ -176,7 +176,7 @@ begin
      if CanPark then Fcapability:=Fcapability+'CanPark; ';
      if CanSlew then Fcapability:=Fcapability+'CanSlew; ';
      if CanSlewAsync then Fcapability:=Fcapability+'CanSlewAsync; ';
-     if FCanSetPierSide then Fcapability:=Fcapability+'CanSetPierSide; ';
+     if CanSetPierSide then Fcapability:=Fcapability+'CanSetPierSide; ';
      if CanSync then Fcapability:=Fcapability+'CanSync; ';
      if CanSetTracking then Fcapability:=Fcapability+'CanSetTracking; ';
      if CanPulseGuide then Fcapability:=Fcapability+'CanPulseGuide; ';
@@ -611,7 +611,7 @@ begin
     if pierside1=pierEast then exit; // already right side
     if (sra=NullCoord)or(sde=NullCoord) then exit;
     msg(rsMeridianFlip5);
-    if FCanSetPierSide and CanSlewAsync then begin
+    if CanSetPierSide and CanSlewAsync then begin
        // do the flip
        SetPierSide(pierEast);
        // check result
@@ -979,6 +979,18 @@ begin
      result:=algGermanPolar;
    end;
  {$endif}
+end;
+
+function T_ascommount.GetCanSetPierSide: boolean;
+begin
+  result:=false;
+  {$ifdef mswindows}
+    try
+    result:=V.CanSetPierSide;
+    except
+      result:=false;
+    end;
+  {$endif}
 end;
 
 initialization

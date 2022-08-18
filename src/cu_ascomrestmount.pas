@@ -74,6 +74,7 @@ T_ascomrestmount = class(T_mount)
    procedure SetGuideRateDe(value:double); override;
    function GetPulseGuiding: boolean; override;
    function GetAlignmentMode: TAlignmentMode; override;
+   function GetCanSetPierSide: boolean; override;
 public
    constructor Create(AOwner: TComponent);override;
    destructor  Destroy; override;
@@ -170,7 +171,6 @@ begin
      CanPark:=V.Get('canpark').AsBool;
      CanSlew:=V.Get('canslew').AsBool;
      CanSlewAsync:=V.Get('canslewasync').AsBool;
-     FCanSetPierSide:=V.Get('cansetpierside').AsBool;
      CanSync:=V.Get('cansync').AsBool;
      CanSetTracking:=V.Get('cansettracking').AsBool;
      FCanPulseGuide:=V.Get('canpulseguide').AsBool;
@@ -180,7 +180,7 @@ begin
      if CanPark then Fcapability:=Fcapability+'CanPark; ';
      if CanSlew then Fcapability:=Fcapability+'CanSlew; ';
      if CanSlewAsync then Fcapability:=Fcapability+'CanSlewAsync; ';
-     if FCanSetPierSide then Fcapability:=Fcapability+'CanSetPierSide; ';
+     if CanSetPierSide then Fcapability:=Fcapability+'CanSetPierSide; ';
      if CanSync then Fcapability:=Fcapability+'CanSync; ';
      if CanSetTracking then Fcapability:=Fcapability+'CanSetTracking; ';
      if CanPulseGuide then Fcapability:=Fcapability+'CanPulseGuide; ';
@@ -911,6 +911,16 @@ begin
    except
      result:=algGermanPolar;
    end;
+end;
+
+function T_ascomrestmount.GetCanSetPierSide: boolean;
+begin
+  result:=false;
+  try
+    result:=V.Get('cansetpierside').AsBool;
+  except
+    result:=false;
+  end;
 end;
 
 end.
