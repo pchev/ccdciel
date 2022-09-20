@@ -14122,7 +14122,7 @@ begin
       mess2:=mess2+' extreme)';
     end
     else
-    if ((TriangleInspection=false) and (nhfd_11>2) and (nhfd_21>2) and (nhfd_31>0) and (nhfd_12>2) and (nhfd_32>2) and (nhfd_13>2) and (nhfd_22>2) and (nhfd_33>2)) then  {enough information for tilt calculation}
+    if ((TriangleInspection=false) and (nhfd_11>2) and (nhfd_21>2) and (nhfd_31>0) and (nhfd_12>2) and (nhfd_32>2) and (nhfd_13>2) and (nhfd_23>2) and (nhfd_33>2)) then  {enough information for tilt calculation}
     begin
 
       median[1,1]:=SMedian(hfdlist_11,nhfd_11);
