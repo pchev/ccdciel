@@ -730,7 +730,8 @@ end;
 procedure T_autoguider_internal.InternalguiderStartAsync(Data: PtrInt); {internal guider}
 var
   i: integer;
-  txt: string;
+  txt,pier: string;
+  alt,az: double;
 begin
   if AllDevicesConnected=false then
   begin
@@ -791,7 +792,14 @@ begin
   Binning:=Finternalguider.Binning.Value;
   frame_size:=Finternalguider.FrameSize div Binning;
 
+
   // initialize the guide log
+  case mount.PierSide of
+    pierEast: pier:='East';
+    pierWest: pier:='West';
+    pierUnknown: pier:='Unknown';
+  end;
+  cmdEq2Hz(mount.RA,mount.Dec,az,alt);
   GuideFrameCount:=0;
   GuideStartTime:=now;
   WriteLog('Guiding Begins at '+FormatDateTime('YYYY-MM-DD HH:NN:SS',GuideStartTime));
@@ -803,7 +811,7 @@ begin
     txt:=txt+'both axes';
   txt:=txt+', Dither scale = '+formatfloat(f3,DitherPixel);
   WriteLog(txt);
-  WriteLog('Ra = '+FormatFloat(f2,mount.Ra*24/360)+' hr, Dec = '+FormatFloat(f2,mount.Dec)+' Deg');
+  WriteLog('RA = '+FormatFloat(f2,mount.Ra)+' hr, Dec = '+FormatFloat(f2,mount.Dec)+' deg, Hour angle = '+FormatFloat(f2,CurrentSidTim*rad2deg/15-mount.Ra)+' hr, Pier side = '+pier+', Alt = '+FormatFloat(f1,alt)+' deg, Az = '+FormatFloat(f1,az));
   WriteLog('Pixel scale = '+FormatFloat(f2,Finternalguider.pixel_size)+' arc-sec/px');
   WriteLog('RA Gain = '+IntToStr(Finternalguider.RAgain)+', RA Hyst = '+IntToStr(Finternalguider.RA_hysteresis));
   WriteLog('DEC Gain = '+IntToStr(Finternalguider.DECgain)+', DEC Hyst = '+IntToStr(Finternalguider.DEC_hysteresis));
