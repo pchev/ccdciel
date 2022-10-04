@@ -134,16 +134,34 @@ type
     procedure ButtonLoopClick(Sender: TObject);
     procedure ButtonGuideClick(Sender: TObject);
     procedure ButtonStopClick(Sender: TObject);
+    procedure dec_gain1Change(Sender: TObject);
+    procedure dec_hysteresis1Change(Sender: TObject);
+    procedure disable_guiding1Change(Sender: TObject);
+    procedure ExposureChange(Sender: TObject);
+    procedure LongestPulse1Change(Sender: TObject);
     procedure MenuItemCaptureDarkClick(Sender: TObject);
     procedure MenuItemClearDarkClick(Sender: TObject);
     procedure MenuItemDarkInfoClick(Sender: TObject);
     procedure MenuItemLoadDarkClick(Sender: TObject);
+    procedure minHFD1Change(Sender: TObject);
+    procedure minSNR1Change(Sender: TObject);
+    procedure pa1Change(Sender: TObject);
+    procedure pier_side1Change(Sender: TObject);
+    procedure pixelsize1Change(Sender: TObject);
+    procedure pulsegainEast1Change(Sender: TObject);
+    procedure pulsegainNorth1Change(Sender: TObject);
+    procedure pulsegainSouth1Change(Sender: TObject);
+    procedure pulsegainWest1Change(Sender: TObject);
+    procedure ra_gain1Change(Sender: TObject);
+    procedure ra_hysteresis1Change(Sender: TObject);
     procedure scale1Click(Sender: TObject; Button: TUDBtnType);
-    procedure MinMoveChange(Sender: TObject);
+    procedure ShortestPulse1Change(Sender: TObject);
   private
     { private declarations }
     thescale : double;
     FonStart, FonStop, FonCalibrate, FonCalibrateMeridianFlip, FonLoop, FonRedraw, FonCaptureDark, FonLoadDark, FonClearDark,FonDarkInfo: TNotifyEvent;
+    FonParameterChange: TNotifyStr;
+    procedure ShowMinMove;
     procedure SetLed (cl : tcolor);
     procedure SetRA_hysteresis(value:integer);
     function GetRA_hysteresis:integer;
@@ -204,6 +222,7 @@ type
     property onLoadDark: TNotifyEvent read FonLoadDark write FonLoadDark;
     property onClearDark: TNotifyEvent read FonClearDark write FonClearDark;
     property onDarkInfo: TNotifyEvent read FonDarkInfo write FonDarkInfo;
+    property onParameterChange: TNotifyStr read FonParameterChange write FonParameterChange;
     property RA_hysteresis: integer read GetRA_hysteresis write SetRA_hysteresis;
     property DEC_hysteresis: integer read GetDEC_hysteresis write SetDEC_hysteresis;
     property RAgain: integer read GetRAgain write SetRAgain;
@@ -533,6 +552,94 @@ begin
   if Assigned(FonLoadDark) then FonLoadDark(self);
 end;
 
+procedure Tf_internalguider.minHFD1Change(Sender: TObject);
+begin
+  if Assigned(FonParameterChange) then FonParameterChange('Minimum HFD setting = '+FormatFloat(f2,minHFD));
+end;
+
+procedure Tf_internalguider.minSNR1Change(Sender: TObject);
+begin
+  if Assigned(FonParameterChange) then FonParameterChange('Minimum SNR setting = '+FormatFloat(f2,minSNR));
+end;
+
+procedure Tf_internalguider.pa1Change(Sender: TObject);
+begin
+  if Assigned(FonParameterChange) then FonParameterChange('Camera angle = '+pa1.Text);
+end;
+
+procedure Tf_internalguider.pier_side1Change(Sender: TObject);
+begin
+  if Assigned(FonParameterChange) then FonParameterChange('Measured at = '+pier_side1.Text);
+end;
+
+procedure Tf_internalguider.pixelsize1Change(Sender: TObject);
+begin
+  if Assigned(FonParameterChange) then FonParameterChange('Pixel scale = '+pixelsize1.Text);
+  ShowMinMove;
+end;
+
+procedure Tf_internalguider.pulsegainEast1Change(Sender: TObject);
+begin
+  if Assigned(FonParameterChange) then FonParameterChange('Pulse gain East = '+pulsegainEast1.Text);
+  ShowMinMove;
+end;
+
+procedure Tf_internalguider.pulsegainNorth1Change(Sender: TObject);
+begin
+  if Assigned(FonParameterChange) then FonParameterChange('Pulse gain North = '+pulsegainNorth1.Text);
+end;
+
+procedure Tf_internalguider.pulsegainSouth1Change(Sender: TObject);
+begin
+  if Assigned(FonParameterChange) then FonParameterChange('Pulse gain South = '+pulsegainSouth1.Text);
+end;
+
+procedure Tf_internalguider.pulsegainWest1Change(Sender: TObject);
+begin
+  if Assigned(FonParameterChange) then FonParameterChange('Pulse gain West = '+pulsegainWest1.Text);
+end;
+
+procedure Tf_internalguider.dec_gain1Change(Sender: TObject);
+begin
+  if Assigned(FonParameterChange) then FonParameterChange('DEC Gain = '+IntToStr(DECgain));
+end;
+
+procedure Tf_internalguider.dec_hysteresis1Change(Sender: TObject);
+begin
+  if Assigned(FonParameterChange) then FonParameterChange('DEC Hyst = '+IntToStr(DEC_hysteresis));
+end;
+
+procedure Tf_internalguider.disable_guiding1Change(Sender: TObject);
+begin
+  if Assigned(FonParameterChange) then FonParameterChange('MountGuidingEnabled = '+BoolToStr(not disable_guiding,'true','false'));
+end;
+
+procedure Tf_internalguider.LongestPulse1Change(Sender: TObject);
+begin
+  if Assigned(FonParameterChange) then FonParameterChange('Max RA duration = '+IntToStr(LongestPulse)+', Max DEC duration = '+IntToStr(LongestPulse));
+end;
+
+procedure Tf_internalguider.ShortestPulse1Change(Sender: TObject);
+begin
+ ShowMinMove;
+ if Assigned(FonParameterChange) then FonParameterChange('Shortest guide pulse setting = '+IntToStr(shortestPulse));
+end;
+
+procedure Tf_internalguider.ExposureChange(Sender: TObject);
+begin
+  if Assigned(FonParameterChange) then FonParameterChange('Exposure = '+FormatFloat(f0,Exposure.value*1000)+' ms');
+end;
+
+procedure Tf_internalguider.ra_gain1Change(Sender: TObject);
+begin
+  if Assigned(FonParameterChange) then FonParameterChange('RA Gain = '+IntToStr(RAgain));
+end;
+
+procedure Tf_internalguider.ra_hysteresis1Change(Sender: TObject);
+begin
+  if Assigned(FonParameterChange) then FonParameterChange('RA Hyst = '+IntToStr(RA_hysteresis));
+end;
+
 procedure Tf_internalguider.MenuItemClearDarkClick(Sender: TObject);
 begin
   if Assigned(FonClearDark) then FonClearDark(self);
@@ -548,7 +655,7 @@ begin
   trend_scale:=scale1.position;//trigger a redraw trend
 end;
 
-procedure Tf_internalguider.MinMoveChange(Sender: TObject);
+procedure Tf_internalguider.ShowMinMove;
 var px,asec: double;
 begin
   px:=ShortestPulse*pulsegainEast/1000;

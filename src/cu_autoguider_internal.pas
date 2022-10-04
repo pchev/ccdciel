@@ -88,6 +88,7 @@ type
     procedure InternalAutoguiding;
     procedure InternalCalibration;
     procedure InternalguiderCaptureDark;
+    procedure ParameterChange(txt: string);
     Procedure StartGuideExposureAsync(Data: PtrInt);
     function WaitBusy(maxwait:integer=5):boolean; override;
     function WaitGuiding(maxwait:integer=5):boolean; override;
@@ -730,7 +731,7 @@ end;
 procedure T_autoguider_internal.InternalguiderStartAsync(Data: PtrInt); {internal guider}
 var
   i: integer;
-  txt,pier: string;
+  txt,pier,frametxt: string;
   alt,az: double;
 begin
   if AllDevicesConnected=false then
@@ -791,7 +792,10 @@ begin
 
   Binning:=Finternalguider.Binning.Value;
   frame_size:=Finternalguider.FrameSize div Binning;
-
+  if frame_size=999999 then
+    frametxt:='Full'
+  else
+    frametxt:=inttostr(frame_size);
 
   // initialize the guide log
   case mount.PierSide of
@@ -811,17 +815,21 @@ begin
     txt:=txt+'both axes';
   txt:=txt+', Dither scale = '+formatfloat(f3,DitherPixel);
   WriteLog(txt);
-  WriteLog('RA = '+FormatFloat(f2,mount.Ra)+' hr, Dec = '+FormatFloat(f2,mount.Dec)+' deg, Hour angle = '+FormatFloat(f2,CurrentSidTim*rad2deg/15-mount.Ra)+' hr, Pier side = '+pier+', Alt = '+FormatFloat(f1,alt)+' deg, Az = '+FormatFloat(f1,az));
-  WriteLog('Pixel scale = '+FormatFloat(f2,Finternalguider.pixel_size)+' arc-sec/px');
+  WriteLog('Pixel scale = '+FormatFloat(f2,Finternalguider.pixel_size)+' arc-sec/px, Binning = '+IntToStr(Finternalguider.Binning.Value));
+  WriteLog('Frame size = '+frametxt);
+  WriteLog('Camera = '+camera.DeviceName);
+  WriteLog('Exposure = '+FormatFloat(f0,finternalguider.Exposure.value*1000)+' ms');
+  //Following is required for correct pulse indication. Indicated pulse amplitude=xRate*RADuration. xAngle is not used and only for info.
+  WriteLog('Mount = '+mount.DeviceName+','+BoolToStr(mount.Status=devConnected,'connected','disconnected')+',guiding '+BoolToStr(not Finternalguider.disable_guiding,'enabled','disabled')+',xAngle = '+FormatFloat(f2,Finternalguider.PA)+', xRate = '+FormatFloat(f2,abs(cos(mount.dec*pi/180)*(Finternalguider.pulsegainEast+Finternalguider.pulsegainWest)/2))+',, yRate = '+FormatFloat(f2,abs((Finternalguider.pulsegainNorth+Finternalguider.pulsegainSouth)/2)));
   WriteLog('RA Gain = '+IntToStr(Finternalguider.RAgain)+', RA Hyst = '+IntToStr(Finternalguider.RA_hysteresis));
   WriteLog('DEC Gain = '+IntToStr(Finternalguider.DECgain)+', DEC Hyst = '+IntToStr(Finternalguider.DEC_hysteresis));
   WriteLog('Pulse gain East = '+FormatFloat(f2,Finternalguider.pulsegainEast)+', Pulse gain West = '+FormatFloat(f2,Finternalguider.pulsegainWest));
   WriteLog('Pulse gain North = '+FormatFloat(f2,Finternalguider.pulsegainNorth)+', Pulse gain South = '+FormatFloat(f2,Finternalguider.pulsegainSouth));
   WriteLog('Shortest guide pulse setting = '+IntToStr(Finternalguider.shortestPulse));
+  WriteLog('Max RA duration = '+IntToStr(Finternalguider.LongestPulse)+', Max DEC duration = '+IntToStr(Finternalguider.LongestPulse));
   WriteLog('Minimum HFD setting = '+FormatFloat(f2,Finternalguider.minHFD));
   WriteLog('Minimum SNR setting = '+FormatFloat(f2,Finternalguider.minSNR));
-  //Following is required for correct pulse indication. Indicated pulse amplitude=xRate*RADuration. xAngle is not used and only for info.
-  WriteLog('Mount = unknown,,,xAngle = '+FormatFloat(f2,Finternalguider.PA)+', xRate = '+FormatFloat(f2,abs(cos(mount.dec*pi/180)*(Finternalguider.pulsegainEast+Finternalguider.pulsegainWest)/2))+',, yRate = '+FormatFloat(f2,abs((Finternalguider.pulsegainNorth+Finternalguider.pulsegainSouth)/2)));
+  WriteLog('RA = '+FormatFloat(f2,mount.Ra)+' hr, Dec = '+FormatFloat(f2,mount.Dec)+' deg, Hour angle = '+FormatFloat(f2,CurrentSidTim*rad2deg/15-mount.Ra)+' hr, Pier side = '+pier+', Alt = '+FormatFloat(f1,alt)+' deg, Az = '+FormatFloat(f1,az));
   WriteLog('');
   WriteLog('Frame,Time,mount,dx,dy,RARawDistance,DECRawDistance,RAGuideDistance,DECGuideDistance,RADuration,RADirection,DECDuration,DECDirection,XStep,YStep,StarMass,SNR,ErrorCode');
 
@@ -830,10 +838,14 @@ begin
 
 end;
 
+procedure T_autoguider_internal.ParameterChange(txt: string);
+begin
+  WriteLog('INFO: Guiding parameter change, '+txt);
+end;
+
 procedure T_autoguider_internal.InternalAutoguiding;
 var i,maxpulse: integer;
-    RADuration,DECDuration: LongInt;
-    RADirection,DECDirection: string;
+    RADuration,DECDuration: LongInt;                              RADirection,DECDirection: string;
     mflipcorr,moveRA2,dsettle : double;
     meridianflip: boolean;
     DecSign: double;

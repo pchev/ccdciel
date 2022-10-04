@@ -898,6 +898,7 @@ type
     procedure InternalguiderLoadDark(Sender: TObject);
     procedure InternalguiderClearDark(Sender: TObject);
     procedure InternalguiderDarkInfo(Sender: TObject);
+    procedure InternalguiderParameterChange(msg:string);
     procedure GuideCameraNewImage(Sender: TObject);
     procedure GuideCameraNewImageAsync(Data: PtrInt);
     procedure ShowGuiderDarkInfo;
@@ -1702,6 +1703,7 @@ begin
   f_internalguider.onLoadDark:=@InternalguiderLoadDark;
   f_internalguider.onClearDark:=@InternalguiderClearDark;
   f_internalguider.onDarkInfo:=@InternalguiderDarkInfo;
+  f_internalguider.onParameterChange:=@InternalguiderParameterChange;
   ShowGuiderDarkInfo;
 
   i:=config.GetValue('/Autoguider/Software',2);
@@ -15157,6 +15159,11 @@ begin
    FormPos(f,mouse.CursorPos.X,mouse.CursorPos.Y);
    f.Show;
  end;
+end;
+
+procedure Tf_main.InternalguiderParameterChange(msg:string);
+begin
+ if autoguider is T_autoguider_internal then T_autoguider_internal(autoguider).ParameterChange(msg)
 end;
 
 procedure Tf_main.InternalguiderRedraw(Sender: TObject);

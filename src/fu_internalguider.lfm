@@ -112,6 +112,7 @@ object f_internalguider: Tf_internalguider
             Width = 50
             Increment = 5
             MaxValue = 200
+            OnChange = dec_gain1Change
             ParentFont = False
             ParentShowHint = False
             ShowHint = True
@@ -129,6 +130,7 @@ object f_internalguider: Tf_internalguider
             BorderSpacing.Top = 2
             Increment = 5
             MaxValue = 100
+            OnChange = ra_hysteresis1Change
             ParentFont = False
             ParentShowHint = False
             ShowHint = True
@@ -187,6 +189,7 @@ object f_internalguider: Tf_internalguider
             Width = 50
             Increment = 5
             MaxValue = 200
+            OnChange = ra_gain1Change
             ParentFont = False
             ParentShowHint = False
             ShowHint = True
@@ -232,6 +235,7 @@ object f_internalguider: Tf_internalguider
             BorderSpacing.Top = 2
             Increment = 5
             MaxValue = 100
+            OnChange = dec_hysteresis1Change
             ParentFont = False
             ParentShowHint = False
             ShowHint = True
@@ -329,6 +333,7 @@ object f_internalguider: Tf_internalguider
             DecimalPlaces = 3
             MaxValue = 30
             MinValue = 0.001
+            OnChange = ExposureChange
             TabOrder = 0
             Value = 1
           end
@@ -583,6 +588,7 @@ object f_internalguider: Tf_internalguider
               Top = 224
               Width = 187
               Caption = 'Disable guiding temporary'
+              OnChange = disable_guiding1Change
               ParentFont = False
               ParentShowHint = False
               ShowHint = True
@@ -597,7 +603,7 @@ object f_internalguider: Tf_internalguider
               Increment = 5
               MaxValue = 100
               MinValue = 10
-              OnChange = MinMoveChange
+              OnChange = ShortestPulse1Change
               ParentShowHint = False
               ShowHint = True
               TabOrder = 0
@@ -632,6 +638,7 @@ object f_internalguider: Tf_internalguider
               Increment = 3
               MaxValue = 100
               MinValue = 6
+              OnChange = minSNR1Change
               ParentShowHint = False
               ShowHint = True
               TabOrder = 2
@@ -656,6 +663,7 @@ object f_internalguider: Tf_internalguider
               Increment = 0.3
               MaxValue = 10
               MinValue = 0.8
+              OnChange = minHFD1Change
               TabOrder = 1
               Value = 1.5
             end
@@ -716,6 +724,7 @@ object f_internalguider: Tf_internalguider
               Increment = 100
               MaxValue = 10000
               MinValue = 500
+              OnChange = LongestPulse1Change
               ParentShowHint = False
               ShowHint = True
               TabOrder = 7
@@ -756,7 +765,7 @@ object f_internalguider: Tf_internalguider
             Top = 0
             Width = 288
             Caption = 'Calibration results:'
-            ClientHeight = 254
+            ClientHeight = 236
             ClientWidth = 286
             TabOrder = 0
             object Label5: TLabel
@@ -776,6 +785,7 @@ object f_internalguider: Tf_internalguider
               Hint = 'The relative angle between the mount and the image. An image with north up and east left has an angle of zero.'
               Top = 8
               Width = 60
+              OnChange = pa1Change
               ParentFont = False
               ParentShowHint = False
               ShowHint = True
@@ -799,7 +809,7 @@ object f_internalguider: Tf_internalguider
               Hint = 'Pulse gain in pixels at the celestial equator. Measured at 0.5x guide rate.'
               Top = 40
               Width = 60
-              OnChange = MinMoveChange
+              OnChange = pulsegainEast1Change
               ParentFont = False
               ParentShowHint = False
               ShowHint = True
@@ -823,6 +833,7 @@ object f_internalguider: Tf_internalguider
               Hint = 'Pulse gain in pixels at the celestial equator. Measured at 1.5x guide rate.'
               Top = 72
               Width = 60
+              OnChange = pulsegainWest1Change
               ParentFont = False
               ParentShowHint = False
               ShowHint = True
@@ -846,6 +857,7 @@ object f_internalguider: Tf_internalguider
               Hint = 'A negative value indicates a flipped image. Measured at 7.5"/px rate.'
               Top = 104
               Width = 60
+              OnChange = pulsegainNorth1Change
               ParentFont = False
               ParentShowHint = False
               ShowHint = True
@@ -858,6 +870,7 @@ object f_internalguider: Tf_internalguider
               Hint = 'A negative value indicates a flipped image. Measured at 7.5"/px rate.'
               Top = 136
               Width = 60
+              OnChange = pulsegainSouth1Change
               ParentFont = False
               ParentShowHint = False
               ShowHint = True
@@ -892,6 +905,7 @@ object f_internalguider: Tf_internalguider
               Hint = 'While calibrating was the telescope pointing East or West'
               Top = 168
               Width = 60
+              OnChange = pier_side1Change
               ParentFont = False
               ParentShowHint = False
               ShowHint = True
@@ -918,7 +932,7 @@ object f_internalguider: Tf_internalguider
               Hint = 'Based on measured pulse gain in px/sec and assuming 0.5x and 1.5x guide rates. This value is not essential for guiding'
               Top = 200
               Width = 60
-              OnChange = MinMoveChange
+              OnChange = pixelsize1Change
               ParentFont = False
               ParentShowHint = False
               ShowHint = True
