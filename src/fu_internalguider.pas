@@ -161,6 +161,10 @@ type
     thescale : double;
     FonStart, FonStop, FonCalibrate, FonCalibrateMeridianFlip, FonLoop, FonRedraw, FonCaptureDark, FonLoadDark, FonClearDark,FonDarkInfo: TNotifyEvent;
     FonParameterChange: TNotifyStr;
+    cur_minHFD,cur_minSNR,cur_Exposure : double;
+    cur_RAgain,cur_RA_hysteresis,cur_DECgain,cur_DEC_hysteresis,cur_LongestPulse,cur_shortestPulse: integer;
+    cur_pa1,cur_pier_side1,cur_pixelsize1,cur_pulsegainEast1,cur_pulsegainNorth1,cur_pulsegainSouth1,cur_pulsegainWest1 : string;
+    cur_disable_guiding: boolean;
     procedure ShowMinMove;
     procedure SetLed (cl : tcolor);
     procedure SetRA_hysteresis(value:integer);
@@ -269,6 +273,23 @@ begin
  SetLang;
  LabelStatusRA.Caption:='';
  LabelStatusDec.Caption:='';
+ cur_minHFD:=minHFD;
+ cur_minSNR:=minSNR;
+ cur_pa1:=pa1.Text;
+ cur_pier_side1:=pier_side1.Text;
+ cur_pixelsize1:=pixelsize1.Text;
+ cur_pulsegainEast1:=pulsegainEast1.Text;
+ cur_pulsegainNorth1:=pulsegainNorth1.Text;
+ cur_pulsegainSouth1:=pulsegainSouth1.Text;
+ cur_pulsegainWest1:=pulsegainWest1.Text;
+ cur_DECgain:=DECgain;
+ cur_DEC_hysteresis:=DEC_hysteresis;
+ cur_disable_guiding:=disable_guiding;
+ cur_LongestPulse:=LongestPulse;
+ cur_shortestPulse:=shortestPulse;
+ cur_Exposure:=Exposure.value;
+ cur_RAgain:=RAgain;
+ cur_RA_hysteresis:=RA_hysteresis;
 end;
 
 destructor  Tf_internalguider.Destroy;
@@ -554,90 +575,107 @@ end;
 
 procedure Tf_internalguider.minHFD1Change(Sender: TObject);
 begin
-  if Assigned(FonParameterChange) then FonParameterChange('Minimum HFD setting = '+FormatFloat(f2,minHFD));
+  if (cur_minHFD<>minHFD) and Assigned(FonParameterChange) then FonParameterChange('Minimum HFD setting = '+FormatFloat(f2,minHFD));
+  cur_minHFD:=minHFD;
 end;
 
 procedure Tf_internalguider.minSNR1Change(Sender: TObject);
 begin
-  if Assigned(FonParameterChange) then FonParameterChange('Minimum SNR setting = '+FormatFloat(f2,minSNR));
+  if (cur_minSNR<>minSNR) and Assigned(FonParameterChange) then FonParameterChange('Minimum SNR setting = '+FormatFloat(f2,minSNR));
+  cur_minSNR:=minSNR;
 end;
 
 procedure Tf_internalguider.pa1Change(Sender: TObject);
 begin
-  if Assigned(FonParameterChange) then FonParameterChange('Camera angle = '+pa1.Text);
+  if (cur_pa1<>pa1.Text) and Assigned(FonParameterChange) then FonParameterChange('Camera angle = '+pa1.Text);
+  cur_pa1:=pa1.Text;
 end;
 
 procedure Tf_internalguider.pier_side1Change(Sender: TObject);
 begin
-  if Assigned(FonParameterChange) then FonParameterChange('Measured at = '+pier_side1.Text);
+  if (cur_pier_side1<>pier_side1.Text) and Assigned(FonParameterChange) then FonParameterChange('Measured at = '+pier_side1.Text);
+  cur_pier_side1:=pier_side1.Text;
 end;
 
 procedure Tf_internalguider.pixelsize1Change(Sender: TObject);
 begin
-  if Assigned(FonParameterChange) then FonParameterChange('Pixel scale = '+pixelsize1.Text);
+  if (cur_pixelsize1<>pixelsize1.Text) and Assigned(FonParameterChange) then FonParameterChange('Pixel scale = '+pixelsize1.Text);
   ShowMinMove;
+  cur_pixelsize1:=pixelsize1.Text;
 end;
 
 procedure Tf_internalguider.pulsegainEast1Change(Sender: TObject);
 begin
-  if Assigned(FonParameterChange) then FonParameterChange('Pulse gain East = '+pulsegainEast1.Text);
+  if (cur_pulsegainEast1<>pulsegainEast1.Text) and Assigned(FonParameterChange) then FonParameterChange('Pulse gain East = '+pulsegainEast1.Text);
   ShowMinMove;
+  cur_pulsegainEast1:=pulsegainEast1.Text;
 end;
 
 procedure Tf_internalguider.pulsegainNorth1Change(Sender: TObject);
 begin
-  if Assigned(FonParameterChange) then FonParameterChange('Pulse gain North = '+pulsegainNorth1.Text);
+  if (cur_pulsegainNorth1<>pulsegainNorth1.Text) and Assigned(FonParameterChange) then FonParameterChange('Pulse gain North = '+pulsegainNorth1.Text);
+  cur_pulsegainNorth1:=pulsegainNorth1.Text;
 end;
 
 procedure Tf_internalguider.pulsegainSouth1Change(Sender: TObject);
 begin
-  if Assigned(FonParameterChange) then FonParameterChange('Pulse gain South = '+pulsegainSouth1.Text);
+  if (cur_pulsegainSouth1<>pulsegainSouth1.Text) and Assigned(FonParameterChange) then FonParameterChange('Pulse gain South = '+pulsegainSouth1.Text);
+  cur_pulsegainSouth1:=pulsegainSouth1.Text;
 end;
 
 procedure Tf_internalguider.pulsegainWest1Change(Sender: TObject);
 begin
-  if Assigned(FonParameterChange) then FonParameterChange('Pulse gain West = '+pulsegainWest1.Text);
+  if (cur_pulsegainWest1<>pulsegainWest1.Text) and Assigned(FonParameterChange) then FonParameterChange('Pulse gain West = '+pulsegainWest1.Text);
+  cur_pulsegainWest1:=pulsegainWest1.Text;
 end;
 
 procedure Tf_internalguider.dec_gain1Change(Sender: TObject);
 begin
-  if Assigned(FonParameterChange) then FonParameterChange('DEC Gain = '+IntToStr(DECgain));
+  if (cur_DECgain<>DECgain) and Assigned(FonParameterChange) then FonParameterChange('DEC Gain = '+IntToStr(DECgain));
+  cur_DECgain:=DECgain;
 end;
 
 procedure Tf_internalguider.dec_hysteresis1Change(Sender: TObject);
 begin
-  if Assigned(FonParameterChange) then FonParameterChange('DEC Hyst = '+IntToStr(DEC_hysteresis));
+  if (cur_DEC_hysteresis<>DEC_hysteresis) and Assigned(FonParameterChange) then FonParameterChange('DEC Hyst = '+IntToStr(DEC_hysteresis));
+  cur_DEC_hysteresis:=DEC_hysteresis;
 end;
 
 procedure Tf_internalguider.disable_guiding1Change(Sender: TObject);
 begin
-  if Assigned(FonParameterChange) then FonParameterChange('MountGuidingEnabled = '+BoolToStr(not disable_guiding,'true','false'));
+  if (cur_disable_guiding<>disable_guiding) and Assigned(FonParameterChange) then FonParameterChange('MountGuidingEnabled = '+BoolToStr(not disable_guiding,'true','false'));
+  cur_disable_guiding:=disable_guiding;
 end;
 
 procedure Tf_internalguider.LongestPulse1Change(Sender: TObject);
 begin
-  if Assigned(FonParameterChange) then FonParameterChange('Max RA duration = '+IntToStr(LongestPulse)+', Max DEC duration = '+IntToStr(LongestPulse));
+  if (cur_LongestPulse<>LongestPulse) and Assigned(FonParameterChange) then FonParameterChange('Max RA duration = '+IntToStr(LongestPulse)+', Max DEC duration = '+IntToStr(LongestPulse));
+  cur_LongestPulse:=LongestPulse;
 end;
 
 procedure Tf_internalguider.ShortestPulse1Change(Sender: TObject);
 begin
  ShowMinMove;
- if Assigned(FonParameterChange) then FonParameterChange('Shortest guide pulse setting = '+IntToStr(shortestPulse));
+ if (cur_shortestPulse<>shortestPulse) and Assigned(FonParameterChange) then FonParameterChange('Shortest guide pulse setting = '+IntToStr(shortestPulse));
+ cur_shortestPulse:=shortestPulse;
 end;
 
 procedure Tf_internalguider.ExposureChange(Sender: TObject);
 begin
-  if Assigned(FonParameterChange) then FonParameterChange('Exposure = '+FormatFloat(f0,Exposure.value*1000)+' ms');
+  if (cur_Exposure<>Exposure.value) and Assigned(FonParameterChange) then FonParameterChange('Exposure = '+FormatFloat(f0,Exposure.value*1000)+' ms');
+  cur_Exposure:=Exposure.value;
 end;
 
 procedure Tf_internalguider.ra_gain1Change(Sender: TObject);
 begin
-  if Assigned(FonParameterChange) then FonParameterChange('RA Gain = '+IntToStr(RAgain));
+  if (cur_RAgain<>RAgain) and Assigned(FonParameterChange) then FonParameterChange('RA Gain = '+IntToStr(RAgain));
+  cur_RAgain:=RAgain;
 end;
 
 procedure Tf_internalguider.ra_hysteresis1Change(Sender: TObject);
 begin
-  if Assigned(FonParameterChange) then FonParameterChange('RA Hyst = '+IntToStr(RA_hysteresis));
+  if (cur_RA_hysteresis<>RA_hysteresis) and Assigned(FonParameterChange) then FonParameterChange('RA Hyst = '+IntToStr(RA_hysteresis));
+  cur_RA_hysteresis:=RA_hysteresis;
 end;
 
 procedure Tf_internalguider.MenuItemClearDarkClick(Sender: TObject);
