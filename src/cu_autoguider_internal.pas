@@ -1072,6 +1072,41 @@ begin
   end //guiding enabled
   else
   begin  //guiding disabled
+    if InternalguiderRunning then begin
+       // write drift to log
+       moveRA:=(- driftRA*(1 - finternalguider.RA_hysteresis/100) +   old_moveRA * finternalguider.RA_hysteresis/100 ) * finternalguider.RAgain/100;//Hysteresis as in PHD1
+       old_moveRA:=moveRA;//Store for next cycle hysteresis calculation
+       //calculate required DEC correction in pixels
+       moveDEC:=(- driftDEC*(1 - finternalguider.DEC_hysteresis/100) +   old_moveDEC * finternalguider.DEC_hysteresis/100 ) * finternalguider.DECgain/100;//Hysteresis as in PHD1
+       old_moveDEC:=moveDEC;//Store for next cycle hysteresis calculation
+       Guidethecos:=cos(mount.Dec*pi/180); if Guidethecos<0.000001 then Guidethecos:=0.000001;
+       moveRA2:=moveRA/Guidethecos; //correct pixels with cos(dec). Rotation in pixels near celestial pole decreases with cos(dec)
+       RADuration:=0;
+       DECDuration:=0;
+       RADirection:='';
+       DECDirection:='';
+       // write log
+       inc(GuideFrameCount);
+       //Frame,Time,mount,dx,dy,RARawDistance,DECRawDistance,RAGuideDistance,DECGuideDistance,RADuration,RADirection,DECDuration,DECDirection,XStep,YStep,StarMass,SNR,ErrorCode
+       WriteLog(IntToStr(GuideFrameCount)+','+
+                FormatFloat(f3,(now-GuideStartTime)*secperday)+','+
+                '"Mount"'+','+
+                FormatFloat(f3,driftX)+','+
+                FormatFloat(f3,driftY)+','+
+                FormatFloat(f3,driftRA)+','+
+                FormatFloat(f3,driftDec)+','+
+                FormatFloat(f3,moveRA2)+','+ //moveRA2 is in pixels
+                FormatFloat(f3,moveDEC)+','+
+                IntToStr(RADuration)+','+
+                RADirection+','+
+                IntToStr(DECDuration)+','+
+                DECDirection+','+
+                ',,'+  // AO
+                FormatFloat(f0,LogFlux)+','+
+                FormatFloat(f2,LogSNR)+','+
+                '0'    // error code
+                );
+    end;
     xy_trend[0].racorr:=0;
     xy_trend[0].deccorr:=0;
   end;
