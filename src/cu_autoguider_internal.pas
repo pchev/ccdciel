@@ -732,7 +732,7 @@ procedure T_autoguider_internal.InternalguiderStartAsync(Data: PtrInt); {interna
 var
   i: integer;
   txt,pier,frametxt: string;
-  alt,az: double;
+  ra,de,alt,az,lha: double;
 begin
   if AllDevicesConnected=false then
   begin
@@ -803,7 +803,12 @@ begin
     pierWest: pier:='West';
     pierUnknown: pier:='Unknown';
   end;
-  cmdEq2Hz(mount.RA,mount.Dec,az,alt);
+  ra:=mount.RA;
+  de:=mount.Dec;
+  MountToLocal(mount.EquinoxJD,ra,de);
+  cmdEq2Hz(ra,de,az,alt);
+  lha:=rmod(CurrentSidTim*rad2deg/15-ra+24,24);
+  if lha>12 then lha:=lha-24;
   GuideFrameCount:=0;
   GuideStartTime:=now;
   WriteLog('Guiding Begins at '+FormatDateTime('YYYY-MM-DD HH:NN:SS',GuideStartTime));
@@ -820,7 +825,10 @@ begin
   WriteLog('Camera = '+camera.DeviceName);
   WriteLog('Exposure = '+FormatFloat(f0,finternalguider.Exposure.value*1000)+' ms');
   //Following is required for correct pulse indication. Indicated pulse amplitude=xRate*RADuration. xAngle is not used and only for info.
-  WriteLog('Mount = '+mount.DeviceName+','+BoolToStr(mount.Status=devConnected,'connected','disconnected')+',guiding '+BoolToStr(not Finternalguider.disable_guiding,'enabled','disabled')+',xAngle = '+FormatFloat(f2,Finternalguider.PA)+', xRate = '+FormatFloat(f2,abs(cos(mount.dec*pi/180)*(Finternalguider.pulsegainEast+Finternalguider.pulsegainWest)/2))+',, yRate = '+FormatFloat(f2,abs((Finternalguider.pulsegainNorth+Finternalguider.pulsegainSouth)/2)));
+  WriteLog('Mount = '+mount.DeviceName+','+BoolToStr(mount.Status=devConnected,'connected','disconnected')+
+           ',guiding '+BoolToStr(not Finternalguider.disable_guiding,'enabled','disabled')+',xAngle = '+FormatFloat(f2,Finternalguider.PA)+
+           ', xRate = '+FormatFloat(f2,abs(cos(mount.dec*pi/180)*(Finternalguider.pulsegainEast+Finternalguider.pulsegainWest)/2))+
+           ',, yRate = '+FormatFloat(f2,abs((Finternalguider.pulsegainNorth+Finternalguider.pulsegainSouth)/2)));
   WriteLog('RA Gain = '+IntToStr(Finternalguider.RAgain)+', RA Hyst = '+IntToStr(Finternalguider.RA_hysteresis));
   WriteLog('DEC Gain = '+IntToStr(Finternalguider.DECgain)+', DEC Hyst = '+IntToStr(Finternalguider.DEC_hysteresis));
   WriteLog('Pulse gain East = '+FormatFloat(f2,Finternalguider.pulsegainEast)+', Pulse gain West = '+FormatFloat(f2,Finternalguider.pulsegainWest));
@@ -829,7 +837,8 @@ begin
   WriteLog('Max RA duration = '+IntToStr(Finternalguider.LongestPulse)+', Max DEC duration = '+IntToStr(Finternalguider.LongestPulse));
   WriteLog('Minimum HFD setting = '+FormatFloat(f2,Finternalguider.minHFD));
   WriteLog('Minimum SNR setting = '+FormatFloat(f2,Finternalguider.minSNR));
-  WriteLog('RA = '+FormatFloat(f2,mount.Ra)+' hr, Dec = '+FormatFloat(f2,mount.Dec)+' deg, Hour angle = '+FormatFloat(f2,CurrentSidTim*rad2deg/15-mount.Ra)+' hr, Pier side = '+pier+', Alt = '+FormatFloat(f1,alt)+' deg, Az = '+FormatFloat(f1,az));
+  WriteLog('RA = '+FormatFloat(f2,mount.Ra)+' hr, Dec = '+FormatFloat(f2,mount.Dec)+' deg, Hour angle = '+FormatFloat(f2,lha)+
+           ' hr, Pier side = '+pier+', Alt = '+FormatFloat(f1,alt)+' deg, Az = '+FormatFloat(f1,az));
   WriteLog('');
   WriteLog('Frame,Time,mount,dx,dy,RARawDistance,DECRawDistance,RAGuideDistance,DECGuideDistance,RADuration,RADirection,DECDuration,DECDirection,XStep,YStep,StarMass,SNR,ErrorCode');
 
