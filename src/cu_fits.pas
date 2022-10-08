@@ -1431,6 +1431,9 @@ begin
     GetFitsInfo;
     // reload stream
     WriteFitsImage;
+    //invalidate raw image
+    SetLength(Frawimage,0,0,0);
+    FUseRawImage:=false;
   end;
 end;
 
