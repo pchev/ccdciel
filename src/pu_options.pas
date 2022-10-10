@@ -36,12 +36,14 @@ type
   Tf_option = class(TForm)
     ButtonSeqDir: TButton;
     CdCPath: TEdit;
+    InstrumentName: TEdit;
     GuideDriftAbort: TCheckBox;
     FitsExt: TComboBox;
     Label155: TLabel;
     Label156: TLabel;
     Label157: TLabel;
     Label158: TLabel;
+    Label159: TLabel;
     LabelFlatWarning: TLabel;
     PageInternal: TPage;
     PanelFlatPositionAltAz: TPanel;

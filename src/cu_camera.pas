@@ -641,7 +641,7 @@ begin
 end;
 
 procedure T_camera.WriteHeaders(UpdateFromCamera:Boolean=true);
-var origin,observer,telname,objname,siso,CType,roworder: string;
+var origin,observer,telname,instrum,objname,siso,CType,roworder: string;
     focal_length,pixscale1,pixscale2,ccdtemp,st,ra,de,fstop,shutter,multr,multg,multb: double;
     hbitpix,hnaxis,hnaxis1,hnaxis2,hnaxis3,hbin1,hbin2,cgain,focuserpos: integer;
     hfilter,hframe,hinstr,hdateobs,pierside : string;
@@ -721,6 +721,7 @@ begin
     origin:=config.GetValue('/Info/ObservatoryName','');
     observer:=config.GetValue('/Info/ObserverName','');
     telname:=config.GetValue('/Info/TelescopeName','');
+    instrum:=config.GetValue('/Info/InstrumentName','');
     if not FGuideCamera then begin
       if config.GetValue('/Astrometry/FocaleFromTelescope',true)
       then begin
@@ -824,7 +825,14 @@ begin
   Ffits.Header.Insert(i,'SITELONG',-ObsLongitude,'Observatory longitude'); //Internal longitude is East negative for historical reason
   if observer<>'' then Ffits.Header.Insert(i,'OBSERVER',observer,'Observer name');
   if telname<>'' then Ffits.Header.Insert(i,'TELESCOP',telname,'Telescope used for acquisition');
-  if hinstr<>'' then Ffits.Header.Insert(i,'INSTRUME',hinstr,'Instrument used for acquisition');
+  if instrum='' then begin
+    if hinstr<>'' then begin
+      Ffits.Header.Insert(i,'INSTRUME',hinstr,'Instrument used for acquisition');
+    end;
+  end
+  else begin
+    Ffits.Header.Insert(i,'INSTRUME',instrum,'Instrument used for acquisition');
+  end;
   if hfilter<>'' then Ffits.Header.Insert(i,'FILTER',hfilter,'Filter');
   Ffits.Header.Insert(i,'SWCREATE','CCDciel '+ccdciel_version+'-'+RevisionStr+blank+compile_system,'');
   if objname<>'' then Ffits.Header.Insert(i,'OBJECT',objname,'Observed object name');

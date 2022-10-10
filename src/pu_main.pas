@@ -8047,6 +8047,7 @@ begin
    f_option.ObsElev.Value:=config.GetValue('/Info/ObservatoryElevation',0.0);
    f_option.ObserverName.Text:=config.GetValue('/Info/ObserverName','');
    f_option.TelescopeName.Text:=config.GetValue('/Info/TelescopeName','');
+   f_option.InstrumentName.Text:=config.GetValue('/Info/InstrumentName','');
    f_option.HorizonFile.FileName:=config.GetValue('/Info/HorizonFile','');
    f_option.ElevationMin.Value:=config.GetValue('/Info/ElevationMin',10.0);
    f_option.AzimuthOrigin.ItemIndex:=config.GetValue('/Info/AzimuthOrigin',azNorth);
@@ -8497,6 +8498,7 @@ begin
      config.SetValue('/Info/ObservatoryElevation',f_option.ObsElev.Value);
      config.SetValue('/Info/ObserverName',f_option.ObserverName.Text);
      config.SetValue('/Info/TelescopeName',f_option.TelescopeName.Text);
+     config.SetValue('/Info/InstrumentName',f_option.InstrumentName.Text);
      config.SetValue('/Info/HorizonFile',f_option.HorizonFile.FileName);
      config.SetValue('/Info/ElevationMin',f_option.ElevationMin.Value);
      f_option.SaveObservatoryDB;

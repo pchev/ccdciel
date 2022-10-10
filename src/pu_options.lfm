@@ -405,7 +405,7 @@ object f_option: Tf_option
           TabOrder = 0
           object FileOpt: TTabSheet
             Caption = 'File name options'
-            ClientHeight = 460
+            ClientHeight = 463
             ClientWidth = 550
             ParentFont = False
             object BtnFileDefault: TButton
@@ -622,7 +622,7 @@ object f_option: Tf_option
           end
           object FolderOpt: TTabSheet
             Caption = 'Folder name options'
-            ClientHeight = 460
+            ClientHeight = 463
             ClientWidth = 550
             ParentFont = False
             object BtnFolderDefault: TButton
@@ -717,12 +717,12 @@ object f_option: Tf_option
         ParentFont = False
         object GroupBox27: TGroupBox
           Left = 0
-          Height = 128
+          Height = 158
           Top = 50
           Width = 560
           Align = alTop
           Caption = 'Information'
-          ClientHeight = 108
+          ClientHeight = 138
           ClientWidth = 558
           ParentFont = False
           TabOrder = 0
@@ -751,7 +751,7 @@ object f_option: Tf_option
             AnchorSideTop.Side = asrCenter
             Left = 8
             Height = 19
-            Top = 45
+            Top = 42
             Width = 116
             Caption = 'Observatory name'
             ParentColor = False
@@ -760,7 +760,7 @@ object f_option: Tf_option
           object ObservatoryName: TEdit
             Left = 146
             Height = 28
-            Top = 40
+            Top = 37
             Width = 220
             Constraints.MaxHeight = 28
             ParentFont = False
@@ -771,7 +771,7 @@ object f_option: Tf_option
             AnchorSideTop.Side = asrCenter
             Left = 8
             Height = 19
-            Top = 77
+            Top = 74
             Width = 99
             Caption = 'Telescope name'
             ParentColor = False
@@ -780,17 +780,35 @@ object f_option: Tf_option
           object TelescopeName: TEdit
             Left = 146
             Height = 28
-            Top = 72
+            Top = 69
             Width = 220
             Constraints.MaxHeight = 28
             ParentFont = False
             TabOrder = 2
           end
+          object Label159: TLabel
+            AnchorSideTop.Control = InstrumentName
+            AnchorSideTop.Side = asrCenter
+            Left = 8
+            Height = 19
+            Top = 106
+            Width = 109
+            Caption = 'Instrument name'
+            ParentColor = False
+          end
+          object InstrumentName: TEdit
+            Left = 146
+            Height = 28
+            Top = 101
+            Width = 220
+            Constraints.MaxHeight = 28
+            TabOrder = 3
+          end
         end
         object GroupBox28: TGroupBox
           Left = 0
           Height = 184
-          Top = 178
+          Top = 208
           Width = 560
           Align = alTop
           Caption = 'Coordinates'
@@ -1034,7 +1052,7 @@ object f_option: Tf_option
         object GroupBox29: TGroupBox
           Left = 0
           Height = 90
-          Top = 362
+          Top = 392
           Width = 560
           Align = alTop
           Caption = 'Rise / Set'
@@ -1139,7 +1157,7 @@ object f_option: Tf_option
         object AzimuthOrigin: TRadioGroup
           Left = 0
           Height = 60
-          Top = 452
+          Top = 482
           Width = 560
           Align = alTop
           AutoFill = True
@@ -1530,7 +1548,7 @@ object f_option: Tf_option
             ChildSizing.ShrinkVertical = crsScaleChilds
             ChildSizing.Layout = cclLeftToRightThenTopToBottom
             ChildSizing.ControlsPerLine = 2
-            ClientHeight = 10
+            ClientHeight = 28
             ClientWidth = 336
             Columns = 2
             ItemIndex = 0
@@ -1649,7 +1667,7 @@ object f_option: Tf_option
             Top = 0
             Width = 185
             Caption = 'Color balance'
-            ClientHeight = 148
+            ClientHeight = 130
             ClientWidth = 183
             ParentFont = False
             TabOrder = 3
@@ -2530,8 +2548,8 @@ object f_option: Tf_option
             TabOrder = 0
             ColWidths = (
               123
-              214
-              214
+              206
+              207
             )
           end
         end
@@ -5233,7 +5251,7 @@ object f_option: Tf_option
                   MinSize = 101
                   MaxSize = 202
                   Title.Caption = 'Action'
-                  Width = 503
+                  Width = 505
                 end>
               DefaultColWidth = 51
               MouseWheelOption = mwGrid
@@ -5243,7 +5261,7 @@ object f_option: Tf_option
               TabOrder = 0
               ColWidths = (
                 51
-                503
+                505
               )
             end
           end
@@ -5273,7 +5291,7 @@ object f_option: Tf_option
                   MinSize = 101
                   MaxSize = 202
                   Title.Caption = 'Action'
-                  Width = 503
+                  Width = 505
                 end>
               DefaultColWidth = 51
               MouseWheelOption = mwGrid
@@ -5283,7 +5301,7 @@ object f_option: Tf_option
               TabOrder = 0
               ColWidths = (
                 51
-                503
+                505
               )
             end
           end
@@ -5539,21 +5557,21 @@ object f_option: Tf_option
           Height = 484
           Top = 66
           Width = 560
-          HorzScrollBar.Page = 505
+          HorzScrollBar.Page = 501
           VertScrollBar.Page = 429
           Align = alClient
-          ClientHeight = 480
-          ClientWidth = 556
+          ClientHeight = 482
+          ClientWidth = 558
           ParentFont = False
           TabOrder = 0
           object PanelW1: TPanel
             Left = 0
             Height = 33
             Top = 0
-            Width = 556
+            Width = 558
             Align = alTop
-            ClientHeight = 29
-            ClientWidth = 552
+            ClientHeight = 33
+            ClientWidth = 558
             ParentFont = False
             TabOrder = 0
             object LabelMi1: TLabel
@@ -5577,7 +5595,7 @@ object f_option: Tf_option
             object FloatSpinEditMi1: TFloatSpinEdit
               Tag = 1
               Left = 241
-              Height = 27
+              Height = 28
               Top = 4
               Width = 85
               Constraints.MaxHeight = 28
@@ -5590,7 +5608,7 @@ object f_option: Tf_option
             object FloatSpinEditMa1: TFloatSpinEdit
               Tag = 1
               Left = 415
-              Height = 27
+              Height = 28
               Top = 4
               Width = 85
               Constraints.MaxHeight = 28
@@ -5602,9 +5620,9 @@ object f_option: Tf_option
             end
             object UseW1: TCheckBox
               Left = 8
-              Height = 23
+              Height = 21
               Top = 6
-              Width = 125
+              Width = 126
               Caption = 'measurement ...'
               ParentFont = False
               TabOrder = 2
@@ -5614,10 +5632,10 @@ object f_option: Tf_option
             Left = 0
             Height = 33
             Top = 33
-            Width = 556
+            Width = 558
             Align = alTop
-            ClientHeight = 29
-            ClientWidth = 552
+            ClientHeight = 33
+            ClientWidth = 558
             ParentFont = False
             TabOrder = 1
             object LabelMi2: TLabel
@@ -5641,7 +5659,7 @@ object f_option: Tf_option
             object FloatSpinEditMi2: TFloatSpinEdit
               Tag = 1
               Left = 241
-              Height = 27
+              Height = 28
               Top = 4
               Width = 85
               Constraints.MaxHeight = 28
@@ -5654,7 +5672,7 @@ object f_option: Tf_option
             object FloatSpinEditMa2: TFloatSpinEdit
               Tag = 1
               Left = 415
-              Height = 27
+              Height = 28
               Top = 4
               Width = 85
               Constraints.MaxHeight = 28
@@ -5666,9 +5684,9 @@ object f_option: Tf_option
             end
             object UseW2: TCheckBox
               Left = 8
-              Height = 23
+              Height = 21
               Top = 6
-              Width = 125
+              Width = 126
               Caption = 'measurement ...'
               ParentFont = False
               TabOrder = 2
@@ -5678,10 +5696,10 @@ object f_option: Tf_option
             Left = 0
             Height = 33
             Top = 66
-            Width = 556
+            Width = 558
             Align = alTop
-            ClientHeight = 29
-            ClientWidth = 552
+            ClientHeight = 33
+            ClientWidth = 558
             ParentFont = False
             TabOrder = 2
             object LabelMi3: TLabel
@@ -5705,7 +5723,7 @@ object f_option: Tf_option
             object FloatSpinEditMi3: TFloatSpinEdit
               Tag = 1
               Left = 241
-              Height = 27
+              Height = 28
               Top = 4
               Width = 85
               Constraints.MaxHeight = 28
@@ -5718,7 +5736,7 @@ object f_option: Tf_option
             object FloatSpinEditMa3: TFloatSpinEdit
               Tag = 1
               Left = 415
-              Height = 27
+              Height = 28
               Top = 4
               Width = 85
               Constraints.MaxHeight = 28
@@ -5730,9 +5748,9 @@ object f_option: Tf_option
             end
             object UseW3: TCheckBox
               Left = 8
-              Height = 23
+              Height = 21
               Top = 6
-              Width = 125
+              Width = 126
               Caption = 'measurement ...'
               ParentFont = False
               TabOrder = 2
@@ -5742,10 +5760,10 @@ object f_option: Tf_option
             Left = 0
             Height = 33
             Top = 99
-            Width = 556
+            Width = 558
             Align = alTop
-            ClientHeight = 29
-            ClientWidth = 552
+            ClientHeight = 33
+            ClientWidth = 558
             ParentFont = False
             TabOrder = 3
             object LabelMi4: TLabel
@@ -5769,7 +5787,7 @@ object f_option: Tf_option
             object FloatSpinEditMi4: TFloatSpinEdit
               Tag = 1
               Left = 241
-              Height = 27
+              Height = 28
               Top = 4
               Width = 85
               Constraints.MaxHeight = 28
@@ -5782,7 +5800,7 @@ object f_option: Tf_option
             object FloatSpinEditMa4: TFloatSpinEdit
               Tag = 1
               Left = 415
-              Height = 27
+              Height = 28
               Top = 4
               Width = 85
               Constraints.MaxHeight = 28
@@ -5794,9 +5812,9 @@ object f_option: Tf_option
             end
             object UseW4: TCheckBox
               Left = 8
-              Height = 23
+              Height = 21
               Top = 6
-              Width = 125
+              Width = 126
               Caption = 'measurement ...'
               ParentFont = False
               TabOrder = 2
@@ -5806,10 +5824,10 @@ object f_option: Tf_option
             Left = 0
             Height = 33
             Top = 132
-            Width = 556
+            Width = 558
             Align = alTop
-            ClientHeight = 29
-            ClientWidth = 552
+            ClientHeight = 33
+            ClientWidth = 558
             ParentFont = False
             TabOrder = 4
             object LabelMi5: TLabel
@@ -5833,7 +5851,7 @@ object f_option: Tf_option
             object FloatSpinEditMi5: TFloatSpinEdit
               Tag = 1
               Left = 241
-              Height = 27
+              Height = 28
               Top = 4
               Width = 85
               Constraints.MaxHeight = 28
@@ -5846,7 +5864,7 @@ object f_option: Tf_option
             object FloatSpinEditMa5: TFloatSpinEdit
               Tag = 1
               Left = 415
-              Height = 27
+              Height = 28
               Top = 4
               Width = 85
               Constraints.MaxHeight = 28
@@ -5858,9 +5876,9 @@ object f_option: Tf_option
             end
             object UseW5: TCheckBox
               Left = 8
-              Height = 23
+              Height = 21
               Top = 6
-              Width = 125
+              Width = 126
               Caption = 'measurement ...'
               ParentFont = False
               TabOrder = 2
@@ -5870,10 +5888,10 @@ object f_option: Tf_option
             Left = 0
             Height = 33
             Top = 165
-            Width = 556
+            Width = 558
             Align = alTop
-            ClientHeight = 29
-            ClientWidth = 552
+            ClientHeight = 33
+            ClientWidth = 558
             ParentFont = False
             TabOrder = 5
             object LabelMi6: TLabel
@@ -5897,7 +5915,7 @@ object f_option: Tf_option
             object FloatSpinEditMi6: TFloatSpinEdit
               Tag = 1
               Left = 241
-              Height = 27
+              Height = 28
               Top = 4
               Width = 85
               Constraints.MaxHeight = 28
@@ -5910,7 +5928,7 @@ object f_option: Tf_option
             object FloatSpinEditMa6: TFloatSpinEdit
               Tag = 1
               Left = 415
-              Height = 27
+              Height = 28
               Top = 4
               Width = 85
               Constraints.MaxHeight = 28
@@ -5922,9 +5940,9 @@ object f_option: Tf_option
             end
             object UseW6: TCheckBox
               Left = 8
-              Height = 23
+              Height = 21
               Top = 6
-              Width = 125
+              Width = 126
               Caption = 'measurement ...'
               ParentFont = False
               TabOrder = 2
@@ -5934,10 +5952,10 @@ object f_option: Tf_option
             Left = 0
             Height = 33
             Top = 198
-            Width = 556
+            Width = 558
             Align = alTop
-            ClientHeight = 29
-            ClientWidth = 552
+            ClientHeight = 33
+            ClientWidth = 558
             ParentFont = False
             TabOrder = 6
             object LabelMi7: TLabel
@@ -5961,7 +5979,7 @@ object f_option: Tf_option
             object FloatSpinEditMi7: TFloatSpinEdit
               Tag = 1
               Left = 241
-              Height = 27
+              Height = 28
               Top = 4
               Width = 85
               Constraints.MaxHeight = 28
@@ -5974,7 +5992,7 @@ object f_option: Tf_option
             object FloatSpinEditMa7: TFloatSpinEdit
               Tag = 1
               Left = 415
-              Height = 27
+              Height = 28
               Top = 4
               Width = 85
               Constraints.MaxHeight = 28
@@ -5986,9 +6004,9 @@ object f_option: Tf_option
             end
             object UseW7: TCheckBox
               Left = 8
-              Height = 23
+              Height = 21
               Top = 6
-              Width = 125
+              Width = 126
               Caption = 'measurement ...'
               ParentFont = False
               TabOrder = 2
@@ -5998,10 +6016,10 @@ object f_option: Tf_option
             Left = 0
             Height = 33
             Top = 231
-            Width = 556
+            Width = 558
             Align = alTop
-            ClientHeight = 29
-            ClientWidth = 552
+            ClientHeight = 33
+            ClientWidth = 558
             ParentFont = False
             TabOrder = 7
             object LabelMi8: TLabel
@@ -6025,7 +6043,7 @@ object f_option: Tf_option
             object FloatSpinEditMi8: TFloatSpinEdit
               Tag = 1
               Left = 241
-              Height = 27
+              Height = 28
               Top = 4
               Width = 85
               Constraints.MaxHeight = 28
@@ -6038,7 +6056,7 @@ object f_option: Tf_option
             object FloatSpinEditMa8: TFloatSpinEdit
               Tag = 1
               Left = 415
-              Height = 27
+              Height = 28
               Top = 4
               Width = 85
               Constraints.MaxHeight = 28
@@ -6050,9 +6068,9 @@ object f_option: Tf_option
             end
             object UseW8: TCheckBox
               Left = 8
-              Height = 23
+              Height = 21
               Top = 6
-              Width = 125
+              Width = 126
               Caption = 'measurement ...'
               ParentFont = False
               TabOrder = 2
@@ -6062,10 +6080,10 @@ object f_option: Tf_option
             Left = 0
             Height = 33
             Top = 264
-            Width = 556
+            Width = 558
             Align = alTop
-            ClientHeight = 29
-            ClientWidth = 552
+            ClientHeight = 33
+            ClientWidth = 558
             ParentFont = False
             TabOrder = 8
             object LabelMi9: TLabel
@@ -6089,7 +6107,7 @@ object f_option: Tf_option
             object FloatSpinEditMi9: TFloatSpinEdit
               Tag = 1
               Left = 241
-              Height = 27
+              Height = 28
               Top = 4
               Width = 85
               Constraints.MaxHeight = 28
@@ -6102,7 +6120,7 @@ object f_option: Tf_option
             object FloatSpinEditMa9: TFloatSpinEdit
               Tag = 1
               Left = 415
-              Height = 27
+              Height = 28
               Top = 4
               Width = 85
               Constraints.MaxHeight = 28
@@ -6114,9 +6132,9 @@ object f_option: Tf_option
             end
             object UseW9: TCheckBox
               Left = 8
-              Height = 23
+              Height = 21
               Top = 6
-              Width = 125
+              Width = 126
               Caption = 'measurement ...'
               ParentFont = False
               TabOrder = 2
@@ -6126,10 +6144,10 @@ object f_option: Tf_option
             Left = 0
             Height = 33
             Top = 297
-            Width = 556
+            Width = 558
             Align = alTop
-            ClientHeight = 29
-            ClientWidth = 552
+            ClientHeight = 33
+            ClientWidth = 558
             ParentFont = False
             TabOrder = 9
             object LabelMi10: TLabel
@@ -6153,7 +6171,7 @@ object f_option: Tf_option
             object FloatSpinEditMi10: TFloatSpinEdit
               Tag = 1
               Left = 241
-              Height = 27
+              Height = 28
               Top = 4
               Width = 85
               Constraints.MaxHeight = 28
@@ -6166,7 +6184,7 @@ object f_option: Tf_option
             object FloatSpinEditMa10: TFloatSpinEdit
               Tag = 1
               Left = 415
-              Height = 27
+              Height = 28
               Top = 4
               Width = 85
               Constraints.MaxHeight = 28
@@ -6178,9 +6196,9 @@ object f_option: Tf_option
             end
             object UseW10: TCheckBox
               Left = 8
-              Height = 23
+              Height = 21
               Top = 6
-              Width = 125
+              Width = 126
               Caption = 'measurement ...'
               ParentFont = False
               TabOrder = 2
@@ -6190,10 +6208,10 @@ object f_option: Tf_option
             Left = 0
             Height = 33
             Top = 330
-            Width = 556
+            Width = 558
             Align = alTop
-            ClientHeight = 29
-            ClientWidth = 552
+            ClientHeight = 33
+            ClientWidth = 558
             ParentFont = False
             TabOrder = 10
             object LabelMi11: TLabel
@@ -6217,7 +6235,7 @@ object f_option: Tf_option
             object FloatSpinEditMi11: TFloatSpinEdit
               Tag = 1
               Left = 241
-              Height = 27
+              Height = 28
               Top = 4
               Width = 85
               Constraints.MaxHeight = 28
@@ -6230,7 +6248,7 @@ object f_option: Tf_option
             object FloatSpinEditMa11: TFloatSpinEdit
               Tag = 1
               Left = 415
-              Height = 27
+              Height = 28
               Top = 4
               Width = 85
               Constraints.MaxHeight = 28
@@ -6242,9 +6260,9 @@ object f_option: Tf_option
             end
             object UseW11: TCheckBox
               Left = 8
-              Height = 23
+              Height = 21
               Top = 6
-              Width = 125
+              Width = 126
               Caption = 'measurement ...'
               ParentFont = False
               TabOrder = 2
@@ -6254,10 +6272,10 @@ object f_option: Tf_option
             Left = 0
             Height = 33
             Top = 363
-            Width = 556
+            Width = 558
             Align = alTop
-            ClientHeight = 29
-            ClientWidth = 552
+            ClientHeight = 33
+            ClientWidth = 558
             ParentFont = False
             TabOrder = 11
             object LabelMi12: TLabel
@@ -6281,7 +6299,7 @@ object f_option: Tf_option
             object FloatSpinEditMi12: TFloatSpinEdit
               Tag = 1
               Left = 241
-              Height = 27
+              Height = 28
               Top = 4
               Width = 85
               Constraints.MaxHeight = 28
@@ -6294,7 +6312,7 @@ object f_option: Tf_option
             object FloatSpinEditMa12: TFloatSpinEdit
               Tag = 1
               Left = 415
-              Height = 27
+              Height = 28
               Top = 4
               Width = 85
               Constraints.MaxHeight = 28
@@ -6306,9 +6324,9 @@ object f_option: Tf_option
             end
             object UseW12: TCheckBox
               Left = 8
-              Height = 23
+              Height = 21
               Top = 6
-              Width = 125
+              Width = 126
               Caption = 'measurement ...'
               ParentFont = False
               TabOrder = 2
@@ -6318,10 +6336,10 @@ object f_option: Tf_option
             Left = 0
             Height = 33
             Top = 396
-            Width = 556
+            Width = 558
             Align = alTop
-            ClientHeight = 29
-            ClientWidth = 552
+            ClientHeight = 33
+            ClientWidth = 558
             ParentFont = False
             TabOrder = 12
             object LabelMi13: TLabel
@@ -6345,7 +6363,7 @@ object f_option: Tf_option
             object FloatSpinEditMi13: TFloatSpinEdit
               Tag = 1
               Left = 241
-              Height = 27
+              Height = 28
               Top = 4
               Width = 85
               Constraints.MaxHeight = 28
@@ -6358,7 +6376,7 @@ object f_option: Tf_option
             object FloatSpinEditMa13: TFloatSpinEdit
               Tag = 1
               Left = 415
-              Height = 27
+              Height = 28
               Top = 4
               Width = 85
               Constraints.MaxHeight = 28
@@ -6370,9 +6388,9 @@ object f_option: Tf_option
             end
             object UseW13: TCheckBox
               Left = 8
-              Height = 23
+              Height = 21
               Top = 6
-              Width = 125
+              Width = 126
               Caption = 'measurement ...'
               ParentFont = False
               TabOrder = 2
@@ -6465,13 +6483,13 @@ object f_option: Tf_option
               MinSize = 101
               MaxSize = 202
               Title.Caption = 'Action'
-              Width = 252
+              Width = 253
             end          
             item
               MinSize = 101
               MaxSize = 202
               Title.Caption = 'Parameters'
-              Width = 253
+              Width = 254
             end>
           DefaultColWidth = 51
           MouseWheelOption = mwGrid
@@ -6483,8 +6501,8 @@ object f_option: Tf_option
           OnValidateEntry = SafetyActionsValidateEntry
           ColWidths = (
             51
-            252
             253
+            254
           )
         end
         object Panel18: TPanel
@@ -6830,23 +6848,23 @@ object f_option: Tf_option
           TabOrder = 0
           object TabSheetEmail: TTabSheet
             Caption = 'Email'
-            ClientHeight = 546
+            ClientHeight = 519
             ClientWidth = 550
             ParentFont = False
             object GroupBox25: TGroupBox
               Left = 0
-              Height = 262
+              Height = 235
               Top = 284
               Width = 550
               Align = alClient
               Caption = 'Email on :'
-              ClientHeight = 242
+              ClientHeight = 215
               ClientWidth = 548
               ParentFont = False
               TabOrder = 0
               object EmailCondition: TCheckListBox
                 Left = 0
-                Height = 201
+                Height = 174
                 Top = 0
                 Width = 548
                 Align = alClient
@@ -6858,10 +6876,9 @@ object f_option: Tf_option
                   'Meridian flip error'
                   'Target initialisation'
                 )
-                ItemHeight = 0
+                ItemHeight = 23
                 ParentFont = False
                 TabOrder = 0
-                TopIndex = -1
                 Data = {
                   06000000000000000000
                 }
@@ -6869,7 +6886,7 @@ object f_option: Tf_option
               object Panel6: TPanel
                 Left = 0
                 Height = 41
-                Top = 201
+                Top = 174
                 Width = 548
                 Align = alBottom
                 ClientHeight = 41
@@ -7077,7 +7094,7 @@ object f_option: Tf_option
           end
           object TabSheetVoice: TTabSheet
             Caption = 'Voice'
-            ClientHeight = 546
+            ClientHeight = 519
             ClientWidth = 550
             ParentFont = False
             object CheckGroupVoice: TCheckGroup
