@@ -13699,7 +13699,7 @@ begin
            meridianflipping:=true;
            NewMessage(Format(rsWaitMeridian, [inttostr(MeridianDelay1)]),2);
            StatusBar1.Panels[panelstatus].Text := rsWaitMeridian2;
-           waittime:=15+abs(round(rad2deg*3600*hh/15)); // time to wait for meridian
+           waittime:=15+abs(round(60*(MinutesPastMeridianMin-(rad2deg*60*hh/15)))); // time to wait for meridian
            exit;
         end else begin
          waittime:=-1;   // if abort, continue
