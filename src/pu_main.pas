@@ -131,6 +131,14 @@ type
     MenuInternalGuider: TMenuItem;
     MenuInternalguiderStart: TMenuItem;
     MenuInternalGuiderStop: TMenuItem;
+    MenuFlatApply: TMenuItem;
+    MenuFlatInfo: TMenuItem;
+    MenuFlatInfo1: TMenuItem;
+    MenuFlatInfo2: TMenuItem;
+    MenuFlatCamera: TMenuItem;
+    MenuFlatFile: TMenuItem;
+    MenuFlatClear: TMenuItem;
+    MenuItemFlat: TMenuItem;
     MenuTabInternalGuider: TMenuItem;
     MenuItemGuiderStopAstrometry: TMenuItem;
     MenuItemGuiderSolve: TMenuItem;
@@ -207,6 +215,7 @@ type
     GuiderPopUpmenu1: TPopupMenu;
     SaveDialogPicture: TSaveDialog;
     ScrollBox1: TScrollBox;
+    Separator2: TMenuItem;
     Splitter1: TSplitter;
     TabMsgLevel: TTabControl;
     PageInternalGuider: TTabSheet;
@@ -375,6 +384,10 @@ type
     procedure FormShow(Sender: TObject);
     procedure GuideCameraConnectTimerTimer(Sender: TObject);
     procedure GuidePlotTimerTimer(Sender: TObject);
+    procedure MenuFlatApplyClick(Sender: TObject);
+    procedure MenuFlatCameraClick(Sender: TObject);
+    procedure MenuFlatClearClick(Sender: TObject);
+    procedure MenuFlatFileClick(Sender: TObject);
     procedure MenuInternalguiderStartClick(Sender: TObject);
     procedure MenuInternalGuiderStopClick(Sender: TObject);
     procedure MenuItemGuiderSaveImageClick(Sender: TObject);
@@ -412,6 +425,7 @@ type
     procedure MenuPolarAlignment2Click(Sender: TObject);
     procedure MenuViewInternalguiderClick(Sender: TObject);
     procedure ShowDarkInfo;
+    procedure ShowFlatInfo;
     procedure MenuDownloadClick(Sender: TObject);
     procedure MenuFilterClick(Sender: TObject);
     procedure MenuFocusaidClick(Sender: TObject);
@@ -1403,6 +1417,7 @@ begin
   StackAlign:=false;
   StackOperation:=1;
   StackUseDark:=false;
+  StackUseFlat:=false;
   StackDebayer:=false;
   FileStackFloat:=false;
   SaveFormat:=ffFITS;
@@ -1511,6 +1526,7 @@ begin
      configfile:='ccdciel_'+profile+'.conf';
   FOpenSetup:=not FileExistsUTF8(slash(ConfigDir)+configfile);
   OpenConfig(configfile);
+  ConfigFlatFile:=slash(ConfigDir)+'flatframe_'+profile+'.fits';
   ConfigDarkFile:=slash(ConfigDir)+'darkframe_'+profile+'.fits';
   ConfigGuiderDarkFile:=slash(ConfigDir)+'darkguider_'+profile+'.fits';
 
@@ -1565,6 +1581,10 @@ begin
      fits.LoadDark(ConfigDarkFile);
   end;
   ShowDarkInfo;
+  if FileExists(ConfigFlatFile) then begin
+     fits.LoadFlat(ConfigFlatFile);
+  end;
+  ShowFlatInfo;
 
   guidefits:=TFits.Create(self);
   guidefits.DisableBayer:=true;
@@ -2057,6 +2077,12 @@ begin
    MenuDarkFile.Caption:=rsLoadDarkFile;
    MenuDarkClear.Caption:=rsClearDarkFra;
    MenuDarkInfo.Caption:=rsInformation;
+   MenuItemFlat.Caption:=rsFlatFrame;
+   MenuFlatApply.Caption:=rsApplyToCurre;
+   MenuFlatCamera.Caption:=rsCreateFromCa;
+   MenuFlatFile.Caption:=rsLoadFlatFile;
+   MenuFlatClear.Caption:=rsClearFlatFra;
+   MenuFlatInfo.Caption:=rsInformation;
    MenuFocuserCalibration.Caption := rsFocuserCalib;
    MenuOpenPicture.Caption := Format(rsOpenPictureF, [ellipsis]);
    MenuSave.Caption := Format(rsSaveFITSFile, [ellipsis]);
@@ -3792,6 +3818,68 @@ begin
   ShowDarkInfo;
 end;
 
+procedure Tf_main.MenuFlatApplyClick(Sender: TObject);
+begin
+  if fits.FlatProcess then exit; // already applied
+  try
+  fits.FlatOn:=true;
+  fits.LoadStream;
+  DrawHistogram(true,false);
+  DrawImage;
+  finally
+  fits.FlatOn:=false;
+  end;
+end;
+
+procedure Tf_main.MenuFlatCameraClick(Sender: TObject);
+var bin: integer;
+begin
+ f_pause.Caption:='Flat frame';
+ f_pause.Text:='Uniformly light the telescope and set the exposure time and binning in the Preview pane now.'+crlf+rsClickContinu;
+ if f_pause.Wait then begin
+   bin:=f_preview.Bin;
+   camera.ResetFrame;
+   fits.SetBPM(bpm,bpmNum,bpmX,bpmY,bpmAxis);
+   fits.DarkOn:=true;
+   fits.FlatOn:=false;
+   if f_preview.ControlExposure(f_preview.Exposure,bin,bin,FLAT,ReadoutModeCapture,f_preview.Gain,f_preview.Offset) then begin
+     fits.SaveToFile(ConfigFlatFile);
+     fits.LoadFlat(ConfigFlatFile);
+   end
+   else
+     NewMessage(rsExposureFail,1);
+ end;
+ ShowFlatInfo;
+end;
+
+procedure Tf_main.MenuFlatClearClick(Sender: TObject);
+begin
+  fits.FreeFlat;
+  DeleteFile(ConfigFlatFile);
+  ShowFlatInfo;
+end;
+
+procedure Tf_main.MenuFlatFileClick(Sender: TObject);
+var fn : string;
+begin
+  OpenDialog1.Title:=rsOpenFlatFile;
+  if OpenDialog1.Execute then begin
+    fn:=OpenDialog1.FileName;
+    fits.SetBPM(bpm,0,0,0,0);
+    fits.DarkOn:=false;
+    fits.FlatOn:=false;
+    fits.LoadFlat(fn);
+    if fits.FlatFrame.HeaderInfo.valid then begin
+      fits.FlatFrame.SaveToFile(ConfigFlatFile);
+    end
+    else begin
+      fits.FreeFlat;
+      NewMessage(Format(rsInvalidOrUns, [fn]),1);
+    end;
+  end;
+  ShowFlatInfo;
+end;
+
 procedure Tf_main.MenuItem25Click(Sender: TObject);
 begin
   astrometry.SyncCurrentImage(false);
@@ -3815,6 +3903,22 @@ begin
   else begin
    MenuDarkInfo1.Caption:=rsNoDark;
    MenuDarkInfo2.Caption:='';
+  end;
+end;
+
+procedure Tf_main.ShowFlatInfo;
+begin
+  if (fits.FlatFrame<>nil)and(fits.FlatFrame.HeaderInfo.valid) then begin
+    MenuFlatInfo1.Caption:=rsFlatFileLoad;
+    if fits.FlatFrame.HeaderInfo.naxis>2 then MenuFlatInfo2.Caption:=rsFromColorIma
+       else MenuFlatInfo2.Caption:=rsFromImage;
+    MenuFlatInfo2.Caption:=MenuFlatInfo2.Caption+' '+rsSize+': '+inttostr(fits.FlatFrame.HeaderInfo.naxis1)+'x'+inttostr(fits.FlatFrame.HeaderInfo.naxis2);
+    MenuFlatInfo2.Caption:=MenuFlatInfo2.Caption+', '+rsExposureTime2+': '+FormatFloat(f3,fits.FlatFrame.HeaderInfo.exptime);
+    NewMessage(MenuFlatInfo1.Caption+blank+MenuFlatInfo2.Caption,3);
+  end
+  else begin
+   MenuFlatInfo1.Caption:=rsNoFlat;
+   MenuFlatInfo2.Caption:='';
   end;
 end;
 
@@ -4057,6 +4161,7 @@ begin
   StackOperation:=config.GetValue('/PreviewStack/StackOperation',1);
   FileStackFloat:=config.GetValue('/PreviewStack/FileStackFloat',false);
   StackUseDark:=config.GetValue('/PreviewStack/StackUseDark',false);
+  StackUseFlat:=config.GetValue('/PreviewStack/StackUseFlat',false);
   StackDebayer:=config.GetValue('/PreviewStack/StackDebayer',false);
   MaxVideoPreviewRate:=config.GetValue('/Video/PreviewRate',5);
   i:=TemperatureScale;
@@ -7710,6 +7815,13 @@ begin
       OpenConfig(configfile);
       f_devicesconnection.ProfileLabel.Caption:=profile;
       caption:='CCDciel '+ccdcielver+blank+profile;
+      ConfigFlatFile:=slash(ConfigDir)+'flatframe_'+profile+'.fits';
+      if FileExists(ConfigFlatFile) then begin
+        fits.LoadFlat(ConfigFlatFile);
+      end
+      else begin
+        fits.FreeFlat;
+      end;
       ConfigDarkFile:=slash(ConfigDir)+'darkframe_'+profile+'.fits';
       if FileExists(ConfigDarkFile) then begin
         fits.LoadDark(ConfigDarkFile);
@@ -8065,6 +8177,7 @@ begin
    f_option.SaveStack.checked:=config.GetValue('/PreviewStack/SaveStack',false);
    f_option.StackAlign.Checked:=config.GetValue('/PreviewStack/StackAlign',false);
    f_option.StackUseDark.Checked:=config.GetValue('/PreviewStack/StackUseDark',false);
+   f_option.StackUseFlat.Checked:=config.GetValue('/PreviewStack/StackUseFlat',false);
    f_option.StackDebayer.Checked:=config.GetValue('/PreviewStack/StackDebayer',false);
    f_option.StackOperation.itemindex:=config.GetValue('/PreviewStack/StackOperation',1);
    f_option.FileStackFloat.Checked:=config.GetValue('/PreviewStack/FileStackFloat',false);
@@ -8517,6 +8630,7 @@ begin
      config.SetValue('/PreviewStack/SaveStack',f_option.SaveStack.checked);
      config.SetValue('/PreviewStack/StackAlign',f_option.StackAlign.Checked);
      config.SetValue('/PreviewStack/StackUseDark',f_option.StackUseDark.Checked);
+     config.SetValue('/PreviewStack/StackUseFlat',f_option.StackUseFlat.Checked);
      config.SetValue('/PreviewStack/StackDebayer',f_option.StackDebayer.Checked);
      config.SetValue('/PreviewStack/StackOperation',f_option.StackOperation.itemindex);
      config.SetValue('/PreviewStack/FileStackFloat',f_option.FileStackFloat.Checked);
@@ -9205,6 +9319,7 @@ if (camera.Status=devConnected) and ((not f_capture.Running) or autofocusing) an
      camera.AlignFrames:=StackAlign;
      camera.StackOperation:=StackOperation;
      camera.StackUseDark:=StackUseDark;
+     camera.StackUseFlat:=StackUseFlat;
      camera.StackDebayer:=StackDebayer;
      camera.StackAllow8bit:=false;
      fits.SetBPM(bpm,0,0,0,0);  // bpm used during addition
@@ -9696,6 +9811,7 @@ if (AllDevicesConnected)and(not autofocusing)and (not learningvcurve) then begin
     camera.AlignFrames:=StackAlign;
     camera.StackOperation:=StackOperation;
     camera.StackUseDark:=StackUseDark;
+    camera.StackUseFlat:=StackUseFlat;
     camera.StackDebayer:=StackDebayer;
     camera.StackAllow8bit:=false;
     camera.StackNum:=f_capture.StackNum.Value;

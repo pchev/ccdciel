@@ -69,7 +69,7 @@ T_camera = class(TComponent)
     FFits: TFits;
     FStackCount, FStackNum, FStackStarted, FStackOperation: integer;
     FStackExpStart, FStackDate, FStackSaveDir: string;
-    FStackAlign, FStackUseDark, FStackDebayer,FStackAllow8bit: boolean;
+    FStackAlign, FStackUseDark, FStackUseFlat, FStackDebayer,FStackAllow8bit: boolean;
     FStackAlignX,FStackAlignY,FStackStarX,FStackStarY: double;
     FMount: T_mount;
     Fwheel: T_wheel;
@@ -224,6 +224,7 @@ T_camera = class(TComponent)
     property AlignFrames: boolean read FAlignFrames write FAlignFrames;
     property StackOperation: integer read FStackOperation write FStackOperation;
     property StackUseDark: boolean read FStackUseDark write FStackUseDark;
+    property StackUseFlat: boolean read FStackUseFlat write FStackUseFlat;
     property StackDebayer: boolean read FStackDebayer write FStackDebayer;
     property StackAllow8bit: boolean read FStackAllow8bit write FStackAllow8bit;
     property VerticalFlip: boolean read GetVerticalFlip;
@@ -356,6 +357,7 @@ begin
   FPrepareStack:=false;
   FAlignFrames:=false;
   FStackUseDark:=false;
+  FStackUseFlat:=false;
   FStackDebayer:=false;
   FStackAllow8bit:=false;
   FSaveFrames:=false;
@@ -521,6 +523,13 @@ if FAddFrames then begin  // stack preview frames
   else begin
     f.DarkOn:=false;
     f.SetBPM(bpm,0,0,0,0);
+  end;
+  if FStackUseFlat then begin
+    f.FlatOn:=true;
+    f.FlatFrame:=FFits.FlatFrame;
+  end
+  else begin
+    f.FlatOn:=false;
   end;
   savebayer:=BayerColor;
   BayerColor:=FStackDebayer;

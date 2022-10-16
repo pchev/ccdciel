@@ -157,7 +157,9 @@ type
     FStarList: TStarList;
     FDark: TFits;
     FDarkOn: boolean;
-    FDarkProcess, FBPMProcess, FPrivateDark: boolean;
+    FFlat: TFits;
+    FFlatOn: boolean;
+    FDarkProcess, FBPMProcess, FFlatProcess, FPrivateDark, FPrivateFlat: boolean;
     FonMsg: TNotifyMsg;
     ReadFitsCS : TRTLCriticalSection;
     procedure msg(txt: string; level:integer=3);
@@ -171,6 +173,7 @@ type
     function GetHasBPM: boolean;
     procedure ApplyBPM;
     procedure ApplyDark;
+    procedure ApplyFlat;
     procedure SetGamma(value: single);
     function GetBayerMode: TBayerMode;
     procedure GetBayerBgColor(t:TBayerMode; rmult,gmult,bmult:double; out r,g,b: single);
@@ -199,8 +202,9 @@ type
      procedure LoadHeaderFromFile(fn:string);
      procedure SetBPM(value: TBpm; count,nx,ny,nax:integer);
      procedure FreeDark;
+     procedure FreeFlat;
      procedure ClearImage;
-     procedure Math(operand: TFits; MathOperator:TMathOperator; new: boolean=false; seqnum: integer=1);
+     procedure Math(operand: TFits; MathOperator:TMathOperator; new: boolean=false; seqnum: integer=1; mult: double=1.0);
      procedure Shift(dx,dy: double);
      procedure ShiftInteger(dx,dy: integer);
      procedure Bitpix8to16;
@@ -216,6 +220,7 @@ type
      procedure SortStarlist;
      procedure ClearStarList;
      procedure LoadDark(fn: string);
+     procedure LoadFlat(fn: string);
      function dateobs: double;
      property IntfImg: TLazIntfImage read FIntfImg;
      Property HeaderInfo : TFitsInfo read FFitsInfo;
@@ -248,6 +253,10 @@ type
      property DarkOn: boolean read FDarkOn write FDarkOn;
      property DarkFrame: TFits read FDark write FDark;
      property PrivateDark: boolean read FPrivateDark write FPrivateDark;
+     property FlatProcess: boolean read FFlatProcess;
+     property FlatOn: boolean read FFlatOn write FFlatOn;
+     property FlatFrame: TFits read FFlat write FFlat;
+     property PrivateFlat: boolean read FPrivateFlat write FPrivateFlat;
      property onMsg: TNotifyMsg read FonMsg write FonMsg;
   end;
 
@@ -1314,6 +1323,9 @@ FBPMProcess:=false;
 FDarkProcess:=false;
 FDarkOn:=false;
 FPrivateDark:=false;
+FFlatProcess:=false;
+FFlatOn:=false;
+FPrivateFlat:=false;
 FStreamValid:=false;
 FImageValid:=false;
 FMarkOverflow:=false;
@@ -1341,6 +1353,7 @@ if FStream<>nil then FreeAndNil(FStream);
 FIntfImg.Free;
 emptybmp.Free;
 FreeDark;
+FreeFlat;
 inherited destroy;
 except
 //writeln('error destroy '+name);
@@ -1510,6 +1523,7 @@ if FileExistsUTF8(fn) then begin
      mem.LoadFromFile(fn);
    SetBPM(bpm,0,0,0,0);
    FDarkOn:=false;
+   FFlatOn:=false;
    SetStream(mem);
    LoadStream;
 end
@@ -1835,6 +1849,7 @@ begin
 FImageValid:=false;
 if FFitsInfo.naxis1=0 then exit;
 FDarkProcess:=false;
+FFlatProcess:=false;
 FBPMProcess:=false;
 if (FFitsInfo.naxis1>maxl)or(FFitsInfo.naxis2>maxl) then
   raise exception.Create(Format('Image too big! limit is currently %dx%d %sPlease open an issue to request an extension.',[maxl,maxl,crlf]));
@@ -1935,6 +1950,7 @@ else
   FimageC:=1;
 if FimageMin<0 then FimageMin:=0;
 ApplyBPM;
+ApplyFlat;
 if FimageDebayer then begin
    Debayer;
 end
@@ -2166,6 +2182,31 @@ if (FDarkOn)and(FDark<>nil)and(SameFormat(FDark))
      Math(FDark,moSub);
      FDarkProcess:=true;
      FHeader.Insert( FHeader.Indexof('END'),'COMMENT','Dark subtracted','');
+   end;
+end;
+
+procedure TFits.LoadFlat(fn: string);
+begin
+  FreeFlat;
+  FFlat:=TFits.Create(nil);
+  FFlat.onMsg:=FonMsg;
+  PrivateFlat:=true;
+  FFlat.LoadFromFile(fn);
+end;
+
+procedure TFits.FreeFlat;
+begin
+  if FPrivateFlat and (FFlat<>nil) then FreeAndNil(FFlat);
+end;
+
+procedure TFits.ApplyFlat;
+begin
+if (FFlatOn)and(FFlat<>nil)and(SameFormat(FFlat))
+   then begin
+    {$ifdef debug_raw}writeln(FormatDateTime(dateiso,Now)+blank+'apply flat');{$endif}
+     Math(FFlat,moDiv,false,1,FFlat.imageMean);
+     FFlatProcess:=true;
+     FHeader.Insert( FHeader.Indexof('END'),'COMMENT','Flat divided','');
    end;
 end;
 
@@ -3539,7 +3580,7 @@ begin
  WriteFitsImage;
 end;
 
-procedure TFits.Math(operand: TFits; MathOperator:TMathOperator; new: boolean=false; seqnum: integer=1);
+procedure TFits.Math(operand: TFits; MathOperator:TMathOperator; new: boolean=false; seqnum: integer=1; mult: double=1.0);
 var i,j,k,nax,naxo,ko,offsetX,offsetY: integer;
     x,y,dmin,dmax : double;
     ni,sum,sum2 : extended;
@@ -3586,7 +3627,7 @@ begin
            moSub: x:=x-y;
            moMean: x:=(x+y)/2;
            moMult: x:=x*y;
-           moDiv : x:=x/y;
+           moDiv : begin if y=0 then y:=1; x:=mult*x/y; end;
            moRunMean: x:=((seqnum-1)*x+y)/seqnum;
          end;
          if FUseRawImage then

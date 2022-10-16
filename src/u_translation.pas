@@ -1455,6 +1455,13 @@ resourcestring
   rsAutofocusLoc = 'Autofocus location';
   rsMoveToBright = 'Move to bright focus star now?';
   rsLongestGuide = 'Longest guide pulse';
+  rsApplyFlat = 'Apply Flat';
+  rsFlatFrame = 'Flat frame';
+  rsOpenFlatFile = 'Open Flat file';
+  rsNoFlat = 'No flat';
+  rsFlatFileLoad = 'Flat file loaded';
+  rsClearFlatFra = 'Clear Flat frame';
+  rsLoadFlatFile = 'Load flat file';
 
 implementation
 

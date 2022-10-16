@@ -640,6 +640,7 @@ begin
   if InternalguiderCapturingDark then begin
     FGuideFits.SetBPM(bpm,0,0,0,0);
     FGuideFits.DarkOn:=false;
+    FGuideFits.FlatOn:=false;
     FCamera.AddFrames:=true;
     FCamera.StackNum:=12;
     FCamera.SaveFrames:=false;
@@ -647,11 +648,13 @@ begin
     FCamera.StackOperation:=1;
     FCamera.StackAllow8bit:=true;
     FCamera.StackUseDark:=false;
+    FCamera.StackUseFlat:=false;
     FCamera.StackDebayer:=false;
   end
   else begin
     FGuideFits.SetBPM(bpm,0,0,0,0);
     FGuideFits.DarkOn:=true;
+    FGuideFits.FlatOn:=false;
     FCamera.AddFrames:=false;
     FCamera.StackNum:=-1;
     FCamera.StackAllow8bit:=false;

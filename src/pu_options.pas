@@ -36,6 +36,7 @@ type
   Tf_option = class(TForm)
     ButtonSeqDir: TButton;
     CdCPath: TEdit;
+    StackUseFlat: TCheckBox;
     InstrumentName: TEdit;
     GuideDriftAbort: TCheckBox;
     FitsExt: TComboBox;
@@ -1004,6 +1005,7 @@ begin
   StackAlign.Caption:= rsStarAlignmen;
   FileStackFloat.Caption:=rsFloatingPoin;
   StackUseDark.Caption:=rsApplyDarkAnd;
+  StackUseFlat.Caption:=rsApplyFlat;
   StackDebayer.Caption:=rsDebayer;
   StackOperation.Items[0]:=rsAddImages;
   StackOperation.Items[1]:=rsMeanOfImages;
@@ -1630,6 +1632,7 @@ begin
   StackOperation.Enabled:=StackShow.Checked;
   FileStackFloat.Enabled:=StackShow.Checked;
   StackUseDark.Enabled:=StackShow.Checked;
+  StackUseFlat.Enabled:=StackShow.Checked;
   StackDebayer.Enabled:=StackShow.Checked;
 end;
 

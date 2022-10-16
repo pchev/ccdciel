@@ -546,6 +546,39 @@ object f_main: Tf_main
           OnClick = MenuDarkClearClick
         end
       end
+      object MenuItemFlat: TMenuItem
+        Caption = 'Flat frame'
+        object MenuFlatApply: TMenuItem
+          Caption = 'Apply to current image'
+          OnClick = MenuFlatApplyClick
+        end
+        object MenuFlatInfo: TMenuItem
+          Caption = 'Info'
+          object MenuFlatInfo1: TMenuItem
+            Caption = 'MenuFlatInfo1'
+            Enabled = False
+          end
+          object MenuFlatInfo2: TMenuItem
+            Caption = 'MenuFlatInfo2'
+            Enabled = False
+          end
+        end
+        object Separator2: TMenuItem
+          Caption = '-'
+        end
+        object MenuFlatCamera: TMenuItem
+          Caption = 'Create from camera'
+          OnClick = MenuFlatCameraClick
+        end
+        object MenuFlatFile: TMenuItem
+          Caption = 'Load flat file'
+          OnClick = MenuFlatFileClick
+        end
+        object MenuFlatClear: TMenuItem
+          Caption = 'Clear Flat frame'
+          OnClick = MenuFlatClearClick
+        end
+      end
       object N1: TMenuItem
         Caption = '-'
       end

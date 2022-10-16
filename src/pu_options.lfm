@@ -1559,7 +1559,7 @@ object f_option: Tf_option
             TabOrder = 3
           end
           object StackUseDark: TCheckBox
-            Left = 201
+            Left = 176
             Height = 21
             Top = 37
             Width = 150
@@ -1567,12 +1567,20 @@ object f_option: Tf_option
             TabOrder = 5
           end
           object StackDebayer: TCheckBox
-            Left = 400
+            Left = 472
             Height = 21
             Top = 37
             Width = 78
             Caption = 'Debayer'
             TabOrder = 6
+          end
+          object StackUseFlat: TCheckBox
+            Left = 352
+            Height = 21
+            Top = 37
+            Width = 84
+            Caption = 'Apply Flat'
+            TabOrder = 7
           end
         end
         object GroupBox31: TGroupBox
