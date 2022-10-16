@@ -3913,7 +3913,7 @@ begin
     if fits.FlatFrame.HeaderInfo.naxis>2 then MenuFlatInfo2.Caption:=rsFromColorIma
        else MenuFlatInfo2.Caption:=rsFromImage;
     MenuFlatInfo2.Caption:=MenuFlatInfo2.Caption+' '+rsSize+': '+inttostr(fits.FlatFrame.HeaderInfo.naxis1)+'x'+inttostr(fits.FlatFrame.HeaderInfo.naxis2);
-    MenuFlatInfo2.Caption:=MenuFlatInfo2.Caption+', '+rsExposureTime2+': '+FormatFloat(f3,fits.FlatFrame.HeaderInfo.exptime);
+    MenuFlatInfo2.Caption:=MenuFlatInfo2.Caption+', '+rsMean+FormatFloat(f1,fits.FlatFrame.imageMean);
     NewMessage(MenuFlatInfo1.Caption+blank+MenuFlatInfo2.Caption,3);
   end
   else begin
