@@ -6,15 +6,15 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ccdciel\n"
 "Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
-"POT-Creation-Date: 2022-08-14 15:06+0000\n"
-"PO-Revision-Date: 2022-07-05 09:35+0000\n"
+"POT-Creation-Date: 2022-10-16 14:12+0000\n"
+"PO-Revision-Date: 2022-08-17 01:33+0000\n"
 "Last-Translator: Zachary Wu <Unknown>\n"
 "Language-Team: Chinese (Simplified) <zh_CN@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2022-08-14 15:12+0000\n"
-"X-Generator: Launchpad (build 70fcfda0dab878e9072e0f29b48d0ec714e91034)\n"
+"X-Launchpad-Export-Date: 2022-10-16 14:28+0000\n"
+"X-Generator: Launchpad (build 25877e98ba44ca75f9c22db1fc37efee03e4606a)\n"
 
 #: u_translation.rs2d
 msgid "2D"
@@ -38,7 +38,7 @@ msgstr "终止于"
 
 #: u_translation.rsabortafterre
 msgid "Abort after restarting more than"
-msgstr ""
+msgstr "终止于重启超过"
 
 #: u_translation.rsabortdome
 #, object-pascal-format
@@ -168,6 +168,10 @@ msgstr "应用暗场和坏像素图"
 #: u_translation.rsapplyediting
 msgid "Apply editing to active sequence"
 msgstr "编辑活动序列"
+
+#: u_translation.rsapplyflat
+msgid "Apply Flat"
+msgstr ""
 
 #: u_translation.rsapplytoallde
 msgid "Apply to all devices"
@@ -312,7 +316,7 @@ msgstr "自动对焦图表"
 
 #: u_translation.rsautofocusloc
 msgid "Autofocus location"
-msgstr ""
+msgstr "自动对焦位置"
 
 #: u_translation.rsautofocusmea
 #, object-pascal-format
@@ -580,7 +584,7 @@ msgstr "已校准"
 
 #: u_translation.rscalibration
 msgid "Calibration"
-msgstr ""
+msgstr "校准"
 
 #: u_translation.rscalibrationd
 #, object-pascal-format
@@ -842,7 +846,7 @@ msgstr "中心RA"
 #: u_translation.rschangedto
 #, object-pascal-format
 msgid "%s changed to %s"
-msgstr ""
+msgstr "%s 变更为 %s"
 
 #: u_translation.rschangelog
 msgid "Change log"
@@ -863,6 +867,10 @@ msgstr "晴天条件"
 #: u_translation.rscleardarkfra
 msgid "Clear Dark frame"
 msgstr "清除暗场帧"
+
+#: u_translation.rsclearflatfra
+msgid "Clear Flat frame"
+msgstr ""
 
 #: u_translation.rsclearreferen
 msgid "Clear reference image"
@@ -1719,6 +1727,14 @@ msgstr "平场"
 msgid "Flat auto-exposure"
 msgstr "平场自动曝光"
 
+#: u_translation.rsflatfileload
+msgid "Flat file loaded"
+msgstr ""
+
+#: u_translation.rsflatframe
+msgid "Flat frame"
+msgstr ""
+
 #: u_translation.rsflatimagemea
 msgid "Flat image mean level"
 msgstr "平场图像平均电平"
@@ -2025,7 +2041,7 @@ msgstr "导星"
 
 #: u_translation.rsguidercalibr
 msgid "Guider calibration"
-msgstr ""
+msgstr "导星校准"
 
 #: u_translation.rsguiderimage
 msgid "Guider image"
@@ -2361,13 +2377,17 @@ msgstr "启动时载入配置"
 msgid "Load dark file"
 msgstr "载入暗场文件"
 
+#: u_translation.rsloadflatfile
+msgid "Load flat file"
+msgstr ""
+
 #: u_translation.rslockoverlay
 msgid "Lock overlay"
 msgstr "锁定覆盖"
 
 #: u_translation.rslongestguide
 msgid "Longest guide pulse"
-msgstr ""
+msgstr "最长导星脉冲"
 
 #: u_translation.rslongitude
 msgid "Longitude"
@@ -2624,7 +2644,7 @@ msgstr "最小值"
 
 #: u_translation.rsminimummove
 msgid "Minimum move"
-msgstr ""
+msgstr "最小移动"
 
 #: u_translation.rsminimumobser
 msgid "Minimum observing elevation "
@@ -2669,7 +2689,7 @@ msgstr "赤道仪能力：%s"
 
 #: u_translation.rsmountdonotsu
 msgid "Mount do not support to set SideOfPier, it is not possible to flip before the meridian!"
-msgstr ""
+msgstr "赤道仪不支持设置SideOfPier，不能在中天前翻转！"
 
 #: u_translation.rsmountisnotpa
 #, object-pascal-format
@@ -2748,7 +2768,7 @@ msgstr "用鼠标移动三角形（左键向下），使绿色方框标记一颗
 
 #: u_translation.rsmovetobright
 msgid "Move to bright focus star now?"
-msgstr ""
+msgstr "现在移动到明亮的对焦星？"
 
 #: u_translation.rsmovetonewpla
 #, object-pascal-format
@@ -2884,6 +2904,10 @@ msgstr "未找到设备"
 #: u_translation.rsnodusktoday
 msgid "No dusk today"
 msgstr "今天没有黄昏"
+
+#: u_translation.rsnoflat
+msgid "No flat"
+msgstr ""
 
 #: u_translation.rsnoflipuntilp
 msgid "No flip until past meridian for"
@@ -3092,6 +3116,10 @@ msgstr "打开文件%s"
 msgid "Open FITS file%s"
 msgstr "打开FITS文件%s"
 
+#: u_translation.rsopenflatfile
+msgid "Open Flat file"
+msgstr ""
+
 #: u_translation.rsopenpicturef
 #, object-pascal-format
 msgid "Open FITS or picture file%s"
@@ -3107,15 +3135,15 @@ msgstr "打开圆顶天窗"
 
 #: u_translation.rsoption1calib
 msgid "Option 1: Calibration at current position."
-msgstr ""
+msgstr "选项一：在当前位置校准。"
 
 #: u_translation.rsoption2slewa
 msgid "Option 2: Slew automatically to SSE and SSW for calibration and meridian flip setting."
-msgstr ""
+msgstr "选项二：自动指向到南东南和南西南以进行校准和中天翻转设置。"
 
 #: u_translation.rsoption3cance
 msgid "Option 3: Cancel."
-msgstr ""
+msgstr "选项三：取消。"
 
 #: u_translation.rsoptions
 #, object-pascal-format
@@ -3790,7 +3818,7 @@ msgstr "反转"
 
 #: u_translation.rsreversedecaf
 msgid "Reverse dec output after meridian flip"
-msgstr ""
+msgstr "中天翻转后反转赤纬输出"
 
 #: u_translation.rsrise
 msgid "rise"
@@ -4017,7 +4045,7 @@ msgstr "安全 SSL/TLS 连接"
 
 #: u_translation.rsselectacalib
 msgid "Select a calibration option:"
-msgstr ""
+msgstr "选择校准选项："
 
 #: u_translation.rsselectastarf
 msgid "Select a star first!"
@@ -4371,7 +4399,7 @@ msgstr "指向终止于3次重试之后！"
 
 #: u_translation.rsslewcalibrat
 msgid "Slew + Calibration + Meridian flip setting"
-msgstr ""
+msgstr "回转+校准+中天翻转设定"
 
 #: u_translation.rsslewcomplete
 msgid "Slew is complete"
@@ -5119,7 +5147,7 @@ msgstr "时间已经过去了%s"
 
 #: u_translation.rstimeinarow
 msgid "time in a row"
-msgstr ""
+msgstr "连续时间"
 
 #: u_translation.rstimeout
 msgid "Timeout"
@@ -5544,7 +5572,7 @@ msgstr "相机回暖"
 
 #: u_translation.rswarningdonot
 msgid "Warning! to use a negative value, be sure the mount driver allow to set SideOfPier before the meridian."
-msgstr ""
+msgstr "警告！要使用负值，请确保赤道仪驱动程序允许在中天之前设置 SideOfPier。"
 
 #: u_translation.rswarningimage
 #, object-pascal-format

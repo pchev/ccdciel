@@ -5406,3 +5406,31 @@ msgstr ""
 msgid "Longest guide pulse"
 msgstr ""
 
+#: u_translation:rsapplyflat
+msgid "Apply Flat"
+msgstr ""
+
+#: u_translation:rsflatframe
+msgid "Flat frame"
+msgstr ""
+
+#: u_translation:rsopenflatfile
+msgid "Open Flat file"
+msgstr ""
+
+#: u_translation:rsnoflat
+msgid "No flat"
+msgstr ""
+
+#: u_translation:rsflatfileload
+msgid "Flat file loaded"
+msgstr ""
+
+#: u_translation:rsclearflatfra
+msgid "Clear Flat frame"
+msgstr ""
+
+#: u_translation:rsloadflatfile
+msgid "Load flat file"
+msgstr ""
+

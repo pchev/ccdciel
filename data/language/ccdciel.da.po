@@ -6,15 +6,15 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ccdciel\n"
 "Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
-"POT-Creation-Date: 2022-08-14 15:06+0000\n"
+"POT-Creation-Date: 2022-10-16 14:12+0000\n"
 "PO-Revision-Date: 2021-09-24 16:13+0000\n"
 "Last-Translator: Jimmy Frydkær Jensen <jimmy@frydkaer.net>\n"
 "Language-Team: Danish <da@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2022-08-14 15:12+0000\n"
-"X-Generator: Launchpad (build 70fcfda0dab878e9072e0f29b48d0ec714e91034)\n"
+"X-Launchpad-Export-Date: 2022-10-16 14:28+0000\n"
+"X-Generator: Launchpad (build 25877e98ba44ca75f9c22db1fc37efee03e4606a)\n"
 
 #: u_translation.rs2d
 msgid "2D"
@@ -167,6 +167,10 @@ msgstr ""
 
 #: u_translation.rsapplyediting
 msgid "Apply editing to active sequence"
+msgstr ""
+
+#: u_translation.rsapplyflat
+msgid "Apply Flat"
 msgstr ""
 
 #: u_translation.rsapplytoallde
@@ -862,6 +866,10 @@ msgstr ""
 
 #: u_translation.rscleardarkfra
 msgid "Clear Dark frame"
+msgstr ""
+
+#: u_translation.rsclearflatfra
+msgid "Clear Flat frame"
 msgstr ""
 
 #: u_translation.rsclearreferen
@@ -1719,6 +1727,14 @@ msgstr ""
 msgid "Flat auto-exposure"
 msgstr ""
 
+#: u_translation.rsflatfileload
+msgid "Flat file loaded"
+msgstr ""
+
+#: u_translation.rsflatframe
+msgid "Flat frame"
+msgstr ""
+
 #: u_translation.rsflatimagemea
 msgid "Flat image mean level"
 msgstr ""
@@ -2361,6 +2377,10 @@ msgstr ""
 msgid "Load dark file"
 msgstr ""
 
+#: u_translation.rsloadflatfile
+msgid "Load flat file"
+msgstr ""
+
 #: u_translation.rslockoverlay
 msgid "Lock overlay"
 msgstr ""
@@ -2885,6 +2905,10 @@ msgstr ""
 msgid "No dusk today"
 msgstr ""
 
+#: u_translation.rsnoflat
+msgid "No flat"
+msgstr ""
+
 #: u_translation.rsnoflipuntilp
 msgid "No flip until past meridian for"
 msgstr ""
@@ -3091,6 +3115,10 @@ msgstr ""
 #, object-pascal-format
 msgid "Open FITS file%s"
 msgstr "Åben FITS fil%s"
+
+#: u_translation.rsopenflatfile
+msgid "Open Flat file"
+msgstr ""
 
 #: u_translation.rsopenpicturef
 #, object-pascal-format

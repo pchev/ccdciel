@@ -6,15 +6,15 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ccdciel\n"
 "Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
-"POT-Creation-Date: 2022-08-14 15:06+0000\n"
+"POT-Creation-Date: 2022-10-16 14:12+0000\n"
 "PO-Revision-Date: 2021-08-31 20:37+0000\n"
 "Last-Translator: Patrick Chevalley <Unknown>\n"
 "Language-Team: English (United Kingdom) <en_GB@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2022-08-14 15:12+0000\n"
-"X-Generator: Launchpad (build 70fcfda0dab878e9072e0f29b48d0ec714e91034)\n"
+"X-Launchpad-Export-Date: 2022-10-16 14:28+0000\n"
+"X-Generator: Launchpad (build 25877e98ba44ca75f9c22db1fc37efee03e4606a)\n"
 "Language: en_GB\n"
 
 #: u_translation.rs2d
@@ -168,6 +168,10 @@ msgstr ""
 
 #: u_translation.rsapplyediting
 msgid "Apply editing to active sequence"
+msgstr ""
+
+#: u_translation.rsapplyflat
+msgid "Apply Flat"
 msgstr ""
 
 #: u_translation.rsapplytoallde
@@ -864,6 +868,10 @@ msgstr "Clear condition"
 #: u_translation.rscleardarkfra
 msgid "Clear Dark frame"
 msgstr "Clear Dark frame"
+
+#: u_translation.rsclearflatfra
+msgid "Clear Flat frame"
+msgstr ""
 
 #: u_translation.rsclearreferen
 msgid "Clear reference image"
@@ -1720,6 +1728,14 @@ msgstr "Flat"
 msgid "Flat auto-exposure"
 msgstr "Flat auto-exposure"
 
+#: u_translation.rsflatfileload
+msgid "Flat file loaded"
+msgstr ""
+
+#: u_translation.rsflatframe
+msgid "Flat frame"
+msgstr ""
+
 #: u_translation.rsflatimagemea
 msgid "Flat image mean level"
 msgstr "Flat image mean level"
@@ -2362,6 +2378,10 @@ msgstr "Load configuration on startup"
 msgid "Load dark file"
 msgstr "Load dark file"
 
+#: u_translation.rsloadflatfile
+msgid "Load flat file"
+msgstr ""
+
 #: u_translation.rslockoverlay
 msgid "Lock overlay"
 msgstr "Lock overlay"
@@ -2886,6 +2906,10 @@ msgstr ""
 msgid "No dusk today"
 msgstr "No dusk today"
 
+#: u_translation.rsnoflat
+msgid "No flat"
+msgstr ""
+
 #: u_translation.rsnoflipuntilp
 msgid "No flip until past meridian for"
 msgstr "No flip until past meridian for"
@@ -3092,6 +3116,10 @@ msgstr "Open file %s"
 #, object-pascal-format
 msgid "Open FITS file%s"
 msgstr "Open FITS file%s"
+
+#: u_translation.rsopenflatfile
+msgid "Open Flat file"
+msgstr ""
 
 #: u_translation.rsopenpicturef
 #, object-pascal-format

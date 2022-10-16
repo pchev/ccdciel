@@ -2,15 +2,15 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ccdciel\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-08-14 15:06+0000\n"
-"PO-Revision-Date: 2022-07-19 16:17+0000\n"
+"POT-Creation-Date: 2022-10-16 14:12+0000\n"
+"PO-Revision-Date: 2022-08-20 13:29+0000\n"
 "Last-Translator: Stanislav Holub <Unknown>\n"
 "Language-Team: Czech <cz@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2022-08-14 15:12+0000\n"
-"X-Generator: Launchpad (build 70fcfda0dab878e9072e0f29b48d0ec714e91034)\n"
+"X-Launchpad-Export-Date: 2022-10-16 14:28+0000\n"
+"X-Generator: Launchpad (build 25877e98ba44ca75f9c22db1fc37efee03e4606a)\n"
 "Language: cs\n"
 
 #: u_translation.rs2d
@@ -35,7 +35,7 @@ msgstr "Přerušit po"
 
 #: u_translation.rsabortafterre
 msgid "Abort after restarting more than"
-msgstr ""
+msgstr "Přerušení po restartu více než"
 
 #: u_translation.rsabortdome
 #, object-pascal-format
@@ -165,6 +165,10 @@ msgstr "Použijte Dark a BPM"
 #: u_translation.rsapplyediting
 msgid "Apply editing to active sequence"
 msgstr "Použít úpravy na aktivní sekvenci"
+
+#: u_translation.rsapplyflat
+msgid "Apply Flat"
+msgstr ""
 
 #: u_translation.rsapplytoallde
 msgid "Apply to all devices"
@@ -311,7 +315,7 @@ msgstr "Graf automatického zaostření"
 
 #: u_translation.rsautofocusloc
 msgid "Autofocus location"
-msgstr ""
+msgstr "Umístění auto-ostření"
 
 #: u_translation.rsautofocusmea
 #, object-pascal-format
@@ -579,7 +583,7 @@ msgstr "Kalibrováno"
 
 #: u_translation.rscalibration
 msgid "Calibration"
-msgstr ""
+msgstr "Kalibrace"
 
 #: u_translation.rscalibrationd
 #, object-pascal-format
@@ -616,7 +620,7 @@ msgstr "Kamera a rotátor musí být připojeny!"
 
 #: u_translation.rscameraangle
 msgid "Camera angle"
-msgstr "Výsledky kalibrace:"
+msgstr "Úhel kamery"
 
 #: u_translation.rscameracooler
 #, object-pascal-format
@@ -814,7 +818,7 @@ msgstr "Rámec CCD odeslán do planetária."
 
 #: u_translation.rscelsius
 msgid "Celsius"
-msgstr "Stupně Celsia"
+msgstr "Celsia"
 
 #: u_translation.rscenter
 msgid "Center"
@@ -841,7 +845,7 @@ msgstr "Střed RA"
 #: u_translation.rschangedto
 #, object-pascal-format
 msgid "%s changed to %s"
-msgstr ""
+msgstr "%s změněno na %s"
 
 #: u_translation.rschangelog
 msgid "Change log"
@@ -862,6 +866,10 @@ msgstr "Stav Počasí"
 #: u_translation.rscleardarkfra
 msgid "Clear Dark frame"
 msgstr "Smazat Drak snímek"
+
+#: u_translation.rsclearflatfra
+msgid "Clear Flat frame"
+msgstr ""
 
 #: u_translation.rsclearreferen
 msgid "Clear reference image"
@@ -1076,7 +1084,7 @@ msgstr "Počet"
 
 #: u_translation.rscov
 msgid "Cov."
-msgstr ""
+msgstr "Kryt"
 
 #: u_translation.rscover
 msgid "Cover"
@@ -1618,7 +1626,7 @@ msgstr "Doba expozice příliš krátká pro měření, potřebují %d sekund."
 
 #: u_translation.rsfahrenheit
 msgid "Fahrenheit"
-msgstr "Stupně Farenheita"
+msgstr "Farenheita"
 
 #: u_translation.rsfailedtodele
 #, object-pascal-format
@@ -1717,6 +1725,14 @@ msgstr "Flat snímky"
 #: u_translation.rsflatautoexpo
 msgid "Flat auto-exposure"
 msgstr "Automatická expozice Flat snímků"
+
+#: u_translation.rsflatfileload
+msgid "Flat file loaded"
+msgstr ""
+
+#: u_translation.rsflatframe
+msgid "Flat frame"
+msgstr ""
 
 #: u_translation.rsflatimagemea
 msgid "Flat image mean level"
@@ -2024,7 +2040,7 @@ msgstr "Pointace"
 
 #: u_translation.rsguidercalibr
 msgid "Guider calibration"
-msgstr ""
+msgstr "Kalibrace naváděcího zařízení"
 
 #: u_translation.rsguiderimage
 msgid "Guider image"
@@ -2222,7 +2238,7 @@ msgstr "Vložit řádek"
 
 #: u_translation.rsinspect
 msgid "Inspect"
-msgstr "Zkontrolovat"
+msgstr "Kontrola"
 
 #: u_translation.rsinspectionan
 msgid "Inspection and collimation"
@@ -2360,13 +2376,17 @@ msgstr "Načíst konfiguraci při spuštění"
 msgid "Load dark file"
 msgstr "Načíst Dark soubor"
 
+#: u_translation.rsloadflatfile
+msgid "Load flat file"
+msgstr ""
+
 #: u_translation.rslockoverlay
 msgid "Lock overlay"
 msgstr "Překrytí zámku"
 
 #: u_translation.rslongestguide
 msgid "Longest guide pulse"
-msgstr ""
+msgstr "Nejdelší pointační puls"
 
 #: u_translation.rslongitude
 msgid "Longitude"
@@ -2399,7 +2419,7 @@ msgstr "Hlavní senzor"
 #: u_translation.rsmakeafirstpo
 #, object-pascal-format
 msgid "Adjust the mount RA axis manually to point to the pole the best as possible.%sSlew the telescope to point near the pole at a declination about 89 to 90 degrees with counterweight down.%sSelect below if the telescope can already slew automatically or if it must be moved manually.%sIf automatic, select the direction and movement step. Beware it will move two time this amount."
-msgstr "Osu RA montáže nastavte ručně tak, aby co nejlépe směřovala k pólu.%sNastavte dalekohled tak, aby směřoval do blízkosti pólu při deklinaci asi 89 až 90 stupňů se spuštěným protizávažím dolů.%sVyberte z nabídky, jak se dalekohled bude otáčet, automaticky nebo ručně.%sPři automatickém otáčení vyberte směr a krok pohybu. Pozor, otočí se dvakrát o zadanou hodnotu."
+msgstr "Osu RA montáže nastavte ručně tak, aby co nejpřesněji směřovala k pólu.%sPřeložte dalekohled tak, aby směřoval do blízkosti pólu při deklinaci asi 89 až 90 stupňů se spuštěným protizávažím dolů.%sVyberte z nabídky, jak se dalekohled bude otáčet, automaticky nebo ručně.%sPři automatickém otáčení vyberte směr a krok pohybu. Pozor, otočí se dvakrát o zadanou hodnotu."
 
 #: u_translation.rsmanage
 msgid "Manage"
@@ -2623,7 +2643,7 @@ msgstr "Minimum"
 
 #: u_translation.rsminimummove
 msgid "Minimum move"
-msgstr ""
+msgstr "Minimální pohyb"
 
 #: u_translation.rsminimumobser
 msgid "Minimum observing elevation "
@@ -2668,7 +2688,7 @@ msgstr "Možnosti montáže: %s"
 
 #: u_translation.rsmountdonotsu
 msgid "Mount do not support to set SideOfPier, it is not possible to flip before the meridian!"
-msgstr ""
+msgstr "Montáž nepodporuje nastavení  strany montáže , není možné překlopit před poledníkem!"
 
 #: u_translation.rsmountisnotpa
 #, object-pascal-format
@@ -2747,7 +2767,7 @@ msgstr "Posuňte trojúhelník myší (levým tlačítkem dolů) tak, aby zelen�
 
 #: u_translation.rsmovetobright
 msgid "Move to bright focus star now?"
-msgstr ""
+msgstr "Přesunout se na jasnou hvězdu?"
 
 #: u_translation.rsmovetonewpla
 #, object-pascal-format
@@ -2883,6 +2903,10 @@ msgstr "Zařízení nenalezeno"
 #: u_translation.rsnodusktoday
 msgid "No dusk today"
 msgstr "Dnes není soumrak"
+
+#: u_translation.rsnoflat
+msgid "No flat"
+msgstr ""
 
 #: u_translation.rsnoflipuntilp
 msgid "No flip until past meridian for"
@@ -3034,7 +3058,7 @@ msgstr "Stav pozorování"
 
 #: u_translation.rsoctagon
 msgid "Octagon"
-msgstr "Kontrola"
+msgstr "Osmiúhelník"
 
 #: u_translation.rsoff
 msgid "Off"
@@ -3091,6 +3115,10 @@ msgstr "Otevřít soubor %s"
 msgid "Open FITS file%s"
 msgstr "Otevřít FITS soubor%s"
 
+#: u_translation.rsopenflatfile
+msgid "Open Flat file"
+msgstr ""
+
 #: u_translation.rsopenpicturef
 #, object-pascal-format
 msgid "Open FITS or picture file%s"
@@ -3106,15 +3134,15 @@ msgstr "Otevřít štěrbinu kopule"
 
 #: u_translation.rsoption1calib
 msgid "Option 1: Calibration at current position."
-msgstr ""
+msgstr "Možnost 1: Kalibrace v aktuální pozici."
 
 #: u_translation.rsoption2slewa
 msgid "Option 2: Slew automatically to SSE and SSW for calibration and meridian flip setting."
-msgstr ""
+msgstr "Možnost 2: Automatické otočení na JJV a JJZ pro kalibraci a nastavení překlopení poledníku."
 
 #: u_translation.rsoption3cance
 msgid "Option 3: Cancel."
-msgstr ""
+msgstr "Možnost 3: Zrušit."
 
 #: u_translation.rsoptions
 #, object-pascal-format
@@ -3152,11 +3180,11 @@ msgstr "Parametr"
 
 #: u_translation.rspark
 msgid "Park"
-msgstr "Park"
+msgstr "Parkovat"
 
 #: u_translation.rsparkandclose
 msgid "Park and close the dome"
-msgstr "Park a zavřít kupoli"
+msgstr "Parkovat a zavřít kupoli"
 
 #: u_translation.rsparkdome
 msgid "Park the Dome"
@@ -3418,7 +3446,7 @@ msgstr "Poz."
 
 #: u_translation.rsposition
 msgid "Position"
-msgstr "Umístění"
+msgstr "Pozice"
 
 #: u_translation.rspower
 msgid "Power"
@@ -3789,7 +3817,7 @@ msgstr "Otočit"
 
 #: u_translation.rsreversedecaf
 msgid "Reverse dec output after meridian flip"
-msgstr ""
+msgstr "Obrácený dec výstup po překlopení poledníku"
 
 #: u_translation.rsrise
 msgid "rise"
@@ -4016,7 +4044,7 @@ msgstr "Zabezpečené připojení SSL/TLS"
 
 #: u_translation.rsselectacalib
 msgid "Select a calibration option:"
-msgstr ""
+msgstr "Vyberte možnosti kalibrace:"
 
 #: u_translation.rsselectastarf
 msgid "Select a star first!"
@@ -4281,7 +4309,7 @@ msgstr "Zobrazení možnosti skládání pro Náhled/Snímání/Sekvence"
 
 #: u_translation.rssideofpier
 msgid "Side of pier"
-msgstr "Strana dal"
+msgstr "Poloha dalek."
 
 #: u_translation.rssigma
 msgid "sigma"
@@ -4370,7 +4398,7 @@ msgstr "Přejezd zrušen po 3 opakování!"
 
 #: u_translation.rsslewcalibrat
 msgid "Slew + Calibration + Meridian flip setting"
-msgstr ""
+msgstr "Otočení + Kalibrace + Nastavení překlopení poledníku"
 
 #: u_translation.rsslewcomplete
 msgid "Slew is complete"
@@ -4468,7 +4496,7 @@ msgstr "Rychlost"
 #: u_translation.rssplittheimag
 #, object-pascal-format
 msgid "Split the image in 9 panel to better show the aberration in each corner. %s You can change the zoom level and the margin offset from the image edge."
-msgstr "Rozdělte snímek na 9 obrazů, abyste lépe viděli aberaci v každém rohu. %s Můžete změnit úroveň přiblížení a offset od okraje obrázku."
+msgstr "Rozdělí snímek na 9 obrazů, abyste lépe viděli aberaci v každém rohu. %s Můžete změnit úroveň přiblížení a offset od okraje obrázku."
 
 #: u_translation.rsssltlsnotsup
 msgid "SSL/TLS not supported, try to uncheck the corresponding box."
@@ -4643,7 +4671,7 @@ msgstr "Stav"
 
 #: u_translation.rsstayatthecur
 msgid "Stay at the current position for autofocus"
-msgstr "Při automatickém zaostření zůstat na aktuální pozici"
+msgstr "Při auto-ostření zůstat na aktuální pozici"
 
 #: u_translation.rsstayinplace
 msgid "Stay in place"
@@ -4652,7 +4680,7 @@ msgstr "Zůstat na místě"
 #: u_translation.rsstayinplace2
 #, object-pascal-format
 msgid "Stay in place%sfor autofocus"
-msgstr "Zůstat na místě%spři automatickém zaostření"
+msgstr "Zůstat na místě%spři auto-ostření"
 
 #: u_translation.rsstddev
 msgid "Std.Dev:"
@@ -4805,7 +4833,7 @@ msgstr "Pozastavit přejíždění kupole"
 
 #: u_translation.rssw
 msgid "Sw."
-msgstr ""
+msgstr "Přep."
 
 #: u_translation.rsswitch
 msgid "Switch"
@@ -5118,7 +5146,7 @@ msgstr "Uplynulý čas %s"
 
 #: u_translation.rstimeinarow
 msgid "time in a row"
-msgstr ""
+msgstr "čas v řadě"
 
 #: u_translation.rstimeout
 msgid "Timeout"
@@ -5543,7 +5571,7 @@ msgstr "Zahřát kameru"
 
 #: u_translation.rswarningdonot
 msgid "Warning! to use a negative value, be sure the mount driver allow to set SideOfPier before the meridian."
-msgstr ""
+msgstr "Pozor! chcete-li použít zápornou hodnotu, ujistěte se, že ovladač montáže umožňuje nastavit stranu montáže před poledníkem."
 
 #: u_translation.rswarningimage
 #, object-pascal-format
@@ -5630,7 +5658,7 @@ msgstr "bez viditelnosti pólu"
 
 #: u_translation.rswth
 msgid "Wth."
-msgstr ""
+msgstr "Počasí"
 
 #: u_translation.rsyes
 msgid "Yes"
