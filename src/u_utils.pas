@@ -93,6 +93,7 @@ function AirMass(h: double): double;
 function atmospheric_absorption(airmass: double):double;
 Procedure cmdEq2Hz(ra,de : double ; out a,h : double);
 Procedure cmdHz2Eq(a,h : double; out ra,de : double);
+procedure GuiderScreen2Fits(x,y: integer; out xx,yy:integer);
 procedure Screen2Fits(x,y: integer;  FlipHorz,FlipVert: boolean; out xx,yy:integer);
 procedure Fits2Screen(x,y: integer; FlipHorz,FlipVert: boolean; out xx,yy: integer);
 procedure Screen2CCD(x,y: integer; FlipHorz,FlipVert: boolean; vflip:boolean; out xx,yy:integer);
@@ -1442,6 +1443,23 @@ begin
   a_ray:=airmass*0.1451; {Rayleigh scattering by air molecules. Expressed in magnitudes}
   a_aer:=airmass*0.120; {Extinction due to aerosol scattering is due to particulates including dust, water droplets and manmade pollutants. Expressed in magnitudes}
   result:=a_ozon+a_ray+a_aer;{Total extinction, scattering, absorption due to the atmosphere expressed in magnitudes}
+end;
+
+procedure GuiderScreen2Fits(x,y: integer; out xx,yy:integer);
+begin
+try
+  if GuideImgZoom=0  then begin
+     xx:=trunc(((x/GuideImgScale0)-GuideOrigX)/GuideImgPixRatio);
+     yy:=trunc((y/GuideImgScale0)-GuideOrigY);
+  end
+  else begin
+     xx:=trunc(((x/GuideImgZoom)-GuideOrigX)/GuideImgPixRatio);
+     yy:=trunc((y/GuideImgZoom)-GuideOrigY);
+  end;
+except
+  xx:=-1;
+  yy:=-1;
+end;
 end;
 
 procedure Screen2Fits(x,y: integer; FlipHorz,FlipVert: boolean; out xx,yy:integer);

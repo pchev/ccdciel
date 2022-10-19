@@ -437,7 +437,7 @@ object f_main: Tf_main
     BorderWidth = 1
     Panels = <    
       item
-        Width = 404
+        Width = 430
       end    
       item
         Width = 259
@@ -1774,5 +1774,12 @@ object f_main: Tf_main
       Caption = 'MenuItemGuiderStopAstrometry'
       OnClick = MenuItemGuiderStopAstrometryClick
     end
+  end
+  object GuiderMeasureTimer: TTimer
+    Enabled = False
+    Interval = 200
+    OnTimer = GuiderMeasureTimerTimer
+    Left = 672
+    Top = 321
   end
 end

@@ -223,6 +223,7 @@ type
     GuideImage: TTabSheet;
     GuideCameraConnectTimer: TTimer;
     GuidePlotTimer: TTimer;
+    GuiderMeasureTimer: TTimer;
     TimerStampTimer: TTimer;
     MenuPdfHelp: TMenuItem;
     MenuOnlineHelp: TMenuItem;
@@ -384,6 +385,7 @@ type
     procedure FormShow(Sender: TObject);
     procedure GuideCameraConnectTimerTimer(Sender: TObject);
     procedure GuidePlotTimerTimer(Sender: TObject);
+    procedure GuiderMeasureTimerTimer(Sender: TObject);
     procedure MenuFlatApplyClick(Sender: TObject);
     procedure MenuFlatCameraClick(Sender: TObject);
     procedure MenuFlatClearClick(Sender: TObject);
@@ -922,6 +924,7 @@ type
     Procedure PlotGuideImage;
     procedure GuideCameraSetTemperature(Sender: TObject);
     procedure GuideCameraSetCooler(Sender: TObject);
+    procedure GuiderMeasureAtPos(x,y:integer);
   public
     { public declarations }
     Image1, ImageGuide: TImgDrawingControl;
@@ -15536,7 +15539,7 @@ begin
     GuidePlotTimer.Enabled:=true;
  end
  else if (guidefits.HeaderInfo.naxis1>0)and(GuideImgScale0<>0) and guidefits.ImageValid then begin
-//   MeasureTimer.Enabled:=true;
+    GuiderMeasureTimer.Enabled:=true;
  end;
 GuideMx:=X;
 GuideMy:=Y;
@@ -15695,6 +15698,81 @@ begin
   end;
 end;
 
+procedure Tf_main.GuiderMeasureTimerTimer(Sender: TObject);
+begin
+  GuiderMeasureTimer.Enabled:=false;
+  GuiderMeasureAtPos(GuideMx,GuideMy);
+end;
+
+procedure Tf_main.GuiderMeasureAtPos(x,y:integer);
+var xx,yy: integer;
+    val,xxc,yyc,rc,s:integer;
+    sval:string;
+    bg,bgdev,xc,yc,hfd,fwhm,vmax,dval,snr,flux: double;
+begin
+ GuiderScreen2fits(x,y,xx,yy);
+ if (xx>0)and(xx<guidefits.HeaderInfo.naxis1)and(yy>0)and(yy<guidefits.HeaderInfo.naxis2) then
+    if guidefits.preview_axis=1 then begin
+      if guidefits.HeaderInfo.bitpix>0 then begin
+        val:=trunc(guidefits.image[0,yy,xx]);
+        if guidefits.HeaderInfo.bitpix=8 then val:=val div 255;
+        sval:=inttostr(val);
+      end
+      else begin
+       dval:=guidefits.imageMin+guidefits.image[0,yy,xx]/guidefits.imageC;
+       sval:=FormatFloat(f3,dval);
+      end;
+    end
+    else if (guidefits.preview_axis=3) then begin
+      if guidefits.HeaderInfo.bitpix>0 then begin
+        val:=trunc(guidefits.imageMin+guidefits.image[0,yy,xx]/guidefits.imageC);
+        if guidefits.HeaderInfo.bitpix=8 then val:=val div 255;
+        sval:=inttostr(val);
+        val:=trunc(guidefits.imageMin+guidefits.image[1,yy,xx]/guidefits.imageC);
+        if guidefits.HeaderInfo.bitpix=8 then val:=val div 255;
+        sval:=sval+'/'+inttostr(val);
+        val:=trunc(guidefits.imageMin+guidefits.image[2,yy,xx]/guidefits.imageC);
+        if guidefits.HeaderInfo.bitpix=8 then val:=val div 255;
+        sval:=sval+'/'+inttostr(val);
+      end
+      else begin
+       dval:=guidefits.imageMin+guidefits.image[0,yy,xx]/guidefits.imageC;
+       sval:=FormatFloat(f3,dval);
+       dval:=guidefits.imageMin+guidefits.image[1,yy,xx]/guidefits.imageC;
+       sval:=sval+'/'+FormatFloat(f3,dval);
+       dval:=guidefits.imageMin+guidefits.image[2,yy,xx]/guidefits.imageC;
+       sval:=sval+'/'+FormatFloat(f3,dval);
+      end;
+    end
+ else sval:='';
+ s:=Starwindow div 2;
+ if (xx>s)and(xx<(guidefits.HeaderInfo.naxis1-s))and(yy>s)and(yy<(guidefits.HeaderInfo.naxis2-s)) then begin
+   guidefits.FindStarPos(xx,yy,s,xxc,yyc,rc,vmax,bg,bgdev);
+   if vmax>0 then begin
+     guidefits.GetHFD2(xxc,yyc,2*rc,xc,yc,bg,bgdev,hfd,fwhm,vmax,snr,flux);
+     if (hfd>=f_internalguider.minHFD) then begin
+       sval:=sval+' HFD='+FormatFloat(f1,hfd)+' FWHM='+FormatFloat(f1,fwhm);
+       if flux>0 then begin
+         sval:=sval+' '+rsFlux+'='+FormatFloat(f0, flux)+' SNR='+FormatFloat(f1, snr);
+       end
+       else begin
+         sval:=sval+blank+rsSaturated;
+        end;
+     end
+     else begin
+      //
+     end;
+   end
+   else begin
+     //
+   end;
+ end
+ else begin
+   //
+ end;
+ yy:=guideimg_Height-yy;
+ StatusBar1.Panels[panelcursor].Text:=rsGuider+': '+inttostr(xx)+'/'+inttostr(yy)+': '+sval;
+end;
 
 end.
 
