@@ -719,6 +719,8 @@ type
     Procedure DisconnectGuideCamera(Sender: TObject);
     Procedure GuideCameraStatus(Sender: TObject);
     Procedure GuideCameraExposureAborted(Sender: TObject);
+    procedure GuideCameraTemperatureChange(t:double);
+    procedure GuideCameraCoolerChange(var v:boolean);
     Procedure SetFilter(Sender: TObject);
     Procedure SetFilterMenu;
     procedure ShowMsgTabs(Sender: TObject);
@@ -918,6 +920,8 @@ type
     procedure ShowGuiderDarkInfo;
     Procedure DrawGuideImage(display: boolean);
     Procedure PlotGuideImage;
+    procedure GuideCameraSetTemperature(Sender: TObject);
+    procedure GuideCameraSetCooler(Sender: TObject);
   public
     { public declarations }
     Image1, ImageGuide: TImgDrawingControl;
@@ -1724,6 +1728,8 @@ begin
   f_internalguider.onClearDark:=@InternalguiderClearDark;
   f_internalguider.onDarkInfo:=@InternalguiderDarkInfo;
   f_internalguider.onParameterChange:=@InternalguiderParameterChange;
+  f_internalguider.onSetTemperature:=@GuideCameraSetTemperature;
+  f_internalguider.onSetCooler:=@GuideCameraSetCooler;
   ShowGuiderDarkInfo;
 
   i:=config.GetValue('/Autoguider/Software',2);
@@ -1972,11 +1978,11 @@ begin
    guidecamera.onStatusChange:=@GuideCameraStatus;
    guidecamera.onNewImage:=@GuideCameraNewImage;
    guidecamera.onAbortExposure:=@GuideCameraExposureAborted;
+   guidecamera.onTemperatureChange:=@GuideCameraTemperatureChange;
+   guidecamera.onCoolerChange:=@GuideCameraCoolerChange;
 {   camera.onExposureProgress:=@CameraProgress;
    camera.onFrameChange:=@FrameChange;
-   camera.onTemperatureChange:=@CameraTemperatureChange;
    camera.onCoolerPowerChange:=@CameraCoolerPowerChange;
-   camera.onCoolerChange:=@CameraCoolerChange;
    camera.onFnumberChange:=@CameraFnumberChange;
    camera.onNewExposure:=@CameraNewExposure;
    camera.onVideoFrame:=@CameraVideoFrame;
@@ -3521,6 +3527,10 @@ begin
   f_internalguider.Offset.Enabled:=guidecamera.hasOffset;
   f_internalguider.Offset.MinValue:=guidecamera.OffsetMin;
   f_internalguider.Offset.MaxValue:=guidecamera.OffsetMax;
+  f_internalguider.Temperature.Enabled:=guidecamera.Temperature<>NullCoord;
+  f_internalguider.ButtonSetTemp.Enabled:=f_internalguider.Temperature.Enabled;
+  f_internalguider.LabelTemperature.Enabled:=f_internalguider.Temperature.Enabled;
+  f_internalguider.Cooler.Enabled:=f_internalguider.Temperature.Enabled;
 end;
 
 procedure Tf_main.FocuserConnectTimerTimer(Sender: TObject);
@@ -4299,6 +4309,7 @@ begin
   f_internalguider.Binning.Value:=config.GetValue('/InternalGuider/Camera/Binning',1);
   f_internalguider.Gain.Value:=config.GetValue('/InternalGuider/Camera/Gain',0);
   f_internalguider.Offset.Value:=config.GetValue('/InternalGuider/Camera/Offset',0);
+  f_internalguider.Temperature.Value:=config.GetValue('/InternalGuider/Camera/Temperature',0);
   f_internalguider.Gamma.Position:=config.GetValue('/InternalGuider/Visu/Gamma',50);
   f_internalguider.Luminosity.Position:=config.GetValue('/InternalGuider/Visu/Luminosity',50);
 
@@ -4821,6 +4832,7 @@ begin
   config.SetValue('/InternalGuider/Camera/Binning',f_internalguider.Binning.Value);
   config.SetValue('/InternalGuider/Camera/Gain',f_internalguider.Gain.Value);
   config.SetValue('/InternalGuider/Camera/Offset',f_internalguider.Offset.Value);
+  config.SetValue('/InternalGuider/Camera/Temperature',f_internalguider.Temperature.Value);
   config.SetValue('/InternalGuider/Visu/Gamma',f_internalguider.Gamma.Position);
   config.SetValue('/InternalGuider/Visu/Luminosity',f_internalguider.Luminosity.Position);
 end;
@@ -5568,6 +5580,8 @@ if guidecamera.Status<>devDisconnected then guidecamera.Disconnect;
 end;
 
 Procedure Tf_main.GuideCameraStatus(Sender: TObject);
+var cool: boolean;
+    t: double;
 begin
 case guidecamera.Status of
   devDisconnected:begin
@@ -5581,6 +5595,10 @@ case guidecamera.Status of
                       if f_devicesconnection.LabelGuideCamera.Font.Color=clGreen then exit;
                       f_devicesconnection.LabelGuideCamera.Font.Color:=clGreen;
                       NewMessage(Format(rsConnected, [rsGuideCamera]),1);
+                      t:=guidecamera.Temperature;
+                      GuideCameraTemperatureChange(t);
+                      cool:=guidecamera.Cooler;
+                      guideCameraCoolerChange(cool);
                    end;
 end;
 CheckConnectionStatus;
@@ -15637,6 +15655,44 @@ begin
    FormPos(f,mouse.CursorPos.X,mouse.CursorPos.Y);
    f.Show;
  end;
+end;
+
+procedure  Tf_main.GuideCameraTemperatureChange(t:double);
+var tscale: string;
+begin
+ if t>-99 then begin
+   if TemperatureScale=0 then
+     tscale:=sdeg+'C'
+   else
+     tscale:=sdeg+'F';
+   f_internalguider.LabelTemperature.Caption:=FormatFloat(f1,TempDisplay(TemperatureScale,t))+tscale;
+ end
+ else begin
+  f_internalguider.LabelTemperature.Caption:='-';
+ end;
+end;
+
+procedure Tf_main.GuideCameraCoolerChange(var v:boolean);
+begin
+ if f_internalguider.Cooler.Checked<>v then begin
+    f_internalguider.Cooler.Checked:=v;
+ end;
+end;
+
+procedure Tf_main.GuideCameraSetTemperature(Sender: TObject);
+begin
+  guidecamera.Temperature:=TempCelsius(TemperatureScale,f_internalguider.Temperature.Value);
+end;
+
+procedure Tf_main.GuideCameraSetCooler(Sender: TObject);
+var onoff,coolerstatus: boolean;
+begin
+  onoff:=f_internalguider.Cooler.Checked;
+  coolerstatus:=guidecamera.Cooler;
+  if coolerstatus<>onoff then begin
+    guidecamera.Cooler:=onoff;
+    if onoff then GuideCameraSetTemperature(Sender);
+  end;
 end;
 
 

@@ -43,17 +43,21 @@ type
     BtnZoom1: TSpeedButton;
     BtnZoom2: TSpeedButton;
     BtnZoomAdjust: TSpeedButton;
+    ButtonSetTemp: TButton;
     ButtonDark: TButton;
     ButtonCalibrate: TButton;
     ButtonLoop: TButton;
     ButtonGuide: TButton;
     ButtonStop: TButton;
     ButtonStop1: TButton;
+    Cooler: TCheckBox;
     CheckBoxReverseDec: TCheckBox;
     disable_guiding1: TCheckBox;
     Exposure: TFloatSpinEdit;
     Label11: TLabel;
     Label20: TLabel;
+    Label21: TLabel;
+    LabelTemperature: TLabel;
     Label9: TLabel;
     LabelStatusDec: TLabel;
     LabelStatusRA: TLabel;
@@ -108,6 +112,7 @@ type
     ShortestPulse1: TSpinEdit;
     minSNR1: TSpinEdit;
     LongestPulse1: TSpinEdit;
+    Temperature: TSpinEdit;
     TabSheetOptions: TTabSheet;
     TabSheetCamera: TTabSheet;
     Gamma: TTrackBar;
@@ -133,7 +138,9 @@ type
     procedure ButtonDarkMouseDown(Sender: TObject; Button: TMouseButton; Shift: TShiftState; X, Y: Integer);
     procedure ButtonLoopClick(Sender: TObject);
     procedure ButtonGuideClick(Sender: TObject);
+    procedure ButtonSetTempClick(Sender: TObject);
     procedure ButtonStopClick(Sender: TObject);
+    procedure CoolerClick(Sender: TObject);
     procedure dec_gain1Change(Sender: TObject);
     procedure dec_hysteresis1Change(Sender: TObject);
     procedure disable_guiding1Change(Sender: TObject);
@@ -159,7 +166,8 @@ type
   private
     { private declarations }
     thescale : double;
-    FonStart, FonStop, FonCalibrate, FonCalibrateMeridianFlip, FonLoop, FonRedraw, FonCaptureDark, FonLoadDark, FonClearDark,FonDarkInfo: TNotifyEvent;
+    FonStart, FonStop, FonCalibrate, FonCalibrateMeridianFlip, FonLoop, FonRedraw: TNotifyEvent;
+    FonSetTemperature,FonSetCooler, FonCaptureDark, FonLoadDark, FonClearDark,FonDarkInfo: TNotifyEvent;
     FonParameterChange: TNotifyStr;
     cur_minHFD,cur_minSNR,cur_Exposure : double;
     cur_RAgain,cur_RA_hysteresis,cur_DECgain,cur_DEC_hysteresis,cur_LongestPulse,cur_shortestPulse: integer;
@@ -227,6 +235,8 @@ type
     property onClearDark: TNotifyEvent read FonClearDark write FonClearDark;
     property onDarkInfo: TNotifyEvent read FonDarkInfo write FonDarkInfo;
     property onParameterChange: TNotifyStr read FonParameterChange write FonParameterChange;
+    property onSetTemperature: TNotifyEvent read FonSetTemperature write FonSetTemperature;
+    property onSetCooler: TNotifyEvent read FonSetCooler write FonSetCooler;
     property RA_hysteresis: integer read GetRA_hysteresis write SetRA_hysteresis;
     property DEC_hysteresis: integer read GetDEC_hysteresis write SetDEC_hysteresis;
     property RAgain: integer read GetRAgain write SetRAgain;
@@ -321,6 +331,9 @@ begin
   Label14.Caption:=rsBinning;
   Label15.Caption:=rsGain;
   Label16.Caption:=rsOffset2;
+  Label21.Caption:=rsTemperature;
+  ButtonSetTemp.Caption:=rsSet;
+  Cooler.Caption:=rsCooler;
   Label17.Caption:=rsGamma;
   Label18.Caption:=rsLuminosity;
   Label19.Caption:=rsZoom;
@@ -552,6 +565,16 @@ procedure Tf_internalguider.ButtonStopClick(Sender: TObject);
 begin
   if Assigned(FonStop) then FonStop(self);
   setled(clGray);
+end;
+
+procedure Tf_internalguider.ButtonSetTempClick(Sender: TObject);
+begin
+  if Assigned(FonSetTemperature) then FonSetTemperature(self);
+end;
+
+procedure Tf_internalguider.CoolerClick(Sender: TObject);
+begin
+  if Assigned(FonSetCooler) then FonSetCooler(self);
 end;
 
 procedure Tf_internalguider.ButtonDarkMouseDown(Sender: TObject; Button: TMouseButton; Shift: TShiftState; X, Y: Integer);
