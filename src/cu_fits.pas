@@ -3558,6 +3558,8 @@ begin
            ((f.FFitsInfo.naxis2 = FFitsInfo.naxis2 )or((FFitsInfo.Fry+FFitsInfo.Frheight)<=f.FFitsInfo.naxis2)) and
            (f.FFitsInfo.naxis3 = FFitsInfo.naxis3 ) and
            (f.FFitsInfo.bzero  = FFitsInfo.bzero )  and
+           (f.FFitsInfo.BinX  = FFitsInfo.BinX )  and
+           (f.FFitsInfo.BinY  = FFitsInfo.BinY )  and
            (f.FFitsInfo.roworder = FFitsInfo.roworder ) and
            (f.FFitsInfo.bscale = FFitsInfo.bscale );
 end;
