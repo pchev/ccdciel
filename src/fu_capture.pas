@@ -178,6 +178,7 @@ begin
     if Sender<>nil then FSeqCount:=1; // otherwise set by plan
     FDitherNum:=0;
     FFocusNum:=0;
+    DomeFlatExpAdjust:=0;
     doFlatAutoExposure:=(TFrameType(FrameType.ItemIndex)=FLAT) and FlatAutoExposure;
     if (TFrameType(FrameType.ItemIndex)=FLAT)and(FlatType=ftDome) then begin
        if DomeFlatSetLight and (DomeFlatSetLightON<>'') then begin
@@ -188,6 +189,10 @@ begin
           AdjustDomeFlat:=true;
        if DomeFlatTelescopeSlew and (FMount<>nil) then
           Mount.SlewToDomeFlatPosition;
+    end;
+    if doFlatAutoExposure then begin
+      if ExposureTime<FlatMinExp then ExposureTime:=FlatMinExp;
+      if ExposureTime>FlatMaxExp then ExposureTime:=FlatMaxExp;
     end;
     if Assigned(FonMsg) then FonMsg(rsStartCapture,2);
     EarlyNextExposure:=((TFrameType(FrameType.ItemIndex)=LIGHT)or(TFrameType(FrameType.ItemIndex)=DARK)) {and not(PanelStack.Visible and (StackNum.Value>1))} and ConfigExpEarlyStart;

@@ -3150,6 +3150,12 @@ try
                       (config.GetValue('/Readout/Astrometry',0)<>0);
     config.SetValue('/Readout/UseReadoutMode',UseReadoutMode);
   end;
+  if oldver<'0.9.81' then begin
+     if TFlatType(config.GetValue('/Flat/FlatType',ord(ftNone)))=ftDome then begin
+       i:=(config.GetValue('/Flat/FlatLevelMin',20000)+config.GetValue('/Flat/FlatLevelMax',30000)) div 2;
+       config.SetValue('/Flat/FlatLevelMin',i);
+     end;
+  end;
   if config.Modified then
      SaveConfig;
 except
@@ -4360,6 +4366,7 @@ begin
   FlatMaxExp:=config.GetValue('/Flat/FlatMaxExp',60.0);
   FlatLevelMin:=config.GetValue('/Flat/FlatLevelMin',20000);
   FlatLevelMax:=config.GetValue('/Flat/FlatLevelMax',30000);
+  DomeFlatLevel:=FlatLevelMin;
   DomeFlatTelescopeSlew:=config.GetValue('/Flat/DomeFlatTelescopeSlew',false);
   DomeFlatPosition:=TDomeFlatPositionType(config.GetValue('/Flat/DomeFlatPosition',0));
   DomeFlatTelescopeAz:=config.GetValue('/Flat/DomeFlatTelescopeAz',90.0);
@@ -10153,45 +10160,48 @@ begin
 end;
 
 function Tf_main.CameraNewDomeFlat: boolean;
-var exp,newexp: double;
+var exp,newexp,expadjust: double;
 begin
   result:=false;
   NewMessage(Format(rsFlatLevel, [inttostr(round(fits.imageFlatLevel))]),2);
+  // adjust exposure time only once per series
   if AdjustDomeFlat then begin
-    // adjust exposure time only once per series
+    // new exposure adjustement
+    expadjust:=DomeFlatLevel/fits.imageFlatLevel;
     exp:=StrToFloatDef(f_capture.ExpTime.Text,FlatMinExp);
-    if ((fits.imageFlatLevel<FlatLevelMin)or(fits.imageFlatLevel>FlatLevelMax))
-       and ((exp>FlatMinExp)or(exp<FlatMaxExp))
-    then begin
-      newexp:=exp*((FlatLevelMin+FlatLevelMax)/2)/fits.imageFlatLevel;
-      if newexp<FlatMinExp then begin
-         // min configured value
-         newexp:=FlatMinExp;
-         AdjustDomeFlat:=false;
-         doFlatAutoExposure:=false;
-         NewMessage(rsReachConfigu,1);
-         NewMessage(rsStopFlatCapt,1);
-         exit;
-      end;
-      if newexp>FlatMaxExp then begin
-        // max configured value
-         newexp:=FlatMaxExp;
-         AdjustDomeFlat:=false;
-         doFlatAutoExposure:=false;
-         NewMessage(rsReachConfigu2,1);
-         NewMessage(rsStopFlatCapt,1);
-         exit;
-      end;
-      f_capture.ExposureTime:=newexp;
-      if newexp<>exp then NewMessage(Format(rsAdjustFlatEx, [f_capture.ExpTime.Text]),2);
-      if f_capture.Running then Application.QueueAsyncCall(@StartCaptureExposureAsync,0);
-      // retry with new exposure
-      exit;
+    newexp:=exp*expadjust;
+    if (fits.imageFlatLevel>=64000)or(((DomeFlatExpAdjust<>expadjust))and((DomeFlatExpAdjust=0) or (sgn(DomeFlatExpAdjust-1)=sgn(expadjust-1)))) then begin
+      // initial exposure or saturated or still in same direction, continue adjustement
+      DomeFlatExpAdjust:=expadjust;
+      result:=false;
     end
     else begin
+      // direction reversal, make last adjustement and stop to prevent oscillation
       AdjustDomeFlat:=false;
       doFlatAutoExposure:=false;
+      result:=true;
     end;
+    newexp:=exp*expadjust;
+    // check exposure still in range
+    if newexp<FlatMinExp then begin
+      // min configured value
+      newexp:=FlatMinExp;
+      AdjustDomeFlat:=false;
+      doFlatAutoExposure:=false;
+      NewMessage(rsReachConfigu,1);
+    end;
+    if (newexp>FlatMaxExp)and((fits.imageFlatLevel<64000)) then begin //continue to reduce exposure when saturated
+      // max configured value
+      newexp:=FlatMaxExp;
+      AdjustDomeFlat:=false;
+      doFlatAutoExposure:=false;
+      NewMessage(rsReachConfigu2,1);
+    end;
+    f_capture.ExposureTime:=newexp;
+    if newexp<>exp then NewMessage(Format(rsAdjustFlatEx, [f_capture.ExpTime.Text]),2);
+    if f_capture.Running then Application.QueueAsyncCall(@StartCaptureExposureAsync,0);
+    // retry with new exposure
+    exit;
   end;
   // save this flat
   result:=true;

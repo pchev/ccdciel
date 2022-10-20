@@ -1686,6 +1686,9 @@ end;
 procedure Tf_option.FlatTypeClick(Sender: TObject);
 begin
   FlatExposureBox.Visible:=FlatType.ItemIndex>0;
+  FlatLevelMax.Visible:=FlatType.ItemIndex=1;
+  Label95.Visible:=FlatLevelMax.Visible;
+  Label96.Visible:=FlatLevelMax.Visible;
   DomeBox.Visible:=FlatType.ItemIndex=2;
 end;
 

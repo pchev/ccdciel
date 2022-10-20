@@ -2197,7 +2197,7 @@ object f_option: Tf_option
             Width = 85
             Constraints.MaxHeight = 28
             Increment = 1000
-            MaxValue = 65535
+            MaxValue = 60000
             ParentFont = False
             TabOrder = 3
           end
@@ -2208,7 +2208,7 @@ object f_option: Tf_option
             Width = 85
             Constraints.MaxHeight = 28
             Increment = 1000
-            MaxValue = 65535
+            MaxValue = 60000
             ParentFont = False
             TabOrder = 4
           end

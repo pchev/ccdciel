@@ -202,7 +202,7 @@ type
   {$i revision.inc}
 
 const
-  ccdcielver = '0.9.80';
+  ccdcielver = '0.9.81';
   ccdciel_version='Version beta '+ccdcielver;
   TargetFileVersion = 5;
   Maxclient = 100;
@@ -451,9 +451,9 @@ var
   ConfigExpEarlyStart, EarlyNextExposure, SkipEarlyExposure, EarlyDither: boolean;
   FlatAutoExposure,doFlatAutoExposure,FlatWaitDusk,FlatWaitDawn,AdjustDomeFlat,DomeFlatTelescopeSlew,DomeFlatSetLight,AdjustFlatLight: boolean;
   FlatType: TFlatType;
-  FlatMinExp,FlatMaxExp,DomeFlatTelescopeAz,DomeFlatTelescopeAlt: double;
+  FlatMinExp,FlatMaxExp,DomeFlatTelescopeAz,DomeFlatTelescopeAlt,DomeFlatExpAdjust: double;
   DomeFlatPosition: TDomeFlatPositionType;
-  FlatLevelMin,FlatLevelMax: integer;
+  FlatLevelMin,FlatLevelMax,DomeFlatLevel: integer;
   FlatSlewTime: TDateTime;
   DomeFlatSetLightON,DomeFlatSetLightOFF: string;
   DomeNoSafetyCheck: boolean;
