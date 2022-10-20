@@ -10219,7 +10219,7 @@ begin
  NewMessage(Format(rsFlatLevel, [inttostr(round(fits.imageFlatLevel))]),2);
  // new exposure time from image level
  exp:=StrToFloatDef(f_capture.ExpTime.Text,FlatMinExp);
- newexp:=exp*((FlatLevelMin+FlatLevelMax)/2)/fits.imageFlatLevel;
+ newexp:=round((exp*((FlatLevelMin+FlatLevelMax)/2)/fits.imageFlatLevel)*1000)/1000;
  // check if current image level is in range
  if (fits.imageFlatLevel<FlatLevelMin)or(fits.imageFlatLevel>FlatLevelMax) then begin
    // will need a too short exposure
