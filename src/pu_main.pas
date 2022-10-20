@@ -10170,18 +10170,23 @@ begin
     expadjust:=DomeFlatLevel/fits.imageFlatLevel;
     exp:=StrToFloatDef(f_capture.ExpTime.Text,FlatMinExp);
     newexp:=exp*expadjust;
-    if (fits.imageFlatLevel>=64000)or(((DomeFlatExpAdjust<>expadjust))and((DomeFlatExpAdjust=0) or (sgn(DomeFlatExpAdjust-1)=sgn(expadjust-1)))) then begin
-      // initial exposure or saturated or still in same direction, continue adjustement
+    if (fits.imageFlatLevel>=64000)or  // saturated
+       ((abs(1-expadjust)>0.01)and     // large enough change
+        ((DomeFlatExpAdjust=0) or      // initial exposure
+         (sgn(DomeFlatExpAdjust-1)=sgn(expadjust-1)) // same direction
+        )
+       ) then begin
+      // continue adjustement
       DomeFlatExpAdjust:=expadjust;
       result:=false;
     end
     else begin
-      // direction reversal, make last adjustement and stop to prevent oscillation
+      // not saturated, small change, direction reversal: make last adjustement and stop to prevent oscillation
       AdjustDomeFlat:=false;
       doFlatAutoExposure:=false;
       result:=true;
     end;
-    newexp:=exp*expadjust;
+    newexp:=round(exp*expadjust*1000)/1000;
     // check exposure still in range
     if newexp<FlatMinExp then begin
       // min configured value
