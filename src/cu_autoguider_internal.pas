@@ -589,7 +589,7 @@ begin
   end;
   if star_counter<1 then
   begin
-    msg('No stars detected!',1);
+    msg('No stars detected!',0);
     initialize:=true;// Return initialize=true for fresh restart next call.
     FCamera.ResetFrame;
     GuideImgZoom:=0;
@@ -614,7 +614,7 @@ begin
       end;
     end;
     if counter/star_counter<0.5 then  // second round and less the 50% of stars are detected
-      msg('Guider, warning lost track or exposure time changed!',2); //more then 7.5 pixels drift in one cycle
+      msg('Guider, warning lost track or exposure time changed!',0); //more then 7.5 pixels drift in one cycle
 
     // Remove outliers and calculate mean drift in X and Y.
     get_best_mean(drift_arrayX,counter {length},drX );

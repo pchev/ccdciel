@@ -7562,7 +7562,12 @@ end;
 
 Procedure Tf_main.AutoguiderStatus(Sender: TObject);
 begin
- if f_autoguider.Status.Text<>autoguider.Status then NewMessage(Format(rsAutoguider+': %s', [autoguider.Status]),2);
+ if f_autoguider.Status.Text<>autoguider.Status then begin
+   if autoguider.State=GUIDER_ALERT then
+     NewMessage(Format(rsAutoguider+': %s', [autoguider.Status]),0)
+   else
+     NewMessage(Format(rsAutoguider+': %s', [autoguider.Status]),2);
+ end;
  f_autoguider.Status.Text:=autoguider.Status;
  case autoguider.State of
    GUIDER_DISCONNECTED:begin

@@ -701,20 +701,20 @@ begin
  end
  else begin
     losttime:=round(secperday*(now-FStarLostTime));
-    FonShowMessage('Star lost for '+inttostr(losttime)+' seconds...');
+    FonShowMessage('Star lost for '+inttostr(losttime)+' seconds...',0);
     if (FStarLostCancelExposure>0)and(FStarLostCount>FStarLostCancelExposure) then begin
-      if assigned(FonShowMessage) then FonShowMessage('Cancel exposure after '+inttostr(FStarLostCount)+' frames without guide star');
+      if assigned(FonShowMessage) then FonShowMessage('Cancel exposure after '+inttostr(FStarLostCount)+' frames without guide star',0);
       FStarLostCount:=0;
       CancelExposure;
     end;
     if (FStarLostTimeoutCancel>0)and(losttime>FStarLostTimeoutCancel) then begin
-       if assigned(FonShowMessage) then FonShowMessage('Cannot recover from star lost. Stop guiding now.');
+       if assigned(FonShowMessage) then FonShowMessage('Cannot recover from star lost. Stop guiding now.',0);
        StarLostTimer.Enabled:=false;
        FRecovering:=false;
        guide(false);
     end
     else if (FState<>GUIDER_BUSY)and(not FRecovering)and(FStarLostTimeoutRestart>0)and(losttime>FStarLostTimeoutRestart) then begin
-       if assigned(FonShowMessage) then FonShowMessage('Try to restart guiding');
+       if assigned(FonShowMessage) then FonShowMessage('Try to restart guiding',0);
        StarLostTimer.Enabled:=false;
        FRecovering:=true;
        guide(false);
