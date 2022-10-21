@@ -9515,6 +9515,7 @@ if (AllDevicesConnected)and(not autofocusing)and(not learningvcurve)and(not f_vi
     NewMessage(rsCaptureStopp2, 0);
     exit;
   end;
+  // check sequence pause
   if PauseSequence then begin
     if canwait then begin
        f_pause.Caption:=rsPauseSequenc2;
@@ -9706,6 +9707,25 @@ if (AllDevicesConnected)and(not autofocusing)and(not learningvcurve)and(not f_vi
   if not f_capture.Running then begin
     NewMessage(rsCaptureStopp2, 0);
     exit;
+  end;
+  if not f_capture.Running then begin
+    NewMessage(rsCaptureStopp2, 0);
+    exit;
+  end;
+  // check pause request during prepare operation
+  if PauseSequence then begin
+    if canwait then begin
+       f_pause.Caption:=rsPauseSequenc2;
+       f_pause.Text:=rsTheSequenceI+crlf+rsClickContinu+crlf+rsClickCancelT;
+       if not f_pause.Wait then begin
+         f_sequence.BtnStop.Click;
+         wait(1);
+       end;
+       PauseSequence:=false;
+    end
+    else begin
+      exit; // cannot start now
+    end;
   end;
   if not f_capture.Running then begin
     NewMessage(rsCaptureStopp2, 0);
