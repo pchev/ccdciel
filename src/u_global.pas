@@ -510,6 +510,7 @@ var
   RunningCapture,RunningPreview: boolean;
   ImageInspection, TriangleInspection: boolean;
   TriangleInspectionAngle: double;
+  LastHfd,LastDrift: double;
   {internal guider}
   InternalguiderRunning,InternalguiderCalibrating,InternalguiderGuiding,StopInternalguider,InternalguiderCapturingDark: boolean;
 

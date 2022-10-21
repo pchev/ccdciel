@@ -1456,6 +1456,8 @@ begin
   ImageInspection:=false;
   TriangleInspection:=false;
   TriangleInspectionAngle:=0;
+  LastHfd:=-1;
+  LastDrift:=-1;
   ManualFilterNames:=TStringList.Create;
   ScrBmp := TBGRABitmap.Create;
   Image1 := TImgDrawingControl.Create(Self);
@@ -10458,6 +10460,8 @@ procedure Tf_main.CameraMeasureNewImage;
 var cra,cde,eq,pa,dist,sharp: double;
 begin
 try
+ LastHfd:=-1;
+ LastDrift:=-1;
  // measure image but not plot
  if MeasureNewImage and (camera.FrameType=LIGHT) then begin
    if AutofocusMode=afPlanet then begin
@@ -10493,6 +10497,7 @@ try
                  NewMessage(Format(rsDistanceToTa, [FormatFloat(f2, dist)]),3);
                  NeedRecenterTarget:=dist>max(RecenterTargetDistance,1.5*SlewPrecision);
                  if NeedRecenterTarget then NewMessage(rsTargetWillBe2,2);
+                 LastDrift:=dist;
                end;
             end;
             finally
@@ -14104,6 +14109,7 @@ var
   Saved_Cursor : TCursor;
   mess1,mess2 : string;
 begin
+  LastHfd:=-1;
   if not (fits.HeaderInfo.valid and fits.ImageValid) then exit;
 
   Saved_Cursor := Screen.Cursor;
@@ -14334,6 +14340,7 @@ begin
 
     NewMessage(Format(rsFoundDStars, [nhfd])+': '+Format(rsImageMedianH, [formatfloat(f1, hfd_median)+ mess2+mess1]), 1); {Report median HFD, tilt and off-axis aberration (was curvature}
     f_starprofile.PlotHistory(hfd_median,fits.HeaderInfo.dmax);
+    LastHfd:=hfd_median;
   end
   else
     NewMessage(rsNoStarDetect,1);
@@ -14766,6 +14773,8 @@ begin
        resp:=resp+', "current": '+inttostr(f_capture.SeqCount);
        resp:=resp+', "exposure": '+formatfloat(f3,f_capture.ExposureTime);
        resp:=resp+', "exposureremain": '+formatfloat(f3,CameraExposureRemain);
+       if LastHfd>0 then resp:=resp+', "hfd": '+formatfloat(f1,LastHfd);
+       if LastDrift>0 then resp:=resp+', "drift": '+formatfloat(f2,LastDrift);
     end;
     resp:=resp+'}, ';
   end;
