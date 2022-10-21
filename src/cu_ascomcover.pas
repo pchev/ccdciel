@@ -160,7 +160,7 @@ begin
    if Assigned(FonStatusChange) then FonStatusChange(self);
    try
    if not VarIsEmpty(V) then begin
-     msg(rsDisconnected3,0);
+     msg(rsDisconnected3,1);
      V.Connected:=false;
      V:=Unassigned;
    end;

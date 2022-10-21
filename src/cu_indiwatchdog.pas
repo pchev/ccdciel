@@ -255,7 +255,7 @@ procedure T_indiwatchdog.ServerDisconnected(Sender: TObject);
 begin
   FStatus := devDisconnected;
   if Assigned(FonStatusChange) then FonStatusChange(self);
-  msg(rsserver+' '+rsDisconnected3,0);
+  msg(rsserver+' '+rsDisconnected3,1);
 end;
 
 procedure T_indiwatchdog.NewDevice(dp: Basedevice);

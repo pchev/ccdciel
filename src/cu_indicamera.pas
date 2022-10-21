@@ -598,7 +598,7 @@ begin
   if (indiws<>nil)and(not indiws.IsTerminated) then DisconnectWs;
   if Assigned(FonStatusChange) then FonStatusChange(self);
   if Assigned(FonWheelStatusChange) then FonWheelStatusChange(self);
-  msg(rsServer+' '+rsDisconnected3,0);
+  msg(rsServer+' '+rsDisconnected3,1);
 end;
 
 procedure T_indicamera.NewDevice(dp: Basedevice);

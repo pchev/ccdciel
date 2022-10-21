@@ -188,7 +188,7 @@ begin
    SetLength(FSwitch,FNumSwitch);
    if Assigned(FonStatusChange) then FonStatusChange(self);
    try
-     msg(rsDisconnected3,0);
+     msg(rsDisconnected3,1);
      // the server is responsible for device disconnection
    except
      on E: Exception do msg(Format(rsDisconnectio, [E.Message]),0);
@@ -215,7 +215,7 @@ begin
   if not Connected then begin
      FStatus := devDisconnected;
      if Assigned(FonStatusChange) then FonStatusChange(self);
-     msg(rsDisconnected3,0);
+     msg(rsDisconnected3,1);
   end
   else begin
     try

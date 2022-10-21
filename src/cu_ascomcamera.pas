@@ -370,7 +370,7 @@ begin
   if not VarIsEmpty(V) then begin
     V.connected:=false;
     V:=Unassigned;
-    msg(rsDisconnected3,0);
+    msg(rsDisconnected3,1);
   end;
   except
     on E: Exception do msg(Format(rsDisconnectio, [E.Message]),0);

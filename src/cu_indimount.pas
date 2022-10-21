@@ -329,7 +329,7 @@ procedure T_indimount.ServerDisconnected(Sender: TObject);
 begin
   FStatus := devDisconnected;
   if Assigned(FonStatusChange) then FonStatusChange(self);
-  msg(rsServer+' '+rsDisconnected3,0);
+  msg(rsServer+' '+rsDisconnected3,1);
 end;
 
 procedure T_indimount.NewDevice(dp: Basedevice);
