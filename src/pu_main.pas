@@ -3531,17 +3531,14 @@ begin
   GuideCameraConnectTimer.Enabled:=false;
   guidecamera.CheckGain;
   guidecamera.CanSetGain:=guidecamera.hasGain;
-  f_internalguider.Gain.Enabled:=guidecamera.hasGain;
+  f_internalguider.PanelGain.Visible:=guidecamera.hasGain;
   f_internalguider.Gain.MinValue:=guidecamera.GainMin;
   f_internalguider.Gain.MaxValue:=guidecamera.GainMax;
   guidecamera.CheckOffset;
-  f_internalguider.Offset.Enabled:=guidecamera.hasOffset;
+  f_internalguider.PanelOffset.Visible:=guidecamera.hasOffset;
   f_internalguider.Offset.MinValue:=guidecamera.OffsetMin;
   f_internalguider.Offset.MaxValue:=guidecamera.OffsetMax;
-  f_internalguider.Temperature.Enabled:=guidecamera.Temperature<>NullCoord;
-  f_internalguider.ButtonSetTemp.Enabled:=f_internalguider.Temperature.Enabled;
-  f_internalguider.LabelTemperature.Enabled:=f_internalguider.Temperature.Enabled;
-  f_internalguider.Cooler.Enabled:=f_internalguider.Temperature.Enabled;
+  f_internalguider.PanelTemperature.Visible:=guidecamera.Temperature<>NullCoord;
 end;
 
 procedure Tf_main.FocuserConnectTimerTimer(Sender: TObject);
@@ -15397,6 +15394,9 @@ begin
         T_autoguider_internal(autoguider).InternalguiderStop;
         exit;
       end;
+    end
+    else begin
+      T_autoguider_internal(autoguider).ShowImgInfo;
     end;
 
     // start next exposure

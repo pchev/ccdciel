@@ -57,6 +57,7 @@ type
     Label11: TLabel;
     Label20: TLabel;
     Label21: TLabel;
+    LabelInfo: TLabel;
     LabelTemperature: TLabel;
     Label9: TLabel;
     LabelStatusDec: TLabel;
@@ -92,6 +93,12 @@ type
     pa1: TEdit;
     Panel4: TPanel;
     Panel5: TPanel;
+    Panel6: TPanel;
+    Panel7: TPanel;
+    Panel8: TPanel;
+    PanelTemperature: TPanel;
+    PanelOffset: TPanel;
+    PanelGain: TPanel;
     pier_side1: TEdit;
     pixelsize1: TEdit;
     PopupMenuDark: TPopupMenu;
@@ -283,6 +290,7 @@ begin
  SetLang;
  LabelStatusRA.Caption:='';
  LabelStatusDec.Caption:='';
+ LabelInfo.Caption:='';
  cur_minHFD:=minHFD;
  cur_minSNR:=minSNR;
  cur_pa1:=pa1.Text;

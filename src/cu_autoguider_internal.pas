@@ -93,6 +93,7 @@ type
     function WaitBusy(maxwait:integer=5):boolean; override;
     function WaitGuiding(maxwait:integer=5):boolean; override;
     function WaitDithering(maxwait:integer=5):boolean; override;
+    procedure ShowImgInfo;
   end;
 
 implementation
@@ -633,6 +634,7 @@ begin
   SetStatus('Looping Exposures',GUIDER_IDLE);
   StopInternalguider:=false;
   InternalguiderRunning:=true;
+  Finternalguider.LabelInfo.Caption:='';
   Finternalguider.ButtonLoop.enabled:=false;
   Finternalguider.ButtonCalibrate.enabled:=false;
   Finternalguider.ButtonGuide.enabled:=false;
@@ -1170,6 +1172,7 @@ begin
   Finternalguider.ButtonGuide.enabled:=true;
   Finternalguider.ButtonDark.enabled:=true;
   Finternalguider.led.Brush.Color:=clGray;
+  Finternalguider.LabelInfo.Caption:='';
   SetStatus('Stopped',GUIDER_IDLE);
 end;
 
@@ -1648,6 +1651,53 @@ begin
   InternalguiderCapturingDark:=true;
   SetStatus('Capture dark',GUIDER_BUSY);
   InternalguiderLoop;
+end;
+
+procedure  T_autoguider_internal.ShowImgInfo;
+var
+  i,fitsx,fitsy,stepsize,xsize,ysize,star_counter: integer;
+  hfd1,star_fwhm,vmax,bg,bgdev,xc,yc,snr,flux,min_SNR,min_HFD,maxSNR,y : double;
+const
+    searchA=28;//square search area
+    overlap=6;
+    maxstars=1000;
+begin
+  star_counter:=0;
+  stepsize:=searchA-overlap;//some overlap
+
+
+  xsize:=guidefits.HeaderInfo.naxis1;// width image
+  ysize:=guidefits.HeaderInfo.naxis2;// height image
+
+  min_SNR:=finternalguider.minSNR;//make local to reduce some CPU load
+  min_HFD:=finternalguider.minHFD;//make local to reduce some CPU load
+  maxSNR:=0;
+
+  // Divide the image in square areas. Try to detect a star in each area.
+    mean_hfd:=0;
+    fitsy:=stepsize div 2;
+    repeat
+      fitsx:=stepsize div 2;
+      repeat
+        guidefits.GetHFD3(fitsX,fitsY,searchA,true{autocenter},xc,yc,bg,bgdev,hfd1,star_fwhm,vmax,snr,flux,false);//find a star in this segment. Auto center is true
+
+        if ((snr>Min_SNR) and (hfd1>Min_HFD) and (abs(fitsX-xc)<stepsize div 2) and (abs(fitsY-yc)<stepsize div 2) and (star_counter<maxstars))  then //detection and no other area closer
+        begin // star in this area
+          mean_hfd:=mean_hfd+hfd1;
+          if (snr>maxSNR) then begin
+            maxSNR:=snr;
+          end;
+          inc(star_counter);
+        end;
+        inc(fitsx,stepsize);
+      until fitsx>=xsize-1+stepsize div 2;;
+      inc(fitsy,stepsize);
+    until fitsy>=ysize-1+stepsize div 2;
+    if star_counter>0 then
+    begin
+      mean_hfd:=mean_hfd/star_counter;
+    end;
+    finternalguider.LabelInfo.Caption:=IntToStr(star_counter)+' stars, HFD: '+FormatFloat(f1,mean_hfd)+', SNR: '+FormatFloat(f0,maxSNR);
 end;
 
 end.

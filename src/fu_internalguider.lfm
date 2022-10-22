@@ -3,7 +3,6 @@ object f_internalguider: Tf_internalguider
   Height = 487
   Top = 0
   Width = 325
-  AutoSize = True
   ClientHeight = 487
   ClientWidth = 325
   ParentFont = False
@@ -315,281 +314,357 @@ object f_internalguider: Tf_internalguider
           Color = clMenu
           ParentColor = False
           TabOrder = 0
-          object Label10: TLabel
-            AnchorSideTop.Control = Exposure
-            AnchorSideTop.Side = asrCenter
-            Left = 16
-            Height = 19
-            Top = 61
-            Width = 57
-            Caption = 'Exposure'
-            ParentColor = False
-          end
-          object Exposure: TFloatSpinEdit
-            Left = 103
-            Height = 29
-            Top = 56
-            Width = 111
-            DecimalPlaces = 3
-            MaxValue = 30
-            MinValue = 0.001
-            OnChange = ExposureChange
+          object Panel6: TPanel
+            Left = 1
+            Height = 79
+            Top = 1
+            Width = 311
+            Align = alTop
+            BevelOuter = bvNone
+            ClientHeight = 79
+            ClientWidth = 311
             TabOrder = 0
-            Value = 1
+            object ButtonLoop: TButton
+              Left = 8
+              Height = 25
+              Top = 9
+              Width = 75
+              Caption = 'Loop'
+              OnClick = ButtonLoopClick
+              TabOrder = 0
+            end
+            object ButtonStop1: TButton
+              Left = 96
+              Height = 25
+              Hint = 'Stop loop'
+              Top = 9
+              Width = 85
+              Caption = 'Stop'
+              OnClick = ButtonStopClick
+              ParentFont = False
+              ParentShowHint = False
+              ShowHint = True
+              TabOrder = 1
+            end
+            object ButtonDark: TButton
+              Left = 194
+              Height = 25
+              Top = 9
+              Width = 75
+              Caption = 'Dark'
+              OnMouseDown = ButtonDarkMouseDown
+              TabOrder = 2
+            end
+            object LabelDark: TLabel
+              Left = 11
+              Height = 19
+              Top = 36
+              Width = 63
+              Caption = 'LabelDark'
+              ParentColor = False
+            end
+            object LabelInfo: TLabel
+              Left = 11
+              Height = 19
+              Top = 57
+              Width = 59
+              Caption = 'LabelInfo'
+              ParentColor = False
+            end
           end
-          object Binning: TSpinEdit
-            Left = 103
-            Height = 29
-            Top = 89
-            Width = 111
-            MaxValue = 8
-            MinValue = 1
+          object Panel7: TPanel
+            Left = 1
+            Height = 66
+            Top = 80
+            Width = 311
+            Align = alTop
+            BevelOuter = bvNone
+            ClientHeight = 66
+            ClientWidth = 311
             TabOrder = 1
-            Value = 1
+            object Label10: TLabel
+              AnchorSideTop.Control = Exposure
+              AnchorSideTop.Side = asrCenter
+              Left = 16
+              Height = 19
+              Top = 5
+              Width = 57
+              Caption = 'Exposure'
+              ParentColor = False
+            end
+            object Exposure: TFloatSpinEdit
+              Left = 104
+              Height = 29
+              Top = 0
+              Width = 111
+              DecimalPlaces = 3
+              MaxValue = 30
+              MinValue = 0.001
+              OnChange = ExposureChange
+              TabOrder = 0
+              Value = 1
+            end
+            object Label14: TLabel
+              AnchorSideTop.Control = Binning
+              AnchorSideTop.Side = asrCenter
+              Left = 16
+              Height = 19
+              Top = 38
+              Width = 47
+              Caption = 'Binning'
+              ParentColor = False
+            end
+            object Binning: TSpinEdit
+              Left = 104
+              Height = 29
+              Top = 33
+              Width = 111
+              MaxValue = 8
+              MinValue = 1
+              TabOrder = 1
+              Value = 1
+            end
           end
-          object Label14: TLabel
-            AnchorSideTop.Control = Binning
-            AnchorSideTop.Side = asrCenter
-            Left = 16
-            Height = 19
-            Top = 94
-            Width = 47
-            Caption = 'Binning'
-            ParentColor = False
-          end
-          object ButtonLoop: TButton
-            Left = 8
-            Height = 25
-            Top = 9
-            Width = 75
-            Caption = 'Loop'
-            OnClick = ButtonLoopClick
+          object PanelGain: TPanel
+            Left = 1
+            Height = 34
+            Top = 146
+            Width = 311
+            Align = alTop
+            BevelOuter = bvNone
+            ClientHeight = 34
+            ClientWidth = 311
             TabOrder = 2
+            object Label15: TLabel
+              AnchorSideTop.Control = Gain
+              AnchorSideTop.Side = asrCenter
+              Left = 16
+              Height = 19
+              Top = 5
+              Width = 28
+              Caption = 'Gain'
+              ParentColor = False
+            end
+            object Gain: TSpinEdit
+              Left = 104
+              Height = 29
+              Top = 0
+              Width = 111
+              TabOrder = 0
+            end
           end
-          object ButtonStop1: TButton
-            Left = 96
-            Height = 25
-            Hint = 'Stop loop'
-            Top = 9
-            Width = 85
-            Caption = 'Stop'
-            OnClick = ButtonStopClick
-            ParentFont = False
-            ParentShowHint = False
-            ShowHint = True
+          object PanelOffset: TPanel
+            Left = 1
+            Height = 34
+            Top = 180
+            Width = 311
+            Align = alTop
+            BevelOuter = bvNone
+            ClientHeight = 34
+            ClientWidth = 311
             TabOrder = 3
+            object Label16: TLabel
+              AnchorSideTop.Control = Offset
+              AnchorSideTop.Side = asrCenter
+              Left = 16
+              Height = 19
+              Top = 5
+              Width = 38
+              Caption = 'Offset'
+              ParentColor = False
+            end
+            object Offset: TSpinEdit
+              Left = 104
+              Height = 29
+              Top = 0
+              Width = 111
+              TabOrder = 0
+            end
           end
-          object Label15: TLabel
-            AnchorSideTop.Control = Gain
-            AnchorSideTop.Side = asrCenter
-            Left = 16
-            Height = 19
-            Top = 127
-            Width = 28
-            Caption = 'Gain'
-            ParentColor = False
-          end
-          object Label16: TLabel
-            AnchorSideTop.Control = Offset
-            AnchorSideTop.Side = asrCenter
-            Left = 16
-            Height = 19
-            Top = 160
-            Width = 38
-            Caption = 'Offset'
-            ParentColor = False
-          end
-          object Gain: TSpinEdit
-            Left = 104
-            Height = 29
-            Top = 122
-            Width = 111
+          object PanelTemperature: TPanel
+            Left = 1
+            Height = 60
+            Top = 214
+            Width = 311
+            Align = alTop
+            BevelOuter = bvNone
+            ClientHeight = 60
+            ClientWidth = 311
             TabOrder = 4
+            object Label21: TLabel
+              AnchorSideTop.Control = Temperature
+              AnchorSideTop.Side = asrCenter
+              Left = 16
+              Height = 19
+              Top = 5
+              Width = 80
+              Caption = 'Temperature'
+              ParentColor = False
+            end
+            object LabelTemperature: TLabel
+              AnchorSideTop.Control = Temperature
+              AnchorSideTop.Side = asrCenter
+              Left = 109
+              Height = 19
+              Top = 5
+              Width = 8
+              Caption = '0'
+              ParentColor = False
+            end
+            object Temperature: TSpinEdit
+              Left = 166
+              Height = 29
+              Top = 0
+              Width = 48
+              MaxValue = 99
+              MinValue = -99
+              TabOrder = 0
+            end
+            object ButtonSetTemp: TButton
+              AnchorSideTop.Control = Temperature
+              AnchorSideTop.Side = asrCenter
+              Left = 217
+              Height = 25
+              Top = 2
+              Width = 52
+              Caption = 'Set'
+              OnClick = ButtonSetTempClick
+              TabOrder = 1
+            end
+            object Cooler: TCheckBox
+              AnchorSideLeft.Control = Temperature
+              AnchorSideTop.Control = Temperature
+              AnchorSideTop.Side = asrBottom
+              Left = 166
+              Height = 21
+              Top = 33
+              Width = 65
+              BorderSpacing.Top = 4
+              Caption = 'Cooler'
+              OnClick = CoolerClick
+              TabOrder = 2
+            end
           end
-          object Offset: TSpinEdit
-            Left = 104
-            Height = 29
-            Top = 155
-            Width = 111
+          object Panel8: TPanel
+            Left = 1
+            Height = 144
+            Top = 274
+            Width = 311
+            Align = alTop
+            BevelOuter = bvNone
+            ClientHeight = 144
+            ClientWidth = 311
             TabOrder = 5
-          end
-          object Label17: TLabel
-            AnchorSideTop.Control = Gamma
-            AnchorSideTop.Side = asrCenter
-            Left = 16
-            Height = 19
-            Top = 268
-            Width = 48
-            Caption = 'Gamma'
-            ParentColor = False
-          end
-          object Gamma: TTrackBar
-            Left = 103
-            Height = 43
-            Top = 256
-            Width = 111
-            Max = 100
-            Min = 1
-            PageSize = 10
-            Position = 50
-            Reversed = True
-            TickStyle = tsNone
-            TabOrder = 6
-          end
-          object Label18: TLabel
-            AnchorSideTop.Control = Luminosity
-            AnchorSideTop.Side = asrCenter
-            Left = 16
-            Height = 19
-            Top = 316
-            Width = 67
-            Caption = 'Luminosity'
-            ParentColor = False
-          end
-          object Luminosity: TTrackBar
-            Left = 103
-            Height = 43
-            Top = 304
-            Width = 111
-            Max = 100
-            Min = 1
-            PageSize = 10
-            Position = 50
-            Reversed = True
-            TickStyle = tsNone
-            TabOrder = 7
-          end
-          object Label19: TLabel
-            Left = 16
-            Height = 19
-            Top = 360
-            Width = 36
-            Caption = 'Zoom'
-            ParentColor = False
-          end
-          object BtnZoom05: TSpeedButton
-            Tag = 1
-            AnchorSideLeft.Control = BtnZoomAdjust
-            AnchorSideLeft.Side = asrBottom
-            Left = 132
-            Height = 22
-            Hint = 'Zoom to half size'
-            Top = 360
-            Width = 28
-            BorderSpacing.Left = 1
-            Caption = '1:2'
-            Color = clDefault
-            Layout = blGlyphBottom
-            OnClick = BtnZoom05Click
-            ParentFont = False
-          end
-          object BtnZoomAdjust: TSpeedButton
-            Left = 103
-            Height = 22
-            Hint = 'Zoom to adjust in window'
-            Top = 360
-            Width = 28
-            Color = clDefault
-            OnClick = BtnZoomAdjustClick
-            ParentFont = False
-          end
-          object BtnZoom1: TSpeedButton
-            Tag = 2
-            AnchorSideLeft.Control = BtnZoom05
-            AnchorSideLeft.Side = asrBottom
-            Left = 161
-            Height = 22
-            Hint = 'Zoom to original scale'
-            Top = 360
-            Width = 28
-            BorderSpacing.Left = 1
-            Caption = '1:1'
-            Color = clDefault
-            Layout = blGlyphBottom
-            OnClick = BtnZoom1Click
-            ParentFont = False
-          end
-          object BtnZoom2: TSpeedButton
-            Tag = 3
-            AnchorSideLeft.Control = BtnZoom1
-            AnchorSideLeft.Side = asrBottom
-            Left = 190
-            Height = 22
-            Hint = 'Zoom two time'
-            Top = 360
-            Width = 28
-            BorderSpacing.Left = 1
-            Caption = '2:1'
-            Color = clDefault
-            Layout = blGlyphBottom
-            OnClick = BtnZoom2Click
-            ParentFont = False
-          end
-          object ButtonDark: TButton
-            Left = 194
-            Height = 25
-            Top = 9
-            Width = 75
-            Caption = 'Dark'
-            OnMouseDown = ButtonDarkMouseDown
-            TabOrder = 8
-          end
-          object LabelDark: TLabel
-            Left = 11
-            Height = 19
-            Top = 36
-            Width = 63
-            Caption = 'LabelDark'
-            ParentColor = False
-          end
-          object Label21: TLabel
-            AnchorSideTop.Control = Temperature
-            AnchorSideTop.Side = asrCenter
-            Left = 16
-            Height = 19
-            Top = 193
-            Width = 80
-            Caption = 'Temperature'
-            ParentColor = False
-          end
-          object Temperature: TSpinEdit
-            Left = 166
-            Height = 29
-            Top = 188
-            Width = 48
-            MaxValue = 99
-            MinValue = -99
-            TabOrder = 9
-          end
-          object LabelTemperature: TLabel
-            AnchorSideTop.Control = Temperature
-            AnchorSideTop.Side = asrCenter
-            Left = 109
-            Height = 19
-            Top = 193
-            Width = 8
-            Caption = '0'
-            ParentColor = False
-          end
-          object ButtonSetTemp: TButton
-            AnchorSideTop.Control = Temperature
-            AnchorSideTop.Side = asrCenter
-            Left = 217
-            Height = 25
-            Top = 190
-            Width = 52
-            Caption = 'Set'
-            OnClick = ButtonSetTempClick
-            TabOrder = 10
-          end
-          object Cooler: TCheckBox
-            Left = 166
-            Height = 21
-            Top = 224
-            Width = 65
-            Caption = 'Cooler'
-            OnClick = CoolerClick
-            TabOrder = 11
+            object Label17: TLabel
+              AnchorSideTop.Control = Gamma
+              AnchorSideTop.Side = asrCenter
+              Left = 16
+              Height = 19
+              Top = 20
+              Width = 48
+              Caption = 'Gamma'
+              ParentColor = False
+            end
+            object Gamma: TTrackBar
+              Left = 104
+              Height = 43
+              Top = 8
+              Width = 111
+              Max = 100
+              Min = 1
+              PageSize = 10
+              Position = 50
+              Reversed = True
+              TickStyle = tsNone
+              TabOrder = 0
+            end
+            object Label18: TLabel
+              AnchorSideTop.Control = Luminosity
+              AnchorSideTop.Side = asrCenter
+              Left = 16
+              Height = 19
+              Top = 68
+              Width = 67
+              Caption = 'Luminosity'
+              ParentColor = False
+            end
+            object Luminosity: TTrackBar
+              Left = 104
+              Height = 43
+              Top = 56
+              Width = 111
+              Max = 100
+              Min = 1
+              PageSize = 10
+              Position = 50
+              Reversed = True
+              TickStyle = tsNone
+              TabOrder = 1
+            end
+            object Label19: TLabel
+              Left = 16
+              Height = 19
+              Top = 114
+              Width = 36
+              Caption = 'Zoom'
+              ParentColor = False
+            end
+            object BtnZoom05: TSpeedButton
+              Tag = 1
+              AnchorSideLeft.Control = BtnZoomAdjust
+              AnchorSideLeft.Side = asrBottom
+              Left = 132
+              Height = 22
+              Hint = 'Zoom to half size'
+              Top = 114
+              Width = 28
+              BorderSpacing.Left = 1
+              Caption = '1:2'
+              Color = clDefault
+              Layout = blGlyphBottom
+              OnClick = BtnZoom05Click
+              ParentFont = False
+            end
+            object BtnZoomAdjust: TSpeedButton
+              Left = 103
+              Height = 22
+              Hint = 'Zoom to adjust in window'
+              Top = 114
+              Width = 28
+              Color = clDefault
+              OnClick = BtnZoomAdjustClick
+              ParentFont = False
+            end
+            object BtnZoom1: TSpeedButton
+              Tag = 2
+              AnchorSideLeft.Side = asrBottom
+              Left = 161
+              Height = 22
+              Hint = 'Zoom to original scale'
+              Top = 114
+              Width = 28
+              BorderSpacing.Left = 1
+              Caption = '1:1'
+              Color = clDefault
+              Layout = blGlyphBottom
+              OnClick = BtnZoom1Click
+              ParentFont = False
+            end
+            object BtnZoom2: TSpeedButton
+              Tag = 3
+              AnchorSideLeft.Side = asrBottom
+              Left = 190
+              Height = 22
+              Hint = 'Zoom two time'
+              Top = 114
+              Width = 28
+              BorderSpacing.Left = 1
+              Caption = '2:1'
+              Color = clDefault
+              Layout = blGlyphBottom
+              OnClick = BtnZoom2Click
+              ParentFont = False
+            end
           end
         end
       end
@@ -615,7 +690,7 @@ object f_internalguider: Tf_internalguider
             Top = 0
             Width = 296
             Caption = 'Options:'
-            ClientHeight = 326
+            ClientHeight = 308
             ClientWidth = 294
             TabOrder = 0
             object measure_method2: TCheckBox
@@ -814,7 +889,7 @@ object f_internalguider: Tf_internalguider
             Top = 0
             Width = 288
             Caption = 'Calibration results:'
-            ClientHeight = 254
+            ClientHeight = 236
             ClientWidth = 286
             TabOrder = 0
             object Label5: TLabel
@@ -994,8 +1069,8 @@ object f_internalguider: Tf_internalguider
     end
   end
   object PopupMenuDark: TPopupMenu
-    Left = 240
-    Top = 416
+    Left = 264
+    Top = 424
     object MenuItemDarkInfo: TMenuItem
       Caption = 'MenuItemDarkInfo'
       OnClick = MenuItemDarkInfoClick
