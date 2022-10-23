@@ -1060,6 +1060,8 @@ begin
                FormatFloat(f2,LogSNR)+','+
                '0'    // error code
                );
+      //Send stats to main
+      GuideStat(-finternalguider.pixel_size*driftRA,finternalguider.pixel_size*driftDec,LogFlux);
       //Status line
       if RADuration>0 then
          finternalguider.LabelStatusRA.Caption:=RADirection+': '+IntToStr(RADuration)+'ms, '+FormatFloat(f1,driftRA)+'px'

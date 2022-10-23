@@ -15278,6 +15278,7 @@ end;
 
 procedure Tf_main.InternalguiderStart(Sender: TObject);
 begin
+   AutoguiderClearStat(nil);
    if autoguider is T_autoguider_internal then T_autoguider_internal(autoguider).InternalguiderStart;
 end;
 
