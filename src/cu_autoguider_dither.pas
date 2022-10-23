@@ -82,7 +82,7 @@ end;
 
 Procedure T_autoguider_dither.Connect(cp1: string; cp2:string=''; cp3:string=''; cb1:boolean=False);
 begin
-
+  start;
 end;
 
 procedure T_autoguider_dither.Disconnect;
