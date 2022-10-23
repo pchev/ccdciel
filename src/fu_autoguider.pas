@@ -41,7 +41,7 @@ type
     GuideChartDecdist: TLineSeries;
     GuideChartStarmass: TLineSeries;
     GuideChartRAdist: TLineSeries;
-    Label1: TLabel;
+    LabelStat: TLabel;
     Panel5: TPanel;
     ShowStat: TCheckBox;
     Panel1: TPanel;
@@ -115,11 +115,11 @@ end;
 procedure Tf_autoguider.SetAutoguiderType(value:TAutoguiderType);
 begin
   FAutoguiderType:=value;
-  panel3.Visible:=(FAutoguiderType<>agDITHER)and(FAutoguiderType<>agNONE);
+  panel3.Visible:=(FAutoguiderType<>agDITHER)and(FAutoguiderType<>agNONE)and(FAutoguiderType<>agINTERNAL);
   panel4.Visible:=(FAutoguiderType<>agNONE);
   BtnGuide.Visible:=(FAutoguiderType<>agDITHER);
-  BtnConnect.Visible:=(FAutoguiderType<>agINTERNAL);
   ShowStat.Visible:=(FAutoguiderType=agPHD);
+  LabelStat.Visible:=(FAutoguiderType=agPHD)or(FAutoguiderType=agINTERNAL);
 end;
 
 procedure Tf_autoguider.BtnConnectClick(Sender: TObject);

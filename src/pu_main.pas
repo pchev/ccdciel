@@ -7686,18 +7686,18 @@ var i,n: integer;
     ma,mi,smmax,ras,des,tots,osc: double;
 begin
    n:=Length(AutoguiderStat);
+   if n>1 then begin
+     // show guide error
+     AutoguiderGetSigma(1,ras);
+     AutoguiderGetSigma(2,des);
+     tots:=sqrt(ras*ras+des*des);
+     osc:=AutoguiderGetOsc;
+     f_autoguider.LabelStat.Caption:='RA:'+FormatFloat(f2,ras)+'" Dec:'+FormatFloat(f2,des)+'" Tot:'+FormatFloat(f2,tots)+'"'+' Osc:'+FormatFloat(f2,osc);
+   end
+   else begin
+     f_autoguider.LabelStat.Caption:=' ';
+   end;
    if (n>0) and f_autoguider.ShowStat.Checked then begin
-     if n>1 then begin
-       // show guide error
-       AutoguiderGetSigma(1,ras);
-       AutoguiderGetSigma(2,des);
-       tots:=sqrt(ras*ras+des*des);
-       osc:=AutoguiderGetOsc;
-       f_autoguider.Label1.Caption:='RA:'+FormatFloat(f2,ras)+'" Dec:'+FormatFloat(f2,des)+'" Tot:'+FormatFloat(f2,tots)+'"'+' Osc:'+FormatFloat(f2,osc);
-     end
-     else begin
-       f_autoguider.Label1.Caption:=' ';
-     end;
      // prepare chart
      f_autoguider.GuideChartRAdist.Clear;
      f_autoguider.GuideChartDecdist.Clear;
