@@ -7610,6 +7610,8 @@ begin
  // see DescriptiveStats::AddValue and DescriptiveStats::GetSigma in guiding_stats.cpp
  sigma:=0;
  runningS:=0;
+ runningMean:=0;
+ count:=0;
  n:=Length(AutoguiderStat);
  if n<2 then exit;
  for i:=0 to n-1 do begin
