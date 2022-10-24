@@ -35,7 +35,12 @@ type
 
   Tf_option = class(TForm)
     ButtonSeqDir: TButton;
+    ButtonLogDir: TButton;
     CdCPath: TEdit;
+    Label160: TLabel;
+    Panel28: TPanel;
+    LogDir: TEdit;
+    LogDirDefault: TButton;
     StackUseFlat: TCheckBox;
     InstrumentName: TEdit;
     GuideDriftAbort: TCheckBox;
@@ -691,8 +696,10 @@ type
     procedure BtnFileDefaultClick(Sender: TObject);
     procedure BtnFolderDefaultClick(Sender: TObject);
     procedure BtnMaxDriftDisableClick(Sender: TObject);
+    procedure ButtonLogDirClick(Sender: TObject);
     procedure ButtonSeqDirClick(Sender: TObject);
     procedure DomeFlatPositionClick(Sender: TObject);
+    procedure LogDirDefaultClick(Sender: TObject);
     procedure ObservatoryDBDeleteClick(Sender: TObject);
     procedure ButtonNotificationAllClick(Sender: TObject);
     procedure ButtonHelpClick(Sender: TObject);
@@ -919,6 +926,8 @@ begin
   Label152.Caption:=rsSequenceFold;
   Label99.Caption := rsTemporaryFol;
   TmpDirDefault.Caption := rsDefault;
+  Label160.Caption := rsLogFolder;
+  LogDirDefault.Caption := rsDefault;
   Label150.Caption := rsTCPIPServerP;
   TCPIPportDefault.Caption := rsDefault;
   Label124.Caption:=rsPythonComman;
@@ -1625,6 +1634,11 @@ begin
   SeqDir.text:=ConfigDir;
 end;
 
+procedure Tf_option.LogDirDefaultClick(Sender: TObject);
+begin
+  LogDir.text:=slash(ConfigDir)+'Log';
+end;
+
 procedure Tf_option.StackShowChange(Sender: TObject);
 begin
   SaveStack.Enabled:=StackShow.Checked;
@@ -1983,6 +1997,13 @@ end;
 procedure Tf_option.BtnMaxDriftDisableClick(Sender: TObject);
 begin
   GuideDriftMax.Value:=100;
+end;
+
+procedure Tf_option.ButtonLogDirClick(Sender: TObject);
+begin
+ SelectDirectoryDialog1.InitialDir:=LogDir.text;
+ SelectDirectoryDialog1.FileName:=LogDir.text;
+ if SelectDirectoryDialog1.Execute then LogDir.text:=SelectDirectoryDialog1.FileName;
 end;
 
 procedure Tf_option.ButtonSeqDirClick(Sender: TObject);

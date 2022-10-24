@@ -1462,6 +1462,7 @@ resourcestring
   rsFlatFileLoad = 'Flat file loaded';
   rsClearFlatFra = 'Clear Flat frame';
   rsLoadFlatFile = 'Load flat file';
+  rsLogFolder = 'Log folder';
 
 implementation
 

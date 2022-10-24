@@ -1545,6 +1545,7 @@ begin
   ScriptDir[2].path:=slash(ScriptsDir);
 
   SequenceDir:=globalconfig.GetValue('/Files/Sequence',ConfigDir);
+  LogDir:=config.GetValue('/Files/LogDir',LogDir);
 
   lang:=config.GetValue('/Language','');;
   lang:=u_translation.translate(lang);
@@ -4122,6 +4123,17 @@ begin
     if not ok then NewMessage('Cannot create directory '+TmpDir,1);
   end;
   if pos(' ', TmpDir)>0 then NewMessage(rsPleaseSelect2,1);
+  buf:=config.GetValue('/Files/LogDir',LogDir);
+  if copy(buf,1,1)='.' then buf:=ExpandFileName(slash(Appdir)+buf);
+  if not DirectoryExistsUTF8(buf) then begin
+    ok:=CreateDirUTF8(buf);
+    if not ok then NewMessage('Cannot create directory '+buf,1);
+  end;
+  if (buf<>LogDir) and DirectoryExistsUTF8(buf) then begin
+    CloseLog;
+    LogDir:=buf;
+    NewMessage('Log directory changed to '+LogDir);
+  end;
   PythonCmd:=config.GetValue('/Script/PythonCmd',defPython);
   {$ifdef mswindows}
   // reset python path when switching between 32 and 64 bit version
@@ -8138,6 +8150,7 @@ begin
    f_option.CaptureDir.Text:=config.GetValue('/Files/CapturePath',defCapturePath);
    f_option.TempDir.Text:=config.GetValue('/Files/TmpDir',TmpDir);
    f_option.SeqDir.Text:=globalconfig.GetValue('/Files/Sequence',SequenceDir);
+   f_option.LogDir.Text:=config.GetValue('/Files/LogDir',LogDir);
    f_option.TCPIPport.Value:=config.GetValue('/Files/TCPIPConfigPort',3277);
    f_option.PythonCmd.Text:=config.GetValue('/Script/PythonCmd',PythonCmd);
    f_option.FolderOptions.RowCount:=SubDirCount;
@@ -8555,6 +8568,7 @@ begin
      screenconfig.SetValue('/Hint/Show',f_option.CbShowHints.Checked);
      config.SetValue('/Files/CapturePath',f_option.CaptureDir.Text);
      config.SetValue('/Files/TmpDir',f_option.TempDir.Text);
+     config.SetValue('/Files/LogDir',f_option.LogDir.Text);
      config.SetValue('/Files/TCPIPConfigPort',f_option.TCPIPport.Value);
      config.SetValue('/Script/PythonCmd',f_option.PythonCmd.Text);
      for i:=0 to SubDirCount-1 do begin
