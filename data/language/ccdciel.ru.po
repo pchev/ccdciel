@@ -6,15 +6,15 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ccdciel\n"
 "Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
-"POT-Creation-Date: 2022-10-16 14:12+0000\n"
-"PO-Revision-Date: 2022-09-05 17:19+0000\n"
+"POT-Creation-Date: 2022-10-24 13:42+0000\n"
+"PO-Revision-Date: 2022-10-20 17:09+0000\n"
 "Last-Translator: Sergey Tarantsov <tsn-ast@yandex.ru>\n"
 "Language-Team: Russian <ru@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2022-10-16 14:28+0000\n"
-"X-Generator: Launchpad (build 25877e98ba44ca75f9c22db1fc37efee03e4606a)\n"
+"X-Launchpad-Export-Date: 2022-10-24 14:00+0000\n"
+"X-Generator: Launchpad (build 083267bcef06a439af1c3ee2507b2333659521d4)\n"
 
 #: u_translation.rs2d
 msgid "2D"
@@ -171,7 +171,7 @@ msgstr "Текущее задание изменено"
 
 #: u_translation.rsapplyflat
 msgid "Apply Flat"
-msgstr ""
+msgstr "Применить флет"
 
 #: u_translation.rsapplytoallde
 msgid "Apply to all devices"
@@ -656,7 +656,7 @@ msgstr "Отмена экспозиции"
 
 #: u_translation.rscancelexposu2
 msgid "Cancel exposure after"
-msgstr "Отменить экспозицию после"
+msgstr "Отменить эксп. после"
 
 #: u_translation.rscancelpolara
 msgid "Cancel polar alignment"
@@ -870,7 +870,7 @@ msgstr "Очистить дарк"
 
 #: u_translation.rsclearflatfra
 msgid "Clear Flat frame"
-msgstr ""
+msgstr "Очистить флет"
 
 #: u_translation.rsclearreferen
 msgid "Clear reference image"
@@ -1664,7 +1664,7 @@ msgstr "Формат файла"
 
 #: u_translation.rsfilenameopti
 msgid "File name options"
-msgstr "Параметры имени файла"
+msgstr "Имя файла"
 
 #: u_translation.rsfilenotfound
 #, object-pascal-format
@@ -1729,11 +1729,11 @@ msgstr "Автоматическая экспозиция"
 
 #: u_translation.rsflatfileload
 msgid "Flat file loaded"
-msgstr ""
+msgstr "Флет загружен"
 
 #: u_translation.rsflatframe
 msgid "Flat frame"
-msgstr ""
+msgstr "Флет"
 
 #: u_translation.rsflatimagemea
 msgid "Flat image mean level"
@@ -1876,11 +1876,11 @@ msgstr "Размер окна фокусировки"
 
 #: u_translation.rsfoldernameop
 msgid "Folder name options"
-msgstr "Параметры имени папки"
+msgstr "Название папки"
 
 #: u_translation.rsforguidancea
 msgid "For guidance adjust the azimuth knob along the blue line and the altitude knob along the red line"
-msgstr ""
+msgstr "Вращайте винт азимута для перемещения по синей линии, винт высоты - по красной линии."
 
 #: u_translation.rsforreflector
 msgid "For reflector collimation."
@@ -2379,11 +2379,15 @@ msgstr "Загрузить дарк"
 
 #: u_translation.rsloadflatfile
 msgid "Load flat file"
-msgstr ""
+msgstr "Загрузить флет"
 
 #: u_translation.rslockoverlay
 msgid "Lock overlay"
 msgstr "Блокировка наложения"
+
+#: u_translation.rslogfolder
+msgid "Log folder"
+msgstr ""
 
 #: u_translation.rslongestguide
 msgid "Longest guide pulse"
@@ -2907,7 +2911,7 @@ msgstr "Сегодня нет сумерек"
 
 #: u_translation.rsnoflat
 msgid "No flat"
-msgstr ""
+msgstr "Флет отсутствует"
 
 #: u_translation.rsnoflipuntilp
 msgid "No flip until past meridian for"
@@ -3118,7 +3122,7 @@ msgstr "Открыть FITS%s"
 
 #: u_translation.rsopenflatfile
 msgid "Open Flat file"
-msgstr ""
+msgstr "Открыть флет"
 
 #: u_translation.rsopenpicturef
 #, object-pascal-format
@@ -4547,7 +4551,7 @@ msgstr "FWHM звезды"
 
 #: u_translation.rsstarlostreco
 msgid "Star lost recovery"
-msgstr "Восстановление после потери звезды"
+msgstr "Действия при потере звезды"
 
 #: u_translation.rsstarprofile
 msgid "Star profile"
@@ -4814,7 +4818,7 @@ msgstr "Подпапка по типу кадра"
 
 #: u_translation.rssubfolderbyo
 msgid "Subfolder by object name"
-msgstr "Подпапка по имени объекта"
+msgstr "Подпапка по объекту"
 
 #: u_translation.rssubfolderbyp
 msgid "Subfolder by plan step"

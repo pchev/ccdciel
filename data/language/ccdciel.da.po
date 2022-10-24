@@ -6,15 +6,15 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ccdciel\n"
 "Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
-"POT-Creation-Date: 2022-10-16 14:12+0000\n"
+"POT-Creation-Date: 2022-10-24 13:42+0000\n"
 "PO-Revision-Date: 2021-09-24 16:13+0000\n"
 "Last-Translator: Jimmy Frydkær Jensen <jimmy@frydkaer.net>\n"
 "Language-Team: Danish <da@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2022-10-16 14:28+0000\n"
-"X-Generator: Launchpad (build 25877e98ba44ca75f9c22db1fc37efee03e4606a)\n"
+"X-Launchpad-Export-Date: 2022-10-24 14:00+0000\n"
+"X-Generator: Launchpad (build 083267bcef06a439af1c3ee2507b2333659521d4)\n"
 
 #: u_translation.rs2d
 msgid "2D"
@@ -2383,6 +2383,10 @@ msgstr ""
 
 #: u_translation.rslockoverlay
 msgid "Lock overlay"
+msgstr ""
+
+#: u_translation.rslogfolder
+msgid "Log folder"
 msgstr ""
 
 #: u_translation.rslongestguide

@@ -5434,3 +5434,7 @@ msgstr ""
 msgid "Load flat file"
 msgstr ""
 
+#: u_translation:rslogfolder
+msgid "Log folder"
+msgstr ""
+
