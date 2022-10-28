@@ -7674,12 +7674,15 @@ begin
 end;
 
 Procedure Tf_main.AutoguiderGuideStat;
-var i,n: integer;
-
+var i,n,k: integer;
 begin
-   // Add current point to list, keep last 100 points
+   // Add current point to list, keep last 50/100 points
+   if autoguider.AutoguiderType=agINTERNAL then
+     k:=50
+   else
+     k:=100;
    n:=Length(AutoguiderStat);
-   if n<100 then begin
+   if n<k then begin
      SetLength(AutoguiderStat,n+1);
    end
    else begin
