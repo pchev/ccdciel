@@ -58,6 +58,7 @@ type
     Label20: TLabel;
     Label21: TLabel;
     LabelInfo: TLabel;
+    LabelInfo2: TLabel;
     LabelTemperature: TLabel;
     Label9: TLabel;
     LabelStatusDec: TLabel;
@@ -291,6 +292,7 @@ begin
  LabelStatusRA.Caption:='';
  LabelStatusDec.Caption:='';
  LabelInfo.Caption:='';
+ LabelInfo2.Caption:='';
  cur_minHFD:=minHFD;
  cur_minSNR:=minSNR;
  cur_pa1:=pa1.Text;

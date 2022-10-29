@@ -548,7 +548,7 @@ begin
 
       WriteLog('INFO: Star(s)='+inttostr(star_counter)+', HFD='+floattostrF(mean_hfd,FFgeneral,3,3));
       msg(inttostr(star_counter)+' guide stars used, HFD='+floattostrF(mean_hfd,FFgeneral,3,3),3);
-      finternalguider.LabelInfo.Caption:=IntToStr(star_counter)+' stars, HFD: '+FormatFloat(f1,mean_hfd)+', SNR: '+FormatFloat(f0,maxSNR);
+      finternalguider.LabelInfo2.Caption:=IntToStr(star_counter)+' stars, HFD: '+FormatFloat(f1,mean_hfd)+', SNR: '+FormatFloat(f0,maxSNR);
     end //stars found
     else
     begin //no star(s) found
@@ -592,7 +592,7 @@ begin
     end;
     if star_counter>0 then begin
       mhfd:=mhfd/star_counter;
-      finternalguider.LabelInfo.Caption:=IntToStr(star_counter)+' stars, HFD: '+FormatFloat(f1,mhfd)+', SNR: '+FormatFloat(f0,LogSNR);
+      finternalguider.LabelInfo2.Caption:=IntToStr(star_counter)+' stars, HFD: '+FormatFloat(f1,mhfd)+', SNR: '+FormatFloat(f0,LogSNR);
     end;
   end;
   if star_counter<1 then
@@ -642,6 +642,7 @@ begin
   StopInternalguider:=false;
   InternalguiderRunning:=true;
   Finternalguider.LabelInfo.Caption:='';
+  Finternalguider.LabelInfo2.Caption:='';
   Finternalguider.ButtonLoop.enabled:=false;
   Finternalguider.ButtonCalibrate.enabled:=false;
   Finternalguider.ButtonGuide.enabled:=false;
@@ -1182,6 +1183,7 @@ begin
   Finternalguider.ButtonDark.enabled:=true;
   Finternalguider.led.Brush.Color:=clGray;
   Finternalguider.LabelInfo.Caption:='';
+  Finternalguider.LabelInfo2.Caption:='';
   SetStatus('Stopped',GUIDER_IDLE);
 end;
 
