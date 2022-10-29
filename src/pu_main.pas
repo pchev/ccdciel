@@ -4602,6 +4602,7 @@ begin
     MenuAutoguiderGuide.Caption:=f_autoguider.BtnGuide.Caption;
     StatusBar1.Invalidate;
   end;
+  f_internalguider.Enabled:=autoguider.AutoguiderType=agINTERNAL;
   if (camera.Status=devConnected) and camera.hasVideo and (config.GetValue('/Video/ShowVideo',false)<>TBVideo.Visible) then begin
     if config.GetValue('/Video/ShowVideo',false) then begin
       TBVideo.Visible:=true;
