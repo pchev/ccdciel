@@ -37,6 +37,7 @@ type
     ButtonSeqDir: TButton;
     ButtonLogDir: TButton;
     CdCPath: TEdit;
+    ShowVideo: TCheckBox;
     Label160: TLabel;
     Panel28: TPanel;
     LogDir: TEdit;
@@ -998,6 +999,7 @@ begin
   GroupBox9.Caption := rsReferenceIma;
   Label39.Caption := rsTreshold;
   VideoGroup.Caption := rsVideo;
+  ShowVideo.Caption := rsShowVideoCap;
   Label45.Caption := rsVideoPreview;
   GroupBox10.Caption := rsBadPixelsDet;
   Label62.Caption := rsBadPixelThre;

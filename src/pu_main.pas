@@ -4602,6 +4602,27 @@ begin
     MenuAutoguiderGuide.Caption:=f_autoguider.BtnGuide.Caption;
     StatusBar1.Invalidate;
   end;
+  if (camera.Status=devConnected) and camera.hasVideo and (config.GetValue('/Video/ShowVideo',false)<>TBVideo.Visible) then begin
+    if config.GetValue('/Video/ShowVideo',false) then begin
+      TBVideo.Visible:=true;
+      MenuTabVideo.Visible:=true;
+      CameraVideoPreviewChange(nil);
+      f_video.FrameRate.Items.Assign(camera.VideoRates);
+      f_video.VideoSize.Items.Assign(camera.VideoSizes);
+      CameraVideoSizeChange(nil);
+      CameraVideoRateChange(nil);
+      f_video.SetImageControls;
+    end
+    else begin
+      if TBVideo.Visible then begin
+        f_video.Preview.Checked:=false;
+        f_video.BtnStopRec.Click;
+        TBConnect.Click;
+        TBVideo.Visible:=false;
+        MenuTabVideo.Visible:=false;
+      end;
+    end;
+  end;
 end;
 
 procedure Tf_main.SaveScreenConfig;
@@ -6430,7 +6451,7 @@ begin
                       f_ccdtemp.Setpoint.Value:=config.GetValue('/Cooler/CameraAutoCoolTemp',0);
                       f_ccdtemp.BtnSet.Click;
                    end;
-                   if camera.hasVideo then begin
+                   if camera.hasVideo and config.GetValue('/Video/ShowVideo',false) then begin
                       wait(1);
                       TBVideo.Visible:=true;
                       MenuTabVideo.Visible:=true;
@@ -8232,6 +8253,7 @@ begin
    f_option.StackOperation.itemindex:=config.GetValue('/PreviewStack/StackOperation',1);
    f_option.FileStackFloat.Checked:=config.GetValue('/PreviewStack/FileStackFloat',false);
    f_option.VideoPreviewRate.Value:=config.GetValue('/Video/PreviewRate',5);
+   f_option.ShowVideo.Checked:=config.GetValue('/Video/ShowVideo',false);
    f_option.VideoGroup.Visible:=(camera.CameraInterface=INDI);
    f_option.RefTreshold.Position:=config.GetValue('/RefImage/Treshold',128);
    f_option.RefColor.ItemIndex:=config.GetValue('/RefImage/Color',0);
@@ -8686,6 +8708,7 @@ begin
      config.SetValue('/PreviewStack/StackOperation',f_option.StackOperation.itemindex);
      config.SetValue('/PreviewStack/FileStackFloat',f_option.FileStackFloat.Checked);
      config.SetValue('/Video/PreviewRate',f_option.VideoPreviewRate.Value);
+     config.SetValue('/Video/ShowVideo',f_option.ShowVideo.Checked);
      config.SetValue('/RefImage/Treshold',f_option.RefTreshold.Position);
      config.SetValue('/RefImage/Color',f_option.RefColor.ItemIndex);
      screenconfig.SetValue('/Cursor/ImageCursor',f_option.ImageCursor.ItemIndex);

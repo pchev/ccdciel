@@ -1842,7 +1842,7 @@ object f_option: Tf_option
             AnchorSideTop.Side = asrCenter
             Left = 14
             Height = 19
-            Top = 5
+            Top = 37
             Width = 156
             Caption = 'Video preview frame rate '
             ParentColor = False
@@ -1851,7 +1851,7 @@ object f_option: Tf_option
           object VideoPreviewRate: TSpinEdit
             Left = 194
             Height = 28
-            Top = 0
+            Top = 32
             Width = 73
             Constraints.MaxHeight = 28
             MaxValue = 60
@@ -1859,6 +1859,14 @@ object f_option: Tf_option
             ParentFont = False
             TabOrder = 0
             Value = 1
+          end
+          object ShowVideo: TCheckBox
+            Left = 16
+            Height = 21
+            Top = 8
+            Width = 181
+            Caption = 'Show video capture panel'
+            TabOrder = 1
           end
         end
         object GroupBox10: TGroupBox
@@ -2057,7 +2065,7 @@ object f_option: Tf_option
             AnchorSideTop.Side = asrCenter
             Left = 14
             Height = 19
-            Top = 8
+            Top = 7
             Width = 148
             Caption = 'Select the cursor to use '
             ParentColor = False
@@ -2065,7 +2073,7 @@ object f_option: Tf_option
           object ImageCursor: TComboBox
             AnchorSideTop.Control = GroupBox33
             Left = 196
-            Height = 31
+            Height = 29
             Top = 2
             Width = 132
             BorderSpacing.Top = 2
@@ -2084,7 +2092,7 @@ object f_option: Tf_option
             AnchorSideTop.Side = asrCenter
             Left = 336
             Height = 19
-            Top = 8
+            Top = 7
             Width = 120
             Caption = '(Restart to activate)'
             ParentColor = False

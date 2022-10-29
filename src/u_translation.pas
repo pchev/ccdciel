@@ -1463,6 +1463,7 @@ resourcestring
   rsClearFlatFra = 'Clear Flat frame';
   rsLoadFlatFile = 'Load flat file';
   rsLogFolder = 'Log folder';
+  rsShowVideoCap = 'Show video capture tab';
 
 implementation
 
