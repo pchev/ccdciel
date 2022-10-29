@@ -406,7 +406,7 @@ end;
 function  T_autoguider_internal.measure_drift(var initialize:boolean; out drX,drY :double) : integer;// ReferenceX,Y indicates the total drift, drX,drY to drift since previouse call. Arrays old_xy_array,xy_array are for storage star positions
 var
   i,fitsx,fitsy,stepsize,xsize,ysize,star_counter,star_counter2,counter,len,maxSNRstar: integer;
-  hfd1,star_fwhm,vmax,bg,bgdev,xc,yc,snr,flux,fluxratio,min_SNR,min_HFD,maxSNR,maxSNRhfd,margin,y : double;
+  hfd1,star_fwhm,vmax,bg,bgdev,xc,yc,snr,flux,fluxratio,min_SNR,min_HFD,maxSNR,maxSNRhfd,margin,y,mhfd : double;
   drift_arrayX,drift_arrayY : array of double;
   starx,stary,frx,fry,frw,frh: integer;
 const
@@ -548,6 +548,7 @@ begin
 
       WriteLog('INFO: Star(s)='+inttostr(star_counter)+', HFD='+floattostrF(mean_hfd,FFgeneral,3,3));
       msg(inttostr(star_counter)+' guide stars used, HFD='+floattostrF(mean_hfd,FFgeneral,3,3),3);
+      finternalguider.LabelInfo.Caption:=IntToStr(star_counter)+' stars, HFD: '+FormatFloat(f1,mean_hfd)+', SNR: '+FormatFloat(f0,maxSNR);
     end //stars found
     else
     begin //no star(s) found
@@ -557,6 +558,7 @@ begin
   end
   else
   begin //second, third ... call
+    mhfd:=0;
     for i:=0 to length(xy_array_old)-1 do
     begin
       if xy_array_old[i].flux<>0 then // Previouse dection, keep tracking this star while it drifts away
@@ -574,6 +576,7 @@ begin
         xy_array[i].y2:=yc;
         xy_array[i].flux:=flux;
         inc(star_counter);
+        mhfd:=mhfd+hfd1;
 
         // max value for guide log
         LogSNR:=max(LogSNR,snr);
@@ -586,6 +589,10 @@ begin
       begin //Star lost temporary
         xy_array[i].flux:=0;
       end;
+    end;
+    if star_counter>0 then begin
+      mhfd:=mhfd/star_counter;
+      finternalguider.LabelInfo.Caption:=IntToStr(star_counter)+' stars, HFD: '+FormatFloat(f1,mhfd)+', SNR: '+FormatFloat(f0,LogSNR);
     end;
   end;
   if star_counter<1 then
