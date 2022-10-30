@@ -5438,3 +5438,7 @@ msgstr ""
 msgid "Log folder"
 msgstr ""
 
+#: u_translation:rsshowvideocap
+msgid "Show video capture tab"
+msgstr ""
+

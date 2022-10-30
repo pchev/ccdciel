@@ -2,15 +2,15 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ccdciel\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-10-24 13:42+0000\n"
-"PO-Revision-Date: 2022-10-16 17:00+0000\n"
+"POT-Creation-Date: 2022-10-30 14:30+0000\n"
+"PO-Revision-Date: 2022-10-24 18:36+0000\n"
 "Last-Translator: Stanislav Holub <Unknown>\n"
 "Language-Team: Czech <cz@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2022-10-24 14:00+0000\n"
-"X-Generator: Launchpad (build 083267bcef06a439af1c3ee2507b2333659521d4)\n"
+"X-Launchpad-Export-Date: 2022-10-30 14:40+0000\n"
+"X-Generator: Launchpad (build 9d579084c41c133b44690cd0fe319367b6cb1140)\n"
 "Language: cs\n"
 
 #: u_translation.rs2d
@@ -2386,7 +2386,7 @@ msgstr "Překrytí zámku"
 
 #: u_translation.rslogfolder
 msgid "Log folder"
-msgstr ""
+msgstr "Složka protokolu"
 
 #: u_translation.rslongestguide
 msgid "Longest guide pulse"
@@ -4310,6 +4310,10 @@ msgstr "Zobrazit výzvu"
 #: u_translation.rsshowstacking
 msgid "Show stacking option for Preview/Capture/Sequence"
 msgstr "Zobrazení možnosti skládání pro Náhled/Snímání/Sekvence"
+
+#: u_translation.rsshowvideocap
+msgid "Show video capture tab"
+msgstr ""
 
 #: u_translation.rssideofpier
 msgid "Side of pier"
