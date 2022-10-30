@@ -863,6 +863,8 @@ type
     procedure AstrometryToPlanetarium(Sender: TObject);
     procedure AstrometryToPlanetariumFrame(Sender: TObject);
     procedure ResolveSlewCenter(Sender: TObject);
+    procedure ResolvePlotDso(Sender: TObject);
+    procedure ResolvePlotHyperleda(Sender: TObject);
     procedure ResolveSyncRotator(Sender: TObject);
     procedure ResolveRotate(Sender: TObject);
     procedure InitWCS(fn:string);
@@ -1792,6 +1794,8 @@ begin
   f_scriptengine.onOpenReferenceImage:=@OpenRefImage;
   f_scriptengine.onClearReferenceImage:=@ClearRefImage;
   f_scriptengine.onSlewImageCenter:=@ResolveSlewCenter;
+  f_scriptengine.onPlotDSO:=@ResolvePlotDso;
+  f_scriptengine.onPlotHyperleda:=@ResolvePlotHyperleda;
   f_scriptengine.onAutomaticAutofocus:=@cmdAutomaticAutofocus;
   f_scriptengine.onAutofocus:=@cmdAutofocus;
   f_scriptengine.DevicesConnection:=f_devicesconnection;
@@ -13185,6 +13189,16 @@ begin
   astrometry.SlewScreenXY(MouseDownX,MouseDownY);
 end;
 
+procedure Tf_main.ResolvePlotDso(Sender: TObject);
+begin
+  MenuResolveDSOClick(MenuResolveDSO)
+end;
+
+procedure Tf_main.ResolvePlotHyperleda(Sender: TObject);
+begin
+  MenuResolveDSOClick(MenuResolveHyperLeda);
+end;
+
 procedure Tf_main.MenuResolveDSOClick(Sender: TObject);
 var
   Save_Cursor:TCursor;
@@ -13194,7 +13208,7 @@ begin
      Save_Cursor := Screen.Cursor; {loading Hyperleda could take some time}
      Screen.Cursor := crHourglass; { Show hourglass cursor }
      if fits.HeaderInfo.solved then begin
-        if sender=MenuResolveHyperLeda then
+        if (sender=MenuResolveHyperLeda)or(sender=MenuResolveHyperLeda2) then
           load_hyperleda
         else
           load_deep;
@@ -13205,7 +13219,7 @@ begin
        if (not astrometry.Busy) and (fits.HeaderInfo.naxis>0) then begin
          if not f_goto.CheckImageInfo(fits) then exit;
          fits.SaveToFile(slash(TmpDir)+'ccdcieltmp.fits');
-         if sender=MenuResolveHyperLeda then
+         if (sender=MenuResolveHyperLeda)or(sender=MenuResolveHyperLeda2) then
            astrometry.StartAstrometry(slash(TmpDir)+'ccdcieltmp.fits',slash(TmpDir)+'ccdcielsolved.fits',@AstrometryPlotHyperleda)
          else
            astrometry.StartAstrometry(slash(TmpDir)+'ccdcieltmp.fits',slash(TmpDir)+'ccdcielsolved.fits',@AstrometryPlotDSO);
@@ -14960,6 +14974,8 @@ try
   else if method='ASTROMETRY_SOLVE' then result:=result+'"result":{"status": "'+f_scriptengine.cmd_AstrometrySolve+'"}'
   else if method='ASTROMETRY_SYNC' then result:=result+'"result":{"status": "'+f_scriptengine.cmd_AstrometrySync+'"}'
   else if method='ASTROMETRY_SLEW_IMAGE_CENTER' then result:=result+'"result":{"status": "'+f_scriptengine.cmd_AstrometrySlewImageCenter+'"}'
+  else if method='ASTROMETRY_PLOT_DSO' then result:=result+'"result":{"status": "'+f_scriptengine.cmd_AstrometryPlotDSO+'"}'
+  else if method='ASTROMETRY_PLOT_HYPERLEDA' then result:=result+'"result":{"status": "'+f_scriptengine.cmd_AstrometryPlotHyperleda+'"}'
   else if method='PLANETARIUM_CONNECT' then result:=result+'"result":{"status": "'+f_scriptengine.cmd_PlanetariumConnect+'"}'
   else if method='PLANETARIUM_SHOWIMAGE' then result:=result+'"result":{"status": "'+f_scriptengine.cmd_PlanetariumShowImage+'"}'
   else if method='PLANETARIUM_SHUTDOWN' then result:=result+'"result":{"status": "'+f_scriptengine.cmd_PlanetariumShutdown+'"}'

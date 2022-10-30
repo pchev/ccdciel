@@ -99,6 +99,7 @@ type
     FonOpenReferenceImage: TNotifyStr;
     FonClearReferenceImage: TNotifyEvent;
     FonSlewImageCenter: TNotifyEvent;
+    FonPlotDSO,FonPlotHyperleda: TNotifyEvent;
     FonAutofocus: TNotifyBool;
     FonAutomaticAutofocus: TNotifyBool;
     ilist: array of Integer;
@@ -198,6 +199,8 @@ type
     function cmd_AstrometrySolve:string;
     function cmd_AstrometrySync:string;
     function cmd_AstrometrySlewImageCenter:string;
+    function cmd_AstrometryPlotDSO:string;
+    function cmd_AstrometryPlotHyperleda:string;
     function cmd_PlanetariumConnect:string;
     function cmd_PlanetariumShowImage(fov:string=''):string;
     function cmd_PlanetariumShutdown:string;
@@ -234,6 +237,8 @@ type
     property onOpenReferenceImage: TNotifyStr read FonOpenReferenceImage write FonOpenReferenceImage;
     property onClearReferenceImage: TNotifyEvent read FonClearReferenceImage write FonClearReferenceImage;
     property onSlewImageCenter: TNotifyEvent read FonSlewImageCenter write FonSlewImageCenter;
+    property onPlotDSO: TNotifyEvent read FonPlotDSO write FonPlotDSO;
+    property onPlotHyperleda: TNotifyEvent read FonPlotHyperleda write FonPlotHyperleda;
     property onAutofocus: TNotifyBool read FonAutofocus write FonAutofocus;
     property onAutomaticAutofocus: TNotifyBool read FonAutomaticAutofocus write FonAutomaticAutofocus;
     property fits: TFits read Ffits write Ffits;
@@ -999,6 +1004,8 @@ else if cname='CAPTURE_STOP' then result:=cmd_Capture_Stop
 else if cname='ASTROMETRY_SOLVE' then result:=cmd_AstrometrySolve
 else if cname='ASTROMETRY_SYNC' then result:=cmd_AstrometrySync
 else if cname='ASTROMETRY_SLEW_IMAGE_CENTER' then result:=cmd_AstrometrySlewImageCenter
+else if cname='ASTROMETRY_PLOT_DSO' then result:=cmd_AstrometryPlotDSO
+else if cname='ASTROMETRY_PLOT_HYPERLEDA' then result:=cmd_AstrometryPlotHyperleda
 else if cname='PLANETARIUM_CONNECT' then result:=cmd_PlanetariumConnect
 else if cname='PLANETARIUM_SHOWIMAGE' then result:=cmd_PlanetariumShowImage
 else if cname='PLANETARIUM_SHUTDOWN' then result:=cmd_PlanetariumShutdown
@@ -1627,6 +1634,18 @@ end;
 function Tf_scriptengine.cmd_AstrometrySlewImageCenter:string;
 begin
   if Assigned(FonSlewImageCenter) then FonSlewImageCenter(self);
+  result:=msgOK;
+end;
+
+function Tf_scriptengine.cmd_AstrometryPlotDSO:string;
+begin
+  if Assigned(FonPlotDSO) then FonPlotDSO(self);
+  result:=msgOK;
+end;
+
+function Tf_scriptengine.cmd_AstrometryPlotHyperleda:string;
+begin
+  if Assigned(FonPlotHyperleda) then FonPlotHyperleda(self);
   result:=msgOK;
 end;
 
