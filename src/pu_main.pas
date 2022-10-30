@@ -3158,6 +3158,9 @@ try
        i:=(config.GetValue('/Flat/FlatLevelMin',20000)+config.GetValue('/Flat/FlatLevelMax',30000)) div 2;
        config.SetValue('/Flat/FlatLevelMin',i);
      end;
+     if config.GetValue('/Files/VideoCapturePath','/tmp')<>'/tmp' then begin
+       config.SetValue('/Video/ShowVideo',true);
+     end;
   end;
   if config.Modified then
      SaveConfig;
