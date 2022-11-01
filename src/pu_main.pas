@@ -6554,11 +6554,14 @@ end;
 
 procedure Tf_main.CameraVideoPreviewChange(Sender: TObject);
 begin
+if TBVideo.Visible then begin
   f_video.Preview.Checked:=camera.VideoPreviewRunning;
+end;
 end;
 
 procedure Tf_main.CameraVideoRecordChange(Sender: TObject);
 begin
+if TBVideo.Visible then begin
  if camera.VideoRecordRunning then begin
    f_video.BtnStartRec.Enabled:=false;
    f_video.BtnStopRec.Enabled:=true;
@@ -6570,28 +6573,36 @@ begin
   f_video.LabelRecording.Caption:='';
 end;
 end;
+end;
 
 procedure Tf_main.CameraVideoSizeChange(Sender: TObject);
 var i: integer;
 begin
+if TBVideo.Visible then begin
   i:=f_video.VideoSize.Items.IndexOf(camera.VideoSize);
   if i>=0 then f_video.VideoSize.ItemIndex:=i;
+end;
 end;
 
 procedure Tf_main.CameraVideoRateChange(Sender: TObject);
 var i: integer;
 begin
+if TBVideo.Visible then begin
   i:=f_video.FrameRate.Items.IndexOf(camera.VideoRate);
   if i>=0 then f_video.FrameRate.ItemIndex:=i;
+end;
 end;
 
 procedure Tf_main.CameraFPSChange(Sender: TObject);
 begin
+if TBVideo.Visible then begin
   f_video.FPS:=camera.FPS;
+end;
 end;
 
 procedure Tf_main.CameraVideoExposureChange(Sender: TObject);
 begin
+if TBVideo.Visible then begin
   if f_video.PanelExposure1.Visible then
     f_video.ShowExposure(camera.VideoExposure);
   if f_video.PanelExposure2.Visible then
@@ -6600,11 +6611,14 @@ begin
   f_video.Gamma.Position:=max(min(round(camera.VideoGamma),f_video.Gamma.Max),f_video.Gamma.Min);
   f_video.Brightness.Position:=max(min(round(camera.VideoBrightness),f_video.Brightness.Max),f_video.Brightness.Min);
 end;
+end;
 
 procedure Tf_main.CameraVideoEncoderChange(Sender: TObject);
 begin
+if TBVideo.Visible then begin
   if f_video.PanelEncoder.Visible and (f_video.VideoEncoder.Items.Count>0) then
     f_video.VideoEncoder.ItemIndex:=camera.VideoEncoder;
+end;
 end;
 
 Procedure Tf_main.WheelStatus(Sender: TObject);
