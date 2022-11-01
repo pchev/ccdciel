@@ -502,8 +502,8 @@ begin
         else
           fry:=stary-(frame_size div 2);
 
-        frx:=min(xsize-frw,max(0,frx)); // Keep frame within sensor area
-        fry:=min(ysize-frh,max(0,fry));
+        frx:=min(xsize-1-frw,max(0,frx)); // Keep frame within sensor area
+        fry:=min(ysize-1-frh,max(0,fry));
 
         star_counter2:=0;
         for i:=0 to star_counter-1 do
