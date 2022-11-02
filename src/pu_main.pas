@@ -1074,6 +1074,16 @@ begin
    i:=FindNextUTF8(fs);
  end;
  FindCloseUTF8(fs);
+ // purge internal guider log
+ i:=FindFirstUTF8(slash(LogDir)+'CCDciel_GuideLog_*',0,fs);
+ while i=0 do begin
+   if (fs.Time>0)and(fs.Time<tl) then begin
+     buf:=slash(LogDir)+fs.Name;
+     DeleteFileUTF8(buf);
+   end;
+   i:=FindNextUTF8(fs);
+ end;
+ FindCloseUTF8(fs);
  // purge focus error pictures
  i:=FindFirstUTF8(slash(LogDir)+'focus_fail_*',0,fs);
  while i=0 do begin
