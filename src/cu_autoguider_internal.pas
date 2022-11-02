@@ -442,7 +442,12 @@ begin
   maxSNR:=0;
   maxSNRstar:=0;
   maxSNRhfd:=0;
-  margin:=2*DitherPixel+10;
+  if xsize<800 then
+    margin:=2*DitherPixel+10
+  else if xsize<1200 then
+    margin:=2*DitherPixel+50
+  else
+    margin:=2*DitherPixel+100;
 
   // Divide the image in square areas. Try to detect a star in each area. Store the star position and flux in the xy_array
   if initialize then
