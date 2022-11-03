@@ -126,6 +126,7 @@ begin
   Pierside.Hint:=rsCurrentTeles3;
   TimeToMeridian.Hint:=rsTimeFromMeri;
   BtnHandpad.Caption:=ellipsis;
+  BtnHandpad.Hint:=rsHandpad;
 end;
 
 procedure Tf_mount.SetCurrentRA(value:double);

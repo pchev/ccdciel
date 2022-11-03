@@ -6,15 +6,15 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ccdciel\n"
 "Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
-"POT-Creation-Date: 2022-10-30 14:30+0000\n"
+"POT-Creation-Date: 2022-11-03 17:09+0000\n"
 "PO-Revision-Date: 2022-10-20 17:09+0000\n"
 "Last-Translator: Sergey Tarantsov <tsn-ast@yandex.ru>\n"
 "Language-Team: Russian <ru@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2022-10-30 14:40+0000\n"
-"X-Generator: Launchpad (build 9d579084c41c133b44690cd0fe319367b6cb1140)\n"
+"X-Launchpad-Export-Date: 2022-11-03 17:16+0000\n"
+"X-Generator: Launchpad (build 83f7123b02a2b50a64bc29e7e35197179a885279)\n"
 
 #: u_translation.rs2d
 msgid "2D"
@@ -1748,6 +1748,10 @@ msgstr "Уровень флета=%s"
 msgid "Flat time"
 msgstr "Время съёмки"
 
+#: u_translation.rsflipns
+msgid "Flip N/S"
+msgstr ""
+
 #: u_translation.rsfliptheimageh
 msgid "Flip the image horizontally"
 msgstr "Зеркально по горизонтали"
@@ -2062,6 +2066,10 @@ msgstr "Контроль дрифта"
 
 #: u_translation.rshalt
 msgid "Halt"
+msgstr ""
+
+#: u_translation.rshandpad
+msgid "Handpad"
 msgstr ""
 
 #: u_translation.rsheartbeatthr
@@ -4026,6 +4034,11 @@ msgstr "Язык скрипта"
 #: u_translation.rsscripttermin
 msgid "Script terminating..."
 msgstr "Завершение скрипта..."
+
+#: u_translation.rssdriverdonot
+#, object-pascal-format
+msgid "%s driver do not support %s"
+msgstr ""
 
 #: u_translation.rssearch
 msgid "Search"

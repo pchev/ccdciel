@@ -5442,3 +5442,15 @@ msgstr ""
 msgid "Show video capture tab"
 msgstr ""
 
+#: u_translation:rssdriverdonot
+msgid "%s driver do not support %s"
+msgstr ""
+
+#: u_translation:rshandpad
+msgid "Handpad"
+msgstr ""
+
+#: u_translation:rsflipns
+msgid "Flip N/S"
+msgstr ""
+
