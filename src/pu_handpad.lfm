@@ -3,7 +3,7 @@ object f_handpad: Tf_handpad
   Height = 114
   Top = 31
   Width = 191
-  BorderIcons = []
+  BorderIcons = [biSystemMenu]
   BorderStyle = bsToolWindow
   Caption = 'handpad'
   ClientHeight = 114
