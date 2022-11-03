@@ -38,7 +38,7 @@ uses
   fu_starprofile, fu_filterwheel, fu_focuser, fu_mount, fu_ccdtemp, fu_autoguider, fu_cover, fu_switch,
   fu_sequence, fu_planetarium, fu_script, u_ccdconfig, pu_edittargets, pu_scriptengine,
   fu_video, pu_devicesetup, pu_options, pu_indigui, cu_fits, cu_camera, pu_pause, cu_tcpserver,
-  pu_viewtext, cu_wheel, cu_mount, cu_focuser, XMLConf, u_utils, u_global, UScaleDPI,
+  pu_viewtext, cu_wheel, cu_mount, cu_focuser, XMLConf, u_utils, u_global, UScaleDPI, pu_handpad,
   cu_indimount, cu_ascommount, cu_indifocuser, cu_ascomfocuser, pu_vcurve, pu_focusercalibration,
   fu_rotator, cu_rotator, cu_indirotator, cu_ascomrotator, cu_watchdog, cu_indiwatchdog,
   cu_weather, cu_ascomweather, cu_indiweather, cu_safety, cu_ascomsafety, cu_indisafety, fu_weather, fu_safety,
@@ -696,6 +696,7 @@ type
     procedure SetMountPark(Sender: TObject);
     procedure SetMountTrack(Sender: TObject);
     procedure MountGoto(Sender: TObject);
+    procedure MountHandpad(Sender: TObject);
     procedure SetFocusMode;
     Procedure ConnectWheel(Sender: TObject);
     Procedure DisconnectWheel(Sender: TObject);
@@ -1709,6 +1710,7 @@ begin
   f_mount.onPark:=@SetMountPark;
   f_mount.onTrack:=@SetMountTrack;
   f_mount.onGoto:=@MountGoto;
+  f_mount.onHandpad:=@MountHandpad;
 
   f_dome:=Tf_dome.Create(self);
   f_dome.onParkDome:=@ParkDome;
@@ -2377,6 +2379,7 @@ begin
    if  f_polaralign2<>nil then f_polaralign2.SetLang;
    if  f_internalguider<>nil then f_internalguider.SetLang;
    if  f_video<>nil then f_video.SetLang;
+   if  f_handpad<>nil then f_handpad.SetLang;
 end;
 
 procedure Tf_main.FormShow(Sender: TObject);
@@ -7527,6 +7530,23 @@ else begin
   camera.AbortExposure;
   astrometry.StopAstrometry;
 end;
+end;
+
+procedure Tf_main.MountHandpad(Sender: TObject);
+var p: TPoint;
+begin
+  if (mount.Status=devConnected) then begin
+    if (mount.CanMoveAxis) then begin
+      if f_handpad.Mount<>mount then f_handpad.Mount:=mount;
+      p.X:=f_mount.Left;
+      p.Y:=8+f_mount.Top+f_mount.Height;
+      p:=ClientToScreen(p);
+      FormPos(f_handpad,p.X,p.Y);
+      f_handpad.Show;
+    end
+    else NewMessage(Format(rsSDriverDoNot, [rsMount, 'MoveAxis']));
+  end
+  else NewMessage(Format(rsNotConnected, [rsMount]));
 end;
 
 Procedure Tf_main.AutoguiderConnectClick(Sender: TObject);

@@ -32,6 +32,9 @@ uses  cu_mount, u_global,  indiapi,
   Forms, ExtCtrls, Classes, SysUtils;
 
 type
+doublearray = array of double;
+Pdoublearray = ^doublearray;
+
 T_ascommount = class(T_mount)
  private
    {$ifdef mswindows}
@@ -49,6 +52,7 @@ T_ascommount = class(T_mount)
    procedure CheckEqmod;
    function WaitMountSlewing(maxtime:integer):boolean;
    function WaitMountPark(maxtime:integer):boolean;
+   procedure GetScopeRates(var nrates0, nrates1: integer; axis0rates, axis1rates: Pdoublearray);
  protected
    function  GetTracking:Boolean; override;
    function  getCanSetGuideRates:Boolean; override;
@@ -72,6 +76,7 @@ T_ascommount = class(T_mount)
    function GetPulseGuiding: boolean; override;
    function GetAlignmentMode: TAlignmentMode; override;
    function GetCanSetPierSide: boolean; override;
+   function GetSlewRates: TstringList; override;
 public
    constructor Create(AOwner: TComponent);override;
    destructor  Destroy; override;
@@ -83,6 +88,7 @@ public
    function Sync(sra,sde: double):boolean; override;
    function Track:boolean; override;
    procedure AbortMotion; override;
+   procedure AbortSlew; override;
    function ClearAlignment:boolean; override;
    function ClearDelta:boolean; override;
    function GetSite(var long,lat,elev: double): boolean; override;
@@ -90,6 +96,7 @@ public
    function GetDate(var utc,offset: double): boolean; override;
    function SetDate(utc,offset: double): boolean; override;
    function PulseGuide(direction,duration:integer): boolean; override;
+   procedure MoveAxis(axis: integer; rate: string); override;
 end;
 
 const waitpoll=500;
@@ -171,6 +178,15 @@ begin
      if debug_msg then msg('Get pulse guiding capability');
      FCanPulseGuide:=V.CanPulseGuide;
      FisGem:=(GetAlignmentMode=algGermanPolar)and(GetPierSide<>pierUnknown);
+     try
+       if FInterfaceVersion>1 then begin
+         FCanMoveAxis:=V.CanMoveAxis(0) and V.CanMoveAxis(1);
+       end
+       else
+         FCanMoveAxis:=false;
+     except
+       FCanMoveAxis:=false;
+     end;
      Fcapability:='';
      if IsEqmod then Fcapability:=Fcapability+'EQmod; ';
      if CanPark then Fcapability:=Fcapability+'CanPark; ';
@@ -180,6 +196,7 @@ begin
      if CanSync then Fcapability:=Fcapability+'CanSync; ';
      if CanSetTracking then Fcapability:=Fcapability+'CanSetTracking; ';
      if CanPulseGuide then Fcapability:=Fcapability+'CanPulseGuide; ';
+     if FCanMoveAxis then Fcapability:=Fcapability+'CanMoveAxis; ';
      if FIsGem then Fcapability:=Fcapability+'GEM; ';
      FEquinox:=NullCoord;
      FEquinoxJD:=NullCoord;
@@ -726,6 +743,20 @@ begin
  {$endif}
 end;
 
+procedure T_ascommount.AbortSlew;
+begin
+ {$ifdef mswindows}
+ MountTrackingAlert:=false;
+ if CanSlew then begin
+   try
+   V.AbortSlew;
+   except
+     on E: Exception do msg('Abort motion error: ' + E.Message,0);
+   end;
+ end;
+ {$endif}
+end;
+
 procedure T_ascommount.SetTimeout(num:integer);
 begin
  FTimeOut:=num;
@@ -962,7 +993,9 @@ begin
 end;
 
 function T_ascommount.GetAlignmentMode: TAlignmentMode;
+{$ifdef mswindows}
 var i: integer;
+{$endif}
 begin
  // Default to GEM and let availability of PierSide make further difference
  result:=algGermanPolar;
@@ -990,6 +1023,126 @@ begin
     except
       result:=false;
     end;
+  {$endif}
+end;
+
+procedure T_ascommount.GetScopeRates(var nrates0, nrates1: integer; axis0rates, axis1rates: Pdoublearray);
+{$ifdef mswindows}
+var
+  rate, irate: variant;
+  i,j,k: integer;
+{$endif}
+begin
+  SetLength(axis0rates^, 0);
+  SetLength(axis1rates^, 0);
+  nrates0 := 0;
+  nrates1 := 0;
+  {$ifdef mswindows}
+  if not VarIsEmpty(V) then
+  begin
+    try
+    //  First axis
+    k := 0;
+    if V.CanMoveAxis(k) then
+    begin
+      rate := V.AxisRates(k);
+      j := rate.Count;
+      for i := 1 to j do
+      begin
+        irate := rate.item[i];
+        Inc(nrates0, 2);
+        SetLength(axis0rates^, nrates0);
+        axis0rates^[nrates0 - 2] := irate.Minimum;
+        axis0rates^[nrates0 - 1] := irate.Maximum;
+      end;
+    end;
+    //  Second axis
+    k := 1;
+    if V.CanMoveAxis(k) then
+    begin
+      rate := V.AxisRates(k);
+      j := rate.Count;
+      for i := 1 to j do
+      begin
+        irate := rate.item[i];
+        Inc(nrates1, 2);
+        SetLength(axis1rates^, nrates1);
+        axis1rates^[nrates1 - 2] := irate.Minimum;
+        axis1rates^[nrates1 - 1] := irate.Maximum;
+      end;
+    end;
+    except
+      // unsupported by interface V1
+    end;
+  end;
+  {$endif}
+end;
+
+function T_ascommount.GetSlewRates: TStringList;
+var
+  i, j, n0, n1: integer;
+  ax0r, ax1r: array of double;
+  min, max, step, rate, x: double;
+begin
+  n0 := 0;
+  n1 := 0;
+  Result:=TStringList.Create;
+  try
+  if FInterfaceVersion>1 then begin
+    GetScopeRates(n0, n1, @ax0r, @ax1r);
+    if n0 >= 1 then
+    begin
+      for i := 0 to (n0 div 2) do
+      begin
+        min := ax0r[2 * i];
+        max := ax0r[2 * i + 1];
+        if min = max then
+          Result.Add(formatfloat('0.####', min))
+        else
+        begin
+          step := (max - min) / 3;
+          for j := 0 to 3 do
+          begin
+            rate := min + j * step;
+            if (i=0) and (rate = 0) and (max > 0.15) then
+            begin  // add slow speed 2x ->32x sidereal
+              Result.add('0.0083');  // 2x
+              Result.add('0.0333');  // 8x
+              Result.add('0.1333');  //32x
+              x := step / 2;
+              if step > 0.3 then
+                Result.add(formatfloat('0.####', x));
+            end
+            else if rate > 0 then
+              Result.add(formatfloat('0.####', rate));
+          end;
+        end;
+      end;
+    end;
+  end;
+  except
+  end;
+end;
+
+procedure T_ascommount.MoveAxis(axis: integer; rate: string);
+{$ifdef mswindows}
+var x: double;
+    n: integer;
+{$endif}
+begin
+  {$ifdef mswindows}
+  val(rate,x,n);
+  if (not VarIsEmpty(V))and(n=0) then
+  begin
+    try
+      if V.CanMoveAxis(axis) then
+      begin
+        V.MoveAxis(axis, x);
+      end;
+    except
+      // unsupported by interface V1
+    end;
+  end;
   {$endif}
 end;
 

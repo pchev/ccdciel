@@ -1464,6 +1464,9 @@ resourcestring
   rsLoadFlatFile = 'Load flat file';
   rsLogFolder = 'Log folder';
   rsShowVideoCap = 'Show video capture tab';
+  rsSDriverDoNot = '%s driver do not support %s';
+  rsHandpad = 'Handpad';
+  rsFlipNS = 'Flip N/S';
 
 implementation
 

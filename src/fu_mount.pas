@@ -53,9 +53,11 @@ type
     Label2: TLabel;
     LabelMeridian: TLabel;
     Panel1: TPanel;
+    BtnHandpad: TSpeedButton;
     TimeToMeridian: TLabel;
     Title: TLabel;
     procedure BtnGotoClick(Sender: TObject);
+    procedure BtnHandpadClick(Sender: TObject);
     procedure BtnParkClick(Sender: TObject);
     procedure BtnTrackClick(Sender: TObject);
   private
@@ -64,6 +66,7 @@ type
     FonPark  : TNotifyEvent;
     FonTrack  : TNotifyEvent;
     FonGoto  : TNotifyEvent;
+    FonHandpad : TNotifyEvent;
     procedure SetCurrentRA(value:double);
     procedure SetCurrentDec(value:double);
     procedure ShowAltAz;
@@ -77,6 +80,7 @@ type
     property onPark  : TNotifyEvent read FonPark write FonPark;
     property onTrack  : TNotifyEvent read FonTrack write FonTrack;
     property onGoto  : TNotifyEvent read FonGoto write FonGoto;
+    property onHandpad : TNotifyEvent read FonHandpad write FonHandpad;
   end;
 
 implementation
@@ -121,6 +125,7 @@ begin
   DE.Hint:=rsCurrentTeles2;
   Pierside.Hint:=rsCurrentTeles3;
   TimeToMeridian.Hint:=rsTimeFromMeri;
+  BtnHandpad.Caption:=ellipsis;
 end;
 
 procedure Tf_mount.SetCurrentRA(value:double);
@@ -159,6 +164,11 @@ end;
 procedure Tf_mount.BtnGotoClick(Sender: TObject);
 begin
   if assigned(FonGoto) then FonGoto(self);
+end;
+
+procedure Tf_mount.BtnHandpadClick(Sender: TObject);
+begin
+  if assigned(FonHandpad) then FonHandpad(self);
 end;
 
 procedure Tf_mount.BtnTrackClick(Sender: TObject);

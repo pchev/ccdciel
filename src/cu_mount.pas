@@ -50,7 +50,7 @@ T_mount = class(TComponent)
     FEquinox,FEquinoxJD: double;
     FSlaveDome: boolean;
     FDomeActionWait: integer;
-    FCanPulseGuide: boolean;
+    FCanPulseGuide, FCanMoveAxis: boolean;
     procedure msg(txt: string; level:integer=3);
     function  GetEquinoxCache: double;
     function  GetEquinoxJD: double;
@@ -77,6 +77,7 @@ T_mount = class(TComponent)
     procedure SetGuideRateDe(value:double); virtual; abstract;
     function GetAlignmentMode: TAlignmentMode; virtual; abstract;
     function GetCanSetPierSide: boolean; virtual; abstract;
+    function GetSlewRates: TstringList; virtual; abstract;
  public
     DomeOpenActions: TDomeOpenActions;
     DomeCloseActions: TDomeCloseActions;
@@ -91,12 +92,14 @@ T_mount = class(TComponent)
     function Sync(sra,sde: double):boolean; virtual; abstract;
     function Track:boolean; virtual; abstract;
     procedure AbortMotion; virtual; abstract;
+    procedure AbortSlew; virtual; abstract;
     function FlipMeridian:boolean; virtual; abstract;
     function GetSite(var long,lat,elev: double): boolean; virtual; abstract;
     function SetSite(long,lat,elev: double): boolean; virtual; abstract;
     function GetDate(var utc,offset: double): boolean; virtual; abstract;
     function SetDate(utc,offset: double): boolean; virtual; abstract;
     function PulseGuide(direction,duration:integer): boolean; virtual; abstract;
+    procedure MoveAxis(axis: integer; rate: string); virtual; abstract;
     // Eqmod specific
     function ClearAlignment:boolean; virtual; abstract;
     function ClearDelta:boolean; virtual; abstract;
@@ -126,6 +129,8 @@ T_mount = class(TComponent)
     property CanPulseGuide: boolean read FCanPulseGuide;
     property PulseGuiding: boolean read GetPulseGuiding;
     property Timeout: integer read FTimeout write SetTimeout;
+    property CanMoveAxis: boolean read FCanMoveAxis;
+    Property SlewRates: TstringList read GetSlewRates;
     property AutoLoadConfig: boolean read FAutoLoadConfig write FAutoLoadConfig;
     property Safety: Tf_safety read Fsafety write Fsafety;
     property Dome: T_dome read FDome write FDome;
@@ -158,6 +163,7 @@ begin
   FSlaveDome:=false;
   FDomeActionWait:=1;
   FCanPulseGuide:=false;
+  FCanMoveAxis:=false;
   Fcapability:='';
 end;
 

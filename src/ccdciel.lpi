@@ -347,7 +347,7 @@
         <PackageName Value="LCL"/>
       </Item11>
     </RequiredPackages>
-    <Units Count="121">
+    <Units Count="122">
       <Unit0>
         <Filename Value="ccdciel.lpr"/>
         <IsPartOfProject Value="True"/>
@@ -968,6 +968,13 @@
         <Filename Value="cu_autoguider_internal.pas"/>
         <IsPartOfProject Value="True"/>
       </Unit120>
+      <Unit121>
+        <Filename Value="pu_handpad.pas"/>
+        <IsPartOfProject Value="True"/>
+        <ComponentName Value="f_handpad"/>
+        <HasResources Value="True"/>
+        <ResourceBaseClass Value="Form"/>
+      </Unit121>
     </Units>
   </ProjectOptions>
   <CompilerOptions>

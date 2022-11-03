@@ -80,6 +80,13 @@ T_indimount = class(T_mount)
    Guide_Rate: INumberVectorProperty;
    Guide_Rate_NS:  INumber;
    Guide_Rate_WE:  INumber;
+   SlewRate_prop: ISwitchVectorProperty;
+   moveNS_prop: ISwitchVectorProperty;
+   moveN_prop: ISwitch;
+   moveS_prop: ISwitch;
+   moveEW_prop: ISwitchVectorProperty;
+   moveE_prop: ISwitch;
+   moveW_prop: ISwitch;
    Fready,Fconnected,FConnectDevice: boolean;
    Findiserver, Findiserverport, Findidevice: string;
    procedure CreateIndiClient;
@@ -123,6 +130,7 @@ T_indimount = class(T_mount)
    function GetPulseGuiding: boolean; override;
    function GetAlignmentMode: TAlignmentMode; override;
    function GetCanSetPierSide: boolean; override;
+   function GetSlewRates: TstringList; override;
  public
    constructor Create(AOwner: TComponent);override;
    destructor  Destroy; override;
@@ -134,6 +142,7 @@ T_indimount = class(T_mount)
    function Sync(sra,sde: double):boolean; override;
    function Track:boolean; override;
    procedure AbortMotion; override;
+   procedure AbortSlew; override;
    function ClearAlignment:boolean; override;
    function ClearDelta:boolean; override;
    function GetSite(var long,lat,elev: double): boolean; override;
@@ -141,6 +150,7 @@ T_indimount = class(T_mount)
    function GetDate(var utc,offset: double): boolean; override;
    function SetDate(utc,offset: double): boolean; override;
    function PulseGuide(direction,duration:integer): boolean; override;
+   procedure MoveAxis(axis: integer; rate: string); override;
 end;
 
 implementation
@@ -220,6 +230,11 @@ begin
     Guide_NS:=nil;
     Guide_WE:=nil;
     Guide_Rate:=nil;
+    SlewRate_prop := nil;
+    moveNS_prop := nil;
+    moveEW_prop := nil;
+    FCanPulseGuide := false;
+    FCanMoveAxis := false;
     Fready:=false;
     Fconnected := false;
     FConnectDevice:=false;
@@ -487,6 +502,25 @@ begin
       Guide_Rate_NS:=IUFindNumber(Guide_Rate,'GUIDE_RATE_NS');
       Guide_Rate_WE:=IUFindNumber(Guide_Rate,'GUIDE_RATE_WE');
       if (Guide_Rate_NS=nil)or(Guide_Rate_WE=nil) then Guide_Rate:=nil;
+   end
+   else if (proptype=INDI_SWITCH)and(moveNS_prop=nil)and(propname='TELESCOPE_MOTION_NS') then begin
+     moveNS_prop := indiProp.getSwitch;
+     moveN_prop := IUFindSwitch(moveNS_prop, 'MOTION_NORTH');
+     moveS_prop := IUFindSwitch(moveNS_prop, 'MOTION_SOUTH');
+     if (moveN_prop=nil)or(moveS_prop=nil) then moveNS_prop:=nil;
+     FCanMoveAxis:=(moveNS_prop<>nil)and(moveEW_prop<>nil);
+     if FCanMoveAxis then Fcapability:=Fcapability+'CanMoveAxis; ';
+   end
+   else if (proptype=INDI_SWITCH)and(moveEW_prop=nil)and(propname='TELESCOPE_MOTION_WE') then begin
+     moveEW_prop := indiProp.getSwitch;
+     moveE_prop := IUFindSwitch(moveEW_prop, 'MOTION_EAST');
+     moveW_prop := IUFindSwitch(moveEW_prop, 'MOTION_WEST');
+     if (moveE_prop=nil)or(moveW_prop=nil) then moveEW_prop:=nil;
+     FCanMoveAxis:=(moveNS_prop<>nil)and(moveEW_prop<>nil);
+     if FCanMoveAxis then Fcapability:=Fcapability+'CanMoveAxis; ';
+   end
+   else if (proptype=INDI_SWITCH)and(SlewRate_prop=nil)and((propname='TELESCOPE_SLEW_RATE')or(propname='SLEWMODE')) then begin
+     SlewRate_prop := indiProp.getSwitch;
    end
    else if (proptype=INDI_SWITCH)and(AlignMode=nil)and(propname='ALIGNMODE') then begin
       AlignMode:=indiProp.getSwitch;
@@ -787,6 +821,25 @@ begin
  msg(rsStopTelescop);
 end;
 
+procedure T_indimount.AbortSlew;
+var ab: ISwitch;
+begin
+ MountTrackingAlert:=false;
+ if AbortmotionProp<>nil then begin
+   ab:=IUFindSwitch(AbortmotionProp,'ABORT');
+   if ab<>nil then begin
+     ab.s:=ISS_ON;
+     indiclient.sendNewSwitch(AbortmotionProp);
+   end;
+ end;
+ // do not stop tracking, only slewing
+ if TrackState<>nil then begin
+    IUResetSwitch(TrackState);
+    TrackOn.s:=ISS_ON;
+    indiclient.sendNewSwitch(TrackState);
+ end;
+end;
+
 procedure T_indimount.SetTimeout(num:integer);
 begin
  FTimeOut:=num;
@@ -998,6 +1051,90 @@ begin
   if Pier_Side<>nil then begin
      result:=(Pier_Side.p=IP_RW);
 end;
+end;
+
+function T_indimount.GetSlewRates: TstringList;
+var i: integer;
+begin
+  result:=TStringList.Create;
+  if SlewRate_prop<>nil then begin
+    for i := 0 to SlewRate_prop.nsp - 1 do
+    begin
+      result.Add(SlewRate_prop.sp[i].lbl);
+    end;
+  end;
+end;
+
+procedure T_indimount.MoveAxis(axis: integer; rate: string);
+var
+  positive: boolean;
+  sw: ISwitch;
+  i: integer;
+begin
+  if (moveNS_prop <> nil) and (moveEW_prop <> nil) then
+  begin
+    if rate = '0' then
+    begin
+      case axis of
+        0:
+        begin  //  alpha
+          IUResetSwitch(moveEW_prop);
+          indiclient.sendNewSwitch(moveEW_prop);
+        end;
+        1:
+        begin  // delta
+          IUResetSwitch(moveNS_prop);
+          indiclient.sendNewSwitch(moveNS_prop);
+        end;
+      end;
+    end
+    else
+    begin
+      positive := (copy(rate, 1, 1) <> '-');
+      if not positive then
+        Delete(rate, 1, 1);
+      if SlewRate_prop <> nil then
+      begin
+        if pos('N/A', rate) = 0 then
+        begin
+          sw:=nil;
+          for i := 0 to SlewRate_prop.nsp - 1 do
+          begin
+            if rate=SlewRate_prop.sp[i].lbl then begin
+              sw:=SlewRate_prop.sp[i];
+              break;
+            end;
+          end;
+          if sw <> nil then
+          begin
+            IUResetSwitch(SlewRate_prop);
+            sw.s := ISS_ON;
+            indiclient.sendNewSwitch(SlewRate_prop);
+          end;
+        end;
+      end;
+      case axis of
+        0:
+        begin  //  alpha
+          IUResetSwitch(moveEW_prop);
+          if positive then
+            moveW_prop.s := ISS_ON
+          else
+            moveE_prop.s := ISS_ON;
+          indiclient.sendNewSwitch(moveEW_prop);
+        end;
+        1:
+        begin  // delta
+          IUResetSwitch(moveNS_prop);
+          if positive then
+            moveN_prop.s := ISS_ON
+          else
+            moveS_prop.s := ISS_ON;
+          indiclient.sendNewSwitch(moveNS_prop);
+        end;
+      end;
+    end;
+  end;
 end;
 
 end.

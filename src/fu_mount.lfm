@@ -23,6 +23,7 @@ object f_mount: Tf_mount
     DragMode = dmAutomatic
     Font.Color = clBtnText
     Layout = tlCenter
+    ParentColor = False
     ParentFont = False
     Transparent = False
   end
@@ -54,6 +55,7 @@ object f_mount: Tf_mount
         Top = 4
         Width = 32
         Caption = 'RA     '
+        ParentColor = False
         ParentFont = False
       end
       object btnTrack: TSpeedButton
@@ -74,6 +76,7 @@ object f_mount: Tf_mount
         Width = 6
         Caption = '  '
         Constraints.MaxHeight = 28
+        ParentColor = False
         ParentFont = False
       end
     end
@@ -93,6 +96,7 @@ object f_mount: Tf_mount
         Top = 4
         Width = 33
         Caption = 'Dec   '
+        ParentColor = False
         ParentFont = False
       end
       object BtnPark: TSpeedButton
@@ -113,16 +117,17 @@ object f_mount: Tf_mount
         Width = 6
         Caption = '  '
         Constraints.MaxHeight = 28
+        ParentColor = False
         ParentFont = False
       end
     end
     object Panel6: TPanel
       Left = 0
-      Height = 19
+      Height = 23
       Top = 48
       Width = 191
       BevelOuter = bvNone
-      ClientHeight = 19
+      ClientHeight = 23
       ClientWidth = 191
       ParentFont = False
       TabOrder = 4
@@ -132,6 +137,7 @@ object f_mount: Tf_mount
         Top = 0
         Width = 15
         Caption = 'Az'
+        ParentColor = False
         ParentFont = False
       end
       object Label5: TLabel
@@ -140,6 +146,7 @@ object f_mount: Tf_mount
         Top = 0
         Width = 17
         Caption = 'Alt'
+        ParentColor = False
         ParentFont = False
       end
       object AZ: TLabel
@@ -148,6 +155,7 @@ object f_mount: Tf_mount
         Top = 0
         Width = 3
         Caption = ' '
+        ParentColor = False
         ParentFont = False
       end
       object ALT: TLabel
@@ -156,13 +164,23 @@ object f_mount: Tf_mount
         Top = 0
         Width = 3
         Caption = ' '
+        ParentColor = False
         ParentFont = False
+      end
+      object BtnHandpad: TSpeedButton
+        Left = 168
+        Height = 23
+        Top = 0
+        Width = 23
+        Align = alRight
+        Caption = '..'
+        OnClick = BtnHandpadClick
       end
     end
     object Panel4: TPanel
       Left = 0
       Height = 25
-      Top = 67
+      Top = 71
       Width = 191
       BevelOuter = bvNone
       ClientHeight = 25
@@ -177,6 +195,7 @@ object f_mount: Tf_mount
         Width = 115
         Caption = 'Unknown pier side'
         Constraints.MaxHeight = 28
+        ParentColor = False
         ParentFont = False
       end
       object BtnGoto: TButton
@@ -193,7 +212,7 @@ object f_mount: Tf_mount
     object Panel5: TPanel
       Left = 0
       Height = 23
-      Top = 92
+      Top = 96
       Width = 191
       BevelOuter = bvNone
       ClientHeight = 23
@@ -206,6 +225,7 @@ object f_mount: Tf_mount
         Top = 4
         Width = 69
         Caption = 'Meridian in'
+        ParentColor = False
         ParentFont = False
       end
       object Label4: TLabel
@@ -214,6 +234,7 @@ object f_mount: Tf_mount
         Top = 4
         Width = 27
         Caption = 'min.'
+        ParentColor = False
         ParentFont = False
       end
       object TimeToMeridian: TLabel
@@ -224,6 +245,7 @@ object f_mount: Tf_mount
         Width = 8
         Caption = '0'
         Constraints.MaxHeight = 28
+        ParentColor = False
         ParentFont = False
       end
     end
