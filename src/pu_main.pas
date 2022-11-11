@@ -3286,6 +3286,7 @@ begin
     VK_F2 : TBFocus.Click;
     VK_F3 : TBCapture.Click;
     VK_F4 : TBSequence.Click;
+    VK_F5 : TBInternalGuider.Click;
     VK_F11: SwitchImageFullscreen;
   end;
 end;
