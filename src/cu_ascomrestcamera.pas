@@ -37,7 +37,7 @@ T_ascomrestcamera = class(T_camera)
    V : TAscomRest;
    FInterfaceVersion: integer;
    nf: integer;
-   timedout:double;
+   newtimestart,timedout:double;
    FPixelSizeX,FPixelSizeY: double;
    Fccdname: string;
    FMaxBinX,FMaxBinY,FBinX,FBinY:integer;
@@ -466,9 +466,9 @@ begin
   try
      Fexptime:=exptime;
      if debug_msg then msg('start exposure.');
-     Ftimestart:=NowUTC;
+     newtimestart:=NowUTC;
      V.Put('startexposure',['Duration',formatfloat(f4,exptime),'Light',li]);
-     Ftimestart:=(Ftimestart+NowUTC)/2;
+     newtimestart:=(newtimestart+NowUTC)/2;
      inc(FImgNum);
      Ftimeend:=now+(exptime)/secperday;
      timedout:=now+(exptime+CameraTimeout)/secperday;
@@ -553,6 +553,7 @@ begin
 
  if ok then begin
    try
+   Ftimestart:=newtimestart;
    FMidExposureTime:=(Ftimestart+NowUTC)/2;
    FImageFormat:='.fits';
    if assigned(FonExposureProgress) then FonExposureProgress(-10);

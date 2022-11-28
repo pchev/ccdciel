@@ -58,6 +58,7 @@ T_camera = class(TComponent)
     FonVideoPreviewChange,FonVideoSizeChange,FonVideoRateChange,FonVideoRecordChange: TNotifyEvent;
     FonFPSChange,FonVideoExposureChange : TNotifyEvent;
     FonEncoderChange: TNotifyEvent;
+    FonSequenceInfo: TNotifyEvent;
     FImgStream: TMemoryStream;
     FVideoStream: TMemoryStream;
     FFilterNames: TStringList;
@@ -96,10 +97,12 @@ T_camera = class(TComponent)
     FFixPixelRange: boolean;
     FGuideCamera: boolean;
     FGuidePixelScale: double;
+    FsequenceRunning: boolean;
+    FStepTotalCount,FStepRepeatCount: integer;
     procedure msg(txt: string; level:integer=3);
     procedure NewImage;
     procedure TryNextExposure(Data: PtrInt);
-    procedure WriteHeaders(UpdateFromCamera:Boolean=true);
+    procedure WriteHeaders(f:TFits; stackresult:Boolean=true; UpdateFromCamera:Boolean=true);
     procedure NewVideoFrame(rawframe: boolean);
     procedure WriteVideoHeader(width,height,naxis,bitpix: integer);
     function GetBinX:integer; virtual; abstract;
@@ -333,6 +336,10 @@ T_camera = class(TComponent)
     property onFPSChange: TNotifyEvent read FonFPSChange write FonFPSChange;
     property onVideoExposureChange: TNotifyEvent read FonVideoExposureChange write FonVideoExposureChange;
     property onEncoderChange: TNotifyEvent read FonEncoderChange write FonEncoderChange;
+    property onSequenceInfo: TNotifyEvent read FonSequenceInfo write FonSequenceInfo;
+    property SequenceRunning: Boolean read FsequenceRunning write FsequenceRunning;
+    property StepTotalCount: Integer read FStepTotalCount write FStepTotalCount;
+    property StepRepeatCount: Integer read FStepRepeatCount write FStepRepeatCount;
 end;
 
 const CameraTimeout=60; // in seconds, must be enough to download image from any camers
@@ -400,6 +407,9 @@ begin
   RampTimer.OnTimer:=@RampTimerTimer;
   FGuideCamera:=false;
   FGuidePixelScale:=-1;
+  FsequenceRunning:=false;
+  FStepTotalCount:=1;
+  FStepRepeatCount:=1;
 end;
 
 destructor  T_camera.Destroy;
@@ -495,12 +505,13 @@ begin
 end;
 
 procedure T_camera.NewImage;
-var f:TFits;
+var f,fs:TFits;
     xi,yi,xc,yc,ri: integer;
     xs,ys,hfd,fwhm,vmax,snr,bg,bgdev,flux : double;
     alok,savebayer: boolean;
     mem: TMemoryStream;
-    objectstr: string;
+    objectstr,fn: string;
+    ft:TFrameType;
 const datefmt = 'yyyy"-"mm"-"dd"T"hh"-"nn"-"ss';
 begin
 {$ifdef debug_raw}writeln(FormatDateTime(dateiso,Now)+blank+'NewImage');{$endif}
@@ -511,6 +522,9 @@ if FAddFrames then begin  // stack preview frames
     mem:=TMemoryStream.Create;
     FImgStream.Position:=0;
     mem.CopyFrom(FImgStream,FImgStream.Size);
+    fs:=TFits.Create(nil);
+    fs.onMsg:=onMsg;
+    fs.Stream:=mem;
   end;
   // load temporary image
   f:=TFits.Create(nil);
@@ -601,20 +615,30 @@ if FAddFrames then begin  // stack preview frames
   end;
   // update image
   FFits.Header.Assign(f.Header);
-  WriteHeaders(false);
+  WriteHeaders(FFits,true,false);
   Ffits.GetFitsInfo;
   f.free;
-  if FSaveFrames and (mem<>nil) then begin
+  if FSaveFrames and (fs<>nil) then begin
+    // write header
+    WriteHeaders(fs,false,true);
     // save image
-    objectstr:=SafeFileName(FObjectName);
+    ft:=FrameType;
+    if ft=LIGHT then
+       objectstr:=SafeFileName(FObjectName)
+    else
+       objectstr:=trim(FrameName[ord(ft)]);
     if FStackCount=1 then begin
-      FStackSaveDir:=slash(config.GetValue('/Files/CapturePath',defCapturePath))+'stack_'+objectstr+'_'+FStackDate;
+      if Assigned(FonSequenceInfo) then FonSequenceInfo(self);
+      FStackSaveDir:=CapturePath(fs,FrameName[ord(ft)],objectstr,FormatFloat(f9v,Fexptime),inttostr(BinX),FsequenceRunning,FStepTotalCount,FStepRepeatCount);
+      FStackSaveDir:=slash(FStackSaveDir)+'stack_'+objectstr+'_'+FStackDate;
       if copy(FStackSaveDir,1,1)='.' then FStackSaveDir:=ExpandFileName(slash(Appdir)+FStackSaveDir);
       ForceDirectories(FStackSaveDir);
-      msg('Saving files to '+FStackSaveDir);
+      msg('Saving individual frames to '+FStackSaveDir);
     end;
-    mem.SaveToFile(slash(FStackSaveDir)+'stack_'+objectstr+'_'+FStackDate+'_'+PadZeros(IntToStr(FStackCount),5)+'.fits');
-    FreeAndNil(mem);
+    fn:=CaptureFilename(fs,FStackSaveDir,FrameName[ord(ft)],objectstr,FormatFloat(f9v,Fexptime),inttostr(BinX));
+    fn:=slash(FStackSaveDir)+fn+FitsFileExt;
+    fs.SaveToFile(fn);
+    fs.free;
   end;
   if Assigned(FonNewImage) then FonNewImage(self);
 end
@@ -625,7 +649,7 @@ else begin  // normal capture
   Ffits.Stream:=FImgStream;
   FImgStream:=TMemoryStream.Create;
   {$ifdef debug_raw}writeln(FormatDateTime(dateiso,Now)+blank+'write headers');{$endif}
-  WriteHeaders;
+  WriteHeaders(FFits);
   end;
   {$ifdef debug_raw}writeln(FormatDateTime(dateiso,Now)+blank+'process new image');{$endif}
   if Assigned(FonNewImage) then FonNewImage(self);
@@ -649,7 +673,7 @@ begin
  end;
 end;
 
-procedure T_camera.WriteHeaders(UpdateFromCamera:Boolean=true);
+procedure T_camera.WriteHeaders(f:TFits; stackresult:Boolean=true; UpdateFromCamera:Boolean=true);
 var origin,observer,telname,instrum,objname,siso,CType,roworder: string;
     focal_length,pixscale1,pixscale2,ccdtemp,st,ra,de,fstop,shutter,multr,multg,multb: double;
     hbitpix,hnaxis,hnaxis1,hnaxis2,hnaxis3,hbin1,hbin2,cgain,focuserpos: integer;
@@ -662,40 +686,40 @@ var origin,observer,telname,instrum,objname,siso,CType,roworder: string;
     i: integer;
 begin
   // get header values from camera (set by INDI driver or libraw)
-  if not Ffits.Header.Valueof('BITPIX',hbitpix) then hbitpix:=Ffits.HeaderInfo.bitpix;
-  if not Ffits.Header.Valueof('NAXIS',hnaxis)   then hnaxis:=Ffits.HeaderInfo.naxis;
-  if not Ffits.Header.Valueof('NAXIS1',hnaxis1) then hnaxis1:=Ffits.HeaderInfo.naxis1;
-  if not Ffits.Header.Valueof('NAXIS2',hnaxis2) then hnaxis2:=Ffits.HeaderInfo.naxis2;
-  if not Ffits.Header.Valueof('NAXIS3',hnaxis3) then hnaxis3:=Ffits.HeaderInfo.naxis3;
-  if not Ffits.Header.Valueof('BZERO',hbzero)   then hbzero:=Ffits.HeaderInfo.bzero;
-  if not Ffits.Header.Valueof('BSCALE',hbscale) then hbscale:=Ffits.HeaderInfo.bscale;
-  if not Ffits.Header.Valueof('ROWORDER',roworder) then roworder:=topdown;
-  if not Ffits.Header.Valueof('EXPTIME',hexp)   then hexp:=Fexptime;
-  if not Ffits.Header.Valueof('PIXSIZE1',hpix1) then hpix1:=-1;
-  if not Ffits.Header.Valueof('PIXSIZE2',hpix2) then hpix2:=-1;
-  if not Ffits.Header.Valueof('XBINNING',hbin1) then hbin1:=-1;
-  if not Ffits.Header.Valueof('YBINNING',hbin2) then hbin2:=-1;
+  if not f.Header.Valueof('BITPIX',hbitpix) then hbitpix:=f.HeaderInfo.bitpix;
+  if not f.Header.Valueof('NAXIS',hnaxis)   then hnaxis:=f.HeaderInfo.naxis;
+  if not f.Header.Valueof('NAXIS1',hnaxis1) then hnaxis1:=f.HeaderInfo.naxis1;
+  if not f.Header.Valueof('NAXIS2',hnaxis2) then hnaxis2:=f.HeaderInfo.naxis2;
+  if not f.Header.Valueof('NAXIS3',hnaxis3) then hnaxis3:=f.HeaderInfo.naxis3;
+  if not f.Header.Valueof('BZERO',hbzero)   then hbzero:=f.HeaderInfo.bzero;
+  if not f.Header.Valueof('BSCALE',hbscale) then hbscale:=f.HeaderInfo.bscale;
+  if not f.Header.Valueof('ROWORDER',roworder) then roworder:=topdown;
+  if not f.Header.Valueof('EXPTIME',hexp)   then hexp:=Fexptime;
+  if not f.Header.Valueof('PIXSIZE1',hpix1) then hpix1:=-1;
+  if not f.Header.Valueof('PIXSIZE2',hpix2) then hpix2:=-1;
+  if not f.Header.Valueof('XBINNING',hbin1) then hbin1:=-1;
+  if not f.Header.Valueof('YBINNING',hbin2) then hbin2:=-1;
   if (hpix1>0) and (hbin1>0) then hpix1:=hpix1*hbin1;
   if (hpix2>0) and (hbin2>0) then hpix2:=hpix2*hbin2;
-  if hpix1<0 then if not Ffits.Header.Valueof('XPIXSZ',hpix1) then hpix1:=-1;
-  if hpix2<0 then if not Ffits.Header.Valueof('YPIXSZ',hpix2) then hpix2:=-1;
-  if not Ffits.Header.Valueof('FRAME',hframe)   then hframe:='Light   ';
-  if not Ffits.Header.Valueof('FILTER',hfilter) then hfilter:='';
-  if not Ffits.Header.Valueof('DATAMIN',hdmin)  then hdmin:=Ffits.HeaderInfo.dmin;
-  if not Ffits.Header.Valueof('DATAMAX',hdmax)  then hdmax:=Ffits.HeaderInfo.dmax;
-  if not Ffits.Header.Valueof('CAMERA',hinstr) then if not Ffits.Header.Valueof('INSTRUME',hinstr) then hinstr:='';
-  if not Ffits.Header.Valueof('FOCALLEN',focal_length)  then focal_length:=-1;
-  if not Ffits.Header.Valueof('ISOSPEED',siso)  then siso:='';
-  if not Ffits.Header.Valueof('F_STOP',fstop)  then fstop:=-1;
-  if not Ffits.Header.Valueof('SHUTTER',shutter)  then shutter:=-1;
-  if not Ffits.Header.Valueof('BAYERPAT',CType)  then CType:='';
-  if not Ffits.Header.Valueof('XBAYROFF',OffsetX)  then OffsetX:=-1;
-  if not Ffits.Header.Valueof('YBAYROFF',OffsetY)  then OffsetY:=-1;
-  if not Ffits.Header.Valueof('MULT_R',multr)  then multr:=-1;
-  if not Ffits.Header.Valueof('MULT_G',multg)  then multg:=-1;
-  if not Ffits.Header.Valueof('MULT_B',multb)  then multb:=-1;
-  if not Ffits.Header.Valueof('DATE-OBS',hdateobs) then hdateobs:=FormatDateTime(dateisoshort,NowUTC);
-  if not Ffits.Header.Valueof('AIRMASS',hairmass) then hairmass:=-1;
+  if hpix1<0 then if not f.Header.Valueof('XPIXSZ',hpix1) then hpix1:=-1;
+  if hpix2<0 then if not f.Header.Valueof('YPIXSZ',hpix2) then hpix2:=-1;
+  if not f.Header.Valueof('FRAME',hframe)   then hframe:='Light   ';
+  if not f.Header.Valueof('FILTER',hfilter) then hfilter:='';
+  if not f.Header.Valueof('DATAMIN',hdmin)  then hdmin:=f.HeaderInfo.dmin;
+  if not f.Header.Valueof('DATAMAX',hdmax)  then hdmax:=f.HeaderInfo.dmax;
+  if not f.Header.Valueof('CAMERA',hinstr) then if not f.Header.Valueof('INSTRUME',hinstr) then hinstr:='';
+  if not f.Header.Valueof('FOCALLEN',focal_length)  then focal_length:=-1;
+  if not f.Header.Valueof('ISOSPEED',siso)  then siso:='';
+  if not f.Header.Valueof('F_STOP',fstop)  then fstop:=-1;
+  if not f.Header.Valueof('SHUTTER',shutter)  then shutter:=-1;
+  if not f.Header.Valueof('BAYERPAT',CType)  then CType:='';
+  if not f.Header.Valueof('XBAYROFF',OffsetX)  then OffsetX:=-1;
+  if not f.Header.Valueof('YBAYROFF',OffsetY)  then OffsetY:=-1;
+  if not f.Header.Valueof('MULT_R',multr)  then multr:=-1;
+  if not f.Header.Valueof('MULT_G',multg)  then multg:=-1;
+  if not f.Header.Valueof('MULT_B',multb)  then multb:=-1;
+  if not f.Header.Valueof('DATE-OBS',hdateobs) then hdateobs:=FormatDateTime(dateisoshort,NowUTC);
+  if not f.Header.Valueof('AIRMASS',hairmass) then hairmass:=-1;
   // get other values
   pierside:='';
   hra:=NullCoord; hdec:=NullCoord;
@@ -808,126 +832,126 @@ begin
     end;
   end;
   // write new header
-  i:=FFits.Header.Indexof('END');
-  if i>0 then FFits.Header.Delete(i);
-  Ffits.Header.Insert(0,'SIMPLE',true,'file does conform to FITS standard');
-  Ffits.Header.Insert(1,'BITPIX',hbitpix,'number of bits per data pixel');
-  Ffits.Header.Insert(2,'NAXIS',hnaxis,'number of data axes');
-  Ffits.Header.Insert(3,'NAXIS1',hnaxis1 ,'length of data axis 1');
-  Ffits.Header.Insert(4,'NAXIS2',hnaxis2 ,'length of data axis 2');
-  if hnaxis=3 then Ffits.Header.Insert(-1,'NAXIS3',hnaxis3 ,'length of data axis 3');;
-  Ffits.Header.Insert(-1,'BZERO',hbzero,'offset data range to that of unsigned short');
-  i:=Ffits.Header.Insert(-1,'BSCALE',hbscale,'default scaling factor');
-  Ffits.Header.Insert(i+1,'ROWORDER',roworder,'Order of the rows in image array');
-  i:=FFits.Header.Indexof('HIERARCH');
+  i:=f.Header.Indexof('END');
+  if i>0 then f.Header.Delete(i);
+  f.Header.Insert(0,'SIMPLE',true,'file does conform to FITS standard');
+  f.Header.Insert(1,'BITPIX',hbitpix,'number of bits per data pixel');
+  f.Header.Insert(2,'NAXIS',hnaxis,'number of data axes');
+  f.Header.Insert(3,'NAXIS1',hnaxis1 ,'length of data axis 1');
+  f.Header.Insert(4,'NAXIS2',hnaxis2 ,'length of data axis 2');
+  if hnaxis=3 then f.Header.Insert(-1,'NAXIS3',hnaxis3 ,'length of data axis 3');;
+  f.Header.Insert(-1,'BZERO',hbzero,'offset data range to that of unsigned short');
+  i:=f.Header.Insert(-1,'BSCALE',hbscale,'default scaling factor');
+  f.Header.Insert(i+1,'ROWORDER',roworder,'Order of the rows in image array');
+  i:=f.Header.Indexof('HIERARCH');
   if i>0 then
      i:=i-1
   else
      i:=-1;
   if hdmax>0 then begin
-    Ffits.Header.Insert(i,'DATAMIN',hdmin,'Minimum value');
-    Ffits.Header.Insert(i,'DATAMAX',hdmax,'Maximum value');
+    f.Header.Insert(i,'DATAMIN',hdmin,'Minimum value');
+    f.Header.Insert(i,'DATAMAX',hdmax,'Maximum value');
   end;
-  Ffits.Header.Insert(i,'DATE',FormatDateTime(dateisoshort,NowUTC),'Date data written');
-  if origin<>'' then Ffits.Header.Insert(i,'ORIGIN',origin,'Observatory name');
-  Ffits.Header.Insert(i,'SITELAT',ObsLatitude,'Observatory latitude');
-  Ffits.Header.Insert(i,'SITELONG',-ObsLongitude,'Observatory longitude'); //Internal longitude is East negative for historical reason
-  if observer<>'' then Ffits.Header.Insert(i,'OBSERVER',observer,'Observer name');
-  if telname<>'' then Ffits.Header.Insert(i,'TELESCOP',telname,'Telescope used for acquisition');
+  f.Header.Insert(i,'DATE',FormatDateTime(dateisoshort,NowUTC),'Date data written');
+  if origin<>'' then f.Header.Insert(i,'ORIGIN',origin,'Observatory name');
+  f.Header.Insert(i,'SITELAT',ObsLatitude,'Observatory latitude');
+  f.Header.Insert(i,'SITELONG',-ObsLongitude,'Observatory longitude'); //Internal longitude is East negative for historical reason
+  if observer<>'' then f.Header.Insert(i,'OBSERVER',observer,'Observer name');
+  if telname<>'' then f.Header.Insert(i,'TELESCOP',telname,'Telescope used for acquisition');
   if instrum='' then begin
     if hinstr<>'' then begin
-      Ffits.Header.Insert(i,'INSTRUME',hinstr,'Instrument used for acquisition');
+      f.Header.Insert(i,'INSTRUME',hinstr,'Instrument used for acquisition');
     end;
   end
   else begin
-    Ffits.Header.Insert(i,'INSTRUME',instrum,'Instrument used for acquisition');
+    f.Header.Insert(i,'INSTRUME',instrum,'Instrument used for acquisition');
   end;
-  if hfilter<>'' then Ffits.Header.Insert(i,'FILTER',hfilter,'Filter');
-  Ffits.Header.Insert(i,'SWCREATE','CCDciel '+ccdciel_version+'-'+RevisionStr+blank+compile_system,'');
-  if objname<>'' then Ffits.Header.Insert(i,'OBJECT',objname,'Observed object name');
-  Ffits.Header.Insert(i,'IMAGETYP',hframe,'Image Type');
-  if FStackCount<=1 then begin
+  if hfilter<>'' then f.Header.Insert(i,'FILTER',hfilter,'Filter');
+  f.Header.Insert(i,'SWCREATE','CCDciel '+ccdciel_version+'-'+RevisionStr+blank+compile_system,'');
+  if objname<>'' then f.Header.Insert(i,'OBJECT',objname,'Observed object name');
+  f.Header.Insert(i,'IMAGETYP',hframe,'Image Type');
+  if (FStackCount<=1)or(not stackresult) then begin
     if FhasLastExposureStartTime then
-      Ffits.Header.Insert(i,'DATE-OBS',hdateobs,'UTC start date from camera')
+      f.Header.Insert(i,'DATE-OBS',hdateobs,'UTC start date from camera')
     else
-      Ffits.Header.Insert(i,'DATE-OBS',hdateobs,'UTC start date of observation');
+      f.Header.Insert(i,'DATE-OBS',hdateobs,'UTC start date of observation');
     if shutter>0 then begin
-      Ffits.Header.Insert(i,'EXPTIME',shutter,'[s] Camera Exposure Time');
-      if hexp>0 then Ffits.Header.Insert(i,'REQTIME',hexp,'[s] Requested Exposure Time');
+      f.Header.Insert(i,'EXPTIME',shutter,'[s] Camera Exposure Time');
+      if hexp>0 then f.Header.Insert(i,'REQTIME',hexp,'[s] Requested Exposure Time');
     end
     else begin
       if FhasLastExposureDuration then
-         Ffits.Header.Insert(i,'EXPTIME',hexp,'[s] Exposure Time from camera')
+         f.Header.Insert(i,'EXPTIME',hexp,'[s] Exposure Time from camera')
       else
-         Ffits.Header.Insert(i,'EXPTIME',hexp,'[s] Total Exposure Time');
+         f.Header.Insert(i,'EXPTIME',hexp,'[s] Total Exposure Time');
     end;
   end
   else begin
-    Ffits.Header.Insert(i,'DATE-OBS',FStackExpStart,'UTC start date of observation');
-    Ffits.Header.Insert(i,'EXPTIME',hexp*FStackCount,'[s] Total Exposure Time');
-    Ffits.Header.Insert(i,'STACKCNT',FStackCount,'Number of stacked frames');
-    Ffits.Header.Insert(i,'STACKEXP',hexp,'[s] Individual frame exposure Time');
+    f.Header.Insert(i,'DATE-OBS',FStackExpStart,'UTC start date of observation');
+    f.Header.Insert(i,'EXPTIME',hexp*FStackCount,'[s] Total Exposure Time');
+    f.Header.Insert(i,'STACKCNT',FStackCount,'Number of stacked frames');
+    f.Header.Insert(i,'STACKEXP',hexp,'[s] Individual frame exposure Time');
     case FStackOperation of
-      0: Ffits.Header.Insert(i,'STACKOP','ADD','Stacking operation');
-      1: Ffits.Header.Insert(i,'STACKOP','MEAN','Stacking operation');
+      0: f.Header.Insert(i,'STACKOP','ADD','Stacking operation');
+      1: f.Header.Insert(i,'STACKOP','MEAN','Stacking operation');
     end;
-    if FStackAlign then Ffits.Header.Insert(i,'STACKALN',FormatFloat(f0,FStackAlignX)+'/'+FormatFloat(f0,hnaxis2-FStackAlignY),'Alignment star x/y position');
+    if FStackAlign then f.Header.Insert(i,'STACKALN',FormatFloat(f0,FStackAlignX)+'/'+FormatFloat(f0,hnaxis2-FStackAlignY),'Alignment star x/y position');
   end;
-  if cgain<>NullInt then Ffits.Header.Insert(i,'GAIN',cgain,'Camera gain setting in manufacturer units');
-  if siso<>'' then Ffits.Header.Insert(i,'GAIN',siso,'Camera ISO');
-  if gamma<>NullInt then Ffits.Header.Insert(i,'GAMMA',gamma,'Video gamma');
-  if coffset<>NullInt then Ffits.Header.Insert(i,'OFFSET',coffset,'Camera offset setting in manufacturer units');
-  if fstop>0 then Ffits.Header.Insert(i,'F_STOP',fstop ,'Camera F-stop');
-  if hpix1>0 then Ffits.Header.Insert(i,'XPIXSZ',hpix1 ,'[um] Pixel Size X, binned');
-  if hpix2>0 then Ffits.Header.Insert(i,'YPIXSZ',hpix2 ,'[um] Pixel Size Y, binned');
-  if hpix1>0 then Ffits.Header.Insert(i,'PIXSIZE1',hpix1 ,'[um] Pixel Size X, binned');
-  if hpix2>0 then Ffits.Header.Insert(i,'PIXSIZE2',hpix2 ,'[um] Pixel Size Y, binned');
-  if hbin1>0 then Ffits.Header.Insert(i,'XBINNING',hbin1 ,'Binning factor X');
-  if hbin2>0 then Ffits.Header.Insert(i,'YBINNING',hbin2 ,'Binning factor Y');
+  if cgain<>NullInt then f.Header.Insert(i,'GAIN',cgain,'Camera gain setting in manufacturer units');
+  if siso<>'' then f.Header.Insert(i,'GAIN',siso,'Camera ISO');
+  if gamma<>NullInt then f.Header.Insert(i,'GAMMA',gamma,'Video gamma');
+  if coffset<>NullInt then f.Header.Insert(i,'OFFSET',coffset,'Camera offset setting in manufacturer units');
+  if fstop>0 then f.Header.Insert(i,'F_STOP',fstop ,'Camera F-stop');
+  if hpix1>0 then f.Header.Insert(i,'XPIXSZ',hpix1 ,'[um] Pixel Size X, binned');
+  if hpix2>0 then f.Header.Insert(i,'YPIXSZ',hpix2 ,'[um] Pixel Size Y, binned');
+  if hpix1>0 then f.Header.Insert(i,'PIXSIZE1',hpix1 ,'[um] Pixel Size X, binned');
+  if hpix2>0 then f.Header.Insert(i,'PIXSIZE2',hpix2 ,'[um] Pixel Size Y, binned');
+  if hbin1>0 then f.Header.Insert(i,'XBINNING',hbin1 ,'Binning factor X');
+  if hbin2>0 then f.Header.Insert(i,'YBINNING',hbin2 ,'Binning factor Y');
   if CType<>'' then begin
-     if OffsetX>=0 then Ffits.Header.Insert(i,'XBAYROFF',OffsetX ,'X offset of Bayer array');
-     if OffsetY>=0 then Ffits.Header.Insert(i,'YBAYROFF',OffsetY ,'Y offset of Bayer array');
-     Ffits.Header.Insert(i,'BAYERPAT',CType ,'Bayer color pattern');
-     if multr>0 then Ffits.Header.Insert(i,'MULT_R',multr ,'R multiplier');
-     if multg>0 then Ffits.Header.Insert(i,'MULT_G',multg ,'G multiplier');
-     if multb>0 then Ffits.Header.Insert(i,'MULT_B',multb ,'B multiplier');
+     if OffsetX>=0 then f.Header.Insert(i,'XBAYROFF',OffsetX ,'X offset of Bayer array');
+     if OffsetY>=0 then f.Header.Insert(i,'YBAYROFF',OffsetY ,'Y offset of Bayer array');
+     f.Header.Insert(i,'BAYERPAT',CType ,'Bayer color pattern');
+     if multr>0 then f.Header.Insert(i,'MULT_R',multr ,'R multiplier');
+     if multg>0 then f.Header.Insert(i,'MULT_G',multg ,'G multiplier');
+     if multb>0 then f.Header.Insert(i,'MULT_B',multb ,'B multiplier');
   end;
-  if (focal_length>0) then Ffits.Header.Insert(i,'FOCALLEN',focal_length,'[mm] Telescope focal length');
-  if ccdtemp<>NullCoord then Ffits.Header.Insert(i,'CCD-TEMP',ccdtemp ,'CCD temperature (Celsius)');
+  if (focal_length>0) then f.Header.Insert(i,'FOCALLEN',focal_length,'[mm] Telescope focal length');
+  if ccdtemp<>NullCoord then f.Header.Insert(i,'CCD-TEMP',ccdtemp ,'CCD temperature (Celsius)');
   if Frwidth<>0 then begin
-    Ffits.Header.Insert(i,'FRAMEX',Frx,'Frame start x');
-    Ffits.Header.Insert(i,'FRAMEY',Fry,'Frame start y');
-    Ffits.Header.Insert(i,'FRAMEHGT',Frheight,'Frame height');
-    Ffits.Header.Insert(i,'FRAMEWDH',Frwidth,'Frame width');
+    f.Header.Insert(i,'FRAMEX',Frx,'Frame start x');
+    f.Header.Insert(i,'FRAMEY',Fry,'Frame start y');
+    f.Header.Insert(i,'FRAMEHGT',Frheight,'Frame height');
+    f.Header.Insert(i,'FRAMEWDH',Frwidth,'Frame width');
   end;
   if (haz<>NullCoord)and(hal<>NullCoord) then begin
-    Ffits.Header.Insert(i,'CENTAZ',FormatFloat(f2,haz),'[deg] Azimuth of center of image, origin North');
-    Ffits.Header.Insert(i,'CENTALT',FormatFloat(f2,hal),'[deg] Altitude of center of image');
+    f.Header.Insert(i,'CENTAZ',FormatFloat(f2,haz),'[deg] Azimuth of center of image, origin North');
+    f.Header.Insert(i,'CENTALT',FormatFloat(f2,hal),'[deg] Altitude of center of image');
   end;
-  if hairmass>0 then Ffits.Header.Insert(i,'AIRMASS',hairmass ,'Airmass');
-  if hasfocuserpos then Ffits.Header.Insert(i,'FOCUSPOS',focuserpos ,'Focuser position in steps');
-  if hasfocusertemp then Ffits.Header.Insert(i,'FOCUSTEM',focusertemp ,'Focuser temperature (Celsius)');
-  if pierside<>'' then Ffits.Header.Insert(i,'PIERSIDE',pierside,'Telescope side of pier');
+  if hairmass>0 then f.Header.Insert(i,'AIRMASS',hairmass ,'Airmass');
+  if hasfocuserpos then f.Header.Insert(i,'FOCUSPOS',focuserpos ,'Focuser position in steps');
+  if hasfocusertemp then f.Header.Insert(i,'FOCUSTEM',focusertemp ,'Focuser temperature (Celsius)');
+  if pierside<>'' then f.Header.Insert(i,'PIERSIDE',pierside,'Telescope side of pier');
   if (hra<>NullCoord)and(hdec<>NullCoord) then begin
-    Ffits.Header.Insert(i,'EQUINOX',2000.0,'');
-    Ffits.Header.Insert(i,'RA',hra,'[deg] Telescope pointing RA');
-    Ffits.Header.Insert(i,'DEC',hdec,'[deg] Telescope pointing DEC');
-    Ffits.Header.Insert(i,'OBJCTRA',trim(RAToStrB(hra/15)),'[hh mm ss] Telescope pointing RA');
-    Ffits.Header.Insert(i,'OBJCTDEC',trim(DEToStrB(hdec)),'[+dd mm ss] Telescope pointing DEC');
+    f.Header.Insert(i,'EQUINOX',2000.0,'');
+    f.Header.Insert(i,'RA',hra,'[deg] Telescope pointing RA');
+    f.Header.Insert(i,'DEC',hdec,'[deg] Telescope pointing DEC');
+    f.Header.Insert(i,'OBJCTRA',trim(RAToStrB(hra/15)),'[hh mm ss] Telescope pointing RA');
+    f.Header.Insert(i,'OBJCTDEC',trim(DEToStrB(hdec)),'[+dd mm ss] Telescope pointing DEC');
     if (hpix1>0)and(hpix2>0)and(focal_length>0)  then begin
        pixscale1:=3600*rad2deg*arctan(hpix1/1000/focal_length);
        pixscale2:=3600*rad2deg*arctan(hpix2/1000/focal_length);
-       Ffits.Header.Insert(i,'SECPIX1',pixscale1,'image scale arcseconds per pixel');
-       Ffits.Header.Insert(i,'SECPIX2',pixscale2,'image scale arcseconds per pixel');
-       Ffits.Header.Insert(i,'SCALE',pixscale1,'image scale arcseconds per pixel');
+       f.Header.Insert(i,'SECPIX1',pixscale1,'image scale arcseconds per pixel');
+       f.Header.Insert(i,'SECPIX2',pixscale2,'image scale arcseconds per pixel');
+       f.Header.Insert(i,'SCALE',pixscale1,'image scale arcseconds per pixel');
     end
     else if FGuideCamera and (FGuidePixelScale>0) then begin
-       Ffits.Header.Insert(i,'SECPIX1',FGuidePixelScale,'image scale arcseconds per pixel');
-       Ffits.Header.Insert(i,'SECPIX2',FGuidePixelScale,'image scale arcseconds per pixel');
-       Ffits.Header.Insert(i,'SCALE',FGuidePixelScale,'image scale arcseconds per pixel');
+       f.Header.Insert(i,'SECPIX1',FGuidePixelScale,'image scale arcseconds per pixel');
+       f.Header.Insert(i,'SECPIX2',FGuidePixelScale,'image scale arcseconds per pixel');
+       f.Header.Insert(i,'SCALE',FGuidePixelScale,'image scale arcseconds per pixel');
     end;
   end;
-  Ffits.Header.Add('END','','');
+  f.Header.Add('END','','');
 end;
 
 procedure T_camera.NewVideoFrame(rawframe: boolean);

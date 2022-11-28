@@ -683,6 +683,7 @@ type
     procedure SetGainList;
     procedure ShowGain;
     procedure GainStatus(Sender: TObject);
+    procedure CameraSequenceInfo(Sender: TObject);
     procedure ShowFnumber;
     procedure ShowFrameRange;
     procedure ShowFrame(reset:boolean);
@@ -1985,6 +1986,7 @@ begin
    camera.onCameraDisconnected:=@CameraDisconnected;
    camera.onAbortExposure:=@CameraExposureAborted;
    camera.onGainStatus:=@GainStatus;
+   camera.onSequenceInfo:=@CameraSequenceInfo;
 
    aInt:=TDevInterface(config.GetValue('/GuideCameraInterface',ord(DefaultInterface)));
    case aInt of
@@ -5470,6 +5472,13 @@ begin
  f_preview.Binning.ItemIndex:=posprev;
  f_capture.Binning.ItemIndex:=poscapt;
  f_EditTargets.FlatBinning.ItemIndex:=0;
+end;
+
+procedure Tf_main.CameraSequenceInfo(Sender: TObject);
+begin
+ camera.SequenceRunning:=f_sequence.Running;
+ camera.StepTotalCount:=f_sequence.StepTotalCount;
+ camera.StepRepeatCount:=f_sequence.StepRepeatCount;
 end;
 
 procedure Tf_main.GainStatus(Sender: TObject);
@@ -10396,20 +10405,12 @@ begin
 end;
 
 procedure Tf_main.CameraSaveNewImage;
-var dt,dn: Tdatetime;
-    fn,fd,buf,fileseqstr,fileseqext,blankrep: string;
+var fn,fd,buf: string;
     framestr,objectstr,binstr,expstr,filterstr: string;
-    ccdtemp: double;
-    fileseqnum,i,n: integer;
-    UseFileSequenceNumber: boolean;
 begin
 try
- dt:=NowUTC;
- dn:=now-0.5;
  {$ifdef debug_raw}writeln(FormatDateTime(dateiso,Now)+blank+'Camera save new image');{$endif}
- // construct path
- fd:=slash(config.GetValue('/Files/CapturePath',defCapturePath));
- if copy(fd,1,1)='.' then fd:=ExpandFileName(slash(Appdir)+fd);
+ // get values
  if not fits.Header.Valueof('FRAME',framestr) then framestr:=f_capture.FrameType.Text;
  framestr:=trim(framestr);
  if not fits.Header.Valueof('OBJECT',objectstr) then objectstr:=f_capture.Fname.Text;
@@ -10423,107 +10424,11 @@ try
  else binstr:=trim(f_capture.Binning.Text);
  if not fits.Header.Valueof('FILTER',filterstr) then filterstr:='';
  filterstr:=trim(filterstr);
- for i:=0 to SubDirCount-1 do begin
-   case SubDirOpt[i] of
-     sdSeq : if SubDirActive[i] and f_sequence.Running then fd:=slash(fd+trim(CurrentSeqName));
-     sdFrt : if SubDirActive[i] then fd:=slash(fd+framestr);
-     sdObj : if SubDirActive[i] then fd:=slash(fd+objectstr);
-     sdStep: if SubDirActive[i] and f_sequence.Running then begin
-                if f_sequence.StepTotalCount>1 then begin
-                  fd:=slash(fd+trim(CurrentStepName)+'_'+IntToStr(f_sequence.StepRepeatCount))
-                end
-                else begin
-                  fd:=slash(fd+trim(CurrentStepName));
-                end;
-             end;
-     sdExp : if SubDirActive[i] then begin
-               if FlatAutoExposure and (framestr=trim(FrameName[3])) then
-                  fd:=slash(fd+'auto')
-               else
-                  fd:=slash(fd+StringReplace(expstr,'.','_',[])+'s');
-             end;
-     sdBin : if SubDirActive[i] then fd:=slash(fd+binstr);
-     sdDate: if SubDirActive[i] then fd:=fd+slash(FormatDateTime('yyyymmdd',dt));
-     sdNight: if SubDirActive[i] then fd:=fd+slash(FormatDateTime('yyyymmdd',dn));
-   end;
- end;
+ // construct path
+ fd:=CapturePath(fits,framestr,objectstr,expstr,binstr,f_sequence.Running,f_sequence.StepTotalCount,f_sequence.StepRepeatCount);
  ForceDirectoriesUTF8(fd);
  // construct file name
- fn:='';
- if FilenameSep='_' then
-    blankrep:='-'
- else
-    blankrep:='_';
- UseFileSequenceNumber:=false;
- for i:=0 to FileNameCount-1 do begin
-   case FileNameOpt[i] of
-     fnObj : if FileNameActive[i] then begin
-             if framestr=trim(FrameName[0]) then begin
-                 fn:=fn+wordspace(StringReplace(objectstr,FilenameSep,blankrep,[rfReplaceAll]))+FilenameSep;
-             end
-             else
-                fn:=fn+framestr+FilenameSep;
-             end;
-     fnFilter: if FileNameActive[i] and (filterstr<>'')and(framestr<>trim(FrameName[1]))and(framestr<>trim(FrameName[2])) then
-                fn:=fn+filterstr+FilenameSep;
-
-     fnExp : if FileNameActive[i] then begin
-               if FlatAutoExposure and (framestr=trim(FrameName[3])) then
-                  fn:=fn+'auto'+FilenameSep
-               else begin
-                  fn:=fn+StringReplace(expstr,'.',FilenameSep,[])+'s'+FilenameSep;
-               end;
-             end;
-     fnBin : if FileNameActive[i] then begin
-               fn:=fn+binstr+FilenameSep;
-             end;
-     fnTemp: if FileNameActive[i] and fits.Header.Valueof('CCD-TEMP',ccdtemp) then
-                fn:=fn+IntToStr(round(ccdtemp))+'C'+FilenameSep;
-     fnDate: if FileNameActive[i] then begin
-                if f_capture.ExposureTime>=1.0 then
-                   fn:=fn+FormatDateTime('yyyymmdd'+FilenameSep+'hhnnss',dt)+FilenameSep
-                else
-                   fn:=fn+FormatDateTime('yyyymmdd'+FilenameSep+'hhnnsszzz',dt)+FilenameSep;
-             end
-             else
-                UseFileSequenceNumber:=true;
-     fnGain: if FileNameActive[i] and fits.Header.Valueof('GAIN',buf) then begin
-                fn:=fn+trim(buf)+FilenameSep;
-             end;
-     fnFocuspos: if FileNameActive[i] and fits.Header.Valueof('FOCUSPOS',buf) then begin
-                  fn:=fn+trim(buf)+FilenameSep;
-             end;
-     fnPierSide: if FileNameActive[i] and fits.Header.Valueof('PIERSIDE',buf) then begin
-                  fn:=fn+trim(buf)+FilenameSep;
-             end;
-   end;
- end;
- fn:=StringReplace(fn,' ',blankrep,[rfReplaceAll]);
- fn:=StringReplace(fn,'/',blankrep,[rfReplaceAll]);
- fn:=StringReplace(fn,'\',blankrep,[rfReplaceAll]);
- fn:=StringReplace(fn,':',blankrep,[rfReplaceAll]);
- if fn<>'' then
-    delete(fn,length(fn),1); // remove last _
- // sequence number must always be at the end
- if UseFileSequenceNumber then begin
-   fileseqnum:=1;
-   fileseqstr:=IntToStr(fileseqnum);
-   if (SaveFormat=ffFITS) or FileStackFloat then begin
-     if FilePack then
-       fileseqext:=FitsFileExt+'.fz'
-     else
-       fileseqext:=FitsFileExt;
-   end
-   else
-     fileseqext:='.tif';
-   if FileSequenceWidth>0 then fileseqstr:=PadZeros(IntToStr(fileseqnum),FileSequenceWidth);
-   while FileExistsUTF8(slash(fd)+fn+FilenameSep+fileseqstr+fileseqext) do begin
-     inc(fileseqnum);
-     fileseqstr:=IntToStr(fileseqnum);
-     if FileSequenceWidth>0 then fileseqstr:=PadZeros(IntToStr(fileseqnum),FileSequenceWidth);
-   end;
-   fn:=fn+FilenameSep+fileseqstr;
- end;
+ fn:=CaptureFilename(fits,fd,framestr,objectstr,expstr,binstr);
  // save the file
  if (SaveFormat=ffFITS) or FileStackFloat then begin
    fn:=slash(fd)+fn+FitsFileExt;

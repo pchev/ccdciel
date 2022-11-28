@@ -39,7 +39,7 @@ T_ascomcamera = class(T_camera)
    {$ifdef mswindows}
    V: variant;
    nf: integer;
-   timedout:double;
+   newtimestart,timedout:double;
    FPixelSizeX,FPixelSizeY: double;
    Fccdname: string;
    {$endif}
@@ -454,9 +454,9 @@ begin
   try
      Fexptime:=exptime;
      if debug_msg then msg('start exposure.');
-     Ftimestart:=NowUTC;
+     newtimestart:=NowUTC;
      V.StartExposure(exptime,li);
-     Ftimestart:=(Ftimestart+NowUTC)/2;
+     newtimestart:=(newtimestart+NowUTC)/2;
      inc(FImgNum);
      Ftimeend:=now+(exptime)/secperday;
      timedout:=now+(exptime+CameraTimeout)/secperday;
@@ -563,6 +563,7 @@ begin
  if ok then begin
    try
    FImageFormat:='.fits';
+   Ftimestart:=newtimestart;
    FMidExposureTime:=(Ftimestart+NowUTC)/2;
    if assigned(FonExposureProgress) then FonExposureProgress(-10);
    if debug_msg then msg('read image.');

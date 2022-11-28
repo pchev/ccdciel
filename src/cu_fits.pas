@@ -327,6 +327,8 @@ type
   procedure RawToFits(raw:TMemoryStream; ext: string; var ImgStream:TMemoryStream; out rmsg:string; pix:double=-1;piy:double=-1;binx:integer=-1;biny:integer=-1; flip:boolean=false);
   function PackFits(unpackedfilename,packedfilename: string; out rmsg:string):integer;
   function UnpackFits(packedfilename: string; var ImgStream:TMemoryStream; out rmsg:string):integer;
+  function CapturePath(f:TFits; DefFrameType,DefObject,DefExp,DefBin:string; sequence: boolean; StepTotalCount,StepRepeatCount:integer):string;
+  function CaptureFilename(f:TFits; Directory,DefFrameType,DefObject,DefExp,DefBin:string; ForceFITS:boolean=false):string;
 
 implementation
 
@@ -4308,6 +4310,168 @@ begin
      rmsg:=E.Message;
    end;
  end;
+end;
+
+function CapturePath(f:TFits; DefFrameType,DefObject,DefExp,DefBin:string; sequence: boolean; StepTotalCount,StepRepeatCount:integer):string;
+var dt,dn: Tdatetime;
+    fd,buf,dateobs: string;
+    framestr,objectstr,binstr,expstr,filterstr: string;
+    i: integer;
+begin
+if f.Header.Valueof('DATE-OBS',dateobs) then begin
+  dt:=DateIso2DateTime(dateobs);
+end
+else begin
+  dt:=NowUTC;
+end;
+dn:=now-0.5;
+// construct path
+fd:=slash(config.GetValue('/Files/CapturePath',defCapturePath));
+if copy(fd,1,1)='.' then fd:=ExpandFileName(slash(Appdir)+fd);
+if not f.Header.Valueof('FRAME',framestr) then framestr:=DefFrameType;
+framestr:=trim(framestr);
+if not f.Header.Valueof('OBJECT',objectstr) then objectstr:=DefObject;
+objectstr:=SafeFileName(objectstr);
+if not f.Header.Valueof('EXPTIME',expstr) then expstr:=DefExp;
+expstr:=trim(expstr);
+if f.Header.Valueof('XBINNING',binstr) then begin
+  if not f.Header.Valueof('YBINNING',buf) then buf:=binstr;
+  binstr:=trim(binstr)+'x'+trim(buf);
+end
+else binstr:=trim(DefBin);
+if not f.Header.Valueof('FILTER',filterstr) then filterstr:='';
+filterstr:=trim(filterstr);
+for i:=0 to SubDirCount-1 do begin
+  case SubDirOpt[i] of
+    sdSeq : if SubDirActive[i] and sequence then fd:=slash(fd+trim(CurrentSeqName));
+    sdFrt : if SubDirActive[i] then fd:=slash(fd+framestr);
+    sdObj : if SubDirActive[i] then fd:=slash(fd+objectstr);
+    sdStep: if SubDirActive[i] and sequence then begin
+               if StepTotalCount>1 then begin
+                 fd:=slash(fd+trim(CurrentStepName)+'_'+IntToStr(StepRepeatCount))
+               end
+               else begin
+                 fd:=slash(fd+trim(CurrentStepName));
+               end;
+            end;
+    sdExp : if SubDirActive[i] then begin
+              if FlatAutoExposure and (framestr=trim(FrameName[3])) then
+                 fd:=slash(fd+'auto')
+              else
+                 fd:=slash(fd+StringReplace(expstr,'.','_',[])+'s');
+            end;
+    sdBin : if SubDirActive[i] then fd:=slash(fd+binstr);
+    sdDate: if SubDirActive[i] then fd:=fd+slash(FormatDateTime('yyyymmdd',dt));
+    sdNight: if SubDirActive[i] then fd:=fd+slash(FormatDateTime('yyyymmdd',dn));
+  end;
+end;
+result:=fd;
+end;
+
+function CaptureFilename(f:TFits; Directory,DefFrameType,DefObject,DefExp,DefBin:string; ForceFITS:boolean=false):string;
+var dt: Tdatetime;
+    fn,buf,fileseqstr,fileseqext,blankrep,dateobs: string;
+    framestr,objectstr,binstr,expstr,filterstr: string;
+    ccdtemp: double;
+    fileseqnum,i: integer;
+    UseFileSequenceNumber: boolean;
+begin
+  if f.Header.Valueof('DATE-OBS',dateobs) then begin
+    dt:=DateIso2DateTime(dateobs);
+  end
+  else begin
+    dt:=NowUTC;
+  end;
+  if copy(Directory,1,1)='.' then Directory:=ExpandFileName(slash(Appdir)+Directory);
+  if not f.Header.Valueof('FRAME',framestr) then framestr:=DefFrameType;
+  framestr:=trim(framestr);
+  if not f.Header.Valueof('OBJECT',objectstr) then objectstr:=DefObject;
+  objectstr:=SafeFileName(objectstr);
+  if not f.Header.Valueof('EXPTIME',expstr) then expstr:=DefExp;
+  expstr:=trim(expstr);
+  if f.Header.Valueof('XBINNING',binstr) then begin
+    if not f.Header.Valueof('YBINNING',buf) then buf:=binstr;
+    binstr:=trim(binstr)+'x'+trim(buf);
+  end
+  else binstr:=trim(DefBin);
+  if not f.Header.Valueof('FILTER',filterstr) then filterstr:='';
+  filterstr:=trim(filterstr);
+  fn:='';
+  if FilenameSep='_' then
+     blankrep:='-'
+  else
+     blankrep:='_';
+  UseFileSequenceNumber:=false;
+  for i:=0 to FileNameCount-1 do begin
+    case FileNameOpt[i] of
+      fnObj : if FileNameActive[i] then begin
+              if framestr=trim(FrameName[0]) then begin
+                  fn:=fn+wordspace(StringReplace(objectstr,FilenameSep,blankrep,[rfReplaceAll]))+FilenameSep;
+              end
+              else
+                 fn:=fn+framestr+FilenameSep;
+              end;
+      fnFilter: if FileNameActive[i] and (filterstr<>'')and(framestr<>trim(FrameName[1]))and(framestr<>trim(FrameName[2])) then
+                 fn:=fn+filterstr+FilenameSep;
+
+      fnExp : if FileNameActive[i] then begin
+                if FlatAutoExposure and (framestr=trim(FrameName[3])) then
+                   fn:=fn+'auto'+FilenameSep
+                else begin
+                   fn:=fn+StringReplace(expstr,'.',FilenameSep,[])+'s'+FilenameSep;
+                end;
+              end;
+      fnBin : if FileNameActive[i] then begin
+                fn:=fn+binstr+FilenameSep;
+              end;
+      fnTemp: if FileNameActive[i] and f.Header.Valueof('CCD-TEMP',ccdtemp) then
+                 fn:=fn+IntToStr(round(ccdtemp))+'C'+FilenameSep;
+      fnDate: if FileNameActive[i] then begin
+                 if StrToFloatDef(expstr,1)>=1.0 then
+                    fn:=fn+FormatDateTime('yyyymmdd'+FilenameSep+'hhnnss',dt)+FilenameSep
+                 else
+                    fn:=fn+FormatDateTime('yyyymmdd'+FilenameSep+'hhnnsszzz',dt)+FilenameSep;
+              end
+              else
+                 UseFileSequenceNumber:=true;
+      fnGain: if FileNameActive[i] and f.Header.Valueof('GAIN',buf) then begin
+                 fn:=fn+trim(buf)+FilenameSep;
+              end;
+      fnFocuspos: if FileNameActive[i] and f.Header.Valueof('FOCUSPOS',buf) then begin
+                   fn:=fn+trim(buf)+FilenameSep;
+              end;
+      fnPierSide: if FileNameActive[i] and f.Header.Valueof('PIERSIDE',buf) then begin
+                   fn:=fn+trim(buf)+FilenameSep;
+              end;
+    end;
+  end;
+  fn:=StringReplace(fn,' ',blankrep,[rfReplaceAll]);
+  fn:=StringReplace(fn,'/',blankrep,[rfReplaceAll]);
+  fn:=StringReplace(fn,'\',blankrep,[rfReplaceAll]);
+  fn:=StringReplace(fn,':',blankrep,[rfReplaceAll]);
+  if fn<>'' then
+     delete(fn,length(fn),1); // remove last _
+  // sequence number must always be at the end
+  if UseFileSequenceNumber then begin
+    fileseqnum:=1;
+    fileseqstr:=IntToStr(fileseqnum);
+    if (SaveFormat=ffFITS) or FileStackFloat or ForceFITS then begin
+      if FilePack then
+        fileseqext:=FitsFileExt+'.fz'
+      else
+        fileseqext:=FitsFileExt;
+    end
+    else
+      fileseqext:='.tif';
+    if FileSequenceWidth>0 then fileseqstr:=PadZeros(IntToStr(fileseqnum),FileSequenceWidth);
+    while FileExistsUTF8(slash(Directory)+fn+FilenameSep+fileseqstr+fileseqext) do begin
+      inc(fileseqnum);
+      fileseqstr:=IntToStr(fileseqnum);
+      if FileSequenceWidth>0 then fileseqstr:=PadZeros(IntToStr(fileseqnum),FileSequenceWidth);
+    end;
+    fn:=fn+FilenameSep+fileseqstr;
+  end;
+  result:=fn;
 end;
 
 end.
