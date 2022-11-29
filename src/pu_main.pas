@@ -1995,6 +1995,7 @@ begin
      ASCOMREST: guidecamera:=T_ascomrestcamera.Create(nil);
    end;
    guidecamera.GuideCamera:=true;
+   guidecamera.CameraTimeout:=15;
    guidecamera.Mount:=mount;
    guidecamera.Fits:=guidefits;
    guidecamera.onMsg:=@NewMessage;
@@ -2018,7 +2019,6 @@ begin
    camera.onVideoExposureChange:=@CameraVideoExposureChange;
    camera.onEncoderChange:=@CameraVideoEncoderChange;
    camera.onCameraDisconnected:=@CameraDisconnected;
-   camera.onAbortExposure:=@CameraExposureAborted;
    camera.onGainStatus:=@GainStatus; }
 
    if config.GetValue('/Devices/Watchdog',false) then begin
@@ -5679,7 +5679,7 @@ end;
 
 Procedure Tf_main.GuideCameraExposureAborted(Sender: TObject);
 begin
-  InternalguiderStop(Sender);
+  if autoguider is T_autoguider_internal then T_autoguider_internal(autoguider).InternalguiderRecoverCamera;
 end;
 
 Procedure Tf_main.ConnectWheel(Sender: TObject);

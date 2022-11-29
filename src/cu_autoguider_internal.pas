@@ -52,6 +52,8 @@ type
     InternalguiderCalibratingMeridianFlipSign1, InternalguiderCalibratingMeridianFlipSign2: double;
     FSettleStartTime, FSettleTime: double;
     TimerWaitPulseGuiding: TTimer;
+    FRecoveringCamera: boolean;
+    FRecoveringCameraCount: integer;
     function  measure_drift(var initialize: boolean; out drX,drY :double) : integer;
     Procedure StartGuideExposure;
     procedure InternalguiderStartAsync(Data: PtrInt);
@@ -83,6 +85,7 @@ type
     procedure InternalguiderLoop;
     procedure InternalguiderStart;
     procedure InternalguiderStop;
+    procedure InternalguiderRecoverCamera;
     procedure InternalguiderCalibrate;
     procedure InternalguiderCalibrateMeridianFlip;
     procedure InternalAutoguiding;
@@ -171,6 +174,8 @@ begin
   TimerWaitPulseGuiding:=TTimer.Create(nil);
   TimerWaitPulseGuiding.Enabled:=false;
   TimerWaitPulseGuiding.OnTimer:=@TimerWaitPulseGuidingTimer;
+  FRecoveringCamera:=false;
+  FRecoveringCameraCount:=0;
 end;
 
 Destructor T_autoguider_internal.Destroy;
@@ -732,6 +737,7 @@ if (FCamera.Status=devConnected) then begin
   FCamera.GuidePixelScale:=Finternalguider.pixel_size;
 
   FCamera.StartExposure(e);
+  FRecoveringCamera:=false;
 
 end
 else begin
@@ -879,6 +885,7 @@ var i,maxpulse: integer;
     largepulse: boolean;
 
 begin
+ FRecoveringCameraCount:=0; // we receive an image, reset recovery count
  if not FPaused then begin
 
   xy_trend[0].dither:=FSettling;
@@ -1190,6 +1197,27 @@ begin
   Finternalguider.LabelInfo.Caption:='';
   Finternalguider.LabelInfo2.Caption:='';
   SetStatus('Stopped',GUIDER_IDLE);
+end;
+
+procedure T_autoguider_internal.InternalguiderRecoverCamera;
+begin
+  // we go here after a guide camera error
+  // try to recover by aborting the current exposure and start another one
+  if InternalguiderGuiding and (not FRecoveringCamera) then begin
+   if FRecoveringCameraCount<5 then begin
+    inc(FRecoveringCameraCount);
+    FRecoveringCamera:=true;
+    PulseGuiding:=false;
+    FCamera.AbortExposureButNotSequence;
+    msg('Try to recover from guide camera error, please check the USB connection',1);
+    wait(1);
+    Application.QueueAsyncCall(@StartGuideExposureAsync,0);
+   end
+   else begin
+     msg('Too much guide camera error, stop guiding',0);
+     InternalguiderStop;
+   end;
+  end;
 end;
 
 procedure T_autoguider_internal.InternalguiderCalibrateMeridianFlip;

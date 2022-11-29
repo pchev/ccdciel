@@ -99,6 +99,7 @@ T_camera = class(TComponent)
     FGuidePixelScale: double;
     FsequenceRunning: boolean;
     FStepTotalCount,FStepRepeatCount: integer;
+    FCameraTimeout: integer;
     procedure msg(txt: string; level:integer=3);
     procedure NewImage;
     procedure TryNextExposure(Data: PtrInt);
@@ -340,15 +341,16 @@ T_camera = class(TComponent)
     property SequenceRunning: Boolean read FsequenceRunning write FsequenceRunning;
     property StepTotalCount: Integer read FStepTotalCount write FStepTotalCount;
     property StepRepeatCount: Integer read FStepRepeatCount write FStepRepeatCount;
+    property CameraTimeout: integer read FCameraTimeout write FCameraTimeout;
 end;
 
-const CameraTimeout=60; // in seconds, must be enough to download image from any camers
 
 implementation
 
 constructor T_camera.Create(AOwner: TComponent);
 begin
   inherited Create(AOwner);
+  FCameraTimeout:=60; // in seconds, must be enough to download image from any camera
   FImgNum:=0;
   FTimeOut:=100;
   FIndiTransfert:=itNetwork;

@@ -1449,7 +1449,7 @@ end;
 procedure T_indicamera.ExposureTimerTimer(sender: TObject);
 begin
  ExposureTimer.Enabled:=false;
- if now>timedout then begin
+ if (now>timedout) then begin
     msg(rsNoResponseFr2, 0);
     if assigned(FonAbortExposure) then FonAbortExposure(self);
  end
