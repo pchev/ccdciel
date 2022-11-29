@@ -1203,7 +1203,7 @@ procedure T_autoguider_internal.InternalguiderRecoverCamera;
 begin
   // we go here after a guide camera error
   // try to recover by aborting the current exposure and start another one
-  if InternalguiderGuiding and (not FRecoveringCamera) then begin
+  if InternalguiderRunning and (not InternalguiderCalibrating) and (not FRecoveringCamera) then begin
    if FRecoveringCameraCount<5 then begin
     inc(FRecoveringCameraCount);
     FRecoveringCamera:=true;
