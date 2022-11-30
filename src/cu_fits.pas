@@ -2184,13 +2184,22 @@ end;
 
 procedure TFits.ApplyDark;
 begin
-if (FDarkOn)and(FDark<>nil)and(SameFormat(FDark))
-   then begin
-    {$ifdef debug_raw}writeln(FormatDateTime(dateiso,Now)+blank+'apply dark');{$endif}
-     Math(FDark,moSub);
-     FDarkProcess:=true;
-     FHeader.Insert( FHeader.Indexof('END'),'COMMENT','Dark subtracted','');
-   end;
+  if (FDarkOn) then begin
+    if (FDark<>nil) then begin
+      if (SameFormat(FDark)) then begin
+        {$ifdef debug_raw}writeln(FormatDateTime(dateiso,Now)+blank+'apply dark');{$endif}
+         Math(FDark,moSub);
+         FDarkProcess:=true;
+         FHeader.Insert( FHeader.Indexof('END'),'COMMENT','Dark subtracted','');
+      end
+      else begin
+         FHeader.Insert( FHeader.Indexof('END'),'COMMENT','Dark not applied, not the same format','');
+      end
+    end
+    else begin
+      FHeader.Insert( FHeader.Indexof('END'),'COMMENT','Dark not applied, not dark file loaded','');
+    end;
+  end;
 end;
 
 procedure TFits.LoadFlat(fn: string);
@@ -2209,13 +2218,22 @@ end;
 
 procedure TFits.ApplyFlat;
 begin
-if (FFlatOn)and(FFlat<>nil)and(SameFormat(FFlat))
-   then begin
-    {$ifdef debug_raw}writeln(FormatDateTime(dateiso,Now)+blank+'apply flat');{$endif}
-     Math(FFlat,moDiv,false,1,FFlat.imageMean);
-     FFlatProcess:=true;
-     FHeader.Insert( FHeader.Indexof('END'),'COMMENT','Flat divided','');
-   end;
+  if (FFlatOn) then begin
+    if (FFlat<>nil) then begin
+      if (SameFormat(FFlat)) then begin
+        {$ifdef debug_raw}writeln(FormatDateTime(dateiso,Now)+blank+'apply flat');{$endif}
+        Math(FFlat,moDiv,false,1,FFlat.imageMean);
+        FFlatProcess:=true;
+        FHeader.Insert( FHeader.Indexof('END'),'COMMENT','Flat divided','');
+      end
+      else begin
+        FHeader.Insert( FHeader.Indexof('END'),'COMMENT','Flat not applied, not the same format','');
+      end;
+    end
+    else begin
+      FHeader.Insert( FHeader.Indexof('END'),'COMMENT','Flat not applied, not flat file loaded','');
+    end;
+  end;
 end;
 
 procedure TFits.ApplyBPM;
@@ -3562,8 +3580,8 @@ begin
  result := (f<>nil) and f.FFitsInfo.valid and
            (f.FFitsInfo.bitpix = FFitsInfo.bitpix)  and
            (f.FFitsInfo.naxis  = FFitsInfo.naxis )  and
-           ((f.FFitsInfo.naxis1 = FFitsInfo.naxis1)or((FFitsInfo.Frx+FFitsInfo.Frwidth)<=f.FFitsInfo.naxis1))  and
-           ((f.FFitsInfo.naxis2 = FFitsInfo.naxis2 )or((FFitsInfo.Fry+FFitsInfo.Frheight)<=f.FFitsInfo.naxis2)) and
+           ((f.FFitsInfo.naxis1 = FFitsInfo.naxis1)or((FFitsInfo.Frx>0)and((FFitsInfo.Frx+FFitsInfo.Frwidth)<=f.FFitsInfo.naxis1)))  and
+           ((f.FFitsInfo.naxis2 = FFitsInfo.naxis2 )or((FFitsInfo.Fry>0)and((FFitsInfo.Fry+FFitsInfo.Frheight)<=f.FFitsInfo.naxis2))) and
            (f.FFitsInfo.naxis3 = FFitsInfo.naxis3 ) and
            (f.FFitsInfo.bzero  = FFitsInfo.bzero )  and
            (f.FFitsInfo.BinX  = FFitsInfo.BinX )  and

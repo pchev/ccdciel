@@ -3808,6 +3808,7 @@ begin
  fits.DarkOn:=true;
  fits.LoadStream;
  fits.UpdateStream;
+ if not fits.DarkProcess then NewMessage('Error: Dark cannot be applied, see FITS header for more information.',0);
  DrawHistogram(true,false);
  DrawImage;
  finally
@@ -3869,6 +3870,7 @@ begin
   fits.FlatOn:=true;
   fits.LoadStream;
   fits.UpdateStream;
+  if not fits.FlatProcess then NewMessage('Error: Flat cannot be applied, see FITS header for more information.',0);
   DrawHistogram(true,false);
   DrawImage;
   finally
