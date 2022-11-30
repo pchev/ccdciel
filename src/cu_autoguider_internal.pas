@@ -685,6 +685,7 @@ begin
   Binning:=Finternalguider.Binning.Value;
   Fcamera.ResetFrame;
   GuideImgZoom:=0;
+  FRecoveringCameraCount:=0;
   Application.QueueAsyncCall(@StartGuideExposureAsync,0);
 end;
 
