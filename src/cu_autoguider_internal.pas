@@ -878,7 +878,8 @@ end;
 
 procedure T_autoguider_internal.InternalAutoguiding;
 var i,maxpulse: integer;
-    RADuration,DECDuration: LongInt;                              RADirection,DECDirection: string;
+    RADuration,DECDuration: LongInt;
+    RADirection,DECDirection: string;
     mflipcorr,moveRA2,dsettle : double;
     meridianflip: boolean;
     DecSign: double;

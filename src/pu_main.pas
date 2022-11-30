@@ -3795,6 +3795,7 @@ begin
  if not hasBPM then
     fits.SetBPM(bpm,bpmNum,bpmX,bpmY,bpmAxis);
  fits.LoadStream;
+ fits.UpdateStream;
  DrawImage;
  if not hasBPM then
     fits.SetBPM(bpm,0,0,0,0);
@@ -3806,6 +3807,7 @@ begin
  try
  fits.DarkOn:=true;
  fits.LoadStream;
+ fits.UpdateStream;
  DrawHistogram(true,false);
  DrawImage;
  finally
@@ -3866,6 +3868,7 @@ begin
   try
   fits.FlatOn:=true;
   fits.LoadStream;
+  fits.UpdateStream;
   DrawHistogram(true,false);
   DrawImage;
   finally
@@ -3875,23 +3878,49 @@ end;
 
 procedure Tf_main.MenuFlatCameraClick(Sender: TObject);
 var bin: integer;
+    fnbias,fnsavedark: string;
 begin
  f_pause.Caption:='Flat frame';
- f_pause.Text:='Uniformly light the telescope and set the exposure time and binning in the Preview pane now.'+crlf+rsClickContinu;
+ f_pause.Text:='Uniformly light the telescope and set the exposure time and binning in the Preview pane now.'+crlf+'Load an existing Bias or Dark-Flat frame in the next prompt.'+crlf+rsClickContinu;
  if f_pause.Wait then begin
-   bin:=f_preview.Bin;
-   camera.ResetFrame;
-   fits.SetBPM(bpm,bpmNum,bpmX,bpmY,bpmAxis);
-   fits.DarkOn:=true;
-   fits.FlatOn:=false;
-   if f_preview.ControlExposure(f_preview.Exposure,bin,bin,FLAT,ReadoutModeCapture,f_preview.Gain,f_preview.Offset) then begin
-     fits.SaveToFile(ConfigFlatFile);
-     fits.LoadFlat(ConfigFlatFile);
-   end
-   else
-     NewMessage(rsExposureFail,1);
+   OpenDialog1.Title:='Open Bias file';
+   if OpenDialog1.Execute then begin
+     fnbias:=OpenDialog1.FileName;
+     // save current dark
+     if fits.DarkFrame<>nil then begin
+       fnsavedark:=slash(TmpDir)+'savedark.fits';
+       fits.DarkFrame.SaveToFile(fnsavedark);
+     end
+     else begin
+       fnsavedark:='';
+     end;
+     // load bias as dark
+     fits.SetBPM(bpm,0,0,0,0);
+     fits.DarkOn:=false;
+     fits.LoadDark(fnbias);
+     // take flat exposure
+     bin:=f_preview.Bin;
+     camera.ResetFrame;
+     fits.SetBPM(bpm,bpmNum,bpmX,bpmY,bpmAxis);
+     fits.DarkOn:=true;
+     fits.FlatOn:=false;
+     if f_preview.ControlExposure(f_preview.Exposure,bin,bin,FLAT,ReadoutModeCapture,f_preview.Gain,f_preview.Offset) then begin
+       fits.SaveToFile(ConfigFlatFile);
+       fits.LoadFlat(ConfigFlatFile);
+     end
+     else
+       NewMessage(rsExposureFail,1);
+     // restore dark
+     if fnsavedark='' then begin
+       fits.FreeDark;
+     end
+     else begin
+       fits.LoadDark(fnsavedark);
+       DeleteFile(fnsavedark);
+     end;
+     ShowFlatInfo;
+   end;
  end;
- ShowFlatInfo;
 end;
 
 procedure Tf_main.MenuFlatClearClick(Sender: TObject);

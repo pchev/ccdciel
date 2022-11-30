@@ -186,6 +186,7 @@ type
      destructor  Destroy; override;
      function  GetStatistics: string;
      Procedure LoadStream;
+     Procedure UpdateStream;
      Procedure MeasureFlatLevel;
      Procedure LoadRGB;
      procedure ClearFitsInfo;
@@ -1452,12 +1453,17 @@ begin
   end;
 end;
 
-function TFits.GetStream: TMemoryStream;
+Procedure TFits.UpdateStream;
 begin
   if not FStreamValid then begin
     WriteFitsImage;
     FStreamValid:=true;
   end;
+end;
+
+function TFits.GetStream: TMemoryStream;
+begin
+  UpdateStream;
   result:=FHeader.GetStream;
   FStream.Position:=Fhdr_end;
   result.CopyFrom(FStream,FStream.Size-Fhdr_end);
