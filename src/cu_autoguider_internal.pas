@@ -97,6 +97,7 @@ type
     function WaitGuiding(maxwait:integer=5):boolean; override;
     function WaitDithering(maxwait:integer=5):boolean; override;
     procedure ShowImgInfo;
+    procedure NewImageReceived;
   end;
 
 implementation
@@ -886,7 +887,6 @@ var i,maxpulse: integer;
     largepulse: boolean;
 
 begin
- FRecoveringCameraCount:=0; // we receive an image, reset recovery count
  if not FPaused then begin
 
   xy_trend[0].dither:=FSettling;
@@ -1211,11 +1211,13 @@ begin
     PulseGuiding:=false;
     FCamera.AbortExposureButNotSequence;
     msg('Try to recover from guide camera error, please check the USB connection',1);
+    WriteLog('INFO: Try to recover from guide camera error');
     wait(1);
     Application.QueueAsyncCall(@StartGuideExposureAsync,0);
    end
    else begin
      msg('Too much guide camera error, stop guiding',0);
+     WriteLog('INFO: Too much guide camera error, stop guiding');
      InternalguiderStop;
    end;
   end;
@@ -1696,6 +1698,16 @@ begin
   InternalguiderCapturingDark:=true;
   SetStatus('Capture dark',GUIDER_BUSY);
   InternalguiderLoop;
+end;
+
+procedure T_autoguider_internal.NewImageReceived;
+begin
+  // we receive an image, reset recovery count
+  if FRecoveringCameraCount>0 then begin
+    FRecoveringCameraCount:=0;
+    msg('Guide camera recovered',1);
+    WriteLog('INFO: Guide camera recovered');
+  end;
 end;
 
 procedure  T_autoguider_internal.ShowImgInfo;

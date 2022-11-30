@@ -15424,12 +15424,16 @@ begin
   // prepare image
   DrawGuideImage(displayimage);
   if InternalguiderRunning and (autoguider is T_autoguider_internal) then begin
+    // signal an image is available
+    T_autoguider_internal(autoguider).NewImageReceived;
+    // process depending on current state
     if InternalguiderGuiding then
       // process autoguiding
       T_autoguider_internal(autoguider).InternalAutoguiding
     else if InternalguiderCalibrating then
       // process calibration
       T_autoguider_internal(autoguider).InternalCalibration
+      // process dark capture
     else if InternalguiderCapturingDark then begin
       if (not guidecamera.AddFrames)or(guidecamera.StackNum<1)or(guidecamera.StackCount>=guidecamera.StackNum) then begin
         // Stack count reach, save dark and stop
@@ -15441,6 +15445,7 @@ begin
       end;
     end
     else begin
+      // looping
       T_autoguider_internal(autoguider).ShowImgInfo;
     end;
 
