@@ -328,7 +328,7 @@ type
   procedure RawToFits(raw:TMemoryStream; ext: string; var ImgStream:TMemoryStream; out rmsg:string; pix:double=-1;piy:double=-1;binx:integer=-1;biny:integer=-1; flip:boolean=false);
   function PackFits(unpackedfilename,packedfilename: string; out rmsg:string):integer;
   function UnpackFits(packedfilename: string; var ImgStream:TMemoryStream; out rmsg:string):integer;
-  function CapturePath(f:TFits; DefFrameType,DefObject,DefExp,DefBin:string; sequence: boolean; StepTotalCount,StepRepeatCount:integer):string;
+  function CapturePath(f:TFits; DefFrameType,DefObject,DefExp,DefBin:string; preview,sequence: boolean; StepTotalCount,StepRepeatCount:integer):string;
   function CaptureFilename(f:TFits; Directory,DefFrameType,DefObject,DefExp,DefBin:string; ForceFITS:boolean=false):string;
 
 implementation
@@ -4336,7 +4336,7 @@ begin
  end;
 end;
 
-function CapturePath(f:TFits; DefFrameType,DefObject,DefExp,DefBin:string; sequence: boolean; StepTotalCount,StepRepeatCount:integer):string;
+function CapturePath(f:TFits; DefFrameType,DefObject,DefExp,DefBin:string; preview,sequence: boolean; StepTotalCount,StepRepeatCount:integer):string;
 var dt,dn: Tdatetime;
     fd,buf,dateobs: string;
     framestr,objectstr,binstr,expstr,filterstr: string;
@@ -4352,8 +4352,13 @@ dn:=now-0.5;
 // construct path
 fd:=slash(config.GetValue('/Files/CapturePath',defCapturePath));
 if copy(fd,1,1)='.' then fd:=ExpandFileName(slash(Appdir)+fd);
-if not f.Header.Valueof('FRAME',framestr) then framestr:=DefFrameType;
-framestr:=trim(framestr);
+if preview then begin
+  framestr:=rsPreview;
+end
+else begin
+  if not f.Header.Valueof('FRAME',framestr) then framestr:=DefFrameType;
+  framestr:=trim(framestr);
+end;
 if not f.Header.Valueof('OBJECT',objectstr) then objectstr:=DefObject;
 objectstr:=SafeFileName(objectstr);
 if not f.Header.Valueof('EXPTIME',expstr) then expstr:=DefExp;

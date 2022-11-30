@@ -631,7 +631,7 @@ if FAddFrames then begin  // stack preview frames
        objectstr:=trim(FrameName[ord(ft)]);
     if FStackCount=1 then begin
       if Assigned(FonSequenceInfo) then FonSequenceInfo(self);
-      FStackSaveDir:=CapturePath(fs,FrameName[ord(ft)],objectstr,FormatFloat(f9v,Fexptime),inttostr(BinX),FsequenceRunning,FStepTotalCount,FStepRepeatCount);
+      FStackSaveDir:=CapturePath(fs,FrameName[ord(ft)],objectstr,FormatFloat(f9v,Fexptime),inttostr(BinX),(objectstr=rsPreview),FsequenceRunning,FStepTotalCount,FStepRepeatCount);
       FStackSaveDir:=slash(FStackSaveDir)+'stack_'+objectstr+'_'+FStackDate;
       if copy(FStackSaveDir,1,1)='.' then FStackSaveDir:=ExpandFileName(slash(Appdir)+FStackSaveDir);
       ForceDirectories(FStackSaveDir);
@@ -871,7 +871,13 @@ begin
   if hfilter<>'' then f.Header.Insert(i,'FILTER',hfilter,'Filter');
   f.Header.Insert(i,'SWCREATE','CCDciel '+ccdciel_version+'-'+RevisionStr+blank+compile_system,'');
   if objname<>'' then f.Header.Insert(i,'OBJECT',objname,'Observed object name');
-  f.Header.Insert(i,'IMAGETYP',hframe,'Image Type');
+  if objname=rsPreview then begin
+    f.Header.Delete('FRAME');
+    f.Header.Delete('IMAGETYP');
+  end
+  else begin
+    f.Header.Insert(i,'IMAGETYP',hframe,'Image Type');
+  end;
   if (FStackCount<=1)or(not stackresult) then begin
     if FhasLastExposureStartTime then
       f.Header.Insert(i,'DATE-OBS',hdateobs,'UTC start date from camera')

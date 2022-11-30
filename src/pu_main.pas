@@ -10456,7 +10456,7 @@ try
  if not fits.Header.Valueof('FILTER',filterstr) then filterstr:='';
  filterstr:=trim(filterstr);
  // construct path
- fd:=CapturePath(fits,framestr,objectstr,expstr,binstr,f_sequence.Running,f_sequence.StepTotalCount,f_sequence.StepRepeatCount);
+ fd:=CapturePath(fits,framestr,objectstr,expstr,binstr,false,f_sequence.Running,f_sequence.StepTotalCount,f_sequence.StepRepeatCount);
  ForceDirectoriesUTF8(fd);
  // construct file name
  fn:=CaptureFilename(fits,fd,framestr,objectstr,expstr,binstr);
