@@ -737,6 +737,7 @@ type
     procedure PlanetariumBoxClick(Sender: TObject);
     procedure SeqDirDefaultClick(Sender: TObject);
     procedure StackShowChange(Sender: TObject);
+    procedure StackUseDarkFlatChange(Sender: TObject);
     procedure StartCdCChange(Sender: TObject);
     procedure StartHNSKYChange(Sender: TObject);
     procedure StartSAMPChange(Sender: TObject);
@@ -1017,6 +1018,7 @@ begin
   FileStackFloat.Caption:=rsFloatingPoin;
   StackUseDark.Caption:=rsApplyDarkAnd;
   StackUseFlat.Caption:=rsApplyFlat;
+  StackUseFlat.Hint:=rsFlatProcessi;
   StackDebayer.Caption:=rsDebayer;
   StackOperation.Items[0]:=rsAddImages;
   StackOperation.Items[1]:=rsMeanOfImages;
@@ -1650,6 +1652,11 @@ begin
   StackUseDark.Enabled:=StackShow.Checked;
   StackUseFlat.Enabled:=StackShow.Checked;
   StackDebayer.Enabled:=StackShow.Checked;
+end;
+
+procedure Tf_option.StackUseDarkFlatChange(Sender: TObject);
+begin
+  if not StackUseDark.Checked then StackUseFlat.Checked:=false;
 end;
 
 procedure Tf_option.StartCdCChange(Sender: TObject);
