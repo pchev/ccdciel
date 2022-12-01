@@ -530,3 +530,7 @@ msgstr ""
 msgid "Save individual images before stacking"
 msgstr ""
 
+#: u_hints:rsflatprocessi
+msgid "Flat processing also require a Dark"
+msgstr ""
+

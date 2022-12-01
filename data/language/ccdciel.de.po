@@ -7,14 +7,14 @@ msgstr ""
 "Project-Id-Version: ccdciel\n"
 "Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
 "POT-Creation-Date: 2022-11-03 17:09+0000\n"
-"PO-Revision-Date: 2022-07-24 10:03+0000\n"
+"PO-Revision-Date: 2022-11-05 19:43+0000\n"
 "Last-Translator: Thomas <email@starhopper.de>\n"
 "Language-Team: German <de@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2022-11-03 17:16+0000\n"
-"X-Generator: Launchpad (build 83f7123b02a2b50a64bc29e7e35197179a885279)\n"
+"X-Launchpad-Export-Date: 2022-11-30 13:55+0000\n"
+"X-Generator: Launchpad (build 51cef3d08dff1e227b5ada709bd67280c567d4be)\n"
 
 #: u_translation.rs2d
 msgid "2D"
@@ -38,7 +38,7 @@ msgstr "Abbrechen nach"
 
 #: u_translation.rsabortafterre
 msgid "Abort after restarting more than"
-msgstr ""
+msgstr "Abbruch nach Neustart mehr als"
 
 #: u_translation.rsabortdome
 #, object-pascal-format
@@ -171,7 +171,7 @@ msgstr "Die Bearbeitung auf die aktive Sequenz anwenden"
 
 #: u_translation.rsapplyflat
 msgid "Apply Flat"
-msgstr ""
+msgstr "Flatfield anwenden"
 
 #: u_translation.rsapplytoallde
 msgid "Apply to all devices"
@@ -316,7 +316,7 @@ msgstr "Autofokus-Grafik"
 
 #: u_translation.rsautofocusloc
 msgid "Autofocus location"
-msgstr ""
+msgstr "Autofokus Position"
 
 #: u_translation.rsautofocusmea
 #, object-pascal-format
@@ -584,7 +584,7 @@ msgstr "Kalibriert"
 
 #: u_translation.rscalibration
 msgid "Calibration"
-msgstr ""
+msgstr "Kalibrierung"
 
 #: u_translation.rscalibrationd
 #, object-pascal-format
@@ -846,7 +846,7 @@ msgstr "RA im Zentrum"
 #: u_translation.rschangedto
 #, object-pascal-format
 msgid "%s changed to %s"
-msgstr ""
+msgstr "%s gewechselt zu %s"
 
 #: u_translation.rschangelog
 msgid "Change log"
@@ -870,7 +870,7 @@ msgstr "Lösche Dunkelbild"
 
 #: u_translation.rsclearflatfra
 msgid "Clear Flat frame"
-msgstr ""
+msgstr "Flatfield löschen"
 
 #: u_translation.rsclearreferen
 msgid "Clear reference image"
@@ -1729,11 +1729,11 @@ msgstr "Automatische Flatbelichtung"
 
 #: u_translation.rsflatfileload
 msgid "Flat file loaded"
-msgstr ""
+msgstr "Flatfield geladen"
 
 #: u_translation.rsflatframe
 msgid "Flat frame"
-msgstr ""
+msgstr "Flatfield"
 
 #: u_translation.rsflatimagemea
 msgid "Flat image mean level"
@@ -1750,7 +1750,7 @@ msgstr "Zeitpunkt für Flats"
 
 #: u_translation.rsflipns
 msgid "Flip N/S"
-msgstr ""
+msgstr "Umkehrung N/S"
 
 #: u_translation.rsfliptheimageh
 msgid "Flip the image horizontally"
@@ -2045,7 +2045,7 @@ msgstr "Guider"
 
 #: u_translation.rsguidercalibr
 msgid "Guider calibration"
-msgstr ""
+msgstr "Kalibrierung der Nachführung"
 
 #: u_translation.rsguiderimage
 msgid "Guider image"
@@ -2070,7 +2070,7 @@ msgstr "Halt"
 
 #: u_translation.rshandpad
 msgid "Handpad"
-msgstr ""
+msgstr "Handpad"
 
 #: u_translation.rsheartbeatthr
 msgid "Heart beat threshold [minutes]"
@@ -2387,7 +2387,7 @@ msgstr "Lade Dunkelbild"
 
 #: u_translation.rsloadflatfile
 msgid "Load flat file"
-msgstr ""
+msgstr "Flatfield laden"
 
 #: u_translation.rslockoverlay
 msgid "Lock overlay"
@@ -2395,11 +2395,11 @@ msgstr "Overlay sperren"
 
 #: u_translation.rslogfolder
 msgid "Log folder"
-msgstr ""
+msgstr "Log Verzeichnis"
 
 #: u_translation.rslongestguide
 msgid "Longest guide pulse"
-msgstr ""
+msgstr "Längstmöglicher Guide Puls"
 
 #: u_translation.rslongitude
 msgid "Longitude"
@@ -2656,7 +2656,7 @@ msgstr "Minimum"
 
 #: u_translation.rsminimummove
 msgid "Minimum move"
-msgstr ""
+msgstr "Minimale Bewegung"
 
 #: u_translation.rsminimumobser
 msgid "Minimum observing elevation "
@@ -2701,7 +2701,7 @@ msgstr "Montierung Fähigkeiten: %s"
 
 #: u_translation.rsmountdonotsu
 msgid "Mount do not support to set SideOfPier, it is not possible to flip before the meridian!"
-msgstr ""
+msgstr "Montierung unterstützt das Setzen der Option \"SideOfPier\" nicht, es ist nicht möglich vor dem Meridian umzuschlagen"
 
 #: u_translation.rsmountisnotpa
 #, object-pascal-format
@@ -2780,7 +2780,7 @@ msgstr "Das Dreieck mit der linken Maustaste so bewegen, dass das grüne Quadrat
 
 #: u_translation.rsmovetobright
 msgid "Move to bright focus star now?"
-msgstr ""
+msgstr "Zu einem hellen Fokussierstern schwenken?"
 
 #: u_translation.rsmovetonewpla
 #, object-pascal-format
@@ -2919,7 +2919,7 @@ msgstr "Keine Abenddämmerung heute"
 
 #: u_translation.rsnoflat
 msgid "No flat"
-msgstr ""
+msgstr "Kein Flatfield"
 
 #: u_translation.rsnoflipuntilp
 msgid "No flip until past meridian for"
@@ -3130,7 +3130,7 @@ msgstr "FITS datei öffnen%s"
 
 #: u_translation.rsopenflatfile
 msgid "Open Flat file"
-msgstr ""
+msgstr "Öffne Flatfield"
 
 #: u_translation.rsopenpicturef
 #, object-pascal-format
@@ -3147,15 +3147,15 @@ msgstr "Öffne den Kuppelspalt"
 
 #: u_translation.rsoption1calib
 msgid "Option 1: Calibration at current position."
-msgstr ""
+msgstr "Option1: Kalibration an der aktuellen Position"
 
 #: u_translation.rsoption2slewa
 msgid "Option 2: Slew automatically to SSE and SSW for calibration and meridian flip setting."
-msgstr ""
+msgstr "Option 2: Schwenke automatisch nach SSE und SSW zur Kalibrierung und Meridian-Flip-Einstellung."
 
 #: u_translation.rsoption3cance
 msgid "Option 3: Cancel."
-msgstr ""
+msgstr "Option 3:  Abbruch"
 
 #: u_translation.rsoptions
 #, object-pascal-format
@@ -3830,7 +3830,7 @@ msgstr "Rückwärts"
 
 #: u_translation.rsreversedecaf
 msgid "Reverse dec output after meridian flip"
-msgstr ""
+msgstr "Umkehrung der Deklination nach Meridan Flip"
 
 #: u_translation.rsrise
 msgid "rise"
@@ -4038,7 +4038,7 @@ msgstr "Skript wird beendet..."
 #: u_translation.rssdriverdonot
 #, object-pascal-format
 msgid "%s driver do not support %s"
-msgstr ""
+msgstr "%s Treiber unterstützt nicht %s"
 
 #: u_translation.rssearch
 msgid "Search"
@@ -4062,7 +4062,7 @@ msgstr "Sichere SSL/TLS Verbindung"
 
 #: u_translation.rsselectacalib
 msgid "Select a calibration option:"
-msgstr ""
+msgstr "Eine Kalibrations Option auswählen"
 
 #: u_translation.rsselectastarf
 msgid "Select a star first!"
@@ -4327,7 +4327,7 @@ msgstr "Zeige Stacking Optionen für Voransicht/Aufnahme/Sequenz"
 
 #: u_translation.rsshowvideocap
 msgid "Show video capture tab"
-msgstr ""
+msgstr "Registerkarte Video Aufnahme anzeigen"
 
 #: u_translation.rssideofpier
 msgid "Side of pier"
@@ -4420,7 +4420,7 @@ msgstr "Schwenk nach 3 Versuchen abgebrochen!"
 
 #: u_translation.rsslewcalibrat
 msgid "Slew + Calibration + Meridian flip setting"
-msgstr ""
+msgstr "Schwenken + Kalibrierung + Meridian-Flip Einstellung"
 
 #: u_translation.rsslewcomplete
 msgid "Slew is complete"
@@ -5168,7 +5168,7 @@ msgstr "Muss warten bis %s"
 
 #: u_translation.rstimeinarow
 msgid "time in a row"
-msgstr ""
+msgstr "Zeit in Zeile"
 
 #: u_translation.rstimeout
 msgid "Timeout"
@@ -5593,7 +5593,7 @@ msgstr "Kamera aufwärmen"
 
 #: u_translation.rswarningdonot
 msgid "Warning! to use a negative value, be sure the mount driver allow to set SideOfPier before the meridian."
-msgstr ""
+msgstr "Warnung! Um einen negativen Wert zu verwenden, bitte sicher stellen, dass der Montierungs Treiber erlaubt, die Option SideOfPier vor dem Meridian zu setzen."
 
 #: u_translation.rswarningimage
 #, object-pascal-format
