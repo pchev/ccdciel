@@ -10755,7 +10755,7 @@ end;
 if f_visu.FlipHorz then {$ifdef debug_raw}begin; writeln(FormatDateTime(dateiso,Now)+blank+'HorizontalFlip');{$endif}ScrBmp.HorizontalFlip;{$ifdef debug_raw}end;{$endif}
 if f_visu.FlipVert then {$ifdef debug_raw}begin; writeln(FormatDateTime(dateiso,Now)+blank+'VerticalFlip');{$endif}ScrBmp.VerticalFlip;{$ifdef debug_raw}end;{$endif}
 
-if fits.HeaderInfo.solved and (cdcWCSinfo.secpix<>0) then plot_north;
+if fits.HeaderInfo.solved and (cdcWCSinfo.secpix<>0) and (not SplitImage) then plot_north;
 
 Image1.Invalidate;
 MagnifyerTimer.Enabled:=true;
