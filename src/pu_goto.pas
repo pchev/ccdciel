@@ -262,7 +262,11 @@ begin
         if i<7 then i:=7;  // skip mandatory keywords
         if i>=fits.Header.Rows.Count then
           i:=fits.Header.Rows.Count-1;
-        if px<>0 then fits.Header.Insert(i,'SECPIX1',px,'');
+        if px<>0 then begin
+           fits.Header.Insert(i,'SECPIX1',px,'');
+           fits.Header.Insert(i,'SECPIX2',px,'');
+           fits.Header.Insert(i,'SCALE',px,'');
+        end;
         if fdec<>NullCoord then fits.Header.Insert(i,'DEC',fdec,'');
         if fra<>NullCoord then fits.Header.Insert(i,'RA',15*fra,'');
         result:=true;
