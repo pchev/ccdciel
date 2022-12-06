@@ -853,7 +853,7 @@ type
     Procedure ClearGuideImage;
     Procedure DrawImage(WaitCursor:boolean=false; videoframe:boolean=false);
     Procedure PlotImage;
-    procedure plot_north(bmp:TBGRABitmap);
+    procedure plot_north;
     Procedure DrawHistogram(SetLevel,ResetCursor: boolean);
     procedure AstrometryStart(Sender: TObject);
     procedure AstrometryEnd(Sender: TObject);
@@ -10639,7 +10639,6 @@ if (fits.HeaderInfo.naxis>0) and fits.ImageValid then begin
     imabmp.EllipseAntialias(cx,cy,s,s,co,1);
 
   end;
-  if fits.HeaderInfo.solved and (cdcWCSinfo.secpix<>0) then plot_north(imabmp);
   {$ifdef debug_raw}writeln(FormatDateTime(dateiso,Now)+blank+'PlotImage');{$endif}
   PlotImage;
   {$ifdef debug_raw}writeln(FormatDateTime(dateiso,Now)+blank+'PlotImage end');{$endif}
@@ -10755,29 +10754,30 @@ end;
 
 if f_visu.FlipHorz then {$ifdef debug_raw}begin; writeln(FormatDateTime(dateiso,Now)+blank+'HorizontalFlip');{$endif}ScrBmp.HorizontalFlip;{$ifdef debug_raw}end;{$endif}
 if f_visu.FlipVert then {$ifdef debug_raw}begin; writeln(FormatDateTime(dateiso,Now)+blank+'VerticalFlip');{$endif}ScrBmp.VerticalFlip;{$ifdef debug_raw}end;{$endif}
+
+if fits.HeaderInfo.solved and (cdcWCSinfo.secpix<>0) then plot_north;
+
 Image1.Invalidate;
 MagnifyerTimer.Enabled:=true;
 {$ifdef debug_raw}writeln(FormatDateTime(dateiso,Now)+blank+'PlotImage end');{$endif}
 end;
 
-procedure Tf_main.plot_north(bmp:TBGRABitmap);
-
+procedure Tf_main.plot_north;
 var scale,s,c: double;
     xpos,ypos,Nleng,Eleng: single;
-    polex,poley: double;
+    polex,poley: integer;
 begin
 if fits.HeaderInfo.solved and
  (cdcWCSinfo.secpix<>0)
  then begin
-  scale:=img_Width/ScrBmp.Width;
-  polex:=WCSpoleX+scale/2;
-  poley:=WCSpoleY-scale/2;
-  // is the pole in the image?
-  if (polex>0)and(polex<img_Width)and(poley>0)and(poley<img_Height) then begin
+  scale:=1;
+  // is the pole in the full image?
+  if (WCSpoleX>0)and(WCSpoleX<img_Width)and(WCSpoleY>0)and(WCSpoleY<img_Height) then begin
+    Fits2Screen(round(WCSpoleX),round(WCSpoleY),f_visu.FlipHorz,f_visu.FlipVert,polex,poley);
     // mark the pole
     Nleng:=6*scale;
-    bmp.DrawLineAntialias(polex-Nleng,poley,polex+Nleng,poley,ColorToBGRA(clOrange),scale);
-    bmp.DrawLineAntialias(polex,poley-Nleng,polex,poley+Nleng,ColorToBGRA(clOrange),scale);
+    ScrBmp.DrawLineAntialias(polex-Nleng,poley,polex+Nleng,poley,ColorToBGRA(clOrange),scale);
+    ScrBmp.DrawLineAntialias(polex,poley-Nleng,polex,poley+Nleng,ColorToBGRA(clOrange),scale);
   end
   else begin
     // draw arrow to north pole
@@ -10787,14 +10787,18 @@ if fits.HeaderInfo.solved and
     Eleng:=6*scale;
 
     sincos(WCSxyNrot,s,c);
-    bmp.ArrowEndAsClassic(false,false,3);
-    bmp.DrawLineAntialias(xpos,ypos,xpos+Nleng*s,ypos+Nleng*c,ColorToBGRA(clOrange),scale);
-    bmp.ArrowEndAsNone;
+    if f_visu.FlipVert then c:=-c;
+    if f_visu.FlipHorz then s:=-s;
+    ScrBmp.ArrowEndAsClassic(false,false,3);
+    ScrBmp.DrawLineAntialias(xpos,ypos,xpos+Nleng*s,ypos+Nleng*c,ColorToBGRA(clOrange),scale);
+    ScrBmp.ArrowEndAsNone;
     sincos(WCSxyErot,s,c);
-    bmp.DrawLineAntialias(xpos,ypos,xpos+Eleng*s,ypos+Eleng*c,ColorToBGRA(clOrange),scale);
+    if f_visu.FlipVert then c:=-c;
+    if f_visu.FlipHorz then s:=-s;
+    ScrBmp.DrawLineAntialias(xpos,ypos,xpos+Eleng*s,ypos+Eleng*c,ColorToBGRA(clOrange),scale);
 
-    bmp.FontHeight:=round(12*scale);
-    bmp.TextOut(xpos,ypos,'  '+FormatFloat(f1,Rmod(cdcWCSinfo.rot+360,360)),clOrange);
+    ScrBmp.FontHeight:=round(12*scale);
+    ScrBmp.TextOut(xpos,ypos,'  '+FormatFloat(f1,Rmod(cdcWCSinfo.rot+360,360)),clOrange);
   end;
  end;
 end;
