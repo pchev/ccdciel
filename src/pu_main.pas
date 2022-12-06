@@ -2414,8 +2414,8 @@ begin
 
   f_visu.Gamma.Value:=config.GetValue('/Visu/Gamma',1.0);
   f_visu.HistBar.Position:=config.GetValue('/Visu/HistBar',50);
-  f_visu.FlipHorz:=config.GetValue('/Visu/FlipHorz',false);
-  f_visu.FlipVert:=config.GetValue('/Visu/FlipVert',false);
+  f_visu.BtnFlipHorz.Down:=config.GetValue('/Visu/FlipHorz',false);
+  f_visu.BtnFlipVert.Down:=config.GetValue('/Visu/FlipVert',false);
   f_visu.BtnClipRange.Down:=config.GetValue('/Visu/ClipRange',false);
 
   TriangleInspection:=config.GetValue('/ImageInspection/TriangleInspection',false);
@@ -4852,8 +4852,8 @@ begin
 
    config.SetValue('/Visu/Gamma',f_visu.Gamma.Value);
    config.SetValue('/Visu/HistBar',f_visu.HistBar.Position);
-   config.SetValue('/Visu/FlipHorz',f_visu.FlipHorz);
-   config.SetValue('/Visu/FlipVert',f_visu.FlipVert);
+   config.SetValue('/Visu/FlipHorz',f_visu.BtnFlipHorz.Down);
+   config.SetValue('/Visu/FlipVert',f_visu.BtnFlipVert.Down);
    config.SetValue('/Visu/ClipRange',f_visu.BtnClipRange.Down);
 
    config.SetValue('/ImageInspection/TriangleInspection',TriangleInspection);

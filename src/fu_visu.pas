@@ -87,7 +87,7 @@ type
     Fhist:Thistogram;
     Fmaxh, Fmaxp, Fsum: integer;
     FimageC, FimageMin, FimageMax : double;
-    FisFloatingPoint, Finitialized: boolean;
+    FisFloatingPoint, FisFlipped, Finitialized: boolean;
     FimgMin, FimgMax: double;
     FHistStart,FHistStop,FHistStep: integer;
     FBullsEye, LockSpinEdit, FClipping, FInvert: Boolean;
@@ -99,8 +99,6 @@ type
     FShowHistogramPos: TNotifyStr;
     FShowLastImage: TNotifyEvent;
     procedure SetZoom(value: double);
-    procedure SetFlipHorz(value:boolean);
-    procedure SetFlipVert(value:boolean);
     function  GetFlipHorz: boolean;
     function  GetFlipVert: boolean;
     procedure SetLimit(SetLevel:boolean);
@@ -117,8 +115,8 @@ type
     property BullsEye: boolean read FBullsEye;
     property Clipping: boolean read FClipping;
     property Invert: boolean read FInvert;
-    property FlipHorz: boolean read GetFlipHorz write SetFlipHorz;
-    property FlipVert: boolean read GetFlipVert write SetFlipVert;
+    property FlipHorz: boolean read GetFlipHorz;
+    property FlipVert: boolean read GetFlipVert;
     property onZoom: TNotifyEvent read FonZoom write FonZoom;
     property onRedraw: TNotifyEvent read FRedraw write FRedraw;
     property onShowHistogramPos: TNotifyStr read FShowHistogramPos write FShowHistogramPos;
@@ -166,6 +164,7 @@ begin
  FInvert:=false;
  LockSpinEdit:=true;
  LockRedraw:=false;
+ FisFlipped:=true;
 end;
 
 destructor  Tf_visu.Destroy;
@@ -267,6 +266,7 @@ try
 LockSpinEdit:=true;
 if ResetCursor then HistogramAdjusted:=false;
 FisFloatingPoint:=f.HeaderInfo.floatingpoint;
+FisFlipped:=f.HeaderInfo.roworder<>bottomup;
 FimageC:=f.imageC;
 FimageMin:=f.imageMin;
 FimageMax:=f.imageMax;
@@ -439,19 +439,9 @@ begin
   result:=BtnFlipHorz.Down;
 end;
 
-procedure Tf_visu.SetFlipHorz(value:boolean);
-begin
-  BtnFlipHorz.Down:=value;
-end;
-
 function Tf_visu.GetFlipVert: boolean;
 begin
-  result:=BtnFlipVert.Down;
-end;
-
-procedure Tf_visu.SetFlipVert(value:boolean);
-begin
-  BtnFlipVert.Down:=value;
+  result:=FisFlipped xor BtnFlipVert.Down;
 end;
 
 procedure Tf_visu.BtnFlipHorzClick(Sender: TObject);

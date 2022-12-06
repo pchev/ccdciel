@@ -167,20 +167,16 @@ object f_visu: Tf_visu
           ClientWidth = 115
           TabOrder = 1
           object HistBar: TTrackBar
-            AnchorSideLeft.Control = Panel5
-            AnchorSideTop.Control = Panel5
-            AnchorSideTop.Side = asrCenter
             AnchorSideRight.Control = Panel5
             AnchorSideRight.Side = asrBottom
             Left = 0
-            Height = 43
-            Top = -11
+            Height = 22
+            Top = 0
             Width = 115
             Max = 100
             OnChange = HistBarChange
             Position = 0
             TickStyle = tsNone
-            Anchors = [akTop, akLeft, akRight]
             Constraints.MaxHeight = 26
             TabOrder = 0
           end
