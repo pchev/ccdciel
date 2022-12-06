@@ -602,6 +602,20 @@ begin
         ClearRunning;
         RestartTarget:=true;
       end;
+      // check global target setting that require a restart
+      if (Ftargets[FCurrentTarget].starttime<>Source.Ftargets[newcurTarget].starttime) or
+         (Ftargets[FCurrentTarget].endtime<>Source.Ftargets[newcurTarget].endtime) or
+         (Ftargets[FCurrentTarget].startmeridian<>Source.Ftargets[newcurTarget].startmeridian) or
+         (Ftargets[FCurrentTarget].endmeridian<>Source.Ftargets[newcurTarget].endmeridian) or
+         (Ftargets[FCurrentTarget].startrise<>Source.Ftargets[newcurTarget].startrise) or
+         (Ftargets[FCurrentTarget].endset<>Source.Ftargets[newcurTarget].endset) or
+         (Ftargets[FCurrentTarget].darknight<>Source.Ftargets[newcurTarget].darknight) or
+         (Ftargets[FCurrentTarget].skip<>Source.Ftargets[newcurTarget].skip)
+         then begin
+           msg('Start or end conditions of active target are modified.', 9);
+           ClearRunning;
+           RestartTarget:=true;
+         end;
     end
     else begin
       // the running target is no more found, need to restart all
@@ -1972,7 +1986,7 @@ begin
        SecondsToWait(chkendtime,true,stw,nd);
        if stw>60 then begin
           SecondsToWait(t.endtime,true,stw,nd);
-          msg(Format(rsTargetWillBe, [TimeToStr(t.endtime), inttostr(stw)]), 9);
+          msg(Format(rsTargetWillBe, [TimeToStr(t.endtime), inttostr(stw)]), 3);
           StopTargetTimer.Interval:=1000*stw;
           StopTargetTimer.Enabled:=true;
        end else begin
