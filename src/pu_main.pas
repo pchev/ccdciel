@@ -13076,7 +13076,7 @@ procedure Tf_main.MenuResolveClick(Sender: TObject);
 begin
   if SplitImage then exit;
   if (not f_goto.CheckImageInfo(fits)) then exit;
-  astrometry.SolveCurrentImage(false);
+  astrometry.SolveCurrentImage(false,true);
 end;
 
 procedure Tf_main.ResolveSlewCenter(Sender: TObject);

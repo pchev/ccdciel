@@ -67,7 +67,7 @@ TAstrometry = class(TComponent)
     procedure StopAstrometry;
     procedure AstrometryDone(errstr:string);
     function  CurrentCoord(out cra,cde,eq,pa: double):boolean;
-    procedure SolveCurrentImage(wait: boolean);
+    procedure SolveCurrentImage(wait: boolean; forcesolve:boolean=false);
     procedure SolveGuideImage;
     procedure SyncCurrentImage(wait: boolean);
     procedure SlewScreenXY(x,y: integer);
@@ -301,11 +301,11 @@ begin
     msg('Missing library '+libwcs,1);
 end;
 
-procedure TAstrometry.SolveCurrentImage(wait: boolean);
+procedure TAstrometry.SolveCurrentImage(wait: boolean; forcesolve:boolean=false);
 var n: integer;
 begin
   if (not FBusy) and (FFits.HeaderInfo.naxis>0) and FFits.ImageValid then begin
-   if FFits.HeaderInfo.solved and (cdcwcs_initfitsfile<>nil) then begin
+   if (not forcesolve) and FFits.HeaderInfo.solved and (cdcwcs_initfitsfile<>nil) then begin
      FFits.SaveToFile(slash(TmpDir)+'ccdcielsolved.fits');
      n:=cdcwcs_initfitsfile(pchar(slash(TmpDir)+'ccdcielsolved.fits'),0);
      FLastResult:=(n=0);
