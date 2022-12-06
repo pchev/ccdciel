@@ -24,7 +24,8 @@ interface
 uses  u_global, u_utils, cu_fits, UScaleDPI,
   Classes, SysUtils,strutils, math,graphics;
 
-procedure plot_deepsky(f: TFits; cnv: TCanvas; cnvheight: integer);{plot the deep sky object on the image}
+procedure search_deepsky(f: TFits);{search the deep sky object on the image}
+procedure plot_deepsky(cnv: TCanvas; cnvwidth,cnvheight: integer; FlipHor,FlipVer: boolean);{plot the deep sky object on the image}
 procedure load_deep;{load the deepsky database once. If loaded no action}
 procedure load_hyperleda;{load the HyperLeda database once. If loaded no action }
 procedure read_deepsky(searchmode:char; telescope_ra,telescope_dec, cos_telescope_dec {cos(telescope_dec},fov : double; out ra2,dec2,length2,width2,pa : double);{deepsky database search}
@@ -36,6 +37,19 @@ var
   naam2,naam3,naam4: string;
 
 implementation
+
+type
+   drawobject=record
+               x,y: integer;
+               length1,width1,pa,rot: double;
+               name: shortstring;
+              end;
+
+var
+   objlist: array[0..500] of drawobject;
+   NumObj: integer;
+   CurrentCdelt2: double;
+
 
 procedure load_deep;{load the deepsky database once. If loaded no action}
 begin
@@ -273,22 +287,16 @@ begin
 end;
 
 
-procedure plot_deepsky(f: TFits; cnv: TCanvas; cnvheight: integer);{plot the deep sky object on the image}
-type
-  textarea = record
-     x1,y1,x2,y2 : integer;
-  end;
+procedure search_deepsky(f: TFits);{search the deep sky object on the image}
 var
   fitsX, fitsY, dra,ddec,delta,gamma, telescope_ra,telescope_dec,cos_telescope_dec,fov,ra2,dec2, length1,width1,
-  pa,xx,yy,len,flipped,  crpix1,crpix2,cd1_1,cd1_2,cd2_1,cd2_2,cdelt1,cdelt2, crota2,ra0,dec0, delta_ra,det,
+  pa,flipped,  crpix1,crpix2,cd1_1,cd1_2,cd2_1,cd2_2,cdelt1,cdelt2, crota2,ra0,dec0, delta_ra,det,
   SIN_dec_ref,COS_dec_ref,SIN_dec_new,COS_dec_new,SIN_delta_ra,COS_delta_ra,hh : double;
-  width2, height2,h,sign: integer;
-  name: string;
+  width2, height2,sign: integer;
   new_to_old_WCS: boolean;
-  text_dimensions  : array of textarea;
-  i,text_counter,th,tw,x1,y1,x2,y2,x,y  : integer;
-  overlap  :boolean;
+  x,y  : integer;
 begin
+  NumObj:=0;
   if ((f<>nil) and (f.HeaderInfo.solved)) then
   begin
     width2:=f.HeaderInfo.naxis1;
@@ -319,6 +327,9 @@ begin
       crota2:= crota2*180/pi;
     end;
 
+    CurrentCdelt2:=cdelt2;
+
+
     {6. Passage (x,y) -> (RA,DEC) to find RA0,DEC0 for middle of the image. See http://alain.klotz.free.fr/audela/libtt/astm1-fr.htm}
     {for case crpix1,crpix2 are not in the middle}
     fitsX:=(width2+1)/2;{range 1..width, if range 1,2,3,4  then middle is 2.5=(4+1)/2 }
@@ -334,24 +345,6 @@ begin
     fov:=1.5*sqrt(sqr(0.5*width2*cdelt1)+sqr(0.5*height2*cdelt2))*pi/180; {field of view with 50% extra}
     linepos:=2;
     if cdelt1*cdelt2>0 then flipped:=-1 {n-s or e-w flipped} else flipped:=1;
-
-    cnv.Pen.width :=1; {thickness lines, fixed} // max(1,round(height2/h));{thickness lines}
-    cnv.pen.color:=clyellow;
-
-    if  deepstring.count<50000 then {default deep sky database 30.000 objects}
-    begin
-      h:=cnvheight;
-      if h=0 then h:=height2;
-      cnv.font.size:=round(max(10,DoScaleX(10)*(ZoomMin/max(ZoomMin,ImgZoom))*height2/h)); {adapt font to image dimension s and zoom factor. Start with font 10 if full image is vissible. If zoomed in use a smaller font down to 10}
-    end
-    else
-    cnv.font.size:=10;{fixed for HyperLeda, always crowded}
-
-    cnv.brush.Style:=bsClear;
-    cnv.font.color:=clyellow;
-
-    text_counter:=0;
-    setlength(text_dimensions,200);
 
     sincos(dec0,SIN_dec_ref,COS_dec_ref);{do this in advance since it is for each pixel the same}
 
@@ -375,18 +368,77 @@ begin
       begin
         y:=(height2-1)-y;
 
+        objlist[NumObj].x:=x;
+        objlist[NumObj].y:=y;
+        objlist[NumObj].length1:=length1;
+        objlist[NumObj].width1:=width1;
+        objlist[NumObj].pa:=pa;
+        objlist[NumObj].rot:=(pa*flipped+crota2);
+        if naam2='' then objlist[NumObj].name:=''
+        else
+        if naam3='' then objlist[NumObj].name:=naam2
+        else
+        if naam4='' then objlist[NumObj].name:=naam2+'/'+naam3
+        else
+        objlist[NumObj].name:=naam2+'/'+naam3+'/'+naam4;
+
+        inc(NumObj);
+
+       end;
+     until (NumObj>=10)or(linepos>=$FFFFFF);{maximum 500 objects or end of database}
+  end;
+end;{search deep_sky}
+
+procedure plot_deepsky(cnv: TCanvas; cnvwidth,cnvheight: integer; FlipHor,FlipVer: boolean);{plot the deep sky object found by search_deepsky}
+type
+  textarea = record
+     x1,y1,x2,y2 : integer;
+  end;
+var
+  length1,width1,
+  pa,rot,z,len,cdelt2 : double;
+  width2, height2: integer;
+  name: string;
+  text_dimensions  : array of textarea;
+  k,i,text_counter,th,tw,x1,y1,x2,y2,x,y  : integer;
+  overlap  :boolean;
+begin
+  if NumObj>0 then
+  begin
+    width2:=cnvwidth;
+    height2:=cnvheight;
+    cdelt2:=CurrentCdelt2;
+
+    cnv.Pen.width :=1; {thickness lines, fixed} // max(1,round(height2/h));{thickness lines}
+    cnv.pen.color:=clyellow;
+
+    cnv.font.size:=DoScaleX(10); {fixed}
+
+    cnv.brush.Style:=bsClear;
+    cnv.font.color:=clyellow;
+
+    text_counter:=0;
+    setlength(text_dimensions,200);
+
+    for k:=0 to NumObj-1 do begin
+
+        x:=objlist[k].x;
+        y:=objlist[k].y;
+        length1:=objlist[k].length1;
+        width1:=objlist[k].width1;
+        pa:=objlist[k].pa;
+        rot:=objlist[k].rot;
+        name:=objlist[k].name;
+
+        Fits2Screen(x,y,FlipHor,FlipVer,x,y);
+
         {Plot deepsky text labels on an empthy text space.}
         { 1) If the center of the deepsky object is outside the image then don't plot text}
         { 2) If the text space is occupied, then move the text down. If the text crosses the bottom then use the original text position.}
         { 3) If the text crosses the right side of the image then move the text to the left.}
         { 4) If the text is moved in y then connect the text to the deepsky object with a vertical line.}
-        if ( (x>=0) and (x<=width2) and (y>=0) and (y<=height2) and (naam2<>'') ) then {plot only text if center object is visible and has a name}
+        if ( (x>=0) and (x<=width2) and (y>=0) and (y<=height2) and (name<>'') ) then {plot only text if center object is visible and has a name}
         begin
-          if naam3='' then name:=naam2
-          else
-          if naam4='' then name:=naam2+'/'+naam3
-          else
-          name:=naam2+'/'+naam3+'/'+naam4;
 
           {get text dimensions}
           th:=cnv.textheight(name);
@@ -445,7 +497,9 @@ begin
         end;{centre object visible}
 
         if width1=0 then begin width1:=length1;pa:=999;end;
-        len:=length1/(abs(cdelt2)*60*10*2); {Length in pixels}
+        z:=ImgZoom;
+        if z=0 then z:=ImgScale0;
+        len:=z*length1/(abs(cdelt2)*60*10*2); {Length in pixels}
         if len<=2 then {too small to plot an elipse or circle, just plot four dots}
         begin {tiny object marking}
           cnv.pixels[x-2,y+2]:=clyellow;
@@ -455,14 +509,16 @@ begin
         end {tiny object marking}
         else
         begin {normal plot}
-          if PA<>999 then
-          plot_glx(cnv,x,y,len,width1/length1,(pa*flipped+crota2)*pi/180) {draw oval or galaxy}
-        else
-          cnv.ellipse(round(x-len),round(y-len),round(x+1+len),round(y+1+len));{circle, the y+1,x+1 are essential to center the circle(ellipse) at the middle of a pixel. Otherwise center is 0.5,0.5 pixel wrong in x, y}
+          if PA<>999 then begin
+            if FlipHor then rot:=-rot;
+            if FlipVer then rot:=-rot;
+            plot_glx(cnv,x,y,len,width1/length1,rot*pi/180) {draw oval or galaxy}
+          end
+          else
+            cnv.ellipse(round(x-len),round(y-len),round(x+1+len),round(y+1+len));{circle, the y+1,x+1 are essential to center the circle(ellipse) at the middle of a pixel. Otherwise center is 0.5,0.5 pixel wrong in x, y}
         end;{normal plot}
-      end;
 
-    until linepos>=$FFFFFF;{end of database}
+    end; // numobj loop
     text_dimensions:=nil;{remove used memory}
   end;
 end;{plot deep_sky}

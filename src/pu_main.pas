@@ -591,6 +591,7 @@ type
     refbmp:TBGRABitmap;
     cdcWCSinfo: TcdcWCSinfo;
     WCSxyNrot,WCSxyErot,WCScenterRA,WCScenterDEC,WCSpoleX,WCSpoleY,WCSwidth,WCSheight: double;
+    Annotate: boolean;
     SaveFocusZoom,ImgCx, ImgCy: double;
     Mx, My, PolX, PolY: integer;
     StartX, StartY, EndX, EndY, MouseDownX,MouseDownY: integer;
@@ -1428,6 +1429,7 @@ begin
   ImgPixRatio:=1;
   Undersampled:=false;
   ZoomMin:=1;
+  Annotate:=false;
   LogLevel:=3;
   LogToFile:=true;
   LastPixelSize:=0;
@@ -3716,6 +3718,7 @@ var fn : string;
 begin
   OpenDialog1.Title:=rsOpenDarkFile;
   if OpenDialog1.Execute then begin
+    Annotate:=false;
     fn:=OpenDialog1.FileName;
     fits.SetBPM(bpm,0,0,0,0);
     fits.DarkOn:=false;
@@ -10104,6 +10107,7 @@ end;
 
 procedure Tf_main.ShowLastImage(Sender: TObject);
 begin
+ Annotate:=false;
  if f_visu.BtnShowImage.Down then begin
   fits.LoadStream;
   DrawHistogram(true,false);
@@ -10124,6 +10128,7 @@ var buf: string;
     loadimage,displayimage,DomeFlatExposureOK: boolean;
 begin
  try
+  Annotate:=false;
   DomeFlatExposureOK:=false;
   StatusBar1.Panels[panelstatus].Text:='';
   ImgFrameX:=FrameX;
@@ -10568,6 +10573,7 @@ ImgFrameX:=FrameX;
 ImgFrameY:=FrameY;
 ImgFrameW:=FrameW;
 ImgFrameH:=FrameH;
+Annotate:=false;
 DrawHistogram(true,false);
 DrawImage(false,true);
 end;
@@ -10755,7 +10761,10 @@ end;
 if f_visu.FlipHorz then {$ifdef debug_raw}begin; writeln(FormatDateTime(dateiso,Now)+blank+'HorizontalFlip');{$endif}ScrBmp.HorizontalFlip;{$ifdef debug_raw}end;{$endif}
 if f_visu.FlipVert then {$ifdef debug_raw}begin; writeln(FormatDateTime(dateiso,Now)+blank+'VerticalFlip');{$endif}ScrBmp.VerticalFlip;{$ifdef debug_raw}end;{$endif}
 
-if fits.HeaderInfo.solved and (cdcWCSinfo.secpix<>0) and (not SplitImage) then plot_north;
+if fits.HeaderInfo.solved and (cdcWCSinfo.secpix<>0) and (not SplitImage) then begin
+  plot_north;
+  if Annotate then plot_deepsky(ScrBmp.Canvas,ScrBmp.Width,ScrBmp.Height,f_visu.FlipHorz,f_visu.FlipVert);
+end;
 
 Image1.Invalidate;
 MagnifyerTimer.Enabled:=true;
@@ -11446,6 +11455,7 @@ end;
 procedure Tf_main.MenuItemCleanupClick(Sender: TObject);
 begin
    fits.ClearStarList;
+   Annotate:=false;
    DrawImage;
 end;
 
@@ -11599,6 +11609,7 @@ if refmask then begin
     end;
     refbmp.InvalidateBitmap;
     refmask:=true;
+    Annotate:=false;
     DrawImage;
   end;
   finally
@@ -13198,8 +13209,10 @@ begin
           load_hyperleda
         else
           load_deep;
+        fits.ClearStarList;
         DrawImage; {cleanup to avoid label overlap}
-        plot_deepsky(fits,imabmp.Canvas,Image1.Height);
+        search_deepsky(fits);
+        Annotate:=true;
         PlotImage;
      end else begin
        if (not astrometry.Busy) and (fits.HeaderInfo.naxis>0) then begin
@@ -13219,8 +13232,10 @@ procedure Tf_main.AstrometryPlotDSO(Sender: TObject);
 begin
 if astrometry.LastResult then begin
   load_deep;
+  fits.ClearStarList;
   DrawImage;
-  plot_deepsky(fits,imabmp.Canvas,Image1.Height);
+  search_deepsky(fits);
+  Annotate:=true;
   PlotImage;
 end;
 end;
@@ -13229,8 +13244,10 @@ procedure Tf_main.AstrometryPlotHyperleda(Sender: TObject);
 begin
 if astrometry.LastResult then begin
   load_hyperleda;
+  fits.ClearStarList;
   DrawImage;
-  plot_deepsky(fits,imabmp.Canvas,Image1.Height);
+  search_deepsky(fits);
+  Annotate:=true;
   PlotImage;
 end;
 end;
@@ -13644,6 +13661,7 @@ var imgsize: string;
     n,oldw,oldh:integer;
     oldmean,oldsigma: double;
 begin
+   Annotate:=false;
    oldw:=fits.HeaderInfo.naxis1;
    oldh:=fits.HeaderInfo.naxis2;
    oldmean:=fits.imageMean;
@@ -13676,6 +13694,7 @@ var RawStream, FitsStream: TMemoryStream;
     oldmean,oldsigma: double;
 begin
  {$ifdef debug_raw}writeln(FormatDateTime(dateiso,Now)+blank+'LoadRawFile'+blank+fn);{$endif}
+ Annotate:=false;
  oldmean:=fits.imageMean;
  oldsigma:=fits.imageSigma;
  // create resources
@@ -13722,6 +13741,7 @@ var PictStream, FitsStream: TMemoryStream;
     imgsize,ext: string;
     oldmean,oldsigma: double;
 begin
+ Annotate:=false;
  oldmean:=fits.imageMean;
  oldsigma:=fits.imageSigma;
  // create resources
@@ -14179,6 +14199,7 @@ begin
   Screen.Cursor := crHourglass; { Show hourglass cursor since analysing will take some time}
 
   if plot then begin   {draw clean image}
+    Annotate:=false;
     if SplitImage then begin
       SplitImage:=false;
       PlotImage;
