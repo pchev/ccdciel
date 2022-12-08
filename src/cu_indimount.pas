@@ -834,6 +834,7 @@ begin
  end;
  // do not stop tracking, only slewing
  if TrackState<>nil then begin
+    sleep(500); // let time for abortmotion to be send
     IUResetSwitch(TrackState);
     TrackOn.s:=ISS_ON;
     indiclient.sendNewSwitch(TrackState);
