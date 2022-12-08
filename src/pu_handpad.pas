@@ -164,7 +164,15 @@ end;
 procedure Tf_handpad.StopMoveTimerTimer(Sender: TObject);
 begin
   StopMoveTimer.Enabled:=false;
-  ArrowStopClick(Sender);
+  FMount.MoveAxis(0, '0');
+  FMount.MoveAxis(1, '0');
+  case FLastArrow of
+    1: ArrowLeft.ArrowColor:=clBtnText;
+    2: ArrowRight.ArrowColor:=clBtnText;
+    3: ArrowUp.ArrowColor:=clBtnText;
+    4: ArrowDown.ArrowColor:=clBtnText;
+  end;
+  FLastArrow:=0;
 end;
 
 end.
