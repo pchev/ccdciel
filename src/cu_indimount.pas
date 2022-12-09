@@ -258,7 +258,7 @@ begin
   ReadyTimer.Enabled := false;
   FStatus := devConnected;
   FIsEqmod:=(SyncManage<>nil)and(AlignList<>nil)and(AlignSyncMode<>nil)and(AlignMode<>nil);
-  FisGem:=(GetAlignmentMode=algGermanPolar)and(GetPierSide<>pierUnknown);
+  FisGem:=(GetAlignmentMode=algGermanPolar)and(Pier_Side<>nil);
   if (not Fready) then begin
      Fready:=true;
      if FAutoloadConfig and FConnectDevice then LoadConfig;
