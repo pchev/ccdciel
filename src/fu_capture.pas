@@ -195,7 +195,7 @@ begin
       if ExposureTime>FlatMaxExp then ExposureTime:=FlatMaxExp;
     end;
     if Assigned(FonMsg) then FonMsg(rsStartCapture,2);
-    EarlyNextExposure:=((TFrameType(FrameType.ItemIndex)=LIGHT)or(TFrameType(FrameType.ItemIndex)=DARK)) {and not(PanelStack.Visible and (StackNum.Value>1))} and ConfigExpEarlyStart;
+    EarlyNextExposure:= ConfigExpEarlyStart and (ExposureTime>1) and ((TFrameType(FrameType.ItemIndex)=LIGHT)or(TFrameType(FrameType.ItemIndex)=DARK));
     if PanelStack.Visible and (StackNum.Value>1) and Assigned(FonResetStack) then FonResetStack(self);
     if Assigned(FonStartExposure) then FonStartExposure(self);
     if (not Frunning) and Assigned(FonMsg) then FonMsg(rsCannotStartC,0);
