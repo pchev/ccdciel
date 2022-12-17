@@ -34,7 +34,7 @@ type
 
   TTarget = Class(TObject)
               public
-              objectname, planname, path: shortstring;
+              objectname, planname, path, scriptargs: shortstring;
               starttime,endtime,startmeridian,endmeridian,ra,de,pa: double;
               startrise,endset,darknight,skip: boolean;
               repeatcount,repeatdone: integer;
@@ -789,6 +789,7 @@ begin
        t.objectname:=trim(FSequenceFile.Items.GetValue('/Targets/Target'+inttostr(i)+'/ObjectName',''));
        t.planname:=FSequenceFile.Items.GetValue('/Targets/Target'+inttostr(i)+'/Plan','');
        t.path:=FSequenceFile.Items.GetValue('/Targets/Target'+inttostr(i)+'/Path','');
+       t.scriptargs:=FSequenceFile.Items.GetValue('/Targets/Target'+inttostr(i)+'/ScriptArgs','');
        if FileVersion>=2 then begin
          t.starttime:=StrToTimeDef(FSequenceFile.Items.GetValue('/Targets/Target'+inttostr(i)+'/StartTime',''),-1);
          t.endtime:=StrToTimeDef(FSequenceFile.Items.GetValue('/Targets/Target'+inttostr(i)+'/EndTime',''),-1);
@@ -964,6 +965,7 @@ try
       FSequenceFile.Items.SetValue('/Targets/Target'+inttostr(i)+'/ObjectName',t.objectname);
       FSequenceFile.Items.SetValue('/Targets/Target'+inttostr(i)+'/Plan',t.planname);
       FSequenceFile.Items.SetValue('/Targets/Target'+inttostr(i)+'/Path',t.path);
+      FSequenceFile.Items.SetValue('/Targets/Target'+inttostr(i)+'/ScriptArgs',t.scriptargs);
       if t.starttime>=0 then
         FSequenceFile.Items.SetValue('/Targets/Target'+inttostr(i)+'/StartTime',TimetoStr(t.starttime))
       else
@@ -1227,7 +1229,7 @@ begin
     for i:=1 to MaxScriptDir do begin
       if FileExistsUTF8(slash(ScriptDir[i].path)+AtStartScript+'.script') then begin
          scriptfound:=true;
-         f_scriptengine.RunScript(AtStartScript,ScriptDir[i].path);
+         f_scriptengine.RunScript(AtStartScript,ScriptDir[i].path,'');
          break;
       end;
     end;
@@ -1640,7 +1642,7 @@ begin
      TargetForceNext:=false;
      Targets[FCurrentTarget].autoguiding:=false;
      FScriptRunning:=true;
-     if not f_scriptengine.RunScript(Targets[FCurrentTarget].planname,Targets[FCurrentTarget].path)then begin
+     if not f_scriptengine.RunScript(Targets[FCurrentTarget].planname,Targets[FCurrentTarget].path,Targets[FCurrentTarget].scriptargs)then begin
        FScriptRunning:=false;
        msg(Format(rsScriptFailed, [Targets[FCurrentTarget].planname]),0);
        if FRunning then begin
@@ -2562,7 +2564,7 @@ begin
     for i:=1 to MaxScriptDir do begin
       if FileExistsUTF8(slash(ScriptDir[i].path)+OnErrorScript+'.script') then begin
          scriptfound:=true;
-         f_scriptengine.RunScript(OnErrorScript,ScriptDir[i].path);
+         f_scriptengine.RunScript(OnErrorScript,ScriptDir[i].path,'');
          break;
       end;
     end;
@@ -2611,7 +2613,7 @@ if AtEndStopTracking or AtEndPark or AtEndCloseDome or AtEndWarmCamera or AtEndR
     for i:=1 to MaxScriptDir do begin
       if FileExistsUTF8(slash(ScriptDir[i].path)+AtEndScript+'.script') then begin
          scriptfound:=true;
-         f_scriptengine.RunScript(AtEndScript,ScriptDir[i].path);
+         f_scriptengine.RunScript(AtEndScript,ScriptDir[i].path,'');
          break;
       end;
     end;
@@ -2637,6 +2639,7 @@ begin
   objectname:='None';
   planname:='';
   path:='';
+  scriptargs:='';
   starttime:=NullCoord;
   endtime:=NullCoord;
   startmeridian:=NullCoord;
@@ -2671,6 +2674,7 @@ begin
   objectname:=Source.objectname;
   planname:=Source.planname;
   path:=Source.path;
+  scriptargs:=Source.scriptargs;
   T_Plan(plan).Clear;
   T_Plan(plan).AssignPlan(T_Plan(Source.plan));
   starttime:=Source.starttime;

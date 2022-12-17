@@ -55,7 +55,9 @@ type
     BtnSaveTemplate: TButton;
     CheckBoxResetRepeat: TCheckBox;
     CheckBoxRestartStatus: TCheckBox;
+    ScriptParam: TEdit;
     Label5: TLabel;
+    Label8: TLabel;
     MenuBlankRow: TMenuItem;
     StartOpt: TCheckListBox;
     TermOpt: TCheckListBox;
@@ -245,7 +247,7 @@ type
     FCoordWarningRow: integer;
     FFilename: string;
     procedure SetPlanList(n: integer; pl:string);
-    procedure SetScriptList(n: integer; sl:string);
+    procedure SetScriptList(n: integer; sl, args:string);
     procedure ResetSequences;
     procedure ResetSteps;
     procedure SetStep(n: integer; p: TStep);
@@ -435,6 +437,7 @@ begin
   MenuImgCoord.Caption := rsCurrentImage;
   MenuImgRot.Caption := rsCurrentImage;
   Label15.Caption := rsScript;
+  Label8.Caption := rsScriptArgume;
   BtnEditScript.Caption := rsEdit;
   BtnEditNewScript.Caption := rsNew;
   FlatTime.Caption := rsFlatTime;
@@ -569,12 +572,13 @@ begin
   s.Free;
 end;
 
-procedure Tf_EditTargets.SetScriptList(n: integer; sl:string);
+procedure Tf_EditTargets.SetScriptList(n: integer; sl, args:string);
 var i:integer;
 begin
   i:=ScriptList.Items.IndexOf(sl);
   if i>=0 then ScriptList.ItemIndex:=i;
   TargetList.Cells[colplan,n]:=sl;
+  ScriptParam.Text:=args;
 end;
 
 procedure Tf_EditTargets.BtnDeleteTemplateClick(Sender: TObject);
@@ -1204,7 +1208,7 @@ begin
     s.SaveToFile(fn);
     if newscript then begin
      LoadScriptList;
-     SetScriptList(n,f_pascaleditor.ScriptName);
+     SetScriptList(n,f_pascaleditor.ScriptName,ScriptParam.Text);
      TargetChange(nil);
     end;
   end;
@@ -1481,7 +1485,7 @@ begin
     TargetList.Cells[colupdcoord,n]:='';
     PanelTools.visible:=false;
     PageControlPlan.ActivePageIndex:=pagescript;
-    SetScriptList(n,t.planname);
+    SetScriptList(n,t.planname,t.scriptargs);
   end
   else if t.objectname=SkyFlatTxt then begin
     PanelTools.visible:=false;
@@ -1655,6 +1659,7 @@ begin
     TargetList.Cells[colplan,n]:=sname;
     scdir:=TScriptDir(ScriptList.Items.Objects[i]);
     t.planname:=sname;
+    t.scriptargs:=trim(ScriptParam.Text);
     if scdir=nil then t.path:=''
                  else t.path:=scdir.path;
   end

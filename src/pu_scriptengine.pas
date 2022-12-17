@@ -46,7 +46,7 @@ type
     procedure ShowOutput;
   public
     PyProcess: TProcess;
-    pycmd, pyscript, pypath: string;
+    pycmd, pyscript, pypath, args: string;
     debug: boolean;
     host,port: string;
     output: TStringList;
@@ -108,6 +108,7 @@ type
     LastErr:string;
     strllist: array of TStringList;
     Waitrunning, cancelWait, ScriptCancel: boolean;
+    FParamStr: TStringList;
 
     RunProcess: TProcess;
     procedure msg(str:string);
@@ -150,6 +151,8 @@ type
     function Cmd(cname:string):string;
     function CmdArg(cname:string; var arg:Tstringlist):string;
     function CompileScripts: boolean;
+    function doParamstr: Tstringlist;
+    function doParamCount: Integer;
   public
     { public declarations }
     dbgscr: TPSScriptDebugger;
@@ -221,9 +224,9 @@ type
     function cmd_calibratorlighton(value:string): string;
     function cmd_calibratorlightoff: string;
     function ScriptType(fn: string): TScriptType;
-    function  RunScript(sname,path: string):boolean;
+    function  RunScript(sname,path,args: string):boolean;
     function ScriptRunning: boolean;
-    function RunPython(pycmd, pyscript, pypath: string; debug:boolean=false): boolean;
+    function RunPython(pycmd, pyscript, pypath, args: string; debug:boolean=false): boolean;
     procedure StopPython;
     function PythonRunning: boolean;
     procedure ShowPythonOutput(output: TStringList; exitcode: integer);
@@ -780,6 +783,19 @@ begin
   result:=CreateDirUTF8(NewDir);
 end;
 
+function Tf_scriptengine.doParamstr: Tstringlist;
+begin
+  result:=FParamStr;
+end;
+
+function Tf_scriptengine.doParamCount: Integer;
+begin
+  if FParamStr=nil then
+    result:=0
+  else
+    result:=FParamStr.Count;
+end;
+
 function Tf_scriptengine.ScriptType(fn: string): TScriptType;
 var
  f: textfile;
@@ -811,7 +827,7 @@ begin
  CloseFile(f);
 end;
 
-function Tf_scriptengine.RunScript(sname,path: string):boolean;
+function Tf_scriptengine.RunScript(sname,path,args: string):boolean;
 var fn: string;
     i: integer;
     ok: boolean;
@@ -825,7 +841,7 @@ begin
   st:=ScriptType(fn);
   if st=stPython then begin
     ScriptCancel:=false;
-    result:=RunPython(PythonCmd, fn, slash(ScriptsDir));
+    result:=RunPython(PythonCmd, fn, slash(ScriptsDir),args);
     result:=result and (not ScriptCancel);
     for i:=0 to PythonOutput.Count-1 do
        msg(PythonOutput[i]);
@@ -841,6 +857,11 @@ begin
       msg('Pascal language script are not supported on ARM processor');
       exit;
     {$endif}
+    FParamStr:=TStringList.Create;
+    FParamStr.Add(fn);
+    if args<>'' then begin
+      SplitCmdLineParams(args,FParamStr,true);
+    end;
     scr.Script.LoadFromFile(fn);
     ok:=scr.Compile;
     ScriptCancel:=false;
@@ -862,6 +883,7 @@ begin
       end;
       result:=false;
     end;
+    FParamStr.Free;
   end
   else begin
     result:=false;
@@ -973,7 +995,8 @@ with Sender as TPSScript do begin
   AddMethod(self, @Tf_scriptengine.doRenameFile,'function RenameFile(OldName, NewName: String): Boolean;');
   AddMethod(self, @Tf_scriptengine.doCreateDir,'function CreateDir(NewDir: String): Boolean;');
   AddMethod(self, @Tf_scriptengine.doSaveSL,'function SaveSL(fn:string; strl: TStringList):Boolean;');
-
+  AddMethod(self, @Tf_scriptengine.doParamstr,'function Paramstr: Tstringlist;');
+  AddMethod(self, @Tf_scriptengine.doParamCount,'function ParamCount: Integer;');
 end;
 end;
 
@@ -1880,7 +1903,7 @@ end;
 
 ///// Python scripts ///////
 
-function Tf_scriptengine.RunPython(pycmd, pyscript, pypath: string; debug:boolean=false): boolean;
+function Tf_scriptengine.RunPython(pycmd, pyscript, pypath, args: string; debug:boolean=false): boolean;
 begin
 result:=false;
 try
@@ -1890,6 +1913,7 @@ try
   PythonScr.pycmd:=pycmd;
   PythonScr.pyscript:=pyscript;
   PythonScr.pypath:=pypath;
+  PythonScr.args:=args;
   PythonScr.debug:=debug;
   PythonScr.Start;
   if assigned(FonScriptExecute) then FonScriptExecute(self);
@@ -1937,7 +1961,7 @@ procedure TPythonThread.Execute;
 const READ_BYTES = 2048;
 var
   M: TMemoryStream;
-  param: TStringList;
+  param,scparam: TStringList;
   n: LongInt;
   i,r: integer;
   BytesRead: LongInt;
@@ -1949,14 +1973,19 @@ FRunning:=true;
 M := TMemoryStream.Create;
 PyProcess := TProcess.Create(nil);
 param:=TStringList.Create;
+scparam:=TStringList.Create;
 output:=TStringList.Create;
 rc:=1;
 try
+  if args<>'' then begin
+    SplitCmdLineParams(args,scparam,true);
+  end;
   BytesRead := 0;
   if debug then begin
      param.Add('-m');
      param.Add('pdb');
      param.Add(pyscript);
+     for i:=0 to scparam.Count-1 do param.Add(scparam[i]);
      PyProcess.ShowWindow:=swoShowNormal;
      PyProcess.Options := [poNewConsole];
      PyProcess.StartupOptions:=[suoUseShowWindow];
@@ -1972,6 +2001,7 @@ try
   end
   else begin
      param.Add(pyscript);
+     for i:=0 to scparam.Count-1 do param.Add(scparam[i]);
      PyProcess.ShowWindow:=swoHIDE;
      if output<>nil then PyProcess.Options := [poUsePipes, poStdErrToOutPut];
   end;
@@ -2009,6 +2039,7 @@ try
   FreeAndNil(PyProcess);
   M.Free;
   param.Free;
+  scparam.Free;
   output.Free;
   FRunning:=false;
 except
@@ -2019,6 +2050,7 @@ except
     FreeAndNil(PyProcess);
     M.Free;
     param.Free;
+    scparam.Free;
     output.Free;
     FRunning:=false;
   end;

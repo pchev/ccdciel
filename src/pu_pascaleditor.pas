@@ -45,6 +45,8 @@ type
     Button1: TButton;
     Button2: TButton;
     Button3: TButton;
+    Label2: TLabel;
+    params: TEdit;
     EditCopy1: TEditCopy;
     EditCut1: TEditCut;
     EditPaste1: TEditPaste;
@@ -67,6 +69,7 @@ type
     ToolBar1: TToolBar;
     ToolButton1: TToolButton;
     ToolButton10: TToolButton;
+    ToolButton11: TToolButton;
     ToolButton2: TToolButton;
     ToolButton3: TToolButton;
     ToolButton4: TToolButton;
@@ -156,6 +159,7 @@ begin
   ToolButton4.Hint:=rsStepInto;
   ToolButton5.Hint:=rsStepOver;
   ToolButton6.Hint:=rsRemoveAllBre;
+  label2.Caption:=rsScriptArgume+':';
 end;
 
 procedure Tf_pascaleditor.SetScriptName(value:string);
@@ -238,7 +242,7 @@ end;
 
 procedure Tf_pascaleditor.ButtonRunClick(Sender: TObject);
 var i: integer;
-    fn:string;
+    fn,args:string;
 begin
 if FScriptType=stPascal then begin
   if Fdbgscr.Running then
@@ -249,10 +253,11 @@ end
 else if FScriptType=stPython then begin
   fn:=slash(TmpDir)+'tmpscript';
   SynEdit1.Lines.SaveToFile(fn);
+  args:=trim(params.Text);
   DebugMemo.Clear;
   DebugMemo.Lines.Add('running...');
   Application.ProcessMessages;
-  f_scriptengine.RunPython(PythonCmd, fn, slash(ScriptsDir));
+  f_scriptengine.RunPython(PythonCmd, fn, slash(ScriptsDir),args);
   for i:=0 to f_scriptengine.PythonOutput.Count-1 do
      DebugMemo.Lines.Add(f_scriptengine.PythonOutput[i]);
   DebugMemo.Lines.Add('Exit code: '+inttostr(f_scriptengine.PythonResult));
@@ -260,7 +265,7 @@ end;
 end;
 
 procedure Tf_pascaleditor.ButtonStepIntoClick(Sender: TObject);
-var fn:string;
+var fn,args:string;
 begin
 if FScriptType=stPascal then begin
   if Fdbgscr.Exec.Status in isRunningOrPaused then
@@ -273,10 +278,11 @@ end
 else if FScriptType=stPython then begin
   fn:=slash(TmpDir)+'tmpscript';
   SynEdit1.Lines.SaveToFile(fn);
+  args:=trim(params.Text);
   DebugMemo.Clear;
   DebugMemo.Lines.Add('debugging...');
   Application.ProcessMessages;
-  f_scriptengine.RunPython(PythonCmd, fn, slash(ScriptsDir),true);
+  f_scriptengine.RunPython(PythonCmd, fn, slash(ScriptsDir),args,true);
   DebugMemo.Lines.Add('Exit code: '+inttostr(f_scriptengine.PythonResult));
 end;
 end;

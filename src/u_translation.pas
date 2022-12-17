@@ -1467,6 +1467,7 @@ resourcestring
   rsSDriverDoNot = '%s driver do not support %s';
   rsHandpad = 'Handpad';
   rsFlipNS = 'Flip N/S';
+  rsScriptArgume = 'Script arguments';
 
 implementation
 

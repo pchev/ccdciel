@@ -970,16 +970,17 @@ object f_EditTargets: Tf_EditTargets
             AnchorSideTop.Side = asrCenter
             Left = 16
             Height = 19
-            Top = 24
+            Top = 20
             Width = 35
             Caption = 'Script'
             ParentColor = False
             ParentFont = False
           end
           object ScriptList: TComboBox
-            Left = 80
+            AnchorSideLeft.Control = ScriptParam
+            Left = 128
             Height = 35
-            Top = 16
+            Top = 12
             Width = 168
             ItemHeight = 0
             OnChange = TargetChange
@@ -988,28 +989,55 @@ object f_EditTargets: Tf_EditTargets
             TabOrder = 0
           end
           object BtnEditScript: TButton
+            AnchorSideLeft.Control = ScriptList
+            AnchorSideLeft.Side = asrBottom
             AnchorSideTop.Control = ScriptList
             AnchorSideTop.Side = asrCenter
-            Left = 267
+            Left = 304
             Height = 25
-            Top = 21
+            Top = 17
             Width = 71
+            BorderSpacing.Left = 8
             Caption = 'Edit'
             OnClick = BtnScriptClick
             ParentFont = False
             TabOrder = 1
           end
           object BtnEditNewScript: TButton
+            AnchorSideLeft.Control = BtnEditScript
+            AnchorSideLeft.Side = asrBottom
             AnchorSideTop.Control = ScriptList
             AnchorSideTop.Side = asrCenter
-            Left = 356
+            Left = 383
             Height = 25
-            Top = 21
+            Top = 17
             Width = 81
+            BorderSpacing.Left = 8
             Caption = 'New'
             OnClick = BtnScriptClick
             ParentFont = False
             TabOrder = 2
+          end
+          object Label8: TLabel
+            AnchorSideTop.Control = ScriptParam
+            AnchorSideTop.Side = asrCenter
+            Left = 15
+            Height = 19
+            Top = 75
+            Width = 105
+            Caption = 'Script arguments'
+            ParentColor = False
+          end
+          object ScriptParam: TEdit
+            AnchorSideLeft.Control = Label8
+            AnchorSideLeft.Side = asrBottom
+            Left = 128
+            Height = 31
+            Top = 69
+            Width = 381
+            BorderSpacing.Left = 8
+            OnEditingDone = TargetChange
+            TabOrder = 3
           end
         end
       end

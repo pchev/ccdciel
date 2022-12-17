@@ -39,17 +39,21 @@ type
     BtnNew: TButton;
     BtnStop: TButton;
     BtnCopy: TButton;
+    ButtonParam: TButton;
     ComboBoxScript: TComboBox;
+    ScriptParam: TEdit;
     led: TShape;
     Panel1: TPanel;
     Panel2: TPanel;
     Panel3: TPanel;
     Panel4: TPanel;
+    Panel5: TPanel;
     Title: TLabel;
     procedure BtnCopyClick(Sender: TObject);
     procedure BtnScriptClick(Sender: TObject);
     procedure BtnRunClick(Sender: TObject);
     procedure BtnStopClick(Sender: TObject);
+    procedure ButtonParamClick(Sender: TObject);
     procedure ComboBoxScriptKeyDown(Sender: TObject; var Key: Word;
       Shift: TShiftState);
   private
@@ -112,6 +116,8 @@ begin
   BtnNew.Caption:=rsNew;
   BtnStop.Caption:=rsStop;
   BtnCopy.Caption:=rsCopy;
+  ButtonParam.Hint:=rsScriptArgume;
+  ScriptParam.Hint:=rsScriptArgume;
   if f_pascaleditor<>nil then f_pascaleditor.SetLang;
 end;
 
@@ -127,7 +133,7 @@ begin
   path:=ScriptDir[1].path;
   sname:='startup';
   if FileExistsUTF8(slash(path)+sname+'.script') then begin
-    f_scriptengine.RunScript(sname,path);
+    f_scriptengine.RunScript(sname,path,'');
   end;
 end;
 
@@ -138,12 +144,12 @@ begin
   path:=ScriptDir[1].path;
   sname:='shutdown';
   if FileExistsUTF8(slash(path)+sname+'.script') then begin
-    f_scriptengine.RunScript(sname,path);
+    f_scriptengine.RunScript(sname,path,'');
   end;
 end;
 
 procedure Tf_script.BtnRunClick(Sender: TObject);
-var sname: string;
+var sname,args: string;
     scdir:TScriptDir;
     i: integer;
 begin
@@ -154,12 +160,16 @@ begin
     end else begin
       sname:=ComboBoxScript.Items[i];
       scdir:=TScriptDir(ComboBoxScript.Items.Objects[i]);
+      if panel5.Visible then
+        args:=trim(ScriptParam.text)
+      else
+        args:='';
       if (sname='')or(scdir=nil) then exit;
       if not FileExistsUTF8(slash(scdir.path)+sname+'.script') then begin
         msg(Format(rsFileNotFound,[sname+'.script']));
         exit;
       end;
-      f_scriptengine.RunScript(sname,scdir.path);
+      f_scriptengine.RunScript(sname,scdir.path,args);
    end;
   end
   else msg(rsPleaseSelect);
@@ -171,6 +181,11 @@ begin
     f_scriptengine.StopScript;
   end
   else msg(rsNoScriptAreR);
+end;
+
+procedure Tf_script.ButtonParamClick(Sender: TObject);
+begin
+  panel5.Visible:=not panel5.Visible;
 end;
 
 procedure Tf_script.ComboBoxScriptKeyDown(Sender: TObject; var Key: Word;

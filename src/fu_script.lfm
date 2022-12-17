@@ -1,10 +1,10 @@
 object f_script: Tf_script
   Left = 0
-  Height = 104
+  Height = 138
   Top = 0
   Width = 194
   AutoSize = True
-  ClientHeight = 104
+  ClientHeight = 138
   ClientWidth = 194
   ParentFont = False
   TabOrder = 0
@@ -29,14 +29,14 @@ object f_script: Tf_script
   end
   object Panel1: TPanel
     Left = 0
-    Height = 84
+    Height = 118
     Top = 20
     Width = 194
     Align = alClient
     AutoSize = True
     ChildSizing.Layout = cclTopToBottomThenLeftToRight
     ChildSizing.ControlsPerLine = 99
-    ClientHeight = 84
+    ClientHeight = 118
     ClientWidth = 194
     ParentFont = False
     TabOrder = 0
@@ -54,7 +54,7 @@ object f_script: Tf_script
         Left = 0
         Height = 28
         Top = 0
-        Width = 193
+        Width = 168
         Align = alClient
         Constraints.MaxHeight = 28
         ItemHeight = 0
@@ -62,11 +62,41 @@ object f_script: Tf_script
         ParentFont = False
         TabOrder = 0
       end
+      object ButtonParam: TButton
+        Left = 168
+        Height = 28
+        Top = 0
+        Width = 25
+        Align = alRight
+        Caption = '...'
+        Constraints.MaxHeight = 28
+        OnClick = ButtonParamClick
+        TabOrder = 1
+      end
+    end
+    object Panel5: TPanel
+      Left = 0
+      Height = 31
+      Top = 28
+      Width = 193
+      BevelOuter = bvNone
+      ClientHeight = 31
+      ClientWidth = 193
+      TabOrder = 3
+      Visible = False
+      object ScriptParam: TEdit
+        Left = 0
+        Height = 31
+        Top = 0
+        Width = 193
+        Align = alClient
+        TabOrder = 0
+      end
     end
     object Panel3: TPanel
       Left = 0
       Height = 25
-      Top = 28
+      Top = 59
       Width = 193
       BevelOuter = bvNone
       ClientHeight = 25
@@ -105,7 +135,7 @@ object f_script: Tf_script
     object Panel4: TPanel
       Left = 0
       Height = 25
-      Top = 53
+      Top = 84
       Width = 193
       BevelOuter = bvNone
       ClientHeight = 25
