@@ -14914,6 +14914,7 @@ try
   else if method='TELESCOPE_PARKED' then result:=result+'"result": '+BoolToStr(mount.Park,tr,fa)
   else if method='TELESCOPE_TRACKING' then result:=result+'"result": '+BoolToStr(mount.Tracking,tr,fa)
   else if method='TELESCOPE_SLEWING' then result:=result+'"result": '+BoolToStr(mount.MountSlewing,tr,fa)
+  else if method='TELESCOPE_PIERSIDE' then result:=result+'"result": "'+PierSideName[ord(mount.PierSide)]+'"'
   else if method='TELESCOPE_EQMOD' then result:=result+'"result": '+BoolToStr(mount.IsEqmod,tr,fa)
   else if method='AUTOGUIDER_CONNECTED' then result:=result+'"result": '+BoolToStr((Autoguider.State<>GUIDER_DISCONNECTED),tr,fa)
   else if method='AUTOGUIDER_RUNNING' then result:=result+'"result": '+BoolToStr(Autoguider.Running,tr,fa)

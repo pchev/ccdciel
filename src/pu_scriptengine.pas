@@ -324,6 +324,7 @@ begin
   else if varname='HOSTOS' then str:=hostOS
   else if varname='COVERSTATUS' then str:=cmd_coverstatus
   else if varname='CALIBRATORSTATUS' then str:=cmd_calibratorstatus
+  else if varname='TELESCOPE_PIERSIDE' then str:=PierSideName[ord(mount.PierSide)]
   else if varname='STR1' then str:=slist[0]
   else if varname='STR2' then str:=slist[1]
   else if varname='STR3' then str:=slist[2]
