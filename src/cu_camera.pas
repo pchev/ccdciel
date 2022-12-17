@@ -663,7 +663,7 @@ begin
  if EarlyNextExposure and Assigned(FonNewExposure) and(not Autofocusing) then begin
    if CameraProcessingImage and (CameraProcessingNum=FImgNum-1) then begin
      sleep(10);
-     msg('wait CameraProcessingImage');
+     if debug_msg then msg('wait CameraProcessingImage');
      CheckSynchronize;
      Application.QueueAsyncCall(@TryNextExposure,Data);
    end
