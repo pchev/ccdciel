@@ -731,7 +731,7 @@ object f_option: Tf_option
             ClientWidth = 550
             object CustomHeader: TStringGrid
               Left = 0
-              Height = 463
+              Height = 421
               Top = 0
               Width = 550
               Align = alClient
@@ -747,16 +747,35 @@ object f_option: Tf_option
                 end              
                 item
                   Title.Caption = 'Value'
-                  Width = 446
+                  Width = 448
                 end>
               FixedCols = 0
               MouseWheelOption = mwGrid
-              Options = [goFixedVertLine, goFixedHorzLine, goVertLine, goHorzLine, goRangeSelect, goEditing, goAlwaysShowEditor, goSmoothScroll]
+              Options = [goFixedVertLine, goFixedHorzLine, goVertLine, goHorzLine, goEditing, goAlwaysShowEditor, goSmoothScroll]
               TabOrder = 0
               ColWidths = (
                 100
-                446
+                448
               )
+            end
+            object Panel8: TPanel
+              Left = 0
+              Height = 42
+              Top = 421
+              Width = 550
+              Align = alBottom
+              ClientHeight = 42
+              ClientWidth = 550
+              TabOrder = 1
+              object BtnDelHdr: TButton
+                Left = 8
+                Height = 25
+                Top = 8
+                Width = 88
+                Caption = 'Delete'
+                OnClick = BtnDelHdrClick
+                TabOrder = 0
+              end
             end
           end
         end
@@ -781,7 +800,7 @@ object f_option: Tf_option
           end
           object CaptureDir: TEdit
             Left = 168
-            Height = 28
+            Height = 27
             Top = 18
             Width = 266
             Constraints.MaxHeight = 28

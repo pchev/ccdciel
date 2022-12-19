@@ -34,9 +34,11 @@ type
   { Tf_option }
 
   Tf_option = class(TForm)
+    BtnDelHdr: TButton;
     ButtonSeqDir: TButton;
     ButtonLogDir: TButton;
     CdCPath: TEdit;
+    Panel8: TPanel;
     ShowVideo: TCheckBox;
     Label160: TLabel;
     Panel28: TPanel;
@@ -692,6 +694,7 @@ type
     procedure AutofocusExpTimeChange(Sender: TObject);
     procedure AutofocusmodeClick(Sender: TObject);
     procedure AutoguiderBoxClick(Sender: TObject);
+    procedure BtnDelHdrClick(Sender: TObject);
     procedure BtnDisableAutofocusTempClick(Sender: TObject);
     procedure BtnDisableDelayClick(Sender: TObject);
     procedure BtnDisableFocuserTempClick(Sender: TObject);
@@ -1936,6 +1939,16 @@ begin
   CalibrationDelay.Visible:=(i=0);
   label26.Visible:=(i=0);
   EarlyDither.Visible:=(i=0);
+end;
+
+procedure Tf_option.BtnDelHdrClick(Sender: TObject);
+var aRow: integer;
+begin
+  aRow:=CustomHeader.Selection.Top;
+  if (aRow>0)and(aRow<CustomHeader.RowCount) then begin
+    CustomHeader.Cells[0,aRow]:='';
+    CustomHeader.Cells[1,aRow]:='';
+  end;
 end;
 
 function Tf_option.GetAutoguiderType: integer;
