@@ -73,6 +73,8 @@ type
     StackShow: TCheckBox;
     SeqDir: TEdit;
     SeqDirDefault: TButton;
+    HeaderOpt: TTabSheet;
+    CustomHeader: TStringGrid;
     UseReadoutMode: TCheckBox;
     Page6: TPage;
     PHDpath: TEdit;
@@ -826,6 +828,7 @@ begin
   FilterList.RowCount:=MaxFilter;
   SafetyActions.RowCount:=SafetyActionNum+1;
   PageControl1.ActivePageIndex:=0;
+  CustomHeader.RowCount:=MaxCustomHeaders+1;
   b:=TSpeedButton.Create(self);
   b.GroupIndex:=99876;
   b.AllowAllUp:=true;

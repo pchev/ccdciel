@@ -155,6 +155,10 @@ type
     az2,alt2: double;
   end;
 
+  TCustomHeaderElement = record
+       key,value: shortstring;
+  end;
+
   // libcdcwcs
  type
    {$ifdef cpu32}
@@ -206,6 +210,7 @@ const
   ccdciel_version='Version beta '+ccdcielver;
   TargetFileVersion = 5;
   Maxclient = 100;
+  MaxCustomHeaders = 50;
   blank=' ';
   blank80='                                                                                ';
   clOrange=$1080EF;
@@ -514,6 +519,9 @@ var
   LastHfd,LastDrift: double;
   {internal guider}
   InternalguiderRunning,InternalguiderCalibrating,InternalguiderGuiding,StopInternalguider,InternalguiderCapturingDark: boolean;
+  CustomHeaderNum: integer;
+  CustomHeaders: array [1..MaxCustomHeaders] of TCustomHeaderElement;
+
 
   procedure globalmsg(str:string);
   function Str2Frametype(str:string):TFrameType;

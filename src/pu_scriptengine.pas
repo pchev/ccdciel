@@ -223,6 +223,10 @@ type
     function cmd_getcalibratorbrightness: integer;
     function cmd_calibratorlighton(value:string): string;
     function cmd_calibratorlightoff: string;
+    function cmd_customheader_add(key,value:string): string;
+    function cmd_customheader_del(key:string): string;
+    function cmd_customheader_clear: string;
+    function cmd_customheader(key:string): string;
     function ScriptType(fn: string): TScriptType;
     function  RunScript(sname,path,args: string):boolean;
     function ScriptRunning: boolean;
@@ -1040,6 +1044,7 @@ else if cname='AUTOMATICAUTOFOCUS' then result:=cmd_AutomaticAutoFocus
 else if cname='COVER_OPEN' then result:=cmd_coveropen
 else if cname='COVER_CLOSE' then result:=cmd_coverclose
 else if cname='CALIBRATOR_LIGHT_OFF' then result:=cmd_calibratorlightoff
+else if cname='CUSTOMHEADER_CLEAR' then result:=cmd_customheader_clear
 ;
 LastErr:='cmd('+cname+'): '+result;
 end;
@@ -1075,6 +1080,9 @@ else if cname='OPEN_REFERENCE_IMAGE' then result:=cmd_OpenReferenceImage(arg[0])
 else if cname='LIST_FILES' then result:=cmd_ListFiles(arg)
 else if cname='PLANETARIUM_SHOWIMAGE_FOV' then result:=cmd_PlanetariumShowImage(arg[0])
 else if cname='CALIBRATOR_LIGHT_ON' then result:=cmd_calibratorlighton(arg[0])
+else if cname='CUSTOMHEADER' then result:=cmd_customheader(arg[0])
+else if cname='CUSTOMHEADER_ADD' then result:=cmd_customheader_add(arg[0],arg[1])
+else if cname='CUSTOMHEADER_DEL' then result:=cmd_customheader_del(arg[0])
 ;
 LastErr:='cmdarg('+cname+'): '+result;
 end;
@@ -1899,6 +1907,60 @@ end;
 function Tf_scriptengine.cmd_getcalibratorbrightness: integer;
 begin
   result:=f_cover.Brightness.Value;
+end;
+
+function Tf_scriptengine.cmd_customheader_add(key,value:string): string;
+begin
+ if CustomHeaderNum<MaxCustomHeaders then begin
+   inc(CustomHeaderNum);
+   CustomHeaders[CustomHeaderNum].key:=uppercase(copy(trim(key),1,8));
+   CustomHeaders[CustomHeaderNum].value:=copy(trim(value),1,68);
+   result:=msgOK;
+ end
+ else begin
+   result:=msgFailed;
+ end;
+end;
+
+function Tf_scriptengine.cmd_customheader_del(key:string): string;
+var i,j: integer;
+    found: boolean;
+begin
+  key:=uppercase(copy(trim(key),1,8));
+  repeat
+    found:=false;
+    for i:=1 to CustomHeaderNum do begin
+      if key=CustomHeaders[i].key then begin
+        for j:=i+1 to CustomHeaderNum do begin
+          CustomHeaders[j-1].key:=CustomHeaders[j].key;
+          CustomHeaders[j-1].value:=CustomHeaders[j].value;
+        end;
+        dec(CustomHeaderNum);
+        found:=true;
+        break;
+      end;
+    end;
+  until found=false;
+  result:=msgOK; // OK also if not found
+end;
+
+function Tf_scriptengine.cmd_customheader_clear: string;
+begin
+  CustomHeaderNum:=0;
+  result:=msgOK;
+end;
+
+function Tf_scriptengine.cmd_customheader(key:string): string;
+var i: integer;
+begin
+  result:='';
+  key:=uppercase(copy(trim(key),1,8));
+  for i:=1 to CustomHeaderNum do begin
+    if key=CustomHeaders[i].key then begin
+      result:=CustomHeaders[i].value;
+      break;
+    end;
+  end;
 end;
 
 ///// Python scripts ///////

@@ -685,7 +685,7 @@ var origin,observer,telname,instrum,objname,siso,CType,roworder: string;
     gamma,voffset,coffset,OffsetX,OffsetY: integer;
     Frx,Fry,Frwidth,Frheight: integer;
     hasfocusertemp,hasfocuserpos: boolean;
-    i: integer;
+    i,j: integer;
 begin
   // get header values from camera (set by INDI driver or libraw)
   if not f.Header.Valueof('BITPIX',hbitpix) then hbitpix:=f.HeaderInfo.bitpix;
@@ -958,6 +958,9 @@ begin
        f.Header.Insert(i,'SECPIX2',FGuidePixelScale,'image scale arcseconds per pixel');
        f.Header.Insert(i,'SCALE',FGuidePixelScale,'image scale arcseconds per pixel');
     end;
+  end;
+  for j:=1 to CustomHeaderNum do begin
+    f.Header.Insert(i,CustomHeaders[j].key,CustomHeaders[j].value,'');
   end;
   f.Header.Add('END','','');
 end;

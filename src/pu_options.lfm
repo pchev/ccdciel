@@ -725,6 +725,40 @@ object f_option: Tf_option
               )
             end
           end
+          object HeaderOpt: TTabSheet
+            Caption = 'Custom headers'
+            ClientHeight = 463
+            ClientWidth = 550
+            object CustomHeader: TStringGrid
+              Left = 0
+              Height = 463
+              Top = 0
+              Width = 550
+              Align = alClient
+              AutoFillColumns = True
+              ColCount = 2
+              Columns = <              
+                item
+                  MinSize = 100
+                  MaxSize = 100
+                  SizePriority = 0
+                  Title.Caption = 'Key'
+                  Width = 100
+                end              
+                item
+                  Title.Caption = 'Value'
+                  Width = 446
+                end>
+              FixedCols = 0
+              MouseWheelOption = mwGrid
+              Options = [goFixedVertLine, goFixedHorzLine, goVertLine, goHorzLine, goRangeSelect, goEditing, goAlwaysShowEditor, goSmoothScroll]
+              TabOrder = 0
+              ColWidths = (
+                100
+                446
+              )
+            end
+          end
         end
         object Panel7: TPanel
           Left = 0

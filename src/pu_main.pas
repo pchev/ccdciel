@@ -49,7 +49,7 @@ uses
   pu_planetariuminfo, indiapi, cu_ascomrestcamera, cu_ascomrestdome, cu_ascomrestfocuser, cu_ascomrestmount, cu_manualwheel,
   cu_ascomrestrotator, cu_ascomrestsafety, cu_ascomrestweather, cu_ascomrestwheel, pu_polaralign, pu_polaralign2, pu_collimation,
   cu_switch, cu_ascomswitch, cu_ascomrestswitch, cu_indiswitch, cu_cover, cu_ascomcover, cu_ascomrestcover, cu_indicover,
-  u_annotation, BGRABitmap, BGRABitmapTypes, LCLVersion, InterfaceBase, lclplatformdef,
+  u_annotation, BGRABitmap, BGRABitmapTypes, LCLVersion, InterfaceBase, lclplatformdef, Grids,
   LazUTF8, Classes, dynlibs, LCLType, LMessages, IniFiles, IntfGraphics, FPImage, GraphType,
   SysUtils, FileUtil, LazFileUtils, LazSysUtils, Forms, Controls, Math, Graphics, Dialogs, u_speech,
   StdCtrls, ExtCtrls, Menus, ComCtrls, Buttons, Types, u_translation;
@@ -4205,6 +4205,11 @@ begin
   SaveBitmapFormat:=config.GetValue('/Files/SaveBitmapFormat','png');
   OpenPictureDialog1.InitialDir:=config.GetValue('/Files/CapturePath',defCapturePath);
   f_video.VideoCaptureDir.Text:=config.GetValue('/Files/VideoCapturePath','/tmp');
+  CustomHeaderNum:=config.GetValue('/Files/CustomHeader/Num',0);
+  for i:=1 to CustomHeaderNum do begin
+    CustomHeaders[i].key:=config.GetValue('/Files/CustomHeader/Key'+inttostr(i),'');
+    CustomHeaders[i].value:=config.GetValue('/Files/CustomHeader/Value'+inttostr(i),'');
+  end;
   ObsLatitude:=config.GetValue('/Info/ObservatoryLatitude',0.0);
   ObsLongitude:=config.GetValue('/Info/ObservatoryLongitude',0.0);
   ObsElevation:=config.GetValue('/Info/ObservatoryElevation',0.0);
@@ -4820,6 +4825,12 @@ begin
    config.SetValue('/Configuration/Version',ccdcielver);
 
    config.SetValue('/Log/LogLevel',LogLevel);
+   config.DeletePath('/Files/CustomHeader/');
+   config.SetValue('/Files/CustomHeader/Num',CustomHeaderNum);
+   for i:=1 to CustomHeaderNum do begin
+     config.SetValue('/Files/CustomHeader/Key'+inttostr(i),CustomHeaders[i].key);
+     config.SetValue('/Files/CustomHeader/Value'+inttostr(i),CustomHeaders[i].value);
+   end;
    config.SetValue('/Script/ScriptName',f_script.ComboBoxScript.Text);
    config.SetValue('/Temperature/Setpoint',f_ccdtemp.Setpoint.Value);
    config.SetValue('/Preview/Exposure',f_preview.ExpTime.Text);
@@ -8318,6 +8329,11 @@ begin
    else if buf='jpg' then f_option.SaveBitmapFormat.ItemIndex:=2
    else if buf='bmp' then f_option.SaveBitmapFormat.ItemIndex:=3
    else f_option.SaveBitmapFormat.ItemIndex:=0;
+   f_option.CustomHeader.Clean([gzNormal]);
+   for i:=1 to CustomHeaderNum do begin
+     f_option.CustomHeader.Cells[0,i]:=CustomHeaders[i].key;
+     f_option.CustomHeader.Cells[1,i]:=CustomHeaders[i].value;
+   end;
    f_option.debug_msg.Checked:=config.GetValue('/Log/debug_msg',debug_msg);
    f_option.LoadObservatoryDB(config.GetValue('/Info/ObservatoryName',''));
    f_option.ObservatoryName.Text:=config.GetValue('/Info/ObservatoryName','');
@@ -8712,6 +8728,22 @@ begin
      config.SetValue('/Files/FitsFileExt',f_option.FitsExt.Text);
      config.SetValue('/Files/Pack',f_option.FilePack.checked);
      config.SetValue('/Files/Exif',f_option.WantExif.Checked);
+
+     CustomHeaderNum:=0;
+     for i:=1 to f_option.CustomHeader.RowCount-1 do begin
+       if trim(f_option.CustomHeader.Cells[0,i])<>'' then begin
+         inc(CustomHeaderNum);
+         CustomHeaders[CustomHeaderNum].key:=uppercase(copy(trim(f_option.CustomHeader.Cells[0,i]),1,8));
+         CustomHeaders[CustomHeaderNum].value:=copy(trim(f_option.CustomHeader.Cells[1,i]),1,68);
+       end;
+     end;
+     config.DeletePath('/Files/CustomHeader/');
+     config.SetValue('/Files/CustomHeader/Num',CustomHeaderNum);
+     for i:=1 to CustomHeaderNum do begin
+       config.SetValue('/Files/CustomHeader/Key'+inttostr(i),CustomHeaders[i].key);
+       config.SetValue('/Files/CustomHeader/Value'+inttostr(i),CustomHeaders[i].value);
+     end;
+
      config.SetValue('/StarAnalysis/Focus',f_option.FocusWindow.Value);
      config.SetValue('/StarAnalysis/Undersampled',f_option.Undersampled.Checked);
      n:=FilterList.Count-1;
@@ -14991,9 +15023,10 @@ try
   else if method='CLEAR_REFERENCE_IMAGE' then result:=result+'"result":{"status": "'+f_scriptengine.cmd_ClearReferenceImage+'"}'
   else if method='AUTOFOCUS' then result:=result+'"result":{"status": "'+f_scriptengine.cmd_AutoFocus+'"}'
   else if method='AUTOMATICAUTOFOCUS' then result:=result+'"result":{"status": "'+f_scriptengine.cmd_AutomaticAutoFocus+'"}'
-  else if method='COVER_OPEN' then result:=f_scriptengine.cmd_coveropen
-  else if method='COVER_CLOSE' then result:=f_scriptengine.cmd_coverclose
-  else if method='CALIBRATOR_LIGHT_OFF' then result:=f_scriptengine.cmd_calibratorlightoff
+  else if method='COVER_OPEN' then result:=result+'"result":{"status": "'+f_scriptengine.cmd_coveropen+'"}'
+  else if method='COVER_CLOSE' then result:=result+'"result":{"status": "'+f_scriptengine.cmd_coverclose+'"}'
+  else if method='CALIBRATOR_LIGHT_OFF' then result:=result+'"result":{"status": "'+f_scriptengine.cmd_calibratorlightoff+'"}'
+  else if method='CUSTOMHEADER_CLEAR' then result:=result+'"result":{"status": "'+f_scriptengine.cmd_customheader_clear+'"}'
   // execute command with parameter
   else if method='DEVICES_CONNECTION' then begin
     if uppercase(trim(value[attrib.IndexOf('params.0')]))='TRUE' then buf:='ON' else buf:='OFF';
@@ -15123,6 +15156,22 @@ try
   else if method='CALIBRATOR_LIGHT_ON' then begin
    buf1:=trim(value[attrib.IndexOf('params.0')]);
    buf:=f_scriptengine.cmd_calibratorlighton(buf1);
+   result:=result+'"result":{"status": "'+buf+'"}';
+  end
+  else if method='CUSTOMHEADER' then begin
+   buf1:=trim(value[attrib.IndexOf('params.0')]);
+   buf:=f_scriptengine.cmd_customheader(buf1);
+   result:=result+'"result":{"value": "'+buf+'"}';
+  end
+  else if method='CUSTOMHEADER_ADD' then begin
+   buf1:=trim(value[attrib.IndexOf('params.0')]);
+   buf2:=trim(value[attrib.IndexOf('params.1')]);
+   buf:=f_scriptengine.cmd_customheader_add(buf1,buf2);
+   result:=result+'"result":{"status": "'+buf+'"}';
+  end
+  else if method='CUSTOMHEADER_DEL' then begin
+   buf1:=trim(value[attrib.IndexOf('params.0')]);
+   buf:=f_scriptengine.cmd_customheader_del(buf1);
    result:=result+'"result":{"status": "'+buf+'"}';
   end
   // method not found
