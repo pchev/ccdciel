@@ -254,6 +254,8 @@ const
   azNorth=0;
   azSouth=1;
   b80 ='                                                                                ';
+  NRestrictKey=8;
+  RestrictKey: array[1..NRestrictKey] of string = ('SIMPLE','BITPIX','NAXIS','NAXIS1','NAXIS2','NAXIS3','XTENSION','END');
   FocusDirIn=true;
   FocusDirOut=false;
   FrameName: array[0..ord(high(TFrameType))] of string =('Light   ','Bias    ','Dark    ','Flat    '); // add space to header as INDI do

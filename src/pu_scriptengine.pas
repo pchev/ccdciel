@@ -1911,16 +1911,14 @@ end;
 
 function Tf_scriptengine.cmd_customheader_add(key,value:string): string;
 begin
- if CustomHeaderNum<MaxCustomHeaders then begin
-   key:=uppercase(copy(trim(key),1,8));
+ result:=msgFailed;
+ key:=uppercase(copy(trim(key),1,8));
+ if (CustomHeaderNum<MaxCustomHeaders)and(ValidateCustomHeader(key)) then begin
    if (key<>'COMMENT')and(key<>'HISTORY')and(key<>'HIERARCH') then cmd_customheader_del(key); // no duplicate
    inc(CustomHeaderNum);
    CustomHeaders[CustomHeaderNum].key:=key;
    CustomHeaders[CustomHeaderNum].value:=copy(trim(value),1,68);
    result:=msgOK;
- end
- else begin
-   result:=msgFailed;
  end;
 end;
 

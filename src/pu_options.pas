@@ -704,6 +704,8 @@ type
     procedure BtnMaxDriftDisableClick(Sender: TObject);
     procedure ButtonLogDirClick(Sender: TObject);
     procedure ButtonSeqDirClick(Sender: TObject);
+    procedure CustomHeaderKeyPress(Sender: TObject; var Key: char);
+    procedure CustomHeaderValidateEntry(Sender: TObject; aCol, aRow: Integer; const OldValue: string; var NewValue: String);
     procedure DomeFlatPositionClick(Sender: TObject);
     procedure LogDirDefaultClick(Sender: TObject);
     procedure ObservatoryDBDeleteClick(Sender: TObject);
@@ -2036,6 +2038,52 @@ begin
  SelectDirectoryDialog1.InitialDir:=SeqDir.text;
  SelectDirectoryDialog1.FileName:=SeqDir.text;
  if SelectDirectoryDialog1.Execute then SeqDir.text:=SelectDirectoryDialog1.FileName;
+end;
+
+procedure Tf_option.CustomHeaderKeyPress(Sender: TObject; var Key: char);
+var aRow,aCol: integer;
+    buf:string;
+begin
+ if ord(key) in [VK_BACK,VK_RETURN] then // normal key editing
+   exit;
+ aRow:=CustomHeader.Selection.Top;
+ aCol:=CustomHeader.Selection.Left;
+ // valid position
+ if (aCol>=0)and(aCol<=1)and(aRow>0)and(aRow<CustomHeader.RowCount) then begin
+   // key editing
+   if (aCol=0) then begin
+     // force uppercase
+     key:=uppercase(key)[1];
+     // check valid character
+     if ((key>='0')and((key<='9')))or((key>='A')and((key<='Z')))or(key='-')or(key='_') then begin
+       buf:=CustomHeader.Cells[aCol,aRow]+key;
+       // check total length
+       if length(buf)>8 then
+         key:=chr(0);
+     end
+     else begin
+       key:=chr(0);
+     end;
+   end
+   // value editing
+   else if (aCol=1) then begin
+     // check valid character
+     if (ord(key)>=32)and(ord(key)<=126) then begin
+       buf:=CustomHeader.Cells[aCol,aRow]+key;
+       // check total length
+       if length(buf)>68 then
+         key:=chr(0);
+     end
+     else begin
+       key:=chr(0);
+     end;
+   end;
+ end;
+end;
+
+procedure Tf_option.CustomHeaderValidateEntry(Sender: TObject; aCol, aRow: Integer; const OldValue: string; var NewValue: String);
+begin
+  if (NewValue>'')and(not ValidateCustomHeader(NewValue)) then NewValue:=OldValue;
 end;
 
 procedure Tf_option.DomeFlatPositionClick(Sender: TObject);

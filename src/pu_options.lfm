@@ -73,7 +73,6 @@ object f_option: Tf_option
     ClientHeight = 554
     ClientWidth = 720
     TabOrder = 1
-    OnClick = StackUseDarkFlatChange
     object PanelLeft: TPanel
       Left = 0
       Height = 554
@@ -753,6 +752,8 @@ object f_option: Tf_option
               MouseWheelOption = mwGrid
               Options = [goFixedVertLine, goFixedHorzLine, goVertLine, goHorzLine, goEditing, goAlwaysShowEditor, goSmoothScroll]
               TabOrder = 0
+              OnKeyPress = CustomHeaderKeyPress
+              OnValidateEntry = CustomHeaderValidateEntry
               ColWidths = (
                 100
                 448

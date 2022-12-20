@@ -163,6 +163,7 @@ function IsProgramRunning(pgm: string): boolean;
 function StartProgram(pgm, path: string): boolean;
 procedure StopProgram(pgm: string);
 function SafeFileName(fn:string): string;
+function ValidateCustomHeader(key:string): boolean;
 
 
 implementation
@@ -3371,6 +3372,29 @@ result:=StringReplace(fn,' ','',[rfReplaceAll]);
 result:=StringReplace(result,'/','_',[rfReplaceAll]);
 result:=StringReplace(result,'\','_',[rfReplaceAll]);
 result:=StringReplace(result,':','_',[rfReplaceAll]);
+end;
+
+function ValidateCustomHeader(key:string): boolean;
+var i: integer;
+    c: char;
+begin
+  // check key is a valid custom FITS header
+  result:=false;
+  // check length
+  if (length(key)=0)or(length(key)>8) then
+    exit;
+  // check not a restricted keyword
+  for i:=1 to NRestrictKey do begin
+    if key=RestrictKey[i] then
+      exit;
+  end;
+  // check valid character
+  for i:=1 to length(key) do begin
+    c:=key[i];
+    if not(((c>='0')and((c<='9')))or((c>='A')and((c<='Z')))or(c='-')or(c='_')) then
+       exit;
+  end;
+  result:=true;
 end;
 
 end.
