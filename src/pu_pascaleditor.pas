@@ -46,6 +46,7 @@ type
     Button2: TButton;
     Button3: TButton;
     Label2: TLabel;
+    Panel4: TPanel;
     params: TEdit;
     EditCopy1: TEditCopy;
     EditCut1: TEditCut;

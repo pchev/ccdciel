@@ -953,6 +953,10 @@ begin
   SaveFormat.Caption:=rsFileFormat;
   SaveFormat.Items[1]:=rsTIFFWithFITS;
   WantExif.Caption:=rsAddFITSKeywo;
+  HeaderOpt.Caption:=rsCustomHeader;
+  CustomHeader.Columns[0].Title.Caption:=rsKey;
+  CustomHeader.Columns[1].Title.Caption:=rsValue;
+  BtnDelHdr.Caption:=rsDelete;
   Label18.Caption := rsLanguage;
   CbShowHints.Caption:=rsShowHints;
   Debug_msg.Caption:=rsVerboseDevic;

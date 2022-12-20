@@ -1468,6 +1468,8 @@ resourcestring
   rsHandpad = 'Handpad';
   rsFlipNS = 'Flip N/S';
   rsScriptArgume = 'Script arguments';
+  rsKey = 'Key';
+  rsCustomHeader = 'Custom headers';
 
 implementation
 
