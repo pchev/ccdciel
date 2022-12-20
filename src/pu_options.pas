@@ -2068,7 +2068,7 @@ begin
    // value editing
    else if (aCol=1) then begin
      // check valid character
-     if (ord(key)>=32)and(ord(key)<=126) then begin
+     if (key<>'?')and(ord(key)>=32)and(ord(key)<=126) then begin // '?' indicate an utf-8 input to be rejected
        buf:=CustomHeader.Cells[aCol,aRow]+key;
        // check total length
        if length(buf)>68 then
