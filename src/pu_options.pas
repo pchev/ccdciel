@@ -2083,7 +2083,9 @@ end;
 
 procedure Tf_option.CustomHeaderValidateEntry(Sender: TObject; aCol, aRow: Integer; const OldValue: string; var NewValue: String);
 begin
-  if (NewValue>'')and(not ValidateCustomHeader(NewValue)) then NewValue:=OldValue;
+  if  aCol=0 then begin
+    if (NewValue>'')and(not ValidateCustomHeader(NewValue)) then NewValue:=OldValue;
+  end;
 end;
 
 procedure Tf_option.DomeFlatPositionClick(Sender: TObject);
