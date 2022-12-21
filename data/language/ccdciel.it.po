@@ -1131,6 +1131,10 @@ msgstr ""
 msgid "Custom"
 msgstr ""
 
+#: u_translation.rscustomheader
+msgid "Custom headers"
+msgstr ""
+
 #: u_translation.rscustompositi
 msgid "Custom position"
 msgstr ""
@@ -2335,6 +2339,10 @@ msgstr "E' consigliato muovere a una stella di messa a fuoco quando si usa la cu
 
 #: u_translation.rsitwillcontin
 msgid "It will continue after the last checkpoint."
+msgstr ""
+
+#: u_translation.rskey
+msgid "Key"
 msgstr ""
 
 #: u_translation.rslanguage
@@ -4001,6 +4009,10 @@ msgstr ""
 #: u_translation.rsscriptalread3
 #, object-pascal-format
 msgid "Script %s already exist. Do you want to replace this custom script by the template?"
+msgstr ""
+
+#: u_translation.rsscriptargume
+msgid "Script arguments"
 msgstr ""
 
 #: u_translation.rsscripteditor

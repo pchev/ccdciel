@@ -1131,6 +1131,10 @@ msgstr "Aktueller Plan"
 msgid "Custom"
 msgstr "Benutzerdefiniert"
 
+#: u_translation.rscustomheader
+msgid "Custom headers"
+msgstr ""
+
 #: u_translation.rscustompositi
 msgid "Custom position"
 msgstr "Benutzerdefinierte Position"
@@ -2336,6 +2340,10 @@ msgstr "Es wird empfohlen bei der Verwendung von Vcurve zu einem Fokussierstern 
 #: u_translation.rsitwillcontin
 msgid "It will continue after the last checkpoint."
 msgstr "Es wird nach dem letzten Kontrollpunkt fortgesetzt"
+
+#: u_translation.rskey
+msgid "Key"
+msgstr ""
 
 #: u_translation.rslanguage
 msgid "Language"
@@ -4002,6 +4010,10 @@ msgstr "Skript %s existiert bereits. Möchten Sie dieses Skript bearbeiten?"
 #, object-pascal-format
 msgid "Script %s already exist. Do you want to replace this custom script by the template?"
 msgstr "Skript %s existiert bereits. Möchten Sie dieses benutzerdefinierte Skript durch ersetzen?"
+
+#: u_translation.rsscriptargume
+msgid "Script arguments"
+msgstr ""
 
 #: u_translation.rsscripteditor
 msgid "Script editor"

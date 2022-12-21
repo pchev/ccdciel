@@ -1131,6 +1131,10 @@ msgstr "当前计划"
 msgid "Custom"
 msgstr "自定义"
 
+#: u_translation.rscustomheader
+msgid "Custom headers"
+msgstr ""
+
 #: u_translation.rscustompositi
 msgid "Custom position"
 msgstr "自定义位置"
@@ -2336,6 +2340,10 @@ msgstr "当使用V曲线时，建议指向到对焦星"
 #: u_translation.rsitwillcontin
 msgid "It will continue after the last checkpoint."
 msgstr "将在最后一个检查点之后继续。"
+
+#: u_translation.rskey
+msgid "Key"
+msgstr ""
 
 #: u_translation.rslanguage
 msgid "Language"
@@ -4002,6 +4010,10 @@ msgstr "脚本%s已存在。是否要编辑此脚本？"
 #, object-pascal-format
 msgid "Script %s already exist. Do you want to replace this custom script by the template?"
 msgstr "脚本%s已存在。是否要用模版替换该脚本为？"
+
+#: u_translation.rsscriptargume
+msgid "Script arguments"
+msgstr ""
 
 #: u_translation.rsscripteditor
 msgid "Script editor"

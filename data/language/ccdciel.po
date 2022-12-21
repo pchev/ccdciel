@@ -5454,3 +5454,15 @@ msgstr ""
 msgid "Flip N/S"
 msgstr ""
 
+#: u_translation:rsscriptargume
+msgid "Script arguments"
+msgstr ""
+
+#: u_translation:rskey
+msgid "Key"
+msgstr ""
+
+#: u_translation:rscustomheader
+msgid "Custom headers"
+msgstr ""
+

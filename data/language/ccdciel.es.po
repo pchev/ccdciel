@@ -1131,6 +1131,10 @@ msgstr "Plan actual"
 msgid "Custom"
 msgstr ""
 
+#: u_translation.rscustomheader
+msgid "Custom headers"
+msgstr ""
+
 #: u_translation.rscustompositi
 msgid "Custom position"
 msgstr ""
@@ -2336,6 +2340,10 @@ msgstr "Si se usa la curva V es recomendable apuntar a la estrella de enfoque"
 #: u_translation.rsitwillcontin
 msgid "It will continue after the last checkpoint."
 msgstr "Continuará después del último punto de comprobación."
+
+#: u_translation.rskey
+msgid "Key"
+msgstr ""
 
 #: u_translation.rslanguage
 msgid "Language"
@@ -4002,6 +4010,10 @@ msgstr "El guión %s ya existe. ¿Desea editar este archivo?"
 #, object-pascal-format
 msgid "Script %s already exist. Do you want to replace this custom script by the template?"
 msgstr "El guión %s ya existe. ¿Desea reemplazar este guión personalizado por la plantilla?"
+
+#: u_translation.rsscriptargume
+msgid "Script arguments"
+msgstr ""
 
 #: u_translation.rsscripteditor
 msgid "Script editor"

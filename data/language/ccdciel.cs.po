@@ -1130,6 +1130,10 @@ msgstr "Aktuální plán"
 msgid "Custom"
 msgstr "Vlastní"
 
+#: u_translation.rscustomheader
+msgid "Custom headers"
+msgstr ""
+
 #: u_translation.rscustompositi
 msgid "Custom position"
 msgstr "Uživatelem určená pozice"
@@ -2335,6 +2339,10 @@ msgstr "Při použití Vkřivky se doporučuje zaostřit na ostřící hvězdu"
 #: u_translation.rsitwillcontin
 msgid "It will continue after the last checkpoint."
 msgstr "Pokračování od posledního kontrolního bodu."
+
+#: u_translation.rskey
+msgid "Key"
+msgstr ""
 
 #: u_translation.rslanguage
 msgid "Language"
@@ -4001,6 +4009,10 @@ msgstr "Skript %s již existuje. Upravit tento skript?"
 #, object-pascal-format
 msgid "Script %s already exist. Do you want to replace this custom script by the template?"
 msgstr "Skript %s již existuje. Nahradit šablonu vlastním scriptem?"
+
+#: u_translation.rsscriptargume
+msgid "Script arguments"
+msgstr ""
 
 #: u_translation.rsscripteditor
 msgid "Script editor"

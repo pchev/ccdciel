@@ -1132,6 +1132,10 @@ msgstr "Current plan"
 msgid "Custom"
 msgstr ""
 
+#: u_translation.rscustomheader
+msgid "Custom headers"
+msgstr ""
+
 #: u_translation.rscustompositi
 msgid "Custom position"
 msgstr ""
@@ -2337,6 +2341,10 @@ msgstr "It is suggest to slew to focus star when using Vcurve"
 #: u_translation.rsitwillcontin
 msgid "It will continue after the last checkpoint."
 msgstr "It will continue after the last checkpoint."
+
+#: u_translation.rskey
+msgid "Key"
+msgstr ""
 
 #: u_translation.rslanguage
 msgid "Language"
@@ -4003,6 +4011,10 @@ msgstr "Script %s already exist. Do you want to edit this script?"
 #, object-pascal-format
 msgid "Script %s already exist. Do you want to replace this custom script by the template?"
 msgstr "Script %s already exist. Do you want to replace this custom script by the template?"
+
+#: u_translation.rsscriptargume
+msgid "Script arguments"
+msgstr ""
 
 #: u_translation.rsscripteditor
 msgid "Script editor"
