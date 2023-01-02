@@ -784,6 +784,8 @@ begin
    // check range
    if width<MinFrameSize then width:=MinFrameSize;
    if height<MinFrameSize then height:=MinFrameSize;
+   if x<0 then x:=0;
+   if y<0 then y:=0;
    if x>(Xmax-MinFrameSize) then x:=Xmax-MinFrameSize;
    if y>(Ymax-MinFrameSize) then y:=Ymax-MinFrameSize;
    if (x+width)>Xmax then width:=Xmax-x;
