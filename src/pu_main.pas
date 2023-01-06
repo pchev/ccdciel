@@ -2879,8 +2879,14 @@ end;
 Procedure Tf_main.StartSequence(SeqName: string);
 begin
   if f_sequence.Running then exit;
-  f_sequence.LoadTargets(slash(SequenceDir)+SeqName+'.targets');
-  StartSequenceTimer.Enabled:=true;
+  SeqName:=slash(SequenceDir)+SeqName+'.targets';
+  if FileExists(SeqName) then begin
+    f_sequence.LoadTargets(SeqName);
+    StartSequenceTimer.Enabled:=true;
+  end
+  else begin
+    NewMessage('Cannot start sequence, '+format(rsFileNotFound,[SeqName]));
+  end;
 end;
 
 procedure Tf_main.StartSequenceTimerTimer(Sender: TObject);
