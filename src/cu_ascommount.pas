@@ -408,6 +408,7 @@ begin
  end;
  if debug_msg then msg('Set sideofpier = '+IntToStr(i));
  V.SideOfPier:=i;
+ wait(5);
  WaitMountSlewing(SlewDelay);
  except
  end;
