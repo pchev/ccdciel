@@ -14056,7 +14056,8 @@ begin
         wait(2);
         while (mount.PierSide=pierWest) do begin
           // if still on wrong side wait the target move further and retry
-          mount.AbortMotion;
+          if MeridianDelay2<=0 then
+             mount.AbortMotion;  // maximum safe time reach
           inc(nretry);
           if nretry>5 then begin
             NewMessage(format(rsMeridianFlip11, [5]), 1);
