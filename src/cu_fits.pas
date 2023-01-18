@@ -28,7 +28,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 interface
 
 uses SysUtils, Classes, LazFileUtils, u_utils, u_global, BGRABitmap, BGRABitmapTypes, ExpandedBitmap,
-  GraphType,  FPReadJPEG, LazSysUtils, u_libraw, dateutils, FPReadTiff, FPWriteTiff, FPTiffCmn,
+  GraphType,  FPReadJPEG, LazSysUtils, u_libraw, dateutils, FPReadTiff, FPWriteTiff, FPTiffCmn,  form,
   LazUTF8, Graphics,Math, FPImage, Controls, LCLType, Dialogs, u_translation, IntfGraphics;
 
 type
@@ -3480,7 +3480,7 @@ begin
   timeout:=60;
   timelimit := now + timeout / secperday;
   repeat
-    sleep(100);
+    wait(0.1);
     working := False;
     for i := 0 to tc - 1 do
       working := working or thread[i].working;
