@@ -197,7 +197,7 @@ type
      procedure GetExpBitmap(var bgra: TExpandedBitmap);
      procedure GetBGRABitmap(var bgra: TBGRABitmap; maxthread:integer=-1);
      procedure SaveToBitmap(fn: string; fliph:boolean=false; flipv:boolean=false);
-     procedure SaveAstroTiff(fn: string);
+     procedure SaveAstroTiff(fn: string; delayed:boolean=false);
      procedure SaveToFile(fn: string; pack: boolean=false; StackFloat:boolean=false);
      procedure LoadFromFile(fn:string);
      procedure LoadHeaderFromFile(fn:string);
@@ -2657,7 +2657,7 @@ begin
   end;
 end;
 
-procedure TFits.SaveAstroTiff(fn: string);
+procedure TFits.SaveAstroTiff(fn: string; delayed:boolean=false);
 // From ASTAP save_tiff16()
 var
   i, j, k,m      :integer;
@@ -2717,6 +2717,9 @@ begin
       image.Colors[j,i]:=thecolor;
     end;
   end;
+
+  // image buffer is now secured, we can let other task to run before to save.
+  if delayed then wait(1);
 
   Image.SaveToFile(fn, Writer);
 

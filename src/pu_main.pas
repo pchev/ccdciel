@@ -10512,7 +10512,7 @@ try
    fn:=slash(fd)+fn+'.tif';
    if not fits.ImageValid then
      fits.LoadStream;
-   fits.SaveAstroTiff(fn);
+   fits.SaveAstroTiff(fn,(autoguider.AutoguiderType=agINTERNAL)and(autoguider.State=GUIDER_GUIDING)and(EarlyNextExposure)and(camera.LastExposureTime>=30));
  end
  else
    raise exception.Create('Unexpected file format '+inttostr(ord(SaveFormat)));
