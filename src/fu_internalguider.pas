@@ -50,6 +50,7 @@ type
     ButtonGuide: TButton;
     ButtonStop: TButton;
     ButtonStop1: TButton;
+    neo_pa1: TEdit;
     Cooler: TCheckBox;
     CheckBoxReverseDec: TCheckBox;
     disable_guiding1: TCheckBox;
@@ -57,6 +58,8 @@ type
     Label11: TLabel;
     Label20: TLabel;
     Label21: TLabel;
+    Label25: TLabel;
+    Label26: TLabel;
     LabelInfo: TLabel;
     LabelInfo2: TLabel;
     LabelTemperature: TLabel;
@@ -107,6 +110,7 @@ type
     pulsegainNorth1: TEdit;
     pulsegainSouth1: TEdit;
     pulsegainWest1: TEdit;
+    neo_rate1: TEdit;
     ra_hysteresis1: TSpinEdit;
     dec_hysteresis1: TSpinEdit;
     Label1: TLabel;
@@ -223,6 +227,12 @@ type
     procedure SetReverseDec(value: Boolean);
     function GetIsGem: Boolean;
     procedure SetIsGem(value: Boolean);
+    procedure SetNEOmovement(value:double);
+    function GetNEOmovement:double;
+    procedure SetNEOpa(value:double);
+    function GetNEOpa:double;
+
+
 
   public
     { public declarations }
@@ -266,6 +276,9 @@ type
     property FrameSize: integer read GetFrameSize;
     property ReverseDec: Boolean read GetReverseDec write SetReverseDec;
     property isGEM: Boolean read GetIsGem write SetIsGem;
+    property neo_motion: double read GetNEOmovement write SetNEOmovement;
+    property neo_pa: double read GetNEOpa write SetNEOpa;
+
   end;
 
 implementation
@@ -453,7 +466,7 @@ end;
 
 procedure Tf_internalguider.SetPixelSize(value:double);
 begin
-  pixelsize1.text:=floattostrF(value,FFgeneral,0,2);
+  pixelsize1.text:=floattostrF(value,FFgeneral,0,4);
 end;
 
 function Tf_internalguider.GetPixelSize:double;
@@ -542,6 +555,27 @@ function Tf_internalguider.GetScale:integer;
 begin
   result:=scale1.position;
 end;
+
+procedure Tf_internalguider.SetNEOmovement(value:double);
+begin
+  neo_rate1.text:=floattostrF(value,FFgeneral,0,3);
+end;
+
+function Tf_internalguider.GetNEOmovement:double;
+begin
+  result:=strtofloat(neo_rate1.text);
+end;
+
+procedure Tf_internalguider.SetNEOpa(value:double);
+begin
+  neo_pa1.text:=floattostrF(value,FFgeneral,0,3);
+end;
+
+function Tf_internalguider.GetNEOpa:double;
+begin
+  result:=strtofloat(neo_pa1.text);
+end;
+
 
 procedure Tf_internalguider.SetScale(value:integer);
 begin

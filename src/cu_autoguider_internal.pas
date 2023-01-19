@@ -35,16 +35,17 @@ type
 
   T_autoguider_internal = class(T_autoguider)
   private
-    InternalguiderInitialize,InternalCalibrationInitialize,GuideLogFileOpen  : boolean;
+    InternalguiderInitialize,InternalCalibrationInitialize,GuideLogFileOpen, neo_tracking  : boolean;
     pulseRA,pulseDEC,GuideFrameCount, InternalguiderCalibrationDirection,InternalguiderCalibrationStep,
     CalibrationDuration,Calflip,CalCount,Calnrtest,frame_size,Binning,BacklashStep: integer;
     driftX,driftY,driftRA,driftDec,moveRA,moveDEC, Guidethecos,old_moveRA,old_moveDEC,  paEast, paNorth,
-    pulsegainEast,pulsegainWest,pulsegainNorth,pulsegainSouth,Calthecos, Caltheangle,CaldriftOld,
-    GuideStartTime,LogSNR,LogFlux,mean_hfd,ditherX,ditherY : double;
+    pulsegainEast,pulsegainWest,pulsegainNorth,pulsegainSouth,Calthecos, Caltheangle,CaldriftOld, ditherX,ditherY,
+    GuideStartTime,LogSNR,LogFlux,mean_hfd : double;
     LastDecSign: double;
     SameDecSignCount: integer;
     xy_trend : xy_guiderlist;{fu_internalguider}
     xy_array,xy_array_old : star_position_array;//internal guider for measure drift
+    d_ra,d_dec : double; //comet tracking
     GuideLog: TextFile;
     FPaused, FSettling, FSettlingInRange,PulseGuiding: boolean;
     InternalguiderCalibratingMeridianFlip, InternalguiderCalibratingMeridianFlipNorth: boolean;
@@ -104,6 +105,9 @@ implementation
 
 const
    nrpointsTrend=50; //number of trend points plotted
+var
+   oldtickcount: qword=0;
+
 
 procedure mad_median(list: array of double;leng :integer;out mad,median :double);{calculate mad and median without modifying the data}
 var  {idea from https://eurekastatistics.com/using-the-median-absolute-deviation-to-find-outliers/}
@@ -328,7 +332,7 @@ end;
 procedure T_autoguider_internal.Dither(pixel:double; raonly:boolean; waittime:double);
 var dra,ddec,mflipcorr: double;
 begin
-  if InternalguiderGuiding and (not InternalguiderInitialize) then begin
+  if ((InternalguiderGuiding) and (not InternalguiderInitialize) and  (not neo_tracking)) then begin
     dra:=(2*random-1)*pixel; // in pixel
     if raonly then
       ddec:=0
@@ -617,7 +621,7 @@ begin
 
   // calculate movement in each area
   counter:=0;
-  if ((initialize=false) and (length(xy_array_old)>0)) then//not empthy, second round or later
+  if ((initialize=false) and (length(xy_array_old)>0)) then //not empthy, second round or later
   begin
     len:=length(xy_array_old);
     setlength(drift_arrayX,len);
@@ -884,16 +888,55 @@ var i,maxpulse: integer;
     RADirection,DECDirection: string;
     mflipcorr,moveRA2,dsettle : double;
     meridianflip: boolean;
-    DecSign: double;
+    DecSign, p : double;
     largepulse: boolean;
 
+        procedure follow_neo;//neo and comet tracking by calculating ditherX, ditherY
+         var
+           tickcount : qword;
+           deltaticks: integer;
+           cosdec,ra_rate,dec_rate: double;
+         begin
+           tickcount:=GetTickCount64;
+           deltaticks:=tickcount-oldtickcount;// number of milliseconds since last cycle
+           if abs(deltaticks)<30000 then
+           begin //less then 30 seconds passed so a valid oldtickcount. Increase drift to follow comet with the mount
+             cosdec:=cos(max(-89.9999,min(mount.dec,89.9999))*pi/180);//cos(dec) but prevent divide by zero
+             sincos(internalguider.neo_pa*pi/180,ra_rate,dec_rate);
+             ra_rate:=ra_rate*internalguider.neo_motion;//solar object sky movement in RA ["/min]
+             dec_rate:=dec_rate*internalguider.neo_motion;//solar object sky movement in DEC ["/min]
+             p:=internalguider.pixel_size;
+             d_ra:=d_ra - ra_rate * deltaticks/(60*1000*internalguider.pixel_size*cosdec);//integrate comet RA drift d_ra in pixels
+             d_dec:=d_dec + dec_rate * deltaticks/(60*1000*internalguider.pixel_size);//integrate comet DEC drift d_dec in pixels
+             //same routine as for dither procdedure
+             if Finternalguider.isGEM and ((mount.PierSide=pierWest) <> (pos('E',finternalguider.pier_side)>0)) then // Did a meridian flip occur since calibration.
+               mflipcorr:=180 // A meridian flip occurred
+             else
+               mflipcorr:=0;
+             rotate2(((finternalguider.PA+mflipcorr)*pi/180),d_ra,d_dec,ditherX,ditherY);// rotate RA, DEC drift to X,Y drift.
+           end;
+           oldtickcount:=tickcount;//remember tickcount for next cycle
+         end;
 begin
  if not FPaused then begin
 
   xy_trend[0].dither:=FSettling;
 
+  if ((FSettling=false) and (internalguider.neo_motion<>0)) then
+  begin
+    follow_neo; //follow NEO or comet using the ditherX, Y factors
+    neo_tracking:=true;//stop any dithering
+  end
+  else
+  begin //reset NEO offset
+    d_ra:=0;// clear integrator variables
+    d_dec:=0;
+    neo_tracking:=false;//allow dithering
+  end;
+
   //Measure drift
   measure_drift(InternalguiderInitialize,driftX,driftY);// ReferenceX,Y indicates the total drift, driftX,driftY to drift since previous call. Arrays xy_array_old,xy_array are for storage star positions
+
   if InternalguiderInitialize then begin
      SetStatus(StarLostStatus,GUIDER_ALERT);
      exit; //until star(s) detected. If no stars are detected initialize is returned true
@@ -901,6 +944,7 @@ begin
 
   // Process settling
   if FSettling then begin
+     finternalguider.trend_message('Guider is settling.','','');
      if ((now-FSettleStartTime)*SecsPerDay)<FSettleTmax then begin
        // check current distance
        dsettle:=sqrt(driftx*driftx+drifty*drifty);

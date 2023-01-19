@@ -694,11 +694,11 @@ object f_internalguider: Tf_internalguider
           TabOrder = 0
           object GroupBox1: TGroupBox
             Left = 16
-            Height = 328
+            Height = 392
             Top = 0
             Width = 296
             Caption = 'Options:'
-            ClientHeight = 326
+            ClientHeight = 372
             ClientWidth = 294
             TabOrder = 0
             object measure_method2: TCheckBox
@@ -870,6 +870,48 @@ object f_internalguider: Tf_internalguider
               Caption = 'Minimum move:'
               ParentColor = False
             end
+            object neo_rate1: TEdit
+              Left = 200
+              Height = 31
+              Hint = 'Comet or NEO or position change in arcsec/min. If set the guider will follow the solar object.'
+              Top = 280
+              Width = 60
+              OnChange = pulsegainWest1Change
+              ParentFont = False
+              ParentShowHint = False
+              ShowHint = True
+              TabOrder = 8
+              Text = '0'
+            end
+            object neo_pa1: TEdit
+              Left = 200
+              Height = 31
+              Hint = 'Direction of the solar object movement.'
+              Top = 312
+              Width = 60
+              OnChange = pulsegainWest1Change
+              ParentFont = False
+              ParentShowHint = False
+              ShowHint = True
+              TabOrder = 9
+              Text = '0'
+            end
+            object Label25: TLabel
+              Left = 8
+              Height = 19
+              Top = 280
+              Width = 191
+              Caption = 'Solar object motion rate ["/min]'
+              ParentColor = False
+            end
+            object Label26: TLabel
+              Left = 8
+              Height = 19
+              Top = 312
+              Width = 179
+              Caption = 'Solar object movement PA [°]'
+              ParentColor = False
+            end
           end
         end
       end
@@ -897,7 +939,7 @@ object f_internalguider: Tf_internalguider
             Top = 0
             Width = 288
             Caption = 'Calibration results:'
-            ClientHeight = 254
+            ClientHeight = 236
             ClientWidth = 286
             TabOrder = 0
             object Label5: TLabel
