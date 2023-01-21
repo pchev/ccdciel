@@ -873,7 +873,7 @@ object f_internalguider: Tf_internalguider
             object neo_rate1: TEdit
               Left = 200
               Height = 31
-              Hint = 'Comet or NEO or position change in arcsec/min. If set the guider will follow the solar object.'
+              Hint = 'Comet or NEO or position change in arcsec/min. If set the guider will follow the solar object. The Pixel scale in tab advanced should be reasonable accurate.'
               Top = 280
               Width = 60
               OnChange = pulsegainWest1Change
@@ -1103,7 +1103,7 @@ object f_internalguider: Tf_internalguider
             object pixelsize1: TEdit
               Left = 210
               Height = 31
-              Hint = 'Based on measured pulse gain in px/sec and assuming 0.5x and 1.5x guide rates. This value is not essential for guiding'
+              Hint = 'Based on measured pulse gain in px/sec and assuming 0.5x and 1.5x guide rates. This value is not essential for guiding except for Solar object tracking.'
               Top = 200
               Width = 60
               OnChange = pixelsize1Change

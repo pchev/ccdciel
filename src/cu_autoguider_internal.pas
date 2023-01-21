@@ -45,7 +45,7 @@ type
     SameDecSignCount: integer;
     xy_trend : xy_guiderlist;{fu_internalguider}
     xy_array,xy_array_old : star_position_array;//internal guider for measure drift
-    d_ra,d_dec : double; //comet tracking
+    offset_RaPixelsNeo,offset_DecPixelsNeo : double; //comet tracking
     GuideLog: TextFile;
     FPaused, FSettling, FSettlingInRange,PulseGuiding: boolean;
     InternalguiderCalibratingMeridianFlip, InternalguiderCalibratingMeridianFlipNorth: boolean;
@@ -891,47 +891,51 @@ var i,maxpulse: integer;
     DecSign, p : double;
     largepulse: boolean;
 
-        procedure follow_neo;//neo and comet tracking by calculating ditherX, ditherY
-         var
-           tickcount : qword;
-           deltaticks: integer;
-           cosdec,ra_rate,dec_rate: double;
-         begin
-           tickcount:=GetTickCount64;
-           deltaticks:=tickcount-oldtickcount;// number of milliseconds since last cycle
-           if abs(deltaticks)<30000 then
-           begin //less then 30 seconds passed so a valid oldtickcount. Increase drift to follow comet with the mount
-             cosdec:=cos(max(-89.9999,min(mount.dec,89.9999))*pi/180);//cos(dec) but prevent divide by zero
-             sincos(internalguider.neo_pa*pi/180,ra_rate,dec_rate);
-             ra_rate:=ra_rate*internalguider.neo_motion;//solar object sky movement in RA ["/min]
-             dec_rate:=dec_rate*internalguider.neo_motion;//solar object sky movement in DEC ["/min]
-             p:=internalguider.pixel_size;
-             d_ra:=d_ra - ra_rate * deltaticks/(60*1000*internalguider.pixel_size*cosdec);//integrate comet RA drift d_ra in pixels
-             d_dec:=d_dec + dec_rate * deltaticks/(60*1000*internalguider.pixel_size);//integrate comet DEC drift d_dec in pixels
-             //same routine as for dither procdedure
-             if Finternalguider.isGEM and ((mount.PierSide=pierWest) <> (pos('E',finternalguider.pier_side)>0)) then // Did a meridian flip occur since calibration.
-               mflipcorr:=180 // A meridian flip occurred
-             else
-               mflipcorr:=0;
-             rotate2(((finternalguider.PA+mflipcorr)*pi/180),d_ra,d_dec,ditherX,ditherY);// rotate RA, DEC drift to X,Y drift.
-           end;
-           oldtickcount:=tickcount;//remember tickcount for next cycle
-         end;
+          procedure follow_neo;//neo and comet tracking
+          // Calculates the total integrated correction in pixels for the reference stars in the guider image (DitherX, DitherY)
+          // The Pixel scale internalguider.pixel_size in tab advanced should be reasonable accurate.
+          var
+            tickcount : qword;
+            deltaticks,flipdec : integer;
+            cosdec,ra_rate,dec_rate: double;
+          begin
+            tickcount:=GetTickCount64;
+            deltaticks:=tickcount-oldtickcount;// number of milliseconds since last cycle
+            oldtickcount:=tickcount;//remember tickcount for next cycle
+
+            if abs(deltaticks)<30000 then
+            begin //less then 30 seconds passed so a valid oldtickcount. Increase drift to follow comet with the mount
+              sincos(internalguider.neo_pa*pi/180,ra_rate,dec_rate);
+              ra_rate:=ra_rate*internalguider.neo_motion;//solar object sky movement in RA ["/min]
+              dec_rate:=dec_rate*internalguider.neo_motion;//solar object sky movement in DEC ["/min]
+              offset_RaPixelsNeo:=offset_RaPixelsNeo - ra_rate * deltaticks/(60*1000*internalguider.pixel_size);//Integrated solar object sky movement in RA. Unit in guider pixels
+              offset_DecPixelsNeo:=offset_DecPixelsNeo - dec_rate * deltaticks/(60*1000*internalguider.pixel_size);//Integrated solar object sky movement in DEC. Unit in guider pixels
+
+              if Finternalguider.isGEM and ((mount.PierSide=pierWest) <> (pos('E',finternalguider.pier_side)>0)) then // Did a meridian flip occur since calibration.
+                mflipcorr:=180 // A meridian flip occurred
+              else
+                mflipcorr:=0;
+              if finternalguider.pulsegainNorth>0 then flipDec:=-1 else flipDec:=1;//flipped image correction. E.g. an image where north is up and east on the right size.
+              if meridianflip and (not finternalguider.ReverseDec) then flipDec:=-flipDec;
+              rotate2(((+finternalguider.PA+mflipcorr)*pi/180),offset_RaPixelsNeo,flipDec*offset_DecPixelsNeo,ditherX,ditherY);// rotate RA, DEC drift to X,Y drift. Positive ditherY is go North. Postive ditherX is go West!
+            end;
+          end;
 begin
  if not FPaused then begin
 
   xy_trend[0].dither:=FSettling;
 
+  //For tracking Solar object only
   if ((FSettling=false) and (internalguider.neo_motion<>0)) then
   begin
-    follow_neo; //follow NEO or comet using the ditherX, Y factors
-    neo_tracking:=true;//stop any dithering
+    follow_neo; //To follow Solar object calculate ditherX, Y factors and feed forward corrections offset_RaPixelsNeo, offset_DecPixelsNeo
+    neo_tracking:=true;// Block any dithering
   end
   else
-  begin //reset NEO offset
-    d_ra:=0;// clear integrator variables
-    d_dec:=0;
-    neo_tracking:=false;//allow dithering
+  begin //Reset NEO offset
+    offset_RaPixelsNeo:=0;// Clear integrated solar object sky movement in RA. Unit in guider pixels
+    offset_DecPixelsNeo:=0;// Clear Integrated solar object sky movement in DEC. Unit in guider pixels
+    neo_tracking:=false;// Allow dithering
   end;
 
   //Measure drift
@@ -1006,7 +1010,6 @@ begin
     //calculate required DEC correction in pixels
     moveDEC:=(- driftDEC*(1 - finternalguider.DEC_hysteresis/100) +   old_moveDEC * finternalguider.DEC_hysteresis/100 ) * finternalguider.DECgain/100;//Hysteresis as in PHD1
     old_moveDEC:=moveDEC;//Store for next cycle hysteresis calculation
-
 
     Guidethecos:=cos(mount.Dec*pi/180); if Guidethecos<0.000001 then Guidethecos:=0.000001;
     moveRA2:=moveRA/Guidethecos; //correct pixels with cos(dec). Rotation in pixels near celestial pole decreases with cos(dec)
