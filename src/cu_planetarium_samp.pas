@@ -56,7 +56,7 @@ type
     function DrawFrame(frra,frde,frsizeH,frsizeV,frrot: double):boolean; override;
     function Cmd(const Value: string):string; override;
     function GetEqSys: double; override;
-    function Search(sname: string; out sra,sde: double): boolean; override;
+    function Search(sname: string; out sra,sde,v_solar,vpa_solar: double): boolean; override;
   end;
 
 
@@ -216,7 +216,7 @@ begin
 end;
 
 
-function TPlanetarium_samp.Search(sname: string; out sra,sde: double): boolean;
+function TPlanetarium_samp.Search(sname: string; out sra,sde,v_solar,vpa_solar: double): boolean;
 begin
   DisplayMessage('Function Search not supported by this planetarium');
   result:=false;

@@ -906,9 +906,9 @@ var i,maxpulse: integer;
 
             if abs(deltaticks)<30000 then
             begin //less then 30 seconds passed so a valid oldtickcount. Increase drift to follow comet with the mount
-              sincos(internalguider.neo_pa*pi/180,ra_rate,dec_rate);
-              ra_rate:=ra_rate*internalguider.neo_motion;//solar object sky movement in RA ["/min]
-              dec_rate:=dec_rate*internalguider.neo_motion;//solar object sky movement in DEC ["/min]
+              sincos(internalguider.vpa_solar*pi/180,ra_rate,dec_rate);
+              ra_rate:=ra_rate*internalguider.v_solar;//solar object sky movement in RA ["/min]
+              dec_rate:=dec_rate*internalguider.v_solar;//solar object sky movement in DEC ["/min]
               dRaPixelsSolar:= - ra_rate * deltaticks/(60*1000*internalguider.pixel_size);//Solar object sky movement in RA. Unit in guider pixels.
               dDecPixelsSolar:=+ dec_rate * deltaticks/(60*1000*internalguider.pixel_size);//Solar object sky movement in DEC. Unit in guider pixels
 
@@ -929,9 +929,9 @@ begin
   xy_trend[0].dither:=FSettling;
 
   //For tracking Solar object only
-  if ((FSettling=false) and (internalguider.neo_motion<>0)) then
+  if ((FSettling=false) and (finternalguider.SolarTracking)) then
   begin
-    track_solar_object;; //Calculate the ditherX, Y factors to track a solar object
+    track_solar_object; //Calculate the ditherX, Y factors to track a solar object
     solar_tracking:=true;// Block any dithering
     msg(floattostr(ditherX)+' '+floattostr(ditherY)+' || '+floattostr(ditherX2)+' '+floattostr(ditherY2),3);
   end

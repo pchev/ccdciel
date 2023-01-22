@@ -1788,6 +1788,7 @@ begin
   f_sequence.Filter:=f_filterwheel;
   f_sequence.Weather:=f_weather;
   f_sequence.Safety:=f_safety;
+  f_sequence.InternalGuider:=f_internalguider;
   f_sequence.Autoguider:=autoguider;
   f_sequence.Astrometry:=astrometry;
   f_sequence.Planetarium:=planetarium;

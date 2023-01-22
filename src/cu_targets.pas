@@ -27,7 +27,7 @@ interface
 
 uses u_global, cu_plan, u_utils, indiapi, pu_scriptengine, pu_pause, cu_rotator, cu_planetarium,
   fu_capture, fu_preview, fu_filterwheel, cu_mount, cu_camera, cu_autoguider, cu_astrometry,
-  fu_safety, fu_weather, cu_dome, u_ccdconfig, cu_sequencefile,
+  fu_safety, fu_weather, cu_dome, u_ccdconfig, cu_sequencefile, fu_internalguider,
   u_translation, LazFileUtils, Controls, Dialogs, ExtCtrls,Classes, Forms, SysUtils;
 
 type
@@ -35,7 +35,7 @@ type
   TTarget = Class(TObject)
               public
               objectname, planname, path, scriptargs: shortstring;
-              starttime,endtime,startmeridian,endmeridian,ra,de,pa: double;
+              starttime,endtime,startmeridian,endmeridian,ra,de,pa,solarV,solarPA: double;
               startrise,endset,darknight,skip: boolean;
               repeatcount,repeatdone: integer;
               FlatBinX,FlatBinY,FlatCount: integer;
@@ -84,6 +84,7 @@ type
       Fcamera: T_camera;
       Frotator: T_rotator;
       Fautoguider: T_autoguider;
+      Finternalguider: Tf_internalguider;
       Fastrometry: TAstrometry;
       Fplanetarium: TPlanetarium;
       StartPlanTimer: TTimer;
@@ -219,6 +220,7 @@ type
       property Safety: Tf_safety read Fsafety write Fsafety;
       property Dome: T_dome read Fdome write Fdome;
       property Autoguider: T_autoguider read Fautoguider write SetAutoguider;
+      property InternalGuider: Tf_internalguider read Finternalguider write Finternalguider;
       property Astrometry: TAstrometry read Fastrometry write SetAstrometry;
       property Planetarium: TPlanetarium read Fplanetarium write Fplanetarium;
       property DelayMsg: TNotifyStr read FDelayMsg write FDelayMsg;
@@ -1812,7 +1814,7 @@ var t: TTarget;
     p: T_Plan;
     ok,wtok,nd:boolean;
     stw,i,intime,ri,si,ti: integer;
-    hr,hs,ht,tt,dt,st,newra,newde,appra,appde,enddelay,chkendtime: double;
+    hr,hs,ht,tt,dt,st,newra,newde,newV,newPA,appra,appde,enddelay,chkendtime: double;
     autofocusstart, astrometrypointing, autostartguider,isCalibrationTarget: boolean;
     skipmsg, buf: string;
 begin
@@ -1858,10 +1860,14 @@ begin
     InplaceAutofocus:=t.inplaceautofocus;
     // adjust moving object coordinates from planetarium
     if t.updatecoord then begin
-       if Fplanetarium.Search(t.objectname,newra,newde) then begin
+       if Fplanetarium.Search(t.objectname,newra,newde,newV,newPa) then begin
           msg(Format(rsNewCoordinat, [RAToStr(newra), DEToStr(newde)]),3);
           t.ra:=newra;
           t.de:=newde;
+          if newv<>NullCoord then {finternalguider.v_solar;}
+            t.solarV:=newv;
+          if newPa<>NullCoord then {finternalguider.vpa_solar;}
+            t.solarPA:=newPA;
        end
        else begin
           msg(rsPlanetariumE+blank+Fplanetarium.LastErrorTxt,3);
@@ -2060,6 +2066,11 @@ begin
             exit;
           end;
           Wait;
+          // Set internal guider solar object motion
+          if (Autoguider<>nil)and(Autoguider.AutoguiderType=agINTERNAL)and(t.solarV<>NullCoord)and(t.solarPA<>NullCoord) then begin
+             finternalguider.v_solar:=t.solarV;
+             finternalguider.vpa_solar:=t.solarPA;
+          end;
         end;
         if not FRunning then exit;
         if WeatherCancelRestart then exit;
@@ -2647,6 +2658,8 @@ begin
   ra:=NullCoord;
   de:=NullCoord;
   pa:=NullCoord;
+  solarV:=NullCoord;
+  solarPA:=NullCoord;
   astrometrypointing:=(astrometryResolver<>ResolverNone);
   updatecoord:=false;
   inplaceautofocus:=AutofocusInPlace;
@@ -2686,6 +2699,8 @@ begin
   ra:=Source.ra;
   de:=Source.de;
   pa:=Source.pa;
+  solarV:=Source.solarV;
+  solarPA:=Source.solarPA;
   astrometrypointing:=source.astrometrypointing;
   updatecoord:=Source.updatecoord;
   repeatcount:=Source.repeatcount;
@@ -2735,6 +2750,7 @@ function TTarget.pa_str: string;
 begin
   Result:=FormatFloat(f2,pa);
 end;
+
 
 function TTarget.id: LongWord;
 var buf: string;

@@ -27,7 +27,7 @@ interface
 
 uses
   pu_edittargets, u_ccdconfig, u_global, u_utils, UScaleDPI, u_speech,
-  fu_capture, fu_preview, fu_filterwheel, u_hints, u_translation, math,
+  fu_capture, fu_preview, fu_filterwheel, fu_internalguider, u_hints, u_translation, math,
   cu_mount, cu_camera, cu_autoguider, cu_astrometry, cu_rotator, pu_viewtext,
   cu_targets, cu_plan, cu_planetarium, pu_pause, fu_safety, fu_weather, cu_dome,
   Classes, SysUtils, FileUtil, Forms, Controls, Graphics, Dialogs, StdCtrls,
@@ -110,6 +110,7 @@ type
     Fcamera: T_camera;
     Frotator: T_rotator;
     Fautoguider: T_autoguider;
+    Finternalguider: Tf_internalguider;
     Fastrometry: TAstrometry;
     Fplanetarium: TPlanetarium;
     procedure SetPreview(val: Tf_preview);
@@ -122,6 +123,7 @@ type
     procedure SetSafety(val: Tf_safety);
     procedure SetDome(val: T_dome);
     procedure SetAutoguider(val: T_autoguider);
+    procedure SetInternalguider(val: Tf_internalguider);
     procedure SetAstrometry(val: TAstrometry);
     procedure SetPlanetarium(val: TPlanetarium);
     function GetRunning: boolean;
@@ -187,6 +189,7 @@ type
     property Safety: Tf_safety read Fsafety write SetSafety;
     property Dome: T_dome read Fdome write SetDome;
     property Autoguider: T_autoguider read Fautoguider write SetAutoguider;
+    property InternalGuider: Tf_internalguider read Finternalguider write SetInternalguider;
     property Astrometry: TAstrometry read Fastrometry write SetAstrometry;
     property Planetarium: TPlanetarium read FPlanetarium write SetPlanetarium;
     property AtEndShutdown: boolean read GetEndShutdown write SetEndShutdown;
@@ -232,6 +235,7 @@ begin
  Targets.Camera:=Fcamera;
  Targets.Filter:=Ffilter;
  Targets.Autoguider:=Fautoguider;
+ Targets.InternalGuider:=FInternalguider;
  Targets.Astrometry:=Fastrometry;
  Targets.Planetarium:=Fplanetarium;
  Targets.onMsg:=@Msg;
@@ -354,6 +358,13 @@ begin
   Fautoguider:=val;
   Targets.Autoguider:=Fautoguider;
 end;
+
+procedure Tf_sequence.SetInternalguider(val: Tf_internalguider);
+begin
+  FInternalguider:=val;
+  Targets.InternalGuider:=FInternalguider;
+end;
+
 
 procedure Tf_sequence.SetAstrometry(val: TAstrometry);
 begin

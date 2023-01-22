@@ -48,7 +48,7 @@ type
     function ShowImage(fn: string; fovdeg:double=0):boolean; override;
     function DrawFrame(frra,frde,frsizeH,frsizeV,frrot: double):boolean; override;
     function GetEqSys: double; override;
-    function Search(sname: string; out sra,sde: double): boolean; override;
+    function Search(sname: string; out sra,sde,v_solar,vpa_solar: double): boolean; override;
   end;
 
 
@@ -121,7 +121,7 @@ begin
   result:=false;
 end;
 
-function TPlanetarium_none.Search(sname: string; out sra,sde: double): boolean;
+function TPlanetarium_none.Search(sname: string; out sra,sde,v_solar,vpa_solar: double): boolean;
 begin
   result:=false;
 end;

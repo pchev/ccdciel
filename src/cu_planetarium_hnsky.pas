@@ -49,7 +49,7 @@ type
     function ShowImage(fn: string; fovdeg:double=0):boolean; override;
     function DrawFrame(frra,frde,frsizeH,frsizeV,frrot: double):boolean; override;
     function GetEqSys: double; override;
-    function Search(sname: string; out sra,sde: double): boolean; override;
+    function Search(sname: string; out sra,sde,v_solar,vpa_solar: double): boolean; override;
   end;
 
 implementation
@@ -249,7 +249,7 @@ begin
 end;
 
 
-function TPlanetarium_hnsky.Search(sname: string; out sra,sde: double): boolean;
+function TPlanetarium_hnsky.Search(sname: string; out sra,sde,v_solar,vpa_solar: double): boolean;
 var buf: string;
     p:Tstringlist;
 begin
@@ -262,11 +262,27 @@ begin
   if (p.Count>=3) then begin
     sra:=StrToFloatDef(StringReplace(p[0],',','.',[]),NullCoord);
     sde:=StrToFloatDef(StringReplace(p[1],',','.',[]),NullCoord);
+
     if (sra<>NullCoord)and(sde<>NullCoord) then begin
       sra:=rad2deg*sra/15;
       sde:=rad2deg*sde;
       result:=true;
     end;
+
+    if (p.Count>=6) then begin //optional parameters
+      v_solar:=StrToFloatDef(StringReplace(p[4],',','.',[]),NullCoord);
+      vpa_solar:=StrToFloatDef(StringReplace(p[5],',','.',[]),NullCoord);
+    end
+    else
+    begin
+       v_solar:=NullCoord;
+       vpa_solar:=NullCoord;
+    end;
+    if vpa_solar<>NullCoord then begin
+      vpa_solar:=rad2deg*vpa_solar;
+    end;
+
+
   end;
   finally
     p.free;

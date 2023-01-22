@@ -49,7 +49,7 @@ type
     function ShowImage(fn: string; fovdeg:double=0):boolean; override;
     function DrawFrame(frra,frde,frsizeH,frsizeV,frrot: double):boolean; override;
     function GetEqSys: double; override;
-    function Search(sname: string; out sra,sde: double): boolean; override;
+    function Search(sname: string; out sra,sde,v_solar,vpa_solar: double): boolean; override;
   end;
 
 const msgTimeout='Timeout!';
@@ -332,12 +332,16 @@ begin
   result:=true;
 end;
 
-function TPlanetarium_cdc.Search(sname: string; out sra,sde: double): boolean;
+function TPlanetarium_cdc.Search(sname: string; out sra,sde,v_solar,vpa_solar: double): boolean;
 var buf: string;
     p: TStringList;
 begin
   // return J2000 coord.
   result:=false;
+
+  v_solar:=NullCoord;
+  vpa_solar:=NullCoord;
+
   p:=TStringList.Create;
   try
   buf:=Cmd('SEARCH "'+sname+'"');

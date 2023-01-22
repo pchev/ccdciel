@@ -67,7 +67,7 @@ public
   function Cmd(const Value: string):string; virtual; abstract;
   function ShowImage(fn: string; fovdeg:double=0):boolean; virtual; abstract;
   function DrawFrame(frra,frde,frsizeH,frsizeV,frrot: double):boolean; virtual; abstract;
-  function Search(sname: string; out sra,sde: double): boolean; virtual; abstract;
+  function Search(sname: string; out sra,sde,v_solar,vpa_solar: double): boolean; virtual; abstract;
   property Terminated;
   property Running: boolean read FRunning;
   property Connected: boolean read FStatus;

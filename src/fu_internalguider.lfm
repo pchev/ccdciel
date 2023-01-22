@@ -694,11 +694,11 @@ object f_internalguider: Tf_internalguider
           TabOrder = 0
           object GroupBox1: TGroupBox
             Left = 16
-            Height = 392
+            Height = 424
             Top = 0
             Width = 296
             Caption = 'Options:'
-            ClientHeight = 372
+            ClientHeight = 404
             ClientWidth = 294
             TabOrder = 0
             object measure_method2: TCheckBox
@@ -711,7 +711,7 @@ object f_internalguider: Tf_internalguider
               ParentFont = False
               ParentShowHint = False
               ShowHint = True
-              TabOrder = 3
+              TabOrder = 5
             end
             object disable_guiding1: TCheckBox
               Left = 8
@@ -724,7 +724,7 @@ object f_internalguider: Tf_internalguider
               ParentFont = False
               ParentShowHint = False
               ShowHint = True
-              TabOrder = 4
+              TabOrder = 6
             end
             object ShortestPulse1: TSpinEdit
               Left = 200
@@ -773,7 +773,7 @@ object f_internalguider: Tf_internalguider
               OnChange = minSNR1Change
               ParentShowHint = False
               ShowHint = True
-              TabOrder = 2
+              TabOrder = 3
               Value = 15
             end
             object Label24: TLabel
@@ -796,7 +796,7 @@ object f_internalguider: Tf_internalguider
               MaxValue = 10
               MinValue = 0.8
               OnChange = minHFD1Change
-              TabOrder = 1
+              TabOrder = 2
               Value = 1.5
             end
             object framesize1: TComboBox
@@ -819,7 +819,7 @@ object f_internalguider: Tf_internalguider
                 '50'
               )
               ParentFont = False
-              TabOrder = 5
+              TabOrder = 4
               Text = 'Max'
             end
             object Label9: TLabel
@@ -838,7 +838,7 @@ object f_internalguider: Tf_internalguider
               Top = 248
               Width = 258
               Caption = 'Reverse dec output after meridian flip'
-              TabOrder = 6
+              TabOrder = 7
             end
             object Label11: TLabel
               Left = 8
@@ -859,7 +859,7 @@ object f_internalguider: Tf_internalguider
               OnChange = LongestPulse1Change
               ParentShowHint = False
               ShowHint = True
-              TabOrder = 7
+              TabOrder = 1
               Value = 500
             end
             object Label20: TLabel
@@ -874,21 +874,9 @@ object f_internalguider: Tf_internalguider
               Left = 200
               Height = 31
               Hint = 'Comet or NEO or position change in arcsec/min. If set the guider will follow the solar object. The Pixel scale in tab advanced should be reasonable accurate.'
-              Top = 280
+              Top = 328
               Width = 60
-              OnChange = pulsegainWest1Change
-              ParentFont = False
-              ParentShowHint = False
-              ShowHint = True
-              TabOrder = 8
-              Text = '0'
-            end
-            object neo_pa1: TEdit
-              Left = 200
-              Height = 31
-              Hint = 'Direction of the solar object movement.'
-              Top = 312
-              Width = 60
+              Enabled = False
               OnChange = pulsegainWest1Change
               ParentFont = False
               ParentShowHint = False
@@ -896,10 +884,24 @@ object f_internalguider: Tf_internalguider
               TabOrder = 9
               Text = '0'
             end
+            object neo_pa1: TEdit
+              Left = 200
+              Height = 31
+              Hint = 'Direction of the solar object movement.'
+              Top = 360
+              Width = 60
+              Enabled = False
+              OnChange = pulsegainWest1Change
+              ParentFont = False
+              ParentShowHint = False
+              ShowHint = True
+              TabOrder = 10
+              Text = '0'
+            end
             object Label25: TLabel
               Left = 8
               Height = 19
-              Top = 280
+              Top = 328
               Width = 191
               Caption = 'Solar object motion rate ["/min]'
               ParentColor = False
@@ -907,10 +909,20 @@ object f_internalguider: Tf_internalguider
             object Label26: TLabel
               Left = 8
               Height = 19
-              Top = 312
+              Top = 360
               Width = 179
               Caption = 'Solar object movement PA [°]'
               ParentColor = False
+            end
+            object CheckBoxTrackSolar1: TCheckBox
+              Left = 8
+              Height = 21
+              Hint = 'The telescope will follow the moving solar object.'
+              Top = 296
+              Width = 207
+              Caption = 'Activate solar object tracking. '
+              OnChange = CheckBoxTrackSolar1Change
+              TabOrder = 8
             end
           end
         end
@@ -1120,7 +1132,7 @@ object f_internalguider: Tf_internalguider
   end
   object PopupMenuDark: TPopupMenu
     Left = 264
-    Top = 424
+    Top = 448
     object MenuItemDarkInfo: TMenuItem
       Caption = 'MenuItemDarkInfo'
       OnClick = MenuItemDarkInfoClick

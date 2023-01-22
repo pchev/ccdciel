@@ -50,6 +50,7 @@ type
     ButtonGuide: TButton;
     ButtonStop: TButton;
     ButtonStop1: TButton;
+    CheckBoxTrackSolar1: TCheckBox;
     neo_pa1: TEdit;
     Cooler: TCheckBox;
     CheckBoxReverseDec: TCheckBox;
@@ -152,6 +153,7 @@ type
     procedure ButtonGuideClick(Sender: TObject);
     procedure ButtonSetTempClick(Sender: TObject);
     procedure ButtonStopClick(Sender: TObject);
+    procedure CheckBoxTrackSolar1Change(Sender: TObject);
     procedure CoolerClick(Sender: TObject);
     procedure dec_gain1Change(Sender: TObject);
     procedure dec_hysteresis1Change(Sender: TObject);
@@ -225,6 +227,8 @@ type
     function GetFrameSize: integer;
     function GetReverseDec: Boolean;
     procedure SetReverseDec(value: Boolean);
+    function GetSolartracking: Boolean;
+    procedure SetSolarTracking(value: Boolean);
     function GetIsGem: Boolean;
     procedure SetIsGem(value: Boolean);
     procedure SetNEOmovement(value:double);
@@ -275,9 +279,10 @@ type
     property trend_scale: integer read Getscale write Setscale;
     property FrameSize: integer read GetFrameSize;
     property ReverseDec: Boolean read GetReverseDec write SetReverseDec;
+    property SolarTracking: Boolean read GetSolarTracking write SetSolarTracking;
     property isGEM: Boolean read GetIsGem write SetIsGem;
-    property neo_motion: double read GetNEOmovement write SetNEOmovement;
-    property neo_pa: double read GetNEOpa write SetNEOpa;
+    property v_solar: double read GetNEOmovement write SetNEOmovement;
+    property vpa_solar: double read GetNEOpa write SetNEOpa;
 
   end;
 
@@ -609,6 +614,12 @@ procedure Tf_internalguider.ButtonStopClick(Sender: TObject);
 begin
   if Assigned(FonStop) then FonStop(self);
   setled(clGray);
+end;
+
+procedure Tf_internalguider.CheckBoxTrackSolar1Change(Sender: TObject);
+begin
+  neo_rate1.Enabled:=CheckBoxTrackSolar1.checked;
+  neo_pa1.enabled:=CheckBoxTrackSolar1.checked;
 end;
 
 procedure Tf_internalguider.ButtonSetTempClick(Sender: TObject);
@@ -1078,6 +1089,16 @@ end;
 procedure Tf_internalguider.SetReverseDec(value: Boolean);
 begin
   CheckBoxReverseDec.Checked:=value;
+end;
+
+function Tf_internalguider.GetSolarTracking: boolean;
+begin
+  result:=CheckBoxTrackSolar1.Checked;
+end;
+
+procedure Tf_internalguider.SetSolarTracking(value: Boolean);
+begin
+  CheckBoxTrackSolar1.Checked:=value;
 end;
 
 function Tf_internalguider.GetIsGem: Boolean;
