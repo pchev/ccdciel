@@ -35,17 +35,16 @@ type
 
   T_autoguider_internal = class(T_autoguider)
   private
-    InternalguiderInitialize,InternalCalibrationInitialize,GuideLogFileOpen, neo_tracking  : boolean;
+    InternalguiderInitialize,InternalCalibrationInitialize,GuideLogFileOpen, solar_tracking  : boolean;
     pulseRA,pulseDEC,GuideFrameCount, InternalguiderCalibrationDirection,InternalguiderCalibrationStep,
     CalibrationDuration,Calflip,CalCount,Calnrtest,frame_size,Binning,BacklashStep: integer;
     driftX,driftY,driftRA,driftDec,moveRA,moveDEC, Guidethecos,old_moveRA,old_moveDEC,  paEast, paNorth,
-    pulsegainEast,pulsegainWest,pulsegainNorth,pulsegainSouth,Calthecos, Caltheangle,CaldriftOld, ditherX,ditherY,
+    pulsegainEast,pulsegainWest,pulsegainNorth,pulsegainSouth,Calthecos, Caltheangle,CaldriftOld, ditherX,ditherY,ditherX2,ditherY2,
     GuideStartTime,LogSNR,LogFlux,mean_hfd : double;
     LastDecSign: double;
     SameDecSignCount: integer;
     xy_trend : xy_guiderlist;{fu_internalguider}
     xy_array,xy_array_old : star_position_array;//internal guider for measure drift
-    offset_RaPixelsNeo,offset_DecPixelsNeo : double; //comet tracking
     GuideLog: TextFile;
     FPaused, FSettling, FSettlingInRange,PulseGuiding: boolean;
     InternalguiderCalibratingMeridianFlip, InternalguiderCalibratingMeridianFlipNorth: boolean;
@@ -106,7 +105,7 @@ implementation
 const
    nrpointsTrend=50; //number of trend points plotted
 var
-   oldtickcount: qword=0;
+  oldtickcount: qword=0;
 
 
 procedure mad_median(list: array of double;leng :integer;out mad,median :double);{calculate mad and median without modifying the data}
@@ -332,7 +331,7 @@ end;
 procedure T_autoguider_internal.Dither(pixel:double; raonly:boolean; waittime:double);
 var dra,ddec,mflipcorr: double;
 begin
-  if ((InternalguiderGuiding) and (not InternalguiderInitialize) and  (not neo_tracking)) then begin
+  if ((InternalguiderGuiding) and (not InternalguiderInitialize) and  (not solar_tracking)) then begin
     dra:=(2*random-1)*pixel; // in pixel
     if raonly then
       ddec:=0
@@ -882,22 +881,24 @@ begin
   WriteLog('INFO: Guiding parameter change, '+txt);
 end;
 
+var
+  offset_RaPixelsNeo,offset_DecPixelsNeo : double; //comet tracking
+
+
 procedure T_autoguider_internal.InternalAutoguiding;
 var i,maxpulse: integer;
     RADuration,DECDuration: LongInt;
     RADirection,DECDirection: string;
-    mflipcorr,moveRA2,dsettle : double;
-    meridianflip: boolean;
-    DecSign, p : double;
-    largepulse: boolean;
+    mflipcorr,moveRA2,dsettle,DecSign: double;
+    meridianflip, largepulse         : boolean;
 
-          procedure follow_neo;//neo and comet tracking
+          procedure track_solar_object;//neo and comet tracking
           // Calculates the total integrated correction in pixels for the reference stars in the guider image (DitherX, DitherY)
           // The Pixel scale internalguider.pixel_size in tab advanced should be reasonable accurate.
           var
             tickcount : qword;
             deltaticks,flipdec : integer;
-            cosdec,ra_rate,dec_rate: double;
+            ra_rate,dec_rate, delta_ditherX,delta_ditherY, dRaPixelsSolar,dDecPixelsSolar : double;
           begin
             tickcount:=GetTickCount64;
             deltaticks:=tickcount-oldtickcount;// number of milliseconds since last cycle
@@ -908,8 +909,8 @@ var i,maxpulse: integer;
               sincos(internalguider.neo_pa*pi/180,ra_rate,dec_rate);
               ra_rate:=ra_rate*internalguider.neo_motion;//solar object sky movement in RA ["/min]
               dec_rate:=dec_rate*internalguider.neo_motion;//solar object sky movement in DEC ["/min]
-              offset_RaPixelsNeo:=offset_RaPixelsNeo - ra_rate * deltaticks/(60*1000*internalguider.pixel_size);//Integrated solar object sky movement in RA. Unit in guider pixels
-              offset_DecPixelsNeo:=offset_DecPixelsNeo - dec_rate * deltaticks/(60*1000*internalguider.pixel_size);//Integrated solar object sky movement in DEC. Unit in guider pixels
+              dRaPixelsSolar:= - ra_rate * deltaticks/(60*1000*internalguider.pixel_size);//Solar object sky movement in RA. Unit in guider pixels.
+              dDecPixelsSolar:=+ dec_rate * deltaticks/(60*1000*internalguider.pixel_size);//Solar object sky movement in DEC. Unit in guider pixels
 
               if Finternalguider.isGEM and ((mount.PierSide=pierWest) <> (pos('E',finternalguider.pier_side)>0)) then // Did a meridian flip occur since calibration.
                 mflipcorr:=180 // A meridian flip occurred
@@ -917,7 +918,9 @@ var i,maxpulse: integer;
                 mflipcorr:=0;
               if finternalguider.pulsegainNorth>0 then flipDec:=-1 else flipDec:=1;//flipped image correction. E.g. an image where north is up and east on the right size.
               if meridianflip and (not finternalguider.ReverseDec) then flipDec:=-flipDec;
-              rotate2(((+finternalguider.PA+mflipcorr)*pi/180),offset_RaPixelsNeo,flipDec*offset_DecPixelsNeo,ditherX,ditherY);// rotate RA, DEC drift to X,Y drift. Positive ditherY is go North. Postive ditherX is go West!
+              rotate2(((+finternalguider.PA+mflipcorr)*pi/180),dRaPixelsSolar,flipDec*dDecPixelsSolar,delta_ditherX,delta_ditherY);// rotate RA, DEC drift scope to X,Y drift guider image. Positive ditherY is go North. Postive ditherX is go West!
+              ditherX:=ditherX+delta_ditherX; //integrate offset solar object in X
+              ditherY:=ditherY+delta_ditherY; //integrate offset solar object in Y
             end;
           end;
 begin
@@ -928,15 +931,13 @@ begin
   //For tracking Solar object only
   if ((FSettling=false) and (internalguider.neo_motion<>0)) then
   begin
-    follow_neo; //To follow Solar object calculate ditherX, Y factors and feed forward corrections offset_RaPixelsNeo, offset_DecPixelsNeo
-    neo_tracking:=true;// Block any dithering
+    track_solar_object;; //Calculate the ditherX, Y factors to track a solar object
+    solar_tracking:=true;// Block any dithering
+    msg(floattostr(ditherX)+' '+floattostr(ditherY)+' || '+floattostr(ditherX2)+' '+floattostr(ditherY2),3);
   end
   else
-  begin //Reset NEO offset
-    offset_RaPixelsNeo:=0;// Clear integrated solar object sky movement in RA. Unit in guider pixels
-    offset_DecPixelsNeo:=0;// Clear Integrated solar object sky movement in DEC. Unit in guider pixels
-    neo_tracking:=false;// Allow dithering
-  end;
+    solar_tracking:=false;// Allow dithering
+
 
   //Measure drift
   measure_drift(InternalguiderInitialize,driftX,driftY);// ReferenceX,Y indicates the total drift, driftX,driftY to drift since previous call. Arrays xy_array_old,xy_array are for storage star positions
