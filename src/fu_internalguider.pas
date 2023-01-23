@@ -51,7 +51,7 @@ type
     ButtonStop: TButton;
     ButtonStop1: TButton;
     CheckBoxTrackSolar1: TCheckBox;
-    neo_pa1: TEdit;
+    vpa_solar1: TEdit;
     Cooler: TCheckBox;
     CheckBoxReverseDec: TCheckBox;
     disable_guiding1: TCheckBox;
@@ -111,7 +111,7 @@ type
     pulsegainNorth1: TEdit;
     pulsegainSouth1: TEdit;
     pulsegainWest1: TEdit;
-    neo_rate1: TEdit;
+    v_solar1: TEdit;
     ra_hysteresis1: TSpinEdit;
     dec_hysteresis1: TSpinEdit;
     Label1: TLabel;
@@ -231,10 +231,10 @@ type
     procedure SetSolarTracking(value: Boolean);
     function GetIsGem: Boolean;
     procedure SetIsGem(value: Boolean);
-    procedure SetNEOmovement(value:double);
-    function GetNEOmovement:double;
-    procedure SetNEOpa(value:double);
-    function GetNEOpa:double;
+    procedure SetV_solar(value:double);
+    function GetV_solar:double;
+    procedure SetVPA_solar(value:double);
+    function GetVPa_solar:double;
 
 
 
@@ -281,8 +281,8 @@ type
     property ReverseDec: Boolean read GetReverseDec write SetReverseDec;
     property SolarTracking: Boolean read GetSolarTracking write SetSolarTracking;
     property isGEM: Boolean read GetIsGem write SetIsGem;
-    property v_solar: double read GetNEOmovement write SetNEOmovement;
-    property vpa_solar: double read GetNEOpa write SetNEOpa;
+    property v_solar: double read GetV_solar write SetV_solar;
+    property vpa_solar: double read GetVPa_solar write SetVPA_solar;
 
   end;
 
@@ -471,7 +471,7 @@ end;
 
 procedure Tf_internalguider.SetPixelSize(value:double);
 begin
-  pixelsize1.text:=floattostrF(value,FFgeneral,0,4);
+  pixelsize1.text:=floattostrF(value,FFgeneral,4,4);
 end;
 
 function Tf_internalguider.GetPixelSize:double;
@@ -561,24 +561,24 @@ begin
   result:=scale1.position;
 end;
 
-procedure Tf_internalguider.SetNEOmovement(value:double);
+procedure Tf_internalguider.SetV_solar(value:double);
 begin
-  neo_rate1.text:=floattostrF(value,FFgeneral,0,3);
+  v_solar1.text:=floattostrF(value,FFgeneral,4,4);
 end;
 
-function Tf_internalguider.GetNEOmovement:double;
+function Tf_internalguider.GetV_solar:double;
 begin
-  result:=strtofloat(neo_rate1.text);
+  result:=strtofloat(v_solar1.text);
 end;
 
-procedure Tf_internalguider.SetNEOpa(value:double);
+procedure Tf_internalguider.SetVPA_solar(value:double);
 begin
-  neo_pa1.text:=floattostrF(value,FFgeneral,0,3);
+  vpa_solar1.text:=floattostrF(value,FFgeneral,4,4);
 end;
 
-function Tf_internalguider.GetNEOpa:double;
+function Tf_internalguider.GetVPa_solar:double;
 begin
-  result:=strtofloat(neo_pa1.text);
+  result:=strtofloat(vpa_solar1.text);
 end;
 
 
@@ -618,8 +618,8 @@ end;
 
 procedure Tf_internalguider.CheckBoxTrackSolar1Change(Sender: TObject);
 begin
-  neo_rate1.Enabled:=CheckBoxTrackSolar1.checked;
-  neo_pa1.enabled:=CheckBoxTrackSolar1.checked;
+  v_solar1.Enabled:=CheckBoxTrackSolar1.checked;
+  vpa_solar1.enabled:=CheckBoxTrackSolar1.checked;
 end;
 
 procedure Tf_internalguider.ButtonSetTempClick(Sender: TObject);

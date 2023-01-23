@@ -870,7 +870,7 @@ object f_internalguider: Tf_internalguider
               Caption = 'Minimum move:'
               ParentColor = False
             end
-            object neo_rate1: TEdit
+            object v_solar1: TEdit
               Left = 200
               Height = 31
               Hint = 'Comet or NEO or position change in arcsec/min. If set the guider will follow the solar object. The Pixel scale in tab advanced should be reasonable accurate.'
@@ -884,7 +884,7 @@ object f_internalguider: Tf_internalguider
               TabOrder = 9
               Text = '0'
             end
-            object neo_pa1: TEdit
+            object vpa_solar1: TEdit
               Left = 200
               Height = 31
               Hint = 'Direction of the solar object movement.'
