@@ -2054,6 +2054,11 @@ begin
              StopSequence(true);
              exit;
           end;
+          // Set internal guider solar object motion
+          if (Autoguider<>nil)and(Autoguider.AutoguiderType=agINTERNAL)and(t.solarV<>NullCoord)and(t.solarPA<>NullCoord) then begin
+             finternalguider.v_solar:=t.solarV;
+             finternalguider.vpa_solar:=t.solarPA;
+          end;
           // disable astrometrypointing and autoguiding if first step is to move to focus star
           astrometrypointing:=t.astrometrypointing and (not (autofocusstart and (not InplaceAutofocus))) ;
           // must track before to slew
@@ -2066,11 +2071,6 @@ begin
             exit;
           end;
           Wait;
-          // Set internal guider solar object motion
-          if (Autoguider<>nil)and(Autoguider.AutoguiderType=agINTERNAL)and(t.solarV<>NullCoord)and(t.solarPA<>NullCoord) then begin
-             finternalguider.v_solar:=t.solarV;
-             finternalguider.vpa_solar:=t.solarPA;
-          end;
         end;
         if not FRunning then exit;
         if WeatherCancelRestart then exit;
