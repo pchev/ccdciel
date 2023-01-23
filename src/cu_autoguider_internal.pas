@@ -933,7 +933,7 @@ begin
   begin
     track_solar_object; //Calculate the ditherX, Y factors to track a solar object
     solar_tracking:=true;// Block any dithering
-    msg(floattostr(ditherX)+' '+floattostr(ditherY)+' || '+floattostr(ditherX2)+' '+floattostr(ditherY2),3);
+    //msg(floattostr(ditherX)+' '+floattostr(ditherY)+' || '+floattostr(ditherX2)+' '+floattostr(ditherY2),3);
   end
   else
     solar_tracking:=false;// Allow dithering

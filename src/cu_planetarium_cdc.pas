@@ -335,6 +335,7 @@ end;
 function TPlanetarium_cdc.Search(sname: string; out sra,sde,v_solar,vpa_solar: double): boolean;
 var buf: string;
     p: TStringList;
+    i: integer;
 begin
   // return J2000 coord.
   result:=false;
@@ -361,6 +362,10 @@ begin
              sra:=rad2deg*sra/15;
              sde:=rad2deg*sde;
            end;
+         end;
+         for i:=0 to p.count-1 do begin
+           if copy(p[i],1,11)='MotionArcm:' then v_solar:=StrToFloatDef(copy(p[i],12,99),NullCoord);
+           if copy(p[i],1,9)='MotionPA:' then vpa_solar:=StrToFloatDef(copy(p[i],10,99),NullCoord);
          end;
        end;
      end;
