@@ -1865,9 +1865,13 @@ begin
           t.ra:=newra;
           t.de:=newde;
           if newv<>NullCoord then {finternalguider.v_solar;}
-            t.solarV:=newv;
+            t.solarV:=newv
+          else
+            t.solarV:=0;
           if newPa<>NullCoord then {finternalguider.vpa_solar;}
-            t.solarPA:=newPA;
+            t.solarPA:=newPA
+          else
+            t.solarPA:=0;
        end
        else begin
           msg(rsPlanetariumE+blank+Fplanetarium.LastErrorTxt,3);
@@ -2033,6 +2037,11 @@ begin
         if (t.pa<>NullCoord)and(Frotator.Status=devConnected) then begin
           Frotator.Angle:=t.pa;
         end;
+        // Set internal guider solar object motion
+        if (Autoguider<>nil)and(Autoguider.AutoguiderType=agINTERNAL)and(t.solarV<>NullCoord)and(t.solarPA<>NullCoord) then begin
+           finternalguider.v_solar:=t.solarV;
+           finternalguider.vpa_solar:=t.solarPA;
+        end;
         // set coordinates
         if ((t.ra<>NullCoord)and(t.de<>NullCoord)) then begin
           // Check dome open and slaving
@@ -2053,11 +2062,6 @@ begin
              msg(InitTargetError, 1);
              StopSequence(true);
              exit;
-          end;
-          // Set internal guider solar object motion
-          if (Autoguider<>nil)and(Autoguider.AutoguiderType=agINTERNAL)and(t.solarV<>NullCoord)and(t.solarPA<>NullCoord) then begin
-             finternalguider.v_solar:=t.solarV;
-             finternalguider.vpa_solar:=t.solarPA;
           end;
           // disable astrometrypointing and autoguiding if first step is to move to focus star
           astrometrypointing:=t.astrometrypointing and (not (autofocusstart and (not InplaceAutofocus))) ;
@@ -2658,8 +2662,8 @@ begin
   ra:=NullCoord;
   de:=NullCoord;
   pa:=NullCoord;
-  solarV:=NullCoord;
-  solarPA:=NullCoord;
+  solarV:=0;
+  solarPA:=0;
   astrometrypointing:=(astrometryResolver<>ResolverNone);
   updatecoord:=false;
   inplaceautofocus:=AutofocusInPlace;
