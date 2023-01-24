@@ -693,13 +693,14 @@ object f_internalguider: Tf_internalguider
           ParentColor = False
           TabOrder = 0
           object GroupBox1: TGroupBox
-            Left = 16
-            Height = 424
+            Left = 0
+            Height = 445
             Top = 0
-            Width = 296
+            Width = 313
+            Align = alClient
             Caption = 'Options:'
-            ClientHeight = 404
-            ClientWidth = 294
+            ClientHeight = 425
+            ClientWidth = 311
             TabOrder = 0
             object measure_method2: TCheckBox
               Left = 8
@@ -873,8 +874,8 @@ object f_internalguider: Tf_internalguider
             object v_solar1: TEdit
               Left = 200
               Height = 31
-              Hint = 'Comet or NEO or position change in arcsec/min. If set the guider will follow the solar object. The Pixel scale in tab advanced should be reasonable accurate.'
-              Top = 328
+              Hint = 'Apparent motion of the solar object in arcsec/min.  The Pixel scale in tab advanced should be reasonable accurate.'
+              Top = 322
               Width = 60
               Enabled = False
               OnChange = pulsegainWest1Change
@@ -887,8 +888,8 @@ object f_internalguider: Tf_internalguider
             object vpa_solar1: TEdit
               Left = 200
               Height = 31
-              Hint = 'Direction of the solar object movement.'
-              Top = 360
+              Hint = 'Position angle of the apparent motion'
+              Top = 354
               Width = 60
               Enabled = False
               OnChange = pulsegainWest1Change
@@ -902,22 +903,22 @@ object f_internalguider: Tf_internalguider
               Left = 8
               Height = 19
               Top = 328
-              Width = 191
-              Caption = 'Solar object motion rate ["/min]'
+              Width = 149
+              Caption = 'Apparent motion ["/min]'
               ParentColor = False
             end
             object Label26: TLabel
               Left = 8
               Height = 19
               Top = 360
-              Width = 179
-              Caption = 'Solar object movement PA [°]'
+              Width = 141
+              Caption = 'Apparent motion PA [°]'
               ParentColor = False
             end
             object CheckBoxTrackSolar1: TCheckBox
               Left = 8
               Height = 21
-              Hint = 'The telescope will follow the moving solar object.'
+              Hint = 'If checked then the telescope will follow the moving solar object.'
               Top = 296
               Width = 207
               Caption = 'Activate solar object tracking. '
@@ -946,13 +947,14 @@ object f_internalguider: Tf_internalguider
           ParentFont = False
           TabOrder = 0
           object GroupBox2: TGroupBox
-            Left = 16
-            Height = 256
+            Left = 0
+            Height = 445
             Top = 0
-            Width = 288
+            Width = 313
+            Align = alClient
             Caption = 'Calibration results:'
-            ClientHeight = 236
-            ClientWidth = 286
+            ClientHeight = 443
+            ClientWidth = 311
             TabOrder = 0
             object Label5: TLabel
               AnchorSideTop.Control = pa1

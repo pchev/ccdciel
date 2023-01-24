@@ -6,15 +6,15 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ccdciel\n"
 "Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
-"POT-Creation-Date: 2022-12-20 14:27+0000\n"
-"PO-Revision-Date: 2022-12-20 14:29+0000\n"
+"POT-Creation-Date: 2023-01-24 10:57+0000\n"
+"PO-Revision-Date: 2023-01-24 11:22+0000\n"
 "Last-Translator: Patrick Chevalley <Unknown>\n"
 "Language-Team: French <fr@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2022-12-21 08:28+0000\n"
-"X-Generator: Launchpad (build 31c78762a8046acf7ab47372e5d588ebb3759d2e)\n"
+"X-Launchpad-Export-Date: 2023-01-24 11:24+0000\n"
+"X-Generator: Launchpad (build e04feada4865d7ca041d8edeee137fe87b5bcb3e)\n"
 
 #: u_translation.rs2d
 msgid "2D"
@@ -65,6 +65,10 @@ msgstr "À propos"
 #: u_translation.rsaction
 msgid "Action"
 msgstr "Action"
+
+#: u_translation.rsactivatesola
+msgid "Activate solar object tracking."
+msgstr "Activer le suivi des objets du système solaire."
 
 #: u_translation.rsactivetarget
 msgid "Active target is replaced, restart the sequence"
@@ -160,6 +164,14 @@ msgstr "Un autre script est déjà en cours"
 #: u_translation.rsanytime
 msgid "Any time"
 msgstr "N'importe quand"
+
+#: u_translation.rsapparentmoti
+msgid "Apparent motion"
+msgstr "Mouvement apparent"
+
+#: u_translation.rsapparentmoti2
+msgid "Apparent motion PA"
+msgstr "Mouvement apparent PA"
 
 #: u_translation.rsapplydarkand
 msgid "Apply Dark and BPM"

@@ -1470,6 +1470,9 @@ resourcestring
   rsScriptArgume = 'Script arguments';
   rsKey = 'Key';
   rsCustomHeader = 'Custom headers';
+  rsActivateSola = 'Activate solar object tracking.';
+  rsApparentMoti = 'Apparent motion';
+  rsApparentMoti2 = 'Apparent motion PA';
 
 implementation
 

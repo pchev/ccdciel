@@ -386,6 +386,9 @@ begin
   Label9.Caption:=rsFrameSize;
   framesize1.Items[0]:=rsMax2;
   CheckBoxReverseDec.Caption:=rsReverseDecAf;
+  CheckBoxTrackSolar1.Caption:=rsActivateSola;
+  Label25.Caption:=rsApparentMoti+' ["/min]';
+  Label26.Caption:=rsApparentMoti2+' [°]';
 end;
 
 function Tf_internalguider.Getdisableguiding:boolean;

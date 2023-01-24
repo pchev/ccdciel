@@ -2,15 +2,15 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ccdciel\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-12-01 11:07+0000\n"
-"PO-Revision-Date: 2022-11-04 15:38+0000\n"
+"POT-Creation-Date: 2023-01-24 10:57+0000\n"
+"PO-Revision-Date: 2022-12-21 10:10+0000\n"
 "Last-Translator: Stanislav Holub <Unknown>\n"
 "Language-Team: Czech <cz@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2022-12-03 08:16+0000\n"
-"X-Generator: Launchpad (build 51cef3d08dff1e227b5ada709bd67280c567d4be)\n"
+"X-Launchpad-Export-Date: 2023-01-24 11:24+0000\n"
+"X-Generator: Launchpad (build e04feada4865d7ca041d8edeee137fe87b5bcb3e)\n"
 "Language: cs\n"
 
 #: u_translation.rs2d
@@ -62,6 +62,10 @@ msgstr "O aplikaci"
 #: u_translation.rsaction
 msgid "Action"
 msgstr "Akce"
+
+#: u_translation.rsactivatesola
+msgid "Activate solar object tracking."
+msgstr ""
 
 #: u_translation.rsactivetarget
 msgid "Active target is replaced, restart the sequence"
@@ -157,6 +161,14 @@ msgstr "Další skript již běží"
 #: u_translation.rsanytime
 msgid "Any time"
 msgstr "Kdykoli"
+
+#: u_translation.rsapparentmoti
+msgid "Apparent motion"
+msgstr ""
+
+#: u_translation.rsapparentmoti2
+msgid "Apparent motion PA"
+msgstr ""
 
 #: u_translation.rsapplydarkand
 msgid "Apply Dark and BPM"
@@ -1132,7 +1144,7 @@ msgstr "Vlastní"
 
 #: u_translation.rscustomheader
 msgid "Custom headers"
-msgstr ""
+msgstr "Vlastní záhlaví"
 
 #: u_translation.rscustompositi
 msgid "Custom position"
@@ -2342,7 +2354,7 @@ msgstr "Pokračování od posledního kontrolního bodu."
 
 #: u_translation.rskey
 msgid "Key"
-msgstr ""
+msgstr "Klíč"
 
 #: u_translation.rslanguage
 msgid "Language"
@@ -4012,7 +4024,7 @@ msgstr "Skript %s již existuje. Nahradit šablonu vlastním scriptem?"
 
 #: u_translation.rsscriptargume
 msgid "Script arguments"
-msgstr ""
+msgstr "Argumenty skriptu"
 
 #: u_translation.rsscripteditor
 msgid "Script editor"

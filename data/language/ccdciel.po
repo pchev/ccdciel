@@ -5466,3 +5466,15 @@ msgstr ""
 msgid "Custom headers"
 msgstr ""
 
+#: u_translation:rsactivatesola
+msgid "Activate solar object tracking."
+msgstr ""
+
+#: u_translation:rsapparentmoti
+msgid "Apparent motion"
+msgstr ""
+
+#: u_translation:rsapparentmoti2
+msgid "Apparent motion PA"
+msgstr ""
+
