@@ -868,6 +868,10 @@ begin
   WriteLog('Minimum SNR setting = '+FormatFloat(f2,Finternalguider.minSNR));
   WriteLog('RA = '+FormatFloat(f2,mount.Ra)+' hr, Dec = '+FormatFloat(f2,mount.Dec)+' deg, Hour angle = '+FormatFloat(f2,lha)+
            ' hr, Pier side = '+pier+', Alt = '+FormatFloat(f1,alt)+' deg, Az = '+FormatFloat(f1,az));
+  if finternalguider.SolarTracking then
+    WriteLog('SolarTracking = true, Rate = '+FormatFloat(f3,Finternalguider.v_solar)+', PA = '+FormatFloat(f2,Finternalguider.vpa_solar))
+  else
+    WriteLog('SolarTracking = false');
   WriteLog('');
   WriteLog('Frame,Time,mount,dx,dy,RARawDistance,DECRawDistance,RAGuideDistance,DECGuideDistance,RADuration,RADirection,DECDuration,DECDirection,XStep,YStep,StarMass,SNR,ErrorCode');
 
@@ -880,10 +884,6 @@ procedure T_autoguider_internal.ParameterChange(txt: string);
 begin
   WriteLog('INFO: Guiding parameter change, '+txt);
 end;
-
-var
-  offset_RaPixelsNeo,offset_DecPixelsNeo : double; //comet tracking
-
 
 procedure T_autoguider_internal.InternalAutoguiding;
 var i,maxpulse: integer;

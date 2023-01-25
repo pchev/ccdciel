@@ -875,10 +875,10 @@ object f_internalguider: Tf_internalguider
               Left = 200
               Height = 31
               Hint = 'Apparent motion of the solar object in arcsec/min.  The Pixel scale in tab advanced should be reasonable accurate.'
-              Top = 322
+              Top = 320
               Width = 60
               Enabled = False
-              OnChange = pulsegainWest1Change
+              OnChange = v_solar1Change
               ParentFont = False
               ParentShowHint = False
               ShowHint = True
@@ -892,7 +892,7 @@ object f_internalguider: Tf_internalguider
               Top = 354
               Width = 60
               Enabled = False
-              OnChange = pulsegainWest1Change
+              OnChange = vpa_solar1Change
               ParentFont = False
               ParentShowHint = False
               ShowHint = True
@@ -953,7 +953,7 @@ object f_internalguider: Tf_internalguider
             Width = 313
             Align = alClient
             Caption = 'Calibration results:'
-            ClientHeight = 443
+            ClientHeight = 425
             ClientWidth = 311
             TabOrder = 0
             object Label5: TLabel

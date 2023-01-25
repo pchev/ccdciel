@@ -177,6 +177,8 @@ type
     procedure ra_hysteresis1Change(Sender: TObject);
     procedure scale1Click(Sender: TObject; Button: TUDBtnType);
     procedure ShortestPulse1Change(Sender: TObject);
+    procedure vpa_solar1Change(Sender: TObject);
+    procedure v_solar1Change(Sender: TObject);
   private
     { private declarations }
     thescale : double;
@@ -185,8 +187,9 @@ type
     FonParameterChange: TNotifyStr;
     cur_minHFD,cur_minSNR,cur_Exposure : double;
     cur_RAgain,cur_RA_hysteresis,cur_DECgain,cur_DEC_hysteresis,cur_LongestPulse,cur_shortestPulse: integer;
-    cur_pa1,cur_pier_side1,cur_pixelsize1,cur_pulsegainEast1,cur_pulsegainNorth1,cur_pulsegainSouth1,cur_pulsegainWest1 : string;
-    cur_disable_guiding: boolean;
+    cur_pa1,cur_pier_side1,cur_pixelsize1,cur_pulsegainEast1,cur_pulsegainNorth1,cur_pulsegainSouth1,
+    cur_pulsegainWest1,cur_vsolar,cur_vpasolar  : string;
+    cur_disable_guiding, cur_tracksolar: boolean;
     procedure ShowMinMove;
     procedure SetLed (cl : tcolor);
     procedure SetRA_hysteresis(value:integer);
@@ -328,6 +331,9 @@ begin
  cur_Exposure:=Exposure.value;
  cur_RAgain:=RAgain;
  cur_RA_hysteresis:=RA_hysteresis;
+ cur_tracksolar:=SolarTracking;
+ cur_vsolar:=v_solar1.Text;
+ cur_vpasolar:=vpa_solar1.Text;
 end;
 
 destructor  Tf_internalguider.Destroy;
@@ -623,6 +629,8 @@ procedure Tf_internalguider.CheckBoxTrackSolar1Change(Sender: TObject);
 begin
   v_solar1.Enabled:=CheckBoxTrackSolar1.checked;
   vpa_solar1.enabled:=CheckBoxTrackSolar1.checked;
+  if (cur_tracksolar<>SolarTracking) and Assigned(FonParameterChange) then FonParameterChange('SolarTracking = '+BoolToStr(SolarTracking,'true','false'));
+  cur_tracksolar:=SolarTracking;
 end;
 
 procedure Tf_internalguider.ButtonSetTempClick(Sender: TObject);
@@ -739,6 +747,18 @@ begin
  ShowMinMove;
  if (cur_shortestPulse<>shortestPulse) and Assigned(FonParameterChange) then FonParameterChange('Shortest guide pulse setting = '+IntToStr(shortestPulse));
  cur_shortestPulse:=shortestPulse;
+end;
+
+procedure Tf_internalguider.vpa_solar1Change(Sender: TObject);
+begin
+ if (cur_vpasolar<>vpa_solar1.Text) and Assigned(FonParameterChange) then FonParameterChange('Solar tracking PA = '+vpa_solar1.Text);
+ cur_vpasolar:=vpa_solar1.Text;
+end;
+
+procedure Tf_internalguider.v_solar1Change(Sender: TObject);
+begin
+ if (cur_vsolar<>v_solar1.Text) and Assigned(FonParameterChange) then FonParameterChange('Solar tracking rate = '+v_solar1.Text);
+ cur_vsolar:=v_solar1.Text;
 end;
 
 procedure Tf_internalguider.ExposureChange(Sender: TObject);
