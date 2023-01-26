@@ -51,7 +51,6 @@ type
     ButtonStop: TButton;
     ButtonStop1: TButton;
     CheckBoxTrackSolar1: TCheckBox;
-    vpa_solar1: TEdit;
     Cooler: TCheckBox;
     CheckBoxReverseDec: TCheckBox;
     disable_guiding1: TCheckBox;
@@ -111,7 +110,6 @@ type
     pulsegainNorth1: TEdit;
     pulsegainSouth1: TEdit;
     pulsegainWest1: TEdit;
-    v_solar1: TEdit;
     ra_hysteresis1: TSpinEdit;
     dec_hysteresis1: TSpinEdit;
     Label1: TLabel;
@@ -131,6 +129,8 @@ type
     Gamma: TTrackBar;
     Luminosity: TTrackBar;
     unitarcseconds1: TCheckBox;
+    vpa_solar1: TFloatSpinEdit;
+    v_solar1: TFloatSpinEdit;
     xy_trend1: TImage;
     xy_Panel1: TImage;
     Label3: TLabel;
@@ -185,10 +185,10 @@ type
     FonStart, FonStop, FonCalibrate, FonCalibrateMeridianFlip, FonLoop, FonRedraw: TNotifyEvent;
     FonSetTemperature,FonSetCooler, FonCaptureDark, FonLoadDark, FonClearDark,FonDarkInfo: TNotifyEvent;
     FonParameterChange: TNotifyStr;
-    cur_minHFD,cur_minSNR,cur_Exposure : double;
+    cur_minHFD,cur_minSNR,cur_Exposure,cur_vsolar,cur_vpasolar : double;
     cur_RAgain,cur_RA_hysteresis,cur_DECgain,cur_DEC_hysteresis,cur_LongestPulse,cur_shortestPulse: integer;
     cur_pa1,cur_pier_side1,cur_pixelsize1,cur_pulsegainEast1,cur_pulsegainNorth1,cur_pulsegainSouth1,
-    cur_pulsegainWest1,cur_vsolar,cur_vpasolar  : string;
+    cur_pulsegainWest1: string;
     cur_disable_guiding, cur_tracksolar: boolean;
     procedure ShowMinMove;
     procedure SetLed (cl : tcolor);
@@ -332,8 +332,8 @@ begin
  cur_RAgain:=RAgain;
  cur_RA_hysteresis:=RA_hysteresis;
  cur_tracksolar:=SolarTracking;
- cur_vsolar:=v_solar1.Text;
- cur_vpasolar:=vpa_solar1.Text;
+ cur_vsolar:=v_solar1.Value;
+ cur_vpasolar:=vpa_solar1.Value;
 end;
 
 destructor  Tf_internalguider.Destroy;
@@ -572,22 +572,22 @@ end;
 
 procedure Tf_internalguider.SetV_solar(value:double);
 begin
-  v_solar1.text:=floattostrF(value,FFgeneral,4,4);
+  v_solar1.Value:=value;
 end;
 
 function Tf_internalguider.GetV_solar:double;
 begin
-  result:=strtofloat(v_solar1.text);
+  result:=v_solar1.Value;
 end;
 
 procedure Tf_internalguider.SetVPA_solar(value:double);
 begin
-  vpa_solar1.text:=floattostrF(value,FFgeneral,4,4);
+  vpa_solar1.Value:=value;
 end;
 
 function Tf_internalguider.GetVPa_solar:double;
 begin
-  result:=strtofloat(vpa_solar1.text);
+  result:=vpa_solar1.Value;
 end;
 
 
@@ -751,14 +751,14 @@ end;
 
 procedure Tf_internalguider.vpa_solar1Change(Sender: TObject);
 begin
- if (cur_vpasolar<>vpa_solar1.Text) and Assigned(FonParameterChange) then FonParameterChange('Solar tracking PA = '+vpa_solar1.Text);
- cur_vpasolar:=vpa_solar1.Text;
+ if (cur_vpasolar<>vpa_solar1.Value) and Assigned(FonParameterChange) then FonParameterChange('Solar tracking PA = '+vpa_solar1.Text);
+ cur_vpasolar:=vpa_solar1.Value;
 end;
 
 procedure Tf_internalguider.v_solar1Change(Sender: TObject);
 begin
- if (cur_vsolar<>v_solar1.Text) and Assigned(FonParameterChange) then FonParameterChange('Solar tracking rate = '+v_solar1.Text);
- cur_vsolar:=v_solar1.Text;
+ if (cur_vsolar<>v_solar1.Value) and Assigned(FonParameterChange) then FonParameterChange('Solar tracking rate = '+v_solar1.Text);
+ cur_vsolar:=v_solar1.Value;
 end;
 
 procedure Tf_internalguider.ExposureChange(Sender: TObject);
