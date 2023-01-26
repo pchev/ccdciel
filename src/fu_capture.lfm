@@ -1,11 +1,11 @@
 object f_capture: Tf_capture
   Left = 0
-  Height = 383
+  Height = 421
   Top = 0
   Width = 194
   AutoSize = True
   ChildSizing.ControlsPerLine = 1
-  ClientHeight = 383
+  ClientHeight = 421
   ClientWidth = 194
   OnEndDrag = FrameEndDrag
   OnResize = FrameResize
@@ -15,14 +15,14 @@ object f_capture: Tf_capture
   DesignTop = -3
   object Panel1: TPanel
     Left = 0
-    Height = 363
+    Height = 401
     Top = 20
     Width = 194
     Align = alClient
     AutoSize = True
     ChildSizing.Layout = cclTopToBottomThenLeftToRight
     ChildSizing.ControlsPerLine = 99
-    ClientHeight = 363
+    ClientHeight = 401
     ClientWidth = 194
     ParentFont = False
     TabOrder = 0
@@ -30,11 +30,11 @@ object f_capture: Tf_capture
       Left = 0
       Height = 29
       Top = 0
-      Width = 191
+      Width = 255
       BevelOuter = bvNone
       Caption = ' '
       ClientHeight = 29
-      ClientWidth = 191
+      ClientWidth = 255
       ParentFont = False
       TabOrder = 0
       object ExpTime: TComboBox
@@ -88,11 +88,11 @@ object f_capture: Tf_capture
       Left = 0
       Height = 29
       Top = 29
-      Width = 191
+      Width = 255
       BevelOuter = bvNone
       Caption = ' '
       ClientHeight = 29
-      ClientWidth = 191
+      ClientWidth = 255
       ParentFont = False
       TabOrder = 10
       object Label7: TLabel
@@ -124,10 +124,10 @@ object f_capture: Tf_capture
       Left = 0
       Height = 68
       Top = 58
-      Width = 191
+      Width = 255
       BevelOuter = bvNone
       ClientHeight = 68
-      ClientWidth = 191
+      ClientWidth = 255
       ParentFont = False
       TabOrder = 8
       Visible = False
@@ -199,11 +199,11 @@ object f_capture: Tf_capture
       Left = 0
       Height = 29
       Top = 126
-      Width = 191
+      Width = 255
       BevelOuter = bvNone
       Caption = ' '
       ClientHeight = 29
-      ClientWidth = 191
+      ClientWidth = 255
       ParentFont = False
       TabOrder = 1
       object Binning: TComboBox
@@ -238,10 +238,10 @@ object f_capture: Tf_capture
       Left = 0
       Height = 28
       Top = 155
-      Width = 191
+      Width = 255
       BevelOuter = bvNone
       ClientHeight = 28
-      ClientWidth = 191
+      ClientWidth = 255
       ParentFont = False
       TabOrder = 9
       Visible = False
@@ -271,10 +271,10 @@ object f_capture: Tf_capture
       Left = 0
       Height = 28
       Top = 183
-      Width = 191
+      Width = 255
       BevelOuter = bvNone
       ClientHeight = 28
-      ClientWidth = 191
+      ClientWidth = 255
       ParentFont = False
       TabOrder = 2
       object Fname: TEdit
@@ -302,11 +302,11 @@ object f_capture: Tf_capture
       Left = 0
       Height = 28
       Top = 211
-      Width = 191
+      Width = 255
       BevelOuter = bvNone
       Caption = ' '
       ClientHeight = 28
-      ClientWidth = 191
+      ClientWidth = 255
       ParentFont = False
       TabOrder = 3
       object Label4: TLabel
@@ -337,10 +337,10 @@ object f_capture: Tf_capture
       Left = 0
       Height = 29
       Top = 239
-      Width = 191
+      Width = 255
       BevelOuter = bvNone
       ClientHeight = 29
-      ClientWidth = 191
+      ClientWidth = 255
       ParentFont = False
       TabOrder = 4
       object Label5: TLabel
@@ -379,10 +379,10 @@ object f_capture: Tf_capture
       Left = 0
       Height = 28
       Top = 268
-      Width = 191
+      Width = 255
       BevelOuter = bvNone
       ClientHeight = 28
-      ClientWidth = 191
+      ClientWidth = 255
       ParentFont = False
       TabOrder = 5
       object CheckBoxDither: TCheckBox
@@ -412,12 +412,12 @@ object f_capture: Tf_capture
     end
     object Panel8: TPanel
       Left = 0
-      Height = 28
+      Height = 53
       Top = 296
-      Width = 191
+      Width = 255
       BevelOuter = bvNone
-      ClientHeight = 28
-      ClientWidth = 191
+      ClientHeight = 53
+      ClientWidth = 255
       ParentFont = False
       TabOrder = 6
       object CheckBoxFocus: TCheckBox
@@ -444,15 +444,23 @@ object f_capture: Tf_capture
         TabOrder = 1
         Value = 1
       end
+      object CheckBoxFocusTemp: TCheckBox
+        Left = 4
+        Height = 21
+        Top = 32
+        Width = 251
+        Caption = 'Autofocus after temperature change'
+        TabOrder = 2
+      end
     end
     object Panel9: TPanel
       Left = 0
       Height = 26
-      Top = 324
-      Width = 191
+      Top = 349
+      Width = 255
       BevelOuter = bvNone
       ClientHeight = 26
-      ClientWidth = 191
+      ClientWidth = 255
       ParentFont = False
       TabOrder = 7
       object BtnStart: TButton

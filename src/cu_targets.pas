@@ -42,7 +42,8 @@ type
               FlatGain,FlatOffset: integer;
               FlatFilters: shortstring;
               FlatFstop: shortstring;
-              preview,astrometrypointing,updatecoord,inplaceautofocus,autoguiding,solartracking: boolean;
+              preview,astrometrypointing,updatecoord,inplaceautofocus,autofocustemp,
+              autoguiding,solartracking: boolean;
               delay, previewexposure: double;
               plan :TComponent;
               constructor Create;
@@ -839,6 +840,7 @@ begin
        t.updatecoord:=FSequenceFile.Items.GetValue('/Targets/Target'+inttostr(i)+'/UpdateCoord',false);
        t.solartracking:=FSequenceFile.Items.GetValue('/Targets/Target'+inttostr(i)+'/SolarTracking',false);
        t.inplaceautofocus:=FSequenceFile.Items.GetValue('/Targets/Target'+inttostr(i)+'/InplaceAutofocus',AutofocusInPlace);
+       t.autofocustemp:=FSequenceFile.Items.GetValue('/Targets/Target'+inttostr(i)+'/AutofocusTemp',(AutofocusTempChange>0));
        t.previewexposure:=FSequenceFile.Items.GetValue('/Targets/Target'+inttostr(i)+'/PreviewExposure',1.0);
        t.preview:=FSequenceFile.Items.GetValue('/Targets/Target'+inttostr(i)+'/Preview',false);
        t.repeatcount:=trunc(FSequenceFile.Items.GetValue('/Targets/Target'+inttostr(i)+'/RepeatCount',1));
@@ -993,6 +995,7 @@ try
       FSequenceFile.Items.SetValue('/Targets/Target'+inttostr(i)+'/UpdateCoord',t.updatecoord);
       FSequenceFile.Items.SetValue('/Targets/Target'+inttostr(i)+'/SolarTracking',t.solartracking);
       FSequenceFile.Items.SetValue('/Targets/Target'+inttostr(i)+'/InplaceAutofocus',t.inplaceautofocus);
+      FSequenceFile.Items.SetValue('/Targets/Target'+inttostr(i)+'/AutofocusTemp',t.autofocustemp);
       FSequenceFile.Items.SetValue('/Targets/Target'+inttostr(i)+'/PreviewExposure',t.previewexposure);
       FSequenceFile.Items.SetValue('/Targets/Target'+inttostr(i)+'/Preview',t.preview);
       FSequenceFile.Items.SetValue('/Targets/Target'+inttostr(i)+'/RepeatCount',t.repeatcount);
@@ -2039,6 +2042,8 @@ begin
         if (t.pa<>NullCoord)and(Frotator.Status=devConnected) then begin
           Frotator.Angle:=t.pa;
         end;
+        // set autofocus on temperature change
+        Fcapture.CheckBoxFocus.Checked:=t.autofocustemp;
         // Set internal guider solar object motion
         if (Autoguider<>nil)and(Autoguider.AutoguiderType=agINTERNAL) then begin
            if (t.solartracking)and(t.solarV<>NullCoord)and(t.solarPA<>NullCoord) then begin
@@ -2678,6 +2683,7 @@ begin
   updatecoord:=false;
   solartracking:=false;
   inplaceautofocus:=AutofocusInPlace;
+  autofocustemp:=(AutofocusTempChange>0);
   autoguiding:=false;
   repeatcount:=1;
   repeatdone:=0;
@@ -2722,6 +2728,7 @@ begin
   repeatcount:=Source.repeatcount;
   repeatdone:=Source.repeatdone;
   inplaceautofocus:=Source.inplaceautofocus;
+  autofocustemp:=Source.autofocustemp;
   autoguiding:=Source.autoguiding;
   preview:=Source.preview;
   delay:=Source.delay;

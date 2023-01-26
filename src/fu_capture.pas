@@ -35,6 +35,7 @@ type
   Tf_capture = class(TFrame)
     Binning: TComboBox;
     BtnStart: TButton;
+    CheckBoxFocusTemp: TCheckBox;
     CheckBoxDither: TCheckBox;
     CheckBoxFocus: TCheckBox;
     StackNum: TSpinEdit;
@@ -167,6 +168,7 @@ begin
   FrameType.Hint:=rsTheTypeOfFra;
   DitherCount.Hint:=rsTheNumberOfI2;
   FocusCount.Hint:=rsTheNumberOfI3;
+  CheckBoxFocusTemp.Hint:=rsSetTheTemper;
   BtnStart.Hint:=rsStartTheCapt
 end;
 

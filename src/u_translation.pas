@@ -1474,6 +1474,7 @@ resourcestring
   rsApparentMoti = 'Apparent motion';
   rsApparentMoti2 = 'Apparent motion PA';
   rsAdditionalOp = 'Additional options for';
+  rsAutofocusAft2 = 'Autofocus after temperature change';
 
 implementation
 

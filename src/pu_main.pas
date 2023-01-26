@@ -2409,6 +2409,7 @@ begin
   f_capture.StackNum.Value:=config.GetValue('/Capture/StackNum',1);
   f_capture.Fname.Text:=config.GetValue('/Capture/FileName','');
   f_capture.SeqNum.Value:=config.GetValue('/Capture/Count',1);
+  f_capture.CheckBoxFocusTemp.Checked:=(config.GetValue('/StarAnalysis/AutofocusTemp',0.0)>0);
 
   FrameX:=config.GetValue('/CCDframe/FrameX',0);
   FrameY:=config.GetValue('/CCDframe/FrameY',0);
@@ -9811,7 +9812,7 @@ if (AllDevicesConnected)and(not autofocusing)and(not learningvcurve)and(not f_vi
      or (f_capture.CheckBoxFocus.Checked and (f_capture.FocusNum>=f_capture.FocusCount.Value)) // every n frame
      or ((AutofocusPeriod>0) and (AutoFocusLastTime<>NullCoord) and                            // every n minutes
         ((minperday*(now-AutoFocusLastTime))>=AutofocusPeriod))
-     or (focuser.hasTemperature and (AutofocusTempChange<>0.0) and                             // temperature change
+     or (focuser.hasTemperature and f_capture.CheckBoxFocusTemp.Checked and(AutofocusTempChange<>0.0) and // temperature change
         (AutofocusLastTemp<>NullCoord) and (f_starprofile.AutofocusDone) and
         (abs(AutofocusLastTemp-FocuserTemp)>=AutofocusTempChange))
         )
@@ -9843,7 +9844,7 @@ if (AllDevicesConnected)and(not autofocusing)and(not learningvcurve)and(not f_vi
    end;
   end
   else
-   if (ftype=LIGHT) and (f_capture.CheckBoxFocus.Checked or (AutofocusPeriod>0)or(AutofocusTempChange<>0.0)) then begin
+   if (ftype=LIGHT) and (f_capture.CheckBoxFocus.Checked or (AutofocusPeriod>0)or(AutofocusTempChange>0.0)) then begin
       // Show message when next autofocus is due
       txt:='';
       if f_capture.CheckBoxFocus.Checked then begin
@@ -9856,7 +9857,7 @@ if (AllDevicesConnected)and(not autofocusing)and(not learningvcurve)and(not f_vi
         buf:=blank+inttostr(i)+blank+rsMinutes;
         if txt='' then txt:=buf else txt:=txt+', '+rsOr+blank+buf;
       end;
-      if focuser.hasTemperature and (AutofocusTempChange<>0.0)and(AutofocusLastTemp<>NullCoord)and(f_starprofile.AutofocusDone) then begin
+      if focuser.hasTemperature and (AutofocusTempChange>0.0)and f_capture.CheckBoxFocusTemp.Checked and(AutofocusLastTemp<>NullCoord)and(f_starprofile.AutofocusDone) then begin
         x:=AutofocusTempChange-(abs(AutofocusLastTemp-FocuserTemp));
         buf:=blank+FormatFloat(f1,x)+blank+'C';
         if txt='' then txt:=buf else txt:=txt+', '+rsOr+blank+buf;

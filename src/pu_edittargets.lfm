@@ -1,11 +1,11 @@
 object f_EditTargets: Tf_EditTargets
   Left = 0
-  Height = 588
+  Height = 677
   Top = 87
   Width = 990
   ActiveControl = BtnSave
   Caption = 'Edit target list'
-  ClientHeight = 588
+  ClientHeight = 677
   ClientWidth = 990
   Constraints.MinHeight = 586
   Constraints.MinWidth = 990
@@ -16,13 +16,13 @@ object f_EditTargets: Tf_EditTargets
   object PanelTarget: TPanel
     AnchorSideBottom.Control = Splitter1
     Left = 0
-    Height = 344
+    Height = 396
     Top = 0
     Width = 990
     Align = alTop
     Anchors = [akLeft, akRight, akBottom]
     BevelOuter = bvNone
-    ClientHeight = 344
+    ClientHeight = 396
     ClientWidth = 990
     Constraints.MinHeight = 290
     ParentFont = False
@@ -328,12 +328,12 @@ object f_EditTargets: Tf_EditTargets
     end
     object Panel4: TPanel
       Left = 0
-      Height = 247
+      Height = 299
       Top = 97
       Width = 990
       Align = alClient
       BevelOuter = bvNone
-      ClientHeight = 247
+      ClientHeight = 299
       ClientWidth = 990
       ParentFont = False
       TabOrder = 1
@@ -507,7 +507,7 @@ object f_EditTargets: Tf_EditTargets
       end
       object TargetList: TStringGrid
         Left = 0
-        Height = 199
+        Height = 251
         Hint = 'The list of target to process in sequence.'
         Top = 48
         Width = 600
@@ -626,12 +626,12 @@ object f_EditTargets: Tf_EditTargets
       end
       object PanelTargetDetail: TPanel
         Left = 600
-        Height = 199
+        Height = 251
         Top = 48
         Width = 390
         Align = alRight
         BevelOuter = bvNone
-        ClientHeight = 199
+        ClientHeight = 251
         ClientWidth = 390
         TabOrder = 2
         object Panel3: TPanel
@@ -654,13 +654,13 @@ object f_EditTargets: Tf_EditTargets
         end
         object ScrollBox2: TScrollBox
           Left = 0
-          Height = 173
+          Height = 225
           Top = 26
           Width = 390
           HorzScrollBar.Page = 338
-          VertScrollBar.Page = 155
+          VertScrollBar.Page = 180
           Align = alClient
-          ClientHeight = 171
+          ClientHeight = 223
           ClientWidth = 388
           Color = clDefault
           ParentColor = False
@@ -704,21 +704,21 @@ object f_EditTargets: Tf_EditTargets
           object cbUpdCoord: TCheckBox
             Left = 16
             Height = 21
-            Top = 104
+            Top = 129
             Width = 233
             Caption = 'Update RA+Dec from Planetarium'
             OnChange = cbChange
-            TabOrder = 4
+            TabOrder = 5
           end
           object PanelSolarTracking: TPanel
             Left = 16
             Height = 26
-            Top = 129
+            Top = 154
             Width = 322
             BevelOuter = bvNone
             ClientHeight = 26
             ClientWidth = 322
-            TabOrder = 5
+            TabOrder = 6
             object cbSolarTracking: TCheckBox
               Left = 0
               Height = 21
@@ -728,6 +728,14 @@ object f_EditTargets: Tf_EditTargets
               TabOrder = 0
             end
           end
+          object cbAutofocusTemp: TCheckBox
+            Left = 16
+            Height = 21
+            Top = 104
+            Width = 251
+            Caption = 'Autofocus after temperature change'
+            TabOrder = 4
+          end
         end
       end
     end
@@ -736,20 +744,20 @@ object f_EditTargets: Tf_EditTargets
     AnchorSideTop.Control = Splitter1
     AnchorSideTop.Side = asrBottom
     Left = 0
-    Height = 210
-    Top = 348
+    Height = 247
+    Top = 400
     Width = 990
     Align = alBottom
     Anchors = [akTop, akLeft, akRight]
     BevelOuter = bvNone
-    ClientHeight = 210
+    ClientHeight = 247
     ClientWidth = 990
     Constraints.MinHeight = 160
     ParentFont = False
     TabOrder = 1
     object PageControlPlan: TPageControl
       Left = 0
-      Height = 210
+      Height = 247
       Top = 0
       Width = 990
       ActivePage = PlanObject
@@ -760,23 +768,23 @@ object f_EditTargets: Tf_EditTargets
       TabOrder = 0
       object PlanObject: TTabSheet
         Caption = 'PlanObject'
-        ClientHeight = 206
+        ClientHeight = 243
         ClientWidth = 980
         ParentFont = False
         object Panel9: TPanel
           Left = 0
-          Height = 206
+          Height = 243
           Top = 0
           Width = 980
           Align = alClient
           BevelOuter = bvNone
-          ClientHeight = 206
+          ClientHeight = 243
           ClientWidth = 980
           ParentFont = False
           TabOrder = 0
           object StepList: TStringGrid
             Left = 0
-            Height = 146
+            Height = 183
             Top = 60
             Width = 980
             Align = alClient
@@ -1008,17 +1016,17 @@ object f_EditTargets: Tf_EditTargets
       end
       object PlanScript: TTabSheet
         Caption = 'PlanScript'
-        ClientHeight = 206
+        ClientHeight = 243
         ClientWidth = 980
         ParentFont = False
         object Panel14: TPanel
           Left = 0
-          Height = 206
+          Height = 243
           Top = 0
           Width = 980
           Align = alClient
           BevelOuter = bvNone
-          ClientHeight = 206
+          ClientHeight = 243
           ClientWidth = 980
           ParentFont = False
           TabOrder = 0
@@ -1100,7 +1108,7 @@ object f_EditTargets: Tf_EditTargets
       end
       object PlanFlat: TTabSheet
         Caption = 'PlanFlat'
-        ClientHeight = 206
+        ClientHeight = 243
         ClientWidth = 980
         ParentFont = False
         object Panel1: TPanel
@@ -1391,7 +1399,7 @@ object f_EditTargets: Tf_EditTargets
     AnchorSideBottom.Side = asrBottom
     Left = 0
     Height = 30
-    Top = 558
+    Top = 647
     Width = 990
     Align = alBottom
     ClientHeight = 30
@@ -1439,7 +1447,7 @@ object f_EditTargets: Tf_EditTargets
     Cursor = crVSplit
     Left = 0
     Height = 4
-    Top = 344
+    Top = 396
     Width = 990
     Align = alNone
     Anchors = [akLeft, akRight]

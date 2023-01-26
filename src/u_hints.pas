@@ -171,6 +171,7 @@ resourcestring
   rsHistogramFul = 'Histogram full range or clipped to available data';
   rsSaveIndividu = 'Save individual images before stacking';
   rsFlatProcessi = 'Flat processing also require a Dark';
+  rsSetTheTemper = 'Set the temperature threshold in the Preferences';
 
 implementation
 

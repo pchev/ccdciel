@@ -801,7 +801,7 @@ object f_option: Tf_option
           end
           object CaptureDir: TEdit
             Left = 168
-            Height = 27
+            Height = 28
             Top = 18
             Width = 266
             Constraints.MaxHeight = 28
@@ -6816,6 +6816,7 @@ object f_option: Tf_option
               Constraints.MaxHeight = 28
               DecimalPlaces = 1
               Increment = 0.1
+              MaxValue = 100
               ParentFont = False
               TabOrder = 2
             end
