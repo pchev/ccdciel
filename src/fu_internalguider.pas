@@ -491,12 +491,12 @@ end;
 
 procedure Tf_internalguider.SetMinHFD(value:double);
 begin
-  MinHFD1.text:=floattostrF(value,FFgeneral,0,2);
+  MinHFD1.value:=value;
 end;
 
 function Tf_internalguider.GetMinHFD:double;
 begin
-  result:=strtofloat(MinHFD1.text);
+  result:=MinHFD1.value;
 end;
 
 
