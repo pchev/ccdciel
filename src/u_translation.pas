@@ -1473,6 +1473,7 @@ resourcestring
   rsActivateSola = 'Activate solar object tracking.';
   rsApparentMoti = 'Apparent motion';
   rsApparentMoti2 = 'Apparent motion PA';
+  rsAdditionalOp = 'Additional options for';
 
 implementation
 

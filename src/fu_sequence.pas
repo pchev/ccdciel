@@ -559,6 +559,7 @@ begin
    f_EditTargets.LoadPlanList;
    f_EditTargets.LoadScriptList;
    f_EditTargets.Filename:=et.SequenceFile.Filename;
+   f_EditTargets.SolarTracking:=(Autoguider.AutoguiderType=agINTERNAL);
    if live then begin
      f_EditTargets.BtnSaveAs.Visible:=false;
      f_EditTargets.MenuImportMosaic.Visible:=false;

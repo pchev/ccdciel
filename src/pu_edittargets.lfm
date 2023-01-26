@@ -510,17 +510,17 @@ object f_EditTargets: Tf_EditTargets
         Height = 199
         Hint = 'The list of target to process in sequence.'
         Top = 48
-        Width = 990
+        Width = 600
         Align = alClient
         AutoFillColumns = True
-        ColCount = 14
+        ColCount = 9
         Columns = <        
           item
             MinSize = 101
             MaxSize = 202
             Title.MultiLine = True
             Title.Caption = 'Object name'
-            Width = 88
+            Width = 77
           end        
           item
             MinSize = 30
@@ -528,7 +528,7 @@ object f_EditTargets: Tf_EditTargets
             Title.ImageIndex = 0
             Title.MultiLine = True
             Title.Caption = 'Template'
-            Width = 88
+            Width = 77
           end        
           item
             MinSize = 86
@@ -585,24 +585,6 @@ object f_EditTargets: Tf_EditTargets
             Width = 61
           end        
           item
-            ButtonStyle = cbsCheckboxColumn
-            MaxSize = 202
-            SizePriority = 0
-            Title.ImageIndex = 0
-            Title.MultiLine = True
-            Title.Caption = 'Dark night'
-            Width = 51
-          end        
-          item
-            ButtonStyle = cbsCheckboxColumn
-            MaxSize = 202
-            SizePriority = 0
-            Title.ImageIndex = 0
-            Title.MultiLine = True
-            Title.Caption = 'Skip'
-            Width = 51
-          end        
-          item
             MinSize = 56
             MaxSize = 56
             SizePriority = 0
@@ -610,30 +592,6 @@ object f_EditTargets: Tf_EditTargets
             Title.MultiLine = True
             Title.Caption = 'Repeat'
             Width = 67
-          end        
-          item
-            ButtonStyle = cbsCheckboxColumn
-            MaxSize = 202
-            Title.ImageIndex = 0
-            Title.MultiLine = True
-            Title.Caption = 'Use astrometry to refine the position'
-            Width = 88
-          end        
-          item
-            ButtonStyle = cbsCheckboxColumn
-            MaxSize = 202
-            Title.ImageIndex = 0
-            Title.MultiLine = True
-            Title.Caption = 'Stay in place for autofocus'
-            Width = 88
-          end        
-          item
-            ButtonStyle = cbsCheckboxColumn
-            MaxSize = 202
-            Title.ImageIndex = 0
-            Title.MultiLine = True
-            Title.Caption = 'Update RA+Dec from Planetarium'
-            Width = 91
           end>
         DefaultColWidth = 30
         HeaderHotZones = [gzFixedCols, gzFixedCells]
@@ -644,7 +602,6 @@ object f_EditTargets: Tf_EditTargets
         ScrollBars = ssAutoVertical
         TabOrder = 0
         TitleImageList = ImageListDay
-        OnCheckboxToggled = TargetListCheckboxToggled
         OnColRowMoved = TargetListColRowMoved
         OnCompareCells = TargetListCompareCells
         OnDrawCell = TargetListDrawCell
@@ -655,23 +612,123 @@ object f_EditTargets: Tf_EditTargets
         OnMouseDown = TargetListMouseDown
         OnSelectEditor = TargetListSelectEditor
         OnSelection = TargetListSelection
-        OnValidateEntry = TargetListValidateEntry
         ColWidths = (
           30
-          88
-          88
+          77
+          77
           86
           88
           40
           71
           61
-          51
-          51
           67
-          88
-          88
-          91
         )
+      end
+      object PanelTargetDetail: TPanel
+        Left = 600
+        Height = 199
+        Top = 48
+        Width = 390
+        Align = alRight
+        BevelOuter = bvNone
+        ClientHeight = 199
+        ClientWidth = 390
+        TabOrder = 2
+        object Panel3: TPanel
+          Left = 0
+          Height = 26
+          Top = 0
+          Width = 390
+          Align = alTop
+          ClientHeight = 26
+          ClientWidth = 390
+          TabOrder = 0
+          object lblName: TLabel
+            Left = 8
+            Height = 19
+            Top = 3
+            Width = 51
+            Caption = 'lblName'
+            ParentColor = False
+          end
+        end
+        object ScrollBox2: TScrollBox
+          Left = 0
+          Height = 173
+          Top = 26
+          Width = 390
+          HorzScrollBar.Page = 338
+          VertScrollBar.Page = 155
+          Align = alClient
+          ClientHeight = 171
+          ClientWidth = 388
+          Color = clDefault
+          ParentColor = False
+          TabOrder = 1
+          object cbDarkNight: TCheckBox
+            Left = 16
+            Height = 21
+            Top = 4
+            Width = 89
+            Caption = 'Dark night'
+            OnChange = cbChange
+            TabOrder = 0
+          end
+          object cbSkip: TCheckBox
+            Left = 16
+            Height = 21
+            Top = 29
+            Width = 86
+            Caption = 'Don''t wait'
+            OnChange = cbChange
+            TabOrder = 1
+          end
+          object cbAstrometry: TCheckBox
+            Left = 16
+            Height = 21
+            Top = 54
+            Width = 252
+            Caption = 'Use astrometry to refine the position'
+            OnChange = cbChange
+            TabOrder = 2
+          end
+          object cbInplace: TCheckBox
+            Left = 16
+            Height = 21
+            Top = 79
+            Width = 185
+            Caption = 'Stay in place for autofocus'
+            OnChange = cbChange
+            TabOrder = 3
+          end
+          object cbUpdCoord: TCheckBox
+            Left = 16
+            Height = 21
+            Top = 104
+            Width = 233
+            Caption = 'Update RA+Dec from Planetarium'
+            OnChange = cbChange
+            TabOrder = 4
+          end
+          object PanelSolarTracking: TPanel
+            Left = 16
+            Height = 26
+            Top = 129
+            Width = 322
+            BevelOuter = bvNone
+            ClientHeight = 26
+            ClientWidth = 322
+            TabOrder = 5
+            object cbSolarTracking: TCheckBox
+              Left = 0
+              Height = 21
+              Top = 0
+              Width = 200
+              Caption = 'Activate solar object tracking'
+              TabOrder = 0
+            end
+          end
+        end
       end
     end
   end

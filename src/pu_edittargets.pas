@@ -31,7 +31,7 @@ uses pu_planetariuminfo, u_global, u_utils, u_ccdconfig, pu_pascaleditor, u_anno
   LazUTF8, maskedit, Grids, ExtCtrls, ComCtrls, EditBtn, Spin, Buttons, Menus, CheckLst, Types;
 
 const
-  colseq=0; colname=1; colplan=2; colra=3; coldec=4; colpa=5; colstart=6; colend=7; coldark=8; colskip=9; colrepeat=10; colastrometry=11; colinplace=12; colupdcoord=13;
+  colseq=0; colname=1; colplan=2; colra=3; coldec=4; colpa=5; colstart=6; colend=7; colrepeat=8;
   pcolseq=0; pcoldesc=1; pcoltype=2; pcolexp=3; pcolstack=4; pcolbin=5; pcolfilter=6; pcolcount=7; pcolafstart=8; pcolafevery=9; pcoldither=10; pcolgain=11; pcoloffset=12; pcolfstop=13;
   titleadd=0; titledel=1;
   pageobject=0; pagescript=1; pageflat=2; pagenone=3;
@@ -53,12 +53,23 @@ type
     BtnRemoveStep: TButton;
     BtnSaveAs: TButton;
     BtnSaveTemplate: TButton;
+    cbDarkNight: TCheckBox;
+    cbSkip: TCheckBox;
+    cbAstrometry: TCheckBox;
+    cbInplace: TCheckBox;
+    cbUpdCoord: TCheckBox;
+    cbSolarTracking: TCheckBox;
     CheckBoxResetRepeat: TCheckBox;
     CheckBoxRestartStatus: TCheckBox;
+    lblName: TLabel;
+    Panel3: TPanel;
+    PanelSolarTracking: TPanel;
+    PanelTargetDetail: TPanel;
     ScriptParam: TEdit;
     Label5: TLabel;
     Label8: TLabel;
     MenuBlankRow: TMenuItem;
+    ScrollBox2: TScrollBox;
     StartOpt: TCheckListBox;
     TermOpt: TCheckListBox;
     FFstopbox: TComboBox;
@@ -187,6 +198,7 @@ type
     procedure BtnNewObjectClick(Sender: TObject);
     procedure BtnNewScriptClick(Sender: TObject);
     procedure Btn_coord_internalClick(Sender: TObject);
+    procedure cbChange(Sender: TObject);
     procedure CheckRestartStatus(Sender: TObject);
     procedure FormResize(Sender: TObject);
     procedure CheckBoxRepeatListChange(Sender: TObject);
@@ -216,8 +228,6 @@ type
     procedure StepChange(Sender: TObject);
     procedure StepListValidateEntry(sender: TObject; aCol, aRow: Integer; const OldValue: string; var NewValue: String);
     procedure TargetChange(Sender: TObject);
-    procedure TargetListCheckboxToggled(sender: TObject; aCol, aRow: Integer;
-      aState: TCheckboxState);
     procedure TargetListColRowMoved(Sender: TObject; IsColumn: Boolean; sIndex,
       tIndex: Integer);
     procedure TargetListCompareCells(Sender: TObject; ACol, ARow, BCol,
@@ -231,8 +241,6 @@ type
     procedure TargetListSelectEditor(Sender: TObject; aCol, aRow: Integer;
       var Editor: TWinControl);
     procedure TargetListSelection(Sender: TObject; aCol, aRow: Integer);
-    procedure TargetListValidateEntry(sender: TObject; aCol, aRow: Integer;
-      const OldValue: string; var NewValue: String);
     procedure TermOptItemClick(Sender: TObject; Index: integer);
   private
     { private declarations }
@@ -242,10 +250,10 @@ type
     LockStep, StepsModified, ObjectNameChange: boolean;
     Lockcb: boolean;
     SortDirection,planheight: integer;
-    FDoneWarning: boolean;
     FCoordWarning: boolean;
     FCoordWarningRow: integer;
     FFilename: string;
+    FSolarTracking: boolean;
     procedure SetPlanList(n: integer; pl:string);
     procedure SetScriptList(n: integer; sl, args:string);
     procedure ResetSequences;
@@ -283,6 +291,7 @@ type
     property TargetsRepeatCount: integer read FTargetsRepeatCount write FTargetsRepeatCount;
     property Astrometry: TAstrometry read FAstrometry write FAstrometry;
     property Filename: string read FFilename write FFilename;
+    property SolarTracking: boolean read FSolarTracking write FSolarTracking;
   end;
 
 var
@@ -377,11 +386,6 @@ begin
   TargetList.Columns.Items[colpa-1].Title.Caption := rsPA;
   TargetList.Columns.Items[colstart-1].Title.Caption := rsBegin;
   TargetList.Columns.Items[colend-1].Title.Caption := rsEnd;
-  TargetList.Columns.Items[coldark-1].Title.Caption := Format(rsDarkNight, [crlf]);
-  TargetList.Columns.Items[colskip-1].Title.Caption := Format(rsDonTSwait+'', [crlf]);
-  TargetList.Columns.Items[colastrometry-1].Title.Caption := Format(rsUseAstromet2+'', [crlf]);
-  TargetList.Columns.Items[colinplace-1].Title.Caption := Format(rsStayInPlace2+'', [crlf]);
-  TargetList.Columns.Items[colupdcoord-1].Title.Caption := Format(rsUpdateRADec2+'', [crlf]);
   TargetList.Columns.Items[colrepeat-1].Title.Caption := rsRepeat;
   TargetList.Columns.Items[colstart-1].PickList.Clear;
   TargetList.Columns.Items[colstart-1].PickList.Add('');
@@ -415,6 +419,17 @@ begin
   TargetList.Columns.Items[colend-1].PickList.Add(MeridianCrossing+'+2.0h');
   TargetList.Columns.Items[colend-1].PickList.Add(MeridianCrossing+'+3.0h');
   TargetList.Columns.Items[colend-1].PickList.Add(MeridianCrossing+'+4.0h');
+  cbDarkNight.Caption := Format(rsDarkNight, [blank]);
+  cbSkip.Caption := Format(rsDonTSwait+'', [blank]);
+  cbAstrometry.Caption := Format(rsUseAstromet2+'', [blank]);
+  cbInplace.Caption := Format(rsStayInPlace2+'', [blank]);
+  cbUpdCoord.Caption := Format(rsUpdateRADec2+'', [blank]);
+  cbSolarTracking.Caption:= rsActivateSola;
+  cbDarkNight.Hint:=rsWaitForFullD;
+  cbSkip.Hint:=Format(rsDonTWaitForT, [crlf]);
+  cbAstrometry.Hint:=rsUsePlateSolv;
+  cbInplace.Hint:=Format(rsStayAtTheTar, [crlf, crlf]);
+  cbUpdCoord.Hint:=Format(rsPriorToSlewi, [crlf, crlf]);
   CheckBoxRepeatList.Caption := rsRepeatTheWho;
   CheckBoxRestartStatus.Caption:=rsRecordRestar;
   CheckBoxResetRepeat.Caption:=rsClearRestart;
@@ -799,6 +814,7 @@ begin
     TargetList.Cells[colstart,n]:=rsRise;
     TargetList.Cells[colend,n]:=rsSet2;
     TargetList.Cells[colname,n]:=keyboard_text;
+    lblName.Caption:=rsAdditionalOp+' : Seq '+IntToStr(n)+', '+keyboard_text;
   end
   else
   begin
@@ -806,6 +822,7 @@ begin
     FCoordWarningRow:=n;
     chkobj:=keyboard_text+'##%%##';
     TargetList.Cells[colname,n]:=chkobj;
+    lblName.Caption:=rsAdditionalOp+' : Seq '+IntToStr(n)+', '+chkobj;
   end;
   if FCoordWarning then begin
     // search if warning row is moved
@@ -839,8 +856,8 @@ begin
   TargetList.Cells[colseq,i]:=IntToStr(i);
   TargetList.Cells[colname,i]:='';
   TargetList.Cells[colplan,i]:=t.planname;
-  if t.astrometrypointing then TargetList.Cells[colastrometry,i]:='1';
-  if t.inplaceautofocus then TargetList.Cells[colinplace,i]:='1';
+  if t.astrometrypointing then cbAstrometry.Checked:=true;
+  if t.inplaceautofocus then cbInplace.Checked:=true;
   TargetList.Objects[colseq,i]:=t;
   TargetList.Row:=i;
   ResetSequences;
@@ -865,8 +882,8 @@ begin
   TargetList.Cells[colseq,i]:=IntToStr(i);
   TargetList.Cells[colname,i]:='';
   TargetList.Cells[colplan,i]:=t.planname;
-  if t.astrometrypointing then TargetList.Cells[colastrometry,i]:='1';
-  if t.inplaceautofocus then TargetList.Cells[colinplace,i]:='1';
+  if t.astrometrypointing then cbAstrometry.Checked:=true;
+  if t.inplaceautofocus then cbInplace.Checked:=true;
   TargetList.Objects[colseq,i]:=t;
   TargetList.Row:=i;
   ResetSequences;
@@ -904,8 +921,8 @@ begin
   begin
     TargetList.Cells[colra,n]:=RAToStr(ra_data*12/pi);{Add position}
     TargetList.Cells[coldec,n]:=DEToStr(dec_data*180/pi);
-    TargetList.Cells[colastrometry,n]:=BoolToStr(astrometryResolver<>ResolverNone,'1','0');
     TargetList.Cells[colname,n]:=keyboard_text;
+    cbAstrometry.Checked:=(astrometryResolver<>ResolverNone);
   end
   else
   begin
@@ -917,6 +934,14 @@ begin
   ShowPlan;
   Application.ProcessMessages;
   FCoordWarning:=false;
+end;
+
+procedure Tf_EditTargets.cbChange(Sender: TObject);
+begin
+  if Sender=cbUpdCoord then begin
+    PanelSolarTracking.Visible:=TCheckBox(Sender).Checked and FSolarTracking;
+  end;
+  TargetChange(Sender);
 end;
 
 procedure Tf_EditTargets.BtnInsertPopup(Sender: TObject);
@@ -1305,7 +1330,7 @@ begin
     TargetList.Cells[coldec,n]:=f_planetariuminfo.De.Text;
     TargetList.Cells[colpa,n]:=f_planetariuminfo.PA.Text;
     if f_planetariuminfo.Obj.Text<>'' then TargetList.Cells[colname,n]:=trim(f_planetariuminfo.Obj.Text);
-    TargetList.Cells[colastrometry,n]:=BoolToStr(astrometryResolver<>ResolverNone,'1','0');
+    cbAstrometry.Checked:=(astrometryResolver<>ResolverNone);
     TargetChange(nil);
   end;
 end;
@@ -1336,7 +1361,7 @@ begin
   TargetList.Cells[coldec,n]:=f_planetariuminfo.De.Text;
   TargetList.Cells[colpa,n]:=trim(f_planetariuminfo.PA.Text);
   if f_planetariuminfo.Obj.Text<>'' then TargetList.Cells[colname,n]:=trim(f_planetariuminfo.Obj.Text);
-  TargetList.Cells[colastrometry,n]:=BoolToStr(astrometryResolver<>ResolverNone,'1','0');
+  cbAstrometry.Checked:=(astrometryResolver<>ResolverNone);
   TargetChange(nil);
 end;
 
@@ -1351,7 +1376,7 @@ try
   if FAstrometry.CurrentCoord(ra,de,eq,pa) then begin
     TargetList.Cells[colra,n]:=RAToStr(ra);
     TargetList.Cells[coldec,n]:=DEToStr(de);
-    TargetList.Cells[colastrometry,n]:=BoolToStr(astrometryResolver<>ResolverNone,'1','0');
+    cbAstrometry.Checked:=(astrometryResolver<>ResolverNone);
     TargetChange(nil);
    end;
 finally
@@ -1471,24 +1496,28 @@ begin
   TargetMsg.Caption:='';
   TargetList.Cells[colseq,n]:=IntToStr(n);
   TargetList.Cells[colname,n]:=t.objectname;
+  lblName.Caption:=rsAdditionalOp+' : Seq '+IntToStr(n)+', '+t.objectname;
   if t.objectname=ScriptTxt then begin
     TargetList.Cells[colra,n]:='';
     TargetList.Cells[coldec,n]:='';
     TargetList.Cells[colpa,n]:='';
     TargetList.Cells[colstart,n]:='';
     TargetList.Cells[colend,n]:='';
-    TargetList.Cells[coldark,n]:='';
-    TargetList.Cells[colskip,n]:='';
     TargetList.Cells[colrepeat,n]:='';
-    TargetList.Cells[colastrometry,n]:='';
-    TargetList.Cells[colinplace,n]:='';
-    TargetList.Cells[colupdcoord,n]:='';
+    cbDarkNight.Checked:=false;
+    cbSkip.Checked:=false;
+    cbAstrometry.Checked:=false;
+    cbInplace.Checked:=false;
+    cbUpdCoord.Checked:=false;
+    PanelSolarTracking.Visible:=false;
+    ScrollBox2.Visible:=false;
     PanelTools.visible:=false;
     PageControlPlan.ActivePageIndex:=pagescript;
     SetScriptList(n,t.planname,t.scriptargs);
   end
   else if t.objectname=SkyFlatTxt then begin
     PanelTools.visible:=false;
+    ScrollBox2.Visible:=false;
     PageControlPlan.ActivePageIndex:=pageflat;
     if t.planname=FlatTimeName[0]
        then FlatTime.ItemIndex:=0
@@ -1499,12 +1528,13 @@ begin
     TargetList.Cells[colpa,n]:='';
     TargetList.Cells[colstart,n]:='';
     TargetList.Cells[colend,n]:='';
-    TargetList.Cells[coldark,n]:='';
-    TargetList.Cells[colskip,n]:='';
     TargetList.Cells[colrepeat,n]:='';
-    TargetList.Cells[colastrometry,n]:='';
-    TargetList.Cells[colinplace,n]:='';
-    TargetList.Cells[colupdcoord,n]:='';
+    cbDarkNight.Checked:=false;
+    cbSkip.Checked:=false;
+    cbAstrometry.Checked:=false;
+    cbInplace.Checked:=false;
+    cbUpdCoord.Checked:=false;
+    PanelSolarTracking.Visible:=false;
     FlatCount.Value:=t.FlatCount;
     buf:=inttostr(t.FlatBinX)+'x'+inttostr(t.FlatBinY);
     j:=FlatBinning.Items.IndexOf(buf);
@@ -1531,6 +1561,7 @@ begin
   end
   else begin
     PanelTools.visible:=true;
+    ScrollBox2.Visible:=true;
     PageControlPlan.ActivePageIndex:=pageobject;
     SetPlanList(n,t.planname);
     if t.starttime>=0 then
@@ -1559,11 +1590,13 @@ begin
       if abs(t.endmeridian)>5 then t.endmeridian:=sgn(t.endmeridian)*5;
       TargetList.Cells[colend,n]:=MeridianCrossing+formatfloat(f1mc,t.endmeridian);
     end;
-    TargetList.Cells[coldark,n]:=BoolToStr(t.darknight,'1','0');
-    TargetList.Cells[colskip,n]:=BoolToStr(t.skip,'1','0');
-    TargetList.Cells[colastrometry,n]:=BoolToStr(t.astrometrypointing,'1','0');
-    TargetList.Cells[colinplace,n]:=BoolToStr(t.inplaceautofocus,'1','0');
-    TargetList.Cells[colupdcoord,n]:=BoolToStr(t.updatecoord,'1','0');
+    cbDarkNight.Checked:=t.darknight;
+    cbSkip.Checked:=t.skip;
+    cbAstrometry.Checked:=t.astrometrypointing;
+    cbInplace.Checked:=t.inplaceautofocus;
+    cbUpdCoord.Checked:=t.updatecoord;
+    PanelSolarTracking.Visible:=t.updatecoord and FSolarTracking;
+    cbSolarTracking.Checked:=t.solartracking and t.updatecoord and FSolarTracking;
     if t.pa=NullCoord then
       TargetList.Cells[colpa,n]:='-'
     else
@@ -1585,15 +1618,6 @@ var t: TTarget;
 begin
   t:=TTarget(TargetList.Objects[colseq,aRow]);
   SetTarget(aRow,t);
-end;
-
-procedure Tf_EditTargets.TargetListValidateEntry(sender: TObject; aCol,
-  aRow: Integer; const OldValue: string; var NewValue: String);
-begin
-  if (TargetList.Cells[colname,aRow]=SkyFlatTxt)or(TargetList.Cells[colname,aRow]=ScriptTxt) then begin
-     if aCol=coldark then NewValue:='';
-     if aCol=colskip then NewValue:='';
-  end;
 end;
 
 procedure Tf_EditTargets.SetStartTime(buf: string; var t:TTarget);
@@ -1712,17 +1736,17 @@ begin
       t.de:=NullCoord
     else
       t.de:=StrToDE(TargetList.Cells[coldec,n]);
-    t.darknight:=(TargetList.Cells[coldark,n]='1');
-    t.skip:=(TargetList.Cells[colskip,n]='1');
+    t.darknight:=cbDarkNight.Checked;
+    t.skip:=cbSkip.Checked;
     if TargetList.Cells[colpa,n]='-' then
       t.pa:=NullCoord
     else
       t.pa:=StrToFloatDef(TargetList.Cells[colpa,n],t.pa);
-    if (TargetList.Cells[colastrometry,n]='1') and ((t.ra=NullCoord)or(t.de=NullCoord)) then TargetList.Cells[colastrometry,n]:='0';
-    t.astrometrypointing:=(TargetList.Cells[colastrometry,n]='1');
-    t.inplaceautofocus:=(TargetList.Cells[colinplace,n]='1');
-    t.updatecoord:=(TargetList.Cells[colupdcoord,n]='1');
-
+    if (cbAstrometry.Checked)and ((t.ra=NullCoord)or(t.de=NullCoord)) then cbAstrometry.Checked:=false;
+    t.astrometrypointing:=cbAstrometry.Checked;
+    t.inplaceautofocus:=cbInplace.Checked;
+    t.updatecoord:=cbUpdCoord.Checked;
+    t.solartracking:=t.updatecoord and cbSolarTracking.Checked and FSolarTracking;
     t.repeatcount:=StrToIntDef(TargetList.Cells[colrepeat,n],1);
     if t.repeatcount<0 then t.repeatcount:=1;
     PanelRepeat.Visible:=t.repeatcount>1;
@@ -1744,33 +1768,6 @@ begin
   end;
 end;
 
-procedure Tf_EditTargets.TargetListCheckboxToggled(sender: TObject; aCol,
-  aRow: Integer; aState: TCheckboxState);
-begin
-if (TargetList.Cells[colname,aRow]=SkyFlatTxt)or(TargetList.Cells[colname,aRow]=ScriptTxt) then begin
-  TargetList.Cells[colskip,aRow]:='';
-  TargetList.Cells[coldark,aRow]:='';
-  TargetList.Cells[colastrometry,aRow]:='';
-  TargetList.Cells[colinplace,aRow]:='';
-  TargetList.Cells[colupdcoord,aRow]:='';
-end
-else begin
-  if aCol=coldark then begin
-    if TargetList.Cells[coldark,aRow]='1' then
-      TargetList.Cells[colskip,aRow]:='1';
-    if (TargetList.Cells[colstart,aRow]='')and(TargetList.Cells[colend,aRow]='')and(TargetList.Cells[coldark,aRow]='0') then
-       TargetList.Cells[colskip,aRow]:='0';
-  end;
-  if aCol=colskip then begin
-    if (TargetList.Cells[colstart,aRow]='')and(TargetList.Cells[colend,aRow]='')and(TargetList.Cells[coldark,aRow]='0') then
-       TargetList.Cells[colskip,aRow]:='0';
-    if TargetList.Cells[colskip,aRow]='0' then
-      TargetList.Cells[coldark,aRow]:='0';
-  end;
-  if sender<>nil then TargetChange(Sender);
-end;
-end;
-
 function Tf_EditTargets.CheckRiseSet(n: integer; showmsg:boolean=true): boolean;
 var ra,de,h: double;
     i:integer;
@@ -1783,8 +1780,8 @@ if (ra<>NullCoord)and(de<>NullCoord) then begin
   if (TargetList.Cells[colstart,n]='') then TargetList.Cells[colstart,n]:=rsRise;
   if (TargetList.Cells[colend,n]='') then TargetList.Cells[colend,n]:=rsSet2;
 end;
-if (TargetList.Cells[colstart,n]='')and(TargetList.Cells[colend,n]='')and(TargetList.Cells[coldark,n]='0') then
-   TargetList.Cells[colskip,n]:='0';
+if (TargetList.Cells[colstart,n]='')and(TargetList.Cells[colend,n]='')and(not cbDarkNight.Checked) then
+   cbSkip.Checked:=false;
 if TargetList.Cells[colstart,n]=rsRise then begin
   if (ra=NullCoord)or(de=NullCoord) then begin
      if showmsg then targetmsg.Caption:=(rsCannotComput+crlf+rsInvalidObjec);
@@ -2000,12 +1997,7 @@ else
     colpa         : HintText:=rsCameraPositi;
     colstart      : HintText:=rsStartTimeCap;
     colend        : HintText:=rsStopTimeCapt;
-    coldark       : HintText:=rsWaitForFullD;
-    colskip       : HintText:=Format(rsDonTWaitForT, [crlf]);
     colrepeat     : HintText:=Format(rsRepeatThePla, [crlf]);
-    colastrometry : HintText:=rsUsePlateSolv;
-    colinplace    : HintText:=Format(rsStayAtTheTar, [crlf, crlf]);
-    colupdcoord   : HintText:=Format(rsPriorToSlewi, [crlf, crlf]);
     else HintText:=rsTheListOfTar;
   end;
 end;
@@ -2067,12 +2059,9 @@ begin
                    if (Cells[colname,i]<>SkyFlatTxt)and(Cells[colname,i]<>ScriptTxt) then begin
                      Cells[Index,i]:=buf;
                      CheckRiseSet(i,false);
-                     TargetListCheckboxToggled(nil,Index,i,cbChecked);
                      t:=TTarget(Objects[colseq,i]);
                      SetStartTime(trim(Cells[colstart,i]),t);
                      SetEndTime(trim(Cells[colend,i]),t);
-                     t.darknight:=(Cells[coldark,i]='1');
-                     t.skip:=(Cells[colskip,i]='1');
                    end;
                end;
               end;
@@ -2083,54 +2072,13 @@ begin
                    if (Cells[colname,i]<>SkyFlatTxt)and(Cells[colname,i]<>ScriptTxt) then begin
                      Cells[Index,i]:=buf;
                      CheckRiseSet(i,false);
-                     TargetListCheckboxToggled(nil,Index,i,cbChecked);
                      t:=TTarget(Objects[colseq,i]);
                      SetStartTime(trim(Cells[colstart,i]),t);
                      SetEndTime(trim(Cells[colend,i]),t);
-                     t.darknight:=(Cells[coldark,i]='1');
-                     t.skip:=(Cells[colskip,i]='1');
                    end;
                end;
               end;
-    coldark:   begin
-                onoff:=Columns[Index-1].Title.ImageIndex=titleadd;
-                if onoff then Columns[Index-1].Title.ImageIndex:=titledel
-                         else Columns[Index-1].Title.ImageIndex:=titleadd;
-                for i:=1 to RowCount-1 do
-                   if (Cells[colname,i]<>SkyFlatTxt)and(Cells[colname,i]<>ScriptTxt) then begin
-                     if onoff then
-                        Cells[Index,i]:='1'
-                     else
-                        Cells[Index,i]:='0';
-                     CheckRiseSet(i,false);
-                     TargetListCheckboxToggled(nil,Index,i,cbChecked);
-                     t:=TTarget(Objects[colseq,i]);
-                     SetStartTime(trim(Cells[colstart,i]),t);
-                     SetEndTime(trim(Cells[colend,i]),t);
-                     t.darknight:=(Cells[coldark,i]='1');
-                     t.skip:=(Cells[colskip,i]='1');
-                   end;
-              end;
-    colskip:   begin
-                onoff:=Columns[Index-1].Title.ImageIndex=titleadd;
-                if onoff then Columns[Index-1].Title.ImageIndex:=titledel
-                         else Columns[Index-1].Title.ImageIndex:=titleadd;
-                for i:=1 to RowCount-1 do
-                   if (Cells[colname,i]<>SkyFlatTxt)and(Cells[colname,i]<>ScriptTxt) then  begin
-                     if onoff then
-                        Cells[Index,i]:='1'
-                     else
-                        Cells[Index,i]:='0';
-                     CheckRiseSet(i,false);
-                     TargetListCheckboxToggled(nil,Index,i,cbChecked);
-                     t:=TTarget(Objects[colseq,i]);
-                     SetStartTime(trim(Cells[colstart,i]),t);
-                     SetEndTime(trim(Cells[colend,i]),t);
-                     t.darknight:=(Cells[coldark,i]='1');
-                     t.skip:=(Cells[colskip,i]='1');
-                   end;
-              end;
-    colrepeat:begin
+     colrepeat:begin
                 buf:=FormEntry(self, Columns[Index-1].Title.Caption, '');
                 if buf<>'' then begin
                   for i:=1 to RowCount-1 do
@@ -2145,49 +2093,6 @@ begin
                      end;
                 end;
               end;
-    colastrometry:begin
-                onoff:=Columns[Index-1].Title.ImageIndex=titleadd;
-                if onoff then Columns[Index-1].Title.ImageIndex:=titledel
-                         else Columns[Index-1].Title.ImageIndex:=titleadd;
-                for i:=1 to RowCount-1 do
-                   if (Cells[colname,i]<>SkyFlatTxt)and(Cells[colname,i]<>ScriptTxt) then  begin
-                     if onoff then
-                        Cells[Index,i]:='1'
-                     else
-                        Cells[Index,i]:='0';
-                     t:=TTarget(Objects[colseq,i]);
-                     t.astrometrypointing:=(Cells[colastrometry,i]='1');
-                   end;
-              end;
-    colinplace:begin
-                onoff:=Columns[Index-1].Title.ImageIndex=titleadd;
-                if onoff then Columns[Index-1].Title.ImageIndex:=titledel
-                         else Columns[Index-1].Title.ImageIndex:=titleadd;
-                for i:=1 to RowCount-1 do
-                   if (Cells[colname,i]<>SkyFlatTxt)and(Cells[colname,i]<>ScriptTxt) then  begin
-                     if onoff then
-                        Cells[Index,i]:='1'
-                     else
-                        Cells[Index,i]:='0';
-                     t:=TTarget(Objects[colseq,i]);
-                     t.inplaceautofocus:=(Cells[colinplace,i]='1');
-                   end;
-              end;
-    colupdcoord:begin
-                onoff:=Columns[Index-1].Title.ImageIndex=titleadd;
-                if onoff then Columns[Index-1].Title.ImageIndex:=titledel
-                         else Columns[Index-1].Title.ImageIndex:=titleadd;
-                for i:=1 to RowCount-1 do
-                   if (Cells[colname,i]<>SkyFlatTxt)and(Cells[colname,i]<>ScriptTxt) then  begin
-                     if onoff then
-                        Cells[Index,i]:='1'
-                     else
-                        Cells[Index,i]:='0';
-                     t:=TTarget(Objects[colseq,i]);
-                     t.updatecoord:=(Cells[colupdcoord,i]='1');
-                   end;
-              end;
-
   end;
  end;
  TargetList.EditorMode := false;
@@ -2240,10 +2145,6 @@ begin
     Editor:=TargetList.EditorByStyle(cbsPickList) // selection for null pa
  else if (aCol=colstart)or(aCol=colend) then
     Editor:=TargetList.EditorByStyle(cbsPickList) // selection for rise, set
- else if (aCol=coldark)or(aCol=colskip) then
-    Editor:=TargetList.EditorByStyle(cbsCheckboxColumn) // dark night and skip
- else if (aCol=colastrometry)or(aCol=colinplace)or(aCol=colupdcoord) then
-    Editor:=TargetList.EditorByStyle(cbsCheckboxColumn) // replace old checkbox
  else
     Editor:=TargetList.EditorByStyle(cbsAuto);
 end;

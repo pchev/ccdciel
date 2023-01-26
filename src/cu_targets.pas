@@ -42,7 +42,7 @@ type
               FlatGain,FlatOffset: integer;
               FlatFilters: shortstring;
               FlatFstop: shortstring;
-              preview,astrometrypointing,updatecoord,inplaceautofocus,autoguiding: boolean;
+              preview,astrometrypointing,updatecoord,inplaceautofocus,autoguiding,solartracking: boolean;
               delay, previewexposure: double;
               plan :TComponent;
               constructor Create;
@@ -837,6 +837,7 @@ begin
          t.pa:=StrToFloatDef(x,NullCoord);
        t.astrometrypointing:=FSequenceFile.Items.GetValue('/Targets/Target'+inttostr(i)+'/AstrometryPointing',false);
        t.updatecoord:=FSequenceFile.Items.GetValue('/Targets/Target'+inttostr(i)+'/UpdateCoord',false);
+       t.solartracking:=FSequenceFile.Items.GetValue('/Targets/Target'+inttostr(i)+'/SolarTracking',false);
        t.inplaceautofocus:=FSequenceFile.Items.GetValue('/Targets/Target'+inttostr(i)+'/InplaceAutofocus',AutofocusInPlace);
        t.previewexposure:=FSequenceFile.Items.GetValue('/Targets/Target'+inttostr(i)+'/PreviewExposure',1.0);
        t.preview:=FSequenceFile.Items.GetValue('/Targets/Target'+inttostr(i)+'/Preview',false);
@@ -990,6 +991,7 @@ try
         FSequenceFile.Items.SetValue('/Targets/Target'+inttostr(i)+'/PA',FormatFloat(f1,t.pa));
       FSequenceFile.Items.SetValue('/Targets/Target'+inttostr(i)+'/AstrometryPointing',t.astrometrypointing);
       FSequenceFile.Items.SetValue('/Targets/Target'+inttostr(i)+'/UpdateCoord',t.updatecoord);
+      FSequenceFile.Items.SetValue('/Targets/Target'+inttostr(i)+'/SolarTracking',t.solartracking);
       FSequenceFile.Items.SetValue('/Targets/Target'+inttostr(i)+'/InplaceAutofocus',t.inplaceautofocus);
       FSequenceFile.Items.SetValue('/Targets/Target'+inttostr(i)+'/PreviewExposure',t.previewexposure);
       FSequenceFile.Items.SetValue('/Targets/Target'+inttostr(i)+'/Preview',t.preview);
@@ -2038,9 +2040,17 @@ begin
           Frotator.Angle:=t.pa;
         end;
         // Set internal guider solar object motion
-        if (Autoguider<>nil)and(Autoguider.AutoguiderType=agINTERNAL)and(t.solarV<>NullCoord)and(t.solarPA<>NullCoord) then begin
-           finternalguider.v_solar:=t.solarV;
-           finternalguider.vpa_solar:=t.solarPA;
+        if (Autoguider<>nil)and(Autoguider.AutoguiderType=agINTERNAL) then begin
+           if (t.solartracking)and(t.solarV<>NullCoord)and(t.solarPA<>NullCoord) then begin
+             finternalguider.SolarTracking:=t.solartracking;
+             finternalguider.v_solar:=t.solarV;
+             finternalguider.vpa_solar:=t.solarPA;
+            end
+            else begin
+             finternalguider.SolarTracking:=false;
+             finternalguider.v_solar:=0;
+             finternalguider.vpa_solar:=0;
+            end;
         end;
         // set coordinates
         if ((t.ra<>NullCoord)and(t.de<>NullCoord)) then begin
@@ -2666,6 +2676,7 @@ begin
   solarPA:=0;
   astrometrypointing:=(astrometryResolver<>ResolverNone);
   updatecoord:=false;
+  solartracking:=false;
   inplaceautofocus:=AutofocusInPlace;
   autoguiding:=false;
   repeatcount:=1;
@@ -2707,6 +2718,7 @@ begin
   solarPA:=Source.solarPA;
   astrometrypointing:=source.astrometrypointing;
   updatecoord:=Source.updatecoord;
+  solartracking:=Source.solartracking;
   repeatcount:=Source.repeatcount;
   repeatdone:=Source.repeatdone;
   inplaceautofocus:=Source.inplaceautofocus;
