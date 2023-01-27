@@ -912,7 +912,7 @@ var i,maxpulse: integer;
               dRaPixelsSolar:= - ra_rate * deltaticks/(60*1000*internalguider.pixel_size);//Solar object sky movement in RA. Unit in guider pixels.
               dDecPixelsSolar:=+ dec_rate * deltaticks/(60*1000*internalguider.pixel_size);//Solar object sky movement in DEC. Unit in guider pixels
 
-              if Finternalguider.isGEM and ((mount.PierSide=pierWest) <> (pos('E',finternalguider.pier_side)>0)) then // Did a meridian flip occur since calibration.
+              if meridianflip then // Did a meridian flip occur since calibration.
                 mflipcorr:=180 // A meridian flip occurred
               else
                 mflipcorr:=0;
@@ -926,6 +926,7 @@ var i,maxpulse: integer;
 begin
  if not FPaused then begin
 
+  meridianflip:= Finternalguider.isGEM and ((mount.PierSide=pierWest) <> (pos('E',finternalguider.pier_side)>0));
   xy_trend[0].dither:=FSettling;
 
   //For tracking Solar object only
@@ -986,7 +987,6 @@ begin
   end;
 
   // Apply camera orientation and meridian flip if required
-  meridianflip:= Finternalguider.isGEM and ((mount.PierSide=pierWest) <> (pos('E',finternalguider.pier_side)>0));
   if meridianflip then // Did a meridian flip occur since calibration.
     mflipcorr:=180 // A meridian flip occurred
   else
