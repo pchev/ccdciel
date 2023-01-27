@@ -916,7 +916,7 @@ var i,maxpulse: integer;
                 mflipcorr:=180 // A meridian flip occurred
               else
                 mflipcorr:=0;
-              if finternalguider.pulsegainNorth>0 then flipDec:=-1 else flipDec:=1;//flipped image correction. E.g. an image where north is up and east on the right size.
+              if finternalguider.pulsegainNorth>0 then flipDec:=+1 else flipDec:=-1;//flipped image correction. E.g. an image where north is up and east on the right size.
               rotate2(((+finternalguider.PA+mflipcorr)*pi/180),dRaPixelsSolar,flipDec*dDecPixelsSolar,delta_ditherX,delta_ditherY);// rotate RA, DEC drift scope to X,Y drift guider image. Positive ditherY is go North. Postive ditherX is go West!
               ditherX:=ditherX+delta_ditherX; //integrate offset solar object in X
               ditherY:=ditherY+delta_ditherY; //integrate offset solar object in Y
