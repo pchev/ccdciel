@@ -725,6 +725,7 @@ object f_EditTargets: Tf_EditTargets
               Top = 0
               Width = 200
               Caption = 'Activate solar object tracking'
+              OnChange = cbChange
               TabOrder = 0
             end
           end
@@ -734,6 +735,7 @@ object f_EditTargets: Tf_EditTargets
             Top = 104
             Width = 251
             Caption = 'Autofocus after temperature change'
+            OnChange = cbChange
             TabOrder = 4
           end
         end
