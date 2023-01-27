@@ -4393,7 +4393,7 @@ begin
   f_internalguider.use_arcsec:=config.GetValue('/InternalGuider/UnitArcSec',false);
   f_internalguider.FrameSize1.text:=config.GetValue('/InternalGuider/FrameSize',rsMax2);
   f_internalguider.measure_method2.checked:=config.GetValue('/InternalGuider/Method2',false);
-  f_internalguider.CheckBoxReverseDec.Checked:=config.GetValue('/InternalGuider/ReverseDec',false);
+  f_internalguider.CheckBoxReverseDec.Checked:=config.GetValue('/InternalGuider/ReverseDec',true);
   f_internalguider.trend_scale:=config.GetValue('/InternalGuider/Scale',5);
   f_internalguider.Exposure.Value:=config.GetValue('/InternalGuider/Camera/Exposure',2);
   f_internalguider.Binning.Value:=config.GetValue('/InternalGuider/Camera/Binning',1);
