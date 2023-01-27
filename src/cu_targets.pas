@@ -2053,8 +2053,6 @@ begin
             end
             else begin
              finternalguider.SolarTracking:=false;
-             finternalguider.v_solar:=0;
-             finternalguider.vpa_solar:=0;
             end;
         end;
         // set coordinates
