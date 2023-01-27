@@ -2521,6 +2521,7 @@ begin
   f_EditTargets.Width:=config.GetValue('/Sequence/EditTarget/Width',f_EditTargets.Width);
   f_EditTargets.Height:=config.GetValue('/Sequence/EditTarget/Height',f_EditTargets.Height);
   f_EditTargets.Splitter1.Top:=config.GetValue('/Sequence/EditTarget/SepPos',f_EditTargets.Splitter1.Top);
+  f_EditTargets.PanelTargetDetail.Width:=config.GetValue('/Sequence/EditTarget/SepPos2',f_EditTargets.PanelTargetDetail.Width);
 
   f_planetariuminfo.planetarium:=planetarium;
 
@@ -4871,6 +4872,7 @@ begin
    config.SetValue('/Sequence/EditTarget/Width',f_EditTargets.Width);
    config.SetValue('/Sequence/EditTarget/Height',f_EditTargets.Height);
    config.SetValue('/Sequence/EditTarget/SepPos',f_EditTargets.Splitter1.Top);
+   config.SetValue('/Sequence/EditTarget/SepPos2',f_EditTargets.PanelTargetDetail.Width);
 
    config.SetValue('/Visu/Gamma',f_visu.Gamma.Value);
    config.SetValue('/Visu/HistBar',f_visu.HistBar.Position);

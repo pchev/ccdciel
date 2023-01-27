@@ -71,6 +71,7 @@ type
     Label8: TLabel;
     MenuBlankRow: TMenuItem;
     ScrollBox2: TScrollBox;
+    Splitter2: TSplitter;
     StartOpt: TCheckListBox;
     TermOpt: TCheckListBox;
     FFstopbox: TComboBox;

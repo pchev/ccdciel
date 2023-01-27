@@ -510,7 +510,7 @@ object f_EditTargets: Tf_EditTargets
         Height = 251
         Hint = 'The list of target to process in sequence.'
         Top = 48
-        Width = 600
+        Width = 596
         Align = alClient
         AutoFillColumns = True
         ColCount = 9
@@ -520,7 +520,7 @@ object f_EditTargets: Tf_EditTargets
             MaxSize = 202
             Title.MultiLine = True
             Title.Caption = 'Object name'
-            Width = 77
+            Width = 75
           end        
           item
             MinSize = 30
@@ -528,7 +528,7 @@ object f_EditTargets: Tf_EditTargets
             Title.ImageIndex = 0
             Title.MultiLine = True
             Title.Caption = 'Template'
-            Width = 77
+            Width = 75
           end        
           item
             MinSize = 86
@@ -614,8 +614,8 @@ object f_EditTargets: Tf_EditTargets
         OnSelection = TargetListSelection
         ColWidths = (
           30
-          77
-          77
+          75
+          75
           86
           88
           40
@@ -739,6 +739,15 @@ object f_EditTargets: Tf_EditTargets
             TabOrder = 4
           end
         end
+      end
+      object Splitter2: TSplitter
+        Left = 596
+        Height = 251
+        Top = 48
+        Width = 4
+        Align = alRight
+        Beveled = True
+        ResizeAnchor = akRight
       end
     end
   end
