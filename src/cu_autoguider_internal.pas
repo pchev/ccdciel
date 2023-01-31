@@ -43,6 +43,7 @@ type
     GuideStartTime,LogSNR,LogFlux,mean_hfd : double;
     LastDecSign: double;
     SameDecSignCount: integer;
+    north, south    : integer;
     xy_trend : xy_guiderlist;{fu_internalguider}
     xy_array,xy_array_old : star_position_array;//internal guider for measure drift
     GuideLog: TextFile;
@@ -897,7 +898,7 @@ var i,maxpulse: integer;
           // The Pixel scale internalguider.pixel_size in tab advanced should be reasonable accurate.
           var
             tickcount : qword;
-            deltaticks : integer;
+            deltaticks,flipdec : integer;
             ra_rate,dec_rate, delta_ditherX,delta_ditherY, dRaPixelsSolar,dDecPixelsSolar : double;
           begin
             tickcount:=GetTickCount64;
@@ -917,7 +918,9 @@ var i,maxpulse: integer;
               else
                 mflipcorr:=0;
 
-              rotate2(((+finternalguider.PA+mflipcorr)*pi/180),dRaPixelsSolar,dDecPixelsSolar,delta_ditherX,delta_ditherY);// rotate RA, DEC drift scope to X,Y drift guider image. Positive ditherY is go North. Postive ditherX is go West!
+              if finternalguider.pulsegainNorth<0 then flipDec:=-1 else flipDec:=+1;//flipped image correction. E.g. an image where north is up and east on the right size.
+
+              rotate2(((+finternalguider.PA+mflipcorr)*pi/180),dRaPixelsSolar,flipDec*dDecPixelsSolar,delta_ditherX,delta_ditherY);// rotate RA, DEC drift scope to X,Y drift guider image. Positive ditherY is go North. Postive ditherX is go West!
               ditherX:=ditherX+delta_ditherX; //integrate offset solar object in X
               ditherY:=ditherY+delta_ditherY; //integrate offset solar object in Y
             end;
@@ -926,6 +929,17 @@ begin
  if not FPaused then begin
 
   meridianflip:= Finternalguider.isGEM and ((mount.PierSide=pierWest) <> (pos('E',finternalguider.pier_side)>0));
+  if ((Finternalguider.isGEM) and (mount.PierSide=pierEast) and (Finternalguider.ReverseDec=false)) then //Correct measurement for reverse pulseDec action
+  begin //swap definition north and south, Some mounts (ReverseDec=false) reverse the decPuls action if PeirSide=pierEast such that pulse north stays pulse north. Flip it back to make the math much simpler
+    north:=1;
+    south:=0
+  end
+  else
+  begin
+    north:=0;
+    south:=1
+  end;
+
   xy_trend[0].dither:=FSettling;
 
   //For tracking Solar object only
@@ -1075,7 +1089,7 @@ begin
       if pulseDEC>finternalguider.shortestPulse then
       begin
         //msg('North: '+inttostr(pulseDEC),3);
-        mount.PulseGuide(0,pulseDEC);  // 0=north, 1=south, 2 East, 3 West
+        mount.PulseGuide(north,pulseDEC);  // 0=north, 1=south, 2 East, 3 West
         DECDuration:=abs(pulseDEC);
         DECDirection:='N';
       end
@@ -1088,7 +1102,7 @@ begin
       if pulseDEC>finternalguider.shortestPulse then
       begin
         //msg('South: '+inttostr(pulseDEC),3);
-        mount.PulseGuide(1,pulseDEC);  // 0=north, 1=south, 2 East, 3 West
+        mount.PulseGuide(south,pulseDEC);  // 0=north, 1=south, 2 East, 3 West
         DECDuration:=abs(pulseDEC);
         DECDirection:='S';
       end
@@ -1407,9 +1421,9 @@ begin
 end;
 
 procedure T_autoguider_internal.InternalCalibration;
-var drift,unequal   : double;
-    saveInternalguiderCalibratingMeridianFlip: boolean;
-    msgA, msgB                          : string;
+var drift,unequal                            : double;
+    saveInternalguiderCalibratingMeridianFlip,t1,t2: boolean;
+    msgA, msgB                               : string;
             procedure StopError;
             begin
               InternalguiderStop;
@@ -1428,6 +1442,19 @@ begin
                CalibrationDuration:=667; //duration of pulse guiding
                InternalguiderCalibrationStep:=1;
                InternalCalibration; // iterate without new image
+
+               t1:=mount.PierSide=pierEast;
+               t2:=Finternalguider.isGEM;
+               if ((Finternalguider.isGEM) and (mount.PierSide=pierEast) and (Finternalguider.ReverseDec=false)) then //Correct measurement for reverse pulseDec action
+               begin //Swap definition north and south, Some mounts (ReverseDec=false) reverse the decPulse action if PierSide=pierEast such that pulse north stays pulse north. Flip it back to make the math much simpler
+                 north:=1;
+                 south:=0
+               end
+               else
+               begin
+                 north:=0;
+                 south:=1
+               end;
              end;
           1: begin
                CalibrationDuration:=round(CalibrationDuration*1.5);
@@ -1489,10 +1516,11 @@ begin
     3:begin  //NORTH measure pulse guide speed.
         case InternalguiderCalibrationStep of
           0: begin
+
                msg('Remove backlash North',3);
                InternalCalibrationInitialize:=true;
                if measure_drift(InternalCalibrationInitialize,driftX,driftY)>0 then StopError;
-               mount.PulseGuide(0,finternalguider.LongestPulse);
+               mount.PulseGuide(north,finternalguider.LongestPulse);
                WaitPulseGuiding(finternalguider.LongestPulse);
                InternalguiderCalibrationStep:=1;
                BacklashStep:=1;
@@ -1509,7 +1537,7 @@ begin
                    StopError;
                  end
                  else begin
-                   mount.PulseGuide(0,finternalguider.LongestPulse);
+                   mount.PulseGuide(north,finternalguider.LongestPulse);
                    WaitPulseGuiding(finternalguider.LongestPulse);
                  end;
                end
@@ -1529,7 +1557,7 @@ begin
                msg('Testing pulse guiding North for '+floattostrF(CalibrationDuration/1000,FFgeneral,0,2)+ ' seconds',3);
                InternalCalibrationInitialize:=true;//for measure drift
                if measure_drift(InternalCalibrationInitialize,driftX,driftY)>0 then StopError;//measure reference star positions
-               mount.PulseGuide(0,CalibrationDuration {duration msec} );  // 0=north, 1=south, 2 East, 3 West
+               mount.PulseGuide(north,CalibrationDuration {duration msec} );  // 0=north, 1=south, 2 East, 3 West
                WaitPulseGuiding(CalibrationDuration);
                InternalguiderCalibrationStep:=3;
              end;
@@ -1548,6 +1576,8 @@ begin
                    Calflip:=+1  // Normal. If North is up then East is left in the image
                  else
                    Calflip:=-1; // Flipped image. E.g.if North is up then East is on the right side}
+
+
                  pulsegainNorth:=Calflip*drift*1000/(CalibrationDuration); // [px/sec]
 
                  if InternalguiderCalibratingMeridianFlipNorth then begin
@@ -1575,7 +1605,7 @@ begin
                msg('Remove backlash South',3);
                InternalCalibrationInitialize:=true;
                if measure_drift(InternalCalibrationInitialize,driftX,driftY)>0 then StopError;
-               mount.PulseGuide(1,finternalguider.LongestPulse);
+               mount.PulseGuide(south,finternalguider.LongestPulse);
                WaitPulseGuiding(finternalguider.LongestPulse);
                InternalguiderCalibrationStep:=1;
                BacklashStep:=1;
@@ -1592,7 +1622,7 @@ begin
                    StopError;
                  end
                  else begin
-                   mount.PulseGuide(1,finternalguider.LongestPulse);
+                   mount.PulseGuide(south,finternalguider.LongestPulse);
                    WaitPulseGuiding(finternalguider.LongestPulse);
                  end;
                end
@@ -1608,7 +1638,7 @@ begin
           2: begin
                InternalCalibrationInitialize:=true;
                if measure_drift(InternalCalibrationInitialize,driftX,driftY)>0 then StopError;//measure reference star positions
-               mount.PulseGuide(1,CalibrationDuration {duration msec} );  // 0=north, 1=south, 2 East, 3 West
+               mount.PulseGuide(south,CalibrationDuration {duration msec} );  // 0=north, 1=south, 2 East, 3 West
                WaitPulseGuiding(CalibrationDuration);
                InternalguiderCalibrationStep:=3;
              end;
@@ -1642,6 +1672,7 @@ begin
           finternalguider.pier_side:='W'
         else
           finternalguider.pier_side:='NA';
+
         finternalguider.PA:=paEast*180/pi; // this is the relative angle between the image and the mount.
         finternalguider.pulsegainEast:=pulsegainEast;
         finternalguider.pulsegainWest:=pulsegainWest;
