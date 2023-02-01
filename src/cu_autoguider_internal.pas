@@ -1306,6 +1306,10 @@ begin
        exit;
      end;
    end;
+
+   // Start with default value representing the non-inverted value for north and south pulse
+   Finternalguider.ReverseDec:=true;
+
    InternalguiderCalibratingMeridianFlip:=true;
    InternalguiderCalibratingMeridianFlipStep:=0;
    InternalguiderCalibrate;
@@ -1361,6 +1365,10 @@ begin
           // option is to be checked when the two sign are equal
           Finternalguider.ReverseDec:=(InternalguiderCalibratingMeridianFlipSign1=InternalguiderCalibratingMeridianFlipSign2);
           msg('Meridian flip calibration, reverse Dec result: '+BoolToStr(Finternalguider.ReverseDec,true),2);
+          if (not Finternalguider.ReverseDec) then begin
+            msg('Calibrate for this new setting',2);
+            InternalguiderCalibrate;
+          end;
        end;
     else begin
       InternalguiderStop;
