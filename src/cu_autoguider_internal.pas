@@ -1008,12 +1008,8 @@ begin
 
   if finternalguider.pulsegainNorth>0 then driftDEC:=-driftDEC;//flipped image correction. E.g. an image where north is up and east on the right size.
 
-  if meridianflip and (not finternalguider.ReverseDec) then driftDEC:=-driftDEC;
-
   xy_trend[0].ra:=-DriftRa;//store RA drift in pixels.
   xy_trend[0].dec:=+DriftDec;//store DEC drift in pixels.
-
-
 
   if finternalguider.disable_guiding=false then //guiding enabled
   begin
