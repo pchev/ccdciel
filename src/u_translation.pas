@@ -1443,7 +1443,7 @@ resourcestring
   rsTimeInARow = 'time in a row';
   rsSelectACalib = 'Select a calibration option:';
   rsOption1Calib = 'Option 1: Calibration at current position.';
-  rsOption2SlewA = 'Option 2: Slew automatically to SSE and SSW for calibration and meridian flip setting.';
+  rsOption2SlewA = 'Option 2: Slew automatically to SSE and SSW for calibration and setting "Reverse dec output after meridian flip".';
   rsOption3Cance = 'Option 3: Cancel.';
   rsSlewCalibrat = 'Slew + Calibration + Meridian flip setting';
   rsCalibration = 'Calibration';

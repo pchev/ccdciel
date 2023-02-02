@@ -809,6 +809,7 @@ object f_internalguider: Tf_internalguider
             object CheckBoxReverseDec: TCheckBox
               Left = 8
               Height = 21
+              Hint = 'Mount declination control is reversed after meridian flip due to camera rotation. This setting can be set automatically by extended calibration of the internal guider'
               Top = 248
               Width = 258
               Caption = 'Reverse dec output after meridian flip'

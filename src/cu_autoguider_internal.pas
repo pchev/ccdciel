@@ -956,7 +956,7 @@ begin
 
 
   //Measure drift
-  measure_drift(InternalguiderInitialize,driftX,driftY);// ReferenceX,Y indicates the total drift, driftX,driftY to drift since previous call. Arrays xy_array_old,xy_array are for storage star positions
+  measure_drift(InternalguiderInitialize,driftX,driftY);// ReferenceX,Y indicates the total drift, driftX,driftY the drift since previous call. Arrays xy_array_old,xy_array are for storage star positions
 
   if InternalguiderInitialize then begin
      SetStatus(StarLostStatus,GUIDER_ALERT);
