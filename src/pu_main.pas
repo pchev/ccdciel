@@ -4406,6 +4406,7 @@ begin
   f_internalguider.Temperature.Value:=config.GetValue('/InternalGuider/Camera/Temperature',0);
   f_internalguider.Gamma.Position:=config.GetValue('/InternalGuider/Visu/Gamma',50);
   f_internalguider.Luminosity.Position:=config.GetValue('/InternalGuider/Visu/Luminosity',50);
+  GuideImgZoom:=config.GetValue('/InternalGuider/Visu/Zoom',0);
 
   MeridianOption:=config.GetValue('/Meridian/MeridianOption',2);
   MinutesPastMeridian:=config.GetValue('/Meridian/MinutesPast',15);
@@ -4959,6 +4960,7 @@ begin
   config.SetValue('/InternalGuider/Camera/Temperature',f_internalguider.Temperature.Value);
   config.SetValue('/InternalGuider/Visu/Gamma',f_internalguider.Gamma.Position);
   config.SetValue('/InternalGuider/Visu/Luminosity',f_internalguider.Luminosity.Position);
+  config.SetValue('/InternalGuider/Visu/Zoom',GuideImgZoom);
 end;
 
 procedure Tf_main.SaveConfig;

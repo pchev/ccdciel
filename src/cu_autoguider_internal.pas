@@ -550,7 +550,6 @@ begin
         star_counter:=star_counter2;
 
         FCamera.SetFrame(frx,fry,frw,frh);//set frame area around the brightest star
-        GuideImgZoom:=1;
         GuideImgCx:=0;
         GuideImgCy:=0;
       end;//filter out stars
@@ -615,7 +614,6 @@ begin
     msg('No stars detected!',0);
     initialize:=true;// Return initialize=true for fresh restart next call.
     FCamera.ResetFrame;
-    GuideImgZoom:=0;
     exit;
   end;
 
@@ -688,7 +686,6 @@ begin
   end;
   Binning:=Finternalguider.Binning.Value;
   Fcamera.ResetFrame;
-  GuideImgZoom:=0;
   FRecoveringCameraCount:=0;
   Application.QueueAsyncCall(@StartGuideExposureAsync,0);
 end;
