@@ -10557,6 +10557,9 @@ begin
 try
  LastHfd:=-1;
  LastDrift:=-1;
+ // No measurement when guiding on a comet
+ if (autoguider.AutoguiderType=agINTERNAL)and(f_internalguider.SolarTracking)and(autoguider.State<>GUIDER_IDLE) then
+   exit;
  // measure image but not plot
  if MeasureNewImage and (camera.FrameType=LIGHT) then begin
    if AutofocusMode=afPlanet then begin
