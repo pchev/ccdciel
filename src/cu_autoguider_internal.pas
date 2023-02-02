@@ -782,7 +782,12 @@ begin
     SetStatus('Mount not supported',GUIDER_ALERT);
     exit;
   end;
-
+  if Finternalguider.pier_side='N/A' then
+  begin
+    msg('A calibration is required before guiding can be started.',1);
+    SetStatus('Calibration required',GUIDER_ALERT);
+    exit;
+  end;
 
   if InternalguiderGuiding then
   begin
@@ -1688,7 +1693,7 @@ begin
         else if mount.PierSide=pierEast then
           finternalguider.pier_side:='W'
         else
-          finternalguider.pier_side:='NA';
+          finternalguider.pier_side:='Unk';
 
         finternalguider.PA:=paEast*180/pi; // this is the relative angle between the image and the mount.
         finternalguider.pulsegainEast:=pulsegainEast;

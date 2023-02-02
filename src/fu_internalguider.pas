@@ -314,6 +314,7 @@ begin
  LabelStatusDec.Caption:='';
  LabelInfo.Caption:='';
  LabelInfo2.Caption:='';
+ pier_side1.Text:='N/A';
  cur_minHFD:=minHFD;
  cur_minSNR:=minSNR;
  cur_pa1:=pa1.Text;

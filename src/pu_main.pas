@@ -3192,6 +3192,9 @@ try
        config.SetValue('/Video/ShowVideo',true);
      end;
   end;
+  if oldver<'0.9.82' then begin
+     config.SetValue('/InternalGuider/PierSide','N/A');
+  end;
   if config.Modified then
      SaveConfig;
 except
@@ -4385,7 +4388,7 @@ begin
   f_internalguider.pulseGainWest:=config.GetValue('/InternalGuider/PulseGainWest',3.0);
   f_internalguider.pulseGainNorth:=config.GetValue('/InternalGuider/PulseGainNorth',3.0);
   f_internalguider.pulseGainSouth:=config.GetValue('/InternalGuider/PulseGainSouth',3.0);
-  f_internalguider.Pier_Side:=config.GetValue('/InternalGuider/PierSide','W');
+  f_internalguider.Pier_Side:=config.GetValue('/InternalGuider/PierSide','N/A');
   f_internalguider.pixel_size:=config.GetValue('/InternalGuider/PixelSize',2.5);
   f_internalguider.ShortestPulse:=config.GetValue('/InternalGuider/ShortestPulse',40);
   f_internalguider.LongestPulse:=config.GetValue('/InternalGuider/LongestPulse',2500);
