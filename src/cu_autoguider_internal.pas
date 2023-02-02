@@ -958,6 +958,14 @@ begin
 
   if InternalguiderInitialize then begin
      SetStatus(StarLostStatus,GUIDER_ALERT);
+     inc(GuideFrameCount);
+     WriteLog(IntToStr(GuideFrameCount)+','+
+              FormatFloat(f3,(now-GuideStartTime)*secperday)+','+
+              '"DROP"'+',,,,,,,,,,,,,'+
+              FormatFloat(f0,LogFlux)+','+
+              FormatFloat(f2,LogSNR)+','+
+              '2,"Star lost"'    // error code
+              );
      exit; //until star(s) detected. If no stars are detected initialize is returned true
   end;
 
@@ -997,6 +1005,11 @@ begin
        SetStatus('Guiding',GUIDER_GUIDING);
        WriteLog('INFO: SETTLING STATE CHANGE, Settling failed');
      end;
+  end
+  else begin
+    // star lost recovered
+    if FState=GUIDER_ALERT then
+      SetStatus('Guiding',GUIDER_GUIDING);
   end;
 
   // Apply camera orientation and meridian flip if required
