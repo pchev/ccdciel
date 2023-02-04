@@ -5966,7 +5966,6 @@ end;
 Procedure Tf_main.ConnectWatchdog(Sender: TObject);
 begin
    if watchdog=nil then exit;
-   watchdog.Threshold:=strtointdef(config.GetValue('/INDIwatchdog/Threshold','10'),10);
    watchdog.Connect(config.GetValue('/INDIwatchdog/Server',''),
                   config.GetValue('/INDIwatchdog/ServerPort',''),
                   config.GetValue('/INDIwatchdog/Device','WatchDog'));
@@ -5990,6 +5989,7 @@ begin
                    f_devicesconnection.LabelWatchdog.Font.Color:=clOrange;
                    end;
    devConnected:   begin
+                   watchdog.Threshold:=strtointdef(config.GetValue('/INDIwatchdog/Threshold','10'),10);
                    if f_devicesconnection.LabelWatchdog.Font.Color<>clGreen then NewMessage(Format(rsConnected, [rsWatchdog]),1);
                    f_devicesconnection.LabelWatchdog.Font.Color:=clGreen;
                    end;

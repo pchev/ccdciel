@@ -42,6 +42,8 @@ T_indiwatchdog = class(T_watchdog)
    connecton,connectoff: ISwitch;
    heartbeat: INumberVectorProperty;
    heartbeatvalue: INumber;
+   triggerprop: ISwitchVectorProperty;
+   triggerclient: ISwitch;
    configprop: ISwitchVectorProperty;
    configload,configsave: ISwitch;
    Fready,Fconnected,FConnectDevice: boolean;
@@ -66,6 +68,7 @@ T_indiwatchdog = class(T_watchdog)
    procedure ServerDisconnected(Sender: TObject);
    procedure LoadConfig;
    procedure SetHeartbeat(value: double);
+   procedure SetTrigger;
 protected
    procedure SetTimeout(num:integer); override;
    procedure SetTThreshold(num:integer); override;
@@ -142,6 +145,8 @@ begin
     WatchdogDevice:=nil;
     heartbeat:=nil;
     heartbeatvalue:=nil;
+    triggerprop:=nil;
+    triggerclient:=nil;
     connectprop:=nil;
     configprop:=nil;
     Fready:=false;
@@ -154,6 +159,7 @@ end;
 procedure T_indiwatchdog.CheckStatus;
 begin
     if Fconnected and
+       (triggerprop<>nil) and
        (heartbeat<>nil) and
        (heartbeatvalue<>nil)
     then begin
@@ -207,7 +213,9 @@ begin
     else if (configprop=nil) then
        msg('Watchdog '+Findidevice+' Missing property CONFIG_PROCESS',0)
     else if (heartbeatvalue=nil) then
-       msg('Watchdog '+Findidevice+' Missing property WATCHDOG_HEARTBEAT',0);
+       msg('Watchdog '+Findidevice+' Missing property WATCHDOG_HEARTBEAT',0)
+    else if (triggerclient=nil) then
+       msg('Watchdog '+Findidevice+' Missing property TRIGGER_CLIENT',0);
     Disconnect;
   end;
 end;
@@ -323,6 +331,11 @@ begin
   else if (proptype=INDI_NUMBER)and(heartbeat=nil)and(propname='WATCHDOG_HEARTBEAT') then begin
      heartbeat:=indiProp.getNumber;
      heartbeatvalue:=IUFindNumber(heartbeat,'WATCHDOG_HEARTBEAT_VALUE');
+  end
+  else if (proptype=INDI_SWITCH)and(uppercase(propname)='WATCHDOG_TRIGGER') then begin
+     triggerprop:=indiProp.getSwitch;
+     triggerclient:=IUFindSwitch(triggerprop,'TRIGGER_CLIENT');
+     if (triggerclient=nil) then triggerprop:=nil;
   end;
   CheckStatus;
 end;
@@ -369,15 +382,28 @@ end;
 
 procedure T_indiwatchdog.SetTThreshold(num:integer);
 begin
+ // value set in minutes
  FThreshold:=num;
+ // timer in milliseconds
  HeartbeatTimer.Interval:=round(60000*FThreshold/4);
+ // Client threshold in minutes
  SetHeartbeat(FThreshold);
+ SetTrigger;
+end;
+
+procedure T_indiwatchdog.SetTrigger;
+begin
+  if (triggerprop<>nil) then begin
+     triggerclient.s:=ISS_ON;
+     indiclient.sendNewSwitch(triggerprop);
+  end;
 end;
 
 procedure T_indiwatchdog.SetHeartbeat(value: double);
 begin
  if (heartbeat<>nil) and (heartbeatvalue<>nil) then begin
-    heartbeatvalue.Value:=value;
+    // INDI heartbeat is now in seconds
+    heartbeatvalue.Value:=60*value;
     indiclient.sendNewNumber(heartbeat);
  end;
 end;
