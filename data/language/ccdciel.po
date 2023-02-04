@@ -5359,7 +5359,7 @@ msgid "Option 1: Calibration at current position."
 msgstr ""
 
 #: u_translation:rsoption2slewa
-msgid "Option 2: Slew automatically to SSE and SSW for calibration and meridian flip setting."
+msgid "Option 2: Slew automatically to SSE and SSW for calibration and setting \"Reverse dec output after meridian flip\"."
 msgstr ""
 
 #: u_translation:rsoption3cance
@@ -5476,5 +5476,13 @@ msgstr ""
 
 #: u_translation:rsapparentmoti2
 msgid "Apparent motion PA"
+msgstr ""
+
+#: u_translation:rsadditionalop
+msgid "Additional options for"
+msgstr ""
+
+#: u_translation:rsautofocusaft2
+msgid "Autofocus after temperature change"
 msgstr ""
 

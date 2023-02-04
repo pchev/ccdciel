@@ -534,3 +534,7 @@ msgstr ""
 msgid "Flat processing also require a Dark"
 msgstr ""
 
+#: u_hints:rssetthetemper
+msgid "Set the temperature threshold in the Preferences"
+msgstr ""
+
