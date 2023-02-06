@@ -626,6 +626,8 @@ begin
   setled(clGray);
 end;
 
+
+
 procedure Tf_internalguider.CheckBoxTrackSolar1Change(Sender: TObject);
 begin
   v_solar1.Enabled:=CheckBoxTrackSolar1.checked;
