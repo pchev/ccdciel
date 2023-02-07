@@ -1438,14 +1438,12 @@ resourcestring
   rsLight = 'Light';
   rsFrameSize = 'Frame size';
   rsMax2 = 'Max';
-  rsReverseDecAf = 'Reverse dec output after meridian flip';
   rsAbortAfterRe = 'Abort after restarting more than';
   rsTimeInARow = 'time in a row';
   rsSelectACalib = 'Select a calibration option:';
   rsOption1Calib = 'Option 1: Calibration at current position.';
   rsOption2SlewA = 'Option 2: Slew automatically to SSE and SSW for calibration and setting "Reverse dec output after meridian flip".';
   rsOption3Cance = 'Option 3: Cancel.';
-  rsSlewCalibrat = 'Slew + Calibration + Meridian flip setting';
   rsCalibration = 'Calibration';
   rsGuiderCalibr = 'Guider calibration';
   rsWarningDoNot = 'Warning! to use a negative value, be sure the mount driver allow to set SideOfPier before the meridian.';

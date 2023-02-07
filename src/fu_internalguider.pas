@@ -50,9 +50,9 @@ type
     ButtonGuide: TButton;
     ButtonStop: TButton;
     ButtonStop1: TButton;
+    CheckBoxInverseSolarTracking1: TCheckBox;
     CheckBoxTrackSolar1: TCheckBox;
     Cooler: TCheckBox;
-    CheckBoxReverseDec: TCheckBox;
     disable_guiding1: TCheckBox;
     Exposure: TFloatSpinEdit;
     Label11: TLabel;
@@ -182,7 +182,7 @@ type
   private
     { private declarations }
     thescale : double;
-    FonStart, FonStop, FonCalibrate, FonCalibrateMeridianFlip, FonLoop, FonRedraw: TNotifyEvent;
+    FonStart, FonStop, FonCalibrate, FonLoop, FonRedraw: TNotifyEvent;
     FonSetTemperature,FonSetCooler, FonCaptureDark, FonLoadDark, FonClearDark,FonDarkInfo: TNotifyEvent;
     FonParameterChange: TNotifyStr;
     cur_minHFD,cur_minSNR,cur_Exposure,cur_vsolar,cur_vpasolar : double;
@@ -228,12 +228,10 @@ type
     function GetScale:integer;
     procedure SetScale(value:integer);
     function GetFrameSize: integer;
-    function GetReverseDec: Boolean;
-    procedure SetReverseDec(value: Boolean);
+    function GetInverseSolarTracking: Boolean;
+    procedure SetInverseSolarTracking(value: Boolean);
     function GetSolartracking: Boolean;
     procedure SetSolarTracking(value: Boolean);
-    function GetIsGem: Boolean;
-    procedure SetIsGem(value: Boolean);
     procedure SetV_solar(value:double);
     function GetV_solar:double;
     procedure SetVPA_solar(value:double);
@@ -253,7 +251,6 @@ type
     property onStart: TNotifyEvent read FonStart write FonStart;
     property onStop: TNotifyEvent read FonStop write FonStop;
     property onCalibrate: TNotifyEvent read FonCalibrate write FonCalibrate;
-    property onCalibrateMeridianFlip: TNotifyEvent read FonCalibrateMeridianFlip write FonCalibrateMeridianFlip;
     property onRedraw: TNotifyEvent read FonRedraw write FonRedraw;
     property onCaptureDark: TNotifyEvent read FonCaptureDark write FonCaptureDark;
     property onLoadDark: TNotifyEvent read FonLoadDark write FonLoadDark;
@@ -281,9 +278,8 @@ type
     property PA : double read GetPAsetting write SetPAsetting;// Guider image orientation in radians. Found by the calibration
     property trend_scale: integer read Getscale write Setscale;
     property FrameSize: integer read GetFrameSize;
-    property ReverseDec: Boolean read GetReverseDec write SetReverseDec;
+    property InverseSolarTracking: Boolean read GetInverseSolarTracking write SetInverseSolarTracking;
     property SolarTracking: Boolean read GetSolarTracking write SetSolarTracking;
-    property isGEM: Boolean read GetIsGem write SetIsGem;
     property v_solar: double read GetV_solar write SetV_solar;
     property vpa_solar: double read GetVPa_solar write SetVPA_solar;
 
@@ -392,7 +388,6 @@ begin
   disable_guiding1.Caption:=rsDisableGuidi;
   Label9.Caption:=rsFrameSize;
   framesize1.Items[0]:=rsMax2;
-  CheckBoxReverseDec.Caption:=rsReverseDecAf;
   CheckBoxTrackSolar1.Caption:=rsActivateSola;
   Label25.Caption:=rsApparentMoti+' ["/min]';
   Label26.Caption:=rsApparentMoti2+' [°]';
@@ -632,6 +627,7 @@ procedure Tf_internalguider.CheckBoxTrackSolar1Change(Sender: TObject);
 begin
   v_solar1.Enabled:=CheckBoxTrackSolar1.checked;
   vpa_solar1.enabled:=CheckBoxTrackSolar1.checked;
+  CheckBoxInverseSolarTracking1.enabled:=CheckBoxTrackSolar1.checked;
   if (cur_tracksolar<>SolarTracking) and Assigned(FonParameterChange) then FonParameterChange('SolarTracking = '+BoolToStr(SolarTracking,'true','false'));
   cur_tracksolar:=SolarTracking;
 end;
@@ -809,26 +805,14 @@ procedure Tf_internalguider.ButtonCalibrateClick(Sender: TObject);
 var txt: string;
     n: integer;
 begin
- txt:= rsSelectACalib+#10+#10+rsOption1Calib+#10;
- if isGEM then
-   txt:=txt+rsOption2SlewA+#10;
- txt:=txt+rsOption3Cance;
+ txt:= rsSelectACalib+#10+#10+rsOption1Calib+#10+rsOption3Cance;
  {$ifdef lclgtk2}
  // inverted button with GTK2
- if isGEM then
-   n:=QuestionDlg (rsGuiderCalibr, txt, mtCustom,
-         [22,rsCancel,'IsCancel', 21, rsSlewCalibrat, 20,rsCalibration],
-         '')
- else
    n:=QuestionDlg (rsGuiderCalibr, txt, mtCustom,
          [22,rsCancel,'IsCancel', 20,rsCalibration],
          '');
  {$else}
- if isGEM then
-   n:=QuestionDlg (rsGuiderCalibr, txt, mtCustom,
-         [20,rsCalibration, 21, rsSlewCalibrat, 22,rsCancel,'IsCancel'],
-         '')
- else
+
    n:=QuestionDlg (rsGuiderCalibr, txt, mtCustom,
          [20,rsCalibration, 22,rsCancel,'IsCancel'],
          '');
@@ -837,10 +821,6 @@ begin
       20:begin
           setled(clYellow);
           if Assigned(FonCalibrate) then FonCalibrate(self);
-         end;
-      21:begin
-          setled(clYellow);
-          if Assigned(FonCalibrateMeridianFlip) then FonCalibrateMeridianFlip(self);
          end;
       22:exit;
    end;
@@ -1107,15 +1087,16 @@ begin
   if err<>0 then result:=999999 else result:=v;
 end;
 
-function Tf_internalguider.GetReverseDec: boolean;
+function Tf_internalguider.GetInverseSolarTracking: boolean;
 begin
-  result:=CheckBoxReverseDec.Enabled and CheckBoxReverseDec.Checked;
+  result:=CheckBoxInverseSolarTracking1.Enabled and CheckBoxInverseSolarTracking1.Checked;
 end;
 
-procedure Tf_internalguider.SetReverseDec(value: Boolean);
+procedure Tf_internalguider.SetInverseSolarTracking(value: Boolean);
 begin
-  CheckBoxReverseDec.Checked:=value;
+  CheckBoxInverseSolarTracking1.Checked:=value;
 end;
+
 
 function Tf_internalguider.GetSolarTracking: boolean;
 begin
@@ -1127,15 +1108,6 @@ begin
   CheckBoxTrackSolar1.Checked:=value;
 end;
 
-function Tf_internalguider.GetIsGem: Boolean;
-begin
-  result:=CheckBoxReverseDec.Enabled;
-end;
-
-procedure Tf_internalguider.SetIsGem(value: Boolean);
-begin
-  CheckBoxReverseDec.Enabled:=value;
-end;
 
 end.
 

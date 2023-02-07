@@ -40,7 +40,7 @@ type
     CalibrationDuration,Calflip,CalCount,Calnrtest,frame_size,Binning,BacklashStep: integer;
     driftX,driftY,driftRA,driftDec,moveRA,moveDEC, Guidethecos,old_moveRA,old_moveDEC,  paEast, paNorth,
     pulsegainEast,pulsegainWest,pulsegainNorth,pulsegainSouth,Calthecos, Caltheangle,CaldriftOld, ditherX,ditherY,ditherX2,ditherY2,
-    GuideStartTime,LogSNR,LogFlux,mean_hfd : double;
+    GuideStartTime,LogSNR,LogFlux,mean_hfd,CalNorthDec1,CalNorthDec2 : double;
     LastDecSign: double;
     SameDecSignCount: integer;
     north, south    : integer;
@@ -48,9 +48,7 @@ type
     xy_array,xy_array_old : star_position_array;//internal guider for measure drift
     GuideLog: TextFile;
     FPaused, FSettling, FSettlingInRange,PulseGuiding: boolean;
-    InternalguiderCalibratingMeridianFlip, InternalguiderCalibratingMeridianFlipNorth: boolean;
-    InternalguiderCalibratingMeridianFlipStep: integer;
-    PAnorth1: double;
+    InternalguiderCalibratingMeridianFlip : boolean;
     FSettleStartTime, FSettleTime: double;
     TimerWaitPulseGuiding: TTimer;
     FRecoveringCamera: boolean;
@@ -71,7 +69,6 @@ type
     procedure Terminate;
     procedure StarLostTimerTimer(Sender: TObject); override;
     procedure StartSettle;
-    procedure InternalguiderCalibrateMeridianFlipStep;
   public
     Constructor Create;
     Destructor Destroy; override;
@@ -89,7 +86,6 @@ type
     procedure InternalguiderStop;
     procedure InternalguiderRecoverCamera;
     procedure InternalguiderCalibrate;
-    procedure InternalguiderCalibrateMeridianFlip;
     procedure InternalAutoguiding;
     procedure InternalCalibration;
     procedure InternalguiderCaptureDark;
@@ -175,7 +171,6 @@ begin
   InternalguiderCalibrating:=false;
   InternalguiderCapturingDark:=false;
   InternalguiderCalibratingMeridianFlip:=false;
-  InternalguiderCalibratingMeridianFlipNorth:=false;
   frame_size:=999999;
   TimerWaitPulseGuiding:=TTimer.Create(nil);
   TimerWaitPulseGuiding.Enabled:=false;
@@ -339,7 +334,7 @@ begin
       ddec:=0
     else
       ddec:=(2*random-1)*pixel;
-    if Finternalguider.isGEM and ((mount.PierSide=pierWest) <> (pos('E',finternalguider.pier_side)>0)) then // Did a meridian flip occur since calibration.
+    if mount.isGem and ((mount.PierSide=pierWest) <> (pos('E',finternalguider.pier_side)>0)) then // Did a meridian flip occur since calibration.
       mflipcorr:=180 // A meridian flip occurred
     else
       mflipcorr:=0;
@@ -893,7 +888,7 @@ procedure T_autoguider_internal.InternalAutoguiding;
 var i,maxpulse: integer;
     RADuration,DECDuration: LongInt;
     RADirection,DECDirection: string;
-    mflipcorr,moveRA2,dsettle,DecSign: double;
+    mflipcorr,PAsolar,moveRA2,dsettle,DecSign: double;
     meridianflip, largepulse         : boolean;
 
           procedure track_solar_object;//neo and comet tracking
@@ -910,7 +905,9 @@ var i,maxpulse: integer;
 
             if abs(deltaticks)<30000 then
             begin //less then 30 seconds passed so a valid oldtickcount. Increase drift to follow comet with the mount
-              sincos(internalguider.vpa_solar*pi/180,ra_rate,dec_rate);
+              PAsolar:=internalguider.vpa_solar;
+              if finternalguider.InverseSolarTracking then PAsolar:=180-PAsolar; //inverse ra and dec control equals 180 degrees rotation. T
+              sincos(PAsolar*pi/180,ra_rate,dec_rate);
               ra_rate:=ra_rate*internalguider.v_solar;//solar object sky movement in RA ["/min]
               dec_rate:=dec_rate*internalguider.v_solar;//solar object sky movement in DEC ["/min]
               dRaPixelsSolar:= - ra_rate * deltaticks/(60*1000*internalguider.pixel_size);//Solar object sky movement in RA. Unit in guider pixels.
@@ -920,6 +917,7 @@ var i,maxpulse: integer;
                 mflipcorr:=180 // A meridian flip occurred
               else
                 mflipcorr:=0;
+
               if finternalguider.pulsegainNorth<0 then flipDec:=-1 else flipDec:=+1;//flipped image correction. E.g. an image where north is up and east on the right size.
               rotate2(((+finternalguider.PA+mflipcorr)*pi/180),dRaPixelsSolar,flipDec*dDecPixelsSolar,delta_ditherX,delta_ditherY);// rotate RA, DEC drift scope to X,Y drift guider image. Positive ditherY is go North. Postive ditherX is go West!
               ditherX:=ditherX+delta_ditherX; //integrate offset solar object in X
@@ -929,8 +927,8 @@ var i,maxpulse: integer;
 begin
  if not FPaused then begin
 
-  meridianflip:= Finternalguider.isGEM and ((mount.PierSide=pierWest) <> (pos('E',finternalguider.pier_side)>0));
-  if ((Finternalguider.isGEM) and (mount.PierSide=pierWest) and (Finternalguider.ReverseDec)) then //Correct measurement for reverse pulseDec action by merdian flip
+  meridianflip:= mount.isGem and ((mount.PierSide=pierWest) <> (pos('E',finternalguider.pier_side)>0));
+  if ((mount.isGem) and (mount.PierSide=pierWest)) then //Correct measurement for reverse Dec by merdian flip
   begin //Swap definition north and south
     north:=1;
     south:=0
@@ -1261,7 +1259,6 @@ begin
   InternalguiderCalibrating:=false;
   InternalguiderCapturingDark:=false;
   InternalguiderCalibratingMeridianFlip:=false;
-  InternalguiderCalibratingMeridianFlipNorth:=false;
   Finternalguider.ButtonLoop.enabled:=true;
   Finternalguider.ButtonCalibrate.enabled:=true;
   Finternalguider.ButtonGuide.enabled:=true;
@@ -1295,40 +1292,6 @@ begin
   end;
 end;
 
-procedure T_autoguider_internal.InternalguiderCalibrateMeridianFlip;
-begin
-   // calibrate Reverse Dec output after meridian flip
-   // this use two calibration on each side of the meridian
-   msg('Start meridian flip calibration',1);
-   Fdelay:=config.GetValue('/PrecSlew/Delay',5);
-   // point at equator, one hour to the west of meridian (SideOfPier=pierEast)
-   FMount.slew(rmod(24+rad2deg*CurrentSidTim/15-1.2,24),sgn(ObsLatitude)*5);
-   wait(Fdelay);
-   if FMount.PierSide=pierWest then begin // ignore pierUnknown
-     if FMount.CanSetPierSide then begin
-       msg('Adjust mount meridian side for current position',1);
-       FMount.PierSide:=pierEast;
-       if FMount.PierSide<>pierEast then begin
-         msg('Setting mount SideOfPier failed!',1);
-         InternalguiderStop;
-         exit;
-      end;
-     end
-     else begin
-       msg('Mount did not slew to the correct side of the meridian!',1);
-       InternalguiderStop;
-       exit;
-     end;
-   end;
-
-   // Start with default value representing the non-inverted value for north and south pulse
-   Finternalguider.ReverseDec:=true;
-
-   InternalguiderCalibratingMeridianFlip:=true;
-   InternalguiderCalibratingMeridianFlipStep:=0;
-   InternalguiderCalibrate;
-end;
-
 
 function  T_autoguider_internal.angular_distance(a1,a2:double):double;//in radians
 begin
@@ -1336,62 +1299,6 @@ begin
   if result>pi then result:=result-2*pi
   else
   if result<-pi then result:=result+2*pi;
-end;
-
-
-procedure T_autoguider_internal.InternalguiderCalibrateMeridianFlipStep;
-var
-  delta : double;
-begin
-  case InternalguiderCalibratingMeridianFlipStep of
-    1: begin
-          // end of first calibration.
-          msg('Meridian flip calibration, North gain measured West: '+FormatFloat(f2,Finternalguider.pulsegainNorth),2);
-          PAnorth1:=PAnorth;//save the angle of the pulse north movement
-          // point near celstial equator, one hour to the east of meridian (SideOfPier=pierWest)
-          FMount.slew(rmod(24+rad2deg*CurrentSidTim/15+1.2,24),sgn(ObsLatitude)*5);
-          wait(Fdelay);
-          if FMount.PierSide=pierEast then begin // ignore pierUnknown
-             if FMount.CanSetPierSide then begin
-               msg('Adjust mount meridian side for current position',1);
-               FMount.PierSide:=pierWest;
-               if FMount.PierSide<>pierWest then begin
-                 msg('Setting mount SideOfPier failed!',1);
-                 InternalguiderStop;
-                 exit;
-              end;
-             end
-             else begin
-               msg('Mount did not slew to the correct side of the meridian!',1);
-               InternalguiderStop;
-               exit;
-             end;
-          end;
-          StopInternalguider:=false;
-          InternalguiderCalibrating:=true;
-          SetStatus('Start Calibration',GUIDER_BUSY);
-          finternalguider.trend_message('Guider is calibrating meridian flip.','This will take a few minutes.','');
-          //note Calthecos is still valid since declination is the same
-          InternalguiderCalibratingMeridianFlipNorth:=true;
-          InternalguiderCalibrationDirection:=3;
-          InternalguiderCalibrationStep:=0;
-          InternalguiderLoop;
-       end;
-    2: begin
-          // end of second calibration
-          InternalguiderCalibratingMeridianFlip:=false;
-          InternalguiderCalibratingMeridianFlipNorth:=false;
-
-          msg('Meridian flip calibration, North gain measured East: '+FormatFloat(f2,pulsegainNorth),2);
-          delta:=angular_distance(PAnorth1,PAnorth);// delta angle PAnorth between calibration west and east [-pi..+pi]
-          Finternalguider.ReverseDec:=abs(delta)<pi/2;// delta should be about zero if pulseGain north direction is not manipulated after meridian flip
-          msg('Meridian flip calibration, reverse Dec result: '+BoolToStr(Finternalguider.ReverseDec,true) {+ '. Delta angle was '+FormatFloat(f2,delta*180/pi)} ,2);
-
-       end;
-    else begin
-      InternalguiderStop;
-    end;
-  end;
 end;
 
 procedure T_autoguider_internal.InternalguiderCalibrate;
@@ -1465,7 +1372,7 @@ begin
                InternalguiderCalibrationStep:=1;
                InternalCalibration; // iterate without new image
 
-               if ((Finternalguider.isGEM) and (mount.PierSide=pierWest) and (Finternalguider.ReverseDec)) then //Correct measurement for reverse pulseDec action by merdian flip
+               if ((mount.isGem) and (mount.PierSide=pierWest)) then //Correct measurement for reverse Dec action by merdian flip
                begin //Swap definition north and south
                  north:=1;
                  south:=0
@@ -1539,6 +1446,7 @@ begin
 
                msg('Remove backlash North',3);
                InternalCalibrationInitialize:=true;
+               CalNorthDec1:=Mount.Dec; //mount declination at start of north calibration
                if measure_drift(InternalCalibrationInitialize,driftX,driftY)>0 then StopError;
                mount.PulseGuide(north,finternalguider.LongestPulse);
                WaitPulseGuiding(finternalguider.LongestPulse);
@@ -1564,10 +1472,7 @@ begin
                else begin
                  // start North measurement
                  CaldriftOld:=0;
-                 if InternalguiderCalibratingMeridianFlipNorth then
-                    CalibrationDuration:=round(CalibrationDuration/1.5)
-                 else
-                    CalibrationDuration:=667; //duration of pulse guiding
+                 CalibrationDuration:=667; //duration of pulse guiding
                  InternalguiderCalibrationStep:=2;
                  InternalCalibration;  // iterate without new image
                end;
@@ -1596,20 +1501,12 @@ begin
                  else
                    Calflip:=-1; // Flipped image. E.g.if North is up then East is on the right side}
 
+                 CalNorthDec2:=Mount.Dec; //mount declination at end of north calibration
 
                  pulsegainNorth:=Calflip*drift*1000/(CalibrationDuration); // [px/sec]
-
-                 if InternalguiderCalibratingMeridianFlipNorth then begin
-                   // North gain mesured, stop here
-                   InternalguiderCalibrationDirection:=8;
-                   InternalguiderCalibrationStep:=0;
-                   InternalCalibration;  // iterate without new image
-                 end
-                 else begin
-                   InternalguiderCalibrationDirection:=4;
-                   InternalguiderCalibrationStep:=0;
-                   InternalCalibration;  // iterate without new image
-                 end;
+                 InternalguiderCalibrationDirection:=4;
+                 InternalguiderCalibrationStep:=0;
+                 InternalCalibration;  // iterate without new image
                end
                else begin // retry with bigger pulse
                  CaldriftOld:=drift;
@@ -1698,6 +1595,8 @@ begin
         finternalguider.pulsegainNorth:=pulsegainNorth;
         finternalguider.pulsegainSouth:=pulsegainSouth;
 
+        finternalguider.InverseSolarTracking:=(CalNorthDec1>CalNorthDec2); //north calibration moved south, inverse solar tracking
+
         finternalguider.pixel_size:=0.5*15*2/(pulsegainEast+pulsegainWest);//Assume 0.5x and 1.5x pulse speed as set previously
 
         if finternalguider.measure_method2.checked then begin  //Alternative method. Measure pixel size in arc seconds by stopping tracking
@@ -1759,28 +1658,12 @@ begin
         unequal:=abs(1-(pulsegainNorth/pulsegainSouth));
         if unequal>0.2 then begin msgB:='Warning unequal North/South pulse gain!'; msg(msgB,1); end else msgB:='';
 
-        if InternalguiderCalibratingMeridianFlip then begin
-          inc(InternalguiderCalibratingMeridianFlipStep);
-          InternalguiderCalibrateMeridianFlipStep;
-        end
-        else
-        begin
-          msg('Ready to guide!',1);
-          finternalguider.trend_message('Calibration is ready.',msgA,msgB);
-          saveInternalguiderCalibratingMeridianFlip:=InternalguiderCalibratingMeridianFlip;
-          InternalguiderStop;
-          SetStatus('Calibration Complete',GUIDER_IDLE);
-          InternalguiderCalibratingMeridianFlip := saveInternalguiderCalibratingMeridianFlip;
-        end;
-      end;
-    8:begin
-        // complete meridian flip calibration
         msg('Ready to guide!',1);
-        finternalguider.trend_message('Meridian flip calibration is ready.','','');
+        finternalguider.trend_message('Calibration is ready.',msgA,msgB);
+        saveInternalguiderCalibratingMeridianFlip:=InternalguiderCalibratingMeridianFlip;
         InternalguiderStop;
         SetStatus('Calibration Complete',GUIDER_IDLE);
-        inc(InternalguiderCalibratingMeridianFlipStep);
-        InternalguiderCalibrateMeridianFlipStep;
+        InternalguiderCalibratingMeridianFlip := saveInternalguiderCalibratingMeridianFlip;
       end;
   end;
   except

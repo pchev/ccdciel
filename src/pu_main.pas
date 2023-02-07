@@ -915,7 +915,6 @@ type
     procedure InternalguiderStart(Sender: TObject);
     procedure InternalguiderStop(Sender: TObject);
     procedure InternalguiderCalibrate(Sender: TObject);
-    procedure InternalguiderCalibrateMeridianFlip(Sender: TObject);
     procedure InternalguiderRedraw(Sender: TObject);
     procedure InternalguiderCaptureDark(Sender: TObject);
     procedure InternalguiderLoadDark(Sender: TObject);
@@ -1744,7 +1743,6 @@ begin
   f_internalguider.onStart:=@InternalguiderStart;
   f_internalguider.onStop:=@InternalguiderStop;
   f_internalguider.onCalibrate:=@InternalguiderCalibrate;
-  f_internalguider.onCalibrateMeridianFlip:=@InternalguiderCalibrateMeridianFlip;
   f_internalguider.onRedraw:=@InternalguiderRedraw;
   f_internalguider.onCaptureDark:=@InternalguiderCaptureDark;
   f_internalguider.onLoadDark:=@InternalguiderLoadDark;
@@ -4397,7 +4395,7 @@ begin
   f_internalguider.use_arcsec:=config.GetValue('/InternalGuider/UnitArcSec',false);
   f_internalguider.FrameSize1.text:=config.GetValue('/InternalGuider/FrameSize',rsMax2);
   f_internalguider.measure_method2.checked:=config.GetValue('/InternalGuider/Method2',false);
-  f_internalguider.ReverseDec:=config.GetValue('/InternalGuider/ReverseDec',true);
+  f_internalguider.InverseSolarTracking:=config.GetValue('/InternalGuider/InverseSolar',false);
   f_internalguider.trend_scale:=config.GetValue('/InternalGuider/Scale',5);
   f_internalguider.Exposure.Value:=config.GetValue('/InternalGuider/Camera/Exposure',2);
   f_internalguider.Binning.Value:=config.GetValue('/InternalGuider/Camera/Binning',1);
@@ -4952,7 +4950,7 @@ begin
   config.SetValue('/InternalGuider/FrameSize',f_internalguider.framesize1.text);
   config.SetValue('/InternalGuider/Scale',f_internalguider.trend_scale);
   config.SetValue('/InternalGuider/Method2',f_internalguider.measure_method2.Checked);
-  config.SetValue('/InternalGuider/ReverseDec',f_internalguider.ReverseDec);
+  config.SetValue('/InternalGuider/InverseSolar',f_internalguider.InverseSolarTracking);
   config.SetValue('/InternalGuider/Camera/Exposure',f_internalguider.Exposure.Value);
   config.SetValue('/InternalGuider/Camera/Binning',f_internalguider.Binning.Value);
   config.SetValue('/InternalGuider/Camera/Gain',f_internalguider.Gain.Value);
@@ -7428,7 +7426,6 @@ case mount.Status of
                            NewMessage(rsSiteSetFromT, 3);
                          end;
                       end;
-                      f_internalguider.isGEM:=mount.isGem;
                       if (MeridianOption=1)and(MinutesPastMeridianMin<0)and(not mount.CanSetPierSide) then begin
                         MeridianOption:=2; // Abort
                         config.SetValue('/Meridian/MeridianOption',MeridianOption);
@@ -15428,11 +15425,6 @@ end;
 procedure Tf_main.InternalguiderCalibrate(Sender: TObject);
 begin
    if autoguider is T_autoguider_internal then T_autoguider_internal(autoguider).InternalguiderCalibrate;
-end;
-
-procedure Tf_main.InternalguiderCalibrateMeridianFlip(Sender: TObject);
-begin
-   if autoguider is T_autoguider_internal then T_autoguider_internal(autoguider).InternalguiderCalibrateMeridianFlip;
 end;
 
 Procedure Tf_main.InternalguiderCaptureDark(Sender: TObject);
