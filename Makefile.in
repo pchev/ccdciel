@@ -27,6 +27,8 @@ install:
 else
 install: 
 	./install.sh $(PREFIX) $(CPU_TARGET)
+installdbg: 
+	./installdbg.sh $(PREFIX) $(CPU_TARGET)
 install_win: 
 	./install_win.sh win32 $(PREFIX)
 install_win64: 
