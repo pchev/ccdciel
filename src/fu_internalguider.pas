@@ -627,7 +627,6 @@ procedure Tf_internalguider.CheckBoxTrackSolar1Change(Sender: TObject);
 begin
   v_solar1.Enabled:=CheckBoxTrackSolar1.checked;
   vpa_solar1.enabled:=CheckBoxTrackSolar1.checked;
-  CheckBoxInverseSolarTracking1.enabled:=CheckBoxTrackSolar1.checked;
   if (cur_tracksolar<>SolarTracking) and Assigned(FonParameterChange) then FonParameterChange('SolarTracking = '+BoolToStr(SolarTracking,'true','false'));
   cur_tracksolar:=SolarTracking;
 end;
@@ -1089,7 +1088,7 @@ end;
 
 function Tf_internalguider.GetInverseSolarTracking: boolean;
 begin
-  result:=CheckBoxInverseSolarTracking1.Enabled and CheckBoxInverseSolarTracking1.Checked;
+  result:=CheckBoxInverseSolarTracking1.Checked;
 end;
 
 procedure Tf_internalguider.SetInverseSolarTracking(value: Boolean);

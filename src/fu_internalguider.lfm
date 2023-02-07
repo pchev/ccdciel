@@ -1080,11 +1080,9 @@ object f_internalguider: Tf_internalguider
               Top = 248
               Width = 151
               Caption = 'Inverse solar control'
-              Checked = True
               Enabled = False
               ParentShowHint = False
               ShowHint = True
-              State = cbChecked
               TabOrder = 7
             end
           end
