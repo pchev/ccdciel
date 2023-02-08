@@ -791,6 +791,8 @@ begin
   StopInternalguider:=false;
   InternalguiderGuiding:=true;
   FPaused:=false;
+  finternalguider.LabelStatusRA.Caption:='';
+  finternalguider.LabelStatusDec.Caption:='';
 
   if Fmount.Tracking=false then
   begin
@@ -1072,24 +1074,30 @@ begin
     // to prevent Dec oscillation, wait 3 corrections in the same direction,
     // except if the correction is more than 3X shortestpulse
     DecSign:=sgn(moveDEC);
-    largepulse:=round(1000*abs(moveDEC/finternalguider.pulsegainNorth))>(3*finternalguider.ShortestPulse);
-    if largepulse then begin
-      LastDecSign:=DecSign;
-      SameDecSignCount:=3;
-    end;
-    if LastDecSign<>0 then begin
-      if (LastDecSign=DecSign) then begin
-        inc(SameDecSignCount);
-        if SameDecSignCount<3 then begin
+    largepulse:=round(1000*abs(moveDEC/finternalguider.pulsegainNorth))>(3*finternalguider.ShortestPulse);  // 3 * minimal pulse
+    if not finternalguider.SolarTracking then begin
+      // tracking comet likely make the correction always in the same direction, disable this process in this case
+      if largepulse then begin
+        // force pulse
+        LastDecSign:=DecSign;
+        SameDecSignCount:=3;
+      end;
+      if LastDecSign<>0 then begin
+        if (LastDecSign=DecSign) then begin
+          inc(SameDecSignCount);
+          if SameDecSignCount<3 then begin
+            // wait more
+            moveDEC:=0;
+          end;
+        end
+        else begin
+          // initialize new direction
+          SameDecSignCount:=0;
           moveDEC:=0;
         end;
-      end
-      else begin
-        SameDecSignCount:=0;
-        moveDEC:=0;
       end;
+      LastDecSign:=DecSign;
     end;
-    LastDecSign:=DecSign;
 
     if moveDEC>0 then //go North increase the DEC.
     begin
@@ -1161,6 +1169,7 @@ begin
       if DECDuration>0 then
          finternalguider.LabelStatusDec.Caption:=DECDirection+': '+IntToStr(DECDuration)+'ms, '+FormatFloat(f1,driftDec)+'px'
       else begin
+       if LastDecSign<>0 then begin
          if SameDecSignCount>3 then
            finternalguider.LabelStatusDec.Caption:=''
          else begin
@@ -1173,6 +1182,7 @@ begin
            else
              finternalguider.LabelStatusDec.Caption:='Wait reversal: '+DECDirection+', '+IntToStr(SameDecSignCount);
          end;
+       end;
       end;
     end;
 
