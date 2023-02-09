@@ -14572,8 +14572,7 @@ begin
  if (xx>0)and(xx<fits.HeaderInfo.naxis1)and(yy>0)and(yy<fits.HeaderInfo.naxis2) then
     if fits.preview_axis=1 then begin
       if fits.HeaderInfo.bitpix>0 then begin
-        val:=trunc(fits.image[0,yy,xx]);
-        if fits.HeaderInfo.bitpix=8 then val:=val div 255;
+        val:=round(fits.imageMin+fits.image[0,yy,xx]/fits.imageC);
         sval:=inttostr(val);
       end
       else begin
