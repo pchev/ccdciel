@@ -94,6 +94,7 @@ type
       FIgnoreRestart: boolean;
       FTargetsRepeatCount: integer;
       FFileVersion, FSlewRetry: integer;
+      FUpdatecoordDelay: integer;
       FAtEndPark, FAtEndCloseDome, FAtEndStopTracking,FAtEndWarmCamera,FAtEndRunScript,FOnErrorRunScript,FAtEndShutdown: boolean;
       FAtEndScript, FOnErrorScript: string;
       FAtStartCool,FAtStartUnpark, FAtStartRunScript: boolean;
@@ -2351,6 +2352,7 @@ begin
       p.RestartTargetNum:=-1
     else
       p.RestartTargetNum:=FCurrentTarget+1;
+    FUpdatecoordDelay:=0;
     TargetTimeStart:=now;
     p.Start;
   end;
@@ -2489,7 +2491,7 @@ begin
 end;
 
 procedure T_Targets.TargetTimerTimer(Sender: TObject);
-var tt: double;
+var tt,newra,newde,newV,newPa: double;
     t: TTarget;
     r: string;
 begin
@@ -2497,8 +2499,33 @@ begin
    FInitializing:=false;
    t:=Targets[FCurrentTarget];
    if not TargetRepeatTimer.Enabled then begin
+      if (t=nil) then begin
+        msg('Nexttarget 2480',9);
+        NextTarget;
+        exit;
+      end;
+      if t.updatecoord and T_Plan(t.plan).Running then begin
+       inc(FUpdatecoordDelay);
+       // update every 60*timerinterval = every minute
+       if ((FUpdatecoordDelay mod 60)=0) and Fplanetarium.Search(t.objectname,newra,newde,newV,newPa) then begin
+          t.ra:=newra;
+          t.de:=newde;
+          // update coordinate for an eventual meridian flip
+          if (FTargetRA<>NullCoord)and(FTargetDE<>NullCoord) then begin
+            FTargetRA:=deg2rad*15*newra;
+            FTargetDE:=deg2rad*newde;
+            J2000ToApparent(FTargetRA,FTargetDE);
+          end;
+          if (newv<>NullCoord)and(newPa<>NullCoord)and(Autoguider<>nil)and(Autoguider.AutoguiderType=agINTERNAL) and t.solartracking then begin
+            // update object motion
+            t.solarV:=newv;
+            t.solarPA:=newPA;
+            Finternalguider.v_solar:=newv;
+            Finternalguider.vpa_solar:=newPa;
+          end;
+       end;
+      end;
       if (not T_Plan(t.plan).Running) and (not FRestarting) then begin
-        if (t<>nil) then begin
         if not TargetForceNext then  // do not mark an interrupted target as complete
           inc(t.repeatdone);
         if (TargetForceNext)or(t.repeatdone>=t.repeatcount) then begin
@@ -2518,11 +2545,6 @@ begin
              Preview.Binning.Text:=Capture.Binning.Text;
              Preview.BtnLoop.Click;
            end;
-        end;
-        end
-        else begin
-         msg('Nexttarget 2480',9);
-         NextTarget;
         end;
       end;
    end
