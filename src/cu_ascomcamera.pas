@@ -483,7 +483,7 @@ procedure T_ascomcamera.ExposureTimerTimer(sender: TObject);
 type Timgdata = array of longint;
 var ok: boolean;
     i,j,c,xs,ys: integer;
-    nax1,nax2,state: integer;
+    nax1,nax2,state,bitpx: integer;
     pix,piy,expt,ElectronsPerADU,rexp: double;
     dateobs,ccdname,frname:string;
     {$ifdef DirectArray}
@@ -678,6 +678,7 @@ begin
    except
      ElectronsPerADU:=-1;
    end;
+   bitpx:=round(GetBitperPixel);
 
    {$ifndef DirectArray}
      {$ifdef DirectOleaut32}
@@ -702,7 +703,7 @@ begin
 
    // count used bit by pixel
    pxdiv:=1;
-   if FFixPixelRange then begin
+   if FFixPixelRange and (bitpx=16) then begin
      nb:=16;
      w:=0;
      for i:=LBoundY to ys-1 do begin
@@ -732,12 +733,14 @@ begin
    hdr:=TFitsHeader.Create;
    hdr.ClearHeader;
    hdr.Add('SIMPLE',true,'file does conform to FITS standard');
-   hdr.Add('BITPIX',16,'number of bits per data pixel');
+   hdr.Add('BITPIX',bitpx,'number of bits per data pixel');
    hdr.Add('NAXIS',2,'number of data axes');
    hdr.Add('NAXIS1',nax1 ,'length of data axis 1');
    hdr.Add('NAXIS2',nax2 ,'length of data axis 2');
-   hdr.Add('BZERO',32768,'offset data range to that of unsigned short');
-   hdr.Add('BSCALE',1,'default scaling factor');
+   if bitpx=16 then begin
+     hdr.Add('BZERO',32768,'offset data range to that of unsigned short');
+     hdr.Add('BSCALE',1,'default scaling factor');
+   end;
    if FASCOMFlipImage then
      hdr.Add('ROWORDER',bottomup,'Order of the rows in image array')
    else
@@ -768,52 +771,92 @@ begin
    FImgStream.CopyFrom(hdrmem,hdrmem.Size);
    hdrmem.Free;
    hdr.Free;
-   if debug_msg then msg('write image');
-
-   if Dims=2 then begin
-     for i:=LBoundY to ys-1 do begin
-        if FASCOMFlipImage then
-           p2[1]:=ys-1-i
-        else
-           p2[1]:=i;
-        for j:=LBoundX to xs-1 do begin
-          p2[0]:=j;
-          {$ifdef DirectArray}
-            lii:=img[p2[0],p2[1]];
-          {$else}
-            lii:=Timgdata(pimgdata)[p2[0]+p2[1]*xs];
-          {$endif}
-          if FFixPixelRange then lii:=lii div pxdiv;
-          if lii>0 then
-             ii:=lii-32768
+   if debug_msg then msg('write image '+inttostr(bitpx)+'bit');
+   if bitpx=16 then begin
+     // Save 16bit FITS
+     if Dims=2 then begin
+       for i:=LBoundY to ys-1 do begin
+          if FASCOMFlipImage then
+             p2[1]:=ys-1-i
           else
-             ii:=-32768;
-          ii:=NtoBE(ii);
-          FImgStream.Write(ii,sizeof(smallint));
-        end;
+             p2[1]:=i;
+          for j:=LBoundX to xs-1 do begin
+            p2[0]:=j;
+            {$ifdef DirectArray}
+              lii:=img[p2[0],p2[1]];
+            {$else}
+              lii:=Timgdata(pimgdata)[p2[0]+p2[1]*xs];
+            {$endif}
+            if FFixPixelRange then lii:=lii div pxdiv;
+            if lii>0 then
+               ii:=lii-32768
+            else
+               ii:=-32768;
+            ii:=NtoBE(ii);
+            FImgStream.Write(ii,sizeof(smallint));
+          end;
+       end;
+     {$ifndef DirectArray}
+     end
+     else if Dims=3 then begin
+       p3[2]:=0; // only the first plane { #todo : implement full color if someday a camera use this format }
+       for i:=LBoundY to ys-1 do begin
+          if FASCOMFlipImage then
+             p3[1]:=ys-1-i
+          else
+             p3[1]:=i;
+          for j:=LBoundX to xs-1 do begin
+            p3[0]:=j;
+            lii:=Timgdata(pimgdata)[p3[0]+p3[1]*xs];
+            if FFixPixelRange then lii:=lii div pxdiv;
+            if lii>0 then
+               ii:=lii-32768
+            else
+               ii:=-32768;
+            ii:=NtoBE(ii);
+            FImgStream.Write(ii,sizeof(smallint));
+          end;
+       end;
+       {$endif}
      end;
-   {$ifndef DirectArray}
    end
-   else if Dims=3 then begin
-     p3[2]:=0; // only the first plane { #todo : implement full color if someday a camera use this format }
-     for i:=LBoundY to ys-1 do begin
-        if FASCOMFlipImage then
-           p3[1]:=ys-1-i
-        else
-           p3[1]:=i;
-        for j:=LBoundX to xs-1 do begin
-          p3[0]:=j;
-          lii:=Timgdata(pimgdata)[p3[0]+p3[1]*xs];
-          if FFixPixelRange then lii:=lii div pxdiv;
-          if lii>0 then
-             ii:=lii-32768
+   else begin
+     // Save 32bit FITS
+     if Dims=2 then begin
+       for i:=LBoundY to ys-1 do begin
+          if FASCOMFlipImage then
+             p2[1]:=ys-1-i
           else
-             ii:=-32768;
-          ii:=NtoBE(ii);
-          FImgStream.Write(ii,sizeof(smallint));
-        end;
+             p2[1]:=i;
+          for j:=LBoundX to xs-1 do begin
+            p2[0]:=j;
+            {$ifdef DirectArray}
+              lii:=img[p2[0],p2[1]];
+            {$else}
+              lii:=Timgdata(pimgdata)[p2[0]+p2[1]*xs];
+            {$endif}
+            lii:=NtoBE(lii);
+            FImgStream.Write(lii,sizeof(longint));
+          end;
+       end;
+     {$ifndef DirectArray}
+     end
+     else if Dims=3 then begin
+       p3[2]:=0; // only the first plane { #todo : implement full color if someday a camera use this format }
+       for i:=LBoundY to ys-1 do begin
+          if FASCOMFlipImage then
+             p3[1]:=ys-1-i
+          else
+             p3[1]:=i;
+          for j:=LBoundX to xs-1 do begin
+            p3[0]:=j;
+            lii:=Timgdata(pimgdata)[p3[0]+p3[1]*xs];
+            lii:=NtoBE(lii);
+            FImgStream.Write(lii,sizeof(longint));
+          end;
+       end;
+       {$endif}
      end;
-     {$endif}
    end;
 
    if debug_msg then msg('pad fits');
@@ -1290,7 +1333,10 @@ function T_ascomcamera.GetBitperPixel: double;
 begin
  result:=-1;
 {$ifdef mswindows}
-result:=16;
+ if GetMaxADU<=MAXWORD then
+   result:=16
+ else
+   result:=32;
 {$endif}
 end;
 

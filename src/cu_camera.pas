@@ -842,10 +842,12 @@ begin
   f.Header.Insert(2,'NAXIS',hnaxis,'number of data axes');
   f.Header.Insert(3,'NAXIS1',hnaxis1 ,'length of data axis 1');
   f.Header.Insert(4,'NAXIS2',hnaxis2 ,'length of data axis 2');
-  if hnaxis=3 then f.Header.Insert(-1,'NAXIS3',hnaxis3 ,'length of data axis 3');;
-  f.Header.Insert(-1,'BZERO',hbzero,'offset data range to that of unsigned short');
-  i:=f.Header.Insert(-1,'BSCALE',hbscale,'default scaling factor');
-  f.Header.Insert(i+1,'ROWORDER',roworder,'Order of the rows in image array');
+  if hnaxis=3 then f.Header.Insert(-1,'NAXIS3',hnaxis3 ,'length of data axis 3');
+  if (hbzero<>0)or(hbscale<>1) then begin
+    f.Header.Insert(-1,'BZERO',hbzero,'offset data range to that of unsigned short');
+    f.Header.Insert(-1,'BSCALE',hbscale,'default scaling factor');
+  end;
+  f.Header.Insert(-1,'ROWORDER',roworder,'Order of the rows in image array');
   i:=f.Header.Indexof('HIERARCH');
   if i>0 then
      i:=i-1
