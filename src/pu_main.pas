@@ -9964,7 +9964,10 @@ if (AllDevicesConnected)and(not autofocusing)and (not learningvcurve) then begin
   ExpectedStop:=false;
   autoguider.ResetDriftRestartCount;
   // check exposure time
-  e:=StrToFloatDef(f_capture.ExpTime.Text,-1);
+  if ftype=BIAS then
+    e:=0
+  else
+    e:=StrToFloatDef(f_capture.ExpTime.Text,-1);
   if e<0 then begin
     NewMessage(Format(rsInvalidExpos, [f_capture.ExpTime.Text]),1);
     f_capture.Stop;
@@ -10071,7 +10074,7 @@ if (AllDevicesConnected)and(not autofocusing)and (not learningvcurve) then begin
     // increment dither
     f_capture.DitherNum:=f_capture.DitherNum+1;
     // show message
-    NewMessage(Format(rsStartingExpo, [f_capture.FrameType.Text, inttostr(cc)+'/'+f_capture.SeqNum.Text, f_capture.ExpTime.Text]),1);
+    NewMessage(Format(rsStartingExpo, [f_capture.FrameType.Text, inttostr(cc)+'/'+f_capture.SeqNum.Text, FormatFloat(f9v,e)]),1);
   end;
   // start exposure for time e
   camera.StartExposure(e);

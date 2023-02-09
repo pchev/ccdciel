@@ -2485,7 +2485,7 @@ begin
 
         end;
     Bias : begin
-           StepList.Cells[pcolexp,n]:='0.01';
+           StepList.Cells[pcolexp,n]:='0';
            StepList.Cells[pcolfilter,n]:=Filter0;
            StepList.Cells[pcolafstart,n]:='';
            StepList.Cells[pcolafevery,n]:='0';
@@ -2570,8 +2570,6 @@ begin
   StepsModified:=StepsModified or (p.description<>StepList.Cells[pcoldesc,n]);
   p.description:=StepList.Cells[pcoldesc,n];
   str:=StepList.Cells[pcoltype,n];
-  if str='Dark' then
-    j:=0;
   j:=StepList.Columns[pcoltype-1].PickList.IndexOf(str);
   if j<0 then j:=0;
   StepsModified:=StepsModified or (p.frtype<>TFrameType(j));

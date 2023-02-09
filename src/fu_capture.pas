@@ -298,6 +298,8 @@ begin
      CheckBoxDither.Checked:=false;
      CheckBoxFocus.Checked:=false;
   end;
+  ExpTime.Enabled:=(FrameType.ItemIndex<>1);
+  if ExpTime.Enabled and (ExpTime.Text='0') then ExpTime.ItemIndex:=0;
 end;
 
 procedure Tf_capture.Stop;

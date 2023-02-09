@@ -660,6 +660,7 @@ begin
           Fcapture.DitherCount.Value:=p.dithercount;
           Fcapture.CheckBoxFocus.Checked:=p.autofocus;
           Fcapture.FocusCount.Value:=p.autofocuscount;
+          Fcapture.CheckLight(nil);
         end;
         // add target to sequence
         Add(t);
