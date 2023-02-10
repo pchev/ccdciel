@@ -5338,10 +5338,6 @@ msgstr ""
 msgid "Max"
 msgstr ""
 
-#: u_translation:rsreversedecaf
-msgid "Reverse dec output after meridian flip"
-msgstr ""
-
 #: u_translation:rsabortafterre
 msgid "Abort after restarting more than"
 msgstr ""
@@ -5364,10 +5360,6 @@ msgstr ""
 
 #: u_translation:rsoption3cance
 msgid "Option 3: Cancel."
-msgstr ""
-
-#: u_translation:rsslewcalibrat
-msgid "Slew + Calibration + Meridian flip setting"
 msgstr ""
 
 #: u_translation:rscalibration

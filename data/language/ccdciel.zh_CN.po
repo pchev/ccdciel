@@ -13,8 +13,8 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2023-02-04 10:32+0000\n"
-"X-Generator: Launchpad (build 33dc2e2ab7f8e563f52b8c81cbdf9e3946d2097e)\n"
+"X-Launchpad-Export-Date: 2023-02-10 14:20+0000\n"
+"X-Generator: Launchpad (build 76fbbe3960b74b1bf6aa937d9f415c99a6b083f0)\n"
 
 #: u_translation.rs2d
 msgid "2D"
@@ -3856,10 +3856,6 @@ msgstr "回到目标位置"
 msgid "Reverse"
 msgstr "反转"
 
-#: u_translation.rsreversedecaf
-msgid "Reverse dec output after meridian flip"
-msgstr "中天翻转后反转赤纬输出"
-
 #: u_translation.rsrise
 msgid "rise"
 msgstr "升起"
@@ -4449,10 +4445,6 @@ msgstr "圆顶从动"
 #: u_translation.rsslewaborteda
 msgid "Slew aborted after 3 retries!"
 msgstr "指向终止于3次重试之后！"
-
-#: u_translation.rsslewcalibrat
-msgid "Slew + Calibration + Meridian flip setting"
-msgstr "回转+校准+中天翻转设定"
 
 #: u_translation.rsslewcomplete
 msgid "Slew is complete"
