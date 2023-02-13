@@ -4395,7 +4395,7 @@ begin
   f_internalguider.use_arcsec:=config.GetValue('/InternalGuider/UnitArcSec',false);
   f_internalguider.FrameSize1.text:=config.GetValue('/InternalGuider/FrameSize',rsMax2);
   f_internalguider.measure_method2.checked:=config.GetValue('/InternalGuider/Method2',false);
-  f_internalguider.ReverseDec:=config.GetValue('/InternalGuider/ReverseDec',true);
+  f_internalguider.ReverseDec:=config.GetValue('/InternalGuider/ReverseDec',false);
   f_internalguider.InverseSolarTracking:=config.GetValue('/InternalGuider/InverseSolar',false);
   f_internalguider.BacklashCompensation:=config.GetValue('/InternalGuider/BacklashCompensation',false);
   f_internalguider.DecBacklash:=config.GetValue('/InternalGuider/DecBacklash',0);
