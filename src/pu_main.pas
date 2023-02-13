@@ -9499,15 +9499,6 @@ if (camera.Status=devConnected) and ((not f_capture.Running) or autofocusing) an
         camera.SetBinning(binx,biny);
      end;
   end;
-  sx:=StrToIntDef(f_frame.FX.Text,-1);
-  sy:=StrToIntDef(f_frame.FY.Text,-1);
-  sw:=StrToIntDef(f_frame.FWidth.Text,-1);
-  sh:=StrToIntDef(f_frame.FHeight.Text,-1);
-  if (sx>=0)and(sy>=0)and(sw>0)and(sh>0) then begin
-    camera.GetFrame(x,y,w,h,true);
-    if (x<>sx)or(y<>sy)or(w<>sw)or(h<>sh) then
-      camera.SetFrame(sx,sy,sw,sh);
-  end;
   if camera.hasFnumber then begin
     f:=f_preview.Fnumber.Text;
     if (camera.Fnumber<>f) then begin
@@ -10000,16 +9991,6 @@ if (AllDevicesConnected)and(not autofocusing)and (not learningvcurve) then begin
         NewMessage(rsSetBinning+blank+inttostr(binx)+'x'+inttostr(biny),2);
         camera.SetBinning(binx,biny);
      end;
-  end;
-  // check and set frame
-  sx:=StrToIntDef(f_frame.FX.Text,-1);
-  sy:=StrToIntDef(f_frame.FY.Text,-1);
-  sw:=StrToIntDef(f_frame.FWidth.Text,-1);
-  sh:=StrToIntDef(f_frame.FHeight.Text,-1);
-  if (sx>=0)and(sy>=0)and(sw>0)and(sh>0) then begin
-    camera.GetFrame(x,y,w,h,true);
-    if (x<>sx)or(y<>sy)or(w<>sw)or(h<>sh) then
-      camera.SetFrame(sx,sy,sw,sh);
   end;
   // check and set f-stop
   if camera.hasFnumber then begin
