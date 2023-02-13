@@ -37,12 +37,13 @@ type
   private
     InternalguiderInitialize,InternalCalibrationInitialize,GuideLogFileOpen, solar_tracking  : boolean;
     pulseRA,pulseDEC,GuideFrameCount, InternalguiderCalibrationDirection,InternalguiderCalibrationStep,
-    CalibrationDuration,Calflip,CalCount,Calnrtest,frame_size,Binning,BacklashStep: integer;
+    CalibrationDuration,Calflip,CalCount,Calnrtest,frame_size,Binning,BacklashStep,CalBacklash: integer;
     driftX,driftY,driftRA,driftDec,moveRA,moveDEC, Guidethecos,old_moveRA,old_moveDEC,  paEast, paNorth,
     pulsegainEast,pulsegainWest,pulsegainNorth,pulsegainSouth,Calthecos, Caltheangle,CaldriftOld, ditherX,ditherY,ditherX2,ditherY2,
     GuideStartTime,LogSNR,LogFlux,mean_hfd,CalNorthDec1,CalNorthDec2 : double;
     LastDecSign: double;
-    SameDecSignCount: integer;
+    SameDecSignCount,LastBacklashDuration: integer;
+    LastBacklash: boolean;
     north, south    : integer;
     xy_trend : xy_guiderlist;{fu_internalguider}
     xy_array,xy_array_old : star_position_array;//internal guider for measure drift
@@ -102,6 +103,7 @@ implementation
 
 const
    nrpointsTrend=50; //number of trend points plotted
+   maxreverse=3; // wait 3 declination pulse in same direction after a reversal
 var
   oldtickcount: qword=0;
 
@@ -816,7 +818,16 @@ begin
   old_moveRA:=0;
   old_moveDEC:=0;
   LastDecSign:=0;
-  SameDecSignCount:=3;
+  SameDecSignCount:=maxreverse;
+  LastBacklash:=false;
+  if Finternalguider.BacklashCompensation then begin
+    // initialize dec backlash, send a pulse north before to start guiding to prevent wrong initialization
+    LastBacklashDuration:=finternalguider.DecBacklash;
+    mount.PulseGuide(north,LastBacklashDuration);
+    WaitPulseGuiding(LastBacklashDuration);
+  end
+  else
+    LastBacklashDuration:=0;
 
   InternalguiderInitialize:=true; //initialize;
 
@@ -888,10 +899,10 @@ end;
 
 procedure T_autoguider_internal.InternalAutoguiding;
 var i,maxpulse: integer;
-    RADuration,DECDuration: LongInt;
+    RADuration,DECDuration,BacklashDuration,NewPulseDEC: LongInt;
     RADirection,DECDirection: string;
     mflipcorr,PAsolar,moveRA2,dsettle,DecSign: double;
-    meridianflip, largepulse         : boolean;
+    meridianflip, largepulse: boolean;
 
           procedure track_solar_object;//neo and comet tracking
           // Calculates the total integrated correction in pixels for the reference stars in the guider image (DitherX, DitherY)
@@ -1044,6 +1055,7 @@ begin
     RADirection:='';
     DECDuration:=0;
     DECDirection:='';
+    BacklashDuration:=0;
 
     if moveRA2>0 then //going East increases the RA
     begin
@@ -1075,19 +1087,23 @@ begin
     // except if the correction is more than 3X shortestpulse
     DecSign:=sgn(moveDEC);
     largepulse:=round(1000*abs(moveDEC/finternalguider.pulsegainNorth))>(3*finternalguider.ShortestPulse);  // 3 * minimal pulse
-    if not finternalguider.SolarTracking then begin
+    if (not LastBacklash)and (not finternalguider.SolarTracking) then begin
       // tracking comet likely make the correction always in the same direction, disable this process in this case
       if largepulse then begin
         // force pulse
         LastDecSign:=DecSign;
-        SameDecSignCount:=3;
+        SameDecSignCount:=maxreverse-1;
       end;
       if LastDecSign<>0 then begin
         if (LastDecSign=DecSign) then begin
           inc(SameDecSignCount);
-          if SameDecSignCount<3 then begin
+          if SameDecSignCount<maxreverse then begin
             // wait more
             moveDEC:=0;
+          end
+          else if (SameDecSignCount=maxreverse)and(DecSign<>sgn(LastBacklashDuration)) then begin
+            // eventual backlash compensation
+            BacklashDuration:=round(DecSign*abs(LastBacklashDuration));
           end;
         end
         else begin
@@ -1097,6 +1113,37 @@ begin
         end;
       end;
       LastDecSign:=DecSign;
+    end;
+
+    // backlash compensation
+    if LastBacklash then begin
+      // last pulse was a backlash compensation, look at the result
+      NewPulseDEC:=round(1000*abs(moveDEC/finternalguider.pulsegainNorth)); {next pulse duration msec after backlash}
+      if NewPulseDEC>(finternalguider.ShortestPulse) then begin
+        // more correction are required after backlash compensation
+        if DecSign=sgn(LastBacklashDuration) then begin
+          // still in same direction, increase compensation for next time
+          LastBacklashDuration:=round(sgn(LastBacklashDuration)*min(finternalguider.LongestPulse,abs(LastBacklashDuration)+NewPulseDEC/2));
+          finternalguider.DecBacklash:=abs(LastBacklashDuration); //update backlash in config
+        end
+        else begin
+          // direction change, decrease compensation for next time
+          LastBacklashDuration:=round(sgn(LastBacklashDuration)*min(finternalguider.LongestPulse,abs(LastBacklashDuration)-NewPulseDEC/2));
+          finternalguider.DecBacklash:=abs(LastBacklashDuration); //update backlash in config
+        end;
+      end;
+      LastBacklash:=false;
+    end
+    else begin
+      if (BacklashDuration<>0) and Finternalguider.BacklashCompensation then begin
+         // use backlash compensation now
+         if DecSign>0 then
+           moveDEC:=abs(BacklashDuration*finternalguider.pulsegainNorth/1000) // convert duration to pixel
+         else
+           moveDEC:=-abs(BacklashDuration*finternalguider.pulsegainSouth/1000);
+         LastBacklashDuration:=BacklashDuration;
+         LastBacklash:=true;
+      end;
     end;
 
     if moveDEC>0 then //go North increase the DEC.
@@ -1166,11 +1213,15 @@ begin
          finternalguider.LabelStatusRA.Caption:=RADirection+': '+IntToStr(RADuration)+'ms, '+FormatFloat(f1,driftRA)+'px'
       else
          finternalguider.LabelStatusRA.Caption:='';
-      if DECDuration>0 then
-         finternalguider.LabelStatusDec.Caption:=DECDirection+': '+IntToStr(DECDuration)+'ms, '+FormatFloat(f1,driftDec)+'px'
+      if DECDuration>0 then begin
+         if LastBacklash then
+           finternalguider.LabelStatusDec.Caption:='Backlash '+DECDirection+': '+IntToStr(DECDuration)+'ms, '+FormatFloat(f1,driftDec)+'px'
+         else
+           finternalguider.LabelStatusDec.Caption:=DECDirection+': '+IntToStr(DECDuration)+'ms, '+FormatFloat(f1,driftDec)+'px';
+      end
       else begin
        if LastDecSign<>0 then begin
-         if SameDecSignCount>3 then
+         if SameDecSignCount>maxreverse then
            finternalguider.LabelStatusDec.Caption:=''
          else begin
            if LastDecSign>0 then

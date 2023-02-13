@@ -4397,6 +4397,8 @@ begin
   f_internalguider.measure_method2.checked:=config.GetValue('/InternalGuider/Method2',false);
   f_internalguider.ReverseDec:=config.GetValue('/InternalGuider/ReverseDec',true);
   f_internalguider.InverseSolarTracking:=config.GetValue('/InternalGuider/InverseSolar',false);
+  f_internalguider.BacklashCompensation:=config.GetValue('/InternalGuider/BacklashCompensation',false);
+  f_internalguider.DecBacklash:=config.GetValue('/InternalGuider/DecBacklash',0);
   f_internalguider.trend_scale:=config.GetValue('/InternalGuider/Scale',5);
   f_internalguider.Exposure.Value:=config.GetValue('/InternalGuider/Camera/Exposure',2);
   f_internalguider.Binning.Value:=config.GetValue('/InternalGuider/Camera/Binning',1);
@@ -4953,6 +4955,8 @@ begin
   config.SetValue('/InternalGuider/Method2',f_internalguider.measure_method2.Checked);
   config.SetValue('/InternalGuider/ReverseDec',f_internalguider.ReverseDec);
   config.SetValue('/InternalGuider/InverseSolar',f_internalguider.InverseSolarTracking);
+  config.SetValue('/InternalGuider/BacklashCompensation',f_internalguider.BacklashCompensation);
+  config.SetValue('/InternalGuider/DecBacklash',f_internalguider.DecBacklash);
   config.SetValue('/InternalGuider/Camera/Exposure',f_internalguider.Exposure.Value);
   config.SetValue('/InternalGuider/Camera/Binning',f_internalguider.Binning.Value);
   config.SetValue('/InternalGuider/Camera/Gain',f_internalguider.Gain.Value);

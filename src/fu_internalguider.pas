@@ -39,6 +39,7 @@ type
   { Tf_internalguider }
 
   Tf_internalguider = class(TFrame)
+    Backlash: TSpinEdit;
     BtnZoom05: TSpeedButton;
     BtnZoom1: TSpeedButton;
     BtnZoom2: TSpeedButton;
@@ -50,6 +51,7 @@ type
     ButtonGuide: TButton;
     ButtonStop: TButton;
     ButtonStop1: TButton;
+    CheckBoxBacklash: TCheckBox;
     CheckBoxInverseSolarTracking1: TCheckBox;
     CheckBoxReverseDec1: TCheckBox;
     CheckBoxTrackSolar1: TCheckBox;
@@ -61,6 +63,7 @@ type
     Label21: TLabel;
     Label25: TLabel;
     Label26: TLabel;
+    Label27: TLabel;
     LabelInfo: TLabel;
     LabelInfo2: TLabel;
     LabelTemperature: TLabel;
@@ -239,9 +242,10 @@ type
     function GetVPa_solar:double;
     function GetReverseDec: Boolean;
     procedure SetReverseDec(value: Boolean);
-
-
-
+    procedure SetBacklash(value:integer);
+    function GetBacklash:integer;
+    procedure SetBacklashCompensation(value:Boolean);
+    function GetBacklashCompensation:Boolean;
 
   public
     { public declarations }
@@ -287,6 +291,8 @@ type
     property v_solar: double read GetV_solar write SetV_solar;
     property vpa_solar: double read GetVPa_solar write SetVPA_solar;
     property ReverseDec: Boolean read GetReverseDec write SetReverseDec;
+    property DecBacklash: integer read GetBacklash write SetBacklash;
+    property BacklashCompensation: Boolean read GetBacklashCompensation write SetBacklashCompensation;
   end;
 
 implementation
@@ -593,6 +599,25 @@ begin
   result:=vpa_solar1.Value;
 end;
 
+procedure Tf_internalguider.SetBacklash(value:integer);
+begin
+   Backlash.Value:=value;
+end;
+
+function Tf_internalguider.GetBacklash:integer;
+begin
+  result:=Backlash.Value;
+end;
+
+procedure Tf_internalguider.SetBacklashCompensation(value:Boolean);
+begin
+  CheckBoxBacklash.Checked:=value;
+end;
+
+function Tf_internalguider.GetBacklashCompensation:Boolean;
+begin
+  result:=CheckBoxBacklash.Checked;
+end;
 
 procedure Tf_internalguider.SetScale(value:integer);
 begin

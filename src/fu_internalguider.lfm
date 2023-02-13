@@ -1089,7 +1089,33 @@ object f_internalguider: Tf_internalguider
               Top = 280
               Width = 301
               Caption = 'Pulse guiding δ is reversed after meridian flip'
+              TabOrder = 10
+            end
+            object CheckBoxBacklash: TCheckBox
+              Left = 8
+              Height = 21
+              Top = 312
+              Width = 193
+              Caption = 'Use backlash compensation'
               TabOrder = 8
+            end
+            object Backlash: TSpinEdit
+              Left = 182
+              Height = 29
+              Top = 338
+              Width = 88
+              MaxValue = 10000
+              TabOrder = 9
+            end
+            object Label27: TLabel
+              AnchorSideTop.Control = Backlash
+              AnchorSideTop.Side = asrCenter
+              Left = 8
+              Height = 19
+              Top = 343
+              Width = 124
+              Caption = 'Declination backlash'
+              ParentColor = False
             end
           end
         end
