@@ -3558,6 +3558,7 @@ begin
     ShowBinningRange;
     ShowGain;
     ShowFrameRange;
+    SetFrame(nil);
     ShowFnumber;
   end;
 end;
