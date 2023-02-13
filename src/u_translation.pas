@@ -1442,9 +1442,11 @@ resourcestring
   rsTimeInARow = 'time in a row';
   rsSelectACalib = 'Select a calibration option:';
   rsOption1Calib = 'Option 1: Calibration at current position.';
-  rsOption2SlewA = 'Option 2: Slew automatically to SSE and SSW for calibration and setting "Reverse dec output after meridian flip".';
+  rsOption2Calib = 'Option 2: Special calibration at current position for some mounts which reverse δ pulse guiding after the meridian flip.';
+//  rsOption2SlewA = 'Option 2: Slew automatically to SSE and SSW for calibration and setting "Reverse dec output after meridian flip".';
   rsOption3Cance = 'Option 3: Cancel.';
   rsCalibration = 'Calibration';
+  rscalibration2 ='Special calibration';
   rsGuiderCalibr = 'Guider calibration';
   rsWarningDoNot = 'Warning! to use a negative value, be sure the mount driver allow to set SideOfPier before the meridian.';
   rsChangedTo = '%s changed to %s';

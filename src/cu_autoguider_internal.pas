@@ -930,7 +930,7 @@ begin
  if not FPaused then begin
 
   meridianflip:= mount.isGem and ((mount.PierSide=pierWest) <> (pos('E',finternalguider.pier_side)>0));
-  if ((mount.isGem) and (mount.PierSide=pierWest)) then //Correct measurement for reverse Dec by merdian flip
+  if ((mount.isGem) and (mount.PierSide=pierWest) and (finternalguider.ReverseDec=false)) then //Correct measurement for reverse Dec by merdian flip
   begin //Swap definition north and south
     north:=1;
     south:=0
@@ -1382,7 +1382,7 @@ begin
                InternalguiderCalibrationStep:=1;
                InternalCalibration; // iterate without new image
 
-               if ((mount.isGem) and (mount.PierSide=pierWest)) then //Correct measurement for reverse Dec action by merdian flip
+               if ((mount.isGem) and (mount.PierSide=pierWest) and (finternalguider.ReverseDec=false)) then //Correct measurement for reverse Dec action by merdian flip
                begin //Swap definition north and south
                  north:=1;
                  south:=0

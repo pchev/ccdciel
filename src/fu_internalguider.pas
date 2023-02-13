@@ -51,6 +51,7 @@ type
     ButtonStop: TButton;
     ButtonStop1: TButton;
     CheckBoxInverseSolarTracking1: TCheckBox;
+    CheckBoxReverseDec1: TCheckBox;
     CheckBoxTrackSolar1: TCheckBox;
     Cooler: TCheckBox;
     disable_guiding1: TCheckBox;
@@ -236,6 +237,9 @@ type
     function GetV_solar:double;
     procedure SetVPA_solar(value:double);
     function GetVPa_solar:double;
+    function GetReverseDec: Boolean;
+    procedure SetReverseDec(value: Boolean);
+
 
 
 
@@ -282,10 +286,12 @@ type
     property SolarTracking: Boolean read GetSolarTracking write SetSolarTracking;
     property v_solar: double read GetV_solar write SetV_solar;
     property vpa_solar: double read GetVPa_solar write SetVPA_solar;
-
+    property ReverseDec: Boolean read GetReverseDec write SetReverseDec;
   end;
 
 implementation
+
+uses cu_mount;
 
 {$R *.lfm}
 
@@ -389,6 +395,7 @@ begin
   Label9.Caption:=rsFrameSize;
   framesize1.Items[0]:=rsMax2;
   CheckBoxTrackSolar1.Caption:=rsActivateSola;
+//  CheckBoxReverseDec1.Caption:=rsReverseDecAf;
   Label25.Caption:=rsApparentMoti+' ["/min]';
   Label26.Caption:=rsApparentMoti2+' [°]';
 end;
@@ -804,23 +811,41 @@ procedure Tf_internalguider.ButtonCalibrateClick(Sender: TObject);
 var txt: string;
     n: integer;
 begin
- txt:= rsSelectACalib+#10+#10+rsOption1Calib+#10+rsOption3Cance;
+ txt:= rsSelectACalib+#10+#10+rsOption1Calib+#10+#10+rsOption2Calib+#10+#10+rsOption3Cance;
  {$ifdef lclgtk2}
  // inverted button with GTK2
-   n:=QuestionDlg (rsGuiderCalibr, txt, mtCustom,
-         [22,rsCancel,'IsCancel', 20,rsCalibration],
-         '');
+//if mount.isGEM then
+  if true then
+    n:=QuestionDlg (rsGuiderCalibr, txt, mtCustom,
+          [22,rsCancel,'IsCancel', 21, rscalibration2, 20,rsCalibration],
+          '')
+  else
+    n:=QuestionDlg (rsGuiderCalibr, txt, mtCustom,
+          [22,rsCancel,'IsCancel', 20,rsCalibration],
+          '');
  {$else}
-
+// if mount.isGem then
+   if true then
+   n:=QuestionDlg (rsGuiderCalibr, txt, mtCustom,
+         [20,rsCalibration, 21,rscalibration2, 22,rsCancel,'IsCancel'],
+         '')
+ else
    n:=QuestionDlg (rsGuiderCalibr, txt, mtCustom,
          [20,rsCalibration, 22,rsCancel,'IsCancel'],
          '');
  {$endif}
  case n of
       20:begin
+          ReverseDec:=false;
           setled(clYellow);
           if Assigned(FonCalibrate) then FonCalibrate(self);
          end;
+      21:begin
+          ReverseDec:=true;
+          setled(clYellow);
+          if Assigned(FonCalibrate) then FonCalibrate(self);
+         end;
+
       22:exit;
    end;
 end;
@@ -1106,6 +1131,17 @@ procedure Tf_internalguider.SetSolarTracking(value: Boolean);
 begin
   CheckBoxTrackSolar1.Checked:=value;
 end;
+
+function Tf_internalguider.GetReverseDec: boolean;
+begin
+  result:=CheckBoxReverseDec1.Enabled and CheckBoxReverseDec1.Checked;
+end;
+
+procedure Tf_internalguider.SetReverseDec(value: Boolean);
+begin
+  CheckBoxReverseDec1.Checked:=value;
+end;
+
 
 
 end.

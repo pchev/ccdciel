@@ -1076,11 +1076,20 @@ object f_internalguider: Tf_internalguider
             object CheckBoxInverseSolarTracking1: TCheckBox
               Left = 8
               Height = 21
-              Hint = 'Is checked when the mount calibration to the North move to the South. This inversion only applies for solar object tracking'
+              Hint = 'Mount with inversed pulse guiding. This inversion only applies for solar object tracking'
               Top = 248
-              Width = 151
-              Caption = 'Inverse solar control'
+              Width = 197
+              Caption = 'Inversed solar guide control'
               TabOrder = 7
+            end
+            object CheckBoxReverseDec1: TCheckBox
+              Left = 8
+              Height = 21
+              Hint = 'Mount guide pulse control is reversed for declination by the mount driver. Checkmark this option if guiding does not work after a meridian flip.'
+              Top = 280
+              Width = 301
+              Caption = 'Pulse guiding δ is reversed after meridian flip'
+              TabOrder = 8
             end
           end
         end
