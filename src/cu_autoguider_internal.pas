@@ -40,7 +40,7 @@ type
     CalibrationDuration,Calflip,CalCount,Calnrtest,frame_size,Binning,BacklashStep: integer;
     driftX,driftY,driftRA,driftDec,moveRA,moveDEC, Guidethecos,old_moveRA,old_moveDEC,  paEast, paNorth,
     pulsegainEast,pulsegainWest,pulsegainNorth,pulsegainSouth,Calthecos, Caltheangle,CaldriftOld, ditherX,ditherY,ditherX2,ditherY2,
-    GuideStartTime,LogSNR,LogFlux,mean_hfd,CalNorthDec1,CalNorthDec2 : double;
+    GuideStartTime,LogSNR,LogFlux,mean_hfd,CalNorthDec1,CalNorthDec2,CalEastRa1,CalEastRa2 : double;
     LastDecSign: double;
     SameDecSignCount,LastBacklashDuration: integer;
     LastBacklash: boolean;
@@ -1422,7 +1422,8 @@ end;
 procedure T_autoguider_internal.InternalCalibration;
 var drift,unequal                            : double;
     saveInternalguiderCalibratingMeridianFlip: boolean;
-    msgA, msgB                               : string;
+    msgA, msgB,pattern                       : string;
+    pEast,pNorth                             : char;
             procedure StopError;
             begin
               InternalguiderStop;
@@ -1457,6 +1458,7 @@ begin
                CalibrationDuration:=round(CalibrationDuration*1.5);
                msg('Testing pulse guiding East for '+floattostrF(CalibrationDuration/1000,FFgeneral,0,2)+ ' seconds',2);
                InternalCalibrationInitialize:=true;
+               CalEastRa1:=mount.ra;//mount right ascension at start of east calibration
                if measure_drift(InternalCalibrationInitialize,driftX,driftY)>0 then StopError;//measure reference star positions
                mount.PulseGuide(2,CalibrationDuration {duration msec} );  // 0=north, 1=south, 2 East, 3 West
 
@@ -1481,6 +1483,7 @@ begin
                else begin // retry with bigger pulse
                  InternalguiderCalibrationStep:=1;
                end;
+               CalEastRa2:=Mount.ra; //mount right ascension at end of east calibration
              end;
         end;
       end;
@@ -1666,6 +1669,12 @@ begin
         finternalguider.pulsegainSouth:=pulsegainSouth;
 
         finternalguider.InverseSolarTracking:=(CalNorthDec1>CalNorthDec2); //north calibration moved south, inverse solar tracking
+
+        if CalEastRa2>CalEastRa1 then pEast:='E' else  pEast:='W';// which direction does the mount go after pulse East
+        if CalNorthDec2>CalNorthDec1 then pNorth:='N' else  pNorth:='S';// which direction does the mount go after pulse North
+        if pEast='E' then pattern:='E->E' else pattern:='E->W';
+        if pNorth='N' then pattern:=pattern+', N->N' else pattern:=pattern+', N->S';
+        msg('Mount pulse guide pattern is '+pattern,3);
 
         finternalguider.pixel_size:=0.5*15*2/(pulsegainEast+pulsegainWest);//Assume 0.5x and 1.5x pulse speed as set previously
 
