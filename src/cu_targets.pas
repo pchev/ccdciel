@@ -2095,14 +2095,20 @@ begin
         if WeatherCancelRestart then exit;
       end;
       // check if the plans contain only calibration
-      isCalibrationTarget:=true;
-      if (p<>nil) then
-        for i:=0 to p.Count-1 do begin
-           if p.Steps[i].frtype=LIGHT then begin
-              isCalibrationTarget:=false;
-              break;
-           end;
+      isCalibrationTarget:=not astrometrypointing; // astrometry done, do not stop tracking
+      if (p<>nil) then begin
+        if p.Count>0 then begin
+          for i:=0 to p.Count-1 do begin
+             if p.Steps[i].frtype=LIGHT then begin
+                isCalibrationTarget:=false;
+                break;
+             end;
+          end;
+        end
+        else begin
+          isCalibrationTarget:=false; // no exposure here, this only position target, do not stop tracking
         end;
+      end;
       // start mount tracking
       if isCalibrationTarget then
         mount.AbortMotion
