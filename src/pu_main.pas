@@ -10193,7 +10193,10 @@ begin
     {$ifdef debug_raw}writeln(FormatDateTime(dateiso,Now)+blank+'DrawImage end');{$endif}
     if (GetCurrentThreadId=MainThreadID) then CheckSynchronize;
     except
-      on E: Exception do NewMessage('CameraNewImage, DrawImage :'+ E.Message,1);
+      on E: Exception do begin
+        displayimage:=false;
+        NewMessage('CameraNewImage, DrawImage :'+ E.Message,1);
+      end;
     end;
   end
   else begin
