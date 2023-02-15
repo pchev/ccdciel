@@ -48,6 +48,7 @@ type
     procedure Guide(onoff:boolean; recalibrate:boolean=false); override;
     procedure Pause(onoff:boolean; settle:boolean=true); override;
     procedure Dither(pixel:double; raonly:boolean; waittime:double); override;
+    procedure SetLockPosition(x,y: double); override;
     function WaitBusy(maxwait:integer=5):boolean; override;
     function WaitGuiding(maxwait:integer=5):boolean; override;
     function WaitDithering(maxwait:integer=5):boolean; override;
@@ -122,6 +123,10 @@ begin
 end;
 
 procedure T_autoguider_none.Guide(onoff:boolean; recalibrate:boolean=false);
+begin
+end;
+
+procedure T_autoguider_none.SetLockPosition(x,y:double);
 begin
 end;
 

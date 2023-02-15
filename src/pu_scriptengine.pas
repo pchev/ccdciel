@@ -178,6 +178,7 @@ type
     function cmd_AutoguiderPause:string;
     function cmd_AutoguiderUnPause:string;
     function cmd_AutoguiderDither:string;
+    function cmd_AutoguiderSetLockPosition(sx,sy:string):string;
     function cmd_AutoguiderShutdown:string;
     function cmd_Wheel_GetFilter:string;
     function cmd_Wheel_SetFilter(num:string):string;
@@ -1083,6 +1084,7 @@ else if cname='CALIBRATOR_LIGHT_ON' then result:=cmd_calibratorlighton(arg[0])
 else if cname='CUSTOMHEADER' then result:=cmd_customheader(arg[0])
 else if cname='CUSTOMHEADER_ADD' then result:=cmd_customheader_add(arg[0],arg[1])
 else if cname='CUSTOMHEADER_DEL' then result:=cmd_customheader_del(arg[0])
+else if cname='AUTOGUIDER_SETLOCKPOSITION' then result:=cmd_AutoguiderSetLockPosition(arg[0],arg[1])
 ;
 LastErr:='cmdarg('+cname+'): '+result;
 end;
@@ -1346,6 +1348,24 @@ begin
  Autoguider.Dither(DitherPixel, DitherRAonly, DitherWaitTime);
  if Autoguider.WaitDithering(SettleMaxTime) then result:=msgOK;
  wait(2);
+ except
+   result:=msgFailed;
+ end;
+end;
+
+function Tf_scriptengine.cmd_AutoguiderSetLockPosition(sx,sy:string):string;
+var n:integer;
+    x,y: double;
+begin
+ try
+ result:=msgFailed;
+ if Autoguider=nil then exit;
+ val(sx,x,n);
+ if n<>0 then exit;
+ val(sy,y,n);
+ if n<>0 then exit;
+ Autoguider.SetLockPosition(x,y);
+ result:=msgOK;
  except
    result:=msgFailed;
  end;

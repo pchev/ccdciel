@@ -389,6 +389,8 @@ var
   SettleMinTime, SettleMaxTime, CalibrationDelay: integer;
   MeridianOption,MinutesPastMeridian, MinutesPastMeridianMin, MeridianFlipPauseTimeout: integer;
   MeridianFlipPauseBefore, MeridianFlipPauseAfter,MeridianFlipCalibrate,MeridianFlipAutofocus,MeridianFlipStopSlaving: boolean;
+  GuideSetLock: boolean;
+  GuideLockX, GuideLockY: double;
   astrometryResolver: integer;
   OrigX, OrigY,img_Height,img_Width,GuideOrigX, GuideOrigY,guideimg_Height,guideimg_Width : integer;
   ImgFrameX,ImgFrameY,ImgFrameW,ImgFrameH: integer;

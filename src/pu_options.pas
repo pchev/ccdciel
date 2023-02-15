@@ -38,6 +38,13 @@ type
     ButtonSeqDir: TButton;
     ButtonLogDir: TButton;
     CdCPath: TEdit;
+    GroupBox34: TGroupBox;
+    GuideLockX: TFloatSpinEdit;
+    GuideLockY: TFloatSpinEdit;
+    GuideSetLock: TCheckBox;
+    Label162: TLabel;
+    Label163: TLabel;
+    Panel29: TPanel;
     Panel8: TPanel;
     ShowVideo: TCheckBox;
     Label160: TLabel;
@@ -1942,8 +1949,7 @@ begin
   groupbox13.Visible:=(i=0);
   GroupBoxDrift.Visible:=(i=0);
   DitherRAonly.Visible:=(i=0)or(i=3)or(i=4);
-  CalibrationDelay.Visible:=(i=0);
-  label26.Visible:=(i=0);
+  panel29.Visible:=(i=0);
   EarlyDither.Visible:=(i=0);
 end;
 

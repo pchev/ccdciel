@@ -57,6 +57,7 @@ type
     procedure Guide(onoff:boolean; recalibrate:boolean=false); override;
     procedure Pause(onoff:boolean; settle:boolean=true); override;
     procedure Dither(pixel:double; raonly:boolean; waittime:double); override;
+    procedure SetLockPosition(x,y: double); override;
     function WaitBusy(maxwait:integer=5):boolean; override;
     function WaitGuiding(maxwait:integer=5):boolean; override;
     function WaitDithering(maxwait:integer=5):boolean; override;
@@ -442,6 +443,11 @@ end else begin
        if rpcresult='error' then begin
           DisplayMessage('dither'+' '+rpcresult+' '+rpcerror);
        end;
+     end
+     else if rpcid='2011' then begin  // dither
+       if rpcresult='error' then begin
+          DisplayMessage('set_lock_position'+' '+rpcresult+' '+rpcerror);
+       end;
      end;
 
   end;
@@ -629,6 +635,10 @@ try
     buf:=buf+'],';
     buf:=buf+'"id": 2003}';
     Send(buf);
+    if GuideSetLock then begin
+      wait(1);
+      SetLockPosition(GuideLockX,GuideLockY);
+    end;
   end else begin
     AutoguiderAlert:=false;
     FStopGuiding:=true;
@@ -640,6 +650,16 @@ try
   if cguide<>onoff then FState:=GUIDER_BUSY;
 except
 end;
+end;
+
+procedure T_autoguider_phd.SetLockPosition(x,y:double);
+var buf:string;
+begin
+  buf:='{"method": "set_lock_position", "params": [';
+  buf:=buf+FormatFloat(f2,x)+',';
+  buf:=buf+FormatFloat(f2,y)+',';
+  buf:=buf+'true],"id": 2011}';
+  Send(buf);
 end;
 
 procedure T_autoguider_phd.Pause(onoff:boolean; settle:boolean=true);

@@ -66,7 +66,7 @@ object f_option: Tf_option
     Height = 554
     Top = 0
     Width = 720
-    HorzScrollBar.Page = 712
+    HorzScrollBar.Page = 713
     VertScrollBar.Page = 549
     Align = alClient
     BorderStyle = bsNone
@@ -746,7 +746,7 @@ object f_option: Tf_option
                 end              
                 item
                   Title.Caption = 'Value'
-                  Width = 448
+                  Width = 446
                 end>
               FixedCols = 0
               MouseWheelOption = mwGrid
@@ -756,7 +756,7 @@ object f_option: Tf_option
               OnValidateEntry = CustomHeaderValidateEntry
               ColWidths = (
                 100
-                448
+                446
               )
             end
             object Panel8: TPanel
@@ -4820,12 +4820,12 @@ object f_option: Tf_option
         end
         object GroupBoxDrift: TGroupBox
           Left = 0
-          Height = 153
-          Top = 397
+          Height = 158
+          Top = 392
           Width = 560
           Align = alClient
           Caption = 'Guiding drift control'
-          ClientHeight = 133
+          ClientHeight = 138
           ClientWidth = 558
           ParentFont = False
           TabOrder = 2
@@ -4955,149 +4955,23 @@ object f_option: Tf_option
         end
         object Panel14: TPanel
           Left = 0
-          Height = 242
+          Height = 237
           Top = 155
           Width = 560
           Align = alTop
           BevelOuter = bvNone
-          ClientHeight = 242
+          ClientHeight = 237
           ClientWidth = 560
           ParentFont = False
           TabOrder = 3
-          object GroupBox11: TGroupBox
-            Left = 303
-            Height = 242
-            Top = 0
-            Width = 257
-            Align = alClient
-            Caption = 'Settle tolerance'
-            ClientHeight = 222
-            ClientWidth = 255
-            ParentFont = False
-            TabOrder = 1
-            object DitherWaitTime: TSpinEdit
-              Left = 105
-              Height = 28
-              Top = 8
-              Width = 74
-              Constraints.MaxHeight = 28
-              MaxValue = 120
-              ParentFont = False
-              TabOrder = 0
-            end
-            object Label121: TLabel
-              Left = 8
-              Height = 19
-              Top = 11
-              Width = 58
-              Caption = 'Wait time'
-              ParentColor = False
-              ParentFont = False
-            end
-          end
-          object GroupBox6: TGroupBox
-            Left = 303
-            Height = 242
-            Top = 0
-            Width = 257
-            Align = alClient
-            Caption = 'Settle tolerance'
-            ClientHeight = 222
-            ClientWidth = 255
-            ParentFont = False
-            TabOrder = 0
-            object Label20: TLabel
-              AnchorSideTop.Control = SettlePixel
-              AnchorSideTop.Side = asrCenter
-              Left = 8
-              Height = 19
-              Top = 9
-              Width = 35
-              Caption = 'Pixels'
-              ParentColor = False
-              ParentFont = False
-            end
-            object Label21: TLabel
-              AnchorSideTop.Control = SettleMinTime
-              AnchorSideTop.Side = asrCenter
-              Left = 8
-              Height = 19
-              Top = 48
-              Width = 58
-              Caption = 'Min. time'
-              ParentColor = False
-              ParentFont = False
-            end
-            object Label22: TLabel
-              AnchorSideTop.Control = SettleMaxTime
-              AnchorSideTop.Side = asrCenter
-              Left = 8
-              Height = 19
-              Top = 87
-              Width = 51
-              Caption = 'Timeout'
-              ParentColor = False
-              ParentFont = False
-            end
-            object Label26: TLabel
-              Left = 8
-              Height = 38
-              Top = 124
-              Width = 68
-              Caption = 'Calibration '#10'delay'
-              ParentColor = False
-              ParentFont = False
-            end
-            object SettlePixel: TFloatSpinEdit
-              Left = 97
-              Height = 28
-              Top = 4
-              Width = 74
-              Constraints.MaxHeight = 28
-              Increment = 0.1
-              MaxValue = 99
-              ParentFont = False
-              TabOrder = 0
-            end
-            object SettleMinTime: TSpinEdit
-              Left = 97
-              Height = 28
-              Top = 43
-              Width = 74
-              Constraints.MaxHeight = 28
-              MaxValue = 99
-              ParentFont = False
-              TabOrder = 1
-            end
-            object SettleMaxTime: TSpinEdit
-              Left = 97
-              Height = 28
-              Top = 82
-              Width = 74
-              Constraints.MaxHeight = 28
-              MaxValue = 120
-              ParentFont = False
-              TabOrder = 2
-            end
-            object CalibrationDelay: TSpinEdit
-              Left = 97
-              Height = 28
-              Top = 121
-              Width = 74
-              Constraints.MaxHeight = 28
-              MaxValue = 600
-              ParentFont = False
-              TabOrder = 3
-            end
-          end
           object Panel15: TPanel
             Left = 0
-            Height = 242
+            Height = 237
             Top = 0
             Width = 303
             Align = alLeft
             BevelOuter = bvNone
-            ClientHeight = 242
+            ClientHeight = 237
             ClientWidth = 303
             ParentFont = False
             TabOrder = 2
@@ -5175,12 +5049,12 @@ object f_option: Tf_option
             end
             object GroupBox13: TGroupBox
               Left = 0
-              Height = 154
+              Height = 149
               Top = 88
               Width = 303
               Align = alClient
               Caption = 'Star lost recovery'
-              ClientHeight = 134
+              ClientHeight = 129
               ClientWidth = 301
               ParentFont = False
               TabOrder = 1
@@ -5288,6 +5162,204 @@ object f_option: Tf_option
                 Caption = 'count'
                 ParentColor = False
                 ParentFont = False
+              end
+            end
+          end
+          object GroupBox11: TGroupBox
+            Left = 303
+            Height = 237
+            Top = 0
+            Width = 257
+            Align = alClient
+            Caption = 'Settle tolerance'
+            ClientHeight = 217
+            ClientWidth = 255
+            ParentFont = False
+            TabOrder = 1
+            object DitherWaitTime: TSpinEdit
+              Left = 105
+              Height = 28
+              Top = 8
+              Width = 74
+              Constraints.MaxHeight = 28
+              MaxValue = 120
+              ParentFont = False
+              TabOrder = 0
+            end
+            object Label121: TLabel
+              Left = 8
+              Height = 19
+              Top = 11
+              Width = 58
+              Caption = 'Wait time'
+              ParentColor = False
+              ParentFont = False
+            end
+          end
+          object GroupBox6: TGroupBox
+            Left = 303
+            Height = 237
+            Top = 0
+            Width = 257
+            Align = alClient
+            Caption = 'Settle tolerance'
+            ClientHeight = 217
+            ClientWidth = 255
+            ParentFont = False
+            TabOrder = 0
+            object Label20: TLabel
+              AnchorSideTop.Control = SettlePixel
+              AnchorSideTop.Side = asrCenter
+              Left = 8
+              Height = 19
+              Top = 7
+              Width = 35
+              Caption = 'Pixels'
+              ParentColor = False
+              ParentFont = False
+            end
+            object Label21: TLabel
+              AnchorSideTop.Control = SettleMinTime
+              AnchorSideTop.Side = asrCenter
+              Left = 8
+              Height = 19
+              Top = 38
+              Width = 58
+              Caption = 'Min. time'
+              ParentColor = False
+              ParentFont = False
+            end
+            object Label22: TLabel
+              AnchorSideTop.Control = SettleMaxTime
+              AnchorSideTop.Side = asrCenter
+              Left = 8
+              Height = 19
+              Top = 71
+              Width = 51
+              Caption = 'Timeout'
+              ParentColor = False
+              ParentFont = False
+            end
+            object SettlePixel: TFloatSpinEdit
+              Left = 160
+              Height = 28
+              Top = 2
+              Width = 74
+              Constraints.MaxHeight = 28
+              Increment = 0.1
+              MaxValue = 99
+              ParentFont = False
+              TabOrder = 0
+            end
+            object SettleMinTime: TSpinEdit
+              Left = 160
+              Height = 28
+              Top = 33
+              Width = 74
+              Constraints.MaxHeight = 28
+              MaxValue = 99
+              ParentFont = False
+              TabOrder = 1
+            end
+            object SettleMaxTime: TSpinEdit
+              Left = 160
+              Height = 28
+              Top = 66
+              Width = 74
+              Constraints.MaxHeight = 28
+              MaxValue = 120
+              ParentFont = False
+              TabOrder = 2
+            end
+            object Panel29: TPanel
+              Left = 0
+              Height = 122
+              Top = 96
+              Width = 248
+              BevelOuter = bvNone
+              ClientHeight = 122
+              ClientWidth = 248
+              TabOrder = 3
+              object Label26: TLabel
+                AnchorSideTop.Control = CalibrationDelay
+                AnchorSideTop.Side = asrCenter
+                Left = 8
+                Height = 19
+                Top = 8
+                Width = 101
+                Caption = 'Calibration delay'
+                ParentColor = False
+                ParentFont = False
+              end
+              object CalibrationDelay: TSpinEdit
+                Left = 160
+                Height = 28
+                Top = 3
+                Width = 74
+                Constraints.MaxHeight = 28
+                MaxValue = 600
+                ParentFont = False
+                TabOrder = 0
+              end
+              object GroupBox34: TGroupBox
+                Left = 0
+                Height = 89
+                Top = 32
+                Width = 248
+                Caption = 'Spectroscopy'
+                ClientHeight = 69
+                ClientWidth = 246
+                TabOrder = 1
+                object GuideLockX: TFloatSpinEdit
+                  AnchorSideTop.Control = GuideLockY
+                  AnchorSideTop.Side = asrCenter
+                  Left = 32
+                  Height = 28
+                  Hint = 'X'
+                  Top = 28
+                  Width = 90
+                  Constraints.MaxHeight = 28
+                  TabOrder = 0
+                end
+                object GuideLockY: TFloatSpinEdit
+                  Left = 152
+                  Height = 28
+                  Hint = 'Y'
+                  Top = 28
+                  Width = 90
+                  Constraints.MaxHeight = 28
+                  TabOrder = 1
+                end
+                object GuideSetLock: TCheckBox
+                  Left = 8
+                  Height = 21
+                  Top = 4
+                  Width = 123
+                  Caption = 'Set lock position'
+                  Color = clDefault
+                  ParentColor = False
+                  TabOrder = 2
+                end
+                object Label162: TLabel
+                  AnchorSideTop.Control = GuideLockY
+                  AnchorSideTop.Side = asrCenter
+                  Left = 16
+                  Height = 19
+                  Top = 33
+                  Width = 8
+                  Caption = 'X'
+                  ParentColor = False
+                end
+                object Label163: TLabel
+                  AnchorSideTop.Control = GuideLockY
+                  AnchorSideTop.Side = asrCenter
+                  Left = 136
+                  Height = 19
+                  Top = 33
+                  Width = 8
+                  Caption = 'Y'
+                  ParentColor = False
+                end
               end
             end
           end

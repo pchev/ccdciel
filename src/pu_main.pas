@@ -1465,6 +1465,7 @@ begin
   LowQualityDisplay:={$ifdef cpuarm}true{$else}false{$endif};
   ConfigExpEarlyStart:=true;
   EarlyDither:=true;
+  GuideSetLock:=false;
   WantExif:=true;
   MagnitudeCalibration:=NullCoord;
   Collimation:=false;
@@ -4379,6 +4380,9 @@ begin
   SettleMinTime:=config.GetValue('/Autoguider/Settle/MinTime',5);
   SettleMaxTime:=config.GetValue('/Autoguider/Settle/MaxTime',30);
   CalibrationDelay:=config.GetValue('/Autoguider/Settle/CalibrationDelay',300);
+  GuideSetLock:=config.GetValue('/Autoguider/Lock/GuideSetLock',false);
+  GuideLockX:=config.GetValue('/Autoguider/Lock/GuideLockX',0);
+  GuideLockY:=config.GetValue('/Autoguider/Lock/GuideLockY',0);
 
   f_internalguider.RAgain:=config.GetValue('/InternalGuider/RaGain',50);
   f_internalguider.DECgain:=config.GetValue('/InternalGuider/DecGain',50);
@@ -8603,6 +8607,9 @@ begin
    f_option.SettleMinTime.Value:=config.GetValue('/Autoguider/Settle/MinTime',5);
    f_option.SettleMaxTime.Value:=config.GetValue('/Autoguider/Settle/MaxTime',30);
    f_option.CalibrationDelay.Value:=config.GetValue('/Autoguider/Settle/CalibrationDelay',300);
+   f_option.GuideSetLock.Checked:=config.GetValue('/Autoguider/Lock/GuideSetLock',false);
+   f_option.GuideLockX.Value:=config.GetValue('/Autoguider/Lock/GuideLockX',0);
+   f_option.GuideLockY.Value:=config.GetValue('/Autoguider/Lock/GuideLockY',0);
    f_option.StarLostCancelExposure.Value:=config.GetValue('/Autoguider/Recovery/StarLostCancelExposure',0);
    f_option.StarLostRestart.Value:=config.GetValue('/Autoguider/Recovery/RestartTimeout',0);
    f_option.StarLostCancel.Value:=config.GetValue('/Autoguider/Recovery/CancelTimeout',1800);
@@ -8957,6 +8964,9 @@ begin
      config.SetValue('/Autoguider/Settle/MinTime',f_option.SettleMinTime.Value);
      config.SetValue('/Autoguider/Settle/MaxTime',f_option.SettleMaxTime.Value);
      config.SetValue('/Autoguider/Settle/CalibrationDelay',f_option.CalibrationDelay.Value);
+     config.SetValue('/Autoguider/Lock/GuideSetLock',f_option.GuideSetLock.Checked);
+     config.SetValue('/Autoguider/Lock/GuideLockX',f_option.GuideLockX.Value);
+     config.SetValue('/Autoguider/Lock/GuideLockY',f_option.GuideLockY.Value);
      config.SetValue('/Autoguider/Recovery/StarLostCancelExposure',f_option.StarLostCancelExposure.Value);
      config.SetValue('/Autoguider/Recovery/RestartTimeout',f_option.StarLostRestart.Value);
      config.SetValue('/Autoguider/Recovery/CancelTimeout',f_option.StarLostCancel.Value);
@@ -15184,6 +15194,12 @@ try
    buf1:=trim(value[attrib.IndexOf('params.0')]);
    buf:=f_scriptengine.cmd_customheader_del(buf1);
    result:=result+'"result":{"status": "'+buf+'"}';
+  end
+  else if method='AUTOGUIDER_SETLOCKPOSITION' then begin
+    buf1:=trim(value[attrib.IndexOf('params.0')]);
+    buf2:=trim(value[attrib.IndexOf('params.1')]);
+    buf:=f_scriptengine.cmd_AutoguiderSetLockPosition(buf1,buf2);
+    result:=result+'"result":{"status": "'+buf+'"}';
   end
   // method not found
   else begin
