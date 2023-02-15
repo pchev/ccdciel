@@ -1136,7 +1136,7 @@ begin
         end
         else begin
           // direction change, decrease compensation for next time
-          LastBacklashDuration:=round(sgn(LastBacklashDuration)*min(finternalguider.LongestPulse,abs(LastBacklashDuration)-NewPulseDEC/2));
+          LastBacklashDuration:=round(sgn(LastBacklashDuration)*min(finternalguider.LongestPulse,abs(LastBacklashDuration)-NewPulseDEC));
           finternalguider.DecBacklash:=abs(LastBacklashDuration); //update backlash in config
         end;
       end;
