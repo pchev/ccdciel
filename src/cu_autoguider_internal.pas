@@ -37,7 +37,7 @@ type
   private
     InternalguiderInitialize,InternalCalibrationInitialize,GuideLogFileOpen, solar_tracking  : boolean;
     pulseRA,pulseDEC,GuideFrameCount, InternalguiderCalibrationDirection,InternalguiderCalibrationStep,
-    CalibrationDuration,Calflip,CalCount,Calnrtest,frame_size,Binning,BacklashStep,CalBacklash: integer;
+    CalibrationDuration,Calflip,CalCount,Calnrtest,frame_size,Binning,BacklashStep: integer;
     driftX,driftY,driftRA,driftDec,moveRA,moveDEC, Guidethecos,old_moveRA,old_moveDEC,  paEast, paNorth,
     pulsegainEast,pulsegainWest,pulsegainNorth,pulsegainSouth,Calthecos, Caltheangle,CaldriftOld, ditherX,ditherY,ditherX2,ditherY2,
     GuideStartTime,LogSNR,LogFlux,mean_hfd,CalNorthDec1,CalNorthDec2 : double;
@@ -87,8 +87,10 @@ type
     procedure InternalguiderStop;
     procedure InternalguiderRecoverCamera;
     procedure InternalguiderCalibrate;
+    procedure InternalguiderCalibrateBacklash;
     procedure InternalAutoguiding;
     procedure InternalCalibration;
+    procedure BacklashCalibration;
     procedure InternalguiderCaptureDark;
     procedure ParameterChange(txt: string);
     Procedure StartGuideExposureAsync(Data: PtrInt);
@@ -171,6 +173,7 @@ begin
   InternalguiderRunning:=false;
   InternalguiderGuiding:=false;
   InternalguiderCalibrating:=false;
+  InternalguiderCalibratingBacklash:=false;
   InternalguiderCapturingDark:=false;
   InternalguiderCalibratingMeridianFlip:=false;
   frame_size:=999999;
@@ -503,7 +506,7 @@ begin
     begin
       mean_hfd:=mean_hfd/star_counter;
 
-      if ((frame_size<(ysize-1)) and (frame_size<(xsize-1)) and (not InternalguiderCalibrating)) then //filter out stars available in the frame
+      if ((frame_size<(ysize-1)) and (frame_size<(xsize-1)) and (not (InternalguiderCalibrating or InternalguiderCalibratingBacklash))) then //filter out stars available in the frame
       begin
         starx:=round(xy_array[maxSNRstar].x1); // brightest star position
         stary:=round(xy_array[maxSNRstar].y1);
@@ -1318,6 +1321,7 @@ begin
   end;
   InternalguiderGuiding:=false;
   InternalguiderCalibrating:=false;
+  InternalguiderCalibratingBacklash:=false;
   InternalguiderCapturingDark:=false;
   InternalguiderCalibratingMeridianFlip:=false;
   Finternalguider.ButtonLoop.enabled:=true;
@@ -1334,7 +1338,7 @@ procedure T_autoguider_internal.InternalguiderRecoverCamera;
 begin
   // we go here after a guide camera error
   // try to recover by aborting the current exposure and start another one
-  if InternalguiderRunning and (not InternalguiderCalibrating) and (not FRecoveringCamera) then begin
+  if InternalguiderRunning and (not (InternalguiderCalibrating or InternalguiderCalibratingBacklash)) and (not FRecoveringCamera) then begin
    if FRecoveringCameraCount<5 then begin
     inc(FRecoveringCameraCount);
     FRecoveringCamera:=true;
@@ -1725,6 +1729,151 @@ begin
         InternalguiderStop;
         SetStatus('Calibration Complete',GUIDER_IDLE);
         InternalguiderCalibratingMeridianFlip := saveInternalguiderCalibratingMeridianFlip;
+      end;
+  end;
+  except
+  end;
+end;
+
+procedure T_autoguider_internal.InternalguiderCalibrateBacklash;
+begin
+  if AllDevicesConnected=false then
+  begin
+    msg('Internal guider: Devices not connected!',1);
+    InternalguiderStop;
+    exit;
+  end;
+  if FCamera.Status<>devConnected then
+  begin
+    msg('Internal guider: Guide camera not connected!',1);
+    SetStatus('Guide camera not connected',GUIDER_ALERT);
+    exit;
+  end;
+  if Fmount.canpulseguide=false then
+  begin
+    msg('Abort, mount does not support pulse guiding!',1);
+    InternalguiderStop;
+    exit;
+  end;
+  if abs(mount.Dec)>60 then
+  begin
+    msg('Abort, calibration at high declination is not possible!',1);
+    InternalguiderStop;
+    exit;
+  end;
+  if Finternalguider.pier_side='N/A' then
+  begin
+    msg('Run the guider calibration before the backlash calibration.',1);
+    InternalguiderStop;
+    exit;
+  end;
+
+  StopInternalguider:=false;
+  InternalguiderCalibratingBacklash:=true;
+  SetStatus('Start Calibration',GUIDER_BUSY);
+
+  finternalguider.trend_message('Guider is in backlash calibration mode.','This will take a few minutes.','');
+
+  if mount.Tracking=false then
+  begin
+    msg('Start tracking. Wait 20 seconds',3);
+    mount.Track;//start tracking
+    wait(20);
+  end;
+
+  InternalguiderCalibrationDirection:=1;
+  InternalguiderCalibrationStep:=0;
+
+  InternalguiderLoop;
+end;
+
+procedure T_autoguider_internal.BacklashCalibration;
+var drift: double;
+            procedure StopError;
+            begin
+              InternalguiderStop;
+              msg('Calibration error',1);
+              SetStatus('Calibration Failed',GUIDER_ALERT);
+              raise exception.Create('Calibration error');
+            end;
+begin
+  try
+    case InternalguiderCalibrationDirection of
+    1:begin  //Move NORTH to remove backlash
+        case InternalguiderCalibrationStep of
+          0: begin
+               msg('Remove backlash North',3);
+               InternalCalibrationInitialize:=true;
+               if measure_drift(InternalCalibrationInitialize,driftX,driftY)>0 then StopError;
+               mount.PulseGuide(north,finternalguider.LongestPulse);
+               WaitPulseGuiding(finternalguider.LongestPulse);
+               InternalguiderCalibrationStep:=1;
+               BacklashStep:=1;
+             end;
+          1: begin
+               if measure_drift(InternalCalibrationInitialize,driftX,driftY)>0 then StopError;
+               drift:=sqrt(sqr(driftX)+sqr(driftY));
+               msg('Backlash step '+inttostr(BacklashStep)+' drift '+FormatFloat(f1,drift),3);
+               if drift<3 then begin
+                 // more backlash
+                 inc(BacklashStep);
+                 if BacklashStep>30 then begin
+                   msg('Mount do not move after '+inttostr(BacklashStep-1)+' steps, try to fix mechanical backlash or increase "Longest guide pulse"',3);
+                   StopError;
+                 end
+                 else begin
+                   mount.PulseGuide(north,finternalguider.LongestPulse);
+                   WaitPulseGuiding(finternalguider.LongestPulse);
+                 end;
+               end
+               else begin
+                 // start South backlash measurement
+                 CalibrationDuration:=round(3*1000/finternalguider.pulsegainNorth); //duration for 3 pixel move
+                 InternalguiderCalibrationDirection:=2;
+                 InternalguiderCalibrationStep:=0;
+                 BacklashCalibration;  // iterate without new image
+               end;
+             end;
+        end;
+      end;
+    2:begin  //SOUTH, measure pulse guide speed.
+        case InternalguiderCalibrationStep of
+          0: begin
+               msg('Measure backlash South',3);
+               InternalCalibrationInitialize:=true;
+               if measure_drift(InternalCalibrationInitialize,driftX,driftY)>0 then StopError;
+               mount.PulseGuide(south,CalibrationDuration);
+               WaitPulseGuiding(CalibrationDuration);
+               InternalguiderCalibrationStep:=1;
+               BacklashStep:=1;
+             end;
+          1: begin
+               if measure_drift(InternalCalibrationInitialize,driftX,driftY)>0 then StopError;
+               drift:=sqrt(sqr(driftX)+sqr(driftY));
+               msg('Backlash step '+inttostr(BacklashStep)+' drift '+FormatFloat(f1,drift),3);
+               if drift<3 then begin
+                 // more backlash
+                 inc(BacklashStep);
+                 if BacklashStep>50 then begin
+                   msg('Mount do not move after '+inttostr(BacklashStep-1)+' steps, try to fix mechanical backlash"',3);
+                   StopError;
+                 end
+                 else begin
+                   mount.PulseGuide(south,CalibrationDuration);
+                   WaitPulseGuiding(CalibrationDuration);
+                 end;
+               end
+               else begin
+                 // measurement completed
+                 finternalguider.DecBacklash:=CalibrationDuration*(BacklashStep-1);
+                 msg('Measured Declination backlash '+IntToStr(finternalguider.DecBacklash)+ ' milliseconds',3);
+                 finternalguider.trend_message('Backlash measurement complete','','');
+                 msg('Check "Use backlash compensation" in the Advanced tab to apply.',3);
+                 InternalguiderStop;
+                 SetStatus('Calibration Complete',GUIDER_IDLE);
+               end;
+             end;
+        end;
       end;
   end;
   except

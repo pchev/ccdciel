@@ -520,7 +520,7 @@ var
   TriangleInspectionAngle: double;
   LastHfd,LastDrift: double;
   {internal guider}
-  InternalguiderRunning,InternalguiderCalibrating,InternalguiderGuiding,StopInternalguider,InternalguiderCapturingDark: boolean;
+  InternalguiderRunning,InternalguiderCalibrating,InternalguiderCalibratingBacklash,InternalguiderGuiding,StopInternalguider,InternalguiderCapturingDark: boolean;
   CustomHeaderNum: integer;
   CustomHeaders: array [1..MaxCustomHeaders] of TCustomHeaderElement;
 

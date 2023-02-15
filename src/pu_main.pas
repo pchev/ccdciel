@@ -915,6 +915,7 @@ type
     procedure InternalguiderStart(Sender: TObject);
     procedure InternalguiderStop(Sender: TObject);
     procedure InternalguiderCalibrate(Sender: TObject);
+    procedure InternalguiderCalibrateBacklash(Sender: TObject);
     procedure InternalguiderRedraw(Sender: TObject);
     procedure InternalguiderCaptureDark(Sender: TObject);
     procedure InternalguiderLoadDark(Sender: TObject);
@@ -1743,6 +1744,7 @@ begin
   f_internalguider.onStart:=@InternalguiderStart;
   f_internalguider.onStop:=@InternalguiderStop;
   f_internalguider.onCalibrate:=@InternalguiderCalibrate;
+  f_internalguider.onCalibrateBacklash:=@InternalguiderCalibrateBacklash;
   f_internalguider.onRedraw:=@InternalguiderRedraw;
   f_internalguider.onCaptureDark:=@InternalguiderCaptureDark;
   f_internalguider.onLoadDark:=@InternalguiderLoadDark;
@@ -15417,8 +15419,12 @@ begin
    if autoguider is T_autoguider_internal then T_autoguider_internal(autoguider).InternalguiderCalibrate;
 end;
 
+procedure Tf_main.InternalguiderCalibrateBacklash(Sender: TObject);
+begin
+   if autoguider is T_autoguider_internal then T_autoguider_internal(autoguider).InternalguiderCalibrateBacklash;
+end;
+
 Procedure Tf_main.InternalguiderCaptureDark(Sender: TObject);
-var bin: integer;
 begin
  f_pause.Caption:='Dark frame';
  f_pause.Text:='Cover the guide camera'+crlf+rsClickContinu;
@@ -15494,6 +15500,7 @@ begin
    InternalguiderRunning:=false;
    InternalguiderGuiding:=false;
    InternalguiderCalibrating:=false;
+   InternalguiderCalibratingBacklash:=false;
    exit;
   end;
 
@@ -15509,6 +15516,9 @@ begin
     else if InternalguiderCalibrating then
       // process calibration
       T_autoguider_internal(autoguider).InternalCalibration
+    else if InternalguiderCalibratingBacklash then
+      // process backlash calibration
+      T_autoguider_internal(autoguider).BacklashCalibration
       // process dark capture
     else if InternalguiderCapturingDark then begin
       if (not guidecamera.AddFrames)or(guidecamera.StackNum<1)or(guidecamera.StackCount>=guidecamera.StackNum) then begin

@@ -186,7 +186,7 @@ type
   private
     { private declarations }
     thescale : double;
-    FonStart, FonStop, FonCalibrate, FonLoop, FonRedraw: TNotifyEvent;
+    FonStart, FonStop, FonCalibrate, FonCalibrateBacklash, FonLoop, FonRedraw: TNotifyEvent;
     FonSetTemperature,FonSetCooler, FonCaptureDark, FonLoadDark, FonClearDark,FonDarkInfo: TNotifyEvent;
     FonParameterChange: TNotifyStr;
     cur_minHFD,cur_minSNR,cur_Exposure,cur_vsolar,cur_vpasolar : double;
@@ -259,6 +259,7 @@ type
     property onStart: TNotifyEvent read FonStart write FonStart;
     property onStop: TNotifyEvent read FonStop write FonStop;
     property onCalibrate: TNotifyEvent read FonCalibrate write FonCalibrate;
+    property onCalibrateBacklash: TNotifyEvent read FonCalibrateBacklash write FonCalibrateBacklash;
     property onRedraw: TNotifyEvent read FonRedraw write FonRedraw;
     property onCaptureDark: TNotifyEvent read FonCaptureDark write FonCaptureDark;
     property onLoadDark: TNotifyEvent read FonLoadDark write FonLoadDark;
@@ -836,27 +837,26 @@ procedure Tf_internalguider.ButtonCalibrateClick(Sender: TObject);
 var txt: string;
     n: integer;
 begin
- txt:= rsSelectACalib+#10+#10+rsOption1Calib+#10+#10+rsOption2Calib+#10+#10+rsOption3Cance;
+ txt:= rsSelectACalib+#10+#10+rsOption1Calib+#10+#10+rsOption2Calib+#10+#10+rsOption3Backl+#10+#10+rsOption4Cance;
  {$ifdef lclgtk2}
  // inverted button with GTK2
 //if mount.isGEM then
   if true then
     n:=QuestionDlg (rsGuiderCalibr, txt, mtCustom,
-          [22,rsCancel,'IsCancel', 21, rscalibration2, 20,rsCalibration],
-          '')
+          [23, rsCancel, 'IsCancel', 22, rsBacklashCali, 21, rscalibration2, 20, rsCalibration],'')
   else
     n:=QuestionDlg (rsGuiderCalibr, txt, mtCustom,
-          [22,rsCancel,'IsCancel', 20,rsCalibration],
+          [23,rsCancel,'IsCancel',  22, rsBacklashCali, 20,rsCalibration],
           '');
  {$else}
 // if mount.isGem then
    if true then
    n:=QuestionDlg (rsGuiderCalibr, txt, mtCustom,
-         [20,rsCalibration, 21,rscalibration2, 22,rsCancel,'IsCancel'],
+         [20,rsCalibration, 21,rscalibration2, 22, rsBacklashCali, 23,rsCancel,'IsCancel'],
          '')
  else
    n:=QuestionDlg (rsGuiderCalibr, txt, mtCustom,
-         [20,rsCalibration, 22,rsCancel,'IsCancel'],
+         [20,rsCalibration, 22, rsBacklashCali, 23,rsCancel,'IsCancel'],
          '');
  {$endif}
  case n of
@@ -870,8 +870,12 @@ begin
           setled(clYellow);
           if Assigned(FonCalibrate) then FonCalibrate(self);
          end;
+      22:begin
+          setled(clYellow);
+          if Assigned(FonCalibrateBacklash) then FonCalibrateBacklash(self);
+         end;
 
-      22:exit;
+      23:exit;
    end;
 end;
 

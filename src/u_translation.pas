@@ -1443,8 +1443,8 @@ resourcestring
   rsSelectACalib = 'Select a calibration option:';
   rsOption1Calib = 'Option 1: Calibration at current position.';
   rsOption2Calib = 'Option 2: Special calibration at current position for some mounts which reverse δ pulse guiding after the meridian flip.';
-//  rsOption2SlewA = 'Option 2: Slew automatically to SSE and SSW for calibration and setting "Reverse dec output after meridian flip".';
-  rsOption3Cance = 'Option 3: Cancel.';
+  rsOption3Backl = 'Option 3: Calibrate backlash compensation.';
+  rsOption4Cance = 'Option 4: Cancel.';
   rsCalibration = 'Calibration';
   rscalibration2 ='Special calibration';
   rsGuiderCalibr = 'Guider calibration';
@@ -1475,6 +1475,7 @@ resourcestring
   rsApparentMoti2 = 'Apparent motion PA';
   rsAdditionalOp = 'Additional options for';
   rsAutofocusAft2 = 'Autofocus after temperature change';
+  rsBacklashCali = 'Backlash calibration';
 
 implementation
 
