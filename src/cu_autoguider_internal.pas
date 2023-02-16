@@ -1423,7 +1423,6 @@ procedure T_autoguider_internal.InternalCalibration;
 var drift,unequal                            : double;
     saveInternalguiderCalibratingMeridianFlip: boolean;
     msgA, msgB,pattern                       : string;
-    pEast,pNorth                             : char;
             procedure StopError;
             begin
               InternalguiderStop;
@@ -1670,11 +1669,12 @@ begin
 
         finternalguider.InverseSolarTracking:=(CalNorthDec1>CalNorthDec2); //north calibration moved south, inverse solar tracking
 
-        if CalEastRa2>CalEastRa1 then pEast:='E' else  pEast:='W';// which direction does the mount go after pulse East
-        if CalNorthDec2>CalNorthDec1 then pNorth:='N' else  pNorth:='S';// which direction does the mount go after pulse North
-        if pEast='E' then pattern:='E->E' else pattern:='E->W';
-        if pNorth='N' then pattern:=pattern+', N->N' else pattern:=pattern+', N->S';
-        msg('Mount pulse guide pattern is '+pattern,3);
+        //report the uncorrected mount behaviour
+        if mount.PierSide=pierWest then pattern:='Mount pulse guide pattern in the East is ' else pattern:='Mount pulse guide pattern in the West is ';
+        if CalEastRa2>CalEastRa1 then pattern:=pattern+'E->E' else pattern:=pattern+'E->W';;// In which direction does the mount go after pulse East
+        if ((CalNorthDec2>CalNorthDec1) xor (North<>0)) then pattern:=pattern+', N->N' else pattern:=pattern+', N->S';// In which direction does the mount go after pulse North (uncorrected).
+        msg(pattern,3);
+
 
         finternalguider.pixel_size:=0.5*15*2/(pulsegainEast+pulsegainWest);//Assume 0.5x and 1.5x pulse speed as set previously
 
