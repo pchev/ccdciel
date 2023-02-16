@@ -15238,8 +15238,12 @@ try
    result:=result+'"result":{"status": "'+buf+'"}';
   end
   else if method='AUTOGUIDER_SETLOCKPOSITION' then begin
+    try
     buf1:=trim(value[attrib.IndexOf('params.0')]);
     buf2:=trim(value[attrib.IndexOf('params.1')]);
+    except
+      buf1:=''; buf2:='';
+    end;
     buf:=f_scriptengine.cmd_AutoguiderSetLockPosition(buf1,buf2);
     result:=result+'"result":{"status": "'+buf+'"}';
   end

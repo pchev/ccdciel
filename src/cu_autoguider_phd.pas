@@ -655,11 +655,13 @@ end;
 procedure T_autoguider_phd.SetLockPosition(x,y:double);
 var buf:string;
 begin
+if FState<>GUIDER_DISCONNECTED then begin
   buf:='{"method": "set_lock_position", "params": [';
   buf:=buf+FormatFloat(f2,x)+',';
   buf:=buf+FormatFloat(f2,y)+',';
   buf:=buf+'true],"id": 2011}';
   Send(buf);
+end;
 end;
 
 procedure T_autoguider_phd.Pause(onoff:boolean; settle:boolean=true);

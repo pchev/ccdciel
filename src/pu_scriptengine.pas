@@ -1360,12 +1360,25 @@ begin
  try
  result:=msgFailed;
  if Autoguider=nil then exit;
- val(sx,x,n);
- if n<>0 then exit;
- val(sy,y,n);
- if n<>0 then exit;
- Autoguider.SetLockPosition(x,y);
- result:=msgOK;
+ if (sx='')and(sy='') then begin
+   config.SetValue('/Autoguider/Lock/GuideSetLock',False);
+   GuideSetLock:=False;
+   result:=msgOK;
+ end
+ else begin
+   val(sx,x,n);
+   if n<>0 then exit;
+   val(sy,y,n);
+   if n<>0 then exit;
+   config.SetValue('/Autoguider/Lock/GuideSetLock',True);
+   config.SetValue('/Autoguider/Lock/GuideLockX',x);
+   config.SetValue('/Autoguider/Lock/GuideLockY',y);
+   GuideSetLock:=True;
+   GuideLockX:=x;
+   GuideLockY:=y;
+   Autoguider.SetLockPosition(x,y);
+   result:=msgOK;
+ end;
  except
    result:=msgFailed;
  end;
