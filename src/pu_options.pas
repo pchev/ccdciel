@@ -38,6 +38,10 @@ type
     ButtonSeqDir: TButton;
     ButtonLogDir: TButton;
     CdCPath: TEdit;
+    Label161: TLabel;
+    Label164: TLabel;
+    MeridianScriptArgs: TEdit;
+    MeridianScript: TComboBox;
     GroupBox34: TGroupBox;
     GuideLockX: TFloatSpinEdit;
     GuideLockY: TFloatSpinEdit;
@@ -45,6 +49,8 @@ type
     Label162: TLabel;
     Label163: TLabel;
     Panel29: TPanel;
+    MeridianFlipPanel1: TPanel;
+    MeridianFlipPanel3: TPanel;
     Panel8: TPanel;
     ShowVideo: TCheckBox;
     Label160: TLabel;
@@ -620,7 +626,7 @@ type
     Label39: TLabel;
     Label40: TLabel;
     MeridianOption: TRadioGroup;
-    MeridianFlipPanel: TPanel;
+    MeridianFlipPanel2: TPanel;
     Page3: TPage;
     RefColor: TRadioGroup;
     SelectDirectoryDialog1: TSelectDirectoryDialog;
@@ -1283,7 +1289,10 @@ begin
   PrecSlewBox.Items[1]:=rsPointingOffs;
   MeridianOption.Items[0]:=rsDoNothing;
   MeridianOption.Items[1]:=rsAutomaticFli;
-  MeridianOption.Items[2]:=rsAbort;
+  MeridianOption.Items[2]:=rsRunAScript;
+  MeridianOption.Items[3]:=rsAbort;
+  Label161.Caption:=rsScript;
+  Label164.Caption:=rsScriptArgume;
   AutoguiderBox.Items[1]:=rsInternal;
   AutoguiderBox.Items[3]:=rsDitherOnly;
   AutoguiderBox.Items[4]:=rsNone2;
@@ -1433,7 +1442,9 @@ end;
 
 procedure Tf_option.MeridianOptionClick(Sender: TObject);
 begin
-  MeridianFlipPanel.Visible:=(MeridianOption.ItemIndex=1);
+  MeridianFlipPanel1.Visible:=(MeridianOption.ItemIndex=1)or(MeridianOption.ItemIndex=2);
+  MeridianFlipPanel2.Visible:=(MeridianOption.ItemIndex=1);
+  MeridianFlipPanel3.Visible:=(MeridianOption.ItemIndex=2);
 end;
 
 procedure Tf_option.MinutesPastMeridianChange(Sender: TObject);

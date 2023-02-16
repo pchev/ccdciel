@@ -3196,6 +3196,12 @@ try
   if oldver<'0.9.82' then begin
      config.SetValue('/InternalGuider/PierSide','N/A');
   end;
+  if oldver<'0.9.83' then begin
+     i:=config.GetValue('/Meridian/MeridianOption',3);
+     if i=2 then begin // old abort value
+       config.SetValue('/Meridian/MeridianOption',3);
+     end;
+  end;
   if config.Modified then
      SaveConfig;
 except
@@ -4416,7 +4422,7 @@ begin
   f_internalguider.Luminosity.Position:=config.GetValue('/InternalGuider/Visu/Luminosity',50);
   GuideImgZoom:=config.GetValue('/InternalGuider/Visu/Zoom',0);
 
-  MeridianOption:=config.GetValue('/Meridian/MeridianOption',2);
+  MeridianOption:=config.GetValue('/Meridian/MeridianOption',3);
   MinutesPastMeridian:=config.GetValue('/Meridian/MinutesPast',15);
   MinutesPastMeridianMin:=config.GetValue('/Meridian/MinutesPastMin',10);
   MeridianFlipPauseBefore:=config.GetValue('/Meridian/MeridianFlipPauseBefore',false);
@@ -4425,9 +4431,12 @@ begin
   MeridianFlipCalibrate:=config.GetValue('/Meridian/MeridianFlipCalibrate',false);
   MeridianFlipAutofocus:=config.GetValue('/Meridian/MeridianFlipAutofocus',false);
   MeridianFlipStopSlaving:=config.GetValue('/Meridian/MeridianFlipStopSlaving',false);
+  MeridianScript:=config.GetValue('/Meridian/MeridianScript','');
+  MeridianScriptPath:=config.GetValue('/Meridian/MeridianScriptPath','');
+  MeridianScriptArgs:=config.GetValue('/Meridian/MeridianScriptArgs','');
 
   if (mount.Status=devConnected)and(MeridianOption=1)and(MinutesPastMeridianMin<0)and(not mount.CanSetPierSide) then begin
-    MeridianOption:=2; // Abort
+    MeridianOption:=3; // Abort
     config.SetValue('/Meridian/MeridianOption',MeridianOption);
     f_pause.Caption:=format(rsError,[rsOnMeridianCr]);
     f_pause.Text:=rsMountDoNotSu+crlf+Format(rsChangedTo, [rsOnMeridianCr, rsAbort]);
@@ -7440,7 +7449,7 @@ case mount.Status of
                          end;
                       end;
                       if (MeridianOption=1)and(MinutesPastMeridianMin<0)and(not mount.CanSetPierSide) then begin
-                        MeridianOption:=2; // Abort
+                        MeridianOption:=3; // Abort
                         config.SetValue('/Meridian/MeridianOption',MeridianOption);
                         f_pause.Caption:=format(rsError,[rsOnMeridianCr]);
                         f_pause.Text:=rsMountDoNotSu+crlf+Format(rsChangedTo, [rsOnMeridianCr, rsAbort]);
@@ -8580,16 +8589,28 @@ begin
       f_option.MeridianWarning.caption:='';
       f_option.Panel13.Visible:=false;
    end;
-   f_option.MeridianOption.ItemIndex:=config.GetValue('/Meridian/MeridianOption',2);
+   f_option.MeridianOption.ItemIndex:=config.GetValue('/Meridian/MeridianOption',3);
    f_option.MinutesPastMeridian.Value:=config.GetValue('/Meridian/MinutesPast',MinutesPastMeridian);
    f_option.MinutesPastMeridianMin.Value:=config.GetValue('/Meridian/MinutesPastMin',MinutesPastMeridianMin);
    f_option.MeridianFlipPauseBefore.Checked:=config.GetValue('/Meridian/MeridianFlipPauseBefore',false);
    f_option.MeridianFlipPauseAfter.Checked:=config.GetValue('/Meridian/MeridianFlipPauseAfter',false);
    f_option.MeridianFlipPauseTimeout.Value:=config.GetValue('/Meridian/MeridianFlipPauseTimeout',0);
-   f_option.MeridianFlipPanel.Visible:=(f_option.MeridianOption.ItemIndex=1);
+   f_option.MeridianFlipPanel1.Visible:=(f_option.MeridianOption.ItemIndex=1)or(f_option.MeridianOption.ItemIndex=2);
+   f_option.MeridianFlipPanel2.Visible:=(f_option.MeridianOption.ItemIndex=1);
    f_option.MeridianFlipCalibrate.Checked:=config.GetValue('/Meridian/MeridianFlipCalibrate',false);
    f_option.MeridianFlipStopSlaving.Checked:=config.GetValue('/Meridian/MeridianFlipStopSlaving',false);
    f_option.MeridianFlipAutofocus.Checked:=config.GetValue('/Meridian/MeridianFlipAutofocus',false);
+   f_option.MeridianScript.Clear;
+   f_option.MeridianScript.Items.Assign(f_script.ComboBoxScript.Items);
+   buf:=config.GetValue('/Meridian/MeridianScript','');
+   if buf<>'' then begin
+     i:=f_option.MeridianScript.Items.IndexOf(buf);
+     if i>=0 then f_option.MeridianScript.ItemIndex:=i;
+   end
+   else begin
+     f_option.MeridianScript.Text:='';
+   end;
+   f_option.MeridianScriptArgs.Text:=config.GetValue('/Meridian/MeridianScriptArgs','');
    f_option.AutoguiderType:=config.GetValue('/Autoguider/Software',2);
    f_option.PHDhostname.Text:=config.GetValue('/Autoguider/PHDhostname','localhost');
    f_option.PHDport.Text:=config.GetValue('/Autoguider/PHDport','4400');
@@ -8947,6 +8968,21 @@ begin
      config.SetValue('/Meridian/MeridianFlipCalibrate',f_option.MeridianFlipCalibrate.Checked);
      config.SetValue('/Meridian/MeridianFlipAutofocus',f_option.MeridianFlipAutofocus.Checked);
      config.SetValue('/Meridian/MeridianFlipStopSlaving',f_option.MeridianFlipStopSlaving.Checked);
+     i:=f_option.MeridianScript.ItemIndex;
+     if i>=0 then begin
+       try
+       config.SetValue('/Meridian/MeridianScript',f_option.MeridianScript.Items[i]);
+       config.SetValue('/Meridian/MeridianScriptPath',TScriptDir(f_option.MeridianScript.Items.Objects[i]).path);
+       except
+         config.SetValue('/Meridian/MeridianScript','');
+         config.SetValue('/Meridian/MeridianScriptPath','');
+       end;
+     end
+     else begin
+       config.SetValue('/Meridian/MeridianScript','');
+       config.SetValue('/Meridian/MeridianScriptPath','');
+     end;
+     config.SetValue('/Meridian/MeridianScriptArgs',f_option.MeridianScriptArgs.Text);
      config.SetValue('/Autoguider/Software',f_option.AutoguiderType);
      config.SetValue('/Autoguider/PHDhostname',f_option.PHDhostname.Text);
      config.SetValue('/Autoguider/PHDport',f_option.PHDport.Text);
@@ -13974,13 +14010,13 @@ begin
        (f_sequence.Running and f_sequence.EditingTarget)
        then exit;
     // check delay
-    if (MeridianOption=1) then begin
+    if (MeridianOption=1)or(MeridianOption=2) then begin // automatic or script
       MeridianDelay1:=MinutesPastMeridianMin-hhmin;
       if mount.PierSide=pierUnknown
         then MeridianDelay2:=MeridianDelay1
         else MeridianDelay2:=MinutesPastMeridian-hhmin;
     end
-    else begin
+    else begin  // abort time
       MeridianDelay1:=-hhmin;
       MeridianDelay2:=MeridianDelay1;
     end;
@@ -13992,7 +14028,7 @@ begin
       end else if (NextDelay>0)and(MeridianDelay1>0) then begin // too short for next exposure
        result:=true;
        if canwait then begin
-        if (MeridianOption=1) then begin   // if autoflip, wait
+        if (MeridianOption=1)or(MeridianOption=2) then begin   // if autoflip or script, wait
            wait(2);
            meridianflipping:=true;
            NewMessage(Format(rsWaitMeridian, [inttostr(MeridianDelay1)]),2);
@@ -14014,7 +14050,7 @@ begin
      result:=true;
      if canwait then begin
       // Do meridian action
-      if MeridianOption=1 then begin  // Flip
+      if MeridianOption=1 then begin  // automatic flip
        if abs(MeridianDelay1)<240 then begin // maximum flip time + 30min
         try
         meridianflipping:=true;
@@ -14201,6 +14237,12 @@ begin
         NewMessage('Unexpected time past meridian '+inttostr(hhmin),0);
         DoAbort;
       end;
+      end
+      else if MeridianOption=2 then begin  // run script
+        if not f_scriptengine.RunScript(MeridianScript,MeridianScriptPath,MeridianScriptArgs)then begin
+          NewMessage('Meridian script '+MeridianScript+' failed!',0);
+          DoAbort;
+        end;
       end else begin  // Abort
         DoAbort;
       end;

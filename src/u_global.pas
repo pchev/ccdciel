@@ -206,7 +206,7 @@ type
   {$i revision.inc}
 
 const
-  ccdcielver = '0.9.82';
+  ccdcielver = '0.9.83';
   ccdciel_version='Version beta '+ccdcielver;
   TargetFileVersion = 5;
   Maxclient = 100;
@@ -389,6 +389,7 @@ var
   SettleMinTime, SettleMaxTime, CalibrationDelay: integer;
   MeridianOption,MinutesPastMeridian, MinutesPastMeridianMin, MeridianFlipPauseTimeout: integer;
   MeridianFlipPauseBefore, MeridianFlipPauseAfter,MeridianFlipCalibrate,MeridianFlipAutofocus,MeridianFlipStopSlaving: boolean;
+  MeridianScript,MeridianScriptPath,MeridianScriptArgs: string;
   GuideSetLock: boolean;
   GuideLockX, GuideLockY: double;
   astrometryResolver: integer;
