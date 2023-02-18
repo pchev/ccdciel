@@ -4387,8 +4387,8 @@ begin
   SettleMaxTime:=config.GetValue('/Autoguider/Settle/MaxTime',30);
   CalibrationDelay:=config.GetValue('/Autoguider/Settle/CalibrationDelay',300);
   GuideSetLock:=config.GetValue('/Autoguider/Lock/GuideSetLock',false);
-  GuideLockX:=config.GetValue('/Autoguider/Lock/GuideLockX',0);
-  GuideLockY:=config.GetValue('/Autoguider/Lock/GuideLockY',0);
+  GuideLockX:=config.GetValue('/Autoguider/Lock/GuideLockX',0.0);
+  GuideLockY:=config.GetValue('/Autoguider/Lock/GuideLockY',0.0);
 
   f_internalguider.RAgain:=config.GetValue('/InternalGuider/RaGain',50);
   f_internalguider.DECgain:=config.GetValue('/InternalGuider/DecGain',50);
@@ -8629,8 +8629,8 @@ begin
    f_option.SettleMaxTime.Value:=config.GetValue('/Autoguider/Settle/MaxTime',30);
    f_option.CalibrationDelay.Value:=config.GetValue('/Autoguider/Settle/CalibrationDelay',300);
    f_option.GuideSetLock.Checked:=config.GetValue('/Autoguider/Lock/GuideSetLock',false);
-   f_option.GuideLockX.Value:=config.GetValue('/Autoguider/Lock/GuideLockX',0);
-   f_option.GuideLockY.Value:=config.GetValue('/Autoguider/Lock/GuideLockY',0);
+   f_option.GuideLockX.Value:=config.GetValue('/Autoguider/Lock/GuideLockX',0.0);
+   f_option.GuideLockY.Value:=config.GetValue('/Autoguider/Lock/GuideLockY',0.0);
    f_option.StarLostCancelExposure.Value:=config.GetValue('/Autoguider/Recovery/StarLostCancelExposure',0);
    f_option.StarLostRestart.Value:=config.GetValue('/Autoguider/Recovery/RestartTimeout',0);
    f_option.StarLostCancel.Value:=config.GetValue('/Autoguider/Recovery/CancelTimeout',1800);
