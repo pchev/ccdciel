@@ -421,6 +421,7 @@ begin
  wait(5);
  WaitMountSlewing(SlewDelay);
  except
+   on E: Exception do msg('Set SideOfPier error: ' + E.Message,0);
  end;
 end;
 
@@ -888,6 +889,7 @@ begin
  if debug_msg then msg('Set GuideRateRightAscension = '+formatfloat(f6,value));
  V.Put('GuideRateRightAscension',value);
  except
+   on E: Exception do msg('Set GuideRateRightAscension error: ' + E.Message,0);
  end;
 end;
 
@@ -897,6 +899,7 @@ begin
  if debug_msg then msg('Set GuideRateDeclination = '+formatfloat(f6,value));
  V.Put('GuideRateDeclination',value);
  except
+   on E: Exception do msg('Set GuideRateDeclination error: ' + E.Message,0);
  end;
 end;
 
