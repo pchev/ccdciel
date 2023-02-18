@@ -658,7 +658,7 @@ object f_EditTargets: Tf_EditTargets
           Top = 26
           Width = 390
           HorzScrollBar.Page = 338
-          VertScrollBar.Page = 180
+          VertScrollBar.Page = 200
           Align = alClient
           ClientHeight = 223
           ClientWidth = 388
@@ -737,6 +737,15 @@ object f_EditTargets: Tf_EditTargets
             Caption = 'Autofocus after temperature change'
             OnChange = cbChange
             TabOrder = 4
+          end
+          object cbNoAutoguidingChange: TCheckBox
+            Left = 16
+            Height = 21
+            Hint = 'This option is normally unchecked, use it only if you manage the pointing and autoguiding by script.'
+            Top = 179
+            Width = 225
+            Caption = 'Do not change autoguiding state'
+            TabOrder = 7
           end
         end
       end

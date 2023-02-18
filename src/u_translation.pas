@@ -1476,6 +1476,7 @@ resourcestring
   rsAdditionalOp = 'Additional options for';
   rsAutofocusAft2 = 'Autofocus after temperature change';
   rsBacklashCali = 'Backlash calibration';
+  rsDoNotChangeA = 'Do not change autoguiding state';
 
 implementation
 

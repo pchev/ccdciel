@@ -60,6 +60,7 @@ type
     cbUpdCoord: TCheckBox;
     cbSolarTracking: TCheckBox;
     cbAutofocusTemp: TCheckBox;
+    cbNoAutoguidingChange: TCheckBox;
     CheckBoxResetRepeat: TCheckBox;
     CheckBoxRestartStatus: TCheckBox;
     lblName: TLabel;
@@ -428,10 +429,12 @@ begin
   cbAutofocusTemp.Caption:=rsAutofocusAft2;
   cbUpdCoord.Caption := Format(rsUpdateRADec2+'', [blank]);
   cbSolarTracking.Caption:= rsActivateSola;
+  cbNoAutoguidingChange.Caption:=rsDoNotChangeA;
   cbDarkNight.Hint:=rsWaitForFullD;
   cbSkip.Hint:=Format(rsDonTWaitForT, [crlf]);
   cbAstrometry.Hint:=rsUsePlateSolv;
   cbInplace.Hint:=Format(rsStayAtTheTar, [crlf, crlf]);
+  cbNoAutoguidingChange.Hint:=rsThisOptionIs;
   cbAutofocusTemp.Hint:=rsSetTheTemper;
   cbUpdCoord.Hint:=Format(rsPriorToSlewi, [crlf, crlf]);
   CheckBoxRepeatList.Caption := rsRepeatTheWho;
@@ -863,6 +866,7 @@ begin
   if t.astrometrypointing then cbAstrometry.Checked:=true;
   if t.inplaceautofocus then cbInplace.Checked:=true;
   if t.autofocustemp then cbAutofocusTemp.Checked:=true;
+  cbNoAutoguidingChange.Checked:=false;
   TargetList.Objects[colseq,i]:=t;
   TargetList.Row:=i;
   ResetSequences;
@@ -890,6 +894,7 @@ begin
   if t.astrometrypointing then cbAstrometry.Checked:=true;
   if t.inplaceautofocus then cbInplace.Checked:=true;
   if t.autofocustemp then cbAutofocusTemp.Checked:=true;
+  cbNoAutoguidingChange.Checked:=false;
   TargetList.Objects[colseq,i]:=t;
   TargetList.Row:=i;
   ResetSequences;
@@ -1515,6 +1520,7 @@ begin
     cbAstrometry.Checked:=false;
     cbInplace.Checked:=false;
     cbAutofocusTemp.Checked:=false;
+    cbNoAutoguidingChange.Checked:=false;
     cbUpdCoord.Checked:=false;
     PanelSolarTracking.Visible:=false;
     ScrollBox2.Visible:=false;
@@ -1541,6 +1547,7 @@ begin
     cbAstrometry.Checked:=false;
     cbInplace.Checked:=false;
     cbAutofocusTemp.Checked:=false;
+    cbNoAutoguidingChange.Checked:=false;
     cbUpdCoord.Checked:=false;
     PanelSolarTracking.Visible:=false;
     FlatCount.Value:=t.FlatCount;
@@ -1603,6 +1610,7 @@ begin
     cbAstrometry.Checked:=t.astrometrypointing;
     cbInplace.Checked:=t.inplaceautofocus;
     cbAutofocusTemp.Checked:=t.autofocustemp;
+    cbNoAutoguidingChange.Checked:=t.noautoguidingchange;
     cbUpdCoord.Checked:=t.updatecoord;
     PanelSolarTracking.Visible:=t.updatecoord and FSolarTracking;
     cbSolarTracking.Checked:=t.solartracking and t.updatecoord and FSolarTracking;
@@ -1755,6 +1763,7 @@ begin
     t.astrometrypointing:=cbAstrometry.Checked;
     t.inplaceautofocus:=cbInplace.Checked;
     t.autofocustemp:=cbAutofocusTemp.Checked;
+    t.noautoguidingchange:=cbNoAutoguidingChange.Checked;
     t.updatecoord:=cbUpdCoord.Checked;
     t.solartracking:=t.updatecoord and cbSolarTracking.Checked and FSolarTracking;
     t.repeatcount:=StrToIntDef(TargetList.Cells[colrepeat,n],1);

@@ -43,7 +43,7 @@ type
               FlatFilters: shortstring;
               FlatFstop: shortstring;
               preview,astrometrypointing,updatecoord,inplaceautofocus,autofocustemp,
-              autoguiding,solartracking: boolean;
+              autoguiding,solartracking,noautoguidingchange: boolean;
               delay, previewexposure: double;
               plan :TComponent;
               constructor Create;
@@ -843,6 +843,7 @@ begin
        t.solartracking:=FSequenceFile.Items.GetValue('/Targets/Target'+inttostr(i)+'/SolarTracking',false);
        t.inplaceautofocus:=FSequenceFile.Items.GetValue('/Targets/Target'+inttostr(i)+'/InplaceAutofocus',AutofocusInPlace);
        t.autofocustemp:=FSequenceFile.Items.GetValue('/Targets/Target'+inttostr(i)+'/AutofocusTemp',(AutofocusTempChange>0));
+       t.noautoguidingchange:=FSequenceFile.Items.GetValue('/Targets/Target'+inttostr(i)+'/NoAutoguidingChange',false);
        t.previewexposure:=FSequenceFile.Items.GetValue('/Targets/Target'+inttostr(i)+'/PreviewExposure',1.0);
        t.preview:=FSequenceFile.Items.GetValue('/Targets/Target'+inttostr(i)+'/Preview',false);
        t.repeatcount:=trunc(FSequenceFile.Items.GetValue('/Targets/Target'+inttostr(i)+'/RepeatCount',1));
@@ -998,6 +999,7 @@ try
       FSequenceFile.Items.SetValue('/Targets/Target'+inttostr(i)+'/SolarTracking',t.solartracking);
       FSequenceFile.Items.SetValue('/Targets/Target'+inttostr(i)+'/InplaceAutofocus',t.inplaceautofocus);
       FSequenceFile.Items.SetValue('/Targets/Target'+inttostr(i)+'/AutofocusTemp',t.autofocustemp);
+      FSequenceFile.Items.SetValue('/Targets/Target'+inttostr(i)+'/NoAutoguidingChange',t.noautoguidingchange);
       FSequenceFile.Items.SetValue('/Targets/Target'+inttostr(i)+'/PreviewExposure',t.previewexposure);
       FSequenceFile.Items.SetValue('/Targets/Target'+inttostr(i)+'/Preview',t.preview);
       FSequenceFile.Items.SetValue('/Targets/Target'+inttostr(i)+'/RepeatCount',t.repeatcount);
@@ -1627,10 +1629,7 @@ begin
   StopTargetTimer.Enabled:=false;
   // do not try to start a new target when stopped for dawn flat
   if FSeqLockTwilight then exit;
-  // stop autoguider
-  if (Autoguider<>nil)and(Autoguider.Running)and(Autoguider.State=GUIDER_GUIDING) then
-     StopGuider;
-  // stop mount tracking
+  // stop mount if let slewing
   if mount.MountSlewing then
      Mount.AbortMotion;
   NeedRecenterTarget:=false;
@@ -1683,6 +1682,9 @@ begin
      FInitializing:=true;
      ShowDelayMsg('');
      TargetForceNext:=false;
+     // stop autoguider
+     if (Autoguider<>nil)and(Autoguider.Running)and(Autoguider.State=GUIDER_GUIDING) then
+       StopGuider;
      Mount.AbortMotion;
      initok:=InitSkyFlat;
      if not FRunning then begin
@@ -1793,7 +1795,6 @@ begin
      FRunning:=false;
      TargetTimer.Enabled:=false;
      StopTimer.Enabled:=false;
-     StopGuider;
      msg(Format(rsSequenceFini, [FName]),1);
      RunEndAction;
      ShowDelayMsg('');
@@ -1991,6 +1992,7 @@ begin
       exit;
     end;
     if (intime<0) and (t.starttime>=0) then begin
+      StopGuider;
       Mount.AbortMotion;
       msg(Format(rsWaitToStartA, [TimeToStr(t.starttime)]),1);
       wtok:=WaitTill(TimeToStr(t.starttime),true);
@@ -2028,6 +2030,7 @@ begin
 
     if (not restart) then begin
       if  ((t.ra<>NullCoord)and(t.de<>NullCoord))or(t.pa<>NullCoord) then begin
+        // prepare for slewing to target
         if (Autoguider<>nil)and(Autoguider.AutoguiderType<>agNONE)and(Autoguider.AutoguiderType<>agDITHER) then begin
           // stop guiding
           if Autoguider.State<>GUIDER_DISCONNECTED then begin
@@ -2081,7 +2084,7 @@ begin
           // disable astrometrypointing and autoguiding if first step is to move to focus star
           astrometrypointing:=t.astrometrypointing and (not (autofocusstart and (not InplaceAutofocus))) ;
           // must track before to slew
-          mount.Track;
+          if not mount.Tracking then mount.Track;
           // slew to coordinates
           FSlewRetry:=1;
           ok:=Slew(t.ra,t.de,astrometrypointing,t.astrometrypointing);
@@ -2110,13 +2113,16 @@ begin
         end;
       end;
       // start mount tracking
-      if isCalibrationTarget then
-        mount.AbortMotion
-      else if ((t.ra=NullCoord)or(t.de=NullCoord)) then
+      if isCalibrationTarget then begin
+        StopGuider;
+        mount.AbortMotion;
+      end
+      else if ((t.ra=NullCoord)or(t.de=NullCoord))and(not mount.Tracking) then
          mount.Track;
       // start guiding
       autostartguider:=(Autoguider<>nil)and(Autoguider.AutoguiderType<>agNONE)and
                        (Autoguider.AutoguiderType<>agDITHER) and (Autoguider.State<>GUIDER_DISCONNECTED)and
+                       (Autoguider.State<>GUIDER_GUIDING)and(not t.noautoguidingchange)and
                        ((not autofocusstart)or (InplaceAutofocus and (not AutofocusPauseGuider))) and
                        (not isCalibrationTarget);
       if autostartguider then begin
@@ -2646,14 +2652,17 @@ if AtEndStopTracking or AtEndPark or AtEndCloseDome or AtEndWarmCamera or AtEndR
   end;
   msg(rsExecutingThe2,1);
   if AtEndStopTracking then begin
+    StopGuider;
     msg(rsStopTelescop2,1);
     Mount.AbortMotion;
   end;
   if AtEndPark then begin
+    StopGuider;
     msg(rsParkTheTeles2,1);
     Mount.Park:=true;
   end;
   if AtEndCloseDome then begin
+    StopGuider;
     msg(rsStopDomeSlav,1);
     Dome.Slave:=false;
     msg(rsParkDome,1);
@@ -2711,6 +2720,7 @@ begin
   solartracking:=false;
   inplaceautofocus:=AutofocusInPlace;
   autofocustemp:=(AutofocusTempChange>0);
+  noautoguidingchange:=false;
   autoguiding:=false;
   repeatcount:=1;
   repeatdone:=0;
@@ -2756,6 +2766,7 @@ begin
   repeatdone:=Source.repeatdone;
   inplaceautofocus:=Source.inplaceautofocus;
   autofocustemp:=Source.autofocustemp;
+  noautoguidingchange:=Source.noautoguidingchange;
   autoguiding:=Source.autoguiding;
   preview:=Source.preview;
   delay:=Source.delay;

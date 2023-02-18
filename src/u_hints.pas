@@ -172,6 +172,7 @@ resourcestring
   rsSaveIndividu = 'Save individual images before stacking';
   rsFlatProcessi = 'Flat processing also require a Dark';
   rsSetTheTemper = 'Set the temperature threshold in the Preferences';
+  rsThisOptionIs = 'This option is normally unchecked, use it only if you manage the pointing and autoguiding by script.';
 
 implementation
 
