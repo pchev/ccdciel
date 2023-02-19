@@ -82,6 +82,7 @@ type
     procedure Guide(onoff:boolean; recalibrate:boolean=false); override;
     procedure Pause(onoff:boolean; settle:boolean=true); override;
     procedure Dither(pixel:double; raonly:boolean; waittime:double); override;
+    function GetLockPosition(out x,y:double):boolean; override;
     procedure SetLockPosition(x,y: double); override;
     procedure InternalguiderLoop;
     procedure InternalguiderStart;
@@ -299,6 +300,11 @@ begin
   else begin
      InternalguiderStop;
   end;
+end;
+
+function T_autoguider_internal.GetLockPosition(out x,y:double):boolean;
+begin
+  result:=false;
 end;
 
 procedure T_autoguider_internal.SetLockPosition(x,y:double);

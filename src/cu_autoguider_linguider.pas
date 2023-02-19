@@ -69,6 +69,7 @@ type
     procedure Guide(onoff:boolean; recalibrate:boolean=false); override;
     procedure Pause(onoff:boolean; settle:boolean=true); override;
     procedure Dither(pixel:double; raonly:boolean; waittime:double); override;
+    function GetLockPosition(out x,y:double):boolean; override;
     procedure SetLockPosition(x,y: double); override;
     function WaitBusy(maxwait:integer=5):boolean; override;
     function WaitGuiding(maxwait:integer=5):boolean; override;
@@ -356,6 +357,11 @@ if not FRunning then exit;
      buf:=LinGuiderCmd(LIN_GUIDER,'stop');
      DisplayMessage('Guide stop: '+buf);
   end;
+end;
+
+function T_autoguider_linguider.GetLockPosition(out x,y:double):boolean;
+begin
+  result:=false;
 end;
 
 procedure T_autoguider_linguider.SetLockPosition(x,y:double);

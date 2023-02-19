@@ -33,6 +33,8 @@ type
   T_autoguider_phd = class(T_autoguider)
   private
     FArcsecPixel: double;
+    FLockPositionX,FLockPositionY: string;
+    FLockPositionReceived: boolean;
     procedure ProcessEventAsync(Data: PtrInt);
   protected
     TcpClient : TTcpclient;
@@ -57,6 +59,7 @@ type
     procedure Guide(onoff:boolean; recalibrate:boolean=false); override;
     procedure Pause(onoff:boolean; settle:boolean=true); override;
     procedure Dither(pixel:double; raonly:boolean; waittime:double); override;
+    function GetLockPosition(out x,y:double):boolean; override;
     procedure SetLockPosition(x,y: double); override;
     function WaitBusy(maxwait:integer=5):boolean; override;
     function WaitGuiding(maxwait:integer=5):boolean; override;
@@ -231,7 +234,7 @@ procedure T_autoguider_phd.ProcessEventAsync(Data: PtrInt);
 var eventname,rpcid,rpcresult,rpcerror,err: string;
     attrib,value:Tstringlist;
     p,q,r,i,s,k:integer;
-    radiff, decdiff:string;
+    radiff, decdiff, buf:string;
 begin
 try
 attrib:=Tstringlist.Create;
@@ -444,9 +447,21 @@ end else begin
           DisplayMessage('dither'+' '+rpcresult+' '+rpcerror);
        end;
      end
-     else if rpcid='2011' then begin  // dither
+     else if rpcid='2011' then begin  // set_lock_position
        if rpcresult='error' then begin
           DisplayMessage('set_lock_position'+' '+rpcresult+' '+rpcerror);
+       end;
+     end
+     else if rpcid='2012' then begin  // get_lock_position
+       if rpcresult='error' then begin
+          DisplayMessage('get_lock_position'+' '+rpcresult+' '+rpcerror);
+       end
+       else begin
+          i:=attrib.IndexOf('result.0');
+          if i>0 then FLockPositionX:=value[i];
+          i:=attrib.IndexOf('result.1');
+          if i>0 then FLockPositionY:=value[i];
+          FLockPositionReceived:=true;
        end;
      end;
 
@@ -663,6 +678,31 @@ if FState<>GUIDER_DISCONNECTED then begin
   Send(buf);
 end;
 end;
+
+function T_autoguider_phd.GetLockPosition(out x,y:double):boolean;
+var buf:string;
+    endt: TDateTime;
+begin
+ FLockPositionReceived:=false;
+ FLockPositionX:='';
+ FLockPositionY:='';
+ buf:='{"method": "get_lock_position","id":2012}';
+ Send(buf);
+ endt:=now+10/secperday;
+ while now<endt do begin
+   Sleep(100);
+   if GetCurrentThreadId=MainThreadID then Application.ProcessMessages;
+   if terminated then break;
+   if FLockPositionReceived then break;
+ end;
+ result:=(FLockPositionReceived)and(FLockPositionX<>'')and(FLockPositionY<>'');
+ if result then begin
+   x:=StrToFloatDef(FLockPositionX,0);
+   y:=StrToFloatDef(FLockPositionY,0);
+ end;
+end;
+
+
 
 procedure T_autoguider_phd.Pause(onoff:boolean; settle:boolean=true);
 var buf:string;

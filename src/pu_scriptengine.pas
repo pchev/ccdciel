@@ -178,7 +178,9 @@ type
     function cmd_AutoguiderPause:string;
     function cmd_AutoguiderUnPause:string;
     function cmd_AutoguiderDither:string;
+    function cmd_AutoguiderGetLockPosition(out sx,sy:string):string;
     function cmd_AutoguiderSetLockPosition(sx,sy:string):string;
+    function cmd_AutoguiderStoreLockPosition(sx,sy:string):string;
     function cmd_AutoguiderShutdown:string;
     function cmd_Wheel_GetFilter:string;
     function cmd_Wheel_SetFilter(num:string):string;
@@ -1006,6 +1008,7 @@ end;
 end;
 
 function Tf_scriptengine.Cmd(cname:string):string;
+var buf,buf1,buf2: string;
 begin
 cname:=uppercase(cname);
 result:=msgFailed;
@@ -1023,6 +1026,13 @@ else if cname='AUTOGUIDER_PAUSE' then result:=cmd_AutoguiderPause
 else if cname='AUTOGUIDER_UNPAUSE' then result:=cmd_AutoguiderUnPause
 else if cname='AUTOGUIDER_DITHER' then result:=cmd_AutoguiderDither
 else if cname='AUTOGUIDER_SHUTDOWN' then result:=cmd_AutoguiderShutdown
+else if cname='AUTOGUIDER_GETLOCKPOSITION' then begin
+  buf:=cmd_AutoguiderGetLockPosition(buf1,buf2);
+  if buf=msgOK then
+     result:=buf1+','+buf2
+  else
+     result:=buf;
+end
 else if cname='WHEEL_GETFILTER' then result:=cmd_Wheel_GetFilter
 else if cname='PREVIEW_SINGLE' then result:=cmd_Preview_Single
 else if cname='PREVIEW_LOOP' then result:=cmd_Preview_Loop
@@ -1085,6 +1095,7 @@ else if cname='CUSTOMHEADER' then result:=cmd_customheader(arg[0])
 else if cname='CUSTOMHEADER_ADD' then result:=cmd_customheader_add(arg[0],arg[1])
 else if cname='CUSTOMHEADER_DEL' then result:=cmd_customheader_del(arg[0])
 else if cname='AUTOGUIDER_SETLOCKPOSITION' then result:=cmd_AutoguiderSetLockPosition(arg[0],arg[1])
+else if cname='AUTOGUIDER_STORELOCKPOSITION' then result:=cmd_AutoguiderStoreLockPosition(arg[0],arg[1])
 ;
 LastErr:='cmdarg('+cname+'): '+result;
 end;
@@ -1353,7 +1364,42 @@ begin
  end;
 end;
 
+function Tf_scriptengine.cmd_AutoguiderGetLockPosition(out sx,sy:string):string;
+var n:integer;
+    x,y: double;
+begin
+ try
+ result:=msgFailed;
+ if Autoguider=nil then exit;
+ if Autoguider.GetLockPosition(x,y) then begin
+    sx:=FormatFloat(f2,x);
+    sy:=FormatFloat(f2,y);
+    result:=msgOK;
+ end;
+ except
+   result:=msgFailed;
+ end;
+end;
+
 function Tf_scriptengine.cmd_AutoguiderSetLockPosition(sx,sy:string):string;
+var n:integer;
+    x,y: double;
+begin
+ try
+ result:=msgFailed;
+ if Autoguider=nil then exit;
+ val(sx,x,n);
+ if n<>0 then exit;
+ val(sy,y,n);
+ if n<>0 then exit;
+ Autoguider.SetLockPosition(x,y);
+ result:=msgOK;
+ except
+   result:=msgFailed;
+ end;
+end;
+
+function Tf_scriptengine.cmd_AutoguiderStoreLockPosition(sx,sy:string):string;
 var n:integer;
     x,y: double;
 begin
@@ -1376,7 +1422,6 @@ begin
    GuideSetLock:=True;
    GuideLockX:=x;
    GuideLockY:=y;
-   Autoguider.SetLockPosition(x,y);
    result:=msgOK;
  end;
  except

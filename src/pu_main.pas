@@ -15014,6 +15014,13 @@ try
   else if method='AUTOGUIDER_CONNECTED' then result:=result+'"result": '+BoolToStr((Autoguider.State<>GUIDER_DISCONNECTED),tr,fa)
   else if method='AUTOGUIDER_RUNNING' then result:=result+'"result": '+BoolToStr(Autoguider.Running,tr,fa)
   else if method='AUTOGUIDER_GUIDING' then result:=result+'"result": '+BoolToStr((Autoguider.State=GUIDER_GUIDING),tr,fa)
+  else if method='AUTOGUIDER_GETLOCKPOSITION' then begin
+       buf:=f_scriptengine.cmd_AutoguiderGetLockPosition(buf1,buf2);
+       if buf=msgOK then
+          result:=result+'"result": ['+buf1+','+buf2+']'
+       else
+          result:=result+'"result":{"status": "'+buf+'"}';
+     end
   else if method='WHEEL_CONNECTED' then result:=result+'"result": '+BoolToStr((wheel.Status=devConnected),tr,fa)
   else if method='FOCUSER_CONNECTED' then result:=result+'"result": '+BoolToStr((Focuser.Status=devConnected),tr,fa)
   else if method='CAMERA_CONNECTED' then result:=result+'"result": '+BoolToStr((Camera.Status=devConnected),tr,fa)
@@ -15245,6 +15252,16 @@ try
       buf1:=''; buf2:='';
     end;
     buf:=f_scriptengine.cmd_AutoguiderSetLockPosition(buf1,buf2);
+    result:=result+'"result":{"status": "'+buf+'"}';
+  end
+  else if method='AUTOGUIDER_STORELOCKPOSITION' then begin
+    try
+    buf1:=trim(value[attrib.IndexOf('params.0')]);
+    buf2:=trim(value[attrib.IndexOf('params.1')]);
+    except
+      buf1:=''; buf2:='';
+    end;
+    buf:=f_scriptengine.cmd_AutoguiderStoreLockPosition(buf1,buf2);
     result:=result+'"result":{"status": "'+buf+'"}';
   end
   // method not found

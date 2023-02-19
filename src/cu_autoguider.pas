@@ -85,6 +85,7 @@ type
     procedure Guide(onoff:boolean; recalibrate:boolean=false); virtual; abstract;
     procedure Pause(onoff:boolean; settle:boolean=true); virtual; abstract;
     procedure Dither(pixel:double; raonly:boolean; waittime:double); virtual; abstract;
+    function GetLockPosition(out x,y: double):boolean; virtual; abstract;
     procedure SetLockPosition(x,y: double); virtual; abstract;
     function WaitBusy(maxwait:integer=5):boolean; virtual; abstract;
     function WaitGuiding(maxwait:integer=5):boolean; virtual; abstract;
