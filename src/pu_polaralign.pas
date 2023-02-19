@@ -27,7 +27,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 interface
 
-uses u_translation, u_utils, u_global, fu_preview, cu_fits, cu_astrometry, cu_mount, cu_wheel, fu_visu, indiapi, UScaleDPI,
+uses u_translation, u_utils, u_global, fu_preview, cu_fits, cu_astrometry, cu_mount, cu_camera, cu_wheel, fu_visu, indiapi, UScaleDPI,
   math, Classes, SysUtils, Forms, Controls, Graphics, Dialogs, ComCtrls, StdCtrls, ExtCtrls, CheckLst, Spin;
 
 type
@@ -85,6 +85,7 @@ type
     Fwheel: T_wheel;
     FAstrometry: TAstrometry;
     FMount: T_mount;
+    Fcamera: T_camera;
     FExposeStep:Integer;
     FInProgress: boolean;
     FTerminate: boolean;
@@ -114,6 +115,7 @@ type
     property Wheel: T_wheel read Fwheel write Fwheel;
     property Astrometry: TAstrometry read FAstrometry write FAstrometry;
     property Mount: T_mount read Fmount write Fmount;
+    property Camera: T_camera read Fcamera write Fcamera;
     property CameraRotation: double read FCameraRotation;
     property onShowMessage: TNotifyMsg read FonShowMessage write FonShowMessage;
     property onClose: TNotifyEvent read FonClose write FonClose;
@@ -412,7 +414,7 @@ if (filter>0)and(Assigned(Fwheel)) then begin
   Fwheel.Filter:=filter;
 end;
 tracemsg('Exposure exptime='+FormatFloat(f3,exp)+' binning='+inttostr(bin)+' filter='+inttostr(filter));
-if not preview.ControlExposure(exp,bin,bin,LIGHT,ReadoutModeAstrometry,pgain,poffset) then begin
+if not Camera.ControlExposure(exp,bin,bin,LIGHT,ReadoutModeAstrometry,pgain,poffset) then begin
     msg(rsExposureFail,1);
     AbortAlignment;
 end

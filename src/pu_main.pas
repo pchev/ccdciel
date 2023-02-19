@@ -540,7 +540,7 @@ type
     procedure TimerStampTimerTimer(Sender: TObject);
   private
     { private declarations }
-    camera, guidecamera: T_camera;
+    camera, guidecamera, findercamera: T_camera;
     wheel: T_wheel;
     focuser: T_focuser;
     rotator: T_rotator;
@@ -1666,7 +1666,6 @@ begin
   f_preview.onStartExposure:=@StartPreviewExposure;
   f_preview.onAbortExposure:=@StopExposure;
   f_preview.onMsg:=@NewMessage;
-  f_preview.onEndControlExposure:=@EndControlExposure;
   astrometry.preview:=f_preview;
   astrometry.visu:=f_visu;
 
@@ -1963,6 +1962,7 @@ begin
      ASCOM: camera:=T_ascomcamera.Create(nil);
      ASCOMREST: camera:=T_ascomrestcamera.Create(nil);
    end;
+   findercamera:=camera;
    if wheel.WheelInterface=INCAMERA then wheel.camera:=camera;
    camera.Mount:=mount;
    camera.Wheel:=wheel;
@@ -1991,6 +1991,7 @@ begin
    camera.onAbortExposure:=@CameraExposureAborted;
    camera.onGainStatus:=@GainStatus;
    camera.onSequenceInfo:=@CameraSequenceInfo;
+   camera.onEndControlExposure:=@EndControlExposure;
 
    aInt:=TDevInterface(config.GetValue('/GuideCameraInterface',ord(DefaultInterface)));
    case aInt of
@@ -2040,7 +2041,7 @@ end;
 procedure Tf_main.SetDevices;
 begin
  if astrometry<>nil then begin
-   astrometry.Camera:=camera;
+   astrometry.Camera:=findercamera;
    astrometry.Mount:=mount;
    astrometry.Wheel:=wheel;
  end;
@@ -3722,7 +3723,7 @@ if f_pause.Wait then begin
   fits.DarkOn:=false;
   fits.DisableBayer:=true;
   try
-  if f_preview.ControlExposure(f_preview.Exposure,bin,bin,DARK,ReadoutModeCapture,f_preview.Gain,f_preview.Offset) then begin
+  if camera.ControlExposure(f_preview.Exposure,bin,bin,DARK,ReadoutModeCapture,f_preview.Gain,f_preview.Offset) then begin
     CreateBPM(fits);
   end
   else
@@ -3849,7 +3850,7 @@ begin
    camera.ResetFrame;
    fits.SetBPM(bpm,0,0,0,0);
    fits.DarkOn:=false;
-   if f_preview.ControlExposure(f_preview.Exposure,bin,bin,DARK,ReadoutModeCapture,f_preview.Gain,f_preview.Offset) then begin
+   if camera.ControlExposure(f_preview.Exposure,bin,bin,DARK,ReadoutModeCapture,f_preview.Gain,f_preview.Offset) then begin
      fits.SaveToFile(ConfigDarkFile);
      fits.LoadDark(ConfigDarkFile);
    end
@@ -3929,7 +3930,7 @@ begin
      fits.SetBPM(bpm,bpmNum,bpmX,bpmY,bpmAxis);
      fits.DarkOn:=true;
      fits.FlatOn:=false;
-     if f_preview.ControlExposure(f_preview.Exposure,bin,bin,FLAT,ReadoutModeCapture,f_preview.Gain,f_preview.Offset) then begin
+     if camera.ControlExposure(f_preview.Exposure,bin,bin,FLAT,ReadoutModeCapture,f_preview.Gain,f_preview.Offset) then begin
        fits.SaveToFile(ConfigFlatFile);
        fits.LoadFlat(ConfigFlatFile);
      end
@@ -7113,7 +7114,7 @@ begin
    fits.DarkOn:=true;
    // average hfd for nsum exposures
    for j:=1 to nsum do begin
-     if not f_preview.ControlExposure(exp,bin,bin,LIGHT,ReadoutModeFocus,again,aoffset) then begin
+     if not camera.ControlExposure(exp,bin,bin,LIGHT,ReadoutModeFocus,again,aoffset) then begin
        NewMessage(rsExposureFail,1);
        TerminateVcurve:=true;
      end;
@@ -7213,7 +7214,7 @@ begin
  // use dark
  fits.DarkOn:=true;
  if (not f_starprofile.FindStar) then begin
-   if not f_preview.ControlExposure(f_preview.Exposure,bin,bin,LIGHT,ReadoutModeFocus,AutofocusGain,AutofocusOffset) then begin
+   if not camera.ControlExposure(f_preview.Exposure,bin,bin,LIGHT,ReadoutModeFocus,AutofocusGain,AutofocusOffset) then begin
       NewMessage(rsExposureFail,1);
       exit;
    end;
@@ -11193,6 +11194,7 @@ begin
   end;
   if f_preview.Loop then f_preview.BtnLoopClick(nil);
   f_polaralign.Mount:=mount;
+  f_polaralign.Camera:=findercamera;
   f_polaralign.Wheel:=wheel;
   pt.x:=-f_polaralign.Width-8;
   pt.y:=PanelCenter.top;
@@ -11224,7 +11226,7 @@ begin
   if f_preview.Loop then f_preview.BtnLoopClick(nil);
   f_polaralign2.Mount:=mount;
   f_polaralign2.Wheel:=wheel;
-  f_polaralign2.Camera:=camera;
+  f_polaralign2.Camera:=findercamera;
   pt.x:=-f_polaralign2.Width-8;
   pt.y:=PanelCenter.top;
   pt:=ClientToScreen(pt);
@@ -11895,7 +11897,7 @@ begin
      else
        NewMessage(rsSetFocusDire2,2);
      repeat
-       if not f_preview.ControlExposure(exp,bin,bin,LIGHT,ReadoutModeFocus,fgain,foffset) then begin
+       if not camera.ControlExposure(exp,bin,bin,LIGHT,ReadoutModeFocus,fgain,foffset) then begin
           buf:=rsExposureFail;
           NewMessage(buf,1);
           f_focusercalibration.CalibrationCancel(buf);
@@ -12015,7 +12017,7 @@ begin
     numhfd2:=0;
     j:=0;
     repeat
-      if not f_preview.ControlExposure(exp,bin,bin,LIGHT,ReadoutModeFocus,fgain,foffset) then begin
+      if not camera.ControlExposure(exp,bin,bin,LIGHT,ReadoutModeFocus,fgain,foffset) then begin
          buf:=rsExposureFail;
          NewMessage(buf,1);
          f_focusercalibration.CalibrationCancel(buf);
@@ -12779,7 +12781,7 @@ begin
   camera.SetBinning(AutofocusBinning,AutofocusBinning);
   fits.SetBPM(bpm,bpmNum,bpmX,bpmY,bpmAxis);
   fits.DarkOn:=true;
-  if not f_preview.ControlExposure(AutofocusExposure*AutofocusExposureFact,AutofocusBinning,AutofocusBinning,LIGHT,ReadoutModeFocus,AutofocusGain,AutofocusOffset) then begin
+  if not camera.ControlExposure(AutofocusExposure*AutofocusExposureFact,AutofocusBinning,AutofocusBinning,LIGHT,ReadoutModeFocus,AutofocusGain,AutofocusOffset) then begin
     NewMessage(rsExposureFail,1);
     f_starprofile.ChkAutofocusDown(false);
     exit;

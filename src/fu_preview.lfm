@@ -69,6 +69,7 @@ object f_preview: Tf_preview
         Top = 5
         Width = 57
         Caption = 'Exposure'
+        ParentColor = False
         ParentFont = False
       end
     end
@@ -104,6 +105,7 @@ object f_preview: Tf_preview
         Top = 9
         Width = 28
         Caption = 'Gain'
+        ParentColor = False
         ParentFont = False
       end
       object GainEdit: TSpinEdit
@@ -134,10 +136,11 @@ object f_preview: Tf_preview
           Top = 9
           Width = 38
           Caption = 'Offset'
+          ParentColor = False
         end
         object OffsetEdit: TSpinEdit
           Left = 100
-          Height = 28
+          Height = 29
           Top = 4
           Width = 90
           MaxValue = 32767
@@ -179,6 +182,7 @@ object f_preview: Tf_preview
         Top = 4
         Width = 47
         Caption = 'Binning'
+        ParentColor = False
         ParentFont = False
       end
     end
@@ -201,6 +205,7 @@ object f_preview: Tf_preview
         Top = 7
         Width = 38
         Caption = 'F-stop'
+        ParentColor = False
         ParentFont = False
       end
       object Fnumber: TComboBox
@@ -314,6 +319,7 @@ object f_preview: Tf_preview
     DragMode = dmAutomatic
     Font.Color = clBtnText
     Layout = tlCenter
+    ParentColor = False
     ParentFont = False
     Transparent = False
   end

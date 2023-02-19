@@ -388,7 +388,7 @@ if (filter>0)and(Assigned(Fwheel)) then begin
   Fwheel.Filter:=filter;
 end;
 tracemsg('Exposure exptime='+FormatFloat(f3,exp)+' binning='+inttostr(bin)+' filter='+inttostr(filter));
-if not preview.ControlExposure(exp,bin,bin,LIGHT,ReadoutModeAstrometry,pgain,poffset) then begin
+if not camera.ControlExposure(exp,bin,bin,LIGHT,ReadoutModeAstrometry,pgain,poffset) then begin
     msg(rsExposureFail,1);
     AbortAlignment;
 end;

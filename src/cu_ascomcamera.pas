@@ -1047,6 +1047,7 @@ begin
    try
     ExposureTimer.Enabled:=false;
     StatusTimer.Enabled:=true;
+    WaitExposure:=false;
     if V.CanAbortExposure then
       V.AbortExposure
     else if V.CanStopExposure then
@@ -1063,6 +1064,7 @@ begin
    try
     ExposureTimer.Enabled:=false;
     StatusTimer.Enabled:=true;
+    WaitExposure:=false;
     if V.CanAbortExposure then
       V.AbortExposure
     else if V.CanStopExposure then

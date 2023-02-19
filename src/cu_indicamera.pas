@@ -1485,6 +1485,7 @@ end;
 Procedure T_indicamera.AbortExposure;
 begin
 ExposureTimer.Enabled:=false;
+WaitExposure:=false;
 if UseMainSensor then begin
   if CCDAbortExposure<>nil then begin
     IUResetSwitch(CCDAbortExposure);

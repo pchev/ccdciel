@@ -100,6 +100,7 @@ T_camera = class(TComponent)
     FsequenceRunning: boolean;
     FStepTotalCount,FStepRepeatCount: integer;
     FCameraTimeout: integer;
+    WaitExposure, ControlExposureOK: boolean;
     procedure msg(txt: string; level:integer=3);
     procedure NewImage;
     procedure TryNextExposure(Data: PtrInt);
@@ -186,10 +187,13 @@ T_camera = class(TComponent)
     TempNow,TempRamp: double;
     Nstep: integer;
     RampTimer: TTimer;
+    FonEndControlExposure: TNotifyEvent;
     procedure RampTimerTimer(Sender: TObject);
+    procedure EndExposure(Sender: TObject);
   public
     constructor Create(AOwner: TComponent); override;
     destructor  Destroy; override;
+    function  ControlExposure(exp:double; pbinx,pbiny: integer; frmt:TFrameType; preadoutmode,pgain,poffset:integer):boolean;
     Procedure Connect(cp1: string; cp2:string=''; cp3:string=''; cp4:string=''; cp5:string=''; cp6:string=''); virtual; abstract;
     Procedure Disconnect; virtual; abstract;
     Procedure SetBinning(binX,binY: integer); virtual; abstract;
@@ -342,6 +346,7 @@ T_camera = class(TComponent)
     property StepTotalCount: Integer read FStepTotalCount write FStepTotalCount;
     property StepRepeatCount: Integer read FStepRepeatCount write FStepRepeatCount;
     property CameraTimeout: integer read FCameraTimeout write FCameraTimeout;
+    property onEndControlExposure: TNotifyEvent read FonEndControlExposure write FonEndControlExposure;
 end;
 
 
@@ -1050,6 +1055,59 @@ begin
   Ffits.Header.Add('DATE-OBS',hdateobs,'UTC start date of observation');
   Ffits.Header.Add('END','','');
   Ffits.GetFitsInfo;
+end;
+
+function T_camera.ControlExposure(exp:double; pbinx,pbiny: integer; frmt:TFrameType; preadoutmode,pgain,poffset:integer):boolean;
+var SaveonNewImage: TNotifyEvent;
+    endt: TDateTime;
+begin
+result:=false;
+if Status=devConnected then begin
+  if exp>=1 then
+    msg(Format(rsTakeControlE, [FormatFloat(f1, exp)]),3)
+  else
+    msg(Format(rsTakeControlE, [FormatFloat(f4, exp)]),3);
+  SaveonNewImage:=FonNewImage;
+  onNewImage:=@EndExposure;
+  // set readout first so it can be overridden by specific binning or gain
+  if UseReadoutMode and hasReadOut then begin
+     readoutmode:=preadoutmode;
+  end;
+  if (pbinx<>BinX)or(pbiny<>BinY) then SetBinning(pbinx,pbiny);
+  WaitExposure:=true;
+  ExpectedStop:=false;
+  ControlExposureOK:=false;
+  AddFrames:=false;
+  if CanSetGain then begin
+    if hasGainISO and (pgain<>NullInt) then begin
+       if Gain<>pgain then Gain:=pgain;
+    end;
+    if hasGain and (not hasGainISO) and (pgain<>NullInt) then begin
+       if Gain<>pgain then Gain:=pgain;
+    end;
+    if hasOffset  and (poffset<>NullInt) then begin
+       if Offset<>poffset then Offset:=poffset;
+    end;
+  end;
+  if FrameType<>frmt then FrameType:=frmt;
+  StartExposure(exp);
+  endt:=now+(exp+60)/secperday; // large timeout for DSLR that not support hardware ROI
+  while WaitExposure and(now<endt) and (not CancelAutofocus) do begin
+    Sleep(100);
+    if GetCurrentThreadId=MainThreadID then Application.ProcessMessages;
+  end;
+  result:=ControlExposureOK;
+  onNewImage:=SaveonNewImage;
+  if result and Assigned(SaveonNewImage) then SaveonNewImage(self);
+  Wait(1);
+end;
+end;
+
+procedure T_camera.EndExposure(Sender: TObject);
+begin
+  ControlExposureOK:=true;
+  WaitExposure:=false;
+  if assigned(FonEndControlExposure) then FonEndControlExposure(self);
 end;
 
 end.

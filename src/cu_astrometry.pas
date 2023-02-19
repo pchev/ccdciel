@@ -545,7 +545,7 @@ begin
       RetryMeridianSync:=false;
       Wait(delay);
       if CancelAutofocus or CancelGoto then exit;
-      if not Fpreview.ControlExposure(exp,binx,biny,LIGHT,ReadoutModeAstrometry,sgain,soffset) then begin
+      if not Fcamera.ControlExposure(exp,binx,biny,LIGHT,ReadoutModeAstrometry,sgain,soffset) then begin
         msg(rsExposureFail,0);
         exit;
       end;

@@ -884,6 +884,7 @@ end;
 
 Procedure T_ascomrestcamera.AbortExposureButNotSequence;
 begin
+   WaitExposure:=false;
    if FStatus<>devConnected then exit;
    try
     ExposureTimer.Enabled:=false;
@@ -899,6 +900,7 @@ end;
 
 Procedure T_ascomrestcamera.AbortExposure;
 begin
+   WaitExposure:=false;
    if FStatus<>devConnected then exit;
    try
     ExposureTimer.Enabled:=false;

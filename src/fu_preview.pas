@@ -69,9 +69,6 @@ type
     FonResetStack: TNotifyEvent;
     FonStartExposure: TNotifyEvent;
     FonAbortExposure: TNotifyEvent;
-    FonEndControlExposure: TNotifyEvent;
-    WaitExposure, ControlExposureOK: boolean;
-    procedure EndExposure(Sender: TObject);
     procedure msg(txt:string; level:integer);
     function GetExposure:double;
     procedure SetExposure(value:double);
@@ -87,7 +84,6 @@ type
     destructor  Destroy; override;
     procedure SetLang;
     procedure Stop;
-    function ControlExposure(exp:double; binx,biny: integer; frmt:TFrameType; readoutmode,pgain,poffset:integer):boolean;
     property Running: boolean read Frunning write Frunning;
     property Camera: T_camera read Fcamera write Fcamera;
     property Loop: boolean read FLoop write FLoop;
@@ -99,7 +95,6 @@ type
     property onStartExposure: TNotifyEvent read FonStartExposure write FonStartExposure;
     property onAbortExposure: TNotifyEvent read FonAbortExposure write FonAbortExposure;
     property onMsg: TNotifyMsg read FonMsg write FonMsg;
-    property onEndControlExposure: TNotifyEvent read FonEndControlExposure write FonEndControlExposure;
   end;
 
 implementation
@@ -214,7 +209,6 @@ begin
   Frunning:=false;
   FLoop:=false;
   EarlyNextExposure:=false;
-  WaitExposure:=false;
   led.Brush.Color:=clGray;
   BtnLoop.Caption:=rsLoop;
 end;
@@ -277,62 +271,6 @@ end;
 procedure Tf_preview.SetOffset(value:integer);
 begin
   OffsetEdit.Value:=value;
-end;
-
-function Tf_preview.ControlExposure(exp:double; binx,biny: integer; frmt:TFrameType; readoutmode,pgain,poffset:integer):boolean;
-var SaveonNewImage: TNotifyEvent;
-    endt: TDateTime;
-begin
-result:=false;
-if camera.Status=devConnected then begin
-  if exp>=1 then
-    msg(Format(rsTakeControlE, [FormatFloat(f1, exp)]),3)
-  else
-    msg(Format(rsTakeControlE, [FormatFloat(f4, exp)]),3);
-  SaveonNewImage:=Camera.onNewImage;
-  Camera.onNewImage:=@EndExposure;
-  // set readout first so it can be overridden by specific binning or gain
-  if UseReadoutMode and camera.hasReadOut then begin
-     camera.readoutmode:=readoutmode;
-  end;
-  if (binx<>Camera.BinX)or(biny<>Camera.BinY) then Camera.SetBinning(binx,biny);
-  WaitExposure:=true;
-  ExpectedStop:=false;
-  ControlExposureOK:=false;
-  camera.AddFrames:=false;
-  if camera.CanSetGain then begin
-    if camera.hasGainISO then begin
-       if pgain=NullInt then pgain:=ISObox.ItemIndex;
-       if camera.Gain<>pgain then camera.Gain:=pgain;
-    end;
-    if camera.hasGain and (not camera.hasGainISO) then begin
-       if pgain=NullInt then pgain:=GainEdit.Value;
-       if camera.Gain<>pgain then camera.Gain:=pgain;
-    end;
-    if camera.hasOffset then begin
-       if poffset=NullInt then poffset:=OffsetEdit.Value;
-       if camera.Offset<>poffset then camera.Offset:=poffset;
-    end;
-  end;
-  if camera.FrameType<>frmt then camera.FrameType:=frmt;
-  Camera.StartExposure(exp);
-  endt:=now+(exp+60)/secperday; // large timeout for DSLR that not support hardware ROI
-  while WaitExposure and(now<endt) and (not CancelAutofocus) do begin
-    Sleep(100);
-    if GetCurrentThreadId=MainThreadID then Application.ProcessMessages;
-  end;
-  result:=ControlExposureOK;
-  Camera.onNewImage:=SaveonNewImage;
-  if result and Assigned(SaveonNewImage) then SaveonNewImage(self);
-  Wait(1);
-end;
-end;
-
-procedure Tf_preview.EndExposure(Sender: TObject);
-begin
-  ControlExposureOK:=true;
-  WaitExposure:=false;
-  if assigned(FonEndControlExposure) then FonEndControlExposure(self);
 end;
 
 end.
