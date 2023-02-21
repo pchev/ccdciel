@@ -38,6 +38,7 @@ type
     ButtonSeqDir: TButton;
     ButtonLogDir: TButton;
     CdCPath: TEdit;
+    MeridianFlipUseSetPierSide: TCheckBox;
     Label161: TLabel;
     Label164: TLabel;
     MeridianScriptArgs: TEdit;

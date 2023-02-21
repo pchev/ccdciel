@@ -609,7 +609,7 @@ begin
     if pierside1=pierEast then exit; // already right side
     if (sra=NullCoord)or(sde=NullCoord) then exit;
     msg(rsMeridianFlip5);
-    if CanSetPierSide and CanSlewAsync then begin
+    if FUseSetPierSide and CanSetPierSide and CanSlewAsync then begin
        // do the flip
        SetPierSide(pierEast);
        // check result

@@ -4432,6 +4432,7 @@ begin
   MeridianFlipCalibrate:=config.GetValue('/Meridian/MeridianFlipCalibrate',false);
   MeridianFlipAutofocus:=config.GetValue('/Meridian/MeridianFlipAutofocus',false);
   MeridianFlipStopSlaving:=config.GetValue('/Meridian/MeridianFlipStopSlaving',false);
+  MeridianFlipUseSetPierSide:=config.GetValue('/Meridian/MeridianFlipUseSetPierSide',true);
   MeridianScript:=config.GetValue('/Meridian/MeridianScript','');
   MeridianScriptPath:=config.GetValue('/Meridian/MeridianScriptPath','');
   MeridianScriptArgs:=config.GetValue('/Meridian/MeridianScriptArgs','');
@@ -8600,6 +8601,7 @@ begin
    f_option.MeridianFlipPanel2.Visible:=(f_option.MeridianOption.ItemIndex=1);
    f_option.MeridianFlipCalibrate.Checked:=config.GetValue('/Meridian/MeridianFlipCalibrate',false);
    f_option.MeridianFlipStopSlaving.Checked:=config.GetValue('/Meridian/MeridianFlipStopSlaving',false);
+   f_option.MeridianFlipUseSetPierSide.Checked:=config.GetValue('/Meridian/MeridianFlipUseSetPierSide',true);
    f_option.MeridianFlipAutofocus.Checked:=config.GetValue('/Meridian/MeridianFlipAutofocus',false);
    f_option.MeridianScript.Clear;
    f_option.MeridianScript.Items.Assign(f_script.ComboBoxScript.Items);
@@ -8967,6 +8969,7 @@ begin
      config.SetValue('/Meridian/MeridianFlipPauseAfter',f_option.MeridianFlipPauseAfter.Checked);
      config.SetValue('/Meridian/MeridianFlipPauseTimeout',f_option.MeridianFlipPauseTimeout.Value);
      config.SetValue('/Meridian/MeridianFlipCalibrate',f_option.MeridianFlipCalibrate.Checked);
+     config.SetValue('/Meridian/MeridianFlipUseSetPierSide',f_option.MeridianFlipUseSetPierSide.Checked);
      config.SetValue('/Meridian/MeridianFlipAutofocus',f_option.MeridianFlipAutofocus.Checked);
      config.SetValue('/Meridian/MeridianFlipStopSlaving',f_option.MeridianFlipStopSlaving.Checked);
      i:=f_option.MeridianScript.ItemIndex;
@@ -14105,6 +14108,7 @@ begin
         nretry:=0;
         NewMessage(rsMeridianFlip4,1);
         StatusBar1.Panels[panelstatus].Text := rsMeridianFlip5;
+        mount.UseSetPierSide:=MeridianFlipUseSetPierSide;
         mount.FlipMeridian;
         wait(2);
         while (mount.PierSide=pierWest) do begin

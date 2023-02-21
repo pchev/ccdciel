@@ -388,7 +388,8 @@ var
   DitherRAonly: boolean;
   SettleMinTime, SettleMaxTime, CalibrationDelay: integer;
   MeridianOption,MinutesPastMeridian, MinutesPastMeridianMin, MeridianFlipPauseTimeout: integer;
-  MeridianFlipPauseBefore, MeridianFlipPauseAfter,MeridianFlipCalibrate,MeridianFlipAutofocus,MeridianFlipStopSlaving: boolean;
+  MeridianFlipPauseBefore, MeridianFlipPauseAfter,MeridianFlipCalibrate,MeridianFlipAutofocus,
+  MeridianFlipStopSlaving,MeridianFlipUseSetPierSide: boolean;
   MeridianScript,MeridianScriptPath,MeridianScriptArgs: string;
   GuideSetLock: boolean;
   GuideLockX, GuideLockY: double;
