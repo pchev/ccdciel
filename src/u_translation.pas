@@ -122,6 +122,7 @@ resourcestring
   rsPleaseConfig = 'Please configure your';
   rsCamera = 'Camera';
   rsGuideCamera = 'Guide camera';
+  rsFinderCamera = 'Finder camera';
   rsFilterWheel = 'Filter wheel';
   rsMount = 'Mount';
   rsWatchdog = 'Watchdog';
@@ -1477,6 +1478,9 @@ resourcestring
   rsAutofocusAft2 = 'Autofocus after temperature change';
   rsBacklashCali = 'Backlash calibration';
   rsDoNotChangeA = 'Do not change autoguiding state';
+  rsUseFinderCam = 'Use finder camera';
+  rsUseThisDevic = 'Use this device if the main or the guider camera cannot be used for plate solving. Also configure the camera to use in Preferences/Slewing';
+  rsFind = 'Find.';
 
 implementation
 

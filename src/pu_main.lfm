@@ -135,6 +135,9 @@ object f_main: Tf_main
           Caption = 'GuideImage'
           PopupMenu = GuiderPopUpmenu1
         end
+        object FinderImage: TTabSheet
+          Caption = 'FinderImage'
+        end
       end
     end
     object PanelBottom: TPanel
@@ -340,6 +343,20 @@ object f_main: Tf_main
             OnDragOver = PanelDragOver
           end
         end
+        object PageFinder: TTabSheet
+          ClientHeight = 500
+          ClientWidth = 212
+          ParentFont = False
+          object PanelRight7: TPanel
+            Left = 0
+            Height = 500
+            Top = 0
+            Width = 212
+            Align = alClient
+            BevelOuter = bvNone
+            TabOrder = 0
+          end
+        end
       end
     end
     object TBTabs: TToolBar
@@ -402,19 +419,6 @@ object f_main: Tf_main
         OnDragOver = ButtonDragOver
         Style = tbsCheck
       end
-      object TBVideo: TToolButton
-        Tag = 4
-        Left = 191
-        Hint = 'Video'
-        Top = 2
-        Grouped = True
-        ImageIndex = 4
-        OnClick = SelectTab
-        OnDragDrop = ButtonDragDrop
-        OnDragOver = ButtonDragOver
-        Style = tbsCheck
-        Visible = False
-      end
       object TBInternalGuider: TToolButton
         Tag = 5
         Left = 153
@@ -426,6 +430,29 @@ object f_main: Tf_main
         OnDragDrop = ButtonDragDrop
         OnDragOver = ButtonDragOver
         Style = tbsCheck
+      end
+      object TBFinder: TToolButton
+        Tag = 6
+        Left = 191
+        Hint = 'Finder'
+        Top = 2
+        Grouped = True
+        ImageIndex = 6
+        OnClick = SelectTab
+        Style = tbsCheck
+      end
+      object TBVideo: TToolButton
+        Tag = 4
+        Left = 229
+        Hint = 'Video'
+        Top = 2
+        Grouped = True
+        ImageIndex = 4
+        OnClick = SelectTab
+        OnDragDrop = ButtonDragDrop
+        OnDragOver = ButtonDragOver
+        Style = tbsCheck
+        Visible = False
       end
     end
   end
@@ -461,8 +488,8 @@ object f_main: Tf_main
   end
   object MainMenu1: TMainMenu
     Images = ImageListDay
-    Left = 55
-    Top = 41
+    Left = 56
+    Top = 40
     object MenuItem1: TMenuItem
       Caption = 'File'
       object MenuOpenPicture: TMenuItem
@@ -629,6 +656,10 @@ object f_main: Tf_main
         Caption = 'MenuAscomGuideCameraSetup'
         OnClick = MenuAscomSetupClick
       end
+      object MenuAscomFinderCameraSetup: TMenuItem
+        Tag = 13
+        Caption = 'MenuAscomFinderCameraSetup'
+      end
       object MenuAscomWheelSetup: TMenuItem
         Tag = 2
         Caption = 'MenuAscomWheelSetup'
@@ -687,6 +718,10 @@ object f_main: Tf_main
         Tag = 12
         Caption = 'MenuAlpacaGuideCameraSetup'
         OnClick = MenuAlpacaSetupClick
+      end
+      object MenuAlpacaFinderCameraSetup: TMenuItem
+        Tag = 13
+        Caption = 'MenuAlpacaFinderCameraSetup'
       end
       object MenuAlpacaWheelSetup: TMenuItem
         Tag = 2
@@ -888,6 +923,12 @@ object f_main: Tf_main
         Checked = True
         ShowAlwaysCheckable = True
         OnClick = MenuViewInternalguiderClick
+      end
+      object MenuViewFinder: TMenuItem
+        AutoCheck = True
+        Caption = 'Finder camera'
+        Checked = True
+        ShowAlwaysCheckable = True
       end
       object MenuViewPlanetarium: TMenuItem
         AutoCheck = True
@@ -1284,6 +1325,13 @@ object f_main: Tf_main
           Caption = 'Stop'
           OnClick = MenuInternalGuiderStopClick
         end
+      end
+    end
+    object MenuTabFinder: TMenuItem
+      Caption = 'Finder camera'
+      ImageIndex = 6
+      object MenuFinder: TMenuItem
+        Caption = 'Finder camera'
       end
     end
     object MenuItem3: TMenuItem
@@ -1781,5 +1829,11 @@ object f_main: Tf_main
     OnTimer = GuiderMeasureTimerTimer
     Left = 672
     Top = 321
+  end
+  object FinderCameraConnectTimer: TTimer
+    Enabled = False
+    OnTimer = FinderCameraConnectTimerTimer
+    Left = 496
+    Top = 472
   end
 end

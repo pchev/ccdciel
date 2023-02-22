@@ -362,7 +362,7 @@ var
   onMsgGlobal: TNotifyMsg;
   Appdir,ConfigDir,LogDir,TmpDir,DataDir,ScriptsDir,HomeDir,SequenceDir: UTF8String;
   defCapturePath, defPython, TCPIPConfigPort, TCPIPServerPort: string;
-  CameraName,WheelName,FocuserName,RotatorName,MountName,DomeName,WatchdogName,WeatherName,SafetyName,SwitchName,CoverName,GuideCameraName: string;
+  CameraName,WheelName,FocuserName,RotatorName,MountName,DomeName,WatchdogName,WeatherName,SafetyName,SwitchName,CoverName,GuideCameraName,FinderCameraName: string;
   ConfigFlatFile,ConfigDarkFile,ConfigGuiderDarkFile,cdate: string;
   isAdmin, UacEnabled, debug_msg: boolean;
   AllDevicesConnected: boolean;
@@ -395,13 +395,15 @@ var
   GuideLockX, GuideLockY: double;
   astrometryResolver: integer;
   OrigX, OrigY,img_Height,img_Width,GuideOrigX, GuideOrigY,guideimg_Height,guideimg_Width : integer;
+  FinderOrigX, FinderOrigY,finderimg_Height,finderimg_Width : integer;
   ImgFrameX,ImgFrameY,ImgFrameW,ImgFrameH: integer;
   ImgScale0,ImgPixRatio: double;
   ImgZoom,ZoomMin,SplitZoom: double;
-  GuideImgCx,GuideImgCy: double;
+  GuideImgCx,GuideImgCy,FinderImgCx,FinderImgCy: double;
   SplitImage: boolean;
   GuideImgScale0,GuideImgPixRatio,GuideImgZoom,GuideZoomMin: double;
-  ScrWidth,ScrHeigth,ScrGuideWidth,ScrGuideHeigth, SplitMargin: integer;
+  ScrWidth,ScrHeigth,ScrGuideWidth,ScrGuideHeigth,ScrFinderWidth,ScrFinderHeigth,SplitMargin: integer;
+  FinderImgScale0,FinderImgPixRatio,FinderImgZoom,FinderZoomMin: double;
   MaxADU, ClippingOverflow, ClippingUnderflow: double;
   MsgHandle: THandle;
   LastPixelSize: double;

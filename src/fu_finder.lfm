@@ -1,0 +1,50 @@
+object f_finder: Tf_finder
+  Left = 0
+  Height = 73
+  Top = 0
+  Width = 194
+  AutoSize = True
+  ClientHeight = 73
+  ClientWidth = 194
+  ParentFont = False
+  TabOrder = 0
+  DesignLeft = -1
+  DesignTop = -1
+  object Title: TLabel
+    Left = 0
+    Height = 20
+    Top = 0
+    Width = 194
+    Align = alTop
+    Alignment = taCenter
+    AutoSize = False
+    Caption = 'Finder'
+    Color = clBtnShadow
+    DragMode = dmAutomatic
+    Font.Color = clBtnText
+    Layout = tlCenter
+    ParentColor = False
+    ParentFont = False
+    Transparent = False
+  end
+  object Panel1: TPanel
+    Left = 0
+    Height = 52
+    Top = 20
+    Width = 194
+    Align = alTop
+    ClientHeight = 52
+    ClientWidth = 194
+    ParentFont = False
+    TabOrder = 0
+    object Button1: TButton
+      Left = 16
+      Height = 25
+      Top = 8
+      Width = 75
+      Caption = 'Exposure'
+      OnClick = Button1Click
+      TabOrder = 0
+    end
+  end
+end

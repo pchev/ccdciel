@@ -25,7 +25,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 interface
 
-uses indibaseclient, indibasedevice, indiapi, u_global, u_utils, u_ccdconfig, UScaleDPI, u_translation, u_hints,
+uses indibaseclient, indibasedevice, indiapi, u_global, u_utils, u_ccdconfig, UScaleDPI, u_hints,  u_translation,
   cu_alpacamanagement,
   {$ifdef mswindows}
     Variants, comobj, math,
@@ -39,6 +39,7 @@ type
 
   Tf_setup = class(TForm)
     AlpacaGuideCameraList: TComboBox;
+    AlpacaFinderCameraList: TComboBox;
     AlpacaSwitchList: TComboBox;
     AlpacaCoverList: TComboBox;
     AlpacaWheelList: TComboBox;
@@ -49,18 +50,22 @@ type
     AlpacaWeatherList: TComboBox;
     AlpacaSafetyList: TComboBox;
     AscomGuideCamera: TEdit;
+    AscomFinderCamera: TEdit;
     AscomSwitch: TEdit;
     AscomCover: TEdit;
     BtnAboutGuideCamera: TButton;
+    BtnAboutFinderCamera: TButton;
     BtnAboutSwitch: TButton;
     BtnAboutCover: TButton;
     BtnChooseGuideCamera: TButton;
+    BtnChooseFinderCamera: TButton;
     BtnChooseSwitch: TButton;
     BtnChooseCover: TButton;
     BtnDiscover: TButton;
     BtnDiscover1: TButton;
     BtnDiscover10: TButton;
     BtnDiscover11: TButton;
+    BtnDiscover12: TButton;
     BtnDiscover2: TButton;
     BtnDiscover3: TButton;
     BtnDiscover4: TButton;
@@ -70,29 +75,46 @@ type
     BtnDiscover8: TButton;
     BtnDiscover9: TButton;
     BtnSetupGuideCamera: TButton;
+    BtnSetupFinderCamera: TButton;
     BtnSetupSwitch: TButton;
     BtnSetupCover: TButton;
     ButtonHelp: TButton;
     DeviceGuideCamera: TCheckBox;
+    DeviceFinderCamera: TCheckBox;
+    DiscoverLed12: TShape;
+    GetIndi12: TButton;
     GuideCameraARestDevice: TSpinEdit;
+    FinderCameraARestDevice: TSpinEdit;
     GuideCameraARestHost: TEdit;
     CameraARestPass: TEdit;
     AlpacaServers: TComboBox;
     AlpacaCameraList: TComboBox;
     AlpacaDiscoveryPort: TSpinEdit;
+    FinderCameraARestHost: TEdit;
     GuideCameraARestPass: TEdit;
+    FinderCameraARestPass: TEdit;
     GuideCameraARestPort: TSpinEdit;
+    FinderCameraARestPort: TSpinEdit;
     GuideCameraARestProtocol: TComboBox;
+    FinderCameraARestProtocol: TComboBox;
     GuideCameraARestUser: TEdit;
+    FinderCameraARestUser: TEdit;
     GuideCameraAscom: TTabSheet;
+    FinderCameraAscom: TTabSheet;
     GuideCameraAscomRest: TTabSheet;
+    FinderCameraAscomRest: TTabSheet;
     GuideCameraAutoLoadConfig: TCheckBox;
     CameraDateObs: TCheckBox;
     CameraDateObs1: TCheckBox;
+    FinderCameraAutoLoadConfig: TCheckBox;
     GuideCameraIndi: TTabSheet;
+    FinderCameraIndi: TTabSheet;
     GuideCameraIndiDevice: TComboBox;
+    FinderCameraIndiDevice: TComboBox;
     GuideCameraIndiPort: TEdit;
+    FinderCameraIndiPort: TEdit;
     GuideCameraIndiServer: TEdit;
+    FinderCameraIndiServer: TEdit;
     GuideCameraMsg: TLabel;
     DeviceSwitch: TCheckBox;
     DeviceCover: TCheckBox;
@@ -115,7 +137,9 @@ type
     GetIndi10: TButton;
     GetIndi11: TButton;
     GetIndi9: TButton;
+    FinderCameraMsg: TLabel;
     GuideIndiSensor: TComboBox;
+    FinderIndiSensor: TComboBox;
     Label10: TLabel;
     Label107: TLabel;
     Label108: TLabel;
@@ -168,6 +192,20 @@ type
     Label153: TLabel;
     Label154: TLabel;
     Label155: TLabel;
+    Label156: TLabel;
+    Label157: TLabel;
+    Label158: TLabel;
+    Label159: TLabel;
+    Label160: TLabel;
+    Label161: TLabel;
+    Label162: TLabel;
+    Label163: TLabel;
+    Label164: TLabel;
+    Label165: TLabel;
+    Label166: TLabel;
+    Label167: TLabel;
+    Label168: TLabel;
+    Label169: TLabel;
     Label23: TLabel;
     Label26: TLabel;
     Label27: TLabel;
@@ -176,6 +214,7 @@ type
     Label7: TLabel;
     Label8: TLabel;
     PageControlGuideCamera: TPageControl;
+    PageControlFinderCamera: TPageControl;
     PageControlSwitch: TPageControl;
     PageControlCover: TPageControl;
     Panel20: TPanel;
@@ -201,8 +240,15 @@ type
     Panel39: TPanel;
     Panel40: TPanel;
     Panel41: TPanel;
+    Panel42: TPanel;
+    Panel43: TPanel;
+    Panel44: TPanel;
+    Panel45: TPanel;
+    Panel46: TPanel;
     PanelGuideCameraAscom: TPanel;
+    PanelFinderCameraAscom: TPanel;
     PanelGuideCameraIndi: TPanel;
+    PanelFinderCameraIndi: TPanel;
     PanelLeft: TPanel;
     PanelSwitchAscom: TPanel;
     PanelCoverAscom: TPanel;
@@ -241,6 +287,7 @@ type
     Switch: TTabSheet;
     Cover: TTabSheet;
     GuideCamera: TTabSheet;
+    FinderCamera: TTabSheet;
     WheelMslot: TSpinEdit;
     WheelManual: TTabSheet;
     WheelARestPass: TEdit;
@@ -597,6 +644,7 @@ type
     procedure AlpacaCameraListChange(Sender: TObject);
     procedure AlpacaCoverListChange(Sender: TObject);
     procedure AlpacaDomeListChange(Sender: TObject);
+    procedure AlpacaFinderCameraListChange(Sender: TObject);
     procedure AlpacaFocuserListChange(Sender: TObject);
     procedure AlpacaGuideCameraListChange(Sender: TObject);
     procedure AlpacaMountListChange(Sender: TObject);
@@ -607,6 +655,7 @@ type
     procedure AlpacaServerSetupClick(Sender: TObject);
     procedure AlpacaServerSetupCover(Sender: TObject);
     procedure AlpacaServerSetupDome(Sender: TObject);
+    procedure AlpacaServerSetupFinderCamera(Sender: TObject);
     procedure AlpacaServerSetupFocuser(Sender: TObject);
     procedure AlpacaServerSetupGuideCamera(Sender: TObject);
     procedure AlpacaServerSetupMount(Sender: TObject);
@@ -618,6 +667,7 @@ type
     procedure AlpacaSetupCamera(Sender: TObject);
     procedure AlpacaSetupCover(Sender: TObject);
     procedure AlpacaSetupDome(Sender: TObject);
+    procedure AlpacaSetupFinderCamera(Sender: TObject);
     procedure AlpacaSetupFocuser(Sender: TObject);
     procedure AlpacaSetupGuideCamera(Sender: TObject);
     procedure AlpacaSetupMount(Sender: TObject);
@@ -645,6 +695,9 @@ type
     procedure CoverARestProtocolChange(Sender: TObject);
     procedure DefaultARestProtocolChange(Sender: TObject);
     procedure DomeARestProtocolChange(Sender: TObject);
+    procedure FinderCameraARestProtocolChange(Sender: TObject);
+    procedure FinderCameraIndiDeviceChange(Sender: TObject);
+    procedure FinderIndiSensorChange(Sender: TObject);
     procedure FocuserARestProtocolChange(Sender: TObject);
     procedure FormShow(Sender: TObject);
     procedure GetIndiClick(Sender: TObject);
@@ -662,6 +715,7 @@ type
     procedure PageControlCameraChange(Sender: TObject);
     procedure PageControlCoverChange(Sender: TObject);
     procedure PageControlDomeChange(Sender: TObject);
+    procedure PageControlFinderCameraChange(Sender: TObject);
     procedure PageControlFocuserChange(Sender: TObject);
     procedure PageControlGuideCameraChange(Sender: TObject);
     procedure PageControlMountChange(Sender: TObject);
@@ -683,11 +737,11 @@ type
   private
     { private declarations }
     indiclient: TIndiBaseClient;
-    camsavedev,wheelsavedev,focusersavedev,mountsavedev,domesavedev,rotatorsavedev,weathersavedev, guidecamsavedev,
-      safetysavedev,watchdogsavedev,switchsavedev,coversavedev,FCameraSensor,FGuideCameraSensor: string;
+    camsavedev,wheelsavedev,focusersavedev,mountsavedev,domesavedev,rotatorsavedev,weathersavedev, guidecamsavedev,findercamsavedev,
+      safetysavedev,watchdogsavedev,switchsavedev,coversavedev,FCameraSensor,FGuideCameraSensor,FFinderCameraSensor: string;
     LockInterfaceChange,InitialLock,ProfileLock: boolean;
     FCameraConnection,FWheelConnection,FFocuserConnection,FMountConnection,FDomeConnection,FRotatorConnection,
-      FWeatherConnection,FSafetyConnection,FSwitchConnection,FCoverConnection,FGuideCameraConnection: TDevInterface;
+      FWeatherConnection,FSafetyConnection,FSwitchConnection,FCoverConnection,FGuideCameraConnection,FFinderCameraConnection: TDevInterface;
     IndiTimerCount,GetDeviceType:integer;
     receiveindidevice: boolean;
     FShowHelp: TNotifyEvent;
@@ -700,6 +754,7 @@ type
     procedure IndiDisconnected(Sender: TObject);
     procedure SetCameraConnection(value: TDevInterface);
     procedure SetGuideCameraConnection(value: TDevInterface);
+    procedure SetFinderCameraConnection(value: TDevInterface);
     procedure SetWheelConnection(value: TDevInterface);
     procedure SetFocuserConnection(value: TDevInterface);
     procedure SetRotatorConnection(value: TDevInterface);
@@ -711,6 +766,7 @@ type
     procedure SetCoverConnection(value: TDevInterface);
     procedure SetCameraSensor(value: string);
     procedure SetGuideCameraSensor(value: string);
+    procedure SetFinderCameraSensor(value: string);
     procedure SelectPage(Sender: TObject);
     procedure IncPage(Sender: TObject);
     procedure SelectNextPage(direction: integer);
@@ -718,9 +774,10 @@ type
     procedure AlpacaSetup(protocol,host,port,device,num: string);
     procedure CheckDualChip;
     procedure CheckGuideDualChip;
+    procedure CheckFinderDualChip;
   public
     { public declarations }
-    DefaultCameraInterface, DefaultGuideCameraInterface, DefaultMountInterface, DefaultDomeInterface, DefaultWheelInterface, DefaultFocuserInterface,
+    DefaultCameraInterface, DefaultGuideCameraInterface, DefaultFinderCameraInterface, DefaultMountInterface, DefaultDomeInterface, DefaultWheelInterface, DefaultFocuserInterface,
       DefaultRotatorInterface, DefaultWeatherInterface, DefaultSafetyInterface, DefaultSwitchInterface, DefaultCoverInterface: TDevInterface;
     profile: string;
     procedure SetLang;
@@ -729,6 +786,7 @@ type
     procedure SetActivePageButton;
     property CameraSensor: string read FCameraSensor write SetCameraSensor;
     property GuideCameraSensor: string read FGuideCameraSensor write SetGuideCameraSensor;
+    property FinderCameraSensor: string read FFinderCameraSensor write SetFinderCameraSensor;
     property CameraConnection: TDevInterface read FCameraConnection write SetCameraConnection;
     property WheelConnection: TDevInterface read FWheelConnection write SetWheelConnection;
     property FocuserConnection: TDevInterface read FFocuserConnection write SetFocuserConnection;
@@ -740,6 +798,7 @@ type
     property SwitchConnection: TDevInterface read FSwitchConnection write SetSwitchConnection;
     property CoverConnection: TDevInterface read FCoverConnection write SetCoverConnection;
     property GuideCameraConnection: TDevInterface read FGuideCameraConnection write SetGuideCameraConnection;
+    property FinderCameraConnection: TDevInterface read FFinderCameraConnection write SetFinderCameraConnection;
     property onShowHelp: TNotifyEvent read FShowHelp write FShowHelp;
     property onMsg: TNotifyMsg read FonMsg write FonMsg;
   end;
@@ -777,6 +836,7 @@ begin
   SwitchAscom.TabVisible:=false;
   CoverAscom.TabVisible:=false;
   GuideCameraAscom.TabVisible:=false;
+  FinderCameraAscom.TabVisible:=false;
   {$endif}
   b:=TSpeedButton.Create(self);
   b.GroupIndex:=94876;
@@ -937,6 +997,27 @@ begin
   GuideIndiSensor.Items[1]:=rsGuiderSensor;
   GuideCameraAutoLoadConfig.Caption:=rsLoadConfigur;
   label144.Caption:=rsToUseThisDev;
+
+  FinderCamera.Caption:=rsFinderCamera;
+  DeviceFinderCamera.Caption:=rsUseFinderCam;
+  Label158.Caption:=rsServer;
+  Label159.Caption:=rsPort;
+  Label161.Caption:=rsProtocol;
+  Label162.Caption:=rsServer;
+  Label163.Caption:=rsPort;
+  Label164.Caption:=rsRemoteDevice;
+  GetIndi12.Caption:=rsGet;
+  Label167.Caption:=rsUserName;
+  Label166.Caption:=rsPassword;
+  BtnChooseFinderCamera.Caption:=rsChoose;
+  BtnSetupFinderCamera.Caption:=rsSetup;
+  BtnAboutFinderCamera.Caption:=rsAbout;
+  Label156.Caption:=rsDevices;
+  Label157.Caption:=rsSensor;
+  FinderIndiSensor.Items[0]:=rsMainSensor;
+  FinderIndiSensor.Items[1]:=rsGuiderSensor;
+  FinderCameraAutoLoadConfig.Caption:=rsLoadConfigur;
+  Label160.Caption:=rsUseThisDevic;
 
   Filterwheel.Caption:=rsFilterWheel;
   label8.Caption:=rsNumberOfSlot;
@@ -1151,6 +1232,9 @@ begin
   GuideCameraIndi.Caption:=DevInterfaceName[0];
   GuideCameraAscom.Caption:=DevInterfaceName[1];
   GuideCameraAscomRest.Caption:=DevInterfaceName[4];
+  FinderCameraIndi.Caption:=DevInterfaceName[0];
+  FinderCameraAscom.Caption:=DevInterfaceName[1];
+  FinderCameraAscomRest.Caption:=DevInterfaceName[4];
   WatchdogIndi.Caption:=DevInterfaceName[0];
   ProfileList.Hint:=rsListOfProfil;
   BtnNewProfile.Hint:=Format(rsCreateANewEm, [crlf, crlf]);
@@ -1244,6 +1328,7 @@ DeviceWatchdog.Checked:=conf.GetValue('/Devices/Watchdog',false);
 DeviceSwitch.Checked:=conf.GetValue('/Devices/Switch',false);
 DeviceCover.Checked:=conf.GetValue('/Devices/Cover',false);
 DeviceGuideCamera.Checked:=conf.GetValue('/Devices/GuideCamera',false);
+DeviceFinderCamera.Checked:=conf.GetValue('/Devices/FinderCamera',false);
 
 CameraConnection:=TDevInterface(conf.GetValue('/CameraInterface',ord(DefaultCameraInterface)));
 CameraIndiServer.Text:=conf.GetValue('/INDIcamera/Server',defautindiserver);
@@ -1292,6 +1377,23 @@ GuideCameraARestHost.Text:=conf.GetValue('/ASCOMRestguidecamera/Host','127.0.0.1
 GuideCameraARestPort.Value:=conf.GetValue('/ASCOMRestguidecamera/Port',11111);
 GuideCameraARestDevice.Value:=conf.GetValue('/ASCOMRestguidecamera/Device',0);
 CheckGuideDualChip;
+
+FinderCameraConnection:=TDevInterface(conf.GetValue('/FinderCameraInterface',ord(DefaultFinderCameraInterface)));
+FinderCameraIndiServer.Text:=conf.GetValue('/INDIFindercamera/Server','localhost');
+FinderCameraIndiPort.Text:=conf.GetValue('/INDIFindercamera/ServerPort','7624');
+if FinderCameraIndiDevice.Items.Count=0 then begin
+  FinderCameraIndiDevice.Items.Add(conf.GetValue('/INDIFindercamera/Device',''));
+  FinderCameraIndiDevice.ItemIndex:=0;
+end;
+FinderCameraIndiDevice.Text:=conf.GetValue('/INDIFindercamera/Device','');
+FinderCameraSensor:=conf.GetValue('/INDIFindercamera/Sensor','CCD1');
+FinderCameraAutoLoadConfig.Checked:=conf.GetValue('/INDIFindercamera/AutoLoadConfig',true);
+AscomFinderCamera.Text:=conf.GetValue('/ASCOMFindercamera/Device','');
+FinderCameraARestProtocol.ItemIndex:=conf.GetValue('/ASCOMRestFindercamera/Protocol',0);
+FinderCameraARestHost.Text:=conf.GetValue('/ASCOMRestFindercamera/Host','127.0.0.1');
+FinderCameraARestPort.Value:=conf.GetValue('/ASCOMRestFindercamera/Port',11111);
+FinderCameraARestDevice.Value:=conf.GetValue('/ASCOMRestFindercamera/Device',0);
+CheckFinderDualChip;
 
 WheelConnection:=TDevInterface(conf.GetValue('/FilterWheelInterface',ord(DefaultWheelInterface)));
 WheelIndiServer.Text:=conf.GetValue('/INDIwheel/Server',defautindiserver);
@@ -1459,6 +1561,7 @@ DeviceCamera.Caption:=rsCamera+': '+DevInterfaceName[ord(FCameraConnection)];
 DeviceSwitch.Caption:=rsUseSwitch+': '+DevInterfaceName[ord(FSwitchConnection)];
 DeviceCover.Caption:=rsUseCoverCali+': '+DevInterfaceName[ord(FCoverConnection)];
 DeviceGuideCamera.Caption:=rsUseGuideCamera+': '+DevInterfaceName[ord(FGuideCameraConnection)];
+DeviceFinderCamera.Caption:=rsUseFinderCam+': '+DevInterfaceName[ord(FFinderCameraConnection)];
 
 CameraARestUser.Text:=DecryptStr(hextostr(credentialconf.GetValue('/ASCOMRestcamera/User','')), encryptpwd);
 WheelARestUser.Text:=DecryptStr(hextostr(credentialconf.GetValue('/ASCOMRestwheel/User','')), encryptpwd);
@@ -1471,6 +1574,7 @@ SafetyARestUser.Text:=DecryptStr(hextostr(credentialconf.GetValue('/ASCOMRestsaf
 SwitchARestUser.Text:=DecryptStr(hextostr(credentialconf.GetValue('/ASCOMRestswitch/User','')), encryptpwd);
 CoverARestUser.Text:=DecryptStr(hextostr(credentialconf.GetValue('/ASCOMRestcover/User','')), encryptpwd);
 GuideCameraARestUser.Text:=DecryptStr(hextostr(credentialconf.GetValue('/ASCOMRestguidecamera/User','')), encryptpwd);
+FinderCameraARestUser.Text:=DecryptStr(hextostr(credentialconf.GetValue('/ASCOMRestfindercamera/User','')), encryptpwd);
 
 CameraARestPass.Text:=DecryptStr(hextostr(credentialconf.GetValue('/ASCOMRestcamera/Pass','')), encryptpwd);
 WheelARestPass.Text:=DecryptStr(hextostr(credentialconf.GetValue('/ASCOMRestwheel/Pass','')), encryptpwd);
@@ -1483,6 +1587,7 @@ SafetyARestPass.Text:=DecryptStr(hextostr(credentialconf.GetValue('/ASCOMRestsaf
 SwitchARestPass.Text:=DecryptStr(hextostr(credentialconf.GetValue('/ASCOMRestswitch/Pass','')), encryptpwd);
 CoverARestPass.Text:=DecryptStr(hextostr(credentialconf.GetValue('/ASCOMRestcover/Pass','')), encryptpwd);
 GuideCameraARestPass.Text:=DecryptStr(hextostr(credentialconf.GetValue('/ASCOMRestguidecamera/Pass','')), encryptpwd);
+FinderCameraARestPass.Text:=DecryptStr(hextostr(credentialconf.GetValue('/ASCOMRestfindercamera/Pass','')), encryptpwd);
 DefaultARestUser.Text:=CameraARestUser.Text;
 DefaultARestPass.Text:=CameraARestPass.Text;
 
@@ -1512,6 +1617,19 @@ begin
    INDI: PageControlGuideCamera.ActivePageIndex:=0;
    ASCOM: PageControlGuideCamera.ActivePageIndex:=1;
    ASCOMREST: PageControlGuideCamera.ActivePageIndex:=2;
+  end;
+end;
+
+procedure Tf_setup.SetFinderCameraConnection(value: TDevInterface);
+begin
+{$ifndef mswindows}
+  if value=ASCOM then value:=INDI;
+{$endif}
+  FFinderCameraConnection:=value;
+  case FFinderCameraConnection of
+   INDI: PageControlFinderCamera.ActivePageIndex:=0;
+   ASCOM: PageControlFinderCamera.ActivePageIndex:=1;
+   ASCOMREST: PageControlFinderCamera.ActivePageIndex:=2;
   end;
 end;
 
@@ -1662,6 +1780,7 @@ begin
     10: begin t:='Switch'; dev:=widestring(AscomSwitch.Text); end;
     11: begin t:='CoverCalibrator'; dev:=widestring(AscomCover.Text); end;
     12: begin t:='Camera'; dev:=widestring(AscomGuideCamera.Text); end;
+    13: begin t:='Camera'; dev:=widestring(AscomFinderCamera.Text); end;
   end;
   try
     try
@@ -1685,6 +1804,7 @@ begin
       10 : begin AscomSwitch.Text:=string(dev); DeviceSwitch.Checked:=true; end;
       11 : begin AscomCover.Text:=string(dev); DeviceCover.Checked:=true; end;
       12 : begin AscomGuideCamera.Text:=string(dev); DeviceGuideCamera.Checked:=true; end;
+      13 : begin AscomFinderCamera.Text:=string(dev); DeviceFinderCamera.Checked:=true; end;
     end;
   except
     on E: Exception do begin
@@ -1716,6 +1836,7 @@ begin
     10: begin dev:=widestring(AscomSwitch.Text); end;
     11: begin dev:=widestring(AscomCover.Text); end;
     12 : begin dev:=widestring(AscomGuideCamera.Text); end;
+    13 : begin dev:=widestring(AscomFinderCamera.Text); end;
   end;
 
   try
@@ -1761,6 +1882,7 @@ begin
     10: begin dev:=widestring(AscomSwitch.Text); end;
     11: begin dev:=widestring(AscomCover.Text); end;
     12: begin dev:=widestring(AscomGuideCamera.Text); end;
+    13: begin dev:=widestring(AscomFinderCamera.Text); end;
   end;
 
   try
@@ -1853,6 +1975,14 @@ begin
   end;
 end;
 
+procedure Tf_setup.FinderCameraARestProtocolChange(Sender: TObject);
+begin
+  case FinderCameraARestProtocol.ItemIndex of
+    0: FinderCameraARestPort.Value:=11111;
+    1: FinderCameraARestPort.Value:=443;
+  end;
+end;
+
 procedure Tf_setup.CameraIndiDeviceChange(Sender: TObject);
 begin
   CheckDualChip;
@@ -1861,6 +1991,11 @@ end;
 procedure Tf_setup.GuideCameraIndiDeviceChange(Sender: TObject);
 begin
   CheckGuideDualChip;
+end;
+
+procedure Tf_setup.FinderCameraIndiDeviceChange(Sender: TObject);
+begin
+  CheckFinderDualChip;
 end;
 
 procedure Tf_setup.CheckDualChip;
@@ -1879,6 +2014,15 @@ begin
   GuideIndiSensor.Visible:=dual;
   label143.Visible:=dual;
   if not dual then FGuideCameraSensor:='CCD1';
+end;
+
+procedure Tf_setup.CheckFinderDualChip;
+var dual: boolean;
+begin
+  dual:=pos('SBIG',UpperCase(FinderCameraIndiDevice.Text))>0;
+  FinderIndiSensor.Visible:=dual;
+  label157.Visible:=dual;
+  if not dual then FFinderCameraSensor:='CCD1';
 end;
 
 procedure Tf_setup.ApplyIndiClick(Sender: TObject);
@@ -1958,6 +2102,14 @@ case GuideIndiSensor.ItemIndex of
 end;
 end;
 
+procedure Tf_setup.FinderIndiSensorChange(Sender: TObject);
+begin
+case FinderIndiSensor.ItemIndex of
+  0: FFinderCameraSensor:='CCD1';
+  1: FFinderCameraSensor:='CCD2';
+end;
+end;
+
 procedure Tf_setup.SetCameraSensor(value: string);
 begin
  FCameraSensor:=value;
@@ -1975,6 +2127,16 @@ begin
    GuideIndiSensor.ItemIndex:=1;
  end else begin
    GuideIndiSensor.ItemIndex:=0;
+ end;
+end;
+
+procedure Tf_setup.SetFinderCameraSensor(value: string);
+begin
+ FFinderCameraSensor:=value;
+ if FFinderCameraSensor='CCD2' then begin
+   FinderIndiSensor.ItemIndex:=1;
+ end else begin
+   FinderIndiSensor.ItemIndex:=0;
  end;
 end;
 
@@ -2001,6 +2163,7 @@ begin
   coversavedev:=SafetyIndiDevice.Text;
   watchdogsavedev:=WatchdogIndiDevice.Text;
   guidecamsavedev:=GuideCameraIndiDevice.Text;
+  findercamsavedev:=FinderCameraIndiDevice.Text;
   indiclient:=TIndiBaseClient.Create;
   indiclient.onNewDevice:=@IndiNewDevice;
   indiclient.onServerDisconnected:=@IndiDisconnected;
@@ -2066,6 +2229,12 @@ begin
         GuideCameraIndiDevice.Clear;
         indiclient.SetServer(GuideCameraIndiServer.Text,GuideCameraIndiPort.Text);
         msg('Get driver list from server '+GuideCameraIndiServer.Text+':'+GuideCameraIndiPort.Text,9);
+       end;
+    13: begin
+        FinderCameraMsg.Caption:='';
+        FinderCameraIndiDevice.Clear;
+        indiclient.SetServer(FinderCameraIndiServer.Text,FinderCameraIndiPort.Text);
+        msg('Get driver list from server '+FinderCameraIndiServer.Text+':'+FinderCameraIndiPort.Text,9);
        end;
   end;
   indiclient.ConnectServer;
@@ -2159,6 +2328,11 @@ begin
        GuideCameraIndiDevice.Items.Add(guidecamsavedev);
        GuideCameraIndiDevice.ItemIndex:=0;
     end;
+    if (GetDeviceType=13) then begin
+       FinderCameraMsg.Caption:=rsNoResponseFr;
+       FinderCameraIndiDevice.Items.Add(findercamsavedev);
+       FinderCameraIndiDevice.ItemIndex:=0;
+    end;
     exit;
   end;
   try
@@ -2189,6 +2363,8 @@ begin
         CoverIndiDevice.Items.Add(BaseDevice(indiclient.devices[i]).getDeviceName);
      if (GetDeviceType=12)and((drint and CCD_INTERFACE)<>0) then
         GuideCameraIndiDevice.Items.Add(BaseDevice(indiclient.devices[i]).getDeviceName);
+     if (GetDeviceType=13)and((drint and CCD_INTERFACE)<>0) then
+        FinderCameraIndiDevice.Items.Add(BaseDevice(indiclient.devices[i]).getDeviceName);
   end;
   if (GetDeviceType=1) then begin
     if CameraIndiDevice.Items.Count>0 then
@@ -2330,10 +2506,21 @@ begin
     for i:=0 to GuideCameraIndiDevice.Items.Count-1 do
        if GuideCameraIndiDevice.Items[i]=guidecamsavedev then GuideCameraIndiDevice.ItemIndex:=i;
   end;
+  if (GetDeviceType=13) then begin
+    if FinderCameraIndiDevice.Items.Count>0 then
+       FinderCameraIndiDevice.ItemIndex:=0
+    else begin
+       FinderCameraIndiDevice.Items.Add(findercamsavedev); ;
+       FinderCameraMsg.Caption:=rsNoDevice;
+    end;
+    for i:=0 to FinderCameraIndiDevice.Items.Count-1 do
+       if FinderCameraIndiDevice.Items[i]=findercamsavedev then FinderCameraIndiDevice.ItemIndex:=i;
+  end;
   indiclient.onServerDisconnected:=nil;
   indiclient.DisconnectServer;
   CheckDualChip;
   CheckGuideDualChip;
+  CheckFinderDualChip;
   except
   end;
   finally
@@ -2388,6 +2575,16 @@ begin
     2: FGuideCameraConnection:=ASCOMREST;
   end;
   DeviceGuideCamera.Caption:=rsGuideCamera+': '+DevInterfaceName[ord(FGuideCameraConnection)];
+end;
+
+procedure Tf_setup.PageControlFinderCameraChange(Sender: TObject);
+begin
+  case PageControlFinderCamera.ActivePageIndex of
+    0: FFinderCameraConnection:=INDI;
+    1: FFinderCameraConnection:=ASCOM;
+    2: FFinderCameraConnection:=ASCOMREST;
+  end;
+  DeviceFinderCamera.Caption:=rsFinderCamera+': '+DevInterfaceName[ord(FFinderCameraConnection)];
 end;
 
 procedure Tf_setup.PageControlDomeChange(Sender: TObject);
@@ -2656,6 +2853,7 @@ begin
   DiscoverLed9.Brush.Color:=c;
   DiscoverLed10.Brush.Color:=c;
   DiscoverLed11.Brush.Color:=c;
+  DiscoverLed12.Brush.Color:=c;
 end;
 
 procedure Tf_setup.AlpacaDiscoverAsync(data:PtrInt);
@@ -2690,6 +2888,8 @@ try
     AlpacaCoverList.Items.Add(Format(rsDiscoveredS, [rsCoverCalibra]));
     AlpacaGuideCameraList.Clear;
     AlpacaGuideCameraList.Items.Add(Format(rsDiscoveredS, [rsGuideCamera]));
+    AlpacaFinderCameraList.Clear;
+    AlpacaFinderCameraList.Items.Add(Format(rsDiscoveredS, [rsFinderCamera]));
     AlpacaServers.Items.Add(Format(rsFoundServers, [inttostr(n)]));
     for i:=0 to length(AlpacaServerList)-1 do begin
       AlpacaServers.Items.Add(AlpacaServerList[i].ip+':'+AlpacaServerList[i].port+', '+AlpacaServerList[i].servername+', '+AlpacaServerList[i].location);
@@ -2698,6 +2898,7 @@ try
         if devtype='CAMERA' then begin
            AlpacaCameraList.Items.Add(AlpacaServerList[i].devices[j].DeviceName+tab+AlpacaServerList[i].ip+tab+AlpacaServerList[i].port+tab+'camera/'+tab+IntToStr(AlpacaServerList[i].devices[j].DeviceNumber));
            AlpacaGuideCameraList.Items.Add(AlpacaServerList[i].devices[j].DeviceName+tab+AlpacaServerList[i].ip+tab+AlpacaServerList[i].port+tab+'camera/'+tab+IntToStr(AlpacaServerList[i].devices[j].DeviceNumber));
+           AlpacaFinderCameraList.Items.Add(AlpacaServerList[i].devices[j].DeviceName+tab+AlpacaServerList[i].ip+tab+AlpacaServerList[i].port+tab+'camera/'+tab+IntToStr(AlpacaServerList[i].devices[j].DeviceNumber));
         end
         else if devtype='FILTERWHEEL' then begin
           AlpacaWheelList.Items.Add(AlpacaServerList[i].devices[j].DeviceName+tab+AlpacaServerList[i].ip+tab+AlpacaServerList[i].port+tab+'filterwheel/'+tab+IntToStr(AlpacaServerList[i].devices[j].DeviceNumber));
@@ -2740,6 +2941,7 @@ try
     AlpacaSwitchList.ItemIndex:=0;
     AlpacaCoverList.ItemIndex:=0;
     AlpacaGuideCameraList.ItemIndex:=0;
+    AlpacaFinderCameraList.ItemIndex:=0;
     if AlpacaCameraList.Items.Count=1 then AlpacaCameraList.Items[0]:=rsNoDeviceFoun;
     if AlpacaWheelList.Items.Count=1 then AlpacaWheelList.Items[0]:=rsNoDeviceFoun;
     if AlpacaFocuserList.Items.Count=1 then AlpacaFocuserList.Items[0]:=rsNoDeviceFoun;
@@ -2751,6 +2953,7 @@ try
     if AlpacaSwitchList.Items.Count=1 then AlpacaSwitchList.Items[0]:=rsNoDeviceFoun;
     if AlpacaCoverList.Items.Count=1 then AlpacaCoverList.Items[0]:=rsNoDeviceFoun;
     if AlpacaGuideCameraList.Items.Count=1 then AlpacaGuideCameraList.Items[0]:=rsNoDeviceFoun;
+    if AlpacaFinderCameraList.Items.Count=1 then AlpacaFinderCameraList.Items[0]:=rsNoDeviceFoun;
     SetDiscoverLed(clLime);
   end else begin
     AlpacaServers.Clear;
@@ -2777,6 +2980,8 @@ try
     AlpacaCoverList.Items.Add(rsNoDeviceFoun);
     AlpacaGuideCameraList.Clear;
     AlpacaGuideCameraList.Items.Add(rsNoDeviceFoun);
+    AlpacaFinderCameraList.Clear;
+    AlpacaFinderCameraList.Items.Add(rsNoDeviceFoun);
     AlpacaServers.ItemIndex:=0;
     AlpacaCameraList.ItemIndex:=0;
     AlpacaWheelList.ItemIndex:=0;
@@ -2789,6 +2994,7 @@ try
     AlpacaSwitchList.ItemIndex:=0;
     AlpacaCoverList.ItemIndex:=0;
     AlpacaGuideCameraList.ItemIndex:=0;
+    AlpacaFinderCameraList.ItemIndex:=0;
     SetDiscoverLed(clRed);
   end;
 finally
@@ -2835,6 +3041,22 @@ begin
     GuideCameraARestPort.Text:=lst[2];
     GuideCameraARestDevice.Value:=StrToInt(lst[4]);
     GuideCameraARestProtocol.ItemIndex:=0;
+    lst.Free;
+  end;
+end;
+
+procedure Tf_setup.AlpacaFinderCameraListChange(Sender: TObject);
+var i: integer;
+    lst:TStringList;
+begin
+  i:=AlpacaFinderCameraList.ItemIndex;
+  if i>0 then begin
+    lst:=TStringList.Create;
+    SplitRec(AlpacaFinderCameraList.Items[i],tab,lst);
+    FinderCameraARestHost.Text:=lst[1];
+    FinderCameraARestPort.Text:=lst[2];
+    FinderCameraARestDevice.Value:=StrToInt(lst[4]);
+    FinderCameraARestProtocol.ItemIndex:=0;
     lst.Free;
   end;
 end;
@@ -3008,6 +3230,11 @@ begin
   AlpacaSetup(GuideCameraARestProtocol.Text,GuideCameraARestHost.Text,GuideCameraARestPort.Text,'','');
 end;
 
+procedure Tf_setup.AlpacaServerSetupFinderCamera(Sender: TObject);
+begin
+  AlpacaSetup(FinderCameraARestProtocol.Text,FinderCameraARestHost.Text,FinderCameraARestPort.Text,'','');
+end;
+
 procedure Tf_setup.AlpacaServerSetupWheel(Sender: TObject);
 begin
   AlpacaSetup(WheelARestProtocol.Text,WheelARestHost.Text,WheelARestPort.Text,'','');
@@ -3061,6 +3288,11 @@ end;
 procedure Tf_setup.AlpacaSetupGuideCamera(Sender: TObject);
 begin
   AlpacaSetup(GuideCameraARestProtocol.Text,GuideCameraARestHost.Text,GuideCameraARestPort.Text,'camera',GuideCameraARestDevice.Text);
+end;
+
+procedure Tf_setup.AlpacaSetupFinderCamera(Sender: TObject);
+begin
+  AlpacaSetup(FinderCameraARestProtocol.Text,FinderCameraARestHost.Text,FinderCameraARestPort.Text,'camera',FinderCameraARestDevice.Text);
 end;
 
 procedure Tf_setup.AlpacaSetupWheel(Sender: TObject);

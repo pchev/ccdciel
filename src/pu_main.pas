@@ -36,7 +36,7 @@ uses
   {$endif}
   fu_devicesconnection, fu_preview, fu_capture, fu_msg, fu_visu, fu_frame, fu_magnifyer, fu_internalguider,
   fu_starprofile, fu_filterwheel, fu_focuser, fu_mount, fu_ccdtemp, fu_autoguider, fu_cover, fu_switch,
-  fu_sequence, fu_planetarium, fu_script, u_ccdconfig, pu_edittargets, pu_scriptengine,
+  fu_sequence, fu_planetarium, fu_script, fu_finder, u_ccdconfig, pu_edittargets, pu_scriptengine,
   fu_video, pu_devicesetup, pu_options, pu_indigui, cu_fits, cu_camera, pu_pause, cu_tcpserver,
   pu_viewtext, cu_wheel, cu_mount, cu_focuser, XMLConf, u_utils, u_global, UScaleDPI, pu_handpad,
   cu_indimount, cu_ascommount, cu_indifocuser, cu_ascomfocuser, pu_vcurve, pu_focusercalibration,
@@ -78,6 +78,7 @@ type
   Tf_main = class(TForm)
     FocuserConnectTimer: TTimer;
     CameraConnectTimer: TTimer;
+    FinderCameraConnectTimer: TTimer;
     ImageListNight: TImageList;
     ImageListDay: TImageList;
     MainMenu1: TMainMenu;
@@ -138,10 +139,16 @@ type
     MenuFlatCamera: TMenuItem;
     MenuFlatFile: TMenuItem;
     MenuFlatClear: TMenuItem;
+    MenuAscomFinderCameraSetup: TMenuItem;
+    MenuAlpacaFinderCameraSetup: TMenuItem;
+    MenuFinder: TMenuItem;
+    MenuTabFinder: TMenuItem;
+    MenuViewFinder: TMenuItem;
     MenuItemFlat: TMenuItem;
     MenuTabInternalGuider: TMenuItem;
     MenuItemGuiderStopAstrometry: TMenuItem;
     MenuItemGuiderSolve: TMenuItem;
+    PanelRight7: TPanel;
     Separator1: TMenuItem;
     MenuItemGuiderImage: TMenuItem;
     MenuItemGuiderViewStatistics: TMenuItem;
@@ -224,6 +231,8 @@ type
     GuideCameraConnectTimer: TTimer;
     GuidePlotTimer: TTimer;
     GuiderMeasureTimer: TTimer;
+    PageFinder: TTabSheet;
+    FinderImage: TTabSheet;
     TimerStampTimer: TTimer;
     MenuPdfHelp: TMenuItem;
     MenuOnlineHelp: TMenuItem;
@@ -371,9 +380,11 @@ type
     TBSequence: TToolButton;
     TBVideo: TToolButton;
     TBInternalGuider: TToolButton;
+    TBFinder: TToolButton;
     procedure AbortTimerTimer(Sender: TObject);
     procedure CameraConnectTimerTimer(Sender: TObject);
     procedure ConnectTimerTimer(Sender: TObject);
+    procedure FinderCameraConnectTimerTimer(Sender: TObject);
     procedure FocuserConnectTimerTimer(Sender: TObject);
     procedure FormClose(Sender: TObject; var CloseAction: TCloseAction);
     procedure FormCloseQuery(Sender: TObject; var CanClose: boolean);
@@ -540,7 +551,7 @@ type
     procedure TimerStampTimerTimer(Sender: TObject);
   private
     { private declarations }
-    camera, guidecamera, findercamera: T_camera;
+    camera, guidecamera, findercamera, astrometrycamera: T_camera;
     wheel: T_wheel;
     focuser: T_focuser;
     rotator: T_rotator;
@@ -554,7 +565,7 @@ type
     autoguider:T_autoguider;
     planetarium:TPlanetarium;
     astrometry:TAstrometry;
-    WantCamera,WantGuideCamera,WantWheel,WantFocuser,WantRotator, WantMount, WantDome, WantWeather, WantSafety, WantSwitch, WantCover, WantWatchdog: boolean;
+    WantCamera,WantGuideCamera,WantFinderCamera,WantWheel,WantFocuser,WantRotator, WantMount, WantDome, WantWeather, WantSafety, WantSwitch, WantCover, WantWatchdog: boolean;
     CameraInitialized: boolean;
     FOpenSetup: boolean;
     f_devicesconnection: Tf_devicesconnection;
@@ -577,13 +588,14 @@ type
     f_cover: Tf_cover;
     f_switch: Tf_switch;
     f_internalguider: Tf_internalguider;
+    f_finder: Tf_finder;
     f_autoguider: Tf_autoguider;
     f_planetarium: Tf_planetarium;
     f_script: Tf_script;
     f_visu: Tf_visu;
     f_msg: Tf_msg;
-    fits, guidefits: TFits;
-    ImaBmp,ImaGuideBmp: TBGRABitmap;
+    fits, guidefits, finderfits: TFits;
+    ImaBmp,ImaGuideBmp,ImaFinderBmp: TBGRABitmap;
     TCPDaemon: TTCPDaemon;
     refmask: boolean;
     reftreshold,refcolor: integer;
@@ -611,7 +623,7 @@ type
     SaveAutofocusFX,SaveAutofocusFY,SaveAutofocusFW,SaveAutofocusFH,SaveAutofocusBX,SaveAutofocusBY: integer;
     SaveAutofocusGain, SaveAutofocusOffset, SaveAutofocusPreviewGain, SaveAutofocusPreviewOffset: integer;
     TerminateVcurve: boolean;
-    ScrBmp,ScrGuideBmp: TBGRABitmap;
+    ScrBmp,ScrGuideBmp,ScrFinderBmp: TBGRABitmap;
     ImageSaved: boolean;
 
     trpxy : array[1..2,1..3,1..3] of integer;{for image inspection}
@@ -639,6 +651,7 @@ type
     procedure ImageGuideMouseMove(Sender: TObject; Shift: TShiftState; X, Y: Integer);
     procedure ImageGuideMouseUp(Sender: TObject; Button: TMouseButton; Shift: TShiftState; X, Y: Integer);
     procedure ImageGuideMouseWheel(Sender: TObject; Shift: TShiftState; WheelDelta: Integer; MousePos: TPoint; var Handled: Boolean);
+    procedure ImageFinderPaint(Sender: TObject);
     Procedure GetAppDir;
     procedure ScaleMainForm;
     Procedure InitLog;
@@ -726,6 +739,12 @@ type
     Procedure GuideCameraExposureAborted(Sender: TObject);
     procedure GuideCameraTemperatureChange(t:double);
     procedure GuideCameraCoolerChange(var v:boolean);
+    Procedure ConnectFinderCamera(Sender: TObject);
+    Procedure DisconnectFinderCamera(Sender: TObject);
+    Procedure FinderCameraStatus(Sender: TObject);
+    Procedure FinderCameraExposureAborted(Sender: TObject);
+    procedure FinderCameraTemperatureChange(t:double);
+    procedure FinderCameraCoolerChange(var v:boolean);
     Procedure SetFilter(Sender: TObject);
     Procedure SetFilterMenu;
     procedure ShowMsgTabs(Sender: TObject);
@@ -852,6 +871,7 @@ type
     Procedure ZoomImage(Sender: TObject);
     Procedure ClearImage;
     Procedure ClearGuideImage;
+    Procedure ClearFinderImage;
     Procedure DrawImage(WaitCursor:boolean=false; videoframe:boolean=false);
     Procedure PlotImage;
     procedure plot_north;
@@ -930,9 +950,13 @@ type
     procedure GuideCameraSetTemperature(Sender: TObject);
     procedure GuideCameraSetCooler(Sender: TObject);
     procedure GuiderMeasureAtPos(x,y:integer);
+    procedure FinderCameraNewImage(Sender: TObject);
+    procedure FinderCameraNewImageAsync(Data: PtrInt);
+    Procedure DrawFinderImage(display: boolean);
+    Procedure PlotFinderImage;
   public
     { public declarations }
-    Image1, ImageGuide: TImgDrawingControl;
+    Image1, ImageGuide, ImageFinder: TImgDrawingControl;
     procedure LoadFitsFile(fn:string);
   end;
 
@@ -1500,6 +1524,14 @@ begin
   ImageGuide.OnMouseMove := @ImageGuideMouseMove;
   ImageGuide.OnMouseUp := @ImageGuideMouseUp;
   ImageGuide.OnMouseWheel := @ImageGuideMouseWheel;
+  ScrFinderBmp := TBGRABitmap.Create;
+  ImaFinderBmp:=TBGRABitmap.Create(1,1);
+  finderimg_Height:=0;
+  finderimg_Width:=0;
+  ImageFinder := TImgDrawingControl.Create(Self);
+  ImageFinder.Parent := FinderImage;
+  ImageFinder.Align := alClient;
+  ImageFinder.OnPaint := @ImageFinderPaint;
   CursorImage1 := TCursorImage.Create;
   GetAppDir;
   chdir(Appdir);
@@ -1619,6 +1651,10 @@ begin
   if FileExists(ConfigGuiderDarkFile) then begin
      guidefits.LoadDark(ConfigGuiderDarkFile);
   end;
+
+  finderfits:=TFits.Create(self);
+  finderfits.DisableBayer:=true;
+  finderfits.onMsg:=@NewMessage;
 
   CreateDevices;
 
@@ -1754,6 +1790,8 @@ begin
   f_internalguider.onSetTemperature:=@GuideCameraSetTemperature;
   f_internalguider.onSetCooler:=@GuideCameraSetCooler;
   ShowGuiderDarkInfo;
+
+  f_finder:=Tf_finder.Create(self);
 
   i:=config.GetValue('/Autoguider/Software',2);
   case TAutoguiderType(i) of
@@ -1962,7 +2000,7 @@ begin
      ASCOM: camera:=T_ascomcamera.Create(nil);
      ASCOMREST: camera:=T_ascomrestcamera.Create(nil);
    end;
-   findercamera:=camera;
+   astrometrycamera:=camera;
    if wheel.WheelInterface=INCAMERA then wheel.camera:=camera;
    camera.Mount:=mount;
    camera.Wheel:=wheel;
@@ -2026,6 +2064,23 @@ begin
    camera.onCameraDisconnected:=@CameraDisconnected;
    camera.onGainStatus:=@GainStatus; }
 
+   aInt:=TDevInterface(config.GetValue('/FinderCameraInterface',ord(DefaultInterface)));
+   case aInt of
+     INDI:  findercamera:=T_indicamera.Create(nil);
+     ASCOM: findercamera:=T_ascomcamera.Create(nil);
+     ASCOMREST: findercamera:=T_ascomrestcamera.Create(nil);
+   end;
+   findercamera.CameraTimeout:=15;
+   findercamera.Mount:=mount;
+   findercamera.Fits:=finderfits;
+   findercamera.onMsg:=@NewMessage;
+   findercamera.onDeviceMsg:=@DeviceMessage;
+   findercamera.onStatusChange:=@FinderCameraStatus;
+   findercamera.onNewImage:=@FinderCameraNewImage;
+   findercamera.onAbortExposure:=@FinderCameraExposureAborted;
+   findercamera.onTemperatureChange:=@FinderCameraTemperatureChange;
+   findercamera.onCoolerChange:=@FinderCameraCoolerChange;
+
    if config.GetValue('/Devices/Watchdog',false) then begin
      watchdog:=T_indiwatchdog.Create(nil);
      watchdog.onMsg:=@NewMessage;
@@ -2041,7 +2096,7 @@ end;
 procedure Tf_main.SetDevices;
 begin
  if astrometry<>nil then begin
-   astrometry.Camera:=findercamera;
+   astrometry.Camera:=astrometrycamera;
    astrometry.Mount:=mount;
    astrometry.Wheel:=wheel;
  end;
@@ -2075,6 +2130,10 @@ begin
    autoguider.Mount:=mount;
    autoguider.Camera:=guidecamera;
  end;
+ if f_finder<>nil then begin
+   f_finder.Camera:=findercamera;
+   f_finder.Mount:=mount;
+ end;
 end;
 
 procedure Tf_main.DestroyDevices;
@@ -2092,6 +2151,7 @@ begin
  switch.Free;
  cover.Free;
  guidecamera.Free;
+ findercamera.Free;
  except
  end;
 end;
@@ -2134,6 +2194,7 @@ begin
    MenuIndiSettings.Caption := rsINDISettings;
    MenuAscomCameraSetup.Caption:='ASCOM '+rsCamera+blank+rsSetup;
    MenuAscomGuideCameraSetup.Caption:='ASCOM '+rsGuideCamera+blank+rsSetup;
+   MenuAscomFinderCameraSetup.Caption:='ASCOM '+rsFinderCamera+blank+rsSetup;
    MenuAscomWheelSetup.Caption:='ASCOM '+rsFilterWheel+blank+rsSetup;
    MenuAscomFocuserSetup.Caption:='ASCOM '+rsFocuser+blank+rsSetup;
    MenuAscomMountSetup.Caption:='ASCOM '+rsMount+blank+rsSetup;
@@ -2144,6 +2205,7 @@ begin
    MenuAlpacaServerSetup.Caption:='Alpaca '+rsServer+blank+rsSetup;
    MenuAlpacaCameraSetup.Caption:='Alpaca '+rsCamera+blank+rsSetup;
    MenuAlpacaGuideCameraSetup.Caption:='Alpaca '+rsGuideCamera+blank+rsSetup;
+   MenuAlpacaFinderCameraSetup.Caption:='Alpaca '+rsFinderCamera+blank+rsSetup;
    MenuAlpacaWheelSetup.Caption:='Alpaca '+rsFilterWheel+blank+rsSetup;
    MenuAlpacaFocuserSetup.Caption:='Alpaca '+rsFocuser+blank+rsSetup;
    MenuAlpacaMountSetup.Caption:='Alpaca '+rsMount+blank+rsSetup;
@@ -2446,6 +2508,9 @@ begin
   GuideImgZoom:=0;
   GuideImgCx:=0;
   GuideImgCy:=0;
+  FinderImgZoom:=0;
+  FinderImgCx:=0;
+  FinderImgCy:=0;
   RunningCapture:=false;
   RunningPreview:=false;
   MenuIndiSettings.Enabled:=true;
@@ -2470,6 +2535,7 @@ begin
     crRetic := crCross;
   Image1.Cursor:=crRetic;
   ImageGuide.Cursor:=crRetic;
+  ImageFinder.Cursor:=crRetic;
   MaxThreadCount := GetThreadCount;
   NewMessage(Format('Using a maximum of %d parallel processor',[MaxThreadCount]),9);
   if isAdmin then NewMessage(Caption);
@@ -2565,6 +2631,7 @@ begin
   WantCover:=config.GetValue('/Devices/Cover',false);
   WantWatchdog:=(watchdog<>nil) and config.GetValue('/Devices/Watchdog',false);
   WantGuideCamera:=config.GetValue('/Devices/GuideCamera',false);
+  WantFinderCamera:=config.GetValue('/Devices/FinderCamera',false);
 
   MenuAscomCameraSetup.Visible:=WantCamera and (camera.CameraInterface=ASCOM);
   MenuAscomWheelSetup.Visible:=WantWheel and (wheel.WheelInterface=ASCOM);
@@ -2577,6 +2644,7 @@ begin
   MenuAscomSwitchSetup.Visible:=WantSwitch and (switch.SwitchInterface=ASCOM);
   MenuAscomCoverSetup.Visible:=WantCover and (cover.CoverInterface=ASCOM);
   MenuAscomGuideCameraSetup.Visible:=WantGuideCamera and (guidecamera.CameraInterface=ASCOM);
+  MenuAscomFinderCameraSetup.Visible:=WantFinderCamera and (findercamera.CameraInterface=ASCOM);
 
   MenuAlpacaServerSetup.Visible:=WantCamera and (camera.CameraInterface=ASCOMREST);
   MenuAlpacaCameraSetup.Visible:=WantCamera and (camera.CameraInterface=ASCOMREST);
@@ -2590,13 +2658,15 @@ begin
   MenuAlpacaSwitchSetup.Visible:=WantSwitch and (switch.SwitchInterface=ASCOMREST);
   MenuAlpacaCoverSetup.Visible:=WantCover and (cover.CoverInterface=ASCOMREST);
   MenuAlpacaGuideCameraSetup.Visible:=WantGuideCamera and (guidecamera.CameraInterface=ASCOMREST);
+  MenuAlpacaFinderCameraSetup.Visible:=WantFinderCamera and (findercamera.CameraInterface=ASCOMREST);
 
   MenuIndiSettings.Visible:= (camera.CameraInterface=INDI)or(wheel.WheelInterface=INDI)or(focuser.FocuserInterface=INDI)or
                              (mount.MountInterface=INDI)or(rotator.RotatorInterface=INDI)or(weather.WeatherInterface=INDI)or
                              (safety.SafetyInterface=INDI)or(dome.DomeInterface=INDI)or(switch.SwitchInterface=INDI)or
-                             (cover.CoverInterface=INDI)or(guidecamera.CameraInterface=INDI);
+                             (cover.CoverInterface=INDI)or(guidecamera.CameraInterface=INDI)or(findercamera.CameraInterface=INDI);
 
   TBInternalGuider.Visible:=WantGuideCamera;
+  TBFinder.Visible:=WantFinderCamera;
 
   SetTool(f_visu,'Histogram',PanelBottom,0,MenuViewHistogram,MenuHistogram,true);
   SetTool(f_msg,'Messages',PanelBottom,f_visu.left+1,MenuViewMessages,nil,true);
@@ -2629,6 +2699,7 @@ begin
 
   SetTool(f_internalguider,'InternalGuider',PanelRight6,0,MenuViewInternalGuider,MenuInternalGuider,WantGuideCamera and WantMount);
 
+  SetTool(f_finder,'Finder',PanelRight7,0,MenuViewFinder,MenuFinder,WantFinderCamera);
 
   MenuViewClock.Checked:=screenconfig.GetValue('/Tools/Clock/Visible',true);
   MenuViewClockClick(nil);
@@ -2943,6 +3014,9 @@ if sender is TMenuItem then begin
     SetTool(f_video,'',PanelRight5,0,MenuViewVideo,MenuVideo,true);
 
     SetTool(f_internalguider,'',PanelRight6,0,MenuViewInternalguider,MenuInternalGuider,WantGuideCamera and WantMount);
+
+    SetTool(f_finder,'',PanelRight7,0,MenuViewFinder,MenuFinder,WantFinderCamera);
+
   end
   else if n=2 then begin
     // use left and right panel
@@ -2977,6 +3051,9 @@ if sender is TMenuItem then begin
    SetTool(f_video,'',PanelRight5,0,MenuViewVideo,MenuVideo,true);
 
    SetTool(f_internalguider,'',PanelRight6,0,MenuViewInternalguider,MenuInternalGuider,WantGuideCamera and WantMount);
+
+   SetTool(f_finder,'',PanelRight7,0,MenuViewFinder,MenuFinder,WantFinderCamera);
+
   end;
   for i:=0 to MaxMenulevel do AccelList[i]:='';
   SetMenuAccelerator(MainMenu1.items,0,AccelList);
@@ -3261,6 +3338,7 @@ begin
   DestroyDevices;
   ImaBmp.Free;
   ImaGuideBmp.Free;
+  ImaFinderBmp.Free;
   refbmp.Free;
   config.Free;
   screenconfig.Free;
@@ -3270,6 +3348,7 @@ begin
   globalconfig.Free;
   ScrBmp.Free;
   ScrGuideBmp.Free;
+  ScrFinderBmp.Free;
   FreeAndNil(FilterList);
   FreeAndNil(BinningList);
   ReadoutList.Free;
@@ -3588,6 +3667,21 @@ begin
   f_internalguider.PanelTemperature.Visible:=guidecamera.Temperature<>NullCoord;
 end;
 
+procedure Tf_main.FinderCameraConnectTimerTimer(Sender: TObject);
+begin
+  FinderCameraConnectTimer.Enabled:=false;
+  findercamera.CheckGain;
+  findercamera.CanSetGain:=findercamera.hasGain;
+//  f_internalguider.PanelGain.Visible:=guidecamera.hasGain;
+//  f_internalguider.Gain.MinValue:=guidecamera.GainMin;
+//  f_internalguider.Gain.MaxValue:=guidecamera.GainMax;
+  findercamera.CheckOffset;
+//  f_internalguider.PanelOffset.Visible:=guidecamera.hasOffset;
+//  f_internalguider.Offset.MinValue:=guidecamera.OffsetMin;
+//  f_internalguider.Offset.MaxValue:=guidecamera.OffsetMax;
+//  f_internalguider.PanelTemperature.Visible:=guidecamera.Temperature<>NullCoord;
+end;
+
 procedure Tf_main.FocuserConnectTimerTimer(Sender: TObject);
 begin
   FocuserConnectTimer.Enabled:=false;
@@ -3635,9 +3729,13 @@ begin
   ScrGuideWidth:=ImageGuide.Width;
   ScrGuideHeigth:=ImageGuide.Height;
   ScrGuideBmp.SetSize(ScrGuideWidth,ScrGuideHeigth);
+  ScrFinderWidth:=ImageFinder.Width;
+  ScrFinderHeigth:=ImageFinder.Height;
+  ScrFinderBmp.SetSize(ScrFinderWidth,ScrFinderHeigth);
   ClearImage;
   DrawImage;
   ClearGuideImage;
+  ClearFinderImage;
   if InternalguiderRunning then begin
     DrawGuideImage(true);
     PlotGuideImage;
@@ -4066,6 +4164,8 @@ if config.GetValue('/INDIcamera/Server','')='' then begin
    config.SetValue('/INDIcover/ServerPort',defaultindiport);
    config.SetValue('/INDIguidecamera/Server',defautindiserver);
    config.SetValue('/INDIguidecamera/ServerPort',defaultindiport);
+   config.SetValue('/INDIfindercamera/Server',defautindiserver);
+   config.SetValue('/INDIfindercamera/ServerPort',defaultindiport);
 end;
 case camera.CameraInterface of
    INDI : CameraName:=config.GetValue('/INDIcamera/Device','');
@@ -4130,6 +4230,11 @@ case guidecamera.CameraInterface of
    ASCOM: GuideCameraName:=config.GetValue('/ASCOMguidecamera/Device','');
    ASCOMREST: GuideCameraName:='Camera/'+IntToStr(config.GetValue('/ASCOMRestguidecamera/Device',0));
 end;
+case findercamera.CameraInterface of
+   INDI : FinderCameraName:=config.GetValue('/INDIfindercamera/Device','');
+   ASCOM: FinderCameraName:=config.GetValue('/ASCOMfindercamera/Device','');
+   ASCOMREST: FinderCameraName:='Camera/'+IntToStr(config.GetValue('/ASCOMRestfindercamera/Device',0));
+end;
 
 DeviceTimeout:=config.GetValue('/Devices/Timeout',100);
 camera.Timeout:=DeviceTimeout;
@@ -4143,6 +4248,7 @@ safety.Timeout:=DeviceTimeout;
 switch.Timeout:=DeviceTimeout;
 cover.Timeout:=DeviceTimeout;
 guidecamera.Timeout:=DeviceTimeout;
+findercamera.Timeout:=DeviceTimeout;
 wheel.AutoLoadConfig:=config.GetValue('/INDIwheel/AutoLoadConfig',false);
 focuser.AutoLoadConfig:=config.GetValue('/INDIfocuser/AutoLoadConfig',false);
 rotator.AutoLoadConfig:=config.GetValue('/INDIrotator/AutoLoadConfig',false);
@@ -4156,6 +4262,7 @@ if camera.CameraInterface=ASCOMREST then begin
    camera.ASCOMFlipImage:=config.GetValue('/ASCOMRestcamera/FlipImage',true);
 end;
 guidecamera.ASCOMFlipImage:=false;
+findercamera.ASCOMFlipImage:=false;
 if wheel.WheelInterface=MANUAL then begin
    ManualFilterNames.Clear;
    ManualFilterNames.Add(rsFilter0);
@@ -4171,6 +4278,7 @@ safety.AutoLoadConfig:=config.GetValue('/INDIsafety/AutoLoadConfig',false);
 switch.AutoLoadConfig:=config.GetValue('/INDIswitch/AutoLoadConfig',false);
 cover.AutoLoadConfig:=config.GetValue('/INDIcover/AutoLoadConfig',false);
 guidecamera.AutoLoadConfig:=config.GetValue('/INDIguidecamera/AutoLoadConfig',false);
+findercamera.AutoLoadConfig:=config.GetValue('/INDIfindercamera/AutoLoadConfig',false);
 if watchdog<>nil then begin
   watchdog.Timeout:=DeviceTimeout;
   WatchdogName:=config.GetValue('/INDIwatchdog/Device','');
@@ -4840,6 +4948,11 @@ begin
  screenconfig.SetValue('/Tools/InternalGuider/Top',f_internalguider.Top);
  screenconfig.SetValue('/Tools/InternalGuider/Left',f_internalguider.Left);
 
+ screenconfig.SetValue('/Tools/Finder/Parent',f_finder.Parent.Name);
+ screenconfig.SetValue('/Tools/Finder/Visible',f_finder.Visible or (not WantFinderCamera));
+ screenconfig.SetValue('/Tools/Finder/Top',f_finder.Top);
+ screenconfig.SetValue('/Tools/Finder/Left',f_finder.Left);
+
  screenconfig.SetValue('/Tools/Clock/Visible',MenuViewClock.Checked);
 
  screenconfig.SetValue('/Window/Maximized', WindowState=wsMaximized);
@@ -5102,6 +5215,12 @@ try
     MenuSetup.Click;
     exit;
   end;
+  if WantFinderCamera and (FinderCameraName='') then begin
+    f_devicesconnection.BtnConnect.Caption:=rsConnect;
+    ShowMessage(rsPleaseConfig+blank+rsFinderCamera);
+    MenuSetup.Click;
+    exit;
+  end;
 
   f_devicesconnection.LabelCamera.Visible:=WantCamera;
   f_devicesconnection.LabelWheel.Visible:=WantWheel;
@@ -5114,6 +5233,7 @@ try
   f_devicesconnection.LabelSwitch.Visible:=WantSwitch;
   f_devicesconnection.LabelCover.Visible:=WantCover;
   f_devicesconnection.LabelGuideCamera.Visible:=WantGuideCamera;
+  f_devicesconnection.LabelFinderCamera.Visible:=WantFinderCamera;
   f_devicesconnection.LabelWatchdog.Visible:=WantWatchdog;
   f_devicesconnection.PanelDev.Visible:=true;
 
@@ -5139,6 +5259,8 @@ try
   Application.ProcessMessages;
   if WantGuideCamera  then ConnectGuideCamera(Sender);
   Application.ProcessMessages;
+  if WantFinderCamera  then ConnectFinderCamera(Sender);
+  Application.ProcessMessages;
   if WantWatchdog then ConnectWatchdog(Sender);
   if f_autoguider.BtnConnect.Caption=rsConnect then AutoguiderConnectClick(Sender);
   if f_planetarium.BtnConnect.Caption=rsConnect then PlanetariumConnectClick(Sender);
@@ -5152,6 +5274,7 @@ begin
      NewMessage(rsDisconnectin,9);
      if camera.Status=devConnected then camera.AbortExposure;
      if guidecamera.Status=devConnected then guidecamera.AbortExposure;
+     if findercamera.Status=devConnected then findercamera.AbortExposure;
      f_preview.stop;
      f_capture.stop;
      f_internalguider.ButtonStopClick(nil);
@@ -5168,6 +5291,7 @@ begin
      DisconnectSwitch(Sender);
      DisconnectCover(Sender);
      DisconnectGuideCamera(Sender);
+     DisconnectFinderCamera(Sender);
      DisconnectWatchdog(Sender);
    end;
 end;
@@ -5187,6 +5311,7 @@ begin
      10: if WantSwitch  then ConnectSwitch(nil);
      11: if WantCover   then ConnectCover(nil);
      12: if WantGuideCamera then ConnectGuideCamera(nil);
+     13: if WantFinderCamera then ConnectFinderCamera(nil);
   end;
 end;
 
@@ -5205,6 +5330,7 @@ begin
     10: DisconnectSwitch(nil);
     11: DisconnectCover(nil);
     12: DisconnectGuideCamera(nil);
+    13: DisconnectFinderCamera(nil);
  end;
 end;
 
@@ -5330,6 +5456,18 @@ allcount:=0; upcount:=0; downcount:=0; concount:=0;
                    inc(upcount);
                    GuideCameraConnectTimer.Enabled:=false;
                    GuideCameraConnectTimer.Enabled:=true;
+                   end;
+     devDisconnected: inc(downcount);
+     devConnecting: inc(concount);
+   end;
+ end;
+ if WantFinderCamera then begin
+   inc(allcount);
+   case findercamera.Status of
+     devConnected: begin
+                   inc(upcount);
+                   FinderCameraConnectTimer.Enabled:=false;
+                   FinderCameraConnectTimer.Enabled:=true;
                    end;
      devDisconnected: inc(downcount);
      devConnecting: inc(concount);
@@ -5762,6 +5900,70 @@ end;
 Procedure Tf_main.GuideCameraExposureAborted(Sender: TObject);
 begin
   if autoguider is T_autoguider_internal then T_autoguider_internal(autoguider).InternalguiderRecoverCamera;
+end;
+
+procedure Tf_main.ConnectFinderCamera(Sender: TObject);
+begin
+  case findercamera.CameraInterface of
+   INDI : begin
+          findercamera.IndiTransfert:=itNetwork;
+          findercamera.Connect(config.GetValue('/INDIfindercamera/Server',''),
+                         config.GetValue('/INDIfindercamera/ServerPort',''),
+                         config.GetValue('/INDIfindercamera/Device',''),
+                         config.GetValue('/INDIfindercamera/Sensor','CCD1'));
+          end;
+   ASCOM: begin
+          findercamera.UseCameraStartTime:=false;
+          findercamera.FixPixelRange:=false;
+          findercamera.Connect(config.GetValue('/ASCOMfindercamera/Device',''));
+          end;
+   ASCOMREST: begin
+          findercamera.UseCameraStartTime:=false;
+          findercamera.FixPixelRange:=false;
+          findercamera.Connect(config.GetValue('/ASCOMRestfindercamera/Host',''),
+                         IntToStr(config.GetValue('/ASCOMRestfindercamera/Port',0)),
+                         ProtocolName[config.GetValue('/ASCOMRestfindercamera/Protocol',0)],
+                         'camera/'+IntToStr(config.GetValue('/ASCOMRestfindercamera/Device',0)),
+                         DecryptStr(hextostr(credentialconfig.GetValue('/ASCOMRestfindercamera/User','')), encryptpwd),
+                         DecryptStr(hextostr(credentialconfig.GetValue('/ASCOMRestfindercamera/Pass','')), encryptpwd));
+
+          end;
+  end;
+end;
+
+procedure Tf_main.DisconnectFinderCamera(Sender: TObject);
+begin
+  if findercamera.Status<>devDisconnected then findercamera.Disconnect;
+end;
+
+procedure Tf_main.FinderCameraStatus(Sender: TObject);
+var cool: boolean;
+    t: double;
+begin
+case findercamera.Status of
+  devDisconnected:begin
+                      f_devicesconnection.LabelFinderCamera.Font.Color:=clRed;
+                  end;
+  devConnecting:  begin
+                      NewMessage(Format(rsConnecting, [rsFinderCamera+' '+DevInterfaceName[ord(findercamera.CameraInterface)]+' "'+findercamera.DeviceName+'" '+ellipsis]), 2);
+                      f_devicesconnection.LabelFinderCamera.Font.Color:=clOrange;
+                   end;
+  devConnected:   begin
+                      if f_devicesconnection.LabelFinderCamera.Font.Color=clGreen then exit;
+                      f_devicesconnection.LabelFinderCamera.Font.Color:=clGreen;
+                      NewMessage(Format(rsConnected, [rsFinderCamera]),1);
+                      t:=findercamera.Temperature;
+                      FinderCameraTemperatureChange(t);
+                      cool:=findercamera.Cooler;
+                      FinderCameraCoolerChange(cool);
+                   end;
+end;
+CheckConnectionStatus;
+end;
+
+procedure Tf_main.FinderCameraExposureAborted(Sender: TObject);
+begin
+  //
 end;
 
 Procedure Tf_main.ConnectWheel(Sender: TObject);
@@ -8002,6 +8204,7 @@ begin
   f_setup.DefaultSwitchInterface:=switch.SwitchInterface;
   f_setup.DefaultCoverInterface:=cover.CoverInterface;
   f_setup.DefaultGuideCameraInterface:=guidecamera.CameraInterface;
+  f_setup.DefaultFinderCameraInterface:=findercamera.CameraInterface;
   f_setup.profile:=profile;
   f_setup.LoadProfileList;
   f_setup.Loadconfig(config,credentialconfig);
@@ -8072,6 +8275,7 @@ begin
     config.SetValue('/Devices/Switch',f_setup.DeviceSwitch.Checked);
     config.SetValue('/Devices/Cover',f_setup.DeviceCover.Checked);
     config.SetValue('/Devices/GuideCamera',f_setup.DeviceGuideCamera.Checked);
+    config.SetValue('/Devices/FinderCamera',f_setup.DeviceFinderCamera.Checked);
 
     config.SetValue('/CameraInterface',ord(f_setup.CameraConnection));
     config.SetValue('/INDIcamera/Server',f_setup.CameraIndiServer.Text);
@@ -8104,6 +8308,18 @@ begin
     config.SetValue('/ASCOMRestguidecamera/Host',f_setup.GuideCameraARestHost.Text);
     config.SetValue('/ASCOMRestguidecamera/Port',f_setup.GuideCameraARestPort.Value);
     config.SetValue('/ASCOMRestguidecamera/Device',f_setup.GuideCameraARestDevice.Value);
+
+    config.SetValue('/FinderCameraInterface',ord(f_setup.FinderCameraConnection));
+    config.SetValue('/INDIfindercamera/Server',f_setup.FinderCameraIndiServer.Text);
+    config.SetValue('/INDIfindercamera/ServerPort',f_setup.FinderCameraIndiPort.Text);
+    if f_setup.FinderCameraIndiDevice.Text<>'' then config.SetValue('/INDIfindercamera/Device',f_setup.FinderCameraIndiDevice.Text);
+    config.SetValue('/INDIfindercamera/Sensor',f_setup.FinderCameraSensor);
+    config.SetValue('/INDIfindercamera/AutoLoadConfig',f_setup.FinderCameraAutoLoadConfig.Checked);
+    config.SetValue('/ASCOMfindercamera/Device',f_setup.AscomFinderCamera.Text);
+    config.SetValue('/ASCOMRestfindercamera/Protocol',f_setup.FinderCameraARestProtocol.ItemIndex);
+    config.SetValue('/ASCOMRestfindercamera/Host',f_setup.FinderCameraARestHost.Text);
+    config.SetValue('/ASCOMRestfindercamera/Port',f_setup.FinderCameraARestPort.Value);
+    config.SetValue('/ASCOMRestfindercamera/Device',f_setup.FinderCameraARestDevice.Value);
 
     config.SetValue('/FilterWheelInterface',ord(f_setup.WheelConnection));
     config.SetValue('/INDIwheel/Server',f_setup.WheelIndiServer.Text);
@@ -8222,7 +8438,7 @@ begin
     credentialconfig.Clear;
     if (f_setup.CameraARestUser.Text+f_setup.WheelARestUser.Text+f_setup.FocuserARestUser.Text+f_setup.RotatorARestUser.Text+
        f_setup.MountARestUser.Text+f_setup.DomeARestUser.Text+f_setup.WeatherARestUser.Text+f_setup.SafetyARestUser.Text+
-       f_setup.SwitchARestUser.Text+f_setup.CoverARestUser.Text <> '')
+       f_setup.SwitchARestUser.Text+f_setup.CoverARestUser.Text+f_setup.GuideCameraARestUser.Text+f_setup.FinderCameraARestUser.Text <> '')
        then
        begin
           credentialconfig.Filename:=config.Filename+'.credential';
@@ -8237,6 +8453,7 @@ begin
           credentialconfig.SetValue('/ASCOMRestswitch/User',strtohex(encryptStr(f_setup.SwitchARestUser.Text, encryptpwd)));
           credentialconfig.SetValue('/ASCOMRestcover/User',strtohex(encryptStr(f_setup.CoverARestUser.Text, encryptpwd)));
           credentialconfig.SetValue('/ASCOMRestguidecamera/User',strtohex(encryptStr(f_setup.GuideCameraARestUser.Text, encryptpwd)));
+          credentialconfig.SetValue('/ASCOMRestfindercamera/User',strtohex(encryptStr(f_setup.FinderCameraARestUser.Text, encryptpwd)));
           credentialconfig.SetValue('/ASCOMRestcamera/Pass',strtohex(encryptStr(f_setup.CameraARestPass.Text, encryptpwd)));
           credentialconfig.SetValue('/ASCOMRestwheel/Pass',strtohex(encryptStr(f_setup.WheelARestPass.Text, encryptpwd)));
           credentialconfig.SetValue('/ASCOMRestfocuser/Pass',strtohex(encryptStr(f_setup.FocuserARestPass.Text, encryptpwd)));
@@ -8248,6 +8465,7 @@ begin
           credentialconfig.SetValue('/ASCOMRestswitch/Pass',strtohex(encryptStr(f_setup.SwitchARestPass.Text, encryptpwd)));
           credentialconfig.SetValue('/ASCOMRestcover/Pass',strtohex(encryptStr(f_setup.CoverARestPass.Text, encryptpwd)));
           credentialconfig.SetValue('/ASCOMRestguidecamera/Pass',strtohex(encryptStr(f_setup.GuideCameraARestPass.Text, encryptpwd)));
+          credentialconfig.SetValue('/ASCOMRestfindercamera/Pass',strtohex(encryptStr(f_setup.FinderCameraARestPass.Text, encryptpwd)));
        end
        else begin
           credentialconfig.Filename:='';
@@ -11197,7 +11415,7 @@ begin
   end;
   if f_preview.Loop then f_preview.BtnLoopClick(nil);
   f_polaralign.Mount:=mount;
-  f_polaralign.Camera:=findercamera;
+  f_polaralign.Camera:=astrometrycamera;
   f_polaralign.Wheel:=wheel;
   pt.x:=-f_polaralign.Width-8;
   pt.y:=PanelCenter.top;
@@ -11229,7 +11447,7 @@ begin
   if f_preview.Loop then f_preview.BtnLoopClick(nil);
   f_polaralign2.Mount:=mount;
   f_polaralign2.Wheel:=wheel;
-  f_polaralign2.Camera:=findercamera;
+  f_polaralign2.Camera:=astrometrycamera;
   pt.x:=-f_polaralign2.Width-8;
   pt.y:=PanelCenter.top;
   pt:=ClientToScreen(pt);
@@ -11434,7 +11652,7 @@ begin
     exit;
   end;
   // check device
-  n:=TButton(Sender).Tag;
+  n:=TMenuItem(Sender).Tag;
   case n of
     1 : begin dev:=widestring(config.GetValue('/ASCOMcamera/Device',''));IsConnected:=(camera<>nil)and(camera.Status<>devDisconnected); end;
     2 : begin dev:=widestring(config.GetValue('/ASCOMwheel/Device',''));IsConnected:=(wheel<>nil)and(wheel.Status<>devDisconnected); end;
@@ -11447,6 +11665,7 @@ begin
     10: begin dev:=widestring(config.GetValue('/ASCOMswitch/Device',''));IsConnected:=(switch<>nil)and(switch.Status<>devDisconnected); end;
     11: begin dev:=widestring(config.GetValue('/ASCOMcover/Device',''));IsConnected:=(cover<>nil)and(cover.Status<>devDisconnected); end;
     12: begin dev:=widestring(config.GetValue('/ASCOMguidecamera/Device',''));IsConnected:=(guidecamera<>nil)and(guidecamera.Status<>devDisconnected); end;
+    13: begin dev:=widestring(config.GetValue('/ASCOMfindercamera/Device',''));IsConnected:=(findercamera<>nil)and(findercamera.Status<>devDisconnected); end;
     else begin dev:=''; IsConnected:=false; end;
   end;
   if dev='' then exit;
@@ -11465,6 +11684,7 @@ begin
         10: DisConnectSwitch(nil);
         11: DisConnectCover(nil);
         12: DisConnectGuideCamera(nil);
+        13: DisconnectFinderCamera(nil);
       end;
     end
     else begin
@@ -11496,6 +11716,7 @@ begin
       10: ConnectSwitch(nil);
       11: ConnectCover(nil);
       12: ConnectGuideCamera(nil);
+      13: ConnectFinderCamera(nil);
     end;
   end;
 {$endif}
@@ -11506,7 +11727,7 @@ var n: integer;
     devt,dev,num,host,port,protocol,url: string;
 begin
 // check device
-n:=TButton(Sender).Tag;
+n:=TMenuItem(Sender).Tag;
 case n of
   0 : begin devt:=''; dev:='server'; end;
   1 : begin devt:='ASCOMRestcamera'; dev:='camera'; end;
@@ -11520,6 +11741,7 @@ case n of
   10: begin devt:='ASCOMRestswitch'; dev:='switch'; end;
   11: begin devt:='ASCOMRestcover'; dev:='covercalibrator'; end;
   12: begin devt:='ASCOMRestguidecamera'; dev:='camera'; end;
+  13: begin devt:='ASCOMRestfindercamera'; dev:='camera'; end;
   else begin dev:=''; end;
 end;
 if dev='' then exit;
@@ -13138,6 +13360,7 @@ begin
   case i of
      0..4: PageControlImage.ActivePageIndex:=0;
      5:    PageControlImage.ActivePageIndex:=1;
+     6:    PageControlImage.ActivePageIndex:=2;
   end;
 end;
 
@@ -16045,6 +16268,157 @@ begin
  end;
  yy:=guideimg_Height-yy;
  StatusBar1.Panels[panelcursor].Text:=rsGuider+': '+inttostr(xx)+'/'+inttostr(yy)+': '+sval;
+end;
+
+procedure Tf_main.FinderCameraTemperatureChange(t: double);
+begin
+
+end;
+
+procedure Tf_main.FinderCameraCoolerChange(var v: boolean);
+begin
+
+end;
+
+procedure Tf_main.FinderCameraNewImage(Sender: TObject);
+begin
+  Application.QueueAsyncCall(@FinderCameraNewImageAsync,0);
+end;
+
+procedure Tf_main.FinderCameraNewImageAsync(Data: PtrInt);
+var displayimage: boolean;
+begin
+  displayimage:=f_finder.IsVisible;
+  if (not finderfits.ImageValid) then begin
+     finderfits.LoadStream;
+  end;
+  // prepare image
+  DrawFinderImage(displayimage);
+  // draw image to screen
+  if displayimage then
+    PlotFinderImage;
+end;
+
+procedure Tf_main.DrawFinderImage(display: boolean);
+var tmpbmp:TBGRABitmap;
+    dmin,dmax: integer;
+begin
+if (finderfits.HeaderInfo.naxis>0) and finderfits.ImageValid then begin
+  finderfits.Gamma:=0.5; //f_finder.Gamma.Position/100;
+  dmin:=round(max(0,finderfits.HeaderInfo.dmin));
+  dmax:=min(MAXWORD,round(max(dmin+1,finderfits.HeaderInfo.dmax*{f_finder.Luminosity.Position}50/100)));
+  finderfits.VisuMax:=dmax;
+  finderfits.VisuMin:=dmin;
+  finderfits.MaxADU:=MaxADU;
+  finderfits.MarkOverflow:=false;
+  finderfits.Invert:=false;
+  if display then begin
+  finderfits.GetBGRABitmap(ImaFinderBmp);
+  FinderImgPixRatio:=finderfits.HeaderInfo.pixratio;
+  if (finderfits.HeaderInfo.pixratio<>1) then begin
+    tmpbmp:=TBGRABitmap.Create(ImaFinderBmp);
+    ImaFinderBmp.SetSize(round(finderfits.HeaderInfo.pixratio*ImaFinderBmp.Width),ImaFinderBmp.Height);
+    ImaFinderBmp.Canvas.StretchDraw(rect(0,0,ImaFinderBmp.Width,ImaFinderBmp.Height),tmpbmp.Bitmap);
+    tmpbmp.Free;
+  end;
+  finderimg_Width:=ImaFinderBmp.Width;
+  finderimg_Height:=ImaFinderBmp.Height;
+ end
+ else begin
+  finderimg_Width:=finderfits.HeaderInfo.naxis1;
+  finderimg_Height:=finderfits.HeaderInfo.naxis2;
+  ImaFinderBmp.SetSize(finderimg_Width,finderimg_Height);
+ end;
+end;
+end;
+
+Procedure Tf_main.ClearFinderImage;
+begin
+ScrFinderBmp.FillRect(0,0,ScrFinderBmp.Width,ScrFinderBmp.Height,clDarkBlue);
+end;
+
+procedure Tf_main.PlotFinderImage;
+var r1,r2: double;
+    w,h,px,py,w3,h3,ww3,hh3,i,j: integer;
+    tmpbmp,str: TBGRABitmap;
+    rmode: TResampleMode;
+begin
+if (finderimg_Height=0)or(finderimg_Width=0) then exit;
+r1:=ScrFinderBmp.Width/ImaFinderBmp.Width;
+r2:=ScrFinderBmp.Height/ImaFinderBmp.Height;
+FinderZoomMin:=minvalue([1.0,r1,r2]);
+if (FinderZoomMin<1)and((FinderImgZoom<FinderZoomMin)or(abs(FinderImgZoom-FinderZoomMin)<0.01)) then FinderImgZoom:=0;
+ClearFinderImage;
+if LowQualityDisplay then begin
+  ImaFinderBmp.ResampleFilter:=rfBox;
+  rmode:=rmSimpleStretch;
+end
+else begin
+  ImaFinderBmp.ResampleFilter:=rfBestQuality;
+  rmode:=rmFineResample;
+end;
+
+if FinderImgZoom=0 then begin
+  // adjust
+  r1:=finderimg_Width/finderimg_Height;
+  w:=ScrFinderBmp.width;
+  h:=ScrFinderBmp.height;
+  r2:=w/h;
+  if r1>r2 then begin
+    h:=trunc(w/r1);
+    FinderImgScale0:=h/finderimg_Height;
+    px:=0;
+    py:=(ScrFinderBmp.Height-h) div 2;
+  end else begin
+    w:=trunc(h*r1);
+    FinderImgScale0:=w/finderimg_Width;
+    px:=(ScrFinderBmp.width-w) div 2;
+    py:=0;
+  end;
+  FinderOrigX:=round(px/FinderImgScale0);
+  FinderOrigY:=round(py/FinderImgScale0);
+  str:=ImaFinderBmp.Resample(w,h,rmode) as TBGRABitmap;
+  ScrFinderBmp.PutImage(px,py,str,dmSet);
+  str.Free;
+end
+else if FinderImgZoom=1 then begin
+   // zoom 1
+   px:=round(FinderImgCx)-((finderimg_Width-ScrFinderBmp.Width) div 2);
+   py:=round(FinderImgCy)-((finderimg_Height-ScrFinderBmp.Height) div 2);
+   FinderOrigX:=px;
+   FinderOrigY:=py;
+   ScrFinderBmp.PutImage(px,py,ImaFinderBmp,dmSet);
+end
+else begin
+   // other zoom
+   if FinderImgZoom<FinderZoomMin then FinderImgZoom:=FinderZoomMin;
+   tmpbmp:=TBGRABitmap.Create(round(ScrFinderBmp.Width/FinderImgZoom),round(ScrFinderBmp.Height/FinderImgZoom),clDarkBlue);
+   px:=round(FinderImgCx)-((finderimg_Width-tmpbmp.Width) div 2);
+   py:=round(FinderImgCy)-((finderimg_Height-tmpbmp.Height) div 2);
+   FinderOrigX:=px;
+   FinderOrigY:=py;
+   tmpbmp.PutImage(px,py,ImaFinderBmp,dmSet);
+   str:=tmpbmp.Resample(ScrFinderBmp.Width,ScrFinderBmp.Height,rmSimpleStretch) as TBGRABitmap;
+   ScrFinderBmp.PutImage(0,0,str,dmSet);
+   str.Free;
+   tmpbmp.Free;
+end;
+if camera.ASCOMFlipImage then ScrFinderBmp.VerticalFlip; // same orientation as main camera
+ImageFinder.Invalidate;
+end;
+
+procedure Tf_main.ImageFinderPaint(Sender: TObject);
+begin
+try
+  if (ScrFinderBmp.Height>0)and(ScrFinderBmp.Width>0) then
+     ScrFinderBmp.Draw(ImageFinder.Canvas,0,0,true);
+  ImageFinder.Canvas.Brush.Color:=clBlack;
+  ImageFinder.Canvas.Brush.Style:=bsSolid;
+  ImageFinder.Canvas.Font.Color:=clSilver;
+  ImageFinder.Canvas.Font.Size:=DoScaleX(16);
+  ImageFinder.Canvas.TextOut(1, 1, rsFinderCamera);
+except
+end;
 end;
 
 end.

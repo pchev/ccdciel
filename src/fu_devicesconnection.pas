@@ -37,6 +37,7 @@ type
     BtnProfile: TButton;
     LabelGuideCamera: TLabel;
     LabelDome: TLabel;
+    LabelFinderCamera: TLabel;
     LabelSafety: TLabel;
     LabelSwitch: TLabel;
     LabelCover: TLabel;
@@ -118,6 +119,7 @@ begin
   LabelMount.Caption:=rsMnt;
   LabelWatchdog.Caption:=rsWch;
   LabelGuideCamera.Caption:=rsGuid;
+  LabelFinderCamera.Caption:=rsFind;
   LabelDome.Caption:=rsDome;
   LabelSafety.Caption:=rsSaf;
   LabelSwitch.Caption:=rsSw;
@@ -158,6 +160,7 @@ begin
       10: txt:=rsSwitch;
       11: txt:=rsCoverCalibra;
       12: txt:=rsGuideCamera;
+      13: txt:=rsFinderCamera;
    end;
    MenuConnectDevice.Caption:=rsConnect+': '+txt;
    MenuDisconnectDevice.Caption:=rsDisconnect+': '+txt;
