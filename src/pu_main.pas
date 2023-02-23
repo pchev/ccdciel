@@ -1808,6 +1808,7 @@ begin
   ShowGuiderDarkInfo;
 
   f_finder:=Tf_finder.Create(self);
+  f_finder.Astrometry:=astrometry;
   f_finder.onShowMessage:=@NewMessage;
   f_finder.onRedraw:=@FinderRedraw;
 
@@ -4570,6 +4571,11 @@ begin
     f_pause.Wait(30);
   end;
 
+  astrometry.FinderOffsetX:=config.GetValue('/Finder/OffsetX',0.0);
+  astrometry.FinderOffsetY:=config.GetValue('/Finder/OffsetY',0.0);
+  f_finder.OffsetX.Value:=astrometry.FinderOffsetX;
+  f_finder.OffsetY.Value:=astrometry.FinderOffsetY;
+
   astrometryResolver:=config.GetValue('/Astrometry/Resolver',ResolverAstap);
   AstrometryTimeout:=config.GetValue('/Astrometry/Timeout',30.0);
   buf:=config.GetValue('/Astrometry/OtherOptions','');
@@ -5114,6 +5120,10 @@ begin
   config.SetValue('/InternalGuider/Visu/Gamma',f_internalguider.Gamma.Position);
   config.SetValue('/InternalGuider/Visu/Luminosity',f_internalguider.Luminosity.Position);
   config.SetValue('/InternalGuider/Visu/Zoom',GuideImgZoom);
+
+  // finder offset need to be saved at the same time
+  config.SetValue('/Finder/OffsetX',astrometry.FinderOffsetX);
+  config.SetValue('/Finder/OffsetY',astrometry.FinderOffsetY);
 end;
 
 procedure Tf_main.SaveConfig;

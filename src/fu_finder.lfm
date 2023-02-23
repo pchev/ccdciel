@@ -2,10 +2,10 @@ object f_finder: Tf_finder
   Left = 0
   Height = 281
   Top = 0
-  Width = 325
+  Width = 243
   AutoSize = True
   ClientHeight = 281
-  ClientWidth = 325
+  ClientWidth = 243
   ParentFont = False
   TabOrder = 0
   DesignLeft = -1
@@ -14,7 +14,7 @@ object f_finder: Tf_finder
     Left = 0
     Height = 20
     Top = 0
-    Width = 325
+    Width = 243
     Align = alTop
     Alignment = taCenter
     AutoSize = False
@@ -31,11 +31,11 @@ object f_finder: Tf_finder
     Left = 0
     Height = 108
     Top = 20
-    Width = 325
+    Width = 243
     Align = alTop
     BevelOuter = bvNone
     ClientHeight = 108
-    ClientWidth = 325
+    ClientWidth = 243
     ParentFont = False
     TabOrder = 0
     object Button1: TButton
@@ -54,11 +54,11 @@ object f_finder: Tf_finder
       Top = 8
       Width = 75
       Caption = 'Calibrate'
+      OnClick = ButtonCalibrateClick
       ParentFont = False
       TabOrder = 1
     end
     object Label1: TLabel
-      AnchorSideTop.Control = Edit1
       AnchorSideTop.Side = asrCenter
       Left = 16
       Height = 19
@@ -68,7 +68,6 @@ object f_finder: Tf_finder
       ParentColor = False
     end
     object Label2: TLabel
-      AnchorSideTop.Control = Edit2
       AnchorSideTop.Side = asrCenter
       Left = 16
       Height = 19
@@ -77,32 +76,30 @@ object f_finder: Tf_finder
       Caption = 'Offset Y'
       ParentColor = False
     end
-    object Edit1: TEdit
+    object OffsetX: TFloatSpinEdit
       Left = 104
-      Height = 31
+      Height = 29
       Top = 40
-      Width = 80
+      Width = 111
       TabOrder = 2
-      Text = '0'
     end
-    object Edit2: TEdit
+    object OffsetY: TFloatSpinEdit
       Left = 104
-      Height = 31
+      Height = 29
       Top = 72
-      Width = 80
+      Width = 111
       TabOrder = 3
-      Text = '0'
     end
   end
   object Panel8: TPanel
     Left = 0
     Height = 144
     Top = 128
-    Width = 325
+    Width = 243
     Align = alTop
     BevelOuter = bvNone
     ClientHeight = 144
-    ClientWidth = 325
+    ClientWidth = 243
     TabOrder = 1
     object Label17: TLabel
       AnchorSideTop.Control = Gamma

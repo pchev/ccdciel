@@ -52,7 +52,7 @@ uses
   cu_ascomrestsafety, cu_ascomrestrotator, cu_ascomrestmount,
   cu_ascomrestfocuser, cu_ascomrestdome, cu_ascomrest, cu_autoguider_dither,
   cu_sequencefile,
-  u_hints, pu_goto, pu_photometry, u_libraw, pu_polaralign, pu_keyboard, cu_alpacamanagement, pu_compute, cu_manualwheel, u_speech, pu_collimation, cu_ascomrestswitch, cu_ascomswitch, cu_indiswitch, cu_switch, fu_switch, pu_newscript, pu_polaralign2, fu_internalguider, cu_autoguider_internal, pu_handpad, fu_finder;
+  u_hints, pu_goto, pu_photometry, u_libraw, pu_polaralign, pu_keyboard, cu_alpacamanagement, pu_compute, cu_manualwheel, u_speech, pu_collimation, cu_ascomrestswitch, cu_ascomswitch, cu_indiswitch, cu_switch, fu_switch, pu_newscript, pu_polaralign2, fu_internalguider, cu_autoguider_internal, pu_handpad, fu_finder, pu_findercalibration;
 
 {$R *.res}
 
@@ -110,6 +110,7 @@ begin
   Application.CreateForm(Tf_collimation, f_collimation);
   Application.CreateForm(Tf_polaralign2, f_polaralign2);
   Application.CreateForm(Tf_handpad, f_handpad);
+  Application.CreateForm(Tf_findercalibration, f_findercalibration);
   Application.Run;
   {$ifdef LCLGTK2}
   try

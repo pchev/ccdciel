@@ -49,6 +49,7 @@ TAstrometry = class(TComponent)
     FResolverName: string;
     logfile,solvefile,savefile: string;
     Xslew, Yslew: integer;
+    FFinderOffsetX, FFinderOffsetY: double;
     AstrometryTimeout: double;
     TimerAstrometrySolve, TimerAstrometrySync, TimerAstrometrySlewScreenXY,TimerAstrometrySolveGuide : TTimer;
     procedure AstrometrySolveonTimer(Sender: TObject);
@@ -71,6 +72,8 @@ TAstrometry = class(TComponent)
     function  FinderCurrentCoord(out cra,cde,eq,pa: double):boolean;
     procedure SolveCurrentImage(wait: boolean; forcesolve:boolean=false);
     procedure SolveGuideImage;
+    procedure SolveFinderImage;
+    function GetFinderOffset(ra2000,de2000: double):boolean;
     procedure SyncCurrentImage(wait: boolean);
     procedure SlewScreenXY(x,y: integer);
     function PrecisionSlew(ra,de,prec,exp:double; filter,binx,biny,method,maxslew,sgain,soffset: integer; out err: double):boolean;
@@ -95,6 +98,8 @@ TAstrometry = class(TComponent)
     property FinderFits: TFits read FFinderFits write FFinderFits;
     property preview:Tf_preview read Fpreview write Fpreview;
     property visu:Tf_visu read Fvisu write Fvisu;
+    property FinderOffsetX: double read FFinderOffsetX write FFinderOffsetX;
+    property FinderOffsetY: double read FFinderOffsetY write FFinderOffsetY;
     property onShowMessage: TNotifyMsg read FonShowMessage write FonShowMessage;
     property onAstrometryStart: TNotifyEvent read FonStartAstrometry write FonStartAstrometry;
     property onAstrometryEnd: TNotifyEvent read FonEndAstrometry write FonEndAstrometry;
@@ -315,16 +320,14 @@ begin
   if cdcwcs_xy2sky<>nil then begin
     n:=cdcwcs_getinfo(addr(i),2);
     if (n=0)and(i.secpix<>0) then begin
-      c.x:=0.5+i.wp/2;
-      c.y:=0.5+i.hp/2;
+      c.x:=FFinderOffsetX;
+      c.y:=FFinderOffsetY;
       m:=cdcwcs_xy2sky(@c,2);
-      if m=0 then begin
-        cra:=c.ra/15;
-        cde:=c.dec;
-        eq:=2000;
-        pa:=i.rot;
-        result:=true;
-      end;
+      cra:=c.ra/15;
+      cde:=c.dec;
+      eq:=2000;
+      pa:=i.rot;
+      result:=true;
     end;
   end
   else
@@ -369,9 +372,66 @@ if FFits.HeaderInfo.solved and CurrentCoord(ra,de,eq,pa) then begin
 end;
 end;
 
+procedure TAstrometry.SolveFinderImage;
+begin
+  if (not FBusy) and (FFinderFits.HeaderInfo.naxis>0) and FFinderFits.ImageValid then begin
+    FFinderFits.SaveToFile(slash(TmpDir)+'findertmp.fits');
+    StartAstrometry(slash(TmpDir)+'findertmp.fits',slash(TmpDir)+'findersolved.fits',@AstrometrySolveFinder);
+    WaitBusy();
+  end;
+end;
+
 procedure TAstrometry.AstrometrySolveFinder(Sender: TObject);
+var ra,de,pa,ra2000,de2000: double;
+    n,m: integer;
+    i: TcdcWCSinfo;
+    c: TcdcWCScoord;
 begin
   if Assigned(FonEndAstrometry) then FonEndAstrometry(nil);
+  if cdcwcs_xy2sky<>nil then begin
+    n:=cdcwcs_initfitsfile(pchar(slash(TmpDir)+'findersolved.fits'),2);
+    try
+    if n=0 then n:=cdcwcs_getinfo(addr(i),2);
+    if (n=0)and(i.secpix<>0) then begin
+      c.x:=0.5+i.wp/2;
+      c.y:=0.5+i.hp/2;
+      m:=cdcwcs_xy2sky(@c,2);
+      if m=0 then begin
+        ra:=c.ra/15;
+        de:=c.dec;
+        pa:=i.rot;
+        ra2000:=ra;
+        de2000:=de;
+        ra:=ra*15*deg2rad;
+        de:=de*deg2rad;
+        J2000ToApparent(ra,de);
+        ra:=rad2deg*ra/15;
+        de:=rad2deg*de;
+        msg(rsFinderCamera+': '+rsFOV+blank+FormatFloat(f2, i.wp*i.secpix/60)+'x'+FormatFloat(f2, i.hp*i.secpix/60)+smin+', '+rsPixelScale+': '+FormatFloat(f2,i.secpix)+ssec+'/'+rsPixel,3);
+        msg(rsFinderCamera+': '+Format(rsCenterAppare, [RAToStr(ra), DEToStr(de), FormatFloat(f1, pa)])+', J2000 '+rsRA+'='+RAToStr(ra2000)+' '+rsDec+'='+DEToStr(de2000),3);
+      end;
+    end;
+    finally
+    end;
+  end
+  else
+    msg('Missing library '+libwcs,1);
+end;
+
+function TAstrometry.GetFinderOffset(ra2000,de2000: double): boolean;
+var n: integer;
+    c: TcdcWCScoord;
+begin
+  result:=false;
+  try
+  c.ra:=15*ra2000;
+  c.dec:=de2000;
+  n:=cdcwcs_sky2xy(@c,2);
+  FFinderOffsetX:=c.x;
+  FFinderOffsetY:=c.y;
+  result:=true;
+  except
+  end;
 end;
 
 procedure TAstrometry.SolveGuideImage;

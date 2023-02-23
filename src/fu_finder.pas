@@ -25,7 +25,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 interface
 
-uses  UScaleDPI, u_global, Graphics, Dialogs, u_translation, cu_mount, cu_camera,
+uses  UScaleDPI, u_global, Graphics, Dialogs, u_translation, cu_mount, cu_camera, cu_astrometry, pu_findercalibration,
   Classes, SysUtils, FileUtil, Forms, Controls, StdCtrls, ExtCtrls, ComCtrls, Spin, Buttons;
 
 type
@@ -39,8 +39,7 @@ type
     BtnZoomAdjust: TSpeedButton;
     Button1: TButton;
     ButtonCalibrate: TButton;
-    Edit1: TEdit;
-    Edit2: TEdit;
+    OffsetX: TFloatSpinEdit;
     Gamma: TTrackBar;
     Label1: TLabel;
     Label17: TLabel;
@@ -48,6 +47,7 @@ type
     Label19: TLabel;
     Label2: TLabel;
     Luminosity: TTrackBar;
+    OffsetY: TFloatSpinEdit;
     Panel1: TPanel;
     Panel8: TPanel;
     Title: TLabel;
@@ -56,10 +56,12 @@ type
     procedure BtnZoom1Click(Sender: TObject);
     procedure BtnZoom2Click(Sender: TObject);
     procedure BtnZoomAdjustClick(Sender: TObject);
+    procedure ButtonCalibrateClick(Sender: TObject);
   private
     { private declarations }
     FMount: T_mount;
     FCamera: T_camera;
+    FAstrometry: TAstrometry;
     FonShowMessage: TNotifyMsg;
     FonRedraw: TNotifyEvent;
     procedure msg(txt:string; level: integer);
@@ -70,6 +72,7 @@ type
     procedure SetLang;
     property Mount: T_mount read FMount write FMount;
     property Camera: T_camera read FCamera write FCamera;
+    property Astrometry: TAstrometry read FAstrometry write FAstrometry;
     property onShowMessage: TNotifyMsg read FonShowMessage write FonShowMessage;
     property onRedraw: TNotifyEvent read FonRedraw write FonRedraw;
   end;
@@ -121,6 +124,32 @@ begin
   end;
 end;
 
+procedure Tf_finder.ButtonCalibrateClick(Sender: TObject);
+var exp,ra2000,de2000:double;
+    bin,sgain,soffset: integer;
+begin
+  if f_findercalibration.ShowModal = mrOK then begin
+    ra2000:=f_findercalibration.RA;
+    de2000:=f_findercalibration.DE;
+    exp:=config.GetValue('/PrecSlew/Exposure',10.0);
+    sgain:=config.GetValue('/PrecSlew/Gain',NullInt);
+    soffset:=config.GetValue('/PrecSlew/Offset',NullInt);
+    bin:=config.GetValue('/PrecSlew/Binning',1);
+    if not Fcamera.ControlExposure(exp,bin,bin,LIGHT,ReadoutModeAstrometry,sgain,soffset) then begin
+      msg(rsExposureFail,0);
+      exit;
+    end;
+    FAstrometry.SolveFinderImage;
+    if FAstrometry.LastResult and FAstrometry.GetFinderOffset(ra2000,de2000) then begin
+      OffsetX.Value:=FAstrometry.FinderOffsetX;
+      OffsetY.Value:=FAstrometry.FinderOffsetY;
+    end
+    else begin
+      msg('Calibration failed',1);
+    end;
+
+  end;
+end;
 
 procedure Tf_finder.BtnZoomAdjustClick(Sender: TObject);
 begin
