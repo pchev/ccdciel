@@ -553,7 +553,7 @@ type
     procedure TimerStampTimerTimer(Sender: TObject);
   private
     { private declarations }
-    camera, guidecamera, findercamera, astrometrycamera: T_camera;
+    camera, guidecamera, findercamera: T_camera;
     wheel: T_wheel;
     focuser: T_focuser;
     rotator: T_rotator;
@@ -963,7 +963,7 @@ type
     Procedure DrawFinderImage(display: boolean);
     Procedure PlotFinderImage;
     procedure FinderRedraw(Sender: TObject);
-    Procedure SetAstrometryCamera;
+    Procedure SetFinderCamera;
   public
     { public declarations }
     Image1, ImageGuide, ImageFinder: TImgDrawingControl;
@@ -1676,6 +1676,7 @@ begin
   astrometry:=TAstrometry.Create(nil);
   astrometry.Fits:=fits;
   astrometry.GuideFits:=guidefits;
+  astrometry.FinderFits:=finderfits;
   astrometry.onAstrometryStart:=@AstrometryStart;
   astrometry.onAstrometryEnd:=@AstrometryEnd;
   astrometry.onGotoStart:=@GotoStart;
@@ -2017,7 +2018,6 @@ begin
      ASCOM: camera:=T_ascomcamera.Create(nil);
      ASCOMREST: camera:=T_ascomrestcamera.Create(nil);
    end;
-   astrometrycamera:=camera;
    if wheel.WheelInterface=INCAMERA then wheel.camera:=camera;
    camera.Mount:=mount;
    camera.Wheel:=wheel;
@@ -2113,7 +2113,7 @@ end;
 procedure Tf_main.SetDevices;
 begin
  if astrometry<>nil then begin
-   astrometry.Camera:=astrometrycamera;
+   astrometry.Camera:=camera;
    astrometry.Mount:=mount;
    astrometry.Wheel:=wheel;
  end;
@@ -2148,7 +2148,7 @@ begin
    autoguider.Camera:=guidecamera;
  end;
  if f_finder<>nil then begin
-   f_finder.Camera:=astrometrycamera;
+   f_finder.Camera:=findercamera;
    f_finder.Mount:=mount;
  end;
 end;
@@ -2684,7 +2684,7 @@ begin
                              (cover.CoverInterface=INDI)or(guidecamera.CameraInterface=INDI)or(findercamera.CameraInterface=INDI);
 
   TBInternalGuider.Visible:=WantGuideCamera;
-  SetAstrometryCamera;
+  SetFinderCamera;
 
   SetTool(f_visu,'Histogram',PanelBottom,0,MenuViewHistogram,MenuHistogram,true);
   SetTool(f_msg,'Messages',PanelBottom,f_visu.left+1,MenuViewMessages,nil,true);
@@ -4843,7 +4843,7 @@ begin
       end;
     end;
   end;
-  SetAstrometryCamera;
+  SetFinderCamera;
 end;
 
 procedure Tf_main.SaveScreenConfig;
@@ -11446,8 +11446,8 @@ begin
   end;
   if f_preview.Loop then f_preview.BtnLoopClick(nil);
   f_polaralign.Mount:=mount;
-  f_polaralign.Camera:=astrometrycamera;
-  f_polaralign.Fits:=astrometrycamera.Fits;
+  f_polaralign.Camera:=camera;
+  f_polaralign.Fits:=Fits;
   f_polaralign.Wheel:=wheel;
   pt.x:=-f_polaralign.Width-8;
   pt.y:=PanelCenter.top;
@@ -11479,8 +11479,8 @@ begin
   if f_preview.Loop then f_preview.BtnLoopClick(nil);
   f_polaralign2.Mount:=mount;
   f_polaralign2.Wheel:=wheel;
-  f_polaralign2.Camera:=astrometrycamera;
-  f_polaralign2.Fits:=astrometrycamera.Fits;
+  f_polaralign2.Camera:=camera;
+  f_polaralign2.Fits:=Fits;
   pt.x:=-f_polaralign2.Width-8;
   pt.y:=PanelCenter.top;
   pt:=ClientToScreen(pt);
@@ -13328,36 +13328,52 @@ begin
   MenuResolvePlanetarium2.Enabled:=true;
   MenuShowCCDFrame2.Enabled:=true;
   MenuViewAstrometryLog2.Enabled:=true;
-  if astrometry.LastResult then begin
-     LoadFitsFile(astrometry.ResultFile);
-     resulttxt:=blank;
-     resulttxt:=resulttxt+Format(rsSolvedInSeco, [inttostr(round((now-astrometry.StartTime)*secperday))]);
-     if (WCScenterRA<>NullCoord) and (WCScenterDEC<>NullCoord) and
-        (astrometry.InitRA<>NullCoord) and (astrometry.InitDEC<>NullCoord)
-     then begin
-        dist:=rad2deg*AngularDistance(deg2rad*astrometry.InitRA,deg2rad*astrometry.InitDEC,deg2rad*WCScenterRA,deg2rad*WCScenterDEC);
-        resulttxt:=resulttxt+' , '+rsOffset+blank;
-        if dist>1 then
-          resulttxt:=resulttxt+FormatFloat(f3,dist)+sdeg
-        else
-          resulttxt:=resulttxt+FormatFloat(f2,60*dist)+smin;
-     end;
-     if (WCSwidth<>NullCoord) and (WCSheight<>NullCoord) then begin
-        if WCSwidth>10 then
-          resulttxt:=resulttxt+' , '+rsFOV+blank+FormatFloat(f2, WCSwidth)+'x'+FormatFloat(f2, WCSheight)+sdeg
-        else
-          resulttxt:=resulttxt+' , '+rsFOV+blank+FormatFloat(f2, WCSwidth*60)+'x'+FormatFloat(f2, WCSheight*60)+smin;
-     end;
-     if cdcWCSinfo.secpix>0 then
-        resulttxt:=resulttxt+' , '+FormatFloat(f2, cdcWCSinfo.secpix)+ssec+'/'+rsPixel;
-     if astrometry.LastError>'' then NewMessage(astrometry.Resolver+': '+astrometry.LastError,1);
-     NewMessage(Format(rsResolveSucce, [rsAstrometry])+resulttxt,3);
-  end else begin
-    NewMessage(Format(rsResolveError, [astrometry.Resolver])+' '+astrometry.LastError,1);
-    if LogToFile then begin
-       buf:=slash(LogDir)+'astrometry_fail_'+FormatDateTime('yyyymmdd_hhnnss',now)+'.fits';
-       fits.SaveToFile(buf);
-       NewMessage(Format(rsSavedFile, [buf]),2);
+  if sender<>nil then begin
+    // main camera result
+    if astrometry.LastResult then begin
+       LoadFitsFile(astrometry.ResultFile);
+       resulttxt:=blank;
+       resulttxt:=resulttxt+Format(rsSolvedInSeco, [inttostr(round((now-astrometry.StartTime)*secperday))]);
+       if (WCScenterRA<>NullCoord) and (WCScenterDEC<>NullCoord) and
+          (astrometry.InitRA<>NullCoord) and (astrometry.InitDEC<>NullCoord)
+       then begin
+          dist:=rad2deg*AngularDistance(deg2rad*astrometry.InitRA,deg2rad*astrometry.InitDEC,deg2rad*WCScenterRA,deg2rad*WCScenterDEC);
+          resulttxt:=resulttxt+' , '+rsOffset+blank;
+          if dist>1 then
+            resulttxt:=resulttxt+FormatFloat(f3,dist)+sdeg
+          else
+            resulttxt:=resulttxt+FormatFloat(f2,60*dist)+smin;
+       end;
+       if (WCSwidth<>NullCoord) and (WCSheight<>NullCoord) then begin
+          if WCSwidth>10 then
+            resulttxt:=resulttxt+' , '+rsFOV+blank+FormatFloat(f2, WCSwidth)+'x'+FormatFloat(f2, WCSheight)+sdeg
+          else
+            resulttxt:=resulttxt+' , '+rsFOV+blank+FormatFloat(f2, WCSwidth*60)+'x'+FormatFloat(f2, WCSheight*60)+smin;
+       end;
+       if cdcWCSinfo.secpix>0 then
+          resulttxt:=resulttxt+' , '+FormatFloat(f2, cdcWCSinfo.secpix)+ssec+'/'+rsPixel;
+       if astrometry.LastError>'' then NewMessage(astrometry.Resolver+': '+astrometry.LastError,1);
+       NewMessage(Format(rsResolveSucce, [rsAstrometry])+resulttxt,3);
+    end else begin
+      NewMessage(Format(rsResolveError, [astrometry.Resolver])+' '+astrometry.LastError,1);
+      if LogToFile then begin
+         buf:=slash(LogDir)+'astrometry_fail_'+FormatDateTime('yyyymmdd_hhnnss',now)+'.fits';
+         fits.SaveToFile(buf);
+         NewMessage(Format(rsSavedFile, [buf]),2);
+      end;
+    end;
+  end
+  else begin
+    // finder camera result
+    if astrometry.LastResult then begin
+       NewMessage(Format(rsResolveSucce, [rsFinderCamera]),3);
+    end else begin
+      NewMessage(Format(rsResolveError, [astrometry.Resolver])+' '+astrometry.LastError,1);
+      if LogToFile then begin
+         buf:=slash(LogDir)+'astrometry_fail_'+FormatDateTime('yyyymmdd_hhnnss',now)+'.fits';
+         finderfits.SaveToFile(buf);
+         NewMessage(Format(rsSavedFile, [buf]),2);
+      end;
     end;
   end;
 end;
@@ -16313,18 +16329,16 @@ begin
 
 end;
 
-Procedure Tf_main.SetAstrometryCamera;
+Procedure Tf_main.SetFinderCamera;
 var n: integer;
 begin
   if astrometry=nil then exit;
   n:=config.GetValue('/Astrometry/Camera',0);
   if (n=1) and (not WantFinderCamera) then n:=0;
   case n of
-    0: astrometrycamera:=camera;
-    1: astrometrycamera:=findercamera;
+    0: astrometry.FinderCamera:=nil;
+    1: astrometry.FinderCamera:=findercamera;
   end;
-  astrometry.Camera:=astrometrycamera;
-  f_finder.Camera:=astrometrycamera;
   if n=0 then begin
     TBFinder.Visible:=false;
     SetTool(f_finder,'Finder',PanelRight7,0,MenuViewFinder,MenuFinder,false);
@@ -16357,7 +16371,7 @@ end;
 procedure Tf_main.FinderCameraNewImageAsync(Data: PtrInt);
 var displayimage: boolean;
 begin
-  displayimage:=f_finder.IsVisible;
+  displayimage:=true;
   if (not finderfits.ImageValid) then begin
      finderfits.LoadStream;
   end;

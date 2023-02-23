@@ -43,9 +43,9 @@ TAstrometry = class(TComponent)
     FLastError: string;
     FLastSlewErr,FInitra,FInitdec,FStartTime: double;
     Fmount: T_mount;
-    Fcamera: T_camera;
+    Fcamera, FFinderCamera: T_camera;
     Fwheel: T_wheel;
-    FFits, FGuideFits: TFits;
+    FFits, FGuideFits, FFinderFits: TFits;
     FResolverName: string;
     logfile,solvefile,savefile: string;
     Xslew, Yslew: integer;
@@ -61,12 +61,14 @@ TAstrometry = class(TComponent)
     procedure AstrometrySlewScreenXY(Sender: TObject);
     procedure AstrometrySolveGuide(Sender: TObject);
     procedure AstrometrySolveGuideonTimer(Sender: TObject);
+    procedure AstrometrySolveFinder(Sender: TObject);
   public
     constructor Create(AOwner: TComponent);override;
     function StartAstrometry(infile,outfile: string; terminatecmd:TNotifyEvent): boolean;
     procedure StopAstrometry;
     procedure AstrometryDone(errstr:string);
     function  CurrentCoord(out cra,cde,eq,pa: double):boolean;
+    function  FinderCurrentCoord(out cra,cde,eq,pa: double):boolean;
     procedure SolveCurrentImage(wait: boolean; forcesolve:boolean=false);
     procedure SolveGuideImage;
     procedure SyncCurrentImage(wait: boolean);
@@ -86,9 +88,11 @@ TAstrometry = class(TComponent)
     property Resolver: string read FResolverName;
     property Mount: T_mount read Fmount write Fmount;
     property Camera: T_camera read Fcamera write Fcamera;
+    property FinderCamera: T_camera read FFinderCamera write FFinderCamera;
     property Wheel: T_wheel read Fwheel write Fwheel;
     property Fits: TFits read FFits write FFits;
     property GuideFits: TFits read FGuideFits write FGuideFits;
+    property FinderFits: TFits read FFinderFits write FFinderFits;
     property preview:Tf_preview read Fpreview write Fpreview;
     property visu:Tf_visu read Fvisu write Fvisu;
     property onShowMessage: TNotifyMsg read FonShowMessage write FonShowMessage;
@@ -108,6 +112,7 @@ begin
   FLastResult:=false;
   FLastError:='';
   FLastSlewErr:=0;
+  FFinderCamera:=nil;
   AstrometryTimeout:=60;
   TimerAstrometrySolve:=TTimer.Create(self);
   TimerAstrometrySolve.Enabled:=false;
@@ -262,7 +267,7 @@ begin
    except
    end;
  end;
- if (Fterminatecmd<>@AstrometrySolveGuide) and Assigned(FonEndAstrometry) then FonEndAstrometry(self);
+ if (Fterminatecmd<>@AstrometrySolveGuide)and(Fterminatecmd<>@AstrometrySolveFinder) and Assigned(FonEndAstrometry) then FonEndAstrometry(self);
  if Assigned(Fterminatecmd) then Fterminatecmd(self);
  Fterminatecmd:=nil;
 end;
@@ -288,6 +293,31 @@ begin
       c.x:=0.5+i.wp/2;
       c.y:=0.5+i.hp/2;
       m:=cdcwcs_xy2sky(@c,0);
+      if m=0 then begin
+        cra:=c.ra/15;
+        cde:=c.dec;
+        eq:=2000;
+        pa:=i.rot;
+        result:=true;
+      end;
+    end;
+  end
+  else
+    msg('Missing library '+libwcs,1);
+end;
+
+function TAstrometry.FinderCurrentCoord(out cra,cde,eq,pa: double):boolean;
+var n,m: integer;
+    i: TcdcWCSinfo;
+    c: TcdcWCScoord;
+begin
+  result:=false;
+  if cdcwcs_xy2sky<>nil then begin
+    n:=cdcwcs_getinfo(addr(i),2);
+    if (n=0)and(i.secpix<>0) then begin
+      c.x:=0.5+i.wp/2;
+      c.y:=0.5+i.hp/2;
+      m:=cdcwcs_xy2sky(@c,2);
       if m=0 then begin
         cra:=c.ra/15;
         cde:=c.dec;
@@ -337,6 +367,11 @@ if FFits.HeaderInfo.solved and CurrentCoord(ra,de,eq,pa) then begin
    de:=rad2deg*de;
    msg(Format(rsCenterAppare, [RAToStr(ra), DEToStr(de), FormatFloat(f1, pa)])+', J2000 '+rsRA+'='+RAToStr(ra2000)+' '+rsDec+'='+DEToStr(de2000),3);
 end;
+end;
+
+procedure TAstrometry.AstrometrySolveFinder(Sender: TObject);
+begin
+  if Assigned(FonEndAstrometry) then FonEndAstrometry(nil);
 end;
 
 procedure TAstrometry.SolveGuideImage;
@@ -527,10 +562,14 @@ begin
       if CancelAutofocus or CancelGoto then exit;
       Wait(delay);
       dist:=0;
-   end else begin
-    if filter>0 then begin
-      oldfilter:=Fwheel.Filter;
-      Fwheel.Filter:=filter;
+   end
+   else begin
+    if FFinderCamera=nil then begin
+      fits.SetBPM(bpm,bpmNum,bpmX,bpmY,bpmAxis);
+      if filter>0 then begin
+        oldfilter:=Fwheel.Filter;
+        Fwheel.Filter:=filter;
+      end;
     end;
     raoffset:=0;
     deoffset:=0;
@@ -539,35 +578,64 @@ begin
     if not Mount.Slew(ra, de) then exit;
     if CancelAutofocus or CancelGoto then exit;
     i:=1;
-    fits.SetBPM(bpm,bpmNum,bpmX,bpmY,bpmAxis);
     RetryMeridianSyncCount:=0;
     repeat
       RetryMeridianSync:=false;
       Wait(delay);
       if CancelAutofocus or CancelGoto then exit;
-      if not Fcamera.ControlExposure(exp,binx,biny,LIGHT,ReadoutModeAstrometry,sgain,soffset) then begin
-        msg(rsExposureFail,0);
-        exit;
+      if FFinderCamera=nil then begin
+        // Use main camera
+        if not Fcamera.ControlExposure(exp,binx,biny,LIGHT,ReadoutModeAstrometry,sgain,soffset) then begin
+          msg(rsExposureFail,0);
+          exit;
+        end;
+        if CancelAutofocus or CancelGoto then exit;
+        msg(rsResolveContr,3);
+        FFits.SaveToFile(slash(TmpDir)+'ccdcieltmp.fits');
+        if StartAstrometry(slash(TmpDir)+'ccdcieltmp.fits',slash(TmpDir)+'ccdcielsolved.fits',nil) then
+           WaitBusy(AstrometryTimeout+30);
+        if not LastResult then begin
+           StopAstrometry;
+           msg(rsFailToResolv,0);
+           inc(i);
+           continue;
+        end;
+        if CancelAutofocus or CancelGoto then exit;
+        fn:=slash(TmpDir)+'ccdcielsolved.fits';
+        n:=cdcwcs_initfitsfile(pchar(fn),0);
+        if n<>0 then begin
+          msg(Format(rsErrorProcess, [TmpDir]),0);
+          exit;
+        end;
+        if (n<>0) or (not CurrentCoord(cra,cde,eq,pa)) then break;
+      end
+      else begin
+        // Use finder camera
+        if not FFinderCamera.ControlExposure(exp,binx,biny,LIGHT,ReadoutModeAstrometry,sgain,soffset) then begin
+          msg(rsExposureFail,0);
+          exit;
+        end;
+        if CancelAutofocus or CancelGoto then exit;
+        msg(rsResolveContr,3);
+        FFinderFits.SaveToFile(slash(TmpDir)+'finder.fits');
+        if StartAstrometry(slash(TmpDir)+'finder.fits',slash(TmpDir)+'findersolved.fits',@AstrometrySolveFinder) then
+           WaitBusy(AstrometryTimeout+30);
+        if not LastResult then begin
+           StopAstrometry;
+           msg(rsFailToResolv,0);
+           inc(i);
+           continue;
+        end;
+        if CancelAutofocus or CancelGoto then exit;
+        fn:=slash(TmpDir)+'findersolved.fits';
+        n:=cdcwcs_initfitsfile(pchar(fn),2);
+        if n<>0 then begin
+          msg(Format(rsErrorProcess, [TmpDir]),0);
+          exit;
+        end;
+        if (n<>0) or (not FinderCurrentCoord(cra,cde,eq,pa)) then break;
       end;
-      if CancelAutofocus or CancelGoto then exit;
-      msg(rsResolveContr,3);
-      FFits.SaveToFile(slash(TmpDir)+'ccdcieltmp.fits');
-      if StartAstrometry(slash(TmpDir)+'ccdcieltmp.fits',slash(TmpDir)+'ccdcielsolved.fits',nil) then
-         WaitBusy(AstrometryTimeout+30);
-      if not LastResult then begin
-         StopAstrometry;
-         msg(rsFailToResolv,0);
-         inc(i);
-         continue;
-      end;
-      if CancelAutofocus or CancelGoto then exit;
-      fn:=slash(TmpDir)+'ccdcielsolved.fits';
-      n:=cdcwcs_initfitsfile(pchar(fn),0);
-      if n<>0 then begin
-        msg(Format(rsErrorProcess, [TmpDir]),0);
-        exit;
-      end;
-      if (n<>0) or (not CurrentCoord(cra,cde,eq,pa)) then break;
+
       ara:=deg2rad*15*cra;
       ade:=deg2rad*cde;
       J2000ToApparent(ara,ade);
@@ -629,7 +697,6 @@ begin
       if CancelAutofocus or CancelGoto then exit;
       inc(i);
     until (not RetryMeridianSync)and((dist<=prec)or(i>maxslew));
-
    end;
   end;
   result:=(dist<=prec);
