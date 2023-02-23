@@ -26,21 +26,43 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 interface
 
 uses  UScaleDPI, u_global, Graphics, Dialogs, u_translation, cu_mount, cu_camera,
-  Classes, SysUtils, FileUtil, Forms, Controls, StdCtrls, ExtCtrls;
+  Classes, SysUtils, FileUtil, Forms, Controls, StdCtrls, ExtCtrls, ComCtrls, Spin, Buttons;
 
 type
 
   { Tf_finder }
 
   Tf_finder = class(TFrame)
+    BtnZoom05: TSpeedButton;
+    BtnZoom1: TSpeedButton;
+    BtnZoom2: TSpeedButton;
+    BtnZoomAdjust: TSpeedButton;
     Button1: TButton;
+    ButtonCalibrate: TButton;
+    Edit1: TEdit;
+    Edit2: TEdit;
+    Gamma: TTrackBar;
+    Label1: TLabel;
+    Label17: TLabel;
+    Label18: TLabel;
+    Label19: TLabel;
+    Label2: TLabel;
+    Luminosity: TTrackBar;
     Panel1: TPanel;
+    Panel8: TPanel;
     Title: TLabel;
     procedure Button1Click(Sender: TObject);
+    procedure BtnZoom05Click(Sender: TObject);
+    procedure BtnZoom1Click(Sender: TObject);
+    procedure BtnZoom2Click(Sender: TObject);
+    procedure BtnZoomAdjustClick(Sender: TObject);
   private
     { private declarations }
     FMount: T_mount;
     FCamera: T_camera;
+    FonShowMessage: TNotifyMsg;
+    FonRedraw: TNotifyEvent;
+    procedure msg(txt:string; level: integer);
   public
     { public declarations }
     constructor Create(aOwner: TComponent); override;
@@ -48,6 +70,8 @@ type
     procedure SetLang;
     property Mount: T_mount read FMount write FMount;
     property Camera: T_camera read FCamera write FCamera;
+    property onShowMessage: TNotifyMsg read FonShowMessage write FonShowMessage;
+    property onRedraw: TNotifyEvent read FonRedraw write FonRedraw;
   end;
 
 implementation
@@ -55,11 +79,6 @@ implementation
 {$R *.lfm}
 
 { Tf_finder }
-
-procedure Tf_finder.Button1Click(Sender: TObject);
-begin
-  camera.StartExposure(2.0);
-end;
 
 constructor Tf_finder.Create(aOwner: TComponent);
 begin
@@ -81,6 +100,50 @@ end;
 procedure Tf_finder.SetLang;
 begin
   Title.Caption:=rsFinderCamera;
+end;
+
+procedure Tf_finder.msg(txt:string; level: integer);
+begin
+ if assigned(FonShowMessage) then FonShowMessage(txt,level);
+end;
+
+procedure Tf_finder.Button1Click(Sender: TObject);
+var exp:double;
+    bin,sgain,soffset: integer;
+begin
+  exp:=config.GetValue('/PrecSlew/Exposure',10.0);
+  sgain:=config.GetValue('/PrecSlew/Gain',NullInt);
+  soffset:=config.GetValue('/PrecSlew/Offset',NullInt);
+  bin:=config.GetValue('/PrecSlew/Binning',1);
+  if not Fcamera.ControlExposure(exp,bin,bin,LIGHT,ReadoutModeAstrometry,sgain,soffset) then begin
+    msg(rsExposureFail,0);
+    exit;
+  end;
+end;
+
+
+procedure Tf_finder.BtnZoomAdjustClick(Sender: TObject);
+begin
+  FinderImgZoom:=0;
+  if Assigned(FonRedraw) then FonRedraw(self);
+end;
+
+procedure Tf_finder.BtnZoom05Click(Sender: TObject);
+begin
+  FinderImgZoom:=0.5;
+  if Assigned(FonRedraw) then FonRedraw(self);
+end;
+
+procedure Tf_finder.BtnZoom1Click(Sender: TObject);
+begin
+  FinderImgZoom:=1;
+  if Assigned(FonRedraw) then FonRedraw(self);
+end;
+
+procedure Tf_finder.BtnZoom2Click(Sender: TObject);
+begin
+  FinderImgZoom:=2;
+  if Assigned(FonRedraw) then FonRedraw(self);
 end;
 
 end.

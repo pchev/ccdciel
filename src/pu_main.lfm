@@ -1836,4 +1836,11 @@ object f_main: Tf_main
     Left = 496
     Top = 472
   end
+  object FinderPlotTimer: TTimer
+    Enabled = False
+    Interval = 100
+    OnTimer = FinderPlotTimerTimer
+    Left = 672
+    Top = 472
+  end
 end

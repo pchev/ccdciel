@@ -79,6 +79,7 @@ type
     FocuserConnectTimer: TTimer;
     CameraConnectTimer: TTimer;
     FinderCameraConnectTimer: TTimer;
+    FinderPlotTimer: TTimer;
     ImageListNight: TImageList;
     ImageListDay: TImageList;
     MainMenu1: TMainMenu;
@@ -385,6 +386,7 @@ type
     procedure CameraConnectTimerTimer(Sender: TObject);
     procedure ConnectTimerTimer(Sender: TObject);
     procedure FinderCameraConnectTimerTimer(Sender: TObject);
+    procedure FinderPlotTimerTimer(Sender: TObject);
     procedure FocuserConnectTimerTimer(Sender: TObject);
     procedure FormClose(Sender: TObject; var CloseAction: TCloseAction);
     procedure FormCloseQuery(Sender: TObject; var CanClose: boolean);
@@ -610,9 +612,11 @@ type
     FrameX,FrameY,FrameW,FrameH: integer;
     GuideMx, GuideMy: integer;
     GuideMouseMoving: boolean;
+    FinderMx, FinderMy: integer;
+    FinderMouseMoving: boolean;
     DeviceTimeout: integer;
     MouseMoving, MouseFrame, MouseSpectra, LockTimerPlot, LockMouseWheel, PolarMoving: boolean;
-    LockGuideMouseWheel, LockGuideTimerPlot: boolean;
+    LockGuideMouseWheel, LockGuideTimerPlot, LockFinderMouseWheel, LockFinderTimerPlot: boolean;
     learningvcurve: boolean;
     LogFileOpen,DeviceLogFileOpen: Boolean;
     NeedRestart, GUIready, AppClose: boolean;
@@ -652,6 +656,10 @@ type
     procedure ImageGuideMouseUp(Sender: TObject; Button: TMouseButton; Shift: TShiftState; X, Y: Integer);
     procedure ImageGuideMouseWheel(Sender: TObject; Shift: TShiftState; WheelDelta: Integer; MousePos: TPoint; var Handled: Boolean);
     procedure ImageFinderPaint(Sender: TObject);
+    procedure ImageFinderMouseDown(Sender: TObject; Button: TMouseButton; Shift: TShiftState; X, Y: Integer);
+    procedure ImageFinderMouseMove(Sender: TObject; Shift: TShiftState; X, Y: Integer);
+    procedure ImageFinderMouseUp(Sender: TObject; Button: TMouseButton; Shift: TShiftState; X, Y: Integer);
+    procedure ImageFinderMouseWheel(Sender: TObject; Shift: TShiftState; WheelDelta: Integer; MousePos: TPoint; var Handled: Boolean);
     Procedure GetAppDir;
     procedure ScaleMainForm;
     Procedure InitLog;
@@ -954,6 +962,8 @@ type
     procedure FinderCameraNewImageAsync(Data: PtrInt);
     Procedure DrawFinderImage(display: boolean);
     Procedure PlotFinderImage;
+    procedure FinderRedraw(Sender: TObject);
+    Procedure SetAstrometryCamera;
   public
     { public declarations }
     Image1, ImageGuide, ImageFinder: TImgDrawingControl;
@@ -1412,6 +1422,7 @@ begin
      end;
   end;
   PageControlRight.ActivePageIndex:=0;
+  PageControlImage.ActivePageIndex:=0;
   AppClose:=false;
   ConfirmClose:=true;
   ScaleMainForm;
@@ -1532,6 +1543,10 @@ begin
   ImageFinder.Parent := FinderImage;
   ImageFinder.Align := alClient;
   ImageFinder.OnPaint := @ImageFinderPaint;
+  ImageFinder.OnMouseDown := @ImageFinderMouseDown;
+  ImageFinder.OnMouseMove := @ImageFinderMouseMove;
+  ImageFinder.OnMouseUp := @ImageFinderMouseUp;
+  ImageFinder.OnMouseWheel := @ImageFinderMouseWheel;
   CursorImage1 := TCursorImage.Create;
   GetAppDir;
   chdir(Appdir);
@@ -1792,6 +1807,8 @@ begin
   ShowGuiderDarkInfo;
 
   f_finder:=Tf_finder.Create(self);
+  f_finder.onShowMessage:=@NewMessage;
+  f_finder.onRedraw:=@FinderRedraw;
 
   i:=config.GetValue('/Autoguider/Software',2);
   case TAutoguiderType(i) of
@@ -2131,7 +2148,7 @@ begin
    autoguider.Camera:=guidecamera;
  end;
  if f_finder<>nil then begin
-   f_finder.Camera:=findercamera;
+   f_finder.Camera:=astrometrycamera;
    f_finder.Mount:=mount;
  end;
 end;
@@ -2498,6 +2515,7 @@ begin
   LockMouseWheel:=false;
   LockRestartExposure:=false;
   LockGuideTimerPlot:=false;
+  LockFinderTimerPlot:=false;
   ImgZoom:=0;
   ImgCx:=0;
   ImgCy:=0;
@@ -2666,7 +2684,7 @@ begin
                              (cover.CoverInterface=INDI)or(guidecamera.CameraInterface=INDI)or(findercamera.CameraInterface=INDI);
 
   TBInternalGuider.Visible:=WantGuideCamera;
-  TBFinder.Visible:=WantFinderCamera;
+  SetAstrometryCamera;
 
   SetTool(f_visu,'Histogram',PanelBottom,0,MenuViewHistogram,MenuHistogram,true);
   SetTool(f_msg,'Messages',PanelBottom,f_visu.left+1,MenuViewMessages,nil,true);
@@ -2698,8 +2716,6 @@ begin
   SetTool(f_video,'Video',PanelRight5,0,MenuViewVideo,MenuVideo,true);
 
   SetTool(f_internalguider,'InternalGuider',PanelRight6,0,MenuViewInternalGuider,MenuInternalGuider,WantGuideCamera and WantMount);
-
-  SetTool(f_finder,'Finder',PanelRight7,0,MenuViewFinder,MenuFinder,WantFinderCamera);
 
   MenuViewClock.Checked:=screenconfig.GetValue('/Tools/Clock/Visible',true);
   MenuViewClockClick(nil);
@@ -2740,6 +2756,7 @@ begin
   TBTabs.Images.GetBitmap(5, btn);
   f_visu.BtnZoomAdjust.Glyph.Assign(btn);
   f_internalguider.BtnZoomAdjust.Glyph.Assign(btn);
+  f_finder.BtnZoomAdjust.Glyph.Assign(btn);
   TBTabs.Images.GetBitmap(6, btn);
   f_visu.BtnBullsEye.Glyph.Assign(btn);
   TBTabs.Images.GetBitmap(7, btn);
@@ -3015,7 +3032,7 @@ if sender is TMenuItem then begin
 
     SetTool(f_internalguider,'',PanelRight6,0,MenuViewInternalguider,MenuInternalGuider,WantGuideCamera and WantMount);
 
-    SetTool(f_finder,'',PanelRight7,0,MenuViewFinder,MenuFinder,WantFinderCamera);
+    SetTool(f_finder,'',PanelRight7,0,MenuViewFinder,MenuFinder,TBFinder.Visible);
 
   end
   else if n=2 then begin
@@ -3052,7 +3069,7 @@ if sender is TMenuItem then begin
 
    SetTool(f_internalguider,'',PanelRight6,0,MenuViewInternalguider,MenuInternalGuider,WantGuideCamera and WantMount);
 
-   SetTool(f_finder,'',PanelRight7,0,MenuViewFinder,MenuFinder,WantFinderCamera);
+   SetTool(f_finder,'',PanelRight7,0,MenuViewFinder,MenuFinder,TBFinder.Visible);
 
   end;
   for i:=0 to MaxMenulevel do AccelList[i]:='';
@@ -4826,6 +4843,7 @@ begin
       end;
     end;
   end;
+  SetAstrometryCamera;
 end;
 
 procedure Tf_main.SaveScreenConfig;
@@ -8787,6 +8805,11 @@ begin
    f_option.SlewPrec.Value:=config.GetValue('/PrecSlew/Precision',SlewPrecision);
    f_option.SlewRetry.Value:=config.GetValue('/PrecSlew/Retry',3);
    f_option.SlewExp.Value:=config.GetValue('/PrecSlew/Exposure',10);
+   i:=config.GetValue('/Astrometry/Camera',0);
+   if i>(f_option.AstrometryCamera.Items.Count-1) then i:=0;
+   if not WantFinderCamera then i:=0;
+   f_option.AstrometryCamera.ItemIndex:=i;
+   f_option.AstrometryCamera.Enabled:=WantFinderCamera;
    if hasGainISO then
      f_option.SlewISObox.ItemIndex:=config.GetValue('/PrecSlew/Gain',f_preview.ISObox.ItemIndex)
    else
@@ -9171,6 +9194,9 @@ begin
      config.SetValue('/PrecSlew/Precision',f_option.SlewPrec.Value);
      config.SetValue('/PrecSlew/Retry',f_option.SlewRetry.Value);
      config.SetValue('/PrecSlew/Exposure',f_option.SlewExp.Value);
+     i:=f_option.AstrometryCamera.ItemIndex;
+     if (i=1) and (not WantFinderCamera) then i:=0;
+     config.SetValue('/Astrometry/Camera',i);
      if hasGainISO then
        config.SetValue('/PrecSlew/Gain',f_option.SlewISObox.ItemIndex)
      else
@@ -16280,6 +16306,42 @@ begin
 
 end;
 
+Procedure Tf_main.SetAstrometryCamera;
+var n: integer;
+begin
+  if astrometry=nil then exit;
+  n:=config.GetValue('/Astrometry/Camera',0);
+  if (n=1) and (not WantFinderCamera) then n:=0;
+  case n of
+    0: astrometrycamera:=camera;
+    1: astrometrycamera:=findercamera;
+  end;
+  astrometry.Camera:=astrometrycamera;
+  f_finder.Camera:=astrometrycamera;
+  if n=0 then begin
+    TBFinder.Visible:=false;
+    SetTool(f_finder,'Finder',PanelRight7,0,MenuViewFinder,MenuFinder,false);
+  end
+  else begin
+    TBFinder.Visible:=true;
+    SetTool(f_finder,'Finder',PanelRight7,0,MenuViewFinder,MenuFinder,true);
+  end;
+end;
+
+procedure Tf_main.FinderRedraw(Sender: TObject);
+begin
+   FinderPlotTimer.Enabled:=true;
+end;
+
+procedure Tf_main.FinderPlotTimerTimer(Sender: TObject);
+begin
+  if LockFinderTimerPlot then exit;
+  LockFinderTimerPlot:=true;
+  FinderPlotTimer.Enabled:=false;
+  PlotFinderImage;
+  LockFinderTimerPlot:=false;
+end;
+
 procedure Tf_main.FinderCameraNewImage(Sender: TObject);
 begin
   Application.QueueAsyncCall(@FinderCameraNewImageAsync,0);
@@ -16304,9 +16366,9 @@ var tmpbmp:TBGRABitmap;
     dmin,dmax: integer;
 begin
 if (finderfits.HeaderInfo.naxis>0) and finderfits.ImageValid then begin
-  finderfits.Gamma:=0.5; //f_finder.Gamma.Position/100;
+  finderfits.Gamma:=f_finder.Gamma.Position/100;
   dmin:=round(max(0,finderfits.HeaderInfo.dmin));
-  dmax:=min(MAXWORD,round(max(dmin+1,finderfits.HeaderInfo.dmax*{f_finder.Luminosity.Position}50/100)));
+  dmax:=min(MAXWORD,round(max(dmin+1,finderfits.HeaderInfo.dmax*f_finder.Luminosity.Position/100)));
   finderfits.VisuMax:=dmax;
   finderfits.VisuMin:=dmin;
   finderfits.MaxADU:=MaxADU;
@@ -16418,6 +16480,87 @@ try
   ImageFinder.Canvas.Font.Size:=DoScaleX(16);
   ImageFinder.Canvas.TextOut(1, 1, rsFinderCamera);
 except
+end;
+end;
+
+procedure Tf_main.ImageFinderMouseDown(Sender: TObject; Button: TMouseButton;
+  Shift: TShiftState; X, Y: Integer);
+begin
+if Shift=[ssLeft] then begin
+  if (FinderImgZoom>0) then begin
+     FinderMx:=X;
+     FinderMy:=y;
+     FinderMouseMoving:=true;
+     screen.Cursor:=crHandPoint;
+  end;
+end
+else if (ssCtrl in Shift) then begin
+  if (FinderImgZoom>0) then begin
+     FinderMx:=X;
+     FinderMy:=y;
+     FinderMouseMoving:=true;
+     screen.Cursor:=crHandPoint;
+  end;
+end;
+end;
+
+procedure Tf_main.ImageFinderMouseMove(Sender: TObject; Shift: TShiftState; X,
+  Y: Integer);
+begin
+ if FinderMouseMoving and finderfits.HeaderInfo.valid and finderfits.ImageValid then begin
+    FinderImgCx:=FinderImgCx + (X-FinderMx) / FinderImgZoom;
+    FinderImgCy:=FinderImgCy + (Y-FinderMy) / FinderImgZoom;
+    FinderPlotTimer.Enabled:=true;
+ end
+ else if (finderfits.HeaderInfo.naxis1>0)and(FinderImgScale0<>0) and finderfits.ImageValid then begin
+    //FinderMeasureTimer.Enabled:=true;
+ end;
+FinderMx:=X;
+FinderMy:=Y;
+end;
+
+procedure Tf_main.ImageFinderMouseUp(Sender: TObject; Button: TMouseButton;
+  Shift: TShiftState; X, Y: Integer);
+begin
+if FinderMouseMoving and finderfits.HeaderInfo.valid and finderfits.ImageValid then begin
+    FinderImgCx:=FinderImgCx + (X-FinderMx) / FinderImgZoom;
+    FinderImgCy:=FinderImgCy + (Y-FinderMy) / FinderImgZoom;
+    PlotFinderImage;
+    FinderMx:=X;
+    FinderMy:=Y;
+end;
+FinderMouseMoving:=false;
+screen.Cursor:=crDefault;
+end;
+
+procedure Tf_main.ImageFinderMouseWheel(Sender: TObject; Shift: TShiftState;
+  WheelDelta: Integer; MousePos: TPoint; var Handled: Boolean);
+var
+  zf,r1,r2: double;
+begin
+if (finderfits.HeaderInfo.naxis>0) and finderfits.ImageValid then begin
+  if LockFinderMouseWheel then
+    exit;
+  LockFinderMouseWheel := True;
+  try
+    handled := True;
+    if wheeldelta > 0 then
+      zf := 1.25
+    else
+      zf := 0.8;
+    if FinderImgZoom=0 then begin
+      r1:=ScrFinderBmp.Width/ImaFinderBmp.Width;
+      r2:=ScrFinderBmp.Height/ImaFinderBmp.Height;
+      FinderImgZoom:=minvalue([r1,r2]);
+    end;
+    FinderImgZoom:=FinderImgZoom*zf;
+    if FinderImgZoom>FinderZoomMax then FinderImgZoom:=FinderZoomMax;
+    if FinderImgZoom<FinderZoomMin then FinderImgZoom:=FinderZoomMin;
+    PlotFinderImage;
+    if GetCurrentThreadId=MainThreadID then Application.ProcessMessages;
+  finally
+    LockFinderMouseWheel := False;
+  end;
 end;
 end;
 

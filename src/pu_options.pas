@@ -38,6 +38,8 @@ type
     ButtonSeqDir: TButton;
     ButtonLogDir: TButton;
     CdCPath: TEdit;
+    AstrometryCamera: TComboBox;
+    Label165: TLabel;
     MeridianFlipUseSetPierSide: TCheckBox;
     Label161: TLabel;
     Label164: TLabel;

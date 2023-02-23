@@ -289,6 +289,7 @@ const
   WaitResponseTime=120;
   ZoomMax=15;
   GuideZoomMax=15;
+  FinderZoomMax=15;
   msgOK = 'OK!';
   msgFailed = 'Failed!';
   ldeg = 'd';
