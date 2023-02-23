@@ -1,10 +1,10 @@
 object f_finder: Tf_finder
   Left = 0
-  Height = 281
+  Height = 326
   Top = 0
   Width = 243
   AutoSize = True
-  ClientHeight = 281
+  ClientHeight = 326
   ClientWidth = 243
   ParentFont = False
   TabOrder = 0
@@ -29,12 +29,12 @@ object f_finder: Tf_finder
   end
   object Panel1: TPanel
     Left = 0
-    Height = 108
+    Height = 172
     Top = 20
     Width = 243
     Align = alTop
     BevelOuter = bvNone
-    ClientHeight = 108
+    ClientHeight = 172
     ClientWidth = 243
     ParentFont = False
     TabOrder = 0
@@ -58,43 +58,64 @@ object f_finder: Tf_finder
       ParentFont = False
       TabOrder = 1
     end
-    object Label1: TLabel
-      AnchorSideTop.Side = asrCenter
-      Left = 16
-      Height = 19
-      Top = 46
-      Width = 49
-      Caption = 'Offset X'
-      ParentColor = False
-    end
-    object Label2: TLabel
-      AnchorSideTop.Side = asrCenter
-      Left = 16
-      Height = 19
-      Top = 78
-      Width = 49
-      Caption = 'Offset Y'
-      ParentColor = False
-    end
-    object OffsetX: TFloatSpinEdit
-      Left = 104
-      Height = 29
-      Top = 40
-      Width = 111
+    object GroupBox1: TGroupBox
+      Left = 0
+      Height = 128
+      Top = 44
+      Width = 243
+      Align = alBottom
+      Caption = 'Calibration result'
+      ClientHeight = 108
+      ClientWidth = 241
       TabOrder = 2
-    end
-    object OffsetY: TFloatSpinEdit
-      Left = 104
-      Height = 29
-      Top = 72
-      Width = 111
-      TabOrder = 3
+      object Label1: TLabel
+        AnchorSideTop.Side = asrCenter
+        Left = 21
+        Height = 19
+        Top = 8
+        Width = 49
+        Caption = 'Offset X'
+        ParentColor = False
+      end
+      object OffsetX: TFloatSpinEdit
+        Left = 109
+        Height = 29
+        Top = 8
+        Width = 111
+        ReadOnly = True
+        TabOrder = 0
+      end
+      object Label2: TLabel
+        AnchorSideTop.Side = asrCenter
+        Left = 21
+        Height = 19
+        Top = 46
+        Width = 49
+        Caption = 'Offset Y'
+        ParentColor = False
+      end
+      object OffsetY: TFloatSpinEdit
+        Left = 109
+        Height = 29
+        Top = 40
+        Width = 111
+        ReadOnly = True
+        TabOrder = 1
+      end
+      object Label3: TLabel
+        Left = 21
+        Height = 19
+        Top = 79
+        Width = 41
+        Caption = 'Label3'
+        ParentColor = False
+      end
     end
   end
   object Panel8: TPanel
     Left = 0
     Height = 144
-    Top = 128
+    Top = 192
     Width = 243
     Align = alTop
     BevelOuter = bvNone

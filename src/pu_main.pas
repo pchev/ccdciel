@@ -4573,8 +4573,8 @@ begin
 
   astrometry.FinderOffsetX:=config.GetValue('/Finder/OffsetX',0.0);
   astrometry.FinderOffsetY:=config.GetValue('/Finder/OffsetY',0.0);
-  f_finder.OffsetX.Value:=astrometry.FinderOffsetX;
-  f_finder.OffsetY.Value:=astrometry.FinderOffsetY;
+  astrometry.FinderOffsetPierSide:=TPierSide(config.GetValue('/Finder/OffsetPierSide',2));
+  f_finder.ShowCalibration;
 
   astrometryResolver:=config.GetValue('/Astrometry/Resolver',ResolverAstap);
   AstrometryTimeout:=config.GetValue('/Astrometry/Timeout',30.0);
@@ -5124,6 +5124,7 @@ begin
   // finder offset need to be saved at the same time
   config.SetValue('/Finder/OffsetX',astrometry.FinderOffsetX);
   config.SetValue('/Finder/OffsetY',astrometry.FinderOffsetY);
+  config.SetValue('/Finder/OffsetPierSide',ord(astrometry.FinderOffsetPierSide));
 end;
 
 procedure Tf_main.SaveConfig;

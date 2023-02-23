@@ -25,7 +25,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 interface
 
-uses  UScaleDPI, u_global, Graphics, Dialogs, u_translation, cu_mount, cu_camera, cu_astrometry, pu_findercalibration,
+uses  UScaleDPI, u_global, Graphics, Dialogs, u_translation, cu_mount, indiapi, cu_camera, cu_astrometry, pu_findercalibration,
   Classes, SysUtils, FileUtil, Forms, Controls, StdCtrls, ExtCtrls, ComCtrls, Spin, Buttons;
 
 type
@@ -39,6 +39,8 @@ type
     BtnZoomAdjust: TSpeedButton;
     Button1: TButton;
     ButtonCalibrate: TButton;
+    GroupBox1: TGroupBox;
+    Label3: TLabel;
     OffsetX: TFloatSpinEdit;
     Gamma: TTrackBar;
     Label1: TLabel;
@@ -70,6 +72,7 @@ type
     constructor Create(aOwner: TComponent); override;
     destructor  Destroy; override;
     procedure SetLang;
+    procedure ShowCalibration;
     property Mount: T_mount read FMount write FMount;
     property Camera: T_camera read FCamera write FCamera;
     property Astrometry: TAstrometry read FAstrometry write FAstrometry;
@@ -141,13 +144,23 @@ begin
     end;
     FAstrometry.SolveFinderImage;
     if FAstrometry.LastResult and FAstrometry.GetFinderOffset(ra2000,de2000) then begin
-      OffsetX.Value:=FAstrometry.FinderOffsetX;
-      OffsetY.Value:=FAstrometry.FinderOffsetY;
+      ShowCalibration;
     end
     else begin
       msg('Calibration failed',1);
     end;
 
+  end;
+end;
+
+procedure Tf_finder.ShowCalibration;
+begin
+  OffsetX.Value:=FAstrometry.FinderOffsetX;
+  OffsetY.Value:=FAstrometry.FinderOffsetY;
+  case FAstrometry.FinderOffsetPierSide of
+    pierEast: label3.Caption:=rsCalibration+': '+rsEastPointing;
+    pierWest: label3.Caption:=rsCalibration+': '+rsWestPointing;
+    pierUnknown: label3.Caption:=rsCalibration+': '+rsUnknowPierSi;
   end;
 end;
 
