@@ -8810,6 +8810,13 @@ begin
    if not WantFinderCamera then i:=0;
    f_option.AstrometryCamera.ItemIndex:=i;
    f_option.AstrometryCamera.Enabled:=WantFinderCamera;
+   f_option.SlewFilter.Items.Assign(FilterList);
+   i:=config.GetValue('/PrecSlew/Filter',0);
+   if f_option.AstrometryCamera.ItemIndex=0 then
+      f_option.SlewFilter.ItemIndex:=i
+   else
+      f_option.SlewFilter.ItemIndex:=0;
+   f_option.SlewFilter.Enabled:=f_option.AstrometryCamera.ItemIndex=0;
    if hasGainISO then
      f_option.SlewISObox.ItemIndex:=config.GetValue('/PrecSlew/Gain',f_preview.ISObox.ItemIndex)
    else
@@ -8821,8 +8828,6 @@ begin
    else
        f_option.SlewBin.MaxValue:=9;
    f_option.SlewDelay.Value:=config.GetValue('/PrecSlew/Delay',5);
-   f_option.SlewFilter.Items.Assign(FilterList);
-   f_option.SlewFilter.ItemIndex:=config.GetValue('/PrecSlew/Filter',0);
    f_option.RecenterTargetDistance.value:=config.GetValue('/PrecSlew/RecenterTargetDistance',RecenterTargetDistance);
    if (mount.Status=devConnected)and(mount.PierSide=pierUnknown) then begin
       f_option.Panel13.Visible:=true;
@@ -11442,6 +11447,7 @@ begin
   if f_preview.Loop then f_preview.BtnLoopClick(nil);
   f_polaralign.Mount:=mount;
   f_polaralign.Camera:=astrometrycamera;
+  f_polaralign.Fits:=astrometrycamera.Fits;
   f_polaralign.Wheel:=wheel;
   pt.x:=-f_polaralign.Width-8;
   pt.y:=PanelCenter.top;
@@ -11474,6 +11480,7 @@ begin
   f_polaralign2.Mount:=mount;
   f_polaralign2.Wheel:=wheel;
   f_polaralign2.Camera:=astrometrycamera;
+  f_polaralign2.Fits:=astrometrycamera.Fits;
   pt.x:=-f_polaralign2.Width-8;
   pt.y:=PanelCenter.top;
   pt:=ClientToScreen(pt);

@@ -4315,6 +4315,7 @@ object f_option: Tf_option
                 'Main camera'
                 'Finder camera'
               )
+              OnChange = AstrometryCameraChange
               Style = csDropDownList
               TabOrder = 1
               Text = 'Main camera'

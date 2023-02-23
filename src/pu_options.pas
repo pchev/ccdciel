@@ -706,6 +706,7 @@ type
     Panel1: TPanel;
     RefTreshold: TTrackBar;
     procedure ASTAPadvancedClick(Sender: TObject);
+    procedure AstrometryCameraChange(Sender: TObject);
     procedure AstUseScriptClick(Sender: TObject);
     procedure AutofocusExpTimeChange(Sender: TObject);
     procedure AutofocusmodeClick(Sender: TObject);
@@ -1927,6 +1928,12 @@ begin
    cmd:=slash(ASTAPFolder.Directory)+'astap -debug';
  {$endif}
  ExecNoWait(cmd,'',false);
+end;
+
+procedure Tf_option.AstrometryCameraChange(Sender: TObject);
+begin
+  if AstrometryCamera.ItemIndex>0 then SlewFilter.ItemIndex:=0;
+  SlewFilter.Enabled:=AstrometryCamera.ItemIndex=0;
 end;
 
 procedure Tf_option.AutofocusExpTimeChange(Sender: TObject);
