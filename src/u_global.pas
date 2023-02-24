@@ -385,6 +385,7 @@ var
   ReadoutModeCapture,ReadoutModePreview,ReadoutModeFocus,ReadoutModeAstrometry: integer;
   UseReadoutMode: boolean;
   compile_time, compile_version, compile_system, lclver: string;
+  WCSxyNrot,WCSxyErot,WCScenterRA,WCScenterDEC,WCSpoleX,WCSpoleY,WCSwidth,WCSheight: double;
   DitherPixel, SettlePixel, DitherWaitTime: double;
   DitherRAonly: boolean;
   SettleMinTime, SettleMaxTime, CalibrationDelay: integer;

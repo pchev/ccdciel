@@ -1,10 +1,10 @@
 object f_finder: Tf_finder
   Left = 0
-  Height = 326
+  Height = 341
   Top = 0
   Width = 243
   AutoSize = True
-  ClientHeight = 326
+  ClientHeight = 341
   ClientWidth = 243
   ParentFont = False
   TabOrder = 0
@@ -73,8 +73,8 @@ object f_finder: Tf_finder
         Left = 21
         Height = 19
         Top = 8
-        Width = 49
-        Caption = 'Offset X'
+        Width = 40
+        Caption = 'Pixel X'
         ParentColor = False
       end
       object OffsetX: TFloatSpinEdit
@@ -90,8 +90,8 @@ object f_finder: Tf_finder
         Left = 21
         Height = 19
         Top = 46
-        Width = 49
-        Caption = 'Offset Y'
+        Width = 40
+        Caption = 'Pixel Y'
         ParentColor = False
       end
       object OffsetY: TFloatSpinEdit

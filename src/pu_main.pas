@@ -604,7 +604,6 @@ type
     reffile: string;
     refbmp:TBGRABitmap;
     cdcWCSinfo: TcdcWCSinfo;
-    WCSxyNrot,WCSxyErot,WCScenterRA,WCScenterDEC,WCSpoleX,WCSpoleY,WCSwidth,WCSheight: double;
     Annotate: boolean;
     SaveFocusZoom,ImgCx, ImgCy: double;
     Mx, My, PolX, PolY: integer;
