@@ -6,15 +6,15 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ccdciel\n"
 "Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
-"POT-Creation-Date: 2023-02-04 09:42+0000\n"
-"PO-Revision-Date: 2022-09-05 17:09+0000\n"
+"POT-Creation-Date: 2023-02-24 15:18+0000\n"
+"PO-Revision-Date: 2023-02-11 17:46+0000\n"
 "Last-Translator: Sergey Tarantsov <tsn-ast@yandex.ru>\n"
 "Language-Team: Russian <ru@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2023-02-10 14:20+0000\n"
-"X-Generator: Launchpad (build 76fbbe3960b74b1bf6aa937d9f415c99a6b083f0)\n"
+"X-Launchpad-Export-Date: 2023-02-24 15:24+0000\n"
+"X-Generator: Launchpad (build b826c8bc42f0c41016fa141bf50faee47f7ecd80)\n"
 
 #: u_hints.rsactivateback
 #, object-pascal-format
@@ -160,7 +160,7 @@ msgstr "Изменить текущуее задание"
 
 #: u_hints.rsflatprocessi
 msgid "Flat processing also require a Dark"
-msgstr ""
+msgstr "Применение флета также требует дарк"
 
 #: u_hints.rsgammaoftheim
 msgid "Gamma of the image display"
@@ -321,7 +321,7 @@ msgstr "Установить время остановки на астроном
 
 #: u_hints.rssetthetemper
 msgid "Set the temperature threshold in the Preferences"
-msgstr ""
+msgstr "Установите порог температуры в настройках"
 
 #: u_hints.rsshowbullseye
 msgid "Show bulls eye"
@@ -519,6 +519,10 @@ msgstr "Путь Unix, эквивалентный папке Elbrus Images."
 #: u_hints.rsthisallowtor
 msgid "This allow to restart an interrupted sequence at the point it was stopped"
 msgstr "Позволяет перезапустить прерванное задание с того места, где оно было остановлено"
+
+#: u_hints.rsthisoptionis
+msgid "This option is normally unchecked, use it only if you manage the pointing and autoguiding by script."
+msgstr ""
 
 #: u_hints.rstimefrommeri
 msgid "Time from meridian transit (hour angle)"

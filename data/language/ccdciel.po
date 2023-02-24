@@ -346,6 +346,10 @@ msgstr ""
 msgid "Guide camera"
 msgstr ""
 
+#: u_translation:rsfindercamera
+msgid "Finder camera"
+msgstr ""
+
 #: u_translation:rsfilterwheel
 msgid "Filter wheel"
 msgstr ""
@@ -5354,16 +5358,24 @@ msgstr ""
 msgid "Option 1: Calibration at current position."
 msgstr ""
 
-#: u_translation:rsoption2slewa
-msgid "Option 2: Slew automatically to SSE and SSW for calibration and setting \"Reverse dec output after meridian flip\"."
+#: u_translation:rsoption2calib
+msgid "Option 2: Special calibration at current position for some mounts which reverse declination pulse guiding after the meridian flip."
 msgstr ""
 
-#: u_translation:rsoption3cance
-msgid "Option 3: Cancel."
+#: u_translation:rsoption3backl
+msgid "Option 3: Calibrate backlash compensation."
+msgstr ""
+
+#: u_translation:rsoption4cance
+msgid "Option 4: Cancel."
 msgstr ""
 
 #: u_translation:rscalibration
 msgid "Calibration"
+msgstr ""
+
+#: u_translation:rscalibration2
+msgid "Special calibration"
 msgstr ""
 
 #: u_translation:rsguidercalibr
@@ -5476,5 +5488,49 @@ msgstr ""
 
 #: u_translation:rsautofocusaft2
 msgid "Autofocus after temperature change"
+msgstr ""
+
+#: u_translation:rsbacklashcali
+msgid "Backlash calibration"
+msgstr ""
+
+#: u_translation:rsdonotchangea
+msgid "Do not change autoguiding state"
+msgstr ""
+
+#: u_translation:rsusefindercam
+msgid "Use finder camera"
+msgstr ""
+
+#: u_translation:rsusethisdevic
+msgid "Use this device if the main camera cannot be used for plate solving. Also configure the camera to use in Preferences/Slewing"
+msgstr ""
+
+#: u_translation:rsfind
+msgid "Find."
+msgstr ""
+
+#: u_translation:rsenterthej200
+msgid "Enter the J2000 coordinates where the main camera is actually pointing"
+msgstr ""
+
+#: u_translation:rsgetfrommaini
+msgid "Get from main image"
+msgstr ""
+
+#: u_translation:rssolvedimage
+msgid "Solved image"
+msgstr ""
+
+#: u_translation:rsnewfindercal
+msgid "New finder calibration is successful"
+msgstr ""
+
+#: u_translation:rsmainimagecen
+msgid "Main image center is at finder image X=%s, Y=%s"
+msgstr ""
+
+#: u_translation:rsmaincamera
+msgid "Main camera"
 msgstr ""
 

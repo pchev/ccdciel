@@ -41,14 +41,15 @@ object f_finder: Tf_finder
     object Button1: TButton
       Left = 16
       Height = 25
+      Hint = 'Exposure time and other parameters are set in Preferences / Slewing'
       Top = 8
-      Width = 75
-      Caption = 'Exposure'
+      Width = 104
+      Caption = 'Preview'
       OnClick = Button1Click
       TabOrder = 0
     end
     object ButtonCalibrate: TButton
-      Left = 104
+      Left = 145
       Height = 25
       Hint = 'Calibrates the guider. Results will be written to tab advanced.'
       Top = 8
@@ -139,6 +140,7 @@ object f_finder: Tf_finder
       Width = 111
       Max = 100
       Min = 1
+      OnChange = GammaChange
       PageSize = 10
       Position = 50
       Reversed = True
@@ -162,6 +164,7 @@ object f_finder: Tf_finder
       Width = 111
       Max = 100
       Min = 1
+      OnChange = LuminosityChange
       PageSize = 10
       Position = 50
       Reversed = True

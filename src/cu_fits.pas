@@ -149,7 +149,7 @@ type
     Fbpm: TBpm;
     FBPMcount,FBPMnx,FBPMny,FBPMnax: integer;
     gamma_c : array[0..32768] of single; {prepared power values for gamma correction}
-    FGamma: single;
+    FGamma: double;
     emptybmp:Tbitmap;
     FMarkOverflow,FDisableBayer: boolean;
     FMaxADU, FOverflow, FUnderflow: double;
@@ -174,7 +174,7 @@ type
     procedure ApplyBPM;
     procedure ApplyDark;
     procedure ApplyFlat;
-    procedure SetGamma(value: single);
+    procedure SetGamma(value: double);
     function GetBayerMode: TBayerMode;
     procedure GetBayerBgColor(t:TBayerMode; rmult,gmult,bmult:double; out r,g,b: single);
     procedure SetMaxADU(value: double);
@@ -231,7 +231,7 @@ type
      property Histogram : THistogram read FHistogram;
      property VisuMin : Word read FVisuMin write FVisuMin;
      property VisuMax : Word read FVisuMax write FVisuMax;
-     property Gamma: single read FGamma write SetGamma;
+     property Gamma: double read FGamma write SetGamma;
      property ImageValid: boolean read FImageValid;
      property image : Timafloat read Fimage;
      property imageC : double read FimageC;
@@ -2300,7 +2300,7 @@ begin
   if FInvert then result:=255-result;
 end;
 
-procedure TFits.SetGamma(value: single);
+procedure TFits.SetGamma(value: double);
 var
   i: integer;
 begin

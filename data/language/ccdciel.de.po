@@ -6,15 +6,15 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ccdciel\n"
 "Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
-"POT-Creation-Date: 2023-02-04 09:42+0000\n"
+"POT-Creation-Date: 2023-02-24 15:18+0000\n"
 "PO-Revision-Date: 2023-01-29 19:00+0000\n"
 "Last-Translator: Thomas <email@starhopper.de>\n"
 "Language-Team: German <de@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2023-02-10 14:20+0000\n"
-"X-Generator: Launchpad (build 76fbbe3960b74b1bf6aa937d9f415c99a6b083f0)\n"
+"X-Launchpad-Export-Date: 2023-02-24 15:24+0000\n"
+"X-Generator: Launchpad (build b826c8bc42f0c41016fa141bf50faee47f7ecd80)\n"
 
 #: u_translation.rs2d
 msgid "2D"
@@ -508,6 +508,10 @@ msgstr "Hintergrund"
 msgid "Background neutralization"
 msgstr "Hintergrund neutralisieren"
 
+#: u_translation.rsbacklashcali
+msgid "Backlash calibration"
+msgstr ""
+
 #: u_translation.rsbacklashcomp
 msgid "Backlash compensation"
 msgstr "Getriebespielausgleich"
@@ -605,6 +609,10 @@ msgstr "Kalibriert"
 #: u_translation.rscalibration
 msgid "Calibration"
 msgstr "Kalibrierung"
+
+#: u_translation.rscalibration2
+msgid "Special calibration"
+msgstr ""
 
 #: u_translation.rscalibrationd
 #, object-pascal-format
@@ -1418,6 +1426,10 @@ msgstr "Kuppel Kopplung: %s"
 msgid "done"
 msgstr "erledigt"
 
+#: u_translation.rsdonotchangea
+msgid "Do not change autoguiding state"
+msgstr ""
+
 #: u_translation.rsdonotdisplay
 msgid "Do not display images during capture"
 msgstr "Keine Bildwiedergabe während der Aufnahme"
@@ -1545,6 +1557,10 @@ msgstr "Vorschau beenden"
 #: u_translation.rsendtime
 msgid "End time"
 msgstr "Ende"
+
+#: u_translation.rsenterthej200
+msgid "Enter the J2000 coordinates where the main camera is actually pointing"
+msgstr ""
 
 #: u_translation.rserror
 #, object-pascal-format
@@ -1726,6 +1742,14 @@ msgstr "Filterrad"
 #: u_translation.rsfinalmovemen
 msgid "Final movement (steps)"
 msgstr "Finale Bewegung (Schritte)"
+
+#: u_translation.rsfind
+msgid "Find."
+msgstr ""
+
+#: u_translation.rsfindercamera
+msgid "Finder camera"
+msgstr ""
 
 #: u_translation.rsfit
 msgid "Fit"
@@ -2017,6 +2041,10 @@ msgstr "Position von letzter Aufnahme ermitteln"
 #: u_translation.rsgetcurrentpo3
 msgid "Get current position from telescope"
 msgstr "Aktuelle Position vom Teleskop abrufen"
+
+#: u_translation.rsgetfrommaini
+msgid "Get from main image"
+msgstr ""
 
 #: u_translation.rsgetsitelongl
 msgid "Get site long/lat from the mount"
@@ -2453,6 +2481,15 @@ msgstr "Lupe"
 msgid "Magnitude"
 msgstr "Grössenklasse"
 
+#: u_translation.rsmaincamera
+msgid "Main camera"
+msgstr ""
+
+#: u_translation.rsmainimagecen
+#, object-pascal-format
+msgid "Main image center is at finder image X=%s, Y=%s"
+msgstr ""
+
 #: u_translation.rsmainsensor
 msgid "Main sensor"
 msgstr "Hauptsensor"
@@ -2869,6 +2906,10 @@ msgstr "Neu"
 msgid "New coordinates from planetarium: %s %s"
 msgstr "Neue Koordinaten vom Planetarium: %s %s"
 
+#: u_translation.rsnewfindercal
+msgid "New finder calibration is successful"
+msgstr ""
+
 #: u_translation.rsnewobject
 msgid "New object"
 msgstr "Neues Objekt"
@@ -3177,13 +3218,17 @@ msgstr "Öffne den Kuppelspalt"
 msgid "Option 1: Calibration at current position."
 msgstr "Option1: Kalibration an der aktuellen Position"
 
-#: u_translation.rsoption2slewa
-msgid "Option 2: Slew automatically to SSE and SSW for calibration and setting \"Reverse dec output after meridian flip\"."
+#: u_translation.rsoption2calib
+msgid "Option 2: Special calibration at current position for some mounts which reverse declination pulse guiding after the meridian flip."
 msgstr ""
 
-#: u_translation.rsoption3cance
-msgid "Option 3: Cancel."
-msgstr "Option 3:  Abbruch"
+#: u_translation.rsoption3backl
+msgid "Option 3: Calibrate backlash compensation."
+msgstr ""
+
+#: u_translation.rsoption4cance
+msgid "Option 4: Cancel."
+msgstr ""
 
 #: u_translation.rsoptions
 #, object-pascal-format
@@ -4518,6 +4563,10 @@ msgstr "Socket error %s.  %s"
 msgid "Software"
 msgstr "Software"
 
+#: u_translation.rssolvedimage
+msgid "Solved image"
+msgstr ""
+
 #: u_translation.rssolvedinseco
 #, object-pascal-format
 msgid "Solved in %s seconds"
@@ -5416,6 +5465,10 @@ msgstr "Benutze externes Kommando um das Panel ein/auszuschalten"
 msgid "Use filter wheel"
 msgstr "Benutze Filterrad"
 
+#: u_translation.rsusefindercam
+msgid "Use finder camera"
+msgstr ""
+
 #: u_translation.rsuseflatautom
 msgid "Use flat automatic exposure"
 msgstr "Automatisch Belichtung der Flats"
@@ -5459,6 +5512,10 @@ msgstr "Verwende bestimmte Auslesemodi für spezielle Aktionen"
 #: u_translation.rsuseswitch
 msgid "Use switch"
 msgstr "Benutze Schalter"
+
+#: u_translation.rsusethisdevic
+msgid "Use this device if the main camera cannot be used for plate solving. Also configure the camera to use in Preferences/Slewing"
+msgstr ""
 
 #: u_translation.rsusewatchdog
 msgid "Use watchdog"

@@ -16369,6 +16369,8 @@ begin
   if LockFinderTimerPlot then exit;
   LockFinderTimerPlot:=true;
   FinderPlotTimer.Enabled:=false;
+  if (finderfits.Gamma<>(f_finder.Gamma.Position/100))or(finderfits.VisuMax<>(min(MAXWORD,round(max(finderfits.VisuMin+1,finderfits.HeaderInfo.dmax*f_finder.Luminosity.Position/100))))) then
+    DrawFinderImage(true);
   PlotFinderImage;
   LockFinderTimerPlot:=false;
 end;

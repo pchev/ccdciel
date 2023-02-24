@@ -1443,7 +1443,7 @@ resourcestring
   rsTimeInARow = 'time in a row';
   rsSelectACalib = 'Select a calibration option:';
   rsOption1Calib = 'Option 1: Calibration at current position.';
-  rsOption2Calib = 'Option 2: Special calibration at current position for some mounts which reverse δ pulse guiding after the meridian flip.';
+  rsOption2Calib = 'Option 2: Special calibration at current position for some mounts which reverse declination pulse guiding after the meridian flip.';
   rsOption3Backl = 'Option 3: Calibrate backlash compensation.';
   rsOption4Cance = 'Option 4: Cancel.';
   rsCalibration = 'Calibration';
@@ -1479,8 +1479,14 @@ resourcestring
   rsBacklashCali = 'Backlash calibration';
   rsDoNotChangeA = 'Do not change autoguiding state';
   rsUseFinderCam = 'Use finder camera';
-  rsUseThisDevic = 'Use this device if the main or the guider camera cannot be used for plate solving. Also configure the camera to use in Preferences/Slewing';
+  rsUseThisDevic = 'Use this device if the main camera cannot be used for plate solving. Also configure the camera to use in Preferences/Slewing';
   rsFind = 'Find.';
+  rsEnterTheJ200 = 'Enter the J2000 coordinates where the main camera is actually pointing';
+  rsGetFromMainI = 'Get from main image';
+  rsSolvedImage = 'Solved image';
+  rsNewFinderCal = 'New finder calibration is successful';
+  rsMainImageCen = 'Main image center is at finder image X=%s, Y=%s';
+  rsMainCamera = 'Main camera';
 
 implementation
 

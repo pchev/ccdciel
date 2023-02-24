@@ -1205,6 +1205,9 @@ begin
   LabelOffset1.Caption:=rsOffset2;
   Label31.Caption := rsBinning;
   Label32.Caption := rsControlExpos;
+  Label165.Caption:=rsCamera;
+  AstrometryCamera.Items[0]:=rsMainCamera;
+  AstrometryCamera.Items[1]:=rsFinderCamera;
   PrecSlewBox.Caption := rsCorrectionMe;
   Label66.Caption := rsFilter;
   Label87.Caption := rsDelayAfterTe;

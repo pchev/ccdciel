@@ -4,7 +4,7 @@ unit pu_findercalibration;
 
 interface
 
-uses u_utils, u_global, u_annotation,
+uses u_utils, u_global, u_annotation, UScaleDPI, u_translation,
   Classes, SysUtils, Forms, Controls, Graphics, Dialogs, StdCtrls, ExtCtrls;
 
 type
@@ -31,12 +31,14 @@ type
     PanelBottom: TPanel;
     procedure BtnSearchClick(Sender: TObject);
     procedure Button3Click(Sender: TObject);
+    procedure FormCreate(Sender: TObject);
   private
     procedure SetRA(value: double);
     procedure SetDE(value: double);
     function  GetRA: double;
     function  GetDE: double;
   public
+    procedure SetLang;
     property RA: double read GetRa write SetRA;
     property DE: double read GetDE write SetDE;
   end;
@@ -47,6 +49,26 @@ var
 implementation
 
 {$R *.lfm}
+
+procedure Tf_findercalibration.FormCreate(Sender: TObject);
+begin
+  ScaleDPI(Self);
+  SetLang;
+end;
+
+procedure Tf_findercalibration.SetLang;
+begin
+  Caption:=rsCalibration;
+  label3.Caption:=rsEnterTheJ200;
+  label1.Caption:=rsCenterRA;
+  label2.Caption:=rsCenterDec;
+  label5.Caption:=rsSolvedImage;
+  button3.Caption:=rsGetFromMainI;
+  label4.Caption:=rsObjectName;
+  BtnSearch.Caption:=rsSearch;
+  button1.Caption:=rsOK;
+  button2.Caption:=rsCancel;
+end;
 
 procedure Tf_findercalibration.BtnSearchClick(Sender: TObject);
 var ra0,dec0,length0,width0,pa : double;

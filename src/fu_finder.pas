@@ -59,6 +59,8 @@ type
     procedure BtnZoom2Click(Sender: TObject);
     procedure BtnZoomAdjustClick(Sender: TObject);
     procedure ButtonCalibrateClick(Sender: TObject);
+    procedure GammaChange(Sender: TObject);
+    procedure LuminosityChange(Sender: TObject);
   private
     { private declarations }
     FMount: T_mount;
@@ -106,6 +108,15 @@ end;
 procedure Tf_finder.SetLang;
 begin
   Title.Caption:=rsFinderCamera;
+  button1.Caption:=rsPreview;
+  ButtonCalibrate.Caption:=rsCalibrate;
+  groupbox1.Caption:=rsCalibrationR;
+  label1.Caption:='X '+rsPixel;
+  label2.Caption:='Y '+rsPixel;
+  label3.Caption:='';
+  label17.Caption:=rsGamma;
+  label18.Caption:=rsLuminosity;
+  label19.Caption:=rsZoom;
 end;
 
 procedure Tf_finder.msg(txt:string; level: integer);
@@ -121,9 +132,11 @@ begin
   sgain:=config.GetValue('/PrecSlew/Gain',NullInt);
   soffset:=config.GetValue('/PrecSlew/Offset',NullInt);
   bin:=config.GetValue('/PrecSlew/Binning',1);
-  if not Fcamera.ControlExposure(exp,bin,bin,LIGHT,ReadoutModeAstrometry,sgain,soffset) then begin
-    msg(rsExposureFail,0);
-    exit;
+  if Fcamera.ControlExposure(exp,bin,bin,LIGHT,ReadoutModeAstrometry,sgain,soffset) then begin
+    msg(rsFinderCamera+': '+rsEndPreview,0);
+  end
+  else begin
+    msg(rsFinderCamera+': '+rsExposureFail,0);
   end;
 end;
 
@@ -145,12 +158,25 @@ begin
     FAstrometry.SolveFinderImage;
     if FAstrometry.LastResult and FAstrometry.GetFinderOffset(ra2000,de2000) then begin
       ShowCalibration;
+      msg(rsNewFinderCal, 3);
+      msg(rsSideOfPier+': '+label3.Caption,3);
+      msg(Format(rsMainImageCen, [OffsetX.Text, OffsetY.Text]), 3);
     end
     else begin
       msg('Calibration failed',1);
     end;
 
   end;
+end;
+
+procedure Tf_finder.GammaChange(Sender: TObject);
+begin
+  if Assigned(FonRedraw) then FonRedraw(self);
+end;
+
+procedure Tf_finder.LuminosityChange(Sender: TObject);
+begin
+  if Assigned(FonRedraw) then FonRedraw(self);
 end;
 
 procedure Tf_finder.ShowCalibration;
