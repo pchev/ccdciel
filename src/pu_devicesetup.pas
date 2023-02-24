@@ -1379,20 +1379,20 @@ GuideCameraARestDevice.Value:=conf.GetValue('/ASCOMRestguidecamera/Device',0);
 CheckGuideDualChip;
 
 FinderCameraConnection:=TDevInterface(conf.GetValue('/FinderCameraInterface',ord(DefaultFinderCameraInterface)));
-FinderCameraIndiServer.Text:=conf.GetValue('/INDIFindercamera/Server','localhost');
-FinderCameraIndiPort.Text:=conf.GetValue('/INDIFindercamera/ServerPort','7624');
+FinderCameraIndiServer.Text:=conf.GetValue('/INDIfindercamera/Server','localhost');
+FinderCameraIndiPort.Text:=conf.GetValue('/INDIfindercamera/ServerPort','7624');
 if FinderCameraIndiDevice.Items.Count=0 then begin
-  FinderCameraIndiDevice.Items.Add(conf.GetValue('/INDIFindercamera/Device',''));
+  FinderCameraIndiDevice.Items.Add(conf.GetValue('/INDIfindercamera/Device',''));
   FinderCameraIndiDevice.ItemIndex:=0;
 end;
-FinderCameraIndiDevice.Text:=conf.GetValue('/INDIFindercamera/Device','');
-FinderCameraSensor:=conf.GetValue('/INDIFindercamera/Sensor','CCD1');
-FinderCameraAutoLoadConfig.Checked:=conf.GetValue('/INDIFindercamera/AutoLoadConfig',true);
-AscomFinderCamera.Text:=conf.GetValue('/ASCOMFindercamera/Device','');
-FinderCameraARestProtocol.ItemIndex:=conf.GetValue('/ASCOMRestFindercamera/Protocol',0);
-FinderCameraARestHost.Text:=conf.GetValue('/ASCOMRestFindercamera/Host','127.0.0.1');
-FinderCameraARestPort.Value:=conf.GetValue('/ASCOMRestFindercamera/Port',11111);
-FinderCameraARestDevice.Value:=conf.GetValue('/ASCOMRestFindercamera/Device',0);
+FinderCameraIndiDevice.Text:=conf.GetValue('/INDIfindercamera/Device','');
+FinderCameraSensor:=conf.GetValue('/INDIfindercamera/Sensor','CCD1');
+FinderCameraAutoLoadConfig.Checked:=conf.GetValue('/INDIfindercamera/AutoLoadConfig',true);
+AscomFinderCamera.Text:=conf.GetValue('/ASCOMfindercamera/Device','');
+FinderCameraARestProtocol.ItemIndex:=conf.GetValue('/ASCOMRestfindercamera/Protocol',0);
+FinderCameraARestHost.Text:=conf.GetValue('/ASCOMRestfindercamera/Host','127.0.0.1');
+FinderCameraARestPort.Value:=conf.GetValue('/ASCOMRestfindercamera/Port',11111);
+FinderCameraARestDevice.Value:=conf.GetValue('/ASCOMRestfindercamera/Device',0);
 CheckFinderDualChip;
 
 WheelConnection:=TDevInterface(conf.GetValue('/FilterWheelInterface',ord(DefaultWheelInterface)));
