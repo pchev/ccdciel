@@ -193,7 +193,7 @@ T_camera = class(TComponent)
   public
     constructor Create(AOwner: TComponent); override;
     destructor  Destroy; override;
-    function  ControlExposure(exp:double; pbinx,pbiny: integer; frmt:TFrameType; preadoutmode,pgain,poffset:integer):boolean;
+    function  ControlExposure(exp:double; pbinx,pbiny: integer; frmt:TFrameType; preadoutmode,pgain,poffset:integer; quiet:boolean=false):boolean;
     Procedure Connect(cp1: string; cp2:string=''; cp3:string=''; cp4:string=''; cp5:string=''; cp6:string=''); virtual; abstract;
     Procedure Disconnect; virtual; abstract;
     Procedure SetBinning(binX,binY: integer); virtual; abstract;
@@ -1057,16 +1057,18 @@ begin
   Ffits.GetFitsInfo;
 end;
 
-function T_camera.ControlExposure(exp:double; pbinx,pbiny: integer; frmt:TFrameType; preadoutmode,pgain,poffset:integer):boolean;
+function T_camera.ControlExposure(exp:double; pbinx,pbiny: integer; frmt:TFrameType; preadoutmode,pgain,poffset:integer; quiet:boolean=false):boolean;
 var SaveonNewImage: TNotifyEvent;
     endt: TDateTime;
 begin
 result:=false;
 if Status=devConnected then begin
-  if exp>=1 then
-    msg(Format(rsTakeControlE, [FormatFloat(f1, exp)]),3)
-  else
-    msg(Format(rsTakeControlE, [FormatFloat(f4, exp)]),3);
+  if not quiet then begin
+    if exp>=1 then
+      msg(Format(rsTakeControlE, [FormatFloat(f1, exp)]),3)
+    else
+      msg(Format(rsTakeControlE, [FormatFloat(f4, exp)]),3);
+  end;
   SaveonNewImage:=FonNewImage;
   onNewImage:=@EndExposure;
   // set readout first so it can be overridden by specific binning or gain
@@ -1099,7 +1101,7 @@ if Status=devConnected then begin
   result:=ControlExposureOK;
   onNewImage:=SaveonNewImage;
   if result and Assigned(SaveonNewImage) then SaveonNewImage(self);
-  Wait(1);
+  if not quiet then Wait(1);
 end;
 end;
 

@@ -67,7 +67,11 @@ type
     FAstrometry: TAstrometry;
     FonShowMessage: TNotifyMsg;
     FonRedraw: TNotifyEvent;
+    Loop: boolean;
+    LoopExp:double;
+    LoopBin,LoopGain,LoopOffset: integer;
     procedure msg(txt:string; level: integer);
+    procedure PreviewAsync(Data: PtrInt);
   public
     { public declarations }
     constructor Create(aOwner: TComponent); override;
@@ -96,6 +100,7 @@ begin
  {$endif}
  ScaleDPI(Self);
  SetLang;
+ Loop:=false;
 end;
 
 destructor  Tf_finder.Destroy;
@@ -106,7 +111,7 @@ end;
 procedure Tf_finder.SetLang;
 begin
   Title.Caption:=rsFinderCamera;
-  button1.Caption:=rsPreview;
+  button1.Caption:=rsLoop;
   ButtonCalibrate.Caption:=rsCalibrate;
   groupbox1.Caption:=rsCalibrationR;
   label1.Caption:='X '+rsPixel;
@@ -122,18 +127,36 @@ begin
 end;
 
 procedure Tf_finder.Button1Click(Sender: TObject);
-var exp:double;
-    bin,sgain,soffset: integer;
 begin
-  exp:=config.GetValue('/PrecSlew/Exposure',10.0);
-  sgain:=config.GetValue('/PrecSlew/Gain',NullInt);
-  soffset:=config.GetValue('/PrecSlew/Offset',NullInt);
-  bin:=config.GetValue('/PrecSlew/Binning',1);
-  if Fcamera.ControlExposure(exp,bin,bin,LIGHT,ReadoutModeAstrometry,sgain,soffset) then begin
-    msg(rsFinderCamera+': '+rsEndPreview,0);
+  Loop:=not Loop;
+  if Loop then begin
+    button1.Caption:=rsStopLoop;
+    LoopExp:=config.GetValue('/PrecSlew/Exposure',10.0);
+    LoopGain:=config.GetValue('/PrecSlew/Gain',NullInt);
+    LoopOffset:=config.GetValue('/PrecSlew/Offset',NullInt);
+    LoopBin:=config.GetValue('/PrecSlew/Binning',1);
+    Application.QueueAsyncCall(@PreviewAsync,0);
   end
   else begin
-    msg(rsFinderCamera+': '+rsExposureFail,0);
+    button1.Caption:=rsLoop;
+  end;
+end;
+
+procedure Tf_finder.PreviewAsync(Data: PtrInt);
+begin
+  if Loop then begin
+    if Fcamera.ControlExposure(LoopExp,LoopBin,LoopBin,LIGHT,ReadoutModeAstrometry,LoopGain,LoopOffset,true) then begin
+      Application.QueueAsyncCall(@PreviewAsync,0);
+    end
+    else begin
+      msg(rsFinderCamera+': '+rsExposureFail,0);
+      Loop:=false;
+      button1.Caption:=rsLoop;
+    end;
+  end
+  else begin
+     button1.Caption:=rsLoop;
+     msg(rsFinderCamera+': '+rsEndPreview,0);
   end;
 end;
 

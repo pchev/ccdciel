@@ -8811,7 +8811,7 @@ begin
    f_option.PrecSlewBox.ItemIndex:=config.GetValue('/PrecSlew/Method',0);
    f_option.SlewPrec.Value:=config.GetValue('/PrecSlew/Precision',SlewPrecision);
    f_option.SlewRetry.Value:=config.GetValue('/PrecSlew/Retry',3);
-   f_option.SlewExp.Value:=config.GetValue('/PrecSlew/Exposure',10);
+   f_option.SlewExp.Value:=config.GetValue('/PrecSlew/Exposure',10.0);
    i:=config.GetValue('/Astrometry/Camera',0);
    if i>(f_option.AstrometryCamera.Items.Count-1) then i:=0;
    if not WantFinderCamera then i:=0;
