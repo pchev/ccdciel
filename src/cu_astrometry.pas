@@ -50,7 +50,6 @@ TAstrometry = class(TComponent)
     logfile,solvefile,savefile: string;
     Xslew, Yslew: integer;
     FFinderOffsetX, FFinderOffsetY: double;
-    FFinderOffsetPierSide: TPierSide;
     AstrometryTimeout: double;
     TimerAstrometrySolve, TimerAstrometrySync, TimerAstrometrySlewScreenXY,TimerAstrometrySolveGuide : TTimer;
     procedure AstrometrySolveonTimer(Sender: TObject);
@@ -101,7 +100,6 @@ TAstrometry = class(TComponent)
     property visu:Tf_visu read Fvisu write Fvisu;
     property FinderOffsetX: double read FFinderOffsetX write FFinderOffsetX;
     property FinderOffsetY: double read FFinderOffsetY write FFinderOffsetY;
-    property FinderOffsetPierSide: TPierSide read FFinderOffsetPierSide write FFinderOffsetPierSide;
     property onShowMessage: TNotifyMsg read FonShowMessage write FonShowMessage;
     property onAstrometryStart: TNotifyEvent read FonStartAstrometry write FonStartAstrometry;
     property onAstrometryEnd: TNotifyEvent read FonEndAstrometry write FonEndAstrometry;
@@ -322,16 +320,8 @@ begin
   if cdcwcs_xy2sky<>nil then begin
     n:=cdcwcs_getinfo(addr(i),2);
     if (n=0)and(i.secpix<>0) then begin
-      if mount.PierSide=FFinderOffsetPierSide then begin
-        // same finder orientation
-        c.x:=FFinderOffsetX;
-        c.y:=FFinderOffsetY;
-      end
-      else begin
-        // finder rotated by 180°
-        c.x:=-FFinderOffsetX;
-        c.y:=-FFinderOffsetY;
-      end;
+      c.x:=FFinderOffsetX;
+      c.y:=FFinderOffsetY;
       m:=cdcwcs_xy2sky(@c,2); // do not check the result, can be out of frame
       cra:=c.ra/15;
       cde:=c.dec;
@@ -436,10 +426,9 @@ begin
   try
   c.ra:=15*ra2000;
   c.dec:=de2000;
-  n:=cdcwcs_sky2xy(@c,2);
+  n:=cdcwcs_sky2xy(@c,2); // do not check the result, can be out of frame
   FFinderOffsetX:=c.x;
   FFinderOffsetY:=c.y;
-  FFinderOffsetPierSide:=mount.PierSide;
   result:=true;
   except
   end;

@@ -2149,7 +2149,6 @@ begin
  end;
  if f_finder<>nil then begin
    f_finder.Camera:=findercamera;
-   f_finder.Mount:=mount;
  end;
 end;
 
@@ -4572,7 +4571,6 @@ begin
 
   astrometry.FinderOffsetX:=config.GetValue('/Finder/OffsetX',0.0);
   astrometry.FinderOffsetY:=config.GetValue('/Finder/OffsetY',0.0);
-  astrometry.FinderOffsetPierSide:=TPierSide(config.GetValue('/Finder/OffsetPierSide',2));
   f_finder.ShowCalibration;
 
   astrometryResolver:=config.GetValue('/Astrometry/Resolver',ResolverAstap);
@@ -5123,7 +5121,6 @@ begin
   // finder offset need to be saved at the same time
   config.SetValue('/Finder/OffsetX',astrometry.FinderOffsetX);
   config.SetValue('/Finder/OffsetY',astrometry.FinderOffsetY);
-  config.SetValue('/Finder/OffsetPierSide',ord(astrometry.FinderOffsetPierSide));
 end;
 
 procedure Tf_main.SaveConfig;

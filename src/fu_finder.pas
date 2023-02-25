@@ -25,7 +25,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 interface
 
-uses  UScaleDPI, u_global, Graphics, Dialogs, u_translation, cu_mount, indiapi, cu_camera, cu_astrometry, pu_findercalibration,
+uses  UScaleDPI, u_global, Graphics, Dialogs, u_translation, cu_camera, cu_astrometry, pu_findercalibration,
   Classes, SysUtils, FileUtil, Forms, Controls, StdCtrls, ExtCtrls, ComCtrls, Spin, Buttons;
 
 type
@@ -40,7 +40,6 @@ type
     Button1: TButton;
     ButtonCalibrate: TButton;
     GroupBox1: TGroupBox;
-    Label3: TLabel;
     OffsetX: TFloatSpinEdit;
     Gamma: TTrackBar;
     Label1: TLabel;
@@ -51,6 +50,7 @@ type
     Luminosity: TTrackBar;
     OffsetY: TFloatSpinEdit;
     Panel1: TPanel;
+    Panel2: TPanel;
     Panel8: TPanel;
     Title: TLabel;
     procedure Button1Click(Sender: TObject);
@@ -63,7 +63,6 @@ type
     procedure LuminosityChange(Sender: TObject);
   private
     { private declarations }
-    FMount: T_mount;
     FCamera: T_camera;
     FAstrometry: TAstrometry;
     FonShowMessage: TNotifyMsg;
@@ -75,7 +74,6 @@ type
     destructor  Destroy; override;
     procedure SetLang;
     procedure ShowCalibration;
-    property Mount: T_mount read FMount write FMount;
     property Camera: T_camera read FCamera write FCamera;
     property Astrometry: TAstrometry read FAstrometry write FAstrometry;
     property onShowMessage: TNotifyMsg read FonShowMessage write FonShowMessage;
@@ -113,7 +111,6 @@ begin
   groupbox1.Caption:=rsCalibrationR;
   label1.Caption:='X '+rsPixel;
   label2.Caption:='Y '+rsPixel;
-  label3.Caption:='';
   label17.Caption:=rsGamma;
   label18.Caption:=rsLuminosity;
   label19.Caption:=rsZoom;
@@ -159,7 +156,6 @@ begin
     if FAstrometry.LastResult and FAstrometry.GetFinderOffset(ra2000,de2000) then begin
       ShowCalibration;
       msg(rsNewFinderCal, 3);
-      msg(rsSideOfPier+': '+label3.Caption,3);
       msg(Format(rsMainImageCen, [OffsetX.Text, OffsetY.Text]), 3);
     end
     else begin
@@ -183,11 +179,6 @@ procedure Tf_finder.ShowCalibration;
 begin
   OffsetX.Value:=FAstrometry.FinderOffsetX;
   OffsetY.Value:=FAstrometry.FinderOffsetY;
-  case FAstrometry.FinderOffsetPierSide of
-    pierEast: label3.Caption:=rsCalibration+': '+rsEastPointing;
-    pierWest: label3.Caption:=rsCalibration+': '+rsWestPointing;
-    pierUnknown: label3.Caption:=rsCalibration+': '+rsUnknowPierSi;
-  end;
 end;
 
 procedure Tf_finder.BtnZoomAdjustClick(Sender: TObject);
