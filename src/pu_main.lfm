@@ -137,6 +137,7 @@ object f_main: Tf_main
         end
         object FinderImage: TTabSheet
           Caption = 'FinderImage'
+          PopupMenu = FinderPopUpmenu
         end
       end
     end
@@ -1842,5 +1843,37 @@ object f_main: Tf_main
     OnTimer = FinderPlotTimerTimer
     Left = 672
     Top = 472
+  end
+  object FinderPopUpmenu: TPopupMenu
+    Left = 304
+    Top = 472
+    object MenuItemFinderImage: TMenuItem
+      Caption = 'Finder Image'
+      Enabled = False
+    end
+    object Separator3: TMenuItem
+      Caption = '-'
+    end
+    object MenuItemFinderSaveImage: TMenuItem
+      Caption = 'Save finder image'
+      Hint = 'Saves the finder image as FITS'
+      OnClick = MenuItemFinderSaveImageClick
+    end
+    object MenuItemFinderViewHeader: TMenuItem
+      Caption = 'MenuItemFinderViewHeader'
+      OnClick = MenuItemFinderViewHeaderClick
+    end
+    object MenuItemFinderViewStatistics: TMenuItem
+      Caption = 'MenuItemFinderViewStatistics'
+      OnClick = MenuItemFinderViewStatisticsClick
+    end
+    object MenuItemFinderSolve: TMenuItem
+      Caption = 'MenuItemFinderSolve'
+      OnClick = MenuItemFinderSolveClick
+    end
+    object MenuItemFinderStopAstrometry: TMenuItem
+      Caption = 'MenuItemFinderStopAstrometry'
+      OnClick = MenuItemFinderStopAstrometryClick
+    end
   end
 end

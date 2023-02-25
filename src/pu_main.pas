@@ -80,6 +80,7 @@ type
     CameraConnectTimer: TTimer;
     FinderCameraConnectTimer: TTimer;
     FinderPlotTimer: TTimer;
+    FinderPopUpmenu: TPopupMenu;
     ImageListNight: TImageList;
     ImageListDay: TImageList;
     MainMenu1: TMainMenu;
@@ -143,6 +144,12 @@ type
     MenuAscomFinderCameraSetup: TMenuItem;
     MenuAlpacaFinderCameraSetup: TMenuItem;
     MenuFinder: TMenuItem;
+    MenuItemFinderImage: TMenuItem;
+    MenuItemFinderSaveImage: TMenuItem;
+    MenuItemFinderSolve: TMenuItem;
+    MenuItemFinderStopAstrometry: TMenuItem;
+    MenuItemFinderViewHeader: TMenuItem;
+    MenuItemFinderViewStatistics: TMenuItem;
     MenuTabFinder: TMenuItem;
     MenuViewFinder: TMenuItem;
     MenuItemFlat: TMenuItem;
@@ -224,6 +231,7 @@ type
     SaveDialogPicture: TSaveDialog;
     ScrollBox1: TScrollBox;
     Separator2: TMenuItem;
+    Separator3: TMenuItem;
     Splitter1: TSplitter;
     TabMsgLevel: TTabControl;
     PageInternalGuider: TTabSheet;
@@ -405,6 +413,11 @@ type
     procedure MenuFlatFileClick(Sender: TObject);
     procedure MenuInternalguiderStartClick(Sender: TObject);
     procedure MenuInternalGuiderStopClick(Sender: TObject);
+    procedure MenuItemFinderSaveImageClick(Sender: TObject);
+    procedure MenuItemFinderSolveClick(Sender: TObject);
+    procedure MenuItemFinderStopAstrometryClick(Sender: TObject);
+    procedure MenuItemFinderViewHeaderClick(Sender: TObject);
+    procedure MenuItemFinderViewStatisticsClick(Sender: TObject);
     procedure MenuItemGuiderSaveImageClick(Sender: TObject);
     procedure MenuItemGuiderSolveClick(Sender: TObject);
     procedure MenuItemGuiderViewHeaderClick(Sender: TObject);
@@ -2371,6 +2384,14 @@ begin
    MenuItemGuiderViewStatistics.Caption:=rsImageStatist;
    MenuItemGuiderSolve.Caption:=rsResolve;
    MenuItemGuiderStopAstrometry.Caption:=rsStopAstromet;
+
+   MenuItemFinderImage.Caption:=rsFinderCamera;
+   MenuItemFinderSaveImage.Caption:=Format(rsSaveFITSFile, [ellipsis]);
+   MenuItemFinderViewHeader.Caption:=rsViewHeader;
+   MenuItemFinderViewStatistics.Caption:=rsImageStatist;
+   MenuItemFinderSolve.Caption:=rsResolve;
+   MenuItemFinderStopAstrometry.Caption:=rsStopAstromet;
+
    SubDirName[0]:=rsSubfolderByS;
    SubDirName[1]:=rsSubfolderByF;
    SubDirName[2]:=rsSubfolderByO;
@@ -16592,6 +16613,56 @@ if (finderfits.HeaderInfo.naxis>0) and finderfits.ImageValid then begin
     LockFinderMouseWheel := False;
   end;
 end;
+end;
+
+procedure Tf_main.MenuItemFinderSaveImageClick(Sender: TObject);
+begin
+  if (finderfits.HeaderInfo.naxis>0) and finderfits.ImageValid then begin
+     if SaveDialogFits.Execute then begin
+        finderfits.SaveToFile(SaveDialogFits.FileName,false);
+     end;
+  end;
+end;
+
+procedure Tf_main.MenuItemFinderSolveClick(Sender: TObject);
+begin
+  if finderfits.HeaderInfo.valid then begin
+    if (not f_goto.CheckImageInfo(finderfits)) then exit;
+    astrometry.SolveFinderImage;
+  end;
+end;
+
+procedure Tf_main.MenuItemFinderStopAstrometryClick(Sender: TObject);
+begin
+  astrometry.StopAstrometry;
+end;
+
+procedure Tf_main.MenuItemFinderViewHeaderClick(Sender: TObject);
+var f: Tf_viewtext;
+begin
+ if finderfits.HeaderInfo.valid then begin
+   f:=Tf_viewtext.Create(self);
+   f.FormStyle:=fsStayOnTop;
+   f.Caption:=rsFITSHeader;
+   f.Memo1.Lines:=finderfits.Header.Rows;
+   FormPos(f,mouse.CursorPos.X,mouse.CursorPos.Y);
+   f.Show;
+ end;
+end;
+
+procedure Tf_main.MenuItemFinderViewStatisticsClick(Sender: TObject);
+var f: Tf_viewtext;
+begin
+ if finderfits.HeaderInfo.valid and finderfits.ImageValid then begin
+   f:=Tf_viewtext.Create(self);
+   f.FormStyle:=fsStayOnTop;
+   f.Width:=DoScaleX(250);
+   f.Height:=DoScaleY(250);
+   f.Caption:=rsImageStatist;
+   f.Memo1.Text:=finderfits.GetStatistics;
+   FormPos(f,mouse.CursorPos.X,mouse.CursorPos.Y);
+   f.Show;
+ end;
 end;
 
 end.
