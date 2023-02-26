@@ -1460,6 +1460,7 @@ end;
 
 function T_Targets.CheckDoneCount:boolean;
 var i,j,totalcount,donecount,totalspteps,donesteps : integer;
+    steptime,targettime,totaltime: double;
     txt: string;
     t: TTarget;
     p: T_Plan;
@@ -1481,6 +1482,7 @@ begin
    result:=true;
    FLastDoneStep:=rsGlobalRepeat+blank+IntToStr(FTargetsRepeatCount)+'/'+IntToStr(FTargetsRepeat);
  end;
+ totaltime:=0;
  for i:=0 to NumTargets-1 do begin
     t:=Targets[i];
     if t=nil then Continue;
@@ -1498,22 +1500,37 @@ begin
       if (t.repeatdone>0) then begin
         result:=true;
       end;
-      txt:=t.objectname+blank+rsRepeat+':'+blank+IntToStr(t.repeatdone)+'/'+IntToStr(t.repeatcount);
+      txt:=crlf+t.objectname+blank+rsRepeat+':'+blank+IntToStr(t.repeatdone)+'/'+IntToStr(t.repeatcount);
       FDoneStatus:=FDoneStatus+crlf+txt;
       if t.repeatdone=t.repeatcount then
         FLastDoneStep:=txt;
       if p.Count<=0 then Continue;
+      targettime:=0;
       for j:=0 to p.Count-1 do begin
         totalcount:=totalcount+p.Steps[j].count;
         donecount:=donecount+p.Steps[j].donecount;
         totalspteps:=totalspteps+p.Steps[j].count;
         donesteps:=donesteps+p.Steps[j].donecount;
-        txt:=t.objectname+blank+p.PlanName+blank+rsStep+':'+blank+p.Steps[j].description+blank+rsDone+':'+IntToStr(p.Steps[j].donecount)+'/'+IntToStr(p.Steps[j].count);
+        if t.objectname<>SkyFlatTxt then begin
+          steptime:=(p.Steps[j].count-p.Steps[j].donecount)*p.Steps[j].exposure*p.Steps[j].stackcount;
+          targettime:=targettime+steptime;
+          txt:=t.objectname+blank+p.PlanName+blank+rsStep+':'+blank+p.Steps[j].description+blank+','+rsDone+':'+blank+IntToStr(p.Steps[j].donecount)+'/'+IntToStr(p.Steps[j].count)+','+blank+'Step time'+':'+blank+TimToStr(steptime/3600,'h',false);
+        end
+        else begin
+           txt:=t.objectname+blank+p.PlanName+blank+rsStep+':'+blank+p.Steps[j].description+blank+','+rsDone+':'+blank+IntToStr(p.Steps[j].donecount)+'/'+IntToStr(p.Steps[j].count);
+        end;
         FDoneStatus:=FDoneStatus+crlf+txt;
         if p.Steps[j].donecount>0 then begin
           result:=true;
           FLastDoneStep:=txt;
         end;
+      end;
+      targettime:=targettime*(t.repeatcount-t.repeatdone);
+      if targettime>0 then begin
+        totaltime:=totaltime+targettime;
+        txt:=t.objectname+blank+'Total time'+':'+blank+TimToStr(targettime/3600,'h',false);
+        txt:=txt+','+blank+'Cumulated time'+':'+blank+TimToStr(totaltime/3600,'h',false);
+        FDoneStatus:=FDoneStatus+crlf+txt;
       end;
     end;
  end;

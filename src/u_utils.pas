@@ -61,6 +61,7 @@ Function Str3ToAR(dms : string) : double;
 Function DEToStr3(de: Double) : string;
 Function Str3ToDE(dms : string) : double;
 function DEToStrShort(de: double; digits: integer = 1): string;
+function TimToStr(tim: double; sep: string = ':'; showsec: boolean = True): string;
 procedure ExecNoWait(cmd: string; title:string=''; hide: boolean=true);
 Function ExecProcess(cmd: string; output: TStringList; ShowConsole:boolean=false): integer;
 Function ExecProcessMem(cmd: string; output: TMemoryStream; out err: string; ShowConsole:boolean=false): integer;
@@ -3395,6 +3396,40 @@ begin
        exit;
   end;
   result:=true;
+end;
+
+function TimToStr(tim: double; sep: string = ':'; showsec: boolean = True): string;
+var
+  dd, min1, min, sec: double;
+  d, m, s: string;
+begin
+  dd := Int(tim);
+  min1 := abs(tim - dd) * 60;
+  if min1 >= 59.99166667 then
+  begin
+    dd := dd + sgn(tim);
+    min1 := 0.0;
+  end;
+  min := Int(min1);
+  sec := (min1 - min) * 60;
+  if sec >= 59.5 then
+  begin
+    min := min + 1;
+    sec := 0.0;
+  end;
+  str(abs(dd): 2: 0, d);
+  if abs(dd) < 10 then
+    d := '0' + trim(d);
+  str(min: 2: 0, m);
+  if abs(min) < 10 then
+    m := '0' + trim(m);
+  str(sec: 2: 0, s);
+  if abs(sec) < 9.5 then
+    s := '0' + trim(s);
+  if showsec then
+    Result := d + sep + m + sep + s
+  else
+    Result := d + sep + m;
 end;
 
 end.
