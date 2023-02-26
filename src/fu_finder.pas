@@ -135,10 +135,12 @@ begin
     LoopGain:=config.GetValue('/PrecSlew/Gain',NullInt);
     LoopOffset:=config.GetValue('/PrecSlew/Offset',NullInt);
     LoopBin:=config.GetValue('/PrecSlew/Binning',1);
+    msg(rsFinderCamera+': '+rsStartPreview,0);
     Application.QueueAsyncCall(@PreviewAsync,0);
   end
   else begin
     button1.Caption:=rsLoop;
+    msg(rsFinderCamera+': '+rsStopLoop,3);
   end;
 end;
 
@@ -156,7 +158,7 @@ begin
   end
   else begin
      button1.Caption:=rsLoop;
-     msg(rsFinderCamera+': '+rsEndPreview,0);
+     msg(rsFinderCamera+': '+rsStopPreviewL,0);
   end;
 end;
 
