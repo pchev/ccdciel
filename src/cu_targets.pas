@@ -27,7 +27,7 @@ interface
 
 uses u_global, cu_plan, u_utils, indiapi, pu_scriptengine, pu_pause, cu_rotator, cu_planetarium,
   fu_capture, fu_preview, fu_filterwheel, cu_mount, cu_camera, cu_autoguider, cu_astrometry,
-  fu_safety, fu_weather, cu_dome, u_ccdconfig, cu_sequencefile, fu_internalguider,
+  fu_safety, fu_weather, cu_dome, u_ccdconfig, cu_sequencefile, fu_internalguider, math,
   u_translation, LazFileUtils, Controls, Dialogs, ExtCtrls,Classes, Forms, SysUtils;
 
 type
@@ -123,6 +123,7 @@ type
       procedure StopSequence(abort: boolean);
       procedure NextTargetAsync(Data: PtrInt);
       procedure NextTarget;
+      function SetTargetTime(t:TTarget; middletime:double; out pivot:double):boolean;
       function InitTarget(restart:boolean=false):boolean;
       function InitSkyFlat: boolean;
       procedure StartPlan;
@@ -173,6 +174,7 @@ type
       procedure WeatherRestart;
       procedure ForceNextTarget;
       procedure SaveDoneCount;
+      function  CheckStatus:boolean;
       function  CheckDoneCount:boolean;
       procedure ClearDoneCount(ClearRepeat: boolean);
       procedure CreateSkyFlatPlan(flt: TTarget);
@@ -267,6 +269,7 @@ begin
   Frunning:=false;
   FRestarting:=False;
   Fslewing:=False;
+  FCurrentTarget:=-1;
   FSeqStartAt:=0;
   FSeqStopAt:=0;
   FSeqStart:=false;
@@ -1458,9 +1461,142 @@ begin
  else msg(rsNotRunningNo,1);
 end;
 
+function T_Targets.CheckStatus:boolean;
+var i,j,totalcount,donecount,totalspteps,donesteps : integer;
+    steptime,targettime,totaltime,st,stime,etime,ctime,hm,he: double;
+    tfuture,tdone,twok: boolean;
+    txt: string;
+    t: TTarget;
+    p: T_Plan;
+begin
+ // Same as CheckDoneCount but with more timing detail
+ result:=false;
+ FAllDone:=false;
+ FAllStepsDone:=false;
+ FDoneStatus:='';
+ FLastDoneStep:='';
+ totalcount:=0; donecount:=0;
+ totalspteps:=0; donesteps:=0;
+ if IgnoreRestart then exit;
+ if FResetRepeat then begin
+   totalcount:=totalcount+FTargetsRepeat;
+   donecount:=donecount+FTargetsRepeatCount;
+ end;
+ FDoneStatus:=rsGlobalRepeat+blank+IntToStr(FTargetsRepeatCount)+'/'+IntToStr(FTargetsRepeat);
+ if (FTargetsRepeatCount>0)and(FTargetsRepeatCount<=FTargetsRepeat) then begin
+   result:=true;
+   FLastDoneStep:=rsGlobalRepeat+blank+IntToStr(FTargetsRepeatCount)+'/'+IntToStr(FTargetsRepeat);
+ end;
+ stime:=FSeqStartTime;
+ etime:=FSeqStopAt;
+ if not FRunning then begin
+   for i:=0 to NumTargets-1 do begin
+     if (Targets[i].objectname=SkyFlatTxt)and(Targets[i].planname=FlatTimeName[1]) then begin
+       FSeqStop:=true;
+       FSeqStopTwilight:=true;
+     end;
+   end;
+   if not FSeqStart then
+     stime:=now;
+   if not FSeqStop then
+     etime:=0;
+   twok:=TwilightAstro(now,hm,he);
+   if twok then begin
+     if FSeqStartTwilight then
+       stime:=he/24;
+     if FSeqStopTwilight then
+       etime:=1+hm/24;
+   end;
+ end;
+ FDoneStatus:=FDoneStatus+crlf+rsSequence+blank+rsStartAt+FormatDateTime(datehms,stime);
+ ctime:=frac(stime);
+ totaltime:=0;
+ for i:=0 to NumTargets-1 do begin
+    t:=TTarget.Create;
+    t.Assign(Targets[i]);
+    if t=nil then Continue;
+    tfuture:=(i>FCurrentTarget);
+    p:=t_plan(t.plan);
+    if p=nil then Continue;
+    if t.objectname=ScriptTxt then begin
+      txt:=crlf+t.objectname+blank+p.PlanName;
+      FDoneStatus:=FDoneStatus+crlf+txt;
+    end
+    else begin
+      totalcount:=totalcount+t.repeatcount;
+      donecount:=donecount+t.repeatdone;
+      totalspteps:=totalspteps+t.repeatcount;
+      donesteps:=donesteps+t.repeatdone;
+      if (t.repeatdone>0) then begin
+        result:=true;
+      end;
+      tdone:=t.repeatdone>=t.repeatcount;
+      if t.starttime>0 then ctime:=max(ctime,t.starttime);
+      txt:=crlf+rsTarget+blank+t.objectname+blank+rsRepeat+':'+blank+IntToStr(t.repeatdone)+'/'+IntToStr(t.repeatcount);
+      if t.objectname<>SkyFlatTxt then begin
+        if tfuture and (not tdone) then begin
+          SetTargetTime(t,stime,st); // running and old target already have time set
+          txt:=txt+','+blank+rsStartAt+FormatDateTime(datehms, ctime);
+        end
+        else begin
+          txt:=txt+','+blank+rsDone;
+        end;
+      end;
+      FDoneStatus:=FDoneStatus+crlf+txt;
+      if t.repeatdone=t.repeatcount then
+        FLastDoneStep:=txt;
+      if p.Count<=0 then Continue;
+      targettime:=0;
+      for j:=0 to p.Count-1 do begin
+        totalcount:=totalcount+p.Steps[j].count;
+        donecount:=donecount+p.Steps[j].donecount;
+        totalspteps:=totalspteps+p.Steps[j].count;
+        donesteps:=donesteps+p.Steps[j].donecount;
+        if t.objectname<>SkyFlatTxt then begin
+          steptime:=(p.Steps[j].count-p.Steps[j].donecount)*p.Steps[j].exposure*p.Steps[j].stackcount;
+          targettime:=targettime+steptime;
+          if steptime>0 then
+            txt:=t.objectname+blank+p.PlanName+blank+rsStep+':'+blank+p.Steps[j].description+blank+','+rsDone+':'+blank+IntToStr(p.Steps[j].donecount)+'/'+IntToStr(p.Steps[j].count)+','+blank+'Step time'+':'+blank+raToStr(steptime/3600)
+          else
+            txt:=t.objectname+blank+p.PlanName+blank+rsStep+':'+blank+p.Steps[j].description+blank+','+rsDone+':'+blank+IntToStr(p.Steps[j].donecount)+'/'+IntToStr(p.Steps[j].count);
+        end
+        else begin
+           txt:=t.objectname+blank+p.PlanName+blank+rsStep+':'+blank+p.Steps[j].description+blank+','+rsDone+':'+blank+IntToStr(p.Steps[j].donecount)+'/'+IntToStr(p.Steps[j].count);
+        end;
+        FDoneStatus:=FDoneStatus+crlf+txt;
+        if p.Steps[j].donecount>0 then begin
+          result:=true;
+          FLastDoneStep:=txt;
+        end;
+      end;
+      targettime:=targettime*(t.repeatcount-t.repeatdone);
+      ctime:=ctime+targettime/secperday;
+      if targettime>0 then begin
+        totaltime:=totaltime+targettime;
+        txt:=t.objectname+blank+'Target time'+':'+blank+TimToStr(targettime/3600,'h',false);
+        txt:=txt+','+blank+'Sequence time'+':'+blank+TimToStr(totaltime/3600,'h',false);
+        FDoneStatus:=FDoneStatus+crlf+txt;
+        if FSeqStop and (ctime>etime) then
+          txt:=t.objectname+blank+'Interrupted at:'+blank+FormatDateTime(datehms,etime)
+        else
+          txt:=t.objectname+blank+'End at:'+blank+FormatDateTime(datehms,ctime);
+        FDoneStatus:=FDoneStatus+crlf+txt;
+      end;
+    end;
+    t.Free;
+ end;
+ // all exposure steps done
+ FAllStepsDone:=(totalspteps<=donesteps);
+ // all done including global repeat
+ FAllDone:=(totalcount<=donecount);
+ if FAllDone then begin
+   FLastDoneStep:=format(rsSequenceFini,[TargetName]);
+   FDoneStatus:=FDoneStatus+crlf+crlf+FLastDoneStep;
+ end;
+end;
+
 function T_Targets.CheckDoneCount:boolean;
 var i,j,totalcount,donecount,totalspteps,donesteps : integer;
-    steptime,targettime,totaltime: double;
     txt: string;
     t: TTarget;
     p: T_Plan;
@@ -1482,7 +1618,6 @@ begin
    result:=true;
    FLastDoneStep:=rsGlobalRepeat+blank+IntToStr(FTargetsRepeatCount)+'/'+IntToStr(FTargetsRepeat);
  end;
- totaltime:=0;
  for i:=0 to NumTargets-1 do begin
     t:=Targets[i];
     if t=nil then Continue;
@@ -1500,37 +1635,22 @@ begin
       if (t.repeatdone>0) then begin
         result:=true;
       end;
-      txt:=crlf+t.objectname+blank+rsRepeat+':'+blank+IntToStr(t.repeatdone)+'/'+IntToStr(t.repeatcount);
+      txt:=t.objectname+blank+rsRepeat+':'+blank+IntToStr(t.repeatdone)+'/'+IntToStr(t.repeatcount);
       FDoneStatus:=FDoneStatus+crlf+txt;
       if t.repeatdone=t.repeatcount then
         FLastDoneStep:=txt;
       if p.Count<=0 then Continue;
-      targettime:=0;
       for j:=0 to p.Count-1 do begin
         totalcount:=totalcount+p.Steps[j].count;
         donecount:=donecount+p.Steps[j].donecount;
         totalspteps:=totalspteps+p.Steps[j].count;
         donesteps:=donesteps+p.Steps[j].donecount;
-        if t.objectname<>SkyFlatTxt then begin
-          steptime:=(p.Steps[j].count-p.Steps[j].donecount)*p.Steps[j].exposure*p.Steps[j].stackcount;
-          targettime:=targettime+steptime;
-          txt:=t.objectname+blank+p.PlanName+blank+rsStep+':'+blank+p.Steps[j].description+blank+','+rsDone+':'+blank+IntToStr(p.Steps[j].donecount)+'/'+IntToStr(p.Steps[j].count)+','+blank+'Step time'+':'+blank+TimToStr(steptime/3600,'h',false);
-        end
-        else begin
-           txt:=t.objectname+blank+p.PlanName+blank+rsStep+':'+blank+p.Steps[j].description+blank+','+rsDone+':'+blank+IntToStr(p.Steps[j].donecount)+'/'+IntToStr(p.Steps[j].count);
-        end;
+        txt:=t.objectname+blank+p.PlanName+blank+rsStep+':'+blank+p.Steps[j].description+blank+rsDone+':'+IntToStr(p.Steps[j].donecount)+'/'+IntToStr(p.Steps[j].count);
         FDoneStatus:=FDoneStatus+crlf+txt;
         if p.Steps[j].donecount>0 then begin
           result:=true;
           FLastDoneStep:=txt;
         end;
-      end;
-      targettime:=targettime*(t.repeatcount-t.repeatdone);
-      if targettime>0 then begin
-        totaltime:=totaltime+targettime;
-        txt:=t.objectname+blank+'Total time'+':'+blank+TimToStr(targettime/3600,'h',false);
-        txt:=txt+','+blank+'Cumulated time'+':'+blank+TimToStr(totaltime/3600,'h',false);
-        FDoneStatus:=FDoneStatus+crlf+txt;
       end;
     end;
  end;
@@ -1834,12 +1954,74 @@ begin
   end;
 end;
 
+function T_Targets.SetTargetTime(t:TTarget; middletime:double; out pivot:double): boolean;
+var hr,hs,ht,tt,dt,appra,appde: double;
+    ri,si,ti: integer;
+begin
+  // convert rise/set or MC to start/end time
+  result:=false;
+  // compute apparent coord.
+  if (t.ra<>NullCoord)and(t.de<>NullCoord) then begin
+     appra:=t.ra*15*deg2rad;
+     appde:=t.de*deg2rad;
+     J2000ToApparent(appra,appde);
+     appra:=appra*rad2deg/15;
+     appde:=appde*rad2deg;
+  end;
+  pivot:=frac(middletime); // if no coordinates, pivot time is sequence start time
+  // adjust start/end from coordinates
+  if (t.ra<>NullCoord)and(t.de<>NullCoord) then begin
+     ObjRise(appra,appde,hr,ri);
+     // check object visibility
+     if ri=2 then begin
+        InitTargetError:=Format(rsSkipTarget, [t.objectname])+', '+rsThisObjectIs2;
+        msg(InitTargetError, 3);
+        exit;
+     end;
+     ObjSet(appra,appde,hs,si);
+     ObjTransit(appra,appde,ht,ti);
+     pivot:=rmod(ht+12+24,24); // pivot time 12h from transit
+     // adjust rise/set time
+     // begin at rise
+     if t.startrise and (ri=0) then
+        t.starttime:=hr/24;
+     // end at set
+     if t.endset and (si=0) then
+        t.endtime:=hs/24;
+     // start from meridian
+     if (t.startmeridian<>NullCoord) and (ti<2) then begin
+        if abs(t.startmeridian)>5 then t.startmeridian:=sgn(t.startmeridian)*5;
+        if t.startmeridian=0 then dt:=5/60 // 5 minutes after meridian to prevent flip
+                             else dt:=t.startmeridian;
+        tt:=rmod(ht+dt+24,24);
+        // check elevation
+        if InTimeInterval(tt/24,hr/24,hs/24,pivot/24)=0 then
+           t.starttime:=tt/24
+        else
+           t.starttime:=hr/24;
+     end;
+     // end from meridian
+     if (t.endmeridian<>NullCoord) and (ti<2) then begin
+        if abs(t.endmeridian)>5 then t.endmeridian:=sgn(t.endmeridian)*5;
+        if t.endmeridian=0 then dt:=-5/60 // 5 minutes before meridian to prevent flip
+                           else dt:=t.endmeridian;
+        tt:=rmod(ht+dt+24,24);
+        // check elevation
+        if InTimeInterval(tt/24,hr/24,hs/24,pivot/24)=0 then
+           t.endtime:=tt/24
+        else
+           t.endtime:=hs/24;
+     end;
+  end;
+  result:=true;
+end;
+
 function T_Targets.InitTarget(restart:boolean=false):boolean;
 var t: TTarget;
     p: T_Plan;
     ok,wtok,nd:boolean;
-    stw,i,intime,ri,si,ti: integer;
-    hr,hs,ht,tt,dt,st,newra,newde,newV,newPA,appra,appde,enddelay,chkendtime: double;
+    stw,i,intime: integer;
+    st,newra,newde,newV,newPA,enddelay,chkendtime: double;
     autofocusstart, astrometrypointing, autostartguider,isCalibrationTarget: boolean;
     skipmsg, buf: string;
 begin
@@ -1908,61 +2090,13 @@ begin
     else
        enddelay:=0;
 
-    // compute apparent coord.
-    if (t.ra<>NullCoord)and(t.de<>NullCoord) then begin
-       appra:=t.ra*15*deg2rad;
-       appde:=t.de*deg2rad;
-       J2000ToApparent(appra,appde);
-       appra:=appra*rad2deg/15;
-       appde:=appde*rad2deg;
+    // initialize start and end time
+    if not SetTargetTime(t,FSeqStartTime,st) then begin
+      SkipTarget:=true;
+      result:=false;
+      exit;
     end;
-    st:=frac(FSeqStartTime); // if no coordinates, pivot time is sequence start time
-    // adjust start/end from coordinates
-    if (t.ra<>NullCoord)and(t.de<>NullCoord) then begin
-       ObjRise(appra,appde,hr,ri);
-       // check object visibility
-       if ri=2 then begin
-          InitTargetError:=Format(rsSkipTarget, [t.objectname])+', '+rsThisObjectIs2;
-          msg(InitTargetError, 3);
-          SkipTarget:=true;
-          result:=false;
-          exit;
-       end;
-       ObjSet(appra,appde,hs,si);
-       ObjTransit(appra,appde,ht,ti);
-       st:=rmod(ht+12+24,24); // pivot time 12h from transit
-       // adjust rise/set time
-       // begin at rise
-       if t.startrise and (ri=0) then
-          t.starttime:=hr/24;
-       // end at set
-       if t.endset and (si=0) then
-          t.endtime:=hs/24;
-       // start from meridian
-       if (t.startmeridian<>NullCoord) and (ti<2) then begin
-          if abs(t.startmeridian)>5 then t.startmeridian:=sgn(t.startmeridian)*5;
-          if t.startmeridian=0 then dt:=5/60 // 5 minutes after meridian to prevent flip
-                               else dt:=t.startmeridian;
-          tt:=rmod(ht+dt+24,24);
-          // check elevation
-          if InTimeInterval(tt/24,hr/24,hs/24,st/24)=0 then
-             t.starttime:=tt/24
-          else
-             t.starttime:=hr/24;
-       end;
-       // end from meridian
-       if (t.endmeridian<>NullCoord) and (ti<2) then begin
-          if abs(t.endmeridian)>5 then t.endmeridian:=sgn(t.endmeridian)*5;
-          if t.endmeridian=0 then dt:=-5/60 // 5 minutes before meridian to prevent flip
-                             else dt:=t.endmeridian;
-          tt:=rmod(ht+dt+24,24);
-          // check elevation
-          if InTimeInterval(tt/24,hr/24,hs/24,st/24)=0 then
-             t.endtime:=tt/24
-          else
-             t.endtime:=hs/24;
-       end;
-    end;
+
     // let time for the first exposure to run
     chkendtime:=rmod(t.endtime-enddelay+1,1);
     // test if in time interval

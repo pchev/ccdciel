@@ -1487,6 +1487,7 @@ resourcestring
   rsNewFinderCal = 'New finder calibration is successful';
   rsMainImageCen = 'Main image center is at finder image X=%s, Y=%s';
   rsMainCamera = 'Main camera';
+  rsTarget = 'Target';
 
 implementation
 

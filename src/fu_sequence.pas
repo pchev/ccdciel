@@ -1038,7 +1038,7 @@ end;
 procedure Tf_sequence.BtnStatusClick(Sender: TObject);
 var f: Tf_viewtext;
 begin
-  Targets.CheckDoneCount;
+  Targets.CheckStatus;
   f:=Tf_viewtext.Create(self);
   f.Caption:=rsStatus2;
   f.Memo1.Text:=rsSequence+blank+Targets.TargetName+crlf+crlf+targets.DoneStatus;
