@@ -16011,18 +16011,20 @@ if (guidefits.HeaderInfo.naxis>0) and guidefits.ImageValid then begin
     ImaGuideBmp.Canvas.Line(xs,0,xs,guideimg_Height);
     ImaGuideBmp.Canvas.Line(0,ys,guideimg_Width,ys);
     // draw slit
-    ImaGuideBmp.Canvas.Pen.Color:=clRed;
-    xs:=f_internalguider.SlitX;
-    ys:=f_internalguider.SlitY;
-    sincos(deg2rad*f_internalguider.SlitPA,sp,cp);
-    xx1 := ( f_internalguider.SlitL/2 * cp - f_internalguider.SlitW/2 * sp);
-    yy1 := ( f_internalguider.SlitL/2 * sp + f_internalguider.SlitW/2 * cp);
-    xx2 := ( f_internalguider.SlitL/2 * cp + f_internalguider.SlitW/2 * sp);
-    yy2 := (-f_internalguider.SlitL/2 * sp + f_internalguider.SlitW/2 * cp);
-    ImaGuideBmp.Canvas.Line(round(xs-xx1), round(ys-yy1), round(xs+xx2), round(ys-yy2));
-    ImaGuideBmp.Canvas.Line(round(xs+xx2), round(ys-yy2), round(xs+xx1), round(ys+yy1));
-    ImaGuideBmp.Canvas.Line(round(xs+xx1), round(ys+yy1), round(xs-xx2), round(ys+yy2));
-    ImaGuideBmp.Canvas.Line(round(xs-xx2), round(ys+yy2), round(xs-xx1), round(ys-yy1));
+    if (f_internalguider.SlitX>0)and(f_internalguider.SlitY>0) then begin
+      ImaGuideBmp.Canvas.Pen.Color:=clRed;
+      xs:=f_internalguider.SlitX;
+      ys:=f_internalguider.SlitY;
+      sincos(deg2rad*f_internalguider.SlitPA,sp,cp);
+      xx1 := ( f_internalguider.SlitL/2 * cp - f_internalguider.SlitW/2 * sp);
+      yy1 := ( f_internalguider.SlitL/2 * sp + f_internalguider.SlitW/2 * cp);
+      xx2 := ( f_internalguider.SlitL/2 * cp + f_internalguider.SlitW/2 * sp);
+      yy2 := (-f_internalguider.SlitL/2 * sp + f_internalguider.SlitW/2 * cp);
+      ImaGuideBmp.Canvas.Line(round(xs-xx1), round(ys-yy1), round(xs+xx2), round(ys-yy2));
+      ImaGuideBmp.Canvas.Line(round(xs+xx2), round(ys-yy2), round(xs+xx1), round(ys+yy1));
+      ImaGuideBmp.Canvas.Line(round(xs+xx1), round(ys+yy1), round(xs-xx2), round(ys+yy2));
+      ImaGuideBmp.Canvas.Line(round(xs-xx2), round(ys+yy2), round(xs-xx1), round(ys-yy1));
+    end;
   end;
  end
  else begin
