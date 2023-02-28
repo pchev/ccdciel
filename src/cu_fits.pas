@@ -214,6 +214,7 @@ type
      function  value_subpixel(x1,y1:double):double;
      procedure FindBrightestPixel(x,y,s,starwindow2: integer; out xc,yc:integer; out vmax: double; accept_double: boolean=true);
      procedure FindStarPos(x,y,s: integer; out xc,yc,ri:integer; out vmax,bg,sd: double);
+     procedure FindStarPos2(x,y,s: integer; out xc,yc,vmax,bg,sd: double);
      procedure GetHFD3(x,y,s: integer; autoCenter :boolean; out xc,yc,bg,sd,hfd,star_fwhm,valmax,snr,flux: double; strict_saturation: boolean=true);{v2022-06}
      procedure GetHFD2(x,y,s: integer; out xc,yc,bg,sd,hfd,star_fwhm,valmax,snr,flux: double; strict_saturation: boolean=true);{v2018}
      procedure GetStarList(rx,ry,s: integer);
@@ -2986,6 +2987,62 @@ begin
    if ri<3 then ri:=3;
 
  except
+   on E: Exception do begin
+       vmax:=0;
+   end;
+ end;
+end;
+
+procedure TFits.FindStarPos2(x,y,s: integer; out xc,yc,vmax,bg,sd: double);
+// center of gravity in area s*s centered on x,y
+// same as FindStarPos but with floating point xc,yc and without the radius computation
+// this is used for autoguiding on spectro slit, with possible splited star image
+const
+    max_ri=100;
+var i,j,rs :integer;
+    SumVal,SumValX,SumValY, val,xg,yg : double;
+begin
+
+  vmax:=0;
+  bg:=0;
+  rs:=s div 2;
+  if (x-s)<1 then x:=s+1;
+  if (x+s)>(Fwidth-1) then x:=Fwidth-s-1;
+  if (y-s)<1 then y:=s+1;
+  if (y+s)>(Fheight-1) then y:=Fheight-s-1;
+
+  try
+    calculate_bg_sd(Fimage,x,y,rs,4,bg,sd); {calculate background and standard deviation for position x,y around box rs x rs. }
+
+    // Get center of gravity whithin star detection box
+    SumVal:=0;
+    SumValX:=0;
+    SumValY:=0;
+    vmax:=0;
+    for i:=-rs to rs do
+     for j:=-rs to rs do begin
+       val:=Fimage[0,y+j,x+i]-bg;
+       if val>((3*sd)) then  {>3 * sd should be signal }
+       begin
+         if val>vmax then vmax:=val;
+         SumVal:=SumVal+val;
+         SumValX:=SumValX+val*(i);
+         SumValY:=SumValY+val*(j);
+       end;
+     end;
+
+    if sumval=0 then
+    begin
+      vmax:=0;
+      exit;
+    end;
+
+    Xg:=SumValX/SumVal;
+    Yg:=SumValY/SumVal;
+    xc:=x+Xg;
+    yc:=y+Yg;
+
+  except
    on E: Exception do begin
        vmax:=0;
    end;

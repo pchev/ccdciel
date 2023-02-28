@@ -394,7 +394,7 @@ var
   MeridianFlipPauseBefore, MeridianFlipPauseAfter,MeridianFlipCalibrate,MeridianFlipAutofocus,
   MeridianFlipStopSlaving,MeridianFlipUseSetPierSide: boolean;
   MeridianScript,MeridianScriptPath,MeridianScriptArgs: string;
-  GuideSetLock: boolean;
+  GuideSetLock,InternalGuiderSetLockPosition: boolean;
   GuideLockX, GuideLockY: double;
   astrometryResolver: integer;
   OrigX, OrigY,img_Height,img_Width,GuideOrigX, GuideOrigY,guideimg_Height,guideimg_Width : integer;

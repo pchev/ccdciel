@@ -427,8 +427,9 @@ end;
 
 function  T_autoguider_internal.measure_drift(var initialize:boolean; out drX,drY :double) : integer;// ReferenceX,Y indicates the total drift, drX,drY to drift since previouse call. Arrays old_xy_array,xy_array are for storage star positions
 var
-  i,fitsx,fitsy,stepsize,xsize,ysize,star_counter,star_counter2,counter,len,maxSNRstar: integer;
+  i,fitsx,fitsy,stepsize,xsize,ysize,star_counter,star_counter2,counter,len,maxSNRstar,ix,iy: integer;
   hfd1,star_fwhm,vmax,bg,bgdev,xc,yc,snr,flux,fluxratio,min_SNR,min_HFD,maxSNR,maxSNRhfd,margin,y,mhfd : double;
+  Spectro: boolean;
   drift_arrayX,drift_arrayY : array of double;
   starx,stary,frx,fry,frw,frh: integer;
 const
@@ -452,12 +453,15 @@ begin
   xsize:=guidefits.HeaderInfo.naxis1;// width image
   ysize:=guidefits.HeaderInfo.naxis2;// height image
 
+
   if initialize then
   begin
     setlength(xy_array,maxstars);
     ditherx:=0;// dither offset
     dithery:=0;
   end;
+
+  Spectro:=finternalguider.Spectro and (not (InternalguiderCalibrating or InternalguiderCalibratingBacklash));
 
   min_SNR:=finternalguider.minSNR;//make local to reduce some CPU load
   min_HFD:=finternalguider.minHFD;//make local to reduce some CPU load
@@ -471,9 +475,36 @@ begin
   else
     margin:=2*DitherPixel+100;
 
-  // Divide the image in square areas. Try to detect a star in each area. Store the star position and flux in the xy_array
   if initialize then
   begin
+   if spectro then begin
+    // search unique star near slit position
+    fitsx:=round(finternalguider.LockX);
+    fitsy:=round(finternalguider.LockY);
+    guidefits.FindStarPos2(fitsx,fitsy,finternalguider.SearchWinMin,xc,yc,vmax,bg,bgdev);
+    if vmax=0 then
+      // if not found try with larger aperture
+      guidefits.FindStarPos2(fitsx,fitsy,finternalguider.SearchWinMax,xc,yc,vmax,bg,bgdev);
+    if vmax=0 then begin
+      // if still not found search brightest star in image
+      guidefits.FindBrightestPixel(xsize div 2,ysize div 2,2*min(xsize,ysize) div 3,starwindow div 2,ix,iy,vmax,true);
+      guidefits.FindStarPos2(ix,iy,finternalguider.SearchWinMax,xc,yc,vmax,bg,bgdev);
+    end;
+    if vmax>0 then begin
+        setlength(xy_array,1);
+        // always use the slit position as reference
+        xy_array[0].x1:=finternalguider.LockX;
+        xy_array[0].y1:=finternalguider.LockY;
+        // current position of star, to be moved on slit
+        xy_array[0].x2:=xc;
+        xy_array[0].y2:=yc;
+        xy_array[0].flux:=1;
+        setlength(xy_array_old,1);
+        star_counter:=1;
+     end;
+   end
+   else begin
+    // Divide the image in square areas. Try to detect a star in each area. Store the star position and flux in the xy_array
     mean_hfd:=0;
     fitsy:=stepsize div 2;
     repeat
@@ -581,9 +612,39 @@ begin
       setlength(xy_array,0);
       setlength(xy_array_old,0);
     end;
+   end;
   end
   else
   begin //second, third ... call
+   if spectro then begin
+     // single star slit guiding
+     // adjust reference slit position if the user make modification while guiding
+     xy_array[0].x1:=finternalguider.LockX;
+     xy_array[0].y1:=finternalguider.LockY;
+     xy_array_old[0].x1:=xy_array[0].x1;
+     xy_array_old[0].y1:=xy_array[0].y1;
+     // search star near previous position
+     guidefits.FindStarPos2(round(xy_array_old[0].x2),round(xy_array_old[0].y2),finternalguider.SearchWinMin,xc,yc,vmax,bg,bgdev);
+     if vmax=0 then
+       guidefits.FindStarPos2(round(xy_array_old[0].x2),round(xy_array_old[0].y2),finternalguider.SearchWinMax,xc,yc,vmax,bg,bgdev);
+     if vmax>0 then begin
+       // star found
+       xy_array[0].x2:=xc;
+       xy_array[0].y2:=yc;
+       xy_array[0].flux:=1;
+       star_counter:=1;
+       hfd1:=finternalguider.SearchWinMin/2/3;
+       // Mark star area
+       FGuideBmp.Canvas.Frame(trunc(1+xc*GuideImgPixRatio-hfd1*3),trunc(1+yc-hfd1*3),trunc(1+xc*GuideImgPixRatio+hfd1*3),trunc(1+yc+hfd1*3));
+       finternalguider.LabelInfo2.Caption:=IntToStr(star_counter)+' star, Intensity: '+FormatFloat(f1,vmax);
+     end
+     else begin
+       // star lost
+       xy_array[0].flux:=0;
+     end;
+   end
+   else begin
+    // multi star guiding
     mhfd:=0;
     for i:=0 to length(xy_array_old)-1 do
     begin
@@ -620,6 +681,7 @@ begin
       mhfd:=mhfd/star_counter;
       finternalguider.LabelInfo2.Caption:=IntToStr(star_counter)+' stars, HFD: '+FormatFloat(f1,mhfd)+', SNR: '+FormatFloat(f0,LogSNR);
     end;
+   end;
   end;
   if star_counter<1 then
   begin
@@ -763,6 +825,7 @@ end;
 
 procedure T_autoguider_internal.InternalguiderStart;
 begin
+  Finternalguider.cbSpectro.enabled:=false;
   SetStatus('Start Guiding',GUIDER_BUSY);
   Application.QueueAsyncCall(@InternalguiderStartAsync,0);
 end;
@@ -1339,6 +1402,7 @@ begin
   Finternalguider.ButtonCalibrate.enabled:=true;
   Finternalguider.ButtonGuide.enabled:=true;
   Finternalguider.ButtonDark.enabled:=true;
+  Finternalguider.cbSpectro.enabled:=true;
   Finternalguider.led.Brush.Color:=clGray;
   Finternalguider.LabelInfo.Caption:='';
   Finternalguider.LabelInfo2.Caption:='';

@@ -44,6 +44,7 @@ type
     BtnZoom1: TSpeedButton;
     BtnZoom2: TSpeedButton;
     BtnZoomAdjust: TSpeedButton;
+    ButtonSetLock: TSpeedButton;
     ButtonSetTemp: TButton;
     ButtonDark: TButton;
     ButtonCalibrate: TButton;
@@ -51,6 +52,7 @@ type
     ButtonGuide: TButton;
     ButtonStop: TButton;
     ButtonStop1: TButton;
+    cbSpectro: TCheckBox;
     CheckBoxBacklash: TCheckBox;
     CheckBoxInverseSolarTracking1: TCheckBox;
     CheckBoxReverseDec1: TCheckBox;
@@ -58,12 +60,26 @@ type
     Cooler: TCheckBox;
     disable_guiding1: TCheckBox;
     Exposure: TFloatSpinEdit;
+    GroupBox3: TGroupBox;
+    GroupBox4: TGroupBox;
+    GroupBox5: TGroupBox;
+    Label30: TLabel;
+    edLockX: TFloatSpinEdit;
+    edLockY: TFloatSpinEdit;
     Label11: TLabel;
     Label20: TLabel;
     Label21: TLabel;
     Label25: TLabel;
     Label26: TLabel;
     Label27: TLabel;
+    Label28: TLabel;
+    Label29: TLabel;
+    Label31: TLabel;
+    Label32: TLabel;
+    Label33: TLabel;
+    Label34: TLabel;
+    Label35: TLabel;
+    Label36: TLabel;
     LabelInfo: TLabel;
     LabelInfo2: TLabel;
     LabelTemperature: TLabel;
@@ -127,6 +143,14 @@ type
     ShortestPulse1: TSpinEdit;
     minSNR1: TSpinEdit;
     LongestPulse1: TSpinEdit;
+    edslitWinMin: TSpinEdit;
+    edslitWinMax: TSpinEdit;
+    spSlitX: TSpinEdit;
+    spSlitY: TSpinEdit;
+    spSlitW: TSpinEdit;
+    spSlitL: TSpinEdit;
+    spSlitPA: TSpinEdit;
+    TabSheetSpectro: TTabSheet;
     Temperature: TSpinEdit;
     TabSheetOptions: TTabSheet;
     TabSheetCamera: TTabSheet;
@@ -151,6 +175,7 @@ type
     procedure BtnZoom1Click(Sender: TObject);
     procedure BtnZoom2Click(Sender: TObject);
     procedure BtnZoomAdjustClick(Sender: TObject);
+    procedure ButtonSetLockClick(Sender: TObject);
     procedure ButtonCalibrateClick(Sender: TObject);
     procedure ButtonDarkMouseDown(Sender: TObject; Button: TMouseButton; Shift: TShiftState; X, Y: Integer);
     procedure ButtonLoopClick(Sender: TObject);
@@ -162,6 +187,7 @@ type
     procedure dec_gain1Change(Sender: TObject);
     procedure dec_hysteresis1Change(Sender: TObject);
     procedure disable_guiding1Change(Sender: TObject);
+    procedure ForceRedraw(Sender: TObject);
     procedure ExposureChange(Sender: TObject);
     procedure LongestPulse1Change(Sender: TObject);
     procedure MenuItemCaptureDarkClick(Sender: TObject);
@@ -194,6 +220,7 @@ type
     cur_pa1,cur_pier_side1,cur_pixelsize1,cur_pulsegainEast1,cur_pulsegainNorth1,cur_pulsegainSouth1,
     cur_pulsegainWest1: string;
     cur_disable_guiding, cur_tracksolar: boolean;
+    FDrawSettingChange: boolean;
     procedure ShowMinMove;
     procedure SetLed (cl : tcolor);
     procedure SetRA_hysteresis(value:integer);
@@ -246,7 +273,26 @@ type
     function GetBacklash:integer;
     procedure SetBacklashCompensation(value:Boolean);
     function GetBacklashCompensation:Boolean;
-
+    procedure Setspectro(value:Boolean);
+    function Getspectro:Boolean;
+    function GetLockX:double;
+    procedure SetLockX(value:double);
+    function GetLockY:double;
+    procedure SetLockY(value:double);
+    function GetSearchWinMin:integer;
+    procedure SetSearchWinMin(value:integer);
+    function GetSearchWinMax:integer;
+    procedure SetSearchWinMax(value:integer);
+    function GetSlitX:integer;
+    procedure SetSlitX(value:integer);
+    function GetSlitY:integer;
+    procedure SetSlitY(value:integer);
+    function GetSlitW:integer;
+    procedure SetSlitW(value:integer);
+    function GetSlitL:integer;
+    procedure SetSlitL(value:integer);
+    function GetSlitPA:integer;
+    procedure SetSlitPA(value:integer);
   public
     { public declarations }
     constructor Create(aOwner: TComponent); override;
@@ -294,6 +340,17 @@ type
     property ReverseDec: Boolean read GetReverseDec write SetReverseDec;
     property DecBacklash: integer read GetBacklash write SetBacklash;
     property BacklashCompensation: Boolean read GetBacklashCompensation write SetBacklashCompensation;
+    property Spectro: boolean read Getspectro write Setspectro; // single star slit guiding
+    property LockX: double read GetLockX write SetLockX;        // slit lock position
+    property LockY: double read GetLockY write SetLockY;
+    property SearchWinMin: integer read GetSearchWinMin write SetSearchWinMin; // star search area
+    property SearchWinMax: integer read GetSearchWinMax write SetSearchWinMax;
+    property SlitX: integer read GetSlitX write SetSlitX; // slit position drawing
+    property SlitY: integer read GetSlitY write SetSlitY;
+    property SlitW: integer read GetSlitW write SetSlitW;
+    property SlitL: integer read GetSlitL write SetSlitL;
+    property SlitPA: integer read GetSlitPA write SetSlitPA;
+    property DrawSettingChange: boolean read FDrawSettingChange write FDrawSettingChange;
   end;
 
 implementation
@@ -344,6 +401,7 @@ begin
  cur_tracksolar:=SolarTracking;
  cur_vsolar:=v_solar1.Value;
  cur_vpasolar:=vpa_solar1.Value;
+ FDrawSettingChange:=false;
 end;
 
 destructor  Tf_internalguider.Destroy;
@@ -767,6 +825,12 @@ begin
   cur_disable_guiding:=disable_guiding;
 end;
 
+procedure Tf_internalguider.ForceRedraw(Sender: TObject);
+begin
+  FDrawSettingChange:=true;
+  if Assigned(FonRedraw) then FonRedraw(self);
+end;
+
 procedure Tf_internalguider.LongestPulse1Change(Sender: TObject);
 begin
   if (cur_LongestPulse<>LongestPulse) and Assigned(FonParameterChange) then FonParameterChange('Max RA duration = '+IntToStr(LongestPulse)+', Max DEC duration = '+IntToStr(LongestPulse));
@@ -1114,6 +1178,12 @@ begin
   if Assigned(FonRedraw) then FonRedraw(self);
 end;
 
+procedure Tf_internalguider.ButtonSetLockClick(Sender: TObject);
+begin
+  InternalGuiderSetLockPosition:=true;
+  ButtonSetLock.Down:=true;
+end;
+
 procedure Tf_internalguider.BtnZoom05Click(Sender: TObject);
 begin
   GuideImgZoom:=0.5;
@@ -1171,6 +1241,105 @@ begin
   CheckBoxReverseDec1.Checked:=value;
 end;
 
+procedure Tf_internalguider.Setspectro(value:Boolean);
+begin
+  cbSpectro.Checked:=value;
+end;
+
+function Tf_internalguider.Getspectro:Boolean;
+begin
+  result:=cbSpectro.Checked;
+end;
+
+function Tf_internalguider.GetLockX:double;
+begin
+ result:=edLockX.value;
+end;
+
+procedure Tf_internalguider.SetLockX(value:double);
+begin
+ edLockX.value:=value;
+end;
+
+function Tf_internalguider.GetLockY:double;
+begin
+ result:=edLockY.value;
+end;
+
+procedure Tf_internalguider.SetLockY(value:double);
+begin
+ edLockY.value:=value;
+end;
+
+function Tf_internalguider.GetSearchWinMin:integer;
+begin
+ result:=edslitWinMin.value;
+end;
+
+procedure Tf_internalguider.SetSearchWinMin(value:integer);
+begin
+ edslitWinMin.value:=value;
+end;
+
+function Tf_internalguider.GetSearchWinMax:integer;
+begin
+ result:=edslitWinMax.value;
+end;
+
+procedure Tf_internalguider.SetSearchWinMax(value:integer);
+begin
+ edslitWinMax.value:=value;
+end;
+
+function Tf_internalguider.GetSlitX:integer;
+begin
+ result:=spSlitX.value;
+end;
+
+procedure Tf_internalguider.SetSlitX(value:integer);
+begin
+ spSlitX.value:=value;
+end;
+
+function Tf_internalguider.GetSlitY:integer;
+begin
+ result:=spSlitY.value;
+end;
+
+procedure Tf_internalguider.SetSlitY(value:integer);
+begin
+ spSlitY.value:=value;
+end;
+
+function Tf_internalguider.GetSlitW:integer;
+begin
+ result:=spSlitW.value;
+end;
+
+procedure Tf_internalguider.SetSlitW(value:integer);
+begin
+ spSlitW.value:=value;
+end;
+
+function Tf_internalguider.GetSlitL:integer;
+begin
+ result:=spSlitL.value;
+end;
+
+procedure Tf_internalguider.SetSlitL(value:integer);
+begin
+ spSlitL.value:=value;
+end;
+
+function Tf_internalguider.GetSlitPA:integer;
+begin
+ result:=spSlitPA.value;
+end;
+
+procedure Tf_internalguider.SetSlitPA(value:integer);
+begin
+ spSlitPA.value:=value;
+end;
 
 
 end.

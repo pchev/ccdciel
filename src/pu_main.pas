@@ -1547,6 +1547,7 @@ begin
   ImageGuide.OnMouseMove := @ImageGuideMouseMove;
   ImageGuide.OnMouseUp := @ImageGuideMouseUp;
   ImageGuide.OnMouseWheel := @ImageGuideMouseWheel;
+  InternalGuiderSetLockPosition:=false;
   ScrFinderBmp := TBGRABitmap.Create;
   ImaFinderBmp:=TBGRABitmap.Create(1,1);
   finderimg_Height:=0;
@@ -4567,7 +4568,16 @@ begin
   f_internalguider.Gamma.Position:=config.GetValue('/InternalGuider/Visu/Gamma',50);
   f_internalguider.Luminosity.Position:=config.GetValue('/InternalGuider/Visu/Luminosity',50);
   GuideImgZoom:=config.GetValue('/InternalGuider/Visu/Zoom',0);
-
+  f_internalguider.Spectro:=config.GetValue('/InternalGuider/Spectro/Spectro',false);
+  f_internalguider.LockX:=config.GetValue('/InternalGuider/Spectro/LockX',0.0);
+  f_internalguider.LockY:=config.GetValue('/InternalGuider/Spectro/LockY',0.0);
+  f_internalguider.SearchWinMin:=config.GetValue('/InternalGuider/Spectro/SearchWinMin',40);
+  f_internalguider.SearchWinMax:=config.GetValue('/InternalGuider/Spectro/SearchWinMax',80);
+  f_internalguider.SlitX:=config.GetValue('/InternalGuider/Spectro/SlitX',0);
+  f_internalguider.SlitY:=config.GetValue('/InternalGuider/Spectro/SlitY',0);
+  f_internalguider.SlitW:=config.GetValue('/InternalGuider/Spectro/SlitW',0);
+  f_internalguider.SlitL:=config.GetValue('/InternalGuider/Spectro/SlitL',0);
+  f_internalguider.SlitPA:=config.GetValue('/InternalGuider/Spectro/SlitPA',0);
   MeridianOption:=config.GetValue('/Meridian/MeridianOption',3);
   MinutesPastMeridian:=config.GetValue('/Meridian/MinutesPast',15);
   MinutesPastMeridianMin:=config.GetValue('/Meridian/MinutesPastMin',10);
@@ -5138,6 +5148,17 @@ begin
   config.SetValue('/InternalGuider/Visu/Gamma',f_internalguider.Gamma.Position);
   config.SetValue('/InternalGuider/Visu/Luminosity',f_internalguider.Luminosity.Position);
   config.SetValue('/InternalGuider/Visu/Zoom',GuideImgZoom);
+
+  config.SetValue('/InternalGuider/Spectro/Spectro',f_internalguider.Spectro);
+  config.SetValue('/InternalGuider/Spectro/LockX',f_internalguider.LockX);
+  config.SetValue('/InternalGuider/Spectro/LockY',f_internalguider.LockY);
+  config.SetValue('/InternalGuider/Spectro/SearchWinMin',f_internalguider.SearchWinMin);
+  config.SetValue('/InternalGuider/Spectro/SearchWinMax',f_internalguider.SearchWinMax);
+  config.SetValue('/InternalGuider/Spectro/SlitX',f_internalguider.SlitX);
+  config.SetValue('/InternalGuider/Spectro/SlitY',f_internalguider.SlitY);
+  config.SetValue('/InternalGuider/Spectro/SlitW',f_internalguider.SlitW);
+  config.SetValue('/InternalGuider/Spectro/SlitL',f_internalguider.SlitL);
+  config.SetValue('/InternalGuider/Spectro/SlitPA',f_internalguider.SlitPA);
 
   // finder offset need to be saved at the same time
   config.SetValue('/Finder/OffsetX',astrometry.FinderOffsetX);
@@ -15952,8 +15973,11 @@ end;
 Procedure Tf_main.DrawGuideImage(display: boolean);
 var tmpbmp:TBGRABitmap;
     dmin,dmax: integer;
+    xs,ys: integer;
+    sp,cp,xx1,xx2,yy1,yy2: double;
 begin
 if (guidefits.HeaderInfo.naxis>0) and guidefits.ImageValid then begin
+  f_internalguider.DrawSettingChange:=false;
   guidefits.Gamma:=f_internalguider.Gamma.Position/100;
   dmin:=round(max(0,guidefits.HeaderInfo.dmin));
   dmax:=min(MAXWORD,round(max(dmin+1,guidefits.HeaderInfo.dmax*f_internalguider.Luminosity.Position/100)));
@@ -15976,6 +16000,30 @@ if (guidefits.HeaderInfo.naxis>0) and guidefits.ImageValid then begin
   end;
   guideimg_Width:=ImaGuideBmp.Width;
   guideimg_Height:=ImaGuideBmp.Height;
+  if f_internalguider.Spectro then begin
+    // draw lock position
+    ImaGuideBmp.Canvas.Pen.Mode:=pmMerge;
+    ImaGuideBmp.Canvas.Pen.Style:=psSolid;
+    ImaGuideBmp.Canvas.Pen.Width:=1;
+    xs:=round(f_internalguider.LockX);
+    ys:=round(f_internalguider.LockY);
+    ImaGuideBmp.Canvas.Pen.Color:=clGreen;
+    ImaGuideBmp.Canvas.Line(xs,0,xs,guideimg_Height);
+    ImaGuideBmp.Canvas.Line(0,ys,guideimg_Width,ys);
+    // draw slit
+    ImaGuideBmp.Canvas.Pen.Color:=clRed;
+    xs:=f_internalguider.SlitX;
+    ys:=f_internalguider.SlitY;
+    sincos(deg2rad*f_internalguider.SlitPA,sp,cp);
+    xx1 := ( f_internalguider.SlitL/2 * cp - f_internalguider.SlitW/2 * sp);
+    yy1 := ( f_internalguider.SlitL/2 * sp + f_internalguider.SlitW/2 * cp);
+    xx2 := ( f_internalguider.SlitL/2 * cp + f_internalguider.SlitW/2 * sp);
+    yy2 := (-f_internalguider.SlitL/2 * sp + f_internalguider.SlitW/2 * cp);
+    ImaGuideBmp.Canvas.Line(round(xs-xx1), round(ys-yy1), round(xs+xx2), round(ys-yy2));
+    ImaGuideBmp.Canvas.Line(round(xs+xx2), round(ys-yy2), round(xs+xx1), round(ys+yy1));
+    ImaGuideBmp.Canvas.Line(round(xs+xx1), round(ys+yy1), round(xs-xx2), round(ys+yy2));
+    ImaGuideBmp.Canvas.Line(round(xs-xx2), round(ys+yy2), round(xs-xx1), round(ys-yy1));
+  end;
  end
  else begin
   guideimg_Width:=guidefits.HeaderInfo.naxis1;
@@ -16120,6 +16168,7 @@ end;
 
 procedure Tf_main.ImageGuideMouseUp(Sender: TObject; Button: TMouseButton;
   Shift: TShiftState; X, Y: Integer);
+var xx,yy: integer;
 begin
 if GuideMouseMoving and guidefits.HeaderInfo.valid and guidefits.ImageValid then begin
     GuideImgCx:=GuideImgCx + (X-GuideMx) / GuideImgZoom;
@@ -16128,6 +16177,15 @@ if GuideMouseMoving and guidefits.HeaderInfo.valid and guidefits.ImageValid then
     GuideMx:=X;
     GuideMy:=Y;
 end;
+if InternalGuiderSetLockPosition and guidefits.HeaderInfo.valid and guidefits.ImageValid  then begin
+  GuideMx:=X;
+  GuideMy:=Y;
+  GuiderScreen2fits(GuideMx,GuideMy,xx,yy);
+  f_internalguider.LockX:=xx;
+  f_internalguider.LockY:=yy;
+end;
+f_internalguider.ButtonSetLock.Down:=false;
+InternalGuiderSetLockPosition:=false;
 GuideMouseMoving:=false;
 screen.Cursor:=crDefault;
 end;
@@ -16168,6 +16226,7 @@ begin
   if LockGuideTimerPlot then exit;
   GuidePlotTimer.Enabled:=false;
   LockGuideTimerPlot:=true;
+  if f_internalguider.DrawSettingChange then DrawGuideImage(true);
   PlotGuideImage;
   LockGuideTimerPlot:=false;
 end;
@@ -16343,7 +16402,6 @@ begin
  else begin
    //
  end;
- yy:=guideimg_Height-yy;
  StatusBar1.Panels[panelcursor].Text:=rsGuider+': '+inttostr(xx)+'/'+inttostr(yy)+': '+sval;
 end;
 
