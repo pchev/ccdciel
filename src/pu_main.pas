@@ -144,6 +144,7 @@ type
     MenuAscomFinderCameraSetup: TMenuItem;
     MenuAlpacaFinderCameraSetup: TMenuItem;
     MenuFinder: TMenuItem;
+    MenuItemSelectGuideStar: TMenuItem;
     MenuItemFinderImage: TMenuItem;
     MenuItemFinderSaveImage: TMenuItem;
     MenuItemFinderSolve: TMenuItem;
@@ -407,6 +408,7 @@ type
     procedure GuideCameraConnectTimerTimer(Sender: TObject);
     procedure GuidePlotTimerTimer(Sender: TObject);
     procedure GuiderMeasureTimerTimer(Sender: TObject);
+    procedure GuiderPopUpmenu1Popup(Sender: TObject);
     procedure MenuFlatApplyClick(Sender: TObject);
     procedure MenuFlatCameraClick(Sender: TObject);
     procedure MenuFlatClearClick(Sender: TObject);
@@ -450,6 +452,7 @@ type
     procedure MenuItemGuiderViewStatisticsClick(Sender: TObject);
     procedure MenuItemImageInspectionClick(Sender: TObject);
     procedure MenuItemGuiderStopAstrometryClick(Sender: TObject);
+    procedure MenuItemSelectGuideStarClick(Sender: TObject);
     procedure MenuPolarAlignment2Click(Sender: TObject);
     procedure MenuViewInternalguiderClick(Sender: TObject);
     procedure ShowDarkInfo;
@@ -15985,7 +15988,7 @@ end;
 Procedure Tf_main.DrawGuideImage(display: boolean);
 var tmpbmp:TBGRABitmap;
     dmin,dmax: integer;
-    xs,ys: integer;
+    xs,ys,r: integer;
     sp,cp,xx1,xx2,yy1,yy2: double;
 begin
 if (guidefits.HeaderInfo.naxis>0) and guidefits.ImageValid then begin
@@ -16022,6 +16025,14 @@ if (guidefits.HeaderInfo.naxis>0) and guidefits.ImageValid then begin
     ImaGuideBmp.Canvas.Pen.Color:=clGreen;
     ImaGuideBmp.Canvas.Line(xs,0,xs,guideimg_Height);
     ImaGuideBmp.Canvas.Line(0,ys,guideimg_Width,ys);
+    // draw selected star
+    if (not InternalguiderGuiding)and(f_internalguider.GuideLockNextX>0)and(f_internalguider.GuideLockNextY>0) then begin
+      xs:=f_internalguider.GuideLockNextX;
+      ys:=guideimg_Height-f_internalguider.GuideLockNextY;
+      r:=round(f_internalguider.SearchWinMin/2);
+      ImaGuideBmp.Canvas.Pen.Color:=clYellow;
+      ImaGuideBmp.Canvas.Frame(xs-r,ys-r,xs+r,ys+r);
+    end;
     // draw slit
     if (f_internalguider.SlitX>0)and(f_internalguider.SlitY>0) then begin
       ImaGuideBmp.Canvas.Pen.Color:=clRed;
@@ -16278,6 +16289,16 @@ begin
   astrometry.StopAstrometry;
 end;
 
+procedure Tf_main.MenuItemSelectGuideStarClick(Sender: TObject);
+var xx,yy: integer;
+begin
+  GuiderScreen2fits(GuideMx,GuideMy,true,xx,yy);
+  f_internalguider.GuideLockNextX:=xx;
+  f_internalguider.GuideLockNextY:=guideimg_Height-yy;
+  f_internalguider.DrawSettingChange:=true;
+  InternalguiderRedraw(nil);
+end;
+
 
 procedure Tf_main.MenuItemGuiderViewHeaderClick(Sender: TObject);
 var f: Tf_viewtext;
@@ -16349,6 +16370,11 @@ procedure Tf_main.GuiderMeasureTimerTimer(Sender: TObject);
 begin
   GuiderMeasureTimer.Enabled:=false;
   GuiderMeasureAtPos(GuideMx,GuideMy);
+end;
+
+procedure Tf_main.GuiderPopUpmenu1Popup(Sender: TObject);
+begin
+  MenuItemSelectGuideStar.Visible:=f_internalguider.GuideLock;
 end;
 
 procedure Tf_main.GuiderMeasureAtPos(x,y:integer);

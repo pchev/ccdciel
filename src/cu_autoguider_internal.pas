@@ -482,9 +482,16 @@ begin
   if initialize then
   begin
    if GuideLock then begin
-    // search unique star near slit position
-    fitsx:=round(finternalguider.LockX);
-    fitsy:=ysize-round(finternalguider.LockY);
+    if (finternalguider.GuideLockNextX>0)and(finternalguider.GuideLockNextY>0) then begin
+       // search star near specified position
+       fitsx:=round(finternalguider.GuideLockNextX);
+       fitsy:=ysize-round(finternalguider.GuideLockNextY);
+    end
+    else begin
+      // search unique star near slit position
+      fitsx:=round(finternalguider.LockX);
+      fitsy:=ysize-round(finternalguider.LockY);
+    end;
     guidefits.FindStarPos2(fitsx,fitsy,finternalguider.SearchWinMin,xc,yc,vmax,bg,bgdev);
     if vmax=0 then
       // if not found try with larger aperture
@@ -505,6 +512,10 @@ begin
         xy_array[0].flux:=1;
         setlength(xy_array_old,1);
         star_counter:=1;
+        // Mark star area
+        hfd1:=finternalguider.SearchWinMin/2/3;
+        FGuideBmp.Canvas.Frame(trunc(1+xc*GuideImgPixRatio-hfd1*3),trunc(1+yc-hfd1*3),trunc(1+xc*GuideImgPixRatio+hfd1*3),trunc(1+yc+hfd1*3));
+        finternalguider.LabelInfo2.Caption:=IntToStr(star_counter)+' star, Intensity: '+FormatFloat(f1,vmax);
      end;
    end
    else begin
@@ -637,8 +648,10 @@ begin
        xy_array[0].y2:=yc;
        xy_array[0].flux:=1;
        star_counter:=1;
-       hfd1:=finternalguider.SearchWinMin/2/3;
+       finternalguider.GuideLockNextX:=round(xc); // in case of recovery restart
+       finternalguider.GuideLockNextY:=ysize-round(yc);
        // Mark star area
+       hfd1:=finternalguider.SearchWinMin/2/3;
        FGuideBmp.Canvas.Frame(trunc(1+xc*GuideImgPixRatio-hfd1*3),trunc(1+yc-hfd1*3),trunc(1+xc*GuideImgPixRatio+hfd1*3),trunc(1+yc+hfd1*3));
        finternalguider.LabelInfo2.Caption:=IntToStr(star_counter)+' star, Intensity: '+FormatFloat(f1,vmax);
      end
@@ -692,6 +705,8 @@ begin
     msg('No stars detected!',0);
     initialize:=true;// Return initialize=true for fresh restart next call.
     FCamera.ResetFrame;
+    finternalguider.GuideLockNextX:=-1;
+    finternalguider.GuideLockNextY:=-1;
     exit;
   end;
 

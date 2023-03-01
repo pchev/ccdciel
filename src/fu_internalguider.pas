@@ -221,6 +221,7 @@ type
     cur_pulsegainWest1: string;
     cur_disable_guiding, cur_tracksolar: boolean;
     FDrawSettingChange: boolean;
+    FGuideLockNextX, FGuideLockNextY: integer;
     procedure ShowMinMove;
     procedure SetLed (cl : tcolor);
     procedure SetRA_hysteresis(value:integer);
@@ -343,6 +344,8 @@ type
     property GuideLock: boolean read GetGuideLock write SetGuideLock; // single star slit guiding
     property LockX: double read GetLockX write SetLockX;        // slit lock position
     property LockY: double read GetLockY write SetLockY;
+    property GuideLockNextX: integer read FGuideLockNextX write FGuideLockNextX;
+    property GuideLockNextY: integer read FGuideLockNextY write FGuideLockNextY;
     property SearchWinMin: integer read GetSearchWinMin write SetSearchWinMin; // star search area
     property SearchWinMax: integer read GetSearchWinMax write SetSearchWinMax;
     property SlitX: integer read GetSlitX write SetSlitX; // slit position drawing
@@ -402,6 +405,8 @@ begin
  cur_vsolar:=v_solar1.Value;
  cur_vpasolar:=vpa_solar1.Value;
  FDrawSettingChange:=false;
+ FGuideLockNextX:=-1;
+ FGuideLockNextY:=-1;
 end;
 
 destructor  Tf_internalguider.Destroy;

@@ -1799,6 +1799,7 @@ object f_main: Tf_main
     Top = 408
   end
   object GuiderPopUpmenu1: TPopupMenu
+    OnPopup = GuiderPopUpmenu1Popup
     Left = 672
     Top = 41
     object MenuItemGuiderImage: TMenuItem
@@ -1807,6 +1808,10 @@ object f_main: Tf_main
     end
     object Separator1: TMenuItem
       Caption = '-'
+    end
+    object MenuItemSelectGuideStar: TMenuItem
+      Caption = 'Select guide star'
+      OnClick = MenuItemSelectGuideStarClick
     end
     object MenuItemGuiderSaveImage: TMenuItem
       Caption = 'Save guide image'
