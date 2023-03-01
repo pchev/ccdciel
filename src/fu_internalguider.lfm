@@ -682,7 +682,7 @@ object f_internalguider: Tf_internalguider
             Width = 313
             Align = alClient
             Caption = 'Options:'
-            ClientHeight = 448
+            ClientHeight = 430
             ClientWidth = 311
             TabOrder = 0
             object measure_method2: TCheckBox
@@ -915,7 +915,7 @@ object f_internalguider: Tf_internalguider
             Width = 313
             Align = alClient
             Caption = 'Calibration results:'
-            ClientHeight = 448
+            ClientHeight = 430
             ClientWidth = 311
             TabOrder = 0
             object Label5: TLabel
@@ -1133,7 +1133,7 @@ object f_internalguider: Tf_internalguider
           Width = 313
           Align = alTop
           Caption = 'Slit drawing'
-          ClientHeight = 190
+          ClientHeight = 172
           ClientWidth = 311
           TabOrder = 0
           object Label32: TLabel
@@ -1240,15 +1240,15 @@ object f_internalguider: Tf_internalguider
           Width = 313
           Align = alTop
           Caption = 'Spectroscope slit guiding'
-          ClientHeight = 166
+          ClientHeight = 148
           ClientWidth = 311
           TabOrder = 1
-          object cbSpectro: TCheckBox
+          object cbGuideLock: TCheckBox
             Left = 8
             Height = 21
             Top = 8
-            Width = 161
-            Caption = 'Use fixed lock position'
+            Width = 123
+            Caption = 'Set lock position'
             OnChange = ForceRedraw
             TabOrder = 0
           end
@@ -1308,7 +1308,7 @@ object f_internalguider: Tf_internalguider
           Width = 313
           Align = alTop
           Caption = 'Star search area'
-          ClientHeight = 87
+          ClientHeight = 69
           ClientWidth = 311
           TabOrder = 2
           object Label30: TLabel

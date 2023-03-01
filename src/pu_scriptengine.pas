@@ -31,7 +31,7 @@ interface
 
 uses  u_global, u_utils, cu_fits, indiapi, cu_planetarium, fu_ccdtemp, fu_devicesconnection, pu_pause,
   fu_capture, fu_preview, fu_mount, cu_wheel, cu_mount, cu_camera, cu_focuser, cu_autoguider, cu_astrometry,
-  fu_cover, cu_cover,
+  fu_cover, cu_cover, fu_internalguider,
   Classes, SysUtils, FileUtil, uPSComponent, uPSComponent_Default, LazFileUtils,
   uPSComponent_Forms, uPSComponent_Controls, uPSComponent_StdCtrls, Forms, process,
   u_translation, Controls, Graphics, Dialogs, ExtCtrls;
@@ -90,6 +90,7 @@ type
     Fautoguider: T_autoguider;
     Fastrometry: TAstrometry;
     Fplanetarium: TPlanetarium;
+    FInternalGuider: Tf_internalguider;
     FonMsg: TNotifyMsg;
     FonStartSequence: TNotifyStr;
     FonScriptExecute: TNotifyEvent;
@@ -266,6 +267,7 @@ type
     property Astrometry: TAstrometry read Fastrometry write Fastrometry;
     property Planetarium: TPlanetarium read Fplanetarium write Fplanetarium;
     property ScriptFilename: string read FScriptFilename;
+    property InternalGuider: Tf_internalguider read Finternalguider write Finternalguider;
   end;
 
 var
@@ -1408,7 +1410,8 @@ begin
  if Autoguider=nil then exit;
  if (sx='')and(sy='') then begin
    config.SetValue('/Autoguider/Lock/GuideSetLock',False);
-   GuideSetLock:=False;
+   FInternalGuider.GuideLock:=false;
+   PHD2GuideSetLock:=False;
    result:=msgOK;
  end
  else begin
@@ -1419,9 +1422,12 @@ begin
    config.SetValue('/Autoguider/Lock/GuideSetLock',True);
    config.SetValue('/Autoguider/Lock/GuideLockX',x);
    config.SetValue('/Autoguider/Lock/GuideLockY',y);
-   GuideSetLock:=True;
-   GuideLockX:=x;
-   GuideLockY:=y;
+   FInternalGuider.GuideLock:=True;
+   FInternalGuider.LockX:=x;
+   FInternalGuider.LockX:=y;
+   PHD2GuideSetLock:=True;
+   PHD2GuideLockX:=x;
+   PHD2GuideLockY:=y;
    result:=msgOK;
  end;
  except

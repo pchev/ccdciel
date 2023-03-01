@@ -52,7 +52,7 @@ type
     ButtonGuide: TButton;
     ButtonStop: TButton;
     ButtonStop1: TButton;
-    cbSpectro: TCheckBox;
+    cbGuideLock: TCheckBox;
     CheckBoxBacklash: TCheckBox;
     CheckBoxInverseSolarTracking1: TCheckBox;
     CheckBoxReverseDec1: TCheckBox;
@@ -273,8 +273,8 @@ type
     function GetBacklash:integer;
     procedure SetBacklashCompensation(value:Boolean);
     function GetBacklashCompensation:Boolean;
-    procedure Setspectro(value:Boolean);
-    function Getspectro:Boolean;
+    procedure SetGuideLock(value:Boolean);
+    function GetGuideLock:Boolean;
     function GetLockX:double;
     procedure SetLockX(value:double);
     function GetLockY:double;
@@ -340,7 +340,7 @@ type
     property ReverseDec: Boolean read GetReverseDec write SetReverseDec;
     property DecBacklash: integer read GetBacklash write SetBacklash;
     property BacklashCompensation: Boolean read GetBacklashCompensation write SetBacklashCompensation;
-    property Spectro: boolean read Getspectro write Setspectro; // single star slit guiding
+    property GuideLock: boolean read GetGuideLock write SetGuideLock; // single star slit guiding
     property LockX: double read GetLockX write SetLockX;        // slit lock position
     property LockY: double read GetLockY write SetLockY;
     property SearchWinMin: integer read GetSearchWinMin write SetSearchWinMin; // star search area
@@ -1241,14 +1241,14 @@ begin
   CheckBoxReverseDec1.Checked:=value;
 end;
 
-procedure Tf_internalguider.Setspectro(value:Boolean);
+procedure Tf_internalguider.SetGuideLock(value:Boolean);
 begin
-  cbSpectro.Checked:=value;
+  cbGuideLock.Checked:=value;
 end;
 
-function Tf_internalguider.Getspectro:Boolean;
+function Tf_internalguider.GetGuideLock:Boolean;
 begin
-  result:=cbSpectro.Checked;
+  result:=cbGuideLock.Checked;
 end;
 
 function Tf_internalguider.GetLockX:double;

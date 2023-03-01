@@ -1512,7 +1512,7 @@ begin
   LowQualityDisplay:={$ifdef cpuarm}true{$else}false{$endif};
   ConfigExpEarlyStart:=true;
   EarlyDither:=true;
-  GuideSetLock:=false;
+  PHD2GuideSetLock:=false;
   WantExif:=true;
   MagnitudeCalibration:=NullCoord;
   Collimation:=false;
@@ -1893,6 +1893,7 @@ begin
   f_scriptengine.Autoguider:=autoguider;
   f_scriptengine.Astrometry:=astrometry;
   f_scriptengine.Planetarium:=planetarium;
+  f_scriptengine.InternalGuider:=f_internalguider;
 
   f_script:=Tf_script.Create(self);
   f_script.onMsg:=@NewMessage;
@@ -4533,9 +4534,12 @@ begin
   SettleMinTime:=config.GetValue('/Autoguider/Settle/MinTime',5);
   SettleMaxTime:=config.GetValue('/Autoguider/Settle/MaxTime',30);
   CalibrationDelay:=config.GetValue('/Autoguider/Settle/CalibrationDelay',300);
-  GuideSetLock:=config.GetValue('/Autoguider/Lock/GuideSetLock',false);
-  GuideLockX:=config.GetValue('/Autoguider/Lock/GuideLockX',0.0);
-  GuideLockY:=config.GetValue('/Autoguider/Lock/GuideLockY',0.0);
+  PHD2GuideSetLock:=config.GetValue('/Autoguider/Lock/GuideSetLock',false);
+  PHD2GuideLockX:=config.GetValue('/Autoguider/Lock/GuideLockX',0.0);
+  PHD2GuideLockY:=config.GetValue('/Autoguider/Lock/GuideLockY',0.0);
+  f_internalguider.GuideLock:=config.GetValue('/Autoguider/Lock/GuideSetLock',false);
+  f_internalguider.LockX:=config.GetValue('/Autoguider/Lock/GuideLockX',0.0);
+  f_internalguider.LockY:=config.GetValue('/Autoguider/Lock/GuideLockY',0.0);
 
   f_internalguider.RAgain:=config.GetValue('/InternalGuider/RaGain',50);
   f_internalguider.DECgain:=config.GetValue('/InternalGuider/DecGain',50);
@@ -4568,9 +4572,6 @@ begin
   f_internalguider.Gamma.Position:=config.GetValue('/InternalGuider/Visu/Gamma',50);
   f_internalguider.Luminosity.Position:=config.GetValue('/InternalGuider/Visu/Luminosity',50);
   GuideImgZoom:=config.GetValue('/InternalGuider/Visu/Zoom',0);
-  f_internalguider.Spectro:=config.GetValue('/InternalGuider/Spectro/Spectro',false);
-  f_internalguider.LockX:=config.GetValue('/InternalGuider/Spectro/LockX',0.0);
-  f_internalguider.LockY:=config.GetValue('/InternalGuider/Spectro/LockY',0.0);
   f_internalguider.SearchWinMin:=config.GetValue('/InternalGuider/Spectro/SearchWinMin',40);
   f_internalguider.SearchWinMax:=config.GetValue('/InternalGuider/Spectro/SearchWinMax',80);
   f_internalguider.SlitX:=config.GetValue('/InternalGuider/Spectro/SlitX',0);
@@ -4578,6 +4579,7 @@ begin
   f_internalguider.SlitW:=config.GetValue('/InternalGuider/Spectro/SlitW',0);
   f_internalguider.SlitL:=config.GetValue('/InternalGuider/Spectro/SlitL',0);
   f_internalguider.SlitPA:=config.GetValue('/InternalGuider/Spectro/SlitPA',0);
+
   MeridianOption:=config.GetValue('/Meridian/MeridianOption',3);
   MinutesPastMeridian:=config.GetValue('/Meridian/MinutesPast',15);
   MinutesPastMeridianMin:=config.GetValue('/Meridian/MinutesPastMin',10);
@@ -5149,9 +5151,9 @@ begin
   config.SetValue('/InternalGuider/Visu/Luminosity',f_internalguider.Luminosity.Position);
   config.SetValue('/InternalGuider/Visu/Zoom',GuideImgZoom);
 
-  config.SetValue('/InternalGuider/Spectro/Spectro',f_internalguider.Spectro);
-  config.SetValue('/InternalGuider/Spectro/LockX',f_internalguider.LockX);
-  config.SetValue('/InternalGuider/Spectro/LockY',f_internalguider.LockY);
+  config.SetValue('/Autoguider/Lock/GuideSetLock',f_internalguider.GuideLock);
+  config.SetValue('/Autoguider/Lock/GuideLockX',f_internalguider.LockX);
+  config.SetValue('/Autoguider/Lock/GuideLockY',f_internalguider.LockY);
   config.SetValue('/InternalGuider/Spectro/SearchWinMin',f_internalguider.SearchWinMin);
   config.SetValue('/InternalGuider/Spectro/SearchWinMax',f_internalguider.SearchWinMax);
   config.SetValue('/InternalGuider/Spectro/SlitX',f_internalguider.SlitX);
@@ -16000,13 +16002,13 @@ if (guidefits.HeaderInfo.naxis>0) and guidefits.ImageValid then begin
   end;
   guideimg_Width:=ImaGuideBmp.Width;
   guideimg_Height:=ImaGuideBmp.Height;
-  if f_internalguider.Spectro then begin
+  if f_internalguider.GuideLock then begin
     // draw lock position
     ImaGuideBmp.Canvas.Pen.Mode:=pmMerge;
     ImaGuideBmp.Canvas.Pen.Style:=psSolid;
     ImaGuideBmp.Canvas.Pen.Width:=1;
     xs:=round(f_internalguider.LockX);
-    ys:=round(f_internalguider.LockY);
+    ys:=guideimg_Height-round(f_internalguider.LockY);
     ImaGuideBmp.Canvas.Pen.Color:=clGreen;
     ImaGuideBmp.Canvas.Line(xs,0,xs,guideimg_Height);
     ImaGuideBmp.Canvas.Line(0,ys,guideimg_Width,ys);
@@ -16014,8 +16016,8 @@ if (guidefits.HeaderInfo.naxis>0) and guidefits.ImageValid then begin
     if (f_internalguider.SlitX>0)and(f_internalguider.SlitY>0) then begin
       ImaGuideBmp.Canvas.Pen.Color:=clRed;
       xs:=f_internalguider.SlitX;
-      ys:=f_internalguider.SlitY;
-      sincos(deg2rad*f_internalguider.SlitPA,sp,cp);
+      ys:=guideimg_Height-f_internalguider.SlitY;
+      sincos(deg2rad*(f_internalguider.SlitPA+90),sp,cp);
       xx1 := ( f_internalguider.SlitL/2 * cp - f_internalguider.SlitW/2 * sp);
       yy1 := ( f_internalguider.SlitL/2 * sp + f_internalguider.SlitW/2 * cp);
       xx2 := ( f_internalguider.SlitL/2 * cp + f_internalguider.SlitW/2 * sp);
@@ -16113,7 +16115,8 @@ else begin
    str.Free;
    tmpbmp.Free;
 end;
-if camera.ASCOMFlipImage then ScrGuideBmp.VerticalFlip; // same orientation as main camera
+
+ScrGuideBmp.VerticalFlip; // "Windows orientation"
 ImageGuide.Invalidate;
 {$ifdef debug_raw}writeln(FormatDateTime(dateiso,Now)+blank+'PlotImage end');{$endif}
 end;
@@ -16182,7 +16185,7 @@ end;
 if InternalGuiderSetLockPosition and guidefits.HeaderInfo.valid and guidefits.ImageValid  then begin
   GuideMx:=X;
   GuideMy:=Y;
-  GuiderScreen2fits(GuideMx,GuideMy,xx,yy);
+  GuiderScreen2fits(GuideMx,GuideMy,false,xx,yy); // flipped later when setting the value
   f_internalguider.LockX:=xx;
   f_internalguider.LockY:=yy;
 end;
@@ -16344,7 +16347,7 @@ var xx,yy: integer;
     sval:string;
     bg,bgdev,xc,yc,hfd,fwhm,vmax,dval,snr,flux: double;
 begin
- GuiderScreen2fits(x,y,xx,yy);
+ GuiderScreen2fits(x,y,true,xx,yy); // always flipped vertically
  if (xx>0)and(xx<guidefits.HeaderInfo.naxis1)and(yy>0)and(yy<guidefits.HeaderInfo.naxis2) then
     if guidefits.preview_axis=1 then begin
       if guidefits.HeaderInfo.bitpix>0 then begin
@@ -16404,6 +16407,7 @@ begin
  else begin
    //
  end;
+ yy:=guideimg_Height-yy;
  StatusBar1.Panels[panelcursor].Text:=rsGuider+': '+inttostr(xx)+'/'+inttostr(yy)+': '+sval;
 end;
 

@@ -650,9 +650,9 @@ try
     buf:=buf+'],';
     buf:=buf+'"id": 2003}';
     Send(buf);
-    if GuideSetLock then begin
+    if PHD2GuideSetLock then begin
       wait(1);
-      SetLockPosition(GuideLockX,GuideLockY);
+      SetLockPosition(PHD2GuideLockX,PHD2GuideLockY);
     end;
   end else begin
     AutoguiderAlert:=false;

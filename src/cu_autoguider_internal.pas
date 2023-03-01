@@ -304,11 +304,15 @@ end;
 
 function T_autoguider_internal.GetLockPosition(out x,y:double):boolean;
 begin
-  result:=false;
+  x:=finternalguider.LockX;
+  y:=finternalguider.LockY;
+  result:=true;
 end;
 
 procedure T_autoguider_internal.SetLockPosition(x,y:double);
 begin
+  finternalguider.LockX:=x;
+  finternalguider.LockY:=y;
 end;
 
 procedure T_autoguider_internal.StartSettle;
@@ -429,7 +433,7 @@ function  T_autoguider_internal.measure_drift(var initialize:boolean; out drX,dr
 var
   i,fitsx,fitsy,stepsize,xsize,ysize,star_counter,star_counter2,counter,len,maxSNRstar,ix,iy: integer;
   hfd1,star_fwhm,vmax,bg,bgdev,xc,yc,snr,flux,fluxratio,min_SNR,min_HFD,maxSNR,maxSNRhfd,margin,y,mhfd : double;
-  Spectro: boolean;
+  GuideLock: boolean;
   drift_arrayX,drift_arrayY : array of double;
   starx,stary,frx,fry,frw,frh: integer;
 const
@@ -461,7 +465,7 @@ begin
     dithery:=0;
   end;
 
-  Spectro:=finternalguider.Spectro and (not (InternalguiderCalibrating or InternalguiderCalibratingBacklash));
+  GuideLock:=finternalguider.GuideLock and (not (InternalguiderCalibrating or InternalguiderCalibratingBacklash));
 
   min_SNR:=finternalguider.minSNR;//make local to reduce some CPU load
   min_HFD:=finternalguider.minHFD;//make local to reduce some CPU load
@@ -477,10 +481,10 @@ begin
 
   if initialize then
   begin
-   if spectro then begin
+   if GuideLock then begin
     // search unique star near slit position
     fitsx:=round(finternalguider.LockX);
-    fitsy:=round(finternalguider.LockY);
+    fitsy:=ysize-round(finternalguider.LockY);
     guidefits.FindStarPos2(fitsx,fitsy,finternalguider.SearchWinMin,xc,yc,vmax,bg,bgdev);
     if vmax=0 then
       // if not found try with larger aperture
@@ -493,8 +497,8 @@ begin
     if vmax>0 then begin
         setlength(xy_array,1);
         // always use the slit position as reference
-        xy_array[0].x1:=finternalguider.LockX;
-        xy_array[0].y1:=finternalguider.LockY;
+        xy_array[0].x1:=fitsx;
+        xy_array[0].y1:=fitsy;
         // current position of star, to be moved on slit
         xy_array[0].x2:=xc;
         xy_array[0].y2:=yc;
@@ -616,11 +620,11 @@ begin
   end
   else
   begin //second, third ... call
-   if spectro then begin
+   if GuideLock then begin
      // single star slit guiding
      // adjust reference slit position if the user make modification while guiding
      xy_array[0].x1:=finternalguider.LockX;
-     xy_array[0].y1:=finternalguider.LockY;
+     xy_array[0].y1:=ysize-finternalguider.LockY;
      xy_array_old[0].x1:=xy_array[0].x1;
      xy_array_old[0].y1:=xy_array[0].y1;
      // search star near previous position
@@ -825,7 +829,7 @@ end;
 
 procedure T_autoguider_internal.InternalguiderStart;
 begin
-  Finternalguider.cbSpectro.enabled:=false;
+  Finternalguider.cbGuideLock.enabled:=false;
   SetStatus('Start Guiding',GUIDER_BUSY);
   Application.QueueAsyncCall(@InternalguiderStartAsync,0);
 end;
@@ -1402,7 +1406,7 @@ begin
   Finternalguider.ButtonCalibrate.enabled:=true;
   Finternalguider.ButtonGuide.enabled:=true;
   Finternalguider.ButtonDark.enabled:=true;
-  Finternalguider.cbSpectro.enabled:=true;
+  Finternalguider.cbGuideLock.enabled:=true;
   Finternalguider.led.Brush.Color:=clGray;
   Finternalguider.LabelInfo.Caption:='';
   Finternalguider.LabelInfo2.Caption:='';
