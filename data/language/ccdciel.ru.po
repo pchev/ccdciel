@@ -6,14 +6,14 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ccdciel\n"
 "Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
-"POT-Creation-Date: 2023-02-24 15:18+0000\n"
+"POT-Creation-Date: 2023-03-01 09:58+0000\n"
 "PO-Revision-Date: 2023-02-11 17:45+0000\n"
 "Last-Translator: Sergey Tarantsov <tsn-ast@yandex.ru>\n"
 "Language-Team: Russian <ru@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2023-02-24 15:24+0000\n"
+"X-Launchpad-Export-Date: 2023-03-01 10:24+0000\n"
 "X-Generator: Launchpad (build b826c8bc42f0c41016fa141bf50faee47f7ecd80)\n"
 
 #: u_translation.rs2d
@@ -931,6 +931,10 @@ msgstr "Нажмите Далее, чтобы начать измерение."
 #: u_translation.rsclicknexttos2
 msgid "Click Next to save this values to the configuration for this profile."
 msgstr "Нажмите Далее, чтобы сохранить эти значения в конфигурации для этого профиля."
+
+#: u_translation.rsclickonimage
+msgid "Click on image to set"
+msgstr ""
 
 #: u_translation.rsclicktheobje
 msgid "Click the object in planetarium"
@@ -2087,6 +2091,10 @@ msgstr ""
 msgid "Guide"
 msgstr "Гидирование"
 
+#: u_translation.rsguideboxsize
+msgid "Guide box size"
+msgstr ""
+
 #: u_translation.rsguidecamera
 msgid "Guide camera"
 msgstr "Гид-камера"
@@ -2405,6 +2413,10 @@ msgstr "Широта"
 msgid "Learn"
 msgstr "Обучить"
 
+#: u_translation.rslength
+msgid "Length"
+msgstr ""
+
 #: u_translation.rslicenseagree
 msgid "License agreement"
 msgstr "Лицензионное соглашение"
@@ -2448,6 +2460,10 @@ msgstr "Загрузить флет"
 #: u_translation.rslockoverlay
 msgid "Lock overlay"
 msgstr "Блокировка наложения"
+
+#: u_translation.rslockposition
+msgid "Lock position"
+msgstr ""
 
 #: u_translation.rslogfolder
 msgid "Log folder"
@@ -2562,6 +2578,10 @@ msgstr "Максимальное количество повторов"
 #: u_translation.rsmaximumsearc
 msgid "Maximum search radius"
 msgstr "Максимальный радиус поиска"
+
+#: u_translation.rsmaximumsearc2
+msgid "Maximum search box"
+msgstr ""
 
 #: u_translation.rsmaximumsourc
 msgid "Maximum sources"
@@ -3929,6 +3949,10 @@ msgstr "Поворот телескопа"
 msgid "Rotating"
 msgstr "Повернуть"
 
+#: u_translation.rsrotation
+msgid "Rotation angle"
+msgstr ""
+
 #: u_translation.rsrotator
 msgid "Rotator"
 msgstr "Ротатор"
@@ -4316,6 +4340,10 @@ msgstr "Установлено направление фокусировки н�
 msgid "Set frame type %s"
 msgstr "Установлен тип кадра %s"
 
+#: u_translation.rssetlockposit
+msgid "Set lock position"
+msgstr ""
+
 #: u_translation.rssetmagnitude
 msgid "Set magnitude"
 msgstr "Установить величину"
@@ -4534,6 +4562,10 @@ msgstr "Компенсация смещения %s/%s"
 msgid "Slippage correction "
 msgstr "Коррекция проскальзывания "
 
+#: u_translation.rsslitdrawing
+msgid "Slit drawing"
+msgstr ""
+
 #: u_translation.rsslope
 msgid "Slope"
 msgstr "Наклон"
@@ -4583,6 +4615,10 @@ msgstr "Юг"
 #: u_translation.rsspectralprof
 msgid "Spectral profile"
 msgstr "Спектральный профиль"
+
+#: u_translation.rsspectroscopy
+msgid "Spectroscopy"
+msgstr ""
 
 #: u_translation.rsspeed
 msgid "Speed"
@@ -4646,6 +4682,10 @@ msgstr "Действия при потере звезды"
 #: u_translation.rsstarprofile
 msgid "Star profile"
 msgstr "Профиль звезды"
+
+#: u_translation.rsstarsearchar
+msgid "Star search area"
+msgstr ""
 
 #: u_translation.rsstart
 msgid "Start"
@@ -4951,6 +4991,10 @@ msgstr "Допускать звёзды размером в 1 пиксел"
 #, object-pascal-format
 msgid "Take control exposure for %s seconds"
 msgstr "Контрольный снимок %s сек."
+
+#: u_translation.rstarget
+msgid "Target"
+msgstr ""
 
 #: u_translation.rstargetcancel
 #, object-pascal-format

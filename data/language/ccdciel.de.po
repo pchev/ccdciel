@@ -6,14 +6,14 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ccdciel\n"
 "Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
-"POT-Creation-Date: 2023-02-24 15:18+0000\n"
+"POT-Creation-Date: 2023-03-01 09:58+0000\n"
 "PO-Revision-Date: 2023-01-29 19:00+0000\n"
 "Last-Translator: Thomas <email@starhopper.de>\n"
 "Language-Team: German <de@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2023-02-24 15:24+0000\n"
+"X-Launchpad-Export-Date: 2023-03-01 10:24+0000\n"
 "X-Generator: Launchpad (build b826c8bc42f0c41016fa141bf50faee47f7ecd80)\n"
 
 #: u_translation.rs2d
@@ -931,6 +931,10 @@ msgstr "Klicken Sie Weiter um die Messung zu starten"
 #: u_translation.rsclicknexttos2
 msgid "Click Next to save this values to the configuration for this profile."
 msgstr "Klicken Sie auf Weiter, um diese Werte in der Konfiguration für dieses Profil zu speichern."
+
+#: u_translation.rsclickonimage
+msgid "Click on image to set"
+msgstr ""
 
 #: u_translation.rsclicktheobje
 msgid "Click the object in planetarium"
@@ -2087,6 +2091,10 @@ msgstr "Nachführen"
 msgid "Guide"
 msgstr "Nachführen"
 
+#: u_translation.rsguideboxsize
+msgid "Guide box size"
+msgstr ""
+
 #: u_translation.rsguidecamera
 msgid "Guide camera"
 msgstr "Nachführkamera"
@@ -2405,6 +2413,10 @@ msgstr "Breitengrad"
 msgid "Learn"
 msgstr "Lernen"
 
+#: u_translation.rslength
+msgid "Length"
+msgstr ""
+
 #: u_translation.rslicenseagree
 msgid "License agreement"
 msgstr "Lizenzabkommen"
@@ -2448,6 +2460,10 @@ msgstr "Flatfield laden"
 #: u_translation.rslockoverlay
 msgid "Lock overlay"
 msgstr "Overlay sperren"
+
+#: u_translation.rslockposition
+msgid "Lock position"
+msgstr ""
 
 #: u_translation.rslogfolder
 msgid "Log folder"
@@ -2562,6 +2578,10 @@ msgstr "Maximale Anzahl von Wiederholungsversuchen"
 #: u_translation.rsmaximumsearc
 msgid "Maximum search radius"
 msgstr "Maximaler Suchradius"
+
+#: u_translation.rsmaximumsearc2
+msgid "Maximum search box"
+msgstr ""
 
 #: u_translation.rsmaximumsourc
 msgid "Maximum sources"
@@ -3929,6 +3949,10 @@ msgstr "Drehe das Teleskop"
 msgid "Rotating"
 msgstr "Rotation läuft"
 
+#: u_translation.rsrotation
+msgid "Rotation angle"
+msgstr ""
+
 #: u_translation.rsrotator
 msgid "Rotator"
 msgstr "Rotator"
@@ -4316,6 +4340,10 @@ msgstr "Stelle Fokussierrichtung nach außen"
 msgid "Set frame type %s"
 msgstr "Bildtyp einstellen %s"
 
+#: u_translation.rssetlockposit
+msgid "Set lock position"
+msgstr ""
+
 #: u_translation.rssetmagnitude
 msgid "Set magnitude"
 msgstr "Sternhelligkeit einstellen"
@@ -4534,6 +4562,10 @@ msgstr "Schwenke mit Offsett %s/%s"
 msgid "Slippage correction "
 msgstr "Schlupfkorrektur "
 
+#: u_translation.rsslitdrawing
+msgid "Slit drawing"
+msgstr ""
+
 #: u_translation.rsslope
 msgid "Slope"
 msgstr "Steigung"
@@ -4583,6 +4615,10 @@ msgstr "Süd"
 #: u_translation.rsspectralprof
 msgid "Spectral profile"
 msgstr "Spektralprofil"
+
+#: u_translation.rsspectroscopy
+msgid "Spectroscopy"
+msgstr ""
 
 #: u_translation.rsspeed
 msgid "Speed"
@@ -4646,6 +4682,10 @@ msgstr "Stern verloren versuche Wiederherstellung"
 #: u_translation.rsstarprofile
 msgid "Star profile"
 msgstr "Sternprofil"
+
+#: u_translation.rsstarsearchar
+msgid "Star search area"
+msgstr ""
 
 #: u_translation.rsstart
 msgid "Start"
@@ -4951,6 +4991,10 @@ msgstr "System ist undersampled, akzeptiere 1 Pixel große Sterne"
 #, object-pascal-format
 msgid "Take control exposure for %s seconds"
 msgstr "Nehme Kontrollbild auf mit %s Sekunden"
+
+#: u_translation.rstarget
+msgid "Target"
+msgstr ""
 
 #: u_translation.rstargetcancel
 #, object-pascal-format

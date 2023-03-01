@@ -1263,6 +1263,9 @@ begin
   BtnMaxDriftDisable.Caption:=rsDisable;
   GuideDriftAbort.Caption:=rsAbortAfterRe;
   Label157.Caption:=rsTimeInARow;
+  GroupBox34.Caption:=rsSpectroscopy;
+  GuideSetLock.Caption:=rsSetLockPosit;
+
   PagePlanetarium.Caption := rsPlanetarium;
   PlanetariumBox.Caption := rsSoftware;
   CheckBoxLocalCdc.Caption := rsSkychartOnLo;

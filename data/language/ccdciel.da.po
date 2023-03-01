@@ -6,14 +6,14 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ccdciel\n"
 "Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
-"POT-Creation-Date: 2023-02-24 15:18+0000\n"
+"POT-Creation-Date: 2023-03-01 09:58+0000\n"
 "PO-Revision-Date: 2021-09-24 16:13+0000\n"
 "Last-Translator: Jimmy Frydkær Jensen <jimmy@frydkaer.net>\n"
 "Language-Team: Danish <da@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2023-02-24 15:24+0000\n"
+"X-Launchpad-Export-Date: 2023-03-01 10:24+0000\n"
 "X-Generator: Launchpad (build b826c8bc42f0c41016fa141bf50faee47f7ecd80)\n"
 
 #: u_translation.rs2d
@@ -930,6 +930,10 @@ msgstr ""
 
 #: u_translation.rsclicknexttos2
 msgid "Click Next to save this values to the configuration for this profile."
+msgstr ""
+
+#: u_translation.rsclickonimage
+msgid "Click on image to set"
 msgstr ""
 
 #: u_translation.rsclicktheobje
@@ -2087,6 +2091,10 @@ msgstr ""
 msgid "Guide"
 msgstr "Vejledning"
 
+#: u_translation.rsguideboxsize
+msgid "Guide box size"
+msgstr ""
+
 #: u_translation.rsguidecamera
 msgid "Guide camera"
 msgstr ""
@@ -2405,6 +2413,10 @@ msgstr ""
 msgid "Learn"
 msgstr ""
 
+#: u_translation.rslength
+msgid "Length"
+msgstr ""
+
 #: u_translation.rslicenseagree
 msgid "License agreement"
 msgstr ""
@@ -2447,6 +2459,10 @@ msgstr ""
 
 #: u_translation.rslockoverlay
 msgid "Lock overlay"
+msgstr ""
+
+#: u_translation.rslockposition
+msgid "Lock position"
 msgstr ""
 
 #: u_translation.rslogfolder
@@ -2561,6 +2577,10 @@ msgstr ""
 
 #: u_translation.rsmaximumsearc
 msgid "Maximum search radius"
+msgstr ""
+
+#: u_translation.rsmaximumsearc2
+msgid "Maximum search box"
 msgstr ""
 
 #: u_translation.rsmaximumsourc
@@ -3929,6 +3949,10 @@ msgstr ""
 msgid "Rotating"
 msgstr ""
 
+#: u_translation.rsrotation
+msgid "Rotation angle"
+msgstr ""
+
 #: u_translation.rsrotator
 msgid "Rotator"
 msgstr "Rotator"
@@ -4316,6 +4340,10 @@ msgstr "Sæt fokusretning udad"
 msgid "Set frame type %s"
 msgstr ""
 
+#: u_translation.rssetlockposit
+msgid "Set lock position"
+msgstr ""
+
 #: u_translation.rssetmagnitude
 msgid "Set magnitude"
 msgstr ""
@@ -4534,6 +4562,10 @@ msgstr ""
 msgid "Slippage correction "
 msgstr ""
 
+#: u_translation.rsslitdrawing
+msgid "Slit drawing"
+msgstr ""
+
 #: u_translation.rsslope
 msgid "Slope"
 msgstr ""
@@ -4582,6 +4614,10 @@ msgstr ""
 
 #: u_translation.rsspectralprof
 msgid "Spectral profile"
+msgstr ""
+
+#: u_translation.rsspectroscopy
+msgid "Spectroscopy"
 msgstr ""
 
 #: u_translation.rsspeed
@@ -4646,6 +4682,10 @@ msgstr ""
 #: u_translation.rsstarprofile
 msgid "Star profile"
 msgstr "Stjerneprofil"
+
+#: u_translation.rsstarsearchar
+msgid "Star search area"
+msgstr ""
 
 #: u_translation.rsstart
 msgid "Start"
@@ -4950,6 +4990,10 @@ msgstr ""
 #: u_translation.rstakecontrole
 #, object-pascal-format
 msgid "Take control exposure for %s seconds"
+msgstr ""
+
+#: u_translation.rstarget
+msgid "Target"
 msgstr ""
 
 #: u_translation.rstargetcancel

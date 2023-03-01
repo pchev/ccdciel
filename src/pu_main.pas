@@ -2334,6 +2334,13 @@ begin
    MenuVideoPreview.Caption := rsPreview;
    MenuVideoStart.Caption := rsStartRecord;
    MenuVideoStop.Caption := rsStopRecord;
+   MenuTabInternalGuider.Caption:=rsInternalGuid;
+   MenuInternalGuider.Caption:=rsInternalGuid;
+   MenuInternalguiderStart.Caption:=rsStart;
+   MenuInternalguiderStop.Caption:=rsStop;
+   MenuTabFinder.Caption:=rsFinderCamera;
+   MenuFinder.Caption:=rsFinderCamera;
+
    MenuItem3.Caption := rsHelp;
    MenuPdfHelp.Caption := rsPDFDocumenta;
    MenuOnlineHelp.Caption := rsOnlineDocume;
@@ -2419,6 +2426,7 @@ begin
    TBSequence.Hint := rsSequence;
    TBVideo.Hint := rsVideo;
    TBInternalGuider.Hint := rsInternalGuid;
+   TBFinder.Hint := rsFinderCamera;
    SafetyActionName[0]:='';
    SafetyActionName[1]:=trim(rsShowPrompt);
    SafetyActionName[2]:=trim(rsAbortTheCurr);
@@ -13448,6 +13456,8 @@ begin
     2 : TBCapture.Click;
     3 : TBSequence.Click;
     4 : TBVideo.Click;
+    5 : TBInternalGuider.Click;
+    6 : TBFinder.Click;
   end;
 end;
 

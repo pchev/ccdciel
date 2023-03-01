@@ -2,14 +2,14 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ccdceil\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-02-24 15:18+0000\n"
-"PO-Revision-Date: 2023-02-05 14:56+0000\n"
+"POT-Creation-Date: 2023-03-01 09:59+0000\n"
+"PO-Revision-Date: 2023-02-25 06:39+0000\n"
 "Last-Translator: Stanislav Holub <Unknown>\n"
 "Language-Team: Czech <cz@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2023-02-24 15:24+0000\n"
+"X-Launchpad-Export-Date: 2023-03-01 10:24+0000\n"
 "X-Generator: Launchpad (build b826c8bc42f0c41016fa141bf50faee47f7ecd80)\n"
 "Language: cs\n"
 
@@ -519,7 +519,7 @@ msgstr "To umožňuje restartování přerušené sekvence v bodě, kdy byla zas
 
 #: u_hints.rsthisoptionis
 msgid "This option is normally unchecked, use it only if you manage the pointing and autoguiding by script."
-msgstr ""
+msgstr "Tato možnost je normálně nezaškrtnutá, použijte ji pouze v případě, že řídíte pointaci pomocí skriptu."
 
 #: u_hints.rstimefrommeri
 msgid "Time from meridian transit (hour angle)"

@@ -2,14 +2,14 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ccdciel\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-02-24 15:18+0000\n"
-"PO-Revision-Date: 2023-02-05 14:56+0000\n"
+"POT-Creation-Date: 2023-03-01 09:58+0000\n"
+"PO-Revision-Date: 2023-02-25 06:50+0000\n"
 "Last-Translator: Stanislav Holub <Unknown>\n"
 "Language-Team: Czech <cz@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2023-02-24 15:24+0000\n"
+"X-Launchpad-Export-Date: 2023-03-01 10:24+0000\n"
 "X-Generator: Launchpad (build b826c8bc42f0c41016fa141bf50faee47f7ecd80)\n"
 "Language: cs\n"
 
@@ -509,7 +509,7 @@ msgstr "Neutralizace pozadí"
 
 #: u_translation.rsbacklashcali
 msgid "Backlash calibration"
-msgstr ""
+msgstr "Kalibrace zpětné vůle"
 
 #: u_translation.rsbacklashcomp
 msgid "Backlash compensation"
@@ -611,7 +611,7 @@ msgstr "Kalibrace"
 
 #: u_translation.rscalibration2
 msgid "Special calibration"
-msgstr ""
+msgstr "Speciální kalibrace"
 
 #: u_translation.rscalibrationd
 #, object-pascal-format
@@ -930,6 +930,10 @@ msgstr "Chcete-li zahájit měření, klepněte na tlačítko Další."
 #: u_translation.rsclicknexttos2
 msgid "Click Next to save this values to the configuration for this profile."
 msgstr "Klepnutím na tlačítko Další uložte tyto hodnoty do konfigurace tohoto profilu."
+
+#: u_translation.rsclickonimage
+msgid "Click on image to set"
+msgstr ""
 
 #: u_translation.rsclicktheobje
 msgid "Click the object in planetarium"
@@ -1427,7 +1431,7 @@ msgstr "hotovo"
 
 #: u_translation.rsdonotchangea
 msgid "Do not change autoguiding state"
-msgstr ""
+msgstr "Neměňte stav automatické pointace"
 
 #: u_translation.rsdonotdisplay
 msgid "Do not display images during capture"
@@ -1559,7 +1563,7 @@ msgstr "Čas ukončení"
 
 #: u_translation.rsenterthej200
 msgid "Enter the J2000 coordinates where the main camera is actually pointing"
-msgstr ""
+msgstr "Zadejte souřadnice J2000, kam hlavní kamera skutečně míří."
 
 #: u_translation.rserror
 #, object-pascal-format
@@ -1744,11 +1748,11 @@ msgstr "Konečný pohyb (kroky)"
 
 #: u_translation.rsfind
 msgid "Find."
-msgstr ""
+msgstr "Najít"
 
 #: u_translation.rsfindercamera
 msgid "Finder camera"
-msgstr ""
+msgstr "Hledáček kamery"
 
 #: u_translation.rsfit
 msgid "Fit"
@@ -2043,7 +2047,7 @@ msgstr "Získat aktuální polohu z dalekohledu"
 
 #: u_translation.rsgetfrommaini
 msgid "Get from main image"
-msgstr ""
+msgstr "Získat z hlavního snímku"
 
 #: u_translation.rsgetsitelongl
 msgid "Get site long/lat from the mount"
@@ -2085,6 +2089,10 @@ msgstr "Point."
 #: u_translation.rsguide
 msgid "Guide"
 msgstr "Pointace"
+
+#: u_translation.rsguideboxsize
+msgid "Guide box size"
+msgstr ""
 
 #: u_translation.rsguidecamera
 msgid "Guide camera"
@@ -2404,6 +2412,10 @@ msgstr "Zeměpisná šířka"
 msgid "Learn"
 msgstr "Učit se"
 
+#: u_translation.rslength
+msgid "Length"
+msgstr ""
+
 #: u_translation.rslicenseagree
 msgid "License agreement"
 msgstr "Licenční smlouva"
@@ -2448,6 +2460,10 @@ msgstr "Načíst flat soubor"
 msgid "Lock overlay"
 msgstr "Překrytí zámku"
 
+#: u_translation.rslockposition
+msgid "Lock position"
+msgstr ""
+
 #: u_translation.rslogfolder
 msgid "Log folder"
 msgstr "Složka protokolu"
@@ -2482,12 +2498,12 @@ msgstr "Magnitůda"
 
 #: u_translation.rsmaincamera
 msgid "Main camera"
-msgstr ""
+msgstr "Hlavní kamera"
 
 #: u_translation.rsmainimagecen
 #, object-pascal-format
 msgid "Main image center is at finder image X=%s, Y=%s"
-msgstr ""
+msgstr "Střed hlavního snímku je v hledáčku X=%s, Y=%s"
 
 #: u_translation.rsmainsensor
 msgid "Main sensor"
@@ -2561,6 +2577,10 @@ msgstr "Maximální počet opakování"
 #: u_translation.rsmaximumsearc
 msgid "Maximum search radius"
 msgstr "Maximální poloměr vyhledávání"
+
+#: u_translation.rsmaximumsearc2
+msgid "Maximum search box"
+msgstr ""
 
 #: u_translation.rsmaximumsourc
 msgid "Maximum sources"
@@ -2907,7 +2927,7 @@ msgstr "Nové souřadnice z planetária: %s %s"
 
 #: u_translation.rsnewfindercal
 msgid "New finder calibration is successful"
-msgstr ""
+msgstr "Kalibrace nového hledáčku je úspěšná"
 
 #: u_translation.rsnewobject
 msgid "New object"
@@ -3219,15 +3239,15 @@ msgstr "Možnost 1: Kalibrace v aktuální pozici."
 
 #: u_translation.rsoption2calib
 msgid "Option 2: Special calibration at current position for some mounts which reverse declination pulse guiding after the meridian flip."
-msgstr ""
+msgstr "Možnost 2: Speciální kalibrace v aktuální poloze pro některé montáže, které po překlopení poledníku obracejí směry impulzů deklinace."
 
 #: u_translation.rsoption3backl
 msgid "Option 3: Calibrate backlash compensation."
-msgstr ""
+msgstr "Možnost 3: Kalibrace kompenzace zpětné vůle."
 
 #: u_translation.rsoption4cance
 msgid "Option 4: Cancel."
-msgstr ""
+msgstr "Možnost 4: Zrušit."
 
 #: u_translation.rsoptions
 #, object-pascal-format
@@ -3928,6 +3948,10 @@ msgstr "Otočit dalekohled"
 msgid "Rotating"
 msgstr "Otáčení"
 
+#: u_translation.rsrotation
+msgid "Rotation angle"
+msgstr ""
+
 #: u_translation.rsrotator
 msgid "Rotator"
 msgstr "Rotátor"
@@ -4315,6 +4339,10 @@ msgstr "Nastavit směr ostření směrem ven↑"
 msgid "Set frame type %s"
 msgstr "Nastavit typ rámce %s"
 
+#: u_translation.rssetlockposit
+msgid "Set lock position"
+msgstr ""
+
 #: u_translation.rssetmagnitude
 msgid "Set magnitude"
 msgstr "Nastavit magnitudu"
@@ -4533,6 +4561,10 @@ msgstr "Přejezd s posunem %s/%s"
 msgid "Slippage correction "
 msgstr "Korekce skluzu "
 
+#: u_translation.rsslitdrawing
+msgid "Slit drawing"
+msgstr ""
+
 #: u_translation.rsslope
 msgid "Slope"
 msgstr "Sklon"
@@ -4564,7 +4596,7 @@ msgstr "Software"
 
 #: u_translation.rssolvedimage
 msgid "Solved image"
-msgstr ""
+msgstr "Vyřešený snímek"
 
 #: u_translation.rssolvedinseco
 #, object-pascal-format
@@ -4582,6 +4614,10 @@ msgstr "Jih"
 #: u_translation.rsspectralprof
 msgid "Spectral profile"
 msgstr "Spektrální profil"
+
+#: u_translation.rsspectroscopy
+msgid "Spectroscopy"
+msgstr ""
 
 #: u_translation.rsspeed
 msgid "Speed"
@@ -4645,6 +4681,10 @@ msgstr "Obnova ztracené hvězdy"
 #: u_translation.rsstarprofile
 msgid "Star profile"
 msgstr "Profil hvězdy"
+
+#: u_translation.rsstarsearchar
+msgid "Star search area"
+msgstr ""
 
 #: u_translation.rsstart
 msgid "Start"
@@ -4950,6 +4990,10 @@ msgstr "Systém je pod rozlišením a umožňuje 1 pixel hvězd"
 #, object-pascal-format
 msgid "Take control exposure for %s seconds"
 msgstr "Převzetí kontrolní expozice na %s sekund"
+
+#: u_translation.rstarget
+msgid "Target"
+msgstr ""
 
 #: u_translation.rstargetcancel
 #, object-pascal-format
@@ -5466,7 +5510,7 @@ msgstr "Použít filtrové kolo"
 
 #: u_translation.rsusefindercam
 msgid "Use finder camera"
-msgstr ""
+msgstr "Použít hledáček kamery"
 
 #: u_translation.rsuseflatautom
 msgid "Use flat automatic exposure"
@@ -5514,7 +5558,7 @@ msgstr "Použít přepínač"
 
 #: u_translation.rsusethisdevic
 msgid "Use this device if the main camera cannot be used for plate solving. Also configure the camera to use in Preferences/Slewing"
-msgstr ""
+msgstr "Toto zařízení použijte, pokud nelze k astrometrii použít hlavní fotoaparát. V části Předvolby, také nakonfigurujte kameru, kterou chcete použít."
 
 #: u_translation.rsusewatchdog
 msgid "Use watchdog"

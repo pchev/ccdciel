@@ -1488,6 +1488,16 @@ resourcestring
   rsMainImageCen = 'Main image center is at finder image X=%s, Y=%s';
   rsMainCamera = 'Main camera';
   rsTarget = 'Target';
+  rsSpectroscopy = 'Spectroscopy';
+  rsSetLockPosit = 'Set lock position';
+  rsLockPosition = 'Lock position';
+  rsClickOnImage = 'Click on image to set';
+  rsStarSearchAr = 'Star search area';
+  rsGuideBoxSize = 'Guide box size';
+  rsMaximumSearc2 = 'Maximum search box';
+  rsSlitDrawing = 'Slit drawing';
+  rsLength = 'Length';
+  rsRotation = 'Rotation angle';
 
 implementation
 

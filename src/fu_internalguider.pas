@@ -460,9 +460,23 @@ begin
   Label9.Caption:=rsFrameSize;
   framesize1.Items[0]:=rsMax2;
   CheckBoxTrackSolar1.Caption:=rsActivateSola;
-//  CheckBoxReverseDec1.Caption:=rsReverseDecAf;
   Label25.Caption:=rsApparentMoti+' ["/min]';
   Label26.Caption:=rsApparentMoti2+' [°]';
+  TabSheetSpectro.Caption:=rsSpectroscopy;
+  cbGuideLock.Caption:=rsSetLockPosit;
+  label28.Caption:=rsLockPosition+' X';
+  label29.Caption:=rsLockPosition+' Y';
+  ButtonSetLock.Caption:=rsClickOnImage;
+  GroupBox5.Caption:=rsStarSearchAr;
+  Label30.Caption:=rsGuideBoxSize;
+  Label31.Caption:=rsMaximumSearc2;
+  GroupBox3.Caption:=rsSlitDrawing;
+  label32.Caption:=rsCenter+' X';
+  label33.Caption:=rsCenter+' Y';
+  label34.Caption:=rsWidth;
+  label35.Caption:=rsLength;
+  label36.Caption:=rsRotation;
+
 end;
 
 function Tf_internalguider.Getdisableguiding:boolean;

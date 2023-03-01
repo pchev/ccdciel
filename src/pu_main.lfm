@@ -1294,9 +1294,11 @@ object f_main: Tf_main
       end
     end
     object MenuTabVideo: TMenuItem
+      Tag = 4
       Caption = 'Video'
       ImageIndex = 4
       Visible = False
+      OnClick = MenuTabClick
       object MenuVideo: TMenuItem
         Caption = 'Video'
         object MenuVideoPreview: TMenuItem
@@ -1314,8 +1316,10 @@ object f_main: Tf_main
       end
     end
     object MenuTabInternalGuider: TMenuItem
+      Tag = 5
       Caption = 'Internal guider'
       ImageIndex = 0
+      OnClick = MenuTabClick
       object MenuInternalGuider: TMenuItem
         Caption = 'Internal guider'
         object MenuInternalguiderStart: TMenuItem
@@ -1329,8 +1333,10 @@ object f_main: Tf_main
       end
     end
     object MenuTabFinder: TMenuItem
+      Tag = 6
       Caption = 'Finder camera'
       ImageIndex = 6
+      OnClick = MenuTabClick
       object MenuFinder: TMenuItem
         Caption = 'Finder camera'
       end

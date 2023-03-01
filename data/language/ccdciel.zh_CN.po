@@ -6,14 +6,14 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ccdciel\n"
 "Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
-"POT-Creation-Date: 2023-02-24 15:18+0000\n"
+"POT-Creation-Date: 2023-03-01 09:58+0000\n"
 "PO-Revision-Date: 2023-01-29 04:46+0000\n"
 "Last-Translator: Zachary Wu <Unknown>\n"
 "Language-Team: Chinese (Simplified) <zh_CN@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2023-02-24 15:24+0000\n"
+"X-Launchpad-Export-Date: 2023-03-01 10:24+0000\n"
 "X-Generator: Launchpad (build b826c8bc42f0c41016fa141bf50faee47f7ecd80)\n"
 
 #: u_translation.rs2d
@@ -931,6 +931,10 @@ msgstr "点击下一步以启动测量。"
 #: u_translation.rsclicknexttos2
 msgid "Click Next to save this values to the configuration for this profile."
 msgstr "点击下一步以将该值保存到配置文件"
+
+#: u_translation.rsclickonimage
+msgid "Click on image to set"
+msgstr ""
 
 #: u_translation.rsclicktheobje
 msgid "Click the object in planetarium"
@@ -2087,6 +2091,10 @@ msgstr "导星"
 msgid "Guide"
 msgstr "导星"
 
+#: u_translation.rsguideboxsize
+msgid "Guide box size"
+msgstr ""
+
 #: u_translation.rsguidecamera
 msgid "Guide camera"
 msgstr "导星相机"
@@ -2405,6 +2413,10 @@ msgstr "纬度"
 msgid "Learn"
 msgstr "学习"
 
+#: u_translation.rslength
+msgid "Length"
+msgstr ""
+
 #: u_translation.rslicenseagree
 msgid "License agreement"
 msgstr "许可协议"
@@ -2448,6 +2460,10 @@ msgstr "载入平场文件"
 #: u_translation.rslockoverlay
 msgid "Lock overlay"
 msgstr "锁定覆盖"
+
+#: u_translation.rslockposition
+msgid "Lock position"
+msgstr ""
 
 #: u_translation.rslogfolder
 msgid "Log folder"
@@ -2562,6 +2578,10 @@ msgstr "最大重试次数"
 #: u_translation.rsmaximumsearc
 msgid "Maximum search radius"
 msgstr "最大搜索半径"
+
+#: u_translation.rsmaximumsearc2
+msgid "Maximum search box"
+msgstr ""
 
 #: u_translation.rsmaximumsourc
 msgid "Maximum sources"
@@ -3929,6 +3949,10 @@ msgstr "旋转望远镜"
 msgid "Rotating"
 msgstr "旋转中"
 
+#: u_translation.rsrotation
+msgid "Rotation angle"
+msgstr ""
+
 #: u_translation.rsrotator
 msgid "Rotator"
 msgstr "旋转器"
@@ -4316,6 +4340,10 @@ msgstr "设置调焦器向外移动方向"
 msgid "Set frame type %s"
 msgstr "设置帧类型%s"
 
+#: u_translation.rssetlockposit
+msgid "Set lock position"
+msgstr ""
+
 #: u_translation.rssetmagnitude
 msgid "Set magnitude"
 msgstr "设定星等"
@@ -4534,6 +4562,10 @@ msgstr "指向偏移量 %s/%s"
 msgid "Slippage correction "
 msgstr "滑脱修正 "
 
+#: u_translation.rsslitdrawing
+msgid "Slit drawing"
+msgstr ""
+
 #: u_translation.rsslope
 msgid "Slope"
 msgstr "斜率"
@@ -4583,6 +4615,10 @@ msgstr "南"
 #: u_translation.rsspectralprof
 msgid "Spectral profile"
 msgstr "光谱轮廓"
+
+#: u_translation.rsspectroscopy
+msgid "Spectroscopy"
+msgstr ""
 
 #: u_translation.rsspeed
 msgid "Speed"
@@ -4646,6 +4682,10 @@ msgstr "星点丢失恢复"
 #: u_translation.rsstarprofile
 msgid "Star profile"
 msgstr "星点轮廓"
+
+#: u_translation.rsstarsearchar
+msgid "Star search area"
+msgstr ""
 
 #: u_translation.rsstart
 msgid "Start"
@@ -4951,6 +4991,10 @@ msgstr "系统欠采样，接受1像素的星点"
 #, object-pascal-format
 msgid "Take control exposure for %s seconds"
 msgstr "控制曝光时间为%s秒"
+
+#: u_translation.rstarget
+msgid "Target"
+msgstr ""
 
 #: u_translation.rstargetcancel
 #, object-pascal-format

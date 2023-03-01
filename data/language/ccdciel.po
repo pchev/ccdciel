@@ -5534,3 +5534,47 @@ msgstr ""
 msgid "Main camera"
 msgstr ""
 
+#: u_translation:rstarget
+msgid "Target"
+msgstr ""
+
+#: u_translation:rsspectroscopy
+msgid "Spectroscopy"
+msgstr ""
+
+#: u_translation:rssetlockposit
+msgid "Set lock position"
+msgstr ""
+
+#: u_translation:rslockposition
+msgid "Lock position"
+msgstr ""
+
+#: u_translation:rsclickonimage
+msgid "Click on image to set"
+msgstr ""
+
+#: u_translation:rsstarsearchar
+msgid "Star search area"
+msgstr ""
+
+#: u_translation:rsguideboxsize
+msgid "Guide box size"
+msgstr ""
+
+#: u_translation:rsmaximumsearc2
+msgid "Maximum search box"
+msgstr ""
+
+#: u_translation:rsslitdrawing
+msgid "Slit drawing"
+msgstr ""
+
+#: u_translation:rslength
+msgid "Length"
+msgstr ""
+
+#: u_translation:rsrotation
+msgid "Rotation angle"
+msgstr ""
+
