@@ -16171,7 +16171,7 @@ procedure Tf_main.ImageGuideMouseMove(Sender: TObject; Shift: TShiftState; X,
 begin
  if GuideMouseMoving and guidefits.HeaderInfo.valid and guidefits.ImageValid then begin
     GuideImgCx:=GuideImgCx + (X-GuideMx) / GuideImgZoom;
-    GuideImgCy:=GuideImgCy + (Y-GuideMy) / GuideImgZoom;
+    GuideImgCy:=GuideImgCy - (Y-GuideMy) / GuideImgZoom;
     GuidePlotTimer.Enabled:=true;
  end
  else if (guidefits.HeaderInfo.naxis1>0)and(GuideImgScale0<>0) and guidefits.ImageValid then begin
@@ -16187,7 +16187,7 @@ var xx,yy: integer;
 begin
 if GuideMouseMoving and guidefits.HeaderInfo.valid and guidefits.ImageValid then begin
     GuideImgCx:=GuideImgCx + (X-GuideMx) / GuideImgZoom;
-    GuideImgCy:=GuideImgCy + (Y-GuideMy) / GuideImgZoom;
+    GuideImgCy:=GuideImgCy - (Y-GuideMy) / GuideImgZoom;
     PlotGuideImage;
     GuideMx:=X;
     GuideMy:=Y;
@@ -16195,9 +16195,9 @@ end;
 if InternalGuiderSetLockPosition and guidefits.HeaderInfo.valid and guidefits.ImageValid  then begin
   GuideMx:=X;
   GuideMy:=Y;
-  GuiderScreen2fits(GuideMx,GuideMy,false,xx,yy); // flipped later when setting the value
+  GuiderScreen2fits(GuideMx,GuideMy,true,xx,yy);
   f_internalguider.LockX:=xx;
-  f_internalguider.LockY:=yy;
+  f_internalguider.LockY:=guideimg_Height-yy;
 end;
 f_internalguider.ButtonSetLock.Down:=false;
 InternalGuiderSetLockPosition:=false;
