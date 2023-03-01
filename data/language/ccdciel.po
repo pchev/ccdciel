@@ -5578,3 +5578,7 @@ msgstr ""
 msgid "Rotation angle"
 msgstr ""
 
+#: u_translation:rsselectguides
+msgid "Select guide star"
+msgstr ""
+

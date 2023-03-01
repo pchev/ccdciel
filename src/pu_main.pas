@@ -2391,6 +2391,7 @@ begin
    MenuItemUnselect.Caption:=rsUnselectStar;
    MenuItemUnselect2.Caption:=rsUnselectStar;
    MenuItemGuiderImage.Caption:=rsGuiderImage;
+   MenuItemSelectGuideStar.Caption:=rsSelectGuideS;
    MenuItemGuiderSaveImage.Caption:=Format(rsSaveFITSFile, [ellipsis]);
    MenuItemGuiderViewHeader.Caption:=rsViewHeader;
    MenuItemGuiderViewStatistics.Caption:=rsImageStatist;

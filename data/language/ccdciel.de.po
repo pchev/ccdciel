@@ -6,15 +6,15 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ccdciel\n"
 "Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
-"POT-Creation-Date: 2023-03-01 09:58+0000\n"
+"POT-Creation-Date: 2023-03-01 13:42+0000\n"
 "PO-Revision-Date: 2023-01-29 19:00+0000\n"
 "Last-Translator: Thomas <email@starhopper.de>\n"
 "Language-Team: German <de@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2023-03-01 10:24+0000\n"
-"X-Generator: Launchpad (build b826c8bc42f0c41016fa141bf50faee47f7ecd80)\n"
+"X-Launchpad-Export-Date: 2023-03-01 13:56+0000\n"
+"X-Generator: Launchpad (build 1938a4fd80bdf1a1b1373119ac1ac9e0e65174d6)\n"
 
 #: u_translation.rs2d
 msgid "2D"
@@ -4164,6 +4164,10 @@ msgstr "Eine Kalibrations Option auswählen"
 #: u_translation.rsselectastarf
 msgid "Select a star first!"
 msgstr "Wählen Sie zuerst einen Stern aus"
+
+#: u_translation.rsselectguides
+msgid "Select guide star"
+msgstr ""
 
 #: u_translation.rsselectoneoft
 msgid "Select one of the measurement options:"

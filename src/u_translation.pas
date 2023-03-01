@@ -1498,6 +1498,7 @@ resourcestring
   rsSlitDrawing = 'Slit drawing';
   rsLength = 'Length';
   rsRotation = 'Rotation angle';
+  rsSelectGuideS = 'Select guide star';
 
 implementation
 
