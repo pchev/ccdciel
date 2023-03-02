@@ -1424,12 +1424,13 @@ begin
    config.SetValue('/Autoguider/Lock/GuideLockY',y);
    FInternalGuider.GuideLock:=True;
    FInternalGuider.LockX:=x;
-   FInternalGuider.LockX:=y;
+   FInternalGuider.LockY:=y;
    PHD2GuideSetLock:=True;
    PHD2GuideLockX:=x;
    PHD2GuideLockY:=y;
    result:=msgOK;
  end;
+ FInternalGuider.cbGuideLockChange(nil);
  except
    result:=msgFailed;
  end;

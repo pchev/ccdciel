@@ -39,7 +39,7 @@ type
     pulseRA,pulseDEC,GuideFrameCount, InternalguiderCalibrationDirection,InternalguiderCalibrationStep,
     CalibrationDuration,Calflip,CalCount,Calnrtest,frame_size,Binning,BacklashStep: integer;
     driftX,driftY,driftRA,driftDec,moveRA,moveDEC, Guidethecos,old_moveRA,old_moveDEC,  paEast, paNorth,
-    pulsegainEast,pulsegainWest,pulsegainNorth,pulsegainSouth,Calthecos, Caltheangle,CaldriftOld, ditherX,ditherY,ditherX2,ditherY2,
+    pulsegainEast,pulsegainWest,pulsegainNorth,pulsegainSouth,Calthecos, Caltheangle,CaldriftOld, ditherX,ditherY,
     GuideStartTime,LogSNR,LogFlux,mean_hfd,CalNorthDec1,CalNorthDec2,CalEastRa1,CalEastRa2 : double;
     LastDecSign: double;
     SameDecSignCount,LastBacklashDuration: integer;
@@ -360,6 +360,8 @@ begin
       mflipcorr:=0;
     rotate2(((finternalguider.PA+mflipcorr)*pi/180),dra,ddec, ditherX,ditherY);{rotate a vector point, counter clockwise}
     FDithering:=true;
+    Finternalguider.OffsetX:=ditherX; // show in spectro offset
+    Finternalguider.OffsetY:=ditherY;
     WriteLog('INFO: DITHER by '+FormatFloat(f3,ditherX)+', '+FormatFloat(f3,ditherY));
     StartSettle;
   end;
@@ -463,9 +465,11 @@ begin
     setlength(xy_array,maxstars);
     ditherx:=0;// dither offset
     dithery:=0;
+    Finternalguider.OffsetX:=ditherX; // always reset on initialize
+    Finternalguider.OffsetY:=ditherY;
   end;
 
-  GuideLock:=finternalguider.GuideLock and (not (InternalguiderCalibrating or InternalguiderCalibratingBacklash));
+  GuideLock:=finternalguider.SpectroFunctions and finternalguider.GuideLock and (not (InternalguiderCalibrating or InternalguiderCalibratingBacklash));
 
   min_SNR:=finternalguider.minSNR;//make local to reduce some CPU load
   min_HFD:=finternalguider.minHFD;//make local to reduce some CPU load
@@ -844,6 +848,7 @@ end;
 
 procedure T_autoguider_internal.InternalguiderStart;
 begin
+  Finternalguider.cbSpectro.enabled:=false;
   Finternalguider.cbGuideLock.enabled:=false;
   SetStatus('Start Guiding',GUIDER_BUSY);
   Application.QueueAsyncCall(@InternalguiderStartAsync,0);
@@ -1031,6 +1036,8 @@ var i,maxpulse: integer;
               rotate2(((+finternalguider.PA+mflipcorr)*pi/180),dRaPixelsSolar,flipDec*dDecPixelsSolar,delta_ditherX,delta_ditherY);// rotate RA, DEC drift scope to X,Y drift guider image. Positive ditherY is go North. Postive ditherX is go West!
               ditherX:=ditherX+delta_ditherX; //integrate offset solar object in X
               ditherY:=ditherY+delta_ditherY; //integrate offset solar object in Y
+              Finternalguider.OffsetX:=ditherX;  // show in spectro offset
+              Finternalguider.OffsetY:=ditherY;
             end;
           end;
 begin
@@ -1060,6 +1067,11 @@ begin
   else
     solar_tracking:=false;// Allow dithering
 
+  // read eventually modified spectro offset value to manually adjust guide position with the slit during guiding
+  if (finternalguider.SpectroFunctions)and(not solar_tracking) then begin
+    ditherX:=Finternalguider.OffsetX;
+    ditherY:=Finternalguider.OffsetY;
+  end;
 
   //Measure drift
   measure_drift(InternalguiderInitialize,driftX,driftY);// ReferenceX,Y indicates the total drift, driftX,driftY the drift since previous call. Arrays xy_array_old,xy_array are for storage star positions
@@ -1421,6 +1433,7 @@ begin
   Finternalguider.ButtonCalibrate.enabled:=true;
   Finternalguider.ButtonGuide.enabled:=true;
   Finternalguider.ButtonDark.enabled:=true;
+  Finternalguider.cbSpectro.enabled:=true;
   Finternalguider.cbGuideLock.enabled:=true;
   Finternalguider.led.Brush.Color:=clGray;
   Finternalguider.LabelInfo.Caption:='';

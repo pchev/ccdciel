@@ -54,16 +54,21 @@ type
     ButtonStop1: TButton;
     cbGuideLock: TCheckBox;
     cbDrawSlit: TCheckBox;
+    cbSpectro: TCheckBox;
     CheckBoxBacklash: TCheckBox;
     CheckBoxInverseSolarTracking1: TCheckBox;
     CheckBoxReverseDec1: TCheckBox;
     CheckBoxTrackSolar1: TCheckBox;
     Cooler: TCheckBox;
     disable_guiding1: TCheckBox;
+    edOffsetX: TFloatSpinEdit;
+    edOffsetY: TFloatSpinEdit;
     Exposure: TFloatSpinEdit;
-    GroupBox3: TGroupBox;
+    GroupBoxSlit: TGroupBox;
     GroupBox4: TGroupBox;
-    GroupBox5: TGroupBox;
+    GroupBoxSearchArea: TGroupBox;
+    GroupBoxLock: TGroupBox;
+    GroupBoxOffset: TGroupBox;
     Label30: TLabel;
     edLockX: TFloatSpinEdit;
     edLockY: TFloatSpinEdit;
@@ -81,6 +86,8 @@ type
     Label34: TLabel;
     Label35: TLabel;
     Label36: TLabel;
+    Label37: TLabel;
+    Label38: TLabel;
     LabelInfo: TLabel;
     LabelInfo2: TLabel;
     LabelTemperature: TLabel;
@@ -116,11 +123,14 @@ type
     MenuItemCaptureDark: TMenuItem;
     MenuItem2: TMenuItem;
     pa1: TEdit;
+    PageControl2: TPageControl;
     Panel4: TPanel;
     Panel5: TPanel;
     Panel6: TPanel;
     Panel7: TPanel;
     Panel8: TPanel;
+    Panel9: TPanel;
+    PanelSpectro: TPanel;
     PanelTemperature: TPanel;
     PanelOffset: TPanel;
     PanelGain: TPanel;
@@ -151,6 +161,8 @@ type
     spSlitW: TSpinEdit;
     spSlitL: TSpinEdit;
     spSlitPA: TSpinEdit;
+    TabSheet1: TTabSheet;
+    TabSheet2: TTabSheet;
     TabSheetSpectro: TTabSheet;
     Temperature: TSpinEdit;
     TabSheetOptions: TTabSheet;
@@ -184,6 +196,8 @@ type
     procedure ButtonSetTempClick(Sender: TObject);
     procedure ButtonStopClick(Sender: TObject);
     procedure cbDrawSlitChange(Sender: TObject);
+    procedure cbGuideLockChange(Sender: TObject);
+    procedure cbSpectroChange(Sender: TObject);
     procedure CheckBoxTrackSolar1Change(Sender: TObject);
     procedure CoolerClick(Sender: TObject);
     procedure dec_gain1Change(Sender: TObject);
@@ -276,6 +290,8 @@ type
     function GetBacklash:integer;
     procedure SetBacklashCompensation(value:Boolean);
     function GetBacklashCompensation:Boolean;
+    procedure SetSpectro(value:Boolean);
+    function GetSpectro:Boolean;
     procedure SetGuideLock(value:Boolean);
     function GetGuideLock:Boolean;
     function GetLockX:double;
@@ -298,6 +314,10 @@ type
     procedure SetSlitPA(value:integer);
     function GetDrawSlit:Boolean;
     procedure SetDrawSlit(value:Boolean);
+    function GetOffsetX:double;
+    procedure SetOffsetX(value:double);
+    function GetOffsetY:double;
+    procedure SetOffsetY(value:double);
   public
     { public declarations }
     constructor Create(aOwner: TComponent); override;
@@ -345,9 +365,12 @@ type
     property ReverseDec: Boolean read GetReverseDec write SetReverseDec;
     property DecBacklash: integer read GetBacklash write SetBacklash;
     property BacklashCompensation: Boolean read GetBacklashCompensation write SetBacklashCompensation;
+    property SpectroFunctions: boolean read GetSpectro write SetSpectro; // single star slit guiding
     property GuideLock: boolean read GetGuideLock write SetGuideLock; // single star slit guiding
     property LockX: double read GetLockX write SetLockX;        // slit lock position
     property LockY: double read GetLockY write SetLockY;
+    property OffsetX: double read GetOffsetX write SetOffsetX;  // guide offset relative to reference, used by dithering, solar tracking, spectro offset
+    property OffsetY: double read GetOffsetY write SetOffsetY;
     property GuideLockNextX: integer read FGuideLockNextX write FGuideLockNextX;
     property GuideLockNextY: integer read FGuideLockNextY write FGuideLockNextY;
     property SearchWinMin: integer read GetSearchWinMin write SetSearchWinMin; // star search area
@@ -380,6 +403,8 @@ begin
  Panel3.Color:=clDefault;
  Panel4.Color:=clDefault;
  Panel5.Color:=clDefault;
+ Panel9.Color:=clDefault;
+ PanelSpectro.Color:=clDefault;
  {$endif}
  PageControl1.ActivePageIndex:=0;
  ScaleDPI(Self);
@@ -473,14 +498,19 @@ begin
   Label25.Caption:=rsApparentMoti+' ["/min]';
   Label26.Caption:=rsApparentMoti2+' [°]';
   TabSheetSpectro.Caption:=rsSpectroscopy;
-  cbGuideLock.Caption:=rsSetLockPosit;
+  cbSpectro.Caption:=rsActivateSpec;
+  cbGuideLock.Caption:=rsActivateSing;
+  GroupBoxLock.Caption:=rsGuidePositio;
   label28.Caption:=rsLockPosition+' X';
   label29.Caption:=rsLockPosition+' Y';
   ButtonSetLock.Caption:=rsClickOnImage;
-  GroupBox5.Caption:=rsStarSearchAr;
+  GroupBoxOffset.Caption:=rsMultiStarGui;
+  Label37.Caption:=rsGuideOffset+' X';
+  Label38.Caption:=rsGuideOffset+' Y';
+  GroupBoxSearchArea.Caption:=rsStarSearchAr;
   Label30.Caption:=rsGuideBoxSize;
   Label31.Caption:=rsMaximumSearc2;
-  GroupBox3.Caption:=rsSlitDrawing;
+  GroupBoxSlit.Caption:=rsSlitDrawing;
   cbDrawSlit.Caption:=rsDrawSlitArea;
   label32.Caption:=rsCenter+' X';
   label33.Caption:=rsCenter+' Y';
@@ -745,6 +775,20 @@ begin
   spSlitL.Enabled:=cbDrawSlit.Checked;
   spSlitPA.Enabled:=cbDrawSlit.Checked;
   ForceRedraw(nil);
+end;
+
+procedure Tf_internalguider.cbGuideLockChange(Sender: TObject);
+begin
+  if cbGuideLock.Checked then
+    PageControl2.ActivePageIndex:=0
+  else
+    PageControl2.ActivePageIndex:=1;
+  ForceRedraw(nil);
+end;
+
+procedure Tf_internalguider.cbSpectroChange(Sender: TObject);
+begin
+  PanelSpectro.Enabled:=cbSpectro.Checked;
 end;
 
 procedure Tf_internalguider.CheckBoxTrackSolar1Change(Sender: TObject);
@@ -1274,6 +1318,16 @@ begin
   CheckBoxReverseDec1.Checked:=value;
 end;
 
+procedure Tf_internalguider.SetSpectro(value:Boolean);
+begin
+  cbSpectro.Checked:=value;
+end;
+
+function Tf_internalguider.GetSpectro:Boolean;
+begin
+  result:=cbSpectro.Checked;
+end;
+
 procedure Tf_internalguider.SetGuideLock(value:Boolean);
 begin
   cbGuideLock.Checked:=value;
@@ -1382,6 +1436,29 @@ end;
 procedure Tf_internalguider.SetDrawSlit(value:Boolean);
 begin
  cbDrawSlit.Checked:=value;
+end;
+
+function Tf_internalguider.GetOffsetX:double;
+begin
+ result:=-edOffsetX.value;
+end;
+
+procedure Tf_internalguider.SetOffsetX(value:double);
+begin
+ if value=0 then
+   edOffsetX.Value:=0
+ else
+   edOffsetX.Value:=-value;
+end;
+
+function Tf_internalguider.GetOffsetY:double;
+begin
+ result:=edOffsetY.value;
+end;
+
+procedure Tf_internalguider.SetOffsetY(value:double);
+begin
+ edOffsetY.Value:=value;
 end;
 
 

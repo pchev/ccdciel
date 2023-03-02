@@ -4584,6 +4584,7 @@ begin
   f_internalguider.Gamma.Position:=config.GetValue('/InternalGuider/Visu/Gamma',50);
   f_internalguider.Luminosity.Position:=config.GetValue('/InternalGuider/Visu/Luminosity',50);
   GuideImgZoom:=config.GetValue('/InternalGuider/Visu/Zoom',0);
+  f_internalguider.SpectroFunctions:=config.GetValue('/InternalGuider/Spectro/SpectroFunctions',false);
   f_internalguider.SearchWinMin:=config.GetValue('/InternalGuider/Spectro/SearchWinMin',40);
   f_internalguider.SearchWinMax:=config.GetValue('/InternalGuider/Spectro/SearchWinMax',80);
   f_internalguider.DrawSlit:=config.GetValue('/InternalGuider/Spectro/DrawSlit',false);
@@ -4592,6 +4593,8 @@ begin
   f_internalguider.SlitW:=config.GetValue('/InternalGuider/Spectro/SlitW',0);
   f_internalguider.SlitL:=config.GetValue('/InternalGuider/Spectro/SlitL',0);
   f_internalguider.SlitPA:=config.GetValue('/InternalGuider/Spectro/SlitPA',0);
+  f_internalguider.cbSpectroChange(nil);
+  f_internalguider.cbGuideLockChange(nil);
 
   MeridianOption:=config.GetValue('/Meridian/MeridianOption',3);
   MinutesPastMeridian:=config.GetValue('/Meridian/MinutesPast',15);
@@ -5164,6 +5167,7 @@ begin
   config.SetValue('/InternalGuider/Visu/Luminosity',f_internalguider.Luminosity.Position);
   config.SetValue('/InternalGuider/Visu/Zoom',GuideImgZoom);
 
+  config.SetValue('/InternalGuider/Spectro/SpectroFunctions',f_internalguider.SpectroFunctions);
   config.SetValue('/Autoguider/Lock/GuideSetLock',f_internalguider.GuideLock);
   config.SetValue('/Autoguider/Lock/GuideLockX',f_internalguider.LockX);
   config.SetValue('/Autoguider/Lock/GuideLockY',f_internalguider.LockY);
@@ -16018,8 +16022,8 @@ if (guidefits.HeaderInfo.naxis>0) and guidefits.ImageValid then begin
   end;
   guideimg_Width:=ImaGuideBmp.Width;
   guideimg_Height:=ImaGuideBmp.Height;
-  if f_internalguider.GuideLock then begin
-    // draw lock position
+  if f_internalguider.SpectroFunctions then begin
+    // always draw lock position
     ImaGuideBmp.Canvas.Pen.Mode:=pmMerge;
     ImaGuideBmp.Canvas.Pen.Style:=psSolid;
     ImaGuideBmp.Canvas.Pen.Width:=1;
@@ -16028,15 +16032,15 @@ if (guidefits.HeaderInfo.naxis>0) and guidefits.ImageValid then begin
     ImaGuideBmp.Canvas.Pen.Color:=clGreen;
     ImaGuideBmp.Canvas.Line(xs,0,xs,guideimg_Height);
     ImaGuideBmp.Canvas.Line(0,ys,guideimg_Width,ys);
-    // draw selected star
-    if (not InternalguiderGuiding)and(f_internalguider.GuideLockNextX>0)and(f_internalguider.GuideLockNextY>0) then begin
+    // draw selected star if using single star
+    if f_internalguider.GuideLock and(not InternalguiderGuiding)and(f_internalguider.GuideLockNextX>0)and(f_internalguider.GuideLockNextY>0) then begin
       xs:=f_internalguider.GuideLockNextX;
       ys:=guideimg_Height-f_internalguider.GuideLockNextY;
       r:=round(f_internalguider.SearchWinMin/2);
       ImaGuideBmp.Canvas.Pen.Color:=clYellow;
       ImaGuideBmp.Canvas.Frame(xs-r,ys-r,xs+r,ys+r);
     end;
-    // draw slit
+    // draw slit if selected
     if f_internalguider.DrawSlit and (f_internalguider.SlitX>0)and(f_internalguider.SlitY>0) then begin
       ImaGuideBmp.Canvas.Pen.Color:=clRed;
       xs:=f_internalguider.SlitX;

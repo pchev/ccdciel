@@ -6,14 +6,14 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ccdciel\n"
 "Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
-"POT-Creation-Date: 2023-03-01 13:42+0000\n"
+"POT-Creation-Date: 2023-03-02 13:45+0000\n"
 "PO-Revision-Date: 2023-02-11 17:45+0000\n"
 "Last-Translator: Sergey Tarantsov <tsn-ast@yandex.ru>\n"
 "Language-Team: Russian <ru@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2023-03-01 13:56+0000\n"
+"X-Launchpad-Export-Date: 2023-03-02 14:44+0000\n"
 "X-Generator: Launchpad (build 1938a4fd80bdf1a1b1373119ac1ac9e0e65174d6)\n"
 
 #: u_translation.rs2d
@@ -66,9 +66,17 @@ msgstr "О программе"
 msgid "Action"
 msgstr "Действие"
 
+#: u_translation.rsactivatesing
+msgid "Activate single star guiding on fixed position"
+msgstr ""
+
 #: u_translation.rsactivatesola
 msgid "Activate solar object tracking."
 msgstr "Отслеживание объектов солнечной системы"
+
+#: u_translation.rsactivatespec
+msgid "Activate spectroscopy functions"
+msgstr ""
 
 #: u_translation.rsactivetarget
 msgid "Active target is replaced, restart the sequence"
@@ -1486,6 +1494,10 @@ msgstr "Повторить попытку?"
 msgid "Do you want to run the termination action now?"
 msgstr "Вы хотите запустить действие для завершения?"
 
+#: u_translation.rsdrawslitarea
+msgid "Draw slit area on image"
+msgstr ""
+
 #: u_translation.rsduration
 msgid "Duration"
 msgstr "Длительность"
@@ -2098,6 +2110,14 @@ msgstr ""
 #: u_translation.rsguidecamera
 msgid "Guide camera"
 msgstr "Гид-камера"
+
+#: u_translation.rsguideoffset
+msgid "Guide offset"
+msgstr ""
+
+#: u_translation.rsguidepositio
+msgid "Guide position on the slit"
+msgstr ""
 
 #: u_translation.rsguider
 msgid "Guider"
@@ -2895,6 +2915,10 @@ msgstr "Переход на первую позицию"
 #: u_translation.rsmovingtoseco
 msgid "Moving to second position"
 msgstr "Переход на вторую позицию"
+
+#: u_translation.rsmultistargui
+msgid "Multi-star guide offset"
+msgstr ""
 
 #: u_translation.rsnearfocus
 msgid "Near focus"

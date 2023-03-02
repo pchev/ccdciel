@@ -2,14 +2,14 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ccdciel\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-03-01 13:42+0000\n"
+"POT-Creation-Date: 2023-03-02 13:45+0000\n"
 "PO-Revision-Date: 2023-02-25 06:50+0000\n"
 "Last-Translator: Stanislav Holub <Unknown>\n"
 "Language-Team: Czech <cz@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2023-03-01 13:56+0000\n"
+"X-Launchpad-Export-Date: 2023-03-02 14:44+0000\n"
 "X-Generator: Launchpad (build 1938a4fd80bdf1a1b1373119ac1ac9e0e65174d6)\n"
 "Language: cs\n"
 
@@ -63,9 +63,17 @@ msgstr "O aplikaci"
 msgid "Action"
 msgstr "Akce"
 
+#: u_translation.rsactivatesing
+msgid "Activate single star guiding on fixed position"
+msgstr ""
+
 #: u_translation.rsactivatesola
 msgid "Activate solar object tracking."
 msgstr "Aktivace sledování solárních objektů."
+
+#: u_translation.rsactivatespec
+msgid "Activate spectroscopy functions"
+msgstr ""
 
 #: u_translation.rsactivetarget
 msgid "Active target is replaced, restart the sequence"
@@ -1485,6 +1493,10 @@ msgstr "Chcete akci opakovat?"
 msgid "Do you want to run the termination action now?"
 msgstr "Spustit ukončovací akci?"
 
+#: u_translation.rsdrawslitarea
+msgid "Draw slit area on image"
+msgstr ""
+
 #: u_translation.rsduration
 msgid "Duration"
 msgstr "Doba trvání"
@@ -2097,6 +2109,14 @@ msgstr ""
 #: u_translation.rsguidecamera
 msgid "Guide camera"
 msgstr "Pointační kamera"
+
+#: u_translation.rsguideoffset
+msgid "Guide offset"
+msgstr ""
+
+#: u_translation.rsguidepositio
+msgid "Guide position on the slit"
+msgstr ""
 
 #: u_translation.rsguider
 msgid "Guider"
@@ -2894,6 +2914,10 @@ msgstr "Přesun na první pozici"
 #: u_translation.rsmovingtoseco
 msgid "Moving to second position"
 msgstr "Přesun na druhou pozici"
+
+#: u_translation.rsmultistargui
+msgid "Multi-star guide offset"
+msgstr ""
 
 #: u_translation.rsnearfocus
 msgid "Near focus"

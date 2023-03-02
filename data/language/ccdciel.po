@@ -5582,3 +5582,27 @@ msgstr ""
 msgid "Select guide star"
 msgstr ""
 
+#: u_translation:rsdrawslitarea
+msgid "Draw slit area on image"
+msgstr ""
+
+#: u_translation:rsactivatespec
+msgid "Activate spectroscopy functions"
+msgstr ""
+
+#: u_translation:rsactivatesing
+msgid "Activate single star guiding on fixed position"
+msgstr ""
+
+#: u_translation:rsguidepositio
+msgid "Guide position on the slit"
+msgstr ""
+
+#: u_translation:rsmultistargui
+msgid "Multi-star guide offset"
+msgstr ""
+
+#: u_translation:rsguideoffset
+msgid "Guide offset"
+msgstr ""
+

@@ -1500,6 +1500,11 @@ resourcestring
   rsRotation = 'Rotation angle';
   rsSelectGuideS = 'Select guide star';
   rsDrawSlitArea = 'Draw slit area on image';
+  rsActivateSpec = 'Activate spectroscopy functions';
+  rsActivateSing = 'Activate single star guiding on fixed position';
+  rsGuidePositio = 'Guide position on the slit';
+  rsMultiStarGui = 'Multi-star guide offset';
+  rsGuideOffset = 'Guide offset';
 
 implementation
 

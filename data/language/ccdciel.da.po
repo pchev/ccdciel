@@ -6,14 +6,14 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ccdciel\n"
 "Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
-"POT-Creation-Date: 2023-03-01 13:42+0000\n"
+"POT-Creation-Date: 2023-03-02 13:45+0000\n"
 "PO-Revision-Date: 2021-09-24 16:13+0000\n"
 "Last-Translator: Jimmy Frydkær Jensen <jimmy@frydkaer.net>\n"
 "Language-Team: Danish <da@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2023-03-01 13:56+0000\n"
+"X-Launchpad-Export-Date: 2023-03-02 14:44+0000\n"
 "X-Generator: Launchpad (build 1938a4fd80bdf1a1b1373119ac1ac9e0e65174d6)\n"
 
 #: u_translation.rs2d
@@ -66,8 +66,16 @@ msgstr "Om"
 msgid "Action"
 msgstr ""
 
+#: u_translation.rsactivatesing
+msgid "Activate single star guiding on fixed position"
+msgstr ""
+
 #: u_translation.rsactivatesola
 msgid "Activate solar object tracking."
+msgstr ""
+
+#: u_translation.rsactivatespec
+msgid "Activate spectroscopy functions"
 msgstr ""
 
 #: u_translation.rsactivetarget
@@ -1486,6 +1494,10 @@ msgstr ""
 msgid "Do you want to run the termination action now?"
 msgstr ""
 
+#: u_translation.rsdrawslitarea
+msgid "Draw slit area on image"
+msgstr ""
+
 #: u_translation.rsduration
 msgid "Duration"
 msgstr ""
@@ -2097,6 +2109,14 @@ msgstr ""
 
 #: u_translation.rsguidecamera
 msgid "Guide camera"
+msgstr ""
+
+#: u_translation.rsguideoffset
+msgid "Guide offset"
+msgstr ""
+
+#: u_translation.rsguidepositio
+msgid "Guide position on the slit"
 msgstr ""
 
 #: u_translation.rsguider
@@ -2894,6 +2914,10 @@ msgstr ""
 
 #: u_translation.rsmovingtoseco
 msgid "Moving to second position"
+msgstr ""
+
+#: u_translation.rsmultistargui
+msgid "Multi-star guide offset"
 msgstr ""
 
 #: u_translation.rsnearfocus

@@ -1,10 +1,10 @@
 object f_internalguider: Tf_internalguider
   Left = 0
-  Height = 510
+  Height = 552
   Top = 0
-  Width = 325
-  ClientHeight = 510
-  ClientWidth = 325
+  Width = 346
+  ClientHeight = 552
+  ClientWidth = 346
   ParentFont = False
   TabOrder = 0
   DesignLeft = 1140
@@ -13,7 +13,7 @@ object f_internalguider: Tf_internalguider
     Left = 0
     Height = 20
     Top = 0
-    Width = 325
+    Width = 346
     Align = alTop
     Alignment = taCenter
     AutoSize = False
@@ -28,19 +28,19 @@ object f_internalguider: Tf_internalguider
   end
   object Panel1: TPanel
     Left = 0
-    Height = 490
+    Height = 532
     Top = 20
-    Width = 325
+    Width = 346
     Align = alClient
-    ClientHeight = 490
-    ClientWidth = 325
+    ClientHeight = 532
+    ClientWidth = 346
     ParentFont = False
     TabOrder = 0
     object PageControl1: TPageControl
       Left = 1
-      Height = 488
+      Height = 530
       Top = 1
-      Width = 323
+      Width = 344
       ActivePage = TabSheetGuider
       Align = alClient
       ParentFont = False
@@ -48,18 +48,18 @@ object f_internalguider: Tf_internalguider
       TabOrder = 0
       object TabSheetGuider: TTabSheet
         Caption = 'Guider'
-        ClientHeight = 457
-        ClientWidth = 313
+        ClientHeight = 499
+        ClientWidth = 334
         ParentFont = False
         object Panel3: TPanel
           Left = 0
-          Height = 457
+          Height = 499
           Top = 0
-          Width = 313
+          Width = 334
           Align = alClient
           BevelOuter = bvNone
-          ClientHeight = 457
-          ClientWidth = 313
+          ClientHeight = 499
+          ClientWidth = 334
           Color = clMenu
           ParentColor = False
           ParentFont = False
@@ -293,16 +293,16 @@ object f_internalguider: Tf_internalguider
       end
       object TabSheetCamera: TTabSheet
         Caption = 'Camera'
-        ClientHeight = 457
-        ClientWidth = 313
+        ClientHeight = 499
+        ClientWidth = 334
         object Panel4: TPanel
           Left = 0
-          Height = 457
+          Height = 499
           Top = 0
-          Width = 313
+          Width = 334
           Align = alClient
-          ClientHeight = 457
-          ClientWidth = 313
+          ClientHeight = 499
+          ClientWidth = 334
           Color = clMenu
           ParentColor = False
           TabOrder = 0
@@ -310,11 +310,11 @@ object f_internalguider: Tf_internalguider
             Left = 1
             Height = 79
             Top = 1
-            Width = 311
+            Width = 332
             Align = alTop
             BevelOuter = bvNone
             ClientHeight = 79
-            ClientWidth = 311
+            ClientWidth = 332
             TabOrder = 0
             object ButtonLoop: TButton
               Left = 8
@@ -365,11 +365,11 @@ object f_internalguider: Tf_internalguider
             Left = 1
             Height = 66
             Top = 80
-            Width = 311
+            Width = 332
             Align = alTop
             BevelOuter = bvNone
             ClientHeight = 66
-            ClientWidth = 311
+            ClientWidth = 332
             TabOrder = 1
             object Label10: TLabel
               AnchorSideTop.Control = Exposure
@@ -418,11 +418,11 @@ object f_internalguider: Tf_internalguider
             Left = 1
             Height = 34
             Top = 146
-            Width = 311
+            Width = 332
             Align = alTop
             BevelOuter = bvNone
             ClientHeight = 34
-            ClientWidth = 311
+            ClientWidth = 332
             TabOrder = 2
             object Label15: TLabel
               AnchorSideTop.Control = Gain
@@ -446,11 +446,11 @@ object f_internalguider: Tf_internalguider
             Left = 1
             Height = 34
             Top = 180
-            Width = 311
+            Width = 332
             Align = alTop
             BevelOuter = bvNone
             ClientHeight = 34
-            ClientWidth = 311
+            ClientWidth = 332
             TabOrder = 3
             object Label16: TLabel
               AnchorSideTop.Control = Offset
@@ -474,11 +474,11 @@ object f_internalguider: Tf_internalguider
             Left = 1
             Height = 60
             Top = 214
-            Width = 311
+            Width = 332
             Align = alTop
             BevelOuter = bvNone
             ClientHeight = 60
-            ClientWidth = 311
+            ClientWidth = 332
             TabOrder = 4
             object Label21: TLabel
               AnchorSideTop.Control = Temperature
@@ -538,11 +538,11 @@ object f_internalguider: Tf_internalguider
             Left = 1
             Height = 144
             Top = 274
-            Width = 311
+            Width = 332
             Align = alTop
             BevelOuter = bvNone
             ClientHeight = 144
-            ClientWidth = 311
+            ClientWidth = 332
             TabOrder = 5
             object Label17: TLabel
               AnchorSideTop.Control = Gamma
@@ -661,29 +661,29 @@ object f_internalguider: Tf_internalguider
       end
       object TabSheetOptions: TTabSheet
         Caption = 'Options'
-        ClientHeight = 457
-        ClientWidth = 313
+        ClientHeight = 499
+        ClientWidth = 334
         object Panel5: TPanel
           Left = 0
-          Height = 457
+          Height = 499
           Top = 0
-          Width = 313
+          Width = 334
           Align = alClient
           BevelOuter = bvNone
-          ClientHeight = 457
-          ClientWidth = 313
+          ClientHeight = 499
+          ClientWidth = 334
           Color = clMenu
           ParentColor = False
           TabOrder = 0
           object GroupBox1: TGroupBox
             Left = 0
-            Height = 457
+            Height = 499
             Top = 0
-            Width = 313
+            Width = 334
             Align = alClient
             Caption = 'Options:'
-            ClientHeight = 437
-            ClientWidth = 311
+            ClientHeight = 479
+            ClientWidth = 332
             TabOrder = 0
             object measure_method2: TCheckBox
               Left = 8
@@ -892,31 +892,31 @@ object f_internalguider: Tf_internalguider
       end
       object TabSheetAdvanced: TTabSheet
         Caption = 'Advanced'
-        ClientHeight = 457
-        ClientWidth = 313
+        ClientHeight = 499
+        ClientWidth = 334
         ParentFont = False
         object Panel2: TPanel
           Left = 0
-          Height = 457
+          Height = 499
           Top = 0
-          Width = 313
+          Width = 334
           Align = alClient
           BevelOuter = bvNone
-          ClientHeight = 457
-          ClientWidth = 313
+          ClientHeight = 499
+          ClientWidth = 334
           Color = clMenu
           ParentColor = False
           ParentFont = False
           TabOrder = 0
           object GroupBox2: TGroupBox
             Left = 0
-            Height = 457
+            Height = 499
             Top = 0
-            Width = 313
+            Width = 334
             Align = alClient
             Caption = 'Calibration results:'
-            ClientHeight = 437
-            ClientWidth = 311
+            ClientHeight = 479
+            ClientWidth = 332
             TabOrder = 0
             object Label5: TLabel
               AnchorSideTop.Control = pa1
@@ -1124,241 +1124,353 @@ object f_internalguider: Tf_internalguider
       end
       object TabSheetSpectro: TTabSheet
         Caption = 'Spectro'
-        ClientHeight = 457
-        ClientWidth = 313
-        object GroupBox3: TGroupBox
+        ClientHeight = 499
+        ClientWidth = 334
+        object PanelSpectro: TPanel
           Left = 0
-          Height = 215
-          Top = 241
-          Width = 313
-          Align = alTop
-          Caption = 'Slit drawing'
-          ClientHeight = 195
-          ClientWidth = 311
+          Height = 469
+          Top = 30
+          Width = 334
+          Align = alClient
+          BevelOuter = bvNone
+          ClientHeight = 469
+          ClientWidth = 334
+          Color = clMenu
+          ParentColor = False
           TabOrder = 0
-          object Label32: TLabel
-            AnchorSideTop.Control = spSlitX
-            AnchorSideTop.Side = asrCenter
-            Left = 8
-            Height = 19
-            Top = 34
-            Width = 54
-            Caption = 'Center X'
-            ParentColor = False
-          end
-          object Label33: TLabel
-            AnchorSideTop.Control = spSlitY
-            AnchorSideTop.Side = asrCenter
-            Left = 8
-            Height = 19
-            Top = 66
-            Width = 54
-            Caption = 'Center Y'
-            ParentColor = False
-          end
-          object Label34: TLabel
-            AnchorSideTop.Control = spSlitW
-            AnchorSideTop.Side = asrCenter
-            Left = 12
-            Height = 19
-            Top = 98
-            Width = 36
-            Caption = 'Width'
-            ParentColor = False
-          end
-          object Label35: TLabel
-            AnchorSideTop.Control = spSlitL
-            AnchorSideTop.Side = asrCenter
-            Left = 11
-            Height = 19
-            Top = 130
-            Width = 44
-            Caption = 'Length'
-            ParentColor = False
-          end
-          object Label36: TLabel
-            AnchorSideTop.Control = spSlitPA
-            AnchorSideTop.Side = asrCenter
-            Left = 12
-            Height = 19
-            Top = 162
-            Width = 89
-            Caption = 'Rotation angle'
-            ParentColor = False
-          end
-          object spSlitX: TSpinEdit
-            Left = 192
-            Height = 29
-            Top = 29
-            Width = 105
-            Enabled = False
-            MaxValue = 99999
-            OnChange = ForceRedraw
+          object GroupBoxSlit: TGroupBox
+            Left = 0
+            Height = 215
+            Top = 250
+            Width = 334
+            Align = alTop
+            Caption = 'Slit drawing'
+            ClientHeight = 195
+            ClientWidth = 332
             TabOrder = 0
+            object Label32: TLabel
+              AnchorSideTop.Control = spSlitX
+              AnchorSideTop.Side = asrCenter
+              Left = 8
+              Height = 19
+              Top = 34
+              Width = 54
+              Caption = 'Center X'
+              ParentColor = False
+            end
+            object Label33: TLabel
+              AnchorSideTop.Control = spSlitY
+              AnchorSideTop.Side = asrCenter
+              Left = 8
+              Height = 19
+              Top = 66
+              Width = 54
+              Caption = 'Center Y'
+              ParentColor = False
+            end
+            object Label34: TLabel
+              AnchorSideTop.Control = spSlitW
+              AnchorSideTop.Side = asrCenter
+              Left = 12
+              Height = 19
+              Top = 98
+              Width = 36
+              Caption = 'Width'
+              ParentColor = False
+            end
+            object Label35: TLabel
+              AnchorSideTop.Control = spSlitL
+              AnchorSideTop.Side = asrCenter
+              Left = 11
+              Height = 19
+              Top = 130
+              Width = 44
+              Caption = 'Length'
+              ParentColor = False
+            end
+            object Label36: TLabel
+              AnchorSideTop.Control = spSlitPA
+              AnchorSideTop.Side = asrCenter
+              Left = 12
+              Height = 19
+              Top = 162
+              Width = 89
+              Caption = 'Rotation angle'
+              ParentColor = False
+            end
+            object spSlitX: TSpinEdit
+              Left = 192
+              Height = 29
+              Top = 29
+              Width = 105
+              Enabled = False
+              MaxValue = 99999
+              OnChange = ForceRedraw
+              TabOrder = 0
+            end
+            object spSlitY: TSpinEdit
+              Left = 192
+              Height = 29
+              Top = 61
+              Width = 105
+              Enabled = False
+              MaxValue = 99999
+              OnChange = ForceRedraw
+              TabOrder = 1
+            end
+            object spSlitW: TSpinEdit
+              Left = 192
+              Height = 29
+              Top = 93
+              Width = 105
+              Enabled = False
+              MaxValue = 99999
+              OnChange = ForceRedraw
+              TabOrder = 2
+            end
+            object spSlitL: TSpinEdit
+              Left = 192
+              Height = 29
+              Top = 125
+              Width = 105
+              Enabled = False
+              MaxValue = 99999
+              OnChange = ForceRedraw
+              TabOrder = 3
+            end
+            object spSlitPA: TSpinEdit
+              Left = 192
+              Height = 29
+              Top = 157
+              Width = 105
+              Enabled = False
+              MaxValue = 90
+              MinValue = -90
+              OnChange = ForceRedraw
+              TabOrder = 4
+            end
+            object cbDrawSlit: TCheckBox
+              Left = 8
+              Height = 21
+              Top = 5
+              Width = 166
+              Caption = 'Draw slit area on image'
+              OnChange = cbDrawSlitChange
+              TabOrder = 5
+            end
           end
-          object spSlitY: TSpinEdit
-            Left = 192
-            Height = 29
-            Top = 61
-            Width = 105
-            Enabled = False
-            MaxValue = 99999
-            OnChange = ForceRedraw
+          object GroupBox4: TGroupBox
+            Left = 0
+            Height = 30
+            Top = 0
+            Width = 334
+            Align = alTop
+            ClientHeight = 28
+            ClientWidth = 332
             TabOrder = 1
+            object cbGuideLock: TCheckBox
+              Left = 8
+              Height = 21
+              Top = 4
+              Width = 219
+              Caption = 'Activate single star lock position'
+              OnChange = cbGuideLockChange
+              TabOrder = 0
+            end
           end
-          object spSlitW: TSpinEdit
-            Left = 192
-            Height = 29
-            Top = 93
-            Width = 105
-            Enabled = False
-            MaxValue = 99999
-            OnChange = ForceRedraw
+          object GroupBoxLock: TGroupBox
+            Left = 0
+            Height = 128
+            Top = 30
+            Width = 334
+            Align = alTop
+            Caption = 'Guide position on the slit'
+            ClientHeight = 108
+            ClientWidth = 332
             TabOrder = 2
+            object edLockX: TFloatSpinEdit
+              Left = 180
+              Height = 29
+              Top = 4
+              Width = 105
+              OnChange = ForceRedraw
+              TabOrder = 0
+              Value = 100
+            end
+            object Label28: TLabel
+              AnchorSideTop.Control = edLockX
+              AnchorSideTop.Side = asrCenter
+              Left = 8
+              Height = 19
+              Top = 9
+              Width = 91
+              Caption = 'Lock position X'
+              ParentColor = False
+            end
+            object Label29: TLabel
+              AnchorSideTop.Control = edLockY
+              AnchorSideTop.Side = asrCenter
+              Left = 8
+              Height = 19
+              Top = 45
+              Width = 91
+              Caption = 'Lock position Y'
+              ParentColor = False
+            end
+            object edLockY: TFloatSpinEdit
+              Left = 180
+              Height = 29
+              Top = 40
+              Width = 105
+              OnChange = ForceRedraw
+              TabOrder = 1
+              Value = 100
+            end
+            object ButtonSetLock: TSpeedButton
+              Left = 0
+              Height = 25
+              Top = 74
+              Width = 273
+              AllowAllUp = True
+              Caption = 'Click on image to set'
+              GroupIndex = 1
+              OnClick = ButtonSetLockClick
+            end
           end
-          object spSlitL: TSpinEdit
-            Left = 192
-            Height = 29
-            Top = 125
-            Width = 105
-            Enabled = False
-            MaxValue = 99999
-            OnChange = ForceRedraw
+          object PageControl2: TPageControl
+            Left = 0
+            Height = 92
+            Top = 158
+            Width = 334
+            ActivePage = TabSheet2
+            Align = alTop
+            ShowTabs = False
+            TabIndex = 1
             TabOrder = 3
-          end
-          object spSlitPA: TSpinEdit
-            Left = 192
-            Height = 29
-            Top = 157
-            Width = 105
-            Enabled = False
-            MaxValue = 90
-            MinValue = -90
-            OnChange = ForceRedraw
-            TabOrder = 4
-          end
-          object cbDrawSlit: TCheckBox
-            Left = 8
-            Height = 21
-            Top = 5
-            Width = 166
-            Caption = 'Draw slit area on image'
-            OnChange = cbDrawSlitChange
-            TabOrder = 5
+            object TabSheet1: TTabSheet
+              Caption = 'TabSheet1'
+              ClientHeight = 88
+              ClientWidth = 324
+              object GroupBoxSearchArea: TGroupBox
+                Left = 0
+                Height = 89
+                Top = 0
+                Width = 324
+                Align = alTop
+                Caption = 'Star search area'
+                ClientHeight = 69
+                ClientWidth = 322
+                TabOrder = 0
+                object Label30: TLabel
+                  AnchorSideTop.Control = edslitWinMin
+                  AnchorSideTop.Side = asrCenter
+                  Left = 8
+                  Height = 19
+                  Top = 8
+                  Width = 89
+                  Caption = 'Guide box size'
+                  ParentColor = False
+                end
+                object edslitWinMin: TSpinEdit
+                  Left = 220
+                  Height = 29
+                  Top = 3
+                  Width = 65
+                  TabOrder = 0
+                  Value = 40
+                end
+                object edslitWinMax: TSpinEdit
+                  Left = 220
+                  Height = 29
+                  Top = 35
+                  Width = 65
+                  TabOrder = 1
+                  Value = 80
+                end
+                object Label31: TLabel
+                  AnchorSideTop.Control = edslitWinMax
+                  AnchorSideTop.Side = asrCenter
+                  Left = 8
+                  Height = 19
+                  Top = 40
+                  Width = 130
+                  Caption = 'Maximum search box'
+                  ParentColor = False
+                end
+              end
+            end
+            object TabSheet2: TTabSheet
+              Caption = 'TabSheet2'
+              ClientHeight = 88
+              ClientWidth = 324
+              object GroupBoxOffset: TGroupBox
+                Left = 0
+                Height = 89
+                Top = 0
+                Width = 324
+                Align = alTop
+                Caption = 'Multi-star guide offset'
+                ClientHeight = 69
+                ClientWidth = 322
+                TabOrder = 0
+                object edOffsetX: TFloatSpinEdit
+                  Left = 180
+                  Height = 29
+                  Top = 3
+                  Width = 105
+                  TabOrder = 0
+                end
+                object Label37: TLabel
+                  AnchorSideTop.Control = edOffsetX
+                  AnchorSideTop.Side = asrCenter
+                  Left = 8
+                  Height = 19
+                  Top = 8
+                  Width = 87
+                  Caption = 'Guide offset X'
+                  ParentColor = False
+                end
+                object Label38: TLabel
+                  AnchorSideTop.Control = edOffsetY
+                  AnchorSideTop.Side = asrCenter
+                  Left = 8
+                  Height = 19
+                  Top = 40
+                  Width = 87
+                  Caption = 'Guide offset Y'
+                  ParentColor = False
+                end
+                object edOffsetY: TFloatSpinEdit
+                  Left = 180
+                  Height = 29
+                  Top = 35
+                  Width = 105
+                  TabOrder = 1
+                end
+              end
+            end
           end
         end
-        object GroupBox4: TGroupBox
+        object Panel9: TPanel
           Left = 0
-          Height = 152
+          Height = 30
           Top = 0
-          Width = 313
+          Width = 334
           Align = alTop
-          ClientHeight = 150
-          ClientWidth = 311
+          BevelOuter = bvNone
+          ClientHeight = 30
+          ClientWidth = 334
+          Color = clMenu
+          ParentColor = False
           TabOrder = 1
-          object cbGuideLock: TCheckBox
-            Left = 8
+          object cbSpectro: TCheckBox
+            Left = 9
             Height = 21
-            Top = 8
-            Width = 123
-            Caption = 'Set lock position'
-            OnChange = ForceRedraw
+            Top = 4
+            Width = 218
+            Caption = 'Activate spectroscopy functions'
+            OnChange = cbSpectroChange
             TabOrder = 0
-          end
-          object edLockX: TFloatSpinEdit
-            Left = 180
-            Height = 29
-            Top = 40
-            Width = 105
-            OnChange = ForceRedraw
-            TabOrder = 1
-            Value = 100
-          end
-          object Label28: TLabel
-            AnchorSideTop.Control = edLockX
-            AnchorSideTop.Side = asrCenter
-            Left = 8
-            Height = 19
-            Top = 45
-            Width = 91
-            Caption = 'Lock position X'
-            ParentColor = False
-          end
-          object Label29: TLabel
-            AnchorSideTop.Control = edLockY
-            AnchorSideTop.Side = asrCenter
-            Left = 8
-            Height = 19
-            Top = 80
-            Width = 91
-            Caption = 'Lock position Y'
-            ParentColor = False
-          end
-          object edLockY: TFloatSpinEdit
-            Left = 180
-            Height = 29
-            Top = 75
-            Width = 105
-            OnChange = ForceRedraw
-            TabOrder = 2
-            Value = 100
-          end
-          object ButtonSetLock: TSpeedButton
-            Left = 8
-            Height = 25
-            Top = 112
-            Width = 273
-            AllowAllUp = True
-            Caption = 'Click on image to set'
-            GroupIndex = 1
-            OnClick = ButtonSetLockClick
-          end
-        end
-        object GroupBox5: TGroupBox
-          Left = 0
-          Height = 89
-          Top = 152
-          Width = 313
-          Align = alTop
-          Caption = 'Star search area'
-          ClientHeight = 69
-          ClientWidth = 311
-          TabOrder = 2
-          object Label30: TLabel
-            AnchorSideTop.Control = edslitWinMin
-            AnchorSideTop.Side = asrCenter
-            Left = 8
-            Height = 19
-            Top = 8
-            Width = 89
-            Caption = 'Guide box size'
-            ParentColor = False
-          end
-          object edslitWinMin: TSpinEdit
-            Left = 220
-            Height = 29
-            Top = 3
-            Width = 65
-            TabOrder = 0
-            Value = 40
-          end
-          object edslitWinMax: TSpinEdit
-            Left = 220
-            Height = 29
-            Top = 35
-            Width = 65
-            TabOrder = 1
-            Value = 80
-          end
-          object Label31: TLabel
-            AnchorSideTop.Control = edslitWinMax
-            AnchorSideTop.Side = asrCenter
-            Left = 8
-            Height = 19
-            Top = 40
-            Width = 130
-            Caption = 'Maximum search box'
-            ParentColor = False
           end
         end
       end
