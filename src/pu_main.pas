@@ -978,6 +978,7 @@ type
     Procedure DrawFinderImage(display: boolean);
     Procedure PlotFinderImage;
     procedure FinderRedraw(Sender: TObject);
+    Procedure SetGuiderCamera;
     Procedure SetFinderCamera;
   public
     { public declarations }
@@ -2717,7 +2718,7 @@ begin
                              (safety.SafetyInterface=INDI)or(dome.DomeInterface=INDI)or(switch.SwitchInterface=INDI)or
                              (cover.CoverInterface=INDI)or(guidecamera.CameraInterface=INDI)or(findercamera.CameraInterface=INDI);
 
-  TBInternalGuider.Visible:=WantGuideCamera;
+  SetGuiderCamera;
   SetFinderCamera;
 
   SetTool(f_visu,'Histogram',PanelBottom,0,MenuViewHistogram,MenuHistogram,true);
@@ -4895,6 +4896,7 @@ begin
       end;
     end;
   end;
+  SetGuiderCamera;
   SetFinderCamera;
 end;
 
@@ -9795,6 +9797,8 @@ begin
    else
    if TToolButton(Sender)=TBInternalGuider then
       pnl:=PanelRight6;
+   if TToolButton(Sender)=TBFinder then
+      pnl:=PanelRight7;
    if pnl<>nil then
       PanelDragDrop(pnl,Source,X,Y);
  end;
@@ -16482,6 +16486,15 @@ begin
     TBFinder.Visible:=true;
     SetTool(f_finder,'Finder',PanelRight7,0,MenuViewFinder,MenuFinder,true);
   end;
+  MenuTabFinder.Visible:=TBFinder.Visible;
+end;
+
+Procedure Tf_main.SetGuiderCamera;
+var n: integer;
+begin
+  n:=config.GetValue('/Autoguider/Software',2);
+  TBInternalGuider.Visible:=WantGuideCamera and (n=4);
+  MenuTabInternalGuider.Visible:=TBInternalGuider.Visible;
 end;
 
 procedure Tf_main.FinderRedraw(Sender: TObject);
