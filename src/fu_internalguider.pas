@@ -53,6 +53,7 @@ type
     ButtonStop: TButton;
     ButtonStop1: TButton;
     cbGuideLock: TCheckBox;
+    cbDrawSlit: TCheckBox;
     CheckBoxBacklash: TCheckBox;
     CheckBoxInverseSolarTracking1: TCheckBox;
     CheckBoxReverseDec1: TCheckBox;
@@ -182,6 +183,7 @@ type
     procedure ButtonGuideClick(Sender: TObject);
     procedure ButtonSetTempClick(Sender: TObject);
     procedure ButtonStopClick(Sender: TObject);
+    procedure cbDrawSlitChange(Sender: TObject);
     procedure CheckBoxTrackSolar1Change(Sender: TObject);
     procedure CoolerClick(Sender: TObject);
     procedure dec_gain1Change(Sender: TObject);
@@ -294,6 +296,8 @@ type
     procedure SetSlitL(value:integer);
     function GetSlitPA:integer;
     procedure SetSlitPA(value:integer);
+    function GetDrawSlit:Boolean;
+    procedure SetDrawSlit(value:Boolean);
   public
     { public declarations }
     constructor Create(aOwner: TComponent); override;
@@ -348,6 +352,7 @@ type
     property GuideLockNextY: integer read FGuideLockNextY write FGuideLockNextY;
     property SearchWinMin: integer read GetSearchWinMin write SetSearchWinMin; // star search area
     property SearchWinMax: integer read GetSearchWinMax write SetSearchWinMax;
+    property DrawSlit: boolean read GetDrawSlit write SetDrawSlit;
     property SlitX: integer read GetSlitX write SetSlitX; // slit position drawing
     property SlitY: integer read GetSlitY write SetSlitY;
     property SlitW: integer read GetSlitW write SetSlitW;
@@ -476,6 +481,7 @@ begin
   Label30.Caption:=rsGuideBoxSize;
   Label31.Caption:=rsMaximumSearc2;
   GroupBox3.Caption:=rsSlitDrawing;
+  cbDrawSlit.Caption:=rsDrawSlitArea;
   label32.Caption:=rsCenter+' X';
   label33.Caption:=rsCenter+' Y';
   label34.Caption:=rsWidth;
@@ -731,7 +737,15 @@ begin
   setled(clGray);
 end;
 
-
+procedure Tf_internalguider.cbDrawSlitChange(Sender: TObject);
+begin
+  spSlitX.Enabled:=cbDrawSlit.Checked;
+  spSlitY.Enabled:=cbDrawSlit.Checked;
+  spSlitW.Enabled:=cbDrawSlit.Checked;
+  spSlitL.Enabled:=cbDrawSlit.Checked;
+  spSlitPA.Enabled:=cbDrawSlit.Checked;
+  ForceRedraw(nil);
+end;
 
 procedure Tf_internalguider.CheckBoxTrackSolar1Change(Sender: TObject);
 begin
@@ -1358,6 +1372,16 @@ end;
 procedure Tf_internalguider.SetSlitPA(value:integer);
 begin
  spSlitPA.value:=value;
+end;
+
+function Tf_internalguider.GetDrawSlit:Boolean;
+begin
+ result:=cbDrawSlit.Checked;
+end;
+
+procedure Tf_internalguider.SetDrawSlit(value:Boolean);
+begin
+ cbDrawSlit.Checked:=value;
 end;
 
 

@@ -4586,6 +4586,7 @@ begin
   GuideImgZoom:=config.GetValue('/InternalGuider/Visu/Zoom',0);
   f_internalguider.SearchWinMin:=config.GetValue('/InternalGuider/Spectro/SearchWinMin',40);
   f_internalguider.SearchWinMax:=config.GetValue('/InternalGuider/Spectro/SearchWinMax',80);
+  f_internalguider.DrawSlit:=config.GetValue('/InternalGuider/Spectro/DrawSlit',false);
   f_internalguider.SlitX:=config.GetValue('/InternalGuider/Spectro/SlitX',0);
   f_internalguider.SlitY:=config.GetValue('/InternalGuider/Spectro/SlitY',0);
   f_internalguider.SlitW:=config.GetValue('/InternalGuider/Spectro/SlitW',0);
@@ -5168,6 +5169,7 @@ begin
   config.SetValue('/Autoguider/Lock/GuideLockY',f_internalguider.LockY);
   config.SetValue('/InternalGuider/Spectro/SearchWinMin',f_internalguider.SearchWinMin);
   config.SetValue('/InternalGuider/Spectro/SearchWinMax',f_internalguider.SearchWinMax);
+  config.SetValue('/InternalGuider/Spectro/DrawSlit',f_internalguider.DrawSlit);
   config.SetValue('/InternalGuider/Spectro/SlitX',f_internalguider.SlitX);
   config.SetValue('/InternalGuider/Spectro/SlitY',f_internalguider.SlitY);
   config.SetValue('/InternalGuider/Spectro/SlitW',f_internalguider.SlitW);
@@ -16035,7 +16037,7 @@ if (guidefits.HeaderInfo.naxis>0) and guidefits.ImageValid then begin
       ImaGuideBmp.Canvas.Frame(xs-r,ys-r,xs+r,ys+r);
     end;
     // draw slit
-    if (f_internalguider.SlitX>0)and(f_internalguider.SlitY>0) then begin
+    if f_internalguider.DrawSlit and (f_internalguider.SlitX>0)and(f_internalguider.SlitY>0) then begin
       ImaGuideBmp.Canvas.Pen.Color:=clRed;
       xs:=f_internalguider.SlitX;
       ys:=guideimg_Height-f_internalguider.SlitY;

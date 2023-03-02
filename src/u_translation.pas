@@ -1499,6 +1499,7 @@ resourcestring
   rsLength = 'Length';
   rsRotation = 'Rotation angle';
   rsSelectGuideS = 'Select guide star';
+  rsDrawSlitArea = 'Draw slit area on image';
 
 implementation
 
