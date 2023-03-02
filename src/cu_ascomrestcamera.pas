@@ -39,7 +39,6 @@ T_ascomrestcamera = class(T_camera)
    nf: integer;
    newtimestart,timedout:double;
    FPixelSizeX,FPixelSizeY: double;
-   Fccdname: string;
    FMaxBinX,FMaxBinY,FBinX,FBinY:integer;
    FHasTemperature, FCanSetTemperature: boolean;
    stCCDtemp,stCoolerPower : double;
@@ -293,7 +292,8 @@ begin
     Fccdname:=Fdevice;
     try
       Fccdname:=V.Get('name').AsString;
-      Fccdname:=Fccdname+'-'+V.Get('sensorname').AsString;
+      buf:=V.Get('sensorname').AsString;
+      if buf<>'' then Fccdname:=Fccdname+'-'+buf;
     except
     end;
     try
@@ -490,7 +490,7 @@ var ok: boolean;
     i,j,k,c,xs,ys: integer;
     nax1,nax2,state: integer;
     pix,piy,expt,rexp: double;
-    dateobs,ccdname,frname:string;
+    dateobs,frname:string;
     Dims,x,y: Integer;
     lii: integer;
     ii: smallint;
@@ -582,7 +582,6 @@ begin
    nax2:=ys;
    pix:=FPixelSizeX;
    piy:=FPixelSizeY;
-   ccdname:=Fccdname;
    frname:=FrameName[ord(FFrametype)];
    dateobs:=FormatDateTime(dateiso,Ftimestart);
    if FhasLastExposureStartTime then begin

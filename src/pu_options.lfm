@@ -4305,10 +4305,10 @@ object f_option: Tf_option
               ParentColor = False
             end
             object AstrometryCamera: TComboBox
-              Left = 251
+              Left = 152
               Height = 31
               Top = 32
-              Width = 157
+              Width = 256
               ItemHeight = 0
               ItemIndex = 0
               Items.Strings = (

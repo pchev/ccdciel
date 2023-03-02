@@ -8620,6 +8620,8 @@ begin
         break;
       end;
    end;
+   f_option.AstrometryCamera.Items[0]:=rsMainCamera+' '+camera.CCDname;
+   f_option.AstrometryCamera.Items[1]:=rsFinderCamera+' '+findercamera.CCDname;
    f_option.CbShowHints.Checked:=screenconfig.GetValue('/Hint/Show',true);
    f_option.CaptureDir.Text:=config.GetValue('/Files/CapturePath',defCapturePath);
    f_option.TempDir.Text:=config.GetValue('/Files/TmpDir',TmpDir);

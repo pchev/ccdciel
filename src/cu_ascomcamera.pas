@@ -41,7 +41,6 @@ T_ascomcamera = class(T_camera)
    nf: integer;
    newtimestart,timedout:double;
    FPixelSizeX,FPixelSizeY: double;
-   Fccdname: string;
    {$endif}
    FInterfaceVersion: integer;
    FOffsetX, FOffsetY: integer;
@@ -199,6 +198,7 @@ procedure T_ascomcamera.Connect(cp1: string; cp2:string=''; cp3:string=''; cp4:s
 {$ifdef mswindows}
 var readmodes,roitem: Variant;
     i,n: integer;
+    buf: string;
 {$endif}
 begin
 {$ifdef mswindows}
@@ -281,7 +281,8 @@ begin
     Fccdname:=Fdevice;
     try
       Fccdname:=V.Name;
-      Fccdname:=Fccdname+'-'+V.SensorName;
+      buf:=V.SensorName;
+      if buf<>'' then Fccdname:=Fccdname+'-'+buf;
     except
     end;
     try
@@ -485,7 +486,7 @@ var ok: boolean;
     i,j,c,xs,ys: integer;
     nax1,nax2,state,bitpx: integer;
     pix,piy,expt,ElectronsPerADU,rexp: double;
-    dateobs,ccdname,frname:string;
+    dateobs,frname:string;
     {$ifdef DirectArray}
       img: array of array of LongInt;     // 2D dynamic array for the image data
     {$else}
@@ -655,7 +656,6 @@ begin
    nax2:=ys;
    pix:=FPixelSizeX;
    piy:=FPixelSizeY;
-   ccdname:=Fccdname;
    frname:=FrameName[ord(FFrametype)];
    dateobs:=FormatDateTime(dateiso,Ftimestart);
    if FhasLastExposureStartTime then begin
