@@ -40,6 +40,8 @@ type
     CdCPath: TEdit;
     AstrometryCamera: TComboBox;
     Label165: TLabel;
+    Label166: TLabel;
+    Label167: TLabel;
     MeridianFlipUseSetPierSide: TCheckBox;
     Label161: TLabel;
     Label164: TLabel;
@@ -54,12 +56,14 @@ type
     Panel29: TPanel;
     MeridianFlipPanel1: TPanel;
     MeridianFlipPanel3: TPanel;
+    PanelFinder: TPanel;
     Panel8: TPanel;
     ShowVideo: TCheckBox;
     Label160: TLabel;
     Panel28: TPanel;
     LogDir: TEdit;
     LogDirDefault: TButton;
+    FinderFocalLength: TSpinEdit;
     StackUseFlat: TCheckBox;
     InstrumentName: TEdit;
     GuideDriftAbort: TCheckBox;
@@ -1940,6 +1944,7 @@ procedure Tf_option.AstrometryCameraChange(Sender: TObject);
 begin
   if AstrometryCamera.ItemIndex>0 then SlewFilter.ItemIndex:=0;
   SlewFilter.Enabled:=AstrometryCamera.ItemIndex=0;
+  PanelFinder.Visible:=AstrometryCamera.ItemIndex=1;
 end;
 
 procedure Tf_option.AutofocusExpTimeChange(Sender: TObject);

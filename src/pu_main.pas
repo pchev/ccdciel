@@ -2106,6 +2106,7 @@ begin
      ASCOM: findercamera:=T_ascomcamera.Create(nil);
      ASCOMREST: findercamera:=T_ascomrestcamera.Create(nil);
    end;
+   findercamera.FinderCamera:=true;
    findercamera.CameraTimeout:=15;
    findercamera.Mount:=mount;
    findercamera.Fits:=finderfits;
@@ -8890,6 +8891,7 @@ begin
    else
       f_option.SlewFilter.ItemIndex:=0;
    f_option.SlewFilter.Enabled:=f_option.AstrometryCamera.ItemIndex=0;
+   f_option.PanelFinder.Visible:=f_option.AstrometryCamera.ItemIndex=1;
    if hasGainISO then
      f_option.SlewISObox.ItemIndex:=config.GetValue('/PrecSlew/Gain',f_preview.ISObox.ItemIndex)
    else
@@ -8901,6 +8903,7 @@ begin
    else
        f_option.SlewBin.MaxValue:=9;
    f_option.SlewDelay.Value:=config.GetValue('/PrecSlew/Delay',5);
+   f_option.FinderFocalLength.Value:=config.GetValue('/Astrometry/FinderFocalLength',0);
    f_option.RecenterTargetDistance.value:=config.GetValue('/PrecSlew/RecenterTargetDistance',RecenterTargetDistance);
    if (mount.Status=devConnected)and(mount.PierSide=pierUnknown) then begin
       f_option.Panel13.Visible:=true;
@@ -9284,6 +9287,7 @@ begin
      config.SetValue('/PrecSlew/Delay',f_option.SlewDelay.Value);
      config.SetValue('/PrecSlew/Filter',f_option.SlewFilter.ItemIndex);
      config.SetValue('/PrecSlew/RecenterTargetDistance',f_option.RecenterTargetDistance.value);
+     config.SetValue('/Astrometry/FinderFocalLength',f_option.FinderFocalLength.Value);
      config.SetValue('/Meridian/MeridianOption',f_option.MeridianOption.ItemIndex);
      config.SetValue('/Meridian/MinutesPast',f_option.MinutesPastMeridian.Value);
      config.SetValue('/Meridian/MinutesPastMin',f_option.MinutesPastMeridianMin.Value);

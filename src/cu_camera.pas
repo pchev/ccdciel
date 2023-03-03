@@ -96,7 +96,7 @@ T_camera = class(TComponent)
     FImgNum:PtrInt;
     Fexptime: double;
     FFixPixelRange: boolean;
-    FGuideCamera: boolean;
+    FGuideCamera,FFinderCamera: boolean;
     FGuidePixelScale: double;
     FsequenceRunning: boolean;
     FStepTotalCount,FStepRepeatCount: integer;
@@ -316,6 +316,7 @@ T_camera = class(TComponent)
     property VideoEncoders: TStringList read FVideoEncoder;
     property VideoEncoder: Integer read GetVideoEncoder write SetVideoEncoder;
     property FixPixelRange: boolean read FFixPixelRange write FFixPixelRange;
+    property FinderCamera: boolean read FFinderCamera write FFinderCamera;
     property GuideCamera: boolean read FGuideCamera write FGuideCamera;
     property GuidePixelScale: double read FGuidePixelScale write FGuidePixelScale;
     property onMsg: TNotifyMsg read FonMsg write FonMsg;
@@ -416,6 +417,7 @@ begin
   RampTimer.Interval:=1000;
   RampTimer.OnTimer:=@RampTimerTimer;
   FGuideCamera:=false;
+  FFinderCamera:=false;
   FGuidePixelScale:=-1;
   FsequenceRunning:=false;
   FStepTotalCount:=1;
@@ -767,12 +769,17 @@ begin
     telname:=config.GetValue('/Info/TelescopeName','');
     instrum:=config.GetValue('/Info/InstrumentName','');
     if not FGuideCamera then begin
+      if FFinderCamera then begin
+        focal_length:=config.GetValue('/Astrometry/FinderFocalLength',0);
+      end
+      else begin
       if config.GetValue('/Astrometry/FocaleFromTelescope',true)
       then begin
          if focal_length<0 then focal_length:=Fmount.FocaleLength;
       end
       else begin
          focal_length:=config.GetValue('/Astrometry/FocaleLength',0);
+      end;
       end;
     end;
     if not (FGuideCamera or config.GetValue('/Astrometry/PixelSizeFromCamera',true)) then begin
