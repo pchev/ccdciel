@@ -1141,7 +1141,7 @@ object f_internalguider: Tf_internalguider
           object GroupBoxSlit: TGroupBox
             Left = 0
             Height = 215
-            Top = 250
+            Top = 268
             Width = 334
             Align = alTop
             Caption = 'Slit drawing'
@@ -1261,11 +1261,11 @@ object f_internalguider: Tf_internalguider
           end
           object GroupBox4: TGroupBox
             Left = 0
-            Height = 30
+            Height = 48
             Top = 0
             Width = 334
             Align = alTop
-            ClientHeight = 28
+            ClientHeight = 46
             ClientWidth = 332
             TabOrder = 1
             object cbGuideLock: TCheckBox
@@ -1281,7 +1281,7 @@ object f_internalguider: Tf_internalguider
           object GroupBoxLock: TGroupBox
             Left = 0
             Height = 128
-            Top = 30
+            Top = 48
             Width = 334
             Align = alTop
             Caption = 'Guide position on the slit'
@@ -1340,7 +1340,7 @@ object f_internalguider: Tf_internalguider
           object PageControl2: TPageControl
             Left = 0
             Height = 92
-            Top = 158
+            Top = 176
             Width = 334
             ActivePage = TabSheet2
             Align = alTop
@@ -1358,7 +1358,7 @@ object f_internalguider: Tf_internalguider
                 Width = 324
                 Align = alTop
                 Caption = 'Star search area'
-                ClientHeight = 69
+                ClientHeight = 87
                 ClientWidth = 322
                 TabOrder = 0
                 object Label30: TLabel
