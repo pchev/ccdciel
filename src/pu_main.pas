@@ -2795,6 +2795,7 @@ begin
   f_finder.BtnZoomAdjust.Glyph.Assign(btn);
   TBTabs.Images.GetBitmap(6, btn);
   f_visu.BtnBullsEye.Glyph.Assign(btn);
+  f_finder.BtnBullsEye.Glyph.Assign(btn);
   TBTabs.Images.GetBitmap(7, btn);
   f_visu.BtnClipRange.Glyph.Assign(btn);
   TBTabs.Images.GetBitmap(8, btn);
@@ -16513,7 +16514,7 @@ begin
   if LockFinderTimerPlot then exit;
   LockFinderTimerPlot:=true;
   FinderPlotTimer.Enabled:=false;
-  if (finderfits.Gamma<>(f_finder.Gamma.Position/100))or(finderfits.VisuMax<>(min(MAXWORD,round(max(finderfits.VisuMin+1,finderfits.HeaderInfo.dmax*f_finder.Luminosity.Position/100))))) then
+  if f_finder.DrawSettingChange then
     DrawFinderImage(true);
   PlotFinderImage;
   LockFinderTimerPlot:=false;
@@ -16541,8 +16542,11 @@ end;
 procedure Tf_main.DrawFinderImage(display: boolean);
 var tmpbmp:TBGRABitmap;
     dmin,dmax: integer;
+    co: TBGRAPixel;
+    s,cx,cy: integer;
 begin
 if (finderfits.HeaderInfo.naxis>0) and finderfits.ImageValid then begin
+  f_finder.DrawSettingChange:=false;
   finderfits.Gamma:=f_finder.Gamma.Position/100;
   dmin:=round(max(0,finderfits.HeaderInfo.dmin));
   dmax:=min(MAXWORD,round(max(dmin+1,finderfits.HeaderInfo.dmax*f_finder.Luminosity.Position/100)));
@@ -16562,6 +16566,17 @@ if (finderfits.HeaderInfo.naxis>0) and finderfits.ImageValid then begin
   end;
   finderimg_Width:=ImaFinderBmp.Width;
   finderimg_Height:=ImaFinderBmp.Height;
+  if f_finder.BullsEye then begin
+    co:=ColorToBGRA(clRed);
+    cx:=finderimg_Width div 2;
+    cy:=finderimg_Height div 2;
+    ImaFinderBmp.DrawHorizLine(0,cy,finderimg_Width,co);
+    ImaFinderBmp.DrawVertLine(cx,0,finderimg_Height,co);
+    s:=min(finderimg_Height,finderimg_Width) div 3;
+    ImaFinderBmp.EllipseAntialias(cx,cy,s,s,co,1);
+    s:=min(finderimg_Height,finderimg_Width) div 8;
+    ImaFinderBmp.EllipseAntialias(cx,cy,s,s,co,1);
+  end;
  end
  else begin
   finderimg_Width:=finderfits.HeaderInfo.naxis1;

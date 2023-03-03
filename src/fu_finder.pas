@@ -33,6 +33,7 @@ type
   { Tf_finder }
 
   Tf_finder = class(TFrame)
+    BtnBullsEye: TSpeedButton;
     BtnZoom05: TSpeedButton;
     BtnZoom1: TSpeedButton;
     BtnZoom2: TSpeedButton;
@@ -53,6 +54,7 @@ type
     Panel2: TPanel;
     Panel8: TPanel;
     Title: TLabel;
+    procedure BtnBullsEyeClick(Sender: TObject);
     procedure Button1Click(Sender: TObject);
     procedure BtnZoom05Click(Sender: TObject);
     procedure BtnZoom1Click(Sender: TObject);
@@ -67,11 +69,12 @@ type
     FAstrometry: TAstrometry;
     FonShowMessage: TNotifyMsg;
     FonRedraw: TNotifyEvent;
-    Loop: boolean;
+    Loop,FDrawSettingChange,FBullsEye: boolean;
     LoopExp:double;
     LoopBin,LoopGain,LoopOffset: integer;
     procedure msg(txt:string; level: integer);
     procedure PreviewAsync(Data: PtrInt);
+    procedure ForceRedraw;
   public
     { public declarations }
     constructor Create(aOwner: TComponent); override;
@@ -80,6 +83,8 @@ type
     procedure ShowCalibration;
     property Camera: T_camera read FCamera write FCamera;
     property Astrometry: TAstrometry read FAstrometry write FAstrometry;
+    property DrawSettingChange: boolean read FDrawSettingChange write FDrawSettingChange;
+    property BullsEye: boolean read FBullsEye write FBullsEye;
     property onShowMessage: TNotifyMsg read FonShowMessage write FonShowMessage;
     property onRedraw: TNotifyEvent read FonRedraw write FonRedraw;
   end;
@@ -101,6 +106,7 @@ begin
  ScaleDPI(Self);
  SetLang;
  Loop:=false;
+ FBullsEye:=false;
 end;
 
 destructor  Tf_finder.Destroy;
@@ -142,6 +148,12 @@ begin
     button1.Caption:=rsLoop;
     msg(rsFinderCamera+': '+rsStopLoop,3);
   end;
+end;
+
+procedure Tf_finder.BtnBullsEyeClick(Sender: TObject);
+begin
+  FBullsEye:=not FBullsEye;
+  ForceRedraw;
 end;
 
 procedure Tf_finder.PreviewAsync(Data: PtrInt);
@@ -190,14 +202,20 @@ begin
   end;
 end;
 
+procedure Tf_finder.ForceRedraw;
+begin
+  FDrawSettingChange:=true;
+  if Assigned(FonRedraw) then FonRedraw(self);
+end;
+
 procedure Tf_finder.GammaChange(Sender: TObject);
 begin
-  if Assigned(FonRedraw) then FonRedraw(self);
+  ForceRedraw;
 end;
 
 procedure Tf_finder.LuminosityChange(Sender: TObject);
 begin
-  if Assigned(FonRedraw) then FonRedraw(self);
+  ForceRedraw;
 end;
 
 procedure Tf_finder.ShowCalibration;

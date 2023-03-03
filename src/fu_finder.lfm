@@ -1,10 +1,10 @@
 object f_finder: Tf_finder
   Left = 0
-  Height = 322
+  Height = 328
   Top = 0
   Width = 243
   AutoSize = True
-  ClientHeight = 322
+  ClientHeight = 328
   ClientWidth = 243
   ParentFont = False
   TabOrder = 0
@@ -29,12 +29,12 @@ object f_finder: Tf_finder
   end
   object Panel1: TPanel
     Left = 0
-    Height = 292
+    Height = 308
     Top = 20
     Width = 243
     Align = alTop
     BevelOuter = bvNone
-    ClientHeight = 292
+    ClientHeight = 308
     ClientWidth = 243
     ParentFont = False
     TabOrder = 0
@@ -117,12 +117,12 @@ object f_finder: Tf_finder
     end
     object Panel8: TPanel
       Left = 0
-      Height = 144
+      Height = 162
       Top = 142
       Width = 243
       Align = alTop
       BevelOuter = bvNone
-      ClientHeight = 144
+      ClientHeight = 162
       ClientWidth = 243
       TabOrder = 2
       object Label17: TLabel
@@ -235,6 +235,20 @@ object f_finder: Tf_finder
         Color = clDefault
         Layout = blGlyphBottom
         OnClick = BtnZoom2Click
+        ParentFont = False
+      end
+      object BtnBullsEye: TSpeedButton
+        AnchorSideLeft.Side = asrBottom
+        Left = 104
+        Height = 22
+        Hint = 'Show bulls eye'
+        Top = 136
+        Width = 28
+        AllowAllUp = True
+        BorderSpacing.Left = 1
+        Color = clDefault
+        GroupIndex = 103
+        OnClick = BtnBullsEyeClick
         ParentFont = False
       end
     end
