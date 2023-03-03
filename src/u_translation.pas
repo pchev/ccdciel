@@ -1505,6 +1505,7 @@ resourcestring
   rsGuidePositio = 'Guide position on the slit';
   rsMultiStarGui = 'Multi-star guide offset';
   rsGuideOffset = 'Guide offset';
+  rsErrorUnknown = 'Error: Unknown finder focal length, set in PREFERENCE, SLEWING.';
 
 implementation
 

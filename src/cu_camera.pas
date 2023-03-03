@@ -789,7 +789,12 @@ begin
       if (hbin2>0) then hpix2:=hpix2*hbin2;
     end;
   end;
-  if (not FGuideCamera)and(focal_length<1) then msg(rsErrorUnknowT,0);
+  if (not FGuideCamera)and(focal_length<1) then begin
+    if FFinderCamera then
+      msg(rsErrorUnknown, 0);
+    else
+      msg(rsErrorUnknowT,0);
+  end;
   if (focal_length>50000) then msg('Error: Is the telescope focal length really '+FormatFloat(f0,focal_length)+'mm ?',0);
   try
    GetFrame(Frx,Fry,Frwidth,Frheight);
