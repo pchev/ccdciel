@@ -16657,7 +16657,7 @@ else begin
    str.Free;
    tmpbmp.Free;
 end;
-if camera.ASCOMFlipImage then ScrFinderBmp.VerticalFlip; // same orientation as main camera
+ScrFinderBmp.VerticalFlip; // same as guider
 ImageFinder.Invalidate;
 end;
 
@@ -16701,7 +16701,7 @@ procedure Tf_main.ImageFinderMouseMove(Sender: TObject; Shift: TShiftState; X,
 begin
  if FinderMouseMoving and finderfits.HeaderInfo.valid and finderfits.ImageValid then begin
     FinderImgCx:=FinderImgCx + (X-FinderMx) / FinderImgZoom;
-    FinderImgCy:=FinderImgCy + (Y-FinderMy) / FinderImgZoom;
+    FinderImgCy:=FinderImgCy - (Y-FinderMy) / FinderImgZoom;
     FinderPlotTimer.Enabled:=true;
  end
  else if (finderfits.HeaderInfo.naxis1>0)and(FinderImgScale0<>0) and finderfits.ImageValid then begin
@@ -16716,7 +16716,7 @@ procedure Tf_main.ImageFinderMouseUp(Sender: TObject; Button: TMouseButton;
 begin
 if FinderMouseMoving and finderfits.HeaderInfo.valid and finderfits.ImageValid then begin
     FinderImgCx:=FinderImgCx + (X-FinderMx) / FinderImgZoom;
-    FinderImgCy:=FinderImgCy + (Y-FinderMy) / FinderImgZoom;
+    FinderImgCy:=FinderImgCy - (Y-FinderMy) / FinderImgZoom;
     PlotFinderImage;
     FinderMx:=X;
     FinderMy:=Y;
