@@ -791,7 +791,7 @@ begin
   end;
   if (not FGuideCamera)and(focal_length<1) then begin
     if FFinderCamera then
-      msg(rsErrorUnknown, 0);
+      msg(rsErrorUnknown, 0)
     else
       msg(rsErrorUnknowT,0);
   end;
