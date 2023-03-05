@@ -1,10 +1,10 @@
 object f_finder: Tf_finder
   Left = 0
-  Height = 328
+  Height = 361
   Top = 0
   Width = 243
   AutoSize = True
-  ClientHeight = 328
+  ClientHeight = 361
   ClientWidth = 243
   ParentFont = False
   TabOrder = 0
@@ -29,19 +29,19 @@ object f_finder: Tf_finder
   end
   object Panel1: TPanel
     Left = 0
-    Height = 308
+    Height = 332
     Top = 20
     Width = 243
     Align = alTop
     BevelOuter = bvNone
-    ClientHeight = 308
+    ClientHeight = 332
     ClientWidth = 243
     ParentFont = False
     TabOrder = 0
     object GroupBox1: TGroupBox
       Left = 0
       Height = 100
-      Top = 42
+      Top = 66
       Width = 243
       Align = alTop
       Caption = 'Calibration result'
@@ -85,12 +85,12 @@ object f_finder: Tf_finder
     end
     object Panel2: TPanel
       Left = 0
-      Height = 42
+      Height = 66
       Top = 0
       Width = 243
       Align = alTop
       BevelOuter = bvNone
-      ClientHeight = 42
+      ClientHeight = 66
       ClientWidth = 243
       TabOrder = 1
       object BtnPreviewLoop: TButton
@@ -108,17 +108,38 @@ object f_finder: Tf_finder
         Height = 25
         Hint = 'Calibrates the guider. Results will be written to tab advanced.'
         Top = 8
-        Width = 75
+        Width = 76
         Caption = 'Calibrate'
         OnClick = ButtonCalibrateClick
         ParentFont = False
         TabOrder = 1
       end
+      object Label3: TLabel
+        AnchorSideTop.Control = PreviewExp
+        AnchorSideTop.Side = asrCenter
+        Left = 22
+        Height = 19
+        Top = 43
+        Width = 107
+        Caption = 'Preview exposure'
+        ParentColor = False
+      end
+      object PreviewExp: TFloatSpinEdit
+        Left = 145
+        Height = 29
+        Top = 38
+        Width = 76
+        DecimalPlaces = 3
+        MaxValue = 60
+        MinValue = 0.001
+        TabOrder = 2
+        Value = 1
+      end
     end
     object Panel8: TPanel
       Left = 0
       Height = 162
-      Top = 142
+      Top = 166
       Width = 243
       Align = alTop
       BevelOuter = bvNone

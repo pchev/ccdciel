@@ -25,7 +25,8 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 interface
 
-uses  UScaleDPI, u_global, u_utils, Graphics, Dialogs, u_translation, cu_camera, indiapi, cu_astrometry, pu_findercalibration,
+uses  UScaleDPI, u_global, u_utils, Graphics, Dialogs, u_translation, cu_camera, indiapi,
+      cu_astrometry, pu_findercalibration, math,
   Classes, SysUtils, FileUtil, Forms, Controls, StdCtrls, ExtCtrls, ComCtrls, Spin, Buttons;
 
 type
@@ -40,7 +41,9 @@ type
     BtnZoomAdjust: TSpeedButton;
     BtnPreviewLoop: TButton;
     ButtonCalibrate: TButton;
+    PreviewExp: TFloatSpinEdit;
     GroupBox1: TGroupBox;
+    Label3: TLabel;
     OffsetX: TFloatSpinEdit;
     Gamma: TTrackBar;
     Label1: TLabel;
@@ -138,10 +141,6 @@ procedure Tf_finder.StartLoop;
 begin
   FinderPreviewLoop:=true;
   BtnPreviewLoop.Caption:=rsStopLoop;
-  LoopExp:=config.GetValue('/PrecSlew/Exposure',10.0);
-  LoopGain:=config.GetValue('/PrecSlew/Gain',NullInt);
-  LoopOffset:=config.GetValue('/PrecSlew/Offset',NullInt);
-  LoopBin:=config.GetValue('/PrecSlew/Binning',1);
   msg(rsFinderCamera+': '+rsStartPreview,0);
   Application.QueueAsyncCall(@StartExposureAsync,0);
 end;
@@ -157,7 +156,7 @@ end;
 Procedure Tf_finder.StartExposureAsync(Data: PtrInt);
 begin
  if (FCamera.Status=devConnected) then begin
-   LoopExp:=config.GetValue('/PrecSlew/Exposure',10.0);
+   LoopExp:=max(FCamera.ExposureRange.min,PreviewExp.Value);
    LoopGain:=config.GetValue('/PrecSlew/Gain',NullInt);
    LoopOffset:=config.GetValue('/PrecSlew/Offset',NullInt);
    LoopBin:=config.GetValue('/PrecSlew/Binning',1);
@@ -211,7 +210,7 @@ begin
   if f_findercalibration.ShowModal = mrOK then begin
     ra2000:=f_findercalibration.RA;
     de2000:=f_findercalibration.DE;
-    exp:=config.GetValue('/PrecSlew/Exposure',10.0);
+    exp:=PreviewExp.Value;
     sgain:=config.GetValue('/PrecSlew/Gain',NullInt);
     soffset:=config.GetValue('/PrecSlew/Offset',NullInt);
     bin:=config.GetValue('/PrecSlew/Binning',1);
