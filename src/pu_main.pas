@@ -7887,7 +7887,7 @@ if f_mount.BtnGoto.Caption=rsGoto then begin
      else
        de:=StrToDE(tde);
      if (ra<>NullCoord) and (de<>NullCoord) then begin
-       if autoguider.State=GUIDER_GUIDING then begin
+       if autoguider.State in [GUIDER_GUIDING,GUIDER_BUSY,GUIDER_ALERT] then begin
          NewMessage(rsStopAutoguid,2);
          autoguider.Guide(false);
          autoguider.WaitBusy(15);
@@ -9964,7 +9964,7 @@ begin
        (f_sequence.TargetCoord)and(f_sequence.TargetRA<>NullCoord)and(f_sequence.TargetDE<>NullCoord)
     then begin
       // stop autoguider
-      restartguider:=(autoguider.State=GUIDER_GUIDING);
+      restartguider:=(autoguider.State in [GUIDER_GUIDING,GUIDER_BUSY,GUIDER_ALERT]);
       if restartguider then begin
         NewMessage(rsStopAutoguid,2);
         autoguider.Guide(false);
@@ -12809,7 +12809,7 @@ begin
    NewMessage(rsStayAtTheCur,2);
    if AutofocusPauseGuider then begin
      // pause autoguider
-     pauseguider:=Autoguider.State=GUIDER_GUIDING;
+     pauseguider:=Autoguider.State in [GUIDER_GUIDING,GUIDER_BUSY,GUIDER_ALERT];
      if pauseguider then begin
        NewMessage(rsPauseAutogui,2);
        autoguider.Pause(True);
@@ -12867,7 +12867,7 @@ begin
  else
  begin
    // move to focus star
-   if restartguider and (Autoguider.State=GUIDER_GUIDING) then begin
+   if restartguider and (Autoguider.State in [GUIDER_GUIDING,GUIDER_BUSY,GUIDER_ALERT]) then begin
      // stop autoguider
      NewMessage(rsStopAutoguid,2);
      autoguider.Guide(false);
@@ -14341,7 +14341,7 @@ var ra,de,hh,a,h,tra,tde,err: double;
     NewMessage(rsMeridianFlip,1);
     mount.AbortMotion;
     if f_capture.Running then CameraExposureAborted(nil);
-    if autoguider.Running and (autoguider.State=GUIDER_GUIDING) then autoguider.Guide(false);
+    if autoguider.Running and (autoguider.State in [GUIDER_GUIDING,GUIDER_BUSY,GUIDER_ALERT]) then autoguider.Guide(false);
     meridianflipping:=false;
     if f_sequence.Running then f_sequence.ForceNextTarget;
   end;
@@ -14444,7 +14444,7 @@ begin
           slewtoimg:=true;
         end;
         // stop autoguider
-        restartguider:=(autoguider.State=GUIDER_GUIDING);
+        restartguider:=(autoguider.State in [GUIDER_GUIDING,GUIDER_BUSY,GUIDER_ALERT]);
         if restartguider then begin
           autoguider.Guide(false);
           autoguider.WaitBusy(15);
