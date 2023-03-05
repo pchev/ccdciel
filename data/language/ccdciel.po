@@ -5606,3 +5606,7 @@ msgstr ""
 msgid "Guide offset"
 msgstr ""
 
+#: u_translation:rserrorunknown
+msgid "Error: Unknown finder focal length, set in PREFERENCE, SLEWING."
+msgstr ""
+
