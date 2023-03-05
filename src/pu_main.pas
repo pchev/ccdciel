@@ -16788,8 +16788,10 @@ begin
   if (finderfits.HeaderInfo.naxis>0) and finderfits.ImageValid then begin
      if SaveDialogFits.Execute then begin
         finderfits.SaveToFile(SaveDialogFits.FileName,false);
+        f_finder.LabelMsg.Caption:=format(rsSaved,[SaveDialogFits.FileName]);
      end;
-  end;
+  end
+  else f_finder.LabelMsg.Caption:='No image!';
 end;
 
 procedure Tf_main.MenuItemFinderSolveClick(Sender: TObject);
@@ -16805,7 +16807,8 @@ begin
   if finderfits.HeaderInfo.valid then begin
     if (not f_goto.CheckImageInfo(finderfits)) then exit;
     astrometry.SyncFinderImage(false);
-  end;
+  end
+  else f_finder.LabelMsg.Caption:='No image!';
 end;
 
 procedure Tf_main.MenuItemFinderStopAstrometryClick(Sender: TObject);
@@ -16823,7 +16826,8 @@ begin
    f.Memo1.Lines:=finderfits.Header.Rows;
    FormPos(f,mouse.CursorPos.X,mouse.CursorPos.Y);
    f.Show;
- end;
+ end
+ else f_finder.LabelMsg.Caption:='No image!';
 end;
 
 procedure Tf_main.MenuItemFinderViewStatisticsClick(Sender: TObject);
@@ -16838,7 +16842,8 @@ begin
    f.Memo1.Text:=finderfits.GetStatistics;
    FormPos(f,mouse.CursorPos.X,mouse.CursorPos.Y);
    f.Show;
- end;
+ end
+ else f_finder.LabelMsg.Caption:='No image!';
 end;
 
 end.

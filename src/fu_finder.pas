@@ -25,7 +25,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 interface
 
-uses  UScaleDPI, u_global, u_utils, Graphics, Dialogs, u_translation, cu_camera, indiapi,
+uses  UScaleDPI, u_global, u_utils, Graphics, Dialogs, u_translation, u_hints, cu_camera, indiapi,
       cu_astrometry, pu_findercalibration, math,
   Classes, SysUtils, FileUtil, Forms, Controls, StdCtrls, ExtCtrls, ComCtrls, Spin, Buttons;
 
@@ -41,6 +41,8 @@ type
     BtnZoomAdjust: TSpeedButton;
     BtnPreviewLoop: TButton;
     ButtonCalibrate: TButton;
+    Label4: TLabel;
+    LabelMsg: TLabel;
     PreviewExp: TFloatSpinEdit;
     GroupBox1: TGroupBox;
     Label3: TLabel;
@@ -130,18 +132,20 @@ begin
   label17.Caption:=rsGamma;
   label18.Caption:=rsLuminosity;
   label19.Caption:=rsZoom;
+  label4.Caption:=rsShowBullsEye;
 end;
 
 procedure Tf_finder.msg(txt:string; level: integer);
 begin
- if assigned(FonShowMessage) then FonShowMessage(txt,level);
+ LabelMsg.Caption:=txt;
+ if assigned(FonShowMessage) then FonShowMessage(rsFinderCamera+': '+txt,level);
 end;
 
 procedure Tf_finder.StartLoop;
 begin
   FinderPreviewLoop:=true;
   BtnPreviewLoop.Caption:=rsStopLoop;
-  msg(rsFinderCamera+': '+rsStartPreview,0);
+  msg(rsStartPreview,0);
   Application.QueueAsyncCall(@StartExposureAsync,0);
 end;
 
@@ -150,7 +154,7 @@ begin
   FinderPreviewLoop:=false;
   FCamera.AbortExposure;
   BtnPreviewLoop.Caption:=rsLoop;
-  msg(rsFinderCamera+': '+rsStopLoop,3);
+  msg(rsStopLoop,3);
 end;
 
 Procedure Tf_finder.StartExposureAsync(Data: PtrInt);
@@ -207,17 +211,20 @@ begin
     StopLoop;
     wait(1);
   end;
+  msg(rsCalibration,3);
   if f_findercalibration.ShowModal = mrOK then begin
     ra2000:=f_findercalibration.RA;
     de2000:=f_findercalibration.DE;
-    exp:=PreviewExp.Value;
+    exp:=max(FCamera.ExposureRange.min,PreviewExp.Value);
     sgain:=config.GetValue('/PrecSlew/Gain',NullInt);
     soffset:=config.GetValue('/PrecSlew/Offset',NullInt);
     bin:=config.GetValue('/PrecSlew/Binning',1);
+    msg(format(rsExposureS,[FormatFloat(f3,exp)])+blank+rsSeconds,3);
     if not Fcamera.ControlExposure(exp,bin,bin,LIGHT,ReadoutModeAstrometry,sgain,soffset) then begin
       msg(rsExposureFail,0);
       exit;
     end;
+    msg(rsResolve,3);
     FAstrometry.SolveFinderImage;
     if FAstrometry.LastResult and FAstrometry.GetFinderOffset(ra2000,de2000) then begin
       ShowCalibration;

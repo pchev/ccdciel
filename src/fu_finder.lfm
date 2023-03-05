@@ -1,10 +1,10 @@
 object f_finder: Tf_finder
   Left = 0
-  Height = 361
+  Height = 409
   Top = 0
   Width = 243
   AutoSize = True
-  ClientHeight = 361
+  ClientHeight = 409
   ClientWidth = 243
   ParentFont = False
   TabOrder = 0
@@ -29,19 +29,19 @@ object f_finder: Tf_finder
   end
   object Panel1: TPanel
     Left = 0
-    Height = 332
+    Height = 388
     Top = 20
     Width = 243
     Align = alTop
     BevelOuter = bvNone
-    ClientHeight = 332
+    ClientHeight = 388
     ClientWidth = 243
     ParentFont = False
     TabOrder = 0
     object GroupBox1: TGroupBox
       Left = 0
       Height = 100
-      Top = 66
+      Top = 122
       Width = 243
       Align = alTop
       Caption = 'Calibration result'
@@ -50,7 +50,7 @@ object f_finder: Tf_finder
       TabOrder = 0
       object Label1: TLabel
         AnchorSideTop.Side = asrCenter
-        Left = 21
+        Left = 7
         Height = 19
         Top = 8
         Width = 40
@@ -67,7 +67,7 @@ object f_finder: Tf_finder
       end
       object Label2: TLabel
         AnchorSideTop.Side = asrCenter
-        Left = 21
+        Left = 7
         Height = 19
         Top = 46
         Width = 40
@@ -85,12 +85,12 @@ object f_finder: Tf_finder
     end
     object Panel2: TPanel
       Left = 0
-      Height = 66
+      Height = 122
       Top = 0
       Width = 243
       Align = alTop
       BevelOuter = bvNone
-      ClientHeight = 66
+      ClientHeight = 122
       ClientWidth = 243
       TabOrder = 1
       object BtnPreviewLoop: TButton
@@ -117,7 +117,7 @@ object f_finder: Tf_finder
       object Label3: TLabel
         AnchorSideTop.Control = PreviewExp
         AnchorSideTop.Side = asrCenter
-        Left = 22
+        Left = 8
         Height = 19
         Top = 43
         Width = 107
@@ -135,11 +135,21 @@ object f_finder: Tf_finder
         TabOrder = 2
         Value = 1
       end
+      object LabelMsg: TLabel
+        Left = 0
+        Height = 48
+        Top = 74
+        Width = 243
+        Align = alBottom
+        AutoSize = False
+        ParentColor = False
+        WordWrap = True
+      end
     end
     object Panel8: TPanel
       Left = 0
       Height = 162
-      Top = 166
+      Top = 222
       Width = 243
       Align = alTop
       BevelOuter = bvNone
@@ -149,7 +159,7 @@ object f_finder: Tf_finder
       object Label17: TLabel
         AnchorSideTop.Control = Gamma
         AnchorSideTop.Side = asrCenter
-        Left = 16
+        Left = 8
         Height = 19
         Top = 20
         Width = 48
@@ -173,7 +183,7 @@ object f_finder: Tf_finder
       object Label18: TLabel
         AnchorSideTop.Control = Luminosity
         AnchorSideTop.Side = asrCenter
-        Left = 16
+        Left = 8
         Height = 19
         Top = 68
         Width = 67
@@ -195,9 +205,11 @@ object f_finder: Tf_finder
         TabOrder = 1
       end
       object Label19: TLabel
-        Left = 16
+        AnchorSideTop.Control = BtnZoomAdjust
+        AnchorSideTop.Side = asrCenter
+        Left = 8
         Height = 19
-        Top = 114
+        Top = 116
         Width = 36
         Caption = 'Zoom'
         ParentColor = False
@@ -271,6 +283,16 @@ object f_finder: Tf_finder
         GroupIndex = 103
         OnClick = BtnBullsEyeClick
         ParentFont = False
+      end
+      object Label4: TLabel
+        AnchorSideTop.Control = BtnBullsEye
+        AnchorSideTop.Side = asrCenter
+        Left = 8
+        Height = 19
+        Top = 138
+        Width = 89
+        Caption = 'Show bulls eye'
+        ParentColor = False
       end
     end
   end
