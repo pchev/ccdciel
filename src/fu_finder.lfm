@@ -93,14 +93,14 @@ object f_finder: Tf_finder
       ClientHeight = 42
       ClientWidth = 243
       TabOrder = 1
-      object Button1: TButton
+      object BtnPreviewLoop: TButton
         Left = 16
         Height = 25
         Hint = 'Exposure time and other parameters are set in Preferences / Slewing'
         Top = 8
         Width = 104
         Caption = 'Preview'
-        OnClick = Button1Click
+        OnClick = BtnPreviewLoopClick
         TabOrder = 0
       end
       object ButtonCalibrate: TButton

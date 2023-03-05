@@ -528,10 +528,12 @@ var
   ImageInspection, TriangleInspection: boolean;
   TriangleInspectionAngle: double;
   LastHfd,LastDrift: double;
-  {internal guider}
-  InternalguiderRunning,InternalguiderCalibrating,InternalguiderCalibratingBacklash,InternalguiderGuiding,StopInternalguider,InternalguiderCapturingDark: boolean;
   CustomHeaderNum: integer;
   CustomHeaders: array [1..MaxCustomHeaders] of TCustomHeaderElement;
+  {internal guider}
+  InternalguiderRunning,InternalguiderCalibrating,InternalguiderCalibratingBacklash,InternalguiderGuiding,StopInternalguider,InternalguiderCapturingDark: boolean;
+  {finder}
+  FinderPreviewLoop: boolean;
 
 
   procedure globalmsg(str:string);

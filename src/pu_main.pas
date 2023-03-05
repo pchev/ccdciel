@@ -629,6 +629,7 @@ type
     GuideMouseMoving: boolean;
     FinderMx, FinderMy: integer;
     FinderMouseMoving: boolean;
+    FinderRestartLoop: boolean;
     DeviceTimeout: integer;
     MouseMoving, MouseFrame, MouseSpectra, LockTimerPlot, LockMouseWheel, PolarMoving: boolean;
     LockGuideMouseWheel, LockGuideTimerPlot, LockFinderMouseWheel, LockFinderTimerPlot: boolean;
@@ -1556,6 +1557,8 @@ begin
   ImaFinderBmp:=TBGRABitmap.Create(1,1);
   finderimg_Height:=0;
   finderimg_Width:=0;
+  FinderPreviewLoop:=false;
+  FinderRestartLoop:=false;
   ImageFinder := TImgDrawingControl.Create(Self);
   ImageFinder.Parent := FinderImage;
   ImageFinder.Align := alClient;
@@ -7821,6 +7824,10 @@ begin
   f_mount.BtnGoto.Caption:=rsStop;
   f_mount.Pierside.Caption:=rsGOTOInProgre+ellipsis;
   f_mount.Pierside.Font.Color:=clRed;
+  if astrometry.FinderCamera<>nil then begin
+    FinderRestartLoop:=FinderPreviewLoop;
+    if FinderPreviewLoop then f_finder.StopLoop;
+  end;
 end;
 
 procedure Tf_main.GotoEnd(Sender: TObject);
@@ -7830,6 +7837,8 @@ begin
   f_mount.BtnGoto.Caption:=rsGoto;
   f_mount.Pierside.Font.Color:=clDefault;
   MountPiersideChange(nil);
+  if FinderRestartLoop and (astrometry.FinderCamera<>nil) then f_finder.StartLoop;
+  FinderRestartLoop:=false;
 end;
 
 procedure Tf_main.MountGoto(Sender: TObject);
@@ -16534,6 +16543,8 @@ begin
   end;
   // prepare image
   DrawFinderImage(displayimage);
+  // start next exposure
+  if FinderPreviewLoop then Application.QueueAsyncCall(@f_finder.StartExposureAsync,0);
   // draw image to screen
   if displayimage then
     PlotFinderImage;

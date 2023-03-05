@@ -25,7 +25,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 interface
 
-uses  UScaleDPI, u_global, Graphics, Dialogs, u_translation, cu_camera, cu_astrometry, pu_findercalibration,
+uses  UScaleDPI, u_global, u_utils, Graphics, Dialogs, u_translation, cu_camera, indiapi, cu_astrometry, pu_findercalibration,
   Classes, SysUtils, FileUtil, Forms, Controls, StdCtrls, ExtCtrls, ComCtrls, Spin, Buttons;
 
 type
@@ -38,7 +38,7 @@ type
     BtnZoom1: TSpeedButton;
     BtnZoom2: TSpeedButton;
     BtnZoomAdjust: TSpeedButton;
-    Button1: TButton;
+    BtnPreviewLoop: TButton;
     ButtonCalibrate: TButton;
     GroupBox1: TGroupBox;
     OffsetX: TFloatSpinEdit;
@@ -55,7 +55,7 @@ type
     Panel8: TPanel;
     Title: TLabel;
     procedure BtnBullsEyeClick(Sender: TObject);
-    procedure Button1Click(Sender: TObject);
+    procedure BtnPreviewLoopClick(Sender: TObject);
     procedure BtnZoom05Click(Sender: TObject);
     procedure BtnZoom1Click(Sender: TObject);
     procedure BtnZoom2Click(Sender: TObject);
@@ -69,11 +69,10 @@ type
     FAstrometry: TAstrometry;
     FonShowMessage: TNotifyMsg;
     FonRedraw: TNotifyEvent;
-    Loop,FDrawSettingChange,FBullsEye: boolean;
+    FDrawSettingChange,FBullsEye: boolean;
     LoopExp:double;
     LoopBin,LoopGain,LoopOffset: integer;
     procedure msg(txt:string; level: integer);
-    procedure PreviewAsync(Data: PtrInt);
     procedure ForceRedraw;
   public
     { public declarations }
@@ -81,6 +80,9 @@ type
     destructor  Destroy; override;
     procedure SetLang;
     procedure ShowCalibration;
+    Procedure StartExposureAsync(Data: PtrInt);
+    procedure StartLoop;
+    procedure StopLoop;
     property Camera: T_camera read FCamera write FCamera;
     property Astrometry: TAstrometry read FAstrometry write FAstrometry;
     property DrawSettingChange: boolean read FDrawSettingChange write FDrawSettingChange;
@@ -105,7 +107,7 @@ begin
  {$endif}
  ScaleDPI(Self);
  SetLang;
- Loop:=false;
+ FinderPreviewLoop:=false;
  FBullsEye:=false;
 end;
 
@@ -117,7 +119,7 @@ end;
 procedure Tf_finder.SetLang;
 begin
   Title.Caption:=rsFinderCamera;
-  button1.Caption:=rsLoop;
+  BtnPreviewLoop.Caption:=rsLoop;
   ButtonCalibrate.Caption:=rsCalibrate;
   groupbox1.Caption:=rsCalibrationR;
   label1.Caption:='X '+rsPixel;
@@ -132,21 +134,61 @@ begin
  if assigned(FonShowMessage) then FonShowMessage(txt,level);
 end;
 
-procedure Tf_finder.Button1Click(Sender: TObject);
+procedure Tf_finder.StartLoop;
 begin
-  Loop:=not Loop;
-  if Loop then begin
-    button1.Caption:=rsStopLoop;
-    LoopExp:=config.GetValue('/PrecSlew/Exposure',10.0);
-    LoopGain:=config.GetValue('/PrecSlew/Gain',NullInt);
-    LoopOffset:=config.GetValue('/PrecSlew/Offset',NullInt);
-    LoopBin:=config.GetValue('/PrecSlew/Binning',1);
-    msg(rsFinderCamera+': '+rsStartPreview,0);
-    Application.QueueAsyncCall(@PreviewAsync,0);
+  FinderPreviewLoop:=true;
+  BtnPreviewLoop.Caption:=rsStopLoop;
+  LoopExp:=config.GetValue('/PrecSlew/Exposure',10.0);
+  LoopGain:=config.GetValue('/PrecSlew/Gain',NullInt);
+  LoopOffset:=config.GetValue('/PrecSlew/Offset',NullInt);
+  LoopBin:=config.GetValue('/PrecSlew/Binning',1);
+  msg(rsFinderCamera+': '+rsStartPreview,0);
+  Application.QueueAsyncCall(@StartExposureAsync,0);
+end;
+
+procedure Tf_finder.StopLoop;
+begin
+  FinderPreviewLoop:=false;
+  FCamera.AbortExposure;
+  BtnPreviewLoop.Caption:=rsLoop;
+  msg(rsFinderCamera+': '+rsStopLoop,3);
+end;
+
+Procedure Tf_finder.StartExposureAsync(Data: PtrInt);
+begin
+ if (FCamera.Status=devConnected) then begin
+   LoopExp:=config.GetValue('/PrecSlew/Exposure',10.0);
+   LoopGain:=config.GetValue('/PrecSlew/Gain',NullInt);
+   LoopOffset:=config.GetValue('/PrecSlew/Offset',NullInt);
+   LoopBin:=config.GetValue('/PrecSlew/Binning',1);
+   if (LoopBin<>FCamera.BinX)or(LoopBin<>FCamera.BinY) then FCamera.SetBinning(LoopBin,LoopBin);
+   if FCamera.hasGain then begin
+     if FCamera.Gain<>LoopGain then begin
+       FCamera.Gain:=LoopGain;
+     end;
+     if FCamera.hasOffset then begin
+        if FCamera.Offset<>LoopOffset then
+          FCamera.Offset:=LoopOffset;
+     end;
+   end;
+   if FCamera.FrameType<>LIGHT then
+     FCamera.FrameType:=LIGHT;
+   FCamera.ObjectName:=rsFinderCamera;
+   FCamera.StartExposure(LoopExp);
+ end
+ else begin
+    StopLoop;
+    if not AllDevicesConnected then msg(rsSomeDefinedD,1);
+ end;
+end;
+
+procedure Tf_finder.BtnPreviewLoopClick(Sender: TObject);
+begin
+  if FinderPreviewLoop then begin
+    StopLoop;
   end
   else begin
-    button1.Caption:=rsLoop;
-    msg(rsFinderCamera+': '+rsStopLoop,3);
+    StartLoop;
   end;
 end;
 
@@ -156,28 +198,16 @@ begin
   ForceRedraw;
 end;
 
-procedure Tf_finder.PreviewAsync(Data: PtrInt);
-begin
-  if Loop then begin
-    if Fcamera.ControlExposure(LoopExp,LoopBin,LoopBin,LIGHT,ReadoutModeAstrometry,LoopGain,LoopOffset,true) then begin
-      Application.QueueAsyncCall(@PreviewAsync,0);
-    end
-    else begin
-      msg(rsFinderCamera+': '+rsExposureFail,0);
-      Loop:=false;
-      button1.Caption:=rsLoop;
-    end;
-  end
-  else begin
-     button1.Caption:=rsLoop;
-     msg(rsFinderCamera+': '+rsStopPreviewL,0);
-  end;
-end;
-
 procedure Tf_finder.ButtonCalibrateClick(Sender: TObject);
 var exp,ra2000,de2000:double;
     bin,sgain,soffset: integer;
+    restartloop:boolean;
 begin
+  restartloop:=FinderPreviewLoop;
+  if FinderPreviewLoop then begin
+    StopLoop;
+    wait(1);
+  end;
   if f_findercalibration.ShowModal = mrOK then begin
     ra2000:=f_findercalibration.RA;
     de2000:=f_findercalibration.DE;
@@ -198,8 +228,8 @@ begin
     else begin
       msg('Calibration failed',1);
     end;
-
   end;
+  if restartloop then StartLoop;
 end;
 
 procedure Tf_finder.ForceRedraw;
