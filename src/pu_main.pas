@@ -11066,6 +11066,7 @@ if (fits.HeaderInfo.naxis>0) and fits.ImageValid then begin
   if f_visu.BullsEye then begin
     {$ifdef debug_raw}writeln(FormatDateTime(dateiso,Now)+blank+'BullsEye');{$endif}
     co:=ColorToBGRA(clRed);
+    co.alpha:=128;
     cx:=img_Width div 2;
     cy:=img_Height div 2;
     imabmp.DrawHorizLine(0,cy,img_Width,co);
@@ -16579,8 +16580,15 @@ if (finderfits.HeaderInfo.naxis>0) and finderfits.ImageValid then begin
   finderimg_Height:=ImaFinderBmp.Height;
   if f_finder.BullsEye then begin
     co:=ColorToBGRA(clRed);
-    cx:=finderimg_Width div 2;
-    cy:=finderimg_Height div 2;
+    co.alpha:=128;
+    if (f_finder.OffsetX.Value>0)and(f_finder.OffsetX.Value<finderimg_Width)and(f_finder.OffsetY.Value>0)and(f_finder.OffsetY.Value<finderimg_Height) then begin
+      cx:=round(f_finder.OffsetX.Value+0.5);
+      cy:=round(f_finder.OffsetY.Value+0.5);
+    end
+    else begin
+      cx:=finderimg_Width div 2;
+      cy:=finderimg_Height div 2;
+    end;
     ImaFinderBmp.DrawHorizLine(0,cy,finderimg_Width,co);
     ImaFinderBmp.DrawVertLine(cx,0,finderimg_Height,co);
     s:=min(finderimg_Height,finderimg_Width) div 3;
