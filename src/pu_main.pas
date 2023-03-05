@@ -144,6 +144,7 @@ type
     MenuAscomFinderCameraSetup: TMenuItem;
     MenuAlpacaFinderCameraSetup: TMenuItem;
     MenuFinder: TMenuItem;
+    MenuItemFinderSolveSync: TMenuItem;
     MenuItemSelectGuideStar: TMenuItem;
     MenuItemFinderImage: TMenuItem;
     MenuItemFinderSaveImage: TMenuItem;
@@ -417,6 +418,7 @@ type
     procedure MenuInternalGuiderStopClick(Sender: TObject);
     procedure MenuItemFinderSaveImageClick(Sender: TObject);
     procedure MenuItemFinderSolveClick(Sender: TObject);
+    procedure MenuItemFinderSolveSyncClick(Sender: TObject);
     procedure MenuItemFinderStopAstrometryClick(Sender: TObject);
     procedure MenuItemFinderViewHeaderClick(Sender: TObject);
     procedure MenuItemFinderViewStatisticsClick(Sender: TObject);
@@ -2408,6 +2410,7 @@ begin
    MenuItemFinderViewHeader.Caption:=rsViewHeader;
    MenuItemFinderViewStatistics.Caption:=rsImageStatist;
    MenuItemFinderSolve.Caption:=rsResolve;
+   MenuItemFinderSolveSync.Caption:=rsResolveAndSy;
    MenuItemFinderStopAstrometry.Caption:=rsStopAstromet;
 
    SubDirName[0]:=rsSubfolderByS;
@@ -16789,6 +16792,14 @@ begin
   if finderfits.HeaderInfo.valid then begin
     if (not f_goto.CheckImageInfo(finderfits)) then exit;
     astrometry.SolveFinderImage;
+  end;
+end;
+
+procedure Tf_main.MenuItemFinderSolveSyncClick(Sender: TObject);
+begin
+  if finderfits.HeaderInfo.valid then begin
+    if (not f_goto.CheckImageInfo(finderfits)) then exit;
+    astrometry.SyncFinderImage(false);
   end;
 end;
 

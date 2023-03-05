@@ -1882,6 +1882,10 @@ object f_main: Tf_main
       Caption = 'MenuItemFinderSolve'
       OnClick = MenuItemFinderSolveClick
     end
+    object MenuItemFinderSolveSync: TMenuItem
+      Caption = 'MenuItemFinderSolveSync'
+      OnClick = MenuItemFinderSolveSyncClick
+    end
     object MenuItemFinderStopAstrometry: TMenuItem
       Caption = 'MenuItemFinderStopAstrometry'
       OnClick = MenuItemFinderStopAstrometryClick

@@ -51,7 +51,7 @@ TAstrometry = class(TComponent)
     Xslew, Yslew: integer;
     FFinderOffsetX, FFinderOffsetY: double;
     AstrometryTimeout: double;
-    TimerAstrometrySolve, TimerAstrometrySync, TimerAstrometrySlewScreenXY,TimerAstrometrySolveGuide : TTimer;
+    TimerAstrometrySolve, TimerAstrometrySync, TimerAstrometrySlewScreenXY,TimerAstrometrySolveGuide,TimerAstrometrySyncFinder : TTimer;
     procedure AstrometrySolveonTimer(Sender: TObject);
     procedure AstrometrySynconTimer(Sender: TObject);
     procedure AstrometrySlewScreenXYonTimer(Sender: TObject);
@@ -59,10 +59,12 @@ TAstrometry = class(TComponent)
     function WaitBusy(Timeout:double=60): boolean;
     procedure AstrometrySolve(Sender: TObject);
     procedure AstrometrySync(Sender: TObject);
+    procedure AstrometrySyncFinder(Sender: TObject);
     procedure AstrometrySlewScreenXY(Sender: TObject);
     procedure AstrometrySolveGuide(Sender: TObject);
     procedure AstrometrySolveGuideonTimer(Sender: TObject);
     procedure AstrometrySolveFinder(Sender: TObject);
+    procedure AstrometrySyncFinderonTimer(Sender: TObject);
   public
     constructor Create(AOwner: TComponent);override;
     function StartAstrometry(infile,outfile: string; terminatecmd:TNotifyEvent): boolean;
@@ -73,6 +75,7 @@ TAstrometry = class(TComponent)
     procedure SolveCurrentImage(wait: boolean; forcesolve:boolean=false);
     procedure SolveGuideImage;
     procedure SolveFinderImage;
+    procedure SyncFinderImage(wait: boolean);
     function GetFinderOffset(ra2000,de2000: double):boolean;
     procedure SyncCurrentImage(wait: boolean);
     procedure SlewScreenXY(x,y: integer);
@@ -135,6 +138,10 @@ begin
   TimerAstrometrySlewScreenXY.Enabled:=false;
   TimerAstrometrySlewScreenXY.Interval:=100;
   TimerAstrometrySlewScreenXY.OnTimer:=@AstrometrySlewScreenXYonTimer;
+  TimerAstrometrySyncFinder:=TTimer.Create(self);
+  TimerAstrometrySyncFinder.Enabled:=false;
+  TimerAstrometrySyncFinder.Interval:=100;
+  TimerAstrometrySyncFinder.OnTimer:=@AstrometrySyncFinderonTimer;
 end;
 
 procedure TAstrometry.msg(txt:string; level: integer);
@@ -416,6 +423,41 @@ begin
   end
   else
     msg('Missing library '+libwcs,1);
+end;
+
+procedure TAstrometry.SyncFinderImage(wait: boolean);
+begin
+  if (not FBusy) and (FFinderFits.HeaderInfo.naxis>0) and FFinderFits.ImageValid and (Mount.Status=devConnected) then begin
+    if FFinderFits.HeaderInfo.solved then begin
+      FFinderFits.SaveToFile(slash(TmpDir)+'findersolved.fits');
+      AstrometrySyncFinder(nil);
+    end else begin
+     FFinderFits.SaveToFile(slash(TmpDir)+'findertmp.fits');
+     StartAstrometry(slash(TmpDir)+'findertmp.fits',slash(TmpDir)+'findersolved.fits',@AstrometrySyncFinder);
+     if wait then WaitBusy(AstrometryTimeout+30);
+    end;
+  end;
+end;
+
+procedure TAstrometry.AstrometrySyncFinder(Sender: TObject);
+begin
+  TimerAstrometrySyncFinder.Enabled:=true;
+end;
+
+procedure TAstrometry.AstrometrySyncFinderonTimer(Sender: TObject);
+var fn: string;
+    ra,de,eq,pa: double;
+    n:integer;
+begin
+TimerAstrometrySyncFinder.Enabled:=false;
+if LastResult and (cdcwcs_xy2sky<>nil) then begin
+   fn:=slash(TmpDir)+'findersolved.fits';
+   n:=cdcwcs_initfitsfile(pchar(fn),2);
+   if FinderCurrentCoord(ra,de,eq,pa) then begin
+       J2000ToMount(mount.EquinoxJD,ra,de);
+       mount.Sync(ra,de);
+   end;
+end;
 end;
 
 function TAstrometry.GetFinderOffset(ra2000,de2000: double): boolean;
