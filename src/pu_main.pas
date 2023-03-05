@@ -55,7 +55,7 @@ uses
   StdCtrls, ExtCtrls, Menus, ComCtrls, Buttons, Types, u_translation;
 
 type
-  TImgDrawingControl = class(TGraphicControl)
+  TImgDrawingControl = class(TCustomControl)
   public
     property OnPaint;
     property OnDblClick;
@@ -1534,6 +1534,7 @@ begin
   Image1 := TImgDrawingControl.Create(Self);
   Image1.Parent := MainImage;
   Image1.Align := alClient;
+  Image1.DoubleBuffered:=true;
   image1.OnDblClick := @Image1DblClick;
   Image1.OnMouseDown := @Image1MouseDown;
   Image1.OnMouseMove := @Image1MouseMove;
@@ -1549,6 +1550,7 @@ begin
   ImageGuide := TImgDrawingControl.Create(Self);
   ImageGuide.Parent := GuideImage;
   ImageGuide.Align := alClient;
+  ImageGuide.DoubleBuffered:=true;
   ImageGuide.OnPaint := @ImageGuidePaint;
   ImageGuide.OnMouseDown := @ImageGuideMouseDown;
   ImageGuide.OnMouseMove := @ImageGuideMouseMove;
@@ -1564,6 +1566,7 @@ begin
   ImageFinder := TImgDrawingControl.Create(Self);
   ImageFinder.Parent := FinderImage;
   ImageFinder.Align := alClient;
+  ImageFinder.DoubleBuffered:=true;
   ImageFinder.OnPaint := @ImageFinderPaint;
   ImageFinder.OnMouseDown := @ImageFinderMouseDown;
   ImageFinder.OnMouseMove := @ImageFinderMouseMove;
