@@ -1462,9 +1462,9 @@ begin
 end;
 
 function T_Targets.CheckStatus:boolean;
-var i,j,totalcount,donecount,totalspteps,donesteps : integer;
-    steptime,targettime,totaltime,st,stime,etime,ctime,hm,he: double;
-    tfuture,tdone,twok: boolean;
+var i,j,totalcount,donecount,totalspteps,donesteps,intime : integer;
+    steptime,targettime,totaltime,pivot,stime,etime,ctime,hm,he,st,et,x: double;
+    tfuture,tdone,twok,dotarget: boolean;
     txt: string;
     t: TTarget;
     p: T_Plan;
@@ -1487,29 +1487,48 @@ begin
    result:=true;
    FLastDoneStep:=rsGlobalRepeat+blank+IntToStr(FTargetsRepeatCount)+'/'+IntToStr(FTargetsRepeat);
  end;
- stime:=FSeqStartTime;
- etime:=FSeqStopAt;
- if not FRunning then begin
+ if FRunning then begin
+   stime:=FSeqStartTime;
+   if FSeqStop then begin
+     etime:=FSeqStopAt;
+     if etime>frac(stime) then
+       etime:=trunc(stime)+etime
+     else
+       etime:=trunc(stime)+1+etime
+   end
+   else
+     etime:=MaxDouble;
+ end
+ else begin
    for i:=0 to NumTargets-1 do begin
      if (Targets[i].objectname=SkyFlatTxt)and(Targets[i].planname=FlatTimeName[1]) then begin
        FSeqStop:=true;
        FSeqStopTwilight:=true;
      end;
    end;
-   if not FSeqStart then
+   if FSeqStart then
+     stime:=trunc(now)+FSeqStartAt
+   else
      stime:=now;
-   if not FSeqStop then
-     etime:=0;
+    if FSeqStop then begin
+      etime:=FSeqStopAt;
+      if etime>frac(stime) then
+        etime:=trunc(stime)+etime
+      else
+        etime:=trunc(stime)+1+etime
+    end
+    else
+      etime:=MaxDouble;
    twok:=TwilightAstro(now,hm,he);
    if twok then begin
      if FSeqStartTwilight then
-       stime:=he/24;
+       stime:=trunc(now)+he/24;
      if FSeqStopTwilight then
-       etime:=1+hm/24;
+       etime:=trunc(now)+1+hm/24;
    end;
  end;
  FDoneStatus:=FDoneStatus+crlf+rsSequence+blank+rsStartAt+FormatDateTime(datehms,stime);
- ctime:=frac(stime);
+ ctime:=stime;
  totaltime:=0;
  for i:=0 to NumTargets-1 do begin
     t:=TTarget.Create;
@@ -1530,15 +1549,34 @@ begin
       if (t.repeatdone>0) then begin
         result:=true;
       end;
+      dotarget:=false;
       tdone:=t.repeatdone>=t.repeatcount;
-      if t.starttime>0 then ctime:=max(ctime,t.starttime);
       txt:=crlf+rsTarget+blank+t.objectname+blank+rsRepeat+':'+blank+IntToStr(t.repeatdone)+'/'+IntToStr(t.repeatcount);
       if t.objectname<>SkyFlatTxt then begin
         if tfuture and (not tdone) then begin
-          SetTargetTime(t,stime,st); // running and old target already have time set
-          txt:=txt+','+blank+rsStartAt+FormatDateTime(datehms, ctime);
+          SetTargetTime(t,stime,pivot); // running and old target already have time set
+          if (t.starttime>0)and(t.endtime>0) then begin
+            st:=t.starttime;
+            et:=t.endtime;
+            intime:=InTimeInterval(frac(ctime),st,et,pivot/24);
+            if intime=0 then begin
+              dotarget:=true;
+              txt:=txt+','+blank+rsStartAt+FormatDateTime(datehms, ctime);
+            end
+            else if intime<0 then begin
+              if st<frac(ctime) then st:=st+1;
+              ctime:=trunc(ctime)+st;
+              dotarget:=true;
+              txt:=txt+','+blank+rsStartAt+FormatDateTime(datehms, ctime);
+            end
+            else if intime>0 then begin
+              dotarget:=false;
+              txt:=txt+','+blank+rsTimeAlreadyP;
+            end;
+          end;
         end
         else begin
+          dotarget:=false;
           txt:=txt+','+blank+rsDone;
         end;
       end;
@@ -1570,7 +1608,7 @@ begin
         end;
       end;
       targettime:=targettime*(t.repeatcount-t.repeatdone);
-      ctime:=ctime+targettime/secperday;
+      if dotarget then ctime:=ctime+targettime/secperday;
       if targettime>0 then begin
         totaltime:=totaltime+targettime;
         txt:=t.objectname+blank+'Target time'+':'+blank+TimToStr(targettime/3600,'h',false);
