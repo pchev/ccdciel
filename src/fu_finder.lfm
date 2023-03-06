@@ -1,10 +1,10 @@
 object f_finder: Tf_finder
   Left = 0
-  Height = 409
+  Height = 478
   Top = 0
   Width = 243
   AutoSize = True
-  ClientHeight = 409
+  ClientHeight = 478
   ClientWidth = 243
   ParentFont = False
   TabOrder = 0
@@ -29,30 +29,31 @@ object f_finder: Tf_finder
   end
   object Panel1: TPanel
     Left = 0
-    Height = 388
+    Height = 452
     Top = 20
     Width = 243
     Align = alTop
     BevelOuter = bvNone
-    ClientHeight = 388
+    ClientHeight = 452
     ClientWidth = 243
     ParentFont = False
     TabOrder = 0
     object GroupBox1: TGroupBox
       Left = 0
-      Height = 100
-      Top = 122
+      Height = 148
+      Top = 74
       Width = 243
       Align = alTop
-      Caption = 'Calibration result'
-      ClientHeight = 80
+      Caption = 'Target position in finder image'
+      ClientHeight = 128
       ClientWidth = 241
       TabOrder = 0
       object Label1: TLabel
+        AnchorSideTop.Control = OffsetX
         AnchorSideTop.Side = asrCenter
         Left = 7
         Height = 19
-        Top = 8
+        Top = 13
         Width = 40
         Caption = 'Pixel X'
         ParentColor = False
@@ -62,14 +63,15 @@ object f_finder: Tf_finder
         Height = 29
         Top = 8
         Width = 111
-        ReadOnly = True
+        OnChange = OffsetXChange
         TabOrder = 0
       end
       object Label2: TLabel
+        AnchorSideTop.Control = OffsetY
         AnchorSideTop.Side = asrCenter
         Left = 7
         Height = 19
-        Top = 46
+        Top = 45
         Width = 40
         Caption = 'Pixel Y'
         ParentColor = False
@@ -79,40 +81,49 @@ object f_finder: Tf_finder
         Height = 29
         Top = 40
         Width = 111
-        ReadOnly = True
+        OnChange = OffsetYChange
         TabOrder = 1
+      end
+      object ButtonCalibrate: TButton
+        Left = 7
+        Height = 25
+        Hint = 'Calibrate the posiiton of the target in the finder image'
+        Top = 100
+        Width = 212
+        Caption = 'Calibration measurement'
+        OnClick = ButtonCalibrateClick
+        ParentFont = False
+        TabOrder = 2
+      end
+      object ButtonImageCenter: TButton
+        Left = 7
+        Height = 25
+        Top = 72
+        Width = 212
+        Caption = 'Image center'
+        OnClick = ButtonImageCenterClick
+        TabOrder = 3
       end
     end
     object Panel2: TPanel
       Left = 0
-      Height = 122
+      Height = 74
       Top = 0
       Width = 243
       Align = alTop
       BevelOuter = bvNone
-      ClientHeight = 122
+      ClientHeight = 74
       ClientWidth = 243
       TabOrder = 1
       object BtnPreviewLoop: TButton
-        Left = 16
+        Left = 8
         Height = 25
-        Hint = 'Exposure time and other parameters are set in Preferences / Slewing'
+        Hint = 'Exposure parameters are set in Preferences / Slewing'
         Top = 8
-        Width = 104
+        Width = 212
         Caption = 'Preview'
         OnClick = BtnPreviewLoopClick
         TabOrder = 0
-      end
-      object ButtonCalibrate: TButton
-        Left = 145
-        Height = 25
-        Hint = 'Calibrates the guider. Results will be written to tab advanced.'
-        Top = 8
-        Width = 76
-        Caption = 'Calibrate'
-        OnClick = ButtonCalibrateClick
-        ParentFont = False
-        TabOrder = 1
       end
       object Label3: TLabel
         AnchorSideTop.Control = PreviewExp
@@ -132,28 +143,18 @@ object f_finder: Tf_finder
         DecimalPlaces = 3
         MaxValue = 60
         MinValue = 0.001
-        TabOrder = 2
+        TabOrder = 1
         Value = 1
-      end
-      object LabelMsg: TLabel
-        Left = 0
-        Height = 48
-        Top = 74
-        Width = 243
-        Align = alBottom
-        AutoSize = False
-        ParentColor = False
-        WordWrap = True
       end
     end
     object Panel8: TPanel
       Left = 0
-      Height = 162
+      Height = 170
       Top = 222
       Width = 243
       Align = alTop
       BevelOuter = bvNone
-      ClientHeight = 162
+      ClientHeight = 170
       ClientWidth = 243
       TabOrder = 2
       object Label17: TLabel
@@ -275,7 +276,7 @@ object f_finder: Tf_finder
         Left = 104
         Height = 22
         Hint = 'Show bulls eye'
-        Top = 136
+        Top = 139
         Width = 28
         AllowAllUp = True
         BorderSpacing.Left = 1
@@ -289,11 +290,21 @@ object f_finder: Tf_finder
         AnchorSideTop.Side = asrCenter
         Left = 8
         Height = 19
-        Top = 138
+        Top = 141
         Width = 89
         Caption = 'Show bulls eye'
         ParentColor = False
       end
+    end
+    object LabelMsg: TLabel
+      Left = 0
+      Height = 60
+      Top = 392
+      Width = 243
+      Align = alClient
+      AutoSize = False
+      ParentColor = False
+      WordWrap = True
     end
   end
 end

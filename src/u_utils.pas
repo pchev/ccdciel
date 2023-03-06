@@ -43,6 +43,7 @@ Function FormEntryCB(aOwner:TComponent; val:Tstrings; lbl,defaultstr:string):str
 function wordspace(str: string): string;
 function words(str,sep : string; p,n : integer; isep:char=blank) : string;
 procedure SplitRec(buf,sep:string; var arg: TStringList);
+procedure Splitarg(buf, sep: string; var arg: TStringList);
 Procedure SplitCmd(S : String; List : TStringList);
 function Slash(nom : string) : string;
 Function sgn(x:Double):Double ;
@@ -62,6 +63,7 @@ Function DEToStr3(de: Double) : string;
 Function Str3ToDE(dms : string) : double;
 function DEToStrShort(de: double; digits: integer = 1): string;
 function TimToStr(tim: double; sep: string = ':'; showsec: boolean = True): string;
+procedure Str2RaDec(txt: string; out ra,de: double);
 procedure ExecNoWait(cmd: string; title:string=''; hide: boolean=true);
 Function ExecProcess(cmd: string; output: TStringList; ShowConsole:boolean=false): integer;
 Function ExecProcessMem(cmd: string; output: TMemoryStream; out err: string; ShowConsole:boolean=false): integer;
@@ -344,6 +346,53 @@ while pos(sep,buf)<>0 do begin
  end;
 end;
 arg.add(buf);
+end;
+
+// same as SplitRec but remove empty strings
+procedure Splitarg(buf, sep: string; var arg: TStringList);
+var
+  i, j, k, l: integer;
+begin
+  arg.Clear;
+  l := length(sep);
+  while copy(buf, 1, l) = sep do
+    Delete(buf, 1, 1);
+  while pos(sep, buf) <> 0 do
+  begin
+    for i := 1 to length(buf) do
+    begin
+      if copy(buf, i, l) = sep then
+      begin
+        if copy(buf, i + l, l) = sep then
+          continue;
+        if copy(buf, 1, 1) = '"' then
+        begin
+          j := length(buf);
+          for k := 2 to length(buf) do
+          begin
+            if copy(buf, k, 1) = '"' then
+            begin
+              j := k;
+              break;
+            end;
+          end;
+          arg.Add(copy(buf, 2, j - 2));
+          Delete(buf, 1, j);
+          while copy(buf, 1, l) = sep do
+            Delete(buf, 1, 1);
+          break;
+        end
+        else
+        begin
+          arg.add(copy(buf, 1, i - 1));
+          Delete(buf, 1, i - 1 + l);
+          break;
+        end;
+      end;
+    end;
+  end;
+  if buf > '' then
+    arg.add(buf);
 end;
 
 Procedure SplitCmd(S : String; List : TStringList);
@@ -772,53 +821,114 @@ begin
     result := d+'h'+m+'m'+s+'s';
 end;
 
-Function Str3ToAR(dms : string) : double;
+function Str3ToAR(dms : string): double;
+type tseplist=array[1..3] of string;
 var s,p : integer;
     t : string;
+    sep: tseplist;
+const
+    sep1: tseplist = ('h','m','s');
+    sep2: tseplist = (':',':',':');
+    sep3: tseplist = (' ',' ',' ');
 begin
 try
-dms:=StringReplace(dms,blank,'0',[rfReplaceAll]);
-if copy(dms,1,1)='-' then s:=-1 else s:=1;
-p:=pos('h',dms);
-if p=0 then
-  result:=StrToFloatDef(dms,0)
-else begin
-  t:=copy(dms,1,p-1); delete(dms,1,p);
-  result:=StrToIntDef(t,0);
-  p:=pos('m',dms);
-  t:=copy(dms,1,p-1); delete(dms,1,p);
-  result:=result+ s * StrToIntDef(t,0) / 60;
-  p:=pos('s',dms);
-  t:=copy(dms,1,p-1);
-  result:=result+ s * StrToFloatDef(t,0) / 3600;
-end;
+  if copy(dms,1,1)='-' then s:=-1 else s:=1;
+  sep:=sep1;
+  p:=pos(sep[1],dms);
+  if p=0 then begin
+    sep:=sep2;
+    p:=pos(sep[1],dms);
+  end;
+  if p=0 then begin
+    sep:=sep3;
+    p:=pos(sep[1],dms);
+  end;
+  if p=0 then
+    result:=StrToFloatDef(trim(dms),-9999)
+  else begin
+    t:=copy(dms,1,p-1); delete(dms,1,p);
+    result:=StrToFloatDef(trim(t),0);
+    p:=pos(sep[2],dms);
+    if p=0 then
+      result:=result+ s * StrToFloatDef(trim(dms),0) / 60
+    else begin
+      t:=copy(dms,1,p-1); delete(dms,1,p);
+      result:=result+ s * StrToFloatDef(trim(t),0) / 60;
+      dms:=StringReplace(dms,' ','',[rfReplaceAll]);
+      p:=pos(sep[3],dms);
+      if p=0 then
+        t:=dms
+      else
+        t:=copy(dms,1,p-1);
+      result:=result+ s * StrToFloatDef(trim(t),0) / 3600;
+    end;
+  end;
 except
-result:=0;
+result:=-9999;
 end;
 end;
 
-Function Str3ToDE(dms : string) : double;
-var s,p : integer;
+function Str3ToDE(dms : string): double;
+type tseplist=array[1..3] of string;
+var s,p,d1 : integer;
     t : string;
+    sep: tseplist;
+const
+    sep1: tseplist = ('d','m','s');
+    sep2: tseplist = ('°','''','"');
+    sep3: tseplist = (#176,'''','"');
+    sep4: tseplist = (':',':',':');
+    sep5: tseplist = (' ',' ',' ');
 begin
 try
-dms:=StringReplace(dms,blank,'0',[rfReplaceAll]);
-if copy(dms,1,1)='-' then s:=-1 else s:=1;
-p:=pos('d',dms);
-if p=0 then
-  result:=StrToFloatDef(dms,0)
-else begin
-t:=copy(dms,1,p-1); delete(dms,1,p);
-result:=StrToIntDef(t,0);
-p:=pos('m',dms);
-t:=copy(dms,1,p-1); delete(dms,1,p);
-result:=result+ s * StrToIntDef(t,0) / 60;
-p:=pos('s',dms);
-t:=copy(dms,1,p-1);
-result:=result+ s * StrToFloatDef(t,0) / 3600;
-end;
+  dms:=StringReplace(dms,ldeg,'d',[]);
+  dms:=StringReplace(dms,lmin,'m',[]);
+  dms:=StringReplace(dms,lsec,'s',[]);
+  if copy(dms,1,1)='-' then s:=-1 else s:=1;
+  sep:=sep1;
+  d1:=length(sep[1])-1;
+  p:=pos(sep[1],dms);
+  if p=0 then begin
+    sep:=sep2;
+    d1:=length(sep[1])-1;
+    p:=pos(sep[1],dms);
+  end;
+  if p=0 then begin
+    sep:=sep3;
+    d1:=length(sep[1])-1;
+    p:=pos(sep[1],dms);
+  end;
+  if p=0 then begin
+    sep:=sep4;
+    d1:=length(sep[1])-1;
+    p:=pos(sep[1],dms);
+  end;
+  if p=0 then begin
+    sep:=sep5;
+    d1:=length(sep[1])-1;
+    p:=pos(sep[1],dms);
+  end;
+  if p=0 then
+    result:=StrToFloatDef(trim(dms),-9999)
+  else begin
+    t:=copy(dms,1,p-1); delete(dms,1,p+d1);
+    result:=StrToFloatDef(trim(t),0);
+    p:=pos(sep[2],dms);
+    if p=0 then
+      result:=result+ s * StrToFloatDef(trim(dms),0) / 60
+    else begin
+      t:=copy(dms,1,p-1); delete(dms,1,p);
+      result:=result+ s * StrToFloatDef(trim(t),0) / 60;
+      p:=pos(sep[3],dms);
+      if p=0 then
+        t:=dms
+      else
+        t:=copy(dms,1,p-1);
+      result:=result+ s * StrToFloatDef(trim(t),0) / 3600;
+    end;
+  end;
 except
-result:=0;
+ result:=-9999;
 end;
 end;
 
@@ -3432,6 +3542,76 @@ begin
   else
     Result := d + sep + m;
 end;
+
+function NumericStr(txt:string):string;
+var i,n: integer;
+    c: char;
+begin
+  // keep only numeric character, keep space between number
+  // 'RA center: 20h32m53s.10' -> '20 32 53 .10'
+  result:='';
+  for i:=1 to length(txt) do begin
+    c:=txt[i];
+    if ((c>='0')and(c<='9'))or(c='.')or(c='+')or(c='-') then
+      result:=result+c
+    else
+      result:=result+' ';
+  end;
+  result:=wordspace(result);
+end;
+
+procedure Str2RaDec(txt: string; out ra,de: double);
+var buf,buf1,buf2: string;
+    i,p,s: integer;
+    lst: TStringList;
+begin
+//  Format example:
+//  RA: 02h53m29.7s DE:+16°11'49.5"
+//  11h22m33.3s +30°10'20"
+//  +30°10'20" 11h22m33.3s
+//  11:22:33.3 +30:10:20
+//  11 22 33.3 +30 10 20
+//  11:22 +30:10
+//  11 22 +30 10
+//  11.5 -30.1
+//  11 30 -30.1
+
+  lst:=TStringList.Create;
+  try
+  txt:=trim(NumericStr(txt));
+  buf1:='';
+  buf2:='';
+  Splitarg(txt,' ',lst);
+  if lst.Count=2 then begin // ra dec in two words
+    buf1:=trim(lst[0]);
+    buf2:=trim(lst[1]);
+    if (copy(buf1,1,1)='+')or(copy(buf1,1,1)='-') then begin // dec first
+      buf:=buf1;
+      buf1:=buf2;
+      buf2:=buf;
+    end;
+  end
+  else begin
+    s:=-1;
+    for i:=1 to lst.Count-1 do begin  // skip first word, this cannot work with dec first
+       if (copy(lst[i],1,1)='+') or (copy(lst[i],1,1)='-') then s:=i; // word with sign is first of dec
+    end;
+    if s<0 then
+      s:=lst.Count div 2; // no sign, assume same number of word for ra and dec
+    for i:=0 to s-1 do
+      buf1:=buf1+' '+lst[i];
+    for i:=s to lst.Count-1 do
+      buf2:=buf2+' '+lst[i];
+  end;
+
+  ra:=Str3ToAR(trim(buf1));
+  de:=Str3ToDE(trim(buf2));
+
+  finally
+   lst.free
+  end;
+end;
+
 
 end.
 

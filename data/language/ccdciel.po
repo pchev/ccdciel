@@ -5510,14 +5510,6 @@ msgstr ""
 msgid "Find."
 msgstr ""
 
-#: u_translation:rsenterthej200
-msgid "Enter the J2000 coordinates where the main camera is actually pointing"
-msgstr ""
-
-#: u_translation:rsgetfrommaini
-msgid "Get from main image"
-msgstr ""
-
 #: u_translation:rssolvedimage
 msgid "Solved image"
 msgstr ""
@@ -5608,5 +5600,37 @@ msgstr ""
 
 #: u_translation:rserrorunknown
 msgid "Error: Unknown finder focal length, set in PREFERENCE, SLEWING."
+msgstr ""
+
+#: u_translation:rsthisprocedur2
+msgid "This procedure measure the position of the main instrument target in the finder camera image."
+msgstr ""
+
+#: u_translation:rsenterthej200
+msgid "Enter the J2000 coordinates of the target where the main instrument is currently pointing."
+msgstr ""
+
+#: u_translation:rspastfromclip
+msgid "Past from clipboard"
+msgstr ""
+
+#: u_translation:rscannotinterp
+msgid "Cannot interpret the text \"%s\" as RA DEC values"
+msgstr ""
+
+#: u_translation:rsimagecenter
+msgid "Image center"
+msgstr ""
+
+#: u_translation:rscalibrationm
+msgid "Calibration measurement"
+msgstr ""
+
+#: u_translation:rstargetpositi2
+msgid "Target position in finder image"
+msgstr ""
+
+#: u_translation:rspreviewexpos
+msgid "Preview exposure"
 msgstr ""
 

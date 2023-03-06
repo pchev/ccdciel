@@ -1481,8 +1481,6 @@ resourcestring
   rsUseFinderCam = 'Use finder camera';
   rsUseThisDevic = 'Use this device if the main camera cannot be used for plate solving. Also configure the camera to use in Preferences/Slewing';
   rsFind = 'Find.';
-  rsEnterTheJ200 = 'Enter the J2000 coordinates where the main camera is actually pointing';
-  rsGetFromMainI = 'Get from main image';
   rsSolvedImage = 'Solved image';
   rsNewFinderCal = 'New finder calibration is successful';
   rsMainImageCen = 'Main image center is at finder image X=%s, Y=%s';
@@ -1506,6 +1504,14 @@ resourcestring
   rsMultiStarGui = 'Multi-star guide offset';
   rsGuideOffset = 'Guide offset';
   rsErrorUnknown = 'Error: Unknown finder focal length, set in PREFERENCE, SLEWING.';
+  rsThisProcedur2 = 'This procedure measure the position of the main instrument target in the finder camera image.';
+  rsEnterTheJ200 = 'Enter the J2000 coordinates of the target where the main instrument is currently pointing.';
+  rsPastFromClip = 'Past from clipboard';
+  rsCannotInterp = 'Cannot interpret the text "%s" as RA DEC values';
+  rsImageCenter = 'Image center';
+  rsCalibrationM = 'Calibration measurement';
+  rsTargetPositi2 = 'Target position in finder image';
+  rsPreviewExpos = 'Preview exposure';
 
 implementation
 

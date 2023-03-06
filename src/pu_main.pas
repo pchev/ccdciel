@@ -3731,18 +3731,23 @@ begin
 end;
 
 procedure Tf_main.FinderCameraConnectTimerTimer(Sender: TObject);
+var rx,ry,rw,rh:TNumRange;
+    bin:integer;
 begin
   FinderCameraConnectTimer.Enabled:=false;
   findercamera.CheckGain;
   findercamera.CanSetGain:=findercamera.hasGain;
-//  f_internalguider.PanelGain.Visible:=guidecamera.hasGain;
-//  f_internalguider.Gain.MinValue:=guidecamera.GainMin;
-//  f_internalguider.Gain.MaxValue:=guidecamera.GainMax;
   findercamera.CheckOffset;
-//  f_internalguider.PanelOffset.Visible:=guidecamera.hasOffset;
-//  f_internalguider.Offset.MinValue:=guidecamera.OffsetMin;
-//  f_internalguider.Offset.MaxValue:=guidecamera.OffsetMax;
-//  f_internalguider.PanelTemperature.Visible:=guidecamera.Temperature<>NullCoord;
+  if (astrometry.FinderOffsetX=0)and(astrometry.FinderOffsetY=0) then begin
+    // set default position in the middle of the image
+    findercamera.GetFrameRange(rx,ry,rw,rh);
+    bin:=config.GetValue('/PrecSlew/Binning',1);
+    astrometry.FinderOffsetX:=rw.max/bin/2;
+    astrometry.FinderOffsetY:=rh.max/bin/2;
+    f_finder.ShowCalibration;
+    config.SetValue('/Finder/OffsetX',astrometry.FinderOffsetX);
+    config.SetValue('/Finder/OffsetY',astrometry.FinderOffsetY);
+  end;
 end;
 
 procedure Tf_main.FocuserConnectTimerTimer(Sender: TObject);
@@ -16590,22 +16595,27 @@ if (finderfits.HeaderInfo.naxis>0) and finderfits.ImageValid then begin
   finderimg_Width:=ImaFinderBmp.Width;
   finderimg_Height:=ImaFinderBmp.Height;
   if f_finder.BullsEye then begin
+    // center cross
     co:=ColorToBGRA(clRed);
     co.alpha:=128;
-    if (f_finder.OffsetX.Value>0)and(f_finder.OffsetX.Value<finderimg_Width)and(f_finder.OffsetY.Value>0)and(f_finder.OffsetY.Value<finderimg_Height) then begin
-      cx:=round(f_finder.OffsetX.Value+0.5);
-      cy:=round(f_finder.OffsetY.Value+0.5);
-    end
-    else begin
-      cx:=finderimg_Width div 2;
-      cy:=finderimg_Height div 2;
-    end;
+    cx:=finderimg_Width div 2;
+    cy:=finderimg_Height div 2;
     ImaFinderBmp.DrawHorizLine(0,cy,finderimg_Width,co);
     ImaFinderBmp.DrawVertLine(cx,0,finderimg_Height,co);
     s:=min(finderimg_Height,finderimg_Width) div 3;
     ImaFinderBmp.EllipseAntialias(cx,cy,s,s,co,1);
     s:=min(finderimg_Height,finderimg_Width) div 8;
     ImaFinderBmp.EllipseAntialias(cx,cy,s,s,co,1);
+    if (f_finder.OffsetX.Value>0)and(f_finder.OffsetX.Value<finderimg_Width)and(f_finder.OffsetY.Value>0)and(f_finder.OffsetY.Value<finderimg_Height) then begin
+      // current calibration cross
+      co:=ColorToBGRA(clLime);
+      co.alpha:=128;
+      cx:=round(f_finder.OffsetX.Value+0.5);
+      cy:=round(finderimg_Height-f_finder.OffsetY.Value+0.5);
+      s:=20;
+      ImaFinderBmp.DrawHorizLine(cx-s,cy,cx+s,co);
+      ImaFinderBmp.DrawVertLine(cx,cy-s,cy+s,co);
+    end
   end;
  end
  else begin

@@ -6,14 +6,14 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ccdciel\n"
 "Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
-"POT-Creation-Date: 2023-03-05 13:27+0000\n"
+"POT-Creation-Date: 2023-03-06 16:18+0000\n"
 "PO-Revision-Date: 2021-08-31 20:35+0000\n"
 "Last-Translator: Patrick Chevalley <Unknown>\n"
 "Language-Team: Kurdish <ku@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2023-03-05 13:32+0000\n"
+"X-Launchpad-Export-Date: 2023-03-06 16:32+0000\n"
 "X-Generator: Launchpad (build 1938a4fd80bdf1a1b1373119ac1ac9e0e65174d6)\n"
 
 #: u_translation.rs2d
@@ -627,6 +627,10 @@ msgstr ""
 msgid "Calibration %sdelay"
 msgstr ""
 
+#: u_translation.rscalibrationm
+msgid "Calibration measurement"
+msgstr ""
+
 #: u_translation.rscalibrationr
 msgid "Calibration results:"
 msgstr ""
@@ -754,6 +758,11 @@ msgstr ""
 
 #: u_translation.rscannotgetfoc
 msgid "Cannot get focuser absolute position"
+msgstr ""
+
+#: u_translation.rscannotinterp
+#, object-pascal-format
+msgid "Cannot interpret the text \"%s\" as RA DEC values"
 msgstr ""
 
 #: u_translation.rscannotoverwr
@@ -1575,7 +1584,7 @@ msgid "End time"
 msgstr ""
 
 #: u_translation.rsenterthej200
-msgid "Enter the J2000 coordinates where the main camera is actually pointing"
+msgid "Enter the J2000 coordinates of the target where the main instrument is currently pointing."
 msgstr ""
 
 #: u_translation.rserror
@@ -2062,10 +2071,6 @@ msgstr ""
 msgid "Get current position from telescope"
 msgstr ""
 
-#: u_translation.rsgetfrommaini
-msgid "Get from main image"
-msgstr ""
-
 #: u_translation.rsgetsitelongl
 msgid "Get site long/lat from the mount"
 msgstr ""
@@ -2224,6 +2229,10 @@ msgstr ""
 
 #: u_translation.rsimage
 msgid "Image"
+msgstr ""
+
+#: u_translation.rsimagecenter
+msgid "Image center"
 msgstr ""
 
 #: u_translation.rsimagecleanup
@@ -3344,6 +3353,10 @@ msgstr ""
 msgid "Password"
 msgstr ""
 
+#: u_translation.rspastfromclip
+msgid "Past from clipboard"
+msgstr ""
+
 #: u_translation.rspause
 msgid "Pause"
 msgstr ""
@@ -3625,6 +3638,10 @@ msgstr "Pêş dîtin"
 
 #: u_translation.rspreviewdebay
 msgid "Preview debayer"
+msgstr ""
+
+#: u_translation.rspreviewexpos
+msgid "Preview exposure"
 msgstr ""
 
 #: u_translation.rsprofile
@@ -5046,6 +5063,10 @@ msgstr ""
 msgid "Target%sname"
 msgstr ""
 
+#: u_translation.rstargetpositi2
+msgid "Target position in finder image"
+msgstr ""
+
 #: u_translation.rstargetprecis
 msgid "Target precision [arcmin] "
 msgstr ""
@@ -5285,6 +5306,10 @@ msgstr ""
 #: u_translation.rsthisprocedur
 #, object-pascal-format
 msgid "This procedure will help you to  find the focuser parameters for auto-focus.%sYou only need to run it once to set this parameters.%sCenter a star with a high elevation and do a manual focusing to be as close as possible of the focus point. Use the Manual focus tool for that.%sUse the Star profile tool to check the star peak intensity is about three fourth of the camera maximum ADU but not saturated. %sAfter focusing, your focuser must be positioned about half way of it's mechanical travel. If this is not the case please adjust it now.%sThe binning you set in the Preview now will be used for the autofocusing operation. If you want to change the focusing binning later you have to run this procedure again."
+msgstr ""
+
+#: u_translation.rsthisprocedur2
+msgid "This procedure measure the position of the main instrument target in the finder camera image."
 msgstr ""
 
 #: u_translation.rsthissequence

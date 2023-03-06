@@ -40,6 +40,7 @@ type
     BtnZoom2: TSpeedButton;
     BtnZoomAdjust: TSpeedButton;
     BtnPreviewLoop: TButton;
+    ButtonImageCenter: TButton;
     ButtonCalibrate: TButton;
     Label4: TLabel;
     LabelMsg: TLabel;
@@ -66,8 +67,11 @@ type
     procedure BtnZoom2Click(Sender: TObject);
     procedure BtnZoomAdjustClick(Sender: TObject);
     procedure ButtonCalibrateClick(Sender: TObject);
+    procedure ButtonImageCenterClick(Sender: TObject);
     procedure GammaChange(Sender: TObject);
     procedure LuminosityChange(Sender: TObject);
+    procedure OffsetXChange(Sender: TObject);
+    procedure OffsetYChange(Sender: TObject);
   private
     { private declarations }
     FCamera: T_camera;
@@ -113,7 +117,8 @@ begin
  ScaleDPI(Self);
  SetLang;
  FinderPreviewLoop:=false;
- FBullsEye:=false;
+ FBullsEye:=true;
+ BtnBullsEye.Down:=true;
 end;
 
 destructor  Tf_finder.Destroy;
@@ -124,11 +129,13 @@ end;
 procedure Tf_finder.SetLang;
 begin
   Title.Caption:=rsFinderCamera;
-  BtnPreviewLoop.Caption:=rsLoop;
-  ButtonCalibrate.Caption:=rsCalibrate;
-  groupbox1.Caption:=rsCalibrationR;
+  BtnPreviewLoop.Caption:=rsStartPreview;
+  ButtonImageCenter.Caption:=rsImageCenter;
+  ButtonCalibrate.Caption:=rsCalibrationM;
+  groupbox1.Caption:=rsTargetPositi2;
   label1.Caption:='X '+rsPixel;
   label2.Caption:='Y '+rsPixel;
+  label3.Caption:=rsPreviewExpos;
   label17.Caption:=rsGamma;
   label18.Caption:=rsLuminosity;
   label19.Caption:=rsZoom;
@@ -144,7 +151,7 @@ end;
 procedure Tf_finder.StartLoop;
 begin
   FinderPreviewLoop:=true;
-  BtnPreviewLoop.Caption:=rsStopLoop;
+  BtnPreviewLoop.Caption:=rsStopPreviewL;
   msg(rsStartPreview,0);
   Application.QueueAsyncCall(@StartExposureAsync,0);
 end;
@@ -153,8 +160,8 @@ procedure Tf_finder.StopLoop;
 begin
   FinderPreviewLoop:=false;
   FCamera.AbortExposure;
-  BtnPreviewLoop.Caption:=rsLoop;
-  msg(rsStopLoop,3);
+  BtnPreviewLoop.Caption:=rsStartPreview;
+  msg(rsStopPreviewL,3);
 end;
 
 Procedure Tf_finder.StartExposureAsync(Data: PtrInt);
@@ -206,6 +213,7 @@ var exp,ra2000,de2000:double;
     bin,sgain,soffset: integer;
     restartloop:boolean;
 begin
+if (FCamera.Status=devConnected) then begin
   restartloop:=FinderPreviewLoop;
   if FinderPreviewLoop then begin
     StopLoop;
@@ -236,6 +244,22 @@ begin
     end;
   end;
   if restartloop then StartLoop;
+end
+else msg(rsSomeDefinedD,1);
+end;
+
+procedure Tf_finder.ButtonImageCenterClick(Sender: TObject);
+var rx,ry,rw,rh:TNumRange;
+    bin:integer;
+begin
+  if (FCamera.Status=devConnected) then begin
+    FCamera.GetFrameRange(rx,ry,rw,rh);
+    bin:=config.GetValue('/PrecSlew/Binning',1);
+    astrometry.FinderOffsetX:=rw.max/bin/2;
+    astrometry.FinderOffsetY:=rh.max/bin/2;
+    ShowCalibration;
+  end
+  else msg(rsSomeDefinedD,1);
 end;
 
 procedure Tf_finder.ForceRedraw;
@@ -252,6 +276,18 @@ end;
 procedure Tf_finder.LuminosityChange(Sender: TObject);
 begin
   ForceRedraw;
+end;
+
+procedure Tf_finder.OffsetXChange(Sender: TObject);
+begin
+  FAstrometry.FinderOffsetX:=OffsetX.Value;
+  if FBullsEye then ForceRedraw;
+end;
+
+procedure Tf_finder.OffsetYChange(Sender: TObject);
+begin
+  FAstrometry.FinderOffsetY:=OffsetY.Value;
+  if FBullsEye then ForceRedraw;
 end;
 
 procedure Tf_finder.ShowCalibration;

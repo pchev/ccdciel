@@ -6,14 +6,14 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ccdciel\n"
 "Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
-"POT-Creation-Date: 2023-03-05 13:27+0000\n"
+"POT-Creation-Date: 2023-03-06 16:18+0000\n"
 "PO-Revision-Date: 2023-02-08 02:21+0000\n"
 "Last-Translator: Víctor R. Ruiz <Unknown>\n"
 "Language-Team: Spanish <es@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2023-03-05 13:32+0000\n"
+"X-Launchpad-Export-Date: 2023-03-06 16:32+0000\n"
 "X-Generator: Launchpad (build 1938a4fd80bdf1a1b1373119ac1ac9e0e65174d6)\n"
 
 #: u_translation.rs2d
@@ -627,6 +627,10 @@ msgstr ""
 msgid "Calibration %sdelay"
 msgstr "Calibración %spausa"
 
+#: u_translation.rscalibrationm
+msgid "Calibration measurement"
+msgstr ""
+
 #: u_translation.rscalibrationr
 msgid "Calibration results:"
 msgstr "Resultados de la calibración:"
@@ -755,6 +759,11 @@ msgstr "No se pudo encontrar una estrella en esta posición. Cambie a una estrel
 #: u_translation.rscannotgetfoc
 msgid "Cannot get focuser absolute position"
 msgstr "No se puede obtener la posición absoluta del enfocador"
+
+#: u_translation.rscannotinterp
+#, object-pascal-format
+msgid "Cannot interpret the text \"%s\" as RA DEC values"
+msgstr ""
 
 #: u_translation.rscannotoverwr
 msgid "Cannot overwrite the running sequence!"
@@ -1575,7 +1584,7 @@ msgid "End time"
 msgstr "Hora de fin"
 
 #: u_translation.rsenterthej200
-msgid "Enter the J2000 coordinates where the main camera is actually pointing"
+msgid "Enter the J2000 coordinates of the target where the main instrument is currently pointing."
 msgstr ""
 
 #: u_translation.rserror
@@ -2062,10 +2071,6 @@ msgstr "Obtener la posición actual de la última imagen"
 msgid "Get current position from telescope"
 msgstr "Obtener posición actual del telescopio"
 
-#: u_translation.rsgetfrommaini
-msgid "Get from main image"
-msgstr ""
-
 #: u_translation.rsgetsitelongl
 msgid "Get site long/lat from the mount"
 msgstr "Obtener coordenadas lat/lon desde la montura"
@@ -2225,6 +2230,10 @@ msgstr "Ignorar condición meteorológica para tipo de imagen=%s"
 #: u_translation.rsimage
 msgid "Image"
 msgstr "Imagen"
+
+#: u_translation.rsimagecenter
+msgid "Image center"
+msgstr ""
 
 #: u_translation.rsimagecleanup
 msgid "Image cleanup"
@@ -3344,6 +3353,10 @@ msgstr "Aparcar el telescopio y la cúpula"
 msgid "Password"
 msgstr "Contraseña"
 
+#: u_translation.rspastfromclip
+msgid "Past from clipboard"
+msgstr ""
+
 #: u_translation.rspause
 msgid "Pause"
 msgstr "Detener"
@@ -3626,6 +3639,10 @@ msgstr "Vista previa"
 #: u_translation.rspreviewdebay
 msgid "Preview debayer"
 msgstr "Previsualizar debayerizado"
+
+#: u_translation.rspreviewexpos
+msgid "Preview exposure"
+msgstr ""
 
 #: u_translation.rsprofile
 #, object-pascal-format
@@ -5046,6 +5063,10 @@ msgstr "Error de inicialización de objetivo"
 msgid "Target%sname"
 msgstr "Nombre%sobjeto"
 
+#: u_translation.rstargetpositi2
+msgid "Target position in finder image"
+msgstr ""
+
 #: u_translation.rstargetprecis
 msgid "Target precision [arcmin] "
 msgstr "Precisión objetivo [arcmin] "
@@ -5286,6 +5307,10 @@ msgstr "Estas opciones son complemento de la frecuencia de autoenfoque disponibl
 #, object-pascal-format
 msgid "This procedure will help you to  find the focuser parameters for auto-focus.%sYou only need to run it once to set this parameters.%sCenter a star with a high elevation and do a manual focusing to be as close as possible of the focus point. Use the Manual focus tool for that.%sUse the Star profile tool to check the star peak intensity is about three fourth of the camera maximum ADU but not saturated. %sAfter focusing, your focuser must be positioned about half way of it's mechanical travel. If this is not the case please adjust it now.%sThe binning you set in the Preview now will be used for the autofocusing operation. If you want to change the focusing binning later you have to run this procedure again."
 msgstr "Este procedimiento le ayudará a encontrar los parámetros del enfocador para el autoenfoque%sSólo necesita ejecutarlo una vez para ajustar estos parámetros.%sCentre una estrella con una alta elevación y realice un enfoque manual tan cerca del foco como sea posible. Use la herramienta de Enfoque manual para eso.%sUse la herramienta de perfil de estrella para comprobar que la intensidad máxima de la estrella está 3/4 del histograma y no está saturada.%sDespués de enfocar, el enfocador debe posicionarse a mitad de camino de su recorrido mecánico. Si no es el caso, por favor, ajústelo ahora.%sEl ajuste de 'binning' que haya indicado en la vista previa se usará ahora para la operación del autoenfoque. Si desea cambiar el 'binning' de enfoque más tarde deberá repetir de nuevo este procedimiento."
+
+#: u_translation.rsthisprocedur2
+msgid "This procedure measure the position of the main instrument target in the finder camera image."
+msgstr ""
 
 #: u_translation.rsthissequence
 #, object-pascal-format

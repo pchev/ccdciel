@@ -6,14 +6,14 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ccdciel\n"
 "Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
-"POT-Creation-Date: 2023-03-05 13:27+0000\n"
+"POT-Creation-Date: 2023-03-06 16:18+0000\n"
 "PO-Revision-Date: 2021-08-31 20:37+0000\n"
 "Last-Translator: Patrick Chevalley <Unknown>\n"
 "Language-Team: English (United Kingdom) <en_GB@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2023-03-05 13:32+0000\n"
+"X-Launchpad-Export-Date: 2023-03-06 16:32+0000\n"
 "X-Generator: Launchpad (build 1938a4fd80bdf1a1b1373119ac1ac9e0e65174d6)\n"
 "Language: en_GB\n"
 
@@ -628,6 +628,10 @@ msgstr ""
 msgid "Calibration %sdelay"
 msgstr "Calibration %sdelay"
 
+#: u_translation.rscalibrationm
+msgid "Calibration measurement"
+msgstr ""
+
 #: u_translation.rscalibrationr
 msgid "Calibration results:"
 msgstr ""
@@ -756,6 +760,11 @@ msgstr "Cannot find a star at his position. Move to a bright star or increase th
 #: u_translation.rscannotgetfoc
 msgid "Cannot get focuser absolute position"
 msgstr "Cannot get focuser absolute position"
+
+#: u_translation.rscannotinterp
+#, object-pascal-format
+msgid "Cannot interpret the text \"%s\" as RA DEC values"
+msgstr ""
 
 #: u_translation.rscannotoverwr
 msgid "Cannot overwrite the running sequence!"
@@ -1576,7 +1585,7 @@ msgid "End time"
 msgstr "End time"
 
 #: u_translation.rsenterthej200
-msgid "Enter the J2000 coordinates where the main camera is actually pointing"
+msgid "Enter the J2000 coordinates of the target where the main instrument is currently pointing."
 msgstr ""
 
 #: u_translation.rserror
@@ -2063,10 +2072,6 @@ msgstr "Get current position from last image"
 msgid "Get current position from telescope"
 msgstr "Get current position from telescope"
 
-#: u_translation.rsgetfrommaini
-msgid "Get from main image"
-msgstr ""
-
 #: u_translation.rsgetsitelongl
 msgid "Get site long/lat from the mount"
 msgstr "Get site long/lat from the mount"
@@ -2226,6 +2231,10 @@ msgstr "Ignore weather condition for image type=%s"
 #: u_translation.rsimage
 msgid "Image"
 msgstr "Image"
+
+#: u_translation.rsimagecenter
+msgid "Image center"
+msgstr ""
 
 #: u_translation.rsimagecleanup
 msgid "Image cleanup"
@@ -3345,6 +3354,10 @@ msgstr "Park the telescope and the dome"
 msgid "Password"
 msgstr "Password"
 
+#: u_translation.rspastfromclip
+msgid "Past from clipboard"
+msgstr ""
+
 #: u_translation.rspause
 msgid "Pause"
 msgstr "Pause"
@@ -3627,6 +3640,10 @@ msgstr "Preview"
 #: u_translation.rspreviewdebay
 msgid "Preview debayer"
 msgstr "Preview debayer"
+
+#: u_translation.rspreviewexpos
+msgid "Preview exposure"
+msgstr ""
 
 #: u_translation.rsprofile
 #, object-pascal-format
@@ -5047,6 +5064,10 @@ msgstr "Target initialisation error"
 msgid "Target%sname"
 msgstr "Target%sname"
 
+#: u_translation.rstargetpositi2
+msgid "Target position in finder image"
+msgstr ""
+
 #: u_translation.rstargetprecis
 msgid "Target precision [arcmin] "
 msgstr "Target precision [arcmin] "
@@ -5287,6 +5308,10 @@ msgstr "This options are in addition to the autofocus frequency available in the
 #, object-pascal-format
 msgid "This procedure will help you to  find the focuser parameters for auto-focus.%sYou only need to run it once to set this parameters.%sCenter a star with a high elevation and do a manual focusing to be as close as possible of the focus point. Use the Manual focus tool for that.%sUse the Star profile tool to check the star peak intensity is about three fourth of the camera maximum ADU but not saturated. %sAfter focusing, your focuser must be positioned about half way of it's mechanical travel. If this is not the case please adjust it now.%sThe binning you set in the Preview now will be used for the autofocusing operation. If you want to change the focusing binning later you have to run this procedure again."
 msgstr "This procedure will help you to  find the focuser parameters for auto-focus.%sYou only need to run it once to set this parameters.%sCenter a star with a high elevation and do a manual focusing to be as close as possible of the focus point. Use the Manual focus tool for that.%sUse the Star profile tool to check the star peak intensity is about three fourth of the camera maximum ADU but not saturated. %sAfter focusing, your focuser must be positioned about half way of it's mechanical travel. If this is not the case please adjust it now.%sThe binning you set in the Preview now will be used for the autofocusing operation. If you want to change the focusing binning later you have to run this procedure again."
+
+#: u_translation.rsthisprocedur2
+msgid "This procedure measure the position of the main instrument target in the finder camera image."
+msgstr ""
 
 #: u_translation.rsthissequence
 #, object-pascal-format
