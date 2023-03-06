@@ -136,10 +136,10 @@ object f_finder: Tf_finder
         ParentColor = False
       end
       object PreviewExp: TFloatSpinEdit
-        Left = 145
+        Left = 161
         Height = 29
         Top = 38
-        Width = 76
+        Width = 60
         DecimalPlaces = 3
         MaxValue = 60
         MinValue = 0.001
