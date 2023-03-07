@@ -1488,6 +1488,7 @@ begin
    FLastDoneStep:=rsGlobalRepeat+blank+IntToStr(FTargetsRepeatCount)+'/'+IntToStr(FTargetsRepeat);
  end;
  if FRunning then begin
+   // Sequence is running, use real start/end time
    stime:=FSeqStartTime;
    if FSeqStop then begin
      etime:=FSeqStopAt;
@@ -1500,47 +1501,53 @@ begin
      etime:=MaxDouble;
  end
  else begin
+   // sequence is not running, estimate start/end time
    for i:=0 to NumTargets-1 do begin
      if (Targets[i].objectname=SkyFlatTxt)and(Targets[i].planname=FlatTimeName[1]) then begin
+       // dawn skyflat require end time
        FSeqStop:=true;
        FSeqStopTwilight:=true;
      end;
    end;
    if FSeqStart then
-     stime:=trunc(now)+FSeqStartAt
+     stime:=trunc(now)+FSeqStartAt  // specified start time
    else
-     stime:=now;
+     stime:=now;                    // otherwise simulate start at current time
     if FSeqStop then begin
-      etime:=FSeqStopAt;
+      etime:=FSeqStopAt;            // specified end time
       if etime>frac(stime) then
         etime:=trunc(stime)+etime
       else
-        etime:=trunc(stime)+1+etime
+        etime:=trunc(stime)+1+etime // end time on next day
     end
     else
-      etime:=MaxDouble;
-   twok:=TwilightAstro(now,hm,he);
+      etime:=MaxDouble;             // no end time, can run infinitly
+   twok:=TwilightAstro(now,hm,he);  // compute twilight
    if twok then begin
      if FSeqStartTwilight then
-       stime:=trunc(now)+he/24;
+       stime:=trunc(now)+he/24;     // replace start time by dusk
      if FSeqStopTwilight then
-       etime:=trunc(now)+1+hm/24;
+       etime:=trunc(now)+1+hm/24;   // replace end time by dawn
    end;
  end;
  FDoneStatus:=FDoneStatus+crlf+rsSequence+blank+rsStartAt+FormatDateTime(datehms,stime);
  ctime:=stime;
  totaltime:=0;
 
+ // Loop global sequence repeat
  for rglobal:=FTargetsRepeatCount to min(FTargetsRepeat,FTargetsRepeatCount+5) do begin  // print maximum of 5 global repeat
    rfuture:=rglobal>FTargetsRepeatCount;
    if rfuture then begin
       FDoneStatus:=FDoneStatus+crlf+crlf+rsGlobalRepeat+blank+IntToStr(rglobal)+'/'+IntToStr(FTargetsRepeat);
    end;
+   // loop each target in sequence
    for i:=0 to NumTargets-1 do begin
+      // create a dummy copy to not alter the current sequence
       t:=TTarget.Create;
       t.Assign(Targets[i]);
       if t=nil then Continue;
       if rfuture and FResetRepeat then begin
+        // simulate reset count on repeat
         t.repeatdone:=0;
         p:=t_plan(t.plan);
         if p=nil then Continue;
@@ -1551,13 +1558,16 @@ begin
       end;
       tfuture:=(i>FCurrentTarget);
       trunning:=(i=FCurrentTarget);
+      // plan is only read, no need to copy
       p:=t_plan(t.plan);
       if p=nil then Continue;
       if t.objectname=ScriptTxt then begin
+        // todo: script mean execution time read from comment in code?
         txt:=crlf+t.objectname+blank+p.PlanName;
         FDoneStatus:=FDoneStatus+crlf+txt;
       end
       else begin
+        // standard target and skyflat
         totalcount:=totalcount+t.repeatcount;
         donecount:=donecount+t.repeatdone;
         totalspteps:=totalspteps+t.repeatcount;
@@ -1570,38 +1580,45 @@ begin
         txt:=crlf+rsTarget+blank+t.objectname+blank+rsRepeat+':'+blank+IntToStr(t.repeatdone)+'/'+IntToStr(t.repeatcount);
         if t.objectname<>SkyFlatTxt then begin
           if tfuture and (not tdone) then begin
-            SetTargetTime(t,stime,pivot); // running and old target already have time set
+            // target is planned in the future and is not completed
+            SetTargetTime(t,stime,pivot); // compute the start/end time, running and old target already have time set
             if (t.starttime>0)and(t.endtime>0) then begin
+              // target need to run between start and end
               st:=t.starttime;
               et:=t.endtime;
               intime:=InTimeInterval(frac(ctime),st,et,pivot/24);
               if intime=0 then begin
+                // target can run in planned time
                 dotarget:=true;
                 txt:=txt+','+blank+rsStartAt+FormatDateTime(datehms, ctime);
               end
               else if intime<0 then begin
+                // target need to wait start time
                 if st<frac(ctime) then st:=st+1;
                 ctime:=trunc(ctime)+st;
                 dotarget:=true;
                 txt:=txt+','+blank+rsStartAt+FormatDateTime(datehms, ctime);
               end
               else if intime>0 then begin
+                // target cannot run because end time is already passed
                 dotarget:=false;
                 txt:=txt+','+blank+Format(rsSkipTarget, [''])+','+Format(rsStopTimeAlre, [TimeToStr(t.endtime)]);;
               end;
             end
             else begin
-               // no time
+               // no start/end time, no coordinates, run anyway
                dotarget:=true;
             end;
           end
           else if trunning then begin
+            // target is currently running
             dotarget:=true;
             st:=t.starttime+trunc(ctime);
             ctime:=max(ctime,st);
             txt:=txt+','+blank+rsStartAt+FormatDateTime(datehms, ctime);
           end
           else begin
+            // target is already completly done
             dotarget:=false;
             txt:=txt+','+blank+rsDone;
           end;
@@ -1611,12 +1628,14 @@ begin
           FLastDoneStep:=txt;
         if p.Count<=0 then Continue;
         targettime:=0;
+        // loop all steps in plan
         for j:=0 to p.Count-1 do begin
           totalcount:=totalcount+p.Steps[j].count;
           donecount:=donecount+p.Steps[j].donecount;
           totalspteps:=totalspteps+p.Steps[j].count;
           donesteps:=donesteps+p.Steps[j].donecount;
           if t.objectname<>SkyFlatTxt then begin
+            // cumulate execution time
             steptime:=(p.Steps[j].count-p.Steps[j].donecount)*p.Steps[j].exposure*p.Steps[j].stackcount;
             targettime:=targettime+steptime;
             if steptime>0 then
@@ -1625,6 +1644,7 @@ begin
               txt:=t.objectname+blank+p.PlanName+blank+rsStep+':'+blank+p.Steps[j].description+blank+','+rsDone+':'+blank+IntToStr(p.Steps[j].donecount)+'/'+IntToStr(p.Steps[j].count);
           end
           else begin
+             // skyflat detail cannot be computed because of variable exposure time
              txt:=t.objectname+blank+p.PlanName+blank+rsStep+':'+blank+p.Steps[j].description+blank+','+rsDone+':'+blank+IntToStr(p.Steps[j].donecount)+'/'+IntToStr(p.Steps[j].count);
           end;
           FDoneStatus:=FDoneStatus+crlf+txt;
@@ -1633,16 +1653,20 @@ begin
             FLastDoneStep:=txt;
           end;
         end;
+        // total execution time for target
         targettime:=targettime*(t.repeatcount-t.repeatdone);
         if dotarget then ctime:=ctime+targettime/secperday;
         if targettime>0 then begin
+          // total sequence time
           totaltime:=totaltime+targettime;
           txt:=t.objectname+blank+'Target time'+':'+blank+TimToStr(targettime/3600,'h',false);
           txt:=txt+','+blank+'Sequence time'+':'+blank+TimToStr(totaltime/3600,'h',false);
           FDoneStatus:=FDoneStatus+crlf+txt;
           if FSeqStop and (ctime>etime) then
+            // interupted by end time
             txt:=t.objectname+blank+'Interrupted at:'+blank+FormatDateTime(datehms,etime)
           else
+            // completed time
             txt:=t.objectname+blank+'End at:'+blank+FormatDateTime(datehms,ctime);
           FDoneStatus:=FDoneStatus+crlf+txt;
         end;
