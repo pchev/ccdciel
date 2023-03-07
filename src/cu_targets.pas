@@ -1462,9 +1462,9 @@ begin
 end;
 
 function T_Targets.CheckStatus:boolean;
-var i,j,totalcount,donecount,totalspteps,donesteps,intime : integer;
-    steptime,targettime,totaltime,pivot,stime,etime,ctime,hm,he,st,et,x: double;
-    tfuture,tdone,twok,dotarget: boolean;
+var i,j,totalcount,donecount,totalspteps,donesteps,intime,rglobal : integer;
+    steptime,targettime,totaltime,pivot,stime,etime,ctime,hm,he,st,et: double;
+    tfuture,tdone,trunning,twok,dotarget,rfuture: boolean;
     txt: string;
     t: TTarget;
     p: T_Plan;
@@ -1530,98 +1530,128 @@ begin
  FDoneStatus:=FDoneStatus+crlf+rsSequence+blank+rsStartAt+FormatDateTime(datehms,stime);
  ctime:=stime;
  totaltime:=0;
- for i:=0 to NumTargets-1 do begin
-    t:=TTarget.Create;
-    t.Assign(Targets[i]);
-    if t=nil then Continue;
-    tfuture:=(i>FCurrentTarget);
-    p:=t_plan(t.plan);
-    if p=nil then Continue;
-    if t.objectname=ScriptTxt then begin
-      txt:=crlf+t.objectname+blank+p.PlanName;
-      FDoneStatus:=FDoneStatus+crlf+txt;
-    end
-    else begin
-      totalcount:=totalcount+t.repeatcount;
-      donecount:=donecount+t.repeatdone;
-      totalspteps:=totalspteps+t.repeatcount;
-      donesteps:=donesteps+t.repeatdone;
-      if (t.repeatdone>0) then begin
-        result:=true;
-      end;
-      dotarget:=false;
-      tdone:=t.repeatdone>=t.repeatcount;
-      txt:=crlf+rsTarget+blank+t.objectname+blank+rsRepeat+':'+blank+IntToStr(t.repeatdone)+'/'+IntToStr(t.repeatcount);
-      if t.objectname<>SkyFlatTxt then begin
-        if tfuture and (not tdone) then begin
-          SetTargetTime(t,stime,pivot); // running and old target already have time set
-          if (t.starttime>0)and(t.endtime>0) then begin
-            st:=t.starttime;
-            et:=t.endtime;
-            intime:=InTimeInterval(frac(ctime),st,et,pivot/24);
-            if intime=0 then begin
-              dotarget:=true;
-              txt:=txt+','+blank+rsStartAt+FormatDateTime(datehms, ctime);
-            end
-            else if intime<0 then begin
-              if st<frac(ctime) then st:=st+1;
-              ctime:=trunc(ctime)+st;
-              dotarget:=true;
-              txt:=txt+','+blank+rsStartAt+FormatDateTime(datehms, ctime);
-            end
-            else if intime>0 then begin
-              dotarget:=false;
-              txt:=txt+','+blank+rsTimeAlreadyP;
-            end;
-          end;
-        end
-        else begin
-          dotarget:=false;
-          txt:=txt+','+blank+rsDone;
+
+ for rglobal:=FTargetsRepeatCount to min(FTargetsRepeat,FTargetsRepeatCount+5) do begin  // print maximum of 5 global repeat
+   rfuture:=rglobal>FTargetsRepeatCount;
+   if rfuture then begin
+      FDoneStatus:=FDoneStatus+crlf+crlf+rsGlobalRepeat+blank+IntToStr(rglobal)+'/'+IntToStr(FTargetsRepeat);
+   end;
+   for i:=0 to NumTargets-1 do begin
+      t:=TTarget.Create;
+      t.Assign(Targets[i]);
+      if t=nil then Continue;
+      if rfuture and FResetRepeat then begin
+        t.repeatdone:=0;
+        p:=t_plan(t.plan);
+        if p=nil then Continue;
+        if p.Count<=0 then Continue;
+        for j:=0 to p.Count-1 do begin
+          p.Steps[j].donecount:=0;
         end;
       end;
-      FDoneStatus:=FDoneStatus+crlf+txt;
-      if t.repeatdone=t.repeatcount then
-        FLastDoneStep:=txt;
-      if p.Count<=0 then Continue;
-      targettime:=0;
-      for j:=0 to p.Count-1 do begin
-        totalcount:=totalcount+p.Steps[j].count;
-        donecount:=donecount+p.Steps[j].donecount;
-        totalspteps:=totalspteps+p.Steps[j].count;
-        donesteps:=donesteps+p.Steps[j].donecount;
-        if t.objectname<>SkyFlatTxt then begin
-          steptime:=(p.Steps[j].count-p.Steps[j].donecount)*p.Steps[j].exposure*p.Steps[j].stackcount;
-          targettime:=targettime+steptime;
-          if steptime>0 then
-            txt:=t.objectname+blank+p.PlanName+blank+rsStep+':'+blank+p.Steps[j].description+blank+','+rsDone+':'+blank+IntToStr(p.Steps[j].donecount)+'/'+IntToStr(p.Steps[j].count)+','+blank+'Step time'+':'+blank+raToStr(steptime/3600)
-          else
-            txt:=t.objectname+blank+p.PlanName+blank+rsStep+':'+blank+p.Steps[j].description+blank+','+rsDone+':'+blank+IntToStr(p.Steps[j].donecount)+'/'+IntToStr(p.Steps[j].count);
-        end
-        else begin
-           txt:=t.objectname+blank+p.PlanName+blank+rsStep+':'+blank+p.Steps[j].description+blank+','+rsDone+':'+blank+IntToStr(p.Steps[j].donecount)+'/'+IntToStr(p.Steps[j].count);
-        end;
+      tfuture:=(i>FCurrentTarget);
+      trunning:=(i=FCurrentTarget);
+      p:=t_plan(t.plan);
+      if p=nil then Continue;
+      if t.objectname=ScriptTxt then begin
+        txt:=crlf+t.objectname+blank+p.PlanName;
         FDoneStatus:=FDoneStatus+crlf+txt;
-        if p.Steps[j].donecount>0 then begin
+      end
+      else begin
+        totalcount:=totalcount+t.repeatcount;
+        donecount:=donecount+t.repeatdone;
+        totalspteps:=totalspteps+t.repeatcount;
+        donesteps:=donesteps+t.repeatdone;
+        if (t.repeatdone>0) then begin
           result:=true;
+        end;
+        dotarget:=false;
+        tdone:=t.repeatdone>=t.repeatcount;
+        txt:=crlf+rsTarget+blank+t.objectname+blank+rsRepeat+':'+blank+IntToStr(t.repeatdone)+'/'+IntToStr(t.repeatcount);
+        if t.objectname<>SkyFlatTxt then begin
+          if tfuture and (not tdone) then begin
+            SetTargetTime(t,stime,pivot); // running and old target already have time set
+            if (t.starttime>0)and(t.endtime>0) then begin
+              st:=t.starttime;
+              et:=t.endtime;
+              intime:=InTimeInterval(frac(ctime),st,et,pivot/24);
+              if intime=0 then begin
+                dotarget:=true;
+                txt:=txt+','+blank+rsStartAt+FormatDateTime(datehms, ctime);
+              end
+              else if intime<0 then begin
+                if st<frac(ctime) then st:=st+1;
+                ctime:=trunc(ctime)+st;
+                dotarget:=true;
+                txt:=txt+','+blank+rsStartAt+FormatDateTime(datehms, ctime);
+              end
+              else if intime>0 then begin
+                dotarget:=false;
+                txt:=txt+','+blank+Format(rsSkipTarget, [''])+','+Format(rsStopTimeAlre, [TimeToStr(t.endtime)]);;
+              end;
+            end
+            else begin
+               // no time
+               dotarget:=true;
+            end;
+          end
+          else if trunning then begin
+            dotarget:=true;
+            st:=t.starttime+trunc(ctime);
+            ctime:=max(ctime,st);
+            txt:=txt+','+blank+rsStartAt+FormatDateTime(datehms, ctime);
+          end
+          else begin
+            dotarget:=false;
+            txt:=txt+','+blank+rsDone;
+          end;
+        end;
+        FDoneStatus:=FDoneStatus+crlf+txt;
+        if t.repeatdone=t.repeatcount then
           FLastDoneStep:=txt;
+        if p.Count<=0 then Continue;
+        targettime:=0;
+        for j:=0 to p.Count-1 do begin
+          totalcount:=totalcount+p.Steps[j].count;
+          donecount:=donecount+p.Steps[j].donecount;
+          totalspteps:=totalspteps+p.Steps[j].count;
+          donesteps:=donesteps+p.Steps[j].donecount;
+          if t.objectname<>SkyFlatTxt then begin
+            steptime:=(p.Steps[j].count-p.Steps[j].donecount)*p.Steps[j].exposure*p.Steps[j].stackcount;
+            targettime:=targettime+steptime;
+            if steptime>0 then
+              txt:=t.objectname+blank+p.PlanName+blank+rsStep+':'+blank+p.Steps[j].description+blank+','+rsDone+':'+blank+IntToStr(p.Steps[j].donecount)+'/'+IntToStr(p.Steps[j].count)+','+blank+'Step time'+':'+blank+raToStr(steptime/3600)
+            else
+              txt:=t.objectname+blank+p.PlanName+blank+rsStep+':'+blank+p.Steps[j].description+blank+','+rsDone+':'+blank+IntToStr(p.Steps[j].donecount)+'/'+IntToStr(p.Steps[j].count);
+          end
+          else begin
+             txt:=t.objectname+blank+p.PlanName+blank+rsStep+':'+blank+p.Steps[j].description+blank+','+rsDone+':'+blank+IntToStr(p.Steps[j].donecount)+'/'+IntToStr(p.Steps[j].count);
+          end;
+          FDoneStatus:=FDoneStatus+crlf+txt;
+          if p.Steps[j].donecount>0 then begin
+            result:=true;
+            FLastDoneStep:=txt;
+          end;
+        end;
+        targettime:=targettime*(t.repeatcount-t.repeatdone);
+        if dotarget then ctime:=ctime+targettime/secperday;
+        if targettime>0 then begin
+          totaltime:=totaltime+targettime;
+          txt:=t.objectname+blank+'Target time'+':'+blank+TimToStr(targettime/3600,'h',false);
+          txt:=txt+','+blank+'Sequence time'+':'+blank+TimToStr(totaltime/3600,'h',false);
+          FDoneStatus:=FDoneStatus+crlf+txt;
+          if FSeqStop and (ctime>etime) then
+            txt:=t.objectname+blank+'Interrupted at:'+blank+FormatDateTime(datehms,etime)
+          else
+            txt:=t.objectname+blank+'End at:'+blank+FormatDateTime(datehms,ctime);
+          FDoneStatus:=FDoneStatus+crlf+txt;
         end;
       end;
-      targettime:=targettime*(t.repeatcount-t.repeatdone);
-      if dotarget then ctime:=ctime+targettime/secperday;
-      if targettime>0 then begin
-        totaltime:=totaltime+targettime;
-        txt:=t.objectname+blank+'Target time'+':'+blank+TimToStr(targettime/3600,'h',false);
-        txt:=txt+','+blank+'Sequence time'+':'+blank+TimToStr(totaltime/3600,'h',false);
-        FDoneStatus:=FDoneStatus+crlf+txt;
-        if FSeqStop and (ctime>etime) then
-          txt:=t.objectname+blank+'Interrupted at:'+blank+FormatDateTime(datehms,etime)
-        else
-          txt:=t.objectname+blank+'End at:'+blank+FormatDateTime(datehms,ctime);
-        FDoneStatus:=FDoneStatus+crlf+txt;
-      end;
-    end;
-    t.Free;
+      t.Free;
+   end;
+ end;
+ if rglobal<FTargetsRepeat then begin
+   FDoneStatus:=FDoneStatus+crlf+crlf+rsGlobalRepeat+blank+IntToStr(rglobal+1)+' to '+IntToStr(FTargetsRepeat)+' not printed';
  end;
  // all exposure steps done
  FAllStepsDone:=(totalspteps<=donesteps);
