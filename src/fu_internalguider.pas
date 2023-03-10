@@ -198,6 +198,7 @@ type
     procedure cbDrawSlitChange(Sender: TObject);
     procedure cbGuideLockChange(Sender: TObject);
     procedure cbSpectroChange(Sender: TObject);
+    procedure CheckBoxBacklashChange(Sender: TObject);
     procedure CheckBoxTrackSolar1Change(Sender: TObject);
     procedure CoolerClick(Sender: TObject);
     procedure dec_gain1Change(Sender: TObject);
@@ -789,6 +790,11 @@ end;
 procedure Tf_internalguider.cbSpectroChange(Sender: TObject);
 begin
   PanelSpectro.Enabled:=cbSpectro.Checked;
+end;
+
+procedure Tf_internalguider.CheckBoxBacklashChange(Sender: TObject);
+begin
+  Backlash.Enabled:=CheckBoxBacklash.Checked;
 end;
 
 procedure Tf_internalguider.CheckBoxTrackSolar1Change(Sender: TObject);

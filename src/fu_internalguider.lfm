@@ -887,234 +887,30 @@ object f_internalguider: Tf_internalguider
               ParentFont = False
               TabOrder = 9
             end
-          end
-        end
-      end
-      object TabSheetAdvanced: TTabSheet
-        Caption = 'Advanced'
-        ClientHeight = 499
-        ClientWidth = 334
-        ParentFont = False
-        object Panel2: TPanel
-          Left = 0
-          Height = 499
-          Top = 0
-          Width = 334
-          Align = alClient
-          BevelOuter = bvNone
-          ClientHeight = 499
-          ClientWidth = 334
-          Color = clMenu
-          ParentColor = False
-          ParentFont = False
-          TabOrder = 0
-          object GroupBox2: TGroupBox
-            Left = 0
-            Height = 499
-            Top = 0
-            Width = 334
-            Align = alClient
-            Caption = 'Calibration results:'
-            ClientHeight = 479
-            ClientWidth = 332
-            TabOrder = 0
-            object Label5: TLabel
-              AnchorSideTop.Control = pa1
-              AnchorSideTop.Side = asrCenter
-              Left = 8
-              Height = 19
-              Top = 14
-              Width = 101
-              Caption = 'Camera angle [°]'
-              ParentColor = False
-              ParentFont = False
-            end
-            object pa1: TEdit
-              Left = 230
-              Height = 31
-              Hint = 'The relative angle between the mount and the image. An image with north up and east left has an angle of zero.'
-              Top = 8
-              Width = 60
-              OnChange = pa1Change
-              ParentFont = False
-              TabOrder = 0
-              Text = '0'
-            end
-            object Label6: TLabel
-              AnchorSideTop.Control = pulsegainEast1
-              AnchorSideTop.Side = asrCenter
-              Left = 8
-              Height = 19
-              Top = 46
-              Width = 184
-              Caption = 'pulse gain East [px*cos(δ)/sec]'
-              ParentColor = False
-              ParentFont = False
-            end
-            object pulsegainEast1: TEdit
-              Left = 230
-              Height = 31
-              Hint = 'Pulse gain in pixels at the celestial equator. Measured at 0.5x guide rate.'
-              Top = 40
-              Width = 60
-              OnChange = pulsegainEast1Change
-              ParentFont = False
-              TabOrder = 1
-              Text = '3'
-            end
-            object Label7: TLabel
-              AnchorSideTop.Control = pulsegainWest1
-              AnchorSideTop.Side = asrCenter
-              Left = 8
-              Height = 19
-              Top = 78
-              Width = 190
-              Caption = 'pulse gain West [px*cos(δ)/sec]'
-              ParentColor = False
-              ParentFont = False
-            end
-            object pulsegainWest1: TEdit
-              Left = 230
-              Height = 31
-              Hint = 'Pulse gain in pixels at the celestial equator. Measured at 1.5x guide rate.'
-              Top = 72
-              Width = 60
-              OnChange = pulsegainWest1Change
-              ParentFont = False
-              TabOrder = 2
-              Text = '3'
-            end
-            object Label8: TLabel
-              AnchorSideTop.Control = pulsegainNorth1
-              AnchorSideTop.Side = asrCenter
-              Left = 8
-              Height = 19
-              Top = 110
-              Width = 153
-              Caption = 'pulse gain North [px/sec]'
-              ParentColor = False
-              ParentFont = False
-            end
-            object pulsegainNorth1: TEdit
-              Left = 230
-              Height = 31
-              Hint = 'A negative value indicates a flipped image. Measured at 7.5"/px rate.'
-              Top = 104
-              Width = 60
-              OnChange = pulsegainNorth1Change
-              ParentFont = False
-              TabOrder = 3
-              Text = '3'
-            end
-            object pulsegainSouth1: TEdit
-              Left = 230
-              Height = 31
-              Hint = 'A negative value indicates a flipped image. Measured at 7.5"/px rate.'
-              Top = 136
-              Width = 60
-              OnChange = pulsegainSouth1Change
-              ParentFont = False
-              TabOrder = 4
-              Text = '3'
-            end
-            object Label13: TLabel
-              AnchorSideTop.Control = pulsegainSouth1
-              AnchorSideTop.Side = asrCenter
-              Left = 8
-              Height = 19
-              Top = 142
-              Width = 152
-              Caption = 'pulse gain South [px/sec]'
-              ParentColor = False
-              ParentFont = False
-            end
-            object Label12: TLabel
-              AnchorSideTop.Control = pier_side1
-              AnchorSideTop.Side = asrCenter
-              Left = 8
-              Height = 19
-              Top = 174
-              Width = 112
-              Caption = 'Measured at [E/W]'
-              ParentColor = False
-              ParentFont = False
-            end
-            object pier_side1: TEdit
-              Left = 230
-              Height = 31
-              Hint = 'While calibrating was the telescope pointing East or West'
-              Top = 168
-              Width = 60
-              OnChange = pier_side1Change
-              ParentFont = False
-              TabOrder = 5
-              Text = 'W'
-            end
-            object label_estimate1: TLabel
-              AnchorSideTop.Control = pixelsize1
-              AnchorSideTop.Side = asrCenter
-              Left = 8
-              Height = 19
-              Top = 206
-              Width = 98
-              Caption = 'Pixel scale ["/px]'
-              Font.CharSet = ANSI_CHARSET
-              Font.Pitch = fpVariable
-              Font.Quality = fqDraft
-              ParentColor = False
-              ParentFont = False
-            end
-            object pixelsize1: TEdit
-              Left = 230
-              Height = 31
-              Hint = 'Based on measured pulse gain in px/sec and assuming 0.5x and 1.5x guide rates. This value is not essential for guiding except for Solar object tracking.'
-              Top = 200
-              Width = 60
-              OnChange = pixelsize1Change
-              ParentFont = False
-              TabOrder = 6
-              Text = '2.5'
-            end
-            object CheckBoxInverseSolarTracking1: TCheckBox
-              Left = 8
-              Height = 21
-              Hint = 'Mount with inversed pulse guiding. This inversion only applies for solar object tracking'
-              Top = 248
-              Width = 197
-              Caption = 'Inversed solar guide control'
-              TabOrder = 7
-            end
-            object CheckBoxReverseDec1: TCheckBox
-              Left = 8
-              Height = 21
-              Hint = 'Mount guide pulse control is reversed for declination by the mount driver. Checkmark this option if guiding does not work after a meridian flip.'
-              Top = 280
-              Width = 301
-              Caption = 'Pulse guiding δ is reversed after meridian flip'
-              TabOrder = 10
-            end
             object CheckBoxBacklash: TCheckBox
               Left = 8
               Height = 21
-              Top = 312
+              Top = 368
               Width = 193
               Caption = 'Use backlash compensation'
-              TabOrder = 8
+              OnChange = CheckBoxBacklashChange
+              TabOrder = 10
             end
             object Backlash: TSpinEdit
-              Left = 202
+              Left = 200
               Height = 29
-              Top = 338
-              Width = 88
+              Top = 400
+              Width = 72
+              Enabled = False
               MaxValue = 10000
-              TabOrder = 9
+              TabOrder = 11
             end
             object Label27: TLabel
               AnchorSideTop.Control = Backlash
               AnchorSideTop.Side = asrCenter
-              Left = 8
+              Left = 24
               Height = 19
-              Top = 343
+              Top = 405
               Width = 124
               Caption = 'Declination backlash'
               ParentColor = False
@@ -1471,6 +1267,212 @@ object f_internalguider: Tf_internalguider
             Caption = 'Activate spectroscopy functions'
             OnChange = cbSpectroChange
             TabOrder = 0
+          end
+        end
+      end
+      object TabSheetAdvanced: TTabSheet
+        Caption = 'Advanced'
+        ClientHeight = 499
+        ClientWidth = 334
+        ParentFont = False
+        object Panel2: TPanel
+          Left = 0
+          Height = 499
+          Top = 0
+          Width = 334
+          Align = alClient
+          BevelOuter = bvNone
+          ClientHeight = 499
+          ClientWidth = 334
+          Color = clMenu
+          ParentColor = False
+          ParentFont = False
+          TabOrder = 0
+          object GroupBox2: TGroupBox
+            Left = 0
+            Height = 499
+            Top = 0
+            Width = 334
+            Align = alClient
+            Caption = 'Calibration results:'
+            ClientHeight = 479
+            ClientWidth = 332
+            TabOrder = 0
+            object Label5: TLabel
+              AnchorSideTop.Control = pa1
+              AnchorSideTop.Side = asrCenter
+              Left = 8
+              Height = 19
+              Top = 14
+              Width = 101
+              Caption = 'Camera angle [°]'
+              ParentColor = False
+              ParentFont = False
+            end
+            object pa1: TEdit
+              Left = 230
+              Height = 31
+              Hint = 'The relative angle between the mount and the image. An image with north up and east left has an angle of zero.'
+              Top = 8
+              Width = 60
+              OnChange = pa1Change
+              ParentFont = False
+              TabOrder = 0
+              Text = '0'
+            end
+            object Label6: TLabel
+              AnchorSideTop.Control = pulsegainEast1
+              AnchorSideTop.Side = asrCenter
+              Left = 8
+              Height = 19
+              Top = 46
+              Width = 184
+              Caption = 'pulse gain East [px*cos(δ)/sec]'
+              ParentColor = False
+              ParentFont = False
+            end
+            object pulsegainEast1: TEdit
+              Left = 230
+              Height = 31
+              Hint = 'Pulse gain in pixels at the celestial equator. Measured at 0.5x guide rate.'
+              Top = 40
+              Width = 60
+              OnChange = pulsegainEast1Change
+              ParentFont = False
+              TabOrder = 1
+              Text = '3'
+            end
+            object Label7: TLabel
+              AnchorSideTop.Control = pulsegainWest1
+              AnchorSideTop.Side = asrCenter
+              Left = 8
+              Height = 19
+              Top = 78
+              Width = 190
+              Caption = 'pulse gain West [px*cos(δ)/sec]'
+              ParentColor = False
+              ParentFont = False
+            end
+            object pulsegainWest1: TEdit
+              Left = 230
+              Height = 31
+              Hint = 'Pulse gain in pixels at the celestial equator. Measured at 1.5x guide rate.'
+              Top = 72
+              Width = 60
+              OnChange = pulsegainWest1Change
+              ParentFont = False
+              TabOrder = 2
+              Text = '3'
+            end
+            object Label8: TLabel
+              AnchorSideTop.Control = pulsegainNorth1
+              AnchorSideTop.Side = asrCenter
+              Left = 8
+              Height = 19
+              Top = 110
+              Width = 153
+              Caption = 'pulse gain North [px/sec]'
+              ParentColor = False
+              ParentFont = False
+            end
+            object pulsegainNorth1: TEdit
+              Left = 230
+              Height = 31
+              Hint = 'A negative value indicates a flipped image. Measured at 7.5"/px rate.'
+              Top = 104
+              Width = 60
+              OnChange = pulsegainNorth1Change
+              ParentFont = False
+              TabOrder = 3
+              Text = '3'
+            end
+            object pulsegainSouth1: TEdit
+              Left = 230
+              Height = 31
+              Hint = 'A negative value indicates a flipped image. Measured at 7.5"/px rate.'
+              Top = 136
+              Width = 60
+              OnChange = pulsegainSouth1Change
+              ParentFont = False
+              TabOrder = 4
+              Text = '3'
+            end
+            object Label13: TLabel
+              AnchorSideTop.Control = pulsegainSouth1
+              AnchorSideTop.Side = asrCenter
+              Left = 8
+              Height = 19
+              Top = 142
+              Width = 152
+              Caption = 'pulse gain South [px/sec]'
+              ParentColor = False
+              ParentFont = False
+            end
+            object Label12: TLabel
+              AnchorSideTop.Control = pier_side1
+              AnchorSideTop.Side = asrCenter
+              Left = 8
+              Height = 19
+              Top = 174
+              Width = 112
+              Caption = 'Measured at [E/W]'
+              ParentColor = False
+              ParentFont = False
+            end
+            object pier_side1: TEdit
+              Left = 230
+              Height = 31
+              Hint = 'While calibrating was the telescope pointing East or West'
+              Top = 168
+              Width = 60
+              OnChange = pier_side1Change
+              ParentFont = False
+              TabOrder = 5
+              Text = 'W'
+            end
+            object label_estimate1: TLabel
+              AnchorSideTop.Control = pixelsize1
+              AnchorSideTop.Side = asrCenter
+              Left = 8
+              Height = 19
+              Top = 206
+              Width = 98
+              Caption = 'Pixel scale ["/px]'
+              Font.CharSet = ANSI_CHARSET
+              Font.Pitch = fpVariable
+              Font.Quality = fqDraft
+              ParentColor = False
+              ParentFont = False
+            end
+            object pixelsize1: TEdit
+              Left = 230
+              Height = 31
+              Hint = 'Based on measured pulse gain in px/sec and assuming 0.5x and 1.5x guide rates. This value is not essential for guiding except for Solar object tracking.'
+              Top = 200
+              Width = 60
+              OnChange = pixelsize1Change
+              ParentFont = False
+              TabOrder = 6
+              Text = '2.5'
+            end
+            object CheckBoxInverseSolarTracking1: TCheckBox
+              Left = 8
+              Height = 21
+              Hint = 'Mount with inversed pulse guiding. This inversion only applies for solar object tracking'
+              Top = 248
+              Width = 197
+              Caption = 'Inversed solar guide control'
+              TabOrder = 7
+            end
+            object CheckBoxReverseDec1: TCheckBox
+              Left = 8
+              Height = 21
+              Hint = 'Mount guide pulse control is reversed for declination by the mount driver. Checkmark this option if guiding does not work after a meridian flip.'
+              Top = 280
+              Width = 301
+              Caption = 'Pulse guiding δ is reversed after meridian flip'
+              TabOrder = 8
+            end
           end
         end
       end
