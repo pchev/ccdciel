@@ -42,6 +42,7 @@ type
     BtnPreviewLoop: TButton;
     ButtonImageCenter: TButton;
     ButtonCalibrate: TButton;
+    cbSaveImages: TCheckBox;
     Label4: TLabel;
     LabelMsg: TLabel;
     PreviewExp: TFloatSpinEdit;

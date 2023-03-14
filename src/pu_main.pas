@@ -16553,10 +16553,30 @@ end;
 
 procedure Tf_main.FinderCameraNewImageAsync(Data: PtrInt);
 var displayimage: boolean;
+    fn,dateobs,objectstr: string;
+    dt: double;
 begin
   displayimage:=true;
   if (not finderfits.ImageValid) then begin
      finderfits.LoadStream;
+  end;
+  if f_finder.cbSaveImages.Checked then begin
+    // save image
+    fn:=slash(config.GetValue('/Files/CapturePath',defCapturePath));
+    if copy(fn,1,1)='.' then fn:=ExpandFileName(slash(Appdir)+fn);
+    fn:=slash(fn)+'Finder';
+    ForceDirectories(fn);
+    fn:=slash(fn)+'Finder'+FilenameSep;
+    objectstr:=f_capture.Fname.Text;
+    objectstr:=SafeFileName(objectstr);
+    fn:=fn+wordspace(StringReplace(objectstr,FilenameSep,'-',[rfReplaceAll]))+FilenameSep;
+    if finderfits.Header.Valueof('DATE-OBS',dateobs) then
+      dt:=DateIso2DateTime(dateobs)
+    else
+      dt:=NowUTC;
+    fn:=fn+FormatDateTime('yyyymmdd'+FilenameSep+'hhnnss',dt);
+    fn:=fn+'.fits';
+    finderfits.SaveToFile(fn);
   end;
   // prepare image
   DrawFinderImage(displayimage);

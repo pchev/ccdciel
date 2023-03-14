@@ -41,26 +41,26 @@ object f_finder: Tf_finder
     object GroupBox1: TGroupBox
       Left = 0
       Height = 148
-      Top = 74
+      Top = 96
       Width = 243
       Align = alTop
       Caption = 'Target position in finder image'
-      ClientHeight = 128
+      ClientHeight = 132
       ClientWidth = 241
       TabOrder = 0
       object Label1: TLabel
         AnchorSideTop.Control = OffsetX
         AnchorSideTop.Side = asrCenter
         Left = 7
-        Height = 19
-        Top = 13
-        Width = 40
+        Height = 15
+        Top = 17
+        Width = 37
         Caption = 'Pixel X'
         ParentColor = False
       end
       object OffsetX: TFloatSpinEdit
         Left = 109
-        Height = 29
+        Height = 32
         Top = 8
         Width = 111
         OnChange = OffsetXChange
@@ -70,15 +70,15 @@ object f_finder: Tf_finder
         AnchorSideTop.Control = OffsetY
         AnchorSideTop.Side = asrCenter
         Left = 7
-        Height = 19
-        Top = 45
-        Width = 40
+        Height = 15
+        Top = 49
+        Width = 36
         Caption = 'Pixel Y'
         ParentColor = False
       end
       object OffsetY: TFloatSpinEdit
         Left = 109
-        Height = 29
+        Height = 32
         Top = 40
         Width = 111
         OnChange = OffsetYChange
@@ -107,12 +107,12 @@ object f_finder: Tf_finder
     end
     object Panel2: TPanel
       Left = 0
-      Height = 74
+      Height = 96
       Top = 0
       Width = 243
       Align = alTop
       BevelOuter = bvNone
-      ClientHeight = 74
+      ClientHeight = 96
       ClientWidth = 243
       TabOrder = 1
       object BtnPreviewLoop: TButton
@@ -129,28 +129,36 @@ object f_finder: Tf_finder
         AnchorSideTop.Control = PreviewExp
         AnchorSideTop.Side = asrCenter
         Left = 8
-        Height = 19
-        Top = 43
-        Width = 107
+        Height = 15
+        Top = 47
+        Width = 98
         Caption = 'Preview exposure'
         ParentColor = False
       end
       object PreviewExp: TFloatSpinEdit
-        Left = 161
-        Height = 29
+        Left = 152
+        Height = 32
         Top = 38
-        Width = 60
+        Width = 69
         DecimalPlaces = 3
         MaxValue = 60
         MinValue = 0.001
         TabOrder = 1
         Value = 1
       end
+      object cbSaveImages: TCheckBox
+        Left = 8
+        Height = 23
+        Top = 70
+        Width = 92
+        Caption = 'Save images'
+        TabOrder = 2
+      end
     end
     object Panel8: TPanel
       Left = 0
       Height = 170
-      Top = 222
+      Top = 244
       Width = 243
       Align = alTop
       BevelOuter = bvNone
@@ -161,9 +169,9 @@ object f_finder: Tf_finder
         AnchorSideTop.Control = Gamma
         AnchorSideTop.Side = asrCenter
         Left = 8
-        Height = 19
-        Top = 20
-        Width = 48
+        Height = 15
+        Top = 22
+        Width = 40
         Caption = 'Gamma'
         ParentColor = False
       end
@@ -185,9 +193,9 @@ object f_finder: Tf_finder
         AnchorSideTop.Control = Luminosity
         AnchorSideTop.Side = asrCenter
         Left = 8
-        Height = 19
-        Top = 68
-        Width = 67
+        Height = 15
+        Top = 70
+        Width = 59
         Caption = 'Luminosity'
         ParentColor = False
       end
@@ -209,9 +217,9 @@ object f_finder: Tf_finder
         AnchorSideTop.Control = BtnZoomAdjust
         AnchorSideTop.Side = asrCenter
         Left = 8
-        Height = 19
-        Top = 116
-        Width = 36
+        Height = 15
+        Top = 118
+        Width = 31
         Caption = 'Zoom'
         ParentColor = False
       end
@@ -289,17 +297,17 @@ object f_finder: Tf_finder
         AnchorSideTop.Control = BtnBullsEye
         AnchorSideTop.Side = asrCenter
         Left = 8
-        Height = 19
-        Top = 141
-        Width = 89
+        Height = 15
+        Top = 143
+        Width = 80
         Caption = 'Show bulls eye'
         ParentColor = False
       end
     end
     object LabelMsg: TLabel
       Left = 0
-      Height = 60
-      Top = 392
+      Height = 38
+      Top = 414
       Width = 243
       Align = alClient
       AutoSize = False
