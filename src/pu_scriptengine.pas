@@ -31,7 +31,7 @@ interface
 
 uses  u_global, u_utils, cu_fits, indiapi, cu_planetarium, fu_ccdtemp, fu_devicesconnection, pu_pause,
   fu_capture, fu_preview, fu_mount, cu_wheel, cu_mount, cu_camera, cu_focuser, cu_autoguider, cu_astrometry,
-  fu_cover, cu_cover, fu_internalguider,
+  fu_cover, cu_cover, fu_internalguider, fu_finder,
   Classes, SysUtils, FileUtil, uPSComponent, uPSComponent_Default, LazFileUtils,
   uPSComponent_Forms, uPSComponent_Controls, uPSComponent_StdCtrls, Forms, process,
   u_translation, Controls, Graphics, Dialogs, ExtCtrls;
@@ -91,6 +91,7 @@ type
     Fastrometry: TAstrometry;
     Fplanetarium: TPlanetarium;
     FInternalGuider: Tf_internalguider;
+    FFinder: Tf_finder;
     FonMsg: TNotifyMsg;
     FonStartSequence: TNotifyStr;
     FonScriptExecute: TNotifyEvent;
@@ -183,6 +184,9 @@ type
     function cmd_AutoguiderSetLockPosition(sx,sy:string):string;
     function cmd_AutoguiderStoreLockPosition(sx,sy:string):string;
     function cmd_AutoguiderShutdown:string;
+    function cmd_FinderStartLoop(exp:string):string;
+    function cmd_FinderStopLoop:string;
+    function cmd_FinderSaveImages(onoff:string):string;
     function cmd_Wheel_GetFilter:string;
     function cmd_Wheel_SetFilter(num:string):string;
     function cmd_Wheel_GetFiltersName(var fl:TStringList):string;
@@ -268,6 +272,7 @@ type
     property Planetarium: TPlanetarium read Fplanetarium write Fplanetarium;
     property ScriptFilename: string read FScriptFilename;
     property InternalGuider: Tf_internalguider read Finternalguider write Finternalguider;
+    property Finder: Tf_finder read FFinder write FFinder;
   end;
 
 var
@@ -1058,6 +1063,7 @@ else if cname='COVER_OPEN' then result:=cmd_coveropen
 else if cname='COVER_CLOSE' then result:=cmd_coverclose
 else if cname='CALIBRATOR_LIGHT_OFF' then result:=cmd_calibratorlightoff
 else if cname='CUSTOMHEADER_CLEAR' then result:=cmd_customheader_clear
+else if cname='FINDER_STOPLOOP' then result:=cmd_FinderStopLoop
 ;
 LastErr:='cmd('+cname+'): '+result;
 end;
@@ -1098,6 +1104,8 @@ else if cname='CUSTOMHEADER_ADD' then result:=cmd_customheader_add(arg[0],arg[1]
 else if cname='CUSTOMHEADER_DEL' then result:=cmd_customheader_del(arg[0])
 else if cname='AUTOGUIDER_SETLOCKPOSITION' then result:=cmd_AutoguiderSetLockPosition(arg[0],arg[1])
 else if cname='AUTOGUIDER_STORELOCKPOSITION' then result:=cmd_AutoguiderStoreLockPosition(arg[0],arg[1])
+else if cname='FINDER_SAVEIMAGES' then result:=cmd_FinderSaveImages(arg[0])
+else if cname='FINDER_STARTLOOP' then result:=cmd_FinderStartLoop(arg[0])
 ;
 LastErr:='cmdarg('+cname+'): '+result;
 end;
@@ -1367,8 +1375,7 @@ begin
 end;
 
 function Tf_scriptengine.cmd_AutoguiderGetLockPosition(out sx,sy:string):string;
-var n:integer;
-    x,y: double;
+var x,y: double;
 begin
  try
  result:=msgFailed;
@@ -1441,6 +1448,44 @@ begin
  result:=msgOK;
  if Autoguider=nil then exit;
  Autoguider.Shutdown;
+end;
+
+function Tf_scriptengine.cmd_FinderStartLoop(exp:string):string;
+var n:integer;
+    e: double;
+begin
+ result:=msgFailed;
+ try
+ val(exp,e,n);
+ if n=0 then
+   finder.PreviewExp.Value:=e;
+ finder.StartLoop;
+ result:=msgOK;
+ except
+   result:=msgFailed;
+ end;
+end;
+
+function Tf_scriptengine.cmd_FinderStopLoop:string;
+begin
+  result:=msgFailed;
+  try
+  finder.StopLoop;
+  result:=msgOK;
+  except
+    result:=msgFailed;
+  end;
+end;
+
+function Tf_scriptengine.cmd_FinderSaveImages(onoff:string):string;
+begin
+  result:=msgFailed;
+  try
+  finder.cbSaveImages.Checked:=(onoff='ON');
+  result:=msgOK;
+  except
+    result:=msgFailed;
+  end;
 end;
 
 function Tf_scriptengine.cmd_Wheel_GetFilter:string;

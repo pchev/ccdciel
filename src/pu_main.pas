@@ -1906,6 +1906,7 @@ begin
   f_scriptengine.Astrometry:=astrometry;
   f_scriptengine.Planetarium:=planetarium;
   f_scriptengine.InternalGuider:=f_internalguider;
+  f_scriptengine.Finder:=f_finder;
 
   f_script:=Tf_script.Create(self);
   f_script.onMsg:=@NewMessage;
@@ -15483,6 +15484,7 @@ try
   else if method='COVER_CLOSE' then result:=result+'"result":{"status": "'+f_scriptengine.cmd_coverclose+'"}'
   else if method='CALIBRATOR_LIGHT_OFF' then result:=result+'"result":{"status": "'+f_scriptengine.cmd_calibratorlightoff+'"}'
   else if method='CUSTOMHEADER_CLEAR' then result:=result+'"result":{"status": "'+f_scriptengine.cmd_customheader_clear+'"}'
+  else if method='FINDER_STOPLOOP' then result:=result+'"result":{"status": "'+f_scriptengine.cmd_FinderStopLoop+'"}'
   // execute command with parameter
   else if method='DEVICES_CONNECTION' then begin
     if uppercase(trim(value[attrib.IndexOf('params.0')]))='TRUE' then buf:='ON' else buf:='OFF';
@@ -15649,6 +15651,16 @@ try
     end;
     buf:=f_scriptengine.cmd_AutoguiderStoreLockPosition(buf1,buf2);
     result:=result+'"result":{"status": "'+buf+'"}';
+  end
+  else if method='FINDER_SAVEIMAGES' then begin
+   buf1:=trim(value[attrib.IndexOf('params.0')]);
+   buf:=f_scriptengine.cmd_FinderSaveImages(buf1);
+   result:=result+'"result":{"status": "'+buf+'"}';
+  end
+  else if method='FINDER_STARTLOOP' then begin
+   buf1:=trim(value[attrib.IndexOf('params.0')]);
+   buf:=f_scriptengine.cmd_FinderStartLoop(buf1);
+   result:=result+'"result":{"status": "'+buf+'"}';
   end
   // method not found
   else begin

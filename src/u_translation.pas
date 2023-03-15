@@ -1512,6 +1512,7 @@ resourcestring
   rsCalibrationM = 'Calibration measurement';
   rsTargetPositi2 = 'Target position in finder image';
   rsPreviewExpos = 'Preview exposure';
+  rsSavePreviewI = 'Save preview images';
 
 implementation
 

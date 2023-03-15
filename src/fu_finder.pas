@@ -131,6 +131,7 @@ procedure Tf_finder.SetLang;
 begin
   Title.Caption:=rsFinderCamera;
   BtnPreviewLoop.Caption:=rsStartPreview;
+  cbSaveImages.Caption:=rsSavePreviewI;
   ButtonImageCenter.Caption:=rsImageCenter;
   ButtonCalibrate.Caption:=rsCalibrationM;
   groupbox1.Caption:=rsTargetPositi2;
