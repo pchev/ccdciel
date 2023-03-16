@@ -1504,6 +1504,11 @@ begin
  else begin
    // sequence is not running, estimate start/end time
    for i:=0 to NumTargets-1 do begin
+     if (Targets[i].objectname=SkyFlatTxt)and(Targets[i].planname=FlatTimeName[0]) then begin
+       // dusk skyflat require start time
+       FSeqStart:=true;
+       FSeqStartTwilight:=true;
+     end;
      if (Targets[i].objectname=SkyFlatTxt)and(Targets[i].planname=FlatTimeName[1]) then begin
        // dawn skyflat require end time
        FSeqStop:=true;
