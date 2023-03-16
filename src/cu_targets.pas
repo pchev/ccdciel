@@ -2250,7 +2250,8 @@ begin
        SecondsToWait(chkendtime,true,stw,nd);
        if stw>60 then begin
           SecondsToWait(t.endtime,true,stw,nd);
-          msg(Format(rsTargetWillBe, [TimeToStr(t.endtime), inttostr(stw)]), 3);
+          msg(Format(rsObjectSetsAt, [FormatDateTime('hh:nn', t.endtime),
+            FormatFloat(f1, stw/3600)]), 3);
           StopTargetTimer.Interval:=1000*stw;
           StopTargetTimer.Enabled:=true;
        end else begin

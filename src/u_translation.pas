@@ -907,7 +907,6 @@ resourcestring
   rsTargetName = 'Target%sname';
   rsSkipTarget = 'Skip target %s';
   rsWaitingForDa2 = 'Waiting for dark night';
-  rsTargetWillBe = 'Target can run until %s, in %s seconds';
   rsContinue = 'Continue';
   rsTomorrow = 'tomorrow';
   rsNeedToWaitUn = 'Need to wait until %s';
@@ -1513,6 +1512,7 @@ resourcestring
   rsTargetPositi2 = 'Target position in finder image';
   rsPreviewExpos = 'Preview exposure';
   rsSavePreviewI = 'Save preview images';
+  rsObjectSetsAt = 'Object sets at %s. In %s hour(s)';
 
 implementation
 
