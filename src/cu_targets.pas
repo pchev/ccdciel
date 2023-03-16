@@ -1462,9 +1462,9 @@ begin
 end;
 
 function T_Targets.CheckStatus:boolean;
-var i,j,totalcount,donecount,totalspteps,donesteps,intime,rglobal : integer;
+var i,j,totalcount,donecount,totalspteps,donesteps,intime,rglobal,forceendtime : integer;
     steptime,targettime,totaltime,pivot,stime,etime,ctime,hm,he,st,et: double;
-    tfuture,tdone,trunning,twok,dotarget,rfuture: boolean;
+    tfuture,tdone,trunning,twok,dotarget,rfuture,nd,forceset,seqbreak,flatnow: boolean;
     txt: string;
     t: TTarget;
     p: T_Plan;
@@ -1473,6 +1473,7 @@ begin
  result:=false;
  FAllDone:=false;
  FAllStepsDone:=false;
+ seqbreak:=false;
  FDoneStatus:='';
  FLastDoneStep:='';
  totalcount:=0; donecount:=0;
@@ -1482,7 +1483,7 @@ begin
    totalcount:=totalcount+FTargetsRepeat;
    donecount:=donecount+FTargetsRepeatCount;
  end;
- FDoneStatus:=rsGlobalRepeat+blank+IntToStr(FTargetsRepeatCount)+'/'+IntToStr(FTargetsRepeat);
+ FDoneStatus:='';//rsGlobalRepeat+blank+IntToStr(FTargetsRepeatCount)+'/'+IntToStr(FTargetsRepeat);
  if (FTargetsRepeatCount>0)and(FTargetsRepeatCount<=FTargetsRepeat) then begin
    result:=true;
    FLastDoneStep:=rsGlobalRepeat+blank+IntToStr(FTargetsRepeatCount)+'/'+IntToStr(FTargetsRepeat);
@@ -1535,7 +1536,7 @@ begin
  totaltime:=0;
 
  // Loop global sequence repeat
- for rglobal:=FTargetsRepeatCount to min(FTargetsRepeat,FTargetsRepeatCount+5) do begin  // print maximum of 5 global repeat
+ for rglobal:=FTargetsRepeatCount+1 to min(FTargetsRepeat,FTargetsRepeatCount+5) do begin  // print maximum of 5 global repeat
    rfuture:=rglobal>FTargetsRepeatCount;
    if rfuture then begin
       FDoneStatus:=FDoneStatus+crlf+crlf+rsGlobalRepeat+blank+IntToStr(rglobal)+'/'+IntToStr(FTargetsRepeat);
@@ -1576,9 +1577,13 @@ begin
           result:=true;
         end;
         dotarget:=false;
+        if t.objectname=SkyFlatTxt then begin
+          flatnow:=((t.planname=FlatTimeName[1]) and (seqbreak or (rglobal=min(FTargetsRepeat,FTargetsRepeatCount+5)))) //dawn
+                   or ((t.planname=FlatTimeName[0]) and (rglobal=1)); // dusk
+        end;
         tdone:=t.repeatdone>=t.repeatcount;
-        txt:=crlf+rsTarget+blank+t.objectname+blank+rsRepeat+':'+blank+IntToStr(t.repeatdone)+'/'+IntToStr(t.repeatcount);
         if t.objectname<>SkyFlatTxt then begin
+          txt:=crlf+rsTarget+blank+t.objectname+blank+rsRepeat+':'+blank+IntToStr(t.repeatdone)+'/'+IntToStr(t.repeatcount);
           if tfuture and (not tdone) then begin
             // target is planned in the future and is not completed
             SetTargetTime(t,stime,pivot); // compute the start/end time, running and old target already have time set
@@ -1604,6 +1609,9 @@ begin
                 dotarget:=false;
                 txt:=txt+','+blank+Format(rsSkipTarget, [''])+','+Format(rsStopTimeAlre, [TimeToStr(t.endtime)]);;
               end;
+              if dotarget then begin
+                SecondsToWait(t.endtime,true,forceendtime,nd);
+              end;
             end
             else begin
                // no start/end time, no coordinates, run anyway
@@ -1622,6 +1630,12 @@ begin
             dotarget:=false;
             txt:=txt+','+blank+rsDone;
           end;
+        end
+        else begin
+           if flatnow then
+              txt:=crlf+rsTarget+blank+t.objectname
+           else
+              txt:='';
         end;
         FDoneStatus:=FDoneStatus+crlf+txt;
         if t.repeatdone=t.repeatcount then
@@ -1644,35 +1658,55 @@ begin
               txt:=t.objectname+blank+p.PlanName+blank+rsStep+':'+blank+p.Steps[j].description+blank+','+rsDone+':'+blank+IntToStr(p.Steps[j].donecount)+'/'+IntToStr(p.Steps[j].count);
           end
           else begin
-             // skyflat detail cannot be computed because of variable exposure time
-             txt:=t.objectname+blank+p.PlanName+blank+rsStep+':'+blank+p.Steps[j].description+blank+','+rsDone+':'+blank+IntToStr(p.Steps[j].donecount)+'/'+IntToStr(p.Steps[j].count);
+             if flatnow then begin
+               // skyflat detail cannot be computed because of variable exposure time
+               txt:=t.objectname+blank+p.PlanName+blank+rsStep+':'+blank+p.Steps[j].description+blank+','+rsDone+':'+blank+IntToStr(p.Steps[j].donecount)+'/'+IntToStr(p.Steps[j].count);
+             end
+             else txt:='';
           end;
-          FDoneStatus:=FDoneStatus+crlf+txt;
-          if p.Steps[j].donecount>0 then begin
-            result:=true;
-            FLastDoneStep:=txt;
+          if txt>'' then begin
+            FDoneStatus:=FDoneStatus+crlf+txt;
+            if p.Steps[j].donecount>0 then begin
+              result:=true;
+              FLastDoneStep:=txt;
+            end;
           end;
         end;
         // total execution time for target
         targettime:=targettime*(t.repeatcount-t.repeatdone);
+        if dotarget and (targettime>forceendtime) then begin
+           // interupted by object set
+           targettime:=forceendtime;
+           forceset:=true;
+        end
+        else
+          forceset:=false;
         if dotarget then ctime:=ctime+targettime/secperday;
         if targettime>0 then begin
           // total sequence time
           totaltime:=totaltime+targettime;
-          txt:=t.objectname+blank+'Target time'+':'+blank+TimToStr(targettime/3600,'h',false);
-          txt:=txt+','+blank+'Sequence time'+':'+blank+TimToStr(totaltime/3600,'h',false);
+          txt:=t.objectname+blank+'Target elapsed time'+':'+blank+TimToStr(targettime/3600,'h',false);
+          txt:=txt+','+blank+'Sequence elapsed time'+':'+blank+TimToStr(totaltime/3600,'h',false);
           FDoneStatus:=FDoneStatus+crlf+txt;
-          if FSeqStop and (ctime>etime) then
-            // interupted by end time
-            txt:=t.objectname+blank+'Interrupted at:'+blank+FormatDateTime(datehms,etime)
-          else
-            // completed time
-            txt:=t.objectname+blank+'End at:'+blank+FormatDateTime(datehms,ctime);
+          if FSeqStop and (ctime>etime) then begin
+            // interupted by sequence end time
+            txt:=t.objectname+blank+'Interrupted by end of sequence at:'+blank+FormatDateTime(datehms,etime);
+            seqbreak:=true;
+          end
+          else begin
+            if forceset then
+              // interupted by object set
+              txt:=t.objectname+blank+'Interrupted by object set at:'+blank+FormatDateTime(datehms,ctime)
+            else
+              // completed time
+              txt:=t.objectname+blank+'End at:'+blank+FormatDateTime(datehms,ctime);
+          end;
           FDoneStatus:=FDoneStatus+crlf+txt;
         end;
       end;
       t.Free;
    end;
+   if seqbreak then break;
  end;
  if rglobal<FTargetsRepeat then begin
    FDoneStatus:=FDoneStatus+crlf+crlf+rsGlobalRepeat+blank+IntToStr(rglobal+1)+' to '+IntToStr(FTargetsRepeat)+' not printed';
