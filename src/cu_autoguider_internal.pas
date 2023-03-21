@@ -43,7 +43,7 @@ type
     GuideStartTime,LogSNR,LogFlux,mean_hfd,CalNorthDec1,CalNorthDec2,CalEastRa1,CalEastRa2 : double;
     LastDecSign: double;
     SameDecSignCount,LastBacklashDuration: integer;
-    LastBacklash: boolean;
+    LastBacklash,FirstDecDirectionChange: boolean;
     north, south    : integer;
     xy_trend : xy_guiderlist;{fu_internalguider}
     xy_array,xy_array_old : star_position_array;//internal guider for measure drift
@@ -921,14 +921,8 @@ begin
   LastDecSign:=0;
   SameDecSignCount:=maxreverse;
   LastBacklash:=false;
-  if Finternalguider.BacklashCompensation then begin
-    // initialize dec backlash, send a pulse north before to start guiding to prevent wrong initialization
-    LastBacklashDuration:=finternalguider.DecBacklash;
-    mount.PulseGuide(north,LastBacklashDuration);
-    WaitPulseGuiding(LastBacklashDuration);
-  end
-  else
-    LastBacklashDuration:=0;
+  FirstDecDirectionChange:=true;
+  LastBacklashDuration:=0;
 
   InternalguiderInitialize:=true; //initialize;
 
@@ -1209,9 +1203,18 @@ begin
             // wait more
             moveDEC:=0;
           end
-          else if (SameDecSignCount=maxreverse)and(DecSign<>sgn(LastBacklashDuration)) then begin
-            // eventual backlash compensation
-            BacklashDuration:=round(DecSign*abs(LastBacklashDuration));
+          else if (SameDecSignCount=maxreverse)and(DecSign<>sign(LastBacklashDuration)) then begin
+            if FirstDecDirectionChange then begin
+              // no backlash compensation for the first change after start guiding
+              FirstDecDirectionChange:=false;
+              LastBacklash:=false;
+              BacklashDuration:=0;
+              LastBacklashDuration:=round(DecSign*finternalguider.DecBacklash);
+            end
+            else begin
+              // eventual backlash compensation
+              BacklashDuration:=round(DecSign*abs(LastBacklashDuration));
+            end;
           end;
         end
         else begin
