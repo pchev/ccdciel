@@ -1672,6 +1672,8 @@ begin
 
   NewMessage('CCDciel '+ccdciel_version+' Copyright (C) '+cdate+' Patrick Chevalley. This is free software, you can redistribute it under certain conditions.');
   NewMessage('This program comes with ABSOLUTELY NO WARRANTY; for details see '+rsHelp+'/'+rsAbout);
+  NewMessage('Screen scaling : ' + BoolToStr(ScreenScaling, True),9);
+  NewMessage('Screen scale : ' + FormatFloat(f0, 100 * UScaleDPI.RunDPI / UScaleDPI.DesignDPI) + '%',9);
   NewMessage(Format(rsUsingConfigu, [config.Filename]), 3);
 
   fits:=TFits.Create(self);
