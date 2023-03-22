@@ -1581,12 +1581,24 @@ try
   if FlipHorz then x:=ScrWidth-x;
   if FlipVert then y:=ScrHeigth-y;
   if ImgZoom=0  then begin
-     xx:=trunc(((x/ImgScale0)-OrigX)/ImgPixRatio);
-     yy:=trunc((y/ImgScale0)-OrigY);
+     if ImgPixRatio>=1 then begin
+       xx:=trunc(((x/ImgScale0)-OrigX)/ImgPixRatio);
+       yy:=trunc((y/ImgScale0)-OrigY);
+     end
+     else begin
+       xx:=trunc((x/ImgScale0)-OrigX);
+       yy:=trunc(((y/ImgScale0)-OrigY)*ImgPixRatio);
+     end;
   end
   else begin
-     xx:=trunc(((x/ImgZoom)-OrigX)/ImgPixRatio);
-     yy:=trunc((y/ImgZoom)-OrigY);
+     if ImgPixRatio>=1 then begin
+       xx:=trunc(((x/ImgZoom)-OrigX)/ImgPixRatio);
+       yy:=trunc((y/ImgZoom)-OrigY);
+     end
+     else begin
+       xx:=trunc((x/ImgZoom)-OrigX);
+       yy:=trunc(((y/ImgZoom)-OrigY)*ImgPixRatio);
+     end;
   end;
 except
   xx:=-1;

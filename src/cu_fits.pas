@@ -1720,6 +1720,11 @@ begin
        (keyword='CRPIX1')
        then solved:=true; // the image must be astrometry solved.
  end;
+ if naxis=1 then begin
+   // 1D spectra, set pseudo pixel size to display with height=width/10
+   pixsz1:=10;
+   pixsz2:=naxis1;
+ end;
  if (pixsz1<>0)and(pixsz2<>0) then pixratio:=pixsz1/pixsz2;
  valid:=valid and (naxis>0); // do not process file without primary array
  if not valid then exit;
@@ -1759,6 +1764,7 @@ begin
   naxis3:=3;
   colormode:=3;
  end;
+ if naxis=1 then naxis2:=1; // 1D spectra, set value to read first row
  if (naxis=3)and(naxis3=3) then n_plane:=3 else n_plane:=1;
  if Frwidth=0 then
    Frwidth:=naxis1;

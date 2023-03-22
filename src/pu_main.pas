@@ -11069,10 +11069,17 @@ if (fits.HeaderInfo.naxis>0) and fits.ImageValid then begin
     fits.GetBGRABitmap(ImaBmp);
   {$ifdef debug_raw}writeln(FormatDateTime(dateiso,Now)+blank+'FITS GetBGRABitmap end');{$endif}
   ImgPixRatio:=fits.HeaderInfo.pixratio;
-  if (fits.HeaderInfo.pixratio<>1) then begin
-    {$ifdef debug_raw}writeln(FormatDateTime(dateiso,Now)+blank+'Fix pixelratio');{$endif}
+  if (fits.HeaderInfo.pixratio>1) then begin
+    // increase image width
     tmpbmp:=TBGRABitmap.Create(ImaBmp);
     ImaBmp.SetSize(round(fits.HeaderInfo.pixratio*ImaBmp.Width),ImaBmp.Height);
+    ImaBmp.Canvas.StretchDraw(rect(0,0,ImaBmp.Width,ImaBmp.Height),tmpbmp.Bitmap);
+    tmpbmp.Free;
+  end
+  else if (fits.HeaderInfo.pixratio<1) and (fits.HeaderInfo.pixratio>0) then begin
+    // increase image height, no camera do that, this is for 1D spectra
+    tmpbmp:=TBGRABitmap.Create(ImaBmp);
+    ImaBmp.SetSize(ImaBmp.Width,round(ImaBmp.Height/fits.HeaderInfo.pixratio));
     ImaBmp.Canvas.StretchDraw(rect(0,0,ImaBmp.Width,ImaBmp.Height),tmpbmp.Bitmap);
     tmpbmp.Free;
   end;
@@ -11164,12 +11171,12 @@ else if ImgZoom=0 then begin
   h:=ScrBmp.height;
   r2:=w/h;
   if r1>r2 then begin
-    h:=trunc(w/r1);
+    h:=max(1,trunc(w/r1));
     ImgScale0:=h/img_Height;
     px:=0;
     py:=(ScrBmp.Height-h) div 2;
   end else begin
-    w:=trunc(h*r1);
+    w:=max(1,trunc(h*r1));
     ImgScale0:=w/img_Width;
     px:=(ScrBmp.width-w) div 2;
     py:=0;
@@ -15006,7 +15013,7 @@ var xx,yy,n: integer;
     bg,bgdev,xc,yc,hfd,fwhm,vmax,dval,snr,flux,mag,magerr: double;
 begin
  Screen2fits(x,y,f_visu.FlipHorz,f_visu.FlipVert,xx,yy);
- if (xx>0)and(xx<fits.HeaderInfo.naxis1)and(yy>0)and(yy<fits.HeaderInfo.naxis2) then
+ if (xx>=0)and(xx<fits.HeaderInfo.naxis1)and(yy>=0)and(yy<fits.HeaderInfo.naxis2) then
     if fits.preview_axis=1 then begin
       if fits.HeaderInfo.bitpix>0 then begin
         val:=round(fits.imageMin+fits.image[0,yy,xx]/fits.imageC);
@@ -15139,7 +15146,10 @@ begin
    end;
  end;
  yy:=img_Height-yy;
- StatusBar1.Panels[panelcursor].Text:=inttostr(xx)+'/'+inttostr(yy)+': '+sval;
+ if fits.HeaderInfo.naxis=1 then
+   StatusBar1.Panels[panelcursor].Text:=inttostr(xx)+': '+sval
+ else
+   StatusBar1.Panels[panelcursor].Text:=inttostr(xx)+'/'+inttostr(yy)+': '+sval;
 end;
 
 procedure Tf_main.StartServer;
