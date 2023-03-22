@@ -3510,7 +3510,10 @@ else if (ssCtrl in Shift) then begin
 end
 else if (ssShift in Shift)and(not (f_capture.Running or f_preview.Running))and(not f_starprofile.SpectraProfile) then begin
    if EndX>0 then begin
-      scrbmp.Rectangle(StartX,StartY,EndX,EndY,BGRAWhite,dmXor);
+      if fits.HeaderInfo.naxis=1 then
+        scrbmp.Rectangle(StartX,0,EndX,Image1.Height,BGRAWhite,dmXor)
+      else
+        scrbmp.Rectangle(StartX,StartY,EndX,EndY,BGRAWhite,dmXor);
    end;
    MouseFrame:=true;
    Startx:=X;
@@ -3563,11 +3566,17 @@ begin
  end
  else if MouseFrame or MouseSpectra then begin
     if EndX>0 then begin
-       scrbmp.Rectangle(StartX,StartY,EndX,EndY,BGRAWhite,dmXor);
+      if fits.HeaderInfo.naxis=1 then
+        scrbmp.Rectangle(StartX,0,EndX,Image1.Height,BGRAWhite,dmXor)
+      else
+        scrbmp.Rectangle(StartX,StartY,EndX,EndY,BGRAWhite,dmXor);
     end;
     EndX:=X;
     EndY:=Y;
-    scrbmp.Rectangle(StartX,StartY,EndX,EndY,BGRAWhite,dmXor);
+    if fits.HeaderInfo.naxis=1 then
+      scrbmp.Rectangle(StartX,0,EndX,Image1.Height,BGRAWhite,dmXor)
+    else
+      scrbmp.Rectangle(StartX,StartY,EndX,EndY,BGRAWhite,dmXor);
     image1.Invalidate;
  end
  else if (fits.HeaderInfo.naxis1>0)and(ImgScale0<>0) and fits.ImageValid then begin
@@ -3624,17 +3633,22 @@ if MouseFrame and fits.HeaderInfo.valid and fits.ImageValid then begin
   end;
   w:=x2-x1;
   h:=y2-y1;
-  f_frame.FX.Text:=inttostr(x1);
-  f_frame.FY.Text:=inttostr(y1);
-  f_frame.FWidth.Text:=inttostr(w);
-  f_frame.FHeight.Text:=inttostr(h);
+  if fits.HeaderInfo.naxis>1 then begin
+    f_frame.FX.Text:=inttostr(x1);
+    f_frame.FY.Text:=inttostr(y1);
+    f_frame.FWidth.Text:=inttostr(w);
+    f_frame.FHeight.Text:=inttostr(h);
+  end;
 end;
 if MouseSpectra and fits.HeaderInfo.valid and fits.ImageValid then begin
   Image1.Canvas.Pen.Color:=clBlack;
   Image1.Canvas.Pen.Mode:=pmCopy;
   EndX:=X;
   EndY:=Y;
-  scrbmp.Rectangle(StartX,StartY,EndX,EndY,BGRAWhite,dmXor);
+  if fits.HeaderInfo.naxis=1 then
+    scrbmp.Rectangle(StartX,0,EndX,Image1.Height,BGRAWhite,dmXor)
+  else
+    scrbmp.Rectangle(StartX,StartY,EndX,EndY,BGRAWhite,dmXor);
   Screen2Fits(StartX,StartY,f_visu.FlipHorz,f_visu.FlipVert,x1,y1);
   Screen2Fits(EndX,EndY,f_visu.FlipHorz,f_visu.FlipVert,x2,y2);
   if x1>x2 then begin
@@ -11343,6 +11357,10 @@ try
   if f_starprofile.SpectraProfile and (f_starprofile.SpectraWidth>0) then begin
      Fits2Screen(f_starprofile.SpectraX,f_starprofile.SpectraY,f_visu.FlipHorz,f_visu.FlipVert,x1,y1);
      Fits2Screen(f_starprofile.SpectraX+f_starprofile.SpectraWidth,f_starprofile.SpectraY+f_starprofile.SpectraHeight,f_visu.FlipHorz,f_visu.FlipVert,x2,y2);
+     if fits.HeaderInfo.naxis=1 then begin
+       y1:=0;
+       y2:=Image1.Height;
+     end;
      with Image1.Canvas do begin
         Pen.Color:=clRed;
         Frame(x1,y1,x2,y2);

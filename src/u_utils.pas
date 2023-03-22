@@ -1610,12 +1610,24 @@ procedure Fits2Screen(x,y: integer; FlipHorz,FlipVert: boolean; out xx,yy: integ
 begin
 try
   if ImgZoom=0 then begin
-    xx:=round((x * ImgPixRatio+OrigX )* ImgScale0);
-    yy:=round((y+OrigY )* ImgScale0);
+    if ImgPixRatio>=1 then begin
+      xx:=round((x * ImgPixRatio+OrigX )* ImgScale0);
+      yy:=round((y+OrigY )* ImgScale0);
+    end
+    else begin
+      xx:=round((x+OrigX )* ImgScale0);
+      yy:=round((y/ImgPixRatio+OrigY )* ImgScale0);
+    end;
   end
   else begin
-    xx:=round(((x+0.5) * ImgPixRatio+OrigX)*ImgZoom);
-    yy:=round((y+0.5+OrigY)*ImgZoom);
+    if ImgPixRatio>=1 then begin
+      xx:=round(((x+0.5) * ImgPixRatio+OrigX)*ImgZoom);
+      yy:=round((y+0.5+OrigY)*ImgZoom);
+    end
+    else begin
+      xx:=round((x+OrigX )* ImgZoom);
+      yy:=round((y/ImgPixRatio+OrigY )* ImgZoom);
+    end;
   end;
   if FlipHorz then xx:=ScrWidth-xx;
   if FlipVert then yy:=ScrHeigth-yy;

@@ -703,10 +703,10 @@ end;
 
 procedure Tf_starprofile.SetSpectra(x,y,w,h: integer; f: TFits);
 begin
-  FSpectraX:=x;
-  FSpectraY:=y;
-  FSpectraWidth:=w;
-  FSpectraHeight:=h;
+  FSpectraWidth:=max(0,w);
+  FSpectraHeight:=max(0,h);
+  FSpectraX:=max(0,min(x,f.HeaderInfo.naxis1-1));
+  FSpectraY:=max(0,min(y,f.HeaderInfo.naxis2-1));
   ShowSpectraProfile(f);
 end;
 
