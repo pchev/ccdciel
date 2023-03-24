@@ -1722,7 +1722,13 @@ begin
  end;
  if naxis=1 then begin
    // 1D spectra, set pseudo pixel size to display with height=width/10
-   pixsz1:=10;
+   if naxis1<10000 then
+     pixsz1:=10
+   else if naxis1<20000 then
+     pixsz1:=100
+   else if naxis1<50000 then
+     pixsz1:=500
+   else pixsz1:=naxis1;
    pixsz2:=naxis1;
  end;
  if (pixsz1<>0)and(pixsz2<>0) then pixratio:=pixsz1/pixsz2;
@@ -1811,7 +1817,7 @@ begin
 FFlatLevel:=0;
 {$ifdef debug_raw}writeln(FormatDateTime(dateiso,Now)+blank+'MeasureFitsImage');{$endif}
 if FFitsInfo.naxis1=0 then exit;
-if (FFitsInfo.naxis1>maxl)or(FFitsInfo.naxis2>maxl) then
+if (FFitsInfo.naxis1*FFitsInfo.naxis2)>(maxl*maxl) then
   raise exception.Create(Format('Image too big! limit is currently %dx%d %sPlease open an issue to request an extension.',[maxl,maxl,crlf]));
 // only 16 bit B/W images
 if (FFitsInfo.bitpix<>16)or(n_plane<>1) then
@@ -1866,7 +1872,7 @@ if FFitsInfo.naxis1=0 then exit;
 FDarkProcess:=false;
 FFlatProcess:=false;
 FBPMProcess:=false;
-if (FFitsInfo.naxis1>maxl)or(FFitsInfo.naxis2>maxl) then
+if (FFitsInfo.naxis1*FFitsInfo.naxis2)>(maxl*maxl) then
   raise exception.Create(Format('Image too big! limit is currently %dx%d %sPlease open an issue to request an extension.',[maxl,maxl,crlf]));
 Fheight:=FFitsInfo.naxis2;
 Fwidth :=FFitsInfo.naxis1;
