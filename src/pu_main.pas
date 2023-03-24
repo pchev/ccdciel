@@ -14175,6 +14175,7 @@ begin
      if (oldw<>fits.HeaderInfo.naxis1)or(oldh<>fits.HeaderInfo.naxis2) then begin
        ImgCx:=0;
        ImgCy:=0;
+       f_starprofile.SpectraProfile:=false;
      end;
      if (abs(oldmean-fits.imageMean)<100)and(abs(oldsigma-fits.imageSigma)<100) then
         DrawHistogram(true,false)  // images are similar, do not reset manual luminosity adjustment

@@ -112,7 +112,6 @@ type
   private
     { private declarations }
     FFindStar: boolean;
-    FSpectraProfile: boolean;
     FStarX,FStarY,FValMax,FValMaxCalibrated,Fbg: double;
     FSpectraX, FSpectraY, FSpectraWidth, FSpectraHeight: integer;
     FFocusStart,FFocusStop: TNotifyEvent;
@@ -149,6 +148,8 @@ type
     procedure Panel2DClose(Sender: TObject; var CloseAction: TCloseAction);
     procedure PanelProfileClose(Sender: TObject; var CloseAction: TCloseAction);
     procedure PanelTrendClose(Sender: TObject; var CloseAction: TCloseAction);
+    procedure SetSpectralProfile(value:boolean);
+    function GetSpectralProfile: boolean;
   public
     { public declarations }
     LastFocusimage: TBGRABitmap;
@@ -167,7 +168,7 @@ type
     procedure PlotHistory(hfd,vmax: double); overload;
     property AutofocusRunning: boolean read getRunning;
     property FindStar : boolean read FFindStar write FFindStar;
-    property SpectraProfile: boolean read FSpectraProfile;
+    property SpectraProfile: boolean read GetSpectralProfile write SetSpectralProfile;
     property HFD:double read Fhfd;
     property SNR:double read Fsnr;
     property ValMax: double read FValMax;
@@ -223,7 +224,6 @@ begin
  LastFocusMsg:='Autofocus not run';
  FAutofocusDone:=false;
  FFindStar:=false;
- FSpectraProfile:=false;
  curhist:=0;
  maxfwhm:=0.0001;
  maximax:=0.0001;
@@ -505,9 +505,18 @@ end;
 
 procedure Tf_starprofile.BtnSpectraProfileClick(Sender: TObject);
 begin
-  FSpectraProfile:=BtnSpectraProfile.Down;
   FSpectraHeight:=0;
   FSpectraWidth:=0;
+end;
+
+procedure Tf_starprofile.SetSpectralProfile(value:boolean);
+begin
+  BtnSpectraProfile.Down:=value;
+end;
+
+function Tf_starprofile.GetSpectralProfile: boolean;
+begin
+   result:=BtnSpectraProfile.Down;
 end;
 
 procedure Tf_starprofile.PanelTrendClose(Sender: TObject; var CloseAction: TCloseAction);
