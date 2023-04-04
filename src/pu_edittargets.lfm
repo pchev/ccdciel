@@ -1462,6 +1462,15 @@ object f_EditTargets: Tf_EditTargets
       ParentFont = False
       TabOrder = 2
     end
+    object BtnTiming: TButton
+      Left = 8
+      Height = 25
+      Top = 2
+      Width = 168
+      Caption = 'BtnTiming'
+      OnClick = BtnTimingClick
+      TabOrder = 3
+    end
   end
   object Splitter1: TSplitter
     Cursor = crVSplit

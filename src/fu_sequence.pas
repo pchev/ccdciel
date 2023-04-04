@@ -552,13 +552,9 @@ begin
 end;
 
 function Tf_sequence.EditTargets(et:T_Targets; live: boolean; out fn,defaultname:string):boolean;
-var i,n:integer;
-    t:TTarget;
 begin
-   f_EditTargets.ClearTargetList;
    f_EditTargets.LoadPlanList;
    f_EditTargets.LoadScriptList;
-   f_EditTargets.Filename:=et.SequenceFile.Filename;
    f_EditTargets.SolarTracking:=(Autoguider.AutoguiderType=agINTERNAL);
    if live then begin
      f_EditTargets.BtnSaveAs.Visible:=false;
@@ -570,107 +566,12 @@ begin
      f_EditTargets.MenuImportMosaic.Visible:=true;
      f_EditTargets.MenuImportObslist.Visible:=true;
    end;
-   if (et.Count>0) then begin
-      // Edit
-      f_EditTargets.TargetName.Caption:=et.TargetName;
-      f_EditTargets.CheckBoxRestartStatus.Checked:=not et.IgnoreRestart;
-      f_EditTargets.CheckBoxResetRepeat.Checked:=et.ResetRepeat;
-      f_EditTargets.TargetsRepeat:=et.TargetsRepeat;
-      f_EditTargets.TargetsRepeatCount:=et.TargetsRepeatCount;
-      f_EditTargets.TargetList.RowCount:=et.Count+1;
-      f_EditTargets.SeqStart.Checked:=et.SeqStart;
-      f_EditTargets.SeqStop.Checked:=et.SeqStop;
-      f_EditTargets.SeqStartTwilight.Checked:=et.SeqStartTwilight;
-      f_EditTargets.SeqStopTwilight.Checked:=et.SeqStopTwilight;
-      f_EditTargets.SeqStartAt.Text:=TimeToStr(et.SeqStartAt);
-      f_EditTargets.SeqStopAt.Text:=TimeToStr(et.SeqStopAt);
-      f_EditTargets.StartOpt.Checked[ccNone]:=not(et.AtStartCool or et.AtStartUnpark);
-      f_EditTargets.StartOpt.Checked[ccCool]:=et.AtStartCool;
-      f_EditTargets.StartOpt.Checked[ccUnpark]:=et.AtStartUnpark;
-      f_EditTargets.StartOpt.Checked[ccScript]:=et.AtStartRunScript;
-      f_EditTargets.StartScript:=et.AtStartScript;
-      f_EditTargets.TermOpt.Checked[cbNone]:=not(et.AtEndStopTracking or et.AtEndPark or et.AtEndCloseDome or et.AtEndWarmCamera or et.AtEndRunScript);
-      f_EditTargets.TermOpt.Checked[cbStopTracking]:=et.AtEndStopTracking;
-      f_EditTargets.TermOpt.Checked[cbParkScope]:=et.AtEndPark;
-      f_EditTargets.TermOpt.Checked[cbParkDome]:=et.AtEndCloseDome;
-      f_EditTargets.TermOpt.Checked[cbWarm]:=et.AtEndWarmCamera;
-      f_EditTargets.TermOpt.Checked[cbScript]:=et.AtEndRunScript;
-      f_EditTargets.TermOpt.Checked[cbUnattended]:=et.OnErrorRunScript;
-      f_EditTargets.EndScript:=et.AtEndScript;
-      f_EditTargets.UnattendedScript:=et.OnErrorScript;
-      for i:=1 to et.Count do begin
-        t:=TTarget.Create;
-        t.Assign(et.Targets[i-1]);
-        f_EditTargets.SetTarget(i,t);
-        f_EditTargets.TargetList.Objects[colseq,i]:=t;
-      end;
-    end else begin
-      // New
-      et.Clear;
-      f_EditTargets.TargetName.Caption:='New targets';
-      f_EditTargets.CheckBoxRestartStatus.Checked:=true;
-      f_EditTargets.CheckBoxResetRepeat.Checked:=true;
-      f_EditTargets.TargetsRepeat:=1;
-      f_EditTargets.TargetsRepeatCount:=0;
-      f_EditTargets.SeqStart.Checked:=false;
-      f_EditTargets.SeqStop.Checked:=false;
-      f_EditTargets.SeqStartTwilight.Checked:=false;
-      f_EditTargets.SeqStopTwilight.Checked:=false;
-      f_EditTargets.SeqStartAt.Text:='00:00:00';
-      f_EditTargets.SeqStopAt.Text:='00:00:00';
-      f_EditTargets.StartOpt.Checked[ccNone]:=false;
-      f_EditTargets.StartOpt.Checked[ccCool]:=true;
-      f_EditTargets.StartOpt.Checked[ccUnpark]:=true;
-      f_EditTargets.StartOpt.Checked[ccScript]:=false;
-      f_EditTargets.StartScript:='';
-      f_EditTargets.TermOpt.Checked[cbNone]:=false;
-      f_EditTargets.TermOpt.Checked[cbStopTracking]:=true;
-      f_EditTargets.TermOpt.Checked[cbParkScope]:=false;
-      f_EditTargets.TermOpt.Checked[cbParkDome]:=false;
-      f_EditTargets.TermOpt.Checked[cbWarm]:=false;
-      f_EditTargets.TermOpt.Checked[cbScript]:=false;
-      f_EditTargets.TermOpt.Checked[cbUnattended]:=false;
-      f_EditTargets.EndScript:='';
-      f_EditTargets.UnattendedScript:='';
-      f_EditTargets.TargetList.RowCount:=1;
-    end;
-    FormPos(f_EditTargets,mouse.CursorPos.X,mouse.CursorPos.Y);
-    Result := (f_EditTargets.ShowModal=mrOK);
-    if Result then begin
-      n:=f_EditTargets.TargetList.RowCount;
-      et.Clear;
-      fn:=f_EditTargets.Filename;
-      defaultname:=FormatDateTime('mmdd',now);
-      for i:=1 to n-1 do begin
-        if (f_EditTargets.TargetList.Cells[1,i]<>ScriptTxt) and (f_EditTargets.TargetList.Cells[1,i]<>SkyFlatTxt) then
-           defaultname:=f_EditTargets.TargetList.Cells[1,i];
-        t:=TTarget.Create;
-        t.Assign(TTarget(f_EditTargets.TargetList.Objects[0,i]));
-        et.Add(t);
-      end;
-      et.IgnoreRestart    := not f_EditTargets.CheckBoxRestartStatus.Checked;
-      et.ResetRepeat      := f_EditTargets.CheckBoxResetRepeat.Checked;
-      et.TargetsRepeat    := f_EditTargets.TargetsRepeat;
-      et.TargetsRepeatCount:=f_EditTargets.TargetsRepeatCount;
-      et.SeqStart         := f_EditTargets.SeqStart.Checked;
-      et.SeqStop          := f_EditTargets.SeqStop.Checked;
-      et.SeqStartTwilight := f_EditTargets.SeqStartTwilight.Checked;
-      et.SeqStopTwilight  := f_EditTargets.SeqStopTwilight.Checked;
-      et.SeqStartAt       := StrToTimeDef(f_EditTargets.SeqStartAt.Text,et.SeqStartAt);
-      et.SeqStopAt        := StrToTimeDef(f_EditTargets.SeqStopAt.Text,et.SeqStopAt);
-      et.AtStartCool      := f_EditTargets.StartOpt.Checked[ccCool];
-      et.AtStartUnpark    := f_EditTargets.StartOpt.Checked[ccUnpark];
-      et.AtStartRunScript := f_EditTargets.StartOpt.Checked[ccScript];
-      et.AtStartScript    := f_EditTargets.StartScript;
-      et.AtEndStopTracking := f_EditTargets.TermOpt.Checked[cbStopTracking];
-      et.AtEndPark         := f_EditTargets.TermOpt.Checked[cbParkScope];
-      et.AtEndCloseDome    := f_EditTargets.TermOpt.Checked[cbParkDome];
-      et.AtEndWarmCamera   := f_EditTargets.TermOpt.Checked[cbWarm];
-      et.AtEndRunScript    := f_EditTargets.TermOpt.Checked[cbScript];
-      et.OnErrorRunScript  := f_EditTargets.TermOpt.Checked[cbUnattended];
-      et.AtEndScript       := f_EditTargets.EndScript;
-      et.OnErrorScript     := f_EditTargets.UnattendedScript;
-    end;
+   f_EditTargets.SetTargets(et);
+   FormPos(f_EditTargets,mouse.CursorPos.X,mouse.CursorPos.Y);
+   Result := (f_EditTargets.ShowModal=mrOK);
+   if Result then begin
+     f_EditTargets.GetTargets(et,fn,defaultname);
+   end;
 end;
 
 procedure Tf_sequence.LoadTargets(fn: string);

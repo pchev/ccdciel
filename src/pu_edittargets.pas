@@ -26,7 +26,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 interface
 
 uses pu_planetariuminfo, u_global, u_utils, u_ccdconfig, pu_pascaleditor, u_annotation, pu_keyboard, pu_newscript,
-  pu_scriptengine, cu_astrometry, u_hints, u_translation, pu_selectscript, Classes, math, cu_targets,
+  pu_scriptengine, cu_astrometry, u_hints, u_translation, pu_selectscript, Classes, math, cu_targets, pu_viewtext,
   SysUtils, FileUtil, Forms, Controls, Graphics, Dialogs, StdCtrls, UScaleDPI, cu_plan, LCLType,
   LazUTF8, maskedit, Grids, ExtCtrls, ComCtrls, EditBtn, Spin, Buttons, Menus, CheckLst, Types;
 
@@ -53,6 +53,7 @@ type
     BtnRemoveStep: TButton;
     BtnSaveAs: TButton;
     BtnSaveTemplate: TButton;
+    BtnTiming: TButton;
     cbDarkNight: TCheckBox;
     cbSkip: TCheckBox;
     cbAstrometry: TCheckBox;
@@ -201,6 +202,7 @@ type
     procedure BtnNewObjectClick(Sender: TObject);
     procedure BtnNewScriptClick(Sender: TObject);
     procedure Btn_coord_internalClick(Sender: TObject);
+    procedure BtnTimingClick(Sender: TObject);
     procedure cbChange(Sender: TObject);
     procedure CheckRestartStatus(Sender: TObject);
     procedure FormResize(Sender: TObject);
@@ -295,6 +297,8 @@ type
     property Astrometry: TAstrometry read FAstrometry write FAstrometry;
     property Filename: string read FFilename write FFilename;
     property SolarTracking: boolean read FSolarTracking write FSolarTracking;
+    procedure SetTargets(value:T_Targets);
+    procedure GetTargets(var value:T_Targets; out fn,defaultname: string);
   end;
 
 var
@@ -371,6 +375,7 @@ begin
   Caption := rsEditTargetLi;
   BtnSave.Caption := rsSave;
   BtnSaveAs.Caption := rsSaveAs;
+  BtnTiming.Caption:=rsTimingEstima;
   BtnInsert.Caption := rsInsertRows;
   MenuNewObject.Caption := rsNewObject;
   MenuBlankRow.Caption:=rsInsertBlankR;
@@ -945,6 +950,22 @@ begin
   ShowPlan;
   Application.ProcessMessages;
   FCoordWarning:=false;
+end;
+
+procedure Tf_EditTargets.BtnTimingClick(Sender: TObject);
+var f: Tf_viewtext;
+    tt:T_Targets;
+    s1,s2: string;
+begin
+  f:=Tf_viewtext.Create(self);
+  tt:=T_Targets.Create(f);
+  GetTargets(tt,s1,s2);
+  tt.CheckStatus;
+  f:=Tf_viewtext.Create(self);
+  f.Caption:=rsStatus2;
+  f.Memo1.Text:=rsSequence+blank+tt.TargetName+crlf+crlf+tt.DoneStatus;
+  FormPos(f,mouse.CursorPos.X,mouse.CursorPos.Y);
+  f.Show;
 end;
 
 procedure Tf_EditTargets.cbChange(Sender: TObject);
@@ -2908,6 +2929,117 @@ begin
       end;
     end;
   end;
+end;
+
+procedure Tf_EditTargets.GetTargets(var value:T_Targets; out fn,defaultname: string);
+var i,n:integer;
+    t:TTarget;
+begin
+  n:=TargetList.RowCount;
+  value.Clear;
+  fn:=Filename;
+  defaultname:=FormatDateTime('mmdd',now);
+  for i:=1 to n-1 do begin
+    if (TargetList.Cells[1,i]<>ScriptTxt) and (TargetList.Cells[1,i]<>SkyFlatTxt) then
+       defaultname:=TargetList.Cells[1,i];
+    t:=TTarget.Create;
+    t.Assign(TTarget(TargetList.Objects[0,i]));
+    value.Add(t);
+  end;
+  value.IgnoreRestart    := not CheckBoxRestartStatus.Checked;
+  value.ResetRepeat      := CheckBoxResetRepeat.Checked;
+  value.TargetsRepeat    := TargetsRepeat;
+  value.TargetsRepeatCount:=TargetsRepeatCount;
+  value.SeqStart         := SeqStart.Checked;
+  value.SeqStop          := SeqStop.Checked;
+  value.SeqStartTwilight := SeqStartTwilight.Checked;
+  value.SeqStopTwilight  := SeqStopTwilight.Checked;
+  value.SeqStartAt       := StrToTimeDef(SeqStartAt.Text,value.SeqStartAt);
+  value.SeqStopAt        := StrToTimeDef(SeqStopAt.Text,value.SeqStopAt);
+  value.AtStartCool      := StartOpt.Checked[ccCool];
+  value.AtStartUnpark    := StartOpt.Checked[ccUnpark];
+  value.AtStartRunScript := StartOpt.Checked[ccScript];
+  value.AtStartScript    := StartScript;
+  value.AtEndStopTracking := TermOpt.Checked[cbStopTracking];
+  value.AtEndPark         := TermOpt.Checked[cbParkScope];
+  value.AtEndCloseDome    := TermOpt.Checked[cbParkDome];
+  value.AtEndWarmCamera   := TermOpt.Checked[cbWarm];
+  value.AtEndRunScript    := TermOpt.Checked[cbScript];
+  value.OnErrorRunScript  := TermOpt.Checked[cbUnattended];
+  value.AtEndScript       := EndScript;
+  value.OnErrorScript     := UnattendedScript;
+end;
+
+procedure Tf_EditTargets.SetTargets(value:T_Targets);
+var i:integer;
+    t:TTarget;
+begin
+  Filename:=value.SequenceFile.Filename;
+  ClearTargetList;
+  if (value.Count>0) then begin
+     // Edit
+     TargetName.Caption:=value.TargetName;
+     CheckBoxRestartStatus.Checked:=not value.IgnoreRestart;
+     CheckBoxResetRepeat.Checked:=value.ResetRepeat;
+     TargetsRepeat:=value.TargetsRepeat;
+     TargetsRepeatCount:=value.TargetsRepeatCount;
+     TargetList.RowCount:=value.Count+1;
+     SeqStart.Checked:=value.SeqStart;
+     SeqStop.Checked:=value.SeqStop;
+     SeqStartTwilight.Checked:=value.SeqStartTwilight;
+     SeqStopTwilight.Checked:=value.SeqStopTwilight;
+     SeqStartAt.Text:=TimeToStr(value.SeqStartAt);
+     SeqStopAt.Text:=TimeToStr(value.SeqStopAt);
+     StartOpt.Checked[ccNone]:=not(value.AtStartCool or value.AtStartUnpark);
+     StartOpt.Checked[ccCool]:=value.AtStartCool;
+     StartOpt.Checked[ccUnpark]:=value.AtStartUnpark;
+     StartOpt.Checked[ccScript]:=value.AtStartRunScript;
+     StartScript:=value.AtStartScript;
+     TermOpt.Checked[cbNone]:=not(value.AtEndStopTracking or value.AtEndPark or value.AtEndCloseDome or value.AtEndWarmCamera or value.AtEndRunScript);
+     TermOpt.Checked[cbStopTracking]:=value.AtEndStopTracking;
+     TermOpt.Checked[cbParkScope]:=value.AtEndPark;
+     TermOpt.Checked[cbParkDome]:=value.AtEndCloseDome;
+     TermOpt.Checked[cbWarm]:=value.AtEndWarmCamera;
+     TermOpt.Checked[cbScript]:=value.AtEndRunScript;
+     TermOpt.Checked[cbUnattended]:=value.OnErrorRunScript;
+     EndScript:=value.AtEndScript;
+     UnattendedScript:=value.OnErrorScript;
+     for i:=1 to value.Count do begin
+       t:=TTarget.Create;
+       t.Assign(value.Targets[i-1]);
+       SetTarget(i,t);
+       TargetList.Objects[colseq,i]:=t;
+     end;
+   end else begin
+     // New
+     value.Clear;
+     TargetName.Caption:='New targets';
+     CheckBoxRestartStatus.Checked:=true;
+     CheckBoxResetRepeat.Checked:=true;
+     TargetsRepeat:=1;
+     TargetsRepeatCount:=0;
+     SeqStart.Checked:=false;
+     SeqStop.Checked:=false;
+     SeqStartTwilight.Checked:=false;
+     SeqStopTwilight.Checked:=false;
+     SeqStartAt.Text:='00:00:00';
+     SeqStopAt.Text:='00:00:00';
+     StartOpt.Checked[ccNone]:=false;
+     StartOpt.Checked[ccCool]:=true;
+     StartOpt.Checked[ccUnpark]:=true;
+     StartOpt.Checked[ccScript]:=false;
+     StartScript:='';
+     TermOpt.Checked[cbNone]:=false;
+     TermOpt.Checked[cbStopTracking]:=true;
+     TermOpt.Checked[cbParkScope]:=false;
+     TermOpt.Checked[cbParkDome]:=false;
+     TermOpt.Checked[cbWarm]:=false;
+     TermOpt.Checked[cbScript]:=false;
+     TermOpt.Checked[cbUnattended]:=false;
+     EndScript:='';
+     UnattendedScript:='';
+     TargetList.RowCount:=1;
+   end;
 end;
 
 end.
