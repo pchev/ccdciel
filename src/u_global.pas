@@ -47,7 +47,7 @@ type
   TFlatType=(ftNone,ftSKY,ftDome);
   TDomeFlatPositionType=(DomeFlatPositionAltAz,DomeFlatPositionPark,DomeFlatPositionHome);
   TAutoguiderType=(agPHD,agLINGUIDER,agNONE,agDITHER,agINTERNAL);
-  TAutoguiderState=(GUIDER_DISCONNECTED,GUIDER_IDLE,GUIDER_GUIDING,GUIDER_BUSY,GUIDER_ALERT);
+  TAutoguiderState=(GUIDER_DISCONNECTED,GUIDER_IDLE,GUIDER_GUIDING,GUIDER_BUSY,GUIDER_ALERT,GUIDER_INITIALIZING);
   TPlanetariumType=(CDC, SAMP, HNSKY,plaNONE);
   TEqmodAlign=(alADDPOINT,alSTDSYNC,alUNSUPPORTED);
   TAlignmentMode=(algAltAz,algPolar,algGermanPolar);

@@ -1951,7 +1951,7 @@ begin
      ShowDelayMsg('');
      TargetForceNext:=false;
      // stop autoguider
-     if (Autoguider<>nil)and(Autoguider.Running)and(Autoguider.State in [GUIDER_GUIDING,GUIDER_BUSY,GUIDER_ALERT]) then
+     if (Autoguider<>nil)and(Autoguider.Running)and(Autoguider.State in [GUIDER_GUIDING,GUIDER_BUSY,GUIDER_ALERT,GUIDER_INITIALIZING]) then
        StopGuider;
      Mount.AbortMotion;
      initok:=InitSkyFlat;
