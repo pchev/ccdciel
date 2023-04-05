@@ -269,7 +269,7 @@ if p>=0 then begin
          begin
            GuideStat(-FArcsecPixel*StrToFloatDef(value[p],0),FArcsecPixel*StrToFloatDef(value[q],0),StrToFloatDef(value[r],0));
          end;
-     if (not FDithering)and(FMaxGuideDrift<=99) then
+     if (not FDithering)and(FStatus<>'Settling')and(FMaxGuideDrift<=99) then
          begin
            p:=attrib.IndexOf('RADistanceGuide');
            q:=attrib.IndexOf('DecDistanceGuide');
@@ -483,7 +483,7 @@ begin
   if FStatus='Guiding' then FState:=GUIDER_GUIDING
   else if FStatus='Start Guiding' then FState:=GUIDER_BUSY
   else if FStatus='Stopped' then FState:=GUIDER_IDLE
-  else if FStatus='Star Selected' then FState:=GUIDER_INITIALIZING
+  else if (FStatus='Star Selected')and(FState=GUIDER_BUSY) then FState:=GUIDER_INITIALIZING
   else if FStatus=StarLostStatus then FState:=GUIDER_ALERT
   else if FStatus='Paused' then FState:=GUIDER_IDLE
   else if FStatus='Resumed' then FState:=FState
@@ -493,7 +493,7 @@ begin
   else if FStatus='Start Calibration' then FState:=GUIDER_BUSY
   else if FStatus='Calibration Failed' then FState:=GUIDER_ALERT
   else if FStatus='Calibration Data Flipped' then FState:=FState
-  else if FStatus='Looping Exposures' then FState:=GUIDER_INITIALIZING
+  else if (FStatus='Looping Exposures')and(FState=GUIDER_BUSY) then FState:=GUIDER_INITIALIZING
   else if FStatus='Exposures Stopped' then FState:=GUIDER_IDLE
   else if FStatus='Settling' then FState:=FState
   else if FStatus='Settle Done' then FState:=FState
