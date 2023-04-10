@@ -626,7 +626,7 @@ type
     SaveFocusZoom,ImgCx, ImgCy: double;
     Mx, My, PolX, PolY: integer;
     StartX, StartY, EndX, EndY, MouseDownX,MouseDownY: integer;
-    FrameX,FrameY,FrameW,FrameH: integer;
+    FrameX,FrameY,FrameW,FrameH,FrameBin: integer;
     GuideMx, GuideMy: integer;
     GuideMouseMoving: boolean;
     FinderMx, FinderMy: integer;
@@ -719,6 +719,7 @@ type
     Procedure DisconnectCamera(Sender: TObject);
     procedure SetCameraActiveDevices;
     procedure SetBinningList(posprev,poscapt: integer);
+    procedure SetBinning(bx,by: integer);
     procedure ShowBinningRange;
     procedure SetGainList;
     procedure ShowGain;
@@ -729,6 +730,7 @@ type
     procedure ShowFrame(reset:boolean);
     procedure SetFrame(Sender: TObject);
     procedure ResetFrame(Sender: TObject);
+    procedure RestoreFrame;
     Procedure FrameChange(Sender: TObject);
     procedure ShowExposureRange;
     procedure ShowTemperatureRange;
@@ -2544,6 +2546,7 @@ begin
   FrameY:=config.GetValue('/CCDframe/FrameY',0);
   FrameW:=config.GetValue('/CCDframe/FrameW',0);
   FrameH:=config.GetValue('/CCDframe/FrameH',0);
+  FrameBin:=config.GetValue('/CCDframe/FrameBin',1);
 
   f_visu.Gamma.Value:=config.GetValue('/Visu/Gamma',1.0);
   f_visu.HistBar.Position:=config.GetValue('/Visu/HistBar',50);
@@ -3727,7 +3730,7 @@ begin
     ShowBinningRange;
     ShowGain;
     ShowFrameRange;
-    SetFrame(nil);
+    RestoreFrame;
     ShowFnumber;
   end;
 end;
@@ -5110,6 +5113,7 @@ begin
    config.SetValue('/CCDframe/FrameY',FrameY);
    config.SetValue('/CCDframe/FrameW',FrameW);
    config.SetValue('/CCDframe/FrameH',FrameH);
+   config.SetValue('/CCDframe/FrameBin',FrameBin);
 
    config.SetValue('/Sequence/Targets',f_sequence.Filename);
    config.SetValue('/Sequence/Unattended',f_sequence.Unattended.Checked);
@@ -5712,6 +5716,7 @@ var x,y,w,h: integer;
 begin
  if reset or (FrameW=0)or(FrameH=0) then begin
    camera.GetFrame(x,y,w,h);
+   FrameBin:=camera.BinX;
    if (x<>FrameX)or(y<>FrameY)or(w<>FrameW)or(h<>FrameH) then begin
      FrameX:=x;
      FrameY:=y;
@@ -5769,6 +5774,18 @@ begin
   camera.ResetFrame;
 end;
 
+procedure Tf_main.RestoreFrame;
+begin
+  // restore saved frame size
+  FrameX:=config.GetValue('/CCDframe/FrameX',0);
+  FrameY:=config.GetValue('/CCDframe/FrameY',0);
+  FrameW:=config.GetValue('/CCDframe/FrameW',0);
+  FrameH:=config.GetValue('/CCDframe/FrameH',0);
+  FrameBin:=config.GetValue('/CCDframe/FrameBin',1);
+  camera.SetBinning(FrameBin,FrameBin);
+  SetFrame(nil);
+end;
+
 procedure Tf_main.ShowBinningRange;
 var rxmin,rxmax,rxstep,rymin,rymax,rystep: integer;
     i,j,n,posprev,poscapt:integer;
@@ -5819,6 +5836,12 @@ begin
  f_preview.Binning.ItemIndex:=posprev;
  f_capture.Binning.ItemIndex:=poscapt;
  f_EditTargets.FlatBinning.ItemIndex:=0;
+end;
+
+procedure Tf_main.SetBinning(bx,by: integer);
+begin
+  FrameBin:=bx;
+  camera.SetBinning(bx,by);
 end;
 
 procedure Tf_main.CameraSequenceInfo(Sender: TObject);
@@ -8395,6 +8418,7 @@ begin
       FrameY:=config.GetValue('/CCDframe/FrameY',0);
       FrameW:=config.GetValue('/CCDframe/FrameW',0);
       FrameH:=config.GetValue('/CCDframe/FrameH',0);
+      FrameBin:=config.GetValue('/CCDframe/FrameBin',1);
     end;
     ShowDarkInfo;
     ShowGuiderDarkInfo;
@@ -9929,7 +9953,7 @@ if (camera.Status=devConnected) and ((not f_capture.Running) or autofocusing) an
          end;
      if (camera.BinX<>binx)or(camera.BinY<>biny) then begin
         NewMessage(rsSetBinning+blank+inttostr(binx)+'x'+inttostr(biny),2);
-        camera.SetBinning(binx,biny);
+        SetBinning(binx,biny);
      end;
   end;
   if camera.hasFnumber then begin
@@ -10422,7 +10446,7 @@ if (AllDevicesConnected)and(not autofocusing)and (not learningvcurve) then begin
         end;
      if (camera.BinX<>binx)or(camera.BinY<>biny) then begin
         NewMessage(rsSetBinning+blank+inttostr(binx)+'x'+inttostr(biny),2);
-        camera.SetBinning(binx,biny);
+        SetBinning(binx,biny);
      end;
   end;
   // check and set f-stop
@@ -13175,7 +13199,7 @@ begin
   f_preview.Gain:=AutofocusGain;
   f_preview.Offset:=AutofocusOffset;
   f_preview.Binning.Text:=inttostr(AutofocusBinning)+'x'+inttostr(AutofocusBinning);
-  camera.SetBinning(AutofocusBinning,AutofocusBinning);
+  SetBinning(AutofocusBinning,AutofocusBinning);
   fits.SetBPM(bpm,bpmNum,bpmX,bpmY,bpmAxis);
   fits.DarkOn:=true;
   if not camera.ControlExposure(AutofocusExposure*AutofocusExposureFact,AutofocusBinning,AutofocusBinning,LIGHT,ReadoutModeFocus,AutofocusGain,AutofocusOffset) then begin
@@ -13323,7 +13347,7 @@ begin
    fits.SetBPM(bpm,0,0,0,0);
    fits.DarkOn:=false;
    f_preview.Binning.Text:=SaveAutofocusBinning;
-   camera.SetBinning(SaveAutofocusBX,SaveAutofocusBY);
+   SetBinning(SaveAutofocusBX,SaveAutofocusBY);
    camera.SetFrame(SaveAutofocusFX,SaveAutofocusFY,SaveAutofocusFW,SaveAutofocusFH);
    f_visu.Zoom:=SaveFocusZoom;
    f_preview.Gain:=SaveAutofocusPreviewGain;
