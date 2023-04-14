@@ -323,6 +323,15 @@ type
       constructor Create(CreateSuspended: boolean);
     end;
 
+    TSaveTiff = class(TThread)
+    public
+      filename: string;
+      image: TFPCustomImage;
+      writer: TFPCustomImageWriter;
+      procedure Execute; override;
+      constructor Create(CreateSuspended: boolean);
+    end;
+
 
 
   procedure PictureToFits(pict:TMemoryStream; ext: string; var ImgStream:TMemoryStream; flip:boolean=false;pix:double=-1;piy:double=-1;binx:integer=-1;biny:integer=-1;bayer:string='';rmult:string='';gmult:string='';bmult:string='';origin:string='';exifkey:TStringList=nil;exifvalue:TStringList=nil);
@@ -2679,6 +2688,7 @@ var
   thecolor  :Tfpcolor;
   flip_V, flip_H: boolean;
   SourceImage: Timafloat;
+  SaveTiff: TSaveTiff;
 begin
   flip_V:=true;
   flip_H:=false;
@@ -2731,11 +2741,23 @@ begin
     end;
   end;
 
-  // image buffer is now secured, we can let other task to run before to save.
-  if delayed then wait(1);
+  // image buffer is now secured, save in separate thread to let other task to run.
+  SaveTiff:=TSaveTiff.Create(true);
+  SaveTiff.filename:=fn;
+  SaveTiff.image:=image;
+  SaveTiff.writer:=writer;
+  SaveTiff.Start;
+end;
 
-  Image.SaveToFile(fn, Writer);
+constructor TSaveTiff.Create(CreateSuspended: boolean);
+begin
+  FreeOnTerminate := true;
+  inherited Create(CreateSuspended);
+end;
 
+procedure TSaveTiff.Execute;
+begin
+  Image.SaveToFile(filename, Writer);
   image.Free;
   writer.Free;
 end;
