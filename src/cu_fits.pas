@@ -29,7 +29,7 @@ interface
 
 uses SysUtils, Classes, LazFileUtils, u_utils, u_global, BGRABitmap, BGRABitmapTypes, ExpandedBitmap,
   GraphType,  FPReadJPEG, LazSysUtils, u_libraw, dateutils, FPReadTiff, FPWriteTiff, FPTiffCmn,
-  LazUTF8, Graphics,Math, FPImage, Controls, LCLType, Dialogs, u_translation, IntfGraphics;
+  LCLIntf, LazUTF8, Graphics,Math, FPImage, Controls, LCLType, Dialogs, u_translation, IntfGraphics;
 
 type
 
@@ -328,6 +328,15 @@ type
       filename: string;
       image: TFPCustomImage;
       writer: TFPCustomImageWriter;
+      procedure Execute; override;
+      constructor Create(CreateSuspended: boolean);
+    end;
+
+    TSaveFits = class(TThread)
+    public
+      filename: string;
+      pack: boolean;
+      mem: TMemoryStream;
       procedure Execute; override;
       constructor Create(CreateSuspended: boolean);
     end;
@@ -1484,6 +1493,7 @@ var mem: TMemoryStream;
     tmpf,rmsg: string;
     i: integer;
     asFloat: boolean;
+    SaveFits: TSaveFits;
 begin
   asFloat := StackFloat and FHeader.Valueof('STACKCNT',i) and (i>1);  // save stack result as 32bit float
   if asFloat and (FFitsInfo.bitpix>0) then begin
@@ -1504,18 +1514,36 @@ begin
     FStreamValid:=false;
   end;
   mem:=GetStream;
+  SaveFits:=TSaveFits.Create(true);
+  SaveFits.filename:=fn;
+  SaveFits.pack:=pack;
+  SaveFits.mem:=mem;
+  SaveFits.Start;
+end;
+
+constructor TSaveFits.Create(CreateSuspended: boolean);
+begin
+  FreeOnTerminate := true;
+  inherited Create(CreateSuspended);
+end;
+
+procedure TSaveFits.Execute;
+var rmsg,tmpf,buf: string;
+    i: integer;
+begin
   if pack then begin
     tmpf:=slash(TmpDir)+'tmppack.fits';
     mem.SaveToFile(tmpf);
-    i:=PackFits(tmpf,fn+'.fz',rmsg);
+    i:=PackFits(tmpf,filename+'.fz',rmsg);
     if i<>0 then begin
-      msg('fpack error '+inttostr(i)+': '+rmsg,1);
-      msg('Saving file without compression',1);
-      mem.SaveToFile(fn);
+      buf:='fpack error '+inttostr(i)+': '+rmsg;
+      buf:=buf+', Saving file without compression';
+      PostMessage(MsgHandle, LM_CCDCIEL, M_Message, PtrInt(strnew(PChar(buf))));
+      mem.SaveToFile(filename);
     end;
   end
   else begin
-    mem.SaveToFile(fn);
+    mem.SaveToFile(filename);
   end;
   mem.Free;
 end;

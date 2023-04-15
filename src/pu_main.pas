@@ -14386,6 +14386,15 @@ begin
                       end;
                       if buf<>'' then NewMessage(buf,1);
                       end;
+    M_Message:       begin
+                      try
+                      buf:=PChar(Message.LParam);
+                      StrDispose(PChar(Message.LParam));
+                      except
+                      buf:='';
+                      end;
+                      if buf<>'' then NewMessage(buf,1);
+                      end;
     else
       NewMessage(Format(rsReceiveUnkno, [inttostr(Message.wParam)]),1);
   end;
