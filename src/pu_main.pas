@@ -10958,7 +10958,7 @@ try
  // save the file
  if (SaveFormat=ffFITS) or FileStackFloat then begin
    fn:=slash(fd)+fn+FitsFileExt;
-   fits.SaveToFile(fn,FilePack,FileStackFloat);
+   fits.SaveToFile(fn,FilePack,FileStackFloat,true);
  end
  else if SaveFormat=ffASTROTIFF then begin
    fn:=slash(fd)+fn+'.tif';

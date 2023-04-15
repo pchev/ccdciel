@@ -198,7 +198,7 @@ type
      procedure GetBGRABitmap(var bgra: TBGRABitmap; maxthread:integer=-1);
      procedure SaveToBitmap(fn: string; fliph:boolean=false; flipv:boolean=false);
      procedure SaveAstroTiff(fn: string; delayed:boolean=false);
-     procedure SaveToFile(fn: string; pack: boolean=false; StackFloat:boolean=false);
+     procedure SaveToFile(fn: string; pack: boolean=false; StackFloat:boolean=false; Async:boolean=false);
      procedure LoadFromFile(fn:string);
      procedure LoadHeaderFromFile(fn:string);
      procedure SetBPM(value: TBpm; count,nx,ny,nax:integer);
@@ -1488,9 +1488,9 @@ begin
   result.CopyFrom(FStream,FStream.Size-Fhdr_end);
 end;
 
-procedure TFits.SaveToFile(fn: string; pack: boolean=false; StackFloat:boolean=false);
+procedure TFits.SaveToFile(fn: string; pack: boolean=false; StackFloat:boolean=false; Async:boolean=false);
 var mem: TMemoryStream;
-    tmpf,rmsg: string;
+    tmpf,rmsg,buf: string;
     i: integer;
     asFloat: boolean;
     SaveFits: TSaveFits;
@@ -1514,11 +1514,30 @@ begin
     FStreamValid:=false;
   end;
   mem:=GetStream;
-  SaveFits:=TSaveFits.Create(true);
-  SaveFits.filename:=fn;
-  SaveFits.pack:=pack;
-  SaveFits.mem:=mem;
-  SaveFits.Start;
+  if async then begin
+    SaveFits:=TSaveFits.Create(true);
+    SaveFits.filename:=fn;
+    SaveFits.pack:=pack;
+    SaveFits.mem:=mem;
+    SaveFits.Start;
+  end
+  else begin
+    if pack then begin
+      tmpf:=slash(TmpDir)+'tmppack.fits';
+      mem.SaveToFile(tmpf);
+      i:=PackFits(tmpf,fn+'.fz',rmsg);
+      if i<>0 then begin
+        buf:='fpack error '+inttostr(i)+': '+rmsg;
+        buf:=buf+', Saving file without compression';
+        msg(buf,1);
+        mem.SaveToFile(fn);
+      end;
+    end
+    else begin
+      mem.SaveToFile(fn);
+    end;
+    mem.Free;
+  end;
 end;
 
 constructor TSaveFits.Create(CreateSuspended: boolean);
