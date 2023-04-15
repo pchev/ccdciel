@@ -1204,7 +1204,6 @@ resourcestring
   rsSharpness = 'Sharpness';
   rsTemperatureF = 'Temperature from weather station';
   rsExposureTime4 = 'Exposure time too short for measurement, need %d seconds.';
-  rsNoMeasuremen = 'No measurement, early start exposure not set.';
   rsNoCenteringM = 'No centering measurement, exposure time shorter than astrometry timeout.';
   rsNoCenteringM3 = 'No centering measurement, astrometry not configured.';
   rsGlobalAction = 'Global actions when a sequence is running';

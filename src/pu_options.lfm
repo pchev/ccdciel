@@ -4419,7 +4419,7 @@ object f_option: Tf_option
             end
             object FinderFocalLength: TSpinEdit
               Left = 328
-              Height = 27
+              Height = 29
               Top = 0
               Width = 81
               MaxValue = 99999
@@ -7109,7 +7109,6 @@ object f_option: Tf_option
             Top = 49
             Width = 261
             Caption = 'Start new exposure as early as possible'
-            OnClick = ExpEarlyStartClick
             ParentFont = False
             TabOrder = 0
           end

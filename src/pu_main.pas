@@ -4457,8 +4457,8 @@ begin
   if ok then f_visu.FrameResize(nil);
   LowQualityDisplay:=config.GetValue('/Visu/LowQualityDisplay',LowQualityDisplay);
   ConfigExpEarlyStart:=config.GetValue('/Sensor/ExpEarlyStart',ConfigExpEarlyStart);
-  MeasureNewImage:=config.GetValue('/Files/MeasureNewImage',false) and ConfigExpEarlyStart;
-  CheckRecenterTarget:=config.GetValue('/PrecSlew/CheckRecenterTarget',false) and ConfigExpEarlyStart;
+  MeasureNewImage:=config.GetValue('/Files/MeasureNewImage',false);
+  CheckRecenterTarget:=config.GetValue('/PrecSlew/CheckRecenterTarget',false);
   reftreshold:=config.GetValue('/RefImage/Treshold',128);
   refcolor:=config.GetValue('/RefImage/Color',0);
   BPMsigma:=config.GetValue('/BadPixel/Sigma',5.0);
@@ -8903,8 +8903,8 @@ begin
    f_option.NotDisplayCapture.Checked:=not config.GetValue('/Visu/DisplayCapture',DisplayCapture);
    f_option.LowQualityDisplay.Checked:=config.GetValue('/Visu/LowQualityDisplay',LowQualityDisplay);
    f_option.ExpEarlyStart.Checked:=config.GetValue('/Sensor/ExpEarlyStart',ConfigExpEarlyStart);
-   f_option.MeasureNewImage.Checked:=config.GetValue('/Files/MeasureNewImage',false) and f_option.ExpEarlyStart.Checked;
-   f_option.CheckRecenterTarget.Checked:=config.GetValue('/PrecSlew/CheckRecenterTarget',false) and f_option.ExpEarlyStart.Checked;
+   f_option.MeasureNewImage.Checked:=config.GetValue('/Files/MeasureNewImage',false);
+   f_option.CheckRecenterTarget.Checked:=config.GetValue('/PrecSlew/CheckRecenterTarget',false);
    f_option.PixelSize.Value:=config.GetValue('/Astrometry/PixelSize',0.0);
    f_option.Focale.Value:=config.GetValue('/Astrometry/FocaleLength',0.0);
    f_option.PixelSizeFromCamera.Checked:=config.GetValue('/Astrometry/PixelSizeFromCamera',true);
@@ -9316,8 +9316,8 @@ begin
      config.SetValue('/Sensor/ExpEarlyStart',f_option.ExpEarlyStart.Checked);
      config.SetValue('/Visu/DisplayCapture',not f_option.NotDisplayCapture.Checked);
      config.SetValue('/Visu/LowQualityDisplay',f_option.LowQualityDisplay.Checked);
-     config.SetValue('/Files/MeasureNewImage',f_option.MeasureNewImage.Checked and f_option.ExpEarlyStart.Checked);
-     config.SetValue('/PrecSlew/CheckRecenterTarget',f_option.CheckRecenterTarget.Checked and f_option.ExpEarlyStart.Checked);
+     config.SetValue('/Files/MeasureNewImage',f_option.MeasureNewImage.Checked);
+     config.SetValue('/PrecSlew/CheckRecenterTarget',f_option.CheckRecenterTarget.Checked);
      config.SetValue('/Astrometry/Resolver',f_option.Resolver);
      config.SetValue('/Astrometry/PixelSizeFromCamera',f_option.PixelSizeFromCamera.Checked);
      config.SetValue('/Astrometry/FocaleFromTelescope',f_option.FocaleFromTelescope.Checked);
@@ -11021,7 +11021,9 @@ try
        end
        else NewMessage(format(rsExposureTime4, [30]), 3);
      end
-     else NewMessage(rsNoMeasuremen, 3);
+     else begin
+       MeasureImage(false);
+     end;
    end;
  end;
  // check if target need to be recentered
@@ -11030,7 +11032,8 @@ try
     then begin
       if (astrometryResolver<>ResolverNone) then begin
         if (f_sequence.Running)and(f_sequence.TargetCoord)and(f_sequence.TargetRA<>NullCoord)and(f_sequence.TargetDE<>NullCoord) then begin
-          if (camera.LastExposureTime>(AstrometryTimeout+5)) then begin
+          if (not EarlyNextExposure) or (camera.LastExposureTime>(AstrometryTimeout+5))
+            then begin
             try
             CheckRecenterBusy:=true;
             astrometry.SolveCurrentImage(true);
