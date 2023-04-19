@@ -1,7 +1,7 @@
 unit u_annotation; {deep sky annotation of the image}
 { From ASTAP unit_deepsky with modification for CCDciel environment}
 {$mode delphi}
-{Copyright (C) 2018,2022 Han Kleijn (www.hnsky.org) and Patrick Chevalley.
+{Copyright (C) 2018, 2023 Han Kleijn (www.hnsky.org) and Patrick Chevalley.
  email: han.k.. at...hnsky.org
 
 {This program is free software: you can redistribute it and/or modify
@@ -290,11 +290,10 @@ end;
 procedure search_deepsky(f: TFits);{search the deep sky object on the image}
 var
   fitsX, fitsY, dra,ddec,delta,gamma, telescope_ra,telescope_dec,cos_telescope_dec,fov,ra2,dec2, length1,width1,
-  pa,flipped,  crpix1,crpix2,cd1_1,cd1_2,cd2_1,cd2_2,cdelt1,cdelt2, crota2,ra0,dec0, delta_ra,det,
+  pa,flipped,  crpix1,crpix2,cd1_1,cd1_2,cd2_1,cd2_2,cdelt2, crota2,ra0,dec0, delta_ra,det,
   SIN_dec_ref,COS_dec_ref,SIN_dec_new,COS_dec_new,SIN_delta_ra,COS_delta_ra,hh : double;
-  width2, height2,sign: integer;
+  width2, height2,x,y : integer;
   new_to_old_WCS: boolean;
-  x,y  : integer;
 begin
   NumObj:=0;
   if ((f<>nil) and (f.HeaderInfo.solved)) then
@@ -310,7 +309,6 @@ begin
     if not f.Header.Valueof('CD2_1',cd2_1) then exit;
     if not f.Header.Valueof('CD2_2',cd2_2) then exit;
     new_to_old_WCS:=false;
-    if not f.Header.Valueof('CDELT1',cdelt1) then new_to_old_WCS:=true;
     if not f.Header.Valueof('CDELT2',cdelt2) then new_to_old_WCS:=true;
     if not f.Header.Valueof('CROTA2',crota2) then new_to_old_WCS:=true;
 
@@ -318,21 +316,32 @@ begin
     dec0:=deg2rad*dec0;
 
     if new_to_old_WCS then begin
-      if (cd1_1*cd2_2-cd1_2*cd2_1)>=0 then sign:=+1 else sign:=-1;
-      cdelt1:=sqrt(sqr(cd1_1)+sqr(cd2_1))*sign;
-      cdelt2:=sqrt(sqr(cd1_2)+sqr(cd2_2));
-      //crota1:= arctan2(sign*cd1_2,cd2_2);{not required}
-      crota2:= arctan2(sign*cd1_1,cd2_1)-pi/2;
-      //crota1:= crota1*180/pi; {not required}
-      crota2:= crota2*180/pi;
+      // https://www.aanda.org/articles/aa/full/2002/45/aah3860/aah3860.right.html
+      // Representations of World Coordinates in FITS paper II aah3860
+      // formula 191
+      if cd1_2>0 then crota2:=arctan2(-cd1_2,cd2_2)  //arctan2 returns arctangent of (y/x)
+      else
+      if cd1_2<0 then crota2:=arctan2(cd1_2,-cd2_2)  //arctan2 returns arctangent of (y/x)
+      else
+      crota2:=0;
+
+      // Formula 193 improved for crota close to or equal to +90 or -90 degrees
+      // Calculate cdelt1, cdelt2 values using the longest side of the triangle
+      if abs(cd1_1)>abs(cd2_1) then
+      begin
+        cdelt2:=+cd2_2/cos(crota2);
+      end
+      else
+      begin
+        cdelt2:=-cd1_2/sin(crota2);
+      end;
+      crota2:=crota2*rad2deg;// convert to degrees
     end;
 
     CurrentCdelt2:=cdelt2;
 
-
-    {6. Passage (x,y) -> (RA,DEC) to find RA0,DEC0 for middle of the image. See http://alain.klotz.free.fr/audela/libtt/astm1-fr.htm}
-    {for case crpix1,crpix2 are not in the middle}
-    fitsX:=(width2+1)/2;{range 1..width, if range 1,2,3,4  then middle is 2.5=(4+1)/2 }
+    //6. Passage (x,y) -> (RA,DEC)
+    fitsX:=(width2+1)/2;{range 1..width, if range 1,2,3,4  then the middle is 2.5=(4+1)/2 }
     fitsY:=(height2+1)/2;
     dRa :=(cd1_1*(fitsX-crpix1)+cd1_2*(fitsY-crpix2))*pi/180;
     dDec:=(cd2_1*(fitsX-crpix1)+cd2_2*(fitsY-crpix2))*pi/180;
@@ -342,17 +351,16 @@ begin
     telescope_dec:=arctan((sin(dec0)+dDec*cos(dec0))/gamma);
 
     cos_telescope_dec:=cos(telescope_dec);
-    fov:=1.5*sqrt(sqr(0.5*width2*cdelt1)+sqr(0.5*height2*cdelt2))*pi/180; {field of view with 50% extra}
+    fov:=1.5*sqrt(sqr(0.5*width2*cdelt2)+sqr(0.5*height2*cdelt2))*pi/180; {field of view with 50% extra}
     linepos:=2;
-    if cdelt1*cdelt2>0 then flipped:=-1 {n-s or e-w flipped} else flipped:=1;
+    if (cd1_1*cd2_2 - cd1_2*cd2_1)>0 then flipped:=-1 {n-s or e-w swapped} else flipped:=1; //flipped?  sign(CDELT1*CDELT2) =  sign(cd1_1*cd2_2 - cd1_2*cd2_1) See World Coordinate Systems Representations within the FITS format, draft 1988
 
-    sincos(dec0,SIN_dec_ref,COS_dec_ref);{do this in advance since it is for each pixel the same}
-
+    sincos(dec0,SIN_dec_ref,COS_dec_ref);//do this in advance since it is for each pixel the same
     repeat
-      read_deepsky('S',telescope_ra,telescope_dec, cos_telescope_dec {cos(telescope_dec},fov,{var} ra2,dec2,length1,width1,pa);{deepsky database search}
+      read_deepsky('S',telescope_ra,telescope_dec, cos_telescope_dec {cos(telescope_dec)},fov,{var} ra2,dec2,length1,width1,pa);{deepsky database search}
 
-      {5. Conversion (RA,DEC) -> (x,y). See http://alain.klotz.free.fr/audela/libtt/astm1-fr.htm}
-      sincos(dec2,SIN_dec_new,COS_dec_new);{sincos is faster then seperate sin and cos functions}
+      //5. Conversion (RA,DEC) -> (x,y).
+      sincos(dec2,SIN_dec_new,COS_dec_new);//sincos is faster then seperate sin and cos functions
       delta_ra:=ra2-ra0;
       sincos(delta_ra,SIN_delta_ra,COS_delta_ra);
       HH := SIN_dec_new*sin_dec_ref + COS_dec_new*COS_dec_ref*COS_delta_ra;
@@ -373,7 +381,7 @@ begin
         objlist[NumObj].length1:=length1;
         objlist[NumObj].width1:=width1;
         objlist[NumObj].pa:=pa;
-        objlist[NumObj].rot:=(pa*flipped+crota2);
+        objlist[NumObj].rot:=(pa+crota2)*flipped;
         if naam2='' then objlist[NumObj].name:=''
         else
         if naam3='' then objlist[NumObj].name:=naam2
@@ -388,6 +396,7 @@ begin
      until (NumObj>=10)or(linepos>=$FFFFFF);{maximum 500 objects or end of database}
   end;
 end;{search deep_sky}
+
 
 procedure plot_deepsky(cnv: TCanvas; cnvwidth,cnvheight: integer; FlipHor,FlipVer: boolean);{plot the deep sky object found by search_deepsky}
 type
