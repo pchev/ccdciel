@@ -862,7 +862,7 @@ var
 begin
   if AllDevicesConnected=false then
   begin
-    msg('Internal guider: Devices not connected!',1);
+    msg('Internal guider: '+rsSomeDefinedD,1);
     SetStatus('Devices not connected',GUIDER_ALERT);
     exit;
   end;
@@ -1480,7 +1480,7 @@ procedure T_autoguider_internal.InternalguiderCalibrate;
 begin
   if AllDevicesConnected=false then
   begin
-    msg('Internal guider: Devices not connected!',1);
+    msg('Internal guider: '+rsSomeDefinedD,1);
     InternalguiderStop;
     exit;
   end;
@@ -1858,7 +1858,7 @@ procedure T_autoguider_internal.InternalguiderCalibrateBacklash;
 begin
   if AllDevicesConnected=false then
   begin
-    msg('Internal guider: Devices not connected!',1);
+    msg('Internal guider: '+rsSomeDefinedD,1);
     InternalguiderStop;
     exit;
   end;

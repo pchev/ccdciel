@@ -2901,7 +2901,7 @@ begin
              f_sequence.OnShutdown:=@ShutdownProgram;
              f_sequence.BtnStart.Click;
           end
-          else NewMessage('Devices not connected!');
+          else NewMessage(rsSomeDefinedD);
         end
         else NewMessage('File not found: '+buf);
      end;
