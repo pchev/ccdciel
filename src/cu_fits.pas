@@ -4429,7 +4429,7 @@ begin
  try
    outstr:=TStringList.Create;
    rmsg:='';
-   result:=ExecProcess(fpackcmd+' -O '+packedfilename+' -D -Y '+unpackedfilename,outstr);
+   result:=ExecProcess(fpackcmd+' -O "'+packedfilename+'" -D -Y "'+unpackedfilename+'"',outstr);
    if result<>0 then begin
      for j:=0 to outstr.Count-1 do rmsg:=rmsg+crlf+outstr[j];
    end;
@@ -4457,7 +4457,7 @@ begin
    tmpfo:=slash(TmpDir)+'tmpunpack.fits';
    outstr:=TStringList.Create;
    rmsg:='';
-   result:=ExecProcess(funpackcmd+' -O '+tmpfo+' -D '+packedfilename,outstr);
+   result:=ExecProcess(funpackcmd+' -O "'+tmpfo+'" -D "'+packedfilename+'"',outstr);
    if result=0 then begin
      ImgStream.LoadFromFile(tmpfo);
      DeleteFile(tmpfo);
@@ -4467,7 +4467,7 @@ begin
    end;
    outstr.Free;
    {$else}
-   result:=ExecProcessMem(funpackcmd+' -S '+packedfilename,ImgStream,rmsg);
+   result:=ExecProcessMem(funpackcmd+' -S "'+packedfilename+'"',ImgStream,rmsg);
    {$endif}
  except
    on E: Exception do begin
