@@ -5763,10 +5763,7 @@ begin
   y:=StrToIntDef(f_frame.FY.Text,-1);
   w:=StrToIntDef(f_frame.FWidth.Text,-1);
   h:=StrToIntDef(f_frame.FHeight.Text,-1);
-  if (x<0)or(y<0)or(w<0)or(h<0) then
-     NewMessage('Invalid frame values',1)
-  else
-     camera.SetFrame(x,y,w,h);
+  camera.SetFrame(x,y,w,h);
 end;
 
 procedure Tf_main.ResetFrame(Sender: TObject);
