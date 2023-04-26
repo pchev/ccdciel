@@ -36,7 +36,8 @@ TAstrometry = class(TComponent)
     Fpreview:Tf_preview;
     Fvisu: Tf_visu;
     Fterminatecmd: TNotifyEvent;
-    FonStartAstrometry,FonEndAstrometry: TNotifyEvent;
+    FonStartAstrometry: TNotifyEvent;
+    FonEndAstrometry: TNotifyInt;
     FonStartGoto,FonEndGoto: TNotifyEvent;
     FonShowMessage: TNotifyMsg;
     FBusy, FSlewBusy, FLastResult: Boolean;
@@ -65,6 +66,7 @@ TAstrometry = class(TComponent)
     procedure AstrometrySolveGuideonTimer(Sender: TObject);
     procedure AstrometrySolveFinder(Sender: TObject);
     procedure AstrometrySyncFinderonTimer(Sender: TObject);
+    procedure AstrometrySolvePreview(Sender: TObject);
   public
     constructor Create(AOwner: TComponent);override;
     function StartAstrometry(infile,outfile: string; terminatecmd:TNotifyEvent): boolean;
@@ -73,6 +75,7 @@ TAstrometry = class(TComponent)
     function  CurrentCoord(out cra,cde,eq,pa: double):boolean;
     function  FinderCurrentCoord(out cra,cde,eq,pa: double):boolean;
     procedure SolveCurrentImage(wait: boolean; forcesolve:boolean=false);
+    procedure SolvePreviewImage;
     procedure SolveGuideImage;
     procedure SolveFinderImage;
     procedure SyncFinderImage(wait: boolean);
@@ -105,7 +108,7 @@ TAstrometry = class(TComponent)
     property FinderOffsetY: double read FFinderOffsetY write FFinderOffsetY;
     property onShowMessage: TNotifyMsg read FonShowMessage write FonShowMessage;
     property onAstrometryStart: TNotifyEvent read FonStartAstrometry write FonStartAstrometry;
-    property onAstrometryEnd: TNotifyEvent read FonEndAstrometry write FonEndAstrometry;
+    property onAstrometryEnd: TNotifyInt read FonEndAstrometry write FonEndAstrometry;
     property onGotoStart: TNotifyEvent read FonStartGoto write FonStartGoto;
     property onGotoEnd: TNotifyEvent read FonEndGoto write FonEndGoto;
 end;
@@ -248,7 +251,7 @@ begin
    engine.timeout:=AstrometryTimeout;
    FBusy:=true;
    engine.Resolve;
-   msg(Format(rsResolvingUsi, [ResolverName[engine.Resolver]]),3);
+   if (Fterminatecmd<>@AstrometrySolvePreview) then msg(Format(rsResolvingUsi, [ResolverName[engine.Resolver]]),3);
    if (Fterminatecmd<>@AstrometrySolveGuide) and Assigned(FonStartAstrometry) then FonStartAstrometry(self);
    result:=true;
  end else begin
@@ -279,7 +282,12 @@ begin
    except
    end;
  end;
- if (Fterminatecmd<>@AstrometrySolveGuide)and(Fterminatecmd<>@AstrometrySolveFinder) and Assigned(FonEndAstrometry) then FonEndAstrometry(self);
+ if (Fterminatecmd<>@AstrometrySolveGuide)and
+    (Fterminatecmd<>@AstrometrySolvePreview)and
+    (Fterminatecmd<>@AstrometrySolveFinder) and
+    Assigned(FonEndAstrometry)
+    then
+       FonEndAstrometry(0);
  if Assigned(Fterminatecmd) then Fterminatecmd(self);
  Fterminatecmd:=nil;
 end;
@@ -379,6 +387,54 @@ if FFits.HeaderInfo.solved and CurrentCoord(ra,de,eq,pa) then begin
 end;
 end;
 
+procedure TAstrometry.SolvePreviewImage;
+var n: integer;
+begin
+  if (not FBusy) and (FFits.HeaderInfo.naxis>0) and FFits.ImageValid then begin
+    FFits.SaveToFile(slash(TmpDir)+'ccdcieltmp.fits');
+    StartAstrometry(slash(TmpDir)+'ccdcieltmp.fits',slash(TmpDir)+'ccdcielsolved.fits',@AstrometrySolvePreview);
+  end;
+end;
+
+procedure TAstrometry.AstrometrySolvePreview(Sender: TObject);
+var ra,de,pa,ra2000,de2000: double;
+    n,m: integer;
+    i: TcdcWCSinfo;
+    c: TcdcWCScoord;
+begin
+  if Assigned(FonEndAstrometry) then FonEndAstrometry(1);
+  if cdcwcs_xy2sky<>nil then begin
+    n:=cdcwcs_initfitsfile(pchar(slash(TmpDir)+'ccdcielsolved.fits'),1);
+    try
+    if n=0 then n:=cdcwcs_getinfo(addr(i),1);
+    if (n=0)and(i.secpix<>0) then begin
+      c.x:=0.5+i.wp/2;
+      c.y:=0.5+i.hp/2;
+      m:=cdcwcs_xy2sky(@c,1);
+      if m=0 then begin
+        ra:=c.ra/15;
+        de:=c.dec;
+        pa:=i.rot;
+        ra2000:=ra;
+        de2000:=de;
+        ra:=ra*15*deg2rad;
+        de:=de*deg2rad;
+        J2000ToApparent(ra,de);
+        ra:=rad2deg*ra/15;
+        de:=rad2deg*de;
+        if preview.CheckBoxAstrometry.Checked then
+          preview.LabelAstrometry.Caption:= 'Apparent: '+RAToStr(ra)+' '+ DEToStr(de)+crlf+
+                                            'J2000   : '+RAToStr(ra2000)+' '+DEToStr(de2000)+crlf+
+                                            'PA      : '+FormatFloat(f1, pa);
+      end;
+    end;
+    finally
+    end;
+  end
+  else
+    msg('Missing library '+libwcs,1);
+end;
+
 procedure TAstrometry.SolveFinderImage;
 begin
   if (not FBusy) and (FFinderFits.HeaderInfo.naxis>0) and FFinderFits.ImageValid then begin
@@ -394,7 +450,7 @@ var ra,de,pa,ra2000,de2000: double;
     i: TcdcWCSinfo;
     c: TcdcWCScoord;
 begin
-  if Assigned(FonEndAstrometry) then FonEndAstrometry(nil);
+  if Assigned(FonEndAstrometry) then FonEndAstrometry(2);
   if cdcwcs_xy2sky<>nil then begin
     n:=cdcwcs_initfitsfile(pchar(slash(TmpDir)+'findersolved.fits'),2);
     try

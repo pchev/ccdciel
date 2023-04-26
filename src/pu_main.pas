@@ -905,7 +905,7 @@ type
     procedure plot_north;
     Procedure DrawHistogram(SetLevel,ResetCursor: boolean);
     procedure AstrometryStart(Sender: TObject);
-    procedure AstrometryEnd(Sender: TObject);
+    procedure AstrometryEnd(i: Integer);
     procedure GotoStart(Sender: TObject);
     procedure GotoEnd(Sender: TObject);
     procedure EndControlExposure(Sender: TObject);
@@ -10746,6 +10746,9 @@ begin
       // Image inspection
       if ImageInspection then
          MeasureImage(true);
+      // astrometry
+      if (f_preview.CheckBoxAstrometry.Checked)and(not astrometry.Busy) then
+        astrometry.SolvePreviewImage;
       // Next exposure delayed after image display
       // start the exposure now
       if f_preview.Loop and f_preview.Running and (not CancelAutofocus) then begin
@@ -13464,7 +13467,7 @@ begin
   MenuStopAstrometry2.Visible:=true;
 end;
 
-procedure Tf_main.AstrometryEnd(Sender: TObject);
+procedure Tf_main.AstrometryEnd(i: Integer);
 var resulttxt,buf:string;
     dist: double;
 begin
@@ -13491,7 +13494,7 @@ begin
   MenuResolvePlanetarium2.Enabled:=true;
   MenuShowCCDFrame2.Enabled:=true;
   MenuViewAstrometryLog2.Enabled:=true;
-  if sender<>nil then begin
+  if i=0 then begin
     // main camera result
     if astrometry.LastResult then begin
        LoadFitsFile(astrometry.ResultFile);
@@ -13526,7 +13529,10 @@ begin
       end;
     end;
   end
-  else begin
+  else if i=1 then begin
+    // preview result, nothing to log
+  end
+  else if i=2 then begin
     // finder camera result
     if astrometry.LastResult then begin
        NewMessage(Format(rsResolveSucce, [rsFinderCamera]),3);

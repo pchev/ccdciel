@@ -35,12 +35,18 @@ type
   Tf_preview = class(TFrame)
     BtnPreview: TButton;
     BtnLoop: TButton;
+    CheckBoxAstrometry: TCheckBox;
     Fnumber: TComboBox;
     ISObox: TComboBox;
     Label3: TLabel;
+    Label4: TLabel;
+    Label5: TLabel;
+    LabelAstrometry: TLabel;
     LabelOffset: TLabel;
     LabelGain: TLabel;
     Panel5: TPanel;
+    Panel6: TPanel;
+    Panel7: TPanel;
     PanelStack: TPanel;
     PanelOffset: TPanel;
     PanelFnumber: TPanel;
@@ -60,6 +66,7 @@ type
     Title: TLabel;
     procedure BtnLoopClick(Sender: TObject);
     procedure BtnPreviewClick(Sender: TObject);
+    procedure CheckBoxAstrometryClick(Sender: TObject);
     procedure ExpTimeKeyPress(Sender: TObject; var Key: char);
   private
     { private declarations }
@@ -129,7 +136,8 @@ begin
   Label2.Caption:=rsBinning;
   Label3.Caption:=rsFStop;
   BtnPreview.Caption:=rsPreview;
-  StackPreview.Caption:=rsStack;
+  label4.Caption:=rsAstrometry;
+  Label5.Caption:=rsStack;
   BtnLoop.Caption:=rsLoop;
   ExpTime.Hint:=rsExposureTime;
   ISObox.Hint:=rsCameraISO;
@@ -164,6 +172,11 @@ begin
      ExpectedStop:=true;
      if Assigned(FonAbortExposure) then FonAbortExposure(self);
   end;
+end;
+
+procedure Tf_preview.CheckBoxAstrometryClick(Sender: TObject);
+begin
+  LabelAstrometry.Caption:='';
 end;
 
 procedure Tf_preview.ExpTimeKeyPress(Sender: TObject; var Key: char);

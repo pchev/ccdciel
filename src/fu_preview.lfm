@@ -1,10 +1,10 @@
 object f_preview: Tf_preview
   Left = 0
-  Height = 244
+  Height = 292
   Top = 0
   Width = 194
   AutoSize = True
-  ClientHeight = 244
+  ClientHeight = 292
   ClientWidth = 194
   ParentFont = False
   TabOrder = 0
@@ -12,13 +12,13 @@ object f_preview: Tf_preview
   DesignTop = -2
   object Panel1: TPanel
     Left = 0
-    Height = 224
+    Height = 272
     Top = 20
     Width = 194
     Align = alClient
     ChildSizing.Layout = cclTopToBottomThenLeftToRight
     ChildSizing.ControlsPerLine = 99
-    ClientHeight = 224
+    ClientHeight = 272
     ClientWidth = 194
     ParentFont = False
     TabOrder = 0
@@ -39,7 +39,7 @@ object f_preview: Tf_preview
         Top = 0
         Width = 90
         Constraints.MaxHeight = 28
-        ItemHeight = 0
+        ItemHeight = 24
         ItemIndex = 7
         Items.Strings = (
           '0.001'
@@ -65,7 +65,7 @@ object f_preview: Tf_preview
         AnchorSideTop.Control = ExpTime
         AnchorSideTop.Side = asrCenter
         Left = 6
-        Height = 19
+        Height = 18
         Top = 5
         Width = 57
         Caption = 'Exposure'
@@ -91,7 +91,7 @@ object f_preview: Tf_preview
         Top = 0
         Width = 91
         Constraints.MaxHeight = 28
-        ItemHeight = 0
+        ItemHeight = 18
         ParentFont = False
         Style = csDropDownList
         TabOrder = 0
@@ -101,9 +101,9 @@ object f_preview: Tf_preview
         AnchorSideTop.Control = GainEdit
         AnchorSideTop.Side = asrCenter
         Left = 6
-        Height = 19
+        Height = 18
         Top = 9
-        Width = 28
+        Width = 29
         Caption = 'Gain'
         ParentColor = False
         ParentFont = False
@@ -132,15 +132,15 @@ object f_preview: Tf_preview
           AnchorSideTop.Control = OffsetEdit
           AnchorSideTop.Side = asrCenter
           Left = 6
-          Height = 19
-          Top = 9
+          Height = 18
+          Top = 11
           Width = 38
           Caption = 'Offset'
           ParentColor = False
         end
         object OffsetEdit: TSpinEdit
           Left = 100
-          Height = 29
+          Height = 32
           Top = 4
           Width = 90
           MaxValue = 32767
@@ -166,7 +166,7 @@ object f_preview: Tf_preview
         Top = 0
         Width = 90
         Constraints.MaxHeight = 28
-        ItemHeight = 0
+        ItemHeight = 24
         ItemIndex = 0
         Items.Strings = (
           '1x1'
@@ -178,9 +178,9 @@ object f_preview: Tf_preview
       end
       object Label2: TLabel
         Left = 6
-        Height = 19
+        Height = 18
         Top = 4
-        Width = 47
+        Width = 48
         Caption = 'Binning'
         ParentColor = False
         ParentFont = False
@@ -201,7 +201,7 @@ object f_preview: Tf_preview
         AnchorSideTop.Control = Fnumber
         AnchorSideTop.Side = asrCenter
         Left = 6
-        Height = 19
+        Height = 18
         Top = 7
         Width = 38
         Caption = 'F-stop'
@@ -214,15 +214,44 @@ object f_preview: Tf_preview
         Top = 2
         Width = 90
         Constraints.MaxHeight = 28
-        ItemHeight = 0
+        ItemHeight = 24
         ParentFont = False
+        TabOrder = 0
+      end
+    end
+    object Panel6: TPanel
+      Left = 0
+      Height = 20
+      Top = 154
+      Width = 191
+      BevelOuter = bvNone
+      ClientHeight = 20
+      ClientWidth = 191
+      TabOrder = 6
+      object Label4: TLabel
+        AnchorSideTop.Control = CheckBoxAstrometry
+        AnchorSideTop.Side = asrCenter
+        Left = 6
+        Height = 18
+        Top = 1
+        Width = 69
+        Caption = 'Astrometry'
+        ParentColor = False
+      end
+      object CheckBoxAstrometry: TCheckBox
+        Left = 100
+        Height = 20
+        Top = 0
+        Width = 28
+        OnClick = CheckBoxAstrometryClick
+        ParentBidiMode = False
         TabOrder = 0
       end
     end
     object Panel5: TPanel
       Left = 0
       Height = 25
-      Top = 154
+      Top = 174
       Width = 191
       BevelOuter = bvNone
       ClientHeight = 25
@@ -255,11 +284,11 @@ object f_preview: Tf_preview
     end
     object Panel4: TPanel
       Left = 0
-      Height = 22
-      Top = 179
+      Height = 21
+      Top = 199
       Width = 191
       BevelOuter = bvNone
-      ClientHeight = 22
+      ClientHeight = 21
       ClientWidth = 191
       ParentFont = False
       TabOrder = 2
@@ -271,7 +300,7 @@ object f_preview: Tf_preview
         Left = 164
         Height = 14
         Hint = 'Uncalibrated'
-        Top = 4
+        Top = 3
         Width = 14
         BorderSpacing.Around = 4
         Brush.Color = clGray
@@ -279,30 +308,55 @@ object f_preview: Tf_preview
       end
       object PanelStack: TPanel
         Left = 0
-        Height = 22
+        Height = 20
         Top = 0
         Width = 160
-        Align = alLeft
-        AutoSize = True
         BevelOuter = bvNone
-        ClientHeight = 22
+        ClientHeight = 20
         ClientWidth = 160
         Constraints.MinWidth = 160
         TabOrder = 0
         object StackPreview: TCheckBox
-          Left = 4
-          Height = 21
+          Left = 100
+          Height = 20
           Hint = 'Stack the preview frames to a single image.'#10'A new stack is started when you start a loop or if you uncheck this button.'
           Top = 0
-          Width = 56
-          BidiMode = bdRightToLeft
-          BorderSpacing.Left = 4
-          BorderSpacing.Right = 4
-          Caption = 'Stack'
+          Width = 28
           ParentFont = False
           ParentBidiMode = False
           TabOrder = 0
         end
+        object Label5: TLabel
+          AnchorSideTop.Control = StackPreview
+          AnchorSideTop.Side = asrCenter
+          Left = 6
+          Height = 18
+          Top = 1
+          Width = 33
+          Caption = 'Stack'
+          ParentColor = False
+        end
+      end
+    end
+    object Panel7: TPanel
+      Left = 0
+      Height = 1
+      Top = 220
+      Width = 191
+      AutoSize = True
+      BevelOuter = bvNone
+      ClientHeight = 1
+      ClientWidth = 191
+      TabOrder = 7
+      object LabelAstrometry: TLabel
+        Left = 0
+        Height = 1
+        Top = 0
+        Width = 1
+        Font.Name = 'Courier New'
+        Font.Pitch = fpFixed
+        ParentColor = False
+        ParentFont = False
       end
     end
   end

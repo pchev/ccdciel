@@ -39,6 +39,7 @@ type
   TNotifyMsg = procedure(msg:string; level: integer=1) of object;
   TNotifyStr = procedure(msg:string) of object;
   TNotifyNum = procedure(d: double) of object;
+  TNotifyInt = procedure(i: integer) of object;
   TNotifyBoolConst= procedure(v: boolean) of object;
   TNotifyBool= procedure(var v: boolean) of object;
 
