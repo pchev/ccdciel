@@ -39,6 +39,7 @@ type
     ButtonLogDir: TButton;
     CdCPath: TEdit;
     AstrometryCamera: TComboBox;
+    CdCAdjustFrame: TCheckBox;
     Label165: TLabel;
     Label166: TLabel;
     Label167: TLabel;
@@ -1270,6 +1271,7 @@ begin
 
   PagePlanetarium.Caption := rsPlanetarium;
   PlanetariumBox.Caption := rsSoftware;
+  CdCAdjustFrame.Caption:=rsAdjustTheCha;
   CheckBoxLocalCdc.Caption := rsSkychartOnLo;
   StartCdC.Caption := Format(rsStartS,['Skychart']);
   StartHNSKY.Caption := Format(rsStartS,['HNSKY']);

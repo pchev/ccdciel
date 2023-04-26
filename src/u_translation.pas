@@ -1513,6 +1513,7 @@ resourcestring
   rsSavePreviewI = 'Save preview images';
   rsObjectSetsAt = 'Object sets at %s. In %s hour(s)';
   rsTimingEstima = 'Timing estimate';
+  rsAdjustTheCha = 'Adjust the chart for the image or frame';
 
 implementation
 

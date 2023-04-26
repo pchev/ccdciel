@@ -532,11 +532,11 @@ var
   LastHfd,LastDrift: double;
   CustomHeaderNum: integer;
   CustomHeaders: array [1..MaxCustomHeaders] of TCustomHeaderElement;
+  CdCAdjustFrame: boolean;
   {internal guider}
   InternalguiderRunning,InternalguiderCalibrating,InternalguiderCalibratingBacklash,InternalguiderGuiding,StopInternalguider,InternalguiderCapturingDark: boolean;
   {finder}
   FinderPreviewLoop: boolean;
-
 
   procedure globalmsg(str:string);
   function Str2Frametype(str:string):TFrameType;

@@ -4655,6 +4655,8 @@ begin
     f_pause.Wait(30);
   end;
 
+  CdCAdjustFrame:=config.GetValue('/Planetarium/CdCAdjustFrame',true);
+
   astrometry.FinderOffsetX:=config.GetValue('/Finder/OffsetX',0.0);
   astrometry.FinderOffsetY:=config.GetValue('/Finder/OffsetY',0.0);
   f_finder.ShowCalibration;
@@ -9038,6 +9040,7 @@ begin
    f_option.CdCport.Text:=config.GetValue('/Planetarium/CdCport','');
    f_option.StartCdC.Checked:=config.GetValue('/Planetarium/CdCstart',false);
    f_option.CdCPath.Text:=config.GetValue('/Planetarium/CdCpath',defCdCpath);
+   f_option.CdCAdjustFrame.Checked:=config.GetValue('/Planetarium/CdCAdjustFrame',true);
    f_option.StartHNSKY.Checked:=config.GetValue('/Planetarium/HNSKYstart',false);
    f_option.HNSKYPath.Text:=config.GetValue('/Planetarium/HNSKYpath',defHNSKYpath);
    f_option.StartSAMP.Checked:=config.GetValue('/Planetarium/SAMPstart',false);
@@ -9415,6 +9418,7 @@ begin
      config.SetValue('/Planetarium/CdCport',trim(f_option.CdCport.Text));
      config.SetValue('/Planetarium/CdCstart',f_option.StartCdC.Checked);
      config.SetValue('/Planetarium/CdCpath',f_option.CdCPath.Text);
+     config.SetValue('/Planetarium/CdCAdjustFrame',f_option.CdCAdjustFrame.Checked);
      config.SetValue('/Planetarium/HNSKYstart',f_option.StartHNSKY.Checked);
      config.SetValue('/Planetarium/HNSKYpath',f_option.HNSKYPath.Text);
      config.SetValue('/Planetarium/SAMPstart',f_option.StartSAMP.Checked);

@@ -267,17 +267,21 @@ begin
 end;
 
 function TPlanetarium_cdc.ShowImage(fn: string; fovdeg:double=0):boolean;
-var buf:string;
+var buf,adjust:string;
 begin
   result:=false;
+  if CdCAdjustFrame then
+    adjust:='ON'
+  else
+    adjust:='OFF';
   buf:='SHOWBGIMAGE OFF';
   FLastErrorTxt:=Cmd(buf);
   if not CompareResult(FLastErrorTxt,msgOK) then begin FLastErrorTxt:=buf+': '+FLastErrorTxt; exit; end;
-  buf:='LOADBGIMAGE '+fn;
+  buf:='LOADBGIMAGE '+fn+' '+adjust;
   FLastErrorTxt:=Cmd(buf);
   if not CompareResult(FLastErrorTxt,msgOK) then begin FLastErrorTxt:=buf+': '+FLastErrorTxt; exit; end;
   if fovdeg=0 then begin
-    buf:='SHOWBGIMAGE ON';
+    buf:='SHOWBGIMAGE ON '+adjust;
     FLastErrorTxt:=Cmd(buf);
     if not CompareResult(FLastErrorTxt,msgOK) then begin FLastErrorTxt:=buf+': '+FLastErrorTxt; exit; end;
   end
@@ -295,22 +299,20 @@ end;
 
 function TPlanetarium_cdc.DrawFrame(frra,frde,frsizeH,frsizeV,frrot: double):boolean;
 var buf:string;
+    cjd: double;
+    f:textfile;
 begin
   result:=false;
+  cjd:=jdtoday;
   if (FplanetariumEquinox<>0)and(FplanetariumJD>0) then begin
     frra:=frra*deg2rad;
     frde:=frde*deg2rad;
     mean_equatorial(frra,frde);
     PrecessionFK5(jdtoday,FplanetariumJD,frra,frde);
+    cjd:=FplanetariumJD;
     frra:=rad2deg*frra;
     frde:=rad2deg*frde;
   end;
-  buf := 'SETRA ' + FormatFloat('0.00000', frra/15.0);
-  FLastErrorTxt:=Cmd(buf);
-  if not CompareResult(FLastErrorTxt,msgOK) then begin FLastErrorTxt:=buf+': '+FLastErrorTxt; exit; end;
-  buf := 'SETDEC ' + FormatFloat('0.00000', frde);
-  FLastErrorTxt:=Cmd(buf);
-  if not CompareResult(FLastErrorTxt,msgOK) then begin FLastErrorTxt:=buf+': '+FLastErrorTxt; exit; end;
   buf := 'SHOWRECTANGLE 10';
   FLastErrorTxt:=Cmd(buf);
   if not CompareResult(FLastErrorTxt,msgOK) then begin FLastErrorTxt:=buf+': '+FLastErrorTxt; exit; end;
@@ -319,12 +321,28 @@ begin
     FormatFloat('0.00', frrot) + ' 0';
   FLastErrorTxt:=Cmd(buf);
   if not CompareResult(FLastErrorTxt,msgOK) then begin FLastErrorTxt:=buf+': '+FLastErrorTxt; exit; end;
-  buf:='MARKCENTER ON';
+  AssignFile(f,slash(TmpDir)+'ccdciel.cdcc');
+  Rewrite(f);
+  writeln(f,'EQUINOX='+FormatFloat(f1,cjd));
+  writeln(f,'Circle_01 '+ARToStr3(frra/15.0)+' '+DEToStr3(frde)+' - - -');
+  CloseFile(f);
+  buf:='LOADCIRCLE '+slash(TmpDir)+'ccdciel.cdcc';
   FLastErrorTxt:=Cmd(buf);
   if not CompareResult(FLastErrorTxt,msgOK) then begin FLastErrorTxt:=buf+': '+FLastErrorTxt; exit; end;
-  buf := 'SETFOV ' + FormatFloat('0.000', frsizeH*2.2);
+  buf:='MARKCENTER OFF';
   FLastErrorTxt:=Cmd(buf);
   if not CompareResult(FLastErrorTxt,msgOK) then begin FLastErrorTxt:=buf+': '+FLastErrorTxt; exit; end;
+  if CdCAdjustFrame then begin
+    buf := 'SETRA ' + FormatFloat('0.00000', frra/15.0);
+    FLastErrorTxt:=Cmd(buf);
+    if not CompareResult(FLastErrorTxt,msgOK) then begin FLastErrorTxt:=buf+': '+FLastErrorTxt; exit; end;
+    buf := 'SETDEC ' + FormatFloat('0.00000', frde);
+    FLastErrorTxt:=Cmd(buf);
+    if not CompareResult(FLastErrorTxt,msgOK) then begin FLastErrorTxt:=buf+': '+FLastErrorTxt; exit; end;
+    buf := 'SETFOV ' + FormatFloat('0.000', frsizeH*2.2);
+    FLastErrorTxt:=Cmd(buf);
+    if not CompareResult(FLastErrorTxt,msgOK) then begin FLastErrorTxt:=buf+': '+FLastErrorTxt; exit; end;
+  end;
   buf:='REDRAW';
   FLastErrorTxt:=Cmd(buf);
   if not CompareResult(FLastErrorTxt,msgOK) then begin FLastErrorTxt:=buf+': '+FLastErrorTxt; exit; end;
