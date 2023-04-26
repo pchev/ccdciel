@@ -90,6 +90,9 @@
         </CompilerOptions>
       </Item3>
       <Item4 Name="Release">
+        <MacroValues Count="1">
+          <Macro6 Name="LCLWidgetType" Value="gtk2"/>
+        </MacroValues>
         <CompilerOptions>
           <Version Value="11"/>
           <Target>
@@ -125,6 +128,9 @@
         </CompilerOptions>
       </Item4>
       <Item5 Name="memleak">
+        <MacroValues Count="1">
+          <Macro5 Name="LCLWidgetType" Value="gtk2"/>
+        </MacroValues>
         <CompilerOptions>
           <Version Value="11"/>
           <Target>
@@ -299,11 +305,13 @@
           </Other>
         </CompilerOptions>
       </Item8>
-      <SharedMatrixOptions Count="4">
+      <SharedMatrixOptions Count="6">
         <Item1 ID="755009368669" Modes="win32" Type="IDEMacro" MacroName="LCLWidgetType" Value="win32"/>
         <Item2 ID="602360172665" Modes="win64" Type="IDEMacro" MacroName="LCLWidgetType" Value="win32"/>
         <Item3 ID="723051368745" Modes="qt" Type="IDEMacro" MacroName="LCLWidgetType" Value="qt5"/>
         <Item4 ID="929994115950" Modes="MacOS" Type="IDEMacro" MacroName="LCLWidgetType" Value="cocoa"/>
+        <Item5 ID="345506446217" Modes="memleak" Type="IDEMacro" MacroName="LCLWidgetType" Value="gtk2"/>
+        <Item6 ID="013547356301" Modes="Release" Type="IDEMacro" MacroName="LCLWidgetType" Value="gtk2"/>
       </SharedMatrixOptions>
     </BuildModes>
     <PublishOptions>
