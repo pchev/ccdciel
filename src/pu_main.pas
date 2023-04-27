@@ -9994,6 +9994,12 @@ if (camera.Status=devConnected) and ((not f_capture.Running) or autofocusing) an
      camera.AlignFrames:=false;
      fits.SetBPM(bpm,bpmNum,bpmX,bpmY,bpmAxis);
   end;
+  if f_preview.CheckBoxAstrometry.Checked then begin
+    if copy(f_preview.LabelAstrometry.Caption,length(f_preview.LabelAstrometry.Caption)-2,3)='...' then
+      f_preview.LabelAstrometry.Caption:=f_preview.LabelAstrometry.Caption+'.'
+    else
+      f_preview.LabelAstrometry.Caption:=f_preview.LabelAstrometry.Caption+'    ...';
+  end;
   camera.StartExposure(e);
 end
 else begin

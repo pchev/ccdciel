@@ -176,7 +176,10 @@ end;
 
 procedure Tf_preview.CheckBoxAstrometryClick(Sender: TObject);
 begin
-  LabelAstrometry.Caption:='';
+  if CheckBoxAstrometry.Checked then
+    LabelAstrometry.Caption:='Apparent: -'+crlf+'J2000   : -'+crlf+'PA      : -'
+  else
+    LabelAstrometry.Caption:='';
 end;
 
 procedure Tf_preview.ExpTimeKeyPress(Sender: TObject; var Key: char);
