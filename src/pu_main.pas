@@ -884,6 +884,7 @@ type
     procedure ShowLastImage(Sender: TObject);
     procedure ResetPreviewStack(Sender: TObject);
     Procedure StopExposure(Sender: TObject);
+    procedure StopPreview;
     Procedure StartPreviewExposure(Sender: TObject);
     Procedure StartPreviewExposureAsync(Data: PtrInt);
     function  PrepareCaptureExposure(canwait:boolean):boolean;
@@ -7440,6 +7441,7 @@ begin
  PosFocus:=-1;
  PosNearR:=-1;
  f_preview.StackPreview.Checked:=false;
+ f_preview.CheckBoxAstrometry.Checked:=false;
  NewMessage(Format(rsFromToBy, [IntToStr(minpos), IntToStr(centerp), IntToStr(step)]),2);
  if focuser.hasTemperature then begin
     NewMessage(Format(rsFocuserTempe, [FormatFloat(f1, TempDisplay(TemperatureScale,FocuserTemp))+TempLabel]),2);
@@ -7635,6 +7637,7 @@ begin
  learningvcurve:=false;
  camera.ResetFrame;
  f_preview.StackPreview.Checked:=false;
+ f_preview.CheckBoxAstrometry.Checked:=false;
  f_visu.Zoom:=SaveZoom;
  ImgZoom:=f_visu.Zoom;
  f_starprofile.FindStar:=false; {deselect the star so a new run will search for the new star position}
@@ -7896,6 +7899,17 @@ begin
   FinderRestartLoop:=false;
 end;
 
+procedure Tf_main.StopPreview;
+begin
+  if f_preview.Running then begin
+    if f_preview.Loop then
+      f_preview.BtnLoopClick(nil)
+    else
+      f_preview.BtnPreviewClick(nil);
+    wait(2);
+  end;
+end;
+
 procedure Tf_main.MountGoto(Sender: TObject);
 var ra,de,err:double;
     tra,tde,objn: string;
@@ -7915,11 +7929,7 @@ if f_mount.BtnGoto.Caption=rsGoto then begin
       exit;
    end;
    if f_preview.Running then begin
-     if f_preview.Loop then
-       f_preview.BtnLoopClick(nil)
-     else
-       f_preview.BtnPreviewClick(nil);
-     wait(2);
+     StopPreview;
    end;
    FormPos(f_goto,mouse.CursorPos.X,mouse.CursorPos.Y);
    f_goto.Caption:=rsGoto;
@@ -10028,6 +10038,7 @@ begin
   RecenteringTarget:=true;
   try
     f_preview.StackPreview.Checked:=false;
+    f_preview.CheckBoxAstrometry.Checked:=false;
     RunningCapture:=false;
     if (astrometryResolver<>ResolverNone)and(Mount.Status=devConnected)and(f_sequence.Running)and
        (f_sequence.TargetCoord)and(f_sequence.TargetRA<>NullCoord)and(f_sequence.TargetDE<>NullCoord)
@@ -10175,11 +10186,7 @@ if (AllDevicesConnected)and(not autofocusing)and(not learningvcurve)and(not f_vi
    if canwait then begin
      NewMessage(rsStopPreview,1);
      StatusBar1.Panels[panelstatus].Text:=rsStopPreview;
-     if f_preview.Loop then
-       f_preview.BtnLoopClick(nil)
-     else
-       f_preview.BtnPreviewClick(nil);
-     wait(2);
+     StopPreview;
     end
     else begin
       exit; // cannot start now
@@ -10413,6 +10420,7 @@ if (AllDevicesConnected)and(not autofocusing)and (not learningvcurve) then begin
   else
     ftype:=LIGHT;
   f_preview.StackPreview.Checked:=false;
+  f_preview.CheckBoxAstrometry.Checked:=false;
   f_capture.Running:=true;
   LockRestartExposure:=false;
   MenuCaptureStart.Caption:=rsStop;
@@ -10489,6 +10497,7 @@ if (AllDevicesConnected)and(not autofocusing)and (not learningvcurve) then begin
   fits.DarkOn:=false;
   // stacking
   f_preview.StackPreview.Checked:=false;
+  f_preview.CheckBoxAstrometry.Checked:=false;
   camera.AddFrames:=f_capture.PanelStack.Visible and (f_capture.StackNum.Value>1);
   if camera.AddFrames then begin
     camera.SaveFrames:=SaveStack;
@@ -11716,6 +11725,7 @@ begin
     wait(2);
   end;
   if not f_visu.BullsEye then f_visu.BtnBullsEyeClick(Sender);
+  f_preview.CheckBoxAstrometry.Checked:=false;
   f_preview.Loop:=true;
   if not f_preview.Running then begin
     f_preview.Running:=true;
@@ -11741,11 +11751,7 @@ begin
     ImageInspection:=false;
     SplitImage:=false;
     if f_preview.Running then begin
-      if f_preview.Loop then
-        f_preview.BtnLoopClick(nil)
-      else
-        f_preview.BtnPreviewClick(nil);
-      wait(2);
+      StopPreview;
     end;
     if f_visu.BullsEye then f_visu.BtnBullsEyeClick(Sender);
     Collimation:=true;
@@ -11818,6 +11824,7 @@ begin
   ImageInspection:=true;
   SplitImage:=false;
   Collimation:=false;
+  f_preview.CheckBoxAstrometry.Checked:=false;
   if not f_preview.Loop then f_preview.Loop:=true;
   if not f_preview.Running then begin
     f_preview.Running:=true;
@@ -12264,11 +12271,7 @@ begin
     exit;
   end;
   if f_preview.Running then begin
-    if f_preview.Loop then
-      f_preview.BtnLoopClick(nil)
-    else
-      f_preview.BtnPreviewClick(nil);
-    wait(2);
+    StopPreview;
   end;
   OutOfRange:=false;
   if FocAbsolute then
@@ -12318,6 +12321,7 @@ begin
      f_visu.Zoom:=0;
      ImgZoom:=0;
      f_preview.StackPreview.Checked:=false;
+     f_preview.CheckBoxAstrometry.Checked:=false;
      NewMessage(rsFocuserCalib2,1);
      hfdmin:=9999;
      j:=0;
@@ -12638,6 +12642,7 @@ begin
       wait(1);
       camera.ResetFrame;
       f_preview.Loop:=false;
+      f_preview.CheckBoxAstrometry.Checked:=false;
       f_preview.BtnPreviewClick(nil);
     end;
   end
@@ -12666,6 +12671,7 @@ if  f_capture.Running  then begin
 if (not Collimation)and(AutofocusMode=afPlanet)and(Sender<>nil) then begin
   SaveFocusZoom:=f_visu.Zoom;
   f_preview.StackPreview.Checked:=false;
+  f_preview.CheckBoxAstrometry.Checked:=false;
   if not f_preview.Loop then f_preview.Loop:=true;
   if not f_preview.Running then begin
     f_preview.Running:=true;
@@ -12705,6 +12711,7 @@ else begin
      f_visu.Zoom:=0;
      ImgZoom:=0;
      f_preview.StackPreview.Checked:=false;
+     f_preview.CheckBoxAstrometry.Checked:=false;
      if not f_preview.Loop then f_preview.Loop:=true;
      if not f_preview.Running then begin
        f_preview.Running:=true;
@@ -12883,6 +12890,7 @@ begin
  savecapture:=RunningCapture;
  saveearlystart:=EarlyNextExposure;
  f_preview.StackPreview.Checked:=false;
+ f_preview.CheckBoxAstrometry.Checked:=false;
  try
  RunningCapture:=false;
  tpos:=false;
@@ -13168,11 +13176,7 @@ begin
     exit;
   end;
   if f_preview.Running then begin
-    if f_preview.Loop then
-      f_preview.BtnLoopClick(nil)
-    else
-      f_preview.BtnPreviewClick(nil);
-    wait(2);
+    StopPreview;
   end;
   if  astrometry.Busy then begin
    NewMessage(rsCannotStartA2,1);
@@ -13208,6 +13212,7 @@ begin
   if AutofocusExposureFact<=0 then AutofocusExposureFact:=1;
   if AutofocusExposure<=0 then AutofocusExposure:=1;
   // start a new exposure as the current frame is probably not a preview
+  f_preview.CheckBoxAstrometry.Checked:=false;
   f_preview.Exposure:=AutofocusExposure*AutofocusExposureFact;
   f_preview.Gain:=AutofocusGain;
   f_preview.Offset:=AutofocusOffset;
@@ -13335,6 +13340,7 @@ begin
   end;
   f_starprofile.InitAutofocus(false);
   f_preview.StackPreview.Checked:=false;
+  f_preview.CheckBoxAstrometry.Checked:=false;
   if CancelAutofocus then begin
     f_starprofile.ChkAutofocusDown(false);
     exit;
@@ -14042,11 +14048,7 @@ begin
       exit;
     end;
     if f_preview.Running then begin
-      if f_preview.Loop then
-        f_preview.BtnLoopClick(nil)
-      else
-        f_preview.BtnPreviewClick(nil);
-      wait(2);
+      StopPreview;
     end;
     if  astrometry.Busy then begin
      NewMessage(rsResolverAlre,1);

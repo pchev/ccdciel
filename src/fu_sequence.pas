@@ -857,6 +857,7 @@ begin
  AutoguiderAlert:=false;
  MountTrackingAlert:=false;
  Preview.StackPreview.Checked:=false;
+ Preview.CheckBoxAstrometry.Checked:=false;
  led.Brush.Color:=clLime;
  StatusTimer.Enabled:=true;
  Targets.Unattended:=Unattended.Checked;
