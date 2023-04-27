@@ -1903,6 +1903,8 @@ end;
 procedure Tf_setup.ApplyAscomRemoteClick(Sender: TObject);
 begin
    CameraARestProtocol.ItemIndex:=DefaultARestProtocol.ItemIndex;
+   GuideCameraARestProtocol.ItemIndex:=DefaultARestProtocol.ItemIndex;
+   FinderCameraARestProtocol.ItemIndex:=DefaultARestProtocol.ItemIndex;
    WheelARestProtocol.ItemIndex:=DefaultARestProtocol.ItemIndex;
    FocuserARestProtocol.ItemIndex:=DefaultARestProtocol.ItemIndex;
    RotatorARestProtocol.ItemIndex:=DefaultARestProtocol.ItemIndex;
@@ -1913,6 +1915,8 @@ begin
    SwitchARestProtocol.ItemIndex:=DefaultARestProtocol.ItemIndex;
    CoverARestProtocol.ItemIndex:=DefaultARestProtocol.ItemIndex;
    CameraARestHost.Text:=DefaultARestHost.Text;
+   GuideCameraARestHost.Text:=DefaultARestHost.Text;
+   FinderCameraARestHost.Text:=DefaultARestHost.Text;
    WheelARestHost.Text:=DefaultARestHost.Text;
    FocuserARestHost.Text:=DefaultARestHost.Text;
    RotatorARestHost.Text:=DefaultARestHost.Text;
@@ -1923,6 +1927,8 @@ begin
    SwitchARestHost.Text:=DefaultARestHost.Text;
    CoverARestHost.Text:=DefaultARestHost.Text;
    CameraARestPort.Value:=DefaultARestPort.Value;
+   GuideCameraARestPort.Value:=DefaultARestPort.Value;
+   FinderCameraARestPort.Value:=DefaultARestPort.Value;
    WheelARestPort.Value:=DefaultARestPort.Value;
    FocuserARestPort.Value:=DefaultARestPort.Value;
    RotatorARestPort.Value:=DefaultARestPort.Value;
@@ -1933,6 +1939,8 @@ begin
    SwitchARestPort.Value:=DefaultARestPort.Value;
    CoverARestPort.Value:=DefaultARestPort.Value;
    CameraARestUser.Text:=DefaultARestUser.Text;
+   GuideCameraARestUser.Text:=DefaultARestUser.Text;
+   FinderCameraARestUser.Text:=DefaultARestUser.Text;
    WheelARestUser.Text:=DefaultARestUser.Text;
    FocuserARestUser.Text:=DefaultARestUser.Text;
    RotatorARestUser.Text:=DefaultARestUser.Text;
@@ -1943,6 +1951,8 @@ begin
    SwitchARestUser.Text:=DefaultARestUser.Text;
    CoverARestUser.Text:=DefaultARestUser.Text;
    CameraARestPass.Text:=DefaultARestPass.Text;
+   GuideCameraARestPass.Text:=DefaultARestPass.Text;
+   FinderCameraARestPass.Text:=DefaultARestPass.Text;
    WheelARestPass.Text:=DefaultARestPass.Text;
    FocuserARestPass.Text:=DefaultARestPass.Text;
    RotatorARestPass.Text:=DefaultARestPass.Text;
@@ -2028,6 +2038,8 @@ end;
 procedure Tf_setup.ApplyIndiClick(Sender: TObject);
 begin
   CameraIndiServer.text:=IndiServer.text;
+  GuideCameraIndiServer.text:=IndiServer.text;
+  FinderCameraIndiServer.text:=IndiServer.text;
   WheelIndiServer.text:=IndiServer.text;
   FocuserIndiServer.text:=IndiServer.text;
   RotatorIndiServer.text:=IndiServer.text;
@@ -2039,6 +2051,8 @@ begin
   CoverIndiServer.text:=IndiServer.text;
   WatchdogIndiServer.text:=IndiServer.text;
   CameraIndiPort.text:=IndiPort.text;
+  GuideCameraIndiPort.text:=IndiPort.text;
+  FinderCameraIndiPort.text:=IndiPort.text;
   WheelIndiPort.text:=IndiPort.text;
   FocuserIndiPort.text:=IndiPort.text;
   RotatorIndiPort.text:=IndiPort.text;
