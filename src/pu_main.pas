@@ -15221,6 +15221,7 @@ begin
    end;
  end;
  yy:=img_Height-yy;
+ xx:=xx+1;
  if fits.HeaderInfo.naxis=1 then
    StatusBar1.Panels[panelcursor].Text:=inttostr(xx)+': '+sval
  else
