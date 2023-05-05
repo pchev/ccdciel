@@ -42,10 +42,12 @@ type
     BtnPinTrend: TSpeedButton;
     BtnSpectraProfile: TSpeedButton;
     BtnViewAutofocus: TButton;
+    SpectraProfileMethod: TComboBox;
     FitSourceMeasure: TListChartSource;
     FitSourceComp: TListChartSource;
     HistoryChartImax: TLineSeries;
     Panel2: TPanel;
+    Panel3: TPanel;
     PanelBtnPin2D: TPanel;
     PanelBtnProfile: TPanel;
     PanelBtnTrend: TPanel;
@@ -109,6 +111,7 @@ type
     procedure TimerHideGraphTimer(Sender: TObject);
     procedure VcChartMouseMove(Sender: TObject; Shift: TShiftState; X,
       Y: Integer);
+    procedure SpectraProfileMethodChange(Sender: TObject);
   private
     { private declarations }
     FFindStar: boolean;
@@ -465,7 +468,13 @@ begin
    f.Caption:=rsProfile2;
    ProfileChart.Parent:=f;
    ProfileChart.Align:=alClient;
-   ProfileChartLine.LinePen.Width:=2;
+   ProfileChart.AxisList.Axes[0].Visible:=true;
+   ProfileChart.AxisList.Axes[0].Title.Caption:='ADU';
+   ProfileChart.AxisList.Axes[0].Title.Visible:=true;
+   ProfileChart.AxisList.Axes[1].Visible:=true;
+   ProfileChart.AxisList.Axes[1].Title.Caption:='X pixel';
+   ProfileChart.AxisList.Axes[1].Title.Visible:=true;
+   ProfileChartLine.LinePen.Width:=1;
    FormPos(f,mouse.CursorPos.x,mouse.CursorPos.y);
    f.Show;
   end
@@ -477,6 +486,8 @@ procedure Tf_starprofile.PanelProfileClose(Sender: TObject; var CloseAction: TCl
 begin
   CloseAction:=caFree;
   ProfileChart.Parent:=TSprofile;
+  ProfileChart.AxisList.Axes[0].Visible:=false;
+  ProfileChart.AxisList.Axes[1].Visible:=false;
   ProfileChartLine.LinePen.Width:=1;
   PanelBtnProfile.SendToBack;
   PanelBtnProfile.BringToFront;
@@ -720,17 +731,35 @@ begin
 end;
 
 procedure Tf_starprofile.ShowSpectraProfile(f: TFits);
-var i,j:integer;
+var i,j,n:integer;
     value: double;
 begin
+ FFits:=f;
  ProfileSource.Clear;
+ n:=SpectraProfileMethod.ItemIndex;
  for i:=FSpectraX to FSpectraX+FSpectraWidth do begin
    value:=0;
-   for j:=FSpectraY to FSpectraY+FSpectraHeight do begin
-     value:=value+f.image[0,j,i];
+   case n of
+   0: begin
+        for j:=FSpectraY to FSpectraY+FSpectraHeight do begin
+          value:=value+f.imageMin+f.image[0,j,i]/f.imageC;
+        end;
+        value:=value/FSpectraHeight;
+      end;
+   1: begin
+        for j:=FSpectraY to FSpectraY+FSpectraHeight do begin
+          value:=max(value,f.imageMin+f.image[0,j,i]/f.imageC);
+        end;
+      end;
    end;
    ProfileSource.Add(i,value);
  end;
+end;
+
+procedure Tf_starprofile.SpectraProfileMethodChange(Sender: TObject);
+begin
+  if SpectraProfile and (FFits<>nil) and(FSpectraHeight>0) then
+    ShowSpectraProfile(FFits);
 end;
 
 procedure Tf_starprofile.PlotStar2D;

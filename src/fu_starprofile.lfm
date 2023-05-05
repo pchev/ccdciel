@@ -353,17 +353,43 @@ object f_starprofile: Tf_starprofile
         OnClick = BtnViewAutofocusClick
         TabOrder = 0
       end
-      object BtnSpectraProfile: TSpeedButton
+      object Panel3: TPanel
         Left = 0
-        Height = 25
+        Height = 26
         Top = 87
         Width = 192
         Align = alTop
-        AllowAllUp = True
-        BorderSpacing.Top = 3
-        Caption = 'Spectra profile'
-        GroupIndex = 505
-        OnClick = BtnSpectraProfileClick
+        AutoSize = True
+        BevelOuter = bvNone
+        ClientHeight = 25
+        ClientWidth = 190
+        TabOrder = 1
+        object BtnSpectraProfile: TSpeedButton
+          Left = 0
+          Height = 25
+          Top = 0
+          Width = 120
+          AllowAllUp = True
+          BorderSpacing.Top = 1
+          Caption = 'Spectra profile'
+          GroupIndex = 505
+          OnClick = BtnSpectraProfileClick
+        end
+        object SpectraProfileMethod: TComboBox
+          Left = 124
+          Height = 27
+          Top = 0
+          Width = 70
+          ItemHeight = 0
+          ItemIndex = 0
+          Items.Strings = (
+            'Avg'
+            'Max'
+          )
+          TabOrder = 0
+          Text = 'Avg'
+          OnChange = SpectraProfileMethodChange 
+        end
       end
     end
     object PageControlProfile: TPageControl
