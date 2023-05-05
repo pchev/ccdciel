@@ -1559,6 +1559,7 @@ begin
   ImageGuide.OnMouseMove := @ImageGuideMouseMove;
   ImageGuide.OnMouseUp := @ImageGuideMouseUp;
   ImageGuide.OnMouseWheel := @ImageGuideMouseWheel;
+  ImageGuide.OnDblClick := @MenuItemSelectGuideStarClick;
   InternalGuiderSetLockPosition:=false;
   ScrFinderBmp := TBGRABitmap.Create;
   ImaFinderBmp:=TBGRABitmap.Create(1,1);
