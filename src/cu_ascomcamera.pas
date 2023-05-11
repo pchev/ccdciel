@@ -483,7 +483,7 @@ procedure T_ascomcamera.ExposureTimerTimer(sender: TObject);
 {$endif}
 type Timgdata = array of longint;
 var ok: boolean;
-    i,j,c,xs,ys: integer;
+    i,j,c,xs,ys,tmp: integer;
     nax1,nax2,state,bitpx: integer;
     pix,piy,expt,ElectronsPerADU,rexp: double;
     dateobs,frname:string;
@@ -642,6 +642,10 @@ begin
      {$endif}
      xs:=HBoundX-LBoundX+1;
      ys:=HBoundY-LBoundY+1;
+     if ((xs<ys) and (FDriverInfo='') and (ccdname='ASCOM.ASCOM_QHY5.Camera')) then 
+       begin 
+         tmp:=xs; xs:=ys; ys:=tmp;//qhy5 v1 fix for swapped width & height 
+       end;
      if (xs<=0) or (ys<=0) then raise Exception.Create('Null size image');
    except
      on E: Exception do begin
