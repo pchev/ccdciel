@@ -55,6 +55,9 @@ type
     BtnZoom1: TSpeedButton;
     Panel4: TPanel;
     Panel5: TPanel;
+    Panel6: TPanel;
+    Panel7: TPanel;
+    Panel8: TPanel;
     PanelNoDisplay: TPanel;
     SpinEditMin: TFloatSpinEdit;
     SpinEditMax: TFloatSpinEdit;
@@ -381,6 +384,7 @@ begin
      BtnInvert.Width:=btnw;
      BtnFlipHorz.Width:=btnw;
      BtnClipRange.Width:=btnw;
+     BtnShowImage.Top:=Panel6.top+BtnClipRange.top;
   end;
 end;
 
