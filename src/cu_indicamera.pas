@@ -1043,8 +1043,11 @@ begin
      FCameraYSize:=round(CCDmaxy.Value);
      if Assigned(FonFrameChange) then FonFrameChange(Self);
   end
-  else if nvp=WheelSlot then begin
-     if Assigned(FonFilterChange) then FonFilterChange(Slot.value);
+  else if (nvp=WheelSlot) and Assigned(FonFilterChange) then begin
+     if nvp.s=IPS_BUSY then
+       FonFilterChange(-1) // report moving
+     else
+       FonFilterChange(Slot.value);
   end
   else if nvp=CCDTemperature then begin
      if Assigned(FonTemperatureChange) then FonTemperatureChange(nvp.np[0].value);
@@ -1839,18 +1842,28 @@ end;
 
 procedure T_indicamera.SetFilter(num:integer);
 begin
-if WheelSlot<>nil then begin;
+if (WheelSlot<>nil)and(num>0)and(Slot.value<>num) then begin;
+  if num>Slot.max then num:=round(Slot.max);
+  if num<Slot.min then num:=round(Slot.min);
   msg(Format(rsSetFilterPos, [inttostr(num)]));
   Slot.value:=num;
   indiclient.sendNewNumber(WheelSlot);
-  indiclient.WaitBusy(WheelSlot);
+  if Assigned(FonFilterChange) then FonFilterChange(-1);
+  indiclient.WaitBusy(WheelSlot,120000);
+  if Assigned(FonFilterChange) then FonFilterChange(Slot.value);
 end;
 end;
 
 function  T_indicamera.GetFilter:integer;
 begin
 if WheelSlot<>nil then begin;
-  result:=round(Slot.value);
+  if WheelSlot.s=IPS_BUSY then
+     result:=-1 // report moving
+  else begin
+     result:=round(Slot.value);
+     if result>Slot.max then result:=round(Slot.max);
+     if result<Slot.min then result:=round(Slot.min);
+  end;
 end
 else result:=0;
 end;

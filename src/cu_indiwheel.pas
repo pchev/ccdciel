@@ -381,7 +381,7 @@ if (WheelSlot<>nil)and(num>0)and(Slot.value<>num) then begin;
   Slot.value:=num;
   indiclient.sendNewNumber(WheelSlot);
   if Assigned(FonFilterChange) then FonFilterChange(-1);
-  indiclient.WaitBusy(WheelSlot);
+  indiclient.WaitBusy(WheelSlot,120000);
   if Assigned(FonFilterChange) then FonFilterChange(Slot.value);
 end;
 end;

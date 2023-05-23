@@ -7084,6 +7084,7 @@ begin
 case wheel.Status of
   devDisconnected:begin
                       f_devicesconnection.LabelWheel.Font.Color:=clRed;
+                      filteroffset_initialized:=false;
                   end;
   devConnecting:  begin
                       NewMessage(Format(rsConnecting, [rsFilterWheel+' '+DevInterfaceName[ord(wheel.WheelInterface)]+' "'+wheel.DeviceName+'" '+ellipsis]),2);
