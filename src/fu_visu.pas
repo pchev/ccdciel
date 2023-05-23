@@ -76,6 +76,8 @@ type
     procedure FrameEndDrag(Sender, Target: TObject; X, Y: Integer);
     procedure FrameResize(Sender: TObject);
     procedure GammaChange(Sender: TObject);
+    procedure HistGraphMouseEnter(Sender: TObject);
+    procedure HistGraphMouseLeave(Sender: TObject);
     procedure histminmaxClick(Sender: TObject);
     procedure HistogramMouseDown(Sender: TObject; Button: TMouseButton; Shift: TShiftState; X, Y: Integer);
     procedure HistogramMouseMove(Sender: TObject; Shift: TShiftState; X, Y: Integer);
@@ -532,10 +534,19 @@ if StartUpd then begin
   else
     txt:=FormatFloat(f0,round(val));
   if Assigned(FShowHistogramPos) then FShowHistogramPos(txt);
-end else begin
-  SpinEditMin.Visible:=(y<SpinEditMin.Height)and(x<SpinEditMin.Width);
-  SpinEditMax.Visible:=(y<SpinEditMax.Height)and(x>SpinEditMax.Left);
 end;
+end;
+
+procedure Tf_visu.HistGraphMouseEnter(Sender: TObject);
+begin
+  SpinEditMin.Visible:=true;
+  SpinEditMax.Visible:=true;
+end;
+
+procedure Tf_visu.HistGraphMouseLeave(Sender: TObject);
+begin
+  SpinEditMin.Visible:=false;
+  SpinEditMax.Visible:=false;
 end;
 
 procedure Tf_visu.HistogramMouseUp(Sender: TObject; Button: TMouseButton; Shift: TShiftState; X, Y: Integer);

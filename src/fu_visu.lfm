@@ -76,6 +76,8 @@ object f_visu: Tf_visu
         )
         Align = alClient
         OnMouseDown = HistogramMouseDown
+        OnMouseEnter = HistGraphMouseEnter
+        OnMouseLeave = HistGraphMouseLeave
         OnMouseMove = HistogramMouseMove
         OnMouseUp = HistogramMouseUp
         object HistGraphMinLine: TConstantLine
@@ -111,6 +113,8 @@ object f_visu: Tf_visu
         Increment = 10
         MaxValue = 65536
         OnChange = SpinEditMinChange
+        OnMouseEnter = HistGraphMouseEnter
+        OnMouseLeave = HistGraphMouseLeave
         ParentFont = False
         TabOrder = 0
         Visible = False
@@ -130,6 +134,8 @@ object f_visu: Tf_visu
         Increment = 10
         MaxValue = 65536
         OnChange = SpinEditMaxChange
+        OnMouseEnter = HistGraphMouseEnter
+        OnMouseLeave = HistGraphMouseLeave
         ParentFont = False
         TabOrder = 1
         Visible = False
