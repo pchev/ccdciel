@@ -46,6 +46,7 @@ T_indiwheel = class(T_wheel)
    configload,configsave: ISwitch;
    Fready,Fconnected,FConnectDevice: boolean;
    Findiserver, Findiserverport, Findidevice: string;
+   NumFilter: integer;
    procedure CreateIndiClient;
    procedure InitTimerTimer(Sender: TObject);
    procedure ConnectTimerTimer(Sender: TObject);
@@ -144,6 +145,7 @@ begin
     Fready:=false;
     Fconnected := false;
     FConnectDevice:=false;
+    NumFilter:=MaxFilter;
     FStatus := devDisconnected;
     if Assigned(FonStatusChange) then FonStatusChange(self);
 end;
@@ -316,12 +318,13 @@ begin
      WheelSlot:=indiProp.getNumber;
      Slot:=IUFindNumber(WheelSlot,'FILTER_SLOT_VALUE');
      if Slot=nil then WheelSlot:=nil;
+     if Slot<>nil then NumFilter:=min(round(Slot.max),MaxFilter);
   end
   else if (proptype=INDI_TEXT)and(FilterName=nil)and(propname='FILTER_NAME') then begin
      FilterName:=indiProp.getText;
      FFilterNames.Clear;
      FFilterNames.Add(Filter0);
-     for i:=0 to min(Maxfilter,FilterName.ntp)-1 do begin
+     for i:=0 to min(Numfilter,FilterName.ntp)-1 do begin
         if debug_msg then msg('Filter '+inttostr(i+1)+' : '+FilterName.tp[i].text,3);
         FFilterNames.Add(FilterName.tp[i].text);
      end;
@@ -332,6 +335,7 @@ end;
 procedure T_indiwheel.NewNumber(nvp: INumberVectorProperty);
 begin
   if (nvp=WheelSlot) and Assigned(FonFilterChange) then begin
+     NumFilter:=min(round(Slot.max),MaxFilter);
      if nvp.s=IPS_BUSY then
        FonFilterChange(-1) // report moving
      else
@@ -348,7 +352,7 @@ begin
  if (propname='FILTER_NAME') then begin
      FFilterNames.Clear;
      FFilterNames.Add(Filter0);
-     for i:=0 to tvp.ntp-1 do begin
+     for i:=0 to min(Numfilter,tvp.ntp)-1 do begin
         if debug_msg then msg('Filter '+inttostr(i+1)+' : '+FilterName.tp[i].text,3);
         FFilterNames.Add(tvp.tp[i].text);
      end;
