@@ -1724,6 +1724,7 @@ begin
   planetarium.onConnect:=@PlanetariumConnect;
   planetarium.onDisconnect:=@PlanetariumDisconnect;
   planetarium.onShowMessage:=@NewMessage;
+  astrometry.planetarium:=planetarium;
 
   f_devicesconnection:=Tf_devicesconnection.Create(self);
   f_devicesconnection.onSelectProfile:=@MenuSetupClick;
@@ -4658,6 +4659,7 @@ begin
   end;
 
   CdCAdjustFrame:=config.GetValue('/Planetarium/CdCAdjustFrame',true);
+  PlanetariumShowAstrometry:=config.GetValue('/Planetarium/ShowAstrometry',false);
 
   astrometry.FinderOffsetX:=config.GetValue('/Finder/OffsetX',0.0);
   astrometry.FinderOffsetY:=config.GetValue('/Finder/OffsetY',0.0);
@@ -4875,6 +4877,7 @@ begin
      planetarium.onConnect:=@PlanetariumConnect;
      planetarium.onDisconnect:=@PlanetariumDisconnect;
      planetarium.onShowMessage:=@NewMessage;
+     astrometry.planetarium:=planetarium;
      f_planetariuminfo.planetarium:=planetarium;
      f_scriptengine.Planetarium:=planetarium;
      f_sequence.Planetarium:=planetarium;
@@ -9053,6 +9056,7 @@ begin
    f_option.StartCdC.Checked:=config.GetValue('/Planetarium/CdCstart',false);
    f_option.CdCPath.Text:=config.GetValue('/Planetarium/CdCpath',defCdCpath);
    f_option.CdCAdjustFrame.Checked:=config.GetValue('/Planetarium/CdCAdjustFrame',true);
+   f_option.PlanetariumShowAstrometry.checked:=config.GetValue('/Planetarium/ShowAstrometry',false);
    f_option.StartHNSKY.Checked:=config.GetValue('/Planetarium/HNSKYstart',false);
    f_option.HNSKYPath.Text:=config.GetValue('/Planetarium/HNSKYpath',defHNSKYpath);
    f_option.StartSAMP.Checked:=config.GetValue('/Planetarium/SAMPstart',false);
@@ -9431,6 +9435,7 @@ begin
      config.SetValue('/Planetarium/CdCstart',f_option.StartCdC.Checked);
      config.SetValue('/Planetarium/CdCpath',f_option.CdCPath.Text);
      config.SetValue('/Planetarium/CdCAdjustFrame',f_option.CdCAdjustFrame.Checked);
+     config.SetValue('/Planetarium/ShowAstrometry',f_option.PlanetariumShowAstrometry.checked);
      config.SetValue('/Planetarium/HNSKYstart',f_option.StartHNSKY.Checked);
      config.SetValue('/Planetarium/HNSKYpath',f_option.HNSKYPath.Text);
      config.SetValue('/Planetarium/SAMPstart',f_option.StartSAMP.Checked);
@@ -10763,13 +10768,13 @@ begin
     buf:=buf+'  '+inttostr(fits.HeaderInfo.naxis1)+'x'+inttostr(fits.HeaderInfo.naxis2);
     if camera.StackCount>1 then buf:=buf+','+blank+Format(rsStackOfFrame, [inttostr(camera.StackCount)]);
     StatusBar1.Panels[panelfile].Text:=buf;
+    // astrometry
+    if (f_preview.CheckBoxAstrometry.Checked)and(not astrometry.Busy)and(not Autofocusing) then
+      astrometry.SolvePreviewImage;
     if (not EarlyNextExposure) or Autofocusing then begin
       // Image inspection
       if ImageInspection then
          MeasureImage(true);
-      // astrometry
-      if (f_preview.CheckBoxAstrometry.Checked)and(not astrometry.Busy) then
-        astrometry.SolvePreviewImage;
       // Next exposure delayed after image display
       // start the exposure now
       if f_preview.Loop and f_preview.Running and (not CancelAutofocus) then begin
@@ -13486,6 +13491,10 @@ begin
 end;
 
 procedure Tf_main.AstrometryEnd(i: Integer);
+// i values:
+// 0 : main camera
+// 1 : preview
+// 2 : finder camera
 var resulttxt,buf:string;
     dist: double;
 begin
@@ -13527,6 +13536,7 @@ begin
             resulttxt:=resulttxt+FormatFloat(f3,dist)+sdeg
           else
             resulttxt:=resulttxt+FormatFloat(f2,60*dist)+smin;
+          astrometry.MarkPlanetarium(WCScenterRA/15,WCScenterDEC);
        end;
        if (WCSwidth<>NullCoord) and (WCSheight<>NullCoord) then begin
           if WCSwidth>10 then
@@ -14033,6 +14043,7 @@ begin
    planetarium.onConnect:=@PlanetariumConnect;
    planetarium.onDisconnect:=@PlanetariumDisconnect;
    planetarium.onShowMessage:=@NewMessage;
+   astrometry.planetarium:=planetarium;
    f_planetariuminfo.planetarium:=planetarium;
    f_scriptengine.Planetarium:=planetarium;
    f_sequence.Planetarium:=planetarium;

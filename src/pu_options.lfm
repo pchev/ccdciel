@@ -5823,6 +5823,14 @@ object f_option: Tf_option
                 Caption = 'Adjust the chart for the image or frame'
                 TabOrder = 3
               end
+              object PlanetariumShowAstrometry: TCheckBox
+                Left = 24
+                Height = 21
+                Top = 183
+                Width = 184
+                Caption = 'Mark every astrometry result'
+                TabOrder = 4
+              end
             end
           end
           object PageSamp: TPage

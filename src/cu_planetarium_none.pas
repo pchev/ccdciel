@@ -49,6 +49,7 @@ type
     function DrawFrame(frra,frde,frsizeH,frsizeV,frrot: double):boolean; override;
     function GetEqSys: double; override;
     function Search(sname: string; out sra,sde,v_solar,vpa_solar: double): boolean; override;
+    procedure ShowAstrometry(sra,sde: double); override;
   end;
 
 
@@ -124,6 +125,10 @@ end;
 function TPlanetarium_none.Search(sname: string; out sra,sde,v_solar,vpa_solar: double): boolean;
 begin
   result:=false;
+end;
+
+procedure TPlanetarium_none.ShowAstrometry(sra,sde: double);
+begin
 end;
 
 end.

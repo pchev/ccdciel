@@ -533,6 +533,7 @@ var
   CustomHeaderNum: integer;
   CustomHeaders: array [1..MaxCustomHeaders] of TCustomHeaderElement;
   CdCAdjustFrame: boolean;
+  PlanetariumShowAstrometry:boolean;
   {internal guider}
   InternalguiderRunning,InternalguiderCalibrating,InternalguiderCalibratingBacklash,InternalguiderGuiding,StopInternalguider,InternalguiderCapturingDark: boolean;
   {finder}

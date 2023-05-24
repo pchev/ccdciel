@@ -50,6 +50,7 @@ type
     function DrawFrame(frra,frde,frsizeH,frsizeV,frrot: double):boolean; override;
     function GetEqSys: double; override;
     function Search(sname: string; out sra,sde,v_solar,vpa_solar: double): boolean; override;
+    procedure ShowAstrometry(sra,sde: double); override;
   end;
 
 const msgTimeout='Timeout!';
@@ -393,6 +394,19 @@ begin
   finally
     p.Free;
   end;
+end;
+
+procedure TPlanetarium_cdc.ShowAstrometry(sra,sde: double);
+var buf: string;
+begin
+  sra:=sra*deg2rad*15;
+  sde:=sde*deg2rad;
+  PrecessionFK5(jd2000,FplanetariumJD,sra,sde);
+  if FplanetariumEquinox=0 then apparent_equatorial(sra,sde);
+  sra:=rad2deg*sra/15;
+  sde:=rad2deg*sde;
+  buf := 'MOVESCOPE ' + FormatFloat('0.00000', sra) + ' ' + FormatFloat('0.00000', sde);
+  FLastErrorTxt:=Cmd(buf);
 end;
 
 end.

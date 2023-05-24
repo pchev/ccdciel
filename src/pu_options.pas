@@ -40,6 +40,7 @@ type
     CdCPath: TEdit;
     AstrometryCamera: TComboBox;
     CdCAdjustFrame: TCheckBox;
+    PlanetariumShowAstrometry: TCheckBox;
     Label165: TLabel;
     Label166: TLabel;
     Label167: TLabel;

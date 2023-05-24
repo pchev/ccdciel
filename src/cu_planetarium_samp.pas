@@ -57,6 +57,7 @@ type
     function Cmd(const Value: string):string; override;
     function GetEqSys: double; override;
     function Search(sname: string; out sra,sde,v_solar,vpa_solar: double): boolean; override;
+    procedure ShowAstrometry(sra,sde: double); override;
   end;
 
 
@@ -215,12 +216,15 @@ begin
   result:=false;
 end;
 
-
 function TPlanetarium_samp.Search(sname: string; out sra,sde,v_solar,vpa_solar: double): boolean;
 begin
   DisplayMessage('Function Search not supported by this planetarium');
   result:=false;
 end;
 
+procedure TPlanetarium_samp.ShowAstrometry(sra,sde: double);
+begin
+  DisplayMessage('Function ShowAstrometry not supported by this planetarium');
+end;
 
 end.

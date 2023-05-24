@@ -25,7 +25,8 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 interface
 
-uses  u_global, u_utils, fu_preview, fu_visu, cu_astrometry_engine, cu_mount, cu_camera, cu_wheel, cu_fits, indiapi,
+uses  u_global, u_utils, fu_preview, fu_visu, cu_astrometry_engine, cu_mount, cu_camera,
+      cu_wheel, cu_fits, indiapi, cu_planetarium,
       u_translation, LCLIntf, math, Forms, LazFileUtils, Classes, SysUtils, ExtCtrls;
 
 type
@@ -35,6 +36,7 @@ TAstrometry = class(TComponent)
     engine: TAstrometry_engine;
     Fpreview:Tf_preview;
     Fvisu: Tf_visu;
+    Fplanetarium: TPlanetarium;
     Fterminatecmd: TNotifyEvent;
     FonStartAstrometry: TNotifyEvent;
     FonEndAstrometry: TNotifyInt;
@@ -85,6 +87,7 @@ TAstrometry = class(TComponent)
     function PrecisionSlew(ra,de,prec,exp:double; filter,binx,biny,method,maxslew,sgain,soffset: integer; out err: double):boolean;
     function PrecisionSlew(ra,de:double; out err: double):boolean;
     function AutofocusPrecisionSlew(ra,de:double; out err: double):boolean;
+    procedure MarkPlanetarium(ra,de: double);
     property Busy: Boolean read FBusy;
     property SlewBusy: Boolean read FSlewBusy;
     property LastSlewErr: double read FLastSlewErr;
@@ -104,6 +107,7 @@ TAstrometry = class(TComponent)
     property FinderFits: TFits read FFinderFits write FFinderFits;
     property preview:Tf_preview read Fpreview write Fpreview;
     property visu:Tf_visu read Fvisu write Fvisu;
+    property planetarium: TPlanetarium read Fplanetarium write Fplanetarium;
     property FinderOffsetX: double read FFinderOffsetX write FFinderOffsetX;
     property FinderOffsetY: double read FFinderOffsetY write FFinderOffsetY;
     property onShowMessage: TNotifyMsg read FonShowMessage write FonShowMessage;
@@ -426,6 +430,7 @@ begin
           preview.LabelAstrometry.Caption:= 'Apparent: '+RAToStr(ra)+' '+ DEToStr(de)+crlf+
                                             'J2000   : '+RAToStr(ra2000)+' '+DEToStr(de2000)+crlf+
                                             'PA      : '+FormatFloat(f1, pa);
+        MarkPlanetarium(ra2000,de2000);
       end;
     end;
     finally
@@ -472,6 +477,7 @@ begin
         de:=rad2deg*de;
         msg(rsFinderCamera+': '+rsFOV+blank+FormatFloat(f2, i.wp*i.secpix/60)+'x'+FormatFloat(f2, i.hp*i.secpix/60)+smin+', '+rsPixelScale+': '+FormatFloat(f2,i.secpix)+ssec+'/'+rsPixel,3);
         msg(rsFinderCamera+': '+Format(rsCenterAppare, [RAToStr(ra), DEToStr(de), FormatFloat(f1, pa)])+', J2000 '+rsRA+'='+RAToStr(ra2000)+' '+rsDec+'='+DEToStr(de2000),3);
+        MarkPlanetarium(ra2000,de2000);
       end;
     end;
     finally
@@ -902,6 +908,12 @@ begin
   result:=PrecisionSlew(ra,de,prec,exp,fi,bin,bin,cormethod,maxretry,sgain,soffset,err);
 end;
 
+procedure TAstrometry.MarkPlanetarium(ra,de: double);
+begin
+  if PlanetariumShowAstrometry and (planetarium<>nil)and(planetarium.Connected) then begin
+     planetarium.ShowAstrometry(ra,de);
+  end;
+end;
 
 end.
 
