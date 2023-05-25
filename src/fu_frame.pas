@@ -25,7 +25,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 interface
 
-uses  UScaleDPI, u_translation, u_hints,
+uses  UScaleDPI, u_translation, u_hints, u_global,
   Classes, SysUtils, FileUtil, Forms, Controls, Graphics, StdCtrls, ExtCtrls;
 
 type
@@ -35,6 +35,7 @@ type
   Tf_frame = class(TFrame)
     BtnSet: TButton;
     BtnReset: TButton;
+    RoiList: TComboBox;
     FX: TEdit;
     FY: TEdit;
     FWidth: TEdit;
@@ -44,9 +45,11 @@ type
     Panel1: TPanel;
     Panel2: TPanel;
     Panel3: TPanel;
+    PanelRoi: TPanel;
     Title: TLabel;
     procedure BtnResetClick(Sender: TObject);
     procedure BtnSetClick(Sender: TObject);
+    procedure RoiListChange(Sender: TObject);
   private
     { private declarations }
     FonSet, FonReset: TNotifyEvent;
@@ -55,6 +58,7 @@ type
     constructor Create(aOwner: TComponent); override;
     destructor  Destroy; override;
     procedure SetLang;
+    procedure ClearRoi;
     property onSet: TNotifyEvent read FonSet write FonSet;
     property onReset: TNotifyEvent read FonReset write FonReset;
   end;
@@ -79,6 +83,7 @@ end;
 
 destructor  Tf_frame.Destroy;
 begin
+ ClearRoi;
  inherited Destroy;
 end;
 
@@ -96,6 +101,27 @@ end;
 procedure Tf_frame.BtnSetClick(Sender: TObject);
 begin
   if Assigned(FonSet) then FonSet(self);
+end;
+
+procedure Tf_frame.RoiListChange(Sender: TObject);
+var i: integer;
+begin
+  i:=RoiList.ItemIndex;
+  if (i>=0)and(RoiList.Items.Objects[i]<>nil) then begin
+    FX.Text:=IntToStr(TRoi(RoiList.Items.Objects[i]).x);
+    FY.Text:=IntToStr(TRoi(RoiList.Items.Objects[i]).y);
+    FWidth.Text:=IntToStr(TRoi(RoiList.Items.Objects[i]).w);
+    FHeight.Text:=IntToStr(TRoi(RoiList.Items.Objects[i]).h);
+  end;
+end;
+
+procedure Tf_frame.ClearRoi;
+var i: integer;
+begin
+  for i:=RoiList.Items.Count-1 downto 0 do begin
+    if RoiList.Items.Objects[i]<>nil then RoiList.Items.Objects[i].Free;
+    RoiList.Items.Delete(i);
+  end;
 end;
 
 procedure Tf_frame.BtnResetClick(Sender: TObject);

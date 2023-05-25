@@ -1030,7 +1030,7 @@ begin
   end
   else if nvp=CCDframe then begin
     // ignore ASI CCDFrame change because this can be just a binning requirement, see: https://indilib.org/forum/ccds-dslrs/4956-indi-asi-driver-bug-causes-false-binned-images.html
-    if not isASI then begin
+    if (not isASI)and(stX<>round(CCDframeX.value))and(stY<>round(CCDframeY.value))and(stWidth<>round(CCDframeWidth.value))and(stHeight<>round(CCDframeHeight.value))  then begin
       stX      := round(CCDframeX.value);
       stY      := round(CCDframeY.value);
       stWidth  := round(CCDframeWidth.value);
@@ -1638,17 +1638,19 @@ begin
      // force even values
      x:=round(x+0.5);
      y:=round(y+0.5);
-     CCDframeX.value:=x;
-     CCDframeY.value:=y;
-     CCDframeWidth.value:=width;
-     CCDframeHeight.value:=height;
-     indiclient.sendNewNumber(CCDframe);
-     stX:=x;
-     stY:=y;
-     stWidth:=width;
-     stHeight:=height;
-     indiclient.WaitBusy(CCDframe);
-     if assigned(FonFrameChange) then FonFrameChange(self);
+     if (CCDframeX.value<>x)or(CCDframeY.value<>y)or(CCDframeWidth.value<>width)or(CCDframeHeight.value<>height) then begin
+       CCDframeX.value:=x;
+       CCDframeY.value:=y;
+       CCDframeWidth.value:=width;
+       CCDframeHeight.value:=height;
+       indiclient.sendNewNumber(CCDframe);
+       stX:=x;
+       stY:=y;
+       stWidth:=width;
+       stHeight:=height;
+       indiclient.WaitBusy(CCDframe);
+       if assigned(FonFrameChange) then FonFrameChange(self);
+     end;
   end;
 end;
 

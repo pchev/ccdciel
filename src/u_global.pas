@@ -160,6 +160,11 @@ type
        key,value: shortstring;
   end;
 
+  TRoi = class(TObject)
+    x,y,w,h: integer;
+    name: string;
+  end;
+
   // libcdcwcs
  type
    {$ifdef cpu32}

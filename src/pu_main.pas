@@ -4386,6 +4386,7 @@ var i,n: integer;
     oldBalance, oldBGneutralization:boolean;
     posprev,poscapt:integer;
     binprev,bincapt:string;
+    roi:TRoi;
 begin
   ShowHint:=screenconfig.GetValue('/Hint/Show',true);
   if f_option<>nil then f_option.ShowHint:=ShowHint;
@@ -4448,6 +4449,18 @@ begin
   BlueBalance:=config.GetValue('/Color/BlueBalance',0.9);
   ClippingOverflow:=config.GetValue('/Color/ClippingOverflow',MAXWORD);
   ClippingUnderflow:=config.GetValue('/Color/ClippingUnderflow',0);
+  f_frame.ClearRoi;
+  n:=config.GetValue('/Sensor/ROI/NumROI',0);
+  for i:=1 to n do begin
+     roi:=TRoi.create;
+     roi.name:=config.GetValue('/Sensor/ROI/ROI'+inttostr(i)+'/Name','');
+     roi.X:=round(config.GetValue('/Sensor/ROI/ROI'+inttostr(i)+'/X',0));
+     roi.Y:=round(config.GetValue('/Sensor/ROI/ROI'+inttostr(i)+'/Y',0));
+     roi.W:=round(config.GetValue('/Sensor/ROI/ROI'+inttostr(i)+'/W',1));
+     roi.H:=round(config.GetValue('/Sensor/ROI/ROI'+inttostr(i)+'/H',1));
+     f_frame.RoiList.Items.AddObject(roi.name,roi);
+  end;
+  f_frame.PanelRoi.Visible:=(n>0);
   CanSetGainOffset:=config.GetValue('/Sensor/CanSetGain',false);
   if CanSetGainOffset<>camera.CanSetGain then begin
     camera.CanSetGain:=CanSetGainOffset;
@@ -5786,6 +5799,10 @@ begin
   FrameW:=config.GetValue('/CCDframe/FrameW',0);
   FrameH:=config.GetValue('/CCDframe/FrameH',0);
   FrameBin:=config.GetValue('/CCDframe/FrameBin',1);
+  f_frame.FX.Text:=inttostr(FrameX);
+  f_frame.FY.Text:=inttostr(FrameY);
+  f_frame.FWidth.Text:=inttostr(FrameW);
+  f_frame.FHeight.Text:=inttostr(FrameH);
   camera.SetBinning(FrameBin,FrameBin);
   SetFrame(nil);
 end;
@@ -8671,6 +8688,7 @@ var ok: boolean;
     buf,langname:string;
     fs : TSearchRec;
     pt: TPoint;
+    roi: TRoi;
 begin
    f_option.ShowHint:=ShowHint;
    f_option.LockTemp:=true;
@@ -8911,6 +8929,21 @@ begin
    f_option.AutofocusDynamicMovement.Value:=config.GetValue('/StarAnalysis/AutofocusDynamicMovement',AutofocusDynamicMovement);
    f_option.AutofocusPlanetNumPoint.Value:=config.GetValue('/StarAnalysis/AutofocusPlanetNumPoint',AutofocusPlanetNumPoint);
    f_option.AutofocusPlanetMovement.Value:=config.GetValue('/StarAnalysis/AutofocusPlanetMovement',AutofocusPlanetMovement);
+   f_option.ClearRoi;
+   n:=config.GetValue('/Sensor/ROI/NumROI',0);
+   for i:=1 to n do begin
+      roi:=TRoi.create;
+      roi.name:=config.GetValue('/Sensor/ROI/ROI'+inttostr(i)+'/Name','');
+      roi.X:=round(config.GetValue('/Sensor/ROI/ROI'+inttostr(i)+'/X',0));
+      roi.Y:=round(config.GetValue('/Sensor/ROI/ROI'+inttostr(i)+'/Y',0));
+      roi.W:=round(config.GetValue('/Sensor/ROI/ROI'+inttostr(i)+'/W',1));
+      roi.H:=round(config.GetValue('/Sensor/ROI/ROI'+inttostr(i)+'/H',1));
+      f_option.RoiList.Items.AddObject(roi.name,roi);
+   end;
+   if n>0 then begin
+     f_option.RoiList.ItemIndex:=0;
+     f_option.RoiListChange(nil);
+   end;
    f_option.CanSetGain.Checked:=config.GetValue('/Sensor/CanSetGain',camera.CanSetGain);
    f_option.MaxAdu.Value:=config.GetValue('/Sensor/MaxADU',MAXWORD);
    f_option.MaxAduFromCamera.Checked:=config.GetValue('/Sensor/MaxADUFromCamera',true);
@@ -9326,6 +9359,19 @@ begin
      config.SetValue('/Flat/DomeFlatSetLight',f_option.DomeFlatSetLight.Checked);
      config.SetValue('/Flat/DomeFlatSetLightON',f_option.DomeFlatSetLightON.Text);
      config.SetValue('/Flat/DomeFlatSetLightOFF',f_option.DomeFlatSetLightOFF.Text);
+     n:=f_option.RoiList.Items.Count;
+     config.SetValue('/Sensor/ROI/NumROI',n);
+     for i:=1 to n do begin
+       if f_option.RoiList.Items.Objects[i-1]<>nil then begin
+         roi:=TRoi(f_option.RoiList.Items.Objects[i-1]);
+         config.SetValue('/Sensor/ROI/ROI'+inttostr(i)+'/Name',roi.name);
+         config.SetValue('/Sensor/ROI/ROI'+inttostr(i)+'/X',roi.X);
+         config.SetValue('/Sensor/ROI/ROI'+inttostr(i)+'/Y',roi.Y);
+         config.SetValue('/Sensor/ROI/ROI'+inttostr(i)+'/W',roi.W);
+         config.SetValue('/Sensor/ROI/ROI'+inttostr(i)+'/H',roi.H);
+       end;
+     end;
+     f_option.ClearRoi;
      config.SetValue('/Sensor/CanSetGain',f_option.CanSetGain.Checked);
      config.SetValue('/Sensor/MaxADUFromCamera',f_option.MaxAduFromCamera.Checked);
      config.SetValue('/Sensor/MaxADU',f_option.MaxAdu.Value);

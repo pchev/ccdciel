@@ -1,13 +1,15 @@
 object f_frame: Tf_frame
   Left = 0
-  Height = 65
+  Height = 88
   Top = 0
   Width = 194
   AutoSize = True
-  ClientHeight = 65
+  ClientHeight = 88
   ClientWidth = 194
   ParentFont = False
   TabOrder = 0
+  DesignLeft = -1
+  DesignTop = -1
   object Title: TLabel
     Left = 0
     Height = 20
@@ -27,13 +29,13 @@ object f_frame: Tf_frame
   end
   object Panel1: TPanel
     Left = 0
-    Height = 45
+    Height = 68
     Top = 20
     Width = 194
     Align = alClient
     ChildSizing.Layout = cclTopToBottomThenLeftToRight
     ChildSizing.ControlsPerLine = 99
-    ClientHeight = 45
+    ClientHeight = 68
     ClientWidth = 194
     ParentFont = False
     TabOrder = 0
@@ -51,9 +53,9 @@ object f_frame: Tf_frame
         AnchorSideTop.Control = FX
         AnchorSideTop.Side = asrCenter
         Left = 4
-        Height = 17
-        Top = 3
-        Width = 12
+        Height = 15
+        Top = 4
+        Width = 11
         Caption = 'X:'
         ParentColor = False
         ParentFont = False
@@ -107,9 +109,9 @@ object f_frame: Tf_frame
         AnchorSideTop.Control = FY
         AnchorSideTop.Side = asrCenter
         Left = 4
-        Height = 17
-        Top = 3
-        Width = 12
+        Height = 15
+        Top = 4
+        Width = 10
         Caption = 'Y:'
         ParentColor = False
         ParentFont = False
@@ -147,6 +149,26 @@ object f_frame: Tf_frame
         OnClick = BtnResetClick
         ParentFont = False
         TabOrder = 2
+      end
+    end
+    object PanelRoi: TPanel
+      Left = 0
+      Height = 30
+      Top = 44
+      Width = 194
+      BevelOuter = bvNone
+      ClientHeight = 30
+      ClientWidth = 194
+      TabOrder = 2
+      object RoiList: TComboBox
+        Left = 16
+        Height = 30
+        Top = 0
+        Width = 176
+        ItemHeight = 0
+        OnChange = RoiListChange
+        Style = csDropDownList
+        TabOrder = 0
       end
     end
   end

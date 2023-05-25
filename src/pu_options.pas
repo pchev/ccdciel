@@ -35,11 +35,20 @@ type
 
   Tf_option = class(TForm)
     BtnDelHdr: TButton;
+    BtnAddRoi: TButton;
+    BtnModRoi: TButton;
+    BtnDelRoi: TButton;
     ButtonSeqDir: TButton;
     ButtonLogDir: TButton;
     CdCPath: TEdit;
     AstrometryCamera: TComboBox;
     CdCAdjustFrame: TCheckBox;
+    RoiList: TComboBox;
+    GroupBox35: TGroupBox;
+    Label168: TLabel;
+    Label169: TLabel;
+    Label170: TLabel;
+    Label171: TLabel;
     PlanetariumShowAstrometry: TCheckBox;
     Label165: TLabel;
     Label166: TLabel;
@@ -66,6 +75,10 @@ type
     LogDir: TEdit;
     LogDirDefault: TButton;
     FinderFocalLength: TSpinEdit;
+    RoiX: TSpinEdit;
+    RoiW: TSpinEdit;
+    RoiY: TSpinEdit;
+    RoiH: TSpinEdit;
     StackUseFlat: TCheckBox;
     InstrumentName: TEdit;
     GuideDriftAbort: TCheckBox;
@@ -718,6 +731,7 @@ type
     procedure AutofocusmodeClick(Sender: TObject);
     procedure AutoguiderBoxClick(Sender: TObject);
     procedure BtnDelHdrClick(Sender: TObject);
+    procedure BtnDelRoiClick(Sender: TObject);
     procedure BtnDisableAutofocusTempClick(Sender: TObject);
     procedure BtnDisableDelayClick(Sender: TObject);
     procedure BtnDisableFocuserTempClick(Sender: TObject);
@@ -725,6 +739,8 @@ type
     procedure BtnFileDefaultClick(Sender: TObject);
     procedure BtnFolderDefaultClick(Sender: TObject);
     procedure BtnMaxDriftDisableClick(Sender: TObject);
+    procedure BtnAddRoiClick(Sender: TObject);
+    procedure BtnModRoiClick(Sender: TObject);
     procedure ButtonLogDirClick(Sender: TObject);
     procedure ButtonSeqDirClick(Sender: TObject);
     procedure CustomHeaderKeyPress(Sender: TObject; var Key: char);
@@ -764,6 +780,7 @@ type
     procedure PanelLeftMouseWheel(Sender: TObject; Shift: TShiftState; WheelDelta: Integer; MousePos: TPoint; var Handled: Boolean);
     procedure PixelSizeFromCameraChange(Sender: TObject);
     procedure PlanetariumBoxClick(Sender: TObject);
+    procedure RoiListChange(Sender: TObject);
     procedure SeqDirDefaultClick(Sender: TObject);
     procedure StackShowChange(Sender: TObject);
     procedure StackUseDarkFlatChange(Sender: TObject);
@@ -792,6 +809,7 @@ type
     FAutofocusExposure: double;
     Lockchange: boolean;
     SaveTemperatureSlope: double;
+    CurrentRoi: integer;
     procedure msg(txt:string);
     function GetResolver: integer;
     procedure SetResolver(value:integer);
@@ -815,6 +833,7 @@ type
     function  GetAutofocusMode: TAutofocusMode;
     procedure LoadObservatoryDB(defaultobs:string);
     procedure SaveObservatoryDB;
+    procedure ClearRoi;
     property AutofocusExp: double read FAutofocusExposure write SetAutofocusExpTime;
     property Resolver: integer read GetResolver write SetResolver;
     property Latitude: double read Flatitude write SetLatitude;
@@ -2062,6 +2081,74 @@ end;
 procedure Tf_option.BtnMaxDriftDisableClick(Sender: TObject);
 begin
   GuideDriftMax.Value:=100;
+end;
+
+procedure Tf_option.RoiListChange(Sender: TObject);
+var roi:TRoi;
+    i: integer;
+begin
+  i:=RoiList.ItemIndex;
+  if (i>=0)and(CurrentRoi<RoiList.Items.Count) then begin
+    CurrentRoi:=i;
+    roi:=TRoi(RoiList.Items.Objects[CurrentRoi]);
+    RoiList.text := roi.name;
+    RoiX.Value   := roi.x;
+    RoiY.Value   := roi.y;
+    RoiW.Value   := roi.w;
+    RoiH.Value   := roi.h;
+  end;
+end;
+
+procedure Tf_option.BtnAddRoiClick(Sender: TObject);
+var i: integer;
+    roi:TRoi;
+begin
+  roi:=TRoi.Create;
+  roi.name:=RoiList.text;
+  roi.x:=RoiX.Value;
+  roi.y:=RoiY.Value;
+  roi.w:=RoiW.Value;
+  roi.h:=RoiH.Value;
+  i:=RoiList.Items.AddObject(roi.name,roi);
+  RoiList.ItemIndex:=i;
+  CurrentRoi:=i;
+end;
+
+procedure Tf_option.BtnModRoiClick(Sender: TObject);
+var i: integer;
+    roi:TRoi;
+begin
+  i:=CurrentRoi;
+  if (i>=0)and(i<RoiList.Items.Count) then begin
+    RoiList.Items[i]:=RoiList.text;
+    roi:=TRoi(RoiList.Items.Objects[i]);
+    roi.name:=RoiList.text;
+    roi.x:=RoiX.Value;
+    roi.y:=RoiY.Value;
+    roi.w:=RoiW.Value;
+    roi.h:=RoiH.Value;
+  end;
+end;
+
+procedure Tf_option.BtnDelRoiClick(Sender: TObject);
+var i: integer;
+begin
+ i:=CurrentRoi;
+ if (i>=0)and(i<RoiList.Items.Count) then begin
+   if RoiList.Items.Objects[i]<>nil then RoiList.Items.Objects[i].Free;
+   RoiList.Items.Delete(i);
+   RoiList.ItemIndex:=i-1;
+   RoiListChange(Sender);
+ end;
+end;
+
+procedure Tf_option.ClearRoi;
+var i: integer;
+begin
+  for i:=RoiList.Items.Count-1 downto 0 do begin
+    if RoiList.Items.Objects[i]<>nil then RoiList.Items.Objects[i].Free;
+    RoiList.Items.Delete(i);
+  end;
 end;
 
 procedure Tf_option.ButtonLogDirClick(Sender: TObject);
