@@ -7162,12 +7162,12 @@ if (n>0)and(n<=MaxFilter)and(focuser.Status=devConnected)and(f_focuser.Ready) th
  if CurrentFilterOffset<>FilterOffset[f] then begin
    if filteroffset_initialized then begin
     o:=FilterOffset[f]-CurrentFilterOffset;
+    CurrentFilterOffset:=FilterOffset[f];
     f_focuser.FocusSpeed:=abs(o);
     if o>0 then
       FocusOUT(nil)
     else
       FocusIN(nil);
-    CurrentFilterOffset:=FilterOffset[f];
    end
    else begin
     CurrentFilterOffset:=FilterOffset[f];
