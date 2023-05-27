@@ -126,6 +126,7 @@ end;
 
 procedure Tf_frame.BtnResetClick(Sender: TObject);
 begin
+  RoiList.ItemIndex:=-1;
   if Assigned(FonReset) then FonReset(self);
 end;
 
