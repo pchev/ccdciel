@@ -4613,6 +4613,9 @@ begin
       fnPierSide: if FileNameActive[i] and f.Header.Valueof('PIERSIDE',buf) then begin
                    fn:=fn+trim(buf)+FilenameSep;
               end;
+      fnOffset: if FileNameActive[i] and f.Header.Valueof('OFFSET',buf) then begin
+                 fn:=fn+trim(buf)+FilenameSep;
+              end;
     end;
   end;
   fn:=StringReplace(fn,' ',blankrep,[rfReplaceAll]);

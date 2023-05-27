@@ -2443,6 +2443,7 @@ begin
    FilenameName[6]:=rsGain;
    FilenameName[7]:=rsFocusPositio;
    FilenameName[8]:=rsSideOfPier;
+   FilenameName[9]:=rsOffset2;
    TBConnect.Hint := rsConnect;
    TBFocus.Hint := rsFocus;
    TBCapture.Hint := rsCapture;
