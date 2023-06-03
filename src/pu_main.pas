@@ -580,7 +580,7 @@ type
     watchdog: T_watchdog;
     weather: T_weather;
     safety: T_safety;
-    switch: array of T_switch;
+    switch: TSwitches;
     cover: T_cover;
     autoguider:T_autoguider;
     planetarium:TPlanetarium;
@@ -2182,6 +2182,7 @@ begin
    f_scriptengine.Mount:=mount;
    f_scriptengine.Camera:=camera;
    f_scriptengine.Focuser:=focuser;
+   f_scriptengine.Switch:=switch;
  end;
  if f_script<>nil then begin
    f_script.Camera:=camera;
@@ -6713,7 +6714,6 @@ var i: integer;
 begin
  i:=T_switch(sender).tag;
  if f_switch.Connected(i) then begin
-   writeln('Tf_main.SwitchChange '+inttostr(T_switch(sender).tag)+' '+T_switch(sender).DeviceName);
    f_switch.SwitchChange(T_switch(sender));
  end;
 end;
@@ -15584,7 +15584,7 @@ end;
 
 function Tf_main.TCPjsoncmd(id:string; attrib,value:Tstringlist):string;
 var p,i: integer;
-    rpcversion,method,buf,buf1,buf2:string;
+    rpcversion,method,buf,buf1,buf2,buf3:string;
     sl:Tstringlist;
     x1,x2,x3,x4: double;
 const tr='true';
@@ -15881,6 +15881,19 @@ try
    buf1:=trim(value[attrib.IndexOf('params.0')]);
    buf:=f_scriptengine.cmd_FinderStartLoop(buf1);
    result:=result+'"result":{"status": "'+buf+'"}';
+  end
+  else if method='GET_SWITCH' then begin
+    buf1:=trim(value[attrib.IndexOf('params.0')]);
+    buf2:=trim(value[attrib.IndexOf('params.1')]);
+    buf:=f_scriptengine.cmd_getswitch(buf1,buf2);
+    result:=result+'"result":{"value": "'+buf+'"}';
+  end
+  else if method='SET_SWITCH' then begin
+    buf1:=trim(value[attrib.IndexOf('params.0')]);
+    buf2:=trim(value[attrib.IndexOf('params.1')]);
+    buf3:=trim(value[attrib.IndexOf('params.2')]);
+    buf:=f_scriptengine.cmd_setswitch(buf1,buf2,buf3);
+    result:=result+'"result":{"status": "'+buf+'"}';
   end
   // method not found
   else begin

@@ -55,12 +55,13 @@ T_switch = class(TComponent)
     procedure SetTimeout(num:integer); virtual; abstract;
     function GetSwitch: TSwitchList; virtual; abstract;
     procedure SetSwitch(value: TSwitchList); virtual; abstract;
+    function GetNickName: string;
   public
     constructor Create(AOwner: TComponent);override;
     destructor  Destroy; override;
     Procedure Connect(cp1: string; cp2:string=''; cp3:string=''; cp4:string=''; cp5:string=''; cp6:string=''); virtual; abstract;
     Procedure Disconnect; virtual; abstract;
-    property Nickname: string read FNickname write FNickname;
+    property Nickname: string read GetNickname write FNickname;
     property DeviceName: string read FDevice;
     property SwitchInterface: TDevInterface read FSwitchInterface;
     property Status: TDeviceStatus read FStatus;
@@ -73,6 +74,8 @@ T_switch = class(TComponent)
     property onStatusChange: TNotifyEvent read FonStatusChange write FonStatusChange;
     property onSwitchChange: TNotifyEvent read FonSwitchChange write FonSwitchChange;
 end;
+
+TSwitches = array of T_switch;
 
 implementation
 
@@ -93,6 +96,14 @@ end;
 procedure T_switch.msg(txt: string; level:integer=3);
 begin
   if Assigned(FonMsg) then FonMsg(Fdevice+': '+txt,level);
+end;
+
+function T_switch.GetNickName: string;
+begin
+  if FNickname<>'' then
+    result:=FNickname
+  else
+    result:=DeviceName;
 end;
 
 end.

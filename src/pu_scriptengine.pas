@@ -31,7 +31,7 @@ interface
 
 uses  u_global, u_utils, cu_fits, indiapi, cu_planetarium, fu_ccdtemp, fu_devicesconnection, pu_pause,
   fu_capture, fu_preview, fu_mount, cu_wheel, cu_mount, cu_camera, cu_focuser, cu_autoguider, cu_astrometry,
-  fu_cover, cu_cover, fu_internalguider, fu_finder,
+  fu_cover, cu_cover, fu_internalguider, fu_finder, cu_switch,
   Classes, SysUtils, FileUtil, uPSComponent, uPSComponent_Default, LazFileUtils,
   uPSComponent_Forms, uPSComponent_Controls, uPSComponent_StdCtrls, Forms, process,
   u_translation, Controls, Graphics, Dialogs, ExtCtrls;
@@ -92,6 +92,7 @@ type
     Fplanetarium: TPlanetarium;
     FInternalGuider: Tf_internalguider;
     FFinder: Tf_finder;
+    FSwitch: TSwitches;
     FonMsg: TNotifyMsg;
     FonStartSequence: TNotifyStr;
     FonScriptExecute: TNotifyEvent;
@@ -235,6 +236,8 @@ type
     function cmd_customheader_del(key:string): string;
     function cmd_customheader_clear: string;
     function cmd_customheader(key:string): string;
+    function cmd_getswitch(nickname,swname: string): string;
+    function cmd_setswitch(nickname,swname, value: string): string;
     function ScriptType(fn: string): TScriptType;
     function  RunScript(sname,path,args: string):boolean;
     function ScriptRunning: boolean;
@@ -273,6 +276,7 @@ type
     property ScriptFilename: string read FScriptFilename;
     property InternalGuider: Tf_internalguider read Finternalguider write Finternalguider;
     property Finder: Tf_finder read FFinder write FFinder;
+    property Switch: TSwitches read FSwitch write FSwitch;
   end;
 
 var
@@ -2091,6 +2095,60 @@ begin
       break;
     end;
   end;
+end;
+
+function Tf_scriptengine.cmd_getswitch(nickname,swname: string): string;
+var i,j: integer;
+    sw: TSwitchList;
+begin
+ result:='';
+ try
+ for i:=0 to NumSwitches-1 do begin
+   if Fswitch[i].Nickname=nickname then begin
+     sw:=Fswitch[i].Switch;
+     for j:=0 to Fswitch[i].NumSwitch-1 do begin
+       if sw[j].Name=swname then begin
+         if sw[j].MultiState then
+           result:=FormatFloat(f9v,sw[j].Value)
+         else
+           result:=BoolToStr(sw[j].Checked,'1','0');
+         break;
+       end;
+     end;
+     break;
+   end;
+ end;
+ except
+   result:='';
+ end;
+end;
+
+function Tf_scriptengine.cmd_setswitch(nickname,swname, value: string): string;
+var i,j: integer;
+    sw: TSwitchList;
+begin
+try
+ result:=msgFailed;
+ for i:=0 to NumSwitches-1 do begin
+   if Fswitch[i].Nickname=nickname then begin
+     sw:=Fswitch[i].Switch;
+     for j:=0 to Fswitch[i].NumSwitch-1 do begin
+       if sw[j].Name=swname then begin
+         if sw[j].MultiState then
+           sw[j].Value:=StrToFloat(value)
+         else
+           sw[j].Checked:=(value<>'0');
+         Fswitch[i].Switch:=sw;
+         result:=msgOK;
+         break;
+       end;
+     end;
+     break;
+   end;
+ end;
+except
+  result:=msgFailed;
+end;
 end;
 
 ///// Python scripts ///////

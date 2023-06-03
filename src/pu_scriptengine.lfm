@@ -6,7 +6,6 @@ object f_scriptengine: Tf_scriptengine
   Caption = 'f_scriptengine'
   OnCreate = FormCreate
   OnDestroy = FormDestroy
-  LCLVersion = '2.2.4.0'
   object TplPSScript: TPSScript
     CompilerOptions = []
     OnLine = TplPSScriptLine

@@ -107,14 +107,10 @@ procedure Tf_switch.AddSwitch(sw:T_switch);
 var tb: TTabSheet;
     sp: Tf_switchpage;
 begin
- writeln('AddSwitch '+inttostr(sw.tag)+' '+sw.DeviceName);
  if sw.tag>MaxSwitches then exit;
  tb:=PageControl1.AddTabSheet;
  SwitchPage[sw.Tag]:=tb.PageIndex;
- if sw.Nickname<>'' then
-   tb.Caption:=sw.Nickname
- else
-   tb.Caption:=sw.DeviceName;
+ tb.Caption:=sw.Nickname;
  sp:=Tf_switchpage.Create(self);
  sp.name:='Switchpage'+inttostr(sw.tag);
  sp.Parent:=tb;
@@ -143,7 +139,6 @@ procedure Tf_switch.SwitchChange(sw:T_switch);
 var i: integer;
     sp: Tf_switchpage;
 begin
-  writeln('SwitchChange '+inttostr(sw.tag)+' '+sw.DeviceName);
   if sw.tag>MaxSwitches then exit;
   i:=SwitchPage[sw.tag];
   if i<0 then begin
@@ -151,10 +146,7 @@ begin
     i:=SwitchPage[sw.tag];
   end;
   sp:=Tf_switchpage(PageControl1.Pages[i].Controls[0]);
-  if sw.Nickname<>'' then
-    sp.Parent.Caption:=sw.Nickname
-  else
-    sp.Parent.Caption:=sw.DeviceName;
+  sp.Parent.Caption:=sw.Nickname;
   sp.NumSwitch:=sw.NumSwitch;
   sp.Switch:=sw.Switch;
   PageControl1.ShowTabs:=(PageControl1.PageCount>1)or(sw.DeviceName<>'');
