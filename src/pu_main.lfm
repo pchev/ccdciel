@@ -1,13 +1,13 @@
 object f_main: Tf_main
   Left = 228
-  Height = 450
+  Height = 602
   Top = 136
-  Width = 841
+  Width = 847
   ActiveControl = PageControlRight
   AllowDropFiles = True
   Caption = 'CCD Ciel'
-  ClientHeight = 450
-  ClientWidth = 841
+  ClientHeight = 572
+  ClientWidth = 847
   Constraints.MinHeight = 450
   Constraints.MinWidth = 800
   KeyPreview = True
@@ -23,18 +23,18 @@ object f_main: Tf_main
   ShowHint = True
   object Panel1: TPanel
     Left = 0
-    Height = 435
+    Height = 549
     Top = 0
-    Width = 614
+    Width = 620
     Align = alClient
     BevelOuter = bvNone
-    ClientHeight = 435
-    ClientWidth = 614
+    ClientHeight = 549
+    ClientWidth = 620
     ParentFont = False
     TabOrder = 0
     object PanelLeft: TPanel
       Left = 0
-      Height = 427
+      Height = 541
       Top = 4
       Width = 4
       Align = alLeft
@@ -55,7 +55,7 @@ object f_main: Tf_main
       Left = 0
       Height = 4
       Top = 0
-      Width = 614
+      Width = 620
       Align = alTop
       AutoSize = True
       BevelOuter = bvNone
@@ -73,13 +73,13 @@ object f_main: Tf_main
     end
     object PanelCenter: TPanel
       Left = 4
-      Height = 427
+      Height = 541
       Top = 4
-      Width = 610
+      Width = 616
       Align = alClient
       BevelOuter = bvNone
-      ClientHeight = 427
-      ClientWidth = 610
+      ClientHeight = 541
+      ClientWidth = 616
       Color = 4197901
       ParentColor = False
       ParentFont = False
@@ -119,9 +119,9 @@ object f_main: Tf_main
       end
       object PageControlImage: TPageControl
         Left = 0
-        Height = 427
+        Height = 541
         Top = 0
-        Width = 610
+        Width = 616
         TabStop = False
         ActivePage = MainImage
         Align = alClient
@@ -144,8 +144,8 @@ object f_main: Tf_main
     object PanelBottom: TPanel
       Left = 0
       Height = 4
-      Top = 431
-      Width = 614
+      Top = 545
+      Width = 620
       Align = alBottom
       AutoSize = True
       BevelOuter = bvNone
@@ -163,8 +163,8 @@ object f_main: Tf_main
     end
   end
   object Splitter1: TSplitter
-    Left = 614
-    Height = 435
+    Left = 620
+    Height = 549
     Top = 0
     Width = 5
     Align = alRight
@@ -172,32 +172,32 @@ object f_main: Tf_main
     ResizeAnchor = akRight
   end
   object PanelRight: TPanel
-    Left = 619
-    Height = 435
+    Left = 625
+    Height = 549
     Top = 0
     Width = 222
     Align = alRight
     BevelOuter = bvNone
-    ClientHeight = 435
+    ClientHeight = 549
     ClientWidth = 222
     Constraints.MinWidth = 222
     ParentFont = False
     TabOrder = 2
     object ScrollBox1: TScrollBox
       Left = 0
-      Height = 394
+      Height = 508
       Top = 41
       Width = 222
-      HorzScrollBar.Page = 11
-      VertScrollBar.Page = 5
+      HorzScrollBar.Page = 208
+      VertScrollBar.Page = 54
       Align = alClient
       BorderStyle = bsNone
-      ClientHeight = 394
+      ClientHeight = 508
       ClientWidth = 222
       TabOrder = 0
       object PageControlRight: TPageControl
         Left = 0
-        Height = 394
+        Height = 508
         Top = 0
         Width = 222
         ActivePage = PageConnect
@@ -210,15 +210,15 @@ object f_main: Tf_main
         TabOrder = 0
         Options = [nboMultiLine]
         object PageConnect: TTabSheet
-          ClientHeight = 390
-          ClientWidth = 212
+          ClientHeight = 504
+          ClientWidth = 218
           ImageIndex = 0
           ParentFont = False
           object PanelRight1: TPanel
             Left = 0
-            Height = 390
+            Height = 504
             Top = 0
-            Width = 212
+            Width = 218
             Align = alClient
             AutoSize = True
             BevelOuter = bvNone
@@ -234,15 +234,15 @@ object f_main: Tf_main
           end
         end
         object PageFocus: TTabSheet
-          ClientHeight = 390
-          ClientWidth = 212
+          ClientHeight = 504
+          ClientWidth = 218
           ImageIndex = 1
           ParentFont = False
           object PanelRight2: TPanel
             Left = 0
-            Height = 390
+            Height = 504
             Top = 0
-            Width = 212
+            Width = 218
             Align = alClient
             AutoSize = True
             BevelOuter = bvNone
@@ -258,15 +258,15 @@ object f_main: Tf_main
           end
         end
         object PageCapture: TTabSheet
-          ClientHeight = 390
-          ClientWidth = 212
+          ClientHeight = 504
+          ClientWidth = 218
           ImageIndex = 2
           ParentFont = False
           object PanelRight3: TPanel
             Left = 0
-            Height = 390
+            Height = 504
             Top = 0
-            Width = 212
+            Width = 218
             Align = alClient
             AutoSize = True
             BevelOuter = bvNone
@@ -282,15 +282,15 @@ object f_main: Tf_main
           end
         end
         object PageSequence: TTabSheet
-          ClientHeight = 390
-          ClientWidth = 212
+          ClientHeight = 504
+          ClientWidth = 218
           ImageIndex = 3
           ParentFont = False
           object PanelRight4: TPanel
             Left = 0
-            Height = 390
+            Height = 504
             Top = 0
-            Width = 212
+            Width = 218
             Align = alClient
             AutoSize = True
             BevelOuter = bvNone
@@ -306,15 +306,15 @@ object f_main: Tf_main
           end
         end
         object PageVideo: TTabSheet
-          ClientHeight = 390
-          ClientWidth = 212
+          ClientHeight = 504
+          ClientWidth = 218
           ImageIndex = 4
           ParentFont = False
           object PanelRight5: TPanel
             Left = 0
-            Height = 390
+            Height = 504
             Top = 0
-            Width = 212
+            Width = 218
             Align = alClient
             AutoSize = True
             BevelOuter = bvNone
@@ -326,15 +326,15 @@ object f_main: Tf_main
           end
         end
         object PageInternalGuider: TTabSheet
-          ClientHeight = 390
-          ClientWidth = 212
+          ClientHeight = 504
+          ClientWidth = 218
           ImageIndex = 4
           ParentFont = False
           object PanelRight6: TPanel
             Left = 0
-            Height = 390
+            Height = 504
             Top = 0
-            Width = 212
+            Width = 218
             Align = alClient
             BevelOuter = bvNone
             ParentColor = False
@@ -345,14 +345,14 @@ object f_main: Tf_main
           end
         end
         object PageFinder: TTabSheet
-          ClientHeight = 390
-          ClientWidth = 212
+          ClientHeight = 504
+          ClientWidth = 218
           ParentFont = False
           object PanelRight7: TPanel
             Left = 0
-            Height = 390
+            Height = 504
             Top = 0
-            Width = 212
+            Width = 218
             Align = alClient
             BevelOuter = bvNone
             TabOrder = 0
@@ -459,9 +459,9 @@ object f_main: Tf_main
   end
   object StatusBar1: TStatusBar
     Left = 0
-    Height = 15
-    Top = 435
-    Width = 841
+    Height = 23
+    Top = 549
+    Width = 847
     BorderWidth = 1
     Panels = <    
       item

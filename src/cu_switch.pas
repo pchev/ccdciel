@@ -47,7 +47,7 @@ T_switch = class(TComponent)
     FonMsg,FonDeviceMsg: TNotifyMsg;
     FonStatusChange, FonSwitchChange: TNotifyEvent;
     FTimeOut: integer;
-    Fdevice: string;
+    Fdevice, FNickname: string;
     FAutoLoadConfig: boolean;
     FNumSwitch: integer;
     FSwitch: TSwitchList;
@@ -60,6 +60,7 @@ T_switch = class(TComponent)
     destructor  Destroy; override;
     Procedure Connect(cp1: string; cp2:string=''; cp3:string=''; cp4:string=''; cp5:string=''; cp6:string=''); virtual; abstract;
     Procedure Disconnect; virtual; abstract;
+    property Nickname: string read FNickname write FNickname;
     property DeviceName: string read FDevice;
     property SwitchInterface: TDevInterface read FSwitchInterface;
     property Status: TDeviceStatus read FStatus;

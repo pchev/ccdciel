@@ -212,7 +212,7 @@ type
   {$i revision.inc}
 
 const
-  ccdcielver = '0.9.83';
+  ccdcielver = '0.9.84';
   ccdciel_version='Version beta '+ccdcielver;
   TargetFileVersion = 5;
   Maxclient = 100;
@@ -294,6 +294,7 @@ const
   MaxScriptDir=2;
   MaxMenulevel=10;
   MaxFilter=100;
+  MaxSwitches=100;
   WaitResponseTime=120;
   ZoomMax=15;
   GuideZoomMax=15;
@@ -539,6 +540,7 @@ var
   CustomHeaders: array [1..MaxCustomHeaders] of TCustomHeaderElement;
   CdCAdjustFrame: boolean;
   PlanetariumShowAstrometry:boolean;
+  NumSwitches: integer;
   {internal guider}
   InternalguiderRunning,InternalguiderCalibrating,InternalguiderCalibratingBacklash,InternalguiderGuiding,StopInternalguider,InternalguiderCapturingDark: boolean;
   {finder}

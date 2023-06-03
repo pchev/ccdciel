@@ -35,6 +35,16 @@ uses indibaseclient, indibasedevice, indiapi, u_global, u_utils, u_ccdconfig, US
 
 type
 
+  TSwitchRec = record
+              SwitchConnection: TDevInterface;
+              Nickname: string;
+              IndiDevice,IndiServer,IndiPort: string;
+              AutoLoadConfig: boolean;
+              AscomDevice: string;
+              AscomRestHost,AscomRestUser,AscomRestPass: string;
+              AscomRestDevice,AscomRestProtocol,AscomRestPort: integer;
+  end;
+
   { Tf_setup }
 
   Tf_setup = class(TForm)
@@ -82,6 +92,7 @@ type
     DeviceGuideCamera: TCheckBox;
     DeviceFinderCamera: TCheckBox;
     DiscoverLed12: TShape;
+    SwitchNickname: TEdit;
     GetIndi12: TButton;
     GuideCameraARestDevice: TSpinEdit;
     FinderCameraARestDevice: TSpinEdit;
@@ -206,6 +217,9 @@ type
     Label167: TLabel;
     Label168: TLabel;
     Label169: TLabel;
+    Label170: TLabel;
+    Label171: TLabel;
+    Label172: TLabel;
     Label23: TLabel;
     Label26: TLabel;
     Label27: TLabel;
@@ -213,6 +227,7 @@ type
     Label4: TLabel;
     Label7: TLabel;
     Label8: TLabel;
+    LabelSwitchConnection: TLabel;
     PageControlGuideCamera: TPageControl;
     PageControlFinderCamera: TPageControl;
     PageControlSwitch: TPageControl;
@@ -245,6 +260,7 @@ type
     Panel44: TPanel;
     Panel45: TPanel;
     Panel46: TPanel;
+    Panel47: TPanel;
     PanelGuideCameraAscom: TPanel;
     PanelFinderCameraAscom: TPanel;
     PanelGuideCameraIndi: TPanel;
@@ -256,6 +272,7 @@ type
     PanelCoverIndi: TPanel;
     ScrollBox1: TScrollBox;
     DiscoverLed: TShape;
+    NumSwitch: TSpinEdit;
     SwitchARestDevice: TSpinEdit;
     CoverARestDevice: TSpinEdit;
     SwitchARestHost: TEdit;
@@ -288,6 +305,7 @@ type
     Cover: TTabSheet;
     GuideCamera: TTabSheet;
     FinderCamera: TTabSheet;
+    SwitchTabControl: TTabControl;
     WheelMslot: TSpinEdit;
     WheelManual: TTabSheet;
     WheelARestPass: TEdit;
@@ -699,6 +717,7 @@ type
     procedure FinderCameraIndiDeviceChange(Sender: TObject);
     procedure FinderIndiSensorChange(Sender: TObject);
     procedure FocuserARestProtocolChange(Sender: TObject);
+    procedure FormClose(Sender: TObject; var CloseAction: TCloseAction);
     procedure FormShow(Sender: TObject);
     procedure GetIndiClick(Sender: TObject);
     procedure GuideCameraARestProtocolChange(Sender: TObject);
@@ -711,6 +730,7 @@ type
     procedure MountARestProtocolChange(Sender: TObject);
     procedure MountGetObservatoryClick(Sender: TObject);
     procedure MountSetObservatoryClick(Sender: TObject);
+    procedure NumSwitchChange(Sender: TObject);
     procedure Pagecontrol1Change(Sender: TObject);
     procedure PageControlCameraChange(Sender: TObject);
     procedure PageControlCoverChange(Sender: TObject);
@@ -731,6 +751,8 @@ type
     procedure RotatorARestProtocolChange(Sender: TObject);
     procedure SafetyARestProtocolChange(Sender: TObject);
     procedure SwitchARestProtocolChange(Sender: TObject);
+    procedure SwitchTabControlChange(Sender: TObject);
+    procedure SwitchTabControlChanging(Sender: TObject; var AllowChange: Boolean);
     procedure WeatherARestProtocolChange(Sender: TObject);
     procedure WheelARestProtocolChange(Sender: TObject);
     procedure WheelMslotChange(Sender: TObject);
@@ -775,11 +797,14 @@ type
     procedure CheckDualChip;
     procedure CheckGuideDualChip;
     procedure CheckFinderDualChip;
+    procedure ShowSwitch(n: integer);
+    procedure StoreSwitch(n: integer);
   public
     { public declarations }
     DefaultCameraInterface, DefaultGuideCameraInterface, DefaultFinderCameraInterface, DefaultMountInterface, DefaultDomeInterface, DefaultWheelInterface, DefaultFocuserInterface,
       DefaultRotatorInterface, DefaultWeatherInterface, DefaultSafetyInterface, DefaultSwitchInterface, DefaultCoverInterface: TDevInterface;
     profile: string;
+    SwitchList: array[0..MaxSwitches] of TSwitchRec;
     procedure SetLang;
     procedure LoadProfileList;
     procedure Loadconfig(conf,credentialconf: TCCDConfig);
@@ -1309,7 +1334,7 @@ end;
 
 procedure Tf_setup.Loadconfig(conf,credentialconf: TCCDConfig);
 var defautindiserver, defaultindiport: string;
-    i: integer;
+    i,n: integer;
 begin
 // default value from old config
 defautindiserver:=conf.GetValue('/INDI/Server','localhost');
@@ -1510,20 +1535,25 @@ SafetyARestHost.Text:=conf.GetValue('/ASCOMRestsafety/Host','127.0.0.1');
 SafetyARestPort.Value:=conf.GetValue('/ASCOMRestsafety/Port',11111);
 SafetyARestDevice.Value:=conf.GetValue('/ASCOMRestsafety/Device',0);
 
-SwitchConnection:=TDevInterface(conf.GetValue('/SwitchInterface',ord(DefaultSwitchInterface)));
-SwitchIndiServer.Text:=conf.GetValue('/INDIswitch/Server',defautindiserver);
-SwitchIndiPort.Text:=conf.GetValue('/INDIswitch/ServerPort',defaultindiport);
-if SwitchIndiDevice.Items.Count=0 then begin
-  SwitchIndiDevice.Items.Add(conf.GetValue('/INDIswitch/Device',''));
-  SwitchIndiDevice.ItemIndex:=0;
+n:=config.GetValue('/Switch/NumSwitch',1);
+for i:=0 to n-1 do begin
+  SwitchList[i].Nickname:=conf.GetValue('/Switch/Switch'+inttostr(i)+'/Nickname','');
+  SwitchList[i].SwitchConnection:=TDevInterface(conf.GetValue('/Switch/Switch'+inttostr(i)+'/SwitchInterface',ord(DefaultSwitchInterface)));
+  SwitchList[i].IndiServer:=conf.GetValue('/Switch/Switch'+inttostr(i)+'/INDIswitch/Server',defautindiserver);
+  SwitchList[i].IndiPort:=conf.GetValue('/Switch/Switch'+inttostr(i)+'/INDIswitch/ServerPort',defaultindiport);
+  SwitchList[i].IndiDevice:=(conf.GetValue('/Switch/Switch'+inttostr(i)+'/INDIswitch/Device',''));
+  SwitchList[i].AutoLoadConfig:=conf.GetValue('/Switch/Switch'+inttostr(i)+'/INDIswitch/AutoLoadConfig',true);
+  SwitchList[i].AscomDevice:=conf.GetValue('/Switch/Switch'+inttostr(i)+'/ASCOMswitch/Device','');
+  SwitchList[i].AscomRestProtocol:=conf.GetValue('/Switch/Switch'+inttostr(i)+'/ASCOMRestswitch/Protocol',0);
+  SwitchList[i].AscomRestHost:=conf.GetValue('/Switch/Switch'+inttostr(i)+'/ASCOMRestswitch/Host','127.0.0.1');
+  SwitchList[i].AscomRestPort:=conf.GetValue('/Switch/Switch'+inttostr(i)+'/ASCOMRestswitch/Port',11111);
+  SwitchList[i].AscomRestDevice:=conf.GetValue('/Switch/Switch'+inttostr(i)+'/ASCOMRestswitch/Device',0);
+  SwitchList[i].AscomRestUser:=DecryptStr(hextostr(credentialconf.GetValue('/ASCOMRestswitch'+inttostr(i)+'/User','')), encryptpwd);
+  SwitchList[i].AscomRestPass:=DecryptStr(hextostr(credentialconf.GetValue('/ASCOMRestswitch'+inttostr(i)+'/Pass','')), encryptpwd);
 end;
-SwitchIndiDevice.Text:=conf.GetValue('/INDIswitch/Device','');
-SwitchAutoLoadConfig.Checked:=conf.GetValue('/INDIswitch/AutoLoadConfig',true);
-AscomSwitch.Text:=conf.GetValue('/ASCOMswitch/Device','');
-SwitchARestProtocol.ItemIndex:=conf.GetValue('/ASCOMRestswitch/Protocol',0);
-SwitchARestHost.Text:=conf.GetValue('/ASCOMRestswitch/Host','127.0.0.1');
-SwitchARestPort.Value:=conf.GetValue('/ASCOMRestswitch/Port',11111);
-SwitchARestDevice.Value:=conf.GetValue('/ASCOMRestswitch/Device',0);
+NumSwitch.Value:=n;
+NumSwitchChange(NumSwitch);
+ShowSwitch(0);
 
 CoverConnection:=TDevInterface(conf.GetValue('/CoverInterface',ord(DefaultCoverInterface)));
 CoverIndiServer.Text:=conf.GetValue('/INDIcover/Server',defautindiserver);
@@ -1558,7 +1588,7 @@ DeviceMount.Caption:=rsUseMount+': '+DevInterfaceName[ord(FMountConnection)];
 DeviceFocuser.Caption:=rsUseFocuser+': '+DevInterfaceName[ord(FocuserConnection)];
 DeviceDome.Caption:=rsUseDome+': '+DevInterfaceName[ord(FocuserConnection)];
 DeviceCamera.Caption:=rsCamera+': '+DevInterfaceName[ord(FCameraConnection)];
-DeviceSwitch.Caption:=rsUseSwitch+': '+DevInterfaceName[ord(FSwitchConnection)];
+DeviceSwitch.Caption:=rsUseSwitch;
 DeviceCover.Caption:=rsUseCoverCali+': '+DevInterfaceName[ord(FCoverConnection)];
 DeviceGuideCamera.Caption:=rsUseGuideCamera+': '+DevInterfaceName[ord(FGuideCameraConnection)];
 DeviceFinderCamera.Caption:=rsUseFinderCam+': '+DevInterfaceName[ord(FFinderCameraConnection)];
@@ -1571,7 +1601,6 @@ MountARestUser.Text:=DecryptStr(hextostr(credentialconf.GetValue('/ASCOMRestmoun
 DomeARestUser.Text:=DecryptStr(hextostr(credentialconf.GetValue('/ASCOMRestdome/User','')), encryptpwd);
 WeatherARestUser.Text:=DecryptStr(hextostr(credentialconf.GetValue('/ASCOMRestweather/User','')), encryptpwd);
 SafetyARestUser.Text:=DecryptStr(hextostr(credentialconf.GetValue('/ASCOMRestsafety/User','')), encryptpwd);
-SwitchARestUser.Text:=DecryptStr(hextostr(credentialconf.GetValue('/ASCOMRestswitch/User','')), encryptpwd);
 CoverARestUser.Text:=DecryptStr(hextostr(credentialconf.GetValue('/ASCOMRestcover/User','')), encryptpwd);
 GuideCameraARestUser.Text:=DecryptStr(hextostr(credentialconf.GetValue('/ASCOMRestguidecamera/User','')), encryptpwd);
 FinderCameraARestUser.Text:=DecryptStr(hextostr(credentialconf.GetValue('/ASCOMRestfindercamera/User','')), encryptpwd);
@@ -1584,7 +1613,6 @@ MountARestPass.Text:=DecryptStr(hextostr(credentialconf.GetValue('/ASCOMRestmoun
 DomeARestPass.Text:=DecryptStr(hextostr(credentialconf.GetValue('/ASCOMRestdome/Pass','')), encryptpwd);
 WeatherARestPass.Text:=DecryptStr(hextostr(credentialconf.GetValue('/ASCOMRestweather/Pass','')), encryptpwd);
 SafetyARestPass.Text:=DecryptStr(hextostr(credentialconf.GetValue('/ASCOMRestsafety/Pass','')), encryptpwd);
-SwitchARestPass.Text:=DecryptStr(hextostr(credentialconf.GetValue('/ASCOMRestswitch/Pass','')), encryptpwd);
 CoverARestPass.Text:=DecryptStr(hextostr(credentialconf.GetValue('/ASCOMRestcover/Pass','')), encryptpwd);
 GuideCameraARestPass.Text:=DecryptStr(hextostr(credentialconf.GetValue('/ASCOMRestguidecamera/Pass','')), encryptpwd);
 FinderCameraARestPass.Text:=DecryptStr(hextostr(credentialconf.GetValue('/ASCOMRestfindercamera/Pass','')), encryptpwd);
@@ -2092,6 +2120,11 @@ begin
     0: FocuserARestPort.Value:=11111;
     1: FocuserARestPort.Value:=443;
   end;
+end;
+
+procedure Tf_setup.FormClose(Sender: TObject; var CloseAction: TCloseAction);
+begin
+  StoreSwitch(SwitchTabControl.TabIndex);
 end;
 
 procedure Tf_setup.FormShow(Sender: TObject);
@@ -2660,7 +2693,7 @@ begin
     1: FSwitchConnection:=ASCOM;
     2: FSwitchConnection:=ASCOMREST;
   end;
-  DeviceSwitch.Caption:=rsUseSwitch+': '+DevInterfaceName[ord(FSwitchConnection)];
+  LabelSwitchConnection.Caption:=rsSwitch+' '+rsInterface+': '+DevInterfaceName[ord(FSwitchConnection)];
 end;
 
 procedure Tf_setup.PageControlCoverChange(Sender: TObject);
@@ -3365,6 +3398,63 @@ begin
   else
     url:=trim(protocol)+'//'+trim(host)+':'+trim(port)+'/setup/v1/'+trim(device)+'/'+trim(num)+'/setup';
   ExecuteFile(url);
+end;
+
+procedure Tf_setup.NumSwitchChange(Sender: TObject);
+var i: integer;
+begin
+  SwitchTabControl.Tabs.Clear;
+  for i:=1 to NumSwitch.Value do SwitchTabControl.Tabs.Add(inttostr(i));
+  SwitchTabControl.TabIndex:=0;
+end;
+
+procedure Tf_setup.SwitchTabControlChange(Sender: TObject);
+begin
+  ShowSwitch(SwitchTabControl.TabIndex);
+end;
+
+procedure Tf_setup.SwitchTabControlChanging(Sender: TObject; var AllowChange: Boolean);
+begin
+  StoreSwitch(SwitchTabControl.TabIndex);
+end;
+
+procedure Tf_setup.ShowSwitch(n: integer);
+begin
+  SwitchNickname.Text   := SwitchList[n].Nickname;
+  SwitchConnection      := SwitchList[n].SwitchConnection;
+  LabelSwitchConnection.Caption:=rsSwitch+' '+rsInterface+': '+DevInterfaceName[ord(FSwitchConnection)];
+  SwitchIndiServer.Text := SwitchList[n].IndiServer;
+  SwitchIndiPort.Text   := SwitchList[n].IndiPort;
+  if SwitchIndiDevice.Items.Count=0 then begin
+    SwitchIndiDevice.Items.Add(SwitchList[n].IndiDevice);
+    SwitchIndiDevice.ItemIndex:=0;
+  end;
+  SwitchIndiDevice.Text         := SwitchList[n].IndiDevice;
+  SwitchAutoLoadConfig.Checked  := SwitchList[n].AutoLoadConfig;
+  AscomSwitch.Text              := SwitchList[n].AscomDevice;
+  SwitchARestProtocol.ItemIndex := SwitchList[n].AscomRestProtocol;
+  SwitchARestHost.Text          := SwitchList[n].AscomRestHost;
+  SwitchARestPort.Value         := SwitchList[n].AscomRestPort;
+  SwitchARestDevice.Value       := SwitchList[n].AscomRestDevice;
+  SwitchARestUser.text          := SwitchList[n].AscomRestUser;
+  SwitchARestPass.text          := SwitchList[n].AscomRestPass;
+end;
+
+procedure Tf_setup.StoreSwitch(n: integer);
+begin
+  SwitchList[n].Nickname          := SwitchNickname.Text;
+  SwitchList[n].SwitchConnection  := SwitchConnection;
+  SwitchList[n].IndiServer        := SwitchIndiServer.Text;
+  SwitchList[n].IndiPort          := SwitchIndiPort.Text;
+  SwitchList[n].IndiDevice        := SwitchIndiDevice.Text;
+  SwitchList[n].AutoLoadConfig    := SwitchAutoLoadConfig.Checked;
+  SwitchList[n].AscomDevice       := AscomSwitch.Text;
+  SwitchList[n].AscomRestProtocol := SwitchARestProtocol.ItemIndex;
+  SwitchList[n].AscomRestHost     := SwitchARestHost.Text;
+  SwitchList[n].AscomRestPort     := SwitchARestPort.Value;
+  SwitchList[n].AscomRestDevice   := SwitchARestDevice.Value;
+  SwitchList[n].AscomRestUser     := SwitchARestUser.text;
+  SwitchList[n].AscomRestPass     := SwitchARestPass.text;
 end;
 
 initialization

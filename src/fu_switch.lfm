@@ -1,9 +1,9 @@
 object f_switch: Tf_switch
   Left = 0
-  Height = 80
+  Height = 103
   Top = 0
   Width = 194
-  ClientHeight = 80
+  ClientHeight = 103
   ClientWidth = 194
   Constraints.MaxHeight = 250
   ParentFont = False
@@ -27,37 +27,22 @@ object f_switch: Tf_switch
     ParentFont = False
     Transparent = False
   end
-  object ScrollBox1: TScrollBox
-    Left = 0
-    Height = 30
-    Top = 20
-    Width = 194
-    HorzScrollBar.Page = 1
-    VertScrollBar.Page = 1
-    Align = alClient
-    AutoSize = True
-    TabOrder = 0
-  end
   object Panel1: TPanel
     Left = 0
-    Height = 30
-    Top = 50
+    Height = 83
+    Top = 20
     Width = 194
-    Align = alBottom
-    ClientHeight = 30
+    Align = alClient
+    ClientHeight = 83
     ClientWidth = 194
-    TabOrder = 1
-    object BtnSet: TButton
-      AnchorSideTop.Control = Panel1
-      AnchorSideTop.Side = asrCenter
-      Left = 112
-      Height = 25
-      Top = 3
-      Width = 75
-      Anchors = [akTop, akRight]
-      Caption = 'Set'
-      Enabled = False
-      OnClick = BtnSetClick
+    TabOrder = 0
+    object PageControl1: TPageControl
+      Left = 1
+      Height = 81
+      Top = 1
+      Width = 192
+      Align = alClient
+      ShowTabs = False
       TabOrder = 0
     end
   end

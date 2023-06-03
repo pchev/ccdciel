@@ -35,7 +35,7 @@ uses
   BaseUnix,
   {$endif}
   fu_devicesconnection, fu_preview, fu_capture, fu_msg, fu_visu, fu_frame, fu_magnifyer, fu_internalguider,
-  fu_starprofile, fu_filterwheel, fu_focuser, fu_mount, fu_ccdtemp, fu_autoguider, fu_cover, fu_switch,
+  fu_starprofile, fu_filterwheel, fu_focuser, fu_mount, fu_ccdtemp, fu_autoguider, fu_cover, fu_switch, fu_switchpage,
   fu_sequence, fu_planetarium, fu_script, fu_finder, u_ccdconfig, pu_edittargets, pu_scriptengine,
   fu_video, pu_devicesetup, pu_options, pu_indigui, cu_fits, cu_camera, pu_pause, cu_tcpserver,
   pu_viewtext, cu_wheel, cu_mount, cu_focuser, XMLConf, u_utils, u_global, UScaleDPI, pu_handpad,
@@ -580,7 +580,7 @@ type
     watchdog: T_watchdog;
     weather: T_weather;
     safety: T_safety;
-    switch: T_switch;
+    switch: array of T_switch;
     cover: T_cover;
     autoguider:T_autoguider;
     planetarium:TPlanetarium;
@@ -844,6 +844,7 @@ type
     Procedure SwitchStatus(Sender: TObject);
     Procedure SwitchChange(Sender: TObject);
     Procedure SetSwitch(Sender: TObject);
+    function  AllSwitchConnected: boolean;
     Procedure CoverStatus(Sender: TObject);
     Procedure CoverChange(Sender: TObject);
     Procedure OpenCover(Sender: TObject);
@@ -1702,6 +1703,9 @@ begin
   finderfits.DisableBayer:=true;
   finderfits.onMsg:=@NewMessage;
 
+  f_switch:=Tf_switch.Create(self);
+  f_switch.onSetSwitch:=@SetSwitch;
+
   CreateDevices;
 
   astrometry:=TAstrometry.Create(nil);
@@ -1820,9 +1824,6 @@ begin
   f_cover.onSetLight:=@SetCalibratorLight;
   f_cover.onChangeBrightness:=@BrightnessChange;
 
-  f_switch:=Tf_switch.Create(self);
-  f_switch.onSetSwitch:=@SetSwitch;
-
   f_internalguider:=Tf_internalguider.Create(self);
   f_internalguider.onLoop:=@InternalguiderLoop;
   f_internalguider.onStart:=@InternalguiderStart;
@@ -1926,6 +1927,7 @@ end;
 
 procedure Tf_main.CreateDevices;
 var DefaultInterface,aInt: TDevInterface;
+    i: integer;
 begin
    {$ifdef mswindows}
    DefaultInterface:=ASCOM;
@@ -1995,16 +1997,22 @@ begin
    safety.onStatusChange:=@SafetyStatus;
    safety.onSafeChange:=@SafetySafeChange;
 
-   aInt:=TDevInterface(config.GetValue('/SwitchInterface',ord(DefaultInterface)));
-   case aInt of
-     INDI:  switch:=T_indiswitch.Create(nil);
-     ASCOM: switch:=T_ascomswitch.Create(nil);
-     ASCOMREST: switch:=T_ascomrestswitch.Create(nil);
+   NumSwitches:=config.GetValue('/Switch/NumSwitch',1);
+   SetLength(switch,NumSwitches);
+   for i:=0 to NumSwitches-1 do begin
+     aInt:=TDevInterface(config.GetValue('/Switch/Switch'+inttostr(i)+'/SwitchInterface',ord(DefaultInterface)));
+     case aInt of
+       INDI:  switch[i]:=T_indiswitch.Create(nil);
+       ASCOM: switch[i]:=T_ascomswitch.Create(nil);
+       ASCOMREST: switch[i]:=T_ascomrestswitch.Create(nil);
+     end;
+     switch[i].Tag:=i;
+     switch[i].Nickname:=config.GetValue('/Switch/Switch'+inttostr(i)+'/Nickname','');
+     switch[i].onMsg:=@NewMessage;
+     switch[i].onDeviceMsg:=@DeviceMessage;
+     switch[i].onStatusChange:=@SwitchStatus;
+     switch[i].onSwitchChange:=@SwitchChange;
    end;
-   switch.onMsg:=@NewMessage;
-   switch.onDeviceMsg:=@DeviceMessage;
-   switch.onStatusChange:=@SwitchStatus;
-   switch.onSwitchChange:=@SwitchChange;
 
    aInt:=TDevInterface(config.GetValue('/CoverInterface',ord(DefaultInterface)));
    case aInt of
@@ -2189,6 +2197,7 @@ begin
 end;
 
 procedure Tf_main.DestroyDevices;
+var i: integer;
 begin
  try
  camera.Free;
@@ -2200,7 +2209,7 @@ begin
  watchdog.Free;
  weather.Free;
  safety.Free;
- switch.Free;
+ for i:=0 to NumSwitches-1 do switch[i].Free;
  cover.Free;
  guidecamera.Free;
  findercamera.Free;
@@ -2714,7 +2723,7 @@ begin
   MenuAscomWeatherSetup.Visible:=WantWeather and (weather.WeatherInterface=ASCOM);
   MenuAscomSafetySetup.Visible:=WantSafety and (safety.SafetyInterface=ASCOM);
   MenuAscomDomeSetup.Visible:=WantDome and (dome.DomeInterface=ASCOM);
-  MenuAscomSwitchSetup.Visible:=WantSwitch and (switch.SwitchInterface=ASCOM);
+  MenuAscomSwitchSetup.Visible:=WantSwitch and (switch[0].SwitchInterface=ASCOM);
   MenuAscomCoverSetup.Visible:=WantCover and (cover.CoverInterface=ASCOM);
   MenuAscomGuideCameraSetup.Visible:=WantGuideCamera and (guidecamera.CameraInterface=ASCOM);
   MenuAscomFinderCameraSetup.Visible:=WantFinderCamera and (findercamera.CameraInterface=ASCOM);
@@ -2728,14 +2737,14 @@ begin
   MenuAlpacaWeatherSetup.Visible:=WantWeather and (weather.WeatherInterface=ASCOMREST);
   MenuAlpacaSafetySetup.Visible:=WantSafety and (safety.SafetyInterface=ASCOMREST);
   MenuAlpacaDomeSetup.Visible:=WantDome and (dome.DomeInterface=ASCOMREST);
-  MenuAlpacaSwitchSetup.Visible:=WantSwitch and (switch.SwitchInterface=ASCOMREST);
+  MenuAlpacaSwitchSetup.Visible:=WantSwitch and (switch[0].SwitchInterface=ASCOMREST);
   MenuAlpacaCoverSetup.Visible:=WantCover and (cover.CoverInterface=ASCOMREST);
   MenuAlpacaGuideCameraSetup.Visible:=WantGuideCamera and (guidecamera.CameraInterface=ASCOMREST);
   MenuAlpacaFinderCameraSetup.Visible:=WantFinderCamera and (findercamera.CameraInterface=ASCOMREST);
 
   MenuIndiSettings.Visible:= (camera.CameraInterface=INDI)or(wheel.WheelInterface=INDI)or(focuser.FocuserInterface=INDI)or
                              (mount.MountInterface=INDI)or(rotator.RotatorInterface=INDI)or(weather.WeatherInterface=INDI)or
-                             (safety.SafetyInterface=INDI)or(dome.DomeInterface=INDI)or(switch.SwitchInterface=INDI)or
+                             (safety.SafetyInterface=INDI)or(dome.DomeInterface=INDI)or(switch[0].SwitchInterface=INDI)or
                              (cover.CoverInterface=INDI)or(guidecamera.CameraInterface=INDI)or(findercamera.CameraInterface=INDI);
 
   SetGuiderCamera;
@@ -3353,8 +3362,33 @@ try
        config.SetValue('/Meridian/MeridianOption',3);
      end;
   end;
-  if config.Modified then
+  if oldver<'0.9.84' then begin
+    config.SetValue('/Switch/NumSwitch',1);
+    config.SetValue('/Switch/Switch0/Nickname','');
+    config.SetValue('/Switch/Switch0/SwitchInterface',config.GetValue('/SwitchInterface',0));
+    config.SetValue('/Switch/Switch0/INDIswitch/Server',config.GetValue('/INDIswitch/Server',''));
+    config.SetValue('/Switch/Switch0/INDIswitch/ServerPort',config.GetValue('/INDIswitch/ServerPort',''));
+    config.SetValue('/Switch/Switch0/INDIswitch/Device',config.GetValue('/INDIswitch/Device',''));
+    config.SetValue('/Switch/Switch0/INDIswitch/AutoLoadConfig',config.GetValue('/INDIswitch/AutoLoadConfig',false));
+    config.SetValue('/Switch/Switch0/ASCOMswitch/Device',config.GetValue('/ASCOMswitch/Device',''));
+    config.SetValue('/Switch/Switch0/ASCOMRestswitch/Protocol',config.GetValue('/ASCOMRestswitch/Protocol',0));
+    config.SetValue('/Switch/Switch0/ASCOMRestswitch/Host',config.GetValue('/ASCOMRestswitch/Host','127.0.0.1'));
+    config.SetValue('/Switch/Switch0/ASCOMRestswitch/Port',config.GetValue('/ASCOMRestswitch/Port',11111));
+    config.SetValue('/Switch/Switch0/ASCOMRestswitch/Device',config.GetValue('/ASCOMRestswitch/Device',0));
+    config.DeleteValue('/SwitchInterface');
+    config.DeletePath('/INDIswitch');
+    config.DeletePath('/ASCOMswitch');
+    config.DeletePath('/ASCOMRestswitch');
+    if (credentialconfig.GetValue('/ASCOMRestswitch/User','')<>'') then begin
+      credentialconfig.SetValue('/ASCOMRestswitch0/User',credentialconfig.GetValue('/ASCOMRestswitch/User',''));
+      credentialconfig.SetValue('/ASCOMRestswitch0/Pass',credentialconfig.GetValue('/ASCOMRestswitch/Pass',''));
+      credentialconfig.DeletePath('/ASCOMRestswitch');
+    end;
+  end;
+  if config.Modified then begin
+     config.SetValue('/Configuration/Version',ccdcielver);
      SaveConfig;
+  end;
 except
   on E: Exception do NewMessage('Error upgrading configuration: '+ E.Message,1);
 end;
@@ -4250,8 +4284,8 @@ if config.GetValue('/INDIcamera/Server','')='' then begin
    config.SetValue('/INDIweather/ServerPort',defaultindiport);
    config.SetValue('/INDIsafety/Server',defautindiserver);
    config.SetValue('/INDIsafety/ServerPort',defaultindiport);
-   config.SetValue('/INDIswitch/Server',defautindiserver);
-   config.SetValue('/INDIswitch/ServerPort',defaultindiport);
+//   config.SetValue('/INDIswitch/Server',defautindiserver);
+//   config.SetValue('/INDIswitch/ServerPort',defaultindiport);
    config.SetValue('/INDIcover/Server',defautindiserver);
    config.SetValue('/INDIcover/ServerPort',defaultindiport);
    config.SetValue('/INDIguidecamera/Server',defautindiserver);
@@ -4307,10 +4341,13 @@ case safety.SafetyInterface of
    ASCOM: SafetyName:=config.GetValue('/ASCOMsafety/Device','');
    ASCOMREST: SafetyName:='SafetyMonitor/'+IntToStr(config.GetValue('/ASCOMRestsafety/Device',0));
 end;
-case switch.SwitchInterface of
-   INDI : SwitchName:=config.GetValue('/INDIswitch/Device','');
-   ASCOM: SwitchName:=config.GetValue('/ASCOMswitch/Device','');
-   ASCOMREST: SwitchName:='Switch/'+IntToStr(config.GetValue('/ASCOMRestswitch/Device',0));
+SwitchName:='';
+for i:=0 to NumSwitches-1 do begin
+  case switch[i].SwitchInterface of
+     INDI : SwitchName:=SwitchName+config.GetValue('/Switch/Switch'+inttostr(i)+'/INDIswitch/Device','');
+     ASCOM: SwitchName:=SwitchName+config.GetValue('/Switch/Switch'+inttostr(i)+'/ASCOMswitch/Device','');
+     ASCOMREST: SwitchName:=SwitchName+'Switch/'+IntToStr(config.GetValue('/Switch/Switch'+inttostr(i)+'/ASCOMRestswitch/Device',0));
+  end;
 end;
 case cover.CoverInterface of
    INDI : CoverName:=config.GetValue('/INDIcover/Device','');
@@ -4337,7 +4374,7 @@ mount.Timeout:=DeviceTimeout;
 dome.Timeout:=DeviceTimeout;
 weather.Timeout:=DeviceTimeout;
 safety.Timeout:=DeviceTimeout;
-switch.Timeout:=DeviceTimeout;
+for i:=0 to NumSwitches-1 do switch[i].Timeout:=DeviceTimeout;
 cover.Timeout:=DeviceTimeout;
 guidecamera.Timeout:=DeviceTimeout;
 findercamera.Timeout:=DeviceTimeout;
@@ -4367,7 +4404,7 @@ if wheel.WheelInterface=MANUAL then begin
 end;
 weather.AutoLoadConfig:=config.GetValue('/INDIweather/AutoLoadConfig',false);
 safety.AutoLoadConfig:=config.GetValue('/INDIsafety/AutoLoadConfig',false);
-switch.AutoLoadConfig:=config.GetValue('/INDIswitch/AutoLoadConfig',false);
+for i:=0 to NumSwitches-1 do switch[i].AutoLoadConfig:=config.GetValue('/Switch/Switch'+inttostr(i)+'/INDIswitch/AutoLoadConfig',false);
 cover.AutoLoadConfig:=config.GetValue('/INDIcover/AutoLoadConfig',false);
 guidecamera.AutoLoadConfig:=config.GetValue('/INDIguidecamera/AutoLoadConfig',false);
 findercamera.AutoLoadConfig:=config.GetValue('/INDIfindercamera/AutoLoadConfig',false);
@@ -5487,7 +5524,8 @@ begin
 end;
 
 Procedure Tf_main.CheckConnectionStatus;
-var allcount, upcount, downcount, concount: integer;
+var i, allcount, upcount, downcount, concount: integer;
+    ok: boolean;
 procedure SetDisconnected;
 begin
  AllDevicesConnected:=false;
@@ -5587,11 +5625,10 @@ allcount:=0; upcount:=0; downcount:=0; concount:=0;
  end;
  if WantSwitch then begin
    inc(allcount);
-   case switch.Status of
-     devConnected: inc(upcount);
-     devDisconnected: inc(downcount);
-     devConnecting: inc(concount);
-   end;
+   ok:=true;
+   for i:=0 to NumSwitches-1 do ok:=ok and (switch[i].Status=devConnected);
+   if ok then inc(upcount)
+         else inc(downcount);
  end;
  if WantCover then begin
    inc(allcount);
@@ -6609,62 +6646,86 @@ begin
 end;
 
 Procedure Tf_main.ConnectSwitch(Sender: TObject);
+var i: integer;
 begin
-  case switch.SwitchInterface of
-    INDI : switch.Connect(config.GetValue('/INDIswitch/Server',''),
-                          config.GetValue('/INDIswitch/ServerPort',''),
-                          config.GetValue('/INDIswitch/Device',''),
+for i:=0 to NumSwitches-1 do begin
+  case switch[i].SwitchInterface of
+    INDI : switch[i].Connect(config.GetValue('/Switch/Switch'+inttostr(i)+'/INDIswitch/Server',''),
+                          config.GetValue('/Switch/Switch'+inttostr(i)+'/INDIswitch/ServerPort',''),
+                          config.GetValue('/Switch/Switch'+inttostr(i)+'/INDIswitch/Device',''),
                           '');
-    ASCOM: switch.Connect(config.GetValue('/ASCOMswitch/Device',''));
-    ASCOMREST: switch.Connect(config.GetValue('/ASCOMRestswitch/Host',''),
-                          IntToStr(config.GetValue('/ASCOMRestswitch/Port',0)),
-                          ProtocolName[config.GetValue('/ASCOMRestswitch/Protocol',0)],
-                          'switch/'+IntToStr(config.GetValue('/ASCOMRestswitch/Device',0)),
-                          DecryptStr(hextostr(credentialconfig.GetValue('/ASCOMRestswitch/User','')), encryptpwd),
-                          DecryptStr(hextostr(credentialconfig.GetValue('/ASCOMRestswitch/Pass','')), encryptpwd));
+    ASCOM: switch[i].Connect(config.GetValue('/Switch/Switch'+inttostr(i)+'/ASCOMswitch/Device',''));
+    ASCOMREST: switch[i].Connect(config.GetValue('/Switch/Switch'+inttostr(i)+'/ASCOMRestswitch/Host',''),
+                          IntToStr(config.GetValue('/Switch/Switch'+inttostr(i)+'/ASCOMRestswitch/Port',0)),
+                          ProtocolName[config.GetValue('/Switch/Switch'+inttostr(i)+'/ASCOMRestswitch/Protocol',0)],
+                          'switch/'+IntToStr(config.GetValue('/Switch/Switch'+inttostr(i)+'/ASCOMRestswitch/Device',0)),
+                          DecryptStr(hextostr(credentialconfig.GetValue('/ASCOMRestswitch'+inttostr(i)+'/User','')), encryptpwd),
+                          DecryptStr(hextostr(credentialconfig.GetValue('/ASCOMRestswitch'+inttostr(i)+'/Pass','')), encryptpwd));
   end;
+end;
 end;
 
 Procedure Tf_main.DisconnectSwitch(Sender: TObject);
+var i: integer;
 begin
- if switch.Status<>devDisconnected then switch.Disconnect;
+ for i:=0 to NumSwitches-1 do begin
+   if switch[i].Status<>devDisconnected then switch[i].Disconnect;
+ end;
  f_switch.Clear;
 end;
 
 Procedure Tf_main.SwitchStatus(Sender: TObject);
+var i: integer;
 begin
-case switch.Status of
-  devDisconnected:begin
-                      f_devicesconnection.LabelSwitch.Font.Color:=clRed;
-                      f_switch.Connected:=false;
-                  end;
-  devConnecting:  begin
-                      NewMessage(Format(rsConnecting, [rsSwitch+' '+DevInterfaceName[ord(switch.SwitchInterface)]+' "'+switch.DeviceName+'" '+ellipsis]), 2);
-                      f_devicesconnection.LabelSwitch.Font.Color:=clOrange;
-                   end;
-  devConnected:   begin
-                      if f_devicesconnection.LabelSwitch.Font.Color=clGreen then exit;
-                      f_devicesconnection.LabelSwitch.Font.Color:=clGreen;
-                      f_switch.Connected:=true;
-                      NewMessage(Format(rsConnected, [rsSwitch]),1);
-                   end;
+  i:=T_switch(sender).tag;
+  case switch[i].Status of
+    devDisconnected:begin
+                        f_devicesconnection.LabelSwitch.Font.Color:=clRed;
+                        f_switch.SetConnected(i,false);
+                    end;
+    devConnecting:  begin
+                        NewMessage(Format(rsConnecting, [rsSwitch+' '+DevInterfaceName[ord(switch[i].SwitchInterface)]+' "'+switch[i].DeviceName+'" '+ellipsis]), 2);
+                        f_devicesconnection.LabelSwitch.Font.Color:=clOrange;
+                     end;
+    devConnected:   begin
+                        if f_devicesconnection.LabelSwitch.Font.Color=clGreen then exit;
+                        f_switch.SetConnected(i,true);
+                        if AllSwitchConnected then begin
+                          f_devicesconnection.LabelSwitch.Font.Color:=clGreen;
+                          NewMessage(Format(rsConnected, [rsSwitch]),1);
+                        end;
+                     end;
 end;
 SwitchChange(Sender);
 CheckConnectionStatus;
 end;
 
-Procedure Tf_main.SwitchChange(Sender: TObject);
+function Tf_main.AllSwitchConnected: boolean;
+var i: integer;
 begin
- if f_switch.Connected then begin
-   f_switch.NumSwitch:=switch.NumSwitch;
-   f_switch.Switch:=switch.Switch;
+result:=true;
+for i:=0 to NumSwitches-1 do
+   result:=result and f_switch.Connected(i);
+end;
+
+Procedure Tf_main.SwitchChange(Sender: TObject);
+var i: integer;
+begin
+ i:=T_switch(sender).tag;
+ if f_switch.Connected(i) then begin
+   writeln('Tf_main.SwitchChange '+inttostr(T_switch(sender).tag)+' '+T_switch(sender).DeviceName);
+   f_switch.SwitchChange(T_switch(sender));
  end;
 end;
 
 Procedure Tf_main.SetSwitch(Sender: TObject);
+var sp: Tf_switchpage;
+    n:integer;
 begin
- if f_switch.Connected then begin
-   switch.Switch:=f_switch.Switch;
+ sp:=Tf_switchpage(sender);
+ n:=sp.Tag;
+ if f_switch.Connected(n) and (n>=0) and (n<NumSwitches) then begin
+   switch[n].Switch:=sp.Switch;
  end;
 end;
 
@@ -8376,9 +8437,9 @@ end;
 
 procedure Tf_main.MenuSetupClick(Sender: TObject);
 var configfile: string;
-    loadopt: boolean;
+    loadopt, savecredential: boolean;
     pt: TPoint;
-    i:integer;
+    i,n:integer;
 begin
   if camera.Status<>devDisconnected then begin
     ShowMessage(rsDisconnectTh);
@@ -8394,7 +8455,7 @@ begin
   f_setup.DefaultRotatorInterface:=rotator.RotatorInterface;
   f_setup.DefaultWeatherInterface:=weather.WeatherInterface;
   f_setup.DefaultSafetyInterface:=safety.SafetyInterface;
-  f_setup.DefaultSwitchInterface:=switch.SwitchInterface;
+  f_setup.DefaultSwitchInterface:=switch[0].SwitchInterface;
   f_setup.DefaultCoverInterface:=cover.CoverInterface;
   f_setup.DefaultGuideCameraInterface:=guidecamera.CameraInterface;
   f_setup.DefaultFinderCameraInterface:=findercamera.CameraInterface;
@@ -8607,16 +8668,21 @@ begin
     config.SetValue('/ASCOMRestsafety/Port',f_setup.SafetyARestPort.Value);
     config.SetValue('/ASCOMRestsafety/Device',f_setup.SafetyARestDevice.Value);
 
-    config.SetValue('/SwitchInterface',ord(f_setup.SwitchConnection));
-    config.SetValue('/INDIswitch/Server',f_setup.SwitchIndiServer.Text);
-    config.SetValue('/INDIswitch/ServerPort',f_setup.SwitchIndiPort.Text);
-    if f_setup.SwitchIndiDevice.Text<>'' then config.SetValue('/INDIswitch/Device',f_setup.SwitchIndiDevice.Text);
-    config.SetValue('/INDIswitch/AutoLoadConfig',f_setup.SwitchAutoLoadConfig.Checked);
-    config.SetValue('/ASCOMswitch/Device',f_setup.AscomSwitch.Text);
-    config.SetValue('/ASCOMRestswitch/Protocol',f_setup.SwitchARestProtocol.ItemIndex);
-    config.SetValue('/ASCOMRestswitch/Host',f_setup.SwitchARestHost.Text);
-    config.SetValue('/ASCOMRestswitch/Port',f_setup.SwitchARestPort.Value);
-    config.SetValue('/ASCOMRestswitch/Device',f_setup.SwitchARestDevice.Value);
+    n:=f_setup.NumSwitch.Value;
+    config.SetValue('/Switch/NumSwitch',n);
+    for i:=0 to n-1 do begin
+      config.SetValue('/Switch/Switch'+inttostr(i)+'/Nickname',f_setup.SwitchList[i].Nickname);
+      config.SetValue('/Switch/Switch'+inttostr(i)+'/SwitchInterface',ord(f_setup.SwitchList[i].SwitchConnection));
+      config.SetValue('/Switch/Switch'+inttostr(i)+'/INDIswitch/Server',f_setup.SwitchList[i].IndiServer);
+      config.SetValue('/Switch/Switch'+inttostr(i)+'/INDIswitch/ServerPort',f_setup.SwitchList[i].IndiPort);
+      if f_setup.SwitchList[i].IndiDevice<>'' then config.SetValue('/Switch/Switch'+inttostr(i)+'/INDIswitch/Device',f_setup.SwitchList[i].IndiDevice);
+      config.SetValue('/Switch/Switch'+inttostr(i)+'/INDIswitch/AutoLoadConfig',f_setup.SwitchList[i].AutoLoadConfig);
+      config.SetValue('/Switch/Switch'+inttostr(i)+'/ASCOMswitch/Device',f_setup.SwitchList[i].AscomDevice);
+      config.SetValue('/Switch/Switch'+inttostr(i)+'/ASCOMRestswitch/Protocol',f_setup.SwitchList[i].AscomRestProtocol);
+      config.SetValue('/Switch/Switch'+inttostr(i)+'/ASCOMRestswitch/Host',f_setup.SwitchList[i].AscomRestHost);
+      config.SetValue('/Switch/Switch'+inttostr(i)+'/ASCOMRestswitch/Port',f_setup.SwitchList[i].AscomRestPort);
+      config.SetValue('/Switch/Switch'+inttostr(i)+'/ASCOMRestswitch/Device',f_setup.SwitchList[i].AscomRestDevice);
+    end;
 
     config.SetValue('/CoverInterface',ord(f_setup.CoverConnection));
     config.SetValue('/INDIcover/Server',f_setup.CoverIndiServer.Text);
@@ -8630,9 +8696,13 @@ begin
     config.SetValue('/ASCOMRestcover/Device',f_setup.CoverARestDevice.Value);
 
     credentialconfig.Clear;
-    if (f_setup.CameraARestUser.Text+f_setup.WheelARestUser.Text+f_setup.FocuserARestUser.Text+f_setup.RotatorARestUser.Text+
+    savecredential:=(f_setup.CameraARestUser.Text+f_setup.WheelARestUser.Text+f_setup.FocuserARestUser.Text+f_setup.RotatorARestUser.Text+
        f_setup.MountARestUser.Text+f_setup.DomeARestUser.Text+f_setup.WeatherARestUser.Text+f_setup.SafetyARestUser.Text+
-       f_setup.SwitchARestUser.Text+f_setup.CoverARestUser.Text+f_setup.GuideCameraARestUser.Text+f_setup.FinderCameraARestUser.Text <> '')
+       f_setup.CoverARestUser.Text+f_setup.GuideCameraARestUser.Text+f_setup.FinderCameraARestUser.Text <> '');
+    for i:=0 to n-1 do begin
+       savecredential:=savecredential or (f_setup.SwitchList[i].AscomRestUser<>'')
+    end;
+    if savecredential
        then
        begin
           credentialconfig.Filename:=config.Filename+'.credential';
@@ -8644,7 +8714,6 @@ begin
           credentialconfig.SetValue('/ASCOMRestdome/User',strtohex(encryptStr(f_setup.DomeARestUser.Text, encryptpwd)));
           credentialconfig.SetValue('/ASCOMRestweather/User',strtohex(encryptStr(f_setup.WeatherARestUser.Text, encryptpwd)));
           credentialconfig.SetValue('/ASCOMRestsafety/User',strtohex(encryptStr(f_setup.SafetyARestUser.Text, encryptpwd)));
-          credentialconfig.SetValue('/ASCOMRestswitch/User',strtohex(encryptStr(f_setup.SwitchARestUser.Text, encryptpwd)));
           credentialconfig.SetValue('/ASCOMRestcover/User',strtohex(encryptStr(f_setup.CoverARestUser.Text, encryptpwd)));
           credentialconfig.SetValue('/ASCOMRestguidecamera/User',strtohex(encryptStr(f_setup.GuideCameraARestUser.Text, encryptpwd)));
           credentialconfig.SetValue('/ASCOMRestfindercamera/User',strtohex(encryptStr(f_setup.FinderCameraARestUser.Text, encryptpwd)));
@@ -8656,10 +8725,13 @@ begin
           credentialconfig.SetValue('/ASCOMRestdome/Pass',strtohex(encryptStr(f_setup.DomeARestPass.Text, encryptpwd)));
           credentialconfig.SetValue('/ASCOMRestweather/Pass',strtohex(encryptStr(f_setup.WeatherARestPass.Text, encryptpwd)));
           credentialconfig.SetValue('/ASCOMRestsafety/Pass',strtohex(encryptStr(f_setup.SafetyARestPass.Text, encryptpwd)));
-          credentialconfig.SetValue('/ASCOMRestswitch/Pass',strtohex(encryptStr(f_setup.SwitchARestPass.Text, encryptpwd)));
           credentialconfig.SetValue('/ASCOMRestcover/Pass',strtohex(encryptStr(f_setup.CoverARestPass.Text, encryptpwd)));
           credentialconfig.SetValue('/ASCOMRestguidecamera/Pass',strtohex(encryptStr(f_setup.GuideCameraARestPass.Text, encryptpwd)));
           credentialconfig.SetValue('/ASCOMRestfindercamera/Pass',strtohex(encryptStr(f_setup.FinderCameraARestPass.Text, encryptpwd)));
+          for i:=0 to n-1 do begin
+            credentialconfig.SetValue('/ASCOMRestswitch'+inttostr(i)+'/User',strtohex(encryptStr(f_setup.SwitchList[i].AscomRestUser, encryptpwd)));
+            credentialconfig.SetValue('/ASCOMRestswitch'+inttostr(i)+'/Pass',strtohex(encryptStr(f_setup.SwitchList[i].AscomRestPass, encryptpwd)));
+          end;
        end
        else begin
           credentialconfig.Filename:='';
@@ -11932,7 +12004,7 @@ begin
     6 : begin dev:=widestring(config.GetValue('/ASCOMweather/Device',''));IsConnected:=(weather<>nil)and(weather.Status<>devDisconnected); end;
     7 : begin dev:=widestring(config.GetValue('/ASCOMsafety/Device',''));IsConnected:=(safety<>nil)and(safety.Status<>devDisconnected); end;
     8 : begin dev:=widestring(config.GetValue('/ASCOMdome/Device',''));IsConnected:=(dome<>nil)and(dome.Status<>devDisconnected); end;
-    10: begin dev:=widestring(config.GetValue('/ASCOMswitch/Device',''));IsConnected:=(switch<>nil)and(switch.Status<>devDisconnected); end;
+    10: begin dev:=widestring(config.GetValue('/Switch/0/ASCOMswitch/Device',''));IsConnected:=(switch<>nil)and(switch.Status<>devDisconnected); end;
     11: begin dev:=widestring(config.GetValue('/ASCOMcover/Device',''));IsConnected:=(cover<>nil)and(cover.Status<>devDisconnected); end;
     12: begin dev:=widestring(config.GetValue('/ASCOMguidecamera/Device',''));IsConnected:=(guidecamera<>nil)and(guidecamera.Status<>devDisconnected); end;
     13: begin dev:=widestring(config.GetValue('/ASCOMfindercamera/Device',''));IsConnected:=(findercamera<>nil)and(findercamera.Status<>devDisconnected); end;

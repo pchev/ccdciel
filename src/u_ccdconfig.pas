@@ -34,9 +34,11 @@ type
      destructor Destroy; override;
      function  GetValue(const APath: String; const ADefault: String): String; overload;
      function  GetValue(const APath: String; const ADefault: Double): Double; overload;
+     function  GetValue(const APath: String; const ADefault: Integer): Integer; overload;
      function  GetValue(const APath: String; const ADefault: Boolean): Boolean; overload;
      procedure SetValue(const APath: String; const AValue: String); overload;
      procedure SetValue(const APath: String; const AValue: Double); overload;
+     procedure SetValue(const APath: String; const AValue: Integer); overload;
      procedure SetValue(const APath: String; const AValue: Boolean); overload;
      procedure Flush;
   end;
@@ -63,6 +65,16 @@ end;
 procedure TCCDconfig.SetValue(const APath: String; const AValue: Double); overload;
 begin
   SetValue(DOMString(APath),DOMString(FloatToStr(AValue)));
+end;
+
+function TCCDconfig.GetValue(const APath: String; const ADefault: Integer): Integer;
+begin
+  Result := StrToIntDef(String(GetValue(DOMString(APath),DOMString(FloatToStr(ADefault)))),ADefault);
+end;
+
+procedure TCCDconfig.SetValue(const APath: String; const AValue: Integer); overload;
+begin
+  SetValue(DOMString(APath),DOMString(IntToStr(AValue)));
 end;
 
 function  TCCDconfig.GetValue(const APath: String; const ADefault: Boolean): Boolean; overload;
