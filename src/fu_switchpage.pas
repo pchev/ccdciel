@@ -68,9 +68,6 @@ implementation
 constructor Tf_switchpage.Create(aOwner: TComponent);
 begin
  inherited Create(aOwner);
- {$ifdef lclcocoa}
- Title.Color:=clWindowFrame;
- {$endif}
  FConnected:=false;
  FNumSwitch:=0;
  initialized:=false;
