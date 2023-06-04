@@ -26,7 +26,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 interface
 
 uses pu_planetariuminfo, u_global, u_utils, u_ccdconfig, pu_pascaleditor, u_annotation, pu_keyboard, pu_newscript,
-  pu_scriptengine, cu_astrometry, u_hints, u_translation, pu_selectscript, Classes, math, cu_targets, pu_viewtext,
+  pu_scriptengine, cu_astrometry, u_hints, u_translation, pu_selectscript, Classes, math, cu_targets, pu_viewtext, cu_switch,
   SysUtils, FileUtil, Forms, Controls, Graphics, Dialogs, StdCtrls, UScaleDPI, cu_plan, LCLType,
   LazUTF8, maskedit, Grids, ExtCtrls, ComCtrls, EditBtn, Spin, Buttons, Menus, CheckLst, Types;
 
@@ -34,7 +34,7 @@ const
   colseq=0; colname=1; colplan=2; colra=3; coldec=4; colpa=5; colstart=6; colend=7; colrepeat=8;
   pcolseq=0; pcoldesc=1; pcoltype=2; pcolexp=3; pcolstack=4; pcolbin=5; pcolfilter=6; pcolcount=7; pcolafstart=8; pcolafevery=9; pcoldither=10; pcolgain=11; pcoloffset=12; pcolfstop=13;
   titleadd=0; titledel=1;
-  pageobject=0; pagescript=1; pageflat=2; pagenone=3;
+  pageobject=0; pagescript=1; pageflat=2; pagenone=3; pageswitch=4;
   cbNone=0; cbStopTracking=1; cbWarm=2; cbParkScope=3; cbParkDome=4; cbScript=5; cbUnattended=6;
   ccNone=0; ccCool=1; ccUnpark=2; ccScript=3;
 
@@ -64,7 +64,14 @@ type
     cbNoAutoguidingChange: TCheckBox;
     CheckBoxResetRepeat: TCheckBox;
     CheckBoxRestartStatus: TCheckBox;
+    Switches: TComboBox;
+    Switchlist: TComboBox;
+    SwitchValue: TEdit;
+    Label10: TLabel;
+    Label12: TLabel;
+    Label9: TLabel;
     lblName: TLabel;
+    MenuSwitch: TMenuItem;
     Panel3: TPanel;
     PanelSolarTracking: TPanel;
     PanelTargetDetail: TPanel;
@@ -75,6 +82,7 @@ type
     ScrollBox2: TScrollBox;
     Splitter2: TSplitter;
     StartOpt: TCheckListBox;
+    PlanSwitch: TTabSheet;
     TermOpt: TCheckListBox;
     FFstopbox: TComboBox;
     FlatFilterList: TCheckGroup;
@@ -213,6 +221,7 @@ type
     procedure FormDestroy(Sender: TObject);
     procedure FormShow(Sender: TObject);
     procedure MenuBlankRowClick(Sender: TObject);
+    procedure MenuSwitchClick(Sender: TObject);
     procedure PointCoordChange(Sender: TObject);
     procedure RepeatCountListChange(Sender: TObject);
     procedure SeqStartChange(Sender: TObject);
@@ -232,6 +241,7 @@ type
     procedure StepListSelection(Sender: TObject; aCol, aRow: Integer);
     procedure StepChange(Sender: TObject);
     procedure StepListValidateEntry(sender: TObject; aCol, aRow: Integer; const OldValue: string; var NewValue: String);
+    procedure SwitchesChange(Sender: TObject);
     procedure TargetChange(Sender: TObject);
     procedure TargetListColRowMoved(Sender: TObject; IsColumn: Boolean; sIndex,
       tIndex: Integer);
@@ -259,8 +269,10 @@ type
     FCoordWarningRow: integer;
     FFilename: string;
     FSolarTracking: boolean;
+    FSwitch: TSwitches;
     procedure SetPlanList(n: integer; pl:string);
     procedure SetScriptList(n: integer; sl, args:string);
+    procedure SetSwitch(n: integer; swl:string);
     procedure ResetSequences;
     procedure ResetSteps;
     procedure SetStep(n: integer; p: TStep);
@@ -285,6 +297,7 @@ type
     procedure SetLang;
     procedure LoadPlanList;
     procedure LoadScriptList;
+    procedure LoadSwitchList;
     procedure SetTarget(n: integer; t: TTarget);
     procedure ClearTargetList;
     procedure ClearStepList;
@@ -297,6 +310,7 @@ type
     property Astrometry: TAstrometry read FAstrometry write FAstrometry;
     property Filename: string read FFilename write FFilename;
     property SolarTracking: boolean read FSolarTracking write FSolarTracking;
+    property Switch: TSwitches read FSwitch write FSwitch;
     procedure SetTargets(value:T_Targets);
     procedure GetTargets(var value:T_Targets; out fn,defaultname: string);
   end;
@@ -606,6 +620,72 @@ begin
   if i>=0 then ScriptList.ItemIndex:=i;
   TargetList.Cells[colplan,n]:=sl;
   ScriptParam.Text:=args;
+end;
+
+procedure Tf_EditTargets.LoadSwitchList;
+var i,j: integer;
+begin
+  Switches.Clear;
+  Switchlist.Clear;
+  SwitchValue.Text:='';
+  for i:=0 to NumSwitches-1 do begin
+     Switches.Items.Add(FSwitch[i].Nickname);
+  end;
+  if NumSwitches>0 then begin
+    Switches.ItemIndex:=0;
+    SwitchesChange(Switches);
+  end;
+end;
+
+procedure Tf_EditTargets.SwitchesChange(Sender: TObject);
+var i,j,n: integer;
+    sw: TSwitchList;
+begin
+  Switchlist.Clear;
+  SwitchValue.Text:='';
+  n:=-1;
+  for i:=0 to NumSwitches-1 do begin
+     if Switches.Text=switch[i].Nickname then begin
+       n:=i;
+       break;
+     end;
+  end;
+  if n>=0 then begin
+    sw:=Fswitch[n].Switch;
+    for j:=0 to Fswitch[n].NumSwitch-1 do begin
+      Switchlist.Items.Add(sw[j].Name);
+    end;
+    Switchlist.ItemIndex:=0;
+  end;
+  TargetChange(Sender);
+end;
+
+procedure Tf_EditTargets.SetSwitch(n: integer; swl:string);
+var i:integer;
+    sw: TStringList;
+begin
+  sw:=TStringList.Create;
+  SplitRec(swl,tab,sw);
+  if sw.Count=3 then begin
+    i:=Switches.Items.IndexOf(sw[0]);
+    if (i>=0) then begin
+      if i<>Switches.ItemIndex then begin
+        Switches.ItemIndex:=i;
+        SwitchesChange(Switches);
+      end
+    end
+    else
+       Switches.Text:=sw[0];
+    i:=Switchlist.Items.IndexOf(sw[1]);
+    if i>=0 then begin
+       Switchlist.ItemIndex:=i;
+    end
+    else
+       Switchlist.Text:=sw[1];
+    SwitchValue.Text:=sw[2];
+  end;
+  TargetList.Cells[colplan,n]:=swl;
+  sw.Free;
 end;
 
 procedure Tf_EditTargets.BtnDeleteTemplateClick(Sender: TObject);
@@ -922,6 +1002,25 @@ begin
   TargetList.Row:=i;
   TargetChange(nil);
 end;
+
+procedure Tf_EditTargets.MenuSwitchClick(Sender: TObject);
+var i: integer;
+    t: TTarget;
+begin
+  PanelTools.visible:=false;
+  PageControlPlan.ActivePageIndex:=pageswitch;
+  t:=TTarget.Create;
+  t.objectname:=SwitchTxt;
+  TargetList.RowCount:=TargetList.RowCount+1;
+  i:=TargetList.RowCount-1;
+  TargetList.Cells[colseq,i]:=IntToStr(i);
+  TargetList.Cells[colname,i]:=SwitchTxt;
+  TargetList.Cells[colplan,i]:=t.planname;
+  TargetList.Objects[colseq,i]:=t;
+  TargetList.Row:=i;
+  TargetChange(nil);
+end;
+
 
 procedure Tf_EditTargets.Btn_coord_internalClick(Sender: TObject);{Retrieve position from deepsky database}
 var n: integer;
@@ -1549,6 +1648,26 @@ begin
     PageControlPlan.ActivePageIndex:=pagescript;
     SetScriptList(n,t.planname,t.scriptargs);
   end
+  else if t.objectname=SwitchTxt then begin
+    TargetList.Cells[colra,n]:='';
+    TargetList.Cells[coldec,n]:='';
+    TargetList.Cells[colpa,n]:='';
+    TargetList.Cells[colstart,n]:='';
+    TargetList.Cells[colend,n]:='';
+    TargetList.Cells[colrepeat,n]:='';
+    cbDarkNight.Checked:=false;
+    cbSkip.Checked:=false;
+    cbAstrometry.Checked:=false;
+    cbInplace.Checked:=false;
+    cbAutofocusTemp.Checked:=false;
+    cbNoAutoguidingChange.Checked:=false;
+    cbUpdCoord.Checked:=false;
+    PanelSolarTracking.Visible:=false;
+    ScrollBox2.Visible:=false;
+    PanelTools.visible:=false;
+    PageControlPlan.ActivePageIndex:=pageswitch;
+    SetSwitch(n,t.planname);
+  end
   else if t.objectname=SkyFlatTxt then begin
     PanelTools.visible:=false;
     ScrollBox2.Visible:=false;
@@ -1724,6 +1843,13 @@ begin
     t.scriptargs:=trim(ScriptParam.Text);
     if scdir=nil then t.path:=''
                  else t.path:=scdir.path;
+  end
+  else if t.objectname=SwitchTxt then begin
+    PanelTools.visible:=false;
+    PageControlPlan.ActivePageIndex:=pageswitch;
+    buf:=Switches.Text+tab+Switchlist.Text+tab+SwitchValue.Text;
+    TargetList.Cells[colplan,n]:=buf;
+    t.planname:=buf;
   end
   else if t.objectname=SkyFlatTxt then begin
     PanelTools.visible:=false;

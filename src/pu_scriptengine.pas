@@ -2139,6 +2139,7 @@ try
          else
            sw[j].Checked:=(value<>'0');
          Fswitch[i].Switch:=sw;
+         msg('Set switch '+nickname+', '+swname+'='+value);
          result:=msgOK;
          break;
        end;

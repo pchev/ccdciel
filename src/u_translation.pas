@@ -799,6 +799,7 @@ resourcestring
   rsTryNextTarge2 = 'Try next target';
   rsStopPlan = 'Stop plan %s';
   rsScriptFailed = 'Script %s failed!';
+  rsSwitchFailed = 'Setting switch %s failed!';
   rsDoYouWantToR = 'Do you want to retry?';
   rsTargetInitia = 'Target initialisation failed!';
   rsSequenceFini = 'Sequence %s finished.';

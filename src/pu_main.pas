@@ -410,6 +410,8 @@ type
     procedure GuidePlotTimerTimer(Sender: TObject);
     procedure GuiderMeasureTimerTimer(Sender: TObject);
     procedure GuiderPopUpmenu1Popup(Sender: TObject);
+    procedure MenuAscomSwitchSetupClick(Sender: TObject);
+    procedure MenuAlpacaSwitchSetupClick(Sender: TObject);
     procedure MenuFlatApplyClick(Sender: TObject);
     procedure MenuFlatCameraClick(Sender: TObject);
     procedure MenuFlatClearClick(Sender: TObject);
@@ -1882,6 +1884,7 @@ begin
   f_sequence.Autoguider:=autoguider;
   f_sequence.Astrometry:=astrometry;
   f_sequence.Planetarium:=planetarium;
+  f_sequence.Switch:=switch;
   f_sequence.onConnectAutoguider:=@AutoguiderConnectClick;
 
   f_planetarium:=Tf_planetarium.Create(self);
@@ -2264,6 +2267,8 @@ begin
    MenuAscomWeatherSetup.Caption:='ASCOM '+rsWeatherStati+blank+rsSetup;
    MenuAscomSafetySetup.Caption:='ASCOM '+rsSafetyMonito+blank+rsSetup;
    MenuAscomDomeSetup.Caption:='ASCOM '+rsDome+blank+rsSetup;
+   MenuAscomSwitchSetup.Caption:='ASCOM '+rsSwitch+blank+rsSetup;
+   MenuAscomCoverSetup.Caption:='ASCOM '+rsCoverCalibra+blank+rsSetup;
    MenuAlpacaServerSetup.Caption:='Alpaca '+rsServer+blank+rsSetup;
    MenuAlpacaCameraSetup.Caption:='Alpaca '+rsCamera+blank+rsSetup;
    MenuAlpacaGuideCameraSetup.Caption:='Alpaca '+rsGuideCamera+blank+rsSetup;
@@ -2275,6 +2280,8 @@ begin
    MenuAlpacaWeatherSetup.Caption:='Alpaca '+rsWeatherStati+blank+rsSetup;
    MenuAlpacaSafetySetup.Caption:='Alpaca '+rsSafetyMonito+blank+rsSetup;
    MenuAlpacaDomeSetup.Caption:='Alpaca '+rsDome+blank+rsSetup;
+   MenuAlpacaSwitchSetup.Caption:='Alpaca '+rsSwitch+blank+rsSetup;
+   MenuAlpacaCoverSetup.Caption:='Alpaca '+rsCoverCalibra+blank+rsSetup;
    MenuViewhdr.Caption := rsViewHeader;
    MenuImgStat.Caption:=rsImageStatist;
    MenuImage.Caption:=rsImage;
@@ -2701,6 +2708,9 @@ begin
 end;
 
 procedure Tf_main.ShowActiveTools;
+var i: integer;
+    ok: boolean;
+    m: TMenuItem;
 begin
   WantCamera:=true;
   WantWheel:=config.GetValue('/Devices/FilterWheel',false);
@@ -2724,7 +2734,6 @@ begin
   MenuAscomWeatherSetup.Visible:=WantWeather and (weather.WeatherInterface=ASCOM);
   MenuAscomSafetySetup.Visible:=WantSafety and (safety.SafetyInterface=ASCOM);
   MenuAscomDomeSetup.Visible:=WantDome and (dome.DomeInterface=ASCOM);
-  MenuAscomSwitchSetup.Visible:=WantSwitch and (switch[0].SwitchInterface=ASCOM);
   MenuAscomCoverSetup.Visible:=WantCover and (cover.CoverInterface=ASCOM);
   MenuAscomGuideCameraSetup.Visible:=WantGuideCamera and (guidecamera.CameraInterface=ASCOM);
   MenuAscomFinderCameraSetup.Visible:=WantFinderCamera and (findercamera.CameraInterface=ASCOM);
@@ -2738,10 +2747,44 @@ begin
   MenuAlpacaWeatherSetup.Visible:=WantWeather and (weather.WeatherInterface=ASCOMREST);
   MenuAlpacaSafetySetup.Visible:=WantSafety and (safety.SafetyInterface=ASCOMREST);
   MenuAlpacaDomeSetup.Visible:=WantDome and (dome.DomeInterface=ASCOMREST);
-  MenuAlpacaSwitchSetup.Visible:=WantSwitch and (switch[0].SwitchInterface=ASCOMREST);
   MenuAlpacaCoverSetup.Visible:=WantCover and (cover.CoverInterface=ASCOMREST);
   MenuAlpacaGuideCameraSetup.Visible:=WantGuideCamera and (guidecamera.CameraInterface=ASCOMREST);
   MenuAlpacaFinderCameraSetup.Visible:=WantFinderCamera and (findercamera.CameraInterface=ASCOMREST);
+
+  ok:=false;
+
+  for i:=0 to NumSwitches-1 do if switch[i].SwitchInterface=ASCOM then ok:=true;
+  MenuAscomSwitchSetup.Visible:=WantSwitch and ok;
+  if MenuAscomSwitchSetup.Visible then begin
+    for i:=MenuAscomSwitchSetup.Count-1 downto 0 do
+      MenuAscomSwitchSetup.Delete(i);
+    for i:=0 to NumSwitches-1 do begin
+      if switch[i].SwitchInterface=ASCOM then begin
+        m:=TMenuItem.Create(Self);
+        m.Caption:=switch[i].Nickname;
+        m.OnClick:=@MenuAscomSwitchSetupClick;
+        m.Tag:=i;
+        MenuAscomSwitchSetup.Add(m);
+      end;
+    end;
+  end;
+
+  ok:=false;
+  for i:=0 to NumSwitches-1 do if switch[i].SwitchInterface=ASCOMREST then ok:=true;
+  MenuAlpacaSwitchSetup.Visible:=WantSwitch and ok;
+  if MenuAlpacaSwitchSetup.Visible then begin
+    for i:=MenuAlpacaSwitchSetup.Count-1 downto 0 do
+      MenuAlpacaSwitchSetup.Delete(i);
+    for i:=0 to NumSwitches-1 do begin
+      if switch[i].SwitchInterface=ASCOMREST then begin
+        m:=TMenuItem.Create(Self);
+        m.Caption:=switch[i].Nickname;
+        m.OnClick:=@MenuAlpacaSwitchSetupClick;
+        m.Tag:=i;
+        MenuAlpacaSwitchSetup.Add(m);
+      end;
+    end;
+  end;
 
   MenuIndiSettings.Visible:= (camera.CameraInterface=INDI)or(wheel.WheelInterface=INDI)or(focuser.FocuserInterface=INDI)or
                              (mount.MountInterface=INDI)or(rotator.RotatorInterface=INDI)or(weather.WeatherInterface=INDI)or
@@ -4959,6 +5002,7 @@ begin
     autoguider.GuideBmp:=ImaGuideBmp;
     autoguider.GuideFits:=guidefits;
     autoguider.SettleTolerance(SettlePixel,SettleMinTime, SettleMaxTime);
+    f_sequence.Switch:=switch;
     f_sequence.Autoguider:=autoguider;
     f_scriptengine.Autoguider:=autoguider;
     f_script.Autoguider:=autoguider;
@@ -12004,7 +12048,6 @@ begin
     6 : begin dev:=widestring(config.GetValue('/ASCOMweather/Device',''));IsConnected:=(weather<>nil)and(weather.Status<>devDisconnected); end;
     7 : begin dev:=widestring(config.GetValue('/ASCOMsafety/Device',''));IsConnected:=(safety<>nil)and(safety.Status<>devDisconnected); end;
     8 : begin dev:=widestring(config.GetValue('/ASCOMdome/Device',''));IsConnected:=(dome<>nil)and(dome.Status<>devDisconnected); end;
-    10: begin dev:=widestring(config.GetValue('/Switch/0/ASCOMswitch/Device',''));IsConnected:=(switch<>nil)and(switch.Status<>devDisconnected); end;
     11: begin dev:=widestring(config.GetValue('/ASCOMcover/Device',''));IsConnected:=(cover<>nil)and(cover.Status<>devDisconnected); end;
     12: begin dev:=widestring(config.GetValue('/ASCOMguidecamera/Device',''));IsConnected:=(guidecamera<>nil)and(guidecamera.Status<>devDisconnected); end;
     13: begin dev:=widestring(config.GetValue('/ASCOMfindercamera/Device',''));IsConnected:=(findercamera<>nil)and(findercamera.Status<>devDisconnected); end;
@@ -12023,7 +12066,6 @@ begin
         6 : DisConnectWeather(nil);
         7 : DisConnectSafety(nil);
         8 : DisConnectDome(nil);
-        10: DisConnectSwitch(nil);
         11: DisConnectCover(nil);
         12: DisConnectGuideCamera(nil);
         13: DisconnectFinderCamera(nil);
@@ -12055,11 +12097,57 @@ begin
       6 : ConnectWeather(nil);
       7 : ConnectSafety(nil);
       8 : ConnectDome(nil);
-      10: ConnectSwitch(nil);
       11: ConnectCover(nil);
       12: ConnectGuideCamera(nil);
       13: ConnectFinderCamera(nil);
     end;
+  end;
+{$endif}
+end;
+
+procedure Tf_main.MenuAscomSwitchSetupClick(Sender: TObject);
+{$ifdef mswindows}
+var
+  n: integer;
+  V: variant;
+  dev: WideString;
+  buf: string;
+  IsConnected: boolean;
+{$endif}
+begin
+{$ifdef mswindows}
+  // check no capture is running
+  if  (f_sequence.Running or f_preview.Running or f_capture.Running or autofocusing or learningvcurve) then begin
+    ShowMessage('Cannot open the device configuration now!');
+    exit;
+  end;
+  // switch number
+  n:=TMenuItem(Sender).Tag;
+  dev:=widestring(config.GetValue('/Switch/Switch'+inttostr(n)+'/ASCOMswitch/Device',''));
+  IsConnected:=(switch[n]<>nil)and(switch[n].Status<>devDisconnected);
+  if dev='' then exit;
+  if IsConnected then begin
+    if MessageDlg(Format(rsDeviceIsConn, [dev, crlf]), mtConfirmation, mbYesNo, 0)=mrYes then begin
+      DisConnectSwitch(nil);
+    end
+    else begin
+      exit;
+    end;
+  end;
+  try
+    // Setup dialog
+    V := CreateOleObject(string(dev));
+    V.SetupDialog;
+    V:=Unassigned;
+  except
+    on E: Exception do begin
+        buf:=E.Message;
+        ShowMessage('Setup error : ' + buf+crlf+'Check the device is not connected to another application.');
+    end;
+  end;
+  // reconnect
+  if IsConnected then begin
+    ConnectSwitch(nil);
   end;
 {$endif}
 end;
@@ -12080,7 +12168,6 @@ case n of
   6 : begin devt:='ASCOMRestweather'; dev:='observingconditions'; end;
   7 : begin devt:='ASCOMRestsafety'; dev:='safetymonitor'; end;
   8 : begin devt:='ASCOMRestdome'; dev:='dome'; end;
-  10: begin devt:='ASCOMRestswitch'; dev:='switch'; end;
   11: begin devt:='ASCOMRestcover'; dev:='covercalibrator'; end;
   12: begin devt:='ASCOMRestguidecamera'; dev:='camera'; end;
   13: begin devt:='ASCOMRestfindercamera'; dev:='camera'; end;
@@ -12108,6 +12195,25 @@ else begin
   url:=protocol+'//'+host+':'+port+'/setup';
 end;
 ExecuteFile(url);
+end;
+
+procedure Tf_main.MenuAlpacaSwitchSetupClick(Sender: TObject);
+var n: integer;
+    devt,dev,num,host,port,protocol,url: string;
+begin
+  // switch number
+  n:=TMenuItem(Sender).Tag;
+  devt:='/Switch/Switch'+inttostr(n)+'/ASCOMRestswitch';
+  dev:='switch';
+  num:=config.GetValue(devt+'/Device','');
+  host:=config.GetValue(devt+'/Host','');
+  port:=config.GetValue(devt+'/Port','');
+  protocol:=config.GetValue(devt+'/Protocol','');
+  if (num='')or(host='')or(port='')or(protocol='') then exit;
+  if protocol='1' then protocol:='https:'
+                  else protocol:='http:';
+  url:=protocol+'//'+host+':'+port+'/setup/v1/'+dev+'/'+num+'/setup';
+  ExecuteFile(url);
 end;
 
 procedure Tf_main.MenuItemCleanupClick(Sender: TObject);

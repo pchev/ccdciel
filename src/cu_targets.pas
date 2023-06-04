@@ -1892,6 +1892,7 @@ end;
 procedure T_Targets.NextTargetAsync(Data: PtrInt);
 var initok: boolean;
     r: string;
+    sw: Tstringlist;
 begin
   TargetTimer.Enabled:=false;
   StopTargetTimer.Enabled:=false;
@@ -1939,6 +1940,39 @@ begin
        end;
      end;
      FScriptRunning:=false;
+     if FRunning then NextTarget;
+     exit;
+   end
+   else if (Targets[FCurrentTarget].objectname=SwitchTxt) then begin
+     // process switch setting
+     FInitializing:=false;
+     TargetForceNext:=false;
+     Targets[FCurrentTarget].autoguiding:=false;
+     sw:=TStringList.Create;
+     SplitRec(Targets[FCurrentTarget].planname,tab,sw);
+     if sw.Count=3 then
+       r:=f_scriptengine.cmd_setswitch(sw[0],sw[1],sw[2])
+     else
+       r:='Wrong parameters count';
+     if r<>msgOK then begin
+       msg(Format(rsSwitchFailed, [Targets[FCurrentTarget].planname])+' '+r,0);
+       if FRunning then begin
+       if FUnattended then begin
+         StopSequence(true);
+         exit;
+       end else begin
+         f_pause.Caption:=Format(rsSwitchFailed, ['']);
+         f_pause.Text:=Format(rsSwitchFailed, [Targets[FCurrentTarget].planname])+crlf+rsDoYouWantToR;
+         if f_pause.Wait(WaitResponseTime,false) then begin
+            Dec(FCurrentTarget);
+         end else begin
+            StopSequence(false);
+            exit;
+         end;
+       end;
+       end;
+     end;
+     sw.Free;
      if FRunning then NextTarget;
      exit;
    end

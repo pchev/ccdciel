@@ -316,6 +316,7 @@ const
   URL_PROGRAMSTATUS='http://localhost:$port';
   SkyFlatTxt='SkyFlat';
   ScriptTxt='Script';
+  SwitchTxt='Switch';
   SubDirCount=8;
   FileNameCount=10;
   MinFrameSize=5;

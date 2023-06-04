@@ -49,7 +49,7 @@ object f_sequence: Tf_sequence
       FixedCols = 0
       Flat = True
       MouseWheelOption = mwGrid
-      Options = [goFixedVertLine, goFixedHorzLine, goVertLine, goHorzLine, goRangeSelect, goSmoothScroll, goTruncCellHints]
+      Options = [goFixedVertLine, goFixedHorzLine, goVertLine, goHorzLine, goRangeSelect, goColSizing, goSmoothScroll, goFixedColSizing, goTruncCellHints]
       ParentFont = False
       RowCount = 1
       TabOrder = 0
@@ -115,7 +115,7 @@ object f_sequence: Tf_sequence
       FixedCols = 0
       Flat = True
       MouseWheelOption = mwGrid
-      Options = [goFixedVertLine, goFixedHorzLine, goVertLine, goHorzLine, goRangeSelect, goSmoothScroll, goTruncCellHints]
+      Options = [goFixedVertLine, goFixedHorzLine, goVertLine, goHorzLine, goRangeSelect, goColSizing, goSmoothScroll, goFixedColSizing, goTruncCellHints]
       ParentFont = False
       RowCount = 1
       TabOrder = 0
@@ -193,27 +193,27 @@ object f_sequence: Tf_sequence
         Left = 0
         Height = 27
         Top = 0
-        Width = 66
+        Width = 70
         Caption = 'Load'
         OnClick = BtnLoadTargetsClick
         ParentFont = False
         TabOrder = 0
       end
       object BtnNewTargets: TButton
-        Left = 66
+        Left = 70
         Height = 27
         Top = 0
-        Width = 65
+        Width = 71
         Caption = 'New'
         OnClick = BtnEditTargetsClick
         ParentFont = False
         TabOrder = 1
       end
       object BtnEditTargets: TButton
-        Left = 131
+        Left = 141
         Height = 27
         Top = 0
-        Width = 81
+        Width = 71
         Caption = 'Edit'
         OnClick = BtnEditTargetsClick
         ParentFont = False
@@ -223,27 +223,27 @@ object f_sequence: Tf_sequence
         Left = 0
         Height = 27
         Top = 27
-        Width = 66
+        Width = 70
         Caption = 'Status'
         OnClick = BtnStatusClick
         ParentFont = False
         TabOrder = 7
       end
       object BtnReset: TButton
-        Left = 66
+        Left = 70
         Height = 27
         Top = 27
-        Width = 65
+        Width = 71
         Caption = 'Reset'
         OnClick = BtnResetClick
         ParentFont = False
         TabOrder = 3
       end
       object BtnManage: TButton
-        Left = 131
+        Left = 141
         Height = 27
         Top = 27
-        Width = 81
+        Width = 71
         Caption = 'Manage'
         OnClick = BtnManageClick
         ParentFont = False
@@ -253,27 +253,27 @@ object f_sequence: Tf_sequence
         Left = 0
         Height = 28
         Top = 54
-        Width = 66
+        Width = 70
         Caption = 'Start'
         OnClick = BtnStartClick
         ParentFont = False
         TabOrder = 4
       end
       object BtnPause: TButton
-        Left = 66
+        Left = 70
         Height = 28
         Top = 54
-        Width = 65
+        Width = 71
         Caption = 'Pause'
         OnClick = BtnPauseClick
         ParentFont = False
         TabOrder = 6
       end
       object BtnStop: TButton
-        Left = 131
+        Left = 141
         Height = 28
         Top = 54
-        Width = 81
+        Width = 71
         Caption = 'Stop'
         OnClick = BtnStopClick
         ParentFont = False
@@ -293,10 +293,10 @@ object f_sequence: Tf_sequence
       AnchorSideTop.Control = led
       AnchorSideTop.Side = asrCenter
       Left = 48
-      Height = 21
+      Height = 22
       Hint = 'If checked no confirmation dialog will be presented and failed operation will abort the current step.'
-      Top = 91
-      Width = 124
+      Top = 90
+      Width = 127
       Caption = 'Run unattended'
       OnChange = UnattendedChange
       ParentFont = False

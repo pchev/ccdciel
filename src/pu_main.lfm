@@ -699,7 +699,6 @@ object f_main: Tf_main
       object MenuAscomSwitchSetup: TMenuItem
         Tag = 10
         Caption = 'MenuAscomSwitchSetup'
-        OnClick = MenuAscomSetupClick
       end
       object MenuAscomCoverSetup: TMenuItem
         Tag = 11
@@ -762,7 +761,6 @@ object f_main: Tf_main
       object MenuAlpacaSwitchSetup: TMenuItem
         Tag = 10
         Caption = 'MenuAlpacaSwitchSetup'
-        OnClick = MenuAlpacaSetupClick
       end
       object MenuAlpacaCoverSetup: TMenuItem
         Tag = 11

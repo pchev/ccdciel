@@ -26,7 +26,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 interface
 
 uses
-  pu_edittargets, u_ccdconfig, u_global, u_utils, UScaleDPI, u_speech,
+  pu_edittargets, u_ccdconfig, u_global, u_utils, UScaleDPI, u_speech, cu_switch,
   fu_capture, fu_preview, fu_filterwheel, fu_internalguider, u_hints, u_translation, math,
   cu_mount, cu_camera, cu_autoguider, cu_astrometry, cu_rotator, pu_viewtext,
   cu_targets, cu_plan, cu_planetarium, pu_pause, fu_safety, fu_weather, cu_dome,
@@ -113,6 +113,7 @@ type
     Finternalguider: Tf_internalguider;
     Fastrometry: TAstrometry;
     Fplanetarium: TPlanetarium;
+    FSwitch: TSwitches;
     procedure SetPreview(val: Tf_preview);
     procedure SetCapture(val: Tf_capture);
     procedure SetMount(val: T_mount);
@@ -192,6 +193,7 @@ type
     property InternalGuider: Tf_internalguider read Finternalguider write SetInternalguider;
     property Astrometry: TAstrometry read Fastrometry write SetAstrometry;
     property Planetarium: TPlanetarium read FPlanetarium write SetPlanetarium;
+    property Switch: TSwitches read FSwitch write FSwitch;
     property AtEndShutdown: boolean read GetEndShutdown write SetEndShutdown;
     property OnShutdown: TNotifyEvent read GetOnShutdown write SetOnShutdown;
     property onMsg: TNotifyMsg read FonMsg write FonMsg;
@@ -555,6 +557,8 @@ function Tf_sequence.EditTargets(et:T_Targets; live: boolean; out fn,defaultname
 begin
    f_EditTargets.LoadPlanList;
    f_EditTargets.LoadScriptList;
+   f_EditTargets.Switch:=FSwitch;
+   f_EditTargets.LoadSwitchList;
    f_EditTargets.SolarTracking:=(Autoguider.AutoguiderType=agINTERNAL);
    if live then begin
      f_EditTargets.BtnSaveAs.Visible:=false;
