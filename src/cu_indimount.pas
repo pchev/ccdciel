@@ -550,7 +550,7 @@ end;
 
 procedure T_indimount.NewNumber(nvp: INumberVectorProperty);
 begin
-  if nvp=coord_prop then begin
+  if (nvp=coord_prop)and(nvp.s<>IPS_ALERT) then begin
      if Assigned(FonCoordChange) then FonCoordChange(self);
   end;
 end;
@@ -613,7 +613,7 @@ end;
 
 function  T_indimount.GetRA:double;
 begin
-if coord_prop<>nil then begin
+if (coord_prop<>nil)and(coord_prop.s<>IPS_ALERT) then begin
   result:=rmod(coord_ra.value+24,24);
 end
 else result:=NullCoord;
@@ -621,7 +621,7 @@ end;
 
 function  T_indimount.GetDec:double;
 begin
-if coord_prop<>nil then begin
+if (coord_prop<>nil)and(coord_prop.s<>IPS_ALERT) then begin
   result:=coord_dec.value;
 end
 else result:=NullCoord;

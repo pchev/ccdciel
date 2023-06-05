@@ -743,8 +743,10 @@ begin
      end;
      hra:=Fmount.RA;
      hdec:=Fmount.Dec;
-     MountToJ2000(Fmount.EquinoxJD,hra,hdec);
-     hra:=15*hra;
+     if (hra<>NullCoord)and(hdec<>NullCoord) then begin
+       MountToJ2000(Fmount.EquinoxJD,hra,hdec);
+       hra:=15*hra;
+     end;
   end;
   haz:=NullCoord; hal:=NullCoord;
   if (hra<>NullCoord)and(hdec<>NullCoord) then begin
