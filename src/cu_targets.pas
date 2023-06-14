@@ -2554,6 +2554,11 @@ begin
   if flt.planname=FlatTimeName[0] then begin    // Dusk
     FlatWaitDusk:=true;
     FlatWaitDawn:=false;
+    // look for eventual next target
+    if (FCurrentTarget+1)<NumTargets then
+      nextt:=Targets[FCurrentTarget+1]
+    else
+      nextt:=nil;
     //Start when the Sun is 2 degree below horizon
     Sun(jdtoday+0.5,sra,sde,sl);
     Time_Alt(jdtoday, sra, sde, -2, hp1, hp2);
@@ -2568,12 +2573,23 @@ begin
     if abs(hp2)<90 then
        flt.endtime:=rmod(hp2+ObsTimeZone+24,24)/24
     else begin
-      msg(rsNoSuitableDu,1);
-      exit;
+      // no real night but try to do something
+      if nextt<>nil then begin
+        if nextt.starttime>=0 then begin
+          // stop the flat at specified next target start time
+          flt.endtime:=nextt.starttime;
+        end
+        else begin
+          flt.endtime:=23.9999/24;
+        end;
+      end
+      else begin
+        // no next target, eventually stop at midnight
+        flt.endtime:=23.9999/24;
+      end;
     end;
     // Update start time of next step to astronomical twilight if not already set
-    if (FCurrentTarget+1)<NumTargets then begin
-      nextt:=Targets[FCurrentTarget+1];
+    if nextt<>nil then begin
       if nextt.starttime<0 then begin
         Time_Alt(jdtoday, sra, sde, -18, hp1, hp2);
         if abs(hp2)<90 then begin
