@@ -477,6 +477,9 @@ begin
   MenuRotator.Caption:=rsRotator;
   MenuImgCoord.Caption := rsCurrentImage;
   MenuImgRot.Caption := rsCurrentImage;
+  Label9.Caption:=rsSwitchConnec;
+  Label10.Caption:=rsSwitch;
+  Label12.Caption:=rsValue;
   Label15.Caption := rsScript;
   Label8.Caption := rsScriptArgume;
   BtnEditScript.Caption := rsEdit;

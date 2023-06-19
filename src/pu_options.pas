@@ -1094,6 +1094,12 @@ begin
   MaxAduFromCamera.Caption:=rsFromCameraDr;
   GroupBox31.Caption:=rsGain+' / '+rsOffset2;
   CanSetGain.Caption:=rsManageTheGai;
+  GroupBox35.Caption:=rsPredefinedRO;
+  BtnAddRoi.Caption:=rsAdd;
+  BtnModRoi.Caption:=rsModify;
+  BtnDelRoi.Caption:=rsDelete;
+  Label170.Caption:=rsWidth;
+  Label171.Caption:=rsHeight;
   GroupBoxReadOut.Caption:=rsReadoutModes;
   UseReadoutMode.Caption:=rsUseSpecificR;
   Label112.Caption:=rsCapture;
@@ -1293,6 +1299,7 @@ begin
   PagePlanetarium.Caption := rsPlanetarium;
   PlanetariumBox.Caption := rsSoftware;
   CdCAdjustFrame.Caption:=rsAdjustTheCha;
+  PlanetariumShowAstrometry:=rsMarkEveryAst;
   CheckBoxLocalCdc.Caption := rsSkychartOnLo;
   StartCdC.Caption := Format(rsStartS,['Skychart']);
   StartHNSKY.Caption := Format(rsStartS,['HNSKY']);

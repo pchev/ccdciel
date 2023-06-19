@@ -1515,6 +1515,14 @@ resourcestring
   rsObjectSetsAt = 'Object sets at %s. In %s hour(s)';
   rsTimingEstima = 'Timing estimate';
   rsAdjustTheCha = 'Adjust the chart for the image or frame';
+  rsUseBacklashC = 'Use backlash compensation';
+  rsDeclinationB = 'Declination backlash';
+  rsInversedSola = 'Inversed solar guide control';
+  rsPulseGuiding = 'Pulse guiding %s is reversed after meridian flip';
+  rsPredefinedRO = 'Predefined ROI';
+  rsModify = 'Modify';
+  rsMarkEveryAst = 'Mark every astrometry result';
+  rsSwitchConnec = 'Switch connection';
 
 implementation
 

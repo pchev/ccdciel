@@ -485,6 +485,8 @@ begin
   Label13.Caption:=rsPulseGain+blank+rsSouth+' [px/sec]';
   Label12.Caption:=rsMeasuredAtEW;
   label_estimate1.Caption:=rsPixelScale+' ["/px]';
+  CheckBoxInverseSolarTracking1.Caption:=rsInversedSola;
+  CheckBoxReverseDec1.Caption:=format(rsPulseGuiding, ['δ']);
   GroupBox1.Caption:=rsOptions2+':';
   Label22.Caption:=rsShortestGuid+' [ms]';
   label11.Caption:=rsLongestGuide+' [ms]';
@@ -498,6 +500,8 @@ begin
   CheckBoxTrackSolar1.Caption:=rsActivateSola;
   Label25.Caption:=rsApparentMoti+' ["/min]';
   Label26.Caption:=rsApparentMoti2+' [°]';
+  CheckBoxBacklash.Caption:=rsUseBacklashC;
+  Label27.Caption:=rsDeclinationB;
   TabSheetSpectro.Caption:=rsSpectroscopy;
   cbSpectro.Caption:=rsActivateSpec;
   cbGuideLock.Caption:=rsActivateSing;
