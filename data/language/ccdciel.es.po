@@ -3665,10 +3665,6 @@ msgstr "Vista previa"
 msgid "Preview debayer"
 msgstr "Previsualizar debayerizado"
 
-#: u_translation.rspreviewexpos
-msgid "Preview exposure"
-msgstr ""
-
 #: u_translation.rsprofile
 #, object-pascal-format
 msgid "Profile: %s"

@@ -3665,10 +3665,6 @@ msgstr "预览"
 msgid "Preview debayer"
 msgstr "预览去拜尔"
 
-#: u_translation.rspreviewexpos
-msgid "Preview exposure"
-msgstr "预览曝光"
-
 #: u_translation.rsprofile
 #, object-pascal-format
 msgid "Profile: %s"

@@ -1510,7 +1510,6 @@ resourcestring
   rsImageCenter = 'Image center';
   rsCalibrationM = 'Calibration measurement';
   rsTargetPositi2 = 'Target position in finder image';
-  rsPreviewExpos = 'Preview exposure';
   rsSavePreviewI = 'Save preview images';
   rsObjectSetsAt = 'Object sets at %s. In %s hour(s)';
   rsTimingEstima = 'Timing estimate';

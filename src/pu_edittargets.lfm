@@ -1425,45 +1425,64 @@ object f_EditTargets: Tf_EditTargets
           ParentColor = False
         end
         object Switches: TComboBox
-          Left = 152
+          AnchorSideLeft.Control = Label9
+          AnchorSideLeft.Side = asrBottom
+          AnchorSideTop.Control = Label9
+          AnchorSideTop.Side = asrCenter
+          Left = 147
           Height = 32
-          Top = 24
+          Top = 25
           Width = 164
+          BorderSpacing.Left = 12
           ItemHeight = 24
           OnChange = SwitchesChange
           TabOrder = 0
           Text = 'Switches'
         end
         object Label10: TLabel
-          Left = 336
+          AnchorSideLeft.Control = Switches
+          AnchorSideLeft.Side = asrBottom
+          AnchorSideTop.Control = Label9
+          AnchorSideTop.Side = asrCenter
+          Left = 323
           Height = 18
           Top = 32
           Width = 39
+          BorderSpacing.Left = 12
           Caption = 'switch'
           ParentColor = False
         end
         object Switchlist: TComboBox
-          Left = 392
+          AnchorSideLeft.Control = Label10
+          AnchorSideLeft.Side = asrBottom
+          AnchorSideTop.Control = Label9
+          AnchorSideTop.Side = asrCenter
+          Left = 374
           Height = 32
-          Top = 24
+          Top = 25
           Width = 184
+          BorderSpacing.Left = 12
           ItemHeight = 24
           OnChange = TargetChange
           TabOrder = 1
           Text = 'Switchlist'
         end
         object Label12: TLabel
-          Left = 87
+          AnchorSideLeft.Control = Label9
+          Left = 24
           Height = 18
-          Top = 80
+          Top = 72
           Width = 34
           Caption = 'Value'
           ParentColor = False
         end
         object SwitchValue: TEdit
-          Left = 152
+          AnchorSideLeft.Control = Switches
+          AnchorSideTop.Control = Label12
+          AnchorSideTop.Side = asrCenter
+          Left = 147
           Height = 32
-          Top = 72
+          Top = 65
           Width = 164
           OnChange = TargetChange
           TabOrder = 2

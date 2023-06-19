@@ -36,7 +36,7 @@ uses
   {$endif}
   fu_devicesconnection, fu_preview, fu_capture, fu_msg, fu_visu, fu_frame, fu_magnifyer, fu_internalguider,
   fu_starprofile, fu_filterwheel, fu_focuser, fu_mount, fu_ccdtemp, fu_autoguider, fu_cover, fu_switch, fu_switchpage,
-  fu_sequence, fu_planetarium, fu_script, fu_finder, u_ccdconfig, pu_edittargets, pu_scriptengine,
+  fu_sequence, fu_planetarium, fu_script, fu_finder, pu_findercalibration, u_ccdconfig, pu_edittargets, pu_scriptengine,
   fu_video, pu_devicesetup, pu_options, pu_indigui, cu_fits, cu_camera, pu_pause, cu_tcpserver,
   pu_viewtext, cu_wheel, cu_mount, cu_focuser, XMLConf, u_utils, u_global, UScaleDPI, pu_handpad,
   cu_indimount, cu_ascommount, cu_indifocuser, cu_ascomfocuser, pu_vcurve, pu_focusercalibration,
@@ -2537,6 +2537,9 @@ begin
    if  f_internalguider<>nil then f_internalguider.SetLang;
    if  f_video<>nil then f_video.SetLang;
    if  f_handpad<>nil then f_handpad.SetLang;
+   if f_switch<>nil then f_switch.SetLang;
+   if f_finder<>nil then f_finder.SetLang;
+   if f_findercalibration<>nil then f_findercalibration.SetLang;
 end;
 
 procedure Tf_main.FormShow(Sender: TObject);

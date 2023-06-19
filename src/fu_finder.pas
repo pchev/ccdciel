@@ -137,7 +137,7 @@ begin
   groupbox1.Caption:=rsTargetPositi2;
   label1.Caption:='X '+rsPixel;
   label2.Caption:='Y '+rsPixel;
-  label3.Caption:=rsPreviewExpos;
+  label3.Caption:=rsExposure;
   label17.Caption:=rsGamma;
   label18.Caption:=rsLuminosity;
   label19.Caption:=rsZoom;
