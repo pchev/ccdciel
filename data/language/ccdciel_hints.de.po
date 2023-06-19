@@ -6,15 +6,15 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ccdciel\n"
 "Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
-"POT-Creation-Date: 2023-03-06 16:18+0000\n"
-"PO-Revision-Date: 2022-12-02 19:38+0000\n"
+"POT-Creation-Date: 2023-06-19 20:18+0000\n"
+"PO-Revision-Date: 2023-03-09 16:39+0000\n"
 "Last-Translator: Thomas <email@starhopper.de>\n"
 "Language-Team: German <de@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2023-03-06 16:32+0000\n"
-"X-Generator: Launchpad (build 1938a4fd80bdf1a1b1373119ac1ac9e0e65174d6)\n"
+"X-Launchpad-Export-Date: 2023-06-19 20:28+0000\n"
+"X-Generator: Launchpad (build 489330bbc434d558d7166379e406ed1fc8bbfcb2)\n"
 
 #: u_hints.rsactivateback
 #, object-pascal-format
@@ -321,7 +321,7 @@ msgstr "Setze die Astronomische Morgendämmerung als Stoppzeit. Berechnet für d
 
 #: u_hints.rssetthetemper
 msgid "Set the temperature threshold in the Preferences"
-msgstr ""
+msgstr "Temperaturschwellwert in den Einstellungen setzen"
 
 #: u_hints.rsshowbullseye
 msgid "Show bulls eye"
@@ -522,7 +522,7 @@ msgstr "Auf diese Weise kann eine unterbrochene Sequenz an dem Punkt erneutgesta
 
 #: u_hints.rsthisoptionis
 msgid "This option is normally unchecked, use it only if you manage the pointing and autoguiding by script."
-msgstr ""
+msgstr "Diese Option ist normalerweise deaktiviert, verwenden Sie sie nur, wenn Sie das Schwenken und Autoguiding per Skript verwalten."
 
 #: u_hints.rstimefrommeri
 msgid "Time from meridian transit (hour angle)"

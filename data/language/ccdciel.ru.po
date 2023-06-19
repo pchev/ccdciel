@@ -6,15 +6,15 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ccdciel\n"
 "Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
-"POT-Creation-Date: 2023-03-06 16:18+0000\n"
-"PO-Revision-Date: 2023-02-11 17:45+0000\n"
+"POT-Creation-Date: 2023-06-19 20:18+0000\n"
+"PO-Revision-Date: 2023-04-04 19:02+0000\n"
 "Last-Translator: Sergey Tarantsov <tsn-ast@yandex.ru>\n"
 "Language-Team: Russian <ru@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2023-03-06 16:32+0000\n"
-"X-Generator: Launchpad (build 1938a4fd80bdf1a1b1373119ac1ac9e0e65174d6)\n"
+"X-Launchpad-Export-Date: 2023-06-19 20:28+0000\n"
+"X-Generator: Launchpad (build 489330bbc434d558d7166379e406ed1fc8bbfcb2)\n"
 
 #: u_translation.rs2d
 msgid "2D"
@@ -68,7 +68,7 @@ msgstr "Действие"
 
 #: u_translation.rsactivatesing
 msgid "Activate single star guiding on fixed position"
-msgstr ""
+msgstr "Активировать гидирование по одной звезде в фиксированном положении"
 
 #: u_translation.rsactivatesola
 msgid "Activate solar object tracking."
@@ -76,7 +76,7 @@ msgstr "Отслеживание объектов солнечной систе�
 
 #: u_translation.rsactivatespec
 msgid "Activate spectroscopy functions"
-msgstr ""
+msgstr "Активировать функции спектроскопии"
 
 #: u_translation.rsactivetarget
 msgid "Active target is replaced, restart the sequence"
@@ -115,6 +115,10 @@ msgstr ""
 #, object-pascal-format
 msgid "Adjust flat exposure time to %s and retry."
 msgstr "Установлена выдержка флета в %sс"
+
+#: u_translation.rsadjustthecha
+msgid "Adjust the chart for the image or frame"
+msgstr ""
 
 #: u_translation.rsadjustthemou
 msgid "Adjust the mount in azimuth and elevation such that the star moves from the green square to the pink circle."
@@ -763,7 +767,7 @@ msgstr "Невозможно получить абсолютную позици�
 #: u_translation.rscannotinterp
 #, object-pascal-format
 msgid "Cannot interpret the text \"%s\" as RA DEC values"
-msgstr ""
+msgstr "Не удаётся интерпретировать текст \"%s\" как значения RA DEC."
 
 #: u_translation.rscannotoverwr
 msgid "Cannot overwrite the running sequence!"
@@ -1233,6 +1237,10 @@ msgstr "Дебайеризовать"
 msgid "Dec"
 msgstr "Dec"
 
+#: u_translation.rsdeclinationb
+msgid "Declination backlash"
+msgstr ""
+
 #: u_translation.rsdefault
 msgid "Default"
 msgstr "Default"
@@ -1585,7 +1593,7 @@ msgstr "Время окончания"
 
 #: u_translation.rsenterthej200
 msgid "Enter the J2000 coordinates of the target where the main instrument is currently pointing."
-msgstr ""
+msgstr "Введите координаты объекта J2000, на который в данный момент указывает основной инструмент."
 
 #: u_translation.rserror
 #, object-pascal-format
@@ -2233,7 +2241,7 @@ msgstr "Изображение"
 
 #: u_translation.rsimagecenter
 msgid "Image center"
-msgstr ""
+msgstr "Центр изображения"
 
 #: u_translation.rsimagecleanup
 msgid "Image cleanup"
@@ -2418,6 +2426,10 @@ msgstr "Неверные координаты объекта!"
 msgid "Invalid or unsupported FITS file %s"
 msgstr "Неверный или неподдерживаемый FITS %s"
 
+#: u_translation.rsinversedsola
+msgid "Inversed solar guide control"
+msgstr ""
+
 #: u_translation.rsiterative
 msgid "Iterative"
 msgstr "Итеративная"
@@ -2576,6 +2588,10 @@ msgstr "Многие функции не будут работать надёж�
 msgid "Margin offset"
 msgstr "Смещение"
 
+#: u_translation.rsmarkeveryast
+msgid "Mark every astrometry result"
+msgstr ""
+
 #: u_translation.rsmax
 msgid "Max:"
 msgstr "Max:"
@@ -2614,7 +2630,7 @@ msgstr "Максимальный радиус поиска"
 
 #: u_translation.rsmaximumsearc2
 msgid "Maximum search box"
-msgstr ""
+msgstr "Максимальное окно поиска"
 
 #: u_translation.rsmaximumsourc
 msgid "Maximum sources"
@@ -2803,6 +2819,10 @@ msgstr "Mnt."
 #: u_translation.rsmode
 msgid "Mode:"
 msgstr "Mode:"
+
+#: u_translation.rsmodify
+msgid "Modify"
+msgstr ""
 
 #: u_translation.rsmoresettings
 msgid "More settings"
@@ -3051,10 +3071,6 @@ msgstr "Флет отсутствует"
 msgid "No flip until past meridian for"
 msgstr "Не перекладывать после пересечения"
 
-#: u_translation.rsnomeasuremen
-msgid "No measurement, early start exposure not set."
-msgstr ""
-
 #: u_translation.rsnone2
 msgid "None"
 msgstr "Ничего"
@@ -3173,6 +3189,11 @@ msgstr "Название объекта"
 #, object-pascal-format
 msgid "Object %s, plan %s finished."
 msgstr "Объект %s, план %s завершён"
+
+#: u_translation.rsobjectsetsat
+#, object-pascal-format
+msgid "Object sets at %s. In %s hour(s)"
+msgstr ""
 
 #: u_translation.rsobjectstartp
 #, object-pascal-format
@@ -3355,7 +3376,7 @@ msgstr "Пароль"
 
 #: u_translation.rspastfromclip
 msgid "Past from clipboard"
-msgstr ""
+msgstr "Вставить из буфера"
 
 #: u_translation.rspause
 msgid "Pause"
@@ -3615,6 +3636,10 @@ msgstr "Уточнение позиции не выполнено!"
 msgid "Predefined (recommended)"
 msgstr "Предопределено (рекомендуется)"
 
+#: u_translation.rspredefinedro
+msgid "Predefined ROI"
+msgstr ""
+
 #: u_translation.rspreferedfocu
 msgid "Prefered focuser direction"
 msgstr "Предпочтительное направление фокусировки"
@@ -3672,6 +3697,11 @@ msgstr "Импульс"
 #: u_translation.rspulsegain
 msgid "pulse gain"
 msgstr "Скорость"
+
+#: u_translation.rspulseguiding
+#, object-pascal-format
+msgid "Pulse guiding %s is reversed after meridian flip"
+msgstr ""
 
 #: u_translation.rspythoncomman
 msgid "Python command"
@@ -4109,6 +4139,10 @@ msgstr "Сохранить FITS%s"
 #, object-pascal-format
 msgid "Save picture%s"
 msgstr "Сохранить растровое изображение %s"
+
+#: u_translation.rssavepreviewi
+msgid "Save preview images"
+msgstr ""
 
 #: u_translation.rssavetempl
 msgid "Save template"
@@ -4667,7 +4701,7 @@ msgstr "Спектральный профиль"
 
 #: u_translation.rsspectroscopy
 msgid "Spectroscopy"
-msgstr ""
+msgstr "Спектроскопия"
 
 #: u_translation.rsspeed
 msgid "Speed"
@@ -5023,6 +5057,15 @@ msgstr ""
 msgid "Switch"
 msgstr "Коммутатор"
 
+#: u_translation.rsswitchconnec
+msgid "Switch connection"
+msgstr ""
+
+#: u_translation.rsswitchfailed
+#, object-pascal-format
+msgid "Setting switch %s failed!"
+msgstr ""
+
 #: u_translation.rssynctoeq
 #, object-pascal-format
 msgid "Sync to %s %s/%s"
@@ -5079,11 +5122,6 @@ msgstr "Объект"
 #, object-pascal-format
 msgid "Target %s coordinates not updated"
 msgstr "Координаты объекта %s не обновлены"
-
-#: u_translation.rstargetwillbe
-#, object-pascal-format
-msgid "Target can run until %s, in %s seconds"
-msgstr ""
 
 #: u_translation.rstargetwillbe2
 msgid "Target will be recentered before next image"
@@ -5310,7 +5348,7 @@ msgstr "Эта процедура поможет подобрать параме
 
 #: u_translation.rsthisprocedur2
 msgid "This procedure measure the position of the main instrument target in the finder camera image."
-msgstr ""
+msgstr "Эта процедура измеряет положение объекта основного инструмента на изображении с камеры искателя."
 
 #: u_translation.rsthissequence
 #, object-pascal-format
@@ -5355,6 +5393,10 @@ msgstr "Таймер"
 #: u_translation.rstimesendtote
 msgid "Time send to telescope."
 msgstr "Текущее время передано в телескоп"
+
+#: u_translation.rstimingestima
+msgid "Timing estimate"
+msgstr ""
 
 #: u_translation.rstomorrow
 msgid "tomorrow"
@@ -5541,6 +5583,10 @@ msgstr "Астрометрия для%sуточнения позиции"
 #: u_translation.rsuseastrometr
 msgid "Use astrometry to refine the position"
 msgstr "Используовать астрометрию для уточнения позиции"
+
+#: u_translation.rsusebacklashc
+msgid "Use backlash compensation"
+msgstr ""
 
 #: u_translation.rsusecovercali
 msgid "Use Cover calibrator"

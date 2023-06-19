@@ -6,15 +6,15 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ccdciel\n"
 "Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
-"POT-Creation-Date: 2023-03-06 16:18+0000\n"
-"PO-Revision-Date: 2023-03-06 16:29+0000\n"
+"POT-Creation-Date: 2023-06-19 20:18+0000\n"
+"PO-Revision-Date: 2023-06-19 20:27+0000\n"
 "Last-Translator: Patrick Chevalley <Unknown>\n"
 "Language-Team: French <fr@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2023-03-06 16:32+0000\n"
-"X-Generator: Launchpad (build 1938a4fd80bdf1a1b1373119ac1ac9e0e65174d6)\n"
+"X-Launchpad-Export-Date: 2023-06-19 20:28+0000\n"
+"X-Generator: Launchpad (build 489330bbc434d558d7166379e406ed1fc8bbfcb2)\n"
 
 #: u_translation.rs2d
 msgid "2D"
@@ -115,6 +115,10 @@ msgstr "Ajustement de l'étoile pour l'autofocus, magnitude:%s, facteur d'exposi
 #, object-pascal-format
 msgid "Adjust flat exposure time to %s and retry."
 msgstr "Ajuste le temps d'exposition à %s et réessaie."
+
+#: u_translation.rsadjustthecha
+msgid "Adjust the chart for the image or frame"
+msgstr "Modifie la carte pour cadrer l'image"
 
 #: u_translation.rsadjustthemou
 msgid "Adjust the mount in azimuth and elevation such that the star moves from the green square to the pink circle."
@@ -1233,6 +1237,10 @@ msgstr "Débayeriser l'aperçu"
 msgid "Dec"
 msgstr "Déc"
 
+#: u_translation.rsdeclinationb
+msgid "Declination backlash"
+msgstr "Backlash en déclinaison"
+
 #: u_translation.rsdefault
 msgid "Default"
 msgstr "Défaut"
@@ -1445,7 +1453,7 @@ msgstr "Asservissement du dôme: %s"
 
 #: u_translation.rsdone
 msgid "done"
-msgstr "terminé"
+msgstr "fait"
 
 #: u_translation.rsdonotchangea
 msgid "Do not change autoguiding state"
@@ -2418,6 +2426,10 @@ msgstr "Coordonnées invalide!"
 msgid "Invalid or unsupported FITS file %s"
 msgstr "Fichier FITS non valide ou non supporté %s"
 
+#: u_translation.rsinversedsola
+msgid "Inversed solar guide control"
+msgstr "Inversion du guidage solaire"
+
 #: u_translation.rsiterative
 msgid "Iterative"
 msgstr "Itératif"
@@ -2575,6 +2587,10 @@ msgstr "De nombreuses fonctions ne fonctionneront pas  sans un logiciel d'astrom
 #: u_translation.rsmarginoffset
 msgid "Margin offset"
 msgstr "Décalage de la marge"
+
+#: u_translation.rsmarkeveryast
+msgid "Mark every astrometry result"
+msgstr "Marque chaque résultat d'astrométrie"
 
 #: u_translation.rsmax
 msgid "Max:"
@@ -2734,7 +2750,7 @@ msgstr "Erreur du retournement méridien"
 
 #: u_translation.rsmeridianflip7
 msgid "Meridian flip done"
-msgstr "Le retournement méridien est terminé"
+msgstr "Le retournement méridien est fait"
 
 #: u_translation.rsmeridianflip8
 msgid "Meridian flip error"
@@ -2803,6 +2819,10 @@ msgstr "Mnt."
 #: u_translation.rsmode
 msgid "Mode:"
 msgstr "Mode:"
+
+#: u_translation.rsmodify
+msgid "Modify"
+msgstr "Modifier"
 
 #: u_translation.rsmoresettings
 msgid "More settings"
@@ -3051,10 +3071,6 @@ msgstr "Pas de flat"
 msgid "No flip until past meridian for"
 msgstr "Pas de retournement avant"
 
-#: u_translation.rsnomeasuremen
-msgid "No measurement, early start exposure not set."
-msgstr "Pas de mesure, le lancement anticipé de l'exposition n'est pas défini."
-
 #: u_translation.rsnone2
 msgid "None"
 msgstr "Aucun"
@@ -3173,6 +3189,11 @@ msgstr "Nom de l'objet"
 #, object-pascal-format
 msgid "Object %s, plan %s finished."
 msgstr "Objet %s,  plan %s terminé"
+
+#: u_translation.rsobjectsetsat
+#, object-pascal-format
+msgid "Object sets at %s. In %s hour(s)"
+msgstr "L'objet se couche à%s. Dans %s heures"
 
 #: u_translation.rsobjectstartp
 #, object-pascal-format
@@ -3615,6 +3636,10 @@ msgstr "Le Goto de précision a échoué"
 msgid "Predefined (recommended)"
 msgstr "Prédefini (recommandé)"
 
+#: u_translation.rspredefinedro
+msgid "Predefined ROI"
+msgstr "Champs prédéfinis"
+
 #: u_translation.rspreferedfocu
 msgid "Prefered focuser direction"
 msgstr "Direction préférée"
@@ -3672,6 +3697,11 @@ msgstr "Durée d'impulsion"
 #: u_translation.rspulsegain
 msgid "pulse gain"
 msgstr "gain d'impulsion"
+
+#: u_translation.rspulseguiding
+#, object-pascal-format
+msgid "Pulse guiding %s is reversed after meridian flip"
+msgstr "L'impulsion de guidage %s est rensersée après un changement du méridien"
 
 #: u_translation.rspythoncomman
 msgid "Python command"
@@ -4109,6 +4139,10 @@ msgstr "Enregistrer  le fichier FITS %s"
 #, object-pascal-format
 msgid "Save picture%s"
 msgstr "Enregistre l'image %s"
+
+#: u_translation.rssavepreviewi
+msgid "Save preview images"
+msgstr "Enregistre les images de prévisualisation"
 
 #: u_translation.rssavetempl
 msgid "Save template"
@@ -5023,6 +5057,15 @@ msgstr "Int."
 msgid "Switch"
 msgstr "Commutateur"
 
+#: u_translation.rsswitchconnec
+msgid "Switch connection"
+msgstr "Connexion du commutateur"
+
+#: u_translation.rsswitchfailed
+#, object-pascal-format
+msgid "Setting switch %s failed!"
+msgstr "La modification du commutateur %s a échoué!"
+
 #: u_translation.rssynctoeq
 #, object-pascal-format
 msgid "Sync to %s %s/%s"
@@ -5079,11 +5122,6 @@ msgstr "Cibles"
 #, object-pascal-format
 msgid "Target %s coordinates not updated"
 msgstr "Les coordonées de la cible %s n'ont pas été mise à jour"
-
-#: u_translation.rstargetwillbe
-#, object-pascal-format
-msgid "Target can run until %s, in %s seconds"
-msgstr "La cible peut être suivie jusqu'a %s, dans %s secondes"
 
 #: u_translation.rstargetwillbe2
 msgid "Target will be recentered before next image"
@@ -5356,6 +5394,10 @@ msgstr "Minuteur"
 msgid "Time send to telescope."
 msgstr "Date envoyée au télescope"
 
+#: u_translation.rstimingestima
+msgid "Timing estimate"
+msgstr "Estimation du temps"
+
 #: u_translation.rstomorrow
 msgid "tomorrow"
 msgstr "demain"
@@ -5541,6 +5583,10 @@ msgstr "Astrométrie pour%saffiner la position"
 #: u_translation.rsuseastrometr
 msgid "Use astrometry to refine the position"
 msgstr "Utilise l'astrométrie pour affiner la posiiton"
+
+#: u_translation.rsusebacklashc
+msgid "Use backlash compensation"
+msgstr "Utilise la compensation du backlash"
 
 #: u_translation.rsusecovercali
 msgid "Use Cover calibrator"

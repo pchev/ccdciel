@@ -1299,7 +1299,7 @@ begin
   PagePlanetarium.Caption := rsPlanetarium;
   PlanetariumBox.Caption := rsSoftware;
   CdCAdjustFrame.Caption:=rsAdjustTheCha;
-  PlanetariumShowAstrometry:=rsMarkEveryAst;
+  PlanetariumShowAstrometry.Caption:=rsMarkEveryAst;
   CheckBoxLocalCdc.Caption := rsSkychartOnLo;
   StartCdC.Caption := Format(rsStartS,['Skychart']);
   StartHNSKY.Caption := Format(rsStartS,['HNSKY']);

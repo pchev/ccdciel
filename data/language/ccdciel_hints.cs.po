@@ -2,15 +2,15 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ccdceil\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-03-06 16:18+0000\n"
-"PO-Revision-Date: 2023-02-25 06:39+0000\n"
+"POT-Creation-Date: 2023-06-19 20:18+0000\n"
+"PO-Revision-Date: 2023-03-26 12:00+0000\n"
 "Last-Translator: Stanislav Holub <Unknown>\n"
 "Language-Team: Czech <cz@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2023-03-06 16:32+0000\n"
-"X-Generator: Launchpad (build 1938a4fd80bdf1a1b1373119ac1ac9e0e65174d6)\n"
+"X-Launchpad-Export-Date: 2023-06-19 20:28+0000\n"
+"X-Generator: Launchpad (build 489330bbc434d558d7166379e406ed1fc8bbfcb2)\n"
 "Language: cs\n"
 
 #: u_hints.rsactivateback
@@ -46,11 +46,11 @@ msgstr "Dočasný adresář pro pracovní soubory. Ujistěte se, že obsahuje po
 
 #: u_hints.rsautofocusatt
 msgid "Autofocus at the start of this step"
-msgstr "Automatické zaostření na začátku tohoto kroku"
+msgstr "AutoOstření na začátku tohoto kroku"
 
 #: u_hints.rsautofocusift
 msgid "Autofocus if the temperature change is greater than the configured value"
-msgstr "Automatické zaostření, pokud je změna teploty větší než nakonfigurovaná hodnota"
+msgstr "AutoOstření, pokud je změna teploty větší než nakonfigurovaná hodnota"
 
 #: u_hints.rsautoguiderst
 msgid "Autoguider status"
@@ -195,7 +195,7 @@ msgstr "Pokud je zaškrtnuto, nebude zobrazen žádný potvrzovací dialog a ne�
 
 #: u_hints.rsifnotchecked
 msgid "If not checked the program will never change the gain/offset value set in the driver setup"
-msgstr "Pokud není zaškrtnuto, program  nezmění hodnotu zesílení/offsetu nastavenou ovladačem"
+msgstr "Pokud není zaškrtnuto, program nezmění hodnotu zesílení/offsetu nastavenou ovladačem"
 
 #: u_hints.rsiftheimageis
 msgid "If the image is now focused, click this button to get the current focuser position"
@@ -203,7 +203,7 @@ msgstr "Pokud je teď snímek zaostřen, kliknutím na toto tlačítko získáte
 
 #: u_hints.rsimageluminos
 msgid "Image luminosity"
-msgstr "Jas Obrazu"
+msgstr "Jas Snímku"
 
 #: u_hints.rsincrementste
 msgid "Increment step for the inward or outward movement"
@@ -219,7 +219,7 @@ msgstr "Invertovat zobrazení snímku"
 
 #: u_hints.rskeepthegraph
 msgid "Keep the graph visible after autofocus is completed"
-msgstr "Ponechání grafu viditelného po dokončení automatického zaostřování"
+msgstr "Ponechání grafu viditelného po dokončení AutoOstření"
 
 #: u_hints.rsletblankford
 msgid "Let blank for default system search path"
@@ -269,7 +269,7 @@ msgstr "Před otočením získejte aktuální souřadnice komety nebo asteroidu 
 
 #: u_hints.rsredoautofocu
 msgid "Redo autofocus after a number of frames"
-msgstr "Opakovat automatické zaostření po sérii snímků"
+msgstr "Opakovat AutoOstření po sérii snímků"
 
 #: u_hints.rsrepeatthepla
 #, object-pascal-format
@@ -338,7 +338,7 @@ msgstr "Zobrazit oříznutí světel a stínů"
 
 #: u_hints.rsshowlastcapt
 msgid "Show captured image"
-msgstr "Zobrazit zachycený smí,ek"
+msgstr "Zobrazit zachycený snímek"
 
 #: u_hints.rsstacktheprev
 #, object-pascal-format
@@ -388,7 +388,7 @@ msgstr "Hvězda Y"
 #: u_hints.rsstayatthetar
 #, object-pascal-format
 msgid "Stay at the target position for autofocus.%sA medium bright star should be visible.%sElse slew to a bright database star."
-msgstr "Zůstat v cílové pozici pro automatické zaostření.%sMěla by být viditelná středně jasná hvězda.%sJinak najet na jasnou hvězdu z databáze."
+msgstr "Zůstat v cílové pozici při AutoOstření%sMěla by být viditelná středně jasná hvězda.%sJinak se přesunout na jasnou hvězdu z databáze."
 
 #: u_hints.rsstepplanfor
 #, object-pascal-format
@@ -434,7 +434,7 @@ msgstr "Hodnota HFD v pixelech"
 
 #: u_hints.rsthehorizonpr
 msgid "The horizon profile used to compute object visibility. This file is the same as used in Cartes du Ciel"
-msgstr "Profil horizontu použitý pro výpočet viditelnosti objektu. Tento soubor je stejný jako v Cartes du Ciel."
+msgstr "Profil horizontu použitý pro výpočet viditelnosti objektu. Tento soubor je stejný jako v Cartes du Ciel"
 
 #: u_hints.rsthelistoftar
 msgid "The list of target to process in sequence."
@@ -443,7 +443,7 @@ msgstr "Seznam cílů, které mají být zpracovávány postupně."
 #: u_hints.rsthemagnitude
 #, object-pascal-format
 msgid "The magnitude of the star used to run the autofocus.%sUsing a faint star can minimize the telescope movement but prefer the brightest to avoid trouble with nearby stars."
-msgstr "Velikost hvězdy použité pro automatické zaostřování.%sPoužití slabé hvězdy může minimalizovat pohyb dalekohledu, ale dává přednost nejjasnějším, aby se předešlo problémům se sousedními hvězdami."
+msgstr "Velikost hvězdy použité pro AutoOstření.%sPoužitím slabé hvězdy můžete minimalizovat pohyb dalekohledu, ale raději zvolte tu nejjasnější, abyste se vyhnuli potížím s blízkými hvězdami."
 
 #: u_hints.rsthemaximumin
 msgid "The maximum intensity value"
@@ -463,7 +463,7 @@ msgstr "Počet snímků, které mají být pořízeny před ditheringem"
 
 #: u_hints.rsthenumberofi3
 msgid "The number of image to take before autofocus"
-msgstr "Počet snímků pořízených před automatickým zaostřením"
+msgstr "Počet snímků pořízených před AutoOstřením"
 
 #: u_hints.rsthenumberofi4
 msgid "The number of image for this step"
@@ -483,7 +483,7 @@ msgstr "Jméno pozorovatele pro zahrnutí do záhlaví FITS"
 
 #: u_hints.rsthepreferedf
 msgid "The preferred focuser direction for autofocus."
-msgstr "Preferovaný směr ostření pro automatické zaostřování.."
+msgstr "Preferovaný směr zaostřování pro AutoOstření."
 
 #: u_hints.rstheselecteds
 msgid "The selected star luminosity profile"

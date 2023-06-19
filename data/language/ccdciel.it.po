@@ -6,15 +6,15 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ccdciel\n"
 "Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
-"POT-Creation-Date: 2023-03-06 16:18+0000\n"
+"POT-Creation-Date: 2023-06-19 20:18+0000\n"
 "PO-Revision-Date: 2021-08-31 20:35+0000\n"
 "Last-Translator: Patrick Chevalley <Unknown>\n"
 "Language-Team: Italian <it@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2023-03-06 16:32+0000\n"
-"X-Generator: Launchpad (build 1938a4fd80bdf1a1b1373119ac1ac9e0e65174d6)\n"
+"X-Launchpad-Export-Date: 2023-06-19 20:28+0000\n"
+"X-Generator: Launchpad (build 489330bbc434d558d7166379e406ed1fc8bbfcb2)\n"
 
 #: u_translation.rs2d
 msgid "2D"
@@ -115,6 +115,10 @@ msgstr ""
 #, object-pascal-format
 msgid "Adjust flat exposure time to %s and retry."
 msgstr "Imposta tempo di esposizione Flat a %s e riprova."
+
+#: u_translation.rsadjustthecha
+msgid "Adjust the chart for the image or frame"
+msgstr ""
 
 #: u_translation.rsadjustthemou
 msgid "Adjust the mount in azimuth and elevation such that the star moves from the green square to the pink circle."
@@ -1231,6 +1235,10 @@ msgstr "Debayer immagine di anteprima"
 
 #: u_translation.rsdec
 msgid "Dec"
+msgstr ""
+
+#: u_translation.rsdeclinationb
+msgid "Declination backlash"
 msgstr ""
 
 #: u_translation.rsdefault
@@ -2418,6 +2426,10 @@ msgstr ""
 msgid "Invalid or unsupported FITS file %s"
 msgstr "File FITS %s non valido o non supportato"
 
+#: u_translation.rsinversedsola
+msgid "Inversed solar guide control"
+msgstr ""
+
 #: u_translation.rsiterative
 msgid "Iterative"
 msgstr "Iterativo"
@@ -2574,6 +2586,10 @@ msgstr "Molte funzioni non funzioneranno correttamente senza un programma astrom
 
 #: u_translation.rsmarginoffset
 msgid "Margin offset"
+msgstr ""
+
+#: u_translation.rsmarkeveryast
+msgid "Mark every astrometry result"
 msgstr ""
 
 #: u_translation.rsmax
@@ -2802,6 +2818,10 @@ msgstr ""
 
 #: u_translation.rsmode
 msgid "Mode:"
+msgstr ""
+
+#: u_translation.rsmodify
+msgid "Modify"
 msgstr ""
 
 #: u_translation.rsmoresettings
@@ -3051,10 +3071,6 @@ msgstr ""
 msgid "No flip until past meridian for"
 msgstr "Non invertire passato il meridiano per"
 
-#: u_translation.rsnomeasuremen
-msgid "No measurement, early start exposure not set."
-msgstr ""
-
 #: u_translation.rsnone2
 msgid "None"
 msgstr "Nessuno"
@@ -3172,6 +3188,11 @@ msgstr "Nome oggetto"
 #: u_translation.rsobjectplanfi
 #, object-pascal-format
 msgid "Object %s, plan %s finished."
+msgstr ""
+
+#: u_translation.rsobjectsetsat
+#, object-pascal-format
+msgid "Object sets at %s. In %s hour(s)"
 msgstr ""
 
 #: u_translation.rsobjectstartp
@@ -3615,6 +3636,10 @@ msgstr ""
 msgid "Predefined (recommended)"
 msgstr ""
 
+#: u_translation.rspredefinedro
+msgid "Predefined ROI"
+msgstr ""
+
 #: u_translation.rspreferedfocu
 msgid "Prefered focuser direction"
 msgstr ""
@@ -3671,6 +3696,11 @@ msgstr ""
 
 #: u_translation.rspulsegain
 msgid "pulse gain"
+msgstr ""
+
+#: u_translation.rspulseguiding
+#, object-pascal-format
+msgid "Pulse guiding %s is reversed after meridian flip"
 msgstr ""
 
 #: u_translation.rspythoncomman
@@ -4108,6 +4138,10 @@ msgstr "Salva file FITS %s"
 #: u_translation.rssavepictures
 #, object-pascal-format
 msgid "Save picture%s"
+msgstr ""
+
+#: u_translation.rssavepreviewi
+msgid "Save preview images"
 msgstr ""
 
 #: u_translation.rssavetempl
@@ -5023,6 +5057,15 @@ msgstr ""
 msgid "Switch"
 msgstr ""
 
+#: u_translation.rsswitchconnec
+msgid "Switch connection"
+msgstr ""
+
+#: u_translation.rsswitchfailed
+#, object-pascal-format
+msgid "Setting switch %s failed!"
+msgstr ""
+
 #: u_translation.rssynctoeq
 #, object-pascal-format
 msgid "Sync to %s %s/%s"
@@ -5078,11 +5121,6 @@ msgstr "Obiettivi"
 #: u_translation.rstargetscoord
 #, object-pascal-format
 msgid "Target %s coordinates not updated"
-msgstr ""
-
-#: u_translation.rstargetwillbe
-#, object-pascal-format
-msgid "Target can run until %s, in %s seconds"
 msgstr ""
 
 #: u_translation.rstargetwillbe2
@@ -5356,6 +5394,10 @@ msgstr ""
 msgid "Time send to telescope."
 msgstr "Data inviata al telescopio"
 
+#: u_translation.rstimingestima
+msgid "Timing estimate"
+msgstr ""
+
 #: u_translation.rstomorrow
 msgid "tomorrow"
 msgstr ""
@@ -5540,6 +5582,10 @@ msgstr ""
 
 #: u_translation.rsuseastrometr
 msgid "Use astrometry to refine the position"
+msgstr ""
+
+#: u_translation.rsusebacklashc
+msgid "Use backlash compensation"
 msgstr ""
 
 #: u_translation.rsusecovercali

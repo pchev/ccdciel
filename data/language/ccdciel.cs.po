@@ -2,15 +2,15 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ccdciel\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-03-06 16:18+0000\n"
-"PO-Revision-Date: 2023-03-05 18:15+0000\n"
+"POT-Creation-Date: 2023-06-19 20:18+0000\n"
+"PO-Revision-Date: 2023-05-28 08:12+0000\n"
 "Last-Translator: Stanislav Holub <Unknown>\n"
 "Language-Team: Czech <cz@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2023-03-06 16:32+0000\n"
-"X-Generator: Launchpad (build 1938a4fd80bdf1a1b1373119ac1ac9e0e65174d6)\n"
+"X-Launchpad-Export-Date: 2023-06-19 20:28+0000\n"
+"X-Generator: Launchpad (build 489330bbc434d558d7166379e406ed1fc8bbfcb2)\n"
 "Language: cs\n"
 
 #: u_translation.rs2d
@@ -93,7 +93,7 @@ msgstr "Přidat klíčové slovo FITS pro značky DSLR EXIF"
 
 #: u_translation.rsaddimages
 msgid "Add images"
-msgstr "Přidat obrázky"
+msgstr "Přidat snímky"
 
 #: u_translation.rsadditionalop
 msgid "Additional options for"
@@ -106,16 +106,20 @@ msgstr "Přidat krok"
 #: u_translation.rsadjustautofo
 #, object-pascal-format
 msgid "Adjust autofocus star magnitude:%s, exposure factor:%s"
-msgstr "Upravit velikost hvězdy automatického ostřením:%s, faktor expozice:%s"
+msgstr "Nastavení AutoOstření magnitudy hvězdy:%s, expoziční faktor:%s"
 
 #: u_translation.rsadjustflatex
 #, object-pascal-format
 msgid "Adjust flat exposure time to %s and retry."
 msgstr "Upravte flat expoziční čas na %s a zkuste to znovu."
 
+#: u_translation.rsadjustthecha
+msgid "Adjust the chart for the image or frame"
+msgstr ""
+
 #: u_translation.rsadjustthemou
 msgid "Adjust the mount in azimuth and elevation such that the star moves from the green square to the pink circle."
-msgstr "Nastavte montáž v azimutu a výšce tak, aby se hvězda přesunula ze zeleného čtverce do růžového kruhu."
+msgstr "Nastavte montáž v azimutu a výšky tak, aby se hvězda přesunula ze zeleného čtverce do růžového kruhu."
 
 #: u_translation.rsadjusttowind
 msgid "Adjust to window"
@@ -140,7 +144,7 @@ msgstr "Po natočení dalekohledu na cíl je offset vůči požadované poloze %
 
 #: u_translation.rsairmass
 msgid "Airmass"
-msgstr "Vlhkost vzduchu"
+msgstr "Hmotnost vzduchu"
 
 #: u_translation.rsalignmenton
 msgid "Alignment on"
@@ -196,7 +200,7 @@ msgstr "Použít Flat"
 
 #: u_translation.rsapplytoallde
 msgid "Apply to all devices"
-msgstr "Použít na všechna zařízení"
+msgstr "Použít pro všechna zařízení"
 
 #: u_translation.rsapplytocurre
 msgid "Apply to current image"
@@ -232,7 +236,7 @@ msgstr "Nastavení astrometrie"
 
 #: u_translation.rsastrometryre
 msgid "Astrometry resolver log"
-msgstr "Protokol vyřešení"
+msgstr "Protokol astrometrického řešení"
 
 #: u_translation.rsatdawn
 msgid "at dawn"
@@ -244,173 +248,173 @@ msgstr "za soumraku"
 
 #: u_translation.rsautofocus
 msgid "Autofocus"
-msgstr "Automatické zaostření"
+msgstr "AutoOstření"
 
 #: u_translation.rsautofocusaft
 msgid "Autofocus after meridian flip"
-msgstr "Automatické zaostření po překlopení poledníku"
+msgstr "AutoOstření po překlopení poledníku"
 
 #: u_translation.rsautofocusaft2
 msgid "Autofocus after temperature change"
-msgstr "Automatické zaostřování po změně teploty"
+msgstr "AutoOstření po změně teploty"
 
 #: u_translation.rsautofocusalr
 msgid "Autofocus already running."
-msgstr "Automatické ostření běží."
+msgstr "AutoOstření běží."
 
 #: u_translation.rsautofocusbef
 #, object-pascal-format
 msgid "Autofocus%sbefore to start"
-msgstr "Automatické zaostření %spřed spuštěním"
+msgstr "AutoOtření %spřed spuštěním"
 
 #: u_translation.rsautofocuscan
 #, object-pascal-format
 msgid "Autofocus cannot find a star!%sPlease adjust your parameters"
-msgstr "Automatické zaostření nemůže najít hvězdu!%sUpravte parametry"
+msgstr "AutoOstření nemůže najít hvězdu!%sUpravte parametry"
 
 #: u_translation.rsautofocuscan2
 msgid "Autofocus canceled because no star was selected."
-msgstr "Automatické zaostření zrušeno, protože nebyla vybrána žádná hvězda."
+msgstr "AutoOstření bylo zrušeno, protože nebyla vybrána žádná hvězda."
 
 #: u_translation.rsautofocuscan3
 msgid "Autofocus canceled because no star was found."
-msgstr "Automatické ostření zrušeno, protože nebyla nalezena žádná hvězda."
+msgstr "AutoOstření bylo zrušeno, protože nebyla nalezena žádná hvězda."
 
 #: u_translation.rsautofocuscan4
 msgid "Autofocus canceled because the HFD cannot be measured"
-msgstr "Automatické zaostření zrušeno, protože HFD nelze měřit"
+msgstr "AutoOstření zrušeno, protože nelze měřit HFD"
 
 #: u_translation.rsautofocuscan5
 #, object-pascal-format
 msgid "Autofocus canceled because of low SNR, POS=%s HFD=%s PEAK:%s SNR:%s"
 msgstr ""
-"Automatické zaostření zrušeno kvůli nízké SNR, POZ =%s HFD =%s VRCH: %s SNR: \"r\n"
+"AutoOstření zrušeno kvůli nízké SNR, POZ =%s HFD =%s VRCH: %s SNR: \"r\n"
 "\"%s"
 
 #: u_translation.rsautofocusdue
 msgid "Autofocus due in"
-msgstr "Automatické ostření bude opět provedeno za"
+msgstr "AutoOstření bude opět provedeno za"
 
 #: u_translation.rsautofocuserr
 msgid "AutoFocus error"
-msgstr "Chyba automatického zaostření"
+msgstr "Chyba AutoOstření"
 
 #: u_translation.rsautofocuserr2
 msgid "Autofocus error"
-msgstr "Chyba Automatického zaostřování"
+msgstr "Chyba AutoOstření"
 
 #: u_translation.rsautofocuseve
 #, object-pascal-format
 msgid "Autofocus%severy"
-msgstr "Automatické zaostřování%svždy"
+msgstr "AutoOstření%svždy"
 
 #: u_translation.rsautofocusfai
 msgid "Autofocus failed!"
-msgstr "Automatické ostření selhalo!"
+msgstr "AutoOstření selhalo!"
 
 #: u_translation.rsautofocusfai2
 msgid "Autofocus failed, try with another star..."
-msgstr "Automatické zaostřování selhalo, zkuste to s jinou hvězdou..."
+msgstr "AutoOstřování selhalo, zkuste to s jinou hvězdou..."
 
 #: u_translation.rsautofocusfai3
 #, object-pascal-format
 msgid "Autofocus failed after %s retries, continue without focusing."
-msgstr "Automatické zaostření po %s opakovaných pokusech selhalo, pokračujte bez zaostření."
+msgstr "AutoOstření po %s pokusů selhalo, pokračujte bez zaostření."
 
 #: u_translation.rsautofocusfin
 #, object-pascal-format
 msgid "Autofocus finished, POS=%s HFD=%s PEAK:%s SNR:%s TEMP:%s"
-msgstr "Automatické zaostření dokončeno, POZ =%s HFD =%s VRCH:%s SNR:%s TEPL:%s"
+msgstr "AutoOstření dokončeno, POZ =%s HFD =%s VRCH:%s SNR:%s TEPL:%s"
 
 #: u_translation.rsautofocusfin2
 #, object-pascal-format
 msgid "Autofocus final HFD is higher than %s"
-msgstr "Automatického zaostření HFD je vyšší než %s"
+msgstr "Konečná hodnota HFD AutoOstření je vyšší než %s"
 
 #: u_translation.rsautofocusfoc
 #, object-pascal-format
 msgid "Autofocus focus in by %s"
-msgstr "Pohyb automatického zaostření směrem ven o %s"
+msgstr "AutoOstření pohyb dovnitř o %s"
 
 #: u_translation.rsautofocusfoc2
 #, object-pascal-format
 msgid "Autofocus focus out by %s"
-msgstr "Pohyb automatického zaostření směrem dovnitř o %s"
+msgstr "AutoOstření pohyb ven o %s"
 
 #: u_translation.rsautofocusgra
 msgid "Autofocus graph"
-msgstr "Graf automatického zaostření"
+msgstr "Graf AutoOstření"
 
 #: u_translation.rsautofocusloc
 msgid "Autofocus location"
-msgstr "Umístění auto-ostření"
+msgstr "Poloha AutoOstření"
 
 #: u_translation.rsautofocusmea
 #, object-pascal-format
 msgid "Autofocus mean frame %s/%s, hfd=%s peak:%s snr:%s"
-msgstr "Průměrný snímek automatického ostření %s/%s, hfd=%s špič:%s snr:%s"
+msgstr "Průměrný snímek AutoOstření %s/%s, hfd=%s špič:%s snr:%s"
 
 #: u_translation.rsautofocusmea2
 #, object-pascal-format
 msgid "Autofocus measurement %s : HFD=%s position=%s"
-msgstr "Automatické Měření ostření %s : HFD =%s pozice =%s"
+msgstr "Měření AutoOstření %s : HFD=%s pozice=%s"
 
 #: u_translation.rsautofocusmet
 msgid "Autofocus method"
-msgstr "Metoda automatického zaostřování"
+msgstr "Metoda AutoOstření"
 
 #: u_translation.rsautofocusmov
 #, object-pascal-format
 msgid "Autofocus move to start position %s"
-msgstr "Automatické zaostření přesunout do výchozí pozice %s"
+msgstr "Přesunutí AutoOstření na počáteční pozici %s"
 
 #: u_translation.rsautofocusmov2
-#, object-pascal-format, fuzzy, badformat
+#, object-pascal-format
 msgid "Autofocus move to near focus %s"
-msgstr "Automatické zaostření přesunout na nejbližší ostřící bod %​​s"
+msgstr "Přesun AutoOstření na nejbližší zaostření %s"
 
 #: u_translation.rsautofocusmov3
 #, object-pascal-format
 msgid "Autofocus move to focus position %s"
-msgstr "Automatické zaostření přesunout do zaostřovacího bodu %s"
+msgstr "Přesunutí AutoOstření do polohy zaostření %s"
 
 #: u_translation.rsautofocusnow
 msgid "Autofocus now"
-msgstr "Automatické zaostření"
+msgstr "AutoOstření Nyní"
 
 #: u_translation.rsautofocusrun
 #, object-pascal-format
 msgid "Autofocus running, hfd=%s peak:%s snr:%s"
-msgstr "Automatické zaostření spuštěno, hfd =%s špič:%s snr:%s"
+msgstr "AutoOstření spuštěno, hfd =%s špič:%s snr:%s"
 
 #: u_translation.rsautofocussta
 #, object-pascal-format
 msgid "AutoFocus started, initial position: %s"
-msgstr "Automatické zaostření zahájeno, počáteční pozice: %s"
+msgstr "AutoOstření zahájeno, počáteční pozice: %s"
 
 #: u_translation.rsautofocussta2
 msgid "AutoFocus started"
-msgstr "Automatické zaostření zahájeno"
+msgstr "AutoOstření zahájeno"
 
 #: u_translation.rsautofocussta3
 msgid "Autofocus start Vcurve"
-msgstr "Spuštěno Automatické zaostření Vkřivky"
+msgstr "Spuštěno AutoOstření Vkřivky"
 
 #: u_translation.rsautofocussta4
 msgid "Autofocus start Dynamic curve"
-msgstr "Spuštěno Automatické ostření Dynamické křivky"
+msgstr "Spuštěno AutoOstření Dynamické křivky"
 
 #: u_translation.rsautofocussta5
 msgid "Autofocus start Iterative focus"
-msgstr "Spuštěno Automatické zaostření Interační ostření"
+msgstr "Spuštěno AutoOstření Iterační ostření"
 
 #: u_translation.rsautofocussta6
 msgid "Autofocus start Planet focus"
-msgstr "Zahájení automatického ostření Planetární ostření"
+msgstr "Zahájení AutoOstření Planetární ostření"
 
 #: u_translation.rsautofocussuc
 msgid "AutoFocus successful"
-msgstr "Automatické zaostření úspěšné"
+msgstr "AutoOstření úspěšné"
 
 #: u_translation.rsautofocustol
 msgid "Autofocus tolerance "
@@ -444,11 +448,11 @@ msgstr "Auto pointace spuštěna"
 #: u_translation.rsautoguiderwa
 #, object-pascal-format
 msgid "Autoguider was still not guiding after %s minutes."
-msgstr "Automatická pointace po %s minutách stále nenavádí."
+msgstr "Autopointaci se po %s minut stále nepodařilo spustit."
 
 #: u_translation.rsautoguiding
 msgid "Auto-guiding"
-msgstr "Automatická pointace"
+msgstr "Auto-pointace"
 
 #: u_translation.rsautoguidingr
 msgid "Autoguiding restarted."
@@ -457,7 +461,7 @@ msgstr "Automatická pointace restartuje."
 #: u_translation.rsautoguidings
 #, object-pascal-format
 msgid "Autoguiding stopped for %s minutes, sequence timeout in %s minutes."
-msgstr "Automatická pointace zastavena na %s minut, časový limit sekvence %s minutách."
+msgstr "Autopointace byla zastavena po %s minutách, časový limit sekvence je %s minut."
 
 #: u_translation.rsautomatic
 msgid "Automatic"
@@ -465,7 +469,7 @@ msgstr "Automaticky"
 
 #: u_translation.rsautomaticall
 msgid "Automatically slave \"Dome Park\" to \"Mount Park\""
-msgstr "Automaticky propojit \"Kopule Park\" na \"Montáž park\""
+msgstr "Automaticky propojit \"Parkovat Kopuli\" na \"Parkovat Montáž\"."
 
 #: u_translation.rsautomaticall2
 msgid "Automatically run auto-focus every"
@@ -477,7 +481,7 @@ msgstr "Automatické chlazení "
 
 #: u_translation.rsautomaticfla
 msgid "Automatic flat exposure is required for the twilight flat."
-msgstr "Pro soumrakový flat snímek je nutná automatická expozice."
+msgstr "Pro soumrakový flat je nutná automatická expozice."
 
 #: u_translation.rsautomaticfli
 msgid "Automatic flip"
@@ -485,7 +489,7 @@ msgstr "Automatické překlopení"
 
 #: u_translation.rsautomatichfd
 msgid "Automatic HFD measurement for every sequence capture"
-msgstr "Automatické měření HFD pro každé snímání v sekvenci"
+msgstr "Automatické měření HFD během sekvenčního snímání"
 
 #: u_translation.rsavailable
 msgid "available"
@@ -501,7 +505,7 @@ msgstr "Azimut"
 
 #: u_translation.rsazimuthorigi
 msgid "Azimuth origin"
-msgstr "Počátek azimutu"
+msgstr "Výchozí azimut"
 
 #: u_translation.rsback
 msgid "Back"
@@ -521,7 +525,7 @@ msgstr "Kalibrace zpětné vůle"
 
 #: u_translation.rsbacklashcomp
 msgid "Backlash compensation"
-msgstr "Kompenzace vůle"
+msgstr "Kompenzace zpětné vůle"
 
 #: u_translation.rsbad
 msgid "Bad"
@@ -530,7 +534,7 @@ msgstr "Špatný"
 #: u_translation.rsbadpixeldete
 #, object-pascal-format
 msgid "Bad pixel detection found %s hot pixels."
-msgstr "Byla nalezena chybná detekce %s horkých pixelů."
+msgstr "Detekce chybných pixelů nalezla %s horkých pixelů."
 
 #: u_translation.rsbadpixelmap
 msgid "Bad pixel map"
@@ -538,11 +542,11 @@ msgstr "Mapa chybných pixelů"
 
 #: u_translation.rsbadpixelmapc
 msgid "Bad pixel map cleared."
-msgstr "Mapa chybných pixelů vymazána."
+msgstr "Mapa chybových pixelů vymazána."
 
 #: u_translation.rsbadpixelsdet
 msgid "Bad pixels detection"
-msgstr "Zjištěny chybné pixely"
+msgstr "Detekce chybných pixelů"
 
 #: u_translation.rsbadpixelthre
 msgid "Bad pixel threshold"
@@ -558,12 +562,12 @@ msgstr "Pozor na nastavení zeměpisné délky  observatoře Východ/Západ."
 
 #: u_translation.rsbeforetouset
 msgid "Before to use this tool you must connect the camera, the mount and the planetarium"
-msgstr "Před použitím tohoto nástroje připojit kameru, montáž a planetárium"
+msgstr "Před použitím tohoto nástroje je nutné připojit kameru, montáž a planetárium"
 
 #: u_translation.rsbeforeyoucan
 #, object-pascal-format
 msgid "Before you can use this option the Elbrus program must be calibrated for your images. Then select File / E-Wait for message.%sAlso be sure to set the parameter: \"Add the WCS in the FITS header\"."
-msgstr "Před použitím této možnosti musí být program Elbrus kalibrován pro vaše snímky. Poté vyberte Soubor / E-Čekat na zprávu.%sVyberte také parametr: \"Přidejte záhlaví WCS do záhlaví FITS\"."
+msgstr "Před použitím této možnosti musí být program Elbrus kalibrován pro vaše snímky. Poté vyberte Soubor / E-Čekat na zprávu.%sVyberte také parametr: \"Přidat WCS do hlavičky FITS\"."
 
 #: u_translation.rsbegin
 msgid "Begin"
@@ -607,11 +611,11 @@ msgstr "Kalibrovat"
 
 #: u_translation.rscalibrateaut
 msgid "Calibrate autoguider after meridian flip"
-msgstr "Kalibrovat automatickou pointaci po překlopení poledníku"
+msgstr "Kalibrovat autopointaci po překlopení poledníku"
 
 #: u_translation.rscalibrated
 msgid "Calibrated"
-msgstr "Kalibrováno"
+msgstr "Kalibrace"
 
 #: u_translation.rscalibration
 msgid "Calibration"
@@ -628,7 +632,7 @@ msgstr "Kalibrace %szpoždění"
 
 #: u_translation.rscalibrationm
 msgid "Calibration measurement"
-msgstr ""
+msgstr "Měření kalibrace"
 
 #: u_translation.rscalibrationr
 msgid "Calibration results:"
@@ -644,7 +648,7 @@ msgstr "Volat externí příkaz"
 
 #: u_translation.rscam
 msgid "Cam."
-msgstr "Kam."
+msgstr "Kamera"
 
 #: u_translation.rscamera
 msgid "Camera"
@@ -670,12 +674,12 @@ msgstr "Chladič kamery %s"
 #: u_translation.rscameraframex
 #, object-pascal-format
 msgid "Camera frame x=%s y=%s width=%s height=%s"
-msgstr "Rámec kamery x =%s y =%s šířka=%s výška =%s"
+msgstr "Rám kamery x =%s y =%s šířka=%s výška =%s"
 
 #: u_translation.rscameranotcoo
 #, object-pascal-format
 msgid "Camera not cooling, set temperature to %s"
-msgstr "Kamera není vychlazená, nastavit teplotu na %s"
+msgstr "Kamera se nechladí, nastavte teplotu na %s"
 
 #: u_translation.rscameraorfocu
 msgid "Camera or focuser are not connected"
@@ -720,7 +724,7 @@ msgstr "Nelze spočítat čas průchodu poledníkem"
 #: u_translation.rscannotconnec
 #, object-pascal-format
 msgid "Cannot connect to autoguider, sequence will run without guiding! %sDo you want to continue anyway?"
-msgstr "Nelze připojit autopointaci, sekvence se spustí bez pointace! %sChcete přesto pokračovat?"
+msgstr "Nelze se připojit k autopointaci, sekvence se spustí bez pointace! %sChcete přesto pokračovat?"
 
 #: u_translation.rscannotdelete
 msgid "Cannot delete the running sequence!"
@@ -749,20 +753,20 @@ msgstr "Ostřící hvězda nenalezena."
 #: u_translation.rscannotfindap
 #, object-pascal-format
 msgid "Cannot find approximate coordinates for this image.%sThe astrometry resolution may take a very long time."
-msgstr "Nelze najít přibližné souřadnice tohoto snímku.%sVýpočet astrometrie může trvat dlouho."
+msgstr "Nelze najít přibližné souřadnice tohoto snímku. %sAstrometrické řešení může trvat velmi dlouho."
 
 #: u_translation.rscannotfindas
 msgid "Cannot find a star at his position. Move to a bright star or increase the preview exposure time, or the autofocus binning."
-msgstr "Hvězda nebyla ve své poloze nalezena. Přejeďte k jasnější hvězdě, zvyšte rychlost expozice nebo binning zaostřování."
+msgstr "Na daném místě nelze najít hvězdu. Přesuňte se na jasnou hvězdu nebo prodlužte expoziční dobu náhledu, popř. binning AutoOstření."
 
 #: u_translation.rscannotgetfoc
 msgid "Cannot get focuser absolute position"
-msgstr "Absolutní polohu ostření nelze získat"
+msgstr "Nelze získat absolutní polohu ostřícího zařízení"
 
 #: u_translation.rscannotinterp
 #, object-pascal-format
 msgid "Cannot interpret the text \"%s\" as RA DEC values"
-msgstr ""
+msgstr "Nelze interpretovat text \"%s\" jako hodnoty RA DEC"
 
 #: u_translation.rscannotoverwr
 msgid "Cannot overwrite the running sequence!"
@@ -770,11 +774,11 @@ msgstr "Běžící sekvenci nelze přepsat!"
 
 #: u_translation.rscannotreachn
 msgid "Cannot reach near focus HFD, please increase Half Width or better center the curve."
-msgstr "Nelze dosáhnout zaostření HFD, zvětšete poloviční šířku nebo lépe vycentrujte křivku."
+msgstr "Nelze dosáhnout zaostření v blízkosti HFD, zvětšete poloviční šířku nebo lépe vycentrujte křivku."
 
 #: u_translation.rscannotreachs
 msgid "Cannot reach start focus HFD, please increase Half Width or decrease the start HFD"
-msgstr "Nelze dosáhnout daného počátečního HFD, zvětšit poloviční šířku nebo snížit počáteční HFD"
+msgstr "Nelze dosáhnout počátečního zaostření HFD, zvětšete poloviční šířku nebo zmenšete počáteční HFD"
 
 #: u_translation.rscannotruncal
 msgid "Cannot run calibration now, stop capture and retry"
@@ -790,11 +794,11 @@ msgstr "Nelze vyřešit aktuální snímek."
 
 #: u_translation.rscannotstarta2
 msgid "Cannot start autofocus now, astrometry is running"
-msgstr "Nelze spustit automatické zaostření, pokud astrometrie běží"
+msgstr "Nelze spustit AutoOstření, právě probíhá astrometrie"
 
 #: u_translation.rscannotstarta3
 msgid "Cannot start autofocus now, stop capture and retry"
-msgstr "Nelze spustit automatické zaostření, zastavte snímání a zkuste to znovu"
+msgstr "Nelze spustit AutoOstření, zastavte snímání a zkuste to znovu"
 
 #: u_translation.rscannotstartc
 msgid "Cannot start capture now"
@@ -802,7 +806,7 @@ msgstr "Nelze spustit snímání"
 
 #: u_translation.rscannotstartm
 msgid "Cannot start manual focus now, stop capture and retry"
-msgstr "Ruční zaostření nelze spustit , zastavte snímání a opakujte akci"
+msgstr "Nelze spustit ruční ostření, zastavte snímání a zkuste to znovu"
 
 #: u_translation.rscannotstartp
 msgid "Cannot start preview now"
@@ -810,7 +814,7 @@ msgstr "Náhled nelze spustit"
 
 #: u_translation.rscannotstartp2
 msgid "Cannot start preview loop now"
-msgstr "Nelze spustit náhled cyklu"
+msgstr "Nelze spustit cyklus náhledu"
 
 #: u_translation.rscannotstartw
 msgid "Cannot start when capture is running"
@@ -826,7 +830,7 @@ msgstr "Za soumraku lze přidat pouze jednu sérii a jednu za svítání"
 
 #: u_translation.rscantrackpast
 msgid "Can track past meridian for"
-msgstr "Sledování po překlopení poledníku"
+msgstr "Sledovat poledník po dobu"
 
 #: u_translation.rscapture
 msgid "Capture"
@@ -872,12 +876,12 @@ msgstr "Střed"
 #: u_translation.rscenterabrigh
 #, object-pascal-format
 msgid "Center a bright star. Defocus until the rings are clearly visible. Click the Start button. %s Slowly adjust the position of the star in the image field using the telescope fine movement until all the circles are concentric. %s Then move the star to the image center using the mirror adjustment screws."
-msgstr "Vycentrujte jasnou hvězdu. Rozostřujte, dokud nejsou prsteny jasně viditelné. Klikněte na tlačítko Start. %s Pomocí jemného pohybu dalekohledu pomalu upravujte polohu hvězdy v obrazovém poli, dokud nejsou všechny kruhy soustředné. %s Poté pomocí šroubů pro nastavení zrcadla přesuňte hvězdu do středu obrazu."
+msgstr "Vycentrujte jasnou hvězdu. Rozostřujte, dokud nejsou prsteny jasně viditelné. Klikněte na tlačítko Start. %s Pomalu upravujte polohu hvězdy v poli obrazu pomocí jemného pohybu dalekohledu, dokud nebudou všechny kroužky koncentrické. %s Poté pomocí šroubů pro nastavení zrcadla přesuňte hvězdu do středu obrazu"
 
 #: u_translation.rscenterappare
 #, object-pascal-format
 msgid "Center, apparent coord. RA=%s DEC=%s PA=%s"
-msgstr "Střed, zdánlivá souřadnice. RA=%s DEC=%s PA=%s"
+msgstr "Střed, zdánlivé souřadnice. RA=%s DEC=%s PA=%s"
 
 #: u_translation.rscenterdec
 msgid "Center Dec"
@@ -950,7 +954,7 @@ msgstr "Klepnutím na tlačítko Další uložte tyto hodnoty do konfigurace toh
 
 #: u_translation.rsclickonimage
 msgid "Click on image to set"
-msgstr "Kliknutím na obrázek nastavte"
+msgstr "Kliknutím na snímek nastavíte"
 
 #: u_translation.rsclicktheobje
 msgid "Click the object in planetarium"
@@ -1084,7 +1088,7 @@ msgstr "Kontrolní expozice"
 
 #: u_translation.rscooldownwhen
 msgid "Cool down when camera is connected"
-msgstr "Po připojení kamery vychladit na"
+msgstr "Chladit po připojení kamery"
 
 #: u_translation.rscooler
 msgid "Cooler"
@@ -1185,7 +1189,7 @@ msgstr "Vlastní záhlaví"
 
 #: u_translation.rscustompositi
 msgid "Custom position"
-msgstr "Uživatelem určená pozice"
+msgstr "Uživatelská pozice"
 
 #: u_translation.rscygwinpath
 msgid "Cygwin path"
@@ -1206,7 +1210,7 @@ msgstr "Dark snímek"
 #: u_translation.rsdarknight
 #, object-pascal-format
 msgid "Dark%snight"
-msgstr "Temná%snoc"
+msgstr "Tmavá%snoc"
 
 #: u_translation.rsdateobsfromc
 msgid "DATE-OBS from camera driver"
@@ -1231,6 +1235,10 @@ msgstr "Debayer"
 #: u_translation.rsdec
 msgid "Dec"
 msgstr "Dec"
+
+#: u_translation.rsdeclinationb
+msgid "Declination backlash"
+msgstr ""
 
 #: u_translation.rsdefault
 msgid "Default"
@@ -1314,7 +1322,7 @@ msgstr "Zařízení"
 
 #: u_translation.rsdevicesconne
 msgid "Devices connection"
-msgstr "Připojení zařízení"
+msgstr "Připojení k zařízení"
 
 #: u_translation.rsdevicessetup
 #, object-pascal-format
@@ -1361,7 +1369,7 @@ msgstr "Chyba odpojení: %s"
 
 #: u_translation.rsdisconnectth
 msgid "Disconnect the camera before to change the configuration."
-msgstr "Před změnou konfigurace odpojit kameru."
+msgstr "Před změnou konfigurace odpojte kameru."
 
 #: u_translation.rsdiscover
 msgid "Discover"
@@ -1382,7 +1390,7 @@ msgstr "Zobrazit"
 
 #: u_translation.rsdisplayspeed
 msgid "Display speed"
-msgstr "Rychlost zobrazení"
+msgstr "Rychlost zobrazování"
 
 #: u_translation.rsdistancetota
 #, object-pascal-format
@@ -1391,16 +1399,16 @@ msgstr "Vzdálenost k cíli: %s arcmin"
 
 #: u_translation.rsdither
 msgid "Dither"
-msgstr "Dithering"
+msgstr "Dither"
 
 #: u_translation.rsditherevery
 msgid "Dither every"
-msgstr "Dithering po"
+msgstr "Dither každý"
 
 #: u_translation.rsditherevery2
 #, object-pascal-format
 msgid "Dither%severy"
-msgstr "Dithering%spokaždé"
+msgstr "Dither%skaždý"
 
 #: u_translation.rsdithering
 msgid "Dithering"
@@ -1408,11 +1416,11 @@ msgstr "Dithering"
 
 #: u_translation.rsditheronly
 msgid "Dither only"
-msgstr "Jen Dithering"
+msgstr "Pouze Dither"
 
 #: u_translation.rsditherwhiled
 msgid "Dither while downloading from the camera"
-msgstr "Dithering při stahování z kamery"
+msgstr "Dither během stahování z kamery"
 
 #: u_translation.rsdome
 msgid "Dome"
@@ -1471,7 +1479,7 @@ msgstr "Nečekat%s"
 #: u_translation.rsdosimpleslew
 #, object-pascal-format
 msgid "Do simple slew to %s/%s"
-msgstr "Použijte jednoduchý přejezd na %s/%s"
+msgstr "Proveďte jednoduchý přejezd na %s/%s"
 
 #: u_translation.rsdownloading
 msgid "Downloading"
@@ -1483,7 +1491,7 @@ msgstr "Stáhnout nejnovější verzi"
 
 #: u_translation.rsdownsample
 msgid "Downsample"
-msgstr "Vzorek dolů"
+msgstr "Zmenšení vzorku"
 
 #: u_translation.rsdoyouwanttoc
 msgid "Do you want to cancel the polar alignment?"
@@ -1544,11 +1552,11 @@ msgstr "Upravit seznam cílů"
 
 #: u_translation.rselbrusimages
 msgid "Elbrus Images folder "
-msgstr "Složka Elbrus Obrázků "
+msgstr "Složka Elbrus Snímky "
 
 #: u_translation.rselevation
 msgid "Elevation"
-msgstr "Výška"
+msgstr "Nadmořská výška"
 
 #: u_translation.rsemailconfigu
 msgid "Email configuration"
@@ -1584,7 +1592,7 @@ msgstr "Čas ukončení"
 
 #: u_translation.rsenterthej200
 msgid "Enter the J2000 coordinates of the target where the main instrument is currently pointing."
-msgstr ""
+msgstr "Zadejte souřadnice J2000 cíle, na který právě míří hlavní přístroj."
 
 #: u_translation.rserror
 #, object-pascal-format
@@ -1620,7 +1628,7 @@ msgstr "Při spuštění příkazu došlo k chybě: %s"
 
 #: u_translation.rserrorunknown
 msgid "Error: Unknown finder focal length, set in PREFERENCE, SLEWING."
-msgstr "Chyba: Neznámá ohnisková vzdálenost hledáčku, nastaveno v položce PŘEDVOLBA, PŘEJÍŽDĚNÍ."
+msgstr "Chyba: Neznámá ohnisková vzdálenost hledáčku, nastavte v položce PŘEDVOLBY, PŘEJÍŽDĚNÍ."
 
 #: u_translation.rserrorunknowt
 msgid "Error: Unknown telescope focal length, set in telescope driver or in PREFERENCE, ASTROMETRY."
@@ -1633,7 +1641,7 @@ msgstr "Při aktualizaci sekvence došlo k chybě:%s"
 
 #: u_translation.rsestimatedsli
 msgid "Estimated slippage since last learning"
-msgstr "Odhadovaný skluz od posledního učení"
+msgstr "Odhad skluzu od posledního učení"
 
 #: u_translation.rsexecutingthe
 msgid "Executing the termination error actions."
@@ -1665,7 +1673,7 @@ msgstr "Expozice přerušena!"
 
 #: u_translation.rsexposurefact
 msgid "Exposure factor"
-msgstr "Faktor expozice"
+msgstr "Expoziční faktor"
 
 #: u_translation.rsexposurefail
 msgid "Exposure fail!"
@@ -1691,7 +1699,7 @@ msgstr "Expoziční čas [sekundy]"
 #: u_translation.rsexposuretime4
 #, object-pascal-format
 msgid "Exposure time too short for measurement, need %d seconds."
-msgstr "Doba expozice příliš krátká pro měření, potřebují %d sekund."
+msgstr "Doba expozice je příliš krátká na měření, nutná doba je %d sekund."
 
 #: u_translation.rsfahrenheit
 msgid "Fahrenheit"
@@ -1720,7 +1728,7 @@ msgstr "Vypnuto"
 
 #: u_translation.rsfil
 msgid "Fil."
-msgstr "Filtr. k."
+msgstr "Filtr. kolo"
 
 #: u_translation.rsfile
 msgid "File"
@@ -1757,7 +1765,7 @@ msgstr "Název filtru"
 
 #: u_translation.rsfilteroffset
 msgid "Filter offset"
-msgstr "Posun filtru"
+msgstr "Offset filtru"
 
 #: u_translation.rsfilters
 msgid "Filters"
@@ -1777,7 +1785,7 @@ msgstr "Najít"
 
 #: u_translation.rsfindercamera
 msgid "Finder camera"
-msgstr "Hledáček kamery"
+msgstr "Vyhledávací kamera"
 
 #: u_translation.rsfit
 msgid "Fit"
@@ -1838,7 +1846,7 @@ msgstr "Otočit snímek svisle"
 
 #: u_translation.rsfloatingpoin
 msgid "Floating point file"
-msgstr "Soubor s plovoucí desetinnou čárkou"
+msgstr "Soubor s plovoucí čárkou"
 
 #: u_translation.rsflux
 msgid "Flux"
@@ -1850,7 +1858,7 @@ msgstr "Ostř."
 
 #: u_translation.rsfocalelength
 msgid "Focal length"
-msgstr "Ohnisko přístroje"
+msgstr "Ohnisková vzdálenost"
 
 #: u_translation.rsfocus
 msgid "Focus"
@@ -1894,11 +1902,11 @@ msgstr "Kalibrace zaostření zahájena, počkejte..."
 
 #: u_translation.rsfocusercalib4
 msgid "Focuser calibration completed, click Next to see the result."
-msgstr "Kalibrace zaostření dokončena, výsledek zobrazíte kliknutím na tlačítko Další."
+msgstr "Kalibrace zaostřování dokončena, klikněte na tlačítko Další a zobrazte výsledek."
 
 #: u_translation.rsfocusercorre
 msgid "Focuser correction"
-msgstr "Oprava zaostření"
+msgstr "Korekce ostření"
 
 #: u_translation.rsfocusermoveb
 #, object-pascal-format, fuzzy, badformat
@@ -1912,12 +1920,12 @@ msgstr "Ostření přesunuto na %s"
 
 #: u_translation.rsfocuseroffse
 msgid "Focuser offset"
-msgstr "Předsazení zaostřovače"
+msgstr "Offset ostření"
 
 #: u_translation.rsfocuserslipp
 #, object-pascal-format
 msgid "Focuser slippage offset set to %s"
-msgstr "Posunutí skluzu zaostřovače je nastaveno na %s"
+msgstr "Offset skluzu ostření je nastaven na %s"
 
 #: u_translation.rsfocusertempe
 #, object-pascal-format
@@ -1927,11 +1935,11 @@ msgstr "Teplota zaostřovače: %s"
 #: u_translation.rsfocusertempe2
 #, object-pascal-format
 msgid "Focuser temperature: %s , adjust position by %s"
-msgstr "Teplota zaostřovače: %s, korekce pohybu o %s"
+msgstr "Teplota ostřícího zařízení: %s , nastavit polohu o %s"
 
 #: u_translation.rsfocusertempe3
 msgid "Focuser temperature compensation"
-msgstr "Kompenzace teploty zaostření"
+msgstr "Kompenzace teploty ostřiče"
 
 #: u_translation.rsfocusevery
 msgid "Focus every"
@@ -1939,7 +1947,7 @@ msgstr "Ostření po"
 
 #: u_translation.rsfocuspositio
 msgid "Focus position"
-msgstr "Zaostřovací pozice"
+msgstr "Pozice zaostření"
 
 #: u_translation.rsfocusquality
 #, object-pascal-format
@@ -1948,11 +1956,11 @@ msgstr "Kvalita zaostření = %s"
 
 #: u_translation.rsfocusstarsel
 msgid "Focus star selection"
-msgstr "Výběr ostřovací hvězdy"
+msgstr "Výběr ostřící hvězdy"
 
 #: u_translation.rsfocuswindows
 msgid "Focus window size"
-msgstr "Velikost zaostřovacího okna"
+msgstr "Velikost okna pro zaostření"
 
 #: u_translation.rsfoldernameop
 msgid "Folder name options"
@@ -1960,11 +1968,11 @@ msgstr "Možnosti názvu složky"
 
 #: u_translation.rsforguidancea
 msgid "For guidance adjust the azimuth knob along the blue line and the altitude knob along the red line"
-msgstr "Pro pointaci nastavte ovládání azimutu podél modré čáry a ovladač výšky podél červené čáry"
+msgstr "Pro pointaci upravte ovládání azimutu po modré lince a ovládání výšky po červené lince"
 
 #: u_translation.rsforreflector
 msgid "For reflector collimation."
-msgstr "Pro kolimaci reflektoru."
+msgstr "Pro kolimaci zrcadla."
 
 #: u_translation.rsfounddevices
 #, object-pascal-format
@@ -2007,7 +2015,7 @@ msgstr "Z ovladače kamery"
 
 #: u_translation.rsfromcolorima
 msgid "From color image"
-msgstr "Z barevného obrázku"
+msgstr "Z barevného snímku"
 
 #: u_translation.rsfromemailadd
 msgid "From email address"
@@ -2015,7 +2023,7 @@ msgstr "Z e-mailové adresy"
 
 #: u_translation.rsfromimage
 msgid "From image"
-msgstr "Z obrázku"
+msgstr "Ze snímku"
 
 #: u_translation.rsfromplanetar
 msgid "From planetarium"
@@ -2023,7 +2031,7 @@ msgstr "Z planetária"
 
 #: u_translation.rsfromplatesol
 msgid "From plate solving"
-msgstr "Z platesolvingu"
+msgstr "Z astrometrie"
 
 #: u_translation.rsfromtelescop
 msgid "From telescope driver"
@@ -2032,7 +2040,7 @@ msgstr "Z ovladače dalekohledu"
 #: u_translation.rsfromtoby
 #, object-pascal-format
 msgid "From: %s to %s by %s"
-msgstr "Od: %s do %s podle %s"
+msgstr "Od: %s do %s od %s"
 
 #: u_translation.rsfstop
 msgid "F-stop"
@@ -2056,7 +2064,7 @@ msgstr "Získat"
 
 #: u_translation.rsgetcurrent
 msgid "Get current"
-msgstr "Získejte aktuální informace"
+msgstr "Zjistit aktuální"
 
 #: u_translation.rsgetcurrentpo
 msgid "Get current position from current target"
@@ -2072,16 +2080,16 @@ msgstr "Získat aktuální polohu z dalekohledu"
 
 #: u_translation.rsgetsitelongl
 msgid "Get site long/lat from the mount"
-msgstr "Získání délky/šířky místa z montáže"
+msgstr "Získat zeměpisnou délku/šířku místa z montáže"
 
 #: u_translation.rsglobalaction
 msgid "Global actions when a sequence is running"
-msgstr "Globální akce při provádění sekvence"
+msgstr "Globální kroky při spuštěné sekvence"
 
 #: u_translation.rsglobalfocuse
 #, object-pascal-format
 msgid "Global focuser parameters.%sSet the focuser direction IN or OUT to the one that give the best result for your setup. If you plan to use temperature compensation, set the direction it need to move when the temperature drop during the night."
-msgstr "Obecné možnosti zaostření.%sNastavit směr ostření na Ven nebo Dovnitř na ten, který dává nejlepší výsledek pro vaše zařízení. Pokud plánujete použít teplotní kompenzaci, nastavte směr, kterým by se mělo postupovat, když teplota v noci klesne."
+msgstr "Globální parametry zaostřovače.%sNastavte směr zaostřování VEN nebo DOVnitř na ten, který poskytuje nejlepší výsledek pro vaše nastavení. Pokud plánujete používat teplotní kompenzaci, nastavte směr, kterým se má pohybovat při poklesu teploty během noci."
 
 #: u_translation.rsglobalrepeat
 msgid "Global repeat:"
@@ -2121,7 +2129,7 @@ msgstr "Pointační kamera"
 
 #: u_translation.rsguideoffset
 msgid "Guide offset"
-msgstr "Pointační offset"
+msgstr "Naváděcí offset"
 
 #: u_translation.rsguidepositio
 msgid "Guide position on the slit"
@@ -2150,15 +2158,15 @@ msgstr "%s pointace"
 
 #: u_translation.rsguidingdrift
 msgid "Guiding drift control"
-msgstr "Řízení pointačního posunu"
+msgstr "Řízení naváděcího posunu"
 
 #: u_translation.rshalt
 msgid "Halt"
-msgstr "Stop"
+msgstr "Zastavit"
 
 #: u_translation.rshandpad
 msgid "Handpad"
-msgstr "Handpad"
+msgstr "Ovládání"
 
 #: u_translation.rsheartbeatthr
 msgid "Heart beat threshold [minutes]"
@@ -2199,7 +2207,7 @@ msgstr "Vlhkost vzduchu"
 #: u_translation.rshyperbolacur
 #, object-pascal-format
 msgid "HYPERBOLA curve fitting focus at %s,  remaining curve fit error %s,  iteration cycles %s"
-msgstr "Zaostření křivky HYPERBOLA %s, zbývající chyba přizpůsobení křivky %s, iterační cykly %s"
+msgstr "Zaostření křivky HYPERBOLA %s, zbývající chyba přizpůsobení křivky %s, počet cyklů iterace %s"
 
 #: u_translation.rshysteresis
 msgid "Hysteresis"
@@ -2215,11 +2223,11 @@ msgstr "Pokud je vidět jasná hvězda, klikněte na DALŠÍ."
 
 #: u_translation.rsifnobrightst
 msgid "If no bright star is visible click MOVE."
-msgstr "Pokud není vidět žádná jasná hvězda, klikněte na POKRAČOVAT."
+msgstr "Pokud není vidět žádná jasná hvězda, klikněte na PŘESUNOUT."
 
 #: u_translation.rsifyourfocuse
 msgid "If your focuser driver do not offer this option, set here the number of steps necessary to clean the backlash when the direction change. This not need to be a precise value, it is better to set it higher than the actual backlash."
-msgstr "Pokud ovladač zaostřovače tuto možnost nenabízí, nastavte zde počet kroků potřebných k vyčištění vůle při změně směru. Nemusí to být přesná hodnota, je lepší ji nastavit vyšší než skutečná zpětná vůle."
+msgstr "Pokud váš ovladač zaostřovacího zařízení tuto možnost nenabízí, nastavte zde počet kroků potřebných k odstranění zpětné vůle při změně směru. Nemusí to být přesná hodnota, je lepší ji nastavit vyšší než skutečnou zpětnou vůli."
 
 #: u_translation.rsignoreweathe
 #, object-pascal-format
@@ -2232,11 +2240,11 @@ msgstr "Snímek"
 
 #: u_translation.rsimagecenter
 msgid "Image center"
-msgstr ""
+msgstr "Střed snímku"
 
 #: u_translation.rsimagecleanup
 msgid "Image cleanup"
-msgstr "Vyčistit snímek"
+msgstr "Vyčistění snímku"
 
 #: u_translation.rsimagecursor
 msgid "Image cursor"
@@ -2244,11 +2252,11 @@ msgstr "Obrazový kurzor"
 
 #: u_translation.rsimagedebayer
 msgid "Image Debayered"
-msgstr "Obraz Debayered"
+msgstr "Snímek Debayered"
 
 #: u_translation.rsimageinspect
 msgid "Image inspection"
-msgstr "Kontrola snímku"
+msgstr "Inspekční kontrola snímků"
 
 #: u_translation.rsimagemedianh
 #, object-pascal-format
@@ -2257,7 +2265,7 @@ msgstr "Medián obrazu hfd=%s"
 
 #: u_translation.rsimages
 msgid "images"
-msgstr "obrázky"
+msgstr "images"
 
 #: u_translation.rsimagescale
 msgid "Image scale"
@@ -2265,7 +2273,7 @@ msgstr "Měřítko snímku"
 
 #: u_translation.rsimagesfolder
 msgid "Images folder Unix path"
-msgstr "Složka Obrázků Unix cesta"
+msgstr "Složka Snímky Unixová cesta"
 
 #: u_translation.rsimagesharpne
 #, object-pascal-format
@@ -2282,7 +2290,7 @@ msgstr "Přenos snímku"
 
 #: u_translation.rsimageundebay
 msgid "Image Un-debayered"
-msgstr "Obrázek Obnoven"
+msgstr "Snímek Obnoven"
 
 #: u_translation.rsimportcdcmos
 msgid "Import mosaic"
@@ -2327,7 +2335,7 @@ msgstr "V montáži"
 
 #: u_translation.rsinplaceautof
 msgid "In place autofocus failed!"
-msgstr "Automatické ostření na místě selhalo!"
+msgstr "AutoOstření na místě selhalo!"
 
 #: u_translation.rsinsertblankr
 msgid "Insert blank row"
@@ -2372,11 +2380,11 @@ msgstr "Typ rozhraní"
 
 #: u_translation.rsinternal
 msgid "Internal"
-msgstr "Vnitřní"
+msgstr "Interní"
 
 #: u_translation.rsinternalguid
 msgid "Internal guider"
-msgstr "Vnitřní pointace"
+msgstr "Interní pointace"
 
 #: u_translation.rsinterval
 msgid "Interval"
@@ -2417,13 +2425,17 @@ msgstr "Neplatné souřadnice objektu!"
 msgid "Invalid or unsupported FITS file %s"
 msgstr "Neplatný nebo nepodporovaný soubor FITS %s"
 
+#: u_translation.rsinversedsola
+msgid "Inversed solar guide control"
+msgstr ""
+
 #: u_translation.rsiterative
 msgid "Iterative"
 msgstr "Iterativní"
 
 #: u_translation.rsitissuggestt
 msgid "It is suggest to slew to focus star when using Vcurve"
-msgstr "Při použití Vkřivky se doporučuje zaostřit na ostřící hvězdu"
+msgstr "Při použití Vkřivky se doporučuje přejet na ostřící hvězdu"
 
 #: u_translation.rsitwillcontin
 msgid "It will continue after the last checkpoint."
@@ -2471,7 +2483,7 @@ msgstr "(omezeno na 1,5 násobek přesnosti otočení)"
 
 #: u_translation.rslimittempera
 msgid "Limit temperature change"
-msgstr "Mezní změna teploty"
+msgstr "Omezení změny teploty"
 
 #: u_translation.rsload
 msgid "Load"
@@ -2491,7 +2503,7 @@ msgstr "Načíst flat soubor"
 
 #: u_translation.rslockoverlay
 msgid "Lock overlay"
-msgstr "Překrytí zámku"
+msgstr "Uzamknout překrytí"
 
 #: u_translation.rslockposition
 msgid "Lock position"
@@ -2503,7 +2515,7 @@ msgstr "Složka protokolu"
 
 #: u_translation.rslongestguide
 msgid "Longest guide pulse"
-msgstr "Nejdelší pointační puls"
+msgstr "Nejdelší vodící puls"
 
 #: u_translation.rslongitude
 msgid "Longitude"
@@ -2536,7 +2548,7 @@ msgstr "Hlavní kamera"
 #: u_translation.rsmainimagecen
 #, object-pascal-format
 msgid "Main image center is at finder image X=%s, Y=%s"
-msgstr "Střed hlavního snímku je v hledáčku X=%s, Y=%s"
+msgstr "Střed snímku je v náhledovém snímku X=%s, Y=%s"
 
 #: u_translation.rsmainsensor
 msgid "Main sensor"
@@ -2545,7 +2557,7 @@ msgstr "Hlavní senzor"
 #: u_translation.rsmakeafirstpo
 #, object-pascal-format
 msgid "Adjust the mount RA axis manually to point to the pole the best as possible.%sSlew the telescope to point near the pole at a declination about 89 to 90 degrees with counterweight down.%sSelect below if the telescope can already slew automatically or if it must be moved manually.%sIf automatic, select the direction and movement step. Beware it will move two time this amount."
-msgstr "Osu RA montáže nastavte ručně tak, aby co nejpřesněji směřovala k pólu.%sPřeložte dalekohled tak, aby směřoval do blízkosti pólu při deklinaci asi 89 až 90 stupňů se spuštěným protizávažím dolů.%sVyberte z nabídky, jak se dalekohled bude otáčet, automaticky nebo ručně.%sPři automatickém otáčení vyberte směr a krok pohybu. Pozor, otočí se dvakrát o zadanou hodnotu."
+msgstr "Ručně nastavte osu RA montáže tak, aby co nejlépe mířila k pólu.%sPřeložte dalekohled tak, aby mířil do blízkosti pólu při deklinaci asi 89 až 90 stupňů dolů s protizávažím.%sNíže vyberte, zda se dalekohled již může přeložit automaticky, nebo zda se musí přeložit ručně.%sJestliže automaticky, vyberte směr a krok pohybu. Pozor, bude se pohybovat dvakrát o uvedený počet."
 
 #: u_translation.rsmanage
 msgid "Manage"
@@ -2565,15 +2577,19 @@ msgstr "Ruční výměna filtru byla zrušena"
 
 #: u_translation.rsmanualfocusa
 msgid "Manual focus aid"
-msgstr "Ruční zaostření"
+msgstr "Pomůcka ručního ostření"
 
 #: u_translation.rsmanyfunction
 msgid "Many functions will not work reliably without an astrometry software."
-msgstr "Mnoho funkcí nebude bez astrometrického softwaru spolehlivě fungovat."
+msgstr "Mnoho funkcí nebude spolehlivě fungovat bez astrometrického softwaru."
 
 #: u_translation.rsmarginoffset
 msgid "Margin offset"
 msgstr "Okraj offsetu"
+
+#: u_translation.rsmarkeveryast
+msgid "Mark every astrometry result"
+msgstr ""
 
 #: u_translation.rsmax
 msgid "Max:"
@@ -2617,7 +2633,7 @@ msgstr "Maximum vyhledávacího pole"
 
 #: u_translation.rsmaximumsourc
 msgid "Maximum sources"
-msgstr "Maximální zdroje"
+msgstr "Maximum zdroje"
 
 #: u_translation.rsmaximumtempe
 msgid "Maximum temperature change "
@@ -2641,11 +2657,11 @@ msgstr "Měřeno na [V/Z]"
 
 #: u_translation.rsmeasureen
 msgid "Measure in the East and North"
-msgstr "Měření na Východě a Severu"
+msgstr "Měřte směrem na Východ a Sever"
 
 #: u_translation.rsmeasurees
 msgid "Measure in the East and South"
-msgstr "Měření na Východě a Jihu"
+msgstr "Měřte směrem na Východ a Jih"
 
 #: u_translation.rsmeasurement
 msgid "Measurement"
@@ -2658,7 +2674,7 @@ msgstr "Měření %s hfd:%s špič:%s snr:%s"
 
 #: u_translation.rsmeasuremento
 msgid "Measurement on new images"
-msgstr "Měření na nových snímcích"
+msgstr "Možnost měření na nových snímcích"
 
 #: u_translation.rsmeasurementp
 #, object-pascal-format
@@ -2671,11 +2687,11 @@ msgstr "Měření měřítka pixelů pomocí stop sledování"
 
 #: u_translation.rsmeasurewn
 msgid "Measure in the West and North"
-msgstr "Měření na Západě a Severu"
+msgstr "Měřte směrem na Západ a Sever"
 
 #: u_translation.rsmeasurews
 msgid "Measure in the West and South"
-msgstr "Měření na Západě a Jihu"
+msgstr "Měřte směrem na Západ a Jih"
 
 #: u_translation.rsmeasuringfir
 msgid "Measuring first position"
@@ -2713,7 +2729,7 @@ msgstr "Překlopení poledníku bylo přerušeno %d opakovat"
 
 #: u_translation.rsmeridianflip2
 msgid "Meridian flip will occur now."
-msgstr "Poledník se překlápí."
+msgstr "Nyní dojde k překlopení poledníku."
 
 #: u_translation.rsmeridianflip3
 msgid "Meridian flip canceled before flip"
@@ -2797,11 +2813,15 @@ msgstr "minut"
 
 #: u_translation.rsmnt
 msgid "Mnt."
-msgstr "Mont."
+msgstr "Montáž"
 
 #: u_translation.rsmode
 msgid "Mode:"
 msgstr "Režim:"
+
+#: u_translation.rsmodify
+msgid "Modify"
+msgstr ""
 
 #: u_translation.rsmoresettings
 msgid "More settings"
@@ -2889,7 +2909,7 @@ msgstr "Ručně přeložte montáž v RA a poté klikněte na Pokračovat"
 
 #: u_translation.rsmovetheteles
 msgid "Slew the telescope to the nearby position with a bright star."
-msgstr "Natočte dalekohled do blízké polohy s jasnou hvězdou."
+msgstr "Natočte dalekohled na pozici poblíž jasné hvězdy"
 
 #: u_translation.rsmovethetrian
 msgid "Move the triangle with the mouse (left button down) such that the green square is marking a bright star."
@@ -2918,23 +2938,23 @@ msgstr "Pohyb montáže"
 
 #: u_translation.rsmovingto
 msgid "Moving to"
-msgstr "Přesunování do"
+msgstr "Pohybující se na"
 
 #: u_translation.rsmovingtofirs
 msgid "Moving to first position"
-msgstr "Přesun na první pozici"
+msgstr "Pohybující se na první pozici"
 
 #: u_translation.rsmovingtoseco
 msgid "Moving to second position"
-msgstr "Přesun na druhou pozici"
+msgstr "Pohybující se na druhou pozici"
 
 #: u_translation.rsmultistargui
 msgid "Multi-star guide offset"
-msgstr "Vícehvězdný pointační offset"
+msgstr "Vícehvězdný naváděcí offset"
 
 #: u_translation.rsnearfocus
 msgid "Near focus"
-msgstr "Blízké zaostření"
+msgstr "Téměř ostrý"
 
 #: u_translation.rsnearhfdmustb
 msgid "Near HFD must be smaller than Start HFD!"
@@ -2964,7 +2984,7 @@ msgstr "Nové souřadnice z planetária: %s %s"
 
 #: u_translation.rsnewfindercal
 msgid "New finder calibration is successful"
-msgstr "Kalibrace nového hledáčku je úspěšná"
+msgstr "Kalibrace nového vyhledávače je úspěšná"
 
 #: u_translation.rsnewobject
 msgid "New object"
@@ -2992,7 +3012,7 @@ msgstr "Ne"
 
 #: u_translation.rsnoalignments
 msgid "No alignment star found for stacking"
-msgstr "Nebyla nalezena žádná zarovnávací hvězda pro skládání"
+msgstr "Nebyla nalezena žádná zarovnávací hvězda pro stohování"
 
 #: u_translation.rsnoalpacaserv
 msgid "No Alpaca server found"
@@ -3004,7 +3024,7 @@ msgstr "Dnes na tomto místě není astronomický soumrak"
 
 #: u_translation.rsnoautoguidin
 msgid "No auto-guiding, only dither by sending pulse guide directly to the mount."
-msgstr "Bez automatické pointaci, pouze posílat pulzy přímo do montáže."
+msgstr "Žádná autopointace, pouze ditherace vysíláním vodicích pulzů přímo do montáže."
 
 #: u_translation.rsnobacklash
 msgid "No backlash"
@@ -3050,10 +3070,6 @@ msgstr "Žádný flat"
 msgid "No flip until past meridian for"
 msgstr "Nepřeklápět  před přechodem poledníku"
 
-#: u_translation.rsnomeasuremen
-msgid "No measurement, early start exposure not set."
-msgstr "Žádné měření, expozice s počátkem zahájení není nastavena."
-
 #: u_translation.rsnone2
 msgid "None"
 msgstr "Žádný"
@@ -3080,7 +3096,7 @@ msgstr "Nejsou spuštěny žádné skripty."
 
 #: u_translation.rsnostardetect
 msgid "No star detected. Is the image focused and sufficiently exposed?"
-msgstr "Nedetekována žádná hvězda. Je snímek zaostřený a dostatečně exponovaný?"
+msgstr "Nebyla zjištěna žádná hvězda. Je snímek zaostřený a dostatečně exponovaný?"
 
 #: u_translation.rsnostarfound
 msgid "No star found"
@@ -3101,16 +3117,16 @@ msgstr "%s montáž není eqmod"
 
 #: u_translation.rsnotautoguidi
 msgid "Not autoguiding! dithering ignored."
-msgstr "Chybí automatická pointace! dithering je ignorován."
+msgstr "Automatická pointace chybí! dithering je ignorován."
 
 #: u_translation.rsnotconnected
 #, object-pascal-format
 msgid "%s not connected!"
-msgstr "%s není připojen(a)!"
+msgstr "%s není připojena!"
 
 #: u_translation.rsnotenoughmea
 msgid "Not enough measurement points! Try to increase the maximum HFD or decrease the minimum start movement"
-msgstr "Nedostatek měřicích bodů! Zkuste zvýšit HFD nebo snížit minimální posun"
+msgstr "Nedostatek měřicích bodů! Zkuste zvýšit maximální HFD nebo snížit minimální počáteční krok"
 
 #: u_translation.rsnotenoughpoi
 msgid "Not enough points in or out of focus position after two try. Start with a better focus position and run the focuser calibration tool."
@@ -3138,7 +3154,7 @@ msgstr "Nic neběží, není co dělat."
 
 #: u_translation.rsnottracking
 msgid "not tracking"
-msgstr "nesleduji"
+msgstr "nesleduje"
 
 #: u_translation.rsnumberofcirc
 msgid "Number of circles"
@@ -3173,6 +3189,11 @@ msgstr "Název objektu"
 msgid "Object %s, plan %s finished."
 msgstr "Objekt %s, plán %s dokončen."
 
+#: u_translation.rsobjectsetsat
+#, object-pascal-format
+msgid "Object sets at %s. In %s hour(s)"
+msgstr ""
+
 #: u_translation.rsobjectstartp
 #, object-pascal-format
 msgid "Object %s, start plan %s"
@@ -3192,7 +3213,7 @@ msgstr "Jméno pozorovatele"
 
 #: u_translation.rsobservingcon
 msgid "Observing condition"
-msgstr "Stav pozorování"
+msgstr "Podmínky pozorování"
 
 #: u_translation.rsoctagon
 msgid "Octagon"
@@ -3229,7 +3250,7 @@ msgstr "Online dokumentace"
 
 #: u_translation.rsonmeridiancr
 msgid "On Meridian crossing"
-msgstr "Co dělat na přechodu poledníku"
+msgstr "Na přechodu Poledníku"
 
 #: u_translation.rsopen
 msgid "Open"
@@ -3338,7 +3359,7 @@ msgstr "Parkovat"
 
 #: u_translation.rsparktheteles
 msgid "Park the telescope now?"
-msgstr "Parkovat dalekohled?"
+msgstr "Zaparkovat dalekohled?"
 
 #: u_translation.rsparktheteles2
 msgid "Park the telescope"
@@ -3354,7 +3375,7 @@ msgstr "Heslo"
 
 #: u_translation.rspastfromclip
 msgid "Past from clipboard"
-msgstr ""
+msgstr "Poslední ze schránky"
 
 #: u_translation.rspause
 msgid "Pause"
@@ -3398,7 +3419,7 @@ msgstr "Výkon"
 
 #: u_translation.rsperiodicauto
 msgid "Periodic auto-focus"
-msgstr "Pravidelné automatické zaostřování"
+msgstr "Periodické automatické ostření"
 
 #: u_translation.rsphotometry
 msgid "Photometry"
@@ -3485,15 +3506,15 @@ msgstr "Plán %s zastaven."
 #: u_translation.rsplatesolveex
 #, object-pascal-format
 msgid "Plate solve exposure %s"
-msgstr "Astrometrie Expozice %s"
+msgstr "Expozice astrometrie %s"
 
 #: u_translation.rspleaseactiva
 msgid "Please activate the log file in the preference."
-msgstr "Aktivujte protokol v nastavení."
+msgstr "Aktivujte protokol v předvolbách."
 
 #: u_translation.rspleasebecare
 msgid "Please be careful to review and set the value for the Gain and Offset"
-msgstr "Pečlivě zkontrolujte a nastavte hodnotu pro Zisk a Offset"
+msgstr "Pečlivě zkontrolujte a nastavte hodnotu pro Zesílení a Offset"
 
 #: u_translation.rspleaseconfig
 msgid "Please configure your"
@@ -3501,7 +3522,7 @@ msgstr "Nakonfigurujte"
 
 #: u_translation.rspleaseconfig2
 msgid "Please configure the Autofocus options."
-msgstr "Nakonfigurujte možnosti automatického zaostření."
+msgstr "Nakonfigurujte možnosti AutoOstření."
 
 #: u_translation.rspleaseconfig3
 msgid "Please configure the observatory location."
@@ -3522,7 +3543,7 @@ msgstr "Vytvořit novou mapu chybných pixelů nebo vyberte jasnější hvězdu"
 
 #: u_translation.rspleaseincrea
 msgid "Please increase the threshold."
-msgstr "Zvýšit práh."
+msgstr "Zvyšte prahovou hodnotu."
 
 #: u_translation.rspleaseloador
 msgid "Please load or create a target list first."
@@ -3530,7 +3551,7 @@ msgstr "Nejprve načtěte nebo vytvořte cílový seznam."
 
 #: u_translation.rspleaserunthe
 msgid "Please run the V-curve learning for this focuser direction first. Button V-learn."
-msgstr "Trénink Vkřivku pro tento směr ostření. Tlačítko Učit se."
+msgstr "Nejdříve spusťte učení V-křivky pro tento směr zaostřování. Tlačítko V-Učit se."
 
 #: u_translation.rspleaserunthe2
 msgid "Please run the Focuser Calibration procedure first"
@@ -3539,7 +3560,7 @@ msgstr "Nejprve spustit Kalibraci Ostření"
 #: u_translation.rspleaserunvcu
 #, object-pascal-format
 msgid "Please run Vcurve learning for binning %s"
-msgstr "Spustit učení Vkřivky pro binning %s"
+msgstr "Spusťte učení Vkřivky pro binning %s"
 
 #: u_translation.rspleaseseethe
 msgid "Please see the documentation for important security information"
@@ -3600,7 +3621,7 @@ msgstr "Energie"
 
 #: u_translation.rsprecisionsle
 msgid "Precision slewing options"
-msgstr "Možnosti přesného přejetí dalekohledu"
+msgstr "Možnosti přesného přejetí"
 
 #: u_translation.rsprecisionsle2
 msgid "Precision slew finished."
@@ -3614,6 +3635,10 @@ msgstr "Přesné přejetí selhalo!"
 msgid "Predefined (recommended)"
 msgstr "Předdefinováno (doporučeno)"
 
+#: u_translation.rspredefinedro
+msgid "Predefined ROI"
+msgstr ""
+
 #: u_translation.rspreferedfocu
 msgid "Prefered focuser direction"
 msgstr "Preferovaný směr zaostřovače"
@@ -3625,7 +3650,7 @@ msgstr "Předvolby%s"
 
 #: u_translation.rspresetlist
 msgid "Preset list"
-msgstr "Přednastavený seznam"
+msgstr "Seznam předvoleb"
 
 #: u_translation.rspressure
 msgid "Pressure"
@@ -3641,7 +3666,7 @@ msgstr "Náhled debayer"
 
 #: u_translation.rspreviewexpos
 msgid "Preview exposure"
-msgstr ""
+msgstr "Náhled expozice"
 
 #: u_translation.rsprofile
 #, object-pascal-format
@@ -3671,6 +3696,11 @@ msgstr "Doba trvání impulzu"
 #: u_translation.rspulsegain
 msgid "pulse gain"
 msgstr "pulzní zesílení"
+
+#: u_translation.rspulseguiding
+#, object-pascal-format
+msgid "Pulse guiding %s is reversed after meridian flip"
+msgstr ""
 
 #: u_translation.rspythoncomman
 msgid "Python command"
@@ -3710,7 +3740,7 @@ msgstr "Nakonfinujte rozpětí maximálního času expozice!"
 
 #: u_translation.rsreachfocuser
 msgid "Reach focuser range limit! please better position the focuser half way on it's mechanical travel or decrease the maximum HFD"
-msgstr "Byl dosažen limit rozsahu ostření! lépe umístěte zaostřovač nejlépe do poloviny na jeho mechanickém zdvihu nebo snižte maximální HFD"
+msgstr "Dosažení limitu rozsahu zaostřování! raději nastavte zaostřovač do poloviny jeho mechanické dráhy nebo snižte maximální HFD"
 
 #: u_translation.rsreadccd
 msgid "Read CCD"
@@ -3731,7 +3761,7 @@ msgstr "Přijmout neznámou zprávu: %s"
 
 #: u_translation.rsrecenterifth
 msgid "Recenter if the drift is more than"
-msgstr "Znovu se zaměřte, pokud je posun větší než"
+msgstr "Znovu zaměřit, pokud je drift větší než"
 
 #: u_translation.rsrecenterimag
 #, object-pascal-format
@@ -3748,7 +3778,7 @@ msgstr "Znovu centruj na poslední snímek"
 
 #: u_translation.rsrecentersequ
 msgid "Recenter sequence target that drift"
-msgstr "Znovu zaměřit cíl sekvence, který je posunut"
+msgstr "Cíl sekvence, který se odchyluje od středu"
 
 #: u_translation.rsrecentertarg
 msgid "Recenter target now"
@@ -3776,7 +3806,7 @@ msgstr "Změření pólu"
 
 #: u_translation.rsrelativeincr
 msgid "Relative increment for the inward or outward movement"
-msgstr "Počet kroků, které se mají vykonat dovnitř nebo ven"
+msgstr "Relativní krok pro pohyb směrem dovnitř nebo ven"
 
 #: u_translation.rsremotedevice
 msgid "Remote device number"
@@ -3834,7 +3864,7 @@ msgstr "Požadavek na zastavení aktuální sekvence"
 
 #: u_translation.rsrequesttosto3
 msgid "Request to stop autofocus ..."
-msgstr "Požadavek na zastavení automatického ostření ..."
+msgstr "Žádost o zastavení AutoOstření ..."
 
 #: u_translation.rsreset
 msgid "Reset"
@@ -3842,7 +3872,7 @@ msgstr "Restartovat"
 
 #: u_translation.rsresettodefau
 msgid "Reset to default"
-msgstr "Obnovit do výchozího nastavení"
+msgstr "Obnovit výchozí nastavení"
 
 #: u_translation.rsresolve
 msgid "Resolve"
@@ -3850,7 +3880,7 @@ msgstr "Vyřešit"
 
 #: u_translation.rsresolveandpl
 msgid "Resolve and annotate DSO"
-msgstr "Řešení a anotace DSO"
+msgstr "Vyřešit a anotovat DSO"
 
 #: u_translation.rsresolveandpl2
 msgid "Resolve and annotate galaxies (Hyperleda)"
@@ -3866,7 +3896,7 @@ msgstr "Vyřešit a zobrazit snímek v planetáriu"
 
 #: u_translation.rsresolveandsh2
 msgid "Resolve and show image frame in planetarium"
-msgstr "Vyřešit a zobrazit snímek v planetáriu"
+msgstr "Vyřešit a zobrazit snímek rámu obrazu v planetáriu"
 
 #: u_translation.rsresolveandsl
 msgid "Resolve and Slew to image center"
@@ -3913,7 +3943,7 @@ msgstr "Restartovat po"
 
 #: u_translation.rsrestartafter2
 msgid "Restart after weather is good for"
-msgstr "Restartovat po dobrém počasí"
+msgstr "Obnova po dobrém počasí"
 
 #: u_translation.rsrestartautog
 msgid "Restart autoguider"
@@ -3971,7 +4001,7 @@ msgstr "vzestup"
 
 #: u_translation.rsrisesetcondi
 msgid "Rise/Set condition"
-msgstr "Stav východu/západu"
+msgstr "Rise/Set condition"
 
 #: u_translation.rsrot
 msgid "Rot."
@@ -4017,7 +4047,7 @@ msgstr "Kalibrace a synchronizace Rotátoru = %s"
 
 #: u_translation.rsrun
 msgid "Run"
-msgstr "Start"
+msgstr "Spustit"
 
 #: u_translation.rsrunascript
 msgid "Run a script"
@@ -4025,12 +4055,12 @@ msgstr "Spustit skript"
 
 #: u_translation.rsrunastrometr
 msgid "Run astrometry on every image to search for drift"
-msgstr "Provádění astrometrie na každém snímku za účelem hledání posunu"
+msgstr "Spustit astrometrii na každém snímku a hledat drift"
 
 #: u_translation.rsrunautofocus
 #, object-pascal-format
 msgid "Auto-focus if temp. change by more than %s"
-msgstr "Autozaostření při změně teploty o více než %s"
+msgstr "AutoOstření při změně teploty o více než %s"
 
 #: u_translation.rsrunscript
 msgid "Run script"
@@ -4108,6 +4138,10 @@ msgstr "Uložit FITS soubor%s"
 #, object-pascal-format
 msgid "Save picture%s"
 msgstr "Uložit snímek%s"
+
+#: u_translation.rssavepreviewi
+msgid "Save preview images"
+msgstr ""
 
 #: u_translation.rssavetempl
 msgid "Save template"
@@ -4207,11 +4241,11 @@ msgstr "Vyberte možnosti kalibrace:"
 
 #: u_translation.rsselectastarf
 msgid "Select a star first!"
-msgstr "Vybbrat hvězdu!"
+msgstr "Nejdřív vyberte hvězdu!"
 
 #: u_translation.rsselectguides
 msgid "Select guide star"
-msgstr "Vyberte pointační hvězdu"
+msgstr "Vyberte naváděcí hvězdu"
 
 #: u_translation.rsselectoneoft
 msgid "Select one of the measurement options:"
@@ -4272,7 +4306,7 @@ msgstr "Sekvence přerušena."
 #: u_translation.rssequenceabor2
 #, object-pascal-format
 msgid "Sequence aborted because the autoguider was not reconnected after %s minutes."
-msgstr "Sekvence přerušena, protože aromatická pointace ne byla po %s minutách znovu připojená."
+msgstr "Sekvence byla přerušena, protože autopointace nebyla po %s minutách znovu připojena."
 
 #: u_translation.rssequencealre
 #, object-pascal-format
@@ -4338,7 +4372,7 @@ msgstr "Po dokončení aktuální expozice bude sekvence pozastavena."
 
 #: u_translation.rssequencewill
 msgid "Sequence will continue with the current focuser position."
-msgstr "Sekvence bude pokračovat s aktuální polohou zaostřovacího zařízení."
+msgstr "Sekvence bude pokračovat s aktuální polohou ostření."
 
 #: u_translation.rssequencewill2
 msgid "Sequence will run without guiding!"
@@ -4386,11 +4420,11 @@ msgstr "Nastavit směr ostření směrem ven↑"
 #: u_translation.rssetframetype
 #, object-pascal-format
 msgid "Set frame type %s"
-msgstr "Nastavit typ rámce %s"
+msgstr "Nastavení typu snímku %s"
 
 #: u_translation.rssetlockposit
 msgid "Set lock position"
-msgstr "Nastavení polohy zámku"
+msgstr "Nastavit uzamčenou polohu"
 
 #: u_translation.rssetmagnitude
 msgid "Set magnitude"
@@ -4398,7 +4432,7 @@ msgstr "Nastavit magnitudu"
 
 #: u_translation.rssetmountsite
 msgid "Set mount site long/lat from configuration"
-msgstr "Nastavení délky/šířku místa připojení z konfigurace"
+msgstr "Nastavit zeměpisnou délku/šířku místa připojení z konfigurace"
 
 #: u_translation.rssetmounttime
 msgid "Set mount time from computer"
@@ -4406,7 +4440,7 @@ msgstr "Nastavit čas montáže z počítače"
 
 #: u_translation.rssetpoint
 msgid "Setpoint"
-msgstr "Nastavit"
+msgstr "Hodnota"
 
 #: u_translation.rssetrotatoran
 msgid "Set rotator angle"
@@ -4432,11 +4466,11 @@ msgstr "Nastavení střední doby trvání ditheringového impulzu v sekundách.
 
 #: u_translation.rssettletolera
 msgid "Settle tolerance"
-msgstr "Vyrovnat toleranci"
+msgstr "Tolerance vyrovnání"
 
 #: u_translation.rssetup
 msgid "Setup"
-msgstr "Nastavit"
+msgstr "Nastaveno"
 
 #: u_translation.rsshadowadu
 msgid "Shadow ADU"
@@ -4452,7 +4486,7 @@ msgstr "Nejkratší vodicí puls"
 
 #: u_translation.rsshortexposur
 msgid "Short exposure stacking"
-msgstr "Krátké skládání expozic"
+msgstr "Krátké stohování expozic"
 
 #: u_translation.rsshowcurrentl
 msgid "Show current log"
@@ -4460,7 +4494,7 @@ msgstr "Zobrazit aktuální protokol"
 
 #: u_translation.rsshowhints
 msgid "Show hints"
-msgstr "Zobrazit návrhy"
+msgstr "Zobrazit nápovědu"
 
 #: u_translation.rsshowindilog
 msgid "Show INDI log"
@@ -4472,7 +4506,7 @@ msgstr "Zobrazit výzvu"
 
 #: u_translation.rsshowstacking
 msgid "Show stacking option for Preview/Capture/Sequence"
-msgstr "Zobrazení možnosti skládání pro Náhled/Snímání/Sekvence"
+msgstr "Zobrazit možnost stohování pro Náhled/Snímání/Sekvence"
 
 #: u_translation.rsshowvideocap
 msgid "Show video capture tab"
@@ -4488,7 +4522,7 @@ msgstr "sigma"
 
 #: u_translation.rssimplifiedph
 msgid "Simplified photometry taking account for calibration, exposure time and airmass"
-msgstr "Zjednodušená fotometrie s ohledem na kalibraci, čas expozice a vlhkosti vzduchu"
+msgstr "Zjednodušená fotometrie s ohledem na kalibraci, čas expozice a hmotnost vzduchu"
 
 #: u_translation.rssimplifiedph2
 msgid "Simplified photometry, uncalibrated"
@@ -4673,9 +4707,9 @@ msgid "Speed"
 msgstr "Rychlost"
 
 #: u_translation.rssplittheimag
-#, object-pascal-format
+#, object-pascal-format, fuzzy, badformat
 msgid "Split the image in 9 panel to better show the aberration in each corner. %s You can change the zoom level and the margin offset from the image edge."
-msgstr "Rozdělí snímek na 9 obrazů, abyste lépe viděli aberaci v každém rohu. %s Můžete změnit úroveň přiblížení a offset od okraje obrázku."
+msgstr "Rozdělit snímek na 9 panelů k lepšímu zobrazení aberace v každém rohu. Můžete změnit úroveň zvětšení a vzdálenost okraje od okraje snímku."
 
 #: u_translation.rsssltlsnotsup
 msgid "SSL/TLS not supported, try to uncheck the corresponding box."
@@ -4701,7 +4735,7 @@ msgstr "Skládání se zarovnávací hvězdou na %s/%s"
 #: u_translation.rsstackofframe
 #, object-pascal-format
 msgid "stack of %s frames"
-msgstr "skládání snímků %s"
+msgstr "stoh %s snímků"
 
 #: u_translation.rsstar
 msgid "Star"
@@ -4717,7 +4751,7 @@ msgstr "Databáze hvězd je prázdná, zkontrolujte cestu k souborům hvězdné 
 
 #: u_translation.rsstardetectio
 msgid "Star detection window size "
-msgstr "Velikost okna detekce hvězd "
+msgstr "Velikost okna pro detekci hvězd "
 
 #: u_translation.rsstarfwhm
 msgid "Star FWHM"
@@ -4749,7 +4783,7 @@ msgstr "Spustit auto pointaci"
 
 #: u_translation.rsstartcapture
 msgid "Start capture"
-msgstr "Spuštění snímání"
+msgstr "Spustit snímání"
 
 #: u_translation.rsstartexposur
 #, object-pascal-format
@@ -4758,11 +4792,11 @@ msgstr "Chyba při zahájení expozice: %s"
 
 #: u_translation.rsstartfocus
 msgid "Start focus"
-msgstr "Spustit zaostření"
+msgstr "Zahájit ostření"
 
 #: u_translation.rsstartfocushf
 msgid "Start focus HFD is outside of current V curve, please decrease the start HFD value"
-msgstr "Počáteční HFD je mimo aktuální Vkřivku, snižte počáteční HFD"
+msgstr "Počáteční hodnota HFD je mimo aktuální křivku V, snižte počáteční hodnotu HFD"
 
 #: u_translation.rsstartingexpo
 #, object-pascal-format, fuzzy, badformat
@@ -4777,11 +4811,11 @@ msgstr "Zahájení sekvence %s"
 #: u_translation.rsstartingsequ2
 #, object-pascal-format
 msgid "Starting sequence %s repeat %s/%s"
-msgstr "Spuštění sekvence %s opakovat %s/%s"
+msgstr "Zahájení sekvence %s opakování %s/%s"
 
 #: u_translation.rsstartlearnin
 msgid "Start learning V curve"
-msgstr "Učení Vkřivky"
+msgstr "Zahájení učení křivky V"
 
 #: u_translation.rsstartnewexpo
 msgid "Start new exposure as early as possible"
@@ -4807,7 +4841,7 @@ msgstr "Počáteční pozice  pos:%s hfd:%s špič:%s snr:%s"
 
 #: u_translation.rsstartpreview
 msgid "Start preview loop"
-msgstr "Spustit náhledy cyklu"
+msgstr "Spustit cyklus náhledu"
 
 #: u_translation.rsstartrecord
 msgid "Start record"
@@ -4863,7 +4897,7 @@ msgstr "Zůstat na místě"
 #: u_translation.rsstayinplace2
 #, object-pascal-format
 msgid "Stay in place%sfor autofocus"
-msgstr "Zůstat na místě%spři auto-ostření"
+msgstr "Zůstat na místě%spři AutoOstření"
 
 #: u_translation.rsstddev
 msgid "Std.Dev:"
@@ -4928,7 +4962,7 @@ msgstr "Zastavit pointaci"
 
 #: u_translation.rsstoploop
 msgid "Stop Loop"
-msgstr "Zrušit cyklus"
+msgstr "Zrušit Cyklus"
 
 #: u_translation.rsstopplan
 #, object-pascal-format
@@ -4941,7 +4975,7 @@ msgstr "Zastavit náhled"
 
 #: u_translation.rsstoppreviewl
 msgid "Stop preview loop"
-msgstr "Zastavit náhledu cyklu"
+msgstr "Zastavit cyklus náhledu"
 
 #: u_translation.rsstoprecord
 msgid "Stop record"
@@ -5022,6 +5056,15 @@ msgstr "Přep."
 msgid "Switch"
 msgstr "Přepínač"
 
+#: u_translation.rsswitchconnec
+msgid "Switch connection"
+msgstr ""
+
+#: u_translation.rsswitchfailed
+#, object-pascal-format
+msgid "Setting switch %s failed!"
+msgstr ""
+
 #: u_translation.rssynctoeq
 #, object-pascal-format
 msgid "Sync to %s %s/%s"
@@ -5033,12 +5076,12 @@ msgstr "Systémový křížek"
 
 #: u_translation.rssystemisunde
 msgid "System is undersampled, accept 1 pixel star"
-msgstr "Systém je pod rozlišením a umožňuje 1 pixel hvězd"
+msgstr "Systém je podvzorkovaný, přijímá 1 pixelovou hvězdu"
 
 #: u_translation.rstakecontrole
 #, object-pascal-format
 msgid "Take control exposure for %s seconds"
-msgstr "Převzetí kontrolní expozice na %s sekund"
+msgstr "Převzetí kontrolní expozice po %s sekund"
 
 #: u_translation.rstarget
 msgid "Target"
@@ -5064,11 +5107,11 @@ msgstr "Název cíle %s"
 
 #: u_translation.rstargetpositi2
 msgid "Target position in finder image"
-msgstr ""
+msgstr "Poloha cíle ve vyhledávacím snímku"
 
 #: u_translation.rstargetprecis
 msgid "Target precision [arcmin] "
-msgstr "Přesnost cíle [úhlové minuty] "
+msgstr "Přesnost cíle [oblouk.-min] "
 
 #: u_translation.rstargets
 msgid "Targets"
@@ -5078,11 +5121,6 @@ msgstr "Cíle"
 #, object-pascal-format
 msgid "Target %s coordinates not updated"
 msgstr "Souřadnice cíle %s nebyly aktualizovány"
-
-#: u_translation.rstargetwillbe
-#, object-pascal-format
-msgid "Target can run until %s, in %s seconds"
-msgstr "Cíl může běžet do %s, za %s sekund"
 
 #: u_translation.rstargetwillbe2
 msgid "Target will be recentered before next image"
@@ -5132,7 +5170,7 @@ msgstr "Dalekohled není dle požadavku %s!"
 
 #: u_translation.rstelescopepos
 msgid "Telescope position"
-msgstr "Pozice dalekohledu"
+msgstr "Poloha dalekohledu"
 
 #: u_translation.rstelescopesle
 #, object-pascal-format
@@ -5206,7 +5244,7 @@ msgstr "Formát snímku kamery je"
 
 #: u_translation.rsthecameraisc
 msgid "The camera is connected. Do you want to exit the program now?"
-msgstr "Kamera připojena! Ukončit program?"
+msgstr "Kamera je připojena. Chcete nyní program ukončit?"
 
 #: u_translation.rsthecomputert
 #, object-pascal-format
@@ -5220,15 +5258,15 @@ msgstr "Data jsou zaznamenána v profilu.%sDalší možnosti automatického zaos
 
 #: u_translation.rsthefocuserdo
 msgid "The focuser do not support Absolute or Relative movement, autofocus calibration is not possible."
-msgstr "Zaostřovač nepodporuje absolutní ani relativní pohyb, kalibrace automatického ostření není možná."
+msgstr "Zaostřovač nepodporuje absolutní ani relativní pohyb, kalibrace AutoOstření není možná."
 
 #: u_translation.rsthefocuserdo2
 msgid "The focuser do not move enough after 30 steps! please check if the focuser is moving at all or increase the minimum movement"
-msgstr "Ostření se po 30 krocích nepohybuje dostatečně! zkontrolujte, zda se zaostřovač skutečně pohybuje, nebo zvyšte minimální pohyb"
+msgstr "Zaostřovač se po 30 krocích dostatečně nepohybuje! zkontrolujte, zda se zaostřovač vůbec pohybuje, nebo zvyšte minimální pohyb"
 
 #: u_translation.rsthefocuserdo3
 msgid "The focuser do not move enough after 30 steps! please check if the focuser is moving at all or decrease the maximum HFD"
-msgstr "Ostření se po 30 krocích nepohybuje dostatečně! zkontrolujte, zda se zaostřovač skutečně pohybuje nebo snižuje maximální HFD"
+msgstr "Zaostřovač se po 30 krocích dostatečně nepohybuje! zkontrolujte, zda se zaostřovač vůbec pohybuje, nebo snižte maximální HFD"
 
 #: u_translation.rsthefocuseris
 msgid "The focuser is now positioned at the best observed HFD position."
@@ -5236,11 +5274,11 @@ msgstr "Zaostřovač je umístěn na nejlepší pozici HFD."
 
 #: u_translation.rsthefollowing
 msgid "The following actions are run if the safety monitor report dangerous condition"
-msgstr "Následující kroky jsou provedeny, pokud bezpečnostní monitor hlásí nebezpečný stav"
+msgstr "Pokud bezpečnostní monitor ohlásí nebezpečný stav, spustí se následující akce"
 
 #: u_translation.rsthemenufilef
 msgid "The menu \"Tools/Focuser calibration\" help to fill this values."
-msgstr "K vyplnění těchto hodnot slouží v menu  \"Nástroje / Kalibrace ostření \"."
+msgstr "K vyplnění těchto hodnot slouží v Menu \"Nástroje / Kalibrace ostření \"."
 
 #: u_translation.rsthemountdono
 msgid "The mount do not move enough!"
@@ -5249,7 +5287,7 @@ msgstr "Montáž se dost nepohybuje!"
 #: u_translation.rsthemountindi
 #, object-pascal-format
 msgid "the mount indicate %s"
-msgstr "montáž ukazuje %s"
+msgstr "montáž indikuje %s"
 
 #: u_translation.rstheplanismod
 #, object-pascal-format
@@ -5300,16 +5338,16 @@ msgstr "Tento objekt není nikdy nad požadovanou výškou"
 
 #: u_translation.rsthisoptionsa
 msgid "This options are in addition to the autofocus frequency available in the Plan definition"
-msgstr "Tyto možnosti jsou navíc k frekvenci automatického ostření, která je k dispozici v definici plánu"
+msgstr "Tyto možnosti jsou doplňkem frekvence AutoOstření dostupné v definici plánu"
 
 #: u_translation.rsthisprocedur
 #, object-pascal-format
 msgid "This procedure will help you to  find the focuser parameters for auto-focus.%sYou only need to run it once to set this parameters.%sCenter a star with a high elevation and do a manual focusing to be as close as possible of the focus point. Use the Manual focus tool for that.%sUse the Star profile tool to check the star peak intensity is about three fourth of the camera maximum ADU but not saturated. %sAfter focusing, your focuser must be positioned about half way of it's mechanical travel. If this is not the case please adjust it now.%sThe binning you set in the Preview now will be used for the autofocusing operation. If you want to change the focusing binning later you have to run this procedure again."
-msgstr "Tento postup vám pomůže najít parametry zaostřování pro automatické zaostřování.%sChcete-li nastavit tyto parametry, postačí je spustit pouze jednou.%sZaostřete na hvězdu s vysokou výškou a proveďte ruční zaostření tak, abyste byli co nejblíže bodu zaostření.  K tomu použijte nástroj Ruční zaostření. %s Pomocí nástroje Profil hvězdy zkontrolujte, zda je maximální intenzita hvězdy asi tři čtvrtiny maximální ADU kamery, ale není nasycená. %s Po zaostření musí být váš zaostřovač umístěn přibližně v polovině mechanického zdvihu. Pokud tomu tak není, upravte to . %s Binning, který jste nyní nastavili v náhledu, se bude používat pro operaci automatického zaostřování. Chcete-li později změnit zaostřovací binning, musíte tento postup spustit znovu."
+msgstr "Tento postup vám pomůže najít parametry zaostření pro AutoOstření.%sPro nastavení parametrů jej stačí spustit pouze jednou.%sZaostřete na hvězdu s vysokou výškou a proveďte ruční zaostření tak, abyste byli co nejblíže ostřícímu bodu. Použijte k tomu nástroj Ruční zaostření.%sPomocí nástroje Profil hvězdy zkontrolujte, zda je špička intenzity hvězdy přibližně na třech čtvrtinách maximální hodnoty ADU kamery, ale není nasycená. %sPo zaostření musí být zaostřovací zařízení umístěno přibližně v polovině své mechanické dráhy. Pokud tomu tak není, nastavte jej nyní.%sBinning, které jste nastavili v náhledu, se nyní použije pro operaci AutoOstření. Pokud budete chtít binning zaostření později změnit, musíte tento postup provést znovu."
 
 #: u_translation.rsthisprocedur2
 msgid "This procedure measure the position of the main instrument target in the finder camera image."
-msgstr ""
+msgstr "Tímto postupem změříte polohu hlavního cíle přístroje v obraze vyhledávací kamery."
 
 #: u_translation.rsthissequence
 #, object-pascal-format
@@ -5319,7 +5357,7 @@ msgstr "Sekvence %s obsahuje informace o dokončení."
 #: u_translation.rsthissequence2
 #, object-pascal-format
 msgid "This sequence contain information about the steps already completed.%sNow you can continue after the last checkpoint.%sDo you want to clear the completion status to restart from the beginning?"
-msgstr "Sekvence obsahuje informace o již dokončených krocích.%sMůžete pokračovat od posledního kontrolního bodu.%sChcete vymazat stav dokončit a nastavit vše od začátku?"
+msgstr "Tato sekvence obsahuje informace o již dokončených krocích.%sNyní můžete pokračovat po posledním kontrolním bodě.%sChcete vymazat stav dokončení a začít znovu od začátku?"
 
 #: u_translation.rstiffwithfits
 msgid "TIFF with FITS header"
@@ -5345,7 +5383,7 @@ msgstr "čas v řadě"
 
 #: u_translation.rstimeout
 msgid "Timeout"
-msgstr "Čas.limit"
+msgstr "Limit"
 
 #: u_translation.rstimer
 msgid "Timer"
@@ -5353,7 +5391,11 @@ msgstr "Čas"
 
 #: u_translation.rstimesendtote
 msgid "Time send to telescope."
-msgstr "Čas poslán do dalekohledu."
+msgstr "Čas odeslán do dalekohledu."
+
+#: u_translation.rstimingestima
+msgid "Timing estimate"
+msgstr ""
 
 #: u_translation.rstomorrow
 msgid "tomorrow"
@@ -5365,7 +5407,7 @@ msgstr "Nástroje"
 
 #: u_translation.rstoomanyhotpi
 msgid "Too many hot pixel found!"
-msgstr "Bylo nalezeno příliš mnoho horkých pixelů!"
+msgstr "Nalezeno příliš mnoho horkých pixelů!"
 
 #: u_translation.rstoosmallhfdd
 msgid "Too small HFD difference, try to increase the number of point or the movement, or run the focuser calibration tool to measure this parameters."
@@ -5381,11 +5423,11 @@ msgstr "Celková polární chyba:"
 
 #: u_translation.rstousetheinte
 msgid "To use the Internal autoguider you need to configure a Mount and a Guide camera in the profile Devices setup"
-msgstr "Chcete-li používat interní autopointaci, musíte v nastavení profilu Zařízení nakonfigurovat kameru Montáž a Pointaci."
+msgstr "Chcete-li používat interní pointaci, musíte v nastavení profilu Zařízení nakonfigurovat kameru Montáž a Pointaci"
 
 #: u_translation.rstousethisdev
 msgid "To use this device, be sure to also configure the Internal Guider in Preferences/Auto-guiding"
-msgstr "Chcete-li toto zařízení používat, nezapomeňte také nakonfigurovat interní pointaci v části Předvolby/Automatická pointace."
+msgstr "Chcete-li toto zařízení používat, nezapomeňte také nakonfigurovat interní pointaci v části Předvolby/Automatická pointace"
 
 #: u_translation.rstrack
 msgid "Track"
@@ -5393,7 +5435,7 @@ msgstr "Sledovat"
 
 #: u_translation.rstracking
 msgid "tracking"
-msgstr "sleduji"
+msgstr "sledování"
 
 #: u_translation.rstrend
 msgid "Trend"
@@ -5433,7 +5475,7 @@ msgstr "Připojit k automatické poitaci"
 
 #: u_translation.rstrytofixpixe
 msgid "Try to fix pixel range to match CMOS camera bit depth"
-msgstr "Nastavte rozsah pixelů tak, aby odpovídal bitové hloubce kamery CMOS"
+msgstr "Oprava rozsahu pixelů tak, aby odpovídal bitové hloubce fotoaparátu CMOS"
 
 #: u_translation.rstwilightskyf
 msgid "Twilight sky flat"
@@ -5541,9 +5583,13 @@ msgstr "Pomocí astrometrie%s upřesněte polohu"
 msgid "Use astrometry to refine the position"
 msgstr "Pro upřesnění polohy použijte astrometrii"
 
+#: u_translation.rsusebacklashc
+msgid "Use backlash compensation"
+msgstr ""
+
 #: u_translation.rsusecovercali
 msgid "Use Cover calibrator"
-msgstr "Použít Kryt kalibrátoru"
+msgstr "Použít Kalibrační kryt"
 
 #: u_translation.rsusecustomscr
 msgid "Use custom script"
@@ -5567,7 +5613,7 @@ msgstr "Použít filtrové kolo"
 
 #: u_translation.rsusefindercam
 msgid "Use finder camera"
-msgstr "Použít hledáček kamery"
+msgstr "Použít vyhledávací kameru"
 
 #: u_translation.rsuseflatautom
 msgid "Use flat automatic exposure"
@@ -5579,7 +5625,7 @@ msgstr "Použít zaostření"
 
 #: u_translation.rsuseguidecamera
 msgid "Use guide camera"
-msgstr "Použití pointační kamery"
+msgstr "Použít pointační kameru"
 
 #: u_translation.rsusemount
 msgid "Use mount"
@@ -5587,7 +5633,7 @@ msgstr "Použít montáž"
 
 #: u_translation.rsuseonlystarn
 msgid "Use only star near the image center"
-msgstr "Použít pouze hvězdy v blízkosti středu obrázku"
+msgstr "Použít pouze hvězdu poblíž středu snímku"
 
 #: u_translation.rsusergroup
 msgid "User group"
@@ -5607,7 +5653,7 @@ msgstr "Použít bezpečnostní monitor"
 
 #: u_translation.rsusespecificr
 msgid "Use specific Readout mode for different actions"
-msgstr "Použijte konkrétní  Režim čtení pro různé akce"
+msgstr "Použít specifický režim čtení pro různé akce"
 
 #: u_translation.rsuseswitch
 msgid "Use switch"
@@ -5615,7 +5661,7 @@ msgstr "Použít přepínač"
 
 #: u_translation.rsusethisdevic
 msgid "Use this device if the main camera cannot be used for plate solving. Also configure the camera to use in Preferences/Slewing"
-msgstr "Toto zařízení použijte, pokud nelze k astrometrii použít hlavní fotoaparát. V části Předvolby, také nakonfigurujte kameru, kterou chcete použít."
+msgstr "Toto zařízení použijte, pokud nelze k astrometrii použít hlavní kameru. V části Předvolby/Přejíždění nakonfigurujte kameru, která se má použít"
 
 #: u_translation.rsusewatchdog
 msgid "Use watchdog"
@@ -5641,11 +5687,11 @@ msgstr "Hodnota"
 
 #: u_translation.rsvcurve
 msgid "V curve"
-msgstr "V-křivka"
+msgstr "V křivka"
 
 #: u_translation.rsvcurvequalit
 msgid "V curve quality is low. Do you really want to save this curve?"
-msgstr "Kvalita Vkřivky je nízká. Uložit tuto křivku?"
+msgstr "Kvalita křivky V je špatná. Chcete tuto křivku uložit?"
 
 #: u_translation.rsverbosedevic
 msgid "Verbose device log"
@@ -5681,7 +5727,7 @@ msgstr "Vizualizace"
 
 #: u_translation.rsvlearn
 msgid "V-learn"
-msgstr "Učit se"
+msgstr "V-Učit se"
 
 #: u_translation.rsvoiceconfigu
 msgid "Voice configuration"
@@ -5689,7 +5735,7 @@ msgstr "Hlasová konfigurace"
 
 #: u_translation.rswait1minute
 msgid "Wait 1 minute ..."
-msgstr "Čekat 1 minutu ..."
+msgstr "Počkejte 1 minutu..."
 
 #: u_translation.rswaitaftersol
 msgid "Wait after solve"
@@ -5720,7 +5766,7 @@ msgstr "Čekat na soumrak"
 #: u_translation.rswaitingformi
 #, object-pascal-format
 msgid "Waiting for %s minutes of good weather before to restart the sequence"
-msgstr "Čekat %s minut při restartování sekvence u příznivého počasí"
+msgstr "Čekat %s minut na dobré počasí před restartem sekvence"
 
 #: u_translation.rswaitingfortw
 #, object-pascal-format
@@ -5779,11 +5825,11 @@ msgstr "Pozor! chcete-li použít zápornou hodnotu, ujistěte se, že ovladač 
 #: u_translation.rswarningimage
 #, object-pascal-format
 msgid "Warning! %s image received"
-msgstr "Varování! %s přijmout obrázek"
+msgstr "Pozor! Snímek %s přijat"
 
 #: u_translation.rswarningrever
 msgid "Warning, reversing the rotator will invalidated the calibration. Do you want to continue?"
-msgstr "Pozor, otočení rotátoru zruší kalibraci. Chcete pokračovat?"
+msgstr "Pozor, otočením rotátoru se kalibrace zruší. Chcete pokračovat?"
 
 #: u_translation.rswarningthemo
 msgid "Warning! the mount will be parked every time a flat capture is started."
@@ -5833,7 +5879,7 @@ msgstr "Po výzvě ručně přeložte montáž pouze podél osy RA, vždy ve ste
 
 #: u_translation.rswhenperformi
 msgid "When performing autofocus from a sequence"
-msgstr "Automatické ostření ze sekvence"
+msgstr "Při použití AutoOstření ze sekvence"
 
 #: u_translation.rswhenreadycli
 msgid "When ready click"
@@ -5870,7 +5916,7 @@ msgstr "Ano"
 #: u_translation.rsyoucansetthe
 #, object-pascal-format
 msgid "You can set the parameters to define how the focuser will move.%sTry first with the default values and adjust them only if you receive an error message on the next step."
-msgstr "Parametry můžete nastavit tak, aby definovaly, jak se zaostřovač bude pohybovat. %s Nejprve vyzkoušejte výchozí hodnoty a upravte je pouze v případě, že se v dalším kroku zobrazí chybová zpráva."
+msgstr "Můžete nastavit parametry, které určují, jak se bude zaostřovací zařízení pohybovat.%sZkuste nejprve výchozí hodnoty a upravte je pouze v případě, že se v dalším kroku zobrazí chybové hlášení."
 
 #: u_translation.rsyoumustconfi
 msgid "You must configure your flat preference."

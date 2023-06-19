@@ -6,15 +6,15 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ccdciel\n"
 "Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
-"POT-Creation-Date: 2023-03-06 16:18+0000\n"
-"PO-Revision-Date: 2023-01-29 04:46+0000\n"
+"POT-Creation-Date: 2023-06-19 20:18+0000\n"
+"PO-Revision-Date: 2023-06-11 12:49+0000\n"
 "Last-Translator: Zachary Wu <Unknown>\n"
 "Language-Team: Chinese (Simplified) <zh_CN@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2023-03-06 16:32+0000\n"
-"X-Generator: Launchpad (build 1938a4fd80bdf1a1b1373119ac1ac9e0e65174d6)\n"
+"X-Launchpad-Export-Date: 2023-06-19 20:28+0000\n"
+"X-Generator: Launchpad (build 489330bbc434d558d7166379e406ed1fc8bbfcb2)\n"
 
 #: u_translation.rs2d
 msgid "2D"
@@ -68,7 +68,7 @@ msgstr "动作"
 
 #: u_translation.rsactivatesing
 msgid "Activate single star guiding on fixed position"
-msgstr ""
+msgstr "启动固定位置的单星导星"
 
 #: u_translation.rsactivatesola
 msgid "Activate solar object tracking."
@@ -76,7 +76,7 @@ msgstr "启动太阳系天体跟踪"
 
 #: u_translation.rsactivatespec
 msgid "Activate spectroscopy functions"
-msgstr ""
+msgstr "启用光谱分析功能"
 
 #: u_translation.rsactivetarget
 msgid "Active target is replaced, restart the sequence"
@@ -100,7 +100,7 @@ msgstr "累加图像"
 
 #: u_translation.rsadditionalop
 msgid "Additional options for"
-msgstr ""
+msgstr "额外的选项"
 
 #: u_translation.rsaddstep
 msgid "Add step"
@@ -115,6 +115,10 @@ msgstr "调整自动对焦星等：&s，曝光系数：%s"
 #, object-pascal-format
 msgid "Adjust flat exposure time to %s and retry."
 msgstr "调整平场曝光时间到%s再重试。"
+
+#: u_translation.rsadjustthecha
+msgid "Adjust the chart for the image or frame"
+msgstr ""
 
 #: u_translation.rsadjustthemou
 msgid "Adjust the mount in azimuth and elevation such that the star moves from the green square to the pink circle."
@@ -139,7 +143,7 @@ msgstr "高级设置"
 #: u_translation.rsaftertelesco
 #, object-pascal-format
 msgid "After telescope pointing to target the offset relative to requested position is %s arcminutes.%sDo you want to retry the slew?"
-msgstr "望远镜指向目标后，相距所请求位置的偏移量为 %s 角分。%s 您是否希望重新指向？"
+msgstr "望远镜转向目标后，相距所请求位置的偏移量为 %s 角分。%s 您是否希望重新回转？"
 
 #: u_translation.rsairmass
 msgid "Airmass"
@@ -255,7 +259,7 @@ msgstr "中天翻转后自动对焦"
 
 #: u_translation.rsautofocusaft2
 msgid "Autofocus after temperature change"
-msgstr ""
+msgstr "在温度变化后自动对焦"
 
 #: u_translation.rsautofocusalr
 msgid "Autofocus already running."
@@ -518,7 +522,7 @@ msgstr "背景平衡"
 
 #: u_translation.rsbacklashcali
 msgid "Backlash calibration"
-msgstr ""
+msgstr "回差校准"
 
 #: u_translation.rsbacklashcomp
 msgid "Backlash compensation"
@@ -620,7 +624,7 @@ msgstr "校准"
 
 #: u_translation.rscalibration2
 msgid "Special calibration"
-msgstr ""
+msgstr "特殊校准"
 
 #: u_translation.rscalibrationd
 #, object-pascal-format
@@ -629,7 +633,7 @@ msgstr "校准%s就绪"
 
 #: u_translation.rscalibrationm
 msgid "Calibration measurement"
-msgstr ""
+msgstr "校准测量"
 
 #: u_translation.rscalibrationr
 msgid "Calibration results:"
@@ -741,7 +745,7 @@ msgstr "无法编辑一个活动序列当自动对焦正在进行"
 
 #: u_translation.rscannoteditth2
 msgid "Cannot edit the active sequence when slewing"
-msgstr "正在指向时无法编辑活动序列"
+msgstr "正在回转时无法编辑活动序列"
 
 #: u_translation.rscannotfindaf
 msgid "Cannot find a focus star."
@@ -763,7 +767,7 @@ msgstr "无法获得调焦器绝对位置"
 #: u_translation.rscannotinterp
 #, object-pascal-format
 msgid "Cannot interpret the text \"%s\" as RA DEC values"
-msgstr ""
+msgstr "无法将文本“%s”解释为 RA DEC 值"
 
 #: u_translation.rscannotoverwr
 msgid "Cannot overwrite the running sequence!"
@@ -951,7 +955,7 @@ msgstr "点击下一步以将该值保存到配置文件"
 
 #: u_translation.rsclickonimage
 msgid "Click on image to set"
-msgstr ""
+msgstr "点击图像进行设置"
 
 #: u_translation.rsclicktheobje
 msgid "Click the object in planetarium"
@@ -1055,7 +1059,7 @@ msgstr "连接 %s"
 
 #: u_translation.rsconnection
 msgid "Connection"
-msgstr "连接"
+msgstr "连接方式"
 
 #: u_translation.rsconnectioner
 #, object-pascal-format
@@ -1233,6 +1237,10 @@ msgstr "预览图去拜尔"
 msgid "Dec"
 msgstr "Dec"
 
+#: u_translation.rsdeclinationb
+msgid "Declination backlash"
+msgstr ""
+
 #: u_translation.rsdefault
 msgid "Default"
 msgstr "缺省值"
@@ -1252,7 +1260,7 @@ msgstr "%s度每分钟"
 
 #: u_translation.rsdelayafterte
 msgid "Delay after telescope slew [seconds] "
-msgstr "望远镜指向完成后等待[秒] "
+msgstr "望远镜回转完成后等待[秒] "
 
 #: u_translation.rsdelete
 msgid "Delete"
@@ -1449,7 +1457,7 @@ msgstr "完成"
 
 #: u_translation.rsdonotchangea
 msgid "Do not change autoguiding state"
-msgstr ""
+msgstr "不改变自动导星状态"
 
 #: u_translation.rsdonotdisplay
 msgid "Do not display images during capture"
@@ -1472,7 +1480,7 @@ msgstr "不要%s等待"
 #: u_translation.rsdosimpleslew
 #, object-pascal-format
 msgid "Do simple slew to %s/%s"
-msgstr "简单指向到 %s/%s"
+msgstr "简单转向到 %s/%s"
 
 #: u_translation.rsdownloading
 msgid "Downloading"
@@ -1505,7 +1513,7 @@ msgstr "您现在要运行终止动作？"
 
 #: u_translation.rsdrawslitarea
 msgid "Draw slit area on image"
-msgstr ""
+msgstr "在图像上绘制狭缝区域"
 
 #: u_translation.rsduration
 msgid "Duration"
@@ -1585,7 +1593,7 @@ msgstr "结束时间"
 
 #: u_translation.rsenterthej200
 msgid "Enter the J2000 coordinates of the target where the main instrument is currently pointing."
-msgstr ""
+msgstr "输入主仪器当前指向的目标的 J2000 坐标。"
 
 #: u_translation.rserror
 #, object-pascal-format
@@ -1621,7 +1629,7 @@ msgstr "Error starting command: %s"
 
 #: u_translation.rserrorunknown
 msgid "Error: Unknown finder focal length, set in PREFERENCE, SLEWING."
-msgstr ""
+msgstr "错误：寻星镜焦距未知，在首选项中设置，回转。"
 
 #: u_translation.rserrorunknowt
 msgid "Error: Unknown telescope focal length, set in telescope driver or in PREFERENCE, ASTROMETRY."
@@ -1774,11 +1782,11 @@ msgstr "最终移动（步长）"
 
 #: u_translation.rsfind
 msgid "Find."
-msgstr ""
+msgstr "查找。"
 
 #: u_translation.rsfindercamera
 msgid "Finder camera"
-msgstr ""
+msgstr "寻星相机"
 
 #: u_translation.rsfit
 msgid "Fit"
@@ -2000,7 +2008,7 @@ msgstr "帧"
 
 #: u_translation.rsframesize
 msgid "Frame size"
-msgstr "帧大小"
+msgstr "帧率"
 
 #: u_translation.rsfromcameradr
 msgid "From camera driver"
@@ -2114,7 +2122,7 @@ msgstr "导星"
 
 #: u_translation.rsguideboxsize
 msgid "Guide box size"
-msgstr ""
+msgstr "导星框大小"
 
 #: u_translation.rsguidecamera
 msgid "Guide camera"
@@ -2122,11 +2130,11 @@ msgstr "导星相机"
 
 #: u_translation.rsguideoffset
 msgid "Guide offset"
-msgstr ""
+msgstr "导星偏移量"
 
 #: u_translation.rsguidepositio
 msgid "Guide position on the slit"
-msgstr ""
+msgstr "狭缝上的导星位置"
 
 #: u_translation.rsguider
 msgid "Guider"
@@ -2233,7 +2241,7 @@ msgstr "图像"
 
 #: u_translation.rsimagecenter
 msgid "Image center"
-msgstr ""
+msgstr "图像中心"
 
 #: u_translation.rsimagecleanup
 msgid "Image cleanup"
@@ -2418,13 +2426,17 @@ msgstr "无效的天体坐标！"
 msgid "Invalid or unsupported FITS file %s"
 msgstr "无效的或不支持的FITS文件%s"
 
+#: u_translation.rsinversedsola
+msgid "Inversed solar guide control"
+msgstr ""
+
 #: u_translation.rsiterative
 msgid "Iterative"
 msgstr "迭代"
 
 #: u_translation.rsitissuggestt
 msgid "It is suggest to slew to focus star when using Vcurve"
-msgstr "当使用V曲线时，建议指向到对焦星"
+msgstr "当使用V曲线时，建议转向到对焦星"
 
 #: u_translation.rsitwillcontin
 msgid "It will continue after the last checkpoint."
@@ -2448,7 +2460,7 @@ msgstr "学习"
 
 #: u_translation.rslength
 msgid "Length"
-msgstr ""
+msgstr "长度"
 
 #: u_translation.rslicenseagree
 msgid "License agreement"
@@ -2468,7 +2480,7 @@ msgstr "点亮"
 
 #: u_translation.rslimitedto15x
 msgid "(limited to 1.5x the slew precision)"
-msgstr "（限制到1.5倍指向精度）"
+msgstr "（限制到1.5倍回转精度）"
 
 #: u_translation.rslimittempera
 msgid "Limit temperature change"
@@ -2496,7 +2508,7 @@ msgstr "锁定覆盖"
 
 #: u_translation.rslockposition
 msgid "Lock position"
-msgstr ""
+msgstr "锁定位置"
 
 #: u_translation.rslogfolder
 msgid "Log folder"
@@ -2532,12 +2544,12 @@ msgstr "星等"
 
 #: u_translation.rsmaincamera
 msgid "Main camera"
-msgstr ""
+msgstr "主相机"
 
 #: u_translation.rsmainimagecen
 #, object-pascal-format
 msgid "Main image center is at finder image X=%s, Y=%s"
-msgstr ""
+msgstr "主相机图像中心位于寻星镜图像 X=%s， Y=%s"
 
 #: u_translation.rsmainsensor
 msgid "Main sensor"
@@ -2546,7 +2558,7 @@ msgstr "主传感器"
 #: u_translation.rsmakeafirstpo
 #, object-pascal-format
 msgid "Adjust the mount RA axis manually to point to the pole the best as possible.%sSlew the telescope to point near the pole at a declination about 89 to 90 degrees with counterweight down.%sSelect below if the telescope can already slew automatically or if it must be moved manually.%sIf automatic, select the direction and movement step. Beware it will move two time this amount."
-msgstr "尽可能手动调整赤道仪RA轴指向天极。%s指向望远镜到天极附近的位置，赤纬约89至90度，重锤向下。%s在下面选择望远镜是否可以自动指向或需要手动操作。%s若自动可用，选择方向和移动步长。请注意望远镜会移动此步长两次。"
+msgstr "尽可能手动调整赤道仪RA轴转向天极。%s转向望远镜到天极附近的位置，赤纬约89至90度，重锤向下。%s在下面选择望远镜是否可以自动转向或需要手动操作。%s若自动可用，选择方向和移动步长。请注意望远镜会移动此步长两次。"
 
 #: u_translation.rsmanage
 msgid "Manage"
@@ -2575,6 +2587,10 @@ msgstr "没有天体测量软件则很多功能无法可靠的工作。"
 #: u_translation.rsmarginoffset
 msgid "Margin offset"
 msgstr "边缘偏移量"
+
+#: u_translation.rsmarkeveryast
+msgid "Mark every astrometry result"
+msgstr ""
 
 #: u_translation.rsmax
 msgid "Max:"
@@ -2614,7 +2630,7 @@ msgstr "最大搜索半径"
 
 #: u_translation.rsmaximumsearc2
 msgid "Maximum search box"
-msgstr ""
+msgstr "最大搜索框"
 
 #: u_translation.rsmaximumsourc
 msgid "Maximum sources"
@@ -2638,7 +2654,7 @@ msgstr "平均图像"
 
 #: u_translation.rsmeasuredatew
 msgid "Measured at [E/W]"
-msgstr "测量于[E/W]"
+msgstr "测量方向 [东/西]"
 
 #: u_translation.rsmeasureen
 msgid "Measure in the East and North"
@@ -2804,6 +2820,10 @@ msgstr "赤道仪"
 msgid "Mode:"
 msgstr "模式："
 
+#: u_translation.rsmodify
+msgid "Modify"
+msgstr ""
+
 #: u_translation.rsmoresettings
 msgid "More settings"
 msgstr "更多设置"
@@ -2890,7 +2910,7 @@ msgstr "手动移动赤道仪RA轴，准备好后点击继续"
 
 #: u_translation.rsmovetheteles
 msgid "Slew the telescope to the nearby position with a bright star."
-msgstr "指向望远镜到附近的一个亮星的位置。"
+msgstr "转向望远镜到附近的一个亮星的位置。"
 
 #: u_translation.rsmovethetrian
 msgid "Move the triangle with the mouse (left button down) such that the green square is marking a bright star."
@@ -2931,7 +2951,7 @@ msgstr "移动到第二个位置"
 
 #: u_translation.rsmultistargui
 msgid "Multi-star guide offset"
-msgstr ""
+msgstr "多星导星偏移量"
 
 #: u_translation.rsnearfocus
 msgid "Near focus"
@@ -2965,7 +2985,7 @@ msgstr "从星图获得的新坐标：%s %s"
 
 #: u_translation.rsnewfindercal
 msgid "New finder calibration is successful"
-msgstr ""
+msgstr "新寻星镜校准成功"
 
 #: u_translation.rsnewobject
 msgid "New object"
@@ -3050,10 +3070,6 @@ msgstr "无平场"
 #: u_translation.rsnoflipuntilp
 msgid "No flip until past meridian for"
 msgstr "过中天后不翻转，直到"
-
-#: u_translation.rsnomeasuremen
-msgid "No measurement, early start exposure not set."
-msgstr "无测量值，早先启动的曝光未设置。"
 
 #: u_translation.rsnone2
 msgid "None"
@@ -3174,6 +3190,11 @@ msgstr "天体名称"
 msgid "Object %s, plan %s finished."
 msgstr "天体%s，计划%s完成。"
 
+#: u_translation.rsobjectsetsat
+#, object-pascal-format
+msgid "Object sets at %s. In %s hour(s)"
+msgstr ""
+
 #: u_translation.rsobjectstartp
 #, object-pascal-format
 msgid "Object %s, start plan %s"
@@ -3277,15 +3298,15 @@ msgstr "选项一：在当前位置校准。"
 
 #: u_translation.rsoption2calib
 msgid "Option 2: Special calibration at current position for some mounts which reverse declination pulse guiding after the meridian flip."
-msgstr ""
+msgstr "选项 2：在当前位置对某些在中天翻转后反转赤纬导星脉冲的赤道仪进行特殊校准。"
 
 #: u_translation.rsoption3backl
 msgid "Option 3: Calibrate backlash compensation."
-msgstr ""
+msgstr "选项3：校准回差补偿。"
 
 #: u_translation.rsoption4cance
 msgid "Option 4: Cancel."
-msgstr ""
+msgstr "选项 4：取消。"
 
 #: u_translation.rsoptions
 #, object-pascal-format
@@ -3355,7 +3376,7 @@ msgstr "密码"
 
 #: u_translation.rspastfromclip
 msgid "Past from clipboard"
-msgstr ""
+msgstr "从剪切板粘贴"
 
 #: u_translation.rspause
 msgid "Pause"
@@ -3471,7 +3492,7 @@ msgstr "星图目标设置为 %s"
 
 #: u_translation.rsplanetariumt2
 msgid "Planetarium target slew fail"
-msgstr "星图目标指向失败"
+msgstr "转向星图目标失败"
 
 #: u_translation.rsplanfinished
 #, object-pascal-format
@@ -3511,7 +3532,7 @@ msgstr "请配置观测站位置。"
 #: u_translation.rspleaseconfir
 #, object-pascal-format
 msgid "Please confirm you want to slew the telescope to %s at coordinates %s/%s"
-msgstr "请确认您要将望远镜指向到 %s 位于坐标 %s/%s"
+msgstr "请确认您要将望远镜转向到 %s 位于坐标 %s/%s"
 
 #: u_translation.rspleaseconnec
 msgid "Please connect the planetarium first"
@@ -3601,19 +3622,23 @@ msgstr "功率"
 
 #: u_translation.rsprecisionsle
 msgid "Precision slewing options"
-msgstr "精确指向选项"
+msgstr "精确回转选项"
 
 #: u_translation.rsprecisionsle2
 msgid "Precision slew finished."
-msgstr "精确指向完成。"
+msgstr "精确回转完成。"
 
 #: u_translation.rsprecisionsle3
 msgid "Precision slew failed!"
-msgstr "精确指向失败！"
+msgstr "精确回转失败！"
 
 #: u_translation.rspredefined
 msgid "Predefined (recommended)"
 msgstr "预设定（推荐的）"
+
+#: u_translation.rspredefinedro
+msgid "Predefined ROI"
+msgstr ""
 
 #: u_translation.rspreferedfocu
 msgid "Prefered focuser direction"
@@ -3642,7 +3667,7 @@ msgstr "预览去拜尔"
 
 #: u_translation.rspreviewexpos
 msgid "Preview exposure"
-msgstr ""
+msgstr "预览曝光"
 
 #: u_translation.rsprofile
 #, object-pascal-format
@@ -3672,6 +3697,11 @@ msgstr "脉冲时长"
 #: u_translation.rspulsegain
 msgid "pulse gain"
 msgstr "脉冲增益"
+
+#: u_translation.rspulseguiding
+#, object-pascal-format
+msgid "Pulse guiding %s is reversed after meridian flip"
+msgstr ""
 
 #: u_translation.rspythoncomman
 msgid "Python command"
@@ -3871,11 +3901,11 @@ msgstr "解析并在星图中显示构图"
 
 #: u_translation.rsresolveandsl
 msgid "Resolve and Slew to image center"
-msgstr "解析并指向到图像中心"
+msgstr "解析并转向到图像中心"
 
 #: u_translation.rsresolveandsl2
 msgid "Resolve and Slew to cursor"
-msgstr "解析并指向目标"
+msgstr "解析并转向到目标"
 
 #: u_translation.rsresolveandsy
 msgid "Resolve and Sync the mount"
@@ -3996,7 +4026,7 @@ msgstr "旋转中"
 
 #: u_translation.rsrotation
 msgid "Rotation angle"
-msgstr ""
+msgstr "旋转角度"
 
 #: u_translation.rsrotator
 msgid "Rotator"
@@ -4110,6 +4140,10 @@ msgstr "保存FITS文件%s"
 msgid "Save picture%s"
 msgstr "保存图片%s"
 
+#: u_translation.rssavepreviewi
+msgid "Save preview images"
+msgstr ""
+
 #: u_translation.rssavetempl
 msgid "Save template"
 msgstr "保存模板"
@@ -4212,7 +4246,7 @@ msgstr "先选择一颗星！"
 
 #: u_translation.rsselectguides
 msgid "Select guide star"
-msgstr ""
+msgstr "选择导星"
 
 #: u_translation.rsselectoneoft
 msgid "Select one of the measurement options:"
@@ -4391,7 +4425,7 @@ msgstr "设置帧类型%s"
 
 #: u_translation.rssetlockposit
 msgid "Set lock position"
-msgstr ""
+msgstr "设置锁定位置"
 
 #: u_translation.rssetmagnitude
 msgid "Set magnitude"
@@ -4485,7 +4519,7 @@ msgstr "基座方向"
 
 #: u_translation.rssigma
 msgid "sigma"
-msgstr "sigma"
+msgstr "标准差"
 
 #: u_translation.rssimplifiedph
 msgid "Simplified photometry taking account for calibration, exposure time and airmass"
@@ -4566,46 +4600,46 @@ msgstr "圆顶从动"
 
 #: u_translation.rsslewaborteda
 msgid "Slew aborted after 3 retries!"
-msgstr "指向终止于3次重试之后！"
+msgstr "回转终止于3次重试之后！"
 
 #: u_translation.rsslewcomplete
 msgid "Slew is complete"
-msgstr "指向完成"
+msgstr "回转完成"
 
 #: u_translation.rsslewing
 msgid "Slewing"
-msgstr "指向"
+msgstr "回转"
 
 #: u_translation.rsslewtelescop2
 msgid "Slew telescope to flat panel position"
-msgstr "指向望远镜到平场板位置"
+msgstr "转向望远镜到平场板位置"
 
 #: u_translation.rsslewtoanears
 msgid "Slew to a near star of magnitude"
-msgstr "指向到一个星等近似的星"
+msgstr "转向到一个星等近似的星"
 
 #: u_translation.rsslewtoeq
 #, object-pascal-format
 msgid "Slewing to %s %s/%s"
-msgstr "指向到 %s %s/%s"
+msgstr "转向到 %s %s/%s"
 
 #: u_translation.rsslewtofocuss
 #, object-pascal-format
 msgid "Slew to focus star %s"
-msgstr "指向到对焦星 %s"
+msgstr "转向到对焦星 %s"
 
 #: u_translation.rsslewtofocuss2
 msgid "Slew to focus star"
-msgstr "指向到对焦星"
+msgstr "转向到对焦星"
 
 #: u_translation.rsslewwithapre
 msgid "Slew with a precision of "
-msgstr "指向精度 "
+msgstr "回转精度 "
 
 #: u_translation.rsslewwithoffs
 #, object-pascal-format
 msgid "Slew with offset %s/%s"
-msgstr "指向偏移量 %s/%s"
+msgstr "回转偏移量 %s/%s"
 
 #: u_translation.rsslippagecorr
 msgid "Slippage correction "
@@ -4613,7 +4647,7 @@ msgstr "滑脱修正 "
 
 #: u_translation.rsslitdrawing
 msgid "Slit drawing"
-msgstr ""
+msgstr "绘制狭缝"
 
 #: u_translation.rsslope
 msgid "Slope"
@@ -4646,7 +4680,7 @@ msgstr "软件"
 
 #: u_translation.rssolvedimage
 msgid "Solved image"
-msgstr ""
+msgstr "已解析的图像"
 
 #: u_translation.rssolvedinseco
 #, object-pascal-format
@@ -4667,7 +4701,7 @@ msgstr "光谱轮廓"
 
 #: u_translation.rsspectroscopy
 msgid "Spectroscopy"
-msgstr ""
+msgstr "光谱分析"
 
 #: u_translation.rsspeed
 msgid "Speed"
@@ -4734,7 +4768,7 @@ msgstr "星点轮廓"
 
 #: u_translation.rsstarsearchar
 msgid "Star search area"
-msgstr ""
+msgstr "星点搜索范围"
 
 #: u_translation.rsstart
 msgid "Start"
@@ -5023,6 +5057,15 @@ msgstr "电源"
 msgid "Switch"
 msgstr "电源开关"
 
+#: u_translation.rsswitchconnec
+msgid "Switch connection"
+msgstr ""
+
+#: u_translation.rsswitchfailed
+#, object-pascal-format
+msgid "Setting switch %s failed!"
+msgstr ""
+
 #: u_translation.rssynctoeq
 #, object-pascal-format
 msgid "Sync to %s %s/%s"
@@ -5043,7 +5086,7 @@ msgstr "控制曝光时间为%s秒"
 
 #: u_translation.rstarget
 msgid "Target"
-msgstr ""
+msgstr "目标"
 
 #: u_translation.rstargetcancel
 #, object-pascal-format
@@ -5065,7 +5108,7 @@ msgstr "目标%s名称"
 
 #: u_translation.rstargetpositi2
 msgid "Target position in finder image"
-msgstr ""
+msgstr "寻星镜图像中的目标位置"
 
 #: u_translation.rstargetprecis
 msgid "Target precision [arcmin] "
@@ -5079,11 +5122,6 @@ msgstr "目标"
 #, object-pascal-format
 msgid "Target %s coordinates not updated"
 msgstr "目标%s坐标未更新"
-
-#: u_translation.rstargetwillbe
-#, object-pascal-format
-msgid "Target can run until %s, in %s seconds"
-msgstr "目标直到%s可以运行，在%s秒后"
 
 #: u_translation.rstargetwillbe2
 msgid "Target will be recentered before next image"
@@ -5138,15 +5176,15 @@ msgstr "望远镜位置"
 #: u_translation.rstelescopesle
 #, object-pascal-format
 msgid "Telescope slew error: %s arcminutes."
-msgstr "望远镜指向误差：%s 角分。"
+msgstr "望远镜回转误差：%s 角分。"
 
 #: u_translation.rstelescopesle2
 msgid "Telescope slew"
-msgstr "望远镜指向"
+msgstr "望远镜回转"
 
 #: u_translation.rstelescopesle3
 msgid "Telescope slew failed"
-msgstr "望远镜指向失败"
+msgstr "望远镜回转失败"
 
 #: u_translation.rstemp
 msgid "Temp."
@@ -5310,7 +5348,7 @@ msgstr "本程序将会帮助您找到用于自动对焦的调焦器参数。%s�
 
 #: u_translation.rsthisprocedur2
 msgid "This procedure measure the position of the main instrument target in the finder camera image."
-msgstr ""
+msgstr "此过程测量主仪器目标在寻星相机图像中的位置。"
 
 #: u_translation.rsthissequence
 #, object-pascal-format
@@ -5355,6 +5393,10 @@ msgstr "定时器"
 #: u_translation.rstimesendtote
 msgid "Time send to telescope."
 msgstr "时间发送至望远镜"
+
+#: u_translation.rstimingestima
+msgid "Timing estimate"
+msgstr ""
 
 #: u_translation.rstomorrow
 msgid "tomorrow"
@@ -5542,6 +5584,10 @@ msgstr "利用解析%s来优化位置"
 msgid "Use astrometry to refine the position"
 msgstr "利用解析来优化位置"
 
+#: u_translation.rsusebacklashc
+msgid "Use backlash compensation"
+msgstr ""
+
 #: u_translation.rsusecovercali
 msgid "Use Cover calibrator"
 msgstr "使用镜头盖校准器"
@@ -5568,7 +5614,7 @@ msgstr "使用滤镜轮"
 
 #: u_translation.rsusefindercam
 msgid "Use finder camera"
-msgstr ""
+msgstr "使用寻星相机"
 
 #: u_translation.rsuseflatautom
 msgid "Use flat automatic exposure"
@@ -5616,7 +5662,7 @@ msgstr "使用电源开关"
 
 #: u_translation.rsusethisdevic
 msgid "Use this device if the main camera cannot be used for plate solving. Also configure the camera to use in Preferences/Slewing"
-msgstr ""
+msgstr "如果主相机不能用于解析，请使用此设备。同时在首选项/回转中配置所使用的像机"
 
 #: u_translation.rsusewatchdog
 msgid "Use watchdog"

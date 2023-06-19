@@ -2822,6 +2822,10 @@ msgstr ""
 msgid "Script %s failed!"
 msgstr ""
 
+#: u_translation:rsswitchfailed
+msgid "Setting switch %s failed!"
+msgstr ""
+
 #: u_translation:rsdoyouwanttor
 msgid "Do you want to retry?"
 msgstr ""
@@ -3236,10 +3240,6 @@ msgstr ""
 
 #: u_translation:rswaitingforda2
 msgid "Waiting for dark night"
-msgstr ""
-
-#: u_translation:rstargetwillbe
-msgid "Target can run until %s, in %s seconds"
 msgstr ""
 
 #: u_translation:rscontinue
@@ -4408,10 +4408,6 @@ msgstr ""
 
 #: u_translation:rsexposuretime4
 msgid "Exposure time too short for measurement, need %d seconds."
-msgstr ""
-
-#: u_translation:rsnomeasuremen
-msgid "No measurement, early start exposure not set."
 msgstr ""
 
 #: u_translation:rsnocenteringm
@@ -5632,5 +5628,53 @@ msgstr ""
 
 #: u_translation:rspreviewexpos
 msgid "Preview exposure"
+msgstr ""
+
+#: u_translation:rssavepreviewi
+msgid "Save preview images"
+msgstr ""
+
+#: u_translation:rsobjectsetsat
+msgid "Object sets at %s. In %s hour(s)"
+msgstr ""
+
+#: u_translation:rstimingestima
+msgid "Timing estimate"
+msgstr ""
+
+#: u_translation:rsadjustthecha
+msgid "Adjust the chart for the image or frame"
+msgstr ""
+
+#: u_translation:rsusebacklashc
+msgid "Use backlash compensation"
+msgstr ""
+
+#: u_translation:rsdeclinationb
+msgid "Declination backlash"
+msgstr ""
+
+#: u_translation:rsinversedsola
+msgid "Inversed solar guide control"
+msgstr ""
+
+#: u_translation:rspulseguiding
+msgid "Pulse guiding %s is reversed after meridian flip"
+msgstr ""
+
+#: u_translation:rspredefinedro
+msgid "Predefined ROI"
+msgstr ""
+
+#: u_translation:rsmodify
+msgid "Modify"
+msgstr ""
+
+#: u_translation:rsmarkeveryast
+msgid "Mark every astrometry result"
+msgstr ""
+
+#: u_translation:rsswitchconnec
+msgid "Switch connection"
 msgstr ""
 

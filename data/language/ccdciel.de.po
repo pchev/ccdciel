@@ -6,15 +6,15 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ccdciel\n"
 "Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
-"POT-Creation-Date: 2023-03-06 16:18+0000\n"
-"PO-Revision-Date: 2023-01-29 19:00+0000\n"
+"POT-Creation-Date: 2023-06-19 20:18+0000\n"
+"PO-Revision-Date: 2023-03-09 16:36+0000\n"
 "Last-Translator: Thomas <email@starhopper.de>\n"
 "Language-Team: German <de@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2023-03-06 16:32+0000\n"
-"X-Generator: Launchpad (build 1938a4fd80bdf1a1b1373119ac1ac9e0e65174d6)\n"
+"X-Launchpad-Export-Date: 2023-06-19 20:28+0000\n"
+"X-Generator: Launchpad (build 489330bbc434d558d7166379e406ed1fc8bbfcb2)\n"
 
 #: u_translation.rs2d
 msgid "2D"
@@ -68,7 +68,7 @@ msgstr "Aktion"
 
 #: u_translation.rsactivatesing
 msgid "Activate single star guiding on fixed position"
-msgstr ""
+msgstr "Nachführung auf fester Position aktivieren"
 
 #: u_translation.rsactivatesola
 msgid "Activate solar object tracking."
@@ -76,7 +76,7 @@ msgstr "Aktiviere Nachführung von Sonnensystem Objekten"
 
 #: u_translation.rsactivatespec
 msgid "Activate spectroscopy functions"
-msgstr ""
+msgstr "Aktiviere Spektroskopiefunktionen"
 
 #: u_translation.rsactivetarget
 msgid "Active target is replaced, restart the sequence"
@@ -100,7 +100,7 @@ msgstr "Bilder hinzufügen"
 
 #: u_translation.rsadditionalop
 msgid "Additional options for"
-msgstr ""
+msgstr "Zusatzoptionen für"
 
 #: u_translation.rsaddstep
 msgid "Add step"
@@ -115,6 +115,10 @@ msgstr "Passe Autofokus Sternhelligkeit an:%s, Belichtungsfaktor:%s"
 #, object-pascal-format
 msgid "Adjust flat exposure time to %s and retry."
 msgstr "Verändere die Flatbelichtungszeit auf %s und starte erneuten Versuch."
+
+#: u_translation.rsadjustthecha
+msgid "Adjust the chart for the image or frame"
+msgstr ""
 
 #: u_translation.rsadjustthemou
 msgid "Adjust the mount in azimuth and elevation such that the star moves from the green square to the pink circle."
@@ -255,7 +259,7 @@ msgstr "Autofokus nach dem Meridianflip"
 
 #: u_translation.rsautofocusaft2
 msgid "Autofocus after temperature change"
-msgstr ""
+msgstr "Autofokus nach Temperaturänderung"
 
 #: u_translation.rsautofocusalr
 msgid "Autofocus already running."
@@ -518,7 +522,7 @@ msgstr "Hintergrund neutralisieren"
 
 #: u_translation.rsbacklashcali
 msgid "Backlash calibration"
-msgstr ""
+msgstr "Getriebespiel Kalibrierung"
 
 #: u_translation.rsbacklashcomp
 msgid "Backlash compensation"
@@ -620,7 +624,7 @@ msgstr "Kalibrierung"
 
 #: u_translation.rscalibration2
 msgid "Special calibration"
-msgstr ""
+msgstr "Spezielle Kalibrierung"
 
 #: u_translation.rscalibrationd
 #, object-pascal-format
@@ -629,7 +633,7 @@ msgstr "Kalibrierung %sVerzögerung"
 
 #: u_translation.rscalibrationm
 msgid "Calibration measurement"
-msgstr ""
+msgstr "Kalibrierung"
 
 #: u_translation.rscalibrationr
 msgid "Calibration results:"
@@ -763,7 +767,7 @@ msgstr "Absolute Position des Fokussierers kann nicht ermittelt werden"
 #: u_translation.rscannotinterp
 #, object-pascal-format
 msgid "Cannot interpret the text \"%s\" as RA DEC values"
-msgstr ""
+msgstr "Der Text „%s“ kann nicht als RA DEC-Werte interpretiert werden"
 
 #: u_translation.rscannotoverwr
 msgid "Cannot overwrite the running sequence!"
@@ -951,7 +955,7 @@ msgstr "Klicken Sie auf Weiter, um diese Werte in der Konfiguration für dieses 
 
 #: u_translation.rsclickonimage
 msgid "Click on image to set"
-msgstr ""
+msgstr "Zum Einstellen auf das Bild klicken"
 
 #: u_translation.rsclicktheobje
 msgid "Click the object in planetarium"
@@ -1233,6 +1237,10 @@ msgstr "Debayer das aktuelle Bild"
 msgid "Dec"
 msgstr "Dec"
 
+#: u_translation.rsdeclinationb
+msgid "Declination backlash"
+msgstr ""
+
 #: u_translation.rsdefault
 msgid "Default"
 msgstr "Default"
@@ -1449,7 +1457,7 @@ msgstr "erledigt"
 
 #: u_translation.rsdonotchangea
 msgid "Do not change autoguiding state"
-msgstr ""
+msgstr "Autoguiding Status nicht ändern"
 
 #: u_translation.rsdonotdisplay
 msgid "Do not display images during capture"
@@ -1505,7 +1513,7 @@ msgstr "Ende-Aktionen jetzt ausführen"
 
 #: u_translation.rsdrawslitarea
 msgid "Draw slit area on image"
-msgstr ""
+msgstr "Sehschlitz auf das Bild zeichnen"
 
 #: u_translation.rsduration
 msgid "Duration"
@@ -1585,7 +1593,7 @@ msgstr "Ende"
 
 #: u_translation.rsenterthej200
 msgid "Enter the J2000 coordinates of the target where the main instrument is currently pointing."
-msgstr ""
+msgstr "Eingabe der Koordinaten (J2000) des Ziels auf welches das Hauptinstrument gerade zeigt."
 
 #: u_translation.rserror
 #, object-pascal-format
@@ -1621,7 +1629,7 @@ msgstr "Fehler beim Starten des Befehls: %s"
 
 #: u_translation.rserrorunknown
 msgid "Error: Unknown finder focal length, set in PREFERENCE, SLEWING."
-msgstr ""
+msgstr "Fehler: unbekannte Sucherbrennweite. Einstellen unter: EINSTELLUNGEN, SCHWENKEN"
 
 #: u_translation.rserrorunknowt
 msgid "Error: Unknown telescope focal length, set in telescope driver or in PREFERENCE, ASTROMETRY."
@@ -1774,11 +1782,11 @@ msgstr "Finale Bewegung (Schritte)"
 
 #: u_translation.rsfind
 msgid "Find."
-msgstr ""
+msgstr "Suche"
 
 #: u_translation.rsfindercamera
 msgid "Finder camera"
-msgstr ""
+msgstr "Sucher Kamera"
 
 #: u_translation.rsfit
 msgid "Fit"
@@ -2114,7 +2122,7 @@ msgstr "Nachführen"
 
 #: u_translation.rsguideboxsize
 msgid "Guide box size"
-msgstr ""
+msgstr "Größe des Guidingbereichs"
 
 #: u_translation.rsguidecamera
 msgid "Guide camera"
@@ -2122,11 +2130,11 @@ msgstr "Nachführkamera"
 
 #: u_translation.rsguideoffset
 msgid "Guide offset"
-msgstr ""
+msgstr "Guiding Offset"
 
 #: u_translation.rsguidepositio
 msgid "Guide position on the slit"
-msgstr ""
+msgstr "Guide Postion auf dem Schlitz"
 
 #: u_translation.rsguider
 msgid "Guider"
@@ -2233,7 +2241,7 @@ msgstr "Bild"
 
 #: u_translation.rsimagecenter
 msgid "Image center"
-msgstr ""
+msgstr "Bildmitte"
 
 #: u_translation.rsimagecleanup
 msgid "Image cleanup"
@@ -2418,6 +2426,10 @@ msgstr "Ungültige Objektkoordinaten!"
 msgid "Invalid or unsupported FITS file %s"
 msgstr "Ungültige oder nicht unterstützte FITS-Datei %s"
 
+#: u_translation.rsinversedsola
+msgid "Inversed solar guide control"
+msgstr ""
+
 #: u_translation.rsiterative
 msgid "Iterative"
 msgstr "Iterativ"
@@ -2448,7 +2460,7 @@ msgstr "Lernen"
 
 #: u_translation.rslength
 msgid "Length"
-msgstr ""
+msgstr "Länge"
 
 #: u_translation.rslicenseagree
 msgid "License agreement"
@@ -2496,7 +2508,7 @@ msgstr "Overlay sperren"
 
 #: u_translation.rslockposition
 msgid "Lock position"
-msgstr ""
+msgstr "Festgelegte Position"
 
 #: u_translation.rslogfolder
 msgid "Log folder"
@@ -2532,12 +2544,12 @@ msgstr "Grössenklasse"
 
 #: u_translation.rsmaincamera
 msgid "Main camera"
-msgstr ""
+msgstr "Hauptkamera"
 
 #: u_translation.rsmainimagecen
 #, object-pascal-format
 msgid "Main image center is at finder image X=%s, Y=%s"
-msgstr ""
+msgstr "Hauptbildzentrum befindet sich im Bild des Suchers bei X=%s, Y=%s"
 
 #: u_translation.rsmainsensor
 msgid "Main sensor"
@@ -2575,6 +2587,10 @@ msgstr "Viele Funktionen funktionieren ohne Astrometrie-Software nicht zuverläs
 #: u_translation.rsmarginoffset
 msgid "Margin offset"
 msgstr "Randversatz"
+
+#: u_translation.rsmarkeveryast
+msgid "Mark every astrometry result"
+msgstr ""
 
 #: u_translation.rsmax
 msgid "Max:"
@@ -2614,7 +2630,7 @@ msgstr "Maximaler Suchradius"
 
 #: u_translation.rsmaximumsearc2
 msgid "Maximum search box"
-msgstr ""
+msgstr "Maximaler Guidingbereich"
 
 #: u_translation.rsmaximumsourc
 msgid "Maximum sources"
@@ -2804,6 +2820,10 @@ msgstr "Mon."
 msgid "Mode:"
 msgstr "Modus:"
 
+#: u_translation.rsmodify
+msgid "Modify"
+msgstr ""
+
 #: u_translation.rsmoresettings
 msgid "More settings"
 msgstr "Weitere Einstellungen"
@@ -2931,7 +2951,7 @@ msgstr "Schwenk zur zweiten Position"
 
 #: u_translation.rsmultistargui
 msgid "Multi-star guide offset"
-msgstr ""
+msgstr "Multi-Star Guiding Offset"
 
 #: u_translation.rsnearfocus
 msgid "Near focus"
@@ -2965,7 +2985,7 @@ msgstr "Neue Koordinaten vom Planetarium: %s %s"
 
 #: u_translation.rsnewfindercal
 msgid "New finder calibration is successful"
-msgstr ""
+msgstr "Neue Sucherkalibrierung ist erfolgreich"
 
 #: u_translation.rsnewobject
 msgid "New object"
@@ -3050,10 +3070,6 @@ msgstr "Kein Flatfield"
 #: u_translation.rsnoflipuntilp
 msgid "No flip until past meridian for"
 msgstr "Kein Flip nach dem Meridian für"
-
-#: u_translation.rsnomeasuremen
-msgid "No measurement, early start exposure not set."
-msgstr "Keine Messung, früher Start der Belichtung nicht gesetzt"
 
 #: u_translation.rsnone2
 msgid "None"
@@ -3174,6 +3190,11 @@ msgstr "Objektname"
 msgid "Object %s, plan %s finished."
 msgstr "Objekt %s, Plan %s fertig."
 
+#: u_translation.rsobjectsetsat
+#, object-pascal-format
+msgid "Object sets at %s. In %s hour(s)"
+msgstr ""
+
 #: u_translation.rsobjectstartp
 #, object-pascal-format
 msgid "Object %s, start plan %s"
@@ -3277,15 +3298,15 @@ msgstr "Option1: Kalibration an der aktuellen Position"
 
 #: u_translation.rsoption2calib
 msgid "Option 2: Special calibration at current position for some mounts which reverse declination pulse guiding after the meridian flip."
-msgstr ""
+msgstr "Option 2: Spezielle Kalibrierung an der aktuellen Position für einige Montierungen, die das Pulseguiding nach dem Meridian-Flip umkehren."
 
 #: u_translation.rsoption3backl
 msgid "Option 3: Calibrate backlash compensation."
-msgstr ""
+msgstr "Option 3: Kalibriere Getriebspielkompensation"
 
 #: u_translation.rsoption4cance
 msgid "Option 4: Cancel."
-msgstr ""
+msgstr "Option 4: Abbrechen"
 
 #: u_translation.rsoptions
 #, object-pascal-format
@@ -3355,7 +3376,7 @@ msgstr "Passwort"
 
 #: u_translation.rspastfromclip
 msgid "Past from clipboard"
-msgstr ""
+msgstr "Einfügen aus der Zwischenablage"
 
 #: u_translation.rspause
 msgid "Pause"
@@ -3615,6 +3636,10 @@ msgstr "Präzisionsschwenk fehlgeschlagen"
 msgid "Predefined (recommended)"
 msgstr "Vordefiniert (empfohlen)"
 
+#: u_translation.rspredefinedro
+msgid "Predefined ROI"
+msgstr ""
+
 #: u_translation.rspreferedfocu
 msgid "Prefered focuser direction"
 msgstr "Bevorzugte Fokussierrichtung"
@@ -3642,7 +3667,7 @@ msgstr "Vorschau mit Debayer"
 
 #: u_translation.rspreviewexpos
 msgid "Preview exposure"
-msgstr ""
+msgstr "Vorschaubelichtung"
 
 #: u_translation.rsprofile
 #, object-pascal-format
@@ -3672,6 +3697,11 @@ msgstr "Pulsdauer"
 #: u_translation.rspulsegain
 msgid "pulse gain"
 msgstr "Pulse gain"
+
+#: u_translation.rspulseguiding
+#, object-pascal-format
+msgid "Pulse guiding %s is reversed after meridian flip"
+msgstr ""
 
 #: u_translation.rspythoncomman
 msgid "Python command"
@@ -3996,7 +4026,7 @@ msgstr "Rotation läuft"
 
 #: u_translation.rsrotation
 msgid "Rotation angle"
-msgstr ""
+msgstr "Rotationswinkel"
 
 #: u_translation.rsrotator
 msgid "Rotator"
@@ -4110,6 +4140,10 @@ msgstr "FITS Datei Speichern%s"
 msgid "Save picture%s"
 msgstr "Speichere Bild%s"
 
+#: u_translation.rssavepreviewi
+msgid "Save preview images"
+msgstr ""
+
 #: u_translation.rssavetempl
 msgid "Save template"
 msgstr "Vorlage speichern"
@@ -4212,7 +4246,7 @@ msgstr "Wählen Sie zuerst einen Stern aus"
 
 #: u_translation.rsselectguides
 msgid "Select guide star"
-msgstr ""
+msgstr "Guide Stern auswählen"
 
 #: u_translation.rsselectoneoft
 msgid "Select one of the measurement options:"
@@ -4391,7 +4425,7 @@ msgstr "Bildtyp einstellen %s"
 
 #: u_translation.rssetlockposit
 msgid "Set lock position"
-msgstr ""
+msgstr "Position verriegeln"
 
 #: u_translation.rssetmagnitude
 msgid "Set magnitude"
@@ -4613,7 +4647,7 @@ msgstr "Schlupfkorrektur "
 
 #: u_translation.rsslitdrawing
 msgid "Slit drawing"
-msgstr ""
+msgstr "Schlitz Zeichnung"
 
 #: u_translation.rsslope
 msgid "Slope"
@@ -4646,7 +4680,7 @@ msgstr "Software"
 
 #: u_translation.rssolvedimage
 msgid "Solved image"
-msgstr ""
+msgstr "Mit Platesolving behandelte Bild"
 
 #: u_translation.rssolvedinseco
 #, object-pascal-format
@@ -4667,7 +4701,7 @@ msgstr "Spektralprofil"
 
 #: u_translation.rsspectroscopy
 msgid "Spectroscopy"
-msgstr ""
+msgstr "Spektroskopie"
 
 #: u_translation.rsspeed
 msgid "Speed"
@@ -4734,7 +4768,7 @@ msgstr "Sternprofil"
 
 #: u_translation.rsstarsearchar
 msgid "Star search area"
-msgstr ""
+msgstr "Sternsuchbereich"
 
 #: u_translation.rsstart
 msgid "Start"
@@ -5023,6 +5057,15 @@ msgstr "Sw."
 msgid "Switch"
 msgstr "Schalter"
 
+#: u_translation.rsswitchconnec
+msgid "Switch connection"
+msgstr ""
+
+#: u_translation.rsswitchfailed
+#, object-pascal-format
+msgid "Setting switch %s failed!"
+msgstr ""
+
 #: u_translation.rssynctoeq
 #, object-pascal-format
 msgid "Sync to %s %s/%s"
@@ -5043,7 +5086,7 @@ msgstr "Nehme Kontrollbild auf mit %s Sekunden"
 
 #: u_translation.rstarget
 msgid "Target"
-msgstr ""
+msgstr "Ziel"
 
 #: u_translation.rstargetcancel
 #, object-pascal-format
@@ -5065,7 +5108,7 @@ msgstr "Ziel%sName"
 
 #: u_translation.rstargetpositi2
 msgid "Target position in finder image"
-msgstr ""
+msgstr "Zielposition im Sucherbild"
 
 #: u_translation.rstargetprecis
 msgid "Target precision [arcmin] "
@@ -5079,11 +5122,6 @@ msgstr "Ziele"
 #, object-pascal-format
 msgid "Target %s coordinates not updated"
 msgstr "Koordinaten des Ziels %s nicht aktualisiert"
-
-#: u_translation.rstargetwillbe
-#, object-pascal-format
-msgid "Target can run until %s, in %s seconds"
-msgstr "Ziel kann bis %s laufen, in %s Sekunden"
 
 #: u_translation.rstargetwillbe2
 msgid "Target will be recentered before next image"
@@ -5310,7 +5348,7 @@ msgstr "Dieses Verfahren hift die Einstellungen für Autofokus zu ermitteln.%s S
 
 #: u_translation.rsthisprocedur2
 msgid "This procedure measure the position of the main instrument target in the finder camera image."
-msgstr ""
+msgstr "Dieses Verfahren misst die Position des Hauptinstruments im Bild der Sucherkamera"
 
 #: u_translation.rsthissequence
 #, object-pascal-format
@@ -5355,6 +5393,10 @@ msgstr "Zeitmesser"
 #: u_translation.rstimesendtote
 msgid "Time send to telescope."
 msgstr "Uhrzeit wurde an das Teleskop gesendet."
+
+#: u_translation.rstimingestima
+msgid "Timing estimate"
+msgstr ""
 
 #: u_translation.rstomorrow
 msgid "tomorrow"
@@ -5542,6 +5584,10 @@ msgstr "Astrometrie zur%sPositionsverbesserung nutzen"
 msgid "Use astrometry to refine the position"
 msgstr "Benutze Astrometrie um die Position zu verbessern"
 
+#: u_translation.rsusebacklashc
+msgid "Use backlash compensation"
+msgstr ""
+
 #: u_translation.rsusecovercali
 msgid "Use Cover calibrator"
 msgstr "Benutze Flatfield Deckel"
@@ -5568,7 +5614,7 @@ msgstr "Benutze Filterrad"
 
 #: u_translation.rsusefindercam
 msgid "Use finder camera"
-msgstr ""
+msgstr "Benutze Sucher Kamera"
 
 #: u_translation.rsuseflatautom
 msgid "Use flat automatic exposure"
@@ -5616,7 +5662,7 @@ msgstr "Benutze Schalter"
 
 #: u_translation.rsusethisdevic
 msgid "Use this device if the main camera cannot be used for plate solving. Also configure the camera to use in Preferences/Slewing"
-msgstr ""
+msgstr "Dieses Gerät verwenden wenn die Hauptkamera nicht für Platesolving verwendet werden kann. Die zu verwendende Kamera unter Einstellungen/Schwenken konfiguieren."
 
 #: u_translation.rsusewatchdog
 msgid "Use watchdog"
