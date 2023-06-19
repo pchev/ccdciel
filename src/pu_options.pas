@@ -746,6 +746,7 @@ type
     procedure CustomHeaderKeyPress(Sender: TObject; var Key: char);
     procedure CustomHeaderValidateEntry(Sender: TObject; aCol, aRow: Integer; const OldValue: string; var NewValue: String);
     procedure DomeFlatPositionClick(Sender: TObject);
+    procedure FormDestroy(Sender: TObject);
     procedure LogDirDefaultClick(Sender: TObject);
     procedure ObservatoryDBDeleteClick(Sender: TObject);
     procedure ButtonNotificationAllClick(Sender: TObject);
@@ -2220,6 +2221,11 @@ begin
     LabelFlatWarning.Caption:=rsWarningTheMo
   else
     LabelFlatWarning.Caption:='';
+end;
+
+procedure Tf_option.FormDestroy(Sender: TObject);
+begin
+  ClearRoi;
 end;
 
 procedure Tf_option.ButtonHelpClick(Sender: TObject);

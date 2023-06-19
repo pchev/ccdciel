@@ -9,6 +9,7 @@ object f_option: Tf_option
   ClientWidth = 728
   KeyPreview = True
   OnCreate = FormCreate
+  OnDestroy = FormDestroy
   OnShow = FormShow
   object Panel1: TPanel
     Left = 0
@@ -1354,8 +1355,8 @@ object f_option: Tf_option
             Width = 240
             Align = alLeft
             Caption = 'Maximum temperature change '
-            ClientHeight = 68
-            ClientWidth = 236
+            ClientHeight = 98
+            ClientWidth = 240
             ParentFont = False
             TabOrder = 1
             object TemperatureSlopeActive: TCheckBox
