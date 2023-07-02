@@ -928,6 +928,9 @@ end;
 
 procedure Tf_sequence.EndSequence(Sender: TObject);
 begin
+ Targets.CheckDoneCount;
+ if Targets.AllDone then
+    ClearRestartHistory(false);
  FlatWaitDusk:=false;
  FlatWaitDawn:=false;
  led.Brush.Color:=clRed;
