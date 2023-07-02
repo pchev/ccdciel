@@ -33,13 +33,13 @@ object f_polaralign2: Tf_polaralign2
       object TabSheetStart: TTabSheet
         Caption = 'TabSheetStart'
         ClientHeight = 56
-        ClientWidth = 317
+        ClientWidth = 323
         object ButtonStart: TButton
           AnchorSideTop.Control = GotoPosition
           AnchorSideTop.Side = asrCenter
           Left = 230
           Height = 25
-          Top = 18
+          Top = 17
           Width = 75
           Caption = 'Start'
           OnClick = ButtonStartClick
@@ -47,10 +47,10 @@ object f_polaralign2: Tf_polaralign2
         end
         object GotoPosition: TComboBox
           Left = 8
-          Height = 35
+          Height = 32
           Top = 13
           Width = 216
-          ItemHeight = 0
+          ItemHeight = 18
           OnChange = GotoPositionChange
           Style = csDropDownList
           TabOrder = 1
@@ -59,7 +59,7 @@ object f_polaralign2: Tf_polaralign2
       object TabSheetAuto: TTabSheet
         Caption = 'TabSheetAuto'
         ClientHeight = 56
-        ClientWidth = 317
+        ClientWidth = 323
         object ButtonAbort1: TButton
           Left = 230
           Height = 25
@@ -73,7 +73,7 @@ object f_polaralign2: Tf_polaralign2
       object TabSheetMove1: TTabSheet
         Caption = 'TabSheetMove1'
         ClientHeight = 56
-        ClientWidth = 317
+        ClientWidth = 323
         object ButtonMove: TButton
           Left = 110
           Height = 25
@@ -107,7 +107,7 @@ object f_polaralign2: Tf_polaralign2
       object TabSheetAdjust: TTabSheet
         Caption = 'TabSheetAdjust'
         ClientHeight = 56
-        ClientWidth = 317
+        ClientWidth = 323
         object BtnLock: TToggleBox
           Left = 8
           Height = 25
@@ -131,7 +131,7 @@ object f_polaralign2: Tf_polaralign2
       object TabSheetMove2: TTabSheet
         Caption = 'TabSheetMove2'
         ClientHeight = 56
-        ClientWidth = 317
+        ClientWidth = 323
         object ButtonContinue: TButton
           Left = 230
           Height = 25
@@ -174,7 +174,7 @@ object f_polaralign2: Tf_polaralign2
     Visible = False
     object Label1: TLabel
       Left = 9
-      Height = 19
+      Height = 18
       Top = 7
       Width = 60
       Caption = 'Position 1'
@@ -182,7 +182,7 @@ object f_polaralign2: Tf_polaralign2
     end
     object Label2: TLabel
       Left = 9
-      Height = 19
+      Height = 18
       Top = 37
       Width = 60
       Caption = 'Position 2'
@@ -190,23 +190,23 @@ object f_polaralign2: Tf_polaralign2
     end
     object Label3: TLabel
       Left = 88
-      Height = 19
+      Height = 18
       Top = 8
-      Width = 19
+      Width = 18
       Caption = 'Az:'
       ParentColor = False
     end
     object Label4: TLabel
       Left = 88
-      Height = 19
+      Height = 18
       Top = 37
-      Width = 19
+      Width = 18
       Caption = 'Az:'
       ParentColor = False
     end
     object FloatSpinEditAz1: TFloatSpinEdit
       Left = 116
-      Height = 29
+      Height = 32
       Top = 2
       Width = 70
       DecimalPlaces = 1
@@ -216,7 +216,7 @@ object f_polaralign2: Tf_polaralign2
     end
     object FloatSpinEditAz2: TFloatSpinEdit
       Left = 116
-      Height = 29
+      Height = 32
       Top = 32
       Width = 70
       DecimalPlaces = 1
@@ -226,7 +226,7 @@ object f_polaralign2: Tf_polaralign2
     end
     object FloatSpinEditAlt1: TFloatSpinEdit
       Left = 240
-      Height = 29
+      Height = 32
       Top = 2
       Width = 70
       DecimalPlaces = 1
@@ -236,7 +236,7 @@ object f_polaralign2: Tf_polaralign2
     end
     object FloatSpinEditAlt2: TFloatSpinEdit
       Left = 240
-      Height = 29
+      Height = 32
       Top = 32
       Width = 70
       DecimalPlaces = 1
@@ -246,17 +246,17 @@ object f_polaralign2: Tf_polaralign2
     end
     object Label5: TLabel
       Left = 208
-      Height = 19
+      Height = 18
       Top = 8
-      Width = 21
+      Width = 20
       Caption = 'Alt:'
       ParentColor = False
     end
     object Label6: TLabel
       Left = 208
-      Height = 19
+      Height = 18
       Top = 37
-      Width = 21
+      Width = 20
       Caption = 'Alt:'
       ParentColor = False
     end

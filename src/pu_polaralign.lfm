@@ -25,13 +25,13 @@ object f_polaralign: Tf_polaralign
     object TabSheetStart: TTabSheet
       Caption = 'TabSheetStart'
       ClientHeight = 470
-      ClientWidth = 344
+      ClientWidth = 350
       ParentFont = False
       object Label5: TLabel
         Left = 0
         Height = 32
         Top = 0
-        Width = 344
+        Width = 350
         Align = alTop
         AutoSize = False
         Caption = 'Polar alignment instruction'
@@ -42,7 +42,7 @@ object f_polaralign: Tf_polaralign
         Left = 0
         Height = 191
         Top = 32
-        Width = 344
+        Width = 350
         Align = alClient
         AutoSize = False
         Caption = '...'
@@ -54,10 +54,10 @@ object f_polaralign: Tf_polaralign
         Left = 0
         Height = 55
         Top = 415
-        Width = 344
+        Width = 350
         Align = alBottom
         ClientHeight = 55
-        ClientWidth = 344
+        ClientWidth = 350
         ParentFont = False
         TabOrder = 0
         object BtnStart: TButton
@@ -72,7 +72,7 @@ object f_polaralign: Tf_polaralign
         end
         object LabelMsg1: TLabel
           Left = 2
-          Height = 19
+          Height = 18
           Top = 0
           Width = 67
           Caption = 'LabelMsg1'
@@ -83,9 +83,9 @@ object f_polaralign: Tf_polaralign
           AnchorSideTop.Control = BtnStart
           AnchorSideTop.Side = asrCenter
           Left = 2
-          Height = 21
-          Top = 24
-          Width = 100
+          Height = 22
+          Top = 23
+          Width = 104
           Caption = 'Save images'
           ParentFont = False
           TabOrder = 1
@@ -95,7 +95,7 @@ object f_polaralign: Tf_polaralign
         Left = 0
         Height = 50
         Top = 273
-        Width = 344
+        Width = 350
         Align = alBottom
         AutoFill = True
         Caption = 'Mount slewing'
@@ -107,8 +107,8 @@ object f_polaralign: Tf_polaralign
         ChildSizing.ShrinkVertical = crsScaleChilds
         ChildSizing.Layout = cclLeftToRightThenTopToBottom
         ChildSizing.ControlsPerLine = 2
-        ClientHeight = 30
-        ClientWidth = 342
+        ClientHeight = 20
+        ClientWidth = 346
         Columns = 2
         ItemIndex = 0
         Items.Strings = (
@@ -123,28 +123,28 @@ object f_polaralign: Tf_polaralign
         Left = 0
         Height = 92
         Top = 323
-        Width = 344
+        Width = 350
         Align = alBottom
         BevelOuter = bvNone
         ClientHeight = 92
-        ClientWidth = 344
+        ClientWidth = 350
         ParentFont = False
         TabOrder = 2
         object PanelManualSlew: TPanel
           Left = 0
           Height = 92
           Top = 0
-          Width = 344
+          Width = 350
           Align = alClient
           ClientHeight = 92
-          ClientWidth = 344
+          ClientWidth = 350
           ParentFont = False
           TabOrder = 1
           object Label3: TLabel
             Left = 1
             Height = 90
             Top = 1
-            Width = 342
+            Width = 348
             Align = alClient
             AutoSize = False
             ParentColor = False
@@ -156,18 +156,18 @@ object f_polaralign: Tf_polaralign
           Left = 0
           Height = 92
           Top = 0
-          Width = 344
+          Width = 350
           Align = alClient
           BevelOuter = bvNone
           ClientHeight = 92
-          ClientWidth = 344
+          ClientWidth = 350
           ParentFont = False
           TabOrder = 0
           object RotDir: TRadioGroup
             Left = 0
             Height = 50
             Top = 0
-            Width = 344
+            Width = 350
             Align = alTop
             AutoFill = True
             Caption = 'Rotation direction'
@@ -179,8 +179,8 @@ object f_polaralign: Tf_polaralign
             ChildSizing.ShrinkVertical = crsScaleChilds
             ChildSizing.Layout = cclLeftToRightThenTopToBottom
             ChildSizing.ControlsPerLine = 2
-            ClientHeight = 30
-            ClientWidth = 342
+            ClientHeight = 20
+            ClientWidth = 346
             Columns = 2
             ItemIndex = 0
             Items.Strings = (
@@ -194,11 +194,11 @@ object f_polaralign: Tf_polaralign
             Left = 0
             Height = 42
             Top = 50
-            Width = 344
+            Width = 350
             Align = alClient
             BevelOuter = bvNone
             ClientHeight = 42
-            ClientWidth = 344
+            ClientWidth = 350
             ParentFont = False
             TabOrder = 1
             object RotAngle: TSpinEdit
@@ -217,7 +217,7 @@ object f_polaralign: Tf_polaralign
               AnchorSideTop.Control = RotAngle
               AnchorSideTop.Side = asrCenter
               Left = 20
-              Height = 19
+              Height = 18
               Top = 13
               Width = 62
               Caption = 'Rotate by '
@@ -228,9 +228,9 @@ object f_polaralign: Tf_polaralign
               AnchorSideTop.Control = RotAngle
               AnchorSideTop.Side = asrCenter
               Left = 234
-              Height = 19
+              Height = 18
               Top = 13
-              Width = 41
+              Width = 42
               Caption = 'Label4'
               ParentColor = False
               ParentFont = False
@@ -242,7 +242,7 @@ object f_polaralign: Tf_polaralign
         Left = 0
         Height = 50
         Top = 223
-        Width = 344
+        Width = 350
         Align = alBottom
         AutoFill = True
         Caption = 'Alignment on'
@@ -253,8 +253,8 @@ object f_polaralign: Tf_polaralign
         ChildSizing.ShrinkVertical = crsScaleChilds
         ChildSizing.Layout = cclLeftToRightThenTopToBottom
         ChildSizing.ControlsPerLine = 2
-        ClientHeight = 30
-        ClientWidth = 342
+        ClientHeight = 20
+        ClientWidth = 346
         Columns = 2
         ItemIndex = 0
         Items.Strings = (
@@ -268,13 +268,13 @@ object f_polaralign: Tf_polaralign
     object TabSheetExpose: TTabSheet
       Caption = 'TabSheetExpose'
       ClientHeight = 470
-      ClientWidth = 344
+      ClientWidth = 350
       ParentFont = False
       object ExposeList: TCheckListBox
         Left = 0
         Height = 415
         Top = 0
-        Width = 344
+        Width = 350
         Align = alClient
         Items.Strings = (
           '1st exposure'
@@ -286,12 +286,11 @@ object f_polaralign: Tf_polaralign
           '3rd exposure'
           'Plate solve 3rd exposure'
         )
-        ItemHeight = 0
+        ItemHeight = 26
         OnItemClick = ExposeListItemClick
         OnSelectionChange = ExposeListSelectionChange
         ParentFont = False
         TabOrder = 0
-        TopIndex = -1
         Data = {
           080000000000000000000000
         }
@@ -300,10 +299,10 @@ object f_polaralign: Tf_polaralign
         Left = 0
         Height = 55
         Top = 415
-        Width = 344
+        Width = 350
         Align = alBottom
         ClientHeight = 55
-        ClientWidth = 344
+        ClientWidth = 350
         ParentFont = False
         TabOrder = 1
         object BtnCancel: TButton
@@ -318,7 +317,7 @@ object f_polaralign: Tf_polaralign
         end
         object LabelMsg2: TLabel
           Left = 2
-          Height = 19
+          Height = 18
           Top = 0
           Width = 67
           Caption = 'LabelMsg2'
@@ -340,16 +339,16 @@ object f_polaralign: Tf_polaralign
     object TabSheetCompute: TTabSheet
       Caption = 'TabSheetCompute'
       ClientHeight = 470
-      ClientWidth = 344
+      ClientWidth = 350
       ParentFont = False
       object Panel4: TPanel
         Left = 0
         Height = 55
         Top = 415
-        Width = 344
+        Width = 350
         Align = alBottom
         ClientHeight = 55
-        ClientWidth = 344
+        ClientWidth = 350
         ParentFont = False
         TabOrder = 0
         object BtnClose: TButton
@@ -364,7 +363,7 @@ object f_polaralign: Tf_polaralign
         end
         object LabelMsg3: TLabel
           Left = 2
-          Height = 19
+          Height = 18
           Top = 0
           Width = 67
           Caption = 'LabelMsg3'
@@ -386,7 +385,7 @@ object f_polaralign: Tf_polaralign
         Left = 0
         Height = 415
         Top = 0
-        Width = 344
+        Width = 350
         Align = alClient
         Color = clWindow
         Font.Color = clWindowText

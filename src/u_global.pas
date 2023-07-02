@@ -545,7 +545,7 @@ var
   {internal guider}
   InternalguiderRunning,InternalguiderCalibrating,InternalguiderCalibratingBacklash,InternalguiderGuiding,StopInternalguider,InternalguiderCapturingDark: boolean;
   {finder}
-  FinderPreviewLoop: boolean;
+  UseFinder,FinderPreviewLoop: boolean;
 
   procedure globalmsg(str:string);
   function Str2Frametype(str:string):TFrameType;

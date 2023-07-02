@@ -27,7 +27,8 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 interface
 
-uses u_translation, u_utils, u_global, fu_preview, cu_fits, cu_astrometry, cu_mount, cu_camera, cu_wheel, fu_visu, indiapi, UScaleDPI,
+uses u_translation, u_utils, u_global, fu_preview, cu_fits, cu_astrometry, cu_mount, cu_camera, cu_wheel,
+  fu_visu, fu_finder, indiapi, UScaleDPI,
   math, Classes, SysUtils, Forms, Controls, Graphics, Dialogs, ComCtrls, StdCtrls, ExtCtrls, CheckLst, Spin;
 
 type
@@ -81,6 +82,7 @@ type
   private
     FFits: TFits;
     Fpreview: Tf_preview;
+    Ffinder: Tf_finder;
     Fvisu: Tf_visu;
     Fwheel: T_wheel;
     FAstrometry: TAstrometry;
@@ -111,6 +113,7 @@ type
     procedure SetLang;
     property Fits: TFits read FFits write FFits;
     property Preview:Tf_preview read Fpreview write Fpreview;
+    property Finder: Tf_finder read Ffinder write Ffinder;
     property Visu: Tf_visu read Fvisu write Fvisu;
     property Wheel: T_wheel read Fwheel write Fwheel;
     property Astrometry: TAstrometry read FAstrometry write FAstrometry;
@@ -250,6 +253,7 @@ begin
   PolarAlignmentOverlay:=false;
   tracemsg('Close polar alignment form');
   if preview.Loop then preview.BtnLoopClick(nil);
+  if UseFinder then Ffinder.StopLoop;
   if Assigned(FonClose) then FonClose(self);
 end;
 
@@ -313,6 +317,7 @@ begin
     if Astrometry.Busy then Astrometry.StopAstrometry;
   end;
   FInProgress:=false;
+  PolarAlignmentOverlay:=false;
   Close;
 end;
 
@@ -467,6 +472,7 @@ end;
 procedure Tf_polaralign.Solve(step: integer);
 var cra,cde,eq,pa,x,y,dx,dy,de: double;
     i:integer;
+    ok: boolean;
 begin
   // solve the current image
   if Mount.Status<>devConnected then begin
@@ -481,9 +487,16 @@ begin
     fits.Header.Insert(i-1,'OBJCTDEC',de,'polaralign');
     fits.Header.Insert(i-1,'EQUINOX',2000,'polaralign');
   end;
-  FAstrometry.SolveCurrentImage(true);
+  if UseFinder then
+    FAstrometry.SolveFinderImage
+  else
+    FAstrometry.SolveCurrentImage(true);
   if (not FAstrometry.Busy)and FAstrometry.LastResult then begin
-     if FAstrometry.CurrentCoord(cra,cde,eq,pa) then begin
+     if UseFinder then
+       ok:=FAstrometry.FinderCurrentCoord(cra,cde,eq,pa)
+     else
+       ok:=FAstrometry.CurrentCoord(cra,cde,eq,pa);
+     if ok then begin
        tracemsg('Plate solve successful for image '+inttostr(step));
        tracemsg('Image center J2000: RA='+FormatFloat(f6,cra)+' DEC='+FormatFloat(f6,cde)+' PA='+FormatFloat(f6,pa));
        cra:=cra*15*deg2rad;
@@ -564,7 +577,7 @@ var bisect1, bisect2, bisect3: TLineDouble;
     parallel1,parallel2,parallel3: boolean;
     err,errx,erry,poleoffset,poleH,poleRefraction: Double;
     txt: string;
-    n: integer;
+    c,n: integer;
     p: TcdcWCScoord;
     rotRa, rotDec, ra, de, azRa, azDec: double;
 begin
@@ -660,6 +673,10 @@ begin
   tracemsg(rsVerticalCorr+' '+txt);
   Memo1.Lines.Add(txt);
   Memo1.Lines.Add('');
+  if UseFinder then
+    c:=2
+  else
+    c:=0;
   // vector to new position in camera plane
   // From the pole
   ra:=0;
@@ -668,7 +685,7 @@ begin
   p.ra:=rad2deg*ra;
   p.dec:=rad2deg*de;
   tracemsg('Pole J2000:  RA='+FormatFloat(f6,p.ra)+' DEC='+FormatFloat(f6,p.dec));
-  n:=cdcwcs_sky2xy(@p,0);
+  n:=cdcwcs_sky2xy(@p,c);
   tracemsg('Pole in image plane X='+FormatFloat(f6,p.x)+' Y='+FormatFloat(f6,p.y));
   PolarAlignmentStartx:=p.x;
   PolarAlignmentStarty:=fits.HeaderInfo.naxis2-p.y;
@@ -684,7 +701,7 @@ begin
   PrecessionFK5(jdtoday,jd2000,ra,de);
   p.ra:=rad2deg*ra;
   p.dec:=rad2deg*de;
-  n:=cdcwcs_sky2xy(@p,0);
+  n:=cdcwcs_sky2xy(@p,c);
   PolarAlignmentAzx:=p.x;
   PolarAlignmentAzy:=fits.HeaderInfo.naxis2-p.y;
   // To mount axis
@@ -694,7 +711,7 @@ begin
   p.ra:=rad2deg*ra;
   p.dec:=rad2deg*de;
   tracemsg('Rotation center J2000:  RA='+FormatFloat(f6,p.ra)+' DEC='+FormatFloat(f6,p.dec));
-  n:=cdcwcs_sky2xy(@p,0);
+  n:=cdcwcs_sky2xy(@p,c);
   tracemsg('Rotation center in image plane X='+FormatFloat(f6,p.x)+' Y='+FormatFloat(f6,p.y)+' image height='+IntToStr(fits.HeaderInfo.naxis2));
   PolarAlignmentEndx:=p.x;
   PolarAlignmentEndy:=fits.HeaderInfo.naxis2-p.y;
@@ -720,12 +737,19 @@ begin
   exit;
   {$endif}
   // start image loop
-  FVisu.BtnZoomAdjust.Click;
-  preview.Exposure:=config.GetValue('/PrecSlew/Exposure',1.0);
-  preview.Bin:=config.GetValue('/PrecSlew/Binning',1);
-  preview.Gain:=config.GetValue('/PrecSlew/Gain',NullInt);
-  preview.Offset:=config.GetValue('/PrecSlew/Offset',NullInt);
-  if not preview.Loop then preview.BtnLoopClick(nil);
+  if UseFinder then begin
+    Ffinder.BtnZoomAdjust.click;
+    Ffinder.PreviewExp.Value:=config.GetValue('/PrecSlew/Exposure',1.0);
+    Ffinder.StartLoop;
+  end
+  else begin
+    FVisu.BtnZoomAdjust.Click;
+    preview.Exposure:=config.GetValue('/PrecSlew/Exposure',1.0);
+    preview.Bin:=config.GetValue('/PrecSlew/Binning',1);
+    preview.Gain:=config.GetValue('/PrecSlew/Gain',NullInt);
+    preview.Offset:=config.GetValue('/PrecSlew/Offset',NullInt);
+    if not preview.Loop then preview.BtnLoopClick(nil);
+  end;
   FInProgress:=false;
   tracemsg('Computation complete');
 end;

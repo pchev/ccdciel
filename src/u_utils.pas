@@ -97,7 +97,9 @@ function atmospheric_absorption(airmass: double):double;
 Procedure cmdEq2Hz(ra,de : double ; out a,h : double);
 Procedure cmdHz2Eq(a,h : double; out ra,de : double);
 procedure GuiderScreen2Fits(x,y: integer; FlipVert: boolean; out xx,yy:integer);
+procedure FinderScreen2Fits(x,y: integer;  FlipVert: boolean; out xx,yy:integer);
 procedure Screen2Fits(x,y: integer;  FlipHorz,FlipVert: boolean; out xx,yy:integer);
+procedure FinderFits2Screen(x,y: integer; FlipVert: boolean; out xx,yy: integer);
 procedure Fits2Screen(x,y: integer; FlipHorz,FlipVert: boolean; out xx,yy: integer);
 procedure Screen2CCD(x,y: integer; FlipHorz,FlipVert: boolean; vflip:boolean; out xx,yy:integer);
 procedure CCD2Screen(x,y: integer; FlipHorz,FlipVert: boolean; vflip:boolean; out xx,yy:integer);
@@ -1575,6 +1577,24 @@ except
 end;
 end;
 
+procedure FinderScreen2Fits(x,y: integer; FlipVert: boolean; out xx,yy:integer);
+begin
+try
+  if FlipVert then y:=ScrHeigth-y;
+  if FinderImgZoom=0  then begin
+     xx:=trunc(((x/FinderImgScale0)-FinderOrigX)/FinderImgPixRatio);
+     yy:=trunc((y/FinderImgScale0)-FinderOrigY);
+  end
+  else begin
+     xx:=trunc(((x/FinderImgZoom)-FinderOrigX)/FinderImgPixRatio);
+     yy:=trunc((y/FinderImgZoom)-FinderOrigY);
+  end;
+except
+  xx:=-1;
+  yy:=-1;
+end;
+end;
+
 procedure Screen2Fits(x,y: integer; FlipHorz,FlipVert: boolean; out xx,yy:integer);
 begin
 try
@@ -1630,6 +1650,36 @@ try
     end;
   end;
   if FlipHorz then xx:=ScrWidth-xx;
+  if FlipVert then yy:=ScrHeigth-yy;
+except
+  xx:=-1;
+  yy:=-1;
+end;
+end;
+
+procedure FinderFits2Screen(x,y: integer; FlipVert: boolean; out xx,yy: integer);
+begin
+try
+  if FinderImgZoom=0 then begin
+    if FinderImgPixRatio>=1 then begin
+      xx:=round((x * FinderImgPixRatio+FinderOrigX )* FinderImgScale0);
+      yy:=round((y+FinderOrigY )* FinderImgScale0);
+    end
+    else begin
+      xx:=round((x+FinderOrigX )* FinderImgScale0);
+      yy:=round((y/FinderImgPixRatio+FinderOrigY )* FinderImgScale0);
+    end;
+  end
+  else begin
+    if FinderImgPixRatio>=1 then begin
+      xx:=round(((x+0.5) * FinderImgPixRatio+FinderOrigX)*FinderImgZoom);
+      yy:=round((y+0.5+FinderOrigY)*FinderImgZoom);
+    end
+    else begin
+      xx:=round((x+FinderOrigX )* FinderImgZoom);
+      yy:=round((y/FinderImgPixRatio+FinderOrigY )* FinderImgZoom);
+    end;
+  end;
   if FlipVert then yy:=ScrHeigth-yy;
 except
   xx:=-1;

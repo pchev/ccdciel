@@ -25,7 +25,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 interface
 
-uses u_translation, u_utils, u_global, fu_preview, pu_goto, cu_fits,
+uses u_translation, u_utils, u_global, fu_preview, pu_goto, cu_fits, fu_finder,
   cu_astrometry, cu_mount, cu_wheel, cu_camera, fu_visu, indiapi, UScaleDPI, math,
   LazSysUtils, Classes, SysUtils, Forms, Controls, Graphics, Dialogs, StdCtrls,
   ExtCtrls, ComCtrls, ActnList, Spin;
@@ -79,6 +79,7 @@ type
   private
     FFits: TFits;
     Fpreview: Tf_preview;
+    Ffinder: Tf_finder;
     Fvisu: Tf_visu;
     Fwheel: T_wheel;
     Fcamera: T_camera;
@@ -115,6 +116,7 @@ type
     procedure SetLang;
     property Fits: TFits read FFits write FFits;
     property Preview:Tf_preview read Fpreview write Fpreview;
+    property Finder: Tf_finder read Ffinder write Ffinder;
     property Visu: Tf_visu read Fvisu write Fvisu;
     property Wheel: T_wheel read Fwheel write Fwheel;
     property Camera: T_camera read Fcamera write Fcamera;
@@ -295,6 +297,7 @@ begin
   if not FAborted then
     SaveConfig;
   if preview.Loop then preview.BtnLoopClick(nil);
+  if UseFinder then Ffinder.StopLoop;
   if Assigned(FonClose) then FonClose(self);
 end;
 
@@ -398,12 +401,20 @@ procedure Tf_polaralign2.Solve(step: integer);
 var cra,cde,eq,pa,jd0: double;
     y,m,d: integer;
     h: double;
+    ok: boolean;
 begin
   // solve the current image
   f_goto.CheckImageInfo(fits);
-  FAstrometry.SolveCurrentImage(true);
+  if UseFinder then
+    FAstrometry.SolveFinderImage
+  else
+    FAstrometry.SolveCurrentImage(true);
   if (not FAstrometry.Busy)and FAstrometry.LastResult then begin
-     if FAstrometry.CurrentCoord(cra,cde,eq,pa) then begin
+     if UseFinder then
+       ok:=FAstrometry.FinderCurrentCoord(cra,cde,eq,pa)
+     else
+       ok:=FAstrometry.CurrentCoord(cra,cde,eq,pa);
+     if ok then begin
        wait(1); // show solve messages now
        tracemsg('Plate solve successful for image '+inttostr(step));
        tracemsg('Image center J2000: RA='+FormatFloat(f6,cra)+' DEC='+FormatFloat(f6,cde)+' PA='+FormatFloat(f6,pa));
@@ -585,45 +596,63 @@ end;
 
 procedure Tf_polaralign2.StartAdjustement;
 var cra,cde,eq,pa: double;
+    ok: boolean;
 begin
   // new measurement after telescope as moved to the position to make the polar axis correction
   StopImageLoop;
   TakeExposure;
   if FAborted then exit;
   f_goto.CheckImageInfo(fits);
-  FAstrometry.SolveCurrentImage(true);
+  if UseFinder then
+    FAstrometry.SolveFinderImage
+  else
+    FAstrometry.SolveCurrentImage(true);
   if FAborted then exit;
-  if FAstrometry.Busy or (not FAstrometry.LastResult) or
-    (not FAstrometry.CurrentCoord(cra,cde,eq,pa)) then begin
+  if (not FAstrometry.Busy)and FAstrometry.LastResult then begin
+     if UseFinder then
+       ok:=FAstrometry.FinderCurrentCoord(cra,cde,eq,pa)
+     else
+       ok:=FAstrometry.CurrentCoord(cra,cde,eq,pa);
+     if ok then begin
+       cra:=cra*15*deg2rad;
+       cde:=cde*deg2rad;
+       J2000ToApparent(cra,cde);
+       // adjustement at current position
+       CurrentAdjustement(cra,cde);
+       tracemsg('Stars in new image have to move: '+FormatFloat(f2,rad2deg*(corr_ra/max(0.00000000000000000001,cos(FDe[2])))*60)+' arcminutes in RA and '+FormatFloat(f2,rad2deg*(corr_de)*60)+' arcminutes in DEC by the correction.');
+       ComputeCorrection;
+       StartImageLoop;
+     end;
+  end
+  else begin
     msg(rsFailToResolv,1);
     AbortAlignment;
   end;
-  cra:=cra*15*deg2rad;
-  cde:=cde*deg2rad;
-  J2000ToApparent(cra,cde);
-  // adjustement at current position
-  CurrentAdjustement(cra,cde);
-  tracemsg('Stars in new image have to move: '+FormatFloat(f2,rad2deg*(corr_ra/max(0.00000000000000000001,cos(FDe[2])))*60)+' arcminutes in RA and '+FormatFloat(f2,rad2deg*(corr_de)*60)+' arcminutes in DEC by the correction.');
-  ComputeCorrection;
-  StartImageLoop;
 end;
 
 procedure Tf_polaralign2.ComputeCorrection;
 var p: TcdcWCScoord;
     ra,de,eq,pa: double;
-    n: integer;
+    c,n: integer;
     ok:boolean;
 begin
 try
-  ok:=true;
-  if (not FAstrometry.CurrentCoord(ra,de,eq,pa)) then begin
+   if UseFinder then begin
+     c:=2;
+     ok:=FAstrometry.FinderCurrentCoord(ra,de,eq,pa)
+   end
+   else begin
+     c:=0;
+     ok:=FAstrometry.CurrentCoord(ra,de,eq,pa);
+   end;
+  if not ok then begin
     msg(rsFailToResolv,1);
     AbortAlignment;
   end;
   // start point
   p.ra:=ra*15;
   p.dec:=de;
-  n:=cdcwcs_sky2xy(@p,0);
+  n:=cdcwcs_sky2xy(@p,c);
   if n=1 then begin ok:=false; exit; end;
   PolarAlignmentStartx:=p.x;
   PolarAlignmentStarty:=fits.HeaderInfo.naxis2-p.y;
@@ -631,7 +660,7 @@ try
   // intermediate point
   p.ra:=ra*15-rad2deg*corr_rai;
   p.dec:=de-rad2deg*corr_dei;
-  n:=cdcwcs_sky2xy(@p,0);
+  n:=cdcwcs_sky2xy(@p,c);
   if n=1 then begin ok:=false; exit; end;
   PolarAlignmentAzx:=p.x;
   PolarAlignmentAzy:=fits.HeaderInfo.naxis2-p.y;
@@ -639,7 +668,7 @@ try
   // end point
   p.ra:=ra*15-rad2deg*corr_ra;
   p.dec:=de-rad2deg*corr_de;
-  n:=cdcwcs_sky2xy(@p,0);
+  n:=cdcwcs_sky2xy(@p,c);
   if n=1 then begin ok:=false; exit; end;
   PolarAlignmentEndx:=p.x;
   PolarAlignmentEndy:=fits.HeaderInfo.naxis2-p.y;
@@ -837,12 +866,19 @@ end;
 procedure Tf_polaralign2.StartImageLoop;
 begin
   // start image loop
-  FVisu.BtnZoomAdjust.Click;
-  preview.Exposure:=config.GetValue('/PrecSlew/Exposure',1.0);
-  preview.Bin:=config.GetValue('/PrecSlew/Binning',1);
-  preview.Gain:=config.GetValue('/PrecSlew/Gain',NullInt);
-  preview.Offset:=config.GetValue('/PrecSlew/Offset',NullInt);
-  if not preview.Loop then preview.BtnLoopClick(nil);
+  if UseFinder then begin
+    Ffinder.BtnZoomAdjust.click;
+    Ffinder.PreviewExp.Value:=config.GetValue('/PrecSlew/Exposure',1.0);
+    Ffinder.StartLoop;
+  end
+  else begin
+    FVisu.BtnZoomAdjust.Click;
+    preview.Exposure:=config.GetValue('/PrecSlew/Exposure',1.0);
+    preview.Bin:=config.GetValue('/PrecSlew/Binning',1);
+    preview.Gain:=config.GetValue('/PrecSlew/Gain',NullInt);
+    preview.Offset:=config.GetValue('/PrecSlew/Offset',NullInt);
+    if not preview.Loop then preview.BtnLoopClick(nil);
+  end;
 end;
 
 procedure Tf_polaralign2.StopImageLoop;
@@ -852,6 +888,7 @@ begin
      preview.BtnLoopClick(nil);
      wait;
   end;
+  if UseFinder then Ffinder.StopLoop;
 end;
 
 procedure Tf_polaralign2.AbortAlignment;
@@ -862,6 +899,7 @@ begin
   if FInProgress then begin
     if Mount.MountSlewing then Mount.AbortMotion;
     if preview.Loop then preview.BtnLoopClick(nil);
+    if UseFinder then Ffinder.StopLoop;
     Fcamera.AbortExposure;
     if Astrometry.Busy then Astrometry.StopAstrometry;
   end;

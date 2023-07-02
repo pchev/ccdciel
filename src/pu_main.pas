@@ -1564,6 +1564,7 @@ begin
   ImageGuide.OnMouseWheel := @ImageGuideMouseWheel;
   ImageGuide.OnDblClick := @MenuItemSelectGuideStarClick;
   InternalGuiderSetLockPosition:=false;
+  UseFinder:=false;
   ScrFinderBmp := TBGRABitmap.Create;
   ImaFinderBmp:=TBGRABitmap.Create(1,1);
   finderimg_Height:=0;
@@ -2696,12 +2697,14 @@ begin
 
   f_polaralign.Fits:=fits;
   f_polaralign.Preview:=f_preview;
+  f_polaralign.Finder:=f_finder;
   f_polaralign.Visu:=f_visu;
   f_polaralign.Astrometry:=astrometry;
   f_polaralign.onShowMessage:=@NewMessage;
   f_polaralign.onClose:=@PolaralignClose;
   f_polaralign2.Fits:=fits;
   f_polaralign2.Preview:=f_preview;
+  f_polaralign2.Finder:=f_finder;
   f_polaralign2.Visu:=f_visu;
   f_polaralign2.Astrometry:=astrometry;
   f_polaralign2.onShowMessage:=@NewMessage;
@@ -11517,7 +11520,7 @@ begin
 try
   if f_starprofile=nil then exit;
   ScrBmp.Draw(Image1.Canvas,0,0,true);
-  if PolarAlignmentOverlay then begin
+  if PolarAlignmentOverlay and (not UseFinder) then begin
      Fits2Screen(round(PolarAlignmentStartX+PolarAlignmentOverlayOffsetX),round(PolarAlignmentStartY+PolarAlignmentOverlayOffsetY),f_visu.FlipHorz,f_visu.FlipVert,x1,y1);
      Fits2Screen(round(PolarAlignmentEndX+PolarAlignmentOverlayOffsetX),round(PolarAlignmentEndY+PolarAlignmentOverlayOffsetY),f_visu.FlipHorz,f_visu.FlipVert,x2,y2);
      Fits2Screen(round(PolarAlignmentAzX+PolarAlignmentOverlayOffsetX),round(PolarAlignmentAzY+PolarAlignmentOverlayOffsetY),f_visu.FlipHorz,f_visu.FlipVert,x3,y3);
@@ -11804,9 +11807,18 @@ begin
   end;
   if f_preview.Loop then f_preview.BtnLoopClick(nil);
   f_polaralign.Mount:=mount;
-  f_polaralign.Camera:=camera;
-  f_polaralign.Fits:=Fits;
   f_polaralign.Wheel:=wheel;
+  if UseFinder then begin
+    TBFinder.Click;
+    f_finder.StopLoop;
+    f_polaralign.Camera:=findercamera;
+    f_polaralign.Fits:=finderfits;
+  end
+  else begin
+    TBConnect.Click;
+    f_polaralign.Camera:=camera;
+    f_polaralign.Fits:=Fits;
+  end;
   pt.x:=-f_polaralign.Width-8;
   pt.y:=PanelCenter.top;
   pt:=ClientToScreen(pt);
@@ -11837,8 +11849,17 @@ begin
   if f_preview.Loop then f_preview.BtnLoopClick(nil);
   f_polaralign2.Mount:=mount;
   f_polaralign2.Wheel:=wheel;
-  f_polaralign2.Camera:=camera;
-  f_polaralign2.Fits:=Fits;
+  if UseFinder then begin
+    TBFinder.Click;
+    f_finder.StopLoop;
+    f_polaralign2.Camera:=findercamera;
+    f_polaralign2.Fits:=finderfits;
+  end
+  else begin
+    TBConnect.Click;
+    f_polaralign2.Camera:=camera;
+    f_polaralign2.Fits:=Fits;
+  end;
   pt.x:=-f_polaralign2.Width-8;
   pt.y:=PanelCenter.top;
   pt:=ClientToScreen(pt);
@@ -16861,6 +16882,7 @@ begin
   if astrometry=nil then exit;
   n:=config.GetValue('/Astrometry/Camera',0);
   if (n=1) and (not WantFinderCamera) then n:=0;
+  UseFinder:=(n=1);
   case n of
     0: astrometry.FinderCamera:=nil;
     1: astrometry.FinderCamera:=findercamera;
@@ -17076,6 +17098,7 @@ ImageFinder.Invalidate;
 end;
 
 procedure Tf_main.ImageFinderPaint(Sender: TObject);
+var x1,y1,x2,y2,x3,y3,xr1,yr1,xr2,yr2,xr3,yr3,xr4,yr4,r: integer;
 begin
 try
   if (ScrFinderBmp.Height>0)and(ScrFinderBmp.Width>0) then
@@ -17085,6 +17108,34 @@ try
   ImageFinder.Canvas.Font.Color:=clSilver;
   ImageFinder.Canvas.Font.Size:=DoScaleX(16);
   ImageFinder.Canvas.TextOut(1, 1, rsFinderCamera);
+  if PolarAlignmentOverlay and UseFinder then begin
+     FinderFits2Screen(round(PolarAlignmentStartX+PolarAlignmentOverlayOffsetX),round(PolarAlignmentStartY+PolarAlignmentOverlayOffsetY),true,x1,y1);
+     FinderFits2Screen(round(PolarAlignmentEndX+PolarAlignmentOverlayOffsetX),round(PolarAlignmentEndY+PolarAlignmentOverlayOffsetY),true,x2,y2);
+     FinderFits2Screen(round(PolarAlignmentAzX+PolarAlignmentOverlayOffsetX),round(PolarAlignmentAzY+PolarAlignmentOverlayOffsetY),true,x3,y3);
+     r:=DoScaleX(2);
+     ImageFinder.Canvas.brush.Style:=bsClear;
+     ImageFinder.Canvas.Pen.Color:=clGreen;
+     ImageFinder.Canvas.Pen.Mode:=pmMerge;
+     ImageFinder.Canvas.Pen.Style:=psSolid;
+     ImageFinder.Canvas.Pen.Width:=r;
+     r:=4*r;
+     CircleIntersect(x1,y1,r,x2,y2,xr1,yr1);
+     CircleIntersect(x2,y2,r,x1,y1,xr2,yr2);
+     if (PlaneDistance(x1,y1,x2,y2)>r) then
+       ImageFinder.Canvas.Line(xr1,yr1,xr2,yr2);
+     ImageFinder.Canvas.Rectangle(x1-r,y1-r,x1+r,y1+r);
+     ImageFinder.Canvas.Pen.Color:=clPurple;
+     ImageFinder.Canvas.Ellipse(x2-r,y2-r,x2+r,y2+r);
+     if (PlaneDistance(x1,y1,x3,y3)>r)and(PlaneDistance(x2,y2,x3,y3)>r) then begin
+       ImageFinder.Canvas.Pen.Color:=clBlue;
+       CircleIntersect(x1,y1,r,x3,y3,xr3,yr3);
+       ImageFinder.Canvas.Line(xr3,yr3,x3,y3);
+       ImageFinder.Canvas.Pen.Color:=clMaroon;
+       CircleIntersect(x2,y2,r,x3,y3,xr4,yr4);
+       ImageFinder.Canvas.Line(x3,y3,xr4,yr4);
+     end;
+     ImageFinder.Canvas.Pen.Mode:=pmCopy;
+  end;
 except
 end;
 end;
@@ -17093,7 +17144,11 @@ procedure Tf_main.ImageFinderMouseDown(Sender: TObject; Button: TMouseButton;
   Shift: TShiftState; X, Y: Integer);
 begin
 if Shift=[ssLeft] then begin
-  if (FinderImgZoom>0) then begin
+  if PolarAlignmentOverlay and (not PolarAlignmentLock) then begin
+     FinderScreen2Fits(X,Y,true,Polx,Poly);
+     PolarMoving:=true;
+  end
+  else if (FinderImgZoom>0) then begin
      FinderMx:=X;
      FinderMy:=y;
      FinderMouseMoving:=true;
@@ -17110,10 +17165,20 @@ else if (ssCtrl in Shift) then begin
 end;
 end;
 
-procedure Tf_main.ImageFinderMouseMove(Sender: TObject; Shift: TShiftState; X,
-  Y: Integer);
+procedure Tf_main.ImageFinderMouseMove(Sender: TObject; Shift: TShiftState; X,Y: Integer);
+var px,py,dx,dy: integer;
 begin
- if FinderMouseMoving and finderfits.HeaderInfo.valid and finderfits.ImageValid then begin
+ if PolarMoving  and finderfits.HeaderInfo.valid and finderfits.ImageValid then begin
+   FinderScreen2Fits(X,Y,true,px,py);
+   dx:=px-PolX;
+   dy:=py-PolY;
+   Polx:=px;
+   Poly:=py;
+   PolarAlignmentOverlayOffsetX:=PolarAlignmentOverlayOffsetX + dx;
+   PolarAlignmentOverlayOffsetY:=PolarAlignmentOverlayOffsetY + dy;
+   ImageFinder.Invalidate;
+  end
+ else if FinderMouseMoving and finderfits.HeaderInfo.valid and finderfits.ImageValid then begin
     FinderImgCx:=FinderImgCx + (X-FinderMx) / FinderImgZoom;
     FinderImgCy:=FinderImgCy - (Y-FinderMy) / FinderImgZoom;
     FinderPlotTimer.Enabled:=true;
@@ -17128,6 +17193,10 @@ end;
 procedure Tf_main.ImageFinderMouseUp(Sender: TObject; Button: TMouseButton;
   Shift: TShiftState; X, Y: Integer);
 begin
+if PolarMoving then begin
+  FinderMx:=X;
+  FinderMy:=Y;
+end;
 if FinderMouseMoving and finderfits.HeaderInfo.valid and finderfits.ImageValid then begin
     FinderImgCx:=FinderImgCx + (X-FinderMx) / FinderImgZoom;
     FinderImgCy:=FinderImgCy - (Y-FinderMy) / FinderImgZoom;
@@ -17136,6 +17205,7 @@ if FinderMouseMoving and finderfits.HeaderInfo.valid and finderfits.ImageValid t
     FinderMy:=Y;
 end;
 FinderMouseMoving:=false;
+PolarMoving:=false;
 screen.Cursor:=crDefault;
 end;
 
