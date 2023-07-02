@@ -631,12 +631,15 @@ begin
   Switches.Clear;
   Switchlist.Clear;
   SwitchValue.Text:='';
+  try
   for i:=0 to NumSwitches-1 do begin
      Switches.Items.Add(FSwitch[i].Nickname);
   end;
   if NumSwitches>0 then begin
     Switches.ItemIndex:=0;
     SwitchesChange(Switches);
+  end;
+  except
   end;
 end;
 
