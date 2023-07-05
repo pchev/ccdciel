@@ -6,15 +6,15 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ccdciel\n"
 "Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
-"POT-Creation-Date: 2023-06-19 20:18+0000\n"
+"POT-Creation-Date: 2023-07-05 11:00+0000\n"
 "PO-Revision-Date: 2023-03-09 16:36+0000\n"
 "Last-Translator: Thomas <email@starhopper.de>\n"
 "Language-Team: German <de@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2023-06-19 20:28+0000\n"
-"X-Generator: Launchpad (build 489330bbc434d558d7166379e406ed1fc8bbfcb2)\n"
+"X-Launchpad-Export-Date: 2023-07-05 11:24+0000\n"
+"X-Generator: Launchpad (build beda0e9dd2b131780db60fe479d4b43618b27243)\n"
 
 #: u_translation.rs2d
 msgid "2D"
@@ -232,6 +232,10 @@ msgstr "Eine Sequenz läuft bereits, kann keine neue laden."
 #: u_translation.rsastrometry
 msgid "Astrometry"
 msgstr "Astrometrie"
+
+#: u_translation.rsastrometryex
+msgid "Astrometry exposure time"
+msgstr ""
 
 #: u_translation.rsastrometryop
 msgid "Astrometry options"
@@ -5579,6 +5583,10 @@ msgstr "Astrometrie zur%sPositionsverbesserung nutzen"
 #: u_translation.rsuseastrometr
 msgid "Use astrometry to refine the position"
 msgstr "Benutze Astrometrie um die Position zu verbessern"
+
+#: u_translation.rsuseastrometr2
+msgid "Use astrometry to identify the target"
+msgstr ""
 
 #: u_translation.rsusebacklashc
 msgid "Use backlash compensation"

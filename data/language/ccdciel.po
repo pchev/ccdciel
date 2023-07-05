@@ -5674,3 +5674,11 @@ msgstr ""
 msgid "Switch connection"
 msgstr ""
 
+#: u_translation:rsuseastrometr2
+msgid "Use astrometry to identify the target"
+msgstr ""
+
+#: u_translation:rsastrometryex
+msgid "Astrometry exposure time"
+msgstr ""
+

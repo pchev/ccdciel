@@ -6,15 +6,15 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ccdciel\n"
 "Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
-"POT-Creation-Date: 2023-06-19 20:18+0000\n"
-"PO-Revision-Date: 2023-06-11 12:49+0000\n"
+"POT-Creation-Date: 2023-07-05 11:00+0000\n"
+"PO-Revision-Date: 2023-06-21 03:24+0000\n"
 "Last-Translator: Zachary Wu <Unknown>\n"
 "Language-Team: Chinese (Simplified) <zh_CN@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2023-06-19 20:28+0000\n"
-"X-Generator: Launchpad (build 489330bbc434d558d7166379e406ed1fc8bbfcb2)\n"
+"X-Launchpad-Export-Date: 2023-07-05 11:24+0000\n"
+"X-Generator: Launchpad (build beda0e9dd2b131780db60fe479d4b43618b27243)\n"
 
 #: u_translation.rs2d
 msgid "2D"
@@ -118,7 +118,7 @@ msgstr "调整平场曝光时间到%s再重试。"
 
 #: u_translation.rsadjustthecha
 msgid "Adjust the chart for the image or frame"
-msgstr ""
+msgstr "根据图像或帧来调整绘图"
 
 #: u_translation.rsadjustthemou
 msgid "Adjust the mount in azimuth and elevation such that the star moves from the green square to the pink circle."
@@ -232,6 +232,10 @@ msgstr "已经有一个序列正在运行，无法载入新的。"
 #: u_translation.rsastrometry
 msgid "Astrometry"
 msgstr "天体测量"
+
+#: u_translation.rsastrometryex
+msgid "Astrometry exposure time"
+msgstr ""
 
 #: u_translation.rsastrometryop
 msgid "Astrometry options"
@@ -1239,7 +1243,7 @@ msgstr "Dec"
 
 #: u_translation.rsdeclinationb
 msgid "Declination backlash"
-msgstr ""
+msgstr "赤纬回差"
 
 #: u_translation.rsdefault
 msgid "Default"
@@ -2428,7 +2432,7 @@ msgstr "无效的或不支持的FITS文件%s"
 
 #: u_translation.rsinversedsola
 msgid "Inversed solar guide control"
-msgstr ""
+msgstr "倒转的太阳系导星控制"
 
 #: u_translation.rsiterative
 msgid "Iterative"
@@ -2590,7 +2594,7 @@ msgstr "边缘偏移量"
 
 #: u_translation.rsmarkeveryast
 msgid "Mark every astrometry result"
-msgstr ""
+msgstr "标记每个天体测量结果"
 
 #: u_translation.rsmax
 msgid "Max:"
@@ -2822,7 +2826,7 @@ msgstr "模式："
 
 #: u_translation.rsmodify
 msgid "Modify"
-msgstr ""
+msgstr "修改"
 
 #: u_translation.rsmoresettings
 msgid "More settings"
@@ -3193,7 +3197,7 @@ msgstr "天体%s，计划%s完成。"
 #: u_translation.rsobjectsetsat
 #, object-pascal-format
 msgid "Object sets at %s. In %s hour(s)"
-msgstr ""
+msgstr "天体设置在 %s。以 %s 小时为单位"
 
 #: u_translation.rsobjectstartp
 #, object-pascal-format
@@ -3638,7 +3642,7 @@ msgstr "预设定（推荐的）"
 
 #: u_translation.rspredefinedro
 msgid "Predefined ROI"
-msgstr ""
+msgstr "预定义的ROI"
 
 #: u_translation.rspreferedfocu
 msgid "Prefered focuser direction"
@@ -3697,7 +3701,7 @@ msgstr "脉冲增益"
 #: u_translation.rspulseguiding
 #, object-pascal-format
 msgid "Pulse guiding %s is reversed after meridian flip"
-msgstr ""
+msgstr "导星脉冲 %s 在中天翻转后倒转"
 
 #: u_translation.rspythoncomman
 msgid "Python command"
@@ -4138,7 +4142,7 @@ msgstr "保存图片%s"
 
 #: u_translation.rssavepreviewi
 msgid "Save preview images"
-msgstr ""
+msgstr "保存预览图像"
 
 #: u_translation.rssavetempl
 msgid "Save template"
@@ -5055,12 +5059,12 @@ msgstr "电源开关"
 
 #: u_translation.rsswitchconnec
 msgid "Switch connection"
-msgstr ""
+msgstr "开关连接"
 
 #: u_translation.rsswitchfailed
 #, object-pascal-format
 msgid "Setting switch %s failed!"
-msgstr ""
+msgstr "设置开关%s失败！"
 
 #: u_translation.rssynctoeq
 #, object-pascal-format
@@ -5392,7 +5396,7 @@ msgstr "时间发送至望远镜"
 
 #: u_translation.rstimingestima
 msgid "Timing estimate"
-msgstr ""
+msgstr "时序估计"
 
 #: u_translation.rstomorrow
 msgid "tomorrow"
@@ -5580,9 +5584,13 @@ msgstr "利用解析%s来优化位置"
 msgid "Use astrometry to refine the position"
 msgstr "利用解析来优化位置"
 
+#: u_translation.rsuseastrometr2
+msgid "Use astrometry to identify the target"
+msgstr ""
+
 #: u_translation.rsusebacklashc
 msgid "Use backlash compensation"
-msgstr ""
+msgstr "使用回差补偿"
 
 #: u_translation.rsusecovercali
 msgid "Use Cover calibrator"
