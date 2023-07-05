@@ -1861,6 +1861,7 @@ begin
   autoguider.onDisconnect:=@AutoguiderDisconnect;
   autoguider.onShowMessage:=@NewMessage;
   autoguider.InternalGuider:=f_internalguider;
+  autoguider.Astrometry:=astrometry;
   autoguider.GuideBmp:=ImaGuideBmp;
   autoguider.GuideFits:=guidefits;
 
@@ -4734,6 +4735,9 @@ begin
   f_internalguider.SlitW:=config.GetValue('/InternalGuider/Spectro/SlitW',0);
   f_internalguider.SlitL:=config.GetValue('/InternalGuider/Spectro/SlitL',0);
   f_internalguider.SlitPA:=config.GetValue('/InternalGuider/Spectro/SlitPA',0);
+  f_internalguider.cbUseAstrometry.Checked:=config.GetValue('/InternalGuider/Spectro/UseAstrometry',false);
+  f_internalguider.AstrometryExp.Value:=config.GetValue('/InternalGuider/Spectro/AstrometryExposure',10);
+  f_internalguider.cbUseAstrometryChange(nil);
   f_internalguider.cbSpectroChange(nil);
   f_internalguider.cbGuideLockChange(nil);
 
@@ -5005,6 +5009,7 @@ begin
     autoguider.onDisconnect:=@AutoguiderDisconnect;
     autoguider.onShowMessage:=@NewMessage;
     autoguider.InternalGuider:=f_internalguider;
+    autoguider.Astrometry:=astrometry;
     autoguider.GuideBmp:=ImaGuideBmp;
     autoguider.GuideFits:=guidefits;
     autoguider.SettleTolerance(SettlePixel,SettleMinTime, SettleMaxTime);
@@ -5330,6 +5335,8 @@ begin
   config.SetValue('/InternalGuider/Spectro/SlitW',f_internalguider.SlitW);
   config.SetValue('/InternalGuider/Spectro/SlitL',f_internalguider.SlitL);
   config.SetValue('/InternalGuider/Spectro/SlitPA',f_internalguider.SlitPA);
+  config.SetValue('/InternalGuider/Spectro/UseAstrometry',f_internalguider.cbUseAstrometry.Checked);
+  config.SetValue('/InternalGuider/Spectro/AstrometryExposure',f_internalguider.AstrometryExp.Value);
 
   // finder offset need to be saved at the same time
   config.SetValue('/Finder/OffsetX',astrometry.FinderOffsetX);
@@ -8219,6 +8226,7 @@ begin
    autoguider.onDisconnect:=@AutoguiderDisconnect;
    autoguider.onShowMessage:=@NewMessage;
    autoguider.InternalGuider:=f_internalguider;
+   autoguider.Astrometry:=astrometry;
    autoguider.GuideBmp:=ImaGuideBmp;
    autoguider.GuideFits:=guidefits;
    f_sequence.Autoguider:=autoguider;

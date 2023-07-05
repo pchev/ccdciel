@@ -48,7 +48,7 @@ type
     xy_trend : xy_guiderlist;{fu_internalguider}
     xy_array,xy_array_old : star_position_array;//internal guider for measure drift
     GuideLog: TextFile;
-    FPaused, FSettling, FSettlingInRange,PulseGuiding: boolean;
+    FPaused, FSettling, FSettlingInRange,PulseGuiding,OffsetFromTarget: boolean;
     InternalguiderCalibratingMeridianFlip : boolean;
     FSettleStartTime, FSettleTime: double;
     TimerWaitPulseGuiding: TTimer;
@@ -84,6 +84,7 @@ type
     procedure Dither(pixel:double; raonly:boolean; waittime:double); override;
     function GetLockPosition(out x,y:double):boolean; override;
     procedure SetLockPosition(x,y: double); override;
+    function SpectroSetTarget(TargetRa,TargetDec: double):boolean; override;
     procedure InternalguiderLoop;
     procedure InternalguiderStart;
     procedure InternalguiderStop;
@@ -167,6 +168,7 @@ begin
   FPaused:=false;
   FSettling:=false;
   PulseGuiding:=false;
+  OffsetFromTarget:=false;
   FSettlePix:=1;
   FSettleTmin:=5;
   FSettleTmax:=30;
@@ -465,8 +467,13 @@ begin
     setlength(xy_array,maxstars);
     ditherx:=0;// dither offset
     dithery:=0;
-    Finternalguider.OffsetX:=ditherX; // always reset on initialize
-    Finternalguider.OffsetY:=ditherY;
+    if OffsetFromTarget then
+      // set by target, do not clear
+      OffsetFromTarget:=false
+    else begin
+      Finternalguider.OffsetX:=ditherX; // reset if not set by target position
+      Finternalguider.OffsetY:=ditherY;
+    end;
   end;
 
   GuideLock:=finternalguider.SpectroFunctions and finternalguider.GuideLock and (not (InternalguiderCalibrating or InternalguiderCalibratingBacklash));
@@ -2068,6 +2075,67 @@ begin
       mean_hfd:=mean_hfd/star_counter;
     end;
     finternalguider.LabelInfo.Caption:=IntToStr(star_counter)+' stars, HFD: '+FormatFloat(f1,mean_hfd)+', SNR: '+FormatFloat(f0,maxSNR);
+end;
+
+function T_autoguider_internal.SpectroSetTarget(TargetRa,TargetDec: double):boolean;
+var n,bin,gain,offset: integer;
+    exp,xt,yt: double;
+    c: TcdcWCScoord;
+begin
+// set Spectro target position ra,de J2000 in hh.hhhh dd.dddd
+// compute the target x,y position in the guide image
+// so the target is moved to the slit when the guiding is started
+  if finternalguider.SpectroFunctions and finternalguider.cbUseAstrometry.Checked
+     and(cdcwcs_sky2xy<>nil) and (TargetRa<>NullCoord)and(TargetDec<>NullCoord) then begin
+    result:=false;
+    exp:=finternalguider.AstrometryExp.value;
+    bin:=finternalguider.Binning.Value;
+    gain:=finternalguider.Gain.Value;
+    offset:=finternalguider.Offset.Value;
+    FCamera.ObjectName:=rsGuide;
+    FCamera.GuidePixelScale:=finternalguider.pixel_size;
+    if FCamera.ControlExposure(exp,bin,bin,LIGHT,ReadoutModeAstrometry,gain,offset) then begin
+      FAstrometry.SolveGuideImage(true);
+      if Fastrometry.LastResult then begin
+         c.ra:=TargetRa*15;
+         c.dec:=TargetDec;
+         n:=cdcwcs_sky2xy(@c,1);
+         if n=0 then begin
+           xt:=c.x;
+           yt:=c.y;
+           msg('Spectro target x='+FormatFloat(f1,xt)+' y='+FormatFloat(f1,yt),3);
+           if Finternalguider.GuideLock then begin
+             // single star guiding, set the search position for a bright star
+             finternalguider.GuideLockNextX:=round(xt);
+             finternalguider.GuideLockNextY:=round(guideimg_Height-yt);
+             finternalguider.DrawSettingChange:=true;
+           end
+           else begin
+             // multi-star guiding, set the guide offset to move the target on the slit
+             OffsetFromTarget:=true;
+             finternalguider.OffsetX:=-finternalguider.LockX+xt;
+             finternalguider.OffsetY:=finternalguider.LockY-yt;
+           end;
+           result:=true;
+         end
+         else begin
+           msg('Spectro target out of frame x='+FormatFloat(f1,c.x)+' y='+FormatFloat(f1,c.y),0);
+           result:=false;
+         end;
+      end
+      else begin
+        msg('Fail to solve guide image',0);
+        result:=false;
+      end;
+    end
+    else begin
+      msg('Guide camera exposure fail',0);
+      result:=false;
+    end;
+  end
+  else begin
+    result:=true;
+  end;
 end;
 
 end.

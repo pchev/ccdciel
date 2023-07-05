@@ -54,7 +54,7 @@ TAstrometry = class(TComponent)
     Xslew, Yslew: integer;
     FFinderOffsetX, FFinderOffsetY: double;
     AstrometryTimeout: double;
-    TimerAstrometrySolve, TimerAstrometrySync, TimerAstrometrySlewScreenXY,TimerAstrometrySolveGuide,TimerAstrometrySyncFinder : TTimer;
+    TimerAstrometrySolve, TimerAstrometrySync, TimerAstrometrySlewScreenXY,TimerAstrometrySyncFinder : TTimer;
     procedure AstrometrySolveonTimer(Sender: TObject);
     procedure AstrometrySynconTimer(Sender: TObject);
     procedure AstrometrySlewScreenXYonTimer(Sender: TObject);
@@ -65,7 +65,6 @@ TAstrometry = class(TComponent)
     procedure AstrometrySyncFinder(Sender: TObject);
     procedure AstrometrySlewScreenXY(Sender: TObject);
     procedure AstrometrySolveGuide(Sender: TObject);
-    procedure AstrometrySolveGuideonTimer(Sender: TObject);
     procedure AstrometrySolveFinder(Sender: TObject);
     procedure AstrometrySyncFinderonTimer(Sender: TObject);
     procedure AstrometrySolvePreview(Sender: TObject);
@@ -76,9 +75,10 @@ TAstrometry = class(TComponent)
     procedure AstrometryDone(errstr:string);
     function  CurrentCoord(out cra,cde,eq,pa: double):boolean;
     function  FinderCurrentCoord(out cra,cde,eq,pa: double):boolean;
+    function  GuideCurrentCoord(out cra,cde,eq,pa: double):boolean;
     procedure SolveCurrentImage(wait: boolean; forcesolve:boolean=false);
     procedure SolvePreviewImage;
-    procedure SolveGuideImage;
+    procedure SolveGuideImage(wait: boolean = false);
     procedure SolveFinderImage;
     procedure SyncFinderImage(wait: boolean);
     function GetFinderOffset(ra2000,de2000: double):boolean;
@@ -133,10 +133,6 @@ begin
   TimerAstrometrySolve.Enabled:=false;
   TimerAstrometrySolve.Interval:=100;
   TimerAstrometrySolve.OnTimer:=@AstrometrySolveonTimer;
-  TimerAstrometrySolveGuide:=TTimer.Create(self);
-  TimerAstrometrySolveGuide.Enabled:=false;
-  TimerAstrometrySolveGuide.Interval:=100;
-  TimerAstrometrySolveGuide.OnTimer:=@AstrometrySolveGuideonTimer;
   TimerAstrometrySync:=TTimer.Create(self);
   TimerAstrometrySync.Enabled:=false;
   TimerAstrometrySync.Interval:=100;
@@ -353,6 +349,29 @@ begin
     msg('Missing library '+libwcs,1);
 end;
 
+function TAstrometry.GuideCurrentCoord(out cra,cde,eq,pa: double):boolean;
+var n,m: integer;
+    i: TcdcWCSinfo;
+    c: TcdcWCScoord;
+begin
+  result:=false;
+  if cdcwcs_xy2sky<>nil then begin
+    n:=cdcwcs_getinfo(addr(i),1);
+    if (n=0)and(i.secpix<>0) then begin
+      c.x:=0.5+i.wp/2;
+      c.y:=0.5+i.hp/2;
+      m:=cdcwcs_xy2sky(@c,1); // do not check the result, can be out of frame
+      cra:=c.ra/15;
+      cde:=c.dec;
+      eq:=2000;
+      pa:=i.rot;
+      result:=true;
+    end;
+  end
+  else
+    msg('Missing library '+libwcs,1);
+end;
+
 procedure TAstrometry.SolveCurrentImage(wait: boolean; forcesolve:boolean=false);
 var n: integer;
 begin
@@ -538,29 +557,23 @@ begin
   end;
 end;
 
-procedure TAstrometry.SolveGuideImage;
+procedure TAstrometry.SolveGuideImage(wait: boolean = false);
 begin
   if (not FBusy) and (FGuideFits.HeaderInfo.naxis>0) and FGuideFits.ImageValid then begin
     FGuideFits.SaveToFile(slash(TmpDir)+'guidetmp.fits');
     StartAstrometry(slash(TmpDir)+'guidetmp.fits',slash(TmpDir)+'guidesolved.fits',@AstrometrySolveGuide);
+    if wait then WaitBusy(AstrometryTimeout+30);
   end;
 end;
 
 procedure TAstrometry.AstrometrySolveGuide(Sender: TObject);
-begin
-  TimerAstrometrySolveGuide.Enabled:=true;
-end;
-
-procedure TAstrometry.AstrometrySolveGuideonTimer(Sender: TObject);
 var ra,de,pa,ra2000,de2000: double;
     n,m: integer;
     i: TcdcWCSinfo;
     c: TcdcWCScoord;
 begin
-TimerAstrometrySolveGuide.Enabled:=false;
 if cdcwcs_xy2sky<>nil then begin
   n:=cdcwcs_initfitsfile(pchar(slash(TmpDir)+'guidesolved.fits'),1);
-  try
   if n=0 then n:=cdcwcs_getinfo(addr(i),1);
   if (n=0)and(i.secpix<>0) then begin
     c.x:=0.5+i.wp/2;
@@ -580,9 +593,6 @@ if cdcwcs_xy2sky<>nil then begin
       msg(rsGuideCamera+': '+rsFOV+blank+FormatFloat(f2, i.wp*i.secpix/60)+'x'+FormatFloat(f2, i.hp*i.secpix/60)+smin+', '+rsPixelScale+': '+FormatFloat(f2,i.secpix)+ssec+'/'+rsPixel,3);
       msg(rsGuideCamera+': '+Format(rsCenterAppare, [RAToStr(ra), DEToStr(de), FormatFloat(f1, pa)])+', J2000 '+rsRA+'='+RAToStr(ra2000)+' '+rsDec+'='+DEToStr(de2000),3);
     end;
-  end;
-  finally
-    cdcwcs_release(1);
   end;
 end
 else

@@ -1522,6 +1522,8 @@ resourcestring
   rsModify = 'Modify';
   rsMarkEveryAst = 'Mark every astrometry result';
   rsSwitchConnec = 'Switch connection';
+  rsUseAstrometr2 = 'Use astrometry to identify the target';
+  rsAstrometryEx = 'Astrometry exposure time';
 
 implementation
 

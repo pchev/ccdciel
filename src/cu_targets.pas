@@ -26,7 +26,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 interface
 
 uses u_global, cu_plan, u_utils, indiapi, pu_scriptengine, pu_pause, cu_rotator, cu_planetarium,
-  fu_capture, fu_preview, fu_filterwheel, cu_mount, cu_camera, cu_autoguider, cu_astrometry,
+  fu_capture, fu_preview, fu_filterwheel, cu_mount, cu_camera, cu_autoguider, cu_autoguider_internal, cu_astrometry,
   fu_safety, fu_weather, cu_dome, u_ccdconfig, cu_sequencefile, fu_internalguider, math,
   u_translation, LazFileUtils, Controls, Dialogs, ExtCtrls,Classes, Forms, SysUtils;
 
@@ -131,7 +131,7 @@ type
       procedure RunErrorAction;
       procedure RunEndAction(confirm: boolean=true);
       function StopGuider:boolean;
-      function StartGuider:boolean;
+      function StartGuider(TargetRa,TargetDec: double):boolean;
       function Slew(ra,de: double; precision,planprecision: boolean):boolean;
       procedure TargetTimerTimer(Sender: TObject);
       procedure TargetRepeatTimerTimer(Sender: TObject);
@@ -2445,7 +2445,7 @@ begin
                        ((not autofocusstart)or (InplaceAutofocus and (not AutofocusPauseGuider))) and
                        (not isCalibrationTarget);
       if autostartguider then begin
-        if not StartGuider then begin
+        if not StartGuider(t.ra,t.de) then begin
           InitTargetError:=rsFailedToStar;
           exit;
         end;
@@ -2730,11 +2730,16 @@ begin
   result:=Autoguider.WaitBusy(60);
 end;
 
-function T_Targets.StartGuider:boolean;
+function T_Targets.StartGuider(TargetRa,TargetDec: double):boolean;
 begin
  result:=false;
  if Autoguider=nil then exit;
  if (mount.Status=devConnected)and(not mount.Tracking) then exit;
+  if autoguider is T_autoguider_internal then begin
+    // set the target position if the spectroscopy function is activated, do nothing otherwise.
+    // implemented only for the internal guider.
+    if not autoguider.SpectroSetTarget(TargetRa,TargetDec) then exit;
+  end;
   msg(rsStartAutogui,2);
   Autoguider.Guide(true);
   result:=Autoguider.WaitGuiding(CalibrationDelay+SettleMaxTime);
@@ -2749,7 +2754,7 @@ begin
     f_pause.Text:=Format(rsAutoguiderNo2, [inttostr(CalibrationDelay+
       SettleMaxTime), crlf]);
     if f_pause.Wait(WaitResponseTime,false) then begin
-       result:=StartGuider();
+       result:=StartGuider(TargetRa,TargetDec);
        exit;
     end;
   end;

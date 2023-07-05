@@ -25,7 +25,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 interface
 
-uses u_global, LCLIntf, u_translation, cu_mount, cu_camera, BGRABitmap, cu_fits, fu_internalguider,
+uses u_global, LCLIntf, u_translation, cu_mount, cu_camera, BGRABitmap, cu_fits, fu_internalguider, cu_astrometry,
   Forms, Classes, SysUtils, ExtCtrls;
 
 type
@@ -61,6 +61,7 @@ type
     FGuideBmp: TBGRABitmap;
     FGuideFits: Tfits;
     Finternalguider: Tf_internalguider;
+    Fastrometry: TAstrometry;
     Fdelay: single;
     procedure msg(txt:string; level: integer); // Only from main thread, use displaymessage() otherwise
     procedure StarLostTimerTimer(Sender: TObject);
@@ -87,6 +88,7 @@ type
     procedure Dither(pixel:double; raonly:boolean; waittime:double); virtual; abstract;
     function GetLockPosition(out x,y: double):boolean; virtual; abstract;
     procedure SetLockPosition(x,y: double); virtual; abstract;
+    function SpectroSetTarget(TargetRa,TargetDec: double): boolean; virtual; abstract;
     function WaitBusy(maxwait:integer=5):boolean; virtual; abstract;
     function WaitGuiding(maxwait:integer=5):boolean; virtual; abstract;
     function WaitDithering(maxwait:integer=5):boolean; virtual; abstract;
@@ -112,6 +114,7 @@ type
     property GuideBmp: TBGRABitmap read FGuideBmp write FGuideBmp;
     property GuideFits: Tfits read FGuideFits write FGuideFits;
     property InternalGuider: Tf_internalguider read Finternalguider write Finternalguider;
+    property Astrometry: TAstrometry read Fastrometry write FAstrometry;
     property onConnect: TNotifyEvent read FonConnect  write FonConnect;
     property onConnectError: TNotifyEvent read FonConnectError  write FonConnectError;
     property onDisconnect: TNotifyEvent read FonDisconnect  write FonDisconnect;

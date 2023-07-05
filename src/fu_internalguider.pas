@@ -55,6 +55,7 @@ type
     cbGuideLock: TCheckBox;
     cbDrawSlit: TCheckBox;
     cbSpectro: TCheckBox;
+    cbUseAstrometry: TCheckBox;
     CheckBoxBacklash: TCheckBox;
     CheckBoxInverseSolarTracking1: TCheckBox;
     CheckBoxReverseDec1: TCheckBox;
@@ -64,6 +65,7 @@ type
     edOffsetX: TFloatSpinEdit;
     edOffsetY: TFloatSpinEdit;
     Exposure: TFloatSpinEdit;
+    AstrometryExp: TFloatSpinEdit;
     GroupBoxSlit: TGroupBox;
     GroupBox4: TGroupBox;
     GroupBoxSearchArea: TGroupBox;
@@ -88,6 +90,7 @@ type
     Label36: TLabel;
     Label37: TLabel;
     Label38: TLabel;
+    Label39: TLabel;
     LabelInfo: TLabel;
     LabelInfo2: TLabel;
     LabelTemperature: TLabel;
@@ -198,6 +201,7 @@ type
     procedure cbDrawSlitChange(Sender: TObject);
     procedure cbGuideLockChange(Sender: TObject);
     procedure cbSpectroChange(Sender: TObject);
+    procedure cbUseAstrometryChange(Sender: TObject);
     procedure CheckBoxBacklashChange(Sender: TObject);
     procedure CheckBoxTrackSolar1Change(Sender: TObject);
     procedure CoolerClick(Sender: TObject);
@@ -509,6 +513,8 @@ begin
   label28.Caption:=rsLockPosition+' X';
   label29.Caption:=rsLockPosition+' Y';
   ButtonSetLock.Caption:=rsClickOnImage;
+  cbUseAstrometry.Caption:=rsUseAstrometr2;
+  label39.Caption:=rsAstrometryEx;
   GroupBoxOffset.Caption:=rsMultiStarGui;
   Label37.Caption:=rsGuideOffset+' X';
   Label38.Caption:=rsGuideOffset+' Y';
@@ -794,6 +800,12 @@ end;
 procedure Tf_internalguider.cbSpectroChange(Sender: TObject);
 begin
   PanelSpectro.Enabled:=cbSpectro.Checked;
+end;
+
+procedure Tf_internalguider.cbUseAstrometryChange(Sender: TObject);
+begin
+  AstrometryExp.Enabled:=cbUseAstrometry.Checked;
+  label39.Enabled:=cbUseAstrometry.Checked;
 end;
 
 procedure Tf_internalguider.CheckBoxBacklashChange(Sender: TObject);

@@ -50,6 +50,7 @@ type
     procedure Dither(pixel:double; raonly:boolean; waittime:double); override;
     function GetLockPosition(out x,y:double):boolean; override;
     procedure SetLockPosition(x,y: double); override;
+    function SpectroSetTarget(TargetRa,TargetDec: double):Boolean; override;
     function WaitBusy(maxwait:integer=5):boolean; override;
     function WaitGuiding(maxwait:integer=5):boolean; override;
     function WaitDithering(maxwait:integer=5):boolean; override;
@@ -146,6 +147,11 @@ end;
 
 procedure T_autoguider_none.StarLostTimerTimer(Sender: TObject);
 begin
+end;
+
+function T_autoguider_none.SpectroSetTarget(TargetRa,TargetDec: double):Boolean;
+begin
+  result:=true;
 end;
 
 end.
