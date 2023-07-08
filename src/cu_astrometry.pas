@@ -214,7 +214,7 @@ begin
    engine.LogFile:=logfile;
    engine.InFile:=infile;
    engine.OutFile:=outfile;
-   tolerance:=config.GetValue('/Astrometry/ScaleTolerance',0.5);
+   tolerance:=min(0.99,max(0.01,config.GetValue('/Astrometry/ScaleTolerance',0.5)));
    MaxRadius:=config.GetValue('/Astrometry/MaxRadius',15.0);
    AstrometryTimeout:=config.GetValue('/Astrometry/Timeout',60.0);
    if pixscale=NullCoord then begin
