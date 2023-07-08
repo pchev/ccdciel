@@ -2107,7 +2107,7 @@ begin
            if Finternalguider.GuideLock then begin
              // single star guiding, set the search position for a bright star
              finternalguider.GuideLockNextX:=round(xt);
-             finternalguider.GuideLockNextY:=round(guideimg_Height-yt);
+             finternalguider.GuideLockNextY:=round(yt);
              finternalguider.DrawSettingChange:=true;
            end
            else begin
