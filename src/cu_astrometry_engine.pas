@@ -303,17 +303,22 @@ if (FResolver=ResolverAstrometryNet)or Fretry then begin
   {$ifdef cpu64}
   // Windows Subsystem for Linux cannot be called from a 32bit application
     if not FileExistsUTF8(fcmd) then begin
-      buf:='C:\Windows\System32\bash.exe';
+      buf:='C:\Windows\System32\wsl.exe';
       if FileExistsUTF8(buf)then begin
         Fcmd:=buf;
         FUseWSL:=true;
       end;
     end;
   {$endif}
-  Fparam.Add('--login');
-  Fparam.Add('-c');
-  buf:='"';
-  buf:=buf+' solve-field ';
+  if not FUseWSL then begin
+    Fparam.Add('--login');
+    Fparam.Add('-c');
+    buf:='" ';
+  end
+  else begin
+    buf:='';
+  end;
+  buf:=buf+'solve-field ';
   buf:=buf+' --overwrite ';
   if (Fscalelow>0)and(Fscalehigh>0) then begin
     buf:=buf+'--scale-low ';
@@ -353,7 +358,8 @@ if (FResolver=ResolverAstrometryNet)or Fretry then begin
      fIn:='/mnt/'+fDrive+fIn;
   end;
   buf:=buf+' ""'+fIn+'""'+blank;
-  Fparam.Add(buf+'"');
+  if not FUseWSL then buf:=buf+'"';
+  Fparam.Add(buf);
   {$else}
   if FAstrometryPath='' then
     Fcmd:='solve-field'
