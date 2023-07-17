@@ -37,7 +37,7 @@ type
   private
     InternalguiderInitialize,InternalCalibrationInitialize,GuideLogFileOpen, solar_tracking  : boolean;
     pulseRA,pulseDEC,GuideFrameCount, InternalguiderCalibrationDirection,InternalguiderCalibrationStep,
-    CalibrationDuration,Calflip,CalCount,Calnrtest,frame_size,Binning,BacklashStep: integer;
+    CalibrationDuration,Calflip,CalCount,Calnrtest,CalDecBacklash,frame_size,Binning,BacklashStep: integer;
     driftX,driftY,driftRA,driftDec,moveRA,moveDEC, Guidethecos,old_moveRA,old_moveDEC,  paEast, paNorth,
     pulsegainEast,pulsegainWest,pulsegainNorth,pulsegainSouth,Calthecos, Caltheangle,CaldriftOld, ditherX,ditherY,
     GuideStartTime,LogSNR,LogFlux,mean_hfd,CalNorthDec1,CalNorthDec2,CalEastRa1,CalEastRa2 : double;
@@ -1664,11 +1664,19 @@ begin
           0: begin
 
                msg('Remove backlash North',3);
+               if Finternalguider.BacklashCompensation then begin
+                 // backlash already calibrated, use the defined value
+                 CalDecBacklash:=Finternalguider.DecBacklash;
+               end
+               else begin
+                 // use a safe value
+                 CalDecBacklash:=min(Finternalguider.LongestPulse,max(300,3*Finternalguider.InitialCalibrationStep.Value));
+               end;
                InternalCalibrationInitialize:=true;
                CalNorthDec1:=Mount.Dec; //mount declination at start of north calibration
                if measure_drift(InternalCalibrationInitialize,driftX,driftY)>0 then StopError;
-               mount.PulseGuide(north,finternalguider.LongestPulse);
-               WaitPulseGuiding(finternalguider.LongestPulse);
+               mount.PulseGuide(north,CalDecBacklash);
+               WaitPulseGuiding(CalDecBacklash);
                InternalguiderCalibrationStep:=1;
                BacklashStep:=1;
              end;
@@ -1684,8 +1692,8 @@ begin
                    StopError;
                  end
                  else begin
-                   mount.PulseGuide(north,finternalguider.LongestPulse);
-                   WaitPulseGuiding(finternalguider.LongestPulse);
+                   mount.PulseGuide(north,CalDecBacklash);
+                   WaitPulseGuiding(CalDecBacklash);
                  end;
                end
                else begin
@@ -1740,8 +1748,8 @@ begin
                msg('Remove backlash South',3);
                InternalCalibrationInitialize:=true;
                if measure_drift(InternalCalibrationInitialize,driftX,driftY)>0 then StopError;
-               mount.PulseGuide(south,finternalguider.LongestPulse);
-               WaitPulseGuiding(finternalguider.LongestPulse);
+               mount.PulseGuide(south,CalDecBacklash);
+               WaitPulseGuiding(CalDecBacklash);
                InternalguiderCalibrationStep:=1;
                BacklashStep:=1;
              end;
@@ -1757,8 +1765,8 @@ begin
                    StopError;
                  end
                  else begin
-                   mount.PulseGuide(south,finternalguider.LongestPulse);
-                   WaitPulseGuiding(finternalguider.LongestPulse);
+                   mount.PulseGuide(south,CalDecBacklash);
+                   WaitPulseGuiding(CalDecBacklash);
                  end;
                end
                else begin
@@ -1972,10 +1980,18 @@ begin
         case InternalguiderCalibrationStep of
           0: begin
                msg('Remove backlash North',3);
+               if Finternalguider.BacklashCompensation then begin
+                 // backlash already calibrated, use the defined value
+                 CalDecBacklash:=Finternalguider.DecBacklash;
+               end
+               else begin
+                 // use a safe value
+                 CalDecBacklash:=min(Finternalguider.LongestPulse,max(300,3*Finternalguider.InitialCalibrationStep.Value));
+               end;
                InternalCalibrationInitialize:=true;
                if measure_drift(InternalCalibrationInitialize,driftX,driftY)>0 then StopError;
-               mount.PulseGuide(north,finternalguider.LongestPulse);
-               WaitPulseGuiding(finternalguider.LongestPulse);
+               mount.PulseGuide(north,CalDecBacklash);
+               WaitPulseGuiding(CalDecBacklash);
                InternalguiderCalibrationStep:=1;
                BacklashStep:=1;
              end;
@@ -1991,8 +2007,8 @@ begin
                    StopError;
                  end
                  else begin
-                   mount.PulseGuide(north,finternalguider.LongestPulse);
-                   WaitPulseGuiding(finternalguider.LongestPulse);
+                   mount.PulseGuide(north,CalDecBacklash);
+                   WaitPulseGuiding(CalDecBacklash);
                  end;
                end
                else begin
