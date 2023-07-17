@@ -4706,6 +4706,12 @@ begin
   f_internalguider.pulseGainSouth:=config.GetValue('/InternalGuider/PulseGainSouth',3.0);
   f_internalguider.Pier_Side:=config.GetValue('/InternalGuider/PierSide','N/A');
   f_internalguider.pixel_size:=config.GetValue('/InternalGuider/PixelSize',2.5);
+  f_internalguider.CalDate.Text:=config.GetValue('/InternalGuider/CalDate','');
+  f_internalguider.CalBinning.Text:=config.GetValue('/InternalGuider/CalBinning','');
+  f_internalguider.CalRAspeed.Text:=config.GetValue('/InternalGuider/CalRAspeed','');
+  f_internalguider.CalDECspeed.Text:=config.GetValue('/InternalGuider/CalDECspeed','');
+  f_internalguider.CalDeclination.Text:=config.GetValue('/InternalGuider/CalDeclination','');
+  f_internalguider.CalIssue.Text:=config.GetValue('/InternalGuider/CalIssue','');
   f_internalguider.ShortestPulse:=config.GetValue('/InternalGuider/ShortestPulse',40);
   f_internalguider.LongestPulse:=config.GetValue('/InternalGuider/LongestPulse',2500);
   f_internalguider.minHFD:=config.GetValue('/InternalGuider/MinHFD',1.5);
@@ -4713,6 +4719,10 @@ begin
   f_internalguider.use_arcsec:=config.GetValue('/InternalGuider/UnitArcSec',false);
   f_internalguider.FrameSize1.text:=config.GetValue('/InternalGuider/FrameSize',rsMax2);
   f_internalguider.measure_method2.checked:=config.GetValue('/InternalGuider/Method2',false);
+  f_internalguider.InitialCalibrationStep.Value:=config.GetValue('/InternalGuider/InitialCalibrationStep',1000);
+  f_internalguider.ForceGuideSpeed.Checked:=config.GetValue('/InternalGuider/ForceGuideSpeed',true);
+  f_internalguider.GuideSpeedRA.Value:=config.GetValue('/InternalGuider/GuideSpeedRA',0.5);
+  f_internalguider.GuideSpeedDEC.Value:=config.GetValue('/InternalGuider/GuideSpeedDEC',0.5);
   f_internalguider.ReverseDec:=config.GetValue('/InternalGuider/ReverseDec',false);
   f_internalguider.InverseSolarTracking:=config.GetValue('/InternalGuider/InverseSolar',false);
   f_internalguider.BacklashCompensation:=config.GetValue('/InternalGuider/BacklashCompensation',false);
@@ -4740,6 +4750,7 @@ begin
   f_internalguider.cbUseAstrometryChange(nil);
   f_internalguider.cbSpectroChange(nil);
   f_internalguider.cbGuideLockChange(nil);
+  f_internalguider.ForceGuideSpeedChange(nil);
 
   MeridianOption:=config.GetValue('/Meridian/MeridianOption',3);
   MinutesPastMeridian:=config.GetValue('/Meridian/MinutesPast',15);
@@ -5299,6 +5310,13 @@ begin
   config.SetValue('/InternalGuider/PulseGainNorth',f_internalguider.pulseGainNorth);
   config.SetValue('/InternalGuider/PulseGainSouth',f_internalguider.pulsegainSouth);
 
+  config.SetValue('/InternalGuider/CalDate',f_internalguider.CalDate.Text);
+  config.SetValue('/InternalGuider/CalBinning',f_internalguider.CalBinning.Text);
+  config.SetValue('/InternalGuider/CalRAspeed',f_internalguider.CalRAspeed.Text);
+  config.SetValue('/InternalGuider/CalDECspeed',f_internalguider.CalDECspeed.Text);
+  config.SetValue('/InternalGuider/CalDeclination',f_internalguider.CalDeclination.Text);
+  config.SetValue('/InternalGuider/CalIssue',f_internalguider.CalIssue.Text);
+
   config.SetValue('/InternalGuider/PierSide',f_internalguider.pier_side);
   config.SetValue('/InternalGuider/PixelSize',f_internalguider.pixel_size);
   config.SetValue('/InternalGuider/ShortestPulse',f_internalguider.ShortestPulse);
@@ -5310,6 +5328,10 @@ begin
   config.SetValue('/InternalGuider/FrameSize',f_internalguider.framesize1.text);
   config.SetValue('/InternalGuider/Scale',f_internalguider.trend_scale);
   config.SetValue('/InternalGuider/Method2',f_internalguider.measure_method2.Checked);
+  config.SetValue('/InternalGuider/InitialCalibrationStep',f_internalguider.InitialCalibrationStep.Value);
+  config.SetValue('/InternalGuider/ForceGuideSpeed',f_internalguider.ForceGuideSpeed.Checked);
+  config.SetValue('/InternalGuider/GuideSpeedRA',f_internalguider.GuideSpeedRA.Value);
+  config.SetValue('/InternalGuider/GuideSpeedDEC',f_internalguider.GuideSpeedDEC.Value);
   config.SetValue('/InternalGuider/ReverseDec',f_internalguider.ReverseDec);
   config.SetValue('/InternalGuider/InverseSolar',f_internalguider.InverseSolarTracking);
   config.SetValue('/InternalGuider/BacklashCompensation',f_internalguider.BacklashCompensation);

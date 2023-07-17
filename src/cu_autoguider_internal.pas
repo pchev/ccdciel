@@ -870,24 +870,28 @@ begin
   if AllDevicesConnected=false then
   begin
     msg('Internal guider: '+rsSomeDefinedD,1);
+    InternalguiderStop;
     SetStatus('Devices not connected',GUIDER_ALERT);
     exit;
   end;
   if FCamera.Status<>devConnected then
   begin
     msg('Internal guider: Guide camera not connected!',1);
+    InternalguiderStop;
     SetStatus('Guide camera not connected',GUIDER_ALERT);
     exit;
   end;
   if Fmount.canpulseguide=false then
   begin
     msg('Abort, mount does not support pulse guiding!',1);
+    InternalguiderStop;
     SetStatus('Mount not supported',GUIDER_ALERT);
     exit;
   end;
   if Finternalguider.pier_side='N/A' then
   begin
     msg('A calibration is required before guiding can be started.',1);
+    InternalguiderStop;
     SetStatus('Calibration required',GUIDER_ALERT);
     exit;
   end;
@@ -911,7 +915,24 @@ begin
     wait(20);
   end;
 
-  Fmount.GuideRateRa:=0.5*360/(24*60*60);//set pulse gain at 0.5x & 1.5 tracking. Same as calibration
+  if FMount.CanSetGuideRates and Finternalguider.ForceGuideSpeed.Checked then begin
+    //Set the same speed as calibration
+    Fmount.GuideRateRa:=Finternalguider.GuideSpeedRA.Value*360/(24*60*60);  //set pulse speed in degree per seconds
+    Fmount.GuideRateDe:=Finternalguider.GuideSpeedDEC.Value*360/(24*60*60); //DEC option use same unit [* sidereal] as RA rate
+  end
+  else begin
+    // read speed from mount
+    Finternalguider.GuideSpeedRA.Value:=FMount.GuideRateRa*(24*60*60)/360;
+    Finternalguider.GuideSpeedDEC.Value:=FMount.GuideRateDe*(24*60*60)/360;
+  end;
+  // check here for in mount guide speed change
+  if not Finternalguider.CalibrationIsValid then
+  begin
+    msg('A new calibration is required before guiding can be started.',1);
+    InternalguiderStop;
+    SetStatus('Calibration required',GUIDER_ALERT);
+    exit;
+  end;
 
   setlength(xy_trend,nrpointsTrend);
   for i:=0 to nrpointsTrend-1 do {clear}
@@ -980,6 +1001,11 @@ begin
   WriteLog('Max RA duration = '+IntToStr(Finternalguider.LongestPulse)+', Max DEC duration = '+IntToStr(Finternalguider.LongestPulse));
   WriteLog('Minimum HFD setting = '+FormatFloat(f2,Finternalguider.minHFD));
   WriteLog('Minimum SNR setting = '+FormatFloat(f2,Finternalguider.minSNR));
+  WriteLog('RA Guide Speed = '+FormatFloat(f1,Finternalguider.GuideSpeedRA.Value*15)+' a-s/s, '+
+           'Dec Guide Speed = '+FormatFloat(f1,Finternalguider.GuideSpeedDEC.Value*15)+' a-s/s, '+
+           'Cal Dec = '+Finternalguider.CalDeclination.Text+', '+
+           'Last Cal Issue = '+Finternalguider.CalIssue.Text+', '+
+           'Timestamp = '+Finternalguider.CalDate.Text);
   WriteLog('RA = '+FormatFloat(f2,mount.Ra)+' hr, Dec = '+FormatFloat(f2,mount.Dec)+' deg, Hour angle = '+FormatFloat(f2,lha)+
            ' hr, Pier side = '+pier+', Alt = '+FormatFloat(f1,alt)+' deg, Az = '+FormatFloat(f1,az));
   if finternalguider.SolarTracking then
@@ -1534,7 +1560,7 @@ end;
 procedure T_autoguider_internal.InternalCalibration;
 var drift,unequal                            : double;
     saveInternalguiderCalibratingMeridianFlip: boolean;
-    msgA, msgB,pattern                       : string;
+    msgA, msgB,msgC,pattern                  : string;
             procedure StopError;
             begin
               InternalguiderStop;
@@ -1548,9 +1574,18 @@ begin
     1:begin  //EAST, measure pulse guide speed
         case InternalguiderCalibrationStep of
           0: begin
-               //force speed
-               Fmount.GuideRateRa:=0.5*360/(24*60*60);//set pulse gain at 0.5x & 1.5 tracking
-               CalibrationDuration:=667; //duration of pulse guiding
+               if FMount.CanSetGuideRates and Finternalguider.ForceGuideSpeed.Checked then begin
+                 //force speed
+                 Fmount.GuideRateRa:=Finternalguider.GuideSpeedRA.Value*360/(24*60*60);  //set pulse speed in degree per seconds
+                 Fmount.GuideRateDe:=Finternalguider.GuideSpeedDEC.Value*360/(24*60*60); //DEC option use same unit [* sidereal] as RA rate
+               end
+               else begin
+                 // read speed
+                 Finternalguider.GuideSpeedRA.Value:=FMount.GuideRateRa*(24*60*60)/360;
+                 Finternalguider.GuideSpeedDEC.Value:=FMount.GuideRateDe*(24*60*60)/360;
+               end;
+               msg('Calibration guide speed: '+FormatFloat(f2,Finternalguider.GuideSpeedRA.Value)+'/'+FormatFloat(f2,Finternalguider.GuideSpeedDEC.Value),3);
+               CalibrationDuration:=round(Finternalguider.InitialCalibrationStep.Value/1.5); //duration of pulse guiding
                InternalguiderCalibrationStep:=1;
                InternalCalibration; // iterate without new image
 
@@ -1656,7 +1691,7 @@ begin
                else begin
                  // start North measurement
                  CaldriftOld:=0;
-                 CalibrationDuration:=667; //duration of pulse guiding
+                 CalibrationDuration:=round(Finternalguider.InitialCalibrationStep.Value/1.5); //duration of pulse guiding
                  InternalguiderCalibrationStep:=2;
                  InternalCalibration;  // iterate without new image
                end;
@@ -1844,10 +1879,18 @@ begin
       end;
     7:begin
 
+        msgC:='None';
         unequal:=abs(1-(pulsegainEast/pulsegainWest));
-        if unequal>0.2 then begin msgA:='Warning unequal East/West pulse gain!'; msg(msgA,1); end else msgA:='';
+        if unequal>0.2 then begin msgA:='Warning unequal East/West pulse gain!'; msg(msgA,1); msgC:='Unequal'; end else msgA:='';
         unequal:=abs(1-(pulsegainNorth/pulsegainSouth));
-        if unequal>0.2 then begin msgB:='Warning unequal North/South pulse gain!'; msg(msgB,1); end else msgB:='';
+        if unequal>0.2 then begin msgB:='Warning unequal North/South pulse gain!'; msg(msgB,1); msgC:='Unequal'; end else msgB:='';
+
+        Finternalguider.CalDate.Text:=FormatDateTime(dateisoshort,now);
+        Finternalguider.CalDeclination.Text:=FormatFloat(f1,CalNorthDec1);
+        Finternalguider.CalBinning.Text:=IntToStr(Finternalguider.Binning.Value);
+        Finternalguider.CalRAspeed.Text:=FormatFloat(f1,Finternalguider.GuideSpeedRA.Value);
+        Finternalguider.CalDECspeed.Text:=FormatFloat(f1,Finternalguider.GuideSpeedDEC.Value);
+        Finternalguider.CalIssue.Text:=msgC;
 
         msg('Ready to guide!',1);
         finternalguider.trend_message('Calibration is ready.',msgA,msgB);

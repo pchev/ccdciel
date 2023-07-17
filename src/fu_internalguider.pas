@@ -56,6 +56,15 @@ type
     cbDrawSlit: TCheckBox;
     cbSpectro: TCheckBox;
     cbUseAstrometry: TCheckBox;
+    CalDate: TEdit;
+    CalBinning: TEdit;
+    CalRAspeed: TEdit;
+    CalDECspeed: TEdit;
+    CalDeclination: TEdit;
+    CalIssue: TEdit;
+    GuideSpeedRA: TFloatSpinEdit;
+    GuideSpeedDEC: TFloatSpinEdit;
+    ForceGuideSpeed: TCheckBox;
     CheckBoxBacklash: TCheckBox;
     CheckBoxInverseSolarTracking1: TCheckBox;
     CheckBoxReverseDec1: TCheckBox;
@@ -66,6 +75,7 @@ type
     edOffsetY: TFloatSpinEdit;
     Exposure: TFloatSpinEdit;
     AstrometryExp: TFloatSpinEdit;
+    GroupBox3: TGroupBox;
     GroupBoxSlit: TGroupBox;
     GroupBox4: TGroupBox;
     GroupBoxSearchArea: TGroupBox;
@@ -91,6 +101,16 @@ type
     Label37: TLabel;
     Label38: TLabel;
     Label39: TLabel;
+    Label40: TLabel;
+    Label41: TLabel;
+    Label42: TLabel;
+    Label43: TLabel;
+    Label44: TLabel;
+    Label45: TLabel;
+    Label46: TLabel;
+    Label47: TLabel;
+    Label49: TLabel;
+    Label50: TLabel;
     LabelInfo: TLabel;
     LabelInfo2: TLabel;
     LabelTemperature: TLabel;
@@ -127,6 +147,7 @@ type
     MenuItem2: TMenuItem;
     pa1: TEdit;
     PageControl2: TPageControl;
+    PanelGuideSpeed: TPanel;
     Panel4: TPanel;
     Panel5: TPanel;
     Panel6: TPanel;
@@ -159,6 +180,7 @@ type
     LongestPulse1: TSpinEdit;
     edslitWinMin: TSpinEdit;
     edslitWinMax: TSpinEdit;
+    InitialCalibrationStep: TSpinEdit;
     spSlitX: TSpinEdit;
     spSlitY: TSpinEdit;
     spSlitW: TSpinEdit;
@@ -208,6 +230,7 @@ type
     procedure dec_gain1Change(Sender: TObject);
     procedure dec_hysteresis1Change(Sender: TObject);
     procedure disable_guiding1Change(Sender: TObject);
+    procedure ForceGuideSpeedChange(Sender: TObject);
     procedure ForceRedraw(Sender: TObject);
     procedure ExposureChange(Sender: TObject);
     procedure LongestPulse1Change(Sender: TObject);
@@ -331,6 +354,7 @@ type
     procedure draw_xy(xy_trend :xy_guiderlist);//draw XY points
     procedure draw_trend(xy_trend :xy_guiderlist);//draw trend
     procedure trend_message(message1,message2,message3 :string);//clear trend and place message
+    function CalibrationIsValid: boolean;
     property onLoop: TNotifyEvent read FonLoop write FonLoop;
     property onStart: TNotifyEvent read FonStart write FonStart;
     property onStop: TNotifyEvent read FonStop write FonStop;
@@ -924,6 +948,11 @@ begin
   cur_disable_guiding:=disable_guiding;
 end;
 
+procedure Tf_internalguider.ForceGuideSpeedChange(Sender: TObject);
+begin
+  PanelGuideSpeed.Enabled:=ForceGuideSpeed.Checked;
+end;
+
 procedure Tf_internalguider.ForceRedraw(Sender: TObject);
 begin
   FDrawSettingChange:=true;
@@ -1483,6 +1512,13 @@ begin
  edOffsetY.Value:=value;
 end;
 
+function Tf_internalguider.CalibrationIsValid: boolean;
+begin
+  result:=(CalDate.Text<>'') and
+          (CalBinning.Text=IntToStr(Binning.Value)) and
+          (CalRAspeed.Text=FormatFloat(f1,GuideSpeedRA.Value)) and
+          (CalDECspeed.Text=FormatFloat(f1,GuideSpeedDEC.Value));
+end;
 
 end.
 

@@ -677,35 +677,14 @@ object f_internalguider: Tf_internalguider
           TabOrder = 0
           object GroupBox1: TGroupBox
             Left = 0
-            Height = 616
+            Height = 430
             Top = 0
             Width = 340
-            Align = alClient
+            Align = alTop
             Caption = 'Options:'
-            ClientHeight = 586
+            ClientHeight = 400
             ClientWidth = 336
             TabOrder = 0
-            object measure_method2: TCheckBox
-              Left = 8
-              Height = 22
-              Hint = 'Use alternative method for measuring pixel scale in arc seconds during calibration. '
-              Top = 200
-              Width = 285
-              Caption = 'Measure pixel scale ["/px] by stop tracking'
-              ParentFont = False
-              TabOrder = 5
-            end
-            object disable_guiding1: TCheckBox
-              Left = 8
-              Height = 22
-              Hint = 'For testing. This will disable guiding but still show the trend.'
-              Top = 224
-              Width = 191
-              Caption = 'Disable guiding temporary'
-              OnChange = disable_guiding1Change
-              ParentFont = False
-              TabOrder = 6
-            end
             object ShortestPulse1: TSpinEdit
               Left = 200
               Height = 32
@@ -839,7 +818,7 @@ object f_internalguider: Tf_internalguider
             object Label25: TLabel
               Left = 24
               Height = 18
-              Top = 296
+              Top = 232
               Width = 150
               Caption = 'Apparent motion ["/min]'
               ParentColor = False
@@ -847,7 +826,7 @@ object f_internalguider: Tf_internalguider
             object Label26: TLabel
               Left = 24
               Height = 18
-              Top = 328
+              Top = 264
               Width = 141
               Caption = 'Apparent motion PA [°]'
               ParentColor = False
@@ -856,64 +835,172 @@ object f_internalguider: Tf_internalguider
               Left = 8
               Height = 22
               Hint = 'If checked then the telescope will follow the moving solar object.'
-              Top = 264
+              Top = 200
               Width = 211
               Caption = 'Activate solar object tracking. '
               OnChange = CheckBoxTrackSolar1Change
-              TabOrder = 7
+              TabOrder = 5
             end
             object v_solar1: TFloatSpinEdit
               Left = 200
               Height = 32
               Hint = 'Apparent motion of the solar object in arcsec/min.  The Pixel scale in tab advanced should be reasonable accurate.'
-              Top = 296
+              Top = 232
               Width = 72
               Enabled = False
               MaxValue = 1000
               OnChange = v_solar1Change
               ParentFont = False
-              TabOrder = 8
+              TabOrder = 6
             end
             object vpa_solar1: TFloatSpinEdit
               Left = 200
               Height = 32
               Hint = 'Position angle of the apparent motion'
-              Top = 328
+              Top = 264
               Width = 72
               Enabled = False
               MaxValue = 360
               MinValue = -360
               OnChange = vpa_solar1Change
               ParentFont = False
-              TabOrder = 9
+              TabOrder = 7
             end
             object CheckBoxBacklash: TCheckBox
               Left = 8
               Height = 22
-              Top = 368
+              Top = 304
               Width = 199
               Caption = 'Use backlash compensation'
               OnChange = CheckBoxBacklashChange
-              TabOrder = 10
+              TabOrder = 8
             end
             object Backlash: TSpinEdit
               Left = 200
               Height = 32
-              Top = 400
+              Top = 336
               Width = 72
               Enabled = False
               MaxValue = 10000
-              TabOrder = 11
+              TabOrder = 9
             end
             object Label27: TLabel
               AnchorSideTop.Control = Backlash
               AnchorSideTop.Side = asrCenter
               Left = 24
               Height = 18
-              Top = 407
+              Top = 343
               Width = 126
               Caption = 'Declination backlash'
               ParentColor = False
+            end
+            object disable_guiding1: TCheckBox
+              Left = 8
+              Height = 22
+              Hint = 'For testing. This will disable guiding but still show the trend.'
+              Top = 372
+              Width = 191
+              Caption = 'Disable guiding temporary'
+              OnChange = disable_guiding1Change
+              ParentFont = False
+              TabOrder = 10
+            end
+          end
+          object GroupBox3: TGroupBox
+            Left = 0
+            Height = 186
+            Top = 430
+            Width = 340
+            Align = alClient
+            Caption = 'Calibration options'
+            ClientHeight = 156
+            ClientWidth = 336
+            TabOrder = 1
+            object measure_method2: TCheckBox
+              Left = 8
+              Height = 22
+              Hint = 'Use alternative method for measuring pixel scale in arc seconds during calibration. '
+              Top = 104
+              Width = 285
+              Caption = 'Measure pixel scale ["/px] by stop tracking'
+              ParentFont = False
+              TabOrder = 0
+            end
+            object Label40: TLabel
+              AnchorSideTop.Control = InitialCalibrationStep
+              AnchorSideTop.Side = asrCenter
+              Left = 8
+              Height = 18
+              Top = 7
+              Width = 166
+              Caption = 'Initial calibration step [ms] '
+              ParentColor = False
+            end
+            object InitialCalibrationStep: TSpinEdit
+              Left = 200
+              Height = 32
+              Top = 0
+              Width = 72
+              Increment = 100
+              MaxValue = 1000
+              MinValue = 100
+              TabOrder = 1
+              Value = 100
+            end
+            object ForceGuideSpeed: TCheckBox
+              Left = 8
+              Height = 22
+              Top = 32
+              Width = 196
+              Caption = 'Set guide speed [x sidereal]'
+              OnChange = ForceGuideSpeedChange
+              TabOrder = 2
+            end
+            object PanelGuideSpeed: TPanel
+              Left = 0
+              Height = 42
+              Top = 56
+              Width = 330
+              BevelOuter = bvNone
+              ClientHeight = 42
+              ClientWidth = 330
+              TabOrder = 3
+              object Label41: TLabel
+                Left = 32
+                Height = 18
+                Top = 8
+                Width = 18
+                Caption = 'RA'
+                ParentColor = False
+              end
+              object Label42: TLabel
+                Left = 160
+                Height = 18
+                Top = 6
+                Width = 25
+                Caption = 'DEC'
+                ParentColor = False
+              end
+              object GuideSpeedRA: TFloatSpinEdit
+                Left = 64
+                Height = 32
+                Top = 0
+                Width = 72
+                DecimalPlaces = 1
+                Increment = 0.1
+                MaxValue = 1
+                TabOrder = 0
+              end
+              object GuideSpeedDEC: TFloatSpinEdit
+                Left = 200
+                Height = 32
+                Top = 0
+                Width = 72
+                DecimalPlaces = 1
+                Increment = 0.1
+                MaxValue = 1
+                TabOrder = 1
+              end
             end
           end
         end
@@ -1502,6 +1589,120 @@ object f_internalguider: Tf_internalguider
               Width = 305
               Caption = 'Pulse guiding δ is reversed after meridian flip'
               TabOrder = 8
+            end
+            object Label43: TLabel
+              AnchorSideTop.Control = CalDate
+              AnchorSideTop.Side = asrCenter
+              Left = 8
+              Height = 18
+              Top = 343
+              Width = 29
+              Caption = 'Date'
+              ParentColor = False
+            end
+            object Label44: TLabel
+              AnchorSideTop.Control = CalBinning
+              AnchorSideTop.Side = asrCenter
+              Left = 8
+              Height = 18
+              Top = 407
+              Width = 48
+              Caption = 'Binning'
+              ParentColor = False
+            end
+            object Label45: TLabel
+              AnchorSideTop.Control = CalRAspeed
+              AnchorSideTop.Side = asrCenter
+              Left = 8
+              Height = 18
+              Top = 439
+              Width = 57
+              Caption = 'RA speed'
+              ParentColor = False
+            end
+            object Label46: TLabel
+              AnchorSideTop.Control = CalDECspeed
+              AnchorSideTop.Side = asrCenter
+              Left = 8
+              Height = 18
+              Top = 471
+              Width = 66
+              Caption = 'DEC speed'
+              ParentColor = False
+            end
+            object CalDate: TEdit
+              Left = 76
+              Height = 32
+              Top = 336
+              Width = 214
+              Enabled = False
+              TabOrder = 9
+            end
+            object CalBinning: TEdit
+              Left = 208
+              Height = 32
+              Top = 400
+              Width = 82
+              Enabled = False
+              TabOrder = 10
+            end
+            object CalRAspeed: TEdit
+              Left = 208
+              Height = 32
+              Top = 432
+              Width = 82
+              Enabled = False
+              TabOrder = 11
+            end
+            object CalDECspeed: TEdit
+              Left = 208
+              Height = 32
+              Top = 464
+              Width = 82
+              Enabled = False
+              TabOrder = 12
+            end
+            object Label47: TLabel
+              Left = 8
+              Height = 18
+              Top = 312
+              Width = 97
+              Caption = 'Last calibration:'
+              ParentColor = False
+            end
+            object CalDeclination: TEdit
+              Left = 208
+              Height = 32
+              Top = 368
+              Width = 82
+              Enabled = False
+              TabOrder = 13
+            end
+            object Label49: TLabel
+              AnchorSideTop.Control = CalDeclination
+              AnchorSideTop.Side = asrCenter
+              Left = 8
+              Height = 18
+              Top = 375
+              Width = 69
+              Caption = 'Declination'
+              ParentColor = False
+            end
+            object Label50: TLabel
+              Left = 10
+              Height = 18
+              Top = 504
+              Width = 33
+              Caption = 'Issue'
+              ParentColor = False
+            end
+            object CalIssue: TEdit
+              Left = 208
+              Height = 32
+              Top = 496
+              Width = 82
+              Enabled = False
+              TabOrder = 14
             end
           end
         end
