@@ -109,6 +109,8 @@ type
     Label45: TLabel;
     Label46: TLabel;
     Label47: TLabel;
+    LabelInfo4: TLabel;
+    LabelInfo3: TLabel;
     Label49: TLabel;
     Label50: TLabel;
     LabelInfo: TLabel;
@@ -346,6 +348,10 @@ type
     procedure SetOffsetX(value:double);
     function GetOffsetY:double;
     procedure SetOffsetY(value:double);
+    procedure SetCameraStatus(status: string);
+    function  GetCameraStatus: string;
+    procedure SetInfo(status: string);
+    function  GetInfo: string;
   public
     { public declarations }
     constructor Create(aOwner: TComponent); override;
@@ -411,6 +417,8 @@ type
     property SlitL: integer read GetSlitL write SetSlitL;
     property SlitPA: integer read GetSlitPA write SetSlitPA;
     property DrawSettingChange: boolean read FDrawSettingChange write FDrawSettingChange;
+    property Info: string read GetInfo write SetInfo;
+    property CameraStatus: string read GetCameraStatus write SetCameraStatus;
   end;
 
 implementation
@@ -442,6 +450,8 @@ begin
  LabelStatusDec.Caption:='';
  LabelInfo.Caption:='';
  LabelInfo2.Caption:='';
+ LabelInfo3.Caption:='';
+ LabelInfo4.Caption:='';
  pier_side1.Text:='N/A';
  cur_minHFD:=minHFD;
  cur_minSNR:=minSNR;
@@ -1518,6 +1528,28 @@ begin
           (CalBinning.Text=IntToStr(Binning.Value)) and
           (CalRAspeed.Text=FormatFloat(f1,GuideSpeedRA.Value)) and
           (CalDECspeed.Text=FormatFloat(f1,GuideSpeedDEC.Value));
+end;
+
+procedure Tf_internalguider.SetCameraStatus(status: string);
+begin
+ LabelInfo3.Caption:=status;
+ LabelInfo4.Caption:=status;
+end;
+
+function Tf_internalguider.GetCameraStatus: string;
+begin
+ result:=LabelInfo3.Caption;
+end;
+
+procedure Tf_internalguider.SetInfo(status: string);
+begin
+ LabelInfo.Caption:=status;
+ LabelInfo2.Caption:=status;
+end;
+
+function Tf_internalguider.GetInfo: string;
+begin
+ result:=LabelInfo.Caption;
 end;
 
 end.

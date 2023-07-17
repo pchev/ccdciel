@@ -289,6 +289,14 @@ object f_internalguider: Tf_internalguider
             Caption = 'LabelInfo2'
             ParentColor = False
           end
+          object LabelInfo3: TLabel
+            Left = 4
+            Height = 18
+            Top = 448
+            Width = 65
+            Caption = 'LabelInfo3'
+            ParentColor = False
+          end
         end
       end
       object TabSheetCamera: TTabSheet
@@ -308,12 +316,12 @@ object f_internalguider: Tf_internalguider
           TabOrder = 0
           object Panel6: TPanel
             Left = 1
-            Height = 79
+            Height = 103
             Top = 1
             Width = 338
             Align = alTop
             BevelOuter = bvNone
-            ClientHeight = 79
+            ClientHeight = 103
             ClientWidth = 338
             TabOrder = 0
             object ButtonLoop: TButton
@@ -360,11 +368,19 @@ object f_internalguider: Tf_internalguider
               Caption = 'LabelInfo'
               ParentColor = False
             end
+            object LabelInfo4: TLabel
+              Left = 11
+              Height = 18
+              Top = 79
+              Width = 66
+              Caption = 'LabelInfo4'
+              ParentColor = False
+            end
           end
           object Panel7: TPanel
             Left = 1
             Height = 66
-            Top = 80
+            Top = 104
             Width = 338
             Align = alTop
             BevelOuter = bvNone
@@ -382,7 +398,7 @@ object f_internalguider: Tf_internalguider
               ParentColor = False
             end
             object Exposure: TFloatSpinEdit
-              Left = 104
+              Left = 103
               Height = 32
               Top = 0
               Width = 111
@@ -417,7 +433,7 @@ object f_internalguider: Tf_internalguider
           object PanelGain: TPanel
             Left = 1
             Height = 34
-            Top = 146
+            Top = 170
             Width = 338
             Align = alTop
             BevelOuter = bvNone
@@ -445,7 +461,7 @@ object f_internalguider: Tf_internalguider
           object PanelOffset: TPanel
             Left = 1
             Height = 34
-            Top = 180
+            Top = 204
             Width = 338
             Align = alTop
             BevelOuter = bvNone
@@ -473,7 +489,7 @@ object f_internalguider: Tf_internalguider
           object PanelTemperature: TPanel
             Left = 1
             Height = 60
-            Top = 214
+            Top = 238
             Width = 338
             Align = alTop
             BevelOuter = bvNone
@@ -537,7 +553,7 @@ object f_internalguider: Tf_internalguider
           object Panel8: TPanel
             Left = 1
             Height = 144
-            Top = 274
+            Top = 298
             Width = 338
             Align = alTop
             BevelOuter = bvNone

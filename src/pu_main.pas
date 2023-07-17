@@ -974,6 +974,7 @@ type
     procedure InternalguiderClearDark(Sender: TObject);
     procedure InternalguiderDarkInfo(Sender: TObject);
     procedure InternalguiderParameterChange(msg:string);
+    procedure GuideCameraProgress(n:double);
     procedure GuideCameraNewImage(Sender: TObject);
     procedure GuideCameraNewImageAsync(Data: PtrInt);
     procedure ShowGuiderDarkInfo;
@@ -2113,8 +2114,8 @@ begin
    guidecamera.onAbortExposure:=@GuideCameraExposureAborted;
    guidecamera.onTemperatureChange:=@GuideCameraTemperatureChange;
    guidecamera.onCoolerChange:=@GuideCameraCoolerChange;
-{   camera.onExposureProgress:=@CameraProgress;
-   camera.onFrameChange:=@FrameChange;
+   guidecamera.onExposureProgress:=@GuideCameraProgress;
+{   camera.onFrameChange:=@FrameChange;
    camera.onCoolerPowerChange:=@CameraCoolerPowerChange;
    camera.onFnumberChange:=@CameraFnumberChange;
    camera.onNewExposure:=@CameraNewExposure;
@@ -16354,6 +16355,39 @@ end;
 procedure Tf_main.InternalguiderRedraw(Sender: TObject);
 begin
    GuidePlotTimer.Enabled:=true;
+end;
+
+procedure Tf_main.GuideCameraProgress(n:double);
+var txt: string;
+    i: integer;
+begin
+ if (n<=0) then begin
+   if InternalguiderRunning then begin
+     i:=round(n);
+     case i of
+       -11 : txt:=rsDisplay+ellipsis;
+       -10 : txt:=rsReadImage+ellipsis;
+       -9 : txt:=rsUnknownStatu+ellipsis;
+       -5 : txt:=rsError2+ellipsis;
+       -4 : txt:=rsDownloading+ellipsis;
+       -3 : txt:=rsReadCCD+ellipsis;
+       -1 : txt:=rsWaitStart+ellipsis;
+        0 : txt:=rsIdle+ellipsis;
+       else txt:=rsUnknownStatu+ellipsis;
+     end;
+     f_internalguider.CameraStatus := txt;
+   end
+   else begin
+      f_internalguider.CameraStatus := '';
+   end;
+ end else begin
+  if n>=10 then txt:=FormatFloat(f0, n)
+           else txt:=FormatFloat(f1, n);
+  if InternalguiderRunning then
+    f_internalguider.CameraStatus := rsExp+blank+txt+blank+rsSec
+  else
+    f_internalguider.CameraStatus := '';
+ end;
 end;
 
 procedure Tf_main.GuideCameraNewImage(Sender: TObject);

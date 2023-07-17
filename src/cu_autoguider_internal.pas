@@ -436,7 +436,7 @@ end;
 function  T_autoguider_internal.measure_drift(var initialize:boolean; out drX,drY :double) : integer;// ReferenceX,Y indicates the total drift, drX,drY to drift since previouse call. Arrays old_xy_array,xy_array are for storage star positions
 var
   i,fitsx,fitsy,stepsize,xsize,ysize,star_counter,star_counter2,counter,len,maxSNRstar,ix,iy: integer;
-  hfd1,star_fwhm,vmax,bg,bgdev,xc,yc,snr,flux,fluxratio,min_SNR,min_HFD,maxSNR,maxSNRhfd,margin,y,mhfd : double;
+  hfd1,star_fwhm,vmax,bg,bgdev,xc,yc,snr,flux,fluxratio,min_SNR,min_HFD,maxSNR,maxSNRhfd,margin,y,mhfd,peak : double;
   GuideLock: boolean;
   drift_arrayX,drift_arrayY : array of double;
   starx,stary,frx,fry,frw,frh: integer;
@@ -526,12 +526,13 @@ begin
         // Mark star area
         hfd1:=finternalguider.SearchWinMin/2/3;
         FGuideBmp.Canvas.Frame(trunc(1+xc*GuideImgPixRatio-hfd1*3),trunc(1+yc-hfd1*3),trunc(1+xc*GuideImgPixRatio+hfd1*3),trunc(1+yc+hfd1*3));
-        finternalguider.LabelInfo2.Caption:=IntToStr(star_counter)+' star, Intensity: '+FormatFloat(f1,vmax);
+        finternalguider.Info:=IntToStr(star_counter)+' star, Intensity: '+FormatFloat(f1,vmax+bg);
      end;
    end
    else begin
     // Divide the image in square areas. Try to detect a star in each area. Store the star position and flux in the xy_array
     mean_hfd:=0;
+    peak:=0;
     fitsy:=stepsize div 2;
     repeat
       fitsx:=stepsize div 2;
@@ -547,6 +548,8 @@ begin
           xy_array[star_counter].y2:=yc;
           xy_array[star_counter].flux:=flux;
           mean_hfd:=mean_hfd+hfd1;
+
+          if (vmax+bg)>peak then peak:=vmax+bg;
 
           // for single star detection
           if (snr>maxSNR)and(xc>margin)and(xc<(xsize-margin))and(yc>margin)and(yc<(ysize-margin)) then begin
@@ -631,7 +634,7 @@ begin
 
       WriteLog('INFO: Star(s)='+inttostr(star_counter)+', HFD='+floattostrF(mean_hfd,FFgeneral,3,3));
       msg(inttostr(star_counter)+' guide stars used, HFD='+floattostrF(mean_hfd,FFgeneral,3,3),3);
-      finternalguider.LabelInfo2.Caption:=IntToStr(star_counter)+' stars, HFD: '+FormatFloat(f1,mean_hfd)+', SNR: '+FormatFloat(f0,maxSNR);
+      finternalguider.Info:=IntToStr(star_counter)+' stars, HFD: '+FormatFloat(f1,mean_hfd)+', SNR: '+FormatFloat(f0,maxSNR)+', PEAK: '+FormatFloat(f0,peak);
     end //stars found
     else
     begin //no star(s) found
@@ -664,7 +667,7 @@ begin
        // Mark star area
        hfd1:=finternalguider.SearchWinMin/2/3;
        FGuideBmp.Canvas.Frame(trunc(1+xc*GuideImgPixRatio-hfd1*3),trunc(1+yc-hfd1*3),trunc(1+xc*GuideImgPixRatio+hfd1*3),trunc(1+yc+hfd1*3));
-       finternalguider.LabelInfo2.Caption:=IntToStr(star_counter)+' star, Intensity: '+FormatFloat(f1,vmax);
+       finternalguider.Info:=IntToStr(star_counter)+' star, Intensity: '+FormatFloat(f1,vmax);
      end
      else begin
        // star lost
@@ -674,6 +677,7 @@ begin
    else begin
     // multi star guiding
     mhfd:=0;
+    peak:=0;
     for i:=0 to length(xy_array_old)-1 do
     begin
       if xy_array_old[i].flux<>0 then // Previouse dection, keep tracking this star while it drifts away
@@ -693,6 +697,8 @@ begin
         inc(star_counter);
         mhfd:=mhfd+hfd1;
 
+        if (vmax+bg)>peak then peak:=vmax+bg;
+
         // max value for guide log
         LogSNR:=max(LogSNR,snr);
         LogFlux:=max(LogFlux,flux);
@@ -707,7 +713,7 @@ begin
     end;
     if star_counter>0 then begin
       mhfd:=mhfd/star_counter;
-      finternalguider.LabelInfo2.Caption:=IntToStr(star_counter)+' stars, HFD: '+FormatFloat(f1,mhfd)+', SNR: '+FormatFloat(f0,LogSNR);
+      finternalguider.Info:=IntToStr(star_counter)+' stars, HFD: '+FormatFloat(f1,mhfd)+', SNR: '+FormatFloat(f0,LogSNR)+', PEAK: '+FormatFloat(f0,peak);
     end;
    end;
   end;
@@ -758,8 +764,7 @@ begin
   SetStatus('Looping Exposures',GUIDER_IDLE);
   StopInternalguider:=false;
   InternalguiderRunning:=true;
-  Finternalguider.LabelInfo.Caption:='';
-  Finternalguider.LabelInfo2.Caption:='';
+  Finternalguider.Info:='';
   Finternalguider.ButtonLoop.enabled:=false;
   Finternalguider.ButtonCalibrate.enabled:=false;
   Finternalguider.ButtonGuide.enabled:=false;
@@ -1472,8 +1477,7 @@ begin
   Finternalguider.cbSpectro.enabled:=true;
   Finternalguider.cbGuideLock.enabled:=true;
   Finternalguider.led.Brush.Color:=clGray;
-  Finternalguider.LabelInfo.Caption:='';
-  Finternalguider.LabelInfo2.Caption:='';
+  Finternalguider.Info:='';
   SetStatus('Stopped',GUIDER_IDLE);
 end;
 
@@ -2092,7 +2096,7 @@ end;
 procedure  T_autoguider_internal.ShowImgInfo;
 var
   i,fitsx,fitsy,stepsize,xsize,ysize,star_counter: integer;
-  hfd1,star_fwhm,vmax,bg,bgdev,xc,yc,snr,flux,min_SNR,min_HFD,maxSNR,y : double;
+  hfd1,star_fwhm,vmax,bg,bgdev,xc,yc,snr,flux,min_SNR,min_HFD,maxSNR,y,peak : double;
 const
     searchA=28;//square search area
     overlap=6;
@@ -2108,6 +2112,7 @@ begin
   min_SNR:=finternalguider.minSNR;//make local to reduce some CPU load
   min_HFD:=finternalguider.minHFD;//make local to reduce some CPU load
   maxSNR:=0;
+  peak:=0;
 
   // Divide the image in square areas. Try to detect a star in each area.
     mean_hfd:=0;
@@ -2117,6 +2122,7 @@ begin
       repeat
         guidefits.GetHFD3(fitsX,fitsY,searchA,true{autocenter},xc,yc,bg,bgdev,hfd1,star_fwhm,vmax,snr,flux,false);//find a star in this segment. Auto center is true
 
+        if (vmax+bg)>peak then peak:=vmax+bg;
         if ((snr>Min_SNR) and (hfd1>Min_HFD) and (abs(fitsX-xc)<stepsize div 2) and (abs(fitsY-yc)<stepsize div 2) and (star_counter<maxstars))  then //detection and no other area closer
         begin // star in this area
           mean_hfd:=mean_hfd+hfd1;
@@ -2133,7 +2139,7 @@ begin
     begin
       mean_hfd:=mean_hfd/star_counter;
     end;
-    finternalguider.LabelInfo.Caption:=IntToStr(star_counter)+' stars, HFD: '+FormatFloat(f1,mean_hfd)+', SNR: '+FormatFloat(f0,maxSNR);
+    finternalguider.Info:=IntToStr(star_counter)+' stars, HFD: '+FormatFloat(f1,mean_hfd)+', SNR: '+FormatFloat(f0,maxSNR)+', PEAK: '+FormatFloat(f0,peak);
 end;
 
 function T_autoguider_internal.SpectroSetTarget(TargetRa,TargetDec: double):boolean;
