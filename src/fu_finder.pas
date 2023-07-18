@@ -44,6 +44,7 @@ type
     ButtonCalibrate: TButton;
     cbSaveImages: TCheckBox;
     Label4: TLabel;
+    LabelInfo: TLabel;
     LabelMsg: TLabel;
     PreviewExp: TFloatSpinEdit;
     GroupBox1: TGroupBox;
@@ -120,6 +121,7 @@ begin
  FinderPreviewLoop:=false;
  FBullsEye:=true;
  BtnBullsEye.Down:=true;
+ LabelInfo.Caption:='';
 end;
 
 destructor  Tf_finder.Destroy;

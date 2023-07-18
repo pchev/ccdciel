@@ -983,6 +983,7 @@ type
     procedure GuideCameraSetTemperature(Sender: TObject);
     procedure GuideCameraSetCooler(Sender: TObject);
     procedure GuiderMeasureAtPos(x,y:integer);
+    procedure FinderCameraProgress(n:double);
     procedure FinderCameraNewImage(Sender: TObject);
     procedure FinderCameraNewImageAsync(Data: PtrInt);
     Procedure DrawFinderImage(display: boolean);
@@ -2147,6 +2148,7 @@ begin
    findercamera.onAbortExposure:=@FinderCameraExposureAborted;
    findercamera.onTemperatureChange:=@FinderCameraTemperatureChange;
    findercamera.onCoolerChange:=@FinderCameraCoolerChange;
+   findercamera.onExposureProgress:=@FinderCameraProgress;
 
    if config.GetValue('/Devices/Watchdog',false) then begin
      watchdog:=T_indiwatchdog.Create(nil);
@@ -16998,6 +17000,39 @@ begin
     DrawFinderImage(true);
   PlotFinderImage;
   LockFinderTimerPlot:=false;
+end;
+
+procedure Tf_main.FinderCameraProgress(n:double);
+var txt: string;
+    i: integer;
+begin
+ if (n<=0) then begin
+   if FinderPreviewLoop then begin
+     i:=round(n);
+     case i of
+       -11 : txt:=rsDisplay+ellipsis;
+       -10 : txt:=rsReadImage+ellipsis;
+       -9 : txt:=rsUnknownStatu+ellipsis;
+       -5 : txt:=rsError2+ellipsis;
+       -4 : txt:=rsDownloading+ellipsis;
+       -3 : txt:=rsReadCCD+ellipsis;
+       -1 : txt:=rsWaitStart+ellipsis;
+        0 : txt:=rsIdle+ellipsis;
+       else txt:=rsUnknownStatu+ellipsis;
+     end;
+     f_finder.LabelInfo.Caption := txt;
+   end
+   else begin
+      f_finder.LabelInfo.Caption := '';
+   end;
+ end else begin
+  if n>=10 then txt:=FormatFloat(f0, n)
+           else txt:=FormatFloat(f1, n);
+  if FinderPreviewLoop then
+    f_finder.LabelInfo.Caption := rsExp+blank+txt+blank+rsSec
+  else
+    f_finder.LabelInfo.Caption := '';
+ end;
 end;
 
 procedure Tf_main.FinderCameraNewImage(Sender: TObject);

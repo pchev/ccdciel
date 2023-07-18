@@ -40,21 +40,21 @@ object f_finder: Tf_finder
     TabOrder = 0
     object GroupBox1: TGroupBox
       Left = 0
-      Height = 148
-      Top = 96
+      Height = 164
+      Top = 120
       Width = 243
       Align = alTop
       Caption = 'Target position in finder image'
-      ClientHeight = 136
-      ClientWidth = 231
+      ClientHeight = 134
+      ClientWidth = 239
       TabOrder = 0
       object Label1: TLabel
         AnchorSideTop.Control = OffsetX
         AnchorSideTop.Side = asrCenter
         Left = 7
-        Height = 15
-        Top = 17
-        Width = 37
+        Height = 18
+        Top = 15
+        Width = 40
         Caption = 'Pixel X'
         ParentColor = False
       end
@@ -70,9 +70,9 @@ object f_finder: Tf_finder
         AnchorSideTop.Control = OffsetY
         AnchorSideTop.Side = asrCenter
         Left = 7
-        Height = 15
-        Top = 49
-        Width = 36
+        Height = 18
+        Top = 47
+        Width = 41
         Caption = 'Pixel Y'
         ParentColor = False
       end
@@ -107,12 +107,12 @@ object f_finder: Tf_finder
     end
     object Panel2: TPanel
       Left = 0
-      Height = 96
+      Height = 120
       Top = 0
       Width = 243
       Align = alTop
       BevelOuter = bvNone
-      ClientHeight = 96
+      ClientHeight = 120
       ClientWidth = 243
       TabOrder = 1
       object BtnPreviewLoop: TButton
@@ -129,9 +129,9 @@ object f_finder: Tf_finder
         AnchorSideTop.Control = PreviewExp
         AnchorSideTop.Side = asrCenter
         Left = 8
-        Height = 15
-        Top = 47
-        Width = 98
+        Height = 18
+        Top = 45
+        Width = 108
         Caption = 'Preview exposure'
         ParentColor = False
       end
@@ -148,17 +148,25 @@ object f_finder: Tf_finder
       end
       object cbSaveImages: TCheckBox
         Left = 8
-        Height = 23
+        Height = 22
         Top = 70
-        Width = 92
+        Width = 104
         Caption = 'Save images'
         TabOrder = 2
+      end
+      object LabelInfo: TLabel
+        Left = 12
+        Height = 18
+        Top = 95
+        Width = 58
+        Caption = 'LabelInfo'
+        ParentColor = False
       end
     end
     object Panel8: TPanel
       Left = 0
       Height = 170
-      Top = 244
+      Top = 284
       Width = 243
       Align = alTop
       BevelOuter = bvNone
@@ -169,9 +177,9 @@ object f_finder: Tf_finder
         AnchorSideTop.Control = Gamma
         AnchorSideTop.Side = asrCenter
         Left = 8
-        Height = 15
-        Top = 22
-        Width = 40
+        Height = 18
+        Top = 20
+        Width = 49
         Caption = 'Gamma'
         ParentColor = False
       end
@@ -193,9 +201,9 @@ object f_finder: Tf_finder
         AnchorSideTop.Control = Luminosity
         AnchorSideTop.Side = asrCenter
         Left = 8
-        Height = 15
-        Top = 70
-        Width = 59
+        Height = 18
+        Top = 68
+        Width = 68
         Caption = 'Luminosity'
         ParentColor = False
       end
@@ -217,9 +225,9 @@ object f_finder: Tf_finder
         AnchorSideTop.Control = BtnZoomAdjust
         AnchorSideTop.Side = asrCenter
         Left = 8
-        Height = 15
-        Top = 118
-        Width = 31
+        Height = 18
+        Top = 116
+        Width = 36
         Caption = 'Zoom'
         ParentColor = False
       end
@@ -297,17 +305,17 @@ object f_finder: Tf_finder
         AnchorSideTop.Control = BtnBullsEye
         AnchorSideTop.Side = asrCenter
         Left = 8
-        Height = 15
-        Top = 143
-        Width = 80
+        Height = 18
+        Top = 141
+        Width = 90
         Caption = 'Show bulls eye'
         ParentColor = False
       end
     end
     object LabelMsg: TLabel
       Left = 0
-      Height = 38
-      Top = 414
+      Height = 0
+      Top = 452
       Width = 243
       Align = alClient
       AutoSize = False
