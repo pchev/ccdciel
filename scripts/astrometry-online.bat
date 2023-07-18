@@ -54,7 +54,7 @@ goto :loop
 :continue
 
 echo %pythoncmd% %clientscript% %onlparam%
-%pythoncmd% %clientscript% %onlparam%
+"%pythoncmd%" "%clientscript%" %onlparam%
 set rc=%errorlevel%
 if %rc% equ 0 (
   echo 1 > %solvfile%
