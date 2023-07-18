@@ -166,6 +166,7 @@ end;
 function TAstrometry.StartAstrometry(infile,outfile: string; terminatecmd:TNotifyEvent): boolean;
 var pixsize,pixscale,telescope_focal_length,tolerance,MaxRadius,ra,de: double;
     iwidth,iheight:integer;
+    online: boolean;
     f: TFits;
 begin
  if (not FBusy) then begin
@@ -239,8 +240,19 @@ begin
    engine.downsample:=config.GetValue('/Astrometry/DownSample',4);
    engine.objs:=config.GetValue('/Astrometry/SourcesLimit',150);
    engine.OtherOptions:=config.GetValue('/Astrometry/OtherOptions','');
-   engine.UseScript:=config.GetValue('/Astrometry/AstUseScript',false);
-   engine.CustomScript:=config.GetValue('/Astrometry/AstCustScript','');
+   online:=config.GetValue('/Astrometry/AstUseOnline',false);
+   if online then begin
+     engine.UseScript:=true;
+     {$ifdef mswindows}
+     engine.CustomScript:=slash(ScriptsDir)+'astrometry-online.bat';
+     {$else}
+     engine.CustomScript:=slash(ScriptsDir)+'astrometry-online.sh';
+     {$endif}
+   end
+   else begin
+     engine.UseScript:=config.GetValue('/Astrometry/AstUseScript',false);
+     engine.CustomScript:=config.GetValue('/Astrometry/AstCustScript','');
+   end;
    engine.ra:=ra;
    engine.de:=de;
    engine.radius:=max(MaxRadius,pixscale*iwidth/3600);

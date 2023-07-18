@@ -4791,7 +4791,7 @@ begin
   astrometryResolver:=config.GetValue('/Astrometry/Resolver',ResolverAstap);
   AstrometryTimeout:=config.GetValue('/Astrometry/Timeout',30.0);
   buf:=config.GetValue('/Astrometry/OtherOptions','');
-  if (astrometryResolver=ResolverAstrometryNet)and(pos('--no-fits2fits',buf)>0) then begin
+  if (astrometryResolver=ResolverAstrometryNet)and(pos('--no-fits2fits',buf)>0)and(not config.GetValue('/Astrometry/AstUseOnline',false)) then begin
     v:=AstrometryVersion(astrometryResolver,config.GetValue('/Astrometry/CygwinPath','C:\cygwin'),config.GetValue('/Astrometry/AstrometryPath',''),config.GetValue('/Astrometry/AstUseScript',false));
     if v<>'unknown' then begin
       if v>='0.68' then begin // option --no-fits2fits was removed in version 0.68
@@ -9126,6 +9126,8 @@ begin
    f_option.Downsample.Value:=config.GetValue('/Astrometry/DownSample',4);
    f_option.SourcesLimit.Value:=config.GetValue('/Astrometry/SourcesLimit',150);
    f_option.OtherOptions.Text:=config.GetValue('/Astrometry/OtherOptions','--no-fits2fits');
+   f_option.AstUseOnline.Checked:=config.GetValue('/Astrometry/AstUseOnline',false);
+   f_option.AstOnlineKey.Text:=config.GetValue('/Astrometry/AstOnlineKey','');
    f_option.AstUseScript.Checked:=config.GetValue('/Astrometry/AstUseScript',false);
    f_option.AstCustScript.Text:=config.GetValue('/Astrometry/AstCustScript','');
    f_option.AstCustScript.Visible:=f_option.AstUseScript.Checked;
@@ -9548,6 +9550,8 @@ begin
      config.SetValue('/Astrometry/DownSample',f_option.Downsample.Value);
      config.SetValue('/Astrometry/SourcesLimit',f_option.SourcesLimit.Value);
      config.SetValue('/Astrometry/OtherOptions',f_option.OtherOptions.Text);
+     config.SetValue('/Astrometry/AstUseOnline',f_option.AstUseOnline.Checked);
+     config.SetValue('/Astrometry/AstOnlineKey',f_option.AstOnlineKey.Text);
      config.SetValue('/Astrometry/AstUseScript',f_option.AstUseScript.Checked);
      config.SetValue('/Astrometry/AstCustScript',f_option.AstCustScript.Text);
      config.SetValue('/Astrometry/AstrometryPath',trim(f_option.AstrometryPath.Text));

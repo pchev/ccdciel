@@ -6,10 +6,10 @@ rem Tested with nova.astrometry.net and ANSVR
 rem script configuration :
 
 rem the server running the api
-set "apiserver=http://nova.astrometry.net/api/"
+set "apiserver=https://nova.astrometry.net/api/"
 
 rem get api key from the server i.e. http://nova.astrometry.net/
-set "myapikey=xxxx"
+set "myapikey=%ccdcielapikey%"
 
 rem python command, default is from CCDciel setup
 set "pythoncmd=%ccdcielpython%"

@@ -43,6 +43,13 @@ type
     CdCPath: TEdit;
     AstrometryCamera: TComboBox;
     CdCAdjustFrame: TCheckBox;
+    AstUseOnline: TCheckBox;
+    AstOnlineKey: TEdit;
+    Label172: TLabel;
+    Panel30: TPanel;
+    Panel31: TPanel;
+    Panel32: TPanel;
+    Panel33: TPanel;
     RoiList: TComboBox;
     GroupBox35: TGroupBox;
     Label168: TLabel;
@@ -726,6 +733,7 @@ type
     RefTreshold: TTrackBar;
     procedure ASTAPadvancedClick(Sender: TObject);
     procedure AstrometryCameraChange(Sender: TObject);
+    procedure AstUseOnlineClick(Sender: TObject);
     procedure AstUseScriptClick(Sender: TObject);
     procedure AutofocusExpTimeChange(Sender: TObject);
     procedure AutofocusmodeClick(Sender: TObject);
@@ -1950,6 +1958,12 @@ end;
 procedure Tf_option.AstUseScriptClick(Sender: TObject);
 begin
    AstCustScript.Visible:=AstUseScript.Checked;
+   if AstUseScript.Checked then AstUseOnline.Checked:=false;
+end;
+
+procedure Tf_option.AstUseOnlineClick(Sender: TObject);
+begin
+   if AstUseOnline.Checked then AstUseScript.Checked:=false;
 end;
 
 procedure Tf_option.ASTAPadvancedClick(Sender: TObject);

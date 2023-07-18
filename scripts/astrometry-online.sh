@@ -7,10 +7,10 @@
 # script configuration :
 
 # the server running the api
-apiserver=http://nova.astrometry.net/api/
+apiserver=https://nova.astrometry.net/api/
 
 # get api key from the server i.e. http://nova.astrometry.net/
-myapikey=xxxx 
+myapikey=$ccdcielapikey 
 
 # python command, default is from CCDciel setup
 pythoncmd=$ccdcielpython

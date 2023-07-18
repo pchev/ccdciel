@@ -3690,11 +3690,13 @@ object f_option: Tf_option
           object Label33: TLabel
             AnchorSideTop.Control = AstrometryTimeout
             AnchorSideTop.Side = asrCenter
-            Left = 258
+            AnchorSideRight.Control = AstrometryTimeout
+            Left = 233
             Height = 18
             Top = 45
             Width = 51
             Anchors = [akTop, akRight]
+            BorderSpacing.Right = 8
             Caption = 'Timeout'
             ParentColor = False
             ParentFont = False
@@ -3750,233 +3752,305 @@ object f_option: Tf_option
           Height = 390
           Top = 192
           Width = 557
-          PageIndex = 0
+          PageIndex = 4
           Align = alClient
           TabOrder = 1
           TabStop = True
           object Page1: TPage
             object astrometrynet: TGroupBox
               Left = 0
-              Height = 390
+              Height = 389
               Top = 0
               Width = 557
               Align = alClient
               Caption = 'Astrometry.Net'
-              ClientHeight = 360
+              ClientHeight = 359
               ClientWidth = 553
               ParentFont = False
               TabOrder = 0
-              object Label6: TLabel
-                Left = 12
-                Height = 38
-                Top = 10
-                Width = 167
-                AutoSize = False
-                Caption = 'Maximum search radius'
-                ParentColor = False
-                ParentFont = False
-                WordWrap = True
-              end
-              object Label7: TLabel
-                Left = 247
-                Height = 18
-                Top = 10
-                Width = 92
-                Caption = 'Scale tolerance'
-                ParentColor = False
-                ParentFont = False
-              end
-              object Label8: TLabel
-                Left = 12
-                Height = 18
-                Top = 49
-                Width = 80
-                Caption = 'Downsample'
-                ParentColor = False
-                ParentFont = False
-              end
-              object Label9: TLabel
-                Left = 247
-                Height = 38
-                Top = 49
-                Width = 133
-                AutoSize = False
-                Caption = 'Maximum sources'
-                ParentColor = False
-                ParentFont = False
-                WordWrap = True
-              end
-              object Label27: TLabel
-                Left = 12
-                Height = 18
-                Top = 117
-                Width = 89
-                Caption = 'Other options '
-                ParentColor = False
-                ParentFont = False
-              end
-              object OtherOptions: TEdit
-                Left = 124
-                Height = 28
-                Top = 113
-                Width = 316
-                Constraints.MaxHeight = 28
-                ParentFont = False
+              object Panel30: TPanel
+                Left = 0
+                Height = 162
+                Top = 0
+                Width = 553
+                Align = alTop
+                BevelOuter = bvNone
+                ClientHeight = 162
+                ClientWidth = 553
                 TabOrder = 0
+                object Label6: TLabel
+                  Left = 12
+                  Height = 38
+                  Top = 10
+                  Width = 167
+                  AutoSize = False
+                  Caption = 'Maximum search radius'
+                  ParentColor = False
+                  ParentFont = False
+                  WordWrap = True
+                end
+                object Label7: TLabel
+                  Left = 247
+                  Height = 18
+                  Top = 10
+                  Width = 92
+                  Caption = 'Scale tolerance'
+                  ParentColor = False
+                  ParentFont = False
+                end
+                object Label8: TLabel
+                  Left = 12
+                  Height = 18
+                  Top = 49
+                  Width = 80
+                  Caption = 'Downsample'
+                  ParentColor = False
+                  ParentFont = False
+                end
+                object Label9: TLabel
+                  Left = 247
+                  Height = 38
+                  Top = 49
+                  Width = 133
+                  AutoSize = False
+                  Caption = 'Maximum sources'
+                  ParentColor = False
+                  ParentFont = False
+                  WordWrap = True
+                end
+                object Label27: TLabel
+                  Left = 12
+                  Height = 18
+                  Top = 117
+                  Width = 89
+                  Caption = 'Other options '
+                  ParentColor = False
+                  ParentFont = False
+                end
+                object OtherOptions: TEdit
+                  Left = 124
+                  Height = 28
+                  Top = 113
+                  Width = 316
+                  Constraints.MaxHeight = 28
+                  ParentFont = False
+                  TabOrder = 0
+                end
+                object MaxRadius: TFloatSpinEdit
+                  Left = 186
+                  Height = 28
+                  Top = 8
+                  Width = 58
+                  Constraints.MaxHeight = 28
+                  DecimalPlaces = 1
+                  MaxValue = 90
+                  ParentFont = False
+                  TabOrder = 1
+                end
+                object Tolerance: TFloatSpinEdit
+                  Left = 380
+                  Height = 28
+                  Top = 8
+                  Width = 61
+                  Constraints.MaxHeight = 28
+                  Increment = 0.01
+                  MaxValue = 1
+                  ParentFont = False
+                  TabOrder = 2
+                end
+                object Downsample: TSpinEdit
+                  Left = 186
+                  Height = 28
+                  Top = 46
+                  Width = 58
+                  Constraints.MaxHeight = 28
+                  MaxValue = 10
+                  MinValue = 1
+                  ParentFont = False
+                  TabOrder = 3
+                  Value = 1
+                end
+                object SourcesLimit: TSpinEdit
+                  Left = 380
+                  Height = 28
+                  Top = 46
+                  Width = 61
+                  Constraints.MaxHeight = 28
+                  MaxValue = 1000
+                  ParentFont = False
+                  TabOrder = 4
+                end
+                object AstrometryFallback: TCheckBox
+                  Left = 12
+                  Height = 22
+                  Top = 88
+                  Width = 245
+                  Caption = 'Use as fallback if other software fail'
+                  ParentFont = False
+                  TabOrder = 5
+                end
               end
-              object CygwinPanel: TPanel
-                Left = 7
-                Height = 40
-                Top = 218
-                Width = 454
+              object Panel31: TPanel
+                Left = 0
+                Height = 78
+                Top = 200
+                Width = 553
+                Align = alTop
                 BevelOuter = bvNone
-                ClientHeight = 40
-                ClientWidth = 454
-                ParentFont = False
+                ClientHeight = 78
+                ClientWidth = 553
                 TabOrder = 1
-                Visible = False
-                object Label34: TLabel
-                  Left = 4
-                  Height = 18
-                  Top = 12
-                  Width = 76
-                  Caption = 'Cygwin path'
-                  ParentColor = False
-                  ParentFont = False
-                end
-                object CygwinPath: TDirectoryEdit
-                  Left = 113
-                  Height = 28
-                  Top = 6
-                  Width = 321
-                  ShowHidden = False
-                  ButtonWidth = 23
-                  Constraints.MaxHeight = 28
-                  NumGlyphs = 1
-                  MaxLength = 0
+                object AstUseScript: TCheckBox
+                  Left = 12
+                  Height = 22
+                  Top = 8
+                  Width = 137
+                  Caption = 'Use custom script'
+                  OnClick = AstUseScriptClick
                   ParentFont = False
                   TabOrder = 0
                 end
+                object AstCustScript: TEdit
+                  Left = 44
+                  Height = 28
+                  Top = 36
+                  Width = 400
+                  Constraints.MaxHeight = 28
+                  ParentFont = False
+                  TabOrder = 1
+                end
               end
-              object AstUseScript: TCheckBox
-                Left = 12
-                Height = 22
-                Top = 150
-                Width = 137
-                Caption = 'Use custom script'
-                OnClick = AstUseScriptClick
-                ParentFont = False
-                TabOrder = 2
-              end
-              object AstCustScript: TEdit
-                Left = 40
-                Height = 28
-                Top = 178
-                Width = 400
-                Constraints.MaxHeight = 28
-                ParentFont = False
-                TabOrder = 3
-              end
-              object MaxRadius: TFloatSpinEdit
-                Left = 186
-                Height = 28
-                Top = 8
-                Width = 58
-                Constraints.MaxHeight = 28
-                DecimalPlaces = 1
-                MaxValue = 90
-                ParentFont = False
-                TabOrder = 4
-              end
-              object Tolerance: TFloatSpinEdit
-                Left = 380
-                Height = 28
-                Top = 8
-                Width = 61
-                Constraints.MaxHeight = 28
-                Increment = 0.01
-                MaxValue = 1
-                ParentFont = False
-                TabOrder = 5
-              end
-              object Downsample: TSpinEdit
-                Left = 186
-                Height = 28
-                Top = 46
-                Width = 58
-                Constraints.MaxHeight = 28
-                MaxValue = 10
-                MinValue = 1
-                ParentFont = False
-                TabOrder = 6
-                Value = 1
-              end
-              object SourcesLimit: TSpinEdit
-                Left = 380
-                Height = 28
-                Top = 46
-                Width = 61
-                Constraints.MaxHeight = 28
-                MaxValue = 1000
-                ParentFont = False
-                TabOrder = 7
-              end
-              object AstrometryPathPanel: TPanel
-                Left = 7
-                Height = 40
-                Top = 218
-                Width = 454
+              object Panel32: TPanel
+                Left = 0
+                Height = 50
+                Top = 278
+                Width = 553
+                Align = alTop
                 BevelOuter = bvNone
-                ClientHeight = 40
-                ClientWidth = 454
-                ParentFont = False
-                TabOrder = 8
-                Visible = False
-                object Label129: TLabel
-                  Left = 4
-                  Height = 18
-                  Top = 12
-                  Width = 94
-                  Caption = 'command path'
-                  ParentColor = False
-                  ParentFont = False
-                end
-                object AstrometryPath: TDirectoryEdit
-                  Left = 113
-                  Height = 28
-                  Hint = 'Let blank for default system search path'
-                  Top = 6
-                  Width = 315
-                  ShowHidden = False
-                  ButtonWidth = 23
-                  Constraints.MaxHeight = 28
-                  NumGlyphs = 1
-                  MaxLength = 0
+                ClientHeight = 50
+                ClientWidth = 553
+                TabOrder = 2
+                object AstrometryPathPanel: TPanel
+                  Left = 7
+                  Height = 40
+                  Top = 4
+                  Width = 454
+                  BevelOuter = bvNone
+                  ClientHeight = 40
+                  ClientWidth = 454
                   ParentFont = False
                   TabOrder = 0
+                  Visible = False
+                  object Label129: TLabel
+                    Left = 4
+                    Height = 18
+                    Top = 12
+                    Width = 94
+                    Caption = 'command path'
+                    ParentColor = False
+                    ParentFont = False
+                  end
+                  object AstrometryPath: TDirectoryEdit
+                    Left = 113
+                    Height = 28
+                    Hint = 'Let blank for default system search path'
+                    Top = 6
+                    Width = 315
+                    ShowHidden = False
+                    ButtonWidth = 23
+                    Constraints.MaxHeight = 28
+                    NumGlyphs = 1
+                    MaxLength = 0
+                    ParentFont = False
+                    TabOrder = 0
+                  end
+                end
+                object CygwinPanel: TPanel
+                  Left = 7
+                  Height = 40
+                  Top = 4
+                  Width = 454
+                  BevelOuter = bvNone
+                  ClientHeight = 40
+                  ClientWidth = 454
+                  ParentFont = False
+                  TabOrder = 1
+                  Visible = False
+                  object Label34: TLabel
+                    Left = 4
+                    Height = 18
+                    Top = 12
+                    Width = 76
+                    Caption = 'Cygwin path'
+                    ParentColor = False
+                    ParentFont = False
+                  end
+                  object CygwinPath: TDirectoryEdit
+                    Left = 113
+                    Height = 28
+                    Top = 6
+                    Width = 321
+                    ShowHidden = False
+                    ButtonWidth = 23
+                    Constraints.MaxHeight = 28
+                    NumGlyphs = 1
+                    MaxLength = 0
+                    ParentFont = False
+                    TabOrder = 0
+                  end
                 end
               end
-              object AstrometryFallback: TCheckBox
-                Left = 12
-                Height = 22
-                Top = 88
-                Width = 245
-                Caption = 'Use as fallback if other software fail'
-                ParentFont = False
-                TabOrder = 9
+              object Panel33: TPanel
+                Left = 0
+                Height = 38
+                Top = 162
+                Width = 553
+                Align = alTop
+                BevelOuter = bvNone
+                ClientHeight = 38
+                ClientWidth = 553
+                TabOrder = 3
+                object AstUseOnline: TCheckBox
+                  AnchorSideTop.Control = AstOnlineKey
+                  AnchorSideTop.Side = asrCenter
+                  Left = 12
+                  Height = 22
+                  Top = 5
+                  Width = 219
+                  Caption = 'Use online nova.astrometry.net'
+                  OnClick = AstUseOnlineClick
+                  TabOrder = 0
+                end
+                object AstOnlineKey: TEdit
+                  Left = 356
+                  Height = 32
+                  Top = 0
+                  Width = 164
+                  TabOrder = 1
+                end
+                object Label172: TLabel
+                  AnchorSideTop.Control = AstOnlineKey
+                  AnchorSideTop.Side = asrCenter
+                  Left = 280
+                  Height = 18
+                  Top = 7
+                  Width = 49
+                  Caption = 'API key:'
+                  ParentColor = False
+                end
               end
             end
           end
           object Page2: TPage
             object elbrus: TGroupBox
-              Left = 1
-              Height = 351
-              Top = 1
-              Width = 535
+              Left = 0
+              Height = 389
+              Top = 0
+              Width = 557
               Align = alClient
               Caption = 'Elbrus Star Locator'
-              ClientHeight = 339
-              ClientWidth = 523
+              ClientHeight = 359
+              ClientWidth = 553
               ParentFont = False
               TabOrder = 0
               object ElbrusFolder: TEdit
@@ -3991,18 +4065,18 @@ object f_option: Tf_option
               end
               object Label12: TLabel
                 Left = 8
-                Height = 17
+                Height = 18
                 Top = 14
-                Width = 131
+                Width = 130
                 Caption = 'Elbrus Images folder '
                 ParentColor = False
                 ParentFont = False
               end
               object Label13: TLabel
                 Left = 10
-                Height = 17
+                Height = 18
                 Top = 45
-                Width = 149
+                Width = 148
                 Caption = 'Images folder Unix path'
                 ParentColor = False
                 ParentFont = False
@@ -4032,10 +4106,10 @@ object f_option: Tf_option
           end
           object Page3: TPage
             object Label44: TLabel
-              Left = 1
-              Height = 343
-              Top = 9
-              Width = 535
+              Left = 0
+              Height = 381
+              Top = 8
+              Width = 557
               Align = alClient
               AutoSize = False
               BorderSpacing.Top = 8
@@ -4047,19 +4121,19 @@ object f_option: Tf_option
           end
           object Page4: TPage
             object platesolve: TGroupBox
-              Left = 1
-              Height = 351
-              Top = 1
-              Width = 535
+              Left = 0
+              Height = 389
+              Top = 0
+              Width = 557
               Align = alClient
               Caption = 'PlateSolve 2'
-              ClientHeight = 339
-              ClientWidth = 523
+              ClientHeight = 359
+              ClientWidth = 553
               ParentFont = False
               TabOrder = 0
               object Label78: TLabel
                 Left = 14
-                Height = 17
+                Height = 18
                 Top = 28
                 Width = 97
                 Caption = 'Program folder '
@@ -4068,16 +4142,16 @@ object f_option: Tf_option
               end
               object Label79: TLabel
                 Left = 16
-                Height = 17
+                Height = 18
                 Top = 81
-                Width = 96
+                Width = 95
                 Caption = 'Wait after solve'
                 ParentColor = False
                 ParentFont = False
               end
               object Label80: TLabel
                 Left = 241
-                Height = 17
+                Height = 18
                 Top = 81
                 Width = 50
                 Caption = 'seconds'
@@ -4112,20 +4186,20 @@ object f_option: Tf_option
           object Page5: TPage
             object astap: TGroupBox
               Left = 0
-              Height = 358
+              Height = 390
               Top = 0
-              Width = 560
+              Width = 557
               Align = alClient
               Caption = 'ASTAP'
-              ClientHeight = 346
-              ClientWidth = 548
+              ClientHeight = 360
+              ClientWidth = 553
               ParentFont = False
               TabOrder = 0
               object Label105: TLabel
                 AnchorSideTop.Control = ASTAPFolder
                 AnchorSideTop.Side = asrCenter
                 Left = 8
-                Height = 19
+                Height = 18
                 Top = 29
                 Width = 97
                 Caption = 'Program folder '
@@ -4148,7 +4222,7 @@ object f_option: Tf_option
                 AnchorSideTop.Control = ASTAPdownsample
                 AnchorSideTop.Side = asrCenter
                 Left = 8
-                Height = 19
+                Height = 18
                 Top = 126
                 Width = 80
                 Caption = 'Downsample'

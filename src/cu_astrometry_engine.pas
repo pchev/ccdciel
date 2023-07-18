@@ -505,6 +505,7 @@ if (FResolver=ResolverAstrometryNet)or Fretry then begin
   process.Parameters:=Fparam;
   process.Environment.Add('ccdcielpython='+PythonCmd);
   process.Environment.Add('ccdcielscriptdir='+ScriptsDir);
+  process.Environment.Add('ccdcielapikey='+config.GetValue('/Astrometry/AstOnlineKey',''));
   if not FUseWSL then process.Options:=[poUsePipes,poStderrToOutPut];
   {$ifdef mswindows}
   process.Environment.Add('SYSTEMROOT=C:\Windows');
