@@ -63,6 +63,8 @@ install -v -m 644 scripts/calibrator_on.script  $destdir/scripts/calibrator_on.s
 install -v -m 644 scripts/calibrator_off.script  $destdir/scripts/calibrator_off.script 
 install -v -m 755 scripts/astrometry.sh  $destdir/scripts/astrometry.sh
 install -v -m 755 scripts/astrometry-online.sh  $destdir/scripts/astrometry-online.sh
+install -v -m 755 scripts/astrometry-online.bat  $destdir/scripts/astrometry-online.bat
+install -v -m 644 scripts/client.py  $destdir/scripts/client.py
 install -v -m 755 scripts/astrometry-macos.sh  $destdir/scripts/astrometry-macos.sh
 install -v -m 755 scripts/siril_bias.script  $destdir/scripts/siril_bias.script
 install -v -m 755 scripts/siril_dark.script $destdir/scripts/siril_dark.script
