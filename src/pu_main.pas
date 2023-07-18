@@ -13775,6 +13775,7 @@ procedure Tf_main.AstrometryEnd(i: Integer);
 // 0 : main camera
 // 1 : preview
 // 2 : finder camera
+// 3 : guide camera
 var resulttxt,buf:string;
     dist: double;
 begin
@@ -13845,10 +13846,23 @@ begin
     if astrometry.LastResult then begin
        NewMessage(Format(rsResolveSucce, [rsFinderCamera]),3);
     end else begin
-      NewMessage(Format(rsResolveError, [astrometry.Resolver])+' '+astrometry.LastError,1);
+      NewMessage(Format(rsResolveError, [rsFinderCamera])+' '+astrometry.LastError,1);
       if LogToFile then begin
-         buf:=slash(LogDir)+'astrometry_fail_'+FormatDateTime('yyyymmdd_hhnnss',now)+'.fits';
+         buf:=slash(LogDir)+'finder_astrometry_fail_'+FormatDateTime('yyyymmdd_hhnnss',now)+'.fits';
          finderfits.SaveToFile(buf);
+         NewMessage(Format(rsSavedFile, [buf]),2);
+      end;
+    end
+  end
+  else if i=3 then begin
+    // guide camera result
+    if astrometry.LastResult then begin
+       NewMessage(Format(rsResolveSucce, [rsGuideCamera]),3);
+    end else begin
+      NewMessage(Format(rsResolveError, [rsGuideCamera])+' '+astrometry.LastError,1);
+      if LogToFile then begin
+         buf:=slash(LogDir)+'guider_astrometry_fail_'+FormatDateTime('yyyymmdd_hhnnss',now)+'.fits';
+         guidefits.SaveToFile(buf);
          NewMessage(Format(rsSavedFile, [buf]),2);
       end;
     end;

@@ -572,6 +572,7 @@ var ra,de,pa,ra2000,de2000: double;
     i: TcdcWCSinfo;
     c: TcdcWCScoord;
 begin
+if Assigned(FonEndAstrometry) then FonEndAstrometry(3);
 if cdcwcs_xy2sky<>nil then begin
   n:=cdcwcs_initfitsfile(pchar(slash(TmpDir)+'guidesolved.fits'),1);
   if n=0 then n:=cdcwcs_getinfo(addr(i),1);
