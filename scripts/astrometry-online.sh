@@ -10,10 +10,18 @@
 apiserver=http://nova.astrometry.net/api/
 
 # get api key from the server i.e. http://nova.astrometry.net/
-myapikey=xxxxxxxx
+myapikey=xxxx 
+
+# python command, default is from CCDciel setup
+pythoncmd=$ccdcielpython
+# to use another python version:
+#pythoncmd=/usr/bin/python3.11
+
+# directory containing the client script
+scriptdir=$ccdcielscriptdir
 
 # the api client script (from https://github.com/dstndstn/astrometry.net/tree/master/net/client )
-clientscript=client.py 
+clientscript=$scriptdir/client.py 
 
 # end of configuration
 
@@ -43,8 +51,8 @@ while [[ "$#" > 1 ]]; do
   shift;
 done
 
-echo $clientscript $onlparam
-$clientscript $onlparam
+echo $pythoncmd $clientscript $onlparam
+$pythoncmd $clientscript $onlparam
 rc=$?
 if [[ $rc == 0 ]]; then
   echo 1 > $solvfile

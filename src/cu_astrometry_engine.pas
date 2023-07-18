@@ -503,6 +503,8 @@ if (FResolver=ResolverAstrometryNet)or Fretry then begin
   end;
   process.Executable:=Fcmd;
   process.Parameters:=Fparam;
+  process.Environment.Add('ccdcielpython='+PythonCmd);
+  process.Environment.Add('ccdcielscriptdir='+ScriptsDir);
   if not FUseWSL then process.Options:=[poUsePipes,poStderrToOutPut];
   {$ifdef mswindows}
   process.ShowWindow:=swoHIDE;
