@@ -15071,8 +15071,8 @@ begin
 
   // first measurement with a big window to find median star diameter
   s:=starwindow; {use configured star window}
-  rx:=img_Width-6*s; {search area}
-  ry:=img_Height-6*s;
+  rx:=min(1000,img_Width-6*s); {search area}
+  ry:=min(1000,img_Height-6*s);
   fits.GetStarList(rx,ry,s); {search stars in fits image}
   nhfd:=Length(fits.StarList);
   if nhfd>0 then begin
