@@ -31,7 +31,7 @@ interface
 
 uses  u_global, u_utils, cu_fits, indiapi, cu_planetarium, fu_ccdtemp, fu_devicesconnection, pu_pause,
   fu_capture, fu_preview, fu_mount, cu_wheel, cu_mount, cu_camera, cu_focuser, cu_autoguider, cu_astrometry,
-  fu_cover, cu_cover, fu_internalguider, fu_finder, cu_switch,
+  fu_cover, cu_cover, fu_internalguider, fu_finder, cu_switch, fu_starprofile,
   Classes, SysUtils, FileUtil, uPSComponent, uPSComponent_Default, LazFileUtils,
   uPSComponent_Forms, uPSComponent_Controls, uPSComponent_StdCtrls, Forms, process,
   u_translation, Controls, Graphics, Dialogs, ExtCtrls;
@@ -83,6 +83,7 @@ type
     Fccdtemp: Tf_ccdtemp;
     f_mount: Tf_mount;
     f_cover: Tf_cover;
+    Fstarprofile: Tf_starprofile;
     Ffilter: T_wheel;
     Fmount: T_mount;
     Fcamera: T_camera;
@@ -224,6 +225,7 @@ type
     function cmd_ClearReferenceImage:string;
     function cmd_AutoFocus:string;
     function cmd_AutomaticAutoFocus:string;
+    function cmd_setFocusXY(x,y: string):string;
     function cmd_ListFiles(var lf:TStringList):string;
     function cmd_coverstatus: string;
     function cmd_coveropen: string;
@@ -264,6 +266,7 @@ type
     property Ccdtemp: Tf_ccdtemp read Fccdtemp write Fccdtemp;
     property Preview: Tf_preview read Fpreview write Fpreview;
     property Capture: Tf_capture read Fcapture write Fcapture;
+    property Starprofile: Tf_starprofile read Fstarprofile write Fstarprofile;
     property Fomount: Tf_mount read f_mount write f_mount;
     property Mount: T_mount read Fmount write Fmount;
     property Cover: Tf_cover read f_cover write f_cover;
@@ -1087,6 +1090,7 @@ else if cname='WHEEL_SETFILTER' then result:=cmd_Wheel_SetFilter(arg[0])
 else if cname='WHEEL_GETFILTERSNAME' then result:=cmd_Wheel_GetFiltersName(arg)
 else if cname='WHEEL_SETFILTERSNAME' then result:=cmd_Wheel_SetFiltersName(arg)
 else if cname='FOCUSER_SETPOSITION' then result:=cmd_Focuser_SetPosition(arg[0])
+else if cname='SETFOCUSXY' then result:=cmd_setFocusXY(arg[0],arg[1])
 else if cname='CCD_SETTEMPERATURE' then result:=cmd_Ccd_SetTemperature(arg[0])
 else if cname='PREVIEW_SETEXPOSURE' then result:=cmd_Preview_SetExposure(arg[0])
 else if cname='PREVIEW_SETBINNING' then result:=cmd_Preview_SetBinning(arg[0])
@@ -1917,6 +1921,24 @@ begin
   if Assigned(FonAutomaticAutofocus) then FonAutomaticAutofocus(ok);
   if ok then result:=msgOK;
   finally
+  end;
+end;
+
+function Tf_scriptengine.cmd_setFocusXY(x,y: string):string;
+var ix,iy,n:integer;
+begin
+  try
+    result:=msgFailed;
+    if not Assigned(Fstarprofile) then exit;
+    if not Assigned(Ffits) then exit;
+    val(x,ix,n);
+    if n<>0 then exit;
+    val(y,iy,n);
+    if n<>0 then exit;
+    Fstarprofile.ShowProfile(Ffits,ix,iy,Starwindow,Ffits.HeaderInfo.focallen,Ffits.HeaderInfo.pixsz1);
+    result:=msgOK;
+  except
+    result:=msgFailed;
   end;
 end;
 

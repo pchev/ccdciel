@@ -1917,6 +1917,7 @@ begin
   f_scriptengine.Ccdtemp:=f_ccdtemp;
   f_scriptengine.Fomount:=f_mount;
   f_scriptengine.Cover:=f_cover;
+  f_scriptengine.Starprofile:=f_starprofile;
   f_scriptengine.Autoguider:=autoguider;
   f_scriptengine.Astrometry:=astrometry;
   f_scriptengine.Planetarium:=planetarium;
@@ -15919,6 +15920,12 @@ try
   else if method='FOCUSER_SETPOSITION' then begin
     buf1:=trim(value[attrib.IndexOf('params.0')]);
     buf:=f_scriptengine.cmd_Focuser_SetPosition(buf1);
+    result:=result+'"result":{"status": "'+buf+'"}';
+  end
+  else if method='SETFOCUSXY' then begin
+    buf1:=trim(value[attrib.IndexOf('params.0')]);
+    buf2:=trim(value[attrib.IndexOf('params.1')]);
+    buf:=f_scriptengine.cmd_setFocusXY(buf1,buf2);
     result:=result+'"result":{"status": "'+buf+'"}';
   end
   else if method='CCD_SETTEMPERATURE' then begin
