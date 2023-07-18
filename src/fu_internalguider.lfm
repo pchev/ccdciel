@@ -403,7 +403,7 @@ object f_internalguider: Tf_internalguider
               Top = 0
               Width = 111
               DecimalPlaces = 3
-              MaxValue = 30
+              MaxValue = 120
               MinValue = 0.001
               OnChange = ExposureChange
               TabOrder = 0
@@ -929,8 +929,8 @@ object f_internalguider: Tf_internalguider
             Width = 340
             Align = alClient
             Caption = 'Calibration options'
-            ClientHeight = 156
-            ClientWidth = 336
+            ClientHeight = 186
+            ClientWidth = 340
             TabOrder = 1
             object measure_method2: TCheckBox
               Left = 8
@@ -1251,7 +1251,7 @@ object f_internalguider: Tf_internalguider
               Top = 128
               Width = 77
               DecimalPlaces = 1
-              MaxValue = 100
+              MaxValue = 120
               MinValue = 0.1
               TabOrder = 2
               Value = 10
@@ -1428,8 +1428,8 @@ object f_internalguider: Tf_internalguider
             Width = 340
             Align = alClient
             Caption = 'Calibration results:'
-            ClientHeight = 586
-            ClientWidth = 336
+            ClientHeight = 616
+            ClientWidth = 340
             TabOrder = 0
             object Label5: TLabel
               AnchorSideTop.Control = pa1
