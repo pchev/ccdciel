@@ -40,7 +40,7 @@ uses
   fu_video, pu_devicesetup, pu_options, pu_indigui, cu_fits, cu_camera, pu_pause, cu_tcpserver,
   pu_viewtext, cu_wheel, cu_mount, cu_focuser, XMLConf, u_utils, u_global, UScaleDPI, pu_handpad,
   cu_indimount, cu_ascommount, cu_indifocuser, cu_ascomfocuser, pu_vcurve, pu_focusercalibration,
-  fu_rotator, cu_rotator, cu_indirotator, cu_ascomrotator, cu_watchdog, cu_indiwatchdog,
+  fu_rotator, cu_rotator, cu_indirotator, cu_ascomrotator, cu_watchdog, cu_indiwatchdog, pu_sensoranalysis,
   cu_weather, cu_ascomweather, cu_indiweather, cu_safety, cu_ascomsafety, cu_indisafety, fu_weather, fu_safety,
   cu_dome, cu_ascomdome, cu_indidome, fu_dome, pu_about, pu_goto, pu_photometry, u_libraw, pu_image_sharpness,
   cu_indiwheel, cu_ascomwheel, cu_incamerawheel, cu_indicamera, cu_ascomcamera, cu_astrometry,
@@ -144,6 +144,7 @@ type
     MenuAscomFinderCameraSetup: TMenuItem;
     MenuAlpacaFinderCameraSetup: TMenuItem;
     MenuFinder: TMenuItem;
+    MenuSensorAnalysis: TMenuItem;
     MenuItemFinderSolveSync: TMenuItem;
     MenuItemSelectGuideStar: TMenuItem;
     MenuItemFinderImage: TMenuItem;
@@ -458,6 +459,7 @@ type
     procedure MenuItemGuiderStopAstrometryClick(Sender: TObject);
     procedure MenuItemSelectGuideStarClick(Sender: TObject);
     procedure MenuPolarAlignment2Click(Sender: TObject);
+    procedure MenuSensorAnalysisClick(Sender: TObject);
     procedure MenuViewInternalguiderClick(Sender: TObject);
     procedure PageInternalGuiderShow(Sender: TObject);
     procedure ShowDarkInfo;
@@ -11908,6 +11910,17 @@ begin
   pt:=ClientToScreen(pt);
   FormPos(f_polaralign2,pt.X,pt.Y);
   f_polaralign2.Show;
+end;
+
+procedure Tf_main.MenuSensorAnalysisClick(Sender: TObject);
+begin
+  if f_sensoranalysis=nil then begin
+    f_sensoranalysis:=Tf_sensoranalysis.Create(self);
+    f_sensoranalysis.onShowMessage:=@NewMessage;
+  end;
+  f_sensoranalysis.Fits:=fits;
+  f_sensoranalysis.Camera:=camera;
+  f_sensoranalysis.Show;
 end;
 
 procedure Tf_main.Polaralign2Close(Sender: TObject);

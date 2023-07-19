@@ -254,6 +254,7 @@ private
    procedure SetStreamingExposure(value:double); override;
    function GetVideoEncoder: integer; override;
    procedure SetVideoEncoder(value:integer); override;
+   function GetFullWellCapacity: double; override;
 
  public
    constructor Create(AOwner: TComponent);override;
@@ -2143,6 +2144,12 @@ begin
   else
     result:='';
 msg('Get aperture '+Result);
+end;
+
+function T_indicamera.GetFullWellCapacity: double;
+begin
+  // not implemented by INDI ?
+  result:=0;
 end;
 
 function T_indicamera.GetImageFormat: string;

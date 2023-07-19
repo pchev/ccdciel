@@ -51,8 +51,11 @@ uses
   cu_ascomrestcamera, cu_ascomrestwheel, cu_ascomrestweather,
   cu_ascomrestsafety, cu_ascomrestrotator, cu_ascomrestmount,
   cu_ascomrestfocuser, cu_ascomrestdome, cu_ascomrest, cu_autoguider_dither,
-  cu_sequencefile,
-  u_hints, pu_goto, pu_photometry, u_libraw, pu_polaralign, pu_keyboard, cu_alpacamanagement, pu_compute, cu_manualwheel, u_speech, pu_collimation, cu_ascomrestswitch, cu_ascomswitch, cu_indiswitch, cu_switch, fu_switchpage, pu_newscript, pu_polaralign2, fu_internalguider, cu_autoguider_internal, pu_handpad, fu_finder, pu_findercalibration, fu_switch;
+  cu_sequencefile, u_hints, pu_goto, pu_photometry, u_libraw, pu_polaralign,
+  pu_keyboard, cu_alpacamanagement, pu_compute, cu_manualwheel, u_speech, pu_collimation,
+  cu_ascomrestswitch, cu_ascomswitch, cu_indiswitch, cu_switch, fu_switchpage, pu_newscript,
+  pu_polaralign2, fu_internalguider, cu_autoguider_internal, pu_handpad, fu_finder,
+  pu_findercalibration, fu_switch, pu_sensoranalysis;
 
 {$R *.res}
 

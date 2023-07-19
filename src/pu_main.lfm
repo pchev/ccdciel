@@ -801,6 +801,10 @@ object f_main: Tf_main
         Caption = 'Focuser calibration'
         OnClick = MenuFocuserCalibrationClick
       end
+      object MenuSensorAnalysis: TMenuItem
+        Caption = 'Sensor Analysis'
+        OnClick = MenuSensorAnalysisClick
+      end
     end
     object MenuImage: TMenuItem
       Caption = 'Image'

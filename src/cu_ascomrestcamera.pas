@@ -129,6 +129,7 @@ T_ascomrestcamera = class(T_camera)
    procedure SetStreamingExposure(value:double); override;
    function GetVideoEncoder: integer; override;
    procedure SetVideoEncoder(value:integer); override;
+   function GetFullWellCapacity: double; override;
 
 public
    constructor Create(AOwner: TComponent);override;
@@ -1348,6 +1349,17 @@ begin
   end;
 end;
 
+function T_ascomrestcamera.GetFullWellCapacity: double;
+begin
+  result:=0;
+  if FStatus<>devConnected then exit;
+  try
+    result := V.Get('fullwellcapacity').AsFloat;
+  except
+    on E: Exception do msg('Get FullWellCapacity: '+E.Message,0);
+  end;
+end;
+
 procedure T_ascomrestcamera.SetFnumber(value: string);
 begin
   //unsupported
@@ -1599,4 +1611,3 @@ begin
 end;
 
 end.
-

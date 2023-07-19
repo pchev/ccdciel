@@ -355,7 +355,7 @@
         <PackageName Value="LCL"/>
       </Item11>
     </RequiredPackages>
-    <Units Count="125">
+    <Units Count="126">
       <Unit0>
         <Filename Value="ccdciel.lpr"/>
         <IsPartOfProject Value="True"/>
@@ -1004,6 +1004,13 @@
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Frame"/>
       </Unit124>
+      <Unit125>
+        <Filename Value="pu_sensoranalysis.pas"/>
+        <IsPartOfProject Value="True"/>
+        <ComponentName Value="f_sensoranalysis"/>
+        <HasResources Value="True"/>
+        <ResourceBaseClass Value="Form"/>
+      </Unit125>
     </Units>
   </ProjectOptions>
   <CompilerOptions>

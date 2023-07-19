@@ -127,6 +127,7 @@ T_ascomcamera = class(T_camera)
    procedure SetStreamingExposure(value:double); override;
    function GetVideoEncoder: integer; override;
    procedure SetVideoEncoder(value:integer); override;
+   function GetFullWellCapacity: double; override;
 
 public
    constructor Create(AOwner: TComponent);override;
@@ -1529,6 +1530,19 @@ begin
   end;
   except
      on E: Exception do msg('Get ReadOut: '+E.Message,0);
+  end;
+  {$endif}
+end;
+
+function T_ascomcamera.GetFullWellCapacity: double;
+begin
+  result:=0;
+  {$ifdef mswindows}
+  if FStatus<>devConnected then exit;
+  try
+    result := V.FullWellCapacity;
+  except
+    on E: Exception do msg('Get FullWellCapacity: '+E.Message,0);
   end;
   {$endif}
 end;

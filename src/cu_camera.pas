@@ -182,6 +182,7 @@ T_camera = class(TComponent)
     procedure SetStreamingExposure(value:double); virtual; abstract;
     function GetVideoEncoder: integer; virtual; abstract;
     procedure SetVideoEncoder(value:integer); virtual; abstract;
+    function GetFullWellCapacity: double; virtual; abstract;
   private
     lockvideoframe: boolean;
     TempFinal: Double;
@@ -319,6 +320,7 @@ T_camera = class(TComponent)
     property FinderCamera: boolean read FFinderCamera write FFinderCamera;
     property GuideCamera: boolean read FGuideCamera write FGuideCamera;
     property GuidePixelScale: double read FGuidePixelScale write FGuidePixelScale;
+    property FullWellCapacity: double read GetFullWellCapacity;
     property onMsg: TNotifyMsg read FonMsg write FonMsg;
     property onDeviceMsg: TNotifyMsg read FonDeviceMsg write FonDeviceMsg;
     property onExposureProgress: TNotifyNum read FonExposureProgress write FonExposureProgress;
