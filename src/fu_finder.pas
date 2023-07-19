@@ -94,6 +94,7 @@ type
     Procedure StartExposureAsync(Data: PtrInt);
     procedure StartLoop;
     procedure StopLoop;
+    function Snapshot(exp: double; fn: string):boolean;
     property Camera: T_camera read FCamera write FCamera;
     property Astrometry: TAstrometry read FAstrometry write FAstrometry;
     property DrawSettingChange: boolean read FDrawSettingChange write FDrawSettingChange;
@@ -322,6 +323,39 @@ procedure Tf_finder.BtnZoom2Click(Sender: TObject);
 begin
   FinderImgZoom:=2;
   if Assigned(FonRedraw) then FonRedraw(self);
+end;
+
+function Tf_finder.Snapshot(exp: double; fn: string): boolean;
+var bin,sgain,soffset: integer;
+    restartloop:boolean;
+begin
+try
+  if (FCamera.Status=devConnected) then begin
+    restartloop:=FinderPreviewLoop;
+    if FinderPreviewLoop then begin
+      StopLoop;
+      wait(1);
+    end;
+    sgain:=config.GetValue('/PrecSlew/Gain',NullInt);
+    soffset:=config.GetValue('/PrecSlew/Offset',NullInt);
+    bin:=config.GetValue('/PrecSlew/Binning',1);
+    msg(format(rsExposureS,[FormatFloat(f3,exp)])+blank+rsSeconds,3);
+    if not Fcamera.ControlExposure(exp,bin,bin,LIGHT,ReadoutModeCapture,sgain,soffset,true) then begin
+      msg(rsExposureFail,0);
+      result:=false;
+      exit;
+    end;
+    FCamera.Fits.SaveToFile(fn);
+    if restartloop then StartLoop;
+    result:=true;
+  end
+  else begin
+    msg(rsSomeDefinedD,1);
+    result:=false;
+  end;
+except
+  result:=false;
+end;
 end;
 
 end.

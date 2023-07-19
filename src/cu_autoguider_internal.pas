@@ -173,7 +173,7 @@ begin
   FSettleTmin:=5;
   FSettleTmax:=30;
   InitLog;
-  StopInternalguider:=true;
+  StopInternalguider:=false;
   InternalguiderRunning:=false;
   InternalguiderGuiding:=false;
   InternalguiderCalibrating:=false;

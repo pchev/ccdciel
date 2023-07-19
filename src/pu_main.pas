@@ -459,6 +459,7 @@ type
     procedure MenuItemSelectGuideStarClick(Sender: TObject);
     procedure MenuPolarAlignment2Click(Sender: TObject);
     procedure MenuViewInternalguiderClick(Sender: TObject);
+    procedure PageInternalGuiderShow(Sender: TObject);
     procedure ShowDarkInfo;
     procedure ShowFlatInfo;
     procedure MenuDownloadClick(Sender: TObject);
@@ -1843,6 +1844,7 @@ begin
   f_internalguider.onParameterChange:=@InternalguiderParameterChange;
   f_internalguider.onSetTemperature:=@GuideCameraSetTemperature;
   f_internalguider.onSetCooler:=@GuideCameraSetCooler;
+  f_internalguider.onShowMessage:=@NewMessage;
   ShowGuiderDarkInfo;
 
   f_finder:=Tf_finder.Create(self);
@@ -2203,6 +2205,9 @@ begin
  end;
  if f_finder<>nil then begin
    f_finder.Camera:=findercamera;
+ end;
+ if f_internalguider<>nil then begin
+   f_internalguider.Camera:=guidecamera;
  end;
 end;
 
@@ -16070,6 +16075,33 @@ try
    buf:=f_scriptengine.cmd_FinderStartLoop(buf1);
    result:=result+'"result":{"status": "'+buf+'"}';
   end
+  else if method='FINDER_SNAPSHOT' then begin
+   buf1:=trim(value[attrib.IndexOf('params.0')]);
+   buf2:=trim(value[attrib.IndexOf('params.1')]);
+   try
+   buf3:=trim(value[attrib.IndexOf('params.2')]);
+   except
+     buf3:='1';
+   end;
+   buf:=f_scriptengine.cmd_FinderSnapshot(buf1,buf2,buf3);
+   result:=result+'"result":{"status": "'+buf+'"}';
+  end
+  else if method='INTERNALGUIDER_SNAPSHOT' then begin
+   buf1:=trim(value[attrib.IndexOf('params.0')]);
+   buf2:=trim(value[attrib.IndexOf('params.1')]);
+   try
+   buf3:=trim(value[attrib.IndexOf('params.2')]);
+   except
+     buf3:='1';
+   end;
+   buf:=f_scriptengine.cmd_InternalGuiderSnapshot(buf1,buf2,buf3);
+   result:=result+'"result":{"status": "'+buf+'"}';
+  end
+  else if method='INTERNALGUIDER_SAVE_FITS_FILE' then begin
+    buf1:=trim(value[attrib.IndexOf('params.0')]);
+    buf:=f_scriptengine.cmd_InternalGuiderSaveFitsFile(buf1);
+    result:=result+'"result":{"status": "'+buf+'"}';
+  end
   else if method='GET_SWITCH' then begin
     buf1:=trim(value[attrib.IndexOf('params.0')]);
     buf2:=trim(value[attrib.IndexOf('params.1')]);
@@ -16435,6 +16467,7 @@ begin
    InternalguiderGuiding:=false;
    InternalguiderCalibrating:=false;
    InternalguiderCalibratingBacklash:=false;
+   StopInternalguider:=false;
    exit;
   end;
 
@@ -16476,6 +16509,14 @@ begin
   // draw image to screen
   if displayimage then
     PlotGuideImage;
+end;
+
+procedure Tf_main.PageInternalGuiderShow(Sender: TObject);
+begin
+ if f_internalguider.IsVisible and guidefits.ImageValid then begin
+   DrawGuideImage(true);
+   PlotGuideImage;
+ end;
 end;
 
 procedure Tf_main.ShowGuiderDarkInfo;

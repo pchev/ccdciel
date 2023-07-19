@@ -189,6 +189,9 @@ type
     function cmd_FinderStartLoop(exp:string):string;
     function cmd_FinderStopLoop:string;
     function cmd_FinderSaveImages(onoff:string):string;
+    function cmd_FinderSnapshot(exp,basefn,count:string):string;
+    function cmd_InternalGuiderSnapshot(exp,basefn,count:string):string;
+    function cmd_InternalGuiderSaveFitsFile(basefn:string):string;
     function cmd_Wheel_GetFilter:string;
     function cmd_Wheel_SetFilter(num:string):string;
     function cmd_Wheel_GetFiltersName(var fl:TStringList):string;
@@ -1114,6 +1117,9 @@ else if cname='AUTOGUIDER_SETLOCKPOSITION' then result:=cmd_AutoguiderSetLockPos
 else if cname='AUTOGUIDER_STORELOCKPOSITION' then result:=cmd_AutoguiderStoreLockPosition(arg[0],arg[1])
 else if cname='FINDER_SAVEIMAGES' then result:=cmd_FinderSaveImages(arg[0])
 else if cname='FINDER_STARTLOOP' then result:=cmd_FinderStartLoop(arg[0])
+else if cname='FINDER_SNAPSHOT' then result:=cmd_FinderSnapshot(arg[0],arg[1],arg[2])
+else if cname='INTERNALGUIDER_SNAPSHOT' then result:=cmd_InternalGuiderSnapshot(arg[0],arg[1],arg[2])
+else if cname='INTERNALGUIDER_SAVE_FITS_FILE' then result:=cmd_InternalGuiderSaveFitsFile(arg[0])
 ;
 LastErr:='cmdarg('+cname+'): '+result;
 end;
@@ -1494,6 +1500,99 @@ begin
   except
     result:=msgFailed;
   end;
+end;
+
+function Tf_scriptengine.cmd_FinderSnapshot(exp,basefn,count:string):string;
+var n,c,i,j:integer;
+    e: double;
+    dir,fn,seqstr: string;
+begin
+ result:=msgFailed;
+ try
+ val(exp,e,n);
+ if n=0 then
+   val(count,c,n);
+ if n=0 then begin;
+   dir:=slash(config.GetValue('/Files/CapturePath',defCapturePath));
+   dir:=slash(dir)+'Finder';
+   ForceDirectories(dir);
+   basefn:=ExtractFileNameOnly(basefn);
+   basefn:=slash(dir)+basefn;
+   i:=1;
+   for j:=0 to c-1 do begin
+     seqstr:=inttostr(i);
+     while FileExists(basefn+FilenameSep+seqstr+FitsFileExt) do begin
+       inc(i);
+       seqstr:=inttostr(i);
+     end;
+     fn:=basefn+FilenameSep+seqstr+FitsFileExt;
+     if not finder.Snapshot(e,fn) then exit;
+     inc(i);
+   end;
+   result:=msgOK;
+ end;
+ except
+   result:=msgFailed;
+ end;
+end;
+
+function Tf_scriptengine.cmd_InternalGuiderSnapshot(exp,basefn,count:string):string;
+var n,c,i,j:integer;
+    e: double;
+    dir,fn,seqstr: string;
+begin
+ result:=msgFailed;
+ try
+ val(exp,e,n);
+ if n=0 then
+   val(count,c,n);
+ if n=0 then begin;
+   dir:=slash(config.GetValue('/Files/CapturePath',defCapturePath));
+   dir:=slash(dir)+'Guider';
+   ForceDirectories(dir);
+   basefn:=ExtractFileNameOnly(basefn);
+   basefn:=slash(dir)+basefn;
+   i:=1;
+   for j:=0 to c-1 do begin
+     seqstr:=inttostr(i);
+     while FileExists(basefn+FilenameSep+seqstr+FitsFileExt) do begin
+       inc(i);
+       seqstr:=inttostr(i);
+     end;
+     fn:=basefn+FilenameSep+seqstr+FitsFileExt;
+     if not FInternalGuider.Snapshot(e,fn) then exit;
+     inc(i);
+   end;
+   result:=msgOK;
+ end;
+ except
+   result:=msgFailed;
+ end;
+end;
+
+function Tf_scriptengine.cmd_InternalGuiderSaveFitsFile(basefn:string):string;
+var i: integer;
+    dir,fn,seqstr: string;
+begin
+ result:=msgFailed;
+ try
+   dir:=slash(config.GetValue('/Files/CapturePath',defCapturePath));
+   dir:=slash(dir)+'Guider';
+   ForceDirectories(dir);
+   basefn:=ExtractFileNameOnly(basefn);
+   basefn:=slash(dir)+basefn;
+   i:=1;
+   seqstr:=inttostr(i);
+   while FileExists(basefn+FilenameSep+seqstr+FitsFileExt) do begin
+     inc(i);
+     seqstr:=inttostr(i);
+   end;
+   fn:=basefn+FilenameSep+seqstr+FitsFileExt;
+   if not FInternalGuider.SaveFits(fn) then exit;
+   result:=msgOK;
+ except
+   result:=msgFailed;
+ end;
 end;
 
 function Tf_scriptengine.cmd_Wheel_GetFilter:string;

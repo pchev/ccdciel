@@ -25,7 +25,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 interface
 
-uses   UScaleDPI, Dialogs, u_hints, u_translation, u_global,
+uses   UScaleDPI, Dialogs, u_hints, u_translation, u_global, cu_camera, indiapi,
   Classes, SysUtils, FileUtil, Forms, Graphics, Controls, StdCtrls, ExtCtrls, Spin,
   math,LCLintf, ComCtrls, Buttons, Menus;
 
@@ -268,6 +268,9 @@ type
     cur_disable_guiding, cur_tracksolar: boolean;
     FDrawSettingChange: boolean;
     FGuideLockNextX, FGuideLockNextY: integer;
+    FonShowMessage: TNotifyMsg;
+    Fcamera: T_camera;
+    procedure msg(txt:string; level: integer);
     procedure ShowMinMove;
     procedure SetLed (cl : tcolor);
     procedure SetRA_hysteresis(value:integer);
@@ -361,6 +364,10 @@ type
     procedure draw_trend(xy_trend :xy_guiderlist);//draw trend
     procedure trend_message(message1,message2,message3 :string);//clear trend and place message
     function CalibrationIsValid: boolean;
+    function Snapshot(exp: double; fn: string):boolean;
+    function SaveFits(fn: string):boolean;
+    property onShowMessage: TNotifyMsg read FonShowMessage write FonShowMessage;
+    property Camera: T_camera read Fcamera write Fcamera;
     property onLoop: TNotifyEvent read FonLoop write FonLoop;
     property onStart: TNotifyEvent read FonStart write FonStart;
     property onStop: TNotifyEvent read FonStop write FonStop;
@@ -1550,6 +1557,65 @@ end;
 function Tf_internalguider.GetInfo: string;
 begin
  result:=LabelInfo.Caption;
+end;
+
+procedure Tf_internalguider.msg(txt:string; level: integer);
+begin
+ if assigned(FonShowMessage) then FonShowMessage(rsGuideCamera+': '+txt,level);
+end;
+
+function Tf_internalguider.Snapshot(exp: double; fn: string): boolean;
+var bin,sgain,soffset: integer;
+begin
+try
+  if (Assigned(Fcamera)) and (FCamera.Status=devConnected) then begin
+    if (not InternalguiderRunning) then begin
+      sgain:=gain.Value;
+      soffset:=Offset.Value;
+      bin:=Binning.Value;
+      msg(format(rsExposureS,[FormatFloat(f3,exp)])+blank+rsSeconds,3);
+      if not Fcamera.ControlExposure(exp,bin,bin,LIGHT,ReadoutModeCapture,sgain,soffset,true) then begin
+        msg(rsExposureFail,0);
+        result:=false;
+        exit;
+      end;
+      FCamera.Fits.SaveToFile(fn);
+      result:=true;
+    end
+    else begin
+      msg('Cannot take snapshot when the guider is running',1);
+      result:=false;
+    end;
+  end
+  else begin
+    msg(rsSomeDefinedD,1);
+    result:=false;
+  end;
+except
+  result:=false;
+end;
+end;
+
+function Tf_internalguider.SaveFits(fn: string):boolean;
+begin
+try
+  if (Assigned(Fcamera)) and (FCamera.Status=devConnected) then begin
+    if Fcamera.Fits.HeaderInfo.valid and Fcamera.Fits.ImageValid then begin
+      FCamera.Fits.SaveToFile(fn);
+      result:=true;
+    end
+    else begin
+      msg('No guider image is available to save',1);
+      result:=false;
+    end;
+  end
+  else begin
+    msg(rsSomeDefinedD,1);
+    result:=false;
+  end;
+except
+  result:=false;
+end;
 end;
 
 end.
