@@ -160,6 +160,13 @@ type
     MenuItemGuiderStopAstrometry: TMenuItem;
     MenuItemGuiderSolve: TMenuItem;
     PanelRight7: TPanel;
+    ScrollBox2: TScrollBox;
+    ScrollBox3: TScrollBox;
+    ScrollBox4: TScrollBox;
+    ScrollBox5: TScrollBox;
+    ScrollBox6: TScrollBox;
+    ScrollBox7: TScrollBox;
+    ScrollBox8: TScrollBox;
     Separator1: TMenuItem;
     MenuItemGuiderImage: TMenuItem;
     MenuItemGuiderViewStatistics: TMenuItem;
@@ -232,7 +239,6 @@ type
     ImageResizeTimer: TTimer;
     GuiderPopUpmenu1: TPopupMenu;
     SaveDialogPicture: TSaveDialog;
-    ScrollBox1: TScrollBox;
     Separator2: TMenuItem;
     Separator3: TMenuItem;
     Splitter1: TSplitter;

@@ -183,184 +183,6 @@ object f_main: Tf_main
     Constraints.MinWidth = 222
     ParentFont = False
     TabOrder = 2
-    object ScrollBox1: TScrollBox
-      Left = 0
-      Height = 508
-      Top = 41
-      Width = 222
-      HorzScrollBar.Page = 208
-      VertScrollBar.Page = 54
-      Align = alClient
-      BorderStyle = bsNone
-      ClientHeight = 508
-      ClientWidth = 222
-      TabOrder = 0
-      object PageControlRight: TPageControl
-        Left = 0
-        Height = 508
-        Top = 0
-        Width = 222
-        ActivePage = PageConnect
-        Align = alClient
-        Images = ImageListDay
-        MultiLine = True
-        ParentFont = False
-        ShowTabs = False
-        TabIndex = 0
-        TabOrder = 0
-        Options = [nboMultiLine]
-        object PageConnect: TTabSheet
-          ClientHeight = 504
-          ClientWidth = 218
-          ImageIndex = 0
-          ParentFont = False
-          object PanelRight1: TPanel
-            Left = 0
-            Height = 504
-            Top = 0
-            Width = 218
-            Align = alClient
-            AutoSize = True
-            BevelOuter = bvNone
-            ChildSizing.TopBottomSpacing = 3
-            ChildSizing.VerticalSpacing = 3
-            ChildSizing.Layout = cclTopToBottomThenLeftToRight
-            ChildSizing.ControlsPerLine = 99
-            ParentColor = False
-            ParentFont = False
-            TabOrder = 0
-            OnDragDrop = PanelDragDrop
-            OnDragOver = PanelDragOver
-          end
-        end
-        object PageFocus: TTabSheet
-          ClientHeight = 504
-          ClientWidth = 218
-          ImageIndex = 1
-          ParentFont = False
-          object PanelRight2: TPanel
-            Left = 0
-            Height = 504
-            Top = 0
-            Width = 218
-            Align = alClient
-            AutoSize = True
-            BevelOuter = bvNone
-            ChildSizing.TopBottomSpacing = 3
-            ChildSizing.VerticalSpacing = 3
-            ChildSizing.Layout = cclTopToBottomThenLeftToRight
-            ChildSizing.ControlsPerLine = 99
-            ParentColor = False
-            ParentFont = False
-            TabOrder = 0
-            OnDragDrop = PanelDragDrop
-            OnDragOver = PanelDragOver
-          end
-        end
-        object PageCapture: TTabSheet
-          ClientHeight = 504
-          ClientWidth = 218
-          ImageIndex = 2
-          ParentFont = False
-          object PanelRight3: TPanel
-            Left = 0
-            Height = 504
-            Top = 0
-            Width = 218
-            Align = alClient
-            AutoSize = True
-            BevelOuter = bvNone
-            ChildSizing.TopBottomSpacing = 3
-            ChildSizing.VerticalSpacing = 3
-            ChildSizing.Layout = cclTopToBottomThenLeftToRight
-            ChildSizing.ControlsPerLine = 99
-            ParentColor = False
-            ParentFont = False
-            TabOrder = 0
-            OnDragDrop = PanelDragDrop
-            OnDragOver = PanelDragOver
-          end
-        end
-        object PageSequence: TTabSheet
-          ClientHeight = 504
-          ClientWidth = 218
-          ImageIndex = 3
-          ParentFont = False
-          object PanelRight4: TPanel
-            Left = 0
-            Height = 504
-            Top = 0
-            Width = 218
-            Align = alClient
-            AutoSize = True
-            BevelOuter = bvNone
-            ChildSizing.TopBottomSpacing = 3
-            ChildSizing.VerticalSpacing = 3
-            ChildSizing.Layout = cclTopToBottomThenLeftToRight
-            ChildSizing.ControlsPerLine = 99
-            ParentColor = False
-            ParentFont = False
-            TabOrder = 0
-            OnDragDrop = PanelDragDrop
-            OnDragOver = PanelDragOver
-          end
-        end
-        object PageVideo: TTabSheet
-          ClientHeight = 504
-          ClientWidth = 218
-          ImageIndex = 4
-          ParentFont = False
-          object PanelRight5: TPanel
-            Left = 0
-            Height = 504
-            Top = 0
-            Width = 218
-            Align = alClient
-            AutoSize = True
-            BevelOuter = bvNone
-            ParentColor = False
-            ParentFont = False
-            TabOrder = 0
-            OnDragDrop = PanelDragDrop
-            OnDragOver = PanelDragOver
-          end
-        end
-        object PageInternalGuider: TTabSheet
-          ClientHeight = 504
-          ClientWidth = 218
-          ImageIndex = 4
-          OnShow = PageInternalGuiderShow
-          ParentFont = False
-          object PanelRight6: TPanel
-            Left = 0
-            Height = 504
-            Top = 0
-            Width = 218
-            Align = alClient
-            BevelOuter = bvNone
-            ParentColor = False
-            ParentFont = False
-            TabOrder = 0
-            OnDragDrop = PanelDragDrop
-            OnDragOver = PanelDragOver
-          end
-        end
-        object PageFinder: TTabSheet
-          ClientHeight = 504
-          ClientWidth = 218
-          ParentFont = False
-          object PanelRight7: TPanel
-            Left = 0
-            Height = 504
-            Top = 0
-            Width = 218
-            Align = alClient
-            BevelOuter = bvNone
-            TabOrder = 0
-          end
-        end
-      end
-    end
     object TBTabs: TToolBar
       Left = 0
       Height = 41
@@ -371,7 +193,7 @@ object f_main: Tf_main
       Images = ImageListDay
       ParentColor = False
       ParentFont = False
-      TabOrder = 1
+      TabOrder = 0
       Wrapable = False
       object TBConnect: TToolButton
         Left = 1
@@ -455,6 +277,255 @@ object f_main: Tf_main
         OnDragOver = ButtonDragOver
         Style = tbsCheck
         Visible = False
+      end
+    end
+    object PageControlRight: TPageControl
+      Left = 0
+      Height = 508
+      Top = 41
+      Width = 222
+      ActivePage = PageConnect
+      Align = alClient
+      Images = ImageListDay
+      MultiLine = True
+      ParentFont = False
+      ShowTabs = False
+      TabIndex = 0
+      TabOrder = 1
+      Options = [nboMultiLine]
+      object PageConnect: TTabSheet
+        ClientHeight = 504
+        ClientWidth = 218
+        ImageIndex = 0
+        ParentFont = False
+        object ScrollBox3: TScrollBox
+          Left = 0
+          Height = 504
+          Top = 0
+          Width = 218
+          HorzScrollBar.Page = 1
+          VertScrollBar.Page = 1
+          Align = alClient
+          ClientHeight = 500
+          ClientWidth = 214
+          TabOrder = 0
+          object PanelRight1: TPanel
+            Left = 0
+            Height = 500
+            Top = 0
+            Width = 214
+            Align = alClient
+            AutoSize = True
+            BevelOuter = bvNone
+            ChildSizing.TopBottomSpacing = 3
+            ChildSizing.VerticalSpacing = 3
+            ChildSizing.Layout = cclTopToBottomThenLeftToRight
+            ChildSizing.ControlsPerLine = 99
+            ParentColor = False
+            ParentFont = False
+            TabOrder = 0
+            OnDragDrop = PanelDragDrop
+            OnDragOver = PanelDragOver
+          end
+        end
+      end
+      object PageFocus: TTabSheet
+        ClientHeight = 504
+        ClientWidth = 218
+        ImageIndex = 1
+        ParentFont = False
+        object ScrollBox4: TScrollBox
+          Left = 0
+          Height = 504
+          Top = 0
+          Width = 218
+          HorzScrollBar.Page = 1
+          VertScrollBar.Page = 1
+          Align = alClient
+          ClientHeight = 500
+          ClientWidth = 214
+          TabOrder = 0
+          object PanelRight2: TPanel
+            Left = 0
+            Height = 500
+            Top = 0
+            Width = 214
+            Align = alClient
+            AutoSize = True
+            BevelOuter = bvNone
+            ChildSizing.TopBottomSpacing = 3
+            ChildSizing.VerticalSpacing = 3
+            ChildSizing.Layout = cclTopToBottomThenLeftToRight
+            ChildSizing.ControlsPerLine = 99
+            ParentColor = False
+            ParentFont = False
+            TabOrder = 0
+            OnDragDrop = PanelDragDrop
+            OnDragOver = PanelDragOver
+          end
+        end
+      end
+      object PageCapture: TTabSheet
+        ClientHeight = 504
+        ClientWidth = 218
+        ImageIndex = 2
+        ParentFont = False
+        object ScrollBox5: TScrollBox
+          Left = 0
+          Height = 504
+          Top = 0
+          Width = 218
+          HorzScrollBar.Page = 1
+          VertScrollBar.Page = 1
+          Align = alClient
+          ClientHeight = 500
+          ClientWidth = 214
+          TabOrder = 0
+          object PanelRight3: TPanel
+            Left = 0
+            Height = 500
+            Top = 0
+            Width = 214
+            Align = alClient
+            AutoSize = True
+            BevelOuter = bvNone
+            ChildSizing.TopBottomSpacing = 3
+            ChildSizing.VerticalSpacing = 3
+            ChildSizing.Layout = cclTopToBottomThenLeftToRight
+            ChildSizing.ControlsPerLine = 99
+            ParentColor = False
+            ParentFont = False
+            TabOrder = 0
+            OnDragDrop = PanelDragDrop
+            OnDragOver = PanelDragOver
+          end
+        end
+      end
+      object PageSequence: TTabSheet
+        ClientHeight = 504
+        ClientWidth = 218
+        ImageIndex = 3
+        ParentFont = False
+        object ScrollBox2: TScrollBox
+          Left = 0
+          Height = 504
+          Top = 0
+          Width = 218
+          HorzScrollBar.Page = 1
+          VertScrollBar.Page = 1
+          Align = alClient
+          ClientHeight = 500
+          ClientWidth = 214
+          TabOrder = 0
+          object PanelRight4: TPanel
+            Left = 0
+            Height = 500
+            Top = 0
+            Width = 214
+            Align = alClient
+            AutoSize = True
+            BevelOuter = bvNone
+            ChildSizing.TopBottomSpacing = 3
+            ChildSizing.VerticalSpacing = 3
+            ChildSizing.Layout = cclTopToBottomThenLeftToRight
+            ChildSizing.ControlsPerLine = 99
+            ParentColor = False
+            ParentFont = False
+            TabOrder = 0
+            OnDragDrop = PanelDragDrop
+            OnDragOver = PanelDragOver
+          end
+        end
+      end
+      object PageVideo: TTabSheet
+        ClientHeight = 504
+        ClientWidth = 218
+        ImageIndex = 4
+        ParentFont = False
+        object ScrollBox6: TScrollBox
+          Left = 0
+          Height = 504
+          Top = 0
+          Width = 218
+          HorzScrollBar.Page = 1
+          VertScrollBar.Page = 1
+          Align = alClient
+          ClientHeight = 500
+          ClientWidth = 214
+          TabOrder = 0
+          object PanelRight5: TPanel
+            Left = 0
+            Height = 500
+            Top = 0
+            Width = 214
+            Align = alClient
+            AutoSize = True
+            BevelOuter = bvNone
+            ParentColor = False
+            ParentFont = False
+            TabOrder = 0
+            OnDragDrop = PanelDragDrop
+            OnDragOver = PanelDragOver
+          end
+        end
+      end
+      object PageInternalGuider: TTabSheet
+        ClientHeight = 504
+        ClientWidth = 218
+        ImageIndex = 4
+        OnShow = PageInternalGuiderShow
+        ParentFont = False
+        object ScrollBox7: TScrollBox
+          Left = 0
+          Height = 504
+          Top = 0
+          Width = 218
+          HorzScrollBar.Page = 1
+          VertScrollBar.Page = 1
+          Align = alClient
+          ClientHeight = 500
+          ClientWidth = 214
+          TabOrder = 0
+          object PanelRight6: TPanel
+            Left = 0
+            Height = 500
+            Top = 0
+            Width = 214
+            Align = alClient
+            BevelOuter = bvNone
+            ParentColor = False
+            ParentFont = False
+            TabOrder = 0
+            OnDragDrop = PanelDragDrop
+            OnDragOver = PanelDragOver
+          end
+        end
+      end
+      object PageFinder: TTabSheet
+        ClientHeight = 504
+        ClientWidth = 218
+        ParentFont = False
+        object ScrollBox8: TScrollBox
+          Left = 0
+          Height = 504
+          Top = 0
+          Width = 218
+          HorzScrollBar.Page = 1
+          VertScrollBar.Page = 1
+          Align = alClient
+          ClientHeight = 500
+          ClientWidth = 214
+          TabOrder = 0
+          object PanelRight7: TPanel
+            Left = 0
+            Height = 500
+            Top = 0
+            Width = 214
+            Align = alClient
+            BevelOuter = bvNone
+            TabOrder = 0
+          end
+        end
       end
     end
   end
