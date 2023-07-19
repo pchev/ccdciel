@@ -1612,8 +1612,6 @@ begin
                if measure_drift(InternalCalibrationInitialize,driftX,driftY)>0 then StopError;//measure reference star positions
                mount.PulseGuide(2,CalibrationDuration {duration msec} );  // 0=north, 1=south, 2 East, 3 West
 
-               //msg('waiting '+ inttostr(CalibrationDuration),3);
-
                WaitPulseGuiding(CalibrationDuration);
                InternalguiderCalibrationStep:=2;
              end;
@@ -1644,8 +1642,6 @@ begin
                InternalCalibrationInitialize:=true;
                if measure_drift(InternalCalibrationInitialize,driftX,driftY)>0 then StopError;//measure reference star positions
                mount.PulseGuide(3,CalibrationDuration {duration msec} );  // 0=north, 1=south, 2 East, 3 West
-
-               //msg('waiting '+ inttostr(CalibrationDuration),3);
 
                WaitPulseGuiding(CalibrationDuration);
                InternalguiderCalibrationStep:=1;
@@ -1710,7 +1706,7 @@ begin
              end;
           2: begin
                CalibrationDuration:=round(CalibrationDuration*1.5);
-               msg('Testing pulse guiding North for '+floattostrF(CalibrationDuration/1000,FFgeneral,0,2)+ ' seconds',3);
+               msg('Testing pulse guiding North for '+floattostrF(CalibrationDuration/1000,FFgeneral,0,2)+ ' seconds',2);
                InternalCalibrationInitialize:=true;//for measure drift
                if measure_drift(InternalCalibrationInitialize,driftX,driftY)>0 then StopError;//measure reference star positions
                mount.PulseGuide(north,CalibrationDuration {duration msec} );  // 0=north, 1=south, 2 East, 3 West
@@ -1778,7 +1774,7 @@ begin
                  CalCount:=0;
                  CaldriftOld:=0;
                  InternalguiderCalibrationStep:=2;
-                 msg('Testing pulse guiding South for '+floattostrF(CalibrationDuration/1000,FFgeneral,0,2)+ ' seconds',3);
+                 msg('Testing pulse guiding South for '+floattostrF(CalibrationDuration/1000,FFgeneral,0,2)+ ' seconds',2);
                  InternalCalibration;  // iterate without new image
                end;
              end;
