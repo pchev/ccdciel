@@ -33,14 +33,17 @@ type
   { Tf_weather }
 
   Tf_weather = class(TFrame)
+    ButtonDetail: TButton;
     Panel2: TPanel;
     Label1: TLabel;
     led: TShape;
     Panel1: TPanel;
     Title: TLabel;
+    procedure ButtonDetailClick(Sender: TObject);
   private
     { private declarations }
     FConnected,FClear: boolean;
+    FonDetail: TNotifyEvent;
     procedure SetConnected(value:boolean);
     procedure SetClear(value:boolean);
     procedure SetLed;
@@ -51,6 +54,7 @@ type
     procedure SetLang;
     property Connected: boolean read FConnected write SetConnected;
     property Clear: boolean read FClear write SetClear;
+    property onDetail: TNotifyEvent read FonDetail write FonDetail;
   end;
 
 implementation
@@ -102,6 +106,11 @@ begin
      led.Brush.Color:=clGray;
      led.Hint:=rsDisconnected3;
   end;
+end;
+
+procedure Tf_weather.ButtonDetailClick(Sender: TObject);
+begin
+  if Assigned(FonDetail) then FonDetail(self);
 end;
 
 procedure Tf_weather.SetConnected(value:boolean);

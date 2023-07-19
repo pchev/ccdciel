@@ -1,11 +1,11 @@
 object f_weather: Tf_weather
   Left = 0
-  Height = 45
+  Height = 51
   Top = 0
-  Width = 194
+  Width = 228
   AutoSize = True
-  ClientHeight = 45
-  ClientWidth = 194
+  ClientHeight = 51
+  ClientWidth = 228
   ParentFont = False
   TabOrder = 0
   DesignLeft = -1
@@ -14,7 +14,7 @@ object f_weather: Tf_weather
     Left = 0
     Height = 20
     Top = 0
-    Width = 194
+    Width = 228
     Align = alTop
     Alignment = taCenter
     AutoSize = False
@@ -29,29 +29,29 @@ object f_weather: Tf_weather
   end
   object Panel1: TPanel
     Left = 0
-    Height = 21
+    Height = 27
     Top = 20
-    Width = 194
+    Width = 228
     Align = alTop
     AutoSize = True
     ChildSizing.Layout = cclTopToBottomThenLeftToRight
     ChildSizing.ControlsPerLine = 99
-    ClientHeight = 21
-    ClientWidth = 194
+    ClientHeight = 27
+    ClientWidth = 228
     ParentFont = False
     TabOrder = 0
     object Panel2: TPanel
       Left = 0
-      Height = 20
+      Height = 26
       Top = 0
-      Width = 178
+      Width = 224
       BevelOuter = bvNone
-      ClientHeight = 20
-      ClientWidth = 178
+      ClientHeight = 26
+      ClientWidth = 224
       ParentFont = False
       TabOrder = 0
       object led: TShape
-        Left = 164
+        Left = 100
         Height = 14
         Hint = 'Uncalibrated'
         Top = 4
@@ -63,12 +63,21 @@ object f_weather: Tf_weather
         AnchorSideTop.Control = led
         AnchorSideTop.Side = asrCenter
         Left = 8
-        Height = 17
-        Top = 3
-        Width = 32
+        Height = 18
+        Top = 2
+        Width = 33
         Caption = 'Clear'
         ParentColor = False
         ParentFont = False
+      end
+      object ButtonDetail: TButton
+        Left = 144
+        Height = 26
+        Top = 0
+        Width = 80
+        Caption = 'Detail'
+        OnClick = ButtonDetailClick
+        TabOrder = 0
       end
     end
   end

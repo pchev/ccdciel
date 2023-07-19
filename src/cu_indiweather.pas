@@ -80,6 +80,7 @@ T_indiweather = class(T_weather)
    function GetWindGust: double; override;
    function GetWindSpeed: double; override;
    function GetWeatherStatus: boolean; override;
+   function GetWeatherDetail: string; override;
    procedure SetTimeout(num:integer); override;
  public
    constructor Create(AOwner: TComponent);override;
@@ -396,6 +397,17 @@ begin
  end;
 end;
 
+function T_indiweather.GetWeatherDetail: string;
+var i: integer;
+begin
+ result:='';
+ if WeatherStatusProp<>nil then begin
+    for i:=0 to WeatherStatusProp.nlp-1 do begin
+      result:=result+crlf+WeatherStatusProp.lp[i].lbl+'='+pstateStr(WeatherStatusProp.lp[i].s);
+    end;
+ end;
+ end;
+
 function T_indiweather.GetCloudCover: double;
 begin
  result:=NullCoord;
@@ -475,6 +487,8 @@ begin
     indiclient.sendNewSwitch(configprop);
   end;
 end;
+
+
 
 end.
 

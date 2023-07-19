@@ -758,6 +758,7 @@ type
     Procedure DisconnectWatchdog(Sender: TObject);
     Procedure ConnectWeather(Sender: TObject);
     Procedure DisconnectWeather(Sender: TObject);
+    procedure WeatherDetail(Sender: TObject);
     Procedure ConnectSafety(Sender: TObject);
     Procedure DisconnectSafety(Sender: TObject);
     Procedure ConnectSwitch(Sender: TObject);
@@ -1821,6 +1822,7 @@ begin
   f_rotator.onReverse:=@RotatorReverse;
 
   f_weather:=Tf_weather.Create(self);
+  f_weather.onDetail:=@WeatherDetail;
 
   f_safety:=Tf_safety.Create(self);
   if mount<>nil then mount.Safety:=f_safety;
@@ -6582,6 +6584,20 @@ begin
       if not f_weather.Clear then NewMessage(Format(rsWeatherIssue, [weather.WeatherMessage]));
       f_sequence.WeatherChange(f_weather.Clear);
     end;
+  end;
+end;
+
+procedure Tf_main.WeatherDetail(Sender: TObject);
+var f:Tf_viewtext;
+begin
+  if (weather<>nil)and(weather.Status=devConnected) then begin
+     f:=Tf_viewtext.Create(self);
+     f.Width:=DoScaleX(250);
+     f.Height:=DoScaleY(350);
+     f.Caption:=rsWeatherStati;
+     f.Memo1.Text:=DateTimeToStr(now)+weather.WeatherDetail;
+     FormPos(f,mouse.CursorPos.X,mouse.CursorPos.Y);
+     f.Show;
   end;
 end;
 

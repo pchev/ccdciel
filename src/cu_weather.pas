@@ -60,6 +60,7 @@ T_weather = class(TComponent)
     function GetWindGust: double; virtual; abstract;
     function GetWindSpeed: double; virtual; abstract;
     function GetWeatherStatus: boolean; virtual; abstract;
+    function GetWeatherDetail: string; virtual; abstract;
     procedure SetTimeout(num:integer); virtual; abstract;
   public
     UseCloudCover,UseDewPoint,UseHumidity,UsePressure,UseRainRate,UseSkyBrightness,
@@ -110,6 +111,7 @@ T_weather = class(TComponent)
     property WindSpeed: double read GetWindSpeed ;
     property WeatherStatus: boolean read GetWeatherStatus;
     property WeatherMessage: string read FWeatherMessage;
+    property WeatherDetail: string read GetWeatherDetail;
     property onMsg: TNotifyMsg read FonMsg write FonMsg;
     property onDeviceMsg: TNotifyMsg read FonDeviceMsg write FonDeviceMsg;
     property onStatusChange: TNotifyEvent read FonStatusChange write FonStatusChange;

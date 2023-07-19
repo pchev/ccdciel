@@ -60,6 +60,7 @@ T_ascomweather = class(T_weather)
    function GetWindGust: double; override;
    function GetWindSpeed: double; override;
    function GetWeatherStatus: boolean; override;
+   function GetWeatherDetail: string; override;
    procedure SetTimeout(num:integer); override;
 public
    constructor Create(AOwner: TComponent);override;
@@ -605,6 +606,79 @@ end;
 procedure T_ascomweather.SetTimeout(num:integer);
 begin
  FTimeOut:=num;
+end;
+
+function T_ascomweather.GetWeatherDetail: string;
+var x: double;
+begin
+ result:='';
+ {$ifdef mswindows}
+ try
+   if FhasStatus then begin
+     // SafetyMonitor interface
+     result:='IsSafe='+BoolToStr(WeatherStatus,True);
+   end
+   else begin
+     // ObservingConditions interface
+     if FhasCloudCover then begin
+        x:=CloudCover;
+        result:=result+crlf+'CloudCover='+FormatFloat(f2,x);
+     end;
+     if FhasDewPoint then begin
+        x:=DewPoint;
+        result:=result+crlf+'DewPoint='+FormatFloat(f2,x);
+     end;
+     if FhasHumidity then begin
+        x:=Humidity;
+        result:=result+crlf+'Humidity='+FormatFloat(f2,x);
+     end;
+     if FhasPressure then begin
+        x:=Pressure;
+        result:=result+crlf+'Pressure='+FormatFloat(f2,x);
+     end;
+     if FhasRainRate then begin
+        x:=RainRate;
+        result:=result+crlf+'RainRate='+FormatFloat(f2,x);
+     end;
+     if FhasSkyBrightness then begin
+        x:=SkyBrightness;
+        result:=result+crlf+'SkyBrightness='+FormatFloat(f4,x);
+     end;
+     if FhasSkyQuality then begin
+        x:=SkyQuality;
+        result:=result+crlf+'SkyQuality='+FormatFloat(f2,x);
+     end;
+     if FhasSkyTemperature then begin
+        x:=SkyTemperature;
+        result:=result+crlf+'SkyTemperature='+FormatFloat(f2,x);
+     end;
+     if FhasStarFWHM then begin
+        x:=StarFWHM;
+        result:=result+crlf+'StarFWHM='+FormatFloat(f2,x);
+     end;
+     if FhasTemperature then begin
+        x:=Temperature;
+        result:=result+crlf+'Temperature='+FormatFloat(f2,x);
+     end;
+     if FhasWindDirection then begin
+        x:=WindDirection;
+        result:=result+crlf+'WindDirection='+FormatFloat(f2,x);
+     end;
+     if FhasWindGust then begin
+        x:=WindGust;
+        result:=result+crlf+'WindGust='+FormatFloat(f2,x);
+     end;
+     if FhasWindSpeed then begin
+        x:=WindSpeed;
+        result:=result+crlf+'WindSpeed='+FormatFloat(f2,x);
+     end;
+   end;
+   except
+    on E: Exception do begin
+     result:=result+crlf+e.Message;
+    end;
+   end;
+ {$endif}
 end;
 
 initialization
