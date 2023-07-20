@@ -499,7 +499,9 @@ if (FResolver=ResolverAstrometryNet)or Fretry then begin
   else
     logok:=false;
   if FAstrometryPath<>'' then begin
-    process.Environment.Add('PATH='+GetEnvironmentVariable('PATH')+':'+FAstrometryPath)
+    process.Environment.Add('PATH='+GetEnvironmentVariable('PATH')+':'+FAstrometryPath);
+  end else begin
+    process.Environment.Add('PATH='+GetEnvironmentVariable('PATH'));
   end;
   process.Executable:=Fcmd;
   process.Parameters:=Fparam;
