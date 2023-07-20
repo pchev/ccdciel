@@ -505,16 +505,19 @@ begin
       fitsy:=ysize-round(finternalguider.LockY);
     end;
     guidefits.FindStarPos2(fitsx,fitsy,finternalguider.SearchWinMin,xc,yc,vmax,bg,bgdev);
-    if vmax=0 then
+    guidefits.GetHFD2(round(xc),round(yc),finternalguider.SearchWinMin,x1,y1,bg1,bgdev1,hfd1,fwhm1,vmax1,snr1,flux1);
+    if (vmax1=0)or(snr1<Finternalguider.MinSNR) then begin
       // if not found try with larger aperture
       guidefits.FindStarPos2(fitsx,fitsy,finternalguider.SearchWinMax,xc,yc,vmax,bg,bgdev);
-    if vmax=0 then begin
+      guidefits.GetHFD2(round(xc),round(yc),finternalguider.SearchWinMin,x1,y1,bg1,bgdev1,hfd1,fwhm1,vmax1,snr1,flux1);
+    end;
+    if (vmax1=0)or(snr1<Finternalguider.MinSNR) then begin
       // if still not found search brightest star in image
       guidefits.FindBrightestPixel(xsize div 2,ysize div 2,2*min(xsize,ysize) div 3,starwindow div 2,ix,iy,vmax,true);
       guidefits.FindStarPos2(ix,iy,finternalguider.SearchWinMax,xc,yc,vmax,bg,bgdev);
+      guidefits.GetHFD2(round(xc),round(yc),finternalguider.SearchWinMin,x1,y1,bg1,bgdev1,hfd1,fwhm1,vmax1,snr1,flux1);
     end;
     if vmax>0 then begin
-        guidefits.GetHFD2(round(xc),round(yc),finternalguider.SearchWinMin,x1,y1,bg1,bgdev1,hfd1,fwhm1,vmax1,snr1,flux1);
         if vmax1>0 then
           CurrentHFD:=hfd1
         else
