@@ -929,8 +929,8 @@ object f_internalguider: Tf_internalguider
             Width = 340
             Align = alClient
             Caption = 'Calibration options'
-            ClientHeight = 186
-            ClientWidth = 340
+            ClientHeight = 156
+            ClientWidth = 336
             TabOrder = 1
             object measure_method2: TCheckBox
               Left = 8
@@ -1428,8 +1428,8 @@ object f_internalguider: Tf_internalguider
             Width = 340
             Align = alClient
             Caption = 'Calibration results:'
-            ClientHeight = 616
-            ClientWidth = 340
+            ClientHeight = 586
+            ClientWidth = 336
             TabOrder = 0
             object Label5: TLabel
               AnchorSideTop.Control = pa1

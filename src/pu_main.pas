@@ -4747,14 +4747,14 @@ begin
   f_internalguider.BacklashCompensation:=config.GetValue('/InternalGuider/BacklashCompensation',false);
   f_internalguider.DecBacklash:=config.GetValue('/InternalGuider/DecBacklash',0);
   f_internalguider.trend_scale:=config.GetValue('/InternalGuider/Scale',5);
-  f_internalguider.Exposure.Value:=config.GetValue('/InternalGuider/Camera/Exposure',2);
+  f_internalguider.Exposure.Value:=config.GetValue('/InternalGuider/Camera/Exposure',2.0);
   f_internalguider.Binning.Value:=config.GetValue('/InternalGuider/Camera/Binning',1);
   f_internalguider.Gain.Value:=config.GetValue('/InternalGuider/Camera/Gain',0);
   f_internalguider.Offset.Value:=config.GetValue('/InternalGuider/Camera/Offset',0);
   f_internalguider.Temperature.Value:=config.GetValue('/InternalGuider/Camera/Temperature',0);
   f_internalguider.Gamma.Position:=config.GetValue('/InternalGuider/Visu/Gamma',50);
   f_internalguider.Luminosity.Position:=config.GetValue('/InternalGuider/Visu/Luminosity',50);
-  GuideImgZoom:=config.GetValue('/InternalGuider/Visu/Zoom',0);
+  GuideImgZoom:=config.GetValue('/InternalGuider/Visu/Zoom',0.0);
   f_internalguider.SpectroFunctions:=config.GetValue('/InternalGuider/Spectro/SpectroFunctions',false);
   f_internalguider.SearchWinMin:=config.GetValue('/InternalGuider/Spectro/SearchWinMin',40);
   f_internalguider.SearchWinMax:=config.GetValue('/InternalGuider/Spectro/SearchWinMax',80);
@@ -4765,7 +4765,7 @@ begin
   f_internalguider.SlitL:=config.GetValue('/InternalGuider/Spectro/SlitL',0);
   f_internalguider.SlitPA:=config.GetValue('/InternalGuider/Spectro/SlitPA',0);
   f_internalguider.cbUseAstrometry.Checked:=config.GetValue('/InternalGuider/Spectro/UseAstrometry',false);
-  f_internalguider.AstrometryExp.Value:=config.GetValue('/InternalGuider/Spectro/AstrometryExposure',10);
+  f_internalguider.AstrometryExp.Value:=config.GetValue('/InternalGuider/Spectro/AstrometryExposure',10.0);
   f_internalguider.cbUseAstrometryChange(nil);
   f_internalguider.cbSpectroChange(nil);
   f_internalguider.cbGuideLockChange(nil);
@@ -16612,7 +16612,7 @@ if (guidefits.HeaderInfo.naxis>0) and guidefits.ImageValid then begin
     ImaGuideBmp.Canvas.Line(xs,0,xs,guideimg_Height);
     ImaGuideBmp.Canvas.Line(0,ys,guideimg_Width,ys);
     // draw selected star if using single star
-    if f_internalguider.GuideLock and(not InternalguiderGuiding)and(f_internalguider.GuideLockNextX>0)and(f_internalguider.GuideLockNextY>0) then begin
+    if f_internalguider.GuideLock and(not InternalguiderGuiding)and(not InternalguiderCalibrating)and(not InternalguiderCalibratingBacklash)and(f_internalguider.GuideLockNextX>0)and(f_internalguider.GuideLockNextY>0) then begin
       xs:=f_internalguider.GuideLockNextX;
       ys:=guideimg_Height-f_internalguider.GuideLockNextY;
       r:=round(f_internalguider.SearchWinMin/2);

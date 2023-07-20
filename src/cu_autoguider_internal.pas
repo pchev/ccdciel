@@ -40,7 +40,7 @@ type
     CalibrationDuration,Calflip,CalCount,Calnrtest,CalDecBacklash,frame_size,Binning,BacklashStep: integer;
     driftX,driftY,driftRA,driftDec,moveRA,moveDEC, Guidethecos,old_moveRA,old_moveDEC,  paEast, paNorth,
     pulsegainEast,pulsegainWest,pulsegainNorth,pulsegainSouth,Calthecos, Caltheangle,CaldriftOld, ditherX,ditherY,
-    GuideStartTime,LogSNR,LogFlux,mean_hfd,CalNorthDec1,CalNorthDec2,CalEastRa1,CalEastRa2 : double;
+    GuideStartTime,LogSNR,LogFlux,mean_hfd,CalNorthDec1,CalNorthDec2,CalEastRa1,CalEastRa2,CurrentHFD : double;
     LastDecSign: double;
     SameDecSignCount,LastBacklashDuration: integer;
     LastBacklash,FirstDecDirectionChange: boolean;
@@ -437,6 +437,7 @@ function  T_autoguider_internal.measure_drift(var initialize:boolean; out drX,dr
 var
   i,fitsx,fitsy,stepsize,xsize,ysize,star_counter,star_counter2,counter,len,maxSNRstar,ix,iy: integer;
   hfd1,star_fwhm,vmax,bg,bgdev,xc,yc,snr,flux,fluxratio,min_SNR,min_HFD,maxSNR,maxSNRhfd,margin,y,mhfd,peak : double;
+  x1,y1,bg1,bgdev1,fwhm1,vmax1,snr1,flux1: double;
   GuideLock: boolean;
   drift_arrayX,drift_arrayY : array of double;
   starx,stary,frx,fry,frw,frh: integer;
@@ -476,7 +477,7 @@ begin
     end;
   end;
 
-  GuideLock:=finternalguider.SpectroFunctions and finternalguider.GuideLock and (not (InternalguiderCalibrating or InternalguiderCalibratingBacklash));
+  GuideLock:=finternalguider.SpectroFunctions and finternalguider.GuideLock;
 
   min_SNR:=finternalguider.minSNR;//make local to reduce some CPU load
   min_HFD:=finternalguider.minHFD;//make local to reduce some CPU load
@@ -513,10 +514,22 @@ begin
       guidefits.FindStarPos2(ix,iy,finternalguider.SearchWinMax,xc,yc,vmax,bg,bgdev);
     end;
     if vmax>0 then begin
+        guidefits.GetHFD2(round(xc),round(yc),finternalguider.SearchWinMin,x1,y1,bg1,bgdev1,hfd1,fwhm1,vmax1,snr1,flux1);
+        if vmax1>0 then
+          CurrentHFD:=hfd1
+        else
+          CurrentHFD:=0;
         setlength(xy_array,1);
-        // always use the slit position as reference
-        xy_array[0].x1:=fitsx;
-        xy_array[0].y1:=fitsy;
+        if (InternalguiderCalibrating or InternalguiderCalibratingBacklash) then begin
+          // for calibration the reference is the star position
+          xy_array[0].x1:=xc;
+          xy_array[0].y1:=yc;
+        end
+        else begin
+          // for guiding use the slit position as reference
+          xy_array[0].x1:=fitsx;
+          xy_array[0].y1:=fitsy;
+        end;
         // current position of star, to be moved on slit
         xy_array[0].x2:=xc;
         xy_array[0].y2:=yc;
@@ -526,7 +539,9 @@ begin
         // Mark star area
         hfd1:=finternalguider.SearchWinMin/2/3;
         FGuideBmp.Canvas.Frame(trunc(1+xc*GuideImgPixRatio-hfd1*3),trunc(1+yc-hfd1*3),trunc(1+xc*GuideImgPixRatio+hfd1*3),trunc(1+yc+hfd1*3));
-        finternalguider.Info:=IntToStr(star_counter)+' star, Intensity: '+FormatFloat(f1,vmax+bg);
+        WriteLog('INFO: Star(s)='+inttostr(star_counter)+', HFD='+floattostrF(CurrentHFD,FFgeneral,3,3));
+        msg(inttostr(star_counter)+' guide stars used, HFD='+floattostrF(CurrentHFD,FFgeneral,3,3),3);
+        finternalguider.Info:=IntToStr(star_counter)+' star, Intensity: '+FormatFloat(f1,vmax+bg)+', HFD='+floattostrF(CurrentHFD,FFgeneral,3,3);
      end;
    end
    else begin
@@ -576,6 +591,7 @@ begin
     if star_counter>0 then
     begin
       mean_hfd:=mean_hfd/star_counter;
+      CurrentHFD:=mean_hfd;
 
       if ((frame_size<(ysize-1)) and (frame_size<(xsize-1)) and (not (InternalguiderCalibrating or InternalguiderCalibratingBacklash))) then //filter out stars available in the frame
       begin
@@ -647,9 +663,11 @@ begin
   begin //second, third ... call
    if GuideLock then begin
      // single star slit guiding
-     // adjust reference slit position if the user make modification while guiding
-     xy_array[0].x1:=finternalguider.LockX;
-     xy_array[0].y1:=ysize-finternalguider.LockY;
+     if not (InternalguiderCalibrating or InternalguiderCalibratingBacklash) then begin
+       // adjust reference slit position if the user make modification while guiding
+       xy_array[0].x1:=finternalguider.LockX;
+       xy_array[0].y1:=ysize-finternalguider.LockY;
+     end;
      xy_array_old[0].x1:=xy_array[0].x1;
      xy_array_old[0].y1:=xy_array[0].y1;
      // search star near previous position
@@ -1562,7 +1580,7 @@ begin
 end;
 
 procedure T_autoguider_internal.InternalCalibration;
-var drift,unequal                            : double;
+var drift,unequal, MinimumDrift              : double;
     saveInternalguiderCalibratingMeridianFlip: boolean;
     msgA, msgB,msgC,pattern                  : string;
             procedure StopError;
@@ -1610,6 +1628,7 @@ begin
                InternalCalibrationInitialize:=true;
                CalEastRa1:=mount.ra;//mount right ascension at start of east calibration
                if measure_drift(InternalCalibrationInitialize,driftX,driftY)>0 then StopError;//measure reference star positions
+               MinimumDrift:=max(5,min(20,5+CurrentHFD));
                mount.PulseGuide(2,CalibrationDuration {duration msec} );  // 0=north, 1=south, 2 East, 3 West
 
                WaitPulseGuiding(CalibrationDuration);
@@ -1620,8 +1639,8 @@ begin
                drift:=sqrt(sqr(driftX)+sqr(driftY));//  For image with north up and east left, driftX become negative.
 
 
-               msg('Measured drift ' + floattostrf(drift,ffgeneral,0,2)+' px',3);
-               if ((drift>5) or (CalibrationDuration>20000)) then begin// OK, next direction
+               msg('Measured drift ' + FormatFloat(f1,drift)+' px',3);
+               if ((drift>MinimumDrift) or (CalibrationDuration>20000)) then begin// OK, next direction
                  if drift<2 then begin msg('Abort calibration, no movement measured!',1); StopError; end;
                  pulsegainEast:=drift*1000/(CalibrationDuration*Calthecos); // [px*cos(dec)/sec]
                  paEast:=arctan2(driftY,driftX);//-pi..pi, For north up and east left this gives zero angle
@@ -1650,7 +1669,7 @@ begin
                if measure_drift(InternalCalibrationInitialize,driftX,driftY)>0 then StopError;//measure drift
                drift:=sqrt(sqr(driftX)+sqr(driftY)); //For image with north up and east left, driftX become positive.
 
-               msg('Measured drift ' + floattostrf(drift,ffgeneral,0,2)+' px',3);
+               msg('Measured drift ' + FormatFloat(f1,drift)+' px',3);
                pulsegainWest:=drift*1000/(CalibrationDuration*Calthecos); // [px*cos(dec)/sec]
                msg('Internal guider calibration:  Pulse gain measured East/West: '+ floattostrF(pulsegainEast,ffgeneral,0,2)+'/'+ floattostrF(pulsegainWest,ffgeneral,0,2)+' [px*cos(δ)/sec], Camera angle: '+floattostrF(paEast*180/pi,ffgeneral,3,1)+'°',3);
                InternalguiderCalibrationDirection:=3;
@@ -1684,7 +1703,7 @@ begin
                if measure_drift(InternalCalibrationInitialize,driftX,driftY)>0 then StopError;
                drift:=sqrt(sqr(driftX)+sqr(driftY));
                msg('Backlash step '+inttostr(BacklashStep)+' drift '+FormatFloat(f1,drift),3);
-               if drift<3 then begin
+               if drift<MinimumDrift then begin
                  // more backlash
                  inc(BacklashStep);
                  if BacklashStep>30 then begin
@@ -1717,8 +1736,8 @@ begin
                if measure_drift(InternalCalibrationInitialize,driftX,driftY)>0 then StopError;//measure drift
                drift:=sqrt(sqr(driftX)+sqr(driftY));
 
-               msg('Measured drift ' + floattostrf(drift,ffgeneral,0,2)+' px',3);
-               if ( ((drift>5) and (CaldriftOld>5/1.5)) or (CalibrationDuration>20000)) then begin// OK both drift and CaldriftOld show movement so backlash must be fully gone. Go next direction
+               msg('Measured drift ' + FormatFloat(f1,drift)+' px',3);
+               if ( ((drift>MinimumDrift) and (CaldriftOld>MinimumDrift/1.5)) or (CalibrationDuration>20000)) then begin// OK both drift and CaldriftOld show movement so backlash must be fully gone. Go next direction
                  if drift<2 then begin msg('Abort calibration, no movement measured!',1); StopError; end;
                  paNorth:=arctan2(driftY,driftX); // Relative to the positive X axis and CCW
                  Caltheangle:=angular_distance(paEast,paNorth);// CCW angles, calculate angle North relative to West. Range [-pi..+pi]
@@ -1757,7 +1776,7 @@ begin
                if measure_drift(InternalCalibrationInitialize,driftX,driftY)>0 then StopError;
                drift:=sqrt(sqr(driftX)+sqr(driftY));
                msg('Backlash step '+inttostr(BacklashStep)+' drift '+FormatFloat(f1,drift),3);
-               if drift<3 then begin
+               if drift<MinimumDrift then begin
                  // more backlash
                  inc(BacklashStep);
                  if BacklashStep>30 then begin
@@ -1789,8 +1808,8 @@ begin
                if measure_drift(InternalCalibrationInitialize,driftX,driftY)>0 then StopError;//measure drift
                drift:=sqrt(sqr(driftX)+sqr(driftY));
                inc(CalCount);
-               msg('Measured drift ' + floattostrf(drift,ffgeneral,0,2)+' px',3);
-               if ((CaldriftOld>3) or (Calcount>=4)) then begin  //previous cycle showed movement so backlash must be fully gone
+               msg('Measured drift ' + FormatFloat(f1,drift)+' px',3);
+               if ((CaldriftOld>(MinimumDrift/1.5)) or (Calcount>=4)) then begin  //previous cycle showed movement so backlash must be fully gone
                  if drift<2 then begin msg('Abort calibration, no movement measured!',1); StopError; end;
                  pulsegainSouth:=Calflip*drift*1000/(CalibrationDuration); // [px*cos(dec)/sec]   Flipped is already measured
                  msg('Internal guider calibration:  Pulse gain measured North/South: '+ floattostrF(pulsegainNorth,ffgeneral,0,2)+'/'+ floattostrF(pulsegainSouth,ffgeneral,0,2)+' [px/sec]',3);
@@ -1831,7 +1850,7 @@ begin
         msg(pattern,3);
 
 
-        finternalguider.pixel_size:=0.5*15*2/(pulsegainEast+pulsegainWest);//Assume 0.5x and 1.5x pulse speed as set previously
+        finternalguider.pixel_size:=Finternalguider.GuideSpeedRA.Value*15*2/(pulsegainEast+pulsegainWest);//Use the set pulse speed
 
         if finternalguider.measure_method2.checked then begin  //Alternative method. Measure pixel size in arc seconds by stopping tracking
           InternalguiderCalibrationDirection:=6;
@@ -1965,7 +1984,7 @@ begin
 end;
 
 procedure T_autoguider_internal.BacklashCalibration;
-var drift: double;
+var drift,MinimumDrift: double;
             procedure StopError;
             begin
               InternalguiderStop;
@@ -1988,6 +2007,7 @@ begin
                  // use a safe value
                  CalDecBacklash:=min(Finternalguider.LongestPulse,max(300,3*Finternalguider.InitialCalibrationStep.Value));
                end;
+               MinimumDrift:=min(20,5+CurrentHFD);
                InternalCalibrationInitialize:=true;
                if measure_drift(InternalCalibrationInitialize,driftX,driftY)>0 then StopError;
                mount.PulseGuide(north,CalDecBacklash);
@@ -1999,7 +2019,7 @@ begin
                if measure_drift(InternalCalibrationInitialize,driftX,driftY)>0 then StopError;
                drift:=sqrt(sqr(driftX)+sqr(driftY));
                msg('Backlash step '+inttostr(BacklashStep)+' drift '+FormatFloat(f1,drift),3);
-               if drift<3 then begin
+               if drift<MinimumDrift then begin
                  // more backlash
                  inc(BacklashStep);
                  if BacklashStep>30 then begin
@@ -2036,7 +2056,7 @@ begin
                if measure_drift(InternalCalibrationInitialize,driftX,driftY)>0 then StopError;
                drift:=sqrt(sqr(driftX)+sqr(driftY));
                msg('Backlash step '+inttostr(BacklashStep)+' drift '+FormatFloat(f1,drift),3);
-               if drift<3 then begin
+               if drift<MinimumDrift then begin
                  // more backlash
                  inc(BacklashStep);
                  if BacklashStep>50 then begin
@@ -2053,7 +2073,7 @@ begin
                  finternalguider.DecBacklash:=CalibrationDuration*(BacklashStep-1);
                  msg('Measured Declination backlash '+IntToStr(finternalguider.DecBacklash)+ ' milliseconds',3);
                  finternalguider.trend_message('Backlash measurement complete','','');
-                 msg('Check "Use backlash compensation" in the Advanced tab to apply.',3);
+                 msg('Check "Use backlash compensation" in the Options tab to apply.',3);
                  InternalguiderStop;
                  SetStatus('Calibration Complete',GUIDER_IDLE);
                end;
