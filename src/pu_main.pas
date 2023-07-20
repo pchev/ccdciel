@@ -16462,31 +16462,23 @@ var txt: string;
 begin
 if f_internalguider.IsVisible then begin
  if (n<=0) then begin
-   if InternalguiderRunning then begin
-     i:=round(n);
-     case i of
-       -11 : txt:=rsDisplay+ellipsis;
-       -10 : txt:=rsReadImage+ellipsis;
-       -9 : txt:=rsUnknownStatu+ellipsis;
-       -5 : txt:=rsError2+ellipsis;
-       -4 : txt:=rsDownloading+ellipsis;
-       -3 : txt:=rsReadCCD+ellipsis;
-       -1 : txt:=rsWaitStart+ellipsis;
-        0 : txt:=rsIdle+ellipsis;
-       else txt:=rsUnknownStatu+ellipsis;
-     end;
-     f_internalguider.CameraStatus := txt;
-   end
-   else begin
-      f_internalguider.CameraStatus := '';
+   i:=round(n);
+   case i of
+     -11 : txt:=rsDisplay+ellipsis;
+     -10 : txt:=rsReadImage+ellipsis;
+     -9 : txt:=rsUnknownStatu+ellipsis;
+     -5 : txt:=rsError2+ellipsis;
+     -4 : txt:=rsDownloading+ellipsis;
+     -3 : txt:=rsReadCCD+ellipsis;
+     -1 : txt:=rsWaitStart+ellipsis;
+      0 : txt:=rsIdle+ellipsis;
+     else txt:=rsUnknownStatu+ellipsis;
    end;
+   f_internalguider.CameraStatus := txt;
  end else begin
   if n>=10 then txt:=FormatFloat(f0, n)
            else txt:=FormatFloat(f1, n);
-  if InternalguiderRunning then
-    f_internalguider.CameraStatus := rsExp+blank+txt+blank+rsSec
-  else
-    f_internalguider.CameraStatus := '';
+  f_internalguider.CameraStatus := rsExp+blank+txt+blank+rsSec;
  end;
 end;
 end;
@@ -17101,31 +17093,23 @@ var txt: string;
     i: integer;
 begin
  if (n<=0) then begin
-   if FinderPreviewLoop then begin
-     i:=round(n);
-     case i of
-       -11 : txt:=rsDisplay+ellipsis;
-       -10 : txt:=rsReadImage+ellipsis;
-       -9 : txt:=rsUnknownStatu+ellipsis;
-       -5 : txt:=rsError2+ellipsis;
-       -4 : txt:=rsDownloading+ellipsis;
-       -3 : txt:=rsReadCCD+ellipsis;
-       -1 : txt:=rsWaitStart+ellipsis;
-        0 : txt:=rsIdle+ellipsis;
-       else txt:=rsUnknownStatu+ellipsis;
-     end;
-     f_finder.LabelInfo.Caption := txt;
-   end
-   else begin
-      f_finder.LabelInfo.Caption := '';
+   i:=round(n);
+   case i of
+     -11 : txt:=rsDisplay+ellipsis;
+     -10 : txt:=rsReadImage+ellipsis;
+     -9 : txt:=rsUnknownStatu+ellipsis;
+     -5 : txt:=rsError2+ellipsis;
+     -4 : txt:=rsDownloading+ellipsis;
+     -3 : txt:=rsReadCCD+ellipsis;
+     -1 : txt:=rsWaitStart+ellipsis;
+      0 : txt:=rsIdle+ellipsis;
+     else txt:=rsUnknownStatu+ellipsis;
    end;
+   f_finder.LabelInfo.Caption := txt;
  end else begin
   if n>=10 then txt:=FormatFloat(f0, n)
            else txt:=FormatFloat(f1, n);
-  if FinderPreviewLoop then
-    f_finder.LabelInfo.Caption := rsExp+blank+txt+blank+rsSec
-  else
-    f_finder.LabelInfo.Caption := '';
+  f_finder.LabelInfo.Caption := rsExp+blank+txt+blank+rsSec;
  end;
 end;
 
