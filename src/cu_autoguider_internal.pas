@@ -40,7 +40,7 @@ type
     CalibrationDuration,Calflip,CalCount,Calnrtest,CalDecBacklash,frame_size,Binning,BacklashStep: integer;
     driftX,driftY,driftRA,driftDec,moveRA,moveDEC, Guidethecos,old_moveRA,old_moveDEC,  paEast, paNorth,
     pulsegainEast,pulsegainWest,pulsegainNorth,pulsegainSouth,Calthecos, Caltheangle,CaldriftOld, ditherX,ditherY,
-    GuideStartTime,LogSNR,LogFlux,mean_hfd,CalNorthDec1,CalNorthDec2,CalEastRa1,CalEastRa2,CurrentHFD : double;
+    GuideStartTime,LogSNR,LogFlux,mean_hfd,CalNorthDec1,CalNorthDec2,CalEastRa1,CalEastRa2,CurrentHFD,MinimumDrift : double;
     LastDecSign: double;
     SameDecSignCount,LastBacklashDuration: integer;
     LastBacklash,FirstDecDirectionChange: boolean;
@@ -830,6 +830,7 @@ if (FCamera.Status=devConnected) then begin
   // check internal pulse guide is in progress
   if PulseGuiding then begin
      CheckSynchronize();
+     sleep(50);
      Application.QueueAsyncCall(@StartGuideExposureAsync,0);
      exit;
   end;
@@ -1580,7 +1581,7 @@ begin
 end;
 
 procedure T_autoguider_internal.InternalCalibration;
-var drift,unequal, MinimumDrift              : double;
+var drift,unequal                            : double;
     saveInternalguiderCalibratingMeridianFlip: boolean;
     msgA, msgB,msgC,pattern                  : string;
             procedure StopError;
@@ -1984,7 +1985,7 @@ begin
 end;
 
 procedure T_autoguider_internal.BacklashCalibration;
-var drift,MinimumDrift: double;
+var drift : double;
             procedure StopError;
             begin
               InternalguiderStop;

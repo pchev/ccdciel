@@ -16455,6 +16455,7 @@ procedure Tf_main.GuideCameraProgress(n:double);
 var txt: string;
     i: integer;
 begin
+if f_internalguider.IsVisible then begin
  if (n<=0) then begin
    if InternalguiderRunning then begin
      i:=round(n);
@@ -16482,6 +16483,7 @@ begin
   else
     f_internalguider.CameraStatus := '';
  end;
+end;
 end;
 
 procedure Tf_main.GuideCameraNewImage(Sender: TObject);
