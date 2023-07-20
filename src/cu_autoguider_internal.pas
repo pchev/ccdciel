@@ -494,6 +494,7 @@ begin
   if initialize then
   begin
    if GuideLock then begin
+    vmax1:=0;
     if (finternalguider.GuideLockNextX>0)and(finternalguider.GuideLockNextY>0) then begin
        // search star near specified position
        fitsx:=round(finternalguider.GuideLockNextX);
@@ -504,8 +505,11 @@ begin
       fitsx:=round(finternalguider.LockX);
       fitsy:=ysize-round(finternalguider.LockY);
     end;
-    guidefits.FindStarPos2(fitsx,fitsy,finternalguider.SearchWinMin,xc,yc,vmax,bg,bgdev);
-    guidefits.GetHFD2(round(xc),round(yc),finternalguider.SearchWinMin,x1,y1,bg1,bgdev1,hfd1,fwhm1,vmax1,snr1,flux1);
+    if finternalguider.GuideLockNextX>-2 then begin
+      // can be set to -10 by SpectroSetTarget, in this case we must skip SearchWinMin to go directly with SearchWinMax
+      guidefits.FindStarPos2(fitsx,fitsy,finternalguider.SearchWinMin,xc,yc,vmax,bg,bgdev);
+      guidefits.GetHFD2(round(xc),round(yc),finternalguider.SearchWinMin,x1,y1,bg1,bgdev1,hfd1,fwhm1,vmax1,snr1,flux1);
+    end;
     if (vmax1=0)or(snr1<Finternalguider.MinSNR) then begin
       // if not found try with larger aperture
       guidefits.FindStarPos2(fitsx,fitsy,finternalguider.SearchWinMax,xc,yc,vmax,bg,bgdev);
@@ -2208,7 +2212,15 @@ begin
            result:=false;
          end;
       end
+      else if Finternalguider.GuideLock then begin
+         // try to find the brightest star instead
+         msg('Try to use the brigthest star instead of the specified coordinates',1);
+         finternalguider.GuideLockNextX:=-10;
+         finternalguider.GuideLockNextY:=-10;
+         result:=true;
+      end
       else begin
+        // nothing can be done
         msg('Fail to solve guide image',0);
         result:=false;
       end;
