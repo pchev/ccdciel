@@ -3752,19 +3752,19 @@ object f_option: Tf_option
           Height = 390
           Top = 192
           Width = 557
-          PageIndex = 4
+          PageIndex = 0
           Align = alClient
           TabOrder = 1
           TabStop = True
           object Page1: TPage
             object astrometrynet: TGroupBox
               Left = 0
-              Height = 389
+              Height = 390
               Top = 0
               Width = 557
               Align = alClient
               Caption = 'Astrometry.Net'
-              ClientHeight = 359
+              ClientHeight = 360
               ClientWidth = 553
               ParentFont = False
               TabOrder = 0
@@ -4049,8 +4049,8 @@ object f_option: Tf_option
               Width = 557
               Align = alClient
               Caption = 'Elbrus Star Locator'
-              ClientHeight = 359
-              ClientWidth = 553
+              ClientHeight = 377
+              ClientWidth = 545
               ParentFont = False
               TabOrder = 0
               object ElbrusFolder: TEdit
@@ -4127,8 +4127,8 @@ object f_option: Tf_option
               Width = 557
               Align = alClient
               Caption = 'PlateSolve 2'
-              ClientHeight = 359
-              ClientWidth = 553
+              ClientHeight = 377
+              ClientWidth = 545
               ParentFont = False
               TabOrder = 0
               object Label78: TLabel
@@ -4186,13 +4186,13 @@ object f_option: Tf_option
           object Page5: TPage
             object astap: TGroupBox
               Left = 0
-              Height = 390
+              Height = 370
               Top = 0
-              Width = 557
+              Width = 574
               Align = alClient
               Caption = 'ASTAP'
-              ClientHeight = 360
-              ClientWidth = 553
+              ClientHeight = 358
+              ClientWidth = 562
               ParentFont = False
               TabOrder = 0
               object Label105: TLabel
@@ -4527,12 +4527,12 @@ object f_option: Tf_option
           end
           object Panel23: TPanel
             Left = 0
-            Height = 136
+            Height = 120
             Top = 312
             Width = 553
             Align = alTop
             BevelOuter = bvNone
-            ClientHeight = 136
+            ClientHeight = 120
             ClientWidth = 553
             TabOrder = 4
             object Label31: TLabel
@@ -4551,7 +4551,7 @@ object f_option: Tf_option
               AnchorSideTop.Side = asrCenter
               Left = 16
               Height = 18
-              Top = 54
+              Top = 48
               Width = 32
               Caption = 'Filter'
               ParentColor = False
@@ -4560,7 +4560,7 @@ object f_option: Tf_option
             object SlewFilter: TComboBox
               Left = 251
               Height = 28
-              Top = 49
+              Top = 43
               Width = 158
               AutoSize = False
               Constraints.MaxHeight = 28
@@ -4574,7 +4574,7 @@ object f_option: Tf_option
               AnchorSideTop.Side = asrCenter
               Left = 16
               Height = 18
-              Top = 102
+              Top = 85
               Width = 224
               Caption = 'Delay after telescope slew [seconds] '
               ParentColor = False
@@ -4593,9 +4593,9 @@ object f_option: Tf_option
               Value = 1
             end
             object SlewDelay: TSpinEdit
-              Left = 359
+              Left = 358
               Height = 28
-              Top = 97
+              Top = 80
               Width = 50
               Constraints.MaxHeight = 28
               MaxValue = 60
@@ -4605,12 +4605,12 @@ object f_option: Tf_option
           end
           object PanelFinder: TPanel
             Left = 0
-            Height = 42
-            Top = 448
+            Height = 72
+            Top = 432
             Width = 553
             Align = alTop
             BevelOuter = bvNone
-            ClientHeight = 42
+            ClientHeight = 72
             ClientWidth = 553
             TabOrder = 5
             object Label166: TLabel
@@ -4636,6 +4636,34 @@ object f_option: Tf_option
               Width = 25
               Caption = 'mm'
               ParentColor = False
+            end
+            object FinderSolver: TComboBox
+              Left = 251
+              Height = 32
+              Top = 36
+              Width = 158
+              ItemHeight = 24
+              ItemIndex = 0
+              Items.Strings = (
+                'Astrometry.Net'
+                'Elbrus Star Locator'
+                'None'
+                'PlateSolve2'
+                'ASTAP'
+              )
+              TabOrder = 1
+              Text = 'Astrometry.Net'
+            end
+            object UseFinderSolver: TCheckBox
+              AnchorSideTop.Control = FinderSolver
+              AnchorSideTop.Side = asrCenter
+              Left = 17
+              Height = 22
+              Top = 41
+              Width = 161
+              Caption = 'Use alternative solver'
+              OnChange = UseFinderSolverChange
+              TabOrder = 2
             end
           end
         end

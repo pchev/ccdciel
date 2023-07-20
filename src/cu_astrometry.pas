@@ -200,9 +200,15 @@ begin
    DeleteFileUTF8(outfile);
    DeleteFileUTF8(solvefile);
    engine:=TAstrometry_engine.Create;
-   engine.Resolver:=config.GetValue('/Astrometry/Resolver',ResolverAstap);
+   if (Fterminatecmd=@AstrometrySolveFinder) and config.GetValue('/Astrometry/UseFinderSolver',false) then begin
+     engine.Resolver:=config.GetValue('/Astrometry/FinderSolver',ResolverAstap);
+     engine.Fallback:=false;
+   end
+   else begin
+     engine.Resolver:=config.GetValue('/Astrometry/Resolver',ResolverAstap);
+     engine.Fallback:=config.GetValue('/Astrometry/Fallback',false);
+   end;
    FResolverName:=ResolverName[engine.Resolver];
-   engine.Fallback:=config.GetValue('/Astrometry/Fallback',false);
    engine.AstrometryPath:=config.GetValue('/Astrometry/AstrometryPath','');
    engine.CygwinPath:=config.GetValue('/Astrometry/CygwinPath','C:\cygwin');
    engine.ElbrusFolder:=config.GetValue('/Astrometry/ElbrusFolder','');

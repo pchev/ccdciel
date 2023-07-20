@@ -45,6 +45,8 @@ type
     CdCAdjustFrame: TCheckBox;
     AstUseOnline: TCheckBox;
     AstOnlineKey: TEdit;
+    UseFinderSolver: TCheckBox;
+    FinderSolver: TComboBox;
     Label172: TLabel;
     Panel30: TPanel;
     Panel31: TPanel;
@@ -810,6 +812,7 @@ type
     procedure TemperatureSlopeActiveClick(Sender: TObject);
     procedure TmpDirDefaultClick(Sender: TObject);
     procedure UseFileSequenceWidthClick(Sender: TObject);
+    procedure UseFinderSolverChange(Sender: TObject);
     procedure UseReadoutModeChange(Sender: TObject);
   private
     { private declarations }
@@ -1883,6 +1886,11 @@ end;
 procedure Tf_option.UseFileSequenceWidthClick(Sender: TObject);
 begin
   FileSequenceWidth.Enabled:=UseFileSequenceWidth.Checked;
+end;
+
+procedure Tf_option.UseFinderSolverChange(Sender: TObject);
+begin
+  FinderSolver.Enabled:=UseFinderSolver.Checked;
 end;
 
 procedure Tf_option.UseReadoutModeChange(Sender: TObject);

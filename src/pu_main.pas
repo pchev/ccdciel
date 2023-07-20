@@ -9211,6 +9211,9 @@ begin
        f_option.SlewBin.MaxValue:=9;
    f_option.SlewDelay.Value:=config.GetValue('/PrecSlew/Delay',5);
    f_option.FinderFocalLength.Value:=config.GetValue('/Astrometry/FinderFocalLength',0);
+   f_option.UseFinderSolver.Checked:=config.GetValue('/Astrometry/UseFinderSolver',false);
+   f_option.FinderSolver.ItemIndex:=config.GetValue('/Astrometry/FinderSolver',ResolverAstap);
+   f_option.UseFinderSolverChange(nil);
    f_option.RecenterTargetDistance.value:=config.GetValue('/PrecSlew/RecenterTargetDistance',RecenterTargetDistance);
    if (mount.Status=devConnected)and(mount.PierSide=pierUnknown) then begin
       f_option.Panel13.Visible:=true;
@@ -9612,6 +9615,8 @@ begin
      config.SetValue('/PrecSlew/Filter',f_option.SlewFilter.ItemIndex);
      config.SetValue('/PrecSlew/RecenterTargetDistance',f_option.RecenterTargetDistance.value);
      config.SetValue('/Astrometry/FinderFocalLength',f_option.FinderFocalLength.Value);
+     config.SetValue('/Astrometry/UseFinderSolver',f_option.UseFinderSolver.Checked);
+     config.SetValue('/Astrometry/FinderSolver',f_option.FinderSolver.ItemIndex);
      config.SetValue('/Meridian/MeridianOption',f_option.MeridianOption.ItemIndex);
      config.SetValue('/Meridian/MinutesPast',f_option.MinutesPastMeridian.Value);
      config.SetValue('/Meridian/MinutesPastMin',f_option.MinutesPastMeridianMin.Value);
