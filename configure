@@ -16,6 +16,7 @@ dirs="component/synapse \
      component/bgrabitmap \
      component/enhedits \
      component/xmlparser \
+     component/controltimer \
      component/vosamp \
      component \
      library \

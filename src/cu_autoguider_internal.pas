@@ -25,7 +25,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 interface
 
-uses cu_autoguider, u_global, u_utils, math, fu_internalguider, indiapi,
+uses cu_autoguider, u_global, u_utils, math, fu_internalguider, indiapi, simpletimer, CTimer,
   u_translation, Graphics, Forms, Classes, SysUtils, ExtCtrls;
 
 type
@@ -51,7 +51,7 @@ type
     FPaused, FSettling, FSettlingInRange,PulseGuiding,OffsetFromTarget: boolean;
     InternalguiderCalibratingMeridianFlip : boolean;
     FSettleStartTime, FSettleTime: double;
-    TimerWaitPulseGuiding: TTimer;
+    TimerWaitPulseGuiding: TSimpleTimer;
     FRecoveringCamera: boolean;
     FRecoveringCameraCount: integer;
     function  measure_drift(var initialize: boolean; out drX,drY :double) : integer;
@@ -63,7 +63,7 @@ type
     Procedure InitLog;
     Procedure WriteLog( buf : string);
     Procedure CloseLog;
-    procedure TimerWaitPulseGuidingTimer(Sender: TObject);
+    procedure TimerWaitPulseGuidingTimer(const Sender: TObject);
   protected
     Procedure ProcessEvent(txt:string); override;
     procedure Execute; override;
@@ -181,7 +181,7 @@ begin
   InternalguiderCapturingDark:=false;
   InternalguiderCalibratingMeridianFlip:=false;
   frame_size:=999999;
-  TimerWaitPulseGuiding:=TTimer.Create(nil);
+  TimerWaitPulseGuiding:=TSimpleTimer.Create(nil);
   TimerWaitPulseGuiding.Enabled:=false;
   TimerWaitPulseGuiding.OnTimer:=@TimerWaitPulseGuidingTimer;
   FRecoveringCamera:=false;
@@ -1474,7 +1474,7 @@ begin
  result:=true;
 end;
 
-procedure T_autoguider_internal.TimerWaitPulseGuidingTimer(Sender: TObject);
+procedure T_autoguider_internal.TimerWaitPulseGuidingTimer(const Sender: TObject);
 begin
   TimerWaitPulseGuiding.Enabled:=false;
   PulseGuiding:=false;

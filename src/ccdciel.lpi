@@ -320,40 +320,43 @@
     <RunParams>
       <FormatVersion Value="2"/>
     </RunParams>
-    <RequiredPackages Count="11">
+    <RequiredPackages Count="12">
       <Item1>
-        <PackageName Value="BGRABitmapPack"/>
+        <PackageName Value="controltimer"/>
       </Item1>
       <Item2>
-        <PackageName Value="LazControls"/>
+        <PackageName Value="BGRABitmapPack"/>
       </Item2>
       <Item3>
-        <PackageName Value="TAChartLazarusPkg"/>
+        <PackageName Value="LazControls"/>
       </Item3>
       <Item4>
-        <PackageName Value="enhedit"/>
+        <PackageName Value="TAChartLazarusPkg"/>
       </Item4>
       <Item5>
-        <PackageName Value="pascalscript"/>
+        <PackageName Value="enhedit"/>
       </Item5>
       <Item6>
-        <PackageName Value="SynEdit"/>
+        <PackageName Value="pascalscript"/>
       </Item6>
       <Item7>
-        <PackageName Value="vosamp"/>
+        <PackageName Value="SynEdit"/>
       </Item7>
       <Item8>
-        <PackageName Value="LazUtils"/>
+        <PackageName Value="vosamp"/>
       </Item8>
       <Item9>
-        <PackageName Value="FCL"/>
+        <PackageName Value="LazUtils"/>
       </Item9>
       <Item10>
-        <PackageName Value="indiclient"/>
+        <PackageName Value="FCL"/>
       </Item10>
       <Item11>
-        <PackageName Value="LCL"/>
+        <PackageName Value="indiclient"/>
       </Item11>
+      <Item12>
+        <PackageName Value="LCL"/>
+      </Item12>
     </RequiredPackages>
     <Units Count="126">
       <Unit0>
