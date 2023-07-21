@@ -1204,13 +1204,21 @@ begin
 
   if finternalguider.disable_guiding=false then //guiding enabled
   begin
-    //calculate required RA correction in pixels
-    moveRA:=(- driftRA*(1 - finternalguider.RA_hysteresis/100) +   old_moveRA * finternalguider.RA_hysteresis/100 ) * finternalguider.RAgain/100;//Hysteresis as in PHD1
-    old_moveRA:=moveRA;//Store for next cycle hysteresis calculation
-
-    //calculate required DEC correction in pixels
-    moveDEC:=(- driftDEC*(1 - finternalguider.DEC_hysteresis/100) +   old_moveDEC * finternalguider.DEC_hysteresis/100 ) * finternalguider.DECgain/100;//Hysteresis as in PHD1
-    old_moveDEC:=moveDEC;//Store for next cycle hysteresis calculation
+    //calculate required RA and DEC correction in pixels
+    if FSettling and finternalguider.SpectroFunctions then begin
+      // No hysteresis when moving the star to the slit
+      moveRA:=- driftRA * finternalguider.RAgain/100;
+      old_moveRA:=0;
+      moveDEC:=- driftDEC * finternalguider.DECgain/100;
+      old_moveDEC:=0;
+    end
+    else begin
+      //Hysteresis as in PHD1  { #todo : Make old_moveXX a running mean of N previous values? }
+      moveRA:=(- driftRA*(1 - finternalguider.RA_hysteresis/100) +   old_moveRA * finternalguider.RA_hysteresis/100 ) * finternalguider.RAgain/100;
+      old_moveRA:=moveRA;//Store for next cycle hysteresis calculation
+      moveDEC:=(- driftDEC*(1 - finternalguider.DEC_hysteresis/100) +   old_moveDEC * finternalguider.DEC_hysteresis/100 ) * finternalguider.DECgain/100;
+      old_moveDEC:=moveDEC;//Store for next cycle hysteresis calculation
+    end;
 
     Guidethecos:=cos(mount.Dec*pi/180); if Guidethecos<0.000001 then Guidethecos:=0.000001;
     moveRA2:=moveRA/Guidethecos; //correct pixels with cos(dec). Rotation in pixels near celestial pole decreases with cos(dec)
