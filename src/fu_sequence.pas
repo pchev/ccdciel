@@ -653,12 +653,20 @@ begin
    PlanGrid.RowCount:=p.count+1;
    for i:=1 to p.count do begin
      PlanGrid.Cells[0,i]:=T_Plan(sender).Steps[i-1].description_str;
-     PlanGrid.Cells[1,i]:=T_Plan(sender).Steps[i-1].exposure_str;
-     if Fcapture.PanelStack.Visible and (T_Plan(sender).Steps[i-1].stackcount>1) then
-        PlanGrid.Cells[1,i]:=T_Plan(sender).Steps[i-1].stackcount_str+'x'+PlanGrid.Cells[1,i];
-     PlanGrid.Cells[2,i]:=T_Plan(sender).Steps[i-1].count_str;
-     PlanGrid.Cells[3,i]:=T_Plan(sender).Steps[i-1].frtype_str;
-     PlanGrid.Cells[4,i]:=T_Plan(sender).Steps[i-1].filter_str;
+     if T_Plan(sender).Steps[i-1].steptype=0 then begin
+       PlanGrid.Cells[1,i]:=T_Plan(sender).Steps[i-1].exposure_str;
+       if Fcapture.PanelStack.Visible and (T_Plan(sender).Steps[i-1].stackcount>1) then
+          PlanGrid.Cells[1,i]:=T_Plan(sender).Steps[i-1].stackcount_str+'x'+PlanGrid.Cells[1,i];
+       PlanGrid.Cells[2,i]:=T_Plan(sender).Steps[i-1].count_str;
+       PlanGrid.Cells[3,i]:=T_Plan(sender).Steps[i-1].frtype_str;
+       PlanGrid.Cells[4,i]:=T_Plan(sender).Steps[i-1].filter_str;
+     end
+     else if T_Plan(sender).Steps[i-1].steptype=1 then begin
+       PlanGrid.Cells[3,i]:=rsScript;
+     end
+     else if T_Plan(sender).Steps[i-1].steptype=2 then begin
+       PlanGrid.Cells[3,i]:=rsSwitch;
+     end;
    end;
   except
   end;

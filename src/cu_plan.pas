@@ -25,7 +25,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 interface
 
-uses u_global, u_utils, u_translation, cu_sequencefile,
+uses u_global, u_utils, u_translation, cu_sequencefile, pu_scriptengine,
   fu_capture, fu_preview, fu_filterwheel, cu_mount, cu_camera, cu_autoguider,
   ExtCtrls, Classes, SysUtils;
 
@@ -47,6 +47,7 @@ T_Plan = class(TComponent)
     Fautoguider: T_autoguider;
     FonStepProgress: TNotifyEvent;
     FSequenceFile: T_SequenceFile;
+    FScriptRunning: boolean;
     procedure SetPlanName(val: string);
     procedure NextStep;
     procedure StartStep;
@@ -80,6 +81,7 @@ T_Plan = class(TComponent)
     function IndexOf(id:LongWord):integer;
     property SequenceFile: T_SequenceFile read FSequenceFile write FSequenceFile;
     property Count: integer read NumSteps;
+    property ScriptRunning: boolean read FScriptRunning;
     property CurrentStep: integer read FCurrentStep write FCurrentStep;
     property Running: boolean read FRunning write FRunning;
     property PlanName: string read FName write SetPlanName;
@@ -255,49 +257,73 @@ end;
 
 procedure T_Plan.StartStep;
 var p: TStep;
+    r: string;
 begin
   StepRunning:=true;
   p:=FSteps[CurrentStep];
   if p<>nil then begin
     CurrentStepNum:=CurrentStep;
-    CurrentDoneCount:=p.donecount;
-    if CurrentDoneCount>=p.count then begin
-       // step already complete
-       msg(Format(rsStepComplete, [p.description]), 2);
-       exit;
+    case p.steptype of
+    0: begin
+        // capture
+        CurrentDoneCount:=p.donecount;
+        if CurrentDoneCount>=p.count then begin
+           // step already complete
+           msg(Format(rsStepComplete, [p.description]), 2);
+           exit;
+        end;
+        if p.exposure>=0 then Fcapture.ExposureTime:=p.exposure;
+        if Fcapture.PanelStack.Visible then
+          Fcapture.StackNum.Value:=p.stackcount
+        else
+          Fcapture.StackNum.Value:=1;
+        Fcapture.Binning.Text:=p.binning_str;
+        Fcapture.Gain:=p.gain;
+        Fcapture.Offset:=p.offset;
+        if p.fstop<>'' then Fcapture.Fnumber.Text:=p.fstop;
+        Fcapture.SeqNum.Value:=p.count;
+        Fcapture.SeqCount:=CurrentDoneCount+1;
+        Fcapture.FrameType.ItemIndex:=ord(p.frtype);
+        Fcapture.CheckBoxDither.Checked:=p.dither;
+        Fcapture.DitherCount.Value:=p.dithercount;
+        Fcapture.CheckBoxFocus.Checked:=p.autofocus;
+        Fcapture.FocusCount.Value:=p.autofocuscount;
+        Fcapture.CheckLight(nil);
+        if p.autofocusstart then Fcapture.FocusNow:=true;
+        Ffilter.Filters.ItemIndex:=p.filter;
+        Ffilter.FiltersChange(self);
+        if p.frtype=FLAT then begin
+          if words(p.description,'',1,1)='Dusk' then
+            FlatWaitDusk:=true;
+          if words(p.description,'',1,1)='Dawn' then
+            FlatWaitDawn:=true;
+        end;
+        if not FRunning then exit;
+        StepTimeStart:=now;
+        msg(Format(rsStartStep, [p.description_str]),1);
+        CurrentStepName:=p.description;
+        ShowDelayMsg('');
+        StartCapture;
+       end;
+    1: begin
+        // script
+        FScriptRunning:=true;
+        StepTimeStart:=now;
+        CurrentStepName:=p.description;
+        ShowDelayMsg('');
+        if not f_scriptengine.RunScript(p.scriptname,p.scriptpath,p.scriptargs)then begin
+          msg(Format(rsScriptFailed, [p.scriptname]),0);
+        end;
+        FScriptRunning:=false;
+       end;
+    2: begin
+        //switch
+        r:=f_scriptengine.cmd_setswitch(p.switchnickname,p.switchname,p.switchvalue);
+        if r<>msgOK then begin
+          msg(Format(rsSwitchFailed, [p.switchnickname+' '+p.switchname])+' '+r,0);
+        end;
+       end;
     end;
-    if p.exposure>=0 then Fcapture.ExposureTime:=p.exposure;
-    if Fcapture.PanelStack.Visible then
-      Fcapture.StackNum.Value:=p.stackcount
-    else
-      Fcapture.StackNum.Value:=1;
-    Fcapture.Binning.Text:=p.binning_str;
-    Fcapture.Gain:=p.gain;
-    Fcapture.Offset:=p.offset;
-    if p.fstop<>'' then Fcapture.Fnumber.Text:=p.fstop;
-    Fcapture.SeqNum.Value:=p.count;
-    Fcapture.SeqCount:=CurrentDoneCount+1;
-    Fcapture.FrameType.ItemIndex:=ord(p.frtype);
-    Fcapture.CheckBoxDither.Checked:=p.dither;
-    Fcapture.DitherCount.Value:=p.dithercount;
-    Fcapture.CheckBoxFocus.Checked:=p.autofocus;
-    Fcapture.FocusCount.Value:=p.autofocuscount;
-    Fcapture.CheckLight(nil);
-    if p.autofocusstart then Fcapture.FocusNow:=true;
-    Ffilter.Filters.ItemIndex:=p.filter;
-    Ffilter.FiltersChange(self);
-    if p.frtype=FLAT then begin
-      if words(p.description,'',1,1)='Dusk' then
-        FlatWaitDusk:=true;
-      if words(p.description,'',1,1)='Dawn' then
-        FlatWaitDawn:=true;
-    end;
-    if not FRunning then exit;
-    StepTimeStart:=now;
-    msg(Format(rsStartStep, [p.description_str]),1);
-    CurrentStepName:=p.description;
-    ShowDelayMsg('');
-    StartCapture;
   end;
 end;
 
@@ -320,7 +346,7 @@ procedure T_Plan.PlanTimerTimer(Sender: TObject);
 begin
  if FRunning then begin
    UpdateDoneCount(true);
-   StepRunning:=Capture.Running;
+   StepRunning:=Capture.Running or FScriptRunning;
    if not StepRunning then begin
        NextStep;
    end;

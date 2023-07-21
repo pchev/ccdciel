@@ -106,6 +106,8 @@ type
 
   TStep   = Class(TObject)
               public
+              steptype: integer; //0=capture, 1=script, 2=switch
+              // capture options
               exposure : double;
               stackcount: integer;
               count: integer;
@@ -121,6 +123,15 @@ type
               offset: integer;
               frtype: TFrameType;
               fstop: string;
+              // script options
+              scriptname: string;
+              scriptpath: string;
+              scriptargs: string;
+              // switch options
+              switchnickname: string;
+              switchname: string;
+              switchvalue: string;
+              // global options
               description: string;
               constructor Create;
               procedure Assign(Source: Tstep);
@@ -577,6 +588,7 @@ end;
 
 constructor TStep.Create;
 begin
+  steptype:=0;
   exposure:=1;
   stackcount:=1;
   count:=1;
@@ -594,6 +606,12 @@ begin
   gain:=1;
   offset:=0;
   description:='Step1';
+  scriptname:='';
+  scriptpath:='';
+  scriptargs:='';
+  switchnickname:='';
+  switchname:='';
+  switchvalue:='';
 end;
 
 procedure TStep.Assign(Source: Tstep);
@@ -615,6 +633,13 @@ begin
   autofocuscount:=Source.autofocuscount;
   fstop:=Source.fstop;
   description:=Source.description;
+  steptype:=Source.steptype;
+  scriptname:=Source.scriptname;
+  scriptpath:=Source.scriptpath;
+  scriptargs:=Source.scriptargs;
+  switchnickname:=Source.switchnickname;
+  switchname:=Source.switchname;
+  switchvalue:=Source.switchvalue;
 end;
 
 function TStep.exposure_str: string;

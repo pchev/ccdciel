@@ -143,6 +143,7 @@ type
       procedure PlanStepChange(Sender: TObject);
       procedure CompatLoadPlan(p: T_Plan; plan,obj:string);
       procedure ClearRunning;
+      function  GetScriptRunning: boolean;
     protected
       Ftargets: TTargetList;
       NumTargets: integer;
@@ -204,7 +205,7 @@ type
       property Restarting: boolean read FRestarting;
       property Slewing: boolean read Fslewing;
       property Running: boolean read FRunning;
-      property ScriptRunning: boolean read FScriptRunning;
+      property ScriptRunning: boolean read GetScriptRunning;
       property TargetCoord: boolean read FTargetCoord;
       property TargetRA: double read FTargetRA;
       property TargetDE: double read FTargetDE;
@@ -873,6 +874,7 @@ begin
           m:=trunc(FSequenceFile.Items.GetValue('/Targets/Target'+inttostr(i)+'/Plan/StepNum',0));
           for j:=1 to m do begin
             s:=TStep.Create;
+            s.steptype:=FSequenceFile.Items.GetValue('/Targets/Target'+inttostr(i)+'/Plan/Steps/Step'+inttostr(j)+'/Type',0); // capture by default for compatibility
             s.description:=FSequenceFile.Items.GetValue('/Targets/Target'+inttostr(i)+'/Plan/Steps/Step'+inttostr(j)+'/Description','');
             str:=UpperCase(trim(FSequenceFile.Items.GetValue('/Targets/Target'+inttostr(i)+'/Plan/Steps/Step'+inttostr(j)+'/FrameType','Light')));
             s.frtype:=Str2Frametype(str);
@@ -907,6 +909,12 @@ begin
             s.autofocus:=FSequenceFile.Items.GetValue('/Targets/Target'+inttostr(i)+'/Plan/Steps/Step'+inttostr(j)+'/Autofocus',false);
             s.autofocuscount:=trunc(FSequenceFile.Items.GetValue('/Targets/Target'+inttostr(i)+'/Plan/Steps/Step'+inttostr(j)+'/AutofocusCount',10));
             s.donecount:=trunc(FSequenceFile.Items.GetValue('/Targets/Target'+inttostr(i)+'/Plan/Steps/Step'+inttostr(j)+'/Done',0));
+            s.scriptname:=FSequenceFile.Items.GetValue('/Targets/Target'+inttostr(i)+'/Plan/Steps/Step'+inttostr(j)+'/ScriptName','');
+            s.scriptpath:=FSequenceFile.Items.GetValue('/Targets/Target'+inttostr(i)+'/Plan/Steps/Step'+inttostr(j)+'/ScriptPath','');
+            s.scriptargs:=FSequenceFile.Items.GetValue('/Targets/Target'+inttostr(i)+'/Plan/Steps/Step'+inttostr(j)+'/ScriptArgs','');
+            s.switchnickname:=FSequenceFile.Items.GetValue('/Targets/Target'+inttostr(i)+'/Plan/Steps/Step'+inttostr(j)+'/SwitchNickname','');
+            s.switchname:=FSequenceFile.Items.GetValue('/Targets/Target'+inttostr(i)+'/Plan/Steps/Step'+inttostr(j)+'/SwitchName','');
+            s.switchvalue:=FSequenceFile.Items.GetValue('/Targets/Target'+inttostr(i)+'/Plan/Steps/Step'+inttostr(j)+'/SwitchValue','');
             p.Add(s);
           end;
           if TemplateModified(p) then begin
@@ -1026,6 +1034,7 @@ try
         FSequenceFile.Items.SetValue('/Targets/Target'+inttostr(i)+'/Plan/Name',p.PlanName);
         FSequenceFile.Items.SetValue('/Targets/Target'+inttostr(i)+'/Plan/StepNum',p.Count);
         for j:=1 to p.Count do begin
+          FSequenceFile.Items.SetValue('/Targets/Target'+inttostr(i)+'/Plan/Steps/Step'+inttostr(j)+'/Type',p.Steps[j-1].steptype);
           FSequenceFile.Items.SetValue('/Targets/Target'+inttostr(i)+'/Plan/Steps/Step'+inttostr(j)+'/Description',p.Steps[j-1].description);
           FSequenceFile.Items.SetValue('/Targets/Target'+inttostr(i)+'/Plan/Steps/Step'+inttostr(j)+'/FrameType',trim(FrameName[ord(p.Steps[j-1].frtype)]));
           FSequenceFile.Items.SetValue('/Targets/Target'+inttostr(i)+'/Plan/Steps/Step'+inttostr(j)+'/Exposure',p.Steps[j-1].exposure);
@@ -1041,7 +1050,13 @@ try
           FSequenceFile.Items.SetValue('/Targets/Target'+inttostr(i)+'/Plan/Steps/Step'+inttostr(j)+'/AutofocusStart',p.Steps[j-1].autofocusstart);
           FSequenceFile.Items.SetValue('/Targets/Target'+inttostr(i)+'/Plan/Steps/Step'+inttostr(j)+'/Autofocus',p.Steps[j-1].autofocus);
           FSequenceFile.Items.SetValue('/Targets/Target'+inttostr(i)+'/Plan/Steps/Step'+inttostr(j)+'/AutofocusCount',p.Steps[j-1].autofocuscount);
-          FSequenceFile.Items.SetValue('/Targets/Target'+inttostr(i)+'/Plan/Steps/Step'+inttostr(j)+'/Done',p.Steps[j-1].donecount)
+          FSequenceFile.Items.SetValue('/Targets/Target'+inttostr(i)+'/Plan/Steps/Step'+inttostr(j)+'/Done',p.Steps[j-1].donecount);
+          FSequenceFile.Items.SetValue('/Targets/Target'+inttostr(i)+'/Plan/Steps/Step'+inttostr(j)+'/ScriptName',p.Steps[j-1].scriptname);
+          FSequenceFile.Items.SetValue('/Targets/Target'+inttostr(i)+'/Plan/Steps/Step'+inttostr(j)+'/ScriptPath',p.Steps[j-1].scriptpath);
+          FSequenceFile.Items.SetValue('/Targets/Target'+inttostr(i)+'/Plan/Steps/Step'+inttostr(j)+'/ScriptArgs',p.Steps[j-1].scriptargs);
+          FSequenceFile.Items.SetValue('/Targets/Target'+inttostr(i)+'/Plan/Steps/Step'+inttostr(j)+'/SwitchNickname',p.Steps[j-1].switchnickname);
+          FSequenceFile.Items.SetValue('/Targets/Target'+inttostr(i)+'/Plan/Steps/Step'+inttostr(j)+'/SwitchName',p.Steps[j-1].switchname);
+          FSequenceFile.Items.SetValue('/Targets/Target'+inttostr(i)+'/Plan/Steps/Step'+inttostr(j)+'/SwitchValue',p.Steps[j-1].switchvalue);
         end;
       end;
     end;
@@ -3043,6 +3058,22 @@ else
   msg(rsNoTerminatio, 1);
 end;
 
+function  T_Targets.GetScriptRunning: boolean;
+var t: TTarget;
+    p: T_Plan;
+begin
+ result:=false;
+ t:=Targets[FCurrentTarget];
+ if t<>nil then begin
+   p:=T_Plan(t.plan);
+   if p<>nil then begin
+     result:=p.ScriptRunning;
+   end;
+ end;
+ result:=result or FScriptRunning;
+end;
+
+
 ////////////////////  TTarget  /////////////////////////////
 
 constructor TTarget.Create;
@@ -3188,6 +3219,7 @@ begin
   if pfile.GetValue('/PlanName','')<>template then exit;
   if pfile.GetValue('/StepNum',-1)<>p.Count then exit;
   for i:=1 to p.Count do begin
+     if pfile.GetValue('/Steps/Step'+inttostr(i)+'/Type',0)<>p.Steps[i-1].steptype then exit;
      if pfile.GetValue('/Steps/Step'+inttostr(i)+'/Exposure',1.0)<>p.Steps[i-1].exposure then exit;
      if pfile.GetValue('/Steps/Step'+inttostr(i)+'/StackCount',1)<>p.Steps[i-1].stackcount then exit;
      if pfile.GetValue('/Steps/Step'+inttostr(i)+'/Count',1)<>p.Steps[i-1].count then exit;
@@ -3202,6 +3234,12 @@ begin
      if pfile.GetValue('/Steps/Step'+inttostr(i)+'/FrameType','Light')<>trim(FrameName[ord(p.Steps[i-1].frtype)]) then exit;
      if pfile.GetValue('/Steps/Step'+inttostr(i)+'/Fstop','')<>p.Steps[i-1].fstop then exit;
      if pfile.GetValue('/Steps/Step'+inttostr(i)+'/Description','')<>p.Steps[i-1].description then exit;
+     if pfile.GetValue('/Steps/Step'+inttostr(i)+'/ScriptName','')<>p.Steps[i-1].scriptname then exit;
+     if pfile.GetValue('/Steps/Step'+inttostr(i)+'/ScriptPath','')<>p.Steps[i-1].scriptpath then exit;
+     if pfile.GetValue('/Steps/Step'+inttostr(i)+'/ScriptArgs','')<>p.Steps[i-1].scriptargs then exit;
+     if pfile.GetValue('/Steps/Step'+inttostr(i)+'/SwitchNickname','')<>p.Steps[i-1].switchnickname then exit;
+     if pfile.GetValue('/Steps/Step'+inttostr(i)+'/SwitchName','')<>p.Steps[i-1].switchname then exit;
+     if pfile.GetValue('/Steps/Step'+inttostr(i)+'/SwitchValue','')<>p.Steps[i-1].switchvalue then exit;
      n:=p.Steps[i-1].filter;
      if FilterList.Count>=n then begin
        if pfile.GetValue('/Steps/Step'+inttostr(i)+'/Filter','')<>FilterList[n] then exit;

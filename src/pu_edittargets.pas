@@ -28,7 +28,7 @@ interface
 uses pu_planetariuminfo, u_global, u_utils, u_ccdconfig, pu_pascaleditor, u_annotation, pu_keyboard, pu_newscript,
   pu_scriptengine, cu_astrometry, u_hints, u_translation, pu_selectscript, Classes, math, cu_targets, pu_viewtext, cu_switch,
   SysUtils, FileUtil, Forms, Controls, Graphics, Dialogs, StdCtrls, UScaleDPI, cu_plan, LCLType,
-  LazUTF8, maskedit, Grids, ExtCtrls, ComCtrls, EditBtn, Spin, Buttons, Menus, CheckLst, Types;
+  LazUTF8, maskedit, Grids, ExtCtrls, ComCtrls, Spin, Buttons, Menus, CheckLst, Types;
 
 const
   colseq=0; colname=1; colplan=2; colra=3; coldec=4; colpa=5; colstart=6; colend=7; colrepeat=8;
@@ -64,6 +64,11 @@ type
     cbNoAutoguidingChange: TCheckBox;
     CheckBoxResetRepeat: TCheckBox;
     CheckBoxRestartStatus: TCheckBox;
+    MenuAddCaptureStep: TMenuItem;
+    MenuAddScriptStep: TMenuItem;
+    MenuAddSwitchStep: TMenuItem;
+    Panel10: TPanel;
+    PopupAddStep: TPopupMenu;
     Switches: TComboBox;
     Switchlist: TComboBox;
     SwitchValue: TEdit;
@@ -184,6 +189,25 @@ type
     ScriptList: TComboBox;
     SeqStartAt: TMaskEdit;
     TargetList: TStringGrid;
+    BtnEditNewScript1: TButton;
+    BtnEditScript1: TButton;
+    Label14: TLabel;
+    Label17: TLabel;
+    Label19: TLabel;
+    Label20: TLabel;
+    Label21: TLabel;
+    PageControlStepType: TPageControl;
+    Panel15: TPanel;
+    Panel5: TPanel;
+    Panel7: TPanel;
+    ScriptList1: TComboBox;
+    ScriptParam1: TEdit;
+    Switches1: TComboBox;
+    Switchlist1: TComboBox;
+    StepTypeCapture: TTabSheet;
+    StepTypeScript: TTabSheet;
+    StepTypeSwitch: TTabSheet;
+    SwitchValue1: TEdit;
     procedure BtnAddStepClick(Sender: TObject);
     procedure BtnAnytimeClick(Sender: TObject);
     procedure BtnApplyTemplateClick(Sender: TObject);
@@ -205,6 +229,7 @@ type
     procedure BtnSaveTemplateAsClick(Sender: TObject);
     procedure BtnSaveTemplateClick(Sender: TObject);
     procedure BtnSaveTemplatePopup(Sender: TObject);
+    procedure BtnScript1Click(Sender: TObject);
     procedure BtnSkyFlatClick(Sender: TObject);
     procedure BtnScriptClick(Sender: TObject);
     procedure BtnNewObjectClick(Sender: TObject);
@@ -220,6 +245,9 @@ type
     procedure FormCreate(Sender: TObject);
     procedure FormDestroy(Sender: TObject);
     procedure FormShow(Sender: TObject);
+    procedure MenuAddCaptureStepClick(Sender: TObject);
+    procedure MenuAddScriptStepClick(Sender: TObject);
+    procedure MenuAddSwitchStepClick(Sender: TObject);
     procedure MenuBlankRowClick(Sender: TObject);
     procedure MenuSwitchClick(Sender: TObject);
     procedure PointCoordChange(Sender: TObject);
@@ -241,6 +269,7 @@ type
     procedure StepListSelection(Sender: TObject; aCol, aRow: Integer);
     procedure StepChange(Sender: TObject);
     procedure StepListValidateEntry(sender: TObject; aCol, aRow: Integer; const OldValue: string; var NewValue: String);
+    procedure Switches1Change(Sender: TObject);
     procedure SwitchesChange(Sender: TObject);
     procedure TargetChange(Sender: TObject);
     procedure TargetListColRowMoved(Sender: TObject; IsColumn: Boolean; sIndex,
@@ -272,7 +301,9 @@ type
     FSwitch: TSwitches;
     procedure SetPlanList(n: integer; pl:string);
     procedure SetScriptList(n: integer; sl, args:string);
+    procedure SetScriptList1(n: integer; sp, sl, args:string);
     procedure SetSwitch(n: integer; swl:string);
+    procedure SetSwitch1(n: integer; swni,swna,swval:string);
     procedure ResetSequences;
     procedure ResetSteps;
     procedure SetStep(n: integer; p: TStep);
@@ -401,6 +432,9 @@ begin
   MenuSkyFlat.Caption := rsSkyFlat;
   MenuImportObslist.Caption:=rsImportCdCObs;
   MenuImportMosaic.Caption:=rsImportCdCMos;
+  MenuAddCaptureStep.Caption:=rsCapture;
+  MenuAddScriptStep.Caption:=rsScript;
+  MenuAddSwitchStep.Caption:=rsSwitch;
   TargetList.Columns.Items[colname-1].Title.Caption := Format(rsTargetName, [crlf]);
   TargetList.Columns.Items[colplan-1].Title.Caption := rsTemplate;
   TargetList.Columns.Items[colra-1].Title.Caption := rsRA+j2000;
@@ -484,6 +518,13 @@ begin
   Label8.Caption := rsScriptArgume;
   BtnEditScript.Caption := rsEdit;
   BtnEditNewScript.Caption := rsNew;
+  Label19.Caption:=rsSwitchConnec;
+  Label20.Caption:=rsSwitch;
+  Label21.Caption:=rsValue;
+  Label17.Caption := rsScript;
+  Label14.Caption := rsScriptArgume;
+  BtnEditScript1.Caption := rsEdit;
+  BtnEditNewScript1.Caption := rsNew;
   FlatTime.Caption := rsFlatTime;
   Label16.Caption := rsBinning;
   GroupBox6.Caption := rsFilters;
@@ -593,6 +634,7 @@ var i,k: integer;
 begin
   s:=TStringlist.Create;
   ScriptList.Clear;
+  ScriptList1.Clear;
   for k:=1 to MaxScriptDir do begin
     i:=FindFirstUTF8(ScriptDir[k].path+'*.script',0,fs);
     while i=0 do begin
@@ -612,6 +654,8 @@ begin
   s.CustomSort(@ScriptListCompare);
   ScriptList.Items.Assign(s);
   ScriptList.ItemIndex:=0;
+  ScriptList1.Items.Assign(s);
+  ScriptList1.ItemIndex:=0;
   f_selectscript.ComboBoxScript.Items.Assign(s);
   s.Free;
 end;
@@ -625,19 +669,40 @@ begin
   ScriptParam.Text:=args;
 end;
 
+procedure Tf_EditTargets.SetScriptList1(n: integer; sp, sl, args:string);
+var i:integer;
+    s:TStep;
+begin
+  s:=TStep(StepList.Objects[0,n]);
+  i:=ScriptList1.Items.IndexOf(sl);
+  if i>=0 then ScriptList1.ItemIndex:=i;
+  StepList.Cells[pcoldesc,n]:=sl+' '+args;
+  StepList.Cells[pcoltype,n]:=rsScript;
+  s.scriptname:=sl;
+  s.scriptpath:=sp;
+  s.scriptargs:=args;
+  ScriptParam1.Text:=args;
+end;
+
 procedure Tf_EditTargets.LoadSwitchList;
-var i,j: integer;
+var i: integer;
 begin
   Switches.Clear;
+  Switches1.Clear;
   Switchlist.Clear;
+  Switchlist1.Clear;
   SwitchValue.Text:='';
+  SwitchValue1.Text:='';
   try
   for i:=0 to NumSwitches-1 do begin
      Switches.Items.Add(FSwitch[i].Nickname);
+     Switches1.Items.Add(FSwitch[i].Nickname);
   end;
   if NumSwitches>0 then begin
     Switches.ItemIndex:=0;
     SwitchesChange(Switches);
+    Switches1.ItemIndex:=0;
+    Switches1Change(Switches1);
   end;
   except
   end;
@@ -666,6 +731,29 @@ begin
   TargetChange(Sender);
 end;
 
+procedure Tf_EditTargets.Switches1Change(Sender: TObject);
+var i,j,n: integer;
+    sw: TSwitchList;
+begin
+  Switchlist1.Clear;
+  SwitchValue1.Text:='';
+  n:=-1;
+  for i:=0 to NumSwitches-1 do begin
+     if Switches1.Text=switch[i].Nickname then begin
+       n:=i;
+       break;
+     end;
+  end;
+  if n>=0 then begin
+    sw:=Fswitch[n].Switch;
+    for j:=0 to Fswitch[n].NumSwitch-1 do begin
+      Switchlist1.Items.Add(sw[j].Name);
+    end;
+    Switchlist1.ItemIndex:=0;
+  end;
+  StepChange(Sender);
+end;
+
 procedure Tf_EditTargets.SetSwitch(n: integer; swl:string);
 var i:integer;
     sw: TStringList;
@@ -692,6 +780,29 @@ begin
   end;
   TargetList.Cells[colplan,n]:=swl;
   sw.Free;
+end;
+
+procedure Tf_EditTargets.SetSwitch1(n: integer; swni,swna,swval:string);
+var i:integer;
+begin
+  i:=Switches1.Items.IndexOf(swni);
+  if (i>=0) then begin
+    if i<>Switches1.ItemIndex then begin
+      Switches1.ItemIndex:=i;
+      Switches1Change(Switches1);
+    end
+  end
+  else
+     Switches1.Text:=swni;
+  i:=Switchlist1.Items.IndexOf(swna);
+  if i>=0 then begin
+     Switchlist1.ItemIndex:=i;
+  end
+  else
+     Switchlist1.Text:=swna;
+  SwitchValue1.Text:=swval;
+  StepList.Cells[pcoldesc,n]:=swni+', '+swna+'='+swval;
+  StepList.Cells[pcoltype,n]:=rsSwitch;
 end;
 
 procedure Tf_EditTargets.BtnDeleteTemplateClick(Sender: TObject);
@@ -1372,6 +1483,102 @@ begin
      LoadScriptList;
      SetScriptList(n,f_pascaleditor.ScriptName,ScriptParam.Text);
      TargetChange(nil);
+    end;
+  end;
+  s.Free;
+end;
+
+procedure Tf_EditTargets.BtnScript1Click(Sender: TObject);
+var txt,fn: string;
+    scdir:TScriptDir;
+    i,n:integer;
+    newscript: boolean;
+    s: TStringList;
+    ns: Tf_newscript;
+    st: TScriptType;
+begin
+  n:=StepList.Row;
+  newscript:=(Sender=BtnEditNewScript1)or(ScriptList1.Text='');
+  s:=TStringList.Create;
+  if f_pascaleditor=nil then begin
+     f_pascaleditor:=Tf_pascaleditor.Create(self);
+     f_pascaleditor.DebugScript:=f_scriptengine.dbgscr;
+  end;
+  if newscript then begin
+    s.Clear;
+    ns:=Tf_newscript.Create(self);
+    ns.ShowModal;
+    if ns.ModalResult<>mrOK then exit;
+    txt:=trim(ns.Edit1.text);
+    if txt='' then exit;
+    st:=TScriptType(ns.ScriptLanguage.ItemIndex+1);
+    ns.free;
+    scdir:=ScriptDir[1];
+    if copy(txt,1,2)='T_' then delete(txt,1,2);
+    fn:=scdir.path+txt+'.script';
+    if FileExistsUTF8(fn) then begin
+       if MessageDlg(Format(rsScriptAlread2, [fn]), mtConfirmation, mbYesNo, 0)=mrYes then
+         s.LoadFromFile(fn)
+       else
+         exit;
+    end
+    else begin
+      if st=stPascal then begin
+        s.Add('{');
+        s.Add('Pascal script for CCDciel');
+        s.Add('see: https://www.ap-i.net/ccdciel/en/documentation/script_reference');
+        s.Add('}');
+        s.Add('begin');
+        s.Add('');
+        s.Add('end.');
+      end
+      else if st=stPython then begin
+        s.Add('# Python program for CCDciel');
+        s.Add('# see: https://www.ap-i.net/ccdciel/en/documentation/jsonrpc_reference');
+        s.Add('');
+        s.Add('from ccdciel import ccdciel');
+        s.Add('');
+      end;
+    end;
+    f_pascaleditor.ScriptName:=txt;
+    f_pascaleditor.ScriptType:=st;
+  end
+  else begin
+    i:=ScriptList1.ItemIndex;
+    if i<0 then exit;
+    txt:=ScriptList1.Items[i];
+    scdir:=TScriptDir(ScriptList1.Items.Objects[i]);
+    if (txt='')or(scdir=nil) then exit;
+    fn:=scdir.path+txt+'.script';
+    s.LoadFromFile(fn);
+    f_pascaleditor.ScriptType:=f_scriptengine.ScriptType(fn);
+    if scdir<>ScriptDir[1] then begin
+       if copy(txt,1,2)='T_' then
+          delete(txt,1,2)
+       else begin
+         if txt[1]<>'_' then txt:='_'+txt
+       end;
+       scdir:=ScriptDir[1];
+       fn:=scdir.path+txt+'.script';
+       newscript:=true;
+       if FileExistsUTF8(fn) then begin
+          if MessageDlg(Format(rsScriptAlread3, [fn]), mtConfirmation,
+            mbYesNo, 0)<>mrYes then
+            exit;
+       end;
+    end;
+    f_pascaleditor.ScriptName:=txt;
+  end;
+  f_pascaleditor.SynEdit1.Lines.Assign(s);
+  FormPos(f_pascaleditor,mouse.CursorPos.X,mouse.CursorPos.Y);
+  f_pascaleditor.ShowModal;
+  if f_pascaleditor.ModalResult=mrOK then begin
+    s.Assign(f_pascaleditor.SynEdit1.Lines);
+    s.SaveToFile(fn);
+    if newscript then begin
+     LoadScriptList;
+     SetScriptList1(n,scdir.path,f_pascaleditor.ScriptName,ScriptParam1.Text);
+     StepChange(nil);
     end;
   end;
   s.Free;
@@ -2176,7 +2383,6 @@ end;
 
 procedure Tf_EditTargets.TargetListHeaderClick(Sender: TObject; IsColumn: Boolean; Index: Integer);
 var i: integer;
-    onoff: boolean;
     buf: string;
     t: TTarget;
 begin
@@ -2489,6 +2695,7 @@ var str,buf: string;
     gainmsg:boolean;
 begin
   StepsModified:=false;
+  p.steptype:=pfile.GetValue('/Steps/Step'+inttostr(i)+'/Type',0); // capture by default for compatibility  
   str:=pfile.GetValue('/Steps/Step'+inttostr(i)+'/Description','');
   p.description:=str;
   str:=trim(pfile.GetValue('/Steps/Step'+inttostr(i)+'/FrameType','Light'));
@@ -2527,6 +2734,12 @@ begin
   p.autofocusstart:=pfile.GetValue('/Steps/Step'+inttostr(i)+'/AutofocusStart',false);
   p.autofocus:=pfile.GetValue('/Steps/Step'+inttostr(i)+'/Autofocus',false);
   p.autofocuscount:=trunc(pfile.GetValue('/Steps/Step'+inttostr(i)+'/AutofocusCount',10));
+  p.scriptname:=pfile.GetValue('/Steps/Step'+inttostr(i)+'/ScriptName','');
+  p.scriptpath:=pfile.GetValue('/Steps/Step'+inttostr(i)+'/ScriptPath','');
+  p.scriptargs:=pfile.GetValue('/Steps/Step'+inttostr(i)+'/ScriptArgs','');
+  p.switchnickname:=pfile.GetValue('/Steps/Step'+inttostr(i)+'/SwitchNickname','');
+  p.switchname:=pfile.GetValue('/Steps/Step'+inttostr(i)+'/SwitchName','');
+  p.switchvalue:=pfile.GetValue('/Steps/Step'+inttostr(i)+'/SwitchValue','');
   if gainmsg and StepList.Columns[pcolgain-1].Visible then
      LabelMsg.Caption:=rsPleaseBeCare;
   // obsolete option
@@ -2680,35 +2893,68 @@ end;
 procedure Tf_EditTargets.SetStep(n: integer; p: TStep);
 begin
   LockStep:=true;
+  PageControlStepType.ActivePageIndex:=p.steptype;
   StepList.Cells[pcoldesc,n]:=p.description_str;
-  StepList.Cells[pcoltype,n]:=trim(FrameName[ord(p.frtype)]);
-  StepList.Cells[pcolexp,n]:=formatfloat(f3,p.exposure);
-  StepList.Cells[pcolstack,n]:=inttostr(p.stackcount);
-  StepList.Cells[pcolbin,n]:=p.binning_str;
-  if hasGainISO then begin
-    if (p.gain<StepList.Columns[pcolgain-1].PickList.Count) then
-      StepList.Cells[pcolgain,n]:=StepList.Columns[pcolgain-1].PickList[p.gain]
+  if p.steptype=0 then begin
+    StepList.Cells[pcoltype,n]:=trim(FrameName[ord(p.frtype)]);
+    StepList.Cells[pcolexp,n]:=formatfloat(f3,p.exposure);
+    StepList.Cells[pcolstack,n]:=inttostr(p.stackcount);
+    StepList.Cells[pcolbin,n]:=p.binning_str;
+    if hasGainISO then begin
+      if (p.gain<StepList.Columns[pcolgain-1].PickList.Count) then
+        StepList.Cells[pcolgain,n]:=StepList.Columns[pcolgain-1].PickList[p.gain]
+      else
+        LabelMsg.Caption:='Gain setting not compatible!';
+    end
     else
-      LabelMsg.Caption:='Gain setting not compatible!';
+      StepList.Cells[pcolgain,n]:=IntToStr(p.gain);
+    StepList.Cells[pcoloffset,n]:=IntToStr(p.offset);
+    StepList.Cells[pcolfstop,n]:=p.fstop;
+    if p.filter<StepList.Columns[pcolfilter-1].PickList.count then
+      StepList.Cells[pcolfilter,n]:=StepList.Columns[pcolfilter-1].PickList[p.filter]
+    else
+      LabelMsg.Caption:='Filter setting not compatible!';
+    StepList.Cells[pcolcount,n]:=IntToStr(p.count);
+    if p.dither then
+      StepList.Cells[pcoldither,n]:=IntToStr(p.dithercount)
+    else
+      StepList.Cells[pcoldither,n]:='';
+    StepList.Cells[pcolafstart,n]:=BoolToStr(p.autofocusstart,'1','0');
+    if p.autofocus then
+      StepList.Cells[pcolafevery,n]:=IntToStr(p.autofocuscount)
+    else
+      StepList.Cells[pcolafevery,n]:='';
   end
-  else
-    StepList.Cells[pcolgain,n]:=IntToStr(p.gain);
-  StepList.Cells[pcoloffset,n]:=IntToStr(p.offset);
-  StepList.Cells[pcolfstop,n]:=p.fstop;
-  if p.filter<StepList.Columns[pcolfilter-1].PickList.count then
-    StepList.Cells[pcolfilter,n]:=StepList.Columns[pcolfilter-1].PickList[p.filter]
-  else
-    LabelMsg.Caption:='Filter setting not compatible!';
-  StepList.Cells[pcolcount,n]:=IntToStr(p.count);
-  if p.dither then
-    StepList.Cells[pcoldither,n]:=IntToStr(p.dithercount)
-  else
-    StepList.Cells[pcoldither,n]:='';
-  StepList.Cells[pcolafstart,n]:=BoolToStr(p.autofocusstart,'1','0');
-  if p.autofocus then
-    StepList.Cells[pcolafevery,n]:=IntToStr(p.autofocuscount)
-  else
+  else if p.steptype=1 then begin
+    StepList.Cells[pcoltype,n]:=rsScript;
+    StepList.Cells[pcolexp,n]:='';
+    StepList.Cells[pcolstack,n]:='';
+    StepList.Cells[pcolbin,n]:='';
+    StepList.Cells[pcolfilter,n]:='';
+    StepList.Cells[pcolcount,n]:='';
+    StepList.Cells[pcolafstart,n]:='';
     StepList.Cells[pcolafevery,n]:='';
+    StepList.Cells[pcoldither,n]:='';
+    StepList.Cells[pcolgain,n]:='';
+    StepList.Cells[pcoloffset,n]:='';
+    StepList.Cells[pcolfstop,n]:='';
+    SetScriptList1(n,p.scriptpath,p.scriptname,p.scriptargs);
+  end
+  else if p.steptype=2 then begin
+    StepList.Cells[pcoltype,n]:=rsSwitch;
+    StepList.Cells[pcolexp,n]:='';
+    StepList.Cells[pcolstack,n]:='';
+    StepList.Cells[pcolbin,n]:='';
+    StepList.Cells[pcolfilter,n]:='';
+    StepList.Cells[pcolcount,n]:='';
+    StepList.Cells[pcolafstart,n]:='';
+    StepList.Cells[pcolafevery,n]:='';
+    StepList.Cells[pcoldither,n]:='';
+    StepList.Cells[pcolgain,n]:='';
+    StepList.Cells[pcoloffset,n]:='';
+    StepList.Cells[pcolfstop,n]:='';
+    SetSwitch1(n,p.switchnickname,p.switchname,p.switchvalue);
+  end;
   LockStep:=false;
 end;
 
@@ -2717,7 +2963,8 @@ var n,j,i:integer;
     oldid: LongWord;
     p: TStep;
     x: double;
-    str,buf: string;
+    str,buf,snick,sname: string;
+    scdir: TScriptDir;
     ok:boolean;
 begin
   if LockStep then exit;
@@ -2728,90 +2975,128 @@ begin
   if n < 1 then exit;
   p:=TStep(StepList.Objects[0,n]);
   if p=nil then exit;
-  oldid:=p.id;
-  StepsModified:=StepsModified or (p.description<>StepList.Cells[pcoldesc,n]);
-  p.description:=StepList.Cells[pcoldesc,n];
-  str:=StepList.Cells[pcoltype,n];
-  j:=StepList.Columns[pcoltype-1].PickList.IndexOf(str);
-  if j<0 then j:=0;
-  StepsModified:=StepsModified or (p.frtype<>TFrameType(j));
-  if p.frtype<>TFrameType(j) then FrameTypeChange(n,TFrameType(j));
-  p.frtype:=TFrameType(j);
-  x:=StrToFloatDef(stringReplace(StepList.Cells[pcolexp,n],',','.',[]),p.exposure);
-  StepsModified:=StepsModified or (p.exposure<>x);
-  p.exposure:=x;
-  j:=StrToIntDef(StepList.Cells[pcolstack,n],p.stackcount);
-  StepsModified:=StepsModified or (p.stackcount<>j);
-  p.stackcount:=j;
-  str:=StepList.Cells[pcolbin,n];
-  j:=pos('x',str);
-  if j>0 then begin
-     buf:=trim(copy(str,1,j-1));
-     i:=StrToIntDef(buf,1);
-     StepsModified:=StepsModified or (p.binx<>i);
-     p.binx:=i;
-     buf:=trim(copy(str,j+1,9));
-     i:=StrToIntDef(buf,1);
-     StepsModified:=StepsModified or (p.biny<>i);
-     p.biny:=i;
-  end else begin
-    StepsModified:=StepsModified or (p.binx<>1);
-    p.binx:=1;
-    StepsModified:=StepsModified or (p.biny<>1);
-    p.biny:=1;
-  end;
-  if hasGainISO then begin
-    str:=StepList.Cells[pcolgain,n];
-    j:=StepList.Columns[pcolgain-1].PickList.IndexOf(str);
-    StepsModified:=StepsModified or (p.gain<>j);
-    if j>=0 then p.gain:=j;
+  PageControlStepType.ActivePageIndex:=p.steptype;
+  if p.steptype=0 then begin
+    oldid:=p.id;
+    StepsModified:=StepsModified or (p.description<>StepList.Cells[pcoldesc,n]);
+    p.description:=StepList.Cells[pcoldesc,n];
+    str:=StepList.Cells[pcoltype,n];
+    j:=StepList.Columns[pcoltype-1].PickList.IndexOf(str);
+    if j<0 then j:=0;
+    StepsModified:=StepsModified or (p.frtype<>TFrameType(j));
+    if p.frtype<>TFrameType(j) then FrameTypeChange(n,TFrameType(j));
+    p.frtype:=TFrameType(j);
+    x:=StrToFloatDef(stringReplace(StepList.Cells[pcolexp,n],',','.',[]),p.exposure);
+    StepsModified:=StepsModified or (p.exposure<>x);
+    p.exposure:=x;
+    j:=StrToIntDef(StepList.Cells[pcolstack,n],p.stackcount);
+    StepsModified:=StepsModified or (p.stackcount<>j);
+    p.stackcount:=j;
+    str:=StepList.Cells[pcolbin,n];
+    j:=pos('x',str);
+    if j>0 then begin
+       buf:=trim(copy(str,1,j-1));
+       i:=StrToIntDef(buf,1);
+       StepsModified:=StepsModified or (p.binx<>i);
+       p.binx:=i;
+       buf:=trim(copy(str,j+1,9));
+       i:=StrToIntDef(buf,1);
+       StepsModified:=StepsModified or (p.biny<>i);
+       p.biny:=i;
+    end else begin
+      StepsModified:=StepsModified or (p.binx<>1);
+      p.binx:=1;
+      StepsModified:=StepsModified or (p.biny<>1);
+      p.biny:=1;
+    end;
+    if hasGainISO then begin
+      str:=StepList.Cells[pcolgain,n];
+      j:=StepList.Columns[pcolgain-1].PickList.IndexOf(str);
+      StepsModified:=StepsModified or (p.gain<>j);
+      if j>=0 then p.gain:=j;
+    end
+    else if hasGain then begin
+      j:=StrToIntDef(StepList.Cells[pcolgain,n],p.gain);
+      if j>GainMax then begin j:=GainMax; StepList.Cells[pcolgain,n]:=inttostr(j); end;
+      if j<GainMin then begin j:=GainMin; StepList.Cells[pcolgain,n]:=inttostr(j); end;
+      StepsModified:=StepsModified or (p.gain<>j);
+      p.gain:=j;
+    end;
+    j:=StrToIntDef(StepList.Cells[pcoloffset,n],p.offset);
+    StepsModified:=StepsModified or (p.offset<>j);
+    p.offset:=j;
+    str:=StepList.Cells[pcolfstop,n];
+    StepsModified:=StepsModified or (p.fstop<>str);
+    p.fstop:=str;
+    str:=StepList.Cells[pcolfilter,n];
+    j:=StepList.Columns[pcolfilter-1].PickList.IndexOf(str);
+    if j<0 then j:=0;
+    StepsModified:=StepsModified or (p.filter<>j);
+    p.filter:=j;
+    j:=StrToIntDef(StepList.Cells[pcolcount,n],p.count);
+    StepsModified:=StepsModified or (p.count<>j);
+    p.count:=j;
+    j:=StrToIntDef(StepList.Cells[pcoldither,n],-1);
+    ok:=j>0;
+    StepsModified:=StepsModified or (p.dither<>ok);
+    p.dither:=(p.frtype=LIGHT) and ok;
+    StepsModified:=StepsModified or (ok and (p.dithercount<>j));
+    if ok then
+       p.dithercount:=j
+    else
+      p.dithercount:=0;
+    ok:=StepList.Cells[pcolafstart,n]='1';
+    StepsModified:=StepsModified or (p.autofocusstart<>ok);
+    p.autofocusstart:=(p.frtype=LIGHT) and ok;
+    j:=StrToIntDef(StepList.Cells[pcolafevery,n],-1);
+    ok:=j>0;
+    StepsModified:=StepsModified or (p.autofocus<>ok);
+    p.autofocus:=(p.frtype=LIGHT) and ok;
+    StepsModified:=StepsModified or (ok and (p.autofocuscount<>j));
+    if ok then
+       p.autofocuscount:=j
+    else
+       p.autofocuscount:=0;
+    // reset donecount if the id change
+    if p.id<>oldid then
+      p.donecount:=0;
+    StepList.Cells[pcoldesc,n]:=p.description;
   end
-  else if hasGain then begin
-    j:=StrToIntDef(StepList.Cells[pcolgain,n],p.gain);
-    if j>GainMax then begin j:=GainMax; StepList.Cells[pcolgain,n]:=inttostr(j); end;
-    if j<GainMin then begin j:=GainMin; StepList.Cells[pcolgain,n]:=inttostr(j); end;
-    StepsModified:=StepsModified or (p.gain<>j);
-    p.gain:=j;
+  else if p.steptype=1 then begin
+    i:=ScriptList1.ItemIndex;
+    sname:=ScriptList1.Items[i];
+    scdir:=TScriptDir(ScriptList1.Items.Objects[i]);
+    buf:=trim(ScriptParam1.Text);
+    p.description:=sname+' '+buf;
+    StepList.Cells[pcoldesc,n]:=p.description;
+    StepList.Cells[pcoltype,n]:=rsScript;
+    StepsModified:=StepsModified or (p.scriptname<>sname);
+    p.scriptname:=sname;
+    StepsModified:=StepsModified or (p.scriptargs<>buf);
+    p.scriptargs:=buf;
+    if scdir=nil then begin
+      StepsModified:=StepsModified or (p.scriptpath<>'');
+      p.scriptpath:=''
+    end
+    else begin
+      StepsModified:=StepsModified or (p.scriptpath<>scdir.path);
+      p.scriptpath:=scdir.path;
+    end;
+  end
+  else if p.steptype=2 then begin
+    snick:=Switches1.Text;
+    sname:=Switchlist1.Text;
+    buf:=SwitchValue1.Text;
+    p.description:=snick+', '+sname+'='+buf;
+    StepList.Cells[pcoldesc,n]:=p.description;
+    StepList.Cells[pcoltype,n]:=rsSwitch;
+    StepsModified:=StepsModified or (p.switchnickname<>snick);
+    p.switchnickname:=snick;
+    StepsModified:=StepsModified or (p.switchname<>sname);
+    p.switchname:=sname;
+    StepsModified:=StepsModified or (p.switchvalue<>buf);
+    p.switchvalue:=buf;
   end;
-  j:=StrToIntDef(StepList.Cells[pcoloffset,n],p.offset);
-  StepsModified:=StepsModified or (p.offset<>j);
-  p.offset:=j;
-  str:=StepList.Cells[pcolfstop,n];
-  StepsModified:=StepsModified or (p.fstop<>str);
-  p.fstop:=str;
-  str:=StepList.Cells[pcolfilter,n];
-  j:=StepList.Columns[pcolfilter-1].PickList.IndexOf(str);
-  if j<0 then j:=0;
-  StepsModified:=StepsModified or (p.filter<>j);
-  p.filter:=j;
-  j:=StrToIntDef(StepList.Cells[pcolcount,n],p.count);
-  StepsModified:=StepsModified or (p.count<>j);
-  p.count:=j;
-  j:=StrToIntDef(StepList.Cells[pcoldither,n],-1);
-  ok:=j>0;
-  StepsModified:=StepsModified or (p.dither<>ok);
-  p.dither:=(p.frtype=LIGHT) and ok;
-  StepsModified:=StepsModified or (ok and (p.dithercount<>j));
-  if ok then
-     p.dithercount:=j
-  else
-    p.dithercount:=0;
-  ok:=StepList.Cells[pcolafstart,n]='1';
-  StepsModified:=StepsModified or (p.autofocusstart<>ok);
-  p.autofocusstart:=(p.frtype=LIGHT) and ok;
-  j:=StrToIntDef(StepList.Cells[pcolafevery,n],-1);
-  ok:=j>0;
-  StepsModified:=StepsModified or (p.autofocus<>ok);
-  p.autofocus:=(p.frtype=LIGHT) and ok;
-  StepsModified:=StepsModified or (ok and (p.autofocuscount<>j));
-  if ok then
-     p.autofocuscount:=j
-  else
-     p.autofocuscount:=0;
-  // reset donecount if the id change
-  if p.id<>oldid then
-    p.donecount:=0;
-  StepList.Cells[1,n]:=p.description;
   SetStep(n,p);
   SavePlanModified(false);
 end;
@@ -2894,6 +3179,14 @@ begin
 end;
 
 procedure Tf_EditTargets.BtnAddStepClick(Sender: TObject);
+var p: TPoint;
+begin
+  p:=Point(Tcontrol(Sender).Left,Tcontrol(Sender).Top+Tcontrol(Sender).Height);
+  p:=Tcontrol(Sender).Parent.ClientToScreen(p);
+  PopupAddStep.PopUp(p.x,p.y);
+end;
+
+procedure Tf_EditTargets.MenuAddCaptureStepClick(Sender: TObject);
 var txt:string;
     i,n: integer;
     p,pp: TStep;
@@ -2903,13 +3196,54 @@ begin
   n:=StepList.Row;
   if n >= 1 then begin
     pp:=TStep(StepList.Objects[0,n]);
-    p.Assign(pp);
+    if pp.steptype=0 then p.Assign(pp);
   end;
+  p.steptype:=0;
   p.description:=txt;
   StepList.RowCount:=StepList.RowCount+1;
   i:=StepList.RowCount-1;
   StepList.Cells[pcolseq,i]:=IntToStr(i);
   StepList.Cells[pcoldesc,i]:=txt;
+  StepList.Objects[pcolseq,i]:=p;
+  StepList.Row:=i;
+  StepsModified:=true;
+  SetStep(i,p);
+  SavePlanModified(false);
+end;
+
+procedure Tf_EditTargets.MenuAddScriptStepClick(Sender: TObject);
+var txt:string;
+    i: integer;
+    p: TStep;
+begin
+  p:=TStep.Create;
+  txt:=rsScript;
+  p.description:=txt;
+  p.steptype:=1;
+  StepList.RowCount:=StepList.RowCount+1;
+  i:=StepList.RowCount-1;
+  StepList.Cells[pcolseq,i]:=IntToStr(i);
+  StepList.Cells[pcoltype,i]:=txt;
+  StepList.Objects[pcolseq,i]:=p;
+  StepList.Row:=i;
+  StepsModified:=true;
+  SetStep(i,p);
+  SavePlanModified(false);
+end;
+
+procedure Tf_EditTargets.MenuAddSwitchStepClick(Sender: TObject);
+var txt:string;
+    i: integer;
+    p: TStep;
+begin
+  p:=TStep.Create;
+  txt:=rsSwitch;
+  p.description:=txt;
+  p.steptype:=2;
+  StepList.RowCount:=StepList.RowCount+1;
+  i:=StepList.RowCount-1;
+  StepList.Cells[pcolseq,i]:=IntToStr(i);
+  StepList.Cells[pcoltype,i]:=txt;
   StepList.Objects[pcolseq,i]:=p;
   StepList.Row:=i;
   StepsModified:=true;
@@ -2997,6 +3331,7 @@ try
   pfile.SetValue('/StepNum',n);
   for i:=1 to n do begin
     p:=TStep(StepList.Objects[0,i]);
+    pfile.SetValue('/Steps/Step'+inttostr(i)+'/Type',p.steptype);
     pfile.SetValue('/Steps/Step'+inttostr(i)+'/Description',p.description);
     pfile.SetValue('/Steps/Step'+inttostr(i)+'/FrameType',trim(FrameName[ord(p.frtype)]));
     pfile.SetValue('/Steps/Step'+inttostr(i)+'/Exposure',p.exposure);
@@ -3020,6 +3355,12 @@ try
     pfile.SetValue('/Steps/Step'+inttostr(i)+'/AutofocusStart',p.autofocusstart);
     pfile.SetValue('/Steps/Step'+inttostr(i)+'/Autofocus',p.autofocus);
     pfile.SetValue('/Steps/Step'+inttostr(i)+'/AutofocusCount',p.autofocuscount);
+    pfile.SetValue('/Steps/Step'+inttostr(i)+'/ScriptName',p.scriptname);
+    pfile.SetValue('/Steps/Step'+inttostr(i)+'/ScriptPath',p.scriptpath);
+    pfile.SetValue('/Steps/Step'+inttostr(i)+'/ScriptArgs',p.scriptargs);
+    pfile.SetValue('/Steps/Step'+inttostr(i)+'/SwitchNickname',p.switchnickname);
+    pfile.SetValue('/Steps/Step'+inttostr(i)+'/SwitchName',p.switchname);
+    pfile.SetValue('/Steps/Step'+inttostr(i)+'/SwitchValue',p.switchvalue);
   end;
   pfile.Flush;
   pfile.Free;

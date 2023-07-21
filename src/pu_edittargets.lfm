@@ -2,11 +2,11 @@ object f_EditTargets: Tf_EditTargets
   Left = 0
   Height = 677
   Top = 87
-  Width = 990
+  Width = 1024
   ActiveControl = BtnSave
   Caption = 'Edit target list'
   ClientHeight = 677
-  ClientWidth = 990
+  ClientWidth = 1024
   Constraints.MinHeight = 586
   Constraints.MinWidth = 990
   OnCreate = FormCreate
@@ -18,12 +18,12 @@ object f_EditTargets: Tf_EditTargets
     Left = 0
     Height = 396
     Top = 0
-    Width = 990
+    Width = 1024
     Align = alTop
     Anchors = [akLeft, akRight, akBottom]
     BevelOuter = bvNone
     ClientHeight = 396
-    ClientWidth = 990
+    ClientWidth = 1024
     Constraints.MinHeight = 290
     ParentFont = False
     TabOrder = 0
@@ -31,10 +31,10 @@ object f_EditTargets: Tf_EditTargets
       Left = 0
       Height = 97
       Top = 0
-      Width = 990
+      Width = 1024
       Align = alTop
       ClientHeight = 97
-      ClientWidth = 990
+      ClientWidth = 1024
       ParentFont = False
       TabOrder = 0
       object PanelSeq: TPanel
@@ -285,11 +285,11 @@ object f_EditTargets: Tf_EditTargets
         Left = 772
         Height = 95
         Top = 1
-        Width = 217
+        Width = 251
         Align = alClient
         BevelOuter = bvNone
         ClientHeight = 95
-        ClientWidth = 217
+        ClientWidth = 251
         Constraints.MaxWidth = 500
         ParentFont = False
         TabOrder = 1
@@ -297,7 +297,7 @@ object f_EditTargets: Tf_EditTargets
           Left = 0
           Height = 79
           Top = 16
-          Width = 217
+          Width = 251
           Align = alBottom
           Items.Strings = (
             'cbNone'
@@ -330,21 +330,21 @@ object f_EditTargets: Tf_EditTargets
       Left = 0
       Height = 299
       Top = 97
-      Width = 990
+      Width = 1024
       Align = alClient
       BevelOuter = bvNone
       ClientHeight = 299
-      ClientWidth = 990
+      ClientWidth = 1024
       ParentFont = False
       TabOrder = 1
       object PanelTargetOptions: TPanel
         Left = 0
         Height = 48
         Top = 0
-        Width = 990
+        Width = 1024
         Align = alTop
         ClientHeight = 48
-        ClientWidth = 990
+        ClientWidth = 1024
         ParentFont = False
         TabOrder = 1
         object Panel6: TPanel
@@ -382,11 +382,11 @@ object f_EditTargets: Tf_EditTargets
           Left = 261
           Height = 46
           Top = 1
-          Width = 728
+          Width = 762
           Align = alClient
           BevelOuter = bvNone
           ClientHeight = 46
-          ClientWidth = 728
+          ClientWidth = 762
           ParentFont = False
           TabOrder = 0
           object Panel8: TPanel
@@ -510,7 +510,7 @@ object f_EditTargets: Tf_EditTargets
         Height = 251
         Hint = 'The list of target to process in sequence.'
         Top = 48
-        Width = 596
+        Width = 630
         Align = alClient
         AutoFillColumns = True
         ColCount = 9
@@ -518,17 +518,19 @@ object f_EditTargets: Tf_EditTargets
           item
             MinSize = 101
             MaxSize = 202
+            SizePriority = 0
             Title.MultiLine = True
             Title.Caption = 'Object name'
-            Width = 74
+            Width = 120
           end        
           item
-            MinSize = 30
+            MinSize = 80
             MaxSize = 202
+            SizePriority = 0
             Title.ImageIndex = 0
             Title.MultiLine = True
             Title.Caption = 'Template'
-            Width = 74
+            Width = 80
           end        
           item
             MinSize = 86
@@ -544,7 +546,7 @@ object f_EditTargets: Tf_EditTargets
             SizePriority = 0
             Title.MultiLine = True
             Title.Caption = 'Dec'
-            Width = 88
+            Width = 86
           end        
           item
             MinSize = 4
@@ -559,7 +561,7 @@ object f_EditTargets: Tf_EditTargets
             Width = 40
           end        
           item
-            MinSize = 81
+            MinSize = 60
             MaxSize = 81
             PickList.Strings = (
               ''
@@ -569,10 +571,10 @@ object f_EditTargets: Tf_EditTargets
             Title.ImageIndex = 0
             Title.MultiLine = True
             Title.Caption = 'Begin'
-            Width = 71
+            Width = 60
           end        
           item
-            MinSize = 81
+            MinSize = 60
             MaxSize = 81
             PickList.Strings = (
               ''
@@ -582,7 +584,7 @@ object f_EditTargets: Tf_EditTargets
             Title.ImageIndex = 0
             Title.MultiLine = True
             Title.Caption = 'End'
-            Width = 61
+            Width = 60
           end        
           item
             MinSize = 56
@@ -591,7 +593,7 @@ object f_EditTargets: Tf_EditTargets
             Title.ImageIndex = 0
             Title.MultiLine = True
             Title.Caption = 'Repeat'
-            Width = 67
+            Width = 64
           end>
         DefaultColWidth = 30
         HeaderHotZones = [gzFixedCols, gzFixedCells]
@@ -599,7 +601,6 @@ object f_EditTargets: Tf_EditTargets
         Options = [goFixedVertLine, goFixedHorzLine, goVertLine, goHorzLine, goDrawFocusSelected, goColSizing, goRowMoving, goEditing, goTabs, goAlwaysShowEditor, goThumbTracking, goCellHints, goCellEllipsis]
         ParentFont = False
         RowCount = 2
-        ScrollBars = ssAutoVertical
         TabOrder = 0
         TitleImageList = ImageListDay
         OnColRowMoved = TargetListColRowMoved
@@ -614,18 +615,18 @@ object f_EditTargets: Tf_EditTargets
         OnSelection = TargetListSelection
         ColWidths = (
           30
-          74
-          74
+          120
+          80
           86
-          88
+          86
           40
-          71
-          61
-          67
+          60
+          60
+          64
         )
       end
       object PanelTargetDetail: TPanel
-        Left = 600
+        Left = 634
         Height = 251
         Top = 48
         Width = 390
@@ -750,7 +751,7 @@ object f_EditTargets: Tf_EditTargets
         end
       end
       object Splitter2: TSplitter
-        Left = 596
+        Left = 630
         Height = 251
         Top = 48
         Width = 4
@@ -766,12 +767,12 @@ object f_EditTargets: Tf_EditTargets
     Left = 0
     Height = 247
     Top = 400
-    Width = 990
+    Width = 1024
     Align = alBottom
     Anchors = [akTop, akLeft, akRight]
     BevelOuter = bvNone
     ClientHeight = 247
-    ClientWidth = 990
+    ClientWidth = 1024
     Constraints.MinHeight = 160
     ParentFont = False
     TabOrder = 1
@@ -779,7 +780,7 @@ object f_EditTargets: Tf_EditTargets
       Left = 0
       Height = 247
       Top = 0
-      Width = 990
+      Width = 1024
       ActivePage = PlanObject
       Align = alClient
       ParentFont = False
@@ -789,33 +790,35 @@ object f_EditTargets: Tf_EditTargets
       object PlanObject: TTabSheet
         Caption = 'PlanObject'
         ClientHeight = 243
-        ClientWidth = 986
+        ClientWidth = 1020
         ParentFont = False
         object Panel9: TPanel
           Left = 0
           Height = 243
           Top = 0
-          Width = 986
+          Width = 1020
           Align = alClient
           BevelOuter = bvNone
           ClientHeight = 243
-          ClientWidth = 986
+          ClientWidth = 1020
           ParentFont = False
           TabOrder = 0
           object StepList: TStringGrid
             Left = 0
-            Height = 183
-            Top = 60
-            Width = 986
+            Height = 171
+            Top = 72
+            Width = 1020
             Align = alClient
             AutoFillColumns = True
             ColCount = 14
             Columns = <            
               item
+                MinSize = 120
                 MaxSize = 202
+                SizePriority = 0
                 Title.MultiLine = True
                 Title.Caption = 'Description'
-                Width = 72
+                Width = 120
               end            
               item
                 ButtonStyle = cbsPickList
@@ -826,25 +829,22 @@ object f_EditTargets: Tf_EditTargets
                   'Dark'
                   'Flat'
                 )
-                SizePriority = 0
                 Title.MultiLine = True
                 Title.Caption = 'Type'
-                Width = 71
+                Width = 72
               end            
               item
                 MaxSize = 202
-                SizePriority = 0
                 Title.MultiLine = True
                 Title.Caption = 'Exposure'
-                Width = 81
+                Width = 72
               end            
               item
                 MinSize = 71
                 MaxSize = 71
-                SizePriority = 0
                 Title.MultiLine = True
                 Title.Caption = 'Stack'
-                Width = 71
+                Width = 72
               end            
               item
                 ButtonStyle = cbsPickList
@@ -853,10 +853,9 @@ object f_EditTargets: Tf_EditTargets
                 PickList.Strings = (
                   '1x1'
                 )
-                SizePriority = 0
                 Title.MultiLine = True
                 Title.Caption = 'Binning'
-                Width = 81
+                Width = 72
               end            
               item
                 ButtonStyle = cbsPickList
@@ -864,17 +863,17 @@ object f_EditTargets: Tf_EditTargets
                 PickList.Strings = (
                   'No change'
                 )
+                SizePriority = 0
                 Title.MultiLine = True
                 Title.Caption = 'Filter'
-                Width = 72
+                Width = 69
               end            
               item
                 MinSize = 71
                 MaxSize = 71
-                SizePriority = 0
                 Title.MultiLine = True
                 Title.Caption = 'Count'
-                Width = 71
+                Width = 72
               end            
               item
                 ButtonStyle = cbsCheckboxColumn
@@ -911,14 +910,13 @@ object f_EditTargets: Tf_EditTargets
                 ButtonStyle = cbsPickList
                 Title.MultiLine = True
                 Title.Caption = 'F-stop'
-                Width = 73
+                Width = 77
               end>
             DefaultColWidth = 30
             MouseWheelOption = mwGrid
             Options = [goFixedVertLine, goFixedHorzLine, goVertLine, goHorzLine, goDrawFocusSelected, goColSizing, goRowMoving, goEditing, goTabs, goAlwaysShowEditor, goThumbTracking, goCellHints, goCellEllipsis]
             ParentFont = False
             RowCount = 1
-            ScrollBars = ssAutoVertical
             TabOrder = 0
             OnCheckboxToggled = StepListCheckboxToggled
             OnColRowMoved = StepListColRowMoved
@@ -929,107 +927,322 @@ object f_EditTargets: Tf_EditTargets
             OnValidateEntry = StepListValidateEntry
             ColWidths = (
               30
-              72
-              71
-              81
-              71
-              81
-              72
-              71
+              120
               72
               72
               72
               72
+              69
               72
-              73
+              72
+              72
+              72
+              72
+              72
+              77
             )
           end
           object Panel17: TPanel
             Left = 0
-            Height = 60
+            Height = 72
             Top = 0
-            Width = 986
+            Width = 1020
             Align = alTop
             BevelOuter = bvNone
-            ClientHeight = 60
-            ClientWidth = 986
+            ClientHeight = 72
+            ClientWidth = 1020
             ParentFont = False
             TabOrder = 1
-            object Label1: TLabel
-              AnchorSideTop.Side = asrCenter
-              Left = 4
-              Height = 18
-              Top = 5
-              Width = 57
-              Anchors = [akLeft]
-              Caption = 'Template'
-              ParentColor = False
-              ParentFont = False
-            end
-            object PlanName: TLabel
-              AnchorSideTop.Control = Label1
-              AnchorSideTop.Side = asrCenter
-              Left = 80
-              Height = 18
-              Top = 5
-              Width = 68
-              Caption = 'PlanName'
-              Font.Style = [fsBold]
-              ParentColor = False
-              ParentFont = False
-            end
-            object LabelMsg: TLabel
-              AnchorSideTop.Control = Label1
-              AnchorSideTop.Side = asrCenter
-              Left = 260
-              Height = 18
-              Top = 5
-              Width = 59
-              Caption = 'LabelMsg'
-              ParentColor = False
-              ParentFont = False
-            end
-            object BtnSaveTemplate: TButton
-              AnchorSideTop.Control = BtnAddStep
-              Left = 320
-              Height = 25
-              Top = 28
-              Width = 150
-              Caption = 'Save template'
-              OnClick = BtnSaveTemplatePopup
+            object PageControlStepType: TPageControl
+              Left = 552
+              Height = 72
+              Top = 0
+              Width = 468
+              ActivePage = StepTypeScript
+              Align = alClient
+              ShowTabs = False
+              TabIndex = 1
               TabOrder = 0
+              object StepTypeCapture: TTabSheet
+                Caption = 'StepTypeCapture'
+                ClientHeight = 68
+                ClientWidth = 464
+                object Panel7: TPanel
+                  Left = 0
+                  Height = 68
+                  Top = 0
+                  Width = 464
+                  Align = alClient
+                  BevelOuter = bvNone
+                  TabOrder = 0
+                end
+              end
+              object StepTypeScript: TTabSheet
+                Caption = 'StepTypeScript'
+                ClientHeight = 68
+                ClientWidth = 464
+                object Panel15: TPanel
+                  Left = 0
+                  Height = 68
+                  Top = 0
+                  Width = 464
+                  Align = alClient
+                  BevelOuter = bvNone
+                  ClientHeight = 68
+                  ClientWidth = 464
+                  ParentFont = False
+                  TabOrder = 0
+                  object Label17: TLabel
+                    AnchorSideTop.Control = ScriptList1
+                    AnchorSideTop.Side = asrCenter
+                    Left = 0
+                    Height = 18
+                    Top = 7
+                    Width = 35
+                    Caption = 'Script'
+                    ParentColor = False
+                    ParentFont = False
+                  end
+                  object ScriptList1: TComboBox
+                    AnchorSideLeft.Control = ScriptParam1
+                    Left = 114
+                    Height = 32
+                    Top = 0
+                    Width = 168
+                    ItemHeight = 18
+                    OnChange = StepChange
+                    ParentFont = False
+                    Style = csDropDownList
+                    TabOrder = 0
+                  end
+                  object BtnEditScript1: TButton
+                    AnchorSideLeft.Control = ScriptList1
+                    AnchorSideLeft.Side = asrBottom
+                    AnchorSideTop.Control = ScriptList1
+                    AnchorSideTop.Side = asrCenter
+                    Left = 290
+                    Height = 25
+                    Top = 4
+                    Width = 71
+                    BorderSpacing.Left = 8
+                    Caption = 'Edit'
+                    OnClick = BtnScript1Click
+                    ParentFont = False
+                    TabOrder = 1
+                  end
+                  object BtnEditNewScript1: TButton
+                    AnchorSideLeft.Control = BtnEditScript1
+                    AnchorSideLeft.Side = asrBottom
+                    AnchorSideTop.Control = ScriptList1
+                    AnchorSideTop.Side = asrCenter
+                    Left = 369
+                    Height = 25
+                    Top = 4
+                    Width = 81
+                    BorderSpacing.Left = 8
+                    Caption = 'New'
+                    OnClick = BtnScript1Click
+                    ParentFont = False
+                    TabOrder = 2
+                  end
+                  object Label14: TLabel
+                    AnchorSideTop.Control = ScriptParam1
+                    AnchorSideTop.Side = asrCenter
+                    Left = 0
+                    Height = 18
+                    Top = 43
+                    Width = 106
+                    Caption = 'Script arguments'
+                    ParentColor = False
+                  end
+                  object ScriptParam1: TEdit
+                    AnchorSideLeft.Control = Label14
+                    AnchorSideLeft.Side = asrBottom
+                    Left = 114
+                    Height = 32
+                    Top = 36
+                    Width = 340
+                    BorderSpacing.Left = 8
+                    OnEditingDone = StepChange
+                    TabOrder = 3
+                  end
+                end
+              end
+              object StepTypeSwitch: TTabSheet
+                Caption = 'StepTypeSwitch'
+                ClientHeight = 68
+                ClientWidth = 464
+                object Panel5: TPanel
+                  Left = 0
+                  Height = 68
+                  Top = 0
+                  Width = 464
+                  Align = alClient
+                  BevelOuter = bvNone
+                  ClientHeight = 68
+                  ClientWidth = 464
+                  TabOrder = 0
+                  object Label19: TLabel
+                    Left = 0
+                    Height = 18
+                    Top = 7
+                    Width = 111
+                    Caption = 'Switch connection'
+                    ParentColor = False
+                  end
+                  object Switches1: TComboBox
+                    AnchorSideLeft.Control = Label19
+                    AnchorSideLeft.Side = asrBottom
+                    AnchorSideTop.Control = Label19
+                    AnchorSideTop.Side = asrCenter
+                    Left = 119
+                    Height = 32
+                    Top = 0
+                    Width = 164
+                    BorderSpacing.Left = 8
+                    ItemHeight = 24
+                    OnChange = Switches1Change
+                    TabOrder = 0
+                    Text = 'Switches1'
+                  end
+                  object Label20: TLabel
+                    AnchorSideLeft.Control = Switches1
+                    AnchorSideLeft.Side = asrBottom
+                    AnchorSideTop.Control = Label19
+                    AnchorSideTop.Side = asrCenter
+                    Left = 291
+                    Height = 18
+                    Top = 7
+                    Width = 39
+                    BorderSpacing.Left = 8
+                    Caption = 'switch'
+                    ParentColor = False
+                  end
+                  object Switchlist1: TComboBox
+                    AnchorSideLeft.Control = Label20
+                    AnchorSideLeft.Side = asrBottom
+                    AnchorSideTop.Control = Label19
+                    AnchorSideTop.Side = asrCenter
+                    Left = 338
+                    Height = 32
+                    Top = 0
+                    Width = 126
+                    BorderSpacing.Left = 8
+                    ItemHeight = 24
+                    OnChange = StepChange
+                    TabOrder = 1
+                    Text = 'Switchlist1'
+                  end
+                  object Label21: TLabel
+                    AnchorSideLeft.Control = Label19
+                    Left = 0
+                    Height = 18
+                    Top = 44
+                    Width = 34
+                    Caption = 'Value'
+                    ParentColor = False
+                  end
+                  object SwitchValue1: TEdit
+                    AnchorSideLeft.Control = Switches1
+                    AnchorSideTop.Control = Label21
+                    AnchorSideTop.Side = asrCenter
+                    Left = 119
+                    Height = 32
+                    Top = 37
+                    Width = 164
+                    OnChange = StepChange
+                    TabOrder = 2
+                    Text = 'SwitchValue1'
+                  end
+                end
+              end
             end
-            object BtnAddStep: TButton
-              Left = 4
-              Height = 25
-              Top = 28
-              Width = 150
-              Caption = 'Add step'
-              OnClick = BtnAddStepClick
-              ParentFont = False
+            object Panel10: TPanel
+              Left = 0
+              Height = 72
+              Top = 0
+              Width = 552
+              Align = alLeft
+              BevelOuter = bvNone
+              ClientHeight = 72
+              ClientWidth = 552
               TabOrder = 1
-            end
-            object BtnRemoveStep: TButton
-              AnchorSideTop.Control = BtnAddStep
-              Left = 162
-              Height = 25
-              Top = 28
-              Width = 150
-              Caption = 'Remove step'
-              OnClick = BtnRemoveStepClick
-              ParentFont = False
-              TabOrder = 2
-            end
-            object BtnDeleteTemplate: TButton
-              AnchorSideTop.Control = BtnAddStep
-              Left = 478
-              Height = 25
-              Top = 28
-              Width = 150
-              Caption = 'Delete template'
-              OnClick = BtnDeleteTemplateClick
-              ParentFont = False
-              TabOrder = 3
+              object BtnDeleteTemplate: TButton
+                AnchorSideTop.Control = BtnAddStep
+                Left = 400
+                Height = 25
+                Top = 40
+                Width = 150
+                Caption = 'Delete template'
+                OnClick = BtnDeleteTemplateClick
+                ParentFont = False
+                TabOrder = 0
+              end
+              object Label1: TLabel
+                AnchorSideTop.Side = asrCenter
+                Left = 4
+                Height = 18
+                Top = 9
+                Width = 57
+                Anchors = [akLeft]
+                Caption = 'Template'
+                ParentColor = False
+                ParentFont = False
+              end
+              object PlanName: TLabel
+                AnchorSideTop.Control = Label1
+                AnchorSideTop.Side = asrCenter
+                Left = 76
+                Height = 18
+                Top = 9
+                Width = 68
+                Caption = 'PlanName'
+                Font.Style = [fsBold]
+                ParentColor = False
+                ParentFont = False
+              end
+              object LabelMsg: TLabel
+                AnchorSideTop.Control = Label1
+                AnchorSideTop.Side = asrCenter
+                Left = 256
+                Height = 18
+                Top = 9
+                Width = 59
+                Caption = 'LabelMsg'
+                ParentColor = False
+                ParentFont = False
+              end
+              object BtnSaveTemplate: TButton
+                AnchorSideTop.Control = BtnAddStep
+                Left = 248
+                Height = 25
+                Top = 40
+                Width = 150
+                Caption = 'Save template'
+                OnClick = BtnSaveTemplatePopup
+                TabOrder = 1
+              end
+              object BtnAddStep: TButton
+                Left = 4
+                Height = 25
+                Top = 40
+                Width = 120
+                Caption = 'Add step'
+                OnClick = BtnAddStepClick
+                ParentFont = False
+                TabOrder = 2
+              end
+              object BtnRemoveStep: TButton
+                AnchorSideTop.Control = BtnAddStep
+                Left = 126
+                Height = 25
+                Top = 40
+                Width = 120
+                Caption = 'Remove step'
+                OnClick = BtnRemoveStepClick
+                ParentFont = False
+                TabOrder = 3
+              end
             end
           end
         end
@@ -1037,17 +1250,17 @@ object f_EditTargets: Tf_EditTargets
       object PlanScript: TTabSheet
         Caption = 'PlanScript'
         ClientHeight = 243
-        ClientWidth = 986
+        ClientWidth = 1020
         ParentFont = False
         object Panel14: TPanel
           Left = 0
           Height = 243
           Top = 0
-          Width = 986
+          Width = 1020
           Align = alClient
           BevelOuter = bvNone
           ClientHeight = 243
-          ClientWidth = 986
+          ClientWidth = 1020
           ParentFont = False
           TabOrder = 0
           object Label15: TLabel
@@ -1129,17 +1342,17 @@ object f_EditTargets: Tf_EditTargets
       object PlanFlat: TTabSheet
         Caption = 'PlanFlat'
         ClientHeight = 243
-        ClientWidth = 986
+        ClientWidth = 1020
         ParentFont = False
         object Panel1: TPanel
           Left = 0
           Height = 170
           Top = 0
-          Width = 986
+          Width = 1020
           Align = alTop
           BevelOuter = bvNone
           ClientHeight = 170
-          ClientWidth = 986
+          ClientWidth = 1020
           ParentFont = False
           TabOrder = 0
           object GroupBox7: TGroupBox
@@ -1415,7 +1628,7 @@ object f_EditTargets: Tf_EditTargets
       object PlanSwitch: TTabSheet
         Caption = 'PlanSwitch'
         ClientHeight = 243
-        ClientWidth = 986
+        ClientWidth = 1020
         object Label9: TLabel
           Left = 24
           Height = 18
@@ -1497,15 +1710,15 @@ object f_EditTargets: Tf_EditTargets
     Left = 0
     Height = 30
     Top = 647
-    Width = 990
+    Width = 1024
     Align = alBottom
     ClientHeight = 30
-    ClientWidth = 990
+    ClientWidth = 1024
     Constraints.MinHeight = 30
     ParentFont = False
     TabOrder = 2
     object BtnCancel: TButton
-      Left = 600
+      Left = 634
       Height = 25
       Top = 2
       Width = 120
@@ -1516,7 +1729,7 @@ object f_EditTargets: Tf_EditTargets
       TabOrder = 0
     end
     object BtnSave: TButton
-      Left = 736
+      Left = 770
       Height = 25
       Hint = 'Save the list and close this window.'
       Top = 2
@@ -1528,7 +1741,7 @@ object f_EditTargets: Tf_EditTargets
       TabOrder = 1
     end
     object BtnSaveAs: TButton
-      Left = 869
+      Left = 903
       Height = 25
       Hint = 'Save the list with a new name and close this window.'
       Top = 2
@@ -1554,7 +1767,7 @@ object f_EditTargets: Tf_EditTargets
     Left = 0
     Height = 4
     Top = 396
-    Width = 990
+    Width = 1024
     Align = alNone
     Anchors = [akLeft, akRight]
     Beveled = True
@@ -1693,6 +1906,22 @@ object f_EditTargets: Tf_EditTargets
     object MenuSaveTemplateAs: TMenuItem
       Caption = 'MenuSaveTemplateAs'
       OnClick = BtnSaveTemplateAsClick
+    end
+  end
+  object PopupAddStep: TPopupMenu
+    Left = 63
+    Top = 520
+    object MenuAddCaptureStep: TMenuItem
+      Caption = 'Add capture'
+      OnClick = MenuAddCaptureStepClick
+    end
+    object MenuAddScriptStep: TMenuItem
+      Caption = 'Add script'
+      OnClick = MenuAddScriptStepClick
+    end
+    object MenuAddSwitchStep: TMenuItem
+      Caption = 'Add switch'
+      OnClick = MenuAddSwitchStepClick
     end
   end
 end
