@@ -482,7 +482,7 @@ begin
   cbAutofocusTemp.Caption:=rsAutofocusAft2;
   cbUpdCoord.Caption := Format(rsUpdateRADec2+'', [blank]);
   cbSolarTracking.Caption:= rsActivateSola;
-  cbNoAutoguidingChange.Caption:=rsDoNotChangeA;
+  cbNoAutoguidingChange.Caption:=rsDoNotStartAu;
   cbDarkNight.Hint:=rsWaitForFullD;
   cbSkip.Hint:=Format(rsDonTWaitForT, [crlf]);
   cbAstrometry.Hint:=rsUsePlateSolv;

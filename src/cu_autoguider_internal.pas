@@ -31,6 +31,10 @@ uses cu_autoguider, u_global, u_utils, math, fu_internalguider, indiapi, simplet
 type
   star_position=record x1,y1,x2,y2,flux: double; end;//for internal guider
   star_position_array= array of star_position;//for internal guider
+  TSpectroTarget = record
+     RA,DEC: double;
+     valid: boolean;
+  end;
 
 
   T_autoguider_internal = class(T_autoguider)
@@ -54,6 +58,7 @@ type
     TimerWaitPulseGuiding: TSimpleTimer;
     FRecoveringCamera: boolean;
     FRecoveringCameraCount: integer;
+    FSpectroTarget: TSpectroTarget;
     function  measure_drift(var initialize: boolean; out drX,drY :double) : integer;
     function angular_distance(a1,a2:double):double;
     Procedure StartGuideExposure;
@@ -64,6 +69,7 @@ type
     Procedure WriteLog( buf : string);
     Procedure CloseLog;
     procedure TimerWaitPulseGuidingTimer(const Sender: TObject);
+    function SelectSpectroTarget: boolean;
   protected
     Procedure ProcessEvent(txt:string); override;
     procedure Execute; override;
@@ -186,6 +192,9 @@ begin
   TimerWaitPulseGuiding.OnTimer:=@TimerWaitPulseGuidingTimer;
   FRecoveringCamera:=false;
   FRecoveringCameraCount:=0;
+  FSpectroTarget.RA:=NullCoord;
+  FSpectroTarget.DEC:=NullCoord;
+  FSpectroTarget.valid:=false;
 end;
 
 Destructor T_autoguider_internal.Destroy;
@@ -982,6 +991,8 @@ begin
   LastBacklash:=false;
   FirstDecDirectionChange:=true;
   LastBacklashDuration:=0;
+
+  SelectSpectroTarget;
 
   InternalguiderInitialize:=true; //initialize;
 
@@ -2175,15 +2186,34 @@ begin
 end;
 
 function T_autoguider_internal.SpectroSetTarget(TargetRa,TargetDec: double):boolean;
+begin
+// set Spectro target position ra,de J2000 in hh.hhhh dd.dddd
+// this position is used the next time guiding is started
+  if finternalguider.SpectroFunctions and finternalguider.cbUseAstrometry.Checked
+     and(cdcwcs_sky2xy<>nil) and (TargetRa<>NullCoord)and(TargetDec<>NullCoord) then begin
+    FSpectroTarget.RA:=TargetRa;
+    FSpectroTarget.DEC:=TargetDec;
+    FSpectroTarget.valid:=true;
+    result:=true;
+  end
+  else begin
+    FSpectroTarget.RA:=NullCoord;
+    FSpectroTarget.DEC:=NullCoord;
+    FSpectroTarget.valid:=false;
+    result:=false;
+  end;
+end;
+
+function T_autoguider_internal.SelectSpectroTarget:boolean;
 var n,bin,gain,offset: integer;
     exp,xt,yt: double;
     c: TcdcWCScoord;
 begin
-// set Spectro target position ra,de J2000 in hh.hhhh dd.dddd
+// set Spectro target at the position set by SpectroSetTarget
 // compute the target x,y position in the guide image
 // so the target is moved to the slit when the guiding is started
   if finternalguider.SpectroFunctions and finternalguider.cbUseAstrometry.Checked
-     and(cdcwcs_sky2xy<>nil) and (TargetRa<>NullCoord)and(TargetDec<>NullCoord) then begin
+     and(cdcwcs_sky2xy<>nil) and FSpectroTarget.valid and (FSpectroTarget.RA<>NullCoord)and(FSpectroTarget.DEC<>NullCoord) then begin
     result:=false;
     exp:=finternalguider.AstrometryExp.value;
     bin:=finternalguider.Binning.Value;
@@ -2194,8 +2224,8 @@ begin
     if FCamera.ControlExposure(exp,bin,bin,LIGHT,ReadoutModeAstrometry,gain,offset) then begin
       FAstrometry.SolveGuideImage(true);
       if Fastrometry.LastResult then begin
-         c.ra:=TargetRa*15;
-         c.dec:=TargetDec;
+         c.ra:=FSpectroTarget.RA*15;
+         c.dec:=FSpectroTarget.DEC;
          n:=cdcwcs_sky2xy(@c,1);
          if n=0 then begin
            xt:=c.x;
@@ -2222,10 +2252,10 @@ begin
       end
       else if Finternalguider.GuideLock then begin
          // try to find the brightest star instead
-         msg('Try to use the brigthest star instead of the specified coordinates',1);
+         msg('Astrometry fail, try to use the brigthest star instead of the specified coordinates',1);
          finternalguider.GuideLockNextX:=-10;
          finternalguider.GuideLockNextY:=-10;
-         result:=true;
+         result:=false;
       end
       else begin
         // nothing can be done
@@ -2239,7 +2269,7 @@ begin
     end;
   end
   else begin
-    result:=true;
+    result:=false;
   end;
 end;
 

@@ -131,7 +131,7 @@ type
       procedure RunErrorAction;
       procedure RunEndAction(confirm: boolean=true);
       function StopGuider:boolean;
-      function StartGuider(TargetRa,TargetDec: double):boolean;
+      function StartGuider:boolean;
       function Slew(ra,de: double; precision,planprecision: boolean):boolean;
       procedure TargetTimerTimer(Sender: TObject);
       procedure TargetRepeatTimerTimer(Sender: TObject);
@@ -2454,13 +2454,18 @@ begin
       else if ((t.ra=NullCoord)or(t.de=NullCoord))and(not mount.Tracking) then
          mount.Track;
       // start guiding
+      if autoguider is T_autoguider_internal then begin
+        // set the target position if the spectroscopy function is activated, do nothing otherwise.
+        // implemented only for the internal guider.
+        autoguider.SpectroSetTarget(t.ra,t.de);
+      end;
       autostartguider:=(Autoguider<>nil)and(Autoguider.AutoguiderType<>agNONE)and
                        (Autoguider.AutoguiderType<>agDITHER) and (Autoguider.State<>GUIDER_DISCONNECTED)and
                        (Autoguider.State<>GUIDER_GUIDING)and(not t.noautoguidingchange)and
                        ((not autofocusstart)or (InplaceAutofocus and (not AutofocusPauseGuider))) and
                        (not isCalibrationTarget);
       if autostartguider then begin
-        if not StartGuider(t.ra,t.de) then begin
+        if not StartGuider then begin
           InitTargetError:=rsFailedToStar;
           exit;
         end;
@@ -2745,16 +2750,11 @@ begin
   result:=Autoguider.WaitBusy(60);
 end;
 
-function T_Targets.StartGuider(TargetRa,TargetDec: double):boolean;
+function T_Targets.StartGuider:boolean;
 begin
  result:=false;
  if Autoguider=nil then exit;
  if (mount.Status=devConnected)and(not mount.Tracking) then exit;
-  if autoguider is T_autoguider_internal then begin
-    // set the target position if the spectroscopy function is activated, do nothing otherwise.
-    // implemented only for the internal guider.
-    if not autoguider.SpectroSetTarget(TargetRa,TargetDec) then exit;
-  end;
   msg(rsStartAutogui,2);
   Autoguider.Guide(true);
   result:=Autoguider.WaitGuiding(CalibrationDelay+SettleMaxTime);
@@ -2769,7 +2769,7 @@ begin
     f_pause.Text:=Format(rsAutoguiderNo2, [inttostr(CalibrationDelay+
       SettleMaxTime), crlf]);
     if f_pause.Wait(WaitResponseTime,false) then begin
-       result:=StartGuider(TargetRa,TargetDec);
+       result:=StartGuider;
        exit;
     end;
   end;
@@ -3063,11 +3063,13 @@ var t: TTarget;
     p: T_Plan;
 begin
  result:=false;
- t:=Targets[FCurrentTarget];
- if t<>nil then begin
-   p:=T_Plan(t.plan);
-   if p<>nil then begin
-     result:=p.ScriptRunning;
+ if FCurrentTarget>=0 then begin
+   t:=Targets[FCurrentTarget];
+   if t<>nil then begin
+     p:=T_Plan(t.plan);
+     if p<>nil then begin
+       result:=p.ScriptRunning;
+     end;
    end;
  end;
  result:=result or FScriptRunning;

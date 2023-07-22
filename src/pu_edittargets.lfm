@@ -744,8 +744,8 @@ object f_EditTargets: Tf_EditTargets
             Height = 22
             Hint = 'This option is normally unchecked, use it only if you manage the pointing and autoguiding by script.'
             Top = 179
-            Width = 230
-            Caption = 'Do not change autoguiding state'
+            Width = 179
+            Caption = 'Do not start autoguiding'
             TabOrder = 7
           end
         end

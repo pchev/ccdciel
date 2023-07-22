@@ -1476,7 +1476,7 @@ resourcestring
   rsAdditionalOp = 'Additional options for';
   rsAutofocusAft2 = 'Autofocus after temperature change';
   rsBacklashCali = 'Backlash calibration';
-  rsDoNotChangeA = 'Do not change autoguiding state';
+  rsDoNotStartAu = 'Do not start autoguiding';
   rsUseFinderCam = 'Use finder camera';
   rsUseThisDevic = 'Use this device if the main camera cannot be used for plate solving. Also configure the camera to use in Preferences/Slewing';
   rsFind = 'Find.';
