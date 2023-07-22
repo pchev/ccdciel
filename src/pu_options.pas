@@ -45,6 +45,8 @@ type
     CdCAdjustFrame: TCheckBox;
     AstUseOnline: TCheckBox;
     AstOnlineKey: TEdit;
+    FileNameSeqSep: TComboBox;
+    Label173: TLabel;
     UseFinderSolver: TCheckBox;
     FinderSolver: TComboBox;
     Label172: TLabel;

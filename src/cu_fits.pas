@@ -4640,12 +4640,12 @@ begin
     else
       fileseqext:='.tif';
     if FileSequenceWidth>0 then fileseqstr:=PadZeros(IntToStr(fileseqnum),FileSequenceWidth);
-    while FileExistsUTF8(slash(Directory)+fn+FilenameSep+fileseqstr+fileseqext) do begin
+    while FileExistsUTF8(slash(Directory)+fn+FilenameSeqSep+fileseqstr+fileseqext) do begin
       inc(fileseqnum);
       fileseqstr:=IntToStr(fileseqnum);
       if FileSequenceWidth>0 then fileseqstr:=PadZeros(IntToStr(fileseqnum),FileSequenceWidth);
     end;
-    fn:=fn+FilenameSep+fileseqstr;
+    fn:=fn+FilenameSeqSep+fileseqstr;
   end;
   result:=fn;
 end;

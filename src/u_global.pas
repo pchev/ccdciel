@@ -223,7 +223,7 @@ type
   {$i revision.inc}
 
 const
-  ccdcielver = '0.9.84';
+  ccdcielver = '0.9.85';
   ccdciel_version='Version beta '+ccdcielver;
   TargetFileVersion = 5;
   Maxclient = 100;
@@ -498,7 +498,7 @@ var
   SubDirActive: array[0..SubDirCount-1] of Boolean;
   FilenameOpt: array[0..FileNameCount-1] of TFilenameList;
   FilenameActive: array[0..FileNameCount-1] of Boolean;
-  FilenameSep: String;
+  FilenameSep, FilenameSeqSep: String;
   FilePack,FileStackFloat: boolean;
   FitsFileExt: string;
   FileSequenceWidth: integer;

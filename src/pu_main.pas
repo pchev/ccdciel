@@ -3456,6 +3456,10 @@ try
       credentialconfig.DeletePath('/ASCOMRestswitch');
     end;
   end;
+  if oldver<'0.9.85' then begin
+    buf:=config.GetValue('/Files/FileNameSep','_');
+    config.SetValue('/Files/FileNameSeqSep',buf);
+  end;
   if config.Modified then begin
      config.SetValue('/Configuration/Version',ccdcielver);
      SaveConfig;
@@ -4847,6 +4851,7 @@ begin
     FileNameActive[i]:=config.GetValue('/Files/FileNameActive'+inttostr(i),i in [0,1,5]);
   end;
   FilenameSep:=config.GetValue('/Files/FileNameSep','_');
+  FilenameSeqSep:=config.GetValue('/Files/FileNameSeqSep','_');
   FitsFileExt:=config.GetValue('/Files/FitsFileExt','.fits');
   FileSequenceWidth:=config.GetValue('/Files/FileSequenceWidth',0);
   FilePack:=config.GetValue('/Files/Pack',false);
@@ -8943,6 +8948,12 @@ begin
         f_option.FilenameSep.ItemIndex:=i;
      end;
    end;
+   f_option.FilenameSeqSep.ItemIndex:=0;
+   for i:=0 to f_option.FilenameSeqSep.Items.Count-1 do begin
+     if f_option.FilenameSeqSep.Items[i]=FilenameSeqSep then begin
+        f_option.FilenameSeqSep.ItemIndex:=i;
+     end;
+   end;
    if FileSequenceWidth>0 then begin
       f_option.UseFileSequenceWidth.Checked:=true;
       f_option.FileSequenceWidth.Enabled:=true;
@@ -9408,6 +9419,7 @@ begin
        config.SetValue('/Files/FileNameActive'+inttostr(i),f_option.FileOptions.Cells[1,i]='1');
      end;
      config.SetValue('/Files/FileNameSep',f_option.FilenameSep.Text);
+     config.SetValue('/Files/FileNameSeqSep',f_option.FilenameSeqSep.Text);
      if f_option.UseFileSequenceWidth.Checked then
         config.SetValue('/Files/FileSequenceWidth',f_option.FileSequenceWidth.Text)
      else

@@ -512,18 +512,20 @@ object f_option: Tf_option
               AnchorSideTop.Side = asrCenter
               Left = 8
               Height = 18
-              Top = 250
+              Top = 254
               Width = 61
               Caption = 'Separator'
               ParentColor = False
               ParentFont = False
             end
             object FilenameSep: TComboBox
-              Left = 88
-              Height = 28
-              Top = 245
-              Width = 79
-              Constraints.MaxHeight = 28
+              AnchorSideLeft.Control = Label123
+              AnchorSideLeft.Side = asrBottom
+              Left = 75
+              Height = 32
+              Top = 247
+              Width = 64
+              BorderSpacing.Left = 6
               ItemHeight = 24
               ItemIndex = 0
               Items.Strings = (
@@ -537,12 +539,15 @@ object f_option: Tf_option
               Text = '_'
             end
             object FileSequenceWidth: TSpinEdit
-              AnchorSideTop.Control = FilenameSep
+              AnchorSideLeft.Control = UseFileSequenceWidth
+              AnchorSideLeft.Side = asrBottom
+              AnchorSideTop.Control = UseFileSequenceWidth
               AnchorSideTop.Side = asrCenter
-              Left = 384
+              Left = 179
               Height = 28
-              Top = 245
+              Top = 285
               Width = 58
+              BorderSpacing.Left = 6
               Constraints.MaxHeight = 28
               MaxValue = 5
               MinValue = 3
@@ -551,11 +556,10 @@ object f_option: Tf_option
               Value = 3
             end
             object UseFileSequenceWidth: TCheckBox
-              AnchorSideTop.Control = FilenameSep
               AnchorSideTop.Side = asrCenter
-              Left = 192
+              Left = 8
               Height = 22
-              Top = 248
+              Top = 288
               Width = 165
               Caption = 'Fixed sequence length'
               OnClick = UseFileSequenceWidthClick
@@ -567,7 +571,7 @@ object f_option: Tf_option
               AnchorSideTop.Side = asrBottom
               Left = 8
               Height = 22
-              Top = 366
+              Top = 374
               Width = 236
               BorderSpacing.Top = 4
               Caption = 'Compress the FITS files with fpack'
@@ -579,7 +583,7 @@ object f_option: Tf_option
               AnchorSideTop.Side = asrBottom
               Left = 8
               Height = 22
-              Top = 392
+              Top = 400
               Width = 258
               BorderSpacing.Top = 4
               Caption = 'Add FITS keywords for DSLR EXIF tags'
@@ -587,14 +591,14 @@ object f_option: Tf_option
               TabOrder = 6
             end
             object SaveFormat: TRadioGroup
-              AnchorSideTop.Control = FilenameSep
+              AnchorSideTop.Control = UseFileSequenceWidth
               AnchorSideTop.Side = asrBottom
               Left = 8
               Height = 53
-              Top = 275
-              Width = 432
+              Top = 318
+              Width = 304
               AutoFill = True
-              BorderSpacing.Top = 2
+              BorderSpacing.Top = 8
               Caption = 'File format'
               ChildSizing.LeftRightSpacing = 6
               ChildSizing.EnlargeHorizontal = crsHomogenousChildResize
@@ -604,7 +608,7 @@ object f_option: Tf_option
               ChildSizing.Layout = cclLeftToRightThenTopToBottom
               ChildSizing.ControlsPerLine = 2
               ClientHeight = 23
-              ClientWidth = 428
+              ClientWidth = 300
               Columns = 2
               Items.Strings = (
                 'FITS'
@@ -617,7 +621,7 @@ object f_option: Tf_option
               AnchorSideTop.Side = asrBottom
               Left = 8
               Height = 22
-              Top = 418
+              Top = 426
               Width = 359
               BorderSpacing.Top = 4
               Caption = 'Save a bitmap file additionally to the standard FITS file'
@@ -629,7 +633,7 @@ object f_option: Tf_option
               AnchorSideTop.Side = asrCenter
               Left = 376
               Height = 30
-              Top = 414
+              Top = 422
               Width = 112
               Constraints.MaxHeight = 30
               ItemHeight = 24
@@ -646,21 +650,24 @@ object f_option: Tf_option
               Text = 'PNG 16bit'
             end
             object Label156: TLabel
-              AnchorSideTop.Control = FitsExt
-              AnchorSideTop.Side = asrCenter
-              Left = 8
+              AnchorSideLeft.Control = SaveFormat
+              AnchorSideLeft.Side = asrBottom
+              AnchorSideTop.Control = SaveFormat
+              Left = 323
               Height = 18
-              Top = 338
+              Top = 318
               Width = 111
+              BorderSpacing.Left = 11
               Caption = 'FITS file extension'
               ParentColor = False
             end
             object FitsExt: TComboBox
-              AnchorSideTop.Control = SaveFormat
+              AnchorSideLeft.Control = Label156
+              AnchorSideTop.Control = Label156
               AnchorSideTop.Side = asrBottom
-              Left = 136
+              Left = 323
               Height = 30
-              Top = 332
+              Top = 340
               Width = 133
               BorderSpacing.Top = 4
               Constraints.MaxHeight = 30
@@ -674,6 +681,40 @@ object f_option: Tf_option
               Style = csDropDownList
               TabOrder = 10
               Text = '.fits'
+            end
+            object Label173: TLabel
+              AnchorSideLeft.Control = FilenameSep
+              AnchorSideLeft.Side = asrBottom
+              AnchorSideTop.Control = FilenameSep
+              AnchorSideTop.Side = asrCenter
+              Left = 149
+              Height = 18
+              Top = 254
+              Width = 123
+              BorderSpacing.Left = 10
+              Caption = 'Sequence separator'
+              ParentColor = False
+            end
+            object FileNameSeqSep: TComboBox
+              AnchorSideLeft.Control = Label173
+              AnchorSideLeft.Side = asrBottom
+              AnchorSideTop.Control = FilenameSep
+              AnchorSideTop.Side = asrCenter
+              Left = 278
+              Height = 32
+              Top = 247
+              Width = 64
+              BorderSpacing.Left = 6
+              ItemHeight = 24
+              ItemIndex = 0
+              Items.Strings = (
+                '_'
+                '-'
+                '.'
+              )
+              Style = csDropDownList
+              TabOrder = 11
+              Text = '_'
             end
           end
           object FolderOpt: TTabSheet
