@@ -4617,7 +4617,7 @@ begin
                  fn:=fn+trim(buf)+FilenameSep;
               end;
       fnStep: if FileNameActive[i] and sequence then begin
-                 fn:=fn+trim(CurrentStepName)+FilenameSep;
+                 if CurrentStepName<>'' then fn:=fn+trim(CurrentStepName)+FilenameSep;
               end;
     end;
   end;
