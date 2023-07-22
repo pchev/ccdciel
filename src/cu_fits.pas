@@ -348,7 +348,7 @@ type
   function PackFits(unpackedfilename,packedfilename: string; out rmsg:string):integer;
   function UnpackFits(packedfilename: string; var ImgStream:TMemoryStream; out rmsg:string):integer;
   function CapturePath(f:TFits; DefFrameType,DefObject,DefExp,DefBin:string; preview,sequence: boolean; StepTotalCount,StepRepeatCount:integer):string;
-  function CaptureFilename(f:TFits; Directory,DefFrameType,DefObject,DefExp,DefBin:string; ForceFITS:boolean=false):string;
+  function CaptureFilename(f:TFits; Directory,DefFrameType,DefObject,DefExp,DefBin:string; sequence:boolean):string;
 
 implementation
 
@@ -4538,7 +4538,7 @@ end;
 result:=fd;
 end;
 
-function CaptureFilename(f:TFits; Directory,DefFrameType,DefObject,DefExp,DefBin:string; ForceFITS:boolean=false):string;
+function CaptureFilename(f:TFits; Directory,DefFrameType,DefObject,DefExp,DefBin:string; sequence:boolean):string;
 var dt: Tdatetime;
     fn,buf,fileseqstr,fileseqext,blankrep,dateobs: string;
     framestr,objectstr,binstr,expstr,filterstr: string;
@@ -4616,6 +4616,9 @@ begin
       fnOffset: if FileNameActive[i] and f.Header.Valueof('OFFSET',buf) then begin
                  fn:=fn+trim(buf)+FilenameSep;
               end;
+      fnStep: if FileNameActive[i] and sequence then begin
+                 fn:=fn+trim(CurrentStepName)+FilenameSep;
+              end;
     end;
   end;
   fn:=StringReplace(fn,' ',blankrep,[rfReplaceAll]);
@@ -4628,7 +4631,7 @@ begin
   if UseFileSequenceNumber then begin
     fileseqnum:=1;
     fileseqstr:=IntToStr(fileseqnum);
-    if (SaveFormat=ffFITS) or FileStackFloat or ForceFITS then begin
+    if (SaveFormat=ffFITS) or FileStackFloat then begin
       if FilePack then
         fileseqext:=FitsFileExt+'.fz'
       else

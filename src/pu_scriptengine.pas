@@ -1517,6 +1517,7 @@ begin
    dir:=slash(dir)+'Finder';
    ForceDirectories(dir);
    basefn:=ExtractFileNameOnly(basefn);
+   if CurrentTargetName<>'' then basefn:=StringReplace(basefn,'%obj%',CurrentTargetName,[rfReplaceAll]);
    basefn:=slash(dir)+basefn;
    i:=1;
    for j:=0 to c-1 do begin
@@ -1551,6 +1552,7 @@ begin
    dir:=slash(dir)+'Guider';
    ForceDirectories(dir);
    basefn:=ExtractFileNameOnly(basefn);
+   if CurrentTargetName<>'' then basefn:=StringReplace(basefn,'%obj%',CurrentTargetName,[rfReplaceAll]);
    basefn:=slash(dir)+basefn;
    i:=1;
    for j:=0 to c-1 do begin
@@ -1580,6 +1582,7 @@ begin
    dir:=slash(dir)+'Guider';
    ForceDirectories(dir);
    basefn:=ExtractFileNameOnly(basefn);
+   if CurrentTargetName<>'' then basefn:=StringReplace(basefn,'%obj%',CurrentTargetName,[rfReplaceAll]);
    basefn:=slash(dir)+basefn;
    i:=1;
    seqstr:=inttostr(i);

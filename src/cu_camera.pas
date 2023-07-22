@@ -649,7 +649,7 @@ if FAddFrames then begin  // stack preview frames
       ForceDirectories(FStackSaveDir);
       msg('Saving individual frames to '+FStackSaveDir);
     end;
-    fn:=CaptureFilename(fs,FStackSaveDir,FrameName[ord(ft)],objectstr,FormatFloat(f9v,Fexptime),inttostr(BinX));
+    fn:=CaptureFilename(fs,FStackSaveDir,FrameName[ord(ft)],objectstr,FormatFloat(f9v,Fexptime),inttostr(BinX),false);
     fn:=slash(FStackSaveDir)+fn+FitsFileExt;
     fs.SaveToFile(fn);
     fs.free;

@@ -1524,6 +1524,7 @@ resourcestring
   rsSwitchConnec = 'Switch connection';
   rsUseAstrometr2 = 'Use astrometry to identify the target';
   rsAstrometryEx = 'Astrometry exposure time';
+  rsPlanStep = 'Plan step';
 
 implementation
 

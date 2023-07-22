@@ -2482,6 +2482,7 @@ begin
    FilenameName[7]:=rsFocusPositio;
    FilenameName[8]:=rsSideOfPier;
    FilenameName[9]:=rsOffset2;
+   FilenameName[10]:=rsPlanStep;
    TBConnect.Hint := rsConnect;
    TBFocus.Hint := rsFocus;
    TBCapture.Hint := rsCapture;
@@ -11221,7 +11222,7 @@ try
  fd:=CapturePath(fits,framestr,objectstr,expstr,binstr,false,f_sequence.Running,f_sequence.StepTotalCount,f_sequence.StepRepeatCount);
  ForceDirectoriesUTF8(fd);
  // construct file name
- fn:=CaptureFilename(fits,fd,framestr,objectstr,expstr,binstr);
+ fn:=CaptureFilename(fits,fd,framestr,objectstr,expstr,binstr,f_sequence.Running);
  // save the file
  if (SaveFormat=ffFITS) or FileStackFloat then begin
    fn:=slash(fd)+fn+FitsFileExt;
