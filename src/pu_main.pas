@@ -16255,7 +16255,7 @@ begin
        result:=result+', ';
        result:=result+rsRA+': '+f_mount.RA.Caption+' ';
        result:=result+rsDec+': '+f_mount.DE.Caption+'<br>';
-       result:=result+f_mount.Pierside.Caption+', '+rsMeridianIn+' '+f_mount.TimeToMeridian.Caption+' '+rsMinutes;
+       result:=result+f_mount.Pierside.Caption+', '+f_mount.LabelMeridian.Caption+' '+f_mount.TimeToMeridian.Caption+' '+rsMinutes;
        result:=result+'<br>';
      end;
      result:=result+'</td></tr>';
