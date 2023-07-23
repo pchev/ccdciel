@@ -1562,7 +1562,7 @@ end;
 procedure GuiderScreen2Fits(x,y: integer; FlipVert: boolean; out xx,yy:integer);
 begin
 try
-  if FlipVert then y:=ScrHeigth-y;
+  if FlipVert then y:=ScrGuideHeigth-y;
   if GuideImgZoom=0  then begin
      xx:=trunc(((x/GuideImgScale0)-GuideOrigX)/GuideImgPixRatio);
      yy:=trunc((y/GuideImgScale0)-GuideOrigY);
@@ -1580,7 +1580,7 @@ end;
 procedure FinderScreen2Fits(x,y: integer; FlipVert: boolean; out xx,yy:integer);
 begin
 try
-  if FlipVert then y:=ScrHeigth-y;
+  if FlipVert then y:=ScrFinderHeigth-y;
   if FinderImgZoom=0  then begin
      xx:=trunc(((x/FinderImgScale0)-FinderOrigX)/FinderImgPixRatio);
      yy:=trunc((y/FinderImgScale0)-FinderOrigY);
@@ -1680,7 +1680,7 @@ try
       yy:=round((y/FinderImgPixRatio+FinderOrigY )* FinderImgZoom);
     end;
   end;
-  if FlipVert then yy:=ScrHeigth-yy;
+  if FlipVert then yy:=ScrFinderHeigth-yy;
 except
   xx:=-1;
   yy:=-1;
