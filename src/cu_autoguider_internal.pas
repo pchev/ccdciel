@@ -43,7 +43,7 @@ type
     pulseRA,pulseDEC,GuideFrameCount, InternalguiderCalibrationDirection,InternalguiderCalibrationStep,
     CalibrationDuration,Calflip,CalCount,Calnrtest,CalDecBacklash,frame_size,Binning,BacklashStep: integer;
     driftX,driftY,driftRA,driftDec,moveRA,moveDEC, Guidethecos,old_moveRA,old_moveDEC,  paEast, paNorth,
-    pulsegainEast,pulsegainWest,pulsegainNorth,pulsegainSouth,Calthecos, Caltheangle,CaldriftOld, ditherX,ditherY,
+    pulsegainEast,pulsegainWest,pulsegainNorth,pulsegainSouth,Calthecos,Orthogonality,Caltheangle,CaldriftOld, ditherX,ditherY,
     GuideStartTime,LogSNR,LogFlux,mean_hfd,CalNorthDec1,CalNorthDec2,CalEastRa1,CalEastRa2,CurrentHFD,MinimumDrift : double;
     LastDecSign: double;
     SameDecSignCount,LastBacklashDuration: integer;
@@ -1774,6 +1774,8 @@ begin
                  else
                    Calflip:=-1; // Flipped image. E.g.if North is up then East is on the right side}
 
+                 Orthogonality:=abs(Caltheangle*rad2deg)-90;
+
                  CalNorthDec2:=Mount.Dec; //mount declination at end of north calibration
 
                  pulsegainNorth:=Calflip*drift*1000/(CalibrationDuration); // [px/sec]
@@ -1933,11 +1935,18 @@ begin
       end;
     7:begin
 
-        msgC:='None';
+        msgC:='';
         unequal:=abs(1-(pulsegainEast/pulsegainWest));
         if unequal>0.2 then begin msgA:='Warning unequal East/West pulse gain!'; msg(msgA,1); msgC:='Unequal'; end else msgA:='';
         unequal:=abs(1-(pulsegainNorth/pulsegainSouth));
         if unequal>0.2 then begin msgB:='Warning unequal North/South pulse gain!'; msg(msgB,1); msgC:='Unequal'; end else msgB:='';
+
+        if abs(Orthogonality)>15 then begin  // 15° tolerance on measured orthogonality
+           msg('Warning Orthogonality error = '+FormatFloat(f1,abs(Orthogonality))+' degrees',1);
+           msgC:=trim(msgC+' '+'Ortho');
+        end;
+
+        if msgC='' then msgC:='None';
 
         Finternalguider.CalDate.Text:=FormatDateTime(dateisoshort,now);
         Finternalguider.CalDeclination.Text:=FormatFloat(f1,CalNorthDec1);
