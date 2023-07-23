@@ -1586,6 +1586,7 @@ begin
   ImageGuide.Parent := GuideImage;
   ImageGuide.Align := alClient;
   ImageGuide.DoubleBuffered:=true;
+  ImageGuide.PopupMenu := GuiderPopUpmenu1;
   ImageGuide.OnResize := @ImageResize;
   ImageGuide.OnPaint := @ImageGuidePaint;
   ImageGuide.OnMouseDown := @ImageGuideMouseDown;
@@ -1605,6 +1606,7 @@ begin
   ImageFinder.Parent := FinderImage;
   ImageFinder.Align := alClient;
   ImageFinder.DoubleBuffered:=true;
+  ImageFinder.PopupMenu := FinderPopUpmenu;
   ImageFinder.OnResize := @ImageResize;
   ImageFinder.OnPaint := @ImageFinderPaint;
   ImageFinder.OnMouseDown := @ImageFinderMouseDown;
