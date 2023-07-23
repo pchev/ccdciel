@@ -144,6 +144,9 @@ type
     MenuAscomFinderCameraSetup: TMenuItem;
     MenuAlpacaFinderCameraSetup: TMenuItem;
     MenuFinder: TMenuItem;
+    MenuImageWindow: TMenuItem;
+    MenuImageSinglepanel: TMenuItem;
+    MenuImageMultipanel: TMenuItem;
     MenuSensorAnalysis: TMenuItem;
     MenuItemFinderSolveSync: TMenuItem;
     MenuItemSelectGuideStar: TMenuItem;
@@ -159,6 +162,11 @@ type
     MenuTabInternalGuider: TMenuItem;
     MenuItemGuiderStopAstrometry: TMenuItem;
     MenuItemGuiderSolve: TMenuItem;
+    FinderImage: TPanel;
+    GuideImage: TPanel;
+    mainimage: TPanel;
+    PanelImage1: TPanel;
+    PanelImage2: TPanel;
     PanelRight7: TPanel;
     ScrollBox2: TScrollBox;
     ScrollBox3: TScrollBox;
@@ -229,7 +237,6 @@ type
     MenuRotator: TMenuItem;
     MenuViewRotator: TMenuItem;
     OpenPictureDialog1: TOpenDialog;
-    PageControlImage: TPageControl;
     PanelRight6: TPanel;
     PanelMsgTabs: TPanel;
     PanelRight: TPanel;
@@ -242,15 +249,14 @@ type
     Separator2: TMenuItem;
     Separator3: TMenuItem;
     Splitter1: TSplitter;
+    Splitter2: TSplitter;
+    Splitter3: TSplitter;
     TabMsgLevel: TTabControl;
     PageInternalGuider: TTabSheet;
-    MainImage: TTabSheet;
-    GuideImage: TTabSheet;
     GuideCameraConnectTimer: TTimer;
     GuidePlotTimer: TTimer;
     GuiderMeasureTimer: TTimer;
     PageFinder: TTabSheet;
-    FinderImage: TTabSheet;
     TimerStampTimer: TTimer;
     MenuPdfHelp: TMenuItem;
     MenuOnlineHelp: TMenuItem;
@@ -423,6 +429,7 @@ type
     procedure MenuFlatCameraClick(Sender: TObject);
     procedure MenuFlatClearClick(Sender: TObject);
     procedure MenuFlatFileClick(Sender: TObject);
+    procedure MenuImageMultipanelClick(Sender: TObject);
     procedure MenuInternalguiderStartClick(Sender: TObject);
     procedure MenuInternalGuiderStopClick(Sender: TObject);
     procedure MenuItemFinderSaveImageClick(Sender: TObject);
@@ -468,6 +475,7 @@ type
     procedure MenuSensorAnalysisClick(Sender: TObject);
     procedure MenuViewInternalguiderClick(Sender: TObject);
     procedure PageInternalGuiderShow(Sender: TObject);
+    procedure PanelCenterResize(Sender: TObject);
     procedure ShowDarkInfo;
     procedure ShowFlatInfo;
     procedure MenuDownloadClick(Sender: TObject);
@@ -568,6 +576,8 @@ type
     procedure PlotTimerTimer(Sender: TObject);
     procedure SelectTab(Sender: TObject);
     procedure Splitter1Moved(Sender: TObject);
+    procedure Splitter2Moved(Sender: TObject);
+    procedure Splitter3Moved(Sender: TObject);
     procedure StartSequenceTimerTimer(Sender: TObject);
     procedure StartupTimerTimer(Sender: TObject);
     procedure StatusBar1DrawPanel(StatusBar: TStatusBar; Panel: TStatusPanel; const Rect: TRect);
@@ -668,6 +678,8 @@ type
     CursorImage1: TCursorImage;
     crRetic: TCursor;
     MsgStatusLed: string;
+    MultiPanel,MultiCamera: boolean;
+    MultiPanelHsplit, MultiPanelVSplit: double;
 
     procedure CreateDevices;
     procedure SetDevices;
@@ -678,7 +690,7 @@ type
     procedure Image1MouseUp(Sender: TObject; Button: TMouseButton; Shift: TShiftState; X, Y: Integer);
     procedure Image1MouseWheel(Sender: TObject; Shift: TShiftState; WheelDelta: Integer; MousePos: TPoint; var Handled: Boolean);
     procedure Image1Paint(Sender: TObject);
-    procedure Image1Resize(Sender: TObject);
+    procedure ImageResize(Sender: TObject);
     procedure ImageGuidePaint(Sender: TObject);
     procedure ImageGuideMouseDown(Sender: TObject; Button: TMouseButton; Shift: TShiftState; X, Y: Integer);
     procedure ImageGuideMouseMove(Sender: TObject; Shift: TShiftState; X, Y: Integer);
@@ -1001,6 +1013,8 @@ type
     procedure FinderRedraw(Sender: TObject);
     Procedure SetGuiderCamera;
     Procedure SetFinderCamera;
+    Procedure SetMultipanel(onoff: boolean);
+    Procedure SetVisibleImage;
   public
     { public declarations }
     Image1, ImageGuide, ImageFinder: TImgDrawingControl;
@@ -1459,7 +1473,7 @@ begin
      end;
   end;
   PageControlRight.ActivePageIndex:=0;
-  PageControlImage.ActivePageIndex:=0;
+  MultiPanel:=false;
   AppClose:=false;
   ConfirmClose:=true;
   ScaleMainForm;
@@ -1558,7 +1572,7 @@ begin
   Image1.OnMouseMove := @Image1MouseMove;
   Image1.OnMouseUp := @Image1MouseUp;
   Image1.OnMouseWheel := @Image1MouseWheel;
-  Image1.OnResize := @Image1Resize;
+  Image1.OnResize := @ImageResize;
   Image1.OnPaint := @Image1Paint;
   Image1.PopupMenu := ImagePopupMenu;
   ScrGuideBmp := TBGRABitmap.Create;
@@ -1569,6 +1583,7 @@ begin
   ImageGuide.Parent := GuideImage;
   ImageGuide.Align := alClient;
   ImageGuide.DoubleBuffered:=true;
+  ImageGuide.OnResize := @ImageResize;
   ImageGuide.OnPaint := @ImageGuidePaint;
   ImageGuide.OnMouseDown := @ImageGuideMouseDown;
   ImageGuide.OnMouseMove := @ImageGuideMouseMove;
@@ -1587,6 +1602,7 @@ begin
   ImageFinder.Parent := FinderImage;
   ImageFinder.Align := alClient;
   ImageFinder.DoubleBuffered:=true;
+  ImageFinder.OnResize := @ImageResize;
   ImageFinder.OnPaint := @ImageFinderPaint;
   ImageFinder.OnMouseDown := @ImageFinderMouseDown;
   ImageFinder.OnMouseMove := @ImageFinderMouseMove;
@@ -2753,6 +2769,24 @@ begin
   WantGuideCamera:=config.GetValue('/Devices/GuideCamera',false);
   WantFinderCamera:=config.GetValue('/Devices/FinderCamera',false);
 
+  MultiPanelHsplit:=config.GetValue('/MultiPanel/HSplit',0.5);
+  MultiPanelVsplit:=config.GetValue('/MultiPanel/VSplit',0.5);
+  PanelImage2.Height:=round(MultiPanelHsplit*PanelCenter.Height);
+  FinderImage.Width:=round(MultiPanelVsplit*PanelCenter.Width);
+  MultiCamera:=WantGuideCamera or WantFinderCamera;
+//  if not MultiCamera then MultiPanel:=false;
+  MultiPanel:=MultiCamera and config.GetValue('/MultiPanel/MultiPanel',false);
+  MenuImageMultipanel.Enabled:=MultiCamera;
+  MenuImageSinglepanel.Enabled:=MultiCamera;
+  mainimage.Visible:=true;
+  GuideImage.Visible:=WantGuideCamera;
+  FinderImage.Visible:=WantFinderCamera;
+  Splitter2.Visible:=WantGuideCamera and WantFinderCamera;
+  if not GuideImage.Visible then FinderImage.Align:=alClient;
+  if not FinderImage.Visible then GuideImage.Align:=alClient;
+  SetMultipanel(MultiPanel);
+  MenuImageMultipanel.Checked:=MultiPanel;
+
   MenuAscomCameraSetup.Visible:=WantCamera and (camera.CameraInterface=ASCOM);
   MenuAscomWheelSetup.Visible:=WantWheel and (wheel.WheelInterface=ASCOM);
   MenuAscomFocuserSetup.Visible:=WantFocuser and (focuser.FocuserInterface=ASCOM);
@@ -3916,7 +3950,7 @@ if CanClose then begin
 end;
 end;
 
-procedure Tf_main.Image1Resize(Sender: TObject);
+procedure Tf_main.ImageResize(Sender: TObject);
 begin
  ImageResizeTimer.Enabled:=true;
 end;
@@ -3935,11 +3969,15 @@ begin
   ScrFinderBmp.SetSize(ScrFinderWidth,ScrFinderHeigth);
   ClearImage;
   DrawImage;
-  ClearGuideImage;
-  ClearFinderImage;
-  if InternalguiderRunning then begin
-    DrawGuideImage(true);
-    PlotGuideImage;
+  if GuideImage.Visible then begin
+     ClearGuideImage;
+     DrawGuideImage(true);
+     PlotGuideImage;
+  end;
+  if FinderImage.Visible then begin
+     ClearFinderImage;
+     DrawFinderImage(true);
+     PlotFinderImage;
   end;
 end;
 
@@ -5321,6 +5359,10 @@ begin
 
    config.SetValue('/StarAnalysis/FocuserLastTemp',FocuserLastTemp);
    config.SetValue('/StarAnalysis/MagnitudeCalibration',MagnitudeCalibration);
+
+   config.SetValue('/MultiPanel/MultiPanel',MultiPanel);
+   config.SetValue('/MultiPanel/HSplit',MultiPanelHsplit);
+   config.SetValue('/MultiPanel/VSplit',MultiPanelVsplit);
 end;
 
 procedure Tf_main.SaveInternalGuiderSettings;
@@ -13964,11 +14006,7 @@ begin
   TToolButton(sender).Down:=true;
   i:=TToolButton(sender).tag;
   PageControlRight.ActivePageIndex:=i;
-  case i of
-     0..4: PageControlImage.ActivePageIndex:=0;
-     5:    PageControlImage.ActivePageIndex:=1;
-     6:    PageControlImage.ActivePageIndex:=2;
-  end;
+  SetVisibleImage;
 end;
 
 procedure Tf_main.Splitter1Moved(Sender: TObject);
@@ -16473,7 +16511,7 @@ procedure Tf_main.GuideCameraProgress(n:double);
 var txt: string;
     i: integer;
 begin
-if f_internalguider.IsVisible then begin
+if GuideImage.IsVisible then begin
  if (n<=0) then begin
    i:=round(n);
    case i of
@@ -16504,7 +16542,7 @@ end;
 procedure Tf_main.GuideCameraNewImageAsync(Data: PtrInt);
 var displayimage: boolean;
 begin
-  displayimage:=f_internalguider.IsVisible;
+  displayimage:=GuideImage.IsVisible;
   if (not guidefits.ImageValid) then begin
      guidefits.LoadStream;
   end;
@@ -16560,7 +16598,7 @@ end;
 
 procedure Tf_main.PageInternalGuiderShow(Sender: TObject);
 begin
- if f_internalguider.IsVisible and guidefits.ImageValid then begin
+ if GuideImage.IsVisible and guidefits.ImageValid then begin
    DrawGuideImage(true);
    PlotGuideImage;
  end;
@@ -17505,6 +17543,74 @@ begin
    f.Show;
  end
  else f_finder.LabelMsg.Caption:='No image!';
+end;
+
+procedure Tf_main.MenuImageMultipanelClick(Sender: TObject);
+begin
+  SetMultiPanel(MenuImageMultipanel.Checked);
+end;
+
+procedure Tf_main.SetMultipanel(onoff: boolean);
+begin
+  onoff:=onoff and MultiCamera;
+  MultiPanel:=onoff;
+  if onoff then begin
+    PanelImage1.Visible:=true;
+    PanelImage2.Visible:=true;
+    Splitter2.Visible:=true;
+    mainimage.Parent:=PanelImage1;
+    finderimage.Parent:=PanelImage2;
+    guideimage.Parent:=PanelImage2;
+    mainimage.Align:=alClient;
+    finderimage.Align:=alLeft;
+    guideimage.Align:=alClient;
+  end
+  else begin
+    PanelImage1.Visible:=true;
+    PanelImage2.Visible:=false;
+    Splitter2.Visible:=false;
+    mainimage.Parent:=PanelImage1;
+    finderimage.Parent:=PanelImage1;
+    guideimage.Parent:=PanelImage1;
+    mainimage.Align:=alClient;
+    guideimage.Align:=alClient;
+    finderimage.Align:=alClient;
+  end;
+  SetVisibleImage;
+end;
+
+procedure Tf_main.SetVisibleImage;
+var i: integer;
+begin
+  if MultiPanel then begin
+    mainimage.Visible:=true;
+    GuideImage.Visible:=WantGuideCamera;
+    FinderImage.Visible:=WantFinderCamera;
+  end
+  else begin
+     i:=PageControlRight.ActivePageIndex;
+     case i of
+          0..4: begin mainimage.Visible:=true;  GuideImage.Visible:=false;  FinderImage.Visible:=false; end;
+          5:    begin mainimage.Visible:=false; GuideImage.Visible:=true;   FinderImage.Visible:=false; end;
+          6:    begin mainimage.Visible:=false; GuideImage.Visible:=false;  FinderImage.Visible:=true;  end;
+     end;
+  end;
+end;
+
+procedure Tf_main.Splitter2Moved(Sender: TObject);
+begin
+   MultiPanelHsplit:=Splitter2.Top/PanelCenter.Height;
+end;
+
+procedure Tf_main.Splitter3Moved(Sender: TObject);
+begin
+  MultiPanelVsplit:=Splitter3.Left/PanelCenter.Width;
+end;
+
+procedure Tf_main.PanelCenterResize(Sender: TObject);
+begin
+ PanelImage2.Height:=round(MultiPanelHsplit*PanelCenter.Height);
+ FinderImage.Width:=round(MultiPanelVsplit*PanelCenter.Width);
 end;
 
 end.

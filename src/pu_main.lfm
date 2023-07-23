@@ -84,6 +84,7 @@ object f_main: Tf_main
       ParentColor = False
       ParentFont = False
       TabOrder = 2
+      OnResize = PanelCenterResize
       object PanelMsgTabs: TPanel
         Left = 461
         Height = 28
@@ -117,27 +118,72 @@ object f_main: Tf_main
           TabOrder = 0
         end
       end
-      object PageControlImage: TPageControl
+      object PanelImage2: TPanel
         Left = 0
-        Height = 541
+        Height = 199
         Top = 0
         Width = 616
-        TabStop = False
-        ActivePage = MainImage
-        Align = alClient
-        ShowTabs = False
-        TabIndex = 0
+        Align = alTop
+        ClientHeight = 199
+        ClientWidth = 616
         TabOrder = 1
-        object MainImage: TTabSheet
-          Caption = 'MainImage'
+        object FinderImage: TPanel
+          Left = 1
+          Height = 197
+          Top = 1
+          Width = 272
+          Align = alLeft
+          TabOrder = 0
         end
-        object GuideImage: TTabSheet
+        object GuideImage: TPanel
+          Left = 278
+          Height = 197
+          Top = 1
+          Width = 337
+          Align = alClient
           Caption = 'GuideImage'
-          PopupMenu = GuiderPopUpmenu1
+          TabOrder = 1
         end
-        object FinderImage: TTabSheet
-          Caption = 'FinderImage'
-          PopupMenu = FinderPopUpmenu
+        object Splitter3: TSplitter
+          Left = 273
+          Height = 197
+          Top = 1
+          Width = 5
+          OnMoved = Splitter3Moved
+        end
+      end
+      object Splitter2: TSplitter
+        Cursor = crVSplit
+        Left = 0
+        Height = 5
+        Top = 199
+        Width = 616
+        Align = alTop
+        DoubleBuffered = False
+        OnMoved = Splitter2Moved
+        ParentColor = False
+        ParentDoubleBuffered = False
+        ParentShowHint = False
+        ResizeAnchor = akTop
+        ShowHint = True
+      end
+      object PanelImage1: TPanel
+        Left = 0
+        Height = 337
+        Top = 204
+        Width = 616
+        Align = alClient
+        ClientHeight = 337
+        ClientWidth = 616
+        TabOrder = 3
+        object mainimage: TPanel
+          Left = 1
+          Height = 335
+          Top = 1
+          Width = 614
+          Align = alClient
+          Caption = 'mainimage'
+          TabOrder = 0
         end
       end
     end
@@ -971,6 +1017,26 @@ object f_main: Tf_main
     end
     object MenuItem4: TMenuItem
       Caption = 'Display'
+      object MenuImageWindow: TMenuItem
+        Caption = 'Image windows'
+        object MenuImageSinglepanel: TMenuItem
+          AutoCheck = True
+          Caption = 'Single panel'
+          Checked = True
+          GroupIndex = 55
+          RadioItem = True
+          ShowAlwaysCheckable = True
+          OnClick = MenuImageMultipanelClick
+        end
+        object MenuImageMultipanel: TMenuItem
+          AutoCheck = True
+          Caption = 'Multi panel'
+          GroupIndex = 55
+          RadioItem = True
+          ShowAlwaysCheckable = True
+          OnClick = MenuImageMultipanelClick
+        end
+      end
       object MenuViewConnection: TMenuItem
         AutoCheck = True
         Caption = 'Connection'
