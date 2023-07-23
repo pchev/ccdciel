@@ -2031,4 +2031,11 @@ object f_main: Tf_main
       OnClick = MenuItemFinderStopAstrometryClick
     end
   end
+  object FinderMeasureTimer: TTimer
+    Enabled = False
+    Interval = 200
+    OnTimer = FinderMeasureTimerTimer
+    Left = 56
+    Top = 472
+  end
 end

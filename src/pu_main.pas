@@ -257,6 +257,7 @@ type
     GuidePlotTimer: TTimer;
     GuiderMeasureTimer: TTimer;
     PageFinder: TTabSheet;
+    FinderMeasureTimer: TTimer;
     TimerStampTimer: TTimer;
     MenuPdfHelp: TMenuItem;
     MenuOnlineHelp: TMenuItem;
@@ -409,6 +410,7 @@ type
     procedure CameraConnectTimerTimer(Sender: TObject);
     procedure ConnectTimerTimer(Sender: TObject);
     procedure FinderCameraConnectTimerTimer(Sender: TObject);
+    procedure FinderMeasureTimerTimer(Sender: TObject);
     procedure FinderPlotTimerTimer(Sender: TObject);
     procedure FocuserConnectTimerTimer(Sender: TObject);
     procedure FormClose(Sender: TObject; var CloseAction: TCloseAction);
@@ -1008,6 +1010,7 @@ type
     procedure FinderCameraProgress(n:double);
     procedure FinderCameraNewImage(Sender: TObject);
     procedure FinderCameraNewImageAsync(Data: PtrInt);
+    procedure FinderMeasureAtPos(x,y:integer);
     Procedure DrawFinderImage(display: boolean);
     Procedure PlotFinderImage;
     procedure FinderRedraw(Sender: TObject);
@@ -17426,7 +17429,7 @@ begin
     FinderPlotTimer.Enabled:=true;
  end
  else if (finderfits.HeaderInfo.naxis1>0)and(FinderImgScale0<>0) and finderfits.ImageValid then begin
-    //FinderMeasureTimer.Enabled:=true;
+    FinderMeasureTimer.Enabled:=true;
  end;
 FinderMx:=X;
 FinderMy:=Y;
@@ -17480,6 +17483,82 @@ if (finderfits.HeaderInfo.naxis>0) and finderfits.ImageValid then begin
     LockFinderMouseWheel := False;
   end;
 end;
+end;
+
+procedure Tf_main.FinderMeasureTimerTimer(Sender: TObject);
+begin
+  FinderMeasureTimer.Enabled:=false;
+  FinderMeasureAtPos(FinderMx,FinderMy);
+end;
+
+procedure Tf_main.FinderMeasureAtPos(x,y:integer);
+var xx,yy: integer;
+    val,xxc,yyc,rc,s:integer;
+    sval:string;
+    bg,bgdev,xc,yc,hfd,fwhm,vmax,dval,snr,flux: double;
+begin
+ FinderScreen2fits(x,y,true,xx,yy); // always flipped vertically
+ if (xx>0)and(xx<finderfits.HeaderInfo.naxis1)and(yy>0)and(yy<finderfits.HeaderInfo.naxis2) then
+    if finderfits.preview_axis=1 then begin
+      if finderfits.HeaderInfo.bitpix>0 then begin
+        val:=trunc(finderfits.image[0,yy,xx]);
+        if finderfits.HeaderInfo.bitpix=8 then val:=val div 255;
+        sval:=inttostr(val);
+      end
+      else begin
+       dval:=finderfits.imageMin+finderfits.image[0,yy,xx]/finderfits.imageC;
+       sval:=FormatFloat(f3,dval);
+      end;
+    end
+    else if (finderfits.preview_axis=3) then begin
+      if finderfits.HeaderInfo.bitpix>0 then begin
+        val:=trunc(finderfits.imageMin+finderfits.image[0,yy,xx]/finderfits.imageC);
+        if finderfits.HeaderInfo.bitpix=8 then val:=val div 255;
+        sval:=inttostr(val);
+        val:=trunc(finderfits.imageMin+finderfits.image[1,yy,xx]/finderfits.imageC);
+        if finderfits.HeaderInfo.bitpix=8 then val:=val div 255;
+        sval:=sval+'/'+inttostr(val);
+        val:=trunc(finderfits.imageMin+finderfits.image[2,yy,xx]/finderfits.imageC);
+        if finderfits.HeaderInfo.bitpix=8 then val:=val div 255;
+        sval:=sval+'/'+inttostr(val);
+      end
+      else begin
+       dval:=finderfits.imageMin+finderfits.image[0,yy,xx]/finderfits.imageC;
+       sval:=FormatFloat(f3,dval);
+       dval:=finderfits.imageMin+finderfits.image[1,yy,xx]/finderfits.imageC;
+       sval:=sval+'/'+FormatFloat(f3,dval);
+       dval:=finderfits.imageMin+finderfits.image[2,yy,xx]/finderfits.imageC;
+       sval:=sval+'/'+FormatFloat(f3,dval);
+      end;
+    end
+ else sval:='';
+ s:=Starwindow div 2;
+ if (xx>s)and(xx<(finderfits.HeaderInfo.naxis1-s))and(yy>s)and(yy<(finderfits.HeaderInfo.naxis2-s)) then begin
+   finderfits.FindStarPos(xx,yy,s,xxc,yyc,rc,vmax,bg,bgdev);
+   if vmax>0 then begin
+     finderfits.GetHFD2(xxc,yyc,2*rc,xc,yc,bg,bgdev,hfd,fwhm,vmax,snr,flux);
+     if (hfd>=0.8) then begin
+       sval:=sval+' HFD='+FormatFloat(f1,hfd)+' FWHM='+FormatFloat(f1,fwhm);
+       if flux>0 then begin
+         sval:=sval+' '+rsFlux+'='+FormatFloat(f0, flux)+' SNR='+FormatFloat(f1, snr);
+       end
+       else begin
+         sval:=sval+blank+rsSaturated;
+        end;
+     end
+     else begin
+      //
+     end;
+   end
+   else begin
+     //
+   end;
+ end
+ else begin
+   //
+ end;
+ yy:=finderimg_Height-yy;
+ StatusBar1.Panels[panelcursor].Text:=rsFinder+': '+inttostr(xx)+'/'+inttostr(yy)+': '+sval;
 end;
 
 procedure Tf_main.MenuItemFinderSaveImageClick(Sender: TObject);

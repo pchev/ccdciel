@@ -1525,6 +1525,7 @@ resourcestring
   rsUseAstrometr2 = 'Use astrometry to identify the target';
   rsAstrometryEx = 'Astrometry exposure time';
   rsPlanStep = 'Plan step';
+  rsFinder = 'Finder';
 
 implementation
 
