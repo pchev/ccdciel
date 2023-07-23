@@ -214,7 +214,7 @@ procedure Tf_sensoranalysis.FormShow(Sender: TObject);
 begin
 //  Exposure.Increment:=camera.ExposureRange.step;
   exposuremin1.caption:=floattostrF(camera.ExposureRange.min,FFfixed,0,6);
-  exposure_min:=math.min(double(0.01), math.max(double(camera.ExposureRange.min),0.0));//protect againt 9999 or -9999 values
+  exposure_min:=math.min(0.01, math.max(camera.ExposureRange.min,0.0));//protect againt 9999 or -9999 values
   exposuremax1.caption:=floattostrF(camera.ExposureRange.max,FFfixed,0,0);
 
   Gain1.enabled:=camera.CanSetGain;
