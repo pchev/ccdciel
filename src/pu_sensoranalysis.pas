@@ -562,7 +562,7 @@ end;
 procedure Tf_sensoranalysis.StepButton1Click(Sender: TObject);
 var
   saturationlevel,correction,stepexposure,themean, oldthemean,mean_dark_adu,sigma_light_adu,exposure_lin,sigma_dark_adu2,mean_dark_adu2,
-  dark_current_adu,dark_current_es, total_noise,total_noise_e,read_noise2_e,dark_current2_es : double;
+  dark_current_adu,dark_current_es, total_noise,total_noise_e,read_noise2_e,dark_current2_es,dark_current_e : double;
   i,gainstep,nr                                                                                          : integer;
   message                                                                                                : string;
   Save_Cursor:TCursor;
@@ -796,29 +796,27 @@ begin
         total_noise_e:=sigma_dark_adu2*measurements[gainstep].gain_e/correction;// noise after 100 seconds noise[e-]:=noise_adu * gain_e
 
         Instruction.Lines.add('Noise after 1.01 sec: '+floattostrF(read_noise2_e,FFfixed,0,2)+ '[e-]');
-        Instruction.Lines.add('Noise after '+inttostr(dark_current_test_duration1.value)+' sec:  '+floattostrF(total_noise_e,FFfixed,0,2)+ '[e-]');
+        Instruction.Lines.add('Noise after '+inttostr(dark_current_test_duration1.value+1)+' sec:  '+floattostrF(total_noise_e,FFfixed,0,2)+ '[e-]');
 
 
         dark_current_adu:=mean_dark_adu2-mean_dark_adu;
         dark_current_es:=dark_current_adu*measurements[gainstep].gain_e/(dark_current_test_duration1.value*correction); //dark current in e-/(sec*pixel)
         Instruction.Lines.add('Δadu: '+floattostrF(dark_current_adu,FFfixed,0,0));
-        Instruction.Lines.add('Dark current method1: '+floattostrF(dark_current_es,FFfixed,0,4)+ ' [e-/(sec*pixel)]');
+        Instruction.Lines.add('Dark current method Δadu: '+floattostrF(dark_current_es,FFfixed,0,4)+ ' [e-/(sec*pixel)]');
 
         dark_current2_es:=(sqr(total_noise_e) - sqr(read_noise2_e))/dark_current_test_duration1.value; //dark current in e-/(sec*pixel)
-        Instruction.Lines.add('Dark current method2: '+floattostrF(dark_current2_es,FFfixed,0,4)+ ' [e-/(sec*pixel)]');
+        Instruction.Lines.add('Dark current method Δσ: '+floattostrF(dark_current2_es,FFfixed,0,4)+ ' [e-/(sec*pixel)]');
 
-
-
-        if dark_current_adu>5 then
+        if dark_current_adu>2 then //at least 2 adu
         begin
-          //method1 using Δadu
+          //Plot method Δadu
           for i:=0 to dark_current_test_duration1.value do
           begin
             total_noise:=sqrt(sqr(measurements[gainstep].read_noise_e)+i*dark_current_es);
             Chart5LineSeries1.addxy(i,total_noise);//total noise:=sqrt(sqr(readnoise)+sqr(dark_noise))==> total noise:=sqrt(sqr(readnoise)+dark current)
           end;
 
-          //method2 using Δσ
+          //Plot method Δσ
           //dark_current_adu[e-]:=sqr(σ_end[adu]*gain[e-/adu]) - sqr(σ_read_noise[adu]*gain[e-/adu])    (formula 4)
           Chart5LineSeries2.addxy(0,read_noise2_e);//read noise
           for i:=0 to dark_current_test_duration1.value  do
