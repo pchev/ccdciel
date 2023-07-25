@@ -12001,6 +12001,7 @@ end;
 
 procedure Tf_main.MenuSensorAnalysisClick(Sender: TObject);
 begin
+if AllDevicesConnected then begin
   if f_sensoranalysis=nil then begin
     f_sensoranalysis:=Tf_sensoranalysis.Create(self);
     f_sensoranalysis.onShowMessage:=@NewMessage;
@@ -12008,6 +12009,7 @@ begin
   f_sensoranalysis.Fits:=fits;
   f_sensoranalysis.Camera:=camera;
   f_sensoranalysis.Show;
+end;
 end;
 
 procedure Tf_main.Polaralign2Close(Sender: TObject);

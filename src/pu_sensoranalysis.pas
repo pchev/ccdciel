@@ -35,7 +35,10 @@ type
        gain      : integer;
        exposure,
        mean_light_adu,
-       sigma_light_adu  : double;
+       sigma_light_adu,
+       read_noise_e,
+       gain_e,
+       fullwell_capacity_e: double;
    end;
 
 type
@@ -44,23 +47,19 @@ type
 
   Tf_sensoranalysis = class(TForm)
     Button1: TButton;
+    Button2: TButton;
     ButtonClose1: TButton;
     Chart1: TChart;
     Chart1LineSeries1: TLineSeries;
-    Chart1LineSeries2: TLineSeries;
-    Chart1LineSeries3: TLineSeries;
-    Chart1LineSeries4: TLineSeries;
-    Chart1LineSeries5: TLineSeries;
-    Chart1LineSeries6: TLineSeries;
-    Chart1LineSeries7: TLineSeries;
-    Chart1LineSeries8: TLineSeries;
     Chart2LineSeries1: TLineSeries;
     Chart3: TChart;
     Chart2: TChart;
     Chart3LineSeries1: TLineSeries;
-    Chart3LineSeries2: TLineSeries;
     Chart4: TChart;
     Chart4LineSeries1: TLineSeries;
+    Chart5: TChart;
+    Chart5LineSeries1: TLineSeries;
+    Chart5LineSeries2: TLineSeries;
     exposuremax1: TLabel;
     exposuremin1: TLabel;
     Gain3: TSpinEdit;
@@ -69,6 +68,7 @@ type
     Gain6: TSpinEdit;
     Gain7: TSpinEdit;
     Gain8: TSpinEdit;
+    dark_current_test_duration1: TSpinEdit;
     GroupBox1: TGroupBox;
     Label10: TLabel;
     Gain2: TSpinEdit;
@@ -78,18 +78,32 @@ type
     Label5: TLabel;
     Label6: TLabel;
     Label7: TLabel;
+    Label8: TLabel;
     LabelFullwellcapacity1: TLabel;
     LabelMaxAdu1: TLabel;
     LabelTemperature1: TLabel;
-    linearity_test2: TCheckBox;
-    linearity_test3: TCheckBox;
-    linearity_test4: TCheckBox;
-    linearity_test5: TCheckBox;
-    linearity_test6: TCheckBox;
-    linearity_test7: TCheckBox;
-    linearity_test8: TCheckBox;
-    linearity_test1: TCheckBox;
+    LabelTemperature2: TLabel;
     PageControl1: TPageControl;
+    RadioButton1: TRadioButton;
+    lin1: TRadioButton;
+    lin2: TRadioButton;
+    lin3: TRadioButton;
+    lin4: TRadioButton;
+    lin5: TRadioButton;
+    lin6: TRadioButton;
+    lin7: TRadioButton;
+    lin8: TRadioButton;
+    RadioButton18: TRadioButton;
+    RadioButton2: TRadioButton;
+    RadioButton3: TRadioButton;
+    RadioButton4: TRadioButton;
+    RadioButton5: TRadioButton;
+    RadioButton6: TRadioButton;
+    RadioButton7: TRadioButton;
+    RadioButton8: TRadioButton;
+    RadioButton9: TRadioButton;
+    RadioGroup1: TRadioGroup;
+    RadioGroup2: TRadioGroup;
     repeats1: TSpinEdit;
     StepButton1: TButton;
     Instruction: TMemo;
@@ -104,18 +118,23 @@ type
     TabSheet1: TTabSheet;
     TabSheet2: TTabSheet;
     TabSheet3: TTabSheet;
+    TabSheet4: TTabSheet;
+    TabSheet5: TTabSheet;
     procedure Button1Click(Sender: TObject);
+    procedure Button2Click(Sender: TObject);
     procedure ButtonCloseClick(Sender: TObject);
     procedure FormClose(Sender: TObject; var CloseAction: TCloseAction);
+    procedure repeats1Change(Sender: TObject);
     procedure StepButton1Click(Sender: TObject);
     procedure FormCreate(Sender: TObject);
     procedure FormShow(Sender: TObject);
+    procedure TabSheet4Show(Sender: TObject);
   private
     FFits: TFits;
     w,h,bit_depth,nrgainsteps : integer;
-    biaslevel,read_noise_e,fullwell_capacity_e, flux_adu, sigma_dark_adu,gain_e,exposure,sat_level_adu,exposure_min : double;
+    biaslevel,flux_adu, sigma_dark_adu,exposure,sat_level_adu,exposure_min : double;
     stoploop: boolean;
-    lightinfo : array of Tlightinfo;
+    measurements : array of Tlightinfo;
     Fcamera: T_camera;
     FonShowMessage: TNotifyMsg;
     procedure msg(txt:string; level: integer=3);
@@ -128,6 +147,7 @@ type
 
     function bitdepth(img1 : Timafloat): integer;//find the bit depth of the data
     function max(img1 : Timafloat): single;//max value of an image
+    procedure update_temperature_reading;
   public
     property Fits: TFits read FFits write FFits;
     property Camera: T_camera read Fcamera write Fcamera;
@@ -158,7 +178,14 @@ Therefore for a dark
 
 For a light with a strong signal:
              σ[e-]:=sqrt(nr_photo_electrons)
-             σ[e-]:=sqrt(flux[e-]) (1b)
+             σ[e-]:=sqrt(flux[e-]) (formula 1b)
+
+Gain can be applied bot on signal and noise
+
+        dark_current[e]:=dark_current[adu]*gain[e-/adu]
+        σ_dark[e-]:=sqrt(dark_current[e])
+
+
 
 --------------------------------------------------
 Step 1 Measure mean dark value
@@ -173,7 +200,7 @@ Step 3 Calculate gain by exposing a light using a flat panel:
      flux[adu]:=mean_px_value - mean_dark_value
      σ_light[adu]:=STDEV(light1-light2)/sqrt(2)
 
-     σ_light[e-]:=sqrt(flux[e-]) (1b)
+     σ_light[e-]:=sqrt(flux[e-]) (formula 1b)
      sqr(σ_light[e-]):=flux[e-]
      sqr(σ_light[adu]*gain[e-/adu]):=flux[adu]*gain[e-/adu]
      sqr(σ_light[adu])*sqr(gain[e-/adu]):=flux[adu]*gain[e-/adu]
@@ -193,7 +220,32 @@ Step 6 Calculate full well capacity
 
   FullWell_capacity[e-]:=sat_level[adu]*gain[e-/adu]
 
-Note a correction for gain in the driver should be applied.E.g ASI1600 12 bit sensor ouput is increased from 0..4096 to 0..65535. A additonal gain factor of 16.
+
+Step 7a Calculate dark current method Δadu
+
+       measure Δ adu over 100 seconds
+       Δ e- = Δ adu * gain[e-/adu]
+       dark current: Δ e-/100 [e-/(sec*pixel)]
+
+Step 7b Calculate dark current method Δσ
+
+      measure noise at beginning and after 100 seconds
+      σ_begin[e]:= σ_begin[adu]*gain[e-/adu]
+      σ_end[e]:= σ_end[adu]*gain[e-/adu]
+
+      sqr(σ_end[e])=sqr(σ_dark_current[e]+sqr(σ_read_noise[e])
+      sqr(σ_end[adu]*gain[e-/adu])=sqr(σ_dark_current[e]+sqr(σ_read_noise[adu]*gain[e-/adu])
+      sqr(σ_end[adu]*gain[e-/adu])=dark_current[e-] + sqr(σ_read_noise[adu]*gain[e-/adu])
+      dark_current[e-]:=sqr(σ_end[adu]*gain[e-/adu]) - sqr(σ_read_noise[adu]*gain[e-/adu])    (formula 4)
+
+
+Note: Gain[e-/adu] can be applied both on flux and noise so
+
+   σ[e]:=σ[adu]*gain[e-/adu]
+   flux[e]:=flux[adu]*gain[e-/adu]
+
+
+Note a correction for gain in the driver should be applied. E.g. ASI1600 12 bit sensor ouput is increased from 0..4096 to 0..65535. A additional gain factor of 16.
 }
 
 
@@ -212,10 +264,7 @@ end;
 
 procedure Tf_sensoranalysis.FormShow(Sender: TObject);
 begin
-//  Exposure.Increment:=camera.ExposureRange.step;
-  exposuremin1.caption:=floattostrF(camera.ExposureRange.min,FFfixed,0,6);
   exposure_min:=math.min(0.01, math.max(camera.ExposureRange.min,0.0));//protect againt 9999 or -9999 values
-  exposuremax1.caption:=floattostrF(camera.ExposureRange.max,FFfixed,0,0);
 
   Gain1.enabled:=camera.CanSetGain;
   Gain2.enabled:=camera.CanSetGain;
@@ -263,30 +312,17 @@ begin
   Gain7.value:=round(0.4*camera.GainMax);
   Gain8.value:=camera.GainMax;
 
-
-{  Gain1.value:=139;
-  Gain2.value:=139;
-  Gain3.value:=139;
-  Gain4.value:=139;
-  Gain5.value:=139;
-  Gain6.value:=139;
-  Gain7.value:=139;
-  Gain8.value:=139;}
-
-  Offset1.enabled:=camera.hasGain;
+  Offset1.enabled:=camera.hasOffset;
   Offset1.MaxValue:=camera.OffsetMax;
   Offset1.MinValue:=camera.OffsetMin;
+  if Offset1.enabled then
+    Offset1.Value:=camera.Offset;
 
   chart1.Title.text.setStrings('Linearity      ('+camera.ccdname+')');
-  chart2.Title.text.setStrings('e-/adu      ('+camera.ccdname+')');
+  chart2.Title.text.setStrings('Gain in e-/adu      ('+camera.ccdname+')');
   chart3.Title.text.setStrings('Read noise      ('+camera.ccdname+')');
-  chart4.Title.text.setStrings('Full well      ('+camera.ccdname+')');
-
-
-  LabelTemperature1.Caption:=FormatFloat(f2,camera.Temperature);
-  LabelFullwellcapacity1.Caption:=FormatFloat(f0,camera.FullWellCapacity);
-  LabelMaxAdu1.Caption:=FormatFloat(f0,camera.MaxADU);
-
+  chart4.Title.text.setStrings('Full well capacity of each pixel in e-      ('+camera.ccdname+')');
+  chart5.Title.text.setStrings('Dark current and total noise      ('+camera.ccdname+')');
 
   StepButton1.caption:='Start';
   Instruction.Lines.text:='Camera sensor analyses'+#10+
@@ -297,9 +333,26 @@ begin
                            #10+
                            'If flat panel is placed then press "Take lights".';
 
+  update_temperature_reading;
+
   StepButton1.enabled:=true;
   StepButton1.caption:='Take lights';
   step:=0;
+
+end;
+
+procedure Tf_sensoranalysis.update_temperature_reading;
+begin
+  LabelTemperature1.Caption:=FormatFloat(f2,camera.Temperature);
+  LabelTemperature2.Caption:='🌡  '+FormatFloat(f2,camera.Temperature)+' °C';
+end;
+
+procedure Tf_sensoranalysis.TabSheet4Show(Sender: TObject);
+begin
+  exposuremin1.caption:=floattostrF(camera.ExposureRange.min,FFfixed,0,6);
+  exposuremax1.caption:=floattostrF(camera.ExposureRange.max,FFfixed,0,0);
+  LabelFullwellcapacity1.Caption:=FormatFloat(f0,camera.FullWellCapacity);
+  LabelMaxAdu1.Caption:=FormatFloat(f0,camera.MaxADU);
 
 end;
 
@@ -310,18 +363,31 @@ begin
   close;
 end;
 
+
 procedure Tf_sensoranalysis.Button1Click(Sender: TObject);
 begin
   stringgrid1.selection:=rect(0,0,5,99);
   stringgrid1.CopyToClipboard;
 end;
 
+
+procedure Tf_sensoranalysis.Button2Click(Sender: TObject);
+begin
+  stoploop:=true;
+  Instruction.Lines.add('Abort pressed. Will stop soon.');
+end;
+
+
 procedure Tf_sensoranalysis.FormClose(Sender: TObject;
   var CloseAction: TCloseAction);
 begin
-  lightinfo:=nil;
+  measurements:=nil;
 end;
 
+procedure Tf_sensoranalysis.repeats1Change(Sender: TObject);
+begin
+
+end;
 
 
 procedure Tf_sensoranalysis.SetROI;
@@ -495,13 +561,15 @@ end;
 
 procedure Tf_sensoranalysis.StepButton1Click(Sender: TObject);
 var
-    saturationlevel,correction,stepexposure,themean, oldthemean,mean_dark_adu,sigma_light_adu,exposure_lin : double;
-    i,gainstep,nr                                                                                          : integer;
-    Save_Cursor:TCursor;
+  saturationlevel,correction,stepexposure,themean, oldthemean,mean_dark_adu,sigma_light_adu,exposure_lin,sigma_dark_adu2,mean_dark_adu2,
+  dark_current_adu,dark_current_es, total_noise,total_noise_e,read_noise2_e,dark_current2_es : double;
+  i,gainstep,nr                                                                                          : integer;
+  message                                                                                                : string;
+  Save_Cursor:TCursor;
 const
      level7=0.7;
-
 begin
+  stoploop:=false;
   if camera.CanSetGain=false then
   begin
      Instruction.Lines.add(#10+#10+'Fatal failure!! Can not set gain. Allow setting the camera gain in Preference, Camera');
@@ -523,36 +591,29 @@ begin
       biaslevel:=median_of_means(exposure,repeats1.value,BIAS {FLAT, DARK, LIGHT, BIAS});//find best mean
       Instruction.Lines.add('Bias level: '+floattostrF(biaslevel,FFfixed,0,0));
 
-      nrgainsteps:=8-1;
-      setlength(lightinfo,nrgainsteps+1);
-      lightinfo[0].gain:=Gain1.value;
-      lightinfo[1].gain:=Gain2.value;
-      lightinfo[2].gain:=Gain3.value;
-      lightinfo[3].gain:=Gain4.value;
-      lightinfo[4].gain:=Gain5.value;
-      lightinfo[5].gain:=Gain6.value;
-      lightinfo[6].gain:=Gain7.value;
-      lightinfo[7].gain:=Gain8.value;
 
-      Chart1LineSeries1.title:=inttostr(gain1.value);
-      Chart1LineSeries2.title:=inttostr(gain2.value);
-      Chart1LineSeries3.title:=inttostr(gain3.value);
-      Chart1LineSeries4.title:=inttostr(gain4.value);
-      Chart1LineSeries5.title:=inttostr(gain5.value);
-      Chart1LineSeries6.title:=inttostr(gain6.value);
-      Chart1LineSeries7.title:=inttostr(gain7.value);
-      Chart1LineSeries8.title:=inttostr(gain8.value);
+      nrgainsteps:=8-1;
+      setlength(measurements,nrgainsteps+1);
+      measurements[0].gain:=Gain1.value;
+      measurements[1].gain:=Gain2.value;
+      measurements[2].gain:=Gain3.value;
+      measurements[3].gain:=Gain4.value;
+      measurements[4].gain:=Gain5.value;
+      measurements[5].gain:=Gain6.value;
+      measurements[6].gain:=Gain7.value;
+      measurements[7].gain:=Gain8.value;
 
       gainstep:=0;
+
       while gainstep<=nrgainsteps do  //do all gains
       begin
-        gain:=lightinfo[gainstep].gain;
-
+        update_temperature_reading;
+        gain:=measurements[gainstep].gain;
         if gainstep=0 then exposure:=0.1
         else
         begin
-          if lightinfo[gainstep-1].gain>0 then // extrapolating from gain 0 does not work
-          exposure:= lightinfo[gainstep-1].exposure * lightinfo[gainstep-1].gain/lightinfo[gainstep].gain;//assuming gain is linear
+          if measurements[gainstep-1].gain>0 then // extrapolating from gain 0 does not work
+          exposure:= measurements[gainstep-1].exposure * measurements[gainstep-1].gain/measurements[gainstep].gain;//assuming gain is linear
         end;
 
         Instruction.Lines.add('Testing gain: '+inttostr(gain));
@@ -560,8 +621,8 @@ begin
         begin
           if Takeimage(exposure,FLAT) then
           begin
-            lightinfo[gainstep].mean_light_adu:= mean(Ffits.image);
-            saturationlevel:=(lightinfo[gainstep].mean_light_adu-biaslevel)/camera.MaxADU;
+            measurements[gainstep].mean_light_adu:= mean(Ffits.image);
+            saturationlevel:=(measurements[gainstep].mean_light_adu-biaslevel)/camera.MaxADU;
 
             Instruction.Lines.add('Trying to find the exposure time for 70% saturation. Exposure time: '+floattostrF(exposure,FFfixed,0,3)+', saturation level: '+floattostrF(saturationlevel*100,FFfixed,0,0 )+'%');
             if (((Ffits.imagemean--biaslevel)>0.65*camera.MaxADU) and ((Ffits.imagemean--biaslevel)<0.75*camera.MaxADU)) then break;//exposure is good
@@ -586,10 +647,10 @@ begin
         end;
 
         //store information
-        lightinfo[gainstep].gain:=gain;
-        lightinfo[gainstep].exposure:=exposure;
+        measurements[gainstep].gain:=gain;
+        measurements[gainstep].exposure:=exposure;
 
-        mean_and_stdev(exposure,repeats1.value,FLAT,{out}lightinfo[gainstep].sigma_light_adu,lightinfo[gainstep].mean_light_adu);//measure mean value and stdev
+        mean_and_stdev(exposure,repeats1.value,FLAT,{out}measurements[gainstep].sigma_light_adu,measurements[gainstep].mean_light_adu);//measure mean value and stdev
 
 
         if gainstep=0 then
@@ -598,14 +659,14 @@ begin
           Instruction.Lines.add('Bit depth image is: '+inttostr(bit_depth));
         end;
 
-        if (  ((gainstep=0) and (linearity_test1.checked)) or
-              ((gainstep=1) and (linearity_test2.checked)) or
-              ((gainstep=2) and (linearity_test3.checked)) or
-              ((gainstep=3) and (linearity_test4.checked)) or
-              ((gainstep=4) and (linearity_test5.checked)) or
-              ((gainstep=5) and (linearity_test6.checked)) or
-              ((gainstep=6) and (linearity_test7.checked)) or
-              ((gainstep=7) and (linearity_test8.checked)) ) then
+        if (  ((gainstep=0) and (lin1.checked)) or
+              ((gainstep=1) and (lin2.checked)) or
+              ((gainstep=2) and (lin3.checked)) or
+              ((gainstep=3) and (lin4.checked)) or
+              ((gainstep=4) and (lin5.checked)) or
+              ((gainstep=5) and (lin6.checked)) or
+              ((gainstep=6) and (lin7.checked)) or
+              ((gainstep=7) and (lin8.checked)) ) then
         begin
           Instruction.Lines.add('Testing linearity.'+#10);
           stepexposure:=exposure/(level7*10);//exposure difference to get 10% more level
@@ -617,24 +678,20 @@ begin
             exposure_lin:=math.max(exposure_min,stepexposure*nr);//about 10%. Minimum 1 ms should be possible for all cameras
 
             mean_and_stdev(exposure_lin,repeats1.value,FLAT,{out}sigma_light_adu,themean);//measure mean value and stdev
-            StringGrid1.InsertRowWithValues(stringgrid1.rowcount,[inttostr(nr), floattostrF(lightinfo[gainstep].Gain,FFfixed,0,0),'','','',floattostrF(exposure_lin,FFfixed,0,3),floattostrF((themean),FFfixed,0,0),
+            StringGrid1.InsertRowWithValues(stringgrid1.rowcount,[inttostr(nr), floattostrF(measurements[gainstep].Gain,FFfixed,0,0),'','','',floattostrF(exposure_lin,FFfixed,0,3),floattostrF((themean),FFfixed,0,0),
                                               floattostrF((themean-oldthemean)*100/65535,FFfixed,0,3),floattostrF(sigma_light_adu,FFfixed,0,1)]);
             StringGrid1.Row :=stringgrid1.rowcount;//scroll
 
             if (themean-oldthemean)<0.1 then break; //saturation reached
             oldthemean:=themean;
 
-            case gainstep of 0: Chart1LineSeries1.addxy(exposure_lin,themean);
-                             2: Chart1LineSeries2.addxy(exposure_lin,themean);
-                             3: Chart1LineSeries3.addxy(exposure_lin,themean);
-                             4: Chart1LineSeries4.addxy(exposure_lin,themean);
-                             5: Chart1LineSeries5.addxy(exposure_lin,themean);
-                             6: Chart1LineSeries6.addxy(exposure_lin,themean);
-                             7: Chart1LineSeries7.addxy(exposure_lin,themean);
-                             8: Chart1LineSeries8.addxy(exposure_lin,themean);
-            end;//case
-
-
+            Chart1LineSeries1.addxy(exposure_lin,themean);
+            chart1.Title.text.setStrings('Linearity for gain '+inttostr(gain));
+            if stoploop then
+            begin
+              Screen.Cursor:=Save_Cursor;
+              exit;
+            end;
           end;//for loop
         end;
 
@@ -664,14 +721,16 @@ begin
       gainstep:=0;
       while gainstep<=nrgainsteps do  //do all gains
       begin
+        update_temperature_reading;
+
         if gainstep=0 then Instruction.Lines.add('Working on the DARKS....');
-        exposure:=lightinfo[gainstep].Exposure;
-        gain:=lightinfo[gainstep].gain;
+        exposure:=measurements[gainstep].Exposure;
+        gain:=measurements[gainstep].gain;
 
         if (( gainstep<>0) or (Takeimage(exposure,DARK))) then //First dark is ignored since in some cameras (Touptek) the pedestal value could be higher in the first dark after a bright flat exposure')
         begin                                                  //so this dark has two functions. 1) Skip first invalid dark and 2) test if flat panel is removed.
           themean:=mean(Ffits.image);
-          if themean>0.5*lightinfo[0].mean_light_adu then
+          if themean>0.5*measurements[0].mean_light_adu then
           begin
             Instruction.Lines.add('Flat panel is still present. Remove panel, place the telescope cap and press again "Take darks".');
             StepButton1.enabled:=true;
@@ -681,12 +740,12 @@ begin
           end;
         end;
 
-        mean_and_stdev(lightinfo[gainstep].exposure,repeats1.value,DARK,{out}sigma_dark_adu,mean_dark_adu);//as stdev but do it nrframes times and report median value as result
+        mean_and_stdev(measurements[gainstep].exposure,repeats1.value,DARK,{out}sigma_dark_adu,mean_dark_adu);//as stdev but do it nrframes times and report median value as result
 
-        Instruction.Lines.add('First dark level: '+floattostrF( themean,FFfixed,0,0));//First bias could be different
-        Instruction.Lines.add('Second dark level: '+floattostrF(mean_dark_adu,FFfixed,0,0));//First bias could be different
+        //Instruction.Lines.add('First dark level: '+floattostrF( themean,FFfixed,0,0));//First bias could be different
+        //Instruction.Lines.add('Second dark level: '+floattostrF(mean_dark_adu,FFfixed,0,0));//First bias could be different
 
-        flux_adu:=lightinfo[gainstep].mean_light_adu-mean_dark_adu;//calculate mean flux value of one pixel
+        flux_adu:=measurements[gainstep].mean_light_adu-mean_dark_adu;//calculate mean flux value of one pixel
 
         //corrections for Gain in the camera driver
         if bit_depth<>16 then
@@ -694,21 +753,93 @@ begin
         else
         correction:=1;
 
-        gain_e{e-/adu}:=(flux_adu/correction)/sqr(lightinfo[gainstep].sigma_light_adu/correction);
+        measurements[gainstep].gain_e{e-/adu}:=(flux_adu/correction)/sqr(measurements[gainstep].sigma_light_adu/correction);
 
-        read_noise_e{e-}:=(sigma_dark_adu/correction) * gain_e;
-        FullWell_capacity_e:=(sat_level_adu/correction)*gain_e;
+        measurements[gainstep].read_noise_e{e-}:=(sigma_dark_adu/correction) * measurements[gainstep].gain_e;
+        measurements[gainstep].FullWell_capacity_e:=(sat_level_adu/correction)*measurements[gainstep].gain_e;
 
-        StringGrid1.InsertRowWithValues(stringgrid1.rowcount,[inttostr(gainstep+1), floattostrF(lightinfo[gainstep].Gain,FFfixed,0,0),floattostrF(gain_e,FFfixed,0,3),floattostrF(read_noise_e,FFfixed,0,3),floattostrF(FullWell_capacity_e,FFfixed,0,0),
-                                                              floattostrF(lightinfo[gainstep].exposure,FFfixed,0,3),floattostrF(lightinfo[gainstep].mean_light_adu,FFfixed,0,0)+'-'+floattostrF(mean_dark_adu,FFfixed,0,0)]);
+        StringGrid1.InsertRowWithValues(stringgrid1.rowcount,[inttostr(gainstep+1), floattostrF(measurements[gainstep].Gain,FFfixed,0,0),floattostrF(measurements[gainstep].gain_e,FFfixed,0,3),
+                                                              floattostrF(measurements[gainstep].read_noise_e,FFfixed,0,3),floattostrF(measurements[gainstep].FullWell_capacity_e,FFfixed,0,0),
+                                                              floattostrF(measurements[gainstep].exposure,FFfixed,0,3),floattostrF(measurements[gainstep].mean_light_adu,FFfixed,0,0)+'-'+floattostrF(mean_dark_adu,FFfixed,0,0)]);
         StringGrid1.Row :=stringgrid1.rowcount;//scroll
 
-        Chart2LineSeries1.addxy(lightinfo[gainstep].Gain,gain_e);
-        Chart3LineSeries1.addxy(lightinfo[gainstep].Gain,read_noise_e);
-        Chart4LineSeries1.addxy(lightinfo[gainstep].Gain,FullWell_capacity_e);
+        Chart2LineSeries1.addxy(measurements[gainstep].Gain,measurements[gainstep].gain_e);
+        Chart3LineSeries1.addxy(measurements[gainstep].Gain,measurements[gainstep].read_noise_e);
+        Chart4LineSeries1.addxy(measurements[gainstep].Gain,measurements[gainstep].FullWell_capacity_e);
 
         inc(gainstep);
       end;//while
+
+
+      Instruction.Lines.add('Testing dark current');
+
+      if radiobutton9.checked=false then
+      begin
+        if radiobutton1.checked then gainstep:=0 else
+        if radiobutton2.checked then gainstep:=1 else
+        if radiobutton3.checked then gainstep:=2 else
+        if radiobutton4.checked then gainstep:=3 else
+        if radiobutton5.checked then gainstep:=4 else
+        if radiobutton6.checked then gainstep:=5 else
+        if radiobutton7.checked then gainstep:=6 else
+        if radiobutton8.checked then gainstep:=7 else
+        if radiobutton1.checked then gainstep:=8;
+
+        gain:=measurements[gainstep].gain; //camera gain
+
+        //take an exposure of 1.01 seconds to avoid weird variations in the first second.
+        mean_and_stdev(1.01,repeats1.value,DARK,{out}sigma_dark_adu,mean_dark_adu);//as stdev but do it nrframes times and report median value as result
+        //take an exposure of value+1 seconds.
+        mean_and_stdev(dark_current_test_duration1.value+1.01,repeats1.value,DARK,{out}sigma_dark_adu2,mean_dark_adu2);//as stdev but do it nrframes times and report median value as result
+
+        read_noise2_e:=sigma_dark_adu*measurements[gainstep].gain_e/correction; // read noise after 1.1 seconds
+        total_noise_e:=sigma_dark_adu2*measurements[gainstep].gain_e/correction;// noise after 100 seconds noise[e-]:=noise_adu * gain_e
+
+        Instruction.Lines.add('Noise after 1.01 sec: '+floattostrF(read_noise2_e,FFfixed,0,2)+ '[e-]');
+        Instruction.Lines.add('Noise after '+inttostr(dark_current_test_duration1.value)+' sec:  '+floattostrF(total_noise_e,FFfixed,0,2)+ '[e-]');
+
+
+        dark_current_adu:=mean_dark_adu2-mean_dark_adu;
+        dark_current_es:=dark_current_adu*measurements[gainstep].gain_e/(dark_current_test_duration1.value*correction); //dark current in e-/(sec*pixel)
+        Instruction.Lines.add('Δadu: '+floattostrF(dark_current_adu,FFfixed,0,0));
+        Instruction.Lines.add('Dark current method1: '+floattostrF(dark_current_es,FFfixed,0,4)+ ' [e-/(sec*pixel)]');
+
+        dark_current2_es:=(sqr(total_noise_e) - sqr(read_noise2_e))/dark_current_test_duration1.value; //dark current in e-/(sec*pixel)
+        Instruction.Lines.add('Dark current method2: '+floattostrF(dark_current2_es,FFfixed,0,4)+ ' [e-/(sec*pixel)]');
+
+
+
+        if dark_current_adu>5 then
+        begin
+          //method1 using Δadu
+          for i:=0 to dark_current_test_duration1.value do
+          begin
+            total_noise:=sqrt(sqr(measurements[gainstep].read_noise_e)+i*dark_current_es);
+            Chart5LineSeries1.addxy(i,total_noise);//total noise:=sqrt(sqr(readnoise)+sqr(dark_noise))==> total noise:=sqrt(sqr(readnoise)+dark current)
+          end;
+
+          //method2 using Δσ
+          //dark_current_adu[e-]:=sqr(σ_end[adu]*gain[e-/adu]) - sqr(σ_read_noise[adu]*gain[e-/adu])    (formula 4)
+          Chart5LineSeries2.addxy(0,read_noise2_e);//read noise
+          for i:=0 to dark_current_test_duration1.value  do
+          begin
+            total_noise:=sqrt(i*dark_current2_es+sqr(read_noise2_e)); //formula 4
+            Chart5LineSeries2.addxy(i,total_noise);
+          end;
+          message:='Dark current '+floattostrF(dark_current2_es,FFfixed,0,5)+' [e-/(sec*pixel)] at'+floattostrF(camera.temperature,FFfixed,0,1)  +'° Celsius. Gain '+inttostr(gain)+'. ('+camera.ccdname+')';
+        end
+        else
+        message:=message+#10+'WARNING. Too short exposure time. Only '+floattostrF(dark_current_adu,FFfixed,0,1)+' adu difference. Set exposure time longer.';
+
+        Instruction.Lines.add(message);
+
+        chart5.Title.text.setStrings(message);
+        StringGrid1.InsertRowWithValues(stringgrid1.rowcount,['',message]);
+        StringGrid1.Row :=stringgrid1.rowcount;//scroll
+
+      end;
+
+      update_temperature_reading;
 
       Instruction.Lines.add(#10+#10+'Finished.');
       StepButton1.enabled:=true;

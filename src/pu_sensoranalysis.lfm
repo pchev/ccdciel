@@ -20,7 +20,7 @@ object f_sensoranalysis: Tf_sensoranalysis
     ClientWidth = 1161
     TabOrder = 0
     object ButtonClose1: TButton
-      Left = 405
+      Left = 1048
       Height = 25
       Top = 16
       Width = 75
@@ -29,7 +29,7 @@ object f_sensoranalysis: Tf_sensoranalysis
       TabOrder = 0
     end
     object StepButton1: TButton
-      Left = 26
+      Left = 392
       Height = 25
       Top = 16
       Width = 208
@@ -38,7 +38,7 @@ object f_sensoranalysis: Tf_sensoranalysis
       TabOrder = 1
     end
     object Button1: TButton
-      Left = 744
+      Left = 640
       Height = 28
       Top = 16
       Width = 119
@@ -46,6 +46,15 @@ object f_sensoranalysis: Tf_sensoranalysis
       Caption = 'Data to clipboard'
       OnClick = Button1Click
       TabOrder = 2
+    end
+    object Button2: TButton
+      Left = 960
+      Height = 25
+      Top = 16
+      Width = 75
+      Caption = 'Abort'
+      OnClick = Button2Click
+      TabOrder = 3
     end
   end
   object Instruction: TMemo
@@ -80,23 +89,23 @@ object f_sensoranalysis: Tf_sensoranalysis
       TabOrder = 0
     end
     object Offset1: TSpinEdit
-      Left = 304
+      Left = 392
       Height = 32
       Top = 56
       Width = 76
-      TabOrder = 6
+      TabOrder = 12
       Value = 10
     end
     object Label2: TLabel
-      Left = 16
+      Left = 8
       Height = 18
-      Top = 10
+      Top = 13
       Width = 116
       Caption = 'Gain values to test:'
       ParentColor = False
     end
     object Label3: TLabel
-      Left = 256
+      Left = 344
       Height = 18
       Top = 56
       Width = 38
@@ -134,113 +143,24 @@ object f_sensoranalysis: Tf_sensoranalysis
       Width = 92
       ParentShowHint = False
       ShowHint = True
-      TabOrder = 8
+      TabOrder = 7
       Value = 10000
     end
-    object GroupBox1: TGroupBox
-      Left = 232
-      Height = 153
-      Top = 104
-      Width = 248
-      Caption = 'Reported by camera'
-      ClientHeight = 123
-      ClientWidth = 244
-      TabOrder = 9
-      object Label4: TLabel
-        Left = 24
-        Height = 18
-        Top = 8
-        Width = 79
-        Caption = 'Temperature'
-        ParentColor = False
-      end
-      object LabelTemperature1: TLabel
-        Left = 139
-        Height = 18
-        Top = 8
-        Width = 5
-        Caption = '-'
-        ParentColor = False
-      end
-      object Label5: TLabel
-        Left = 24
-        Height = 18
-        Top = 32
-        Width = 103
-        Caption = 'Full well capacity'
-        ParentColor = False
-      end
-      object LabelFullwellcapacity1: TLabel
-        Left = 139
-        Height = 18
-        Top = 32
-        Width = 5
-        Caption = '-'
-        ParentColor = False
-      end
-      object Label6: TLabel
-        Left = 24
-        Height = 18
-        Top = 56
-        Width = 57
-        Caption = 'Max ADU'
-        ParentColor = False
-      end
-      object LabelMaxAdu1: TLabel
-        Left = 139
-        Height = 18
-        Top = 56
-        Width = 5
-        Caption = '-'
-        ParentColor = False
-      end
-      object Label11: TLabel
-        Left = 24
-        Height = 18
-        Top = 80
-        Width = 87
-        Caption = 'Exposure min:'
-        ParentColor = False
-      end
-      object exposuremin1: TLabel
-        Left = 139
-        Height = 18
-        Top = 80
-        Width = 5
-        Caption = '-'
-        ParentColor = False
-      end
-      object Label12: TLabel
-        Left = 24
-        Height = 18
-        Top = 104
-        Width = 90
-        Caption = 'Exposure max:'
-        ParentColor = False
-      end
-      object exposuremax1: TLabel
-        Left = 139
-        Height = 18
-        Top = 104
-        Width = 5
-        Caption = '-'
-        ParentColor = False
-      end
-    end
     object repeats1: TSpinEdit
-      Left = 304
+      Left = 396
       Height = 32
       Hint = 'Number of images used for each measurement.'
       Top = 16
       Width = 72
       MinValue = 1
+      OnChange = repeats1Change
       ParentShowHint = False
       ShowHint = True
-      TabOrder = 10
+      TabOrder = 8
       Value = 3
     end
     object Label7: TLabel
-      Left = 248
+      Left = 340
       Height = 18
       Top = 16
       Width = 49
@@ -277,7 +197,7 @@ object f_sensoranalysis: Tf_sensoranalysis
       Width = 92
       ParentShowHint = False
       ShowHint = True
-      TabOrder = 7
+      TabOrder = 6
       Value = 4000
     end
     object Gain5: TSpinEdit
@@ -291,93 +211,204 @@ object f_sensoranalysis: Tf_sensoranalysis
       TabOrder = 4
       Value = 1000
     end
-    object linearity_test2: TCheckBox
-      Left = 128
-      Height = 22
-      Hint = 'Linearity test for this gain'
-      Top = 56
-      Width = 104
-      Caption = 'linearity test'
+    object RadioGroup1: TRadioGroup
+      Left = 224
+      Height = 235
+      Hint = 'Measure the dark current preferable at a high gain.'
+      Top = 13
+      Width = 113
+      AutoFill = True
+      Caption = 'Dark current test'
+      ChildSizing.LeftRightSpacing = 6
+      ChildSizing.EnlargeHorizontal = crsHomogenousChildResize
+      ChildSizing.EnlargeVertical = crsHomogenousChildResize
+      ChildSizing.ShrinkHorizontal = crsScaleChilds
+      ChildSizing.ShrinkVertical = crsScaleChilds
+      ChildSizing.Layout = cclLeftToRightThenTopToBottom
+      ChildSizing.ControlsPerLine = 1
+      ClientHeight = 205
+      ClientWidth = 109
+      ParentShowHint = False
+      ShowHint = True
+      TabOrder = 9
+      object RadioButton1: TRadioButton
+        Left = 6
+        Height = 23
+        Top = 0
+        Width = 97
+        TabOrder = 0
+      end
+      object RadioButton2: TRadioButton
+        Left = 6
+        Height = 23
+        Top = 23
+        Width = 97
+        TabOrder = 1
+      end
+      object RadioButton3: TRadioButton
+        Left = 6
+        Height = 23
+        Top = 46
+        Width = 97
+        TabOrder = 2
+      end
+      object RadioButton4: TRadioButton
+        Left = 6
+        Height = 23
+        Top = 69
+        Width = 97
+        TabOrder = 3
+      end
+      object RadioButton5: TRadioButton
+        Left = 6
+        Height = 23
+        Top = 92
+        Width = 97
+        TabOrder = 4
+      end
+      object RadioButton6: TRadioButton
+        Left = 6
+        Height = 23
+        Top = 115
+        Width = 97
+        TabOrder = 5
+      end
+      object RadioButton7: TRadioButton
+        Left = 6
+        Height = 23
+        Top = 138
+        Width = 97
+        TabOrder = 6
+      end
+      object RadioButton8: TRadioButton
+        Left = 6
+        Height = 22
+        Top = 161
+        Width = 97
+        TabOrder = 7
+      end
+      object RadioButton9: TRadioButton
+        Left = 6
+        Height = 22
+        Top = 183
+        Width = 97
+        Caption = 'None'
+        Checked = True
+        TabOrder = 8
+        TabStop = True
+      end
+    end
+    object RadioGroup2: TRadioGroup
+      Left = 120
+      Height = 235
+      Top = 13
+      Width = 105
+      AutoFill = True
+      Caption = 'Linearity test'
+      ChildSizing.LeftRightSpacing = 6
+      ChildSizing.EnlargeHorizontal = crsHomogenousChildResize
+      ChildSizing.EnlargeVertical = crsHomogenousChildResize
+      ChildSizing.ShrinkHorizontal = crsScaleChilds
+      ChildSizing.ShrinkVertical = crsScaleChilds
+      ChildSizing.Layout = cclLeftToRightThenTopToBottom
+      ChildSizing.ControlsPerLine = 1
+      ClientHeight = 205
+      ClientWidth = 101
+      TabOrder = 10
+      object lin1: TRadioButton
+        Left = 6
+        Height = 23
+        Top = 0
+        Width = 89
+        TabOrder = 0
+      end
+      object lin2: TRadioButton
+        Left = 6
+        Height = 23
+        Top = 23
+        Width = 89
+        TabOrder = 1
+      end
+      object lin3: TRadioButton
+        Left = 6
+        Height = 23
+        Top = 46
+        Width = 89
+        TabOrder = 2
+      end
+      object lin4: TRadioButton
+        Left = 6
+        Height = 23
+        Top = 69
+        Width = 89
+        TabOrder = 3
+      end
+      object lin5: TRadioButton
+        Left = 6
+        Height = 23
+        Top = 92
+        Width = 89
+        TabOrder = 4
+      end
+      object lin6: TRadioButton
+        Left = 6
+        Height = 23
+        Top = 115
+        Width = 89
+        TabOrder = 5
+      end
+      object lin7: TRadioButton
+        Left = 6
+        Height = 23
+        Top = 138
+        Width = 89
+        TabOrder = 6
+      end
+      object lin8: TRadioButton
+        Left = 6
+        Height = 22
+        Top = 161
+        Width = 89
+        TabOrder = 7
+      end
+      object RadioButton18: TRadioButton
+        Left = 6
+        Height = 22
+        Top = 183
+        Width = 89
+        Caption = 'None'
+        Checked = True
+        TabOrder = 8
+        TabStop = True
+      end
+    end
+    object dark_current_test_duration1: TSpinEdit
+      Left = 232
+      Height = 32
+      Hint = 'Dark current test duration'
+      Top = 248
+      Width = 68
+      MinValue = 10
       ParentShowHint = False
       ShowHint = True
       TabOrder = 11
+      Value = 200
     end
-    object linearity_test3: TCheckBox
-      Left = 128
-      Height = 22
-      Hint = 'Linearity test for this gain'
-      Top = 80
-      Width = 104
-      Caption = 'linearity test'
-      ParentShowHint = False
-      ShowHint = True
-      TabOrder = 12
+    object Label8: TLabel
+      Left = 304
+      Height = 18
+      Top = 248
+      Width = 29
+      Caption = '[sec]'
+      ParentColor = False
     end
-    object linearity_test4: TCheckBox
-      Left = 128
-      Height = 22
-      Hint = 'Linearity test for this gain'
-      Top = 104
-      Width = 104
-      Caption = 'linearity test'
-      ParentShowHint = False
-      ShowHint = True
-      TabOrder = 13
-    end
-    object linearity_test5: TCheckBox
-      Left = 128
-      Height = 22
-      Hint = 'Linearity test for this gain'
+    object LabelTemperature2: TLabel
+      Left = 392
+      Height = 18
       Top = 128
-      Width = 104
-      Caption = 'linearity test'
-      ParentShowHint = False
-      ShowHint = True
-      TabOrder = 14
-    end
-    object linearity_test6: TCheckBox
-      Left = 128
-      Height = 22
-      Hint = 'Linearity test for this gain'
-      Top = 152
-      Width = 104
-      Caption = 'linearity test'
-      ParentShowHint = False
-      ShowHint = True
-      TabOrder = 15
-    end
-    object linearity_test7: TCheckBox
-      Left = 128
-      Height = 22
-      Hint = 'Linearity test for this gain'
-      Top = 176
-      Width = 104
-      Caption = 'linearity test'
-      ParentShowHint = False
-      ShowHint = True
-      TabOrder = 16
-    end
-    object linearity_test8: TCheckBox
-      Left = 128
-      Height = 22
-      Hint = 'Linearity test for this gain'
-      Top = 200
-      Width = 104
-      Caption = 'linearity test'
-      ParentShowHint = False
-      ShowHint = True
-      TabOrder = 17
-    end
-    object linearity_test1: TCheckBox
-      Left = 128
-      Height = 22
-      Hint = 'Linearity test for this gain'
-      Top = 32
-      Width = 104
-      Caption = 'linearity test'
-      ParentShowHint = False
-      ShowHint = True
-      TabOrder = 18
+      Width = 17
+      Caption = '----'
+      ParentColor = False
     end
   end
   object StringGrid1: TStringGrid
@@ -464,7 +495,7 @@ object f_sensoranalysis: Tf_sensoranalysis
             Minors = <>
             Title.LabelFont.Orientation = 900
             Title.Visible = True
-            Title.Caption = '                                   adu                  CCDCiel'
+            Title.Caption = '                  camera ouput [adu]           CCDCiel'
             Title.LabelBrush.Style = bsClear
           end        
           item
@@ -472,7 +503,7 @@ object f_sensoranalysis: Tf_sensoranalysis
             Marks.LabelBrush.Style = bsClear
             Minors = <>
             Title.Visible = True
-            Title.Caption = 'Exposure'
+            Title.Caption = 'Exposure [sec]'
             Title.LabelBrush.Style = bsClear
           end>
         Legend.Visible = True
@@ -482,27 +513,8 @@ object f_sensoranalysis: Tf_sensoranalysis
         Title.Visible = True
         Align = alClient
         object Chart1LineSeries1: TLineSeries
+          Legend.Visible = False
           LinePen.Color = clBlue
-        end
-        object Chart1LineSeries2: TLineSeries
-          LinePen.Color = clLime
-        end
-        object Chart1LineSeries3: TLineSeries
-          LinePen.Color = clPurple
-        end
-        object Chart1LineSeries4: TLineSeries
-          LinePen.Color = clLime
-        end
-        object Chart1LineSeries5: TLineSeries
-          LinePen.Color = clFuchsia
-        end
-        object Chart1LineSeries6: TLineSeries
-          LinePen.Color = clAqua
-        end
-        object Chart1LineSeries7: TLineSeries
-          LinePen.Color = clGreen
-        end
-        object Chart1LineSeries8: TLineSeries
         end
       end
     end
@@ -521,7 +533,7 @@ object f_sensoranalysis: Tf_sensoranalysis
             Minors = <>
             Title.LabelFont.Orientation = 900
             Title.Visible = True
-            Title.Caption = 'e-/adu'
+            Title.Caption = '                         gain [e-/adu]                CCDCiel'
             Title.LabelBrush.Style = bsClear
           end        
           item
@@ -529,11 +541,11 @@ object f_sensoranalysis: Tf_sensoranalysis
             Marks.LabelBrush.Style = bsClear
             Minors = <>
             Title.Visible = True
-            Title.Caption = 'gain'
+            Title.Caption = 'camara gain'
             Title.LabelBrush.Style = bsClear
           end>
         Title.Text.Strings = (
-          'e-/adu'
+          'Gain in e-/adu'
         )
         Title.Visible = True
         Align = alClient
@@ -559,7 +571,7 @@ object f_sensoranalysis: Tf_sensoranalysis
             Title.Alignment = taRightJustify
             Title.LabelFont.Orientation = 900
             Title.Visible = True
-            Title.Caption = '                                  e-                         CCDCiel'
+            Title.Caption = '     Read noise per pixel [e-]'
             Title.LabelBrush.Style = bsClear
           end        
           item
@@ -567,7 +579,7 @@ object f_sensoranalysis: Tf_sensoranalysis
             Marks.LabelBrush.Style = bsClear
             Minors = <>
             Title.Visible = True
-            Title.Caption = 'gain'
+            Title.Caption = 'camera gain'
             Title.LabelBrush.Style = bsClear
           end>
         Legend.Visible = True
@@ -581,12 +593,9 @@ object f_sensoranalysis: Tf_sensoranalysis
         Title.Visible = True
         Align = alClient
         object Chart3LineSeries1: TLineSeries
+          Legend.Visible = False
           Title = 'Small exposure'
           LinePen.Color = clBlue
-        end
-        object Chart3LineSeries2: TLineSeries
-          Title = 'Bias'
-          LinePen.Color = clGreen
         end
       end
     end
@@ -605,7 +614,7 @@ object f_sensoranalysis: Tf_sensoranalysis
             Minors = <>
             Title.LabelFont.Orientation = 900
             Title.Visible = True
-            Title.Caption = 'e-'
+            Title.Caption = '             Maximum charge [e-]           CCDCiel'
             Title.LabelBrush.Style = bsClear
           end        
           item
@@ -613,17 +622,154 @@ object f_sensoranalysis: Tf_sensoranalysis
             Marks.LabelBrush.Style = bsClear
             Minors = <>
             Title.Visible = True
-            Title.Caption = 'gain'
+            Title.Caption = 'camera gain'
             Title.LabelBrush.Style = bsClear
           end>
         Title.Text.Strings = (
-          'Full well'
+          'Full well capacity each pixel in e-'
         )
         Title.Visible = True
         Align = alClient
         object Chart4LineSeries1: TLineSeries
           Legend.Visible = False
           LinePen.Color = clBlue
+        end
+      end
+    end
+    object TabSheet5: TTabSheet
+      Caption = 'Dark current'
+      ClientHeight = 245
+      ClientWidth = 664
+      object Chart5: TChart
+        Left = 0
+        Height = 245
+        Top = 0
+        Width = 664
+        AxisList = <        
+          item
+            Marks.LabelBrush.Style = bsClear
+            Minors = <>
+            Title.LabelFont.Orientation = 900
+            Title.Visible = True
+            Title.Caption = '                           Total noise [e-]             CCDCiel'
+            Title.LabelBrush.Style = bsClear
+          end        
+          item
+            Alignment = calBottom
+            Marks.LabelBrush.Style = bsClear
+            Minors = <>
+            Title.Visible = True
+            Title.Caption = 'Time [sec]'
+            Title.LabelBrush.Style = bsClear
+          end>
+        Legend.Visible = True
+        Title.Text.Strings = (
+          'Dark current'
+        )
+        Title.Visible = True
+        Align = alClient
+        object Chart5LineSeries1: TLineSeries
+          Title = 'Total noise method Δadu'
+        end
+        object Chart5LineSeries2: TLineSeries
+          Title = 'Total noise method Δσ'
+          LinePen.Color = clRed
+        end
+      end
+    end
+    object TabSheet4: TTabSheet
+      Caption = 'Info'
+      ClientHeight = 245
+      ClientWidth = 664
+      OnShow = TabSheet4Show
+      object GroupBox1: TGroupBox
+        Left = 32
+        Height = 153
+        Top = 32
+        Width = 248
+        Caption = 'Reported by camera'
+        ClientHeight = 123
+        ClientWidth = 244
+        TabOrder = 0
+        object Label4: TLabel
+          Left = 24
+          Height = 18
+          Top = 8
+          Width = 79
+          Caption = 'Temperature'
+          ParentColor = False
+        end
+        object LabelTemperature1: TLabel
+          Left = 139
+          Height = 18
+          Top = 8
+          Width = 5
+          Caption = '-'
+          ParentColor = False
+        end
+        object Label5: TLabel
+          Left = 24
+          Height = 18
+          Top = 32
+          Width = 103
+          Caption = 'Full well capacity'
+          ParentColor = False
+        end
+        object LabelFullwellcapacity1: TLabel
+          Left = 139
+          Height = 18
+          Top = 32
+          Width = 5
+          Caption = '-'
+          ParentColor = False
+        end
+        object Label6: TLabel
+          Left = 24
+          Height = 18
+          Top = 56
+          Width = 57
+          Caption = 'Max ADU'
+          ParentColor = False
+        end
+        object LabelMaxAdu1: TLabel
+          Left = 139
+          Height = 18
+          Top = 56
+          Width = 5
+          Caption = '-'
+          ParentColor = False
+        end
+        object Label11: TLabel
+          Left = 24
+          Height = 18
+          Top = 80
+          Width = 87
+          Caption = 'Exposure min:'
+          ParentColor = False
+        end
+        object exposuremin1: TLabel
+          Left = 139
+          Height = 18
+          Top = 80
+          Width = 5
+          Caption = '-'
+          ParentColor = False
+        end
+        object Label12: TLabel
+          Left = 24
+          Height = 18
+          Top = 104
+          Width = 90
+          Caption = 'Exposure max:'
+          ParentColor = False
+        end
+        object exposuremax1: TLabel
+          Left = 139
+          Height = 18
+          Top = 104
+          Width = 5
+          Caption = '-'
+          ParentColor = False
         end
       end
     end
