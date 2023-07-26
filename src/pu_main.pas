@@ -8188,7 +8188,7 @@ begin
 end;
 
 procedure Tf_main.MountGoto(Sender: TObject);
-var ra,de,err:double;
+var ra,de,ra2000,de2000,err:double;
     tra,tde,objn: string;
 begin
 if f_mount.BtnGoto.Caption=rsGoto then begin
@@ -8236,11 +8236,21 @@ if f_mount.BtnGoto.Caption=rsGoto then begin
        end;
        if CancelGoto then exit;
        NewMessage(rsGoto+': '+objn,1);
+       ra2000:=ra;
+       de2000:=de;
        J2000ToMount(mount.EquinoxJD,ra,de);
        if f_goto.GotoAstrometry.Checked then begin
-         if astrometry.PrecisionSlew(ra,de,err) then
-           f_capture.Fname.Text:=objn
-         else
+         if astrometry.PrecisionSlew(ra,de,err) then begin
+           f_capture.Fname.Text:=objn;
+           if (autoguider is T_autoguider_internal) and f_internalguider.SpectroFunctions
+              and f_internalguider.cbUseAstrometry.Checked then begin
+                if MessageDlg('Start guiding to complete the centering on the slit?',mtConfirmation,mbYesNo,0)=mrYes then begin
+                  autoguider.SpectroSetTarget(ra2000,de2000);
+                  autoguider.Guide(true);
+                end;
+           end;
+         end
+          else
            NewMessage(format(rsError,[rsGoto+': '+objn]) ,1);
        end
        else begin
@@ -14484,7 +14494,7 @@ begin
 end;
 
 Procedure Tf_main.PlanetariumNewTarget(Sender: TObject);
-var ra,de,err:double;
+var ra,de,ra2000,de2000,err:double;
     tra,tde,objn: string;
 begin
  if planetarium.Connected and (AllDevicesConnected)and(Mount.Status=devConnected)and(Camera.Status=devConnected) then begin
@@ -14526,10 +14536,19 @@ begin
          de:=StrToDE(tde);
       if (ra<>NullCoord) and (de<>NullCoord) then begin
         if MessageDlg(Format(rsPleaseConfir, [objn, tra, tde]), mtConfirmation,mbOKCancel, 0)=mrOK then begin
+          ra2000:=ra;
+          de2000:=de;
           J2000ToMount(mount.EquinoxJD,ra,de);
           if astrometry.PrecisionSlew(ra,de,err) then begin
             f_capture.Fname.Text:=objn;
             NewMessage(Format(rsPlanetariumT, [objn]),1);
+            if (autoguider is T_autoguider_internal) and f_internalguider.SpectroFunctions
+               and f_internalguider.cbUseAstrometry.Checked then begin
+                 if MessageDlg('Start guiding to complete the centering on the slit?',mtConfirmation,mbYesNo,0)=mrYes then begin
+                   autoguider.SpectroSetTarget(ra2000,de2000);
+                   autoguider.Guide(true);
+                 end;
+            end;
           end
           else NewMessage(rsPlanetariumT2,1);
         end;
