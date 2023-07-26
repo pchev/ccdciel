@@ -15,7 +15,7 @@
     <i18n>
       <EnableI18N LFM="False"/>
     </i18n>
-    <BuildModes Count="8">
+    <BuildModes Count="7">
       <Item1 Name="Default" Default="True"/>
       <Item2 Name="win32">
         <MacroValues Count="1">
@@ -91,7 +91,7 @@
       </Item3>
       <Item4 Name="Release">
         <MacroValues Count="1">
-          <Macro6 Name="LCLWidgetType" Value="gtk2"/>
+          <Macro4 Name="LCLWidgetType" Value="qt5"/>
         </MacroValues>
         <CompilerOptions>
           <Version Value="11"/>
@@ -129,7 +129,7 @@
       </Item4>
       <Item5 Name="memleak">
         <MacroValues Count="1">
-          <Macro5 Name="LCLWidgetType" Value="gtk2"/>
+          <Macro5 Name="LCLWidgetType" Value="qt5"/>
         </MacroValues>
         <CompilerOptions>
           <Version Value="11"/>
@@ -173,54 +173,9 @@
           </Other>
         </CompilerOptions>
       </Item5>
-      <Item6 Name="qt">
+      <Item6 Name="MacOS">
         <MacroValues Count="1">
-          <Macro3 Name="LCLWidgetType" Value="qt5"/>
-        </MacroValues>
-        <CompilerOptions>
-          <Version Value="11"/>
-          <Target>
-            <Filename Value="ccdciel"/>
-          </Target>
-          <SearchPaths>
-            <IncludeFiles Value="$(ProjOutDir)"/>
-            <UnitOutputDirectory Value="units/$(TargetCPU)-$(TargetOS)-$(LCLWidgetType)"/>
-          </SearchPaths>
-          <Parsing>
-            <SyntaxOptions>
-              <IncludeAssertionCode Value="True"/>
-            </SyntaxOptions>
-          </Parsing>
-          <CodeGeneration>
-            <Checks>
-              <IOChecks Value="True"/>
-              <RangeChecks Value="True"/>
-              <OverflowChecks Value="True"/>
-              <StackChecks Value="True"/>
-            </Checks>
-            <StackSize Value="8388608"/>
-          </CodeGeneration>
-          <Linking>
-            <Debugging>
-              <DebugInfoType Value="dsDwarf2"/>
-            </Debugging>
-            <Options>
-              <Win32>
-                <GraphicApplication Value="True"/>
-              </Win32>
-            </Options>
-          </Linking>
-          <Other>
-            <CompilerMessages>
-              <IgnoredMessages idx5024="True"/>
-            </CompilerMessages>
-            <CustomOptions Value="-dUseCThreads"/>
-          </Other>
-        </CompilerOptions>
-      </Item6>
-      <Item7 Name="MacOS">
-        <MacroValues Count="1">
-          <Macro4 Name="LCLWidgetType" Value="cocoa"/>
+          <Macro3 Name="LCLWidgetType" Value="cocoa"/>
         </MacroValues>
         <CompilerOptions>
           <Version Value="11"/>
@@ -264,8 +219,8 @@
             <CustomOptions Value="-dUseCThreads"/>
           </Other>
         </CompilerOptions>
-      </Item7>
-      <Item8 Name="MacOS-aarch64">
+      </Item6>
+      <Item7 Name="MacOS-aarch64">
         <CompilerOptions>
           <Version Value="11"/>
           <Target>
@@ -304,14 +259,13 @@
             <CompilerPath Value="/usr/local/bin/ppcrossa64"/>
           </Other>
         </CompilerOptions>
-      </Item8>
-      <SharedMatrixOptions Count="6">
+      </Item7>
+      <SharedMatrixOptions Count="5">
         <Item1 ID="755009368669" Modes="win32" Type="IDEMacro" MacroName="LCLWidgetType" Value="win32"/>
         <Item2 ID="602360172665" Modes="win64" Type="IDEMacro" MacroName="LCLWidgetType" Value="win32"/>
-        <Item3 ID="723051368745" Modes="qt" Type="IDEMacro" MacroName="LCLWidgetType" Value="qt5"/>
-        <Item4 ID="929994115950" Modes="MacOS" Type="IDEMacro" MacroName="LCLWidgetType" Value="cocoa"/>
-        <Item5 ID="345506446217" Modes="memleak" Type="IDEMacro" MacroName="LCLWidgetType" Value="gtk2"/>
-        <Item6 ID="013547356301" Modes="Release" Type="IDEMacro" MacroName="LCLWidgetType" Value="gtk2"/>
+        <Item3 ID="929994115950" Modes="MacOS" Type="IDEMacro" MacroName="LCLWidgetType" Value="cocoa"/>
+        <Item4 ID="863054938370" Modes="Release" Type="IDEMacro" MacroName="LCLWidgetType" Value="qt5"/>
+        <Item5 ID="742428467299" Modes="memleak" Type="IDEMacro" MacroName="LCLWidgetType" Value="qt5"/>
       </SharedMatrixOptions>
     </BuildModes>
     <PublishOptions>
