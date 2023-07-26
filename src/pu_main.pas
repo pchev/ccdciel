@@ -2774,6 +2774,34 @@ begin
   WantGuideCamera:=config.GetValue('/Devices/GuideCamera',false);
   WantFinderCamera:=config.GetValue('/Devices/FinderCamera',false);
 
+  f_devicesconnection.LabelCamera.Visible:=WantCamera;
+  f_devicesconnection.LabelWheel.Visible:=WantWheel;
+  f_devicesconnection.LabelFocuser.Visible:=WantFocuser;
+  f_devicesconnection.LabelRotator.Visible:=WantRotator;
+  f_devicesconnection.LabelMount.Visible:=WantMount;
+  f_devicesconnection.LabelDome.Visible:=WantDome;
+  f_devicesconnection.LabelWeather.Visible:=WantWeather;
+  f_devicesconnection.LabelSafety.Visible:=WantSafety;
+  f_devicesconnection.LabelSwitch.Visible:=WantSwitch;
+  f_devicesconnection.LabelCover.Visible:=WantCover;
+  f_devicesconnection.LabelGuideCamera.Visible:=WantGuideCamera;
+  f_devicesconnection.LabelFinderCamera.Visible:=WantFinderCamera;
+  f_devicesconnection.LabelWatchdog.Visible:=WantWatchdog;
+  f_devicesconnection.LabelCamera.font.color:=clRed;
+  f_devicesconnection.LabelWheel.font.color:=clRed;
+  f_devicesconnection.LabelFocuser.font.color:=clRed;
+  f_devicesconnection.LabelRotator.font.color:=clRed;
+  f_devicesconnection.LabelMount.font.color:=clRed;
+  f_devicesconnection.LabelDome.font.color:=clRed;
+  f_devicesconnection.LabelWeather.font.color:=clRed;
+  f_devicesconnection.LabelSafety.font.color:=clRed;
+  f_devicesconnection.LabelSwitch.font.color:=clRed;
+  f_devicesconnection.LabelCover.font.color:=clRed;
+  f_devicesconnection.LabelGuideCamera.font.color:=clRed;
+  f_devicesconnection.LabelFinderCamera.font.color:=clRed;
+  f_devicesconnection.LabelWatchdog.font.color:=clRed;
+  f_devicesconnection.PanelDev.Visible:=true;
+
   MultiPanelHsplit:=config.GetValue('/MultiPanel/HSplit',0.5);
   MultiPanelVsplit:=config.GetValue('/MultiPanel/VSplit',0.5);
   PanelImage2.Height:=round(MultiPanelHsplit*PanelCenter.Height);
