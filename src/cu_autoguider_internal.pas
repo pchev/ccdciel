@@ -2224,6 +2224,7 @@ begin
   if finternalguider.SpectroFunctions and finternalguider.cbUseAstrometry.Checked
      and(cdcwcs_sky2xy<>nil) and FSpectroTarget.valid and (FSpectroTarget.RA<>NullCoord)and(FSpectroTarget.DEC<>NullCoord) then begin
     result:=false;
+    FSpectroTarget.valid:=false; // use coordinates only once
     exp:=finternalguider.AstrometryExp.value;
     bin:=finternalguider.Binning.Value;
     gain:=finternalguider.Gain.Value;
