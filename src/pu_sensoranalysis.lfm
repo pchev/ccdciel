@@ -1,11 +1,11 @@
 object f_sensoranalysis: Tf_sensoranalysis
-  Left = 311
-  Height = 651
-  Top = 0
-  Width = 1000
+  Left = 361
+  Height = 650
+  Top = 142
+  Width = 1144
   Caption = 'Sensor Analysis'
-  ClientHeight = 651
-  ClientWidth = 1000
+  ClientHeight = 650
+  ClientWidth = 1144
   FormStyle = fsStayOnTop
   OnClose = FormClose
   OnCreate = FormCreate
@@ -13,11 +13,11 @@ object f_sensoranalysis: Tf_sensoranalysis
   object Panel1: TPanel
     Left = 0
     Height = 51
-    Top = 600
-    Width = 1000
+    Top = 599
+    Width = 1144
     Align = alBottom
     ClientHeight = 51
-    ClientWidth = 1000
+    ClientWidth = 1144
     TabOrder = 0
     object ButtonClose1: TButton
       Left = 686
@@ -56,9 +56,9 @@ object f_sensoranalysis: Tf_sensoranalysis
       TabOrder = 3
     end
   end
-  object Instruction: TMemo
+  object Instructions: TMemo
     Left = 0
-    Height = 320
+    Height = 319
     Top = 0
     Width = 488
     Align = alClient
@@ -69,7 +69,7 @@ object f_sensoranalysis: Tf_sensoranalysis
   object Panel2: TPanel
     Left = 0
     Height = 280
-    Top = 320
+    Top = 319
     Width = 488
     Align = alBottom
     Anchors = [akLeft, akBottom]
@@ -152,11 +152,10 @@ object f_sensoranalysis: Tf_sensoranalysis
       Top = 16
       Width = 72
       MinValue = 1
-      OnChange = repeats1Change
       ParentShowHint = False
       ShowHint = True
       TabOrder = 8
-      Value = 3
+      Value = 1
     end
     object Label7: TLabel
       Left = 340
@@ -384,14 +383,15 @@ object f_sensoranalysis: Tf_sensoranalysis
     object dark_current_test_duration1: TSpinEdit
       Left = 232
       Height = 32
-      Hint = 'Dark current test duration'
+      Hint = 'Dark current test duration., '
       Top = 248
       Width = 68
-      MinValue = 10
+      Increment = 20
+      MinValue = 60
       ParentShowHint = False
       ShowHint = True
       TabOrder = 11
-      Value = 200
+      Value = 400
     end
     object Label8: TLabel
       Left = 304
@@ -412,9 +412,9 @@ object f_sensoranalysis: Tf_sensoranalysis
   end
   object StringGrid1: TStringGrid
     Left = 493
-    Height = 317
+    Height = 316
     Top = 3
-    Width = 502
+    Width = 646
     Anchors = [akTop, akLeft, akRight, akBottom]
     ColCount = 9
     RowCount = 1
@@ -472,28 +472,28 @@ object f_sensoranalysis: Tf_sensoranalysis
   object PageControl1: TPageControl
     Left = 493
     Height = 280
-    Top = 320
-    Width = 507
+    Top = 319
+    Width = 651
     ActivePage = Linearity
-    Anchors = [akLeft, akRight, akBottom]
+    Anchors = [akTop, akLeft, akRight, akBottom]
     TabIndex = 0
     TabOrder = 4
     object Linearity: TTabSheet
       Caption = 'Linearity'
       ClientHeight = 245
-      ClientWidth = 503
+      ClientWidth = 647
       object Chart1: TChart
         Left = 0
         Height = 245
         Top = 0
-        Width = 503
+        Width = 647
         AxisList = <        
           item
             Marks.LabelBrush.Style = bsClear
             Minors = <>
             Title.LabelFont.Orientation = 900
             Title.Visible = True
-            Title.Caption = '                  camera ouput [adu]           CCDCiel'
+            Title.Caption = '            camera output[adu]         CCDCiel'
             Title.LabelBrush.Style = bsClear
           end        
           item
@@ -501,37 +501,43 @@ object f_sensoranalysis: Tf_sensoranalysis
             Marks.LabelBrush.Style = bsClear
             Minors = <>
             Title.Visible = True
-            Title.Caption = 'Exposure [sec]'
+            Title.Caption = 'exposure[sec]'
             Title.LabelBrush.Style = bsClear
           end>
-        Legend.Visible = True
         Title.Text.Strings = (
           'Linearity'
         )
         Title.Visible = True
         Align = alClient
         object Chart1LineSeries1: TLineSeries
-          Legend.Visible = False
+          Title = 'linearity'
           LinePen.Color = clBlue
+          Marks.LabelFont.Color = clMenuText
+          Marks.CalloutAngle = 90
+          Marks.Format = '%2:s'
+          Marks.LabelBrush.Color = clWindow
+          Marks.Style = smsLabel
+          Pointer.Visible = True
+          ShowPoints = True
         end
       end
     end
     object TabSheet1: TTabSheet
-      Caption = 'e-/adu'
+      Caption = 'Gain'
       ClientHeight = 245
-      ClientWidth = 503
+      ClientWidth = 647
       object Chart2: TChart
         Left = 0
         Height = 245
         Top = 0
-        Width = 503
+        Width = 647
         AxisList = <        
           item
             Marks.LabelBrush.Style = bsClear
             Minors = <>
             Title.LabelFont.Orientation = 900
             Title.Visible = True
-            Title.Caption = '                         gain [e-/adu]                CCDCiel'
+            Title.Caption = '                       gain [e-/adu]                CCDCiel'
             Title.LabelBrush.Style = bsClear
           end        
           item
@@ -539,7 +545,7 @@ object f_sensoranalysis: Tf_sensoranalysis
             Marks.LabelBrush.Style = bsClear
             Minors = <>
             Title.Visible = True
-            Title.Caption = 'camara gain'
+            Title.Caption = 'camera gain'
             Title.LabelBrush.Style = bsClear
           end>
         Title.Text.Strings = (
@@ -556,12 +562,12 @@ object f_sensoranalysis: Tf_sensoranalysis
     object TabSheet2: TTabSheet
       Caption = 'Read noise'
       ClientHeight = 245
-      ClientWidth = 503
+      ClientWidth = 647
       object Chart3: TChart
         Left = 0
         Height = 245
         Top = 0
-        Width = 503
+        Width = 647
         AxisList = <        
           item
             Marks.LabelBrush.Style = bsClear
@@ -598,21 +604,21 @@ object f_sensoranalysis: Tf_sensoranalysis
       end
     end
     object TabSheet3: TTabSheet
-      Caption = 'Full well[e-]'
+      Caption = 'Full well'
       ClientHeight = 245
-      ClientWidth = 503
+      ClientWidth = 647
       object Chart4: TChart
         Left = 0
         Height = 245
         Top = 0
-        Width = 503
+        Width = 647
         AxisList = <        
           item
             Marks.LabelBrush.Style = bsClear
             Minors = <>
             Title.LabelFont.Orientation = 900
             Title.Visible = True
-            Title.Caption = '             Maximum charge [e-]           CCDCiel'
+            Title.Caption = '            Maximum charge [e-]          CCDCiel'
             Title.LabelBrush.Style = bsClear
           end        
           item
@@ -634,22 +640,63 @@ object f_sensoranalysis: Tf_sensoranalysis
         end
       end
     end
+    object TabSheet6: TTabSheet
+      Caption = 'Charge persistence'
+      ClientHeight = 245
+      ClientWidth = 647
+      object Chart6: TChart
+        Left = 0
+        Height = 245
+        Top = 0
+        Width = 647
+        AxisList = <        
+          item
+            Marks.LabelFont.Color = clMenu
+            Marks.LabelBrush.Color = clMenu
+            Marks.LabelBrush.Style = bsClear
+            Minors = <>
+            Title.LabelFont.Orientation = 900
+            Title.Visible = True
+            Title.Caption = '        Median value darks              CCDCiel'
+            Title.LabelBrush.Color = clDefault
+          end        
+          item
+            Alignment = calBottom
+            Marks.LabelBrush.Style = bsClear
+            Minors = <>
+            Title.LabelBrush.Style = bsClear
+          end>
+        Title.Text.Strings = (
+          'Charge persistence and stability median value darks'
+        )
+        Title.Visible = True
+        Align = alClient
+        object Chart6BarSeries1: TBarSeries
+          Title = 'Median value dark'
+          BarBrush.Color = clGray
+          Marks.LabelFont.Color = clMenuText
+          Marks.Format = '%2:s %0:.9g'
+          Marks.LabelBrush.Color = clWindow
+          Marks.Style = smsLabelValue
+        end
+      end
+    end
     object TabSheet5: TTabSheet
       Caption = 'Dark current'
       ClientHeight = 245
-      ClientWidth = 503
+      ClientWidth = 647
       object Chart5: TChart
         Left = 0
         Height = 245
         Top = 0
-        Width = 503
+        Width = 647
         AxisList = <        
           item
             Marks.LabelBrush.Style = bsClear
             Minors = <>
             Title.LabelFont.Orientation = 900
             Title.Visible = True
-            Title.Caption = '                           Total noise [e-]             CCDCiel'
+            Title.Caption = '                       Total noise [e-]             CCDCiel'
             Title.LabelBrush.Style = bsClear
           end        
           item
@@ -679,12 +726,12 @@ object f_sensoranalysis: Tf_sensoranalysis
     object TabSheet4: TTabSheet
       Caption = 'Info'
       ClientHeight = 245
-      ClientWidth = 503
+      ClientWidth = 647
       OnShow = TabSheet4Show
       object GroupBox1: TGroupBox
-        Left = 32
+        Left = 16
         Height = 153
-        Top = 32
+        Top = 16
         Width = 248
         Caption = 'Reported by camera'
         ClientHeight = 123
