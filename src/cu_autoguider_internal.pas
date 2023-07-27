@@ -895,6 +895,7 @@ end;
 
 procedure T_autoguider_internal.InternalguiderStart;
 begin
+  if InternalguiderRunning then InternalguiderStop;
   Finternalguider.cbSpectro.enabled:=false;
   Finternalguider.cbGuideLock.enabled:=false;
   SetStatus('Start Guiding',GUIDER_BUSY);
