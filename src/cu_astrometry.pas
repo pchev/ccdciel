@@ -270,7 +270,7 @@ begin
    FBusy:=true;
    engine.Resolve;
    if (Fterminatecmd<>@AstrometrySolvePreview) then msg(Format(rsResolvingUsi, [ResolverName[engine.Resolver]]),3);
-   if (Fterminatecmd<>@AstrometrySolveGuide) and Assigned(FonStartAstrometry) then FonStartAstrometry(self);
+   if Assigned(FonStartAstrometry) then FonStartAstrometry(self);
    result:=true;
  end else begin
    msg(rsResolverAlre,0);

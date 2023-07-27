@@ -13922,6 +13922,14 @@ begin
   {$endif}
   MenuStopAstrometry.Visible:=true;
   MenuStopAstrometry2.Visible:=true;
+
+  MenuItemFinderSolve.Enabled:=false;
+  MenuItemFinderSolveSync.Enabled:=false;
+  MenuItemFinderStopAstrometry.Visible:=true;
+
+  MenuItemGuiderSolve.Enabled:=false;
+  MenuItemGuiderStopAstrometry.Visible:=true;
+
 end;
 
 procedure Tf_main.AstrometryEnd(i: Integer);
@@ -13956,6 +13964,14 @@ begin
   MenuResolvePlanetarium2.Enabled:=true;
   MenuShowCCDFrame2.Enabled:=true;
   MenuViewAstrometryLog2.Enabled:=true;
+
+  MenuItemFinderSolve.Enabled:=true;
+  MenuItemFinderSolveSync.Enabled:=true;
+  MenuItemFinderStopAstrometry.Visible:=false;
+
+  MenuItemGuiderSolve.Enabled:=true;
+  MenuItemGuiderStopAstrometry.Visible:=false;
+
   if i=0 then begin
     // main camera result
     if astrometry.LastResult then begin

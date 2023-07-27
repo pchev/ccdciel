@@ -1972,6 +1972,7 @@ object f_main: Tf_main
     end
     object MenuItemGuiderStopAstrometry: TMenuItem
       Caption = 'MenuItemGuiderStopAstrometry'
+      Visible = False
       OnClick = MenuItemGuiderStopAstrometryClick
     end
   end
@@ -2028,6 +2029,7 @@ object f_main: Tf_main
     end
     object MenuItemFinderStopAstrometry: TMenuItem
       Caption = 'MenuItemFinderStopAstrometry'
+      Visible = False
       OnClick = MenuItemFinderStopAstrometryClick
     end
   end
