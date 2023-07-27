@@ -201,17 +201,18 @@ if (FResolver=ResolverAstrometryNet) or Fretry then begin
   end;
   if (process<>nil) then process.Active:=false;
 {$else}
+ if FUseWSL or FUseScript then begin
+   // with windows script or wsl it is sufficient to kill the main process
+   if (process<>nil) and process.Running then
+     process.Terminate(1);
+ end
+ else begin
+  // cygwin need to kill all process but do not include pgrep
   Kparam:=TStringList.Create;
   Kprocess:=TProcessUTF8.Create(nil);
   try
-  if FUseWSL then begin
-     Kcmd:='C:\Windows\System32\bash.exe';
-     Kpos:='\$2';
-  end
-  else begin
-     Kcmd:=slash(Fcygwinpath)+slash('bin')+'bash.exe';
-     Kpos:='$1';
-  end;
+  Kcmd:=slash(Fcygwinpath)+slash('bin')+'bash.exe';
+  Kpos:='$1';
   Kparam.Clear;
   Kparam.Add('--login');
   Kparam.Add('-c');
@@ -237,6 +238,7 @@ if (FResolver=ResolverAstrometryNet) or Fretry then begin
     Kparam.Free;
   end;
   if (process<>nil) and process.Running then process.Active:=false;
+ end;
 {$endif}
 end
 else begin
