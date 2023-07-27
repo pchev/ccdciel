@@ -1613,7 +1613,6 @@ begin
   ImageFinder.OnMouseMove := @ImageFinderMouseMove;
   ImageFinder.OnMouseUp := @ImageFinderMouseUp;
   ImageFinder.OnMouseWheel := @ImageFinderMouseWheel;
-  CursorImage1 := TCursorImage.Create;
   GetAppDir;
   chdir(Appdir);
   cdcwcs_initfitsfile:=nil;
@@ -2652,6 +2651,7 @@ begin
   MenuIndiSettings.Enabled:=true;
   MenuShowINDIlog.Visible:=true;
   ObsTimeZone:=-GetLocalTimeOffset/60;
+  {$ifndef lclqt}{$ifndef lclqt5}{$ifndef lclcocoa}
   crRetic:=6;
   if screenconfig.GetValue('/Cursor/ImageCursor',0)=0 then
     fn:=slash(DataDir) + slash('resources') + 'smallcross.cur'
@@ -2661,6 +2661,7 @@ begin
   if (fn<>'')and fileexists(fn) then
   begin
     try
+      CursorImage1 := TCursorImage.Create;
       CursorImage1.LoadFromFile(fn);
       Screen.Cursors[crRetic] := CursorImage1.Handle;
     except
@@ -2668,6 +2669,7 @@ begin
     end;
   end
   else
+  {$endif}{$endif}{$endif}
     crRetic := crCross;
   Image1.Cursor:=crRetic;
   ImageGuide.Cursor:=crRetic;
