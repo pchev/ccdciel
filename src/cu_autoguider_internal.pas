@@ -966,9 +966,13 @@ begin
     Finternalguider.GuideSpeedDEC.Value:=FMount.GuideRateDe*(24*60*60)/360;
   end;
   // check here for in mount guide speed change
-  if not Finternalguider.CalibrationIsValid then
+  if not Finternalguider.CalibrationIsValid(txt) then
   begin
-    msg('A new calibration is required before guiding can be started.',1);
+    StopInternalguider:=true;
+    Finternalguider.Info:='A new calibration is required before guiding can be started:';
+    Finternalguider.CameraStatus:=txt;
+    msg('A new calibration is required before guiding can be started:',1);
+    msg(txt,1);
     InternalguiderStop;
     SetStatus('Calibration required',GUIDER_ALERT);
     exit;
@@ -1509,6 +1513,7 @@ begin
   if not StopInternalguider then begin
     StopInternalguider:=true;
     FCamera.AbortExposure;
+    Finternalguider.Info:='';
   end;
   InternalguiderGuiding:=false;
   InternalguiderCalibrating:=false;
@@ -1522,7 +1527,6 @@ begin
   Finternalguider.cbSpectro.enabled:=true;
   Finternalguider.cbGuideLock.enabled:=true;
   Finternalguider.led.Brush.Color:=clGray;
-  Finternalguider.Info:='';
   SetStatus('Stopped',GUIDER_IDLE);
 end;
 

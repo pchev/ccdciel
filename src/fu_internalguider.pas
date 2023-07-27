@@ -363,7 +363,7 @@ type
     procedure draw_xy(xy_trend :xy_guiderlist);//draw XY points
     procedure draw_trend(xy_trend :xy_guiderlist);//draw trend
     procedure trend_message(message1,message2,message3 :string);//clear trend and place message
-    function CalibrationIsValid: boolean;
+    function CalibrationIsValid(out detail: string): boolean;
     function Snapshot(exp: double; fn: string):boolean;
     function SaveFits(fn: string):boolean;
     property onShowMessage: TNotifyMsg read FonShowMessage write FonShowMessage;
@@ -1529,12 +1529,27 @@ begin
  edOffsetY.Value:=value;
 end;
 
-function Tf_internalguider.CalibrationIsValid: boolean;
+function Tf_internalguider.CalibrationIsValid(out detail: string): boolean;
 begin
-  result:=(CalDate.Text<>'') and
-          (CalBinning.Text=IntToStr(Binning.Value)) and
-          (CalRAspeed.Text=FormatFloat(f1,GuideSpeedRA.Value)) and
-          (CalDECspeed.Text=FormatFloat(f1,GuideSpeedDEC.Value));
+  result:=true;
+  detail:='';
+  if CalDate.Text='' then begin
+    result:=false;
+    detail:='No calibration done with current program version.';
+    exit;
+  end;
+  if CalBinning.Text<>IntToStr(Binning.Value) then begin
+    result:=false;
+    detail:='Binning change, ';
+  end;
+  if CalRAspeed.Text<>FormatFloat(f1,GuideSpeedRA.Value) then begin
+    result:=false;
+    detail:=detail+'RA guide rate change, ';
+  end;
+  if CalDECspeed.Text<>FormatFloat(f1,GuideSpeedDEC.Value) then begin
+    result:=false;
+    detail:=detail+'DEC guide rate change, ';
+  end;
 end;
 
 procedure Tf_internalguider.SetCameraStatus(status: string);
