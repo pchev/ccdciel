@@ -503,6 +503,7 @@ begin
   if initialize then
   begin
    if GuideLock then begin
+    vmax:=0;
     if (finternalguider.GuideLockNextX>0)and(finternalguider.GuideLockNextY>0) then begin
        // search star near specified position
        fitsx:=round(finternalguider.GuideLockNextX);
