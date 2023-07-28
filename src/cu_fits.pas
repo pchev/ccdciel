@@ -216,7 +216,7 @@ type
      procedure FindStarPos(x,y,s: integer; out xc,yc,ri:integer; out vmax,bg,sd: double);
      procedure FindStarPos2(x,y,s: integer; out xc,yc,vmax,bg,sd: double);
      procedure GetHFD3(x,y,s: integer; autoCenter :boolean; out xc,yc,bg,sd,hfd,star_fwhm,valmax,snr,flux: double; strict_saturation: boolean=true);{v2022-06}
-     procedure GetHFD2(x,y,s: integer; out xc,yc,bg,sd,hfd,star_fwhm,valmax,snr,flux: double; strict_saturation: boolean=true);{v2018}
+     procedure GetHFD2(x,y,s: integer; out xc,yc,bg,sd,hfd,star_fwhm,valmax,snr,flux: double; strict_saturation: boolean=true; allow_saturation: boolean=false);
      procedure GetStarList(rx,ry,s: integer);
      procedure MeasureStarList(s: integer; list: TArrayDouble2);
      procedure SortStarlist;
@@ -3351,7 +3351,7 @@ begin
 end;{gethfd3}
 
 
-procedure TFits.GetHFD2(x,y,s: integer; out xc,yc,bg,sd,hfd,star_fwhm,valmax,snr,flux: double; strict_saturation: boolean=true);
+procedure TFits.GetHFD2(x,y,s: integer; out xc,yc,bg,sd,hfd,star_fwhm,valmax,snr,flux: double; strict_saturation: boolean=true; allow_saturation: boolean=false);
 // x,y, s, test location x,y and box size s x s
 // xc,yc, center of gravity
 // bg, background value
@@ -3381,8 +3381,12 @@ begin
 
   if strict_saturation then
      max_saturated:=0
-  else
+  else begin
+    if allow_saturation then
+     max_saturated:=MaxInt
+    else
      max_saturated:=5;
+  end;
 
   rs:=s div 2;
   if rs>max_ri then rs:=max_ri; {protection against run time error}
