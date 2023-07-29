@@ -2651,7 +2651,6 @@ begin
   MenuIndiSettings.Enabled:=true;
   MenuShowINDIlog.Visible:=true;
   ObsTimeZone:=-GetLocalTimeOffset/60;
-  {$ifndef lclqt}{$ifndef lclqt5}{$ifndef lclcocoa}
   crRetic:=6;
   if screenconfig.GetValue('/Cursor/ImageCursor',0)=0 then
     fn:=slash(DataDir) + slash('resources') + 'smallcross.cur'
@@ -2669,7 +2668,6 @@ begin
     end;
   end
   else
-  {$endif}{$endif}{$endif}
     crRetic := crCross;
   Image1.Cursor:=crRetic;
   ImageGuide.Cursor:=crRetic;
@@ -3614,9 +3612,10 @@ begin
   else NewMessage('Program exit',1);
   CloseLog;
   AllMsg.Free;
-  {$ifndef lclqt}{$ifndef lclqt5}{$ifndef lclcocoa}
-  if CursorImage1 <> nil then CursorImage1.Free;
-  {$endif}{$endif}{$endif}
+  if CursorImage1 <> nil then begin
+    CursorImage1.ReleaseHandle;
+    CursorImage1.Free;
+  end;
   except
   end;
 end;
