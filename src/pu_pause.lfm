@@ -1,13 +1,13 @@
 object f_pause: Tf_pause
   Left = 0
-  Height = 153
+  Height = 158
   Top = 0
   Width = 329
   ActiveControl = BtnContinue
   AutoSize = True
   BorderWidth = 8
   Caption = 'Pause'
-  ClientHeight = 153
+  ClientHeight = 158
   ClientWidth = 329
   FormStyle = fsStayOnTop
   OnCloseQuery = FormCloseQuery
@@ -16,7 +16,7 @@ object f_pause: Tf_pause
   Position = poMainFormCenter
   object PauseLabel: TLabel
     Left = 8
-    Height = 68
+    Height = 72
     Top = 8
     Width = 313
     Align = alTop
@@ -27,8 +27,8 @@ object f_pause: Tf_pause
   end
   object Label1: TLabel
     Left = 8
-    Height = 17
-    Top = 88
+    Height = 18
+    Top = 92
     Width = 313
     Align = alTop
     Caption = '     '
@@ -38,7 +38,7 @@ object f_pause: Tf_pause
   object Panel1: TPanel
     Left = 8
     Height = 40
-    Top = 105
+    Top = 110
     Width = 313
     Align = alTop
     BevelOuter = bvNone
@@ -69,7 +69,7 @@ object f_pause: Tf_pause
   object Panel2: TPanel
     Left = 8
     Height = 12
-    Top = 76
+    Top = 80
     Width = 313
     Align = alTop
     BevelOuter = bvNone

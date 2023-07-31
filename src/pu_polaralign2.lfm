@@ -155,7 +155,7 @@ object f_polaralign2: Tf_polaralign2
   end
   object Instruction: TMemo
     Left = 0
-    Height = 250
+    Height = 242
     Top = 0
     Width = 329
     Align = alClient
@@ -164,11 +164,11 @@ object f_polaralign2: Tf_polaralign2
   end
   object PanelCustomPosition: TPanel
     Left = 0
-    Height = 63
-    Top = 250
+    Height = 71
+    Top = 242
     Width = 329
     Align = alBottom
-    ClientHeight = 63
+    ClientHeight = 71
     ClientWidth = 329
     TabOrder = 2
     Visible = False

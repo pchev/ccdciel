@@ -1,11 +1,11 @@
 object f_frame: Tf_frame
   Left = 0
-  Height = 88
+  Height = 106
   Top = 0
-  Width = 194
+  Width = 205
   AutoSize = True
-  ClientHeight = 88
-  ClientWidth = 194
+  ClientHeight = 106
+  ClientWidth = 205
   ParentFont = False
   TabOrder = 0
   DesignLeft = -1
@@ -14,7 +14,7 @@ object f_frame: Tf_frame
     Left = 0
     Height = 20
     Top = 0
-    Width = 194
+    Width = 205
     Align = alTop
     Alignment = taCenter
     AutoSize = False
@@ -29,33 +29,34 @@ object f_frame: Tf_frame
   end
   object Panel1: TPanel
     Left = 0
-    Height = 68
+    Height = 86
     Top = 20
-    Width = 194
+    Width = 205
     Align = alClient
+    ChildSizing.VerticalSpacing = 3
     ChildSizing.Layout = cclTopToBottomThenLeftToRight
     ChildSizing.ControlsPerLine = 99
-    ClientHeight = 68
-    ClientWidth = 194
+    ClientHeight = 86
+    ClientWidth = 205
     ParentFont = False
     TabOrder = 0
     object Panel2: TPanel
       Left = 0
       Height = 22
       Top = 0
-      Width = 194
+      Width = 200
       BevelOuter = bvNone
       ClientHeight = 22
-      ClientWidth = 194
+      ClientWidth = 200
       ParentFont = False
       TabOrder = 0
       object Label1: TLabel
         AnchorSideTop.Control = FX
         AnchorSideTop.Side = asrCenter
         Left = 4
-        Height = 15
-        Top = 4
-        Width = 11
+        Height = 18
+        Top = 2
+        Width = 12
         Caption = 'X:'
         ParentColor = False
         ParentFont = False
@@ -73,7 +74,7 @@ object f_frame: Tf_frame
         Text = ' '
       end
       object FWidth: TEdit
-        Left = 71
+        Left = 76
         Height = 22
         Hint = 'Width'
         Top = 0
@@ -85,7 +86,7 @@ object f_frame: Tf_frame
         Text = ' '
       end
       object BtnSet: TButton
-        Left = 128
+        Left = 134
         Height = 22
         Top = 0
         Width = 66
@@ -98,20 +99,20 @@ object f_frame: Tf_frame
     object Panel3: TPanel
       Left = 0
       Height = 22
-      Top = 22
-      Width = 194
+      Top = 25
+      Width = 200
       BevelOuter = bvNone
       ClientHeight = 22
-      ClientWidth = 194
+      ClientWidth = 200
       ParentFont = False
       TabOrder = 1
       object Label2: TLabel
         AnchorSideTop.Control = FY
         AnchorSideTop.Side = asrCenter
         Left = 4
-        Height = 15
-        Top = 4
-        Width = 10
+        Height = 18
+        Top = 2
+        Width = 11
         Caption = 'Y:'
         ParentColor = False
         ParentFont = False
@@ -129,7 +130,7 @@ object f_frame: Tf_frame
         Text = ' '
       end
       object FHeight: TEdit
-        Left = 71
+        Left = 76
         Height = 22
         Hint = 'Height'
         Top = 0
@@ -141,7 +142,7 @@ object f_frame: Tf_frame
         Text = ' '
       end
       object BtnReset: TButton
-        Left = 128
+        Left = 134
         Height = 22
         Top = 0
         Width = 66
@@ -153,19 +154,19 @@ object f_frame: Tf_frame
     end
     object PanelRoi: TPanel
       Left = 0
-      Height = 30
-      Top = 44
-      Width = 194
+      Height = 32
+      Top = 50
+      Width = 200
       BevelOuter = bvNone
-      ClientHeight = 30
-      ClientWidth = 194
+      ClientHeight = 32
+      ClientWidth = 200
       TabOrder = 2
       object RoiList: TComboBox
         Left = 16
-        Height = 30
+        Height = 32
         Top = 0
         Width = 176
-        ItemHeight = 0
+        ItemHeight = 18
         OnChange = RoiListChange
         Style = csDropDownList
         TabOrder = 0

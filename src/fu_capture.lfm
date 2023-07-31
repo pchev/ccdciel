@@ -1,12 +1,12 @@
 object f_capture: Tf_capture
   Left = 0
-  Height = 421
+  Height = 447
   Top = 0
-  Width = 194
+  Width = 218
   AutoSize = True
   ChildSizing.ControlsPerLine = 1
-  ClientHeight = 421
-  ClientWidth = 194
+  ClientHeight = 447
+  ClientWidth = 218
   OnEndDrag = FrameEndDrag
   OnResize = FrameResize
   ParentFont = False
@@ -15,15 +15,16 @@ object f_capture: Tf_capture
   DesignTop = -3
   object Panel1: TPanel
     Left = 0
-    Height = 401
+    Height = 427
     Top = 20
-    Width = 194
+    Width = 218
     Align = alClient
     AutoSize = True
+    ChildSizing.VerticalSpacing = 4
     ChildSizing.Layout = cclTopToBottomThenLeftToRight
     ChildSizing.ControlsPerLine = 99
-    ClientHeight = 401
-    ClientWidth = 194
+    ClientHeight = 427
+    ClientWidth = 218
     ParentFont = False
     TabOrder = 0
     object Panel2: TPanel
@@ -44,7 +45,7 @@ object f_capture: Tf_capture
         Top = 1
         Width = 101
         Constraints.MaxHeight = 28
-        ItemHeight = 0
+        ItemHeight = 24
         ItemIndex = 7
         Items.Strings = (
           '0.001'
@@ -76,9 +77,9 @@ object f_capture: Tf_capture
         AnchorSideTop.Control = ExpTime
         AnchorSideTop.Side = asrCenter
         Left = 4
-        Height = 19
+        Height = 18
         Top = 6
-        Width = 22
+        Width = 23
         Caption = 'Exp'
         ParentColor = False
         ParentFont = False
@@ -87,7 +88,7 @@ object f_capture: Tf_capture
     object PanelStack: TPanel
       Left = 0
       Height = 29
-      Top = 29
+      Top = 33
       Width = 255
       BevelOuter = bvNone
       Caption = ' '
@@ -99,9 +100,9 @@ object f_capture: Tf_capture
         AnchorSideTop.Control = StackNum
         AnchorSideTop.Side = asrCenter
         Left = 4
-        Height = 19
+        Height = 18
         Top = 6
-        Width = 89
+        Width = 90
         Caption = 'Stacking count'
         ParentColor = False
         ParentFont = False
@@ -123,7 +124,7 @@ object f_capture: Tf_capture
     object PanelGain: TPanel
       Left = 0
       Height = 68
-      Top = 58
+      Top = 66
       Width = 255
       BevelOuter = bvNone
       ClientHeight = 68
@@ -137,7 +138,7 @@ object f_capture: Tf_capture
         Top = 1
         Width = 91
         Constraints.MaxHeight = 28
-        ItemHeight = 0
+        ItemHeight = 18
         ParentFont = False
         Style = csDropDownList
         TabOrder = 0
@@ -147,9 +148,9 @@ object f_capture: Tf_capture
         AnchorSideTop.Control = GainEdit
         AnchorSideTop.Side = asrCenter
         Left = 4
-        Height = 19
+        Height = 18
         Top = 9
-        Width = 28
+        Width = 29
         Caption = 'Gain'
         ParentColor = False
         ParentFont = False
@@ -178,15 +179,15 @@ object f_capture: Tf_capture
           AnchorSideTop.Control = OffsetEdit
           AnchorSideTop.Side = asrCenter
           Left = 4
-          Height = 19
-          Top = 9
+          Height = 18
+          Top = 11
           Width = 38
           Caption = 'Offset'
           ParentColor = False
         end
         object OffsetEdit: TSpinEdit
           Left = 89
-          Height = 29
+          Height = 32
           Top = 4
           Width = 101
           MaxValue = 32767
@@ -198,7 +199,7 @@ object f_capture: Tf_capture
     object Panel3: TPanel
       Left = 0
       Height = 29
-      Top = 126
+      Top = 138
       Width = 255
       BevelOuter = bvNone
       Caption = ' '
@@ -212,7 +213,7 @@ object f_capture: Tf_capture
         Top = 1
         Width = 101
         Constraints.MaxHeight = 28
-        ItemHeight = 0
+        ItemHeight = 24
         ItemIndex = 0
         Items.Strings = (
           '1x1'
@@ -226,7 +227,7 @@ object f_capture: Tf_capture
         AnchorSideTop.Control = Binning
         AnchorSideTop.Side = asrCenter
         Left = 4
-        Height = 19
+        Height = 18
         Top = 6
         Width = 24
         Caption = 'Bin.'
@@ -237,7 +238,7 @@ object f_capture: Tf_capture
     object PanelFnumber: TPanel
       Left = 0
       Height = 28
-      Top = 155
+      Top = 171
       Width = 255
       BevelOuter = bvNone
       ClientHeight = 28
@@ -249,7 +250,7 @@ object f_capture: Tf_capture
         AnchorSideTop.Control = Fnumber
         AnchorSideTop.Side = asrCenter
         Left = 4
-        Height = 19
+        Height = 18
         Top = 5
         Width = 38
         Caption = 'F-stop'
@@ -262,7 +263,7 @@ object f_capture: Tf_capture
         Top = 0
         Width = 101
         Constraints.MaxHeight = 28
-        ItemHeight = 0
+        ItemHeight = 24
         ParentFont = False
         TabOrder = 0
       end
@@ -270,7 +271,7 @@ object f_capture: Tf_capture
     object Panel4: TPanel
       Left = 0
       Height = 28
-      Top = 183
+      Top = 203
       Width = 255
       BevelOuter = bvNone
       ClientHeight = 28
@@ -290,7 +291,7 @@ object f_capture: Tf_capture
         AnchorSideTop.Control = Fname
         AnchorSideTop.Side = asrCenter
         Left = 4
-        Height = 19
+        Height = 18
         Top = 5
         Width = 40
         Caption = 'Object'
@@ -301,7 +302,7 @@ object f_capture: Tf_capture
     object Panel5: TPanel
       Left = 0
       Height = 28
-      Top = 211
+      Top = 235
       Width = 255
       BevelOuter = bvNone
       Caption = ' '
@@ -313,7 +314,7 @@ object f_capture: Tf_capture
         AnchorSideTop.Control = SeqNum
         AnchorSideTop.Side = asrCenter
         Left = 4
-        Height = 19
+        Height = 18
         Top = 5
         Width = 37
         Caption = 'Count'
@@ -336,7 +337,7 @@ object f_capture: Tf_capture
     object Panel6: TPanel
       Left = 0
       Height = 29
-      Top = 239
+      Top = 267
       Width = 255
       BevelOuter = bvNone
       ClientHeight = 29
@@ -347,9 +348,9 @@ object f_capture: Tf_capture
         AnchorSideTop.Control = FrameType
         AnchorSideTop.Side = asrCenter
         Left = 4
-        Height = 19
+        Height = 18
         Top = 6
-        Width = 30
+        Width = 29
         Caption = 'Type'
         ParentColor = False
         ParentFont = False
@@ -360,7 +361,7 @@ object f_capture: Tf_capture
         Top = 1
         Width = 101
         Constraints.MaxHeight = 28
-        ItemHeight = 0
+        ItemHeight = 24
         ItemIndex = 0
         Items.Strings = (
           'Light'
@@ -378,7 +379,7 @@ object f_capture: Tf_capture
     object Panel7: TPanel
       Left = 0
       Height = 28
-      Top = 268
+      Top = 300
       Width = 255
       BevelOuter = bvNone
       ClientHeight = 28
@@ -389,9 +390,9 @@ object f_capture: Tf_capture
         AnchorSideTop.Control = DitherCount
         AnchorSideTop.Side = asrCenter
         Left = 4
-        Height = 21
-        Top = 4
-        Width = 102
+        Height = 22
+        Top = 3
+        Width = 103
         Caption = 'Dither every'
         OnClick = CheckLight
         ParentFont = False
@@ -412,11 +413,11 @@ object f_capture: Tf_capture
     end
     object Panel8: TPanel
       Left = 0
-      Height = 53
-      Top = 296
+      Height = 54
+      Top = 332
       Width = 255
       BevelOuter = bvNone
-      ClientHeight = 53
+      ClientHeight = 54
       ClientWidth = 255
       ParentFont = False
       TabOrder = 6
@@ -424,9 +425,9 @@ object f_capture: Tf_capture
         AnchorSideTop.Control = FocusCount
         AnchorSideTop.Side = asrCenter
         Left = 4
-        Height = 21
-        Top = 4
-        Width = 97
+        Height = 22
+        Top = 3
+        Width = 100
         Caption = 'Focus every'
         OnClick = CheckLight
         ParentFont = False
@@ -446,7 +447,7 @@ object f_capture: Tf_capture
       end
       object CheckBoxFocusTemp: TCheckBox
         Left = 4
-        Height = 21
+        Height = 22
         Top = 32
         Width = 251
         Caption = 'Autofocus after temperature change'
@@ -456,7 +457,7 @@ object f_capture: Tf_capture
     object Panel9: TPanel
       Left = 0
       Height = 26
-      Top = 349
+      Top = 390
       Width = 255
       BevelOuter = bvNone
       ClientHeight = 26
@@ -488,7 +489,7 @@ object f_capture: Tf_capture
     Left = 0
     Height = 20
     Top = 0
-    Width = 194
+    Width = 218
     Align = alTop
     Alignment = taCenter
     AutoSize = False

@@ -397,9 +397,9 @@ object f_starprofile: Tf_starprofile
       Height = 160
       Top = 1
       Width = 192
-      ActivePage = TS2d
+      ActivePage = TSprofile
       Align = alTop
-      TabIndex = 1
+      TabIndex = 0
       TabOrder = 3
       OnChange = PageControlProfileChange
       object TSprofile: TTabSheet

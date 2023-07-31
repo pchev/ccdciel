@@ -13,18 +13,18 @@ object f_photometry: Tf_photometry
   OnCreate = FormCreate
   object GroupBoxMeasurement: TGroupBox
     Left = 0
-    Height = 271
+    Height = 264
     Top = 0
     Width = 327
     Align = alClient
     Caption = 'Measurement'
-    ClientHeight = 254
+    ClientHeight = 234
     ClientWidth = 323
     ParentFont = False
     TabOrder = 1
     object Memo1: TMemo
       Left = 0
-      Height = 254
+      Height = 234
       Top = 0
       Width = 323
       Align = alClient
@@ -38,18 +38,18 @@ object f_photometry: Tf_photometry
   end
   object GroupBoxRefStar: TGroupBox
     Left = 0
-    Height = 63
-    Top = 271
+    Height = 70
+    Top = 264
     Width = 327
     Align = alBottom
     Caption = 'Use as reference star'
-    ClientHeight = 46
+    ClientHeight = 40
     ClientWidth = 323
     ParentFont = False
     TabOrder = 0
     object RefMag: TFloatSpinEdit
       Left = 223
-      Height = 24
+      Height = 32
       Top = 6
       Width = 93
       DecimalPlaces = 3
@@ -62,7 +62,7 @@ object f_photometry: Tf_photometry
       AnchorSideTop.Side = asrCenter
       Left = 17
       Height = 25
-      Top = 6
+      Top = 10
       Width = 153
       Caption = 'Set magnitude'
       OnClick = ButtonSetRefMagClick

@@ -53,18 +53,18 @@ object f_focuser: Tf_focuser
             TabOrder = 0
             object Label3: TLabel
               Left = 6
-              Height = 17
+              Height = 18
               Top = 4
-              Width = 39
+              Width = 38
               Caption = 'Speed'
               ParentColor = False
               ParentFont = False
             end
             object Label4: TLabel
               Left = 6
-              Height = 17
+              Height = 18
               Top = 27
-              Width = 36
+              Width = 37
               Caption = 'Timer'
               ParentColor = False
               ParentFont = False
@@ -105,20 +105,20 @@ object f_focuser: Tf_focuser
             TabOrder = 0
             object Label6: TLabel
               Left = 6
-              Height = 19
+              Height = 18
               Top = 8
-              Width = 28
+              Width = 26
               Caption = 'Incr.'
               ParentColor = False
               ParentFont = False
             end
             object RelIncr: TComboBox
               Left = 57
-              Height = 31
+              Height = 32
               Hint = 'Relative increment for the inward or outward movement'
               Top = 5
               Width = 127
-              ItemHeight = 0
+              ItemHeight = 24
               Items.Strings = (
                 '1'
                 '10'
@@ -150,8 +150,8 @@ object f_focuser: Tf_focuser
               AnchorSideTop.Control = Position
               AnchorSideTop.Side = asrCenter
               Left = 6
-              Height = 17
-              Top = 6
+              Height = 18
+              Top = 5
               Width = 26
               Caption = 'Pos.'
               ParentColor = False
@@ -161,8 +161,8 @@ object f_focuser: Tf_focuser
               AnchorSideTop.Control = PosIncr
               AnchorSideTop.Side = asrCenter
               Left = 6
-              Height = 17
-              Top = 34
+              Height = 18
+              Top = 37
               Width = 28
               Caption = 'Step'
               ParentColor = False
@@ -172,10 +172,10 @@ object f_focuser: Tf_focuser
               Left = 40
               Height = 28
               Hint = 'Increment step for the inward or outward movement'
-              Top = 28
+              Top = 32
               Width = 82
               Constraints.MaxHeight = 28
-              ItemHeight = 0
+              ItemHeight = 24
               Items.Strings = (
                 '1'
                 '10'
@@ -208,7 +208,7 @@ object f_focuser: Tf_focuser
               Left = 126
               Height = 24
               Hint = 'V curve learning'
-              Top = 30
+              Top = 34
               Width = 65
               Caption = 'V-learn'
               OnClick = BtnVcurveClick
@@ -269,7 +269,7 @@ object f_focuser: Tf_focuser
     object PanelTemp: TPanel
       Left = 0
       Height = 28
-      Top = 57
+      Top = 60
       Width = 113
       BevelOuter = bvNone
       ClientHeight = 28
@@ -292,8 +292,8 @@ object f_focuser: Tf_focuser
         AnchorSideTop.Control = Temp
         AnchorSideTop.Side = asrCenter
         Left = 6
-        Height = 17
-        Top = 7
+        Height = 18
+        Top = 6
         Width = 38
         Caption = 'Temp.'
         ParentColor = False
@@ -303,9 +303,9 @@ object f_focuser: Tf_focuser
         AnchorSideTop.Control = Temp
         AnchorSideTop.Side = asrCenter
         Left = 103
-        Height = 17
-        Top = 7
-        Width = 8
+        Height = 18
+        Top = 6
+        Width = 9
         Caption = 'C'
         ParentColor = False
         ParentFont = False
