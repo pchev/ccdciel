@@ -1521,6 +1521,7 @@ begin
     FCamera.AbortExposure;
     Finternalguider.Info:='';
   end;
+  AutoguiderAlert:=false;
   InternalguiderGuiding:=false;
   InternalguiderCalibrating:=false;
   InternalguiderCalibratingBacklash:=false;

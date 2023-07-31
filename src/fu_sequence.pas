@@ -1142,10 +1142,13 @@ end;
 procedure Tf_sequence.AutoguiderIddle;
 var r: string;
 begin
+try
   if Autoguider.AutoguiderType=agNONE then exit;
   if Targets.Running and
     (Targets.CurrentTarget>=0) and
     T_Plan(Targets.Targets[Targets.CurrentTarget].plan).Running and
+    (T_Plan(Targets.Targets[Targets.CurrentTarget].plan).CurrentStep>=0) and
+    (T_Plan(Targets.Targets[Targets.CurrentTarget].plan).Steps[T_Plan(Targets.Targets[Targets.CurrentTarget].plan).CurrentStep].steptype=0) and
     (Targets.Targets[Targets.CurrentTarget].autoguiding) and
     (not Fautoguider.Recovering)
     then begin
@@ -1160,6 +1163,8 @@ begin
       end;
     end;
   end;
+except
+end;
 end;
 
 procedure Tf_sequence.MountTrackingStarted;
