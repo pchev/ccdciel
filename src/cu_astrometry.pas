@@ -200,7 +200,7 @@ begin
    DeleteFileUTF8(outfile);
    DeleteFileUTF8(solvefile);
    engine:=TAstrometry_engine.Create;
-   if (Fterminatecmd=@AstrometrySolveFinder) and config.GetValue('/Astrometry/UseFinderSolver',false) then begin
+   if ((Fterminatecmd=@AstrometrySolveFinder)or(Fterminatecmd=@AstrometrySyncFinder)) and config.GetValue('/Astrometry/UseFinderSolver',false) then begin
      engine.Resolver:=config.GetValue('/Astrometry/FinderSolver',ResolverAstap);
      engine.Fallback:=false;
    end
