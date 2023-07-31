@@ -2356,7 +2356,23 @@ begin
    MenuResetTools.Caption := rsResetToDefau;
    MenuReset1col.Caption:='1 '+rsColumn;
    MenuReset2col.Caption:='2 '+rsColumn;
-   MenuTabConnect.Caption := rsConnect;
+   {$ifdef lclqt5}
+     MenuTabConnect.Caption:='';    // No glyph + caption in first level menu with qt5
+     MenuTabFocus.Caption := '';    // this change prevent flashing text/icon on mouse over
+     MenuTabCapture.Caption := '';  { #todo : Check if this can be fixed }
+     MenuTabSequence.Caption := '';
+     MenuTabVideo.Caption := '';
+     MenuTabInternalGuider.Caption:='';
+     MenuTabFinder.Caption:='';
+   {$else}
+     MenuTabConnect.Caption := rsConnect;
+     MenuTabFocus.Caption := rsFocus;
+     MenuTabCapture.Caption := rsCapture;
+     MenuTabSequence.Caption := rsSequence;
+     MenuTabVideo.Caption := rsVideo;
+     MenuTabInternalGuider.Caption:=rsInternalGuid;
+     MenuTabFinder.Caption:=rsFinderCamera;
+   {$endif}
    MenuConnection.Caption := rsConnection;
    MenuConnect.Caption := rsConnect;
    MenuPreview.Caption := rsPreview;
@@ -2380,13 +2396,11 @@ begin
    MenuVisuZoom1.Caption := rsZoom+' 1:1';
    MenuVisuZoom12.Caption := rsZoom+' 1:2';
    MenuVisuZoomAdjust.Caption := rsAdjustToWind;
-   MenuTabFocus.Caption := rsFocus;
    MenuFocuser.Caption := rsFocuser;
    MenuFocuserIn.Caption := rsMoveInward;
    MenuFocuserOut.Caption := rsMoveOutward;
    MenuStarProfile.Caption := rsFocus;
    MenuFocusaid.Caption := rsFocusAid;
-   MenuTabCapture.Caption := rsCapture;
    MenuCapture.Caption := rsCapture;
    MenuCaptureStart.Caption := rsStart;
    MenuFilters.Caption := rsFilters;
@@ -2401,23 +2415,19 @@ begin
    MenuMount.Caption := rsTelescopeMou;
    MenuMountPark.Caption := rsPark;
    MenuMountTrack.Caption := rsTrack;
-   MenuTabSequence.Caption := rsSequence;
    MenuSequence.Caption := rsSequence;
    MenuSequenceLoad.Caption := rsLoad;
    MenuSequenceNew.Caption := rsNew;
    MenuSequenceEdit.Caption := rsEdit;
    MenuSequenceStart.Caption := rsStart;
    MenuSequenceStop.Caption := rsStop;
-   MenuTabVideo.Caption := rsVideo;
    MenuVideo.Caption := rsVideo;
    MenuVideoPreview.Caption := rsPreview;
    MenuVideoStart.Caption := rsStartRecord;
    MenuVideoStop.Caption := rsStopRecord;
-   MenuTabInternalGuider.Caption:=rsInternalGuid;
    MenuInternalGuider.Caption:=rsInternalGuid;
    MenuInternalguiderStart.Caption:=rsStart;
    MenuInternalguiderStop.Caption:=rsStop;
-   MenuTabFinder.Caption:=rsFinderCamera;
    MenuFinder.Caption:=rsFinderCamera;
 
    MenuItem3.Caption := rsHelp;
