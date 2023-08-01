@@ -1,11 +1,11 @@
 object f_sensoranalysis: Tf_sensoranalysis
-  Left = 361
+  Left = 283
   Height = 650
-  Top = 142
-  Width = 1144
+  Top = 192
+  Width = 1220
   Caption = 'Sensor Analysis'
   ClientHeight = 650
-  ClientWidth = 1144
+  ClientWidth = 1220
   FormStyle = fsStayOnTop
   OnClose = FormClose
   OnCreate = FormCreate
@@ -14,10 +14,10 @@ object f_sensoranalysis: Tf_sensoranalysis
     Left = 0
     Height = 51
     Top = 599
-    Width = 1144
+    Width = 1220
     Align = alBottom
     ClientHeight = 51
-    ClientWidth = 1144
+    ClientWidth = 1220
     TabOrder = 0
     object ButtonClose1: TButton
       Left = 686
@@ -414,7 +414,7 @@ object f_sensoranalysis: Tf_sensoranalysis
     Left = 493
     Height = 316
     Top = 3
-    Width = 646
+    Width = 722
     Anchors = [akTop, akLeft, akRight, akBottom]
     ColCount = 9
     RowCount = 1
@@ -424,10 +424,10 @@ object f_sensoranalysis: Tf_sensoranalysis
       51
       59
       90
+      125
       78
       122
       59
-      64
       64
     )
     Cells = (
@@ -446,19 +446,19 @@ object f_sensoranalysis: Tf_sensoranalysis
       'Read noise[e-]'
       4
       0
-      'Full well[e-]'
+      'Read noise+RTN[e-]'
       5
       0
-      'Exposure used[sec]'
+      'Full well[e-]'
       6
       0
-      'adu'
+      'Exposure used[sec]'
       7
       0
-      'Δ level[%]'
+      'adu'
       8
       0
-      'σ[adu]'
+      'Δ level[%]'
     )
   end
   object Label10: TLabel
@@ -472,8 +472,8 @@ object f_sensoranalysis: Tf_sensoranalysis
   object PageControl1: TPageControl
     Left = 493
     Height = 280
-    Top = 319
-    Width = 651
+    Top = 320
+    Width = 727
     ActivePage = Linearity
     Anchors = [akTop, akLeft, akRight, akBottom]
     TabIndex = 0
@@ -481,12 +481,12 @@ object f_sensoranalysis: Tf_sensoranalysis
     object Linearity: TTabSheet
       Caption = 'Linearity'
       ClientHeight = 245
-      ClientWidth = 647
+      ClientWidth = 723
       object Chart1: TChart
         Left = 0
         Height = 245
         Top = 0
-        Width = 647
+        Width = 723
         AxisList = <        
           item
             Marks.LabelBrush.Style = bsClear
@@ -525,12 +525,12 @@ object f_sensoranalysis: Tf_sensoranalysis
     object TabSheet1: TTabSheet
       Caption = 'Gain'
       ClientHeight = 245
-      ClientWidth = 647
+      ClientWidth = 723
       object Chart2: TChart
         Left = 0
         Height = 245
         Top = 0
-        Width = 647
+        Width = 723
         AxisList = <        
           item
             Marks.LabelBrush.Style = bsClear
@@ -562,12 +562,12 @@ object f_sensoranalysis: Tf_sensoranalysis
     object TabSheet2: TTabSheet
       Caption = 'Read noise'
       ClientHeight = 245
-      ClientWidth = 647
+      ClientWidth = 723
       object Chart3: TChart
         Left = 0
         Height = 245
         Top = 0
-        Width = 647
+        Width = 723
         AxisList = <        
           item
             Marks.LabelBrush.Style = bsClear
@@ -575,7 +575,7 @@ object f_sensoranalysis: Tf_sensoranalysis
             Title.Alignment = taRightJustify
             Title.LabelFont.Orientation = 900
             Title.Visible = True
-            Title.Caption = '     Read noise per pixel [e-]'
+            Title.Caption = '             Noise per pixel [e-]          CCDCiel'
             Title.LabelBrush.Style = bsClear
           end        
           item
@@ -588,7 +588,7 @@ object f_sensoranalysis: Tf_sensoranalysis
           end>
         Legend.Visible = True
         Title.Text.Strings = (
-          'Read noise'
+          'Read noise and Random Telegraph Noise'
           ''
           ''
           ''
@@ -597,21 +597,24 @@ object f_sensoranalysis: Tf_sensoranalysis
         Title.Visible = True
         Align = alClient
         object Chart3LineSeries1: TLineSeries
-          Legend.Visible = False
-          Title = 'Small exposure'
+          Title = 'Read noise'
           LinePen.Color = clBlue
+        end
+        object Chart3LineSeries2: TLineSeries
+          Title = 'Read noise + RTN'
+          LinePen.Color = clRed
         end
       end
     end
     object TabSheet3: TTabSheet
       Caption = 'Full well'
       ClientHeight = 245
-      ClientWidth = 647
+      ClientWidth = 723
       object Chart4: TChart
         Left = 0
         Height = 245
         Top = 0
-        Width = 647
+        Width = 723
         AxisList = <        
           item
             Marks.LabelBrush.Style = bsClear
@@ -643,12 +646,12 @@ object f_sensoranalysis: Tf_sensoranalysis
     object TabSheet6: TTabSheet
       Caption = 'Charge persistence'
       ClientHeight = 245
-      ClientWidth = 647
-      object Chart6: TChart
+      ClientWidth = 723
+      object Chart5: TChart
         Left = 0
         Height = 245
         Top = 0
-        Width = 647
+        Width = 723
         AxisList = <        
           item
             Marks.LabelFont.Color = clMenu
@@ -671,7 +674,7 @@ object f_sensoranalysis: Tf_sensoranalysis
         )
         Title.Visible = True
         Align = alClient
-        object Chart6BarSeries1: TBarSeries
+        object Chart5BarSeries1: TBarSeries
           Title = 'Median value dark'
           BarBrush.Color = clGray
           Marks.LabelFont.Color = clMenuText
@@ -684,12 +687,12 @@ object f_sensoranalysis: Tf_sensoranalysis
     object TabSheet5: TTabSheet
       Caption = 'Dark current'
       ClientHeight = 245
-      ClientWidth = 647
-      object Chart5: TChart
+      ClientWidth = 723
+      object Chart6: TChart
         Left = 0
         Height = 245
         Top = 0
-        Width = 647
+        Width = 723
         AxisList = <        
           item
             Marks.LabelBrush.Style = bsClear
@@ -713,12 +716,16 @@ object f_sensoranalysis: Tf_sensoranalysis
         )
         Title.Visible = True
         Align = alClient
-        object Chart5LineSeries1: TLineSeries
-          Title = 'Total noise method Δadu'
+        object Chart6LineSeries1: TLineSeries
+          Title = 'Total noise, method Δadu'
           LinePen.Color = clLime
         end
-        object Chart5LineSeries2: TLineSeries
-          Title = 'Total noise method Δσ'
+        object Chart6LineSeries2: TLineSeries
+          Title = 'Total noise exl. RTN, method Δσ'
+          LinePen.Color = clBlue
+        end
+        object Chart6LineSeries3: TLineSeries
+          Title = 'Total noise inc. RTN, method Δσ'
           LinePen.Color = clRed
         end
       end
@@ -726,7 +733,7 @@ object f_sensoranalysis: Tf_sensoranalysis
     object TabSheet4: TTabSheet
       Caption = 'Info'
       ClientHeight = 245
-      ClientWidth = 647
+      ClientWidth = 723
       OnShow = TabSheet4Show
       object GroupBox1: TGroupBox
         Left = 16
