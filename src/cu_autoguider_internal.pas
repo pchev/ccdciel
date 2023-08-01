@@ -693,7 +693,13 @@ begin
      xy_array_old[0].y1:=xy_array[0].y1;
      // search star near previous position
      guidefits.FindStarPos2(round(xy_array_old[0].x2),round(xy_array_old[0].y2),finternalguider.SearchWinMin,xc,yc,vmax,bg,bgdev);
+     if FSettling then begin
+       // check SNR to be sure we not loss the star with a large move
+       guidefits.GetHFD2(round(xc),round(yc),finternalguider.SearchWinMin,x1,y1,bg1,bgdev1,hfd1,fwhm1,vmax,snr1,flux1,false,true);
+       if snr1<Finternalguider.MinSNR then vmax:=0;
+     end;
      if vmax=0 then
+       // if star lost, search again with the larger area
        guidefits.FindStarPos2(round(xy_array_old[0].x2),round(xy_array_old[0].y2),finternalguider.SearchWinMax,xc,yc,vmax,bg,bgdev);
      if vmax>0 then begin
        // star found
