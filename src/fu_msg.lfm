@@ -1,28 +1,28 @@
 object f_msg: Tf_msg
   Left = 0
-  Height = 117
+  Height = 120
   Top = 0
   Width = 608
-  ClientHeight = 117
+  ClientHeight = 120
   ClientWidth = 608
+  Constraints.MaxHeight = 120
   OnResize = FrameResize
   ParentFont = False
   TabOrder = 0
   DesignTop = 23
   object Panel1: TPanel
     Left = 8
-    Height = 117
+    Height = 120
     Top = 0
     Width = 600
     Align = alClient
-    AutoSize = True
-    ClientHeight = 117
+    ClientHeight = 120
     ClientWidth = 600
     ParentFont = False
     TabOrder = 0
     object msg: TMemo
       Left = 1
-      Height = 115
+      Height = 118
       Top = 1
       Width = 598
       Align = alClient
@@ -41,7 +41,7 @@ object f_msg: Tf_msg
   end
   object Title: TLabel
     Left = 0
-    Height = 117
+    Height = 120
     Top = 0
     Width = 8
     Align = alLeft
