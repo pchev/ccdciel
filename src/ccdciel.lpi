@@ -260,12 +260,13 @@
           </Other>
         </CompilerOptions>
       </Item7>
-      <SharedMatrixOptions Count="5">
+      <SharedMatrixOptions Count="6">
         <Item1 ID="755009368669" Modes="win32" Type="IDEMacro" MacroName="LCLWidgetType" Value="win32"/>
         <Item2 ID="602360172665" Modes="win64" Type="IDEMacro" MacroName="LCLWidgetType" Value="win32"/>
         <Item3 ID="929994115950" Modes="MacOS" Type="IDEMacro" MacroName="LCLWidgetType" Value="cocoa"/>
         <Item4 ID="863054938370" Modes="Release" Type="IDEMacro" MacroName="LCLWidgetType" Value="qt5"/>
         <Item5 ID="742428467299" Modes="memleak" Type="IDEMacro" MacroName="LCLWidgetType" Value="qt5"/>
+        <Item6 ID="677298046189" Type="IDEMacro" MacroName="LCLWidgetType" Value="gtk2"/>
       </SharedMatrixOptions>
     </BuildModes>
     <PublishOptions>

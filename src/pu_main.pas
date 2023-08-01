@@ -3071,18 +3071,19 @@ end;
 
 procedure Tf_main.StatusBar1DrawPanel(StatusBar: TStatusBar;  Panel: TStatusPanel; const Rect: TRect);
 var
-    s,x,y: integer;
+    s,hs,x,y: integer;
 begin
   if StatusBar=StatusBar1 then begin;
     if panel=StatusBar.Panels[panelled] then begin
       MsgStatusLed:='';
-      s:=(StatusBar.Height-6) div 2;
-      y:=StatusBar.Height div 2;
+      s:=(Rect.Height-4) div 2;
+      y:=Rect.Height div 2;
+      hs:=(Rect.Width-6*s) div 4;
       // clear
       statusbar.Canvas.Brush.Color:=clDefault;
       statusbar.Canvas.FillRect(Rect);
       // planetarium
-      x:=Rect.Left+s+4;
+      x:=Rect.Left+s+hs;
       if (f_planetarium<>nil)and(not planetarium.Terminated)and(planetarium.Connected) then begin
         statusbar.Canvas.Brush.Color:=cllime;
         MsgStatusLed:=MsgStatusLed+Format(rsConnected,[rsPlanetarium]);
@@ -3093,7 +3094,7 @@ begin
       end;
       statusbar.Canvas.Ellipse(x-s,y-s,x+s,y+s);
       // guider
-      x:=x+2*s+4;
+      x:=x+2*s+hs;
       if f_autoguider=nil then begin
          statusbar.Canvas.Brush.Color:=clGray;
          MsgStatusLed:=MsgStatusLed+', '+Format(rsDisconnected,[rsAutoguider]);
@@ -3118,7 +3119,7 @@ begin
       end;
       statusbar.Canvas.Ellipse(x-s,y-s,x+s,y+s);
       // device
-      x:=x+2*s+4;
+      x:=x+2*s+hs;
       if AllDevicesConnected then begin
         statusbar.Canvas.Brush.Color:=cllime;
         MsgStatusLed:=MsgStatusLed+', '+Format(rsConnected, [rsDevices]);
