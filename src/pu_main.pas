@@ -3076,7 +3076,7 @@ begin
   if StatusBar=StatusBar1 then begin;
     if panel=StatusBar.Panels[panelled] then begin
       MsgStatusLed:='';
-      s:=(Rect.Height-4) div 2;
+      s:=(Rect.Height-6) div 2;
       y:=Rect.Height div 2;
       hs:=(Rect.Width-6*s) div 4;
       // clear
