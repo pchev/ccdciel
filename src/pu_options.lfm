@@ -461,7 +461,7 @@ object f_option: Tf_option
           TabOrder = 0
           object FileOpt: TTabSheet
             Caption = 'File name options'
-            ClientHeight = 558
+            ClientHeight = 557
             ClientWidth = 553
             ParentFont = False
             object BtnFileDefault: TButton
@@ -571,9 +571,9 @@ object f_option: Tf_option
               AnchorSideTop.Side = asrBottom
               Left = 8
               Height = 22
-              Top = 374
+              Top = 388
               Width = 236
-              BorderSpacing.Top = 4
+              BorderSpacing.Top = 18
               Caption = 'Compress the FITS files with fpack'
               ParentFont = False
               TabOrder = 5
@@ -583,7 +583,7 @@ object f_option: Tf_option
               AnchorSideTop.Side = asrBottom
               Left = 8
               Height = 22
-              Top = 400
+              Top = 414
               Width = 258
               BorderSpacing.Top = 4
               Caption = 'Add FITS keywords for DSLR EXIF tags'
@@ -594,7 +594,7 @@ object f_option: Tf_option
               AnchorSideTop.Control = UseFileSequenceWidth
               AnchorSideTop.Side = asrBottom
               Left = 8
-              Height = 53
+              Height = 56
               Top = 318
               Width = 304
               AutoFill = True
@@ -607,7 +607,7 @@ object f_option: Tf_option
               ChildSizing.ShrinkVertical = crsScaleChilds
               ChildSizing.Layout = cclLeftToRightThenTopToBottom
               ChildSizing.ControlsPerLine = 2
-              ClientHeight = 23
+              ClientHeight = 26
               ClientWidth = 300
               Columns = 2
               Items.Strings = (
@@ -621,7 +621,7 @@ object f_option: Tf_option
               AnchorSideTop.Side = asrBottom
               Left = 8
               Height = 22
-              Top = 426
+              Top = 440
               Width = 359
               BorderSpacing.Top = 4
               Caption = 'Save a bitmap file additionally to the standard FITS file'
@@ -633,7 +633,7 @@ object f_option: Tf_option
               AnchorSideTop.Side = asrCenter
               Left = 376
               Height = 30
-              Top = 422
+              Top = 436
               Width = 112
               Constraints.MaxHeight = 30
               ItemHeight = 24
@@ -719,7 +719,7 @@ object f_option: Tf_option
           end
           object FolderOpt: TTabSheet
             Caption = 'Folder name options'
-            ClientHeight = 558
+            ClientHeight = 557
             ClientWidth = 553
             ParentFont = False
             object BtnFolderDefault: TButton
@@ -768,11 +768,11 @@ object f_option: Tf_option
           end
           object HeaderOpt: TTabSheet
             Caption = 'Custom headers'
-            ClientHeight = 558
+            ClientHeight = 557
             ClientWidth = 553
             object CustomHeader: TStringGrid
               Left = 0
-              Height = 516
+              Height = 515
               Top = 0
               Width = 553
               Align = alClient
@@ -804,7 +804,7 @@ object f_option: Tf_option
             object Panel8: TPanel
               Left = 0
               Height = 42
-              Top = 516
+              Top = 515
               Width = 553
               Align = alBottom
               ClientHeight = 42
@@ -1360,8 +1360,8 @@ object f_option: Tf_option
             Width = 313
             Align = alClient
             Caption = 'Automatic cooling '
-            ClientHeight = 92
-            ClientWidth = 313
+            ClientHeight = 62
+            ClientWidth = 309
             ParentFont = False
             TabOrder = 0
             object CameraAutoCool: TCheckBox
@@ -1402,8 +1402,8 @@ object f_option: Tf_option
             Width = 240
             Align = alLeft
             Caption = 'Maximum temperature change '
-            ClientHeight = 92
-            ClientWidth = 240
+            ClientHeight = 62
+            ClientWidth = 236
             ParentFont = False
             TabOrder = 1
             object TemperatureSlopeActive: TCheckBox
@@ -2853,8 +2853,8 @@ object f_option: Tf_option
             TabOrder = 0
             ColWidths = (
               123
-              213
-              213
+              202
+              203
             )
           end
         end
@@ -3085,7 +3085,7 @@ object f_option: Tf_option
             Height = 91
             Top = 178
             Width = 557
-            PageIndex = 3
+            PageIndex = 0
             Align = alBottom
             TabOrder = 2
             TabStop = True
@@ -4096,8 +4096,8 @@ object f_option: Tf_option
               Width = 574
               Align = alClient
               Caption = 'Elbrus Star Locator'
-              ClientHeight = 433
-              ClientWidth = 570
+              ClientHeight = 451
+              ClientWidth = 562
               ParentFont = False
               TabOrder = 0
               object ElbrusFolder: TEdit
@@ -4174,8 +4174,8 @@ object f_option: Tf_option
               Width = 574
               Align = alClient
               Caption = 'PlateSolve 2'
-              ClientHeight = 433
-              ClientWidth = 570
+              ClientHeight = 451
+              ClientWidth = 562
               ParentFont = False
               TabOrder = 0
               object Label78: TLabel
@@ -4238,8 +4238,8 @@ object f_option: Tf_option
               Width = 574
               Align = alClient
               Caption = 'ASTAP'
-              ClientHeight = 433
-              ClientWidth = 570
+              ClientHeight = 451
+              ClientWidth = 562
               ParentFont = False
               TabOrder = 0
               object Label105: TLabel
@@ -5123,8 +5123,8 @@ object f_option: Tf_option
               Width = 574
               Align = alClient
               Caption = 'Lin_Guider'
-              ClientHeight = 76
-              ClientWidth = 570
+              ClientHeight = 94
+              ClientWidth = 562
               ParentFont = False
               TabOrder = 0
               object LinGuiderSocket: TEdit
@@ -5859,7 +5859,7 @@ object f_option: Tf_option
                   MinSize = 101
                   MaxSize = 202
                   Title.Caption = 'Action'
-                  Width = 498
+                  Width = 477
                 end>
               DefaultColWidth = 51
               MouseWheelOption = mwGrid
@@ -5869,7 +5869,7 @@ object f_option: Tf_option
               TabOrder = 0
               ColWidths = (
                 51
-                498
+                477
               )
             end
           end
@@ -7183,8 +7183,8 @@ object f_option: Tf_option
             Width = 553
             Align = alBottom
             Caption = 'Recenter sequence target that drift'
-            ClientHeight = 116
-            ClientWidth = 553
+            ClientHeight = 86
+            ClientWidth = 549
             ParentFont = False
             TabOrder = 1
             object CheckRecenterTarget: TCheckBox
@@ -7254,8 +7254,8 @@ object f_option: Tf_option
             Width = 553
             Align = alTop
             Caption = 'Focuser temperature compensation'
-            ClientHeight = 92
-            ClientWidth = 553
+            ClientHeight = 62
+            ClientWidth = 549
             ParentFont = False
             TabOrder = 0
             object Label84: TLabel
@@ -7336,8 +7336,8 @@ object f_option: Tf_option
             Width = 553
             Align = alTop
             Caption = 'Periodic auto-focus'
-            ClientHeight = 62
-            ClientWidth = 553
+            ClientHeight = 32
+            ClientWidth = 549
             ParentFont = False
             TabOrder = 1
             object Label127: TLabel
