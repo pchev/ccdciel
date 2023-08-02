@@ -77,6 +77,7 @@ begin
  led.Hint:=rsDisconnected3;
  ScaleDPI(Self);
  SetLang;
+ led.Canvas.AntialiasingMode:=amOn;
 end;
 
 destructor  Tf_weather.Destroy;

@@ -121,6 +121,7 @@ begin
  ScaleDPI(Self);
  Frunning:=false;
  SetLang;
+ led.Canvas.AntialiasingMode:=amOn;
 end;
 
 destructor  Tf_preview.Destroy;

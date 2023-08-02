@@ -82,6 +82,7 @@ begin
  noprompt:=false;
  lockreverse:=false;
  SetLang;
+ led.Canvas.AntialiasingMode:=amOn;
 end;
 
 destructor  Tf_rotator.Destroy;

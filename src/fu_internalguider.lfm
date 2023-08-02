@@ -201,6 +201,7 @@ object f_internalguider: Tf_internalguider
             Hint = 'North is up, East is to the left. The values indicate the standard deviation from the mean.'
             Top = 40
             Width = 178
+            AntialiasingMode = amOn
             ParentShowHint = False
             ShowHint = True
           end
@@ -210,6 +211,7 @@ object f_internalguider: Tf_internalguider
             Hint = 'Blue trend is RA, Red trend is declination. The corrective actions are also shown. North and West are up. South and East are down.'
             Top = 232
             Width = 314
+            AntialiasingMode = amOn
           end
           object dec_hysteresis1: TSpinEdit
             AnchorSideTop.Control = dec_gain1

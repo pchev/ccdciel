@@ -73,6 +73,7 @@ begin
  led.Hint:=rsUnsafe;
  ScaleDPI(Self);
  SetLang;
+ led.Canvas.AntialiasingMode:=amOn;
 end;
 
 destructor  Tf_safety.Destroy;

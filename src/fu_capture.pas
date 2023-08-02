@@ -137,6 +137,7 @@ begin
  FFocusNow:=false;
  FExposureTime:=-1;
  SetLang;
+ led.Canvas.AntialiasingMode:=amOn;
 end;
 
 destructor  Tf_capture.Destroy;

@@ -99,6 +99,7 @@ begin
  ScaleDPI(Self);
  SetLang;
  SelectedDevice:=0;
+ led.Canvas.AntialiasingMode:=amOn;
 end;
 
 destructor  Tf_devicesconnection.Destroy;

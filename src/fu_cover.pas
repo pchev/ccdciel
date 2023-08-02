@@ -101,6 +101,8 @@ begin
  ledCalibrator.Brush.Color:=clGray;
  ScaleDPI(Self);
  SetLang;
+ ledCalibrator.Canvas.AntialiasingMode:=amOn;
+ ledCover.Canvas.AntialiasingMode:=amOn;
 end;
 
 destructor  Tf_cover.Destroy;

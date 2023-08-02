@@ -892,6 +892,19 @@ begin
   b.tag:=1002;
   b.OnClick:=@IncPage;
   b.Parent:=PanelLeft;
+
+  DiscoverLed.Canvas.AntialiasingMode:=amOn;
+  DiscoverLed1.Canvas.AntialiasingMode:=amOn;
+  DiscoverLed2.Canvas.AntialiasingMode:=amOn;
+  DiscoverLed3.Canvas.AntialiasingMode:=amOn;
+  DiscoverLed4.Canvas.AntialiasingMode:=amOn;
+  DiscoverLed5.Canvas.AntialiasingMode:=amOn;
+  DiscoverLed6.Canvas.AntialiasingMode:=amOn;
+  DiscoverLed7.Canvas.AntialiasingMode:=amOn;
+  DiscoverLed9.Canvas.AntialiasingMode:=amOn;
+  DiscoverLed10.Canvas.AntialiasingMode:=amOn;
+  DiscoverLed11.Canvas.AntialiasingMode:=amOn;
+  DiscoverLed12.Canvas.AntialiasingMode:=amOn;
 end;
 
 procedure Tf_setup.msg(txt: string; level:integer=3);

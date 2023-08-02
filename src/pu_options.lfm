@@ -339,7 +339,6 @@ object f_option: Tf_option
           Top = 342
           Width = 557
           Align = alTop
-          Caption = 'Panel27'
           ClientHeight = 50
           ClientWidth = 557
           TabOrder = 5
@@ -394,7 +393,6 @@ object f_option: Tf_option
           Top = 292
           Width = 557
           Align = alTop
-          Caption = 'Panel28'
           ClientHeight = 50
           ClientWidth = 557
           TabOrder = 6

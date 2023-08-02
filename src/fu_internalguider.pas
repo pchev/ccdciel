@@ -483,6 +483,7 @@ begin
  FDrawSettingChange:=false;
  FGuideLockNextX:=-1;
  FGuideLockNextY:=-1;
+ led.Canvas.AntialiasingMode:=amOn;
 end;
 
 destructor  Tf_internalguider.Destroy;
@@ -1108,7 +1109,11 @@ begin
 
    {clear}
    Canvas.Pen.width :=1;{thickness lines}
+   {$ifdef lclqt5}
+   Canvas.pen.color:=clBtnText;
+   {$else}
    Canvas.pen.color:=clScrollbar;
+   {$endif}
    canvas.font.color:=clBtntext;
    canvas.brush.color:=clmenu;
    canvas.rectangle(0,0, width,height);
@@ -1213,7 +1218,11 @@ begin
    h2:= height div 2;
 
    {clear}
+   {$ifdef lclqt5}
+   Canvas.pen.color:=clBtnText;
+   {$else}
    Canvas.pen.color:=clScrollbar;
+   {$endif}
    canvas.font.color:=clBtntext;
    canvas.brush.color:=clmenu;
    canvas.rectangle(0,0, width,height);

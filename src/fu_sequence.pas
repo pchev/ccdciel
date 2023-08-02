@@ -250,6 +250,7 @@ begin
  TargetGrid.ColWidths[3]:=0;
  f_EditTargets:=Tf_EditTargets.Create(nil);
  f_EditTargets.Astrometry:=Fastrometry;
+ led.Canvas.AntialiasingMode:=amOn;
 end;
 
 destructor  Tf_sequence.Destroy;

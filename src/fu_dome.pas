@@ -89,6 +89,8 @@ begin
  ledSlaved.Brush.Color:=clGray;
  ScaleDPI(Self);
  SetLang;
+ ledOpen.Canvas.AntialiasingMode:=amOn;
+ ledSlaved.Canvas.AntialiasingMode:=amOn;
 end;
 
 destructor  Tf_dome.Destroy;

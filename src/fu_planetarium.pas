@@ -72,6 +72,7 @@ begin
  {$endif}
  ScaleDPI(Self);
  SetLang;
+ led.Canvas.AntialiasingMode:=amOn;
 end;
 
 destructor  Tf_planetarium.Destroy;

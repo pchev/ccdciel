@@ -1963,6 +1963,9 @@ begin
   f_script.Autoguider:=autoguider;
   f_script.Astrometry:=astrometry;
   f_script.LoadScriptList;
+
+  StatusBar1.Canvas.AntialiasingMode:=amOn;
+
 end;
 
 procedure Tf_main.CreateDevices;
@@ -3076,7 +3079,11 @@ begin
   if StatusBar=StatusBar1 then begin;
     if panel=StatusBar.Panels[panelled] then begin
       MsgStatusLed:='';
-      s:=(Rect.Height-6) div 2;
+      {$ifdef mswindows}
+      s:=(Rect.Height-6) div 2;  // space for right grip
+      {$else}
+      s:=(Rect.Height-4) div 2;
+      {$endif}
       y:=Rect.Height div 2;
       hs:=(Rect.Width-6*s) div 4;
       // clear
