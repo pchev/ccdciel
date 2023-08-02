@@ -146,6 +146,7 @@ type
     Fcamera: T_camera;
     FonShowMessage: TNotifyMsg;
     procedure msg(txt:string; level: integer=3);
+    procedure InstructionsAdd(txt:string);
     procedure SetROI;
     function Takeimage(exp:double; typeof {FLAT, DARK, LIGHT, BIAS}: TFrameType): boolean;
     procedure stdev(img1,img2: Timafloat; out sd0,sd :double);//find standard deviation of a single image using two images and avoid pixel-to-pixel variations in the sensitivity of the CCD, known as the flat field effect.
@@ -258,6 +259,13 @@ begin
  if assigned(FonShowMessage) then FonShowMessage('Sensor analysis: '+txt,level);
 end;
 
+procedure Tf_sensoranalysis.InstructionsAdd(txt:string);
+begin
+  Instructions.Lines.Add(txt);
+  // on Linux the memo do not go automatically to the last line
+  Instructions.SelStart:=Instructions.GetTextLen-1;
+  Instructions.SelLength:=0;
+end;
 
 procedure Tf_sensoranalysis.FormCreate(Sender: TObject);
 begin
@@ -377,7 +385,7 @@ end;
 procedure Tf_sensoranalysis.Button2Click(Sender: TObject);
 begin
   stoploop:=true;
-  Instructions.Lines.add('Abort pressed. Will stop soon.');
+  InstructionsAdd('Abort pressed. Will stop soon.');
 end;
 
 
@@ -654,7 +662,7 @@ begin
     if i<=9 then maxerr:=math.max(maxerr,abs(err));
   end;
   mess:=floattostrF(maxerr,FFfixed,0,3)+'%';
-  Instructions.Lines.add('Max linearity error is ' +mess+ ' in range [0..90%]');
+  InstructionsAdd('Max linearity error is ' +mess+ ' in range [0..90%]');
   chart1.Title.text.setStrings('Linearity. Maximum error ' +mess+ ' in range [0..90%]. Gain is '+inttostr(gain));
 end;
 
@@ -676,14 +684,14 @@ const
        StepButton1.enabled:=true;
        Screen.Cursor:=Save_Cursor;
        step:=0;
-       Instructions.Lines.add('Read to restart');
+       InstructionsAdd('Read to restart');
      end;
 begin
   stoploop:=false;
 
   if camera.CanSetGain=false then
   begin
-     Instructions.Lines.add(#10+#10+'Fatal failure!! Can not set gain. Allow setting the camera gain in Preference, Camera');
+     InstructionsAdd(#10+#10+'Fatal failure!! Can not set gain. Allow setting the camera gain in Preference, Camera');
      exit;
   end;
    //Chart5BarSeries1.addxy(0,20,' test' );
@@ -709,12 +717,12 @@ begin
 
       StepButton1.enabled:=false;
       StepButton1.caption:='.....';
-      Instructions.Lines.add('Working on the LIGHTS....'+#10);
+      InstructionsAdd('Working on the LIGHTS....'+#10);
 
       // find bias level
       exposure:=0.0;
       biaslevel:=median_of_median(exposure,repeats1.value,BIAS {FLAT, DARK, LIGHT, BIAS});//find best median
-      Instructions.Lines.add('Bias level: '+floattostrF(biaslevel,FFfixed,0,0));
+      InstructionsAdd('Bias level: '+floattostrF(biaslevel,FFfixed,0,0));
 
       nrgainsteps:=8-1;
       setlength(measurements,nrgainsteps+1);
@@ -740,7 +748,7 @@ begin
           exposure:= measurements[gainstep-1].exposure * measurements[gainstep-1].gain/measurements[gainstep].gain;//assuming gain is linear
         end;
 
-        Instructions.Lines.add('Testing gain: '+inttostr(gain));
+        InstructionsAdd('Testing gain: '+inttostr(gain));
         for i:=0 to 9 do
         begin
           if Takeimage(exposure,FLAT) then
@@ -748,7 +756,7 @@ begin
             measurements[gainstep].median_light_adu:= median(Ffits.image);
             saturationlevel:=(measurements[gainstep].median_light_adu-biaslevel)/camera.MaxADU;
 
-            Instructions.Lines.add('Trying to find the exposure time for 70% saturation. Exposure time: '+floattostrF(exposure,FFfixed,0,3)+', saturation level: '+floattostrF(saturationlevel*100,FFfixed,0,0 )+'%');
+            InstructionsAdd('Trying to find the exposure time for 70% saturation. Exposure time: '+floattostrF(exposure,FFfixed,0,3)+', saturation level: '+floattostrF(saturationlevel*100,FFfixed,0,0 )+'%');
             if (((Ffits.imagemean-biaslevel)>0.65*camera.MaxADU) and ((Ffits.imagemean-biaslevel)<0.75*camera.MaxADU)) then break;//exposure is good
             exposure:=min(30,exposure*level7/saturationlevel);//try to get 70% exposed. level7=0.7
            end;
@@ -762,7 +770,7 @@ begin
         end; //for loop
         if ((i=9) or (exposure>=30)) then
         begin
-          Instructions.Lines.add('Abort. Can not find a correct exposure time. Check flat panel'+#10);
+          InstructionsAdd('Abort. Can not find a correct exposure time. Check flat panel'+#10);
           prepare_stop;
           exit;
         end;
@@ -777,7 +785,7 @@ begin
         if gainstep=0 then
         begin
           bit_depth:=bitdepth(Ffits.image);
-          Instructions.Lines.add('Bit depth image is: '+inttostr(bit_depth));
+          InstructionsAdd('Bit depth image is: '+inttostr(bit_depth));
         end;
 
         if stoploop then begin prepare_stop; exit; end;
@@ -791,7 +799,7 @@ begin
               ((gainstep=6) and (lin7.checked)) or
               ((gainstep=7) and (lin8.checked)) ) then
         begin
-          Instructions.Lines.add('Testing linearity.'+#10);
+          InstructionsAdd('Testing linearity.'+#10);
           stepexposure:=exposure/(level7*10);//exposure difference to get 10% more level
 
           oldthemedian:=0;
@@ -824,14 +832,14 @@ begin
         begin
           if Takeimage(3*exposure,FLAT) then  //expose at 4*70%
           sat_level_adu:=max(Ffits.image);
-          Instructions.Lines.add('Test saturation level. Exposure time: '+floattostrF(3*exposure,FFfixed,0,3)+', saturation level: '+floattostrF(sat_level_adu,FFfixed,0,0 )+' adu');
+          InstructionsAdd('Test saturation level. Exposure time: '+floattostrF(3*exposure,FFfixed,0,3)+', saturation level: '+floattostrF(sat_level_adu,FFfixed,0,0 )+' adu');
         end;
 
         inc(gainstep);
 
       end; //while
 
-      Instructions.Lines.add(#10+
+      InstructionsAdd(#10+
                             'Place the cap on the telescope for making darks.'+#10+#10+
                             'If ready press button "Take darks"');
       StepButton1.caption:='■■■ Take darks ■■■';
@@ -848,18 +856,18 @@ begin
       begin
         update_temperature_reading;
 
-        if gainstep=0 then Instructions.Lines.add('Working on the DARKS....');
+        if gainstep=0 then InstructionsAdd('Working on the DARKS....');
         exposure:=measurements[gainstep].Exposure;
         gain:=measurements[gainstep].gain;
 
         if (( gainstep=0) and (Takeimage(exposure,DARK))) then //First dark is ignored since in some cameras (Touptek) the pedestal value could be higher in the first dark after a bright flat exposure')
         begin  //so this dark has two functions. 1) Skip first invalid dark and 2) test if flat panel is removed.
           themedian:=median(Ffits.image);
-          Instructions.Lines.add('Took dark with gain '+floattostrF( gain,FFfixed,0,0)+ ' and exposure ' +floattostrF(measurements[gainstep].exposure,FFfixed,0,3)+' to remove persistent charge.  Median value '+floattostrF(themedian,FFfixed,0,3));
+          InstructionsAdd('Took dark with gain '+floattostrF( gain,FFfixed,0,0)+ ' and exposure ' +floattostrF(measurements[gainstep].exposure,FFfixed,0,3)+' to remove persistent charge.  Median value '+floattostrF(themedian,FFfixed,0,3));
 
           if themedian>0.5*measurements[0].median_light_adu then
           begin
-            Instructions.Lines.add('Flat panel is still present. Remove panel, place the telescope cap and press again "Take darks".');
+            InstructionsAdd('Flat panel is still present. Remove panel, place the telescope cap and press again "Take darks".');
             StepButton1.enabled:=true;
             StepButton1.caption:='■■■ Take darks ■■■';
             Screen.Cursor:=Save_Cursor;
@@ -868,7 +876,7 @@ begin
           Chart5BarSeries1.addxy(gainstep-1,themedian,' Gain '+inttostr(gain)+', ' );
 
         end;
-        Instructions.Lines.add('Taking dark(s) with gain '+floattostrF( gain,FFfixed,0,0)+ ' and exposure ' +floattostrF(measurements[gainstep].exposure,FFfixed,0,3));
+        InstructionsAdd('Taking dark(s) with gain '+floattostrF( gain,FFfixed,0,0)+ ' and exposure ' +floattostrF(measurements[gainstep].exposure,FFfixed,0,3));
         median_and_stdev(measurements[gainstep].exposure,repeats1.value,DARK,{out}sd_RTN_dark_adu,sd_dark_adu,median_dark_adu);//as stdev but do it nrframes times and report median value as result
 
         Chart5BarSeries1.addxy(gainstep,median_dark_adu,' Gain '+inttostr(gain)+', ');
@@ -903,7 +911,7 @@ begin
       end;//while
 
 
-      Instructions.Lines.add('Testing dark current');
+      InstructionsAdd('Testing dark current');
 
       if radiobutton9.checked=false then
       begin
@@ -930,18 +938,18 @@ begin
         total_noise_e:=sd_dark_adu2*measurements[gainstep].gain_e/correction;// total noise after long exposure noise[e-]:=noise_adu * gain_e     {1.63}
         total_noise_RTN_e:=sd_RTN_dark_adu2*measurements[gainstep].gain_e/correction;// total noise after long exposure noise[e-]:=noise_adu * gain_e. Including  including random telegraph noise {2.20}
 
-        Instructions.Lines.add('Noise after 1.01 sec: '+floattostrF(readnoise2_e,FFfixed,0,2)+ '[e-]');
-        Instructions.Lines.add('Noise after '+inttostr(dark_current_test_duration1.value+1)+' sec:  '+floattostrF(total_noise_e,FFfixed,0,2)+ '[e-]');
-        Instructions.Lines.add('Noise including RTN after '+inttostr(dark_current_test_duration1.value+1)+' sec:  '+floattostrF(total_noise_RTN_e,FFfixed,0,2)+ '[e-]');
+        InstructionsAdd('Noise after 1.01 sec: '+floattostrF(readnoise2_e,FFfixed,0,2)+ '[e-]');
+        InstructionsAdd('Noise after '+inttostr(dark_current_test_duration1.value+1)+' sec:  '+floattostrF(total_noise_e,FFfixed,0,2)+ '[e-]');
+        InstructionsAdd('Noise including RTN after '+inttostr(dark_current_test_duration1.value+1)+' sec:  '+floattostrF(total_noise_RTN_e,FFfixed,0,2)+ '[e-]');
 
         dark_current_adu:=median_dark_adu2-median_dark_adu;//dark current in adu {4.5}
         dark_current_es:=dark_current_adu*measurements[gainstep].gain_e/(dark_current_test_duration1.value*correction); //dark current in e-/(sec*pixel)  {0.003}
-        Instructions.Lines.add('Δadu after '+inttostr(dark_current_test_duration1.value+1)+' sec:  '+floattostrF(dark_current_adu,FFfixed,0,0));
-        Instructions.Lines.add('Dark current method Δadu: '+floattostrF(dark_current_es,FFfixed,0,4)+ ' [e-/(sec*pixel)]');
+        InstructionsAdd('Δadu after '+inttostr(dark_current_test_duration1.value+1)+' sec:  '+floattostrF(dark_current_adu,FFfixed,0,0));
+        InstructionsAdd('Dark current method Δadu: '+floattostrF(dark_current_es,FFfixed,0,4)+ ' [e-/(sec*pixel)]');
 
         dark_current2_es:=(sqr(total_noise_e) - sqr(readnoise2_e))/dark_current_test_duration1.value; // dark current in e-/(sec*pixel) {0.0037}
         dark_current_RTN2_es:=(sqr(total_noise_RTN_e) - sqr(readnoise_RTN2_e))/dark_current_test_duration1.value; // dark current in e-/(sec*pixel)  {0.0057}
-        Instructions.Lines.add('Dark current method Δσ: '+floattostrF(dark_current2_es,FFfixed,0,4)+ ' [e-/(sec*pixel)]');
+        InstructionsAdd('Dark current method Δσ: '+floattostrF(dark_current2_es,FFfixed,0,4)+ ' [e-/(sec*pixel)]');
 
         if dark_current_adu>2 then //at least 2 adu
         begin
@@ -966,7 +974,7 @@ begin
         end
         else
         message:=message+#10+'WARNING. Too short exposure time. Only '+floattostrF(dark_current_adu,FFfixed,0,1)+' adu difference. Set exposure time longer.';
-        Instructions.Lines.add(message);
+        InstructionsAdd(message);
 
         Chart6.Title.text.setStrings(message);
         StringGrid1.InsertRowWithValues(stringgrid1.rowcount,['',message]);
@@ -974,7 +982,7 @@ begin
       end;
 
       update_temperature_reading;
-      Instructions.Lines.add(#10+#10+'Test completed.');
+      InstructionsAdd(#10+#10+'Test completed.');
       StepButton1.enabled:=true;
       StepButton1.caption:='Restart';
       step:=0;
