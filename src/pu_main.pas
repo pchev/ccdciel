@@ -8615,6 +8615,8 @@ end;
 procedure Tf_main.MenuImgStatClick(Sender: TObject);
 var f: Tf_viewtext;
     txt: string;
+    mean,sd : double;
+    iterations :integer;
 begin
  if fits.HeaderInfo.valid and fits.ImageValid then begin
    f:=Tf_viewtext.Create(self);
@@ -8622,6 +8624,12 @@ begin
    f.Height:=DoScaleY(350);
    f.Caption:=rsImageStatist;
    txt:=fits.GetStatistics;
+
+   Fits.stdev2({out}mean,sd,iterations);
+   txt:=txt+'Mean2: '+floattostrF(mean,FFfixed,0,1)+' (sigma clipped)'+crlf;
+   txt:=txt+'Std.Dev2: '+floattostrF(sd,FFfixed,0,1)+' (sigma clipped)'+crlf;
+
+
    if (WCScenterRA<>NullCoord) and (WCScenterDEC<>NullCoord)
    then begin
      txt:=txt+crlf+rsFromPlateSol+':'+crlf;

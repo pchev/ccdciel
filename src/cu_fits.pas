@@ -191,6 +191,7 @@ type
      Procedure LoadRGB;
      procedure ClearFitsInfo;
      procedure GetFitsInfo;
+     procedure stdev2(out mean,sd : double; out iterations :integer);{calculate mean and standard deviation using sigma clip to exclude outliers}
      procedure CreateImage(info: TFitsInfo; hdr:TFitsHeader);
      procedure BayerInterpolation(t:TBayerMode; rmult,gmult,bmult:double; rbg,gbg,bbg:single; pix1,pix2,pix3,pix4,pix5,pix6,pix7,pix8,pix9:single; row,col:integer; out pixr,pixg,pixb:single); inline;
      Procedure Debayer;
@@ -1635,6 +1636,52 @@ else begin
  msg(Format(rsFileNotFound, [fn]),1);
 end;
 end;
+
+
+procedure TFits.stdev2( out mean,sd : double; out iterations :integer);{calculate mean and standard deviation using sigma clip to exclude outliers}
+var i,j,counter,w,h : integer;
+    value, sd_old,meanx   : double;
+
+begin
+  sd:=99999;
+  mean:=0;
+  iterations:=0;
+  repeat
+    {mean}
+    counter:=0;
+    meanx:=0;
+    for j:=0 to Fheight-1  do
+    for i:=0 to Fwidth-1 do
+    begin
+      value:=Fimage[0,j,i];
+      if  ((iterations=0) or (abs(value-mean)<=3*sd)) then  {ignore outliers after first run}
+      begin
+        inc(counter);
+        meanx:=meanx+value; {mean}
+       end;
+     end;{filter outliers}
+    if counter<>0 then mean:=meanx/counter {calculate the mean};
+
+    {sd}
+    sd_old:=sd;
+    counter:=0;
+    for j:=0 to Fheight-1  do
+    for i:=0 to Fwidth-1 do
+    begin
+      value:=Fimage[0,j,i];
+      if value<2*mean then {not a large outlier}
+      if ((iterations=0) or (abs(value-mean)<=3*sd_old)) then {ignore outliers after first run}
+      begin
+        sd:=sd+sqr(mean-value);
+        inc(counter);
+      end;
+    end;
+    if counter<>0 then sd:=sqrt(sd/counter);
+
+    inc(iterations);
+  until (((sd_old-sd)<0.03*sd) or (iterations>=7));{repeat until sd is stable or 7 iterations}
+end;
+
 
 function TFits.GetStatistics: string;
 var ff: string;
