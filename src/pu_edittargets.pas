@@ -428,6 +428,7 @@ begin
   BtnDeleteObject.Caption := rsRemoveRow;
   BtnOptions.Caption:=rsOptions2;
   MenuNewScript.Caption := rsScript;
+  MenuSwitch.Caption:=rsSwitch;
   BtnCancel.Caption := rsCancel;
   MenuSkyFlat.Caption := rsSkyFlat;
   MenuImportObslist.Caption:=rsImportCdCObs;

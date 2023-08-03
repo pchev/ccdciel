@@ -1526,6 +1526,17 @@ resourcestring
   rsAstrometryEx = 'Astrometry exposure time';
   rsPlanStep = 'Plan step';
   rsFinder = 'Finder';
+  rsSensorAnalys = 'Sensor analysis';
+  rsImageWindow = 'Image window';
+  rsSinglePanel = 'Single panel';
+  rsMultiPanel = 'Multi panel';
+  rsCalibrationO = 'Calibration options';
+  rsInitialCalib = 'Initial calibration step';
+  rsSetGuideSpee = 'Set guide speed [x sidereal]';
+  rsLastCalibrat = 'Last calibration:';
+  rsDate = 'Date';
+  rsDeclination = 'Declination';
+  rsIssue = 'Issue';
 
 implementation
 

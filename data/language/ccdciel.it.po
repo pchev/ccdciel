@@ -6,15 +6,15 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ccdciel\n"
 "Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
-"POT-Creation-Date: 2023-07-05 11:00+0000\n"
+"POT-Creation-Date: 2023-08-03 08:21+0000\n"
 "PO-Revision-Date: 2021-08-31 20:35+0000\n"
 "Last-Translator: Patrick Chevalley <Unknown>\n"
 "Language-Team: Italian <it@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2023-07-05 11:24+0000\n"
-"X-Generator: Launchpad (build beda0e9dd2b131780db60fe479d4b43618b27243)\n"
+"X-Launchpad-Export-Date: 2023-08-03 08:32+0000\n"
+"X-Generator: Launchpad (build d80dbb5bdc9110f3a64cc968928033472d5e0509)\n"
 
 #: u_translation.rs2d
 msgid "2D"
@@ -639,6 +639,10 @@ msgstr "Ritardo %scalibrazione"
 msgid "Calibration measurement"
 msgstr ""
 
+#: u_translation.rscalibrationo
+msgid "Calibration options"
+msgstr ""
+
 #: u_translation.rscalibrationr
 msgid "Calibration results:"
 msgstr ""
@@ -1217,6 +1221,10 @@ msgstr ""
 msgid "Dark%snight"
 msgstr ""
 
+#: u_translation.rsdate
+msgid "Date"
+msgstr ""
+
 #: u_translation.rsdateobsfromc
 msgid "DATE-OBS from camera driver"
 msgstr ""
@@ -1239,6 +1247,10 @@ msgstr "Debayer immagine di anteprima"
 
 #: u_translation.rsdec
 msgid "Dec"
+msgstr ""
+
+#: u_translation.rsdeclination
+msgid "Declination"
 msgstr ""
 
 #: u_translation.rsdeclinationb
@@ -1459,10 +1471,6 @@ msgstr ""
 msgid "done"
 msgstr ""
 
-#: u_translation.rsdonotchangea
-msgid "Do not change autoguiding state"
-msgstr ""
-
 #: u_translation.rsdonotdisplay
 msgid "Do not display images during capture"
 msgstr ""
@@ -1474,6 +1482,10 @@ msgstr ""
 #: u_translation.rsdonotrunasad
 #, object-pascal-format
 msgid "Do not run %s as %s!"
+msgstr ""
+
+#: u_translation.rsdonotstartau
+msgid "Do not start autoguiding"
 msgstr ""
 
 #: u_translation.rsdontswait
@@ -1786,6 +1798,10 @@ msgstr "Movimento finale (passi)"
 
 #: u_translation.rsfind
 msgid "Find."
+msgstr ""
+
+#: u_translation.rsfinder
+msgid "Finder"
 msgstr ""
 
 #: u_translation.rsfindercamera
@@ -2297,6 +2313,10 @@ msgstr "Trasferimento immagine"
 msgid "Image Un-debayered"
 msgstr "Immagine non Debayered"
 
+#: u_translation.rsimagewindow
+msgid "Image window"
+msgstr ""
+
 #: u_translation.rsimportcdcmos
 msgid "Import mosaic"
 msgstr ""
@@ -2323,6 +2343,10 @@ msgstr "Impostazioni INDI"
 
 #: u_translation.rsinformation
 msgid "Information"
+msgstr ""
+
+#: u_translation.rsinitialcalib
+msgid "Initial calibration step"
 msgstr ""
 
 #: u_translation.rsinitializeta
@@ -2434,6 +2458,10 @@ msgstr "File FITS %s non valido o non supportato"
 msgid "Inversed solar guide control"
 msgstr ""
 
+#: u_translation.rsissue
+msgid "Issue"
+msgstr ""
+
 #: u_translation.rsiterative
 msgid "Iterative"
 msgstr "Iterativo"
@@ -2453,6 +2481,10 @@ msgstr ""
 #: u_translation.rslanguage
 msgid "Language"
 msgstr "Lingua"
+
+#: u_translation.rslastcalibrat
+msgid "Last calibration:"
+msgstr ""
 
 #: u_translation.rslatitude
 msgid "Latitude"
@@ -2951,6 +2983,10 @@ msgstr ""
 
 #: u_translation.rsmovingtoseco
 msgid "Moving to second position"
+msgstr ""
+
+#: u_translation.rsmultipanel
+msgid "Multi panel"
 msgstr ""
 
 #: u_translation.rsmultistargui
@@ -3501,6 +3537,10 @@ msgstr ""
 #: u_translation.rsplanfinished
 #, object-pascal-format
 msgid "Plan %s finished."
+msgstr ""
+
+#: u_translation.rsplanstep
+msgid "Plan step"
 msgstr ""
 
 #: u_translation.rsplanstopped
@@ -4280,6 +4320,10 @@ msgstr ""
 msgid "Sensor"
 msgstr "Sensore"
 
+#: u_translation.rssensoranalys
+msgid "Sensor analysis"
+msgstr ""
+
 #: u_translation.rssensorsprope
 msgid "Sensors properties"
 msgstr "Proprietà sensore"
@@ -4423,6 +4467,10 @@ msgstr "Imposta direzione verso l'esterno del focheggiatore"
 msgid "Set frame type %s"
 msgstr ""
 
+#: u_translation.rssetguidespee
+msgid "Set guide speed [x sidereal]"
+msgstr ""
+
 #: u_translation.rssetlockposit
 msgid "Set lock position"
 msgstr ""
@@ -4531,6 +4579,10 @@ msgstr ""
 
 #: u_translation.rssimplifiedph3
 msgid "Simplified photometry taking account for only the calibration"
+msgstr ""
+
+#: u_translation.rssinglepanel
+msgid "Single panel"
 msgstr ""
 
 #: u_translation.rssinglestar

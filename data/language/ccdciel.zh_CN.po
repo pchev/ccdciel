@@ -6,15 +6,15 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ccdciel\n"
 "Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
-"POT-Creation-Date: 2023-07-05 11:00+0000\n"
-"PO-Revision-Date: 2023-06-21 03:24+0000\n"
+"POT-Creation-Date: 2023-08-03 08:21+0000\n"
+"PO-Revision-Date: 2023-07-09 06:05+0000\n"
 "Last-Translator: Zachary Wu <Unknown>\n"
 "Language-Team: Chinese (Simplified) <zh_CN@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2023-07-05 11:24+0000\n"
-"X-Generator: Launchpad (build beda0e9dd2b131780db60fe479d4b43618b27243)\n"
+"X-Launchpad-Export-Date: 2023-08-03 08:32+0000\n"
+"X-Generator: Launchpad (build d80dbb5bdc9110f3a64cc968928033472d5e0509)\n"
 
 #: u_translation.rs2d
 msgid "2D"
@@ -235,7 +235,7 @@ msgstr "天体测量"
 
 #: u_translation.rsastrometryex
 msgid "Astrometry exposure time"
-msgstr ""
+msgstr "天体测量曝光时间"
 
 #: u_translation.rsastrometryop
 msgid "Astrometry options"
@@ -638,6 +638,10 @@ msgstr "校准%s就绪"
 #: u_translation.rscalibrationm
 msgid "Calibration measurement"
 msgstr "校准测量"
+
+#: u_translation.rscalibrationo
+msgid "Calibration options"
+msgstr ""
 
 #: u_translation.rscalibrationr
 msgid "Calibration results:"
@@ -1217,6 +1221,10 @@ msgstr "暗场帧"
 msgid "Dark%snight"
 msgstr "暗夜%s"
 
+#: u_translation.rsdate
+msgid "Date"
+msgstr ""
+
 #: u_translation.rsdateobsfromc
 msgid "DATE-OBS from camera driver"
 msgstr "来自于相机驱动的DATE-OBS"
@@ -1240,6 +1248,10 @@ msgstr "预览图去拜尔"
 #: u_translation.rsdec
 msgid "Dec"
 msgstr "Dec"
+
+#: u_translation.rsdeclination
+msgid "Declination"
+msgstr ""
 
 #: u_translation.rsdeclinationb
 msgid "Declination backlash"
@@ -1459,10 +1471,6 @@ msgstr "圆顶从动：%s"
 msgid "done"
 msgstr "完成"
 
-#: u_translation.rsdonotchangea
-msgid "Do not change autoguiding state"
-msgstr "不改变自动导星状态"
-
 #: u_translation.rsdonotdisplay
 msgid "Do not display images during capture"
 msgstr "拍摄中不显示图像"
@@ -1475,6 +1483,10 @@ msgstr "无动作"
 #, object-pascal-format
 msgid "Do not run %s as %s!"
 msgstr "不要运行%s如同%s！"
+
+#: u_translation.rsdonotstartau
+msgid "Do not start autoguiding"
+msgstr ""
 
 #: u_translation.rsdontswait
 #, object-pascal-format
@@ -1787,6 +1799,10 @@ msgstr "最终移动（步长）"
 #: u_translation.rsfind
 msgid "Find."
 msgstr "查找。"
+
+#: u_translation.rsfinder
+msgid "Finder"
+msgstr ""
 
 #: u_translation.rsfindercamera
 msgid "Finder camera"
@@ -2297,6 +2313,10 @@ msgstr "图像传输"
 msgid "Image Un-debayered"
 msgstr "图像未去拜尔"
 
+#: u_translation.rsimagewindow
+msgid "Image window"
+msgstr ""
+
 #: u_translation.rsimportcdcmos
 msgid "Import mosaic"
 msgstr "导入马赛克"
@@ -2324,6 +2344,10 @@ msgstr "INDI设置"
 #: u_translation.rsinformation
 msgid "Information"
 msgstr "信息"
+
+#: u_translation.rsinitialcalib
+msgid "Initial calibration step"
+msgstr ""
 
 #: u_translation.rsinitializeta
 #, object-pascal-format
@@ -2434,6 +2458,10 @@ msgstr "无效的或不支持的FITS文件%s"
 msgid "Inversed solar guide control"
 msgstr "倒转的太阳系导星控制"
 
+#: u_translation.rsissue
+msgid "Issue"
+msgstr ""
+
 #: u_translation.rsiterative
 msgid "Iterative"
 msgstr "迭代"
@@ -2453,6 +2481,10 @@ msgstr "按键"
 #: u_translation.rslanguage
 msgid "Language"
 msgstr "语言"
+
+#: u_translation.rslastcalibrat
+msgid "Last calibration:"
+msgstr ""
 
 #: u_translation.rslatitude
 msgid "Latitude"
@@ -2952,6 +2984,10 @@ msgstr "移动到第一个位置"
 #: u_translation.rsmovingtoseco
 msgid "Moving to second position"
 msgstr "移动到第二个位置"
+
+#: u_translation.rsmultipanel
+msgid "Multi panel"
+msgstr ""
 
 #: u_translation.rsmultistargui
 msgid "Multi-star guide offset"
@@ -3502,6 +3538,10 @@ msgstr "转向星图目标失败"
 #, object-pascal-format
 msgid "Plan %s finished."
 msgstr "计划%s完成。"
+
+#: u_translation.rsplanstep
+msgid "Plan step"
+msgstr ""
 
 #: u_translation.rsplanstopped
 #, object-pascal-format
@@ -4280,6 +4320,10 @@ msgstr "发送测试邮件"
 msgid "Sensor"
 msgstr "传感器"
 
+#: u_translation.rssensoranalys
+msgid "Sensor analysis"
+msgstr ""
+
 #: u_translation.rssensorsprope
 msgid "Sensors properties"
 msgstr "传感器属性"
@@ -4423,6 +4467,10 @@ msgstr "设置调焦器向外移动方向"
 msgid "Set frame type %s"
 msgstr "设置帧类型%s"
 
+#: u_translation.rssetguidespee
+msgid "Set guide speed [x sidereal]"
+msgstr ""
+
 #: u_translation.rssetlockposit
 msgid "Set lock position"
 msgstr "设置锁定位置"
@@ -4532,6 +4580,10 @@ msgstr "简化的光度测量，未校准"
 #: u_translation.rssimplifiedph3
 msgid "Simplified photometry taking account for only the calibration"
 msgstr "仅考虑校准的简化光度测量"
+
+#: u_translation.rssinglepanel
+msgid "Single panel"
+msgstr ""
 
 #: u_translation.rssinglestar
 msgid "Single star"
@@ -5586,7 +5638,7 @@ msgstr "利用解析来优化位置"
 
 #: u_translation.rsuseastrometr2
 msgid "Use astrometry to identify the target"
-msgstr ""
+msgstr "使用天体测量法识别目标"
 
 #: u_translation.rsusebacklashc
 msgid "Use backlash compensation"

@@ -6,15 +6,15 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ccdciel\n"
 "Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
-"POT-Creation-Date: 2023-07-05 11:00+0000\n"
+"POT-Creation-Date: 2023-08-03 08:21+0000\n"
 "PO-Revision-Date: 2023-02-08 02:21+0000\n"
 "Last-Translator: Víctor R. Ruiz <Unknown>\n"
 "Language-Team: Spanish <es@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2023-07-05 11:24+0000\n"
-"X-Generator: Launchpad (build beda0e9dd2b131780db60fe479d4b43618b27243)\n"
+"X-Launchpad-Export-Date: 2023-08-03 08:32+0000\n"
+"X-Generator: Launchpad (build d80dbb5bdc9110f3a64cc968928033472d5e0509)\n"
 
 #: u_translation.rs2d
 msgid "2D"
@@ -639,6 +639,10 @@ msgstr "Calibración %spausa"
 msgid "Calibration measurement"
 msgstr ""
 
+#: u_translation.rscalibrationo
+msgid "Calibration options"
+msgstr ""
+
 #: u_translation.rscalibrationr
 msgid "Calibration results:"
 msgstr "Resultados de la calibración:"
@@ -1217,6 +1221,10 @@ msgstr "Toma oscura"
 msgid "Dark%snight"
 msgstr "Noche%soscura"
 
+#: u_translation.rsdate
+msgid "Date"
+msgstr ""
+
 #: u_translation.rsdateobsfromc
 msgid "DATE-OBS from camera driver"
 msgstr "DATE-OBS desde el controlador de la cámara"
@@ -1240,6 +1248,10 @@ msgstr "Debayerizar la previsualización"
 #: u_translation.rsdec
 msgid "Dec"
 msgstr "Dec"
+
+#: u_translation.rsdeclination
+msgid "Declination"
+msgstr ""
 
 #: u_translation.rsdeclinationb
 msgid "Declination backlash"
@@ -1459,10 +1471,6 @@ msgstr "Esclavitud de cúpula: %s"
 msgid "done"
 msgstr "hecho"
 
-#: u_translation.rsdonotchangea
-msgid "Do not change autoguiding state"
-msgstr ""
-
 #: u_translation.rsdonotdisplay
 msgid "Do not display images during capture"
 msgstr "No mostrar imágenes durante su captura"
@@ -1475,6 +1483,10 @@ msgstr "No hacer nada"
 #, object-pascal-format
 msgid "Do not run %s as %s!"
 msgstr "¡No ejecutar %s como %s!"
+
+#: u_translation.rsdonotstartau
+msgid "Do not start autoguiding"
+msgstr ""
 
 #: u_translation.rsdontswait
 #, object-pascal-format
@@ -1786,6 +1798,10 @@ msgstr "Movimiento final (pasos)"
 
 #: u_translation.rsfind
 msgid "Find."
+msgstr ""
+
+#: u_translation.rsfinder
+msgid "Finder"
 msgstr ""
 
 #: u_translation.rsfindercamera
@@ -2297,6 +2313,10 @@ msgstr "Transferencia de imagen"
 msgid "Image Un-debayered"
 msgstr "Imagen des-debayerizada"
 
+#: u_translation.rsimagewindow
+msgid "Image window"
+msgstr ""
+
 #: u_translation.rsimportcdcmos
 msgid "Import mosaic"
 msgstr "Importar mosaico"
@@ -2324,6 +2344,10 @@ msgstr "Preferencias INDI"
 #: u_translation.rsinformation
 msgid "Information"
 msgstr "Información"
+
+#: u_translation.rsinitialcalib
+msgid "Initial calibration step"
+msgstr ""
 
 #: u_translation.rsinitializeta
 #, object-pascal-format
@@ -2434,6 +2458,10 @@ msgstr "Archivo FITS no válido o no soportado %s"
 msgid "Inversed solar guide control"
 msgstr ""
 
+#: u_translation.rsissue
+msgid "Issue"
+msgstr ""
+
 #: u_translation.rsiterative
 msgid "Iterative"
 msgstr "Iterativo"
@@ -2453,6 +2481,10 @@ msgstr ""
 #: u_translation.rslanguage
 msgid "Language"
 msgstr "Idioma"
+
+#: u_translation.rslastcalibrat
+msgid "Last calibration:"
+msgstr ""
 
 #: u_translation.rslatitude
 msgid "Latitude"
@@ -2951,6 +2983,10 @@ msgstr ""
 
 #: u_translation.rsmovingtoseco
 msgid "Moving to second position"
+msgstr ""
+
+#: u_translation.rsmultipanel
+msgid "Multi panel"
 msgstr ""
 
 #: u_translation.rsmultistargui
@@ -3502,6 +3538,10 @@ msgstr "Falló al moverse al objetivo del planetario"
 #, object-pascal-format
 msgid "Plan %s finished."
 msgstr "Plan %s finalizado."
+
+#: u_translation.rsplanstep
+msgid "Plan step"
+msgstr ""
 
 #: u_translation.rsplanstopped
 #, object-pascal-format
@@ -4280,6 +4320,10 @@ msgstr "Enviar correo de prueba"
 msgid "Sensor"
 msgstr "Sensor"
 
+#: u_translation.rssensoranalys
+msgid "Sensor analysis"
+msgstr ""
+
 #: u_translation.rssensorsprope
 msgid "Sensors properties"
 msgstr "Propiedades del sensor"
@@ -4423,6 +4467,10 @@ msgstr "Establecer la dirección del enfoque afuera"
 msgid "Set frame type %s"
 msgstr "Fijar tipo fotograma %s"
 
+#: u_translation.rssetguidespee
+msgid "Set guide speed [x sidereal]"
+msgstr ""
+
 #: u_translation.rssetlockposit
 msgid "Set lock position"
 msgstr ""
@@ -4532,6 +4580,10 @@ msgstr "Fotometría simplificada, sin calibrado"
 #: u_translation.rssimplifiedph3
 msgid "Simplified photometry taking account for only the calibration"
 msgstr "Fotometría simplificada teniendo en cuenta solo la calibración"
+
+#: u_translation.rssinglepanel
+msgid "Single panel"
+msgstr ""
 
 #: u_translation.rssinglestar
 msgid "Single star"

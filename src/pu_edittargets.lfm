@@ -1843,7 +1843,7 @@ object f_EditTargets: Tf_EditTargets
       OnClick = BtnNewScriptClick
     end
     object MenuSwitch: TMenuItem
-      Caption = 'Set Switch'
+      Caption = 'Switch'
       OnClick = MenuSwitchClick
     end
     object MenuImportObsList: TMenuItem

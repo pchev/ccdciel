@@ -2291,6 +2291,7 @@ begin
    MenuFlatClear.Caption:=rsClearFlatFra;
    MenuFlatInfo.Caption:=rsInformation;
    MenuFocuserCalibration.Caption := rsFocuserCalib;
+   MenuSensorAnalysis.Caption := rsSensorAnalys;
    MenuOpenPicture.Caption := Format(rsOpenPictureF, [ellipsis]);
    MenuSave.Caption := Format(rsSaveFITSFile, [ellipsis]);
    MenuSavePicture.Caption := Format(rsSavePictureS, [ellipsis]);
@@ -2334,6 +2335,9 @@ begin
    MenuImage.Caption:=rsImage;
    MenuItem15.Caption := rsTools;
    MenuItem4.Caption := rsDisplay;
+   MenuImageWindow.Caption:=rsImageWindow;
+   MenuImageSinglepanel.Caption:=rsSinglePanel;
+   MenuImageMultipanel.Caption:=rsMultiPanel;
    MenuViewConnection.Caption := rsConnection;
    MenuViewPreview.Caption := rsPreview;
    MenuViewAutoguider.Caption := rsAutoguider;

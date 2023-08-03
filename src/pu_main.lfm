@@ -1018,7 +1018,7 @@ object f_main: Tf_main
     object MenuItem4: TMenuItem
       Caption = 'Display'
       object MenuImageWindow: TMenuItem
-        Caption = 'Image windows'
+        Caption = 'Image window'
         object MenuImageSinglepanel: TMenuItem
           AutoCheck = True
           Caption = 'Single panel'

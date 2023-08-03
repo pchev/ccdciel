@@ -539,7 +539,6 @@ begin
   Label20.Caption:=rsMinimumMove;
   Label23.Caption:=rsMinimum2+' HFD';
   Label24.Caption:=rsMinimum2+' SNR';
-  measure_method2.Caption:=rsMeasurePixel;
   disable_guiding1.Caption:=rsDisableGuidi;
   Label9.Caption:=rsFrameSize;
   framesize1.Items[0]:=rsMax2;
@@ -570,6 +569,20 @@ begin
   label34.Caption:=rsWidth;
   label35.Caption:=rsLength;
   label36.Caption:=rsRotation;
+  GroupBox3.Caption:=rsCalibrationO;
+  label40.Caption:=rsInitialCalib+' [ms]';
+  ForceGuideSpeed.Caption:=rsSetGuideSpee;
+  Label41.Caption:=rsRA;
+  Label42.Caption:=rsDec;
+  measure_method2.Caption:=rsMeasurePixel;
+  Label47.Caption:=rsLastCalibrat;
+  Label43.Caption:=rsDate;
+  Label44.Caption:=rsBinning;
+  Label45.Caption:=rsRA+' '+rsSpeed;
+  Label46.Caption:=rsDec+' '+rsSpeed;
+  Label49.Caption:=rsDeclination;
+  Label50.Caption:=rsIssue;
+
 
 end;
 

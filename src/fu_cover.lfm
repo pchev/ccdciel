@@ -2,10 +2,10 @@ object f_cover: Tf_cover
   Left = 0
   Height = 148
   Top = 0
-  Width = 194
+  Width = 250
   AutoSize = True
   ClientHeight = 148
-  ClientWidth = 194
+  ClientWidth = 250
   ParentFont = False
   TabOrder = 0
   DesignLeft = -2
@@ -14,7 +14,7 @@ object f_cover: Tf_cover
     Left = 0
     Height = 20
     Top = 0
-    Width = 194
+    Width = 250
     Align = alTop
     Alignment = taCenter
     AutoSize = False
@@ -31,28 +31,28 @@ object f_cover: Tf_cover
     Left = 0
     Height = 111
     Top = 20
-    Width = 194
+    Width = 250
     Align = alTop
     AutoSize = True
     ClientHeight = 111
-    ClientWidth = 194
+    ClientWidth = 250
     ParentFont = False
     TabOrder = 0
     object PanelCover: TPanel
       Left = 1
       Height = 54
       Top = 1
-      Width = 192
+      Width = 248
       Align = alTop
       BevelOuter = bvNone
       ClientHeight = 54
-      ClientWidth = 192
+      ClientWidth = 248
       ParentFont = False
       TabOrder = 0
       object ledCover: TShape
         AnchorSideTop.Control = Label1
         AnchorSideTop.Side = asrCenter
-        Left = 72
+        Left = 104
         Height = 14
         Top = 6
         Width = 14
@@ -61,7 +61,7 @@ object f_cover: Tf_cover
       end
       object Label1: TLabel
         Left = 8
-        Height = 19
+        Height = 18
         Top = 4
         Width = 37
         Caption = 'Cover'
@@ -89,10 +89,10 @@ object f_cover: Tf_cover
       end
       object LabelCover: TLabel
         AnchorSideTop.Control = Label1
-        Left = 104
-        Height = 19
+        Left = 136
+        Height = 18
         Top = 4
-        Width = 70
+        Width = 69
         Caption = 'LabelCover'
         ParentColor = False
       end
@@ -101,17 +101,17 @@ object f_cover: Tf_cover
       Left = 1
       Height = 55
       Top = 55
-      Width = 192
+      Width = 248
       Align = alTop
       BevelOuter = bvNone
       ClientHeight = 55
-      ClientWidth = 192
+      ClientWidth = 248
       ParentFont = False
       TabOrder = 1
       object ledCalibrator: TShape
         AnchorSideTop.Control = Label2
         AnchorSideTop.Side = asrCenter
-        Left = 72
+        Left = 104
         Height = 14
         Top = 6
         Width = 14
@@ -121,9 +121,9 @@ object f_cover: Tf_cover
       object Label2: TLabel
         AnchorSideTop.Side = asrCenter
         Left = 8
-        Height = 19
+        Height = 18
         Top = 4
-        Width = 60
+        Width = 62
         Caption = 'Calibrator'
         ParentColor = False
         ParentFont = False
@@ -132,8 +132,8 @@ object f_cover: Tf_cover
         AnchorSideTop.Control = Light
         AnchorSideTop.Side = asrCenter
         Left = 104
-        Height = 29
-        Top = 22
+        Height = 32
+        Top = 21
         Width = 72
         Enabled = False
         OnChange = BrightnessChange
@@ -141,18 +141,18 @@ object f_cover: Tf_cover
       end
       object LabelCalibrator: TLabel
         AnchorSideTop.Control = Label2
-        Left = 104
-        Height = 19
+        Left = 136
+        Height = 18
         Top = 4
-        Width = 93
+        Width = 95
         Caption = 'LabelCalibrator'
         ParentColor = False
       end
       object Light: TCheckBox
         Left = 8
-        Height = 21
+        Height = 22
         Top = 26
-        Width = 55
+        Width = 59
         Caption = 'Light'
         Enabled = False
         OnClick = LightClick

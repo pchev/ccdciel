@@ -5490,8 +5490,8 @@ msgstr ""
 msgid "Backlash calibration"
 msgstr ""
 
-#: u_translation:rsdonotchangea
-msgid "Do not change autoguiding state"
+#: u_translation:rsdonotstartau
+msgid "Do not start autoguiding"
 msgstr ""
 
 #: u_translation:rsusefindercam
@@ -5680,5 +5680,57 @@ msgstr ""
 
 #: u_translation:rsastrometryex
 msgid "Astrometry exposure time"
+msgstr ""
+
+#: u_translation:rsplanstep
+msgid "Plan step"
+msgstr ""
+
+#: u_translation:rsfinder
+msgid "Finder"
+msgstr ""
+
+#: u_translation:rssensoranalys
+msgid "Sensor analysis"
+msgstr ""
+
+#: u_translation:rsimagewindow
+msgid "Image window"
+msgstr ""
+
+#: u_translation:rssinglepanel
+msgid "Single panel"
+msgstr ""
+
+#: u_translation:rsmultipanel
+msgid "Multi panel"
+msgstr ""
+
+#: u_translation:rscalibrationo
+msgid "Calibration options"
+msgstr ""
+
+#: u_translation:rsinitialcalib
+msgid "Initial calibration step"
+msgstr ""
+
+#: u_translation:rssetguidespee
+msgid "Set guide speed [x sidereal]"
+msgstr ""
+
+#: u_translation:rslastcalibrat
+msgid "Last calibration:"
+msgstr ""
+
+#: u_translation:rsdate
+msgid "Date"
+msgstr ""
+
+#: u_translation:rsdeclination
+msgid "Declination"
+msgstr ""
+
+#: u_translation:rsissue
+msgid "Issue"
 msgstr ""
 

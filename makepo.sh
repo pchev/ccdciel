@@ -8,11 +8,11 @@
 # Update first the path to your Lazarus installation and run "make" in lazarus/tools
 #
 
-rstconv -i src/units/x86_64-linux-gtk2/u_translation.rsj -o data/language/ccdciel.pot
+rstconv -i src/units/x86_64-linux-qt5/u_translation.rsj -o data/language/ccdciel.pot
 /home/compiler/lazarus/tools/updatepofiles data/language/ccdciel.pot
 /home/compiler/lazarus/tools/updatepofiles data/language/ccdciel.pot
 
-rstconv -i src/units/x86_64-linux-gtk2/u_hints.rsj -o data/language/ccdciel_hints.pot
+rstconv -i src/units/x86_64-linux-qt5/u_hints.rsj -o data/language/ccdciel_hints.pot
 /home/compiler/lazarus/tools/updatepofiles data/language/ccdciel_hints.pot
 /home/compiler/lazarus/tools/updatepofiles data/language/ccdciel_hints.pot
 
