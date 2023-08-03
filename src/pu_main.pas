@@ -1028,6 +1028,9 @@ var
   f_main: Tf_main;
 
 implementation
+{$ifdef lclqt5}
+  uses qtint;
+{$endif}
 
 {$R *.lfm}
 
@@ -2598,8 +2601,9 @@ begin
 end;
 
 procedure Tf_main.FormShow(Sender: TObject);
-var str,fn: string;
-    i: integer;
+var str,fn,buf: string;
+    i,i1,i2: integer;
+    usecursor: boolean;
 begin
 
   SetDevices;
@@ -2664,21 +2668,37 @@ begin
   MenuIndiSettings.Enabled:=true;
   MenuShowINDIlog.Visible:=true;
   ObsTimeZone:=-GetLocalTimeOffset/60;
-  crRetic:=6;
-  if screenconfig.GetValue('/Cursor/ImageCursor',0)=0 then
-    fn:=slash(DataDir) + slash('resources') + 'smallcross.cur'
-  else if screenconfig.GetValue('/Cursor/ImageCursor',0)=1 then
-    fn:=slash(DataDir) + slash('resources') + 'bigcross.cur'
-  else fn:='';
-  if (fn<>'')and fileexists(fn) then
-  begin
-    try
-      CursorImage1 := TCursorImage.Create;
-      CursorImage1.LoadFromFile(fn);
-      Screen.Cursors[crRetic] := CursorImage1.Handle;
-    except
+  {$ifdef lclqt5}
+  buf:=GetQtVersion;
+  NewMessage('Running on Qt version: '+buf,9);
+  i:=pos('.',buf);               // do not use QtVersionMinor because of bug in qtint
+  if not TryStrToInt(copy(buf,1,i-1),i1) then i1:=5;
+  Delete(buf,1,i);
+  i:=pos('.',buf);
+  if not TryStrToInt(copy(buf,1,i-1),i2) then i2:=0;
+  usecursor:=(i1>=5)and(i2>=12); // cursor crash with old version, work with version in focal
+  {$else}
+  usecursor:=true;
+  {$endif}
+  if usecursor then begin
+    crRetic:=6;
+    if screenconfig.GetValue('/Cursor/ImageCursor',0)=0 then
+      fn:=slash(DataDir) + slash('resources') + 'smallcross.cur'
+    else if screenconfig.GetValue('/Cursor/ImageCursor',0)=1 then
+      fn:=slash(DataDir) + slash('resources') + 'bigcross.cur'
+    else fn:='';
+    if (fn<>'')and fileexists(fn) then
+    begin
+      try
+        CursorImage1 := TCursorImage.Create;
+        CursorImage1.LoadFromFile(fn);
+        Screen.Cursors[crRetic] := CursorImage1.Handle;
+      except
+        crRetic := crCross;
+      end;
+    end
+    else
       crRetic := crCross;
-    end;
   end
   else
     crRetic := crCross;
