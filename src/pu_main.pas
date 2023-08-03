@@ -8439,7 +8439,7 @@ begin
    if autoguider.State=GUIDER_ALERT then
      NewMessage(Format(rsAutoguider+': %s', [autoguider.Status]),0)
    else
-     NewMessage(Format(rsAutoguider+': %s', [autoguider.Status]),2);
+     NewMessage(Format(rsAutoguider+': %s', [autoguider.Status]),3);
  end;
  f_autoguider.Status.Text:=autoguider.Status;
  case autoguider.State of
