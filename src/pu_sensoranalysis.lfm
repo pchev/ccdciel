@@ -391,7 +391,7 @@ object f_sensoranalysis: Tf_sensoranalysis
       ParentShowHint = False
       ShowHint = True
       TabOrder = 11
-      Value = 400
+      Value = 200
     end
     object Label8: TLabel
       Left = 304
