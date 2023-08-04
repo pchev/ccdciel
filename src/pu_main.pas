@@ -15982,12 +15982,16 @@ begin
 end;
 
 function Tf_main.TCPjsoncmd(id:string; attrib,value:Tstringlist):string;
-var p,i: integer;
+var p,i,nparms: integer;
     rpcversion,method,buf,buf1,buf2,buf3:string;
     sl:Tstringlist;
     x1,x2,x3,x4: double;
 const tr='true';
       fa='false';
+procedure CheckParamCount(count: integer);
+ begin
+   if nparms<count then raise Exception.Create('Invalid number of parameter: '+IntToStr(nparms)+', must be: '+IntToStr(count));
+ end;
 begin
 try
   p:=attrib.IndexOf('jsonrpc');
@@ -16005,6 +16009,12 @@ try
     method:=uppercase(value[p])
   else
     method:='';
+  nparms:=0;
+  for i:=0 to 9 do begin
+    p:=attrib.IndexOf('params.'+IntToStr(i));
+    if p<0 then break;
+    inc(nparms);
+  end;
 
   if method='STATUS' then begin
     result:=result+jsoncmd_status(attrib,value);
@@ -16106,153 +16116,182 @@ try
   else if method='FINDER_STOPLOOP' then result:=result+'"result":{"status": "'+f_scriptengine.cmd_FinderStopLoop+'"}'
   // execute command with parameter
   else if method='DEVICES_CONNECTION' then begin
+    CheckParamCount(1);
     if uppercase(trim(value[attrib.IndexOf('params.0')]))='TRUE' then buf:='ON' else buf:='OFF';
     buf:=f_scriptengine.cmd_DevicesConnection(buf);
     result:=result+'"result":{"status": "'+buf+'"}';
   end
   else if method='TELESCOPE_PARK' then begin
+    CheckParamCount(1);
     if uppercase(trim(value[attrib.IndexOf('params.0')]))='TRUE' then buf:='ON' else buf:='OFF';
     buf:=f_scriptengine.cmd_MountPark(buf);
     result:=result+'"result":{"status": "'+buf+'"}';
   end
   else if method='TELESCOPE_SLEW' then begin
+    CheckParamCount(2);
     buf1:=trim(value[attrib.IndexOf('params.0')]);
     buf2:=trim(value[attrib.IndexOf('params.1')]);
     buf:=f_scriptengine.cmd_MountSlew(buf1,buf2);
     result:=result+'"result":{"status": "'+buf+'"}';
   end
   else if method='TELESCOPE_SLEWASYNC' then begin
+    CheckParamCount(2);
     buf1:=trim(value[attrib.IndexOf('params.0')]);
     buf2:=trim(value[attrib.IndexOf('params.1')]);
     buf:=f_scriptengine.cmd_MountSlewAsync(buf1,buf2);
     result:=result+'"result":{"status": "'+buf+'"}';
   end
   else if method='TELESCOPE_SYNC' then begin
+    CheckParamCount(2);
     buf1:=trim(value[attrib.IndexOf('params.0')]);
     buf2:=trim(value[attrib.IndexOf('params.1')]);
     buf:=f_scriptengine.cmd_MountSync(buf1,buf2);
     result:=result+'"result":{"status": "'+buf+'"}';
   end
   else if method='WHEEL_SETFILTER' then begin
+    CheckParamCount(1);
     buf1:=trim(value[attrib.IndexOf('params.0')]);
     buf:=f_scriptengine.cmd_Wheel_SetFilter(buf1);
     result:=result+'"result":{"status": "'+buf+'"}';
   end
   else if method='FOCUSER_SETPOSITION' then begin
+    CheckParamCount(1);
     buf1:=trim(value[attrib.IndexOf('params.0')]);
     buf:=f_scriptengine.cmd_Focuser_SetPosition(buf1);
     result:=result+'"result":{"status": "'+buf+'"}';
   end
   else if method='SETFOCUSXY' then begin
+    CheckParamCount(2);
     buf1:=trim(value[attrib.IndexOf('params.0')]);
     buf2:=trim(value[attrib.IndexOf('params.1')]);
     buf:=f_scriptengine.cmd_setFocusXY(buf1,buf2);
     result:=result+'"result":{"status": "'+buf+'"}';
   end
   else if method='CCD_SETTEMPERATURE' then begin
+    CheckParamCount(1);
     buf1:=trim(value[attrib.IndexOf('params.0')]);
     buf:=f_scriptengine.cmd_Ccd_SetTemperature(buf1);
     result:=result+'"result":{"status": "'+buf+'"}';
   end
   else if method='PREVIEW_SETEXPOSURE' then begin
+    CheckParamCount(1);
     buf1:=trim(value[attrib.IndexOf('params.0')]);
     buf:=f_scriptengine.cmd_Preview_SetExposure(buf1);
     result:=result+'"result":{"status": "'+buf+'"}';
   end
   else if method='PREVIEW_SETBINNING' then begin
+    CheckParamCount(1);
     buf1:=trim(value[attrib.IndexOf('params.0')]);
     buf:=f_scriptengine.cmd_Preview_SetBinning(buf1);
     result:=result+'"result":{"status": "'+buf+'"}';
   end
   else if method='CAPTURE_SETEXPOSURE' then begin
+    CheckParamCount(1);
     buf1:=trim(value[attrib.IndexOf('params.0')]);
     buf:=f_scriptengine.cmd_Capture_SetExposure(buf1);
     result:=result+'"result":{"status": "'+buf+'"}';
   end
   else if method='CAPTURE_SETBINNING' then begin
+    CheckParamCount(1);
     buf1:=trim(value[attrib.IndexOf('params.0')]);
     buf:=f_scriptengine.cmd_Capture_SetBinning(buf1);
     result:=result+'"result":{"status": "'+buf+'"}';
   end
   else if method='CAPTURE_SETOBJECTNAME' then begin
+    CheckParamCount(1);
     buf1:=trim(value[attrib.IndexOf('params.0')]);
     buf:=f_scriptengine.cmd_Capture_SetObjectName(buf1);
     result:=result+'"result":{"status": "'+buf+'"}';
   end
   else if method='CAPTURE_SETCOUNT' then begin
+    CheckParamCount(1);
     buf1:=trim(value[attrib.IndexOf('params.0')]);
     buf:=f_scriptengine.cmd_Capture_SetCount(buf1);
     result:=result+'"result":{"status": "'+buf+'"}';
   end
   else if method='CAPTURE_SETFRAMETYPE' then begin
+    CheckParamCount(1);
     buf1:=trim(value[attrib.IndexOf('params.0')]);
     buf:=f_scriptengine.cmd_Capture_SetFrameType(buf1);
     result:=result+'"result":{"status": "'+buf+'"}';
   end
   else if method='CAPTURE_SETDITHER' then begin
+    CheckParamCount(1);
     buf1:=trim(value[attrib.IndexOf('params.0')]);
     buf:=f_scriptengine.cmd_Capture_SetDither(buf1);
     result:=result+'"result":{"status": "'+buf+'"}';
   end
   else if method='SEQUENCE_START' then begin
+    CheckParamCount(1);
     buf1:=trim(value[attrib.IndexOf('params.0')]);
     buf:=f_scriptengine.cmd_SequenceStart(buf1);
     result:=result+'"result":{"status": "'+buf+'"}';
   end
   else if method='SAVE_FITS_FILE' then begin
+    CheckParamCount(1);
     buf1:=trim(value[attrib.IndexOf('params.0')]);
     buf:=f_scriptengine.cmd_SaveFitsFile(buf1);
     result:=result+'"result":{"status": "'+buf+'"}';
   end
   else if method='OPEN_FITS_FILE' then begin
+    CheckParamCount(1);
     buf1:=trim(value[attrib.IndexOf('params.0')]);
     buf:=f_scriptengine.cmd_OpenFitsFile(buf1);
     result:=result+'"result":{"status": "'+buf+'"}';
   end
   else if method='OPEN_REFERENCE_IMAGE' then begin
+    CheckParamCount(1);
     buf1:=trim(value[attrib.IndexOf('params.0')]);
     buf:=f_scriptengine.cmd_OpenReferenceImage(buf1);
     result:=result+'"result":{"status": "'+buf+'"}';
   end
   else if method='LOGMSG' then begin
+    CheckParamCount(1);
     buf1:=trim(value[attrib.IndexOf('params.0')]);
     NewMessage(buf1);
     result:=result+'"result":{"status": "'+msgOK+'"}';
   end
   else if method='PLANETARIUM_SHOWIMAGE_FOV' then begin
+    CheckParamCount(1);
     buf1:=trim(value[attrib.IndexOf('params.0')]);
     buf:=f_scriptengine.cmd_PlanetariumShowImage(buf1);
     result:=result+'"result":{"status": "'+buf+'"}';
   end
   else if method='EQ2HZ' then begin
+    CheckParamCount(2);
     x1:=StrToFloat(trim(value[attrib.IndexOf('params.0')]));
     x2:=StrToFloat(trim(value[attrib.IndexOf('params.1')]));
     cmdEq2Hz(x1,x2,x3,x4);
     result:=result+'"result":{"az": '+FormatFloat(f9v,x3)+', "alt": '+FormatFloat(f9v,x4)+'}';
   end
   else if method='HZ2EQ' then begin
+    CheckParamCount(2);
     x1:=StrToFloat(trim(value[attrib.IndexOf('params.0')]));
     x2:=StrToFloat(trim(value[attrib.IndexOf('params.1')]));
     cmdHz2Eq(x1,x2,x3,x4);
     result:=result+'"result":{"ra": '+FormatFloat(f9v,x3)+', "dec": '+FormatFloat(f9v,x4)+'}';
   end
   else if method='CALIBRATOR_LIGHT_ON' then begin
+   CheckParamCount(1);
    buf1:=trim(value[attrib.IndexOf('params.0')]);
    buf:=f_scriptengine.cmd_calibratorlighton(buf1);
    result:=result+'"result":{"status": "'+buf+'"}';
   end
   else if method='CUSTOMHEADER' then begin
+   CheckParamCount(1);
    buf1:=trim(value[attrib.IndexOf('params.0')]);
    buf:=f_scriptengine.cmd_customheader(buf1);
    result:=result+'"result":{"value": "'+buf+'"}';
   end
   else if method='CUSTOMHEADER_ADD' then begin
+   CheckParamCount(2);
    buf1:=trim(value[attrib.IndexOf('params.0')]);
    buf2:=trim(value[attrib.IndexOf('params.1')]);
    buf:=f_scriptengine.cmd_customheader_add(buf1,buf2);
    result:=result+'"result":{"status": "'+buf+'"}';
   end
   else if method='CUSTOMHEADER_DEL' then begin
+   CheckParamCount(1);
    buf1:=trim(value[attrib.IndexOf('params.0')]);
    buf:=f_scriptengine.cmd_customheader_del(buf1);
    result:=result+'"result":{"status": "'+buf+'"}';
@@ -16278,16 +16317,19 @@ try
     result:=result+'"result":{"status": "'+buf+'"}';
   end
   else if method='FINDER_SAVEIMAGES' then begin
+   CheckParamCount(1);
    buf1:=trim(value[attrib.IndexOf('params.0')]);
    buf:=f_scriptengine.cmd_FinderSaveImages(buf1);
    result:=result+'"result":{"status": "'+buf+'"}';
   end
   else if method='FINDER_STARTLOOP' then begin
+   CheckParamCount(1);
    buf1:=trim(value[attrib.IndexOf('params.0')]);
    buf:=f_scriptengine.cmd_FinderStartLoop(buf1);
    result:=result+'"result":{"status": "'+buf+'"}';
   end
   else if method='FINDER_SNAPSHOT' then begin
+   CheckParamCount(2);
    buf1:=trim(value[attrib.IndexOf('params.0')]);
    buf2:=trim(value[attrib.IndexOf('params.1')]);
    try
@@ -16299,6 +16341,7 @@ try
    result:=result+'"result":{"status": "'+buf+'"}';
   end
   else if method='INTERNALGUIDER_SNAPSHOT' then begin
+   CheckParamCount(2);
    buf1:=trim(value[attrib.IndexOf('params.0')]);
    buf2:=trim(value[attrib.IndexOf('params.1')]);
    try
@@ -16310,17 +16353,20 @@ try
    result:=result+'"result":{"status": "'+buf+'"}';
   end
   else if method='INTERNALGUIDER_SAVE_FITS_FILE' then begin
+    CheckParamCount(1);
     buf1:=trim(value[attrib.IndexOf('params.0')]);
     buf:=f_scriptengine.cmd_InternalGuiderSaveFitsFile(buf1);
     result:=result+'"result":{"status": "'+buf+'"}';
   end
   else if method='GET_SWITCH' then begin
+    CheckParamCount(2);
     buf1:=trim(value[attrib.IndexOf('params.0')]);
     buf2:=trim(value[attrib.IndexOf('params.1')]);
     buf:=f_scriptengine.cmd_getswitch(buf1,buf2);
     result:=result+'"result":{"value": "'+buf+'"}';
   end
   else if method='SET_SWITCH' then begin
+    CheckParamCount(3);
     buf1:=trim(value[attrib.IndexOf('params.0')]);
     buf2:=trim(value[attrib.IndexOf('params.1')]);
     buf3:=trim(value[attrib.IndexOf('params.2')]);
@@ -16334,10 +16380,18 @@ try
   result:=result+', "id": '+id+'}'
 
 except
-  on E: Exception do result :=
-     '{"jsonrpc": "2.0", "error": {"code": -32603, "message": "Internal error:'+
-     StringReplace(E.Message,'"','',[rfReplaceAll]) +
-     '"}, "id": '+id+'}';
+  on E: Exception do begin
+    if copy(E.Message,1,28)='Invalid number of parameter:' then begin
+      result := '{"jsonrpc": "2.0", "error": {"code": -32602, "message": "'+
+      StringReplace(E.Message,'"','',[rfReplaceAll]) +
+      '"}, "id": '+id+'}';
+    end
+    else begin
+       result := '{"jsonrpc": "2.0", "error": {"code": -32603, "message": "Internal error:'+
+       StringReplace(E.Message,'"','',[rfReplaceAll]) +
+       '"}, "id": '+id+'}';
+    end;
+  end;
 end;
 end;
 
