@@ -432,6 +432,9 @@ begin
     Result := False;
     exit;
   end;
+  // update image size to what the camera really return
+  w:=Fits.HeaderInfo.naxis1;
+  h:=Fits.HeaderInfo.naxis2;
   Result := True;
 end;
 
