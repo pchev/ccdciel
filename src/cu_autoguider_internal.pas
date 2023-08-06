@@ -91,6 +91,7 @@ type
     function GetLockPosition(out x,y:double):boolean; override;
     procedure SetLockPosition(x,y: double); override;
     function SpectroSetTarget(TargetRa,TargetDec: double):boolean; override;
+    procedure SpectroSelectNewStar(x,y: integer);
     procedure InternalguiderLoop;
     procedure InternalguiderStart;
     procedure InternalguiderStop;
@@ -2296,8 +2297,19 @@ begin
     end;
   end
   else begin
+    // search near center
+    finternalguider.GuideLockNextX:=-1;
+    finternalguider.GuideLockNextY:=-1;
     result:=false;
   end;
+end;
+
+procedure T_autoguider_internal.SpectroSelectNewStar(x,y: integer);
+begin
+  // new initialization to select new star at  GuideLockNextX, GuideLockNextY
+  finternalguider.GuideLockNextX:=x;
+  finternalguider.GuideLockNextY:=y;
+  InternalguiderInitialize:=true;
 end;
 
 end.

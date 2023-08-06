@@ -17115,11 +17115,12 @@ end;
 procedure Tf_main.MenuItemSelectGuideStarClick(Sender: TObject);
 var xx,yy: integer;
 begin
-  GuiderScreen2fits(GuideMx,GuideMy,true,xx,yy);
-  f_internalguider.GuideLockNextX:=xx;
-  f_internalguider.GuideLockNextY:=guideimg_Height-yy;
-  f_internalguider.DrawSettingChange:=true;
-  InternalguiderRedraw(nil);
+  if f_internalguider.SpectroFunctions and (autoguider is T_autoguider_internal) then begin
+    GuiderScreen2fits(GuideMx,GuideMy,false,xx,yy);
+    T_autoguider_internal(autoguider).SpectroSelectNewStar(xx,yy);
+    f_internalguider.DrawSettingChange:=true;
+    InternalguiderRedraw(nil);
+  end;
 end;
 
 
