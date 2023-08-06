@@ -674,9 +674,9 @@ begin
   Memo1.Lines.Add(txt);
   Memo1.Lines.Add('');
   if UseFinder then
-    c:=2
+    c:=wcsfind
   else
-    c:=0;
+    c:=wcsmain;
   // vector to new position in camera plane
   // From the pole
   ra:=0;

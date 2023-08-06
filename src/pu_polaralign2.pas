@@ -638,11 +638,11 @@ var p: TcdcWCScoord;
 begin
 try
    if UseFinder then begin
-     c:=2;
+     c:=wcsfind;
      ok:=FAstrometry.FinderCurrentCoord(ra,de,eq,pa)
    end
    else begin
-     c:=0;
+     c:=wcsmain;
      ok:=FAstrometry.CurrentCoord(ra,de,eq,pa);
    end;
   if not ok then begin

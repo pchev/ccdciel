@@ -54,7 +54,7 @@ TAstrometry = class(TComponent)
     Xslew, Yslew: integer;
     FFinderOffsetX, FFinderOffsetY: double;
     AstrometryTimeout: double;
-    TimerAstrometrySolve, TimerAstrometrySync, TimerAstrometrySlewScreenXY,TimerAstrometrySyncFinder : TTimer;
+    TimerAstrometrySolve, TimerAstrometrySync, TimerAstrometrySlewScreenXY,TimerAstrometrySyncFinder,TimerAstrometrySyncGuider : TTimer;
     procedure AstrometrySolveonTimer(Sender: TObject);
     procedure AstrometrySynconTimer(Sender: TObject);
     procedure AstrometrySlewScreenXYonTimer(Sender: TObject);
@@ -63,10 +63,12 @@ TAstrometry = class(TComponent)
     procedure AstrometrySolve(Sender: TObject);
     procedure AstrometrySync(Sender: TObject);
     procedure AstrometrySyncFinder(Sender: TObject);
+    procedure AstrometrySyncGuider(Sender: TObject);
     procedure AstrometrySlewScreenXY(Sender: TObject);
     procedure AstrometrySolveGuide(Sender: TObject);
     procedure AstrometrySolveFinder(Sender: TObject);
     procedure AstrometrySyncFinderonTimer(Sender: TObject);
+    procedure AstrometrySyncGuideronTimer(Sender: TObject);
     procedure AstrometrySolvePreview(Sender: TObject);
   public
     constructor Create(AOwner: TComponent);override;
@@ -79,6 +81,7 @@ TAstrometry = class(TComponent)
     procedure SolveCurrentImage(wait: boolean; forcesolve:boolean=false);
     procedure SolvePreviewImage;
     procedure SolveGuideImage(wait: boolean = false);
+    procedure SyncGuideImage(wait: boolean);
     procedure SolveFinderImage;
     procedure SyncFinderImage(wait: boolean);
     function GetFinderOffset(ra2000,de2000: double):boolean;
@@ -145,6 +148,10 @@ begin
   TimerAstrometrySyncFinder.Enabled:=false;
   TimerAstrometrySyncFinder.Interval:=100;
   TimerAstrometrySyncFinder.OnTimer:=@AstrometrySyncFinderonTimer;
+  TimerAstrometrySyncGuider:=TTimer.Create(self);
+  TimerAstrometrySyncGuider.Enabled:=false;
+  TimerAstrometrySyncGuider.Interval:=100;
+  TimerAstrometrySyncGuider.OnTimer:=@AstrometrySyncGuideronTimer;
 end;
 
 procedure TAstrometry.msg(txt:string; level: integer);
@@ -326,11 +333,11 @@ var n,m: integer;
 begin
   result:=false;
   if cdcwcs_xy2sky<>nil then begin
-    n:=cdcwcs_getinfo(addr(i),0);
+    n:=cdcwcs_getinfo(addr(i),wcsmain);
     if (n=0)and(i.secpix<>0) then begin
       c.x:=0.5+i.wp/2;
       c.y:=0.5+i.hp/2;
-      m:=cdcwcs_xy2sky(@c,0);
+      m:=cdcwcs_xy2sky(@c,wcsmain);
       if m=0 then begin
         cra:=c.ra/15;
         cde:=c.dec;
@@ -351,11 +358,11 @@ var n,m: integer;
 begin
   result:=false;
   if cdcwcs_xy2sky<>nil then begin
-    n:=cdcwcs_getinfo(addr(i),2);
+    n:=cdcwcs_getinfo(addr(i),wcsfind);
     if (n=0)and(i.secpix<>0) then begin
       c.x:=FFinderOffsetX;
       c.y:=FFinderOffsetY;
-      m:=cdcwcs_xy2sky(@c,2); // do not check the result, can be out of frame
+      m:=cdcwcs_xy2sky(@c,wcsfind); // do not check the result, can be out of frame
       cra:=c.ra/15;
       cde:=c.dec;
       eq:=2000;
@@ -374,11 +381,11 @@ var n,m: integer;
 begin
   result:=false;
   if cdcwcs_xy2sky<>nil then begin
-    n:=cdcwcs_getinfo(addr(i),1);
+    n:=cdcwcs_getinfo(addr(i),wcsguide);
     if (n=0)and(i.secpix<>0) then begin
       c.x:=0.5+i.wp/2;
       c.y:=0.5+i.hp/2;
-      m:=cdcwcs_xy2sky(@c,1); // do not check the result, can be out of frame
+      m:=cdcwcs_xy2sky(@c,wcsguide); // do not check the result, can be out of frame
       cra:=c.ra/15;
       cde:=c.dec;
       eq:=2000;
@@ -396,7 +403,7 @@ begin
   if (not FBusy) and (FFits.HeaderInfo.naxis>0) and FFits.ImageValid then begin
    if (not forcesolve) and FFits.HeaderInfo.solved and (cdcwcs_initfitsfile<>nil) then begin
      FFits.SaveToFile(slash(TmpDir)+'ccdcielsolved.fits');
-     n:=cdcwcs_initfitsfile(pchar(slash(TmpDir)+'ccdcielsolved.fits'),0);
+     n:=cdcwcs_initfitsfile(pchar(slash(TmpDir)+'ccdcielsolved.fits'),wcsmain);
      FLastResult:=(n=0);
    end
    else begin
@@ -445,13 +452,13 @@ var ra,de,pa,ra2000,de2000: double;
 begin
   if Assigned(FonEndAstrometry) then FonEndAstrometry(1);
   if cdcwcs_xy2sky<>nil then begin
-    n:=cdcwcs_initfitsfile(pchar(slash(TmpDir)+'ccdcielsolved.fits'),1);
+    n:=cdcwcs_initfitsfile(pchar(slash(TmpDir)+'ccdcielsolved.fits'),wcspreview);
     try
-    if n=0 then n:=cdcwcs_getinfo(addr(i),1);
+    if n=0 then n:=cdcwcs_getinfo(addr(i),wcspreview);
     if (n=0)and(i.secpix<>0) then begin
       c.x:=0.5+i.wp/2;
       c.y:=0.5+i.hp/2;
-      m:=cdcwcs_xy2sky(@c,1);
+      m:=cdcwcs_xy2sky(@c,wcspreview);
       if m=0 then begin
         ra:=c.ra/15;
         de:=c.dec;
@@ -494,13 +501,13 @@ var ra,de,pa,ra2000,de2000: double;
 begin
   if Assigned(FonEndAstrometry) then FonEndAstrometry(2);
   if cdcwcs_xy2sky<>nil then begin
-    n:=cdcwcs_initfitsfile(pchar(slash(TmpDir)+'findersolved.fits'),2);
+    n:=cdcwcs_initfitsfile(pchar(slash(TmpDir)+'findersolved.fits'),wcsfind);
     try
-    if n=0 then n:=cdcwcs_getinfo(addr(i),2);
+    if n=0 then n:=cdcwcs_getinfo(addr(i),wcsfind);
     if (n=0)and(i.secpix<>0) then begin
       c.x:=0.5+i.wp/2;
       c.y:=0.5+i.hp/2;
-      m:=cdcwcs_xy2sky(@c,2);
+      m:=cdcwcs_xy2sky(@c,wcsfind);
       if m=0 then begin
         ra:=c.ra/15;
         de:=c.dec;
@@ -551,7 +558,7 @@ begin
 TimerAstrometrySyncFinder.Enabled:=false;
 if LastResult and (cdcwcs_xy2sky<>nil) then begin
    fn:=slash(TmpDir)+'findersolved.fits';
-   n:=cdcwcs_initfitsfile(pchar(fn),2);
+   n:=cdcwcs_initfitsfile(pchar(fn),wcsfind);
    if FinderCurrentCoord(ra,de,eq,pa) then begin
        J2000ToMount(mount.EquinoxJD,ra,de);
        mount.Sync(ra,de);
@@ -567,7 +574,7 @@ begin
   try
   c.ra:=15*ra2000;
   c.dec:=de2000;
-  n:=cdcwcs_sky2xy(@c,2); // do not check the result, can be out of frame
+  n:=cdcwcs_sky2xy(@c,wcsfind); // do not check the result, can be out of frame
   FFinderOffsetX:=c.x;
   FFinderOffsetY:=c.y;
   result:=true;
@@ -592,12 +599,12 @@ var ra,de,pa,ra2000,de2000: double;
 begin
 if Assigned(FonEndAstrometry) then FonEndAstrometry(3);
 if cdcwcs_xy2sky<>nil then begin
-  n:=cdcwcs_initfitsfile(pchar(slash(TmpDir)+'guidesolved.fits'),1);
-  if n=0 then n:=cdcwcs_getinfo(addr(i),1);
+  n:=cdcwcs_initfitsfile(pchar(slash(TmpDir)+'guidesolved.fits'),wcsguide);
+  if n=0 then n:=cdcwcs_getinfo(addr(i),wcsguide);
   if (n=0)and(i.secpix<>0) then begin
     c.x:=0.5+i.wp/2;
     c.y:=0.5+i.hp/2;
-    m:=cdcwcs_xy2sky(@c,1);
+    m:=cdcwcs_xy2sky(@c,wcsguide);
     if m=0 then begin
       ra:=c.ra/15;
       de:=c.dec;
@@ -618,6 +625,40 @@ else
   msg('Missing library '+libwcs,1);
 end;
 
+procedure TAstrometry.SyncGuideImage(wait: boolean);
+begin
+  if (not FBusy) and (FGuideFits.HeaderInfo.naxis>0) and FGuideFits.ImageValid and (Mount.Status=devConnected) then begin
+    if FGuideFits.HeaderInfo.solved then begin
+      FGuideFits.SaveToFile(slash(TmpDir)+'guidesolved.fits');
+      AstrometrySyncGuider(nil);
+    end else begin
+     FGuideFits.SaveToFile(slash(TmpDir)+'guidetmp.fits');
+     StartAstrometry(slash(TmpDir)+'guidetmp.fits',slash(TmpDir)+'guidesolved.fits',@AstrometrySyncGuider);
+     if wait then WaitBusy(AstrometryTimeout+30);
+    end;
+  end;
+end;
+
+procedure TAstrometry.AstrometrySyncGuider(Sender: TObject);
+begin
+  TimerAstrometrySyncGuider.Enabled:=true;
+end;
+
+procedure TAstrometry.AstrometrySyncGuideronTimer(Sender: TObject);
+var fn: string;
+    ra,de,eq,pa: double;
+    n:integer;
+begin
+TimerAstrometrySyncGuider.Enabled:=false;
+if LastResult and (cdcwcs_xy2sky<>nil) then begin
+   fn:=slash(TmpDir)+'guidetmp.fits';
+   n:=cdcwcs_initfitsfile(pchar(fn),wcsguide);
+   if GuideCurrentCoord(ra,de,eq,pa) then begin
+       J2000ToMount(mount.EquinoxJD,ra,de);
+       mount.Sync(ra,de);
+   end;
+end;
+end;
 
 procedure TAstrometry.SyncCurrentImage(wait: boolean);
 begin
@@ -646,7 +687,7 @@ begin
 TimerAstrometrySync.Enabled:=false;
 if LastResult and (cdcwcs_xy2sky<>nil) then begin
    fn:=slash(TmpDir)+'ccdcielsolved.fits';
-   n:=cdcwcs_initfitsfile(pchar(fn),0);
+   n:=cdcwcs_initfitsfile(pchar(fn),wcsmain);
    if n<>0 then begin
      msg(Format(rsErrorProcess, [TmpDir]),0);
      exit;
@@ -693,17 +734,17 @@ TimerAstrometrySlewScreenXY.Enabled:=false;
 try
 if LastResult and (cdcwcs_xy2sky<>nil) then begin
    fn:=slash(TmpDir)+'ccdcielsolved.fits';
-   n:=cdcwcs_initfitsfile(pchar(fn),0);
+   n:=cdcwcs_initfitsfile(pchar(fn),wcsmain);
    if n<>0 then begin
      msg(Format(rsErrorProcess, [TmpDir]),0);
      exit;
    end;
-   n:=cdcwcs_getinfo(addr(i),0);
+   n:=cdcwcs_getinfo(addr(i),wcsmain);
    if (n=0)and(i.secpix<>0) then begin
      Screen2fits(Xslew,Yslew,Fvisu.FlipHorz,Fvisu.FlipVert,xx,yy);
      c.x:=xx;
      c.y:=i.hp-yy;
-     m:=cdcwcs_xy2sky(@c,0);
+     m:=cdcwcs_xy2sky(@c,wcsmain);
      if m=0 then begin
        ra:=c.ra/15;
        de:=c.dec;
@@ -795,7 +836,7 @@ begin
         end;
         if CancelAutofocus or CancelGoto then exit;
         fn:=slash(TmpDir)+'ccdcielsolved.fits';
-        n:=cdcwcs_initfitsfile(pchar(fn),0);
+        n:=cdcwcs_initfitsfile(pchar(fn),wcsmain);
         if n<>0 then begin
           msg(Format(rsErrorProcess, [TmpDir]),0);
           exit;
@@ -821,7 +862,7 @@ begin
         end;
         if CancelAutofocus or CancelGoto then exit;
         fn:=slash(TmpDir)+'findersolved.fits';
-        n:=cdcwcs_initfitsfile(pchar(fn),2);
+        n:=cdcwcs_initfitsfile(pchar(fn),wcsfind);
         if n<>0 then begin
           msg(Format(rsErrorProcess, [TmpDir]),0);
           exit;

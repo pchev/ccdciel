@@ -147,6 +147,7 @@ type
     MenuImageWindow: TMenuItem;
     MenuImageSinglepanel: TMenuItem;
     MenuImageMultipanel: TMenuItem;
+    MenuItemGuiderSolveSync: TMenuItem;
     MenuSensorAnalysis: TMenuItem;
     MenuItemFinderSolveSync: TMenuItem;
     MenuItemSelectGuideStar: TMenuItem;
@@ -442,6 +443,7 @@ type
     procedure MenuItemFinderViewStatisticsClick(Sender: TObject);
     procedure MenuItemGuiderSaveImageClick(Sender: TObject);
     procedure MenuItemGuiderSolveClick(Sender: TObject);
+    procedure MenuItemGuiderSolveSyncClick(Sender: TObject);
     procedure MenuItemGuiderViewHeaderClick(Sender: TObject);
     procedure ImageResizeTimerTimer(Sender: TObject);
     procedure MagnifyerTimerTimer(Sender: TObject);
@@ -2492,6 +2494,7 @@ begin
    MenuItemGuiderViewHeader.Caption:=rsViewHeader;
    MenuItemGuiderViewStatistics.Caption:=rsImageStatist;
    MenuItemGuiderSolve.Caption:=rsResolve;
+   MenuItemGuiderSolveSync.Caption:=rsResolveAndSy;
    MenuItemGuiderStopAstrometry.Caption:=rsStopAstromet;
 
    MenuItemFinderImage.Caption:=rsFinderCamera;
@@ -14425,9 +14428,9 @@ begin
 rot:=NullCoord;
 
 fn:=slash(TmpDir)+'ccdcielsolved.fits';
-n:=cdcwcs_initfitsfile(pchar(fn),0);
+n:=cdcwcs_initfitsfile(pchar(fn),wcsmain);
 if n=0 then
-  n:=cdcwcs_getinfo(addr(wcsinfo),0)
+  n:=cdcwcs_getinfo(addr(wcsinfo),wcsmain)
 else begin
   NewMessage(Format(rsErrorProcess, [TmpDir]),1);
   exit;
@@ -14452,9 +14455,9 @@ begin
 ra:=NullCoord; dec:=NullCoord; rot:=NullCoord; sizeH:=0; sizeV:=0;
 
 fn:=slash(TmpDir)+'ccdcielsolved.fits';
-n:=cdcwcs_initfitsfile(pchar(fn),0);
+n:=cdcwcs_initfitsfile(pchar(fn),wcsmain);
 if n=0 then
-   n:=cdcwcs_getinfo(addr(wcsinfo),0)
+   n:=cdcwcs_getinfo(addr(wcsinfo),wcsmain)
 else begin
   NewMessage(Format(rsErrorProcess, [TmpDir]),1);
   exit;
@@ -14647,9 +14650,9 @@ var n: integer;
 begin
   if fits.HeaderInfo.solved then begin
     try
-    n:=cdcwcs_initfitsfile(pchar(fn),0);
+    n:=cdcwcs_initfitsfile(pchar(fn),wcsmain);
     if n=0 then
-       n:=cdcwcs_getinfo(addr(cdcWCSinfo),0)
+       n:=cdcwcs_getinfo(addr(cdcWCSinfo),wcsmain)
     else begin
       NewMessage(Format(rsErrorProcess, [fn]),9);
     end;
@@ -14657,28 +14660,28 @@ begin
       // rotation from upper left corner
       c.x:=0;
       c.y:=cdcWCSinfo.hp;
-      n:=cdcwcs_xy2sky(@c,0);
+      n:=cdcwcs_xy2sky(@c,wcsmain);
       ulra:=c.ra;
       uldec:=c.dec;
-      n:=cdcwcs_sky2xy(@c,0);
+      n:=cdcwcs_sky2xy(@c,wcsmain);
       x1:=c.x;
       y1:=c.y;
       c.ra:=ulra;
       c.dec:=uldec+0.01;
-      n:=cdcwcs_sky2xy(@c,0);
+      n:=cdcwcs_sky2xy(@c,wcsmain);
       x2:=c.x;
       y2:=c.y;
       WCSxyNrot := arctan2((x2 - x1), (y1 - y2));
       c.ra:=ulra+0.01;
       c.dec:=uldec;
-      n:=cdcwcs_sky2xy(@c,0);
+      n:=cdcwcs_sky2xy(@c,wcsmain);
       x2:=c.x;
       y2:=c.y;
       WCSxyErot := arctan2((x2 - x1), (y1 - y2));
       // center
       c.x:=0.5+cdcWCSinfo.wp/2;
       c.y:=0.5+cdcWCSinfo.hp/2;
-      n:=cdcwcs_xy2sky(@c,0);
+      n:=cdcwcs_xy2sky(@c,wcsmain);
       WCScenterRA:=c.ra;
       WCScenterDEC:=c.dec;
       // FOV
@@ -14696,7 +14699,7 @@ begin
       PrecessionFK5(jdtoday,jd2000,c.ra,c.dec);
       c.ra:=rad2deg*c.ra;
       c.dec:=rad2deg*c.dec;
-      n:=cdcwcs_sky2xy(@c,0);
+      n:=cdcwcs_sky2xy(@c,wcsmain);
       if n=0 then begin
         WCSpoleX:=c.x;
         WCSpoleY:=cdcWCSinfo.hp-c.y;
@@ -15744,7 +15747,7 @@ begin
  if fits.HeaderInfo.solved and (cdcWCSinfo.secpix<>0) then begin
    c.x:=xx;
    c.y:=cdcWCSinfo.hp-yy;
-   n:=cdcwcs_xy2sky(@c,0);
+   n:=cdcwcs_xy2sky(@c,wcsmain);
    if n=0 then begin
      ra:=c.ra/15;
      de:=c.dec;
@@ -17093,6 +17096,15 @@ begin
     if (not f_goto.CheckImageInfo(guidefits)) then exit;
     astrometry.SolveGuideImage;
   end;
+end;
+
+procedure Tf_main.MenuItemGuiderSolveSyncClick(Sender: TObject);
+begin
+  if guidefits.HeaderInfo.valid then begin
+    if (not f_goto.CheckImageInfo(guidefits)) then exit;
+    astrometry.SyncGuideImage(false);
+  end
+  else f_internalguider.Info:='No image!';
 end;
 
 procedure Tf_main.MenuItemGuiderStopAstrometryClick(Sender: TObject);

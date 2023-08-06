@@ -2253,7 +2253,7 @@ begin
       if Fastrometry.LastResult then begin
          c.ra:=FSpectroTarget.RA*15;
          c.dec:=FSpectroTarget.DEC;
-         n:=cdcwcs_sky2xy(@c,1);
+         n:=cdcwcs_sky2xy(@c,wcsguide);
          if n=0 then begin
            xt:=c.x;
            yt:=c.y;

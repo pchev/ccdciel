@@ -1970,6 +1970,10 @@ object f_main: Tf_main
       Caption = 'MenuItemGuiderSolve'
       OnClick = MenuItemGuiderSolveClick
     end
+    object MenuItemGuiderSolveSync: TMenuItem
+      Caption = 'MenuItemGuiderSolveSync'
+      OnClick = MenuItemGuiderSolveSyncClick
+    end
     object MenuItemGuiderStopAstrometry: TMenuItem
       Caption = 'MenuItemGuiderStopAstrometry'
       Visible = False
