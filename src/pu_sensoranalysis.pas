@@ -151,12 +151,13 @@ type
     function Takeimage(exp: double; typeof {FLAT, DARK, LIGHT, BIAS}: TFrameType): boolean;
     procedure stdev2(img1, img2: Timafloat; out sd0, sd, rtn: double);   //find standard deviation of a single image using two images and avoid pixel-to-pixel variations in the sensitivity of the CCD, known as the flat field effect.
     procedure median_and_stdev(exp: double; nrframes: integer; typeof {FLAT, DARK, LIGHT, BIAS}: TFrameType; out the_stdev0, the_stdev, the_median, the_RTN: double);  //calculate stdev and median using several exposures
-    function median(img1: Timafloat): double;//median value of an image
+    function median(img: Timafloat): double;//median value of an image
     function median_of_median(exp: double; nrframes: integer; typeof {FLAT, DARK, LIGHT, BIAS}: TFrameType): double;//median of medians
 
     function bitdepth(img1: Timafloat): integer;//find the bit depth of the data
-    function max(img1: Timafloat): single;//max value of an image
+    function max(img: Timafloat): single;//max value of an image
     function getbayer: integer;//find out which pixels are green sensitive
+    function extract_pixel(img : Timafloat; j,i :integer): double;//extra a pixel value from image. In case of OSC image report -999 if not a green pixel.
 
     procedure update_temperature_reading;
     procedure draw_linearity_line(xylist: xy_list; nr: integer);
@@ -472,10 +473,28 @@ begin
 end;
 
 
-function Tf_sensoranalysis.median(img1: Timafloat): double;
+function Tf_sensoranalysis.extract_pixel(img : Timafloat; j,i :integer): double;//extra pixel value from image. In case of OSC image report -999 if not a green pixel.
+begin
+  if bayerpatt = 0 then // mono
+    result := img[0, j, i]
+  else //pattern GR or GB
+  if ((bayerpatt = 1) and (((odd(i) = False) and (odd(j) = False)) or
+                           ((odd(i) = True) and (odd(j) = True)))) then  // green one
+    result:= img[0, j, i]
+  else //pattern RG or BG
+  if ((bayerpatt = 2) and (((odd(i) = True) and (odd(j) = False)) or
+                           ((odd(i) = False) and (odd(j) = True)))) then  //green two
+    result := img[0, j, i]
+  else
+  result:=1E99;//mark as invalid
+end;
+
+
+function Tf_sensoranalysis.median(img: Timafloat): double;
   //median value of an image, If OSC then green channel only
 var
   i, j, counter: integer;
+  value        : double;
   median_array: array of double;
 begin
   setlength(median_array, w * h);
@@ -484,34 +503,19 @@ begin
   for i := 0 to w - 1 do
     for j := 0 to h - 1 do
     begin
-      if bayerpatt = 0 then
+      value:=extract_pixel(img,j,i);
+      if value<>1E99 then
       begin
-        median_array[counter] := img1[0, j, i];
-        Inc(counter);
-      end
-      else //pattern GR or GB
-      if ((bayerpatt = 1) and (((odd(i) = False) and (odd(j) = False)) or
-        ((odd(i) = True) and (odd(j) = True)))) then
-      begin
-        median_array[counter] := img1[0, j, i];
-        {fill array with sampling data. Smedian will be applied later}
-        Inc(counter);
-      end
-      else //pattern RG or BG
-      if ((bayerpatt = 2) and (((odd(i) = True) and (odd(j) = False)) or
-        ((odd(i) = False) and (odd(j) = True)))) then
-      begin
-        median_array[counter] := img1[0, j, i];
-        {fill array with sampling data. Smedian will be applied later}
-        Inc(counter);
+         median_array[counter] := value;
+         Inc(counter);
       end;
     end;
-  Result := smedian(median_array, counter);
+  result := smedian(median_array, counter);
   median_array := nil;
 end;
 
 
-function Tf_sensoranalysis.max(img1: Timafloat): single;//max value of an image
+function Tf_sensoranalysis.max(img: Timafloat): single;//max value of an image
 var
   i, j: integer;
 begin
@@ -519,7 +523,7 @@ begin
   for i := 0 to w - 1 do
     for j := 0 to h - 1 do
     begin
-      Result := Math.max(Result, img1[0, j, i]);
+      Result := Math.max(Result, img[0, j, i]);
     end;
 end;
 
@@ -611,9 +615,9 @@ begin
     for i := 0 to w - 1 do
       for j := 0 to h - 1 do
       begin
-        Value := img3[0, j, i];
-        if ((iterations = 0) or (abs(Value - mean) <= 3 * sd)) then
-          {ignore outliers after first run}
+        value:=extract_pixel(img3,j,i);
+        if value<>1E99 then
+        if ((iterations = 0) or (abs(Value - mean) <= 3 * sd)) then  {ignore outliers after first run}
         begin
           Inc(counter);
           meanx := meanx + Value; {mean}
@@ -627,7 +631,8 @@ begin
     for i := 0 to w - 1 do
       for j := 0 to h - 1 do
       begin
-        Value := img3[0, j, i];
+        value:=extract_pixel(img3,j,i);
+        if value<>1E99 then
         if ((iterations = 0) or (abs(Value - mean) <= 3 * sd_old)) then  {ignore outliers after first run}
         begin
           sd := sd + sqr(mean - Value);
@@ -803,6 +808,7 @@ begin
         InstructionsAdd('Bias level: ' + floattostrF(biaslevel, FFfixed, 0, 0));
 
         bayerpatt := getbayer;
+
         if bayerpatt = 0 then
           InstructionsAdd('Mono sensor detected')
         else
