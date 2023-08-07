@@ -12025,37 +12025,46 @@ end;
 procedure Tf_main.MenuPolarAlignmentClick(Sender: TObject);
 var pt: TPoint;
 begin
-  if camera.Status<>devConnected then begin
-    ShowMessage(Format(rsNotConnected, [rsCamera]));
-    exit;
-  end;
-  if (mount.Status=devConnected)and(mount.Park) then begin
-    NewMessage(rsTheTelescope);
-    exit;
-  end;
-  if (ObsLatitude=0)and(ObsLongitude=0)and(ObsElevation=0) then begin
-    NewMessage(rsPleaseConfig3);
-    exit;
-  end;
-  if f_preview.Loop then f_preview.BtnLoopClick(nil);
-  f_polaralign.Mount:=mount;
-  f_polaralign.Wheel:=wheel;
-  if UseFinder then begin
-    TBFinder.Click;
-    f_finder.StopLoop;
-    f_polaralign.Camera:=findercamera;
-    f_polaralign.Fits:=finderfits;
-  end
-  else begin
-    TBConnect.Click;
-    f_polaralign.Camera:=camera;
-    f_polaralign.Fits:=Fits;
-  end;
   pt.x:=-f_polaralign.Width-8;
   pt.y:=PanelCenter.top;
   pt:=ClientToScreen(pt);
-  FormPos(f_polaralign,pt.X,pt.Y);
-  f_polaralign.Show;
+  if f_polaralign.Visible then begin
+    f_polaralign.WindowState:=wsNormal;
+    FormPos(f_polaralign,pt.X,pt.Y);
+  end
+  else begin
+    if camera.Status<>devConnected then begin
+      ShowMessage(Format(rsNotConnected, [rsCamera]));
+      exit;
+    end;
+    if (mount.Status=devConnected)and(mount.Park) then begin
+      NewMessage(rsTheTelescope);
+      exit;
+    end;
+    if (ObsLatitude=0)and(ObsLongitude=0)and(ObsElevation=0) then begin
+      NewMessage(rsPleaseConfig3);
+      exit;
+    end;
+    if f_preview.Loop then f_preview.BtnLoopClick(nil);
+    f_polaralign.Mount:=mount;
+    f_polaralign.Wheel:=wheel;
+    if UseFinder then begin
+      TBFinder.Click;
+      f_finder.StopLoop;
+      f_polaralign.Camera:=findercamera;
+      f_polaralign.Fits:=finderfits;
+    end
+    else begin
+      TBConnect.Click;
+      f_polaralign.Camera:=camera;
+      f_polaralign.Fits:=Fits;
+    end;
+    pt.x:=-f_polaralign.Width-8;
+    pt.y:=PanelCenter.top;
+    pt:=ClientToScreen(pt);
+    FormPos(f_polaralign,pt.X,pt.Y);
+    f_polaralign.Show;
+  end;
 end;
 
 procedure Tf_main.PolaralignClose(Sender: TObject);
@@ -12066,37 +12075,43 @@ end;
 procedure Tf_main.MenuPolarAlignment2Click(Sender: TObject);
 var pt: TPoint;
 begin
-  if camera.Status<>devConnected then begin
-    ShowMessage(Format(rsNotConnected, [rsCamera]));
-    exit;
-  end;
-  if (mount.Status=devConnected)and(mount.Park) then begin
-    NewMessage(rsTheTelescope);
-    exit;
-  end;
-  if (ObsLatitude=0)and(ObsLongitude=0)and(ObsElevation=0) then begin
-    NewMessage(rsPleaseConfig3);
-    exit;
-  end;
-  if f_preview.Loop then f_preview.BtnLoopClick(nil);
-  f_polaralign2.Mount:=mount;
-  f_polaralign2.Wheel:=wheel;
-  if UseFinder then begin
-    TBFinder.Click;
-    f_finder.StopLoop;
-    f_polaralign2.Camera:=findercamera;
-    f_polaralign2.Fits:=finderfits;
-  end
-  else begin
-    TBConnect.Click;
-    f_polaralign2.Camera:=camera;
-    f_polaralign2.Fits:=Fits;
-  end;
   pt.x:=-f_polaralign2.Width-8;
   pt.y:=PanelCenter.top;
   pt:=ClientToScreen(pt);
-  FormPos(f_polaralign2,pt.X,pt.Y);
-  f_polaralign2.Show;
+  if f_polaralign2.Visible then begin
+    f_polaralign2.WindowState:=wsNormal;
+    FormPos(f_polaralign2,pt.X,pt.Y);
+  end
+  else begin
+    if camera.Status<>devConnected then begin
+      ShowMessage(Format(rsNotConnected, [rsCamera]));
+      exit;
+    end;
+    if (mount.Status=devConnected)and(mount.Park) then begin
+      NewMessage(rsTheTelescope);
+      exit;
+    end;
+    if (ObsLatitude=0)and(ObsLongitude=0)and(ObsElevation=0) then begin
+      NewMessage(rsPleaseConfig3);
+      exit;
+    end;
+    if f_preview.Loop then f_preview.BtnLoopClick(nil);
+    f_polaralign2.Mount:=mount;
+    f_polaralign2.Wheel:=wheel;
+    if UseFinder then begin
+      TBFinder.Click;
+      f_finder.StopLoop;
+      f_polaralign2.Camera:=findercamera;
+      f_polaralign2.Fits:=finderfits;
+    end
+    else begin
+      TBConnect.Click;
+      f_polaralign2.Camera:=camera;
+      f_polaralign2.Fits:=Fits;
+    end;
+    FormPos(f_polaralign2,pt.X,pt.Y);
+    f_polaralign2.Show;
+  end;
 end;
 
 procedure Tf_main.MenuSensorAnalysisClick(Sender: TObject);
