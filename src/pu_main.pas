@@ -3022,6 +3022,15 @@ begin
   TBTabs.Images.GetBitmap(10, btn);
   f_EditTargets.BtnRepeatInf.Glyph.Assign(btn);
   btn.Free;
+
+  if f_starprofile<>nil then begin
+    f_starprofile.VcChartRegMeasure.LinePen.Color:=colorBlue;
+    f_starprofile.ProfileChartLine.LinePen.Color:=colorRed;
+    f_starprofile.HistoryChartHfd.LinePen.Color:=colorRed;
+    f_starprofile.HistoryChartImax.LinePen.Color:=colorGreen;
+  end;
+  if f_vcurve<>nil then f_vcurve.VcChartRef.LinePen.Color:=colorBlue;
+
   {$ifdef lclcocoa}
   if i<128 then begin
    if f_devicesconnection<>nil then f_devicesconnection.Title.Color:=clBtnShadow;
