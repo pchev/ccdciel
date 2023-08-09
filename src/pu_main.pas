@@ -1777,7 +1777,7 @@ begin
   f_devicesconnection.onConnectDevice:=@ConnectDevice;
   f_devicesconnection.onDisconnectDevice:=@DisconnectDevice;
   f_devicesconnection.ProfileLabel.Caption:=profile;
-  caption:='CCDciel '+ccdcielver+blank+profile;
+  caption:='CCDciel '+ccdcielver+'-'+ShortRevisionStr+blank+profile;
 
   f_visu:=Tf_visu.Create(self);
   f_visu.onRedraw:=@Redraw;
@@ -8757,7 +8757,7 @@ begin
       loadopt:=FileExistsUTF8(slash(ConfigDir)+configfile);
       OpenConfig(configfile);
       f_devicesconnection.ProfileLabel.Caption:=profile;
-      caption:='CCDciel '+ccdcielver+blank+profile;
+      caption:='CCDciel '+ccdcielver+'-'+ShortRevisionStr+blank+profile;
       ConfigFlatFile:=slash(ConfigDir)+'flatframe_'+profile+'.fits';
       if FileExists(ConfigFlatFile) then begin
         fits.LoadFlat(ConfigFlatFile);
