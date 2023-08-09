@@ -2037,6 +2037,7 @@ begin
     if n<>0 then exit;
     val(y,iy,n);
     if n<>0 then exit;
+    iy:=Ffits.HeaderInfo.naxis2-iy;
     Fstarprofile.ShowProfile(Ffits,ix,iy,Starwindow,Ffits.HeaderInfo.focallen,Ffits.HeaderInfo.pixsz1);
     result:=msgOK;
   except
