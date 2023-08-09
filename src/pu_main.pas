@@ -4885,7 +4885,6 @@ begin
   f_internalguider.Temperature.Value:=config.GetValue('/InternalGuider/Camera/Temperature',0);
   f_internalguider.Gamma.Position:=config.GetValue('/InternalGuider/Visu/Gamma',50);
   f_internalguider.Luminosity.Position:=config.GetValue('/InternalGuider/Visu/Luminosity',50);
-  GuideImgZoom:=config.GetValue('/InternalGuider/Visu/Zoom',0.0);
   f_internalguider.SpectroFunctions:=config.GetValue('/InternalGuider/Spectro/SpectroFunctions',false);
   f_internalguider.SearchWinMin:=config.GetValue('/InternalGuider/Spectro/SearchWinMin',40);
   f_internalguider.SearchWinMax:=config.GetValue('/InternalGuider/Spectro/SearchWinMax',80);
@@ -5498,7 +5497,6 @@ begin
   config.SetValue('/InternalGuider/Camera/Temperature',f_internalguider.Temperature.Value);
   config.SetValue('/InternalGuider/Visu/Gamma',f_internalguider.Gamma.Position);
   config.SetValue('/InternalGuider/Visu/Luminosity',f_internalguider.Luminosity.Position);
-  config.SetValue('/InternalGuider/Visu/Zoom',GuideImgZoom);
 
   config.SetValue('/InternalGuider/Spectro/SpectroFunctions',f_internalguider.SpectroFunctions);
   config.SetValue('/Autoguider/Lock/GuideSetLock',f_internalguider.GuideLock);
@@ -17148,8 +17146,8 @@ procedure Tf_main.MenuItemSelectGuideStarClick(Sender: TObject);
 var xx,yy: integer;
 begin
   if f_internalguider.SpectroFunctions and (autoguider is T_autoguider_internal) then begin
-    GuiderScreen2fits(GuideMx,GuideMy,false,xx,yy);
-    T_autoguider_internal(autoguider).SpectroSelectNewStar(xx,yy);
+    GuiderScreen2fits(GuideMx,GuideMy,true,xx,yy);
+    T_autoguider_internal(autoguider).SpectroSelectNewStar(xx,guidefits.HeaderInfo.naxis2-yy);
     f_internalguider.DrawSettingChange:=true;
     InternalguiderRedraw(nil);
   end;
