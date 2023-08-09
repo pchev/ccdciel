@@ -1,11 +1,11 @@
 object f_sensoranalysis: Tf_sensoranalysis
-  Left = 283
-  Height = 650
-  Top = 192
-  Width = 1220
+  Left = 41
+  Height = 803
+  Top = 166
+  Width = 1222
   Caption = 'Sensor Analysis'
-  ClientHeight = 650
-  ClientWidth = 1220
+  ClientHeight = 803
+  ClientWidth = 1222
   FormStyle = fsStayOnTop
   OnClose = FormClose
   OnCreate = FormCreate
@@ -13,11 +13,11 @@ object f_sensoranalysis: Tf_sensoranalysis
   object Panel1: TPanel
     Left = 0
     Height = 51
-    Top = 599
-    Width = 1220
+    Top = 752
+    Width = 1222
     Align = alBottom
     ClientHeight = 51
-    ClientWidth = 1220
+    ClientWidth = 1222
     TabOrder = 0
     object ButtonClose1: TButton
       Left = 686
@@ -58,7 +58,7 @@ object f_sensoranalysis: Tf_sensoranalysis
   end
   object Instructions: TMemo
     Left = 0
-    Height = 319
+    Height = 472
     Top = 0
     Width = 488
     Align = alClient
@@ -69,7 +69,7 @@ object f_sensoranalysis: Tf_sensoranalysis
   object Panel2: TPanel
     Left = 0
     Height = 280
-    Top = 319
+    Top = 472
     Width = 488
     Align = alBottom
     Anchors = [akLeft, akBottom]
@@ -401,7 +401,7 @@ object f_sensoranalysis: Tf_sensoranalysis
       Caption = '[sec]'
       ParentColor = False
     end
-    object LabelTemperature2: TLabel
+    object temperature_sensor1: TLabel
       Left = 392
       Height = 18
       Top = 128
@@ -410,12 +410,20 @@ object f_sensoranalysis: Tf_sensoranalysis
       ParentColor = False
     end
   end
+  object Label10: TLabel
+    Left = 21
+    Height = 18
+    Top = 16
+    Width = 94
+    Caption = 'Gain test range'
+    ParentColor = False
+  end
   object StringGrid1: TStringGrid
-    Left = 493
-    Height = 316
-    Top = 3
-    Width = 722
-    Anchors = [akTop, akLeft, akRight, akBottom]
+    Left = 490
+    Height = 375
+    Top = 0
+    Width = 730
+    Anchors = [akTop, akLeft, akRight]
     ColCount = 9
     RowCount = 1
     TabOrder = 3
@@ -461,32 +469,24 @@ object f_sensoranalysis: Tf_sensoranalysis
       'Δ level[%]'
     )
   end
-  object Label10: TLabel
-    Left = 21
-    Height = 18
-    Top = 16
-    Width = 94
-    Caption = 'Gain test range'
-    ParentColor = False
-  end
   object PageControl1: TPageControl
-    Left = 493
-    Height = 280
-    Top = 320
-    Width = 727
+    Left = 490
+    Height = 385
+    Top = 375
+    Width = 730
     ActivePage = Linearity
     Anchors = [akTop, akLeft, akRight, akBottom]
     TabIndex = 0
     TabOrder = 4
     object Linearity: TTabSheet
       Caption = 'Linearity'
-      ClientHeight = 245
-      ClientWidth = 723
+      ClientHeight = 350
+      ClientWidth = 726
       object Chart1: TChart
         Left = 0
-        Height = 245
+        Height = 350
         Top = 0
-        Width = 723
+        Width = 726
         AxisList = <        
           item
             Marks.LabelBrush.Style = bsClear
@@ -524,13 +524,13 @@ object f_sensoranalysis: Tf_sensoranalysis
     end
     object TabSheet1: TTabSheet
       Caption = 'Gain'
-      ClientHeight = 245
-      ClientWidth = 723
+      ClientHeight = 350
+      ClientWidth = 726
       object Chart2: TChart
         Left = 0
-        Height = 245
+        Height = 350
         Top = 0
-        Width = 723
+        Width = 726
         AxisList = <        
           item
             Marks.LabelBrush.Style = bsClear
@@ -561,13 +561,13 @@ object f_sensoranalysis: Tf_sensoranalysis
     end
     object TabSheet2: TTabSheet
       Caption = 'Read noise'
-      ClientHeight = 245
-      ClientWidth = 723
+      ClientHeight = 350
+      ClientWidth = 726
       object Chart3: TChart
         Left = 0
-        Height = 245
+        Height = 350
         Top = 0
-        Width = 723
+        Width = 726
         AxisList = <        
           item
             Marks.LabelBrush.Style = bsClear
@@ -608,13 +608,13 @@ object f_sensoranalysis: Tf_sensoranalysis
     end
     object TabSheet3: TTabSheet
       Caption = 'Full well'
-      ClientHeight = 245
-      ClientWidth = 723
+      ClientHeight = 350
+      ClientWidth = 726
       object Chart4: TChart
         Left = 0
-        Height = 245
+        Height = 350
         Top = 0
-        Width = 723
+        Width = 726
         AxisList = <        
           item
             Marks.LabelBrush.Style = bsClear
@@ -645,13 +645,13 @@ object f_sensoranalysis: Tf_sensoranalysis
     end
     object TabSheet6: TTabSheet
       Caption = 'Charge persistence'
-      ClientHeight = 245
-      ClientWidth = 723
+      ClientHeight = 350
+      ClientWidth = 726
       object Chart5: TChart
         Left = 0
-        Height = 245
+        Height = 350
         Top = 0
-        Width = 723
+        Width = 726
         AxisList = <        
           item
             Marks.LabelFont.Color = clMenu
@@ -686,13 +686,13 @@ object f_sensoranalysis: Tf_sensoranalysis
     end
     object TabSheet5: TTabSheet
       Caption = 'Dark current'
-      ClientHeight = 245
-      ClientWidth = 723
+      ClientHeight = 350
+      ClientWidth = 726
       object Chart6: TChart
         Left = 0
-        Height = 245
+        Height = 350
         Top = 0
-        Width = 723
+        Width = 726
         AxisList = <        
           item
             Marks.LabelBrush.Style = bsClear
@@ -732,38 +732,22 @@ object f_sensoranalysis: Tf_sensoranalysis
     end
     object TabSheet4: TTabSheet
       Caption = 'Info'
-      ClientHeight = 245
-      ClientWidth = 723
+      ClientHeight = 350
+      ClientWidth = 726
       OnShow = TabSheet4Show
       object GroupBox1: TGroupBox
         Left = 16
-        Height = 153
-        Top = 16
+        Height = 200
+        Top = 48
         Width = 248
         Caption = 'Reported by camera'
-        ClientHeight = 123
+        ClientHeight = 170
         ClientWidth = 244
         TabOrder = 0
-        object Label4: TLabel
-          Left = 24
-          Height = 18
-          Top = 8
-          Width = 79
-          Caption = 'Temperature'
-          ParentColor = False
-        end
-        object LabelTemperature1: TLabel
-          Left = 139
-          Height = 18
-          Top = 8
-          Width = 5
-          Caption = '-'
-          ParentColor = False
-        end
         object Label5: TLabel
           Left = 24
           Height = 18
-          Top = 32
+          Top = 8
           Width = 103
           Caption = 'Full well capacity'
           ParentColor = False
@@ -771,7 +755,7 @@ object f_sensoranalysis: Tf_sensoranalysis
         object LabelFullwellcapacity1: TLabel
           Left = 139
           Height = 18
-          Top = 32
+          Top = 8
           Width = 5
           Caption = '-'
           ParentColor = False
@@ -779,7 +763,7 @@ object f_sensoranalysis: Tf_sensoranalysis
         object Label6: TLabel
           Left = 24
           Height = 18
-          Top = 56
+          Top = 32
           Width = 57
           Caption = 'Max ADU'
           ParentColor = False
@@ -787,7 +771,7 @@ object f_sensoranalysis: Tf_sensoranalysis
         object LabelMaxAdu1: TLabel
           Left = 139
           Height = 18
-          Top = 56
+          Top = 32
           Width = 5
           Caption = '-'
           ParentColor = False
@@ -795,7 +779,7 @@ object f_sensoranalysis: Tf_sensoranalysis
         object Label11: TLabel
           Left = 24
           Height = 18
-          Top = 80
+          Top = 56
           Width = 87
           Caption = 'Exposure min:'
           ParentColor = False
@@ -803,7 +787,7 @@ object f_sensoranalysis: Tf_sensoranalysis
         object exposuremin1: TLabel
           Left = 139
           Height = 18
-          Top = 80
+          Top = 56
           Width = 5
           Caption = '-'
           ParentColor = False
@@ -811,7 +795,7 @@ object f_sensoranalysis: Tf_sensoranalysis
         object Label12: TLabel
           Left = 24
           Height = 18
-          Top = 104
+          Top = 80
           Width = 90
           Caption = 'Exposure max:'
           ParentColor = False
@@ -819,11 +803,149 @@ object f_sensoranalysis: Tf_sensoranalysis
         object exposuremax1: TLabel
           Left = 139
           Height = 18
+          Top = 80
+          Width = 5
+          Caption = '-'
+          ParentColor = False
+        end
+        object Label4: TLabel
+          Left = 24
+          Height = 18
+          Top = 104
+          Width = 72
+          Caption = 'Sensor type'
+          ParentColor = False
+        end
+        object sensor_type1: TLabel
+          Left = 139
+          Height = 18
           Top = 104
           Width = 5
           Caption = '-'
           ParentColor = False
         end
+      end
+      object GroupBox2: TGroupBox
+        Left = 288
+        Height = 200
+        Top = 48
+        Width = 424
+        Caption = 'Measured'
+        ClientHeight = 170
+        ClientWidth = 420
+        TabOrder = 1
+        object Label1: TLabel
+          Left = 24
+          Height = 18
+          Top = 8
+          Width = 83
+          Caption = 'Bits per pixel:'
+          ParentColor = False
+        end
+        object Label9: TLabel
+          Left = 24
+          Height = 18
+          Top = 80
+          Width = 157
+          Caption = 'Random Telegraph Noise:'
+          ParentColor = False
+        end
+        object Label13: TLabel
+          Left = 24
+          Height = 18
+          Top = 104
+          Width = 227
+          Caption = 'RMS value Random Telegraph  Noise:'
+          ParentColor = False
+        end
+        object bitsperpixel1: TLabel
+          Left = 240
+          Height = 18
+          Top = 8
+          Width = 5
+          Caption = '-'
+          ParentColor = False
+        end
+        object rtn1: TLabel
+          Left = 240
+          Height = 18
+          Top = 80
+          Width = 5
+          Caption = '-'
+          ParentColor = False
+        end
+        object rtn_rms1: TLabel
+          Left = 240
+          Height = 18
+          Top = 104
+          Width = 5
+          Caption = '-'
+          ParentColor = False
+        end
+        object Label14: TLabel
+          Left = 24
+          Height = 18
+          Top = 128
+          Width = 81
+          Caption = 'Dark current:'
+          ParentColor = False
+        end
+        object darkcurrent1: TLabel
+          Left = 240
+          Height = 18
+          Top = 129
+          Width = 5
+          Caption = '-'
+          ParentColor = False
+        end
+        object Label15: TLabel
+          Left = 24
+          Height = 18
+          Top = 32
+          Width = 65
+          Caption = 'Gain used:'
+          ParentColor = False
+        end
+        object Label16: TLabel
+          Left = 24
+          Height = 18
+          Top = 56
+          Width = 127
+          Caption = 'Temperature sensor:'
+          ParentColor = False
+        end
+        object gain_used1: TLabel
+          Left = 240
+          Height = 18
+          Top = 32
+          Width = 5
+          Caption = '-'
+          ParentColor = False
+        end
+        object temperature_sensor2: TLabel
+          Left = 240
+          Height = 18
+          Top = 56
+          Width = 5
+          Caption = '-'
+          ParentColor = False
+        end
+      end
+      object model1: TLabel
+        Left = 88
+        Height = 18
+        Top = 16
+        Width = 13
+        Caption = '---'
+        ParentColor = False
+      end
+      object Label17: TLabel
+        Left = 24
+        Height = 18
+        Top = 16
+        Width = 42
+        Caption = 'Model:'
+        ParentColor = False
       end
     end
   end

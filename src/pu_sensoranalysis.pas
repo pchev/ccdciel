@@ -54,19 +54,19 @@ type
     ButtonClose1: TButton;
     Chart1: TChart;
     Chart1LineSeries1: TLineSeries;
+    Chart2: TChart;
     Chart2LineSeries1: TLineSeries;
     Chart3: TChart;
-    Chart2: TChart;
     Chart3LineSeries1: TLineSeries;
     Chart3LineSeries2: TLineSeries;
     Chart4: TChart;
     Chart4LineSeries1: TLineSeries;
+    Chart5: TChart;
+    Chart5BarSeries1: TBarSeries;
     Chart6: TChart;
     Chart6LineSeries1: TLineSeries;
     Chart6LineSeries2: TLineSeries;
     Chart6LineSeries3: TLineSeries;
-    Chart5: TChart;
-    Chart5BarSeries1: TBarSeries;
     exposuremax1: TLabel;
     exposuremin1: TLabel;
     Gain3: TSpinEdit;
@@ -77,19 +77,35 @@ type
     Gain8: TSpinEdit;
     dark_current_test_duration1: TSpinEdit;
     GroupBox1: TGroupBox;
+    GroupBox2: TGroupBox;
+    Label1: TLabel;
     Label10: TLabel;
     Gain2: TSpinEdit;
     Label11: TLabel;
     Label12: TLabel;
+    Label13: TLabel;
+    bitsperpixel1: TLabel;
+    Label14: TLabel;
+    darkcurrent1: TLabel;
+    Label15: TLabel;
+    Label16: TLabel;
+    gain_used1: TLabel;
+    Label17: TLabel;
+    sensor_type1: TLabel;
     Label4: TLabel;
+    model1: TLabel;
+    temperature_sensor2: TLabel;
+    rtn_rms1: TLabel;
+    rtn1: TLabel;
     Label5: TLabel;
     Label6: TLabel;
     Label7: TLabel;
     Label8: TLabel;
+    Label9: TLabel;
     LabelFullwellcapacity1: TLabel;
     LabelMaxAdu1: TLabel;
-    LabelTemperature1: TLabel;
-    LabelTemperature2: TLabel;
+    temperature_sensor1: TLabel;
+    Linearity: TTabSheet;
     PageControl1: TPageControl;
     RadioButton1: TRadioButton;
     lin1: TRadioButton;
@@ -121,7 +137,6 @@ type
     Gain1: TSpinEdit;
     Offset1: TSpinEdit;
     StringGrid1: TStringGrid;
-    Linearity: TTabSheet;
     TabSheet1: TTabSheet;
     TabSheet2: TTabSheet;
     TabSheet3: TTabSheet;
@@ -149,8 +164,6 @@ type
     procedure InstructionsAdd(txt: string);
     procedure SetROI;
     function Takeimage(exp: double; typeof {FLAT, DARK, LIGHT, BIAS}: TFrameType): boolean;
-    procedure stdev2(img1, img2: Timafloat; out sd0, sd, rtn: double);   //find standard deviation of a single image using two images and avoid pixel-to-pixel variations in the sensitivity of the CCD, known as the flat field effect.
-    procedure median_and_stdev(exp: double; nrframes: integer; typeof {FLAT, DARK, LIGHT, BIAS}: TFrameType; out the_stdev0, the_stdev, the_median, the_RTN: double);  //calculate stdev and median using several exposures
     function median(img: Timafloat): double;//median value of an image
     function median_of_median(exp: double; nrframes: integer; typeof {FLAT, DARK, LIGHT, BIAS}: TFrameType): double;//median of medians
 
@@ -158,6 +171,9 @@ type
     function max(img: Timafloat): single;//max value of an image
     function getbayer: integer;//find out which pixels are green sensitive
     function extract_pixel(img : Timafloat; j,i :integer): double;//extra a pixel value from image. In case of OSC image report -999 if not a green pixel.
+    procedure measure_rtn(sd,mean:  double; img : Timafloat; out rtn_perc, rtn_rms :double);{calculate the rtn (hotpixels) part and the RMS value of it}
+    procedure stdev2(img1, img2: Timafloat; out  sd0, sd,rtn,rtn_rms: double); //find standard deviation of a single image using two images and avoid pixel-to-pixel variations in the sensitivity of the CCD, known as the flat field effect.
+    procedure median_and_stdev(exp: double; nrframes: integer;  typeof {FLAT, DARK, LIGHT, BIAS}: TFrameType;out the_stdev0, the_stdev, the_median, the_RTN, the_RTNrms: double);//calculate stdev and median using several exposures
 
     procedure update_temperature_reading;
     procedure draw_linearity_line(xylist: xy_list; nr: integer);
@@ -336,10 +352,8 @@ begin
 
   chart1.Title.Text.setStrings('Linearity      (' + camera.ccdname + ')');
   chart2.Title.Text.setStrings('Gain in e-/adu      (' + camera.ccdname + ')');
-  chart3.Title.Text.setStrings('Read noise and Random Telegraph Noise     (' +
-    camera.ccdname + ')');
-  chart4.Title.Text.setStrings('Full well capacity of each pixel in e-      (' +
-    camera.ccdname + ')');
+  chart3.Title.Text.setStrings('Read noise and Random Telegraph Noise     (' + camera.ccdname + ')');
+  chart4.Title.Text.setStrings('Full well capacity of each pixel in e-      (' +  camera.ccdname + ')');
   Chart6.Title.Text.setStrings('Dark current and total noise      (' + camera.ccdname + ')');
 
   StepButton1.Caption := 'Start';
@@ -352,6 +366,7 @@ begin
     crlf + crlf +
     'If flat panel is placed then press "Take lights" to start the test.';
 
+  model1.caption:=camera.ccdname;//report camera name in info tab
   update_temperature_reading;
 
   StepButton1.Enabled := True;
@@ -362,8 +377,8 @@ end;
 
 procedure Tf_sensoranalysis.update_temperature_reading;
 begin
-  LabelTemperature1.Caption := FormatFloat(f2, camera.Temperature);
-  LabelTemperature2.Caption := '🌡  ' + FormatFloat(f2, camera.Temperature) + ' °C';
+  temperature_sensor2.caption:=FormatFloat(f2, camera.Temperature) + ' °C';
+  temperature_sensor1.Caption := '🌡  ' + temperature_sensor2.caption;
 end;
 
 
@@ -591,8 +606,35 @@ begin
 end;
 
 
-procedure Tf_sensoranalysis.stdev2(img1, img2: Timafloat; out sd0, sd,rtn: double);
-//find standard deviation of a single image using two images and avoid pixel-to-pixel variations in the sensitivity of the CCD, known as the flat field effect.
+procedure Tf_sensoranalysis.measure_rtn(sd,mean:  double; img : Timafloat; out rtn_perc, rtn_rms :double);{calculate the rtn (hotpixels) part and the RMS value of it}
+var i,j,counter,counter2 : integer;
+    value                : double;
+
+begin
+  rtn_rms:=0;
+  counter:=0;
+  counter2:=0;
+  for i := 0 to w - 1 do
+  for j := 0 to h - 1 do
+  begin
+    value:=abs(img[0,j,i]-mean);
+    if value<=3*sd then {ignore outliers}
+      inc(counter)
+    else
+    begin
+      rtn_rms:=rtn_rms+sqr(value);
+      inc(counter2);
+    end;
+  end;
+  if counter2>0 then
+    rtn_rms:=sqrt(rtn_rms/counter2)
+  else
+    rtn_rms:=0;
+    rtn_perc:=100*(0.997 - counter/(counter+counter2));//Part effected by hot pixels. Within sigma 3.0,  99.73% remains.
+end;
+
+
+procedure Tf_sensoranalysis.stdev2(img1, img2: Timafloat; out  sd0, sd,rtn,rtn_rms: double); //find standard deviation of a single image using two images and avoid pixel-to-pixel variations in the sensitivity of the CCD, known as the flat field effect.
 var
   i, j, counter, iterations: integer;
   mean, meanx, Value, sd_old: double;
@@ -645,28 +687,29 @@ begin
     Inc(iterations);
   until (((sd_old - sd) < 0.03 * sd) or (iterations >= 7)); {repeat until sd is stable or 7 iterations}
 
+  measure_rtn(sd,mean,img3, {out} rtn, rtn_rms);{calculate the hotpixels percentage and RMS value of the DIFFERENCE. So use sd of the difference and not sd/sqrt(2)}
+
   sd0 := sd0 / sqrt(2); // Standard deviation. Corrected for combined noise of two images subtracted
   sd := sd / sqrt(2);   // Standard deviation using sigma clip. Correct for combined noise of two images subtracted
-
-  rtn:=0.997-counter/(w*h);//wich part is ignored. For sigma 3.0 99.73% is kept
-
   img3 := nil;
 end;
 
 
-procedure Tf_sensoranalysis.median_and_stdev(exp: double; nrframes: integer;  typeof {FLAT, DARK, LIGHT, BIAS}: TFrameType;out the_stdev0, the_stdev, the_median, the_RTN: double);//calculate stdev and median using several exposures
+procedure Tf_sensoranalysis.median_and_stdev(exp: double; nrframes: integer;  typeof {FLAT, DARK, LIGHT, BIAS}: TFrameType;out the_stdev0, the_stdev, the_median, the_RTN, the_RTNrms: double);//calculate stdev and median using several exposures
 label
   999;
 var
   i: integer;
   image3: Timafloat;
-  valuesSD0, valuesSD, valuesM,valuesRTN: array of double;
+  mean  : double;
+  valuesSD0, valuesSD, valuesM,valuesRTN,valuesRTNrms: array of double;
 begin
   the_median := 0;
   setlength(valuesSD0, nrframes);
   setlength(valuesSD, nrframes);
   setlength(valuesM, nrframes);
   setlength(valuesRTN, nrframes);
+  setlength(valuesRTNrms, nrframes);
   for i := 0 to nrframes - 1 do
   begin
     if Takeimage(exp, typeof) then
@@ -674,7 +717,9 @@ begin
       image3 := Ffits.image;
       setlength(image3, 1, h, w); //duplicate
       if Takeimage(exp, typeof) then
-        stdev2(image3, Ffits.image, valuesSD0[i], valuesSD[i],valuesRTN[i])  //calculate standard deviation
+      begin
+        stdev2(image3, Ffits.image, valuesSD0[i], valuesSD[i],valuesRTN[i],valuesRTNrms[i])  //calculate standard deviation
+      end
       else
       begin
         the_stdev := 0;
@@ -693,12 +738,15 @@ begin
   the_stdev:=smedian(valuesSD, nrframes);
   the_median:=smedian(valuesM, nrframes);//median of the median values
   the_RTN:=smedian(valuesRTN, nrframes);//median of the median values
+  the_RTNrms:=smedian(valuesRTNrms, nrframes);//median of the median values
+
   999:
     image3 := nil;
     valuesSD0 := nil;
     valuesSD := nil;
     valuesM := nil;
     valuesRTN:=nil;
+    valuesRTNrms:=nil
 end;
 
 
@@ -755,7 +803,7 @@ procedure Tf_sensoranalysis.StepButton1Click(Sender: TObject);
 var
   saturationlevel, correction, stepexposure, themedian,
   oldthemedian, median_dark_adu, sigma_light_adu, exposure_lin, sd_RTN_dark_adu2, sd_dark_adu2, median_dark_adu2, dark_current_adu, dark_current_es,
-  total_noise, total_noise_e, readnoise2_e, dark_current2_e, dark_current2_es,  readnoise_RTN2_e, total_noise_RTN_e, dark_current_RTN2_es,RTN_perc,hotpixel_perc : double;
+  total_noise, total_noise_e, readnoise2_e, dark_current2_e, dark_current2_es,  readnoise_RTN2_e, total_noise_RTN_e, dark_current_RTN2_es,RTN_perc,RTN_rms : double;
   i, gainstep, nr :  integer;
   message:  string;
   Save_Cursor: TCursor;
@@ -785,6 +833,15 @@ begin
   Save_Cursor := Screen.Cursor;
   Screen.Cursor := crHourglass; { Show hourglass cursor }
 
+//  gain:=139;
+//  median_and_stdev(1, repeats1.Value, DARK,{out}sd_RTN_dark_adu, sd_dark_adu, median_dark_adu,RTN_perc,RTN_rms);//take an exposure of 1.01 seconds to avoid weird variations in the first second.
+//    RTN_rms:=RTN_rms* 1 / 16;//convert to e-
+//    InstructionsAdd('Percentage of RTN found after '+ IntToStr(dark_current_test_duration1.Value + 1) + ' sec:  ' + floattostrF(RTN_perc, FFfixed, 0, 2)+'%, RMS value '+ floattostrF(RTN_rms, FFfixed, 0, 2)+
+//    ' e-. Random Telegraph Noise is here defined as the number of pixels with a value more then 3 sigma above the Gaussian noise level in the difference betweem two darks.');
+//  exit;
+
+
+
   case step of
     0:begin //taking lights
         Chart1LineSeries1.Clear;//clear old charts
@@ -796,7 +853,6 @@ begin
         Chart6LineSeries1.Clear;//clear old charts
         Chart6LineSeries2.Clear;//clear old charts
         Chart6LineSeries3.Clear;//clear old charts
-
 
         StepButton1.Enabled := False;
         StepButton1.Caption := '.....';
@@ -810,9 +866,15 @@ begin
         bayerpatt := getbayer;
 
         if bayerpatt = 0 then
-          InstructionsAdd('Mono sensor detected')
+        begin
+          InstructionsAdd('Mono sensor detected');
+          sensor_type1.caption:='mono';
+        end
         else
+        begin
           InstructionsAdd('Colour sensor detected. Will use only green for linearity test.' + crlf);
+          sensor_type1.caption:='colour '+Ffits.HeaderInfo.bayerpattern;
+        end;
 
         nrgainsteps := 8 - 1;
         setlength(measurements, nrgainsteps + 1);
@@ -869,12 +931,13 @@ begin
           measurements[gainstep].gain := gain;
           measurements[gainstep].exposure := exposure;
 
-          median_and_stdev(exposure, repeats1.Value, FLAT, {out}measurements[gainstep].sd_RTN_light_adu, measurements[gainstep].sd_light_adu, measurements[gainstep].median_light_adu,RTN_perc); //measure median value and stdev0, stdev.
+          median_and_stdev(exposure, repeats1.Value, FLAT, {out}measurements[gainstep].sd_RTN_light_adu, measurements[gainstep].sd_light_adu, measurements[gainstep].median_light_adu,RTN_perc, RTN_rms); //measure median value and stdev0, stdev.
 
           if gainstep = 0 then
           begin
             bit_depth := bitdepth(Ffits.image);
             InstructionsAdd('Bit depth image is: ' + IntToStr(bit_depth));
+            bitsperpixel1.caption:=IntToStr(bit_depth);
           end;
 
           if stoploop then
@@ -970,7 +1033,7 @@ begin
 
           end;
           InstructionsAdd('Taking dark(s) with gain ' + floattostrF( gain, FFfixed, 0, 0) + ' and exposure ' + floattostrF( measurements[gainstep].exposure, FFfixed, 0, 3));
-          median_and_stdev(measurements[gainstep].exposure, repeats1.Value, DARK,{out}sd_RTN_dark_adu, sd_dark_adu, median_dark_adu,RTN_perc);  //as stdev but do it nrframes times and report median value as result
+          median_and_stdev(measurements[gainstep].exposure, repeats1.Value, DARK,{out}sd_RTN_dark_adu, sd_dark_adu, median_dark_adu,RTN_perc,RTN_rms);  //as stdev but do it nrframes times and report median value as result
 
           Chart5BarSeries1.addxy(gainstep, median_dark_adu, ' Gain ' + IntToStr(gain) + ', ');
 
@@ -1030,16 +1093,20 @@ begin
 
           gain := measurements[gainstep].gain; //camera gain
 
-          //take an exposure of 1.01 seconds to avoid weird variations in the first second.
-          median_and_stdev(1.01, repeats1.Value, DARK,{out}sd_RTN_dark_adu, sd_dark_adu, median_dark_adu,RTN_perc);
-          InstructionsAdd('Percentage of RTN found after 1 sec: ' + floattostrF(RTN_perc, FFfixed, 0, 2)+'%');
+          // one seoond test
+          median_and_stdev(1.01, repeats1.Value, DARK,{out}sd_RTN_dark_adu, sd_dark_adu, median_dark_adu,RTN_perc,RTN_rms);//take an exposure of 1.01 seconds to avoid weird variations in the first second.
+          RTN_rms:=RTN_rms* measurements[gainstep].gain_e / correction;//convert to e-
+          rtn1.caption:= floattostrF(RTN_perc, FFfixed, 0, 2)+' %';
+          rtn_rms1.caption:= floattostrF(RTN_rms, FFfixed, 0, 2)+' e-';
+          gain_used1.Caption:=IntToStr(gain);
+          InstructionsAdd('Percentage of RTN found after 1.01 sec: ' + rtn1.caption+', RMS value '+ rtn_rms1.caption);
+          InstructionsAdd('Random Telegraph Noise is here defined as the number of pixels with a value more then 3 sigma above the Gaussian noise level in the difference betweem two darks.');
 
-          //as stdev but do it nrframes times and report median value as result
-          //take an exposure of value+1 seconds.
-          median_and_stdev(dark_current_test_duration1.Value + 1.01, repeats1.Value, DARK,{out}sd_RTN_dark_adu2, sd_dark_adu2, median_dark_adu2,RTN_perc);
-          //as stdev but do it nrframes times and report median value as result
-          InstructionsAdd('Percentage of RTN found after '+ IntToStr(dark_current_test_duration1.Value + 1) + ' sec:  ' + floattostrF(RTN_perc, FFfixed, 0, 2)+
-          '%. RTN, Random Telegraph Noise is here defined as the number of pixels with a value more then 3 sigma above the Gaussian noise level in the difference betweem two darks.');
+          // long duration test
+          median_and_stdev(dark_current_test_duration1.Value + 1.01, repeats1.Value, DARK,{out}sd_RTN_dark_adu2, sd_dark_adu2, median_dark_adu2,RTN_perc,RTN_rms);  //take an exposure of value+1 seconds.
+          RTN_rms:=RTN_rms* measurements[gainstep].gain_e / correction;//convert to e-
+          InstructionsAdd('Percentage of RTN found after '+ IntToStr(dark_current_test_duration1.Value + 1) + ' sec:  ' + floattostrF(RTN_perc, FFfixed, 0, 2)+'%, RMS value '+ floattostrF(RTN_rms, FFfixed, 0, 2)+' e-.');
+          InstructionsAdd('Random Telegraph Noise is here defined as the number of pixels with a value more then 3 sigma above the Gaussian noise level in the difference betweem two darks.');
 
 
           readnoise2_e := sd_dark_adu * measurements[gainstep].gain_e / correction; // read noise after 1.1 seconds        {1.08}
@@ -1080,8 +1147,9 @@ begin
               total_noise := sqrt(i * dark_current_RTN2_es + sqr(readnoise_RTN2_e)); //formula 4
               Chart6LineSeries3.addxy(i, total_noise);
             end;
-            message := 'Dark current ' + floattostrF(dark_current2_es, FFfixed, 0, 5) +' [e-/(sec*pixel)] at' + floattostrF(camera.temperature, FFfixed, 0, 1) + '° Celsius. Gain ' +
-                       IntToStr(gain)+ '. RTN is '+floattostrF(rtn_perc, FFfixed, 0, 4)  + '%. (' + camera.ccdname + ')';
+            darkcurrent1.caption:= floattostrF(dark_current2_es, FFfixed, 0, 5) +' [e-/(sec*pixel)]';
+            message := 'Dark current ' + darkcurrent1.caption+' at' + ' gain ' +gain_used1.Caption+'Temperature '+
+                       temperature_sensor2.caption+ '. RTN is '+rtn1.caption+', RMS value of RTN is '+rtn_rms1.caption + '. (' + camera.ccdname + ')';
           end
           else
             message := message + crlf + 'WARNING. Too short exposure time. Only ' +  floattostrF(dark_current_adu, FFfixed, 0, 1) + ' e- difference. Set exposure time longer.';
