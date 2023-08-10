@@ -14636,6 +14636,12 @@ begin
          de:=StrToDE(tde);
       if (ra<>NullCoord) and (de<>NullCoord) then begin
         if MessageDlg(Format(rsPleaseConfir, [objn, tra, tde]), mtConfirmation,mbOKCancel, 0)=mrOK then begin
+          if autoguider.State in [GUIDER_GUIDING,GUIDER_BUSY,GUIDER_ALERT,GUIDER_INITIALIZING] then begin
+            NewMessage(rsStopAutoguid,2);
+            autoguider.Guide(false);
+            autoguider.WaitBusy(15);
+          end;
+          if CancelGoto then exit;
           ra2000:=ra;
           de2000:=de;
           J2000ToMount(mount.EquinoxJD,ra,de);
