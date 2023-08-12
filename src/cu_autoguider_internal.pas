@@ -1673,7 +1673,10 @@ begin
                InternalCalibrationInitialize:=true;
                CalEastRa1:=mount.ra;//mount right ascension at start of east calibration
                if measure_drift(InternalCalibrationInitialize,driftX,driftY)>0 then StopError;//measure reference star positions
-               MinimumDrift:=max(5,min(25,3*CurrentHFD));
+               if finternalguider.SpectroFunctions then
+                 MinimumDrift:=max(5,min(25,3*CurrentHFD))
+               else
+                 MinimumDrift:=5;
                mount.PulseGuide(2,CalibrationDuration {duration msec} );  // 0=north, 1=south, 2 East, 3 West
 
                WaitPulseGuiding(CalibrationDuration);
@@ -2061,7 +2064,10 @@ begin
                  // use a safe value
                  CalDecBacklash:=min(Finternalguider.LongestPulse,max(300,3*Finternalguider.InitialCalibrationStep.Value));
                end;
-               MinimumDrift:=max(5,min(25,3*CurrentHFD));
+               if finternalguider.SpectroFunctions then
+                 MinimumDrift:=max(5,min(25,3*CurrentHFD))
+               else
+                 MinimumDrift:=5;
                InternalCalibrationInitialize:=true;
                if measure_drift(InternalCalibrationInitialize,driftX,driftY)>0 then StopError;
                mount.PulseGuide(north,CalDecBacklash);
