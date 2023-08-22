@@ -1569,7 +1569,7 @@ begin
       t:=TTarget.Create;
       t.Assign(Targets[i]);
       if t=nil then Continue;
-      if rfuture and FResetRepeat then begin
+      if rfuture and FResetRepeat and (FTargetsRepeat>1) then begin
         // simulate reset count on repeat
         t.repeatdone:=0;
         p:=t_plan(t.plan);
