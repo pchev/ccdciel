@@ -279,7 +279,7 @@ const
   FocusDirOut=false;
   FrameName: array[0..ord(high(TFrameType))] of string =('Light   ','Bias    ','Dark    ','Flat    '); // add space to header as INDI do
   FlatTimeName: array[0..1] of string=('Dusk','Dawn');
-  PierSideName: array[0..2] of string=('pierEast', 'pierWest', 'pierUnknown');
+  PierSideName: array[0..3] of string=('pierEast', 'pierWest', 'pierUnknown','pierNotImplemented');
   ResolverAstrometryNet=0;
   ResolverElbrus=1;
   ResolverNone=2;

@@ -111,7 +111,7 @@ begin
  stRA:=0;
  stDE:=0;;
  stPark:=false;
- stPierside:=pierUnknown;
+ stPierside:=pierNotImplemented;
  stTracking:=false;
  CanPark:=false;
  CanSlew:=false;
@@ -177,7 +177,7 @@ begin
      CanSetTracking:=V.CanSetTracking;
      if debug_msg then msg('Get pulse guiding capability');
      FCanPulseGuide:=V.CanPulseGuide;
-     FisGem:=(GetAlignmentMode=algGermanPolar)and(GetPierSide<>pierUnknown);
+     FisGem:=(GetAlignmentMode=algGermanPolar)and(GetPierSide<>pierNotImplemented);
      try
        if FInterfaceVersion>1 then begin
          FCanMoveAxis:=V.CanMoveAxis(0) and V.CanMoveAxis(1);
@@ -377,7 +377,7 @@ function  T_ascommount.GetPierSide:TPierSide;
 var i: integer;
 {$endif}
 begin
- result:=pierUnknown;
+ result:=pierNotImplemented;
  {$ifdef mswindows}
  if not VarIsEmpty(V) then begin
    try
@@ -388,7 +388,7 @@ begin
       1: result:=pierWest;
    end;
    except
-    result:=pierUnknown;
+    result:=pierNotImplemented;
    end;
  end;
  {$endif}

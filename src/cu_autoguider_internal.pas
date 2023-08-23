@@ -1025,6 +1025,7 @@ begin
     pierEast: pier:='East';
     pierWest: pier:='West';
     pierUnknown: pier:='Unknown';
+    pierNotImplemented: pier:='Not implemented';
   end;
   ra:=mount.RA;
   de:=mount.Dec;

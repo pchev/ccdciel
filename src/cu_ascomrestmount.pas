@@ -114,7 +114,7 @@ begin
  stDE:=NullCoord;
  stFocalLength:=NullCoord;
  stPark:=false;
- stPierside:=pierUnknown;
+ stPierside:=pierNotImplemented;
  stTracking:=false;
  CanPark:=false;
  CanSlew:=false;
@@ -181,7 +181,7 @@ begin
      CanSync:=V.Get('cansync').AsBool;
      CanSetTracking:=V.Get('cansettracking').AsBool;
      FCanPulseGuide:=V.Get('canpulseguide').AsBool;
-     FisGem:=(GetAlignmentMode=algGermanPolar)and(GetPierSideReal<>pierUnknown);
+     FisGem:=(GetAlignmentMode=algGermanPolar)and(GetPierSideReal<>pierNotImplemented);
      try
        if FInterfaceVersion>1 then begin
          FCanMoveAxis:=V.Get('canmoveaxis','Axis=0').AsBool and V.Get('canmoveaxis','Axis=1').AsBool;
@@ -365,7 +365,7 @@ end;
 function  T_ascomrestmount.GetPierSideReal:TPierSide;
 var i: integer;
 begin
- result:=pierUnknown;
+ result:=pierNotImplemented;
    if FStatus<>devConnected then exit;
    try
    i:=V.Get('sideofpier').AsInt;  // pascal enum may have different size
@@ -375,7 +375,7 @@ begin
       1: result:=pierWest;
    end;
    except
-    result:=pierUnknown;
+    result:=pierNotImplemented;
    end;
 end;
 
@@ -404,7 +404,7 @@ begin
  if FStatus=devConnected then
     result:=stPierside
  else
-    result:=pierUnknown;
+    result:=pierNotImplemented;
 end;
 
 procedure T_ascomrestmount.SetPierSide(value: TPierSide);

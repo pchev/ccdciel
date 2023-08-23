@@ -8164,6 +8164,7 @@ else begin
     pierEast: f_mount.Pierside.Caption:=rsEastPointing;
     pierWest: f_mount.Pierside.Caption:=rsWestPointing;
     pierUnknown: f_mount.Pierside.Caption:=rsUnknowPierSi;
+    pierNotImplemented: f_mount.Pierside.Caption:='';
   end;
 end;
 end;
@@ -9381,7 +9382,7 @@ begin
    f_option.FinderSolver.ItemIndex:=config.GetValue('/Astrometry/FinderSolver',ResolverAstap);
    f_option.UseFinderSolverChange(nil);
    f_option.RecenterTargetDistance.value:=config.GetValue('/PrecSlew/RecenterTargetDistance',RecenterTargetDistance);
-   if (mount.Status=devConnected)and(mount.PierSide=pierUnknown) then begin
+   if (mount.Status=devConnected)and(mount.PierSide>=pierUnknown) then begin
       f_option.Panel13.Visible:=true;
       f_option.MeridianWarning.caption:='Mount is not reporting pier side, meridian process is unreliable.'
    end
@@ -13334,7 +13335,7 @@ begin
   hh:=CurSt-tra;
   Eq2Hz(hh,tde,ta,th);
   tm:=mount.PierSide;
-  if tm=pierUnknown then begin
+  if tm>=pierUnknown then begin
     if (ta>0)and(ta<pi) then
       tm:=pierEast
     else
@@ -15052,7 +15053,7 @@ begin
     // check delay
     if (MeridianOption=1)or(MeridianOption=2) then begin // automatic or script
       MeridianDelay1:=MinutesPastMeridianMin-hhmin;
-      if mount.PierSide=pierUnknown
+      if mount.PierSide>=pierUnknown
         then MeridianDelay2:=MeridianDelay1
         else MeridianDelay2:=MinutesPastMeridian-hhmin;
     end
@@ -15094,7 +15095,7 @@ begin
        if abs(MeridianDelay1)<240 then begin // maximum flip time + 30min
         try
         meridianflipping:=true;
-        if mount.PierSide=pierUnknown then begin
+        if mount.PierSide>=pierUnknown then begin
           NewMessage(rsMountIsNotRe,1);
         end;
         slewtopos:=false; slewtoimg:=false;
@@ -15169,7 +15170,7 @@ begin
             exit;
           end;
         end;
-        if mount.PierSide=pierUnknown then begin
+        if mount.PierSide>=pierUnknown then begin
           NewMessage(rsWait1Minute,2);
           wait(60); // ensure we not do the flip two time
         end;

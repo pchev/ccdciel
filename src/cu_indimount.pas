@@ -629,7 +629,7 @@ end;
 
 function  T_indimount.GetPierSide:TPierSide;
 begin
-result:=pierUnknown;
+result:=pierNotImplemented;
 if Pier_Side<>nil then begin
   if Pier_East.s=ISS_ON then result:=pierEast
   else if Pier_West.s=ISS_ON then result:=pierWest;
