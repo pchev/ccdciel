@@ -830,7 +830,7 @@ type
     Procedure DoAutoFocus;
     procedure LoadFocusStar(focusmag:integer);
     function  FindFocusStar(tra, tde:double; out sra,sde: double; out id: string): Boolean;
-    function  AutoAutofocus(ReturnToTarget: boolean=true): Boolean;
+    function  AutoAutofocus(ReturnToTarget: boolean=true; GuiderRestart: boolean=true): Boolean;
     procedure cmdAutomaticAutofocus(var ok: boolean);
     procedure cmdAutofocus(var ok: boolean);
     Procedure FocuserStatus(Sender: TObject);
@@ -13364,7 +13364,7 @@ begin
   end;
 end;
 
-function Tf_main.AutoAutofocus(ReturnToTarget: boolean=true): Boolean;
+function Tf_main.AutoAutofocus(ReturnToTarget: boolean=true; GuiderRestart: boolean=true): Boolean;
 var tra,tde,teq,tpa,sra,sde,err: double;
     sid,r: string;
     focusretry,maxretry: integer;
@@ -13419,7 +13419,7 @@ begin
  RunningCapture:=false;
  tpos:=false;
  pslew:=false;
- restartguider:=(Autoguider.State<>GUIDER_DISCONNECTED);
+ restartguider:=GuiderRestart and (Autoguider.State<>GUIDER_DISCONNECTED);
  pauseguider:=false;
  if InplaceAutofocus then begin
    // stay in place for autofocus
@@ -15201,7 +15201,7 @@ begin
         end;
         // autofocus
         if MeridianFlipAutofocus then begin
-          AutoAutofocus(false);
+          AutoAutofocus(false,false);
         end;
         // precision slew with saved coordinates
         if slewtopos then begin
