@@ -908,8 +908,8 @@ object f_internalguider: Tf_internalguider
               Left = 24
               Height = 18
               Top = 343
-              Width = 126
-              Caption = 'Declination backlash'
+              Width = 153
+              Caption = 'Declination backlash[ms]'
               ParentColor = False
             end
             object disable_guiding1: TCheckBox
@@ -1341,8 +1341,8 @@ object f_internalguider: Tf_internalguider
                 Width = 336
                 Align = alTop
                 Caption = 'Multi-star guide offset'
-                ClientHeight = 74
-                ClientWidth = 332
+                ClientHeight = 104
+                ClientWidth = 336
                 TabOrder = 0
                 object edOffsetX: TFloatSpinEdit
                   Left = 180
@@ -1430,8 +1430,8 @@ object f_internalguider: Tf_internalguider
             Width = 340
             Align = alClient
             Caption = 'Calibration results:'
-            ClientHeight = 616
-            ClientWidth = 340
+            ClientHeight = 586
+            ClientWidth = 336
             TabOrder = 0
             object Label5: TLabel
               AnchorSideTop.Control = pa1
@@ -1557,7 +1557,7 @@ object f_internalguider: Tf_internalguider
             object pier_side1: TEdit
               Left = 230
               Height = 32
-              Hint = 'While calibrating was the telescope pointing East or West'
+              Hint = 'Mount side where the calibation was done. This specifies the side where telescope is pointing at.'
               Top = 168
               Width = 60
               OnChange = pier_side1Change
@@ -1590,30 +1590,12 @@ object f_internalguider: Tf_internalguider
               TabOrder = 6
               Text = '2.5'
             end
-            object CheckBoxInverseSolarTracking1: TCheckBox
-              Left = 8
-              Height = 22
-              Hint = 'Mount with inversed pulse guiding. This inversion only applies for solar object tracking'
-              Top = 248
-              Width = 200
-              Caption = 'Inversed solar guide control'
-              TabOrder = 7
-            end
-            object CheckBoxReverseDec1: TCheckBox
-              Left = 8
-              Height = 22
-              Hint = 'Mount guide pulse control is reversed for declination by the mount driver. Checkmark this option if guiding does not work after a meridian flip.'
-              Top = 280
-              Width = 305
-              Caption = 'Pulse guiding δ is reversed after meridian flip'
-              TabOrder = 8
-            end
             object Label43: TLabel
               AnchorSideTop.Control = CalDate
               AnchorSideTop.Side = asrCenter
               Left = 8
               Height = 18
-              Top = 343
+              Top = 311
               Width = 29
               Caption = 'Date'
               ParentColor = False
@@ -1623,7 +1605,7 @@ object f_internalguider: Tf_internalguider
               AnchorSideTop.Side = asrCenter
               Left = 8
               Height = 18
-              Top = 407
+              Top = 375
               Width = 48
               Caption = 'Binning'
               ParentColor = False
@@ -1633,7 +1615,7 @@ object f_internalguider: Tf_internalguider
               AnchorSideTop.Side = asrCenter
               Left = 8
               Height = 18
-              Top = 439
+              Top = 407
               Width = 57
               Caption = 'RA speed'
               ParentColor = False
@@ -1643,7 +1625,7 @@ object f_internalguider: Tf_internalguider
               AnchorSideTop.Side = asrCenter
               Left = 8
               Height = 18
-              Top = 471
+              Top = 439
               Width = 66
               Caption = 'DEC speed'
               ParentColor = False
@@ -1651,39 +1633,39 @@ object f_internalguider: Tf_internalguider
             object CalDate: TEdit
               Left = 76
               Height = 32
-              Top = 336
+              Top = 304
               Width = 214
               Enabled = False
-              TabOrder = 9
+              TabOrder = 7
             end
             object CalBinning: TEdit
+              Left = 208
+              Height = 32
+              Top = 368
+              Width = 82
+              Enabled = False
+              TabOrder = 8
+            end
+            object CalRAspeed: TEdit
               Left = 208
               Height = 32
               Top = 400
               Width = 82
               Enabled = False
-              TabOrder = 10
+              TabOrder = 9
             end
-            object CalRAspeed: TEdit
+            object CalDECspeed: TEdit
               Left = 208
               Height = 32
               Top = 432
               Width = 82
               Enabled = False
-              TabOrder = 11
-            end
-            object CalDECspeed: TEdit
-              Left = 208
-              Height = 32
-              Top = 464
-              Width = 82
-              Enabled = False
-              TabOrder = 12
+              TabOrder = 10
             end
             object Label47: TLabel
               Left = 8
               Height = 18
-              Top = 312
+              Top = 280
               Width = 97
               Caption = 'Last calibration:'
               ParentColor = False
@@ -1691,17 +1673,17 @@ object f_internalguider: Tf_internalguider
             object CalDeclination: TEdit
               Left = 208
               Height = 32
-              Top = 368
+              Top = 336
               Width = 82
               Enabled = False
-              TabOrder = 13
+              TabOrder = 11
             end
             object Label49: TLabel
               AnchorSideTop.Control = CalDeclination
               AnchorSideTop.Side = asrCenter
               Left = 8
               Height = 18
-              Top = 375
+              Top = 343
               Width = 69
               Caption = 'Declination'
               ParentColor = False
@@ -1709,7 +1691,7 @@ object f_internalguider: Tf_internalguider
             object Label50: TLabel
               Left = 10
               Height = 18
-              Top = 504
+              Top = 472
               Width = 33
               Caption = 'Issue'
               ParentColor = False
@@ -1717,10 +1699,38 @@ object f_internalguider: Tf_internalguider
             object CalIssue: TEdit
               Left = 208
               Height = 32
-              Top = 496
+              Top = 464
               Width = 82
               Enabled = False
+              TabOrder = 12
+            end
+            object Label48: TLabel
+              Left = 8
+              Height = 18
+              Top = 236
+              Width = 206
+              Caption = 'Pulse North direction[cal/flipped]:'
+              ParentColor = False
+            end
+            object PulseNorthDirection1: TEdit
+              Left = 230
+              Height = 32
+              Hint = 'Pulse North direction at calibration side.'
+              Top = 232
+              Width = 32
+              ParentFont = False
+              TabOrder = 13
+              Text = '?'
+            end
+            object PulseNotthDirection2: TEdit
+              Left = 270
+              Height = 32
+              Hint = 'Pulse North direction at the other side after a merdian flip.'
+              Top = 232
+              Width = 32
+              ParentFont = False
               TabOrder = 14
+              Text = '?'
             end
           end
         end
@@ -1728,7 +1738,7 @@ object f_internalguider: Tf_internalguider
     end
   end
   object PopupMenuDark: TPopupMenu
-    Left = 280
+    Left = 296
     Top = 24
     object MenuItemDarkInfo: TMenuItem
       Caption = 'MenuItemDarkInfo'

@@ -4626,6 +4626,7 @@ var i,n: integer;
     posprev,poscapt:integer;
     binprev,bincapt:string;
     roi:TRoi;
+    ReverseDec, InverseSolarTracking : boolean;
 begin
   ShowHint:=screenconfig.GetValue('/Hint/Show',true);
   if f_option<>nil then f_option.ShowHint:=ShowHint;
@@ -4873,8 +4874,38 @@ begin
   f_internalguider.ForceGuideSpeed.Checked:=config.GetValue('/InternalGuider/ForceGuideSpeed',true);
   f_internalguider.GuideSpeedRA.Value:=config.GetValue('/InternalGuider/GuideSpeedRA',0.5);
   f_internalguider.GuideSpeedDEC.Value:=config.GetValue('/InternalGuider/GuideSpeedDEC',0.5);
-  f_internalguider.ReverseDec:=config.GetValue('/InternalGuider/ReverseDec',false);
-  f_internalguider.InverseSolarTracking:=config.GetValue('/InternalGuider/InverseSolar',false);
+
+  f_internalguider.PulseNorthDirection_1:=config.GetValue('/InternalGuider/PulseNorthDirection_1','?');
+  f_internalguider.PulseNorthDirection_2:=config.GetValue('/InternalGuider/PulseNorthDirection_2','?');
+
+  begin  //Upgrade old setting to new settings. Remove these temporary lines after summer 2024
+    if f_internalguider.PulseNorthDirection_1='?' then //old profile
+    begin
+      ReverseDec:=config.GetValue('/InternalGuider/ReverseDec',false);
+      InverseSolarTracking:=config.GetValue('/InternalGuider/InverseSolar',false);
+      if InverseSolarTracking then
+      begin
+        if f_internalguider.Pier_Side='E' then
+          begin f_internalguider.PulseNorthDirection_1:='N';f_internalguider.PulseNorthDirection_2:='S';end
+        else
+          begin f_internalguider.PulseNorthDirection_1:='S';f_internalguider.PulseNorthDirection_2:='N';end;
+        f_internalguider.pulseGainNorth:=-f_internalguider.pulseGainNorth;
+        f_internalguider.pulseGainSouth:=-f_internalguider.pulseGainSouth;
+      end
+      else
+      if ReverseDec then
+        begin f_internalguider.PulseNorthDirection_1:='N';f_internalguider.PulseNorthDirection_2:='N';end
+      else
+      begin
+        if f_internalguider.Pier_Side='W' then
+          begin f_internalguider.PulseNorthDirection_1:='N';f_internalguider.PulseNorthDirection_2:='S';end
+        else
+          begin f_internalguider.PulseNorthDirection_1:='S';f_internalguider.PulseNorthDirection_2:='N'; end;
+      end;
+    end;
+  end;
+
+
   f_internalguider.BacklashCompensation:=config.GetValue('/InternalGuider/BacklashCompensation',false);
   f_internalguider.DecBacklash:=config.GetValue('/InternalGuider/DecBacklash',0);
   f_internalguider.trend_scale:=config.GetValue('/InternalGuider/Scale',5);
@@ -5464,6 +5495,9 @@ begin
   config.SetValue('/InternalGuider/PulseGainNorth',f_internalguider.pulseGainNorth);
   config.SetValue('/InternalGuider/PulseGainSouth',f_internalguider.pulsegainSouth);
 
+  config.SetValue('/InternalGuider/PulseNorthDirection_1',f_internalguider.PulseNorthDirection_1);
+  config.SetValue('/InternalGuider/PulseNorthDirection_2',f_internalguider.PulseNorthDirection_2);
+
   config.SetValue('/InternalGuider/CalDate',f_internalguider.CalDate.Text);
   config.SetValue('/InternalGuider/CalBinning',f_internalguider.CalBinning.Text);
   config.SetValue('/InternalGuider/CalRAspeed',f_internalguider.CalRAspeed.Text);
@@ -5486,8 +5520,8 @@ begin
   config.SetValue('/InternalGuider/ForceGuideSpeed',f_internalguider.ForceGuideSpeed.Checked);
   config.SetValue('/InternalGuider/GuideSpeedRA',f_internalguider.GuideSpeedRA.Value);
   config.SetValue('/InternalGuider/GuideSpeedDEC',f_internalguider.GuideSpeedDEC.Value);
-  config.SetValue('/InternalGuider/ReverseDec',f_internalguider.ReverseDec);
-  config.SetValue('/InternalGuider/InverseSolar',f_internalguider.InverseSolarTracking);
+//  config.SetValue('/InternalGuider/ReverseDec',f_internalguider.ReverseDec);
+//  config.SetValue('/InternalGuider/InverseSolar',f_internalguider.InverseSolarTracking);
   config.SetValue('/InternalGuider/BacklashCompensation',f_internalguider.BacklashCompensation);
   config.SetValue('/InternalGuider/DecBacklash',f_internalguider.DecBacklash);
   config.SetValue('/InternalGuider/Camera/Exposure',f_internalguider.Exposure.Value);
@@ -10827,7 +10861,7 @@ end;
 Procedure Tf_main.StartCaptureExposureNow;
 var e: double;
     buf,f: string;
-    p,binx,biny,i,x,y,w,h,sx,sy,sw,sh,cc,cs: integer;
+    p,binx,biny,cc: integer;
     ftype:TFrameType;
 begin
 if (AllDevicesConnected)and(not autofocusing)and (not learningvcurve) then begin
@@ -16916,7 +16950,7 @@ end;
 
 Procedure Tf_main.PlotGuideImage;
 var r1,r2: double;
-    w,h,px,py,w3,h3,ww3,hh3,i,j: integer;
+    w,h,px,py : integer;
     tmpbmp,str: TBGRABitmap;
     rmode: TResampleMode;
 begin
@@ -17496,7 +17530,7 @@ end;
 
 procedure Tf_main.PlotFinderImage;
 var r1,r2: double;
-    w,h,px,py,w3,h3,ww3,hh3,i,j: integer;
+    w,h,px,py : integer;
     tmpbmp,str: TBGRABitmap;
     rmode: TResampleMode;
 begin

@@ -66,8 +66,6 @@ type
     GuideSpeedDEC: TFloatSpinEdit;
     ForceGuideSpeed: TCheckBox;
     CheckBoxBacklash: TCheckBox;
-    CheckBoxInverseSolarTracking1: TCheckBox;
-    CheckBoxReverseDec1: TCheckBox;
     CheckBoxTrackSolar1: TCheckBox;
     Cooler: TCheckBox;
     disable_guiding1: TCheckBox;
@@ -109,6 +107,7 @@ type
     Label45: TLabel;
     Label46: TLabel;
     Label47: TLabel;
+    Label48: TLabel;
     LabelInfo4: TLabel;
     LabelInfo3: TLabel;
     Label49: TLabel;
@@ -161,6 +160,8 @@ type
     PanelOffset: TPanel;
     PanelGain: TPanel;
     pier_side1: TEdit;
+    PulseNorthDirection1: TEdit;
+    PulseNotthDirection2: TEdit;
     pixelsize1: TEdit;
     PopupMenuDark: TPopupMenu;
     pulsegainEast1: TEdit;
@@ -294,6 +295,12 @@ type
     function GetPAsetting:double;
     procedure SetPixelSize(value:double);
     function GetPixelSize:double;
+
+    procedure SetPulseDirectionNorth_1(value:string);
+    function GetPulseDirectionNorth_1:string;
+    procedure SetPulseDirectionNorth_2(value:string);
+    function GetPulseDirectionNorth_2:string;
+
     procedure SetMinHFD(value:double);
     function GetMinHFD:double;
     procedure SetShortestPulse(value:integer);
@@ -309,16 +316,16 @@ type
     function GetScale:integer;
     procedure SetScale(value:integer);
     function GetFrameSize: integer;
-    function GetInverseSolarTracking: Boolean;
-    procedure SetInverseSolarTracking(value: Boolean);
+//    function GetInverseSolarTracking: Boolean;
+//    procedure SetInverseSolarTracking(value: Boolean);
     function GetSolartracking: Boolean;
     procedure SetSolarTracking(value: Boolean);
     procedure SetV_solar(value:double);
     function GetV_solar:double;
     procedure SetVPA_solar(value:double);
     function GetVPa_solar:double;
-    function GetReverseDec: Boolean;
-    procedure SetReverseDec(value: Boolean);
+//    function GetReverseDec: Boolean;
+//    procedure SetReverseDec(value: Boolean);
     procedure SetBacklash(value:integer);
     function GetBacklash:integer;
     procedure SetBacklashCompensation(value:Boolean);
@@ -392,6 +399,8 @@ type
     property pulsegainNorth: double read GetpulsegainNorthsetting write SetpulsegainNorthsetting; // movement in arcsec/second. Found by the calibration
     property pulsegainSouth: double read GetpulsegainSouthsetting write SetpulsegainSouthsetting; // movement in arcsec/second. Found by the calibration
     property pixel_size: double read GetPixelSize write SetPixelSize; // scale in arcsec/pixel.
+    property PulseNorthDirection_1: string read GetPulseDirectionNorth_1 write SetPulseDirectionNorth_1; // pulse direction at calibration side
+    property PulseNorthDirection_2: string read GetPulseDirectionNorth_2 write SetPulseDirectionNorth_2; // pulse direction after flipping
     property minHFD: double read GetMinHFD write SetMinHFD;
     property ShortestPulse: integer read GetShortestPulse write SetShortestPulse; // minimum pulse duration. If below skip.
     property LongestPulse: integer read GetLongestPulse write SetLongestPulse;    // maximum pulse duration. Truncated if above.
@@ -400,11 +409,9 @@ type
     property PA : double read GetPAsetting write SetPAsetting;// Guider image orientation in radians. Found by the calibration
     property trend_scale: integer read Getscale write Setscale;
     property FrameSize: integer read GetFrameSize;
-    property InverseSolarTracking: Boolean read GetInverseSolarTracking write SetInverseSolarTracking;
     property SolarTracking: Boolean read GetSolarTracking write SetSolarTracking;
     property v_solar: double read GetV_solar write SetV_solar;
     property vpa_solar: double read GetVPa_solar write SetVPA_solar;
-    property ReverseDec: Boolean read GetReverseDec write SetReverseDec;
     property DecBacklash: integer read GetBacklash write SetBacklash;
     property BacklashCompensation: Boolean read GetBacklashCompensation write SetBacklashCompensation;
     property SpectroFunctions: boolean read GetSpectro write SetSpectro; // single star slit guiding
@@ -531,8 +538,6 @@ begin
   Label13.Caption:=rsPulseGain+blank+rsSouth+' [px/sec]';
   Label12.Caption:=rsMeasuredAtEW;
   label_estimate1.Caption:=rsPixelScale+' ["/px]';
-  CheckBoxInverseSolarTracking1.Caption:=rsInversedSola;
-  CheckBoxReverseDec1.Caption:=format(rsPulseGuiding, ['δ']);
   GroupBox1.Caption:=rsOptions2+':';
   Label22.Caption:=rsShortestGuid+' [ms]';
   label11.Caption:=rsLongestGuide+' [ms]';
@@ -582,8 +587,6 @@ begin
   Label46.Caption:=rsDec+' '+rsSpeed;
   Label49.Caption:=rsDeclination;
   Label50.Caption:=rsIssue;
-
-
 end;
 
 function Tf_internalguider.Getdisableguiding:boolean;
@@ -675,6 +678,26 @@ end;
 function Tf_internalguider.GetPixelSize:double;
 begin
   result:=strtofloat(pixelsize1.text);
+end;
+
+procedure Tf_internalguider.SetPulseDirectionNorth_1(value:string);
+begin
+  PulseNorthDirection1.text:=value;
+end;
+
+function Tf_internalguider.GetPulseDirectionNorth_1:string;
+begin
+  result:=PulseNorthDirection1.text;
+end;
+
+procedure Tf_internalguider.SetPulseDirectionNorth_2(value:string);
+begin
+  PulseNotthDirection2.text:=value;
+end;
+
+function Tf_internalguider.GetPulseDirectionNorth_2:string;
+begin
+  result:=PulseNotthDirection2.text;
 end;
 
 
@@ -1060,36 +1083,20 @@ procedure Tf_internalguider.ButtonCalibrateClick(Sender: TObject);
 var txt: string;
     n: integer;
 begin
- txt:= rsSelectACalib+#10+#10+rsOption1Calib+#10+#10+rsOption2Calib+#10+#10+rsOption3Backl+#10+#10+rsOption4Cance;
+ txt:= rsSelectACalib+#10+#10+rsOption1Calib+#10+#10{+rsOption2Calib}+#10+#10+rsOption3Backl+#10+#10+rsOption4Cance;
  {$ifdef lclgtk2}
  // inverted button with GTK2
-//if mount.isGEM then
-  if true then
-    n:=QuestionDlg (rsGuiderCalibr, txt, mtCustom,
-          [23, rsCancel, 'IsCancel', 22, rsBacklashCali, 21, rscalibration2, 20, rsCalibration],'')
-  else
     n:=QuestionDlg (rsGuiderCalibr, txt, mtCustom,
           [23,rsCancel,'IsCancel',  22, rsBacklashCali, 20,rsCalibration],
           '');
  {$else}
-// if mount.isGem then
-   if true then
-   n:=QuestionDlg (rsGuiderCalibr, txt, mtCustom,
-         [20,rsCalibration, 21,rscalibration2, 22, rsBacklashCali, 23,rsCancel,'IsCancel'],
-         '')
- else
    n:=QuestionDlg (rsGuiderCalibr, txt, mtCustom,
          [20,rsCalibration, 22, rsBacklashCali, 23,rsCancel,'IsCancel'],
          '');
  {$endif}
  case n of
       20:begin
-          ReverseDec:=false;
-          setled(clYellow);
-          if Assigned(FonCalibrate) then FonCalibrate(self);
-         end;
-      21:begin
-          ReverseDec:=true;
+         // ReverseDec:=false;
           setled(clYellow);
           if Assigned(FonCalibrate) then FonCalibrate(self);
          end;
@@ -1377,17 +1384,6 @@ begin
   if err<>0 then result:=999999 else result:=v;
 end;
 
-function Tf_internalguider.GetInverseSolarTracking: boolean;
-begin
-  result:=CheckBoxInverseSolarTracking1.Checked;
-end;
-
-procedure Tf_internalguider.SetInverseSolarTracking(value: Boolean);
-begin
-  CheckBoxInverseSolarTracking1.Checked:=value;
-end;
-
-
 function Tf_internalguider.GetSolarTracking: boolean;
 begin
   result:=CheckBoxTrackSolar1.Checked;
@@ -1396,16 +1392,6 @@ end;
 procedure Tf_internalguider.SetSolarTracking(value: Boolean);
 begin
   CheckBoxTrackSolar1.Checked:=value;
-end;
-
-function Tf_internalguider.GetReverseDec: boolean;
-begin
-  result:=CheckBoxReverseDec1.Enabled and CheckBoxReverseDec1.Checked;
-end;
-
-procedure Tf_internalguider.SetReverseDec(value: Boolean);
-begin
-  CheckBoxReverseDec1.Checked:=value;
 end;
 
 procedure Tf_internalguider.SetSpectro(value:Boolean);
