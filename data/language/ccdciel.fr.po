@@ -3336,16 +3336,16 @@ msgstr "Ouvre l'ouverture du dôme"
 msgid "Option 1: Calibration at current position."
 msgstr "Optiion 1: Calibration a la position courante"
 
-#: u_translation.rsoption2calib
-msgid "Option 2: Special calibration at current position for some mounts which reverse declination pulse guiding after the meridian flip."
-msgstr "Option 2: Calibration spéciale à la position courante pour certaines monture qui renverse la direction de déclinaison après un flip méridien."
-
 #: u_translation.rsoption3backl
-msgid "Option 3: Calibrate backlash compensation."
+#, fuzzy
+#| msgid "Option 3: Calibrate backlash compensation."
+msgid "Option 2: Calibrate backlash compensation."
 msgstr "Option 3: Calibration de la compensation de jeu"
 
 #: u_translation.rsoption4cance
-msgid "Option 4: Cancel."
+#, fuzzy
+#| msgid "Option 4: Cancel."
+msgid "Option 3: Cancel."
 msgstr "Option 4: Abandon"
 
 #: u_translation.rsoptions

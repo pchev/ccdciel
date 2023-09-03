@@ -3336,16 +3336,16 @@ msgstr "打开圆顶天窗"
 msgid "Option 1: Calibration at current position."
 msgstr "选项一：在当前位置校准。"
 
-#: u_translation.rsoption2calib
-msgid "Option 2: Special calibration at current position for some mounts which reverse declination pulse guiding after the meridian flip."
-msgstr "选项 2：在当前位置对某些在中天翻转后反转赤纬导星脉冲的赤道仪进行特殊校准。"
-
 #: u_translation.rsoption3backl
-msgid "Option 3: Calibrate backlash compensation."
+#, fuzzy
+#| msgid "Option 3: Calibrate backlash compensation."
+msgid "Option 2: Calibrate backlash compensation."
 msgstr "选项3：校准回差补偿。"
 
 #: u_translation.rsoption4cance
-msgid "Option 4: Cancel."
+#, fuzzy
+#| msgid "Option 4: Cancel."
+msgid "Option 3: Cancel."
 msgstr "选项 4：取消。"
 
 #: u_translation.rsoptions

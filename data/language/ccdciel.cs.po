@@ -3335,16 +3335,16 @@ msgstr "Otevřít štěrbinu kopule"
 msgid "Option 1: Calibration at current position."
 msgstr "Možnost 1: Kalibrace v aktuální pozici."
 
-#: u_translation.rsoption2calib
-msgid "Option 2: Special calibration at current position for some mounts which reverse declination pulse guiding after the meridian flip."
-msgstr "Možnost 2: Speciální kalibrace v aktuální poloze pro některé montáže, které po překlopení poledníku obracejí směry impulzů deklinace."
-
 #: u_translation.rsoption3backl
-msgid "Option 3: Calibrate backlash compensation."
+#, fuzzy
+#| msgid "Option 3: Calibrate backlash compensation."
+msgid "Option 2: Calibrate backlash compensation."
 msgstr "Možnost 3: Kalibrace kompenzace zpětné vůle."
 
 #: u_translation.rsoption4cance
-msgid "Option 4: Cancel."
+#, fuzzy
+#| msgid "Option 4: Cancel."
+msgid "Option 3: Cancel."
 msgstr "Možnost 4: Zrušit."
 
 #: u_translation.rsoptions

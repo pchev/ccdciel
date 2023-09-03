@@ -1442,9 +1442,8 @@ resourcestring
   rsTimeInARow = 'time in a row';
   rsSelectACalib = 'Select a calibration option:';
   rsOption1Calib = 'Option 1: Calibration at current position.';
-  rsOption2Calib = 'Option 2: Special calibration at current position for some mounts which reverse declination pulse guiding after the meridian flip.';
-  rsOption3Backl = 'Option 3: Calibrate backlash compensation.';
-  rsOption4Cance = 'Option 4: Cancel.';
+  rsOption3Backl = 'Option 2: Calibrate backlash compensation.';
+  rsOption4Cance = 'Option 3: Cancel.';
   rsCalibration = 'Calibration';
   rscalibration2 ='Special calibration';
   rsGuiderCalibr = 'Guider calibration';

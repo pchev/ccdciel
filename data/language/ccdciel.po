@@ -5354,16 +5354,12 @@ msgstr ""
 msgid "Option 1: Calibration at current position."
 msgstr ""
 
-#: u_translation:rsoption2calib
-msgid "Option 2: Special calibration at current position for some mounts which reverse declination pulse guiding after the meridian flip."
-msgstr ""
-
 #: u_translation:rsoption3backl
-msgid "Option 3: Calibrate backlash compensation."
+msgid "Option 2: Calibrate backlash compensation."
 msgstr ""
 
 #: u_translation:rsoption4cance
-msgid "Option 4: Cancel."
+msgid "Option 3: Cancel."
 msgstr ""
 
 #: u_translation:rscalibration
