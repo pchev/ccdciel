@@ -651,7 +651,7 @@ var fn: string;
 begin
 TimerAstrometrySyncGuider.Enabled:=false;
 if LastResult and (cdcwcs_xy2sky<>nil) then begin
-   fn:=slash(TmpDir)+'guidetmp.fits';
+   fn:=slash(TmpDir)+'guidesolved.fits';
    n:=cdcwcs_initfitsfile(pchar(fn),wcsguide);
    if GuideCurrentCoord(ra,de,eq,pa) then begin
        J2000ToMount(mount.EquinoxJD,ra,de);
