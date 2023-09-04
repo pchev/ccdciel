@@ -198,15 +198,20 @@ end;
 
 procedure Tf_visu.SetLimit(SetLevel:boolean);
 var hval: double;
-    i,sum,slh,shh,lh,hh,startp: integer;
+    i,sum,slh,shh,lh,hh,startp,histp: integer;
 begin
   if SetLevel and (not HistogramAdjusted) then begin
-    if HistBar.Position<30 then
-      hval:=(101-power(1.2,HistBar.Position/100))/100
-    else if HistBar.Position<70 then
-      hval:=7.3127E-4+(101-power(1.5,HistBar.Position/100))/100
+    histp:=HistBar.Position;
+    if histp<2 then
+      hval:=1.0
+    else if histp<10 then
+      hval:=0.999999-((histp/2-1)*0.00005)
+    else if histp<30 then
+      hval:=(101-power(1.2,histp/100))/100
+    else if histp<70 then
+      hval:=7.3127E-4+(101-power(1.5,histp/100))/100
     else
-      hval:=(99.672-((HistBar.Position-70)/4))/100;
+      hval:=(99.672-((histp-70)/4))/100;
     if hval=1 then begin
       FImgMin:=0;
       FImgMax:=high(word);
