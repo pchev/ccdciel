@@ -2049,7 +2049,7 @@ if dmin>=dmax then begin
    else
      dmin:=dmax-1; // white if all same value
 end;
-if (FFitsInfo.dmin=0)and(FFitsInfo.dmax=0) then begin  // do not replace existing header data range
+if ((FFitsInfo.dmin=0)and(FFitsInfo.dmax=0))or(FFitsInfo.dmin>dmin)or(FFitsInfo.dmax<dmax) then begin  // do not replace valid existing header data range
   FFitsInfo.dmin:=dmin;
   FFitsInfo.dmax:=dmax;
 end;
