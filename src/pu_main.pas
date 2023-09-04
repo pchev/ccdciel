@@ -11872,7 +11872,11 @@ try
   if Length(fits.StarList)>0 then begin
      // draw all star boxes
      Image1.Canvas.pen.Color:=clRed;
+     {$ifdef lclqt5}
+     Image1.Canvas.pen.Mode:=pmCopy; // Qt5 pmMerge draw very bad text
+     {$else}
      Image1.Canvas.pen.Mode:=pmMerge;
+     {$endif}
      Image1.Canvas.pen.Width:=DoScaleX(1);
      Image1.Canvas.Brush.Style:=bsClear;
      Image1.Canvas.Font.Color:=clYellow;
