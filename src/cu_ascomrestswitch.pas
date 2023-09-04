@@ -201,7 +201,10 @@ result:=false;
   try
   result:=V.Get('connected').AsBool;
   except
-   result:=false;
+   on E: Exception do begin
+     msg('Get Connected error: ' + E.Message,0);
+     result:=false;
+   end;
   end;
 end;
 
