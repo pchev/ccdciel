@@ -6354,6 +6354,7 @@ var cool: boolean;
 begin
 case guidecamera.Status of
   devDisconnected:begin
+                      InternalguiderStop(nil);
                       f_devicesconnection.LabelGuideCamera.Font.Color:=clRed;
                   end;
   devConnecting:  begin
@@ -6418,6 +6419,7 @@ var cool: boolean;
 begin
 case findercamera.Status of
   devDisconnected:begin
+                      f_finder.StopLoop;
                       f_devicesconnection.LabelFinderCamera.Font.Color:=clRed;
                   end;
   devConnecting:  begin
