@@ -186,6 +186,7 @@ begin
   Fmethod:='';
   Fok:=False;
   Fhttp:=THTTPSend.Create;
+  Fhttp.KeepAlive:=false;              // always close connection
   Fhttp.Sock.ConnectionTimeout:=5000;  // not too long if service is not available
   Fhttp.Timeout:=120000;               // 2 minutes for long sync request
   Fhttp.UserAgent:='';
