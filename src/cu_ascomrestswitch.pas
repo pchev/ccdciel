@@ -35,7 +35,7 @@ T_ascomrestswitch = class(T_switch)
    V: TAscomRest;
    FInterfaceVersion: integer;
    StatusTimer: TTimer;
-   statusinterval: integer;
+   statusinterval, statuserrorcount: integer;
    procedure StatusTimerTimer(sender: TObject);
    function  Connected: boolean;
    function  InterfaceVersion: integer;
@@ -60,6 +60,7 @@ begin
  FSwitchInterface:=ASCOMREST;
  FInterfaceVersion:=1;
  statusinterval:=2000;
+ statuserrorcount:=0;
  StatusTimer:=TTimer.Create(nil);
  StatusTimer.Enabled:=false;
  StatusTimer.Interval:=statusinterval;
@@ -161,6 +162,7 @@ begin
          FSwitch[i].MultiState:=((FSwitch[i].Max-FSwitch[i].Min)/FSwitch[i].Step)>1;
        end;
      end;
+     statuserrorcount:=0;
      if isLocalIP(V.RemoteIP) then
        statusinterval:=2000
      else
@@ -202,7 +204,7 @@ result:=false;
   result:=V.Get('connected').AsBool;
   except
    on E: Exception do begin
-     msg('Get Connected error: ' + E.Message,0);
+     if debug_msg then msg('Get Connected error: ' + E.Message,0);
      result:=false;
    end;
   end;
@@ -216,9 +218,12 @@ begin
  StatusTimer.Enabled:=false;
  try
   if not Connected then begin
-     FStatus := devDisconnected;
-     if Assigned(FonStatusChange) then FonStatusChange(self);
-     msg(rsDisconnected3,1);
+    inc(statuserrorcount);
+    if statuserrorcount>10 then begin
+      FStatus := devDisconnected;
+      if Assigned(FonStatusChange) then FonStatusChange(self);
+      msg(rsDisconnected3,1);
+    end;
   end
   else begin
     try
@@ -231,6 +236,7 @@ begin
         FSwitch[i].Checked:=s[i].Checked;
      end;
      if changed and Assigned(FonSwitchChange) then FonSwitchChange(self);
+     statuserrorcount:=0;
     except
      on E: Exception do msg('Status error: ' + E.Message,0);
     end;
