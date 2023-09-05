@@ -34,7 +34,6 @@ type
 
   Tf_planetarium = class(TFrame)
     BtnConnect: TButton;
-    BtnNewTarget: TButton;
     Panel1: TPanel;
     led: TShape;
     Panel2: TPanel;
@@ -43,17 +42,15 @@ type
     Status: TEdit;
     Title: TLabel;
     procedure BtnConnectClick(Sender: TObject);
-    procedure BtnNewTargetClick(Sender: TObject);
   private
     { private declarations }
-    FonConnect,FonNewTarget: TNotifyEvent;
+    FonConnect: TNotifyEvent;
   public
     { public declarations }
     constructor Create(aOwner: TComponent); override;
     destructor  Destroy; override;
     procedure SetLang;
     property onConnect: TNotifyEvent read FonConnect write FonConnect;
-    property onNewTarget: TNotifyEvent read FonNewTarget write FonNewTarget;
   end;
 
 implementation
@@ -84,18 +81,12 @@ procedure Tf_planetarium.SetLang;
 begin
   Title.Caption:=rsPlanetarium;
   BtnConnect.Caption:=rsConnect;
-  BtnNewTarget.Caption:=rsNewTarget;
   Status.Hint:=rsPlanetariumS2;
 end;
 
 procedure Tf_planetarium.BtnConnectClick(Sender: TObject);
 begin
    if Assigned(FonConnect) then FonConnect(self);
-end;
-
-procedure Tf_planetarium.BtnNewTargetClick(Sender: TObject);
-begin
-   if Assigned(FonNewTarget) then FonNewTarget(self);
 end;
 
 end.

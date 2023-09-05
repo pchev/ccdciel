@@ -74,7 +74,6 @@ resourcestring
   rsCalibrate = 'Calibrate';
   rsGuide = 'Guide';
   rsDither = 'Dither';
-  rsNewTarget = 'New target';
   rsRun = 'Run';
   rsStop = 'Stop';
   rsNew = 'New';

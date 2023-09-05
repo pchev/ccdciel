@@ -25,7 +25,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 interface
 
-uses u_utils, u_global, cu_fits, UScaleDPI, u_translation, u_annotation, LCLType, pu_compute,
+uses cu_planetarium, u_utils, u_global, cu_fits, UScaleDPI, u_translation, u_annotation, LCLType, pu_compute,
   Classes, SysUtils, Forms, Controls, Graphics, Dialogs, StdCtrls, ExtCtrls;
 
 type
@@ -33,26 +33,27 @@ type
   { Tf_goto }
 
   Tf_goto = class(TForm)
-    BtnSearch: TButton;
     BtnCompute: TButton;
+    BtnSearch: TButton;
     ButtonOK: TButton;
     Button2: TButton;
-    GotoAstrometry: TCheckBox;
     De: TEdit;
-    Label8: TLabel;
-    msginfo: TLabel;
-    PxSz: TEdit;
+    GotoAstrometry: TCheckBox;
     Label1: TLabel;
+    Label16: TLabel;
     Label2: TLabel;
     Label3: TLabel;
-    Label4: TLabel;
     Label6: TLabel;
+    Label8: TLabel;
+    msginfo: TLabel;
+    Obj: TEdit;
+    Panel2: TPanel;
+    PxSz: TEdit;
+    Label4: TLabel;
     Label5: TLabel;
     Label7: TLabel;
-    Label16: TLabel;
     LabelAz: TLabel;
     LabelAlt: TLabel;
-    Obj: TEdit;
     Panel1: TPanel;
     PanelAltAz: TPanel;
     PanelPxSz: TPanel;
@@ -60,16 +61,21 @@ type
     procedure BtnSearchClick(Sender: TObject);
     procedure BtnComputeClick(Sender: TObject);
     procedure ButtonOKClick(Sender: TObject);
+    procedure FormClose(Sender: TObject; var CloseAction: TCloseAction);
     procedure FormCreate(Sender: TObject);
     procedure CenterChange(Sender: TObject);
     function CheckImageInfo(fits:Tfits): boolean;
     procedure FormShow(Sender: TObject);
     procedure ObjKeyDown(Sender: TObject; var Key: Word; Shift: TShiftState);
   private
-
+    LastMsg: string;
+    FPlanetarium: TPlanetarium;
+    procedure recvdata(msg:string);
+    procedure SetPlanetarium(value: TPlanetarium);
   public
     focallength,pixelsize: double;
     procedure SetLang;
+    property planetarium: TPlanetarium read FPlanetarium write SetPlanetarium;
   end;
 
 var
@@ -111,6 +117,37 @@ end;
 procedure Tf_goto.FormShow(Sender: TObject);
 begin
   Obj.SetFocus;
+  if (planetarium<>nil) and (planetarium.Connected) then begin
+    LastMsg:='';
+    planetarium.onReceiveData:=@recvdata;
+    recvdata('');
+  end;
+  if PanelAltAz.Visible then msginfo.Caption:='Search object name, click on planetarium or type the coordinates';
+end;
+
+procedure Tf_goto.FormClose(Sender: TObject; var CloseAction: TCloseAction);
+begin
+  if (planetarium<>nil) then planetarium.onReceiveData:=nil;
+end;
+
+procedure Tf_goto.SetPlanetarium(value: TPlanetarium);
+begin
+  FPlanetarium:=value;
+end;
+
+procedure Tf_goto.recvdata(msg: string);
+begin
+   if (planetarium=nil) or (not planetarium.Connected) then begin
+     Exit;
+   end;
+   LastMsg:=msg;
+   if (planetarium.RA<>NullCoord)and(planetarium.DE<>NullCoord) then begin
+    Ra.Text:=RAToStr(planetarium.RA);
+    De.Text:=DEToStr(planetarium.DE);
+   end;
+   if planetarium.Objname<>'' then begin
+    Obj.Text:=trim(planetarium.Objname);
+   end;
 end;
 
 procedure Tf_goto.ObjKeyDown(Sender: TObject; var Key: Word; Shift: TShiftState);

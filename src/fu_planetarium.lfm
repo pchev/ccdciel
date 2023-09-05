@@ -43,10 +43,10 @@ object f_planetarium: Tf_planetarium
       Left = 0
       Height = 25
       Top = 0
-      Width = 191
+      Width = 178
       BevelOuter = bvNone
       ClientHeight = 25
-      ClientWidth = 191
+      ClientWidth = 178
       ParentFont = False
       TabOrder = 0
       object led: TShape
@@ -74,10 +74,10 @@ object f_planetarium: Tf_planetarium
       Left = 0
       Height = 25
       Top = 25
-      Width = 191
+      Width = 178
       BevelOuter = bvNone
       ClientHeight = 25
-      ClientWidth = 191
+      ClientWidth = 178
       ParentFont = False
       TabOrder = 1
       object BtnConnect: TButton
@@ -90,22 +90,12 @@ object f_planetarium: Tf_planetarium
         ParentFont = False
         TabOrder = 0
       end
-      object BtnNewTarget: TButton
-        Left = 97
-        Height = 25
-        Top = 0
-        Width = 94
-        Caption = 'New target'
-        OnClick = BtnNewTargetClick
-        ParentFont = False
-        TabOrder = 1
-      end
     end
     object Panel4: TPanel
       Left = 0
       Height = 1
       Top = 50
-      Width = 191
+      Width = 178
       ParentFont = False
       TabOrder = 2
     end

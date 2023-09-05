@@ -1279,10 +1279,6 @@ object f_main: Tf_main
           Caption = 'Connect'
           OnClick = MenuPlanetariumConnectClick
         end
-        object MenuPlanetariumNewtarget: TMenuItem
-          Caption = 'New target'
-          OnClick = MenuPlanetariumNewtargetClick
-        end
       end
       object MenuScript: TMenuItem
         Caption = 'Script'

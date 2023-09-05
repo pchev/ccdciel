@@ -294,7 +294,6 @@ type
     MenuScriptEdit: TMenuItem;
     MenuScriptNew: TMenuItem;
     MenuScriptRun: TMenuItem;
-    MenuPlanetariumNewtarget: TMenuItem;
     MenuPlanetariumConnect: TMenuItem;
     MenuMountTrack: TMenuItem;
     MenuMountPark: TMenuItem;
@@ -510,7 +509,6 @@ type
     procedure MenuOptionsClick(Sender: TObject);
     procedure MenuPdfHelpClick(Sender: TObject);
     procedure MenuPlanetariumConnectClick(Sender: TObject);
-    procedure MenuPlanetariumNewtargetClick(Sender: TObject);
     procedure MenuPreviewLoopClick(Sender: TObject);
     procedure MenuPreviewStartClick(Sender: TObject);
     procedure MenuRefimageClick(Sender: TObject);
@@ -894,7 +892,6 @@ type
     Procedure PlanetariumConnectClick(Sender: TObject);
     Procedure PlanetariumConnect(Sender: TObject);
     Procedure PlanetariumDisconnect(Sender: TObject);
-    Procedure PlanetariumNewTarget(Sender: TObject);
     procedure CameraNewImage(Sender: TObject);
     procedure CameraNewImageAsync(Data: PtrInt);
     procedure CameraNewExposure(Sender: TObject);
@@ -1930,7 +1927,6 @@ begin
 
   f_planetarium:=Tf_planetarium.Create(self);
   f_planetarium.onConnect:=@PlanetariumConnectClick;
-  f_planetarium.onNewTarget:=@PlanetariumNewTarget;
   f_planetarium.Status.Text:='Disconnected';
 
   f_scriptengine:=Tf_scriptengine.Create(self);
@@ -2397,7 +2393,6 @@ begin
    MenuAutoguiderDither.Caption := rsDither;
    MenuPlanetarium.Caption := rsPlanetarium;
    MenuPlanetariumConnect.Caption := rsConnect;
-   MenuPlanetariumNewtarget.Caption := rsNewTarget;
    MenuScript.Caption := rsScript;
    MenuScriptRun.Caption := rsRun;
    MenuScriptStop.Caption := rsStop;
@@ -2768,6 +2763,7 @@ begin
   f_EditTargets.PanelTargetDetail.Width:=config.GetValue('/Sequence/EditTarget/SepPos2',f_EditTargets.PanelTargetDetail.Width);
 
   f_planetariuminfo.planetarium:=planetarium;
+  f_goto.planetarium:=planetarium;
 
   f_script.SetScriptList(config.GetValue('/Script/ScriptName',''));
 
@@ -5176,6 +5172,7 @@ begin
      planetarium.onShowMessage:=@NewMessage;
      astrometry.planetarium:=planetarium;
      f_planetariuminfo.planetarium:=planetarium;
+     f_goto.planetarium:=planetarium;
      f_scriptengine.Planetarium:=planetarium;
      f_sequence.Planetarium:=planetarium;
   end;
@@ -10051,11 +10048,6 @@ begin
   PlanetariumConnectClick(Sender);
 end;
 
-procedure Tf_main.MenuPlanetariumNewtargetClick(Sender: TObject);
-begin
-  PlanetariumNewTarget(Sender);
-end;
-
 procedure Tf_main.MenuPreviewLoopClick(Sender: TObject);
 begin
   f_preview.BtnLoop.Click;
@@ -14628,83 +14620,10 @@ begin
    planetarium.onShowMessage:=@NewMessage;
    astrometry.planetarium:=planetarium;
    f_planetariuminfo.planetarium:=planetarium;
+   f_goto.planetarium:=planetarium;
    f_scriptengine.Planetarium:=planetarium;
    f_sequence.Planetarium:=planetarium;
    StatusBar1.Invalidate;
- end;
-end;
-
-Procedure Tf_main.PlanetariumNewTarget(Sender: TObject);
-var ra,de,ra2000,de2000,err:double;
-    tra,tde,objn: string;
-begin
- if planetarium.Connected and (AllDevicesConnected)and(Mount.Status=devConnected)and(Camera.Status=devConnected) then begin
-    if Mount.Park then begin
-      NewMessage(rsTheTelescope);
-      exit;
-    end;
-    if f_preview.Running then begin
-      StopPreview;
-    end;
-    if  astrometry.Busy then begin
-     NewMessage(rsResolverAlre,1);
-     exit;
-    end;
-    if (f_capture.Running or f_sequence.Running) then begin
-      NewMessage(rsCannotStartW, 1);
-      exit;
-    end;
-    f_planetariuminfo.Ra.Text  := '-';
-    f_planetariuminfo.De.Text  := '-';
-    f_planetariuminfo.PA.Text  := '-';
-    f_planetariuminfo.Obj.Text := '';
-    f_planetariuminfo.onNewTarget := nil;
-    FormPos(f_planetariuminfo,mouse.CursorPos.X,mouse.CursorPos.Y);
-    f_planetariuminfo.ShowModal;
-    if f_planetariuminfo.ModalResult=mrOK then begin
-      CancelAutofocus:=false;
-      tra:= f_planetariuminfo.Ra.Text;
-      tde:=f_planetariuminfo.De.Text;
-      objn:=trim(f_planetariuminfo.Obj.Text);
-      NewMessage(Format(rsMoveToNewPla, [objn]),1);
-       if tra='-' then
-         ra:=NullCoord
-       else
-         ra:=StrToAR(tra);
-       if tde='-' then
-         de:=NullCoord
-       else
-         de:=StrToDE(tde);
-      if (ra<>NullCoord) and (de<>NullCoord) then begin
-        if MessageDlg(Format(rsPleaseConfir, [objn, tra, tde]), mtConfirmation,mbOKCancel, 0)=mrOK then begin
-          if autoguider.State in [GUIDER_GUIDING,GUIDER_BUSY,GUIDER_ALERT,GUIDER_INITIALIZING] then begin
-            NewMessage(rsStopAutoguid,2);
-            autoguider.Guide(false);
-            autoguider.WaitBusy(15);
-          end;
-          if CancelGoto then exit;
-          ra2000:=ra;
-          de2000:=de;
-          J2000ToMount(mount.EquinoxJD,ra,de);
-          if astrometry.PrecisionSlew(ra,de,err) then begin
-            f_capture.Fname.Text:=objn;
-            NewMessage(Format(rsPlanetariumT, [objn]),1);
-            if (autoguider is T_autoguider_internal) and f_internalguider.SpectroFunctions
-               and f_internalguider.cbUseAstrometry.Checked then begin
-                 if MessageDlg('Start guiding to complete the centering on the slit?',mtConfirmation,mbYesNo,0)=mrYes then begin
-                   autoguider.SpectroSetTarget(ra2000,de2000);
-                   autoguider.Guide(true);
-                 end;
-            end;
-          end
-          else NewMessage(rsPlanetariumT2,1);
-        end;
-      end
-      else NewMessage(rsInvalidCoord,1);
-    end;
- end else begin
-   NewMessage(rsBeforeToUseT,1);
-   if not AllDevicesConnected then NewMessage(rsSomeDefinedD,1);
  end;
 end;
 
