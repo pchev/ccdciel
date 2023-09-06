@@ -53,12 +53,14 @@ type
     FCurrentTemperature: double;
     FonSetTemperature,FonSetCooler: TNotifyEvent;
     procedure SetCurrentTemperature(value:double);
+    function GetCurrentCoolerPower: double;
   public
     { public declarations }
     constructor Create(aOwner: TComponent); override;
     destructor  Destroy; override;
     procedure SetLang;
     property CurrentTemperature: double read FCurrentTemperature write SetCurrentTemperature;
+    property CurrentCoolerPower: double read GetCurrentCoolerPower;
     property onSetTemperature: TNotifyEvent read FonSetTemperature write FonSetTemperature;
     property onSetCooler: TNotifyEvent read FonSetCooler write FonSetCooler;
   end;
@@ -101,6 +103,11 @@ procedure Tf_ccdtemp.SetCurrentTemperature(value:double);
 begin
   FCurrentTemperature:=value;
   Current.Caption:=FormatFloat(f1,TempDisplay(TemperatureScale,FCurrentTemperature));
+end;
+
+function Tf_ccdtemp.GetCurrentCoolerPower: double;
+begin
+  result:=StrToFloatDef(power.Caption,0.0);
 end;
 
 procedure Tf_ccdtemp.BtnSetClick(Sender: TObject);

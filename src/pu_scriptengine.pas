@@ -442,6 +442,7 @@ begin
   if varname='TELESCOPERA' then x:=f_mount.CurrentRA
   else if varname='TELESCOPEDE' then x:=f_mount.CurrentDec
   else if varname='CCDTEMP' then x:=TempDisplay(TemperatureScale,Fccdtemp.CurrentTemperature)
+  else if varname='CCDCOOLER_POWER' then x:=Fccdtemp.CurrentCoolerPower
   else if varname='TIMENOW' then x:=now
   else if varname='OBS_LATITUDE' then x:=ObsLatitude
   else if varname='OBS_LONGITUDE' then x:=-ObsLongitude
