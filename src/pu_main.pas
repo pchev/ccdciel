@@ -14943,6 +14943,12 @@ begin
                       end;
                       if buf<>'' then NewMessage(buf,1);
                       end;
+    M_AbortSequence: begin
+                      NewMessage(rsStopCapture,1);
+                      f_capture.Stop;
+                      RunningCapture:=false;
+                      if f_sequence.Running then f_sequence.AbortSequence;
+                     end;
     else
       NewMessage(Format(rsReceiveUnkno, [inttostr(Message.wParam)]),1);
   end;

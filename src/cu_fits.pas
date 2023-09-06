@@ -1551,6 +1551,7 @@ procedure TSaveFits.Execute;
 var rmsg,tmpf,buf: string;
     i: integer;
 begin
+try
   if pack then begin
     tmpf:=slash(TmpDir)+'tmppack.fits';
     mem.SaveToFile(tmpf);
@@ -1566,6 +1567,13 @@ begin
     mem.SaveToFile(filename);
   end;
   mem.Free;
+except
+ on e:Exception do begin
+    buf:='Save FITS: '+e.Message;
+    PostMessage(MsgHandle, LM_CCDCIEL, M_Message, PtrInt(strnew(PChar(buf))));
+    PostMessage(MsgHandle, LM_CCDCIEL, M_AbortSequence, 0);
+ end;
+end;
 end;
 
 procedure TFits.LoadFromFile(fn:string);
@@ -2850,10 +2858,19 @@ begin
 end;
 
 procedure TSaveTiff.Execute;
+var buf: string;
 begin
+try
   Image.SaveToFile(filename, Writer);
   image.Free;
   writer.Free;
+except
+ on e:Exception do begin
+    buf:='Save TIFF: '+e.Message;
+    PostMessage(MsgHandle, LM_CCDCIEL, M_Message, PtrInt(strnew(PChar(buf))));
+    PostMessage(MsgHandle, LM_CCDCIEL, M_AbortSequence, 0);
+ end;
+end;
 end;
 
 procedure TFits.ClearImage;

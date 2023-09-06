@@ -301,6 +301,7 @@ const
   M_AstrometryDone=1100;
   M_AstrometryMsg=1101;
   M_Message=1200;
+  M_AbortSequence=1201;
   StarLostStatus='Star lost';
   MaxCmdArg = 10;
   MaxScriptDir=2;
