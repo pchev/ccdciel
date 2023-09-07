@@ -204,7 +204,7 @@ result:=false;
   result:=V.Get('connected').AsBool;
   except
    on E: Exception do begin
-     if debug_msg then msg('Get Connected error: ' + E.Message,0);
+     msg('Get Connected error: ' + E.Message+', retrying...',0);
      result:=false;
    end;
   end;
