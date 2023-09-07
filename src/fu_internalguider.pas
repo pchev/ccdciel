@@ -1085,7 +1085,7 @@ procedure Tf_internalguider.ButtonCalibrateClick(Sender: TObject);
 var txt: string;
     n: integer;
 begin
- txt:= rsSelectACalib+#10+#10+rsOption1Calib+#10+#10{+rsOption2Calib}+#10+#10+rsOption3Backl+#10+#10+rsOption4Cance;
+ txt:= rsSelectACalib+#10+#10+rsOption1Calib+#10+#10+rsOption3Backl+#10+#10+rsOption4Cance;
  {$ifdef lclgtk2}
  // inverted button with GTK2
     n:=QuestionDlg (rsGuiderCalibr, txt, mtCustom,
