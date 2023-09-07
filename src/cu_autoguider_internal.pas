@@ -480,6 +480,8 @@ begin
     setlength(xy_array,maxstars);
     ditherx:=0;// dither offset
     dithery:=0;
+    drX:=0; // initial drift is 0
+    drY:=0;
     if OffsetFromTarget then
       // set by target, do not clear
       OffsetFromTarget:=false
