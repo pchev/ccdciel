@@ -259,7 +259,7 @@ type
   private
     { private declarations }
     thescale : double;
-    FonStart, FonStop, FonCalibrate, FonCalibrateBacklash, FonLoop, FonRedraw: TNotifyEvent;
+    FonStart, FonStop, FonCalibrate, FonCalibrateBacklash, FonLoop, FonRedraw,FonSpectroGuideChange: TNotifyEvent;
     FonSetTemperature,FonSetCooler, FonCaptureDark, FonLoadDark, FonClearDark,FonDarkInfo: TNotifyEvent;
     FonParameterChange: TNotifyStr;
     cur_minHFD,cur_minSNR,cur_Exposure,cur_vsolar,cur_vpasolar : double;
@@ -378,6 +378,7 @@ type
     property onLoop: TNotifyEvent read FonLoop write FonLoop;
     property onStart: TNotifyEvent read FonStart write FonStart;
     property onStop: TNotifyEvent read FonStop write FonStop;
+    property onSpectroGuideChange: TNotifyEvent read FonSpectroGuideChange write FonSpectroGuideChange;
     property onCalibrate: TNotifyEvent read FonCalibrate write FonCalibrate;
     property onCalibrateBacklash: TNotifyEvent read FonCalibrateBacklash write FonCalibrateBacklash;
     property onRedraw: TNotifyEvent read FonRedraw write FonRedraw;
@@ -872,7 +873,8 @@ begin
     PageControl2.ActivePageIndex:=0
   else
     PageControl2.ActivePageIndex:=1;
-  ForceRedraw(nil);
+  FDrawSettingChange:=true;
+  if Assigned(FonSpectroGuideChange) then FonSpectroGuideChange(self);
 end;
 
 procedure Tf_internalguider.cbSpectroChange(Sender: TObject);

@@ -992,6 +992,7 @@ type
     procedure InternalguiderCalibrate(Sender: TObject);
     procedure InternalguiderCalibrateBacklash(Sender: TObject);
     procedure InternalguiderRedraw(Sender: TObject);
+    procedure InternalguiderSpectroGuideChange(Sender: TObject);
     procedure InternalguiderCaptureDark(Sender: TObject);
     procedure InternalguiderLoadDark(Sender: TObject);
     procedure InternalguiderClearDark(Sender: TObject);
@@ -1869,6 +1870,7 @@ begin
   f_internalguider.onCalibrate:=@InternalguiderCalibrate;
   f_internalguider.onCalibrateBacklash:=@InternalguiderCalibrateBacklash;
   f_internalguider.onRedraw:=@InternalguiderRedraw;
+  f_internalguider.onSpectroGuideChange:=@InternalguiderSpectroGuideChange;
   f_internalguider.onCaptureDark:=@InternalguiderCaptureDark;
   f_internalguider.onLoadDark:=@InternalguiderLoadDark;
   f_internalguider.onClearDark:=@InternalguiderClearDark;
@@ -16627,6 +16629,11 @@ end;
 procedure Tf_main.InternalguiderCalibrateBacklash(Sender: TObject);
 begin
    if autoguider is T_autoguider_internal then T_autoguider_internal(autoguider).InternalguiderCalibrateBacklash;
+end;
+
+procedure Tf_main.InternalguiderSpectroGuideChange(Sender: TObject);
+begin
+  if autoguider is T_autoguider_internal then T_autoguider_internal(autoguider).InternalguiderSpectroGuideChange;
 end;
 
 Procedure Tf_main.InternalguiderCaptureDark(Sender: TObject);

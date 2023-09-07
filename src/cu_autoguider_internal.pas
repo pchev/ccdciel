@@ -97,6 +97,7 @@ type
     procedure InternalguiderRecoverCamera;
     procedure InternalguiderCalibrate;
     procedure InternalguiderCalibrateBacklash;
+    procedure InternalguiderSpectroGuideChange;
     procedure InternalAutoguiding;
     procedure InternalCalibration;
     procedure BacklashCalibration;
@@ -910,7 +911,6 @@ procedure T_autoguider_internal.InternalguiderStart;
 begin
   if InternalguiderRunning then InternalguiderStop;
   Finternalguider.cbSpectro.enabled:=false;
-  Finternalguider.cbGuideLock.enabled:=false;
   SetStatus('Start Guiding',GUIDER_BUSY);
   Application.QueueAsyncCall(@InternalguiderStartAsync,0);
 end;
@@ -1079,6 +1079,14 @@ begin
   InternalguiderLoop;
   StartSettle;
 
+end;
+
+procedure T_autoguider_internal.InternalguiderSpectroGuideChange;
+begin
+  if InternalguiderGuiding then begin
+    InternalguiderInitialize:=true;
+    measure_drift(InternalguiderInitialize,driftX,driftY);
+  end;
 end;
 
 procedure T_autoguider_internal.ParameterChange(txt: string);
@@ -1556,7 +1564,6 @@ begin
   Finternalguider.ButtonGuide.enabled:=true;
   Finternalguider.ButtonDark.enabled:=true;
   Finternalguider.cbSpectro.enabled:=true;
-  Finternalguider.cbGuideLock.enabled:=true;
   Finternalguider.led.Brush.Color:=clGray;
   SetStatus('Stopped',GUIDER_IDLE);
 end;
