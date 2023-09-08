@@ -650,7 +650,7 @@ begin
   try
    p:=T_Plan(sender);
    ClearPlanGrid;
-   Title2.Caption:=rsPlan+': '+p.PlanName;
+   Title2.Caption:=p.objectname+', '+rsPlan+': '+p.PlanName;
    PlanGrid.RowCount:=p.count+1;
    for i:=1 to p.count do begin
      PlanGrid.Cells[0,i]:=T_Plan(sender).Steps[i-1].description_str;
@@ -719,7 +719,7 @@ end;
 procedure Tf_sequence.TargetGridSelection(Sender: TObject; aCol, aRow: Integer);
 var p : T_plan;
 begin
-  if (not Running)and(arow<=Targets.Count) then begin
+  if (arow<=Targets.Count) then begin
     p:=T_Plan(Targets.Targets[arow-1].plan);
     if p<>nil then PlanChange(p);
   end;
@@ -1013,7 +1013,7 @@ begin
 end;
 
 procedure Tf_sequence.StatusTimerTimer(Sender: TObject);
-var buf1,buf2,r:string;
+var r:string;
     i:integer;
     p: T_Plan;
     agAlerttime, trAlerttime, msgtime: integer;
@@ -1029,16 +1029,9 @@ begin
    try
    // show plan status
    if (TargetRow>0) then begin
-    buf1:=Targets.Targets[Targets.CurrentTarget].planname;
-    buf2:=Title2.Caption;
-    i:=pos(blank,buf2);
-    delete(buf2,1,i);
-    buf2:=trim(buf2);
     p:=T_Plan(Targets.Targets[Targets.CurrentTarget].plan);
     if p=nil then exit;
-    if buf1<>buf2 then begin
-      PlanChange(p);
-    end;
+    PlanChange(p);
     PlanRow:=p.CurrentStep+1;
     TargetGrid.TopRow:=TargetRow;
     PlanGrid.TopRow:=PlanRow;
