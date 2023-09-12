@@ -114,7 +114,7 @@ type
     procedure SpectraProfileMethodChange(Sender: TObject);
   private
     { private declarations }
-    FFindStar: boolean;
+    FFindStar, FPlotImax: boolean;
     FStarX,FStarY,FValMax,FValMaxCalibrated,Fbg: double;
     FSpectraX, FSpectraY, FSpectraWidth, FSpectraHeight: integer;
     FFocusStart,FFocusStop: TNotifyEvent;
@@ -227,6 +227,7 @@ begin
  LastFocusMsg:='Autofocus not run';
  FAutofocusDone:=false;
  FFindStar:=false;
+ FPlotImax:=false;
  curhist:=0;
  maxfwhm:=0.0001;
  maximax:=0.0001;
@@ -296,8 +297,12 @@ begin
  if ChkFocus.Down then begin
     PanelFWHM.Visible:=true;
     PanelGraph.Visible:=false;
+    FPlotImax:=true;
+    curhist:=0;
     if Assigned(FFocusStart) then FFocusStart(self);
  end else begin
+   FPlotImax:=false;
+   curhist:=0;
    if Assigned(FFocusStop) then FFocusStop(self);
  end;
 end;
@@ -408,15 +413,19 @@ var dx,d,vhfd,vimax: Double;
 begin
  d:=99999;
  vhfd:=-1;
+ vimax:=0;
  for i:=0 to HistSourceHfd.Count-1 do begin
    dx:=abs(X-HistoryChart.XGraphToImage(HistSourceHfd.Item[i]^.X));
    if dx<d then begin
      d:=dx;
      vhfd:=HistSourceHfd.Item[i]^.Y;
-     vimax:=HistSourceImax.Item[i]^.Y*maximax/maxfwhm;
+     if HistSourceImax.Count>0 then vimax:=HistSourceImax.Item[i]^.Y*maximax/maxfwhm;
    end;
  end;
- if (vhfd>0) and assigned(FonStatus) then FonStatus(rsHFD+':'+formatfloat(f1,vhfd)+' '+rsIntensity+':'+formatfloat(f0,vimax));
+ if (vhfd>0) and assigned(FonStatus) then begin
+   if vimax>0 then FonStatus(rsHFD+':'+formatfloat(f1,vhfd)+' '+rsIntensity+':'+formatfloat(f0,vimax))
+              else FonStatus(rsHFD+':'+formatfloat(f1,vhfd))
+ end;
 end;
 
 procedure Tf_starprofile.PageControlProfileChange(Sender: TObject);
@@ -825,7 +834,7 @@ if curhist>maxhist then
     curhist:=maxhist;
   end;
 histfwhm[curhist]:=Fhfd;
-histimax[curhist]:=FValMaxCalibrated;
+if FPlotImax then histimax[curhist]:=FValMaxCalibrated else histimax[curhist]:=0;
 if histfwhm[curhist] > maxfwhm then maxfwhm:=histfwhm[curhist];
 if histimax[curhist] > maximax then maximax:=histimax[curhist];
 if FValMax>0 then begin
@@ -833,7 +842,7 @@ if FValMax>0 then begin
   HistSourceImax.Clear;
   for i:=0 to curhist do begin
     HistSourceHfd.Add(i,histfwhm[i]);
-    HistSourceImax.Add(i,histimax[i]*maxfwhm/maximax);
+    if FPlotImax then HistSourceImax.Add(i,histimax[i]*maxfwhm/maximax);
   end;
 end;
 HistoryChartHfd.Pointer.Visible:=(curhist<10);
