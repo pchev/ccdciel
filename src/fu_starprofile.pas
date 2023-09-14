@@ -266,7 +266,7 @@ begin
   BtnViewAutofocus.Caption:=rsViewLastAuto;
   BtnSpectraProfile.Caption:=rsSpectralProf;
   ProfileChart.Hint:=rsTheSelectedS;
-  HistoryChart.Hint:=rsHistoryOfThe;
+  HistoryChart.Hint:=StringReplace(rsHistoryOfThe,'FWHM','HFD',[]);
   LabelHFD.Hint:=rsTheHalfFluxD;
   LabelImax.Hint:=rsTheMaximumIn;
   LabelSNR.Hint:=rsTheSignalNoi;
