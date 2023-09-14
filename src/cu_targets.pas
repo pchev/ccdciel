@@ -3063,7 +3063,7 @@ var t: TTarget;
     p: T_Plan;
 begin
  result:=false;
- if FCurrentTarget>=0 then begin
+ if (FCurrentTarget>=0)and(FCurrentTarget<NumTargets) then begin
    t:=Targets[FCurrentTarget];
    if t<>nil then begin
      p:=T_Plan(t.plan);
