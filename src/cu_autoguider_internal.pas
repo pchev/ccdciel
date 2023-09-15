@@ -46,7 +46,7 @@ type
     pulsegainEast,pulsegainWest,pulsegainNorth,pulsegainSouth,Calthecos,Orthogonality,Caltheangle,CaldriftOld, ditherX,ditherY,
     GuideStartTime,LogSNR,LogFlux,mean_hfd,CalNorthDec1,CalNorthDec2,CalEastRa1,CalEastRa2,CurrentHFD,MinimumDrift,
     LastDecSign : double;
-    SameDecSignCount,LastBacklashDuration,north, south, CalibrationPhase2,watchdog : integer;
+    SameDecSignCount,LastBacklashDuration,Dnorth, Dsouth, CalibrationPhase2,watchdog : integer;
     LastBacklash,FirstDecDirectionChange: boolean;
     xy_trend : xy_guiderlist;{fu_internalguider}
     xy_array,xy_array_old : star_position_array;//internal guider for measure drift
@@ -448,7 +448,7 @@ end;
 function  T_autoguider_internal.measure_drift(var initialize:boolean; out drX,drY :double) : integer;// ReferenceX,Y indicates the total drift, drX,drY to drift since previouse call. Arrays old_xy_array,xy_array are for storage star positions
 var
   i,fitsx,fitsy,stepsize,xsize,ysize,star_counter,star_counter2,counter,len,maxSNRstar,ix,iy: integer;
-  hfd1,star_fwhm,vmax,bg,bgdev,xc,yc,snr,flux,fluxratio,min_SNR,min_HFD,maxSNR,maxSNRhfd,margin,y,mhfd,peak : double;
+  hfd1,star_fwhm,vmax,bg,bgdev,xc,yc,snr,flux,fluxratio,min_SNR,min_HFD,maxSNR,{maxSNRhfd,}margin,y,mhfd,peak : double;
   x1,y1,bg1,bgdev1,fwhm1,vmax1,snr1,flux1: double;
   GuideLock: boolean;
   drift_arrayX,drift_arrayY : array of double;
@@ -497,7 +497,7 @@ begin
   min_HFD:=finternalguider.minHFD;//make local to reduce some CPU load
   maxSNR:=0;
   maxSNRstar:=0;
-  maxSNRhfd:=0;
+  //maxSNRhfd:=0;
   if xsize<800 then
     margin:=2*DitherPixel+10
   else if xsize<1200 then
@@ -595,7 +595,7 @@ begin
           // for single star detection
           if (snr>maxSNR)and(xc>margin)and(xc<(xsize-margin))and(yc>margin)and(yc<(ysize-margin)) then begin
             maxSNR:=snr;
-            maxSNRhfd:=hfd1;
+            //maxSNRhfd:=hfd1;
             maxSNRstar:=star_counter;
           end;
 
@@ -1100,7 +1100,7 @@ procedure T_autoguider_internal.InternalAutoguiding;
 var i,maxpulse    : integer;
     RADuration,DECDuration,BacklashDuration,NewPulseDEC: LongInt;
     RADirection,DECDirection,pulsedir: string;
-    mflipcorr,PAsolar,moveRA2,dsettle,DecSign,x: double;
+    mflipcorr,PAsolar,moveRA2,dsettle,DecSign: double;
     meridianflip, largepulse: boolean;
 
           procedure track_solar_object;//neo and comet tracking
@@ -1146,8 +1146,7 @@ begin
     exit;
   end;
 
-  meridianflip:= mount.isGem and ((mount.PierSide=pierWest) <> (pos('E',finternalguider.pier_side)>0));
-
+  meridianflip:= mount.isGem and  ( ((mount.PierSide=pierWest) and (pos('W',finternalguider.pier_side)>0)) or  ((mount.PierSide=pierEast) and (pos('E',finternalguider.pier_side)>0)) ); // Avoid pierUnknown, pierNotImplemented
 
   if ((meridianflip)  and (finternalguider.PulseNorthDirection_2='?')) then
   begin
@@ -1159,13 +1158,13 @@ begin
                         else pulsedir:=finternalguider.PulseNorthDirection_2;
   if ((mount.isGem) and (pulsedir='S')) then //Correct measurement for reverse Dec by meridian flip
   begin //Swap definition north and south
-    north:=1;
-    south:=0
+    Dnorth:=1;
+    Dsouth:=0
   end
   else
   begin //Fork mount or mount software keeps action button north north
-    north:=0;
-    south:=1
+    Dnorth:=0;
+    Dsouth:=1
   end;
 
   xy_trend[0].dither:=FSettling;
@@ -1390,7 +1389,7 @@ begin
       if pulseDEC>finternalguider.shortestPulse then
       begin
         //msg('North: '+inttostr(pulseDEC),3);
-        mount.PulseGuide(north,pulseDEC);  // 0=north, 1=south, 2 East, 3 West
+        mount.PulseGuide(Dnorth,pulseDEC);  // 0=north, 1=south, 2 East, 3 West
         DECDuration:=abs(pulseDEC);
         DECDirection:='N';
       end
@@ -1403,7 +1402,7 @@ begin
       if pulseDEC>finternalguider.shortestPulse then
       begin
         //msg('South: '+inttostr(pulseDEC),3);
-        mount.PulseGuide(south,pulseDEC);  // 0=north, 1=south, 2 East, 3 West
+        mount.PulseGuide(Dsouth,pulseDEC);  // 0=north, 1=south, 2 East, 3 West
         DECDuration:=abs(pulseDEC);
         DECDirection:='S';
       end
@@ -1908,7 +1907,7 @@ begin
         //report/record the uncorrected mount behaviour
         if mount.PierSide=pierWest then pattern:='Mount pulse guide pattern in the East is ' else pattern:='Mount pulse guide pattern in the West is ';
         if CalEastRa2>CalEastRa1 then pattern:=pattern+'E->E' else pattern:=pattern+'E->W';;// In which direction does the mount go after pulse East
-        if ((CalNorthDec2>CalNorthDec1) xor (North<>0)) then
+        if CalNorthDec2>CalNorthDec1 then
         begin
           pattern:=pattern+', N->N';
           finternalguider.PulseNorthDirection_1:='N';
@@ -2147,8 +2146,8 @@ begin
                InternalguiderCalibrationStep:=1;
                BacklashStep:=1;
 
-               north:=0;
-               south:=1
+               Dnorth:=0;
+               Dsouth:=1
 
              end;
           1: begin
@@ -2247,8 +2246,8 @@ end;
 
 procedure  T_autoguider_internal.ShowImgInfo;
 var
-  i,fitsx,fitsy,stepsize,xsize,ysize,star_counter: integer;
-  hfd1,star_fwhm,vmax,bg,bgdev,xc,yc,snr,flux,min_SNR,min_HFD,maxSNR,y,peak : double;
+  fitsx,fitsy,stepsize,xsize,ysize,star_counter: integer;
+  hfd1,star_fwhm,vmax,bg,bgdev,xc,yc,snr,flux,min_SNR,min_HFD,maxSNR,peak : double;
 const
     searchA=28;//square search area
     overlap=6;
