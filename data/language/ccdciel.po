@@ -162,10 +162,6 @@ msgstr ""
 msgid "Dither"
 msgstr ""
 
-#: u_translation:rsnewtarget
-msgid "New target"
-msgstr ""
-
 #: u_translation:rsrun
 msgid "Run"
 msgstr ""
