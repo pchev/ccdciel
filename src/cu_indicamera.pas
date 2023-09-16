@@ -1639,19 +1639,17 @@ begin
      // force even values
      x:=round(x+0.5);
      y:=round(y+0.5);
-     if (CCDframeX.value<>x)or(CCDframeY.value<>y)or(CCDframeWidth.value<>width)or(CCDframeHeight.value<>height) then begin
-       CCDframeX.value:=x;
-       CCDframeY.value:=y;
-       CCDframeWidth.value:=width;
-       CCDframeHeight.value:=height;
-       indiclient.sendNewNumber(CCDframe);
-       stX:=x;
-       stY:=y;
-       stWidth:=width;
-       stHeight:=height;
-       indiclient.WaitBusy(CCDframe);
-       if assigned(FonFrameChange) then FonFrameChange(self);
-     end;
+     CCDframeX.value:=x;
+     CCDframeY.value:=y;
+     CCDframeWidth.value:=width;
+     CCDframeHeight.value:=height;
+     indiclient.sendNewNumber(CCDframe);
+     stX:=x;
+     stY:=y;
+     stWidth:=width;
+     stHeight:=height;
+     indiclient.WaitBusy(CCDframe);
+     if assigned(FonFrameChange) then FonFrameChange(self);
   end;
 end;
 
