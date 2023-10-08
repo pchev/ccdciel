@@ -613,8 +613,8 @@ begin
         RestartTarget:=true;
       end;
       // check global target setting that require a restart
-      if (Ftargets[FCurrentTarget].starttime<>Source.Ftargets[newcurTarget].starttime) or
-         (Ftargets[FCurrentTarget].endtime<>Source.Ftargets[newcurTarget].endtime) or
+      if ((Ftargets[FCurrentTarget].starttime<>Source.Ftargets[newcurTarget].starttime)and((Source.Ftargets[newcurTarget].startmeridian=NullCoord)and(not Source.Ftargets[newcurTarget].startrise))) or
+         ((Ftargets[FCurrentTarget].endtime<>Source.Ftargets[newcurTarget].endtime)and((Source.Ftargets[newcurTarget].endmeridian=NullCoord)and(not Source.Ftargets[newcurTarget].endset))) or
          (Ftargets[FCurrentTarget].startmeridian<>Source.Ftargets[newcurTarget].startmeridian) or
          (Ftargets[FCurrentTarget].endmeridian<>Source.Ftargets[newcurTarget].endmeridian) or
          (Ftargets[FCurrentTarget].startrise<>Source.Ftargets[newcurTarget].startrise) or
