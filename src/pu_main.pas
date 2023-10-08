@@ -8236,8 +8236,16 @@ end;
 
 procedure Tf_main.SetMountTrack(Sender: TObject);
 begin
- // do not test for mount.tracking here
- mount.Track;
+ if (mount<>nil) and (mount.Status=devConnected) and (not GotoInProgress) then begin
+   if mount.Tracking then begin
+     if MessageDlg(rsStopTelescop+'?',mtConfirmation,mbYesNo,0)=mrYes then
+       mount.AbortMotion;
+   end
+   else
+   begin
+     mount.Track;
+   end;
+ end;
 end;
 
 procedure Tf_main.GotoStart(Sender: TObject);
