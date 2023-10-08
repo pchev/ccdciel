@@ -37,6 +37,7 @@ type
   private
     started: boolean;
     TcpClient : TTcpclient;
+    FLastObjname: string;
   protected
     procedure Execute; override;
     procedure ProcessDataSyn; override;
@@ -71,6 +72,7 @@ FTargetHost:='localhost';
 FTargetPort:='3292';
 FTimeout:=200;
 FCmdTimeout:=10/86400;
+FLastObjname:='';
 end;
 
 procedure TPlanetarium_cdc.Connect(cp1: string; cp2:string=''; cp3:string=''; cb1:boolean=False);
@@ -232,7 +234,8 @@ if FRecvData<>'' then begin
     end
     else
        Fpa:=NullCoord;
-    if assigned(FonReceiveData) then FonReceiveData(FRecvData);
+    if assigned(FonReceiveData) and (Fobjname<>FLastObjname) then FonReceiveData(FRecvData);
+    FLastObjname:=Fobjname;
   end;
   p.free;
 end;
