@@ -15311,7 +15311,7 @@ begin
   Saved_Cursor := Screen.Cursor;
   Screen.Cursor := crHourglass; { Show hourglass cursor since analysing will take some time}
 
-  if plot then begin   {draw clean image}
+  if plot and (Annotate or SplitImage) then begin   {draw clean image}
     Annotate:=false;
     if SplitImage then begin
       SplitImage:=false;
