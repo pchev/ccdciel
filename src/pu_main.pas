@@ -9391,7 +9391,7 @@ begin
       {$endif}
       );
    f_option.ASTAPSearchRadius.Value:=config.GetValue('/Astrometry/ASTAPSearchRadius',30);
-   f_option.ASTAPdownsample.Value:=config.GetValue('/Astrometry/ASTAPdownsample',0);{0 is automatic selection but gives an runtime error in old ASTAP versions. Make 0 default after 9/2020}
+   f_option.ASTAPdownsample.Value:=config.GetValue('/Astrometry/ASTAPdownsample',0);{0 is automatic selection}
    f_option.PrecSlewBox.ItemIndex:=config.GetValue('/PrecSlew/Method',0);
    f_option.SlewPrec.Value:=config.GetValue('/PrecSlew/Precision',SlewPrecision);
    f_option.SlewRetry.Value:=config.GetValue('/PrecSlew/Retry',3);
@@ -11220,7 +11220,7 @@ begin
       astrometry.SolvePreviewImage;
     if (not EarlyNextExposure) or Autofocusing then begin
       // Image inspection
-      if ImageInspection then
+      if ((ImageInspection) or (f_preview.image_inspection1.checked)) then
          MeasureImage(true);
       // Next exposure delayed after image display
       // start the exposure now

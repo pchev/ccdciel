@@ -239,7 +239,36 @@ object f_preview: Tf_preview
         ParentColor = False
       end
       object CheckBoxAstrometry: TCheckBox
-        Left = 100
+        Left = 112
+        Height = 20
+        Top = 0
+        Width = 28
+        OnClick = CheckBoxAstrometryClick
+        ParentBidiMode = False
+        TabOrder = 0
+      end
+    end
+    object Panel8: TPanel
+      Left = 0
+      Height = 20
+      Top = 174
+      Width = 191
+      BevelOuter = bvNone
+      ClientHeight = 20
+      ClientWidth = 191
+      TabOrder = 8
+      object label7: TLabel
+        AnchorSideTop.Control = image_inspection1
+        AnchorSideTop.Side = asrCenter
+        Left = 6
+        Height = 18
+        Top = 1
+        Width = 106
+        Caption = 'Image inspection'
+        ParentColor = False
+      end
+      object image_inspection1: TCheckBox
+        Left = 112
         Height = 20
         Top = 0
         Width = 28
@@ -250,19 +279,19 @@ object f_preview: Tf_preview
     end
     object Panel5: TPanel
       Left = 0
-      Height = 25
-      Top = 174
+      Height = 26
+      Top = 194
       Width = 191
       BevelOuter = bvNone
-      ClientHeight = 25
+      ClientHeight = 26
       ClientWidth = 191
       ParentFont = False
       TabOrder = 3
       object BtnPreview: TButton
-        Left = 1
-        Height = 23
+        Left = 2
+        Height = 26
         Hint = 'Start one preview exposure'
-        Top = 2
+        Top = 0
         Width = 96
         Caption = 'Preview'
         OnClick = BtnPreviewClick
@@ -271,10 +300,10 @@ object f_preview: Tf_preview
       end
       object BtnLoop: TButton
         Tag = 1
-        Left = 100
-        Height = 23
+        Left = 101
+        Height = 26
         Hint = 'Loop preview exposures'
-        Top = 2
+        Top = 0
         Width = 90
         Caption = 'Loop'
         OnClick = BtnLoopClick
@@ -284,11 +313,11 @@ object f_preview: Tf_preview
     end
     object Panel4: TPanel
       Left = 0
-      Height = 21
-      Top = 199
+      Height = 28
+      Top = 220
       Width = 191
       BevelOuter = bvNone
-      ClientHeight = 21
+      ClientHeight = 28
       ClientWidth = 191
       ParentFont = False
       TabOrder = 2
@@ -297,19 +326,19 @@ object f_preview: Tf_preview
         AnchorSideLeft.Side = asrBottom
         AnchorSideTop.Control = PanelStack
         AnchorSideTop.Side = asrCenter
-        Left = 164
-        Height = 14
+        Left = 170
+        Height = 16
         Hint = 'Uncalibrated'
-        Top = 3
+        Top = 8
         Width = 14
         BorderSpacing.Around = 4
         Brush.Color = clGray
         Shape = stCircle
       end
       object PanelStack: TPanel
-        Left = 0
+        Left = 6
         Height = 20
-        Top = 0
+        Top = 6
         Width = 160
         BevelOuter = bvNone
         ClientHeight = 20
@@ -320,7 +349,7 @@ object f_preview: Tf_preview
           Left = 100
           Height = 20
           Hint = 'Stack the preview frames to a single image.'#10'A new stack is started when you start a loop or if you uncheck this button.'
-          Top = 0
+          Top = 2
           Width = 28
           ParentFont = False
           ParentBidiMode = False
@@ -331,7 +360,7 @@ object f_preview: Tf_preview
           AnchorSideTop.Side = asrCenter
           Left = 6
           Height = 18
-          Top = 1
+          Top = 3
           Width = 33
           Caption = 'Stack'
           ParentColor = False
@@ -341,7 +370,7 @@ object f_preview: Tf_preview
     object Panel7: TPanel
       Left = 0
       Height = 1
-      Top = 220
+      Top = 248
       Width = 191
       AutoSize = True
       BevelOuter = bvNone

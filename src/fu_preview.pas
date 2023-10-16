@@ -36,17 +36,20 @@ type
     BtnPreview: TButton;
     BtnLoop: TButton;
     CheckBoxAstrometry: TCheckBox;
+    image_inspection1: TCheckBox;
     Fnumber: TComboBox;
     ISObox: TComboBox;
     Label3: TLabel;
     Label4: TLabel;
     Label5: TLabel;
+    label7: TLabel;
     LabelAstrometry: TLabel;
     LabelOffset: TLabel;
     LabelGain: TLabel;
     Panel5: TPanel;
     Panel6: TPanel;
     Panel7: TPanel;
+    Panel8: TPanel;
     PanelStack: TPanel;
     PanelOffset: TPanel;
     PanelFnumber: TPanel;
@@ -138,6 +141,7 @@ begin
   Label3.Caption:=rsFStop;
   BtnPreview.Caption:=rsPreview;
   label4.Caption:=rsAstrometry;
+  label7.caption:=rsImageInspect;
   Label5.Caption:=rsStack;
   BtnLoop.Caption:=rsLoop;
   ExpTime.Hint:=rsExposureTime;
