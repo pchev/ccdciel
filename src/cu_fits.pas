@@ -218,7 +218,7 @@ type
      procedure FindStarPos2(x,y,s: integer; out xc,yc,vmax,bg,sd: double);
      procedure GetHFD3(x,y,s: integer; autoCenter :boolean; out xc,yc,bg,sd,hfd,star_fwhm,valmax,snr,flux: double; strict_saturation: boolean=true);{v2022-06}
      procedure GetHFD2(x,y,s: integer; out xc,yc,bg,sd,hfd,star_fwhm,valmax,snr,flux: double; strict_saturation: boolean=true; allow_saturation: boolean=false);
-     procedure GetStarList(rx,ry,s: integer);
+     procedure GetStarList(rx,ry,s: integer;min_snr: double; strict_saturation : boolean);
      procedure MeasureStarList(s: integer; list: TArrayDouble2);
      procedure SortStarlist;
      procedure ClearStarList;
@@ -314,11 +314,12 @@ type
 
     TGetStarList = class(TThread)
     public
-      working: boolean;
+      working,strict_saturation: boolean;
       num, id: integer;
       fits: TFits;
       StarList: TStarList;
       rx,ry,overlap,s: integer;
+      min_snr: double;
       img_temp: Timabyte;
       procedure Execute; override;
       constructor Create(CreateSuspended: boolean);
@@ -1289,14 +1290,15 @@ begin
      begin
        fitsX:=fx*s;
 
-       fits.GetHFD2(fitsX,fitsY,s+overlap,xc,yc,bg,bgdev,hfd1,star_fwhm,vmax,snr,flux,false);{2018-3-21, calculate HFD}
+       fits.GetHFD2(fitsX,fitsY,s+overlap,xc,yc,bg,bgdev,hfd1,star_fwhm,vmax,snr,flux,strict_saturation);{calculate the HFD}
 
        {check valid hfd }
        if ((hfd1>0)and (Undersampled or (hfd1>0.7)))
           and (hfd1<99)
           and (img_temp[0,round(xc),round(yc)]=0)  {area not surveyed}
-          and (snr>AutofocusMinSNR)  {minimal star detection level, also detect saturation}
+          and (snr>min_snr)  {minimal star detection level, return SNR=0 when star is saturated}
        then
+
        begin
          inc(nhfd);
          if nhfd>=Length(StarList) then
@@ -3651,7 +3653,7 @@ begin
   SetLength(FStarList,0);
 end;
 
-procedure TFits.GetStarList(rx,ry,s: integer);
+procedure TFits.GetStarList(rx,ry,s: integer;min_snr: double;strict_saturation : boolean);
 var
  i,j,n,nhfd: integer;
  overlap: integer;
@@ -3682,6 +3684,8 @@ begin
     thread[i].ry := ry;
     thread[i].overlap := overlap;
     thread[i].s := s;
+    thread[i].strict_saturation:=strict_saturation;
+    thread[i].min_snr:=min_snr;
     thread[i].img_temp := img_temp;
     thread[i].Start;
   end;

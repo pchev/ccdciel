@@ -13801,7 +13801,7 @@ begin
      s:=starwindow; {use configured star window}
      rx:=img_Width-6*s; {search area}
      ry:=img_Height-6*s;
-     fits.GetStarList(rx,ry,s); {search stars in fits image}
+     fits.GetStarList(rx,ry,s,AutofocusMinSNR,false); {search stars in fits image}
      ns:=Length(fits.StarList);
      if ns>0 then begin
        SetLength(hfdlist,ns);
@@ -13825,7 +13825,7 @@ begin
        ry:=img_Height-6*s;
      end;
 
-     fits.GetStarList(rx,ry,s); {search stars in fits image}
+     fits.GetStarList(rx,ry,s,AutofocusMinSNR,false); {search stars in fits image}
      ns:=Length(fits.StarList);
      // store star list
      if ns>0 then begin
@@ -15322,27 +15322,13 @@ begin
     end;
   end;
 
-  // first measurement with a big window to find median star diameter
-  s:=starwindow; {use configured star window}
-  rx:=min(1000,img_Width-6*s); {search area}
-  ry:=min(1000,img_Height-6*s);
-  fits.GetStarList(rx,ry,s); {search stars in fits image}
-  nhfd:=Length(fits.StarList);
-  if nhfd>0 then begin
-    SetLength(hfdlist,nhfd);
-    for i:=0 to nhfd-1 do
-      hfdlist[i]:=fits.StarList[i].hfd;
-    med:=SMedian(hfdlist,nhfd);            {median of starshfd}
-    s:=min(max(14,round(3.0*med)),s); {reasonable window to measure this star}
-  end
-  else
-    s:=20; {no star found, try with small default window}
+  s:=28;// Fixed measuring window since in tilted images the stars not have the same HFD.
 
   // new measurement with adjusted window
   rx:=img_Width-6*s; {search area}
   ry:=img_Height-6*s;
 
-  fits.GetStarList(rx,ry,s); {search stars in fits image}
+  fits.GetStarList(rx,ry,s,10 {min_snr},true {strict_saturation}); {search stars in fits image}
 
 //  Uncomment to help star detection debugging
 //  PrintStarList;
