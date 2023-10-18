@@ -162,12 +162,17 @@ begin
       p.BevelOuter:=bvNone;
       l.Name:='Label_'+IntToStr(i);
       l.Caption:=FSwitch[i].Name;
-      l.Align:=alLeft;
+      l.AnchorSideTop.Control:=s;
+      l.AnchorSideTop.Side:=asrCenter;
       l.Parent:=p;
       s.name:='Switch_'+IntToStr(i);
       s.MinValue:=FSwitch[i].Min;
       s.MaxValue:=FSwitch[i].Max;
       s.Increment:=FSwitch[i].Step;
+      if FSwitch[i].Step>=1 then s.DecimalPlaces:=0
+      else if FSwitch[i].Step>=0.1 then s.DecimalPlaces:=1
+      else s.DecimalPlaces:=2;
+      s.Hint:=FloatToStr(s.MinValue)+ellipsis+FloatToStr(s.MaxValue);
       s.Enabled:=FSwitch[i].CanWrite;
       s.Value:=FSwitch[i].Value;
       s.Width:=80;
