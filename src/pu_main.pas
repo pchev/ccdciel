@@ -2111,6 +2111,7 @@ begin
    camera.Mount:=mount;
    camera.Wheel:=wheel;
    camera.Focuser:=focuser;
+   camera.Weather:=weather;
    camera.Fits:=fits;
    camera.onMsg:=@NewMessage;
    camera.onDeviceMsg:=@DeviceMessage;

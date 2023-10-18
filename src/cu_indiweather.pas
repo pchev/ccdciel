@@ -468,6 +468,7 @@ begin
        x:=WindSpeed;
        result:=result+crlf+'WindSpeed='+FormatFloat(f2,x);
     end;
+    result:=result+crlf;
  end;
  end;
 

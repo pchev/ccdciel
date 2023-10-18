@@ -28,7 +28,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 interface
 
-uses  cu_fits, cu_mount, cu_wheel, cu_focuser, u_global, u_utils,  indiapi, math, u_translation,
+uses  cu_fits, cu_mount, cu_wheel, cu_focuser, cu_weather, u_global, u_utils,  indiapi, math, u_translation,
   LazSysUtils, Classes, Forms, SysUtils, ExtCtrls;
 
 type
@@ -76,6 +76,7 @@ T_camera = class(TComponent)
     FMount: T_mount;
     Fwheel: T_wheel;
     FFocuser: T_focuser;
+    FWeather: T_weather;
     FTimeOut: integer;
     FAutoLoadConfig: boolean;
     FhasVideo: boolean;
@@ -223,6 +224,7 @@ T_camera = class(TComponent)
     property Mount: T_mount read FMount write FMount;
     property Wheel: T_wheel read Fwheel write Fwheel;
     property Focuser: T_focuser read FFocuser write FFocuser;
+    property Weather: T_weather read FWeather write FWeather;
     property ObjectName: string read FObjectName write FObjectName;
     property CameraInterface: TDevInterface read FCameraInterface;
     property Status: TDeviceStatus read FStatus;
@@ -688,10 +690,12 @@ begin
 end;
 
 procedure T_camera.WriteHeaders(f:TFits; stackresult:Boolean=true; UpdateFromCamera:Boolean=true);
-var origin,observer,telname,instrum,objname,siso,CType,roworder: string;
+var origin,observer,telname,instrum,objname,siso,CType,roworder,buf: string;
     focal_length,pixscale1,pixscale2,ccdtemp,st,ra,de,fstop,shutter,multr,multg,multb: double;
     hbitpix,hnaxis,hnaxis1,hnaxis2,hnaxis3,hbin1,hbin2,cgain,focuserpos: integer;
     hfilter,hframe,hinstr,hdateobs,pierside : string;
+    hCloudCover,hDewPoint,hHumidity,hPressure,hRainRate,hSkyBrightness,hSkyQuality,
+    hSkyTemperature,hStarFWHM,hTemperature,hWindDirection,hWindGust,hWindSpeed: double;
     hbzero,hbscale,hdmin,hdmax,hra,hdec,hexp,hpix1,hpix2,hairmass,focusertemp: double;
     haz,hal: double;
     gamma,voffset,coffset,OffsetX,OffsetY: integer;
@@ -699,6 +703,25 @@ var origin,observer,telname,instrum,objname,siso,CType,roworder: string;
     hasfocusertemp,hasfocuserpos: boolean;
     i,j,k,n: integer;
     x: double;
+
+    function ExtractWeather(val,key: string): double;
+    var i: integer;
+    begin
+    try
+      i:=pos(crlf+key+'=',val);
+      if i>0 then begin
+        delete(val,1,i+length(crlf+key+'=')-1);
+        i:=pos(crlf,val);
+        result:=StrToFloatDef(trim(copy(val,1,i-1)),NullCoord);
+      end
+      else begin
+        result:=NullCoord;
+      end;
+    except
+      result:=NullCoord;
+    end;
+    end;
+
 begin
   // get header values from camera (set by INDI driver or libraw)
   if not f.Header.Valueof('BITPIX',hbitpix) then hbitpix:=f.HeaderInfo.bitpix;
@@ -858,6 +881,25 @@ begin
     except
     end;
   end;
+  hCloudCover:=NullCoord; hDewPoint:=NullCoord; hHumidity:=NullCoord; hPressure:=NullCoord; hRainRate:=NullCoord;
+  hSkyBrightness:=NullCoord; hSkyQuality:=NullCoord; hSkyTemperature:=NullCoord; hStarFWHM:=NullCoord;
+  hTemperature:=NullCoord; hWindDirection:=NullCoord; hWindGust:=NullCoord; hWindSpeed:=NullCoord;
+  if (FWeather<>nil)and(FWeather.Status=devConnected) then begin
+    buf:=FWeather.WeatherDetail;
+    hCloudCover:=ExtractWeather(buf,'CloudCover');
+    hDewPoint:=ExtractWeather(buf,'DewPoint');
+    hHumidity:=ExtractWeather(buf,'Humidity');
+    hPressure:=ExtractWeather(buf,'Pressure');
+    hRainRate:=ExtractWeather(buf,'RainRate');
+    hSkyBrightness:=ExtractWeather(buf,'SkyBrightness');
+    hSkyQuality:=ExtractWeather(buf,'SkyQuality');
+    hSkyTemperature:=ExtractWeather(buf,'SkyTemperature');
+    hStarFWHM:=ExtractWeather(buf,'StarFWHM');
+    hTemperature:=ExtractWeather(buf,'Temperature');
+    hWindDirection:=ExtractWeather(buf,'WindDirection');
+    hWindGust:=ExtractWeather(buf,'WindGust');
+    hWindSpeed:=ExtractWeather(buf,'WindSpeed');
+  end;
   // write new header
   i:=f.Header.Indexof('END');
   if i>0 then f.Header.Delete(i);
@@ -986,6 +1028,19 @@ begin
        f.Header.Insert(i,'SCALE',FGuidePixelScale,'image scale arcseconds per pixel');
     end;
   end;
+  if hCloudCover<>NullCoord then f.Header.Insert(i,'AOCCLOUD',hCloudCover,'Cloud coverage in percent');
+  if hTemperature<>NullCoord then f.Header.Insert(i,'AOCAMBT',hTemperature,'Ambient temperature in degrees C');
+  if hDewPoint<>NullCoord then f.Header.Insert(i,'AOCDEW',hDewPoint,'Dew point in degrees C');
+  if hHumidity<>NullCoord then f.Header.Insert(i,'AOCHUM',hHumidity,'Humidity in percent');
+  if hPressure<>NullCoord then f.Header.Insert(i,'AOCBAROM',hPressure,'Barometric pressure in hPa');
+  if hRainRate<>NullCoord then f.Header.Insert(i,'AOCRAIN',hRainRate,'Rain rate in mm/hour');
+  if hWindDirection<>NullCoord then f.Header.Insert(i,'AOCWINDD',hWindDirection,'Wind direction in degrees (0..360)');
+  if hWindGust<>NullCoord then f.Header.Insert(i,'AOCWINDG',hWindGust,'Wind gust in m/s');
+  if hWindSpeed<>NullCoord then f.Header.Insert(i,'AOCWIND',hWindSpeed,'Wind speed in m/s');
+  if hSkyBrightness<>NullCoord then f.Header.Insert(i,'AOCSKYBR',hSkyBrightness,'Sky brightness in Lux');
+  if hSkyQuality<>NullCoord then f.Header.Insert(i,'AOCSKYQU',hSkyQuality,'Sky quality (magnitudes per square arcsecond)');
+  if hSkyTemperature<>NullCoord then f.Header.Insert(i,'AOCSKYT',hSkyTemperature,'Sky temperature in degrees C');
+  if hStarFWHM<>NullCoord then f.Header.Insert(i,'AOCFWHM',hStarFWHM,'Seeing FWHM in arc seconds');
   // custom headers
   for j:=1 to CustomHeaderNum do begin
     // try integer value

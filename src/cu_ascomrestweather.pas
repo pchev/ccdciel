@@ -673,6 +673,7 @@ begin
         x:=FWindSpeed;
         result:=result+crlf+'WindSpeed='+FormatFloat(f2,x);
      end;
+     result:=result+crlf;
    end;
    except
     on E: Exception do begin
