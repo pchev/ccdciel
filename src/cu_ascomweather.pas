@@ -228,97 +228,136 @@ begin
    end
    else begin
      // ObservingConditions interface
-     if FhasCloudCover and UseCloudCover then begin
-        x:=CloudCover;
-        ok:=(x>=MinCloudCover)and(x<=MaxCloudCover);
-        result:=result and ok;
-        if not ok then FWeatherMessage:=FWeatherMessage+' '+'CloudCover='+FormatFloat(f2,x);
-        nullcheck:=true;
-     end;
-     if FhasDewPoint and UseDewPoint then begin
-        x:=DewPoint;
-        ok:=(x>=MinDewPoint)and(x<=MaxDewPoint);
-        result:=result and ok;
-        if not ok then FWeatherMessage:=FWeatherMessage+' '+'DewPoint='+FormatFloat(f2,x);
-        nullcheck:=true;
-     end;
-     if FhasHumidity and UseHumidity then begin
-        x:=Humidity;
-        ok:=(x>=MinHumidity)and(x<=MaxHumidity);
-        result:=result and ok;
-        if not ok then FWeatherMessage:=FWeatherMessage+' '+'Humidity='+FormatFloat(f2,x);
-        nullcheck:=true;
-     end;
-     if FhasPressure and UsePressure then begin
-        x:=Pressure;
-        ok:=(x>=MinPressure)and(x<=MaxPressure);
-        result:=result and ok;
-        if not ok then FWeatherMessage:=FWeatherMessage+' '+'Pressure='+FormatFloat(f2,x);
-        nullcheck:=true;
-     end;
-     if FhasRainRate and UseRainRate then begin
-        x:=RainRate;
-        ok:=(x>=MinRainRate)and(x<=MaxRainRate);
-        result:=result and ok;
-        if not ok then FWeatherMessage:=FWeatherMessage+' '+'RainRate='+FormatFloat(f2,x);
-        nullcheck:=true;
-     end;
-     if FhasSkyBrightness and UseSkyBrightness then begin
-        x:=SkyBrightness;
-        ok:=(x>=MinSkyBrightness)and(x<=MaxSkyBrightness);
-        result:=result and ok;
-        if not ok then FWeatherMessage:=FWeatherMessage+' '+'SkyBrightness='+FormatFloat(f4,x);
-        nullcheck:=true;
-     end;
-     if FhasSkyQuality and UseSkyQuality then begin
-        x:=SkyQuality;
-        ok:=(x>=MinSkyQuality)and(x<=MaxSkyQuality);
-        result:=result and ok;
-        if not ok then FWeatherMessage:=FWeatherMessage+' '+'SkyQuality='+FormatFloat(f2,x);
-        nullcheck:=true;
-     end;
-     if FhasSkyTemperature and UseSkyTemperature then begin
-        x:=SkyTemperature;
-        ok:=(x>=MinSkyTemperature)and(x<=MaxSkyTemperature);
-        result:=result and ok;
-        if not ok then FWeatherMessage:=FWeatherMessage+' '+'SkyTemperature='+FormatFloat(f2,x);
-        nullcheck:=true;
-     end;
-     if FhasStarFWHM and UseStarFWHM then begin
-        x:=StarFWHM;
-        ok:=(x>=MinStarFWHM)and(x<=MaxStarFWHM);
-        result:=result and ok;
-        if not ok then FWeatherMessage:=FWeatherMessage+' '+'StarFWHM='+FormatFloat(f2,x);
-        nullcheck:=true;
-     end;
-     if FhasTemperature and UseTemperature then begin
-        x:=Temperature;
-        ok:=(x>=MinTemperature)and(x<=MaxTemperature);
-        result:=result and ok;
-        if not ok then FWeatherMessage:=FWeatherMessage+' '+'Temperature='+FormatFloat(f2,x);
-        nullcheck:=true;
-     end;
-     if FhasWindDirection and UseWindDirection then begin
-        x:=WindDirection;
-        ok:=(x>=MinWindDirection)and(x<=MaxWindDirection);
-        result:=result and ok;
-        if not ok then FWeatherMessage:=FWeatherMessage+' '+'WindDirection='+FormatFloat(f2,x);
-        nullcheck:=true;
-     end;
-     if FhasWindGust and UseWindGust then begin
-        x:=WindGust;
-        ok:=(x>=MinWindGust)and(x<=MaxWindGust);
-        result:=result and ok;
-        if not ok then FWeatherMessage:=FWeatherMessage+' '+'WindGust='+FormatFloat(f2,x);
-        nullcheck:=true;
-     end;
-     if FhasWindSpeed and UseWindSpeed then begin
-        x:=WindSpeed;
-        ok:=(x>=MinWindSpeed)and(x<=MaxWindSpeed);
-        result:=result and ok;
-        if not ok then FWeatherMessage:=FWeatherMessage+' '+'WindSpeed='+FormatFloat(f2,x);
-        nullcheck:=true;
-     end;
+       if FhasCloudCover then begin
+          x:=CloudCover;
+          FCloudCover:=x;
+          if UseCloudCover then begin
+            ok:=(x>=MinCloudCover)and(x<=MaxCloudCover);
+            result:=result and ok;
+            if not ok then FWeatherMessage:=FWeatherMessage+' '+'CloudCover='+FormatFloat(f2,x);
+            nullcheck:=true;
+          end;
+       end;
+       if FhasDewPoint then begin
+          x:=DewPoint;
+          FDewPoint:=x;
+          if UseDewPoint then begin
+            ok:=(x>=MinDewPoint)and(x<=MaxDewPoint);
+            result:=result and ok;
+            if not ok then FWeatherMessage:=FWeatherMessage+' '+'DewPoint='+FormatFloat(f2,x);
+            nullcheck:=true;
+          end;
+         end;
+       if FhasHumidity then begin
+          x:=Humidity;
+          FHumidity:=x;
+          if UseHumidity then begin
+            ok:=(x>=MinHumidity)and(x<=MaxHumidity);
+            result:=result and ok;
+            if not ok then FWeatherMessage:=FWeatherMessage+' '+'Humidity='+FormatFloat(f2,x);
+            nullcheck:=true;
+          end;
+       end;
+       if FhasPressure then begin
+          x:=Pressure;
+          FPressure:=x;
+          if UsePressure then begin
+            ok:=(x>=MinPressure)and(x<=MaxPressure);
+            result:=result and ok;
+            if not ok then FWeatherMessage:=FWeatherMessage+' '+'Pressure='+FormatFloat(f2,x);
+            nullcheck:=true;
+          end;
+       end;
+       if FhasRainRate then begin
+          x:=RainRate;
+          FRainRate:=x;
+          if UseRainRate then begin
+            ok:=(x>=MinRainRate)and(x<=MaxRainRate);
+            result:=result and ok;
+            if not ok then FWeatherMessage:=FWeatherMessage+' '+'RainRate='+FormatFloat(f2,x);
+            nullcheck:=true;
+          end;
+       end;
+       if FhasSkyBrightness then begin
+          x:=SkyBrightness;
+          FSkyBrightness:=x;
+          if UseSkyBrightness then begin
+            ok:=(x>=MinSkyBrightness)and(x<=MaxSkyBrightness);
+            result:=result and ok;
+            if not ok then FWeatherMessage:=FWeatherMessage+' '+'SkyBrightness='+FormatFloat(f4,x);
+            nullcheck:=true;
+          end;
+       end;
+       if FhasSkyQuality then begin
+          x:=SkyQuality;
+          FSkyQuality:=x;
+          if UseSkyQuality then begin
+            ok:=(x>=MinSkyQuality)and(x<=MaxSkyQuality);
+            result:=result and ok;
+            if not ok then FWeatherMessage:=FWeatherMessage+' '+'SkyQuality='+FormatFloat(f2,x);
+            nullcheck:=true;
+          end;
+         end;
+       if FhasSkyTemperature then begin
+          x:=SkyTemperature;
+          FSkyTemperature:=x;
+          if UseSkyTemperature then begin
+            ok:=(x>=MinSkyTemperature)and(x<=MaxSkyTemperature);
+            result:=result and ok;
+            if not ok then FWeatherMessage:=FWeatherMessage+' '+'SkyTemperature='+FormatFloat(f2,x);
+            nullcheck:=true;
+          end;
+       end;
+       if FhasStarFWHM then begin
+          x:=StarFWHM;
+          FStarFWHM:=x;
+          if UseStarFWHM then begin
+            ok:=(x>=MinStarFWHM)and(x<=MaxStarFWHM);
+            result:=result and ok;
+            if not ok then FWeatherMessage:=FWeatherMessage+' '+'StarFWHM='+FormatFloat(f2,x);
+            nullcheck:=true;
+          end;
+       end;
+       if FhasTemperature then begin
+          x:=Temperature;
+          FTemperature:=x;
+          if UseTemperature then begin
+            ok:=(x>=MinTemperature)and(x<=MaxTemperature);
+            result:=result and ok;
+            if not ok then FWeatherMessage:=FWeatherMessage+' '+'Temperature='+FormatFloat(f2,x);
+            nullcheck:=true;
+          end;
+       end;
+       if FhasWindDirection then begin
+          x:=WindDirection;
+          FWindDirection:=x;
+          if UseWindDirection then begin
+            ok:=(x>=MinWindDirection)and(x<=MaxWindDirection);
+            result:=result and ok;
+            if not ok then FWeatherMessage:=FWeatherMessage+' '+'WindDirection='+FormatFloat(f2,x);
+            nullcheck:=true;
+          end;
+       end;
+       if FhasWindGust then begin
+          x:=WindGust;
+          FWindGust:=x;
+          if UseWindGust then begin
+            ok:=(x>=MinWindGust)and(x<=MaxWindGust);
+            result:=result and ok;
+            if not ok then FWeatherMessage:=FWeatherMessage+' '+'WindGust='+FormatFloat(f2,x);
+            nullcheck:=true;
+          end;
+       end;
+       if FhasWindSpeed then begin
+          x:=WindSpeed;
+          FWindSpeed:=x;
+          if UseWindSpeed then begin
+            ok:=(x>=MinWindSpeed)and(x<=MaxWindSpeed);
+            result:=result and ok;
+            if not ok then FWeatherMessage:=FWeatherMessage+' '+'WindSpeed='+FormatFloat(f2,x);
+            nullcheck:=true;
+          end;
+       end;
    end;
    result:=result and nullcheck;
    except
@@ -621,55 +660,55 @@ begin
    else begin
      // ObservingConditions interface
      if FhasCloudCover then begin
-        x:=CloudCover;
+        x:=FCloudCover;
         result:=result+crlf+'CloudCover='+FormatFloat(f2,x);
      end;
      if FhasDewPoint then begin
-        x:=DewPoint;
+        x:=FDewPoint;
         result:=result+crlf+'DewPoint='+FormatFloat(f2,x);
      end;
      if FhasHumidity then begin
-        x:=Humidity;
+        x:=FHumidity;
         result:=result+crlf+'Humidity='+FormatFloat(f2,x);
      end;
      if FhasPressure then begin
-        x:=Pressure;
+        x:=FPressure;
         result:=result+crlf+'Pressure='+FormatFloat(f2,x);
      end;
      if FhasRainRate then begin
-        x:=RainRate;
+        x:=FRainRate;
         result:=result+crlf+'RainRate='+FormatFloat(f2,x);
      end;
      if FhasSkyBrightness then begin
-        x:=SkyBrightness;
+        x:=FSkyBrightness;
         result:=result+crlf+'SkyBrightness='+FormatFloat(f4,x);
      end;
      if FhasSkyQuality then begin
-        x:=SkyQuality;
+        x:=FSkyQuality;
         result:=result+crlf+'SkyQuality='+FormatFloat(f2,x);
      end;
      if FhasSkyTemperature then begin
-        x:=SkyTemperature;
+        x:=FSkyTemperature;
         result:=result+crlf+'SkyTemperature='+FormatFloat(f2,x);
      end;
      if FhasStarFWHM then begin
-        x:=StarFWHM;
+        x:=FStarFWHM;
         result:=result+crlf+'StarFWHM='+FormatFloat(f2,x);
      end;
      if FhasTemperature then begin
-        x:=Temperature;
+        x:=FTemperature;
         result:=result+crlf+'Temperature='+FormatFloat(f2,x);
      end;
      if FhasWindDirection then begin
-        x:=WindDirection;
+        x:=FWindDirection;
         result:=result+crlf+'WindDirection='+FormatFloat(f2,x);
      end;
      if FhasWindGust then begin
-        x:=WindGust;
+        x:=FWindGust;
         result:=result+crlf+'WindGust='+FormatFloat(f2,x);
      end;
      if FhasWindSpeed then begin
-        x:=WindSpeed;
+        x:=FWindSpeed;
         result:=result+crlf+'WindSpeed='+FormatFloat(f2,x);
      end;
    end;

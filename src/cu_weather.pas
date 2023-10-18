@@ -39,6 +39,8 @@ T_weather = class(TComponent)
     FTimeOut: integer;
     Fdevice: string;
     FAutoLoadConfig: boolean;
+    FCloudCover,FDewPoint,FHumidity,FPressure,FRainRate,FSkyBrightness,FSkyQuality,
+    FSkyTemperature,FStarFWHM,FTemperature,FWindDirection,FWindGust,FWindSpeed: double;
     FhasCloudCover,FhasDewPoint,FhasHumidity,FhasPressure,FhasRainRate,FhasSkyBrightness,
     FhasSkyQuality,FhasSkyTemperature,FhasStarFWHM,FhasTemperature,FhasWindDirection,
     FhasWindGust,FhasWindSpeed,FhasStatus: boolean;
