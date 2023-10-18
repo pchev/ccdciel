@@ -326,7 +326,7 @@ begin
        j:=ISwitchVectorProperty(SwitchPropList[NumSwitchProp]).nsp;
        SetLength(FSwitch,FNumSwitch+j);
        for i:=0 to j-1 do begin
-         FSwitch[FNumSwitch+i].Name:=ISwitchVectorProperty(SwitchPropList[NumSwitchProp]).group+','+ISwitchVectorProperty(SwitchPropList[NumSwitchProp]).lbl+','+ISwitchVectorProperty(SwitchPropList[NumSwitchProp]).sp[i].lbl;
+         FSwitch[FNumSwitch+i].Name:=ISwitchVectorProperty(SwitchPropList[NumSwitchProp]).group+'; '+ISwitchVectorProperty(SwitchPropList[NumSwitchProp]).lbl+'; '+ISwitchVectorProperty(SwitchPropList[NumSwitchProp]).sp[i].lbl;
          FSwitch[FNumSwitch+i].IndiType:=INDI_SWITCH;
          FSwitch[FNumSwitch+i].IndiProp:=NumSwitchProp;
          FSwitch[FNumSwitch+i].IndiIndex:=i;
@@ -350,7 +350,7 @@ begin
        j:=INumberVectorProperty(SwitchPropList[NumSwitchProp]).nnp;
        SetLength(FSwitch,FNumSwitch+j);
        for i:=0 to j-1 do begin
-         FSwitch[FNumSwitch+i].Name:=INumberVectorProperty(SwitchPropList[NumSwitchProp]).group+','+INumberVectorProperty(SwitchPropList[NumSwitchProp]).lbl+','+INumberVectorProperty(SwitchPropList[NumSwitchProp]).np[i].lbl;
+         FSwitch[FNumSwitch+i].Name:=INumberVectorProperty(SwitchPropList[NumSwitchProp]).group+'; '+INumberVectorProperty(SwitchPropList[NumSwitchProp]).lbl+'; '+INumberVectorProperty(SwitchPropList[NumSwitchProp]).np[i].lbl;
          FSwitch[FNumSwitch+i].IndiType:=INDI_NUMBER;
          FSwitch[FNumSwitch+i].IndiProp:=NumSwitchProp;
          FSwitch[FNumSwitch+i].IndiIndex:=i;
