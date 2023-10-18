@@ -31,6 +31,8 @@ type
 
 TSwitchRec = record
                Name: shortstring;
+               IndiType: INDI_TYPE;
+               IndiProp, IndiIndex: integer;
                CanWrite: boolean;
                MultiState: boolean;
                Checked: boolean;

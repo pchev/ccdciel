@@ -28,6 +28,8 @@ interface
 uses cu_switch, indibaseclient, indibasedevice, indiapi, indicom, u_translation,
      u_global, ExtCtrls, Forms, Classes, SysUtils;
 
+const MaxSwitchProp = 100;
+
 type
 
 T_indiswitch = class(T_switch)
@@ -39,11 +41,12 @@ T_indiswitch = class(T_switch)
    SwitchDevice: Basedevice;
    connectprop: ISwitchVectorProperty;
    connecton,connectoff: ISwitch;
-   Switches: ISwitchVectorProperty;
    configprop: ISwitchVectorProperty;
    configload,configsave: ISwitch;
    Fready,Fconnected,FConnectDevice: boolean;
    Findiserver, Findiserverport, Findidevice: string;
+   SwitchPropList: array[0..MaxSwitchProp] of TObject;
+   NumSwitchProp: integer;
    procedure CreateIndiClient;
    procedure InitTimerTimer(Sender: TObject);
    procedure ConnectTimerTimer(Sender: TObject);
@@ -129,9 +132,11 @@ begin
 end;
 
 procedure T_indiswitch.ClearStatus;
+var i: integer;
 begin
     SwitchDevice:=nil;
-    Switches:=nil;
+    NumSwitchProp:=0;
+    for i:=0 to MaxSwitchProp do SwitchPropList[i]:=nil;
     connectprop:=nil;
     configprop:=nil;
     Fready:=false;
@@ -146,7 +151,7 @@ end;
 procedure T_indiswitch.CheckStatus;
 begin
     if Fconnected and
-       (Switches<>nil)
+       (NumSwitchProp>0)
     then begin
       ReadyTimer.Enabled := false;
       ReadyTimer.Enabled := true;
@@ -196,8 +201,8 @@ begin
     end
     else if (configprop=nil) then
        msg('Switch '+Findidevice+' Missing property CONFIG_PROCESS',0)
-    else if (Switches=nil) then
-       msg('Switch '+Findidevice+' Missing property POWER_CONTROL',0);
+    else if (NumSwitchProp=0) then
+       msg('Switch '+Findidevice+' No switch found',0);
     Disconnect;
   end;
 end;
@@ -272,9 +277,11 @@ procedure T_indiswitch.NewProperty(indiProp: IndiProperty);
 var propname: string;
     proptype: INDI_TYPE;
     TxtProp: ITextVectorProperty;
+    SwProp: ISwitchVectorProperty;
+    NumProp: INumberVectorProperty;
     Txt: IText;
     buf: string;
-    i: integer;
+    i,j: integer;
 begin
   propname:=indiProp.getName;
   proptype:=indiProp.getType;
@@ -304,25 +311,72 @@ begin
      configsave:=IUFindSwitch(configprop,'CONFIG_SAVE');
      if (configload=nil)or(configsave=nil) then configprop:=nil;
   end
-  else if (proptype=INDI_SWITCH)and(Switches=nil)and(propname='POWER_CONTROL') then begin
-     Switches:=indiProp.getSwitch;
-     FNumSwitch:=Switches.nsp;
-     SetLength(FSwitch,FNumSwitch);
-     for i:=0 to FNumSwitch-1 do begin
-       FSwitch[i].Name:=Switches.sp[i].lbl;
-       FSwitch[i].CanWrite:=Switches.p<>IP_RO;
-       FSwitch[i].MultiState:=false;
-       FSwitch[i].Min:=0;
-       FSwitch[i].Max:=0;
-       FSwitch[i].Step:=0;
-       FSwitch[i].Value:=0;
+  else if (propname='DEBUG')or(propname='SIMULATION')or(propname='POLLING_PERIOD')or(propname='CONNECTION_MODE')or(propname='DEVICE_PORT')or
+       (propname='DEVICE_BAUD_RATE')or(propname='DEVICE_AUTO_SEARCH')or(propname='DEVICE_PORT_SCAN')or(propname='FIRMWARE_INFO')
+  then begin
+      // ignore this properties
+      // everything else is considered as a switch
+  end
+  else if (proptype=INDI_SWITCH) and (NumSwitchProp<MaxSwitchProp)  then begin
+     SwProp:=indiProp.getSwitch;
+     if (SwProp.r=ISR_NOFMANY) and ((SwProp.p=IP_RO)or(SwProp.p=IP_RW))
+     then begin
+       inc(NumSwitchProp);
+       SwitchPropList[NumSwitchProp]:=SwProp;
+       j:=ISwitchVectorProperty(SwitchPropList[NumSwitchProp]).nsp;
+       SetLength(FSwitch,FNumSwitch+j);
+       for i:=0 to j-1 do begin
+         FSwitch[FNumSwitch+i].Name:=ISwitchVectorProperty(SwitchPropList[NumSwitchProp]).group+','+ISwitchVectorProperty(SwitchPropList[NumSwitchProp]).lbl+','+ISwitchVectorProperty(SwitchPropList[NumSwitchProp]).sp[i].lbl;
+         FSwitch[FNumSwitch+i].IndiType:=INDI_SWITCH;
+         FSwitch[FNumSwitch+i].IndiProp:=NumSwitchProp;
+         FSwitch[FNumSwitch+i].IndiIndex:=i;
+         FSwitch[FNumSwitch+i].CanWrite:=ISwitchVectorProperty(SwitchPropList[NumSwitchProp]).p<>IP_RO;
+         FSwitch[FNumSwitch+i].MultiState:=false;
+         FSwitch[FNumSwitch+i].Min:=0;
+         FSwitch[FNumSwitch+i].Max:=0;
+         FSwitch[FNumSwitch+i].Step:=0;
+         FSwitch[FNumSwitch+i].Value:=0;
+         FSwitch[FNumSwitch+i].Checked:=ISwitchVectorProperty(SwitchPropList[NumSwitchProp]).sp[i].s=ISS_ON;
+       end;
+       FNumSwitch:=FNumSwitch+j;
+     end;
+  end
+  else if (proptype=INDI_NUMBER) and (NumSwitchProp<MaxSwitchProp) then begin
+     NumProp:=indiProp.getNumber;
+     if ((NumProp.p=IP_RO)or(NumProp.p=IP_RW))
+     then begin
+       inc(NumSwitchProp);
+       SwitchPropList[NumSwitchProp]:=NumProp;
+       j:=INumberVectorProperty(SwitchPropList[NumSwitchProp]).nnp;
+       SetLength(FSwitch,FNumSwitch+j);
+       for i:=0 to j-1 do begin
+         FSwitch[FNumSwitch+i].Name:=INumberVectorProperty(SwitchPropList[NumSwitchProp]).group+','+INumberVectorProperty(SwitchPropList[NumSwitchProp]).lbl+','+INumberVectorProperty(SwitchPropList[NumSwitchProp]).np[i].lbl;
+         FSwitch[FNumSwitch+i].IndiType:=INDI_NUMBER;
+         FSwitch[FNumSwitch+i].IndiProp:=NumSwitchProp;
+         FSwitch[FNumSwitch+i].IndiIndex:=i;
+         FSwitch[FNumSwitch+i].CanWrite:=INumberVectorProperty(SwitchPropList[NumSwitchProp]).p<>IP_RO;
+         FSwitch[FNumSwitch+i].MultiState:=true;
+         FSwitch[FNumSwitch+i].Min:=INumberVectorProperty(SwitchPropList[NumSwitchProp]).np[i].min;
+         FSwitch[FNumSwitch+i].Max:=INumberVectorProperty(SwitchPropList[NumSwitchProp]).np[i].max;
+         FSwitch[FNumSwitch+i].Step:=INumberVectorProperty(SwitchPropList[NumSwitchProp]).np[i].step;
+         FSwitch[FNumSwitch+i].Value:=INumberVectorProperty(SwitchPropList[NumSwitchProp]).np[i].Value;
+         FSwitch[FNumSwitch+i].Checked:=FSwitch[FNumSwitch+i].Value<>0;
+       end;
+       FNumSwitch:=FNumSwitch+j;
      end;
   end;
+
   CheckStatus;
 end;
 
 procedure T_indiswitch.NewNumber(nvp: INumberVectorProperty);
+var i: integer;
 begin
+  for i:=1 to NumSwitchProp do begin
+    if nvp=INumberVectorProperty(SwitchPropList[i]) then begin
+      if Assigned(FonSwitchChange) then FonSwitchChange(self);
+    end;
+  end;
 end;
 
 procedure T_indiswitch.NewText(tvp: ITextVectorProperty);
@@ -332,6 +386,7 @@ end;
 
 procedure T_indiswitch.NewSwitch(svp: ISwitchVectorProperty);
 var sw: ISwitch;
+    i: integer;
 begin
   if (svp.name='CONNECTION') then begin
     sw:=IUFindOnSwitch(svp);
@@ -339,8 +394,12 @@ begin
       Disconnect;
     end;
   end
-  else if svp=Switches then begin
-    if Assigned(FonSwitchChange) then FonSwitchChange(self);
+  else begin
+    for i:=1 to NumSwitchProp do begin
+      if svp=ISwitchVectorProperty(SwitchPropList[i]) then begin
+        if Assigned(FonSwitchChange) then FonSwitchChange(self);
+      end;
+    end;
   end;
 end;
 
@@ -352,30 +411,69 @@ function  T_indiswitch.GetSwitch:TSwitchList;
 var i: integer;
 begin
  SetLength(result,FNumSwitch);
- if (Switches=nil)or(FNumSwitch=0) then exit;
+ if (NumSwitchProp=0)or(FNumSwitch=0) then exit;
  for i:=0 to FNumSwitch-1 do begin
    result[i].Name       := FSwitch[i].Name;
+   result[i].IndiType   := FSwitch[i].IndiType;
+   result[i].IndiProp   := FSwitch[i].IndiProp;
+   result[i].IndiIndex  := FSwitch[i].IndiIndex;
    result[i].CanWrite   := FSwitch[i].CanWrite;
    result[i].MultiState := FSwitch[i].MultiState;
    result[i].Min        := FSwitch[i].Min;
    result[i].Max        := FSwitch[i].Max;
    result[i].Step       := FSwitch[i].Step;
-   result[i].Value      := FSwitch[i].Value;
-   result[i].Checked    :=(Switches.sp[i].s=ISS_ON);
+   case FSwitch[i].IndiType of
+     INDI_SWITCH : begin
+       result[i].Value      := FSwitch[i].Value;
+       result[i].Checked    :=(ISwitchVectorProperty(SwitchPropList[FSwitch[i].IndiProp]).sp[FSwitch[i].IndiIndex].s=ISS_ON);
+     end;
+     INDI_NUMBER : begin
+       result[i].Value      := INumberVectorProperty(SwitchPropList[FSwitch[i].IndiProp]).np[FSwitch[i].IndiIndex].Value;
+       result[i].Checked    := result[i].Value<>0;
+     end;
+   end;
  end;
 end;
 
 procedure T_indiswitch.SetSwitch(value: TSwitchList);
-var i: integer;
+var i,j: integer;
+    modified: boolean;
+    t: INDI_TYPE;
 begin
- if (Switches=nil)or(FNumSwitch=0) then exit;
+ if (NumSwitchProp=0)or(FNumSwitch=0) then exit;
+ j:=1;
+ modified:=false;
+ t:=INDI_SWITCH;
  for i:=0 to FNumSwitch-1 do begin
-   if value[i].Checked then
-     Switches.sp[i].s:=ISS_ON
-   else
-     Switches.sp[i].s:=ISS_OFF;
+   if FSwitch[i].IndiProp<>j then begin
+     if modified then
+       case t of
+         INDI_SWITCH: indiclient.sendNewSwitch(ISwitchVectorProperty(SwitchPropList[j]));
+         INDI_NUMBER: indiclient.sendNewNumber(INumberVectorProperty(SwitchPropList[j]));
+       end;
+     modified:=false;
+     j:=FSwitch[i].IndiProp;
+   end;
+   t:=FSwitch[i].IndiType;
+   case t of
+     INDI_SWITCH: begin
+         modified:=modified or ( value[i].Checked <> (ISwitchVectorProperty(SwitchPropList[FSwitch[i].IndiProp]).sp[FSwitch[i].IndiIndex].s=ISS_ON) );
+         if value[i].Checked then
+           ISwitchVectorProperty(SwitchPropList[FSwitch[i].IndiProp]).sp[FSwitch[i].IndiIndex].s:=ISS_ON
+         else
+           ISwitchVectorProperty(SwitchPropList[FSwitch[i].IndiProp]).sp[FSwitch[i].IndiIndex].s:=ISS_OFF;
+     end;
+     INDI_NUMBER: begin
+         modified:=modified or ( value[i].Value <> (INumberVectorProperty(SwitchPropList[FSwitch[i].IndiProp]).np[FSwitch[i].IndiIndex].Value) );
+         INumberVectorProperty(SwitchPropList[FSwitch[i].IndiProp]).np[FSwitch[i].IndiIndex].Value := value[i].Value;
+     end;
+   end;
  end;
- indiclient.sendNewSwitch(Switches);
+ if modified then
+   case t of
+     INDI_SWITCH: indiclient.sendNewSwitch(ISwitchVectorProperty(SwitchPropList[j]));
+     INDI_NUMBER: indiclient.sendNewNumber(INumberVectorProperty(SwitchPropList[j]));
+   end;
 end;
 
 procedure T_indiswitch.SetTimeout(num:integer);
