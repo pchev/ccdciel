@@ -42,6 +42,8 @@ T_indiweather = class(T_weather)
    WeatherStatusProp: ILightVectorProperty;
    configprop: ISwitchVectorProperty;
    configload,configsave: ISwitch;
+   WeatherParamProp: INumberVectorProperty;
+   wforecast,wtemp,wpressure,whumidity,wwindspeed,wwindgust,wrainhour,wcloud: INumber;
    Fready,Fconnected,FConnectDevice: boolean;
    Findiserver, Findiserverport, Findidevice: string;
    stClear: boolean;
@@ -322,6 +324,18 @@ begin
   end
   else if (proptype=INDI_LIGHT)and(WeatherStatusProp=nil)and(propname='WEATHER_STATUS') then begin
      WeatherStatusProp:=indiProp.getLight;
+  end
+  else if (proptype=INDI_NUMBER)and(WeatherParamProp=nil)and(propname='WEATHER_PARAMETERS') then begin
+     WeatherParamProp:=indiProp.getNumber;
+     wforecast:=IUFindNumber(WeatherParamProp,'WEATHER_FORECAST');
+     wtemp:=IUFindNumber(WeatherParamProp,'WEATHER_TEMPERATURE');
+     wpressure:=IUFindNumber(WeatherParamProp,'WEATHER_PRESSURE');
+     whumidity:=IUFindNumber(WeatherParamProp,'WEATHER_HUMIDITY');
+     wwindspeed:=IUFindNumber(WeatherParamProp,'WEATHER_WIND_SPEED');
+     wwindgust:=IUFindNumber(WeatherParamProp,'WEATHER_WIND_GUST');
+     wrainhour:=IUFindNumber(WeatherParamProp,'WEATHER_RAIN_HOUR');
+     wcloud:=IUFindNumber(WeatherParamProp,'WEATHER_CLOUDS');
+     if wcloud=nil then wcloud:=IUFindNumber(WeatherParamProp,'WEATHER_CLOUD_COVER');
   end;
   CheckStatus;
 end;
@@ -360,25 +374,25 @@ end;
 
 function  T_indiweather.GetClear:Boolean;
 begin
-  // Use only WEATHER_STATUS for now because other properties are not standardized
+  // Use only WEATHER_STATUS, limit are set in INDI driver
   result:=WeatherStatus;
 end;
 
 procedure T_indiweather.GetCapabilities;
 begin
- FhasCloudCover:=false;
+ FhasCloudCover:=(wcloud<>nil);
  FhasDewPoint:=false;
- FhasHumidity:=false;
- FhasPressure:=false;
- FhasRainRate:=false;
+ FhasHumidity:=(whumidity<>nil);
+ FhasPressure:=(wpressure<>nil);
+ FhasRainRate:=(wrainhour<>nil);
  FhasSkyBrightness:=false;
  FhasSkyQuality:=false;
  FhasSkyTemperature:=false;
  FhasStarFWHM:=false;
- FhasTemperature:=false;
+ FhasTemperature:=(wtemp<>nil);
  FhasWindDirection:=false;
- FhasWindGust:=false;
- FhasWindSpeed:=false;
+ FhasWindGust:=(wwindgust<>nil);
+ FhasWindSpeed:=(wwindspeed<>nil);
  FhasStatus:=(WeatherStatusProp<>nil);
 end;
 
@@ -398,19 +412,71 @@ begin
 end;
 
 function T_indiweather.GetWeatherDetail: string;
-var i: integer;
+var x: double;
 begin
  result:='';
  if WeatherStatusProp<>nil then begin
-    for i:=0 to WeatherStatusProp.nlp-1 do begin
-      result:=result+crlf+WeatherStatusProp.lp[i].lbl+'='+pstateStr(WeatherStatusProp.lp[i].s);
+    if FhasCloudCover then begin
+       x:=CloudCover;
+       result:=result+crlf+'CloudCover='+FormatFloat(f2,x);
+    end;
+    if FhasDewPoint then begin
+       x:=DewPoint;
+       result:=result+crlf+'DewPoint='+FormatFloat(f2,x);
+    end;
+    if FhasHumidity then begin
+       x:=Humidity;
+       result:=result+crlf+'Humidity='+FormatFloat(f2,x);
+    end;
+    if FhasPressure then begin
+       x:=Pressure;
+       result:=result+crlf+'Pressure='+FormatFloat(f2,x);
+    end;
+    if FhasRainRate then begin
+       x:=RainRate;
+       result:=result+crlf+'RainRate='+FormatFloat(f2,x);
+    end;
+    if FhasSkyBrightness then begin
+       x:=SkyBrightness;
+       result:=result+crlf+'SkyBrightness='+FormatFloat(f4,x);
+    end;
+    if FhasSkyQuality then begin
+       x:=SkyQuality;
+       result:=result+crlf+'SkyQuality='+FormatFloat(f2,x);
+    end;
+    if FhasSkyTemperature then begin
+       x:=SkyTemperature;
+       result:=result+crlf+'SkyTemperature='+FormatFloat(f2,x);
+    end;
+    if FhasStarFWHM then begin
+       x:=StarFWHM;
+       result:=result+crlf+'StarFWHM='+FormatFloat(f2,x);
+    end;
+    if FhasTemperature then begin
+       x:=Temperature;
+       result:=result+crlf+'Temperature='+FormatFloat(f2,x);
+    end;
+    if FhasWindDirection then begin
+       x:=WindDirection;
+       result:=result+crlf+'WindDirection='+FormatFloat(f2,x);
+    end;
+    if FhasWindGust then begin
+       x:=WindGust;
+       result:=result+crlf+'WindGust='+FormatFloat(f2,x);
+    end;
+    if FhasWindSpeed then begin
+       x:=WindSpeed;
+       result:=result+crlf+'WindSpeed='+FormatFloat(f2,x);
     end;
  end;
  end;
 
 function T_indiweather.GetCloudCover: double;
 begin
- result:=NullCoord;
+ if (WeatherParamProp<>nil) and (wcloud<>nil) then
+   result:=wcloud.Value
+ else
+   result:=NullCoord;
 end;
 
 function T_indiweather.GetDewPoint: double;
@@ -420,17 +486,26 @@ end;
 
 function T_indiweather.GetHumidity: double;
 begin
- result:=NullCoord;
+ if (WeatherParamProp<>nil) and (whumidity<>nil) then
+   result:=whumidity.Value
+ else
+   result:=NullCoord;
 end;
 
 function T_indiweather.GetPressure: double;
 begin
- result:=NullCoord;
+ if (WeatherParamProp<>nil) and (wpressure<>nil) then
+   result:=wpressure.Value
+ else
+   result:=NullCoord;
 end;
 
 function T_indiweather.GetRainRate: double;
 begin
- result:=NullCoord;
+ if (WeatherParamProp<>nil) and (wrainhour<>nil) then
+   result:=wrainhour.Value
+ else
+   result:=NullCoord;
 end;
 
 function T_indiweather.GetSkyBrightness: double;
@@ -455,7 +530,10 @@ end;
 
 function T_indiweather.GetTemperature: double;
 begin
- result:=NullCoord;
+ if (WeatherParamProp<>nil) and (wtemp<>nil) then
+   result:=wtemp.Value
+ else
+   result:=NullCoord;
 end;
 
 function T_indiweather.GetWindDirection: double;
@@ -465,12 +543,18 @@ end;
 
 function T_indiweather.GetWindGust: double;
 begin
- result:=NullCoord;
+ if (WeatherParamProp<>nil) and (wwindgust<>nil) then
+   result:=wwindgust.Value
+ else
+   result:=NullCoord;
 end;
 
 function T_indiweather.GetWindSpeed: double;
 begin
- result:=NullCoord;
+ if (WeatherParamProp<>nil) and (wwindspeed<>nil) then
+   result:=wwindspeed.Value
+ else
+   result:=NullCoord;
 end;
 
 procedure T_indiweather.SetTimeout(num:integer);
