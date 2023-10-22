@@ -542,9 +542,13 @@ if (FResolver=ResolverAstrometryNet)or Fretry then begin
   end;
   Fresult:=process.ExitStatus;
   if (logok)and(Fresult<>127)and(process.Output<>nil) then repeat
-    n := process.Output.Read(cbuf, READ_BYTES);
-    if n>=0 then BlockWrite(f,cbuf,n);
-  until (n<=0)or(process.Output=nil);
+    available:=process.Output.NumBytesAvailable;
+    if available>0 then begin
+      available:=min(available,READ_BYTES);
+      n := process.Output.Read(cbuf, available);
+      if n>=0 then BlockWrite(f,cbuf,n);
+    end;
+  until (n<=0)or(available<=0)or(process.Output=nil);
   if (Fresult<>0)and(err='') then
      err:=Format(rsErrorResult, [IntToStr(Fresult)]);
   if logok and (Fresult<>0) then begin

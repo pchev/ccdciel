@@ -1009,7 +1009,6 @@ end;
 {$endif}
 
 Function ExecProcessMem(cmd: string; output: TMemoryStream; out err: string; ShowConsole:boolean=false): integer;
-const READ_BYTES = 2048;
 var
   P: TProcess;
   param: TStringList;
@@ -1039,29 +1038,37 @@ try
   P.Execute;
   while P.Running do begin
     if GetCurrentThreadId=MainThreadID then Application.ProcessMessages;
-    if (output<>nil) and (P.Output<>nil)and(P.Output.NumBytesAvailable>0) then begin
-      i:=min(READ_BYTES, P.Output.NumBytesAvailable);
+    if (output<>nil) and (P.Output<>nil) then begin
+      i:=P.Output.NumBytesAvailable;
+      if i>0 then begin
+        output.SetSize(BytesRead + i);
+        n := P.Output.Read((output.Memory + BytesRead)^, i);
+        if n > 0 then inc(BytesRead, n);
+      end;
+    end;
+    if (P.Stderr<>nil) then begin
+      i:=P.Stderr.NumBytesAvailable;
+      if i>0 then begin
+        n:=P.Stderr.Read(cerr, i);
+        err:=err+trim(cerr);
+      end;
+    end;
+  end;
+  result:=P.ExitStatus;
+  if (output<>nil) and (result<>127)and(P.Output<>nil) then repeat
+    i:=P.Output.NumBytesAvailable;
+    if i>0 then begin
       output.SetSize(BytesRead + i);
       n := P.Output.Read((output.Memory + BytesRead)^, i);
       if n > 0 then inc(BytesRead, n);
     end;
-    if (P.Stderr<>nil)and(P.Stderr.NumBytesAvailable>0) then begin
-      i:=min(1024, P.Stderr.NumBytesAvailable);
+  until (n<=0)or(i<=0)or(P.Output=nil);
+  if (P.Stderr<>nil) then begin
+    i:=P.Stderr.NumBytesAvailable;
+    if i>0 then begin
       n:=P.Stderr.Read(cerr, i);
       err:=err+trim(cerr);
     end;
-  end;
-  result:=P.ExitStatus;
-  if (output<>nil) and (result<>127)and(P.Output<>nil)and(P.Output.NumBytesAvailable>0) then repeat
-    i:=min(READ_BYTES, P.Output.NumBytesAvailable);
-    output.SetSize(BytesRead + i);
-    n := P.Output.Read((output.Memory + BytesRead)^, i);
-    if n > 0 then inc(BytesRead, n);
-  until (n<=0)or(P.Output=nil);
-  if (P.Stderr<>nil)and(P.Stderr.NumBytesAvailable>0) then begin
-    i:=min(1024, P.Stderr.NumBytesAvailable);
-    n:=P.Stderr.Read(cerr, i);
-    err:=err+trim(cerr);
   end;
   P.Free;
   param.Free;
@@ -1076,12 +1083,11 @@ end;
 end;
 
 Function ExecProcess(cmd: string; output: TStringList; ShowConsole:boolean=false): integer;
-const READ_BYTES = 2048;
 var
   M: TMemoryStream;
   P: TProcess;
   param: TStringList;
-  n: LongInt;
+  n,s: LongInt;
   BytesRead: LongInt;
 begin
 M := TMemoryStream.Create;
@@ -1106,20 +1112,23 @@ try
   while P.Running do begin
     if GetCurrentThreadId=MainThreadID then Application.ProcessMessages;
     if (output<>nil) and (P.Output<>nil) then begin
-      M.SetSize(BytesRead + READ_BYTES);
-      n := P.Output.Read((M.Memory + BytesRead)^, READ_BYTES);
-      if n > 0 then inc(BytesRead, n);
+      s:=P.Output.NumBytesAvailable;
+      if s>0 then begin
+        M.SetSize(BytesRead + s);
+        n := P.Output.Read((M.Memory + BytesRead)^, s);
+        if n > 0 then inc(BytesRead, n);
+      end;
     end;
   end;
   result:=P.ExitStatus;
   if (output<>nil) and (result<>127)and(P.Output<>nil) then repeat
-    M.SetSize(BytesRead + READ_BYTES);
-    n := P.Output.Read((M.Memory + BytesRead)^, READ_BYTES);
-    if n > 0
-    then begin
-      Inc(BytesRead, n);
+    s:=P.Output.NumBytesAvailable;
+    if s>0 then begin
+      M.SetSize(BytesRead + s);
+      n := P.Output.Read((M.Memory + BytesRead)^, s);
+      if n > 0 then Inc(BytesRead, n);
     end;
-  until (n<=0)or(P.Output=nil);
+  until (n<=0)or(s<=0)or(P.Output=nil);
   if (output<>nil) then begin
     M.SetSize(BytesRead);
     output.LoadFromStream(M);
@@ -3215,11 +3224,13 @@ function GetKernel_Info: string;
 var P: TProcess;
 
   function ExecParam(Param: String): String;
+  var s: LongWord;
   begin
     P.Parameters[0]:= '-' + Param;
     P.Execute;
-    SetLength(Result, 1000);
-    SetLength(Result, P.Output.Read(Result[1], Length(Result)));
+    s:=P.Output.NumBytesAvailable;
+    SetLength(Result, s);
+    if s>0 then P.Output.Read(Result[1], s);
     While (Length(Result) > 0) And (Result[Length(Result)] In [#8..#13,#32]) Do
       SetLength(Result, Length(Result) - 1);
   end;
@@ -3245,11 +3256,13 @@ function GetLinux_Info: string;
 var P: TProcess;
 
   function ExecParam(Param: String): String;
+  var s: LongWord;
   begin
     P.Parameters[0]:= '-' + Param;
     P.Execute;
-    SetLength(Result, 1000);
-    SetLength(Result, P.Output.Read(Result[1], Length(Result)));
+    s:=P.Output.NumBytesAvailable;
+    SetLength(Result, s);
+    if s>0 then P.Output.Read(Result[1], s);
     While (Length(Result) > 0) And (Result[Length(Result)] In [#8..#13,#32]) Do
       SetLength(Result, Length(Result) - 1);
   end;
@@ -3274,11 +3287,13 @@ function GetMac_Info: string;
 var P: TProcess;
 
   function ExecParam(Param: String): String;
+  var s: LongWord;
   begin
     P.Parameters[0]:= '-' + Param;
     P.Execute;
-    SetLength(Result, 1000);
-    SetLength(Result, P.Output.Read(Result[1], Length(Result)));
+    s:=P.Output.NumBytesAvailable;
+    SetLength(Result, s);
+    if s>0 then P.Output.Read(Result[1], s);
     While (Length(Result) > 0) And (Result[Length(Result)] In [#8..#13,#32]) Do
       SetLength(Result, Length(Result) - 1);
   end;
@@ -3364,7 +3379,7 @@ end;
 
 function AstrometryVersion(resolver:integer; cygwinpath,cmdpath:string; usescript:boolean):string;
 var P: TProcess;
-    i: integer;
+    i,s: integer;
     endtime: double;
     buf: String;
 begin
@@ -3399,8 +3414,9 @@ if (resolver=ResolverAstrometryNet) and (not usescript) then begin
     end;
     sleep(100);
   end;
-  SetLength(buf, 1000);
-  SetLength(buf, P.Output.Read(buf[1], Length(buf)));
+  s:=P.Output.NumBytesAvailable;
+  SetLength(buf, s);
+  if s>0 then P.Output.Read(buf[1], s);
   P.Free;
   i:=pos('Revision',buf);
   if i<=0 then exit;

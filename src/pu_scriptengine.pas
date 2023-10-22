@@ -605,11 +605,10 @@ begin
 end;
 
 Function Tf_scriptengine.ExecPr(cmd: string; output: TStringList; ShowConsole:boolean=false): integer;
-const READ_BYTES = 2048;
 var
   M: TMemoryStream;
   param: TStringList;
-  n: LongInt;
+  n,s: LongInt;
   BytesRead: LongInt;
 begin
 M := TMemoryStream.Create;
@@ -634,20 +633,23 @@ try
   while RunProcess.Running do begin
     if GetCurrentThreadId=MainThreadID then Application.ProcessMessages;
     if (output<>nil) and (RunProcess.Output<>nil) then begin
-      M.SetSize(BytesRead + READ_BYTES);
-      n := RunProcess.Output.Read((M.Memory + BytesRead)^, READ_BYTES);
-      if n > 0 then inc(BytesRead, n);
+      s:=RunProcess.Output.NumBytesAvailable;
+      if s>0 then begin
+        M.SetSize(BytesRead + s);
+        n := RunProcess.Output.Read((M.Memory + BytesRead)^, s);
+        if n > 0 then inc(BytesRead, n);
+      end;
     end;
   end;
   result:=RunProcess.ExitStatus;
   if (output<>nil) and (result<>127)and(RunProcess.Output<>nil) then repeat
-    M.SetSize(BytesRead + READ_BYTES);
-    n := RunProcess.Output.Read((M.Memory + BytesRead)^, READ_BYTES);
-    if n > 0
-    then begin
-      Inc(BytesRead, n);
+    s:=RunProcess.Output.NumBytesAvailable;
+    if s>0 then begin
+      M.SetSize(BytesRead + s);
+      n := RunProcess.Output.Read((M.Memory + BytesRead)^, s);
+      if n > 0 then Inc(BytesRead, n);
     end;
-  until (n<=0)or(RunProcess.Output=nil);
+  until (n<=0)or(s<=0)or(RunProcess.Output=nil);
   if (output<>nil) then begin
     M.SetSize(BytesRead);
     output.LoadFromStream(M);
@@ -2335,11 +2337,10 @@ FRunning:=false;
 end;
 
 procedure TPythonThread.Execute;
-const READ_BYTES = 2048;
 var
   M: TMemoryStream;
   param,scparam: TStringList;
-  n: LongInt;
+  n,s: LongInt;
   i,r: integer;
   BytesRead: LongInt;
   {$ifdef mswindows}
@@ -2393,21 +2394,24 @@ try
   PyProcess.Execute;
   while PyProcess.Running do begin
     if (output<>nil) and (PyProcess.Output<>nil) then begin
-      M.SetSize(BytesRead + READ_BYTES);
-      n := PyProcess.Output.Read((M.Memory + BytesRead)^, READ_BYTES);
-      if n > 0 then inc(BytesRead, n);
+      s:=PyProcess.Output.NumBytesAvailable;
+      if s>0 then begin
+        M.SetSize(BytesRead + s);
+        n := PyProcess.Output.Read((M.Memory + BytesRead)^, s);
+        if n > 0 then inc(BytesRead, n);
+      end;
     end;
   end;
   r:=PyProcess.ExitStatus;
   rc:=PyProcess.ExitCode;
   if (output<>nil) and (r<>127)and(PyProcess.Output<>nil) then repeat
-    M.SetSize(BytesRead + READ_BYTES);
-    n := PyProcess.Output.Read((M.Memory + BytesRead)^, READ_BYTES);
-    if n > 0
-    then begin
-      Inc(BytesRead, n);
+    s:=PyProcess.Output.NumBytesAvailable;
+    if s>0 then begin
+      M.SetSize(BytesRead + s);
+      n := PyProcess.Output.Read((M.Memory + BytesRead)^, s);
+      if n > 0 then Inc(BytesRead, n);
     end;
-  until (n<=0)or(PyProcess.Output=nil);
+  until (n<=0)or(s<=0)or(PyProcess.Output=nil);
   if (output<>nil) then begin
     M.SetSize(BytesRead);
     output.LoadFromStream(M);
