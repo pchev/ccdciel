@@ -3126,7 +3126,7 @@ object f_option: Tf_option
                 Height = 32
                 Top = 32
                 Width = 61
-                MaxValue = 10000
+                MaxValue = 100000
                 MinValue = 1
                 ParentFont = False
                 TabOrder = 1
