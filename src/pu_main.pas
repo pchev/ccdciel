@@ -13717,10 +13717,11 @@ begin
 end;
 
 Procedure Tf_main.AutoFocusStart(Sender: TObject);
-var x,y,rx,ry,xc,yc,ns,n,i,s,s2,s3,s4: integer;
+var x,y,rx,ry,xc,yc,ns,n,i,s,s2,s3,s4,fs: integer;
     hfdlist: array of double;
     vmax,meanhfd, med: double;
     buf: string;
+    fx,fy,fw,fh:TNumRange;
 begin
   CancelAutofocus:=false;
   f_starprofile.AutofocusResult:=false;
@@ -13785,6 +13786,17 @@ begin
   f_preview.Offset:=AutofocusOffset;
   f_preview.Binning.Text:=inttostr(AutofocusBinning)+'x'+inttostr(AutofocusBinning);
   SetBinning(AutofocusBinning,AutofocusBinning);
+  if AutofocusMultiStarCenter then begin  // reduce search area to image center
+    camera.GetFrameRange(fx,fy,fw,fh);
+    if max(fh.max,fw.max)/min(fh.max,fw.max)>1.4 then // format ratio > 4/3
+      fs:=round(min(fh.max,fw.max))  // format 3/2, use full height
+    else
+      fs:=round(2*min(fh.max,fw.max)/3); // format 4/3 or 1/1 use 2/3 height
+    fs:=min(fs,MaxAutofocusCenterFrame);
+    rx:=round(max(0,(fw.max-fs)/2));
+    ry:=round(max(0,(fh.max-fs)/2));
+    camera.SetFrame(rx,ry,fs,fs);
+  end;
   fits.SetBPM(bpm,bpmNum,bpmX,bpmY,bpmAxis);
   fits.DarkOn:=true;
   if not camera.ControlExposure(AutofocusExposure*AutofocusExposureFact,AutofocusBinning,AutofocusBinning,LIGHT,ReadoutModeFocus,AutofocusGain,AutofocusOffset) then begin
@@ -13813,19 +13825,8 @@ begin
      end
      else
        s:=20; {no star found, try with small default window}
-
-     if AutofocusMultiStarCenter then begin  // reduce search area to image center
-       if max(img_Height,img_Width)/min(img_Height,img_Width)>1.4 then // format ratio > 4/3
-         rx:=round(min(img_Height,img_Width)-4*s)  // format 3/2, use full height
-       else
-         rx:=round(2*min(img_Height,img_Width)/3); // format 4/3 or 1/1 use 2/3 height
-       ry:=rx;
-     end
-     else begin
-       rx:=img_Width-6*s; {search area}
-       ry:=img_Height-6*s;
-     end;
-
+     rx:=img_Width-6*s; {search area}
+     ry:=img_Height-6*s;
      fits.GetStarList(rx,ry,s,AutofocusMinSNR,false); {search stars in fits image}
      ns:=Length(fits.StarList);
      // store star list
