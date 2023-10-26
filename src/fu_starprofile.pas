@@ -351,9 +351,10 @@ begin
  FAutofocusResult:=false;
  i:=0;
  p1:=focuser.FocusPosition;
+ // check focuser is not moving
  repeat
    inc(i);
-   wait;
+   wait(1);
    p2:=p1;
    p1:=focuser.FocusPosition;
  until (p1=p2)or(i>3);
