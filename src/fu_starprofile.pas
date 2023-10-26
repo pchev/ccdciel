@@ -1466,6 +1466,7 @@ begin
               // focus position with last move in focus direction
               if DynAbsStartPos<0 then begin
                 step:=round(AutofocusDynamicMovement*(AutofocusDynamicNumPoint-p_hyp)); //require steps from current position at the end of the curve
+                step:=step + AutoFocusDefocus;
                 if focuser.BacklashActive then begin
                   focuser.FocusSpeed:=step;
                    if AutofocusMoveDir=FocusDirIn then begin
@@ -1492,6 +1493,7 @@ begin
                 end;
               end
               else begin
+                focuspos:=focuspos + AutoFocusDefocus;
                 focuser.FocusPosition:=focuspos;
                 FonAbsolutePosition(self);
               end;

@@ -456,7 +456,7 @@ var
   AutofocusVcDir, AutofocusSlippageCorrection: boolean;
   AutofocusVcSlopeL,AutofocusVcSlopeR,AutofocusVcPID,AutofocusVcpiL,AutofocusVcpiR: double;
   AutofocusVcStep:TAutofocusVcurveStep;
-  AutofocusDynamicMovement,AutofocusDynamicNumPoint,AutofocusVcFilterOffset,AutofocusSlippageOffset: integer;
+  AutofocusDynamicMovement,AutofocusDynamicNumPoint,AutofocusVcFilterOffset,AutofocusSlippageOffset,AutoFocusDefocus: integer;
   AutofocusDynamicStep:TAutofocusDynamicStep;
   AutofocusPlanetMovement,AutofocusPlanetNumPoint: integer;
   AutofocusPlanetStep:TAutofocusPlanetStep;

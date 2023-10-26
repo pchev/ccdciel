@@ -46,7 +46,10 @@ type
     AstUseOnline: TCheckBox;
     AstOnlineKey: TEdit;
     FileNameSeqSep: TComboBox;
+    GroupBoxExpert: TGroupBox;
     Label173: TLabel;
+    Label174: TLabel;
+    DefocusAmount: TSpinEdit;
     UseFinderSolver: TCheckBox;
     FinderSolver: TComboBox;
     Label172: TLabel;
@@ -1960,6 +1963,7 @@ begin
   AutofocusNotebook.PageIndex:=Autofocusmode.ItemIndex;
   PanelAutofocus.Visible:=(Autofocusmode.ItemIndex<4);
   PanelFocusStar.Visible:=PanelAutofocus.Visible;
+  GroupBoxExpert.Visible:=(Autofocusmode.ItemIndex=0);
   PanelNearFocus.Visible:=true;
   CheckFocuserDirection(Sender);
   ChangeAutofocusInPlace(Sender);

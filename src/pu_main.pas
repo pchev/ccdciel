@@ -4820,6 +4820,7 @@ begin
   AutofocusTolerance:=config.GetValue('/StarAnalysis/AutofocusTolerance',99.0);
   AutofocusMinSNR:=config.GetValue('/StarAnalysis/AutofocusMinSNR',3.0);
   AutofocusSlippageCorrection:=config.GetValue('/StarAnalysis/AutofocusSlippageCorrection',false);
+  AutoFocusDefocus:=config.GetValue('/StarAnalysis/AutoFocusDefocus',0);
   if AutofocusSlippageCorrection then
      AutofocusSlippageOffset:=config.GetValue('/StarAnalysis/AutofocusSlippageOffset',0)
   else
@@ -9326,6 +9327,7 @@ begin
    f_option.AutofocusDynamicMovement.Value:=config.GetValue('/StarAnalysis/AutofocusDynamicMovement',AutofocusDynamicMovement);
    f_option.AutofocusPlanetNumPoint.Value:=config.GetValue('/StarAnalysis/AutofocusPlanetNumPoint',AutofocusPlanetNumPoint);
    f_option.AutofocusPlanetMovement.Value:=config.GetValue('/StarAnalysis/AutofocusPlanetMovement',AutofocusPlanetMovement);
+   f_option.DefocusAmount.Value:=config.GetValue('/StarAnalysis/AutoFocusDefocus',0);
    f_option.ClearRoi;
    n:=config.GetValue('/Sensor/ROI/NumROI',0);
    for i:=1 to n do begin
@@ -9693,6 +9695,7 @@ begin
      config.SetValue('/StarAnalysis/AutofocusDynamicMovement',f_option.AutofocusDynamicMovement.Value);
      config.SetValue('/StarAnalysis/AutofocusPlanetNumPoint',f_option.AutofocusPlanetNumPoint.Value);
      config.SetValue('/StarAnalysis/AutofocusPlanetMovement',f_option.AutofocusPlanetMovement.Value);
+     config.SetValue('/StarAnalysis/AutoFocusDefocus',f_option.DefocusAmount.Value);
      config.SetValue('/Log/debug_msg',f_option.debug_msg.Checked);
      config.SetValue('/Files/SaveFormat',f_option.SaveFormat.ItemIndex);
      config.SetValue('/Files/SaveBitmap',f_option.SaveBitmap.Checked);
@@ -13789,9 +13792,9 @@ begin
   if AutofocusMultiStarCenter then begin  // reduce search area to image center
     camera.GetFrameRange(fx,fy,fw,fh);
     if max(fh.max,fw.max)/min(fh.max,fw.max)>1.4 then // format ratio > 4/3
-      fs:=round(min(fh.max,fw.max))  // format 3/2, use full height
+      fs:=round(2*min(fh.max,fw.max)/3)  // format 3/2, use 2/3 height
     else
-      fs:=round(2*min(fh.max,fw.max)/3); // format 4/3 or 1/1 use 2/3 height
+      fs:=round(min(fh.max,fw.max)/2); // format 4/3 or 1/1 use 1/2 height
     fs:=min(fs,MaxAutofocusCenterFrame);
     rx:=round(max(0,(fw.max-fs)/2));
     ry:=round(max(0,(fh.max-fs)/2));
