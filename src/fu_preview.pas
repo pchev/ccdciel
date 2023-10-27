@@ -44,6 +44,7 @@ type
     LabelGain: TLabel;
     CheckBoxAstrometry: TMenuItem;
     image_inspection1: TMenuItem;
+    PreprocessPreview: TMenuItem;
     Panel6: TPanel;
     StackPreview: TMenuItem;
     Panel5: TPanel;
@@ -71,6 +72,7 @@ type
     procedure Label6MouseDown(Sender: TObject; Button: TMouseButton; Shift: TShiftState; X, Y: Integer);
     procedure Label6MouseEnter(Sender: TObject);
     procedure Label6MouseLeave(Sender: TObject);
+    procedure StackPreviewClick(Sender: TObject);
   private
     { private declarations }
     Fcamera: T_camera;
@@ -144,6 +146,7 @@ begin
   CheckBoxAstrometry.Caption:=rsAstrometry;
   image_inspection1.caption:=rsImageInspect;
   StackPreview.Caption:=rsStack;
+  PreprocessPreview.Caption:=rsPreprocessin;
   BtnLoop.Caption:=rsLoop;
   ExpTime.Hint:=rsExposureTime;
   ISObox.Hint:=rsCameraISO;
@@ -216,6 +219,11 @@ procedure Tf_preview.Label6MouseLeave(Sender: TObject);
 begin
   label6.Color:=clNone;
   label6.Font.Color:=clDefault;
+end;
+
+procedure Tf_preview.StackPreviewClick(Sender: TObject);
+begin
+  PreprocessPreview.Enabled:=not StackPreview.Checked;
 end;
 
 procedure Tf_preview.BtnLoopClick(Sender: TObject);

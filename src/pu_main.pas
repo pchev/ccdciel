@@ -10364,6 +10364,9 @@ end;
 Procedure Tf_main.StopExposure(Sender: TObject);
 begin
   camera.AbortExposure;
+  fits.SetBPM(bpm,0,0,0,0);
+  fits.DarkOn:=false;
+  fits.FlatOn:=false;
   RunningPreview:=false;
   RunningCapture:=false;
   StatusBar1.Panels[panelstatus].Text:=rsStop;
@@ -10460,7 +10463,16 @@ if (camera.Status=devConnected) and ((not f_capture.Running) or autofocusing) an
   else begin
      camera.SaveFrames:=false;
      camera.AlignFrames:=false;
-     fits.SetBPM(bpm,bpmNum,bpmX,bpmY,bpmAxis);
+     if f_preview.PreprocessPreview.Checked then begin
+       fits.SetBPM(bpm,bpmNum,bpmX,bpmY,bpmAxis);
+       fits.DarkOn:=true;
+       fits.FlatOn:=true;
+     end
+     else begin
+       fits.SetBPM(bpm,0,0,0,0);
+       fits.DarkOn:=false;
+       fits.FlatOn:=false;
+     end;
   end;
   if f_preview.CheckBoxAstrometry.Checked then begin
     if copy(f_preview.LabelAstrometry.Caption,length(f_preview.LabelAstrometry.Caption)-2,3)='...' then
@@ -10953,6 +10965,7 @@ if (AllDevicesConnected)and(not autofocusing)and (not learningvcurve) then begin
   // disable BPM
   fits.SetBPM(bpm,0,0,0,0);
   fits.DarkOn:=false;
+  fits.FlatOn:=false;
   // stacking
   f_preview.StackPreview.Checked:=false;
   f_preview.CheckBoxAstrometry.Checked:=false;
@@ -11235,6 +11248,9 @@ begin
       else begin
          // end preview
          f_preview.stop;
+         fits.SetBPM(bpm,0,0,0,0);
+         fits.DarkOn:=false;
+         fits.FlatOn:=false;
          RunningPreview:=false;
          NewMessage(rsEndPreview,2);
          StatusBar1.Panels[panelstatus].Text:='';

@@ -361,6 +361,12 @@ object f_preview: Tf_preview
       AutoCheck = True
       Caption = 'Stack'
       ShowAlwaysCheckable = True
+      OnClick = StackPreviewClick
+    end
+    object PreprocessPreview: TMenuItem
+      AutoCheck = True
+      Caption = 'Preprocessing'
+      ShowAlwaysCheckable = True
     end
   end
 end

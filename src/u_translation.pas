@@ -1535,6 +1535,7 @@ resourcestring
   rsDate = 'Date';
   rsDeclination = 'Declination';
   rsIssue = 'Issue';
+  rsPreprocessin = 'Preprocessing';
 
 implementation
 
