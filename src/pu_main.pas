@@ -4717,9 +4717,9 @@ begin
   reftreshold:=config.GetValue('/RefImage/Treshold',128);
   refcolor:=config.GetValue('/RefImage/Color',0);
   BPMsigma:=config.GetValue('/BadPixel/Sigma',5.0);
-  f_preview.PanelStack.Visible:=config.GetValue('/PreviewStack/StackShow',false);
-  f_capture.PanelStack.Visible:=f_preview.PanelStack.Visible;
-  f_EditTargets.StepList.Columns[pcolstack-1].Visible:=f_preview.PanelStack.Visible;
+  f_preview.StackPreview.Visible:=config.GetValue('/PreviewStack/StackShow',false);
+  f_capture.PanelStack.Visible:=f_preview.StackPreview.Visible;
+  f_EditTargets.StepList.Columns[pcolstack-1].Visible:=f_preview.StackPreview.Visible;
   SaveStack:=config.GetValue('/PreviewStack/SaveStack',false);
   StackAlign:=config.GetValue('/PreviewStack/StackAlign',false);
   StackOperation:=config.GetValue('/PreviewStack/StackOperation',1);

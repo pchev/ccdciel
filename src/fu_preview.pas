@@ -26,7 +26,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 interface
 
 uses u_global, u_utils, Graphics, UScaleDPI, cu_camera, u_translation, u_hints, indiapi,
-  Classes, SysUtils, FileUtil, Forms, Controls, ExtCtrls, StdCtrls, Spin;
+  Classes, SysUtils, FileUtil, Forms, Controls, ExtCtrls, StdCtrls, Spin, Menus;
 
 type
 
@@ -35,28 +35,25 @@ type
   Tf_preview = class(TFrame)
     BtnPreview: TButton;
     BtnLoop: TButton;
-    CheckBoxAstrometry: TCheckBox;
-    image_inspection1: TCheckBox;
     Fnumber: TComboBox;
     ISObox: TComboBox;
     Label3: TLabel;
-    Label4: TLabel;
-    Label5: TLabel;
-    label7: TLabel;
+    Label6: TLabel;
     LabelAstrometry: TLabel;
     LabelOffset: TLabel;
     LabelGain: TLabel;
-    Panel5: TPanel;
+    CheckBoxAstrometry: TMenuItem;
+    image_inspection1: TMenuItem;
     Panel6: TPanel;
+    StackPreview: TMenuItem;
+    Panel5: TPanel;
     Panel7: TPanel;
-    Panel8: TPanel;
-    PanelStack: TPanel;
     PanelOffset: TPanel;
     PanelFnumber: TPanel;
     PanelGain: TPanel;
     GainEdit: TSpinEdit;
     OffsetEdit: TSpinEdit;
-    StackPreview: TCheckBox;
+    PopupMenu1: TPopupMenu;
     ExpTime: TComboBox;
     Binning: TComboBox;
     Label1: TLabel;
@@ -71,6 +68,9 @@ type
     procedure BtnPreviewClick(Sender: TObject);
     procedure CheckBoxAstrometryClick(Sender: TObject);
     procedure ExpTimeKeyPress(Sender: TObject; var Key: char);
+    procedure Label6MouseDown(Sender: TObject; Button: TMouseButton; Shift: TShiftState; X, Y: Integer);
+    procedure Label6MouseEnter(Sender: TObject);
+    procedure Label6MouseLeave(Sender: TObject);
   private
     { private declarations }
     Fcamera: T_camera;
@@ -135,14 +135,15 @@ end;
 procedure Tf_preview.SetLang;
 begin
   Title.Caption:=rsPreview;
+  Label6.Caption:=rsOptions2;
   Label1.Caption:=rsExposure;
   LabelGain.Caption:=rsGain;
   Label2.Caption:=rsBinning;
   Label3.Caption:=rsFStop;
   BtnPreview.Caption:=rsPreview;
-  label4.Caption:=rsAstrometry;
-  label7.caption:=rsImageInspect;
-  Label5.Caption:=rsStack;
+  CheckBoxAstrometry.Caption:=rsAstrometry;
+  image_inspection1.caption:=rsImageInspect;
+  StackPreview.Caption:=rsStack;
   BtnLoop.Caption:=rsLoop;
   ExpTime.Hint:=rsExposureTime;
   ISObox.Hint:=rsCameraISO;
@@ -194,6 +195,27 @@ begin
   inherited KeyPress(Key);
   if (Key in ['.',',']) then Key := DefaultFormatSettings.Decimalseparator;
   if not (Key in ['0'..'9', DefaultFormatSettings.DecimalSeparator,'+',#8,#9,^C,^X,^V,^Z]) then Key := #0;
+end;
+
+procedure Tf_preview.Label6MouseDown(Sender: TObject; Button: TMouseButton; Shift: TShiftState; X, Y: Integer);
+var p: TPoint;
+begin
+  p.x:=label6.Left;
+  p.y:=label6.Top+label6.Height;
+  p:=panel6.ClientToScreen(p);
+  popupmenu1.PopUp(p.x,p.y);
+end;
+
+procedure Tf_preview.Label6MouseEnter(Sender: TObject);
+begin
+  label6.Color:=clHighlight;
+  label6.Font.Color:=clHighlightText;
+end;
+
+procedure Tf_preview.Label6MouseLeave(Sender: TObject);
+begin
+  label6.Color:=clNone;
+  label6.Font.Color:=clDefault;
 end;
 
 procedure Tf_preview.BtnLoopClick(Sender: TObject);
