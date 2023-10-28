@@ -404,7 +404,7 @@ function TAscomRest.Get(method:string; param: string=''; hdr: string=''):TAscomR
            if Pos('content-type', lowercase(RESTRequest.http.Headers[i])) = 1 then
            begin
              buf:=lowercase(trim(SeparateRight(RESTRequest.http.Headers[i], ':')));
-             Result.imagebytes:=(buf='application/imagebytes');
+             Result.imagebytes:=pos('application/imagebytes',buf)>=0;
            end;
        end;
        if Result.imagebytes then begin
@@ -439,11 +439,11 @@ function TAscomRest.Get(method:string; param: string=''; hdr: string=''):TAscomR
          case Result.FImageBytesInfo.TransmissionElementType of
            1: begin
               SetLength(Result.FArrayInt16,i);
-              RESTRequest.http.Document.Read(Result.FArrayInt16, i*SizeOf(cint16));
+              RESTRequest.http.Document.Read(Result.FArrayInt16[0], i*SizeOf(cint16));
               end;
            2: begin
               SetLength(Result.FArrayInt32,i);
-              RESTRequest.http.Document.Read(Result.FArrayInt32, i*SizeOf(cint32));
+              RESTRequest.http.Document.Read(Result.FArrayInt32[0], i*SizeOf(cint32));
               end;
            6: begin
               SetLength(Result.FArrayByte,i);
