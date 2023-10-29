@@ -147,6 +147,8 @@ type
     MenuImageWindow: TMenuItem;
     MenuImageSinglepanel: TMenuItem;
     MenuImageMultipanel: TMenuItem;
+    MenuItemPreprocess: TMenuItem;
+    MenuItemPreprocess2: TMenuItem;
     MenuItemGuiderSolveSync: TMenuItem;
     MenuSensorAnalysis: TMenuItem;
     MenuItemFinderSolveSync: TMenuItem;
@@ -473,6 +475,7 @@ type
     procedure MenuItemGuiderViewStatisticsClick(Sender: TObject);
     procedure MenuItemImageInspectionClick(Sender: TObject);
     procedure MenuItemGuiderStopAstrometryClick(Sender: TObject);
+    procedure MenuItemPreprocessClick(Sender: TObject);
     procedure MenuItemSelectGuideStarClick(Sender: TObject);
     procedure MenuPolarAlignment2Click(Sender: TObject);
     procedure MenuSensorAnalysisClick(Sender: TObject);
@@ -12597,6 +12600,24 @@ procedure Tf_main.MagnitudeCalibrationChange(Sender: TObject);
 begin
   if (f_photometry<>nil) and f_photometry.Visible then begin
     MeasureAtPos(MouseDownX,MouseDownY,true);
+  end;
+end;
+
+procedure Tf_main.MenuItemPreprocessClick(Sender: TObject);
+begin
+  if fits.DarkProcess and fits.BPMProcess and fits.FlatProcess then exit; // already processed
+  try
+    fits.DarkOn:=true;
+    fits.FlatOn:=true;
+    fits.SetBPM(bpm,bpmNum,bpmX,bpmY,bpmAxis);
+    fits.LoadStream;
+    fits.UpdateStream;
+    DrawHistogram(true,false);
+    DrawImage;
+  finally
+    fits.DarkOn:=false;
+    fits.FlatOn:=false;
+    fits.SetBPM(bpm,0,0,0,0);
   end;
 end;
 
