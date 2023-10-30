@@ -12605,7 +12605,7 @@ end;
 
 procedure Tf_main.MenuItemPreprocessClick(Sender: TObject);
 begin
-  if fits.DarkProcess and fits.BPMProcess and fits.FlatProcess then exit; // already processed
+  if fits.DarkProcess or fits.BPMProcess or fits.FlatProcess then exit; // already processed
   try
     fits.DarkOn:=true;
     fits.FlatOn:=true;
