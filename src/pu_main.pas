@@ -147,6 +147,8 @@ type
     MenuImageWindow: TMenuItem;
     MenuImageSinglepanel: TMenuItem;
     MenuImageMultipanel: TMenuItem;
+    MenuDarkHeader: TMenuItem;
+    MenuFlatHeader: TMenuItem;
     MenuItemPreprocess: TMenuItem;
     MenuItemPreprocess2: TMenuItem;
     MenuItemGuiderSolveSync: TMenuItem;
@@ -429,10 +431,12 @@ type
     procedure GuiderPopUpmenu1Popup(Sender: TObject);
     procedure MenuAscomSwitchSetupClick(Sender: TObject);
     procedure MenuAlpacaSwitchSetupClick(Sender: TObject);
+    procedure MenuDarkHeaderClick(Sender: TObject);
     procedure MenuFlatApplyClick(Sender: TObject);
     procedure MenuFlatCameraClick(Sender: TObject);
     procedure MenuFlatClearClick(Sender: TObject);
     procedure MenuFlatFileClick(Sender: TObject);
+    procedure MenuFlatHeaderClick(Sender: TObject);
     procedure MenuImageMultipanelClick(Sender: TObject);
     procedure MenuInternalguiderStartClick(Sender: TObject);
     procedure MenuInternalGuiderStopClick(Sender: TObject);
@@ -2287,6 +2291,7 @@ begin
    MenuDarkCamera.Caption:=rsCreateFromCa;
    MenuDarkFile.Caption:=rsLoadDarkFile;
    MenuDarkClear.Caption:=rsClearDarkFra;
+   MenuDarkHeader.Caption:=rsViewHeader;
    MenuDarkInfo.Caption:=rsInformation;
    MenuItemFlat.Caption:=rsFlatFrame;
    MenuFlatApply.Caption:=rsApplyToCurre;
@@ -2294,6 +2299,7 @@ begin
    MenuFlatFile.Caption:=rsLoadFlatFile;
    MenuFlatClear.Caption:=rsClearFlatFra;
    MenuFlatInfo.Caption:=rsInformation;
+   MenuFlatHeader.Caption:=rsViewHeader;
    MenuFocuserCalibration.Caption := rsFocuserCalib;
    MenuSensorAnalysis.Caption := rsSensorAnalys;
    MenuOpenPicture.Caption := Format(rsOpenPictureF, [ellipsis]);
@@ -4402,6 +4408,19 @@ begin
     end;
   end;
   ShowFlatInfo;
+end;
+
+procedure Tf_main.MenuFlatHeaderClick(Sender: TObject);
+var f: Tf_viewtext;
+begin
+ if (fits.FlatFrame<>nil) and fits.FlatFrame.HeaderInfo.valid then begin
+   f:=Tf_viewtext.Create(self);
+   f.FormStyle:=fsStayOnTop;
+   f.Caption:=rsFITSHeader;
+   f.Memo1.Lines:=fits.FlatFrame.Header.Rows;
+   FormPos(f,mouse.CursorPos.X,mouse.CursorPos.Y);
+   f.Show;
+ end;
 end;
 
 procedure Tf_main.MenuItem25Click(Sender: TObject);
@@ -12573,6 +12592,19 @@ begin
   ExecuteFile(url);
 end;
 
+procedure Tf_main.MenuDarkHeaderClick(Sender: TObject);
+var f: Tf_viewtext;
+begin
+ if (fits.DarkFrame<>nil) and fits.DarkFrame.HeaderInfo.valid then begin
+   f:=Tf_viewtext.Create(self);
+   f.FormStyle:=fsStayOnTop;
+   f.Caption:=rsFITSHeader;
+   f.Memo1.Lines:=fits.DarkFrame.Header.Rows;
+   FormPos(f,mouse.CursorPos.X,mouse.CursorPos.Y);
+   f.Show;
+ end;
+end;
+
 procedure Tf_main.MenuItemCleanupClick(Sender: TObject);
 begin
    fits.ClearStarList;
@@ -16711,7 +16743,7 @@ end;
 procedure Tf_main.InternalguiderDarkInfo(Sender: TObject);
 var f: Tf_viewtext;
 begin
- if guidefits.DarkFrame.HeaderInfo.valid then begin
+ if (guidefits.DarkFrame<>nil) and guidefits.DarkFrame.HeaderInfo.valid then begin
    f:=Tf_viewtext.Create(self);
    f.FormStyle:=fsStayOnTop;
    f.Caption:=rsFITSHeader;
