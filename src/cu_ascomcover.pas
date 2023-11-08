@@ -173,7 +173,9 @@ end;
 
 function T_ascomcover.GetV: variant;
 begin
-  result:=V;
+ {$ifdef mswindows}
+ result:=V;
+ {$endif}
 end;
 
 function T_ascomcover.Connected: boolean;

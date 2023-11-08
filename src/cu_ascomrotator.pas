@@ -158,7 +158,9 @@ end;
 
 function T_ascomrotator.GetV: variant;
 begin
-  result:=V;
+ {$ifdef mswindows}
+ result:=V;
+ {$endif}
 end;
 
 function T_ascomrotator.Connected: boolean;

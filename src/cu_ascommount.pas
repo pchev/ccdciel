@@ -312,7 +312,9 @@ end;
 
 function T_ascommount.GetV: variant;
 begin
+  {$ifdef mswindows}
   result:=V;
+  {$endif}
 end;
 
 procedure T_ascommount.SetPark(value:Boolean);

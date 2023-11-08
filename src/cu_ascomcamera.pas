@@ -383,7 +383,9 @@ end;
 
 function T_ascomcamera.GetV: variant;
 begin
-  result:=V;
+ {$ifdef mswindows}
+ result:=V;
+ {$endif}
 end;
 
 function T_ascomcamera.Connected: boolean;

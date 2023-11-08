@@ -166,7 +166,9 @@ end;
 
 function T_ascomweather.GetV: variant;
 begin
-  result:=V;
+ {$ifdef mswindows}
+ result:=V;
+ {$endif}
 end;
 
 function T_ascomweather.Connected: boolean;

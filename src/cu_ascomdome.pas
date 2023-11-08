@@ -175,7 +175,9 @@ end;
 
 function T_ascomdome.GetV: variant;
 begin
-  result:=V;
+ {$ifdef mswindows}
+ result:=V;
+ {$endif}
 end;
 
 function T_ascomdome.Connected: boolean;

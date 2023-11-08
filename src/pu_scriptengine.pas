@@ -567,6 +567,7 @@ end;
 
 function Tf_scriptengine.doGetV(varname: string; var v: variant): boolean;
 begin
+{$ifdef mswindows}
  Result := True;
  varname := uppercase(varname);
  if (varname = 'TELESCOPE') and (Fmount<>nil) and (Fmount.MountInterface=ASCOM) then
@@ -612,11 +613,13 @@ begin
  else if varname = 'VARIANT10' then
    v := vlist[9]
  else
+{$endif}
    Result := False;
 end;
 
 function Tf_scriptengine.doSetV(varname: string; v: variant): boolean;
 begin
+{$ifdef mswindows}
  Result := True;
  varname := uppercase(varname);
  if varname = 'VARIANT1' then
@@ -640,6 +643,7 @@ begin
  else if varname = 'VARIANT10' then
    vlist[9] := v
  else
+ {$endif}
    Result := False;
 end;
 
