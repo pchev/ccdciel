@@ -34,6 +34,9 @@ uses  u_global, u_utils, cu_fits, indiapi, cu_planetarium, fu_ccdtemp, fu_device
   fu_cover, cu_cover, fu_internalguider, fu_finder, cu_switch, fu_starprofile,
   Classes, SysUtils, FileUtil, uPSComponent, uPSComponent_Default, LazFileUtils,
   uPSComponent_Forms, uPSComponent_Controls, uPSComponent_StdCtrls, Forms, process,
+  {$ifdef mswindows}
+   uPSComponent_COM,
+  {$endif}
   u_translation, Controls, Graphics, Dialogs, ExtCtrls;
 
 type
@@ -64,6 +67,9 @@ type
     PSImport_DateUtils1: TPSImport_DateUtils;
     PSImport_Forms1: TPSImport_Forms;
     PSImport_StdCtrls1: TPSImport_StdCtrls;
+    {$ifdef mswindows}
+     PSImport_ComObj1: TPSImport_ComObj;
+    {$endif}
     ShutdownTimer: TTimer;
     TplPSScript: TPSScript;
     procedure FormCreate(Sender: TObject);
@@ -109,6 +115,7 @@ type
     ilist: array of Integer;
     dlist: array of Double;
     slist: array of String;
+    vlist: array of variant;
     LastErr:string;
     strllist: array of TStringList;
     Waitrunning, cancelWait, ScriptCancel: boolean;
@@ -125,6 +132,8 @@ type
     function doSetI(varname:string; i: Integer):Boolean;
     function doGetD(varname:string; var x: Double):Boolean;
     function doSetD(varname:string; x: Double):Boolean;
+    function doGetV(varname: string; var v: variant): boolean;
+    function doSetV(varname: string; v: variant): boolean;
     function doGetB(varname:string; var x: Boolean):Boolean;
     function doOpenFile(fn:string):boolean;
     function doRun(cmdline:string):boolean;
@@ -301,10 +310,15 @@ begin
   SetLength(ilist,10);
   SetLength(dlist,10);
   SetLength(slist,10);
+  SetLength(vlist, 22);
   SetLength(strllist,10);
   for i:=0 to 9 do strllist[i]:=TStringList.Create;
   Waitrunning:=false;
   cancelWait:=false;
+  {$ifdef mswindows}
+   PSImport_ComObj1 := TPSImport_ComObj.Create(self);
+   TPSPluginItem(TplPSScript.Plugins.Add).Plugin := PSImport_ComObj1;
+  {$endif}
   scr:=TPSScriptDebugger.Create(self);
   scr.OnCompile:=@TplPSScriptCompile;
   scr.OnExecute:=@TplPSScriptExecute;
@@ -326,6 +340,7 @@ begin
   SetLength(ilist,0);
   SetLength(dlist,0);
   SetLength(slist,0);
+  SetLength(vlist, 0);
   for i:=0 to 9 do strllist[i].Free;
   SetLength(strllist,0);
 end;
@@ -533,6 +548,110 @@ begin
   else if varname='PREVIEW_LOOP' then x:=Preview.Loop
   else if varname='CAPTURE_RUNNING' then x:=Capture.Running
   else result:=false;
+end;
+
+function Tf_scriptengine.doGetV(varname: string; var v: variant): boolean;
+begin
+ Result := True;
+ varname := uppercase(varname);
+ if varname = 'TELESCOPE1' then
+   v := vlist[0]
+ else if varname = 'TELESCOPE2' then
+   v := vlist[1]
+ else if varname = 'DOME1' then
+   v := vlist[2]
+ else if varname = 'DOME2' then
+   v := vlist[3]
+ else if varname = 'CAMERA1' then
+   v := vlist[4]
+ else if varname = 'CAMERA2' then
+   v := vlist[5]
+ else if varname = 'FOCUSER1' then
+   v := vlist[6]
+ else if varname = 'FOCUSER2' then
+   v := vlist[7]
+ else if varname = 'FILTER1' then
+   v := vlist[8]
+ else if varname = 'FILTER1' then
+   v := vlist[9]
+ else if varname = 'ROTATOR1' then
+   v := vlist[10]
+ else if varname = 'ROTATOR2' then
+   v := vlist[11]
+ else if varname = 'VARIANT1' then
+   v := vlist[12]
+ else if varname = 'VARIANT2' then
+   v := vlist[13]
+ else if varname = 'VARIANT3' then
+   v := vlist[14]
+ else if varname = 'VARIANT4' then
+   v := vlist[15]
+ else if varname = 'VARIANT5' then
+   v := vlist[16]
+ else if varname = 'VARIANT6' then
+   v := vlist[17]
+ else if varname = 'VARIANT7' then
+   v := vlist[18]
+ else if varname = 'VARIANT8' then
+   v := vlist[19]
+ else if varname = 'VARIANT9' then
+   v := vlist[20]
+ else if varname = 'VARIANT10' then
+   v := vlist[21]
+ else
+   Result := False;
+end;
+
+function Tf_scriptengine.doSetV(varname: string; v: variant): boolean;
+begin
+ Result := True;
+ varname := uppercase(varname);
+ if varname = 'TELESCOPE1' then
+   vlist[0] := v
+ else if varname = 'TELESCOPE2' then
+   vlist[1] := v
+ else if varname = 'DOME1' then
+   vlist[2] := v
+ else if varname = 'DOME2' then
+   vlist[3] := v
+ else if varname = 'CAMERA1' then
+   vlist[4] := v
+ else if varname = 'CAMERA2' then
+   vlist[5] := v
+ else if varname = 'FOCUSER1' then
+   vlist[6] := v
+ else if varname = 'FOCUSER2' then
+   vlist[7] := v
+ else if varname = 'FILTER1' then
+   vlist[8] := v
+ else if varname = 'FILTER1' then
+   vlist[9] := v
+ else if varname = 'ROTATOR1' then
+   vlist[10] := v
+ else if varname = 'ROTATOR2' then
+   vlist[11] := v
+ else if varname = 'VARIANT1' then
+   vlist[12] := v
+ else if varname = 'VARIANT2' then
+   vlist[13] := v
+ else if varname = 'VARIANT3' then
+   vlist[14] := v
+ else if varname = 'VARIANT4' then
+   vlist[15] := v
+ else if varname = 'VARIANT5' then
+   vlist[16] := v
+ else if varname = 'VARIANT6' then
+   vlist[17] := v
+ else if varname = 'VARIANT7' then
+   vlist[18] := v
+ else if varname = 'VARIANT8' then
+   vlist[19] := v
+ else if varname = 'VARIANT9' then
+   vlist[20] := v
+ else if varname = 'VARIANT10' then
+   vlist[21] := v
+ else
+   Result := False;
 end;
 
 Procedure Tf_scriptengine.doEq2Hz(var ra,de,a,h : double);
@@ -995,6 +1114,8 @@ with Sender as TPSScript do begin
   AddMethod(self, @Tf_scriptengine.doSetI, 'function SetI(varname:string; i: Integer):Boolean;');
   AddMethod(self, @Tf_scriptengine.doGetD, 'function GetD(varname:string; var x: double):boolean;');
   AddMethod(self, @Tf_scriptengine.doSetD, 'function SetD(varname:string; x: Double):Boolean;');
+  AddMethod(self, @Tf_scriptengine.doGetV, 'function GetV(varname:string; var v: variant):boolean;');
+  AddMethod(self, @Tf_scriptengine.doSetV, 'function SetV(varname:string; v: variant):Boolean;');
   AddMethod(self, @Tf_scriptengine.doGetB, 'function GetB(varname:string; var x: Boolean):Boolean;');
   AddMethod(self, @Tf_scriptengine.doARtoStr, 'Function ARtoStr(var ar: Double) : string;');
   AddMethod(self, @Tf_scriptengine.doDEtoStr, 'Function DEtoStr(var de: Double) : string;');
