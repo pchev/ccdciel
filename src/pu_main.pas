@@ -2236,8 +2236,15 @@ begin
    f_scriptengine.Filter:=wheel;
    f_scriptengine.Mount:=mount;
    f_scriptengine.Camera:=camera;
+   f_scriptengine.GuiderCamera:=guidecamera;
+   f_scriptengine.FinderCamera:=findercamera;
    f_scriptengine.Focuser:=focuser;
    f_scriptengine.Switch:=switch;
+   f_scriptengine.Dome:=dome;
+   f_scriptengine.Rotator:=rotator;
+   f_scriptengine.CoverCalibrator:=cover;
+   f_scriptengine.Safety:=safety;
+   f_scriptengine.Weather:=weather;
  end;
  if f_script<>nil then begin
    f_script.Camera:=camera;

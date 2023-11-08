@@ -134,6 +134,7 @@ public
    destructor  Destroy; override;
    Procedure Connect(cp1: string; cp2:string=''; cp3:string=''; cp4:string=''; cp5:string=''; cp6:string=''); override;
    procedure Disconnect;  override;
+   function GetV: variant;
    Procedure StartExposure(exptime: double); override;
    procedure RestartExposure; override;
    Procedure SetBinning(sbinX,sbinY: integer); override;
@@ -378,6 +379,11 @@ begin
     on E: Exception do msg(Format(rsDisconnectio, [E.Message]),0);
   end;
 {$endif}
+end;
+
+function T_ascomcamera.GetV: variant;
+begin
+  result:=V;
 end;
 
 function T_ascomcamera.Connected: boolean;

@@ -82,6 +82,7 @@ public
    destructor  Destroy; override;
    procedure Connect(cp1: string; cp2:string=''; cp3:string=''; cp4:string=''; cp5:string=''; cp6:string=''); override;
    procedure Disconnect; override;
+   function GetV: variant;
    function Slew(sra,sde: double):boolean; override;
    function SlewAsync(sra,sde: double):boolean; override;
    function FlipMeridian: boolean; override;
@@ -307,6 +308,11 @@ begin
   if FStatus=devConnected then StatusTimer.Enabled:=true;
   end;
  {$endif}
+end;
+
+function T_ascommount.GetV: variant;
+begin
+  result:=V;
 end;
 
 procedure T_ascommount.SetPark(value:Boolean);

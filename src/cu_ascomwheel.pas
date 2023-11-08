@@ -58,6 +58,7 @@ T_ascomwheel = class(T_wheel)
    destructor  Destroy; override;
    Procedure Connect(cp1: string; cp2:string=''; cp3:string=''; cp4:string=''; cp5:string=''; cp6:string=''); override;
    procedure Disconnect; override;
+   function GetV: variant;
 end;
 
 const waitpoll=500;
@@ -137,6 +138,11 @@ begin
      on E: Exception do msg('Disconnection error: ' + E.Message,0);
    end;
  {$endif}
+end;
+
+function T_ascomwheel.GetV: variant;
+begin
+  result:=V;
 end;
 
 function T_ascomwheel.Connected: boolean;

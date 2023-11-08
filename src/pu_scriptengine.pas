@@ -31,11 +31,13 @@ interface
 
 uses  u_global, u_utils, cu_fits, indiapi, cu_planetarium, fu_ccdtemp, fu_devicesconnection, pu_pause,
   fu_capture, fu_preview, fu_mount, cu_wheel, cu_mount, cu_camera, cu_focuser, cu_autoguider, cu_astrometry,
+  cu_dome, cu_rotator, cu_safety, cu_weather,
   fu_cover, cu_cover, fu_internalguider, fu_finder, cu_switch, fu_starprofile,
   Classes, SysUtils, FileUtil, uPSComponent, uPSComponent_Default, LazFileUtils,
   uPSComponent_Forms, uPSComponent_Controls, uPSComponent_StdCtrls, Forms, process,
   {$ifdef mswindows}
-   uPSComponent_COM,
+   uPSComponent_COM, cu_ascommount, cu_ascomcamera, cu_ascomcover, cu_ascomdome, cu_ascomfocuser, cu_ascomrotator,
+   cu_ascomsafety, cu_ascomswitch, cu_ascomweather, cu_ascomwheel,
   {$endif}
   u_translation, Controls, Graphics, Dialogs, ExtCtrls;
 
@@ -67,9 +69,6 @@ type
     PSImport_DateUtils1: TPSImport_DateUtils;
     PSImport_Forms1: TPSImport_Forms;
     PSImport_StdCtrls1: TPSImport_StdCtrls;
-    {$ifdef mswindows}
-     PSImport_ComObj1: TPSImport_ComObj;
-    {$endif}
     ShutdownTimer: TTimer;
     TplPSScript: TPSScript;
     procedure FormCreate(Sender: TObject);
@@ -90,10 +89,17 @@ type
     f_mount: Tf_mount;
     f_cover: Tf_cover;
     Fstarprofile: Tf_starprofile;
-    Ffilter: T_wheel;
     Fmount: T_mount;
     Fcamera: T_camera;
+    Fguidercamera: T_camera;
+    Ffindercamera: T_camera;
+    Fcover: T_cover;
+    Fdome: T_dome;
     FFocuser: T_focuser;
+    Frotator: T_rotator;
+    Fsafety: T_safety;
+    Fweather: T_weather;
+    Ffilter: T_wheel;
     Fautoguider: T_autoguider;
     Fastrometry: TAstrometry;
     Fplanetarium: TPlanetarium;
@@ -120,8 +126,10 @@ type
     strllist: array of TStringList;
     Waitrunning, cancelWait, ScriptCancel: boolean;
     FParamStr: TStringList;
-
     RunProcess: TProcess;
+    {$ifdef mswindows}
+     PSImport_ComObj1: TPSImport_ComObj;
+    {$endif}
     procedure msg(str:string);
     function doGetS(varname:string; var str: string):Boolean;
     function doSetS(varname:string; str: string):Boolean;
@@ -283,8 +291,15 @@ type
     property Mount: T_mount read Fmount write Fmount;
     property Cover: Tf_cover read f_cover write f_cover;
     property Camera: T_camera read Fcamera write Fcamera;
+    property GuiderCamera: T_camera read Fguidercamera write Fguidercamera;
+    property FinderCamera: T_camera read Ffindercamera write Ffindercamera;
     property Focuser: T_focuser read FFocuser write FFocuser;
     property Filter: T_wheel read Ffilter write Ffilter;
+    property Dome: T_dome read Fdome write Fdome;
+    property Rotator: T_rotator read Frotator write Frotator;
+    property Safety: T_safety read Fsafety write Fsafety;
+    property Weather: T_weather read Fweather write Fweather;
+    property CoverCalibrator: T_cover read Fcover write Fcover;
     property Autoguider: T_autoguider read Fautoguider write Fautoguider;
     property Astrometry: TAstrometry read Fastrometry write Fastrometry;
     property Planetarium: TPlanetarium read Fplanetarium write Fplanetarium;
@@ -310,7 +325,7 @@ begin
   SetLength(ilist,10);
   SetLength(dlist,10);
   SetLength(slist,10);
-  SetLength(vlist, 22);
+  SetLength(vlist, 10);
   SetLength(strllist,10);
   for i:=0 to 9 do strllist[i]:=TStringList.Create;
   Waitrunning:=false;
@@ -554,50 +569,48 @@ function Tf_scriptengine.doGetV(varname: string; var v: variant): boolean;
 begin
  Result := True;
  varname := uppercase(varname);
- if varname = 'TELESCOPE1' then
-   v := vlist[0]
- else if varname = 'TELESCOPE2' then
-   v := vlist[1]
- else if varname = 'DOME1' then
-   v := vlist[2]
- else if varname = 'DOME2' then
-   v := vlist[3]
- else if varname = 'CAMERA1' then
-   v := vlist[4]
- else if varname = 'CAMERA2' then
-   v := vlist[5]
- else if varname = 'FOCUSER1' then
-   v := vlist[6]
- else if varname = 'FOCUSER2' then
-   v := vlist[7]
- else if varname = 'FILTER1' then
-   v := vlist[8]
- else if varname = 'FILTER1' then
-   v := vlist[9]
- else if varname = 'ROTATOR1' then
-   v := vlist[10]
- else if varname = 'ROTATOR2' then
-   v := vlist[11]
+ if (varname = 'TELESCOPE') and (Fmount<>nil) and (Fmount.MountInterface=ASCOM) then
+   v := T_ascommount(Fmount).GetV
+ else if (varname = 'DOME') and (FDome<>nil) and (Fdome.DomeInterface=ASCOM) then
+   v := T_ascomdome(FDome).GetV
+ else if (varname = 'CAMERA') and (Fcamera<>nil) and (Fcamera.CameraInterface=ASCOM) then
+   v := T_ascomcamera(Fcamera).GetV
+ else if (varname = 'GUIDERCAMERA') and (Fguidercamera<>nil) and (Fguidercamera.CameraInterface=ASCOM) then
+   v := T_ascomcamera(Fguidercamera).GetV
+ else if (varname = 'FINDERCAMERA') and (Ffindercamera<>nil) and (Ffindercamera.CameraInterface=ASCOM) then
+   v := T_ascomcamera(Ffindercamera).GetV
+ else if (varname = 'FOCUSER') and (FFocuser<>nil) and (FFocuser.FocuserInterface=ASCOM) then
+   v := T_ascomfocuser(FFocuser).GetV
+ else if (varname = 'FILTER') and (Ffilter<>nil) and (Ffilter.WheelInterface=ASCOM) then
+   v := T_ascomwheel(Ffilter).GetV
+ else if (varname = 'ROTATOR') and (Frotator<>nil) and (Frotator.RotatorInterface=ASCOM) then
+   v := T_ascomrotator(Frotator).GetV
+ else if (varname = 'COVER') and (Fcover<>nil) and (Fcover.CoverInterface=ASCOM) then
+   v := T_ascomcover(Fcover).GetV
+ else if (varname = 'SAFETY') and (Fsafety<>nil) and (Fsafety.SafetyInterface=ASCOM) then
+   v := T_ascomsafety(Fsafety).GetV
+ else if (varname = 'WEATHER') and (Fweather<>nil) and (Fweather.WeatherInterface=ASCOM) then
+   v := T_ascomweather(Fweather).GetV
  else if varname = 'VARIANT1' then
-   v := vlist[12]
+   v := vlist[0]
  else if varname = 'VARIANT2' then
-   v := vlist[13]
+   v := vlist[1]
  else if varname = 'VARIANT3' then
-   v := vlist[14]
+   v := vlist[2]
  else if varname = 'VARIANT4' then
-   v := vlist[15]
+   v := vlist[3]
  else if varname = 'VARIANT5' then
-   v := vlist[16]
+   v := vlist[4]
  else if varname = 'VARIANT6' then
-   v := vlist[17]
+   v := vlist[5]
  else if varname = 'VARIANT7' then
-   v := vlist[18]
+   v := vlist[6]
  else if varname = 'VARIANT8' then
-   v := vlist[19]
+   v := vlist[7]
  else if varname = 'VARIANT9' then
-   v := vlist[20]
+   v := vlist[8]
  else if varname = 'VARIANT10' then
-   v := vlist[21]
+   v := vlist[9]
  else
    Result := False;
 end;
@@ -606,50 +619,26 @@ function Tf_scriptengine.doSetV(varname: string; v: variant): boolean;
 begin
  Result := True;
  varname := uppercase(varname);
- if varname = 'TELESCOPE1' then
+ if varname = 'VARIANT1' then
    vlist[0] := v
- else if varname = 'TELESCOPE2' then
-   vlist[1] := v
- else if varname = 'DOME1' then
-   vlist[2] := v
- else if varname = 'DOME2' then
-   vlist[3] := v
- else if varname = 'CAMERA1' then
-   vlist[4] := v
- else if varname = 'CAMERA2' then
-   vlist[5] := v
- else if varname = 'FOCUSER1' then
-   vlist[6] := v
- else if varname = 'FOCUSER2' then
-   vlist[7] := v
- else if varname = 'FILTER1' then
-   vlist[8] := v
- else if varname = 'FILTER1' then
-   vlist[9] := v
- else if varname = 'ROTATOR1' then
-   vlist[10] := v
- else if varname = 'ROTATOR2' then
-   vlist[11] := v
- else if varname = 'VARIANT1' then
-   vlist[12] := v
  else if varname = 'VARIANT2' then
-   vlist[13] := v
+   vlist[1] := v
  else if varname = 'VARIANT3' then
-   vlist[14] := v
+   vlist[2] := v
  else if varname = 'VARIANT4' then
-   vlist[15] := v
+   vlist[3] := v
  else if varname = 'VARIANT5' then
-   vlist[16] := v
+   vlist[4] := v
  else if varname = 'VARIANT6' then
-   vlist[17] := v
+   vlist[5] := v
  else if varname = 'VARIANT7' then
-   vlist[18] := v
+   vlist[6] := v
  else if varname = 'VARIANT8' then
-   vlist[19] := v
+   vlist[7] := v
  else if varname = 'VARIANT9' then
-   vlist[20] := v
+   vlist[8] := v
  else if varname = 'VARIANT10' then
-   vlist[21] := v
+   vlist[9] := v
  else
    Result := False;
 end;
@@ -1114,8 +1103,10 @@ with Sender as TPSScript do begin
   AddMethod(self, @Tf_scriptengine.doSetI, 'function SetI(varname:string; i: Integer):Boolean;');
   AddMethod(self, @Tf_scriptengine.doGetD, 'function GetD(varname:string; var x: double):boolean;');
   AddMethod(self, @Tf_scriptengine.doSetD, 'function SetD(varname:string; x: Double):Boolean;');
+  {$ifdef mswindows}
   AddMethod(self, @Tf_scriptengine.doGetV, 'function GetV(varname:string; var v: variant):boolean;');
   AddMethod(self, @Tf_scriptengine.doSetV, 'function SetV(varname:string; v: variant):Boolean;');
+  {$endif}
   AddMethod(self, @Tf_scriptengine.doGetB, 'function GetB(varname:string; var x: Boolean):Boolean;');
   AddMethod(self, @Tf_scriptengine.doARtoStr, 'Function ARtoStr(var ar: Double) : string;');
   AddMethod(self, @Tf_scriptengine.doDEtoStr, 'Function DEtoStr(var de: Double) : string;');
