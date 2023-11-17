@@ -1073,9 +1073,11 @@ object f_option: Tf_option
               ShowHint = True
               TabOrder = 0
               OnChange = latChange
+              OnKeyDown = latdegKeyDown
               Decimals = 0
               MaxValue = 90
               NumericType = ntFixed
+              OnExit = latdegExit
             end
             object latmin: TLongEdit
               AnchorSideTop.Control = LatitudeGroup
@@ -1164,9 +1166,11 @@ object f_option: Tf_option
               ShowHint = True
               TabOrder = 0
               OnChange = longChange
+              OnKeyDown = longdegKeyDown
               Decimals = 0
               MaxValue = 180
               NumericType = ntFixed
+              OnExit = longdegExit
             end
             object longmin: TLongEdit
               AnchorSideTop.Control = LongitudeGroup

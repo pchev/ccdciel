@@ -762,7 +762,11 @@ type
     procedure CustomHeaderValidateEntry(Sender: TObject; aCol, aRow: Integer; const OldValue: string; var NewValue: String);
     procedure DomeFlatPositionClick(Sender: TObject);
     procedure FormDestroy(Sender: TObject);
+    procedure latdegExit(Sender: TObject);
+    procedure latdegKeyDown(Sender: TObject; var Key: Word; Shift: TShiftState);
     procedure LogDirDefaultClick(Sender: TObject);
+    procedure longdegExit(Sender: TObject);
+    procedure longdegKeyDown(Sender: TObject; var Key: Word; Shift: TShiftState);
     procedure ObservatoryDBDeleteClick(Sender: TObject);
     procedure ButtonNotificationAllClick(Sender: TObject);
     procedure ButtonHelpClick(Sender: TObject);
@@ -1485,6 +1489,18 @@ begin
   if hemis.Itemindex>0 then Flatitude:=-Flatitude;
 end;
 
+procedure Tf_option.latdegKeyDown(Sender: TObject; var Key: Word; Shift: TShiftState);
+begin
+ if key=VK_RETURN then begin
+   SetLatitude(Flatitude);
+ end;
+end;
+
+procedure Tf_option.latdegExit(Sender: TObject);
+begin
+ SetLatitude(Flatitude);
+end;
+
 procedure Tf_option.longChange(Sender: TObject);
 begin
   if LockChange then exit;
@@ -1496,6 +1512,18 @@ begin
   if long.Itemindex>0 then Flongitude:=-Flongitude;
   Flongitude:=to180(Flongitude);
   CheckLongitude;
+end;
+
+procedure Tf_option.longdegKeyDown(Sender: TObject; var Key: Word; Shift: TShiftState);
+begin
+  if key=VK_RETURN then begin
+    SetLongitude(Flongitude);
+  end;
+end;
+
+procedure Tf_option.longdegExit(Sender: TObject);
+begin
+  SetLongitude(Flongitude);
 end;
 
 procedure Tf_option.MeridianOptionClick(Sender: TObject);
