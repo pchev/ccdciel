@@ -706,6 +706,7 @@ type
     procedure ImageGuideMouseUp(Sender: TObject; Button: TMouseButton; Shift: TShiftState; X, Y: Integer);
     procedure ImageGuideMouseWheel(Sender: TObject; Shift: TShiftState; WheelDelta: Integer; MousePos: TPoint; var Handled: Boolean);
     procedure ImageFinderPaint(Sender: TObject);
+    procedure ImageFinderDblClick(Sender: TObject);
     procedure ImageFinderMouseDown(Sender: TObject; Button: TMouseButton; Shift: TShiftState; X, Y: Integer);
     procedure ImageFinderMouseMove(Sender: TObject; Shift: TShiftState; X, Y: Integer);
     procedure ImageFinderMouseUp(Sender: TObject; Button: TMouseButton; Shift: TShiftState; X, Y: Integer);
@@ -1619,6 +1620,7 @@ begin
   ImageFinder.PopupMenu := FinderPopUpmenu;
   ImageFinder.OnResize := @ImageResize;
   ImageFinder.OnPaint := @ImageFinderPaint;
+  ImageFinder.OnDblClick := @ImageFinderDblClick;
   ImageFinder.OnMouseDown := @ImageFinderMouseDown;
   ImageFinder.OnMouseMove := @ImageFinderMouseMove;
   ImageFinder.OnMouseUp := @ImageFinderMouseUp;
@@ -3720,12 +3722,25 @@ begin
 end;
 
 procedure Tf_main.Image1DblClick(Sender: TObject);
-var x,y: integer;
+var x,y,px,py,dx,dy: integer;
+    xc,yc,ri:integer;
+    vmax,bg,sd: double;
 begin
 if SplitImage then exit;
 if fits.HeaderInfo.valid and fits.ImageValid and (not f_starprofile.AutofocusRunning) then begin
    if f_photometry.Visible then begin
       MeasureAtPos(Mx,My,true);
+   end
+   else if PolarAlignmentOverlay and (not PolarAlignmentLock) then begin
+      Screen2fits(Mx,My,f_visu.FlipHorz,f_visu.FlipVert,px,py);
+      fits.FindStarPos(px,py,Starwindow div 2,xc,yc,ri,vmax,bg,sd);
+      if vmax>0 then begin
+        dx:=xc-(fits.HeaderInfo.naxis1 div 2);
+        dy:=yc-(fits.HeaderInfo.naxis2 div 2);
+        PolarAlignmentOverlayOffsetX:=(Fits.HeaderInfo.naxis1 div 2)-PolarAlignmentStartx + dx;
+        PolarAlignmentOverlayOffsetY:=(Fits.HeaderInfo.naxis2 div 2)-PolarAlignmentStarty + dy;
+        Image1.Invalidate;
+      end;
    end
    else begin
       Screen2fits(Mx,My,f_visu.FlipHorz,f_visu.FlipVert,x,y);
@@ -17652,6 +17667,26 @@ try
      ImageFinder.Canvas.Pen.Mode:=pmCopy;
   end;
 except
+end;
+end;
+
+procedure Tf_main.ImageFinderDblClick(Sender: TObject);
+var x,y,px,py,dx,dy: integer;
+    xc,yc,ri:integer;
+    vmax,bg,sd: double;
+begin
+if finderfits.HeaderInfo.valid and finderfits.ImageValid then begin
+  if PolarAlignmentOverlay and (not PolarAlignmentLock) then begin
+      FinderScreen2Fits(FinderMx,FinderMy,true,px,py);
+      finderfits.FindStarPos(px,py,Starwindow div 2,xc,yc,ri,vmax,bg,sd);
+      if vmax>0 then begin
+        dx:=xc-(finderfits.HeaderInfo.naxis1 div 2);
+        dy:=yc-(finderfits.HeaderInfo.naxis2 div 2);
+        PolarAlignmentOverlayOffsetX:=(finderfits.HeaderInfo.naxis1 div 2)-PolarAlignmentStartx + dx;
+        PolarAlignmentOverlayOffsetY:=(finderfits.HeaderInfo.naxis2 div 2)-PolarAlignmentStarty + dy;
+        ImageFinder.Invalidate;
+      end;
+  end;
 end;
 end;
 
