@@ -8757,7 +8757,7 @@ begin
    f.Caption:=rsImageStatist;
    txt:=fits.GetStatistics;
 
-   Fits.stdev2({out}mean,sd,iterations);
+   Fits.stdev2(4,{out}mean,sd,iterations);//test every 4x4= 16th pixel to speed up
    txt:=txt+'Mean2: '+floattostrF(mean,FFfixed,0,1)+' (sigma clipped)'+crlf;
    txt:=txt+'Std.Dev2: '+floattostrF(sd,FFfixed,0,1)+' (sigma clipped)'+crlf;
 
@@ -15418,14 +15418,15 @@ begin
     end;
   end;
 
+  NewMessage('Start image inspection',2);
+
   s:=28;// Fixed measuring window since in tilted images the stars not have the same HFD.
 
   // new measurement with adjusted window
-  rx:=img_Width-6*s; {search area}
-  ry:=img_Height-6*s;
+  rx:=img_Width-2*s; {search area}
+  ry:=img_Height-2*s;
 
   fits.GetStarList(rx,ry,s,10 {min_snr},true {strict_saturation}); {search stars in fits image}
-
 //  Uncomment to help star detection debugging
 //  PrintStarList;
 
@@ -15438,7 +15439,6 @@ begin
      screw2:=fnmodulo2(TriangleInspectionAngle+120,360);
      screw3:=fnmodulo2(TriangleInspectionAngle-120,360);
    end;
-
 
   nhfd_11:=0;{set counters at zero}
   nhfd_21:=0;

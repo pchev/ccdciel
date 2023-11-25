@@ -191,7 +191,7 @@ type
      Procedure LoadRGB;
      procedure ClearFitsInfo;
      procedure GetFitsInfo;
-     procedure stdev2(out mean,sd : double; out iterations :integer);{calculate mean and standard deviation using sigma clip to exclude outliers}
+     procedure stdev2(samplestep: integer; out mean,sd : double; out iterations :integer);{calculate mean and standard deviation using sigma clip to exclude outliers}
      procedure CreateImage(info: TFitsInfo; hdr:TFitsHeader);
      procedure BayerInterpolation(t:TBayerMode; rmult,gmult,bmult:double; rbg,gbg,bbg:single; pix1,pix2,pix3,pix4,pix5,pix6,pix7,pix8,pix9:single; row,col:integer; out pixr,pixg,pixb:single); inline;
      Procedure Debayer;
@@ -219,6 +219,7 @@ type
      procedure GetHFD3(x,y,s: integer; autoCenter :boolean; out xc,yc,bg,sd,hfd,star_fwhm,valmax,snr,flux: double; strict_saturation: boolean=true);{v2022-06}
      procedure GetHFD2(x,y,s: integer; out xc,yc,bg,sd,hfd,star_fwhm,valmax,snr,flux: double; strict_saturation: boolean=true; allow_saturation: boolean=false);
      procedure GetStarList(rx,ry,s: integer;min_snr: double; strict_saturation : boolean);
+
      procedure MeasureStarList(s: integer; list: TArrayDouble2);
      procedure SortStarlist;
      procedure ClearStarList;
@@ -1273,12 +1274,14 @@ begin
   ss := ry div num div s;
   marginx:=(xs-rx)div 2 div s;
   marginy:=(ys-ry)div 2 div s;
+
   // range for current thread
   starty := marginy + id * ss;
   if id=(num-1) then
     endy := ((ys) div s)-marginy
   else
     endy := starty + ss;
+
 
   nhfd:=0;{set counters at zero}
   SetLength(StarList,1000);{allocate initial size}
@@ -1293,9 +1296,9 @@ begin
        fits.GetHFD2(fitsX,fitsY,s+overlap,xc,yc,bg,bgdev,hfd1,star_fwhm,vmax,snr,flux,strict_saturation);{calculate the HFD}
 
        {check valid hfd }
-       if ((hfd1>0)and (Undersampled or (hfd1>0.7)))
+       if ((hfd1>0)and (Undersampled or (hfd1>0.8)))
           and (hfd1<99)
-          and (img_temp[0,round(xc),round(yc)]=0)  {area not surveyed}
+          and (img_temp[0,round(yc),round(xc)]=0)  {area not surveyed}
           and (snr>min_snr)  {minimal star detection level, return SNR=0 when star is saturated}
        then
 
@@ -1317,9 +1320,9 @@ begin
          for n:=-radius to +radius do {mark the whole circular star area as occupied to prevent double detection's}
            for m:=-radius to +radius do
            begin
-             j:=n+yci;
-             i:=m+xci;
-             if ((j>=0) and (i>=0) and (j<ys) and (i<xs) and (sqr(m)+sqr(n)<=sqr_radius)) then
+             i:=n+yci;
+             j:=m+xci;
+             if ((j>=0) and (i>=0) and (i<ys) and (j<xs) and (sqr(m)+sqr(n)<=sqr_radius)) then
               img_temp[0,i,j]:=1;
            end;
 
@@ -1329,6 +1332,7 @@ begin
    SetLength(StarList,nhfd);  {set length to new number of elements}
    working:=false;
 end;
+
 
 //////////////////// TFits /////////////////////////
 
@@ -1648,9 +1652,9 @@ end;
 end;
 
 
-procedure TFits.stdev2( out mean,sd : double; out iterations :integer);{calculate mean and standard deviation using sigma clip to exclude outliers}
-var i,j,counter,w,h : integer;
-    value, sd_old,meanx   : double;
+procedure TFits.stdev2(samplestep: integer; out mean,sd : double; out iterations :integer);{calculate mean and standard deviation using sigma clip to exclude outliers}
+var i,j,counter          : integer;
+    value, sd_old,meanx  : double;
 
 begin
   sd:=99999;
@@ -1660,10 +1664,10 @@ begin
     {mean}
     counter:=0;
     meanx:=0;
-    for j:=0 to Fheight-1  do
-    for i:=0 to Fwidth-1 do
+    for j:=0 to (Fheight-1) div samplestep  do
+    for i:=0 to (Fwidth-1) div samplestep do
     begin
-      value:=Fimage[0,j,i];
+      value:=Fimage[0,j*samplestep,i*samplestep];
       if  ((iterations=0) or (abs(value-mean)<=3*sd)) then  {ignore outliers after first run}
       begin
         inc(counter);
@@ -1675,10 +1679,11 @@ begin
     {sd}
     sd_old:=sd;
     counter:=0;
-    for j:=0 to Fheight-1  do
-    for i:=0 to Fwidth-1 do
+    for j:=0 to (Fheight-1) div samplestep  do
+    for i:=0 to (Fwidth-1) div samplestep do
+
     begin
-      value:=Fimage[0,j,i];
+      value:=Fimage[0,j*samplestep,i*samplestep];
       if value<2*mean then {not a large outlier}
       if ((iterations=0) or (abs(value-mean)<=3*sd_old)) then {ignore outliers after first run}
       begin
@@ -3665,14 +3670,15 @@ var
 begin
   overlap:=max(8,round(s/3)); // large overlap to have more chance to measure a big dot as a single piece
   s:=max(4,s-overlap);        // keep original window size after adding overlap
-  SetLength(img_temp,1,FWidth,FHeight); {array to check for duplicate}
-  for j:=0 to Fheight-1 do
-     for i:=0 to FWidth-1 do
+  SetLength(img_temp,1,FHeight,FWidth); {array to check for duplicate}
+  for i:=0 to Fheight-1 do
+     for j:=0 to FWidth-1 do
         img_temp[0,i,j]:=0;  {mark as not surveyed}
   thread[0]:=nil;
   // number of thread
    tc := max(1,min(16, MaxThreadCount)); // based on number of core
    tc := max(1,min(tc,Fheight div (100+2*s))); // do not split the image too much
+
   // start thread
   for i := 0 to tc - 1 do
   begin
@@ -3718,6 +3724,7 @@ begin
   // sort brighter first
   SortStarlist;
 end;
+
 
 procedure TFits.MeasureStarList(s: integer; list: TArrayDouble2);
 var
