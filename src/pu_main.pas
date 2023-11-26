@@ -1197,7 +1197,7 @@ begin
  end;
  FindCloseUTF8(fs);
  // purge astrometry error pictures
- i:=FindFirstUTF8(slash(LogDir)+'astrometry_fail_*',0,fs);
+ i:=FindFirstUTF8(slash(LogDir)+'*astrometry_fail_*',0,fs);
  while i=0 do begin
    if (fs.Time>0)and(fs.Time<tl) then begin
      buf:=slash(LogDir)+fs.Name;
