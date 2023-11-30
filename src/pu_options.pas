@@ -535,7 +535,7 @@ type
     BayerMode: TComboBox;
     Autofocusmode: TRadioGroup;
     AstUseScript: TCheckBox;
-    AstCustScript: TEdit;
+    AstCustScript: TFileNameEdit;
     ButtonTempDir: TButton;
     CameraAutoCool: TCheckBox;
     AutofocusSlippageCorrection: TCheckBox;

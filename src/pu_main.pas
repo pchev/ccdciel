@@ -9415,8 +9415,11 @@ begin
    f_option.AstUseOnline.Checked:=config.GetValue('/Astrometry/AstUseOnline',false);
    f_option.AstOnlineKey.Text:=config.GetValue('/Astrometry/AstOnlineKey','');
    f_option.AstUseScript.Checked:=config.GetValue('/Astrometry/AstUseScript',false);
-   f_option.AstCustScript.Text:=config.GetValue('/Astrometry/AstCustScript','');
+   f_option.AstCustScript.FileName:=config.GetValue('/Astrometry/AstCustScript','');
    f_option.AstCustScript.Visible:=f_option.AstUseScript.Checked;
+   buf:=ExtractFilePath(f_option.AstCustScript.FileName);
+   if buf='' then f_option.AstCustScript.InitialDir:=ScriptsDir
+             else f_option.AstCustScript.InitialDir:=buf;
    f_option.CygwinPath.Text:=config.GetValue('/Astrometry/CygwinPath','C:\cygwin');
    f_option.AstrometryPath.Text:=config.GetValue('/Astrometry/AstrometryPath','');
    f_option.AstrometryFallback.Checked:=config.GetValue('/Astrometry/Fallback',false);
@@ -9843,8 +9846,8 @@ begin
      config.SetValue('/Astrometry/OtherOptions',f_option.OtherOptions.Text);
      config.SetValue('/Astrometry/AstUseOnline',f_option.AstUseOnline.Checked);
      config.SetValue('/Astrometry/AstOnlineKey',f_option.AstOnlineKey.Text);
-     config.SetValue('/Astrometry/AstUseScript',f_option.AstUseScript.Checked);
-     config.SetValue('/Astrometry/AstCustScript',f_option.AstCustScript.Text);
+     config.SetValue('/Astrometry/AstUseScript',f_option.AstUseScript.Checked and (f_option.AstCustScript.FileName<>''));
+     config.SetValue('/Astrometry/AstCustScript',f_option.AstCustScript.FileName);
      config.SetValue('/Astrometry/AstrometryPath',trim(f_option.AstrometryPath.Text));
      config.SetValue('/Astrometry/CygwinPath',f_option.CygwinPath.Text);
      config.SetValue('/Astrometry/Fallback',f_option.AstrometryFallback.Checked);

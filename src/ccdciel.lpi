@@ -170,6 +170,10 @@
               <IgnoredMessages idx5024="True"/>
             </CompilerMessages>
             <CustomOptions Value="-dUseCThreads -dUseHeapTrc"/>
+            <OtherDefines Count="2">
+              <Define0 Value="UseCThreads"/>
+              <Define1 Value="debug_raw"/>
+            </OtherDefines>
           </Other>
         </CompilerOptions>
       </Item5>

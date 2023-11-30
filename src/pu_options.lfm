@@ -3986,12 +3986,17 @@ object f_option: Tf_option
                   ParentFont = False
                   TabOrder = 0
                 end
-                object AstCustScript: TEdit
+                object AstCustScript: TFileNameEdit
                   Left = 44
                   Height = 28
                   Top = 36
-                  Width = 400
+                  Width = 397
+                  FilterIndex = 0
+                  HideDirectories = False
+                  ButtonWidth = 23
                   Constraints.MaxHeight = 28
+                  NumGlyphs = 1
+                  MaxLength = 0
                   ParentFont = False
                   TabOrder = 1
                 end
@@ -4031,7 +4036,7 @@ object f_option: Tf_option
                     Height = 28
                     Hint = 'Let blank for default system search path'
                     Top = 6
-                    Width = 315
+                    Width = 319
                     ShowHidden = False
                     ButtonWidth = 23
                     Constraints.MaxHeight = 28
