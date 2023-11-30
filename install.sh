@@ -46,6 +46,7 @@ install -m 755 -d $destdir/share/ccdciel/doc
 
 install -v -m 755 -s src/ccdciel  $destdir/bin/ccdciel
 install -v -m 755 scripts/astrometry.sh  $destdir/share/ccdciel/scripts/astrometry.sh
+install -v -m 755 scripts/astrometry-blind.sh  $destdir/share/ccdciel/scripts/astrometry-blind.sh
 install -v -m 755 scripts/astrometry-online.sh  $destdir/share/ccdciel/scripts/astrometry-online.sh
 install -v -m 755 scripts/astrometry-online.bat  $destdir/share/ccdciel/scripts/astrometry-online.bat
 install -v -m 644 scripts/client.py  $destdir/share/ccdciel/scripts/client.py

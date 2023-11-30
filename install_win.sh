@@ -62,6 +62,7 @@ install -v -m 644 scripts/cover_close.script  $destdir/scripts/cover_close.scrip
 install -v -m 644 scripts/calibrator_on.script  $destdir/scripts/calibrator_on.script
 install -v -m 644 scripts/calibrator_off.script  $destdir/scripts/calibrator_off.script 
 install -v -m 755 scripts/astrometry.sh  $destdir/scripts/astrometry.sh
+install -v -m 755 scripts/astrometry-blind.sh  $destdir/scripts/astrometry-blind.sh
 install -v -m 755 scripts/astrometry-online.sh  $destdir/scripts/astrometry-online.sh
 install -v -m 755 scripts/astrometry-online.bat  $destdir/scripts/astrometry-online.bat
 install -v -m 644 scripts/client.py  $destdir/scripts/client.py
