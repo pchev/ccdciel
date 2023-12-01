@@ -3991,6 +3991,7 @@ object f_option: Tf_option
                   Height = 28
                   Top = 36
                   Width = 397
+                  Filter = 'all|*.*|shell script|*.sh|cmd script|*.cmd,*.bat|powershell|*.ps1'
                   FilterIndex = 0
                   HideDirectories = False
                   ButtonWidth = 23
