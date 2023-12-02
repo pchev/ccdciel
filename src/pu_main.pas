@@ -9409,9 +9409,9 @@ begin
    f_option.Tolerance.Value:=config.GetValue('/Astrometry/ScaleTolerance',0.5);
    f_option.MaxRadius.Value:=config.GetValue('/Astrometry/MaxRadius',15.0);
    f_option.AstrometryTimeout.Value:=round(config.GetValue('/Astrometry/Timeout',60.0));
-   f_option.Downsample.Value:=config.GetValue('/Astrometry/DownSample',4);
+   f_option.Downsample.Value:=config.GetValue('/Astrometry/DownSample',1);
    f_option.SourcesLimit.Value:=config.GetValue('/Astrometry/SourcesLimit',150);
-   f_option.OtherOptions.Text:=config.GetValue('/Astrometry/OtherOptions','--no-fits2fits');
+   f_option.OtherOptions.Text:=config.GetValue('/Astrometry/OtherOptions',defAstrometryNetOpt);
    f_option.AstUseOnline.Checked:=config.GetValue('/Astrometry/AstUseOnline',false);
    f_option.AstOnlineKey.Text:=config.GetValue('/Astrometry/AstOnlineKey','');
    f_option.AstUseScript.Checked:=config.GetValue('/Astrometry/AstUseScript',false);

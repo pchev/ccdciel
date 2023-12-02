@@ -349,6 +349,7 @@ const
     defSAMPpath = 'aladin';
     defPHDpath = 'phd2';
     hostOS = 'linux';
+    defAstrometryNetOpt='';
   {$endif}
   {$ifdef darwin}
     SharedDir = './';
@@ -362,6 +363,7 @@ const
     defSAMPpath = '/Applications/Aladin.app/Contents/MacOS/Aladin';
     defPHDpath = '/Applications/PHD2.app/Contents/MacOS/PHD2';
     hostOS = 'darwin';
+    defAstrometryNetOpt='';
   {$endif}
   {$ifdef mswindows}
     SharedDir = '.\';
@@ -375,6 +377,7 @@ const
     defSAMPpath = 'C:\Program Files\Aladin\Aladin.exe';
     defPHDpath = 'C:\Program Files (x86)/PHDGuiding2/phd2.exe';
     hostOS = 'windows';
+    defAstrometryNetOpt='--no-fits2fits';
   {$endif}
   {$ifdef darwin}
     OpenFileCMD: string = 'open';

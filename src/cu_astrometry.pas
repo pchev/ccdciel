@@ -250,7 +250,7 @@ begin
       engine.scalelow:=(1-tolerance)*pixscale;
       engine.scalehigh:=(1+tolerance)*pixscale;
    end;
-   engine.downsample:=config.GetValue('/Astrometry/DownSample',4);
+   engine.downsample:=config.GetValue('/Astrometry/DownSample',1);
    engine.objs:=config.GetValue('/Astrometry/SourcesLimit',150);
    engine.OtherOptions:=config.GetValue('/Astrometry/OtherOptions','');
    online:=config.GetValue('/Astrometry/AstUseOnline',false);
