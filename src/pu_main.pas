@@ -17396,10 +17396,12 @@ begin
     1: astrometry.FinderCamera:=findercamera;
   end;
   if n=0 then begin
+    screenconfig.SetValue('/Tools/Finder/Visible',false);
     TBFinder.Visible:=false;
     SetTool(f_finder,'Finder',PanelRight7,0,MenuViewFinder,MenuFinder,false);
   end
   else begin
+    screenconfig.SetValue('/Tools/Finder/Visible',true);
     TBFinder.Visible:=true;
     SetTool(f_finder,'Finder',PanelRight7,0,MenuViewFinder,MenuFinder,true);
   end;
