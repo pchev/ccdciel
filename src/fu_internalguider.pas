@@ -1221,7 +1221,7 @@ begin
  begin
    canvas.brush.color:=clmenu;
    canvas.rectangle(0,0, width,height);
-   canvas.font.color:=clblue;
+   canvas.font.color:=clBtnText;
    canvas.textout(5,10,message1);
    canvas.textout(5,35,message2);
    canvas.textout(5,60,message3);
