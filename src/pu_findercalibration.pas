@@ -4,7 +4,7 @@ unit pu_findercalibration;
 
 interface
 
-uses u_utils, u_global, u_annotation, UScaleDPI, u_translation, Clipbrd,
+uses u_utils, u_global, u_annotation, UScaleDPI, u_translation, Clipbrd, cu_astrometry, fu_preview,
   Classes, SysUtils, Forms, Controls, Graphics, Dialogs, StdCtrls, ExtCtrls;
 
 type
@@ -15,6 +15,7 @@ type
     Button1: TButton;
     Button2: TButton;
     ButtonPast: TButton;
+    ButtonSolve: TButton;
     edDe: TEdit;
     Label1: TLabel;
     Label16: TLabel;
@@ -26,14 +27,19 @@ type
     PanelTop: TPanel;
     PanelBottom: TPanel;
     procedure ButtonPastClick(Sender: TObject);
+    procedure ButtonSolveClick(Sender: TObject);
     procedure FormCreate(Sender: TObject);
   private
+    FAstrometry: TAstrometry;
+    Fpreview:Tf_preview;
     procedure SetRA(value: double);
     procedure SetDE(value: double);
     function  GetRA: double;
     function  GetDE: double;
   public
     procedure SetLang;
+    property Astrometry: TAstrometry read FAstrometry write FAstrometry;
+    property preview: Tf_preview read Fpreview write Fpreview;
     property RA: double read GetRa write SetRA;
     property DE: double read GetDE write SetDE;
   end;
@@ -74,6 +80,32 @@ begin
   end
   else begin
     ShowMessage(Format(rsCannotInterp, [buf]));
+  end;
+end;
+
+procedure Tf_findercalibration.ButtonSolveClick(Sender: TObject);
+var exp,cra,cde,eq,pa: double;
+    bin,gain,offset: integer;
+begin
+  try
+  screen.Cursor:=crHourGlass;
+  exp:=Fpreview.Exposure;
+  bin:=Fpreview.Bin;
+  gain:=Fpreview.Gain;
+  offset:=Fpreview.Offset;
+  FAstrometry.Camera.ControlExposure(exp,bin,bin,LIGHT,ReadoutModeAstrometry,gain,offset);
+  screen.Cursor:=crHourGlass;
+  FAstrometry.SolveCurrentImage(true);
+  screen.Cursor:=crHourGlass;
+  if (not FAstrometry.Busy)and FAstrometry.LastResult then begin
+      if FAstrometry.CurrentCoord(cra,cde,eq,pa) then begin
+        edRa.Text:=RAToStr(cra);
+        edDe.Text:=DEToStr(cde);
+      end;
+  end
+  else ShowMessage(format(rsError,[FAstrometry.LastError]));
+  finally
+    screen.Cursor:=crDefault;
   end;
 end;
 

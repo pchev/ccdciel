@@ -225,9 +225,14 @@ if (FCamera.Status=devConnected) then begin
     wait(1);
   end;
   msg(rsCalibration,3);
-  if f_findercalibration.ShowModal = mrOK then begin
+  f_findercalibration.Astrometry:=FAstrometry;
+  if pseudomodal(f_findercalibration) = mrOK then begin
     ra2000:=f_findercalibration.RA;
     de2000:=f_findercalibration.DE;
+    if (ra2000=NullCoord)or(de2000=NullCoord) then begin
+      msg(rsInvalidCoord,1);
+      exit;
+    end;
     exp:=max(FCamera.ExposureRange.min,PreviewExp.Value);
     sgain:=config.GetValue('/PrecSlew/Gain',NullInt);
     soffset:=config.GetValue('/PrecSlew/Offset',NullInt);

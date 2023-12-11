@@ -1,16 +1,16 @@
 object f_findercalibration: Tf_findercalibration
   Left = 369
-  Height = 270
+  Height = 301
   Top = 31
   Width = 320
   Caption = 'Finder Calibration'
-  ClientHeight = 270
+  ClientHeight = 301
   ClientWidth = 320
   OnCreate = FormCreate
   object PanelBottom: TPanel
     Left = 0
     Height = 42
-    Top = 228
+    Top = 259
     Width = 320
     Align = alBottom
     ClientHeight = 42
@@ -38,16 +38,16 @@ object f_findercalibration: Tf_findercalibration
   end
   object PanelTop: TPanel
     Left = 0
-    Height = 112
+    Height = 120
     Top = 0
     Width = 320
     Align = alClient
-    ClientHeight = 112
+    ClientHeight = 120
     ClientWidth = 320
     TabOrder = 1
     object Label3: TLabel
       Left = 1
-      Height = 110
+      Height = 118
       Top = 1
       Width = 318
       Align = alClient
@@ -59,20 +59,20 @@ object f_findercalibration: Tf_findercalibration
   end
   object Panel1: TPanel
     Left = 0
-    Height = 116
-    Top = 112
+    Height = 139
+    Top = 120
     Width = 320
     Align = alBottom
-    ClientHeight = 116
+    ClientHeight = 139
     ClientWidth = 320
     TabOrder = 2
     object Label1: TLabel
       AnchorSideTop.Control = edRa
       AnchorSideTop.Side = asrCenter
       Left = 8
-      Height = 19
+      Height = 18
       Top = 13
-      Width = 63
+      Width = 62
       Caption = 'Center RA'
       ParentColor = False
       ParentFont = False
@@ -99,9 +99,9 @@ object f_findercalibration: Tf_findercalibration
       AnchorSideTop.Control = edDe
       AnchorSideTop.Side = asrCenter
       Left = 8
-      Height = 19
+      Height = 18
       Top = 47
-      Width = 70
+      Width = 68
       Caption = 'Center Dec'
       ParentColor = False
       ParentFont = False
@@ -110,9 +110,9 @@ object f_findercalibration: Tf_findercalibration
       AnchorSideTop.Control = edRa
       AnchorSideTop.Side = asrCenter
       Left = 235
-      Height = 19
+      Height = 18
       Top = 13
-      Width = 36
+      Width = 34
       Caption = 'J2000'
       ParentColor = False
       ParentFont = False
@@ -121,9 +121,9 @@ object f_findercalibration: Tf_findercalibration
       AnchorSideTop.Control = edDe
       AnchorSideTop.Side = asrCenter
       Left = 235
-      Height = 19
+      Height = 18
       Top = 47
-      Width = 36
+      Width = 34
       Caption = 'J2000'
       ParentColor = False
       ParentFont = False
@@ -136,6 +136,15 @@ object f_findercalibration: Tf_findercalibration
       Caption = 'Past from clipboard'
       OnClick = ButtonPastClick
       TabOrder = 2
+    end
+    object ButtonSolve: TButton
+      Left = 56
+      Height = 25
+      Top = 108
+      Width = 213
+      Caption = 'Solve main camera image'
+      OnClick = ButtonSolveClick
+      TabOrder = 3
     end
   end
 end

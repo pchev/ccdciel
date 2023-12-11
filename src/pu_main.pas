@@ -2809,6 +2809,8 @@ begin
   f_polaralign2.onShowMessage:=@NewMessage;
   f_polaralign2.onClose:=@Polaralign2Close;
 
+  f_findercalibration.preview:=f_preview;
+
   StartupTimer.Enabled:=true;
 end;
 

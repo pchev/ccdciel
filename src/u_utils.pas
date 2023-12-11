@@ -169,6 +169,7 @@ function StartProgram(pgm, path: string): boolean;
 procedure StopProgram(pgm: string);
 function SafeFileName(fn:string): string;
 function ValidateCustomHeader(key:string): boolean;
+function pseudomodal(f:Tform):TModalResult;
 
 
 implementation
@@ -3700,6 +3701,27 @@ begin
 
   finally
    lst.free
+  end;
+end;
+
+function pseudomodal(f:Tform):TModalResult;
+var fstyle: TFormStyle;
+begin
+  // show form in modal like mode that allow to change the cursor
+  f.ModalResult:=mrNone;
+  fstyle:=f.FormStyle;
+  try
+  f.FormStyle:=fsStayOnTop;
+  f.Show;
+  while (f.visible)and(f.ModalResult=mrNone) do begin
+    sleep(100);
+    Application.ProcessMessages;
+  end;
+  result:=f.ModalResult;
+  if result=mrNone then result:=mrCancel;
+  finally
+   f.Hide;
+   f.FormStyle:=fstyle;
   end;
 end;
 
