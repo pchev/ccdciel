@@ -4700,10 +4700,9 @@ begin
               end;
     end;
   end;
-  fn:=StringReplace(fn,' ',blankrep,[rfReplaceAll]);
-  fn:=StringReplace(fn,'/',blankrep,[rfReplaceAll]);
-  fn:=StringReplace(fn,'\',blankrep,[rfReplaceAll]);
-  fn:=StringReplace(fn,':',blankrep,[rfReplaceAll]);
+  fn:=StringReplace(fn,'/','',[rfReplaceAll]);
+  fn:=StringReplace(fn,'\','',[rfReplaceAll]);
+  fn:=StringReplace(fn,':','',[rfReplaceAll]);
   if fn<>'' then
      delete(fn,length(fn),1); // remove last _
   // sequence number must always be at the end

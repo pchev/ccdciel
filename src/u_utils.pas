@@ -3571,11 +3571,10 @@ end;
 
 function SafeFileName(fn:string): string;
 begin
-result:=StringReplace(fn,' ','',[rfReplaceAll]);
 result:=StringReplace(fn,'*','',[rfReplaceAll]);
-result:=StringReplace(result,'/','_',[rfReplaceAll]);
-result:=StringReplace(result,'\','_',[rfReplaceAll]);
-result:=StringReplace(result,':','_',[rfReplaceAll]);
+result:=StringReplace(result,'/','',[rfReplaceAll]);
+result:=StringReplace(result,'\','',[rfReplaceAll]);
+result:=StringReplace(result,':','',[rfReplaceAll]);
 end;
 
 function ValidateCustomHeader(key:string): boolean;
