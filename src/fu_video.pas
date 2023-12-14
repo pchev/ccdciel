@@ -124,6 +124,7 @@ type
     procedure SetLang;
     procedure SetImageControls;
     procedure ShowExposure(value:double);
+    procedure Stop;
     property camera: T_camera read FCamera write FCamera;
     property wheel: T_wheel read Fwheel write Fwheel;
     property Running: boolean read Frunning;
@@ -493,10 +494,15 @@ begin
     FVideoindigui.IndiServer:=config.GetValue('/INDIcamera/Server','');
     FVideoindigui.IndiPort:=config.GetValue('/INDIcamera/ServerPort','');
     FVideoindigui.IndiDevice:=CameraName;
-    FVideoGUIready:=true;
   end;
-  FVideoindigui.Show;
-  FormPos(FVideoindigui,mouse.CursorPos.X,mouse.CursorPos.Y);
+  try
+    FormPos(FVideoindigui,mouse.CursorPos.X,mouse.CursorPos.Y);
+    FVideoindigui.Show;
+    FVideoGUIready:=true;
+  except
+    FVideoGUIready:=false;
+    if Sender<>nil then BtnOptionsClick(nil);
+  end;
 end;
 
 procedure Tf_video.GUIdestroy(Sender: TObject);
@@ -504,6 +510,16 @@ begin
   FVideoGUIready:=false;
 end;
 
+procedure Tf_video.Stop;
+// when disconnecting from INDI
+begin
+  try
+    Preview.Checked:=false;
+    Frunning:=false;
+    if FVideoGUIready then FVideoindigui.Close;
+  except
+  end;
+end;
 
 procedure Tf_video.FrameRateChange(Sender: TObject);
 var prw: boolean;

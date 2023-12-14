@@ -5780,6 +5780,7 @@ begin
      if findercamera.Status=devConnected then findercamera.AbortExposure;
      f_preview.stop;
      f_capture.stop;
+     f_video.stop;
      f_internalguider.ButtonStopClick(nil);
      RunningCapture:=false;
      StatusBar1.Panels[panelstatus].Text:='';
