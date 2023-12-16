@@ -16086,9 +16086,10 @@ end;
 
 function Tf_main.TCPjsoncmd(id:string; attrib,value:Tstringlist):string;
 var p,i,nparms: integer;
-    rpcversion,method,buf,buf1,buf2,buf3:string;
+    rpcversion,method,buf,buf1,buf2,buf3,buf4:string;
     sl:Tstringlist;
     x1,x2,x3,x4: double;
+    i1,i2,i3,i4: integer;
 const tr='true';
       fa='false';
 procedure CheckParamCount(count: integer);
@@ -16218,6 +16219,12 @@ try
   else if method='CALIBRATOR_LIGHT_OFF' then result:=result+'"result":{"status": "'+f_scriptengine.cmd_calibratorlightoff+'"}'
   else if method='CUSTOMHEADER_CLEAR' then result:=result+'"result":{"status": "'+f_scriptengine.cmd_customheader_clear+'"}'
   else if method='FINDER_STOPLOOP' then result:=result+'"result":{"status": "'+f_scriptengine.cmd_FinderStopLoop+'"}'
+  else if method='CAMERA_RESETFRAME' then result:=result+'"result":{"status": "'+f_scriptengine.cmd_cameraresetframe+'"}'
+  else if method='CAMERA_GETFRAME' then begin
+    result:=result+'"result":{"status": "'+f_scriptengine.cmd_cameragetframe(i1,i2,i3,i4)+'",';
+    result:=result+' "X": '+IntToStr(i1)+', "Y": '+IntToStr(i2)+', "W": '+IntToStr(i3)+', "H": '+IntToStr(i4)+'}';
+  end
+
   // execute command with parameter
   else if method='DEVICES_CONNECTION' then begin
     CheckParamCount(1);
@@ -16475,6 +16482,15 @@ try
     buf2:=trim(value[attrib.IndexOf('params.1')]);
     buf3:=trim(value[attrib.IndexOf('params.2')]);
     buf:=f_scriptengine.cmd_setswitch(buf1,buf2,buf3);
+    result:=result+'"result":{"status": "'+buf+'"}';
+  end
+  else if method='CAMERA_SETFRAME' then begin
+    CheckParamCount(4);
+    buf1:=trim(value[attrib.IndexOf('params.0')]);
+    buf2:=trim(value[attrib.IndexOf('params.1')]);
+    buf3:=trim(value[attrib.IndexOf('params.2')]);
+    buf4:=trim(value[attrib.IndexOf('params.3')]);
+    buf:=f_scriptengine.cmd_camerasetframe(buf1,buf2,buf3,buf4);
     result:=result+'"result":{"status": "'+buf+'"}';
   end
   // method not found

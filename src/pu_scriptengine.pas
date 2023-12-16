@@ -260,6 +260,9 @@ type
     function cmd_customheader(key:string): string;
     function cmd_getswitch(nickname,swname: string): string;
     function cmd_setswitch(nickname,swname, value: string): string;
+    function cmd_camerasetframe(fx,fy,fw,fh: string): string;
+    function cmd_cameraresetframe: string;
+    function cmd_cameragetframe(out fx,fy,fw,fh: integer): string;
     function ScriptType(fn: string): TScriptType;
     function  RunScript(sname,path,args: string):boolean;
     function ScriptRunning: boolean;
@@ -1193,6 +1196,7 @@ else if cname='COVER_CLOSE' then result:=cmd_coverclose
 else if cname='CALIBRATOR_LIGHT_OFF' then result:=cmd_calibratorlightoff
 else if cname='CUSTOMHEADER_CLEAR' then result:=cmd_customheader_clear
 else if cname='FINDER_STOPLOOP' then result:=cmd_FinderStopLoop
+else if cname='CAMERA_RESETFRAME' then result:=cmd_cameraresetframe
 ;
 LastErr:='cmd('+cname+'): '+result;
 end;
@@ -1239,6 +1243,9 @@ else if cname='FINDER_STARTLOOP' then result:=cmd_FinderStartLoop(arg[0])
 else if cname='FINDER_SNAPSHOT' then result:=cmd_FinderSnapshot(arg[0],arg[1],arg[2])
 else if cname='INTERNALGUIDER_SNAPSHOT' then result:=cmd_InternalGuiderSnapshot(arg[0],arg[1],arg[2])
 else if cname='INTERNALGUIDER_SAVE_FITS_FILE' then result:=cmd_InternalGuiderSaveFitsFile(arg[0])
+else if cname='GET_SWITCH' then result:=f_scriptengine.cmd_getswitch(arg[0],arg[1])
+else if cname='SET_SWITCH' then result:=f_scriptengine.cmd_setswitch(arg[0],arg[1],arg[2])
+else if cname='CAMERA_SETFRAME' then result:=f_scriptengine.cmd_camerasetframe(arg[0],arg[1],arg[2],arg[3])
 ;
 LastErr:='cmdarg('+cname+'): '+result;
 end;
@@ -2391,6 +2398,41 @@ try
      break;
    end;
  end;
+except
+  result:=msgFailed;
+end;
+end;
+
+function Tf_scriptengine.cmd_camerasetframe(fx,fy,fw,fh: string): string;
+var x,y,w,h: integer;
+begin
+try
+  x:=StrToIntDef(fx,-1);
+  y:=StrToIntDef(fy,-1);
+  w:=StrToIntDef(fw,-1);
+  h:=StrToIntDef(fh,-1);
+  camera.SetFrame(x,y,w,h);
+  result:=msgOK;
+except
+  result:=msgFailed;
+end;
+end;
+
+function Tf_scriptengine.cmd_cameragetframe(out fx,fy,fw,fh: integer): string;
+begin
+try
+  camera.GetFrame(fx,fy,fw,fh);
+  result:=msgOK;
+except
+  result:=msgFailed;
+end;
+end;
+
+function Tf_scriptengine.cmd_cameraresetframe: string;
+begin
+try
+  camera.ResetFrame;
+  result:=msgOK;
 except
   result:=msgFailed;
 end;
