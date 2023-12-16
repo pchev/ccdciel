@@ -193,7 +193,6 @@ object f_finder: Tf_finder
         OnChange = GammaChange
         PageSize = 10
         Position = 50
-        Reversed = True
         TickStyle = tsNone
         TabOrder = 0
       end
@@ -213,11 +212,9 @@ object f_finder: Tf_finder
         Top = 56
         Width = 111
         Max = 100
-        Min = 1
         OnChange = LuminosityChange
         PageSize = 10
         Position = 50
-        Reversed = True
         TickStyle = tsNone
         TabOrder = 1
       end

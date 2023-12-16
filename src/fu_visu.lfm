@@ -104,7 +104,7 @@ object f_visu: Tf_visu
         AnchorSideLeft.Control = Panel3
         AnchorSideTop.Control = Panel3
         Left = 0
-        Height = 25
+        Height = 26
         Top = 0
         Width = 71
         Constraints.MaxHeight = 26
@@ -124,7 +124,7 @@ object f_visu: Tf_visu
         AnchorSideRight.Control = Panel3
         AnchorSideRight.Side = asrBottom
         Left = 188
-        Height = 25
+        Height = 26
         Top = 0
         Width = 71
         Anchors = [akTop, akRight]

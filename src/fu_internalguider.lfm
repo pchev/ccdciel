@@ -581,7 +581,6 @@ object f_internalguider: Tf_internalguider
               Min = 1
               PageSize = 10
               Position = 50
-              Reversed = True
               TickStyle = tsNone
               OnClick = ForceRedraw
               TabOrder = 0
@@ -602,10 +601,8 @@ object f_internalguider: Tf_internalguider
               Top = 56
               Width = 111
               Max = 100
-              Min = 1
               PageSize = 10
               Position = 50
-              Reversed = True
               TickStyle = tsNone
               OnClick = ForceRedraw
               TabOrder = 1
@@ -1341,8 +1338,8 @@ object f_internalguider: Tf_internalguider
                 Width = 336
                 Align = alTop
                 Caption = 'Multi-star guide offset'
-                ClientHeight = 104
-                ClientWidth = 336
+                ClientHeight = 74
+                ClientWidth = 332
                 TabOrder = 0
                 object edOffsetX: TFloatSpinEdit
                   Left = 180

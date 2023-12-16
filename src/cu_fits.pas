@@ -352,6 +352,8 @@ type
   function UnpackFits(packedfilename: string; var ImgStream:TMemoryStream; out rmsg:string):integer;
   function CapturePath(f:TFits; DefFrameType,DefObject,DefExp,DefBin:string; preview,sequence: boolean; StepTotalCount,StepRepeatCount:integer):string;
   function CaptureFilename(f:TFits; Directory,DefFrameType,DefObject,DefExp,DefBin:string; sequence:boolean):string;
+  procedure HistLevel(pos,sum,start,maxp: integer; hist:THistogram; out imin,imax: double);
+  procedure HistStats(hist:THistogram; out maxhist,maxp,sumhist,starthist,stophist:integer);
 
 implementation
 
@@ -4726,6 +4728,61 @@ begin
     fn:=fn+FilenameSeqSep+fileseqstr;
   end;
   result:=fn;
+end;
+
+procedure HistLevel(pos,sum,start,maxp: integer; hist:THistogram; out imin,imax: double);
+var hval: double;
+    i,slh,shh,lh,hh,startp: integer;
+begin
+  // pos, histogram truncation percent, in 0..100 range
+  if pos<2 then
+    hval:=1.0
+  else if pos<10 then
+    hval:=0.999999-((pos/2-1)*0.00005)
+  else if pos<30 then
+    hval:=(101-power(1.2,pos/100))/100
+  else if pos<70 then
+    hval:=7.3127E-4+(101-power(1.5,pos/100))/100
+  else
+    hval:=(99.672-((pos-70)/4))/100;
+  if hval=1 then begin
+    imin:=0;
+    imax:=high(word);
+  end
+  else begin
+    slh:=round((1-hval)*sum); lh:=0;
+    shh:=round(hval*sum); hh:=0;
+    sum:=0;
+    startp:=round(start+0.90*(max(0,maxp-start)));
+    for i:=0 to high(word) do begin
+      sum:=sum+hist[i];
+      if i>startp then begin
+        if (lh=0) and (sum>=slh) then lh:=i;
+        if (hh=0) and (sum>=shh) then hh:=i;
+      end;
+    end;
+    imin:=lh;
+    imax:=hh;
+  end;
+end;
+
+procedure HistStats(hist:THistogram; out maxhist,maxp,sumhist,starthist,stophist:integer);
+var i: integer;
+begin
+  maxhist:=0;
+  maxp:=0;
+  sumhist:=0;
+  starthist:=0;
+  stophist:=0;
+  for i:=0 to high(word) do begin
+    sumhist:=sumhist+hist[i];
+    if (starthist=0)and(hist[i]>0) then starthist:=i;
+    if (hist[i]>0) then stophist:=i;
+    if hist[i]>maxhist then begin
+        maxhist:=hist[i];
+        maxp:=i;
+    end;
+  end;
 end;
 
 end.

@@ -197,40 +197,11 @@ begin
 end;
 
 procedure Tf_visu.SetLimit(SetLevel:boolean);
-var hval: double;
-    i,sum,slh,shh,lh,hh,startp,histp: integer;
+var histp: integer;
 begin
   if SetLevel and (not HistogramAdjusted) then begin
     histp:=HistBar.Position;
-    if histp<2 then
-      hval:=1.0
-    else if histp<10 then
-      hval:=0.999999-((histp/2-1)*0.00005)
-    else if histp<30 then
-      hval:=(101-power(1.2,histp/100))/100
-    else if histp<70 then
-      hval:=7.3127E-4+(101-power(1.5,histp/100))/100
-    else
-      hval:=(99.672-((histp-70)/4))/100;
-    if hval=1 then begin
-      FImgMin:=0;
-      FImgMax:=high(word);
-    end
-    else begin
-      slh:=round((1-hval)*Fsum); lh:=0;
-      shh:=round(hval*Fsum); hh:=0;
-      sum:=0;
-      startp:=round(FHistStart+0.90*(max(0,Fmaxp-FHistStart)));
-      for i:=0 to high(word) do begin
-        sum:=sum+Fhist[i];
-        if i>startp then begin
-          if (lh=0) and (sum>=slh) then lh:=i;
-          if (hh=0) and (sum>=shh) then hh:=i;
-        end;
-      end;
-      FimgMin:=lh;
-      FImgMax:=hh;
-    end;
+    HistLevel(histp,Fsum,FHistStart,Fmaxp,Fhist,FimgMin,FimgMax);
   end;
   // adjust spinedit for data range
   LockHistogram:=true;
@@ -280,23 +251,10 @@ FisFlipped:=f.HeaderInfo.roworder<>bottomup;
 FimageC:=f.imageC;
 FimageMin:=f.imageMin;
 FimageMax:=f.imageMax;
-Fmaxh:=0;
-Fsum:=0;
-FHistStart:=0;
-FHistStop:=0;
-for i:=0 to high(word) do begin
-  Fhist[i]:=f.Histogram[i];
-  Fsum:=Fsum+Fhist[i];
-  if (FHistStart=0)and(Fhist[i]>0) then FHistStart:=i;
-  if (Fhist[i]>0) then FHistStop:=i;
-  if Fhist[i]>Fmaxh then begin
-      Fmaxh:=Fhist[i];
-      Fmaxp:=i;
-  end;
-end;
+for i:=0 to high(word) do Fhist[i]:=f.Histogram[i];
+HistStats(Fhist,Fmaxh,Fmaxp,Fsum,FHistStart,FHistStop);
 if Fmaxh=0 then exit;
 if Fmaxp>(FHistStart+(FHistStop-FHistStart)/10) then Fmaxp:=0; // peak is probably not sky background
-
 SetLimit(SetLevel);
 PlotHistogram;
 

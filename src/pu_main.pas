@@ -16923,17 +16923,18 @@ end;
 
 Procedure Tf_main.DrawGuideImage(display: boolean);
 var tmpbmp:TBGRABitmap;
-    dmin,dmax: integer;
+    dmin,dmax: double;
     xs,ys,r: integer;
     sp,cp,xx1,xx2,yy1,yy2: double;
+    maxhist,maxp,sumhist,starthist,stophist:integer;
 begin
 if (guidefits.HeaderInfo.naxis>0) and guidefits.ImageValid then begin
   f_internalguider.DrawSettingChange:=false;
-  guidefits.Gamma:=f_internalguider.Gamma.Position/100;
-  dmin:=round(max(0,guidefits.HeaderInfo.dmin));
-  dmax:=min(MAXWORD,round(max(dmin+1,guidefits.HeaderInfo.dmax*f_internalguider.Luminosity.Position/100)));
-  guidefits.VisuMax:=dmax;
-  guidefits.VisuMin:=dmin;
+  guidefits.Gamma:=(101-f_internalguider.Gamma.Position)/100;
+  HistStats(guidefits.Histogram,maxhist,maxp,sumhist,starthist,stophist);
+  HistLevel(f_internalguider.Luminosity.Position,sumhist,starthist,maxp,guidefits.Histogram,dmin,dmax);
+  guidefits.VisuMax:=round(dmax);
+  guidefits.VisuMin:=round(dmin);
   guidefits.MaxADU:=MaxADU;
   guidefits.MarkOverflow:=false; //f_visu.Clipping;
   guidefits.Invert:=false; //f_visu.Invert;
@@ -17519,17 +17520,18 @@ end;
 
 procedure Tf_main.DrawFinderImage(display: boolean);
 var tmpbmp:TBGRABitmap;
-    dmin,dmax: integer;
+    dmin,dmax: double;
     co: TBGRAPixel;
     s,cx,cy: integer;
+    maxhist,maxp,sumhist,starthist,stophist:integer;
 begin
 if (finderfits.HeaderInfo.naxis>0) and finderfits.ImageValid then begin
   f_finder.DrawSettingChange:=false;
-  finderfits.Gamma:=f_finder.Gamma.Position/100;
-  dmin:=round(max(0,finderfits.HeaderInfo.dmin));
-  dmax:=min(MAXWORD,round(max(dmin+1,finderfits.HeaderInfo.dmax*f_finder.Luminosity.Position/100)));
-  finderfits.VisuMax:=dmax;
-  finderfits.VisuMin:=dmin;
+  finderfits.Gamma:=(101-f_finder.Gamma.Position)/100;
+  HistStats(finderfits.Histogram,maxhist,maxp,sumhist,starthist,stophist);
+  HistLevel(f_finder.Luminosity.Position,sumhist,starthist,maxp,finderfits.Histogram,dmin,dmax);
+  finderfits.VisuMax:=round(dmax);
+  finderfits.VisuMin:=round(dmin);
   finderfits.MaxADU:=MaxADU;
   finderfits.MarkOverflow:=false;
   finderfits.Invert:=false;
