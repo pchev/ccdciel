@@ -4089,15 +4089,18 @@ begin
   ScrFinderBmp.SetSize(ScrFinderWidth,ScrFinderHeigth);
   ClearImage;
   DrawImage;
+  Image1.Invalidate;
   if GuideImage.Visible then begin
      ClearGuideImage;
      DrawGuideImage(true);
      PlotGuideImage;
+     ImageGuide.Invalidate;
   end;
   if FinderImage.Visible then begin
      ClearFinderImage;
      DrawFinderImage(true);
      PlotFinderImage;
+     ImageFinder.Invalidate;
   end;
 end;
 

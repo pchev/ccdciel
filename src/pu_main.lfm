@@ -80,7 +80,7 @@ object f_main: Tf_main
       BevelOuter = bvNone
       ClientHeight = 536
       ClientWidth = 616
-      Color = 4197901
+      Color = 3149070
       ParentColor = False
       ParentFont = False
       TabOrder = 2
@@ -93,6 +93,7 @@ object f_main: Tf_main
         BevelOuter = bvNone
         ClientHeight = 28
         ClientWidth = 299
+        Color = clWindow
         ParentColor = False
         ParentFont = False
         TabOrder = 0
@@ -133,6 +134,9 @@ object f_main: Tf_main
           Top = 1
           Width = 272
           Align = alLeft
+          Caption = 'finderimage'
+          Color = 3149070
+          ParentColor = False
           TabOrder = 0
         end
         object GuideImage: TPanel
@@ -142,6 +146,8 @@ object f_main: Tf_main
           Width = 339
           Align = alClient
           Caption = 'GuideImage'
+          Color = 3149070
+          ParentColor = False
           TabOrder = 1
         end
         object Splitter3: TSplitter
@@ -183,6 +189,8 @@ object f_main: Tf_main
           Width = 614
           Align = alClient
           Caption = 'mainimage'
+          Color = 3149070
+          ParentColor = False
           TabOrder = 0
         end
       end
