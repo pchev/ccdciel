@@ -6470,7 +6470,8 @@ var cool: boolean;
 begin
 case findercamera.Status of
   devDisconnected:begin
-                      f_finder.StopLoop;
+                      FinderPreviewLoop:=false;
+                      f_finder.BtnPreviewLoop.Caption:=rsStartPreview;
                       f_devicesconnection.LabelFinderCamera.Font.Color:=clRed;
                   end;
   devConnecting:  begin
