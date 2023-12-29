@@ -1,6 +1,6 @@
 unit pu_hyperbola; {Hyperbola modeling of the star disk size in HFD as function of the telescope focuser position. Purpose is finding the best focuser position at the hyperbola minimum.}
 {
-Copyright (C) 2018, 2020 Patrick Chevalley & Han Kleijn (author)
+Copyright (C) 2018, 2023 Patrick Chevalley & Han Kleijn (author)
 
 http://www.ap-i.net
 h@ap-i.net
@@ -26,7 +26,7 @@ interface
 
 uses
   Classes, SysUtils,
-  math, u_global;
+  u_global;
 
 procedure find_best_hyperbola_fit(data: array of TDouble2;data_length:integer;var p,a,b: double); {input data[n,1]=position,data[n,2]=hfd, output: bestfocusposition=p, a, b of hyperbola}
 function hfd_calc(position,perfectfocusposition,a,b:double) :double; {calculate HFD from position and perfectfocusposition using hyperbola parameters}
@@ -41,35 +41,25 @@ implementation
 function hfd_calc(position,perfectfocusposition,a,b:double) :double; {calculate HFD from position and perfectfocusposition using hyperbola parameters}
 {The HFD (half flux diameter) of the imaged star disk as function of the focuser position can be described as hyperbola}
 {a,b are the hyperbola parameters, a is the lowest HFD value at focus position, the asymptote y:= +-x*a/b} {rev1}
-{A hyperbola is defined as: }
-{x=b*sinh(t)                }
-{y=a*cosh(t)                }
-{Using the arccosh and arsinh functions it is possible to inverse}
-{above calculations and convert x=>t and t->y or y->t and t->x}
+{A vertical hyperbola is defined as: sqr(y/a)-sqr(x/b)=1}
 var
-  x,t : double;
+  x : double;
 begin
   x:=perfectfocusposition - position;
-  t:=arsinh(x/b);{calculate t-position in hyperbola}
-  result:=a*cosh(t);{convert t-position to y/hfd value}
+  result:=a*sqrt(1+sqr(x/b));//The y or hfd value
 end;
 
 function steps_to_focus(hfd,a,b:double) :double; {calculates focuser steps to perfect focus from HFD and hyperbola parameters}
-{The HFD (half flux diameter) of the imaged star disk as function of the focuser position can be described as hyperbola}
+{The HFD (half flux diameter) of the imaged star disk as function of the focuser position can be described as hyperbola. The y-axis is the HFD. The x-axis the offset from the perfect focus position }
 {a,b are the hyperbola parameters, a is the lowest HFD value at focus position, the asymptote y:= +-x*a/b} {rev1}
-{A hyperbola is defined as: }
-{x=b*sinh(t)                }
-{y=a*cosh(t)                }
-{Using the arccosh and arsinh functions it is possible to inverse}
-{above calculations and convert x=>t and t->y or y->t and t->x}
-
+{A vertical hyperbola is defined as: sqr(y/a)-sqr(x/b)=1}
 {Note using the HFD there are two solutions, either left or right side of the hyperbola}
 var
-  x,t : double;
+  k : double;
 begin
-  t:=arcosh(hfd/a);{calculate t-position in hyperbola}
-  x:=b*sinh(t);{convert t-position to x}
-  result:=x;{steps to focus}
+  k:=hfd/a;
+  if k<1 then k:=1;{prevent run time errors}
+  result:=b*sqrt(sqr(k)-1); //calculate x position of the vertical hyperbola
 end;
 
 function mean_error_hyperbola(data: array of TDouble2 {pos, hfd};data_length:integer; perfectfocusposition,a,b : double): double;{calculates total averaged error between measured V-curve and hyperbola}
@@ -99,7 +89,7 @@ procedure find_best_hyperbola_fit(data: array of TDouble2 {pos, hfd};data_length
 var
    i,n  :integer;
    error1, old_error, p_range,a_range, b_range, highest_hfd, lowest_hfd,
-   highest_position, lowest_position,a1,b1,p1,a0,b0,p0  :double;
+   highest_hfd_position, lowest_hfd_position,a1,b1,p1,a0,b0,p0  :double;
 begin
   lowest_error:=1E99;
   n:=data_length;// or n:=Length(data);
@@ -111,28 +101,28 @@ begin
     if data[i,2]>highest_hfd then
     begin
       highest_hfd:=data[i,2];
-      highest_position:=data[i,1];
+      highest_hfd_position:=data[i,1];
     end;
     if ((data[i,2]<lowest_hfd) and (data[i,2]>0.1){avoid zero's}) then
     begin
      lowest_hfd:=data[i,2];
-     lowest_position:=data[i,1];
+     lowest_hfd_position:=data[i,1];
     end;
   end;
-  if  highest_position<lowest_position then  highest_position:=(lowest_position- highest_position)+lowest_position;{go up always}
+  if  highest_hfd_position<lowest_hfd_position then  highest_hfd_position:=(lowest_hfd_position- highest_hfd_position)+lowest_hfd_position;{go up always}
 
   {get good starting values for a, b and p}
   a:=lowest_hfd;{a is near the HFD value}
-  {Alternative hyperbola formula: sqr(y)/sqr(a)-sqr(x)/sqr(b)=1 ==>  sqr(b)=sqr(x)*sqr(a)/(sqr(y)-sqr(a)} {rev1}
-  b:=sqrt(sqr(highest_position- lowest_position)*sqr(a)/(sqr(highest_hfd)-sqr(a)) );{rev1}
-  p:=lowest_position;
+  {Vertical hyperbola formula: sqr(y/a)-sqr(x/b)=1 ==>  sqr(b):=sqr(x)/(-1+sqr(y/a)) ==> b:=x/sqrt(-1+sqr(y/a))  rev2}
+  b:=(highest_hfd_position-lowest_hfd_position)/sqrt(-1+sqr(highest_hfd/a));{rev2.}
+  p:=lowest_hfd_position;
 
   iteration_cycles:=0;
 
   {set starting test range}
   a_range:=a;
   b_range:=b;
-  p_range:=(highest_position-lowest_position);{large steps since slope could contain some error}
+  p_range:=(highest_hfd_position-lowest_hfd_position);{large steps since slope could contain some error}
 
   repeat
     p0:=p;
