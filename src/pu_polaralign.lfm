@@ -343,18 +343,18 @@ object f_polaralign: Tf_polaralign
       ParentFont = False
       object Panel4: TPanel
         Left = 0
-        Height = 55
-        Top = 419
+        Height = 82
+        Top = 392
         Width = 350
         Align = alBottom
-        ClientHeight = 55
+        ClientHeight = 82
         ClientWidth = 350
         ParentFont = False
         TabOrder = 0
         object BtnClose: TButton
           Left = 253
           Height = 25
-          Top = 22
+          Top = 48
           Width = 75
           Caption = 'Close'
           OnClick = BtnCloseClick
@@ -373,17 +373,26 @@ object f_polaralign: Tf_polaralign
         object BtnLock: TToggleBox
           Left = 89
           Height = 25
-          Top = 22
+          Top = 48
           Width = 132
           Caption = 'Lock overlay'
           OnClick = BtnLockClick
           ParentFont = False
           TabOrder = 1
         end
+        object SolveUpdate: TCheckBox
+          Left = 2
+          Height = 22
+          Top = 24
+          Width = 106
+          Caption = 'SolveUpdate'
+          OnClick = SolveUpdateClick
+          TabOrder = 2
+        end
       end
       object Memo1: TMemo
         Left = 0
-        Height = 419
+        Height = 342
         Top = 0
         Width = 350
         Align = alClient
@@ -391,6 +400,17 @@ object f_polaralign: Tf_polaralign
         Font.Color = clWindowText
         ParentFont = False
         TabOrder = 1
+      end
+      object Memo2: TMemo
+        Left = 0
+        Height = 50
+        Top = 342
+        Width = 350
+        Align = alBottom
+        Font.Height = 30
+        Font.Style = [fsBold]
+        ParentFont = False
+        TabOrder = 2
       end
     end
   end

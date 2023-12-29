@@ -41,6 +41,8 @@ type
     BtnStart: TButton;
     BtnCancel: TButton;
     BtnContinue: TButton;
+    Memo2: TMemo;
+    SolveUpdate: TCheckBox;
     RefractionGroup: TRadioGroup;
     SaveImages: TCheckBox;
     ExposeList: TCheckListBox;
@@ -79,6 +81,7 @@ type
     procedure FormCreate(Sender: TObject);
     procedure FormShow(Sender: TObject);
     procedure MountSlewingClick(Sender: TObject);
+    procedure SolveUpdateClick(Sender: TObject);
   private
     FFits: TFits;
     Fpreview: Tf_preview;
@@ -95,7 +98,7 @@ type
     FonShowMessage: TNotifyMsg;
     FonClose: TNotifyEvent;
     Fx, Fy: array[1..3] of double;
-    FSidtimStart,Fac,Fdc,FDateStart: double;
+    FSidtimStart,Fac,Fdc,FDateStart,Fcra,Fcde: double;
     FOffsetAz, FOffsetH, FCameraRotation: double;
     Fdelay: single;
     procedure msg(txt:string; level: integer);
@@ -111,6 +114,7 @@ type
     procedure Rotate;
   public
     procedure SetLang;
+    procedure UpdateAlign;
     property Fits: TFits read FFits write FFits;
     property Preview:Tf_preview read Fpreview write Fpreview;
     property Finder: Tf_finder read Ffinder write Ffinder;
@@ -218,6 +222,7 @@ begin
    RotDir.Items[1]:=rsEast;
    Label2.Caption:=rsRotateBy;
    Label4.Caption:=rsDegree;
+   SolveUpdate.Caption:=rsPlateSolveTo;
    ExposeList.Items[0]:=Format(rsExposureS, ['1']);
    ExposeList.Items[1]:=Format(rsPlateSolveEx, ['1']);
    ExposeList.Items[2]:=rsRotateTelesc;
@@ -252,6 +257,7 @@ procedure Tf_polaralign.FormClose(Sender: TObject; var CloseAction: TCloseAction
 begin
   PolarAlignmentOverlay:=false;
   tracemsg('Close polar alignment form');
+  config.SetValue('/PolarAlignment/UpdateAlign',SolveUpdate.Checked);
   if preview.Loop then preview.BtnLoopClick(nil);
   if UseFinder then Ffinder.StopLoop;
   if Assigned(FonClose) then FonClose(self);
@@ -293,6 +299,8 @@ begin
   LabelMsg1.Caption:='';
   LabelMsg2.Caption:='';
   LabelMsg3.Caption:='';
+  Memo2.Clear;
+  SolveUpdate.Checked:=false;
   PageControl1.ActivePageIndex:=0;
   MountSlewing.ItemIndex:=0;
   MountSlewingClick(nil);
@@ -359,6 +367,7 @@ begin
 
   CancelAutofocus:=false;
   memo1.Clear;
+  memo2.Clear;
   BtnContinue.Visible:=false;
   LabelMsg2.Caption:=rsPleaseWaitUn;
   PageControl1.ActivePage:=TabSheetExpose;
@@ -502,6 +511,8 @@ begin
        cra:=cra*15*deg2rad;
        cde:=cde*deg2rad;
        PrecessionFK5(jd2000,jdtoday,cra,cde);
+       Fcra:=cra;
+       Fcde:=cde;
        tracemsg('Image center JNOW: RA='+FormatFloat(f6,rad2deg*cra/15)+' DEC='+FormatFloat(f6,rad2deg*cde));
        // Coordinates projection in plane centered on the pole
        // X axis is parallel to the horizon at the time the procedure is started
@@ -751,6 +762,7 @@ begin
     if not preview.Loop then preview.BtnLoopClick(nil);
   end;
   FInProgress:=false;
+  SolveUpdate.Checked:=config.GetValue('/PolarAlignment/UpdateAlign',false);
   tracemsg('Computation complete');
 end;
 
@@ -764,6 +776,48 @@ begin
   end
   else begin
     tracemsg('Overlay unlocked');
+  end;
+end;
+
+procedure Tf_polaralign.SolveUpdateClick(Sender: TObject);
+begin
+  Memo2.Clear;
+end;
+
+procedure Tf_polaralign.UpdateAlign;
+var ok: boolean;
+    cra,cde,eq,pa,caz,calt,icaz,icalt: double;
+    laz,lalt: string;
+begin
+   if UseFinder then
+    FAstrometry.SolveFinderImage
+  else
+    FAstrometry.SolveCurrentImage(true);
+  if (not FAstrometry.Busy)and FAstrometry.LastResult then begin
+     if UseFinder then
+       ok:=FAstrometry.FinderCurrentCoord(cra,cde,eq,pa)
+     else
+       ok:=FAstrometry.CurrentCoord(cra,cde,eq,pa);
+     if ok then begin
+       cra:=cra*15*deg2rad;
+       cde:=cde*deg2rad;
+       PrecessionFK5(jd2000,jdtoday,cra,cde);
+       cmdEq2Hz(cra*rad2deg/15,cde*rad2deg,caz,calt);
+       cmdEq2Hz(Fcra*rad2deg/15,Fcde*rad2deg,icaz,icalt);
+       caz:=caz-icaz;
+       if abs(caz)>180 then caz:=Sign(caz)*(360-abs(caz));
+       caz:=caz+FOffsetAz;
+       calt:=calt-icalt-FOffsetH;
+       if caz*sgn(ObsLatitude)>0 then
+          laz:=rsWest
+       else
+          laz:=rsEast;
+       if calt>0 then
+          lalt:=rsUp
+       else
+          lalt:=rsDown;
+       Memo2.Text:=laz+':'+FormatFloat(f1,abs(caz*60))+' '+lalt+':'+FormatFloat(f1,abs(calt*60));
+      end;
   end;
 end;
 

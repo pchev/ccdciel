@@ -1536,6 +1536,9 @@ resourcestring
   rsDeclination = 'Declination';
   rsIssue = 'Issue';
   rsPreprocessin = 'Preprocessing';
+  rsPlateSolveTo = 'Plate solve to update the correction';
+  rsUp = 'Up';
+  rsDown = 'Down';
 
 implementation
 

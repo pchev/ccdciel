@@ -11286,6 +11286,11 @@ begin
     buf:=buf+'  '+inttostr(fits.HeaderInfo.naxis1)+'x'+inttostr(fits.HeaderInfo.naxis2);
     if camera.StackCount>1 then buf:=buf+','+blank+Format(rsStackOfFrame, [inttostr(camera.StackCount)]);
     StatusBar1.Panels[panelfile].Text:=buf;
+    // solve polar alignment
+    if PolarAlignmentOverlay then begin
+      if f_polaralign.Visible and f_polaralign.SolveUpdate.Checked then f_polaralign.UpdateAlign;
+      if f_polaralign2.Visible and f_polaralign2.SolveUpdate.Checked then f_polaralign2.UpdateAlign;
+    end;
     // astrometry
     if (f_preview.CheckBoxAstrometry.Checked)and(not astrometry.Busy)and(not Autofocusing) then
       astrometry.SolvePreviewImage;

@@ -43,6 +43,8 @@ type
     ButtonClose: TButton;
     ButtonMove: TButton;
     ButtonNext: TButton;
+    Memo2: TMemo;
+    SolveUpdate: TCheckBox;
     FloatSpinEditAz1: TFloatSpinEdit;
     FloatSpinEditAz2: TFloatSpinEdit;
     FloatSpinEditAlt1: TFloatSpinEdit;
@@ -76,6 +78,7 @@ type
     procedure FormCreate(Sender: TObject);
     procedure FormDestroy(Sender: TObject);
     procedure FormShow(Sender: TObject);
+    procedure SolveUpdateClick(Sender: TObject);
   private
     FFits: TFits;
     Fpreview: Tf_preview;
@@ -89,7 +92,7 @@ type
     FonClose: TNotifyEvent;
     CurrentStep: integer;
     FSidt,FRa,FDe,FMountRa,FMountDe: array[1..2] of double;
-    corr_alt, corr_az, corr_ra, corr_de, corr_rai, corr_dei: double;
+    corr_alt, corr_az, corr_ra, corr_de, corr_rai, corr_dei,Fcra,Fcde: double;
     FInProgress: boolean;
     FAborted: boolean;
     Fdelay: single;
@@ -114,6 +117,7 @@ type
     procedure SaveConfig;
   public
     procedure SetLang;
+    procedure UpdateAlign;
     property Fits: TFits read FFits write FFits;
     property Preview:Tf_preview read Fpreview write Fpreview;
     property Finder: Tf_finder read Ffinder write Ffinder;
@@ -271,6 +275,7 @@ begin
   ButtonContinue.Caption:=rsContinue;
   BtnLock.Caption:=rsLockOverlay;
   ButtonClose.Caption:=rsClose;
+  SolveUpdate.Caption:=rsPlateSolveTo;
   label1.Caption:=rsPosition+' 1';
   label2.Caption:=rsPosition+' 2';
   label3.Caption:=rsAz;
@@ -286,6 +291,7 @@ begin
  config.SetValue('/PolarAlignment2/Az2',FloatSpinEditAz2.Value);
  config.SetValue('/PolarAlignment2/Alt2',FloatSpinEditAlt2.Value);
  config.SetValue('/PolarAlignment2/Method',GotoPosition.ItemIndex);
+ config.SetValue('/PolarAlignment2/UpdateAlign',SolveUpdate.Checked);
 end;
 
 procedure Tf_polaralign2.FormClose(Sender: TObject; var CloseAction: TCloseAction);
@@ -422,6 +428,9 @@ begin
        cde:=cde*deg2rad;
        J2000ToApparent(cra,cde);
        tracemsg('Image center JNOW: RA='+FormatFloat(f6,rad2deg*cra/15)+' DEC='+FormatFloat(f6,rad2deg*cde));
+       // store center
+       Fcra:=cra;
+       Fcde:=cde;
        FRa[step]:=cra;
        FDe[step]:=cde;
        Djd(FFits.dateobs+FFits.HeaderInfo.exptime/secperday/2,y,m,d,h);
@@ -617,6 +626,9 @@ begin
        cra:=cra*15*deg2rad;
        cde:=cde*deg2rad;
        J2000ToApparent(cra,cde);
+       // store center
+       Fcra:=cra;
+       Fcde:=cde;
        // adjustement at current position
        CurrentAdjustement(cra,cde);
        tracemsg('Stars in new image have to move: '+FormatFloat(f2,rad2deg*(corr_ra/max(0.00000000000000000001,cos(FDe[2])))*60)+' arcminutes in RA and '+FormatFloat(f2,rad2deg*(corr_de)*60)+' arcminutes in DEC by the correction.');
@@ -808,6 +820,7 @@ begin
   Instruction.Lines.Add(rsCloseTheWind);
   PageControl1.ActivePage:=TabSheetAdjust;
   FInProgress:=false;
+  SolveUpdate.Checked:=config.GetValue('/PolarAlignment2/UpdateAlign',false);
 end;
 
 procedure Tf_polaralign2.GotoPositionChange(Sender: TObject);
@@ -846,6 +859,8 @@ begin
   Instruction.Lines.Add(' - '+rsCustom);
   Instruction.Lines.Add('');
   Instruction.Lines.Add(rsWhenReadyCli+': '+rsStart);
+  Memo2.Clear;
+  SolveUpdate.Checked:=false;
   PageControl1.ActivePage:=TabSheetStart;
   PolarAlignmentOverlay:=false;
   PolarAlignmentLock:=false;
@@ -906,6 +921,46 @@ begin
   FInProgress:=false;
   msg(rsCancelPolarA,1);
   close;
+end;
+
+procedure Tf_polaralign2.SolveUpdateClick(Sender: TObject);
+begin
+  Memo2.Clear;
+end;
+
+procedure Tf_polaralign2.UpdateAlign;
+var ok: boolean;
+    cra,cde,eq,pa,caz,calt,icaz,icalt: double;
+    laz,lalt: string;
+begin
+   if UseFinder then
+    FAstrometry.SolveFinderImage
+  else
+    FAstrometry.SolveCurrentImage(true);
+  if (not FAstrometry.Busy)and FAstrometry.LastResult then begin
+     if UseFinder then
+       ok:=FAstrometry.FinderCurrentCoord(cra,cde,eq,pa)
+     else
+       ok:=FAstrometry.CurrentCoord(cra,cde,eq,pa);
+     if ok then begin
+       cra:=cra*15*deg2rad;
+       cde:=cde*deg2rad;
+       J2000ToApparent(cra,cde);
+       cmdEq2Hz(cra*rad2deg/15,cde*rad2deg,caz,calt);
+       cmdEq2Hz(Fcra*rad2deg/15,Fcde*rad2deg,icaz,icalt);
+       caz:=caz-icaz+rad2deg*corr_az;
+       calt:=calt-icalt-rad2deg*corr_alt;
+       if caz>0 then
+         laz:=rsWest
+       else
+         laz:=rsEast;
+       if calt>0 then
+         lalt:=rsUp
+       else
+         lalt:=rsDown;
+       Memo2.Text:=laz+':'+FormatFloat(f1,abs(caz*60))+' '+lalt+':'+FormatFloat(f1,abs(calt*60));
+      end;
+  end;
 end;
 
 end.
