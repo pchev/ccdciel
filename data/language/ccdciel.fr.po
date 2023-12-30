@@ -6,15 +6,15 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ccdciel\n"
 "Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
-"POT-Creation-Date: 2023-09-15 15:42+0000\n"
-"PO-Revision-Date: 2023-09-15 16:08+0000\n"
+"POT-Creation-Date: 2023-12-30 15:36+0000\n"
+"PO-Revision-Date: 2023-12-30 15:43+0000\n"
 "Last-Translator: Patrick Chevalley <Unknown>\n"
 "Language-Team: French <fr@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2023-09-15 16:20+0000\n"
-"X-Generator: Launchpad (build 32eed776db4e1fe74faaa77122cde19862d565ac)\n"
+"X-Launchpad-Export-Date: 2023-12-30 15:48+0000\n"
+"X-Generator: Launchpad (build e1eeab5b20e19239bd7d5f36676f7a52988db88b)\n"
 
 #: u_translation.rs2d
 msgid "2D"
@@ -1265,6 +1265,10 @@ msgstr "Défaut"
 msgid "Default behavior"
 msgstr "Comportement par défaut"
 
+#: u_translation.rsdefocusamoun
+msgid "Defocus amount"
+msgstr "Montant de défocalisation"
+
 #: u_translation.rsdegree
 msgid "degree"
 msgstr "degré"
@@ -1498,6 +1502,10 @@ msgstr "Ne pas%sattendre"
 msgid "Do simple slew to %s/%s"
 msgstr "Utilise un Goto simple vers %s %s"
 
+#: u_translation.rsdown
+msgid "Down"
+msgstr "Bas"
+
 #: u_translation.rsdownloading
 msgid "Downloading"
 msgstr "Transfert"
@@ -1679,6 +1687,10 @@ msgstr "Exp:"
 #: u_translation.rsexp2
 msgid "Exp."
 msgstr "Exp."
+
+#: u_translation.rsexperttrick
+msgid "Expert trick"
+msgstr "Options pour expert"
 
 #: u_translation.rsexposure
 msgid "Exposure"
@@ -2624,10 +2636,6 @@ msgstr "De nombreuses fonctions ne fonctionneront pas  sans un logiciel d'astrom
 msgid "Margin offset"
 msgstr "Décalage de la marge"
 
-#: u_translation.rsmarkeveryast
-msgid "Mark every astrometry result"
-msgstr "Marque chaque résultat d'astrométrie"
-
 #: u_translation.rsmax
 msgid "Max:"
 msgstr "Max:"
@@ -3353,6 +3361,10 @@ msgstr "Options"
 msgid "or"
 msgstr "ou"
 
+#: u_translation.rsordoubleclic
+msgid "Or double click on the bright star."
+msgstr "Ou faire un double clic sur l'étoile."
+
 #: u_translation.rsotheroptions
 msgid "Other options "
 msgstr "Autres options "
@@ -3545,6 +3557,10 @@ msgstr "Plan %s arrêté."
 msgid "Plate solve exposure %s"
 msgstr "Résolution de l'image %s"
 
+#: u_translation.rsplatesolveto
+msgid "Plate solve to update the correction"
+msgstr "Mise à jour par résolution astrométrique"
+
 #: u_translation.rspleaseactiva
 msgid "Please activate the log file in the preference."
 msgstr "Veuillez activer le journal dans les options."
@@ -3685,6 +3701,10 @@ msgstr "Direction préférée"
 msgid "Preferences%s"
 msgstr "Préférences%s"
 
+#: u_translation.rspreprocessin
+msgid "Preprocessing"
+msgstr "Prétraitement"
+
 #: u_translation.rspresetlist
 msgid "Preset list"
 msgstr "Liste de réglage"
@@ -3700,6 +3720,10 @@ msgstr "Prévisualisation"
 #: u_translation.rspreviewdebay
 msgid "Preview debayer"
 msgstr "Débayeriser la prévisualisation"
+
+#: u_translation.rspreviewprepr
+msgid "Preview preprocessing"
+msgstr "Prétraitement de l'aperçu"
 
 #: u_translation.rsprofile
 #, object-pascal-format
@@ -4731,6 +4755,10 @@ msgstr "Image résolue"
 msgid "Solved in %s seconds"
 msgstr "Résolu en %s secondes"
 
+#: u_translation.rssolvemaincam
+msgid "Solve main camera image"
+msgstr "Astrométrie de la caméra principale"
+
 #: u_translation.rssomedefinedd
 msgid "Some defined devices are not connected"
 msgstr "Certains périphériques de la configuration ne sont pas connectés"
@@ -5594,9 +5622,17 @@ msgstr "Désélectionner l'étoile"
 msgid "Unslaved"
 msgstr "Non asservi"
 
+#: u_translation.rsup
+msgid "Up"
+msgstr "Haut"
+
 #: u_translation.rsupdateactive
 msgid "Update active sequence"
 msgstr "Mise à jour de la séquence active"
+
+#: u_translation.rsupdatechartw
+msgid "Update chart with any astrometry result"
+msgstr "Met la carte a jour pour chaque résultat d'astrométrie"
 
 #: u_translation.rsupdatefullse
 msgid "Update full sequence"

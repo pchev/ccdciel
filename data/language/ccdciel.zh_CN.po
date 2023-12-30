@@ -6,15 +6,15 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ccdciel\n"
 "Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
-"POT-Creation-Date: 2023-09-15 15:42+0000\n"
-"PO-Revision-Date: 2023-08-30 03:37+0000\n"
+"POT-Creation-Date: 2023-12-30 15:36+0000\n"
+"PO-Revision-Date: 2023-12-11 18:57+0000\n"
 "Last-Translator: Zachary Wu <Unknown>\n"
 "Language-Team: Chinese (Simplified) <zh_CN@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2023-09-15 16:20+0000\n"
-"X-Generator: Launchpad (build 32eed776db4e1fe74faaa77122cde19862d565ac)\n"
+"X-Launchpad-Export-Date: 2023-12-30 15:48+0000\n"
+"X-Generator: Launchpad (build e1eeab5b20e19239bd7d5f36676f7a52988db88b)\n"
 
 #: u_translation.rs2d
 msgid "2D"
@@ -1265,6 +1265,10 @@ msgstr "缺省值"
 msgid "Default behavior"
 msgstr "缺省行为"
 
+#: u_translation.rsdefocusamoun
+msgid "Defocus amount"
+msgstr ""
+
 #: u_translation.rsdegree
 msgid "degree"
 msgstr "度"
@@ -1498,6 +1502,10 @@ msgstr "不要%s等待"
 msgid "Do simple slew to %s/%s"
 msgstr "简单转向到 %s/%s"
 
+#: u_translation.rsdown
+msgid "Down"
+msgstr ""
+
 #: u_translation.rsdownloading
 msgid "Downloading"
 msgstr "下载中"
@@ -1573,7 +1581,7 @@ msgstr "Elbrus图像目录 "
 
 #: u_translation.rselevation
 msgid "Elevation"
-msgstr "海拔"
+msgstr "高度角"
 
 #: u_translation.rsemailconfigu
 msgid "Email configuration"
@@ -1679,6 +1687,10 @@ msgstr "曝光："
 #: u_translation.rsexp2
 msgid "Exp."
 msgstr "曝光"
+
+#: u_translation.rsexperttrick
+msgid "Expert trick"
+msgstr ""
 
 #: u_translation.rsexposure
 msgid "Exposure"
@@ -1798,7 +1810,7 @@ msgstr "最终移动（步长）"
 
 #: u_translation.rsfind
 msgid "Find."
-msgstr "查找。"
+msgstr "寻星"
 
 #: u_translation.rsfinder
 msgid "Finder"
@@ -2624,10 +2636,6 @@ msgstr "没有天体测量软件则很多功能无法可靠的工作。"
 msgid "Margin offset"
 msgstr "边缘偏移量"
 
-#: u_translation.rsmarkeveryast
-msgid "Mark every astrometry result"
-msgstr "标记每个天体测量结果"
-
 #: u_translation.rsmax
 msgid "Max:"
 msgstr "最大值："
@@ -3334,11 +3342,11 @@ msgstr "选项一：在当前位置校准。"
 
 #: u_translation.rsoption3backl
 msgid "Option 2: Calibrate backlash compensation."
-msgstr ""
+msgstr "选项 2：校准回差补偿。"
 
 #: u_translation.rsoption4cance
 msgid "Option 3: Cancel."
-msgstr ""
+msgstr "选项 3：取消。"
 
 #: u_translation.rsoptions
 #, object-pascal-format
@@ -3352,6 +3360,10 @@ msgstr "选项"
 #: u_translation.rsor
 msgid "or"
 msgstr "或者"
+
+#: u_translation.rsordoubleclic
+msgid "Or double click on the bright star."
+msgstr ""
 
 #: u_translation.rsotheroptions
 msgid "Other options "
@@ -3545,6 +3557,10 @@ msgstr "计划%s停止。"
 msgid "Plate solve exposure %s"
 msgstr "解析曝光%s"
 
+#: u_translation.rsplatesolveto
+msgid "Plate solve to update the correction"
+msgstr ""
+
 #: u_translation.rspleaseactiva
 msgid "Please activate the log file in the preference."
 msgstr "请在首选项中激活日志文件。"
@@ -3685,6 +3701,10 @@ msgstr "首选调焦器方向"
 msgid "Preferences%s"
 msgstr "首选项%s"
 
+#: u_translation.rspreprocessin
+msgid "Preprocessing"
+msgstr ""
+
 #: u_translation.rspresetlist
 msgid "Preset list"
 msgstr "预设列表"
@@ -3700,6 +3720,10 @@ msgstr "预览"
 #: u_translation.rspreviewdebay
 msgid "Preview debayer"
 msgstr "预览去拜尔"
+
+#: u_translation.rspreviewprepr
+msgid "Preview preprocessing"
+msgstr ""
 
 #: u_translation.rsprofile
 #, object-pascal-format
@@ -4731,6 +4755,10 @@ msgstr "已解析的图像"
 msgid "Solved in %s seconds"
 msgstr "解析完成于%s秒"
 
+#: u_translation.rssolvemaincam
+msgid "Solve main camera image"
+msgstr ""
+
 #: u_translation.rssomedefinedd
 msgid "Some defined devices are not connected"
 msgstr "某些已定义的设备未连接"
@@ -5594,9 +5622,17 @@ msgstr "取消选择星"
 msgid "Unslaved"
 msgstr "未从动"
 
+#: u_translation.rsup
+msgid "Up"
+msgstr ""
+
 #: u_translation.rsupdateactive
 msgid "Update active sequence"
 msgstr "更新活动序列"
+
+#: u_translation.rsupdatechartw
+msgid "Update chart with any astrometry result"
+msgstr ""
 
 #: u_translation.rsupdatefullse
 msgid "Update full sequence"

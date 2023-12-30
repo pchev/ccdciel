@@ -6,15 +6,15 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ccdciel\n"
 "Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
-"POT-Creation-Date: 2023-09-15 15:42+0000\n"
+"POT-Creation-Date: 2023-12-30 15:36+0000\n"
 "PO-Revision-Date: 2021-09-24 16:13+0000\n"
 "Last-Translator: Jimmy Frydkær Jensen <jimmy@frydkaer.net>\n"
 "Language-Team: Danish <da@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2023-09-15 16:20+0000\n"
-"X-Generator: Launchpad (build 32eed776db4e1fe74faaa77122cde19862d565ac)\n"
+"X-Launchpad-Export-Date: 2023-12-30 15:48+0000\n"
+"X-Generator: Launchpad (build e1eeab5b20e19239bd7d5f36676f7a52988db88b)\n"
 
 #: u_translation.rs2d
 msgid "2D"
@@ -1265,6 +1265,10 @@ msgstr ""
 msgid "Default behavior"
 msgstr ""
 
+#: u_translation.rsdefocusamoun
+msgid "Defocus amount"
+msgstr ""
+
 #: u_translation.rsdegree
 msgid "degree"
 msgstr ""
@@ -1498,6 +1502,10 @@ msgstr ""
 msgid "Do simple slew to %s/%s"
 msgstr ""
 
+#: u_translation.rsdown
+msgid "Down"
+msgstr ""
+
 #: u_translation.rsdownloading
 msgid "Downloading"
 msgstr "Downloader"
@@ -1678,6 +1686,10 @@ msgstr "Exp:"
 
 #: u_translation.rsexp2
 msgid "Exp."
+msgstr ""
+
+#: u_translation.rsexperttrick
+msgid "Expert trick"
 msgstr ""
 
 #: u_translation.rsexposure
@@ -2624,10 +2636,6 @@ msgstr ""
 msgid "Margin offset"
 msgstr ""
 
-#: u_translation.rsmarkeveryast
-msgid "Mark every astrometry result"
-msgstr ""
-
 #: u_translation.rsmax
 msgid "Max:"
 msgstr ""
@@ -3353,6 +3361,10 @@ msgstr ""
 msgid "or"
 msgstr ""
 
+#: u_translation.rsordoubleclic
+msgid "Or double click on the bright star."
+msgstr ""
+
 #: u_translation.rsotheroptions
 msgid "Other options "
 msgstr ""
@@ -3545,6 +3557,10 @@ msgstr ""
 msgid "Plate solve exposure %s"
 msgstr ""
 
+#: u_translation.rsplatesolveto
+msgid "Plate solve to update the correction"
+msgstr ""
+
 #: u_translation.rspleaseactiva
 msgid "Please activate the log file in the preference."
 msgstr "Venligst aktiver logfilen i indstillingerne."
@@ -3685,6 +3701,10 @@ msgstr ""
 msgid "Preferences%s"
 msgstr "Indstillinger%s"
 
+#: u_translation.rspreprocessin
+msgid "Preprocessing"
+msgstr ""
+
 #: u_translation.rspresetlist
 msgid "Preset list"
 msgstr ""
@@ -3699,6 +3719,10 @@ msgstr "Forhåndsvisning"
 
 #: u_translation.rspreviewdebay
 msgid "Preview debayer"
+msgstr ""
+
+#: u_translation.rspreviewprepr
+msgid "Preview preprocessing"
 msgstr ""
 
 #: u_translation.rsprofile
@@ -4731,6 +4755,10 @@ msgstr ""
 msgid "Solved in %s seconds"
 msgstr ""
 
+#: u_translation.rssolvemaincam
+msgid "Solve main camera image"
+msgstr ""
+
 #: u_translation.rssomedefinedd
 msgid "Some defined devices are not connected"
 msgstr ""
@@ -5594,8 +5622,16 @@ msgstr ""
 msgid "Unslaved"
 msgstr ""
 
+#: u_translation.rsup
+msgid "Up"
+msgstr ""
+
 #: u_translation.rsupdateactive
 msgid "Update active sequence"
+msgstr ""
+
+#: u_translation.rsupdatechartw
+msgid "Update chart with any astrometry result"
 msgstr ""
 
 #: u_translation.rsupdatefullse

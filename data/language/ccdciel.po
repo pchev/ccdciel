@@ -5658,10 +5658,6 @@ msgstr ""
 msgid "Modify"
 msgstr ""
 
-#: u_translation:rsmarkeveryast
-msgid "Mark every astrometry result"
-msgstr ""
-
 #: u_translation:rsswitchconnec
 msgid "Switch connection"
 msgstr ""
@@ -5724,5 +5720,45 @@ msgstr ""
 
 #: u_translation:rsissue
 msgid "Issue"
+msgstr ""
+
+#: u_translation:rspreprocessin
+msgid "Preprocessing"
+msgstr ""
+
+#: u_translation:rsplatesolveto
+msgid "Plate solve to update the correction"
+msgstr ""
+
+#: u_translation:rsup
+msgid "Up"
+msgstr ""
+
+#: u_translation:rsdown
+msgid "Down"
+msgstr ""
+
+#: u_translation:rsupdatechartw
+msgid "Update chart with any astrometry result"
+msgstr ""
+
+#: u_translation:rsexperttrick
+msgid "Expert trick"
+msgstr ""
+
+#: u_translation:rsdefocusamoun
+msgid "Defocus amount"
+msgstr ""
+
+#: u_translation:rspreviewprepr
+msgid "Preview preprocessing"
+msgstr ""
+
+#: u_translation:rsordoubleclic
+msgid "Or double click on the bright star."
+msgstr ""
+
+#: u_translation:rssolvemaincam
+msgid "Solve main camera image"
 msgstr ""
 

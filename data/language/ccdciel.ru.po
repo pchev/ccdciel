@@ -6,15 +6,15 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ccdciel\n"
 "Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
-"POT-Creation-Date: 2023-09-15 15:42+0000\n"
-"PO-Revision-Date: 2023-07-26 12:11+0000\n"
+"POT-Creation-Date: 2023-12-30 15:36+0000\n"
+"PO-Revision-Date: 2023-10-18 18:39+0000\n"
 "Last-Translator: Sergey Tarantsov <tsn-ast@yandex.ru>\n"
 "Language-Team: Russian <ru@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2023-09-15 16:20+0000\n"
-"X-Generator: Launchpad (build 32eed776db4e1fe74faaa77122cde19862d565ac)\n"
+"X-Launchpad-Export-Date: 2023-12-30 15:48+0000\n"
+"X-Generator: Launchpad (build e1eeab5b20e19239bd7d5f36676f7a52988db88b)\n"
 
 #: u_translation.rs2d
 msgid "2D"
@@ -352,7 +352,7 @@ msgstr "График автофокусировки"
 
 #: u_translation.rsautofocusloc
 msgid "Autofocus location"
-msgstr ""
+msgstr "Позиция автофокусировки"
 
 #: u_translation.rsautofocusmea
 #, object-pascal-format
@@ -637,11 +637,11 @@ msgstr "Задержка%sкалибровки"
 
 #: u_translation.rscalibrationm
 msgid "Calibration measurement"
-msgstr ""
+msgstr "Калибровка"
 
 #: u_translation.rscalibrationo
 msgid "Calibration options"
-msgstr ""
+msgstr "Калибровка"
 
 #: u_translation.rscalibrationr
 msgid "Calibration results:"
@@ -1223,7 +1223,7 @@ msgstr "Тёмная%sночь"
 
 #: u_translation.rsdate
 msgid "Date"
-msgstr ""
+msgstr "Дата"
 
 #: u_translation.rsdateobsfromc
 msgid "DATE-OBS from camera driver"
@@ -1251,7 +1251,7 @@ msgstr "Dec"
 
 #: u_translation.rsdeclination
 msgid "Declination"
-msgstr ""
+msgstr "Склонение"
 
 #: u_translation.rsdeclinationb
 msgid "Declination backlash"
@@ -1264,6 +1264,10 @@ msgstr "Default"
 #: u_translation.rsdefaultbehav
 msgid "Default behavior"
 msgstr "Стандартное поведение"
+
+#: u_translation.rsdefocusamoun
+msgid "Defocus amount"
+msgstr ""
 
 #: u_translation.rsdegree
 msgid "degree"
@@ -1498,6 +1502,10 @@ msgstr "Не%sждать"
 msgid "Do simple slew to %s/%s"
 msgstr "Сделать простой поворот к %s/%s"
 
+#: u_translation.rsdown
+msgid "Down"
+msgstr ""
+
 #: u_translation.rsdownloading
 msgid "Downloading"
 msgstr "Загрузка"
@@ -1529,7 +1537,7 @@ msgstr "Вы хотите запустить действие для завер�
 
 #: u_translation.rsdrawslitarea
 msgid "Draw slit area on image"
-msgstr ""
+msgstr "Показать щель на изображении"
 
 #: u_translation.rsduration
 msgid "Duration"
@@ -1680,6 +1688,10 @@ msgstr "Exp:"
 msgid "Exp."
 msgstr "Exp."
 
+#: u_translation.rsexperttrick
+msgid "Expert trick"
+msgstr ""
+
 #: u_translation.rsexposure
 msgid "Exposure"
 msgstr "Выдержка"
@@ -1802,7 +1814,7 @@ msgstr ""
 
 #: u_translation.rsfinder
 msgid "Finder"
-msgstr ""
+msgstr "Искатель"
 
 #: u_translation.rsfindercamera
 msgid "Finder camera"
@@ -2150,7 +2162,7 @@ msgstr "Камера гида"
 
 #: u_translation.rsguideoffset
 msgid "Guide offset"
-msgstr ""
+msgstr "Смещение"
 
 #: u_translation.rsguidepositio
 msgid "Guide position on the slit"
@@ -2315,7 +2327,7 @@ msgstr "Изображение восстановлено"
 
 #: u_translation.rsimagewindow
 msgid "Image window"
-msgstr ""
+msgstr "Область снимка"
 
 #: u_translation.rsimportcdcmos
 msgid "Import mosaic"
@@ -2347,7 +2359,7 @@ msgstr "Информация"
 
 #: u_translation.rsinitialcalib
 msgid "Initial calibration step"
-msgstr ""
+msgstr "Начальный шаг"
 
 #: u_translation.rsinitializeta
 #, object-pascal-format
@@ -2460,7 +2472,7 @@ msgstr "Инверсное управление солнечного гидир�
 
 #: u_translation.rsissue
 msgid "Issue"
-msgstr ""
+msgstr "Проблема"
 
 #: u_translation.rsiterative
 msgid "Iterative"
@@ -2484,7 +2496,7 @@ msgstr "Язык"
 
 #: u_translation.rslastcalibrat
 msgid "Last calibration:"
-msgstr ""
+msgstr "Последняя калибровка:"
 
 #: u_translation.rslatitude
 msgid "Latitude"
@@ -2544,7 +2556,7 @@ msgstr "Блокировка наложения"
 
 #: u_translation.rslockposition
 msgid "Lock position"
-msgstr ""
+msgstr "Закрепить"
 
 #: u_translation.rslogfolder
 msgid "Log folder"
@@ -2623,10 +2635,6 @@ msgstr "Многие функции не будут работать надёж�
 #: u_translation.rsmarginoffset
 msgid "Margin offset"
 msgstr "Смещение"
-
-#: u_translation.rsmarkeveryast
-msgid "Mark every astrometry result"
-msgstr "Отмечать каждый результат астрометрии"
 
 #: u_translation.rsmax
 msgid "Max:"
@@ -2826,7 +2834,7 @@ msgstr "Минимальный"
 
 #: u_translation.rsminimummove
 msgid "Minimum move"
-msgstr ""
+msgstr "Мин. перемещение"
 
 #: u_translation.rsminimumobser
 msgid "Minimum observing elevation "
@@ -2987,7 +2995,7 @@ msgstr "Переход на вторую позицию"
 
 #: u_translation.rsmultipanel
 msgid "Multi panel"
-msgstr ""
+msgstr "Двойная"
 
 #: u_translation.rsmultistargui
 msgid "Multi-star guide offset"
@@ -3334,11 +3342,11 @@ msgstr "1. Калибровка в текущем положении."
 
 #: u_translation.rsoption3backl
 msgid "Option 2: Calibrate backlash compensation."
-msgstr ""
+msgstr "2. Калибровка компенсации люфта."
 
 #: u_translation.rsoption4cance
 msgid "Option 3: Cancel."
-msgstr ""
+msgstr "3. Отмена."
 
 #: u_translation.rsoptions
 #, object-pascal-format
@@ -3352,6 +3360,10 @@ msgstr "Параметры"
 #: u_translation.rsor
 msgid "or"
 msgstr "или"
+
+#: u_translation.rsordoubleclic
+msgid "Or double click on the bright star."
+msgstr ""
 
 #: u_translation.rsotheroptions
 msgid "Other options "
@@ -3533,7 +3545,7 @@ msgstr "План %s завершён"
 
 #: u_translation.rsplanstep
 msgid "Plan step"
-msgstr ""
+msgstr "Шаг плана"
 
 #: u_translation.rsplanstopped
 #, object-pascal-format
@@ -3544,6 +3556,10 @@ msgstr "План %s остановлен"
 #, object-pascal-format
 msgid "Plate solve exposure %s"
 msgstr "Распознавание экспозиции %s"
+
+#: u_translation.rsplatesolveto
+msgid "Plate solve to update the correction"
+msgstr ""
 
 #: u_translation.rspleaseactiva
 msgid "Please activate the log file in the preference."
@@ -3685,6 +3701,10 @@ msgstr "Предпочтительное направление фокусиро
 msgid "Preferences%s"
 msgstr "Настройки%s"
 
+#: u_translation.rspreprocessin
+msgid "Preprocessing"
+msgstr ""
+
 #: u_translation.rspresetlist
 msgid "Preset list"
 msgstr "Профиль"
@@ -3700,6 +3720,10 @@ msgstr "Превью"
 #: u_translation.rspreviewdebay
 msgid "Preview debayer"
 msgstr "Дебайеризовать превью"
+
+#: u_translation.rspreviewprepr
+msgid "Preview preprocessing"
+msgstr ""
 
 #: u_translation.rsprofile
 #, object-pascal-format
@@ -4174,7 +4198,7 @@ msgstr "Сохранить растровое изображение %s"
 
 #: u_translation.rssavepreviewi
 msgid "Save preview images"
-msgstr ""
+msgstr "Сохранить превью"
 
 #: u_translation.rssavetempl
 msgid "Save template"
@@ -4314,7 +4338,7 @@ msgstr "Сенсор"
 
 #: u_translation.rssensoranalys
 msgid "Sensor analysis"
-msgstr ""
+msgstr "Анализ сенсора"
 
 #: u_translation.rssensorsprope
 msgid "Sensors properties"
@@ -4461,7 +4485,7 @@ msgstr "Установлен тип кадра %s"
 
 #: u_translation.rssetguidespee
 msgid "Set guide speed [x sidereal]"
-msgstr ""
+msgstr "Установить скорость гидирования [x звездной]"
 
 #: u_translation.rssetlockposit
 msgid "Set lock position"
@@ -4495,7 +4519,7 @@ msgstr "Установлена температура сенсора %s"
 #: u_translation.rssettemperatu2
 #, object-pascal-format
 msgid "Set temperature ramp to %s started"
-msgstr ""
+msgstr "Изменение температуры до %s запущено"
 
 #: u_translation.rssettemperatu3
 msgid "Set temperature ramp finished"
@@ -4575,7 +4599,7 @@ msgstr "Упрощённая фотометрия только с учётом �
 
 #: u_translation.rssinglepanel
 msgid "Single panel"
-msgstr ""
+msgstr "Одинарная"
 
 #: u_translation.rssinglestar
 msgid "Single star"
@@ -4691,7 +4715,7 @@ msgstr "Коррекция проскальзывания "
 
 #: u_translation.rsslitdrawing
 msgid "Slit drawing"
-msgstr "Щелевой рисунок"
+msgstr "Щель"
 
 #: u_translation.rsslope
 msgid "Slope"
@@ -4730,6 +4754,10 @@ msgstr "Решенное изображение"
 #, object-pascal-format
 msgid "Solved in %s seconds"
 msgstr "Время %s сек."
+
+#: u_translation.rssolvemaincam
+msgid "Solve main camera image"
+msgstr ""
 
 #: u_translation.rssomedefinedd
 msgid "Some defined devices are not connected"
@@ -5152,7 +5180,7 @@ msgstr "Название%sобъекта"
 
 #: u_translation.rstargetpositi2
 msgid "Target position in finder image"
-msgstr ""
+msgstr "Позиция объекта в искателе"
 
 #: u_translation.rstargetprecis
 msgid "Target precision [arcmin] "
@@ -5594,9 +5622,17 @@ msgstr "Снять отметку со звезды"
 msgid "Unslaved"
 msgstr "Unslaved"
 
+#: u_translation.rsup
+msgid "Up"
+msgstr ""
+
 #: u_translation.rsupdateactive
 msgid "Update active sequence"
 msgstr "Обновить активное задание"
+
+#: u_translation.rsupdatechartw
+msgid "Update chart with any astrometry result"
+msgstr ""
 
 #: u_translation.rsupdatefullse
 msgid "Update full sequence"
@@ -5626,7 +5662,7 @@ msgstr "Астрометрия для%sуточнения позиции"
 
 #: u_translation.rsuseastrometr
 msgid "Use astrometry to refine the position"
-msgstr "Используовать астрометрию для уточнения позиции"
+msgstr "Использовать астрометрию для уточнения позиции"
 
 #: u_translation.rsuseastrometr2
 msgid "Use astrometry to identify the target"
