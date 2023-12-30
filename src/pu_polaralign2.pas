@@ -815,6 +815,7 @@ begin
   Instruction.Lines.Add(txt);
   Instruction.Lines.Add('');
   Instruction.Lines.Add(rsMoveTheTrian);
+  Instruction.Lines.Add(rsOrDoubleClic);
   Instruction.Lines.Add(rsAdjustTheMou);
   Instruction.Lines.Add(rsForGuidanceA);
   Instruction.Lines.Add(rsCloseTheWind);

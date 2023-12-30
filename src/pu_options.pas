@@ -1216,6 +1216,8 @@ begin
   AutofocusPauseGuider.Caption:=rsPauseGuiding;
   AutofocusMultiStarCenter.Caption:=rsUseOnlyStarN;
   Label101.Caption := rsTheMenuFileF;
+  GroupBoxExpert.Caption:=rsExpertTrick;
+  Label174.Caption:=rsDefocusAmoun;
   PageAstrometry.Caption := rsAstrometry;
   GroupBox4.Caption := rsAstrometryOp;
   FocaleFromTelescope.Caption := rsFromTelescop;
@@ -1319,7 +1321,7 @@ begin
   PagePlanetarium.Caption := rsPlanetarium;
   PlanetariumBox.Caption := rsSoftware;
   CdCAdjustFrame.Caption:=rsAdjustTheCha;
-  PlanetariumShowAstrometry.Caption:=rsMarkEveryAst;
+  PlanetariumShowAstrometry.Caption:=rsUpdateChartW;
   CheckBoxLocalCdc.Caption := rsSkychartOnLo;
   StartCdC.Caption := Format(rsStartS,['Skychart']);
   StartHNSKY.Caption := Format(rsStartS,['HNSKY']);

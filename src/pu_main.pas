@@ -2498,6 +2498,8 @@ begin
    MenuItemPhotometry2.Caption:=rsPhotometry;
    MenuItemDebayer.Caption := rsPreviewDebay;
    MenuItemDebayer2.Caption := rsPreviewDebay;
+   MenuItemPreprocess.Caption:=rsPreviewPrepr;
+   MenuItemPreprocess2.Caption:=rsPreviewPrepr;
    MenuItemImageInspection.Caption:=rsImageInspect;
    MenuItemImageInspection2.Caption:=rsImageInspect;
    MenuItemCleanup.Caption:=rsImageCleanup;

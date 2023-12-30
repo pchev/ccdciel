@@ -89,6 +89,7 @@ procedure Tf_weather.SetLang;
 begin
   Title.Caption:=rsWeatherStati;
   label1.Caption:=rsClearConditi;
+  ButtonDetail.Caption:=rsDetails;
 end;
 
 procedure Tf_weather.SetLed;

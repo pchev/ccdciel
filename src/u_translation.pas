@@ -1518,7 +1518,6 @@ resourcestring
   rsPulseGuiding = 'Pulse guiding %s is reversed after meridian flip';
   rsPredefinedRO = 'Predefined ROI';
   rsModify = 'Modify';
-  rsMarkEveryAst = 'Mark every astrometry result';
   rsSwitchConnec = 'Switch connection';
   rsUseAstrometr2 = 'Use astrometry to identify the target';
   rsAstrometryEx = 'Astrometry exposure time';
@@ -1539,6 +1538,12 @@ resourcestring
   rsPlateSolveTo = 'Plate solve to update the correction';
   rsUp = 'Up';
   rsDown = 'Down';
+  rsUpdateChartW = 'Update chart with any astrometry result';
+  rsExpertTrick = 'Expert trick';
+  rsDefocusAmoun = 'Defocus amount';
+  rsPreviewPrepr = 'Preview preprocessing';
+  rsOrDoubleClic = 'Or double click on the bright star.';
+  rsSolveMainCam = 'Solve main camera image';
 
 implementation
 

@@ -740,6 +740,7 @@ begin
   PolarAlignmentOverlay:=true;
   PolarAlignmentLock:=false;
   Memo1.Lines.Add(rsMoveTheTrian);
+  Memo1.Lines.Add(rsOrDoubleClic);
   Memo1.Lines.Add(rsAdjustTheMou);
   Memo1.Lines.Add(rsForGuidanceA);
   Memo1.Lines.Add(rsCloseTheWind);

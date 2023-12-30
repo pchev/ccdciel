@@ -66,6 +66,7 @@ begin
   ButtonPast.Caption:=rsPastFromClip;
   button1.Caption:=rsOK;
   button2.Caption:=rsCancel;
+  ButtonSolve.Caption:=rsSolveMainCam;
 end;
 
 procedure Tf_findercalibration.ButtonPastClick(Sender: TObject);
