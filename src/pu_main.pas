@@ -11289,7 +11289,7 @@ begin
     if camera.StackCount>1 then buf:=buf+','+blank+Format(rsStackOfFrame, [inttostr(camera.StackCount)]);
     StatusBar1.Panels[panelfile].Text:=buf;
     // solve polar alignment
-    if PolarAlignmentOverlay then begin
+    if PolarAlignmentOverlay and (not UseFinder) then begin
       if f_polaralign.Visible and f_polaralign.SolveUpdate.Checked then f_polaralign.UpdateAlign;
       if f_polaralign2.Visible and f_polaralign2.SolveUpdate.Checked then f_polaralign2.UpdateAlign;
     end;
@@ -17519,6 +17519,11 @@ begin
     fn:=fn+FormatDateTime('yyyymmdd'+FilenameSep+'hhnnss',dt);
     fn:=fn+'.fits';
     finderfits.SaveToFile(fn);
+  end;
+  // solve polar alignment
+  if PolarAlignmentOverlay and UseFinder then begin
+    if f_polaralign.Visible and f_polaralign.SolveUpdate.Checked then f_polaralign.UpdateAlign;
+    if f_polaralign2.Visible and f_polaralign2.SolveUpdate.Checked then f_polaralign2.UpdateAlign;
   end;
   // prepare image
   DrawFinderImage(displayimage);
