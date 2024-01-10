@@ -62,10 +62,25 @@ echo $version - $currentrev
   if [[ $? -ne 0 ]]; then exit 1;fi
   mv ccdciel*.deb $wd
   if [[ $? -ne 0 ]]; then exit 1;fi
-
+  # rpm
   cd $wd
-  rm -rf $builddir
-
+  rsync -a --exclude=.svn system_integration/Linux/rpm $builddir
+  cd $builddir
+  mkdir -p rpm/RPMS/x86_64
+  mkdir -p rpm/RPMS/i386
+  mkdir rpm/SRPMS
+  mkdir rpm/tmp
+  mkdir -p rpm/ccdciel/usr/
+  mv debian/ccdciel64/usr/* rpm/ccdciel/usr/
+  cd rpm
+  sed -i "/Version:/ s/3/$version/"  SPECS/ccdciel64.spec
+  sed -i "/Release:/ s/1/$currentrev\_dbg/" SPECS/ccdciel64.spec
+# rpm 4.7
+  fakeroot rpmbuild  --buildroot "$builddir/rpm/ccdciel" --define "_topdir $builddir/rpm/" --define "_binary_payload w7.xzdio"  -bb SPECS/ccdciel64.spec
+  if [[ $? -ne 0 ]]; then exit 1;fi
+  mv RPMS/x86_64/ccdciel*.rpm $wd
+  if [[ $? -ne 0 ]]; then exit 1;fi
+ 
 cd $wd
 rm -rf $builddir
 
