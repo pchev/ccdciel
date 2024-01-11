@@ -489,7 +489,7 @@ procedure Tf_video.BtnOptionsClick(Sender: TObject);
 begin
   if not FVideoGUIready then begin
     FVideoindigui:=Tf_indigui.Create(Application.MainForm);
-    ScaleDPI(f_indigui);
+    ScaleDPI(FVideoindigui);
     FVideoindigui.onDestroy:=@GUIdestroy;
     FVideoindigui.IndiServer:=config.GetValue('/INDIcamera/Server','');
     FVideoindigui.IndiPort:=config.GetValue('/INDIcamera/ServerPort','');

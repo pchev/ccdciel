@@ -134,7 +134,7 @@ var
   n: integer;
   WinControl: TWinControl;
 begin
-  if (not UseScaling) or (RunDPI <= DesignDPI) then
+  if (Control=nil) or (not UseScaling) or (RunDPI <= DesignDPI) then
     exit;
 
   if Control is TUpDown then
