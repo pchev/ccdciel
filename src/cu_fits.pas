@@ -4621,7 +4621,7 @@ end;
 
 function CaptureFilename(f:TFits; Directory,DefFrameType,DefObject,DefExp,DefBin:string; sequence:boolean):string;
 var dt: Tdatetime;
-    fn,buf,fileseqstr,fileseqext,blankrep,dateobs: string;
+    fn,buf,fileseqstr,fileseqext,dateobs: string;
     framestr,objectstr,binstr,expstr,filterstr: string;
     ccdtemp: double;
     fileseqnum,i: integer;
@@ -4648,16 +4648,12 @@ begin
   if not f.Header.Valueof('FILTER',filterstr) then filterstr:='';
   filterstr:=trim(filterstr);
   fn:='';
-  if FilenameSep='_' then
-     blankrep:='-'
-  else
-     blankrep:='_';
   UseFileSequenceNumber:=false;
   for i:=0 to FileNameCount-1 do begin
     case FileNameOpt[i] of
       fnObj : if FileNameActive[i] then begin
               if framestr=trim(FrameName[0]) then begin
-                  fn:=fn+wordspace(StringReplace(objectstr,FilenameSep,blankrep,[rfReplaceAll]))+FilenameSep;
+                  fn:=fn+wordspace(objectstr)+FilenameSep;
               end
               else
                  fn:=fn+framestr+FilenameSep;
