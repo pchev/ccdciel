@@ -38,6 +38,7 @@ type
     BtnAddRoi: TButton;
     BtnModRoi: TButton;
     BtnDelRoi: TButton;
+    ButtonDelrow: TButton;
     ButtonAddrow: TButton;
     ButtonSeqDir: TButton;
     ButtonLogDir: TButton;
@@ -767,6 +768,7 @@ type
     procedure BtnAddRoiClick(Sender: TObject);
     procedure BtnModRoiClick(Sender: TObject);
     procedure ButtonAddrowClick(Sender: TObject);
+    procedure ButtonDelrowClick(Sender: TObject);
     procedure ButtonLogDirClick(Sender: TObject);
     procedure ButtonSeqDirClick(Sender: TObject);
     procedure CustomHeaderKeyPress(Sender: TObject; var Key: char);
@@ -1173,6 +1175,7 @@ begin
   sgCustomType.Columns[4].Title.Caption:='';
   sgCustomType.Cells[4,1]:=rsParameter;
   ButtonAddrow.Caption:=rsAdd;
+  ButtonDelrow.Caption:=rsDelete;
   PageFlat.Caption := rsFlat;
   FlatType.Caption := rsSequenceAuto;
   FlatExposureBox.Caption := rsFlatAutoExpo;
@@ -1792,10 +1795,22 @@ begin
   if buf='' then exit;
   for j:=0 to ord(high(TFrameType)) do begin
     if UpperCase(trim(FrameName[j]))=buf then begin
-      LabelTypeError.Caption:='Error, duplicate name '+buf+' for image type!';
+      LabelTypeError.Caption:=Format(rsErrorDuplica, [buf]);
       sgCustomType.Cells[0,i]:='';
     end;
   end;
+end;
+
+procedure Tf_option.ButtonAddrowClick(Sender: TObject);
+begin
+  sgCustomType.RowCount:=sgCustomType.RowCount+1;
+end;
+
+procedure Tf_option.ButtonDelrowClick(Sender: TObject);
+var i: integer;
+begin
+  i:=sgCustomType.Selection.top;
+  sgCustomType.DeleteRow(i);
 end;
 
 procedure Tf_option.LogDirDefaultClick(Sender: TObject);
@@ -2236,11 +2251,6 @@ begin
     roi.w:=RoiW.Value;
     roi.h:=RoiH.Value;
   end;
-end;
-
-procedure Tf_option.ButtonAddrowClick(Sender: TObject);
-begin
-  sgCustomType.RowCount:=sgCustomType.RowCount+1;
 end;
 
 procedure Tf_option.BtnDelRoiClick(Sender: TObject);

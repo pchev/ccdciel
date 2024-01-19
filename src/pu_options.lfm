@@ -2447,6 +2447,15 @@ object f_option: Tf_option
             Caption = 'LabelTypeError'
             ParentColor = False
           end
+          object ButtonDelrow: TButton
+            Left = 199
+            Height = 25
+            Top = 11
+            Width = 120
+            Caption = 'Delete row'
+            OnClick = ButtonDelrowClick
+            TabOrder = 1
+          end
         end
       end
       object PageFlat: TTabSheet

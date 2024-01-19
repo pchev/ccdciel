@@ -1549,6 +1549,7 @@ resourcestring
   rsName = 'Name';
   rsActivation = 'Activation';
   rsDeactivation = 'Deactivation';
+  rsErrorDuplica = 'Error, duplicate name %s for image type!';
 
 implementation
 
