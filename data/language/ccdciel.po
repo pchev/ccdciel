@@ -5782,3 +5782,7 @@ msgstr ""
 msgid "Deactivation"
 msgstr ""
 
+#: u_translation:rserrorduplica
+msgid "Error, duplicate name %s for image type!"
+msgstr ""
+
