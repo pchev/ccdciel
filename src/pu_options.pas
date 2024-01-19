@@ -51,6 +51,7 @@ type
     Label173: TLabel;
     Label174: TLabel;
     DefocusAmount: TSpinEdit;
+    LabelTypeError: TLabel;
     PageType: TTabSheet;
     Panel34: TPanel;
     Panel35: TPanel;
@@ -812,6 +813,7 @@ type
     procedure PlanetariumBoxClick(Sender: TObject);
     procedure RoiListChange(Sender: TObject);
     procedure SeqDirDefaultClick(Sender: TObject);
+    procedure sgCustomTypeEditingDone(Sender: TObject);
     procedure StackShowChange(Sender: TObject);
     procedure StackUseDarkFlatChange(Sender: TObject);
     procedure StartCdCChange(Sender: TObject);
@@ -986,6 +988,7 @@ begin
   ChangeAutofocusInPlace(nil);
   TemperatureScaleClick(nil);
   panel4.Visible:=DomeSlaveToMount.Checked;
+  LabelTypeError.Caption:='';
   AutoguiderBoxClick(nil);
   BalanceChange(nil);
   StartCdCChange(nil);
@@ -1777,6 +1780,22 @@ end;
 procedure Tf_option.SeqDirDefaultClick(Sender: TObject);
 begin
   SeqDir.text:=ConfigDir;
+end;
+
+procedure Tf_option.sgCustomTypeEditingDone(Sender: TObject);
+var i,j: integer;
+    buf: string;
+begin
+  LabelTypeError.Caption:='';
+  i:=sgCustomType.Selection.top;
+  buf:=UpperCase(trim(sgCustomType.Cells[0,i]));
+  if buf='' then exit;
+  for j:=0 to ord(high(TFrameType)) do begin
+    if UpperCase(trim(FrameName[j]))=buf then begin
+      LabelTypeError.Caption:='Error, duplicate name '+buf+' for image type!';
+      sgCustomType.Cells[0,i]:='';
+    end;
+  end;
 end;
 
 procedure Tf_option.LogDirDefaultClick(Sender: TObject);

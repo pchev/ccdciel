@@ -2400,9 +2400,10 @@ object f_option: Tf_option
           FixedCols = 0
           FixedRows = 2
           MouseWheelOption = mwGrid
-          Options = [goFixedVertLine, goFixedHorzLine, goVertLine, goHorzLine, goRangeSelect, goEditing, goAutoAddRows, goAlwaysShowEditor, goSmoothScroll, goAutoAddRowsSkipContentCheck]
+          Options = [goFixedVertLine, goFixedHorzLine, goVertLine, goHorzLine, goEditing, goAutoAddRows, goAlwaysShowEditor, goSmoothScroll, goAutoAddRowsSkipContentCheck]
           RowCount = 3
           TabOrder = 0
+          OnEditingDone = sgCustomTypeEditingDone
           ColWidths = (
             114
             114
@@ -2437,6 +2438,14 @@ object f_option: Tf_option
             Caption = 'Add row'
             OnClick = ButtonAddrowClick
             TabOrder = 0
+          end
+          object LabelTypeError: TLabel
+            Left = 28
+            Height = 18
+            Top = 50
+            Width = 94
+            Caption = 'LabelTypeError'
+            ParentColor = False
           end
         end
       end
