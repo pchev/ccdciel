@@ -462,21 +462,12 @@ object f_option: Tf_option
             ClientHeight = 576
             ClientWidth = 570
             ParentFont = False
-            object BtnFileDefault: TButton
-              Left = 394
-              Height = 25
-              Top = 8
-              Width = 61
-              Caption = 'Default'
-              OnClick = BtnFileDefaultClick
-              ParentFont = False
-              TabOrder = 0
-            end
             object FileOptions: TStringGrid
-              Left = 8
-              Height = 240
-              Top = 2
-              Width = 372
+              Left = 0
+              Height = 344
+              Top = 0
+              Width = 398
+              Align = alClient
               ColCount = 3
               Columns = <              
                 item
@@ -496,7 +487,7 @@ object f_option: Tf_option
               ParentFont = False
               RowCount = 9
               ScrollBars = ssAutoVertical
-              TabOrder = 1
+              TabOrder = 0
               OnClick = FileOrFolderOptionsClick
               OnColRowMoved = FileOrFolderOptionsColRowMoved
               ColWidths = (
@@ -505,214 +496,231 @@ object f_option: Tf_option
                 307
               )
             end
-            object Label123: TLabel
-              AnchorSideTop.Control = FilenameSep
-              AnchorSideTop.Side = asrCenter
-              Left = 8
-              Height = 18
-              Top = 254
-              Width = 61
-              Caption = 'Separator'
-              ParentColor = False
-              ParentFont = False
+            object Panel36: TPanel
+              Left = 0
+              Height = 232
+              Top = 344
+              Width = 570
+              Align = alBottom
+              ClientHeight = 232
+              ClientWidth = 570
+              TabOrder = 1
+              object Label123: TLabel
+                AnchorSideTop.Control = FilenameSep
+                AnchorSideTop.Side = asrCenter
+                Left = 8
+                Height = 18
+                Top = 15
+                Width = 61
+                Caption = 'Separator'
+                ParentColor = False
+                ParentFont = False
+              end
+              object FilenameSep: TComboBox
+                AnchorSideLeft.Side = asrBottom
+                Left = 75
+                Height = 32
+                Top = 8
+                Width = 64
+                BorderSpacing.Left = 6
+                ItemHeight = 24
+                ItemIndex = 0
+                Items.Strings = (
+                  '_'
+                  '-'
+                  '.'
+                )
+                ParentFont = False
+                Style = csDropDownList
+                TabOrder = 0
+                Text = '_'
+              end
+              object FileSequenceWidth: TSpinEdit
+                AnchorSideLeft.Control = UseFileSequenceWidth
+                AnchorSideLeft.Side = asrBottom
+                AnchorSideTop.Control = UseFileSequenceWidth
+                AnchorSideTop.Side = asrCenter
+                Left = 179
+                Height = 28
+                Top = 46
+                Width = 58
+                BorderSpacing.Left = 6
+                Constraints.MaxHeight = 28
+                MaxValue = 5
+                MinValue = 3
+                ParentFont = False
+                TabOrder = 1
+                Value = 3
+              end
+              object UseFileSequenceWidth: TCheckBox
+                AnchorSideTop.Side = asrCenter
+                Left = 8
+                Height = 22
+                Top = 49
+                Width = 165
+                Caption = 'Fixed sequence length'
+                OnClick = UseFileSequenceWidthClick
+                ParentFont = False
+                TabOrder = 2
+              end
+              object FilePack: TCheckBox
+                AnchorSideTop.Control = FitsExt
+                AnchorSideTop.Side = asrBottom
+                Left = 8
+                Height = 22
+                Top = 149
+                Width = 236
+                BorderSpacing.Top = 18
+                Caption = 'Compress the FITS files with fpack'
+                ParentFont = False
+                TabOrder = 3
+              end
+              object WantExif: TCheckBox
+                AnchorSideTop.Side = asrBottom
+                Left = 8
+                Height = 22
+                Top = 175
+                Width = 258
+                BorderSpacing.Top = 4
+                Caption = 'Add FITS keywords for DSLR EXIF tags'
+                ParentFont = False
+                TabOrder = 4
+              end
+              object SaveFormat: TRadioGroup
+                AnchorSideTop.Side = asrBottom
+                Left = 8
+                Height = 56
+                Top = 79
+                Width = 304
+                AutoFill = True
+                BorderSpacing.Top = 8
+                Caption = 'File format'
+                ChildSizing.LeftRightSpacing = 6
+                ChildSizing.EnlargeHorizontal = crsHomogenousChildResize
+                ChildSizing.EnlargeVertical = crsHomogenousChildResize
+                ChildSizing.ShrinkHorizontal = crsScaleChilds
+                ChildSizing.ShrinkVertical = crsScaleChilds
+                ChildSizing.Layout = cclLeftToRightThenTopToBottom
+                ChildSizing.ControlsPerLine = 2
+                ClientHeight = 26
+                ClientWidth = 300
+                Columns = 2
+                Items.Strings = (
+                  'FITS'
+                  'TIFF with FITS header'
+                )
+                TabOrder = 5
+              end
+              object SaveBitmap: TCheckBox
+                AnchorSideTop.Side = asrBottom
+                Left = 8
+                Height = 22
+                Top = 201
+                Width = 359
+                BorderSpacing.Top = 4
+                Caption = 'Save a bitmap file additionally to the standard FITS file'
+                ParentFont = False
+                TabOrder = 6
+              end
+              object SaveBitmapFormat: TComboBox
+                AnchorSideTop.Side = asrCenter
+                Left = 376
+                Height = 30
+                Top = 197
+                Width = 112
+                Constraints.MaxHeight = 30
+                ItemHeight = 24
+                ItemIndex = 0
+                Items.Strings = (
+                  'PNG 16bit'
+                  'TIFF 16bit'
+                  'JPG 8bit'
+                  'BMP 8bit'
+                )
+                ParentFont = False
+                Style = csDropDownList
+                TabOrder = 7
+                Text = 'PNG 16bit'
+              end
+              object Label156: TLabel
+                AnchorSideLeft.Side = asrBottom
+                Left = 323
+                Height = 18
+                Top = 79
+                Width = 111
+                BorderSpacing.Left = 11
+                Caption = 'FITS file extension'
+                ParentColor = False
+              end
+              object FitsExt: TComboBox
+                AnchorSideTop.Side = asrBottom
+                Left = 323
+                Height = 30
+                Top = 101
+                Width = 133
+                BorderSpacing.Top = 4
+                Constraints.MaxHeight = 30
+                ItemHeight = 24
+                ItemIndex = 0
+                Items.Strings = (
+                  '.fits'
+                  '.fit'
+                  '.fts'
+                )
+                Style = csDropDownList
+                TabOrder = 8
+                Text = '.fits'
+              end
+              object Label173: TLabel
+                AnchorSideLeft.Side = asrBottom
+                AnchorSideTop.Side = asrCenter
+                Left = 149
+                Height = 18
+                Top = 15
+                Width = 123
+                BorderSpacing.Left = 10
+                Caption = 'Sequence separator'
+                ParentColor = False
+              end
+              object FileNameSeqSep: TComboBox
+                AnchorSideLeft.Side = asrBottom
+                AnchorSideTop.Side = asrCenter
+                Left = 278
+                Height = 32
+                Top = 8
+                Width = 64
+                BorderSpacing.Left = 6
+                ItemHeight = 24
+                ItemIndex = 0
+                Items.Strings = (
+                  '_'
+                  '-'
+                  '.'
+                )
+                Style = csDropDownList
+                TabOrder = 9
+                Text = '_'
+              end
             end
-            object FilenameSep: TComboBox
-              AnchorSideLeft.Control = Label123
-              AnchorSideLeft.Side = asrBottom
-              Left = 75
-              Height = 32
-              Top = 247
-              Width = 64
-              BorderSpacing.Left = 6
-              ItemHeight = 24
-              ItemIndex = 0
-              Items.Strings = (
-                '_'
-                '-'
-                '.'
-              )
-              ParentFont = False
-              Style = csDropDownList
+            object Panel37: TPanel
+              Left = 398
+              Height = 344
+              Top = 0
+              Width = 172
+              Align = alRight
+              ClientHeight = 344
+              ClientWidth = 172
               TabOrder = 2
-              Text = '_'
-            end
-            object FileSequenceWidth: TSpinEdit
-              AnchorSideLeft.Control = UseFileSequenceWidth
-              AnchorSideLeft.Side = asrBottom
-              AnchorSideTop.Control = UseFileSequenceWidth
-              AnchorSideTop.Side = asrCenter
-              Left = 179
-              Height = 28
-              Top = 285
-              Width = 58
-              BorderSpacing.Left = 6
-              Constraints.MaxHeight = 28
-              MaxValue = 5
-              MinValue = 3
-              ParentFont = False
-              TabOrder = 3
-              Value = 3
-            end
-            object UseFileSequenceWidth: TCheckBox
-              AnchorSideTop.Side = asrCenter
-              Left = 8
-              Height = 22
-              Top = 288
-              Width = 165
-              Caption = 'Fixed sequence length'
-              OnClick = UseFileSequenceWidthClick
-              ParentFont = False
-              TabOrder = 4
-            end
-            object FilePack: TCheckBox
-              AnchorSideTop.Control = FitsExt
-              AnchorSideTop.Side = asrBottom
-              Left = 8
-              Height = 22
-              Top = 388
-              Width = 236
-              BorderSpacing.Top = 18
-              Caption = 'Compress the FITS files with fpack'
-              ParentFont = False
-              TabOrder = 5
-            end
-            object WantExif: TCheckBox
-              AnchorSideTop.Control = FilePack
-              AnchorSideTop.Side = asrBottom
-              Left = 8
-              Height = 22
-              Top = 414
-              Width = 258
-              BorderSpacing.Top = 4
-              Caption = 'Add FITS keywords for DSLR EXIF tags'
-              ParentFont = False
-              TabOrder = 6
-            end
-            object SaveFormat: TRadioGroup
-              AnchorSideTop.Control = UseFileSequenceWidth
-              AnchorSideTop.Side = asrBottom
-              Left = 8
-              Height = 56
-              Top = 318
-              Width = 304
-              AutoFill = True
-              BorderSpacing.Top = 8
-              Caption = 'File format'
-              ChildSizing.LeftRightSpacing = 6
-              ChildSizing.EnlargeHorizontal = crsHomogenousChildResize
-              ChildSizing.EnlargeVertical = crsHomogenousChildResize
-              ChildSizing.ShrinkHorizontal = crsScaleChilds
-              ChildSizing.ShrinkVertical = crsScaleChilds
-              ChildSizing.Layout = cclLeftToRightThenTopToBottom
-              ChildSizing.ControlsPerLine = 2
-              ClientHeight = 26
-              ClientWidth = 300
-              Columns = 2
-              Items.Strings = (
-                'FITS'
-                'TIFF with FITS header'
-              )
-              TabOrder = 7
-            end
-            object SaveBitmap: TCheckBox
-              AnchorSideTop.Control = WantExif
-              AnchorSideTop.Side = asrBottom
-              Left = 8
-              Height = 22
-              Top = 440
-              Width = 359
-              BorderSpacing.Top = 4
-              Caption = 'Save a bitmap file additionally to the standard FITS file'
-              ParentFont = False
-              TabOrder = 8
-            end
-            object SaveBitmapFormat: TComboBox
-              AnchorSideTop.Control = SaveBitmap
-              AnchorSideTop.Side = asrCenter
-              Left = 376
-              Height = 30
-              Top = 436
-              Width = 112
-              Constraints.MaxHeight = 30
-              ItemHeight = 24
-              ItemIndex = 0
-              Items.Strings = (
-                'PNG 16bit'
-                'TIFF 16bit'
-                'JPG 8bit'
-                'BMP 8bit'
-              )
-              ParentFont = False
-              Style = csDropDownList
-              TabOrder = 9
-              Text = 'PNG 16bit'
-            end
-            object Label156: TLabel
-              AnchorSideLeft.Control = SaveFormat
-              AnchorSideLeft.Side = asrBottom
-              AnchorSideTop.Control = SaveFormat
-              Left = 323
-              Height = 18
-              Top = 318
-              Width = 111
-              BorderSpacing.Left = 11
-              Caption = 'FITS file extension'
-              ParentColor = False
-            end
-            object FitsExt: TComboBox
-              AnchorSideLeft.Control = Label156
-              AnchorSideTop.Control = Label156
-              AnchorSideTop.Side = asrBottom
-              Left = 323
-              Height = 30
-              Top = 340
-              Width = 133
-              BorderSpacing.Top = 4
-              Constraints.MaxHeight = 30
-              ItemHeight = 24
-              ItemIndex = 0
-              Items.Strings = (
-                '.fits'
-                '.fit'
-                '.fts'
-              )
-              Style = csDropDownList
-              TabOrder = 10
-              Text = '.fits'
-            end
-            object Label173: TLabel
-              AnchorSideLeft.Control = FilenameSep
-              AnchorSideLeft.Side = asrBottom
-              AnchorSideTop.Control = FilenameSep
-              AnchorSideTop.Side = asrCenter
-              Left = 149
-              Height = 18
-              Top = 254
-              Width = 123
-              BorderSpacing.Left = 10
-              Caption = 'Sequence separator'
-              ParentColor = False
-            end
-            object FileNameSeqSep: TComboBox
-              AnchorSideLeft.Control = Label173
-              AnchorSideLeft.Side = asrBottom
-              AnchorSideTop.Control = FilenameSep
-              AnchorSideTop.Side = asrCenter
-              Left = 278
-              Height = 32
-              Top = 247
-              Width = 64
-              BorderSpacing.Left = 6
-              ItemHeight = 24
-              ItemIndex = 0
-              Items.Strings = (
-                '_'
-                '-'
-                '.'
-              )
-              Style = csDropDownList
-              TabOrder = 11
-              Text = '_'
+              object BtnFileDefault: TButton
+                Left = 24
+                Height = 25
+                Top = 8
+                Width = 61
+                Caption = 'Default'
+                OnClick = BtnFileDefaultClick
+                ParentFont = False
+                TabOrder = 0
+              end
             end
           end
           object FolderOpt: TTabSheet
@@ -720,21 +728,12 @@ object f_option: Tf_option
             ClientHeight = 576
             ClientWidth = 570
             ParentFont = False
-            object BtnFolderDefault: TButton
-              Left = 394
-              Height = 25
-              Top = 8
-              Width = 61
-              Caption = 'Default'
-              OnClick = BtnFolderDefaultClick
-              ParentFont = False
-              TabOrder = 0
-            end
             object FolderOptions: TStringGrid
-              Left = 8
-              Height = 218
-              Top = 2
-              Width = 372
+              Left = 0
+              Height = 344
+              Top = 0
+              Width = 398
+              Align = alClient
               ColCount = 3
               Columns = <              
                 item
@@ -754,7 +753,7 @@ object f_option: Tf_option
               ParentFont = False
               RowCount = 8
               ScrollBars = ssAutoVertical
-              TabOrder = 1
+              TabOrder = 0
               OnClick = FileOrFolderOptionsClick
               OnColRowMoved = FileOrFolderOptionsColRowMoved
               ColWidths = (
@@ -762,6 +761,34 @@ object f_option: Tf_option
                 30
                 307
               )
+            end
+            object Panel38: TPanel
+              Left = 0
+              Height = 232
+              Top = 344
+              Width = 570
+              Align = alBottom
+              TabOrder = 1
+            end
+            object Panel39: TPanel
+              Left = 398
+              Height = 344
+              Top = 0
+              Width = 172
+              Align = alRight
+              ClientHeight = 344
+              ClientWidth = 172
+              TabOrder = 2
+              object BtnFolderDefault: TButton
+                Left = 24
+                Height = 25
+                Top = 8
+                Width = 61
+                Caption = 'Default'
+                OnClick = BtnFolderDefaultClick
+                ParentFont = False
+                TabOrder = 0
+              end
             end
           end
           object HeaderOpt: TTabSheet
@@ -2332,6 +2359,84 @@ object f_option: Tf_option
             Width = 119
             Caption = '(Restart to activate)'
             ParentColor = False
+          end
+        end
+      end
+      object PageType: TTabSheet
+        Caption = 'PageType'
+        ClientHeight = 667
+        ClientWidth = 574
+        object sgCustomType: TStringGrid
+          Left = 0
+          Height = 433
+          Top = 80
+          Width = 574
+          Align = alClient
+          AutoFillColumns = True
+          Columns = <          
+            item
+              Title.Caption = 'Title'
+              Width = 114
+            end          
+            item
+              ButtonStyle = cbsPickList
+              Title.Caption = 'Title'
+              Width = 114
+            end          
+            item
+              Title.Caption = 'Title'
+              Width = 114
+            end          
+            item
+              ButtonStyle = cbsPickList
+              Title.Caption = 'Title'
+              Width = 114
+            end          
+            item
+              Title.Caption = 'Title'
+              Width = 114
+            end>
+          DefaultRowHeight = 30
+          FixedCols = 0
+          FixedRows = 2
+          MouseWheelOption = mwGrid
+          Options = [goFixedVertLine, goFixedHorzLine, goVertLine, goHorzLine, goRangeSelect, goEditing, goAutoAddRows, goAlwaysShowEditor, goSmoothScroll, goAutoAddRowsSkipContentCheck]
+          RowCount = 3
+          TabOrder = 0
+          ColWidths = (
+            114
+            114
+            114
+            114
+            114
+          )
+        end
+        object Panel34: TPanel
+          Left = 0
+          Height = 80
+          Top = 0
+          Width = 574
+          Align = alTop
+          Caption = 'Define specialized image type'
+          TabOrder = 1
+        end
+        object Panel35: TPanel
+          Left = 0
+          Height = 154
+          Top = 513
+          Width = 574
+          Align = alBottom
+          ClientHeight = 154
+          ClientWidth = 574
+          TabOrder = 2
+          object ButtonAddrow: TButton
+            Left = 24
+            Height = 25
+            Top = 11
+            Width = 120
+            Caption = 'Add row'
+            OnClick = ButtonAddrowClick
+            TabOrder = 0
           end
         end
       end

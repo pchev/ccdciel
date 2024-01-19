@@ -377,10 +377,10 @@ begin
   else if varname='APPDIR' then str:=Appdir
   else if varname='TMPDIR' then str:=TmpDir
   else if varname='CAPTUREDIR' then str:=config.GetValue('/Files/CapturePath',defCapturePath)
-  else if varname='LIGHTDIR' then str:=Fcapture.FrameType.Items[ord(LIGHT)]
-  else if varname='BIASDIR' then str:=Fcapture.FrameType.Items[ord(BIAS)]
-  else if varname='DARKDIR' then str:=Fcapture.FrameType.Items[ord(DARK)]
-  else if varname='FLATDIR' then str:=Fcapture.FrameType.Items[ord(FLAT)]
+  else if varname='LIGHTDIR' then str:=trim(FrameName[0])
+  else if varname='BIASDIR' then str:=trim(FrameName[1])
+  else if varname='DARKDIR' then str:=trim(FrameName[2])
+  else if varname='FLATDIR' then str:=trim(FrameName[3])
   else if varname='HOSTOS' then str:=hostOS
   else if varname='COVERSTATUS' then str:=cmd_coverstatus
   else if varname='CALIBRATORSTATUS' then str:=cmd_calibratorstatus
@@ -1951,7 +1951,7 @@ function Tf_scriptengine.cmd_Capture_SetFrameType(typ:string):string;
 begin
 try
 result:=msgFailed;
-Capture.FrameType.ItemIndex:=ord(Str2Frametype(typ));
+Capture.FrameType:=Str2Frametype(typ);
 result:=msgOK;
 except
   result:=msgFailed;

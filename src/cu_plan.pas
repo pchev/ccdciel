@@ -283,7 +283,7 @@ begin
         if p.fstop<>'' then Fcapture.Fnumber.Text:=p.fstop;
         Fcapture.SeqNum.Value:=p.count;
         Fcapture.SeqCount:=CurrentDoneCount+1;
-        Fcapture.FrameType.ItemIndex:=ord(p.frtype);
+        Fcapture.FrameType:=p.frtype;
         Fcapture.CheckBoxDither.Checked:=p.dither;
         Fcapture.DitherCount.Value:=p.dithercount;
         Fcapture.CheckBoxFocus.Checked:=p.autofocus;
@@ -292,7 +292,7 @@ begin
         if p.autofocusstart then Fcapture.FocusNow:=true;
         Ffilter.Filters.ItemIndex:=p.filter;
         Ffilter.FiltersChange(self);
-        if p.frtype=FLAT then begin
+        if p.frtype=ord(FLAT) then begin
           if words(p.description,'',1,1)='Dusk' then
             FlatWaitDusk:=true;
           if words(p.description,'',1,1)='Dawn' then

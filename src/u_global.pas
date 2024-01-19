@@ -59,13 +59,17 @@ type
   TAutofocusPlanetStep=(afpStart,afpMeasure,afpEnd);
   TIndiTransfert=(itNetwork,itDisk);
   TSubDirList=(sdSeq,sdFrt,sdObj,sdStep,sdExp,sdBin,sdDate,sdNight);
-  TFilenameList=(fnObj,fnFilter,fnExp,fnBin,fnTemp,fnDate,fnGain,fnFocuspos,fnPierSide,fnOffset,fnStep);
+  TFilenameList=(fnObj,fnFilter,fnExp,fnBin,fnTemp,fnDate,fnGain,fnFocuspos,fnPierSide,fnOffset,fnStep,fnCtype);
   TSafetyAction=(safNothing,safShowPrompt,safAbortSequence,safStopTelescope,safParkTelescope,safStopDomeSlaving,safParkDome,safCloseDome,safWarmCamera,safAutoguiderShutdown,safPlanetariumShutdown,safExternalCommand,safExitProgram);
   TDomeOpenAction=(dopNothing,dopOpenDome,dopUnparkdome,dopUnparkTelescope,dopStartTelescope,dopStartdomeSlaving);
   TDomeCloseAction=(dclNothing,dclStopTelescope,dclParkTelescope,dclStopDomeSlaving,dclParkDome,dclCloseDome);
   TDomeOpenActions=array[0..DomeOpenActionNum-1] of TDomeOpenAction;
   TDomeCloseActions=array[0..DomeCloseActionNum-1] of TDomeCloseAction;
   TFileFormat = (ffFITS, ffASTROTIFF);
+
+  TCustomFrameType = record
+    Name,ScriptOn,ScriptOff,ParamOn,ParamOff: string;
+  end;
 
   coordvector = array[1..3] of double;
   rotmatrix = array[1..3, 1..3] of double;
@@ -121,7 +125,7 @@ type
               binx,biny: integer;
               gain: integer;
               offset: integer;
-              frtype: TFrameType;
+              frtype: integer;
               fstop: string;
               // script options
               scriptname: string;
@@ -332,7 +336,7 @@ const
   ScriptTxt='Script';
   SwitchTxt='Switch';
   SubDirCount=8;
-  FileNameCount=11;
+  FileNameCount=12;
   MinFrameSize=5;
   SafetyActionNum=15;
   encryptpwd='m=Nrv"wE+W^RA?$b:]w<!t1v]pcTT>3$B?3";~OG9\7$,n[~8KLaUrfCgvRh$=DnlXK]Vxr^0!.HAA';
@@ -500,6 +504,8 @@ var
   FlatSlewTime: TDateTime;
   DomeFlatSetLightON,DomeFlatSetLightOFF: string;
   DomeNoSafetyCheck: boolean;
+  CustomFrameType: array of TCustomFrameType;
+  NumCustomFrameType,CurrentCustomFrameType: integer;
   SubDirOpt: array[0..SubDirCount-1] of TSubDirList;
   SubDirActive: array[0..SubDirCount-1] of Boolean;
   FilenameOpt: array[0..FileNameCount-1] of TFilenameList;
@@ -565,7 +571,7 @@ var
   UseFinder,FinderPreviewLoop: boolean;
 
   procedure globalmsg(str:string);
-  function Str2Frametype(str:string):TFrameType;
+  function Str2Frametype(str:string):integer;
 
 implementation
 
@@ -580,14 +586,21 @@ begin
   if Assigned(onMsgGlobal) then onMsgGlobal(str);
 end;
 
-function Str2Frametype(str:string):TFrameType;
+function Str2Frametype(str:string):integer;
+var i: integer;
 begin
+  result:=ord(LIGHT);
   str:=UpperCase(trim(str));
-  if str='LIGHT' then result:=LIGHT
-  else if str='BIAS' then result:=BIAS
-  else if str='DARK' then result:=DARK
-  else if str='FLAT' then result:=FLAT
-  else result:=LIGHT;
+  if str='LIGHT' then result:=ord(LIGHT)
+  else if str='BIAS' then result:=ord(BIAS)
+  else if str='DARK' then result:=ord(DARK)
+  else if str='FLAT' then result:=ord(FLAT)
+  else begin
+    for i:=0 to NumCustomFrameType-1 do begin
+      if UpperCase(CustomFrameType[i].Name)=str then
+        result:=ord(high(TFrameType))+i+1;
+    end;
+  end;
 end;
 
 ////////////////////  TStep  /////////////////////////////
@@ -602,7 +615,7 @@ begin
   filter:=0;
   binx:=1;
   biny:=1;
-  frtype:=LIGHT;
+  frtype:=ord(LIGHT);
   dither:=false;
   dithercount:=1;
   autofocusstart:=false;
@@ -689,11 +702,17 @@ end;
 function TStep.frtype_str: string;
 var i:integer;
 begin
-  i:=ord(frtype);
-  if (i<0)or(i>ord(High(frtype))) then
-    Result:=''
-  else
-    Result:=FrameName[ord(frtype)];
+  if (frtype<0) then
+    Result:=trim(FrameName[0])
+  else if frtype<=ord(High(TFrameType)) then
+    Result:=trim(FrameName[frtype])
+  else begin
+    i:=frtype-ord(High(TFrameType))-1;
+    if (i>=0) and (i<NumCustomFrameType) then
+      Result:=trim(CustomFrameType[i].Name)
+    else
+      Result:=trim(FrameName[0]);
+  end;
 end;
 
 function TStep.description_str: string;

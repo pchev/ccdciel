@@ -45,7 +45,7 @@ type
             pixsz1,pixsz2,pixratio,focallen,scale: double;
             exptime,stackexp,airmass: double;
             objects,ctype1,ctype2 : string;
-            frametype: TFrameType;
+            frametype: string;
             procedure Assign(Source:TFitsInfo);
             end;
 
@@ -1437,7 +1437,7 @@ Procedure TFits.LoadStream;
 begin
   GetFitsInfo;
   if FFitsInfo.valid then begin
-    if FFitsInfo.frametype=FLAT then GetFlatLevel;
+    if FFitsInfo.frametype='FLAT' then GetFlatLevel;
     ReadFitsImage;
   end;
 end;
@@ -1761,7 +1761,7 @@ with FFitsInfo do begin
    exptime:=0; stackexp:=0; airmass:=0;
    stackcount:=0;
    objects:=''; ctype1:=''; ctype2:='';
-   frametype:=LIGHT;
+   frametype:='LIGHT';
 end;
 end;
 
@@ -1835,7 +1835,7 @@ begin
     if (keyword='CRVAL2') then crval2:=strtofloat(buf);
     if (keyword='SCALE')  then scale:=strtofloat(buf);
     if (scale=0) and (keyword='SECPIX1')then scale:=strtofloat(buf);
-    if (keyword='FRAME')or(keyword='IMAGETYP') then frametype:=Str2Frametype(buf);
+    if (keyword='FRAME')or(keyword='IMAGETYP') then frametype:=UpperCase(trim(buf));
     if ((keyword='PLTSOLVD')and(copy(buf,1,1)='T')) or
        (keyword='CRPIX1')
        then solved:=true; // the image must be astrometry solved.
@@ -4699,6 +4699,9 @@ begin
               end;
       fnStep: if FileNameActive[i] and sequence then begin
                  if CurrentStepName<>'' then fn:=fn+trim(CurrentStepName)+FilenameSep;
+              end;
+      fnCtype: if FileNameActive[i] and (CurrentCustomFrameType>=0) and (CurrentCustomFrameType<NumCustomFrameType) then begin
+                 if CustomFrameType[CurrentCustomFrameType].Name<>'' then fn:=fn+trim(CustomFrameType[CurrentCustomFrameType].Name)+FilenameSep;
               end;
     end;
   end;

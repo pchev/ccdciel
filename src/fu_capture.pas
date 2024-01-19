@@ -25,7 +25,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 interface
 
-uses u_global, Graphics, UScaleDPI, u_hints, u_translation, cu_mount, u_utils,
+uses u_global, Graphics, UScaleDPI, u_hints, u_translation, cu_mount, u_utils, math,
   Classes, SysUtils, FileUtil, Forms, Controls, ExtCtrls, StdCtrls, Spin;
 
 type
@@ -41,7 +41,7 @@ type
     StackNum: TSpinEdit;
     Fnumber: TComboBox;
     ISObox: TComboBox;
-    FrameType: TComboBox;
+    cbFrameType: TComboBox;
     ExpTime: TComboBox;
     Label1: TLabel;
     Label2: TLabel;
@@ -97,18 +97,24 @@ type
     procedure SetGain(value:integer);
     function GetOffset:integer;
     procedure SetOffset(value:integer);
+    function GetFrameType:integer;
+    procedure SetFrameType(value:integer);
+    function GetFrameTypeText:string;
   public
     { public declarations }
     constructor Create(aOwner: TComponent); override;
     destructor  Destroy; override;
     procedure SetLang;
     procedure Stop;
+    procedure setCustomFrameType;
     property Mount: T_mount read FMount write FMount;
     property Running: boolean read Frunning write Frunning;
     property SeqCount: Integer read FSeqCount write FSeqCount;
     property ExposureTime: double read FExposureTime write SetExposureTime;
     property Gain: integer read GetGain write SetGain;
     property Offset: integer read GetOffset write SetOffset;
+    property FrameType: integer read GetFrameType write SetFrameType;
+    property FrameTypeText: string read GetFrameTypeText;
     property DitherNum: Integer read FDitherNum write FDitherNum;
     property FocusNum: Integer read FFocusNum write FFocusNum;
     property FocusNow: boolean read FFocusNow write FFocusNow;
@@ -166,7 +172,7 @@ begin
   GainEdit.Hint:=rsCameraGain;
   Fname.Hint:=rsTheObjectNam;
   SeqNum.Hint:=rsTheNumberOfI;
-  FrameType.Hint:=rsTheTypeOfFra;
+  cbFrameType.Hint:=rsTheTypeOfFra;
   DitherCount.Hint:=rsTheNumberOfI2;
   FocusCount.Hint:=rsTheNumberOfI3;
   CheckBoxFocusTemp.Hint:=rsSetTheTemper;
@@ -182,8 +188,8 @@ begin
     FDitherNum:=0;
     FFocusNum:=0;
     DomeFlatExpAdjust:=0;
-    doFlatAutoExposure:=(TFrameType(FrameType.ItemIndex)=FLAT) and FlatAutoExposure;
-    if (TFrameType(FrameType.ItemIndex)=FLAT)and(FlatType=ftDome) then begin
+    doFlatAutoExposure:=(TFrameType(cbFrameType.ItemIndex)=FLAT) and FlatAutoExposure;
+    if (TFrameType(cbFrameType.ItemIndex)=FLAT)and(FlatType=ftDome) then begin
        if DomeFlatSetLight and (DomeFlatSetLightON<>'') then begin
           AdjustFlatLight:=true;
           ExecProcess(DomeFlatSetLightON,nil,false);
@@ -198,7 +204,7 @@ begin
       if ExposureTime>FlatMaxExp then ExposureTime:=FlatMaxExp;
     end;
     if Assigned(FonMsg) then FonMsg(rsStartCapture,2);
-    EarlyNextExposure:= ConfigExpEarlyStart and (ExposureTime>1) and ((TFrameType(FrameType.ItemIndex)=LIGHT)or(TFrameType(FrameType.ItemIndex)=DARK));
+    EarlyNextExposure:= ConfigExpEarlyStart and (ExposureTime>1) and ((TFrameType(cbFrameType.ItemIndex)=LIGHT)or(TFrameType(cbFrameType.ItemIndex)=DARK)or(cbFrameType.ItemIndex>ord(high(TFrameType))));
     if PanelStack.Visible and (StackNum.Value>1) and Assigned(FonResetStack) then FonResetStack(self);
     if Assigned(FonStartExposure) then FonStartExposure(self);
     if (not Frunning) and Assigned(FonMsg) then FonMsg(rsCannotStartC,0);
@@ -295,11 +301,11 @@ end;
 
 procedure Tf_capture.CheckLight(Sender: TObject);
 begin
-  if FrameType.ItemIndex<>0 then begin
+  if cbFrameType.ItemIndex<>0 then begin
      CheckBoxDither.Checked:=false;
      CheckBoxFocus.Checked:=false;
   end;
-  ExpTime.Enabled:=(FrameType.ItemIndex<>1);
+  ExpTime.Enabled:=(cbFrameType.ItemIndex<>1);
   if ExpTime.Enabled and (ExpTime.Text='0') then ExpTime.ItemIndex:=0;
 end;
 
@@ -310,12 +316,43 @@ begin
   CameraProcessingImage:=false;
   led.Brush.Color:=clGray;
   BtnStart.Caption:=rsStart;
-  if (TFrameType(FrameType.ItemIndex)=FLAT)and(FlatType=ftDome) then begin
+  if (TFrameType(cbFrameType.ItemIndex)=FLAT)and(FlatType=ftDome) then begin
      if DomeFlatSetLight and AdjustFlatLight and (DomeFlatSetLightOFF<>'') then begin
         AdjustFlatLight:=false;
         ExecProcess(DomeFlatSetLightOFF,nil,false);
      end;
   end;
+end;
+
+procedure Tf_capture.setCustomFrameType;
+var i,n: integer;
+begin
+  n:=cbFrameType.ItemIndex;
+  cbFrameType.Clear;
+  for i:=0 to ord(high(TFrameType)) do
+    cbFrameType.Items.Add(trim(FrameName[i]));
+  for i:=0 to NumCustomFrameType-1 do
+    cbFrameType.Items.Add(trim(CustomFrameType[i].Name));
+  n:=min(cbFrameType.Items.Count-1,max(n,0));
+  cbFrameType.ItemIndex:=n;
+end;
+
+function Tf_capture.GetFrameType:integer;
+begin
+  result:=cbFrameType.ItemIndex;
+end;
+
+procedure Tf_capture.SetFrameType(value:integer);
+begin
+  if (value>=0)and(value<cbFrameType.Items.Count) then
+    cbFrameType.ItemIndex:=value
+  else
+    cbFrameType.ItemIndex:=0;
+end;
+
+function Tf_capture.GetFrameTypeText:string;
+begin
+  result:=cbFrameType.Text;
 end;
 
 end.

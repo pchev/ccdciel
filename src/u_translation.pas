@@ -1544,6 +1544,11 @@ resourcestring
   rsPreviewPrepr = 'Preview preprocessing';
   rsOrDoubleClic = 'Or double click on the bright star.';
   rsSolveMainCam = 'Solve main camera image';
+  rsCustomType = 'Custom image type';
+  rsDefineSpecia = 'Define a specialized image type and how to enable it';
+  rsName = 'Name';
+  rsActivation = 'Activation';
+  rsDeactivation = 'Deactivation';
 
 implementation
 

@@ -309,7 +309,7 @@ type
     procedure SetStep(n: integer; p: TStep);
     procedure SavePlanModified(isTemplate: boolean);
     function  CheckRiseSet(n: integer; showmsg:boolean=true): boolean;
-    procedure FrameTypeChange(n: integer; newtype: TFrameType);
+    procedure FrameTypeChange(n: integer; newtype: integer);
     procedure SetStartTime(buf: string; var t:TTarget);
     procedure SetEndTime(buf: string; var t:TTarget);
     function AsDuskFlat:boolean;
@@ -326,6 +326,7 @@ type
     originalFilter: TSaveFilter;
     EndScript, UnattendedScript, StartScript: string;
     procedure SetLang;
+    procedure LoadTypeList;
     procedure LoadPlanList;
     procedure LoadScriptList;
     procedure LoadSwitchList;
@@ -381,6 +382,7 @@ begin
   SetLang;
   LoadPlanList;
   LoadScriptList;
+  LoadTypeList;
 end;
 
 procedure Tf_EditTargets.FormDestroy(Sender: TObject);
@@ -599,6 +601,19 @@ end;
 procedure Tf_EditTargets.PointCoordChange(Sender: TObject);
 begin
   TargetChange(Sender);
+end;
+
+procedure Tf_EditTargets.LoadTypeList;
+var i: integer;
+    s: TStringlist;
+begin
+  s:=TStringlist.Create;
+  for i:=0 to ord(high(TFrameType)) do
+    s.Add(trim(FrameName[i]));
+  for i:=0 to NumCustomFrameType-1 do
+    s.Add(trim(CustomFrameType[i].Name));
+  StepList.Columns[pcoltype-1].PickList.Assign(s);
+  s.Free;
 end;
 
 procedure Tf_EditTargets.LoadPlanList;
@@ -2854,30 +2869,34 @@ begin
   StepList.RowCount:=1;
 end;
 
-procedure Tf_EditTargets.FrameTypeChange(n: integer; newtype: TFrameType);
+procedure Tf_EditTargets.FrameTypeChange(n: integer; newtype: integer);
 begin
   case newtype of
-    Light : begin
+    ord(Light) : begin
 
         end;
-    Bias : begin
+    ord(Bias) : begin
            StepList.Cells[pcolexp,n]:='0';
            StepList.Cells[pcolfilter,n]:=Filter0;
            StepList.Cells[pcolafstart,n]:='';
            StepList.Cells[pcolafevery,n]:='0';
            StepList.Cells[pcoldither,n]:='0';
         end;
-    Dark : begin
+    ord(Dark) : begin
            StepList.Cells[pcolfilter,n]:=Filter0;
            StepList.Cells[pcolafstart,n]:='';
            StepList.Cells[pcolafevery,n]:='0';
            StepList.Cells[pcoldither,n]:='0';
         end;
-    Flat : begin
+    ord(Flat) : begin
            StepList.Cells[pcolafstart,n]:='';
            StepList.Cells[pcolafevery,n]:='0';
            StepList.Cells[pcoldither,n]:='0';
         end;
+     else begin
+
+        end;
+
   end;
 end;
 
@@ -2897,7 +2916,7 @@ begin
   PageControlStepType.ActivePageIndex:=p.steptype;
   StepList.Cells[pcoldesc,n]:=p.description_str;
   if p.steptype=0 then begin
-    StepList.Cells[pcoltype,n]:=trim(FrameName[ord(p.frtype)]);
+    StepList.Cells[pcoltype,n]:=p.frtype_str;
     StepList.Cells[pcolexp,n]:=formatfloat(f3,p.exposure);
     StepList.Cells[pcolstack,n]:=inttostr(p.stackcount);
     StepList.Cells[pcolbin,n]:=p.binning_str;
@@ -2984,9 +3003,9 @@ begin
     str:=StepList.Cells[pcoltype,n];
     j:=StepList.Columns[pcoltype-1].PickList.IndexOf(str);
     if j<0 then j:=0;
-    StepsModified:=StepsModified or (p.frtype<>TFrameType(j));
-    if p.frtype<>TFrameType(j) then FrameTypeChange(n,TFrameType(j));
-    p.frtype:=TFrameType(j);
+    StepsModified:=StepsModified or (p.frtype<>j);
+    if p.frtype<>j then FrameTypeChange(n,j);
+    p.frtype:=j;
     x:=StrToFloatDef(stringReplace(StepList.Cells[pcolexp,n],',','.',[]),p.exposure);
     StepsModified:=StepsModified or (p.exposure<>x);
     p.exposure:=x;
@@ -3040,7 +3059,7 @@ begin
     j:=StrToIntDef(StepList.Cells[pcoldither,n],-1);
     ok:=j>0;
     StepsModified:=StepsModified or (p.dither<>ok);
-    p.dither:=(p.frtype=LIGHT) and ok;
+    p.dither:=(p.frtype=ord(LIGHT)) and ok;
     StepsModified:=StepsModified or (ok and (p.dithercount<>j));
     if ok then
        p.dithercount:=j
@@ -3048,11 +3067,11 @@ begin
       p.dithercount:=0;
     ok:=StepList.Cells[pcolafstart,n]='1';
     StepsModified:=StepsModified or (p.autofocusstart<>ok);
-    p.autofocusstart:=(p.frtype=LIGHT) and ok;
+    p.autofocusstart:=(p.frtype=ord(LIGHT)) and ok;
     j:=StrToIntDef(StepList.Cells[pcolafevery,n],-1);
     ok:=j>0;
     StepsModified:=StepsModified or (p.autofocus<>ok);
-    p.autofocus:=(p.frtype=LIGHT) and ok;
+    p.autofocus:=(p.frtype=ord(LIGHT)) and ok;
     StepsModified:=StepsModified or (ok and (p.autofocuscount<>j));
     if ok then
        p.autofocuscount:=j
@@ -3334,7 +3353,7 @@ try
     p:=TStep(StepList.Objects[0,i]);
     pfile.SetValue('/Steps/Step'+inttostr(i)+'/Type',p.steptype);
     pfile.SetValue('/Steps/Step'+inttostr(i)+'/Description',p.description);
-    pfile.SetValue('/Steps/Step'+inttostr(i)+'/FrameType',trim(FrameName[ord(p.frtype)]));
+    pfile.SetValue('/Steps/Step'+inttostr(i)+'/FrameType',p.frtype_str);
     pfile.SetValue('/Steps/Step'+inttostr(i)+'/Exposure',p.exposure);
     pfile.SetValue('/Steps/Step'+inttostr(i)+'/StackCount',p.stackcount);
     pfile.SetValue('/Steps/Step'+inttostr(i)+'/Binning',IntToStr(p.binx)+'x'+IntToStr(p.biny));

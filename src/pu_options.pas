@@ -38,6 +38,7 @@ type
     BtnAddRoi: TButton;
     BtnModRoi: TButton;
     BtnDelRoi: TButton;
+    ButtonAddrow: TButton;
     ButtonSeqDir: TButton;
     ButtonLogDir: TButton;
     CdCPath: TEdit;
@@ -50,6 +51,14 @@ type
     Label173: TLabel;
     Label174: TLabel;
     DefocusAmount: TSpinEdit;
+    PageType: TTabSheet;
+    Panel34: TPanel;
+    Panel35: TPanel;
+    Panel36: TPanel;
+    Panel37: TPanel;
+    Panel38: TPanel;
+    Panel39: TPanel;
+    sgCustomType: TStringGrid;
     UseFinderSolver: TCheckBox;
     FinderSolver: TComboBox;
     Label172: TLabel;
@@ -756,6 +765,7 @@ type
     procedure BtnMaxDriftDisableClick(Sender: TObject);
     procedure BtnAddRoiClick(Sender: TObject);
     procedure BtnModRoiClick(Sender: TObject);
+    procedure ButtonAddrowClick(Sender: TObject);
     procedure ButtonLogDirClick(Sender: TObject);
     procedure ButtonSeqDirClick(Sender: TObject);
     procedure CustomHeaderKeyPress(Sender: TObject; var Key: char);
@@ -855,6 +865,7 @@ type
     procedure LoadObservatoryDB(defaultobs:string);
     procedure SaveObservatoryDB;
     procedure ClearRoi;
+    procedure SetScriptList(sl: TStrings);
     property AutofocusExp: double read FAutofocusExposure write SetAutofocusExpTime;
     property Resolver: integer read GetResolver write SetResolver;
     property Latitude: double read Flatitude write SetLatitude;
@@ -1147,6 +1158,18 @@ begin
   GroupBox22.Caption:=rsPeriodicAuto;
   Label127.Caption:=rsAutomaticall2;
   Label128.Caption:=rsMinutes;
+  PageType.Caption := rsCustomType;
+  Panel34.Caption:=rsDefineSpecia;
+  sgCustomType.Columns[0].Title.Caption:=rsName;
+  sgCustomType.Columns[1].Title.Caption:=rsActivation;
+  sgCustomType.Cells[1,1]:=rsScript;
+  sgCustomType.Columns[2].Title.Caption:='';
+  sgCustomType.Cells[2,1]:=rsParameter;
+  sgCustomType.Columns[3].Title.Caption:=rsDeactivation;
+  sgCustomType.Cells[3, 1]:=rsScript;
+  sgCustomType.Columns[4].Title.Caption:='';
+  sgCustomType.Cells[4,1]:=rsParameter;
+  ButtonAddrow.Caption:=rsAdd;
   PageFlat.Caption := rsFlat;
   FlatType.Caption := rsSequenceAuto;
   FlatExposureBox.Caption := rsFlatAutoExpo;
@@ -2196,6 +2219,11 @@ begin
   end;
 end;
 
+procedure Tf_option.ButtonAddrowClick(Sender: TObject);
+begin
+  sgCustomType.RowCount:=sgCustomType.RowCount+1;
+end;
+
 procedure Tf_option.BtnDelRoiClick(Sender: TObject);
 var i: integer;
 begin
@@ -2500,6 +2528,21 @@ begin
   speak(rstest+' . '+format(rsNeedToWaitUn,['22:34:56']));
   if SPError<>0 then
     LabelTestVoice.Caption:=SPErrorMsg;
+end;
+
+procedure Tf_option.SetScriptList(sl: TStrings);
+var s: TStrings;
+    i: integer;
+begin
+  // use only script in user directory
+  s:=TStringList.Create;
+  for i:=0 to sl.Count-1 do begin
+    if TScriptDir(sl.Objects[i]).path=ScriptDir[1].path then
+      s.Add(sl[i]);
+  end;
+  f_option.sgCustomType.Columns[1].PickList.Assign(s);
+  f_option.sgCustomType.Columns[3].PickList.Assign(s);
+  s.Free;
 end;
 
 end.

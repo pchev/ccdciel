@@ -66,6 +66,7 @@ type
     Fastrometry: TAstrometry;
     FonMsg: TNotifyMsg;
     procedure msg(txt:string);
+    function GetScriptList: TStrings;
  public
     { public declarations }
     constructor Create(aOwner: TComponent); override;
@@ -82,6 +83,7 @@ type
     property Autoguider: T_autoguider read Fautoguider write Fautoguider;
     property Astrometry: TAstrometry read Fastrometry write Fastrometry;
     property onMsg: TNotifyMsg read FonMsg write FonMsg;
+    property ScriptList: TStrings read GetScriptList;
   end;
 
 implementation
@@ -372,6 +374,11 @@ begin
   if sl='' then exit;
   i:=ComboBoxScript.Items.IndexOf(sl);
   if i>=0 then ComboBoxScript.ItemIndex:=i;
+end;
+
+function Tf_script.GetScriptList: TStrings;
+begin
+  result:=ComboBoxScript.Items;
 end;
 
 end.

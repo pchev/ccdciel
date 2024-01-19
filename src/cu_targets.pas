@@ -661,7 +661,7 @@ begin
           if p.fstop<>'' then Fcapture.Fnumber.Text:=p.fstop;
           Fcapture.SeqNum.Value:=p.count;
           Fcapture.SeqCount:=CurrentDoneCount+1;
-          Fcapture.FrameType.ItemIndex:=ord(p.frtype);
+          Fcapture.FrameType:=p.frtype;
           Fcapture.CheckBoxDither.Checked:=p.dither;
           Fcapture.DitherCount.Value:=p.dithercount;
           Fcapture.CheckBoxFocus.Checked:=p.autofocus;
@@ -1036,7 +1036,7 @@ try
         for j:=1 to p.Count do begin
           FSequenceFile.Items.SetValue('/Targets/Target'+inttostr(i)+'/Plan/Steps/Step'+inttostr(j)+'/Type',p.Steps[j-1].steptype);
           FSequenceFile.Items.SetValue('/Targets/Target'+inttostr(i)+'/Plan/Steps/Step'+inttostr(j)+'/Description',p.Steps[j-1].description);
-          FSequenceFile.Items.SetValue('/Targets/Target'+inttostr(i)+'/Plan/Steps/Step'+inttostr(j)+'/FrameType',trim(FrameName[ord(p.Steps[j-1].frtype)]));
+          FSequenceFile.Items.SetValue('/Targets/Target'+inttostr(i)+'/Plan/Steps/Step'+inttostr(j)+'/FrameType',p.Steps[j-1].frtype_str);
           FSequenceFile.Items.SetValue('/Targets/Target'+inttostr(i)+'/Plan/Steps/Step'+inttostr(j)+'/Exposure',p.Steps[j-1].exposure);
           FSequenceFile.Items.SetValue('/Targets/Target'+inttostr(i)+'/Plan/Steps/Step'+inttostr(j)+'/StackCount',p.Steps[j-1].stackcount);
           FSequenceFile.Items.SetValue('/Targets/Target'+inttostr(i)+'/Plan/Steps/Step'+inttostr(j)+'/Binning',IntToStr(p.Steps[j-1].binx)+'x'+IntToStr(p.Steps[j-1].biny));
@@ -2436,7 +2436,7 @@ begin
       if (p<>nil) then begin
         if p.Count>0 then begin
           for i:=0 to p.Count-1 do begin
-             if p.Steps[i].frtype=LIGHT then begin
+             if (p.Steps[i].frtype=ord(LIGHT))or(p.Steps[i].frtype>ord(high(TFrameType))) then begin
                 isCalibrationTarget:=false;
                 break;
              end;
@@ -2526,7 +2526,7 @@ begin
   for i:=0 to flfilter.count-1 do
     if trim(flfilter[i])<>'' then begin
       fls:=TStep.Create;
-      fls.frtype:=FLAT;
+      fls.frtype:=ord(FLAT);
       fls.filter:=FilterList.IndexOf(flfilter[i]);
       fls.binx:=flt.FlatBinX;
       fls.biny:=flt.FlatBinY;
@@ -3233,7 +3233,7 @@ begin
      if pfile.GetValue('/Steps/Step'+inttostr(i)+'/Binning','1x1')<>IntToStr(p.Steps[i-1].binx)+'x'+IntToStr(p.Steps[i-1].biny) then exit;
      if pfile.GetValue('/Steps/Step'+inttostr(i)+'/Gain',Gain)<>p.Steps[i-1].gain then exit;
      if pfile.GetValue('/Steps/Step'+inttostr(i)+'/Offset',Offset)<>p.Steps[i-1].offset then exit;
-     if pfile.GetValue('/Steps/Step'+inttostr(i)+'/FrameType','Light')<>trim(FrameName[ord(p.Steps[i-1].frtype)]) then exit;
+     if pfile.GetValue('/Steps/Step'+inttostr(i)+'/FrameType','Light')<>p.Steps[i-1].frtype_str then exit;
      if pfile.GetValue('/Steps/Step'+inttostr(i)+'/Fstop','')<>p.Steps[i-1].fstop then exit;
      if pfile.GetValue('/Steps/Step'+inttostr(i)+'/Description','')<>p.Steps[i-1].description then exit;
      if pfile.GetValue('/Steps/Step'+inttostr(i)+'/ScriptName','')<>p.Steps[i-1].scriptname then exit;

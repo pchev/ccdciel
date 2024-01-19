@@ -345,7 +345,7 @@ object f_capture: Tf_capture
       ParentFont = False
       TabOrder = 4
       object Label5: TLabel
-        AnchorSideTop.Control = FrameType
+        AnchorSideTop.Control = cbFrameType
         AnchorSideTop.Side = asrCenter
         Left = 4
         Height = 18
@@ -355,7 +355,7 @@ object f_capture: Tf_capture
         ParentColor = False
         ParentFont = False
       end
-      object FrameType: TComboBox
+      object cbFrameType: TComboBox
         Left = 89
         Height = 28
         Top = 1

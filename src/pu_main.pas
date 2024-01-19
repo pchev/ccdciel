@@ -1568,6 +1568,8 @@ begin
   PHD2GuideSetLock:=false;
   WantExif:=true;
   MagnitudeCalibration:=NullCoord;
+  NumCustomFrameType:=0;
+  CurrentCustomFrameType:=-1;
   Collimation:=false;
   CollimationCircle:=4;
   ImageInspection:=false;
@@ -2544,6 +2546,7 @@ begin
    FilenameName[8]:=rsSideOfPier;
    FilenameName[9]:=rsOffset2;
    FilenameName[10]:=rsPlanStep;
+   FilenameName[11]:=rsCustomType;
    TBConnect.Hint := rsConnect;
    TBFocus.Hint := rsFocus;
    TBCapture.Hint := rsCapture;
@@ -4809,6 +4812,16 @@ begin
   ReadoutModeFocus:=config.GetValue('/Readout/Focus',0);
   ReadoutModeAstrometry:=config.GetValue('/Readout/Astrometry',0);
   UseReadoutMode:=config.GetValue('/Readout/UseReadoutMode',false);
+  NumCustomFrameType:=config.GetValue('/CustomFrameType/Num',0);
+  SetLength(CustomFrameType,NumCustomFrameType);
+  for i:=0 to NumCustomFrameType-1 do begin
+    CustomFrameType[i].Name:=config.GetValue('/CustomFrameType/Name'+inttostr(i),'');
+    CustomFrameType[i].ScriptOn:=config.GetValue('/CustomFrameType/ScriptOn'+inttostr(i),'');
+    CustomFrameType[i].ParamOn:=config.GetValue('/CustomFrameType/ParamOn'+inttostr(i),'');
+    CustomFrameType[i].ScriptOff:=config.GetValue('/CustomFrameType/ScriptOff'+inttostr(i),'');
+    CustomFrameType[i].ParamOff:=config.GetValue('/CustomFrameType/ParamOff'+inttostr(i),'');
+  end;
+  f_capture.setCustomFrameType;
   Starwindow:=config.GetValue('/StarAnalysis/Window',60);
   Focuswindow:=config.GetValue('/StarAnalysis/Focus',400);
   Focuswindow:=max(Focuswindow,4*Starwindow);
@@ -9296,6 +9309,16 @@ begin
    f_option.ReadOutPreview.Enabled:=f_option.UseReadoutMode.Checked;
    f_option.ReadOutAstrometry.Enabled:=f_option.UseReadoutMode.Checked;
    f_option.ReadOutFocus.Enabled:=f_option.UseReadoutMode.Checked;
+   n:=config.GetValue('/CustomFrameType/Num',0);
+   f_option.sgCustomType.RowCount:=n+3;
+   f_option.SetScriptList(f_script.ScriptList);
+   for i:=0 to n-1 do begin
+      f_option.sgCustomType.Cells[0,i+2]:=config.GetValue('/CustomFrameType/Name'+inttostr(i),'');
+      f_option.sgCustomType.Cells[1,i+2]:=config.GetValue('/CustomFrameType/ScriptOn'+inttostr(i),'');
+      f_option.sgCustomType.Cells[2,i+2]:=config.GetValue('/CustomFrameType/ParamOn'+inttostr(i),'');
+      f_option.sgCustomType.Cells[3,i+2]:=config.GetValue('/CustomFrameType/ScriptOff'+inttostr(i),'');
+      f_option.sgCustomType.Cells[4,i+2]:=config.GetValue('/CustomFrameType/ParamOff'+inttostr(i),'');
+   end;
    f_option.FlatType.ItemIndex:=config.GetValue('/Flat/FlatType',ord(FlatType));
    f_option.FlatAutoExposure.Checked:=config.GetValue('/Flat/FlatAutoExposure',FlatAutoExposure);
    f_option.FlatMinExp.Value:=config.GetValue('/Flat/FlatMinExp',FlatMinExp);
@@ -9808,6 +9831,20 @@ begin
        config.SetValue('/Readout/Astrometry',f_option.ReadOutAstrometry.ItemIndex);
      end;
      config.SetValue('/Readout/UseReadoutMode',f_option.UseReadoutMode.Checked);
+
+     n:=0;
+     for i:=2 to f_option.sgCustomType.RowCount-1 do begin
+       if trim(f_option.sgCustomType.Cells[0,i])<>'' then begin
+         config.SetValue('/CustomFrameType/Name'+inttostr(n),f_option.sgCustomType.Cells[0,i]);
+         config.SetValue('/CustomFrameType/ScriptOn'+inttostr(n),f_option.sgCustomType.Cells[1,i]);
+         config.SetValue('/CustomFrameType/ParamOn'+inttostr(n),f_option.sgCustomType.Cells[2,i]);
+         config.SetValue('/CustomFrameType/ScriptOff'+inttostr(n),f_option.sgCustomType.Cells[3,i]);
+         config.SetValue('/CustomFrameType/ParamOff'+inttostr(n),f_option.sgCustomType.Cells[4,i]);
+         inc(n);
+       end;
+     end;
+     config.SetValue('/CustomFrameType/Num',n);
+
      config.SetValue('/Flat/FlatType',f_option.FlatType.ItemIndex);
      config.SetValue('/Flat/FlatAutoExposure',f_option.FlatAutoExposure.Checked);
      config.SetValue('/Flat/FlatMinExp',f_option.FlatMinExp.Value);
@@ -10603,7 +10640,7 @@ end;
 function Tf_main.PrepareCaptureExposure(canwait:boolean):boolean;
 var e,x: double;
     buf,txt,r: string;
-    waittime,i: integer;
+    waittime,i,ctype: integer;
     ftype:TFrameType;
 begin
 // If called with canwait=false this function only check for operation
@@ -10622,10 +10659,26 @@ if (AllDevicesConnected)and(not autofocusing)and(not learningvcurve)and(not f_vi
      result:=true;
      exit;
   end;
-  if (f_capture.FrameType.ItemIndex>=0)and(f_capture.FrameType.ItemIndex<=ord(High(TFrameType))) then
-    ftype:=TFrameType(f_capture.FrameType.ItemIndex)
-  else
+  if (f_capture.FrameType>=0)and(f_capture.FrameType<=ord(High(TFrameType))) then begin
+    ftype:=TFrameType(f_capture.FrameType);
+    ctype:=-1;
+  end
+  else begin
     ftype:=LIGHT;
+    if f_capture.FrameType>ord(High(TFrameType)) then
+      ctype:=f_capture.FrameType-ord(High(TFrameType))-1
+    else
+      ctype:=-1;
+  end;
+  if ctype<>CurrentCustomFrameType then begin
+    if (CurrentCustomFrameType>=0)and(CustomFrameType[CurrentCustomFrameType].ScriptOff<>'') then begin
+      f_scriptengine.RunScript(CustomFrameType[CurrentCustomFrameType].ScriptOff,slash(ConfigDir),CustomFrameType[CurrentCustomFrameType].ParamOff);
+    end;
+    if (ctype>=0)and(CustomFrameType[ctype].ScriptOn<>'') then begin
+      f_scriptengine.RunScript(CustomFrameType[ctype].ScriptOn,slash(ConfigDir),CustomFrameType[ctype].ParamOn);
+    end;
+    CurrentCustomFrameType:=ctype;
+  end;
   // wait if paused
   if WeatherPauseCapture then begin
     if canwait then begin
@@ -10941,8 +10994,8 @@ var e: double;
     ftype:TFrameType;
 begin
 if (AllDevicesConnected)and(not autofocusing)and (not learningvcurve) then begin
-  if (f_capture.FrameType.ItemIndex>=0)and(f_capture.FrameType.ItemIndex<=ord(High(TFrameType))) then
-    ftype:=TFrameType(f_capture.FrameType.ItemIndex)
+  if (f_capture.FrameType>=0)and(f_capture.FrameType<=ord(High(TFrameType))) then
+    ftype:=TFrameType(f_capture.FrameType)
   else
     ftype:=LIGHT;
   f_preview.StackPreview.Checked:=false;
@@ -11050,14 +11103,14 @@ if (AllDevicesConnected)and(not autofocusing)and (not learningvcurve) then begin
       f_capture.DitherNum:=f_capture.DitherNum+1;
       // start message
       camera.StackStarted:=1;
-      NewMessage(Format(rsStartingExpo, [f_capture.FrameType.Text, inttostr(cc)+'/'+f_capture.SeqNum.Text, IntToStr(camera.StackNum)+' x '+f_capture.ExpTime.Text]));
+      NewMessage(Format(rsStartingExpo, [f_capture.FrameTypeText, inttostr(cc)+'/'+f_capture.SeqNum.Text, IntToStr(camera.StackNum)+' x '+f_capture.ExpTime.Text]));
     end;
   end
   else begin
     // increment dither
     f_capture.DitherNum:=f_capture.DitherNum+1;
     // show message
-    NewMessage(Format(rsStartingExpo, [f_capture.FrameType.Text, inttostr(cc)+'/'+f_capture.SeqNum.Text, FormatFloat(f9v,e)]),1);
+    NewMessage(Format(rsStartingExpo, [f_capture.FrameTypeText, inttostr(cc)+'/'+f_capture.SeqNum.Text, FormatFloat(f9v,e)]),1);
   end;
   // start exposure for time e
   camera.StartExposure(e);
@@ -11491,7 +11544,7 @@ begin
 try
  {$ifdef debug_raw}writeln(FormatDateTime(dateiso,Now)+blank+'Camera save new image');{$endif}
  // get values
- if not fits.Header.Valueof('FRAME',framestr) then framestr:=f_capture.FrameType.Text;
+ if not fits.Header.Valueof('FRAME',framestr) then framestr:=f_capture.FrameTypeText;
  framestr:=trim(framestr);
  if not fits.Header.Valueof('OBJECT',objectstr) then objectstr:=f_capture.Fname.Text;
  objectstr:=SafeFileName(objectstr);
@@ -16172,10 +16225,10 @@ try
   else if method='APPDIR' then result:=result+'"result": "'+stringreplace(Appdir,'\','\\',[rfReplaceAll])+'"'
   else if method='TMPDIR' then result:=result+'"result": "'+stringreplace(TmpDir,'\','\\',[rfReplaceAll])+'"'
   else if method='CAPTUREDIR' then result:=result+'"result": "'+stringreplace(config.GetValue('/Files/CapturePath',defCapturePath),'\','\\',[rfReplaceAll])+'"'
-  else if method='LIGHTDIR' then result:=result+'"result": "'+f_capture.FrameType.Items[ord(LIGHT)]+'"'
-  else if method='BIASDIR' then result:=result+'"result": "'+f_capture.FrameType.Items[ord(BIAS)]+'"'
-  else if method='DARKDIR' then result:=result+'"result": "'+f_capture.FrameType.Items[ord(DARK)]+'"'
-  else if method='FLATDIR' then result:=result+'"result": "'+f_capture.FrameType.Items[ord(FLAT)]+'"'
+  else if method='LIGHTDIR' then result:=result+'"result": "'+trim(FrameName[0])+'"'
+  else if method='BIASDIR' then result:=result+'"result": "'+trim(FrameName[1])+'"'
+  else if method='DARKDIR' then result:=result+'"result": "'+trim(FrameName[2])+'"'
+  else if method='FLATDIR' then result:=result+'"result": "'+trim(FrameName[3])+'"'
   else if method='HOSTOS' then result:=result+'"result": "'+hostOS+'"'
   else if method='COVERSTATUS' then result:=f_scriptengine.cmd_coverstatus
   else if method='CALIBRATORSTATUS' then result:=f_scriptengine.cmd_calibratorstatus

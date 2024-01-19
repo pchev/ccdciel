@@ -556,6 +556,7 @@ end;
 
 function Tf_sequence.EditTargets(et:T_Targets; live: boolean; out fn,defaultname:string):boolean;
 begin
+   f_EditTargets.LoadTypeList;
    f_EditTargets.LoadPlanList;
    f_EditTargets.LoadScriptList;
    f_EditTargets.Switch:=FSwitch;
@@ -822,7 +823,7 @@ begin
    if Targets.Targets[j].objectname=ScriptTxt then continue;
    if Targets.Targets[j].objectname=SkyFlatTxt then continue;
    for i:=0 to T_Plan(Targets.Targets[j].plan).Count-1 do begin
-      if T_Plan(Targets.Targets[j].plan).Steps[i].frtype=LIGHT then begin
+      if (T_Plan(Targets.Targets[j].plan).Steps[i].frtype=ord(LIGHT))or(T_Plan(Targets.Targets[j].plan).Steps[i].frtype>ord(high(TFrameType))) then begin
          isCalibrationSequence:=false;
          break;
       end;
@@ -1179,7 +1180,7 @@ begin
     (Targets.Targets[Targets.CurrentTarget].objectname<>SkyFlatTxt) and
     (Targets.Targets[Targets.CurrentTarget].objectname<>ScriptTxt) and
     (T_Plan(Targets.Targets[Targets.CurrentTarget].plan).Running) and
-    (T_Plan(Targets.Targets[Targets.CurrentTarget].plan).Steps[T_Plan(Targets.Targets[Targets.CurrentTarget].plan).CurrentStep].frtype=LIGHT)
+    (T_Plan(Targets.Targets[Targets.CurrentTarget].plan).Steps[T_Plan(Targets.Targets[Targets.CurrentTarget].plan).CurrentStep].frtype=ord(LIGHT))
     then begin
        MountTrackingAlert:=true;
        MountTrackingAlertTime:=now;
