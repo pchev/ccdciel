@@ -2,14 +2,14 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ccdciel\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-12-30 15:36+0000\n"
-"PO-Revision-Date: 2023-09-16 18:25+0000\n"
+"POT-Creation-Date: 2024-01-19 15:51+0000\n"
+"PO-Revision-Date: 2024-01-03 15:02+0000\n"
 "Last-Translator: Stanislav Holub <Unknown>\n"
 "Language-Team: Czech <cz@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2023-12-30 15:48+0000\n"
+"X-Launchpad-Export-Date: 2024-01-19 15:56+0000\n"
 "X-Generator: Launchpad (build e1eeab5b20e19239bd7d5f36676f7a52988db88b)\n"
 "Language: cs\n"
 
@@ -74,6 +74,10 @@ msgstr "Aktivace sledování solárních objektů."
 #: u_translation.rsactivatespec
 msgid "Activate spectroscopy functions"
 msgstr "Aktivace spektroskopických funkcí"
+
+#: u_translation.rsactivation
+msgid "Activation"
+msgstr ""
 
 #: u_translation.rsactivetarget
 msgid "Active target is replaced, restart the sequence"
@@ -1199,6 +1203,10 @@ msgstr "Vlastní záhlaví"
 msgid "Custom position"
 msgstr "Uživatelská pozice"
 
+#: u_translation.rscustomtype
+msgid "Custom image type"
+msgstr ""
+
 #: u_translation.rscygwinpath
 msgid "Cygwin path"
 msgstr "Cygwinová cesta"
@@ -1236,6 +1244,10 @@ msgstr "Datum (UT) / Sekvence"
 msgid "dawn"
 msgstr "úsvit"
 
+#: u_translation.rsdeactivation
+msgid "Deactivation"
+msgstr ""
+
 #: u_translation.rsdebayer
 msgid "Debayer"
 msgstr "Debayer"
@@ -1264,9 +1276,13 @@ msgstr "Výchozí"
 msgid "Default behavior"
 msgstr "Výchozí vlastnosti"
 
+#: u_translation.rsdefinespecia
+msgid "Define a specialized image type and how to enable it"
+msgstr ""
+
 #: u_translation.rsdefocusamoun
 msgid "Defocus amount"
-msgstr ""
+msgstr "Množství rozostření"
 
 #: u_translation.rsdegree
 msgid "degree"
@@ -1503,7 +1519,7 @@ msgstr "Proveďte jednoduchý přejezd na %s/%s"
 
 #: u_translation.rsdown
 msgid "Down"
-msgstr ""
+msgstr "Dolů"
 
 #: u_translation.rsdownloading
 msgid "Downloading"
@@ -1689,7 +1705,7 @@ msgstr "Exp."
 
 #: u_translation.rsexperttrick
 msgid "Expert trick"
-msgstr ""
+msgstr "Odborný trik"
 
 #: u_translation.rsexposure
 msgid "Exposure"
@@ -3000,6 +3016,10 @@ msgstr "Více panelů"
 msgid "Multi-star guide offset"
 msgstr "Vícehvězdný naváděcí offset"
 
+#: u_translation.rsname
+msgid "Name"
+msgstr ""
+
 #: u_translation.rsnearfocus
 msgid "Near focus"
 msgstr "Téměř ostrý"
@@ -3362,7 +3382,7 @@ msgstr "nebo"
 
 #: u_translation.rsordoubleclic
 msgid "Or double click on the bright star."
-msgstr ""
+msgstr "Nebo dvakrát klikněte na jasnou hvězdu."
 
 #: u_translation.rsotheroptions
 msgid "Other options "
@@ -3558,7 +3578,7 @@ msgstr "Expozice astrometrie %s"
 
 #: u_translation.rsplatesolveto
 msgid "Plate solve to update the correction"
-msgstr ""
+msgstr "Astrometrie pro aktualizaci opravy"
 
 #: u_translation.rspleaseactiva
 msgid "Please activate the log file in the preference."
@@ -3702,7 +3722,7 @@ msgstr "Předvolby%s"
 
 #: u_translation.rspreprocessin
 msgid "Preprocessing"
-msgstr ""
+msgstr "Předzpracování"
 
 #: u_translation.rspresetlist
 msgid "Preset list"
@@ -3722,7 +3742,7 @@ msgstr "Náhled debayer"
 
 #: u_translation.rspreviewprepr
 msgid "Preview preprocessing"
-msgstr ""
+msgstr "Předzpracování náhledu"
 
 #: u_translation.rsprofile
 #, object-pascal-format
@@ -4756,7 +4776,7 @@ msgstr "Vyřešeno za %s sekund"
 
 #: u_translation.rssolvemaincam
 msgid "Solve main camera image"
-msgstr ""
+msgstr "Astrometrie snímku hlavní kamery"
 
 #: u_translation.rssomedefinedd
 msgid "Some defined devices are not connected"
@@ -5623,7 +5643,7 @@ msgstr "Neřešit"
 
 #: u_translation.rsup
 msgid "Up"
-msgstr ""
+msgstr "Nahoru"
 
 #: u_translation.rsupdateactive
 msgid "Update active sequence"
@@ -5631,7 +5651,7 @@ msgstr "Aktualizovat aktivní sekvenci"
 
 #: u_translation.rsupdatechartw
 msgid "Update chart with any astrometry result"
-msgstr ""
+msgstr "Aktualizace grafu s libovolným výsledkem astrometrie"
 
 #: u_translation.rsupdatefullse
 msgid "Update full sequence"

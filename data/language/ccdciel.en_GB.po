@@ -6,14 +6,14 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ccdciel\n"
 "Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
-"POT-Creation-Date: 2023-12-30 15:36+0000\n"
+"POT-Creation-Date: 2024-01-19 15:51+0000\n"
 "PO-Revision-Date: 2021-08-31 20:37+0000\n"
 "Last-Translator: Patrick Chevalley <Unknown>\n"
 "Language-Team: English (United Kingdom) <en_GB@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2023-12-30 15:48+0000\n"
+"X-Launchpad-Export-Date: 2024-01-19 15:56+0000\n"
 "X-Generator: Launchpad (build e1eeab5b20e19239bd7d5f36676f7a52988db88b)\n"
 "Language: en_GB\n"
 
@@ -77,6 +77,10 @@ msgstr ""
 
 #: u_translation.rsactivatespec
 msgid "Activate spectroscopy functions"
+msgstr ""
+
+#: u_translation.rsactivation
+msgid "Activation"
 msgstr ""
 
 #: u_translation.rsactivetarget
@@ -1201,6 +1205,10 @@ msgstr ""
 msgid "Custom position"
 msgstr ""
 
+#: u_translation.rscustomtype
+msgid "Custom image type"
+msgstr ""
+
 #: u_translation.rscygwinpath
 msgid "Cygwin path"
 msgstr "Cygwin path"
@@ -1238,6 +1246,10 @@ msgstr "Date (UT) / Sequence"
 msgid "dawn"
 msgstr "dawn"
 
+#: u_translation.rsdeactivation
+msgid "Deactivation"
+msgstr ""
+
 #: u_translation.rsdebayer
 msgid "Debayer"
 msgstr ""
@@ -1265,6 +1277,10 @@ msgstr "Default"
 #: u_translation.rsdefaultbehav
 msgid "Default behavior"
 msgstr "Default behaviour"
+
+#: u_translation.rsdefinespecia
+msgid "Define a specialized image type and how to enable it"
+msgstr ""
 
 #: u_translation.rsdefocusamoun
 msgid "Defocus amount"
@@ -3000,6 +3016,10 @@ msgstr ""
 
 #: u_translation.rsmultistargui
 msgid "Multi-star guide offset"
+msgstr ""
+
+#: u_translation.rsname
+msgid "Name"
 msgstr ""
 
 #: u_translation.rsnearfocus

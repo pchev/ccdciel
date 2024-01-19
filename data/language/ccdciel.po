@@ -5762,3 +5762,23 @@ msgstr ""
 msgid "Solve main camera image"
 msgstr ""
 
+#: u_translation:rscustomtype
+msgid "Custom image type"
+msgstr ""
+
+#: u_translation:rsdefinespecia
+msgid "Define a specialized image type and how to enable it"
+msgstr ""
+
+#: u_translation:rsname
+msgid "Name"
+msgstr ""
+
+#: u_translation:rsactivation
+msgid "Activation"
+msgstr ""
+
+#: u_translation:rsdeactivation
+msgid "Deactivation"
+msgstr ""
+

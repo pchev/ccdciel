@@ -6,14 +6,14 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ccdciel\n"
 "Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
-"POT-Creation-Date: 2023-12-30 15:36+0000\n"
-"PO-Revision-Date: 2023-10-18 18:39+0000\n"
+"POT-Creation-Date: 2024-01-19 15:51+0000\n"
+"PO-Revision-Date: 2024-01-10 19:00+0000\n"
 "Last-Translator: Sergey Tarantsov <tsn-ast@yandex.ru>\n"
 "Language-Team: Russian <ru@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2023-12-30 15:48+0000\n"
+"X-Launchpad-Export-Date: 2024-01-19 15:56+0000\n"
 "X-Generator: Launchpad (build e1eeab5b20e19239bd7d5f36676f7a52988db88b)\n"
 
 #: u_translation.rs2d
@@ -77,6 +77,10 @@ msgstr "Отслеживание объектов солнечной систе�
 #: u_translation.rsactivatespec
 msgid "Activate spectroscopy functions"
 msgstr "Активировать функции спектроскопии"
+
+#: u_translation.rsactivation
+msgid "Activation"
+msgstr ""
 
 #: u_translation.rsactivetarget
 msgid "Active target is replaced, restart the sequence"
@@ -1200,6 +1204,10 @@ msgstr "Пользовательские заголовки"
 msgid "Custom position"
 msgstr ""
 
+#: u_translation.rscustomtype
+msgid "Custom image type"
+msgstr ""
+
 #: u_translation.rscygwinpath
 msgid "Cygwin path"
 msgstr "Папка Cygwin"
@@ -1237,6 +1245,10 @@ msgstr "Дата (UT) / задание"
 msgid "dawn"
 msgstr "рассвет"
 
+#: u_translation.rsdeactivation
+msgid "Deactivation"
+msgstr ""
+
 #: u_translation.rsdebayer
 msgid "Debayer"
 msgstr "Дебайеризовать"
@@ -1265,9 +1277,13 @@ msgstr "Default"
 msgid "Default behavior"
 msgstr "Стандартное поведение"
 
+#: u_translation.rsdefinespecia
+msgid "Define a specialized image type and how to enable it"
+msgstr ""
+
 #: u_translation.rsdefocusamoun
 msgid "Defocus amount"
-msgstr ""
+msgstr "Величина расфокусировки"
 
 #: u_translation.rsdegree
 msgid "degree"
@@ -1690,7 +1706,7 @@ msgstr "Exp."
 
 #: u_translation.rsexperttrick
 msgid "Expert trick"
-msgstr ""
+msgstr "Смещение точки фокуса (не изменять без необходимости)"
 
 #: u_translation.rsexposure
 msgid "Exposure"
@@ -3001,6 +3017,10 @@ msgstr "Двойная"
 msgid "Multi-star guide offset"
 msgstr ""
 
+#: u_translation.rsname
+msgid "Name"
+msgstr ""
+
 #: u_translation.rsnearfocus
 msgid "Near focus"
 msgstr "Вблизи"
@@ -3363,7 +3383,7 @@ msgstr "или"
 
 #: u_translation.rsordoubleclic
 msgid "Or double click on the bright star."
-msgstr ""
+msgstr "Или двойной клик по яркой звезде."
 
 #: u_translation.rsotheroptions
 msgid "Other options "
@@ -3559,7 +3579,7 @@ msgstr "Распознавание экспозиции %s"
 
 #: u_translation.rsplatesolveto
 msgid "Plate solve to update the correction"
-msgstr ""
+msgstr "Распознавание для обновления коррекций"
 
 #: u_translation.rspleaseactiva
 msgid "Please activate the log file in the preference."
@@ -3703,7 +3723,7 @@ msgstr "Настройки%s"
 
 #: u_translation.rspreprocessin
 msgid "Preprocessing"
-msgstr ""
+msgstr "Предварительная обработка"
 
 #: u_translation.rspresetlist
 msgid "Preset list"
@@ -3723,7 +3743,7 @@ msgstr "Дебайеризовать превью"
 
 #: u_translation.rspreviewprepr
 msgid "Preview preprocessing"
-msgstr ""
+msgstr "Обработка превью"
 
 #: u_translation.rsprofile
 #, object-pascal-format
@@ -4769,7 +4789,7 @@ msgstr "Юг"
 
 #: u_translation.rsspectralprof
 msgid "Spectral profile"
-msgstr "Спектральный профиль"
+msgstr "Спектр. профиль"
 
 #: u_translation.rsspectroscopy
 msgid "Spectroscopy"
@@ -5632,7 +5652,7 @@ msgstr "Обновить активное задание"
 
 #: u_translation.rsupdatechartw
 msgid "Update chart with any astrometry result"
-msgstr ""
+msgstr "Обновить карту при любом результате астрометрии"
 
 #: u_translation.rsupdatefullse
 msgid "Update full sequence"

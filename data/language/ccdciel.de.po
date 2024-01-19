@@ -6,14 +6,14 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ccdciel\n"
 "Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
-"POT-Creation-Date: 2023-12-30 15:36+0000\n"
+"POT-Creation-Date: 2024-01-19 15:51+0000\n"
 "PO-Revision-Date: 2023-12-21 18:29+0000\n"
 "Last-Translator: Thomas <email@starhopper.de>\n"
 "Language-Team: German <de@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2023-12-30 15:48+0000\n"
+"X-Launchpad-Export-Date: 2024-01-19 15:56+0000\n"
 "X-Generator: Launchpad (build e1eeab5b20e19239bd7d5f36676f7a52988db88b)\n"
 
 #: u_translation.rs2d
@@ -77,6 +77,10 @@ msgstr "Aktiviere Nachführung von Sonnensystem Objekten"
 #: u_translation.rsactivatespec
 msgid "Activate spectroscopy functions"
 msgstr "Aktiviere Spektroskopiefunktionen"
+
+#: u_translation.rsactivation
+msgid "Activation"
+msgstr ""
 
 #: u_translation.rsactivetarget
 msgid "Active target is replaced, restart the sequence"
@@ -1200,6 +1204,10 @@ msgstr "Benutzerdefinierte Kopfzeilen"
 msgid "Custom position"
 msgstr "Benutzerdefinierte Position"
 
+#: u_translation.rscustomtype
+msgid "Custom image type"
+msgstr ""
+
 #: u_translation.rscygwinpath
 msgid "Cygwin path"
 msgstr "Dateipfad zu Cygwin"
@@ -1237,6 +1245,10 @@ msgstr "Datum (UT) / Sequenz"
 msgid "dawn"
 msgstr "Morgendämmerung"
 
+#: u_translation.rsdeactivation
+msgid "Deactivation"
+msgstr ""
+
 #: u_translation.rsdebayer
 msgid "Debayer"
 msgstr "Debayer"
@@ -1264,6 +1276,10 @@ msgstr "Default"
 #: u_translation.rsdefaultbehav
 msgid "Default behavior"
 msgstr "Standardverhalten"
+
+#: u_translation.rsdefinespecia
+msgid "Define a specialized image type and how to enable it"
+msgstr ""
 
 #: u_translation.rsdefocusamoun
 msgid "Defocus amount"
@@ -3000,6 +3016,10 @@ msgstr "Mehrteilig"
 #: u_translation.rsmultistargui
 msgid "Multi-star guide offset"
 msgstr "Multi-Star Guiding Offset"
+
+#: u_translation.rsname
+msgid "Name"
+msgstr ""
 
 #: u_translation.rsnearfocus
 msgid "Near focus"
