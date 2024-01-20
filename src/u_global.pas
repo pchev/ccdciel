@@ -42,6 +42,7 @@ type
   TNotifyInt = procedure(i: integer) of object;
   TNotifyBoolConst= procedure(v: boolean) of object;
   TNotifyBool= procedure(var v: boolean) of object;
+  TRunScript = procedure(scname,scpath,scargs: string) of object;
 
   TDevInterface = (INDI, ASCOM, INCAMERA, INTELESCOPE, ASCOMREST, MANUAL);
   TFrameType =(LIGHT, BIAS, DARK, FLAT);

@@ -191,6 +191,7 @@ T_camera = class(TComponent)
     Nstep: integer;
     RampTimer: TTimer;
     FonEndControlExposure: TNotifyEvent;
+    FRunScript: TRunScript;
     procedure RampTimerTimer(Sender: TObject);
     procedure EndExposure(Sender: TObject);
   public
@@ -199,6 +200,7 @@ T_camera = class(TComponent)
     function  ControlExposure(exp:double; pbinx,pbiny: integer; frmt:TFrameType; preadoutmode,pgain,poffset:integer; quiet:boolean=false):boolean;
     Procedure Connect(cp1: string; cp2:string=''; cp3:string=''; cp4:string=''; cp5:string=''; cp6:string=''); virtual; abstract;
     Procedure Disconnect; virtual; abstract;
+    function  InitFrameType(t: integer):TFrameType;
     Procedure SetBinning(binX,binY: integer); virtual; abstract;
     Procedure StartExposure(exptime: double); virtual; abstract;
     procedure RestartExposure; virtual; abstract;
@@ -354,6 +356,7 @@ T_camera = class(TComponent)
     property StepRepeatCount: Integer read FStepRepeatCount write FStepRepeatCount;
     property CameraTimeout: integer read FCameraTimeout write FCameraTimeout;
     property onEndControlExposure: TNotifyEvent read FonEndControlExposure write FonEndControlExposure;
+    property onRunScript: TRunScript read FRunScript write FRunScript;
 end;
 
 
@@ -1131,6 +1134,40 @@ begin
   Ffits.GetFitsInfo;
 end;
 
+function T_camera.InitFrameType(t: integer):TFrameType;
+var ctype: integer;
+begin
+  if FFinderCamera or FGuideCamera then begin
+    // Only used by main camera
+    exit;
+  end;
+  if (t>=0)and(t<=ord(High(TFrameType))) then begin
+    // one of the standard image type: light,bias,dark,flat
+    result:=TFrameType(t);
+    ctype:=-1;
+  end
+  else begin
+    // a custom image type
+    result:=LIGHT;
+    if t>ord(High(TFrameType)) then
+      ctype:=t-ord(High(TFrameType))-1
+    else
+      ctype:=-1; // undefined type, same as light
+  end;
+  if ctype<>CurrentCustomFrameType then begin
+    // custom type change
+    if (CurrentCustomFrameType>=0)and(CustomFrameType[CurrentCustomFrameType].ScriptOff<>'') then begin
+      // Deactivation script
+      FRunScript(CustomFrameType[CurrentCustomFrameType].ScriptOff,slash(ConfigDir),CustomFrameType[CurrentCustomFrameType].ParamOff);
+    end;
+    if (ctype>=0)and(CustomFrameType[ctype].ScriptOn<>'') then begin
+      // Activation script
+      FRunScript(CustomFrameType[ctype].ScriptOn,slash(ConfigDir),CustomFrameType[ctype].ParamOn);
+    end;
+    CurrentCustomFrameType:=ctype;
+  end;
+end;
+
 function T_camera.ControlExposure(exp:double; pbinx,pbiny: integer; frmt:TFrameType; preadoutmode,pgain,poffset:integer; quiet:boolean=false):boolean;
 var SaveonNewImage: TNotifyEvent;
     endt: TDateTime;
@@ -1165,6 +1202,7 @@ if Status=devConnected then begin
        if Offset<>poffset then Offset:=poffset;
     end;
   end;
+  InitFrameType(ord(frmt));
   if FrameType<>frmt then FrameType:=frmt;
   StartExposure(exp);
   endt:=now+(exp+FCameraTimeout)/secperday; // large timeout for DSLR that not support hardware ROI

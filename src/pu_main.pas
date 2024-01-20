@@ -1026,6 +1026,7 @@ type
     Procedure SetFinderCamera;
     Procedure SetMultipanel(onoff: boolean);
     Procedure SetVisibleImage;
+    procedure RunScript(scname,scpath,scargs: string);
   public
     { public declarations }
     Image1, ImageGuide, ImageFinder: TImgDrawingControl;
@@ -2148,6 +2149,7 @@ begin
    camera.onGainStatus:=@GainStatus;
    camera.onSequenceInfo:=@CameraSequenceInfo;
    camera.onEndControlExposure:=@EndControlExposure;
+   camera.onRunScript:=@RunScript;
 
    aInt:=TDevInterface(config.GetValue('/GuideCameraInterface',ord(DefaultInterface)));
    case aInt of
@@ -10636,11 +10638,10 @@ begin
   end;
 end;
 
-
 function Tf_main.PrepareCaptureExposure(canwait:boolean):boolean;
 var e,x: double;
     buf,txt,r: string;
-    waittime,i,ctype: integer;
+    waittime,i: integer;
     ftype:TFrameType;
 begin
 // If called with canwait=false this function only check for operation
@@ -10659,26 +10660,9 @@ if (AllDevicesConnected)and(not autofocusing)and(not learningvcurve)and(not f_vi
      result:=true;
      exit;
   end;
-  if (f_capture.FrameType>=0)and(f_capture.FrameType<=ord(High(TFrameType))) then begin
-    ftype:=TFrameType(f_capture.FrameType);
-    ctype:=-1;
-  end
-  else begin
-    ftype:=LIGHT;
-    if f_capture.FrameType>ord(High(TFrameType)) then
-      ctype:=f_capture.FrameType-ord(High(TFrameType))-1
-    else
-      ctype:=-1;
-  end;
-  if ctype<>CurrentCustomFrameType then begin
-    if (CurrentCustomFrameType>=0)and(CustomFrameType[CurrentCustomFrameType].ScriptOff<>'') then begin
-      f_scriptengine.RunScript(CustomFrameType[CurrentCustomFrameType].ScriptOff,slash(ConfigDir),CustomFrameType[CurrentCustomFrameType].ParamOff);
-    end;
-    if (ctype>=0)and(CustomFrameType[ctype].ScriptOn<>'') then begin
-      f_scriptengine.RunScript(CustomFrameType[ctype].ScriptOn,slash(ConfigDir),CustomFrameType[ctype].ParamOn);
-    end;
-    CurrentCustomFrameType:=ctype;
-  end;
+
+  ftype:=camera.InitFrameType(f_capture.FrameType);
+
   // wait if paused
   if WeatherPauseCapture then begin
     if canwait then begin
@@ -16577,6 +16561,11 @@ except
     end;
   end;
 end;
+end;
+
+procedure Tf_main.RunScript(scname,scpath,scargs: string);
+begin
+ f_scriptengine.RunScript(scname,scpath,scargs);
 end;
 
 function Tf_main.TCPcmd(s: string):string;
