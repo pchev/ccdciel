@@ -4097,13 +4097,13 @@ begin
   ClearImage;
   DrawImage;
   Image1.Invalidate;
-  if GuideImage.Visible then begin
+  if MultiCamera then begin
      ClearGuideImage;
      DrawGuideImage(true);
      PlotGuideImage;
      ImageGuide.Invalidate;
   end;
-  if FinderImage.Visible then begin
+  if MultiCamera then begin
      ClearFinderImage;
      DrawFinderImage(true);
      PlotFinderImage;
