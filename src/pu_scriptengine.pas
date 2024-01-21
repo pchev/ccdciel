@@ -977,7 +977,7 @@ var fn: string;
 begin
  try
   result:=false;
-  msg(Format(rsRunScript2, [sname]));
+  msg(Format(rsRunScript2, [sname+blank+args]));
   FScriptFilename:=sname;
   fn:=slash(path)+sname+'.script';
   st:=ScriptType(fn);
