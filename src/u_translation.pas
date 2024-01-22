@@ -1550,6 +1550,7 @@ resourcestring
   rsActivation = 'Activation';
   rsDeactivation = 'Deactivation';
   rsErrorDuplica = 'Error, duplicate name %s for image type!';
+  rsScanThisServ = 'Scan this server';
 
 implementation
 

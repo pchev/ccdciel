@@ -394,6 +394,18 @@ object f_setup: Tf_setup
             BorderSpacing.Bottom = 4
             Brush.Color = clSilver
           end
+          object BtnScan: TButton
+            AnchorSideTop.Control = ApplyAscomRemote
+            AnchorSideTop.Side = asrCenter
+            Left = 298
+            Height = 25
+            Top = 165
+            Width = 174
+            Caption = 'Scan this server'
+            OnClick = BtnScanClick
+            TabOrder = 9
+            Visible = False
+          end
         end
         object Panel20: TPanel
           Left = 0

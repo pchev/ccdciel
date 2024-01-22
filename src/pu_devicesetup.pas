@@ -88,6 +88,7 @@ type
     BtnSetupFinderCamera: TButton;
     BtnSetupSwitch: TButton;
     BtnSetupCover: TButton;
+    BtnScan: TButton;
     ButtonHelp: TButton;
     DeviceGuideCamera: TCheckBox;
     DeviceFinderCamera: TCheckBox;
@@ -706,6 +707,7 @@ type
     procedure BtnNewProfileClick(Sender: TObject);
     procedure BtnSetupAscomClick(Sender: TObject);
     procedure ApplyAscomRemoteClick(Sender: TObject);
+    procedure BtnScanClick(Sender: TObject);
     procedure ButtonHelpClick(Sender: TObject);
     procedure CameraARestProtocolChange(Sender: TObject);
     procedure CameraIndiDeviceChange(Sender: TObject);
@@ -771,6 +773,8 @@ type
     FonMsg: TNotifyMsg;
     procedure GetIndiDevicesStart;
     procedure AlpacaDiscoverAsync(data:PtrInt);
+    procedure AlpacaScanAsync(data:PtrInt);
+    procedure FillDiscoveryResult;
     procedure SetDiscoverLed(c:TColor);
     procedure IndiNewDevice(dp: Basedevice);
     procedure IndiDisconnected(Sender: TObject);
@@ -981,6 +985,7 @@ begin
   BtnDiscover9.Caption:=rsDiscover;
   BtnDiscover10.Caption:=rsDiscover;
   BtnDiscover11.Caption:=rsDiscover;
+  BtnScan.Caption:=rsScanThisServ;
   Label26.Caption:=rsDiscoveryPor;
   Label70.Caption:=rsProtocol;
   Label71.Caption:=rsServer;
@@ -2892,13 +2897,6 @@ begin
   end;
 end;
 
-procedure Tf_setup.BtnDiscoverClick(Sender: TObject);
-begin
-  Screen.Cursor:=crHourGlass;
-  Application.ProcessMessages;
-  Application.QueueAsyncCall(@AlpacaDiscoverAsync,0);
-end;
-
 procedure Tf_setup.SetDiscoverLed(c:TColor);
 begin
   DiscoverLed.Brush.Color:=c;
@@ -2916,13 +2914,47 @@ begin
   DiscoverLed12.Brush.Color:=c;
 end;
 
-procedure Tf_setup.AlpacaDiscoverAsync(data:PtrInt);
-var i,j,n:integer;
-    devtype: string;
+procedure Tf_setup.BtnScanClick(Sender: TObject);
+begin
+  Screen.Cursor:=crHourGlass;
+  Application.ProcessMessages;
+  Application.QueueAsyncCall(@AlpacaScanAsync,0);
+end;
+
+procedure Tf_setup.AlpacaScanAsync(data:PtrInt);
 begin
 try
   SetDiscoverLed(clYellow);
+  AlpacaServerList:=AlpacaScanServer(DefaultARestHost.Text,DefaultARestPort.text);
+  FillDiscoveryResult;
+finally
+  Screen.Cursor:=crDefault;
+end;
+end;
+
+procedure Tf_setup.BtnDiscoverClick(Sender: TObject);
+begin
+  Screen.Cursor:=crHourGlass;
+  Application.ProcessMessages;
+  Application.QueueAsyncCall(@AlpacaDiscoverAsync,0);
+end;
+
+procedure Tf_setup.AlpacaDiscoverAsync(data:PtrInt);
+begin
+try
+  BtnScan.Visible:=false;
+  SetDiscoverLed(clYellow);
   AlpacaServerList:=AlpacaDiscover(AlpacaDiscoveryPort.Value);
+  FillDiscoveryResult;
+finally
+  Screen.Cursor:=crDefault;
+end;
+end;
+
+procedure Tf_setup.FillDiscoveryResult;
+var i,j,n:integer;
+    devtype: string;
+begin
   n:=length(AlpacaServerList);
   if n>0 then begin
     AlpacaServers.Clear;
@@ -3056,10 +3088,8 @@ try
     AlpacaGuideCameraList.ItemIndex:=0;
     AlpacaFinderCameraList.ItemIndex:=0;
     SetDiscoverLed(clRed);
+    BtnScan.Visible:=true;
   end;
-finally
-  Screen.Cursor:=crDefault;
-end;
 end;
 
 procedure Tf_setup.AlpacaServersChange(Sender: TObject);
