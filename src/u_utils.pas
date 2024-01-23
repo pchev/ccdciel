@@ -2200,7 +2200,7 @@ begin
      Eq2Hz(st-ra*15*deg2rad,de*deg2rad,a,h);
      aa:=round(rmod(a + pi, pi2)*rad2deg);
      if aa=360 then aa:=0;
-     if (aa>180)or(aa<0)or(aa>360) then exit;
+     if (aa>270)or(aa<0)or(aa>360) then exit;
      ch:=horizonlist[aa];
     end;
     hr:=rmod(hhr+24,24);
@@ -2233,7 +2233,7 @@ begin
      Eq2Hz(st-ra*15*deg2rad,de*deg2rad,a,h);
      aa:=round(rmod(a + pi, pi2)*rad2deg);
      if aa=0 then aa:=360;
-     if (aa<180)or(aa<0)or(aa>360) then exit;
+     if (aa<90)or(aa<0)or(aa>360) then exit;
      ch:=horizonlist[aa];
     end;
     hs:=rmod(hhs+24,24);
