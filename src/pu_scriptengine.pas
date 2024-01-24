@@ -1639,8 +1639,7 @@ begin
  if n=0 then
    val(count,c,n);
  if n=0 then begin;
-   dir:=slash(config.GetValue('/Files/CapturePath',defCapturePath));
-   dir:=slash(dir)+'Finder';
+   dir:=LastCapturePath;
    ForceDirectories(dir);
    basefn:=ExtractFileNameOnly(basefn);
    if CurrentTargetName<>'' then basefn:=StringReplace(basefn,'%obj%',CurrentTargetName,[rfReplaceAll]);
@@ -1674,8 +1673,7 @@ begin
  if n=0 then
    val(count,c,n);
  if n=0 then begin;
-   dir:=slash(config.GetValue('/Files/CapturePath',defCapturePath));
-   dir:=slash(dir)+'Guider';
+   dir:=LastCapturePath;
    ForceDirectories(dir);
    basefn:=ExtractFileNameOnly(basefn);
    if CurrentTargetName<>'' then basefn:=StringReplace(basefn,'%obj%',CurrentTargetName,[rfReplaceAll]);
@@ -1704,8 +1702,7 @@ var i: integer;
 begin
  result:=msgFailed;
  try
-   dir:=slash(config.GetValue('/Files/CapturePath',defCapturePath));
-   dir:=slash(dir)+'Guider';
+   dir:=LastCapturePath;
    ForceDirectories(dir);
    basefn:=ExtractFileNameOnly(basefn);
    if CurrentTargetName<>'' then basefn:=StringReplace(basefn,'%obj%',CurrentTargetName,[rfReplaceAll]);

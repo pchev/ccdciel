@@ -4720,6 +4720,7 @@ begin
   SaveBitmap:=config.GetValue('/Files/SaveBitmap',false);
   SaveBitmapFormat:=config.GetValue('/Files/SaveBitmapFormat','png');
   OpenPictureDialog1.InitialDir:=config.GetValue('/Files/CapturePath',defCapturePath);
+  LastCapturePath:=config.GetValue('/Files/CapturePath',defCapturePath);
   f_video.VideoCaptureDir.Text:=config.GetValue('/Files/VideoCapturePath','/tmp');
   CustomHeaderNum:=config.GetValue('/Files/CustomHeader/Num',0);
   for i:=1 to CustomHeaderNum do begin
@@ -11543,6 +11544,7 @@ try
  filterstr:=trim(filterstr);
  // construct path
  fd:=CapturePath(fits,framestr,objectstr,expstr,binstr,false,f_sequence.Running,f_sequence.StepTotalCount,f_sequence.StepRepeatCount);
+ LastCapturePath:=fd;
  ForceDirectoriesUTF8(fd);
  // construct file name
  fn:=CaptureFilename(fits,fd,framestr,objectstr,expstr,binstr,f_sequence.Running);
@@ -17546,9 +17548,7 @@ begin
   end;
   if f_finder.cbSaveImages.Checked then begin
     // save image
-    fn:=slash(config.GetValue('/Files/CapturePath',defCapturePath));
-    if copy(fn,1,1)='.' then fn:=ExpandFileName(slash(Appdir)+fn);
-    fn:=slash(fn)+'Finder';
+    fn:=LastCapturePath;
     ForceDirectories(fn);
     fn:=slash(fn)+'Finder'+FilenameSep;
     objectstr:=f_capture.Fname.Text;
