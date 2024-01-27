@@ -663,7 +663,7 @@ type
     FinderMouseMoving: boolean;
     FinderRestartLoop: boolean;
     DeviceTimeout: integer;
-    MouseMoving, MouseFrame, MouseSpectra, LockTimerPlot, LockMouseWheel, PolarMoving: boolean;
+    MouseMoving, MouseFrame, MouseSpectra, MouseRule, LockTimerPlot, LockMouseWheel, PolarMoving: boolean;
     LockGuideMouseWheel, LockGuideTimerPlot, LockFinderMouseWheel, LockFinderTimerPlot: boolean;
     learningvcurve: boolean;
     LogFileOpen,DeviceLogFileOpen: Boolean;
@@ -3777,6 +3777,11 @@ if Shift=[ssLeft] then begin
      screen.Cursor:=crHandPoint;
   end;
 end
+else if (ssMeta in Shift) then begin
+  Mx:=X;
+  My:=y;
+  MouseRule:=true;
+end
 else if (ssCtrl in Shift) then begin
   if (ImgZoom>0) then begin
      Mx:=X;
@@ -3807,13 +3812,13 @@ else if (ssShift in Shift)and(f_starprofile.SpectraProfile) then begin
  end;
 end;
 
-procedure Tf_main.Image1MouseMove(Sender: TObject; Shift: TShiftState; X,
-  Y: Integer);
+procedure Tf_main.Image1MouseMove(Sender: TObject; Shift: TShiftState; X,Y: Integer);
 var px,py,dx,dy: integer;
-    z: double;
 begin
  if SplitImage then exit;
  MagnifyerTimer.Enabled:=true;
+ X:=Max(1,Min(ScrWidth,X));
+ Y:=Max(1,Min(ScrHeigth,Y));
  if PolarMoving  and fits.HeaderInfo.valid and fits.ImageValid then begin
     Screen2Fits(X,Y,false,false,px,py);
     dx:=px-PolX;
@@ -3858,6 +3863,9 @@ begin
  end
  else if (fits.HeaderInfo.naxis1>0)and(ImgScale0<>0) and fits.ImageValid then begin
    MeasureTimer.Enabled:=true;
+ end;
+ if MouseRule then begin
+   image1.Invalidate;
  end;
 Mx:=X;
 My:=Y;
@@ -3943,8 +3951,12 @@ if MouseSpectra and fits.HeaderInfo.valid and fits.ImageValid then begin
   f_starprofile.SetSpectra(x1,y1,w,h,fits);
   Image1.Invalidate;
 end;
+if MouseRule then begin
+  Image1.Invalidate;
+end;
 MouseMoving:=false;
 MouseFrame:=false;
+MouseRule:=false;
 MouseSpectra:=false;
 PolarMoving:=false;
 screen.Cursor:=crDefault;
@@ -12159,6 +12171,13 @@ try
     x:=1;
     y:=Image1.Height-DoScaleX(17);
     Image1.Canvas.TextOut(x, y, rsClippingIndi+': '+FormatFloat(f0, ClippingUnderflow)+'/'+FormatFloat(f0, ClippingOverflow));
+  end;
+  if MouseRule then begin
+    Image1.Canvas.Pen.Color:=clRed;
+    Image1.Canvas.Pen.Style:=psSolid;
+    Image1.Canvas.pen.Mode:=pmCopy;
+    Image1.Canvas.Line(Mx,0,Mx,ScrHeigth);
+    Image1.Canvas.Line(0,My,ScrWidth,My);
   end;
 except
 end;
