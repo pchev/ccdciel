@@ -1013,11 +1013,13 @@ begin
   if hasfocusertemp then f.Header.Insert(i,'FOCUSTEM',focusertemp ,'Focuser temperature (Celsius)');
   if pierside<>'' then f.Header.Insert(i,'PIERSIDE',pierside,'Telescope side of pier');
   if (hra<>NullCoord)and(hdec<>NullCoord) then begin
+    f.Header.Insert(i,'OBJCTRA',trim(RAToStrB(hra/15)),'[hh mm ss] Telescope pointing RA');
+    f.Header.Insert(i,'OBJCTDEC',trim(DEToStrB(hdec)),'[+dd mm ss] Telescope pointing DEC');
     f.Header.Insert(i,'EQUINOX',2000.0,'');
     f.Header.Insert(i,'RA',hra,'[deg] Telescope pointing RA');
     f.Header.Insert(i,'DEC',hdec,'[deg] Telescope pointing DEC');
-    f.Header.Insert(i,'OBJCTRA',trim(RAToStrB(hra/15)),'[hh mm ss] Telescope pointing RA');
-    f.Header.Insert(i,'OBJCTDEC',trim(DEToStrB(hdec)),'[+dd mm ss] Telescope pointing DEC');
+    f.Header.Insert(i,'CRVAL1',hra,'[deg] Telescope pointing RA');
+    f.Header.Insert(i,'CRVAL2',hdec,'[deg] Telescope pointing DEC');
     if (hpix1>0)and(hpix2>0)and(focal_length>0)  then begin
        pixscale1:=3600*rad2deg*arctan(hpix1/1000/focal_length);
        pixscale2:=3600*rad2deg*arctan(hpix2/1000/focal_length);
