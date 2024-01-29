@@ -3854,8 +3854,14 @@ begin
       naxo:=operand.n_plane
     else
       naxo:=operand.Fpreview_axis;
-    offsetX:=FFitsInfo.Frx-operand.FFitsInfo.frx;
-    offsetY:=operand.FFitsInfo.naxis2-FFitsInfo.naxis2-FFitsInfo.Fry;
+    if FFitsInfo.naxis1=operand.FFitsInfo.naxis1 then
+      offsetX:=0
+    else
+      offsetX:=FFitsInfo.Frx-operand.FFitsInfo.frx;
+    if FFitsInfo.naxis2=operand.FFitsInfo.naxis2 then
+      offsetY:=0
+    else
+      offsetY:=operand.FFitsInfo.naxis2-FFitsInfo.naxis2-FFitsInfo.Fry;
     for k:=0 to nax-1 do begin
       ko:=min(k,naxo-1);
       for i:=0 to FFitsInfo.naxis2-1 do begin
