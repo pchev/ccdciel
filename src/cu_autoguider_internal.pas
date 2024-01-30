@@ -817,7 +817,6 @@ begin
   Finternalguider.Info:='';
   Finternalguider.ButtonLoop.enabled:=false;
   Finternalguider.ButtonCalibrate.enabled:=false;
-  Finternalguider.ButtonGuide.enabled:=false;
   Finternalguider.ButtonDark.enabled:=false;
   if InternalguiderCapturingDark then begin
     FGuideFits.SetBPM(bpm,0,0,0,0);
@@ -1553,6 +1552,7 @@ begin
     StopInternalguider:=true;
     FCamera.AbortExposure;
     Finternalguider.Info:='';
+    Wait(0.5);
   end;
   AutoguiderAlert:=false;
   InternalguiderGuiding:=false;
