@@ -244,7 +244,7 @@ object f_option: Tf_option
             Left = 404
             Height = 25
             Top = 19
-            Width = 61
+            Width = 85
             Caption = 'Default'
             OnClick = TmpDirDefaultClick
             ParentFont = False
@@ -283,7 +283,7 @@ object f_option: Tf_option
             Left = 404
             Height = 25
             Top = 12
-            Width = 61
+            Width = 85
             Caption = 'Default'
             OnClick = PythonDefaultClick
             ParentFont = False
@@ -326,7 +326,7 @@ object f_option: Tf_option
             Left = 404
             Height = 25
             Top = 13
-            Width = 61
+            Width = 85
             Caption = 'Default'
             OnClick = TCPIPportDefaultClick
             ParentFont = False
@@ -380,7 +380,7 @@ object f_option: Tf_option
             Left = 404
             Height = 25
             Top = 13
-            Width = 61
+            Width = 85
             Caption = 'Default'
             OnClick = SeqDirDefaultClick
             ParentFont = False
@@ -434,7 +434,7 @@ object f_option: Tf_option
             Left = 404
             Height = 25
             Top = 13
-            Width = 61
+            Width = 85
             Caption = 'Default'
             OnClick = LogDirDefaultClick
             ParentFont = False
@@ -715,7 +715,7 @@ object f_option: Tf_option
                 Left = 24
                 Height = 25
                 Top = 8
-                Width = 61
+                Width = 85
                 Caption = 'Default'
                 OnClick = BtnFileDefaultClick
                 ParentFont = False
@@ -783,7 +783,7 @@ object f_option: Tf_option
                 Left = 24
                 Height = 25
                 Top = 8
-                Width = 61
+                Width = 85
                 Caption = 'Default'
                 OnClick = BtnFolderDefaultClick
                 ParentFont = False
@@ -2091,12 +2091,12 @@ object f_option: Tf_option
         end
         object VideoGroup: TGroupBox
           Left = 0
-          Height = 211
-          Top = 456
+          Height = 179
+          Top = 488
           Width = 586
           Align = alClient
           Caption = 'Video'
-          ClientHeight = 181
+          ClientHeight = 149
           ClientWidth = 582
           ParentFont = False
           TabOrder = 2
@@ -2135,7 +2135,7 @@ object f_option: Tf_option
         object GroupBox10: TGroupBox
           Left = 0
           Height = 60
-          Top = 332
+          Top = 340
           Width = 586
           Align = alTop
           Caption = 'Bad pixels detection'
@@ -2183,7 +2183,7 @@ object f_option: Tf_option
         object GroupBox19: TGroupBox
           Left = 0
           Height = 60
-          Top = 272
+          Top = 280
           Width = 586
           Align = alTop
           Caption = 'Clipping indicator'
@@ -2239,12 +2239,12 @@ object f_option: Tf_option
         end
         object GroupBox9: TGroupBox
           Left = 0
-          Height = 86
+          Height = 94
           Top = 186
           Width = 586
           Align = alTop
           Caption = 'Reference image'
-          ClientHeight = 56
+          ClientHeight = 64
           ClientWidth = 582
           ParentFont = False
           TabOrder = 1
@@ -2289,7 +2289,7 @@ object f_option: Tf_option
           end
           object RefColor: TRadioGroup
             Left = 285
-            Height = 54
+            Height = 58
             Top = 0
             Width = 248
             AutoFill = True
@@ -2301,7 +2301,7 @@ object f_option: Tf_option
             ChildSizing.ShrinkVertical = crsScaleChilds
             ChildSizing.Layout = cclLeftToRightThenTopToBottom
             ChildSizing.ControlsPerLine = 3
-            ClientHeight = 24
+            ClientHeight = 28
             ClientWidth = 244
             Columns = 3
             Items.Strings = (
@@ -2315,12 +2315,12 @@ object f_option: Tf_option
         end
         object GroupBox33: TGroupBox
           Left = 0
-          Height = 64
-          Top = 392
+          Height = 88
+          Top = 400
           Width = 586
           Align = alTop
           Caption = 'Image cursor'
-          ClientHeight = 34
+          ClientHeight = 58
           ClientWidth = 582
           TabOrder = 5
           object Label153: TLabel
@@ -2351,11 +2351,10 @@ object f_option: Tf_option
             Text = 'Small cross'
           end
           object Label154: TLabel
-            AnchorSideTop.Control = ImageCursor
             AnchorSideTop.Side = asrCenter
-            Left = 336
+            Left = 16
             Height = 18
-            Top = 9
+            Top = 36
             Width = 119
             Caption = '(Restart to activate)'
             ParentColor = False
@@ -2890,7 +2889,7 @@ object f_option: Tf_option
             Left = 354
             Height = 21
             Top = 36
-            Width = 76
+            Width = 80
             Caption = 'Disable'
             OnClick = BtnDisableDelayClick
             ParentFont = False
@@ -2903,7 +2902,7 @@ object f_option: Tf_option
             Height = 28
             Hint = 'The direction the focuser will always finish to move.'#10'If using auto-focus set the same move direction.'
             Top = 1
-            Width = 76
+            Width = 80
             Constraints.MaxHeight = 28
             ItemHeight = 24
             ItemIndex = 0
@@ -4538,11 +4537,11 @@ object f_option: Tf_option
             TabOrder = 1
             Visible = False
             object SlewISObox: TComboBox
-              Left = 327
+              Left = 374
               Height = 28
               Hint = 'Exposure time in seconds'
               Top = 0
-              Width = 91
+              Width = 82
               Constraints.MaxHeight = 28
               ItemHeight = 18
               ParentFont = False
@@ -4562,7 +4561,7 @@ object f_option: Tf_option
               ParentFont = False
             end
             object SlewGainEdit: TSpinEdit
-              Left = 327
+              Left = 375
               Height = 28
               Top = 0
               Width = 81
@@ -4592,7 +4591,7 @@ object f_option: Tf_option
                 ParentColor = False
               end
               object SlewOffsetEdit: TSpinEdit
-                Left = 328
+                Left = 375
                 Height = 28
                 Top = 4
                 Width = 81
@@ -4614,7 +4613,7 @@ object f_option: Tf_option
             ClientWidth = 582
             TabOrder = 2
             object SlewPrec: TFloatSpinEdit
-              Left = 327
+              Left = 375
               Height = 28
               Top = 8
               Width = 81
@@ -4650,7 +4649,7 @@ object f_option: Tf_option
               ParentFont = False
             end
             object SlewRetry: TSpinEdit
-              Left = 327
+              Left = 375
               Height = 28
               Top = 40
               Width = 81
@@ -4691,7 +4690,7 @@ object f_option: Tf_option
               ParentFont = False
             end
             object SlewExp: TFloatSpinEdit
-              Left = 327
+              Left = 375
               Height = 28
               Top = 72
               Width = 81
@@ -4714,7 +4713,7 @@ object f_option: Tf_option
               ParentColor = False
             end
             object AstrometryCamera: TComboBox
-              Left = 152
+              Left = 200
               Height = 32
               Top = 32
               Width = 256
@@ -4763,10 +4762,10 @@ object f_option: Tf_option
               ParentFont = False
             end
             object SlewFilter: TComboBox
-              Left = 251
+              Left = 266
               Height = 28
               Top = 43
-              Width = 158
+              Width = 191
               AutoSize = False
               Constraints.MaxHeight = 28
               ItemHeight = 18
@@ -4786,7 +4785,7 @@ object f_option: Tf_option
               ParentFont = False
             end
             object SlewBin: TSpinEdit
-              Left = 328
+              Left = 375
               Height = 28
               Top = 8
               Width = 81
@@ -4798,7 +4797,7 @@ object f_option: Tf_option
               Value = 1
             end
             object SlewDelay: TSpinEdit
-              Left = 358
+              Left = 406
               Height = 28
               Top = 80
               Width = 50
@@ -4827,7 +4826,7 @@ object f_option: Tf_option
               ParentColor = False
             end
             object FinderFocalLength: TSpinEdit
-              Left = 328
+              Left = 375
               Height = 32
               Top = 0
               Width = 81
@@ -4835,18 +4834,18 @@ object f_option: Tf_option
               TabOrder = 0
             end
             object Label167: TLabel
-              Left = 424
+              Left = 463
               Height = 18
-              Top = 7
+              Top = 4
               Width = 25
               Caption = 'mm'
               ParentColor = False
             end
             object FinderSolver: TComboBox
-              Left = 251
+              Left = 266
               Height = 32
               Top = 36
-              Width = 158
+              Width = 191
               ItemHeight = 24
               ItemIndex = 0
               Items.Strings = (
@@ -5439,7 +5438,7 @@ object f_option: Tf_option
           object Label143: TLabel
             AnchorSideTop.Control = GuideDriftCancelExposure
             AnchorSideTop.Side = asrCenter
-            Left = 253
+            Left = 336
             Height = 18
             Top = 50
             Width = 80
@@ -5450,7 +5449,7 @@ object f_option: Tf_option
           object Label144: TLabel
             AnchorSideTop.Control = GuideDriftCancelExposure
             AnchorSideTop.Side = asrCenter
-            Left = 449
+            Left = 532
             Height = 18
             Top = 50
             Width = 7
@@ -5461,7 +5460,7 @@ object f_option: Tf_option
           object GuideDriftRestartDelay: TSpinEdit
             AnchorSideTop.Control = GuideDriftCancelExposure
             AnchorSideTop.Side = asrCenter
-            Left = 360
+            Left = 443
             Height = 28
             Top = 45
             Width = 79
@@ -5473,10 +5472,10 @@ object f_option: Tf_option
           object BtnMaxDriftDisable: TButton
             AnchorSideTop.Control = GuideDriftMax
             AnchorSideTop.Side = asrCenter
-            Left = 360
+            Left = 443
             Height = 25
             Top = 10
-            Width = 75
+            Width = 85
             Caption = 'Disable'
             OnClick = BtnMaxDriftDisableClick
             ParentFont = False
@@ -5495,11 +5494,11 @@ object f_option: Tf_option
             AnchorSideLeft.Side = asrBottom
             AnchorSideTop.Control = GuideDriftAbort
             AnchorSideTop.Side = asrCenter
-            Left = 238
+            Left = 239
             Height = 32
             Top = 83
             Width = 50
-            BorderSpacing.Left = 4
+            BorderSpacing.Left = 5
             MaxValue = 99
             MinValue = 1
             TabOrder = 5
@@ -5510,11 +5509,11 @@ object f_option: Tf_option
             AnchorSideLeft.Side = asrBottom
             AnchorSideTop.Control = GuideDriftAbort
             AnchorSideTop.Side = asrCenter
-            Left = 292
+            Left = 294
             Height = 18
             Top = 90
             Width = 81
-            BorderSpacing.Left = 4
+            BorderSpacing.Left = 5
             Caption = 'time in a row'
             ParentColor = False
           end
@@ -5712,7 +5711,7 @@ object f_option: Tf_option
                 Left = 152
                 Height = 25
                 Top = 104
-                Width = 75
+                Width = 85
                 Caption = 'Disable'
                 OnClick = BtnDisableStarLostClick
                 ParentFont = False
@@ -7298,10 +7297,12 @@ object f_option: Tf_option
           ParentFont = False
           TabOrder = 1
           object Label111: TLabel
-            Left = 8
-            Height = 18
-            Top = 8
-            Width = 476
+            Left = 1
+            Height = 40
+            Top = 1
+            Width = 584
+            Align = alClient
+            AutoSize = False
             Caption = 'The following actions are run if the safety monitor report dangerous condition'
             ParentColor = False
             ParentFont = False
@@ -7316,12 +7317,12 @@ object f_option: Tf_option
         ParentFont = False
         object GroupBoxMeasurement: TGroupBox
           Left = 0
-          Height = 182
+          Height = 206
           Top = 82
           Width = 586
           Align = alTop
           Caption = 'Measurement on new images'
-          ClientHeight = 152
+          ClientHeight = 176
           ClientWidth = 582
           ParentFont = False
           TabOrder = 0
@@ -7336,12 +7337,12 @@ object f_option: Tf_option
           end
           object GroupBox23: TGroupBox
             Left = 0
-            Height = 116
-            Top = 36
+            Height = 128
+            Top = 48
             Width = 582
             Align = alBottom
             Caption = 'Recenter sequence target that drift'
-            ClientHeight = 86
+            ClientHeight = 98
             ClientWidth = 578
             ParentFont = False
             TabOrder = 1
@@ -7355,7 +7356,7 @@ object f_option: Tf_option
               TabOrder = 0
             end
             object RecenterTargetDistance: TFloatSpinEdit
-              Left = 289
+              Left = 344
               Height = 32
               Top = 40
               Width = 74
@@ -7375,7 +7376,7 @@ object f_option: Tf_option
             object Label131: TLabel
               AnchorSideTop.Control = RecenterTargetDistance
               AnchorSideTop.Side = asrCenter
-              Left = 370
+              Left = 425
               Height = 18
               Top = 47
               Width = 50
@@ -7386,7 +7387,7 @@ object f_option: Tf_option
             object Label149: TLabel
               Left = 16
               Height = 18
-              Top = 64
+              Top = 70
               Width = 207
               Caption = '(limited to 1.5x the slew precision)'
               ParentColor = False
@@ -7396,12 +7397,12 @@ object f_option: Tf_option
         end
         object GroupBoxFocus: TGroupBox
           Left = 0
-          Height = 403
-          Top = 264
+          Height = 379
+          Top = 288
           Width = 586
           Align = alClient
           Caption = 'Periodic autofocus'
-          ClientHeight = 373
+          ClientHeight = 349
           ClientWidth = 582
           ParentFont = False
           TabOrder = 1
@@ -7430,17 +7431,17 @@ object f_option: Tf_option
             object BtnDisableFocuserTemp: TButton
               AnchorSideTop.Control = FocuserTempCoeff
               AnchorSideTop.Side = asrCenter
-              Left = 370
+              Left = 425
               Height = 23
               Top = 6
-              Width = 76
+              Width = 85
               Caption = 'Disable'
               OnClick = BtnDisableFocuserTempClick
               ParentFont = False
               TabOrder = 0
             end
             object FocuserTempCoeff: TFloatSpinEdit
-              Left = 289
+              Left = 344
               Height = 28
               Top = 3
               Width = 75
@@ -7463,7 +7464,7 @@ object f_option: Tf_option
               ParentFont = False
             end
             object AutofocusTemp: TFloatSpinEdit
-              Left = 289
+              Left = 344
               Height = 28
               Top = 31
               Width = 75
@@ -7477,10 +7478,10 @@ object f_option: Tf_option
             object BtnDisableAutofocusTemp: TButton
               AnchorSideTop.Control = AutofocusTemp
               AnchorSideTop.Side = asrCenter
-              Left = 370
+              Left = 425
               Height = 23
               Top = 34
-              Width = 76
+              Width = 85
               Caption = 'Disable'
               OnClick = BtnDisableAutofocusTempClick
               ParentFont = False
@@ -7510,7 +7511,7 @@ object f_option: Tf_option
               ParentFont = False
             end
             object AutofocusPeriod: TSpinEdit
-              Left = 289
+              Left = 344
               Height = 28
               Top = 0
               Width = 75
@@ -7522,7 +7523,7 @@ object f_option: Tf_option
             object Label128: TLabel
               AnchorSideTop.Control = AutofocusPeriod
               AnchorSideTop.Side = asrCenter
-              Left = 370
+              Left = 425
               Height = 18
               Top = 5
               Width = 50

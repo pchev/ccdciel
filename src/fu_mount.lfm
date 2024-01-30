@@ -1,11 +1,11 @@
 object f_mount: Tf_mount
   Left = 0
-  Height = 152
+  Height = 177
   Top = 0
-  Width = 194
+  Width = 220
   AutoSize = True
-  ClientHeight = 152
-  ClientWidth = 194
+  ClientHeight = 177
+  ClientWidth = 220
   ParentFont = False
   TabOrder = 0
   DesignLeft = -1
@@ -14,7 +14,7 @@ object f_mount: Tf_mount
     Left = 0
     Height = 20
     Top = 0
-    Width = 194
+    Width = 220
     Align = alTop
     Alignment = taCenter
     AutoSize = False
@@ -29,40 +29,40 @@ object f_mount: Tf_mount
   end
   object Panel1: TPanel
     Left = 0
-    Height = 132
+    Height = 157
     Top = 20
-    Width = 194
+    Width = 220
     Align = alClient
     ChildSizing.Layout = cclTopToBottomThenLeftToRight
     ChildSizing.ControlsPerLine = 99
-    ClientHeight = 132
-    ClientWidth = 194
+    ClientHeight = 157
+    ClientWidth = 220
     ParentFont = False
     TabOrder = 0
     object Panel2: TPanel
       Left = 0
-      Height = 24
+      Height = 27
       Top = 0
-      Width = 191
+      Width = 210
       BevelOuter = bvNone
-      ClientHeight = 24
-      ClientWidth = 191
+      ClientHeight = 27
+      ClientWidth = 210
       ParentFont = False
       TabOrder = 0
       object Label1: TLabel
         Left = 4
-        Height = 19
+        Height = 18
         Top = 4
-        Width = 32
+        Width = 34
         Caption = 'RA     '
         ParentColor = False
         ParentFont = False
       end
       object btnTrack: TSpeedButton
         Left = 120
-        Height = 22
+        Height = 25
         Top = 2
-        Width = 71
+        Width = 90
         Caption = 'Track'
         Layout = blGlyphBottom
         OnClick = BtnTrackClick
@@ -70,10 +70,10 @@ object f_mount: Tf_mount
       end
       object RA: TLabel
         Left = 30
-        Height = 19
+        Height = 18
         Hint = 'Current telescope Right Ascension'
         Top = 4
-        Width = 6
+        Width = 7
         Caption = '  '
         Constraints.MaxHeight = 28
         ParentColor = False
@@ -82,28 +82,28 @@ object f_mount: Tf_mount
     end
     object Panel3: TPanel
       Left = 0
-      Height = 24
-      Top = 24
-      Width = 191
+      Height = 27
+      Top = 27
+      Width = 210
       BevelOuter = bvNone
-      ClientHeight = 24
-      ClientWidth = 191
+      ClientHeight = 27
+      ClientWidth = 210
       ParentFont = False
       TabOrder = 1
       object Label2: TLabel
         Left = 4
-        Height = 19
+        Height = 18
         Top = 4
-        Width = 33
+        Width = 34
         Caption = 'Dec   '
         ParentColor = False
         ParentFont = False
       end
       object BtnPark: TSpeedButton
         Left = 120
-        Height = 22
+        Height = 25
         Top = 2
-        Width = 71
+        Width = 90
         Caption = 'Park'
         Layout = blGlyphBottom
         OnClick = BtnParkClick
@@ -111,10 +111,10 @@ object f_mount: Tf_mount
       end
       object DE: TLabel
         Left = 30
-        Height = 19
+        Height = 18
         Hint = 'Current telescope Declination'
         Top = 4
-        Width = 6
+        Width = 7
         Caption = '  '
         Constraints.MaxHeight = 28
         ParentColor = False
@@ -123,127 +123,132 @@ object f_mount: Tf_mount
     end
     object Panel6: TPanel
       Left = 0
-      Height = 23
-      Top = 48
-      Width = 191
+      Height = 26
+      Top = 54
+      Width = 210
       BevelOuter = bvNone
-      ClientHeight = 23
-      ClientWidth = 191
+      ClientHeight = 26
+      ClientWidth = 210
       ParentFont = False
       TabOrder = 4
       object Label3: TLabel
         Left = 4
-        Height = 19
-        Top = 0
+        Height = 18
+        Top = 4
         Width = 15
+        BorderSpacing.Top = 4
+        BorderSpacing.Bottom = 4
         Caption = 'Az'
         ParentColor = False
         ParentFont = False
       end
       object Label5: TLabel
+        AnchorSideTop.Control = Label3
         Left = 89
-        Height = 19
-        Top = 0
+        Height = 18
+        Top = 4
         Width = 17
         Caption = 'Alt'
         ParentColor = False
         ParentFont = False
       end
       object AZ: TLabel
+        AnchorSideTop.Control = Label3
         Left = 30
-        Height = 19
-        Top = 0
-        Width = 3
+        Height = 18
+        Top = 4
+        Width = 4
         Caption = ' '
         ParentColor = False
         ParentFont = False
       end
       object ALT: TLabel
+        AnchorSideTop.Control = Label3
         Left = 116
-        Height = 19
-        Top = 0
-        Width = 3
+        Height = 18
+        Top = 4
+        Width = 4
         Caption = ' '
         ParentColor = False
         ParentFont = False
-      end
-      object BtnHandpad: TSpeedButton
-        Left = 168
-        Height = 23
-        Top = 0
-        Width = 23
-        Align = alRight
-        Caption = '..'
-        OnClick = BtnHandpadClick
       end
     end
     object Panel4: TPanel
       Left = 0
       Height = 25
-      Top = 71
-      Width = 191
+      Top = 80
+      Width = 210
       BevelOuter = bvNone
       ClientHeight = 25
-      ClientWidth = 191
+      ClientWidth = 210
       ParentFont = False
       TabOrder = 2
-      object Pierside: TLabel
-        Left = 4
-        Height = 19
-        Hint = 'Current telescope pier side'
-        Top = 4
-        Width = 115
-        Caption = 'Unknown pier side'
-        Constraints.MaxHeight = 28
-        ParentColor = False
-        ParentFont = False
-      end
       object BtnGoto: TButton
-        Left = 133
+        Left = 120
         Height = 25
         Top = 0
-        Width = 58
+        Width = 90
         Caption = 'Goto'
         OnClick = BtnGotoClick
         ParentFont = False
         TabOrder = 0
       end
+      object BtnHandpad: TButton
+        Left = 4
+        Height = 25
+        Top = 0
+        Width = 100
+        Caption = 'Handpad'
+        OnClick = BtnHandpadClick
+        TabOrder = 1
+      end
     end
     object Panel5: TPanel
       Left = 0
-      Height = 23
-      Top = 96
-      Width = 191
+      Height = 42
+      Top = 105
+      Width = 210
       BevelOuter = bvNone
-      ClientHeight = 23
-      ClientWidth = 191
+      ClientHeight = 42
+      ClientWidth = 210
       ParentFont = False
       TabOrder = 3
       object LabelMeridian: TLabel
         Left = 4
-        Height = 19
-        Top = 4
-        Width = 69
+        Height = 18
+        Top = 24
+        Width = 70
         Caption = 'Meridian in'
         ParentColor = False
         ParentFont = False
       end
       object Label4: TLabel
-        Left = 146
-        Height = 19
-        Top = 4
+        Left = 183
+        Height = 18
+        Top = 24
         Width = 27
         Caption = 'min.'
         ParentColor = False
         ParentFont = False
       end
       object TimeToMeridian: TLabel
-        Left = 113
-        Height = 19
+        Left = 152
+        Height = 18
         Hint = 'Time from meridian transit (hour angle)'
-        Top = 4
+        Top = 24
         Width = 8
         Caption = '0'
+        Constraints.MaxHeight = 28
+        ParentColor = False
+        ParentFont = False
+      end
+      object Pierside: TLabel
+        Left = 4
+        Height = 18
+        Hint = 'Current telescope pier side'
+        Top = 4
+        Width = 114
+        Caption = 'Unknown pier side'
         Constraints.MaxHeight = 28
         ParentColor = False
         ParentFont = False

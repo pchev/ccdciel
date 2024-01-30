@@ -34,6 +34,7 @@ type
 
   Tf_mount = class(TFrame)
     BtnGoto: TButton;
+    BtnHandpad: TButton;
     DE: TLabel;
     Label3: TLabel;
     Label5: TLabel;
@@ -53,7 +54,6 @@ type
     Label2: TLabel;
     LabelMeridian: TLabel;
     Panel1: TPanel;
-    BtnHandpad: TSpeedButton;
     TimeToMeridian: TLabel;
     Title: TLabel;
     procedure BtnGotoClick(Sender: TObject);
@@ -125,8 +125,7 @@ begin
   DE.Hint:=rsCurrentTeles2;
   Pierside.Hint:=rsCurrentTeles3;
   TimeToMeridian.Hint:=rsTimeFromMeri;
-  BtnHandpad.Caption:=ellipsis;
-  BtnHandpad.Hint:=rsHandpad;
+  BtnHandpad.Caption:=rsHandpad;
 end;
 
 procedure Tf_mount.SetCurrentRA(value:double);

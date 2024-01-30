@@ -2,10 +2,10 @@ object f_focuser: Tf_focuser
   Left = 0
   Height = 115
   Top = 0
-  Width = 194
+  Width = 220
   AutoSize = True
   ClientHeight = 115
-  ClientWidth = 194
+  ClientWidth = 220
   ParentFont = False
   TabOrder = 0
   DesignLeft = -1
@@ -14,27 +14,27 @@ object f_focuser: Tf_focuser
     Left = 0
     Height = 95
     Top = 20
-    Width = 194
+    Width = 220
     Align = alClient
     ClientHeight = 95
-    ClientWidth = 194
+    ClientWidth = 220
     ParentFont = False
     TabOrder = 0
     object PanelParam: TPanel
       Left = 0
       Height = 57
       Top = 0
-      Width = 192
+      Width = 216
       BevelOuter = bvNone
       ClientHeight = 57
-      ClientWidth = 192
+      ClientWidth = 216
       ParentFont = False
       TabOrder = 1
       object Notebook1: TNotebook
         Left = 0
         Height = 57
         Top = 0
-        Width = 192
+        Width = 216
         PageIndex = 2
         Align = alClient
         TabOrder = 0
@@ -44,11 +44,11 @@ object f_focuser: Tf_focuser
             Left = 0
             Height = 57
             Top = 0
-            Width = 192
+            Width = 208
             Align = alClient
             BevelOuter = bvNone
             ClientHeight = 57
-            ClientWidth = 192
+            ClientWidth = 208
             ParentFont = False
             TabOrder = 0
             object Label3: TLabel
@@ -70,7 +70,7 @@ object f_focuser: Tf_focuser
               ParentFont = False
             end
             object speed: TSpinEdit
-              Left = 57
+              Left = 64
               Height = 28
               Top = 0
               Width = 81
@@ -80,7 +80,7 @@ object f_focuser: Tf_focuser
               TabOrder = 0
             end
             object timer: TSpinEdit
-              Left = 57
+              Left = 64
               Height = 28
               Top = 27
               Width = 81
@@ -96,11 +96,11 @@ object f_focuser: Tf_focuser
             Left = 0
             Height = 57
             Top = 0
-            Width = 192
+            Width = 208
             Align = alClient
             BevelOuter = bvNone
             ClientHeight = 57
-            ClientWidth = 192
+            ClientWidth = 208
             ParentFont = False
             TabOrder = 0
             object Label6: TLabel
@@ -139,11 +139,11 @@ object f_focuser: Tf_focuser
             Left = 0
             Height = 57
             Top = 0
-            Width = 192
+            Width = 216
             Align = alClient
             BevelOuter = bvNone
             ClientHeight = 57
-            ClientWidth = 192
+            ClientWidth = 216
             ParentFont = False
             TabOrder = 0
             object Label1: TLabel
@@ -169,7 +169,7 @@ object f_focuser: Tf_focuser
               ParentFont = False
             end
             object PosIncr: TComboBox
-              Left = 40
+              Left = 48
               Height = 28
               Hint = 'Increment step for the inward or outward movement'
               Top = 32
@@ -192,11 +192,11 @@ object f_focuser: Tf_focuser
             object BtnSetAbsPos: TButton
               AnchorSideTop.Control = Position
               AnchorSideTop.Side = asrCenter
-              Left = 126
+              Left = 134
               Height = 24
               Hint = 'Set absolute focuser position'
               Top = 2
-              Width = 65
+              Width = 80
               Caption = 'Move to'
               OnClick = BtnSetAbsPosClick
               ParentFont = False
@@ -205,18 +205,18 @@ object f_focuser: Tf_focuser
             object BtnVcurve: TButton
               AnchorSideTop.Control = PosIncr
               AnchorSideTop.Side = asrCenter
-              Left = 126
+              Left = 134
               Height = 24
               Hint = 'V curve learning'
               Top = 34
-              Width = 65
+              Width = 80
               Caption = 'V-learn'
               OnClick = BtnVcurveClick
               ParentFont = False
               TabOrder = 2
             end
             object Position: TSpinEdit
-              Left = 40
+              Left = 48
               Height = 28
               Top = 0
               Width = 82
@@ -230,19 +230,19 @@ object f_focuser: Tf_focuser
       end
     end
     object PanelBtn: TPanel
-      Left = 113
+      Left = 136
       Height = 28
-      Top = 57
-      Width = 81
+      Top = 60
+      Width = 80
       BevelOuter = bvNone
       ClientHeight = 28
-      ClientWidth = 81
+      ClientWidth = 80
       ParentFont = False
       TabOrder = 0
       object BtnDown: TButton
         AnchorSideTop.Control = PanelBtn
         AnchorSideTop.Side = asrCenter
-        Left = 12
+        Left = 8
         Height = 25
         Hint = 'Move focuser inward'
         Top = 2
@@ -255,7 +255,7 @@ object f_focuser: Tf_focuser
       object BtnUp: TButton
         AnchorSideTop.Control = PanelBtn
         AnchorSideTop.Side = asrCenter
-        Left = 46
+        Left = 42
         Height = 25
         Hint = 'Move focuser outward'
         Top = 2
@@ -270,15 +270,15 @@ object f_focuser: Tf_focuser
       Left = 0
       Height = 28
       Top = 60
-      Width = 113
+      Width = 137
       BevelOuter = bvNone
       ClientHeight = 28
-      ClientWidth = 113
+      ClientWidth = 137
       ParentFont = False
       TabOrder = 2
       Visible = False
       object Temp: TEdit
-        Left = 57
+        Left = 64
         Height = 28
         Top = 1
         Width = 44
@@ -302,7 +302,7 @@ object f_focuser: Tf_focuser
       object lblTemp: TLabel
         AnchorSideTop.Control = Temp
         AnchorSideTop.Side = asrCenter
-        Left = 103
+        Left = 120
         Height = 18
         Top = 6
         Width = 9
@@ -316,7 +316,7 @@ object f_focuser: Tf_focuser
     Left = 0
     Height = 20
     Top = 0
-    Width = 194
+    Width = 220
     Align = alTop
     Alignment = taCenter
     AutoSize = False

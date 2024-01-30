@@ -2,10 +2,10 @@ object f_frame: Tf_frame
   Left = 0
   Height = 106
   Top = 0
-  Width = 205
+  Width = 220
   AutoSize = True
   ClientHeight = 106
-  ClientWidth = 205
+  ClientWidth = 220
   ParentFont = False
   TabOrder = 0
   DesignLeft = -1
@@ -14,7 +14,7 @@ object f_frame: Tf_frame
     Left = 0
     Height = 20
     Top = 0
-    Width = 205
+    Width = 220
     Align = alTop
     Alignment = taCenter
     AutoSize = False
@@ -31,23 +31,23 @@ object f_frame: Tf_frame
     Left = 0
     Height = 86
     Top = 20
-    Width = 205
+    Width = 220
     Align = alClient
     ChildSizing.VerticalSpacing = 3
     ChildSizing.Layout = cclTopToBottomThenLeftToRight
     ChildSizing.ControlsPerLine = 99
     ClientHeight = 86
-    ClientWidth = 205
+    ClientWidth = 220
     ParentFont = False
     TabOrder = 0
     object Panel2: TPanel
       Left = 0
       Height = 22
       Top = 0
-      Width = 200
+      Width = 214
       BevelOuter = bvNone
       ClientHeight = 22
-      ClientWidth = 200
+      ClientWidth = 214
       ParentFont = False
       TabOrder = 0
       object Label1: TLabel
@@ -89,7 +89,7 @@ object f_frame: Tf_frame
         Left = 134
         Height = 22
         Top = 0
-        Width = 66
+        Width = 80
         Caption = 'Set'
         OnClick = BtnSetClick
         ParentFont = False
@@ -100,10 +100,10 @@ object f_frame: Tf_frame
       Left = 0
       Height = 22
       Top = 25
-      Width = 200
+      Width = 214
       BevelOuter = bvNone
       ClientHeight = 22
-      ClientWidth = 200
+      ClientWidth = 214
       ParentFont = False
       TabOrder = 1
       object Label2: TLabel
@@ -145,7 +145,7 @@ object f_frame: Tf_frame
         Left = 134
         Height = 22
         Top = 0
-        Width = 66
+        Width = 80
         Caption = 'Reset'
         OnClick = BtnResetClick
         ParentFont = False
@@ -156,16 +156,16 @@ object f_frame: Tf_frame
       Left = 0
       Height = 32
       Top = 50
-      Width = 200
+      Width = 214
       BevelOuter = bvNone
       ClientHeight = 32
-      ClientWidth = 200
+      ClientWidth = 214
       TabOrder = 2
       object RoiList: TComboBox
         Left = 16
         Height = 32
         Top = 0
-        Width = 176
+        Width = 192
         ItemHeight = 18
         OnChange = RoiListChange
         Style = csDropDownList
