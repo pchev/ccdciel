@@ -340,13 +340,13 @@ object f_internalguider: Tf_internalguider
               Height = 25
               Hint = 'Stop loop'
               Top = 9
-              Width = 85
+              Width = 104
               Caption = 'Stop'
               OnClick = ButtonStopClick
               TabOrder = 1
             end
             object ButtonDark: TButton
-              Left = 194
+              Left = 216
               Height = 25
               Top = 9
               Width = 75
@@ -928,8 +928,8 @@ object f_internalguider: Tf_internalguider
             Width = 340
             Align = alClient
             Caption = 'Calibration options'
-            ClientHeight = 156
-            ClientWidth = 336
+            ClientHeight = 186
+            ClientWidth = 340
             TabOrder = 1
             object measure_method2: TCheckBox
               Left = 8
@@ -1427,8 +1427,8 @@ object f_internalguider: Tf_internalguider
             Width = 340
             Align = alClient
             Caption = 'Calibration results:'
-            ClientHeight = 586
-            ClientWidth = 336
+            ClientHeight = 616
+            ClientWidth = 340
             TabOrder = 0
             object Label5: TLabel
               AnchorSideTop.Control = pa1

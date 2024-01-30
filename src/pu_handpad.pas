@@ -41,10 +41,12 @@ type
     AxisRates: TComboBox;
     FlipNS: TRadioGroup;
     Handpad: TPanel;
+    Label1: TLabel;
     Label2: TLabel;
     Label3: TLabel;
     Label4: TLabel;
     Label5: TLabel;
+    Panel1: TPanel;
     StopMoveTimer: TTimer;
     procedure ArrowMouseUp(Sender: TObject; Button: TMouseButton; Shift: TShiftState; X, Y: Integer);
     procedure ArrowMouseDown(Sender: TObject; Button: TMouseButton; Shift: TShiftState; X, Y: Integer);
@@ -83,7 +85,7 @@ end;
 procedure Tf_handpad.SetLang;
 begin
   Caption:=rsHandpad;
-  FlipNS.Caption:=rsFlipNS;
+  Label1.Caption:=rsFlipNS;
 end;
 
 procedure Tf_handpad.SetMount(m:T_mount);
