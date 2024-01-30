@@ -5786,3 +5786,7 @@ msgstr ""
 msgid "Error, duplicate name %s for image type!"
 msgstr ""
 
+#: u_translation:rsscanthisserv
+msgid "Scan this server"
+msgstr ""
+
