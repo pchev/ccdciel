@@ -58,6 +58,7 @@ object f_script: Tf_script
         Align = alClient
         Constraints.MaxHeight = 28
         ItemHeight = 24
+        OnChange = ComboBoxScriptChange
         OnKeyDown = ComboBoxScriptKeyDown
         ParentFont = False
         TabOrder = 0
@@ -84,12 +85,13 @@ object f_script: Tf_script
       ClientWidth = 226
       TabOrder = 3
       Visible = False
-      object ScriptParam: TEdit
+      object ScriptParam: TComboBox
         Left = 0
         Height = 32
         Top = 0
         Width = 226
         Align = alClient
+        ItemHeight = 24
         TabOrder = 0
       end
     end

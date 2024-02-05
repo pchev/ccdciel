@@ -922,6 +922,7 @@ function T_indimount.SetSite(long,lat,elev: double): boolean;
 begin
   result:=false;
   if GeographicCoord_prop<>nil then begin
+    if long<0 then long:=360+long;
     geo_lon.Value  := long;
     geo_lat.Value  := lat;
     geo_elev.Value := elev;

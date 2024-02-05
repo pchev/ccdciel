@@ -41,19 +41,20 @@ type
     BtnCopy: TButton;
     ButtonParam: TButton;
     ComboBoxScript: TComboBox;
-    ScriptParam: TEdit;
     led: TShape;
     Panel1: TPanel;
     Panel2: TPanel;
     Panel3: TPanel;
     Panel4: TPanel;
     Panel5: TPanel;
+    ScriptParam: TComboBox;
     Title: TLabel;
     procedure BtnCopyClick(Sender: TObject);
     procedure BtnScriptClick(Sender: TObject);
     procedure BtnRunClick(Sender: TObject);
     procedure BtnStopClick(Sender: TObject);
     procedure ButtonParamClick(Sender: TObject);
+    procedure ComboBoxScriptChange(Sender: TObject);
     procedure ComboBoxScriptKeyDown(Sender: TObject; var Key: Word;
       Shift: TShiftState);
   private
@@ -67,6 +68,9 @@ type
     FonMsg: TNotifyMsg;
     procedure msg(txt:string);
     function GetScriptList: TStrings;
+    procedure AddMRU(txt:string);
+    procedure SaveMRU;
+    procedure LoadMRU;
  public
     { public declarations }
     constructor Create(aOwner: TComponent); override;
@@ -90,6 +94,8 @@ implementation
 
 {$R *.lfm}
 uses LazFileUtils;
+
+const MaxMRU=10;
 
 { Tf_script }
 
@@ -129,6 +135,67 @@ begin
   if Assigned(FonMsg) then FonMsg(txt);
 end;
 
+procedure Tf_script.AddMRU(txt:string);
+var i: integer;
+begin
+  i := ScriptParam.Items.IndexOf(txt);
+  if (i < 0) and (ScriptParam.Items.Count >= MaxMRU) then
+    i := MaxMRU - 1;
+  if i >= 0 then
+    ScriptParam.Items.Delete(i);
+  ScriptParam.Items.Insert(0, txt);
+  ScriptParam.ItemIndex:=ScriptParam.Items.Count-1;
+  ScriptParam.ItemIndex := 0;
+  SaveMRU;
+end;
+
+procedure Tf_script.SaveMRU;
+var fn,sname: string;
+    f: Textfile;
+    i: integer;
+begin
+  i:=ComboBoxScript.ItemIndex;
+  sname:=ComboBoxScript.Items[i];
+  fn:=slash(ConfigDir)+'param_'+sname+'.lst';
+  AssignFile(f,fn);
+  Rewrite(f);
+  for i:=0 to ScriptParam.Items.Count-1 do begin
+    WriteLn(f,ScriptParam.Items[i]);
+  end;
+  CloseFile(f);
+end;
+
+procedure Tf_script.LoadMRU;
+var fn,sname,buf: string;
+    f: Textfile;
+    i: integer;
+begin
+  i:=ComboBoxScript.ItemIndex;
+  sname:=ComboBoxScript.Items[i];
+  fn:=slash(ConfigDir)+'param_'+sname+'.lst';
+  if FileExists(fn) then begin
+    panel5.Visible:=true;
+    ScriptParam.Clear;
+    AssignFile(f,fn);
+    Reset(f);
+    repeat
+      ReadLn(f,buf);
+      ScriptParam.Items.Add(buf);
+    until eof(f);
+    CloseFile(f);
+    ScriptParam.ItemIndex:=0;
+  end
+  else begin
+    ScriptParam.Clear;
+    panel5.Visible:=false;
+  end;
+end;
+
+procedure Tf_script.ComboBoxScriptChange(Sender: TObject);
+begin
+  LoadMRU;
+end;
+
 procedure Tf_script.RunStartupScript;
 var path,sname: string;
 begin
@@ -163,8 +230,10 @@ begin
     end else begin
       sname:=ComboBoxScript.Items[i];
       scdir:=TScriptDir(ComboBoxScript.Items.Objects[i]);
-      if panel5.Visible then
-        args:=trim(ScriptParam.text)
+      if panel5.Visible then begin
+        args:=trim(ScriptParam.text);
+        AddMRU(args);
+      end
       else
         args:='';
       if (sname='')or(scdir=nil) then exit;
@@ -365,6 +434,7 @@ begin
   s.CustomSort(@ScriptListCompare);
   ComboBoxScript.Items.Assign(s);
   ComboBoxScript.ItemIndex:=0;
+  ComboBoxScriptChange(ComboBoxScript);
   s.Free;
 end;
 
@@ -374,6 +444,7 @@ begin
   if sl='' then exit;
   i:=ComboBoxScript.Items.IndexOf(sl);
   if i>=0 then ComboBoxScript.ItemIndex:=i;
+  ComboBoxScriptChange(ComboBoxScript);
 end;
 
 function Tf_script.GetScriptList: TStrings;
