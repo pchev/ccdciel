@@ -65,10 +65,11 @@ object f_internalguider: Tf_internalguider
           ParentFont = False
           TabOrder = 0
           object ButtonGuide: TButton
-            Left = 16
+            AnchorSideTop.Control = ButtonStop
+            Left = 112
             Height = 25
             Hint = 'Start guiding.'
-            Top = 9
+            Top = 8
             Width = 75
             Caption = 'Guide'
             OnClick = ButtonGuideClick
@@ -76,10 +77,10 @@ object f_internalguider: Tf_internalguider
             TabOrder = 0
           end
           object ButtonStop: TButton
-            Left = 232
+            Left = 240
             Height = 25
             Hint = 'Stop guidng or calibration'
-            Top = 9
+            Top = 8
             Width = 75
             Caption = 'Stop'
             OnClick = ButtonStopClick
@@ -87,10 +88,10 @@ object f_internalguider: Tf_internalguider
             TabOrder = 1
           end
           object ButtonCalibrate: TButton
-            Left = 136
+            Left = 8
             Height = 25
             Hint = 'Calibrates the guider. Results will be written to tab advanced.'
-            Top = 9
+            Top = 472
             Width = 75
             Caption = 'Calibrate'
             OnClick = ButtonCalibrateClick
@@ -185,11 +186,12 @@ object f_internalguider: Tf_internalguider
           end
           object led: TShape
             AnchorSideLeft.Side = asrBottom
+            AnchorSideTop.Control = ButtonStop
             AnchorSideTop.Side = asrCenter
-            Left = 104
+            Left = 208
             Height = 14
             Hint = 'Uncalibrated'
-            Top = 14
+            Top = 13
             Width = 14
             BorderSpacing.Around = 4
             Brush.Color = clGray
@@ -299,6 +301,16 @@ object f_internalguider: Tf_internalguider
             Caption = 'LabelInfo3'
             ParentColor = False
           end
+          object ButtonLoop: TButton
+            AnchorSideTop.Control = ButtonStop
+            Left = 8
+            Height = 25
+            Top = 8
+            Width = 75
+            Caption = 'Loop'
+            OnClick = ButtonLoopClick
+            TabOrder = 9
+          end
         end
       end
       object TabSheetCamera: TTabSheet
@@ -326,33 +338,14 @@ object f_internalguider: Tf_internalguider
             ClientHeight = 103
             ClientWidth = 338
             TabOrder = 0
-            object ButtonLoop: TButton
-              Left = 8
-              Height = 25
-              Top = 9
-              Width = 75
-              Caption = 'Loop'
-              OnClick = ButtonLoopClick
-              TabOrder = 0
-            end
-            object ButtonStop1: TButton
-              Left = 96
-              Height = 25
-              Hint = 'Stop loop'
-              Top = 9
-              Width = 104
-              Caption = 'Stop'
-              OnClick = ButtonStopClick
-              TabOrder = 1
-            end
             object ButtonDark: TButton
-              Left = 216
+              Left = 11
               Height = 25
-              Top = 9
+              Top = 8
               Width = 75
               Caption = 'Dark'
               OnMouseDown = ButtonDarkMouseDown
-              TabOrder = 2
+              TabOrder = 0
             end
             object LabelDark: TLabel
               Left = 11
@@ -928,8 +921,8 @@ object f_internalguider: Tf_internalguider
             Width = 340
             Align = alClient
             Caption = 'Calibration options'
-            ClientHeight = 186
-            ClientWidth = 340
+            ClientHeight = 156
+            ClientWidth = 336
             TabOrder = 1
             object measure_method2: TCheckBox
               Left = 8
@@ -1427,8 +1420,8 @@ object f_internalguider: Tf_internalguider
             Width = 340
             Align = alClient
             Caption = 'Calibration results:'
-            ClientHeight = 616
-            ClientWidth = 340
+            ClientHeight = 586
+            ClientWidth = 336
             TabOrder = 0
             object Label5: TLabel
               AnchorSideTop.Control = pa1

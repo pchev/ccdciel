@@ -44,14 +44,13 @@ type
     BtnZoom1: TSpeedButton;
     BtnZoom2: TSpeedButton;
     BtnZoomAdjust: TSpeedButton;
+    ButtonLoop: TButton;
     ButtonSetLock: TSpeedButton;
     ButtonSetTemp: TButton;
     ButtonDark: TButton;
     ButtonCalibrate: TButton;
-    ButtonLoop: TButton;
     ButtonGuide: TButton;
     ButtonStop: TButton;
-    ButtonStop1: TButton;
     cbGuideLock: TCheckBox;
     cbDrawSlit: TCheckBox;
     cbSpectro: TCheckBox;
@@ -513,7 +512,6 @@ begin
   Label4.Caption:=rsHysteresis+':';
   TabSheetCamera.Caption:=rsCamera;
   ButtonLoop.Caption:=rsLoop;
-  ButtonStop1.Caption:=rsStopLoop;
   ButtonDark.Caption:=rsDark;
   MenuItemCaptureDark.Caption:=rsCreateFromCa;
   MenuItemLoadDark.Caption:=rsLoadDarkFile;
