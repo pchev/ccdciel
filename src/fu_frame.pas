@@ -59,6 +59,7 @@ type
     destructor  Destroy; override;
     procedure SetLang;
     procedure ClearRoi;
+    procedure SetRoi(RoiName: string);
     property onSet: TNotifyEvent read FonSet write FonSet;
     property onReset: TNotifyEvent read FonReset write FonReset;
   end;
@@ -112,6 +113,19 @@ begin
     FY.Text:=IntToStr(TRoi(RoiList.Items.Objects[i]).y);
     FWidth.Text:=IntToStr(TRoi(RoiList.Items.Objects[i]).w);
     FHeight.Text:=IntToStr(TRoi(RoiList.Items.Objects[i]).h);
+  end;
+end;
+
+procedure Tf_frame.SetRoi(RoiName: string);
+var i: integer;
+begin
+  for i:=0 to RoiList.Items.Count-1 do begin
+    if RoiList.Items[i]=RoiName then begin
+      RoiList.ItemIndex:=i;
+      RoiListChange(RoiList);
+      if Assigned(FonSet) then FonSet(self);
+      break;
+    end;
   end;
 end;
 

@@ -1503,6 +1503,7 @@ begin
   TemperatureSlope:=0;
   learningvcurve:=false;
   autofocusing:=false;
+  LastROIname:='';
   CameraProcessingImage:=false;
   CameraProcessingNum:=0;
   CancelAutofocus:=false;
@@ -2781,6 +2782,7 @@ begin
   f_setup.onMsg:=@NewMessage;
 
   SetOptions;
+  f_frame.SetRoi(LastROIname);
 
   str:=config.GetValue('/Sequence/Targets','');
   if str<>'' then f_sequence.LoadTargets(str);
@@ -4769,6 +4771,7 @@ begin
      f_frame.RoiList.Items.AddObject(roi.name,roi);
   end;
   f_frame.PanelRoi.Visible:=(n>0);
+  LastROIname:=config.GetValue('/Sensor/ROI/ROIname','');
   CanSetGainOffset:=config.GetValue('/Sensor/CanSetGain',false);
   if CanSetGainOffset<>camera.CanSetGain then begin
     camera.CanSetGain:=CanSetGainOffset;
@@ -6165,6 +6168,10 @@ end;
 procedure Tf_main.SetFrame(Sender: TObject);
 var x,y,w,h: integer;
 begin
+  if Sender=f_frame then begin
+    LastROIname:=f_frame.RoiList.Text;
+    config.SetValue('/Sensor/ROI/ROIname',LastROIname);
+  end;
   x:=StrToIntDef(f_frame.FX.Text,-1);
   y:=StrToIntDef(f_frame.FY.Text,-1);
   w:=StrToIntDef(f_frame.FWidth.Text,-1);
@@ -6174,6 +6181,8 @@ end;
 
 procedure Tf_main.ResetFrame(Sender: TObject);
 begin
+  LastROIname:='';
+  config.SetValue('/Sensor/ROI/ROIname',LastROIname);
   camera.ResetFrame;
 end;
 
@@ -7356,6 +7365,7 @@ begin
    devConnected:   begin
                    if f_devicesconnection.LabelCamera.Font.Color<>clGreen then NewMessage(Format(rsConnected, [rsCamera]),1);
                    f_devicesconnection.LabelCamera.Font.Color:=clGreen;
+                   f_frame.SetRoi(LastROIname);
                    wait(1);
                    cool:=camera.Cooler;
                    CameraCoolerChange(cool);
@@ -9144,8 +9154,10 @@ begin
     ShowActiveTools;
 
     SetConfig;
-    if loadopt then SetOptions;
-
+    if loadopt then begin
+     SetOptions;
+     f_frame.SetRoi(LastROIname);
+    end;
 
     if config.GetValue('/Filters/Num',-1)<0 then begin //new empty profile, open options
       f_option.PageControl1.ActivePageIndex:=1;

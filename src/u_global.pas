@@ -429,6 +429,7 @@ var
   PHD2GuideSetLock,InternalGuiderSetLockPosition: boolean;
   PHD2GuideLockX, PHD2GuideLockY: double;
   astrometryResolver: integer;
+  LastROIname: string;
   OrigX, OrigY,img_Height,img_Width,GuideOrigX, GuideOrigY,guideimg_Height,guideimg_Width : integer;
   FinderOrigX, FinderOrigY,finderimg_Height,finderimg_Width : integer;
   ImgFrameX,ImgFrameY,ImgFrameW,ImgFrameH: integer;
