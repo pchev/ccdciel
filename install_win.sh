@@ -46,6 +46,7 @@ if [ $OS_TARGET = win64 ]; then
   unzip -d $destdir system_integration/Windows/data/exiv2-win64.zip
   unzip -d $destdir/scripts/python system_integration/Windows/data/python-3.8.10-embed-amd64.zip
 fi
+unzip -d $destdir/scripts/python system_integration/Windows/data/python-pyserial.zip
 
 install -v -m 644 scripts/ccdciel.py  $destdir/scripts/ccdciel.py
 install -v -m 644 scripts/ccdciel.winembed  $destdir/scripts/python/ccdciel.py
