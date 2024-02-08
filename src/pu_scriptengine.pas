@@ -2538,6 +2538,11 @@ try
      PyProcess.ShowWindow:=swoHIDE;
      if output<>nil then PyProcess.Options := [poUsePipes, poStdErrToOutPut];
   end;
+  {$ifdef mswindows}
+  if pycmd=defPython then begin
+     pypath:=pypath+';'+ConfigDir;
+  end;
+  {$endif}
   PyProcess.Executable:=pycmd;
   PyProcess.Parameters:=param;
   PyProcess.Environment.Clear;
