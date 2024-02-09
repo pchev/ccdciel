@@ -252,7 +252,7 @@ if FScriptType=stPascal then begin
     Startdebug;
 end
 else if FScriptType=stPython then begin
-  fn:=slash(TmpDir)+'tmpscript';
+  fn:=slash(ConfigDir)+'tmpscript';
   SynEdit1.Lines.SaveToFile(fn);
   args:=trim(params.Text);
   DebugMemo.Clear;
@@ -277,7 +277,7 @@ if FScriptType=stPascal then begin
   end;
 end
 else if FScriptType=stPython then begin
-  fn:=slash(TmpDir)+'tmpscript';
+  fn:=slash(ConfigDir)+'tmpscript';
   SynEdit1.Lines.SaveToFile(fn);
   args:=trim(params.Text);
   DebugMemo.Clear;
