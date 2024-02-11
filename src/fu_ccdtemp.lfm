@@ -59,7 +59,7 @@ object f_ccdtemp: Tf_ccdtemp
         ParentFont = False
       end
       object Current: TLabel
-        Left = 62
+        Left = 64
         Height = 18
         Top = 4
         Width = 19
@@ -85,16 +85,16 @@ object f_ccdtemp: Tf_ccdtemp
         AnchorSideTop.Side = asrCenter
         Left = 4
         Height = 18
-        Top = 7
+        Top = 5
         Width = 52
         Caption = 'Setpoint'
         ParentColor = False
         ParentFont = False
       end
       object Setpoint: TFloatSpinEdit
-        Left = 61
+        Left = 64
         Height = 28
-        Top = 2
+        Top = 0
         Width = 68
         Constraints.MaxHeight = 28
         MaxValue = 100
@@ -105,9 +105,9 @@ object f_ccdtemp: Tf_ccdtemp
       object BtnSet: TButton
         AnchorSideTop.Control = Setpoint
         AnchorSideTop.Side = asrCenter
-        Left = 132
+        Left = 139
         Height = 24
-        Top = 4
+        Top = 2
         Width = 80
         Caption = 'Set'
         OnClick = BtnSetClick
@@ -136,22 +136,28 @@ object f_ccdtemp: Tf_ccdtemp
         TabOrder = 0
       end
       object Label3: TLabel
+        AnchorSideLeft.Control = CCDcooler
+        AnchorSideLeft.Side = asrBottom
         AnchorSideTop.Control = CCDcooler
         AnchorSideTop.Side = asrCenter
-        Left = 100
+        Left = 79
         Height = 18
         Top = 4
         Width = 40
+        BorderSpacing.Left = 6
         Caption = 'Power'
         ParentColor = False
       end
       object Power: TLabel
+        AnchorSideLeft.Control = Label3
+        AnchorSideLeft.Side = asrBottom
         AnchorSideTop.Control = CCDcooler
         AnchorSideTop.Side = asrCenter
-        Left = 156
+        Left = 127
         Height = 18
         Top = 4
         Width = 5
+        BorderSpacing.Left = 8
         Caption = '-'
         ParentColor = False
       end
