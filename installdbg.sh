@@ -48,6 +48,8 @@ install -v -m 755 src/ccdciel  $destdir/bin/ccdciel
 install -v -m 755 scripts/astrometry.sh  $destdir/share/ccdciel/scripts/astrometry.sh
 install -v -m 755 scripts/astrometry-blind.sh  $destdir/share/ccdciel/scripts/astrometry-blind.sh
 install -v -m 755 scripts/astrometry-online.sh  $destdir/share/ccdciel/scripts/astrometry-online.sh
+install -v -m 755 scripts/astrometry-online.bat  $destdir/share/ccdciel/scripts/astrometry-online.bat
+install -v -m 644 scripts/client.py  $destdir/share/ccdciel/scripts/client.py
 install -v -m 755 scripts/astrometry-macos.sh  $destdir/share/ccdciel/scripts/astrometry-macos.sh
 install -v -m 644 scripts/ccdciel.py  $destdir/share/ccdciel/scripts/ccdciel.py
 install -v -m 644 scripts/scope_park.script  $destdir/share/ccdciel/scripts/scope_park.script
