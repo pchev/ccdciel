@@ -80,7 +80,7 @@ type
     procedure TplPSScriptLine(Sender: TObject);
   private
     { private declarations }
-    FScriptFilename: string;
+    FScriptFilename,FScriptArgs: string;
     Ffits : TFits;
     Fdevicesconnection:Tf_devicesconnection;
     Fcapture: Tf_capture;
@@ -307,6 +307,7 @@ type
     property Astrometry: TAstrometry read Fastrometry write Fastrometry;
     property Planetarium: TPlanetarium read Fplanetarium write Fplanetarium;
     property ScriptFilename: string read FScriptFilename;
+    property ScriptArgs: string read FScriptArgs;
     property InternalGuider: Tf_internalguider read Finternalguider write Finternalguider;
     property Finder: Tf_finder read FFinder write FFinder;
     property Switch: TSwitches read FSwitch write FSwitch;
@@ -979,6 +980,7 @@ begin
   result:=false;
   msg(Format(rsRunScript2, [sname+blank+args]));
   FScriptFilename:=sname;
+  FScriptArgs:=args;
   fn:=slash(path)+sname+'.script';
   st:=ScriptType(fn);
   if st=stPython then begin

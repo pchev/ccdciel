@@ -55,8 +55,7 @@ type
     procedure BtnStopClick(Sender: TObject);
     procedure ButtonParamClick(Sender: TObject);
     procedure ComboBoxScriptChange(Sender: TObject);
-    procedure ComboBoxScriptKeyDown(Sender: TObject; var Key: Word;
-      Shift: TShiftState);
+    procedure ComboBoxScriptKeyDown(Sender: TObject; var Key: Word; Shift: TShiftState);
   private
     { private declarations }
     Fcamera: T_camera;
@@ -71,6 +70,8 @@ type
     procedure AddMRU(txt:string);
     procedure SaveMRU;
     procedure LoadMRU;
+    function  GetScriptName: string;
+    procedure SetScriptName(value: string);
  public
     { public declarations }
     constructor Create(aOwner: TComponent); override;
@@ -88,6 +89,7 @@ type
     property Astrometry: TAstrometry read Fastrometry write Fastrometry;
     property onMsg: TNotifyMsg read FonMsg write FonMsg;
     property ScriptList: TStrings read GetScriptList;
+    property ScriptName: string read GetScriptName write SetScriptName;
   end;
 
 implementation
@@ -189,6 +191,23 @@ begin
     ScriptParam.Clear;
     panel5.Visible:=false;
   end;
+end;
+
+function  Tf_script.GetScriptName: string;
+begin
+  result:=ComboBoxScript.Text;
+end;
+
+procedure Tf_script.SetScriptName(value: string);
+var i: integer;
+begin
+  i:=ComboBoxScript.Items.IndexOf(value);
+  if i >= 0 then begin
+    ComboBoxScript.ItemIndex:=i;
+    LoadMRU;
+  end
+  else
+    ComboBoxScript.Text:=value;
 end;
 
 procedure Tf_script.ComboBoxScriptChange(Sender: TObject);

@@ -917,6 +917,7 @@ type
     procedure CameraFPSChange(Sender: TObject);
     procedure ShowLastImage(Sender: TObject);
     procedure ResetPreviewStack(Sender: TObject);
+    procedure CaptureFrameTypeChange(Sender: TObject);
     Procedure StopExposure(Sender: TObject);
     procedure StopPreview;
     Procedure StartPreviewExposure(Sender: TObject);
@@ -1810,6 +1811,7 @@ begin
 
   f_capture:=Tf_capture.Create(self);
   f_capture.onResetStack:=@ResetPreviewStack;
+  f_capture.onFrameTypeChange:=@CaptureFrameTypeChange;
   f_capture.onStartExposure:=@StartCaptureExposure;
   f_capture.onAbortExposure:=@StopExposure;
   f_capture.onMsg:=@NewMessage;
@@ -3245,8 +3247,13 @@ begin
   if (f_scriptengine.ScriptFilename<>'startup')and
      (f_scriptengine.ScriptFilename<>'shutdown') and
      (f_scriptengine.ScriptFilename<>'unattended_error')
-     then
-      f_script.ComboBoxScript.Text:=f_scriptengine.ScriptFilename;
+     then begin
+      f_script.ScriptName:=f_scriptengine.ScriptFilename;
+      if f_scriptengine.ScriptArgs>'' then begin
+        f_script.panel5.Visible:=true;
+        f_script.ScriptParam.Text:=f_scriptengine.ScriptArgs;
+      end;
+     end;
 end;
 
 procedure Tf_main.ScriptAfterExecute(Sender: TObject);
@@ -5476,7 +5483,7 @@ begin
      config.SetValue('/Files/CustomHeader/Key'+inttostr(i),CustomHeaders[i].key);
      config.SetValue('/Files/CustomHeader/Value'+inttostr(i),CustomHeaders[i].value);
    end;
-   config.SetValue('/Script/ScriptName',f_script.ComboBoxScript.Text);
+   config.SetValue('/Script/ScriptName',f_script.ScriptName);
    config.SetValue('/Temperature/Setpoint',f_ccdtemp.Setpoint.Value);
    config.SetValue('/Preview/Exposure',f_preview.ExpTime.Text);
    config.SetValue('/Preview/Binning',f_preview.Binning.Text);
@@ -10661,6 +10668,12 @@ begin
     RunningCapture:=savecapture;
     RecenteringTarget:=false;
   end;
+end;
+
+procedure Tf_main.CaptureFrameTypeChange(Sender: TObject);
+begin
+  // run custom frame type script immediatelly when changed interactively
+  camera.InitFrameType(f_capture.FrameType)
 end;
 
 function Tf_main.PrepareCaptureExposure(canwait:boolean):boolean;

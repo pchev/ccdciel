@@ -92,6 +92,7 @@ type
     FonStartExposure: TNotifyEvent;
     FonAbortExposure: TNotifyEvent;
     FonResetStack: TNotifyEvent;
+    FonFrameTypeChange: TNotifyEvent;
     procedure SetExposureTime(val: double);
     function GetGain:integer;
     procedure SetGain(value:integer);
@@ -122,6 +123,8 @@ type
     property onAbortExposure: TNotifyEvent read FonAbortExposure write FonAbortExposure;
     property onResetStack: TNotifyEvent read FonResetStack write FonResetStack;
     property onMsg: TNotifyMsg read FonMsg write FonMsg;
+    property onFrameTypeChange: TNotifyEvent read FonFrameTypeChange write FonFrameTypeChange;
+
 end;
 
 implementation
@@ -307,6 +310,10 @@ begin
   end;
   ExpTime.Enabled:=(cbFrameType.ItemIndex<>1);
   if ExpTime.Enabled and (ExpTime.Text='0') then ExpTime.ItemIndex:=0;
+  if Sender<>nil then begin
+    // run custom frame type script immediatelly when changed interactively
+    if assigned(FonFrameTypeChange) then FonFrameTypeChange(self);
+  end;
 end;
 
 procedure Tf_capture.Stop;
