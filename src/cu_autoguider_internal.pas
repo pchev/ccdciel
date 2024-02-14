@@ -513,7 +513,7 @@ begin
   if initialize then
   begin
    if GuideLock then begin
-   vmax:=0;
+    vmax:=0;
     hfd1:=-1;
     xc:=xsize div 2;
     yc:=ysize div 2;
