@@ -53,11 +53,12 @@ type
     GuideLog: TextFile;
     FPaused, FSettling, FSettlingInRange,PulseGuiding,OffsetFromTarget: boolean;
     InternalguiderCalibratingMeridianFlip : boolean;
-    FSettleStartTime, FSettleTime: double;
+    FSettleStartTime, FSettleTime, SearchCorrX, SearchCorrY: double;
     TimerWaitPulseGuiding: TSimpleTimer;
     FRecoveringCamera: boolean;
     FRecoveringCameraCount: integer;
     FSpectroTarget: TSpectroTarget;
+    StarSelectedManually: boolean;
     function  measure_drift(var initialize: boolean; out drX,drY :double) : integer;
     function angular_distance(a1,a2:double):double;
     Procedure StartGuideExposure;
@@ -198,6 +199,7 @@ begin
   FSpectroTarget.RA:=NullCoord;
   FSpectroTarget.DEC:=NullCoord;
   FSpectroTarget.valid:=false;
+  StarSelectedManually:=false;
 end;
 
 Destructor T_autoguider_internal.Destroy;
@@ -453,6 +455,7 @@ var
   GuideLock: boolean;
   drift_arrayX,drift_arrayY : array of double;
   starx,stary,frx,fry,frw,frh: integer;
+  r,xs,ys: integer;
 const
     searchA=28;//square search area
     overlap=6;
@@ -467,7 +470,7 @@ begin
   LogFlux:=0;
 
   FGuideBmp.Canvas.Pen.Color:=clYellow;
-  FGuideBmp.Canvas.Pen.Mode:=pmMerge;
+  FGuideBmp.Canvas.Pen.Mode:=pmCopy;
   FGuideBmp.Canvas.Pen.Style:=psSolid;
   FGuideBmp.Canvas.Pen.Width:=1;
 
@@ -482,6 +485,8 @@ begin
     dithery:=0;
     drX:=0; // initial drift is 0
     drY:=0;
+    SearchCorrX:=0;
+    SearchCorrY:=0;
     if OffsetFromTarget then
       // set by target, do not clear
       OffsetFromTarget:=false
@@ -508,7 +513,7 @@ begin
   if initialize then
   begin
    if GuideLock then begin
-    vmax:=0;
+   vmax:=0;
     hfd1:=-1;
     xc:=xsize div 2;
     yc:=ysize div 2;
@@ -696,6 +701,23 @@ begin
      end;
      xy_array_old[0].x1:=xy_array[0].x1;
      xy_array_old[0].y1:=xy_array[0].y1;
+
+     if FSettling and not (InternalguiderCalibrating or InternalguiderCalibratingBacklash) then begin
+       // correct search position for last move
+       xy_array_old[0].x2:=xy_array_old[0].x2- SearchCorrX;
+       xy_array_old[0].y2:=xy_array_old[0].y2+ SearchCorrY;
+       // mark this position
+       FGuideBmp.Canvas.Pen.Mode:=pmCopy;
+       FGuideBmp.Canvas.Pen.Style:=psSolid;
+       FGuideBmp.Canvas.Pen.Width:=1;
+       FGuideBmp.Canvas.Pen.Color:=clRed;
+       r:=round(finternalguider.SearchWinMin/4);
+       xs:=round(xy_array_old[0].x2);
+       ys:=round(xy_array_old[0].y2);
+       FGuideBmp.Canvas.Frame(xs-r,ys-r,xs+r,ys+r);
+       FGuideBmp.Canvas.Pen.Color:=clYellow;
+     end;
+
      // search star near previous position
      guidefits.FindStarPos2(round(xy_array_old[0].x2),round(xy_array_old[0].y2),finternalguider.SearchWinMin,xc,yc,vmax,bg,bgdev);
      if FSettling then begin
@@ -1012,6 +1034,7 @@ begin
   LastBacklashDuration:=0;
 
   SelectSpectroTarget;
+  StarSelectedManually:=false;
 
   InternalguiderInitialize:=true; //initialize;
 
@@ -1099,7 +1122,7 @@ procedure T_autoguider_internal.InternalAutoguiding;
 var i,maxpulse    : integer;
     RADuration,DECDuration,BacklashDuration,NewPulseDEC: LongInt;
     RADirection,DECDirection,pulsedir: string;
-    mflipcorr,PAsolar,moveRA2,dsettle,DecSign: double;
+    mflipcorr,PAsolar,moveRA2,dsettle,DecSign,SearchCorrRA,SearchCorrDec: double;
     meridianflip, largepulse: boolean;
 
           procedure track_solar_object;//neo and comet tracking
@@ -1287,6 +1310,7 @@ begin
     if moveRA2>0 then //going East increases the RA
     begin
        pulseRA:=min(finternalguider.LongestPulse,round(1000*abs(moveRA2/finternalguider.pulsegainEast))); {duration msec}
+       SearchCorrRA := abs(pulseRA * finternalguider.pulsegainNorth/1000); // next expected move
        if pulseRA>finternalguider.shortestPulse then //Large enough correction to follow by motors/relays. Complementary with minimum_move
        begin
          //msg('East: '+inttostr(pulseRA),3);
@@ -1300,6 +1324,7 @@ begin
     if moveRA2<0 then //going West
     begin
       pulseRA:=min(finternalguider.LongestPulse,round(1000*abs(moveRA2/finternalguider.pulsegainWest))); {duration msec}
+      SearchCorrRA := -abs(pulseRA * finternalguider.pulsegainNorth/1000); // next expected move
       if pulseRA>finternalguider.shortestPulse then
       begin
         //msg('West: '+inttostr(pulseRA),3);
@@ -1385,6 +1410,7 @@ begin
     if moveDEC>0 then //go North increase the DEC.
     begin
       pulseDEC:=min(finternalguider.LongestPulse,round(1000*abs(moveDEC/finternalguider.pulsegainNorth))); {duration msec}
+      SearchCorrDec :=  abs(pulseDEC * finternalguider.pulsegainNorth/1000);  // next expected move
       if pulseDEC>finternalguider.shortestPulse then
       begin
         //msg('North: '+inttostr(pulseDEC),3);
@@ -1398,6 +1424,7 @@ begin
     if moveDEC<0 then //go South
     begin
       pulseDEC:=min(finternalguider.LongestPulse,round(1000*abs(moveDEC/finternalguider.pulsegainSouth))); {duration msec}
+      SearchCorrDec :=  -abs(pulseDEC * finternalguider.pulsegainNorth/1000);  // next expected move
       if pulseDEC>finternalguider.shortestPulse then
       begin
         //msg('South: '+inttostr(pulseDEC),3);
@@ -1419,6 +1446,13 @@ begin
     xy_trend[0].racorr:=-moveRA;//store RA correction in pixels for trend
     xy_trend[0].deccorr:=+moveDEC;//store DEC correction in pixels for trend
 
+    if FSettling and finternalguider.SpectroFunctions and (moveRA2<>0) and (moveDEC<>0) then begin
+      rotate2(((finternalguider.PA+mflipcorr)*pi/180),SearchCorrRA,SearchCorrDec, SearchCorrX,SearchCorrY);
+    end
+    else begin
+      SearchCorrX:=0;
+      SearchCorrY:=0;
+    end;
 
     if InternalguiderRunning then begin
       // write log
@@ -2302,6 +2336,7 @@ begin
     FSpectroTarget.RA:=TargetRa;
     FSpectroTarget.DEC:=TargetDec;
     FSpectroTarget.valid:=true;
+    StarSelectedManually:=false;
     result:=true;
   end
   else begin
@@ -2378,19 +2413,32 @@ begin
     end;
   end
   else begin
-    // search near center
-    finternalguider.GuideLockNextX:=-1;
-    finternalguider.GuideLockNextY:=-1;
-    result:=false;
+    if StarSelectedManually then begin
+      result:=true;
+    end
+    else begin
+      // search near center
+      finternalguider.GuideLockNextX:=-1;
+      finternalguider.GuideLockNextY:=-1;
+      result:=false;
+    end;
   end;
 end;
 
 procedure T_autoguider_internal.SpectroSelectNewStar(x,y: integer);
 begin
-  // new initialization to select new star at  GuideLockNextX, GuideLockNextY
-  finternalguider.GuideLockNextX:=x;
-  finternalguider.GuideLockNextY:=y;
-  InternalguiderInitialize:=true;
+  if InternalguiderGuiding then begin
+    // new initialization to select new star at  GuideLockNextX, GuideLockNextY
+    finternalguider.GuideLockNextX:=x;
+    finternalguider.GuideLockNextY:=y;
+    InternalguiderInitialize:=true;
+  end
+  else begin
+    // select star for next start
+    StarSelectedManually:=true;
+    finternalguider.GuideLockNextX:=x;
+    finternalguider.GuideLockNextY:=y;
+  end;
 end;
 
 end.

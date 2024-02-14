@@ -17053,7 +17053,7 @@ if (guidefits.HeaderInfo.naxis>0) and guidefits.ImageValid then begin
   guideimg_Height:=ImaGuideBmp.Height;
   if f_internalguider.SpectroFunctions then begin
     // always draw lock position
-    ImaGuideBmp.Canvas.Pen.Mode:=pmMerge;
+    ImaGuideBmp.Canvas.Pen.Mode:=pmCopy;
     ImaGuideBmp.Canvas.Pen.Style:=psSolid;
     ImaGuideBmp.Canvas.Pen.Width:=1;
     xs:=round(f_internalguider.LockX);
