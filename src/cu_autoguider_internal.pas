@@ -455,7 +455,7 @@ var
   GuideLock: boolean;
   drift_arrayX,drift_arrayY : array of double;
   starx,stary,frx,fry,frw,frh: integer;
-  r,xs,ys: integer;
+  r,xs1,xs2,ys1,ys2: integer;
 const
     searchA=28;//square search area
     overlap=6;
@@ -699,22 +699,21 @@ begin
        xy_array[0].x1:=finternalguider.LockX;
        xy_array[0].y1:=ysize-finternalguider.LockY;
      end;
+
      xy_array_old[0].x1:=xy_array[0].x1;
      xy_array_old[0].y1:=xy_array[0].y1;
 
-     if FSettling and not (InternalguiderCalibrating or InternalguiderCalibratingBacklash) then begin
+     if  not (InternalguiderCalibrating or InternalguiderCalibratingBacklash) then begin
+       xs1:=round(xy_array_old[0].x2);
+       ys1:=round(xy_array_old[0].y2);
        // correct search position for last move
        xy_array_old[0].x2:=xy_array_old[0].x2- SearchCorrX;
        xy_array_old[0].y2:=xy_array_old[0].y2+ SearchCorrY;
        // mark this position
-       FGuideBmp.Canvas.Pen.Mode:=pmCopy;
-       FGuideBmp.Canvas.Pen.Style:=psSolid;
-       FGuideBmp.Canvas.Pen.Width:=1;
        FGuideBmp.Canvas.Pen.Color:=clRed;
-       r:=round(finternalguider.SearchWinMin/4);
-       xs:=round(xy_array_old[0].x2);
-       ys:=round(xy_array_old[0].y2);
-       FGuideBmp.Canvas.Frame(xs-r,ys-r,xs+r,ys+r);
+       xs2:=round(xy_array_old[0].x2);
+       ys2:=round(xy_array_old[0].y2);
+       FGuideBmp.Canvas.Line(xs1,ys1,xs2,ys2);
        FGuideBmp.Canvas.Pen.Color:=clYellow;
      end;
 
@@ -1446,7 +1445,8 @@ begin
     xy_trend[0].racorr:=-moveRA;//store RA correction in pixels for trend
     xy_trend[0].deccorr:=+moveDEC;//store DEC correction in pixels for trend
 
-    if FSettling and finternalguider.SpectroFunctions and (moveRA2<>0) and (moveDEC<>0) then begin
+    if {FSettling and} finternalguider.SpectroFunctions and (moveRA2<>0) and (moveDEC<>0) then begin
+      SearchCorrRA:=SearchCorrRA*Guidethecos;
       rotate2(((finternalguider.PA+mflipcorr)*pi/180),SearchCorrRA,SearchCorrDec, SearchCorrX,SearchCorrY);
     end
     else begin
