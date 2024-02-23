@@ -282,7 +282,6 @@ const
   RestrictKey: array[1..NRestrictKey] of string = ('SIMPLE','BITPIX','NAXIS','NAXIS1','NAXIS2','NAXIS3','XTENSION','END');
   FocusDirIn=true;
   FocusDirOut=false;
-  MaxAutofocusCenterFrame=1500;
   FrameName: array[0..ord(high(TFrameType))] of string =('Light   ','Bias    ','Dark    ','Flat    '); // add space to header as INDI do
   FlatTimeName: array[0..1] of string=('Dusk','Dawn');
   PierSideName: array[0..3] of string=('pierEast', 'pierWest', 'pierUnknown','pierNotImplemented');
@@ -474,6 +473,7 @@ var
   AutofocusVcCheckHFDlist: array of double;
   AutofocusVcTemp, AutofocusVcTemp1, AutofocusVcTemp2: double;
   AutofocusInPlace, InplaceAutofocus, AutofocusPauseGuider, AutofocusMultiStarCenter: boolean;
+  AutofocusMultiStarCenterPct: integer;
   AutofocusStarList: TArrayDouble2;
   CancelAutofocus, Autofocusing, TerminateFocuserCalibration: Boolean;
   GotoInProgress, CancelGoto: boolean;

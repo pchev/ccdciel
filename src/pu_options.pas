@@ -52,6 +52,7 @@ type
     Label173: TLabel;
     Label174: TLabel;
     DefocusAmount: TSpinEdit;
+    Label175: TLabel;
     LabelTypeError: TLabel;
     PageType: TTabSheet;
     Panel34: TPanel;
@@ -60,6 +61,8 @@ type
     Panel37: TPanel;
     Panel38: TPanel;
     Panel39: TPanel;
+    AutofocusMultiStarCenterPct: TRadioGroup;
+    PanelImageCenter: TPanel;
     sgCustomType: TStringGrid;
     UseFinderSolver: TCheckBox;
     FinderSolver: TComboBox;
@@ -755,6 +758,7 @@ type
     procedure AstUseScriptClick(Sender: TObject);
     procedure AutofocusExpTimeChange(Sender: TObject);
     procedure AutofocusmodeClick(Sender: TObject);
+    procedure AutofocusMultiStarCenterClick(Sender: TObject);
     procedure AutoguiderBoxClick(Sender: TObject);
     procedure BtnDelHdrClick(Sender: TObject);
     procedure BtnDelRoiClick(Sender: TObject);
@@ -2054,6 +2058,11 @@ begin
   PanelNearFocus.Visible:=true;
   CheckFocuserDirection(Sender);
   ChangeAutofocusInPlace(Sender);
+end;
+
+procedure Tf_option.AutofocusMultiStarCenterClick(Sender: TObject);
+begin
+  PanelImageCenter.Visible:=AutofocusMultiStarCenter.Checked;
 end;
 
 procedure Tf_option.AstUseScriptClick(Sender: TObject);

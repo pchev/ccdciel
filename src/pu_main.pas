@@ -4900,6 +4900,7 @@ begin
      AutofocusPauseGuider:=true;
   if not f_sequence.Running then InplaceAutofocus:=AutofocusInPlace;
   AutofocusMultiStarCenter:=config.GetValue('/StarAnalysis/AutofocusMultiStarCenter',true);
+  AutofocusMultiStarCenterPct:=config.GetValue('/StarAnalysis/AutofocusMultiStarCenterPct',30);
   LoadFocusStar(config.GetValue('/StarAnalysis/AutofocusStarMag',4));
   FocusStarMagAdjust:=config.GetValue('/StarAnalysis/FocusStarMagAdjust',false);
   AutofocusDynamicNumPoint:=config.GetValue('/StarAnalysis/AutofocusDynamicNumPoint',7);
@@ -9433,6 +9434,13 @@ begin
    f_option.AutofocusSlew.Checked:=not ok;
    f_option.AutofocusPauseGuider.Checked:=config.GetValue('/StarAnalysis/AutofocusPauseGuider',AutofocusPauseGuider);
    f_option.AutofocusMultiStarCenter.Checked:=config.GetValue('/StarAnalysis/AutofocusMultiStarCenter',AutofocusMultiStarCenter);
+   i:=config.GetValue('/StarAnalysis/AutofocusMultiStarCenterPct',30);
+   if i=10 then f_option.AutofocusMultiStarCenterPct.ItemIndex:=0
+   else if i=20 then f_option.AutofocusMultiStarCenterPct.ItemIndex:=1
+   else if i=30 then f_option.AutofocusMultiStarCenterPct.ItemIndex:=2
+   else if i=40 then f_option.AutofocusMultiStarCenterPct.ItemIndex:=3
+   else f_option.AutofocusMultiStarCenterPct.ItemIndex:=4;
+   f_option.PanelImageCenter.Visible:=f_option.AutofocusMultiStarCenter.Checked;
    f_option.AutofocusDynamicNumPoint.Value:=config.GetValue('/StarAnalysis/AutofocusDynamicNumPoint',AutofocusDynamicNumPoint);
    f_option.AutofocusDynamicMovement.Value:=config.GetValue('/StarAnalysis/AutofocusDynamicMovement',AutofocusDynamicMovement);
    f_option.AutofocusPlanetNumPoint.Value:=config.GetValue('/StarAnalysis/AutofocusPlanetNumPoint',AutofocusPlanetNumPoint);
@@ -9804,6 +9812,12 @@ begin
      else
        config.SetValue('/StarAnalysis/AutofocusPauseGuider',true);
      config.SetValue('/StarAnalysis/AutofocusMultiStarCenter',f_option.AutofocusMultiStarCenter.Checked);
+     if f_option.AutofocusMultiStarCenterPct.ItemIndex=0 then i:=10
+     else if f_option.AutofocusMultiStarCenterPct.ItemIndex=1 then i:=20
+     else if f_option.AutofocusMultiStarCenterPct.ItemIndex=2 then i:=30
+     else if f_option.AutofocusMultiStarCenterPct.ItemIndex=3 then i:=40
+     else i:=50;
+     config.SetValue('/StarAnalysis/AutofocusMultiStarCenterPct',i);
      config.SetValue('/StarAnalysis/AutofocusDynamicNumPoint',f_option.AutofocusDynamicNumPoint.Value);
      config.SetValue('/StarAnalysis/AutofocusDynamicMovement',f_option.AutofocusDynamicMovement.Value);
      config.SetValue('/StarAnalysis/AutofocusPlanetNumPoint',f_option.AutofocusPlanetNumPoint.Value);
@@ -13913,7 +13927,7 @@ end;
 Procedure Tf_main.AutoFocusStart(Sender: TObject);
 var x,y,rx,ry,xc,yc,ns,n,i,s,s2,s3,s4,fs: integer;
     hfdlist: array of double;
-    vmax,meanhfd, med: double;
+    vmax,meanhfd, med, pctsize, maxsize: double;
     buf: string;
     fx,fy,fw,fh:TNumRange;
 begin
@@ -13982,11 +13996,7 @@ begin
   SetBinning(AutofocusBinning,AutofocusBinning);
   if AutofocusMultiStarCenter then begin  // reduce search area to image center
     camera.GetFrameRange(fx,fy,fw,fh);
-    if max(fh.max,fw.max)/min(fh.max,fw.max)>1.4 then // format ratio > 4/3
-      fs:=round(2*min(fh.max,fw.max)/3)  // format 3/2, use 2/3 height
-    else
-      fs:=round(min(fh.max,fw.max)/2); // format 4/3 or 1/1 use 1/2 height
-    fs:=min(fs,MaxAutofocusCenterFrame);
+    fs:=round(MinValue([sqrt(AutofocusMultiStarCenterPct*fh.max*fw.max/100),fh.max,fw.max]));
     rx:=round(max(0,(fw.max-fs)/2));
     ry:=round(max(0,(fh.max-fs)/2));
     camera.SetFrame(rx,ry,fs,fs);
