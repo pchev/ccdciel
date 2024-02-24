@@ -68,7 +68,7 @@ object f_option: Tf_option
     Top = 0
     Width = 740
     HorzScrollBar.Page = 711
-    VertScrollBar.Page = 686
+    VertScrollBar.Page = 670
     Align = alClient
     BorderStyle = bsNone
     ClientHeight = 687
@@ -3560,92 +3560,22 @@ object f_option: Tf_option
         end
         object PanelFocusStar: TPanel
           Left = 0
-          Height = 233
+          Height = 217
           Top = 359
           Width = 586
           Align = alTop
-          ClientHeight = 233
+          ClientHeight = 217
           ClientWidth = 586
           ParentFont = False
           TabOrder = 2
-          object Panel16: TPanel
-            Left = 1
-            Height = 82
-            Top = 1
-            Width = 584
-            Align = alTop
-            BevelOuter = bvNone
-            ClientHeight = 82
-            ClientWidth = 584
-            ParentFont = False
-            TabOrder = 2
-            object Label52: TLabel
-              AnchorSideTop.Control = AutofocusInPlace
-              AnchorSideTop.Side = asrCenter
-              Left = 1
-              Height = 18
-              Top = 26
-              Width = 103
-              Caption = 'Default behavior'
-              ParentColor = False
-              ParentFont = False
-            end
-            object AutofocusSlew: TRadioButton
-              AnchorSideTop.Control = AutofocusInPlace
-              AnchorSideTop.Side = asrCenter
-              Left = 170
-              Height = 22
-              Top = 24
-              Width = 136
-              Caption = 'Slew to focus star'
-              Checked = True
-              OnClick = ChangeAutofocusInPlace
-              ParentFont = False
-              TabOrder = 0
-              TabStop = True
-            end
-            object AutofocusInPlace: TRadioButton
-              AnchorSideTop.Control = Label67
-              AnchorSideTop.Side = asrBottom
-              Left = 352
-              Height = 22
-              Top = 24
-              Width = 105
-              BorderSpacing.Top = 4
-              Caption = 'Stay in place'
-              OnClick = ChangeAutofocusInPlace
-              ParentFont = False
-              TabOrder = 1
-            end
-            object LabelMultistarWarning: TLabel
-              AnchorSideTop.Control = AutofocusInPlace
-              AnchorSideTop.Side = asrBottom
-              Left = 4
-              Height = 18
-              Top = 48
-              Width = 7
-              BorderSpacing.Top = 2
-              Caption = '  '
-              ParentColor = False
-              ParentFont = False
-            end
-            object Label67: TLabel
-              Left = 1
-              Height = 18
-              Top = 2
-              Width = 279
-              Caption = 'When performing autofocus from a sequence'
-              ParentColor = False
-            end
-          end
           object AutofocusSlewStar: TGroupBox
             Left = 1
-            Height = 149
+            Height = 133
             Top = 83
             Width = 584
             Align = alClient
             Caption = 'Focus star selection'
-            ClientHeight = 119
+            ClientHeight = 103
             ClientWidth = 580
             ParentFont = False
             TabOrder = 0
@@ -3728,12 +3658,12 @@ object f_option: Tf_option
           end
           object AutofocusMultistar: TGroupBox
             Left = 1
-            Height = 149
+            Height = 133
             Top = 83
             Width = 584
             Align = alClient
             Caption = 'Focus star selection'
-            ClientHeight = 119
+            ClientHeight = 103
             ClientWidth = 580
             ParentFont = False
             TabOrder = 1
@@ -3749,76 +3679,125 @@ object f_option: Tf_option
             object AutofocusPauseGuider: TCheckBox
               Left = 8
               Height = 22
-              Top = 88
+              Top = 64
               Width = 228
               Caption = 'Pause guiding during auto-focus'
               ParentFont = False
               TabOrder = 0
             end
-            object AutofocusMultiStarCenter: TCheckBox
+            object Label175: TLabel
+              AnchorSideTop.Side = asrCenter
               Left = 8
+              Height = 18
+              Top = 32
+              Width = 182
+              Caption = 'Sensor area used for focusing'
+              ParentColor = False
+            end
+            object AutofocusMultiStarCenterPct: TComboBox
+              AnchorSideLeft.Control = Label175
+              AnchorSideLeft.Side = asrBottom
+              AnchorSideTop.Control = Label175
+              AnchorSideTop.Side = asrCenter
+              Left = 202
+              Height = 32
+              Top = 25
+              Width = 70
+              BorderSpacing.Left = 12
+              ItemHeight = 24
+              ItemIndex = 2
+              Items.Strings = (
+                '10'
+                '20'
+                '30'
+                '40'
+                '50'
+                '100'
+              )
+              TabOrder = 1
+              Text = '30'
+            end
+            object Label176: TLabel
+              AnchorSideLeft.Control = AutofocusMultiStarCenterPct
+              AnchorSideLeft.Side = asrBottom
+              AnchorSideTop.Control = Label175
+              Left = 280
+              Height = 18
+              Top = 32
+              Width = 47
+              BorderSpacing.Left = 8
+              Caption = 'percent'
+              ParentColor = False
+            end
+          end
+          object Panel16: TPanel
+            Left = 1
+            Height = 82
+            Top = 1
+            Width = 584
+            Align = alTop
+            BevelOuter = bvNone
+            ClientHeight = 82
+            ClientWidth = 584
+            ParentFont = False
+            TabOrder = 2
+            object Label52: TLabel
+              AnchorSideTop.Control = AutofocusInPlace
+              AnchorSideTop.Side = asrCenter
+              Left = 1
+              Height = 18
+              Top = 26
+              Width = 103
+              Caption = 'Default behavior'
+              ParentColor = False
+              ParentFont = False
+            end
+            object AutofocusSlew: TRadioButton
+              AnchorSideTop.Control = AutofocusInPlace
+              AnchorSideTop.Side = asrCenter
+              Left = 170
               Height = 22
-              Top = 33
-              Width = 247
-              Caption = 'Use only star near the image center'
-              OnClick = AutofocusMultiStarCenterClick
+              Top = 24
+              Width = 136
+              Caption = 'Slew to focus star'
+              Checked = True
+              OnClick = ChangeAutofocusInPlace
+              ParentFont = False
+              TabOrder = 0
+              TabStop = True
+            end
+            object AutofocusInPlace: TRadioButton
+              AnchorSideTop.Control = Label67
+              AnchorSideTop.Side = asrBottom
+              Left = 352
+              Height = 22
+              Top = 24
+              Width = 105
+              BorderSpacing.Top = 4
+              Caption = 'Stay in place'
+              OnClick = ChangeAutofocusInPlace
               ParentFont = False
               TabOrder = 1
             end
-            object PanelImageCenter: TPanel
-              AnchorSideLeft.Control = AutofocusMultiStarCenter
-              AnchorSideTop.Control = AutofocusMultiStarCenter
+            object LabelMultistarWarning: TLabel
+              AnchorSideTop.Control = AutofocusInPlace
               AnchorSideTop.Side = asrBottom
-              Left = 32
-              Height = 26
-              Top = 55
-              Width = 482
-              AutoSize = True
-              BorderSpacing.Left = 24
-              BevelOuter = bvNone
-              ClientHeight = 26
-              ClientWidth = 482
-              TabOrder = 2
-              object Label175: TLabel
-                AnchorSideTop.Control = AutofocusMultiStarCenterPct
-                AnchorSideTop.Side = asrCenter
-                Left = 0
-                Height = 18
-                Top = 4
-                Width = 184
-                Caption = 'Percentage of the sensor area'
-                ParentColor = False
-              end
-              object AutofocusMultiStarCenterPct: TRadioGroup
-                AnchorSideLeft.Control = Label175
-                AnchorSideLeft.Side = asrBottom
-                AnchorSideTop.Side = asrCenter
-                Left = 196
-                Height = 26
-                Top = 0
-                Width = 286
-                AutoFill = True
-                AutoSize = True
-                BorderSpacing.Left = 12
-                ChildSizing.LeftRightSpacing = 6
-                ChildSizing.EnlargeHorizontal = crsHomogenousChildResize
-                ChildSizing.EnlargeVertical = crsHomogenousChildResize
-                ChildSizing.ShrinkHorizontal = crsScaleChilds
-                ChildSizing.ShrinkVertical = crsScaleChilds
-                ChildSizing.Layout = cclLeftToRightThenTopToBottom
-                ChildSizing.ControlsPerLine = 5
-                ClientHeight = 22
-                ClientWidth = 282
-                Columns = 5
-                Items.Strings = (
-                  '10%'
-                  '20%'
-                  '30%'
-                  '40%'
-                  '50%'
-                )
-                TabOrder = 0
-              end
+              Left = 4
+              Height = 18
+              Top = 48
+              Width = 7
+              BorderSpacing.Top = 2
+              Caption = '  '
+              ParentColor = False
+              ParentFont = False
+            end
+            object Label67: TLabel
+              Left = 1
+              Height = 18
+              Top = 2
+              Width = 279
+              Caption = 'When performing autofocus from a sequence'
+              ParentColor = False
             end
           end
         end
@@ -3845,12 +3824,12 @@ object f_option: Tf_option
         end
         object GroupBoxExpert: TGroupBox
           Left = 0
-          Height = 91
-          Top = 592
+          Height = 107
+          Top = 576
           Width = 586
           Align = alClient
           Caption = 'Expert trick'
-          ClientHeight = 61
+          ClientHeight = 77
           ClientWidth = 582
           TabOrder = 4
           object Label174: TLabel

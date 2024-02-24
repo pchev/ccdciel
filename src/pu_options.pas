@@ -47,12 +47,14 @@ type
     CdCAdjustFrame: TCheckBox;
     AstUseOnline: TCheckBox;
     AstOnlineKey: TEdit;
+    AutofocusMultiStarCenterPct: TComboBox;
     FileNameSeqSep: TComboBox;
     GroupBoxExpert: TGroupBox;
     Label173: TLabel;
     Label174: TLabel;
     DefocusAmount: TSpinEdit;
     Label175: TLabel;
+    Label176: TLabel;
     LabelTypeError: TLabel;
     PageType: TTabSheet;
     Panel34: TPanel;
@@ -61,8 +63,6 @@ type
     Panel37: TPanel;
     Panel38: TPanel;
     Panel39: TPanel;
-    AutofocusMultiStarCenterPct: TRadioGroup;
-    PanelImageCenter: TPanel;
     sgCustomType: TStringGrid;
     UseFinderSolver: TCheckBox;
     FinderSolver: TComboBox;
@@ -203,7 +203,6 @@ type
     ButtonVoiceTest: TButton;
     ButtonVoiceAll: TButton;
     ButtonVoiceNone: TButton;
-    AutofocusMultiStarCenter: TCheckBox;
     BGneutralization: TCheckBox;
     Label14: TLabel;
     ObservatoryDB: TComboBox;
@@ -758,7 +757,6 @@ type
     procedure AstUseScriptClick(Sender: TObject);
     procedure AutofocusExpTimeChange(Sender: TObject);
     procedure AutofocusmodeClick(Sender: TObject);
-    procedure AutofocusMultiStarCenterClick(Sender: TObject);
     procedure AutoguiderBoxClick(Sender: TObject);
     procedure BtnDelHdrClick(Sender: TObject);
     procedure BtnDelRoiClick(Sender: TObject);
@@ -1246,8 +1244,9 @@ begin
   FocusStarMagAdjust.Caption:=rsAllowToSelec;
   AutofocusMultistar.Caption := rsFocusStarSel;
   label56.Caption := rsDetectMultip;
+  label175.Caption := rsSensorAreaUs;
+  label176.Caption := rsPercent;
   AutofocusPauseGuider.Caption:=rsPauseGuiding;
-  AutofocusMultiStarCenter.Caption:=rsUseOnlyStarN;
   Label101.Caption := rsTheMenuFileF;
   GroupBoxExpert.Caption:=rsExpertTrick;
   Label174.Caption:=rsDefocusAmoun;
@@ -2058,11 +2057,6 @@ begin
   PanelNearFocus.Visible:=true;
   CheckFocuserDirection(Sender);
   ChangeAutofocusInPlace(Sender);
-end;
-
-procedure Tf_option.AutofocusMultiStarCenterClick(Sender: TObject);
-begin
-  PanelImageCenter.Visible:=AutofocusMultiStarCenter.Checked;
 end;
 
 procedure Tf_option.AstUseScriptClick(Sender: TObject);

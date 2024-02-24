@@ -3616,6 +3616,16 @@ try
     buf:=config.GetValue('/Files/FileNameSep','_');
     config.SetValue('/Files/FileNameSeqSep',buf);
   end;
+  if oldver<'0.9.87' then begin
+    ok:=config.GetValue('/StarAnalysis/AutofocusMultiStarCenter',true);
+    if ok then
+      i:=config.GetValue('/StarAnalysis/AutofocusMultiStarCenterPct',30)
+    else
+      i:=100;
+    config.SetValue('/StarAnalysis/AutofocusMultiStarCenterPct',i);
+    config.DeleteValue('/StarAnalysis/AutofocusMultiStarCenter');
+  end;
+
   if config.Modified then begin
      config.SetValue('/Configuration/Version',ccdcielver);
      SaveConfig;
@@ -4899,8 +4909,9 @@ begin
   else
      AutofocusPauseGuider:=true;
   if not f_sequence.Running then InplaceAutofocus:=AutofocusInPlace;
-  AutofocusMultiStarCenter:=config.GetValue('/StarAnalysis/AutofocusMultiStarCenter',true);
   AutofocusMultiStarCenterPct:=config.GetValue('/StarAnalysis/AutofocusMultiStarCenterPct',30);
+  AutofocusMultiStarCenterPct:=min(100,max(1,AutofocusMultiStarCenterPct));
+  AutofocusMultiStarCenter:=(AutofocusMultiStarCenterPct<>100);
   LoadFocusStar(config.GetValue('/StarAnalysis/AutofocusStarMag',4));
   FocusStarMagAdjust:=config.GetValue('/StarAnalysis/FocusStarMagAdjust',false);
   AutofocusDynamicNumPoint:=config.GetValue('/StarAnalysis/AutofocusDynamicNumPoint',7);
@@ -9433,14 +9444,7 @@ begin
    f_option.AutofocusInPlace.Checked:=ok;
    f_option.AutofocusSlew.Checked:=not ok;
    f_option.AutofocusPauseGuider.Checked:=config.GetValue('/StarAnalysis/AutofocusPauseGuider',AutofocusPauseGuider);
-   f_option.AutofocusMultiStarCenter.Checked:=config.GetValue('/StarAnalysis/AutofocusMultiStarCenter',AutofocusMultiStarCenter);
-   i:=config.GetValue('/StarAnalysis/AutofocusMultiStarCenterPct',30);
-   if i=10 then f_option.AutofocusMultiStarCenterPct.ItemIndex:=0
-   else if i=20 then f_option.AutofocusMultiStarCenterPct.ItemIndex:=1
-   else if i=30 then f_option.AutofocusMultiStarCenterPct.ItemIndex:=2
-   else if i=40 then f_option.AutofocusMultiStarCenterPct.ItemIndex:=3
-   else f_option.AutofocusMultiStarCenterPct.ItemIndex:=4;
-   f_option.PanelImageCenter.Visible:=f_option.AutofocusMultiStarCenter.Checked;
+   f_option.AutofocusMultiStarCenterPct.Text:=IntToStr(config.GetValue('/StarAnalysis/AutofocusMultiStarCenterPct',30));
    f_option.AutofocusDynamicNumPoint.Value:=config.GetValue('/StarAnalysis/AutofocusDynamicNumPoint',AutofocusDynamicNumPoint);
    f_option.AutofocusDynamicMovement.Value:=config.GetValue('/StarAnalysis/AutofocusDynamicMovement',AutofocusDynamicMovement);
    f_option.AutofocusPlanetNumPoint.Value:=config.GetValue('/StarAnalysis/AutofocusPlanetNumPoint',AutofocusPlanetNumPoint);
@@ -9811,13 +9815,7 @@ begin
        config.SetValue('/StarAnalysis/AutofocusPauseGuider',f_option.AutofocusPauseGuider.Checked)
      else
        config.SetValue('/StarAnalysis/AutofocusPauseGuider',true);
-     config.SetValue('/StarAnalysis/AutofocusMultiStarCenter',f_option.AutofocusMultiStarCenter.Checked);
-     if f_option.AutofocusMultiStarCenterPct.ItemIndex=0 then i:=10
-     else if f_option.AutofocusMultiStarCenterPct.ItemIndex=1 then i:=20
-     else if f_option.AutofocusMultiStarCenterPct.ItemIndex=2 then i:=30
-     else if f_option.AutofocusMultiStarCenterPct.ItemIndex=3 then i:=40
-     else i:=50;
-     config.SetValue('/StarAnalysis/AutofocusMultiStarCenterPct',i);
+     config.SetValue('/StarAnalysis/AutofocusMultiStarCenterPct',StrToIntDef(f_option.AutofocusMultiStarCenterPct.Text,30));
      config.SetValue('/StarAnalysis/AutofocusDynamicNumPoint',f_option.AutofocusDynamicNumPoint.Value);
      config.SetValue('/StarAnalysis/AutofocusDynamicMovement',f_option.AutofocusDynamicMovement.Value);
      config.SetValue('/StarAnalysis/AutofocusPlanetNumPoint',f_option.AutofocusPlanetNumPoint.Value);
