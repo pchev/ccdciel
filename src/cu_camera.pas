@@ -800,7 +800,7 @@ begin
     instrum:=config.GetValue('/Info/InstrumentName','');
     if not FGuideCamera then begin
       if FFinderCamera then begin
-        focal_length:=config.GetValue('/Astrometry/FinderFocalLength',0);
+        focal_length:=config.GetValue('/Astrometry/FinderFocalLength',0.0);
       end
       else begin
       if config.GetValue('/Astrometry/FocaleFromTelescope',true)
@@ -808,7 +808,7 @@ begin
          if focal_length<0 then focal_length:=Fmount.FocaleLength;
       end
       else begin
-         focal_length:=config.GetValue('/Astrometry/FocaleLength',0);
+         focal_length:=config.GetValue('/Astrometry/FocaleLength',0.0);
       end;
       end;
     end;
