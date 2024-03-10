@@ -3012,6 +3012,10 @@ begin
     colorGreen:=clGreen;
     colorBlue:=clBlue;
     colorRed:=clRed;
+    colorText:=clBlack;
+    colorBg:=clWhite;
+    colorGray:=clGray;
+    colorLightGray:=clSilver;
   end
   else begin
     TBTabs.Images:=ImageListNight;
@@ -3019,6 +3023,10 @@ begin
     colorGreen:=clLime;
     colorBlue:=clAqua;
     colorRed:=clFuchsia;
+    colorText:=clWhite;
+    colorBg:=clBlack;
+    colorGray:=clSilver;
+    colorLightGray:=clGray;
     {$ifdef lclcocoa}
     TBTabs.Color:=clBackground;
     {$endif}

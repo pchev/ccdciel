@@ -1129,13 +1129,9 @@ begin
 
    {clear}
    Canvas.Pen.width :=1;{thickness lines}
-   {$ifdef lclqt5}
-   Canvas.pen.color:=clBtnText;
-   {$else}
-   Canvas.pen.color:=clScrollbar;
-   {$endif}
-   canvas.font.color:=clBtntext;
-   canvas.brush.color:=clmenu;
+   Canvas.pen.color:=colorLightGray;
+   canvas.font.color:=colorText;
+   canvas.brush.color:=colorBg;
    canvas.rectangle(0,0, width,height);
    canvas.Brush.Style:=bsClear;{transparent style}
    canvas.moveto(0,h2);{cross}
@@ -1174,7 +1170,7 @@ begin
    rms_ra:=0;
    mean_ra:=0;
    mean_dec:=0;
-   for i:=0 to lenb do
+   for i:=lenb downto 0 do
    begin
      if xy_trend[i].ra<1E99 then //valid data
      begin
@@ -1183,7 +1179,7 @@ begin
 
      x:=min(max(0,x),width);
      y:=min(max(0,y),height);
-     if i<6 then Canvas.pen.color:=clBtnText else  Canvas.pen.color:=clGrayText;
+     if i<6 then Canvas.pen.color:=colorGray else  Canvas.pen.color:=colorLightGray;
 
      if i<>0 then canvas.lineto(x,y) else canvas.moveto(x,y);
      canvas.Ellipse(x-len,y-len,x+1+len,y+1+len);{circle, the y+1,x+1 are essential to center the circle(ellipse) at the middle of a pixel. Otherwise center is 0.5,0.5 pixel wrong in x, y}
@@ -1217,9 +1213,9 @@ procedure Tf_internalguider.trend_message(message1,message2,message3 :string);//
 begin
  with xy_trend1 do
  begin
-   canvas.brush.color:=clmenu;
+   canvas.brush.color:=colorBg;
    canvas.rectangle(0,0, width,height);
-   canvas.font.color:=clBtnText;
+   canvas.font.color:=colorText;
    canvas.textout(5,10,message1);
    canvas.textout(5,35,message2);
    canvas.textout(5,60,message3);
@@ -1238,13 +1234,9 @@ begin
    h2:= height div 2;
 
    {clear}
-   {$ifdef lclqt5}
-   Canvas.pen.color:=clBtnText;
-   {$else}
-   Canvas.pen.color:=clScrollbar;
-   {$endif}
-   canvas.font.color:=clBtntext;
-   canvas.brush.color:=clmenu;
+   Canvas.pen.color:=colorLightGray;
+   canvas.font.color:=colorText;
+   canvas.brush.color:=colorBg;
    canvas.rectangle(0,0, width,height);
    canvas.Brush.Style:=bsClear;{transparent style}
    Canvas.Pen.width :=1;{thickness lines}
@@ -1274,13 +1266,13 @@ begin
 
    Canvas.Pen.width :=2;{thickness lines}
    lenb:=length(xy_trend)-1;
-   Canvas.pen.color:=clBlue;
-   canvas.font.color:=clBlue;
+   Canvas.pen.color:=colorBlue;
+   canvas.font.color:=colorBlue;
    canvas.textout(5,0,'α');
 
    //draw DEC trend
-   Canvas.pen.color:=clRed;
-   canvas.font.color:=clRed;
+   Canvas.pen.color:=colorRed;
+   canvas.font.color:=colorRed;
    canvas.textout(15,0,'δ');
    counter:=lenb;
    for i:=lenb downto 0  do
@@ -1296,8 +1288,8 @@ begin
    end;
 
    //drawDEC  corrective action
-   Canvas.pen.color:=clRED;
-   canvas.font.color:=clBtntext;
+   Canvas.pen.color:=colorRed;
+   canvas.font.color:=colorText;
    counter:=lenb;
    for i:=lenb downto 0  do
    begin
@@ -1315,7 +1307,7 @@ begin
    end;
 
    //draw RA trend
-   Canvas.pen.color:=clBlue;
+   Canvas.pen.color:=colorBlue;
    counter:=lenb;
    for i:=lenb downto 0  do
    begin

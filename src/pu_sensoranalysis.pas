@@ -290,6 +290,24 @@ end;
 procedure Tf_sensoranalysis.FormCreate(Sender: TObject);
 begin
   ScaleDPI(Self);
+  Chart1LineSeries1.SeriesColor:=colorBlue;
+  Chart1LineSeries1.LinePen.Color:=colorBlue;
+  Chart2LineSeries1.SeriesColor:=colorBlue;
+  Chart2LineSeries1.LinePen.Color:=colorBlue;
+  Chart3LineSeries1.SeriesColor:=colorBlue;
+  Chart3LineSeries1.LinePen.Color:=colorBlue;
+  Chart3LineSeries2.SeriesColor:=colorRed;
+  Chart3LineSeries2.LinePen.Color:=colorRed;
+  Chart4LineSeries1.SeriesColor:=colorBlue;
+  Chart4LineSeries1.LinePen.Color:=colorBlue;
+  Chart5BarSeries1.SeriesColor:=colorGray;
+  Chart5BarSeries1.BarBrush.Color:=colorGray;
+  Chart6LineSeries1.SeriesColor:=colorGreen;
+  Chart6LineSeries1.LinePen.Color:=colorGreen;
+  Chart6LineSeries2.SeriesColor:=colorBlue;
+  Chart6LineSeries2.LinePen.Color:=colorBlue;
+  Chart6LineSeries3.SeriesColor:=colorRed;
+  Chart6LineSeries3.LinePen.Color:=colorRed;
 end;
 
 

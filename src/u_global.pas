@@ -552,7 +552,7 @@ var
   Collimation: boolean;
   CollimationCircle: integer;
   AutoguiderStat: array of TAutoguiderStatistics;
-  colorGreen, colorBlue, colorRed: Tcolor;
+  colorGreen, colorBlue, colorRed, colorText, colorBg, colorGray, colorLightGray: Tcolor;
   AutoguiderAlert,AutoguiderStarting,LockRestartExposure: boolean;
   AutoguiderAlertTime,AutoguiderMsgTime: double;
   MountTrackingAlert: boolean;
