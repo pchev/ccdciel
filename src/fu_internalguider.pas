@@ -1119,6 +1119,7 @@ var
  i,w2,h2,diameter, lenb,x,y,counter :integer;
  rms_ra,rms_dec,mean_ra,mean_dec,scale,scale2 :double;
  scaleunit : string;
+ firstplot: boolean;
 const
     len=2;
 begin
@@ -1170,6 +1171,7 @@ begin
    rms_ra:=0;
    mean_ra:=0;
    mean_dec:=0;
+   firstplot:=true;
    for i:=lenb downto 0 do
    begin
      if xy_trend[i].ra<1E99 then //valid data
@@ -1179,13 +1181,14 @@ begin
 
      x:=min(max(0,x),width);
      y:=min(max(0,y),height);
-     if i<6 then Canvas.pen.color:=colorGray else  Canvas.pen.color:=colorLightGray;
+     if i<6 then Canvas.pen.color:=colorRed else  Canvas.pen.color:=colorGray;
 
-     if i<>0 then canvas.lineto(x,y) else canvas.moveto(x,y);
+     if firstplot then canvas.moveto(x,y) else canvas.lineto(x,y);
      canvas.Ellipse(x-len,y-len,x+1+len,y+1+len);{circle, the y+1,x+1 are essential to center the circle(ellipse) at the middle of a pixel. Otherwise center is 0.5,0.5 pixel wrong in x, y}
      mean_ra:=mean_ra+xy_trend[i].ra;
      mean_dec:=mean_dec+xy_trend[i].dec;
-     inc(counter)
+     inc(counter);
+     firstplot:=false;
     end;
    end;
 
