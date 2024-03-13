@@ -458,6 +458,8 @@ begin
   fits.DarkOn := False;
   bin := 1;
   poffset := Offset1.Value;
+  // ensure exposure is in valid range
+  if typeof<>BIAS then exp:=Math.max(exposure_min,exp);
   msg(copy(FrameName[Ord(typeof)], 1, 6) + 'exposure=' + FormatFloat(f3, exp) +
     ' binning=' + IntToStr(bin));
   if not camera.ControlExposure(exp, bin, bin, typeof, ReadoutModeCapture, gain, poffset) then
