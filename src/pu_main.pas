@@ -3804,7 +3804,7 @@ if Shift=[ssLeft] then begin
      screen.Cursor:=crHandPoint;
   end;
 end
-else if (ssMeta in Shift) then begin
+else if (ssMeta in Shift)or(ssAlt in Shift) then begin
   Mx:=X;
   My:=y;
   MouseRule:=true;
