@@ -539,7 +539,7 @@ begin
     for j := 0 to h - 1 do
     begin
       value:=extract_pixel(img,j,i);
-      if value<>1E99 then
+      if value<1E90 then
       begin
          median_array[counter] := value;
          Inc(counter);
@@ -678,7 +678,7 @@ begin
       for j := 0 to h - 1 do
       begin
         value:=extract_pixel(img3,j,i);
-        if value<>1E99 then
+        if value<1E90 then
         if ((iterations = 0) or (abs(Value - mean) <= 3 * sd)) then  {ignore outliers after first run}
         begin
           Inc(counter);
@@ -694,7 +694,7 @@ begin
       for j := 0 to h - 1 do
       begin
         value:=extract_pixel(img3,j,i);
-        if value<>1E99 then
+        if value<1E90 then
         if ((iterations = 0) or (abs(Value - mean) <= 3 * sd_old)) then  {ignore outliers after first run}
         begin
           sd := sd + sqr(mean - Value);
