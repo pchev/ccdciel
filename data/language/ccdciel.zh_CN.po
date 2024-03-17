@@ -6,15 +6,15 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ccdciel\n"
 "Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
-"POT-Creation-Date: 2024-01-19 18:00+0000\n"
-"PO-Revision-Date: 2023-12-11 18:57+0000\n"
+"POT-Creation-Date: 2024-03-17 17:24+0000\n"
+"PO-Revision-Date: 2024-02-19 08:57+0000\n"
 "Last-Translator: Zachary Wu <Unknown>\n"
 "Language-Team: Chinese (Simplified) <zh_CN@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2024-01-29 21:20+0000\n"
-"X-Generator: Launchpad (build 666c6bd52ccc7c38c7d6806b807b117caa7d8b6e)\n"
+"X-Launchpad-Export-Date: 2024-03-17 17:28+0000\n"
+"X-Generator: Launchpad (build aec24aef7a9042c99ef3e238d8b0ca01df9e1a9f)\n"
 
 #: u_translation.rs2d
 msgid "2D"
@@ -80,7 +80,7 @@ msgstr "启用光谱分析功能"
 
 #: u_translation.rsactivation
 msgid "Activation"
-msgstr ""
+msgstr "启用"
 
 #: u_translation.rsactivetarget
 msgid "Active target is replaced, restart the sequence"
@@ -1206,7 +1206,7 @@ msgstr "自定义位置"
 
 #: u_translation.rscustomtype
 msgid "Custom image type"
-msgstr ""
+msgstr "自定义图像类型"
 
 #: u_translation.rscygwinpath
 msgid "Cygwin path"
@@ -1247,7 +1247,7 @@ msgstr "破晓"
 
 #: u_translation.rsdeactivation
 msgid "Deactivation"
-msgstr ""
+msgstr "停用"
 
 #: u_translation.rsdebayer
 msgid "Debayer"
@@ -1279,11 +1279,11 @@ msgstr "缺省行为"
 
 #: u_translation.rsdefinespecia
 msgid "Define a specialized image type and how to enable it"
-msgstr ""
+msgstr "定义专门的图像类型以及如何启用它"
 
 #: u_translation.rsdefocusamoun
 msgid "Defocus amount"
-msgstr ""
+msgstr "散焦量"
 
 #: u_translation.rsdegree
 msgid "degree"
@@ -1520,7 +1520,7 @@ msgstr "简单转向到 %s/%s"
 
 #: u_translation.rsdown
 msgid "Down"
-msgstr ""
+msgstr "下"
 
 #: u_translation.rsdownloading
 msgid "Downloading"
@@ -1647,7 +1647,7 @@ msgstr "错误"
 #: u_translation.rserrorduplica
 #, object-pascal-format
 msgid "Error, duplicate name %s for image type!"
-msgstr ""
+msgstr "错误，图像类型的名称 %s 重复！"
 
 #: u_translation.rserrormessage
 msgid "Error messages"
@@ -1711,7 +1711,7 @@ msgstr "曝光"
 
 #: u_translation.rsexperttrick
 msgid "Expert trick"
-msgstr ""
+msgstr "专家技巧"
 
 #: u_translation.rsexposure
 msgid "Exposure"
@@ -3024,7 +3024,7 @@ msgstr "多星导星偏移量"
 
 #: u_translation.rsname
 msgid "Name"
-msgstr ""
+msgstr "名称"
 
 #: u_translation.rsnearfocus
 msgid "Near focus"
@@ -3388,7 +3388,7 @@ msgstr "或者"
 
 #: u_translation.rsordoubleclic
 msgid "Or double click on the bright star."
-msgstr ""
+msgstr "或者在亮星上双击"
 
 #: u_translation.rsotheroptions
 msgid "Other options "
@@ -3482,6 +3482,10 @@ msgstr "终止序列的请求已撤销。"
 #: u_translation.rspdfdocumenta
 msgid "PDF documentation"
 msgstr "PDF文档"
+
+#: u_translation.rspercent
+msgid "percent"
+msgstr ""
 
 #: u_translation.rsperformance
 msgid "Performance"
@@ -3584,7 +3588,7 @@ msgstr "解析曝光%s"
 
 #: u_translation.rsplatesolveto
 msgid "Plate solve to update the correction"
-msgstr ""
+msgstr "以解析更新修正"
 
 #: u_translation.rspleaseactiva
 msgid "Please activate the log file in the preference."
@@ -3728,7 +3732,7 @@ msgstr "首选项%s"
 
 #: u_translation.rspreprocessin
 msgid "Preprocessing"
-msgstr ""
+msgstr "预处理"
 
 #: u_translation.rspresetlist
 msgid "Preset list"
@@ -3748,7 +3752,7 @@ msgstr "预览去拜尔"
 
 #: u_translation.rspreviewprepr
 msgid "Preview preprocessing"
-msgstr ""
+msgstr "预览预处理"
 
 #: u_translation.rsprofile
 #, object-pascal-format
@@ -4369,6 +4373,10 @@ msgstr "传感器"
 msgid "Sensor analysis"
 msgstr "传感器分析"
 
+#: u_translation.rssensorareaus
+msgid "Sensor area used for focusing"
+msgstr ""
+
 #: u_translation.rssensorsprope
 msgid "Sensors properties"
 msgstr "传感器属性"
@@ -4786,7 +4794,7 @@ msgstr "解析完成于%s秒"
 
 #: u_translation.rssolvemaincam
 msgid "Solve main camera image"
-msgstr ""
+msgstr "解析主相机图像"
 
 #: u_translation.rssomedefinedd
 msgid "Some defined devices are not connected"
@@ -5653,7 +5661,7 @@ msgstr "未从动"
 
 #: u_translation.rsup
 msgid "Up"
-msgstr ""
+msgstr "上"
 
 #: u_translation.rsupdateactive
 msgid "Update active sequence"
@@ -5661,7 +5669,7 @@ msgstr "更新活动序列"
 
 #: u_translation.rsupdatechartw
 msgid "Update chart with any astrometry result"
-msgstr ""
+msgstr "以解析的结果更新星图"
 
 #: u_translation.rsupdatefullse
 msgid "Update full sequence"
@@ -5744,10 +5752,6 @@ msgstr "使用导星相机"
 #: u_translation.rsusemount
 msgid "Use mount"
 msgstr "使用赤道仪"
-
-#: u_translation.rsuseonlystarn
-msgid "Use only star near the image center"
-msgstr "仅使用图像中心附近的星点"
 
 #: u_translation.rsusergroup
 msgid "User group"

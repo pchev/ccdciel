@@ -6,15 +6,15 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ccdciel\n"
 "Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
-"POT-Creation-Date: 2024-01-19 18:00+0000\n"
+"POT-Creation-Date: 2024-03-17 17:24+0000\n"
 "PO-Revision-Date: 2021-08-31 20:35+0000\n"
 "Last-Translator: Patrick Chevalley <Unknown>\n"
 "Language-Team: Italian <it@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2024-01-29 21:20+0000\n"
-"X-Generator: Launchpad (build 666c6bd52ccc7c38c7d6806b807b117caa7d8b6e)\n"
+"X-Launchpad-Export-Date: 2024-03-17 17:28+0000\n"
+"X-Generator: Launchpad (build aec24aef7a9042c99ef3e238d8b0ca01df9e1a9f)\n"
 
 #: u_translation.rs2d
 msgid "2D"
@@ -3483,6 +3483,10 @@ msgstr ""
 msgid "PDF documentation"
 msgstr "Manuale PDF"
 
+#: u_translation.rspercent
+msgid "percent"
+msgstr ""
+
 #: u_translation.rsperformance
 msgid "Performance"
 msgstr ""
@@ -4367,6 +4371,10 @@ msgstr "Sensore"
 
 #: u_translation.rssensoranalys
 msgid "Sensor analysis"
+msgstr ""
+
+#: u_translation.rssensorareaus
+msgid "Sensor area used for focusing"
 msgstr ""
 
 #: u_translation.rssensorsprope
@@ -5744,10 +5752,6 @@ msgstr ""
 #: u_translation.rsusemount
 msgid "Use mount"
 msgstr "Usa montatura"
-
-#: u_translation.rsuseonlystarn
-msgid "Use only star near the image center"
-msgstr ""
 
 #: u_translation.rsusergroup
 msgid "User group"

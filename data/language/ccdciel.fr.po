@@ -6,15 +6,15 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ccdciel\n"
 "Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
-"POT-Creation-Date: 2024-01-19 18:00+0000\n"
-"PO-Revision-Date: 2024-01-19 18:15+0000\n"
+"POT-Creation-Date: 2024-03-17 17:24+0000\n"
+"PO-Revision-Date: 2024-03-17 17:27+0000\n"
 "Last-Translator: Patrick Chevalley <Unknown>\n"
 "Language-Team: French <fr@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2024-01-29 21:20+0000\n"
-"X-Generator: Launchpad (build 666c6bd52ccc7c38c7d6806b807b117caa7d8b6e)\n"
+"X-Launchpad-Export-Date: 2024-03-17 17:28+0000\n"
+"X-Generator: Launchpad (build aec24aef7a9042c99ef3e238d8b0ca01df9e1a9f)\n"
 
 #: u_translation.rs2d
 msgid "2D"
@@ -3483,6 +3483,10 @@ msgstr "Demande de pause de la séquence annulée."
 msgid "PDF documentation"
 msgstr "Documentation PDF"
 
+#: u_translation.rspercent
+msgid "percent"
+msgstr "pourcent"
+
 #: u_translation.rsperformance
 msgid "Performance"
 msgstr "Performance"
@@ -4239,7 +4243,7 @@ msgstr "Tolérance de l'échelle"
 
 #: u_translation.rsscanthisserv
 msgid "Scan this server"
-msgstr ""
+msgstr "Analyse ce serveur"
 
 #: u_translation.rsscript
 msgid "Script"
@@ -4368,6 +4372,10 @@ msgstr "Capteur"
 #: u_translation.rssensoranalys
 msgid "Sensor analysis"
 msgstr "Analyse du capteur"
+
+#: u_translation.rssensorareaus
+msgid "Sensor area used for focusing"
+msgstr "Zone du capteur pour la mise au point"
 
 #: u_translation.rssensorsprope
 msgid "Sensors properties"
@@ -5744,10 +5752,6 @@ msgstr "Utilise la caméra de guidage"
 #: u_translation.rsusemount
 msgid "Use mount"
 msgstr "Utilise la monture"
-
-#: u_translation.rsuseonlystarn
-msgid "Use only star near the image center"
-msgstr "Utilise seulement des étoiles près du centre de l'image"
 
 #: u_translation.rsusergroup
 msgid "User group"
