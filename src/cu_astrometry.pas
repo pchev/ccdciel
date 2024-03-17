@@ -473,7 +473,7 @@ begin
         if preview.CheckBoxAstrometry.Checked then
           preview.LabelAstrometry.Caption:= 'Apparent: '+RAToStr(ra)+' '+ DEToStr(de)+crlf+
                                             'J2000   : '+RAToStr(ra2000)+' '+DEToStr(de2000)+crlf+
-                                            'PA      : '+FormatFloat(f1, pa);
+                                            'PA      : '+FormatFloat(f1, pa)+crlf;
         MarkPlanetarium(ra2000,de2000);
       end;
     end;

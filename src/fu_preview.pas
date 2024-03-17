@@ -186,7 +186,7 @@ end;
 procedure Tf_preview.CheckBoxAstrometryClick(Sender: TObject);
 begin
   if CheckBoxAstrometry.Checked then
-    LabelAstrometry.Caption:='Apparent: -'+crlf+'J2000   : -'+crlf+'PA      : -'
+    LabelAstrometry.Caption:='Apparent: -'+crlf+'J2000   : -'+crlf+'PA      : -'+crlf
   else
     LabelAstrometry.Caption:='';
 end;
