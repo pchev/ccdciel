@@ -76,7 +76,7 @@ sed -i '/\/display\.html/r./fl1.txt' fl.txt
 rm fl1.txt
 
 # insert pages in Tools menu
-grep '<li class="level1"><div class="li"><a href="' $lang/documentation/tools.html      | sed 's/<li class="level1"><div class="li"><a href="//'| cut -d\" -f1      | awk '{printf ("'$lang'/documentation/%s \n", $1)}' > fl1.txt
+grep '<li class="level1"><div class="li"> <a href="' $lang/documentation/tools.html      | sed 's/<li class="level1"><div class="li"> <a href="//'| cut -d\" -f1      | awk '{printf ("'$lang'/documentation/%s \n", $1)}' > fl1.txt
 sed -i '/\/tools\.html/r./fl1.txt' fl.txt
 rm fl1.txt
 
