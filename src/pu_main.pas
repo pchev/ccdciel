@@ -4952,6 +4952,7 @@ begin
   PHD2GuideLockX:=config.GetValue('/Autoguider/Lock/GuideLockX',0.0);
   PHD2GuideLockY:=config.GetValue('/Autoguider/Lock/GuideLockY',0.0);
   f_internalguider.GuideLock:=config.GetValue('/Autoguider/Lock/GuideSetLock',false);
+  f_internalguider.ForceGuideMultistar:=config.GetValue('/Autoguider/Lock/ForceGuideMultistar',false);
   f_internalguider.LockX:=config.GetValue('/Autoguider/Lock/GuideLockX',0.0);
   f_internalguider.LockY:=config.GetValue('/Autoguider/Lock/GuideLockY',0.0);
 
@@ -5644,6 +5645,7 @@ begin
 
   config.SetValue('/InternalGuider/Spectro/SpectroFunctions',f_internalguider.SpectroFunctions);
   config.SetValue('/Autoguider/Lock/GuideSetLock',f_internalguider.GuideLock);
+  config.SetValue('/Autoguider/Lock/ForceGuideMultistar',f_internalguider.ForceGuideMultistar);
   config.SetValue('/Autoguider/Lock/GuideLockX',f_internalguider.LockX);
   config.SetValue('/Autoguider/Lock/GuideLockY',f_internalguider.LockY);
   config.SetValue('/InternalGuider/Spectro/SearchWinMin',f_internalguider.SearchWinMin);
@@ -17436,7 +17438,7 @@ end;
 
 procedure Tf_main.GuiderPopUpmenu1Popup(Sender: TObject);
 begin
-  MenuItemSelectGuideStar.Visible:=f_internalguider.GuideLock;
+  MenuItemSelectGuideStar.Visible:=f_internalguider.GuideLock and (not f_internalguider.ForceMultistar);
 end;
 
 procedure Tf_main.GuiderMeasureAtPos(x,y:integer);

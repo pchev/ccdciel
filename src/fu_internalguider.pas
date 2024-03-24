@@ -61,6 +61,7 @@ type
     CalDECspeed: TEdit;
     CalDeclination: TEdit;
     CalIssue: TEdit;
+    cbFGuideMultiStar: TCheckBox;
     GuideSpeedRA: TFloatSpinEdit;
     GuideSpeedDEC: TFloatSpinEdit;
     ForceGuideSpeed: TCheckBox;
@@ -265,7 +266,7 @@ type
     cur_RAgain,cur_RA_hysteresis,cur_DECgain,cur_DEC_hysteresis,cur_LongestPulse,cur_shortestPulse: integer;
     cur_pa1,cur_pier_side1,cur_pixelsize1,cur_pulsegainEast1,cur_pulsegainNorth1,cur_pulsegainSouth1,
     cur_pulsegainWest1: string;
-    cur_disable_guiding, cur_tracksolar: boolean;
+    cur_disable_guiding, cur_tracksolar, FForceMultiStar: boolean;
     FDrawSettingChange: boolean;
     FGuideLockNextX, FGuideLockNextY: integer;
     FonShowMessage: TNotifyMsg;
@@ -331,6 +332,10 @@ type
     function GetBacklashCompensation:Boolean;
     procedure SetSpectro(value:Boolean);
     function GetSpectro:Boolean;
+    procedure SetForceMultistar(value:Boolean);
+    function GetForceMultistar:Boolean;
+    procedure SetFGuideMultistar(value:Boolean);
+    function GetFGuideMultistar:Boolean;
     procedure SetGuideLock(value:Boolean);
     function GetGuideLock:Boolean;
     function GetLockX:double;
@@ -416,6 +421,8 @@ type
     property BacklashCompensation: Boolean read GetBacklashCompensation write SetBacklashCompensation;
     property SpectroFunctions: boolean read GetSpectro write SetSpectro; // single star slit guiding
     property GuideLock: boolean read GetGuideLock write SetGuideLock; // single star slit guiding
+    property ForceGuideMultistar: boolean read GetFGuideMultistar write SetFGuideMultistar; // force multistar after star lock
+    property ForceMultistar: boolean read GetForceMultistar write SetForceMultistar; // multistar mode now required
     property LockX: double read GetLockX write SetLockX;        // slit lock position
     property LockY: double read GetLockY write SetLockY;
     property OffsetX: double read GetOffsetX write SetOffsetX;  // guide offset relative to reference, used by dithering, solar tracking, spectro offset
@@ -491,6 +498,7 @@ begin
  FGuideLockNextX:=-1;
  FGuideLockNextY:=-1;
  led.Canvas.AntialiasingMode:=amOn;
+ FForceMultiStar:=false;
 end;
 
 destructor  Tf_internalguider.Destroy;
@@ -1407,6 +1415,26 @@ end;
 function Tf_internalguider.GetGuideLock:Boolean;
 begin
   result:=cbGuideLock.Checked;
+end;
+
+procedure Tf_internalguider.SetFGuideMultistar(value:Boolean);
+begin
+  cbFGuideMultiStar.Checked:=value;
+end;
+
+function Tf_internalguider.GetFGuideMultistar:Boolean;
+begin
+  result:=cbFGuideMultiStar.Checked;
+end;
+
+procedure Tf_internalguider.SetForceMultistar(value:Boolean);
+begin
+  FForceMultiStar:=value;
+end;
+
+function Tf_internalguider.GetForceMultistar:Boolean;
+begin
+  result:=FForceMultiStar;
 end;
 
 function Tf_internalguider.GetLockX:double;

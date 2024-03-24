@@ -53,7 +53,7 @@ type
     GuideLog: TextFile;
     FPaused, FSettling, FSettlingInRange,PulseGuiding,OffsetFromTarget: boolean;
     InternalguiderCalibratingMeridianFlip : boolean;
-    FSettleStartTime, FSettleTime, SearchCorrX, SearchCorrY: double;
+    FSettleStartTime, FSettleTime, FSettleLastDistance, SearchCorrX, SearchCorrY: double;
     TimerWaitPulseGuiding: TSimpleTimer;
     FRecoveringCamera: boolean;
     FRecoveringCameraCount: integer;
@@ -338,6 +338,7 @@ begin
     FSettlingInRange:=false;
     FSettleTime:=MaxDouble;
     FSettleStartTime:=now;
+    FSettleLastDistance:=9999;
     SetStatus('Settling',GUIDER_BUSY);
     WriteLog('INFO: SETTLING STATE CHANGE, Settling started');
   end;
@@ -455,7 +456,7 @@ var
   GuideLock: boolean;
   drift_arrayX,drift_arrayY : array of double;
   starx,stary,frx,fry,frw,frh: integer;
-  r,xs1,xs2,ys1,ys2: integer;
+  xs1,xs2,ys1,ys2: integer;
 const
     searchA=28;//square search area
     overlap=6;
@@ -496,7 +497,7 @@ begin
     end;
   end;
 
-  GuideLock:=finternalguider.SpectroFunctions and finternalguider.GuideLock;
+  GuideLock:=finternalguider.SpectroFunctions and finternalguider.GuideLock and (not finternalguider.ForceMultistar);
 
   min_SNR:=finternalguider.minSNR;//make local to reduce some CPU load
   min_HFD:=finternalguider.minHFD;//make local to reduce some CPU load
@@ -835,6 +836,7 @@ begin
   SetStatus('Looping Exposures',GUIDER_IDLE);
   StopInternalguider:=false;
   InternalguiderRunning:=true;
+  Finternalguider.ForceMultiStar:=false;
   Finternalguider.Info:='';
   Finternalguider.ButtonLoop.enabled:=false;
   Finternalguider.ButtonCalibrate.enabled:=false;
@@ -980,6 +982,7 @@ begin
   SetStatus('Start Guiding',GUIDER_BUSY);
   StopInternalguider:=false;
   InternalguiderGuiding:=true;
+  Finternalguider.ForceMultiStar:=false;
   FPaused:=false;
   finternalguider.LabelStatusRA.Caption:='';
   finternalguider.LabelStatusDec.Caption:='';
@@ -1122,7 +1125,7 @@ var i,maxpulse    : integer;
     RADuration,DECDuration,BacklashDuration,NewPulseDEC: LongInt;
     RADirection,DECDirection,pulsedir: string;
     mflipcorr,PAsolar,moveRA2,dsettle,DecSign,SearchCorrRA,SearchCorrDec: double;
-    meridianflip, largepulse: boolean;
+    meridianflip, largepulse, initial: boolean;
 
           procedure track_solar_object;//neo and comet tracking
           // Calculates the total integrated correction in pixels for the reference stars in the guider image (DitherX, DitherY)
@@ -1207,7 +1210,17 @@ begin
   end;
 
   //Measure drift
+  initial:=InternalguiderInitialize;
   measure_drift(InternalguiderInitialize,driftX,driftY);// ReferenceX,Y indicates the total drift, driftX,driftY the drift since previous call. Arrays xy_array_old,xy_array are for storage star positions
+
+  if FSettling and finternalguider.SpectroFunctions and finternalguider.GuideLock and finternalguider.ForceGuideMultistar  and  // option to change spectro guider to multistar after centering
+    (not Finternalguider.ForceMultistar) and (not initial) and              // time to test
+    ( ((xy_array[0].flux=0) and (FSettleLastDistance<=(4*FSettlePix))) or   // star lost in slit
+      (sqrt(driftx*driftx+drifty*drifty)<=FSettlePix) ) then begin          // reach settle distance
+        Finternalguider.ForceMultistar:=True;
+        internalguider.cbGuideLockChange(Finternalguider.cbGuideLock);
+        exit;
+  end;
 
   if InternalguiderInitialize then begin
      SetStatus(StarLostStatus,GUIDER_ALERT);
@@ -1228,6 +1241,7 @@ begin
      if ((now-FSettleStartTime)*SecsPerDay)<FSettleTmax then begin
        // check current distance
        dsettle:=sqrt(driftx*driftx+drifty*drifty);
+       FSettleLastDistance:=dsettle;
        if dsettle<=FSettlePix then begin
          // distance in range
          if FSettlingInRange then begin
@@ -1582,6 +1596,7 @@ begin
     WriteLog('');
   end;
   InternalguiderRunning:=false;
+  Finternalguider.ForceMultiStar:=false;
   if not StopInternalguider then begin
     StopInternalguider:=true;
     FCamera.AbortExposure;
@@ -1664,6 +1679,7 @@ begin
 
   StopInternalguider:=false;
   InternalguiderCalibrating:=true;
+  finternalguider.ForceMultiStar:=false;
   SetStatus('Start Calibration',GUIDER_BUSY);
 
   finternalguider.trend_message('Guider is in calibration mode.','This will take a few minutes.','');
