@@ -29,7 +29,7 @@ interface
 
 uses
   {$ifdef mswindows}
-  ShlObj, comobj, windows, Registry,
+  ShlObj, comobj, Variants, windows, Registry,
   {$endif}
   {$ifdef unix}
   BaseUnix,
@@ -6511,7 +6511,13 @@ begin
    ASCOM: begin
           findercamera.UseCameraStartTime:=false;
           findercamera.FixPixelRange:=false;
-          findercamera.Connect(config.GetValue('/ASCOMfindercamera/Device',''));
+          if (FinderCamera.CameraInterface=GuideCamera.CameraInterface) and
+             (FinderCameraName=GuideCameraName) and
+             (not VarIsEmpty(T_ascomcamera(guidecamera).GetV))
+             then
+               T_ascomcamera(findercamera).ConnectV(T_ascomcamera(guidecamera).GetV, FinderCameraName)
+             else
+               findercamera.Connect(FinderCameraName,'');
           end;
    ASCOMREST: begin
           findercamera.UseCameraStartTime:=false;

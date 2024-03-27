@@ -133,6 +133,7 @@ public
    constructor Create(AOwner: TComponent);override;
    destructor  Destroy; override;
    Procedure Connect(cp1: string; cp2:string=''; cp3:string=''; cp4:string=''; cp5:string=''; cp6:string=''); override;
+   procedure ConnectV(value: variant; cp1: string);
    procedure Disconnect;  override;
    function GetV: variant;
    Procedure StartExposure(exptime: double); override;
@@ -197,6 +198,13 @@ begin
 end;
 
 procedure T_ascomcamera.Connect(cp1: string; cp2:string=''; cp3:string=''; cp4:string=''; cp5:string=''; cp6:string='');
+begin
+  V:=Unassigned;
+  V:=CreateOleObject(cp1);
+  ConnectV(V, cp1);
+end;
+
+procedure T_ascomcamera.ConnectV(value: variant; cp1: string);
 {$ifdef mswindows}
 var readmodes,roitem: Variant;
     i,n: integer;
@@ -212,8 +220,7 @@ begin
  FStatus := devConnecting;
  Fdevice:=cp1;
  if Assigned(FonStatusChange) then FonStatusChange(self);
- V:=Unassigned;
- V:=CreateOleObject(Fdevice);
+ V:=value;
  V.connected:=true;
  if V.connected then begin
     FStatus := devConnected;
