@@ -199,9 +199,11 @@ end;
 
 procedure T_ascomcamera.Connect(cp1: string; cp2:string=''; cp3:string=''; cp4:string=''; cp5:string=''; cp6:string='');
 begin
+ {$ifdef mswindows}
   V:=Unassigned;
   V:=CreateOleObject(cp1);
   ConnectV(V, cp1);
+  {$endif}
 end;
 
 procedure T_ascomcamera.ConnectV(value: variant; cp1: string);
