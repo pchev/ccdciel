@@ -2064,4 +2064,10 @@ object f_main: Tf_main
     Left = 56
     Top = 472
   end
+  object DisconnectTimer: TTimer
+    Enabled = False
+    OnTimer = DisconnectTimerTimer
+    Left = 176
+    Top = 468
+  end
 end

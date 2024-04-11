@@ -263,6 +263,7 @@ type
     GuiderMeasureTimer: TTimer;
     PageFinder: TTabSheet;
     FinderMeasureTimer: TTimer;
+    DisconnectTimer: TTimer;
     TimerStampTimer: TTimer;
     MenuPdfHelp: TMenuItem;
     MenuOnlineHelp: TMenuItem;
@@ -413,6 +414,7 @@ type
     procedure AbortTimerTimer(Sender: TObject);
     procedure CameraConnectTimerTimer(Sender: TObject);
     procedure ConnectTimerTimer(Sender: TObject);
+    procedure DisconnectTimerTimer(Sender: TObject);
     procedure FinderCameraConnectTimerTimer(Sender: TObject);
     procedure FinderMeasureTimerTimer(Sender: TObject);
     procedure FinderPlotTimerTimer(Sender: TObject);
@@ -4030,6 +4032,14 @@ begin
   ConnectTimer.Enabled:=false;
   // Thing to do after all devices are connected
   SetCameraActiveDevices;
+  f_script.RunConnectedScript;
+end;
+
+procedure Tf_main.DisconnectTimerTimer(Sender: TObject);
+begin
+  DisconnectTimer.Enabled:=false;
+  // Thing to do after all devices are disconnected
+  f_script.RunDisconnectedScript;
 end;
 
 procedure Tf_main.CameraConnectTimerTimer(Sender: TObject);
@@ -5862,6 +5872,7 @@ begin
      DisconnectGuideCamera(Sender);
      DisconnectFinderCamera(Sender);
      DisconnectWatchdog(Sender);
+     DisconnectTimer.enabled:=true;
    end;
 end;
 
