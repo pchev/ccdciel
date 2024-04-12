@@ -1925,6 +1925,11 @@ begin
   SaveDoneCount;
   // refresh alldone count
   CheckDoneCount;
+  if Fcapture.FrameType<>ord(LIGHT) then begin
+    // reset to Light before the next target
+    Fcapture.FrameType:=ord(LIGHT);
+    Fcapture.CheckLight(self);
+  end;
   // try next target
   inc(FCurrentTarget);
   if FRunning and (FCurrentTarget<NumTargets) then begin
