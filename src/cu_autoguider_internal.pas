@@ -1213,13 +1213,31 @@ begin
   initial:=InternalguiderInitialize;
   measure_drift(InternalguiderInitialize,driftX,driftY);// ReferenceX,Y indicates the total drift, driftX,driftY the drift since previous call. Arrays xy_array_old,xy_array are for storage star positions
 
-  if FSettling and finternalguider.SpectroFunctions and finternalguider.GuideLock and finternalguider.ForceGuideMultistar  and  // option to change spectro guider to multistar after centering
-    (not Finternalguider.ForceMultistar) and (not initial) and              // time to test
-    ( ((xy_array[0].flux=0) and (FSettleLastDistance<=(4*FSettlePix))) or   // star lost in slit
-      (sqrt(driftx*driftx+drifty*drifty)<=FSettlePix) ) then begin          // reach settle distance
-        Finternalguider.ForceMultistar:=True;
-        internalguider.cbGuideLockChange(Finternalguider.cbGuideLock);
-        exit;
+  if finternalguider.SpectroFunctions then begin
+    if (not FSettling) and InternalguiderInitialize then begin
+      // never modify the lock position during spectro guiding
+      InternalguiderInitialize:=false;
+      SetStatus(StarLostStatus,GUIDER_ALERT);
+      inc(GuideFrameCount);
+      WriteLog(IntToStr(GuideFrameCount)+','+
+               FormatFloat(f3,(now-GuideStartTime)*secperday)+','+
+               '"DROP"'+',,,,,,,,,,,,,'+
+               FormatFloat(f0,LogFlux)+','+
+               FormatFloat(f2,LogSNR)+','+
+               '2,"Star lost"'    // error code
+               );
+      exit;
+    end;
+    // option to change spectro guider to multistar after centering
+    if FSettling and finternalguider.GuideLock and finternalguider.ForceGuideMultistar  and
+      (not Finternalguider.ForceMultistar) and (not initial) and              // time to test
+      ( ((xy_array[0].flux=0) and (FSettleLastDistance<=(4*FSettlePix))) or   // star lost in slit
+        (sqrt(driftx*driftx+drifty*drifty)<=FSettlePix) ) then begin          // reach settle distance
+          Finternalguider.ForceMultistar:=True;
+          internalguider.cbGuideLockChange(Finternalguider.cbGuideLock);
+          FSettling := false;
+          exit;
+    end;
   end;
 
   if InternalguiderInitialize then begin
