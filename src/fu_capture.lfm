@@ -495,7 +495,6 @@ object f_capture: Tf_capture
     AutoSize = False
     Caption = 'Capture'
     Color = clBtnShadow
-    DragMode = dmAutomatic
     Font.Color = clBtnText
     Layout = tlCenter
     ParentColor = False

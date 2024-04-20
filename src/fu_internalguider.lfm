@@ -19,7 +19,6 @@ object f_internalguider: Tf_internalguider
     AutoSize = False
     Caption = 'Internal guider'
     Color = clBtnShadow
-    DragMode = dmAutomatic
     Font.Color = clBtnText
     Layout = tlCenter
     ParentColor = False

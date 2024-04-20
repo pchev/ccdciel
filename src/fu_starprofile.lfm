@@ -20,7 +20,6 @@ object f_starprofile: Tf_starprofile
     AutoSize = False
     Caption = 'Focus'
     Color = clBtnShadow
-    DragMode = dmAutomatic
     Font.Color = clBtnText
     ParentColor = False
     ParentFont = False

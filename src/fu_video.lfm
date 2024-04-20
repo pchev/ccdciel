@@ -20,7 +20,6 @@ object f_video: Tf_video
     AutoSize = False
     Caption = 'Video'
     Color = clBtnShadow
-    DragMode = dmAutomatic
     Font.Color = clBtnText
     Layout = tlCenter
     ParentColor = False
@@ -51,7 +50,7 @@ object f_video: Tf_video
       TabOrder = 8
       object Label8: TLabel
         Left = 8
-        Height = 19
+        Height = 18
         Top = 10
         Width = 57
         Caption = 'Exposure'
@@ -60,7 +59,7 @@ object f_video: Tf_video
       end
       object StreamExp: TFloatSpinEdit
         Left = 105
-        Height = 29
+        Height = 32
         Top = 7
         Width = 101
         DecimalPlaces = 3
@@ -83,7 +82,7 @@ object f_video: Tf_video
       TabOrder = 0
       object Label4: TLabel
         Left = 8
-        Height = 19
+        Height = 18
         Top = 0
         Width = 57
         Caption = 'Exposure'
@@ -96,7 +95,7 @@ object f_video: Tf_video
         Top = 18
         Width = 80
         Constraints.MaxHeight = 28
-        ItemHeight = 0
+        ItemHeight = 18
         OnChange = ExprangeChange
         ParentFont = False
         Style = csDropDownList
@@ -127,9 +126,9 @@ object f_video: Tf_video
       TabOrder = 1
       object Preview: TCheckBox
         Left = 8
-        Height = 21
+        Height = 22
         Top = 1
-        Width = 71
+        Width = 77
         Caption = 'Preview'
         OnChange = PreviewChange
         ParentFont = False
@@ -137,9 +136,9 @@ object f_video: Tf_video
       end
       object FPSlabel: TLabel
         Left = 144
-        Height = 19
+        Height = 18
         Top = 1
-        Width = 57
+        Width = 65
         Caption = '                   '
         ParentColor = False
         ParentFont = False
@@ -158,9 +157,9 @@ object f_video: Tf_video
       TabOrder = 2
       object Label5: TLabel
         Left = 8
-        Height = 19
+        Height = 18
         Top = 0
-        Width = 28
+        Width = 29
         Caption = 'Gain'
         ParentColor = False
         ParentFont = False
@@ -190,9 +189,9 @@ object f_video: Tf_video
       TabOrder = 3
       object Label6: TLabel
         Left = 8
-        Height = 19
+        Height = 18
         Top = 0
-        Width = 48
+        Width = 49
         Caption = 'Gamma'
         ParentColor = False
         ParentFont = False
@@ -222,9 +221,9 @@ object f_video: Tf_video
       TabOrder = 4
       object Label7: TLabel
         Left = 8
-        Height = 19
+        Height = 18
         Top = 0
-        Width = 67
+        Width = 66
         Caption = 'Brightness'
         ParentColor = False
         ParentFont = False
@@ -254,7 +253,7 @@ object f_video: Tf_video
       TabOrder = 5
       object Label2: TLabel
         Left = 8
-        Height = 19
+        Height = 18
         Top = 4
         Width = 24
         Caption = 'Size'
@@ -267,7 +266,7 @@ object f_video: Tf_video
         Top = 2
         Width = 92
         Constraints.MaxHeight = 28
-        ItemHeight = 0
+        ItemHeight = 18
         OnChange = VideoSizeChange
         ParentFont = False
         Style = csDropDownList
@@ -275,7 +274,7 @@ object f_video: Tf_video
       end
       object Label1: TLabel
         Left = 8
-        Height = 19
+        Height = 18
         Top = 32
         Width = 67
         Caption = 'Frame rate'
@@ -288,7 +287,7 @@ object f_video: Tf_video
         Top = 30
         Width = 92
         Constraints.MaxHeight = 28
-        ItemHeight = 0
+        ItemHeight = 18
         OnChange = FrameRateChange
         ParentFont = False
         Style = csDropDownList
@@ -308,9 +307,9 @@ object f_video: Tf_video
       TabOrder = 6
       object Duration: TCheckBox
         Left = 7
-        Height = 21
+        Height = 22
         Top = 2
-        Width = 78
+        Width = 82
         Caption = 'Duration'
         OnClick = DurationClick
         ParentFont = False
@@ -322,7 +321,7 @@ object f_video: Tf_video
         Top = 2
         Width = 77
         Constraints.MaxHeight = 28
-        ItemHeight = 0
+        ItemHeight = 24
         ItemIndex = 2
         Items.Strings = (
           '10'
@@ -336,9 +335,9 @@ object f_video: Tf_video
       end
       object Frames: TCheckBox
         Left = 7
-        Height = 21
+        Height = 22
         Top = 28
-        Width = 69
+        Width = 73
         Caption = 'Frames'
         OnClick = FramesClick
         ParentFont = False
@@ -350,7 +349,7 @@ object f_video: Tf_video
         Top = 29
         Width = 77
         Constraints.MaxHeight = 28
-        ItemHeight = 0
+        ItemHeight = 24
         ItemIndex = 2
         Items.Strings = (
           '50'
@@ -365,7 +364,7 @@ object f_video: Tf_video
       end
       object Label3: TLabel
         Left = 7
-        Height = 19
+        Height = 18
         Top = 61
         Width = 40
         Caption = 'Object'
@@ -412,16 +411,16 @@ object f_video: Tf_video
       end
       object Label9: TLabel
         Left = 7
-        Height = 19
+        Height = 18
         Top = 92
-        Width = 58
+        Width = 57
         Caption = 'Directory'
         ParentColor = False
         ParentFont = False
       end
       object LabelRecording: TLabel
         Left = 7
-        Height = 19
+        Height = 18
         Top = 156
         Width = 95
         Caption = 'LabelRecording'
@@ -462,9 +461,9 @@ object f_video: Tf_video
       TabOrder = 9
       object Label10: TLabel
         Left = 8
-        Height = 19
+        Height = 18
         Top = 10
-        Width = 51
+        Width = 52
         Caption = 'Encoder'
         ParentColor = False
       end
@@ -474,7 +473,7 @@ object f_video: Tf_video
         Top = 7
         Width = 101
         Constraints.MaxHeight = 28
-        ItemHeight = 0
+        ItemHeight = 18
         OnChange = VideoEncoderChange
         Style = csDropDownList
         TabOrder = 0

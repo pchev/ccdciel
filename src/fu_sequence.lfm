@@ -20,7 +20,6 @@ object f_sequence: Tf_sequence
     AutoSize = False
     Caption = 'Sequence'
     Color = clBtnShadow
-    DragMode = dmAutomatic
     Font.Color = clBtnText
     ParentColor = False
     ParentFont = False

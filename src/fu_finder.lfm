@@ -20,7 +20,6 @@ object f_finder: Tf_finder
     AutoSize = False
     Caption = 'Finder'
     Color = clBtnShadow
-    DragMode = dmAutomatic
     Font.Color = clBtnText
     Layout = tlCenter
     ParentColor = False

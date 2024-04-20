@@ -20,7 +20,6 @@ object f_devicesconnection: Tf_devicesconnection
     AutoSize = False
     Caption = 'Devices connection'
     Color = clBtnShadow
-    DragMode = dmAutomatic
     Font.Color = clBtnText
     Layout = tlCenter
     ParentColor = False
