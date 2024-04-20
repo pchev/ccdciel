@@ -485,7 +485,9 @@ type
     procedure MenuItemSelectGuideStarClick(Sender: TObject);
     procedure MenuPolarAlignment2Click(Sender: TObject);
     procedure MenuSensorAnalysisClick(Sender: TObject);
+    procedure MenuViewFinderClick(Sender: TObject);
     procedure MenuViewInternalguiderClick(Sender: TObject);
+    procedure MenuViewVideoClick(Sender: TObject);
     procedure PageInternalGuiderShow(Sender: TObject);
     procedure PanelCenterResize(Sender: TObject);
     procedure ShowDarkInfo;
@@ -10260,7 +10262,7 @@ end;
 
 procedure Tf_main.MenuViewConnectionClick(Sender: TObject);
 begin
-  f_devicesconnection.Visible:=MenuViewConnection.Checked;
+  MenuViewConnection.Checked:=true;
 end;
 
 procedure Tf_main.MenuViewDomeClick(Sender: TObject);
@@ -10355,7 +10357,7 @@ end;
 
 procedure Tf_main.MenuViewCaptureClick(Sender: TObject);
 begin
-  f_capture.Visible:=MenuViewCapture.Checked;
+  MenuViewCapture.Checked:=true;
 end;
 
 procedure Tf_main.MenuViewScriptClick(Sender: TObject);
@@ -10365,17 +10367,22 @@ end;
 
 procedure Tf_main.MenuViewSequenceClick(Sender: TObject);
 begin
-  f_sequence.Visible:=MenuViewSequence.Checked;
+  MenuViewSequence.Checked:=true;
 end;
 
 procedure Tf_main.MenuViewStarProfileClick(Sender: TObject);
 begin
-  f_starprofile.Visible:=MenuViewStarProfile.Checked;
+  MenuViewStarProfile.Checked:=true;
 end;
 
 procedure Tf_main.MenuViewWeatherClick(Sender: TObject);
 begin
   f_weather.Visible:=MenuViewWeather.Checked;
+end;
+
+procedure Tf_main.MenuViewVideoClick(Sender: TObject);
+begin
+  MenuViewVideo.Checked:=true;
 end;
 
 procedure Tf_main.MenuVisuZoom12Click(Sender: TObject);
@@ -10405,7 +10412,12 @@ end;
 
 procedure Tf_main.MenuViewInternalguiderClick(Sender: TObject);
 begin
-  f_internalguider.Visible:=MenuViewInternalguider.Checked;
+  MenuViewInternalguider.Checked:=true;
+end;
+
+procedure Tf_main.MenuViewFinderClick(Sender: TObject);
+begin
+  MenuViewFinder.Checked:=true;
 end;
 
 procedure Tf_main.PanelDragDrop(Sender, Source: TObject; X, Y: Integer);
