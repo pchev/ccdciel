@@ -25,7 +25,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 interface
 
-uses pu_planetariuminfo, u_global, u_utils, u_ccdconfig, pu_pascaleditor, u_annotation, pu_keyboard, pu_newscript,
+uses pu_planetariuminfo, u_global, u_utils, u_ccdconfig, pu_pascaleditor, u_annotation, pu_keyboard, pu_newscript, pu_onlineinfo,
   pu_scriptengine, cu_astrometry, u_hints, u_translation, pu_selectscript, Classes, math, cu_targets, pu_viewtext, cu_switch,
   SysUtils, FileUtil, Forms, Controls, Graphics, Dialogs, StdCtrls, UScaleDPI, cu_plan, LCLType,
   LazUTF8, maskedit, Grids, ExtCtrls, ComCtrls, Spin, Buttons, Menus, CheckLst, Types;
@@ -67,6 +67,8 @@ type
     MenuAddCaptureStep: TMenuItem;
     MenuAddScriptStep: TMenuItem;
     MenuAddSwitchStep: TMenuItem;
+    MenuInsertOnline: TMenuItem;
+    MenuOnlineCoord: TMenuItem;
     Panel10: TPanel;
     PopupAddStep: TPopupMenu;
     Switches: TComboBox;
@@ -249,6 +251,8 @@ type
     procedure MenuAddScriptStepClick(Sender: TObject);
     procedure MenuAddSwitchStepClick(Sender: TObject);
     procedure MenuBlankRowClick(Sender: TObject);
+    procedure MenuInsertOnlineClick(Sender: TObject);
+    procedure MenuOnlineCoordClick(Sender: TObject);
     procedure MenuSwitchClick(Sender: TObject);
     procedure PointCoordChange(Sender: TObject);
     procedure RepeatCountListChange(Sender: TObject);
@@ -427,6 +431,7 @@ begin
   MenuNewObject.Caption := rsNewObject;
   MenuBlankRow.Caption:=rsInsertBlankR;
   MenuInsertPlanetarium.Caption := rsFromPlanetar;
+  MenuInsertOnline.Caption:=rsSearchOnline;
   BtnDeleteObject.Caption := rsRemoveRow;
   BtnOptions.Caption:=rsOptions2;
   MenuNewScript.Caption := rsScript;
@@ -511,6 +516,7 @@ begin
   MenuNoMove.Caption := rsNone2;
   MenuPlanetariumCoord.Caption := rsPlanetarium;
   MenuSearchCoord.Caption:=rsSearch;
+  MenuOnlineCoord.Caption:=rsSearchOnline;
   MenuRotator.Caption:=rsRotator;
   MenuImgCoord.Caption := rsCurrentImage;
   MenuImgRot.Caption := rsCurrentImage;
@@ -1059,6 +1065,57 @@ begin
       end;
     end;
   end;  
+  TargetChange(nil);
+  Targetlist.Refresh;{apply Fcoordwarning directly}
+  ShowPlan;
+  Application.ProcessMessages;
+  FCoordWarning:=false;
+end;
+
+procedure Tf_EditTargets.MenuInsertOnlineClick(Sender: TObject);
+var n: integer;
+begin
+  PanelTools.visible:=true;
+  PageControlPlan.ActivePageIndex:=pageobject;
+  f_onlineinfo.Ra.Text:='';
+  f_onlineinfo.De.Text:='';
+  f_onlineinfo.ShowModal;
+  if (f_onlineinfo.ModalResult=mrOK)and(f_onlineinfo.Ra.Text<>'')and(f_onlineinfo.De.Text<>'') then
+  begin
+    NewObject;
+    n:=TargetList.Row;
+    TargetList.Cells[colra,n]:=f_onlineinfo.Ra.Text;{Add position}
+    TargetList.Cells[coldec,n]:=f_onlineinfo.De.Text;
+    TargetList.Cells[colstart,n]:=rsRise;
+    TargetList.Cells[colend,n]:=rsSet2;
+    TargetList.Cells[colname,n]:=f_onlineinfo.Obj.Text;
+    lblName.Caption:=rsAdditionalOp+' : Seq '+IntToStr(n)+', '+f_onlineinfo.Obj.Text;
+    TargetChange(nil);
+    ShowPlan;
+  end;
+end;
+
+procedure Tf_EditTargets.MenuOnlineCoordClick(Sender: TObject);
+var n: integer;
+begin
+  n:=TargetList.Row;
+  f_onlineinfo.Obj.Text:=TargetList.Cells[colname,n];
+  f_onlineinfo.Ra.Text:='';
+  f_onlineinfo.De.Text:='';
+  f_onlineinfo.LabelResolver.Caption:='';
+  f_onlineinfo.ShowModal;
+  if (f_onlineinfo.ModalResult=mrOK)and(f_onlineinfo.Ra.Text<>'')and(f_onlineinfo.De.Text<>'') then
+  begin
+    TargetList.Cells[colra,n]:=f_onlineinfo.Ra.Text;{Add position}
+    TargetList.Cells[coldec,n]:=f_onlineinfo.De.Text;
+    TargetList.Cells[colname,n]:=f_onlineinfo.Obj.Text;
+    cbAstrometry.Checked:=(astrometryResolver<>ResolverNone);
+  end
+  else
+  begin
+    FCoordWarning:=true;
+    FCoordWarningRow:=n;
+  end;
   TargetChange(nil);
   Targetlist.Refresh;{apply Fcoordwarning directly}
   ShowPlan;

@@ -1552,6 +1552,7 @@ resourcestring
   rsScanThisServ = 'Scan this server';
   rsSensorAreaUs = 'Sensor area used for focusing';
   rsPercent = 'percent';
+  rsSearchOnline = 'Search online';
 
 implementation
 

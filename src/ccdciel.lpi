@@ -317,7 +317,7 @@
         <PackageName Value="LCL"/>
       </Item12>
     </RequiredPackages>
-    <Units Count="126">
+    <Units Count="128">
       <Unit0>
         <Filename Value="ccdciel.lpr"/>
         <IsPartOfProject Value="True"/>
@@ -973,6 +973,16 @@
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Form"/>
       </Unit125>
+      <Unit126>
+        <Filename Value="cu_onlinesearch.pas"/>
+        <IsPartOfProject Value="True"/>
+      </Unit126>
+      <Unit127>
+        <Filename Value="pu_onlineinfo.pas"/>
+        <IsPartOfProject Value="True"/>
+        <ComponentName Value="f_onlineinfo"/>
+        <ResourceBaseClass Value="Form"/>
+      </Unit127>
     </Units>
   </ProjectOptions>
   <CompilerOptions>

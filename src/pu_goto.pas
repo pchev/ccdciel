@@ -26,7 +26,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 interface
 
 uses cu_planetarium, u_utils, u_global, cu_fits, UScaleDPI, u_translation, u_annotation, LCLType, pu_compute,
-  Classes, SysUtils, Forms, Controls, Graphics, Dialogs, StdCtrls, ExtCtrls;
+  cu_onlinesearch, Classes, SysUtils, Forms, Controls, Graphics, Dialogs, StdCtrls, ExtCtrls;
 
 type
 
@@ -45,6 +45,7 @@ type
     Label3: TLabel;
     Label6: TLabel;
     Label8: TLabel;
+    LabelResolver: TLabel;
     msginfo: TLabel;
     Obj: TEdit;
     Panel2: TPanel;
@@ -110,6 +111,7 @@ begin
   Label8.Caption:=ssec+'/'+rsPixel;
   GotoAstrometry.Caption:=rsUseAstrometr;
   msginfo.Caption:='';
+  LabelResolver.Caption:='';
   BtnCompute.Caption:=rsCompute;
   if f_compute<>nil then f_compute.Setlang;
 end;
@@ -144,6 +146,7 @@ begin
    if (planetarium.RA<>NullCoord)and(planetarium.DE<>NullCoord) then begin
     Ra.Text:=RAToStr(planetarium.RA);
     De.Text:=DEToStr(planetarium.DE);
+    LabelResolver.Caption:=rsFromPlanetar;
    end;
    if planetarium.Objname<>'' then begin
     Obj.Text:=trim(planetarium.Objname);
@@ -161,10 +164,11 @@ end;
 
 procedure Tf_goto.BtnSearchClick(Sender: TObject);
 var ra0,dec0,length0,width0,pa : double;
-    objname : string;
+    objname,sname,sresolv : string;
     found: boolean;
     p: integer;
 begin
+  LabelResolver.Caption:='';
   found:=false;
   objname:=uppercase(trim(Obj.Text));
   p:=pos('_',objname);
@@ -185,11 +189,23 @@ begin
            Obj.Text:=naam2+'_'+naam3; {Add two object names}
         linepos:=$FFFFFF; {Stop searching}
         found:=true;
+        LabelResolver.Caption:='From internal database';
      end;
     until linepos>=$FFFFFF;{Found object or end of database}
     if not found then begin
+      // online search
+      found:=SearchOnline(objname,sname,sresolv,ra0,dec0);
+      if found then begin
+        Ra.Text:=RAToStr(ra0*12/pi);{Add position}
+        De.Text:=DEToStr(dec0*180/pi);
+        // do not change the name by other synonym that can be returned by Simbad
+        LabelResolver.Caption:='From '+sresolv;
+      end;
+    end;
+    if not found then begin
       Ra.Text:='';
       De.Text:='';
+      LabelResolver.Caption:='Not found!';
     end
     else begin
       if PanelPxSz.Visible then begin

@@ -1834,6 +1834,10 @@ object f_EditTargets: Tf_EditTargets
       Caption = 'From Planetarium'
       OnClick = BtnInsertPlanetariumClick
     end
+    object MenuInsertOnline: TMenuItem
+      Caption = 'Search online'
+      OnClick = MenuInsertOnlineClick
+    end
     object MenuSkyFlat: TMenuItem
       Caption = 'Sky Flat'
       OnClick = BtnSkyFlatClick
@@ -1867,6 +1871,10 @@ object f_EditTargets: Tf_EditTargets
       object MenuPlanetariumCoord: TMenuItem
         Caption = 'From planetarium'
         OnClick = BtnPlanetariumCoordClick
+      end
+      object MenuOnlineCoord: TMenuItem
+        Caption = 'Search online'
+        OnClick = MenuOnlineCoordClick
       end
       object MenuImgCoord: TMenuItem
         Caption = 'Current image'

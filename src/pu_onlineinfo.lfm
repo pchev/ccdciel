@@ -1,0 +1,155 @@
+object f_onlineinfo: Tf_onlineinfo
+  Left = 369
+  Height = 198
+  Top = 30
+  Width = 320
+  Caption = 'f_onlineinfo'
+  ClientHeight = 198
+  ClientWidth = 320
+  OnCreate = FormCreate
+  object Panel2: TPanel
+    Left = 0
+    Height = 148
+    Top = 0
+    Width = 320
+    Align = alClient
+    ClientHeight = 148
+    ClientWidth = 320
+    TabOrder = 0
+    object BtnSearch: TButton
+      AnchorSideTop.Control = Obj
+      AnchorSideTop.Side = asrCenter
+      Left = 240
+      Height = 25
+      Top = 12
+      Width = 75
+      Caption = 'Search'
+      OnClick = BtnSearchClick
+      ParentFont = False
+      TabOrder = 0
+    end
+    object Ra: TEdit
+      Left = 120
+      Height = 28
+      Top = 48
+      Width = 111
+      Constraints.MaxHeight = 28
+      ParentFont = False
+      TabOrder = 1
+    end
+    object De: TEdit
+      Left = 120
+      Height = 28
+      Top = 85
+      Width = 111
+      Constraints.MaxHeight = 28
+      ParentFont = False
+      TabOrder = 2
+    end
+    object Obj: TEdit
+      Left = 120
+      Height = 28
+      Top = 10
+      Width = 111
+      Constraints.MaxHeight = 28
+      ParentFont = False
+      TabOrder = 3
+    end
+    object Label1: TLabel
+      AnchorSideTop.Control = Ra
+      AnchorSideTop.Side = asrCenter
+      Left = 19
+      Height = 18
+      Top = 53
+      Width = 62
+      Caption = 'Center RA'
+      ParentColor = False
+      ParentFont = False
+    end
+    object Label2: TLabel
+      AnchorSideTop.Control = De
+      AnchorSideTop.Side = asrCenter
+      Left = 19
+      Height = 18
+      Top = 90
+      Width = 68
+      Caption = 'Center Dec'
+      ParentColor = False
+      ParentFont = False
+    end
+    object Label3: TLabel
+      AnchorSideTop.Control = Obj
+      AnchorSideTop.Side = asrCenter
+      Left = 19
+      Height = 18
+      Top = 15
+      Width = 78
+      Caption = 'Object name'
+      ParentColor = False
+      ParentFont = False
+    end
+    object Label6: TLabel
+      AnchorSideTop.Control = Ra
+      AnchorSideTop.Side = asrCenter
+      Left = 233
+      Height = 18
+      Top = 53
+      Width = 34
+      Caption = 'J2000'
+      ParentColor = False
+      ParentFont = False
+    end
+    object Label16: TLabel
+      AnchorSideTop.Control = De
+      AnchorSideTop.Side = asrCenter
+      Left = 233
+      Height = 18
+      Top = 90
+      Width = 34
+      Caption = 'J2000'
+      ParentColor = False
+      ParentFont = False
+    end
+    object LabelResolver: TLabel
+      Left = 19
+      Height = 18
+      Top = 118
+      Width = 86
+      Caption = 'LabelResolver'
+      ParentColor = False
+    end
+  end
+  object Panel1: TPanel
+    Left = 0
+    Height = 50
+    Top = 148
+    Width = 320
+    Align = alBottom
+    ClientHeight = 50
+    ClientWidth = 320
+    ParentFont = False
+    TabOrder = 1
+    object Button2: TButton
+      Left = 113
+      Height = 25
+      Top = 8
+      Width = 76
+      Anchors = [akTop, akRight]
+      Caption = 'Cancel'
+      ModalResult = 2
+      ParentFont = False
+      TabOrder = 0
+    end
+    object ButtonOK: TButton
+      Left = 229
+      Height = 25
+      Top = 8
+      Width = 76
+      Anchors = [akTop, akRight]
+      Caption = 'OK'
+      ModalResult = 1
+      ParentFont = False
+      TabOrder = 1
+    end
+  end
+end

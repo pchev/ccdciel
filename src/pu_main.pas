@@ -39,7 +39,7 @@ uses
   fu_sequence, fu_planetarium, fu_script, fu_finder, pu_findercalibration, u_ccdconfig, pu_edittargets, pu_scriptengine,
   fu_video, pu_devicesetup, pu_options, pu_indigui, cu_fits, cu_camera, pu_pause, cu_tcpserver,
   pu_viewtext, cu_wheel, cu_mount, cu_focuser, XMLConf, u_utils, u_global, UScaleDPI, pu_handpad,
-  cu_indimount, cu_ascommount, cu_indifocuser, cu_ascomfocuser, pu_vcurve, pu_focusercalibration,
+  cu_indimount, cu_ascommount, cu_indifocuser, cu_ascomfocuser, pu_vcurve, pu_focusercalibration, pu_onlineinfo,
   fu_rotator, cu_rotator, cu_indirotator, cu_ascomrotator, cu_watchdog, cu_indiwatchdog, pu_sensoranalysis,
   cu_weather, cu_ascomweather, cu_indiweather, cu_safety, cu_ascomsafety, cu_indisafety, fu_weather, fu_safety,
   cu_dome, cu_ascomdome, cu_indidome, fu_dome, pu_about, pu_goto, pu_photometry, u_libraw, pu_image_sharpness,
@@ -2635,6 +2635,7 @@ begin
    if f_switch<>nil then f_switch.SetLang;
    if f_finder<>nil then f_finder.SetLang;
    if f_findercalibration<>nil then f_findercalibration.SetLang;
+   if f_onlineinfo<>nil then f_onlineinfo.SetLang;
 end;
 
 procedure Tf_main.FormShow(Sender: TObject);

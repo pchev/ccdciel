@@ -11,12 +11,12 @@ object f_goto: Tf_goto
   OnShow = FormShow
   object PanelPxSz: TPanel
     Left = 0
-    Height = 131
-    Top = 144
+    Height = 115
+    Top = 160
     Width = 337
     Align = alClient
     BevelOuter = bvNone
-    ClientHeight = 131
+    ClientHeight = 115
     ClientWidth = 337
     ParentFont = False
     TabOrder = 2
@@ -94,12 +94,12 @@ object f_goto: Tf_goto
   end
   object PanelAltAz: TPanel
     Left = 0
-    Height = 131
-    Top = 144
+    Height = 115
+    Top = 160
     Width = 337
     Align = alClient
     BevelOuter = bvNone
-    ClientHeight = 131
+    ClientHeight = 115
     ClientWidth = 337
     ParentFont = False
     TabOrder = 1
@@ -152,11 +152,11 @@ object f_goto: Tf_goto
   end
   object Panel2: TPanel
     Left = 0
-    Height = 126
+    Height = 142
     Top = 18
     Width = 337
     Align = alTop
-    ClientHeight = 126
+    ClientHeight = 142
     ClientWidth = 337
     TabOrder = 3
     object BtnSearch: TButton
@@ -255,6 +255,14 @@ object f_goto: Tf_goto
       Caption = 'J2000'
       ParentColor = False
       ParentFont = False
+    end
+    object LabelResolver: TLabel
+      Left = 19
+      Height = 18
+      Top = 118
+      Width = 86
+      Caption = 'LabelResolver'
+      ParentColor = False
     end
   end
   object msginfo: TLabel

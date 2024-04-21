@@ -55,7 +55,7 @@ uses
   pu_keyboard, cu_alpacamanagement, pu_compute, cu_manualwheel, u_speech, pu_collimation,
   cu_ascomrestswitch, cu_ascomswitch, cu_indiswitch, cu_switch, fu_switchpage, pu_newscript,
   pu_polaralign2, fu_internalguider, cu_autoguider_internal, pu_handpad, fu_finder,
-  pu_findercalibration, fu_switch, pu_sensoranalysis;
+  pu_findercalibration, fu_switch, pu_sensoranalysis, cu_onlinesearch, pu_onlineinfo;
 
 {$R *.res}
 
@@ -114,6 +114,7 @@ begin
   Application.CreateForm(Tf_polaralign2, f_polaralign2);
   Application.CreateForm(Tf_handpad, f_handpad);
   Application.CreateForm(Tf_findercalibration, f_findercalibration);
+  Application.CreateForm(Tf_onlineinfo, f_onlineinfo);
   Application.Run;
   {$ifdef LCLGTK2}
   try
