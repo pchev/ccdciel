@@ -225,7 +225,7 @@ begin
 InitTimer.Enabled:=False;
 ConnectTimer.Enabled:=False;
 HeartbeatTimer.Enabled:=False;
-if indiclient<>nil then begin
+if (indiclient<>nil)and(not indiclient.Terminated) then begin
   SetHeartbeat(0);
   wait(1);
   indiclient.disconnectDevice(Findidevice);

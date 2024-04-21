@@ -537,8 +537,10 @@ begin
 InitTimer.Enabled:=False;
 ConnectTimer.Enabled:=False;
 try
-indiclient.Terminate;
-indiblob.Terminate;
+if (indiclient<>nil)and(not indiclient.Terminated) then
+  indiclient.Terminate;
+if (indiblob<>nil)and(not indiblob.Terminated) then
+  indiblob.Terminate;
 except
 end;
 ClearStatus;

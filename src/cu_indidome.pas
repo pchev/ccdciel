@@ -222,7 +222,8 @@ begin
 InitTimer.Enabled:=False;
 ConnectTimer.Enabled:=False;
 try
-indiclient.Terminate;
+if (indiclient<>nil)and(not indiclient.Terminated) then
+  indiclient.Terminate;
 except
 end;
 ClearStatus;
