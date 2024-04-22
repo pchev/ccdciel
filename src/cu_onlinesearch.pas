@@ -26,7 +26,10 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 interface
 
 uses
-  u_global, netdb,
+  {$ifndef mswindows}
+  netdb,
+  {$endif}
+  u_global,
   httpsend, blcksock, XMLRead, DOM,
   SysUtils, Classes;
 
@@ -174,10 +177,12 @@ begin
 
   http.Timeout:=2000;
   http.Sock.ConnectionTimeout:=2000;
+  {$ifndef mswindows}
   ts:=netdb.TimeOutS;
   tms:=netdb.TimeOutMS;
   netdb.TimeOutS:=2;
   netdb.TimeOutMS:=0;
+  {$endif}
   try
 
   if http.HTTPMethod('GET', url) and
@@ -197,8 +202,10 @@ begin
   end;
 
   finally
+  {$ifndef mswindows}
   netdb.TimeOutS:=ts;
   netdb.TimeOutMS:=tms;
+  {$endif}
   http.Free;
   end;
 end;
