@@ -77,6 +77,8 @@ T_ascommount = class(T_mount)
    function GetAlignmentMode: TAlignmentMode; override;
    function GetCanSetPierSide: boolean; override;
    function GetSlewRates: TstringList; override;
+   function GetTrackRate: TTrackRate; override;
+   procedure SetTrackRate(value: TTrackRate); override;
 public
    constructor Create(AOwner: TComponent);override;
    destructor  Destroy; override;
@@ -1162,6 +1164,33 @@ begin
       // unsupported by interface V1
     end;
   end;
+  {$endif}
+end;
+
+function T_ascommount.GetTrackRate: TTrackRate;
+var i: integer;
+begin
+  result:=trSidereal;
+  {$ifdef mswindows}
+    try
+    i:=V.TrackingRate;
+    result:=TTrackRate(i);
+    except
+      on E: Exception do msg('Cannot get mount tracking rate: ' + E.Message,0);
+    end;
+  {$endif}
+end;
+
+procedure T_ascommount.SetTrackRate(value: TTrackRate);
+var i: integer;
+begin
+  {$ifdef mswindows}
+    try
+    i:=ord(value);
+    V.TrackingRate:=i;
+    except
+      on E: Exception do msg('Cannot set mount tracking rate: ' + E.Message,0);
+    end;
   {$endif}
 end;
 

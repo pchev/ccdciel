@@ -184,6 +184,8 @@ type
     function cmd_DevicesConnection(onoff:string):string;
     function cmd_MountPark(onoff:string):string;
     function cmd_MountTrack:string;
+    function cmd_MountGetTrackingRate:string;
+    function cmd_MountSetTrackingRate(rate:string):string;
     function cmd_MountSlew(RA,DE:string):string;
     function cmd_MountSlewAsync(RA,DE:string):string;
     function cmd_MountSync(RA,DE:string):string;
@@ -1293,6 +1295,40 @@ result:=msgFailed;
 Fmount.Track;
 wait(2);
 result:=msgOK;
+except
+  result:=msgFailed;
+end;
+end;
+
+function Tf_scriptengine.cmd_MountSetTrackingRate(rate:string):string;
+var r: TTrackRate;
+begin
+try
+result:=msgFailed;
+rate:=UpperCase(trim(rate));
+if rate='SIDEREAL' then r:=trSidereal
+else if rate='LUNAR' then r:=trLunar
+else if rate='SOLAR' then r:=trSolar
+else exit;
+Fmount.TrackRate:=r;
+result:=msgOK;
+except
+  result:=msgFailed;
+end;
+end;
+
+function Tf_scriptengine.cmd_MountGetTrackingRate:string;
+var r: TTrackRate;
+begin
+try
+r:=Fmount.TrackRate;
+case r of
+  trSidereal: result:='SIDEREAL';
+  trLunar: result:='LUNAR';
+  trSolar: result:='SOLAR';
+  trCustom: result:='CUSTOM';
+  else result:=msgFailed;
+end;
 except
   result:=msgFailed;
 end;

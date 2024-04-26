@@ -16272,6 +16272,7 @@ try
   else if method='TELESCOPE_CONNECTED' then result:=result+'"result": '+BoolToStr(mount.Status=devConnected,tr,fa)
   else if method='TELESCOPE_PARKED' then result:=result+'"result": '+BoolToStr(mount.Park,tr,fa)
   else if method='TELESCOPE_TRACKING' then result:=result+'"result": '+BoolToStr(mount.Tracking,tr,fa)
+  else if method='TELESCOPE_TRACKINGRATE' then result:=result+'"result": "'+f_scriptengine.cmd_MountGetTrackingRate+'"'
   else if method='TELESCOPE_SLEWING' then result:=result+'"result": '+BoolToStr(mount.MountSlewing,tr,fa)
   else if method='TELESCOPE_PIERSIDE' then result:=result+'"result": "'+PierSideName[ord(mount.PierSide)]+'"'
   else if method='TELESCOPE_EQMOD' then result:=result+'"result": '+BoolToStr(mount.IsEqmod,tr,fa)
@@ -16380,6 +16381,12 @@ try
     CheckParamCount(1);
     if uppercase(trim(value[attrib.IndexOf('params.0')]))='TRUE' then buf:='ON' else buf:='OFF';
     buf:=f_scriptengine.cmd_MountPark(buf);
+    result:=result+'"result":{"status": "'+buf+'"}';
+  end
+  else if method='TELESCOPE_SETTRACKINGRATE' then begin
+    CheckParamCount(1);
+    buf1:=trim(value[attrib.IndexOf('params.0')]);
+    buf:=f_scriptengine.cmd_MountSetTrackingRate(buf1);
     result:=result+'"result":{"status": "'+buf+'"}';
   end
   else if method='TELESCOPE_SLEW' then begin

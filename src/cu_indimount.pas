@@ -46,6 +46,8 @@ T_indimount = class(T_mount)
    CoordSetTrack,CoordSetSlew,CoordSetSync: ISwitch;
    TrackState: ISwitchVectorProperty;
    TrackOn,TrackOff: ISwitch;
+   TrackR: ISwitchVectorProperty;
+   TrackSidereal,TrackLunar,TrackSolar,TrackCustom: ISwitch;
    parkprop: ISwitchVectorProperty;
    swpark,swunpark: ISwitch;
    AbortmotionProp: ISwitchVectorProperty;
@@ -131,6 +133,8 @@ T_indimount = class(T_mount)
    function GetAlignmentMode: TAlignmentMode; override;
    function GetCanSetPierSide: boolean; override;
    function GetSlewRates: TstringList; override;
+   function GetTrackRate: TTrackRate; override;
+   procedure SetTrackRate(value: TTrackRate); override;
  public
    constructor Create(AOwner: TComponent);override;
    destructor  Destroy; override;
@@ -215,6 +219,7 @@ begin
     TelescopeInfo:=nil;
     parkprop:=nil;
     TrackState:=nil;
+    TrackR:=nil;
     coord_prop:=nil;
     CoordSet:=nil;
     AbortmotionProp:=nil;
@@ -452,6 +457,14 @@ begin
       if (TrackOn=nil)or(TrackOff=nil) then TrackState:=nil;
       if TrackState<>nil then Fcapability:=Fcapability+'CanSetTracking; ';
       if Assigned(FonTrackingChange) then FonTrackingChange(self);
+   end
+   else if (proptype=INDI_SWITCH)and((propname='TELESCOPE_TRACK_RATE')or(propname='TELESCOPE_TRACK_MODE')) then begin
+      TrackR:=indiProp.getSwitch;
+      TrackSidereal:=IUFindSwitch(TrackR,'TRACK_SIDEREAL');
+      TrackLunar:=IUFindSwitch(TrackR,'TRACK_LUNAR');
+      TrackSolar:=IUFindSwitch(TrackR,'TRACK_SOLAR');
+      TrackCustom:=IUFindSwitch(TrackR,'TRACK_CUSTOM');
+      if (TrackSidereal=nil)or(TrackLunar=nil)or(TrackSolar=nil)or(TrackCustom=nil) then TrackR:=nil;
    end
    else if (proptype=INDI_SWITCH)and(AbortmotionProp=nil)and(propname='TELESCOPE_ABORT_MOTION') then begin
       AbortmotionProp:=indiProp.getSwitch;
@@ -771,6 +784,43 @@ begin
     indiclient.sendNewNumber(coord_prop);
     indiclient.WaitBusy(coord_prop);
     result:=true;
+  end;
+end;
+
+function  T_indimount.GetTrackRate: TTrackRate;
+var sp: ISwitch;
+    i:integer;
+begin
+ result:=trSidereal;
+ if TrackR<>nil then begin
+   sp:=IUFindOnSwitch(TrackR);
+   if sp<>nil then begin
+     for i:=0 to ord(High(TTrackRate)) do begin
+       if sp.name=TrackRateName[i] then begin
+         result:=TTrackRate(i);
+         break;
+       end;
+     end;
+   end;
+ end;
+end;
+
+procedure T_indimount.SetTrackRate(value: TTrackRate);
+var i:integer;
+    n:string;
+begin
+  if TrackR<>nil then begin
+    IUResetSwitch(TrackR);
+    i:=ord(value);
+    n:=TrackRateName[i];
+    for i:=0 to TrackR.nsp-1 do begin
+      if TrackR.sp[i].name=n then begin
+        TrackR.sp[i].s:=ISS_ON;
+        break;
+      end;
+    end;
+    indiclient.sendNewSwitch(TrackR);
+    indiclient.WaitBusy(TrackR);
   end;
 end;
 

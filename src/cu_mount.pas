@@ -78,6 +78,8 @@ T_mount = class(TComponent)
     function GetAlignmentMode: TAlignmentMode; virtual; abstract;
     function GetCanSetPierSide: boolean; virtual; abstract;
     function GetSlewRates: TstringList; virtual; abstract;
+    function GetTrackRate: TTrackRate; virtual; abstract;
+    procedure SetTrackRate(value: TTrackRate); virtual; abstract;
  public
     DomeOpenActions: TDomeOpenActions;
     DomeCloseActions: TDomeCloseActions;
@@ -111,6 +113,7 @@ T_mount = class(TComponent)
     property MountInterface: TDevInterface read FMountInterface;
     property Status: TDeviceStatus read FStatus;
     property Tracking: Boolean read GetTracking;
+    property TrackRate: TTrackRate read GetTrackRate write SetTrackRate;
     property Park: Boolean read GetPark write SetParkInterface;
     property CanSetGuideRates: Boolean read GetCanSetGuideRates;
     property MountSlewing: boolean read GetMountSlewing;

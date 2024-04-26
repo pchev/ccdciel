@@ -53,6 +53,7 @@ type
   TPlanetariumType=(CDC, SAMP, HNSKY,plaNONE);
   TEqmodAlign=(alADDPOINT,alSTDSYNC,alUNSUPPORTED);
   TAlignmentMode=(algAltAz,algPolar,algGermanPolar);
+  TTrackRate =(trSidereal, trLunar, trSolar, trCustom);
   TBayerMode=(bayerGR,bayerRG,bayerBG,bayerGB,bayerCamera,bayerUnsupported);
   TAutofocusMode=(afVcurve,afDynamic,afIterative,afNone,afPlanet);
   TAutofocusVcurveStep=(vcsStartL,vcsStartR,vcsNearL,vcsNearR,vcsCheckL,vcsCheckR,vcsFocusL,vcsFocusR);
@@ -285,6 +286,7 @@ const
   FrameName: array[0..ord(high(TFrameType))] of string =('Light   ','Bias    ','Dark    ','Flat    '); // add space to header as INDI do
   FlatTimeName: array[0..1] of string=('Dusk','Dawn');
   PierSideName: array[0..3] of string=('pierEast', 'pierWest', 'pierUnknown','pierNotImplemented');
+  TrackRateName :array [0..3] of string = ('TRACK_SIDEREAL','TRACK_LUNAR','TRACK_SOLAR','TRACK_CUSTOM');
   ResolverAstrometryNet=0;
   ResolverElbrus=1;
   ResolverNone=2;
