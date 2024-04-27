@@ -2396,23 +2396,13 @@ begin
    MenuResetTools.Caption := rsResetToDefau;
    MenuReset1col.Caption:='1 '+rsColumn;
    MenuReset2col.Caption:='2 '+rsColumn;
-   {$ifdef lclqt5}
-     MenuTabConnect.Caption:='';    // No glyph + caption in first level menu with qt5
-     MenuTabFocus.Caption := '';    // this change prevent flashing text/icon on mouse over
-     MenuTabCapture.Caption := '';  { #todo : Check if this can be fixed }
-     MenuTabSequence.Caption := '';
-     MenuTabVideo.Caption := '';
-     MenuTabInternalGuider.Caption:='';
-     MenuTabFinder.Caption:='';
-   {$else}
-     MenuTabConnect.Caption := rsConnect;
-     MenuTabFocus.Caption := rsFocus;
-     MenuTabCapture.Caption := rsCapture;
-     MenuTabSequence.Caption := rsSequence;
-     MenuTabVideo.Caption := rsVideo;
-     MenuTabInternalGuider.Caption:=rsInternalGuid;
-     MenuTabFinder.Caption:=rsFinderCamera;
-   {$endif}
+   MenuTabConnect.Caption := rsConnect;
+   MenuTabFocus.Caption := rsFocus;
+   MenuTabCapture.Caption := rsCapture;
+   MenuTabSequence.Caption := rsSequence;
+   MenuTabVideo.Caption := rsVideo;
+   MenuTabInternalGuider.Caption:=rsInternalGuid;
+   MenuTabFinder.Caption:=rsFinderCamera;
    MenuConnection.Caption := rsConnection;
    MenuConnect.Caption := rsConnect;
    MenuPreview.Caption := rsPreview;

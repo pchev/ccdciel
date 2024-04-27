@@ -1263,7 +1263,6 @@ object f_main: Tf_main
     end
     object MenuTabConnect: TMenuItem
       Caption = 'Connect'
-      ImageIndex = 15
       OnClick = MenuTabClick
       object MenuConnection: TMenuItem
         Caption = 'Connection'
@@ -1351,7 +1350,6 @@ object f_main: Tf_main
     object MenuTabFocus: TMenuItem
       Tag = 1
       Caption = 'Focus'
-      ImageIndex = 1
       OnClick = MenuTabClick
       object MenuFocuser: TMenuItem
         Caption = 'Focuser'
@@ -1375,7 +1373,6 @@ object f_main: Tf_main
     object MenuTabCapture: TMenuItem
       Tag = 2
       Caption = 'Capture'
-      ImageIndex = 2
       OnClick = MenuTabClick
       object MenuCapture: TMenuItem
         Caption = 'Capture'
@@ -1432,7 +1429,6 @@ object f_main: Tf_main
     object MenuTabSequence: TMenuItem
       Tag = 3
       Caption = 'Sequence'
-      ImageIndex = 3
       OnClick = MenuTabClick
       object MenuSequence: TMenuItem
         Caption = 'Sequence'
@@ -1461,7 +1457,6 @@ object f_main: Tf_main
     object MenuTabVideo: TMenuItem
       Tag = 4
       Caption = 'Video'
-      ImageIndex = 4
       Visible = False
       OnClick = MenuTabClick
       object MenuVideo: TMenuItem
@@ -1483,7 +1478,6 @@ object f_main: Tf_main
     object MenuTabInternalGuider: TMenuItem
       Tag = 5
       Caption = 'Internal guider'
-      ImageIndex = 0
       OnClick = MenuTabClick
       object MenuInternalGuider: TMenuItem
         Caption = 'Internal guider'
@@ -1500,7 +1494,6 @@ object f_main: Tf_main
     object MenuTabFinder: TMenuItem
       Tag = 6
       Caption = 'Finder camera'
-      ImageIndex = 6
       OnClick = MenuTabClick
       object MenuFinder: TMenuItem
         Caption = 'Finder camera'
