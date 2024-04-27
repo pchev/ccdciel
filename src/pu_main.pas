@@ -16258,6 +16258,7 @@ try
     result:=result+jsoncmd_status(attrib,value);
   end
   // return variable value
+  else if method='CCDCIEL_VERSION' then result:=result+'"result": ["'+ccdcielver+'","'+ShortRevisionStr+'","'+RevisionStr+'"]'
   else if method='DEVICES_CONNECTED' then result:=result+'"result": '+BoolToStr(AllDevicesConnected,tr,fa)
   else if method='TELESCOPE_CONNECTED' then result:=result+'"result": '+BoolToStr(mount.Status=devConnected,tr,fa)
   else if method='TELESCOPE_PARKED' then result:=result+'"result": '+BoolToStr(mount.Park,tr,fa)
