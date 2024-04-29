@@ -1,0 +1,26 @@
+This patch fix Qt5 menu on Wayland when using Lazarus 2.2.6
+It is to be applied in the lazarus directory.
+This is fixed in Lazarus since version 3.2
+See: https://gitlab.com/freepascal.org/lazarus/lazarus/-/issues/40602
+
+diff --git a/lcl/interfaces/qt5/qtwidgets.pas b/lcl/interfaces/qt5/qtwidgets.pas
+index 086e2515b6..7522737633 100644
+--- a/lcl/interfaces/qt5/qtwidgets.pas
++++ b/lcl/interfaces/qt5/qtwidgets.pas
+@@ -15906,6 +15906,16 @@ begin
+     Parent := TQtWidget(AParams.WndParent).GetContainerWidget
+   else
+     Parent := nil;
++
++  {$IFDEF HASX11}
++  // issue #40602
++  if (Parent = nil) and IsWayland and Assigned(FMenuItem) and FMenuItem.HasParent then
++  begin
++    if (FMenuItem.GetParentMenu is TMenu) then
++      Parent := TQtMenu(TMainMenu(FMenuItem.GetParentMenu).Handle).Widget;
++  end;
++  {$ENDIF}
++
+   Result := QMenu_create(Parent);
+   FDeleteLater := True;
+   FActionHandle := nil;
