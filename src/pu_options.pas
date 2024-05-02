@@ -2569,8 +2569,7 @@ begin
   // use only script in user directory
   s:=TStringList.Create;
   for i:=0 to sl.Count-1 do begin
-    if TScriptDir(sl.Objects[i]).path=ScriptDir[1].path then
-      s.Add(sl[i]);
+     s.Add(sl[i]);
   end;
   f_option.sgCustomType.Columns[1].PickList.Assign(s);
   f_option.sgCustomType.Columns[3].PickList.Assign(s);

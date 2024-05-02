@@ -70,7 +70,7 @@ var f: textfile;
     doDownload: boolean;
 begin
   msg:='';
-  fn:=slash(ScriptDir[1].path)+'script.list';
+  fn:=slash(ConfigDir)+'script.list';
   doDownload:=true;
   if FileExists(fn) then begin
     if FileAge(fn,ft) then begin
@@ -114,7 +114,7 @@ begin
   FscriptName:='';
   x:=StringGrid1.Selection.Top;
   fn:=trim(StringGrid1.Cells[1,x])+'.script';
-  dfn:=slash(ScriptDir[1].path)+fn;
+  dfn:=slash(ConfigDir)+fn;
   if FileExists(dfn) then begin
     if MessageDlg(format(rsScriptAlread,[fn]),mtConfirmation,mbYesNo,0)=mrNo
        then exit;

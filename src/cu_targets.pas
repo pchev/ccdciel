@@ -788,7 +788,7 @@ begin
       msg('Upgrade sequence file '+CurrentSeqName+' from version '+IntToStr(FileVersion)+' to version '+IntToStr(TargetFileVersion),1);
    if FileVersion<3 then begin
      // compatibility with previous version
-     if FileExistsUTF8(slash(ScriptDir[1].path)+'end_sequence.script') then begin
+     if FileExistsUTF8(slash(ConfigDir)+'end_sequence.script') then begin
         AtEndStopTracking:=false;
         AtEndRunScript:=true;
         AtEndScript:='end_sequence';
@@ -1257,12 +1257,9 @@ begin
   end;
   if AtStartRunScript then begin
     scriptfound:=false;
-    for i:=1 to MaxScriptDir do begin
-      if FileExistsUTF8(slash(ScriptDir[i].path)+AtStartScript+'.script') then begin
-         scriptfound:=true;
-         f_scriptengine.RunScript(AtStartScript,ScriptDir[i].path,'');
-         break;
-      end;
+    if FileExistsUTF8(slash(ConfigDir)+AtStartScript+'.script') then begin
+       scriptfound:=true;
+       f_scriptengine.RunScript(AtStartScript,ConfigDir,'');
     end;
     if not scriptfound then begin
       msg(Format(rsFileNotFound,[AtStartScript+'.script']),1);
@@ -2991,12 +2988,9 @@ begin
   RunEndAction(false);
   if OnErrorRunScript then begin
     scriptfound:=false;
-    for i:=1 to MaxScriptDir do begin
-      if FileExistsUTF8(slash(ScriptDir[i].path)+OnErrorScript+'.script') then begin
-         scriptfound:=true;
-         f_scriptengine.RunScript(OnErrorScript,ScriptDir[i].path,'');
-         break;
-      end;
+    if FileExistsUTF8(slash(ConfigDir)+OnErrorScript+'.script') then begin
+       scriptfound:=true;
+       f_scriptengine.RunScript(OnErrorScript,ConfigDir,'');
     end;
     if not scriptfound then begin
       msg(Format(rsFileNotFound,[OnErrorScript+'.script']),1);
@@ -3043,12 +3037,9 @@ if AtEndStopTracking or AtEndPark or AtEndCloseDome or AtEndWarmCamera or AtEndR
   end;
   if AtEndRunScript then begin
     scriptfound:=false;
-    for i:=1 to MaxScriptDir do begin
-      if FileExistsUTF8(slash(ScriptDir[i].path)+AtEndScript+'.script') then begin
-         scriptfound:=true;
-         f_scriptengine.RunScript(AtEndScript,ScriptDir[i].path,'');
-         break;
-      end;
+    if FileExistsUTF8(slash(ConfigDir)+AtEndScript+'.script') then begin
+       scriptfound:=true;
+       f_scriptengine.RunScript(AtEndScript,ConfigDir,'');
     end;
     if not scriptfound then begin
       msg(Format(rsFileNotFound,[AtEndScript+'.script']),1);

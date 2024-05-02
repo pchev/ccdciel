@@ -1690,9 +1690,6 @@ begin
   ConfigGuiderDarkFile:=slash(ConfigDir)+'darkguider_'+profile+'.fits';
 
   LogFileOpen:=false;
-  for i:=1 to MaxScriptDir do ScriptDir[i]:=TScriptDir.Create;
-  ScriptDir[1].path:=slash(ConfigDir);
-  ScriptDir[2].path:=slash(ScriptsDir);
 
   SequenceDir:=globalconfig.GetValue('/Files/Sequence',ConfigDir);
   LogDir:=config.GetValue('/Files/LogDir',LogDir);
@@ -3706,7 +3703,6 @@ begin
   ISOList.Free;
   deepstring.Free;
   ManualFilterNames.Free;
-  for i:=1 to MaxScriptDir do ScriptDir[i].Free;
   if NeedRestart then begin
      ExecNoWait(paramstr(0));
      NewMessage('Program restart',1);
@@ -10007,7 +10003,7 @@ begin
      if i>=0 then begin
        try
        config.SetValue('/Meridian/MeridianScript',f_option.MeridianScript.Items[i]);
-       config.SetValue('/Meridian/MeridianScriptPath',TScriptDir(f_option.MeridianScript.Items.Objects[i]).path);
+       config.SetValue('/Meridian/MeridianScriptPath',ConfigDir);
        except
          config.SetValue('/Meridian/MeridianScript','');
          config.SetValue('/Meridian/MeridianScriptPath','');

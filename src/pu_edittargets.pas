@@ -657,22 +657,20 @@ begin
   s:=TStringlist.Create;
   ScriptList.Clear;
   ScriptList1.Clear;
-  for k:=1 to MaxScriptDir do begin
-    i:=FindFirstUTF8(ScriptDir[k].path+'*.script',0,fs);
-    while i=0 do begin
-      {$if defined(CPUARM) or defined(CPUAARCH64)}
-      if f_scriptengine.ScriptType(ScriptDir[k].path+fs.name)<>stPascal then
-      {$endif}
-      begin
-        scr:=ExtractFileNameOnly(fs.Name);
-        if s.IndexOf(scr)<0 then begin
-          s.AddObject(scr,ScriptDir[k]);
-        end;
+  i:=FindFirstUTF8(slash(ConfigDir)+'*.script',0,fs);
+  while i=0 do begin
+    {$if defined(CPUARM) or defined(CPUAARCH64)}
+    if f_scriptengine.ScriptType(slash(ConfigDir)+fs.name)<>stPascal then
+    {$endif}
+    begin
+      scr:=ExtractFileNameOnly(fs.Name);
+      if s.IndexOf(scr)<0 then begin
+        s.Add(scr);
       end;
-      i:=FindNextUTF8(fs);
     end;
-    FindCloseUTF8(fs);
+    i:=FindNextUTF8(fs);
   end;
+  FindCloseUTF8(fs);
   s.CustomSort(@ScriptListCompare);
   ScriptList.Items.Assign(s);
   ScriptList.ItemIndex:=0;
@@ -1467,7 +1465,6 @@ end;
 
 procedure Tf_EditTargets.BtnScriptClick(Sender: TObject);
 var txt,fn: string;
-    scdir:TScriptDir;
     i,n:integer;
     newscript: boolean;
     s: TStringList;
@@ -1490,9 +1487,8 @@ begin
     if txt='' then exit;
     st:=TScriptType(ns.ScriptLanguage.ItemIndex+1);
     ns.free;
-    scdir:=ScriptDir[1];
     if copy(txt,1,2)='T_' then delete(txt,1,2);
-    fn:=scdir.path+txt+'.script';
+    fn:=slash(ConfigDir)+txt+'.script';
     if FileExistsUTF8(fn) then begin
        if MessageDlg(Format(rsScriptAlread2, [fn]), mtConfirmation, mbYesNo, 0)=mrYes then
          s.LoadFromFile(fn)
@@ -1524,26 +1520,10 @@ begin
     i:=ScriptList.ItemIndex;
     if i<0 then exit;
     txt:=ScriptList.Items[i];
-    scdir:=TScriptDir(ScriptList.Items.Objects[i]);
-    if (txt='')or(scdir=nil) then exit;
-    fn:=scdir.path+txt+'.script';
+    if (txt='') then exit;
+    fn:=slash(ConfigDir)+txt+'.script';
     s.LoadFromFile(fn);
     f_pascaleditor.ScriptType:=f_scriptengine.ScriptType(fn);
-    if scdir<>ScriptDir[1] then begin
-       if copy(txt,1,2)='T_' then
-          delete(txt,1,2)
-       else begin
-         if txt[1]<>'_' then txt:='_'+txt
-       end;
-       scdir:=ScriptDir[1];
-       fn:=scdir.path+txt+'.script';
-       newscript:=true;
-       if FileExistsUTF8(fn) then begin
-          if MessageDlg(Format(rsScriptAlread3, [fn]), mtConfirmation,
-            mbYesNo, 0)<>mrYes then
-            exit;
-       end;
-    end;
     f_pascaleditor.ScriptName:=txt;
   end;
   f_pascaleditor.SynEdit1.Lines.Assign(s);
@@ -1563,7 +1543,6 @@ end;
 
 procedure Tf_EditTargets.BtnScript1Click(Sender: TObject);
 var txt,fn: string;
-    scdir:TScriptDir;
     i,n:integer;
     newscript: boolean;
     s: TStringList;
@@ -1586,9 +1565,8 @@ begin
     if txt='' then exit;
     st:=TScriptType(ns.ScriptLanguage.ItemIndex+1);
     ns.free;
-    scdir:=ScriptDir[1];
     if copy(txt,1,2)='T_' then delete(txt,1,2);
-    fn:=scdir.path+txt+'.script';
+    fn:=slash(ConfigDir)+txt+'.script';
     if FileExistsUTF8(fn) then begin
        if MessageDlg(Format(rsScriptAlread2, [fn]), mtConfirmation, mbYesNo, 0)=mrYes then
          s.LoadFromFile(fn)
@@ -1620,26 +1598,10 @@ begin
     i:=ScriptList1.ItemIndex;
     if i<0 then exit;
     txt:=ScriptList1.Items[i];
-    scdir:=TScriptDir(ScriptList1.Items.Objects[i]);
-    if (txt='')or(scdir=nil) then exit;
-    fn:=scdir.path+txt+'.script';
+    if (txt='') then exit;
+    fn:=slash(ConfigDir)+txt+'.script';
     s.LoadFromFile(fn);
     f_pascaleditor.ScriptType:=f_scriptengine.ScriptType(fn);
-    if scdir<>ScriptDir[1] then begin
-       if copy(txt,1,2)='T_' then
-          delete(txt,1,2)
-       else begin
-         if txt[1]<>'_' then txt:='_'+txt
-       end;
-       scdir:=ScriptDir[1];
-       fn:=scdir.path+txt+'.script';
-       newscript:=true;
-       if FileExistsUTF8(fn) then begin
-          if MessageDlg(Format(rsScriptAlread3, [fn]), mtConfirmation,
-            mbYesNo, 0)<>mrYes then
-            exit;
-       end;
-    end;
     f_pascaleditor.ScriptName:=txt;
   end;
   f_pascaleditor.SynEdit1.Lines.Assign(s);
@@ -1650,7 +1612,7 @@ begin
     s.SaveToFile(fn);
     if newscript then begin
      LoadScriptList;
-     SetScriptList1(n,scdir.path,f_pascaleditor.ScriptName,ScriptParam1.Text);
+     SetScriptList1(n,ConfigDir,f_pascaleditor.ScriptName,ScriptParam1.Text);
      StepChange(nil);
     end;
   end;
@@ -2104,7 +2066,6 @@ end;
 procedure Tf_EditTargets.TargetChange(Sender: TObject);
 var i,n,j:integer;
     oldid: LongWord;
-    scdir:TScriptDir;
     sname,str,buf: string;
     t: TTarget;
     planchange: boolean;
@@ -2124,11 +2085,9 @@ begin
     i:=ScriptList.ItemIndex;
     sname:=ScriptList.Items[i];
     TargetList.Cells[colplan,n]:=sname;
-    scdir:=TScriptDir(ScriptList.Items.Objects[i]);
     t.planname:=sname;
     t.scriptargs:=trim(ScriptParam.Text);
-    if scdir=nil then t.path:=''
-                 else t.path:=scdir.path;
+    t.path:=slash(ConfigDir);
   end
   else if t.objectname=SwitchTxt then begin
     PanelTools.visible:=false;
@@ -3041,7 +3000,6 @@ var n,j,i:integer;
     p: TStep;
     x: double;
     str,buf,snick,sname: string;
-    scdir: TScriptDir;
     ok:boolean;
 begin
   if LockStep then exit;
@@ -3142,7 +3100,6 @@ begin
   else if p.steptype=1 then begin
     i:=ScriptList1.ItemIndex;
     sname:=ScriptList1.Items[i];
-    scdir:=TScriptDir(ScriptList1.Items.Objects[i]);
     buf:=trim(ScriptParam1.Text);
     p.description:=sname+' '+buf;
     StepList.Cells[pcoldesc,n]:=p.description;
@@ -3151,14 +3108,7 @@ begin
     p.scriptname:=sname;
     StepsModified:=StepsModified or (p.scriptargs<>buf);
     p.scriptargs:=buf;
-    if scdir=nil then begin
-      StepsModified:=StepsModified or (p.scriptpath<>'');
-      p.scriptpath:=''
-    end
-    else begin
-      StepsModified:=StepsModified or (p.scriptpath<>scdir.path);
-      p.scriptpath:=scdir.path;
-    end;
+    p.scriptpath:=slash(ConfigDir);
   end
   else if p.steptype=2 then begin
     snick:=Switches1.Text;

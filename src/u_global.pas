@@ -93,11 +93,6 @@ type
                  range: TNumRange;
                end;
 
-  TScriptDir = Class(TObject)
-               public
-                 path: string;
-               end;
-
   TScriptType = (stUnknown, stPascal, stPython);
 
   TFilterExp = Class(TObject)
@@ -311,7 +306,6 @@ const
   M_AbortSequence=1201;
   StarLostStatus='Star lost';
   MaxCmdArg = 10;
-  MaxScriptDir=2;
   MaxMenulevel=10;
   MaxFilter=100;
   MaxSwitches=100;
@@ -405,7 +399,6 @@ var
   AllDevicesConnected: boolean;
   ConfirmClose, ScreenScaling, LogToFile: boolean;
   LogLevel: integer;
-  ScriptDir: array[1..MaxScriptDir] of TScriptDir;
   PythonCmd: string;
   config,screenconfig,credentialconfig,emailconfig,bpmconfig,globalconfig: TCCDConfig;
   profile: string;

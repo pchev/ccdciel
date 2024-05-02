@@ -221,7 +221,7 @@ procedure Tf_script.RunStartupScript;
 var path,sname: string;
 begin
   // Always run user customized script, never try to run the distribution sample script
-  path:=ScriptDir[1].path;
+  path:=ConfigDir;
   sname:='startup';
   if FileExistsUTF8(slash(path)+sname+'.script') then begin
     f_scriptengine.RunScript(sname,path,'');
@@ -232,7 +232,7 @@ procedure Tf_script.RunShutdownScript;
 var path,sname: string;
 begin
   // Always run user customized script, never try to run the distribution sample script
-  path:=ScriptDir[1].path;
+  path:=ConfigDir;
   sname:='shutdown';
   if FileExistsUTF8(slash(path)+sname+'.script') then begin
     f_scriptengine.RunScript(sname,path,'');
@@ -243,7 +243,7 @@ procedure Tf_script.RunConnectedScript;
 var path,sname: string;
 begin
   // Always run user customized script, never try to run the distribution sample script
-  path:=ScriptDir[1].path;
+  path:=ConfigDir;
   sname:='connected';
   if FileExistsUTF8(slash(path)+sname+'.script') then begin
     f_scriptengine.RunScript(sname,path,'');
@@ -254,7 +254,7 @@ procedure Tf_script.RunDisconnectedScript;
 var path,sname: string;
 begin
   // Always run user customized script, never try to run the distribution sample script
-  path:=ScriptDir[1].path;
+  path:=ConfigDir;
   sname:='disconnected';
   if FileExistsUTF8(slash(path)+sname+'.script') then begin
     f_scriptengine.RunScript(sname,path,'');
@@ -263,7 +263,6 @@ end;
 
 procedure Tf_script.BtnRunClick(Sender: TObject);
 var sname,args: string;
-    scdir:TScriptDir;
     i: integer;
 begin
   i:=ComboBoxScript.ItemIndex;
@@ -272,19 +271,18 @@ begin
       msg(rsAnotherScrip);
     end else begin
       sname:=ComboBoxScript.Items[i];
-      scdir:=TScriptDir(ComboBoxScript.Items.Objects[i]);
       if panel5.Visible then begin
         args:=trim(ScriptParam.text);
         AddMRU(args);
       end
       else
         args:='';
-      if (sname='')or(scdir=nil) then exit;
-      if not FileExistsUTF8(slash(scdir.path)+sname+'.script') then begin
+      if (sname='') then exit;
+      if not FileExistsUTF8(slash(ConfigDir)+sname+'.script') then begin
         msg(Format(rsFileNotFound,[sname+'.script']));
         exit;
       end;
-      f_scriptengine.RunScript(sname,scdir.path,args);
+      f_scriptengine.RunScript(sname,ConfigDir,args);
    end;
   end
   else msg(rsPleaseSelect);
@@ -306,17 +304,14 @@ end;
 procedure Tf_script.ComboBoxScriptKeyDown(Sender: TObject; var Key: Word;
   Shift: TShiftState);
 var txt,fn: string;
-    scdir:TScriptDir;
     i:integer;
 begin
   if key=VK_DELETE then begin
    i:=ComboBoxScript.ItemIndex;
    if i<0 then exit;
    txt:=ComboBoxScript.Items[i];
-   scdir:=TScriptDir(ComboBoxScript.Items.Objects[i]);
-   if (txt='')or(scdir=nil) then exit;
-   if scdir<>ScriptDir[1] then exit;
-   fn:=scdir.path+txt+'.script';
+   if (txt='') then exit;
+   fn:=slash(ConfigDir)+txt+'.script';
    if MessageDlg(Format(rsDoYouWantToD, [fn]), mtConfirmation, mbYesNo, 0)=
      mrYes then begin
       DeleteFileUTF8(fn);
@@ -327,19 +322,16 @@ end;
 
 procedure Tf_script.BtnCopyClick(Sender: TObject);
 var txt,fn1,fn2: string;
-    scdir:TScriptDir;
     i:integer;
 begin
   i:=ComboBoxScript.ItemIndex;
   if i<0 then exit;
   txt:=ComboBoxScript.Items[i];
-  scdir:=TScriptDir(ComboBoxScript.Items.Objects[i]);
-  if (txt='')or(scdir=nil) then exit;
-  fn1:=scdir.path+txt+'.script';
+  if (txt='') then exit;
+  fn1:=slash(ConfigDir)+txt+'.script';
   txt:=FormEntry(self, rsCopyTo, '');
   if txt='' then exit;
-  scdir:=ScriptDir[1];
-  fn2:=scdir.path+txt+'.script';
+  fn2:=slash(ConfigDir)+txt+'.script';
   if FileExistsUTF8(fn2) then begin
      if MessageDlg(Format(rsScriptAlread, [fn2]), mtConfirmation, mbYesNo, 0)<>
        mrYes then
@@ -357,7 +349,6 @@ end;
 
 procedure Tf_script.BtnScriptClick(Sender: TObject);
 var txt,fn: string;
-    scdir:TScriptDir;
     i:integer;
     newscript: boolean;
     s: TStringList;
@@ -381,9 +372,7 @@ begin
     txt:=trim(ns.Edit1.text);
     if txt='' then exit;
     st:=TScriptType(ns.ScriptLanguage.ItemIndex+1);
-    scdir:=ScriptDir[1];
-    if copy(txt,1,2)='T_' then delete(txt,1,2);
-    fn:=scdir.path+txt+'.script';
+    fn:=slash(ConfigDir)+txt+'.script';
     if ns.Downloaded then begin
       LoadScriptList;
       SetScriptList(txt);
@@ -421,25 +410,10 @@ begin
     i:=ComboBoxScript.ItemIndex;
     if i<0 then exit;
     txt:=ComboBoxScript.Items[i];
-    scdir:=TScriptDir(ComboBoxScript.Items.Objects[i]);
-    if (txt='')or(scdir=nil) then exit;
-    fn:=scdir.path+txt+'.script';
+    if (txt='') then exit;
+    fn:=slash(ConfigDir)+txt+'.script';
     s.LoadFromFile(fn);
     f_pascaleditor.ScriptType:=f_scriptengine.ScriptType(fn);
-    if scdir<>ScriptDir[1] then begin
-       if copy(txt,1,2)='T_' then
-          delete(txt,1,2)
-       else begin
-         if txt[1]<>'_' then txt:='_'+txt
-       end;
-       scdir:=ScriptDir[1];
-       fn:=scdir.path+txt+'.script';
-       newscript:=true;
-       if FileExistsUTF8(fn) then begin
-          if MessageDlg(Format(rsScriptAlread3, [fn]), mtConfirmation, mbYesNo, 0)<>mrYes then
-            exit;
-       end;
-    end;
     f_pascaleditor.ScriptName:=txt;
   end;
   f_pascaleditor.SynEdit1.Lines.Assign(s);
@@ -467,21 +441,19 @@ var i,k: integer;
 begin
   s:=TStringlist.Create;
   ComboBoxScript.Clear;
-  for k:=1 to MaxScriptDir do begin
-    i:=FindFirstUTF8(ScriptDir[k].path+'*.script',0,fs);
-    while i=0 do begin
-      {$if defined(CPUARM) or defined(CPUAARCH64)}
-      if f_scriptengine.ScriptType(ScriptDir[k].path+fs.name)<>stPascal then
-      {$endif}
-        begin
-          scr:=ExtractFileNameOnly(fs.Name);
-          if s.IndexOf(scr)<0 then
-            s.AddObject(scr,ScriptDir[k]);
-        end;
-      i:=FindNextUTF8(fs);
-    end;
-    FindCloseUTF8(fs);
+  i:=FindFirstUTF8(slash(ConfigDir)+'*.script',0,fs);
+  while i=0 do begin
+    {$if defined(CPUARM) or defined(CPUAARCH64)}
+    if f_scriptengine.ScriptType(slash(ConfigDir)+fs.name)<>stPascal then
+    {$endif}
+      begin
+        scr:=ExtractFileNameOnly(fs.Name);
+        if s.IndexOf(scr)<0 then
+          s.Add(scr);
+      end;
+    i:=FindNextUTF8(fs);
   end;
+  FindCloseUTF8(fs);
   s.CustomSort(@ScriptListCompare);
   ComboBoxScript.Items.Assign(s);
   ComboBoxScript.ItemIndex:=0;
