@@ -18,6 +18,7 @@ dirs="component/synapse \
      component/xmlparser \
      component/controltimer \
      component/vosamp \
+     component/downloaddialog \
      component \
      library \
      src \

@@ -366,6 +366,8 @@ var txt,fn: string;
 begin
   newscript:=(Sender=BtnNew)or(ComboBoxScript.Text='');
   s:=TStringList.Create;
+  ns:=Tf_newscript.Create(self);
+  try
   if f_pascaleditor=nil then begin
      f_pascaleditor:=Tf_pascaleditor.Create(self);
      f_pascaleditor.DebugScript:=f_scriptengine.dbgscr;
@@ -373,17 +375,20 @@ begin
   f_pascaleditor.ShowHint:=ShowHint;
   if newscript then begin
     s.Clear;
-    ns:=Tf_newscript.Create(self);
     FormPos(ns,mouse.CursorPos.x,mouse.CursorPos.y);
     ns.ShowModal;
     if ns.ModalResult<>mrOK then exit;
     txt:=trim(ns.Edit1.text);
     if txt='' then exit;
     st:=TScriptType(ns.ScriptLanguage.ItemIndex+1);
-    ns.free;
     scdir:=ScriptDir[1];
     if copy(txt,1,2)='T_' then delete(txt,1,2);
     fn:=scdir.path+txt+'.script';
+    if ns.Downloaded then begin
+      LoadScriptList;
+      SetScriptList(txt);
+      exit;
+    end;
     if FileExistsUTF8(fn) then begin
        if MessageDlg(Format(rsScriptAlread2, [fn]), mtConfirmation, mbYesNo, 0)=
          mrYes then
@@ -448,7 +453,10 @@ begin
      SetScriptList(f_pascaleditor.ScriptName);
     end;
   end;
-  s.Free;
+  finally
+    ns.free;
+    s.Free;
+  end;
 end;
 
 procedure Tf_script.LoadScriptList;

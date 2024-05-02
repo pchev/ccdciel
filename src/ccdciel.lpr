@@ -41,7 +41,7 @@ uses
   cu_autoguider_phd, cu_tcpclient, fu_autoguider, fu_sequence, u_ccdconfig,
   pu_edittargets, cu_autoguider, cu_planetarium, fu_planetarium, cu_astrometry,
   pu_planetariuminfo, cu_planetarium_cdc, cu_targets, cu_plan, pu_pascaleditor,
-  pu_scriptengine, fu_mount, enhedit, pu_pause, UScaleDPI, fu_video, pu_vcurve,
+  pu_scriptengine, fu_mount, enhedit, downldialog, pu_pause, UScaleDPI, fu_video, pu_vcurve,
   cu_incamerawheel, cu_planetarium_hnsky, cu_indirotator, cu_ascomrotator,
   cu_rotator, fu_rotator, cu_autoguider_linguider, cu_watchdog, cu_indiwatchdog,
   pu_focusercalibration, cu_tcpserver, u_translation, pu_hyperbola,
@@ -55,7 +55,7 @@ uses
   pu_keyboard, cu_alpacamanagement, pu_compute, cu_manualwheel, u_speech, pu_collimation,
   cu_ascomrestswitch, cu_ascomswitch, cu_indiswitch, cu_switch, fu_switchpage, pu_newscript,
   pu_polaralign2, fu_internalguider, cu_autoguider_internal, pu_handpad, fu_finder,
-  pu_findercalibration, fu_switch, pu_sensoranalysis, cu_onlinesearch, pu_onlineinfo;
+  pu_findercalibration, fu_switch, pu_sensoranalysis, cu_onlinesearch, pu_onlineinfo, pu_downloadscript;
 
 {$R *.res}
 

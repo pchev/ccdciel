@@ -334,6 +334,8 @@ const
   URL_ONLINEHELP='https://www.ap-i.net/ccdciel/en/documentation/start';
   URL_USERGROUP='https://groups.io/g/ccdciel';
   URL_PROGRAMSTATUS='http://localhost:$port';
+  URL_SCRIPTLIST='https://vega.ap-i.net/pub/ccdciel/scripts/script.list';
+  URL_SCRIPTDOWNLOAD='https://vega.ap-i.net/pub/ccdciel/scripts/';
   SkyFlatTxt='SkyFlat';
   ScriptTxt='Script';
   SwitchTxt='Switch';

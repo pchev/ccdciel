@@ -1,0 +1,99 @@
+object f_downloadscript: Tf_downloadscript
+  Left = 369
+  Height = 367
+  Top = 30
+  Width = 556
+  Caption = 'f_downloadscript'
+  ClientHeight = 367
+  ClientWidth = 556
+  OnCreate = FormCreate
+  OnShow = FormShow
+  object StringGrid1: TStringGrid
+    Left = 0
+    Height = 285
+    Top = 40
+    Width = 556
+    Align = alClient
+    ColCount = 3
+    Columns = <    
+      item
+        MinSize = 100
+        MaxSize = 150
+        Title.Caption = 'Group'
+        Width = 100
+      end    
+      item
+        MinSize = 100
+        MaxSize = 150
+        Title.Caption = 'Script'
+        Width = 150
+      end    
+      item
+        MinSize = 250
+        MaxSize = 1000
+        Title.Caption = 'Description'
+        Width = 500
+      end>
+    FixedCols = 0
+    TabOrder = 0
+    ColWidths = (
+      100
+      150
+      500
+    )
+  end
+  object PanelBottom: TPanel
+    Left = 0
+    Height = 42
+    Top = 325
+    Width = 556
+    Align = alBottom
+    ClientHeight = 42
+    ClientWidth = 556
+    TabOrder = 1
+    object ButtonCancel: TButton
+      AnchorSideLeft.Side = asrBottom
+      AnchorSideRight.Control = ButtonDownload
+      Left = 146
+      Height = 25
+      Top = 8
+      Width = 75
+      Anchors = [akTop, akRight]
+      BorderSpacing.Right = 20
+      Cancel = True
+      Caption = 'Cancel'
+      OnClick = ButtonCancelClick
+      TabOrder = 0
+    end
+    object ButtonDownload: TButton
+      AnchorSideLeft.Control = PanelBottom
+      AnchorSideLeft.Side = asrCenter
+      Left = 241
+      Height = 25
+      Top = 8
+      Width = 75
+      Caption = 'Download'
+      OnClick = ButtonDownloadClick
+      TabOrder = 1
+    end
+  end
+  object PanelTitle: TPanel
+    Left = 0
+    Height = 40
+    Top = 0
+    Width = 556
+    Align = alTop
+    Caption = 'Select the script to download'
+    TabOrder = 2
+  end
+  object DownloadDialog1: TDownloadDialog
+    HttpDirectDownload = False
+    Timeout = 90000
+    FtpFwMode = 0
+    FtpFwPassive = True
+    ConfirmDownload = True
+    QuickCancel = False
+    Left = 440
+    Top = 232
+  end
+end

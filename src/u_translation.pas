@@ -1553,6 +1553,10 @@ resourcestring
   rsSensorAreaUs = 'Sensor area used for focusing';
   rsPercent = 'percent';
   rsSearchOnline = 'Search online';
+  rsDownload = 'Download';
+  rsExampleAndTe = 'Example and template';
+  rsGroup = 'Group';
+  rsSelectTheScr = 'Select the script to download';
 
 implementation
 

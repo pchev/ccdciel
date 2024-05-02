@@ -15,9 +15,9 @@
         </SyntaxOptions>
       </Parsing>
     </CompilerOptions>
-    <Description Value="Requires packages for Cartes du Ciel"/>
+    <Description Value="Requires packages for CCDciel"/>
     <CompatibilityMode Value="True"/>
-    <RequiredPkgs Count="8">
+    <RequiredPkgs Count="9">
       <Item1>
         <PackageName Value="controltimer"/>
         <DefaultFilename Value="controltimer/controltimer.lpk"/>
@@ -47,9 +47,13 @@
         <DefaultFilename Value="xmlparser/xmlparser.lpk"/>
       </Item7>
       <Item8>
+        <PackageName Value="downldialog"/>
+        <DefaultFilename Value="downloaddialog/downldialog.lpk"/>
+      </Item8>
+      <Item9>
         <PackageName Value="FCL"/>
         <MinVersion Major="1" Valid="True"/>
-      </Item8>
+      </Item9>
     </RequiredPkgs>
     <UsageOptions>
       <UnitPath Value="$(PkgOutDir)"/>
