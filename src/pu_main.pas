@@ -3625,6 +3625,13 @@ try
     config.SetValue('/StarAnalysis/AutofocusMultiStarCenterPct',i);
     config.DeleteValue('/StarAnalysis/AutofocusMultiStarCenter');
   end;
+  if oldver<'0.9.88' then begin
+    msg:='This version remove the example script from'+crlf+slash(appdir)+'scripts' +crlf+
+         'Please check you not use any of them directly without editing.'+crlf+
+         'Now you can download the example you need using the button "New" in the "Run Script" tool.';
+    NewMessage(msg,1);
+    MessageDlg(caption,msg,mtWarning,[mbOK],0);
+  end;
 
   if config.Modified then begin
      config.SetValue('/Configuration/Version',ccdcielver);
