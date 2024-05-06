@@ -1304,7 +1304,7 @@ begin
   if (Index=ccScript) and StartOpt.Checked[ccScript] then begin
      f_selectscript.SetScript(StartScript);
      FormPos(f_selectscript,mouse.CursorPos.X,mouse.CursorPos.Y);
-     if f_selectscript.ShowModal=mrOK then begin
+     if (f_selectscript.ShowModal=mrOK)and(f_selectscript.ComboBoxScript.ItemIndex>=0) then begin
         StartScript:=f_selectscript.ComboBoxScript.Items[f_selectscript.ComboBoxScript.ItemIndex];
      end;
   end;
@@ -1347,14 +1347,14 @@ begin
   if (Index=cbScript) and TermOpt.Checked[cbScript] then begin
      f_selectscript.SetScript(EndScript);
      FormPos(f_selectscript,mouse.CursorPos.X,mouse.CursorPos.Y);
-     if f_selectscript.ShowModal=mrOK then begin
+     if (f_selectscript.ShowModal=mrOK)and(f_selectscript.ComboBoxScript.ItemIndex>=0) then begin
         EndScript:=f_selectscript.ComboBoxScript.Items[f_selectscript.ComboBoxScript.ItemIndex];
      end;
   end;
   if (Index=cbUnattended) and TermOpt.Checked[cbUnattended] then begin
      f_selectscript.SetScript(UnattendedScript);
      FormPos(f_selectscript,mouse.CursorPos.X,mouse.CursorPos.Y);
-     if f_selectscript.ShowModal=mrOK then begin
+     if (f_selectscript.ShowModal=mrOK)and(f_selectscript.ComboBoxScript.ItemIndex>=0) then begin
         UnattendedScript:=f_selectscript.ComboBoxScript.Items[f_selectscript.ComboBoxScript.ItemIndex];
      end;
   end;
@@ -2083,7 +2083,10 @@ begin
     PanelTools.visible:=false;
     PageControlPlan.ActivePageIndex:=pagescript;
     i:=ScriptList.ItemIndex;
-    sname:=ScriptList.Items[i];
+    if i>=0 then
+      sname:=ScriptList.Items[i]
+    else
+      sname:='';
     TargetList.Cells[colplan,n]:=sname;
     t.planname:=sname;
     t.scriptargs:=trim(ScriptParam.Text);
@@ -3099,7 +3102,10 @@ begin
   end
   else if p.steptype=1 then begin
     i:=ScriptList1.ItemIndex;
-    sname:=ScriptList1.Items[i];
+    if i>=0 then
+      sname:=ScriptList1.Items[i]
+    else
+      sname:='';
     buf:=trim(ScriptParam1.Text);
     p.description:=sname+' '+buf;
     StepList.Cells[pcoldesc,n]:=p.description;

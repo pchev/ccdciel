@@ -175,6 +175,7 @@ var fn,sname,buf: string;
     i: integer;
 begin
   i:=ComboBoxScript.ItemIndex;
+  if i<0 then exit;
   sname:=ComboBoxScript.Items[i];
   fn:=slash(ConfigDir)+'param_'+sname+'.lst';
   if FileExists(fn) then begin
@@ -455,10 +456,12 @@ begin
     i:=FindNextUTF8(fs);
   end;
   FindCloseUTF8(fs);
-  s.CustomSort(@ScriptListCompare);
-  ComboBoxScript.Items.Assign(s);
-  ComboBoxScript.ItemIndex:=0;
-  ComboBoxScriptChange(ComboBoxScript);
+  if s.Count>0 then begin
+    s.CustomSort(@ScriptListCompare);
+    ComboBoxScript.Items.Assign(s);
+    ComboBoxScript.ItemIndex:=0;
+    ComboBoxScriptChange(ComboBoxScript);
+  end;
   s.Free;
 end;
 

@@ -947,6 +947,7 @@ var
  buf: string;
  p: integer;
 begin
+ try
  result:=stUnknown;
  AssignFile(f,fn);
  Reset(f);
@@ -970,6 +971,9 @@ begin
    end;
  until eof(f);
  CloseFile(f);
+ except
+   result:=stUnknown;
+ end;
 end;
 
 function Tf_scriptengine.RunScript(sname,path,args: string):boolean;
