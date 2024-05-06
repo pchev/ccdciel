@@ -376,6 +376,7 @@ begin
     if ns.Downloaded then begin
       LoadScriptList;
       SetScriptList(txt);
+      BtnScriptClick(BtnEdit);
       exit;
     end;
     if FileExistsUTF8(fn) then begin

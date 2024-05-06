@@ -1,8 +1,9 @@
 # CCDciel shutdown script example
+#
 # This script will be executed every time ccdciel is closed.
-# Please review, adapt and test carefully before to copy this script in the active directory.
-# On Windows copy to %LOCALAPPDATA%\ccdciel\
-# On Linux copy to ~/.config/ccdciel
+# This example close PHD2, Skychart, Indistarter
+# Please review, adapt and test carefully before to use this script.
+#
 
 from ccdciel import ccdciel
 from ccdciel import IsRunning

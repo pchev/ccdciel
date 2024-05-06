@@ -1,0 +1,56 @@
+# Python program for CCDciel
+# see: https://www.ap-i.net/ccdciel/en/documentation/jsonrpc_reference
+#
+# UVEX4 change calibration light on or off
+#
+# This script can also stop the mount tracking when a calibration light is ON.
+# Uncomment then corresponding block below if you need that.
+
+from ccdciel import ccdciel
+from libuvex4 import UVEX4
+import sys
+import os
+
+# process parameters
+try:
+  if len(sys.argv) < 3 :
+    raise Exception('Missing parameters')
+  cname = sys.argv[1]
+  state = int(sys.argv[2])
+  if (state<0) or (state>1) :
+     raise Exception('Incorrect calibration switch state')
+except Exception as ex:
+  print('Invalid parameters: ',ex)
+  sys.exit(1)
+
+# current script directory
+scriptdir = os.path.dirname(os.path.abspath(sys.argv[0]))
+
+try :
+    # connect to UVEX4 using information in the config file
+    uvex = UVEX4(os.path.join(scriptdir,'UVEX4_config.script'))
+
+    # set the switch state
+    uvex.calibration = [cname, state]
+
+    # update FITS header
+    gr = str(uvex.grating_resolution)
+    w  = uvex.wavelength
+    spos= uvex.slitpos
+    sname = uvex.Slits[spos-1].Label
+    t = uvex.temperature
+    ccdciel("CustomHeader_add",["SLIT",sname])
+    ccdciel("CustomHeader_add",["GRATING",gr])
+    ccdciel("CustomHeader_add",["WAVELNTH",w[1]])
+    ccdciel("CustomHeader_add",["WAVEMIN",w[2]])
+    ccdciel("CustomHeader_add",["WAVEMAX",w[3]])
+    ccdciel("CustomHeader_add",["SPECTEMP",t])
+
+    # stop tracking for calibration images
+    #if (state==1) :
+    #   ccdciel('Telescope_Abortmotion');
+
+except Exception as ex:
+    print('Error: '+type(ex).__name__,'-',ex)
+    sys.exit(1)
+

@@ -1,6 +1,40 @@
 from ccdciel import ccdciel
 import sys
 
+#  This script can be used to create a pointing model for you mount.
+#  You must set the mount driver in the correct mode to record a pointing model before to run this script.
+#  This version allow for an unlimited number of points.
+#  
+#  Use the script eqmod_alignment if you use an EQMOD mount.
+#  
+#  Edit the parameters below according to your needs.
+
+# Exposure time and binning
+EXPTIME_SEC = 5
+BINNING = '1x1'
+# select alignemnt on both side of meridian or only one
+DO_EAST_ALIGN = True
+DO_WEST_ALIGN = False
+# position of point to the east, [azimuth, elevation]
+AZ_ALT_EAST = ([45.0,  35.0],
+               [90.0,  60.0],
+               [110.0, 30.0],
+               [140.0, 30.0],
+               [170.0, 30.0],
+               [170.0, 50.0],
+               [170.0, 70.0],
+               [90.0, 80.0],
+               [10.0, 60.0])
+# position of point to the west, [azimuth, elevation]
+AZ_ALT_WEST = ([340.0,  60.0],
+               [240.0,  75.0],
+               [210.0,  30.0],
+               [245.0,  30.0],
+               [300.0,  60.0])
+
+# end of parameters, no need to change anything below this line.
+
+
 MSG_OK = 'OK!'
 
 def SyncAzAlt(az, alt):
@@ -55,25 +89,6 @@ def Setup(exptime, binning):
       sys.exit(1)
 
 
-# Main settings
-EXPTIME_SEC = 5
-BINNING = '1x1'
-AZ_ALT_EAST = ([45.0,  35.0],
-               [90.0,  60.0],
-               [110.0, 30.0],
-               [140.0, 30.0],
-               [170.0, 30.0],
-               [170.0, 50.0],
-               [170.0, 70.0],
-               [90.0, 80.0],
-               [10.0, 60.0])
-AZ_ALT_WEST = ([340.0,  60.0],
-               [240.0,  75.0],
-               [210.0,  30.0],
-               [245.0,  30.0],
-               [300.0,  60.0])
-DO_EAST_ALIGN = True
-DO_WEST_ALIGN = False
 
 # Connect and setup.
 Setup(EXPTIME_SEC, BINNING)

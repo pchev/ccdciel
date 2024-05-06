@@ -1,0 +1,18 @@
+Telescope; scope_park; Park the telescope
+Telescope; scope_unpark; Unpark the telescope
+Telescope; scope_position; Show the telescope position
+Telescope; scope_alignment; Make a telescope pointing model
+Telescope; eqmod_alignment; Make a Eqmod telescope pointing model
+Preprocessing; siril_bias; Create master Bias (require Siril)
+Preprocessing; siril_dark; Create master Dark (require Siril)
+Preprocessing; siril_flat; Create master Flat (require Siril)
+Preprocessing; siril_light_color; Preprocessing of color images (require Siril)
+Preprocessing; siril_light; Preprocessing of mono images (require Siril)
+Calibrator; cover_open; Open the telescope cover
+Calibrator; cover_close; Close the telescope cover
+Calibrator; calibrator_on; Turn the calibrator light on
+Calibrator; calibrator_off; Turn the calibrator light off
+Initialization; startup; Startup action when CCDciel is started
+Initialization; shutdown; Close action when CCDciel is exited
+Computer; computer_shutdown; Shutdown the computer
+Computer; computer_to_sleep; Make the computer to sleep

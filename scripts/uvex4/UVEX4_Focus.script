@@ -1,0 +1,51 @@
+# Python program for CCDciel
+# see: https://www.ap-i.net/ccdciel/en/documentation/jsonrpc_reference
+
+# UVEX4 change the internal focus position by the specified amount.
+# for example UVEX4_Focus in 200
+
+from ccdciel import ccdciel
+from libuvex4 import UVEX4
+import sys
+import os
+
+# process parameters
+try:
+  if len(sys.argv) < 3 :
+    raise Exception('Missing parameters')
+  direction = sys.argv[1].lower()
+  if direction not in ['in','out']  :
+     raise Exception('Incorrect focus direction')
+  nstep = int(sys.argv[2])
+  if (nstep<100)or(nstep>5000):
+     raise Exception('Number of step out of range 100..5000')
+except Exception as ex:
+  print('Invalid parameters: ',ex)
+  print('Example: UVEX4_Focus in 200')
+  sys.exit(1)
+
+# current script directory
+scriptdir = os.path.dirname(os.path.abspath(sys.argv[0]))
+
+try :
+    # connect to UVEX4 using information in the config file
+    uvex = UVEX4(os.path.join(scriptdir,'UVEX4_config.script'))
+
+    if direction == 'in' :
+       # move focus in
+       uvex.focusin(nstep)
+    else:   
+       # move focus out
+       uvex.focusout(nstep)
+
+    p1 = 'relative '+str(uvex.focusrelpos)
+    if uvex.Focuser_hall_enabled :
+      p2 = ', absolute '+str(uvex.focuspos)
+    else:
+      p2 = ''  
+    print('Focuser position: '+p1+p2)
+
+except Exception as ex:
+    print('Error: '+type(ex).__name__,'-',ex)
+    sys.exit(1)
+

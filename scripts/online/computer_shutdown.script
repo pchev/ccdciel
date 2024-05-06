@@ -1,4 +1,10 @@
-{ CCDciel script to put the computer to sleep }
+{ 
+  CCDciel script to shutdown the computer. 
+  
+  You need to review and test the command used in the Run() function below.
+  This may need to modify the system settings to allow this command to run.
+}
+
 var connected: boolean;
     hostOS: string;
 begin
@@ -18,14 +24,15 @@ begin
  
   logMsg('Will shutdown in 120 seconds');
   // wait 1/720 part of a day
-   if not waittill(formatdatetime('hh":"nn":"ss',now+1.0/720),true) then exit; 
+   if not waittill(formatdatetime('hh":"nn":"ss',now+1.0/720),true) then exit;
 
    if hostOS='windows' then
-     Run('rundll32.exe powrprof.dll,SetSuspendState 0,1,0');
+     Run('shutdown /s  /t 2'); {force a shutdown}
 
    if hostOS='linux' then
-     Run('sudo /usr/sbin/hibernate');
-     {install the package hibernate, configure the swap and kernel parameter resume= }
-     {use visudo to allow to run this command without password}
+     Run('/sbin/poweroff');
+     {depending on system setting you may have to add sudo here}
+     {and use visudo to allow to run this command without password}
 
 end.
+

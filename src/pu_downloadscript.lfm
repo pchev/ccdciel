@@ -35,6 +35,8 @@ object f_downloadscript: Tf_downloadscript
         Width = 500
       end>
     FixedCols = 0
+    MouseWheelOption = mwGrid
+    Options = [goFixedVertLine, goFixedHorzLine, goVertLine, goHorzLine, goRangeSelect, goColSizing, goRowSelect, goSmoothScroll, goFixedColSizing]
     TabOrder = 0
     ColWidths = (
       100

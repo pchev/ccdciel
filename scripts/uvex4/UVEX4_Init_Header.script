@@ -1,0 +1,41 @@
+# Python program for CCDciel
+# see: https://www.ap-i.net/ccdciel/en/documentation/jsonrpc_reference
+
+# UVEX4 set FITS headers with current UVEX4 information
+
+from ccdciel import ccdciel
+from libuvex4 import UVEX4
+import sys
+import os
+
+# current script directory
+scriptdir = os.path.dirname(os.path.abspath(sys.argv[0]))
+
+try :
+    # connect to UVEX4 using information in the config file
+    uvex = UVEX4(os.path.join(scriptdir,'UVEX4_config.script'))
+
+    gr = str(uvex.grating_resolution)
+    w  = uvex.wavelength
+    spos= uvex.slitpos
+    sname = uvex.Slits[spos-1].Label
+    t = uvex.temperature
+
+    print('SLIT='+sname)                   # print for a trace in the log
+    print('GRATING='+gr)
+    print("WAVELNTH="+w[1])
+    print("WAVEMIN="+w[2])
+    print("WAVEMAX="+w[3])
+    print('SPECTEMP='+ str(t))
+
+    ccdciel("CustomHeader_add",["SLIT",sname])    # update FITS header
+    ccdciel("CustomHeader_add",["GRATING",gr])
+    ccdciel("CustomHeader_add",["WAVELNTH",w[1]])
+    ccdciel("CustomHeader_add",["WAVEMIN",w[2]])
+    ccdciel("CustomHeader_add",["WAVEMAX",w[3]])
+    ccdciel("CustomHeader_add",["SPECTEMP",t])
+
+except Exception as ex:
+    print('Error: '+type(ex).__name__,'-',ex)
+    sys.exit(1)
+

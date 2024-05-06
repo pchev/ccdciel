@@ -28,7 +28,6 @@ tar xvzf system_integration/MacOSX/data/openssl-mac.tgz -C $destdir/ccdciel.app/
 
 install -d -m 755 $destdir/scripts
 install -m 755 -d $destdir/scripts/siril
-install -m 755 -d $destdir/scripts/example
 install -d -m 755 $destdir/data
 install -d -m 755 $destdir/data/stars
 install -d -m 755 $destdir/data/dso

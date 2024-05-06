@@ -2,6 +2,8 @@
 # For more information and reference of the available methods see: 
 # https://www.ap-i.net/ccdciel/en/documentation/jsonrpc_reference
 
+# This script is an example that print the telescope position in the log.
+
 from ccdciel import ccdciel
 import sys
 

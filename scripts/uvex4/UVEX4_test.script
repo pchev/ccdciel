@@ -1,0 +1,49 @@
+# Python program for CCDciel
+# see: https://www.ap-i.net/ccdciel/en/documentation/jsonrpc_reference
+#
+# UVEX4 set FITS headers with current UVEX4 information
+
+from ccdciel import ccdciel
+from libuvex4 import UVEX4
+import sys
+import os
+
+# current script directory
+scriptdir = os.path.dirname(os.path.abspath(sys.argv[0]))
+
+# connect to UVEX4 using information in the config file
+uvex = UVEX4(os.path.join(scriptdir,'UVEX4_config.script'))
+
+print('Version_Arduino='+uvex.Version_Arduino)
+
+print('SlitSet='+str(uvex.SlitSet))
+print('NumSlit='+str(uvex.NumSlit))
+for i in range(uvex.NumSlit):
+   print(str(i+1)+', '+uvex.Slits[i].Label+', '+', '+str(uvex.Slits[i].Offset))
+spos= uvex.slitpos
+sname = uvex.Slits[spos-1].Label
+print('Current slit='+str(spos)+' '+sname)
+
+print('Grating resolution='+str(uvex.grating_resolution)+' line/mm')
+print('Grating resolution='+str(uvex.GratingSpRes)+' A/px')
+print('Grating resolution='+str(uvex.GratingAnRes)+' A/step')
+w  = uvex.wavelength
+print("WAVELNTH="+w[1])
+print("WAVEMIN="+w[2])
+print("WAVEMAX="+w[3])
+
+print('CalibrationNb='+str(uvex.CalibrationNb))
+n = uvex.calibrations_name
+c = uvex.calibration
+for i in range(uvex.CalibrationNb):
+   print('Relay '+str(i+1)+ ', ' +n[i] + ' = ' + str(c[i]) )
+
+p1 = 'relative '+str(uvex.focusrelpos)
+if uvex.Focuser_hall_enabled :
+   p2 = ', absolute '+str(uvex.focuspos)
+else:
+   p2 = ''  
+print('Focuser position: '+p1+p2)
+
+print('Temperature='+ str(uvex.temperature))
+

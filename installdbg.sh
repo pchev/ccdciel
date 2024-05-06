@@ -36,7 +36,6 @@ install -m 755 -d $destdir/share/ccdciel
 install -m 755 -d $destdir/share/ccdciel/scripts
 install -m 755 -d $destdir/share/ccdciel/scripts/siril
 install -m 755 -d $destdir/share/ccdciel/scripts/indi
-install -m 755 -d $destdir/share/ccdciel/scripts/example
 install -m 755 -d $destdir/share/ccdciel/data
 install -m 755 -d $destdir/share/ccdciel/data/stars
 install -m 755 -d $destdir/share/ccdciel/data/dso

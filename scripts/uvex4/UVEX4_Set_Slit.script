@@ -1,0 +1,35 @@
+# Python program for CCDciel
+# see: https://www.ap-i.net/ccdciel/en/documentation/jsonrpc_reference
+#
+# UVEX4 change the slit 
+
+from ccdciel import ccdciel
+from libuvex4 import UVEX4
+import sys
+import os
+
+# process parameters
+try:
+  if len(sys.argv) < 2 :
+    raise Exception('Missing parameters slit name')
+  slitname = sys.argv[1]
+except Exception as ex:
+  print('Invalid parameters: ',ex)
+  sys.exit(1)
+
+# current script directory
+scriptdir = os.path.dirname(os.path.abspath(sys.argv[0]))
+
+try :
+    # connect to UVEX4 using information in the config file
+    uvex = UVEX4(os.path.join(scriptdir,'UVEX4_config.script'))
+
+    uvex.slitpos = slitname
+
+    print('SLIT='+slitname)
+    ccdciel("CustomHeader_add",["SLIT",slitname])
+
+except Exception as ex:
+    print('Error: '+type(ex).__name__,'-',ex)
+    sys.exit(1)
+

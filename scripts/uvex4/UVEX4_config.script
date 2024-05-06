@@ -1,0 +1,10 @@
+# This is not a script but the configuration for the UVEX4 serial port.
+# It is listed with the scripts to make easy to modify it from CCDciel
+
+[settings]
+# the serial port, COM4 or /dev/ttyUSB0 for example
+portCOM = COM4
+
+# timeout can be adjusted if need
+serialtimeout = 10
+commandtimeout = 60

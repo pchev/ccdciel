@@ -1,6 +1,6 @@
 # CCDciel script to process files with Siril
 #
-# Process a series
+# Process a series of images
 
 from ccdciel import ccdciel
 from ccdciel import IsWindows
