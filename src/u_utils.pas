@@ -24,7 +24,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 {$mode delphi}{$H+}
 interface
 
-uses u_global,
+uses u_global, u_refraction,
      {$ifdef mswindows}
        Windows, registry, ActiveX, comobj, variants,
      {$endif}
@@ -89,7 +89,6 @@ function PlaneDistance(x1,y1,x2,y2: double): double;
 function SidTim(jd0,ut,long : double; eqeq: double=0): double;
 Function CurrentSidTim: double;
 Function SidTimT(t:TDateTime): double;
-Procedure Refraction(var h : double; flag:boolean);
 PROCEDURE Eq2Hz(HH,DE : double ; out A,h : double);
 Procedure Hz2Eq(A,h : double; out hh,de : double);
 function AirMass(h: double): double;
@@ -1446,30 +1445,6 @@ te:=100.46061837 + 36000.770053608*t + 0.000387933*t*t - t*t*t/38710000;
 te:=te+rad2deg*eqeq;
 result := deg2rad*Rmod(te - long + 1.00273790935*ut*15 + 360,360);
 END ;
-
-Procedure Refraction(var h : double; flag:boolean);
-var h1,R : double;
-begin
-{ Bennett 2010, meeus91 15.3, 15.4 }
-if flag then begin   // true -> apparent
-     h1:=rad2deg*h;
-     if h1>-1 then begin
-        R:=cotan(deg2rad*(h1+9.48/(h1+4.8)));
-        R:=R-0.06*sin(deg2rad*(14.7*R+13));
-        h:=MinValue([pid2, h + deg2rad * (R) / 60]);
-     end
-      else h:=h;
-end
-else begin      // apparent -> true
-     h1:=rad2deg*h;
-     if h1>-0.347259404573 then begin
-        R:=cotan(deg2rad*(0.99914*h1+(7.31/(h1+4.4))));
-        R:=R-0.06*sin(deg2rad*(14.7*R+13));
-        h:=MinValue([pid2, h - deg2rad * (R) / 60]);
-     end
-      else h:=h;
-end;
-end;
 
 PROCEDURE Eq2Hz(HH,DE : double ; out A,h : double);
 var l1,d1,h1,sh : double;

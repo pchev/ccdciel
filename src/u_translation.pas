@@ -1557,6 +1557,12 @@ resourcestring
   rsExampleAndTe = 'Example and template';
   rsGroup = 'Group';
   rsSelectTheScr = 'Select the script to download';
+  rsAtmosphericR = 'Atmospheric refraction';
+  rsPressureMill = 'Pressure (millibar)';
+  rsTemperatureC2 = 'Temperature (C)';
+  rsHumidity2 = 'Humidity %';
+  rsTroposphereR = 'Troposphere rate (K/km)';
+  rsGetValuesFro = 'Get values from the weather station';
 
 implementation
 

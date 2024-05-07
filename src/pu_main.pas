@@ -743,6 +743,7 @@ type
     procedure OptionGetMaxADU(Sender: TObject);
     procedure OptionGetPixelSize(Sender: TObject);
     procedure OptionGetFocaleLength(Sender: TObject);
+    procedure OptionGetWeather(Sender: TObject);
     procedure Restart;
     procedure SetTheme;
     procedure SetRefImage;
@@ -1502,6 +1503,11 @@ begin
   GUIready:=false;
   filteroffset_initialized:=false;
   MsgHandle:=handle;
+  ObsWeather:=false;
+  ObsTemperature:=10;
+  ObsPressure:=1013;
+  ObsHumidity:=50;
+  ObsTlr:=6.5;
   meridianflipping:=false;
   TemperatureScale:=0;
   TempLabel:=sdeg+'C';
@@ -5100,6 +5106,11 @@ begin
   LoadHorizon(config.GetValue('/Info/HorizonFile',''));
   ElevationMin:=config.GetValue('/Info/ElevationMin',10.0);
   AzimuthOrigin:=config.GetValue('/Info/AzimuthOrigin',azNorth);
+  ObsWeather:=config.GetValue('/Info/ObsWeather',false);
+  ObsPressure:=config.GetValue('/Info/ObsPressure',1013.0);
+  ObsTemperature:=config.GetValue('/Info/ObsTemperature',10.0);
+  ObsHumidity:=config.GetValue('/Info/ObsHumidity',50.0);
+  ObsTlr:=config.GetValue('/Info/ObsTlr',6.5);
   FlatType:=TFlatType(config.GetValue('/Flat/FlatType',ord(ftNone)));
   FlatAutoExposure:=config.GetValue('/Flat/FlatAutoExposure',false);
   FlatMinExp:=config.GetValue('/Flat/FlatMinExp',1.0);
@@ -9225,6 +9236,7 @@ begin
    f_option.onGetPixelSize:=@OptionGetPixelSize;
    f_option.onGetMaxADU:=@OptionGetMaxADU;
    f_option.onGetFocale:=@OptionGetFocaleLength;
+   f_option.onGetWeather:=@OptionGetWeather;
    f_option.Languages.Clear;
    i:=FindFirstUTF8(slash(appdir) + slash('data') + slash('language') + 'ccdciel.*.po',0,fs);
    while i=0 do begin
@@ -9331,6 +9343,11 @@ begin
    f_option.HorizonFile.FileName:=config.GetValue('/Info/HorizonFile','');
    f_option.ElevationMin.Value:=config.GetValue('/Info/ElevationMin',10.0);
    f_option.AzimuthOrigin.ItemIndex:=config.GetValue('/Info/AzimuthOrigin',azNorth);
+   f_option.cbObsWeather.Checked:=config.GetValue('/Info/ObsWeather',ObsWeather);;
+   f_option.pressure.Value:=ObsPressure;
+   f_option.temperature.Value:=ObsTemperature;
+   f_option.humidity.Value:=ObsHumidity;
+   f_option.tlrate.Value:=ObsTlr;
    f_option.DebayerPreview.Checked:=config.GetValue('/Color/Bayer',false);
    f_option.BayerMode.ItemIndex:=config.GetValue('/Color/BayerMode',4);
    f_option.RedBalance.Position:=round(100*config.GetValue('/Color/RedBalance',1.0));
@@ -9868,6 +9885,11 @@ begin
      config.SetValue('/Info/ElevationMin',f_option.ElevationMin.Value);
      f_option.SaveObservatoryDB;
      config.SetValue('/Info/AzimuthOrigin',f_option.AzimuthOrigin.ItemIndex);
+     config.SetValue('/Info/ObsWeather',f_option.cbObsWeather.Checked);
+     config.SetValue('/Info/ObsPressure',f_option.pressure.Value);
+     config.SetValue('/Info/ObsTemperature',f_option.temperature.Value);
+     config.SetValue('/Info/ObsHumidity',f_option.humidity.Value);
+     config.SetValue('/Info/ObsTlr',f_option.tlrate.Value);
      config.SetValue('/Color/Bayer',f_option.DebayerPreview.Checked);
      config.SetValue('/Color/BayerMode',f_option.BayerMode.ItemIndex);
      config.SetValue('/Color/RedBalance',f_option.RedBalance.Position/100);
@@ -10252,6 +10274,19 @@ procedure Tf_main.OptionGetFocaleLength(Sender: TObject);
 begin
    if (mount.Status=devConnected) and (mount.FocaleLength>0) then
       f_option.Focale.Value:=mount.FocaleLength;
+end;
+
+procedure Tf_main.OptionGetWeather(Sender: TObject);
+var x: double;
+begin
+  if weather.Status=devConnected then begin
+    x:=weather.Temperature;
+    if x<>NullCoord then f_option.temperature.Value:=x;
+    x:=weather.Pressure;
+    if x<>NullCoord then f_option.pressure.Value:=x;
+    x:=weather.Humidity;
+    if x<>NullCoord then f_option.humidity.Value:=x;
+  end;
 end;
 
 procedure Tf_main.MenuViewConnectionClick(Sender: TObject);

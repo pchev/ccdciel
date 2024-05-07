@@ -28,7 +28,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 interface
 
 uses u_translation, u_utils, u_global, fu_preview, cu_fits, cu_astrometry, cu_mount, cu_camera, cu_wheel,
-  fu_visu, fu_finder, indiapi, UScaleDPI,
+  fu_visu, fu_finder, indiapi, UScaleDPI, u_refraction,
   math, Classes, SysUtils, Forms, Controls, Graphics, Dialogs, ComCtrls, StdCtrls, ExtCtrls, CheckLst, Spin;
 
 type

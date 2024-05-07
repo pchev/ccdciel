@@ -337,12 +337,22 @@ begin
      wrainhour:=IUFindNumber(WeatherParamProp,'WEATHER_RAIN_HOUR');
      wcloud:=IUFindNumber(WeatherParamProp,'WEATHER_CLOUDS');
      if wcloud=nil then wcloud:=IUFindNumber(WeatherParamProp,'WEATHER_CLOUD_COVER');
+     if ObsWeather and (WeatherParamProp.s=IPS_OK) then begin
+       if (wpressure<>nil)and(wpressure.Value<>0) then ObsPressure:=wpressure.Value;
+       if (wtemp<>nil)and(wtemp.Value<>0) then ObsTemperature:=wtemp.Value;
+       if (whumidity<>nil)and(whumidity.Value<>0) then ObsHumidity:=whumidity.Value;
+     end;
   end;
   CheckStatus;
 end;
 
 procedure T_indiweather.NewNumber(nvp: INumberVectorProperty);
 begin
+  if ObsWeather and (nvp=WeatherParamProp) and (nvp.s=IPS_OK) then begin
+    if (wpressure<>nil)and(wpressure.Value<>0) then ObsPressure:=wpressure.Value;
+    if (wtemp<>nil)and(wtemp.Value<>0) then ObsTemperature:=wtemp.Value;
+    if (whumidity<>nil)and(whumidity.Value<>0) then ObsHumidity:=whumidity.Value;
+  end;
 end;
 
 procedure T_indiweather.NewText(tvp: ITextVectorProperty);

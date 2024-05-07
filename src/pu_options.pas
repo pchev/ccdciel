@@ -38,6 +38,7 @@ type
     BtnAddRoi: TButton;
     BtnModRoi: TButton;
     BtnDelRoi: TButton;
+    BtnDefaultWeather: TButton;
     ButtonDelrow: TButton;
     ButtonAddrow: TButton;
     ButtonSeqDir: TButton;
@@ -48,13 +49,20 @@ type
     AstUseOnline: TCheckBox;
     AstOnlineKey: TEdit;
     AutofocusMultiStarCenterPct: TComboBox;
+    cbObsWeather: TCheckBox;
     FileNameSeqSep: TComboBox;
+    GroupBox36: TGroupBox;
     GroupBoxExpert: TGroupBox;
+    humidity: TFloatEdit;
     Label173: TLabel;
     Label174: TLabel;
     DefocusAmount: TSpinEdit;
     Label175: TLabel;
     Label176: TLabel;
+    Label177: TLabel;
+    Label178: TLabel;
+    Label179: TLabel;
+    Label180: TLabel;
     LabelTypeError: TLabel;
     PageType: TTabSheet;
     Panel34: TPanel;
@@ -63,7 +71,10 @@ type
     Panel37: TPanel;
     Panel38: TPanel;
     Panel39: TPanel;
+    pressure: TFloatEdit;
     sgCustomType: TStringGrid;
+    temperature: TFloatEdit;
+    tlrate: TFloatEdit;
     UseFinderSolver: TCheckBox;
     FinderSolver: TComboBox;
     Label172: TLabel;
@@ -758,6 +769,7 @@ type
     procedure AutofocusExpTimeChange(Sender: TObject);
     procedure AutofocusmodeClick(Sender: TObject);
     procedure AutoguiderBoxClick(Sender: TObject);
+    procedure BtnDefaultWeatherClick(Sender: TObject);
     procedure BtnDelHdrClick(Sender: TObject);
     procedure BtnDelRoiClick(Sender: TObject);
     procedure BtnDisableAutofocusTempClick(Sender: TObject);
@@ -773,6 +785,7 @@ type
     procedure ButtonDelrowClick(Sender: TObject);
     procedure ButtonLogDirClick(Sender: TObject);
     procedure ButtonSeqDirClick(Sender: TObject);
+    procedure cbObsWeatherChange(Sender: TObject);
     procedure CustomHeaderKeyPress(Sender: TObject; var Key: char);
     procedure CustomHeaderValidateEntry(Sender: TObject; aCol, aRow: Integer; const OldValue: string; var NewValue: String);
     procedure DomeFlatPositionClick(Sender: TObject);
@@ -841,7 +854,7 @@ type
     procedure UseReadoutModeChange(Sender: TObject);
   private
     { private declarations }
-    FGetMaxADU, FGetPixelSize, FGetFocale, FShowHelp: TNotifyEvent;
+    FGetMaxADU, FGetPixelSize, FGetFocale, FShowHelp, FGetWeather: TNotifyEvent;
     Flatitude, Flongitude: double;
     FAutofocusExposure: double;
     Lockchange: boolean;
@@ -881,6 +894,7 @@ type
     property onGetMaxADU : TNotifyEvent read FGetMaxADU write FGetMaxADU;
     property onGetPixelSize : TNotifyEvent read FGetPixelSize write FGetPixelSize;
     property onGetFocale : TNotifyEvent read FGetFocale write FGetFocale;
+    property onGetWeather : TNotifyEvent read FGetWeather write FGetWeather;
     property onShowHelp: TNotifyEvent read FShowHelp write FShowHelp;
   end;
 
@@ -1057,6 +1071,13 @@ begin
   AzimuthOrigin.Caption:=rsAzimuthOrigi;
   AzimuthOrigin.Items[0]:=rsNorth;
   AzimuthOrigin.Items[1]:=rsSouth;
+  GroupBox36.Caption:=rsAtmosphericR;
+  Label177.Caption:=rsPressureMill;
+  Label178.Caption:=rsTemperatureC2;
+  Label179.Caption:=rsHumidity2;
+  Label180.Caption:=rsTroposphereR;
+  cbObsWeather.Caption:=rsGetValuesFro;
+  BtnDefaultWeather.Caption:=rsDefault;
   PageDome.Caption:=rsDome;
   DomeNoSafetyCheck.Caption:=rsAllowToOpenT;
   DomeSlaveToMount.Caption:=rsAutomaticall;
@@ -2289,6 +2310,22 @@ begin
  SelectDirectoryDialog1.InitialDir:=SeqDir.text;
  SelectDirectoryDialog1.FileName:=SeqDir.text;
  if SelectDirectoryDialog1.Execute then SeqDir.text:=SelectDirectoryDialog1.FileName;
+end;
+
+procedure Tf_option.cbObsWeatherChange(Sender: TObject);
+begin
+ if cbObsWeather.Checked then begin
+   if assigned(FGetWeather) then FGetWeather(self);
+ end;
+end;
+
+procedure Tf_option.BtnDefaultWeatherClick(Sender: TObject);
+begin
+ cbObsWeather.Checked:=false;
+ pressure.Value:=1013;
+ temperature.Value:=10;
+ humidity.Value:=50;
+ tlrate.Value:=6.5;
 end;
 
 procedure Tf_option.CustomHeaderKeyPress(Sender: TObject; var Key: char);

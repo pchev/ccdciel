@@ -1344,7 +1344,7 @@ object f_option: Tf_option
         object AzimuthOrigin: TRadioGroup
           Left = 0
           Height = 60
-          Top = 496
+          Top = 604
           Width = 586
           Align = alTop
           AutoFill = True
@@ -1364,6 +1364,130 @@ object f_option: Tf_option
             'South'
           )
           TabOrder = 4
+        end
+        object GroupBox36: TGroupBox
+          Left = 0
+          Height = 108
+          Top = 496
+          Width = 586
+          Align = alTop
+          Caption = 'Atmospheric refraction'
+          ClientHeight = 78
+          ClientWidth = 582
+          TabOrder = 5
+          object Label177: TLabel
+            Left = 13
+            Height = 18
+            Top = 1
+            Width = 111
+            Caption = 'Pressure (millibar)'
+            ParentColor = False
+            ParentFont = False
+          end
+          object Label178: TLabel
+            Left = 142
+            Height = 18
+            Top = 1
+            Width = 98
+            Caption = 'Temperature (C)'
+            ParentColor = False
+            ParentFont = False
+          end
+          object pressure: TFloatEdit
+            Left = 13
+            Height = 28
+            Hint = '0..1500'
+            Top = 18
+            Width = 66
+            Constraints.MaxHeight = 28
+            ParentFont = False
+            ParentShowHint = False
+            ShowHint = True
+            TabOrder = 0
+            Decimals = 0
+            MaxValue = 1500
+            NumericType = ntFixed
+          end
+          object temperature: TFloatEdit
+            Left = 142
+            Height = 28
+            Hint = '-100..100'
+            Top = 18
+            Width = 66
+            Constraints.MaxHeight = 28
+            ParentFont = False
+            ParentShowHint = False
+            ShowHint = True
+            TabOrder = 1
+            MinValue = -100
+            MaxValue = 100
+            NumericType = ntFixed
+          end
+          object humidity: TFloatEdit
+            Left = 271
+            Height = 28
+            Hint = '0..100'
+            Top = 18
+            Width = 66
+            Constraints.MaxHeight = 28
+            ParentFont = False
+            ParentShowHint = False
+            ShowHint = True
+            TabOrder = 2
+            MaxValue = 100
+          end
+          object Label179: TLabel
+            Left = 271
+            Height = 18
+            Top = 1
+            Width = 70
+            Caption = 'Humidity %'
+            ParentColor = False
+            ParentFont = False
+          end
+          object tlrate: TFloatEdit
+            Left = 400
+            Height = 28
+            Hint = '5..7.5'
+            Top = 19
+            Width = 66
+            Constraints.MaxHeight = 28
+            ParentFont = False
+            ParentShowHint = False
+            ShowHint = True
+            TabOrder = 3
+            Value = 5
+            Decimals = 2
+            MinValue = 5
+            MaxValue = 7.5
+          end
+          object Label180: TLabel
+            Left = 400
+            Height = 18
+            Top = 1
+            Width = 149
+            Caption = 'Troposphere rate (K/km)'
+            ParentColor = False
+            ParentFont = False
+          end
+          object cbObsWeather: TCheckBox
+            Left = 13
+            Height = 22
+            Top = 55
+            Width = 248
+            Caption = 'Get values from the weather station'
+            OnChange = cbObsWeatherChange
+            TabOrder = 4
+          end
+          object BtnDefaultWeather: TButton
+            Left = 400
+            Height = 25
+            Top = 50
+            Width = 66
+            Caption = 'Default'
+            OnClick = BtnDefaultWeatherClick
+            TabOrder = 5
+          end
         end
       end
       object PageCamera: TTabSheet

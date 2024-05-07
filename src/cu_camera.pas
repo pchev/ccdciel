@@ -28,7 +28,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 interface
 
-uses  cu_fits, cu_mount, cu_wheel, cu_focuser, cu_weather, u_global, u_utils,  indiapi, math, u_translation,
+uses  cu_fits, cu_mount, cu_wheel, cu_focuser, cu_weather, u_global, u_utils, u_refraction, indiapi, math, u_translation,
   LazSysUtils, Classes, Forms, SysUtils, ExtCtrls;
 
 type

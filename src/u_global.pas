@@ -439,7 +439,9 @@ var
   MaxADU, ClippingOverflow, ClippingUnderflow: double;
   MsgHandle: THandle;
   LastPixelSize: double;
-  ObsLongitude, ObsLatitude, ObsElevation, ObsTimeZone: double;
+  ObsLongitude, ObsLatitude, ObsElevation, ObsTimeZone, ObsRefA, ObsRefB: double;
+  ObsWeather: boolean;
+  ObsTemperature, ObsPressure, ObsHumidity, ObsTlr: double;
   BayerColor: boolean;
   DefaultBayerMode:TBayerMode;
   BalanceFromCamera,BGneutralization: boolean;

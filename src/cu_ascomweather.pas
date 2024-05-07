@@ -188,6 +188,7 @@ end;
 procedure T_ascomweather.StatusTimerTimer(sender: TObject);
 {$ifdef mswindows}
 var s: boolean;
+    x: double;
 {$endif}
 begin
  {$ifdef mswindows}
@@ -203,6 +204,14 @@ begin
       if s<>stClear then begin
         stClear:=s;
         if Assigned(FonClearChange) then FonClearChange(self);
+        if ObsWeather then begin
+          x:=GetPressure;
+          if x<>NullCoord then ObsPressure:=x;
+          x:=GetTemperature;
+          if x<>NullCoord then ObsTemperature:=x;
+          x:=GetHumidity;
+          if x<>NullCoord then ObsHumidity:=x;
+        end;
       end;
      except
      on E: Exception do msg('Status error: ' + E.Message,0);
