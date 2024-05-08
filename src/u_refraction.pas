@@ -91,7 +91,7 @@ begin
         begin
           h1 := pid2 - h;
           sla_REFCO(ObsElevation, 273.15 + ObsTemperature, ObsPressure,
-                    ObsHumidity, RefractionWavelength, deg2rad * ObsLatitude, ObsTlr,
+                    ObsHumidity, RefractionWavelength, deg2rad * ObsLatitude, ObsTlr/1000,
                     1E-8, ObsRefA, ObsRefb);
           sla_REFZ(h1, ObsRefA, ObsRefB, h);
           if (COS(h) < ZBREAK) then
@@ -103,7 +103,7 @@ begin
               // Compute refraction using current estimate of observed ZD
               sla_REFRO(h, ObsElevation, 273 + ObsTemperature,
                 ObsPressure, ObsHumidity/100, 0.55, deg2rad * ObsLatitude,
-                ObsTlr, 1E-8, R);
+                ObsTlr/1000, 1E-8, R);
               // Remaining discrepancy
               DZD := h + R - h1;
               // Update the estimate
@@ -144,7 +144,7 @@ begin
         begin
           h1 := pid2 - h;
           sla_REFRO(h1, ObsElevation, 273 + ObsTemperature,
-            ObsPressure, ObsHumidity/100, 0.55, deg2rad * ObsLatitude, ObsTlr, 1E-8, R);
+            ObsPressure, ObsHumidity/100, 0.55, deg2rad * ObsLatitude, ObsTlr/1000, 1E-8, R);
           h1 := h1 + R;
           h := pid2 - h1;
         end

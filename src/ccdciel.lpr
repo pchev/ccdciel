@@ -55,7 +55,7 @@ uses
   pu_keyboard, cu_alpacamanagement, pu_compute, cu_manualwheel, u_speech, pu_collimation,
   cu_ascomrestswitch, cu_ascomswitch, cu_indiswitch, cu_switch, fu_switchpage, pu_newscript,
   pu_polaralign2, fu_internalguider, cu_autoguider_internal, pu_handpad, fu_finder,
-  pu_findercalibration, fu_switch, pu_sensoranalysis, cu_onlinesearch, pu_onlineinfo, pu_downloadscript;
+  pu_findercalibration, fu_switch, pu_sensoranalysis, cu_onlinesearch, pu_onlineinfo, pu_downloadscript, u_refraction;
 
 {$R *.res}
 
