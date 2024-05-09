@@ -34,6 +34,7 @@ type
   TSpectroTarget = record
      RA,DEC: double;
      valid: boolean;
+     newastrometry: boolean;
   end;
 
 
@@ -93,8 +94,8 @@ type
     function SpectroSetTarget(TargetRa,TargetDec: double):boolean; override;
     procedure SpectroSelectNewStar(x,y: integer);
     procedure InternalguiderLoop;
-    procedure InternalguiderStart;
-    procedure InternalguiderStop;
+    procedure InternalguiderStart(verbose: boolean=True);
+    procedure InternalguiderStop(verbose: boolean=True);
     procedure InternalguiderRecoverCamera;
     procedure InternalguiderCalibrate;
     procedure InternalguiderCalibrateBacklash;
@@ -199,6 +200,7 @@ begin
   FSpectroTarget.RA:=NullCoord;
   FSpectroTarget.DEC:=NullCoord;
   FSpectroTarget.valid:=false;
+  FSpectroTarget.newastrometry:=false;
   StarSelectedManually:=false;
 end;
 
@@ -931,12 +933,14 @@ else begin
 end;
 end;
 
-procedure T_autoguider_internal.InternalguiderStart;
+procedure T_autoguider_internal.InternalguiderStart(verbose: boolean=True);
+var i: PtrInt;
 begin
   if InternalguiderRunning then InternalguiderStop;
   Finternalguider.cbSpectro.enabled:=false;
-  SetStatus('Start Guiding',GUIDER_BUSY);
-  Application.QueueAsyncCall(@InternalguiderStartAsync,0);
+  if verbose then SetStatus('Start Guiding',GUIDER_BUSY);
+  if verbose then i:=1 else i:=0;
+  Application.QueueAsyncCall(@InternalguiderStartAsync,i);
 end;
 
 procedure T_autoguider_internal.InternalguiderStartAsync(Data: PtrInt); {internal guider}
@@ -944,7 +948,9 @@ var
   i: integer;
   txt,pier,frametxt: string;
   ra,de,alt,az,lha: double;
+  verbose: boolean;
 begin
+  verbose:=(Data=1);
   if AllDevicesConnected=false then
   begin
     msg('Internal guider: '+rsSomeDefinedD,1);
@@ -979,7 +985,7 @@ begin
     // already starting
     exit;
   end;
-  SetStatus('Start Guiding',GUIDER_BUSY);
+  if verbose then SetStatus('Start Guiding',GUIDER_BUSY);
   StopInternalguider:=false;
   InternalguiderGuiding:=true;
   Finternalguider.ForceMultiStar:=false;
@@ -1048,6 +1054,7 @@ begin
     frametxt:=inttostr(frame_size);
 
   // initialize the guide log
+  if verbose then begin
   case mount.PierSide of
     pierEast: pier:='East';
     pierWest: pier:='West';
@@ -1101,6 +1108,7 @@ begin
     WriteLog('SolarTracking = false');
   WriteLog('');
   WriteLog('Frame,Time,mount,dx,dy,RARawDistance,DECRawDistance,RAGuideDistance,DECGuideDistance,RADuration,RADirection,DECDuration,DECDirection,XStep,YStep,StarMass,SNR,ErrorCode');
+  end;
 
   InternalguiderLoop;
   StartSettle;
@@ -1238,6 +1246,16 @@ begin
           FSettling := false;
           exit;
     end;
+    // refine astrometry measurement closer to slit in multistar
+    if FSettling and (not finternalguider.GuideLock) and finternalguider.cbUseAstrometry.Checked  and
+       FSpectroTarget.newastrometry and (not initial) and             // time to test
+       (sqrt(driftx*driftx+drifty*drifty)<=4*FSettlePix) then begin   // near settle distance
+          // restart with astrometry
+          msg('Make a new astrometry near the target now',3);
+          InternalguiderStop(false);
+          InternalguiderStart(false);
+          exit;
+       end;
   end;
 
   if InternalguiderInitialize then begin
@@ -1607,9 +1625,9 @@ begin
   PulseGuiding:=false;
 end;
 
-procedure T_autoguider_internal.InternalguiderStop;
+procedure T_autoguider_internal.InternalguiderStop(verbose: boolean=True);
 begin
-  if InternalguiderGuiding and (not InternalguiderCapturingDark)and(not StopInternalguider) then begin
+  if verbose and InternalguiderGuiding and (not InternalguiderCapturingDark)and(not StopInternalguider) then begin
     WriteLog('Guiding Ends at '+FormatDateTime('YYYY-MM-DD HH:NN:SS',now));
     WriteLog('');
   end;
@@ -1633,7 +1651,7 @@ begin
   Finternalguider.ButtonDark.enabled:=true;
   Finternalguider.cbSpectro.enabled:=true;
   Finternalguider.led.Brush.Color:=clGray;
-  SetStatus('Stopped',GUIDER_IDLE);
+  if verbose then SetStatus('Stopped',GUIDER_IDLE);
 end;
 
 procedure T_autoguider_internal.InternalguiderRecoverCamera;
@@ -2370,6 +2388,7 @@ begin
     FSpectroTarget.RA:=TargetRa;
     FSpectroTarget.DEC:=TargetDec;
     FSpectroTarget.valid:=true;
+    FSpectroTarget.newastrometry:=false;
     StarSelectedManually:=false;
     result:=true;
   end
@@ -2377,20 +2396,22 @@ begin
     FSpectroTarget.RA:=NullCoord;
     FSpectroTarget.DEC:=NullCoord;
     FSpectroTarget.valid:=false;
+    FSpectroTarget.newastrometry:=false;
     result:=false;
   end;
 end;
 
 function T_autoguider_internal.SelectSpectroTarget:boolean;
 var n,bin,gain,offset: integer;
-    exp,xt,yt: double;
+    exp,xt,yt,dist: double;
     c: TcdcWCScoord;
 begin
 // set Spectro target at the position set by SpectroSetTarget
 // compute the target x,y position in the guide image
 // so the target is moved to the slit when the guiding is started
   if finternalguider.SpectroFunctions and finternalguider.cbUseAstrometry.Checked
-     and(cdcwcs_sky2xy<>nil) and FSpectroTarget.valid and (FSpectroTarget.RA<>NullCoord)and(FSpectroTarget.DEC<>NullCoord) then begin
+     and(cdcwcs_sky2xy<>nil) and (FSpectroTarget.valid or FSpectroTarget.newastrometry)
+     and (FSpectroTarget.RA<>NullCoord)and(FSpectroTarget.DEC<>NullCoord) then begin
     result:=false;
     FSpectroTarget.valid:=false; // use coordinates only once
     exp:=finternalguider.AstrometryExp.value;
@@ -2408,6 +2429,11 @@ begin
          if n=0 then begin
            xt:=c.x;
            yt:=c.y;
+
+           dist:=sqrt(sqr(xt-Finternalguider.LockX)+sqr(yt-Finternalguider.LockY));
+           FSpectroTarget.newastrometry:= dist>(2*Finternalguider.LongestPulse*Finternalguider.pulsegainNorth/1000);
+           if FSpectroTarget.newastrometry then msg('Target distance '+FormatFloat(f1,dist)+'px, a new astrometry will be taken after it move close to the slit',3);
+
            msg('Spectro target x='+FormatFloat(f1,xt)+' y='+FormatFloat(f1,yt),3);
            if Finternalguider.GuideLock then begin
              // single star guiding, set the search position for a bright star
