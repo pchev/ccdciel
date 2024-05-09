@@ -2430,9 +2430,13 @@ begin
            xt:=c.x;
            yt:=c.y;
 
-           dist:=sqrt(sqr(xt-Finternalguider.LockX)+sqr(yt-Finternalguider.LockY));
-           FSpectroTarget.newastrometry:= dist>(2*Finternalguider.LongestPulse*Finternalguider.pulsegainNorth/1000);
-           if FSpectroTarget.newastrometry then msg('Target distance '+FormatFloat(f1,dist)+'px, a new astrometry will be taken after it move close to the slit',3);
+           if finternalguider.GuideLock then
+             FSpectroTarget.newastrometry:=false
+           else begin
+             dist:=sqrt(sqr(xt-Finternalguider.LockX)+sqr(yt-Finternalguider.LockY));
+             FSpectroTarget.newastrometry:= dist>(2*Finternalguider.LongestPulse*Finternalguider.pulsegainNorth/1000);
+             if FSpectroTarget.newastrometry then msg('Target distance '+FormatFloat(f1,dist)+'px, a new astrometry will be taken after it move close to the slit',3);
+           end;
 
            msg('Spectro target x='+FormatFloat(f1,xt)+' y='+FormatFloat(f1,yt),3);
            if Finternalguider.GuideLock then begin
