@@ -468,7 +468,7 @@ begin
 
   //square search area
   if finternalguider.SpectroFunctions and FSettling and (not finternalguider.GuideLock) then
-    searchA:=min(28,round(2*Finternalguider.LongestPulse*Finternalguider.pulsegainNorth/1000)) // large enough when moving to the slit using longestpulse
+    searchA:=max(28,round(2*Finternalguider.LongestPulse*Finternalguider.pulsegainNorth/1000)) // large enough when moving to the slit using longestpulse
   else
     searchA:=28;
 
