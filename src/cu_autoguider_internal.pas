@@ -457,15 +457,21 @@ var
   x1,y1,bg1,bgdev1,fwhm1,vmax1,snr1,flux1: double;
   GuideLock: boolean;
   drift_arrayX,drift_arrayY : array of double;
-  starx,stary,frx,fry,frw,frh: integer;
+  searchA,starx,stary,frx,fry,frw,frh: integer;
   xs1,xs2,ys1,ys2: integer;
 const
-    searchA=28;//square search area
     overlap=6;
     maxstars=1000;
 begin
   result:=1;// Assume no stars detected
   star_counter:=0;
+
+  //square search area
+  if finternalguider.SpectroFunctions and FSettling and (not finternalguider.GuideLock) then
+    searchA:=min(28,round(2*Finternalguider.LongestPulse*Finternalguider.pulsegainNorth/1000)) // large enough when moving to the slit using longestpulse
+  else
+    searchA:=28;
+
   stepsize:=searchA-overlap;//some overlap
 
   // for guide log
