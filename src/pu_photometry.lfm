@@ -53,6 +53,7 @@ object f_photometry: Tf_photometry
       Top = 6
       Width = 93
       DecimalPlaces = 3
+      MaxValue = 100
       MinValue = -100
       ParentFont = False
       TabOrder = 0
