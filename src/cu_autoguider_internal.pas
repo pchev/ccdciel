@@ -468,7 +468,7 @@ begin
 
   //square search area
   if finternalguider.SpectroFunctions and FSettling and (not finternalguider.GuideLock) then
-    searchA:=max(28,round(2*Finternalguider.LongestPulse*Finternalguider.pulsegainNorth/1000)) // large enough when moving to the slit using longestpulse
+    searchA:=max(28,round(2*Finternalguider.LongestPulse*Finternalguider.pulsegainEast/1000)) // large enough when moving to the slit using longestpulse
   else
     searchA:=28;
 
@@ -1365,7 +1365,7 @@ begin
     if moveRA2>0 then //going East increases the RA
     begin
        pulseRA:=min(finternalguider.LongestPulse,round(1000*abs(moveRA2/finternalguider.pulsegainEast))); {duration msec}
-       SearchCorrRA := abs(pulseRA * finternalguider.pulsegainNorth/1000); // next expected move
+       SearchCorrRA := abs(pulseRA * finternalguider.pulsegainEast/1000); // next expected move
        if pulseRA>finternalguider.shortestPulse then //Large enough correction to follow by motors/relays. Complementary with minimum_move
        begin
          //msg('East: '+inttostr(pulseRA),3);
@@ -1379,7 +1379,7 @@ begin
     if moveRA2<0 then //going West
     begin
       pulseRA:=min(finternalguider.LongestPulse,round(1000*abs(moveRA2/finternalguider.pulsegainWest))); {duration msec}
-      SearchCorrRA := -abs(pulseRA * finternalguider.pulsegainNorth/1000); // next expected move
+      SearchCorrRA := -abs(pulseRA * finternalguider.pulsegainEast/1000); // next expected move
       if pulseRA>finternalguider.shortestPulse then
       begin
         //msg('West: '+inttostr(pulseRA),3);
@@ -2440,7 +2440,7 @@ begin
              FSpectroTarget.newastrometry:=false
            else begin
              dist:=sqrt(sqr(xt-Finternalguider.LockX)+sqr(yt-Finternalguider.LockY));
-             FSpectroTarget.newastrometry:= dist>(2*Finternalguider.LongestPulse*Finternalguider.pulsegainNorth/1000);
+             FSpectroTarget.newastrometry:= dist>(2*Finternalguider.LongestPulse*Finternalguider.pulsegainEast/1000);
              if FSpectroTarget.newastrometry then msg('Target distance '+FormatFloat(f1,dist)+'px, a new astrometry will be taken after it move close to the slit',3);
            end;
 
