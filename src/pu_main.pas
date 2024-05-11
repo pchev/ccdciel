@@ -3745,6 +3745,7 @@ end;
 
 procedure Tf_main.FormKeyDown(Sender: TObject; var Key: Word; Shift: TShiftState);
 begin
+ if Shift=[] then begin
   case Key of
     VK_F1 : TBConnect.Click;
     VK_F2 : TBFocus.Click;
@@ -3753,6 +3754,16 @@ begin
     VK_F5 : TBInternalGuider.Click;
     VK_F11: SwitchImageFullscreen;
   end;
+ end
+ else if Shift=[ssAlt] then begin
+  case Key of
+    VK_W : if MultiCamera then begin
+             MenuImageMultipanel.Checked:=not MenuImageMultipanel.Checked;
+             MenuImageSinglepanel.Checked:=not MenuImageMultipanel.Checked;
+             MenuImageMultipanelClick(nil);
+           end;
+  end;
+ end;
 end;
 
 procedure Tf_main.FormResize(Sender: TObject);
