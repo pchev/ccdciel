@@ -14425,7 +14425,10 @@ begin
     end;
   end
   else if i=1 then begin
-    // preview result, nothing to log
+    // preview result, show only error
+    if not astrometry.LastResult then begin
+      f_preview.LabelAstrometry.Caption:=Format(rsResolveError, [rsPreview])+' '+astrometry.LastError;
+    end;
   end
   else if i=2 then begin
     // finder camera result
