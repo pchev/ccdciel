@@ -181,6 +181,42 @@ object f_setup: Tf_setup
             ParentFont = False
             TabOrder = 3
           end
+          object gbIndistarter: TGroupBox
+            Left = 298
+            Height = 128
+            Top = 0
+            Width = 185
+            Caption = 'Indistarter'
+            ClientHeight = 98
+            ClientWidth = 181
+            TabOrder = 4
+            object cbIndistarterConfig: TComboBox
+              Left = 16
+              Height = 32
+              Top = 4
+              Width = 153
+              ItemHeight = 18
+              Style = csDropDownList
+              TabOrder = 0
+            end
+            object cbIndistarterAutostart: TCheckBox
+              Left = 16
+              Height = 22
+              Top = 40
+              Width = 127
+              Caption = 'Start Indistarter'
+              TabOrder = 1
+            end
+            object ButtonStartIndi: TButton
+              Left = 16
+              Height = 25
+              Top = 66
+              Width = 75
+              Caption = 'Start'
+              OnClick = ButtonStartIndiClick
+              TabOrder = 2
+            end
+          end
         end
         object Panel10: TPanel
           Left = 0
@@ -499,17 +535,17 @@ object f_setup: Tf_setup
           OnChange = PageControlCameraChange
           object CameraIndi: TTabSheet
             Caption = 'CameraIndi'
-            ClientHeight = 376
+            ClientHeight = 375
             ClientWidth = 486
             ParentFont = False
             object PanelCameraIndi: TPanel
               Left = 0
-              Height = 376
+              Height = 375
               Top = 0
               Width = 486
               Align = alClient
               BevelOuter = bvNone
-              ClientHeight = 376
+              ClientHeight = 375
               ClientWidth = 486
               ParentFont = False
               TabOrder = 0
@@ -712,7 +748,7 @@ object f_setup: Tf_setup
           end
           object CameraAscom: TTabSheet
             Caption = 'CameraAscom'
-            ClientHeight = 376
+            ClientHeight = 375
             ClientWidth = 486
             ParentFont = False
             object PanelCameraAscom: TPanel
@@ -800,17 +836,17 @@ object f_setup: Tf_setup
           end
           object CameraAscomRest: TTabSheet
             Caption = 'CameraAscomRest'
-            ClientHeight = 376
+            ClientHeight = 375
             ClientWidth = 486
             ParentFont = False
             object Panel2: TPanel
               Left = 0
-              Height = 376
+              Height = 375
               Top = 0
               Width = 486
               Align = alClient
               BevelOuter = bvNone
-              ClientHeight = 376
+              ClientHeight = 375
               ClientWidth = 486
               ParentFont = False
               TabOrder = 0
@@ -1079,17 +1115,17 @@ object f_setup: Tf_setup
           OnChange = PageControlGuideCameraChange
           object GuideCameraIndi: TTabSheet
             Caption = 'CameraIndi'
-            ClientHeight = 262
+            ClientHeight = 261
             ClientWidth = 486
             ParentFont = False
             object PanelGuideCameraIndi: TPanel
               Left = 0
-              Height = 262
+              Height = 261
               Top = 0
               Width = 486
               Align = alClient
               BevelOuter = bvNone
-              ClientHeight = 262
+              ClientHeight = 261
               ClientWidth = 486
               ParentFont = False
               TabOrder = 0
@@ -1235,7 +1271,7 @@ object f_setup: Tf_setup
           end
           object GuideCameraAscom: TTabSheet
             Caption = 'CameraAscom'
-            ClientHeight = 262
+            ClientHeight = 261
             ClientWidth = 486
             ParentFont = False
             object PanelGuideCameraAscom: TPanel
@@ -1296,17 +1332,17 @@ object f_setup: Tf_setup
           end
           object GuideCameraAscomRest: TTabSheet
             Caption = 'CameraAscomRest'
-            ClientHeight = 262
+            ClientHeight = 261
             ClientWidth = 486
             ParentFont = False
             object Panel40: TPanel
               Left = 0
-              Height = 262
+              Height = 261
               Top = 0
               Width = 486
               Align = alClient
               BevelOuter = bvNone
-              ClientHeight = 262
+              ClientHeight = 261
               ClientWidth = 486
               ParentFont = False
               TabOrder = 0
@@ -1570,17 +1606,17 @@ object f_setup: Tf_setup
           OnChange = PageControlFinderCameraChange
           object FinderCameraIndi: TTabSheet
             Caption = 'CameraIndi'
-            ClientHeight = 262
+            ClientHeight = 261
             ClientWidth = 486
             ParentFont = False
             object PanelFinderCameraIndi: TPanel
               Left = 0
-              Height = 262
+              Height = 261
               Top = 0
               Width = 486
               Align = alClient
               BevelOuter = bvNone
-              ClientHeight = 262
+              ClientHeight = 261
               ClientWidth = 486
               ParentFont = False
               TabOrder = 0
@@ -1726,7 +1762,7 @@ object f_setup: Tf_setup
           end
           object FinderCameraAscom: TTabSheet
             Caption = 'CameraAscom'
-            ClientHeight = 262
+            ClientHeight = 261
             ClientWidth = 486
             ParentFont = False
             object PanelFinderCameraAscom: TPanel
@@ -1787,17 +1823,17 @@ object f_setup: Tf_setup
           end
           object FinderCameraAscomRest: TTabSheet
             Caption = 'CameraAscomRest'
-            ClientHeight = 262
+            ClientHeight = 261
             ClientWidth = 486
             ParentFont = False
             object Panel43: TPanel
               Left = 0
-              Height = 262
+              Height = 261
               Top = 0
               Width = 486
               Align = alClient
               BevelOuter = bvNone
-              ClientHeight = 262
+              ClientHeight = 261
               ClientWidth = 486
               ParentFont = False
               TabOrder = 0
@@ -2062,17 +2098,17 @@ object f_setup: Tf_setup
           OnChange = PageControlWheelChange
           object WheelIndi: TTabSheet
             Caption = 'WheelIndi'
-            ClientHeight = 376
+            ClientHeight = 375
             ClientWidth = 486
             ParentFont = False
             object PanelWheelIndi: TPanel
               Left = 0
-              Height = 376
+              Height = 375
               Top = 0
               Width = 486
               Align = alClient
               BevelOuter = bvNone
-              ClientHeight = 376
+              ClientHeight = 375
               ClientWidth = 486
               ParentFont = False
               TabOrder = 0
@@ -2190,7 +2226,7 @@ object f_setup: Tf_setup
           end
           object WheelAscom: TTabSheet
             Caption = 'WheelAscom'
-            ClientHeight = 376
+            ClientHeight = 375
             ClientWidth = 486
             ParentFont = False
             object PanelWheelAscom: TPanel
@@ -2251,7 +2287,7 @@ object f_setup: Tf_setup
           end
           object WheelInCamera: TTabSheet
             Caption = 'WheelInCamera'
-            ClientHeight = 376
+            ClientHeight = 375
             ClientWidth = 486
             ParentFont = False
             object PanelWheelIncamera: TPanel
@@ -2279,17 +2315,17 @@ object f_setup: Tf_setup
           end
           object WheelAscomRest: TTabSheet
             Caption = 'WheelAscomRest'
-            ClientHeight = 376
+            ClientHeight = 375
             ClientWidth = 486
             ParentFont = False
             object Panel3: TPanel
               Left = 0
-              Height = 376
+              Height = 375
               Top = 0
               Width = 486
               Align = alClient
               BevelOuter = bvNone
-              ClientHeight = 376
+              ClientHeight = 375
               ClientWidth = 486
               ParentFont = False
               TabOrder = 0
@@ -2493,7 +2529,7 @@ object f_setup: Tf_setup
           end
           object WheelManual: TTabSheet
             Caption = 'WheelManual'
-            ClientHeight = 376
+            ClientHeight = 375
             ClientWidth = 486
             ParentFont = False
             object Panel32: TPanel
@@ -2531,7 +2567,7 @@ object f_setup: Tf_setup
             end
             object ManualFilterName: TStringGrid
               Left = 0
-              Height = 318
+              Height = 317
               Top = 58
               Width = 486
               Align = alClient
@@ -2626,17 +2662,17 @@ object f_setup: Tf_setup
             OnChange = PageControlFocuserChange
             object FocuserIndi: TTabSheet
               Caption = 'FocuserIndi'
-              ClientHeight = 289
+              ClientHeight = 288
               ClientWidth = 486
               ParentFont = False
               object PanelFocuserIndi: TPanel
                 Left = 0
-                Height = 289
+                Height = 288
                 Top = 0
                 Width = 486
                 Align = alClient
                 BevelOuter = bvNone
-                ClientHeight = 289
+                ClientHeight = 288
                 ClientWidth = 486
                 ParentFont = False
                 TabOrder = 0
@@ -2754,7 +2790,7 @@ object f_setup: Tf_setup
             end
             object FocuserAscom: TTabSheet
               Caption = 'FocuserAscom'
-              ClientHeight = 289
+              ClientHeight = 288
               ClientWidth = 486
               ParentFont = False
               object PanelFocuserAscom: TPanel
@@ -2815,7 +2851,7 @@ object f_setup: Tf_setup
             end
             object FocuserInMount: TTabSheet
               Caption = 'FocuserInMount'
-              ClientHeight = 289
+              ClientHeight = 288
               ClientWidth = 486
               ParentFont = False
               TabVisible = False
@@ -2844,17 +2880,17 @@ object f_setup: Tf_setup
             end
             object FocuserAscomRest: TTabSheet
               Caption = 'FocuserAscomRest'
-              ClientHeight = 289
+              ClientHeight = 288
               ClientWidth = 486
               ParentFont = False
               object Panel4: TPanel
                 Left = 0
-                Height = 289
+                Height = 288
                 Top = 0
                 Width = 486
                 Align = alClient
                 BevelOuter = bvNone
-                ClientHeight = 289
+                ClientHeight = 288
                 ClientWidth = 486
                 ParentFont = False
                 TabOrder = 0
@@ -3077,17 +3113,17 @@ object f_setup: Tf_setup
           OnChange = PageControlRotatorChange
           object RotatorIndi: TTabSheet
             Caption = 'RotatorIndi'
-            ClientHeight = 376
+            ClientHeight = 375
             ClientWidth = 486
             ParentFont = False
             object PanelRotatorIndi: TPanel
               Left = 0
-              Height = 376
+              Height = 375
               Top = 0
               Width = 486
               Align = alClient
               BevelOuter = bvNone
-              ClientHeight = 376
+              ClientHeight = 375
               ClientWidth = 486
               ParentFont = False
               TabOrder = 0
@@ -3205,7 +3241,7 @@ object f_setup: Tf_setup
           end
           object RotatorAscom: TTabSheet
             Caption = 'RotatorAscom'
-            ClientHeight = 376
+            ClientHeight = 375
             ClientWidth = 486
             ParentFont = False
             object PanelRotatorAscom: TPanel
@@ -3266,17 +3302,17 @@ object f_setup: Tf_setup
           end
           object RotatorAscomRest: TTabSheet
             Caption = 'RotatorAscomRest'
-            ClientHeight = 376
+            ClientHeight = 375
             ClientWidth = 486
             ParentFont = False
             object Panel5: TPanel
               Left = 0
-              Height = 376
+              Height = 375
               Top = 0
               Width = 486
               Align = alClient
               BevelOuter = bvNone
-              ClientHeight = 376
+              ClientHeight = 375
               ClientWidth = 486
               ParentFont = False
               TabOrder = 0
@@ -3580,17 +3616,17 @@ object f_setup: Tf_setup
             OnChange = PageControlMountChange
             object MountIndi: TTabSheet
               Caption = 'MountIndi'
-              ClientHeight = 230
+              ClientHeight = 229
               ClientWidth = 486
               ParentFont = False
               object PanelMountIndi: TPanel
                 Left = 0
-                Height = 230
+                Height = 229
                 Top = 0
                 Width = 486
                 Align = alClient
                 BevelOuter = bvNone
-                ClientHeight = 230
+                ClientHeight = 229
                 ClientWidth = 486
                 ParentFont = False
                 TabOrder = 0
@@ -3708,7 +3744,7 @@ object f_setup: Tf_setup
             end
             object MountAscom: TTabSheet
               Caption = 'MountAscom'
-              ClientHeight = 230
+              ClientHeight = 229
               ClientWidth = 486
               ParentFont = False
               object PanelMountAscom: TPanel
@@ -3769,17 +3805,17 @@ object f_setup: Tf_setup
             end
             object MountAscomRest: TTabSheet
               Caption = 'MountAscomRest'
-              ClientHeight = 230
+              ClientHeight = 229
               ClientWidth = 486
               ParentFont = False
               object Panel6: TPanel
                 Left = 0
-                Height = 230
+                Height = 229
                 Top = 0
                 Width = 486
                 Align = alClient
                 BevelOuter = bvNone
-                ClientHeight = 230
+                ClientHeight = 229
                 ClientWidth = 486
                 ParentFont = False
                 TabOrder = 0
@@ -4002,17 +4038,17 @@ object f_setup: Tf_setup
           OnChange = PageControlDomeChange
           object DomeIndi: TTabSheet
             Caption = 'DomeIndi'
-            ClientHeight = 376
+            ClientHeight = 375
             ClientWidth = 486
             ParentFont = False
             object PanelDomeIndi: TPanel
               Left = 0
-              Height = 376
+              Height = 375
               Top = 0
               Width = 486
               Align = alClient
               BevelOuter = bvNone
-              ClientHeight = 376
+              ClientHeight = 375
               ClientWidth = 486
               ParentFont = False
               TabOrder = 0
@@ -4130,7 +4166,7 @@ object f_setup: Tf_setup
           end
           object DomeAscom: TTabSheet
             Caption = 'DomeAscom'
-            ClientHeight = 376
+            ClientHeight = 375
             ClientWidth = 486
             ParentFont = False
             object PanelDomeAscom: TPanel
@@ -4191,17 +4227,17 @@ object f_setup: Tf_setup
           end
           object DomeAscomRest: TTabSheet
             Caption = 'DomeAscomRest'
-            ClientHeight = 376
+            ClientHeight = 375
             ClientWidth = 486
             ParentFont = False
             object Panel7: TPanel
               Left = 0
-              Height = 376
+              Height = 375
               Top = 0
               Width = 486
               Align = alClient
               BevelOuter = bvNone
-              ClientHeight = 376
+              ClientHeight = 375
               ClientWidth = 486
               ParentFont = False
               TabOrder = 0
@@ -4444,17 +4480,17 @@ object f_setup: Tf_setup
           OnChange = PageControlWeatherChange
           object WeatherIndi: TTabSheet
             Caption = 'WeatherIndi'
-            ClientHeight = 376
+            ClientHeight = 375
             ClientWidth = 486
             ParentFont = False
             object PanelWeatherIndi: TPanel
               Left = 0
-              Height = 376
+              Height = 375
               Top = 0
               Width = 486
               Align = alClient
               BevelOuter = bvNone
-              ClientHeight = 376
+              ClientHeight = 375
               ClientWidth = 486
               ParentFont = False
               TabOrder = 0
@@ -4572,7 +4608,7 @@ object f_setup: Tf_setup
           end
           object WeatherAscom: TTabSheet
             Caption = 'WeatherAscom'
-            ClientHeight = 376
+            ClientHeight = 375
             ClientWidth = 486
             ParentFont = False
             object PanelWeatherAscom: TPanel
@@ -4658,17 +4694,17 @@ object f_setup: Tf_setup
           end
           object WeatherAscomRest: TTabSheet
             Caption = 'WeatherAscomRest'
-            ClientHeight = 376
+            ClientHeight = 375
             ClientWidth = 486
             ParentFont = False
             object Panel8: TPanel
               Left = 0
-              Height = 376
+              Height = 375
               Top = 0
               Width = 486
               Align = alClient
               BevelOuter = bvNone
-              ClientHeight = 376
+              ClientHeight = 375
               ClientWidth = 486
               ParentFont = False
               TabOrder = 0
@@ -4926,17 +4962,17 @@ object f_setup: Tf_setup
           OnChange = PageControlSafetyChange
           object SafetyIndi: TTabSheet
             Caption = 'SafetyIndi'
-            ClientHeight = 376
+            ClientHeight = 375
             ClientWidth = 486
             ParentFont = False
             object PanelSafetyIndi: TPanel
               Left = 0
-              Height = 376
+              Height = 375
               Top = 0
               Width = 486
               Align = alClient
               BevelOuter = bvNone
-              ClientHeight = 376
+              ClientHeight = 375
               ClientWidth = 486
               ParentFont = False
               TabOrder = 0
@@ -5054,7 +5090,7 @@ object f_setup: Tf_setup
           end
           object SafetyAscom: TTabSheet
             Caption = 'SafetyAscom'
-            ClientHeight = 376
+            ClientHeight = 375
             ClientWidth = 486
             ParentFont = False
             object PanelSafetyAscom: TPanel
@@ -5115,17 +5151,17 @@ object f_setup: Tf_setup
           end
           object SafetyAscomRest: TTabSheet
             Caption = 'SafetyAscomRest'
-            ClientHeight = 376
+            ClientHeight = 375
             ClientWidth = 486
             ParentFont = False
             object Panel9: TPanel
               Left = 0
-              Height = 376
+              Height = 375
               Top = 0
               Width = 486
               Align = alClient
               BevelOuter = bvNone
-              ClientHeight = 376
+              ClientHeight = 375
               ClientWidth = 486
               ParentFont = False
               TabOrder = 0
@@ -5368,17 +5404,17 @@ object f_setup: Tf_setup
           OnChange = PageControlWatchdogChange
           object WatchdogIndi: TTabSheet
             Caption = 'WatchdogIndi'
-            ClientHeight = 376
+            ClientHeight = 375
             ClientWidth = 486
             ParentFont = False
             object PanelWatchdogIndi: TPanel
               Left = 0
-              Height = 376
+              Height = 375
               Top = 0
               Width = 486
               Align = alClient
               BevelOuter = bvNone
-              ClientHeight = 376
+              ClientHeight = 375
               ClientWidth = 486
               ParentFont = False
               TabOrder = 0
@@ -5648,17 +5684,17 @@ object f_setup: Tf_setup
           OnChange = PageControlSwitchChange
           object SwitchIndi: TTabSheet
             Caption = 'SwitchIndi'
-            ClientHeight = 272
+            ClientHeight = 271
             ClientWidth = 486
             ParentFont = False
             object PanelSwitchIndi: TPanel
               Left = 0
-              Height = 272
+              Height = 271
               Top = 0
               Width = 486
               Align = alClient
               BevelOuter = bvNone
-              ClientHeight = 272
+              ClientHeight = 271
               ClientWidth = 486
               ParentFont = False
               TabOrder = 0
@@ -5776,7 +5812,7 @@ object f_setup: Tf_setup
           end
           object SwitchAscom: TTabSheet
             Caption = 'SwitchAscom'
-            ClientHeight = 272
+            ClientHeight = 271
             ClientWidth = 486
             ParentFont = False
             object PanelSwitchAscom: TPanel
@@ -5837,17 +5873,17 @@ object f_setup: Tf_setup
           end
           object SwitchAscomRest: TTabSheet
             Caption = 'SwitchAscomRest'
-            ClientHeight = 272
+            ClientHeight = 271
             ClientWidth = 486
             ParentFont = False
             object Panel35: TPanel
               Left = 0
-              Height = 272
+              Height = 271
               Top = 0
               Width = 486
               Align = alClient
               BevelOuter = bvNone
-              ClientHeight = 272
+              ClientHeight = 271
               ClientWidth = 486
               ParentFont = False
               TabOrder = 0
@@ -6089,17 +6125,17 @@ object f_setup: Tf_setup
           OnChange = PageControlCoverChange
           object CoverIndi: TTabSheet
             Caption = 'CoverIndi'
-            ClientHeight = 376
+            ClientHeight = 375
             ClientWidth = 486
             ParentFont = False
             object PanelCoverIndi: TPanel
               Left = 0
-              Height = 376
+              Height = 375
               Top = 0
               Width = 486
               Align = alClient
               BevelOuter = bvNone
-              ClientHeight = 376
+              ClientHeight = 375
               ClientWidth = 486
               ParentFont = False
               TabOrder = 0
@@ -6217,7 +6253,7 @@ object f_setup: Tf_setup
           end
           object CoverAscom: TTabSheet
             Caption = 'CoverAscom'
-            ClientHeight = 376
+            ClientHeight = 375
             ClientWidth = 486
             ParentFont = False
             object PanelCoverAscom: TPanel
@@ -6278,17 +6314,17 @@ object f_setup: Tf_setup
           end
           object CoverAscomRest: TTabSheet
             Caption = 'CoverAscomRest'
-            ClientHeight = 376
+            ClientHeight = 375
             ClientWidth = 486
             ParentFont = False
             object Panel38: TPanel
               Left = 0
-              Height = 376
+              Height = 375
               Top = 0
               Width = 486
               Align = alClient
               BevelOuter = bvNone
-              ClientHeight = 376
+              ClientHeight = 375
               ClientWidth = 486
               ParentFont = False
               TabOrder = 0

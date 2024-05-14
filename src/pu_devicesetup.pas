@@ -89,10 +89,14 @@ type
     BtnSetupSwitch: TButton;
     BtnSetupCover: TButton;
     BtnScan: TButton;
+    ButtonStartIndi: TButton;
     ButtonHelp: TButton;
+    cbIndistarterAutostart: TCheckBox;
+    cbIndistarterConfig: TComboBox;
     DeviceGuideCamera: TCheckBox;
     DeviceFinderCamera: TCheckBox;
     DiscoverLed12: TShape;
+    gbIndistarter: TGroupBox;
     SwitchNickname: TEdit;
     GetIndi12: TButton;
     GuideCameraARestDevice: TSpinEdit;
@@ -708,7 +712,9 @@ type
     procedure BtnSetupAscomClick(Sender: TObject);
     procedure ApplyAscomRemoteClick(Sender: TObject);
     procedure BtnScanClick(Sender: TObject);
+    procedure Button2Click(Sender: TObject);
     procedure ButtonHelpClick(Sender: TObject);
+    procedure ButtonStartIndiClick(Sender: TObject);
     procedure CameraARestProtocolChange(Sender: TObject);
     procedure CameraIndiDeviceChange(Sender: TObject);
     procedure CameraIndiTransfertClick(Sender: TObject);
@@ -973,6 +979,8 @@ begin
   Label22.Caption:=rsPort;
   Label1.Caption:=rsTimeout;
   ApplyIndi.Caption:=rsApplyToAllDe;
+  cbIndistarterAutostart.Caption:=format(rsStartS,['Indistarter']);
+  ButtonStartIndi.Caption:=rsStart;
   BtnDiscover.Caption:=rsDiscover;
   BtnDiscover1.Caption:=rsDiscover;
   BtnDiscover2.Caption:=rsDiscover;
@@ -1351,12 +1359,40 @@ end;
 end;
 
 procedure Tf_setup.Loadconfig(conf,credentialconf: TCCDConfig);
-var defautindiserver, defaultindiport: string;
+var defautindiserver, defaultindiport, isConf, buf: string;
+    isStart: boolean;
     i,n: integer;
+    fs : TSearchRec;
 begin
 // default value from old config
 defautindiserver:=conf.GetValue('/INDI/Server','localhost');
 defaultindiport:=conf.GetValue('/INDI/ServerPort','7624');
+
+// Indistarter config
+isConf:=conf.GetValue('/Indistarter/Config','');
+isStart:=conf.GetValue('/Indistarter/Autostart',false);
+cbIndistarterConfig.Clear;
+i:=findfirst(slash(ConfigDir)+slash('..')+slash('indistarter')+'*.conf',0,fs);
+while i=0 do begin
+  buf:=ExtractFileNameOnly(fs.name);
+  cbIndistarterConfig.Items.Add(buf);
+  i:=findnext(fs);
+end;
+findclose(fs);
+if cbIndistarterConfig.Items.Count=0 then begin
+  gbIndistarter.Visible:=false;
+  cbIndistarterConfig.Text:='';
+  cbIndistarterAutostart.Checked:=false;
+end else begin
+  gbIndistarter.Visible:=true;
+  cbIndistarterAutostart.Checked:=isStart;
+  for i:=0 to cbIndistarterConfig.Items.Count-1 do begin
+     if cbIndistarterConfig.Items[i]=isConf then begin
+        cbIndistarterConfig.ItemIndex:=i;
+        break;
+     end;
+  end;
+end;
 
 IndiTimeout.Text:=conf.GetValue('/Devices/Timeout','100');
 
@@ -2013,6 +2049,11 @@ end;
 procedure Tf_setup.ButtonHelpClick(Sender: TObject);
 begin
   if Assigned(FShowHelp) then FShowHelp(self);
+end;
+
+procedure Tf_setup.ButtonStartIndiClick(Sender: TObject);
+begin
+  StartProgram('indistarter','','-c '+cbIndistarterConfig.Text+' -s',true);
 end;
 
 procedure Tf_setup.CameraARestProtocolChange(Sender: TObject);
@@ -2919,6 +2960,11 @@ begin
   Screen.Cursor:=crHourGlass;
   Application.ProcessMessages;
   Application.QueueAsyncCall(@AlpacaScanAsync,0);
+end;
+
+procedure Tf_setup.Button2Click(Sender: TObject);
+begin
+  StartProgram('indistarter','','-c '+cbIndistarterConfig.Text+' -s')
 end;
 
 procedure Tf_setup.AlpacaScanAsync(data:PtrInt);

@@ -4683,6 +4683,9 @@ case findercamera.CameraInterface of
    ASCOMREST: FinderCameraName:='Camera/'+IntToStr(config.GetValue('/ASCOMRestfindercamera/Device',0));
 end;
 
+IndistarterConfig:=config.GetValue('/Indistarter/Config','');
+IndistarterAutostart:=config.GetValue('/Indistarter/Autostart',false);
+
 DeviceTimeout:=config.GetValue('/Devices/Timeout',100);
 camera.Timeout:=DeviceTimeout;
 focuser.Timeout:=DeviceTimeout;
@@ -5739,6 +5742,11 @@ end;
 Procedure Tf_main.Connect(Sender: TObject);
 begin
 try
+  if IndistarterAutostart then begin
+    if StartProgram('indistarter','','-c '+IndistarterConfig+' -s',true) then
+      NewMessage(format(rsStartS,['Indistarter'])+' ...',3);
+      wait(10);
+  end;
   if WantCamera and (CameraName='') then begin
     f_devicesconnection.BtnConnect.Caption:=rsConnect;
     ShowMessage(rsPleaseConfig+blank+rsCamera);
@@ -8993,6 +9001,8 @@ begin
     ShowGuiderDarkInfo;
 
     config.SetValue('/Devices/Timeout',f_setup.IndiTimeout.Text);
+    config.SetValue('/Indistarter/Config',f_setup.cbIndistarterConfig.Text);
+    config.SetValue('/Indistarter/Autostart',f_setup.cbIndistarterAutostart.Checked);
 
     config.SetValue('/Devices/Camera',true);
     config.SetValue('/Devices/FilterWheel',f_setup.DeviceFilterWheel.Checked);
