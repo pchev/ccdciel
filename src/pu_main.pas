@@ -3677,7 +3677,7 @@ begin
     planetarium.Disconnect;
   end else begin
     planetarium.Terminate;
-    planetarium.Connect('','');
+    planetarium.Connect('','','','');
   end;
   except
   end;
@@ -5299,7 +5299,7 @@ begin
   if (planetarium.PlanetariumType<>TPlanetariumType(config.GetValue('/Planetarium/Software',ord(plaNONE)))) and (not planetarium.Connected) then begin
      try
      planetarium.Terminate;
-     planetarium.Connect('');
+     planetarium.Connect('','','','');
      except
      end;
      i:=config.GetValue('/Planetarium/Software',ord(plaNONE));
@@ -9670,12 +9670,15 @@ begin
    f_option.CdCport.Text:=config.GetValue('/Planetarium/CdCport','');
    f_option.StartCdC.Checked:=config.GetValue('/Planetarium/CdCstart',false);
    f_option.CdCPath.Text:=config.GetValue('/Planetarium/CdCpath',defCdCpath);
+   f_option.CdCParam.Text:=config.GetValue('/Planetarium/CdCparam','');
    f_option.CdCAdjustFrame.Checked:=config.GetValue('/Planetarium/CdCAdjustFrame',true);
    f_option.PlanetariumShowAstrometry.checked:=config.GetValue('/Planetarium/ShowAstrometry',false);
    f_option.StartHNSKY.Checked:=config.GetValue('/Planetarium/HNSKYstart',false);
    f_option.HNSKYPath.Text:=config.GetValue('/Planetarium/HNSKYpath',defHNSKYpath);
+   f_option.HNSKYParam.Text:=config.GetValue('/Planetarium/HNSKYparam','');
    f_option.StartSAMP.Checked:=config.GetValue('/Planetarium/SAMPstart',false);
    f_option.SAMPPath.Text:=config.GetValue('/Planetarium/SAMPpath',defSAMPpath);
+   f_option.SAMPParam.Text:=config.GetValue('/Planetarium/SAMPparam','');
    f_option.CheckBoxLocalCdc.Checked:=f_option.CdCport.Text='';
    f_option.PanelRemoteCdc.Visible:=not f_option.CheckBoxLocalCdc.Checked;
    f_option.PanelLocalCdC.Visible:=not f_option.PanelRemoteCdc.Visible;
@@ -10087,12 +10090,15 @@ begin
      config.SetValue('/Planetarium/CdCport',trim(f_option.CdCport.Text));
      config.SetValue('/Planetarium/CdCstart',f_option.StartCdC.Checked);
      config.SetValue('/Planetarium/CdCpath',f_option.CdCPath.Text);
+     config.SetValue('/Planetarium/CdCparam',f_option.CdCParam.Text);
      config.SetValue('/Planetarium/CdCAdjustFrame',f_option.CdCAdjustFrame.Checked);
      config.SetValue('/Planetarium/ShowAstrometry',f_option.PlanetariumShowAstrometry.checked);
      config.SetValue('/Planetarium/HNSKYstart',f_option.StartHNSKY.Checked);
      config.SetValue('/Planetarium/HNSKYpath',f_option.HNSKYPath.Text);
+     config.SetValue('/Planetarium/HNSKYparam',f_option.HNSKYParam.Text);
      config.SetValue('/Planetarium/SAMPstart',f_option.StartSAMP.Checked);
      config.SetValue('/Planetarium/SAMPpath',f_option.SAMPPath.Text);
+     config.SetValue('/Planetarium/SAMPparam',f_option.SAMPParam.Text);
      config.SetValue('/Weather/RestartDelay',f_option.WeatherRestartDelay.Value);
      if f_option.ScrollBoxWeather.Visible then begin
         config.SetValue('/Weather/Use/CloudCover',f_option.UseW1.Checked);
@@ -14871,10 +14877,13 @@ begin
      CDC:  planetarium.Connect(config.GetValue('/Planetarium/CdChostname','localhost'),
                       config.GetValue('/Planetarium/CdCport',''),
                       config.GetValue('/Planetarium/CdCpath',''),
+                      config.GetValue('/Planetarium/CdCparam',''),
                       config.GetValue('/Planetarium/CdCstart',false));
      SAMP: planetarium.Connect('','',config.GetValue('/Planetarium/SAMPpath',''),
+                      config.GetValue('/Planetarium/SAMPparam',''),
                       config.GetValue('/Planetarium/SAMPstart',false));
      HNSKY: planetarium.Connect('','',config.GetValue('/Planetarium/HNSKYpath',''),
+                      config.GetValue('/Planetarium/HNSKYparam',''),
                       config.GetValue('/Planetarium/HNSKYstart',false));
    end;
  end else begin

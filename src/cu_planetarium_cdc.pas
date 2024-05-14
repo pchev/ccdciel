@@ -43,7 +43,7 @@ type
     procedure ProcessDataSyn; override;
   public
     Constructor Create;
-    procedure Connect(cp1: string; cp2:string=''; cp3:string=''; cb1:boolean=False); override;
+    procedure Connect(cp1,cp2,cp3,cp4: string; cb1:boolean=False); override;
     procedure Disconnect; override;
     procedure Shutdown; override;
     function Cmd(const Value: string):string; override;
@@ -75,7 +75,7 @@ FCmdTimeout:=10/86400;
 FLastObjname:='';
 end;
 
-procedure TPlanetarium_cdc.Connect(cp1: string; cp2:string=''; cp3:string=''; cb1:boolean=False);
+procedure TPlanetarium_cdc.Connect(cp1,cp2,cp3,cp4: string; cb1:boolean=False);
 begin
   if started then exit;
   started:=true;
@@ -84,7 +84,7 @@ begin
     FProgramPath:=ExtractFilePath(cp3);
     FProgramName:=ExtractFileName(cp3);
     if FProgramName<>'' then begin
-      FStartedProgram:=StartProgram(FProgramName,FProgramPath);
+      FStartedProgram:=StartProgram(FProgramName,FProgramPath,trim(cp4));
       if FStartedProgram then wait(10);
     end;
   end;

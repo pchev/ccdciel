@@ -61,7 +61,7 @@ public
   InitTimer: TTimer;
   Constructor Create;
   destructor Destroy; override;
-  Procedure Connect(cp1: string; cp2:string=''; cp3:string=''; cb1:boolean=False); virtual; abstract;
+  Procedure Connect(cp1,cp2,cp3,cp4: string; cb1:boolean=False); virtual; abstract;
   procedure Disconnect; virtual; abstract;
   procedure Shutdown; virtual; abstract;
   function Cmd(const Value: string):string; virtual; abstract;

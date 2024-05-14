@@ -164,7 +164,7 @@ function GetThreadCount: integer;
 function email(Subject,Msg:string):string;
 function isLocalIP(ip:string): boolean;
 function IsProgramRunning(pgm: string): boolean;
-function StartProgram(pgm, path: string): boolean;
+function StartProgram(pgm, path: string; param:string=''): boolean;
 procedure StopProgram(pgm: string);
 function SafeFileName(fn:string): string;
 function ValidateCustomHeader(key:string): boolean;
@@ -3524,10 +3524,11 @@ begin
   end;
 end;
 
-function StartProgram(pgm, path: string): boolean;
+function StartProgram(pgm, path: string; param:string=''): boolean;
 begin
   if not IsProgramRunning(pgm) then begin
     if path<>'' then pgm:='"'+slash(path)+pgm+'"';
+    if param<>'' then pgm:=pgm+' '+param;
     ExecNoWait(pgm,'',false);
     result:=true;
   end

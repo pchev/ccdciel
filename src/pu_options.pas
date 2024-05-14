@@ -50,6 +50,9 @@ type
     AstOnlineKey: TEdit;
     AutofocusMultiStarCenterPct: TComboBox;
     cbObsWeather: TCheckBox;
+    Label182: TLabel;
+    Label183: TLabel;
+    SAMPParam: TEdit;
     FileNameSeqSep: TComboBox;
     GroupBox36: TGroupBox;
     GroupBoxExpert: TGroupBox;
@@ -63,6 +66,7 @@ type
     Label178: TLabel;
     Label179: TLabel;
     Label180: TLabel;
+    Label181: TLabel;
     LabelTypeError: TLabel;
     PageType: TTabSheet;
     Panel34: TPanel;
@@ -72,6 +76,8 @@ type
     Panel38: TPanel;
     Panel39: TPanel;
     pressure: TFloatEdit;
+    HNSKYParam: TEdit;
+    CdCParam: TEdit;
     sgCustomType: TStringGrid;
     temperature: TFloatEdit;
     tlrate: TFloatEdit;
@@ -1382,6 +1388,9 @@ begin
   label68.Caption := rsProgramPath;
   label69.Caption := rsProgramPath;
   label151.Caption := rsProgramPath;
+  Label181.Caption := rsParameter;
+  Label182.Caption := rsParameter;
+  Label183.Caption := rsParameter;
   Label25.Caption := rsPort;
   Label24.Caption := rsServer;
   hemis.Items[0]:=rsNorth;

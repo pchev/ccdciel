@@ -6329,10 +6329,10 @@ object f_option: Tf_option
               end
               object PanelRemoteCdc: TPanel
                 Left = 24
-                Height = 81
+                Height = 120
                 Top = 49
                 Width = 480
-                ClientHeight = 81
+                ClientHeight = 120
                 ClientWidth = 480
                 ParentFont = False
                 TabOrder = 1
@@ -6381,10 +6381,10 @@ object f_option: Tf_option
                 AnchorSideLeft.Control = PanelRemoteCdc
                 AnchorSideTop.Control = PanelRemoteCdc
                 Left = 24
-                Height = 81
+                Height = 120
                 Top = 49
                 Width = 480
-                ClientHeight = 81
+                ClientHeight = 120
                 ClientWidth = 480
                 TabOrder = 2
                 object StartCdC: TCheckBox
@@ -6411,11 +6411,28 @@ object f_option: Tf_option
                   Caption = 'Program path'
                   ParentColor = False
                 end
+                object Label183: TLabel
+                  AnchorSideTop.Control = CdCParam
+                  AnchorSideTop.Side = asrCenter
+                  Left = 18
+                  Height = 18
+                  Top = 87
+                  Width = 71
+                  Caption = 'Parameters'
+                  ParentColor = False
+                end
+                object CdCParam: TEdit
+                  Left = 160
+                  Height = 32
+                  Top = 80
+                  Width = 306
+                  TabOrder = 2
+                end
               end
               object CdCAdjustFrame: TCheckBox
                 Left = 22
                 Height = 22
-                Top = 144
+                Top = 184
                 Width = 268
                 Caption = 'Adjust the chart for the image or frame'
                 TabOrder = 3
@@ -6423,7 +6440,7 @@ object f_option: Tf_option
               object PlanetariumShowAstrometry: TCheckBox
                 Left = 24
                 Height = 22
-                Top = 183
+                Top = 223
                 Width = 205
                 Caption = 'Mark every astrometry result'
                 TabOrder = 4
@@ -6455,6 +6472,23 @@ object f_option: Tf_option
               Width = 306
               TabOrder = 1
             end
+            object Label181: TLabel
+              AnchorSideTop.Control = SAMPParam
+              AnchorSideTop.Side = asrCenter
+              Left = 18
+              Height = 18
+              Top = 99
+              Width = 71
+              Caption = 'Parameters'
+              ParentColor = False
+            end
+            object SAMPParam: TEdit
+              Left = 160
+              Height = 32
+              Top = 92
+              Width = 306
+              TabOrder = 2
+            end
           end
           object PageHNSKY: TPage
             object Label151: TLabel
@@ -6480,6 +6514,23 @@ object f_option: Tf_option
               Top = 40
               Width = 306
               TabOrder = 1
+            end
+            object Label182: TLabel
+              AnchorSideTop.Control = HNSKYParam
+              AnchorSideTop.Side = asrCenter
+              Left = 18
+              Height = 18
+              Top = 99
+              Width = 71
+              Caption = 'Parameters'
+              ParentColor = False
+            end
+            object HNSKYParam: TEdit
+              Left = 160
+              Height = 32
+              Top = 92
+              Width = 306
+              TabOrder = 2
             end
           end
           object PagePlaNone: TPage

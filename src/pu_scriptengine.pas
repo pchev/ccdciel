@@ -2096,10 +2096,13 @@ case TPlanetariumType(i) of
   CDC:  planetarium.Connect(config.GetValue('/Planetarium/CdChostname','localhost'),
                    config.GetValue('/Planetarium/CdCport',''),
                    config.GetValue('/Planetarium/CdCpath',''),
+                   config.GetValue('/Planetarium/CdCparam',''),
                    config.GetValue('/Planetarium/CdCstart',false));
   SAMP: planetarium.Connect('','',config.GetValue('/Planetarium/SAMPpath',''),
+                   config.GetValue('/Planetarium/SAMPparam',''),
                    config.GetValue('/Planetarium/SAMPstart',false));
   HNSKY: planetarium.Connect('','',config.GetValue('/Planetarium/HNSKYpath',''),
+                   config.GetValue('/Planetarium/HNSKYparam',''),
                    config.GetValue('/Planetarium/HNSKYstart',false));
   plaNONE: exit;
 end;
