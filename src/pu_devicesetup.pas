@@ -1372,7 +1372,7 @@ defaultindiport:=conf.GetValue('/INDI/ServerPort','7624');
 isConf:=conf.GetValue('/Indistarter/Config','');
 isStart:=conf.GetValue('/Indistarter/Autostart',false);
 cbIndistarterConfig.Clear;
-i:=findfirst(slash(ConfigDir)+slash('..')+slash('indistarter')+'*.conf',0,fs);
+i:=findfirst(slash(IndistarterConfigdir)+'*.conf',0,fs);
 while i=0 do begin
   buf:=ExtractFileNameOnly(fs.name);
   cbIndistarterConfig.Items.Add(buf);

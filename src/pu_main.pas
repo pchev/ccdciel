@@ -1363,6 +1363,7 @@ begin
  DataDir:=slash(Appdir)+slash('data');
  ScriptsDir:=slash(Appdir)+slash('scripts');
  ConfigDir:=GetAppConfigDirUTF8(false,true);
+ IndistarterConfigdir:=ExpandFileName(slash(ConfigDir)+slash('..')+slash('indistarter'));
  if Application.HasOption('b', 'basedir') then begin
    buf:=Application.GetOptionValue('b', 'basedir');
    if buf<>'' then ConfigDir:=ExpandFileNameUTF8(buf);

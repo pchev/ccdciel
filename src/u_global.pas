@@ -567,7 +567,7 @@ var
   CdCAdjustFrame: boolean;
   PlanetariumShowAstrometry:boolean;
   NumSwitches: integer;
-  IndistarterConfig: string;
+  IndistarterConfig, IndistarterConfigdir: string;
   IndistarterAutostart: boolean;
   {internal guider}
   InternalguiderRunning,InternalguiderCalibrating,InternalguiderCalibratingBacklash,InternalguiderGuiding,StopInternalguider,InternalguiderCapturingDark: boolean;
