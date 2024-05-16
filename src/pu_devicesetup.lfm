@@ -106,90 +106,16 @@ object f_setup: Tf_setup
           ClientWidth = 490
           ParentFont = False
           TabOrder = 0
-          object IndiServer: TEdit
-            Left = 8
-            Height = 28
-            Top = 43
-            Width = 121
-            Constraints.MaxHeight = 28
-            ParentFont = False
-            TabOrder = 0
-            Text = 'localhost'
-          end
-          object IndiPort: TEdit
-            Left = 137
-            Height = 28
-            Top = 43
-            Width = 81
-            Constraints.MaxHeight = 28
-            ParentFont = False
-            TabOrder = 1
-            Text = '7624'
-          end
-          object Label18: TLabel
-            Left = 13
-            Height = 18
-            Top = 24
-            Width = 41
-            Caption = 'Server'
-            ParentColor = False
-            ParentFont = False
-          end
-          object Label22: TLabel
-            Left = 145
-            Height = 18
-            Top = 24
-            Width = 26
-            Caption = 'Port'
-            ParentColor = False
-            ParentFont = False
-          end
-          object Label1: TLabel
-            Left = 226
-            Height = 18
-            Top = 24
-            Width = 51
-            Caption = 'Timeout'
-            ParentColor = False
-            ParentFont = False
-          end
-          object IndiTimeout: TEdit
-            Left = 226
-            Height = 28
-            Top = 43
-            Width = 49
-            Constraints.MaxHeight = 28
-            ParentFont = False
-            TabOrder = 2
-          end
-          object Label29: TLabel
-            Left = 13
-            Height = 18
-            Top = 0
-            Width = 72
-            Caption = 'INDI Server'
-            ParentColor = False
-            ParentFont = False
-          end
-          object ApplyIndi: TButton
-            Left = 8
-            Height = 25
-            Top = 84
-            Width = 261
-            Caption = 'Apply to all devices'
-            OnClick = ApplyIndiClick
-            ParentFont = False
-            TabOrder = 3
-          end
           object gbIndistarter: TGroupBox
-            Left = 298
-            Height = 128
-            Top = 0
-            Width = 185
+            Left = 312
+            Height = 125
+            Top = 1
+            Width = 176
+            Align = alLeft
             Caption = 'Indistarter'
-            ClientHeight = 98
-            ClientWidth = 181
-            TabOrder = 4
+            ClientHeight = 95
+            ClientWidth = 172
+            TabOrder = 0
             object cbIndistarterConfig: TComboBox
               Left = 16
               Height = 32
@@ -217,26 +143,168 @@ object f_setup: Tf_setup
               TabOrder = 2
             end
           end
+          object gbIndiserver: TGroupBox
+            Left = 1
+            Height = 125
+            Top = 1
+            Width = 311
+            Align = alLeft
+            Caption = 'Indi Server'
+            ClientHeight = 95
+            ClientWidth = 307
+            TabOrder = 1
+            object IndiServer: TEdit
+              Left = 8
+              Height = 28
+              Top = 23
+              Width = 121
+              Constraints.MaxHeight = 28
+              ParentFont = False
+              TabOrder = 0
+              Text = 'localhost'
+            end
+            object IndiPort: TEdit
+              Left = 137
+              Height = 28
+              Top = 23
+              Width = 55
+              Constraints.MaxHeight = 28
+              ParentFont = False
+              TabOrder = 1
+              Text = '7624'
+            end
+            object Label18: TLabel
+              Left = 13
+              Height = 18
+              Top = 4
+              Width = 41
+              Caption = 'Server'
+              ParentColor = False
+              ParentFont = False
+            end
+            object Label22: TLabel
+              Left = 145
+              Height = 18
+              Top = 4
+              Width = 26
+              Caption = 'Port'
+              ParentColor = False
+              ParentFont = False
+            end
+            object Label1: TLabel
+              Left = 200
+              Height = 18
+              Top = 4
+              Width = 51
+              Caption = 'Timeout'
+              ParentColor = False
+              ParentFont = False
+            end
+            object IndiTimeout: TEdit
+              Left = 200
+              Height = 28
+              Top = 23
+              Width = 49
+              Constraints.MaxHeight = 28
+              ParentFont = False
+              TabOrder = 2
+            end
+            object ApplyIndi: TButton
+              Left = 8
+              Height = 25
+              Top = 64
+              Width = 261
+              Caption = 'Apply to all devices'
+              OnClick = ApplyIndiClick
+              ParentFont = False
+              TabOrder = 3
+            end
+          end
         end
-        object Panel10: TPanel
+        object Panel20: TPanel
+          Left = 0
+          Height = 88
+          Top = 0
+          Width = 490
+          Align = alTop
+          ClientHeight = 88
+          ClientWidth = 490
+          ParentFont = False
+          TabOrder = 1
+          object Label2: TLabel
+            AnchorSideTop.Control = ProfileList
+            AnchorSideTop.Side = asrCenter
+            Left = 21
+            Height = 18
+            Top = 13
+            Width = 47
+            Caption = 'Profile :'
+            ParentColor = False
+            ParentFont = False
+          end
+          object ProfileList: TComboBox
+            Left = 97
+            Height = 28
+            Top = 8
+            Width = 375
+            Constraints.MaxHeight = 28
+            ItemHeight = 24
+            ItemIndex = 0
+            Items.Strings = (
+              'Default'
+            )
+            OnChange = ProfileListChange
+            ParentFont = False
+            Sorted = True
+            Style = csDropDownList
+            TabOrder = 0
+            Text = 'Default'
+          end
+          object BtnCopyProfile: TButton
+            Left = 97
+            Height = 25
+            Hint = 'Copy the current profile to a new one.'#10'This also copy every program preference to the new profile.'
+            Top = 49
+            Width = 60
+            Caption = 'Copy'
+            OnClick = BtnCopyProfileClick
+            ParentFont = False
+            TabOrder = 1
+          end
+          object BtnNewProfile: TButton
+            Left = 166
+            Height = 25
+            Hint = 'Create a new empty profile.'#10'Warning this also clear every program preference for this new profile. '#10'Use the Copy button if you want to configure a different equipement but keep the program options.'
+            Top = 49
+            Width = 71
+            Caption = 'New'
+            OnClick = BtnNewProfileClick
+            ParentFont = False
+            TabOrder = 2
+          end
+          object BtnDeleteProfile: TButton
+            Left = 247
+            Height = 25
+            Hint = 'Delete this profile and associated program preference.'
+            Top = 49
+            Width = 71
+            Caption = 'Delete'
+            OnClick = BtnDeleteProfileClick
+            ParentFont = False
+            TabOrder = 3
+          end
+        end
+        object Panel10: TGroupBox
           Left = 0
           Height = 235
           Top = 215
           Width = 490
           Align = alClient
-          ClientHeight = 235
-          ClientWidth = 490
+          Caption = 'ASCOM Alpaca'
+          ClientHeight = 205
+          ClientWidth = 486
           ParentFont = False
-          TabOrder = 1
-          object Label62: TLabel
-            Left = 13
-            Height = 18
-            Top = 2
-            Width = 90
-            Caption = 'ASCOM Alpaca'
-            ParentColor = False
-            ParentFont = False
-          end
+          TabOrder = 2
           object Label70: TLabel
             Left = 13
             Height = 18
@@ -443,79 +511,6 @@ object f_setup: Tf_setup
             Visible = False
           end
         end
-        object Panel20: TPanel
-          Left = 0
-          Height = 88
-          Top = 0
-          Width = 490
-          Align = alTop
-          ClientHeight = 88
-          ClientWidth = 490
-          ParentFont = False
-          TabOrder = 2
-          object Label2: TLabel
-            AnchorSideTop.Control = ProfileList
-            AnchorSideTop.Side = asrCenter
-            Left = 21
-            Height = 18
-            Top = 13
-            Width = 47
-            Caption = 'Profile :'
-            ParentColor = False
-            ParentFont = False
-          end
-          object ProfileList: TComboBox
-            Left = 97
-            Height = 28
-            Top = 8
-            Width = 375
-            Constraints.MaxHeight = 28
-            ItemHeight = 24
-            ItemIndex = 0
-            Items.Strings = (
-              'Default'
-            )
-            OnChange = ProfileListChange
-            ParentFont = False
-            Sorted = True
-            Style = csDropDownList
-            TabOrder = 0
-            Text = 'Default'
-          end
-          object BtnCopyProfile: TButton
-            Left = 97
-            Height = 25
-            Hint = 'Copy the current profile to a new one.'#10'This also copy every program preference to the new profile.'
-            Top = 49
-            Width = 60
-            Caption = 'Copy'
-            OnClick = BtnCopyProfileClick
-            ParentFont = False
-            TabOrder = 1
-          end
-          object BtnNewProfile: TButton
-            Left = 166
-            Height = 25
-            Hint = 'Create a new empty profile.'#10'Warning this also clear every program preference for this new profile. '#10'Use the Copy button if you want to configure a different equipement but keep the program options.'
-            Top = 49
-            Width = 71
-            Caption = 'New'
-            OnClick = BtnNewProfileClick
-            ParentFont = False
-            TabOrder = 2
-          end
-          object BtnDeleteProfile: TButton
-            Left = 247
-            Height = 25
-            Hint = 'Delete this profile and associated program preference.'
-            Top = 49
-            Width = 71
-            Caption = 'Delete'
-            OnClick = BtnDeleteProfileClick
-            ParentFont = False
-            TabOrder = 3
-          end
-        end
       end
       object Camera: TTabSheet
         Caption = 'Camera'
@@ -610,7 +605,7 @@ object f_setup: Tf_setup
               end
               object CameraIndiTransfert: TRadioGroup
                 Left = 8
-                Height = 45
+                Height = 54
                 Hint = 'Make test to determine the most performant '#10'option depending on your computer '#10'(Network is mandatory if the camera is '#10'connected to a remote Indi server)'
                 Top = 180
                 Width = 340
@@ -623,7 +618,7 @@ object f_setup: Tf_setup
                 ChildSizing.ShrinkVertical = crsScaleChilds
                 ChildSizing.Layout = cclLeftToRightThenTopToBottom
                 ChildSizing.ControlsPerLine = 2
-                ClientHeight = 15
+                ClientHeight = 24
                 ClientWidth = 336
                 Columns = 2
                 Items.Strings = (
@@ -637,7 +632,7 @@ object f_setup: Tf_setup
               object CameraDiskPanel: TPanel
                 Left = 0
                 Height = 34
-                Top = 227
+                Top = 240
                 Width = 356
                 BevelOuter = bvNone
                 ClientHeight = 34

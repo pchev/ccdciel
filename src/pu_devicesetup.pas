@@ -48,8 +48,10 @@ type
   { Tf_setup }
 
   Tf_setup = class(TForm)
+    AlpacaDiscoveryPort: TSpinEdit;
     AlpacaGuideCameraList: TComboBox;
     AlpacaFinderCameraList: TComboBox;
+    AlpacaServers: TComboBox;
     AlpacaSwitchList: TComboBox;
     AlpacaCoverList: TComboBox;
     AlpacaWheelList: TComboBox;
@@ -59,6 +61,7 @@ type
     AlpacaDomeList: TComboBox;
     AlpacaWeatherList: TComboBox;
     AlpacaSafetyList: TComboBox;
+    ApplyAscomRemote: TButton;
     AscomGuideCamera: TEdit;
     AscomFinderCamera: TEdit;
     AscomSwitch: TEdit;
@@ -84,28 +87,41 @@ type
     BtnDiscover7: TButton;
     BtnDiscover8: TButton;
     BtnDiscover9: TButton;
+    BtnScan: TButton;
     BtnSetupGuideCamera: TButton;
     BtnSetupFinderCamera: TButton;
     BtnSetupSwitch: TButton;
     BtnSetupCover: TButton;
-    BtnScan: TButton;
     ButtonStartIndi: TButton;
     ButtonHelp: TButton;
     cbIndistarterAutostart: TCheckBox;
     cbIndistarterConfig: TComboBox;
+    DefaultARestHost: TEdit;
+    DefaultARestPass: TEdit;
+    DefaultARestPort: TSpinEdit;
+    DefaultARestProtocol: TComboBox;
+    DefaultARestUser: TEdit;
     DeviceGuideCamera: TCheckBox;
     DeviceFinderCamera: TCheckBox;
+    DiscoverLed: TShape;
     DiscoverLed12: TShape;
     gbIndistarter: TGroupBox;
+    gbIndiserver: TGroupBox;
+    Label107: TLabel;
+    Label108: TLabel;
+    Label26: TLabel;
+    Label4: TLabel;
+    Label70: TLabel;
+    Label71: TLabel;
+    Label72: TLabel;
+    Panel10: TGroupBox;
     SwitchNickname: TEdit;
     GetIndi12: TButton;
     GuideCameraARestDevice: TSpinEdit;
     FinderCameraARestDevice: TSpinEdit;
     GuideCameraARestHost: TEdit;
     CameraARestPass: TEdit;
-    AlpacaServers: TComboBox;
     AlpacaCameraList: TComboBox;
-    AlpacaDiscoveryPort: TSpinEdit;
     FinderCameraARestHost: TEdit;
     GuideCameraARestPass: TEdit;
     FinderCameraARestPass: TEdit;
@@ -148,8 +164,6 @@ type
     FixPixelRange: TCheckBox;
     FixPixelRange1: TCheckBox;
     FocuserExternalTemperature: TCheckBox;
-    DefaultARestPass: TEdit;
-    DefaultARestUser: TEdit;
     GetIndi10: TButton;
     GetIndi11: TButton;
     GetIndi9: TButton;
@@ -157,8 +171,6 @@ type
     GuideIndiSensor: TComboBox;
     FinderIndiSensor: TComboBox;
     Label10: TLabel;
-    Label107: TLabel;
-    Label108: TLabel;
     Label109: TLabel;
     Label110: TLabel;
     Label111: TLabel;
@@ -226,10 +238,8 @@ type
     Label171: TLabel;
     Label172: TLabel;
     Label23: TLabel;
-    Label26: TLabel;
     Label27: TLabel;
     Label28: TLabel;
-    Label4: TLabel;
     Label7: TLabel;
     Label8: TLabel;
     LabelSwitchConnection: TLabel;
@@ -276,7 +286,6 @@ type
     PanelSwitchIndi: TPanel;
     PanelCoverIndi: TPanel;
     ScrollBox1: TScrollBox;
-    DiscoverLed: TShape;
     NumSwitch: TSpinEdit;
     SwitchARestDevice: TSpinEdit;
     CoverARestDevice: TSpinEdit;
@@ -351,7 +360,6 @@ type
     BtnSetupSafety: TButton;
     BtnSetupRotator: TButton;
     BtnCopyProfile: TButton;
-    ApplyAscomRemote: TButton;
     ApplyIndi: TButton;
     Label100: TLabel;
     Label101: TLabel;
@@ -424,12 +432,8 @@ type
     Panel14: TPanel;
     WheelIndiPort: TEdit;
     WheelIndiServer: TEdit;
-    DefaultARestHost: TEdit;
-    DefaultARestPort: TSpinEdit;
-    DefaultARestProtocol: TComboBox;
     CameraIndiPort: TEdit;
     CameraIndiServer: TEdit;
-    Label62: TLabel;
     Label63: TLabel;
     Label64: TLabel;
     Label65: TLabel;
@@ -437,14 +441,10 @@ type
     Label67: TLabel;
     Label68: TLabel;
     Label69: TLabel;
-    Label70: TLabel;
-    Label71: TLabel;
-    Label72: TLabel;
     Label73: TLabel;
     Label74: TLabel;
     Label75: TLabel;
     Label76: TLabel;
-    Panel10: TPanel;
     Panel11: TPanel;
     Panel12: TPanel;
     WheelARestDevice: TSpinEdit;
@@ -501,7 +501,6 @@ type
     Dome: TTabSheet;
     FlipImage1: TCheckBox;
     Label25: TLabel;
-    Label29: TLabel;
     DeviceCamera: TLabel;
     Label30: TLabel;
     Label31: TLabel;
@@ -1291,7 +1290,7 @@ begin
   BtnNewProfile.Hint:=Format(rsCreateANewEm, [crlf, crlf]);
   BtnDeleteProfile.Hint:=rsDeleteThisPr;
   BtnCopyProfile.Hint:=Format(rsCopyTheCurre, [crlf]);
-  PanelIndiServer.Hint:=rsGlobalINDISe;
+  gbIndiServer.Hint:=rsGlobalINDISe;
   Panel10.Hint:=rsGlobalALPACA;
   CameraIndiTransfert.Hint:=rsDoNotSetThis+crlf+crlf+Format(rsMakeTestToDe, [crlf]);
   CameraIndiTransfertDir.Hint:=rsTheTemporary;
