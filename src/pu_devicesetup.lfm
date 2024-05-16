@@ -603,63 +603,6 @@ object f_setup: Tf_setup
                 ParentFont = False
                 TabOrder = 2
               end
-              object CameraIndiTransfert: TRadioGroup
-                Left = 8
-                Height = 54
-                Hint = 'Make test to determine the most performant '#10'option depending on your computer '#10'(Network is mandatory if the camera is '#10'connected to a remote Indi server)'
-                Top = 180
-                Width = 340
-                AutoFill = True
-                Caption = 'Image transfert'
-                ChildSizing.LeftRightSpacing = 6
-                ChildSizing.EnlargeHorizontal = crsHomogenousChildResize
-                ChildSizing.EnlargeVertical = crsHomogenousChildResize
-                ChildSizing.ShrinkHorizontal = crsScaleChilds
-                ChildSizing.ShrinkVertical = crsScaleChilds
-                ChildSizing.Layout = cclLeftToRightThenTopToBottom
-                ChildSizing.ControlsPerLine = 2
-                ClientHeight = 24
-                ClientWidth = 336
-                Columns = 2
-                Items.Strings = (
-                  'Network'
-                  'RAM Disk'
-                )
-                OnClick = CameraIndiTransfertClick
-                ParentFont = False
-                TabOrder = 3
-              end
-              object CameraDiskPanel: TPanel
-                Left = 0
-                Height = 34
-                Top = 240
-                Width = 356
-                BevelOuter = bvNone
-                ClientHeight = 34
-                ClientWidth = 356
-                ParentFont = False
-                TabOrder = 4
-                object Label5: TLabel
-                  Left = 8
-                  Height = 18
-                  Top = 6
-                  Width = 57
-                  Caption = 'Directory'
-                  ParentColor = False
-                  ParentFont = False
-                end
-                object CameraIndiTransfertDir: TEdit
-                  Left = 96
-                  Height = 28
-                  Hint = 'The temporary RAM disk used to transfert the images '#10'from the Indi server'
-                  Top = 2
-                  Width = 254
-                  Constraints.MaxHeight = 28
-                  ParentFont = False
-                  TabOrder = 0
-                  Text = '/mnt/ramdisk'
-                end
-              end
               object Panel11: TPanel
                 Left = 0
                 Height = 38
@@ -669,7 +612,7 @@ object f_setup: Tf_setup
                 ClientHeight = 38
                 ClientWidth = 412
                 ParentFont = False
-                TabOrder = 5
+                TabOrder = 3
                 object Label73: TLabel
                   AnchorSideTop.Control = CameraIndiPort
                   AnchorSideTop.Side = asrCenter
@@ -726,7 +669,7 @@ object f_setup: Tf_setup
                 Caption = 'Get'
                 OnClick = GetIndiClick
                 ParentFont = False
-                TabOrder = 6
+                TabOrder = 4
               end
               object CameraMsg: TLabel
                 Left = 275

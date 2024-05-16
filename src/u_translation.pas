@@ -440,9 +440,6 @@ resourcestring
   rsMainSensor = 'Main sensor';
   rsGuiderSensor = 'Guider sensor;';
   rsLoadConfigur = 'Load configuration on startup';
-  rsImageTransfe = 'Image transfer';
-  rsNetwork = 'Network';
-  rsRAMDisk = 'RAM Disk';
   rsDirectory = 'Directory';
   rsBeSureToConf = 'Be sure to configure the camera connection.';
   rsUseFilterWhe = 'Use filter wheel';

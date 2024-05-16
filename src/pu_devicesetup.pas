@@ -490,7 +490,6 @@ type
     BtnChooseFocuser: TButton;
     BtnChooseMount: TButton;
     BtnAboutCamera: TButton;
-    CameraIndiTransfertDir: TEdit;
     CameraARestProtocol: TComboBox;
     DeviceDome: TCheckBox;
     DeviceWeather: TCheckBox;
@@ -614,14 +613,11 @@ type
     RotatorAutoLoadConfig: TCheckBox;
     RotatorIndiDevice: TComboBox;
     Label11: TLabel;
-    Label5: TLabel;
-    CameraDiskPanel: TPanel;
     PanelRotatorIndi: TPanel;
     ProfileList: TComboBox;
     Label2: TLabel;
     MountAutoLoadConfig: TCheckBox;
     FocuserAutoLoadConfig: TCheckBox;
-    CameraIndiTransfert: TRadioGroup;
     Rotator: TTabSheet;
     Watchdog: TTabSheet;
     WheelAutoLoadConfig: TCheckBox;
@@ -716,7 +712,6 @@ type
     procedure ButtonStartIndiClick(Sender: TObject);
     procedure CameraARestProtocolChange(Sender: TObject);
     procedure CameraIndiDeviceChange(Sender: TObject);
-    procedure CameraIndiTransfertClick(Sender: TObject);
     procedure CoverARestProtocolChange(Sender: TObject);
     procedure DefaultARestProtocolChange(Sender: TObject);
     procedure DomeARestProtocolChange(Sender: TObject);
@@ -1022,11 +1017,6 @@ begin
   IndiSensor.Items[0]:=rsMainSensor;
   IndiSensor.Items[1]:=rsGuiderSensor;
   CameraAutoLoadConfig.Caption:=rsLoadConfigur;
-  CameraIndiTransfert.Caption:=rsImageTransfe;
-  CameraIndiTransfert.Items[0]:=rsNetwork;
-  CameraIndiTransfert.Items[1]:=rsRAMDisk;
-  Label5.Caption:=rsDirectory;
-
   GuideCamera.Caption:=rsGuideCamera;
   DeviceGuideCamera.Caption:=rsUseGuideCamera;
   Label145.Caption:=rsServer;
@@ -1292,8 +1282,6 @@ begin
   BtnCopyProfile.Hint:=Format(rsCopyTheCurre, [crlf]);
   gbIndiServer.Hint:=rsGlobalINDISe;
   Panel10.Hint:=rsGlobalALPACA;
-  CameraIndiTransfert.Hint:=rsDoNotSetThis+crlf+crlf+Format(rsMakeTestToDe, [crlf]);
-  CameraIndiTransfertDir.Hint:=rsTheTemporary;
 
   label4.Caption:='Alpaca '+rsServer+blank+rsSetup;
   label7.Caption:='Alpaca '+rsServer+blank+rsSetup;
@@ -1420,13 +1408,10 @@ end;
 CameraIndiDevice.Text:=conf.GetValue('/INDIcamera/Device','');
 CameraSensor:=conf.GetValue('/INDIcamera/Sensor','CCD1');
 CameraAutoLoadConfig.Checked:=conf.GetValue('/INDIcamera/AutoLoadConfig',true);
-CameraIndiTransfert.ItemIndex:=conf.GetValue('/INDIcamera/IndiTransfert',ord(itNetwork));
-CameraIndiTransfertDir.Text:=conf.GetValue('/INDIcamera/IndiTransfertDir',defTransfertPath);
 AscomCamera.Text:=conf.GetValue('/ASCOMcamera/Device','');
 FlipImage.Checked:=conf.GetValue('/ASCOMcamera/FlipImage',true);
 CameraDateObs.Checked:=conf.GetValue('/ASCOMcamera/CameraDateObs',false);
 FixPixelRange.Checked:=conf.GetValue('/ASCOMcamera/FixPixelRange',false);
-CameraDiskPanel.Visible:=CameraIndiTransfert.ItemIndex>0;
 CameraARestProtocol.ItemIndex:=conf.GetValue('/ASCOMRestcamera/Protocol',0);
 CameraARestHost.Text:=conf.GetValue('/ASCOMRestcamera/Host','127.0.0.1');
 CameraARestPort.Value:=conf.GetValue('/ASCOMRestcamera/Port',11111);
@@ -2149,11 +2134,6 @@ begin
   SwitchIndiPort.text:=IndiPort.text;
   CoverIndiPort.text:=IndiPort.text;
   WatchdogIndiPort.text:=IndiPort.text;
-end;
-
-procedure Tf_setup.CameraIndiTransfertClick(Sender: TObject);
-begin
-  CameraDiskPanel.Visible:=CameraIndiTransfert.ItemIndex>0;
 end;
 
 procedure Tf_setup.DefaultARestProtocolChange(Sender: TObject);
