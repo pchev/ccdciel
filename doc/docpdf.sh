@@ -57,6 +57,7 @@ $lang/documentation/installation_on_mac_os_x.html
 $lang/documentation/hyperleda_database.html
 $lang/documentation/ascom.html
 $lang/documentation/indi.html
+$lang/documentation/install_python.html
 $lang/documentation/astap.html
 $lang/documentation/astrometry.net.html
 $lang/documentation/windows_subsystem_for_linux.html
