@@ -5743,7 +5743,7 @@ end;
 Procedure Tf_main.Connect(Sender: TObject);
 begin
 try
-  if IndistarterAutostart then begin
+  if IndistarterAutostart and (not checkconnection(config.GetValue('/INDIcamera/Server',''),config.GetValue('/INDIcamera/ServerPort',''))) then begin
     if StartProgram('indistarter','','-c '+IndistarterConfig+' -s',true) then
       NewMessage(format(rsStartS,['Indistarter'])+' ...',3);
       wait(10);

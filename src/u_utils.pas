@@ -31,7 +31,7 @@ uses u_global, u_refraction,
      {$ifdef unix}
        unix,baseunix,
      {$endif}
-     smtpsend, synautil,
+     smtpsend, synautil, cu_tcpclient,
      process, Classes, LCLType, FileUtil, ComCtrls, MTPCPU,
      Math, SysUtils, Forms, Menus, ActnList, Controls, StdCtrls, Graphics;
 
@@ -169,6 +169,7 @@ procedure StopProgram(pgm: string);
 function SafeFileName(fn:string): string;
 function ValidateCustomHeader(key:string): boolean;
 function pseudomodal(f:Tform):TModalResult;
+function checkconnection(host,port: string):boolean;
 
 
 implementation
@@ -3700,6 +3701,24 @@ begin
   end;
 end;
 
+function checkconnection(host,port: string):boolean;
+var tcpclient:TTCPClient;
+begin
+result:=false;
+tcpclient:=TTCPClient.Create;
+try
+ tcpclient.TargetHost:=host;
+ tcpclient.TargetPort:=port;
+ tcpclient.Timeout := 100;
+ if tcpclient.Connect then begin
+    result:=true;
+ end;
+ tcpclient.Disconnect;
+ tcpclient.Free;
+except
+ result:=false;
+end;
+end;
 
 end.
 
