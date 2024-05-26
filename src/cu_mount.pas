@@ -23,17 +23,31 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 }
 
+//{$define AppSkychart}
+{$define AppCcdciel}
+
+
+
 interface
 
-uses u_global, u_utils, indiapi, cu_dome, fu_safety, u_translation,
+uses
+  {$ifdef AppSkychart}
+  u_constant, u_util, u_projection,
+  {$endif}
+  {$ifdef AppCcdciel}
+  u_global, u_utils, cu_dome, fu_safety,
+  {$endif}
+  indiapi, u_translation,
   Classes, SysUtils;
 
 type
 
 T_mount = class(TComponent)
   protected
+    {$ifdef AppCcdciel}
     FDome: T_dome;
     Fsafety: Tf_safety;
+    {$endif}
     FMountInterface: TDevInterface;
     FonMsg,FonDeviceMsg: TNotifyMsg;
     FonCoordChange: TNotifyEvent;
@@ -81,8 +95,10 @@ T_mount = class(TComponent)
     function GetTrackRate: TTrackRate; virtual; abstract;
     procedure SetTrackRate(value: TTrackRate); virtual; abstract;
  public
+   {$ifdef AppCcdciel}
     DomeOpenActions: TDomeOpenActions;
     DomeCloseActions: TDomeCloseActions;
+    {$endif}
     constructor Create(AOwner: TComponent);override;
     destructor  Destroy; override;
     procedure SlewToSkyFlatPosition;
@@ -136,10 +152,12 @@ T_mount = class(TComponent)
     property CanMoveAxis: boolean read FCanMoveAxis;
     Property SlewRates: TstringList read GetSlewRates;
     property AutoLoadConfig: boolean read FAutoLoadConfig write FAutoLoadConfig;
+    {$ifdef AppCcdciel}
     property Safety: Tf_safety read Fsafety write Fsafety;
     property Dome: T_dome read FDome write FDome;
     property SlaveDome: boolean read FSlaveDome write FSlaveDome;
     property DomeActionWait: integer read FDomeActionWait write FDomeActionWait;
+    {$endif}
     property onMsg: TNotifyMsg read FonMsg write FonMsg;
     property onDeviceMsg: TNotifyMsg read FonDeviceMsg write FonDeviceMsg;
     property onCoordChange: TNotifyEvent read FonCoordChange write FonCoordChange;
@@ -157,7 +175,9 @@ implementation
 constructor T_mount.Create(AOwner: TComponent);
 begin
   inherited Create(AOwner);
+  {$ifdef AppCcdciel}
   Fsafety:=nil;
+  {$endif}
   FIsEqmod:=false;
   FMountSlewing:=false;
   FStatus := devDisconnected;
@@ -204,6 +224,7 @@ end;
 procedure T_mount.SlewToSkyFlatPosition;
 var zra,zde: double;
 begin
+  {$ifdef AppCcdciel}
     // every 5 minutes maintain position near the zenith, add some randomness and stop tracking
    if now-FlatSlewTime>(5/minperday) then begin
      FlatSlewTime:=now;
@@ -220,11 +241,13 @@ begin
      // stop tracking to blur the stars
      AbortMotion;
    end;
+  {$endif}
 end;
 
 procedure T_mount.SlewToDomeFlatPosition;
 var zra,zde: double;
 begin
+ {$ifdef AppCcdciel}
  case DomeFlatPosition of
    DomeFlatPositionAltAz: begin
            zra:=0; zde:=0;
@@ -242,11 +265,13 @@ begin
            { #todo : set mount home }
          end;
  end;
+ {$endif}
 end;
 
 procedure T_mount.SetParkInterface(value:Boolean);
 var i: integer;
 begin
+  {$ifdef AppCcdciel}
   if FSlaveDome then begin
    if FDomeActionWait<1 then FDomeActionWait:=1;
    if (FDome<>nil) and (FDome.Status=devConnected) then begin
@@ -382,6 +407,7 @@ begin
    end;
   end
   else
+  {$endif}
     // Process only mount
     SetPark(value);
 end;
