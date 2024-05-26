@@ -1560,6 +1560,7 @@ resourcestring
   rsHumidity2 = 'Humidity %';
   rsTroposphereR = 'Troposphere rate (K/km)';
   rsGetValuesFro = 'Get values from the weather station';
+  rsAutofocusWil = 'Autofocus will run before the next exposure';
 
 implementation
 

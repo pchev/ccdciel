@@ -31,7 +31,7 @@ uses
   cu_mount, cu_camera, cu_autoguider, cu_astrometry, cu_rotator, pu_viewtext,
   cu_targets, cu_plan, cu_planetarium, pu_pause, fu_safety, fu_weather, cu_dome,
   Classes, SysUtils, FileUtil, Forms, Controls, Graphics, Dialogs, StdCtrls,
-  ExtCtrls, Grids, Menus;
+  LCLIntf, ExtCtrls, Grids, Menus;
 
 type
 
@@ -47,6 +47,8 @@ type
     BtnLoadTargets: TButton;
     BtnPause: TButton;
     BtnStatus: TButton;
+    BtnSkip: TButton;
+    BtnAutofocus: TButton;
     led: TShape;
     MenuCopy: TMenuItem;
     MenuDelete: TMenuItem;
@@ -70,10 +72,12 @@ type
     Title3: TPanel;
     TargetGrid: TStringGrid;
     PlanGrid: TStringGrid;
+    procedure BtnAutofocusClick(Sender: TObject);
     procedure BtnEditTargetsClick(Sender: TObject);
     procedure BtnManageClick(Sender: TObject);
     procedure BtnPauseClick(Sender: TObject);
     procedure BtnResetClick(Sender: TObject);
+    procedure BtnSkipClick(Sender: TObject);
     procedure BtnStartClick(Sender: TObject);
     procedure BtnLoadTargetsClick(Sender: TObject);
     procedure BtnStopClick(Sender: TObject);
@@ -607,6 +611,17 @@ begin
      exit;
    end;
    ClearRestartHistory(true);
+end;
+
+procedure Tf_sequence.BtnAutofocusClick(Sender: TObject);
+begin
+  Fcapture.FocusNow:=true;
+  if Assigned(FonMsg) then FonMsg(rsAutofocusWil, 3);
+end;
+
+procedure Tf_sequence.BtnSkipClick(Sender: TObject);
+begin
+  PostMessage(MsgHandle, LM_CCDCIEL, M_SequenceCancelExposure, 0);
 end;
 
 procedure Tf_sequence.ClearRestartHistory(Confirm:boolean);
@@ -1270,9 +1285,13 @@ begin
     BtnPause.Enabled:=true;
     if Targets.Slewing or Autofocusing or MeridianFlipping then begin
       BtnEditTargets.Enabled:=false;
+      BtnSkip.Enabled:=false;
+      BtnAutofocus.Enabled:=false;
     end
     else begin
       BtnEditTargets.Enabled:=true;
+      BtnSkip.Enabled:=true;
+      BtnAutofocus.Enabled:=true;
     end;
   end
   else begin
@@ -1283,6 +1302,8 @@ begin
     BtnStart.Enabled:=true;
     BtnStop.Enabled:=false;
     BtnPause.Enabled:=false;
+    BtnSkip.Enabled:=false;
+    BtnAutofocus.Enabled:=false;
   end;
 end;
 

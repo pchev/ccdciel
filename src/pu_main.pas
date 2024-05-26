@@ -15248,6 +15248,9 @@ begin
                       RunningCapture:=false;
                       if f_sequence.Running then f_sequence.AbortSequence;
                      end;
+    M_SequenceCancelExposure: begin
+                      CancelRestartExposure(5);
+                     end;
     else
       NewMessage(Format(rsReceiveUnkno, [inttostr(Message.wParam)]),1);
   end;
