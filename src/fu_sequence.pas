@@ -283,6 +283,8 @@ begin
   BtnReset.Caption:=rsReset;
   BtnPause.Caption:=rsPause;
   BtnManage.Caption:=rsManage;
+  BtnSkip.Caption:=rsRestartExpos;
+  BtnAutofocus.Caption:=rsAutofocus;
   BtnLoadTargets.Hint:=rsLoadASequenc;
   BtnNewTargets.Hint:=rsCreateANewSe;
   BtnEditTargets.Hint:=rsEditTheCurre;
