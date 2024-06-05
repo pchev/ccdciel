@@ -6,15 +6,15 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ccdciel\n"
 "Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
-"POT-Creation-Date: 2024-03-17 17:24+0000\n"
-"PO-Revision-Date: 2024-02-19 08:57+0000\n"
+"POT-Creation-Date: 2024-06-05 06:51+0000\n"
+"PO-Revision-Date: 2024-04-04 04:23+0000\n"
 "Last-Translator: Zachary Wu <Unknown>\n"
 "Language-Team: Chinese (Simplified) <zh_CN@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2024-03-17 17:28+0000\n"
-"X-Generator: Launchpad (build aec24aef7a9042c99ef3e238d8b0ca01df9e1a9f)\n"
+"X-Launchpad-Export-Date: 2024-06-05 07:08+0000\n"
+"X-Generator: Launchpad (build 4d1350fd3710dfe10d207fa9961e224cc481dca3)\n"
 
 #: u_translation.rs2d
 msgid "2D"
@@ -257,6 +257,10 @@ msgstr "于破晓"
 msgid "at dusk"
 msgstr "于黄昏"
 
+#: u_translation.rsatmosphericr
+msgid "Atmospheric refraction"
+msgstr ""
+
 #: u_translation.rsautofocus
 msgid "Autofocus"
 msgstr "自动对焦"
@@ -428,6 +432,10 @@ msgstr "自动对焦成功"
 #: u_translation.rsautofocustol
 msgid "Autofocus tolerance "
 msgstr "自动对焦容差 "
+
+#: u_translation.rsautofocuswil
+msgid "Autofocus will run before the next exposure"
+msgstr ""
 
 #: u_translation.rsautoguider
 msgid "Autoguider"
@@ -1522,6 +1530,10 @@ msgstr "简单转向到 %s/%s"
 msgid "Down"
 msgstr "下"
 
+#: u_translation.rsdownload
+msgid "Download"
+msgstr ""
+
 #: u_translation.rsdownloading
 msgid "Downloading"
 msgstr "下载中"
@@ -1688,6 +1700,10 @@ msgstr "更新序列错误：%s"
 #: u_translation.rsestimatedsli
 msgid "Estimated slippage since last learning"
 msgstr "根据最后的学习估计的滑脱"
+
+#: u_translation.rsexampleandte
+msgid "Example and template"
+msgstr ""
 
 #: u_translation.rsexecutingthe
 msgid "Executing the termination error actions."
@@ -2136,6 +2152,10 @@ msgstr "从望远镜获取当前位置"
 msgid "Get site long/lat from the mount"
 msgstr "从赤道仪获取经纬度"
 
+#: u_translation.rsgetvaluesfro
+msgid "Get values from the weather station"
+msgstr ""
+
 #: u_translation.rsglobalaction
 msgid "Global actions when a sequence is running"
 msgstr "当一个序列正在运行时的全局动作"
@@ -2164,6 +2184,10 @@ msgstr "GOTO进行中"
 #: u_translation.rsgreen
 msgid "green"
 msgstr "绿"
+
+#: u_translation.rsgroup
+msgid "Group"
+msgstr ""
 
 #: u_translation.rsguid
 msgid "Guid."
@@ -2258,6 +2282,10 @@ msgstr "水平修正："
 msgid "Humidity"
 msgstr "湿度"
 
+#: u_translation.rshumidity2
+msgid "Humidity %"
+msgstr ""
+
 #: u_translation.rshyperbolacur
 #, object-pascal-format
 msgid "HYPERBOLA curve fitting focus at %s,  remaining curve fit error %s,  iteration cycles %s"
@@ -2337,10 +2365,6 @@ msgstr "图像清晰度%s"
 #: u_translation.rsimagestatist
 msgid "Image statistic"
 msgstr "图像统计数据"
-
-#: u_translation.rsimagetransfe
-msgid "Image transfer"
-msgstr "图像传输"
 
 #: u_translation.rsimageundebay
 msgid "Image Un-debayered"
@@ -3043,10 +3067,6 @@ msgstr "临近天极"
 msgid "Need to wait until %s"
 msgstr "需要等待直到%s"
 
-#: u_translation.rsnetwork
-msgid "Network"
-msgstr "路网"
-
 #: u_translation.rsnew
 msgid "New"
 msgstr "新建"
@@ -3485,7 +3505,7 @@ msgstr "PDF文档"
 
 #: u_translation.rspercent
 msgid "percent"
-msgstr ""
+msgstr "百分比"
 
 #: u_translation.rsperformance
 msgid "Performance"
@@ -3742,6 +3762,10 @@ msgstr "预设列表"
 msgid "Pressure"
 msgstr "气压"
 
+#: u_translation.rspressuremill
+msgid "Pressure (millibar)"
+msgstr ""
+
 #: u_translation.rspreview
 msgid "Preview"
 msgstr "预览"
@@ -3807,10 +3831,6 @@ msgstr "RA"
 #: u_translation.rsrainrate
 msgid "Rain rate"
 msgstr "降水概率"
-
-#: u_translation.rsramdisk
-msgid "RAM Disk"
-msgstr "内存盘"
 
 #: u_translation.rsraonly
 msgid "RA only"
@@ -4243,7 +4263,7 @@ msgstr "比例容差"
 
 #: u_translation.rsscanthisserv
 msgid "Scan this server"
-msgstr ""
+msgstr "扫描此服务器"
 
 #: u_translation.rsscript
 msgid "Script"
@@ -4309,6 +4329,10 @@ msgstr "%s 驱动不支持 %s"
 msgid "Search"
 msgstr "检索"
 
+#: u_translation.rssearchonline
+msgid "Search online"
+msgstr ""
+
 #: u_translation.rssec
 msgid "sec."
 msgstr "秒"
@@ -4357,6 +4381,10 @@ msgstr "选择要编辑的文件"
 msgid "Select the file to load"
 msgstr "选择要载入的文件"
 
+#: u_translation.rsselectthescr
+msgid "Select the script to download"
+msgstr ""
+
 #: u_translation.rssendimagetop
 msgid "Send image to planetarium"
 msgstr "将图像发送给星图"
@@ -4375,7 +4403,7 @@ msgstr "传感器分析"
 
 #: u_translation.rssensorareaus
 msgid "Sensor area used for focusing"
-msgstr ""
+msgstr "用于对焦的传感器区域"
 
 #: u_translation.rssensorsprope
 msgid "Sensors properties"
@@ -5308,6 +5336,10 @@ msgstr "温度"
 msgid "Temperature coefficient in steps/%s"
 msgstr "温度步长系数为：步/%s"
 
+#: u_translation.rstemperaturec2
+msgid "Temperature (C)"
+msgstr ""
+
 #: u_translation.rstemperaturef
 msgid "Temperature from weather station"
 msgstr "来自气象站的温度"
@@ -5562,6 +5594,10 @@ msgstr "三角形"
 #: u_translation.rstrianglerota
 msgid "Triangle rotation angle"
 msgstr "三角形旋转角度"
+
+#: u_translation.rstropospherer
+msgid "Troposphere rate (K/km)"
+msgstr ""
 
 #: u_translation.rstrue
 msgid "True"

@@ -6,15 +6,15 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ccdciel\n"
 "Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
-"POT-Creation-Date: 2024-03-17 17:24+0000\n"
+"POT-Creation-Date: 2024-06-05 06:51+0000\n"
 "PO-Revision-Date: 2023-05-31 10:28+0000\n"
 "Last-Translator: Zachary Wu <Unknown>\n"
 "Language-Team: Chinese (Simplified) <zh_CN@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2024-03-17 17:28+0000\n"
-"X-Generator: Launchpad (build aec24aef7a9042c99ef3e238d8b0ca01df9e1a9f)\n"
+"X-Launchpad-Export-Date: 2024-06-05 07:08+0000\n"
+"X-Generator: Launchpad (build 4d1350fd3710dfe10d207fa9961e224cc481dca3)\n"
 
 #: u_hints.rsactivateback
 #, object-pascal-format
@@ -239,11 +239,6 @@ msgstr "载入一个序列文件"
 #: u_hints.rslooppreviewe
 msgid "Loop preview exposures"
 msgstr "循环预览曝光"
-
-#: u_hints.rsmaketesttode
-#, object-pascal-format
-msgid "Make test to determine the most performant option depending on your computer.%s(Network is mandatory if the camera is connected to a remote Indi server)"
-msgstr "根据您的计算机进行测试以确定性能最高的选项。%s（如果相机连接到远程Indi服务器，则必须使用网络）"
 
 #: u_hints.rsmovefocuseri
 msgid "Move focuser inward"
@@ -503,10 +498,6 @@ msgstr "用于拍摄图像的目标名称"
 #: u_hints.rsthetelescopenamefori
 msgid "The telescope name for inclusion in the FITS header"
 msgstr "包含在FITS头中的望远镜名称"
-
-#: u_hints.rsthetemporary
-msgid "The temporary RAM disk used to transfer the images from the Indi server"
-msgstr "用于从Indi服务器传输图像的临时RAM磁盘"
 
 #: u_hints.rsthetypeoffra
 msgid "The type of frame"

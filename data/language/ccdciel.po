@@ -1498,18 +1498,6 @@ msgstr ""
 msgid "Load configuration on startup"
 msgstr ""
 
-#: u_translation:rsimagetransfe
-msgid "Image transfer"
-msgstr ""
-
-#: u_translation:rsnetwork
-msgid "Network"
-msgstr ""
-
-#: u_translation:rsramdisk
-msgid "RAM Disk"
-msgstr ""
-
 #: u_translation:rsdirectory
 msgid "Directory"
 msgstr ""
@@ -5792,5 +5780,53 @@ msgstr ""
 
 #: u_translation:rspercent
 msgid "percent"
+msgstr ""
+
+#: u_translation:rssearchonline
+msgid "Search online"
+msgstr ""
+
+#: u_translation:rsdownload
+msgid "Download"
+msgstr ""
+
+#: u_translation:rsexampleandte
+msgid "Example and template"
+msgstr ""
+
+#: u_translation:rsgroup
+msgid "Group"
+msgstr ""
+
+#: u_translation:rsselectthescr
+msgid "Select the script to download"
+msgstr ""
+
+#: u_translation:rsatmosphericr
+msgid "Atmospheric refraction"
+msgstr ""
+
+#: u_translation:rspressuremill
+msgid "Pressure (millibar)"
+msgstr ""
+
+#: u_translation:rstemperaturec2
+msgid "Temperature (C)"
+msgstr ""
+
+#: u_translation:rshumidity2
+msgid "Humidity %"
+msgstr ""
+
+#: u_translation:rstropospherer
+msgid "Troposphere rate (K/km)"
+msgstr ""
+
+#: u_translation:rsgetvaluesfro
+msgid "Get values from the weather station"
+msgstr ""
+
+#: u_translation:rsautofocuswil
+msgid "Autofocus will run before the next exposure"
 msgstr ""
 

@@ -6,15 +6,15 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ccdciel\n"
 "Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
-"POT-Creation-Date: 2024-03-17 17:24+0000\n"
-"PO-Revision-Date: 2024-01-29 19:59+0000\n"
+"POT-Creation-Date: 2024-06-05 06:51+0000\n"
+"PO-Revision-Date: 2024-05-29 19:22+0000\n"
 "Last-Translator: Thomas <email@starhopper.de>\n"
 "Language-Team: German <de@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2024-03-17 17:28+0000\n"
-"X-Generator: Launchpad (build aec24aef7a9042c99ef3e238d8b0ca01df9e1a9f)\n"
+"X-Launchpad-Export-Date: 2024-06-05 07:08+0000\n"
+"X-Generator: Launchpad (build 4d1350fd3710dfe10d207fa9961e224cc481dca3)\n"
 
 #: u_translation.rs2d
 msgid "2D"
@@ -257,6 +257,10 @@ msgstr "zur Morgendämmerung"
 msgid "at dusk"
 msgstr "zur Abenddämmerung"
 
+#: u_translation.rsatmosphericr
+msgid "Atmospheric refraction"
+msgstr ""
+
 #: u_translation.rsautofocus
 msgid "Autofocus"
 msgstr "Autofokus"
@@ -428,6 +432,10 @@ msgstr "Autofokus erfolgreich"
 #: u_translation.rsautofocustol
 msgid "Autofocus tolerance "
 msgstr "Autofokus Toleranz "
+
+#: u_translation.rsautofocuswil
+msgid "Autofocus will run before the next exposure"
+msgstr ""
 
 #: u_translation.rsautoguider
 msgid "Autoguider"
@@ -1522,6 +1530,10 @@ msgstr "Mache einfachen Schwenk zu %s/%s"
 msgid "Down"
 msgstr "Nach unten"
 
+#: u_translation.rsdownload
+msgid "Download"
+msgstr ""
+
 #: u_translation.rsdownloading
 msgid "Downloading"
 msgstr "Downloading"
@@ -1688,6 +1700,10 @@ msgstr "Fehler beim Aktualisieren der Sequenz"
 #: u_translation.rsestimatedsli
 msgid "Estimated slippage since last learning"
 msgstr "Geschätzter Schlupf seit dem letzten Lernen"
+
+#: u_translation.rsexampleandte
+msgid "Example and template"
+msgstr ""
 
 #: u_translation.rsexecutingthe
 msgid "Executing the termination error actions."
@@ -2136,6 +2152,10 @@ msgstr "Aktuelle Position vom Teleskop abrufen"
 msgid "Get site long/lat from the mount"
 msgstr "Übernehme Standort (Länge-/Breitengrad) von der Montierung"
 
+#: u_translation.rsgetvaluesfro
+msgid "Get values from the weather station"
+msgstr ""
+
 #: u_translation.rsglobalaction
 msgid "Global actions when a sequence is running"
 msgstr "Globale Aktionen, wenn eine Sequenz ausgeführt wird"
@@ -2164,6 +2184,10 @@ msgstr "Teleskopschwenk läuft aktuell"
 #: u_translation.rsgreen
 msgid "green"
 msgstr "grün"
+
+#: u_translation.rsgroup
+msgid "Group"
+msgstr ""
 
 #: u_translation.rsguid
 msgid "Guid."
@@ -2258,6 +2282,10 @@ msgstr "Horizontale Korrektur:"
 msgid "Humidity"
 msgstr "Feuchtigkeit"
 
+#: u_translation.rshumidity2
+msgid "Humidity %"
+msgstr ""
+
 #: u_translation.rshyperbolacur
 #, object-pascal-format
 msgid "HYPERBOLA curve fitting focus at %s,  remaining curve fit error %s,  iteration cycles %s"
@@ -2337,10 +2365,6 @@ msgstr "Bildschärfe %s"
 #: u_translation.rsimagestatist
 msgid "Image statistic"
 msgstr "Bildstatistik"
-
-#: u_translation.rsimagetransfe
-msgid "Image transfer"
-msgstr "Bildtransfer"
 
 #: u_translation.rsimageundebay
 msgid "Image Un-debayered"
@@ -3043,10 +3067,6 @@ msgstr "Nahe des Himmelspols"
 msgid "Need to wait until %s"
 msgstr "Muss warten bis %s"
 
-#: u_translation.rsnetwork
-msgid "Network"
-msgstr "Netzwerk"
-
 #: u_translation.rsnew
 msgid "New"
 msgstr "Neu"
@@ -3485,7 +3505,7 @@ msgstr "PDF Dokumentation"
 
 #: u_translation.rspercent
 msgid "percent"
-msgstr ""
+msgstr "Prozent"
 
 #: u_translation.rsperformance
 msgid "Performance"
@@ -3742,6 +3762,10 @@ msgstr "Voreinstellung"
 msgid "Pressure"
 msgstr "Luftdruck"
 
+#: u_translation.rspressuremill
+msgid "Pressure (millibar)"
+msgstr ""
+
 #: u_translation.rspreview
 msgid "Preview"
 msgstr "Vorschau"
@@ -3807,10 +3831,6 @@ msgstr "RA"
 #: u_translation.rsrainrate
 msgid "Rain rate"
 msgstr "Niederschlagsrate"
-
-#: u_translation.rsramdisk
-msgid "RAM Disk"
-msgstr "RAM Disk"
 
 #: u_translation.rsraonly
 msgid "RA only"
@@ -4243,7 +4263,7 @@ msgstr "Skallierungstoleranz"
 
 #: u_translation.rsscanthisserv
 msgid "Scan this server"
-msgstr ""
+msgstr "Diesen Server scannen"
 
 #: u_translation.rsscript
 msgid "Script"
@@ -4309,6 +4329,10 @@ msgstr "%s Treiber unterstützt nicht %s"
 msgid "Search"
 msgstr "Suche"
 
+#: u_translation.rssearchonline
+msgid "Search online"
+msgstr ""
+
 #: u_translation.rssec
 msgid "sec."
 msgstr "sek."
@@ -4357,6 +4381,10 @@ msgstr "Zu bearbeitende Datei auswählen"
 msgid "Select the file to load"
 msgstr "Zu öffnende Datei auswählen"
 
+#: u_translation.rsselectthescr
+msgid "Select the script to download"
+msgstr ""
+
 #: u_translation.rssendimagetop
 msgid "Send image to planetarium"
 msgstr "Bild an Planetarium senden"
@@ -4375,7 +4403,7 @@ msgstr "Bildsensor Analyse"
 
 #: u_translation.rssensorareaus
 msgid "Sensor area used for focusing"
-msgstr ""
+msgstr "Zur Fokussierung genutzte Sensorfläche"
 
 #: u_translation.rssensorsprope
 msgid "Sensors properties"
@@ -5308,6 +5336,10 @@ msgstr "Temperatur"
 msgid "Temperature coefficient in steps/%s"
 msgstr "Temperaturkoeffizient in Schritten/%s"
 
+#: u_translation.rstemperaturec2
+msgid "Temperature (C)"
+msgstr ""
+
 #: u_translation.rstemperaturef
 msgid "Temperature from weather station"
 msgstr "Temperatur von der Wetterstation"
@@ -5562,6 +5594,10 @@ msgstr "Dreieck"
 #: u_translation.rstrianglerota
 msgid "Triangle rotation angle"
 msgstr "Rotationswinkel des Dreiecks"
+
+#: u_translation.rstropospherer
+msgid "Troposphere rate (K/km)"
+msgstr ""
 
 #: u_translation.rstrue
 msgid "True"
