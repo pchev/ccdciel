@@ -393,7 +393,7 @@ begin
         inc(NumObj);
 
        end;
-     until (NumObj>=10)or(linepos>=$FFFFFF);{maximum 500 objects or end of database}
+     until (NumObj>=500)or(linepos>=$FFFFFF);{maximum 500 objects or end of database}
   end;
 end;{search deep_sky}
 
