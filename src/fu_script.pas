@@ -81,6 +81,7 @@ type
     procedure SetScriptList(sl:string);
     procedure RunStartupScript;
     procedure RunShutdownScript;
+    procedure RunBeforeConnectScript;
     procedure RunConnectedScript;
     procedure RunDisconnectedScript;
     property Camera: T_camera read Fcamera write Fcamera;
@@ -240,6 +241,17 @@ begin
   end;
 end;
 
+procedure Tf_script.RunBeforeConnectScript;
+var path,sname: string;
+begin
+  // Always run user customized script, never try to run the distribution sample script
+  path:=ConfigDir;
+  sname:='beforeconnect';
+  if FileExistsUTF8(slash(path)+sname+'.script') then begin
+    f_scriptengine.RunScript(sname,path,profile);
+  end;
+end;
+
 procedure Tf_script.RunConnectedScript;
 var path,sname: string;
 begin
@@ -247,7 +259,7 @@ begin
   path:=ConfigDir;
   sname:='connected';
   if FileExistsUTF8(slash(path)+sname+'.script') then begin
-    f_scriptengine.RunScript(sname,path,'');
+    f_scriptengine.RunScript(sname,path,profile);
   end;
 end;
 
@@ -258,7 +270,7 @@ begin
   path:=ConfigDir;
   sname:='disconnected';
   if FileExistsUTF8(slash(path)+sname+'.script') then begin
-    f_scriptengine.RunScript(sname,path,'');
+    f_scriptengine.RunScript(sname,path,profile);
   end;
 end;
 

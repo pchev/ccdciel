@@ -5748,6 +5748,7 @@ try
       NewMessage(format(rsStartS,['Indistarter'])+' ...',3);
       wait(10);
   end;
+  f_script.RunBeforeConnectScript;
   if WantCamera and (CameraName='') then begin
     f_devicesconnection.BtnConnect.Caption:=rsConnect;
     ShowMessage(rsPleaseConfig+blank+rsCamera);
