@@ -2,10 +2,10 @@ object f_ccdtemp: Tf_ccdtemp
   Left = 0
   Height = 122
   Top = 0
-  Width = 220
+  Width = 236
   AutoSize = True
   ClientHeight = 122
-  ClientWidth = 220
+  ClientWidth = 236
   ParentFont = False
   TabOrder = 0
   DesignLeft = -3
@@ -14,7 +14,7 @@ object f_ccdtemp: Tf_ccdtemp
     Left = 0
     Height = 20
     Top = 0
-    Width = 220
+    Width = 236
     Align = alTop
     Alignment = taCenter
     AutoSize = False
@@ -29,24 +29,24 @@ object f_ccdtemp: Tf_ccdtemp
   end
   object Panel1: TPanel
     Left = 0
-    Height = 89
+    Height = 88
     Top = 20
-    Width = 220
+    Width = 236
     Align = alTop
     AutoSize = True
-    ClientHeight = 89
-    ClientWidth = 220
+    ClientHeight = 88
+    ClientWidth = 236
     ParentFont = False
     TabOrder = 0
     object Panel2: TPanel
       Left = 1
       Height = 27
       Top = 1
-      Width = 218
+      Width = 234
       Align = alTop
       BevelOuter = bvNone
       ClientHeight = 27
-      ClientWidth = 218
+      ClientWidth = 234
       ParentFont = False
       TabOrder = 0
       object Label1: TLabel
@@ -71,32 +71,33 @@ object f_ccdtemp: Tf_ccdtemp
     end
     object Panel3: TPanel
       Left = 1
-      Height = 33
+      Height = 32
       Top = 28
-      Width = 218
+      Width = 234
       Align = alTop
+      AutoSize = True
       BevelOuter = bvNone
-      ClientHeight = 33
-      ClientWidth = 218
+      ClientHeight = 32
+      ClientWidth = 234
       ParentFont = False
       TabOrder = 1
       object Label2: TLabel
         AnchorSideTop.Control = Setpoint
         AnchorSideTop.Side = asrCenter
-        Left = 4
+        Left = 0
         Height = 18
-        Top = 5
+        Top = 7
         Width = 52
         Caption = 'Setpoint'
         ParentColor = False
         ParentFont = False
       end
       object Setpoint: TFloatSpinEdit
-        Left = 64
-        Height = 28
+        Left = 60
+        Height = 32
         Top = 0
-        Width = 68
-        Constraints.MaxHeight = 28
+        Width = 82
+        DecimalPlaces = 1
         MaxValue = 100
         MinValue = -100
         ParentFont = False
@@ -105,9 +106,9 @@ object f_ccdtemp: Tf_ccdtemp
       object BtnSet: TButton
         AnchorSideTop.Control = Setpoint
         AnchorSideTop.Side = asrCenter
-        Left = 139
+        Left = 144
         Height = 24
-        Top = 2
+        Top = 4
         Width = 80
         Caption = 'Set'
         OnClick = BtnSetClick
@@ -118,12 +119,12 @@ object f_ccdtemp: Tf_ccdtemp
     object PanelCooler: TPanel
       Left = 1
       Height = 27
-      Top = 61
-      Width = 218
+      Top = 60
+      Width = 234
       Align = alTop
       BevelOuter = bvNone
       ClientHeight = 27
-      ClientWidth = 218
+      ClientWidth = 234
       TabOrder = 2
       object CCDcooler: TCheckBox
         Left = 4

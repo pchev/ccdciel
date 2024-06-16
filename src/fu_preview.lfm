@@ -76,22 +76,22 @@ object f_preview: Tf_preview
     end
     object PanelGain: TPanel
       Left = 0
-      Height = 68
+      Height = 64
       Top = 28
       Width = 191
+      AutoSize = True
       BevelOuter = bvNone
-      ClientHeight = 68
+      ClientHeight = 64
       ClientWidth = 191
       ParentFont = False
       TabOrder = 4
       Visible = False
       object ISObox: TComboBox
         Left = 100
-        Height = 28
+        Height = 32
         Hint = 'Exposure time in seconds'
         Top = 0
         Width = 91
-        Constraints.MaxHeight = 28
         ItemHeight = 18
         ParentFont = False
         Style = csDropDownList
@@ -103,7 +103,7 @@ object f_preview: Tf_preview
         AnchorSideTop.Side = asrCenter
         Left = 6
         Height = 18
-        Top = 9
+        Top = 7
         Width = 29
         Caption = 'Gain'
         ParentColor = False
@@ -111,30 +111,32 @@ object f_preview: Tf_preview
       end
       object GainEdit: TSpinEdit
         Left = 100
-        Height = 28
-        Top = 4
+        Height = 32
+        Top = 0
         Width = 90
-        Constraints.MaxHeight = 28
         MaxValue = 32767
         MinValue = -32768
         ParentFont = False
         TabOrder = 1
       end
       object PanelOffset: TPanel
+        AnchorSideTop.Control = GainEdit
+        AnchorSideTop.Side = asrBottom
         Left = 0
-        Height = 36
+        Height = 32
         Top = 32
-        Width = 191
+        Width = 190
+        AutoSize = True
         BevelOuter = bvNone
-        ClientHeight = 36
-        ClientWidth = 191
+        ClientHeight = 32
+        ClientWidth = 190
         TabOrder = 2
         object LabelOffset: TLabel
           AnchorSideTop.Control = OffsetEdit
           AnchorSideTop.Side = asrCenter
-          Left = 6
+          Left = 0
           Height = 18
-          Top = 11
+          Top = 7
           Width = 38
           Caption = 'Offset'
           ParentColor = False
@@ -142,7 +144,7 @@ object f_preview: Tf_preview
         object OffsetEdit: TSpinEdit
           Left = 100
           Height = 32
-          Top = 4
+          Top = 0
           Width = 90
           MaxValue = 32767
           MinValue = -32768
@@ -153,7 +155,7 @@ object f_preview: Tf_preview
     object Panel3: TPanel
       Left = 0
       Height = 28
-      Top = 96
+      Top = 92
       Width = 191
       BevelOuter = bvNone
       ClientHeight = 28
@@ -190,7 +192,7 @@ object f_preview: Tf_preview
     object PanelFnumber: TPanel
       Left = 0
       Height = 30
-      Top = 124
+      Top = 120
       Width = 191
       BevelOuter = bvNone
       ClientHeight = 30
@@ -223,7 +225,7 @@ object f_preview: Tf_preview
     object Panel5: TPanel
       Left = 0
       Height = 26
-      Top = 154
+      Top = 150
       Width = 191
       BevelOuter = bvNone
       ClientHeight = 26
@@ -257,7 +259,7 @@ object f_preview: Tf_preview
     object Panel4: TPanel
       Left = 0
       Height = 28
-      Top = 180
+      Top = 176
       Width = 191
       BevelOuter = bvNone
       ClientHeight = 28
@@ -280,7 +282,7 @@ object f_preview: Tf_preview
     object Panel7: TPanel
       Left = 0
       Height = 13
-      Top = 208
+      Top = 204
       Width = 191
       AutoSize = True
       BevelOuter = bvNone
