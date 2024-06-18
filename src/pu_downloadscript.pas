@@ -79,7 +79,6 @@ begin
   end;
   if doDownload then begin
     DownloadDialog1.ConfirmDownload:=false;
-    DownloadDialog1.QuickCancel:=FileExists(fn);
     DownloadDialog1.URL:=URL_SCRIPTLIST;
     DownloadDialog1.SaveToFile:=fn;
     DownloadDialog1.Execute;
@@ -129,7 +128,6 @@ function Tf_downloadscript.DownloadScript(fn,dfn: string): boolean;
 begin
   result:=false;
   DownloadDialog1.ConfirmDownload:=false;
-  DownloadDialog1.QuickCancel:=false;
   DownloadDialog1.URL:=URL_SCRIPTDOWNLOAD+fn;
   DownloadDialog1.SaveToFile:=dfn;
   result:=DownloadDialog1.Execute;

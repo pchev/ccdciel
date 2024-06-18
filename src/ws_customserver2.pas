@@ -26,7 +26,7 @@ uses
   {$IFDEF UNIX}
   cthreads,
   {$ENDIF}
-  Classes, SysUtils, blcksock, syncobjs, ssl_openssl, ws_bclasses;
+  Classes, SysUtils, blcksock, syncobjs, ssl_openssl3, ws_bclasses;
 
 type
   TCustomServer = class;

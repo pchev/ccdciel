@@ -94,7 +94,6 @@ object f_downloadscript: Tf_downloadscript
     FtpFwMode = 0
     FtpFwPassive = True
     ConfirmDownload = True
-    QuickCancel = False
     Left = 440
     Top = 232
   end
