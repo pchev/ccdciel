@@ -1223,7 +1223,7 @@ begin
      end;
   end;
   if FSeqStop then begin
-     SecondsToWait(FSeqStopAt,true,stw,nd);
+     SecondsToWait(now,FSeqStopAt,true,stw,nd);
      if stw>0 then begin
         msg(Format(rsTheSequenceW, [FName, TimeToStr(FSeqStopAt), IntToStr(stw)]), 1);
         StopTimer.Interval:=1000*stw;
@@ -1476,9 +1476,10 @@ begin
 end;
 
 function T_Targets.CheckStatus:boolean;
-var i,j,totalcount,donecount,totalspteps,donesteps,intime,rglobal,forceendtime : integer;
+var i,j,totalcount,donecount,totalspteps,donesteps,intime,rglobal,forceendtime,stw : integer;
     steptime,targettime,totaltime,pivot,stime,etime,ctime,hm,he,st,et: double;
     sra,sde,sl,hp1,hp2,duskflats: double;
+    saveSeqStart,saveSeqStartTwilight,saveSeqStop,saveSeqStopTwilight: boolean;
     tfuture,tdone,trunning,twok,dotarget,rfuture,nd,forceset,seqbreak,flatnow,duskflat: boolean;
     txt: string;
     t: TTarget;
@@ -1520,16 +1521,18 @@ begin
      end;
    end;
    if FSeqStop then begin
-     etime:=FSeqStopAt;
-     if etime>frac(stime) then
-       etime:=trunc(stime)+etime
-     else
-       etime:=trunc(stime)+1+etime
+     SecondsToWait(stime,FSeqStopAt,false,stw,nd);
+     etime:=stime+stw/secperday;
    end
    else
      etime:=MaxDouble;
  end
  else begin
+   // save values that can be modified by simulation
+   saveSeqStart         := FSeqStart;
+   saveSeqStartTwilight := FSeqStartTwilight;
+   saveSeqStop          := FSeqStop;
+   saveSeqStopTwilight  := FSeqStopTwilight;
    // sequence is not running, estimate start/end time
    for i:=0 to NumTargets-1 do begin
      if (Targets[i].objectname=SkyFlatTxt)and(Targets[i].planname=FlatTimeName[0]) then begin
@@ -1552,21 +1555,20 @@ begin
      stime:=trunc(now)+FSeqStartAt  // specified start time
    else
      stime:=now;                    // otherwise simulate start at current time
-    if FSeqStop then begin
-      etime:=FSeqStopAt;            // specified end time
-      if etime>frac(stime) then
-        etime:=trunc(stime)+etime
-      else
-        etime:=trunc(stime)+1+etime // end time on next day
-    end
-    else
-      etime:=MaxDouble;             // no end time, can run infinitly
+   if FSeqStop then begin
+     SecondsToWait(stime,FSeqStopAt,false,stw,nd);
+     etime:=stime+stw/secperday;
+   end
+   else
+     etime:=MaxDouble;             // no end time, can run infinitly
    twok:=TwilightAstro(now,hm,he);  // compute twilight
    if twok then begin
      if FSeqStart and FSeqStartTwilight then
        stime:=trunc(now)+he/24;     // replace start time by dusk
-     if FSeqStop and FSeqStopTwilight then
-       etime:=trunc(now)+1+hm/24;   // replace end time by dawn
+     if FSeqStop and FSeqStopTwilight then begin
+       SecondsToWait(stime,hm/24,false,stw,nd);
+       etime:=stime+stw/secperday; // replace end time by dawn
+     end;
    end;
  end;
  if duskflat and (duskflats>0) then
@@ -1652,7 +1654,7 @@ begin
                 txt:=txt+','+blank+Format(rsSkipTarget, [''])+','+Format(rsStopTimeAlre, [TimeToStr(t.endtime)]);;
               end;
               if dotarget then begin
-                SecondsToWait(t.endtime,true,forceendtime,nd);
+                SecondsToWait(now,t.endtime,true,forceendtime,nd);
               end;
             end
             else begin
@@ -1680,6 +1682,7 @@ begin
                 txt:=txt+' '+FormatDateTime(datehms,duskflats);
                 twok:=TwilightAstro(now,hm,he);  // compute twilight
                 if FRunning and twok then begin
+                  if (he/24)<frac(ctime) then ctime:=ctime+1;
                   ctime:=trunc(ctime)+he/24;
                   targettime:=ctime-duskflats;
                   if targettime<0 then targettime:=targettime+1;
@@ -1770,6 +1773,13 @@ begin
  if FAllDone then begin
    FLastDoneStep:=format(rsSequenceFini,[TargetName]);
    FDoneStatus:=FDoneStatus+crlf+crlf+FLastDoneStep;
+ end;
+ if (not FRunning) then begin
+   // reset simulation values
+   FSeqStart:=saveSeqStart;
+   FSeqStartTwilight:=saveSeqStartTwilight;
+   FSeqStop:=saveSeqStop;
+   FSeqStopTwilight:=saveSeqStopTwilight;
  end;
 end;
 
@@ -2322,14 +2332,14 @@ begin
     if t.skip then begin
       skipmsg:='';
       if (intime<0) and (t.starttime>=0) then begin
-        SecondsToWait(t.starttime,true,stw,nd);
+        SecondsToWait(now,t.starttime,true,stw,nd);
         if (stw>60) then begin
           SkipTarget:=true;
           skipmsg:=skipmsg+', '+Format(rsWaitToStartA, [TimeToStr(t.starttime)]);
         end;
       end;
       if (intime<=0) and (t.endtime>=0) then begin
-        SecondsToWait(chkendtime,true,stw,nd);
+        SecondsToWait(now,chkendtime,true,stw,nd);
         if stw<60 then begin
           SkipTarget:=true;
           skipmsg:=skipmsg+', '+Format(rsStopTimeAlre, [TimeToStr(t.endtime)]);
@@ -2372,9 +2382,9 @@ begin
       end;
     end;
     if (intime<=0) and (t.endtime>=0) then begin
-       SecondsToWait(chkendtime,true,stw,nd);
+       SecondsToWait(now,chkendtime,true,stw,nd);
        if stw>60 then begin
-          SecondsToWait(t.endtime,true,stw,nd);
+          SecondsToWait(now,t.endtime,true,stw,nd);
           msg(Format(rsObjectSetsAt, [FormatDateTime('hh:nn', t.endtime),
             FormatFloat(f1, stw/3600)]), 3);
           StopTargetTimer.Interval:=1000*stw;
@@ -2698,7 +2708,7 @@ begin
     end;
   end;
   if flt.endtime>=0 then begin
-     SecondsToWait(flt.endtime,true,stw,nd);
+     SecondsToWait(now,flt.endtime,true,stw,nd);
      if stw>0 then begin
         StopTargetTimer.Interval:=1000*stw;
         StopTargetTimer.Enabled:=true;

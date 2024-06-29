@@ -108,7 +108,7 @@ procedure LeastSquares(data: array of TDouble2; out a,b,r: double);
 procedure Sun(jdn:double; out ra,de,l:double);
 procedure Time_Alt(jd, ar, de, h: double; out hp1, hp2: double);
 function TwilightAstro(dt:TDateTime; out HMorning,HEvening:double):boolean;
-procedure SecondsToWait(dt: TDateTime; forcenextday: boolean; out wt: Integer; out nextday:boolean);
+procedure SecondsToWait(tnow,dt: TDateTime; forcenextday: boolean; out wt: Integer; out nextday:boolean);
 procedure LoadHorizon(fname: string);
 function ObjTransit(ra,de: double; out ht:double; out i:integer):boolean;
 function ObjRise(ra,de: double; out hr:double; out i:integer):boolean;
@@ -1892,11 +1892,11 @@ begin
  end;
 end;
 
-procedure SecondsToWait(dt: TDateTime; forcenextday: boolean; out wt: Integer; out nextday:boolean);
+procedure SecondsToWait(tnow,dt: TDateTime; forcenextday: boolean; out wt: Integer; out nextday:boolean);
 var endt,nowt,nowd: TDateTime;
 begin
   endt:=dt;
-  nowd:=now;
+  nowd:=tnow;
   nowt:=frac(nowd);
   nowd:=trunc(nowd);
   nextday:=false;
@@ -1907,7 +1907,7 @@ begin
   else begin
     endt:=nowd+endt;
   end;
-  wt:=round((endt-now)*secperday);
+  wt:=round((endt-tnow)*secperday);
 end;
 
 procedure LoadHorizon(fname: string);

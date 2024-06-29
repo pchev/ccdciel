@@ -177,7 +177,7 @@ begin
  end;
  try
   endt:=StrToTime(hour,':');
-  SecondsToWait(endt,forcenextday,wt,nextday);
+  SecondsToWait(now,endt,forcenextday,wt,nextday);
   if nextday then
      daystr:=rsTomorrow+' '
   else
