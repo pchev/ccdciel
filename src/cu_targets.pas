@@ -1478,7 +1478,8 @@ end;
 function T_Targets.CheckStatus:boolean;
 var i,j,totalcount,donecount,totalspteps,donesteps,intime,rglobal,forceendtime : integer;
     steptime,targettime,totaltime,pivot,stime,etime,ctime,hm,he,st,et: double;
-    tfuture,tdone,trunning,twok,dotarget,rfuture,nd,forceset,seqbreak,flatnow: boolean;
+    sra,sde,sl,hp1,hp2,duskflats: double;
+    tfuture,tdone,trunning,twok,dotarget,rfuture,nd,forceset,seqbreak,flatnow,duskflat: boolean;
     txt: string;
     t: TTarget;
     p: T_Plan;
@@ -1488,7 +1489,8 @@ begin
  FAllDone:=false;
  FAllStepsDone:=false;
  seqbreak:=false;
- FDoneStatus:='';
+ duskflat:=true;
+ duskflats:=0;
  FLastDoneStep:='';
  totalcount:=0; donecount:=0;
  totalspteps:=0; donesteps:=0;
@@ -1497,7 +1499,7 @@ begin
    totalcount:=totalcount+FTargetsRepeat;
    donecount:=donecount+FTargetsRepeatCount;
  end;
- FDoneStatus:='';//rsGlobalRepeat+blank+IntToStr(FTargetsRepeatCount)+'/'+IntToStr(FTargetsRepeat);
+ FDoneStatus:='';
  if (FTargetsRepeatCount>0)and(FTargetsRepeatCount<=FTargetsRepeat) then begin
    result:=true;
    FLastDoneStep:=rsGlobalRepeat+blank+IntToStr(FTargetsRepeatCount)+'/'+IntToStr(FTargetsRepeat);
@@ -1505,6 +1507,18 @@ begin
  if FRunning then begin
    // Sequence is running, use real start/end time
    stime:=FSeqStartTime;
+   for i:=0 to NumTargets-1 do begin
+     if (Targets[i].objectname=SkyFlatTxt)and(Targets[i].planname=FlatTimeName[0]) then begin
+       // dusk skyflat require start time
+       duskflat:=true;
+       Sun(jdtoday+0.5,sra,sde,sl);
+       Time_Alt(jdtoday, sra, sde, -2, hp1, hp2);
+       if abs(hp2)<90 then begin
+         duskflats:=trunc(stime)+rmod(hp2+ObsTimeZone+24,24)/24;
+         stime:=max(stime,duskflats);
+       end;
+     end;
+   end;
    if FSeqStop then begin
      etime:=FSeqStopAt;
      if etime>frac(stime) then
@@ -1520,6 +1534,11 @@ begin
    for i:=0 to NumTargets-1 do begin
      if (Targets[i].objectname=SkyFlatTxt)and(Targets[i].planname=FlatTimeName[0]) then begin
        // dusk skyflat require start time
+       duskflat:=true;
+       Sun(jdtoday+0.5,sra,sde,sl);
+       Time_Alt(jdtoday, sra, sde, -2, hp1, hp2);
+       if abs(hp2)<90 then
+         duskflats:=rmod(hp2+ObsTimeZone+24,24)/24;
        FSeqStart:=true;
        FSeqStartTwilight:=true;
      end;
@@ -1544,13 +1563,16 @@ begin
       etime:=MaxDouble;             // no end time, can run infinitly
    twok:=TwilightAstro(now,hm,he);  // compute twilight
    if twok then begin
-     if FSeqStartTwilight then
+     if FSeqStart and FSeqStartTwilight then
        stime:=trunc(now)+he/24;     // replace start time by dusk
-     if FSeqStopTwilight then
+     if FSeqStop and FSeqStopTwilight then
        etime:=trunc(now)+1+hm/24;   // replace end time by dawn
    end;
  end;
- FDoneStatus:=FDoneStatus+crlf+rsSequence+blank+rsStartAt+FormatDateTime(datehms,stime);
+ if duskflat and (duskflats>0) then
+   FDoneStatus:=FDoneStatus+crlf+rsSequence+blank+rsStartAt+' '+FormatDateTime(datehms,duskflats)
+ else
+   FDoneStatus:=FDoneStatus+crlf+rsSequence+blank+rsStartAt+' '+FormatDateTime(datehms,stime);
  ctime:=stime;
  totaltime:=0;
 
@@ -1601,6 +1623,7 @@ begin
                    or ((t.planname=FlatTimeName[0]) and (rglobal=1)); // dusk
         end;
         tdone:=t.repeatdone>=t.repeatcount;
+        targettime:=0;
         if t.objectname<>SkyFlatTxt then begin
           txt:=crlf+rsTarget+blank+t.objectname+blank+rsRepeat+':'+blank+IntToStr(t.repeatdone)+'/'+IntToStr(t.repeatcount);
           if tfuture and (not tdone) then begin
@@ -1651,8 +1674,19 @@ begin
           end;
         end
         else begin
-           if flatnow then
-              txt:=crlf+rsTarget+blank+t.objectname
+           if flatnow then begin
+              txt:=crlf+rsTarget+blank+t.objectname;
+              if (t.planname=FlatTimeName[0]) and duskflat and (duskflats>0) then begin
+                txt:=txt+' '+FormatDateTime(datehms,duskflats);
+                twok:=TwilightAstro(now,hm,he);  // compute twilight
+                if FRunning and twok then begin
+                  ctime:=trunc(ctime)+he/24;
+                  targettime:=ctime-duskflats;
+                  if targettime<0 then targettime:=targettime+1;
+                  targettime:=targettime*24*3600;
+                end;
+              end;
+           end
            else
               txt:='';
         end;
@@ -1660,7 +1694,6 @@ begin
         if t.repeatdone=t.repeatcount then
           FLastDoneStep:=txt;
         if p.Count<=0 then Continue;
-        targettime:=0;
         // loop all steps in plan
         for j:=0 to p.Count-1 do begin
           totalcount:=totalcount+p.Steps[j].count;
