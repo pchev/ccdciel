@@ -36,7 +36,7 @@ type
               public
               objectname, planname, path, scriptargs: shortstring;
               starttime,endtime,startmeridian,endmeridian,ra,de,pa,solarV,solarPA: double;
-              startrise,endset,darknight,skip: boolean;
+              startrise,endset,darknight,skip,mandatorystarttime: boolean;
               repeatcount,repeatdone: integer;
               FlatBinX,FlatBinY,FlatCount: integer;
               FlatGain,FlatOffset: integer;
@@ -808,6 +808,7 @@ begin
          t.starttime:=-1;
          t.endtime:=-1;
        end;
+       t.mandatorystarttime:=FSequenceFile.Items.GetValue('/Targets/Target'+inttostr(i)+'/MandatoryStartTime',false);
        t.startrise:=FSequenceFile.Items.GetValue('/Targets/Target'+inttostr(i)+'/StartRise',false);
        t.endset:=FSequenceFile.Items.GetValue('/Targets/Target'+inttostr(i)+'/EndSet',false);
        t.startmeridian:=FSequenceFile.Items.GetValue('/Targets/Target'+inttostr(i)+'/StartMeridian',NullCoord);
@@ -995,6 +996,7 @@ try
         FSequenceFile.Items.SetValue('/Targets/Target'+inttostr(i)+'/EndTime',TimetoStr(t.endtime))
       else
         FSequenceFile.Items.SetValue('/Targets/Target'+inttostr(i)+'/EndTime','');
+      FSequenceFile.Items.SetValue('/Targets/Target'+inttostr(i)+'/MandatoryStartTime',t.mandatorystarttime);
       FSequenceFile.Items.SetValue('/Targets/Target'+inttostr(i)+'/StartRise',t.startrise);
       FSequenceFile.Items.SetValue('/Targets/Target'+inttostr(i)+'/EndSet',t.endset);
       FSequenceFile.Items.SetValue('/Targets/Target'+inttostr(i)+'/StartMeridian',t.startmeridian);
@@ -1551,8 +1553,11 @@ begin
        FSeqStopTwilight:=true;
      end;
    end;
-   if FSeqStart then
+   if FSeqStart then begin
+     stime:=now;
      stime:=trunc(now)+FSeqStartAt  // specified start time
+
+   end
    else
      stime:=now;                    // otherwise simulate start at current time
    if FSeqStop then begin
@@ -1563,6 +1568,7 @@ begin
      etime:=MaxDouble;             // no end time, can run infinitly
    twok:=TwilightAstro(now,hm,he);  // compute twilight
    if twok then begin
+     if he<12 then he:=he+24;
      if FSeqStart and FSeqStartTwilight then
        stime:=trunc(now)+he/24;     // replace start time by dusk
      if FSeqStop and FSeqStopTwilight then begin
@@ -1631,6 +1637,14 @@ begin
           if tfuture and (not tdone) then begin
             // target is planned in the future and is not completed
             SetTargetTime(t,stime,pivot); // compute the start/end time, running and old target already have time set
+            // next target mandatory time
+            if i<(NumTargets-1) then begin
+              if Targets[i+1].mandatorystarttime and (Targets[i+1].starttime>0) and (not Targets[i+1].startrise) and
+               (Targets[i+1].startmeridian=NullCoord) {and (Targets[i+1].starttime<t.endtime)}
+                then begin
+                  t.endtime:=Targets[i+1].starttime;
+                end;
+            end;
             if (t.starttime>0)and(t.endtime>0) then begin
               // target need to run between start and end
               st:=t.starttime;
@@ -1654,7 +1668,7 @@ begin
                 txt:=txt+','+blank+Format(rsSkipTarget, [''])+','+Format(rsStopTimeAlre, [TimeToStr(t.endtime)]);;
               end;
               if dotarget then begin
-                SecondsToWait(now,t.endtime,true,forceendtime,nd);
+                SecondsToWait(ctime,t.endtime,true,forceendtime,nd);
               end;
             end
             else begin
@@ -1688,6 +1702,15 @@ begin
                   if targettime<0 then targettime:=targettime+1;
                   targettime:=targettime*24*3600;
                 end;
+              end;
+              // next target mandatory time
+              if i<(NumTargets-1) then begin
+                if Targets[i+1].mandatorystarttime and (Targets[i+1].starttime>0) and (not Targets[i+1].startrise) and
+                 (Targets[i+1].startmeridian=NullCoord)
+                  then begin
+                    ctime:=trunc(now)+Targets[i+1].starttime;
+                    txt:=txt+','+'Time limit: '+TimeToStr(ctime)
+                  end;
               end;
            end
            else
@@ -1751,7 +1774,7 @@ begin
           else begin
             if forceset then
               // interupted by object set
-              txt:=t.objectname+blank+'Interrupted by object set at:'+blank+FormatDateTime(datehms,ctime)
+              txt:=t.objectname+blank+'Interrupted at:'+blank+FormatDateTime(datehms,ctime)
             else
               // completed time
               txt:=t.objectname+blank+'End at:'+blank+FormatDateTime(datehms,ctime);
@@ -2905,7 +2928,7 @@ end;
 
 procedure T_Targets.TargetTimerTimer(Sender: TObject);
 var tt,newra,newde,newV,newPa: double;
-    t: TTarget;
+    t,nextt: TTarget;
     r: string;
 begin
  if LockTargetTimer then
@@ -2920,6 +2943,17 @@ begin
         msg('Nexttarget 2480',9);
         NextTarget;
         exit;
+      end;
+      if (FCurrentTarget<(NumTargets-1)) and (not TargetForceNext) then begin
+        nextt:=Targets[FCurrentTarget+1];
+        // look for next target mandatory start time
+        if nextt.mandatorystarttime and (nextt.starttime>0) and (not nextt.startrise) and (nextt.startmeridian=NullCoord) and
+          (InTimeInterval(frac(now),t.starttime,nextt.starttime,t.starttime)=1)
+          then begin
+            msg('Start target '+nextt.objectname+' with mandatory start time at '+TimeToStr(nextt.starttime),1);
+            ForceNextTarget;
+            exit;
+          end;
       end;
       if t.updatecoord and T_Plan(t.plan).Running then begin
        inc(FUpdatecoordDelay);
@@ -3126,6 +3160,7 @@ begin
   path:='';
   scriptargs:='';
   starttime:=NullCoord;
+  mandatorystarttime:=false;
   endtime:=NullCoord;
   startmeridian:=NullCoord;
   endmeridian:=NullCoord;
@@ -3168,6 +3203,7 @@ begin
   T_Plan(plan).Clear;
   T_Plan(plan).AssignPlan(T_Plan(Source.plan));
   starttime:=Source.starttime;
+  mandatorystarttime:=Source.mandatorystarttime;
   endtime:=Source.endtime;
   startrise:=Source.startrise;
   endset:=Source.endset;

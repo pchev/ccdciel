@@ -659,10 +659,10 @@ object f_EditTargets: Tf_EditTargets
           Top = 26
           Width = 390
           HorzScrollBar.Page = 338
-          VertScrollBar.Page = 201
+          VertScrollBar.Page = 221
           Align = alClient
           ClientHeight = 221
-          ClientWidth = 386
+          ClientWidth = 365
           Color = clDefault
           ParentColor = False
           TabOrder = 1
@@ -746,7 +746,17 @@ object f_EditTargets: Tf_EditTargets
             Top = 179
             Width = 179
             Caption = 'Do not start autoguiding'
+            OnChange = cbChange
             TabOrder = 7
+          end
+          object cbMandatoryStartTime: TCheckBox
+            Left = 16
+            Height = 22
+            Top = 204
+            Width = 158
+            Caption = 'Mandatory start time'
+            OnChange = cbChange
+            TabOrder = 8
           end
         end
       end
