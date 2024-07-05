@@ -995,8 +995,10 @@ object f_internalguider: Tf_internalguider
                 Width = 72
                 DecimalPlaces = 1
                 Increment = 0.1
-                MaxValue = 1
+                MaxValue = 0.9
+                MinValue = 0.1
                 TabOrder = 0
+                Value = 0.1
               end
               object GuideSpeedDEC: TFloatSpinEdit
                 Left = 200
@@ -1005,8 +1007,10 @@ object f_internalguider: Tf_internalguider
                 Width = 72
                 DecimalPlaces = 1
                 Increment = 0.1
-                MaxValue = 1
+                MaxValue = 0.9
+                MinValue = 0.1
                 TabOrder = 1
+                Value = 0.1
               end
             end
           end
