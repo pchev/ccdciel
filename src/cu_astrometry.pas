@@ -86,6 +86,7 @@ TAstrometry = class(TComponent)
     procedure SyncFinderImage(wait: boolean);
     function GetFinderOffset(ra2000,de2000: double):boolean;
     procedure SyncCurrentImage(wait: boolean);
+    procedure Solve(f: TFits; out ra,de,pa,scale: double; out ok:boolean);
     procedure SlewScreenXY(x,y: integer);
     function PrecisionSlew(ra,de,prec,exp:double; filter,binx,biny,method,maxslew,sgain,soffset: integer; out err: double):boolean;
     function PrecisionSlew(ra,de:double; out err: double):boolean;
@@ -310,9 +311,13 @@ begin
  if (Fterminatecmd<>@AstrometrySolveGuide)and
     (Fterminatecmd<>@AstrometrySolvePreview)and
     (Fterminatecmd<>@AstrometrySolveFinder) and
+    (Fterminatecmd<>nil) and
     Assigned(FonEndAstrometry)
     then
-       FonEndAstrometry(0);
+       FonEndAstrometry(0)
+    else if (Fterminatecmd=nil)
+    then
+       FonEndAstrometry(4);
  if Assigned(Fterminatecmd) then Fterminatecmd(self);
  Fterminatecmd:=nil;
 end;
@@ -395,6 +400,34 @@ begin
   end
   else
     msg('Missing library '+libwcs,1);
+end;
+
+procedure TAstrometry.Solve(f: TFits; out ra,de,pa,scale: double; out ok:boolean);
+var n,m: integer;
+    i: TcdcWCSinfo;
+    c: TcdcWCScoord;
+begin
+  ok:=false;
+  if (not FBusy) and (f.HeaderInfo.naxis>0) and f.ImageValid then begin
+    f.SaveToFile(slash(TmpDir)+'fitstmp.fits');
+    StartAstrometry(slash(TmpDir)+'fitstmp.fits',slash(TmpDir)+'fitssolved.fits',nil);
+    if WaitBusy(AstrometryTimeout+30) and (cdcwcs_xy2sky<>nil) then begin
+      n:=cdcwcs_initfitsfile(pchar(slash(TmpDir)+'fitssolved.fits'),wcsfits);
+      if n=0 then n:=cdcwcs_getinfo(addr(i),wcsfits);
+      if (n=0)and(i.secpix<>0) then begin
+        c.x:=0.5+i.wp/2;
+        c.y:=0.5+i.hp/2;
+        m:=cdcwcs_xy2sky(@c,wcsfits);
+        if m=0 then begin
+          ra:=c.ra/15;
+          de:=c.dec;
+          pa:=i.rot;
+          scale:=i.secpix;
+          ok:=true;
+        end;
+      end;
+    end
+  end;
 end;
 
 procedure TAstrometry.SolveCurrentImage(wait: boolean; forcesolve:boolean=false);

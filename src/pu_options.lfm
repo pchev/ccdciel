@@ -1684,12 +1684,12 @@ object f_option: Tf_option
         end
         object GroupBoxReadOut: TGroupBox
           Left = 0
-          Height = 163
-          Top = 520
+          Height = 155
+          Top = 528
           Width = 586
           Align = alClient
           Caption = 'Readout modes'
-          ClientHeight = 133
+          ClientHeight = 125
           ClientWidth = 582
           ParentFont = False
           TabOrder = 2
@@ -1797,12 +1797,12 @@ object f_option: Tf_option
         end
         object StackGroup: TGroupBox
           Left = 0
-          Height = 152
+          Height = 160
           Top = 368
           Width = 586
           Align = alTop
           Caption = 'Short exposure stacking'
-          ClientHeight = 122
+          ClientHeight = 130
           ClientWidth = 582
           ParentFont = False
           TabOrder = 4
@@ -1810,7 +1810,7 @@ object f_option: Tf_option
             AnchorSideLeft.Side = asrBottom
             Left = 16
             Height = 22
-            Top = 95
+            Top = 100
             Width = 265
             BorderSpacing.Left = 4
             BorderSpacing.Right = 4
@@ -1821,7 +1821,7 @@ object f_option: Tf_option
           object StackShow: TCheckBox
             Left = 16
             Height = 22
-            Top = 8
+            Top = 4
             Width = 348
             Caption = 'Show stacking option for Preview/Capture/Sequence'
             OnChange = StackShowChange
@@ -1831,25 +1831,26 @@ object f_option: Tf_option
           object StackAlign: TCheckBox
             Left = 16
             Height = 22
-            Top = 37
+            Top = 28
             Width = 118
             Caption = 'Star alignment'
+            OnChange = StackAlignChange
             TabOrder = 2
           end
           object FileStackFloat: TCheckBox
-            AnchorSideTop.Control = StackOperation
-            AnchorSideTop.Side = asrCenter
             Left = 16
             Height = 22
-            Top = 65
+            Top = 76
             Width = 135
             Caption = 'Floating point file'
             TabOrder = 4
           end
           object StackOperation: TRadioGroup
-            Left = 201
+            AnchorSideTop.Control = FileStackFloat
+            AnchorSideTop.Side = asrCenter
+            Left = 184
             Height = 30
-            Top = 61
+            Top = 72
             Width = 338
             AutoFill = True
             ChildSizing.LeftRightSpacing = 6
@@ -1870,30 +1871,38 @@ object f_option: Tf_option
             TabOrder = 3
           end
           object StackUseDark: TCheckBox
-            Left = 176
+            Left = 16
             Height = 22
-            Top = 37
+            Top = 52
             Width = 153
             Caption = 'Apply Dark and BPM'
             OnClick = StackUseDarkFlatChange
             TabOrder = 5
           end
           object StackDebayer: TCheckBox
-            Left = 472
+            Left = 339
             Height = 22
-            Top = 37
+            Top = 52
             Width = 81
             Caption = 'Debayer'
             TabOrder = 6
           end
           object StackUseFlat: TCheckBox
-            Left = 352
+            Left = 193
             Height = 22
-            Top = 37
+            Top = 52
             Width = 88
             Caption = 'Apply Flat'
             OnClick = StackUseDarkFlatChange
             TabOrder = 7
+          end
+          object StackRotation: TCheckBox
+            Left = 193
+            Height = 22
+            Top = 28
+            Width = 80
+            Caption = 'Rotation'
+            TabOrder = 8
           end
         end
         object GroupBox31: TGroupBox

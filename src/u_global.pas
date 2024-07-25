@@ -43,6 +43,7 @@ type
   TNotifyBoolConst= procedure(v: boolean) of object;
   TNotifyBool= procedure(var v: boolean) of object;
   TRunScript = procedure(scname,scpath,scargs: string) of object;
+  TSolve = procedure(f:pointer; out ra,de,pa,scale: double; out ok:boolean) of object;
 
   TDevInterface = (INDI, ASCOM, INCAMERA, INTELESCOPE, ASCOMREST, MANUAL);
   TFrameType =(LIGHT, BIAS, DARK, FLAT);
@@ -220,7 +221,7 @@ type
 
   const
     maxfitslist=15;  // must corespond to value in cdcwcs.c
-    wcsmain=0; wcsguide=1; wcsfind=2; wcspreview=3;
+    wcsmain=0; wcsguide=1; wcsfind=2; wcspreview=3; wcsfits=4;
 
   {$i revision.inc}
 
@@ -554,7 +555,7 @@ var
   AutoguiderAlertTime,AutoguiderMsgTime: double;
   MountTrackingAlert: boolean;
   MountTrackingAlertTime: double;
-  SaveStack, StackAlign, StackUseDark, StackUseFlat, StackDebayer: boolean;
+  SaveStack, StackAlign, StackRotation, StackUseDark, StackUseFlat, StackDebayer: boolean;
   StackOperation: integer;
   RunningCapture,RunningPreview: boolean;
   ImageInspection, TriangleInspection: boolean;

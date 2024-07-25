@@ -1033,6 +1033,7 @@ type
     Procedure SetMultipanel(onoff: boolean);
     Procedure SetVisibleImage;
     procedure RunScript(scname,scpath,scargs: string);
+    procedure Solve(f:pointer; out ra,de,pa,scale: double; out ok:boolean);
   public
     { public declarations }
     Image1, ImageGuide, ImageFinder: TImgDrawingControl;
@@ -1552,6 +1553,7 @@ begin
   SplitZoom:=1;
   SaveStack:=false;
   StackAlign:=false;
+  StackRotation:=false;
   StackOperation:=1;
   StackUseDark:=false;
   StackUseFlat:=false;
@@ -2161,6 +2163,7 @@ begin
    camera.onSequenceInfo:=@CameraSequenceInfo;
    camera.onEndControlExposure:=@EndControlExposure;
    camera.onRunScript:=@RunScript;
+   camera.onSolve:=@Solve;
 
    aInt:=TDevInterface(config.GetValue('/GuideCameraInterface',ord(DefaultInterface)));
    case aInt of
@@ -4846,6 +4849,7 @@ begin
   f_EditTargets.StepList.Columns[pcolstack-1].Visible:=f_preview.StackPreview.Visible;
   SaveStack:=config.GetValue('/PreviewStack/SaveStack',false);
   StackAlign:=config.GetValue('/PreviewStack/StackAlign',false);
+  StackRotation:=config.GetValue('/PreviewStack/StackRotation',false);
   StackOperation:=config.GetValue('/PreviewStack/StackOperation',1);
   FileStackFloat:=config.GetValue('/PreviewStack/FileStackFloat',false);
   StackUseDark:=config.GetValue('/PreviewStack/StackUseDark',false);
@@ -9365,6 +9369,8 @@ begin
    f_option.StackShow.Checked:=config.GetValue('/PreviewStack/StackShow',false);
    f_option.SaveStack.checked:=config.GetValue('/PreviewStack/SaveStack',false);
    f_option.StackAlign.Checked:=config.GetValue('/PreviewStack/StackAlign',false);
+   f_option.StackRotation.Checked:=config.GetValue('/PreviewStack/StackRotation',false);
+   f_option.StackRotation.Enabled:=f_option.StackAlign.Checked;
    f_option.StackUseDark.Checked:=config.GetValue('/PreviewStack/StackUseDark',false);
    f_option.StackUseFlat.Checked:=config.GetValue('/PreviewStack/StackUseFlat',false);
    f_option.StackDebayer.Checked:=config.GetValue('/PreviewStack/StackDebayer',false);
@@ -9910,6 +9916,7 @@ begin
      config.SetValue('/PreviewStack/StackShow',f_option.StackShow.Checked);
      config.SetValue('/PreviewStack/SaveStack',f_option.SaveStack.checked);
      config.SetValue('/PreviewStack/StackAlign',f_option.StackAlign.Checked);
+     config.SetValue('/PreviewStack/StackRotation',f_option.StackRotation.Checked);
      config.SetValue('/PreviewStack/StackUseDark',f_option.StackUseDark.Checked);
      config.SetValue('/PreviewStack/StackUseFlat',f_option.StackUseFlat.Checked);
      config.SetValue('/PreviewStack/StackDebayer',f_option.StackDebayer.Checked);
@@ -10672,6 +10679,7 @@ if (camera.Status=devConnected) and ((not f_capture.Running) or autofocusing) an
   if camera.AddFrames then begin
      camera.SaveFrames:=SaveStack;
      camera.AlignFrames:=StackAlign;
+     camera.StackRotation:=StackRotation;
      camera.StackOperation:=StackOperation;
      camera.StackUseDark:=StackUseDark;
      camera.StackUseFlat:=StackUseFlat;
@@ -11196,6 +11204,7 @@ if (AllDevicesConnected)and(not autofocusing)and (not learningvcurve) then begin
   if camera.AddFrames then begin
     camera.SaveFrames:=SaveStack;
     camera.AlignFrames:=StackAlign;
+    camera.StackRotation:=StackRotation;
     camera.StackOperation:=StackOperation;
     camera.StackUseDark:=StackUseDark;
     camera.StackUseFlat:=StackUseFlat;
@@ -14347,6 +14356,7 @@ procedure Tf_main.AstrometryEnd(i: Integer);
 // 1 : preview
 // 2 : finder camera
 // 3 : guide camera
+// 4 : stacking
 var resulttxt,buf:string;
     dist: double;
 begin
@@ -14447,6 +14457,12 @@ begin
          guidefits.SaveToFile(buf);
          NewMessage(Format(rsSavedFile, [buf]),2);
       end;
+    end;
+  end
+  else if i=4 then begin
+    // stacking result, show only error
+    if not astrometry.LastResult then begin
+      NewMessage(Format(rsResolveError, [rsStack])+' '+astrometry.LastError);
     end;
   end;
 end;
@@ -16717,6 +16733,11 @@ end;
 procedure Tf_main.RunScript(scname,scpath,scargs: string);
 begin
  f_scriptengine.RunScript(scname,scpath,scargs);
+end;
+
+procedure Tf_main.Solve(f:pointer; out ra,de,pa,scale: double; out ok:boolean);
+begin
+  astrometry.Solve(TFits(f^),ra,de,pa,scale,ok);
 end;
 
 function Tf_main.TCPcmd(s: string):string;

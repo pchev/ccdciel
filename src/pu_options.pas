@@ -50,6 +50,7 @@ type
     AstOnlineKey: TEdit;
     AutofocusMultiStarCenterPct: TComboBox;
     cbObsWeather: TCheckBox;
+    StackRotation: TCheckBox;
     Label182: TLabel;
     Label183: TLabel;
     SAMPParam: TEdit;
@@ -837,6 +838,7 @@ type
     procedure RoiListChange(Sender: TObject);
     procedure SeqDirDefaultClick(Sender: TObject);
     procedure sgCustomTypeEditingDone(Sender: TObject);
+    procedure StackAlignChange(Sender: TObject);
     procedure StackShowChange(Sender: TObject);
     procedure StackUseDarkFlatChange(Sender: TObject);
     procedure StartCdCChange(Sender: TObject);
@@ -1832,6 +1834,11 @@ begin
       sgCustomType.Cells[0,i]:='';
     end;
   end;
+end;
+
+procedure Tf_option.StackAlignChange(Sender: TObject);
+begin
+  StackRotation.Enabled:=StackAlign.Checked;
 end;
 
 procedure Tf_option.ButtonAddrowClick(Sender: TObject);

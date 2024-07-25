@@ -72,7 +72,7 @@ T_camera = class(TComponent)
     FStackCount, FStackNum, FStackStarted, FStackOperation: integer;
     FStackExpStart, FStackDate, FStackSaveDir: string;
     FStackAlign, FStackUseDark, FStackUseFlat, FStackDebayer,FStackAllow8bit: boolean;
-    FStackAlignX,FStackAlignY,FStackStarX,FStackStarY: double;
+    FStackAlignX,FStackAlignY,FStackStarX,FStackStarY,FStackAlignRot: double;
     FMount: T_mount;
     Fwheel: T_wheel;
     FFocuser: T_focuser;
@@ -82,7 +82,7 @@ T_camera = class(TComponent)
     FhasVideo: boolean;
     FVerticalFlip: boolean;
     FASCOMFlipImage: boolean;
-    FAddFrames,FSaveFrames,FAlignFrames,FPrepareStack: boolean;
+    FAddFrames,FSaveFrames,FAlignFrames,FPrepareStack,FStackRotation: boolean;
     FVideoSizes, FVideoRates,FFNumberList,FVideoEncoder:TStringList;
     FTemperatureRampActive, FCancelTemperatureRamp: boolean;
     FIndiTransfert: TIndiTransfert;
@@ -192,8 +192,10 @@ T_camera = class(TComponent)
     RampTimer: TTimer;
     FonEndControlExposure: TNotifyEvent;
     FRunScript: TRunScript;
+    FSolve: TSolve;
     procedure RampTimerTimer(Sender: TObject);
     procedure EndExposure(Sender: TObject);
+    function Solve(f:TFits; out ra,de,pa,scale: double): boolean;
   public
     constructor Create(AOwner: TComponent); override;
     destructor  Destroy; override;
@@ -237,6 +239,7 @@ T_camera = class(TComponent)
     property PrepareStack: boolean read FPrepareStack write FPrepareStack;
     property SaveFrames: boolean read FSaveFrames write FSaveFrames;
     property AlignFrames: boolean read FAlignFrames write FAlignFrames;
+    property StackRotation: boolean read FStackRotation write FStackRotation;
     property StackOperation: integer read FStackOperation write FStackOperation;
     property StackUseDark: boolean read FStackUseDark write FStackUseDark;
     property StackUseFlat: boolean read FStackUseFlat write FStackUseFlat;
@@ -357,6 +360,7 @@ T_camera = class(TComponent)
     property CameraTimeout: integer read FCameraTimeout write FCameraTimeout;
     property onEndControlExposure: TNotifyEvent read FonEndControlExposure write FonEndControlExposure;
     property onRunScript: TRunScript read FRunScript write FRunScript;
+    property onSolve: TSolve read FSolve write FSolve;
 end;
 
 
@@ -526,7 +530,7 @@ end;
 procedure T_camera.NewImage;
 var f,fs:TFits;
     xi,yi,xc,yc,ri: integer;
-    xs,ys,hfd,fwhm,vmax,snr,bg,bgdev,flux : double;
+    xs,ys,xn,yn,hfd,fwhm,vmax,snr,bg,bgdev,flux,rot,scale,ra,de,s,c,dx,dy : double;
     alok,savebayer: boolean;
     mem: TMemoryStream;
     objectstr,fn: string;
@@ -582,21 +586,38 @@ if FAddFrames then begin  // stack preview frames
   // check frame is compatible
   if FFits.SameFormat(f) then begin
      if FStackAlign then begin
-        // align frame on ref star
+        // align frame on ref star or center
         alok:=false;
-        xi:=round(FStackStarX);
-        yi:=round(FStackStarY);
-        f.FindStarPos(xi,yi,50,xc,yc,ri,vmax,bg,bgdev);
-        if vmax>0 then begin
-          f.GetHFD2(xc,yc,2*ri,xs,ys,bg,bgdev,hfd,fwhm,vmax,snr,flux,false);
-          if ((hfd>0)and(Undersampled or (hfd>0.7))) and (hfd<10) then begin
-             f.Shift(FStackAlignX-xs,FStackAlignY-ys);
-             FStackStarX:=xs;
-             FStackStarY:=ys;
-             alok:=true;
-           end;
-       end;
-       if not alok then msg(rsAlignmentSta,0);
+        if FStackRotation then begin
+          alok:=Solve(f,ra,de,rot,scale);
+          sincos(deg2rad*rot,s,c);
+          dx:=(FStackAlignX-ra)*15*3600/scale;
+          dy:=(-FStackAlignY+de)*3600/scale;
+          xs:= dx*c + dy*s;
+          ys:= -dx*s + dy*c;
+          rot:=deg2rad*(rot-FStackAlignRot);
+        end
+        else begin
+          rot:=0;
+          xi:=round(FStackStarX);
+          yi:=round(FStackStarY);
+          f.FindStarPos(xi,yi,50,xc,yc,ri,vmax,bg,bgdev);
+          if vmax>0 then begin
+            f.GetHFD2(xc,yc,2*ri,xn,yn,bg,bgdev,hfd,fwhm,vmax,snr,flux,false);
+            if ((hfd>0)and(Undersampled or (hfd>0.7))) and (hfd<10) then begin
+              xs:=FStackAlignX-xn;
+              ys:=FStackAlignY-yn;
+              FStackStarX:=xn;
+              FStackStarY:=yn;
+              alok:=true;
+             end;
+          end;
+        end;
+        if alok then begin
+          f.Shift(xs,ys,rot);
+        end
+        else
+          msg(rsAlignmentSta,0);
      end;
      inc(FStackCount);
      case FStackOperation of
@@ -612,23 +633,30 @@ if FAddFrames then begin  // stack preview frames
      FStackCount:=1;
      FStackAlign:=false;
      if FAlignFrames then begin
-       // search alignment star
-       FFits.FindBrightestPixel(FFits.HeaderInfo.naxis1 div 2, FFits.HeaderInfo.naxis2 div 2,min(FFits.HeaderInfo.naxis1,FFits.HeaderInfo.naxis2) div 2,20,xi,yi,vmax);
-       if vmax>0 then begin
-         FFits.FindStarPos(xi,yi,20,xc,yc,ri,vmax,bg,bgdev);
-         if vmax>0 then begin
-           FFits.GetHFD2(xc,yc,2*ri,xs,ys,bg,bgdev,hfd,fwhm,vmax,snr,flux,false);
-           if ((hfd>0)and(Undersampled or (hfd>0.7))) and (hfd<10) then begin
-              FStackAlign:=true;
-              FStackAlignX:=xs;
-              FStackAlignY:=ys;
-              FStackStarX:=xs;
-              FStackStarY:=ys;
-              msg(Format(rsStackingWith, [inttostr(round(xs)), inttostr(round(FFits.HeaderInfo.naxis2-ys))]));
-           end;
-         end;
+        if FStackRotation then begin
+          FStackAlign:=Solve(FFits,FStackAlignX,FStackAlignY,FStackAlignRot,scale);
+          if FStackAlign then msg(Format('Stacking with reference image %s/%s, PA %s',[RAToStr(FStackAlignX),DEToStr(FStackAlignY),FormatFloat(f1,FStackAlignRot)]))
+                         else msg('Fail to solve the exposure, no alignment is used');
+        end
+        else begin
+          // search alignment star
+          FFits.FindBrightestPixel(FFits.HeaderInfo.naxis1 div 2, FFits.HeaderInfo.naxis2 div 2,min(FFits.HeaderInfo.naxis1,FFits.HeaderInfo.naxis2) div 2,20,xi,yi,vmax);
+          if vmax>0 then begin
+            FFits.FindStarPos(xi,yi,20,xc,yc,ri,vmax,bg,bgdev);
+            if vmax>0 then begin
+              FFits.GetHFD2(xc,yc,2*ri,xs,ys,bg,bgdev,hfd,fwhm,vmax,snr,flux,false);
+              if ((hfd>0)and(Undersampled or (hfd>0.7))) and (hfd<10) then begin
+                 FStackAlign:=true;
+                 FStackAlignX:=xs;
+                 FStackAlignY:=ys;
+                 FStackStarX:=xs;
+                 FStackStarY:=ys;
+                 msg(Format(rsStackingWith, [inttostr(round(xs)), inttostr(round(FFits.HeaderInfo.naxis2-ys))]));
+              end;
+            end;
+          end;
+          if not FStackAlign then msg(rsNoAlignmentS,0);
        end;
-       if not FStackAlign then msg(rsNoAlignmentS,0);
      end;
      msg(Format('%d frame stacked',[FStackCount]));
   end;
@@ -1224,6 +1252,15 @@ begin
   ControlExposureOK:=true;
   WaitExposure:=false;
   if assigned(FonEndControlExposure) then FonEndControlExposure(self);
+end;
+
+function T_camera.Solve(f:TFits; out ra,de,pa,scale: double):boolean;
+begin
+  if Assigned(FSolve) then begin
+    FSolve(@f,ra,de,pa,scale,result);
+  end
+  else
+    result:=false;
 end;
 
 end.

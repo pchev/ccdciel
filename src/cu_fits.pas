@@ -207,8 +207,9 @@ type
      procedure FreeFlat;
      procedure ClearImage;
      procedure Math(operand: TFits; MathOperator:TMathOperator; new: boolean=false; seqnum: integer=1; mult: double=1.0);
-     procedure Shift(dx,dy: double);
+     procedure Shift(dx,dy: double; rot: double = 0.0);
      procedure ShiftInteger(dx,dy: integer);
+     procedure ShiftRot(dx,dy, rot: double);
      procedure Bitpix8to16;
      function  SameFormat(f:TFits): boolean;
      function  double_star(ri, x,y : integer):boolean;
@@ -3908,10 +3909,12 @@ begin
  end;
 end;
 
-procedure TFits.Shift(dx,dy: double);
+procedure TFits.Shift(dx,dy: double; rot: double = 0.0);
 begin
-  // for now use integer shift, next is to try with value_subpixel()
-  ShiftInteger(round(dx),round(dy));
+  if rot=0.0 then
+    ShiftInteger(round(dx),round(dy))
+  else
+    ShiftRot(dx,dy,rot);
 end;
 
 procedure TFits.ShiftInteger(dx,dy: integer);
@@ -3933,6 +3936,43 @@ begin
        end
        else begin
         imgshift.Fimage[k,ii,j]:=0;
+       end;
+     end;
+    end;
+  end;
+  imgshift.FStreamValid:=false;
+  m:=imgshift.Stream;
+  SetStream(m);
+  LoadStream;
+  imgshift.Free;
+end;
+
+procedure TFits.ShiftRot(dx,dy, rot: double);
+var imgshift: TFits;
+    i,j,k,ix,iy,wd,hd: integer;
+    s,c,x,y: double;
+    m: TMemoryStream;
+begin
+  sincos(rot,s,c);
+  imgshift:=TFits.Create(nil);
+  imgshift.onMsg:=onMsg;
+  imgshift.CreateImage(FFitsInfo,FHeader);
+  wd:=FFitsInfo.naxis1 div 2;
+  hd:=FFitsInfo.naxis2 div 2;
+  for i:=0 to FFitsInfo.naxis2-1 do begin
+   for j := 0 to FFitsInfo.naxis1-1 do begin
+     // center rotation
+     x:= (j-wd)*c + (i-hd)*s;
+     y:= -(j-wd)*s + (i-hd)*c;
+     // offset
+     ix:=wd+round(x+dx);
+     iy:=hd+round(y+dy);
+     for k:=0 to n_plane-1 do begin
+       if (ix>0)and(ix<FFitsInfo.naxis1)and(iy>0)and(iy<FFitsInfo.naxis2) then begin
+         imgshift.Fimage[k,i,j]:=Fimage[k,iy,ix];
+       end
+       else begin
+        imgshift.Fimage[k,i,j]:=0;
        end;
      end;
     end;
