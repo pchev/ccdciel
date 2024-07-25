@@ -113,6 +113,8 @@ resourcestring
   rsTheNumberOfI3 = 'The number of image to take before autofocus';
   rsAutofocusIfT = 'Autofocus if the temperature change is greater than the '
     +'configured value';
+  rsAutofocusIfHFD = 'Autofocus if the HFD % change is greater than the '
+    +'configured value';
   rsEditTheCurre = 'Edit the current sequence';
   rsListOfProfil = 'List of profile for every different equipment configuration';
   rsGlobalINDISe = 'Global INDI server parameters';
@@ -167,6 +169,7 @@ resourcestring
   rsSaveIndividu = 'Save individual images before stacking';
   rsFlatProcessi = 'Flat processing also require a Dark';
   rsSetTheTemper = 'Set the temperature threshold in the Preferences';
+  rsSetTheHFD = 'Set the HFD % change threshold in the Preferences. Measurements must also be enabled.';
   rsThisOptionIs = 'This option is normally unchecked, use it only if you manage the pointing and autoguiding by script.';
 
 implementation

@@ -892,6 +892,9 @@ begin
  led.Brush.Color:=clLime;
  StatusTimer.Enabled:=true;
  Targets.Unattended:=Unattended.Checked;
+
+ // new sequence started, so reset the HFM
+ Fcapture.ResetHFM:=true;
  Targets.Start;
  if not Targets.Running then AbortSequence;
  UpdateBtn;

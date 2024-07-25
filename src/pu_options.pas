@@ -34,8 +34,10 @@ type
   { Tf_option }
 
   Tf_option = class(TForm)
+    SpinAutoFocusHFD: TFloatSpinEdit;
     BtnDelHdr: TButton;
     BtnAddRoi: TButton;
+    BtnDisableAutofocusHFD: TButton;
     BtnModRoi: TButton;
     BtnDelRoi: TButton;
     BtnDefaultWeather: TButton;
@@ -53,6 +55,7 @@ type
     StackRotation: TCheckBox;
     Label182: TLabel;
     Label183: TLabel;
+    Label184: TLabel;
     SAMPParam: TEdit;
     FileNameSeqSep: TComboBox;
     GroupBox36: TGroupBox;
@@ -779,6 +782,7 @@ type
     procedure BtnDefaultWeatherClick(Sender: TObject);
     procedure BtnDelHdrClick(Sender: TObject);
     procedure BtnDelRoiClick(Sender: TObject);
+    procedure BtnDisableAutofocusHFDClick(Sender: TObject);
     procedure BtnDisableAutofocusTempClick(Sender: TObject);
     procedure BtnDisableDelayClick(Sender: TObject);
     procedure BtnDisableFocuserTempClick(Sender: TObject);
@@ -802,6 +806,7 @@ type
     procedure LogDirDefaultClick(Sender: TObject);
     procedure longdegExit(Sender: TObject);
     procedure longdegKeyDown(Sender: TObject; var Key: Word; Shift: TShiftState);
+    procedure MeasureNewImageClick(Sender: TObject);
     procedure ObservatoryDBDeleteClick(Sender: TObject);
     procedure ButtonNotificationAllClick(Sender: TObject);
     procedure ButtonHelpClick(Sender: TObject);
@@ -883,6 +888,7 @@ type
     procedure CheckLongitude;
     function  GetAutoguiderType: integer;
     procedure SetAutoguiderType(value: integer);
+    procedure SetupHFMOption;
   public
     { public declarations }
     LockTemp: Boolean;
@@ -964,6 +970,7 @@ begin
   b.tag:=1002;
   b.OnClick:=@IncPage;
   b.Parent:=PanelLeft;
+  SetupHFMOption;
 end;
 
 procedure Tf_option.SelectPage(Sender: TObject);
@@ -1189,8 +1196,10 @@ begin
   Label84.Caption := rsTemperatureC;
   Label119.Caption := rsRunAutoFocus;
   AutofocusTemp.Hint := rsAutofocusIfT;
+  SpinAutoFocusHFD.Hint := rsAutofocusIfHFD;
   BtnDisableFocuserTemp.Caption := rsDisable;
   BtnDisableAutofocusTemp.Caption := rsDisable;
+  BtnDisableAutofocusHFD.Caption := rsDisable;
   GroupBox22.Caption:=rsPeriodicAuto;
   Label127.Caption:=rsAutomaticall2;
   Label128.Caption:=rsMinutes;
@@ -1584,6 +1593,26 @@ procedure Tf_option.longdegKeyDown(Sender: TObject; var Key: Word; Shift: TShift
 begin
   if key=VK_RETURN then begin
     SetLongitude(Flongitude);
+  end;
+end;
+
+procedure Tf_option.MeasureNewImageClick(Sender: TObject);
+begin
+  SetupHFMOption;
+end;
+
+procedure Tf_option.SetupHFMOption;
+begin
+  // If image measurement is enabled then also make the autofocus option available
+  if MeasureNewImage.Checked then begin
+     Label184.Enabled:=true;
+     SpinAutoFocusHFD.Enabled:=true;
+     BtnDisableAutofocusHFD.Enabled:=true;
+  end
+  else begin
+     Label184.Enabled:=false;
+     SpinAutoFocusHFD.Enabled:=false;
+     BtnDisableAutofocusHFD.Enabled:=false;
   end;
 end;
 
@@ -2303,6 +2332,11 @@ begin
    RoiList.ItemIndex:=i-1;
    RoiListChange(Sender);
  end;
+end;
+
+procedure Tf_option.BtnDisableAutofocusHFDClick(Sender: TObject);
+begin
+    SpinAutoFocusHFD.Value:=0.0;
 end;
 
 procedure Tf_option.ClearRoi;

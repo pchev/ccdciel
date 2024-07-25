@@ -43,7 +43,7 @@ type
               FlatFilters: shortstring;
               FlatFstop: shortstring;
               preview,astrometrypointing,updatecoord,inplaceautofocus,autofocustemp,
-              autoguiding,solartracking,noautoguidingchange: boolean;
+              autofocushfd,autoguiding,solartracking,noautoguidingchange: boolean;
               delay, previewexposure: double;
               plan :TComponent;
               constructor Create;
@@ -850,6 +850,7 @@ begin
        t.solartracking:=FSequenceFile.Items.GetValue('/Targets/Target'+inttostr(i)+'/SolarTracking',false);
        t.inplaceautofocus:=FSequenceFile.Items.GetValue('/Targets/Target'+inttostr(i)+'/InplaceAutofocus',AutofocusInPlace);
        t.autofocustemp:=FSequenceFile.Items.GetValue('/Targets/Target'+inttostr(i)+'/AutofocusTemp',(AutofocusTempChange>0));
+       t.autofocushfd:=FSequenceFile.Items.GetValue('/Targets/Target'+inttostr(i)+'/HFM_Enabled',(HFM_Threshold>0));
        t.noautoguidingchange:=FSequenceFile.Items.GetValue('/Targets/Target'+inttostr(i)+'/NoAutoguidingChange',false);
        t.previewexposure:=FSequenceFile.Items.GetValue('/Targets/Target'+inttostr(i)+'/PreviewExposure',1.0);
        t.preview:=FSequenceFile.Items.GetValue('/Targets/Target'+inttostr(i)+'/Preview',false);
@@ -1014,6 +1015,7 @@ try
       FSequenceFile.Items.SetValue('/Targets/Target'+inttostr(i)+'/SolarTracking',t.solartracking);
       FSequenceFile.Items.SetValue('/Targets/Target'+inttostr(i)+'/InplaceAutofocus',t.inplaceautofocus);
       FSequenceFile.Items.SetValue('/Targets/Target'+inttostr(i)+'/AutofocusTemp',t.autofocustemp);
+      FSequenceFile.Items.SetValue('/Targets/Target'+inttostr(i)+'/HFM_Enabled',t.autofocushfd);
       FSequenceFile.Items.SetValue('/Targets/Target'+inttostr(i)+'/NoAutoguidingChange',t.noautoguidingchange);
       FSequenceFile.Items.SetValue('/Targets/Target'+inttostr(i)+'/PreviewExposure',t.previewexposure);
       FSequenceFile.Items.SetValue('/Targets/Target'+inttostr(i)+'/Preview',t.preview);
@@ -2451,6 +2453,11 @@ begin
         end;
         // set autofocus on temperature change
         Fcapture.CheckBoxFocus.Checked:=t.autofocustemp;
+
+        // enable/disable HFM - if enabled, monitor HFD %change and trigger
+        // an autofocus if it exceeds the HFM threshold (preferences/sequence)
+        Fcapture.CheckBoxFocusHFD.Checked:=t.autofocushfd;
+
         // Set internal guider solar object motion
         if (Autoguider<>nil)and(Autoguider.AutoguiderType=agINTERNAL) then begin
            if (t.solartracking)and(t.solarV<>NullCoord)and(t.solarPA<>NullCoord) then begin
@@ -3174,6 +3181,7 @@ begin
   solartracking:=false;
   inplaceautofocus:=AutofocusInPlace;
   autofocustemp:=(AutofocusTempChange>0);
+  autofocushfd:=(HFM_Threshold>0);
   noautoguidingchange:=false;
   autoguiding:=false;
   repeatcount:=1;
@@ -3221,6 +3229,7 @@ begin
   repeatdone:=Source.repeatdone;
   inplaceautofocus:=Source.inplaceautofocus;
   autofocustemp:=Source.autofocustemp;
+  autofocushfd:=Source.autofocushfd;
   noautoguidingchange:=Source.noautoguidingchange;
   autoguiding:=Source.autoguiding;
   preview:=Source.preview;

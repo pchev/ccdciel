@@ -62,6 +62,7 @@ type
     cbSolarTracking: TCheckBox;
     cbAutofocusTemp: TCheckBox;
     cbNoAutoguidingChange: TCheckBox;
+    cbAutofocusHFD: TCheckBox;
     cbMandatoryStartTime: TCheckBox;
     CheckBoxResetRepeat: TCheckBox;
     CheckBoxRestartStatus: TCheckBox;
@@ -489,6 +490,7 @@ begin
   cbAstrometry.Caption := Format(rsUseAstromet2+'', [blank]);
   cbInplace.Caption := Format(rsStayInPlace2+'', [blank]);
   cbAutofocusTemp.Caption:=rsAutofocusAft2;
+  cbAutofocusHFD.Caption:=rsAutofocusHFD2;
   cbUpdCoord.Caption := Format(rsUpdateRADec2+'', [blank]);
   cbSolarTracking.Caption:= rsActivateSola;
   cbNoAutoguidingChange.Caption:=rsDoNotStartAu;
@@ -498,6 +500,7 @@ begin
   cbInplace.Hint:=Format(rsStayAtTheTar, [crlf, crlf]);
   cbNoAutoguidingChange.Hint:=rsThisOptionIs;
   cbAutofocusTemp.Hint:=rsSetTheTemper;
+  cbAutofocusHFD.Hint:=rsSetTheHFD;
   cbUpdCoord.Hint:=Format(rsPriorToSlewi, [crlf, crlf]);
   CheckBoxRepeatList.Caption := rsRepeatTheWho;
   CheckBoxRestartStatus.Caption:=rsRecordRestar;
@@ -1140,6 +1143,7 @@ begin
   if t.astrometrypointing then cbAstrometry.Checked:=true;
   if t.inplaceautofocus then cbInplace.Checked:=true;
   if t.autofocustemp then cbAutofocusTemp.Checked:=true;
+  if t.autofocushfd then cbAutofocusHFD.Checked:=true;
   cbNoAutoguidingChange.Checked:=false;
   cbMandatoryStartTime.Checked:=false;
   TargetList.Objects[colseq,i]:=t;
@@ -1169,6 +1173,7 @@ begin
   if t.astrometrypointing then cbAstrometry.Checked:=true;
   if t.inplaceautofocus then cbInplace.Checked:=true;
   if t.autofocustemp then cbAutofocusTemp.Checked:=true;
+  if t.autofocushfd then cbAutofocusHFD.Checked:=true;
   cbNoAutoguidingChange.Checked:=false;
   cbMandatoryStartTime.Checked:=false;
   TargetList.Objects[colseq,i]:=t;
@@ -1891,6 +1896,7 @@ begin
     cbAstrometry.Checked:=false;
     cbInplace.Checked:=false;
     cbAutofocusTemp.Checked:=false;
+    cbAutofocusHFD.Checked:=false;
     cbNoAutoguidingChange.Checked:=false;
     cbMandatoryStartTime.Checked:=false;
     cbUpdCoord.Checked:=false;
@@ -1912,6 +1918,7 @@ begin
     cbAstrometry.Checked:=false;
     cbInplace.Checked:=false;
     cbAutofocusTemp.Checked:=false;
+    cbAutofocusHFD.Checked:=false;
     cbNoAutoguidingChange.Checked:=false;
     cbMandatoryStartTime.Checked:=false;
     cbUpdCoord.Checked:=false;
@@ -1940,6 +1947,7 @@ begin
     cbAstrometry.Checked:=false;
     cbInplace.Checked:=false;
     cbAutofocusTemp.Checked:=false;
+    cbAutofocusHFD.Checked:=false;
     cbNoAutoguidingChange.Checked:=false;
     cbMandatoryStartTime.Checked:=false;
     cbUpdCoord.Checked:=false;
@@ -2004,6 +2012,11 @@ begin
     cbAstrometry.Checked:=t.astrometrypointing;
     cbInplace.Checked:=t.inplaceautofocus;
     cbAutofocusTemp.Checked:=t.autofocustemp;
+
+    // When the form is saved, the corresponding values for each target are
+    // saved off. IOW, the form determines the target value, and vice versa
+    // when the target is selected/loaded.
+    cbAutofocusHFD.Checked:=t.autofocushfd;
     cbNoAutoguidingChange.Checked:=t.noautoguidingchange;
     cbMandatoryStartTime.Checked:=t.mandatorystarttime;
     cbUpdCoord.Checked:=t.updatecoord;
@@ -2165,6 +2178,10 @@ begin
     t.astrometrypointing:=cbAstrometry.Checked;
     t.inplaceautofocus:=cbInplace.Checked;
     t.autofocustemp:=cbAutofocusTemp.Checked;
+
+    // set the target autofocus value based on the value set in the form. The
+    // form drives the target value, and vice versa when the target is selected
+    t.autofocushfd:=cbAutofocusHFD.Checked;
     t.noautoguidingchange:=cbNoAutoguidingChange.Checked;
     if (t.starttime>0) and (not t.startrise) and (t.startmeridian=NullCoord) then
       t.mandatorystarttime:=cbMandatoryStartTime.Checked

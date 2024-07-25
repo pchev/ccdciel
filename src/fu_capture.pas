@@ -29,12 +29,14 @@ uses u_global, Graphics, UScaleDPI, u_hints, u_translation, cu_mount, u_utils, m
   Classes, SysUtils, FileUtil, Forms, Controls, ExtCtrls, StdCtrls, Spin;
 
 type
+  TCaptureRunType = (CAPTURE, SEQUENCE);
 
   { Tf_capture }
 
   Tf_capture = class(TFrame)
     Binning: TComboBox;
     BtnStart: TButton;
+    CheckBoxFocusHFD: TCheckBox;
     CheckBoxFocusTemp: TCheckBox;
     CheckBoxDither: TCheckBox;
     CheckBoxFocus: TCheckBox;
@@ -88,11 +90,13 @@ type
     FFocusNum: integer;
     FFocusNow: boolean;
     Frunning: boolean;
+    FResetHFM: boolean;
     FonMsg: TNotifyMsg;
     FonStartExposure: TNotifyEvent;
     FonAbortExposure: TNotifyEvent;
     FonResetStack: TNotifyEvent;
     FonFrameTypeChange: TNotifyEvent;
+    FonResetHFM: TNotifyEvent;
     procedure SetExposureTime(val: double);
     function GetGain:integer;
     procedure SetGain(value:integer);
@@ -124,7 +128,8 @@ type
     property onResetStack: TNotifyEvent read FonResetStack write FonResetStack;
     property onMsg: TNotifyMsg read FonMsg write FonMsg;
     property onFrameTypeChange: TNotifyEvent read FonFrameTypeChange write FonFrameTypeChange;
-
+    property onResetHFM: TNotifyEvent read FonResetHFM write FonResetHFM;
+    property ResetHFM: boolean read FResetHFM write FResetHFM;
 end;
 
 implementation
@@ -144,6 +149,7 @@ begin
  ScaleDPI(Self);
  Frunning:=false;
  FFocusNow:=false;
+ FResetHFM:=true;
  FExposureTime:=-1;
  SetLang;
  led.Canvas.AntialiasingMode:=amOn;
@@ -179,17 +185,40 @@ begin
   DitherCount.Hint:=rsTheNumberOfI2;
   FocusCount.Hint:=rsTheNumberOfI3;
   CheckBoxFocusTemp.Hint:=rsSetTheTemper;
+  CheckBoxFocusHFD.Hint:=rsSetTheHFD;
   BtnStart.Hint:=rsStartTheCapt
 end;
 
 procedure Tf_capture.BtnStartClick(Sender: TObject);
+var
+startedBy: TCaptureRunType;
 begin
   Frunning:=not Frunning;
+  if (Sender=nil) then startedBy:=SEQUENCE else startedBy:=CAPTURE;
   if Frunning then begin
     CancelAutofocus:=false;
-    if Sender<>nil then FSeqCount:=1; // otherwise set by plan
+    if startedBy=CAPTURE then FSeqCount:=1; // otherwise set by plan
     FDitherNum:=0;
     FFocusNum:=0;
+
+    // Ensure HFD autofocus history and vars are reset for new measurements.
+    // If started by a sequence then only reset when the sequence starts, not
+    // for each plan/target or step. This allows the monitor to track across
+    // parfocal filters or across targets if skies and airmass are similar, but
+    // will trigger a refocus if nonparfocal or skies vary. Of course, the user
+    // can trigger an autofocus via the plan or manually, which will reset the
+    // HFM. If started by the capture button then always reset values as the
+    // user could have done any number of manual events that require a reset.
+    if (startedBy=SEQUENCE) and FResetHFM then begin
+      if Assigned(FonResetHFM) then FonResetHFM(self);
+
+      // don't reset again for a sequence unless triggered by an autofocus
+      FResetHFM:=false;
+    end
+    else if (startedBy=CAPTURE) then begin
+      if Assigned(FonResetHFM) then FonResetHFM(self);
+    end;
+
     DomeFlatExpAdjust:=0;
     doFlatAutoExposure:=(TFrameType(cbFrameType.ItemIndex)=FLAT) and FlatAutoExposure;
     if (TFrameType(cbFrameType.ItemIndex)=FLAT)and(FlatType=ftDome) then begin

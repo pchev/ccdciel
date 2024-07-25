@@ -694,6 +694,14 @@ type
     MultiPanel,MultiCamera: boolean;
     MultiPanelHsplit, MultiPanelVSplit: double;
 
+    // HFD Focus Monitoring (HFM)
+    const HFM_HIST_SIZE=3;     // size of array of HFD measurements
+  var
+    HFM_Measurements: array[0..(HFM_HIST_SIZE-1)] of double;
+    HFM_Primed: boolean;   // true if measurements array filled, else false
+    HFM_MeasIdx: integer;      // index location for next element in array
+    HFM_RefHFD, HFM_MeasAvg: double;
+
     procedure CreateDevices;
     procedure SetDevices;
     procedure DestroyDevices;
@@ -1034,6 +1042,11 @@ type
     Procedure SetVisibleImage;
     procedure RunScript(scname,scpath,scargs: string);
     procedure Solve(f:pointer; out ra,de,pa,scale: double; out ok:boolean);
+    procedure HFM_AddMeasurement(newHFD:double);
+    procedure HFM_ResetMeasurements(Sender: TObject);
+    function HFM_IsActive():boolean;
+    function HFM_GetHFDShift():double;
+
   public
     { public declarations }
     Image1, ImageGuide, ImageFinder: TImgDrawingControl;
@@ -1825,6 +1838,7 @@ begin
   f_capture.onStartExposure:=@StartCaptureExposure;
   f_capture.onAbortExposure:=@StopExposure;
   f_capture.onMsg:=@NewMessage;
+  f_capture.onResetHFM:=@HFM_ResetMeasurements;
 
   f_video:=Tf_video.Create(self);
   f_video.onMsg:=@NewMessage;
@@ -2659,6 +2673,7 @@ begin
   f_capture.Fname.Text:=config.GetValue('/Capture/FileName','');
   f_capture.SeqNum.Value:=config.GetValue('/Capture/Count',1);
   f_capture.CheckBoxFocusTemp.Checked:=(config.GetValue('/StarAnalysis/AutofocusTemp',0.0)>0);
+  f_capture.CheckBoxFocusHFD.Checked:=MeasureNewImage and (config.GetValue('/StarAnalysis/HFM_Threshold',0.0)>0);
 
   FrameX:=config.GetValue('/CCDframe/FrameX',0);
   FrameY:=config.GetValue('/CCDframe/FrameY',0);
@@ -4939,6 +4954,8 @@ begin
   if abs(FocuserTempCoeff)<0.001 then FocuserTempCoeff:=0;
   AutofocusTempChange:=config.GetValue('/StarAnalysis/AutofocusTemp',0.0);
   if abs(AutofocusTempChange)<0.001 then AutofocusTempChange:=0;
+  HFM_Threshold:=config.GetValue('/StarAnalysis/HFM_Threshold',0.0);
+  if abs(HFM_Threshold)<0.001 then HFM_Threshold:=0;
   AutofocusPeriod:=config.GetValue('/StarAnalysis/AutofocusPeriod',0);
   AutofocusMoveDir:=config.GetValue('/StarAnalysis/AutofocusMoveDir',FocusDirIn);
   AutofocusNearNum:=config.GetValue('/StarAnalysis/AutofocusNearNum',3);
@@ -9478,6 +9495,7 @@ begin
       f_option.FocuserTempCoeff.Value:=f_option.FocuserTempCoeff.Value*5/9;
       f_option.AutofocusTemp.Value:=f_option.AutofocusTemp.Value*5/9;
    end;
+   f_option.SpinAutoFocusHFD.Value:=config.GetValue('/StarAnalysis/HFM_Threshold',HFM_Threshold);
    f_option.AutofocusPeriod.Value:=config.GetValue('/StarAnalysis/AutofocusPeriod',AutofocusPeriod);
    f_option.AutofocusTolerance.Value:=config.GetValue('/StarAnalysis/AutofocusTolerance',AutofocusTolerance);
    f_option.AutofocusMinSNR.Value:=config.GetValue('/StarAnalysis/AutofocusMinSNR',AutofocusMinSNR);
@@ -9855,6 +9873,7 @@ begin
      x:=f_option.AutofocusTemp.Value;
      if TemperatureScale=1 then x:=x*9/5;
      config.SetValue('/StarAnalysis/AutofocusTemp',x);
+     config.SetValue('/StarAnalysis/HFM_Threshold', f_option.SpinAutofocusHFD.Value);
      config.SetValue('/StarAnalysis/AutofocusPeriod',f_option.AutofocusPeriod.Value);
      config.SetValue('/StarAnalysis/AutofocusTolerance',f_option.AutofocusTolerance.Value);
      config.SetValue('/StarAnalysis/AutofocusMinSNR',f_option.AutofocusMinSNR.Value);
@@ -10983,14 +11002,18 @@ if (AllDevicesConnected)and(not autofocusing)and(not learningvcurve)and(not f_vi
         ((minperday*(now-AutoFocusLastTime))>=AutofocusPeriod))
      or (focuser.hasTemperature and f_capture.CheckBoxFocusTemp.Checked and(AutofocusTempChange<>0.0) and // temperature change
         (AutofocusLastTemp<>NullCoord) and (f_starprofile.AutofocusDone) and
-        (abs(AutofocusLastTemp-FocuserTemp)>=AutofocusTempChange))
-        )
+        (abs(AutofocusLastTemp-FocuserTemp)>=AutofocusTempChange)))
+     or (HFM_IsActive and (HFM_GetHFDShift>=HFM_Threshold))
      then begin
     if canwait then begin
      f_capture.FocusNum:=0;
      f_capture.FocusNow:=false;
      // do autofocus
      if AutoAutofocus then begin
+
+       // Reset HFD history and vars for new measurements, if enabled
+       HFM_ResetMeasurements(self);
+
        if f_capture.Running then begin
          // ok, continue
          f_capture.DitherNum:=0; // no dither after focus
@@ -11013,7 +11036,8 @@ if (AllDevicesConnected)and(not autofocusing)and(not learningvcurve)and(not f_vi
    end;
   end
   else
-   if (ftype=LIGHT) and (f_capture.CheckBoxFocus.Checked or (AutofocusPeriod>0)or(AutofocusTempChange>0.0)) then begin
+   if (ftype=LIGHT) and (f_capture.CheckBoxFocus.Checked or (AutofocusPeriod>0)or
+      (AutofocusTempChange>0.0)or HFM_IsActive) then begin
       // Show message when next autofocus is due
       txt:='';
       if f_capture.CheckBoxFocus.Checked then begin
@@ -11026,10 +11050,21 @@ if (AllDevicesConnected)and(not autofocusing)and(not learningvcurve)and(not f_vi
         buf:=blank+inttostr(i)+blank+rsMinutes;
         if txt='' then txt:=buf else txt:=txt+', '+rsOr+blank+buf;
       end;
-      if focuser.hasTemperature and (AutofocusTempChange>0.0)and f_capture.CheckBoxFocusTemp.Checked and(AutofocusLastTemp<>NullCoord)and(f_starprofile.AutofocusDone) then begin
+      if focuser.hasTemperature and (AutofocusTempChange>0.0)and
+           f_capture.CheckBoxFocusTemp.Checked and
+           (AutofocusLastTemp<>NullCoord)and(f_starprofile.AutofocusDone) then begin
         x:=AutofocusTempChange-(abs(AutofocusLastTemp-FocuserTemp));
         buf:=blank+FormatFloat(f1,x)+blank+'C';
         if txt='' then txt:=buf else txt:=txt+', '+rsOr+blank+buf;
+      end;
+      if HFM_IsActive then begin
+        // refocusing takes place whether improving or degrading
+        x:=HFM_GetHFDShift;
+        if(x<>NullCoord) then begin
+          x:=HFM_Threshold - x;
+          buf:=blank+FormatFloat(f1,x)+rsChangeInHFD;
+          if txt='' then txt:=buf else txt:=txt+', '+rsOr+blank+buf;
+        end;
       end;
       if txt>'' then NewMessage(rsAutofocusDue+blank+txt,3);
    end;
@@ -11078,6 +11113,114 @@ if (AllDevicesConnected)and(not autofocusing)and(not learningvcurve)and(not f_vi
   // All OK
   result:=true;
 end;
+end;
+
+{
+Feature: HFD Focus Monitor (HFM)
+Reset all HFD autofocus related values to default states
+}
+procedure Tf_main.HFM_ResetMeasurements(Sender: TObject);
+begin
+  // if already reset don't repeat, otherwise may log duplicate reset messages
+  if (HFM_RefHFD<>NullCoord) or (HFM_MeasAvg<>NullCoord) or
+      (HFM_Primed=true) or (HFM_MeasIdx>0) then begin
+    HFM_RefHFD:=NullCoord;
+    HFM_MeasAvg:=NullCoord;
+    HFM_Primed:=false;
+    HFM_MeasIdx:=0;
+    NewMessage(rsHFDReset);
+  end;
+end;
+
+{
+Feature: HFD Focus Monitor (HFM)
+Add the new HFD into the circular buffer and calculate the new average. This
+function also determines when the HFD history is 'primed', meaning the buffer
+has been filled, the average calculated, and a new HFD reference set. The
+reference is set to the primed historical average.
+}
+procedure Tf_main.HFM_AddMeasurement(newHFD:double);
+var i:integer;
+begin
+  // validate newHFD
+  if(newHFD<>NullCoord) and (newHFD>0.0) then begin
+    HFM_Measurements[HFM_MeasIdx]:=newHFD;
+
+    if(not HFM_Primed) then begin
+      // log each new measurement until primed
+      if MeasureNewImage and (HFM_Threshold>0.0) and
+           f_capture.CheckBoxFocusHFD.Checked then
+         NewMessage(Format(rsHFDMeasuring, [HFM_MeasIdx+1, HFM_HIST_SIZE]));
+
+      // array has been filled for the first time, so now primed
+      if((HFM_MeasIdx+1)=HFM_HIST_SIZE) then
+         HFM_Primed:=true;
+    end;
+
+    // update to new index
+    HFM_MeasIdx:=(HFM_MeasIdx+1) mod HFM_HIST_SIZE;
+
+    // once primed, calculate the running average with each new exposure
+    if HFM_Primed then begin
+      HFM_MeasAvg:=0;
+      for i:=0 to HFM_HIST_SIZE-1 do begin
+         HFM_MeasAvg:=HFM_MeasAvg+HFM_Measurements[i];
+      end;
+      HFM_MeasAvg:=HFM_MeasAvg/Double(HFM_HIST_SIZE);
+
+      // if the reference HFD is still null then this is the first run
+      // through since primed, so set it once and don't set it again until
+      // the measurements are reset
+      if(HFM_RefHFD=NullCoord) then begin
+         HFM_RefHFD:=HFM_MeasAvg;
+
+      // necessary to check if configured as measurements may be enabled
+      // but the threshold may be disabled; if so, don't show message
+      if HFM_IsActive then
+        NewMessage(Format(rsHFDActive, [FormatFloat(f1, HFM_Threshold),
+           FormatFloat(f1, HFM_RefHFD)]));
+      end;
+    end;
+  end;
+end;
+
+{
+Feature: HFD Focus Monitor (HFM)
+Determine if HFD focus monitoring is configured. Only true if measurements
+are active, the HFD percentage threshold is enabled, and the capture form HFD
+focus checkbox is checked. HFD focus checkbox is a necessary check as it's
+checked not only by the user, but also programmatically by the sequence/
+plan-related code for each target; i.e. each target can optionally enable or
+disable HFD focus monitoring, and when the target is set up during a sequence
+run the code sets the capture form to match what is set for the target.
+
+Returns: true if configured, otherwise false
+}
+function Tf_main.HFM_IsActive():boolean;
+begin
+  result:=false;
+  if MeasureNewImage and f_capture.CheckBoxFocusHFD.Checked
+      and (HFM_Threshold>0.0) and HFM_Primed and (HFM_RefHFD<>NullCoord) and
+      (HFM_RefHFD>0.0) then
+    result:=true;
+end;
+
+{
+Feature: HFD Monitor/Autofocus
+Calculate the percentage difference between the reference and average of recent
+HFD measurements. The absolute value ensures that a positive value is returned
+regardless of whether the HFD is improving (i.e. decreasing median HFD) or
+deteriorating (i.e. increasing median HFD). Thus an autofocus should take place
+under both circumstances. This value is only calculated if HFD focus
+monitoring is configured and enabled.
+
+Returns: a positive percentage if HFM is active, otherwise NullCoord
+}
+function Tf_main.HFM_GetHFDShift():double;
+begin
+  result:=NullCoord;
+  if HFM_IsActive then
+   result:=abs(Double(100.0)-(HFM_MeasAvg/HFM_RefHFD)*Double(100.0));
 end;
 
 procedure Tf_main.CaptureDither;
@@ -11749,11 +11892,15 @@ try
      if EarlyNextExposure then begin
        if camera.LastExposureTime>=30 then begin
           MeasureImage(false);
+          // update HFD autofocus monitoring history with the new HFD measurement
+          HFM_AddMeasurement(LastHfd);
        end
        else NewMessage(format(rsExposureTime4, [30]), 3);
      end
      else begin
        MeasureImage(false);
+       // update HFD autofocus monitoring history with the new HFD measurement
+       HFM_AddMeasurement(LastHfd);
      end;
    end;
  end;

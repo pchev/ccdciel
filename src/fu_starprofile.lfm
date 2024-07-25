@@ -8,8 +8,8 @@ object f_starprofile: Tf_starprofile
   ClientWidth = 194
   ParentFont = False
   TabOrder = 0
-  DesignLeft = -1
-  DesignTop = -1
+  DesignLeft = 0
+  DesignTop = 0
   object Title: TLabel
     Left = 0
     Height = 20
@@ -486,6 +486,7 @@ object f_starprofile: Tf_starprofile
           ClientHeight = 125
           ClientWidth = 188
           Color = clBlack
+          ParentBackground = False
           ParentColor = False
           TabOrder = 0
           object Star2D: TImage

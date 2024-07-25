@@ -1,21 +1,21 @@
 object f_capture: Tf_capture
   Left = 0
-  Height = 447
+  Height = 524
   Top = 0
   Width = 218
   AutoSize = True
   ChildSizing.ControlsPerLine = 1
-  ClientHeight = 447
+  ClientHeight = 524
   ClientWidth = 218
   OnEndDrag = FrameEndDrag
   OnResize = FrameResize
   ParentFont = False
   TabOrder = 0
-  DesignLeft = -3
-  DesignTop = -3
+  DesignLeft = 0
+  DesignTop = 0
   object Panel1: TPanel
     Left = 0
-    Height = 427
+    Height = 504
     Top = 20
     Width = 218
     Align = alClient
@@ -23,7 +23,7 @@ object f_capture: Tf_capture
     ChildSizing.VerticalSpacing = 4
     ChildSizing.Layout = cclTopToBottomThenLeftToRight
     ChildSizing.ControlsPerLine = 99
-    ClientHeight = 427
+    ClientHeight = 504
     ClientWidth = 218
     ParentFont = False
     TabOrder = 0
@@ -413,11 +413,11 @@ object f_capture: Tf_capture
     end
     object Panel8: TPanel
       Left = 0
-      Height = 54
+      Height = 84
       Top = 332
       Width = 255
       BevelOuter = bvNone
-      ClientHeight = 54
+      ClientHeight = 84
       ClientWidth = 255
       ParentFont = False
       TabOrder = 6
@@ -453,11 +453,19 @@ object f_capture: Tf_capture
         Caption = 'Autofocus after temperature change'
         TabOrder = 2
       end
+      object CheckBoxFocusHFD: TCheckBox
+        Left = 4
+        Height = 22
+        Top = 62
+        Width = 229
+        Caption = 'Autofocus after % change in HFD'
+        TabOrder = 3
+      end
     end
     object Panel9: TPanel
       Left = 0
       Height = 26
-      Top = 390
+      Top = 420
       Width = 255
       BevelOuter = bvNone
       ClientHeight = 26
@@ -466,9 +474,9 @@ object f_capture: Tf_capture
       TabOrder = 7
       object BtnStart: TButton
         Left = 4
-        Height = 22
+        Height = 24
         Hint = 'Start the capture sequence'
-        Top = 4
+        Top = 2
         Width = 121
         Caption = 'Start'
         OnClick = BtnStartClick
@@ -477,8 +485,8 @@ object f_capture: Tf_capture
       end
       object led: TShape
         Left = 164
-        Height = 14
-        Top = 8
+        Height = 15
+        Top = 6
         Width = 14
         Brush.Color = clGray
         Shape = stCircle

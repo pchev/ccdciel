@@ -1,7 +1,7 @@
 object f_EditTargets: Tf_EditTargets
-  Left = 0
+  Left = 2559
   Height = 677
-  Top = 87
+  Top = 180
   Width = 1024
   ActiveControl = BtnSave
   Caption = 'Edit target list'
@@ -705,7 +705,7 @@ object f_EditTargets: Tf_EditTargets
           object cbUpdCoord: TCheckBox
             Left = 16
             Height = 22
-            Top = 129
+            Top = 152
             Width = 234
             Caption = 'Update RA+Dec from Planetarium'
             OnChange = cbChange
@@ -714,7 +714,7 @@ object f_EditTargets: Tf_EditTargets
           object PanelSolarTracking: TPanel
             Left = 16
             Height = 26
-            Top = 154
+            Top = 177
             Width = 322
             BevelOuter = bvNone
             ClientHeight = 26
@@ -743,7 +743,7 @@ object f_EditTargets: Tf_EditTargets
             Left = 16
             Height = 22
             Hint = 'This option is normally unchecked, use it only if you manage the pointing and autoguiding by script.'
-            Top = 179
+            Top = 202
             Width = 179
             Caption = 'Do not start autoguiding'
             OnChange = cbChange
@@ -752,9 +752,18 @@ object f_EditTargets: Tf_EditTargets
           object cbMandatoryStartTime: TCheckBox
             Left = 16
             Height = 22
-            Top = 204
+            Top = 227
             Width = 158
             Caption = 'Mandatory start time'
+            OnChange = cbChange
+            TabOrder = 9
+          end
+          object cbAutofocusHFD: TCheckBox
+            Left = 16
+            Height = 22
+            Top = 128
+            Width = 214
+            Caption = 'Autofocus after % change HFD'
             OnChange = cbChange
             TabOrder = 8
           end

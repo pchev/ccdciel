@@ -140,6 +140,9 @@ resourcestring
   rsCannotGetFoc = 'Cannot get focuser absolute position';
   rsFromToBy = 'From: %s to %s by %s';
   rsFocuserTempe = 'Focuser temperature: %s';
+  rsHFDReset = 'HFD Focus Monitor: Reset. Clearing reference HFD and measurements.';
+  rsHFDMeasuring = 'HFD Focus Monitor: Measuring. %d of %d HFD measurements completed.';
+  rsHFDActive = 'HFD Focus Monitor: Active. Threshold: %s%%, Reference HFD: %s';
   rsStopVcurveLe = 'Stop Vcurve learning';
   rsMeasurementH = 'Measurement %s hfd:%s peak:%s snr:%s';
   rsCannotDetect = 'Cannot detect star.';
@@ -1090,6 +1093,7 @@ resourcestring
   rsPeriodicAuto = 'Periodic auto-focus';
   rsAutomaticall2 = 'Automatically run auto-focus every';
   rsAutofocusDue = 'Autofocus due in';
+  rsChangeInHFD = '% change in HFD';
   rsOr = 'or';
   rsCommandPath = 'Command path';
   rsPixelCount = '%sPixel count:%s';
@@ -1469,6 +1473,7 @@ resourcestring
   rsApparentMoti2 = 'Apparent motion PA';
   rsAdditionalOp = 'Additional options for';
   rsAutofocusAft2 = 'Autofocus after temperature change';
+  rsAutofocusHFD2 = 'Autofocus after % change HFD';
   rsBacklashCali = 'Backlash calibration';
   rsDoNotStartAu = 'Do not start autoguiding';
   rsUseFinderCam = 'Use finder camera';
