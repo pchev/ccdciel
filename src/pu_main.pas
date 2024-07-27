@@ -13676,7 +13676,7 @@ Procedure Tf_main.FocusStart(Sender: TObject);
 var x,y,xc,yc,s,s2,s3,s4: integer;
     vmax:double;
 begin
-if  f_capture.Running  then begin
+if  f_capture.Running or f_sequence.Running then begin
   NewMessage(rsCannotStartM,1);
   f_starprofile.ChkFocusDown(false);
   if Collimation then CollimationStop(nil);
@@ -13748,7 +13748,7 @@ end;
 
 Procedure Tf_main.FocusStop(Sender: TObject);
 begin
-   if  f_capture.Running then exit;
+   if  (f_capture.Running or f_sequence.Running)  then exit;
    f_preview.Running:=false;
    f_preview.Loop:=false;
    camera.AbortExposure;
@@ -14203,7 +14203,7 @@ begin
     f_starprofile.ChkAutofocusDown(false);
     exit;
   end;
-  if (f_capture.Running and (not autofocusing)) then begin
+  if (f_capture.Running or f_sequence.Running) and (not autofocusing) then begin
     NewMessage(rsCannotStartA3,1);
     f_starprofile.ChkAutofocusDown(false);
     exit;
@@ -14370,7 +14370,7 @@ end;
 
 Procedure Tf_main.AutoFocusStop(Sender: TObject);
 begin
-   if  f_capture.Running and (not autofocusing) then exit;
+   if (f_capture.Running or f_sequence.Running) and (not autofocusing) then exit;
    f_preview.Running:=false;
    f_preview.Loop:=false;
    if (not f_capture.Running) and (not f_starprofile.AutofocusResult) then camera.AbortExposure;
