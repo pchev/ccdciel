@@ -1029,6 +1029,7 @@ type
     procedure GuideCameraSetTemperature(Sender: TObject);
     procedure GuideCameraSetCooler(Sender: TObject);
     procedure GuiderMeasureAtPos(x,y:integer);
+    procedure ShowGuideImage(Sender: TObject);
     procedure FinderCameraProgress(n:double);
     procedure FinderCameraNewImage(Sender: TObject);
     procedure FinderCameraNewImageAsync(Data: PtrInt);
@@ -1918,6 +1919,7 @@ begin
   f_internalguider.onSetTemperature:=@GuideCameraSetTemperature;
   f_internalguider.onSetCooler:=@GuideCameraSetCooler;
   f_internalguider.onShowMessage:=@NewMessage;
+  f_internalguider.onShowImage:=@ShowGuideImage;
   ShowGuiderDarkInfo;
 
   f_finder:=Tf_finder.Create(self);
@@ -3004,7 +3006,7 @@ begin
 
   SetTool(f_video,'Video',PanelRight5,0,MenuViewVideo,MenuVideo,true,true);
 
-  SetTool(f_internalguider,'InternalGuider',PanelRight6,0,MenuViewInternalGuider,MenuInternalGuider,WantGuideCamera and WantMount,true);
+  SetTool(f_internalguider,'InternalGuider',PanelRight6,0,MenuViewInternalGuider,MenuInternalGuider,WantGuideCamera and WantMount);
 
   MenuViewClock.Checked:=screenconfig.GetValue('/Tools/Clock/Visible',true);
   MenuViewClockClick(nil);
@@ -5074,6 +5076,7 @@ begin
   f_internalguider.Temperature.Value:=config.GetValue('/InternalGuider/Camera/Temperature',0);
   f_internalguider.Gamma.Position:=config.GetValue('/InternalGuider/Visu/Gamma',50);
   f_internalguider.Luminosity.Position:=config.GetValue('/InternalGuider/Visu/Luminosity',50);
+  f_internalguider.cbShowImage.Checked:=config.GetValue('/InternalGuider/ShowImage',false);
   f_internalguider.SpectroFunctions:=config.GetValue('/InternalGuider/Spectro/SpectroFunctions',false);
   f_internalguider.SearchWinMin:=config.GetValue('/InternalGuider/Spectro/SearchWinMin',40);
   f_internalguider.SearchWinMax:=config.GetValue('/InternalGuider/Spectro/SearchWinMax',80);
@@ -5089,6 +5092,7 @@ begin
   f_internalguider.cbSpectroChange(nil);
   f_internalguider.cbGuideLockChange(nil);
   f_internalguider.ForceGuideSpeedChange(nil);
+  f_internalguider.cbShowImageChange(nil);
 
   MeridianOption:=config.GetValue('/Meridian/MeridianOption',3);
   MinutesPastMeridian:=config.GetValue('/Meridian/MinutesPast',15);
@@ -5695,6 +5699,7 @@ begin
   config.SetValue('/InternalGuider/Camera/Temperature',f_internalguider.Temperature.Value);
   config.SetValue('/InternalGuider/Visu/Gamma',f_internalguider.Gamma.Position);
   config.SetValue('/InternalGuider/Visu/Luminosity',f_internalguider.Luminosity.Position);
+  config.SetValue('/InternalGuider/ShowImage',f_internalguider.cbShowImage.Checked);
 
   config.SetValue('/InternalGuider/Spectro/SpectroFunctions',f_internalguider.SpectroFunctions);
   config.SetValue('/Autoguider/Lock/GuideSetLock',f_internalguider.GuideLock);
@@ -17214,7 +17219,7 @@ end;
 procedure Tf_main.GuideCameraNewImageAsync(Data: PtrInt);
 var displayimage: boolean;
 begin
-  displayimage:=GuideImage.IsVisible;
+  displayimage:=GuideImage.IsVisible or f_internalguider.cbShowImage.Checked;
   if (not guidefits.ImageValid) then begin
      guidefits.LoadStream;
   end;
@@ -17451,15 +17456,51 @@ ImageGuide.Invalidate;
 {$ifdef debug_raw}writeln(FormatDateTime(dateiso,Now)+blank+'PlotImage end');{$endif}
 end;
 
+procedure Tf_main.ShowGuideImage(Sender: TObject);
+begin
+  if f_internalguider.cbShowImage.Checked then begin
+    // keep image proportion
+    if (guideimg_Height>0) and (guideimg_Width>0) then
+      f_internalguider.PanelImage.Height:=round(f_internalguider.PanelImage.Width*guideimg_Height/guideimg_Width)
+    else
+      f_internalguider.PanelImage.Height:=round(f_internalguider.PanelImage.Width/1.5);
+    // add space for image
+    f_internalguider.Panel1.Height:=f_internalguider.PanelImage.top+f_internalguider.PanelImage.Height;
+    ImageGuide.Parent:=f_internalguider.PanelImage;
+    f_internalguider.PanelImage.Parent:=f_internalguider.Panel3;
+  end
+  else begin
+    ImageGuide.Parent:=GuideImage;
+    f_internalguider.PanelImage.Parent:=f_internalguider.Panel3;
+    // remove image panel
+    f_internalguider.PanelImage.Height:=0;
+    // let space for the larger control
+    f_internalguider.Panel1.Height:=f_internalguider.GroupBoxSlit.Top+f_internalguider.GroupBoxSlit.Height
+  end;
+  SetVisibleImage;
+end;
+
 procedure Tf_main.ImageGuidePaint(Sender: TObject);
+var h: integer;
 begin
 try
+  if (ImageGuide.Parent=f_internalguider.PanelImage) and (guideimg_Height>0) and (guideimg_Width>0) then begin
+    // check image proportion and eventually adjust the display
+    h:=round(f_internalguider.PanelImage.Width*guideimg_Height/guideimg_Width);
+    if abs(f_internalguider.PanelImage.Height-h)>2 then begin
+       f_internalguider.PanelImage.Height:=h;
+       f_internalguider.Panel1.Height:=f_internalguider.PanelImage.top+f_internalguider.PanelImage.Height;
+    end;
+  end;
   if (ScrGuideBmp.Height>0)and(ScrGuideBmp.Width>0) then
      ScrGuideBmp.Draw(ImageGuide.Canvas,0,0,true);
   ImageGuide.Canvas.Brush.Color:=clBlack;
   ImageGuide.Canvas.Brush.Style:=bsSolid;
   ImageGuide.Canvas.Font.Color:=clSilver;
-  ImageGuide.Canvas.Font.Size:=DoScaleX(16);
+  if ImageGuide.Parent=GuideImage then
+    ImageGuide.Canvas.Font.Size:=DoScaleX(16)
+  else
+    ImageGuide.Canvas.Font.Size:=DoScaleX(10);
   ImageGuide.Canvas.TextOut(1, 1, rsGuideCamera);
 except
 end;
@@ -18369,11 +18410,12 @@ var i: integer;
 begin
   if MultiPanel then begin
     mainimage.Visible:=true;
-    GuideImage.Visible:=WantGuideCamera;
+    GuideImage.Visible:=WantGuideCamera and (not f_internalguider.cbShowImage.Checked);
     FinderImage.Visible:=WantFinderCamera;
   end
   else begin
      i:=PageControlRight.ActivePageIndex;
+     if (i=5)and(f_internalguider.cbShowImage.Checked) then i:=0;
      case i of
           0..4: begin mainimage.Visible:=true;  GuideImage.Visible:=false;  FinderImage.Visible:=false; end;
           5:    begin mainimage.Visible:=false; GuideImage.Visible:=true;   FinderImage.Visible:=false; end;

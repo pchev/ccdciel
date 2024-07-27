@@ -3,6 +3,7 @@ object f_internalguider: Tf_internalguider
   Height = 673
   Top = 0
   Width = 346
+  AutoSize = True
   ClientHeight = 673
   ClientWidth = 346
   ParentFont = False
@@ -19,6 +20,7 @@ object f_internalguider: Tf_internalguider
     AutoSize = False
     Caption = 'Internal guider'
     Color = clBtnShadow
+    DragMode = dmAutomatic
     Font.Color = clBtnText
     Layout = tlCenter
     ParentColor = False
@@ -27,17 +29,18 @@ object f_internalguider: Tf_internalguider
   end
   object Panel1: TPanel
     Left = 0
-    Height = 653
+    Height = 665
     Top = 20
     Width = 346
-    Align = alClient
-    ClientHeight = 653
+    Align = alTop
+    AutoSize = True
+    ClientHeight = 665
     ClientWidth = 346
     ParentFont = False
     TabOrder = 0
     object PageControl1: TPageControl
       Left = 1
-      Height = 651
+      Height = 663
       Top = 1
       Width = 344
       ActivePage = TabSheetGuider
@@ -45,19 +48,20 @@ object f_internalguider: Tf_internalguider
       ParentFont = False
       TabIndex = 0
       TabOrder = 0
+      OnChange = PageControl1Change
       object TabSheetGuider: TTabSheet
         Caption = 'Guider'
-        ClientHeight = 616
+        ClientHeight = 628
         ClientWidth = 340
         ParentFont = False
         object Panel3: TPanel
           Left = 0
-          Height = 616
+          Height = 628
           Top = 0
           Width = 340
           Align = alClient
           BevelOuter = bvNone
-          ClientHeight = 616
+          ClientHeight = 628
           ClientWidth = 340
           Color = clMenu
           ParentColor = False
@@ -310,19 +314,37 @@ object f_internalguider: Tf_internalguider
             OnClick = ButtonLoopClick
             TabOrder = 9
           end
+          object cbShowImage: TCheckBox
+            AnchorSideTop.Control = ButtonCalibrate
+            AnchorSideTop.Side = asrCenter
+            Left = 128
+            Height = 22
+            Top = 473
+            Width = 172
+            Caption = 'Show guide image here'
+            OnChange = cbShowImageChange
+            TabOrder = 10
+          end
+          object PanelImage: TPanel
+            Left = -3
+            Height = 0
+            Top = 504
+            Width = 344
+            TabOrder = 11
+          end
         end
       end
       object TabSheetCamera: TTabSheet
         Caption = 'Camera'
-        ClientHeight = 616
+        ClientHeight = 628
         ClientWidth = 340
         object Panel4: TPanel
           Left = 0
-          Height = 616
+          Height = 628
           Top = 0
           Width = 340
           Align = alClient
-          ClientHeight = 616
+          ClientHeight = 628
           ClientWidth = 340
           Color = clMenu
           ParentColor = False
@@ -668,16 +690,16 @@ object f_internalguider: Tf_internalguider
       end
       object TabSheetOptions: TTabSheet
         Caption = 'Options'
-        ClientHeight = 616
+        ClientHeight = 628
         ClientWidth = 340
         object Panel5: TPanel
           Left = 0
-          Height = 616
+          Height = 628
           Top = 0
           Width = 340
           Align = alClient
           BevelOuter = bvNone
-          ClientHeight = 616
+          ClientHeight = 628
           ClientWidth = 340
           Color = clMenu
           ParentColor = False
@@ -915,12 +937,12 @@ object f_internalguider: Tf_internalguider
           end
           object GroupBox3: TGroupBox
             Left = 0
-            Height = 186
+            Height = 198
             Top = 430
             Width = 340
             Align = alClient
             Caption = 'Calibration options'
-            ClientHeight = 156
+            ClientHeight = 168
             ClientWidth = 336
             TabOrder = 1
             object measure_method2: TCheckBox
@@ -1018,16 +1040,16 @@ object f_internalguider: Tf_internalguider
       end
       object TabSheetSpectro: TTabSheet
         Caption = 'Spectro'
-        ClientHeight = 616
+        ClientHeight = 628
         ClientWidth = 340
         object PanelSpectro: TPanel
           Left = 0
-          Height = 586
+          Height = 598
           Top = 30
           Width = 340
           Align = alClient
           BevelOuter = bvNone
-          ClientHeight = 586
+          ClientHeight = 598
           ClientWidth = 340
           Color = clMenu
           ParentColor = False
@@ -1408,17 +1430,17 @@ object f_internalguider: Tf_internalguider
       end
       object TabSheetAdvanced: TTabSheet
         Caption = 'Advanced'
-        ClientHeight = 616
+        ClientHeight = 628
         ClientWidth = 340
         ParentFont = False
         object Panel2: TPanel
           Left = 0
-          Height = 616
+          Height = 628
           Top = 0
           Width = 340
           Align = alClient
           BevelOuter = bvNone
-          ClientHeight = 616
+          ClientHeight = 628
           ClientWidth = 340
           Color = clMenu
           ParentColor = False
@@ -1426,12 +1448,12 @@ object f_internalguider: Tf_internalguider
           TabOrder = 0
           object GroupBox2: TGroupBox
             Left = 0
-            Height = 616
+            Height = 628
             Top = 0
             Width = 340
             Align = alClient
             Caption = 'Calibration results:'
-            ClientHeight = 586
+            ClientHeight = 598
             ClientWidth = 336
             TabOrder = 0
             object Label5: TLabel

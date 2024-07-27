@@ -62,6 +62,7 @@ type
     CalDeclination: TEdit;
     CalIssue: TEdit;
     cbFGuideMultiStar: TCheckBox;
+    cbShowImage: TCheckBox;
     GuideSpeedRA: TFloatSpinEdit;
     GuideSpeedDEC: TFloatSpinEdit;
     ForceGuideSpeed: TCheckBox;
@@ -148,6 +149,7 @@ type
     MenuItem2: TMenuItem;
     pa1: TEdit;
     PageControl2: TPageControl;
+    PanelImage: TPanel;
     PanelGuideSpeed: TPanel;
     Panel4: TPanel;
     Panel5: TPanel;
@@ -227,6 +229,7 @@ type
     procedure cbGuideLockChange(Sender: TObject);
     procedure cbSpectroChange(Sender: TObject);
     procedure cbUseAstrometryChange(Sender: TObject);
+    procedure cbShowImageChange(Sender: TObject);
     procedure CheckBoxBacklashChange(Sender: TObject);
     procedure CheckBoxTrackSolar1Change(Sender: TObject);
     procedure CoolerClick(Sender: TObject);
@@ -244,6 +247,7 @@ type
     procedure minHFD1Change(Sender: TObject);
     procedure minSNR1Change(Sender: TObject);
     procedure pa1Change(Sender: TObject);
+    procedure PageControl1Change(Sender: TObject);
     procedure pier_side1Change(Sender: TObject);
     procedure pixelsize1Change(Sender: TObject);
     procedure pulsegainEast1Change(Sender: TObject);
@@ -260,7 +264,7 @@ type
     { private declarations }
     thescale : double;
     FonStart, FonStop, FonCalibrate, FonCalibrateBacklash, FonLoop, FonRedraw,FonSpectroGuideChange: TNotifyEvent;
-    FonSetTemperature,FonSetCooler, FonCaptureDark, FonLoadDark, FonClearDark,FonDarkInfo: TNotifyEvent;
+    FonSetTemperature,FonSetCooler, FonCaptureDark, FonLoadDark, FonClearDark,FonDarkInfo, FonShowImage: TNotifyEvent;
     FonParameterChange: TNotifyStr;
     cur_minHFD,cur_minSNR,cur_Exposure,cur_vsolar,cur_vpasolar : double;
     cur_RAgain,cur_RA_hysteresis,cur_DECgain,cur_DEC_hysteresis,cur_LongestPulse,cur_shortestPulse: integer;
@@ -393,6 +397,7 @@ type
     property onParameterChange: TNotifyStr read FonParameterChange write FonParameterChange;
     property onSetTemperature: TNotifyEvent read FonSetTemperature write FonSetTemperature;
     property onSetCooler: TNotifyEvent read FonSetCooler write FonSetCooler;
+    property onShowImage: TNotifyEvent read FonShowImage write FonShowImage;
     property RA_hysteresis: integer read GetRA_hysteresis write SetRA_hysteresis;
     property DEC_hysteresis: integer read GetDEC_hysteresis write SetDEC_hysteresis;
     property RAgain: integer read GetRAgain write SetRAgain;
@@ -894,6 +899,11 @@ begin
   label39.Enabled:=cbUseAstrometry.Checked;
 end;
 
+procedure Tf_internalguider.cbShowImageChange(Sender: TObject);
+begin
+  if assigned(FonShowImage) then FonShowImage(self);
+end;
+
 procedure Tf_internalguider.CheckBoxBacklashChange(Sender: TObject);
 begin
   Backlash.Enabled:=CheckBoxBacklash.Checked;
@@ -952,6 +962,14 @@ procedure Tf_internalguider.pa1Change(Sender: TObject);
 begin
   if (cur_pa1<>pa1.Text) and Assigned(FonParameterChange) then FonParameterChange('Camera angle = '+pa1.Text);
   cur_pa1:=pa1.Text;
+end;
+
+procedure Tf_internalguider.PageControl1Change(Sender: TObject);
+begin
+  if PageControl1.ActivePageIndex=1 then
+    PanelImage.Parent:=Panel4  // page camera
+  else
+    PanelImage.Parent:=Panel3; // page guider
 end;
 
 procedure Tf_internalguider.pier_side1Change(Sender: TObject);
