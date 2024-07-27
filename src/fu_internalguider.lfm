@@ -330,6 +330,7 @@ object f_internalguider: Tf_internalguider
             Height = 0
             Top = 504
             Width = 344
+            Anchors = [akTop, akLeft, akRight]
             TabOrder = 11
           end
         end
