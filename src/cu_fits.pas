@@ -3965,14 +3965,26 @@ begin
      x:= (j-wd)*c + (i-hd)*s;
      y:= -(j-wd)*s + (i-hd)*c;
      // offset
-     ix:=wd+round(x+dx);
-     iy:=hd+round(y+dy);
-     for k:=0 to n_plane-1 do begin
-       if (ix>0)and(ix<FFitsInfo.naxis1)and(iy>0)and(iy<FFitsInfo.naxis2) then begin
-         imgshift.Fimage[k,i,j]:=Fimage[k,iy,ix];
+     x:=wd+x+dx;
+     y:=hd+y+dy;
+     if n_plane=1 then begin
+       if (x>0)and(x<FFitsInfo.naxis1)and(y>0)and(y<FFitsInfo.naxis2) then begin
+         imgshift.Fimage[0,i,j]:=value_subpixel(x,y);
        end
        else begin
-        imgshift.Fimage[k,i,j]:=0;
+        imgshift.Fimage[0,i,j]:=0;
+       end;
+     end
+     else begin
+       ix:=round(x);
+       iy:=round(y);
+       for k:=0 to n_plane-1 do begin
+         if (ix>0)and(ix<FFitsInfo.naxis1)and(iy>0)and(iy<FFitsInfo.naxis2) then begin
+           imgshift.Fimage[k,i,j]:=Fimage[k,iy,ix];
+         end
+         else begin
+          imgshift.Fimage[k,i,j]:=0;
+         end;
        end;
      end;
     end;

@@ -315,7 +315,8 @@ begin
     Assigned(FonEndAstrometry)
     then
        FonEndAstrometry(0)
-    else if (Fterminatecmd=nil)
+    else if (Fterminatecmd=nil) and
+    Assigned(FonEndAstrometry)
     then
        FonEndAstrometry(4);
  if Assigned(Fterminatecmd) then Fterminatecmd(self);

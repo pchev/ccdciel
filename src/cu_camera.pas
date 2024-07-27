@@ -529,12 +529,13 @@ end;
 
 procedure T_camera.NewImage;
 var f,fs:TFits;
-    xi,yi,xc,yc,ri: integer;
-    xs,ys,xn,yn,hfd,fwhm,vmax,snr,bg,bgdev,flux,rot,scale,ra,de,s,c,dx,dy : double;
-    alok,savebayer: boolean;
+    n,xi,yi,xc,yc,ri: integer;
+    xs,ys,xn,yn,hfd,fwhm,vmax,snr,bg,bgdev,flux,rot,scale,ra,de : double;
+    stackok,alok,savebayer: boolean;
     mem: TMemoryStream;
     objectstr,fn: string;
     ft:TFrameType;
+    wcs: TcdcWCScoord;
 const datefmt = 'yyyy"-"mm"-"dd"T"hh"-"nn"-"ss';
 begin
 {$ifdef debug_raw}writeln(FormatDateTime(dateiso,Now)+blank+'NewImage');{$endif}
@@ -585,17 +586,24 @@ if FAddFrames then begin  // stack preview frames
      f.Bitpix8to16;
   // check frame is compatible
   if FFits.SameFormat(f) then begin
+     stackok:=true;
      if FStackAlign then begin
         // align frame on ref star or center
         alok:=false;
         if FStackRotation then begin
           alok:=Solve(f,ra,de,rot,scale);
-          sincos(deg2rad*rot,s,c);
-          dx:=(FStackAlignX-ra)*15*3600/scale;
-          dy:=(-FStackAlignY+de)*3600/scale;
-          xs:= dx*c + dy*s;
-          ys:= -dx*s + dy*c;
           rot:=deg2rad*(rot-FStackAlignRot);
+          wcs.ra:=FStackAlignX*15;
+          wcs.dec:=FStackAlignY;
+          n:=cdcwcs_sky2xy(@wcs,wcsfits);
+          if n=0 then begin
+            xn:=wcs.x;
+            yn:=wcs.y;
+            xs:=xn-(0.5+f.HeaderInfo.naxis1/2);
+            ys:=(0.5+f.HeaderInfo.naxis2/2)-yn;
+          end
+          else
+            alok:=false;
         end
         else begin
           rot:=0;
@@ -615,16 +623,24 @@ if FAddFrames then begin  // stack preview frames
         end;
         if alok then begin
           f.Shift(xs,ys,rot);
+          stackok:=true;
         end
-        else
+        else begin
+          stackok:=false;
           msg(rsAlignmentSta,0);
+        end;
      end;
-     inc(FStackCount);
-     case FStackOperation of
-      0 : FFits.Math(f,moAdd);                       // add frame
-      1 : FFits.Math(f,moRunMean,false,FStackCount); // mean of frames
+     if stackok then begin
+       inc(FStackCount);
+       case FStackOperation of
+        0 : FFits.Math(f,moAdd);                       // add frame
+        1 : FFits.Math(f,moRunMean,false,FStackCount); // mean of frames
+       end;
+       msg(Format('%d frame stacked',[FStackCount]));
+     end
+     else begin
+       msg('frame ignored');
      end;
-     msg(Format('%d frame stacked',[FStackCount]));
   end
   else begin
      FStackExpStart:=FormatDateTime(dateiso,Ftimestart);
@@ -1003,7 +1019,7 @@ begin
       0: f.Header.Insert(i,'STACKOP','ADD','Stacking operation');
       1: f.Header.Insert(i,'STACKOP','MEAN','Stacking operation');
     end;
-    if FStackAlign then f.Header.Insert(i,'STACKALN',FormatFloat(f0,FStackAlignX)+'/'+FormatFloat(f0,hnaxis2-FStackAlignY),'Alignment star x/y position');
+    if FStackAlign and (not FStackRotation) then f.Header.Insert(i,'STACKALN',FormatFloat(f0,FStackAlignX)+'/'+FormatFloat(f0,hnaxis2-FStackAlignY),'Alignment star x/y position');
   end;
   if cgain<>NullInt then f.Header.Insert(i,'GAIN',cgain,'Camera gain setting in manufacturer units');
   if siso<>'' then f.Header.Insert(i,'GAIN',siso,'Camera ISO');
