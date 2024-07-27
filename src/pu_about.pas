@@ -81,7 +81,8 @@ begin
   aboutmsg:=aboutmsg+blank+compile_version+crlf+crlf;
   aboutmsg:=aboutmsg+'Credits:'+crlf;
   aboutmsg:=aboutmsg+tab+'Patrick Chevalley'+crlf;
-  aboutmsg:=aboutmsg+tab+'Han Kleijn'+crlf+crlf;
+  aboutmsg:=aboutmsg+tab+'Han Kleijn'+crlf;
+  aboutmsg:=aboutmsg+tab+'Chris Konvalin'+crlf+crlf;
   aboutmsg:=aboutmsg+'Copyright (C) '+cdate+' Patrick Chevalley pch@ap-i.net'+crlf;
   aboutmsg:=aboutmsg+'http://www.ap-i.net'+crlf;
   aboutmsg:=aboutmsg+'This program is free software; you can redistribute it and/or'+crlf;
