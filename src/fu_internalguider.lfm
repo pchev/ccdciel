@@ -314,15 +314,15 @@ object f_internalguider: Tf_internalguider
             OnClick = ButtonLoopClick
             TabOrder = 9
           end
-          object cbShowImage: TCheckBox
+          object cbEnlargeImage: TCheckBox
             AnchorSideTop.Control = ButtonCalibrate
             AnchorSideTop.Side = asrCenter
             Left = 128
             Height = 22
             Top = 473
-            Width = 172
-            Caption = 'Show guide image here'
-            OnChange = cbShowImageChange
+            Width = 154
+            Caption = 'Enlarge guide image'
+            OnChange = cbEnlargeImageChange
             TabOrder = 10
           end
           object PanelImage: TPanel

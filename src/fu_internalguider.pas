@@ -62,7 +62,7 @@ type
     CalDeclination: TEdit;
     CalIssue: TEdit;
     cbFGuideMultiStar: TCheckBox;
-    cbShowImage: TCheckBox;
+    cbEnlargeImage: TCheckBox;
     GuideSpeedRA: TFloatSpinEdit;
     GuideSpeedDEC: TFloatSpinEdit;
     ForceGuideSpeed: TCheckBox;
@@ -229,7 +229,7 @@ type
     procedure cbGuideLockChange(Sender: TObject);
     procedure cbSpectroChange(Sender: TObject);
     procedure cbUseAstrometryChange(Sender: TObject);
-    procedure cbShowImageChange(Sender: TObject);
+    procedure cbEnlargeImageChange(Sender: TObject);
     procedure CheckBoxBacklashChange(Sender: TObject);
     procedure CheckBoxTrackSolar1Change(Sender: TObject);
     procedure CoolerClick(Sender: TObject);
@@ -899,7 +899,7 @@ begin
   label39.Enabled:=cbUseAstrometry.Checked;
 end;
 
-procedure Tf_internalguider.cbShowImageChange(Sender: TObject);
+procedure Tf_internalguider.cbEnlargeImageChange(Sender: TObject);
 begin
   if assigned(FonShowImage) then FonShowImage(self);
 end;
