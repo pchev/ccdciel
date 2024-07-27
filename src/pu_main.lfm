@@ -32,25 +32,6 @@ object f_main: Tf_main
     ClientWidth = 1018
     ParentFont = False
     TabOrder = 0
-    object PanelLeft: TPanel
-      Left = 0
-      Height = 884
-      Top = 4
-      Width = 4
-      Align = alLeft
-      AutoSize = True
-      BevelOuter = bvNone
-      ChildSizing.TopBottomSpacing = 3
-      ChildSizing.VerticalSpacing = 3
-      ChildSizing.Layout = cclTopToBottomThenLeftToRight
-      ChildSizing.ControlsPerLine = 99
-      Constraints.MinWidth = 4
-      ParentColor = False
-      ParentFont = False
-      TabOrder = 0
-      OnDragDrop = PanelDragDrop
-      OnDragOver = PanelDragOver
-    end
     object PanelTop: TPanel
       Left = 0
       Height = 4
@@ -67,24 +48,76 @@ object f_main: Tf_main
       Constraints.MinHeight = 4
       ParentColor = False
       ParentFont = False
-      TabOrder = 1
+      TabOrder = 0
       OnDragDrop = PanelDragDrop
       OnDragOver = PanelDragOver
     end
-    object PanelCenter: TPanel
+    object PanelLeftBase: TPanel
+      Left = 0
+      Height = 884
+      Top = 4
+      Width = 4
+      Align = alLeft
+      BevelOuter = bvNone
+      ChildSizing.TopBottomSpacing = 3
+      ChildSizing.VerticalSpacing = 3
+      ChildSizing.Layout = cclTopToBottomThenLeftToRight
+      ChildSizing.ControlsPerLine = 99
+      ClientHeight = 884
+      ClientWidth = 4
+      Constraints.MinWidth = 4
+      ParentColor = False
+      ParentFont = False
+      TabOrder = 3
+      OnDragDrop = PanelDragDrop
+      OnDragOver = PanelDragOver
+      object ScrollBox1: TScrollBox
+        Left = 0
+        Height = 878
+        Top = 3
+        Width = 4
+        HorzScrollBar.Page = 1
+        VertScrollBar.Page = 1
+        Align = alClient
+        BorderStyle = bsNone
+        ClientHeight = 878
+        ClientWidth = 4
+        TabOrder = 0
+        object PanelLeft: TPanel
+          Left = 0
+          Height = 878
+          Top = 0
+          Width = 4
+          Align = alClient
+          AutoSize = True
+          BevelOuter = bvNone
+          TabOrder = 0
+          OnDragDrop = PanelDragDrop
+          OnDragOver = PanelDragOver
+        end
+      end
+    end
+    object Splitter4: TSplitter
       Left = 4
       Height = 884
       Top = 4
-      Width = 1014
+      Width = 5
+      OnMoved = Splitter4Moved
+    end
+    object PanelCenter: TPanel
+      Left = 9
+      Height = 884
+      Top = 4
+      Width = 1009
       Align = alClient
       BevelOuter = bvNone
       ClientHeight = 884
-      ClientWidth = 1014
+      ClientWidth = 1009
       Color = 3149070
       ParentBackground = False
       ParentColor = False
       ParentFont = False
-      TabOrder = 2
+      TabOrder = 1
       OnResize = PanelCenterResize
       object PanelMsgTabs: TPanel
         Left = 461
@@ -125,10 +158,10 @@ object f_main: Tf_main
         Left = 0
         Height = 199
         Top = 0
-        Width = 1014
+        Width = 1009
         Align = alTop
         ClientHeight = 199
-        ClientWidth = 1014
+        ClientWidth = 1009
         ParentBackground = False
         TabOrder = 1
         object FinderImage: TPanel
@@ -147,7 +180,7 @@ object f_main: Tf_main
           Left = 276
           Height = 197
           Top = 1
-          Width = 737
+          Width = 732
           Align = alClient
           Caption = 'GuideImage'
           Color = 3149070
@@ -168,7 +201,7 @@ object f_main: Tf_main
         Left = 0
         Height = 3
         Top = 199
-        Width = 1014
+        Width = 1009
         Align = alTop
         DoubleBuffered = False
         OnMoved = Splitter2Moved
@@ -182,17 +215,17 @@ object f_main: Tf_main
         Left = 0
         Height = 682
         Top = 202
-        Width = 1014
+        Width = 1009
         Align = alClient
         ClientHeight = 682
-        ClientWidth = 1014
+        ClientWidth = 1009
         ParentBackground = False
         TabOrder = 3
         object mainimage: TPanel
           Left = 1
           Height = 680
           Top = 1
-          Width = 1012
+          Width = 1007
           Align = alClient
           Caption = 'mainimage'
           Color = 3149070
@@ -218,7 +251,7 @@ object f_main: Tf_main
       Constraints.MinHeight = 4
       ParentColor = False
       ParentFont = False
-      TabOrder = 3
+      TabOrder = 2
       OnDragDrop = PanelDragDrop
       OnDragOver = PanelDragOver
     end

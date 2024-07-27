@@ -170,9 +170,11 @@ type
     FinderImage: TPanel;
     GuideImage: TPanel;
     mainimage: TPanel;
+    PanelLeft: TPanel;
     PanelImage1: TPanel;
     PanelImage2: TPanel;
     PanelRight7: TPanel;
+    ScrollBox1: TScrollBox;
     ScrollBox2: TScrollBox;
     ScrollBox3: TScrollBox;
     ScrollBox4: TScrollBox;
@@ -256,6 +258,7 @@ type
     Splitter1: TSplitter;
     Splitter2: TSplitter;
     Splitter3: TSplitter;
+    Splitter4: TSplitter;
     TabMsgLevel: TTabControl;
     PageInternalGuider: TTabSheet;
     GuideCameraConnectTimer: TTimer;
@@ -382,7 +385,7 @@ type
     Panel1: TPanel;
     PanelRight5: TPanel;
     PanelCenter: TPanel;
-    PanelLeft: TPanel;
+    PanelLeftBase: TPanel;
     PanelRight1: TPanel;
     PanelRight2: TPanel;
     PanelRight3: TPanel;
@@ -591,6 +594,7 @@ type
     procedure Splitter1Moved(Sender: TObject);
     procedure Splitter2Moved(Sender: TObject);
     procedure Splitter3Moved(Sender: TObject);
+    procedure Splitter4Moved(Sender: TObject);
     procedure StartSequenceTimerTimer(Sender: TObject);
     procedure StartupTimerTimer(Sender: TObject);
     procedure StatusBar1DrawPanel(StatusBar: TStatusBar; Panel: TStatusPanel; const Rect: TRect);
@@ -1417,7 +1421,7 @@ begin
     rl:=DoScaleX(5);
   PanelTop.Constraints.MinHeight:=rl;
   PanelBottom.Constraints.MinHeight:=rl;
-  PanelLeft.Constraints.MinWidth:=rl;
+  PanelLeftBase.Constraints.MinWidth:=rl;
 end;
 
 Procedure UppercaseFilter(opendialog:TOpenDialog);
@@ -1746,6 +1750,7 @@ begin
   if screenconfig.GetValue('/Window/Maximized',false) then WindowState := wsMaximized;
 
   PanelRight.Width:=screenconfig.GetValue('/Window/PanelRight',PanelRight.Width);
+  PanelLeftBase.Width:=screenconfig.GetValue('/Window/PanelLeft',DoScaleX(250));
 
   f_msg:=Tf_msg.Create(self);
   f_msg.onShowTabs:=@ShowMsgTabs;
@@ -3320,6 +3325,7 @@ if sender is TMenuItem then begin
   n:=TMenuItem(sender).Tag;
   if n=1 then begin
     // all in the right panel
+    PanelLeftBase.Width:=0;
     SetTool(f_visu,'',PanelBottom,0,MenuViewHistogram,MenuHistogram,true);
     SetTool(f_msg,'',PanelBottom,f_visu.left+1,MenuViewMessages,nil,true);
 
@@ -3356,6 +3362,7 @@ if sender is TMenuItem then begin
   end
   else if n=2 then begin
     // use left and right panel
+   PanelLeftBase.Width:=DoScaleX(250);
    SetTool(f_visu,'',PanelBottom,0,MenuViewHistogram,MenuHistogram,true);
    SetTool(f_msg,'',PanelBottom,f_visu.left+1,MenuViewMessages,nil,true);
 
@@ -5546,6 +5553,7 @@ begin
  screenconfig.SetValue('/Window/Width',Width);
  screenconfig.SetValue('/Window/Height',Height);
  screenconfig.SetValue('/Window/PanelRight',PanelRight.Width);
+ screenconfig.SetValue('/Window/PanelLeft',PanelLeftBase.Width);
 end;
 
 procedure Tf_main.SaveSettings;
@@ -10511,6 +10519,8 @@ if sender is TPanel then begin
      end else begin
         TFrame(TLabel(Source).Parent).Align:=alTop;
      end;
+     if (sender=PanelLeft)and(TFrame(TLabel(Source).Parent)=f_internalguider) then
+       PanelLeftBase.Width:=DoScaleX(350);
     end
     else if source is TMemo then begin
       if TFrame(TPanel(TMemo(Source).Parent).Parent).tag>0 then toolmenu:=TMenuItem(TFrame(TPanel(TMemo(Source).Parent).Parent).tag);
@@ -14653,6 +14663,11 @@ begin
 end;
 
 procedure Tf_main.Splitter1Moved(Sender: TObject);
+begin
+  FormResize(Sender);
+end;
+
+procedure Tf_main.Splitter4Moved(Sender: TObject);
 begin
   FormResize(Sender);
 end;
