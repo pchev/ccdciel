@@ -2279,6 +2279,7 @@ var t: TTarget;
 begin
   InitTargetError:='';
   SkipTarget:=false;
+  astrometrypointing:=false;
   result:=false;
   if not FRunning then exit;
   try
@@ -2451,12 +2452,6 @@ begin
         if (t.pa<>NullCoord)and(Frotator.Status=devConnected) then begin
           Frotator.Angle:=t.pa;
         end;
-        // set autofocus on temperature change
-        Fcapture.CheckBoxFocus.Checked:=t.autofocustemp;
-
-        // enable/disable HFM - if enabled, monitor HFD %change and trigger
-        // an autofocus if it exceeds the HFM threshold (preferences/sequence)
-        Fcapture.CheckBoxFocusHFD.Checked:=t.autofocushfd;
 
         // Set internal guider solar object motion
         if (Autoguider<>nil)and(Autoguider.AutoguiderType=agINTERNAL) then begin
@@ -2506,6 +2501,7 @@ begin
         if not FRunning then exit;
         if WeatherCancelRestart then exit;
       end;
+
       // check if the plans contain only calibration
       isCalibrationTarget:=not astrometrypointing; // astrometry done, do not stop tracking
       if (p<>nil) then begin
@@ -2520,6 +2516,14 @@ begin
         else begin
           isCalibrationTarget:=false; // no exposure here, this only position target, do not stop tracking
         end;
+      end;
+      if not isCalibrationTarget then begin
+        // set autofocus on temperature change
+         Fcapture.CheckBoxFocus.Checked:=t.autofocustemp;
+
+         // enable/disable HFM - if enabled, monitor HFD %change and trigger
+         // an autofocus if it exceeds the HFM threshold (preferences/sequence)
+         Fcapture.CheckBoxFocusHFD.Checked:=t.autofocushfd;
       end;
       // start mount tracking
       if isCalibrationTarget then begin
