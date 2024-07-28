@@ -204,13 +204,13 @@ begin
   Frunning:=not Frunning;
   if Frunning then begin
      if StackPreview.Checked and Assigned(FonResetStack) then FonResetStack(self);
+     FLoop:=True;
      EarlyNextExposure:=ConfigExpEarlyStart and (Exposure>1);
      if Assigned(FonStartExposure) then FonStartExposure(self);
      if Frunning then begin
         CancelAutofocus:=false;
         led.Brush.Color:=clLime;
         BtnLoop.Caption:=rsStopLoop;
-        FLoop:=True;
         Msg(rsStartPreview,2);
      end else begin
         FLoop:=False;
