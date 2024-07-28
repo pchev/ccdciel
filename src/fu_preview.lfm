@@ -12,14 +12,14 @@ object f_preview: Tf_preview
   DesignTop = -2
   object Panel1: TPanel
     Left = 0
-    Height = 279
-    Top = 45
+    Height = 260
+    Top = 64
     Width = 194
     Align = alClient
     AutoSize = True
     ChildSizing.Layout = cclTopToBottomThenLeftToRight
     ChildSizing.ControlsPerLine = 99
-    ClientHeight = 279
+    ClientHeight = 260
     ClientWidth = 194
     ParentFont = False
     TabOrder = 0
@@ -321,56 +321,49 @@ object f_preview: Tf_preview
   end
   object Panel6: TPanel
     Left = 0
-    Height = 25
+    Height = 44
     Top = 20
     Width = 194
     Align = alTop
     BevelOuter = bvNone
-    ClientHeight = 25
+    ChildSizing.Layout = cclLeftToRightThenTopToBottom
+    ChildSizing.ControlsPerLine = 2
+    ClientHeight = 44
     ClientWidth = 194
     TabOrder = 1
-    object Label6: TLabel
-      Left = 8
-      Height = 25
+    object CheckBoxAstrometry: TCheckBox
+      Left = 0
+      Height = 22
       Top = 0
-      Width = 49
-      Align = alLeft
-      BorderSpacing.Left = 8
-      Caption = 'Options'
-      Font.Height = 13
-      Layout = tlCenter
-      ParentColor = False
-      ParentFont = False
-      ShowAccelChar = False
-      OnMouseDown = Label6MouseDown
-      OnMouseEnter = Label6MouseEnter
-      OnMouseLeave = Label6MouseLeave
-    end
-  end
-  object PopupMenu1: TPopupMenu
-    Left = 56
-    Top = 224
-    object CheckBoxAstrometry: TMenuItem
-      AutoCheck = True
+      Width = 97
       Caption = 'Astrometry'
-      ShowAlwaysCheckable = True
       OnClick = CheckBoxAstrometryClick
+      TabOrder = 0
     end
-    object image_inspection1: TMenuItem
-      AutoCheck = True
-      Caption = 'Image inspection'
-      ShowAlwaysCheckable = True
+    object image_inspection1: TCheckBox
+      Left = 97
+      Height = 22
+      Top = 0
+      Width = 96
+      Caption = 'Inspection'
+      TabOrder = 1
     end
-    object StackPreview: TMenuItem
-      AutoCheck = True
+    object StackPreview: TCheckBox
+      Left = 0
+      Height = 22
+      Top = 22
+      Width = 97
       Caption = 'Stack'
-      ShowAlwaysCheckable = True
       OnClick = StackPreviewClick
+      TabOrder = 2
     end
-    object PreprocessPreview: TMenuItem
-      AutoCheck = True
-      Caption = 'Preprocessing'
-      ShowAlwaysCheckable = True
+    object PreprocessPreview: TCheckBox
+      Left = 97
+      Height = 22
+      Top = 22
+      Width = 96
+      Caption = 'Preprocess'
+      TabOrder = 3
     end
   end
 end

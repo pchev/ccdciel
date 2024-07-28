@@ -35,18 +35,17 @@ type
   Tf_preview = class(TFrame)
     BtnPreview: TButton;
     BtnLoop: TButton;
+    CheckBoxAstrometry: TCheckBox;
+    image_inspection1: TCheckBox;
+    StackPreview: TCheckBox;
+    PreprocessPreview: TCheckBox;
     Fnumber: TComboBox;
     ISObox: TComboBox;
     Label3: TLabel;
-    Label6: TLabel;
     LabelAstrometry: TLabel;
     LabelOffset: TLabel;
     LabelGain: TLabel;
-    CheckBoxAstrometry: TMenuItem;
-    image_inspection1: TMenuItem;
-    PreprocessPreview: TMenuItem;
     Panel6: TPanel;
-    StackPreview: TMenuItem;
     Panel5: TPanel;
     Panel7: TPanel;
     PanelOffset: TPanel;
@@ -54,7 +53,6 @@ type
     PanelGain: TPanel;
     GainEdit: TSpinEdit;
     OffsetEdit: TSpinEdit;
-    PopupMenu1: TPopupMenu;
     ExpTime: TComboBox;
     Binning: TComboBox;
     Label1: TLabel;
@@ -69,9 +67,6 @@ type
     procedure BtnPreviewClick(Sender: TObject);
     procedure CheckBoxAstrometryClick(Sender: TObject);
     procedure ExpTimeKeyPress(Sender: TObject; var Key: char);
-    procedure Label6MouseDown(Sender: TObject; Button: TMouseButton; Shift: TShiftState; X, Y: Integer);
-    procedure Label6MouseEnter(Sender: TObject);
-    procedure Label6MouseLeave(Sender: TObject);
     procedure StackPreviewClick(Sender: TObject);
   private
     { private declarations }
@@ -137,7 +132,6 @@ end;
 procedure Tf_preview.SetLang;
 begin
   Title.Caption:=rsPreview;
-  Label6.Caption:=rsOptions2;
   Label1.Caption:=rsExposure;
   LabelGain.Caption:=rsGain;
   Label2.Caption:=rsBinning;
@@ -198,27 +192,6 @@ begin
   inherited KeyPress(Key);
   if (Key in ['.',',']) then Key := DefaultFormatSettings.Decimalseparator;
   if not (Key in ['0'..'9', DefaultFormatSettings.DecimalSeparator,'+',#8,#9,^C,^X,^V,^Z]) then Key := #0;
-end;
-
-procedure Tf_preview.Label6MouseDown(Sender: TObject; Button: TMouseButton; Shift: TShiftState; X, Y: Integer);
-var p: TPoint;
-begin
-  p.x:=label6.Left;
-  p.y:=label6.Top+label6.Height;
-  p:=panel6.ClientToScreen(p);
-  popupmenu1.PopUp(p.x,p.y);
-end;
-
-procedure Tf_preview.Label6MouseEnter(Sender: TObject);
-begin
-  label6.Color:=clHighlight;
-  label6.Font.Color:=clHighlightText;
-end;
-
-procedure Tf_preview.Label6MouseLeave(Sender: TObject);
-begin
-  label6.Color:=clNone;
-  label6.Font.Color:=clDefault;
 end;
 
 procedure Tf_preview.StackPreviewClick(Sender: TObject);
