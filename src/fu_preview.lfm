@@ -126,7 +126,6 @@ object f_preview: Tf_preview
         Height = 32
         Top = 32
         Width = 190
-        AutoSize = True
         BevelOuter = bvNone
         ClientHeight = 32
         ClientWidth = 190
@@ -134,7 +133,7 @@ object f_preview: Tf_preview
         object LabelOffset: TLabel
           AnchorSideTop.Control = OffsetEdit
           AnchorSideTop.Side = asrCenter
-          Left = 0
+          Left = 6
           Height = 18
           Top = 7
           Width = 38

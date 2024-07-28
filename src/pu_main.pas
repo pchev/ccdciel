@@ -10709,7 +10709,7 @@ if (camera.Status=devConnected) and ((not f_capture.Running) or autofocusing) an
   if camera.FrameType<>LIGHT then camera.FrameType:=LIGHT;
   camera.ObjectName:=rsPreview;
   camera.StackNum:=-1; //unlimited
-  camera.AddFrames:=f_preview.StackPreview.Checked;
+  camera.AddFrames:=f_preview.StackPreview.Checked and f_preview.Loop;
   if camera.AddFrames then begin
      camera.SaveFrames:=SaveStack;
      camera.AlignFrames:=StackAlign;
