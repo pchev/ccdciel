@@ -143,6 +143,7 @@ resourcestring
   rsHFDReset = 'HFD Focus Monitor: Reset. Clearing reference HFD and measurements.';
   rsHFDMeasuring = 'HFD Focus Monitor: Measuring. %d of %d HFD measurements completed.';
   rsHFDActive = 'HFD Focus Monitor: Active. Threshold: %s%%, Reference HFD: %s';
+  rsHFMTriggered = 'HFD Focus Monitor: Threshold: %s%%, Ref: %s, %s-Image Avg: %s, HFD Delta: %s%%';
   rsStopVcurveLe = 'Stop Vcurve learning';
   rsMeasurementH = 'Measurement %s hfd:%s peak:%s snr:%s';
   rsCannotDetect = 'Cannot detect star.';
