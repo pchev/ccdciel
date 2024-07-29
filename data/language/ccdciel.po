@@ -418,6 +418,22 @@ msgstr ""
 msgid "Focuser temperature: %s"
 msgstr ""
 
+#: u_translation:rshfdreset
+msgid "HFD Focus Monitor: Reset. Clearing reference HFD and measurements."
+msgstr ""
+
+#: u_translation:rshfdmeasuring
+msgid "HFD Focus Monitor: Measuring. %d of %d HFD measurements completed."
+msgstr ""
+
+#: u_translation:rshfdactive
+msgid "HFD Focus Monitor: Active. Threshold: %s%%, Reference HFD: %s"
+msgstr ""
+
+#: u_translation:rshfmtriggered
+msgid "HFD Focus Monitor: Threshold: %s%%, Ref: %s, %s-Image Avg: %s, HFD Delta: %s%%"
+msgstr ""
+
 #: u_translation:rsstopvcurvele
 msgid "Stop Vcurve learning"
 msgstr ""
@@ -3962,6 +3978,10 @@ msgstr ""
 msgid "Autofocus due in"
 msgstr ""
 
+#: u_translation:rschangeinhfd
+msgid "% change in HFD"
+msgstr ""
+
 #: u_translation:rsor
 msgid "or"
 msgstr ""
@@ -5462,6 +5482,10 @@ msgstr ""
 msgid "Autofocus after temperature change"
 msgstr ""
 
+#: u_translation:rsautofocushfd2
+msgid "Autofocus after % change HFD"
+msgstr ""
+
 #: u_translation:rsbacklashcali
 msgid "Backlash calibration"
 msgstr ""
@@ -5828,5 +5852,9 @@ msgstr ""
 
 #: u_translation:rsautofocuswil
 msgid "Autofocus will run before the next exposure"
+msgstr ""
+
+#: u_translation:rsrunautofocus2
+msgid "Run auto-focus if change is more than % HFD"
 msgstr ""
 

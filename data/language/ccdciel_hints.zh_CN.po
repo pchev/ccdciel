@@ -6,15 +6,15 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ccdciel\n"
 "Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
-"POT-Creation-Date: 2024-06-05 06:51+0000\n"
+"POT-Creation-Date: 2024-07-29 18:13+0000\n"
 "PO-Revision-Date: 2023-05-31 10:28+0000\n"
 "Last-Translator: Zachary Wu <Unknown>\n"
 "Language-Team: Chinese (Simplified) <zh_CN@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2024-06-05 07:08+0000\n"
-"X-Generator: Launchpad (build 4d1350fd3710dfe10d207fa9961e224cc481dca3)\n"
+"X-Launchpad-Export-Date: 2024-07-29 18:20+0000\n"
+"X-Generator: Launchpad (build 0f7b58d0a728e5e8f34556869262ccfa55217529)\n"
 
 #: u_hints.rsactivateback
 #, object-pascal-format
@@ -50,6 +50,10 @@ msgstr "工作文件的临时目录。确保它只包含ASCII字符并且没​�
 #: u_hints.rsautofocusatt
 msgid "Autofocus at the start of this step"
 msgstr "此步骤开始时自动对焦"
+
+#: u_hints.rsautofocusifhfd
+msgid "Autofocus if the HFD % change is greater than the configured value"
+msgstr ""
 
 #: u_hints.rsautofocusift
 msgid "Autofocus if the temperature change is greater than the configured value"
@@ -305,6 +309,10 @@ msgstr "设置调焦器绝对位置"
 #: u_hints.rssetheretheac
 msgid "Set here the action to take after the sequence is terminated"
 msgstr "在此处设置序列终止后要执行的操作"
+
+#: u_hints.rssetthehfd
+msgid "Set the HFD % change threshold in the Preferences. Measurements must also be enabled."
+msgstr ""
 
 #: u_hints.rssetthestartt
 msgid "Set the start time at astronomical dusk, recomputed for the date you run the sequence."

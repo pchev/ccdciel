@@ -1567,6 +1567,7 @@ resourcestring
   rsTroposphereR = 'Troposphere rate (K/km)';
   rsGetValuesFro = 'Get values from the weather station';
   rsAutofocusWil = 'Autofocus will run before the next exposure';
+  rsRunAutoFocus2 = 'Run auto-focus if change is more than % HFD';
 
 implementation
 

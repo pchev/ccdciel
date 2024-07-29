@@ -330,6 +330,10 @@ msgstr ""
 msgid "Autofocus if the temperature change is greater than the configured value"
 msgstr ""
 
+#: u_hints:rsautofocusifhfd
+msgid "Autofocus if the HFD % change is greater than the configured value"
+msgstr ""
+
 #: u_hints:rseditthecurre
 msgid "Edit the current sequence"
 msgstr ""
@@ -528,6 +532,10 @@ msgstr ""
 
 #: u_hints:rssetthetemper
 msgid "Set the temperature threshold in the Preferences"
+msgstr ""
+
+#: u_hints:rssetthehfd
+msgid "Set the HFD % change threshold in the Preferences. Measurements must also be enabled."
 msgstr ""
 
 #: u_hints:rsthisoptionis

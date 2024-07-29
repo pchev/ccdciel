@@ -1185,6 +1185,7 @@ begin
   Label147.Caption:=rsGlobalAction;
   GroupBoxMeasurement.Caption:=rsMeasurementO;
   MeasureNewImage.Caption:=rsAutomaticHFD;
+  Label184.Caption:=rsRunAutoFocus2;
   GroupBox23.Caption:=rsRecenterSequ;
   CheckRecenterTarget.Caption:=rsRunAstrometr;
   Label130.Caption:=rsRecenterIfTh;

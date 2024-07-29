@@ -6,15 +6,15 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ccdciel\n"
 "Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
-"POT-Creation-Date: 2024-06-05 06:51+0000\n"
-"PO-Revision-Date: 2024-06-05 07:05+0000\n"
+"POT-Creation-Date: 2024-07-29 18:12+0000\n"
+"PO-Revision-Date: 2024-07-29 18:16+0000\n"
 "Last-Translator: Patrick Chevalley <Unknown>\n"
 "Language-Team: French <fr@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2024-06-05 07:08+0000\n"
-"X-Generator: Launchpad (build 4d1350fd3710dfe10d207fa9961e224cc481dca3)\n"
+"X-Launchpad-Export-Date: 2024-07-29 18:20+0000\n"
+"X-Generator: Launchpad (build 0f7b58d0a728e5e8f34556869262ccfa55217529)\n"
 
 #: u_translation.rs2d
 msgid "2D"
@@ -357,6 +357,10 @@ msgstr "Autofocus, déplacement vers l'extérieur de %s"
 #: u_translation.rsautofocusgra
 msgid "Autofocus graph"
 msgstr "Graphique de l'auto-focus"
+
+#: u_translation.rsautofocushfd2
+msgid "Autofocus after % change HFD"
+msgstr "Autofocus après un changement du % HFD"
 
 #: u_translation.rsautofocusloc
 msgid "Autofocus location"
@@ -916,6 +920,10 @@ msgstr "AD centre"
 #, object-pascal-format
 msgid "%s changed to %s"
 msgstr "%s changé à %s"
+
+#: u_translation.rschangeinhfd
+msgid "% change in HFD"
+msgstr "% de changement du HFD"
 
 #: u_translation.rschangelog
 msgid "Change log"
@@ -2261,6 +2269,25 @@ msgstr "Aide"
 #: u_translation.rshfd
 msgid "HFD"
 msgstr "HFD"
+
+#: u_translation.rshfdactive
+#, object-pascal-format
+msgid "HFD Focus Monitor: Active. Threshold: %s%%, Reference HFD: %s"
+msgstr "Moniteur de focalisation par HFD: Actif. Seuil: %s%%, HFD de référence: %s"
+
+#: u_translation.rshfdmeasuring
+#, object-pascal-format, fuzzy, badformat
+msgid "HFD Focus Monitor: Measuring. %d of %d HFD measurements completed."
+msgstr "Moniteur de focalisation par HFD: Mesure. Complété %s sur %s mesures du HFD."
+
+#: u_translation.rshfdreset
+msgid "HFD Focus Monitor: Reset. Clearing reference HFD and measurements."
+msgstr "Moniteur de focalisation par HFD: Réinitialisation. Effacement du HFD de référence et des mesures."
+
+#: u_translation.rshfmtriggered
+#, object-pascal-format
+msgid "HFD Focus Monitor: Threshold: %s%%, Ref: %s, %s-Image Avg: %s, HFD Delta: %s%%"
+msgstr "Moniteur de focalisation par HFD: Seuil: %s%%, Réf: %s, %s-Image Moy: %s, HFD Diff: %s%%"
 
 #: u_translation.rshighlightadu
 msgid "Highlight ADU"
@@ -4167,6 +4194,10 @@ msgstr "Exécuter l'astrométrie sur chaque image pour rechercher une dérive"
 #, object-pascal-format
 msgid "Auto-focus if temp. change by more than %s"
 msgstr "Auto-focus si changement de plus de %s"
+
+#: u_translation.rsrunautofocus2
+msgid "Run auto-focus if change is more than % HFD"
+msgstr "Faire l'autofocus si le HFD change de plus de %"
 
 #: u_translation.rsrunscript
 msgid "Run script"

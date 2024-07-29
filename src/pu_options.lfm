@@ -93,12 +93,12 @@ object f_option: Tf_option
       Height = 687
       Top = 0
       Width = 580
-      ActivePage = PagePref
+      ActivePage = PageSequence
       Align = alClient
       MultiLine = True
       ParentFont = False
       ShowTabs = False
-      TabIndex = 0
+      TabIndex = 17
       TabOrder = 1
       OnChanging = PageControl1Changing
       Options = [nboMultiLine]

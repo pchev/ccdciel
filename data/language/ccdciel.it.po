@@ -6,15 +6,15 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ccdciel\n"
 "Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
-"POT-Creation-Date: 2024-06-05 06:51+0000\n"
+"POT-Creation-Date: 2024-07-29 18:12+0000\n"
 "PO-Revision-Date: 2021-08-31 20:35+0000\n"
 "Last-Translator: Patrick Chevalley <Unknown>\n"
 "Language-Team: Italian <it@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2024-06-05 07:08+0000\n"
-"X-Generator: Launchpad (build 4d1350fd3710dfe10d207fa9961e224cc481dca3)\n"
+"X-Launchpad-Export-Date: 2024-07-29 18:20+0000\n"
+"X-Generator: Launchpad (build 0f7b58d0a728e5e8f34556869262ccfa55217529)\n"
 
 #: u_translation.rs2d
 msgid "2D"
@@ -356,6 +356,10 @@ msgstr ""
 
 #: u_translation.rsautofocusgra
 msgid "Autofocus graph"
+msgstr ""
+
+#: u_translation.rsautofocushfd2
+msgid "Autofocus after % change HFD"
 msgstr ""
 
 #: u_translation.rsautofocusloc
@@ -915,6 +919,10 @@ msgstr ""
 #: u_translation.rschangedto
 #, object-pascal-format
 msgid "%s changed to %s"
+msgstr ""
+
+#: u_translation.rschangeinhfd
+msgid "% change in HFD"
 msgstr ""
 
 #: u_translation.rschangelog
@@ -2260,6 +2268,25 @@ msgstr "Aiuto"
 
 #: u_translation.rshfd
 msgid "HFD"
+msgstr ""
+
+#: u_translation.rshfdactive
+#, object-pascal-format
+msgid "HFD Focus Monitor: Active. Threshold: %s%%, Reference HFD: %s"
+msgstr ""
+
+#: u_translation.rshfdmeasuring
+#, object-pascal-format
+msgid "HFD Focus Monitor: Measuring. %d of %d HFD measurements completed."
+msgstr ""
+
+#: u_translation.rshfdreset
+msgid "HFD Focus Monitor: Reset. Clearing reference HFD and measurements."
+msgstr ""
+
+#: u_translation.rshfmtriggered
+#, object-pascal-format
+msgid "HFD Focus Monitor: Threshold: %s%%, Ref: %s, %s-Image Avg: %s, HFD Delta: %s%%"
 msgstr ""
 
 #: u_translation.rshighlightadu
@@ -4166,6 +4193,10 @@ msgstr ""
 #: u_translation.rsrunautofocus
 #, object-pascal-format
 msgid "Auto-focus if temp. change by more than %s"
+msgstr ""
+
+#: u_translation.rsrunautofocus2
+msgid "Run auto-focus if change is more than % HFD"
 msgstr ""
 
 #: u_translation.rsrunscript

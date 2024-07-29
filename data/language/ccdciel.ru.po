@@ -6,15 +6,15 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ccdciel\n"
 "Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
-"POT-Creation-Date: 2024-06-05 06:51+0000\n"
-"PO-Revision-Date: 2024-04-22 17:46+0000\n"
+"POT-Creation-Date: 2024-07-29 18:12+0000\n"
+"PO-Revision-Date: 2024-06-08 20:30+0000\n"
 "Last-Translator: Sergey Tarantsov <tsn-ast@yandex.ru>\n"
 "Language-Team: Russian <ru@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2024-06-05 07:08+0000\n"
-"X-Generator: Launchpad (build 4d1350fd3710dfe10d207fa9961e224cc481dca3)\n"
+"X-Launchpad-Export-Date: 2024-07-29 18:20+0000\n"
+"X-Generator: Launchpad (build 0f7b58d0a728e5e8f34556869262ccfa55217529)\n"
 
 #: u_translation.rs2d
 msgid "2D"
@@ -259,7 +259,7 @@ msgstr "в сумерках"
 
 #: u_translation.rsatmosphericr
 msgid "Atmospheric refraction"
-msgstr ""
+msgstr "Атмосферная рефракция"
 
 #: u_translation.rsautofocus
 msgid "Autofocus"
@@ -358,6 +358,10 @@ msgstr "Движение вовнутрь через %s"
 msgid "Autofocus graph"
 msgstr "График автофокусировки"
 
+#: u_translation.rsautofocushfd2
+msgid "Autofocus after % change HFD"
+msgstr ""
+
 #: u_translation.rsautofocusloc
 msgid "Autofocus location"
 msgstr "Позиция автофокусировки"
@@ -435,7 +439,7 @@ msgstr "Допуск "
 
 #: u_translation.rsautofocuswil
 msgid "Autofocus will run before the next exposure"
-msgstr ""
+msgstr "Автофокусировка будет выполнена перед следующей экспозицией"
 
 #: u_translation.rsautoguider
 msgid "Autoguider"
@@ -916,6 +920,10 @@ msgstr "Центр RA"
 #, object-pascal-format
 msgid "%s changed to %s"
 msgstr "%s изменено на %s"
+
+#: u_translation.rschangeinhfd
+msgid "% change in HFD"
+msgstr ""
 
 #: u_translation.rschangelog
 msgid "Change log"
@@ -1532,7 +1540,7 @@ msgstr "Вниз"
 
 #: u_translation.rsdownload
 msgid "Download"
-msgstr ""
+msgstr "Загрузить"
 
 #: u_translation.rsdownloading
 msgid "Downloading"
@@ -2154,7 +2162,7 @@ msgstr "Получить долготу/широту от монтировки"
 
 #: u_translation.rsgetvaluesfro
 msgid "Get values from the weather station"
-msgstr ""
+msgstr "Получить значения с метеостанции"
 
 #: u_translation.rsglobalaction
 msgid "Global actions when a sequence is running"
@@ -2187,7 +2195,7 @@ msgstr "зелёный"
 
 #: u_translation.rsgroup
 msgid "Group"
-msgstr ""
+msgstr "Группа"
 
 #: u_translation.rsguid
 msgid "Guid."
@@ -2262,6 +2270,25 @@ msgstr "Справка"
 msgid "HFD"
 msgstr "HFD"
 
+#: u_translation.rshfdactive
+#, object-pascal-format
+msgid "HFD Focus Monitor: Active. Threshold: %s%%, Reference HFD: %s"
+msgstr ""
+
+#: u_translation.rshfdmeasuring
+#, object-pascal-format
+msgid "HFD Focus Monitor: Measuring. %d of %d HFD measurements completed."
+msgstr ""
+
+#: u_translation.rshfdreset
+msgid "HFD Focus Monitor: Reset. Clearing reference HFD and measurements."
+msgstr ""
+
+#: u_translation.rshfmtriggered
+#, object-pascal-format
+msgid "HFD Focus Monitor: Threshold: %s%%, Ref: %s, %s-Image Avg: %s, HFD Delta: %s%%"
+msgstr ""
+
 #: u_translation.rshighlightadu
 msgid "Highlight ADU"
 msgstr "Света ADU"
@@ -2284,7 +2311,7 @@ msgstr "Влажность"
 
 #: u_translation.rshumidity2
 msgid "Humidity %"
-msgstr ""
+msgstr "Влажность %"
 
 #: u_translation.rshyperbolacur
 #, object-pascal-format
@@ -3764,7 +3791,7 @@ msgstr "Давление"
 
 #: u_translation.rspressuremill
 msgid "Pressure (millibar)"
-msgstr ""
+msgstr "Давление (миллибар)"
 
 #: u_translation.rspreview
 msgid "Preview"
@@ -4168,6 +4195,10 @@ msgstr "Проводить астрометрию каждого снимка д
 msgid "Auto-focus if temp. change by more than %s"
 msgstr "Автофокусировка при изменении темп. > %s"
 
+#: u_translation.rsrunautofocus2
+msgid "Run auto-focus if change is more than % HFD"
+msgstr ""
+
 #: u_translation.rsrunscript
 msgid "Run script"
 msgstr "Запуск скрипта"
@@ -4331,7 +4362,7 @@ msgstr "Поиск"
 
 #: u_translation.rssearchonline
 msgid "Search online"
-msgstr ""
+msgstr "Поиск в Интернете"
 
 #: u_translation.rssec
 msgid "sec."
@@ -4383,7 +4414,7 @@ msgstr "Выберите файл для загрузки"
 
 #: u_translation.rsselectthescr
 msgid "Select the script to download"
-msgstr ""
+msgstr "Выберите скрипт для скачивания"
 
 #: u_translation.rssendimagetop
 msgid "Send image to planetarium"
@@ -5338,7 +5369,7 @@ msgstr "Температурный коэффициент, шаги/%s"
 
 #: u_translation.rstemperaturec2
 msgid "Temperature (C)"
-msgstr ""
+msgstr "Температура (С)"
 
 #: u_translation.rstemperaturef
 msgid "Temperature from weather station"
