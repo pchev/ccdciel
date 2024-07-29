@@ -2519,7 +2519,7 @@ begin
       end;
       if not isCalibrationTarget then begin
         // set autofocus on temperature change
-         Fcapture.CheckBoxFocus.Checked:=t.autofocustemp;
+         Fcapture.CheckBoxFocusTemp.Checked:=t.autofocustemp;
 
          // enable/disable HFM - if enabled, monitor HFD %change and trigger
          // an autofocus if it exceeds the HFM threshold (preferences/sequence)
