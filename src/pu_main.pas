@@ -11069,7 +11069,7 @@ if (AllDevicesConnected)and(not autofocusing)and(not learningvcurve)and(not f_vi
            f_capture.CheckBoxFocusTemp.Checked and
            (AutofocusLastTemp<>NullCoord)and(f_starprofile.AutofocusDone) then begin
         x:=AutofocusTempChange-(abs(AutofocusLastTemp-FocuserTemp));
-        buf:=blank+FormatFloat(f1,x)+blank+'C';
+        buf:=blank+FormatFloat(f2,x)+blank+'C';
         if txt='' then txt:=buf else txt:=txt+', '+rsOr+blank+buf;
       end;
       if HFM_IsActive then begin
@@ -11143,7 +11143,9 @@ begin
     HFM_MeasAvg:=NullCoord;
     HFM_Primed:=false;
     HFM_MeasIdx:=0;
-    NewMessage(rsHFDReset);
+    if MeasureNewImage and f_capture.CheckBoxFocusHFD.Checked and
+         (HFM_Threshold>0.0) then
+      NewMessage(rsHFDReset);
   end;
 end;
 
@@ -11192,8 +11194,8 @@ begin
       // necessary to check if configured as measurements may be enabled
       // but the threshold may be disabled; if so, don't show message
       if HFM_IsActive then
-        NewMessage(Format(rsHFDActive, [FormatFloat(f1, HFM_Threshold),
-           FormatFloat(f1, HFM_RefHFD)]));
+        NewMessage(Format(rsHFDActive, [FormatFloat(f2, HFM_Threshold),
+           FormatFloat(f2, HFM_RefHFD)]));
       end;
     end;
   end;
@@ -13937,6 +13939,13 @@ begin
    if CancelAutofocus then exit;
    // do autofocus
    if focuser.hasTemperature then NewMessage(Format(rsFocuserTempe, [FormatFloat(f1, TempDisplay(TemperatureScale,FocuserTemp))+TempLabel]),2);
+
+   // display HFM stats
+   if (HFM_IsActive and (HFM_GetHFDShift>=HFM_Threshold)) then
+     NewMessage(Format(rsHFMTriggered, [FormatFloat(f2, HFM_Threshold),
+       FormatFloat(f2, HFM_RefHFD), IntToStr(self.HFM_HIST_SIZE),
+       FormatFloat(f2, HFM_MeasAvg), FormatFloat(f2, HFM_GetHFDShift)]));
+
    f_starprofile.ChkAutofocusDown(true);
    while f_starprofile.ChkAutofocus.Down do begin
     sleep(100);
@@ -14084,6 +14093,13 @@ begin
      if CancelAutofocus then exit;
      // do autofocus
      if focuser.hasTemperature then NewMessage(Format(rsFocuserTempe, [FormatFloat(f1, TempDisplay(TemperatureScale,FocuserTemp))+TempLabel]),2);
+
+     // display HFM stats
+     if (HFM_IsActive and (HFM_GetHFDShift>=HFM_Threshold)) then
+        NewMessage(Format(rsHFMTriggered, [FormatFloat(f2, HFM_Threshold),
+           FormatFloat(f2, HFM_RefHFD), IntToStr(self.HFM_HIST_SIZE),
+           FormatFloat(f2, HFM_MeasAvg), FormatFloat(f2, HFM_GetHFDShift)]));
+
      // set the new exposure factor here, because PrecisionSlew can set another filter
      AutofocusExposureFact:=newfilterfact;
      f_starprofile.ChkAutofocusDown(true);
@@ -15997,7 +16013,7 @@ begin
       mess2:='';
     end;
 
-    NewMessage(Format(rsFoundDStars, [nhfd])+': '+Format(rsImageMedianH, [formatfloat(f1, hfd_median)+ mess2+mess1]), 1); {Report median HFD, tilt and off-axis aberration (was curvature}
+    NewMessage(Format(rsFoundDStars, [nhfd])+': '+Format(rsImageMedianH, [formatfloat(f2, hfd_median)+ mess2+mess1]), 1); {Report median HFD, tilt and off-axis aberration (was curvature}
     f_starprofile.PlotHistory(hfd_median,fits.HeaderInfo.dmax);
     LastHfd:=hfd_median;
   end
