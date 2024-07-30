@@ -402,8 +402,8 @@ end;
 
 procedure Tf_sensoranalysis.TabSheet4Show(Sender: TObject);
 begin
-  exposuremin1.Caption := floattostrF(camera.ExposureRange.min, FFfixed, 0, 6);
-  exposuremax1.Caption := floattostrF(camera.ExposureRange.max, FFfixed, 0, 0);
+  exposuremin1.Caption := FormatFloat(f6,camera.ExposureRange.min);
+  exposuremax1.Caption := FormatFloat(f0,camera.ExposureRange.max);
   LabelFullwellcapacity1.Caption := FormatFloat(f0, camera.FullWellCapacity);
   LabelMaxAdu1.Caption := FormatFloat(f0, camera.MaxADU);
 end;
@@ -807,13 +807,13 @@ begin
   for i := 0 to nr do
   begin
     err := (xylist[1, i] - (xylist[0, i] * slope + intercept)) * 100 / 65535;
-    Chart1LineSeries1.addxy(xylist[0, i], xylist[1, i], floattostrF(err, FFfixed, 0, 2) + '%');
+    Chart1LineSeries1.addxy(xylist[0, i], xylist[1, i], FormatFloat(f2,err) + '%');
     {Now we have to make sure that the labels are displayed. For this purpose, the TChartSeries which is an ancestor of TLineSeries has a property Marks.
     In the sub-properties you find the option Style which is set to smsNone by default, meaning that no labels are displayed.
     You see in the object inspector that there is a variety of information than can be displayed in the marks, but you'll need here the option smsLabel which shows the text of the ChartDataItems.}
     if i <= 9 then maxerr := Math.max(maxerr, abs(err));
   end;
-  mess := floattostrF(maxerr, FFfixed, 0, 3) + '%';
+  mess := FormatFloat(f3,maxerr) + '%';
   InstructionsAdd('Max linearity error is ' + mess + ' in range [0..90%]');
   chart1.Title.Text.setStrings('Linearity. Maximum error ' + mess + ' in range [0..90%]. Gain is ' + IntToStr(gain));
 end;
@@ -881,7 +881,7 @@ begin
         // find bias level
         exposure := 0.0;
         biaslevel := median_of_median(exposure, repeats1.Value, BIAS {FLAT, DARK, LIGHT, BIAS}); //find best median
-        InstructionsAdd('Bias level: ' + floattostrF(biaslevel, FFfixed, 0, 0));
+        InstructionsAdd('Bias level: ' + FormatFloat(f0,biaslevel));
 
         bayerpatt := getbayer;
 
@@ -927,8 +927,8 @@ begin
             begin
               measurements[gainstep].median_light_adu := median(Ffits.image);
               saturationlevel:=(measurements[gainstep].median_light_adu - biaslevel) / camera.MaxADU;
-              InstructionsAdd('Trying to find the exposure time for 70% saturation. Exposure time: ' + floattostrF(exposure, FFfixed, 0, 3) +
-                              ', saturation level: ' + floattostrF( saturationlevel * 100, FFfixed, 0, 0) + '%');
+              InstructionsAdd('Trying to find the exposure time for 70% saturation. Exposure time: ' + FormatFloat(f3,exposure) +
+                              ', saturation level: ' + FormatFloat(f0, saturationlevel * 100) + '%');
               if ((saturationlevel> 0.65) and (saturationlevel < 0.75 )) then break;//exposure is good
 
               exposure := min(30, exposure * level7 / saturationlevel);   //try to get 70% exposed. level7=0.7
@@ -990,7 +990,7 @@ begin
               themedian := median_of_median(exposure_lin, repeats1.Value, FLAT); //median of medians
 
 
-              StringGrid1.InsertRowWithValues(stringgrid1.rowcount,[IntToStr(nr), floattostrF(measurements[gainstep].Gain, FFfixed, 0, 0), '', '', '', '', floattostrF(exposure_lin, FFfixed, 0, 3), floattostrF((themedian), FFfixed, 0, 0), floattostrF( (themedian - oldthemedian) * 100 / 65535, FFfixed, 0, 3)]);
+              StringGrid1.InsertRowWithValues(stringgrid1.rowcount,[IntToStr(nr), FormatFloat(f0,measurements[gainstep].Gain), '', '', '', '', FormatFloat(f3,exposure_lin), FormatFloat(f0, themedian), FormatFloat(f3, (themedian - oldthemedian) * 100 / 65535)]);
               StringGrid1.Row := stringgrid1.rowcount;//scroll
 
               if (themedian - oldthemedian) < 0.1 then break; //saturation reached
@@ -1011,7 +1011,7 @@ begin
           begin
             if Takeimage(3 * exposure, FLAT) then  //expose at 4*70%
               sat_level_adu := max(Ffits.image);
-            InstructionsAdd('Test saturation level. Exposure time: ' + floattostrF(3 * exposure, FFfixed, 0, 3) + ', saturation level: ' + floattostrF( sat_level_adu, FFfixed, 0, 0) + ' adu');
+            InstructionsAdd('Test saturation level. Exposure time: ' + FormatFloat(f3, 3 * exposure) + ', saturation level: ' + FormatFloat(f0, sat_level_adu) + ' adu');
           end;
           Inc(gainstep);
         end; //while
@@ -1038,7 +1038,7 @@ begin
           if ((gainstep = 0) and (Takeimage(exposure, DARK))) then //First dark is ignored since in some cameras (Touptek) the pedestal value could be higher in the first dark after a bright flat exposure')
           begin  //so this dark has two functions. 1) Skip first invalid dark and 2) test if flat panel is removed.
             themedian := median(Ffits.image);
-            InstructionsAdd('Took dark with gain ' + floattostrF( gain, FFfixed, 0, 0) + ' and exposure ' + floattostrF( measurements[gainstep].exposure, FFfixed, 0, 3) + ' to remove persistent charge.  Median value ' + floattostrF(themedian, FFfixed, 0, 3));
+            InstructionsAdd('Took dark with gain ' + FormatFloat(f0, gain) + ' and exposure ' + FormatFloat(f3, measurements[gainstep].exposure) + ' to remove persistent charge.  Median value ' + FormatFloat(f3,themedian));
 
             if themedian > 0.5 * measurements[0].median_light_adu then
             begin
@@ -1052,7 +1052,7 @@ begin
             Chart5BarSeries1.addxy(gainstep - 1, themedian, ' Gain ' + IntToStr(gain) + ', ');
 
           end;
-          InstructionsAdd('Taking dark(s) with gain ' + floattostrF( gain, FFfixed, 0, 0) + ' and exposure ' + floattostrF( measurements[gainstep].exposure, FFfixed, 0, 3));
+          InstructionsAdd('Taking dark(s) with gain ' + FormatFloat(f0, gain) + ' and exposure ' + FormatFloat(f3, measurements[gainstep].exposure));
           median_and_stdev(measurements[gainstep].exposure, repeats1.Value, DARK,{out}sd_RTN_dark_adu, sd_dark_adu, median_dark_adu,RTN_perc,RTN_rms);  //as stdev but do it nrframes times and report median value as result
 
           Chart5BarSeries1.addxy(gainstep, median_dark_adu, ' Gain ' + IntToStr(gain) + ', ');
@@ -1072,13 +1072,13 @@ begin
           measurements[gainstep].fw_capacity_e :=(sat_level_adu / correction) * measurements[gainstep].gain_e;
 
           StringGrid1.InsertRowWithValues(stringgrid1.rowcount,
-            [IntToStr(gainstep + 1), floattostrF(measurements[gainstep].Gain, FFfixed, 0, 0),
-            floattostrF(measurements[gainstep].gain_e, FFfixed, 0, 3),
-            floattostrF( measurements[gainstep].readnoise_e, FFfixed, 0, 3),
-            floattostrF( measurements[gainstep].readnoise_RTN_e, FFfixed, 0, 3),
-            floattostrF( measurements[gainstep].fw_capacity_e, FFfixed, 0, 0),
-            floattostrF( measurements[gainstep].exposure, FFfixed, 0, 3),
-            floattostrF( measurements[gainstep].median_light_adu, FFfixed, 0, 0) + '-' + floattostrF(median_dark_adu, FFfixed, 0, 0)]);
+            [IntToStr(gainstep + 1), FormatFloat(f0, measurements[gainstep].Gain),
+            FormatFloat(f3, measurements[gainstep].gain_e),
+            FormatFloat(f3, measurements[gainstep].readnoise_e),
+            FormatFloat(f3, measurements[gainstep].readnoise_RTN_e),
+            FormatFloat(f0, measurements[gainstep].fw_capacity_e),
+            FormatFloat(f3, measurements[gainstep].exposure),
+            FormatFloat(f0, measurements[gainstep].median_light_adu) + '-' + FormatFloat(f0, median_dark_adu)]);
           StringGrid1.Row := stringgrid1.rowcount;//scroll
 
           Chart2LineSeries1.addxy(measurements[gainstep].Gain, measurements[gainstep].gain_e);
@@ -1116,8 +1116,8 @@ begin
           // one seoond test
           median_and_stdev(1.01, repeats1.Value, DARK,{out}sd_RTN_dark_adu, sd_dark_adu, median_dark_adu,RTN_perc,RTN_rms);//take an exposure of 1.01 seconds to avoid weird variations in the first second.
           RTN_rms:=RTN_rms* measurements[gainstep].gain_e / correction;//convert to e-
-          rtn1.caption:= floattostrF(RTN_perc, FFfixed, 0, 2)+' %';
-          rtn_rms1.caption:= floattostrF(RTN_rms, FFfixed, 0, 2)+' e-';
+          rtn1.caption:= FormatFloat(f2, RTN_perc)+' %';
+          rtn_rms1.caption:= FormatFloat(f2, RTN_rms)+' e-';
           gain_used1.Caption:=IntToStr(gain);
           InstructionsAdd('Percentage of RTN found after 1.01 sec: ' + rtn1.caption+', RMS value '+ rtn_rms1.caption);
           InstructionsAdd('Random Telegraph Noise is here defined as the number of pixels with a value more then 3 sigma above the Gaussian noise level in the difference betweem two darks.');
@@ -1125,7 +1125,7 @@ begin
           // long duration test
           median_and_stdev(dark_current_test_duration1.Value + 1.01, repeats1.Value, DARK,{out}sd_RTN_dark_adu2, sd_dark_adu2, median_dark_adu2,RTN_perc,RTN_rms);  //take an exposure of value+1 seconds.
           RTN_rms:=RTN_rms* measurements[gainstep].gain_e / correction;//convert to e-
-          InstructionsAdd('Percentage of RTN found after '+ IntToStr(dark_current_test_duration1.Value + 1) + ' sec:  ' + floattostrF(RTN_perc, FFfixed, 0, 2)+'%, RMS value '+ floattostrF(RTN_rms, FFfixed, 0, 2)+' e-.');
+          InstructionsAdd('Percentage of RTN found after '+ IntToStr(dark_current_test_duration1.Value + 1) + ' sec:  ' + FormatFloat(f2,RTN_perc)+'%, RMS value '+ FormatFloat(f2,RTN_rms)+' e-.');
           InstructionsAdd('Random Telegraph Noise is here defined as the number of pixels with a value more then 3 sigma above the Gaussian noise level in the difference betweem two darks.');
 
 
@@ -1134,19 +1134,19 @@ begin
           total_noise_e := sd_dark_adu2 * measurements[gainstep].gain_e / correction; // total noise after long exposure noise[e-]:=noise_adu * gain_e     {1.63}
           total_noise_RTN_e := sd_RTN_dark_adu2 * measurements[gainstep].gain_e / correction; // total noise after long exposure noise[e-]:=noise_adu * gain_e. Including  including random telegraph noise {2.20}
 
-          InstructionsAdd('Noise after 1.01 sec: ' + floattostrF(readnoise2_e, FFfixed, 0, 2) + '[e-]');
-          InstructionsAdd('Noise after ' + IntToStr(dark_current_test_duration1.Value + 1) + ' sec:  ' + floattostrF(total_noise_e, FFfixed, 0, 2) + '[e-]');
-          InstructionsAdd('Noise including RTN after ' + IntToStr(dark_current_test_duration1.Value + 1) + ' sec:  ' + floattostrF( total_noise_RTN_e, FFfixed, 0, 2) + '[e-]');
+          InstructionsAdd('Noise after 1.01 sec: ' + FormatFloat(f2, readnoise2_e) + '[e-]');
+          InstructionsAdd('Noise after ' + IntToStr(dark_current_test_duration1.Value + 1) + ' sec:  ' + FormatFloat(f2, total_noise_e) + '[e-]');
+          InstructionsAdd('Noise including RTN after ' + IntToStr(dark_current_test_duration1.Value + 1) + ' sec:  ' + FormatFloat(f2, total_noise_RTN_e) + '[e-]');
 
           dark_current_adu := median_dark_adu2 - median_dark_adu;//dark current in adu {4.5}
           dark_current_es := dark_current_adu * measurements[gainstep].gain_e / (dark_current_test_duration1.Value * correction); //dark current in e-/(sec*pixel)  {0.003}
-          InstructionsAdd('Δadu after ' + IntToStr(dark_current_test_duration1.Value + 1) + ' sec:  ' + floattostrF(dark_current_adu, FFfixed, 0, 0));
-          InstructionsAdd('Dark current method Δadu: ' + floattostrF(dark_current_es, FFfixed, 0, 4) + ' [e-/(sec*pixel)]');
+          InstructionsAdd('Δadu after ' + IntToStr(dark_current_test_duration1.Value + 1) + ' sec:  ' + FormatFloat(f0, dark_current_adu));
+          InstructionsAdd('Dark current method Δadu: ' + FormatFloat(f4, dark_current_es) + ' [e-/(sec*pixel)]');
 
           dark_current2_e  :=(sqr(total_noise_e) - sqr(readnoise2_e)); //total dark current after exposure time in e-
           dark_current2_es := dark_current2_e /dark_current_test_duration1.Value; // dark current in e-/(sec*pixel) {0.0037}
           dark_current_RTN2_es :=(sqr(total_noise_RTN_e) - sqr(readnoise_RTN2_e)) / dark_current_test_duration1.Value;// dark current in e-/(sec*pixel)  {0.0057}
-          InstructionsAdd('Dark current method Δσ: ' + floattostrF( dark_current2_es, FFfixed, 0, 4) + ' [e-/(sec*pixel)]');
+          InstructionsAdd('Dark current method Δσ: ' + FormatFloat(f4, dark_current2_es) + ' [e-/(sec*pixel)]');
 
           if dark_current2_e > 0.5 then //at least 0.5 e-
           begin
@@ -1167,12 +1167,12 @@ begin
               total_noise := sqrt(i * dark_current_RTN2_es + sqr(readnoise_RTN2_e)); //formula 4
               Chart6LineSeries3.addxy(i, total_noise);
             end;
-            darkcurrent1.caption:= floattostrF(dark_current2_es, FFfixed, 0, 5) +' [e-/(sec*pixel)]';
+            darkcurrent1.caption:= FormatFloat(f5, dark_current2_es) +' [e-/(sec*pixel)]';
             message := 'Dark current ' + darkcurrent1.caption+' at' + ' gain ' +gain_used1.Caption+'Temperature '+
                        temperature_sensor2.caption+ '. RTN is '+rtn1.caption+', RMS value of RTN is '+rtn_rms1.caption + '. (' + camera.ccdname + ')';
           end
           else
-            message := message + crlf + 'WARNING. Too short exposure time. Only ' +  floattostrF(dark_current_adu, FFfixed, 0, 1) + ' e- difference. Set exposure time longer.';
+            message := message + crlf + 'WARNING. Too short exposure time. Only ' +  FormatFloat(f1, dark_current_adu) + ' e- difference. Set exposure time longer.';
           InstructionsAdd(message);
 
           Chart6.Title.Text.setStrings(message);

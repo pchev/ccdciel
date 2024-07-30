@@ -644,7 +644,7 @@ end;
 
 procedure Tf_internalguider.SetpulsegainEastsetting(value:double);
 begin
-  pulsegainEAST1.text:=floattostrF(value,FFgeneral,0,2);
+  pulsegainEAST1.text:=FormatFloat(f2v,value);
 end;
 
 function Tf_internalguider.GetpulsegainWestsetting:double;
@@ -654,7 +654,7 @@ end;
 
 procedure Tf_internalguider.SetpulsegainWestsetting(value:double);
 begin
-  pulsegainWest1.text:=floattostrF(value,FFgeneral,0,2);
+  pulsegainWest1.text:=FormatFloat(f2v,value);
 end;
 
 function Tf_internalguider.GetpulsegainNorthsetting:double;
@@ -664,7 +664,7 @@ end;
 
 procedure Tf_internalguider.SetpulsegainNorthsetting(value:double);
 begin
-  pulsegainNorth1.text:=floattostrF(value,FFgeneral,0,2);
+  pulsegainNorth1.text:=FormatFloat(f2v,value);
 end;
 
 function Tf_internalguider.GetpulsegainSouthsetting:double;
@@ -674,7 +674,7 @@ end;
 
 procedure Tf_internalguider.SetpulsegainSouthsetting(value:double);
 begin
-  pulsegainSouth1.text:=floattostrF(value,FFgeneral,0,2);
+  pulsegainSouth1.text:=FormatFloat(f2v,value);
 end;
 
 function Tf_internalguider.Getpier_sidesetting:string;
@@ -684,7 +684,7 @@ end;
 
 procedure Tf_internalguider.SetPixelSize(value:double);
 begin
-  pixelsize1.text:=floattostrF(value,FFgeneral,4,4);
+  pixelsize1.text:=FormatFloat(f4v,value);
 end;
 
 function Tf_internalguider.GetPixelSize:double;
@@ -766,7 +766,7 @@ end;
 
 procedure Tf_internalguider.SetPAsetting(value:double);
 begin
-  PA1.text:=floattostrF(value,FFgeneral,3,1);
+  PA1.text:=FormatFloat(f1v,value);
 end;
 
 function Tf_internalguider.GetRAgain:integer;
@@ -1187,9 +1187,9 @@ begin
       scale2:=pixel_size;
       scaleunit:=' "';
    end;
-   canvas.textout(w2,h2+20-10,floattostrF(2*scale,FFgeneral,0,1));
-   canvas.textout(w2,h2+40-10,floattostrF(4*scale,FFgeneral,0,1));
-   canvas.textout(w2,h2+60-10,floattostrF(6*scale,FFgeneral,0,1)+scaleunit);
+   canvas.textout(w2,h2+20-10,FormatFloat(f1v,2*scale));
+   canvas.textout(w2,h2+40-10,FormatFloat(f1v,4*scale));
+   canvas.textout(w2,h2+60-10,FormatFloat(f1v,6*scale)+scaleunit);
 
    //draw xy graph
    lenb:=length(xy_trend)-1;
@@ -1232,8 +1232,8 @@ begin
      rms_ra:=sqrt(rms_ra/counter);
      rms_dec:=sqrt(rms_dec/counter);
 
-     canvas.textout(1,h2,'α  '+floattostrF(scale2*rms_ra,FFgeneral,2,1));
-     canvas.textout(w2+2,2,'δ  '+floattostrF(scale2*rms_dec,FFgeneral,2,1));
+     canvas.textout(1,h2,'α  '+FormatFloat(f1v,scale2*rms_ra));
+     canvas.textout(w2+2,2,'δ  '+FormatFloat(f1v,scale2*rms_dec));
    end;
  end;
 end;
@@ -1286,10 +1286,10 @@ begin
       scale:=pixel_size/thescale;
       scaleunit:=' "';
    end;
-   canvas.textout(0,h2+20-10,floattostrF(-2*scale,FFgeneral,0,1));
-   canvas.textout(0,h2+40-10,floattostrF(-4*scale,FFgeneral,0,1));
-   canvas.textout(0,h2-20-10,'+'+floattostrF(+2*scale,FFgeneral,0,1));
-   canvas.textout(0,h2-40-10,'+'+floattostrF(+4*scale,FFgeneral,0,1)+scaleunit);
+   canvas.textout(0,h2+20-10,FormatFloat(f1v,-2*scale));
+   canvas.textout(0,h2+40-10,FormatFloat(f1v,-4*scale));
+   canvas.textout(0,h2-20-10,'+'+FormatFloat(f1v,+2*scale));
+   canvas.textout(0,h2-40-10,'+'+FormatFloat(f1v,+4*scale)+scaleunit);
 
 
 

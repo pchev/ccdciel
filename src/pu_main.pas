@@ -8898,8 +8898,8 @@ begin
    txt:=fits.GetStatistics;
 
    Fits.stdev2(4,{out}mean,sd,iterations);//test every 4x4= 16th pixel to speed up
-   txt:=txt+'Mean2: '+floattostrF(mean,FFfixed,0,1)+' (sigma clipped)'+crlf;
-   txt:=txt+'Std.Dev2: '+floattostrF(sd,FFfixed,0,1)+' (sigma clipped)'+crlf;
+   txt:=txt+'Mean2: '+FormatFloat(f1,mean)+' (sigma clipped)'+crlf;
+   txt:=txt+'Std.Dev2: '+FormatFloat(f1,sd)+' (sigma clipped)'+crlf;
 
 
    if (WCScenterRA<>NullCoord) and (WCScenterDEC<>NullCoord)
@@ -12322,7 +12322,7 @@ try
         if labeloverlap[lox,loy]=0 then begin
           size:=max(3,round(max(ImgZoom,ImgScale0)*2.5*fits.StarList[i].hfd));
           Image1.Canvas.Rectangle(x-size,y-size, x+size, y+size);
-          Image1.Canvas.TextOut(x+size,y+size,floattostrf(fits.StarList[i].hfd, ffgeneral, 2,1));
+          Image1.Canvas.TextOut(x+size,y+size,FormatFloat(f1v,fits.StarList[i].hfd));
           for j:=-1 to 1 do
             for k:=-1 to 1 do
               labeloverlap[lox+j,loy+k]:=1;
@@ -12340,46 +12340,46 @@ try
         //11   21   31
 
         Fits2Screen(trpxy[1,1,1],trpxy[2,1,1],f_visu.FlipHorz,f_visu.FlipVert,x,y);
-        image1.Canvas.textout(x,y,floattostrF(median[1,1], ffgeneral, 3,2)); //text
+        image1.Canvas.textout(x,y,FormatFloat(f2v,median[1,1])); //text
         Image1.Canvas.MoveTo(x,y);
 
         Fits2Screen(trpxy[1,2,1],trpxy[2,2,1],f_visu.FlipHorz,f_visu.FlipVert,x,y);
         Image1.Canvas.LineTo(x,y);
-        image1.Canvas.textout(x,y,floattostrF(median[2,1], ffgeneral, 3,2));  //text
+        image1.Canvas.textout(x,y,FormatFloat(f2v,median[2,1]));  //text
         Image1.Canvas.MoveTo(x,y);{text out move the x,y position}
 
 
         Fits2Screen(trpxy[1,3,1],trpxy[2,3,1],f_visu.FlipHorz,f_visu.FlipVert,x,y);
         Image1.Canvas.LineTo(x,y);
-        image1.Canvas.textout(x,y,floattostrF(median[3,1], ffgeneral, 3,2)); //text
+        image1.Canvas.textout(x,y,FormatFloat(f2v,median[3,1])); //text
         Image1.Canvas.MoveTo(x,y);{text out move the x,y position}
 
 
         Fits2Screen(trpxy[1,3,2],trpxy[2,3,2],f_visu.FlipHorz,f_visu.FlipVert,x,y);
         Image1.Canvas.LineTo(x,y);
-        image1.Canvas.textout(x,y,floattostrF(median[3,2], ffgeneral, 3,2)); //text
+        image1.Canvas.textout(x,y,FormatFloat(f2v,median[3,2])); //text
         Image1.Canvas.MoveTo(x,y);{text out move the x,y position}
 
 
         Fits2Screen(trpxy[1,3,3],trpxy[2,3,3],f_visu.FlipHorz,f_visu.FlipVert,x,y);
         Image1.Canvas.LineTo(x,y);
-        image1.Canvas.textout(x,y,floattostrF(median[3,3], ffgeneral, 3,2)); //text
+        image1.Canvas.textout(x,y,FormatFloat(f2v,median[3,3])); //text
         Image1.Canvas.MoveTo(x,y);{text out move the x,y position}
 
 
         Fits2Screen(trpxy[1,2,3],trpxy[2,2,3],f_visu.FlipHorz,f_visu.FlipVert,x,y);
         Image1.Canvas.LineTo(x,y);
-        image1.Canvas.textout(x,y,floattostrF(median[2,3], ffgeneral, 3,2));//text
+        image1.Canvas.textout(x,y,FormatFloat(f2v,median[2,3]));//text
         Image1.Canvas.MoveTo(x,y);
 
         Fits2Screen(trpxy[1,1,3],trpxy[2,1,3],f_visu.FlipHorz,f_visu.FlipVert,x,y);
         Image1.Canvas.LineTo(x,y);
-        image1.Canvas.textout(x,y,floattostrF(median[1,3], ffgeneral, 3,2));//text
+        image1.Canvas.textout(x,y,FormatFloat(f2v,median[1,3]));//text
         Image1.Canvas.MoveTo(x,y);
 
         Fits2Screen(trpxy[1,1,2],trpxy[2,1,2],f_visu.FlipHorz,f_visu.FlipVert,x,y);
         Image1.Canvas.LineTo(x,y);
-        image1.Canvas.textout(x,y,floattostrF(median[1,2], ffgeneral, 3,2));//text
+        image1.Canvas.textout(x,y,FormatFloat(f2v,median[1,2]));//text
         Image1.Canvas.MoveTo(x,y);
 
         Fits2Screen(trpxy[1,1,1],trpxy[2,1,1],f_visu.FlipHorz,f_visu.FlipVert,x,y);
@@ -12387,7 +12387,7 @@ try
 
         {draw diagonal}
         Fits2Screen(img_width div 2,img_height div 2,f_visu.FlipHorz,f_visu.FlipVert,xxc,yyc);
-        image1.Canvas.textout(xxc,yyc,floattostrF(median[2,2], ffgeneral, 3,2));   //text center
+        image1.Canvas.textout(xxc,yyc,FormatFloat(f2v,median[2,2]));   //text center
 
         {diagonal 1}
         Fits2Screen(trpxy[1,1,1],trpxy[2,1,1],f_visu.FlipHorz,f_visu.FlipVert,x,y);
@@ -12415,18 +12415,18 @@ try
       //11   21   31
 
       Fits2Screen(trpxy[1,1,1],trpxy[2,1,1],f_visu.FlipHorz,f_visu.FlipVert,x,y);
-      image1.Canvas.textout(x,y,floattostrF(median[1,1], ffgeneral, 3,2)); //text
+      image1.Canvas.textout(x,y,FormatFloat(f2v,median[1,1])); //text
       Image1.Canvas.MoveTo(x,y);
 
       Fits2Screen(trpxy[1,2,1],trpxy[2,2,1],f_visu.FlipHorz,f_visu.FlipVert,x,y);
       Image1.Canvas.LineTo(x,y);
-      image1.Canvas.textout(x,y,floattostrF(median[2,1], ffgeneral, 3,2));  //text
+      image1.Canvas.textout(x,y,FormatFloat(f2v,median[2,1]));  //text
       Image1.Canvas.MoveTo(x,y);{text out move the x,y position}
 
 
       Fits2Screen(trpxy[1,3,1],trpxy[2,3,1],f_visu.FlipHorz,f_visu.FlipVert,x,y);
       Image1.Canvas.LineTo(x,y);
-      image1.Canvas.textout(x,y,floattostrF(median[3,1], ffgeneral, 3,2)); //text
+      image1.Canvas.textout(x,y,FormatFloat(f2v,median[3,1])); //text
       Image1.Canvas.MoveTo(x,y);{text out move the x,y position}
 
 
@@ -12438,7 +12438,7 @@ try
       Fits2Screen(img_width div 2,img_height div 2,f_visu.FlipHorz,f_visu.FlipVert,xxc,yyc);
       Image1.Canvas.LineTo(xxc,yyc);{1,1 to center}
 
-      image1.Canvas.textout(xxc,yyc,floattostrF(median[2,2], ffgeneral, 3,2));   //text center
+      image1.Canvas.textout(xxc,yyc,FormatFloat(f2v,median[2,2]));   //text center
 
       Image1.Canvas.MoveTo(xxc,yyc);{center}
       Fits2Screen(trpxy[1,2,1],trpxy[2,2,1],f_visu.FlipHorz,f_visu.FlipVert,x,y);
@@ -15919,7 +15919,7 @@ begin
     begin
       median[2,2]:=SMedian(hfdlist_22,nhfd_22);
       median_outer_ring:=SMedian(hfdlist_outer_ring,nhfd_outer_ring);
-      mess1:='  '+Format(rsOffAxisAberr, [floattostrF(median_outer_ring-median[2,2], ffgeneral, 3, 2)]); {off-axis aberration measured in delta HFD. Works also for defocussed images}
+      mess1:='  '+Format(rsOffAxisAberr, [FormatFloat(f2v,median_outer_ring-median[2,2])]); {off-axis aberration measured in delta HFD. Works also for defocussed images}
     end
     else
     mess1:='';
@@ -15950,7 +15950,7 @@ begin
       trpOK:=2;{triangle okay}
 
       tilt_value:=100*(median_worst-median_best)/hfd_median;
-      mess2:='  Tilt[HFD]='+floattostrF(median_worst-median_best,ffFixed,0,2)+' ('+floattostrF(tilt_value,ffFixed,0,0)+'%';{estimate tilt value}
+      mess2:='  Tilt[HFD]='+FormatFloat(f2,median_worst-median_best)+' ('+FormatFloat(f0,tilt_value)+'%';{estimate tilt value}
       if tilt_value<5 then mess2:=mess2+' none)'
       else
       if tilt_value<10 then mess2:=mess2+' almost none)'
@@ -16006,7 +16006,7 @@ begin
       trpxy[2,3,3]:=round(+median[3,3]*scale_factor+img_height/2);
 
       trpOK:=1;{irregular octagon okay}
-      mess2:='  '+Format(rsTiltIndicati2, [floattostrF(median_worst-median_best,ffgeneral,3,2)]); {estimate tilt value in delta HFD}
+      mess2:='  '+Format(rsTiltIndicati2, [FormatFloat(f2v,median_worst-median_best)]); {estimate tilt value in delta HFD}
     end
     else begin
       trpOK:=0;
