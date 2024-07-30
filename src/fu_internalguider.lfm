@@ -329,7 +329,7 @@ object f_internalguider: Tf_internalguider
             Left = -3
             Height = 0
             Top = 504
-            Width = 344
+            Width = 310
             Anchors = [akTop, akLeft, akRight]
             TabOrder = 11
           end
@@ -1721,10 +1721,10 @@ object f_internalguider: Tf_internalguider
               ParentColor = False
             end
             object CalIssue: TEdit
-              Left = 208
+              Left = 112
               Height = 32
               Top = 464
-              Width = 82
+              Width = 178
               Enabled = False
               TabOrder = 12
             end
