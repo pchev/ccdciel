@@ -17518,7 +17518,7 @@ try
   if (ImageGuide.Parent=f_internalguider.PanelImage) and (guideimg_Height>0) and (guideimg_Width>0) then begin
     // check image proportion and eventually adjust the display
     h:=round(f_internalguider.PanelImage.Width*guideimg_Height/guideimg_Width);
-    if abs(f_internalguider.PanelImage.Height-h)>2 then begin
+    if abs(f_internalguider.PanelImage.Height-h)>DoScaleX(20) then begin
        f_internalguider.PanelImage.Height:=h;
        f_internalguider.Panel1.Height:=f_internalguider.PanelImage.top+f_internalguider.PanelImage.Height;
     end;
