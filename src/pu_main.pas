@@ -991,6 +991,7 @@ type
     function TCPcmd(s: string):string;
     function TCPjsoncmd(id:string; attrib,value:Tstringlist):string;
     function jsoncmd_status(attrib,value:Tstringlist):string;
+    function jsoncmd_devices:string;
     procedure TCPgetimage(n: string;  var img: Tmemorystream);
     procedure SetLang;
     procedure UpdateMagnifyer(x,y:integer);
@@ -16333,6 +16334,329 @@ begin
   end;
 end;
 
+function Tf_main.jsoncmd_devices:string;
+var i,j,n: integer;
+begin
+result:='"result": { ';
+
+if WantCamera then begin
+  i:=config.GetValue('/CameraInterface',-1);
+  if i>=0 then begin
+    result:=result+'"camera": {';
+    case TDevInterface(i) of
+      INDI:  begin
+               result:=result+'"interface": "INDI",';
+               result:=result+'"driver": "'+config.GetValue('/INDIcamera/Device','')+'",';
+               result:=result+'"server": "'+config.GetValue('/INDIcamera/Server','')+'",';
+               result:=result+'"port": "'+config.GetValue('/INDIcamera/ServerPort','')+'"';
+             end;
+      ASCOM: begin
+               result:=result+'"interface": "ASCOM",';
+               result:=result+'"driver": "'+config.GetValue('/ASCOMcamera/Device','')+'"';
+             end;
+      ASCOMREST: begin
+               result:=result+'"interface": "ALPACA",';
+               result:=result+'"device": "'+'camera/'+IntToStr(config.GetValue('/ASCOMRestcamera/Device',0))+'",';
+               result:=result+'"server": "'+config.GetValue('/ASCOMRestcamera/Host','')+'",';
+               result:=result+'"port": "'+config.GetValue('/ASCOMRestcamera/Port','')+'"';
+             end;
+    end;
+    result:=result+'},';
+  end;
+end;
+if WantGuideCamera then begin
+  i:=config.GetValue('/GuideCameraInterface',-1);
+  if i>=0 then begin
+    result:=result+'"guidecamera": {';
+    case TDevInterface(i) of
+      INDI:  begin
+               result:=result+'"interface": "INDI",';
+               result:=result+'"driver": "'+config.GetValue('/INDIguidecamera/Device','')+'",';
+               result:=result+'"server": "'+config.GetValue('/INDIguidecamera/Server','')+'",';
+               result:=result+'"port": "'+config.GetValue('/INDIguidecamera/ServerPort','')+'"';
+             end;
+      ASCOM: begin
+               result:=result+'"interface": "ASCOM",';
+               result:=result+'"driver": "'+config.GetValue('/ASCOMguidecamera/Device','')+'"';
+             end;
+      ASCOMREST: begin
+               result:=result+'"interface": "ALPACA",';
+               result:=result+'"device": "'+'camera/'+IntToStr(config.GetValue('/ASCOMRestguidecamera/Device',0))+'",';
+               result:=result+'"server": "'+config.GetValue('/ASCOMRestguidecamera/Host','')+'",';
+               result:=result+'"port": "'+config.GetValue('/ASCOMRestguidecamera/Port','')+'"';
+             end;
+    end;
+    result:=result+'},';
+  end;
+end;
+if WantFinderCamera then begin
+  i:=config.GetValue('/FinderCameraInterface',-1);
+  if i>=0 then begin
+    result:=result+'"findercamera": {';
+    case TDevInterface(i) of
+      INDI:  begin
+               result:=result+'"interface": "INDI",';
+               result:=result+'"driver": "'+config.GetValue('/INDIfindercamera/Device','')+'",';
+               result:=result+'"server": "'+config.GetValue('/INDIfindercamera/Server','')+'",';
+               result:=result+'"port": "'+config.GetValue('/INDIfindercamera/ServerPort','')+'"';
+             end;
+      ASCOM: begin
+               result:=result+'"interface": "ASCOM",';
+               result:=result+'"driver": "'+config.GetValue('/ASCOMfindercamera/Device','')+'"';
+             end;
+      ASCOMREST: begin
+               result:=result+'"interface": "ALPACA",';
+               result:=result+'"device": "'+'camera/'+IntToStr(config.GetValue('/ASCOMRestfindercamera/Device',0))+'",';
+               result:=result+'"server": "'+config.GetValue('/ASCOMRestfindercamera/Host','')+'",';
+               result:=result+'"port": "'+config.GetValue('/ASCOMRestfindercamera/Port','')+'"';
+             end;
+    end;
+    result:=result+'},';
+  end;
+end;
+if WantMount then begin
+  i:=config.GetValue('/MountInterface',-1);
+  if i>=0 then begin
+    result:=result+'"mount": {';
+    case TDevInterface(i) of
+      INDI:  begin
+               result:=result+'"interface": "INDI",';
+               result:=result+'"driver": "'+config.GetValue('/INDImount/Device','')+'",';
+               result:=result+'"server": "'+config.GetValue('/INDImount/Server','')+'",';
+               result:=result+'"port": "'+config.GetValue('/INDImount/ServerPort','')+'"';
+             end;
+      ASCOM: begin
+               result:=result+'"interface": "ASCOM",';
+               result:=result+'"driver": "'+config.GetValue('/ASCOMmount/Device','')+'"';
+             end;
+      ASCOMREST: begin
+               result:=result+'"interface": "ALPACA",';
+               result:=result+'"device": "'+'telescope/'+IntToStr(config.GetValue('/ASCOMRestmount/Device',0))+'",';
+               result:=result+'"server": "'+config.GetValue('/ASCOMRestmount/Host','')+'",';
+               result:=result+'"port": "'+config.GetValue('/ASCOMRestmount/Port','')+'"';
+             end;
+    end;
+    result:=result+'},';
+  end;
+end;
+if WantWheel then begin
+  i:=config.GetValue('/WheelInterface',-1);
+  if i>=0 then begin
+    result:=result+'"filterwheel": {';
+    case TDevInterface(i) of
+      INDI:  begin
+               result:=result+'"interface": "INDI",';
+               result:=result+'"driver": "'+config.GetValue('/INDIwheel/Device','')+'",';
+               result:=result+'"server": "'+config.GetValue('/INDIwheel/Server','')+'",';
+               result:=result+'"port": "'+config.GetValue('/INDIwheel/ServerPort','')+'"';
+             end;
+      ASCOM: begin
+               result:=result+'"interface": "ASCOM",';
+               result:=result+'"driver": "'+config.GetValue('/ASCOMwheel/Device','')+'"';
+             end;
+      ASCOMREST: begin
+               result:=result+'"interface": "ALPACA",';
+               result:=result+'"device": "'+'filterwheel/'+IntToStr(config.GetValue('/ASCOMRestwheel/Device',0))+'",';
+               result:=result+'"server": "'+config.GetValue('/ASCOMRestwheel/Host','')+'",';
+               result:=result+'"port": "'+config.GetValue('/ASCOMRestwheel/Port','')+'"';
+             end;
+      INCAMERA: begin
+               result:=result+'"interface": "INCAMERA"';
+             end;
+      MANUAL: begin
+               result:=result+'"interface": "MANUAL"';
+             end;
+    end;
+    result:=result+'},';
+  end;
+end;
+if WantFocuser then begin
+  i:=config.GetValue('/FocuserInterface',-1);
+  if i>=0 then begin
+    result:=result+'"focuser": {';
+    case TDevInterface(i) of
+      INDI:  begin
+               result:=result+'"interface": "INDI",';
+               result:=result+'"driver": "'+config.GetValue('/INDIfocuser/Device','')+'",';
+               result:=result+'"server": "'+config.GetValue('/INDIfocuser/Server','')+'",';
+               result:=result+'"port": "'+config.GetValue('/INDIfocuser/ServerPort','')+'"';
+             end;
+      ASCOM: begin
+               result:=result+'"interface": "ASCOM",';
+               result:=result+'"driver": "'+config.GetValue('/ASCOMfocuser/Device','')+'"';
+             end;
+      ASCOMREST: begin
+               result:=result+'"interface": "ALPACA",';
+               result:=result+'"device": "'+'focuser/'+IntToStr(config.GetValue('/ASCOMRestfocuser/Device',0))+'",';
+               result:=result+'"server": "'+config.GetValue('/ASCOMRestfocuser/Host','')+'",';
+               result:=result+'"port": "'+config.GetValue('/ASCOMRestfocuser/Port','')+'"';
+             end;
+    end;
+    result:=result+'},';
+  end;
+end;
+if WantRotator then begin
+  i:=config.GetValue('/RotatorInterface',-1);
+  if i>=0 then begin
+    result:=result+'"rotator": {';
+    case TDevInterface(i) of
+      INDI:  begin
+               result:=result+'"interface": "INDI",';
+               result:=result+'"driver": "'+config.GetValue('/INDIrotator/Device','')+'",';
+               result:=result+'"server": "'+config.GetValue('/INDIrotator/Server','')+'",';
+               result:=result+'"port": "'+config.GetValue('/INDIrotator/ServerPort','')+'"';
+             end;
+      ASCOM: begin
+               result:=result+'"interface": "ASCOM",';
+               result:=result+'"driver": "'+config.GetValue('/ASCOMrotator/Device','')+'"';
+             end;
+      ASCOMREST: begin
+               result:=result+'"interface": "ALPACA",';
+               result:=result+'"device": "'+'rotator/'+IntToStr(config.GetValue('/ASCOMRestrotator/Device',0))+'",';
+               result:=result+'"server": "'+config.GetValue('/ASCOMRestrotator/Host','')+'",';
+               result:=result+'"port": "'+config.GetValue('/ASCOMRestrotator/Port','')+'"';
+             end;
+    end;
+    result:=result+'},';
+  end;
+end;
+if WantDome then begin
+  i:=config.GetValue('/DomeInterface',-1);
+  if i>=0 then begin
+    result:=result+'"dome": {';
+    case TDevInterface(i) of
+      INDI:  begin
+               result:=result+'"interface": "INDI",';
+               result:=result+'"driver": "'+config.GetValue('/INDIdome/Device','')+'",';
+               result:=result+'"server": "'+config.GetValue('/INDIdome/Server','')+'",';
+               result:=result+'"port": "'+config.GetValue('/INDIdome/ServerPort','')+'"';
+             end;
+      ASCOM: begin
+               result:=result+'"interface": "ASCOM",';
+               result:=result+'"driver": "'+config.GetValue('/ASCOMdome/Device','')+'"';
+             end;
+      ASCOMREST: begin
+               result:=result+'"interface": "ALPACA",';
+               result:=result+'"device": "'+'dome/'+IntToStr(config.GetValue('/ASCOMRestdome/Device',0))+'",';
+               result:=result+'"server": "'+config.GetValue('/ASCOMRestdome/Host','')+'",';
+               result:=result+'"port": "'+config.GetValue('/ASCOMRestdome/Port','')+'"';
+             end;
+    end;
+    result:=result+'},';
+  end;
+end;
+if WantWeather then begin
+  i:=config.GetValue('/WeatherInterface',-1);
+  if i>=0 then begin
+    result:=result+'"weather": {';
+    case TDevInterface(i) of
+      INDI:  begin
+               result:=result+'"interface": "INDI",';
+               result:=result+'"driver": "'+config.GetValue('/INDIweather/Device','')+'",';
+               result:=result+'"server": "'+config.GetValue('/INDIweather/Server','')+'",';
+               result:=result+'"port": "'+config.GetValue('/INDIweather/ServerPort','')+'"';
+             end;
+      ASCOM: begin
+               result:=result+'"interface": "ASCOM",';
+               result:=result+'"driver": "'+config.GetValue('/ASCOMweather/Device','')+'"';
+             end;
+      ASCOMREST: begin
+               result:=result+'"interface": "ALPACA",';
+               if config.GetValue('/ASCOMRestweather/DeviceType',0)=0 then
+                  result:=result+'"device": "'+'observingconditions/'+IntToStr(config.GetValue('/ASCOMRestweather/Device',0))+'",'
+               else
+                  result:=result+'"device": "'+'safetymonitor/'+IntToStr(config.GetValue('/ASCOMRestweather/Device',0))+'",';
+               result:=result+'"server": "'+config.GetValue('/ASCOMRestweather/Host','')+'",';
+               result:=result+'"port": "'+config.GetValue('/ASCOMRestweather/Port','')+'"';
+             end;
+    end;
+    result:=result+'},';
+  end;
+end;
+if WantSafety then begin
+  i:=config.GetValue('/SafetyInterface',-1);
+  if i>=0 then begin
+    result:=result+'"safetymonitor": {';
+    case TDevInterface(i) of
+      INDI:  begin
+               result:=result+'"interface": "INDI",';
+               result:=result+'"driver": "'+config.GetValue('/INDIsafety/Device','')+'",';
+               result:=result+'"server": "'+config.GetValue('/INDIsafety/Server','')+'",';
+               result:=result+'"port": "'+config.GetValue('/INDIsafety/ServerPort','')+'"';
+             end;
+      ASCOM: begin
+               result:=result+'"interface": "ASCOM",';
+               result:=result+'"driver": "'+config.GetValue('/ASCOMsafety/Device','')+'"';
+             end;
+      ASCOMREST: begin
+               result:=result+'"interface": "ALPACA",';
+               result:=result+'"device": "'+'safetymonitor/'+IntToStr(config.GetValue('/ASCOMRestsafety/Device',0))+'",';
+               result:=result+'"server": "'+config.GetValue('/ASCOMRestsafety/Host','')+'",';
+               result:=result+'"port": "'+config.GetValue('/ASCOMRestsafety/Port','')+'"';
+             end;
+    end;
+    result:=result+'},';
+  end;
+end;
+if WantCover then begin
+  i:=config.GetValue('/CoverInterface',-1);
+  if i>=0 then begin
+    result:=result+'"covercalibrator": {';
+    case TDevInterface(i) of
+      INDI:  begin
+               result:=result+'"interface": "INDI",';
+               result:=result+'"driver": "'+config.GetValue('/INDIcover/Device','')+'",';
+               result:=result+'"server": "'+config.GetValue('/INDIcover/Server','')+'",';
+               result:=result+'"port": "'+config.GetValue('/INDIcover/ServerPort','')+'"';
+             end;
+      ASCOM: begin
+               result:=result+'"interface": "ASCOM",';
+               result:=result+'"driver": "'+config.GetValue('/ASCOMcover/Device','')+'"';
+             end;
+      ASCOMREST: begin
+               result:=result+'"interface": "ALPACA",';
+               result:=result+'"device": "'+'covercalibrator/'+IntToStr(config.GetValue('/ASCOMRestcover/Device',0))+'",';
+               result:=result+'"server": "'+config.GetValue('/ASCOMRestcover/Host','')+'",';
+               result:=result+'"port": "'+config.GetValue('/ASCOMRestcover/Port','')+'"';
+             end;
+    end;
+    result:=result+'},';
+  end;
+end;
+if WantSwitch then begin
+ n:=config.GetValue('/Switch/NumSwitch',1);
+ for j:=0 to n-1 do begin
+  i:=config.GetValue('/Switch/Switch'+inttostr(j)+'/SwitchInterface',-1);
+  if i>=0 then begin
+    result:=result+'"switch'+inttostr(j+1)+'": {';
+    case TDevInterface(i) of
+      INDI:  begin
+               result:=result+'"interface": "INDI",';
+               result:=result+'"driver": "'+config.GetValue('/Switch/Switch'+inttostr(j)+'/INDIswitch/Device','')+'",';
+               result:=result+'"server": "'+config.GetValue('/Switch/Switch'+inttostr(j)+'/INDIswitch/Server','')+'",';
+               result:=result+'"port": "'+config.GetValue('/Switch/Switch'+inttostr(j)+'/INDIswitch/ServerPort','')+'"';
+             end;
+      ASCOM: begin
+               result:=result+'"interface": "ASCOM",';
+               result:=result+'"driver": "'+config.GetValue('/Switch/Switch'+inttostr(j)+'/ASCOMswitch/Device','')+'"';
+             end;
+      ASCOMREST: begin
+               result:=result+'"interface": "ALPACA",';
+               result:=result+'"device": "'+'switch/'+IntToStr(config.GetValue('/Switch/Switch'+inttostr(j)+'/ASCOMRestswitch/Device',0))+'",';
+               result:=result+'"server": "'+config.GetValue('/Switch/Switch'+inttostr(j)+'/ASCOMRestswitch/Host','')+'",';
+               result:=result+'"port": "'+config.GetValue('/Switch/Switch'+inttostr(j)+'/ASCOMRestswitch/Port','')+'"';
+             end;
+    end;
+    result:=result+'},';
+  end;
+  end;
+end;
+
+delete(result,length(result),1);
+result:=result+'}';
+
+end;
+
 function Tf_main.jsoncmd_status(attrib,value:Tstringlist):string;
 var frx,fry,frw,frh,i,j,n: integer;
     resp:string;
@@ -16513,6 +16837,9 @@ try
   if method='STATUS' then begin
     result:=result+jsoncmd_status(attrib,value);
   end
+  else if method='DEVICES' then begin
+   result:=result+jsoncmd_devices;
+ end
   // return variable value
   else if method='CCDCIEL_VERSION' then result:=result+'"result": ["'+ccdcielver+'","'+ShortRevisionStr+'","'+RevisionStr+'"]'
   else if method='DEVICES_CONNECTED' then result:=result+'"result": '+BoolToStr(AllDevicesConnected,tr,fa)
