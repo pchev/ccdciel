@@ -11070,7 +11070,7 @@ if (AllDevicesConnected)and(not autofocusing)and(not learningvcurve)and(not f_vi
            f_capture.CheckBoxFocusTemp.Checked and
            (AutofocusLastTemp<>NullCoord)and(f_starprofile.AutofocusDone) then begin
         x:=AutofocusTempChange-(abs(AutofocusLastTemp-FocuserTemp));
-        buf:=blank+FormatFloat(f2,x)+blank+'C';
+        buf:=blank+FormatFloat(f1,x)+blank+'C';
         if txt='' then txt:=buf else txt:=txt+', '+rsOr+blank+buf;
       end;
       if HFM_IsActive then begin
@@ -11078,7 +11078,7 @@ if (AllDevicesConnected)and(not autofocusing)and(not learningvcurve)and(not f_vi
         x:=HFM_GetHFDShift;
         if(x<>NullCoord) then begin
           x:=HFM_Threshold - x;
-          buf:=blank+FormatFloat(f1,x)+rsChangeInHFD;
+          buf:=blank+FormatFloat(f2,x)+rsChangeInHFD;
           if txt='' then txt:=buf else txt:=txt+', '+rsOr+blank+buf;
         end;
       end;
