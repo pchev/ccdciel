@@ -10755,7 +10755,11 @@ end;
 procedure Tf_main.StartCaptureExposureAsync(Data: PtrInt);
 begin
   if (autoguider.AutoguiderType=agINTERNAL)and(autoguider.Dithering) then begin
+    {$ifdef mswindows}
+    Application.ProcessMessages; // Fix for Lazarus 3
+    {$else}
     CheckSynchronize();
+    {$endif}
     Application.QueueAsyncCall(@StartCaptureExposureAsync,0);
     exit;
   end;
