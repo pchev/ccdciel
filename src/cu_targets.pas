@@ -109,7 +109,6 @@ type
       FRestarting, FRealRestart: boolean;
       Fslewing: boolean;
       InitTargetError: string;
-      LockTargetTimer: boolean;
       function GetBusy: boolean;
       procedure SetTargetName(val: string);
       procedure SetPreview(val: Tf_preview);
@@ -304,7 +303,6 @@ begin
   FTargetRA:=NullCoord;
   FTargetDE:=NullCoord;
   SkipTarget:=false;
-  LockTargetTimer:=false;
   TargetTimer:=TTimer.Create(self);
   TargetTimer.Enabled:=false;
   TargetTimer.Interval:=1000;
@@ -2942,11 +2940,9 @@ var tt,newra,newde,newV,newPa: double;
     t,nextt: TTarget;
     r: string;
 begin
- if LockTargetTimer then
-   exit;
- try
- LockTargetTimer:=true;
  if FRunning and (FCurrentTarget>=0) and (FCurrentTarget<NumTargets) then begin
+   try
+   TargetTimer.Enabled:=false;
    FInitializing:=false;
    t:=Targets[FCurrentTarget];
    if not TargetRepeatTimer.Enabled then begin
@@ -3014,6 +3010,9 @@ begin
      tt:=(TargetDelayEnd-Now)*secperday;
      ShowDelayMsg(Format(rsContinueInSe, [FormatFloat(f0, tt)]));
    end;
+   finally
+     TargetTimer.Enabled:=true;
+   end;
  end
  else begin
   FRunning:=false;
@@ -3028,9 +3027,6 @@ begin
     if r='' then r:=rsEmailSentSuc;
     msg(r,9);
   end;
- end;
- finally
-   LockTargetTimer:=false;
  end;
 end;
 
