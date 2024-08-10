@@ -371,7 +371,7 @@
         <PackageName Value="LCL"/>
       </Item13>
     </RequiredPackages>
-    <Units Count="130">
+    <Units Count="131">
       <Unit0>
         <Filename Value="ccdciel.lpr"/>
         <IsPartOfProject Value="True"/>
@@ -1049,6 +1049,10 @@
         <Filename Value="u_refraction.pas"/>
         <IsPartOfProject Value="True"/>
       </Unit129>
+      <Unit130>
+        <Filename Value="cu_waitthread.pas"/>
+        <IsPartOfProject Value="True"/>
+      </Unit130>
     </Units>
   </ProjectOptions>
   <CompilerOptions>

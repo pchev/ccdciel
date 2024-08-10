@@ -37,7 +37,7 @@ uses
   fu_devicesconnection, fu_preview, fu_capture, fu_msg, fu_visu, fu_frame, fu_magnifyer, fu_internalguider,
   fu_starprofile, fu_filterwheel, fu_focuser, fu_mount, fu_ccdtemp, fu_autoguider, fu_cover, fu_switch, fu_switchpage,
   fu_sequence, fu_planetarium, fu_script, fu_finder, pu_findercalibration, u_ccdconfig, pu_edittargets, pu_scriptengine,
-  fu_video, pu_devicesetup, pu_options, pu_indigui, cu_fits, cu_camera, pu_pause, cu_tcpserver,
+  fu_video, pu_devicesetup, pu_options, pu_indigui, cu_fits, cu_camera, pu_pause, cu_tcpserver, cu_waitthread,
   pu_viewtext, cu_wheel, cu_mount, cu_focuser, XMLConf, u_utils, u_global, UScaleDPI, pu_handpad,
   cu_indimount, cu_ascommount, cu_indifocuser, cu_ascomfocuser, pu_vcurve, pu_focusercalibration, pu_onlineinfo,
   fu_rotator, cu_rotator, cu_indirotator, cu_ascomrotator, cu_watchdog, cu_indiwatchdog, pu_sensoranalysis,
@@ -10755,12 +10755,8 @@ end;
 procedure Tf_main.StartCaptureExposureAsync(Data: PtrInt);
 begin
   if (autoguider.AutoguiderType=agINTERNAL)and(autoguider.Dithering) then begin
-    {$ifdef mswindows}
-    Application.ProcessMessages; // Fix for Lazarus 3
-    {$else}
-    CheckSynchronize();
-    {$endif}
-    Application.QueueAsyncCall(@StartCaptureExposureAsync,0);
+    // dithering in progress, wait and try later
+    WaitExecute(1000,@StartCaptureExposureAsync,0);
     exit;
   end;
   StartCaptureExposure(nil);
