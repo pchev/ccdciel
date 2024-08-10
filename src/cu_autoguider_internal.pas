@@ -25,7 +25,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 interface
 
-uses cu_autoguider, u_global, u_utils, math, fu_internalguider, indiapi, simpletimer, CTimer,
+uses cu_autoguider, u_global, u_utils, math, fu_internalguider, indiapi, simpletimer, CTimer, cu_waitthread,
   u_translation, Graphics, Forms, Classes, SysUtils, ExtCtrls;
 
 type
@@ -891,9 +891,7 @@ begin
 if (FCamera.Status=devConnected) then begin
   // check internal pulse guide is in progress
   if PulseGuiding then begin
-     CheckSynchronize();
-     sleep(50);
-     Application.QueueAsyncCall(@StartGuideExposureAsync,0);
+     WaitExecute(50,@StartGuideExposureAsync,0);
      exit;
   end;
   // check exposure time
@@ -1672,8 +1670,7 @@ begin
     FCamera.AbortExposureButNotSequence;
     msg('Try to recover from guide camera error, please check the USB connection',1);
     WriteLog('INFO: Try to recover from guide camera error');
-    wait(1);
-    Application.QueueAsyncCall(@StartGuideExposureAsync,0);
+    WaitExecute(1000,@StartGuideExposureAsync,0);
    end
    else begin
      msg('Too much guide camera error, stop guiding',0);

@@ -10886,8 +10886,7 @@ if (AllDevicesConnected)and(not autofocusing)and(not learningvcurve)and(not f_vi
   end;
   if f_sequence.Running and f_sequence.EditingTarget then begin
     if canwait then begin
-       wait(1);
-       Application.QueueAsyncCall(@StartCaptureExposureAsync,0);
+       WaitExecute(1000,@StartCaptureExposureAsync,0);
        exit; // will be restarted after editing is done
     end
     else begin
@@ -10992,7 +10991,7 @@ if (AllDevicesConnected)and(not autofocusing)and(not learningvcurve)and(not f_vi
    if canwait then begin
     CaptureDither;
     if (autoguider.AutoguiderType=agINTERNAL)and(autoguider.Dithering) then begin
-      Application.QueueAsyncCall(@StartCaptureExposureAsync,0);
+      WaitExecute(1000,@StartCaptureExposureAsync,0);
       exit;
     end;
    end

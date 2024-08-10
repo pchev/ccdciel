@@ -28,7 +28,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 interface
 
-uses  cu_fits, cu_mount, cu_wheel, cu_focuser, cu_weather, u_global, u_utils, u_refraction, indiapi, math, u_translation,
+uses  cu_fits, cu_mount, cu_wheel, cu_focuser, cu_weather, u_global, u_utils, u_refraction, indiapi, math, u_translation, cu_waitthread,
   LazSysUtils, Classes, Forms, SysUtils, ExtCtrls;
 
 type
@@ -723,10 +723,8 @@ procedure T_camera.TryNextExposure(Data: PtrInt);
 begin
  if EarlyNextExposure and Assigned(FonNewExposure) and(not Autofocusing) then begin
    if CameraProcessingImage and (CameraProcessingNum=FImgNum-1) then begin
-     sleep(10);
      if debug_msg then msg('wait CameraProcessingImage');
-     CheckSynchronize;
-     Application.QueueAsyncCall(@TryNextExposure,Data);
+     WaitExecute(10,@TryNextExposure,Data);
    end
    else begin
      CameraProcessingImage:=true;
