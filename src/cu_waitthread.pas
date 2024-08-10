@@ -25,8 +25,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 interface
 
-uses cthreads,
-  Classes, SysUtils, Forms;
+uses Classes, SysUtils, Forms;
 
 type
 
