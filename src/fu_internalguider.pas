@@ -63,6 +63,7 @@ type
     CalIssue: TEdit;
     cbFGuideMultiStar: TCheckBox;
     cbEnlargeImage: TCheckBox;
+    cb_FastDither: TCheckBox;
     GuideSpeedRA: TFloatSpinEdit;
     GuideSpeedDEC: TFloatSpinEdit;
     ForceGuideSpeed: TCheckBox;
@@ -370,6 +371,8 @@ type
     function  GetCameraStatus: string;
     procedure SetInfo(status: string);
     function  GetInfo: string;
+    procedure SetFastDither(value: boolean);
+    function GetFastDither: boolean;
   public
     { public declarations }
     constructor Create(aOwner: TComponent); override;
@@ -445,6 +448,7 @@ type
     property DrawSettingChange: boolean read FDrawSettingChange write FDrawSettingChange;
     property Info: string read GetInfo write SetInfo;
     property CameraStatus: string read GetCameraStatus write SetCameraStatus;
+    property FastDither: boolean read GetFastDither write SetFastDither;
   end;
 
 implementation
@@ -1680,6 +1684,16 @@ try
 except
   result:=false;
 end;
+end;
+
+procedure Tf_internalguider.SetFastDither(value: boolean);
+begin
+  cb_FastDither.Checked:=value;
+end;
+
+function Tf_internalguider.GetFastDither: boolean;
+begin
+ result:=cb_FastDither.Checked;
 end;
 
 end.

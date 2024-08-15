@@ -52,7 +52,7 @@ type
     xy_trend : xy_guiderlist;{fu_internalguider}
     xy_array,xy_array_old : star_position_array;//internal guider for measure drift
     GuideLog: TextFile;
-    FPaused, FSettling, FSettlingInRange,PulseGuiding,OffsetFromTarget: boolean;
+    FPaused, FSettling, FSettlingInRange, FFastDither, PulseGuiding, OffsetFromTarget: boolean;
     InternalguiderCalibratingMeridianFlip : boolean;
     FSettleStartTime, FSettleTime, FSettleLastDistance, SearchCorrX, SearchCorrY: double;
     TimerWaitPulseGuiding: TSimpleTimer;
@@ -177,6 +177,7 @@ begin
   FRunning:=true;
   FPaused:=false;
   FSettling:=false;
+  FFastDither:=false;
   CalibrationPhase2:=0;
   PulseGuiding:=false;
   OffsetFromTarget:=false;
@@ -379,6 +380,7 @@ begin
       mflipcorr:=0;
     rotate2(((finternalguider.PA+mflipcorr)*pi/180),dra,ddec, ditherX,ditherY);{rotate a vector point, counter clockwise}
     FDithering:=true;
+    FFastDither:=finternalguider.FastDither;
     Finternalguider.OffsetX:=ditherX; // show in spectro offset
     Finternalguider.OffsetY:=ditherY;
     WriteLog('INFO: DITHER by '+FormatFloat(f3,ditherX)+', '+FormatFloat(f3,ditherY));
@@ -467,7 +469,7 @@ begin
   star_counter:=0;
 
   //square search area
-  if finternalguider.SpectroFunctions and FSettling and (not finternalguider.GuideLock) then
+  if (finternalguider.SpectroFunctions or FFastDither) and FSettling and (not finternalguider.GuideLock) then
     searchA:=max(28,round(2*Finternalguider.LongestPulse*Finternalguider.pulsegainEast/1000)) // large enough when moving to the slit using longestpulse
   else
     searchA:=28;
@@ -1282,6 +1284,8 @@ begin
        // check current distance
        dsettle:=sqrt(driftx*driftx+drifty*drifty);
        FSettleLastDistance:=dsettle;
+       if dsettle<(2*FSettlePix) then
+         FFastDither:=false;
        if dsettle<=FSettlePix then begin
          // distance in range
          if FSettlingInRange then begin
@@ -1334,7 +1338,7 @@ begin
   if finternalguider.disable_guiding=false then //guiding enabled
   begin
     //calculate required RA and DEC correction in pixels
-    if FSettling and finternalguider.SpectroFunctions then begin
+    if FSettling and (finternalguider.SpectroFunctions or FFastDither) then begin
       // No hysteresis when moving the star to the slit
       moveRA:=- driftRA * finternalguider.RAgain/100;
       old_moveRA:=0;
