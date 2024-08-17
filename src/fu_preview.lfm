@@ -79,7 +79,6 @@ object f_preview: Tf_preview
       Height = 64
       Top = 28
       Width = 191
-      AutoSize = True
       BevelOuter = bvNone
       ClientHeight = 64
       ClientWidth = 191

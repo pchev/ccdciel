@@ -90,7 +90,7 @@ object f_video: Tf_video
         ParentFont = False
       end
       object Exprange: TComboBox
-        Left = 1
+        Left = 7
         Height = 28
         Top = 18
         Width = 80
@@ -107,6 +107,7 @@ object f_video: Tf_video
         Top = 1
         Width = 101
         Position = 0
+        TickStyle = tsNone
         OnMouseUp = ExposureMouseUp
         OnKeyUp = ExposureKeyUp
         ParentFont = False
@@ -170,6 +171,7 @@ object f_video: Tf_video
         Top = 1
         Width = 101
         Position = 0
+        TickStyle = tsNone
         OnMouseUp = GainMouseUp
         OnKeyUp = GainKeyUp
         ParentFont = False
@@ -202,6 +204,7 @@ object f_video: Tf_video
         Top = 1
         Width = 101
         Position = 0
+        TickStyle = tsNone
         OnMouseUp = GammaMouseUp
         OnKeyUp = GammaKeyUp
         ParentFont = False
@@ -234,6 +237,7 @@ object f_video: Tf_video
         Top = 1
         Width = 101
         Position = 0
+        TickStyle = tsNone
         OnMouseUp = BrightnessMouseUp
         OnKeyUp = BrightnessKeyUp
         ParentFont = False
