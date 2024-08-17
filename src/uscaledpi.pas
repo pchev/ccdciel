@@ -26,7 +26,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 interface
 
 uses
-  Math, Types, StdCtrls,
+  Math, Types, StdCtrls, Buttons,
   Forms, Graphics, Controls, ComCtrls, Grids, LCLType;
 
 procedure SetScale(cnv: TCanvas);
@@ -51,19 +51,28 @@ var
   sc: double;
 const
   teststr = 'The Lazy Fox Jumps';
-  designlen = 118;
-  designhig = 19;
+  designlen = 125;
+  designhig = 18;
 begin
-  {$ifdef SCALE_BY_DPI_ONLY}
+  RunDPI:=DesignDPI;
+  try
   RunDPI := Screen.PixelsPerInch;
+  RunDPI:=max(RunDPI,72);
+  RunDPI:=min(RunDPI,480);
+  {$ifdef SCALE_BY_DPI_ONLY}
+  exit;
   {$else}
+  // take account for font size
   rs := cnv.TextExtent(teststr);
   sc := rs.cx / designlen;
   sc := max(sc, rs.cy / designhig);
   if abs(1 - sc) < 0.02 then
     sc := 1;
-  RunDPI := round(DesignDPI * sc);
+  if (sc>0.75)and(sc<5) then
+    RunDPI := round(DesignDPI * sc);
   {$endif}
+  except
+  end;
 end;
 
 function scale: double;
@@ -134,7 +143,7 @@ var
   n: integer;
   WinControl: TWinControl;
 begin
-  if (Control=nil) or (not UseScaling) or (RunDPI <= DesignDPI) then
+  if (not UseScaling) or (RunDPI <= DesignDPI) then
     exit;
 
   if Control is TUpDown then
@@ -174,12 +183,22 @@ begin
   begin
     with TStringGrid(Control) do
     begin
+      DefaultRowHeight:=DoScaleY(DefaultRowHeight);
       for n := 0 to ColCount - 1 do
       begin
         ColWidths[n] := DoScaleX(ColWidths[n]);
       end;
     end;
     exit;
+  end;
+
+  if Control is TSpeedButton then
+  begin
+    with TSpeedButton(Control) do
+    begin
+      if Font.Height<0 then
+        Font.Height:=-DoScaleX(abs(Font.Height));
+    end;
   end;
 
   if Control is TWinControl then
