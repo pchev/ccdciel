@@ -1204,22 +1204,22 @@ begin
    firstplot:=true;
    for i:=lenb downto 0 do
    begin
-     if xy_trend[i].ra<1E99 then //valid data
+     if ((xy_trend[i].ra<1E99) and (xy_trend[i].dither=false)) then //valid data
      begin
-     x:=w2+round(xy_trend[i].ra*10*thescale) ;
-     y:=h2-round(xy_trend[i].dec*10*thescale);
+       x:=w2+round(xy_trend[i].ra*10*thescale) ;
+       y:=h2-round(xy_trend[i].dec*10*thescale);
 
-     x:=min(max(0,x),width);
-     y:=min(max(0,y),height);
-     if i<6 then Canvas.pen.color:=colorRed else  Canvas.pen.color:=colorGray;
+       x:=min(max(0,x),width);
+       y:=min(max(0,y),height);
+       if i<6 then Canvas.pen.color:=colorRed else  Canvas.pen.color:=colorGray;
 
-     if firstplot then canvas.moveto(x,y) else canvas.lineto(x,y);
-     canvas.Ellipse(x-len,y-len,x+1+len,y+1+len);{circle, the y+1,x+1 are essential to center the circle(ellipse) at the middle of a pixel. Otherwise center is 0.5,0.5 pixel wrong in x, y}
-     mean_ra:=mean_ra+xy_trend[i].ra;
-     mean_dec:=mean_dec+xy_trend[i].dec;
-     inc(counter);
-     firstplot:=false;
-    end;
+       if firstplot then canvas.moveto(x,y) else canvas.lineto(x,y);
+       canvas.Ellipse(x-len,y-len,x+1+len,y+1+len);{circle, the y+1,x+1 are essential to center the circle(ellipse) at the middle of a pixel. Otherwise center is 0.5,0.5 pixel wrong in x, y}
+       mean_ra:=mean_ra+xy_trend[i].ra;
+       mean_dec:=mean_dec+xy_trend[i].dec;
+       inc(counter);
+       firstplot:=false;
+     end;
    end;
 
    if counter>0 then // calculate the RMS error of the variation around the mean value;
@@ -1261,6 +1261,8 @@ var
  i, h2, lenb, x, y, counter :integer;
  scale: double;
  scaleunit : string;
+ PenPattern:TPenPattern;
+
 begin
  with xy_trend1 do
  begin
@@ -1272,6 +1274,30 @@ begin
    canvas.brush.color:=colorBg;
    canvas.rectangle(0,0, width,height);
    canvas.Brush.Style:=bsClear;{transparent style}
+
+
+   //show dither phase
+   Canvas.pen.color:= colorLightGray;
+   Canvas.Pen.width :=6;{thickness lines}
+   Canvas.pen.style:=psSolid;
+   lenb:=length(xy_trend)-1;
+   counter:=lenb;
+   for i:=lenb downto 0  do
+   begin
+     if xy_trend[i].ra<1E99 then //valid data
+     begin
+       x:=width-counter*((width-5) div lenb)-15;
+       dec(counter);
+
+       if xy_trend[i].dither then
+       begin
+         canvas.moveto(x-2,0);
+         canvas.lineto(x-2,height);
+       end;
+     end;
+   end;
+
+
    Canvas.Pen.width :=1;{thickness lines}
 
    for i:=-2 to 2 do
@@ -1302,6 +1328,7 @@ begin
    Canvas.pen.color:=colorBlue;
    canvas.font.color:=colorBlue;
    canvas.textout(5,0,'α');
+
 
    //draw DEC trend
    Canvas.pen.color:=colorRed;
@@ -1335,11 +1362,11 @@ begin
        canvas.lineto(x-1,y);
        dec(counter);
 
-       if xy_trend[i].dither then canvas.textout(x,height-20,'∿');//dither indication
      end;
    end;
 
    //draw RA trend
+   Canvas.Pen.width :=2;{thickness lines}
    Canvas.pen.color:=colorBlue;
    counter:=lenb;
    for i:=lenb downto 0  do

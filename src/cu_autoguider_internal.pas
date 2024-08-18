@@ -1279,7 +1279,6 @@ begin
 
   // Process settling
   if FSettling then begin
-     finternalguider.trend_message('Guider is settling.','','');
      if ((now-FSettleStartTime)*SecsPerDay)<FSettleTmax then begin
        // check current distance
        dsettle:=sqrt(driftx*driftx+drifty*drifty);
@@ -1608,12 +1607,10 @@ begin
   end;
 
   // Plot graph
-  if not FSettling then begin
-    finternalguider.draw_xy(xy_trend);//plot xy values
-    finternalguider.draw_trend(xy_trend);// plot trend
-    for i:=nrpointsTrend-2 downto 0 do {shift values and make place for new values}
-      xy_trend[i+1]:=xy_trend[i];//move records one position
-  end;
+  finternalguider.draw_xy(xy_trend);//plot xy values
+  finternalguider.draw_trend(xy_trend);// plot trend
+  for i:=nrpointsTrend-2 downto 0 do {shift values and make place for new values}
+    xy_trend[i+1]:=xy_trend[i];//move records one position
 
  end;
 end;
