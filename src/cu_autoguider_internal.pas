@@ -43,16 +43,18 @@ type
     InternalguiderInitialize,InternalCalibrationInitialize,GuideLogFileOpen, solar_tracking  : boolean;
     pulseRA,pulseDEC,GuideFrameCount, InternalguiderCalibrationDirection,InternalguiderCalibrationStep,
     CalibrationDuration,Calflip,CalCount,Calnrtest,CalDecBacklash,frame_size,Binning,BacklashStep: integer;
-    driftX,driftY,driftRA,driftDec,moveRA,moveDEC, Guidethecos,old_moveRA,old_moveDEC,  paEast, paNorth,
+    driftX,driftY,driftRA,driftDec,moveRA,moveDEC, old_moveRA,old_moveDEC,  paEast, paNorth,
     pulsegainEast,pulsegainWest,pulsegainNorth,pulsegainSouth,Calthecos,Orthogonality,Caltheangle,CaldriftOld, ditherX,ditherY,
     GuideStartTime,LogSNR,LogFlux,mean_hfd,CalNorthDec1,CalNorthDec2,CalEastRa1,CalEastRa2,CurrentHFD,MinimumDrift,
-    LastDecSign : double;
+    LastDecSign,FFullDitherRa,FFullDitherDec : double;
+    RAduration, DECduration,BacklashDuration : longint;
+    RADirection,DECDirection: string;
     SameDecSignCount,LastBacklashDuration,Dnorth, Dsouth, CalibrationPhase2,watchdog : integer;
     LastBacklash,FirstDecDirectionChange: boolean;
     xy_trend : xy_guiderlist;{fu_internalguider}
     xy_array,xy_array_old : star_position_array;//internal guider for measure drift
     GuideLog: TextFile;
-    FPaused, FSettling, FSettlingInRange, FFastDither, PulseGuiding, OffsetFromTarget: boolean;
+    FPaused, FSettling, FSettlingInRange, FFastDither, PulseGuiding, OffsetFromTarget, FInitialDither: boolean;
     InternalguiderCalibratingMeridianFlip : boolean;
     FSettleStartTime, FSettleTime, FSettleLastDistance, SearchCorrX, SearchCorrY: double;
     TimerWaitPulseGuiding: TSimpleTimer;
@@ -71,6 +73,8 @@ type
     Procedure CloseLog;
     procedure TimerWaitPulseGuidingTimer(const Sender: TObject);
     function SelectSpectroTarget: boolean;
+    procedure pulse_move(pulse_limit_ms : longint);
+
   protected
     Procedure ProcessEvent(txt:string); override;
     procedure Execute; override;
@@ -176,6 +180,7 @@ begin
   FState:=GUIDER_IDLE;
   FRunning:=true;
   FPaused:=false;
+  FInitialDither:=false;
   FSettling:=false;
   FFastDither:=false;
   CalibrationPhase2:=0;
@@ -365,28 +370,41 @@ begin
   end;
 end;
 
+
 procedure T_autoguider_internal.Dither(pixel:double; raonly:boolean; waittime:double);
-var dra,ddec,mflipcorr: double;
+var
+   dra,ddec,mflipcorr: double;
 begin
-  if ((InternalguiderGuiding) and (not InternalguiderInitialize) and  (not solar_tracking)) then begin
-    dra:=(2*random-1)*pixel; // in pixel
+  if ((InternalguiderGuiding) and (not InternalguiderInitialize) and  (not solar_tracking)) and (not finternalguider.SpectroFunctions) then begin
+    dra:=(2*random-1)*pixel; // RA dither amount in pixels
     if raonly then
       ddec:=0
     else
-      ddec:=(2*random-1)*pixel;
+      ddec:=(2*random-1)*pixel;//DEC dither ammount in pixels
+
+    // move fast for the first pulse
+    FInitialDither:=true;
+    FFullDitherRa:=dra;
+    FFullDitherDec:=ddec;
+
     if mount.isGem and ((mount.PierSide=pierWest) <> (pos('E',finternalguider.pier_side)>0)) then // Did a meridian flip occur since calibration.
       mflipcorr:=180 // A meridian flip occurred
     else
       mflipcorr:=0;
     rotate2(((finternalguider.PA+mflipcorr)*pi/180),dra,ddec, ditherX,ditherY);{rotate a vector point, counter clockwise}
+
     FDithering:=true;
-    FFastDither:=finternalguider.FastDither;
+    FFastDither:=True; // disable hysteresis
     Finternalguider.OffsetX:=ditherX; // show in spectro offset
     Finternalguider.OffsetY:=ditherY;
     WriteLog('INFO: DITHER by '+FormatFloat(f3,ditherX)+', '+FormatFloat(f3,ditherY));
     StartSettle;
-  end;
+  end
+  else
+    msg('Cannot dither now',0);
 end;
+
+
 
 procedure T_autoguider_internal.StarLostTimerTimer(Sender: TObject);
 begin
@@ -455,7 +473,7 @@ end;
 function  T_autoguider_internal.measure_drift(var initialize:boolean; out drX,drY :double) : integer;// ReferenceX,Y indicates the total drift, drX,drY to drift since previouse call. Arrays old_xy_array,xy_array are for storage star positions
 var
   i,fitsx,fitsy,stepsize,xsize,ysize,star_counter,star_counter2,counter,len,maxSNRstar,ix,iy: integer;
-  hfd1,star_fwhm,vmax,bg,bgdev,xc,yc,snr,flux,fluxratio,min_SNR,min_HFD,maxSNR,{maxSNRhfd,}margin,y,mhfd,peak : double;
+  hfd1,star_fwhm,vmax,bg,bgdev,xc,yc,snr,flux,fluxratio,min_SNR,min_HFD,maxSNR,margin,y,mhfd,peak : double;
   x1,y1,bg1,bgdev1,fwhm1,vmax1,snr1,flux1: double;
   GuideLock: boolean;
   drift_arrayX,drift_arrayY : array of double;
@@ -513,7 +531,6 @@ begin
   min_HFD:=finternalguider.minHFD;//make local to reduce some CPU load
   maxSNR:=0;
   maxSNRstar:=0;
-  //maxSNRhfd:=0;
   if xsize<800 then
     margin:=2*DitherPixel+10
   else if xsize<1200 then
@@ -611,7 +628,6 @@ begin
           // for single star detection
           if (snr>maxSNR)and(xc>margin)and(xc<(xsize-margin))and(yc>margin)and(yc<(ysize-margin)) then begin
             maxSNR:=snr;
-            //maxSNRhfd:=hfd1;
             maxSNRstar:=star_counter;
           end;
 
@@ -1134,12 +1150,165 @@ begin
   WriteLog('INFO: Guiding parameter change, '+txt);
 end;
 
+
+procedure T_autoguider_internal.pulse_move(pulse_limit_ms : longint);
+var
+  moveRA2,cos_decl, DecSign: double;
+  largepulse : boolean;
+  NewPulseDEC : longint;
+begin
+  pulseRA:=0;
+  pulseDEC:=0;
+  RADuration:=0;
+  RADirection:='';
+  DECDuration:=0;
+  DECDirection:='';
+  BacklashDuration:=0;
+
+  cos_decl:=max(0.000001,cos(mount.Dec*pi/180));
+  moveRA2:=moveRA/cos_decl; //calculate angular movement. Rotation in pixels near celestial pole decreases with cos(dec)
+
+
+  if moveRA2>0 then //going East increases the RA
+  begin
+     pulseRA:=min(pulse_limit_ms,round(1000*abs(moveRA2/finternalguider.pulsegainEast))); {duration msec}
+     moveRA := abs(pulseRA * finternalguider.pulsegainEast/1000)*cos_decl; // next expected move in pixels
+
+     if pulseRA>finternalguider.shortestPulse then //Large enough correction to follow by motors/relays. Complementary with minimum_move
+     begin
+       //msg('East: '+inttostr(pulseRA),3);
+       mount.PulseGuide(2,pulseRA);  // 0=north, 1=south, 2 East, 3 West
+       RADuration:=abs(pulseRA);
+       RADirection:='E';
+     end
+     else moveRA:=0; // for trend in pixels
+  end
+  else
+  if moveRA2<0 then //going West
+  begin
+    pulseRA:=min(pulse_limit_ms,round(1000*abs(moveRA2/finternalguider.pulsegainWest))); {duration msec}
+    moveRA := -abs(pulseRA * finternalguider.pulsegainEast/1000); // next expected move
+    if pulseRA>finternalguider.shortestPulse then
+    begin
+      //msg('West: '+inttostr(pulseRA),3);
+      mount.PulseGuide(3,pulseRA);  // 0=north, 1=south, 2 East, 3 West
+      RADuration:=abs(pulseRA);
+      RADirection:='W';
+    end
+     else moveRA:=0; // for trend in pixels
+  end;
+
+
+  // to prevent Dec oscillation, wait 3 corrections in the same direction,
+  // except if the correction is more than 3X shortestpulse
+  DecSign:=sgn(moveDEC);
+  largepulse:=round(1000*abs(moveDEC/finternalguider.pulsegainNorth))>(3*finternalguider.ShortestPulse);  // 3 * minimal pulse
+  if (not LastBacklash)and (not finternalguider.SolarTracking) then begin
+    // tracking comet likely make the correction always in the same direction, disable this process in this case
+    if largepulse then begin
+      // force pulse
+      LastDecSign:=DecSign;
+      SameDecSignCount:=maxreverse-1;
+    end;
+    if LastDecSign<>0 then begin
+      if (LastDecSign=DecSign) then begin
+        inc(SameDecSignCount);
+        if SameDecSignCount<maxreverse then begin
+          // wait more
+          moveDEC:=0;
+        end
+        else if (SameDecSignCount=maxreverse)and(DecSign<>sign(LastBacklashDuration)) then begin
+          if FirstDecDirectionChange then begin
+            // no backlash compensation for the first change after start guiding
+            FirstDecDirectionChange:=false;
+            LastBacklash:=false;
+            BacklashDuration:=0;
+            LastBacklashDuration:=round(DecSign*finternalguider.DecBacklash);
+          end
+          else begin
+            // eventual backlash compensation
+            BacklashDuration:=round(DecSign*abs(LastBacklashDuration));
+          end;
+        end;
+      end
+      else begin
+        // initialize new direction
+        SameDecSignCount:=0;
+        moveDEC:=0;
+      end;
+    end;
+    LastDecSign:=DecSign;
+  end;
+
+
+  // backlash compensation
+  if LastBacklash then begin
+    // last pulse was a backlash compensation, look at the result
+    NewPulseDEC:=round(1000*abs(moveDEC/finternalguider.pulsegainNorth)); {next pulse duration msec after backlash}
+    if NewPulseDEC>(finternalguider.ShortestPulse) then begin
+      // more correction are required after backlash compensation
+      if DecSign=sgn(LastBacklashDuration) then begin
+        // still in same direction, increase compensation for next time
+        LastBacklashDuration:=round(sgn(LastBacklashDuration)*min(pulse_limit_ms,abs(LastBacklashDuration)+NewPulseDEC/2));
+        finternalguider.DecBacklash:=abs(LastBacklashDuration); //update backlash in config
+      end
+      else begin
+        // direction change, decrease compensation for next time
+        LastBacklashDuration:=round(sgn(LastBacklashDuration)*min(pulse_limit_ms,abs(LastBacklashDuration)-NewPulseDEC));
+        finternalguider.DecBacklash:=abs(LastBacklashDuration); //update backlash in config
+      end;
+    end;
+    LastBacklash:=false;
+  end
+  else begin
+    if (BacklashDuration<>0) and Finternalguider.BacklashCompensation then begin
+       // use backlash compensation now
+       if DecSign>0 then
+         moveDEC:=abs(BacklashDuration*finternalguider.pulsegainNorth/1000) // convert duration to pixel
+       else
+         moveDEC:=-abs(BacklashDuration*finternalguider.pulsegainSouth/1000);
+       LastBacklashDuration:=BacklashDuration;
+       LastBacklash:=true;
+    end;
+  end;
+
+
+
+  if moveDEC>0 then //go North increase the DEC.
+  begin
+    pulseDEC:=min(pulse_limit_ms,round(1000*abs(moveDEC/finternalguider.pulsegainNorth))); {duration msec}
+    moveDec :=  abs(pulseDEC * finternalguider.pulsegainNorth/1000);  // next expected move
+    if pulseDEC>finternalguider.shortestPulse then
+    begin
+      //msg('North: '+inttostr(pulseDEC),3);
+      mount.PulseGuide(Dnorth,pulseDEC);  // 0=north, 1=south, 2 East, 3 West
+      DECDuration:=abs(pulseDEC);
+      DECDirection:='N';
+    end
+    else moveDEC:=0; // for trend in pixels
+  end
+  else
+  if moveDEC<0 then //go South
+  begin
+    pulseDEC:=min(pulse_limit_ms,round(1000*abs(moveDEC/finternalguider.pulsegainSouth))); {duration msec}
+    moveDec :=  -abs(pulseDEC * finternalguider.pulsegainNorth/1000);  // next expected move
+    if pulseDEC>finternalguider.shortestPulse then
+    begin
+      //msg('South: '+inttostr(pulseDEC),3);
+      mount.PulseGuide(Dsouth,pulseDEC);  // 0=north, 1=south, 2 East, 3 West
+      DECDuration:=abs(pulseDEC);
+      DECDirection:='S';
+    end
+    else moveDEC:=0; // for trend in pixels
+  end;
+end;
+
+
 procedure T_autoguider_internal.InternalAutoguiding;
 var i,maxpulse    : integer;
-    RADuration,DECDuration,BacklashDuration,NewPulseDEC: LongInt;
-    RADirection,DECDirection,pulsedir: string;
-    mflipcorr,PAsolar,moveRA2,dsettle,DecSign,SearchCorrRA,SearchCorrDec: double;
-    meridianflip, largepulse, initial: boolean;
+    pulsedir: string;
+    mflipcorr,PAsolar,dsettle: double;
+    meridianflip, initial: boolean;
 
           procedure track_solar_object;//neo and comet tracking
           // Calculates the total integrated correction in pixels for the reference stars in the guider image (DitherX, DitherY)
@@ -1315,7 +1484,7 @@ begin
        SetStatus('Guiding',GUIDER_GUIDING);
        WriteLog('INFO: SETTLING STATE CHANGE, Settling failed');
      end;
-  end
+  end //settling
   else begin
     // star lost recovered
     if FState=GUIDER_ALERT then
@@ -1328,7 +1497,6 @@ begin
   else
     mflipcorr:=0;
   rotate2((- (finternalguider.PA+mflipcorr)*pi/180),driftX,driftY, driftRA,driftDec);{rotate a vector point, counter clockwise}
-
   if finternalguider.pulsegainNorth>0 then driftDEC:=-driftDEC;//flipped image correction. E.g. an image where north is up and east on the right size.
 
   xy_trend[0].ra:=-DriftRa;//store RA drift in pixels.
@@ -1337,7 +1505,14 @@ begin
   if finternalguider.disable_guiding=false then //guiding enabled
   begin
     //calculate required RA and DEC correction in pixels
-    if FSettling and (finternalguider.SpectroFunctions or FFastDither) then begin
+    if FInitialDither then begin
+      // move the full dither
+      moveRA:= -FFullDitherRa;
+      old_moveRA:=0;
+      moveDEC:=+FFullDitherDec;
+      old_moveDEC:=0;
+    end
+    else if FSettling and (finternalguider.SpectroFunctions or FFastDither) then begin
       // No hysteresis when moving the star to the slit
       moveRA:=- driftRA * finternalguider.RAgain/100;
       old_moveRA:=0;
@@ -1352,159 +1527,33 @@ begin
       old_moveDEC:=moveDEC;//Store for next cycle hysteresis calculation
     end;
 
-    Guidethecos:=cos(mount.Dec*pi/180); if Guidethecos<0.000001 then Guidethecos:=0.000001;
-    moveRA2:=moveRA/Guidethecos; //correct pixels with cos(dec). Rotation in pixels near celestial pole decreases with cos(dec)
-
-    pulseRA:=0;
-    pulseDEC:=0;
-    RADuration:=0;
-    RADirection:='';
-    DECDuration:=0;
-    DECDirection:='';
-    BacklashDuration:=0;
-
-    if moveRA2>0 then //going East increases the RA
-    begin
-       pulseRA:=min(finternalguider.LongestPulse,round(1000*abs(moveRA2/finternalguider.pulsegainEast))); {duration msec}
-       SearchCorrRA := abs(pulseRA * finternalguider.pulsegainEast/1000); // next expected move
-       if pulseRA>finternalguider.shortestPulse then //Large enough correction to follow by motors/relays. Complementary with minimum_move
-       begin
-         //msg('East: '+inttostr(pulseRA),3);
-         mount.PulseGuide(2,pulseRA);  // 0=north, 1=south, 2 East, 3 West
-         RADuration:=abs(pulseRA);
-         RADirection:='E';
-       end
-       else moveRA:=0; // for trend in pixels
-    end
-    else
-    if moveRA2<0 then //going West
-    begin
-      pulseRA:=min(finternalguider.LongestPulse,round(1000*abs(moveRA2/finternalguider.pulsegainWest))); {duration msec}
-      SearchCorrRA := -abs(pulseRA * finternalguider.pulsegainEast/1000); // next expected move
-      if pulseRA>finternalguider.shortestPulse then
-      begin
-        //msg('West: '+inttostr(pulseRA),3);
-        mount.PulseGuide(3,pulseRA);  // 0=north, 1=south, 2 East, 3 West
-        RADuration:=abs(pulseRA);
-        RADirection:='W';
-      end
-       else moveRA:=0; // for trend in pixels
-    end;
-
-    // to prevent Dec oscillation, wait 3 corrections in the same direction,
-    // except if the correction is more than 3X shortestpulse
-    DecSign:=sgn(moveDEC);
-    largepulse:=round(1000*abs(moveDEC/finternalguider.pulsegainNorth))>(3*finternalguider.ShortestPulse);  // 3 * minimal pulse
-    if (not LastBacklash)and (not finternalguider.SolarTracking) then begin
-      // tracking comet likely make the correction always in the same direction, disable this process in this case
-      if largepulse then begin
-        // force pulse
-        LastDecSign:=DecSign;
-        SameDecSignCount:=maxreverse-1;
-      end;
-      if LastDecSign<>0 then begin
-        if (LastDecSign=DecSign) then begin
-          inc(SameDecSignCount);
-          if SameDecSignCount<maxreverse then begin
-            // wait more
-            moveDEC:=0;
-          end
-          else if (SameDecSignCount=maxreverse)and(DecSign<>sign(LastBacklashDuration)) then begin
-            if FirstDecDirectionChange then begin
-              // no backlash compensation for the first change after start guiding
-              FirstDecDirectionChange:=false;
-              LastBacklash:=false;
-              BacklashDuration:=0;
-              LastBacklashDuration:=round(DecSign*finternalguider.DecBacklash);
-            end
-            else begin
-              // eventual backlash compensation
-              BacklashDuration:=round(DecSign*abs(LastBacklashDuration));
-            end;
-          end;
-        end
-        else begin
-          // initialize new direction
-          SameDecSignCount:=0;
-          moveDEC:=0;
-        end;
-      end;
-      LastDecSign:=DecSign;
-    end;
-
-    // backlash compensation
-    if LastBacklash then begin
-      // last pulse was a backlash compensation, look at the result
-      NewPulseDEC:=round(1000*abs(moveDEC/finternalguider.pulsegainNorth)); {next pulse duration msec after backlash}
-      if NewPulseDEC>(finternalguider.ShortestPulse) then begin
-        // more correction are required after backlash compensation
-        if DecSign=sgn(LastBacklashDuration) then begin
-          // still in same direction, increase compensation for next time
-          LastBacklashDuration:=round(sgn(LastBacklashDuration)*min(finternalguider.LongestPulse,abs(LastBacklashDuration)+NewPulseDEC/2));
-          finternalguider.DecBacklash:=abs(LastBacklashDuration); //update backlash in config
-        end
-        else begin
-          // direction change, decrease compensation for next time
-          LastBacklashDuration:=round(sgn(LastBacklashDuration)*min(finternalguider.LongestPulse,abs(LastBacklashDuration)-NewPulseDEC));
-          finternalguider.DecBacklash:=abs(LastBacklashDuration); //update backlash in config
-        end;
-      end;
-      LastBacklash:=false;
+    if FInitialDither then begin
+      // large initial dither pulse
+       pulse_move(30*1000 {limit pulse to 30 seconds});//move the mount with specified moveRA and moveDEC using pulses
+       InternalguiderInitialize:=true;
     end
     else begin
-      if (BacklashDuration<>0) and Finternalguider.BacklashCompensation then begin
-         // use backlash compensation now
-         if DecSign>0 then
-           moveDEC:=abs(BacklashDuration*finternalguider.pulsegainNorth/1000) // convert duration to pixel
-         else
-           moveDEC:=-abs(BacklashDuration*finternalguider.pulsegainSouth/1000);
-         LastBacklashDuration:=BacklashDuration;
-         LastBacklash:=true;
-      end;
+      pulse_move(finternalguider.LongestPulse);//move the mount with specified moveRA and moveDEC using pulses
     end;
-
-    if moveDEC>0 then //go North increase the DEC.
-    begin
-      pulseDEC:=min(finternalguider.LongestPulse,round(1000*abs(moveDEC/finternalguider.pulsegainNorth))); {duration msec}
-      SearchCorrDec :=  abs(pulseDEC * finternalguider.pulsegainNorth/1000);  // next expected move
-      if pulseDEC>finternalguider.shortestPulse then
-      begin
-        //msg('North: '+inttostr(pulseDEC),3);
-        mount.PulseGuide(Dnorth,pulseDEC);  // 0=north, 1=south, 2 East, 3 West
-        DECDuration:=abs(pulseDEC);
-        DECDirection:='N';
-      end
-      else moveDEC:=0; // for trend in pixels
-    end
-    else
-    if moveDEC<0 then //go South
-    begin
-      pulseDEC:=min(finternalguider.LongestPulse,round(1000*abs(moveDEC/finternalguider.pulsegainSouth))); {duration msec}
-      SearchCorrDec :=  -abs(pulseDEC * finternalguider.pulsegainNorth/1000);  // next expected move
-      if pulseDEC>finternalguider.shortestPulse then
-      begin
-        //msg('South: '+inttostr(pulseDEC),3);
-        mount.PulseGuide(Dsouth,pulseDEC);  // 0=north, 1=south, 2 East, 3 West
-        DECDuration:=abs(pulseDEC);
-        DECDirection:='S';
-      end
-      else moveDEC:=0; // for trend in pixels
-    end;
-
 
     // wait for puls guide move completed
     maxpulse:=max(pulseRA,pulseDEC);
     if maxpulse>finternalguider.shortestPulse then
     begin
-      WaitPulseGuiding(maxpulse);
+      WaitPulseGuiding(maxpulse);//If this timer has run a new exposure is started
+    end;
+
+    if FInitialDither then begin
+      // do not plot the large bump
+      FInitialDither:=false;
+      exit;
     end;
 
     xy_trend[0].racorr:=-moveRA;//store RA correction in pixels for trend
     xy_trend[0].deccorr:=+moveDEC;//store DEC correction in pixels for trend
 
-    if {FSettling and} finternalguider.SpectroFunctions and (moveRA2<>0) and (moveDEC<>0) then begin
-      SearchCorrRA:=SearchCorrRA*Guidethecos;
-      rotate2(((finternalguider.PA+mflipcorr)*pi/180),SearchCorrRA,SearchCorrDec, SearchCorrX,SearchCorrY);
+    if finternalguider.SpectroFunctions and (moveRA<>0) and (moveDEC<>0) then begin
+      rotate2(((finternalguider.PA+mflipcorr)*pi/180),moveRA,moveDec, SearchCorrX,SearchCorrY);
     end
     else begin
       SearchCorrX:=0;
@@ -1522,7 +1571,7 @@ begin
                FormatFloat(f3,driftY)+','+
                FormatFloat(f3,driftRA)+','+
                FormatFloat(f3,driftDec)+','+
-               FormatFloat(f3,moveRA2)+','+ //moveRA2 is in pixels
+               FormatFloat(f3,moveRA)+','+ //moveRA is in pixels
                FormatFloat(f3,moveDEC)+','+
                IntToStr(RADuration)+','+
                RADirection+','+
@@ -1574,8 +1623,8 @@ begin
        //calculate required DEC correction in pixels
        moveDEC:=(- driftDEC*(1 - finternalguider.DEC_hysteresis/100) +   old_moveDEC * finternalguider.DEC_hysteresis/100 ) * finternalguider.DECgain/100;//Hysteresis as in PHD1
        old_moveDEC:=moveDEC;//Store for next cycle hysteresis calculation
-       Guidethecos:=cos(mount.Dec*pi/180); if Guidethecos<0.000001 then Guidethecos:=0.000001;
-       moveRA2:=moveRA/Guidethecos; //correct pixels with cos(dec). Rotation in pixels near celestial pole decreases with cos(dec)
+       //Guidethecos:=cos(mount.Dec*pi/180); if Guidethecos<0.000001 then Guidethecos:=0.000001;
+       //moveRA2:=moveRA/Guidethecos; //correct pixels with cos(dec). Rotation in pixels near celestial pole decreases with cos(dec)
        RADuration:=0;
        DECDuration:=0;
        RADirection:='';
@@ -1590,7 +1639,7 @@ begin
                 FormatFloat(f3,driftY)+','+
                 FormatFloat(f3,driftRA)+','+
                 FormatFloat(f3,driftDec)+','+
-                FormatFloat(f3,moveRA2)+','+ //moveRA2 is in pixels
+                FormatFloat(f3,moveRA)+','+ //moveRA is in pixels, moveRA2 is a rotation
                 FormatFloat(f3,moveDEC)+','+
                 IntToStr(RADuration)+','+
                 RADirection+','+

@@ -63,7 +63,6 @@ type
     CalIssue: TEdit;
     cbFGuideMultiStar: TCheckBox;
     cbEnlargeImage: TCheckBox;
-    cb_FastDither: TCheckBox;
     GuideSpeedRA: TFloatSpinEdit;
     GuideSpeedDEC: TFloatSpinEdit;
     ForceGuideSpeed: TCheckBox;
@@ -321,16 +320,12 @@ type
     function GetScale:integer;
     procedure SetScale(value:integer);
     function GetFrameSize: integer;
-//    function GetInverseSolarTracking: Boolean;
-//    procedure SetInverseSolarTracking(value: Boolean);
     function GetSolartracking: Boolean;
     procedure SetSolarTracking(value: Boolean);
     procedure SetV_solar(value:double);
     function GetV_solar:double;
     procedure SetVPA_solar(value:double);
     function GetVPa_solar:double;
-//    function GetReverseDec: Boolean;
-//    procedure SetReverseDec(value: Boolean);
     procedure SetBacklash(value:integer);
     function GetBacklash:integer;
     procedure SetBacklashCompensation(value:Boolean);
@@ -371,8 +366,7 @@ type
     function  GetCameraStatus: string;
     procedure SetInfo(status: string);
     function  GetInfo: string;
-    procedure SetFastDither(value: boolean);
-    function GetFastDither: boolean;
+
   public
     { public declarations }
     constructor Create(aOwner: TComponent); override;
@@ -448,7 +442,7 @@ type
     property DrawSettingChange: boolean read FDrawSettingChange write FDrawSettingChange;
     property Info: string read GetInfo write SetInfo;
     property CameraStatus: string read GetCameraStatus write SetCameraStatus;
-    property FastDither: boolean read GetFastDither write SetFastDither;
+
   end;
 
 implementation
@@ -1261,7 +1255,6 @@ var
  i, h2, lenb, x, y, counter :integer;
  scale: double;
  scaleunit : string;
- PenPattern:TPenPattern;
 
 begin
  with xy_trend1 do
@@ -1276,7 +1269,7 @@ begin
    canvas.Brush.Style:=bsClear;{transparent style}
 
 
-   //show dither phase
+   //mark dither phase as grey background
    Canvas.pen.color:= colorLightGray;
    Canvas.Pen.width :=6;{thickness lines}
    Canvas.pen.style:=psSolid;
@@ -1361,7 +1354,6 @@ begin
        canvas.moveto(x-1,h2);{one pixel behind to allow both RA and DEC action to be drawn}
        canvas.lineto(x-1,y);
        dec(counter);
-
      end;
    end;
 
@@ -1711,16 +1703,6 @@ try
 except
   result:=false;
 end;
-end;
-
-procedure Tf_internalguider.SetFastDither(value: boolean);
-begin
-  cb_FastDither.Checked:=value;
-end;
-
-function Tf_internalguider.GetFastDither: boolean;
-begin
- result:=cb_FastDither.Checked;
 end;
 
 end.

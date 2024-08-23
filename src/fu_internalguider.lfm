@@ -64,6 +64,7 @@ object f_internalguider: Tf_internalguider
           ClientHeight = 628
           ClientWidth = 340
           Color = clMenu
+          ParentBackground = False
           ParentColor = False
           ParentFont = False
           TabOrder = 0
@@ -331,6 +332,7 @@ object f_internalguider: Tf_internalguider
             Top = 504
             Width = 310
             Anchors = [akTop, akLeft, akRight]
+            ParentBackground = False
             TabOrder = 11
           end
         end
@@ -348,6 +350,7 @@ object f_internalguider: Tf_internalguider
           ClientHeight = 628
           ClientWidth = 340
           Color = clMenu
+          ParentBackground = False
           ParentColor = False
           TabOrder = 0
           object Panel6: TPanel
@@ -359,6 +362,7 @@ object f_internalguider: Tf_internalguider
             BevelOuter = bvNone
             ClientHeight = 103
             ClientWidth = 338
+            ParentBackground = False
             TabOrder = 0
             object ButtonDark: TButton
               Left = 11
@@ -403,6 +407,7 @@ object f_internalguider: Tf_internalguider
             BevelOuter = bvNone
             ClientHeight = 66
             ClientWidth = 338
+            ParentBackground = False
             TabOrder = 1
             object Label10: TLabel
               AnchorSideTop.Control = Exposure
@@ -456,6 +461,7 @@ object f_internalguider: Tf_internalguider
             BevelOuter = bvNone
             ClientHeight = 34
             ClientWidth = 338
+            ParentBackground = False
             TabOrder = 2
             object Label15: TLabel
               AnchorSideTop.Control = Gain
@@ -484,6 +490,7 @@ object f_internalguider: Tf_internalguider
             BevelOuter = bvNone
             ClientHeight = 34
             ClientWidth = 338
+            ParentBackground = False
             TabOrder = 3
             object Label16: TLabel
               AnchorSideTop.Control = Offset
@@ -512,6 +519,7 @@ object f_internalguider: Tf_internalguider
             BevelOuter = bvNone
             ClientHeight = 60
             ClientWidth = 338
+            ParentBackground = False
             TabOrder = 4
             object Label21: TLabel
               AnchorSideTop.Control = Temperature
@@ -576,6 +584,7 @@ object f_internalguider: Tf_internalguider
             BevelOuter = bvNone
             ClientHeight = 144
             ClientWidth = 338
+            ParentBackground = False
             TabOrder = 5
             object Label17: TLabel
               AnchorSideTop.Control = Gamma
@@ -703,17 +712,19 @@ object f_internalguider: Tf_internalguider
           ClientHeight = 628
           ClientWidth = 340
           Color = clMenu
+          ParentBackground = False
           ParentColor = False
           TabOrder = 0
           object GroupBox1: TGroupBox
             Left = 0
-            Height = 454
+            Height = 436
             Top = 0
             Width = 340
             Align = alTop
             Caption = 'Options:'
-            ClientHeight = 424
+            ClientHeight = 406
             ClientWidth = 336
+            ParentBackground = False
             TabOrder = 0
             object ShortestPulse1: TSpinEdit
               Left = 200
@@ -928,31 +939,24 @@ object f_internalguider: Tf_internalguider
               Left = 8
               Height = 22
               Hint = 'For testing. This will disable guiding but still show the trend.'
-              Top = 396
+              Top = 376
               Width = 191
               Caption = 'Disable guiding temporary'
               OnChange = disable_guiding1Change
               ParentFont = False
               TabOrder = 10
             end
-            object cb_FastDither: TCheckBox
-              Left = 8
-              Height = 22
-              Top = 368
-              Width = 168
-              Caption = 'Fast dither recentering'
-              TabOrder = 11
-            end
           end
           object GroupBox3: TGroupBox
             Left = 0
-            Height = 174
-            Top = 454
+            Height = 192
+            Top = 436
             Width = 340
             Align = alClient
             Caption = 'Calibration options'
-            ClientHeight = 144
+            ClientHeight = 162
             ClientWidth = 336
+            ParentBackground = False
             TabOrder = 1
             object measure_method2: TCheckBox
               Left = 8
@@ -1002,6 +1006,7 @@ object f_internalguider: Tf_internalguider
               BevelOuter = bvNone
               ClientHeight = 42
               ClientWidth = 330
+              ParentBackground = False
               TabOrder = 3
               object Label41: TLabel
                 Left = 32
@@ -1061,6 +1066,7 @@ object f_internalguider: Tf_internalguider
           ClientHeight = 598
           ClientWidth = 340
           Color = clMenu
+          ParentBackground = False
           ParentColor = False
           TabOrder = 0
           object GroupBoxSlit: TGroupBox
@@ -1072,6 +1078,7 @@ object f_internalguider: Tf_internalguider
             Caption = 'Slit drawing'
             ClientHeight = 200
             ClientWidth = 336
+            ParentBackground = False
             TabOrder = 0
             object Label32: TLabel
               AnchorSideTop.Control = spSlitX
@@ -1192,6 +1199,7 @@ object f_internalguider: Tf_internalguider
             Align = alTop
             ClientHeight = 60
             ClientWidth = 336
+            ParentBackground = False
             TabOrder = 1
             object cbGuideLock: TCheckBox
               Left = 8
@@ -1220,6 +1228,7 @@ object f_internalguider: Tf_internalguider
             Caption = 'Guide position on the slit'
             ClientHeight = 170
             ClientWidth = 336
+            ParentBackground = False
             TabOrder = 2
             object edLockX: TFloatSpinEdit
               Left = 180
@@ -1323,6 +1332,7 @@ object f_internalguider: Tf_internalguider
                 Caption = 'Star search area'
                 ClientHeight = 74
                 ClientWidth = 332
+                ParentBackground = False
                 TabOrder = 0
                 object Label30: TLabel
                   AnchorSideTop.Control = edslitWinMin
@@ -1375,6 +1385,7 @@ object f_internalguider: Tf_internalguider
                 Caption = 'Multi-star guide offset'
                 ClientHeight = 74
                 ClientWidth = 332
+                ParentBackground = False
                 TabOrder = 0
                 object edOffsetX: TFloatSpinEdit
                   Left = 180
@@ -1424,6 +1435,7 @@ object f_internalguider: Tf_internalguider
           ClientHeight = 30
           ClientWidth = 340
           Color = clMenu
+          ParentBackground = False
           ParentColor = False
           TabOrder = 1
           object cbSpectro: TCheckBox
@@ -1452,6 +1464,7 @@ object f_internalguider: Tf_internalguider
           ClientHeight = 628
           ClientWidth = 340
           Color = clMenu
+          ParentBackground = False
           ParentColor = False
           ParentFont = False
           TabOrder = 0
@@ -1464,6 +1477,7 @@ object f_internalguider: Tf_internalguider
             Caption = 'Calibration results:'
             ClientHeight = 598
             ClientWidth = 336
+            ParentBackground = False
             TabOrder = 0
             object Label5: TLabel
               AnchorSideTop.Control = pa1
