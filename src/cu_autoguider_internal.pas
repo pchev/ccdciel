@@ -46,7 +46,7 @@ type
     driftX,driftY,driftRA,driftDec,moveRA,moveDEC, old_moveRA,old_moveDEC,  paEast, paNorth,
     pulsegainEast,pulsegainWest,pulsegainNorth,pulsegainSouth,Calthecos,Orthogonality,Caltheangle,CaldriftOld, ditherX,ditherY,
     GuideStartTime,LogSNR,LogFlux,mean_hfd,CalNorthDec1,CalNorthDec2,CalEastRa1,CalEastRa2,CurrentHFD,MinimumDrift,
-    LastDecSign,FFullDitherRa,FFullDitherDec : double;
+    LastDecSign,FFullDitherRa,FFullDitherDec,PulseGuidingStartTime : double;
     RAduration, DECduration,BacklashDuration : longint;
     RADirection,DECDirection: string;
     SameDecSignCount,LastBacklashDuration,Dnorth, Dsouth, CalibrationPhase2,watchdog : integer;
@@ -72,6 +72,7 @@ type
     Procedure WriteLog( buf : string);
     Procedure CloseLog;
     procedure TimerWaitPulseGuidingTimer(const Sender: TObject);
+    procedure TimerWaitPulseGuidingTimerSync;
     function SelectSpectroTarget: boolean;
     procedure pulse_move(pulse_limit_ms : longint);
 
@@ -1667,7 +1668,8 @@ end;
 function T_autoguider_internal.WaitPulseGuiding(pulse:longint): boolean;
 begin
  PulseGuiding:=true;
- TimerWaitPulseGuiding.Interval:=pulse;
+ PulseGuidingStartTime:=now;
+ TimerWaitPulseGuiding.Interval:=pulse+100; // add 100ms wait time for driver delay
  TimerWaitPulseGuiding.Enabled:=false;
  TimerWaitPulseGuiding.Enabled:=true;
  result:=true;
@@ -1675,8 +1677,25 @@ end;
 
 procedure T_autoguider_internal.TimerWaitPulseGuidingTimer(const Sender: TObject);
 begin
+  // this run in TSimpleTimer thread, don't use mount property here.
   TimerWaitPulseGuiding.Enabled:=false;
-  PulseGuiding:=false;
+  Synchronize(@TimerWaitPulseGuidingTimerSync);
+end;
+
+procedure T_autoguider_internal.TimerWaitPulseGuidingTimerSync;
+const delay=10;
+begin
+  if mount.PulseGuiding then begin
+     // mount report the pulse is still in progress, try to wait a bit more
+     if ((now-PulseGuidingStartTime)*SecsPerDay) < delay then begin
+       TimerWaitPulseGuiding.Interval:=500;
+       TimerWaitPulseGuiding.Enabled:=true;
+     end
+     else
+       msg('Mount pulse guiding not completed after '+inttostr(delay)+' seconds delay!',0);
+  end
+  else
+    PulseGuiding:=false;
 end;
 
 procedure T_autoguider_internal.InternalguiderStop(verbose: boolean=True);
