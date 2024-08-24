@@ -1691,8 +1691,10 @@ begin
        TimerWaitPulseGuiding.Interval:=500;
        TimerWaitPulseGuiding.Enabled:=true;
      end
-     else
+     else begin
        msg('Mount pulse guiding not completed after '+inttostr(delay)+' seconds delay!',0);
+       PulseGuiding:=false;
+     end;
   end
   else
     PulseGuiding:=false;
