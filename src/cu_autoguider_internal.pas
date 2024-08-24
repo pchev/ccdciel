@@ -42,7 +42,7 @@ type
   private
     InternalguiderInitialize,InternalCalibrationInitialize,GuideLogFileOpen, solar_tracking  : boolean;
     pulseRA,pulseDEC,GuideFrameCount, InternalguiderCalibrationDirection,InternalguiderCalibrationStep,
-    CalibrationDuration,Calflip,CalCount,Calnrtest,CalDecBacklash,frame_size,Binning,BacklashStep,LastSpiralDirection,SpiralScale: integer;
+    CalibrationDuration,Calflip,CalCount,Calnrtest,CalDecBacklash,frame_size,Binning,BacklashStep: integer;
     driftX,driftY,driftRA,driftDec,moveRA,moveDEC, old_moveRA,old_moveDEC,  paEast, paNorth,
     pulsegainEast,pulsegainWest,pulsegainNorth,pulsegainSouth,Calthecos,Orthogonality,Caltheangle,CaldriftOld, ditherX,ditherY,
     GuideStartTime,LogSNR,LogFlux,mean_hfd,CalNorthDec1,CalNorthDec2,CalEastRa1,CalEastRa2,CurrentHFD,MinimumDrift,
@@ -62,6 +62,7 @@ type
     FRecoveringCameraCount: integer;
     FSpectroTarget: TSpectroTarget;
     StarSelectedManually: boolean;
+    SPdra,SPdde,SPx,SPy,SPdx,SPdy: integer;
     function  measure_drift(var initialize: boolean; out drX,drY :double) : integer;
     function angular_distance(a1,a2:double):double;
     Procedure StartGuideExposure;
@@ -75,6 +76,8 @@ type
     procedure TimerWaitPulseGuidingTimerSync;
     function SelectSpectroTarget: boolean;
     procedure pulse_move(pulse_limit_ms : longint);
+    procedure initspiral;
+    procedure spiral;
 
   protected
     Procedure ProcessEvent(txt:string); override;
@@ -184,8 +187,6 @@ begin
   FInitialDither:=false;
   FSettling:=false;
   FFastDither:=false;
-  LastSpiralDirection:=0;
-  SpiralScale:=1;
   CalibrationPhase2:=0;
   PulseGuiding:=false;
   OffsetFromTarget:=false;
@@ -382,22 +383,10 @@ begin
 
     if finternalguider.SpiralDither then begin
       // spiral dithering
-      dra:=0;
-      ddec:=0;
-      // change direction
-      LastSpiralDirection:=(LastSpiralDirection+1) mod 4;
-      if raonly and Odd(LastSpiralDirection) then
-        LastSpiralDirection:=(LastSpiralDirection+1) mod 4;
-      // after each turn, increase the arm size to make a spiral
-      if LastSpiralDirection=0 then inc(SpiralScale);
-      // reset if too large
-      if SpiralScale>5 then SpiralScale:=1;
-      case LastSpiralDirection of
-        0 : dra := pixel*SpiralScale;
-        1 : ddec:= pixel*SpiralScale;
-        2 : dra :=-pixel*SpiralScale;
-        3 : ddec:=-pixel*SpiralScale;
-      end;
+      spiral;
+      // scale the movement
+      dra:=SPdra*pixel;
+      ddec:=SPdde*pixel;
     end
     else begin
       // random dithering
@@ -1038,8 +1027,7 @@ begin
   InternalguiderGuiding:=true;
   Finternalguider.ForceMultiStar:=false;
   FPaused:=false;
-  LastSpiralDirection:=0;
-  SpiralScale:=1;
+  initspiral;
   finternalguider.LabelStatusRA.Caption:='';
   finternalguider.LabelStatusDec.Caption:='';
 
@@ -2604,6 +2592,42 @@ begin
     finternalguider.GuideLockNextX:=x;
     finternalguider.GuideLockNextY:=y;
   end;
+end;
+
+procedure T_autoguider_internal.initspiral;
+begin
+  SPx := 0;
+  SPy := 0;
+  SPdx := -1;
+  SPdy := 0;
+end;
+
+procedure T_autoguider_internal.spiral;
+var p,xx:integer;
+begin
+    if DitherRAonly then begin
+      p := -SPdx;
+      SPdx := SPdy;
+      SPdy := p;
+      xx:=SPx;
+      if SPdy=0 then
+        SPx:=-SPx
+      else
+        SPx:=SPx+SPdy;
+      SPdra:=SPx-xx;
+      SPdde:=0;
+    end
+    else begin
+      if (SPx = SPy) or ((SPx > 0) and (SPx = -SPy)) or ((SPx <= 0) and (SPy = (1-SPx))) then begin
+         p := -SPdx;
+         SPdx := SPdy;
+         SPdy := p;
+      end;
+      SPx:=SPx+SPdx;
+      SPy:=SPy+SPdy;
+      SPDra:=SPdx;
+      SPDde:=SPdy;
+    end;
 end;
 
 end.
