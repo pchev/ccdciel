@@ -5096,6 +5096,7 @@ begin
   f_internalguider.SlitPA:=config.GetValue('/InternalGuider/Spectro/SlitPA',0);
   f_internalguider.cbUseAstrometry.Checked:=config.GetValue('/InternalGuider/Spectro/UseAstrometry',false);
   f_internalguider.AstrometryExp.Value:=config.GetValue('/InternalGuider/Spectro/AstrometryExposure',10.0);
+  f_internalguider.SpiralDither:=config.GetValue('/InternalGuider/SpiralDither',false);
   f_internalguider.cbUseAstrometryChange(nil);
   f_internalguider.cbSpectroChange(nil);
   f_internalguider.cbGuideLockChange(nil);
@@ -5723,6 +5724,7 @@ begin
   config.SetValue('/InternalGuider/Spectro/SlitPA',f_internalguider.SlitPA);
   config.SetValue('/InternalGuider/Spectro/UseAstrometry',f_internalguider.cbUseAstrometry.Checked);
   config.SetValue('/InternalGuider/Spectro/AstrometryExposure',f_internalguider.AstrometryExp.Value);
+  config.SetValue('/InternalGuider/SpiralDither',f_internalguider.SpiralDither);
 
   // finder offset need to be saved at the same time
   config.SetValue('/Finder/OffsetX',astrometry.FinderOffsetX);

@@ -42,7 +42,7 @@ type
   private
     InternalguiderInitialize,InternalCalibrationInitialize,GuideLogFileOpen, solar_tracking  : boolean;
     pulseRA,pulseDEC,GuideFrameCount, InternalguiderCalibrationDirection,InternalguiderCalibrationStep,
-    CalibrationDuration,Calflip,CalCount,Calnrtest,CalDecBacklash,frame_size,Binning,BacklashStep: integer;
+    CalibrationDuration,Calflip,CalCount,Calnrtest,CalDecBacklash,frame_size,Binning,BacklashStep,LastSpiralDirection,SpiralScale: integer;
     driftX,driftY,driftRA,driftDec,moveRA,moveDEC, old_moveRA,old_moveDEC,  paEast, paNorth,
     pulsegainEast,pulsegainWest,pulsegainNorth,pulsegainSouth,Calthecos,Orthogonality,Caltheangle,CaldriftOld, ditherX,ditherY,
     GuideStartTime,LogSNR,LogFlux,mean_hfd,CalNorthDec1,CalNorthDec2,CalEastRa1,CalEastRa2,CurrentHFD,MinimumDrift,
@@ -184,6 +184,8 @@ begin
   FInitialDither:=false;
   FSettling:=false;
   FFastDither:=false;
+  LastSpiralDirection:=0;
+  SpiralScale:=1;
   CalibrationPhase2:=0;
   PulseGuiding:=false;
   OffsetFromTarget:=false;
@@ -377,11 +379,34 @@ var
    dra,ddec,mflipcorr: double;
 begin
   if ((InternalguiderGuiding) and (not InternalguiderInitialize) and  (not solar_tracking)) and (not finternalguider.SpectroFunctions) then begin
-    dra:=(2*random-1)*pixel; // RA dither amount in pixels
-    if raonly then
-      ddec:=0
-    else
-      ddec:=(2*random-1)*pixel;//DEC dither ammount in pixels
+
+    if finternalguider.SpiralDither then begin
+      // spiral dithering
+      dra:=0;
+      ddec:=0;
+      // change direction
+      LastSpiralDirection:=(LastSpiralDirection+1) mod 4;
+      if raonly and Odd(LastSpiralDirection) then
+        LastSpiralDirection:=(LastSpiralDirection+1) mod 4;
+      // after each turn, increase the arm size to make a spiral
+      if LastSpiralDirection=0 then inc(SpiralScale);
+      // reset if too large
+      if SpiralScale>5 then SpiralScale:=1;
+      case LastSpiralDirection of
+        0 : dra := pixel*SpiralScale;
+        1 : ddec:= pixel*SpiralScale;
+        2 : dra :=-pixel*SpiralScale;
+        3 : ddec:=-pixel*SpiralScale;
+      end;
+    end
+    else begin
+      // random dithering
+      dra:=(2*random-1)*pixel; // RA dither amount in pixels
+      if raonly then
+        ddec:=0
+      else
+        ddec:=(2*random-1)*pixel;//DEC dither ammount in pixels
+    end;
 
     // move fast for the first pulse
     FInitialDither:=true;
@@ -1013,6 +1038,8 @@ begin
   InternalguiderGuiding:=true;
   Finternalguider.ForceMultiStar:=false;
   FPaused:=false;
+  LastSpiralDirection:=0;
+  SpiralScale:=1;
   finternalguider.LabelStatusRA.Caption:='';
   finternalguider.LabelStatusDec.Caption:='';
 

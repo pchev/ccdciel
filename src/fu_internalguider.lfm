@@ -717,12 +717,12 @@ object f_internalguider: Tf_internalguider
           TabOrder = 0
           object GroupBox1: TGroupBox
             Left = 0
-            Height = 436
+            Height = 456
             Top = 0
             Width = 340
             Align = alTop
             Caption = 'Options:'
-            ClientHeight = 406
+            ClientHeight = 426
             ClientWidth = 336
             ParentBackground = False
             TabOrder = 0
@@ -939,22 +939,30 @@ object f_internalguider: Tf_internalguider
               Left = 8
               Height = 22
               Hint = 'For testing. This will disable guiding but still show the trend.'
-              Top = 376
+              Top = 400
               Width = 191
               Caption = 'Disable guiding temporary'
               OnChange = disable_guiding1Change
               ParentFont = False
               TabOrder = 10
             end
+            object cbSpiralDither: TCheckBox
+              Left = 8
+              Height = 22
+              Top = 376
+              Width = 122
+              Caption = 'Spiral dithering'
+              TabOrder = 11
+            end
           end
           object GroupBox3: TGroupBox
             Left = 0
-            Height = 192
-            Top = 436
+            Height = 172
+            Top = 456
             Width = 340
             Align = alClient
             Caption = 'Calibration options'
-            ClientHeight = 162
+            ClientHeight = 142
             ClientWidth = 336
             ParentBackground = False
             TabOrder = 1

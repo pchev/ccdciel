@@ -63,6 +63,7 @@ type
     CalIssue: TEdit;
     cbFGuideMultiStar: TCheckBox;
     cbEnlargeImage: TCheckBox;
+    cbSpiralDither: TCheckBox;
     GuideSpeedRA: TFloatSpinEdit;
     GuideSpeedDEC: TFloatSpinEdit;
     ForceGuideSpeed: TCheckBox;
@@ -366,6 +367,8 @@ type
     function  GetCameraStatus: string;
     procedure SetInfo(status: string);
     function  GetInfo: string;
+    procedure SetSpiralDither(value:Boolean);
+    function GetSpiralDither:Boolean;
 
   public
     { public declarations }
@@ -442,6 +445,7 @@ type
     property DrawSettingChange: boolean read FDrawSettingChange write FDrawSettingChange;
     property Info: string read GetInfo write SetInfo;
     property CameraStatus: string read GetCameraStatus write SetCameraStatus;
+    property SpiralDither: boolean read GetSpiralDither write SetSpiralDither;
 
   end;
 
@@ -1703,6 +1707,16 @@ try
 except
   result:=false;
 end;
+end;
+
+procedure Tf_internalguider.SetSpiralDither(value:Boolean);
+begin
+  cbSpiralDither.Checked:=value;
+end;
+
+function Tf_internalguider.GetSpiralDither:Boolean;
+begin
+  result:=cbSpiralDither.Checked;
 end;
 
 end.
