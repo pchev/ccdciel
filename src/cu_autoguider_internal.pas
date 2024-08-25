@@ -1218,7 +1218,7 @@ begin
   // to prevent Dec oscillation, wait 3 corrections in the same direction,
   // except if the correction is more than 3X shortestpulse
   DecSign:=sgn(moveDEC);
-  largepulse:=round(1000*abs(moveDEC/finternalguider.pulsegainNorth))>(3*finternalguider.ShortestPulse);  // 3 * minimal pulse
+  largepulse:=FInitialDither or (round(1000*abs(moveDEC/finternalguider.pulsegainNorth))>(3*finternalguider.ShortestPulse));  // 3 * minimal pulse
   if (not LastBacklash)and (not finternalguider.SolarTracking) then begin
     // tracking comet likely make the correction always in the same direction, disable this process in this case
     if largepulse then begin
