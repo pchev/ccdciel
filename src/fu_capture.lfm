@@ -11,8 +11,6 @@ object f_capture: Tf_capture
   OnResize = FrameResize
   ParentFont = False
   TabOrder = 0
-  DesignLeft = 0
-  DesignTop = 0
   object Panel1: TPanel
     Left = 0
     Height = 504
@@ -46,15 +44,8 @@ object f_capture: Tf_capture
         Width = 101
         Constraints.MaxHeight = 28
         ItemHeight = 24
-        ItemIndex = 7
+        ItemIndex = 0
         Items.Strings = (
-          '0.001'
-          '0.005'
-          '0.01'
-          '0.05'
-          '0.1'
-          '0.2'
-          '0.5'
           '1'
           '2'
           '5'
