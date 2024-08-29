@@ -31,8 +31,11 @@ uses   UScaleDPI, Dialogs, u_hints, u_translation, u_global, cu_camera, indiapi,
 
 
 type
-  trend_info=record ra,dec,racorr,deccorr : double; dither:boolean; end;//for internal guider
+  trend_info=record ra,dec,racorr,deccorr : double; settling:boolean; end;//for internal guider
   xy_guiderlist =array of trend_info;
+
+  dither_info=record raposition,decposition : double; end;//for internal guider
+  dither_positionarray=array of dither_info;
 
 
 type
@@ -276,6 +279,7 @@ type
     FGuideLockNextX, FGuideLockNextY: integer;
     FonShowMessage: TNotifyMsg;
     Fcamera: T_camera;
+
     procedure msg(txt:string; level: integer);
     procedure ShowMinMove;
     procedure SetLed (cl : tcolor);
@@ -375,7 +379,7 @@ type
     constructor Create(aOwner: TComponent); override;
     destructor  Destroy; override;
     procedure SetLang;
-    procedure draw_xy(xy_trend :xy_guiderlist);//draw XY points
+    procedure draw_xy(xy_trend :xy_guiderlist; dither_position :dither_positionarray);//draw XY points
     procedure draw_trend(xy_trend :xy_guiderlist);//draw trend
     procedure trend_message(message1,message2,message3 :string);//clear trend and place message
     function CalibrationIsValid(out detail: string): boolean;
@@ -404,6 +408,7 @@ type
     property DECgain: integer read GetDECgain write SetDECgain;
     property disable_guiding: boolean read Getdisableguiding;
     property use_arcsec: boolean read GetUseArcseconds write SetUseArcSeconds;
+
     property pulsegainEast: double read GetpulsegainEastsetting write SetpulsegainEastsetting; // movement in arcsec/second. Found by the calibration
     property pulsegainWest: double read GetpulsegainWestsetting write SetpulsegainWestsetting; // movement in arcsec/second. Found by the calibration
     property pulsegainNorth: double read GetpulsegainNorthsetting write SetpulsegainNorthsetting; // movement in arcsec/second. Found by the calibration
@@ -506,6 +511,7 @@ begin
  FGuideLockNextY:=-1;
  led.Canvas.AntialiasingMode:=amOn;
  FForceMultiStar:=false;
+
 end;
 
 destructor  Tf_internalguider.Destroy;
@@ -612,7 +618,6 @@ function Tf_internalguider.GetUseArcSeconds:boolean;
 begin
   result:=unitarcseconds1.checked;
 end;
-
 
 procedure Tf_internalguider.SetUseArcSeconds(value:boolean);
 begin
@@ -848,7 +853,7 @@ begin
                 0: thescale:=16.0;
   end;
 
- draw_xy(nil);//plot xy values
+ draw_xy(nil,nil);//plot xy values
  draw_trend(nil);// plot trends
 
 end;
@@ -1142,49 +1147,60 @@ begin
   if Assigned(FonLoop) then FonLoop(self);
 end;
 
-procedure Tf_internalguider.draw_xy(xy_trend :xy_guiderlist);
+
+
+
+procedure Tf_internalguider.draw_xy(xy_trend :xy_guiderlist; dither_position :dither_positionarray);
 var
- i,w2,h2,diameter, lenb,x,y,counter :integer;
+ i,j,w2,h2,diameter, lenb,x,y,counter :integer;
  rms_ra,rms_dec,mean_ra,mean_dec,scale,scale2 :double;
  scaleunit : string;
  firstplot: boolean;
 const
     len=2;
-begin
- with xy_panel1 do
- begin
-   w2:= width div 2;
-   h2:= height div 2;
-
-   {clear}
-   Canvas.Pen.width :=1;{thickness lines}
-   Canvas.pen.color:=colorLightGray;
-   canvas.font.color:=colorText;
-   canvas.brush.color:=colorBg;
-   canvas.rectangle(0,0, width,height);
-   canvas.Brush.Style:=bsClear;{transparent style}
-   canvas.moveto(0,h2);{cross}
-   canvas.lineto(width,h2);{cross}
-
-   canvas.moveto(w2,0);{cross}
-   canvas.lineto(w2,height);
-
-   diameter:=round(20);
-   canvas.Ellipse(w2-diameter, h2-diameter, w2+diameter, h2+diameter);
-   diameter:=round(40);
-   canvas.Ellipse(w2-diameter, h2-diameter, w2+diameter, h2+diameter);
-   diameter:=round(60);
-   canvas.Ellipse(w2-diameter, h2-diameter, w2+diameter, h2+diameter);
-
-
-   if ((use_arcsec=false) or (pixel_size=0)) then
+   procedure draw_plussign(canvas :tcanvas; x,y :integer);
    begin
+     canvas.MoveTo(x-2,y);
+     canvas.LineTo(x+2,y);
+     canvas.MoveTo(x,y-2);
+     canvas.LineTo(x,y+2);
+   end;
+
+begin
+  with xy_panel1 do
+  begin
+    w2:= width div 2;
+    h2:= height div 2;
+
+    {clear}
+    Canvas.Pen.width :=1;{thickness lines}
+    Canvas.pen.color:=colorLightGray;
+    canvas.font.color:=colorText;
+    canvas.brush.color:=colorBg;
+    canvas.rectangle(0,0, width,height);
+    canvas.Brush.Style:=bsClear;{transparent style}
+    canvas.moveto(0,h2);{cross}
+    canvas.lineto(width,h2);{cross}
+
+    canvas.moveto(w2,0);{cross}
+    canvas.lineto(w2,height);
+
+    diameter:=round(20);
+    canvas.Ellipse(w2-diameter, h2-diameter, w2+diameter, h2+diameter);
+    diameter:=round(40);
+    canvas.Ellipse(w2-diameter, h2-diameter, w2+diameter, h2+diameter);
+    diameter:=round(60);
+    canvas.Ellipse(w2-diameter, h2-diameter, w2+diameter, h2+diameter);
+
+
+    if ((use_arcsec=false) or (pixel_size=0)) then
+    begin
       scale:=1/thescale;
       scale2:=1;
       scaleunit:=' px';
-   end
-   else
-   begin
+    end
+    else
+    begin
       scale:=pixel_size/thescale;
       scale2:=pixel_size;
       scaleunit:=' "';
@@ -1202,7 +1218,7 @@ begin
    firstplot:=true;
    for i:=lenb downto 0 do
    begin
-     if ((xy_trend[i].ra<1E99) and (xy_trend[i].dither=false)) then //valid data
+     if ((xy_trend[i].ra<1E99) and (xy_trend[i].settling=false)) then //valid trend data
      begin
        x:=w2+round(xy_trend[i].ra*10*thescale) ;
        y:=h2-round(xy_trend[i].dec*10*thescale);
@@ -1221,23 +1237,38 @@ begin
    end;
 
    if counter>0 then // calculate the RMS error of the variation around the mean value;
-   begin // report the RMS values
-     mean_ra:=mean_ra/counter;//mean or average value
-     mean_dec:=mean_dec/counter;
-     rms_ra:=0;
-     rms_dec:=0;
-     for i:=0 to counter-1 do
-     begin
-       rms_ra:=rms_ra+sqr(xy_trend[i].ra-mean_ra);
-       rms_dec:=rms_dec+sqr(xy_trend[i].dec-mean_dec);
-     end;
-     rms_ra:=sqrt(rms_ra/counter);
-     rms_dec:=sqrt(rms_dec/counter);
+    begin // report the RMS values
+      mean_ra:=mean_ra/counter;//mean or average value
+      mean_dec:=mean_dec/counter;
+      rms_ra:=0;
+      rms_dec:=0;
+      for i:=0 to counter-1 do
+      begin
+        rms_ra:=rms_ra+sqr(xy_trend[i].ra-mean_ra);
+        rms_dec:=rms_dec+sqr(xy_trend[i].dec-mean_dec);
+      end;
+      rms_ra:=sqrt(rms_ra/counter);
+      rms_dec:=sqrt(rms_dec/counter);
 
-     canvas.textout(1,h2,'α  '+FormatFloat(f1v,scale2*rms_ra));
-     canvas.textout(w2+2,2,'δ  '+FormatFloat(f1v,scale2*rms_dec));
-   end;
- end;
+      canvas.textout(1,h2,'α  '+FormatFloat(f1v,scale2*rms_ra));
+      canvas.textout(w2+2,2,'δ  '+FormatFloat(f1v,scale2*rms_dec));
+    end;
+
+    //show dithering
+    Canvas.pen.color:=colorGreen;
+    for i:=length(dither_position)-1 downto 0 do
+    begin
+      if dither_position[i].raposition<1E99 then //valid data
+      begin
+        x:=w2+round(dither_position[i].raposition*10*thescale) ;
+        y:=h2-round(dither_position[i].decposition*10*thescale);
+
+        x:=min(max(0,x),width);
+        y:=min(max(0,y),height);
+        draw_plussign(canvas,x,y);
+      end;
+    end;
+  end;//xy panel
 end;
 
 procedure Tf_internalguider.trend_message(message1,message2,message3 :string);//clear trend and place message
@@ -1286,7 +1317,7 @@ begin
        x:=width-counter*((width-5) div lenb)-15;
        dec(counter);
 
-       if xy_trend[i].dither then
+       if xy_trend[i].settling then
        begin
          canvas.moveto(x-2,0);
          canvas.lineto(x-2,height);
@@ -1718,6 +1749,7 @@ function Tf_internalguider.GetSpiralDither:Boolean;
 begin
   result:=cbSpiralDither.Checked;
 end;
+
 
 end.
 

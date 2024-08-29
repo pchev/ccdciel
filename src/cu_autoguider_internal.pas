@@ -46,12 +46,13 @@ type
     driftX,driftY,driftRA,driftDec,moveRA,moveDEC, old_moveRA,old_moveDEC,  paEast, paNorth,
     pulsegainEast,pulsegainWest,pulsegainNorth,pulsegainSouth,Calthecos,Orthogonality,Caltheangle,CaldriftOld, ditherX,ditherY,
     GuideStartTime,LogSNR,LogFlux,mean_hfd,CalNorthDec1,CalNorthDec2,CalEastRa1,CalEastRa2,CurrentHFD,MinimumDrift,
-    LastDecSign,FFullDitherRa,FFullDitherDec,PulseGuidingStartTime : double;
+    LastDecSign,FFullDitherRa,FFullDitherDec,PulseGuidingStartTime,RAposition,DECposition : double;
     RAduration, DECduration,BacklashDuration : longint;
     RADirection,DECDirection: string;
     SameDecSignCount,LastBacklashDuration,Dnorth, Dsouth, CalibrationPhase2,watchdog : integer;
     LastBacklash,FirstDecDirectionChange: boolean;
-    xy_trend : xy_guiderlist;{fu_internalguider}
+    xy_trend : xy_guiderlist;
+    dither_position: dither_positionarray;
     xy_array,xy_array_old : star_position_array;//internal guider for measure drift
     GuideLog: TextFile;
     FPaused, FSettling, FSettlingInRange, FFastDither, PulseGuiding, OffsetFromTarget, FInitialDither: boolean;
@@ -212,6 +213,11 @@ begin
   FSpectroTarget.valid:=false;
   FSpectroTarget.newastrometry:=false;
   StarSelectedManually:=false;
+  RAposition:=0;
+  DECposition:=0;
+  pulseRA:=0;
+  pulseDEC:=0;
+
 end;
 
 Destructor T_autoguider_internal.Destroy;
@@ -377,13 +383,13 @@ end;
 
 procedure T_autoguider_internal.Dither(pixel:double; raonly:boolean; waittime:double);
 var
-   dra,ddec,mflipcorr: double;
+   dra,ddec,mflipcorr,delta_ditherX,delta_ditherY,flipDec: double;
 begin
   if ((InternalguiderGuiding) and (not InternalguiderInitialize) and  (not solar_tracking)) and (not finternalguider.SpectroFunctions) then begin
 
     if finternalguider.SpiralDither then begin
       // spiral dithering
-      spiral;
+      spiral;//calculate square spiral steps in size of 1
       // scale the movement
       dra:=SPdra*pixel;
       ddec:=SPdde*pixel;
@@ -399,20 +405,28 @@ begin
 
     // move fast for the first pulse
     FInitialDither:=true;
-    FFullDitherRa:=dra;
-    FFullDitherDec:=ddec;
+    FDithering:=true;
+    FFastDither:=true;
+
+    FFullDitherRa:=+dra;
+    FFullDitherDec:=+ddec; //the dither pulse will be executed in InternalAutoguiding;
 
     if mount.isGem and ((mount.PierSide=pierWest) <> (pos('E',finternalguider.pier_side)>0)) then // Did a meridian flip occur since calibration.
       mflipcorr:=180 // A meridian flip occurred
     else
       mflipcorr:=0;
-    rotate2(((finternalguider.PA+mflipcorr)*pi/180),dra,ddec, ditherX,ditherY);{rotate a vector point, counter clockwise}
+    if finternalguider.pulsegainNorth<0 then flipDec:=-1 else flipDec:=+1;//flipped image correction. E.g. an image where north is up and east on the right size.
+    rotate2(((finternalguider.PA+mflipcorr)*pi/180),dra,flipDec*ddec, delta_ditherX,delta_ditherY);{rotate a vector point, counter clockwise}
 
-    FDithering:=true;
-    FFastDither:=True; // disable hysteresis
+    WriteLog('INFO: DITHER by '+FormatFloat(f3,delta_ditherX)+', '+FormatFloat(f3,delta_ditherY));
+
+    //Correct the measured guide star(s) position to the expected new positions using the global ditherX and ditherY correction variables. Any remaining error will be picked up by the controller
+    ditherX:=ditherX+delta_ditherX; //integrate offset in X. Unit pixels
+    ditherY:=ditherY+delta_ditherY; //integrate offset in Y
+
     Finternalguider.OffsetX:=ditherX; // show in spectro offset
     Finternalguider.OffsetY:=ditherY;
-    WriteLog('INFO: DITHER by '+FormatFloat(f3,ditherX)+', '+FormatFloat(f3,ditherY));
+
     StartSettle;
   end
   else
@@ -503,7 +517,7 @@ begin
 
   //square search area
   if (finternalguider.SpectroFunctions or FFastDither) and FSettling and (not finternalguider.GuideLock) then
-    searchA:=max(28,round(2*Finternalguider.LongestPulse*Finternalguider.pulsegainEast/1000)) // large enough when moving to the slit using longestpulse
+    searchA:=max(28,round(2*(MaxValue([pulseRA,pulseDEC,Finternalguider.LongestPulse])*Finternalguider.pulsegainEast/1000))) // large enough when moving to the slit using longestpulse
   else
     searchA:=28;
 
@@ -1063,13 +1077,13 @@ begin
 
   setlength(xy_trend,nrpointsTrend);
   for i:=0 to nrpointsTrend-1 do {clear}
-  begin
-   xy_trend[i].ra:=1E100;//delta ra, 1E100 is an empthy marker
-   xy_trend[i].dec:=0;//delta dec
-   xy_trend[i].racorr:=0;//ra correction
-   xy_trend[i].deccorr:=0; //dec correction
-   xy_trend[i].dither:=false; //dither
-  end;
+    xy_trend[i].ra:=1E100;// 1E100 is an empthy marker
+
+  setlength(dither_position,nrpointsTrend); //dither trend
+  for i:=0 to nrpointsTrend-1 do {clear}
+    dither_position[i].raposition:=1E100;//1E100 is an empthy marker
+  RAposition:=0;//reset the actual dither position indication
+  DECposition:=0;//resetthe actual dither position indication
 
   old_moveRA:=0;
   old_moveDEC:=0;
@@ -1150,8 +1164,8 @@ begin
 
   InternalguiderLoop;
   StartSettle;
-
 end;
+
 
 procedure T_autoguider_internal.InternalguiderSpectroGuideChange;
 begin
@@ -1160,6 +1174,7 @@ begin
     measure_drift(InternalguiderInitialize,driftX,driftY);
   end;
 end;
+
 
 procedure T_autoguider_internal.ParameterChange(txt: string);
 begin
@@ -1203,7 +1218,7 @@ begin
   if moveRA2<0 then //going West
   begin
     pulseRA:=min(pulse_limit_ms,round(1000*abs(moveRA2/finternalguider.pulsegainWest))); {duration msec}
-    moveRA := -abs(pulseRA * finternalguider.pulsegainEast/1000); // next expected move
+    moveRA := -abs(pulseRA * finternalguider.pulsegainEast/1000)*cos_decl; // next expected move west in pixels
     if pulseRA>finternalguider.shortestPulse then
     begin
       //msg('West: '+inttostr(pulseRA),3);
@@ -1287,7 +1302,6 @@ begin
        LastBacklash:=true;
     end;
   end;
-
 
 
   if moveDEC>0 then //go North increase the DEC.
@@ -1390,7 +1404,7 @@ begin
     Dsouth:=1
   end;
 
-  xy_trend[0].dither:=FSettling;
+  xy_trend[0].settling:=FSettling;
 
   //For tracking Solar object only
   if ((FSettling=false) and (finternalguider.SolarTracking)) then
@@ -1543,17 +1557,27 @@ begin
       old_moveDEC:=moveDEC;//Store for next cycle hysteresis calculation
     end;
 
-    if FInitialDither then begin
+    if FInitialDither then begin //dithering
       // large initial dither pulse
        pulse_move(30*1000 {limit pulse to 30 seconds});//move the mount with specified moveRA and moveDEC using pulses
-       InternalguiderInitialize:=true;
+       for i:=nrpointsTrend-2 downto 0 do {shift values and make place for new values}
+               dither_position[i+1]:=dither_position[i];//move records one position
+       RAposition:=RAposition+moveRA;//integrate the dither movement to apixel position for plotting in xy graph
+       DECposition:=DECposition+moveDec;
+       dither_position[0].raposition:=RAposition;//store the dither position in pixels for the xy graph
+       dither_position[0].decposition:=DECposition;
+
+       maxpulse:=max(pulseRA,pulseDEC)+1000;//Assume parallel dithering, add one second as dither settle time.
+       FSettleStartTime:=now+(maxpulse/SecsPerDay); // reset the settle start time to after the initial pulse end
+
     end
-    else begin
+    else begin //standard control
       pulse_move(finternalguider.LongestPulse);//move the mount with specified moveRA and moveDEC using pulses
+      maxpulse:=max(pulseRA,pulseDEC); // Assume parallel dithering
+
     end;
 
     // wait for puls guide move completed
-    maxpulse:=max(pulseRA,pulseDEC);
     if maxpulse>finternalguider.shortestPulse then
     begin
       WaitPulseGuiding(maxpulse);//If this timer has run a new exposure is started
@@ -1672,7 +1696,7 @@ begin
   end;
 
   // Plot graph
-  finternalguider.draw_xy(xy_trend);//plot xy values
+  finternalguider.draw_xy(xy_trend,dither_position);//plot xy values
   finternalguider.draw_trend(xy_trend);// plot trend
   for i:=nrpointsTrend-2 downto 0 do {shift values and make place for new values}
     xy_trend[i+1]:=xy_trend[i];//move records one position
@@ -2594,7 +2618,7 @@ begin
   end;
 end;
 
-procedure T_autoguider_internal.initspiral;
+procedure T_autoguider_internal.initspiral;//reset spiral global values
 begin
   SPx := 0;
   SPy := 0;
@@ -2602,7 +2626,7 @@ begin
   SPdy := 0;
 end;
 
-procedure T_autoguider_internal.spiral;
+procedure T_autoguider_internal.spiral;//calculate square spiral steps in size of 1
 var p,xx:integer;
 begin
     if DitherRAonly then begin
