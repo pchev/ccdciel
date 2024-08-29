@@ -715,17 +715,16 @@ object f_internalguider: Tf_internalguider
           ParentBackground = False
           ParentColor = False
           TabOrder = 0
-          object GroupBox1: TGroupBox
+          object Panel10: TPanel
             Left = 0
-            Height = 456
+            Height = 400
             Top = 0
             Width = 340
             Align = alTop
-            Caption = 'Options:'
-            ClientHeight = 426
-            ClientWidth = 336
+            ClientHeight = 400
+            ClientWidth = 340
             ParentBackground = False
-            TabOrder = 0
+            TabOrder = 1
             object ShortestPulse1: TSpinEdit
               Left = 200
               Height = 32
@@ -939,33 +938,49 @@ object f_internalguider: Tf_internalguider
               Left = 8
               Height = 22
               Hint = 'For testing. This will disable guiding but still show the trend.'
-              Top = 400
+              Top = 368
               Width = 191
               Caption = 'Disable guiding temporary'
               OnChange = disable_guiding1Change
               ParentFont = False
               TabOrder = 10
             end
-            object cbSpiralDither: TCheckBox
-              Left = 8
-              Height = 22
-              Top = 376
-              Width = 122
-              Caption = 'Spiral dithering'
-              TabOrder = 11
-            end
+          end
+          object rgDitherMode: TRadioGroup
+            Left = 0
+            Height = 57
+            Top = 400
+            Width = 340
+            Align = alTop
+            AutoFill = True
+            Caption = 'Dither mode'
+            ChildSizing.LeftRightSpacing = 6
+            ChildSizing.EnlargeHorizontal = crsHomogenousChildResize
+            ChildSizing.EnlargeVertical = crsHomogenousChildResize
+            ChildSizing.ShrinkHorizontal = crsScaleChilds
+            ChildSizing.ShrinkVertical = crsScaleChilds
+            ChildSizing.Layout = cclLeftToRightThenTopToBottom
+            ChildSizing.ControlsPerLine = 2
+            ClientHeight = 27
+            ClientWidth = 336
+            Columns = 2
+            Items.Strings = (
+              'Spiral'
+              'Random'
+            )
+            TabOrder = 2
           end
           object GroupBox3: TGroupBox
             Left = 0
-            Height = 172
-            Top = 456
+            Height = 171
+            Top = 457
             Width = 340
             Align = alClient
             Caption = 'Calibration options'
-            ClientHeight = 142
+            ClientHeight = 141
             ClientWidth = 336
             ParentBackground = False
-            TabOrder = 1
+            TabOrder = 0
             object measure_method2: TCheckBox
               Left = 8
               Height = 22

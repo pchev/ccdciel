@@ -66,14 +66,15 @@ type
     CalIssue: TEdit;
     cbFGuideMultiStar: TCheckBox;
     cbEnlargeImage: TCheckBox;
-    cbSpiralDither: TCheckBox;
+    CheckBoxBacklash: TCheckBox;
+    CheckBoxTrackSolar1: TCheckBox;
+    disable_guiding1: TCheckBox;
+    framesize1: TComboBox;
+    Panel10: TPanel;
     GuideSpeedRA: TFloatSpinEdit;
     GuideSpeedDEC: TFloatSpinEdit;
     ForceGuideSpeed: TCheckBox;
-    CheckBoxBacklash: TCheckBox;
-    CheckBoxTrackSolar1: TCheckBox;
     Cooler: TCheckBox;
-    disable_guiding1: TCheckBox;
     edOffsetX: TFloatSpinEdit;
     edOffsetY: TFloatSpinEdit;
     Exposure: TFloatSpinEdit;
@@ -84,15 +85,18 @@ type
     GroupBoxSearchArea: TGroupBox;
     GroupBoxLock: TGroupBox;
     GroupBoxOffset: TGroupBox;
-    Label30: TLabel;
-    edLockX: TFloatSpinEdit;
-    edLockY: TFloatSpinEdit;
     Label11: TLabel;
     Label20: TLabel;
-    Label21: TLabel;
+    Label22: TLabel;
+    Label23: TLabel;
+    Label24: TLabel;
     Label25: TLabel;
     Label26: TLabel;
     Label27: TLabel;
+    Label30: TLabel;
+    edLockX: TFloatSpinEdit;
+    edLockY: TFloatSpinEdit;
+    Label21: TLabel;
     Label28: TLabel;
     Label29: TLabel;
     Label31: TLabel;
@@ -113,6 +117,7 @@ type
     Label46: TLabel;
     Label47: TLabel;
     Label48: TLabel;
+    Label9: TLabel;
     LabelInfo4: TLabel;
     LabelInfo3: TLabel;
     Label49: TLabel;
@@ -120,14 +125,11 @@ type
     LabelInfo: TLabel;
     LabelInfo2: TLabel;
     LabelTemperature: TLabel;
-    Label9: TLabel;
     LabelStatusDec: TLabel;
     LabelStatusRA: TLabel;
-    framesize1: TComboBox;
+    LongestPulse1: TSpinEdit;
     MenuItemDarkInfo: TMenuItem;
     MenuItemLoadDark: TMenuItem;
-    minHFD1: TFloatSpinEdit;
-    GroupBox1: TGroupBox;
     GroupBox2: TGroupBox;
     Label10: TLabel;
     Label12: TLabel;
@@ -138,9 +140,6 @@ type
     Label17: TLabel;
     Label18: TLabel;
     Label19: TLabel;
-    Label22: TLabel;
-    Label23: TLabel;
-    Label24: TLabel;
     LabelDark: TLabel;
     Label5: TLabel;
     Label6: TLabel;
@@ -151,6 +150,8 @@ type
     MenuItemClearDark: TMenuItem;
     MenuItemCaptureDark: TMenuItem;
     MenuItem2: TMenuItem;
+    minHFD1: TFloatSpinEdit;
+    minSNR1: TSpinEdit;
     pa1: TEdit;
     PageControl2: TPageControl;
     PanelImage: TPanel;
@@ -174,6 +175,7 @@ type
     pulsegainNorth1: TEdit;
     pulsegainSouth1: TEdit;
     pulsegainWest1: TEdit;
+    rgDitherMode: TRadioGroup;
     ra_hysteresis1: TSpinEdit;
     dec_hysteresis1: TSpinEdit;
     Label1: TLabel;
@@ -184,12 +186,10 @@ type
     Binning: TSpinEdit;
     Gain: TSpinEdit;
     Offset: TSpinEdit;
-    ShortestPulse1: TSpinEdit;
-    minSNR1: TSpinEdit;
-    LongestPulse1: TSpinEdit;
     edslitWinMin: TSpinEdit;
     edslitWinMax: TSpinEdit;
     InitialCalibrationStep: TSpinEdit;
+    ShortestPulse1: TSpinEdit;
     spSlitX: TSpinEdit;
     spSlitY: TSpinEdit;
     spSlitW: TSpinEdit;
@@ -558,7 +558,6 @@ begin
   Label13.Caption:=rsPulseGain+blank+rsSouth+' [px/sec]';
   Label12.Caption:=rsMeasuredAtEW;
   label_estimate1.Caption:=rsPixelScale+' ["/px]';
-  GroupBox1.Caption:=rsOptions2+':';
   Label22.Caption:=rsShortestGuid+' [ms]';
   label11.Caption:=rsLongestGuide+' [ms]';
   Label20.Caption:=rsMinimumMove;
@@ -572,6 +571,9 @@ begin
   Label26.Caption:=rsApparentMoti2+' [°]';
   CheckBoxBacklash.Caption:=rsUseBacklashC;
   Label27.Caption:=rsDeclinationB;
+  rgDitherMode.Caption:=rsDitherMode;
+  rgDitherMode.Items[0]:=rsSpiral;
+  rgDitherMode.Items[1]:=rsRandom;
   TabSheetSpectro.Caption:=rsSpectroscopy;
   cbSpectro.Caption:=rsActivateSpec;
   cbGuideLock.Caption:=rsActivateSing;
@@ -1742,12 +1744,13 @@ end;
 
 procedure Tf_internalguider.SetSpiralDither(value:Boolean);
 begin
-  cbSpiralDither.Checked:=value;
+  if value then rgDitherMode.ItemIndex:=0
+           else rgDitherMode.ItemIndex:=1;
 end;
 
 function Tf_internalguider.GetSpiralDither:Boolean;
 begin
-  result:=cbSpiralDither.Checked;
+  result:=rgDitherMode.ItemIndex=0;
 end;
 
 

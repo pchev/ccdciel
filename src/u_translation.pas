@@ -1568,6 +1568,9 @@ resourcestring
   rsGetValuesFro = 'Get values from the weather station';
   rsAutofocusWil = 'Autofocus will run before the next exposure';
   rsRunAutoFocus2 = 'Run auto-focus if change is more than % HFD';
+  rsDitherMode = 'Dither mode';
+  rsSpiral = 'Spiral';
+  rsRandom = 'Random';
 
 implementation
 
