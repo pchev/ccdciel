@@ -5096,7 +5096,7 @@ begin
   f_internalguider.SlitPA:=config.GetValue('/InternalGuider/Spectro/SlitPA',0);
   f_internalguider.cbUseAstrometry.Checked:=config.GetValue('/InternalGuider/Spectro/UseAstrometry',false);
   f_internalguider.AstrometryExp.Value:=config.GetValue('/InternalGuider/Spectro/AstrometryExposure',10.0);
-  f_internalguider.SpiralDither:=config.GetValue('/InternalGuider/SpiralDither',false);
+  f_internalguider.SpiralDither:=config.GetValue('/InternalGuider/SpiralDither',true);
   f_internalguider.cbUseAstrometryChange(nil);
   f_internalguider.cbSpectroChange(nil);
   f_internalguider.cbGuideLockChange(nil);
@@ -12216,6 +12216,30 @@ var x,y,x1,y1,x2,y2,x3,y3,xr1,yr1,xr2,yr2,xr3,yr3,xr4,yr4,xxc,yyc,s,r,rc: intege
     i,j,k,size: integer;
     labeloverlap: array of array of Byte;
     labellimit,lox,loy,mlox,mloy: integer;
+
+    procedure textout_octogram(x,y: integer;value : double); //center the text to the middle of the octogram
+    var
+      tw,th : integer;
+      txt : string;
+    begin
+      with image1.canvas do
+      begin
+        txt:=FormatFloat(f2v,value);
+        th:= textheight(txt);//not efficient but it is done only 9 times
+        tw:= textwidth(txt);
+
+        if x>xxc then x:=x-tw //align right
+        else
+        if x=xxc then x:=x-(tw div 2); //align centered
+
+        if y=yyc then y:=y-(th div 2) //align vertical centered
+        else
+        if y>yyc then y:=y-th; //text above Y
+        textout(x,y,txt);
+      end;
+    end;
+
+
 begin
 try
   if f_starprofile=nil then exit;
@@ -12334,60 +12358,63 @@ try
         Image1.Canvas.pen.Width:=DoScaleX(2);
         Image1.Canvas.Font.Size:=DoScaleX(30);
 
+
         //The nine areas. FITS 1,1 is left bottom:
         //13   23   33
         //12   22   32
         //11   21   31
 
+        {draw diagonal}
+        Fits2Screen(img_width div 2,img_height div 2,f_visu.FlipHorz,f_visu.FlipVert,xxc,yyc);
+        textout_octogram(xxc,yyc,median[2,2]);  //text at center
+
         Fits2Screen(trpxy[1,1,1],trpxy[2,1,1],f_visu.FlipHorz,f_visu.FlipVert,x,y);
-        image1.Canvas.textout(x,y,FormatFloat(f2v,median[1,1])); //text
+        textout_octogram(x,y,median[1,1]);
+
         Image1.Canvas.MoveTo(x,y);
 
         Fits2Screen(trpxy[1,2,1],trpxy[2,2,1],f_visu.FlipHorz,f_visu.FlipVert,x,y);
         Image1.Canvas.LineTo(x,y);
-        image1.Canvas.textout(x,y,FormatFloat(f2v,median[2,1]));  //text
+        textout_octogram(x,y,median[2,1]);
         Image1.Canvas.MoveTo(x,y);{text out move the x,y position}
 
 
         Fits2Screen(trpxy[1,3,1],trpxy[2,3,1],f_visu.FlipHorz,f_visu.FlipVert,x,y);
         Image1.Canvas.LineTo(x,y);
-        image1.Canvas.textout(x,y,FormatFloat(f2v,median[3,1])); //text
+        textout_octogram(x,y,median[3,1]);
         Image1.Canvas.MoveTo(x,y);{text out move the x,y position}
 
 
         Fits2Screen(trpxy[1,3,2],trpxy[2,3,2],f_visu.FlipHorz,f_visu.FlipVert,x,y);
         Image1.Canvas.LineTo(x,y);
-        image1.Canvas.textout(x,y,FormatFloat(f2v,median[3,2])); //text
+        textout_octogram(x,y,median[3,2]);
         Image1.Canvas.MoveTo(x,y);{text out move the x,y position}
 
 
         Fits2Screen(trpxy[1,3,3],trpxy[2,3,3],f_visu.FlipHorz,f_visu.FlipVert,x,y);
         Image1.Canvas.LineTo(x,y);
-        image1.Canvas.textout(x,y,FormatFloat(f2v,median[3,3])); //text
+        textout_octogram(x,y,median[3,3]);
         Image1.Canvas.MoveTo(x,y);{text out move the x,y position}
 
 
         Fits2Screen(trpxy[1,2,3],trpxy[2,2,3],f_visu.FlipHorz,f_visu.FlipVert,x,y);
         Image1.Canvas.LineTo(x,y);
-        image1.Canvas.textout(x,y,FormatFloat(f2v,median[2,3]));//text
+        textout_octogram(x,y,median[2,3]);
         Image1.Canvas.MoveTo(x,y);
 
         Fits2Screen(trpxy[1,1,3],trpxy[2,1,3],f_visu.FlipHorz,f_visu.FlipVert,x,y);
         Image1.Canvas.LineTo(x,y);
-        image1.Canvas.textout(x,y,FormatFloat(f2v,median[1,3]));//text
+        textout_octogram(x,y,median[1,3]);
         Image1.Canvas.MoveTo(x,y);
 
         Fits2Screen(trpxy[1,1,2],trpxy[2,1,2],f_visu.FlipHorz,f_visu.FlipVert,x,y);
         Image1.Canvas.LineTo(x,y);
-        image1.Canvas.textout(x,y,FormatFloat(f2v,median[1,2]));//text
+        textout_octogram(x,y,median[1,2]);
         Image1.Canvas.MoveTo(x,y);
 
         Fits2Screen(trpxy[1,1,1],trpxy[2,1,1],f_visu.FlipHorz,f_visu.FlipVert,x,y);
         Image1.Canvas.LineTo(x,y);
 
-        {draw diagonal}
-        Fits2Screen(img_width div 2,img_height div 2,f_visu.FlipHorz,f_visu.FlipVert,xxc,yyc);
-        image1.Canvas.textout(xxc,yyc,FormatFloat(f2v,median[2,2]));   //text center
 
         {diagonal 1}
         Fits2Screen(trpxy[1,1,1],trpxy[2,1,1],f_visu.FlipHorz,f_visu.FlipVert,x,y);
@@ -16019,19 +16046,6 @@ begin
   end
   else
     NewMessage(rsNoStarDetect,1);
-
-  hfdlist:=nil;{release memory}
-
-  hfdlist_outer_ring:=nil;
-  hfdlist_13:=nil;
-  hfdlist_23:=nil;
-  hfdlist_33:=nil;
-  hfdlist_12:=nil;
-  hfdlist_22:=nil;
-  hfdlist_32:=nil;
-  hfdlist_11:=nil;
-  hfdlist_21:=nil;
-  hfdlist_31:=nil;
 
   if plot then
     PlotImage
