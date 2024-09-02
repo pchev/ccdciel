@@ -1256,7 +1256,7 @@ end;
 
 function InitSSLInterface: Boolean;
 var
-  s: string;
+  s,buf: string;
   x: integer;
 begin
   {pf}
@@ -1270,8 +1270,15 @@ begin
   try
     if not IsSSLloaded then
     begin
+      {$IFDEF DARWIN}
+      // load libraries from Frameworks
+      buf:=extractfilepath(paramstr(0));
+      DLLSSLName:=expandfilename(buf+'/../Frameworks')+'/'+DLLSSLName;
+      DLLUtilName:=expandfilename(buf+'/../Frameworks')+'/'+DLLUtilName;
+      {$ENDIF}
       SSLUtilHandle := LoadLib(DLLUtilName);
       SSLLibHandle := LoadLib(DLLSSLName);
+
       if (SSLLibHandle <> 0) and (SSLUtilHandle <> 0) then
       begin
         _SslGetError := GetProcAddr(SSLLibHandle, 'SSL_get_error');
