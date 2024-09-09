@@ -546,20 +546,27 @@ end;
 
 procedure Tf_polaralign.Rotate;
 var cra,cde: double;
+    eqn            : string;
 begin
   {$ifdef test_polaralignment}
   exit;
   {$endif}
   if MountSlewing.ItemIndex=0 then begin
     // Rotate mount in RA by configured angle
+
     cra:=FMount.RA;
     cde:=FMount.Dec;
+    MountToLocal(mount.EquinoxJD,cra,cde);//for case communication with mount is in J2000 coordinate system
+
     if RotDir.ItemIndex=0 then
       cra:=cra-RotAngle.Value/15
     else
       cra:=cra+RotAngle.Value/15;
     cra:=rmod(cra+24,24);
-    tracemsg('Slew mount to RA:'+FormatFloat(f6,cra)+' DEC:='+FormatFloat(f6,cde));
+
+    LocalToMount(mount.EquinoxJD,cra,cde);//for case communication with mount is in J2000 coordinate system
+    if mount.EquinoxJD>2451545 then eqn:='local' else eqn:='2000';
+    tracemsg('Slew mount to RA'+eqn+':'+FormatFloat(f6,cra)+' DEC'+eqn+'='+FormatFloat(f6,cde));
     if not FMount.Slew(cra,cde) then begin
       msg(rsTelescopeSle3,1);
       AbortAlignment;
