@@ -4,7 +4,7 @@ unit pu_downloadscript;
 
 interface
 
-uses u_global, u_utils, u_translation,
+uses u_global, u_utils, u_translation, zipper, LazFileUtils,
   Classes, SysUtils, Forms, Controls, Graphics, Dialogs, Grids, StdCtrls, ExtCtrls, downloaddialog;
 
 type
@@ -22,6 +22,7 @@ type
     procedure ButtonDownloadClick(Sender: TObject);
     procedure FormCreate(Sender: TObject);
     procedure FormShow(Sender: TObject);
+    procedure StringGrid1Resize(Sender: TObject);
   private
     FscriptName: string;
     procedure SetLang;
@@ -60,6 +61,13 @@ procedure Tf_downloadscript.FormShow(Sender: TObject);
 begin
   FscriptName:='';
   LoadScriptList;
+end;
+
+procedure Tf_downloadscript.StringGrid1Resize(Sender: TObject);
+begin
+  with StringGrid1 do begin
+    Columns[2].Width:=ClientWidth-Columns[0].Width-Columns[1].Width;
+  end;
 end;
 
 procedure Tf_downloadscript.LoadScriptList;
@@ -108,19 +116,50 @@ end;
 
 procedure Tf_downloadscript.ButtonDownloadClick(Sender: TObject);
 var x: integer;
-    fn,dfn: string;
+    fn,basefn,dfn: string;
+    FUnZipper: TUnZipper;
 begin
   FscriptName:='';
   x:=StringGrid1.Selection.Top;
-  fn:=trim(StringGrid1.Cells[1,x])+'.script';
-  dfn:=slash(ConfigDir)+fn;
+  fn:=trim(StringGrid1.Cells[1,x]);
+  basefn:=ExtractFileNameOnly(fn);
+  if uppercase(ExtractFileExt(fn))='.PKG' then begin
+    fn:=basefn+'.zip';
+    dfn:=slash(ConfigDir)+fn;
+  end
+  else begin
+    fn:=basefn+'.script';
+    dfn:=slash(ConfigDir)+fn;
+  end;
   if FileExists(dfn) then begin
     if MessageDlg(format(rsScriptAlread,[fn]),mtConfirmation,mbYesNo,0)=mrNo
        then exit;
   end;
   if DownloadScript(fn,dfn) then  begin
-    FscriptName:=trim(StringGrid1.Cells[1,x]);
-    ModalResult:=mrOK;
+    if uppercase(ExtractFileExt(fn))='.ZIP' then begin
+      try
+      FUnZipper:=TUnZipper.Create;
+      FUnZipper.FileName:=dfn;
+      FUnZipper.OutputPath:=ConfigDir;
+      FUnZipper.UseUTF8:=True;
+      FUnZipper.Examine;
+      FUnZipper.UnZipAllFiles;
+      FscriptName:=trim(basefn)+'_config';
+      if not FileExists(slash(ConfigDir)+FscriptName+'.script') then
+        FscriptName:='';
+      ModalResult:=mrOK;
+      except
+         on E: Exception do
+         begin
+           ShowMessage('Unzip error : '+E.Message)
+         end;
+      end;
+      FUnZipper.Free;
+    end
+    else begin
+      FscriptName:=trim(StringGrid1.Cells[1,x]);
+      ModalResult:=mrOK;
+    end;
   end;
 end;
 

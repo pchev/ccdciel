@@ -17,31 +17,33 @@ object f_downloadscript: Tf_downloadscript
     ColCount = 3
     Columns = <    
       item
-        MinSize = 100
+        MinSize = 150
         MaxSize = 150
         Title.Caption = 'Group'
-        Width = 100
+        Width = 134
       end    
       item
-        MinSize = 100
+        MinSize = 150
         MaxSize = 150
         Title.Caption = 'Script'
-        Width = 150
+        Width = 134
       end    
       item
-        MinSize = 250
+        MinSize = 300
         MaxSize = 1000
+        SizePriority = 0
         Title.Caption = 'Description'
-        Width = 500
+        Width = 284
       end>
     FixedCols = 0
     MouseWheelOption = mwGrid
     Options = [goFixedVertLine, goFixedHorzLine, goVertLine, goHorzLine, goRangeSelect, goColSizing, goRowSelect, goSmoothScroll, goFixedColSizing]
     TabOrder = 0
+    OnResize = StringGrid1Resize
     ColWidths = (
-      100
-      150
-      500
+      134
+      134
+      284
     )
   end
   object PanelBottom: TPanel
