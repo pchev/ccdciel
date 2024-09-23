@@ -545,8 +545,8 @@ begin
 end;
 
 procedure Tf_polaralign.Rotate;
-var cra,cde: double;
-    eqn            : string;
+var cra,cde  : double;
+    eqn      : string;
 begin
   {$ifdef test_polaralignment}
   exit;
@@ -679,7 +679,7 @@ begin
      txt:=rsMoveWestBy
   else
      txt:=rsMoveEastBy;
-  txt:=txt+DEToStrShort(abs(FOffsetAz),0);
+  txt:=txt+DEToStrShort(abs(FOffsetAz),0)+' ('+rsAzimuth+' ↺: '+DEToStrShort(FOffsetAz/cos(deg2rad*ObsLatitude)) ;
   tracemsg(rsHorizontalCo+' '+txt);
   Memo1.Lines.Add(txt);
   Memo1.Lines.Add(rsVerticalCorr);
@@ -813,9 +813,15 @@ begin
        cmdEq2Hz(cra*rad2deg/15,cde*rad2deg,caz,calt);
        cmdEq2Hz(Fcra*rad2deg/15,Fcde*rad2deg,icaz,icalt);
        caz:=caz-icaz;
-       if abs(caz)>180 then caz:=Sign(caz)*(360-abs(caz));
-       caz:=caz+FOffsetAz;
-       calt:=calt-icalt-FOffsetH;
+       if caz>180 then caz:=caz-360 //359 is -1
+       else
+       if caz<-180 then caz:=caz+360;//-359 is +1
+
+       caz:=caz*cos(deg2rad*ObsLatitude);//Convert azimuth rotation in distance
+       caz:=caz+FOffsetAz; //remaining horizontal distance. This is not a rotation.
+       calt:=-calt+icalt-FOffsetH;//remaining elevation error expressed in degrees distance.
+
+
        if caz*sgn(ObsLatitude)>0 then
           laz:=rsWest
        else
