@@ -6,15 +6,15 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ccdciel\n"
 "Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
-"POT-Creation-Date: 2024-07-29 18:12+0000\n"
-"PO-Revision-Date: 2024-04-04 04:23+0000\n"
+"POT-Creation-Date: 2024-09-25 12:15+0000\n"
+"PO-Revision-Date: 2024-08-22 04:14+0000\n"
 "Last-Translator: Zachary Wu <Unknown>\n"
 "Language-Team: Chinese (Simplified) <zh_CN@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2024-07-29 18:20+0000\n"
-"X-Generator: Launchpad (build 0f7b58d0a728e5e8f34556869262ccfa55217529)\n"
+"X-Launchpad-Export-Date: 2024-09-25 12:32+0000\n"
+"X-Generator: Launchpad (build 1b1ed1ad2dbfc71ee62b5c5491c975135a771bf0)\n"
 
 #: u_translation.rs2d
 msgid "2D"
@@ -259,7 +259,7 @@ msgstr "于黄昏"
 
 #: u_translation.rsatmosphericr
 msgid "Atmospheric refraction"
-msgstr ""
+msgstr "大气折射"
 
 #: u_translation.rsautofocus
 msgid "Autofocus"
@@ -360,7 +360,7 @@ msgstr "自动对焦图表"
 
 #: u_translation.rsautofocushfd2
 msgid "Autofocus after % change HFD"
-msgstr ""
+msgstr "HFD 百分比变化后的自动对焦"
 
 #: u_translation.rsautofocusloc
 msgid "Autofocus location"
@@ -439,7 +439,7 @@ msgstr "自动对焦容差 "
 
 #: u_translation.rsautofocuswil
 msgid "Autofocus will run before the next exposure"
-msgstr ""
+msgstr "自动对焦将在下次曝光之前运行"
 
 #: u_translation.rsautoguider
 msgid "Autoguider"
@@ -923,7 +923,7 @@ msgstr "%s 变更为 %s"
 
 #: u_translation.rschangeinhfd
 msgid "% change in HFD"
-msgstr ""
+msgstr "HFD 的百分比变化"
 
 #: u_translation.rschangelog
 msgid "Change log"
@@ -1467,6 +1467,10 @@ msgstr "抖动%s每隔"
 msgid "Dithering"
 msgstr "抖动"
 
+#: u_translation.rsdithermode
+msgid "Dither mode"
+msgstr ""
+
 #: u_translation.rsditheronly
 msgid "Dither only"
 msgstr "仅抖动"
@@ -1540,7 +1544,7 @@ msgstr "下"
 
 #: u_translation.rsdownload
 msgid "Download"
-msgstr ""
+msgstr "下载"
 
 #: u_translation.rsdownloading
 msgid "Downloading"
@@ -1711,7 +1715,7 @@ msgstr "根据最后的学习估计的滑脱"
 
 #: u_translation.rsexampleandte
 msgid "Example and template"
-msgstr ""
+msgstr "例子和模版"
 
 #: u_translation.rsexecutingthe
 msgid "Executing the termination error actions."
@@ -2162,7 +2166,7 @@ msgstr "从赤道仪获取经纬度"
 
 #: u_translation.rsgetvaluesfro
 msgid "Get values from the weather station"
-msgstr ""
+msgstr "从气象站获取值"
 
 #: u_translation.rsglobalaction
 msgid "Global actions when a sequence is running"
@@ -2195,7 +2199,7 @@ msgstr "绿"
 
 #: u_translation.rsgroup
 msgid "Group"
-msgstr ""
+msgstr "分组"
 
 #: u_translation.rsguid
 msgid "Guid."
@@ -2273,21 +2277,21 @@ msgstr "HFD"
 #: u_translation.rshfdactive
 #, object-pascal-format
 msgid "HFD Focus Monitor: Active. Threshold: %s%%, Reference HFD: %s"
-msgstr ""
+msgstr "HFD 对焦监视器：有效。阈值：%s%%，参考 HFD：%s"
 
 #: u_translation.rshfdmeasuring
 #, object-pascal-format
 msgid "HFD Focus Monitor: Measuring. %d of %d HFD measurements completed."
-msgstr ""
+msgstr "HFD 对焦监视器：测量。已完成的 %d / %d 个 HFD 测量。"
 
 #: u_translation.rshfdreset
 msgid "HFD Focus Monitor: Reset. Clearing reference HFD and measurements."
-msgstr ""
+msgstr "HFD 对焦监视器：重置。清除参考 HFD 和测量值。"
 
 #: u_translation.rshfmtriggered
 #, object-pascal-format
 msgid "HFD Focus Monitor: Threshold: %s%%, Ref: %s, %s-Image Avg: %s, HFD Delta: %s%%"
-msgstr ""
+msgstr "HFD 对焦监视器：阈值： %s%%，参考： %s，%s-图像平均： %s，HFD 增量： %s%%"
 
 #: u_translation.rshighlightadu
 msgid "Highlight ADU"
@@ -2311,7 +2315,7 @@ msgstr "湿度"
 
 #: u_translation.rshumidity2
 msgid "Humidity %"
-msgstr ""
+msgstr "湿度 %"
 
 #: u_translation.rshyperbolacur
 #, object-pascal-format
@@ -2677,8 +2681,8 @@ msgstr "主传感器"
 
 #: u_translation.rsmakeafirstpo
 #, object-pascal-format
-msgid "Adjust the mount RA axis manually to point to the pole the best as possible.%sSlew the telescope to point near the pole at a declination about 89 to 90 degrees with counterweight down.%sSelect below if the telescope can already slew automatically or if it must be moved manually.%sIf automatic, select the direction and movement step. Beware it will move two time this amount."
-msgstr "尽可能手动调整赤道仪RA轴转向天极。%s转向望远镜到天极附近的位置，赤纬约89至90度，重锤向下。%s在下面选择望远镜是否可以自动转向或需要手动操作。%s若自动可用，选择方向和移动步长。请注意望远镜会移动此步长两次。"
+msgid "In mode automatic the telescope will slew to the test positions near the pole automatically.%sIn mode manual you have to slew the mount to the position by the keypad. See documentation."
+msgstr ""
 
 #: u_translation.rsmanage
 msgid "Manage"
@@ -3040,6 +3044,10 @@ msgstr "现在移动到明亮的对焦星？"
 #, object-pascal-format
 msgid "Move to new planetarium object %s"
 msgstr "移动到新的星图目标 %s"
+
+#: u_translation.rsmovetostartp
+msgid "Move to start position"
+msgstr ""
 
 #: u_translation.rsmoveupby
 msgid "move Up by "
@@ -3791,7 +3799,7 @@ msgstr "气压"
 
 #: u_translation.rspressuremill
 msgid "Pressure (millibar)"
-msgstr ""
+msgstr "气压（毫巴）"
 
 #: u_translation.rspreview
 msgid "Preview"
@@ -3858,6 +3866,10 @@ msgstr "RA"
 #: u_translation.rsrainrate
 msgid "Rain rate"
 msgstr "降水概率"
+
+#: u_translation.rsrandom
+msgid "Random"
+msgstr ""
 
 #: u_translation.rsraonly
 msgid "RA only"
@@ -4197,7 +4209,7 @@ msgstr "如果温度变化大于%s则自动对焦"
 
 #: u_translation.rsrunautofocus2
 msgid "Run auto-focus if change is more than % HFD"
-msgstr ""
+msgstr "如果变化超过 % HFD，则运行自动对焦"
 
 #: u_translation.rsrunscript
 msgid "Run script"
@@ -4362,7 +4374,7 @@ msgstr "检索"
 
 #: u_translation.rssearchonline
 msgid "Search online"
-msgstr ""
+msgstr "在线搜索"
 
 #: u_translation.rssec
 msgid "sec."
@@ -4414,7 +4426,7 @@ msgstr "选择要载入的文件"
 
 #: u_translation.rsselectthescr
 msgid "Select the script to download"
-msgstr ""
+msgstr "选择要下载的脚本"
 
 #: u_translation.rssendimagetop
 msgid "Send image to planetarium"
@@ -4874,6 +4886,10 @@ msgstr "光谱分析"
 #: u_translation.rsspeed
 msgid "Speed"
 msgstr "速率"
+
+#: u_translation.rsspiral
+msgid "Spiral"
+msgstr ""
 
 #: u_translation.rssplittheimag
 #, object-pascal-format
@@ -5369,7 +5385,7 @@ msgstr "温度步长系数为：步/%s"
 
 #: u_translation.rstemperaturec2
 msgid "Temperature (C)"
-msgstr ""
+msgstr "温度（摄氏度）"
 
 #: u_translation.rstemperaturef
 msgid "Temperature from weather station"
@@ -5628,7 +5644,7 @@ msgstr "三角形旋转角度"
 
 #: u_translation.rstropospherer
 msgid "Troposphere rate (K/km)"
-msgstr ""
+msgstr "对流层速率 （K/km）"
 
 #: u_translation.rstrue
 msgid "True"

@@ -6,15 +6,15 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ccdciel\n"
 "Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
-"POT-Creation-Date: 2024-07-29 18:13+0000\n"
-"PO-Revision-Date: 2023-05-31 10:28+0000\n"
+"POT-Creation-Date: 2024-09-25 12:16+0000\n"
+"PO-Revision-Date: 2024-08-22 03:50+0000\n"
 "Last-Translator: Zachary Wu <Unknown>\n"
 "Language-Team: Chinese (Simplified) <zh_CN@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2024-07-29 18:20+0000\n"
-"X-Generator: Launchpad (build 0f7b58d0a728e5e8f34556869262ccfa55217529)\n"
+"X-Launchpad-Export-Date: 2024-09-25 12:32+0000\n"
+"X-Generator: Launchpad (build 1b1ed1ad2dbfc71ee62b5c5491c975135a771bf0)\n"
 
 #: u_hints.rsactivateback
 #, object-pascal-format
@@ -53,7 +53,7 @@ msgstr "此步骤开始时自动对焦"
 
 #: u_hints.rsautofocusifhfd
 msgid "Autofocus if the HFD % change is greater than the configured value"
-msgstr ""
+msgstr "如果 HFD % 变化大于配置值，则自动对焦"
 
 #: u_hints.rsautofocusift
 msgid "Autofocus if the temperature change is greater than the configured value"
@@ -312,7 +312,7 @@ msgstr "在此处设置序列终止后要执行的操作"
 
 #: u_hints.rssetthehfd
 msgid "Set the HFD % change threshold in the Preferences. Measurements must also be enabled."
-msgstr ""
+msgstr "在“首选项”中设置 HFD % 变化阈值。还必须启用测量功能。"
 
 #: u_hints.rssetthestartt
 msgid "Set the start time at astronomical dusk, recomputed for the date you run the sequence."

@@ -2,15 +2,15 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ccdciel\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-07-29 18:12+0000\n"
-"PO-Revision-Date: 2024-06-23 08:58+0000\n"
+"POT-Creation-Date: 2024-09-25 12:15+0000\n"
+"PO-Revision-Date: 2024-07-30 13:40+0000\n"
 "Last-Translator: Stanislav Holub <Unknown>\n"
 "Language-Team: Czech <cz@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2024-07-29 18:20+0000\n"
-"X-Generator: Launchpad (build 0f7b58d0a728e5e8f34556869262ccfa55217529)\n"
+"X-Launchpad-Export-Date: 2024-09-25 12:32+0000\n"
+"X-Generator: Launchpad (build 1b1ed1ad2dbfc71ee62b5c5491c975135a771bf0)\n"
 "Language: cs\n"
 
 #: u_translation.rs2d
@@ -359,7 +359,7 @@ msgstr "Graf AutoOstření"
 
 #: u_translation.rsautofocushfd2
 msgid "Autofocus after % change HFD"
-msgstr ""
+msgstr "Auto-ostření po změně % HFD"
 
 #: u_translation.rsautofocusloc
 msgid "Autofocus location"
@@ -922,7 +922,7 @@ msgstr "%s změněno na %s"
 
 #: u_translation.rschangeinhfd
 msgid "% change in HFD"
-msgstr ""
+msgstr "změna HFD v %"
 
 #: u_translation.rschangelog
 msgid "Change log"
@@ -1465,6 +1465,10 @@ msgstr "Dither%skaždý"
 #: u_translation.rsdithering
 msgid "Dithering"
 msgstr "Dithering"
+
+#: u_translation.rsdithermode
+msgid "Dither mode"
+msgstr ""
 
 #: u_translation.rsditheronly
 msgid "Dither only"
@@ -2272,21 +2276,21 @@ msgstr "HFD"
 #: u_translation.rshfdactive
 #, object-pascal-format
 msgid "HFD Focus Monitor: Active. Threshold: %s%%, Reference HFD: %s"
-msgstr ""
+msgstr "HFD Monitor Zaostření: Aktivní. Práh: %s%%, Referenční HFD: %s"
 
 #: u_translation.rshfdmeasuring
 #, object-pascal-format
 msgid "HFD Focus Monitor: Measuring. %d of %d HFD measurements completed."
-msgstr ""
+msgstr "HFD Monitor Zaostření: Měření. %d z %d měření HFD dokončeno."
 
 #: u_translation.rshfdreset
 msgid "HFD Focus Monitor: Reset. Clearing reference HFD and measurements."
-msgstr ""
+msgstr "HFD Monitor Zaostření: Vynulovat. Vymazání referenční HFD a měření."
 
 #: u_translation.rshfmtriggered
 #, object-pascal-format
 msgid "HFD Focus Monitor: Threshold: %s%%, Ref: %s, %s-Image Avg: %s, HFD Delta: %s%%"
-msgstr ""
+msgstr "HFD Monitor Zaostření: Práh: %s%%, Ref: %s, %s- Obr. průměr: %s, HFD Delta: %s%%"
 
 #: u_translation.rshighlightadu
 msgid "Highlight ADU"
@@ -2676,8 +2680,8 @@ msgstr "Hlavní senzor"
 
 #: u_translation.rsmakeafirstpo
 #, object-pascal-format
-msgid "Adjust the mount RA axis manually to point to the pole the best as possible.%sSlew the telescope to point near the pole at a declination about 89 to 90 degrees with counterweight down.%sSelect below if the telescope can already slew automatically or if it must be moved manually.%sIf automatic, select the direction and movement step. Beware it will move two time this amount."
-msgstr "Ručně nastavte osu RA montáže tak, aby co nejlépe mířila k pólu.%sPřeložte dalekohled tak, aby mířil do blízkosti pólu při deklinaci asi 89 až 90 stupňů dolů s protizávažím.%sNíže vyberte, zda se dalekohled již může přeložit automaticky, nebo zda se musí přeložit ručně.%sJestliže automaticky, vyberte směr a krok pohybu. Pozor, bude se pohybovat dvakrát o uvedený počet."
+msgid "In mode automatic the telescope will slew to the test positions near the pole automatically.%sIn mode manual you have to slew the mount to the position by the keypad. See documentation."
+msgstr ""
 
 #: u_translation.rsmanage
 msgid "Manage"
@@ -3039,6 +3043,10 @@ msgstr "Přesunout se na jasnou hvězdu?"
 #, object-pascal-format
 msgid "Move to new planetarium object %s"
 msgstr "Přejít na nový objekt planetária %s"
+
+#: u_translation.rsmovetostartp
+msgid "Move to start position"
+msgstr ""
 
 #: u_translation.rsmoveupby
 msgid "move Up by "
@@ -3858,6 +3866,10 @@ msgstr "RA"
 msgid "Rain rate"
 msgstr "Míra deště"
 
+#: u_translation.rsrandom
+msgid "Random"
+msgstr ""
+
 #: u_translation.rsraonly
 msgid "RA only"
 msgstr "Pouze RA"
@@ -4196,7 +4208,7 @@ msgstr "AutoOstření při změně teploty o více než %s"
 
 #: u_translation.rsrunautofocus2
 msgid "Run auto-focus if change is more than % HFD"
-msgstr ""
+msgstr "Spustit auto-ostření, pokud je změna větší než % HFD"
 
 #: u_translation.rsrunscript
 msgid "Run script"
@@ -4873,6 +4885,10 @@ msgstr "Spektroskopie"
 #: u_translation.rsspeed
 msgid "Speed"
 msgstr "Rychlost"
+
+#: u_translation.rsspiral
+msgid "Spiral"
+msgstr ""
 
 #: u_translation.rssplittheimag
 #, object-pascal-format, fuzzy, badformat

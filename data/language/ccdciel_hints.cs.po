@@ -2,15 +2,15 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ccdceil\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-07-29 18:13+0000\n"
-"PO-Revision-Date: 2023-03-26 12:00+0000\n"
+"POT-Creation-Date: 2024-09-25 12:16+0000\n"
+"PO-Revision-Date: 2024-07-30 13:38+0000\n"
 "Last-Translator: Stanislav Holub <Unknown>\n"
 "Language-Team: Czech <cz@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2024-07-29 18:20+0000\n"
-"X-Generator: Launchpad (build 0f7b58d0a728e5e8f34556869262ccfa55217529)\n"
+"X-Launchpad-Export-Date: 2024-09-25 12:32+0000\n"
+"X-Generator: Launchpad (build 1b1ed1ad2dbfc71ee62b5c5491c975135a771bf0)\n"
 "Language: cs\n"
 
 #: u_hints.rsactivateback
@@ -50,7 +50,7 @@ msgstr "AutoOstření na začátku tohoto kroku"
 
 #: u_hints.rsautofocusifhfd
 msgid "Autofocus if the HFD % change is greater than the configured value"
-msgstr ""
+msgstr "Auto-ostření, pokud je změna HFD % větší než nakonfigurovaná hodnota"
 
 #: u_hints.rsautofocusift
 msgid "Autofocus if the temperature change is greater than the configured value"
@@ -309,7 +309,7 @@ msgstr "Nastavit akci, která bude provedena po ukončení sekvence"
 
 #: u_hints.rssetthehfd
 msgid "Set the HFD % change threshold in the Preferences. Measurements must also be enabled."
-msgstr ""
+msgstr "V předvolbách nastavte prahovou hodnotu změny HFD v %. Musí být také povoleno měření."
 
 #: u_hints.rssetthestartt
 msgid "Set the start time at astronomical dusk, recomputed for the date you run the sequence."

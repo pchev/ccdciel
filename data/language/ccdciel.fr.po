@@ -6,15 +6,15 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ccdciel\n"
 "Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
-"POT-Creation-Date: 2024-07-29 18:12+0000\n"
-"PO-Revision-Date: 2024-07-29 18:16+0000\n"
+"POT-Creation-Date: 2024-09-25 12:15+0000\n"
+"PO-Revision-Date: 2024-09-25 12:28+0000\n"
 "Last-Translator: Patrick Chevalley <Unknown>\n"
 "Language-Team: French <fr@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2024-07-29 18:20+0000\n"
-"X-Generator: Launchpad (build 0f7b58d0a728e5e8f34556869262ccfa55217529)\n"
+"X-Launchpad-Export-Date: 2024-09-25 12:32+0000\n"
+"X-Generator: Launchpad (build 1b1ed1ad2dbfc71ee62b5c5491c975135a771bf0)\n"
 
 #: u_translation.rs2d
 msgid "2D"
@@ -1467,6 +1467,10 @@ msgstr "Dither%stous les"
 msgid "Dithering"
 msgstr "Dithering"
 
+#: u_translation.rsdithermode
+msgid "Dither mode"
+msgstr "Mode du dithering"
+
 #: u_translation.rsditheronly
 msgid "Dither only"
 msgstr "Dither seul"
@@ -2677,8 +2681,8 @@ msgstr "Capteur principal"
 
 #: u_translation.rsmakeafirstpo
 #, object-pascal-format
-msgid "Adjust the mount RA axis manually to point to the pole the best as possible.%sSlew the telescope to point near the pole at a declination about 89 to 90 degrees with counterweight down.%sSelect below if the telescope can already slew automatically or if it must be moved manually.%sIf automatic, select the direction and movement step. Beware it will move two time this amount."
-msgstr "Pointer l’axe de la monture manuellement vers le pôle le mieux possible.%sPointer le télescope à proximité du pôle avec une déclinaison de 89 à 90 degrés avec le contrepoids vers le bas.%sSélectionnez ci-dessous si le télescope peut déjà se déplacer automatiquement ou si il doit être déplacé manuellement.%sSi automatique, sélectionnez la direction et le déplacement. Attention qu'il se déplacera de deux fois ce montant."
+msgid "In mode automatic the telescope will slew to the test positions near the pole automatically.%sIn mode manual you have to slew the mount to the position by the keypad. See documentation."
+msgstr "En mode automatique, le télescope s'orientera automatiquement vers la position de test près du pôle. %sEn mode manuel, vous devez orienter la monture vers la position à l'aide de la raquette. Voir la documentation."
 
 #: u_translation.rsmanage
 msgid "Manage"
@@ -3040,6 +3044,10 @@ msgstr "Déplacement vers une étoile brillante maintenant?"
 #, object-pascal-format
 msgid "Move to new planetarium object %s"
 msgstr "Déplacement vers le nouvel objet du planétarium %s"
+
+#: u_translation.rsmovetostartp
+msgid "Move to start position"
+msgstr "Déplacement vers la position de départ"
 
 #: u_translation.rsmoveupby
 msgid "move Up by "
@@ -3858,6 +3866,10 @@ msgstr "AD"
 #: u_translation.rsrainrate
 msgid "Rain rate"
 msgstr "Précipitations"
+
+#: u_translation.rsrandom
+msgid "Random"
+msgstr "Aléatoire"
 
 #: u_translation.rsraonly
 msgid "RA only"
@@ -4874,6 +4886,10 @@ msgstr "Spectroscopie"
 #: u_translation.rsspeed
 msgid "Speed"
 msgstr "Vitesse"
+
+#: u_translation.rsspiral
+msgid "Spiral"
+msgstr "Spirale"
 
 #: u_translation.rssplittheimag
 #, object-pascal-format

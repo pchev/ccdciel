@@ -4199,7 +4199,7 @@ msgid "Polar alignment"
 msgstr ""
 
 #: u_translation:rsmakeafirstpo
-msgid "Adjust the mount RA axis manually to point to the pole the best as possible.%sSlew the telescope to point near the pole at a declination about 89 to 90 degrees with counterweight down.%sSelect below if the telescope can already slew automatically or if it must be moved manually.%sIf automatic, select the direction and movement step. Beware it will move two time this amount."
+msgid "In mode automatic the telescope will slew to the test positions near the pole automatically.%sIn mode manual you have to slew the mount to the position by the keypad. See documentation."
 msgstr ""
 
 #: u_translation:rsmovingmount
@@ -5856,5 +5856,21 @@ msgstr ""
 
 #: u_translation:rsrunautofocus2
 msgid "Run auto-focus if change is more than % HFD"
+msgstr ""
+
+#: u_translation:rsdithermode
+msgid "Dither mode"
+msgstr ""
+
+#: u_translation:rsspiral
+msgid "Spiral"
+msgstr ""
+
+#: u_translation:rsrandom
+msgid "Random"
+msgstr ""
+
+#: u_translation:rsmovetostartp
+msgid "Move to start position"
 msgstr ""
 

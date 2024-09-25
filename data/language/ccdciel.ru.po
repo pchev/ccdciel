@@ -6,15 +6,15 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ccdciel\n"
 "Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
-"POT-Creation-Date: 2024-07-29 18:12+0000\n"
-"PO-Revision-Date: 2024-06-08 20:30+0000\n"
+"POT-Creation-Date: 2024-09-25 12:15+0000\n"
+"PO-Revision-Date: 2024-08-15 16:45+0000\n"
 "Last-Translator: Sergey Tarantsov <tsn-ast@yandex.ru>\n"
 "Language-Team: Russian <ru@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2024-07-29 18:20+0000\n"
-"X-Generator: Launchpad (build 0f7b58d0a728e5e8f34556869262ccfa55217529)\n"
+"X-Launchpad-Export-Date: 2024-09-25 12:32+0000\n"
+"X-Generator: Launchpad (build 1b1ed1ad2dbfc71ee62b5c5491c975135a771bf0)\n"
 
 #: u_translation.rs2d
 msgid "2D"
@@ -360,7 +360,7 @@ msgstr "График автофокусировки"
 
 #: u_translation.rsautofocushfd2
 msgid "Autofocus after % change HFD"
-msgstr ""
+msgstr "Автофокусировка после % изменения HFD"
 
 #: u_translation.rsautofocusloc
 msgid "Autofocus location"
@@ -923,7 +923,7 @@ msgstr "%s изменено на %s"
 
 #: u_translation.rschangeinhfd
 msgid "% change in HFD"
-msgstr ""
+msgstr "% изменения HFD"
 
 #: u_translation.rschangelog
 msgid "Change log"
@@ -1467,6 +1467,10 @@ msgstr "Подвижка%sчерез"
 msgid "Dithering"
 msgstr "Выполнение подвижки"
 
+#: u_translation.rsdithermode
+msgid "Dither mode"
+msgstr ""
+
 #: u_translation.rsditheronly
 msgid "Dither only"
 msgstr "Только подвижки"
@@ -1711,7 +1715,7 @@ msgstr "Расчётное проскальзывание с момента по
 
 #: u_translation.rsexampleandte
 msgid "Example and template"
-msgstr ""
+msgstr "Пример и шаблон"
 
 #: u_translation.rsexecutingthe
 msgid "Executing the termination error actions."
@@ -2273,21 +2277,21 @@ msgstr "HFD"
 #: u_translation.rshfdactive
 #, object-pascal-format
 msgid "HFD Focus Monitor: Active. Threshold: %s%%, Reference HFD: %s"
-msgstr ""
+msgstr "Монитор фокусировки HFD: активен. Порог: %s%%, эталонный HFD: %s"
 
 #: u_translation.rshfdmeasuring
 #, object-pascal-format
 msgid "HFD Focus Monitor: Measuring. %d of %d HFD measurements completed."
-msgstr ""
+msgstr "Монитор фокусировки HFD: Измерение %d из %d измерений HFD завершено."
 
 #: u_translation.rshfdreset
 msgid "HFD Focus Monitor: Reset. Clearing reference HFD and measurements."
-msgstr ""
+msgstr "Монитор фокусировки HFD: сброс. Очистка эталонного HFD и измерений."
 
 #: u_translation.rshfmtriggered
 #, object-pascal-format
 msgid "HFD Focus Monitor: Threshold: %s%%, Ref: %s, %s-Image Avg: %s, HFD Delta: %s%%"
-msgstr ""
+msgstr "Монитор фокусировки HFD: Порог: %s%%, Ref: %s, %s-Image Avg: %s, Дельта HFD: %s%%"
 
 #: u_translation.rshighlightadu
 msgid "Highlight ADU"
@@ -2677,8 +2681,8 @@ msgstr "Главный сенсор"
 
 #: u_translation.rsmakeafirstpo
 #, object-pascal-format
-msgid "Adjust the mount RA axis manually to point to the pole the best as possible.%sSlew the telescope to point near the pole at a declination about 89 to 90 degrees with counterweight down.%sSelect below if the telescope can already slew automatically or if it must be moved manually.%sIf automatic, select the direction and movement step. Beware it will move two time this amount."
-msgstr "Установите ось RA монтировки вручную, чтобы она указывала на полюс как можно точнее.%sНаправьте трубу телескопа на область рядом с полюсом: склонение приблизительно от 89 до 90 градусов с противовесом вниз.%sВыберите ниже, если телескоп может поворачиваться автоматически или если он должен быть перемещён вручную.%sПри автоматическом повороте выберите направление и шаг движения. Осторожно, он повернётся на эту величину два раза."
+msgid "In mode automatic the telescope will slew to the test positions near the pole automatically.%sIn mode manual you have to slew the mount to the position by the keypad. See documentation."
+msgstr ""
 
 #: u_translation.rsmanage
 msgid "Manage"
@@ -3040,6 +3044,10 @@ msgstr "Перейти к яркой звезде?"
 #, object-pascal-format
 msgid "Move to new planetarium object %s"
 msgstr "Наведение на новую цель из планетария - %s"
+
+#: u_translation.rsmovetostartp
+msgid "Move to start position"
+msgstr ""
 
 #: u_translation.rsmoveupby
 msgid "move Up by "
@@ -3859,6 +3867,10 @@ msgstr "RA"
 msgid "Rain rate"
 msgstr "Осадки"
 
+#: u_translation.rsrandom
+msgid "Random"
+msgstr ""
+
 #: u_translation.rsraonly
 msgid "RA only"
 msgstr "Только по RA"
@@ -4197,7 +4209,7 @@ msgstr "Автофокусировка при изменении темп. > %s"
 
 #: u_translation.rsrunautofocus2
 msgid "Run auto-focus if change is more than % HFD"
-msgstr ""
+msgstr "Запустить автофокусировку, если изменение превышает % HFD"
 
 #: u_translation.rsrunscript
 msgid "Run script"
@@ -4874,6 +4886,10 @@ msgstr "Спектроскопия"
 #: u_translation.rsspeed
 msgid "Speed"
 msgstr "Скорость"
+
+#: u_translation.rsspiral
+msgid "Spiral"
+msgstr ""
 
 #: u_translation.rssplittheimag
 #, object-pascal-format

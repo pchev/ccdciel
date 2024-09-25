@@ -6,15 +6,15 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ccdciel\n"
 "Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
-"POT-Creation-Date: 2024-07-29 18:12+0000\n"
+"POT-Creation-Date: 2024-09-25 12:15+0000\n"
 "PO-Revision-Date: 2021-08-31 20:35+0000\n"
 "Last-Translator: Patrick Chevalley <Unknown>\n"
 "Language-Team: Kurdish <ku@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2024-07-29 18:20+0000\n"
-"X-Generator: Launchpad (build 0f7b58d0a728e5e8f34556869262ccfa55217529)\n"
+"X-Launchpad-Export-Date: 2024-09-25 12:32+0000\n"
+"X-Generator: Launchpad (build 1b1ed1ad2dbfc71ee62b5c5491c975135a771bf0)\n"
 
 #: u_translation.rs2d
 msgid "2D"
@@ -1467,6 +1467,10 @@ msgstr ""
 msgid "Dithering"
 msgstr ""
 
+#: u_translation.rsdithermode
+msgid "Dither mode"
+msgstr ""
+
 #: u_translation.rsditheronly
 msgid "Dither only"
 msgstr ""
@@ -2677,7 +2681,7 @@ msgstr ""
 
 #: u_translation.rsmakeafirstpo
 #, object-pascal-format
-msgid "Adjust the mount RA axis manually to point to the pole the best as possible.%sSlew the telescope to point near the pole at a declination about 89 to 90 degrees with counterweight down.%sSelect below if the telescope can already slew automatically or if it must be moved manually.%sIf automatic, select the direction and movement step. Beware it will move two time this amount."
+msgid "In mode automatic the telescope will slew to the test positions near the pole automatically.%sIn mode manual you have to slew the mount to the position by the keypad. See documentation."
 msgstr ""
 
 #: u_translation.rsmanage
@@ -3039,6 +3043,10 @@ msgstr ""
 #: u_translation.rsmovetonewpla
 #, object-pascal-format
 msgid "Move to new planetarium object %s"
+msgstr ""
+
+#: u_translation.rsmovetostartp
+msgid "Move to start position"
 msgstr ""
 
 #: u_translation.rsmoveupby
@@ -3857,6 +3865,10 @@ msgstr ""
 
 #: u_translation.rsrainrate
 msgid "Rain rate"
+msgstr ""
+
+#: u_translation.rsrandom
+msgid "Random"
 msgstr ""
 
 #: u_translation.rsraonly
@@ -4873,6 +4885,10 @@ msgstr ""
 
 #: u_translation.rsspeed
 msgid "Speed"
+msgstr ""
+
+#: u_translation.rsspiral
+msgid "Spiral"
 msgstr ""
 
 #: u_translation.rssplittheimag

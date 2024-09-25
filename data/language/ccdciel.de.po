@@ -6,15 +6,15 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ccdciel\n"
 "Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
-"POT-Creation-Date: 2024-07-29 18:12+0000\n"
-"PO-Revision-Date: 2024-05-29 19:22+0000\n"
+"POT-Creation-Date: 2024-09-25 12:15+0000\n"
+"PO-Revision-Date: 2024-08-19 19:32+0000\n"
 "Last-Translator: Thomas <email@starhopper.de>\n"
 "Language-Team: German <de@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2024-07-29 18:20+0000\n"
-"X-Generator: Launchpad (build 0f7b58d0a728e5e8f34556869262ccfa55217529)\n"
+"X-Launchpad-Export-Date: 2024-09-25 12:32+0000\n"
+"X-Generator: Launchpad (build 1b1ed1ad2dbfc71ee62b5c5491c975135a771bf0)\n"
 
 #: u_translation.rs2d
 msgid "2D"
@@ -259,7 +259,7 @@ msgstr "zur Abenddämmerung"
 
 #: u_translation.rsatmosphericr
 msgid "Atmospheric refraction"
-msgstr ""
+msgstr "Atmosphärische Refraktion"
 
 #: u_translation.rsautofocus
 msgid "Autofocus"
@@ -360,7 +360,7 @@ msgstr "Autofokus-Grafik"
 
 #: u_translation.rsautofocushfd2
 msgid "Autofocus after % change HFD"
-msgstr ""
+msgstr "Autofokus nach % Veränderung des HFG"
 
 #: u_translation.rsautofocusloc
 msgid "Autofocus location"
@@ -439,7 +439,7 @@ msgstr "Autofokus Toleranz "
 
 #: u_translation.rsautofocuswil
 msgid "Autofocus will run before the next exposure"
-msgstr ""
+msgstr "Autofokus wird vor der nächsten Belichtung ausgeführt"
 
 #: u_translation.rsautoguider
 msgid "Autoguider"
@@ -923,7 +923,7 @@ msgstr "%s gewechselt zu %s"
 
 #: u_translation.rschangeinhfd
 msgid "% change in HFD"
-msgstr ""
+msgstr "% Veränderung des HFD"
 
 #: u_translation.rschangelog
 msgid "Change log"
@@ -1467,6 +1467,10 @@ msgstr "Dither%sjedes"
 msgid "Dithering"
 msgstr "Dithering"
 
+#: u_translation.rsdithermode
+msgid "Dither mode"
+msgstr ""
+
 #: u_translation.rsditheronly
 msgid "Dither only"
 msgstr "Nur Dither"
@@ -1540,7 +1544,7 @@ msgstr "Nach unten"
 
 #: u_translation.rsdownload
 msgid "Download"
-msgstr ""
+msgstr "Download"
 
 #: u_translation.rsdownloading
 msgid "Downloading"
@@ -1711,7 +1715,7 @@ msgstr "Geschätzter Schlupf seit dem letzten Lernen"
 
 #: u_translation.rsexampleandte
 msgid "Example and template"
-msgstr ""
+msgstr "Beispiel und Vorlage"
 
 #: u_translation.rsexecutingthe
 msgid "Executing the termination error actions."
@@ -2162,7 +2166,7 @@ msgstr "Übernehme Standort (Länge-/Breitengrad) von der Montierung"
 
 #: u_translation.rsgetvaluesfro
 msgid "Get values from the weather station"
-msgstr ""
+msgstr "Werte der Wetterstation abrufen"
 
 #: u_translation.rsglobalaction
 msgid "Global actions when a sequence is running"
@@ -2195,7 +2199,7 @@ msgstr "grün"
 
 #: u_translation.rsgroup
 msgid "Group"
-msgstr ""
+msgstr "Gruppe"
 
 #: u_translation.rsguid
 msgid "Guid."
@@ -2273,21 +2277,21 @@ msgstr "HFD"
 #: u_translation.rshfdactive
 #, object-pascal-format
 msgid "HFD Focus Monitor: Active. Threshold: %s%%, Reference HFD: %s"
-msgstr ""
+msgstr "HFD Focus Monitor: Aktiv. Schwellenwert: %s%%, Referenz HFD: %s"
 
 #: u_translation.rshfdmeasuring
 #, object-pascal-format
 msgid "HFD Focus Monitor: Measuring. %d of %d HFD measurements completed."
-msgstr ""
+msgstr "HFD Fokus Monitor: Messung. %d von %d HFD-Messungen abgeschlossen."
 
 #: u_translation.rshfdreset
 msgid "HFD Focus Monitor: Reset. Clearing reference HFD and measurements."
-msgstr ""
+msgstr "HFD Fokus Monitor: Reset. Lösche HFD Referenz und Messwerte."
 
 #: u_translation.rshfmtriggered
 #, object-pascal-format
 msgid "HFD Focus Monitor: Threshold: %s%%, Ref: %s, %s-Image Avg: %s, HFD Delta: %s%%"
-msgstr ""
+msgstr "HFD Focus Monitor: Schwellenwert: %s%%, Ref: %s, %s-Bild-Durchschnitt: %s, HFD Delta: %s%%"
 
 #: u_translation.rshighlightadu
 msgid "Highlight ADU"
@@ -2311,7 +2315,7 @@ msgstr "Feuchtigkeit"
 
 #: u_translation.rshumidity2
 msgid "Humidity %"
-msgstr ""
+msgstr "Luftfeuchte %"
 
 #: u_translation.rshyperbolacur
 #, object-pascal-format
@@ -2676,9 +2680,9 @@ msgid "Main sensor"
 msgstr "Hauptsensor"
 
 #: u_translation.rsmakeafirstpo
-#, object-pascal-format, fuzzy, badformat
-msgid "Adjust the mount RA axis manually to point to the pole the best as possible.%sSlew the telescope to point near the pole at a declination about 89 to 90 degrees with counterweight down.%sSelect below if the telescope can already slew automatically or if it must be moved manually.%sIf automatic, select the direction and movement step. Beware it will move two time this amount."
-msgstr "Die Montierung vorher so gut wie möglich auf den Pol ausrichten. Das Teleskop anschließend auf einen Punkt nahe des Himmelspols zwischen 89-90 Grad Deklination fahren, die Gegengewichtsstange soll dabei nach unten zeigen.%sWählen Sie \"automatisch\" aus wenn das Teleskop bereits vom Programm aus geschwenkt werden kann, ansonsten muss es manuell bewegt werden.%sBei \"automatisch\" kann noch Drehrichtung und Drehwinkel eingestellt werden . Bitte aufpassen, dass kein Hindernis im weg ist, dass Teleskop dreht sich zweimal um den eingestellten Betrag."
+#, object-pascal-format
+msgid "In mode automatic the telescope will slew to the test positions near the pole automatically.%sIn mode manual you have to slew the mount to the position by the keypad. See documentation."
+msgstr ""
 
 #: u_translation.rsmanage
 msgid "Manage"
@@ -3041,6 +3045,10 @@ msgstr "Zu einem hellen Fokussierstern schwenken?"
 msgid "Move to new planetarium object %s"
 msgstr "Schwenke zu neuem Planetarium Objekt %s"
 
+#: u_translation.rsmovetostartp
+msgid "Move to start position"
+msgstr ""
+
 #: u_translation.rsmoveupby
 msgid "move Up by "
 msgstr "nach oben bewegen um "
@@ -3092,7 +3100,7 @@ msgstr "Nahe des Himmelspols"
 #: u_translation.rsneedtowaitun
 #, object-pascal-format
 msgid "Need to wait until %s"
-msgstr "Muss warten bis %s"
+msgstr "Warten bis %s"
 
 #: u_translation.rsnew
 msgid "New"
@@ -3791,7 +3799,7 @@ msgstr "Luftdruck"
 
 #: u_translation.rspressuremill
 msgid "Pressure (millibar)"
-msgstr ""
+msgstr "Luftdruck (hP)"
 
 #: u_translation.rspreview
 msgid "Preview"
@@ -3858,6 +3866,10 @@ msgstr "RA"
 #: u_translation.rsrainrate
 msgid "Rain rate"
 msgstr "Niederschlagsrate"
+
+#: u_translation.rsrandom
+msgid "Random"
+msgstr ""
 
 #: u_translation.rsraonly
 msgid "RA only"
@@ -4197,7 +4209,7 @@ msgstr "Autofokus wenn Temperaturänderung mehr als %s"
 
 #: u_translation.rsrunautofocus2
 msgid "Run auto-focus if change is more than % HFD"
-msgstr ""
+msgstr "Autofokus ausführen, wenn die Änderung mehr als % HFD beträgt"
 
 #: u_translation.rsrunscript
 msgid "Run script"
@@ -4362,7 +4374,7 @@ msgstr "Suche"
 
 #: u_translation.rssearchonline
 msgid "Search online"
-msgstr ""
+msgstr "Online Suche"
 
 #: u_translation.rssec
 msgid "sec."
@@ -4414,7 +4426,7 @@ msgstr "Zu öffnende Datei auswählen"
 
 #: u_translation.rsselectthescr
 msgid "Select the script to download"
-msgstr ""
+msgstr "Wählen Sie das Skript zum Download aus"
 
 #: u_translation.rssendimagetop
 msgid "Send image to planetarium"
@@ -4874,6 +4886,10 @@ msgstr "Spektroskopie"
 #: u_translation.rsspeed
 msgid "Speed"
 msgstr "Geschwindigkeit"
+
+#: u_translation.rsspiral
+msgid "Spiral"
+msgstr ""
 
 #: u_translation.rssplittheimag
 #, object-pascal-format
@@ -5369,7 +5385,7 @@ msgstr "Temperaturkoeffizient in Schritten/%s"
 
 #: u_translation.rstemperaturec2
 msgid "Temperature (C)"
-msgstr ""
+msgstr "Temperatur (C)"
 
 #: u_translation.rstemperaturef
 msgid "Temperature from weather station"
@@ -5548,7 +5564,7 @@ msgstr "Zeit"
 #: u_translation.rstimealreadyp
 #, object-pascal-format
 msgid "Time already passed %s"
-msgstr "Muss warten bis %s"
+msgstr "Zeit ist bereits vergangen %s"
 
 #: u_translation.rstimeinarow
 msgid "time in a row"
@@ -5628,7 +5644,7 @@ msgstr "Rotationswinkel des Dreiecks"
 
 #: u_translation.rstropospherer
 msgid "Troposphere rate (K/km)"
-msgstr ""
+msgstr "Troposphäre (K/km)"
 
 #: u_translation.rstrue
 msgid "True"
