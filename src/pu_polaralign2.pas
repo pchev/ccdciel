@@ -351,7 +351,9 @@ begin
   {do not sync in ASCOM simulation since it will move the mount in the Sky simulator.
   Not required for the Sky Simulator Alpaca mount simulation in since it maintains a
   separate ra, dec position for the indication and mount}
-  if pos('simulator',LowerCase(camera.DriverInfo))=0 then Sync(1);
+
+  if pos('Camera Sky Simulator',camera.DriverInfo)=0 then  //do not try to sync the ascom simulator
+    Sync(1);
 
   MountPosition(1);
   CurrentStep:=1;
@@ -464,8 +466,7 @@ end;
 procedure Tf_polaralign2.MountPosition(step: integer);
 var tra,tde: double;
 begin
-  if (step=1)and(pos('simulator',LowerCase(camera.DriverInfo))=0) then begin
-    // use sync coordinates to remove mount error
+  if (step=1)and (pos('Camera Sky Simulator',camera.DriverInfo)=0) then begin   // use sync coordinates to remove mount error
     tra:=rad2deg*FRa[step]/15;
     tde:=rad2deg*FDe[step];
     LocalToMount(mount.EquinoxJD,tra,tde);
@@ -492,7 +493,7 @@ end;
 
 
  For one reference image the difference in RA and DEC caused by the misalignment of the polar axis, formula (3):
-   delta_ra:= de * TAN(dec)*SIN(h)  + da * (sin(lat)- COS(lat)*(TAN(dec1)*COS(h_1))
+   delta_ra:= de * TAN(dec)*SIN(h)  + da * (sin(lat)- COS(lat)*(TAN(dec)*COS(h))
    delta_dec:=de * COS(h)  + da * COS(lat)*SIN(h))
 
    where de is the polar error in elevation (altitude)
@@ -500,8 +501,9 @@ end;
    where h is the hour angle of the reference point equal ra - local_sidereal_time
 
  Using the above formula calculate the difference in RA and DEC by subtracting the first image postion from the second reference image. The common term sin(lat) will be nulified. Formula (4)
- delta_ra:= de * (TAN(dec)*SIN(h_2)-TAN(dec1)*SIN(h_1))  + da * COS(lat)*(TAN(dec1)*COS(h_1)-TAN(dec2)*COS(h_2));
-   delta_dec:=de * (COS(h_2)-COS(h_1))  + da * COS(lat)*(SIN(h_2)-SIN(h_1));
+ delta_ra:= de * (TAN(dec2)*SIN(h_2)-TAN(dec1)*SIN(h_1))  + da * COS(lat)*(TAN(dec1)*COS(h_1)-TAN(dec2)*COS(h_2));
+ delta_dec:=de * (COS(h_2)-COS(h_1))  + da * COS(lat)*(SIN(h_2)-SIN(h_1));
+
 
  Writing the above formulas in matrix notation:
   [delta_Ra;delta_Dec]= C * [de;da]
@@ -797,6 +799,7 @@ end;
 
 procedure Tf_polaralign2.ButtonNextClick(Sender: TObject);
 var txt: string;
+    poleoffset: double;
 begin
   Instruction.Clear;
   Instruction.Lines.Add(rsHorizontalCo);
@@ -804,7 +807,7 @@ begin
      txt:=rsMoveWestBy
   else
      txt:=rsMoveEastBy;
-  txt:=txt+DEToStrShort(rad2deg*abs(corr_az),0);
+  txt:=txt+DEToStrShort(rad2deg*abs(corr_az*cos(deg2rad*ObsLatitude){rotation to distance}),0)+' ('+rsAzimuth+' ↺: '+DEToStrShort(rad2deg*corr_az)+')';;;
   Instruction.Lines.Add(txt);
   Instruction.Lines.Add(rsVerticalCorr);
   if corr_alt>0 then
@@ -813,6 +816,11 @@ begin
      txt:=rsMoveUpBy;
   txt:=txt+DEToStrShort(rad2deg*abs(corr_alt),0);
   Instruction.Lines.Add(txt);
+
+  Instruction.Lines.Add(rsTotalPolarEr);
+  poleoffset:=rad2deg*sqrt(sqr(corr_az*cos(deg2rad*ObsLatitude))+sqr(corr_alt));
+  Instruction.Lines.Add(DEToStrShort(poleoffset,0));
+
   Instruction.Lines.Add('');
   Instruction.Lines.Add(rsMoveTheTrian);
   Instruction.Lines.Add(rsOrDoubleClic);
@@ -949,8 +957,10 @@ begin
        J2000ToApparent(cra,cde);
        cmdEq2Hz(cra*rad2deg/15,cde*rad2deg,caz,calt);
        cmdEq2Hz(Fcra*rad2deg/15,Fcde*rad2deg,icaz,icalt);
-       caz:=caz-icaz+rad2deg*corr_az;
+       caz:=caz-icaz+rad2deg*corr_az;//azimuth rotation error
+       caz:=caz*cos(deg2rad*ObsLatitude);//convert to a distance
        calt:=calt-icalt-rad2deg*corr_alt;
+
        if caz>0 then
          laz:=rsWest
        else
@@ -959,7 +969,7 @@ begin
          lalt:=rsUp
        else
          lalt:=rsDown;
-       Memo2.Text:=laz+':'+FormatFloat(f1,abs(caz*60))+' '+lalt+':'+FormatFloat(f1,abs(calt*60));
+       Memo2.Text:=laz+':'+FormatFloat(f1,abs(caz*60))+' '+lalt+':'+FormatFloat(f1,abs(calt*60));//report azimu
       end;
   end;
 end;

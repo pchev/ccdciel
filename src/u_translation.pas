@@ -1149,10 +1149,8 @@ resourcestring
   rsAdjustTheMou = 'Adjust the mount in azimuth and elevation such that the star moves from the green square to the pink circle.';
   rsCloseTheWind = 'Close the window when ready.';
   rsPolarAlignme = 'Polar alignment';
-  rsMakeAFirstPo = 'Adjust the mount RA axis manually to point to the pole the best as possible.%s'+
-                   'Slew the telescope to point near the pole at a declination about 89 to 90 degrees with counterweight down.%s'+
-                   'Select below if the telescope can already slew automatically or if it must be moved manually.%s'+
-                   'If automatic, select the direction and movement step. Beware it will move two time this amount.';
+  rsMakeAFirstPo = 'In mode automatic the telescope will slew to the test positions near the pole automatically.%s'+
+                   'In mode manual you have to slew the mount to the position by the keypad. See documentation.';
   rsMovingMount = 'Moving mount';
   rsAutomatic = 'Automatic';
   rsManual = 'Manual';
@@ -1571,6 +1569,7 @@ resourcestring
   rsDitherMode = 'Dither mode';
   rsSpiral = 'Spiral';
   rsRandom = 'Random';
+  rsMoveToStartP = 'Move to start position';
 
 implementation
 

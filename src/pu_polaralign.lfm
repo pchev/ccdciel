@@ -1,7 +1,7 @@
 object f_polaralign: Tf_polaralign
-  Left = 369
+  Left = 511
   Height = 478
-  Top = 30
+  Top = 57
   Width = 354
   Caption = 'f_polaralign'
   ClientHeight = 478
@@ -277,6 +277,7 @@ object f_polaralign: Tf_polaralign
         Width = 350
         Align = alClient
         Items.Strings = (
+          'Move to start position'
           '1st exposure'
           'Plate solve 1st exposure'
           'rotate telescope'
@@ -292,7 +293,7 @@ object f_polaralign: Tf_polaralign
         ParentFont = False
         TabOrder = 0
         Data = {
-          080000000000000000000000
+          09000000000000000000000000
         }
       end
       object Panel3: TPanel

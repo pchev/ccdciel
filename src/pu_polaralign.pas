@@ -111,6 +111,7 @@ type
     procedure InvProj(xx, yy, ac, dc: double; out ar, de: double);
     procedure TakeExposure;
     procedure Solve(step: integer);
+    procedure Move_to_start_position;
     procedure Rotate;
   public
     procedure SetLang;
@@ -209,7 +210,7 @@ begin
    BtnContinue.Caption:=rsContinue;
    BtnLock.Caption:=rsLockOverlay;
    Label5.Caption:=rsPolarAlignme2;
-   Label1.Caption:=Format(rsMakeAFirstPo, [crlf, crlf, crlf]);
+   Label1.Caption:=Format(rsMakeAFirstPo, [crlf+crlf]);
    RefractionGroup.Caption:=rsAlignmentOn;
    RefractionGroup.Items[0]:=rsTruePole;
    RefractionGroup.Items[1]:=rsRefractedPol;
@@ -223,14 +224,15 @@ begin
    Label2.Caption:=rsRotateBy;
    Label4.Caption:=rsDegree;
    SolveUpdate.Caption:=rsPlateSolveTo;
-   ExposeList.Items[0]:=Format(rsExposureS, ['1']);
-   ExposeList.Items[1]:=Format(rsPlateSolveEx, ['1']);
-   ExposeList.Items[2]:=rsRotateTelesc;
-   ExposeList.Items[3]:=Format(rsExposureS, ['2']);
-   ExposeList.Items[4]:=Format(rsPlateSolveEx, ['2']);
-   ExposeList.Items[5]:=rsRotateTelesc;
-   ExposeList.Items[6]:=Format(rsExposureS, ['3']);
-   ExposeList.Items[7]:=Format(rsPlateSolveEx, ['3']);
+   ExposeList.Items[0]:=rsMoveToStartP;
+   ExposeList.Items[1]:=Format(rsExposureS, ['1']);
+   ExposeList.Items[2]:=Format(rsPlateSolveEx, ['1']);
+   ExposeList.Items[3]:=rsRotateTelesc;
+   ExposeList.Items[4]:=Format(rsExposureS, ['2']);
+   ExposeList.Items[5]:=Format(rsPlateSolveEx, ['2']);
+   ExposeList.Items[6]:=rsRotateTelesc;
+   ExposeList.Items[7]:=Format(rsExposureS, ['3']);
+   ExposeList.Items[8]:=Format(rsPlateSolveEx, ['3']);
 end;
 
 procedure Tf_polaralign.FormCreate(Sender: TObject);
@@ -371,26 +373,27 @@ begin
   BtnContinue.Visible:=false;
   LabelMsg2.Caption:=rsPleaseWaitUn;
   PageControl1.ActivePage:=TabSheetExpose;
-  for i:=0 to 7 do
+  for i:=0 to 8 do
     ExposeList.State[i]:=cbUnchecked;
-  for i:=0 to 7 do begin
+  for i:=0 to 8 do begin
     if FTerminate then exit;
     FExposeStep:=i;
     tracemsg('Start measurement step '+inttostr(FExposeStep));
     ExposeList.Selected[FExposeStep]:=true;
     case FExposeStep of
-      0: TakeExposure;
-      1: Solve(1);
-      2: Rotate;
-      3: TakeExposure;
-      4: solve(2);
-      5: Rotate;
-      6: TakeExposure;
-      7: solve(3);
+      0: Move_to_start_position;
+      1: TakeExposure;
+      2: Solve(1);
+      3: Rotate;
+      4: TakeExposure;
+      5: solve(2);
+      6: Rotate;
+      7: TakeExposure;
+      8: solve(3);
     end;
     ExposeList.State[FExposeStep]:=cbChecked;
   end;
-  FExposeStep:=8;
+  FExposeStep:=9;
   wait(2);
   tracemsg('Measurement complete');
   Application.QueueAsyncCall(@DoCompute,0);
@@ -544,6 +547,45 @@ begin
   end;
 end;
 
+
+procedure Tf_polaralign.move_to_start_position;
+var cra,cde  : double;
+    eqn      : string;
+begin
+  {$ifdef test_polaralignment}
+  exit;
+  {$endif}
+  if MountSlewing.ItemIndex=0 then begin
+    if ObsLatitude>0 then
+      cde:=88 //Measure two degrees from the celestial pole.
+    else
+      cde:=-88;
+    if RotDir.ItemIndex=0 then
+      cra:=(FSidtimStart-pi/4)*12/pi//move weight half down, look west. This always rotating 135 degrees without reaching meridian. Only 2x45=90 is required
+    else
+      cra:=(FSidtimStart+pi/4)*12/pi;//move weight half down, look east. This always rotating 135 degrees without reaching meridian. Only 2x45=90 is required
+
+    MountToLocal(mount.EquinoxJD,cra,cde);//for case communication with mount is in J2000 coordinate system
+
+    tracemsg('Slew mount to start position, RAlocal:'+FormatFloat(f6,cra)+' DEClocal='+FormatFloat(f6,cde));
+    if not FMount.Slew(cra,cde) then begin
+      msg(rsTelescopeSle3,1);
+      AbortAlignment;
+    end;
+    Wait(Fdelay);
+  end
+  else begin
+    tracemsg('Wait for manual slew to pole position');
+    LabelMsg2.Caption:=rsMoveTheMount;
+    BtnContinue.Visible:=True;
+    while BtnContinue.Visible do begin
+      Wait(2);
+    end;
+  end;
+  tracemsg('Slew complete');
+end;
+
+
 procedure Tf_polaralign.Rotate;
 var cra,cde  : double;
     eqn      : string;
@@ -679,7 +721,8 @@ begin
      txt:=rsMoveWestBy
   else
      txt:=rsMoveEastBy;
-  txt:=txt+DEToStrShort(abs(FOffsetAz),0)+' ('+rsAzimuth+' ↺: '+DEToStrShort(FOffsetAz/cos(deg2rad*ObsLatitude)) ;
+  txt:=txt+DEToStrShort(abs(FOffsetAz),0)+' ('+rsAzimuth+' ↺: '+DEToStrShort(FOffsetAz/cos(deg2rad*ObsLatitude))+')';
+
   tracemsg(rsHorizontalCo+' '+txt);
   Memo1.Lines.Add(txt);
   Memo1.Lines.Add(rsVerticalCorr);
