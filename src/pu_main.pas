@@ -11350,6 +11350,8 @@ if (AllDevicesConnected)and(not autofocusing)and (not learningvcurve) then begin
   if ftype<>LIGHT then begin
      f_capture.CheckBoxDither.Checked:=false;
      f_capture.CheckBoxFocus.Checked:=false;
+     f_capture.CheckBoxFocusHFD.Checked:=false;
+     f_capture.CheckBoxFocusTemp.Checked:=false;
   end;
   // set object for filename
   camera.ObjectName:=f_capture.Fname.Text;
