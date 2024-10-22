@@ -336,6 +336,8 @@ begin
   if cbFrameType.ItemIndex<>0 then begin
      CheckBoxDither.Checked:=false;
      CheckBoxFocus.Checked:=false;
+     CheckBoxFocusHFD.Checked:=false;
+     CheckBoxFocusTemp.Checked:=false;
   end;
   ExpTime.Enabled:=(cbFrameType.ItemIndex<>1);
   if ExpTime.Enabled and (ExpTime.Text='0') then ExpTime.ItemIndex:=0;
