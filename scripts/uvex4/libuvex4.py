@@ -63,13 +63,18 @@ def UVEX4close() :
 def UVEX4query(command, resp='', minlen=3, numresp=1) :
     if resp=='' :
       resp = command[:-1]                      # default response is command without the last #
-    ser.reset_input_buffer()  
+    if verbose :
+              logging.warning('Send query: {!r}'.format(command))
+              logging.warning('Waiting for: {!r}'.format(resp))
+    ser.reset_input_buffer()
     ser.write(command.encode('ascii'))         # write command
     r = "no response"
     countresp = 0
     start=time.time()
     while not ((r.startswith(resp)) or (r == "")) :
       r = ser.readline().decode("ascii", "ignore")       # read response
+      if verbose :
+              logging.warning('Receive: {!r}'.format(r))
       if len(r) == 0 :
         logging.error('timeout')
         break                                  # timeout, exit
@@ -88,6 +93,9 @@ def UVEX4query(command, resp='', minlen=3, numresp=1) :
 # command that set a new value and wait this is done by checking the resp message
 # example :GGTL;5500;#
 def UVEX4cmd(command, resp, testbusy=True) :
+    if verbose :
+              logging.warning('Send command: {!r}'.format(command))
+              logging.warning('Waiting for: {!r}'.format(resp))
     ser.reset_input_buffer()
     ser.write(command.encode('ascii'))         # write command
     r = "no response"
@@ -98,15 +106,19 @@ def UVEX4cmd(command, resp, testbusy=True) :
     start=time.time()
     while not (((not busy) and (resp in r)) or (r == "")) :
       r = ser.readline().decode("ascii", "ignore")       # read response
+      if verbose :
+              logging.warning('Receive: {!r}'.format(r))
       if len(r) == 0 :
         logging.error('timeout')
         break                                  # serial timeout, exit
       if time.time()-start > globaltimeout:    # global command timeout exceded
          raise Exception('Command {!r} take too long to complete'.format(command))
-      l = r.split(';')
-      if (len(l)>2) and (l[0]==":IBSY") :      # detect busy status change 
-        busy = (l[1]=='0')
-        
+      if testbusy :
+         l = r.split(';')
+         for index, value in enumerate(l):
+            if (":IBSY" in value) :            # detect busy status change
+               busy = (l[index+1]=='0')
+               break
     return r                                   # return last response, must be equal to resp parameter
 
 # one slit information
