@@ -32,11 +32,12 @@ print("WAVELNTH="+w[1])
 print("WAVEMIN="+w[2])
 print("WAVEMAX="+w[3])
 
-print('CalibrationNb='+str(uvex.CalibrationNb))
-n = uvex.calibrations_name
-c = uvex.calibration
-for i in range(uvex.CalibrationNb):
-   print('Relay '+str(i+1)+ ', ' +n[i] + ' = ' + str(c[i]) )
+if ( uvex.CalibrationNb > 0 ) :
+   print('CalibrationNb='+str(uvex.CalibrationNb))
+   n = uvex.calibrations_name
+   c = uvex.calibration
+   for i in range(uvex.CalibrationNb):
+      print('Relay '+str(i+1)+ ', ' +n[i] + ' = ' + str(c[i]) )
 
 p1 = 'relative '+str(uvex.focusrelpos)
 if uvex.Focuser_hall_enabled :
