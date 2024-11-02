@@ -6275,10 +6275,10 @@ end;
 procedure Tf_main.RestoreFrame;
 begin
   // restore saved frame size
-  FrameX:=config.GetValue('/CCDframe/FrameX',0);
-  FrameY:=config.GetValue('/CCDframe/FrameY',0);
-  FrameW:=config.GetValue('/CCDframe/FrameW',0);
-  FrameH:=config.GetValue('/CCDframe/FrameH',0);
+  FrameX:=config.GetValue('/CCDframe/FrameX',FrameX);
+  FrameY:=config.GetValue('/CCDframe/FrameY',FrameY);
+  FrameW:=config.GetValue('/CCDframe/FrameW',FrameW);
+  FrameH:=config.GetValue('/CCDframe/FrameH',FrameH);
   FrameBin:=config.GetValue('/CCDframe/FrameBin',1);
   f_frame.FX.Text:=inttostr(FrameX);
   f_frame.FY.Text:=inttostr(FrameY);

@@ -1,13 +1,13 @@
 object f_main: Tf_main
-  Left = 1920
+  Left = 0
   Height = 945
   Top = 0
   Width = 1245
   ActiveControl = PageControlRight
   AllowDropFiles = True
   Caption = 'CCD Ciel'
-  ClientHeight = 420
-  ClientWidth = 800
+  ClientHeight = 915
+  ClientWidth = 1245
   Constraints.MinHeight = 450
   Constraints.MinWidth = 800
   KeyPreview = True
@@ -21,7 +21,6 @@ object f_main: Tf_main
   OnResize = FormResize
   OnShow = FormShow
   ShowHint = True
-  LCLVersion = '2.2.6.0'
   object Panel1: TPanel
     Left = 0
     Height = 892
