@@ -1,7 +1,7 @@
 object f_main: Tf_main
-  Left = 0
+  Left = 33
   Height = 945
-  Top = 0
+  Top = 122
   Width = 1245
   ActiveControl = PageControlRight
   AllowDropFiles = True
@@ -957,6 +957,10 @@ object f_main: Tf_main
       end
       object N5: TMenuItem
         Caption = '-'
+      end
+      object MeasureConeError1: TMenuItem
+        Caption = 'Measure telescope cone error'
+        OnClick = MeasureConeError1Click
       end
       object MenuPolarAlignment2: TMenuItem
         Caption = 'Polar alignment without pole visibility'

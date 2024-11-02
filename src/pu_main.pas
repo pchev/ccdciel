@@ -149,6 +149,7 @@ type
     MenuImageMultipanel: TMenuItem;
     MenuDarkHeader: TMenuItem;
     MenuFlatHeader: TMenuItem;
+    MeasureConeError1: TMenuItem;
     MenuItemPreprocess: TMenuItem;
     MenuItemPreprocess2: TMenuItem;
     MenuItemGuiderSolveSync: TMenuItem;
@@ -434,6 +435,7 @@ type
     procedure GuidePlotTimerTimer(Sender: TObject);
     procedure GuiderMeasureTimerTimer(Sender: TObject);
     procedure GuiderPopUpmenu1Popup(Sender: TObject);
+    procedure MeasureConeError1Click(Sender: TObject);
     procedure MenuAscomSwitchSetupClick(Sender: TObject);
     procedure MenuAlpacaSwitchSetupClick(Sender: TObject);
     procedure MenuDarkHeaderClick(Sender: TObject);
@@ -18109,6 +18111,93 @@ procedure Tf_main.GuiderPopUpmenu1Popup(Sender: TObject);
 begin
   MenuItemSelectGuideStar.Visible:=f_internalguider.GuideLock and (not f_internalguider.ForceMultistar);
 end;
+
+procedure Tf_main.MeasureConeError1Click(Sender: TObject);
+var
+  n: integer;
+  zra,zde,cra1,cde1,cra2,cde2,eq,pa,dist1,dist2,delay,delta_ra: double;
+
+const
+  delta: double=15; //step in degrees from meridian
+
+        function measure_jnow_position(out cra,cde : double): boolean;//Report Jnow position
+        begin
+          result:=true;
+          if camera.ControlExposure(f_preview.Exposure,f_preview.Bin,f_preview.Bin,LIGHT,ReadoutModeAstrometry,f_preview.Gain,f_preview.Offset)
+          then
+          begin
+            astrometry.SolveCurrentImage(true);//solve
+            if (not astrometry.Busy) then
+            begin
+              if astrometry.CurrentCoord(cra,cde,eq,pa) then
+              begin
+                cra:=cra*15*deg2rad;
+                cde:=cde*deg2rad;
+                J2000ToApparent(cra,cde);
+              end
+              else exit;
+            end
+            else exit;
+          end
+          else exit;
+          result:=true;
+        end;
+        function measure(delt : double): boolean;//measure at two positions east and west of the meridian
+        begin
+          result:=false;
+          mount.Slew(rmod(zra+delt,24),zde);
+          Wait(delay);
+          if measure_jnow_position(cra1,cde1)=false  then exit;
+          wait(0.25);//put following message at the end of the message queue
+          NewMessage(rsCrossMeridan,3);
+          mount.Slew(rmod(zra-delt,24),zde);
+          Wait(delay);
+          if measure_jnow_position(cra2,cde2)=false then exit;
+          result:=true;
+        end;
+
+begin
+  if camera.Status<>devConnected then begin
+    ShowMessage(Format(rsNotConnected, [rsCamera]));
+    exit;
+  end;
+  if mount=nil then exit;
+  autoguider.Guide(false);//stop guiding
+  if mount.Tracking=false then
+     mount.Track;//start tracking again
+
+  delay:=config.GetValue('/PrecSlew/Delay',5);
+  delta_ra:=delta*(12/180)/abs(cos(deg2rad*ObsLatitude));//delta_ra ra in hours
+
+  cmdHz2Eq(180,90,zra,zde);//zenith ra, dec position
+
+  {$ifdef lclgtk2}
+  // inverted button with GTK2
+   n:=QuestionDlg (rsConeTest, rsConeInstructions, mtCustom,[23,rsCancel,'IsCancel',  22, rsBacklashCali, 21,rsCalibration],'');
+ {$else}
+   n:=QuestionDlg (rsConeTest, rsConeInstructions, mtCustom,[21,rsConeMeasureEastWest, 22, rsConeMeasureWestEast, 23,rsCancel,'IsCancel'],'');
+ {$endif}
+
+  case n of
+      21:begin
+           NewMessage(rsConeMeasureEastWest ,1);
+           if measure(delta_ra)=false then exit;
+         end;//21
+      22:begin
+           NewMessage(rsConeMeasureWestEast ,1);
+           if measure(-delta_ra)=false then exit;
+         end;
+
+      23:exit;
+   end;
+
+   dist1:=AngularDistance((zra+delta_ra)*pi/12,zde*deg2rad,(zra-delta_ra)*pi/12,zde*deg2rad);//expected distance
+   dist2:=AngularDistance(cra1,cde1,cra2,cde2);//measured distance
+   dist2:=(dist2-dist1)*60*180/pi; //delta distance in arcmin
+   wait(0.25);//put last message at the end of the message queue
+   NewMessage(Format(rsTheConeError, [FormatFloat(f2, dist2)]) , 1);
+end;
+
 
 procedure Tf_main.GuiderMeasureAtPos(x,y:integer);
 var xx,yy: integer;
