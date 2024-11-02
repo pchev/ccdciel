@@ -7,14 +7,14 @@ msgstr ""
 "Project-Id-Version: ccdciel\n"
 "Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
 "POT-Creation-Date: 2024-09-25 12:15+0000\n"
-"PO-Revision-Date: 2024-08-22 04:14+0000\n"
+"PO-Revision-Date: 2024-10-07 04:00+0000\n"
 "Last-Translator: Zachary Wu <Unknown>\n"
 "Language-Team: Chinese (Simplified) <zh_CN@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2024-09-25 12:32+0000\n"
-"X-Generator: Launchpad (build 1b1ed1ad2dbfc71ee62b5c5491c975135a771bf0)\n"
+"X-Launchpad-Export-Date: 2024-11-02 13:08+0000\n"
+"X-Generator: Launchpad (build 22ade00ab50b929fac63b8ee7252243aceda294a)\n"
 
 #: u_translation.rs2d
 msgid "2D"
@@ -1469,7 +1469,7 @@ msgstr "抖动"
 
 #: u_translation.rsdithermode
 msgid "Dither mode"
-msgstr ""
+msgstr "Dither模式"
 
 #: u_translation.rsditheronly
 msgid "Dither only"
@@ -2682,7 +2682,7 @@ msgstr "主传感器"
 #: u_translation.rsmakeafirstpo
 #, object-pascal-format
 msgid "In mode automatic the telescope will slew to the test positions near the pole automatically.%sIn mode manual you have to slew the mount to the position by the keypad. See documentation."
-msgstr ""
+msgstr "在自动模式下，望远镜将自动旋转到极轴附近的测试位置。%s在手动模式下，您必须通过键盘将赤道仪旋转到该位置。请参阅文档。"
 
 #: u_translation.rsmanage
 msgid "Manage"
@@ -3047,7 +3047,7 @@ msgstr "移动到新的星图目标 %s"
 
 #: u_translation.rsmovetostartp
 msgid "Move to start position"
-msgstr ""
+msgstr "移动到起始位置"
 
 #: u_translation.rsmoveupby
 msgid "move Up by "
@@ -3869,7 +3869,7 @@ msgstr "降水概率"
 
 #: u_translation.rsrandom
 msgid "Random"
-msgstr ""
+msgstr "随机"
 
 #: u_translation.rsraonly
 msgid "RA only"
@@ -4889,7 +4889,7 @@ msgstr "速率"
 
 #: u_translation.rsspiral
 msgid "Spiral"
-msgstr ""
+msgstr "螺旋"
 
 #: u_translation.rssplittheimag
 #, object-pascal-format

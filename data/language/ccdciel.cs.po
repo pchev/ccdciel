@@ -3,14 +3,14 @@ msgstr ""
 "Project-Id-Version: ccdciel\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-09-25 12:15+0000\n"
-"PO-Revision-Date: 2024-07-30 13:40+0000\n"
+"PO-Revision-Date: 2024-09-26 18:51+0000\n"
 "Last-Translator: Stanislav Holub <Unknown>\n"
 "Language-Team: Czech <cz@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2024-09-25 12:32+0000\n"
-"X-Generator: Launchpad (build 1b1ed1ad2dbfc71ee62b5c5491c975135a771bf0)\n"
+"X-Launchpad-Export-Date: 2024-11-02 13:08+0000\n"
+"X-Generator: Launchpad (build 22ade00ab50b929fac63b8ee7252243aceda294a)\n"
 "Language: cs\n"
 
 #: u_translation.rs2d
@@ -1468,7 +1468,7 @@ msgstr "Dithering"
 
 #: u_translation.rsdithermode
 msgid "Dither mode"
-msgstr ""
+msgstr "Režim Dither"
 
 #: u_translation.rsditheronly
 msgid "Dither only"
@@ -2681,7 +2681,7 @@ msgstr "Hlavní senzor"
 #: u_translation.rsmakeafirstpo
 #, object-pascal-format
 msgid "In mode automatic the telescope will slew to the test positions near the pole automatically.%sIn mode manual you have to slew the mount to the position by the keypad. See documentation."
-msgstr ""
+msgstr "V automatickém režimu se dalekohled automaticky natočí do testovacích poloh v blízkosti pólu.%sV manuálním režimu musíte montáž natočit do polohy pomocí klávesnice. Viz dokumentace."
 
 #: u_translation.rsmanage
 msgid "Manage"
@@ -3046,7 +3046,7 @@ msgstr "Přejít na nový objekt planetária %s"
 
 #: u_translation.rsmovetostartp
 msgid "Move to start position"
-msgstr ""
+msgstr "Přesun do výchozí pozice"
 
 #: u_translation.rsmoveupby
 msgid "move Up by "
@@ -3868,7 +3868,7 @@ msgstr "Míra deště"
 
 #: u_translation.rsrandom
 msgid "Random"
-msgstr ""
+msgstr "Náhodné"
 
 #: u_translation.rsraonly
 msgid "RA only"
@@ -4888,7 +4888,7 @@ msgstr "Rychlost"
 
 #: u_translation.rsspiral
 msgid "Spiral"
-msgstr ""
+msgstr "Spirála"
 
 #: u_translation.rssplittheimag
 #, object-pascal-format, fuzzy, badformat

@@ -7,14 +7,14 @@ msgstr ""
 "Project-Id-Version: ccdciel\n"
 "Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
 "POT-Creation-Date: 2024-09-25 12:15+0000\n"
-"PO-Revision-Date: 2024-08-15 16:45+0000\n"
+"PO-Revision-Date: 2024-10-09 19:23+0000\n"
 "Last-Translator: Sergey Tarantsov <tsn-ast@yandex.ru>\n"
 "Language-Team: Russian <ru@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2024-09-25 12:32+0000\n"
-"X-Generator: Launchpad (build 1b1ed1ad2dbfc71ee62b5c5491c975135a771bf0)\n"
+"X-Launchpad-Export-Date: 2024-11-02 13:08+0000\n"
+"X-Generator: Launchpad (build 22ade00ab50b929fac63b8ee7252243aceda294a)\n"
 
 #: u_translation.rs2d
 msgid "2D"
@@ -271,7 +271,7 @@ msgstr "Автофокусировка после перекладки"
 
 #: u_translation.rsautofocusaft2
 msgid "Autofocus after temperature change"
-msgstr "Автофокусировка после изменения температуры"
+msgstr "Автофокусировка при изменении температуры"
 
 #: u_translation.rsautofocusalr
 msgid "Autofocus already running."
@@ -360,7 +360,7 @@ msgstr "График автофокусировки"
 
 #: u_translation.rsautofocushfd2
 msgid "Autofocus after % change HFD"
-msgstr "Автофокусировка после % изменения HFD"
+msgstr "Автофокусировка при % изменения HFD"
 
 #: u_translation.rsautofocusloc
 msgid "Autofocus location"
@@ -665,7 +665,7 @@ msgstr "Результаты калибровки:"
 
 #: u_translation.rscalibrator
 msgid "Calibrator"
-msgstr "Калибратор"
+msgstr "Флетпанель"
 
 #: u_translation.rscallexternal
 msgid "Call external command"
@@ -1174,7 +1174,7 @@ msgstr "Крышка"
 
 #: u_translation.rscovercalibra
 msgid "Cover calibrator"
-msgstr "Крышка-калибратор"
+msgstr "Крышка-флетпанель"
 
 #: u_translation.rscoverthecame
 msgid "Cover the camera and set the exposure time and binning in the Preview pane now."
@@ -1469,7 +1469,7 @@ msgstr "Выполнение подвижки"
 
 #: u_translation.rsdithermode
 msgid "Dither mode"
-msgstr ""
+msgstr "Режим подвижек"
 
 #: u_translation.rsditheronly
 msgid "Dither only"
@@ -3047,7 +3047,7 @@ msgstr "Наведение на новую цель из планетария - 
 
 #: u_translation.rsmovetostartp
 msgid "Move to start position"
-msgstr ""
+msgstr "В исходное положение"
 
 #: u_translation.rsmoveupby
 msgid "move Up by "
@@ -3787,7 +3787,7 @@ msgstr "Настройки%s"
 
 #: u_translation.rspreprocessin
 msgid "Preprocessing"
-msgstr "Предварительная обработка"
+msgstr "Преобработка"
 
 #: u_translation.rspresetlist
 msgid "Preset list"
@@ -3869,7 +3869,7 @@ msgstr "Осадки"
 
 #: u_translation.rsrandom
 msgid "Random"
-msgstr ""
+msgstr "Случайно"
 
 #: u_translation.rsraonly
 msgid "RA only"
@@ -4889,7 +4889,7 @@ msgstr "Скорость"
 
 #: u_translation.rsspiral
 msgid "Spiral"
-msgstr ""
+msgstr "По спирали"
 
 #: u_translation.rssplittheimag
 #, object-pascal-format
