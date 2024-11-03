@@ -6,14 +6,14 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ccdciel\n"
 "Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
-"POT-Creation-Date: 2024-09-25 12:15+0000\n"
-"PO-Revision-Date: 2024-09-25 12:28+0000\n"
+"POT-Creation-Date: 2024-11-03 14:03+0000\n"
+"PO-Revision-Date: 2024-11-03 14:08+0000\n"
 "Last-Translator: Patrick Chevalley <Unknown>\n"
 "Language-Team: French <fr@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2024-11-02 13:08+0000\n"
+"X-Launchpad-Export-Date: 2024-11-03 14:12+0000\n"
 "X-Generator: Launchpad (build 22ade00ab50b929fac63b8ee7252243aceda294a)\n"
 
 #: u_translation.rs2d
@@ -1058,6 +1058,28 @@ msgstr "Résultat des calculs:"
 msgid "Compute"
 msgstr "Calcul"
 
+#: u_translation.rsconeinstructions
+msgid ""
+"This test will estimate the telescope cone error by measuring the slew error after a meridian flip\n"
+"\n"
+"It will automatically take two images east and west of the meridian near the zenith. The cone error will be reported in the log."
+msgstr ""
+"Ce test estimera l'erreur de cône du télescope en mesurant l'erreur de position après un basculement du méridien\n"
+"\n"
+"Il prendra automatiquement deux images à l'est et à l'ouest du méridien près du zénith. L'erreur de cône sera signalée dans le journal."
+
+#: u_translation.rsconemeasureeastwest
+msgid "Start measuring East to West"
+msgstr "Début de la mesure Est vers Ouest"
+
+#: u_translation.rsconemeasurewesteast
+msgid "Start measuring West to East"
+msgstr "Début de la mesure Ouest vers Est"
+
+#: u_translation.rsconetest
+msgid "Measure the cone error"
+msgstr "Mesurer l'erreur de cône"
+
 #: u_translation.rsconfiguratio
 msgid "Configuration saved"
 msgstr "Configuration enregistrée"
@@ -1191,6 +1213,10 @@ msgstr "Créer à partir d'un fichier Dark"
 #: u_translation.rscreatenewemp
 msgid "Create new empty profile"
 msgstr "Créer un nouveau profile vide"
+
+#: u_translation.rscrossmeridan
+msgid " Moving to the other side of the meridian"
+msgstr " Déplacement de l'autre coté du méridien"
 
 #: u_translation.rscurrent
 msgid "Current"
@@ -5439,6 +5465,11 @@ msgstr "La caméra est connectée. Voulez-vous quitter le programme maintenant?"
 #, object-pascal-format
 msgid "The computer timezone %s and the observatory longitude %s are not compatible."
 msgstr "Le fuseau horaire de l'ordinateur %s et la longitude de l'observatoire %s ne sont pas compatibles."
+
+#: u_translation.rstheconeerror
+#, object-pascal-format
+msgid "The cone error results in a slew error of: %s arcmin at zenith. If error is positive then move telescope light inlet closer to the mount. If negative move telescope light inlet away from the mount,"
+msgstr "L'erreur de cône entraîne une erreur de position de : %s arcmin au zénith. Si l'erreur est positive, rapprochez l'entrée de lumière du télescope de la monture. Si elle est négative, éloignez l'entrée de lumière du télescope de la monture,"
 
 #: u_translation.rsthedataare2
 #, object-pascal-format

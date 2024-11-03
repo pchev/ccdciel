@@ -5874,3 +5874,30 @@ msgstr ""
 msgid "Move to start position"
 msgstr ""
 
+#: u_translation:rsconetest
+msgid "Measure the cone error"
+msgstr ""
+
+#: u_translation:rsconemeasureeastwest
+msgid "Start measuring East to West"
+msgstr ""
+
+#: u_translation:rsconemeasurewesteast
+msgid "Start measuring West to East"
+msgstr ""
+
+#: u_translation:rscrossmeridan
+msgid " Moving to the other side of the meridian"
+msgstr ""
+
+#: u_translation:rsconeinstructions
+msgid ""
+"This test will estimate the telescope cone error by measuring the slew error after a meridian flip\n"
+"\n"
+"It will automatically take two images east and west of the meridian near the zenith. The cone error will be reported in the log."
+msgstr ""
+
+#: u_translation:rstheconeerror
+msgid "The cone error results in a slew error of: %s arcmin at zenith. If error is positive then move telescope light inlet closer to the mount. If negative move telescope light inlet away from the mount,"
+msgstr ""
+

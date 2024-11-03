@@ -2,14 +2,14 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ccdciel\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-09-25 12:15+0000\n"
+"POT-Creation-Date: 2024-11-03 14:03+0000\n"
 "PO-Revision-Date: 2024-09-26 18:51+0000\n"
 "Last-Translator: Stanislav Holub <Unknown>\n"
 "Language-Team: Czech <cz@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2024-11-02 13:08+0000\n"
+"X-Launchpad-Export-Date: 2024-11-03 14:12+0000\n"
 "X-Generator: Launchpad (build 22ade00ab50b929fac63b8ee7252243aceda294a)\n"
 "Language: cs\n"
 
@@ -1057,6 +1057,25 @@ msgstr "Výsledek výpočtu:"
 msgid "Compute"
 msgstr "Výpočet"
 
+#: u_translation.rsconeinstructions
+msgid ""
+"This test will estimate the telescope cone error by measuring the slew error after a meridian flip\n"
+"\n"
+"It will automatically take two images east and west of the meridian near the zenith. The cone error will be reported in the log."
+msgstr ""
+
+#: u_translation.rsconemeasureeastwest
+msgid "Start measuring East to West"
+msgstr ""
+
+#: u_translation.rsconemeasurewesteast
+msgid "Start measuring West to East"
+msgstr ""
+
+#: u_translation.rsconetest
+msgid "Measure the cone error"
+msgstr ""
+
 #: u_translation.rsconfiguratio
 msgid "Configuration saved"
 msgstr "Konfigurace uložena"
@@ -1190,6 +1209,10 @@ msgstr "Vytvořit z Dark souboru"
 #: u_translation.rscreatenewemp
 msgid "Create new empty profile"
 msgstr "Vytvořit nový prázdný profil"
+
+#: u_translation.rscrossmeridan
+msgid " Moving to the other side of the meridian"
+msgstr ""
 
 #: u_translation.rscurrent
 msgid "Current"
@@ -5438,6 +5461,11 @@ msgstr "Kamera je připojena. Chcete nyní program ukončit?"
 #, object-pascal-format
 msgid "The computer timezone %s and the observatory longitude %s are not compatible."
 msgstr "Časové pásmo používané počítačem %s a zeměpisná délka Observatoře %s nejsou kompatibilní."
+
+#: u_translation.rstheconeerror
+#, object-pascal-format
+msgid "The cone error results in a slew error of: %s arcmin at zenith. If error is positive then move telescope light inlet closer to the mount. If negative move telescope light inlet away from the mount,"
+msgstr ""
 
 #: u_translation.rsthedataare2
 #, object-pascal-format
