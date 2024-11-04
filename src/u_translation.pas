@@ -1577,6 +1577,9 @@ resourcestring
   rsConeInstructions = 'This test will estimate the telescope cone error by measuring the slew error after a meridian flip'+#10+#10+
                        'It will automatically take two images east and west of the meridian near the zenith. The cone error will be reported in the log.';
   rsTheConeError = 'The cone error results in a slew error of: %s arcmin at zenith. If error is positive then move telescope light inlet closer to the mount. If negative move telescope light inlet away from the mount,';
+  rsSelectCamera = 'Select camera';
+  rsSelectTheCam = 'Select the camera to use for the cone measurement';
+  rsMeasureTeles = 'Measure telescope cone error';
 
 implementation
 

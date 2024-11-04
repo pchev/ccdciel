@@ -2364,6 +2364,7 @@ begin
    MenuOptions.Caption := Format(rsPreferences, [ellipsis]);
    MenuPolarAlignment.Caption:=rsPolarAlignme+', '+rsNearThePole;
    MenuPolarAlignment2.Caption:=rsPolarAlignme+', '+rsWithoutPoleV;
+   MeasureConeError1.Caption:=rsMeasureTeles;
    MenuCollimation.Caption:=rsInspectionAn;
    MenuIndiSettings.Caption := rsINDISettings;
    MenuAscomCameraSetup.Caption:='ASCOM '+rsCamera+blank+rsSetup;
@@ -18115,7 +18116,7 @@ end;
 
 procedure Tf_main.MeasureConeError1Click(Sender: TObject);
 var
-  n: integer;
+  n,nc,ncam: integer;
   ra1,de1,ra2,de2,cra1,cde1,cra2,cde2,eq,pa,dist1,dist2,delay : double;
   success: boolean;
 const
@@ -18123,15 +18124,30 @@ const
   altitude: double=65;
 
         function measure_jnow_position(out cra,cde : double): boolean;//Report Jnow position
+        var ok: boolean;
         begin
           result:=false;
-          if camera.ControlExposure(f_preview.Exposure,f_preview.Bin,f_preview.Bin,LIGHT,ReadoutModeAstrometry,f_preview.Gain,f_preview.Offset)
-          then
+          ok:=false;
+          case ncam of
+             0: ok:=camera.ControlExposure(f_preview.Exposure,f_preview.Bin,f_preview.Bin,LIGHT,ReadoutModeAstrometry,f_preview.Gain,f_preview.Offset) ;
+             1: ok:=guidecamera.ControlExposure(f_internalguider.Exposure.Value,f_internalguider.Binning.Value,f_internalguider.Binning.Value,LIGHT,ReadoutModeCapture,f_internalguider.Gain.Value,f_internalguider.Offset.Value) ;
+             2: ok:=findercamera.ControlExposure(config.GetValue('/PrecSlew/Exposure',10.0),config.GetValue('/PrecSlew/Binning',1),config.GetValue('/PrecSlew/Binning',1),LIGHT,ReadoutModeCapture,config.GetValue('/PrecSlew/Gain',NullInt),config.GetValue('/PrecSlew/Offset',NullInt)) ;
+          end;
+          if ok then
           begin
-            astrometry.SolveCurrentImage(true);//solve
+            case ncam of
+              0: astrometry.SolveCurrentImage(true);//solve
+              1: astrometry.SolveGuideImage(true);
+              2: astrometry.SolveFinderImage(true);
+            end;
             if (not astrometry.Busy)and astrometry.LastResult then
             begin
-              if astrometry.CurrentCoord(cra,cde,eq,pa) then
+              case ncam of
+                0: ok:=astrometry.CurrentCoord(cra,cde,eq,pa);
+                1: ok:=astrometry.GuideCurrentCoord(cra,cde,eq,pa);
+                2: ok:=astrometry.FinderCurrentCoord(cra,cde,eq,pa);
+              end;
+              if ok then
               begin
                 cra:=cra*15*deg2rad;
                 cde:=cde*deg2rad;
@@ -18184,10 +18200,20 @@ begin
 
   {$ifdef lclgtk2}
   // inverted button with GTK2
-   n:=QuestionDlg (rsConeTest, rsConeInstructions, mtCustom,[23,rsCancel,'IsCancel',  22, rsBacklashCali, 21,rsCalibration],'');
+   n:=QuestionDlg (rsConeTest, rsConeInstructions, mtCustom,[23,rsCancel,'IsCancel',   22, rsConeMeasureWestEast, 21,rsConeMeasureEastWest],'');
  {$else}
    n:=QuestionDlg (rsConeTest, rsConeInstructions, mtCustom,[21,rsConeMeasureEastWest, 22, rsConeMeasureWestEast, 23,rsCancel,'IsCancel'],'');
  {$endif}
+
+  if (n<>23) and((guidecamera.Status=devConnected) or (findercamera.Status=devConnected)) then begin
+    if (guidecamera.Status=devConnected) and (findercamera.Status=devConnected) then
+      nc:=QuestionDlg (rsSelectCamera, rsSelectTheCam, mtCustom, [21, rsMainCamera, 22, rsGuider, 23, rsFinder], '') // not important if Gtk2 revert the button order
+    else if (guidecamera.Status=devConnected) then
+      nc:=QuestionDlg (rsSelectCamera, rsSelectTheCam, mtCustom, [21, rsMainCamera, 22, rsGuider], '')
+    else
+      nc:=QuestionDlg (rsSelectCamera, rsSelectTheCam, mtCustom, [21, rsMainCamera, 23, rsFinder], '');
+    ncam:=nc-21;
+  end;
 
   case n of
       21:begin //east, west
