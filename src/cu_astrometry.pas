@@ -82,7 +82,7 @@ TAstrometry = class(TComponent)
     procedure SolvePreviewImage;
     procedure SolveGuideImage(wait: boolean = false);
     procedure SyncGuideImage(wait: boolean);
-    procedure SolveFinderImage;
+    procedure SolveFinderImage(wait: boolean =true);
     procedure SyncFinderImage(wait: boolean);
     function GetFinderOffset(ra2000,de2000: double):boolean;
     procedure SyncCurrentImage(wait: boolean);
@@ -518,12 +518,12 @@ begin
     msg('Missing library '+libwcs,1);
 end;
 
-procedure TAstrometry.SolveFinderImage;
+procedure TAstrometry.SolveFinderImage(wait: boolean =true);
 begin
   if (not FBusy) and (FFinderFits.HeaderInfo.naxis>0) and FFinderFits.ImageValid then begin
     FFinderFits.SaveToFile(slash(TmpDir)+'findertmp.fits');
     StartAstrometry(slash(TmpDir)+'findertmp.fits',slash(TmpDir)+'findersolved.fits',@AstrometrySolveFinder);
-    WaitBusy();
+    if wait then WaitBusy(AstrometryTimeout+30);
   end;
 end;
 
