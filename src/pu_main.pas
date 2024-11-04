@@ -14706,6 +14706,7 @@ begin
   TToolButton(sender).Down:=true;
   i:=TToolButton(sender).tag;
   PageControlRight.ActivePageIndex:=i;
+  if PageControlRight.ActivePage=PageFocus then f_starprofile.PageControlProfileChange(Sender);
   SetVisibleImage;
 end;
 
