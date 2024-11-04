@@ -18226,12 +18226,12 @@ begin
          end;
       23:exit;
    end;
+   wait(0.25);//put last message at the end of the message queue
    if success then
    begin
      dist1:=AngularDistance((ra1)*pi/12,de1*deg2rad,ra2*pi/12,de2*deg2rad);//expected distance
      dist2:=AngularDistance(cra1,cde1,cra2,cde2);//measured distance
      dist2:=(dist2-dist1)*60*180/pi; //delta distance in arcmin
-     wait(0.25);//put last message at the end of the message queue
      NewMessage(Format(rsTheConeError, [FormatFloat(f2, dist2)]) , 1);
    end
    else
