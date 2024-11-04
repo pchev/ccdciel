@@ -468,14 +468,20 @@ end;
 
 procedure Tf_starprofile.BtnPinProfileClick(Sender: TObject);
 var f: TForm;
+    p: TPanel;
 begin
   if ProfileChart.Parent=TSprofile then begin
    f:=TForm.Create(self);
    f.FormStyle:=fsStayOnTop;
    f.OnClose:=@PanelProfileClose;
    f.Width:=DoScaleX(400);
-   f.Height:=DoScaleY(300);
+   f.Height:=DoScaleY(350);
    f.Caption:=rsProfile2;
+   p:=TPanel.Create(f);
+   p.Parent:=f;
+   p.Height:=SpectraProfileMethod.Height+SpectraProfileMethod.Top+4;
+   p.Align:=alBottom;
+   SpectraProfileMethod.Parent:=p;
    ProfileChart.Parent:=f;
    ProfileChart.Align:=alClient;
    ProfileChart.AxisList.Axes[0].Visible:=true;
@@ -495,6 +501,7 @@ end;
 procedure Tf_starprofile.PanelProfileClose(Sender: TObject; var CloseAction: TCloseAction);
 begin
   CloseAction:=caFree;
+  SpectraProfileMethod.Parent:=Panel3;
   ProfileChart.Parent:=TSprofile;
   ProfileChart.AxisList.Axes[0].Visible:=false;
   ProfileChart.AxisList.Axes[1].Visible:=false;

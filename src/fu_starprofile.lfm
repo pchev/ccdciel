@@ -8,8 +8,6 @@ object f_starprofile: Tf_starprofile
   ClientWidth = 194
   ParentFont = False
   TabOrder = 0
-  DesignLeft = 0
-  DesignTop = 0
   object Title: TLabel
     Left = 0
     Height = 20
@@ -362,7 +360,7 @@ object f_starprofile: Tf_starprofile
         ClientWidth = 192
         TabOrder = 1
         object BtnSpectraProfile: TSpeedButton
-          AnchorSideTop.Control = SpectraProfileMethod
+          AnchorSideTop.Control = Panel3
           AnchorSideTop.Side = asrCenter
           Left = 0
           Height = 25
@@ -375,7 +373,7 @@ object f_starprofile: Tf_starprofile
           OnClick = BtnSpectraProfileClick
         end
         object SpectraProfileMethod: TComboBox
-          Left = 124
+          Left = 125
           Height = 32
           Top = 0
           Width = 70
@@ -386,6 +384,7 @@ object f_starprofile: Tf_starprofile
             'Max'
           )
           OnChange = SpectraProfileMethodChange
+          Style = csDropDownList
           TabOrder = 0
           Text = 'Avg'
         end
