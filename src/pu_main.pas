@@ -18129,9 +18129,10 @@ var
   n,nc,ncam: integer;
   ra1,de1,ra2,de2,cra1,cde1,cra2,cde2,eq,pa,dist1,dist2,delay : double;
   success: boolean;
+  mra : double;
 const
-  delta: double=20; //step in azimuth degrees from meridian. With this value and altitude a HEQ5 meridian flip is triggered at any latitude
-  altitude: double=65;
+  delta: double=22*(12/180); //step in ra hours
+  altitude: double=65; //target altitude in degrees
 
         function measure_jnow_position(out cra,cde : double): boolean;//Report Jnow position
         var ok: boolean;
@@ -18198,15 +18199,12 @@ begin
   delay:=config.GetValue('/PrecSlew/Delay',5);
 
   if ObsLatitude>0 then
-  begin
-    cmdHz2Eq(180-delta,altitude,ra1,de1);//The ra, dec position east from the meridian at altitude.
-    cmdHz2Eq(180+delta,altitude,ra2,de2);//The ra, dec position west from the meridian at altitude.
-  end
-  else
-  begin //southern hemisphere
-    cmdHz2Eq(+delta,altitude,ra1,de1);//The ra, dec position east from the meridian at altitude.
-    cmdHz2Eq(-delta,altitude,ra2,de2);//The ra, dec position west from the meridian at altitude.
-  end;
+    cmdHz2Eq(180,altitude,mra,de1)
+  else //southern hemisphere
+    cmdHz2Eq(0,altitude,mra,de1);
+  ra1:=rmod(mra+delta,24);//The ra, dec position east from the meridian
+  ra2:=rmod(mra-delta,24);//The ra, dec position west from the meridian
+  de2:=de1;
 
   {$ifdef lclgtk2}
   // inverted button with GTK2
