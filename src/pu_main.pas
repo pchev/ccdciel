@@ -18601,8 +18601,8 @@ if (finderfits.HeaderInfo.naxis>0) and finderfits.ImageValid then begin
     co:=ColorToBGRA(clRed);
     cx:=finderimg_Width div 2;
     cy:=finderimg_Height div 2;
-    ImaFinderBmp.DrawHorizLine(0,cy,finderimg_Width,co);
-    ImaFinderBmp.DrawVertLine(cx,0,finderimg_Height,co);
+    ImaFinderBmp.DrawLineAntialias(0,cy,finderimg_Width,cy,co,2);
+    ImaFinderBmp.DrawLineAntialias(cx,0,cx,finderimg_Height,co,2);
     s:=min(finderimg_Height,finderimg_Width) div 3;
     ImaFinderBmp.EllipseAntialias(cx,cy,s,s,co,1);
     s:=min(finderimg_Height,finderimg_Width) div 8;
@@ -18613,8 +18613,8 @@ if (finderfits.HeaderInfo.naxis>0) and finderfits.ImageValid then begin
       cx:=round(f_finder.OffsetX.Value+0.5);
       cy:=round(finderimg_Height-f_finder.OffsetY.Value+0.5);
       s:=20;
-      ImaFinderBmp.DrawHorizLine(cx-s,cy,cx+s,co);
-      ImaFinderBmp.DrawVertLine(cx,cy-s,cy+s,co);
+      ImaFinderBmp.DrawLineAntialias(cx-s,cy,cx+s,cy,co,2);
+      ImaFinderBmp.DrawLineAntialias(cx,cy-s,cx,cy+s,co,2);
     end
   end;
  end
