@@ -8,8 +8,6 @@ object f_sequence: Tf_sequence
   OnResize = FrameResize
   ParentFont = False
   TabOrder = 0
-  DesignLeft = 0
-  DesignTop = 0
   object Title1: TLabel
     Left = 0
     Height = 20

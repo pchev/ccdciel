@@ -1035,7 +1035,7 @@ end;
 
 procedure Tf_sequence.StatusTimerTimer(Sender: TObject);
 var r:string;
-    i:integer;
+    i,newtarget,newplan:integer;
     p: T_Plan;
     agAlerttime, trAlerttime, msgtime: integer;
 const
@@ -1044,20 +1044,26 @@ const
 begin
  try
   StatusTimer.Enabled:=false;
-  TargetRow:=Targets.CurrentTarget+1;
+  newtarget:=Targets.CurrentTarget+1;
   UpdateBtn;
   if Targets.Running then begin
    try
    // show plan status
-   if (TargetRow>0) then begin
+   if (newtarget>0) then begin
     p:=T_Plan(Targets.Targets[Targets.CurrentTarget].plan);
     if p=nil then exit;
-    PlanChange(p);
-    PlanRow:=p.CurrentStep+1;
-    TargetGrid.TopRow:=TargetRow;
-    PlanGrid.TopRow:=PlanRow;
-    TargetGrid.Invalidate;
-    PlanGrid.Invalidate;
+    newplan:=p.CurrentStep+1;
+    if TargetRow<>newtarget then begin
+      TargetRow:=newtarget;
+      TargetGrid.TopRow:=TargetRow;
+      TargetGrid.Invalidate;
+    end;
+    if PlanRow<>newplan then begin
+      PlanChange(p);
+      PlanRow:=newplan;
+      PlanGrid.TopRow:=PlanRow;
+      PlanGrid.Invalidate;
+    end;
     Application.ProcessMessages;
    end;
    // process autoguider problem during sequence
