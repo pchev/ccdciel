@@ -64,6 +64,11 @@ resourcestring
   rsDeleteThisPr = 'Delete this profile and associated program preference.';
   rsCopyTheCurre = 'Copy the current profile to a new one.%sThis also copy '
     +'every program preference to the new profile.';
+  rsMakeTestToDe = 'Make test to determine the most performant option '
+    +'depending on your computer.%s(Network is mandatory if the camera is '
+    +'connected to a remote Indi server)';
+  rsTheTemporary = 'The temporary RAM disk used to transfer the images from '
+    +'the Indi server';
   rsUsePlateSolv = 'Use astrometric (plate) solving to improve telescope pointing accuracy';
   rsStartAPrevie = 'Start a preview loop when waiting for the delay to expire.';
   rsRepeatTheWho2 = 'Repeat the whole list a number of time.';

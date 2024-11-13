@@ -6141,10 +6141,27 @@ allcount:=0; upcount:=0; downcount:=0; concount:=0;
 end;
 
 Procedure Tf_main.ConnectCamera(Sender: TObject);
+var inditransfer: TIndiTransfert;
+    indihost,inditransferdir: string;
+    ok: boolean;
 begin
    CameraInitialized:=false;
    case camera.CameraInterface of
     INDI : begin
+           inditransfer:=TIndiTransfert(config.GetValue('/INDIcamera/IndiTransfert',ord(itNetwork)));
+           inditransferdir:=config.GetValue('/INDIcamera/IndiTransfertDir',defTransfertPath);
+           indihost:=config.GetValue('/INDIcamera/Server','');
+           if inditransfer=itDisk then begin
+             // some control to be sure we can use disk transfer
+             ok:=(copy(indihost,1,3)='127')or(uppercase(indihost)='LOCALHOST'); // local indiserver
+             ok:=ok and DirectoryIsWritable(inditransferdir);
+             if not ok then begin
+               inditransfer:=itNetwork;
+               NewMessage('Cannot use ramdisk camera transfer, switch to network',3);
+             end;
+           end;
+           camera.IndiTransfert:=inditransfer;
+           camera.IndiTransfertDir:=inditransferdir;
            camera.Connect(config.GetValue('/INDIcamera/Server',''),
                           config.GetValue('/INDIcamera/ServerPort',''),
                           config.GetValue('/INDIcamera/Device',''),
@@ -9057,6 +9074,8 @@ begin
     if f_setup.CameraIndiDevice.Text<>'' then config.SetValue('/INDIcamera/Device',f_setup.CameraIndiDevice.Text);
     config.SetValue('/INDIcamera/Sensor',f_setup.CameraSensor);
     config.SetValue('/INDIcamera/AutoLoadConfig',f_setup.CameraAutoLoadConfig.Checked);
+    config.SetValue('/INDIcamera/IndiTransfert',f_setup.CameraIndiTransfert.ItemIndex);
+    config.SetValue('/INDIcamera/IndiTransfertDir',f_setup.CameraIndiTransfertDir.Text);
     config.SetValue('/ASCOMcamera/Device',f_setup.AscomCamera.Text);
     config.SetValue('/ASCOMcamera/FlipImage',f_setup.FlipImage.Checked);
     config.SetValue('/ASCOMcamera/CameraDateObs',f_setup.CameraDateObs.Checked);
