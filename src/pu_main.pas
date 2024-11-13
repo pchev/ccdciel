@@ -4130,6 +4130,7 @@ begin
   f_internalguider.Offset.MinValue:=guidecamera.OffsetMin;
   f_internalguider.Offset.MaxValue:=guidecamera.OffsetMax;
   f_internalguider.PanelTemperature.Visible:=guidecamera.Temperature<>NullCoord;
+  if f_internalguider.PanelTemperature.Visible then GuideCameraSetCooler(nil);
 end;
 
 procedure Tf_main.FinderCameraConnectTimerTimer(Sender: TObject);
@@ -18127,7 +18128,7 @@ end;
 procedure Tf_main.GuideCameraSetCooler(Sender: TObject);
 var onoff,coolerstatus: boolean;
 begin
-  onoff:=f_internalguider.Cooler.Checked;
+  onoff:=(sender=nil) or f_internalguider.Cooler.Checked;
   coolerstatus:=guidecamera.Cooler;
   if coolerstatus<>onoff then begin
     guidecamera.Cooler:=onoff;
