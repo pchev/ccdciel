@@ -12041,62 +12041,19 @@ begin
 end;
 
 procedure Tf_main.SpectraColor(bmp:TBGRABitmap; wmin,wmax:double);
-var x,y: integer;
+var x,y,r,g,b: integer;
     f: double;
     c: TBGRAPixel;
     p: PBGRAPixel;
-function spcolor(w: double):TBGRAPixel;
-var r,g,b: double;
-begin
-   if (w<3800) then begin
-       r := 1.0;
-       g := 0.0;
-       b := 1.0;
-   end
-   else if((w >= 3800) and (w<4400)) then begin
-       r := -(w - 4400) / (4400 - 3800);
-       g := 0.0;
-       b := 1.0;
-   end
-   else if((w >= 4400) and (w<4900)) then begin
-       r := 0.0;
-       g := (w - 4400) / (4900 - 4400);
-       b := 1.0;
-   end
-   else if((w >= 4900) and (w<5100)) then begin
-       r := 0.0;
-       g := 1.0;
-       b := -(w - 5100) / (5100 - 4900);
-   end
-   else if((w >= 5100) and (w<5800)) then begin
-       r := (w - 5100) / (5800 - 5100);
-       g := 1.0;
-       b := 0.0;
-   end
-   else if((w >= 5800) and (w<6450)) then begin
-       r := 1.0;
-       g := -(w - 6450) / (6450 - 5800);
-       b := 0.0;
-   end
-   else begin
-       r := 1.0;
-       g := 0.0;
-       b := 0.0;
-   end;
-   result.red := round(r * 255);
-   result.green := round(g * 255);
-   result.blue := round(b * 255);
-end;
-
 begin
   for y:=0 to bmp.Height-1 do begin
     p := bmp.Scanline[y];
     for x:=0 to bmp.Width-1 do begin
-       c:=spcolor(wmin+(wmax-wmin)*x/bmp.Width);
+       spcolor(wmin+(wmax-wmin)*x/bmp.Width,r,g,b);
        f:=p^.red / 256;
-       p^.red := round(f*c.red);
-       p^.green := round(f*c.green);
-       p^.blue := round(f*c.blue);
+       p^.red := round(f*r);
+       p^.green := round(f*g);
+       p^.blue := round(f*b);
        p^.alpha := 255;
        inc(p);
     end;

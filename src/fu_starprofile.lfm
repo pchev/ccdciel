@@ -439,6 +439,7 @@ object f_starprofile: Tf_starprofile
           object ProfileChartLine: TLineSeries
             Legend.Visible = False
             LinePen.Color = clRed
+            LinePen.Cosmetic = False
             Marks.Visible = False
             Pointer.Brush.Style = bsClear
             Pointer.OverrideColor = [ocPen]

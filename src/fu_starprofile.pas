@@ -680,6 +680,8 @@ begin
  ProfileSource.Clear;
  HistSourceHfd.Clear;
  HistSourceImax.Clear;
+ ProfileChart.BackColor:=clWindow;
+ ProfileChartLine.ColorEach:=ceNone;
 end;
 
 procedure Tf_starprofile.PlotProfile(f: TFits; bg: double; s:integer);
@@ -725,6 +727,8 @@ if FValMax>0 then begin
   j:=trunc(FStarY);
   i0:=trunc(FStarX)-(s div 2);
   ProfileSource.Clear;
+  ProfileChart.BackColor:=clWindow;
+  ProfileChartLine.ColorEach:=ceNone;
   ProfileSource.Add(0,f.image[0,j,i0]-bg);
   for i:=0 to s-1 do begin
     ProfileSource.Add(i,f.image[0,j,i0+i]-bg);
@@ -748,10 +752,20 @@ begin
 end;
 
 procedure Tf_starprofile.ShowSpectraProfile(f: TFits);
-var i,j,n:integer;
-    value: double;
+var i,j,n,r,g,b:integer;
+    value,wmin,wmax: double;
 begin
  FFits:=f;
+ wmin:=FFits.HeaderInfo.wavemin;
+ wmax:=FFits.HeaderInfo.wavemax;
+ if ColorizeSpectra and (wmin<>NullCoord) and (wmax<>NullCoord) then begin
+   ProfileChart.BackColor:=clBlack;
+   ProfileChartLine.ColorEach:=ceLineAfter;
+ end
+ else begin
+   ProfileChart.BackColor:=clWindow;
+   ProfileChartLine.ColorEach:=ceNone;
+ end;
  ProfileSource.Clear;
  n:=SpectraProfileMethod.ItemIndex;
  for i:=FSpectraX to FSpectraX+FSpectraWidth do begin
@@ -769,7 +783,13 @@ begin
         end;
       end;
    end;
-   ProfileSource.Add(i,value);
+   if ColorizeSpectra and (wmin<>NullCoord) and (wmax<>NullCoord) then begin
+     spcolor(wmin+(wmax-wmin)*i/FFits.HeaderInfo.naxis1,r,g,b);
+     ProfileSource.Add(i,value,'',RGBToColor(r,g,b));
+   end
+   else begin
+     ProfileSource.Add(i,value);
+   end;
  end;
 end;
 
