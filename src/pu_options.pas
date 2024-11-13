@@ -34,6 +34,7 @@ type
   { Tf_option }
 
   Tf_option = class(TForm)
+    ColorizeSpectra: TCheckBox;
     SpinAutoFocusHFD: TFloatSpinEdit;
     BtnDelHdr: TButton;
     BtnAddRoi: TButton;
@@ -1123,6 +1124,7 @@ begin
   BayerMode.Items[4]:=rsAutomatic;
   BalanceFromCamera.Caption:=rsUseDSLRColor;
   BGneutralization.Caption:=rsBackgroundNe;
+  ColorizeSpectra.Caption:=rsColorizeSpec;
   GroupBox26.Caption:=rsColorBalance;
   GroupBox9.Caption := rsReferenceIma;
   Label39.Caption := rsTreshold;

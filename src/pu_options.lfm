@@ -2061,12 +2061,12 @@ object f_option: Tf_option
         ParentFont = False
         object GroupBox8: TGroupBox
           Left = 0
-          Height = 186
+          Height = 216
           Top = 0
           Width = 576
           Align = alTop
           Caption = 'Color preview'
-          ClientHeight = 156
+          ClientHeight = 186
           ClientWidth = 572
           ParentFont = False
           TabOrder = 0
@@ -2220,15 +2220,23 @@ object f_option: Tf_option
             ParentFont = False
             TabOrder = 4
           end
+          object ColorizeSpectra: TCheckBox
+            Left = 16
+            Height = 22
+            Top = 152
+            Width = 129
+            Caption = 'Colorize spectra '
+            TabOrder = 5
+          end
         end
         object VideoGroup: TGroupBox
           Left = 0
-          Height = 195
-          Top = 488
+          Height = 165
+          Top = 518
           Width = 576
           Align = alClient
           Caption = 'Video'
-          ClientHeight = 165
+          ClientHeight = 135
           ClientWidth = 572
           ParentFont = False
           TabOrder = 2
@@ -2267,7 +2275,7 @@ object f_option: Tf_option
         object GroupBox10: TGroupBox
           Left = 0
           Height = 60
-          Top = 340
+          Top = 370
           Width = 576
           Align = alTop
           Caption = 'Bad pixels detection'
@@ -2315,7 +2323,7 @@ object f_option: Tf_option
         object GroupBox19: TGroupBox
           Left = 0
           Height = 60
-          Top = 280
+          Top = 310
           Width = 576
           Align = alTop
           Caption = 'Clipping indicator'
@@ -2372,7 +2380,7 @@ object f_option: Tf_option
         object GroupBox9: TGroupBox
           Left = 0
           Height = 94
-          Top = 186
+          Top = 216
           Width = 576
           Align = alTop
           Caption = 'Reference image'
@@ -2448,7 +2456,7 @@ object f_option: Tf_option
         object GroupBox33: TGroupBox
           Left = 0
           Height = 88
-          Top = 400
+          Top = 430
           Width = 576
           Align = alTop
           Caption = 'Image cursor'

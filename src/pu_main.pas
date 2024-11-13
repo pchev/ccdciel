@@ -957,6 +957,7 @@ type
     Procedure ClearGuideImage;
     Procedure ClearFinderImage;
     Procedure DrawImage(WaitCursor:boolean=false; videoframe:boolean=false);
+    procedure SpectraColor(bmp:TBGRABitmap; wmin,wmax:double);
     Procedure PlotImage;
     procedure plot_north;
     Procedure DrawHistogram(SetLevel,ResetCursor: boolean);
@@ -4791,7 +4792,7 @@ var i,n: integer;
     ok: boolean;
     oldbayer: TBayerMode;
     oldRed,oldGreen,oldBlue:double;
-    oldBalance, oldBGneutralization:boolean;
+    oldBalance, oldBGneutralization,oldColorizeSpectra:boolean;
     posprev,poscapt:integer;
     binprev,bincapt:string;
     roi:TRoi;
@@ -4859,6 +4860,8 @@ begin
   BlueBalance:=config.GetValue('/Color/BlueBalance',0.9);
   ClippingOverflow:=config.GetValue('/Color/ClippingOverflow',MAXWORD);
   ClippingUnderflow:=config.GetValue('/Color/ClippingUnderflow',0);
+  oldColorizeSpectra:=ColorizeSpectra;
+  ColorizeSpectra:=config.GetValue('/Color/ColorizeSpectra',true);
   f_frame.ClearRoi;
   n:=config.GetValue('/Sensor/ROI/NumROI',0);
   for i:=1 to n do begin
@@ -5258,6 +5261,10 @@ begin
     MenuItemDebayer.Checked:=BayerColor;
     MenuItemDebayer2.Checked:=BayerColor;
     MenuItemDebayerClick(MenuItemDebayer);
+  end;
+  if oldColorizeSpectra<>ColorizeSpectra then begin
+    DrawImage;
+    Image1.Invalidate;
   end;
   DomeNoSafetyCheck:=config.GetValue('/Dome/NoSafetyCheck',false);
   mount.SlaveDome:=config.GetValue('/Dome/SlaveToMount',false);
@@ -9434,6 +9441,7 @@ begin
    f_option.BGneutralization.Checked:=config.GetValue('/Color/BGneutralization',true);
    f_option.ClippingHigh.Value:=config.GetValue('/Color/ClippingOverflow',MAXWORD);
    f_option.ClippingLow.Value:=config.GetValue('/Color/ClippingUnderflow',0);
+   f_option.ColorizeSpectra.Checked:=config.GetValue('/Color/ColorizeSpectra',true);
    f_option.BPMsigma.Value:=config.GetValue('/BadPixel/Sigma',5.0);
    f_option.StackShow.Checked:=config.GetValue('/PreviewStack/StackShow',false);
    f_option.SaveStack.checked:=config.GetValue('/PreviewStack/SaveStack',false);
@@ -9983,6 +9991,7 @@ begin
      config.SetValue('/Color/BGneutralization',f_option.BGneutralization.Checked);
      config.SetValue('/Color/ClippingOverflow',f_option.ClippingHigh.Value);
      config.SetValue('/Color/ClippingUnderflow',f_option.ClippingLow.Value);
+     config.SetValue('/Color/ColorizeSpectra',f_option.ColorizeSpectra.Checked);
      config.SetValue('/BadPixel/Sigma',f_option.BPMsigma.Value);
      config.SetValue('/PreviewStack/StackShow',f_option.StackShow.Checked);
      config.SetValue('/PreviewStack/SaveStack',f_option.SaveStack.checked);
@@ -12031,6 +12040,69 @@ begin
   PlotImage;
 end;
 
+procedure Tf_main.SpectraColor(bmp:TBGRABitmap; wmin,wmax:double);
+var x,y: integer;
+    f: double;
+    c: TBGRAPixel;
+    p: PBGRAPixel;
+function spcolor(w: double):TBGRAPixel;
+var r,g,b: double;
+begin
+   if (w<3800) then begin
+       r := 1.0;
+       g := 0.0;
+       b := 1.0;
+   end
+   else if((w >= 3800) and (w<4400)) then begin
+       r := -(w - 4400) / (4400 - 3800);
+       g := 0.0;
+       b := 1.0;
+   end
+   else if((w >= 4400) and (w<4900)) then begin
+       r := 0.0;
+       g := (w - 4400) / (4900 - 4400);
+       b := 1.0;
+   end
+   else if((w >= 4900) and (w<5100)) then begin
+       r := 0.0;
+       g := 1.0;
+       b := -(w - 5100) / (5100 - 4900);
+   end
+   else if((w >= 5100) and (w<5800)) then begin
+       r := (w - 5100) / (5800 - 5100);
+       g := 1.0;
+       b := 0.0;
+   end
+   else if((w >= 5800) and (w<6450)) then begin
+       r := 1.0;
+       g := -(w - 6450) / (6450 - 5800);
+       b := 0.0;
+   end
+   else begin
+       r := 1.0;
+       g := 0.0;
+       b := 0.0;
+   end;
+   result.red := round(r * 255);
+   result.green := round(g * 255);
+   result.blue := round(b * 255);
+end;
+
+begin
+  for y:=0 to bmp.Height-1 do begin
+    p := bmp.Scanline[y];
+    for x:=0 to bmp.Width-1 do begin
+       c:=spcolor(wmin+(wmax-wmin)*x/bmp.Width);
+       f:=p^.red / 256;
+       p^.red := round(f*c.red);
+       p^.green := round(f*c.green);
+       p^.blue := round(f*c.blue);
+       p^.alpha := 255;
+       inc(p);
+    end;
+  end;
+end;
+
 Procedure Tf_main.DrawImage(WaitCursor:boolean=false; videoframe:boolean=false);
 var tmpbmp:TBGRABitmap;
     co: TBGRAPixel;
@@ -12053,6 +12125,8 @@ if (fits.HeaderInfo.naxis>0) and fits.ImageValid then begin
     fits.GetBGRABitmap(ImaBmp,1)
   else
     fits.GetBGRABitmap(ImaBmp);
+  if ColorizeSpectra and (fits.HeaderInfo.wavemin<>NullCoord) and (fits.HeaderInfo.wavemax<>NullCoord) then
+    SpectraColor(imabmp,fits.HeaderInfo.wavemin,fits.HeaderInfo.wavemax);
   {$ifdef debug_raw}writeln(FormatDateTime(dateiso,Now)+blank+'FITS GetBGRABitmap end');{$endif}
   ImgPixRatio:=fits.HeaderInfo.pixratio;
   if (fits.HeaderInfo.pixratio>1) then begin

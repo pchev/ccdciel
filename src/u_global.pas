@@ -452,6 +452,7 @@ var
   DefaultBayerMode:TBayerMode;
   BalanceFromCamera,BGneutralization: boolean;
   RedBalance,GreenBalance,BlueBalance: double;
+  ColorizeSpectra: boolean;
   MaxVideoPreviewRate: integer;
   TemperatureScale: integer;
   TempLabel: string;
