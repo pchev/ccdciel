@@ -94,6 +94,7 @@ type
     FonMsg: TNotifyMsg;
     FonStartExposure: TNotifyEvent;
     FonAbortExposure: TNotifyEvent;
+    FonStopPreview: TNotifyEvent;
     FonResetStack: TNotifyEvent;
     FonFrameTypeChange: TNotifyEvent;
     FonResetHFM: TNotifyEvent;
@@ -123,6 +124,7 @@ type
     property DitherNum: Integer read FDitherNum write FDitherNum;
     property FocusNum: Integer read FFocusNum write FFocusNum;
     property FocusNow: boolean read FFocusNow write FFocusNow;
+    property onStopPreview: TNotifyEvent read FonStopPreview write FonStopPreview;
     property onStartExposure: TNotifyEvent read FonStartExposure write FonStartExposure;
     property onAbortExposure: TNotifyEvent read FonAbortExposure write FonAbortExposure;
     property onResetStack: TNotifyEvent read FonResetStack write FonResetStack;
@@ -196,6 +198,8 @@ begin
   Frunning:=not Frunning;
   if (Sender=nil) then startedBy:=SEQUENCE else startedBy:=CAPTURE;
   if Frunning then begin
+    if assigned(FonStopPreview) then FonStopPreview(self);
+    Frunning:=true;
     CancelAutofocus:=false;
     if startedBy=CAPTURE then FSeqCount:=1; // otherwise set by plan
     FDitherNum:=0;

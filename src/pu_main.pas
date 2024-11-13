@@ -943,6 +943,7 @@ type
     Procedure StartPreviewExposureAsync(Data: PtrInt);
     function  PrepareCaptureExposure(canwait:boolean):boolean;
     procedure CaptureDither;
+    procedure StopPreviewEvent(Sender: TObject);
     Procedure StartCaptureExposure(Sender: TObject);
     procedure StartCaptureExposureAsync(Data: PtrInt);
     Procedure StartCaptureExposureNow;
@@ -1848,6 +1849,7 @@ begin
   f_capture.onFrameTypeChange:=@CaptureFrameTypeChange;
   f_capture.onStartExposure:=@StartCaptureExposure;
   f_capture.onAbortExposure:=@StopExposure;
+  f_capture.onStopPreview:=@StopPreviewEvent;
   f_capture.onMsg:=@NewMessage;
   f_capture.onResetHFM:=@HFM_ResetMeasurements;
 
@@ -11288,6 +11290,11 @@ begin
   end else begin
     NewMessage(rsNotAutoguidi,1);
   end;
+end;
+
+procedure Tf_main.StopPreviewEvent(Sender: TObject);
+begin
+ StopPreview;
 end;
 
 Procedure Tf_main.StartCaptureExposure(Sender: TObject);

@@ -442,7 +442,7 @@ object f_capture: Tf_capture
         Top = 32
         Width = 251
         Caption = 'Autofocus after temperature change'
-	OnClick = CheckLight
+        OnClick = CheckLight
         TabOrder = 2
       end
       object CheckBoxFocusHFD: TCheckBox
@@ -451,7 +451,7 @@ object f_capture: Tf_capture
         Top = 62
         Width = 229
         Caption = 'Autofocus after % change in HFD'
-	OnClick = CheckLight
+        OnClick = CheckLight
         TabOrder = 3
       end
     end
