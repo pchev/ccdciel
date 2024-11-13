@@ -1,10 +1,10 @@
 object f_internalguider: Tf_internalguider
   Left = 0
-  Height = 673
+  Height = 664
   Top = 0
   Width = 346
   AutoSize = True
-  ClientHeight = 673
+  ClientHeight = 664
   ClientWidth = 346
   ParentFont = False
   TabOrder = 0
@@ -1804,6 +1804,26 @@ object f_internalguider: Tf_internalguider
           end
         end
       end
+    end
+  end
+  object Panel11: TPanel
+    Left = 0
+    Height = 50
+    Top = 664
+    Width = 346
+    Align = alTop
+    ClientHeight = 50
+    ClientWidth = 346
+    TabOrder = 1
+    Visible = False
+    object Button1: TButton
+      Left = 26
+      Height = 25
+      Top = 14
+      Width = 190
+      Caption = 'Please configure the guider'
+      OnClick = Button1Click
+      TabOrder = 0
     end
   end
   object PopupMenuDark: TPopupMenu

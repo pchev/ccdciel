@@ -1,10 +1,10 @@
 object f_finder: Tf_finder
   Left = 0
-  Height = 478
+  Height = 472
   Top = 0
   Width = 243
   AutoSize = True
-  ClientHeight = 478
+  ClientHeight = 472
   ClientWidth = 243
   ParentFont = False
   TabOrder = 0
@@ -317,6 +317,26 @@ object f_finder: Tf_finder
       AutoSize = False
       ParentColor = False
       WordWrap = True
+    end
+  end
+  object Panel3: TPanel
+    Left = 0
+    Height = 50
+    Top = 472
+    Width = 243
+    Align = alTop
+    ClientHeight = 50
+    ClientWidth = 243
+    TabOrder = 1
+    Visible = False
+    object Button1: TButton
+      Left = 26
+      Height = 25
+      Top = 14
+      Width = 190
+      Caption = 'Please configure the finder'
+      OnClick = Button1Click
+      TabOrder = 0
     end
   end
 end

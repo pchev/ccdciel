@@ -1015,6 +1015,7 @@ type
     procedure CollimationApplyInspection(Sender: TObject);
     procedure ReadyForVideo(var v: boolean);
     procedure ShowStatus(str: string);
+    procedure InternalguiderConfigure(Sender: TObject);
     procedure InternalguiderLoop(Sender: TObject);
     procedure InternalguiderStart(Sender: TObject);
     procedure InternalguiderStop(Sender: TObject);
@@ -1044,6 +1045,7 @@ type
     Procedure DrawFinderImage(display: boolean);
     Procedure PlotFinderImage;
     procedure FinderRedraw(Sender: TObject);
+    procedure FinderConfigure(Sender: TObject);
     Procedure SetGuiderCamera;
     Procedure SetFinderCamera;
     Procedure SetMultipanel(onoff: boolean);
@@ -1912,6 +1914,7 @@ begin
   f_cover.onChangeBrightness:=@BrightnessChange;
 
   f_internalguider:=Tf_internalguider.Create(self);
+  f_internalguider.onConfigureGuider:=@InternalguiderConfigure;
   f_internalguider.onLoop:=@InternalguiderLoop;
   f_internalguider.onStart:=@InternalguiderStart;
   f_internalguider.onStop:=@InternalguiderStop;
@@ -1934,6 +1937,7 @@ begin
   f_finder.Astrometry:=astrometry;
   f_finder.onShowMessage:=@NewMessage;
   f_finder.onRedraw:=@FinderRedraw;
+  f_finder.onConfigureFinder:=@FinderConfigure;
 
   i:=config.GetValue('/Autoguider/Software',2);
   case TAutoguiderType(i) of
@@ -5409,7 +5413,6 @@ begin
     MenuAutoguiderGuide.Caption:=f_autoguider.BtnGuide.Caption;
     StatusBar1.Invalidate;
   end;
-  f_internalguider.Enabled:=autoguider.AutoguiderType=agINTERNAL;
   if (camera.Status=devConnected) and camera.hasVideo and (config.GetValue('/Video/ShowVideo',false)<>TBVideo.Visible) then begin
     if config.GetValue('/Video/ShowVideo',false) then begin
       TBVideo.Visible:=true;
@@ -18350,32 +18353,52 @@ Procedure Tf_main.SetFinderCamera;
 var n: integer;
 begin
   if astrometry=nil then exit;
-  n:=config.GetValue('/Astrometry/Camera',0);
-  if (n=1) and (not WantFinderCamera) then n:=0;
-  UseFinder:=(n=1);
-  case n of
-    0: astrometry.FinderCamera:=nil;
-    1: astrometry.FinderCamera:=findercamera;
-  end;
-  if n=0 then begin
-    screenconfig.SetValue('/Tools/Finder/Visible',false);
-    TBFinder.Visible:=false;
-    SetTool(f_finder,'Finder',PanelRight7,0,MenuViewFinder,MenuFinder,false,true);
-  end
-  else begin
+  if WantFinderCamera then begin
+    n:=config.GetValue('/Astrometry/Camera',0);
+    UseFinder:=(n=1);
+    case n of
+      0: astrometry.FinderCamera:=nil;
+      1: astrometry.FinderCamera:=findercamera;
+    end;
     screenconfig.SetValue('/Tools/Finder/Visible',true);
     TBFinder.Visible:=true;
     SetTool(f_finder,'Finder',PanelRight7,0,MenuViewFinder,MenuFinder,true,true);
+    MenuTabFinder.Visible:=true;
+    f_finder.Panel1.Visible:=UseFinder;
+    f_finder.Panel3.Visible:=not UseFinder;
+  end
+  else begin
+    UseFinder:=false;
+    astrometry.FinderCamera:=nil;
+    screenconfig.SetValue('/Tools/Finder/Visible',false);
+    TBFinder.Visible:=false;
+    SetTool(f_finder,'Finder',PanelRight7,0,MenuViewFinder,MenuFinder,false,true);
+    MenuTabFinder.Visible:=false;
+    f_finder.Panel1.Visible:=true;
+    f_finder.Panel3.Visible:=false;
   end;
-  MenuTabFinder.Visible:=TBFinder.Visible;
 end;
 
 Procedure Tf_main.SetGuiderCamera;
 var n: integer;
 begin
   n:=config.GetValue('/Autoguider/Software',2);
-  TBInternalGuider.Visible:=WantGuideCamera and WantMount and (n=4);
+  TBInternalGuider.Visible:=WantGuideCamera and WantMount;
   MenuTabInternalGuider.Visible:=TBInternalGuider.Visible;
+  f_internalguider.Panel1.Visible:=(n=4);
+  f_internalguider.Panel11.Visible:=(n<>4);
+end;
+
+procedure Tf_main.InternalguiderConfigure(Sender: TObject);
+begin
+  f_option.PageControl1.ActivePageIndex:=12;
+  MenuOptions.Click;
+end;
+
+procedure Tf_main.FinderConfigure(Sender: TObject);
+begin
+  f_option.PageControl1.ActivePageIndex:=10;
+  MenuOptions.Click;
 end;
 
 procedure Tf_main.FinderRedraw(Sender: TObject);

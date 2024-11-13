@@ -47,6 +47,7 @@ type
     BtnZoom1: TSpeedButton;
     BtnZoom2: TSpeedButton;
     BtnZoomAdjust: TSpeedButton;
+    Button1: TButton;
     ButtonLoop: TButton;
     ButtonSetLock: TSpeedButton;
     ButtonSetTemp: TButton;
@@ -154,6 +155,7 @@ type
     minSNR1: TSpinEdit;
     pa1: TEdit;
     PageControl2: TPageControl;
+    Panel11: TPanel;
     PanelImage: TPanel;
     PanelGuideSpeed: TPanel;
     Panel4: TPanel;
@@ -222,6 +224,7 @@ type
     procedure BtnZoom1Click(Sender: TObject);
     procedure BtnZoom2Click(Sender: TObject);
     procedure BtnZoomAdjustClick(Sender: TObject);
+    procedure Button1Click(Sender: TObject);
     procedure ButtonSetLockClick(Sender: TObject);
     procedure ButtonCalibrateClick(Sender: TObject);
     procedure ButtonDarkMouseDown(Sender: TObject; Button: TMouseButton; Shift: TShiftState; X, Y: Integer);
@@ -267,7 +270,7 @@ type
   private
     { private declarations }
     thescale : double;
-    FonStart, FonStop, FonCalibrate, FonCalibrateBacklash, FonLoop, FonRedraw,FonSpectroGuideChange: TNotifyEvent;
+    FonStart, FonStop, FonCalibrate, FonCalibrateBacklash, FonLoop, FonRedraw,FonSpectroGuideChange,FonConfigureGuider: TNotifyEvent;
     FonSetTemperature,FonSetCooler, FonCaptureDark, FonLoadDark, FonClearDark,FonDarkInfo, FonShowImage: TNotifyEvent;
     FonParameterChange: TNotifyStr;
     cur_minHFD,cur_minSNR,cur_Exposure,cur_vsolar,cur_vpasolar : double;
@@ -451,6 +454,7 @@ type
     property Info: string read GetInfo write SetInfo;
     property CameraStatus: string read GetCameraStatus write SetCameraStatus;
     property SpiralDither: boolean read GetSpiralDither write SetSpiralDither;
+    property onConfigureGuider: TNotifyEvent read FonConfigureGuider write FonConfigureGuider;
 
   end;
 
@@ -1431,6 +1435,11 @@ procedure Tf_internalguider.BtnZoomAdjustClick(Sender: TObject);
 begin
   GuideImgZoom:=0;
   if Assigned(FonRedraw) then FonRedraw(self);
+end;
+
+procedure Tf_internalguider.Button1Click(Sender: TObject);
+begin
+  if Assigned(FonConfigureGuider) then FonConfigureGuider(self);
 end;
 
 procedure Tf_internalguider.ButtonSetLockClick(Sender: TObject);
