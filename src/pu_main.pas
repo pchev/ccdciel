@@ -5209,6 +5209,7 @@ begin
   FilenameSeqSep:=config.GetValue('/Files/FileNameSeqSep','_');
   FitsFileExt:=config.GetValue('/Files/FitsFileExt','.fits');
   FileSequenceWidth:=config.GetValue('/Files/FileSequenceWidth',0);
+  FileRemoveSpace:=config.GetValue('/Files/RemoveSpace',false);
   FilePack:=config.GetValue('/Files/Pack',false);
   WantExif:=config.GetValue('/Files/Exif',WantExif);
   if ((TCPDaemon=nil)or(TCPDaemon.stoping)) then
@@ -9404,6 +9405,7 @@ begin
    f_option.WantExif.Checked:=config.GetValue('/Files/Exif',WantExif);
    f_option.SaveFormat.ItemIndex:=config.GetValue('/Files/SaveFormat',0);
    f_option.SaveBitmap.Checked:=config.GetValue('/Files/SaveBitmap',false);
+   f_option.RemoveSpace.Checked:=config.GetValue('/Files/RemoveSpace',false);
    buf:=config.GetValue('/Files/SaveBitmapFormat','png');
    if buf='png' then f_option.SaveBitmapFormat.ItemIndex:=0
    else if buf='tif' then f_option.SaveBitmapFormat.ItemIndex:=1
@@ -9886,7 +9888,7 @@ begin
      config.SetValue('/Files/FitsFileExt',f_option.FitsExt.Text);
      config.SetValue('/Files/Pack',f_option.FilePack.checked);
      config.SetValue('/Files/Exif',f_option.WantExif.Checked);
-
+     config.SetValue('/Files/RemoveSpace',f_option.RemoveSpace.Checked);
      CustomHeaderNum:=0;
      for i:=1 to f_option.CustomHeader.RowCount-1 do begin
        if trim(f_option.CustomHeader.Cells[0,i])<>'' then begin

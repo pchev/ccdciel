@@ -521,7 +521,7 @@ var
   FilenameOpt: array[0..FileNameCount-1] of TFilenameList;
   FilenameActive: array[0..FileNameCount-1] of Boolean;
   FilenameSep, FilenameSeqSep: String;
-  FilePack,FileStackFloat: boolean;
+  FilePack,FileStackFloat,FileRemoveSpace: boolean;
   FitsFileExt: string;
   FileSequenceWidth: integer;
   UseRotator: boolean;

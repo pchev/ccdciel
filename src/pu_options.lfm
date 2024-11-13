@@ -700,6 +700,14 @@ object f_option: Tf_option
                 TabOrder = 9
                 Text = '_'
               end
+              object RemoveSpace: TCheckBox
+                Left = 278
+                Height = 22
+                Top = 49
+                Width = 210
+                Caption = 'Remove space in object name'
+                TabOrder = 10
+              end
             end
             object Panel37: TPanel
               Left = 400

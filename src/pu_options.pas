@@ -34,6 +34,7 @@ type
   { Tf_option }
 
   Tf_option = class(TForm)
+    RemoveSpace: TCheckBox;
     ColorizeSpectra: TCheckBox;
     SpinAutoFocusHFD: TFloatSpinEdit;
     BtnDelHdr: TButton;
