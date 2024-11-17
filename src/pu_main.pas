@@ -3814,7 +3814,7 @@ end;
 procedure Tf_main.Image1DblClick(Sender: TObject);
 var x,y,px,py,dx,dy: integer;
     xc,yc,ri:integer;
-    x1,y1,w,h: integer;
+    x1,y1,y2,w,h: integer;
     vmax,bg,sd: double;
 begin
 if SplitImage then exit;
@@ -3836,9 +3836,12 @@ if fits.HeaderInfo.valid and fits.ImageValid and (not f_starprofile.AutofocusRun
    else if f_starprofile.SpectraProfile then begin
       Screen2Fits(Mx,My,f_visu.FlipHorz,f_visu.FlipVert,x1,y1);
       x1:=0;
-      y1:=y1-20;
       w:=fits.HeaderInfo.naxis1-1;
-      h:=40;
+      y1:=y1-20;
+      y2:=y1+40;
+      y1:=max(0,y1);
+      y2:=min(fits.HeaderInfo.naxis2-1,y2);
+      h:=y2-y1;
       f_starprofile.SetSpectra(x1,y1,w,h,fits);
       Image1.Invalidate;
    end

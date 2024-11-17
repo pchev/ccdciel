@@ -775,7 +775,7 @@ begin
         for j:=FSpectraY to FSpectraY+FSpectraHeight do begin
           value:=value+f.imageMin+f.image[0,j,i]/f.imageC;
         end;
-        value:=value/FSpectraHeight;
+        value:=value/(FSpectraHeight+1);
       end;
    1: begin
         for j:=FSpectraY to FSpectraY+FSpectraHeight do begin
