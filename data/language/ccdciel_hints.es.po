@@ -6,14 +6,14 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ccdciel\n"
 "Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
-"POT-Creation-Date: 2024-11-03 14:03+0000\n"
+"POT-Creation-Date: 2024-11-23 15:55+0000\n"
 "PO-Revision-Date: 2020-08-06 21:07+0000\n"
 "Last-Translator: Víctor R. Ruiz <Unknown>\n"
 "Language-Team: Spanish <es@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2024-11-03 14:12+0000\n"
+"X-Launchpad-Export-Date: 2024-11-23 16:04+0000\n"
 "X-Generator: Launchpad (build 22ade00ab50b929fac63b8ee7252243aceda294a)\n"
 
 #: u_hints.rsactivateback
@@ -243,6 +243,11 @@ msgstr "Cargar fichero de secuencia"
 #: u_hints.rslooppreviewe
 msgid "Loop preview exposures"
 msgstr "Bucle exposiciones de previsualización"
+
+#: u_hints.rsmaketesttode
+#, object-pascal-format
+msgid "Make test to determine the most performant option depending on your computer.%s(Network is mandatory if the camera is connected to a remote Indi server)"
+msgstr ""
 
 #: u_hints.rsmovefocuseri
 msgid "Move focuser inward"
@@ -506,6 +511,10 @@ msgstr "El nombre del objetivo a utilizar para capturar las imágenes"
 #: u_hints.rsthetelescopenamefori
 msgid "The telescope name for inclusion in the FITS header"
 msgstr "Nombre del telescopio para su inclusión en la cabecera FITS"
+
+#: u_hints.rsthetemporary
+msgid "The temporary RAM disk used to transfer the images from the Indi server"
+msgstr ""
 
 #: u_hints.rsthetypeoffra
 msgid "The type of frame"

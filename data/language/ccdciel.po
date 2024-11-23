@@ -1514,6 +1514,18 @@ msgstr ""
 msgid "Load configuration on startup"
 msgstr ""
 
+#: u_translation:rsimagetransfe
+msgid "Image transfer"
+msgstr ""
+
+#: u_translation:rsnetwork
+msgid "Network"
+msgstr ""
+
+#: u_translation:rsramdisk
+msgid "RAM Disk"
+msgstr ""
+
 #: u_translation:rsdirectory
 msgid "Directory"
 msgstr ""
@@ -5899,5 +5911,25 @@ msgstr ""
 
 #: u_translation:rstheconeerror
 msgid "The cone error results in a slew error of: %s arcmin at zenith. If error is positive then move telescope light inlet closer to the mount. If negative move telescope light inlet away from the mount,"
+msgstr ""
+
+#: u_translation:rsselectcamera
+msgid "Select camera"
+msgstr ""
+
+#: u_translation:rsselectthecam
+msgid "Select the camera to use for the cone measurement"
+msgstr ""
+
+#: u_translation:rsmeasureteles
+msgid "Measure telescope cone error"
+msgstr ""
+
+#: u_translation:rscolorizespec
+msgid "Colorize spectra images"
+msgstr ""
+
+#: u_translation:rsautofocususi
+msgid "Autofocus using the OAG camera"
 msgstr ""
 

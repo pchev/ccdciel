@@ -2,14 +2,14 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ccdciel\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-11-03 14:03+0000\n"
-"PO-Revision-Date: 2024-09-26 18:51+0000\n"
+"POT-Creation-Date: 2024-11-23 15:54+0000\n"
+"PO-Revision-Date: 2024-11-03 15:21+0000\n"
 "Last-Translator: Stanislav Holub <Unknown>\n"
 "Language-Team: Czech <cz@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2024-11-03 14:12+0000\n"
+"X-Launchpad-Export-Date: 2024-11-23 16:04+0000\n"
 "X-Generator: Launchpad (build 22ade00ab50b929fac63b8ee7252243aceda294a)\n"
 "Language: cs\n"
 
@@ -435,6 +435,10 @@ msgstr "AutoOstření úspěšné"
 #: u_translation.rsautofocustol
 msgid "Autofocus tolerance "
 msgstr "Tolerance AutoOstření "
+
+#: u_translation.rsautofocususi
+msgid "Autofocus using the OAG camera"
+msgstr ""
 
 #: u_translation.rsautofocuswil
 msgid "Autofocus will run before the next exposure"
@@ -1020,6 +1024,10 @@ msgstr "Oblačnost"
 msgid "Color balance"
 msgstr "Vyvážení barev"
 
+#: u_translation.rscolorizespec
+msgid "Colorize spectra images"
+msgstr ""
+
 #: u_translation.rscolorpreview
 msgid "Color preview"
 msgstr "Barevný náhled"
@@ -1063,18 +1071,21 @@ msgid ""
 "\n"
 "It will automatically take two images east and west of the meridian near the zenith. The cone error will be reported in the log."
 msgstr ""
+"Tento test umožní odhadnout kuželovou chybu dalekohledu měřením chyby otáčení po překlopení poledníku.\n"
+"\n"
+"Automaticky pořídí dva snímky východně a západně od poledníku v blízkosti zenitu. Kuželová chyba bude zaznamenána v protokolu."
 
 #: u_translation.rsconemeasureeastwest
 msgid "Start measuring East to West"
-msgstr ""
+msgstr "Měření od Východu k Západu"
 
 #: u_translation.rsconemeasurewesteast
 msgid "Start measuring West to East"
-msgstr ""
+msgstr "Měření od Západu k Východu"
 
 #: u_translation.rsconetest
 msgid "Measure the cone error"
-msgstr ""
+msgstr "Měření kuželové chyby"
 
 #: u_translation.rsconfiguratio
 msgid "Configuration saved"
@@ -1212,7 +1223,7 @@ msgstr "Vytvořit nový prázdný profil"
 
 #: u_translation.rscrossmeridan
 msgid " Moving to the other side of the meridian"
-msgstr ""
+msgstr " Přejezd na druhou stranu poledníku"
 
 #: u_translation.rscurrent
 msgid "Current"
@@ -2419,6 +2430,10 @@ msgstr "Ostrost snímku %s"
 msgid "Image statistic"
 msgstr "Statistika snímku"
 
+#: u_translation.rsimagetransfe
+msgid "Image transfer"
+msgstr ""
+
 #: u_translation.rsimageundebay
 msgid "Image Un-debayered"
 msgstr "Snímek Obnoven"
@@ -2828,6 +2843,10 @@ msgstr "Měření %s pos:%s krok:%s hfd:%s špičk:%s snr:%s"
 msgid "Measure pixel scale by stop tracking"
 msgstr "Měření měřítka pixelů pomocí stop sledování"
 
+#: u_translation.rsmeasureteles
+msgid "Measure telescope cone error"
+msgstr ""
+
 #: u_translation.rsmeasurewn
 msgid "Measure in the West and North"
 msgstr "Měřte směrem na Západ a Sever"
@@ -3123,6 +3142,10 @@ msgstr "poblíž pólu"
 #, object-pascal-format
 msgid "Need to wait until %s"
 msgstr "Je třeba vyčkat až %s"
+
+#: u_translation.rsnetwork
+msgid "Network"
+msgstr ""
 
 #: u_translation.rsnew
 msgid "New"
@@ -3889,6 +3912,10 @@ msgstr "RA"
 msgid "Rain rate"
 msgstr "Míra deště"
 
+#: u_translation.rsramdisk
+msgid "RAM Disk"
+msgstr ""
+
 #: u_translation.rsrandom
 msgid "Random"
 msgstr "Náhodné"
@@ -4422,6 +4449,10 @@ msgstr "Vyberte možnosti kalibrace:"
 msgid "Select a star first!"
 msgstr "Nejdřív vyberte hvězdu!"
 
+#: u_translation.rsselectcamera
+msgid "Select camera"
+msgstr ""
+
 #: u_translation.rsselectguides
 msgid "Select guide star"
 msgstr "Vyberte naváděcí hvězdu"
@@ -4429,6 +4460,10 @@ msgstr "Vyberte naváděcí hvězdu"
 #: u_translation.rsselectoneoft
 msgid "Select one of the measurement options:"
 msgstr "Vyberte jednu z možností měření:"
+
+#: u_translation.rsselectthecam
+msgid "Select the camera to use for the cone measurement"
+msgstr ""
 
 #: u_translation.rsselectthecur
 msgid "Select the cursor to use "
@@ -5465,7 +5500,7 @@ msgstr "Časové pásmo používané počítačem %s a zeměpisná délka Observ
 #: u_translation.rstheconeerror
 #, object-pascal-format
 msgid "The cone error results in a slew error of: %s arcmin at zenith. If error is positive then move telescope light inlet closer to the mount. If negative move telescope light inlet away from the mount,"
-msgstr ""
+msgstr "Kuželová chyba má za následek chybu otáčení ve výši: %s arcmin v zenitu. Pokud je chyba kladná, posuňte vstup teleskopu blíže k montáži. Pokud je záporná, posuňte vstup do dalekohledu směrem od montáže,"
 
 #: u_translation.rsthedataare2
 #, object-pascal-format

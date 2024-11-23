@@ -6,14 +6,14 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ccdciel\n"
 "Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
-"POT-Creation-Date: 2024-11-03 14:03+0000\n"
-"PO-Revision-Date: 2024-11-03 14:08+0000\n"
+"POT-Creation-Date: 2024-11-23 15:54+0000\n"
+"PO-Revision-Date: 2024-11-23 16:02+0000\n"
 "Last-Translator: Patrick Chevalley <Unknown>\n"
 "Language-Team: French <fr@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2024-11-03 14:12+0000\n"
+"X-Launchpad-Export-Date: 2024-11-23 16:04+0000\n"
 "X-Generator: Launchpad (build 22ade00ab50b929fac63b8ee7252243aceda294a)\n"
 
 #: u_translation.rs2d
@@ -436,6 +436,10 @@ msgstr "Autofocus réussi"
 #: u_translation.rsautofocustol
 msgid "Autofocus tolerance "
 msgstr "Tolérance de mise au point "
+
+#: u_translation.rsautofocususi
+msgid "Autofocus using the OAG camera"
+msgstr "Autofocus avec la caméra de guidage du diviseur optique"
 
 #: u_translation.rsautofocuswil
 msgid "Autofocus will run before the next exposure"
@@ -1020,6 +1024,10 @@ msgstr "Couverture nuageuse"
 #: u_translation.rscolorbalance
 msgid "Color balance"
 msgstr "Balance de couleur"
+
+#: u_translation.rscolorizespec
+msgid "Colorize spectra images"
+msgstr "Coloriser les images spectrales"
 
 #: u_translation.rscolorpreview
 msgid "Color preview"
@@ -2423,6 +2431,10 @@ msgstr "Netteté de l'image"
 msgid "Image statistic"
 msgstr "Statistique de l'image"
 
+#: u_translation.rsimagetransfe
+msgid "Image transfer"
+msgstr "Transfert d'image"
+
 #: u_translation.rsimageundebay
 msgid "Image Un-debayered"
 msgstr "Image non Debayerisée"
@@ -2832,6 +2844,10 @@ msgstr "Mesure %s  pos:%s pas:%s hfd:%s pointe:%s snr:%s"
 msgid "Measure pixel scale by stop tracking"
 msgstr "Arrête le suivi pour mesurer l'échelle des pixels"
 
+#: u_translation.rsmeasureteles
+msgid "Measure telescope cone error"
+msgstr "Mesurer l'erreur de cone du télescope"
+
 #: u_translation.rsmeasurewn
 msgid "Measure in the West and North"
 msgstr "Mesure à l'ouest et au nord"
@@ -3127,6 +3143,10 @@ msgstr "près du pôle"
 #, object-pascal-format
 msgid "Need to wait until %s"
 msgstr "Doit attendre jusqu'à %s"
+
+#: u_translation.rsnetwork
+msgid "Network"
+msgstr "Réseau"
 
 #: u_translation.rsnew
 msgid "New"
@@ -3893,6 +3913,10 @@ msgstr "AD"
 msgid "Rain rate"
 msgstr "Précipitations"
 
+#: u_translation.rsramdisk
+msgid "RAM Disk"
+msgstr "Disque en mémoire"
+
 #: u_translation.rsrandom
 msgid "Random"
 msgstr "Aléatoire"
@@ -4426,6 +4450,10 @@ msgstr "Choisir une option de calibration:"
 msgid "Select a star first!"
 msgstr "Choisir d'abord une étoile!"
 
+#: u_translation.rsselectcamera
+msgid "Select camera"
+msgstr "Choisir la caméra"
+
 #: u_translation.rsselectguides
 msgid "Select guide star"
 msgstr "Sélection de l'étoile guide"
@@ -4433,6 +4461,10 @@ msgstr "Sélection de l'étoile guide"
 #: u_translation.rsselectoneoft
 msgid "Select one of the measurement options:"
 msgstr "Choisir une des options de mesure:"
+
+#: u_translation.rsselectthecam
+msgid "Select the camera to use for the cone measurement"
+msgstr "Choisir la caméra à utiliser pour la mesure du cone"
 
 #: u_translation.rsselectthecur
 msgid "Select the cursor to use "

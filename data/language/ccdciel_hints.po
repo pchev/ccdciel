@@ -190,6 +190,14 @@ msgstr ""
 msgid "Copy the current profile to a new one.%sThis also copy every program preference to the new profile."
 msgstr ""
 
+#: u_hints:rsmaketesttode
+msgid "Make test to determine the most performant option depending on your computer.%s(Network is mandatory if the camera is connected to a remote Indi server)"
+msgstr ""
+
+#: u_hints:rsthetemporary
+msgid "The temporary RAM disk used to transfer the images from the Indi server"
+msgstr ""
+
 #: u_hints:rsuseplatesolv
 msgid "Use astrometric (plate) solving to improve telescope pointing accuracy"
 msgstr ""
