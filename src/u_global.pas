@@ -462,6 +462,7 @@ var
   FocuserPositionMin, FocuserPositionMax: integer;
   Starwindow,Focuswindow: integer;
   AutofocusMode:TAutofocusMode;
+  GuiderAutofocus: boolean;
   AutofocusMinSpeed,AutofocusMaxSpeed,AutofocusNearNum,FocuserDelay,AutofocusBinning,AutofocusPeriod: integer;
   AutofocusStartHFD,AutofocusNearHFD: double;
   AutofocusExposure,AutofocusExposureFact:double;

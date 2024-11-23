@@ -858,6 +858,9 @@ type
     function  AutoAutofocus(ReturnToTarget: boolean=true; GuiderRestart: boolean=true): Boolean;
     procedure cmdAutomaticAutofocus(var ok: boolean);
     procedure cmdAutofocus(var ok: boolean);
+    Procedure GuiderAutoFocusStart(Sender: TObject);
+    Procedure GuiderAutoFocusStop(Sender: TObject);
+    Procedure DoGuiderAutoFocus;
     Procedure FocuserStatus(Sender: TObject);
     function  FocuserTemperatureCompensation(canwait:boolean):boolean;
     procedure FocuserPositionChange(n:double);
@@ -4974,6 +4977,10 @@ begin
     f_starprofile.Label3.Caption:=rsFWHM+':';
     f_starprofile.Label4.Caption:='SNR:';
   end;
+  if WantGuideCamera then
+    GuiderAutofocus:=config.GetValue('/StarAnalysis/GuiderAutofocus',false)
+  else
+    GuiderAutofocus:=false;
   AutofocusMinSpeed:=config.GetValue('/StarAnalysis/AutofocusMinSpeed',10);
   AutofocusMaxSpeed:=config.GetValue('/StarAnalysis/AutofocusMaxSpeed',100);
   AutofocusStartHFD:=config.GetValue('/StarAnalysis/AutofocusStartHFD',20.0);
@@ -9532,6 +9539,14 @@ begin
    f_option.FilterList.Row:=0;
    f_option.FilterList.Col:=0;
    f_option.SetAutofocusmode(TAutofocusMode(config.GetValue('/StarAnalysis/AutoFocusMode',ord(AutoFocusMode))));
+   if WantGuideCamera then begin
+     f_option.GuiderAutofocus.Visible:=true;
+     f_option.GuiderAutofocus.checked:=config.GetValue('/StarAnalysis/GuiderAutofocus',false);
+   end
+   else begin
+     f_option.GuiderAutofocus.Visible:=false;
+     f_option.GuiderAutofocus.checked:=false;
+   end;
    f_option.AutofocusMinSpeed.Value:=config.GetValue('/StarAnalysis/AutofocusMinSpeed',AutofocusMinSpeed);
    f_option.AutofocusMaxSpeed.Value:=config.GetValue('/StarAnalysis/AutofocusMaxSpeed',AutofocusMaxSpeed);
    f_option.AutofocusStartHFD.Value:=config.GetValue('/StarAnalysis/AutofocusStartHFD',AutofocusStartHFD);
@@ -9917,6 +9932,10 @@ begin
         config.SetValue('/Filters/ExpFact'+IntToStr(i),StrToFloatDef(trim(stringReplace(f_option.FilterList.Cells[2,i],',','.',[])),1.0));
      end;
      config.SetValue('/StarAnalysis/AutoFocusMode',ord(f_option.GetAutofocusMode));
+     if f_option.GetAutofocusMode=afDynamic then
+       config.SetValue('/StarAnalysis/GuiderAutofocus',f_option.GuiderAutofocus.checked)
+     else
+       config.SetValue('/StarAnalysis/GuiderAutofocus',false);
      config.SetValue('/StarAnalysis/AutofocusMinSpeed',f_option.AutofocusMinSpeed.Value);
      config.SetValue('/StarAnalysis/AutofocusMaxSpeed',f_option.AutofocusMaxSpeed.Value);
      config.SetValue('/StarAnalysis/AutofocusStartHFD',f_option.AutofocusStartHFD.Value);
@@ -14078,7 +14097,7 @@ begin
       end;
    end;
    finally
-   if AutofocusPauseGuider then begin
+   if AutofocusPauseGuider or GuiderAutofocus then begin
      // restart autoguider, never let in pause in case autofocus is aborted
      if pauseguider then begin
        NewMessage(rsResumeAutogu,2);
@@ -14304,6 +14323,10 @@ var x,y,rx,ry,xc,yc,ns,n,i,s,s2,s3,s4,fs: integer;
     buf: string;
     fx,fy,fw,fh:TNumRange;
 begin
+  if GuiderAutofocus then begin
+    GuiderAutoFocusStart(Sender);
+    exit;
+  end;
   CancelAutofocus:=false;
   f_starprofile.AutofocusResult:=false;
   SaveAutofocusBinning:=f_preview.Binning.Text;
@@ -14504,6 +14527,10 @@ end;
 
 Procedure Tf_main.AutoFocusStop(Sender: TObject);
 begin
+   if GuiderAutofocus then begin
+     GuiderAutoFocusStop(Sender);
+     exit;
+   end;
    if (f_capture.Running or f_sequence.Running) and (not autofocusing) then exit;
    f_preview.Running:=false;
    f_preview.Loop:=false;
@@ -14593,6 +14620,144 @@ if (fits.HeaderInfo.valid)and(RunningPreview or RunningCapture) then begin // no
     // only refresh star profile
     f_starprofile.showprofile(fits,round(f_starprofile.StarX),round(f_starprofile.StarY),Starwindow,fits.HeaderInfo.focallen,fits.HeaderInfo.pixsz1);
 end;
+end;
+
+Procedure Tf_main.GuiderAutoFocusStart(Sender: TObject);
+var rx,ry,ns,n,i,s: integer;
+    hfdlist: array of double;
+    meanhfd, med: double;
+    buf: string;
+begin
+  CancelAutofocus:=false;
+  f_starprofile.AutofocusResult:=false;
+  if not (autoguider is T_autoguider_internal) then begin
+   NewMessage('Internal guider is need',1);
+   f_starprofile.ChkAutofocusDown(false);
+   exit;
+  end;
+  if (guidecamera.Status<>devConnected)or(focuser.Status<>devConnected) then begin
+   NewMessage(rsCameraOrFocu,1);
+   f_starprofile.ChkAutofocusDown(false);
+   exit;
+  end;
+  if (AutofocusMode<>afDynamic) then begin
+    NewMessage(rsPleaseConfig2+crlf+'Only dynamic is supported on the guider.',1);
+    f_starprofile.ChkAutofocusDown(false);
+    exit;
+  end;
+  if (f_capture.Running or f_sequence.Running) and (not autofocusing) then begin
+    NewMessage(rsCannotStartA3,1);
+    f_starprofile.ChkAutofocusDown(false);
+    exit;
+  end;
+  if InternalguiderRunning then begin
+    InternalguiderStop(nil);
+  end;
+  if not guidecamera.ControlExposure(f_internalguider.Exposure.Value,f_internalguider.Binning.Value,f_internalguider.Binning.Value,LIGHT,ReadoutModeCapture,f_internalguider.Gain.Value,f_internalguider.Offset.Value) then begin
+    NewMessage(rsExposureFail,1);
+    f_starprofile.ChkAutofocusDown(false);
+    exit;
+  end;
+  if CancelAutofocus then begin
+    f_starprofile.ChkAutofocusDown(false);
+    exit;
+  end;
+
+   // first measurement with a big window to find median star diameter
+   s:=60; //starwindow; {use configured star window}
+   rx:=guidefits.HeaderInfo.naxis1-s; {search area}
+   ry:=guidefits.HeaderInfo.naxis2-s;
+   guidefits.GetStarList(rx,ry,s,AutofocusMinSNR,false); {search stars in fits image}
+   ns:=Length(guidefits.StarList);
+   if ns>0 then begin
+     SetLength(hfdlist,ns);
+     for i:=0 to ns-1 do
+       hfdlist[i]:=guidefits.StarList[i].hfd;
+     med:=SMedian(hfdlist,ns);            {median of starshfd}
+     s:=min(max(14,round(3.0*med)),s); {reasonable window to measure this star}
+   end
+   else
+     s:=20; {no star found, try with small default window}
+   rx:=guidefits.HeaderInfo.naxis1-s; {search area}
+   ry:=guidefits.HeaderInfo.naxis2-s;
+   guidefits.GetStarList(rx,ry,s,AutofocusMinSNR,false); {search stars in fits image}
+   ns:=Length(guidefits.StarList);
+   // store star list
+   if ns>0 then begin
+      // compute median HFD
+      SetLength(hfdlist,ns);
+      for i:=0 to ns-1 do
+          hfdlist[i]:=guidefits.StarList[i].hfd;
+      meanhfd:=SMedian(hfdlist,ns);
+      n:=0;
+      SetLength(AutofocusStarList,ns);
+      for i:=0 to ns-1 do begin
+        // filter by hfd to remove galaxies and others outliers
+        if abs(guidefits.StarList[i].hfd-meanhfd)<(0.5*meanhfd) then begin
+          inc(n);
+          AutofocusStarList[n-1,1]:=guidefits.StarList[i].x;
+          AutofocusStarList[n-1,2]:=guidefits.StarList[i].y;
+        end;
+      end;
+      SetLength(AutofocusStarList,n);
+   end
+   else begin  // no star, manual action is required
+      SetLength(AutofocusStarList,0);
+      f_starprofile.ChkAutofocusDown(false);
+      NewMessage(Format(rsAutofocusCan, [crlf]),1);
+      if LogToFile then begin
+        buf:=slash(LogDir)+'focus_fail_guider'+FormatDateTime('yyyymmdd_hhnnss',now)+'.fits';
+        guidefits.SaveToFile(buf);
+        NewMessage(Format(rsSavedFile, [buf]),2);
+      end;
+      exit;
+   end;
+
+  if CancelAutofocus then begin
+    f_starprofile.ChkAutofocusDown(false);
+    exit;
+  end;
+  f_starprofile.InitAutofocus(false);
+  if CancelAutofocus then begin
+    f_starprofile.ChkAutofocusDown(false);
+    exit;
+  end;
+  InternalguiderLoop(nil);
+  if focuser.hasTemperature then NewMessage(Format(rsFocuserTempe, [FormatFloat(f1, TempDisplay(TemperatureScale,FocuserTemp))+TempLabel]),2);
+  if f_starprofile.PreFocusPos>0 then
+     NewMessage(Format(rsAutoFocusSta, [inttostr(f_starprofile.PreFocusPos)]),2)
+  else
+     NewMessage(rsAutoFocusSta2,2);
+end;
+
+Procedure Tf_main.GuiderAutoFocusStop(Sender: TObject);
+begin
+   if (f_capture.Running or f_sequence.Running) and (not autofocusing) then exit;
+   InternalguiderStop(nil);
+   f_starprofile.StarX:=-1;
+   f_starprofile.StarY:=-1;
+   f_starprofile.FindStar:=false;
+   if f_starprofile.AutofocusResult then begin
+     NewMessage(rsAutoFocusSuc,1);
+   end
+   else begin
+     NewMessage(rsAutoFocusErr,1);
+     if f_starprofile.PreFocusPos>0 then begin  // only for absolute position focuser
+       NewMessage(Format(rsReturnTheFoc, [inttostr(f_starprofile.PreFocusPos)]),2);
+       f_focuser.FocusPosition:=f_starprofile.PreFocusPos;
+       FocusSetAbsolutePosition(nil);
+       Wait(1);
+     end;
+   end;
+   f_starprofile.TimerHideGraph.Interval:=5000;
+   f_starprofile.TimerHideGraph.Enabled:=true;
+ end;
+
+Procedure Tf_main.DoGuiderAutoFocus;
+begin
+  if GuiderAutofocus and f_starprofile.AutofocusRunning then
+    // process autofocus
+    f_starprofile.Autofocus(guidefits,round(f_starprofile.StarX),round(f_starprofile.StarY),Starwindow)
 end;
 
 procedure Tf_main.GUIdestroy(Sender: TObject);
@@ -17713,8 +17878,18 @@ begin
       end;
     end
     else begin
-      // looping
-      T_autoguider_internal(autoguider).ShowImgInfo;
+      if GuiderAutofocus and f_starprofile.AutofocusRunning then begin
+         // process autofocus frame
+         try
+         DoGuiderAutoFocus;
+         except
+           on E: Exception do NewMessage('GuideCameraNewImage, Autofocus :'+ E.Message,1);
+         end;
+      end
+      else begin
+        // looping
+        T_autoguider_internal(autoguider).ShowImgInfo;
+      end;
     end;
 
     // start next exposure

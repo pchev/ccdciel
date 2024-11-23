@@ -314,7 +314,7 @@ begin
     exit;
  end;
  if ChkAutofocus.Down then begin
-    if (sender<>nil) and (not InplaceAutofocus) and
+    if (sender<>nil) and (not GuiderAutofocus) and (not InplaceAutofocus) and
       (MessageDlg(rsAutofocusLoc, rsMoveToBright, mtConfirmation, mbYesNo, 0)=mrYes)
     then begin
       BtnViewAutofocus.Enabled:=false;

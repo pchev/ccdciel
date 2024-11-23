@@ -67,7 +67,7 @@ object f_option: Tf_option
     Top = 0
     Width = 740
     HorzScrollBar.Page = 721
-    VertScrollBar.Page = 670
+    VertScrollBar.Page = 672
     Align = alClient
     BorderStyle = bsNone
     ClientHeight = 687
@@ -3177,27 +3177,165 @@ object f_option: Tf_option
           ClientWidth = 576
           ParentFont = False
           TabOrder = 1
-          object Label49: TLabel
-            AnchorSideTop.Control = AutofocusExpTime
-            AnchorSideTop.Side = asrCenter
-            Left = 8
-            Height = 18
-            Top = 5
-            Width = 88
-            Caption = 'Exposure time'
-            ParentColor = False
-            ParentFont = False
-          end
-          object Label51: TLabel
-            AnchorSideTop.Control = AutofocusExpTime
-            AnchorSideTop.Side = asrCenter
-            Left = 312
-            Height = 18
-            Top = 5
-            Width = 50
-            Caption = 'seconds'
-            ParentColor = False
-            ParentFont = False
+          object PanelExposure: TPanel
+            Left = 0
+            Height = 96
+            Top = 0
+            Width = 576
+            Align = alTop
+            BevelOuter = bvNone
+            ClientHeight = 96
+            ClientWidth = 576
+            TabOrder = 6
+            object AutofocusPanelGain: TPanel
+              Left = 0
+              Height = 32
+              Top = 28
+              Width = 519
+              BevelOuter = bvNone
+              ClientHeight = 32
+              ClientWidth = 519
+              ParentFont = False
+              TabOrder = 0
+              Visible = False
+              object AutofocusISObox: TComboBox
+                Left = 214
+                Height = 28
+                Hint = 'Exposure time in seconds'
+                Top = 0
+                Width = 91
+                Constraints.MaxHeight = 28
+                ItemHeight = 18
+                ParentFont = False
+                Style = csDropDownList
+                TabOrder = 0
+                Visible = False
+              end
+              object LabelGain: TLabel
+                AnchorSideTop.Control = AutofocusPanelOffset
+                AnchorSideTop.Side = asrCenter
+                Left = 8
+                Height = 18
+                Top = 7
+                Width = 29
+                Caption = 'Gain'
+                ParentColor = False
+                ParentFont = False
+              end
+              object AutofocusGainEdit: TSpinEdit
+                AnchorSideTop.Control = AutofocusPanelOffset
+                AnchorSideTop.Side = asrCenter
+                Left = 214
+                Height = 28
+                Top = 2
+                Width = 90
+                Constraints.MaxHeight = 28
+                MaxValue = 32767
+                MinValue = -32768
+                ParentFont = False
+                TabOrder = 1
+              end
+              object AutofocusPanelOffset: TPanel
+                Left = 312
+                Height = 32
+                Top = 0
+                Width = 200
+                BevelOuter = bvNone
+                ClientHeight = 32
+                ClientWidth = 200
+                TabOrder = 2
+                object LabelOffset: TLabel
+                  AnchorSideTop.Control = AutofocusPanelOffset
+                  AnchorSideTop.Side = asrCenter
+                  Left = 0
+                  Height = 18
+                  Top = 7
+                  Width = 38
+                  Caption = 'Offset'
+                  ParentColor = False
+                end
+                object AutofocusOffsetEdit: TSpinEdit
+                  AnchorSideTop.Control = AutofocusPanelOffset
+                  AnchorSideTop.Side = asrCenter
+                  Left = 55
+                  Height = 28
+                  Top = 2
+                  Width = 90
+                  Constraints.MaxHeight = 28
+                  MaxValue = 32767
+                  MinValue = -32768
+                  TabOrder = 0
+                end
+              end
+            end
+            object Label51: TLabel
+              AnchorSideTop.Control = AutofocusExpTime
+              AnchorSideTop.Side = asrCenter
+              Left = 312
+              Height = 18
+              Top = 5
+              Width = 50
+              Caption = 'seconds'
+              ParentColor = False
+              ParentFont = False
+            end
+            object AutofocusExpTime: TComboBox
+              Left = 214
+              Height = 28
+              Top = 0
+              Width = 90
+              Constraints.MaxHeight = 28
+              ItemHeight = 24
+              ItemIndex = 7
+              Items.Strings = (
+                '0.001'
+                '0.005'
+                '0.01'
+                '0.05'
+                '0.1'
+                '0.2'
+                '0.5'
+                '1'
+                '2'
+                '5'
+                '10'
+              )
+              OnChange = AutofocusExpTimeChange
+              ParentFont = False
+              TabOrder = 1
+              Text = '1'
+            end
+            object Label49: TLabel
+              AnchorSideTop.Side = asrCenter
+              Left = 8
+              Height = 18
+              Top = 5
+              Width = 88
+              Caption = 'Exposure time'
+              ParentColor = False
+              ParentFont = False
+            end
+            object Label50: TLabel
+              Left = 8
+              Height = 18
+              Top = 64
+              Width = 48
+              Caption = 'Binning'
+              ParentColor = False
+              ParentFont = False
+            end
+            object AutofocusBinning: TSpinEdit
+              Left = 214
+              Height = 28
+              Top = 60
+              Width = 61
+              Constraints.MaxHeight = 28
+              MaxValue = 8
+              MinValue = 1
+              ParentFont = False
+              TabOrder = 2
+              Value = 1
+            end
           end
           object Label58: TLabel
             AnchorSideTop.Control = AutofocusMoveDirOut
@@ -3271,15 +3409,6 @@ object f_option: Tf_option
               Value = 1
             end
           end
-          object Label50: TLabel
-            Left = 8
-            Height = 18
-            Top = 64
-            Width = 48
-            Caption = 'Binning'
-            ParentColor = False
-            ParentFont = False
-          end
           object Label54: TLabel
             AnchorSideTop.Control = AutofocusMinSNR
             AnchorSideTop.Side = asrCenter
@@ -3313,18 +3442,6 @@ object f_option: Tf_option
             ParentColor = False
             ParentFont = False
           end
-          object AutofocusBinning: TSpinEdit
-            Left = 214
-            Height = 28
-            Top = 60
-            Width = 61
-            Constraints.MaxHeight = 28
-            MaxValue = 8
-            MinValue = 1
-            ParentFont = False
-            TabOrder = 4
-            Value = 1
-          end
           object AutofocusTolerance: TFloatSpinEdit
             AnchorSideTop.Control = AutofocusMinSNR
             AnchorSideTop.Side = asrCenter
@@ -3337,7 +3454,7 @@ object f_option: Tf_option
             MaxValue = 99
             MinValue = 1
             ParentFont = False
-            TabOrder = 5
+            TabOrder = 4
             Value = 1
           end
           object AutofocusMinSNR: TFloatSpinEdit
@@ -3350,7 +3467,7 @@ object f_option: Tf_option
             MaxValue = 99
             MinValue = 1
             ParentFont = False
-            TabOrder = 6
+            TabOrder = 5
             Value = 1
           end
           object AutofocusNotebook: TNotebook
@@ -3597,113 +3714,6 @@ object f_option: Tf_option
               end
             end
             object PageNone: TPage
-            end
-          end
-          object AutofocusExpTime: TComboBox
-            Left = 214
-            Height = 28
-            Top = 0
-            Width = 90
-            Constraints.MaxHeight = 28
-            ItemHeight = 24
-            ItemIndex = 7
-            Items.Strings = (
-              '0.001'
-              '0.005'
-              '0.01'
-              '0.05'
-              '0.1'
-              '0.2'
-              '0.5'
-              '1'
-              '2'
-              '5'
-              '10'
-            )
-            OnChange = AutofocusExpTimeChange
-            ParentFont = False
-            TabOrder = 7
-            Text = '1'
-          end
-          object AutofocusPanelGain: TPanel
-            Left = 0
-            Height = 32
-            Top = 28
-            Width = 519
-            BevelOuter = bvNone
-            ClientHeight = 32
-            ClientWidth = 519
-            ParentFont = False
-            TabOrder = 8
-            Visible = False
-            object AutofocusISObox: TComboBox
-              Left = 214
-              Height = 28
-              Hint = 'Exposure time in seconds'
-              Top = 0
-              Width = 91
-              Constraints.MaxHeight = 28
-              ItemHeight = 18
-              ParentFont = False
-              Style = csDropDownList
-              TabOrder = 0
-              Visible = False
-            end
-            object LabelGain: TLabel
-              AnchorSideTop.Control = AutofocusPanelOffset
-              AnchorSideTop.Side = asrCenter
-              Left = 8
-              Height = 18
-              Top = 7
-              Width = 29
-              Caption = 'Gain'
-              ParentColor = False
-              ParentFont = False
-            end
-            object AutofocusGainEdit: TSpinEdit
-              AnchorSideTop.Control = AutofocusPanelOffset
-              AnchorSideTop.Side = asrCenter
-              Left = 214
-              Height = 28
-              Top = 2
-              Width = 90
-              Constraints.MaxHeight = 28
-              MaxValue = 32767
-              MinValue = -32768
-              ParentFont = False
-              TabOrder = 1
-            end
-            object AutofocusPanelOffset: TPanel
-              Left = 312
-              Height = 32
-              Top = 0
-              Width = 200
-              BevelOuter = bvNone
-              ClientHeight = 32
-              ClientWidth = 200
-              TabOrder = 2
-              object LabelOffset: TLabel
-                AnchorSideTop.Control = AutofocusPanelOffset
-                AnchorSideTop.Side = asrCenter
-                Left = 0
-                Height = 18
-                Top = 7
-                Width = 38
-                Caption = 'Offset'
-                ParentColor = False
-              end
-              object AutofocusOffsetEdit: TSpinEdit
-                AnchorSideTop.Control = AutofocusPanelOffset
-                AnchorSideTop.Side = asrCenter
-                Left = 55
-                Height = 28
-                Top = 2
-                Width = 90
-                Constraints.MaxHeight = 28
-                MaxValue = 32767
-                MinValue = -32768
-                TabOrder = 0
-              end
             end
           end
         end
@@ -3997,6 +4007,15 @@ object f_option: Tf_option
             Top = 4
             Width = 61
             TabOrder = 0
+          end
+          object GuiderAutofocus: TCheckBox
+            Left = 6
+            Height = 22
+            Top = 40
+            Width = 230
+            Caption = 'Autofocus using the OAG camera'
+            OnClick = GuiderAutofocusClick
+            TabOrder = 1
           end
         end
       end

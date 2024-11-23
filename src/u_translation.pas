@@ -1584,6 +1584,7 @@ resourcestring
   rsSelectTheCam = 'Select the camera to use for the cone measurement';
   rsMeasureTeles = 'Measure telescope cone error';
   rsColorizeSpec = 'Colorize spectra images';
+  rsAutofocusUsi = 'Autofocus using the OAG camera';
 
 implementation
 

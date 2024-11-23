@@ -34,6 +34,8 @@ type
   { Tf_option }
 
   Tf_option = class(TForm)
+    GuiderAutofocus: TCheckBox;
+    PanelExposure: TPanel;
     RemoveSpace: TCheckBox;
     ColorizeSpectra: TCheckBox;
     SpinAutoFocusHFD: TFloatSpinEdit;
@@ -803,6 +805,7 @@ type
     procedure CustomHeaderValidateEntry(Sender: TObject; aCol, aRow: Integer; const OldValue: string; var NewValue: String);
     procedure DomeFlatPositionClick(Sender: TObject);
     procedure FormDestroy(Sender: TObject);
+    procedure GuiderAutofocusClick(Sender: TObject);
     procedure latdegExit(Sender: TObject);
     procedure latdegKeyDown(Sender: TObject; var Key: Word; Shift: TShiftState);
     procedure LogDirDefaultClick(Sender: TObject);
@@ -1292,6 +1295,7 @@ begin
   Label101.Caption := rsTheMenuFileF;
   GroupBoxExpert.Caption:=rsExpertTrick;
   Label174.Caption:=rsDefocusAmoun;
+  GuiderAutofocus.Caption:=rsAutofocusUsi;
   PageAstrometry.Caption := rsAstrometry;
   GroupBox4.Caption := rsAstrometryOp;
   FocaleFromTelescope.Caption := rsFromTelescop;
@@ -2120,6 +2124,7 @@ end;
 
 procedure Tf_option.AutofocusmodeClick(Sender: TObject);
 begin
+  if Autofocusmode.ItemIndex<>0 then GuiderAutofocus.Checked:=false;
   AutofocusNotebook.PageIndex:=Autofocusmode.ItemIndex;
   PanelAutofocus.Visible:=(Autofocusmode.ItemIndex<4);
   PanelFocusStar.Visible:=PanelAutofocus.Visible;
@@ -2442,6 +2447,12 @@ end;
 procedure Tf_option.FormDestroy(Sender: TObject);
 begin
   ClearRoi;
+end;
+
+procedure Tf_option.GuiderAutofocusClick(Sender: TObject);
+begin
+  PanelFocusStar.Visible:=not GuiderAutofocus.Checked;
+  PanelExposure.Visible:=not GuiderAutofocus.Checked;
 end;
 
 procedure Tf_option.ButtonHelpClick(Sender: TObject);
