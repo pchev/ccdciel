@@ -18456,11 +18456,12 @@ begin
 
   if (n<>23) and((guidecamera.Status=devConnected) or (findercamera.Status=devConnected)) then begin
     if (guidecamera.Status=devConnected) and (findercamera.Status=devConnected) then
-      nc:=QuestionDlg (rsSelectCamera, rsSelectTheCam, mtCustom, [21, rsMainCamera, 22, rsGuider, 23, rsFinder], '') // not important if Gtk2 revert the button order
+      nc:=QuestionDlg (rsSelectCamera, rsSelectTheCam, mtCustom, [21, rsMainCamera, 22, rsGuider, 23, rsFinder, 24,rsCancel,'IsCancel'], '') // not important if Gtk2 revert the button order
     else if (guidecamera.Status=devConnected) then
-      nc:=QuestionDlg (rsSelectCamera, rsSelectTheCam, mtCustom, [21, rsMainCamera, 22, rsGuider], '')
+      nc:=QuestionDlg (rsSelectCamera, rsSelectTheCam, mtCustom, [21, rsMainCamera, 22, rsGuider, 24,rsCancel,'IsCancel'], '')
     else
-      nc:=QuestionDlg (rsSelectCamera, rsSelectTheCam, mtCustom, [21, rsMainCamera, 23, rsFinder], '');
+      nc:=QuestionDlg (rsSelectCamera, rsSelectTheCam, mtCustom, [21, rsMainCamera, 23, rsFinder, 24,rsCancel,'IsCancel'], '');
+    if nc=24 then exit;
     ncam:=nc-21;
   end;
 
