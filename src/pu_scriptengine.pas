@@ -388,6 +388,10 @@ begin
   else if varname='COVERSTATUS' then str:=cmd_coverstatus
   else if varname='CALIBRATORSTATUS' then str:=cmd_calibratorstatus
   else if varname='TELESCOPE_PIERSIDE' then str:=PierSideName[ord(mount.PierSide)]
+  else if varname='PREVIEW_GETBINNING' then str:=Preview.Binning.Text
+  else if varname='CAPTURE_GETBINNING' then str:=Capture.Binning.Text
+  else if varname='CAPTURE_GETOBJECTNAME' then str:=Capture.Fname.Text
+  else if varname='CAPTURE_GETFRAMETYPE' then str:=Capture.cbFrameType.Text
   else if varname='STR1' then str:=slist[0]
   else if varname='STR2' then str:=slist[1]
   else if varname='STR3' then str:=slist[2]
@@ -483,6 +487,8 @@ begin
   else if varname='OBS_LATITUDE' then x:=ObsLatitude
   else if varname='OBS_LONGITUDE' then x:=-ObsLongitude
   else if varname='OBS_ELEVATION' then x:=ObsElevation
+  else if varname='PREVIEW_GETEXPOSURE' then x:=Preview.Exposure
+  else if varname='CAPTURE_GETEXPOSURE' then x:=Capture.ExposureTime
   else if varname='DOUBLE1' then x:=dlist[0]
   else if varname='DOUBLE2' then x:=dlist[1]
   else if varname='DOUBLE3' then x:=dlist[2]
@@ -519,6 +525,8 @@ begin
   varname:=uppercase(varname);
   if varname='FOCUSERPOSITION' then i:=FFocuser.Position
   else if varname='CALIBRATORBRIGHTNESS' then i:=cmd_getcalibratorbrightness
+  else if varname='CAPTURE_GETCOUNT' then i:=Capture.SeqNum.Value
+  else if varname='CAPTURE_GETDITHER' then i:=Capture.DitherCount.Value
   else if varname='INT1' then i:=ilist[0]
   else if varname='INT2' then i:=ilist[1]
   else if varname='INT3' then i:=ilist[2]

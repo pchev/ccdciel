@@ -17124,8 +17124,16 @@ try
   else if method='FOCUSER_CONNECTED' then result:=result+'"result": '+BoolToStr((Focuser.Status=devConnected),tr,fa)
   else if method='CAMERA_CONNECTED' then result:=result+'"result": '+BoolToStr((Camera.Status=devConnected),tr,fa)
   else if method='PLANETARIUM_CONNECTED' then result:=result+'"result": '+BoolToStr(Planetarium.Connected,tr,fa)
+  else if method='PREVIEW_GETEXPOSURE' then result:=result+'"result": '+f_Preview.ExpTime.Text
+  else if method='PREVIEW_GETBINNING' then result:=result+'"result": "'+f_Preview.Binning.Text+'"'
   else if method='PREVIEW_RUNNING' then result:=result+'"result": '+BoolToStr(f_Preview.Running,tr,fa)
   else if method='PREVIEW_LOOP_RUNNING' then result:=result+'"result": '+BoolToStr(f_Preview.Loop,tr,fa)
+  else if method='CAPTURE_GETEXPOSURE' then result:=result+'"result": '+f_capture.ExpTime.Text
+  else if method='CAPTURE_GETBINNING' then result:=result+'"result": "'+f_capture.Binning.Text+'"'
+  else if method='CAPTURE_GETOBJECTNAME' then result:=result+'"result": "'+f_capture.Fname.Text+'"'
+  else if method='CAPTURE_GETCOUNT' then result:=result+'"result": '+f_capture.SeqNum.Text
+  else if method='CAPTURE_GETFRAMETYPE' then result:=result+'"result": "'+f_capture.cbFrameType.Text+'"'
+  else if method='CAPTURE_GETDITHER' then result:=result+'"result": '+f_capture.DitherCount.Text
   else if method='CAPTURE_RUNNING' then result:=result+'"result": '+BoolToStr(f_Capture.Running,tr,fa)
   else if method='TELESCOPERA' then result:=result+'"result": '+FormatFloat(f6,f_mount.CurrentRA)
   else if method='TELESCOPEDE' then result:=result+'"result": '+FormatFloat(f6,f_mount.CurrentDec)
