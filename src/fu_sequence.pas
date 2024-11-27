@@ -1206,6 +1206,7 @@ begin
     (Targets.Targets[Targets.CurrentTarget].objectname<>SkyFlatTxt) and
     (Targets.Targets[Targets.CurrentTarget].objectname<>ScriptTxt) and
     (T_Plan(Targets.Targets[Targets.CurrentTarget].plan).Running) and
+    (T_Plan(Targets.Targets[Targets.CurrentTarget].plan).Steps[T_Plan(Targets.Targets[Targets.CurrentTarget].plan).CurrentStep].steptype=0) and
     (T_Plan(Targets.Targets[Targets.CurrentTarget].plan).Steps[T_Plan(Targets.Targets[Targets.CurrentTarget].plan).CurrentStep].frtype=ord(LIGHT))
     then begin
        MountTrackingAlert:=true;
