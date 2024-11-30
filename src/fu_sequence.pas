@@ -1064,7 +1064,6 @@ begin
       PlanGrid.TopRow:=PlanRow;
       PlanGrid.Invalidate;
     end;
-    Application.ProcessMessages;
    end;
    // process autoguider problem during sequence
    if AutoguiderAlert then begin
