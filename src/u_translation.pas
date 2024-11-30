@@ -1585,6 +1585,8 @@ resourcestring
   rsMeasureTeles = 'Measure telescope cone error';
   rsColorizeSpec = 'Colorize spectra images';
   rsAutofocusUsi = 'Autofocus using the OAG camera';
+  rsRunAnInitial = 'Run an initialization script';
+  rsAdditionalSc = 'Additional script parameter';
 
 implementation
 
