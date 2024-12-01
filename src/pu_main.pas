@@ -685,6 +685,7 @@ type
     SaveAutofocusFX,SaveAutofocusFY,SaveAutofocusFW,SaveAutofocusFH,SaveAutofocusBX,SaveAutofocusBY: integer;
     SaveAutofocusGain, SaveAutofocusOffset, SaveAutofocusPreviewGain, SaveAutofocusPreviewOffset: integer;
     SaveGuiderAutofocusExposure: double;
+    SaveAutofocusBin, SaveGuiderAutofocusGain, SaveGuiderAutofocusOffset: integer;
     TerminateVcurve: boolean;
     ScrBmp,ScrGuideBmp,ScrFinderBmp: TBGRABitmap;
     ImageSaved: boolean;
@@ -14659,6 +14660,9 @@ var rx,ry,ns,n,i,s: integer;
     buf: string;
 begin
   SaveGuiderAutofocusExposure:=f_internalguider.Exposure.Value;
+  SaveAutofocusBin:=f_internalguider.Binning.Value;
+  SaveGuiderAutofocusGain:=f_internalguider.Gain.Value;
+  SaveGuiderAutofocusOffset:=f_internalguider.Offset.Value;
   CancelAutofocus:=false;
   f_starprofile.AutofocusResult:=false;
   if not (autoguider is T_autoguider_internal) then begin
@@ -14684,8 +14688,10 @@ begin
   if InternalguiderRunning then begin
     InternalguiderStop(nil);
   end;
-  if f_internalguider.SpectroFunctions and f_internalguider.cbUseAstrometry.Checked then
-    f_internalguider.Exposure.Value:=f_internalguider.AstrometryExp.value;
+  f_internalguider.Exposure.Value:=AutofocusExposure;
+  f_internalguider.Binning.Value:=AutofocusBinning;
+  f_internalguider.Gain.Value:=AutofocusGain;
+  f_internalguider.Offset.Value:=AutofocusOffset;
   if not guidecamera.ControlExposure(f_internalguider.Exposure.Value,f_internalguider.Binning.Value,f_internalguider.Binning.Value,LIGHT,ReadoutModeCapture,f_internalguider.Gain.Value,f_internalguider.Offset.Value) then begin
     NewMessage(rsExposureFail,1);
     f_starprofile.ChkAutofocusDown(false);
@@ -14766,6 +14772,9 @@ end;
 Procedure Tf_main.GuiderAutoFocusStop(Sender: TObject);
 begin
    f_internalguider.Exposure.Value := SaveGuiderAutofocusExposure;
+   f_internalguider.Binning.Value := SaveAutofocusBin;
+   f_internalguider.Gain.Value    := SaveGuiderAutofocusGain;
+   f_internalguider.Offset.Value  := SaveGuiderAutofocusOffset;
    if (f_capture.Running or f_sequence.Running) and (not autofocusing) then exit;
    InternalguiderStop(nil);
    f_starprofile.StarX:=-1;
