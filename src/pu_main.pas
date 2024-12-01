@@ -8553,7 +8553,6 @@ if f_mount.BtnGoto.Caption=rsGoto then begin
    f_goto.PanelPxSz.Visible:=false;
    f_goto.PanelAltAz.Visible:=true;
    f_goto.ButtonOK.Caption:=rsGoto;
-   f_goto.GotoAstrometry.Checked:=true;
    f_goto.ShowModal;
    if f_goto.ModalResult=mrok then begin
      tra:= f_goto.Ra.Text;
