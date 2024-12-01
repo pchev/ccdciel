@@ -1589,6 +1589,7 @@ resourcestring
   rsEnlargeGuide = 'Enlarge guide image';
   rsPerSlitOffse = 'Per slit offset';
   rsSlit = 'Slit';
+  rsInstrumentNa = 'Instrument name';
 
 implementation
 

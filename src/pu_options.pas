@@ -1083,6 +1083,7 @@ begin
   Label5.Caption := rsObserverName;
   Label10.Caption := rsObservatoryN;
   Label11.Caption := rsTelescopeNam;
+  Label159.Caption:=rsInstrumentNa;
   Label35.Caption := rsLatitude;
   Label36.Caption := rsLongitude;
   Label108.Caption := rsElevation;

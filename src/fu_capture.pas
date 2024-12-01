@@ -176,6 +176,8 @@ begin
   Label5.Caption:=rsType;
   CheckBoxDither.Caption:=rsDitherEvery;
   CheckBoxFocus.Caption:=rsFocusEvery;
+  CheckBoxFocusTemp.Caption:=rsAutofocusAft2;
+  CheckBoxFocusHFD.Caption:=rsAutofocusHFD2;
   BtnStart.Caption:=rsStart;
   ExpTime.Hint:=rsExposureTime;
   Binning.Hint:=rsCameraBinnin;

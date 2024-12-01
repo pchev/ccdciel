@@ -5949,3 +5949,7 @@ msgstr ""
 msgid "Slit"
 msgstr ""
 
+#: u_translation:rsinstrumentna
+msgid "Instrument name"
+msgstr ""
+
