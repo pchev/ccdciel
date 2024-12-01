@@ -5546,10 +5546,6 @@ msgstr ""
 msgid "Set lock position"
 msgstr ""
 
-#: u_translation:rslockposition
-msgid "Lock position"
-msgstr ""
-
 #: u_translation:rsclickonimage
 msgid "Click on image to set"
 msgstr ""
@@ -5931,5 +5927,25 @@ msgstr ""
 
 #: u_translation:rsautofocususi
 msgid "Autofocus using the OAG camera"
+msgstr ""
+
+#: u_translation:rsrunaninitial
+msgid "Run an initialization script"
+msgstr ""
+
+#: u_translation:rsadditionalsc
+msgid "Additional script parameter"
+msgstr ""
+
+#: u_translation:rsenlargeguide
+msgid "Enlarge guide image"
+msgstr ""
+
+#: u_translation:rsperslitoffse
+msgid "Per slit offset"
+msgstr ""
+
+#: u_translation:rsslit
+msgid "Slit"
 msgstr ""
 
