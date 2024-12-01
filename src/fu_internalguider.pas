@@ -37,7 +37,6 @@ type
   dither_info=record raposition,decposition : double; end;//for internal guider
   dither_positionarray=array of dither_info;
 
-
 type
   { Tf_internalguider }
 
@@ -69,8 +68,19 @@ type
     cbEnlargeImage: TCheckBox;
     CheckBoxBacklash: TCheckBox;
     CheckBoxTrackSolar1: TCheckBox;
+    cbSlitList: TComboBox;
     disable_guiding1: TCheckBox;
+    MenuItemAddSlit: TMenuItem;
+    MenuItemDelSlit: TMenuItem;
+    MenuSlitOffset: TButton;
+    PopupMenuSlit: TPopupMenu;
+    SlitOffsetX: TFloatSpinEdit;
+    SlitOffsetY: TFloatSpinEdit;
     framesize1: TComboBox;
+    Label51: TLabel;
+    Label52: TLabel;
+    Label53: TLabel;
+    Label54: TLabel;
     Panel10: TPanel;
     GuideSpeedRA: TFloatSpinEdit;
     GuideSpeedDEC: TFloatSpinEdit;
@@ -95,8 +105,8 @@ type
     Label26: TLabel;
     Label27: TLabel;
     Label30: TLabel;
-    edLockX: TFloatSpinEdit;
-    edLockY: TFloatSpinEdit;
+    edRefX: TFloatSpinEdit;
+    edRefY: TFloatSpinEdit;
     Label21: TLabel;
     Label28: TLabel;
     Label29: TLabel;
@@ -150,7 +160,7 @@ type
     measure_method2: TCheckBox;
     MenuItemClearDark: TMenuItem;
     MenuItemCaptureDark: TMenuItem;
-    MenuItem2: TMenuItem;
+    MenuItemUpdSlit: TMenuItem;
     minHFD1: TFloatSpinEdit;
     minSNR1: TSpinEdit;
     pa1: TEdit;
@@ -221,6 +231,9 @@ type
     TabSheetAdvanced: TTabSheet;
     TabSheetGuider: TTabSheet;
     Title: TLabel;
+    procedure btnAddSlitOffsetClick(Sender: TObject);
+    procedure btnDelSlitOffsetClick(Sender: TObject);
+    procedure btnUpdSlitOffsetClick(Sender: TObject);
     procedure BtnZoom05Click(Sender: TObject);
     procedure BtnZoom1Click(Sender: TObject);
     procedure BtnZoom2Click(Sender: TObject);
@@ -235,6 +248,7 @@ type
     procedure ButtonStopClick(Sender: TObject);
     procedure cbDrawSlitChange(Sender: TObject);
     procedure cbGuideLockChange(Sender: TObject);
+    procedure cbSlitListChange(Sender: TObject);
     procedure cbSpectroChange(Sender: TObject);
     procedure cbUseAstrometryChange(Sender: TObject);
     procedure cbEnlargeImageChange(Sender: TObject);
@@ -247,6 +261,7 @@ type
     procedure ForceGuideSpeedChange(Sender: TObject);
     procedure ForceRedraw(Sender: TObject);
     procedure ExposureChange(Sender: TObject);
+    procedure MenuSlitOffsetMouseDown(Sender: TObject; Button: TMouseButton; Shift: TShiftState; X, Y: Integer);
     procedure LongestPulse1Change(Sender: TObject);
     procedure MenuItemCaptureDarkClick(Sender: TObject);
     procedure MenuItemClearDarkClick(Sender: TObject);
@@ -283,6 +298,7 @@ type
     FGuideLockNextX, FGuideLockNextY: integer;
     FonShowMessage: TNotifyMsg;
     Fcamera: T_camera;
+    CurrentSlit: integer;
 
     procedure msg(txt:string; level: integer);
     procedure ShowMinMove;
@@ -347,10 +363,12 @@ type
     function GetFGuideMultistar:Boolean;
     procedure SetGuideLock(value:Boolean);
     function GetGuideLock:Boolean;
+    function GetRefX:double;
+    procedure SetRefX(value:double);
+    function GetRefY:double;
+    procedure SetRefY(value:double);
     function GetLockX:double;
-    procedure SetLockX(value:double);
     function GetLockY:double;
-    procedure SetLockY(value:double);
     function GetSearchWinMin:integer;
     procedure SetSearchWinMin(value:integer);
     function GetSearchWinMax:integer;
@@ -389,6 +407,7 @@ type
     function CalibrationIsValid(out detail: string): boolean;
     function Snapshot(exp: double; fn: string):boolean;
     function SaveFits(fn: string):boolean;
+    procedure ClearSlitList;
     property onShowMessage: TNotifyMsg read FonShowMessage write FonShowMessage;
     property Camera: T_camera read Fcamera write Fcamera;
     property onLoop: TNotifyEvent read FonLoop write FonLoop;
@@ -437,8 +456,10 @@ type
     property GuideLock: boolean read GetGuideLock write SetGuideLock; // single star slit guiding
     property ForceGuideMultistar: boolean read GetFGuideMultistar write SetFGuideMultistar; // force multistar after star lock
     property ForceMultistar: boolean read GetForceMultistar write SetForceMultistar; // multistar mode now required
-    property LockX: double read GetLockX write SetLockX;        // slit lock position
-    property LockY: double read GetLockY write SetLockY;
+    property RefX: double read GetRefX write SetRefX;           // slit reference position
+    property RefY: double read GetRefY write SetRefY;
+    property LockX: double read GetLockX;        // slit lock position (reference + slit offset)
+    property LockY: double read GetLockY;
     property OffsetX: double read GetOffsetX write SetOffsetX;  // guide offset relative to reference, used by dithering, solar tracking, spectro offset
     property OffsetY: double read GetOffsetY write SetOffsetY;
     property GuideLockNextX: integer read FGuideLockNextX write FGuideLockNextX;
@@ -521,6 +542,7 @@ end;
 
 destructor  Tf_internalguider.Destroy;
 begin
+ ClearSlitList;
  inherited Destroy;
 end;
 
@@ -532,6 +554,7 @@ begin
   ButtonGuide.Caption:=rsGuide;
   ButtonStop.Caption:=rsStop;
   ButtonCalibrate.Caption:=rsCalibrate;
+  cbEnlargeImage.Caption:=rsEnlargeGuide;
   Label2.Caption:='α '+rsGain+':';
   Label3.Caption:='δ '+rsGain+':';
   Label1.Caption:=rsHysteresis+':';
@@ -583,9 +606,17 @@ begin
   cbSpectro.Caption:=rsActivateSpec;
   cbGuideLock.Caption:=rsActivateSing;
   GroupBoxLock.Caption:=rsGuidePositio;
-  label28.Caption:=rsLockPosition+' X';
-  label29.Caption:=rsLockPosition+' Y';
+  label28.Caption:='X';
+  label29.Caption:='Y';
   ButtonSetLock.Caption:=rsClickOnImage;
+  Label54.Caption:=rsPerSlitOffse;
+  Label53.Caption:=rsSlit;
+  Label51.Caption:=rsOffset+' X';
+  Label52.Caption:=rsOffset+' Y';
+  MenuSlitOffset.Caption:=rsManage;
+  MenuItemAddSlit.Caption:=rsAdd;
+  MenuItemUpdSlit.Caption:=rsModify;
+  MenuItemDelSlit.Caption:=rsDelete;
   cbUseAstrometry.Caption:=rsUseAstrometr2;
   label39.Caption:=rsAstrometryEx;
   GroupBoxOffset.Caption:=rsMultiStarGui;
@@ -1521,24 +1552,31 @@ begin
   result:=FForceMultiStar;
 end;
 
-function Tf_internalguider.GetLockX:double;
+function Tf_internalguider.GetRefX:double;
 begin
- result:=edLockX.value;
+ result:=edRefX.value;
+end;
+procedure Tf_internalguider.SetRefX(value:double);
+begin
+ edRefX.value:=value;
+end;
+function Tf_internalguider.GetRefY:double;
+begin
+ result:=edRefY.value;
+end;
+procedure Tf_internalguider.SetRefY(value:double);
+begin
+ edRefY.value:=value;
 end;
 
-procedure Tf_internalguider.SetLockX(value:double);
+function Tf_internalguider.GetLockX:double;
 begin
- edLockX.value:=value;
+ result:=edRefX.value + SlitOffsetX.Value;
 end;
 
 function Tf_internalguider.GetLockY:double;
 begin
- result:=edLockY.value;
-end;
-
-procedure Tf_internalguider.SetLockY(value:double);
-begin
- edLockY.value:=value;
+ result:=edRefY.value + SlitOffsetY.value;
 end;
 
 function Tf_internalguider.GetSearchWinMin:integer;
@@ -1759,6 +1797,76 @@ begin
   result:=rgDitherMode.ItemIndex=0;
 end;
 
+procedure Tf_internalguider.ClearSlitList;
+var i: integer;
+begin
+  for i:=cbSlitList.Items.Count-1 downto 0 do begin
+    if cbSlitList.Items.Objects[i]<>nil then cbSlitList.Items.Objects[i].Free;
+    cbSlitList.Items.Delete(i);
+  end;
+end;
+
+procedure Tf_internalguider.MenuSlitOffsetMouseDown(Sender: TObject; Button: TMouseButton; Shift: TShiftState; X, Y: Integer);
+var p: TPoint;
+begin
+  p.x:=0;
+  p.y:=MenuSlitOffset.Height;
+  p:=MenuSlitOffset.ClientToScreen(p);
+  PopupMenuSlit.PopUp(p.x,p.y);
+end;
+
+procedure Tf_internalguider.btnAddSlitOffsetClick(Sender: TObject);
+var so:TSlitOffset;
+    i: integer;
+begin
+  so:=TSlitOffset.Create;
+  so.slitname:=cbSlitList.text;
+  so.x:=SlitOffsetX.Value;
+  so.y:=SlitOffsetY.Value;
+  i:=cbSlitList.Items.AddObject(so.slitname,so);
+  cbSlitList.ItemIndex:=i;
+  CurrentSlit:=i;
+end;
+
+procedure Tf_internalguider.btnUpdSlitOffsetClick(Sender: TObject);
+var so:TSlitOffset;
+    i: integer;
+begin
+  i:=CurrentSlit;
+  if (i>=0)and(i<cbSlitList.Items.Count) then begin
+    cbSlitList.Items[i]:=cbSlitList.text;
+    so:=TSlitOffset(cbSlitList.Items.Objects[i]);
+    so.slitname:=cbSlitList.text;
+    so.x:=SlitOffsetX.Value;
+    so.y:=SlitOffsetY.Value;
+  end;
+end;
+
+procedure Tf_internalguider.btnDelSlitOffsetClick(Sender: TObject);
+var i: integer;
+begin
+ i:=CurrentSlit;
+ if (i>=0)and(i<cbSlitList.Items.Count) then begin
+   if cbSlitList.Items.Objects[i]<>nil then cbSlitList.Items.Objects[i].Free;
+   cbSlitList.Items.Delete(i);
+   cbSlitList.ItemIndex:=i-1;
+   cbSlitListChange(Sender);
+ end;
+end;
+
+procedure Tf_internalguider.cbSlitListChange(Sender: TObject);
+var so:TSlitOffset;
+    i: integer;
+begin
+  i:=cbSlitList.ItemIndex;
+  if (i>=0)and(CurrentSlit<cbSlitList.Items.Count) then begin
+    CurrentSlit:=i;
+    so:=TSlitOffset(cbSlitList.Items.Objects[CurrentSlit]);
+    cbSlitList.text := so.slitname;
+    SlitOffsetX.Value := so.x;
+    SlitOffsetY.Value := so.y;
+  end;
+end;
 
 end.
 

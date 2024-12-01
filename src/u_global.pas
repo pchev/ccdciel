@@ -178,6 +178,11 @@ type
     name: string;
   end;
 
+  TSlitOffset = class(TObject)
+    x,y: double;
+    slitname: string;
+  end;
+
   // libcdcwcs
  type
    {$ifdef cpu32}

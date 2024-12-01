@@ -4803,6 +4803,7 @@ var i,n: integer;
     posprev,poscapt:integer;
     binprev,bincapt:string;
     roi:TRoi;
+    so: TSlitOffset;
     ReverseDec, InverseSolarTracking : boolean;
 begin
   ShowHint:=screenconfig.GetValue('/Hint/Show',true);
@@ -5045,9 +5046,24 @@ begin
   PHD2GuideLockY:=config.GetValue('/Autoguider/Lock/GuideLockY',0.0);
   f_internalguider.GuideLock:=config.GetValue('/Autoguider/Lock/GuideSetLock',false);
   f_internalguider.ForceGuideMultistar:=config.GetValue('/Autoguider/Lock/ForceGuideMultistar',false);
-  f_internalguider.LockX:=config.GetValue('/Autoguider/Lock/GuideLockX',0.0);
-  f_internalguider.LockY:=config.GetValue('/Autoguider/Lock/GuideLockY',0.0);
-
+  f_internalguider.RefX:=config.GetValue('/Autoguider/Lock/GuideLockX',0.0);
+  f_internalguider.RefY:=config.GetValue('/Autoguider/Lock/GuideLockY',0.0);
+  f_internalguider.ClearSlitList;
+  n:=config.GetValue('/InternalGuider/Spectro/Slit/NumSlit',0);
+  for i:=1 to n do begin
+     so:=TSlitOffset.create;
+     so.slitname:=config.GetValue('/InternalGuider/Spectro/Slit/Slit'+inttostr(i)+'/Name','');
+     so.X:=round(config.GetValue('/InternalGuider/Spectro/Slit/Slit'+inttostr(i)+'/X',0));
+     so.Y:=round(config.GetValue('/InternalGuider/Spectro/Slit/Slit'+inttostr(i)+'/Y',0));
+     f_internalguider.cbSlitList.Items.AddObject(so.slitname,so);
+  end;
+  if n>0 then begin
+    i:=config.GetValue('/InternalGuider/Spectro/Slit/CurrentSlit',-1);
+    if i>=0 then begin
+      f_internalguider.cbSlitList.ItemIndex:=i;
+      f_internalguider.cbSlitListChange(nil);
+    end;
+  end;
   f_internalguider.RAgain:=config.GetValue('/InternalGuider/RaGain',50);
   f_internalguider.DECgain:=config.GetValue('/InternalGuider/DecGain',50);
   f_internalguider.RA_hysteresis:=config.GetValue('/InternalGuider/RaHysteresis',30);
@@ -5700,6 +5716,8 @@ begin
 end;
 
 procedure Tf_main.SaveInternalGuiderSettings;
+var so:TSlitOffset;
+    i,n: integer;
 begin
   config.SetValue('/InternalGuider/RaGain',f_internalguider.ragain);
   config.SetValue('/InternalGuider/DecGain',f_internalguider.decgain);
@@ -5750,8 +5768,20 @@ begin
   config.SetValue('/InternalGuider/Spectro/SpectroFunctions',f_internalguider.SpectroFunctions);
   config.SetValue('/Autoguider/Lock/GuideSetLock',f_internalguider.GuideLock);
   config.SetValue('/Autoguider/Lock/ForceGuideMultistar',f_internalguider.ForceGuideMultistar);
-  config.SetValue('/Autoguider/Lock/GuideLockX',f_internalguider.LockX);
-  config.SetValue('/Autoguider/Lock/GuideLockY',f_internalguider.LockY);
+  config.SetValue('/Autoguider/Lock/GuideLockX',f_internalguider.RefX);
+  config.SetValue('/Autoguider/Lock/GuideLockY',f_internalguider.RefY);
+
+  n:=f_internalguider.cbSlitList.Items.Count;
+  config.SetValue('/InternalGuider/Spectro/Slit/NumSlit',n);
+  config.SetValue('/InternalGuider/Spectro/Slit/CurrentSlit',f_internalguider.cbSlitList.ItemIndex);
+  for i:=1 to n do begin
+    if f_internalguider.cbSlitList.Items.Objects[i-1]<>nil then begin
+      so:=TSlitOffset(f_internalguider.cbSlitList.Items.Objects[i-1]);
+      config.SetValue('/InternalGuider/Spectro/Slit/Slit'+inttostr(i)+'/Name',so.slitname);
+      config.SetValue('/InternalGuider/Spectro/Slit/Slit'+inttostr(i)+'/X',so.X);
+      config.SetValue('/InternalGuider/Spectro/Slit/Slit'+inttostr(i)+'/Y',so.Y);
+    end;
+  end;
   config.SetValue('/InternalGuider/Spectro/SearchWinMin',f_internalguider.SearchWinMin);
   config.SetValue('/InternalGuider/Spectro/SearchWinMax',f_internalguider.SearchWinMax);
   config.SetValue('/InternalGuider/Spectro/DrawSlit',f_internalguider.DrawSlit);
@@ -18197,8 +18227,8 @@ if InternalGuiderSetLockPosition and guidefits.HeaderInfo.valid and guidefits.Im
   GuideMx:=X;
   GuideMy:=Y;
   GuiderScreen2fits(GuideMx,GuideMy,true,xx,yy);
-  f_internalguider.LockX:=xx;
-  f_internalguider.LockY:=guideimg_Height-yy;
+  f_internalguider.RefX:=xx;
+  f_internalguider.RefY:=guideimg_Height-yy;
 end;
 f_internalguider.ButtonSetLock.Down:=false;
 InternalGuiderSetLockPosition:=false;

@@ -1488,7 +1488,6 @@ resourcestring
   rsTarget = 'Target';
   rsSpectroscopy = 'Spectroscopy';
   rsSetLockPosit = 'Set lock position';
-  rsLockPosition = 'Lock position';
   rsClickOnImage = 'Click on image to set';
   rsStarSearchAr = 'Star search area';
   rsGuideBoxSize = 'Guide box size';
@@ -1587,6 +1586,9 @@ resourcestring
   rsAutofocusUsi = 'Autofocus using the OAG camera';
   rsRunAnInitial = 'Run an initialization script';
   rsAdditionalSc = 'Additional script parameter';
+  rsEnlargeGuide = 'Enlarge guide image';
+  rsPerSlitOffse = 'Per slit offset';
+  rsSlit = 'Slit';
 
 implementation
 

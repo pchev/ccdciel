@@ -1620,8 +1620,8 @@ begin
    config.SetValue('/Autoguider/Lock/GuideLockX',x);
    config.SetValue('/Autoguider/Lock/GuideLockY',y);
    FInternalGuider.GuideLock:=True;
-   FInternalGuider.LockX:=x;
-   FInternalGuider.LockY:=y;
+   FInternalGuider.RefX:=x;
+   FInternalGuider.RefY:=y;
    PHD2GuideSetLock:=True;
    PHD2GuideLockX:=x;
    PHD2GuideLockY:=y;
