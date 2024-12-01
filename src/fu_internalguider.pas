@@ -70,11 +70,18 @@ type
     CheckBoxTrackSolar1: TCheckBox;
     cbSlitList: TComboBox;
     disable_guiding1: TCheckBox;
+    Label55: TLabel;
+    Label56: TLabel;
+    Label57: TLabel;
     MenuItemAddSlit: TMenuItem;
     MenuItemDelSlit: TMenuItem;
     MenuSlitOffset: TButton;
+    Panel12: TPanel;
+    Panel13: TPanel;
+    Panel14: TPanel;
     PopupMenuSlit: TPopupMenu;
     SlitOffsetX: TFloatSpinEdit;
+    StarOffsetX: TFloatSpinEdit;
     SlitOffsetY: TFloatSpinEdit;
     framesize1: TComboBox;
     Label51: TLabel;
@@ -203,6 +210,7 @@ type
     edslitWinMax: TSpinEdit;
     InitialCalibrationStep: TSpinEdit;
     ShortestPulse1: TSpinEdit;
+    StarOffsetY: TFloatSpinEdit;
     spSlitX: TSpinEdit;
     spSlitY: TSpinEdit;
     spSlitW: TSpinEdit;
@@ -363,10 +371,15 @@ type
     function GetFGuideMultistar:Boolean;
     procedure SetGuideLock(value:Boolean);
     function GetGuideLock:Boolean;
+    // slit reference position
     function GetRefX:double;
     procedure SetRefX(value:double);
     function GetRefY:double;
     procedure SetRefY(value:double);
+    // slit current position including slit offset
+    function GetSlitPosX:double;
+    function GetSlitPosY:double;
+    // guide position including slit and star offset
     function GetLockX:double;
     function GetLockY:double;
     function GetSearchWinMin:integer;
@@ -456,9 +469,11 @@ type
     property GuideLock: boolean read GetGuideLock write SetGuideLock; // single star slit guiding
     property ForceGuideMultistar: boolean read GetFGuideMultistar write SetFGuideMultistar; // force multistar after star lock
     property ForceMultistar: boolean read GetForceMultistar write SetForceMultistar; // multistar mode now required
-    property RefX: double read GetRefX write SetRefX;           // slit reference position
+    property RefX: double read GetRefX write SetRefX;    // slit reference position
     property RefY: double read GetRefY write SetRefY;
-    property LockX: double read GetLockX;        // slit lock position (reference + slit offset)
+    property SlitPosX:double read GetSlitPosX;           // slit current position including slit offset
+    property SlitPosY:double read GetSlitPosY;
+    property LockX: double read GetLockX;                // guide position including slit and star offset
     property LockY: double read GetLockY;
     property OffsetX: double read GetOffsetX write SetOffsetX;  // guide offset relative to reference, used by dithering, solar tracking, spectro offset
     property OffsetY: double read GetOffsetY write SetOffsetY;
@@ -613,6 +628,9 @@ begin
   Label53.Caption:=rsSlit;
   Label51.Caption:=rsOffset+' X';
   Label52.Caption:=rsOffset+' Y';
+  Label55.Caption:=rsGuideStarOff;
+  Label56.Caption:=rsOffset+' X';
+  Label57.Caption:=rsOffset+' Y';
   MenuSlitOffset.Caption:=rsManage;
   MenuItemAddSlit.Caption:=rsAdd;
   MenuItemUpdSlit.Caption:=rsModify;
@@ -1571,10 +1589,20 @@ end;
 
 function Tf_internalguider.GetLockX:double;
 begin
- result:=edRefX.value + SlitOffsetX.Value;
+ result:=edRefX.value + SlitOffsetX.Value + StarOffsetX.Value;
 end;
 
 function Tf_internalguider.GetLockY:double;
+begin
+ result:=edRefY.value + SlitOffsetY.value + StarOffsetY.Value;
+end;
+
+function Tf_internalguider.GetSlitPosX:double;
+begin
+ result:=edRefX.value + SlitOffsetX.Value;
+end;
+
+function Tf_internalguider.GetSlitPosY:double;
 begin
  result:=edRefY.value + SlitOffsetY.value;
 end;

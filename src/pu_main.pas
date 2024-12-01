@@ -18009,15 +18009,27 @@ if (guidefits.HeaderInfo.naxis>0) and guidefits.ImageValid then begin
   guideimg_Width:=ImaGuideBmp.Width;
   guideimg_Height:=ImaGuideBmp.Height;
   if f_internalguider.SpectroFunctions then begin
-    // always draw lock position
+    // always draw slit position
     ImaGuideBmp.Canvas.Pen.Mode:=pmCopy;
     ImaGuideBmp.Canvas.Pen.Style:=psSolid;
     ImaGuideBmp.Canvas.Pen.Width:=1;
-    xs:=round(f_internalguider.LockX);
-    ys:=guideimg_Height-round(f_internalguider.LockY);
+    xs:=round(f_internalguider.SlitPosX);
+    ys:=guideimg_Height-round(f_internalguider.SlitPosY);
     ImaGuideBmp.Canvas.Pen.Color:=clGreen;
     ImaGuideBmp.Canvas.Line(xs,0,xs,guideimg_Height);
     ImaGuideBmp.Canvas.Line(0,ys,guideimg_Width,ys);
+    // draw single guide star lock position
+    if f_internalguider.GuideLock then begin
+      xs:=round(f_internalguider.LockX);
+      ys:=round(f_internalguider.LockY);
+      if (xs<>0)or(ys<>0) then begin
+        r:=round(f_internalguider.SearchWinMin);
+        ys:=guideimg_Height-ys;
+        ImaGuideBmp.Canvas.Pen.Color:=clGreen;
+        ImaGuideBmp.Canvas.Line(xs-r,ys,xs+r,ys);
+        ImaGuideBmp.Canvas.Line(xs,ys-r,xs,ys+r);
+      end;
+    end;
     // draw selected star if using single star
     if f_internalguider.GuideLock and(not InternalguiderGuiding)and(not InternalguiderCalibrating)and(not InternalguiderCalibratingBacklash)and(f_internalguider.GuideLockNextX>0)and(f_internalguider.GuideLockNextY>0) then begin
       xs:=f_internalguider.GuideLockNextX;

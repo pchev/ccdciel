@@ -1590,6 +1590,7 @@ resourcestring
   rsPerSlitOffse = 'Per slit offset';
   rsSlit = 'Slit';
   rsInstrumentNa = 'Instrument name';
+  rsGuideStarOff = 'Guide star offset';
 
 implementation
 
