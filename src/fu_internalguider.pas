@@ -156,6 +156,7 @@ type
     pa1: TEdit;
     PageControl2: TPageControl;
     Panel11: TPanel;
+    PanelSlitDrawing: TPanel;
     PanelImage: TPanel;
     PanelGuideSpeed: TPanel;
     Panel4: TPanel;
@@ -883,11 +884,7 @@ end;
 
 procedure Tf_internalguider.cbDrawSlitChange(Sender: TObject);
 begin
-  spSlitX.Enabled:=cbDrawSlit.Checked;
-  spSlitY.Enabled:=cbDrawSlit.Checked;
-  spSlitW.Enabled:=cbDrawSlit.Checked;
-  spSlitL.Enabled:=cbDrawSlit.Checked;
-  spSlitPA.Enabled:=cbDrawSlit.Checked;
+  PanelSlitDrawing.Visible:=cbDrawSlit.Checked;
   ForceRedraw(nil);
 end;
 
