@@ -17218,7 +17218,7 @@ try
   else if method='INTERNALGUIDER_GETSPECTROASTROMETRYEXPOSURE' then result:=result+'"result": '+StringReplace(f_internalguider.AstrometryExp.text,',','.',[])
   else if method='INTERNALGUIDER_GETSPECTROSLITNAME' then result:=result+'"result": "'+f_internalguider.cbSlitList.text+'"'
   else if method='INTERNALGUIDER_GETSPECTROGUIDESTAROFFSET' then result:=result+'"result": ['+StringReplace(f_internalguider.StarOffsetX.text,',','.',[])+','+StringReplace(f_internalguider.StarOffsetY.text,',','.',[])+']'
-  else if method='INTERNALGUIDER_GETSPECTROMULITSTAROFFSET' then result:=result+'"result": ['+StringReplace(f_internalguider.edOffsetX.text,',','.',[])+','+StringReplace(f_internalguider.edOffsetY.text,',','.',[])+']'
+  else if method='INTERNALGUIDER_GETSPECTROMULTISTAROFFSET' then result:=result+'"result": ['+StringReplace(f_internalguider.edOffsetX.text,',','.',[])+','+StringReplace(f_internalguider.edOffsetY.text,',','.',[])+']'
   // execute command without parameter
   else if method='TELESCOPE_ABORTMOTION' then result:=result+'"result":{"status": "'+f_scriptengine.cmd_MountAbortMotion+'"}'
   else if method='TELESCOPE_TRACK' then result:=result+'"result":{"status": "'+f_scriptengine.cmd_MountTrack+'"}'
