@@ -11933,6 +11933,7 @@ end;
 procedure Tf_main.CameraSaveNewImage;
 var fn,fd,buf: string;
     framestr,objectstr,binstr,expstr,filterstr: string;
+    i: integer;
 begin
 try
  {$ifdef debug_raw}writeln(FormatDateTime(dateiso,Now)+blank+'Camera save new image');{$endif}
@@ -11957,7 +11958,7 @@ try
  // construct file name
  fn:=CaptureFilename(fits,fd,framestr,objectstr,expstr,binstr,f_sequence.Running);
  // save the file
- if (SaveFormat=ffFITS) or FileStackFloat then begin
+ if (SaveFormat=ffFITS) or (FileStackFloat and fits.Header.Valueof('STACKCNT',i) and (i>1)) then begin
    fn:=slash(fd)+fn+FitsFileExt;
    fits.SaveToFile(fn,FilePack,FileStackFloat,true);
  end
