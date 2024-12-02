@@ -2706,7 +2706,7 @@ begin
   FrameBin:=config.GetValue('/CCDframe/FrameBin',1);
 
   f_visu.Gamma.Value:=config.GetValue('/Visu/Gamma',1.0);
-  f_visu.HistBar.Position:=config.GetValue('/Visu/HistBar',50);
+  f_visu.HistBarPosition:=config.GetValue('/Visu/HistBar',50);
   f_visu.BtnFlipHorz.Down:=config.GetValue('/Visu/FlipHorz',false);
   f_visu.BtnFlipVert.Down:=config.GetValue('/Visu/FlipVert',false);
   f_visu.BtnClipRange.Down:=config.GetValue('/Visu/ClipRange',false);
@@ -5663,7 +5663,7 @@ begin
    config.SetValue('/Sequence/EditTarget/SepPos2',f_EditTargets.PanelTargetDetail.Width);
 
    config.SetValue('/Visu/Gamma',f_visu.Gamma.Value);
-   config.SetValue('/Visu/HistBar',f_visu.HistBar.Position);
+   config.SetValue('/Visu/HistBar',f_visu.HistBarPosition);
    config.SetValue('/Visu/FlipHorz',f_visu.BtnFlipHorz.Down);
    config.SetValue('/Visu/FlipVert',f_visu.BtnFlipVert.Down);
    config.SetValue('/Visu/ClipRange',f_visu.BtnClipRange.Down);
