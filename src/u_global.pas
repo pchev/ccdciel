@@ -530,6 +530,7 @@ var
   FilePack,FileStackFloat,FileRemoveSpace: boolean;
   FitsFileExt: string;
   FileSequenceWidth: integer;
+  LastCaptureFile: string;
   UseRotator: boolean;
   CanSetGainOffset, hasGain, hasGainISO, hasOffset: boolean;
   ISOList: TStringList;

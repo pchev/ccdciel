@@ -1547,6 +1547,7 @@ begin
   learningvcurve:=false;
   autofocusing:=false;
   LastROIname:='';
+  LastCaptureFile:='';
   CameraProcessingImage:=false;
   CameraProcessingNum:=0;
   CancelAutofocus:=false;
@@ -11969,14 +11970,11 @@ try
  else
    raise exception.Create('Unexpected file format '+inttostr(ord(SaveFormat)));
  inc(CurrentDoneCount);
- if FilePack then begin
-   NewMessage(Format(rsSavedFile, [fn+'.fz']),1);
-   buf:=Format(rsSaved, [fn+'.fz']);
- end
- else begin
-   NewMessage(Format(rsSavedFile, [fn]),1);
-   buf:=Format(rsSaved, [fn]);
- end;
+ LastCaptureFile:=fn;
+ if FilePack then
+   LastCaptureFile:=LastCaptureFile+'.fz';
+ NewMessage(Format(rsSavedFile, [LastCaptureFile]),1);
+ buf:=Format(rsSaved, [LastCaptureFile]);
  if camera.ImageFormat<>'.fits' then buf:=UpperCase(camera.ImageFormat)+' '+buf;
  if fits.HeaderInfo.valid then buf:=buf+' '+inttostr(fits.HeaderInfo.naxis1)+'x'+inttostr(fits.HeaderInfo.naxis2);
  StatusBar1.Panels[panelfile].Text:=buf;
@@ -17178,6 +17176,7 @@ try
   else if method='CAPTURE_GETFRAMETYPE' then result:=result+'"result": "'+f_capture.cbFrameType.Text+'"'
   else if method='CAPTURE_GETDITHER' then result:=result+'"result": '+f_capture.DitherCount.Text
   else if method='CAPTURE_RUNNING' then result:=result+'"result": '+BoolToStr(f_Capture.Running,tr,fa)
+  else if method='CAPTURE_GETLASTFILENAME' then result:=result+'"result": "'+LastCaptureFile+'"'
   else if method='TELESCOPERA' then result:=result+'"result": '+FormatFloat(f6,f_mount.CurrentRA)
   else if method='TELESCOPEDE' then result:=result+'"result": '+FormatFloat(f6,f_mount.CurrentDec)
   else if method='OBS_LATITUDE' then result:=result+'"result": '+FormatFloat(f6,ObsLatitude)
