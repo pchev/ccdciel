@@ -12160,19 +12160,6 @@ if (fits.HeaderInfo.naxis>0) and fits.ImageValid then begin
   end;
   img_Width:=ImaBmp.Width;
   img_Height:=ImaBmp.Height;
-  if f_visu.BullsEye then begin
-    {$ifdef debug_raw}writeln(FormatDateTime(dateiso,Now)+blank+'BullsEye');{$endif}
-    co:=ColorToBGRA(clRed);
-    cx:=img_Width div 2;
-    cy:=img_Height div 2;
-    imabmp.DrawHorizLine(0,cy,img_Width,co);
-    imabmp.DrawVertLine(cx,0,img_Height,co);
-    s:=min(img_Height,img_Width) div 3;
-    imabmp.EllipseAntialias(cx,cy,s,s,co,1);
-    s:=min(img_Height,img_Width) div 8;
-    imabmp.EllipseAntialias(cx,cy,s,s,co,1);
-
-  end;
   {$ifdef debug_raw}writeln(FormatDateTime(dateiso,Now)+blank+'PlotImage');{$endif}
   PlotImage;
   {$ifdef debug_raw}writeln(FormatDateTime(dateiso,Now)+blank+'PlotImage end');{$endif}
@@ -12196,6 +12183,9 @@ var r1,r2: double;
     w,h,px,py,w3,h3,ww3,hh3,i,j: integer;
     tmpbmp,str: TBGRABitmap;
     rmode: TResampleMode;
+    co: TBGRAPixel;
+    s,cx,cy: integer;
+    scale: double;
 begin
 if (img_Height=0)or(img_Width=0) then exit;
 r1:=ScrBmp.Width/imabmp.Width;
@@ -12251,6 +12241,7 @@ else if ImgZoom=0 then begin
     px:=(ScrBmp.width-w) div 2;
     py:=0;
   end;
+  scale:=ImgScale0;
   OrigX:=round(px/ImgScale0);
   OrigY:=round(py/ImgScale0);
   {$ifdef debug_raw}writeln(FormatDateTime(dateiso,Now)+blank+'Resample');{$endif}
@@ -12261,6 +12252,7 @@ else if ImgZoom=0 then begin
 end
 else if ImgZoom=1 then begin
    // zoom 1
+   scale:=1;
    px:=round(ImgCx)-((img_Width-ScrBmp.Width) div 2);
    py:=round(ImgCy)-((img_Height-ScrBmp.Height) div 2);
    OrigX:=px;
@@ -12271,6 +12263,7 @@ end
 else begin
    // other zoom
    if ImgZoom<ZoomMin then ImgZoom:=ZoomMin;
+   scale:=ImgZoom;
    tmpbmp:=TBGRABitmap.Create(round(ScrBmp.Width/ImgZoom),round(ScrBmp.Height/ImgZoom),clDarkBlue);
    px:=round(ImgCx)-((img_Width-tmpbmp.Width) div 2);
    py:=round(ImgCy)-((img_Height-tmpbmp.Height) div 2);
@@ -12293,7 +12286,19 @@ if fits.HeaderInfo.solved and (cdcWCSinfo.secpix<>0) and (not SplitImage) then b
   plot_north;
   if Annotate then plot_deepsky(ScrBmp.Canvas,ScrBmp.Width,ScrBmp.Height,f_visu.FlipHorz,f_visu.FlipVert);
 end;
-
+if f_visu.BullsEye and (not SplitImage) and (fits.HeaderInfo.naxis>1) then begin
+  {$ifdef debug_raw}writeln(FormatDateTime(dateiso,Now)+blank+'BullsEye');{$endif}
+  co:=ColorToBGRA(clRed);
+  cx:=img_Width div 2;
+  cy:=img_Height div 2;
+  Fits2Screen(cx,cy,f_visu.FlipHorz,f_visu.FlipVert,cx,cy);
+  scrbmp.DrawHorizLine(0,cy,ScrBmp.Width,co);
+  scrbmp.DrawVertLine(cx,0,ScrBmp.Height,co);
+  s:=round((min(img_Height,img_Width) div 3)*scale);
+  scrbmp.EllipseAntialias(cx,cy,s,s,co,1);
+  s:=round((min(img_Height,img_Width) div 8)*scale);
+  scrbmp.EllipseAntialias(cx,cy,s,s,co,1);
+end;
 Image1.Invalidate;
 MagnifyerTimer.Enabled:=true;
 {$ifdef debug_raw}writeln(FormatDateTime(dateiso,Now)+blank+'PlotImage end');{$endif}
