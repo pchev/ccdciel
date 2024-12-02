@@ -12163,7 +12163,6 @@ if (fits.HeaderInfo.naxis>0) and fits.ImageValid then begin
   if f_visu.BullsEye then begin
     {$ifdef debug_raw}writeln(FormatDateTime(dateiso,Now)+blank+'BullsEye');{$endif}
     co:=ColorToBGRA(clRed);
-    co.alpha:=128;
     cx:=img_Width div 2;
     cy:=img_Height div 2;
     imabmp.DrawHorizLine(0,cy,img_Width,co);
