@@ -17210,6 +17210,15 @@ try
     result:=result+']';
     sl.Free;
   end
+  else if method='INTERNALGUIDER_GETGUIDEEXPOSURE' then result:=result+'"result": '+StringReplace(f_internalguider.Exposure.Text,',','.',[])
+  else if method='INTERNALGUIDER_GETSPECTROFUNCTION' then result:=result+'"result": '+BoolToStr(f_internalguider.SpectroFunctions,tr,fa)
+  else if method='INTERNALGUIDER_GETSPECTROSINGLESTAR' then result:=result+'"result": '+BoolToStr(f_internalguider.GuideLock,tr,fa)
+  else if method='INTERNALGUIDER_GETSPECTROCHANGEMULTISTAR' then result:=result+'"result": '+BoolToStr(f_internalguider.ForceGuideMultistar,tr,fa)
+  else if method='INTERNALGUIDER_GETSPECTROASTROMETRY' then result:=result+'"result": '+BoolToStr(f_internalguider.cbUseAstrometry.Checked,tr,fa)
+  else if method='INTERNALGUIDER_GETSPECTROASTROMETRYEXPOSURE' then result:=result+'"result": '+StringReplace(f_internalguider.AstrometryExp.text,',','.',[])
+  else if method='INTERNALGUIDER_GETSPECTROSLITNAME' then result:=result+'"result": "'+f_internalguider.cbSlitList.text+'"'
+  else if method='INTERNALGUIDER_GETSPECTROGUIDESTAROFFSET' then result:=result+'"result": ['+StringReplace(f_internalguider.StarOffsetX.text,',','.',[])+','+StringReplace(f_internalguider.StarOffsetY.text,',','.',[])+']'
+  else if method='INTERNALGUIDER_GETSPECTROMULITSTAROFFSET' then result:=result+'"result": ['+StringReplace(f_internalguider.edOffsetX.text,',','.',[])+','+StringReplace(f_internalguider.edOffsetY.text,',','.',[])+']'
   // execute command without parameter
   else if method='TELESCOPE_ABORTMOTION' then result:=result+'"result":{"status": "'+f_scriptengine.cmd_MountAbortMotion+'"}'
   else if method='TELESCOPE_TRACK' then result:=result+'"result":{"status": "'+f_scriptengine.cmd_MountTrack+'"}'
@@ -17527,6 +17536,69 @@ try
     buf3:=trim(value[attrib.IndexOf('params.2')]);
     buf4:=trim(value[attrib.IndexOf('params.3')]);
     buf:=f_scriptengine.cmd_camerasetframe(buf1,buf2,buf3,buf4);
+    result:=result+'"result":{"status": "'+buf+'"}';
+  end
+  else if method='INTERNALGUIDER_SETGUIDEEXPOSURE' then begin
+    CheckParamCount(1);
+    buf1:=trim(value[attrib.IndexOf('params.0')]);
+    buf:=f_scriptengine.cmd_Internalguider_SetGuideExposure(buf1);
+    result:=result+'"result":{"status": "'+buf+'"}';
+  end
+  else if method='INTERNALGUIDER_SETSPECTROFUNCTION' then begin
+    CheckParamCount(1);
+    if uppercase(trim(value[attrib.IndexOf('params.0')]))='TRUE' then buf1:='ON' else buf1:='OFF';
+    buf:=f_scriptengine.cmd_Internalguider_SetSpectrofunction(buf1);
+    result:=result+'"result":{"status": "'+buf+'"}';
+  end
+  else if method='INTERNALGUIDER_SETSPECTROSINGLESTAR' then begin
+    CheckParamCount(1);
+    if uppercase(trim(value[attrib.IndexOf('params.0')]))='TRUE' then buf1:='ON' else buf1:='OFF';
+    buf:=f_scriptengine.cmd_Internalguider_SetSpectroSinglestar(buf1);
+    result:=result+'"result":{"status": "'+buf+'"}';
+  end
+  else if method='INTERNALGUIDER_SETSPECTROCHANGEMULTISTAR' then begin
+    CheckParamCount(1);
+    if uppercase(trim(value[attrib.IndexOf('params.0')]))='TRUE' then buf1:='ON' else buf1:='OFF';
+    buf:=f_scriptengine.cmd_Internalguider_SetSpectroChangeMultistar(buf1);
+    result:=result+'"result":{"status": "'+buf+'"}';
+  end
+  else if method='INTERNALGUIDER_SETSPECTROASTROMETRY' then begin
+    CheckParamCount(1);
+    if uppercase(trim(value[attrib.IndexOf('params.0')]))='TRUE' then buf1:='ON' else buf1:='OFF';
+    buf:=f_scriptengine.cmd_Internalguider_SetSpectroAstrometry(buf1);
+    result:=result+'"result":{"status": "'+buf+'"}';
+  end
+  else if method='INTERNALGUIDER_SETSPECTROASTROMETRYEXPOSURE' then begin
+    CheckParamCount(1);
+    buf1:=trim(value[attrib.IndexOf('params.0')]);
+    buf:=f_scriptengine.cmd_Internalguider_SetSpectroAstrometryExposure(buf1);
+    result:=result+'"result":{"status": "'+buf+'"}';
+  end
+  else if method='INTERNALGUIDER_SETSPECTROSLITNAME' then begin
+    CheckParamCount(1);
+    buf1:=trim(value[attrib.IndexOf('params.0')]);
+    buf:=f_scriptengine.cmd_Internalguider_SetSpectroSlitname(buf1);
+    result:=result+'"result":{"status": "'+buf+'"}';
+  end
+  else if method='INTERNALGUIDER_SETSPECTROGUIDESTAROFFSET' then begin
+    CheckParamCount(2);
+    buf1:=trim(value[attrib.IndexOf('params.0')]);
+    buf2:=trim(value[attrib.IndexOf('params.1')]);
+    buf:=f_scriptengine.cmd_Internalguider_SetSpectroGuidestaroffset(buf1,buf2);
+    result:=result+'"result":{"status": "'+buf+'"}';
+  end
+  else if method='INTERNALGUIDER_SETSPECTROGUIDESTARRADEC' then begin
+    CheckParamCount(2);
+    buf1:=trim(value[attrib.IndexOf('params.0')]);
+    buf2:=trim(value[attrib.IndexOf('params.1')]);
+    buf:=f_scriptengine.cmd_Internalguider_SetSpectroGuidestarRaDec(buf1,buf2);
+    result:=result+'"result":{"status": "'+buf+'"}';
+  end
+  else if method='INTERNALGUIDER_SETSPECTROMULTISTAROFFSET' then begin
+    CheckParamCount(2);
+    buf1:=trim(value[attrib.IndexOf('params.0')]);
+    buf2:=trim(value[attrib.IndexOf('params.1')]);
+    buf:=f_scriptengine.cmd_Internalguider_SetSpectroMultistaroffset(buf1,buf2);
     result:=result+'"result":{"status": "'+buf+'"}';
   end
   // method not found

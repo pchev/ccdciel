@@ -1259,13 +1259,16 @@ object f_internalguider: Tf_internalguider
               ParentColor = False
             end
             object AstrometryExp: TFloatSpinEdit
-              Left = 224
+              AnchorSideLeft.Control = Label39
+              AnchorSideLeft.Side = asrBottom
+              Left = 199
               Height = 32
               Top = 78
-              Width = 77
-              DecimalPlaces = 1
+              Width = 69
+              BorderSpacing.Left = 8
+              DecimalPlaces = 0
               MaxValue = 120
-              MinValue = 0.1
+              MinValue = 1
               TabOrder = 2
               Value = 10
             end
@@ -1515,7 +1518,7 @@ object f_internalguider: Tf_internalguider
                   ParentColor = False
                 end
               end
-              object Panel14: TPanel
+              object PanelGuideStar: TPanel
                 Left = 0
                 Height = 60
                 Top = 100

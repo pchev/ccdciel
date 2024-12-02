@@ -78,7 +78,7 @@ type
     MenuSlitOffset: TButton;
     Panel12: TPanel;
     Panel13: TPanel;
-    Panel14: TPanel;
+    PanelGuideStar: TPanel;
     PopupMenuSlit: TPopupMenu;
     SlitOffsetX: TFloatSpinEdit;
     StarOffsetX: TFloatSpinEdit;
@@ -943,6 +943,13 @@ begin
     PageControl2.ActivePageIndex:=0
   else
     PageControl2.ActivePageIndex:=1;
+  if not cbGuideLock.Checked then begin
+    StarOffsetX.Value:=0;
+    StarOffsetY.Value:=0;
+  end;
+  cbFGuideMultiStar.Enabled:=cbGuideLock.Checked;
+  if not cbFGuideMultiStar.Enabled then
+     cbFGuideMultiStar.Checked:=false;
   FDrawSettingChange:=true;
   if Assigned(FonSpectroGuideChange) then FonSpectroGuideChange(self);
 end;
@@ -956,6 +963,11 @@ procedure Tf_internalguider.cbUseAstrometryChange(Sender: TObject);
 begin
   AstrometryExp.Enabled:=cbUseAstrometry.Checked;
   label39.Enabled:=cbUseAstrometry.Checked;
+  PanelGuideStar.Enabled:=not cbUseAstrometry.Checked;
+  if not PanelGuideStar.Enabled then begin
+    StarOffsetX.Value:=0;
+    StarOffsetY.Value:=0;
+  end;
 end;
 
 procedure Tf_internalguider.cbEnlargeImageChange(Sender: TObject);

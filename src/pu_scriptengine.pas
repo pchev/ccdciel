@@ -265,6 +265,16 @@ type
     function cmd_camerasetframe(fx,fy,fw,fh: string): string;
     function cmd_cameraresetframe: string;
     function cmd_cameragetframe(out fx,fy,fw,fh: integer): string;
+    function cmd_Internalguider_SetGuideExposure(exp:string):string;
+    function cmd_Internalguider_SetSpectrofunction(onoff:string):string;
+    function cmd_Internalguider_SetSpectroSinglestar(onoff:string):string;
+    function cmd_Internalguider_SetSpectroChangeMultistar(onoff:string):string;
+    function cmd_Internalguider_SetSpectroAstrometry(onoff:string):string;
+    function cmd_Internalguider_SetSpectroAstrometryExposure(exp:string):string;
+    function cmd_Internalguider_SetSpectroSlitname(slit:string):string;
+    function cmd_Internalguider_SetSpectroGuidestaroffset(x,y:string):string;
+    function cmd_Internalguider_SetSpectroGuidestarRaDec(ra,de:string):string;
+    function cmd_Internalguider_SetSpectroMultistaroffset(x,y:string):string;
     function ScriptType(fn: string): TScriptType;
     function  RunScript(sname,path,args: string):boolean;
     function ScriptRunning: boolean;
@@ -2487,6 +2497,162 @@ except
   result:=msgFailed;
 end;
 end;
+
+function Tf_scriptengine.cmd_Internalguider_SetGuideExposure(exp:string):string;
+var x: double;
+    n: integer;
+begin
+result:=msgFailed;
+try
+ val(exp,x,n);
+ if (n=0)and(Fautoguider.AutoguiderType=agINTERNAL) then begin
+   Finternalguider.Exposure.Value:=x;
+   result:=msgOK;
+ end;
+except
+  result:=msgFailed;
+end;
+end;
+
+function Tf_scriptengine.cmd_Internalguider_SetSpectrofunction(onoff:string):string;
+begin
+result:=msgFailed;
+try
+ if (Fautoguider.AutoguiderType=agINTERNAL) then begin
+   Finternalguider.SpectroFunctions:=(onoff='ON');
+   result:=msgOK;
+ end;
+except
+  result:=msgFailed;
+end;
+end;
+
+function Tf_scriptengine.cmd_Internalguider_SetSpectroSinglestar(onoff:string):string;
+begin
+result:=msgFailed;
+try
+ if (Fautoguider.AutoguiderType=agINTERNAL) then begin
+   Finternalguider.GuideLock:=(onoff='ON');
+   result:=msgOK;
+ end;
+except
+  result:=msgFailed;
+end;
+end;
+
+function Tf_scriptengine.cmd_Internalguider_SetSpectroChangeMultistar(onoff:string):string;
+begin
+result:=msgFailed;
+try
+ if (Fautoguider.AutoguiderType=agINTERNAL)and(Finternalguider.GuideLock) then begin
+   Finternalguider.ForceGuideMultistar:=(onoff='ON');
+   result:=msgOK;
+ end;
+except
+  result:=msgFailed;
+end;
+end;
+
+function Tf_scriptengine.cmd_Internalguider_SetSpectroAstrometry(onoff:string):string;
+begin
+result:=msgFailed;
+try
+ if (Fautoguider.AutoguiderType=agINTERNAL) then begin
+   Finternalguider.cbUseAstrometry.Checked:=(onoff='ON');
+   result:=msgOK;
+ end;
+except
+  result:=msgFailed;
+end;
+end;
+
+function Tf_scriptengine.cmd_Internalguider_SetSpectroAstrometryExposure(exp:string):string;
+var x: double;
+    n: integer;
+begin
+result:=msgFailed;
+try
+ val(exp,x,n);
+ if (n=0)and(Fautoguider.AutoguiderType=agINTERNAL)and(Finternalguider.cbUseAstrometry.Checked) then begin
+   Finternalguider.AstrometryExp.Value:=x;
+   result:=msgOK;
+ end;
+except
+  result:=msgFailed;
+end;
+end;
+
+function Tf_scriptengine.cmd_Internalguider_SetSpectroSlitname(slit:string):string;
+var i: integer;
+begin
+result:=msgFailed;
+try
+ if (Fautoguider.AutoguiderType=agINTERNAL) then begin
+   for i:=0 to Finternalguider.cbSlitList.Items.Count-1 do begin
+     if Finternalguider.cbSlitList.Items[i]=slit then begin
+        Finternalguider.cbSlitList.ItemIndex:=i;
+        Finternalguider.cbSlitListChange(nil);
+        result:=msgOK;
+     end;
+   end;
+ end;
+except
+  result:=msgFailed;
+end;
+end;
+
+function Tf_scriptengine.cmd_Internalguider_SetSpectroGuidestaroffset(x,y:string):string;
+var xx,yy: double;
+    n: integer;
+begin
+result:=msgFailed;
+try
+ if (Fautoguider.AutoguiderType=agINTERNAL)and(finternalguider.GuideLock)and(finternalguider.PanelGuideStar.Enabled) then begin
+   val(x,xx,n);
+   if n<>0 then exit;
+   val(y,yy,n);
+   if n<>0 then exit;
+   finternalguider.StarOffsetX.Value:=xx;
+   finternalguider.StarOffsetY.Value:=yy;
+   result:=msgOK;
+ end;
+except
+  result:=msgFailed;
+end;
+end;
+
+function Tf_scriptengine.cmd_Internalguider_SetSpectroGuidestarRaDec(ra,de:string):string;
+begin
+result:=msgFailed;
+try
+ if (Fautoguider.AutoguiderType=agINTERNAL)and(finternalguider.GuideLock)and(finternalguider.PanelGuideStar.Enabled) then begin
+   { #todo :  }
+ end;
+except
+  result:=msgFailed;
+end;
+end;
+
+function Tf_scriptengine.cmd_Internalguider_SetSpectroMultistaroffset(x,y:string):string;
+var xx,yy: double;
+    n: integer;
+begin
+result:=msgFailed;
+try
+ if (Fautoguider.AutoguiderType=agINTERNAL)and(not finternalguider.GuideLock) then begin
+   val(x,xx,n);
+   if n<>0 then exit;
+   val(y,yy,n);
+   if n<>0 then exit;
+   finternalguider.OffsetX:=xx;
+   finternalguider.OffsetY:=yy;
+   result:=msgOK;
+ end;
+except
+  result:=msgFailed;
+end;
+end;
+
 
 ///// Python scripts ///////
 
