@@ -12288,7 +12288,7 @@ if fits.HeaderInfo.solved and (cdcWCSinfo.secpix<>0) and (not SplitImage) then b
 end;
 if f_visu.BullsEye and (not SplitImage) and (fits.HeaderInfo.naxis>1) then begin
   {$ifdef debug_raw}writeln(FormatDateTime(dateiso,Now)+blank+'BullsEye');{$endif}
-  co:=ColorToBGRA(clRed);
+  co:=ColorToBGRA($0000AA);
   cx:=img_Width div 2;
   cy:=img_Height div 2;
   Fits2Screen(cx,cy,f_visu.FlipHorz,f_visu.FlipVert,cx,cy);

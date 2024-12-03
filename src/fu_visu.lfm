@@ -424,7 +424,6 @@ object f_visu: Tf_visu
       BevelOuter = bvNone
       ClientHeight = 12
       ClientWidth = 403
-      Color = clBlack
       ParentColor = False
       TabOrder = 1
       object HistBarLeft: TPanel
@@ -434,7 +433,7 @@ object f_visu: Tf_visu
         Width = 170
         Align = alLeft
         BevelOuter = bvNone
-        Color = clBlue
+        Color = clBtnHighlight
         ParentColor = False
         TabOrder = 0
         OnResize = HistBarLeftResize
@@ -444,7 +443,7 @@ object f_visu: Tf_visu
         Height = 12
         Top = 0
         Width = 6
-        Color = clWhite
+        Color = clBtnFace
         MinSize = 1
         ParentColor = False
       end
@@ -455,7 +454,7 @@ object f_visu: Tf_visu
         Width = 227
         Align = alClient
         BevelOuter = bvNone
-        Color = clBlack
+        Color = clBtnShadow
         ParentColor = False
         TabOrder = 2
       end

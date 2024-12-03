@@ -57,7 +57,7 @@ resourcestring
   rsZoomTwoTime = 'Zoom two time';
   rsZoomToOrigin = 'Zoom to original scale';
   rsZoomToHalfSi = 'Zoom to half size';
-  rsShowBullsEye = 'Show bulls eye';
+  rsShowBullsEye = 'Show crosshairs';
   rsShowHighligh = 'Show highlight and shadow clipping';
   rsGammaOfTheIm = 'Gamma of the image display';
   rsInvertImageD = 'Invert image display';
