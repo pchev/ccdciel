@@ -2584,16 +2584,29 @@ end;
 
 function Tf_scriptengine.cmd_Internalguider_SetSpectroSlitname(slit:string):string;
 var i: integer;
+    so:TSlitOffset;
 begin
 result:=msgFailed;
 try
  if (Fautoguider.AutoguiderType=agINTERNAL) then begin
-   for i:=0 to Finternalguider.cbSlitList.Items.Count-1 do begin
-     if Finternalguider.cbSlitList.Items[i]=slit then begin
-        Finternalguider.cbSlitList.ItemIndex:=i;
-        Finternalguider.cbSlitListChange(nil);
-        result:=msgOK;
-     end;
+   slit:=trim(slit);
+   i:=Finternalguider.cbSlitList.Items.IndexOf(slit);
+   if i>=0 then begin
+     // select slit
+     Finternalguider.cbSlitList.ItemIndex:=i;
+     Finternalguider.cbSlitListChange(nil);
+     result:=msgOK;
+   end
+   else begin
+     // not found, create a new entry
+     so:=TSlitOffset.Create;
+     so.slitname:=slit;
+     so.x:=0;
+     so.y:=0;
+     i:=Finternalguider.cbSlitList.Items.AddObject(slit,so);
+     Finternalguider.cbSlitList.ItemIndex:=i;
+     Finternalguider.cbSlitListChange(nil);
+     result:=msgOK;
    end;
  end;
 except
