@@ -1858,12 +1858,22 @@ end;
 procedure Tf_internalguider.btnAddSlitOffsetClick(Sender: TObject);
 var so:TSlitOffset;
     i: integer;
+    n: string;
 begin
-  so:=TSlitOffset.Create;
-  so.slitname:=cbSlitList.text;
-  so.x:=SlitOffsetX.Value;
-  so.y:=SlitOffsetY.Value;
-  i:=cbSlitList.Items.AddObject(so.slitname,so);
+  n:=trim(cbSlitList.text);
+  i:=cbSlitList.Items.IndexOf(n);
+  if i>=0 then begin
+    so:=TSlitOffset(cbSlitList.items.Objects[i]);
+    so.x:=SlitOffsetX.Value;
+    so.y:=SlitOffsetY.Value;
+  end
+  else begin
+    so:=TSlitOffset.Create;
+    so.slitname:=n;
+    so.x:=SlitOffsetX.Value;
+    so.y:=SlitOffsetY.Value;
+    i:=cbSlitList.Items.AddObject(so.slitname,so);
+  end;
   cbSlitList.ItemIndex:=i;
   CurrentSlit:=i;
 end;

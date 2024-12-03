@@ -2304,14 +2304,26 @@ end;
 procedure Tf_option.BtnAddRoiClick(Sender: TObject);
 var i: integer;
     roi:TRoi;
+    n: string;
 begin
-  roi:=TRoi.Create;
-  roi.name:=RoiList.text;
-  roi.x:=RoiX.Value;
-  roi.y:=RoiY.Value;
-  roi.w:=RoiW.Value;
-  roi.h:=RoiH.Value;
-  i:=RoiList.Items.AddObject(roi.name,roi);
+  n:=trim(RoiList.text);
+  i:=RoiList.Items.IndexOf(n);
+  if i>=0 then begin
+    roi:=TRoi(RoiList.Items.Objects[i]);
+    roi.x:=RoiX.Value;
+    roi.y:=RoiY.Value;
+    roi.w:=RoiW.Value;
+    roi.h:=RoiH.Value;
+  end
+  else begin
+    roi:=TRoi.Create;
+    roi.name:=RoiList.text;
+    roi.x:=RoiX.Value;
+    roi.y:=RoiY.Value;
+    roi.w:=RoiW.Value;
+    roi.h:=RoiH.Value;
+    i:=RoiList.Items.AddObject(roi.name,roi);
+  end;
   RoiList.ItemIndex:=i;
   CurrentRoi:=i;
 end;
