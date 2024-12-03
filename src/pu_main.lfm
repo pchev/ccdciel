@@ -814,7 +814,14 @@ object f_main: Tf_main
         Caption = 'Devices Setup...'
         OnClick = MenuSetupClick
       end
-      object MenuItem18: TMenuItem
+      object Separator5: TMenuItem
+        Caption = '-'
+      end
+      object MenuInstallScript: TMenuItem
+        Caption = 'MenuInstallScript'
+        OnClick = MenuInstallScriptClick
+      end
+      object Separator4: TMenuItem
         Caption = '-'
       end
       object MenuIndiSettings: TMenuItem

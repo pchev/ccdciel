@@ -38,7 +38,7 @@ uses
   fu_starprofile, fu_filterwheel, fu_focuser, fu_mount, fu_ccdtemp, fu_autoguider, fu_cover, fu_switch, fu_switchpage,
   fu_sequence, fu_planetarium, fu_script, fu_finder, pu_findercalibration, u_ccdconfig, pu_edittargets, pu_scriptengine,
   fu_video, pu_devicesetup, pu_options, pu_indigui, cu_fits, cu_camera, pu_pause, cu_tcpserver, cu_waitthread,
-  pu_viewtext, cu_wheel, cu_mount, cu_focuser, XMLConf, u_utils, u_global, UScaleDPI, pu_handpad,
+  pu_viewtext, cu_wheel, cu_mount, cu_focuser, XMLConf, u_utils, u_global, UScaleDPI, pu_handpad, pu_downloadscript,
   cu_indimount, cu_ascommount, cu_indifocuser, cu_ascomfocuser, pu_vcurve, pu_focusercalibration, pu_onlineinfo,
   fu_rotator, cu_rotator, cu_indirotator, cu_ascomrotator, cu_watchdog, cu_indiwatchdog, pu_sensoranalysis,
   cu_weather, cu_ascomweather, cu_indiweather, cu_safety, cu_ascomsafety, cu_indisafety, fu_weather, fu_safety,
@@ -150,6 +150,7 @@ type
     MenuDarkHeader: TMenuItem;
     MenuFlatHeader: TMenuItem;
     MeasureConeError1: TMenuItem;
+    MenuInstallScript: TMenuItem;
     MenuItemPreprocess: TMenuItem;
     MenuItemPreprocess2: TMenuItem;
     MenuItemGuiderSolveSync: TMenuItem;
@@ -198,7 +199,6 @@ type
     MenuViewSwitch: TMenuItem;
     MenuSavePicture: TMenuItem;
     MenuPolarAlignment: TMenuItem;
-    MenuItem18: TMenuItem;
     MenuItemPhotometry2: TMenuItem;
     MenuItem17: TMenuItem;
     MenuItemPhotometry: TMenuItem;
@@ -256,6 +256,8 @@ type
     SaveDialogPicture: TSaveDialog;
     Separator2: TMenuItem;
     Separator3: TMenuItem;
+    Separator4: TMenuItem;
+    Separator5: TMenuItem;
     Splitter1: TSplitter;
     Splitter2: TSplitter;
     Splitter3: TSplitter;
@@ -445,6 +447,7 @@ type
     procedure MenuFlatFileClick(Sender: TObject);
     procedure MenuFlatHeaderClick(Sender: TObject);
     procedure MenuImageMultipanelClick(Sender: TObject);
+    procedure MenuInstallScriptClick(Sender: TObject);
     procedure MenuInternalguiderStartClick(Sender: TObject);
     procedure MenuInternalGuiderStopClick(Sender: TObject);
     procedure MenuItemFinderSaveImageClick(Sender: TObject);
@@ -2344,6 +2347,7 @@ procedure Tf_main.SetLang;
 begin
    MenuItem1.Caption := rsFile;
    MenuSetup.Caption:=Format(rsDevicesSetup, [ellipsis]);
+   MenuInstallScript.Caption:=rsInstallScrip+ellipsis;
    MenuItemBPM.Caption := rsBadPixelMap;
    MenuBPM.Caption := rsCreateFromCa;
    MenuBPMDark.Caption:=rsCreateFromDa;
@@ -19283,6 +19287,21 @@ end;
 procedure Tf_main.MenuImageMultipanelClick(Sender: TObject);
 begin
   SetMultiPanel(MenuImageMultipanel.Checked);
+end;
+
+procedure Tf_main.MenuInstallScriptClick(Sender: TObject);
+begin
+  f_downloadscript:=Tf_downloadscript.Create(self);
+  try
+  f_downloadscript.ShowModal;
+  if  f_downloadscript.ModalResult=mrOK  then begin
+    f_script.LoadScriptList;
+    f_script.ScriptName:=f_downloadscript.Scriptname;
+    f_script.BtnEdit.Click;
+  end;
+  finally
+    f_downloadscript.Free;
+  end;
 end;
 
 procedure Tf_main.SetMultipanel(onoff: boolean);

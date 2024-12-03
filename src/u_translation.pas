@@ -1591,6 +1591,7 @@ resourcestring
   rsSlit = 'Slit';
   rsInstrumentNa = 'Instrument name';
   rsGuideStarOff = 'Guide star offset';
+  rsInstallScrip = 'Install script';
 
 implementation
 
