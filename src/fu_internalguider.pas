@@ -1886,6 +1886,7 @@ begin
     so.x:=SlitOffsetX.Value;
     so.y:=SlitOffsetY.Value;
   end;
+  ForceRedraw(Sender);
 end;
 
 procedure Tf_internalguider.btnDelSlitOffsetClick(Sender: TObject);

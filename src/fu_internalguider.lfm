@@ -1557,6 +1557,7 @@ object f_internalguider: Tf_internalguider
                   AutoSize = False
                   BorderSpacing.Left = 8
                   DecimalPlaces = 1
+                  OnChange = ForceRedraw
                   TabOrder = 0
                 end
                 object Label57: TLabel
@@ -1583,6 +1584,7 @@ object f_internalguider: Tf_internalguider
                   AutoSize = False
                   BorderSpacing.Left = 8
                   DecimalPlaces = 1
+                  OnChange = ForceRedraw
                   TabOrder = 1
                 end
               end
