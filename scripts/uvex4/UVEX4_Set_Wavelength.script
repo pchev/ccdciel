@@ -29,7 +29,7 @@ try :
     #change the central wavelength
     uvex.wavelength = wavelength
 
-    # query the grating positions
+    # query the wavelength range
     w = uvex.wavelength
 
     print("WAVELNTH="+w[1])

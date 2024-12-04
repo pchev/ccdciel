@@ -35,16 +35,20 @@ try :
 
     # update FITS header
     gr = str(uvex.grating_resolution)
-    w  = uvex.wavelength
-    spos= uvex.slitpos
-    sname = uvex.Slits[spos-1].Label
-    t = uvex.temperature
-    ccdciel("CustomHeader_add",["SLIT",sname])
     ccdciel("CustomHeader_add",["GRATING",gr])
-    ccdciel("CustomHeader_add",["WAVELNTH",w[1]])
-    ccdciel("CustomHeader_add",["WAVEMIN",w[2]])
-    ccdciel("CustomHeader_add",["WAVEMAX",w[3]])
-    ccdciel("CustomHeader_add",["SPECTEMP",t])
+    if uvex.Grating_motor_enabled :
+      w  = uvex.wavelength
+      ccdciel("CustomHeader_add",["WAVELNTH",w[1]])
+      ccdciel("CustomHeader_add",["WAVEMIN",w[2]])
+      ccdciel("CustomHeader_add",["WAVEMAX",w[3]])
+    if uvex.Slit_motor_enabled :
+      spos= uvex.slitpos
+      sname = uvex.Slits[spos-1].Label
+      ccdciel("CustomHeader_add",["SLIT",sname])
+    if uvex.Temperature_active :
+      t = uvex.temperature
+      ccdciel("CustomHeader_add",["SPECTEMP",t])
+
 
     # stop tracking for calibration images
     #if (state==1) :

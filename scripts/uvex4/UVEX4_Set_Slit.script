@@ -27,6 +27,7 @@ try :
     uvex.slitpos = slitname
 
     print('SLIT='+slitname)
+    ccdciel("Internalguider_SetSpectroSlitname",slitname)
     ccdciel("CustomHeader_add",["SLIT",slitname])
 
 except Exception as ex:
