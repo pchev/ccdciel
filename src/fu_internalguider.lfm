@@ -1354,6 +1354,7 @@ object f_internalguider: Tf_internalguider
                 AutoSize = False
                 BorderSpacing.Left = 8
                 DecimalPlaces = 1
+                OnChange = SlitOffsetChange
                 TabOrder = 1
               end
               object SlitOffsetY: TFloatSpinEdit
@@ -1368,6 +1369,7 @@ object f_internalguider: Tf_internalguider
                 AutoSize = False
                 BorderSpacing.Left = 8
                 DecimalPlaces = 1
+                OnChange = SlitOffsetChange
                 TabOrder = 2
               end
               object Label54: TLabel
@@ -2043,10 +2045,6 @@ object f_internalguider: Tf_internalguider
     object MenuItemAddSlit: TMenuItem
       Caption = 'MenuItemAddSlit'
       OnClick = btnAddSlitOffsetClick
-    end
-    object MenuItemUpdSlit: TMenuItem
-      Caption = 'MenuItemUpdSlit'
-      OnClick = btnUpdSlitOffsetClick
     end
     object MenuItemDelSlit: TMenuItem
       Caption = 'MenuItemDelSlit'

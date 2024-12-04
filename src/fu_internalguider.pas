@@ -167,7 +167,6 @@ type
     measure_method2: TCheckBox;
     MenuItemClearDark: TMenuItem;
     MenuItemCaptureDark: TMenuItem;
-    MenuItemUpdSlit: TMenuItem;
     minHFD1: TFloatSpinEdit;
     minSNR1: TSpinEdit;
     pa1: TEdit;
@@ -241,7 +240,6 @@ type
     Title: TLabel;
     procedure btnAddSlitOffsetClick(Sender: TObject);
     procedure btnDelSlitOffsetClick(Sender: TObject);
-    procedure btnUpdSlitOffsetClick(Sender: TObject);
     procedure BtnZoom05Click(Sender: TObject);
     procedure BtnZoom1Click(Sender: TObject);
     procedure BtnZoom2Click(Sender: TObject);
@@ -289,6 +287,7 @@ type
     procedure ra_hysteresis1Change(Sender: TObject);
     procedure scale1Click(Sender: TObject; Button: TUDBtnType);
     procedure ShortestPulse1Change(Sender: TObject);
+    procedure SlitOffsetChange(Sender: TObject);
     procedure vpa_solar1Change(Sender: TObject);
     procedure v_solar1Change(Sender: TObject);
   private
@@ -633,7 +632,6 @@ begin
   Label57.Caption:=rsOffset+' Y';
   MenuSlitOffset.Caption:=rsManage;
   MenuItemAddSlit.Caption:=rsAdd;
-  MenuItemUpdSlit.Caption:=rsModify;
   MenuItemDelSlit.Caption:=rsDelete;
   cbUseAstrometry.Caption:=rsUseAstrometr2;
   label39.Caption:=rsAstrometryEx;
@@ -1878,15 +1876,13 @@ begin
   CurrentSlit:=i;
 end;
 
-procedure Tf_internalguider.btnUpdSlitOffsetClick(Sender: TObject);
+procedure Tf_internalguider.SlitOffsetChange(Sender: TObject);
 var so:TSlitOffset;
     i: integer;
 begin
-  i:=CurrentSlit;
-  if (i>=0)and(i<cbSlitList.Items.Count) then begin
-    cbSlitList.Items[i]:=cbSlitList.text;
+  i:=cbSlitList.ItemIndex;
+  if (i>=0) then begin
     so:=TSlitOffset(cbSlitList.Items.Objects[i]);
-    so.slitname:=cbSlitList.text;
     so.x:=SlitOffsetX.Value;
     so.y:=SlitOffsetY.Value;
   end;
@@ -1909,7 +1905,7 @@ var so:TSlitOffset;
     i: integer;
 begin
   i:=cbSlitList.ItemIndex;
-  if (i>=0)and(CurrentSlit<cbSlitList.Items.Count) then begin
+  if (i>=0)and(i<cbSlitList.Items.Count) then begin
     CurrentSlit:=i;
     so:=TSlitOffset(cbSlitList.Items.Objects[CurrentSlit]);
     cbSlitList.text := so.slitname;
