@@ -733,7 +733,7 @@ object f_internalguider: Tf_internalguider
               Top = 8
               Width = 72
               Increment = 5
-              MaxValue = 100
+              MaxValue = 10000
               MinValue = 10
               OnChange = ShortestPulse1Change
               TabOrder = 0
