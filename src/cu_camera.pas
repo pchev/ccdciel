@@ -373,7 +373,7 @@ begin
   FImgNum:=0;
   FTimeOut:=100;
   FIndiTransfert:=itNetwork;
-  FIndiTransfertDir:='';
+  FIndiTransfertDir:=defTransfertPath;
   FIndiTransfertPrefix:='ccdciel_tmp';
   FVerticalFlip:=false;
   FASCOMFlipImage:=false;

@@ -6,15 +6,15 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ccdciel\n"
 "Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
-"POT-Creation-Date: 2024-11-03 14:03+0000\n"
-"PO-Revision-Date: 2024-10-09 19:23+0000\n"
+"POT-Creation-Date: 2024-12-01 20:12+0000\n"
+"PO-Revision-Date: 2024-11-25 17:59+0000\n"
 "Last-Translator: Sergey Tarantsov <tsn-ast@yandex.ru>\n"
 "Language-Team: Russian <ru@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2024-11-03 14:12+0000\n"
-"X-Generator: Launchpad (build 22ade00ab50b929fac63b8ee7252243aceda294a)\n"
+"X-Launchpad-Export-Date: 2024-12-01 20:16+0000\n"
+"X-Generator: Launchpad (build 1519c6efe8e9bd78e6c5ebf2eb5bcb040b95ad32)\n"
 
 #: u_translation.rs2d
 msgid "2D"
@@ -105,6 +105,10 @@ msgstr "Сумма"
 #: u_translation.rsadditionalop
 msgid "Additional options for"
 msgstr "Дополнительные опции для"
+
+#: u_translation.rsadditionalsc
+msgid "Additional script parameter"
+msgstr ""
 
 #: u_translation.rsaddstep
 msgid "Add step"
@@ -437,6 +441,10 @@ msgstr "Автофокусировка успешно завершена"
 msgid "Autofocus tolerance "
 msgstr "Допуск "
 
+#: u_translation.rsautofocususi
+msgid "Autofocus using the OAG camera"
+msgstr "Автофокусировка с помощью OAG"
+
 #: u_translation.rsautofocuswil
 msgid "Autofocus will run before the next exposure"
 msgstr "Автофокусировка будет выполнена перед следующей экспозицией"
@@ -620,7 +628,7 @@ msgstr "синий"
 
 #: u_translation.rsbrightness
 msgid "Brightness"
-msgstr ""
+msgstr "Яркость"
 
 #: u_translation.rsbrowselogfil
 msgid "Browse log files"
@@ -1021,6 +1029,10 @@ msgstr "Облачность"
 msgid "Color balance"
 msgstr "Цветовой баланс"
 
+#: u_translation.rscolorizespec
+msgid "Colorize spectra images"
+msgstr "Раскрашивание изображений спектров"
+
 #: u_translation.rscolorpreview
 msgid "Color preview"
 msgstr "Цветной превью"
@@ -1064,18 +1076,21 @@ msgid ""
 "\n"
 "It will automatically take two images east and west of the meridian near the zenith. The cone error will be reported in the log."
 msgstr ""
+"Этот тест позволит оценить ошибку конуса телескопа путем измерения ошибки поворота после перекладки.\n"
+"\n"
+"Будет сделано два снимка к востоку и западу от меридиана вблизи зенита. Ошибка конуса будет записана в лог."
 
 #: u_translation.rsconemeasureeastwest
 msgid "Start measuring East to West"
-msgstr ""
+msgstr "Начать измерение с Востока на Запад"
 
 #: u_translation.rsconemeasurewesteast
 msgid "Start measuring West to East"
-msgstr ""
+msgstr "Начать измерение с Запада на Восток"
 
 #: u_translation.rsconetest
 msgid "Measure the cone error"
-msgstr ""
+msgstr "Измерение ошибки конуса"
 
 #: u_translation.rsconfiguratio
 msgid "Configuration saved"
@@ -1213,7 +1228,7 @@ msgstr "Создать новый пустой профиль"
 
 #: u_translation.rscrossmeridan
 msgid " Moving to the other side of the meridian"
-msgstr ""
+msgstr " Переход на другую сторону меридиана"
 
 #: u_translation.rscurrent
 msgid "Current"
@@ -1678,6 +1693,10 @@ msgstr "Превью остановлен"
 msgid "End time"
 msgstr "Время окончания"
 
+#: u_translation.rsenlargeguide
+msgid "Enlarge guide image"
+msgstr ""
+
 #: u_translation.rsenterthej200
 msgid "Enter the J2000 coordinates of the target where the main instrument is currently pointing."
 msgstr "Введите координаты объекта J2000, на который в данный момент указывает основной инструмент."
@@ -2092,7 +2111,7 @@ msgstr "Найдено %d звёзд"
 #: u_translation.rsfoundservers
 #, object-pascal-format
 msgid "Found %s servers"
-msgstr ""
+msgstr "Найдено %s серверов"
 
 #: u_translation.rsfov
 msgid "FOV"
@@ -2420,6 +2439,10 @@ msgstr "Резкость изображения %s"
 msgid "Image statistic"
 msgstr "Статистика изображения"
 
+#: u_translation.rsimagetransfe
+msgid "Image transfer"
+msgstr ""
+
 #: u_translation.rsimageundebay
 msgid "Image Un-debayered"
 msgstr "Изображение восстановлено"
@@ -2501,6 +2524,10 @@ msgstr "Проверка распределения значения HFD по и
 #, object-pascal-format
 msgid "in %s seconds"
 msgstr "через %s сек."
+
+#: u_translation.rsinstrumentna
+msgid "Instrument name"
+msgstr ""
 
 #: u_translation.rsintensity
 msgid "Intensity"
@@ -2653,10 +2680,6 @@ msgstr "Загрузить флет"
 msgid "Lock overlay"
 msgstr "Блокировка наложения"
 
-#: u_translation.rslockposition
-msgid "Lock position"
-msgstr "Закрепить"
-
 #: u_translation.rslogfolder
 msgid "Log folder"
 msgstr ""
@@ -2705,7 +2728,7 @@ msgstr "Главный сенсор"
 #: u_translation.rsmakeafirstpo
 #, object-pascal-format
 msgid "In mode automatic the telescope will slew to the test positions near the pole automatically.%sIn mode manual you have to slew the mount to the position by the keypad. See documentation."
-msgstr ""
+msgstr "В автоматическом режиме телескоп автоматически поворачивается в тестовое положение около полюса.%sВ ручном режиме вам необходимо повернуть монтировку  с помощью клавиатуры. См. документацию."
 
 #: u_translation.rsmanage
 msgid "Manage"
@@ -2828,6 +2851,10 @@ msgstr "Измерение %s POS:%s STEP:%s HFD:%s PEAK:%s SNR:%s"
 #: u_translation.rsmeasurepixel
 msgid "Measure pixel scale by stop tracking"
 msgstr "Измерять масштаб без трекинга"
+
+#: u_translation.rsmeasureteles
+msgid "Measure telescope cone error"
+msgstr "Измерение ошибки конуса телескопа"
 
 #: u_translation.rsmeasurewn
 msgid "Measure in the West and North"
@@ -3102,7 +3129,7 @@ msgstr "Двойная"
 
 #: u_translation.rsmultistargui
 msgid "Multi-star guide offset"
-msgstr ""
+msgstr "Смещение многозвездного гидирования"
 
 #: u_translation.rsname
 msgid "Name"
@@ -3124,6 +3151,10 @@ msgstr "около полюса"
 #, object-pascal-format
 msgid "Need to wait until %s"
 msgstr "Необходимо подождать до %s"
+
+#: u_translation.rsnetwork
+msgid "Network"
+msgstr ""
 
 #: u_translation.rsnew
 msgid "New"
@@ -3573,6 +3604,10 @@ msgstr "Производительность"
 msgid "Periodic auto-focus"
 msgstr "Периодическая автофокусировка"
 
+#: u_translation.rsperslitoffse
+msgid "Per slit offset"
+msgstr ""
+
 #: u_translation.rsphotometry
 msgid "Photometry"
 msgstr "Фотометрия"
@@ -3889,6 +3924,10 @@ msgstr "RA"
 #: u_translation.rsrainrate
 msgid "Rain rate"
 msgstr "Осадки"
+
+#: u_translation.rsramdisk
+msgid "RAM Disk"
+msgstr ""
 
 #: u_translation.rsrandom
 msgid "Random"
@@ -4217,6 +4256,10 @@ msgstr "Калибровка синхронизации ротатора = %s"
 msgid "Run"
 msgstr "Старт"
 
+#: u_translation.rsrunaninitial
+msgid "Run an initialization script"
+msgstr ""
+
 #: u_translation.rsrunascript
 msgid "Run a script"
 msgstr "Запустить скрипт"
@@ -4329,7 +4372,7 @@ msgstr "Допуск масштаба"
 
 #: u_translation.rsscanthisserv
 msgid "Scan this server"
-msgstr ""
+msgstr "Сканировать этот сервер"
 
 #: u_translation.rsscript
 msgid "Script"
@@ -4423,6 +4466,10 @@ msgstr "Варианты калибровки:"
 msgid "Select a star first!"
 msgstr "Сначала выберите звезду!"
 
+#: u_translation.rsselectcamera
+msgid "Select camera"
+msgstr "Выбрать камеру"
+
 #: u_translation.rsselectguides
 msgid "Select guide star"
 msgstr "Выберите звезду"
@@ -4430,6 +4477,10 @@ msgstr "Выберите звезду"
 #: u_translation.rsselectoneoft
 msgid "Select one of the measurement options:"
 msgstr "Выберите один из вариантов измерения:"
+
+#: u_translation.rsselectthecam
+msgid "Select the camera to use for the cone measurement"
+msgstr "Выберите камеру для измерения ошибки конуса"
 
 #: u_translation.rsselectthecur
 msgid "Select the cursor to use "
@@ -4843,6 +4894,10 @@ msgstr "Компенсация смещения %s/%s"
 #: u_translation.rsslippagecorr
 msgid "Slippage correction "
 msgstr "Коррекция проскальзывания "
+
+#: u_translation.rsslit
+msgid "Slit"
+msgstr ""
 
 #: u_translation.rsslitdrawing
 msgid "Slit drawing"
@@ -5466,7 +5521,7 @@ msgstr "Часовой пояс компьютера %s и долгота обс
 #: u_translation.rstheconeerror
 #, object-pascal-format
 msgid "The cone error results in a slew error of: %s arcmin at zenith. If error is positive then move telescope light inlet closer to the mount. If negative move telescope light inlet away from the mount,"
-msgstr ""
+msgstr "Ошибка конуса приводит к ошибке поворота: %s угл. мин в зените. Если ошибка положительна, переместите входное отверстие телескопа ближе к монтировке, если отрицательная - в сторону от монтировки,"
 
 #: u_translation.rsthedataare2
 #, object-pascal-format
@@ -5672,7 +5727,7 @@ msgstr "Угол поворота треугольника"
 
 #: u_translation.rstropospherer
 msgid "Troposphere rate (K/km)"
-msgstr ""
+msgstr "Тропосферный градиент (K/km)"
 
 #: u_translation.rstrue
 msgid "True"

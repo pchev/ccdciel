@@ -37,7 +37,6 @@ type
   dither_info=record raposition,decposition : double; end;//for internal guider
   dither_positionarray=array of dither_info;
 
-
 type
   { Tf_internalguider }
 
@@ -47,6 +46,7 @@ type
     BtnZoom1: TSpeedButton;
     BtnZoom2: TSpeedButton;
     BtnZoomAdjust: TSpeedButton;
+    Button1: TButton;
     ButtonLoop: TButton;
     ButtonSetLock: TSpeedButton;
     ButtonSetTemp: TButton;
@@ -68,8 +68,26 @@ type
     cbEnlargeImage: TCheckBox;
     CheckBoxBacklash: TCheckBox;
     CheckBoxTrackSolar1: TCheckBox;
+    cbSlitList: TComboBox;
     disable_guiding1: TCheckBox;
+    Label55: TLabel;
+    Label56: TLabel;
+    Label57: TLabel;
+    MenuItemAddSlit: TMenuItem;
+    MenuItemDelSlit: TMenuItem;
+    MenuSlitOffset: TButton;
+    Panel12: TPanel;
+    Panel13: TPanel;
+    PanelGuideStar: TPanel;
+    PopupMenuSlit: TPopupMenu;
+    SlitOffsetX: TFloatSpinEdit;
+    StarOffsetX: TFloatSpinEdit;
+    SlitOffsetY: TFloatSpinEdit;
     framesize1: TComboBox;
+    Label51: TLabel;
+    Label52: TLabel;
+    Label53: TLabel;
+    Label54: TLabel;
     Panel10: TPanel;
     GuideSpeedRA: TFloatSpinEdit;
     GuideSpeedDEC: TFloatSpinEdit;
@@ -94,8 +112,8 @@ type
     Label26: TLabel;
     Label27: TLabel;
     Label30: TLabel;
-    edLockX: TFloatSpinEdit;
-    edLockY: TFloatSpinEdit;
+    edRefX: TFloatSpinEdit;
+    edRefY: TFloatSpinEdit;
     Label21: TLabel;
     Label28: TLabel;
     Label29: TLabel;
@@ -149,11 +167,12 @@ type
     measure_method2: TCheckBox;
     MenuItemClearDark: TMenuItem;
     MenuItemCaptureDark: TMenuItem;
-    MenuItem2: TMenuItem;
     minHFD1: TFloatSpinEdit;
     minSNR1: TSpinEdit;
     pa1: TEdit;
     PageControl2: TPageControl;
+    Panel11: TPanel;
+    PanelSlitDrawing: TPanel;
     PanelImage: TPanel;
     PanelGuideSpeed: TPanel;
     Panel4: TPanel;
@@ -190,6 +209,7 @@ type
     edslitWinMax: TSpinEdit;
     InitialCalibrationStep: TSpinEdit;
     ShortestPulse1: TSpinEdit;
+    StarOffsetY: TFloatSpinEdit;
     spSlitX: TSpinEdit;
     spSlitY: TSpinEdit;
     spSlitW: TSpinEdit;
@@ -218,10 +238,13 @@ type
     TabSheetAdvanced: TTabSheet;
     TabSheetGuider: TTabSheet;
     Title: TLabel;
+    procedure btnAddSlitOffsetClick(Sender: TObject);
+    procedure btnDelSlitOffsetClick(Sender: TObject);
     procedure BtnZoom05Click(Sender: TObject);
     procedure BtnZoom1Click(Sender: TObject);
     procedure BtnZoom2Click(Sender: TObject);
     procedure BtnZoomAdjustClick(Sender: TObject);
+    procedure Button1Click(Sender: TObject);
     procedure ButtonSetLockClick(Sender: TObject);
     procedure ButtonCalibrateClick(Sender: TObject);
     procedure ButtonDarkMouseDown(Sender: TObject; Button: TMouseButton; Shift: TShiftState; X, Y: Integer);
@@ -231,6 +254,7 @@ type
     procedure ButtonStopClick(Sender: TObject);
     procedure cbDrawSlitChange(Sender: TObject);
     procedure cbGuideLockChange(Sender: TObject);
+    procedure cbSlitListChange(Sender: TObject);
     procedure cbSpectroChange(Sender: TObject);
     procedure cbUseAstrometryChange(Sender: TObject);
     procedure cbEnlargeImageChange(Sender: TObject);
@@ -243,6 +267,7 @@ type
     procedure ForceGuideSpeedChange(Sender: TObject);
     procedure ForceRedraw(Sender: TObject);
     procedure ExposureChange(Sender: TObject);
+    procedure MenuSlitOffsetMouseDown(Sender: TObject; Button: TMouseButton; Shift: TShiftState; X, Y: Integer);
     procedure LongestPulse1Change(Sender: TObject);
     procedure MenuItemCaptureDarkClick(Sender: TObject);
     procedure MenuItemClearDarkClick(Sender: TObject);
@@ -262,12 +287,13 @@ type
     procedure ra_hysteresis1Change(Sender: TObject);
     procedure scale1Click(Sender: TObject; Button: TUDBtnType);
     procedure ShortestPulse1Change(Sender: TObject);
+    procedure SlitOffsetChange(Sender: TObject);
     procedure vpa_solar1Change(Sender: TObject);
     procedure v_solar1Change(Sender: TObject);
   private
     { private declarations }
     thescale : double;
-    FonStart, FonStop, FonCalibrate, FonCalibrateBacklash, FonLoop, FonRedraw,FonSpectroGuideChange: TNotifyEvent;
+    FonStart, FonStop, FonCalibrate, FonCalibrateBacklash, FonLoop, FonRedraw,FonSpectroGuideChange,FonConfigureGuider: TNotifyEvent;
     FonSetTemperature,FonSetCooler, FonCaptureDark, FonLoadDark, FonClearDark,FonDarkInfo, FonShowImage: TNotifyEvent;
     FonParameterChange: TNotifyStr;
     cur_minHFD,cur_minSNR,cur_Exposure,cur_vsolar,cur_vpasolar : double;
@@ -279,6 +305,7 @@ type
     FGuideLockNextX, FGuideLockNextY: integer;
     FonShowMessage: TNotifyMsg;
     Fcamera: T_camera;
+    CurrentSlit: integer;
 
     procedure msg(txt:string; level: integer);
     procedure ShowMinMove;
@@ -343,10 +370,17 @@ type
     function GetFGuideMultistar:Boolean;
     procedure SetGuideLock(value:Boolean);
     function GetGuideLock:Boolean;
+    // slit reference position
+    function GetRefX:double;
+    procedure SetRefX(value:double);
+    function GetRefY:double;
+    procedure SetRefY(value:double);
+    // slit current position including slit offset
+    function GetSlitPosX:double;
+    function GetSlitPosY:double;
+    // guide position including slit and star offset
     function GetLockX:double;
-    procedure SetLockX(value:double);
     function GetLockY:double;
-    procedure SetLockY(value:double);
     function GetSearchWinMin:integer;
     procedure SetSearchWinMin(value:integer);
     function GetSearchWinMax:integer;
@@ -385,6 +419,7 @@ type
     function CalibrationIsValid(out detail: string): boolean;
     function Snapshot(exp: double; fn: string):boolean;
     function SaveFits(fn: string):boolean;
+    procedure ClearSlitList;
     property onShowMessage: TNotifyMsg read FonShowMessage write FonShowMessage;
     property Camera: T_camera read Fcamera write Fcamera;
     property onLoop: TNotifyEvent read FonLoop write FonLoop;
@@ -433,8 +468,12 @@ type
     property GuideLock: boolean read GetGuideLock write SetGuideLock; // single star slit guiding
     property ForceGuideMultistar: boolean read GetFGuideMultistar write SetFGuideMultistar; // force multistar after star lock
     property ForceMultistar: boolean read GetForceMultistar write SetForceMultistar; // multistar mode now required
-    property LockX: double read GetLockX write SetLockX;        // slit lock position
-    property LockY: double read GetLockY write SetLockY;
+    property RefX: double read GetRefX write SetRefX;    // slit reference position
+    property RefY: double read GetRefY write SetRefY;
+    property SlitPosX:double read GetSlitPosX;           // slit current position including slit offset
+    property SlitPosY:double read GetSlitPosY;
+    property LockX: double read GetLockX;                // guide position including slit and star offset
+    property LockY: double read GetLockY;
     property OffsetX: double read GetOffsetX write SetOffsetX;  // guide offset relative to reference, used by dithering, solar tracking, spectro offset
     property OffsetY: double read GetOffsetY write SetOffsetY;
     property GuideLockNextX: integer read FGuideLockNextX write FGuideLockNextX;
@@ -451,6 +490,7 @@ type
     property Info: string read GetInfo write SetInfo;
     property CameraStatus: string read GetCameraStatus write SetCameraStatus;
     property SpiralDither: boolean read GetSpiralDither write SetSpiralDither;
+    property onConfigureGuider: TNotifyEvent read FonConfigureGuider write FonConfigureGuider;
 
   end;
 
@@ -516,6 +556,7 @@ end;
 
 destructor  Tf_internalguider.Destroy;
 begin
+ ClearSlitList;
  inherited Destroy;
 end;
 
@@ -527,6 +568,7 @@ begin
   ButtonGuide.Caption:=rsGuide;
   ButtonStop.Caption:=rsStop;
   ButtonCalibrate.Caption:=rsCalibrate;
+  cbEnlargeImage.Caption:=rsEnlargeGuide;
   Label2.Caption:='α '+rsGain+':';
   Label3.Caption:='δ '+rsGain+':';
   Label1.Caption:=rsHysteresis+':';
@@ -578,9 +620,19 @@ begin
   cbSpectro.Caption:=rsActivateSpec;
   cbGuideLock.Caption:=rsActivateSing;
   GroupBoxLock.Caption:=rsGuidePositio;
-  label28.Caption:=rsLockPosition+' X';
-  label29.Caption:=rsLockPosition+' Y';
+  label28.Caption:='X';
+  label29.Caption:='Y';
   ButtonSetLock.Caption:=rsClickOnImage;
+  Label54.Caption:=rsPerSlitOffse;
+  Label53.Caption:=rsSlit;
+  Label51.Caption:=rsOffset+' X';
+  Label52.Caption:=rsOffset+' Y';
+  Label55.Caption:=rsGuideStarOff;
+  Label56.Caption:=rsOffset+' X';
+  Label57.Caption:=rsOffset+' Y';
+  MenuSlitOffset.Caption:=rsManage;
+  MenuItemAddSlit.Caption:=rsAdd;
+  MenuItemDelSlit.Caption:=rsDelete;
   cbUseAstrometry.Caption:=rsUseAstrometr2;
   label39.Caption:=rsAstrometryEx;
   GroupBoxOffset.Caption:=rsMultiStarGui;
@@ -879,11 +931,7 @@ end;
 
 procedure Tf_internalguider.cbDrawSlitChange(Sender: TObject);
 begin
-  spSlitX.Enabled:=cbDrawSlit.Checked;
-  spSlitY.Enabled:=cbDrawSlit.Checked;
-  spSlitW.Enabled:=cbDrawSlit.Checked;
-  spSlitL.Enabled:=cbDrawSlit.Checked;
-  spSlitPA.Enabled:=cbDrawSlit.Checked;
+  PanelSlitDrawing.Visible:=cbDrawSlit.Checked;
   ForceRedraw(nil);
 end;
 
@@ -893,6 +941,13 @@ begin
     PageControl2.ActivePageIndex:=0
   else
     PageControl2.ActivePageIndex:=1;
+  if not cbGuideLock.Checked then begin
+    StarOffsetX.Value:=0;
+    StarOffsetY.Value:=0;
+  end;
+  cbFGuideMultiStar.Enabled:=cbGuideLock.Checked;
+  if not cbFGuideMultiStar.Enabled then
+     cbFGuideMultiStar.Checked:=false;
   FDrawSettingChange:=true;
   if Assigned(FonSpectroGuideChange) then FonSpectroGuideChange(self);
 end;
@@ -906,6 +961,11 @@ procedure Tf_internalguider.cbUseAstrometryChange(Sender: TObject);
 begin
   AstrometryExp.Enabled:=cbUseAstrometry.Checked;
   label39.Enabled:=cbUseAstrometry.Checked;
+  PanelGuideStar.Enabled:=not cbUseAstrometry.Checked;
+  if not PanelGuideStar.Enabled then begin
+    StarOffsetX.Value:=0;
+    StarOffsetY.Value:=0;
+  end;
 end;
 
 procedure Tf_internalguider.cbEnlargeImageChange(Sender: TObject);
@@ -1433,6 +1493,11 @@ begin
   if Assigned(FonRedraw) then FonRedraw(self);
 end;
 
+procedure Tf_internalguider.Button1Click(Sender: TObject);
+begin
+  if Assigned(FonConfigureGuider) then FonConfigureGuider(self);
+end;
+
 procedure Tf_internalguider.ButtonSetLockClick(Sender: TObject);
 begin
   InternalGuiderSetLockPosition:=true;
@@ -1515,24 +1580,41 @@ begin
   result:=FForceMultiStar;
 end;
 
-function Tf_internalguider.GetLockX:double;
+function Tf_internalguider.GetRefX:double;
 begin
- result:=edLockX.value;
+ result:=edRefX.value;
+end;
+procedure Tf_internalguider.SetRefX(value:double);
+begin
+ edRefX.value:=value;
+end;
+function Tf_internalguider.GetRefY:double;
+begin
+ result:=edRefY.value;
+end;
+procedure Tf_internalguider.SetRefY(value:double);
+begin
+ edRefY.value:=value;
 end;
 
-procedure Tf_internalguider.SetLockX(value:double);
+function Tf_internalguider.GetLockX:double;
 begin
- edLockX.value:=value;
+ result:=edRefX.value + SlitOffsetX.Value + StarOffsetX.Value;
 end;
 
 function Tf_internalguider.GetLockY:double;
 begin
- result:=edLockY.value;
+ result:=edRefY.value + SlitOffsetY.value + StarOffsetY.Value;
 end;
 
-procedure Tf_internalguider.SetLockY(value:double);
+function Tf_internalguider.GetSlitPosX:double;
 begin
- edLockY.value:=value;
+ result:=edRefX.value + SlitOffsetX.Value;
+end;
+
+function Tf_internalguider.GetSlitPosY:double;
+begin
+ result:=edRefY.value + SlitOffsetY.value;
 end;
 
 function Tf_internalguider.GetSearchWinMin:integer;
@@ -1753,6 +1835,85 @@ begin
   result:=rgDitherMode.ItemIndex=0;
 end;
 
+procedure Tf_internalguider.ClearSlitList;
+var i: integer;
+begin
+  for i:=cbSlitList.Items.Count-1 downto 0 do begin
+    if cbSlitList.Items.Objects[i]<>nil then cbSlitList.Items.Objects[i].Free;
+    cbSlitList.Items.Delete(i);
+  end;
+end;
+
+procedure Tf_internalguider.MenuSlitOffsetMouseDown(Sender: TObject; Button: TMouseButton; Shift: TShiftState; X, Y: Integer);
+var p: TPoint;
+begin
+  p.x:=0;
+  p.y:=MenuSlitOffset.Height;
+  p:=MenuSlitOffset.ClientToScreen(p);
+  PopupMenuSlit.PopUp(p.x,p.y);
+end;
+
+procedure Tf_internalguider.btnAddSlitOffsetClick(Sender: TObject);
+var so:TSlitOffset;
+    i: integer;
+    n: string;
+begin
+  n:=trim(cbSlitList.text);
+  i:=cbSlitList.Items.IndexOf(n);
+  if i>=0 then begin
+    so:=TSlitOffset(cbSlitList.items.Objects[i]);
+    so.x:=SlitOffsetX.Value;
+    so.y:=SlitOffsetY.Value;
+  end
+  else begin
+    so:=TSlitOffset.Create;
+    so.slitname:=n;
+    so.x:=SlitOffsetX.Value;
+    so.y:=SlitOffsetY.Value;
+    i:=cbSlitList.Items.AddObject(so.slitname,so);
+  end;
+  cbSlitList.ItemIndex:=i;
+  CurrentSlit:=i;
+end;
+
+procedure Tf_internalguider.SlitOffsetChange(Sender: TObject);
+var so:TSlitOffset;
+    i: integer;
+begin
+  i:=cbSlitList.ItemIndex;
+  if (i>=0) then begin
+    so:=TSlitOffset(cbSlitList.Items.Objects[i]);
+    so.x:=SlitOffsetX.Value;
+    so.y:=SlitOffsetY.Value;
+  end;
+  ForceRedraw(Sender);
+end;
+
+procedure Tf_internalguider.btnDelSlitOffsetClick(Sender: TObject);
+var i: integer;
+begin
+ i:=CurrentSlit;
+ if (i>=0)and(i<cbSlitList.Items.Count) then begin
+   if cbSlitList.Items.Objects[i]<>nil then cbSlitList.Items.Objects[i].Free;
+   cbSlitList.Items.Delete(i);
+   cbSlitList.ItemIndex:=i-1;
+   cbSlitListChange(Sender);
+ end;
+end;
+
+procedure Tf_internalguider.cbSlitListChange(Sender: TObject);
+var so:TSlitOffset;
+    i: integer;
+begin
+  i:=cbSlitList.ItemIndex;
+  if (i>=0)and(i<cbSlitList.Items.Count) then begin
+    CurrentSlit:=i;
+    so:=TSlitOffset(cbSlitList.Items.Objects[CurrentSlit]);
+    cbSlitList.text := so.slitname;
+    SlitOffsetX.Value := so.x;
+    SlitOffsetY.Value := so.y;
+  end;
+end;
 
 end.
 

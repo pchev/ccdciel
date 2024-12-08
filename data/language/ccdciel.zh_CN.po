@@ -6,15 +6,15 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ccdciel\n"
 "Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
-"POT-Creation-Date: 2024-11-03 14:03+0000\n"
-"PO-Revision-Date: 2024-10-07 04:00+0000\n"
+"POT-Creation-Date: 2024-12-01 20:12+0000\n"
+"PO-Revision-Date: 2024-11-16 13:09+0000\n"
 "Last-Translator: Zachary Wu <Unknown>\n"
 "Language-Team: Chinese (Simplified) <zh_CN@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2024-11-03 14:12+0000\n"
-"X-Generator: Launchpad (build 22ade00ab50b929fac63b8ee7252243aceda294a)\n"
+"X-Launchpad-Export-Date: 2024-12-01 20:16+0000\n"
+"X-Generator: Launchpad (build 1519c6efe8e9bd78e6c5ebf2eb5bcb040b95ad32)\n"
 
 #: u_translation.rs2d
 msgid "2D"
@@ -105,6 +105,10 @@ msgstr "累加图像"
 #: u_translation.rsadditionalop
 msgid "Additional options for"
 msgstr "额外的选项"
+
+#: u_translation.rsadditionalsc
+msgid "Additional script parameter"
+msgstr ""
 
 #: u_translation.rsaddstep
 msgid "Add step"
@@ -436,6 +440,10 @@ msgstr "自动对焦成功"
 #: u_translation.rsautofocustol
 msgid "Autofocus tolerance "
 msgstr "自动对焦容差 "
+
+#: u_translation.rsautofocususi
+msgid "Autofocus using the OAG camera"
+msgstr ""
 
 #: u_translation.rsautofocuswil
 msgid "Autofocus will run before the next exposure"
@@ -1021,6 +1029,10 @@ msgstr "云量"
 msgid "Color balance"
 msgstr "色彩平衡"
 
+#: u_translation.rscolorizespec
+msgid "Colorize spectra images"
+msgstr ""
+
 #: u_translation.rscolorpreview
 msgid "Color preview"
 msgstr "彩色预览"
@@ -1064,18 +1076,21 @@ msgid ""
 "\n"
 "It will automatically take two images east and west of the meridian near the zenith. The cone error will be reported in the log."
 msgstr ""
+"该测试将通过测量中天翻转后的指向误差来估计望远镜圆锥误差\n"
+"\n"
+"系统会自动拍摄天顶附近子午线东西两侧的两幅图像。圆锥误差将会在日志中报告。"
 
 #: u_translation.rsconemeasureeastwest
 msgid "Start measuring East to West"
-msgstr ""
+msgstr "开始自东向西测量"
 
 #: u_translation.rsconemeasurewesteast
 msgid "Start measuring West to East"
-msgstr ""
+msgstr "开始自西向东测量"
 
 #: u_translation.rsconetest
 msgid "Measure the cone error"
-msgstr ""
+msgstr "测量圆锥误差"
 
 #: u_translation.rsconfiguratio
 msgid "Configuration saved"
@@ -1213,7 +1228,7 @@ msgstr "新建空的配置文件"
 
 #: u_translation.rscrossmeridan
 msgid " Moving to the other side of the meridian"
-msgstr ""
+msgstr " 移动到子午线的另一边"
 
 #: u_translation.rscurrent
 msgid "Current"
@@ -1677,6 +1692,10 @@ msgstr "结束预览"
 #: u_translation.rsendtime
 msgid "End time"
 msgstr "结束时间"
+
+#: u_translation.rsenlargeguide
+msgid "Enlarge guide image"
+msgstr ""
 
 #: u_translation.rsenterthej200
 msgid "Enter the J2000 coordinates of the target where the main instrument is currently pointing."
@@ -2420,6 +2439,10 @@ msgstr "图像清晰度%s"
 msgid "Image statistic"
 msgstr "图像统计数据"
 
+#: u_translation.rsimagetransfe
+msgid "Image transfer"
+msgstr ""
+
 #: u_translation.rsimageundebay
 msgid "Image Un-debayered"
 msgstr "图像未去拜尔"
@@ -2501,6 +2524,10 @@ msgstr "检测图像中HFD值的分布，以帮助进行彗差镜间距和倾斜
 #, object-pascal-format
 msgid "in %s seconds"
 msgstr "在%s秒内"
+
+#: u_translation.rsinstrumentna
+msgid "Instrument name"
+msgstr ""
 
 #: u_translation.rsintensity
 msgid "Intensity"
@@ -2652,10 +2679,6 @@ msgstr "载入平场文件"
 #: u_translation.rslockoverlay
 msgid "Lock overlay"
 msgstr "锁定覆盖"
-
-#: u_translation.rslockposition
-msgid "Lock position"
-msgstr "锁定位置"
 
 #: u_translation.rslogfolder
 msgid "Log folder"
@@ -2828,6 +2851,10 @@ msgstr "测量%s pos:%s step:%s hfd:%s peak:%s snr:%s"
 #: u_translation.rsmeasurepixel
 msgid "Measure pixel scale by stop tracking"
 msgstr "通过停止跟踪测量像素比例尺"
+
+#: u_translation.rsmeasureteles
+msgid "Measure telescope cone error"
+msgstr ""
 
 #: u_translation.rsmeasurewn
 msgid "Measure in the West and North"
@@ -3124,6 +3151,10 @@ msgstr "临近天极"
 #, object-pascal-format
 msgid "Need to wait until %s"
 msgstr "需要等待直到%s"
+
+#: u_translation.rsnetwork
+msgid "Network"
+msgstr ""
 
 #: u_translation.rsnew
 msgid "New"
@@ -3573,6 +3604,10 @@ msgstr "性能"
 msgid "Periodic auto-focus"
 msgstr "周期性自动对焦"
 
+#: u_translation.rsperslitoffse
+msgid "Per slit offset"
+msgstr ""
+
 #: u_translation.rsphotometry
 msgid "Photometry"
 msgstr "光度测定"
@@ -3889,6 +3924,10 @@ msgstr "RA"
 #: u_translation.rsrainrate
 msgid "Rain rate"
 msgstr "降水概率"
+
+#: u_translation.rsramdisk
+msgid "RAM Disk"
+msgstr ""
 
 #: u_translation.rsrandom
 msgid "Random"
@@ -4217,6 +4256,10 @@ msgstr "旋转器同步校准=%s"
 msgid "Run"
 msgstr "执行"
 
+#: u_translation.rsrunaninitial
+msgid "Run an initialization script"
+msgstr ""
+
 #: u_translation.rsrunascript
 msgid "Run a script"
 msgstr "运行脚本"
@@ -4423,6 +4466,10 @@ msgstr "选择校准选项："
 msgid "Select a star first!"
 msgstr "先选择一颗星！"
 
+#: u_translation.rsselectcamera
+msgid "Select camera"
+msgstr ""
+
 #: u_translation.rsselectguides
 msgid "Select guide star"
 msgstr "选择导星"
@@ -4430,6 +4477,10 @@ msgstr "选择导星"
 #: u_translation.rsselectoneoft
 msgid "Select one of the measurement options:"
 msgstr "选择测量选项之一："
+
+#: u_translation.rsselectthecam
+msgid "Select the camera to use for the cone measurement"
+msgstr ""
 
 #: u_translation.rsselectthecur
 msgid "Select the cursor to use "
@@ -4843,6 +4894,10 @@ msgstr "回转偏移量 %s/%s"
 #: u_translation.rsslippagecorr
 msgid "Slippage correction "
 msgstr "滑脱修正 "
+
+#: u_translation.rsslit
+msgid "Slit"
+msgstr ""
 
 #: u_translation.rsslitdrawing
 msgid "Slit drawing"
@@ -5466,7 +5521,7 @@ msgstr "计算机时区%s和观测站经度%s不兼容。"
 #: u_translation.rstheconeerror
 #, object-pascal-format
 msgid "The cone error results in a slew error of: %s arcmin at zenith. If error is positive then move telescope light inlet closer to the mount. If negative move telescope light inlet away from the mount,"
-msgstr ""
+msgstr "圆锥误差导致的指向误差为：天顶处为 %s 弧分。如果误差为正，则将望远镜入光口移近支架。如果误差为负，则将望远镜入光口移离支架，"
 
 #: u_translation.rsthedataare2
 #, object-pascal-format

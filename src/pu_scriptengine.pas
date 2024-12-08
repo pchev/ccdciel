@@ -265,6 +265,16 @@ type
     function cmd_camerasetframe(fx,fy,fw,fh: string): string;
     function cmd_cameraresetframe: string;
     function cmd_cameragetframe(out fx,fy,fw,fh: integer): string;
+    function cmd_Internalguider_SetGuideExposure(exp:string):string;
+    function cmd_Internalguider_SetSpectrofunction(onoff:string):string;
+    function cmd_Internalguider_SetSpectroSinglestar(onoff:string):string;
+    function cmd_Internalguider_SetSpectroChangeMultistar(onoff:string):string;
+    function cmd_Internalguider_SetSpectroAstrometry(onoff:string):string;
+    function cmd_Internalguider_SetSpectroAstrometryExposure(exp:string):string;
+    function cmd_Internalguider_SetSpectroSlitname(slit:string):string;
+    function cmd_Internalguider_SetSpectroGuidestaroffset(x,y:string):string;
+    function cmd_Internalguider_SetSpectroGuidestarRaDec(ra,de:string):string;
+    function cmd_Internalguider_SetSpectroMultistaroffset(x,y:string):string;
     function ScriptType(fn: string): TScriptType;
     function  RunScript(sname,path,args: string):boolean;
     function ScriptRunning: boolean;
@@ -388,6 +398,10 @@ begin
   else if varname='COVERSTATUS' then str:=cmd_coverstatus
   else if varname='CALIBRATORSTATUS' then str:=cmd_calibratorstatus
   else if varname='TELESCOPE_PIERSIDE' then str:=PierSideName[ord(mount.PierSide)]
+  else if varname='PREVIEW_GETBINNING' then str:=Preview.Binning.Text
+  else if varname='CAPTURE_GETBINNING' then str:=Capture.Binning.Text
+  else if varname='CAPTURE_GETOBJECTNAME' then str:=Capture.Fname.Text
+  else if varname='CAPTURE_GETFRAMETYPE' then str:=Capture.cbFrameType.Text
   else if varname='STR1' then str:=slist[0]
   else if varname='STR2' then str:=slist[1]
   else if varname='STR3' then str:=slist[2]
@@ -483,6 +497,8 @@ begin
   else if varname='OBS_LATITUDE' then x:=ObsLatitude
   else if varname='OBS_LONGITUDE' then x:=-ObsLongitude
   else if varname='OBS_ELEVATION' then x:=ObsElevation
+  else if varname='PREVIEW_GETEXPOSURE' then x:=Preview.Exposure
+  else if varname='CAPTURE_GETEXPOSURE' then x:=Capture.ExposureTime
   else if varname='DOUBLE1' then x:=dlist[0]
   else if varname='DOUBLE2' then x:=dlist[1]
   else if varname='DOUBLE3' then x:=dlist[2]
@@ -519,6 +535,8 @@ begin
   varname:=uppercase(varname);
   if varname='FOCUSERPOSITION' then i:=FFocuser.Position
   else if varname='CALIBRATORBRIGHTNESS' then i:=cmd_getcalibratorbrightness
+  else if varname='CAPTURE_GETCOUNT' then i:=Capture.SeqNum.Value
+  else if varname='CAPTURE_GETDITHER' then i:=Capture.DitherCount.Value
   else if varname='INT1' then i:=ilist[0]
   else if varname='INT2' then i:=ilist[1]
   else if varname='INT3' then i:=ilist[2]
@@ -1612,8 +1630,8 @@ begin
    config.SetValue('/Autoguider/Lock/GuideLockX',x);
    config.SetValue('/Autoguider/Lock/GuideLockY',y);
    FInternalGuider.GuideLock:=True;
-   FInternalGuider.LockX:=x;
-   FInternalGuider.LockY:=y;
+   FInternalGuider.RefX:=x;
+   FInternalGuider.RefY:=y;
    PHD2GuideSetLock:=True;
    PHD2GuideLockX:=x;
    PHD2GuideLockY:=y;
@@ -2479,6 +2497,175 @@ except
   result:=msgFailed;
 end;
 end;
+
+function Tf_scriptengine.cmd_Internalguider_SetGuideExposure(exp:string):string;
+var x: double;
+    n: integer;
+begin
+result:=msgFailed;
+try
+ val(exp,x,n);
+ if (n=0)and(Fautoguider.AutoguiderType=agINTERNAL) then begin
+   Finternalguider.Exposure.Value:=x;
+   result:=msgOK;
+ end;
+except
+  result:=msgFailed;
+end;
+end;
+
+function Tf_scriptengine.cmd_Internalguider_SetSpectrofunction(onoff:string):string;
+begin
+result:=msgFailed;
+try
+ if (Fautoguider.AutoguiderType=agINTERNAL) then begin
+   Finternalguider.SpectroFunctions:=(onoff='ON');
+   result:=msgOK;
+ end;
+except
+  result:=msgFailed;
+end;
+end;
+
+function Tf_scriptengine.cmd_Internalguider_SetSpectroSinglestar(onoff:string):string;
+begin
+result:=msgFailed;
+try
+ if (Fautoguider.AutoguiderType=agINTERNAL) then begin
+   Finternalguider.GuideLock:=(onoff='ON');
+   result:=msgOK;
+ end;
+except
+  result:=msgFailed;
+end;
+end;
+
+function Tf_scriptengine.cmd_Internalguider_SetSpectroChangeMultistar(onoff:string):string;
+begin
+result:=msgFailed;
+try
+ if (Fautoguider.AutoguiderType=agINTERNAL)and(Finternalguider.GuideLock) then begin
+   Finternalguider.ForceGuideMultistar:=(onoff='ON');
+   result:=msgOK;
+ end;
+except
+  result:=msgFailed;
+end;
+end;
+
+function Tf_scriptengine.cmd_Internalguider_SetSpectroAstrometry(onoff:string):string;
+begin
+result:=msgFailed;
+try
+ if (Fautoguider.AutoguiderType=agINTERNAL) then begin
+   Finternalguider.cbUseAstrometry.Checked:=(onoff='ON');
+   result:=msgOK;
+ end;
+except
+  result:=msgFailed;
+end;
+end;
+
+function Tf_scriptengine.cmd_Internalguider_SetSpectroAstrometryExposure(exp:string):string;
+var x: double;
+    n: integer;
+begin
+result:=msgFailed;
+try
+ val(exp,x,n);
+ if (n=0)and(Fautoguider.AutoguiderType=agINTERNAL)and(Finternalguider.cbUseAstrometry.Checked) then begin
+   Finternalguider.AstrometryExp.Value:=x;
+   result:=msgOK;
+ end;
+except
+  result:=msgFailed;
+end;
+end;
+
+function Tf_scriptengine.cmd_Internalguider_SetSpectroSlitname(slit:string):string;
+var i: integer;
+    so:TSlitOffset;
+begin
+result:=msgFailed;
+try
+ if (Fautoguider.AutoguiderType=agINTERNAL) then begin
+   slit:=trim(slit);
+   i:=Finternalguider.cbSlitList.Items.IndexOf(slit);
+   if i>=0 then begin
+     // select slit
+     Finternalguider.cbSlitList.ItemIndex:=i;
+     Finternalguider.cbSlitListChange(nil);
+     result:=msgOK;
+   end
+   else begin
+     // not found, create a new entry
+     so:=TSlitOffset.Create;
+     so.slitname:=slit;
+     so.x:=0;
+     so.y:=0;
+     i:=Finternalguider.cbSlitList.Items.AddObject(slit,so);
+     Finternalguider.cbSlitList.ItemIndex:=i;
+     Finternalguider.cbSlitListChange(nil);
+     result:=msgOK;
+   end;
+ end;
+except
+  result:=msgFailed;
+end;
+end;
+
+function Tf_scriptengine.cmd_Internalguider_SetSpectroGuidestaroffset(x,y:string):string;
+var xx,yy: double;
+    n: integer;
+begin
+result:=msgFailed;
+try
+ if (Fautoguider.AutoguiderType=agINTERNAL)and(finternalguider.GuideLock)and(finternalguider.PanelGuideStar.Enabled) then begin
+   val(x,xx,n);
+   if n<>0 then exit;
+   val(y,yy,n);
+   if n<>0 then exit;
+   finternalguider.StarOffsetX.Value:=xx;
+   finternalguider.StarOffsetY.Value:=yy;
+   result:=msgOK;
+ end;
+except
+  result:=msgFailed;
+end;
+end;
+
+function Tf_scriptengine.cmd_Internalguider_SetSpectroGuidestarRaDec(ra,de:string):string;
+begin
+result:=msgFailed;
+try
+ if (Fautoguider.AutoguiderType=agINTERNAL)and(finternalguider.GuideLock)and(finternalguider.PanelGuideStar.Enabled) then begin
+   { #todo :  }
+ end;
+except
+  result:=msgFailed;
+end;
+end;
+
+function Tf_scriptengine.cmd_Internalguider_SetSpectroMultistaroffset(x,y:string):string;
+var xx,yy: double;
+    n: integer;
+begin
+result:=msgFailed;
+try
+ if (Fautoguider.AutoguiderType=agINTERNAL)and(not finternalguider.GuideLock) then begin
+   val(x,xx,n);
+   if n<>0 then exit;
+   val(y,yy,n);
+   if n<>0 then exit;
+   finternalguider.OffsetX:=xx;
+   finternalguider.OffsetY:=yy;
+   result:=msgOK;
+ end;
+except
+  result:=msgFailed;
+end;
+end;
+
 
 ///// Python scripts ///////
 

@@ -178,6 +178,11 @@ type
     name: string;
   end;
 
+  TSlitOffset = class(TObject)
+    x,y: double;
+    slitname: string;
+  end;
+
   // libcdcwcs
  type
    {$ifdef cpu32}
@@ -347,6 +352,7 @@ const
 
   {$ifdef linux}
     SharedDir = '../share/ccdciel';
+    defTransfertPath='/mnt/ramdisk';
     libwcs = 'libpaswcs.so.1';
     libz = 'libz.so.1';
     fpackcmd = 'fpack';
@@ -360,6 +366,7 @@ const
   {$endif}
   {$ifdef darwin}
     SharedDir = './';
+    defTransfertPath='/Volumes/ramdisk';
     libwcs = 'libccdcielwcs.dylib';
     libz = 'libz.dylib';
     fpackcmd = 'fpack';
@@ -373,6 +380,7 @@ const
   {$endif}
   {$ifdef mswindows}
     SharedDir = '.\';
+    defTransfertPath='Z:\';
     libwcs = 'libccdcielwcs.dll';
     libz = 'zlib1.dll';
     fpackcmd = 'fpack.exe';
@@ -449,6 +457,7 @@ var
   DefaultBayerMode:TBayerMode;
   BalanceFromCamera,BGneutralization: boolean;
   RedBalance,GreenBalance,BlueBalance: double;
+  ColorizeSpectra: boolean;
   MaxVideoPreviewRate: integer;
   TemperatureScale: integer;
   TempLabel: string;
@@ -458,6 +467,7 @@ var
   FocuserPositionMin, FocuserPositionMax: integer;
   Starwindow,Focuswindow: integer;
   AutofocusMode:TAutofocusMode;
+  GuiderAutofocus: boolean;
   AutofocusMinSpeed,AutofocusMaxSpeed,AutofocusNearNum,FocuserDelay,AutofocusBinning,AutofocusPeriod: integer;
   AutofocusStartHFD,AutofocusNearHFD: double;
   AutofocusExposure,AutofocusExposureFact:double;
@@ -517,9 +527,10 @@ var
   FilenameOpt: array[0..FileNameCount-1] of TFilenameList;
   FilenameActive: array[0..FileNameCount-1] of Boolean;
   FilenameSep, FilenameSeqSep: String;
-  FilePack,FileStackFloat: boolean;
+  FilePack,FileStackFloat,FileRemoveSpace: boolean;
   FitsFileExt: string;
   FileSequenceWidth: integer;
+  LastCaptureFile: string;
   UseRotator: boolean;
   CanSetGainOffset, hasGain, hasGainISO, hasOffset: boolean;
   ISOList: TStringList;

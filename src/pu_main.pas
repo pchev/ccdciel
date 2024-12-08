@@ -38,7 +38,7 @@ uses
   fu_starprofile, fu_filterwheel, fu_focuser, fu_mount, fu_ccdtemp, fu_autoguider, fu_cover, fu_switch, fu_switchpage,
   fu_sequence, fu_planetarium, fu_script, fu_finder, pu_findercalibration, u_ccdconfig, pu_edittargets, pu_scriptengine,
   fu_video, pu_devicesetup, pu_options, pu_indigui, cu_fits, cu_camera, pu_pause, cu_tcpserver, cu_waitthread,
-  pu_viewtext, cu_wheel, cu_mount, cu_focuser, XMLConf, u_utils, u_global, UScaleDPI, pu_handpad,
+  pu_viewtext, cu_wheel, cu_mount, cu_focuser, XMLConf, u_utils, u_global, UScaleDPI, pu_handpad, pu_downloadscript,
   cu_indimount, cu_ascommount, cu_indifocuser, cu_ascomfocuser, pu_vcurve, pu_focusercalibration, pu_onlineinfo,
   fu_rotator, cu_rotator, cu_indirotator, cu_ascomrotator, cu_watchdog, cu_indiwatchdog, pu_sensoranalysis,
   cu_weather, cu_ascomweather, cu_indiweather, cu_safety, cu_ascomsafety, cu_indisafety, fu_weather, fu_safety,
@@ -150,6 +150,7 @@ type
     MenuDarkHeader: TMenuItem;
     MenuFlatHeader: TMenuItem;
     MeasureConeError1: TMenuItem;
+    MenuInstallScript: TMenuItem;
     MenuItemPreprocess: TMenuItem;
     MenuItemPreprocess2: TMenuItem;
     MenuItemGuiderSolveSync: TMenuItem;
@@ -198,7 +199,6 @@ type
     MenuViewSwitch: TMenuItem;
     MenuSavePicture: TMenuItem;
     MenuPolarAlignment: TMenuItem;
-    MenuItem18: TMenuItem;
     MenuItemPhotometry2: TMenuItem;
     MenuItem17: TMenuItem;
     MenuItemPhotometry: TMenuItem;
@@ -256,6 +256,8 @@ type
     SaveDialogPicture: TSaveDialog;
     Separator2: TMenuItem;
     Separator3: TMenuItem;
+    Separator4: TMenuItem;
+    Separator5: TMenuItem;
     Splitter1: TSplitter;
     Splitter2: TSplitter;
     Splitter3: TSplitter;
@@ -445,6 +447,7 @@ type
     procedure MenuFlatFileClick(Sender: TObject);
     procedure MenuFlatHeaderClick(Sender: TObject);
     procedure MenuImageMultipanelClick(Sender: TObject);
+    procedure MenuInstallScriptClick(Sender: TObject);
     procedure MenuInternalguiderStartClick(Sender: TObject);
     procedure MenuInternalGuiderStopClick(Sender: TObject);
     procedure MenuItemFinderSaveImageClick(Sender: TObject);
@@ -684,6 +687,8 @@ type
     SaveAutofocusBinning: string;
     SaveAutofocusFX,SaveAutofocusFY,SaveAutofocusFW,SaveAutofocusFH,SaveAutofocusBX,SaveAutofocusBY: integer;
     SaveAutofocusGain, SaveAutofocusOffset, SaveAutofocusPreviewGain, SaveAutofocusPreviewOffset: integer;
+    SaveGuiderAutofocusExposure: double;
+    SaveAutofocusBin, SaveGuiderAutofocusGain, SaveGuiderAutofocusOffset: integer;
     TerminateVcurve: boolean;
     ScrBmp,ScrGuideBmp,ScrFinderBmp: TBGRABitmap;
     ImageSaved: boolean;
@@ -858,6 +863,9 @@ type
     function  AutoAutofocus(ReturnToTarget: boolean=true; GuiderRestart: boolean=true): Boolean;
     procedure cmdAutomaticAutofocus(var ok: boolean);
     procedure cmdAutofocus(var ok: boolean);
+    Procedure GuiderAutoFocusStart(Sender: TObject);
+    Procedure GuiderAutoFocusStop(Sender: TObject);
+    Procedure DoGuiderAutoFocus;
     Procedure FocuserStatus(Sender: TObject);
     function  FocuserTemperatureCompensation(canwait:boolean):boolean;
     procedure FocuserPositionChange(n:double);
@@ -943,6 +951,7 @@ type
     Procedure StartPreviewExposureAsync(Data: PtrInt);
     function  PrepareCaptureExposure(canwait:boolean):boolean;
     procedure CaptureDither;
+    procedure StopPreviewEvent(Sender: TObject);
     Procedure StartCaptureExposure(Sender: TObject);
     procedure StartCaptureExposureAsync(Data: PtrInt);
     Procedure StartCaptureExposureNow;
@@ -956,6 +965,7 @@ type
     Procedure ClearGuideImage;
     Procedure ClearFinderImage;
     Procedure DrawImage(WaitCursor:boolean=false; videoframe:boolean=false);
+    procedure SpectraColor(bmp:TBGRABitmap; wmin,wmax:double);
     Procedure PlotImage;
     procedure plot_north;
     Procedure DrawHistogram(SetLevel,ResetCursor: boolean);
@@ -1015,6 +1025,7 @@ type
     procedure CollimationApplyInspection(Sender: TObject);
     procedure ReadyForVideo(var v: boolean);
     procedure ShowStatus(str: string);
+    procedure InternalguiderConfigure(Sender: TObject);
     procedure InternalguiderLoop(Sender: TObject);
     procedure InternalguiderStart(Sender: TObject);
     procedure InternalguiderStop(Sender: TObject);
@@ -1044,6 +1055,7 @@ type
     Procedure DrawFinderImage(display: boolean);
     Procedure PlotFinderImage;
     procedure FinderRedraw(Sender: TObject);
+    procedure FinderConfigure(Sender: TObject);
     Procedure SetGuiderCamera;
     Procedure SetFinderCamera;
     Procedure SetMultipanel(onoff: boolean);
@@ -1538,6 +1550,7 @@ begin
   learningvcurve:=false;
   autofocusing:=false;
   LastROIname:='';
+  LastCaptureFile:='';
   CameraProcessingImage:=false;
   CameraProcessingNum:=0;
   CancelAutofocus:=false;
@@ -1675,7 +1688,7 @@ begin
     cdcwcs_initfitsfile:= Tcdcwcs_initfitsfile(GetProcedureAddress(cdcwcslib,'cdcwcs_initfitsfile'));
     cdcwcs_release:= Tcdcwcs_release(GetProcedureAddress(cdcwcslib,'cdcwcs_release'));
     cdcwcs_sky2xy:= Tcdcwcs_sky2xy(GetProcedureAddress(cdcwcslib,'cdcwcs_sky2xy'));
-    cdcwcs_xy2sky:= Tcdcwcs_sky2xy(GetProcedureAddress(cdcwcslib,'cdcwcs_xy2sky'));
+    cdcwcs_xy2sky:= Tcdcwcs_xy2sky(GetProcedureAddress(cdcwcslib,'cdcwcs_xy2sky'));
     cdcwcs_getinfo:= Tcdcwcs_getinfo(GetProcedureAddress(cdcwcslib,'cdcwcs_getinfo'));
   end;
   WCScenterRA:=NullCoord;
@@ -1846,6 +1859,7 @@ begin
   f_capture.onFrameTypeChange:=@CaptureFrameTypeChange;
   f_capture.onStartExposure:=@StartCaptureExposure;
   f_capture.onAbortExposure:=@StopExposure;
+  f_capture.onStopPreview:=@StopPreviewEvent;
   f_capture.onMsg:=@NewMessage;
   f_capture.onResetHFM:=@HFM_ResetMeasurements;
 
@@ -1912,6 +1926,7 @@ begin
   f_cover.onChangeBrightness:=@BrightnessChange;
 
   f_internalguider:=Tf_internalguider.Create(self);
+  f_internalguider.onConfigureGuider:=@InternalguiderConfigure;
   f_internalguider.onLoop:=@InternalguiderLoop;
   f_internalguider.onStart:=@InternalguiderStart;
   f_internalguider.onStop:=@InternalguiderStop;
@@ -1934,6 +1949,7 @@ begin
   f_finder.Astrometry:=astrometry;
   f_finder.onShowMessage:=@NewMessage;
   f_finder.onRedraw:=@FinderRedraw;
+  f_finder.onConfigureFinder:=@FinderConfigure;
 
   i:=config.GetValue('/Autoguider/Software',2);
   case TAutoguiderType(i) of
@@ -2331,6 +2347,7 @@ procedure Tf_main.SetLang;
 begin
    MenuItem1.Caption := rsFile;
    MenuSetup.Caption:=Format(rsDevicesSetup, [ellipsis]);
+   MenuInstallScript.Caption:=rsInstallScrip+ellipsis;
    MenuItemBPM.Caption := rsBadPixelMap;
    MenuBPM.Caption := rsCreateFromCa;
    MenuBPMDark.Caption:=rsCreateFromDa;
@@ -2693,7 +2710,7 @@ begin
   FrameBin:=config.GetValue('/CCDframe/FrameBin',1);
 
   f_visu.Gamma.Value:=config.GetValue('/Visu/Gamma',1.0);
-  f_visu.HistBar.Position:=config.GetValue('/Visu/HistBar',50);
+  f_visu.HistBarPosition:=config.GetValue('/Visu/HistBar',50);
   f_visu.BtnFlipHorz.Down:=config.GetValue('/Visu/FlipHorz',false);
   f_visu.BtnFlipVert.Down:=config.GetValue('/Visu/FlipVert',false);
   f_visu.BtnClipRange.Down:=config.GetValue('/Visu/ClipRange',false);
@@ -3807,7 +3824,7 @@ end;
 procedure Tf_main.Image1DblClick(Sender: TObject);
 var x,y,px,py,dx,dy: integer;
     xc,yc,ri:integer;
-    x1,y1,w,h: integer;
+    x1,y1,y2,w,h: integer;
     vmax,bg,sd: double;
 begin
 if SplitImage then exit;
@@ -3829,9 +3846,12 @@ if fits.HeaderInfo.valid and fits.ImageValid and (not f_starprofile.AutofocusRun
    else if f_starprofile.SpectraProfile then begin
       Screen2Fits(Mx,My,f_visu.FlipHorz,f_visu.FlipVert,x1,y1);
       x1:=0;
-      y1:=y1-20;
       w:=fits.HeaderInfo.naxis1-1;
-      h:=40;
+      y1:=y1-20;
+      y2:=y1+40;
+      y1:=max(0,y1);
+      y2:=min(fits.HeaderInfo.naxis2-1,y2);
+      h:=y2-y1;
       f_starprofile.SetSpectra(x1,y1,w,h,fits);
       Image1.Invalidate;
    end
@@ -4126,6 +4146,7 @@ begin
   f_internalguider.Offset.MinValue:=guidecamera.OffsetMin;
   f_internalguider.Offset.MaxValue:=guidecamera.OffsetMax;
   f_internalguider.PanelTemperature.Visible:=guidecamera.Temperature<>NullCoord;
+  if f_internalguider.PanelTemperature.Visible then GuideCameraSetCooler(nil);
 end;
 
 procedure Tf_main.FinderCameraConnectTimerTimer(Sender: TObject);
@@ -4784,10 +4805,11 @@ var i,n: integer;
     ok: boolean;
     oldbayer: TBayerMode;
     oldRed,oldGreen,oldBlue:double;
-    oldBalance, oldBGneutralization:boolean;
+    oldBalance, oldBGneutralization,oldColorizeSpectra:boolean;
     posprev,poscapt:integer;
     binprev,bincapt:string;
     roi:TRoi;
+    so: TSlitOffset;
     ReverseDec, InverseSolarTracking : boolean;
 begin
   ShowHint:=screenconfig.GetValue('/Hint/Show',true);
@@ -4852,6 +4874,8 @@ begin
   BlueBalance:=config.GetValue('/Color/BlueBalance',0.9);
   ClippingOverflow:=config.GetValue('/Color/ClippingOverflow',MAXWORD);
   ClippingUnderflow:=config.GetValue('/Color/ClippingUnderflow',0);
+  oldColorizeSpectra:=ColorizeSpectra;
+  ColorizeSpectra:=config.GetValue('/Color/ColorizeSpectra',true);
   f_frame.ClearRoi;
   n:=config.GetValue('/Sensor/ROI/NumROI',0);
   for i:=1 to n do begin
@@ -4961,6 +4985,10 @@ begin
     f_starprofile.Label3.Caption:=rsFWHM+':';
     f_starprofile.Label4.Caption:='SNR:';
   end;
+  if WantGuideCamera then
+    GuiderAutofocus:=config.GetValue('/StarAnalysis/GuiderAutofocus',false)
+  else
+    GuiderAutofocus:=false;
   AutofocusMinSpeed:=config.GetValue('/StarAnalysis/AutofocusMinSpeed',10);
   AutofocusMaxSpeed:=config.GetValue('/StarAnalysis/AutofocusMaxSpeed',100);
   AutofocusStartHFD:=config.GetValue('/StarAnalysis/AutofocusStartHFD',20.0);
@@ -5024,9 +5052,24 @@ begin
   PHD2GuideLockY:=config.GetValue('/Autoguider/Lock/GuideLockY',0.0);
   f_internalguider.GuideLock:=config.GetValue('/Autoguider/Lock/GuideSetLock',false);
   f_internalguider.ForceGuideMultistar:=config.GetValue('/Autoguider/Lock/ForceGuideMultistar',false);
-  f_internalguider.LockX:=config.GetValue('/Autoguider/Lock/GuideLockX',0.0);
-  f_internalguider.LockY:=config.GetValue('/Autoguider/Lock/GuideLockY',0.0);
-
+  f_internalguider.RefX:=config.GetValue('/Autoguider/Lock/GuideLockX',0.0);
+  f_internalguider.RefY:=config.GetValue('/Autoguider/Lock/GuideLockY',0.0);
+  f_internalguider.ClearSlitList;
+  n:=config.GetValue('/InternalGuider/Spectro/Slit/NumSlit',0);
+  for i:=1 to n do begin
+     so:=TSlitOffset.create;
+     so.slitname:=config.GetValue('/InternalGuider/Spectro/Slit/Slit'+inttostr(i)+'/Name','');
+     so.X:=round(config.GetValue('/InternalGuider/Spectro/Slit/Slit'+inttostr(i)+'/X',0));
+     so.Y:=round(config.GetValue('/InternalGuider/Spectro/Slit/Slit'+inttostr(i)+'/Y',0));
+     f_internalguider.cbSlitList.Items.AddObject(so.slitname,so);
+  end;
+  if n>0 then begin
+    i:=config.GetValue('/InternalGuider/Spectro/Slit/CurrentSlit',-1);
+    if i>=0 then begin
+      f_internalguider.cbSlitList.ItemIndex:=i;
+      f_internalguider.cbSlitListChange(nil);
+    end;
+  end;
   f_internalguider.RAgain:=config.GetValue('/InternalGuider/RaGain',50);
   f_internalguider.DECgain:=config.GetValue('/InternalGuider/DecGain',50);
   f_internalguider.RA_hysteresis:=config.GetValue('/InternalGuider/RaHysteresis',30);
@@ -5199,6 +5242,7 @@ begin
   FilenameSeqSep:=config.GetValue('/Files/FileNameSeqSep','_');
   FitsFileExt:=config.GetValue('/Files/FitsFileExt','.fits');
   FileSequenceWidth:=config.GetValue('/Files/FileSequenceWidth',0);
+  FileRemoveSpace:=config.GetValue('/Files/RemoveSpace',false);
   FilePack:=config.GetValue('/Files/Pack',false);
   WantExif:=config.GetValue('/Files/Exif',WantExif);
   if ((TCPDaemon=nil)or(TCPDaemon.stoping)) then
@@ -5251,6 +5295,10 @@ begin
     MenuItemDebayer.Checked:=BayerColor;
     MenuItemDebayer2.Checked:=BayerColor;
     MenuItemDebayerClick(MenuItemDebayer);
+  end;
+  if oldColorizeSpectra<>ColorizeSpectra then begin
+    DrawImage;
+    Image1.Invalidate;
   end;
   DomeNoSafetyCheck:=config.GetValue('/Dome/NoSafetyCheck',false);
   mount.SlaveDome:=config.GetValue('/Dome/SlaveToMount',false);
@@ -5409,7 +5457,6 @@ begin
     MenuAutoguiderGuide.Caption:=f_autoguider.BtnGuide.Caption;
     StatusBar1.Invalidate;
   end;
-  f_internalguider.Enabled:=autoguider.AutoguiderType=agINTERNAL;
   if (camera.Status=devConnected) and camera.hasVideo and (config.GetValue('/Video/ShowVideo',false)<>TBVideo.Visible) then begin
     if config.GetValue('/Video/ShowVideo',false) then begin
       TBVideo.Visible:=true;
@@ -5620,7 +5667,7 @@ begin
    config.SetValue('/Sequence/EditTarget/SepPos2',f_EditTargets.PanelTargetDetail.Width);
 
    config.SetValue('/Visu/Gamma',f_visu.Gamma.Value);
-   config.SetValue('/Visu/HistBar',f_visu.HistBar.Position);
+   config.SetValue('/Visu/HistBar',f_visu.HistBarPosition);
    config.SetValue('/Visu/FlipHorz',f_visu.BtnFlipHorz.Down);
    config.SetValue('/Visu/FlipVert',f_visu.BtnFlipVert.Down);
    config.SetValue('/Visu/ClipRange',f_visu.BtnClipRange.Down);
@@ -5675,6 +5722,8 @@ begin
 end;
 
 procedure Tf_main.SaveInternalGuiderSettings;
+var so:TSlitOffset;
+    i,n: integer;
 begin
   config.SetValue('/InternalGuider/RaGain',f_internalguider.ragain);
   config.SetValue('/InternalGuider/DecGain',f_internalguider.decgain);
@@ -5725,8 +5774,20 @@ begin
   config.SetValue('/InternalGuider/Spectro/SpectroFunctions',f_internalguider.SpectroFunctions);
   config.SetValue('/Autoguider/Lock/GuideSetLock',f_internalguider.GuideLock);
   config.SetValue('/Autoguider/Lock/ForceGuideMultistar',f_internalguider.ForceGuideMultistar);
-  config.SetValue('/Autoguider/Lock/GuideLockX',f_internalguider.LockX);
-  config.SetValue('/Autoguider/Lock/GuideLockY',f_internalguider.LockY);
+  config.SetValue('/Autoguider/Lock/GuideLockX',f_internalguider.RefX);
+  config.SetValue('/Autoguider/Lock/GuideLockY',f_internalguider.RefY);
+
+  n:=f_internalguider.cbSlitList.Items.Count;
+  config.SetValue('/InternalGuider/Spectro/Slit/NumSlit',n);
+  config.SetValue('/InternalGuider/Spectro/Slit/CurrentSlit',f_internalguider.cbSlitList.ItemIndex);
+  for i:=1 to n do begin
+    if f_internalguider.cbSlitList.Items.Objects[i-1]<>nil then begin
+      so:=TSlitOffset(f_internalguider.cbSlitList.Items.Objects[i-1]);
+      config.SetValue('/InternalGuider/Spectro/Slit/Slit'+inttostr(i)+'/Name',so.slitname);
+      config.SetValue('/InternalGuider/Spectro/Slit/Slit'+inttostr(i)+'/X',so.X);
+      config.SetValue('/InternalGuider/Spectro/Slit/Slit'+inttostr(i)+'/Y',so.Y);
+    end;
+  end;
   config.SetValue('/InternalGuider/Spectro/SearchWinMin',f_internalguider.SearchWinMin);
   config.SetValue('/InternalGuider/Spectro/SearchWinMax',f_internalguider.SearchWinMax);
   config.SetValue('/InternalGuider/Spectro/DrawSlit',f_internalguider.DrawSlit);
@@ -6141,10 +6202,27 @@ allcount:=0; upcount:=0; downcount:=0; concount:=0;
 end;
 
 Procedure Tf_main.ConnectCamera(Sender: TObject);
+var inditransfer: TIndiTransfert;
+    indihost,inditransferdir: string;
+    ok: boolean;
 begin
    CameraInitialized:=false;
    case camera.CameraInterface of
     INDI : begin
+           inditransfer:=TIndiTransfert(config.GetValue('/INDIcamera/IndiTransfert',ord(itNetwork)));
+           inditransferdir:=config.GetValue('/INDIcamera/IndiTransfertDir',defTransfertPath);
+           indihost:=config.GetValue('/INDIcamera/Server','');
+           if inditransfer=itDisk then begin
+             // some control to be sure we can use disk transfer
+             ok:=(copy(indihost,1,3)='127')or(uppercase(indihost)='LOCALHOST'); // local indiserver
+             ok:=ok and DirectoryIsWritable(inditransferdir);
+             if not ok then begin
+               inditransfer:=itNetwork;
+               NewMessage('Cannot use ramdisk camera transfer, switch to network',3);
+             end;
+           end;
+           camera.IndiTransfert:=inditransfer;
+           camera.IndiTransfertDir:=inditransferdir;
            camera.Connect(config.GetValue('/INDIcamera/Server',''),
                           config.GetValue('/INDIcamera/ServerPort',''),
                           config.GetValue('/INDIcamera/Device',''),
@@ -8511,7 +8589,6 @@ if f_mount.BtnGoto.Caption=rsGoto then begin
    f_goto.PanelPxSz.Visible:=false;
    f_goto.PanelAltAz.Visible:=true;
    f_goto.ButtonOK.Caption:=rsGoto;
-   f_goto.GotoAstrometry.Checked:=true;
    f_goto.ShowModal;
    if f_goto.ModalResult=mrok then begin
      tra:= f_goto.Ra.Text;
@@ -9057,6 +9134,8 @@ begin
     if f_setup.CameraIndiDevice.Text<>'' then config.SetValue('/INDIcamera/Device',f_setup.CameraIndiDevice.Text);
     config.SetValue('/INDIcamera/Sensor',f_setup.CameraSensor);
     config.SetValue('/INDIcamera/AutoLoadConfig',f_setup.CameraAutoLoadConfig.Checked);
+    config.SetValue('/INDIcamera/IndiTransfert',f_setup.CameraIndiTransfert.ItemIndex);
+    config.SetValue('/INDIcamera/IndiTransfertDir',f_setup.CameraIndiTransfertDir.Text);
     config.SetValue('/ASCOMcamera/Device',f_setup.AscomCamera.Text);
     config.SetValue('/ASCOMcamera/FlipImage',f_setup.FlipImage.Checked);
     config.SetValue('/ASCOMcamera/CameraDateObs',f_setup.CameraDateObs.Checked);
@@ -9372,6 +9451,7 @@ begin
    f_option.WantExif.Checked:=config.GetValue('/Files/Exif',WantExif);
    f_option.SaveFormat.ItemIndex:=config.GetValue('/Files/SaveFormat',0);
    f_option.SaveBitmap.Checked:=config.GetValue('/Files/SaveBitmap',false);
+   f_option.RemoveSpace.Checked:=config.GetValue('/Files/RemoveSpace',false);
    buf:=config.GetValue('/Files/SaveBitmapFormat','png');
    if buf='png' then f_option.SaveBitmapFormat.ItemIndex:=0
    else if buf='tif' then f_option.SaveBitmapFormat.ItemIndex:=1
@@ -9409,6 +9489,7 @@ begin
    f_option.BGneutralization.Checked:=config.GetValue('/Color/BGneutralization',true);
    f_option.ClippingHigh.Value:=config.GetValue('/Color/ClippingOverflow',MAXWORD);
    f_option.ClippingLow.Value:=config.GetValue('/Color/ClippingUnderflow',0);
+   f_option.ColorizeSpectra.Checked:=config.GetValue('/Color/ColorizeSpectra',true);
    f_option.BPMsigma.Value:=config.GetValue('/BadPixel/Sigma',5.0);
    f_option.StackShow.Checked:=config.GetValue('/PreviewStack/StackShow',false);
    f_option.SaveStack.checked:=config.GetValue('/PreviewStack/SaveStack',false);
@@ -9494,6 +9575,14 @@ begin
    f_option.FilterList.Row:=0;
    f_option.FilterList.Col:=0;
    f_option.SetAutofocusmode(TAutofocusMode(config.GetValue('/StarAnalysis/AutoFocusMode',ord(AutoFocusMode))));
+   if WantGuideCamera then begin
+     f_option.GuiderAutofocus.Visible:=true;
+     f_option.GuiderAutofocus.checked:=config.GetValue('/StarAnalysis/GuiderAutofocus',false);
+   end
+   else begin
+     f_option.GuiderAutofocus.Visible:=false;
+     f_option.GuiderAutofocus.checked:=false;
+   end;
    f_option.AutofocusMinSpeed.Value:=config.GetValue('/StarAnalysis/AutofocusMinSpeed',AutofocusMinSpeed);
    f_option.AutofocusMaxSpeed.Value:=config.GetValue('/StarAnalysis/AutofocusMaxSpeed',AutofocusMaxSpeed);
    f_option.AutofocusStartHFD.Value:=config.GetValue('/StarAnalysis/AutofocusStartHFD',AutofocusStartHFD);
@@ -9853,7 +9942,7 @@ begin
      config.SetValue('/Files/FitsFileExt',f_option.FitsExt.Text);
      config.SetValue('/Files/Pack',f_option.FilePack.checked);
      config.SetValue('/Files/Exif',f_option.WantExif.Checked);
-
+     config.SetValue('/Files/RemoveSpace',f_option.RemoveSpace.Checked);
      CustomHeaderNum:=0;
      for i:=1 to f_option.CustomHeader.RowCount-1 do begin
        if trim(f_option.CustomHeader.Cells[0,i])<>'' then begin
@@ -9879,6 +9968,10 @@ begin
         config.SetValue('/Filters/ExpFact'+IntToStr(i),StrToFloatDef(trim(stringReplace(f_option.FilterList.Cells[2,i],',','.',[])),1.0));
      end;
      config.SetValue('/StarAnalysis/AutoFocusMode',ord(f_option.GetAutofocusMode));
+     if f_option.GetAutofocusMode=afDynamic then
+       config.SetValue('/StarAnalysis/GuiderAutofocus',f_option.GuiderAutofocus.checked)
+     else
+       config.SetValue('/StarAnalysis/GuiderAutofocus',false);
      config.SetValue('/StarAnalysis/AutofocusMinSpeed',f_option.AutofocusMinSpeed.Value);
      config.SetValue('/StarAnalysis/AutofocusMaxSpeed',f_option.AutofocusMaxSpeed.Value);
      config.SetValue('/StarAnalysis/AutofocusStartHFD',f_option.AutofocusStartHFD.Value);
@@ -9958,6 +10051,7 @@ begin
      config.SetValue('/Color/BGneutralization',f_option.BGneutralization.Checked);
      config.SetValue('/Color/ClippingOverflow',f_option.ClippingHigh.Value);
      config.SetValue('/Color/ClippingUnderflow',f_option.ClippingLow.Value);
+     config.SetValue('/Color/ColorizeSpectra',f_option.ColorizeSpectra.Checked);
      config.SetValue('/BadPixel/Sigma',f_option.BPMsigma.Value);
      config.SetValue('/PreviewStack/StackShow',f_option.StackShow.Checked);
      config.SetValue('/PreviewStack/SaveStack',f_option.SaveStack.checked);
@@ -11267,6 +11361,11 @@ begin
   end;
 end;
 
+procedure Tf_main.StopPreviewEvent(Sender: TObject);
+begin
+ StopPreview;
+end;
+
 Procedure Tf_main.StartCaptureExposure(Sender: TObject);
 begin
   if PrepareCaptureExposure(true) then // do all requirement and check it's OK
@@ -11838,6 +11937,7 @@ end;
 procedure Tf_main.CameraSaveNewImage;
 var fn,fd,buf: string;
     framestr,objectstr,binstr,expstr,filterstr: string;
+    i: integer;
 begin
 try
  {$ifdef debug_raw}writeln(FormatDateTime(dateiso,Now)+blank+'Camera save new image');{$endif}
@@ -11862,7 +11962,7 @@ try
  // construct file name
  fn:=CaptureFilename(fits,fd,framestr,objectstr,expstr,binstr,f_sequence.Running);
  // save the file
- if (SaveFormat=ffFITS) or FileStackFloat then begin
+ if (SaveFormat=ffFITS) or (FileStackFloat and fits.Header.Valueof('STACKCNT',i) and (i>1)) then begin
    fn:=slash(fd)+fn+FitsFileExt;
    fits.SaveToFile(fn,FilePack,FileStackFloat,true);
  end
@@ -11875,14 +11975,11 @@ try
  else
    raise exception.Create('Unexpected file format '+inttostr(ord(SaveFormat)));
  inc(CurrentDoneCount);
- if FilePack then begin
-   NewMessage(Format(rsSavedFile, [fn+'.fz']),1);
-   buf:=Format(rsSaved, [fn+'.fz']);
- end
- else begin
-   NewMessage(Format(rsSavedFile, [fn]),1);
-   buf:=Format(rsSaved, [fn]);
- end;
+ LastCaptureFile:=fn;
+ if FilePack then
+   LastCaptureFile:=LastCaptureFile+'.fz';
+ NewMessage(Format(rsSavedFile, [LastCaptureFile]),1);
+ buf:=Format(rsSaved, [LastCaptureFile]);
  if camera.ImageFormat<>'.fits' then buf:=UpperCase(camera.ImageFormat)+' '+buf;
  if fits.HeaderInfo.valid then buf:=buf+' '+inttostr(fits.HeaderInfo.naxis1)+'x'+inttostr(fits.HeaderInfo.naxis2);
  StatusBar1.Panels[panelfile].Text:=buf;
@@ -12001,6 +12098,26 @@ begin
   PlotImage;
 end;
 
+procedure Tf_main.SpectraColor(bmp:TBGRABitmap; wmin,wmax:double);
+var x,y,r,g,b: integer;
+    f: double;
+    c: TBGRAPixel;
+    p: PBGRAPixel;
+begin
+  for y:=0 to bmp.Height-1 do begin
+    p := bmp.Scanline[y];
+    for x:=0 to bmp.Width-1 do begin
+       spcolor(wmin+(wmax-wmin)*x/bmp.Width,r,g,b);
+       f:=p^.red / 256;
+       p^.red := round(f*r);
+       p^.green := round(f*g);
+       p^.blue := round(f*b);
+       p^.alpha := 255;
+       inc(p);
+    end;
+  end;
+end;
+
 Procedure Tf_main.DrawImage(WaitCursor:boolean=false; videoframe:boolean=false);
 var tmpbmp:TBGRABitmap;
     co: TBGRAPixel;
@@ -12023,6 +12140,8 @@ if (fits.HeaderInfo.naxis>0) and fits.ImageValid then begin
     fits.GetBGRABitmap(ImaBmp,1)
   else
     fits.GetBGRABitmap(ImaBmp);
+  if ColorizeSpectra and (fits.HeaderInfo.wavemin<>NullCoord) and (fits.HeaderInfo.wavemax<>NullCoord) then
+    SpectraColor(imabmp,fits.HeaderInfo.wavemin,fits.HeaderInfo.wavemax);
   {$ifdef debug_raw}writeln(FormatDateTime(dateiso,Now)+blank+'FITS GetBGRABitmap end');{$endif}
   ImgPixRatio:=fits.HeaderInfo.pixratio;
   if (fits.HeaderInfo.pixratio>1) then begin
@@ -12045,20 +12164,6 @@ if (fits.HeaderInfo.naxis>0) and fits.ImageValid then begin
   end;
   img_Width:=ImaBmp.Width;
   img_Height:=ImaBmp.Height;
-  if f_visu.BullsEye then begin
-    {$ifdef debug_raw}writeln(FormatDateTime(dateiso,Now)+blank+'BullsEye');{$endif}
-    co:=ColorToBGRA(clRed);
-    co.alpha:=128;
-    cx:=img_Width div 2;
-    cy:=img_Height div 2;
-    imabmp.DrawHorizLine(0,cy,img_Width,co);
-    imabmp.DrawVertLine(cx,0,img_Height,co);
-    s:=min(img_Height,img_Width) div 3;
-    imabmp.EllipseAntialias(cx,cy,s,s,co,1);
-    s:=min(img_Height,img_Width) div 8;
-    imabmp.EllipseAntialias(cx,cy,s,s,co,1);
-
-  end;
   {$ifdef debug_raw}writeln(FormatDateTime(dateiso,Now)+blank+'PlotImage');{$endif}
   PlotImage;
   {$ifdef debug_raw}writeln(FormatDateTime(dateiso,Now)+blank+'PlotImage end');{$endif}
@@ -12082,6 +12187,9 @@ var r1,r2: double;
     w,h,px,py,w3,h3,ww3,hh3,i,j: integer;
     tmpbmp,str: TBGRABitmap;
     rmode: TResampleMode;
+    co: TBGRAPixel;
+    s,cx,cy: integer;
+    scale: double;
 begin
 if (img_Height=0)or(img_Width=0) then exit;
 r1:=ScrBmp.Width/imabmp.Width;
@@ -12137,6 +12245,7 @@ else if ImgZoom=0 then begin
     px:=(ScrBmp.width-w) div 2;
     py:=0;
   end;
+  scale:=ImgScale0;
   OrigX:=round(px/ImgScale0);
   OrigY:=round(py/ImgScale0);
   {$ifdef debug_raw}writeln(FormatDateTime(dateiso,Now)+blank+'Resample');{$endif}
@@ -12147,6 +12256,7 @@ else if ImgZoom=0 then begin
 end
 else if ImgZoom=1 then begin
    // zoom 1
+   scale:=1;
    px:=round(ImgCx)-((img_Width-ScrBmp.Width) div 2);
    py:=round(ImgCy)-((img_Height-ScrBmp.Height) div 2);
    OrigX:=px;
@@ -12157,6 +12267,7 @@ end
 else begin
    // other zoom
    if ImgZoom<ZoomMin then ImgZoom:=ZoomMin;
+   scale:=ImgZoom;
    tmpbmp:=TBGRABitmap.Create(round(ScrBmp.Width/ImgZoom),round(ScrBmp.Height/ImgZoom),clDarkBlue);
    px:=round(ImgCx)-((img_Width-tmpbmp.Width) div 2);
    py:=round(ImgCy)-((img_Height-tmpbmp.Height) div 2);
@@ -12179,7 +12290,19 @@ if fits.HeaderInfo.solved and (cdcWCSinfo.secpix<>0) and (not SplitImage) then b
   plot_north;
   if Annotate then plot_deepsky(ScrBmp.Canvas,ScrBmp.Width,ScrBmp.Height,f_visu.FlipHorz,f_visu.FlipVert);
 end;
-
+if f_visu.BullsEye and (not SplitImage) and (fits.HeaderInfo.naxis>1) then begin
+  {$ifdef debug_raw}writeln(FormatDateTime(dateiso,Now)+blank+'BullsEye');{$endif}
+  co:=ColorToBGRA($0000AA);
+  cx:=img_Width div 2;
+  cy:=img_Height div 2;
+  Fits2Screen(cx,cy,f_visu.FlipHorz,f_visu.FlipVert,cx,cy);
+  scrbmp.DrawHorizLine(0,cy,ScrBmp.Width,co);
+  scrbmp.DrawVertLine(cx,0,ScrBmp.Height,co);
+  s:=round((min(img_Height,img_Width) div 3)*scale);
+  scrbmp.EllipseAntialias(cx,cy,s,s,co,1);
+  s:=round((min(img_Height,img_Width) div 8)*scale);
+  scrbmp.EllipseAntialias(cx,cy,s,s,co,1);
+end;
 Image1.Invalidate;
 MagnifyerTimer.Enabled:=true;
 {$ifdef debug_raw}writeln(FormatDateTime(dateiso,Now)+blank+'PlotImage end');{$endif}
@@ -14012,7 +14135,7 @@ begin
       end;
    end;
    finally
-   if AutofocusPauseGuider then begin
+   if AutofocusPauseGuider or GuiderAutofocus then begin
      // restart autoguider, never let in pause in case autofocus is aborted
      if pauseguider then begin
        NewMessage(rsResumeAutogu,2);
@@ -14238,6 +14361,10 @@ var x,y,rx,ry,xc,yc,ns,n,i,s,s2,s3,s4,fs: integer;
     buf: string;
     fx,fy,fw,fh:TNumRange;
 begin
+  if GuiderAutofocus then begin
+    GuiderAutoFocusStart(Sender);
+    exit;
+  end;
   CancelAutofocus:=false;
   f_starprofile.AutofocusResult:=false;
   SaveAutofocusBinning:=f_preview.Binning.Text;
@@ -14438,6 +14565,10 @@ end;
 
 Procedure Tf_main.AutoFocusStop(Sender: TObject);
 begin
+   if GuiderAutofocus then begin
+     GuiderAutoFocusStop(Sender);
+     exit;
+   end;
    if (f_capture.Running or f_sequence.Running) and (not autofocusing) then exit;
    f_preview.Running:=false;
    f_preview.Loop:=false;
@@ -14527,6 +14658,156 @@ if (fits.HeaderInfo.valid)and(RunningPreview or RunningCapture) then begin // no
     // only refresh star profile
     f_starprofile.showprofile(fits,round(f_starprofile.StarX),round(f_starprofile.StarY),Starwindow,fits.HeaderInfo.focallen,fits.HeaderInfo.pixsz1);
 end;
+end;
+
+Procedure Tf_main.GuiderAutoFocusStart(Sender: TObject);
+var rx,ry,ns,n,i,s: integer;
+    hfdlist: array of double;
+    meanhfd, med: double;
+    buf: string;
+begin
+  SaveGuiderAutofocusExposure:=f_internalguider.Exposure.Value;
+  SaveAutofocusBin:=f_internalguider.Binning.Value;
+  SaveGuiderAutofocusGain:=f_internalguider.Gain.Value;
+  SaveGuiderAutofocusOffset:=f_internalguider.Offset.Value;
+  CancelAutofocus:=false;
+  f_starprofile.AutofocusResult:=false;
+  if not (autoguider is T_autoguider_internal) then begin
+   NewMessage('Internal guider is need',1);
+   f_starprofile.ChkAutofocusDown(false);
+   exit;
+  end;
+  if (guidecamera.Status<>devConnected)or(focuser.Status<>devConnected) then begin
+   NewMessage(rsCameraOrFocu,1);
+   f_starprofile.ChkAutofocusDown(false);
+   exit;
+  end;
+  if (AutofocusMode<>afDynamic) then begin
+    NewMessage(rsPleaseConfig2+crlf+'Only dynamic is supported on the guider.',1);
+    f_starprofile.ChkAutofocusDown(false);
+    exit;
+  end;
+  if (f_capture.Running or f_sequence.Running) and (not autofocusing) then begin
+    NewMessage(rsCannotStartA3,1);
+    f_starprofile.ChkAutofocusDown(false);
+    exit;
+  end;
+  if InternalguiderRunning then begin
+    InternalguiderStop(nil);
+  end;
+  f_internalguider.Exposure.Value:=AutofocusExposure;
+  f_internalguider.Binning.Value:=AutofocusBinning;
+  f_internalguider.Gain.Value:=AutofocusGain;
+  f_internalguider.Offset.Value:=AutofocusOffset;
+  if not guidecamera.ControlExposure(f_internalguider.Exposure.Value,f_internalguider.Binning.Value,f_internalguider.Binning.Value,LIGHT,ReadoutModeCapture,f_internalguider.Gain.Value,f_internalguider.Offset.Value) then begin
+    NewMessage(rsExposureFail,1);
+    f_starprofile.ChkAutofocusDown(false);
+    exit;
+  end;
+  if CancelAutofocus then begin
+    f_starprofile.ChkAutofocusDown(false);
+    exit;
+  end;
+
+   // first measurement with a big window to find median star diameter
+   s:=60; //starwindow; {use configured star window}
+   rx:=guidefits.HeaderInfo.naxis1-s; {search area}
+   ry:=guidefits.HeaderInfo.naxis2-s;
+   guidefits.GetStarList(rx,ry,s,AutofocusMinSNR,false); {search stars in fits image}
+   ns:=Length(guidefits.StarList);
+   if ns>0 then begin
+     SetLength(hfdlist,ns);
+     for i:=0 to ns-1 do
+       hfdlist[i]:=guidefits.StarList[i].hfd;
+     med:=SMedian(hfdlist,ns);            {median of starshfd}
+     s:=min(max(14,round(3.0*med)),s); {reasonable window to measure this star}
+   end
+   else
+     s:=20; {no star found, try with small default window}
+   rx:=guidefits.HeaderInfo.naxis1-s; {search area}
+   ry:=guidefits.HeaderInfo.naxis2-s;
+   guidefits.GetStarList(rx,ry,s,AutofocusMinSNR,false); {search stars in fits image}
+   ns:=Length(guidefits.StarList);
+   // store star list
+   if ns>0 then begin
+      // compute median HFD
+      SetLength(hfdlist,ns);
+      for i:=0 to ns-1 do
+          hfdlist[i]:=guidefits.StarList[i].hfd;
+      meanhfd:=SMedian(hfdlist,ns);
+      n:=0;
+      SetLength(AutofocusStarList,ns);
+      for i:=0 to ns-1 do begin
+        // filter by hfd to remove galaxies and others outliers
+        if abs(guidefits.StarList[i].hfd-meanhfd)<(0.5*meanhfd) then begin
+          inc(n);
+          AutofocusStarList[n-1,1]:=guidefits.StarList[i].x;
+          AutofocusStarList[n-1,2]:=guidefits.StarList[i].y;
+        end;
+      end;
+      SetLength(AutofocusStarList,n);
+   end
+   else begin  // no star, manual action is required
+      SetLength(AutofocusStarList,0);
+      f_starprofile.ChkAutofocusDown(false);
+      NewMessage(Format(rsAutofocusCan, [crlf]),1);
+      if LogToFile then begin
+        buf:=slash(LogDir)+'focus_fail_guider'+FormatDateTime('yyyymmdd_hhnnss',now)+'.fits';
+        guidefits.SaveToFile(buf);
+        NewMessage(Format(rsSavedFile, [buf]),2);
+      end;
+      exit;
+   end;
+
+  if CancelAutofocus then begin
+    f_starprofile.ChkAutofocusDown(false);
+    exit;
+  end;
+  f_starprofile.InitAutofocus(false);
+  if CancelAutofocus then begin
+    f_starprofile.ChkAutofocusDown(false);
+    exit;
+  end;
+  InternalguiderLoop(nil);
+  if focuser.hasTemperature then NewMessage(Format(rsFocuserTempe, [FormatFloat(f1, TempDisplay(TemperatureScale,FocuserTemp))+TempLabel]),2);
+  if f_starprofile.PreFocusPos>0 then
+     NewMessage(Format(rsAutoFocusSta, [inttostr(f_starprofile.PreFocusPos)]),2)
+  else
+     NewMessage(rsAutoFocusSta2,2);
+end;
+
+Procedure Tf_main.GuiderAutoFocusStop(Sender: TObject);
+begin
+   f_internalguider.Exposure.Value := SaveGuiderAutofocusExposure;
+   f_internalguider.Binning.Value := SaveAutofocusBin;
+   f_internalguider.Gain.Value    := SaveGuiderAutofocusGain;
+   f_internalguider.Offset.Value  := SaveGuiderAutofocusOffset;
+   if (f_capture.Running or f_sequence.Running) and (not autofocusing) then exit;
+   InternalguiderStop(nil);
+   f_starprofile.StarX:=-1;
+   f_starprofile.StarY:=-1;
+   f_starprofile.FindStar:=false;
+   if f_starprofile.AutofocusResult then begin
+     NewMessage(rsAutoFocusSuc,1);
+   end
+   else begin
+     NewMessage(rsAutoFocusErr,1);
+     if f_starprofile.PreFocusPos>0 then begin  // only for absolute position focuser
+       NewMessage(Format(rsReturnTheFoc, [inttostr(f_starprofile.PreFocusPos)]),2);
+       f_focuser.FocusPosition:=f_starprofile.PreFocusPos;
+       FocusSetAbsolutePosition(nil);
+       Wait(1);
+     end;
+   end;
+   f_starprofile.TimerHideGraph.Interval:=5000;
+   f_starprofile.TimerHideGraph.Enabled:=true;
+ end;
+
+Procedure Tf_main.DoGuiderAutoFocus;
+begin
+  if GuiderAutofocus and f_starprofile.AutofocusRunning then
+    // process autofocus
+    f_starprofile.Autofocus(guidefits,round(f_starprofile.StarX),round(f_starprofile.StarY),Starwindow)
 end;
 
 procedure Tf_main.GUIdestroy(Sender: TObject);
@@ -16893,9 +17174,18 @@ try
   else if method='FOCUSER_CONNECTED' then result:=result+'"result": '+BoolToStr((Focuser.Status=devConnected),tr,fa)
   else if method='CAMERA_CONNECTED' then result:=result+'"result": '+BoolToStr((Camera.Status=devConnected),tr,fa)
   else if method='PLANETARIUM_CONNECTED' then result:=result+'"result": '+BoolToStr(Planetarium.Connected,tr,fa)
+  else if method='PREVIEW_GETEXPOSURE' then result:=result+'"result": '+f_Preview.ExpTime.Text
+  else if method='PREVIEW_GETBINNING' then result:=result+'"result": "'+f_Preview.Binning.Text+'"'
   else if method='PREVIEW_RUNNING' then result:=result+'"result": '+BoolToStr(f_Preview.Running,tr,fa)
   else if method='PREVIEW_LOOP_RUNNING' then result:=result+'"result": '+BoolToStr(f_Preview.Loop,tr,fa)
+  else if method='CAPTURE_GETEXPOSURE' then result:=result+'"result": '+f_capture.ExpTime.Text
+  else if method='CAPTURE_GETBINNING' then result:=result+'"result": "'+f_capture.Binning.Text+'"'
+  else if method='CAPTURE_GETOBJECTNAME' then result:=result+'"result": "'+f_capture.Fname.Text+'"'
+  else if method='CAPTURE_GETCOUNT' then result:=result+'"result": '+f_capture.SeqNum.Text
+  else if method='CAPTURE_GETFRAMETYPE' then result:=result+'"result": "'+f_capture.cbFrameType.Text+'"'
+  else if method='CAPTURE_GETDITHER' then result:=result+'"result": '+f_capture.DitherCount.Text
   else if method='CAPTURE_RUNNING' then result:=result+'"result": '+BoolToStr(f_Capture.Running,tr,fa)
+  else if method='CAPTURE_GETLASTFILENAME' then result:=result+'"result": "'+LastCaptureFile+'"'
   else if method='TELESCOPERA' then result:=result+'"result": '+FormatFloat(f6,f_mount.CurrentRA)
   else if method='TELESCOPEDE' then result:=result+'"result": '+FormatFloat(f6,f_mount.CurrentDec)
   else if method='OBS_LATITUDE' then result:=result+'"result": '+FormatFloat(f6,ObsLatitude)
@@ -16928,6 +17218,15 @@ try
     result:=result+']';
     sl.Free;
   end
+  else if method='INTERNALGUIDER_GETGUIDEEXPOSURE' then result:=result+'"result": '+StringReplace(f_internalguider.Exposure.Text,',','.',[])
+  else if method='INTERNALGUIDER_GETSPECTROFUNCTION' then result:=result+'"result": '+BoolToStr(f_internalguider.SpectroFunctions,tr,fa)
+  else if method='INTERNALGUIDER_GETSPECTROSINGLESTAR' then result:=result+'"result": '+BoolToStr(f_internalguider.GuideLock,tr,fa)
+  else if method='INTERNALGUIDER_GETSPECTROCHANGEMULTISTAR' then result:=result+'"result": '+BoolToStr(f_internalguider.ForceGuideMultistar,tr,fa)
+  else if method='INTERNALGUIDER_GETSPECTROASTROMETRY' then result:=result+'"result": '+BoolToStr(f_internalguider.cbUseAstrometry.Checked,tr,fa)
+  else if method='INTERNALGUIDER_GETSPECTROASTROMETRYEXPOSURE' then result:=result+'"result": '+StringReplace(f_internalguider.AstrometryExp.text,',','.',[])
+  else if method='INTERNALGUIDER_GETSPECTROSLITNAME' then result:=result+'"result": "'+f_internalguider.cbSlitList.text+'"'
+  else if method='INTERNALGUIDER_GETSPECTROGUIDESTAROFFSET' then result:=result+'"result": ['+StringReplace(f_internalguider.StarOffsetX.text,',','.',[])+','+StringReplace(f_internalguider.StarOffsetY.text,',','.',[])+']'
+  else if method='INTERNALGUIDER_GETSPECTROMULTISTAROFFSET' then result:=result+'"result": ['+StringReplace(f_internalguider.edOffsetX.text,',','.',[])+','+StringReplace(f_internalguider.edOffsetY.text,',','.',[])+']'
   // execute command without parameter
   else if method='TELESCOPE_ABORTMOTION' then result:=result+'"result":{"status": "'+f_scriptengine.cmd_MountAbortMotion+'"}'
   else if method='TELESCOPE_TRACK' then result:=result+'"result":{"status": "'+f_scriptengine.cmd_MountTrack+'"}'
@@ -17245,6 +17544,69 @@ try
     buf3:=trim(value[attrib.IndexOf('params.2')]);
     buf4:=trim(value[attrib.IndexOf('params.3')]);
     buf:=f_scriptengine.cmd_camerasetframe(buf1,buf2,buf3,buf4);
+    result:=result+'"result":{"status": "'+buf+'"}';
+  end
+  else if method='INTERNALGUIDER_SETGUIDEEXPOSURE' then begin
+    CheckParamCount(1);
+    buf1:=trim(value[attrib.IndexOf('params.0')]);
+    buf:=f_scriptengine.cmd_Internalguider_SetGuideExposure(buf1);
+    result:=result+'"result":{"status": "'+buf+'"}';
+  end
+  else if method='INTERNALGUIDER_SETSPECTROFUNCTION' then begin
+    CheckParamCount(1);
+    if uppercase(trim(value[attrib.IndexOf('params.0')]))='TRUE' then buf1:='ON' else buf1:='OFF';
+    buf:=f_scriptengine.cmd_Internalguider_SetSpectrofunction(buf1);
+    result:=result+'"result":{"status": "'+buf+'"}';
+  end
+  else if method='INTERNALGUIDER_SETSPECTROSINGLESTAR' then begin
+    CheckParamCount(1);
+    if uppercase(trim(value[attrib.IndexOf('params.0')]))='TRUE' then buf1:='ON' else buf1:='OFF';
+    buf:=f_scriptengine.cmd_Internalguider_SetSpectroSinglestar(buf1);
+    result:=result+'"result":{"status": "'+buf+'"}';
+  end
+  else if method='INTERNALGUIDER_SETSPECTROCHANGEMULTISTAR' then begin
+    CheckParamCount(1);
+    if uppercase(trim(value[attrib.IndexOf('params.0')]))='TRUE' then buf1:='ON' else buf1:='OFF';
+    buf:=f_scriptengine.cmd_Internalguider_SetSpectroChangeMultistar(buf1);
+    result:=result+'"result":{"status": "'+buf+'"}';
+  end
+  else if method='INTERNALGUIDER_SETSPECTROASTROMETRY' then begin
+    CheckParamCount(1);
+    if uppercase(trim(value[attrib.IndexOf('params.0')]))='TRUE' then buf1:='ON' else buf1:='OFF';
+    buf:=f_scriptengine.cmd_Internalguider_SetSpectroAstrometry(buf1);
+    result:=result+'"result":{"status": "'+buf+'"}';
+  end
+  else if method='INTERNALGUIDER_SETSPECTROASTROMETRYEXPOSURE' then begin
+    CheckParamCount(1);
+    buf1:=trim(value[attrib.IndexOf('params.0')]);
+    buf:=f_scriptengine.cmd_Internalguider_SetSpectroAstrometryExposure(buf1);
+    result:=result+'"result":{"status": "'+buf+'"}';
+  end
+  else if method='INTERNALGUIDER_SETSPECTROSLITNAME' then begin
+    CheckParamCount(1);
+    buf1:=trim(value[attrib.IndexOf('params.0')]);
+    buf:=f_scriptengine.cmd_Internalguider_SetSpectroSlitname(buf1);
+    result:=result+'"result":{"status": "'+buf+'"}';
+  end
+  else if method='INTERNALGUIDER_SETSPECTROGUIDESTAROFFSET' then begin
+    CheckParamCount(2);
+    buf1:=trim(value[attrib.IndexOf('params.0')]);
+    buf2:=trim(value[attrib.IndexOf('params.1')]);
+    buf:=f_scriptengine.cmd_Internalguider_SetSpectroGuidestaroffset(buf1,buf2);
+    result:=result+'"result":{"status": "'+buf+'"}';
+  end
+  else if method='INTERNALGUIDER_SETSPECTROGUIDESTARRADEC' then begin
+    CheckParamCount(2);
+    buf1:=trim(value[attrib.IndexOf('params.0')]);
+    buf2:=trim(value[attrib.IndexOf('params.1')]);
+    buf:=f_scriptengine.cmd_Internalguider_SetSpectroGuidestarRaDec(buf1,buf2);
+    result:=result+'"result":{"status": "'+buf+'"}';
+  end
+  else if method='INTERNALGUIDER_SETSPECTROMULTISTAROFFSET' then begin
+    CheckParamCount(2);
+    buf1:=trim(value[attrib.IndexOf('params.0')]);
+    buf2:=trim(value[attrib.IndexOf('params.1')]);
+    buf:=f_scriptengine.cmd_Internalguider_SetSpectroMultistaroffset(buf1,buf2);
     result:=result+'"result":{"status": "'+buf+'"}';
   end
   // method not found
@@ -17647,8 +18009,18 @@ begin
       end;
     end
     else begin
-      // looping
-      T_autoguider_internal(autoguider).ShowImgInfo;
+      if GuiderAutofocus and f_starprofile.AutofocusRunning then begin
+         // process autofocus frame
+         try
+         DoGuiderAutoFocus;
+         except
+           on E: Exception do NewMessage('GuideCameraNewImage, Autofocus :'+ E.Message,1);
+         end;
+      end
+      else begin
+        // looping
+        T_autoguider_internal(autoguider).ShowImgInfo;
+      end;
     end;
 
     // start next exposure
@@ -17717,15 +18089,27 @@ if (guidefits.HeaderInfo.naxis>0) and guidefits.ImageValid then begin
   guideimg_Width:=ImaGuideBmp.Width;
   guideimg_Height:=ImaGuideBmp.Height;
   if f_internalguider.SpectroFunctions then begin
-    // always draw lock position
+    // always draw slit position
     ImaGuideBmp.Canvas.Pen.Mode:=pmCopy;
     ImaGuideBmp.Canvas.Pen.Style:=psSolid;
     ImaGuideBmp.Canvas.Pen.Width:=1;
-    xs:=round(f_internalguider.LockX);
-    ys:=guideimg_Height-round(f_internalguider.LockY);
+    xs:=round(f_internalguider.SlitPosX);
+    ys:=guideimg_Height-round(f_internalguider.SlitPosY);
     ImaGuideBmp.Canvas.Pen.Color:=clGreen;
     ImaGuideBmp.Canvas.Line(xs,0,xs,guideimg_Height);
     ImaGuideBmp.Canvas.Line(0,ys,guideimg_Width,ys);
+    // draw single guide star lock position
+    if f_internalguider.GuideLock then begin
+      xs:=round(f_internalguider.LockX);
+      ys:=round(f_internalguider.LockY);
+      if (xs<>0)or(ys<>0) then begin
+        r:=round(f_internalguider.SearchWinMin);
+        ys:=guideimg_Height-ys;
+        ImaGuideBmp.Canvas.Pen.Color:=clGreen;
+        ImaGuideBmp.Canvas.Line(xs-r,ys,xs+r,ys);
+        ImaGuideBmp.Canvas.Line(xs,ys-r,xs,ys+r);
+      end;
+    end;
     // draw selected star if using single star
     if f_internalguider.GuideLock and(not InternalguiderGuiding)and(not InternalguiderCalibrating)and(not InternalguiderCalibratingBacklash)and(f_internalguider.GuideLockNextX>0)and(f_internalguider.GuideLockNextY>0) then begin
       xs:=f_internalguider.GuideLockNextX;
@@ -17944,8 +18328,8 @@ if InternalGuiderSetLockPosition and guidefits.HeaderInfo.valid and guidefits.Im
   GuideMx:=X;
   GuideMy:=Y;
   GuiderScreen2fits(GuideMx,GuideMy,true,xx,yy);
-  f_internalguider.LockX:=xx;
-  f_internalguider.LockY:=guideimg_Height-yy;
+  f_internalguider.RefX:=xx;
+  f_internalguider.RefY:=guideimg_Height-yy;
 end;
 f_internalguider.ButtonSetLock.Down:=false;
 InternalGuiderSetLockPosition:=false;
@@ -18105,7 +18489,7 @@ end;
 procedure Tf_main.GuideCameraSetCooler(Sender: TObject);
 var onoff,coolerstatus: boolean;
 begin
-  onoff:=f_internalguider.Cooler.Checked;
+  onoff:=(sender=nil) or f_internalguider.Cooler.Checked;
   coolerstatus:=guidecamera.Cooler;
   if coolerstatus<>onoff then begin
     guidecamera.Cooler:=onoff;
@@ -18215,11 +18599,12 @@ begin
 
   if (n<>23) and((guidecamera.Status=devConnected) or (findercamera.Status=devConnected)) then begin
     if (guidecamera.Status=devConnected) and (findercamera.Status=devConnected) then
-      nc:=QuestionDlg (rsSelectCamera, rsSelectTheCam, mtCustom, [21, rsMainCamera, 22, rsGuider, 23, rsFinder], '') // not important if Gtk2 revert the button order
+      nc:=QuestionDlg (rsSelectCamera, rsSelectTheCam, mtCustom, [21, rsMainCamera, 22, rsGuider, 23, rsFinder, 24,rsCancel,'IsCancel'], '') // not important if Gtk2 revert the button order
     else if (guidecamera.Status=devConnected) then
-      nc:=QuestionDlg (rsSelectCamera, rsSelectTheCam, mtCustom, [21, rsMainCamera, 22, rsGuider], '')
+      nc:=QuestionDlg (rsSelectCamera, rsSelectTheCam, mtCustom, [21, rsMainCamera, 22, rsGuider, 24,rsCancel,'IsCancel'], '')
     else
-      nc:=QuestionDlg (rsSelectCamera, rsSelectTheCam, mtCustom, [21, rsMainCamera, 23, rsFinder], '');
+      nc:=QuestionDlg (rsSelectCamera, rsSelectTheCam, mtCustom, [21, rsMainCamera, 23, rsFinder, 24,rsCancel,'IsCancel'], '');
+    if nc=24 then exit;
     ncam:=nc-21;
   end;
 
@@ -18331,32 +18716,52 @@ Procedure Tf_main.SetFinderCamera;
 var n: integer;
 begin
   if astrometry=nil then exit;
-  n:=config.GetValue('/Astrometry/Camera',0);
-  if (n=1) and (not WantFinderCamera) then n:=0;
-  UseFinder:=(n=1);
-  case n of
-    0: astrometry.FinderCamera:=nil;
-    1: astrometry.FinderCamera:=findercamera;
-  end;
-  if n=0 then begin
-    screenconfig.SetValue('/Tools/Finder/Visible',false);
-    TBFinder.Visible:=false;
-    SetTool(f_finder,'Finder',PanelRight7,0,MenuViewFinder,MenuFinder,false,true);
-  end
-  else begin
+  if WantFinderCamera then begin
+    n:=config.GetValue('/Astrometry/Camera',0);
+    UseFinder:=(n=1);
+    case n of
+      0: astrometry.FinderCamera:=nil;
+      1: astrometry.FinderCamera:=findercamera;
+    end;
     screenconfig.SetValue('/Tools/Finder/Visible',true);
     TBFinder.Visible:=true;
     SetTool(f_finder,'Finder',PanelRight7,0,MenuViewFinder,MenuFinder,true,true);
+    MenuTabFinder.Visible:=true;
+    f_finder.Panel1.Visible:=UseFinder;
+    f_finder.Panel3.Visible:=not UseFinder;
+  end
+  else begin
+    UseFinder:=false;
+    astrometry.FinderCamera:=nil;
+    screenconfig.SetValue('/Tools/Finder/Visible',false);
+    TBFinder.Visible:=false;
+    SetTool(f_finder,'Finder',PanelRight7,0,MenuViewFinder,MenuFinder,false,true);
+    MenuTabFinder.Visible:=false;
+    f_finder.Panel1.Visible:=true;
+    f_finder.Panel3.Visible:=false;
   end;
-  MenuTabFinder.Visible:=TBFinder.Visible;
 end;
 
 Procedure Tf_main.SetGuiderCamera;
 var n: integer;
 begin
   n:=config.GetValue('/Autoguider/Software',2);
-  TBInternalGuider.Visible:=WantGuideCamera and WantMount and (n=4);
+  TBInternalGuider.Visible:=WantGuideCamera and WantMount;
   MenuTabInternalGuider.Visible:=TBInternalGuider.Visible;
+  f_internalguider.Panel1.Visible:=(n=4);
+  f_internalguider.Panel11.Visible:=(n<>4);
+end;
+
+procedure Tf_main.InternalguiderConfigure(Sender: TObject);
+begin
+  f_option.PageControl1.ActivePageIndex:=12;
+  MenuOptions.Click;
+end;
+
+procedure Tf_main.FinderConfigure(Sender: TObject);
+begin
+  f_option.PageControl1.ActivePageIndex:=10;
+  MenuOptions.Click;
 end;
 
 procedure Tf_main.FinderRedraw(Sender: TObject);
@@ -18475,11 +18880,10 @@ if (finderfits.HeaderInfo.naxis>0) and finderfits.ImageValid then begin
   if f_finder.BullsEye then begin
     // center cross
     co:=ColorToBGRA(clRed);
-    co.alpha:=128;
     cx:=finderimg_Width div 2;
     cy:=finderimg_Height div 2;
-    ImaFinderBmp.DrawHorizLine(0,cy,finderimg_Width,co);
-    ImaFinderBmp.DrawVertLine(cx,0,finderimg_Height,co);
+    ImaFinderBmp.DrawLineAntialias(0,cy,finderimg_Width,cy,co,2);
+    ImaFinderBmp.DrawLineAntialias(cx,0,cx,finderimg_Height,co,2);
     s:=min(finderimg_Height,finderimg_Width) div 3;
     ImaFinderBmp.EllipseAntialias(cx,cy,s,s,co,1);
     s:=min(finderimg_Height,finderimg_Width) div 8;
@@ -18487,12 +18891,11 @@ if (finderfits.HeaderInfo.naxis>0) and finderfits.ImageValid then begin
     if (f_finder.OffsetX.Value>0)and(f_finder.OffsetX.Value<finderimg_Width)and(f_finder.OffsetY.Value>0)and(f_finder.OffsetY.Value<finderimg_Height) then begin
       // current calibration cross
       co:=ColorToBGRA(clLime);
-      co.alpha:=128;
       cx:=round(f_finder.OffsetX.Value+0.5);
       cy:=round(finderimg_Height-f_finder.OffsetY.Value+0.5);
       s:=20;
-      ImaFinderBmp.DrawHorizLine(cx-s,cy,cx+s,co);
-      ImaFinderBmp.DrawVertLine(cx,cy-s,cy+s,co);
+      ImaFinderBmp.DrawLineAntialias(cx-s,cy,cx+s,cy,co,2);
+      ImaFinderBmp.DrawLineAntialias(cx,cy-s,cx,cy+s,co,2);
     end
   end;
  end
@@ -18884,6 +19287,21 @@ end;
 procedure Tf_main.MenuImageMultipanelClick(Sender: TObject);
 begin
   SetMultiPanel(MenuImageMultipanel.Checked);
+end;
+
+procedure Tf_main.MenuInstallScriptClick(Sender: TObject);
+begin
+  f_downloadscript:=Tf_downloadscript.Create(self);
+  try
+  f_downloadscript.ShowModal;
+  if  f_downloadscript.ModalResult=mrOK  then begin
+    f_script.LoadScriptList;
+    f_script.ScriptName:=f_downloadscript.Scriptname;
+    f_script.BtnEdit.Click;
+  end;
+  finally
+    f_downloadscript.Free;
+  end;
 end;
 
 procedure Tf_main.SetMultipanel(onoff: boolean);

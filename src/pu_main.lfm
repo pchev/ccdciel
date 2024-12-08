@@ -400,14 +400,14 @@ object f_main: Tf_main
           HorzScrollBar.Page = 1
           VertScrollBar.Page = 1
           Align = alClient
-          ClientHeight = 843
-          ClientWidth = 214
+          ClientHeight = 847
+          ClientWidth = 218
           TabOrder = 0
           object PanelRight1: TPanel
             Left = 0
-            Height = 843
+            Height = 847
             Top = 0
-            Width = 214
+            Width = 218
             Align = alClient
             AutoSize = True
             BevelOuter = bvNone
@@ -436,14 +436,14 @@ object f_main: Tf_main
           HorzScrollBar.Page = 1
           VertScrollBar.Page = 1
           Align = alClient
-          ClientHeight = 843
-          ClientWidth = 214
+          ClientHeight = 847
+          ClientWidth = 218
           TabOrder = 0
           object PanelRight2: TPanel
             Left = 0
-            Height = 843
+            Height = 847
             Top = 0
-            Width = 214
+            Width = 218
             Align = alClient
             AutoSize = True
             BevelOuter = bvNone
@@ -472,14 +472,14 @@ object f_main: Tf_main
           HorzScrollBar.Page = 1
           VertScrollBar.Page = 1
           Align = alClient
-          ClientHeight = 843
-          ClientWidth = 214
+          ClientHeight = 847
+          ClientWidth = 218
           TabOrder = 0
           object PanelRight3: TPanel
             Left = 0
-            Height = 843
+            Height = 847
             Top = 0
-            Width = 214
+            Width = 218
             Align = alClient
             AutoSize = True
             BevelOuter = bvNone
@@ -508,14 +508,14 @@ object f_main: Tf_main
           HorzScrollBar.Page = 1
           VertScrollBar.Page = 1
           Align = alClient
-          ClientHeight = 843
-          ClientWidth = 214
+          ClientHeight = 847
+          ClientWidth = 218
           TabOrder = 0
           object PanelRight4: TPanel
             Left = 0
-            Height = 843
+            Height = 847
             Top = 0
-            Width = 214
+            Width = 218
             Align = alClient
             AutoSize = True
             BevelOuter = bvNone
@@ -544,14 +544,14 @@ object f_main: Tf_main
           HorzScrollBar.Page = 1
           VertScrollBar.Page = 1
           Align = alClient
-          ClientHeight = 843
-          ClientWidth = 214
+          ClientHeight = 847
+          ClientWidth = 218
           TabOrder = 0
           object PanelRight5: TPanel
             Left = 0
-            Height = 843
+            Height = 847
             Top = 0
-            Width = 214
+            Width = 218
             Align = alClient
             AutoSize = True
             BevelOuter = bvNone
@@ -577,14 +577,14 @@ object f_main: Tf_main
           HorzScrollBar.Page = 1
           VertScrollBar.Page = 1
           Align = alClient
-          ClientHeight = 843
-          ClientWidth = 214
+          ClientHeight = 847
+          ClientWidth = 218
           TabOrder = 0
           object PanelRight6: TPanel
             Left = 0
-            Height = 843
+            Height = 847
             Top = 0
-            Width = 214
+            Width = 218
             Align = alClient
             BevelOuter = bvNone
             ParentColor = False
@@ -607,14 +607,14 @@ object f_main: Tf_main
           HorzScrollBar.Page = 1
           VertScrollBar.Page = 1
           Align = alClient
-          ClientHeight = 843
-          ClientWidth = 214
+          ClientHeight = 847
+          ClientWidth = 218
           TabOrder = 0
           object PanelRight7: TPanel
             Left = 0
-            Height = 843
+            Height = 847
             Top = 0
-            Width = 214
+            Width = 218
             Align = alClient
             BevelOuter = bvNone
             TabOrder = 0
@@ -814,7 +814,14 @@ object f_main: Tf_main
         Caption = 'Devices Setup...'
         OnClick = MenuSetupClick
       end
-      object MenuItem18: TMenuItem
+      object Separator5: TMenuItem
+        Caption = '-'
+      end
+      object MenuInstallScript: TMenuItem
+        Caption = 'MenuInstallScript'
+        OnClick = MenuInstallScriptClick
+      end
+      object Separator4: TMenuItem
         Caption = '-'
       end
       object MenuIndiSettings: TMenuItem

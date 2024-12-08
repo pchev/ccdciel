@@ -1,18 +1,18 @@
 object f_downloadscript: Tf_downloadscript
   Left = 369
-  Height = 367
+  Height = 451
   Top = 30
-  Width = 556
+  Width = 608
   Caption = 'f_downloadscript'
-  ClientHeight = 367
-  ClientWidth = 556
+  ClientHeight = 451
+  ClientWidth = 608
   OnCreate = FormCreate
   OnShow = FormShow
   object StringGrid1: TStringGrid
     Left = 0
-    Height = 285
+    Height = 369
     Top = 40
-    Width = 556
+    Width = 608
     Align = alClient
     ColCount = 3
     Columns = <    
@@ -29,11 +29,11 @@ object f_downloadscript: Tf_downloadscript
         Width = 134
       end    
       item
-        MinSize = 300
+        MinSize = 340
         MaxSize = 1000
         SizePriority = 0
         Title.Caption = 'Description'
-        Width = 284
+        Width = 340
       end>
     FixedCols = 0
     MouseWheelOption = mwGrid
@@ -43,22 +43,22 @@ object f_downloadscript: Tf_downloadscript
     ColWidths = (
       134
       134
-      284
+      340
     )
   end
   object PanelBottom: TPanel
     Left = 0
     Height = 42
-    Top = 325
-    Width = 556
+    Top = 409
+    Width = 608
     Align = alBottom
     ClientHeight = 42
-    ClientWidth = 556
+    ClientWidth = 608
     TabOrder = 1
     object ButtonCancel: TButton
       AnchorSideLeft.Side = asrBottom
       AnchorSideRight.Control = ButtonDownload
-      Left = 146
+      Left = 172
       Height = 25
       Top = 8
       Width = 75
@@ -72,7 +72,7 @@ object f_downloadscript: Tf_downloadscript
     object ButtonDownload: TButton
       AnchorSideLeft.Control = PanelBottom
       AnchorSideLeft.Side = asrCenter
-      Left = 241
+      Left = 267
       Height = 25
       Top = 8
       Width = 75
@@ -85,7 +85,7 @@ object f_downloadscript: Tf_downloadscript
     Left = 0
     Height = 40
     Top = 0
-    Width = 556
+    Width = 608
     Align = alTop
     Caption = 'Select the script to download'
     TabOrder = 2

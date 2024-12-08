@@ -444,6 +444,9 @@ resourcestring
   rsMainSensor = 'Main sensor';
   rsGuiderSensor = 'Guider sensor;';
   rsLoadConfigur = 'Load configuration on startup';
+  rsImageTransfe = 'Image transfer';
+  rsNetwork = 'Network';
+  rsRAMDisk = 'RAM Disk';
   rsDirectory = 'Directory';
   rsBeSureToConf = 'Be sure to configure the camera connection.';
   rsUseFilterWhe = 'Use filter wheel';
@@ -1485,7 +1488,6 @@ resourcestring
   rsTarget = 'Target';
   rsSpectroscopy = 'Spectroscopy';
   rsSetLockPosit = 'Set lock position';
-  rsLockPosition = 'Lock position';
   rsClickOnImage = 'Click on image to set';
   rsStarSearchAr = 'Star search area';
   rsGuideBoxSize = 'Guide box size';
@@ -1580,6 +1582,16 @@ resourcestring
   rsSelectCamera = 'Select camera';
   rsSelectTheCam = 'Select the camera to use for the cone measurement';
   rsMeasureTeles = 'Measure telescope cone error';
+  rsColorizeSpec = 'Colorize spectra images';
+  rsAutofocusUsi = 'Autofocus using the OAG camera';
+  rsRunAnInitial = 'Run an initialization script';
+  rsAdditionalSc = 'Additional script parameter';
+  rsEnlargeGuide = 'Enlarge guide image';
+  rsPerSlitOffse = 'Per slit offset';
+  rsSlit = 'Slit';
+  rsInstrumentNa = 'Instrument name';
+  rsGuideStarOff = 'Guide star offset';
+  rsInstallScrip = 'Install script';
 
 implementation
 

@@ -593,7 +593,7 @@ object f_EditTargets: Tf_EditTargets
             Title.ImageIndex = 0
             Title.MultiLine = True
             Title.Caption = 'Repeat'
-            Width = 64
+            Width = 68
           end>
         DefaultColWidth = 30
         HeaderHotZones = [gzFixedCols, gzFixedCells]
@@ -622,7 +622,7 @@ object f_EditTargets: Tf_EditTargets
           40
           60
           60
-          64
+          68
         )
       end
       object PanelTargetDetail: TPanel
@@ -659,10 +659,10 @@ object f_EditTargets: Tf_EditTargets
           Top = 26
           Width = 390
           HorzScrollBar.Page = 338
-          VertScrollBar.Page = 221
+          VertScrollBar.Page = 225
           Align = alClient
-          ClientHeight = 221
-          ClientWidth = 365
+          ClientHeight = 225
+          ClientWidth = 369
           Color = clDefault
           ParentColor = False
           TabOrder = 1
@@ -766,6 +766,71 @@ object f_EditTargets: Tf_EditTargets
             Caption = 'Autofocus after % change HFD'
             OnChange = cbChange
             TabOrder = 8
+          end
+          object cbInitScript: TCheckBox
+            Left = 16
+            Height = 22
+            Top = 253
+            Width = 186
+            Caption = 'Run an initialization script'
+            OnChange = cbChange
+            TabOrder = 10
+          end
+          object Panel16: TPanel
+            Left = 32
+            Height = 101
+            Top = 280
+            Width = 264
+            BevelOuter = bvNone
+            ClientHeight = 101
+            ClientWidth = 264
+            ParentFont = False
+            TabOrder = 11
+            object Label22: TLabel
+              AnchorSideLeft.Control = ScriptList2
+              AnchorSideTop.Side = asrCenter
+              AnchorSideBottom.Control = ScriptList2
+              Left = 8
+              Height = 18
+              Top = -2
+              Width = 35
+              Anchors = [akLeft, akBottom]
+              Caption = 'Script'
+              ParentColor = False
+              ParentFont = False
+            end
+            object ScriptList2: TComboBox
+              Left = 8
+              Height = 32
+              Top = 16
+              Width = 240
+              ItemHeight = 18
+              OnChange = TargetChange
+              ParentFont = False
+              Style = csDropDownList
+              TabOrder = 0
+            end
+            object Label23: TLabel
+              AnchorSideLeft.Control = ScriptParam2
+              AnchorSideTop.Side = asrCenter
+              AnchorSideBottom.Control = ScriptParam2
+              Left = 8
+              Height = 18
+              Top = 46
+              Width = 170
+              Anchors = [akLeft, akBottom]
+              Caption = 'Additional script arguments'
+              ParentColor = False
+            end
+            object ScriptParam2: TEdit
+              AnchorSideLeft.Control = ScriptList2
+              Left = 8
+              Height = 32
+              Top = 64
+              Width = 240
+              OnEditingDone = TargetChange
+              TabOrder = 1
+            end
           end
         end
       end
@@ -929,7 +994,7 @@ object f_EditTargets: Tf_EditTargets
                 ButtonStyle = cbsPickList
                 Title.MultiLine = True
                 Title.Caption = 'F-stop'
-                Width = 77
+                Width = 81
               end>
             DefaultColWidth = 30
             MouseWheelOption = mwGrid
@@ -958,7 +1023,7 @@ object f_EditTargets: Tf_EditTargets
               72
               72
               72
-              77
+              81
             )
           end
           object Panel17: TPanel

@@ -338,15 +338,15 @@ end;
 
 function T_autoguider_internal.GetLockPosition(out x,y:double):boolean;
 begin
-  x:=finternalguider.LockX;
-  y:=finternalguider.LockY;
+  x:=finternalguider.RefX;
+  y:=finternalguider.RefY;
   result:=true;
 end;
 
 procedure T_autoguider_internal.SetLockPosition(x,y:double);
 begin
-  finternalguider.LockX:=x;
-  finternalguider.LockY:=y;
+  finternalguider.RefX:=x;
+  finternalguider.RefY:=y;
 end;
 
 procedure T_autoguider_internal.StartSettle;

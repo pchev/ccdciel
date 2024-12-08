@@ -6,15 +6,15 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ccdciel\n"
 "Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
-"POT-Creation-Date: 2024-11-03 14:03+0000\n"
+"POT-Creation-Date: 2024-12-01 20:12+0000\n"
 "PO-Revision-Date: 2021-08-31 20:37+0000\n"
 "Last-Translator: Patrick Chevalley <Unknown>\n"
 "Language-Team: English (United Kingdom) <en_GB@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2024-11-03 14:12+0000\n"
-"X-Generator: Launchpad (build 22ade00ab50b929fac63b8ee7252243aceda294a)\n"
+"X-Launchpad-Export-Date: 2024-12-01 20:16+0000\n"
+"X-Generator: Launchpad (build 1519c6efe8e9bd78e6c5ebf2eb5bcb040b95ad32)\n"
 "Language: en_GB\n"
 
 #: u_translation.rs2d
@@ -105,6 +105,10 @@ msgstr ""
 
 #: u_translation.rsadditionalop
 msgid "Additional options for"
+msgstr ""
+
+#: u_translation.rsadditionalsc
+msgid "Additional script parameter"
 msgstr ""
 
 #: u_translation.rsaddstep
@@ -437,6 +441,10 @@ msgstr "AutoFocus successful"
 #: u_translation.rsautofocustol
 msgid "Autofocus tolerance "
 msgstr "Autofocus tolerance "
+
+#: u_translation.rsautofocususi
+msgid "Autofocus using the OAG camera"
+msgstr ""
 
 #: u_translation.rsautofocuswil
 msgid "Autofocus will run before the next exposure"
@@ -1021,6 +1029,10 @@ msgstr "Cloud cover"
 #: u_translation.rscolorbalance
 msgid "Color balance"
 msgstr "Colour balance"
+
+#: u_translation.rscolorizespec
+msgid "Colorize spectra images"
+msgstr ""
 
 #: u_translation.rscolorpreview
 msgid "Color preview"
@@ -1678,6 +1690,10 @@ msgstr "End preview"
 #: u_translation.rsendtime
 msgid "End time"
 msgstr "End time"
+
+#: u_translation.rsenlargeguide
+msgid "Enlarge guide image"
+msgstr ""
 
 #: u_translation.rsenterthej200
 msgid "Enter the J2000 coordinates of the target where the main instrument is currently pointing."
@@ -2421,6 +2437,10 @@ msgstr "Image sharpness %s"
 msgid "Image statistic"
 msgstr "Image statistic"
 
+#: u_translation.rsimagetransfe
+msgid "Image transfer"
+msgstr ""
+
 #: u_translation.rsimageundebay
 msgid "Image Un-debayered"
 msgstr "Image Un-debayered"
@@ -2501,6 +2521,10 @@ msgstr ""
 #: u_translation.rsinsseconds
 #, object-pascal-format
 msgid "in %s seconds"
+msgstr ""
+
+#: u_translation.rsinstrumentna
+msgid "Instrument name"
 msgstr ""
 
 #: u_translation.rsintensity
@@ -2653,10 +2677,6 @@ msgstr ""
 #: u_translation.rslockoverlay
 msgid "Lock overlay"
 msgstr "Lock overlay"
-
-#: u_translation.rslockposition
-msgid "Lock position"
-msgstr ""
 
 #: u_translation.rslogfolder
 msgid "Log folder"
@@ -2828,6 +2848,10 @@ msgstr "Measurement %s pos:%s step:%s hfd:%s peak:%s snr:%s"
 
 #: u_translation.rsmeasurepixel
 msgid "Measure pixel scale by stop tracking"
+msgstr ""
+
+#: u_translation.rsmeasureteles
+msgid "Measure telescope cone error"
 msgstr ""
 
 #: u_translation.rsmeasurewn
@@ -3125,6 +3149,10 @@ msgstr ""
 #, object-pascal-format
 msgid "Need to wait until %s"
 msgstr "Need to wait until %s"
+
+#: u_translation.rsnetwork
+msgid "Network"
+msgstr ""
 
 #: u_translation.rsnew
 msgid "New"
@@ -3574,6 +3602,10 @@ msgstr "Performance"
 msgid "Periodic auto-focus"
 msgstr "Periodic auto-focus"
 
+#: u_translation.rsperslitoffse
+msgid "Per slit offset"
+msgstr ""
+
 #: u_translation.rsphotometry
 msgid "Photometry"
 msgstr "Photometry"
@@ -3890,6 +3922,10 @@ msgstr "RA"
 #: u_translation.rsrainrate
 msgid "Rain rate"
 msgstr "Rain rate"
+
+#: u_translation.rsramdisk
+msgid "RAM Disk"
+msgstr ""
 
 #: u_translation.rsrandom
 msgid "Random"
@@ -4218,6 +4254,10 @@ msgstr "Rotator sync calibration = %s"
 msgid "Run"
 msgstr "Run"
 
+#: u_translation.rsrunaninitial
+msgid "Run an initialization script"
+msgstr ""
+
 #: u_translation.rsrunascript
 msgid "Run a script"
 msgstr "Run a script"
@@ -4424,12 +4464,20 @@ msgstr ""
 msgid "Select a star first!"
 msgstr "Select a star first!"
 
+#: u_translation.rsselectcamera
+msgid "Select camera"
+msgstr ""
+
 #: u_translation.rsselectguides
 msgid "Select guide star"
 msgstr ""
 
 #: u_translation.rsselectoneoft
 msgid "Select one of the measurement options:"
+msgstr ""
+
+#: u_translation.rsselectthecam
+msgid "Select the camera to use for the cone measurement"
 msgstr ""
 
 #: u_translation.rsselectthecur
@@ -4844,6 +4892,10 @@ msgstr "Slew with offset %s/%s"
 #: u_translation.rsslippagecorr
 msgid "Slippage correction "
 msgstr "Slippage correction "
+
+#: u_translation.rsslit
+msgid "Slit"
+msgstr ""
 
 #: u_translation.rsslitdrawing
 msgid "Slit drawing"

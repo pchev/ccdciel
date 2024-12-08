@@ -41,7 +41,7 @@ type
             bayerpattern,roworder: string;
             bayeroffsetx, bayeroffsety: integer;
             rmult,gmult,bmult: double;
-            equinox,ra,dec,crval1,crval2: double;
+            equinox,ra,dec,crval1,crval2,wavemin,wavemax: double;
             pixsz1,pixsz2,pixratio,focallen,scale: double;
             exptime,stackexp,airmass: double;
             objects,ctype1,ctype2 : string;
@@ -832,6 +832,8 @@ begin
   equinox := Source.equinox ;
   ra := Source.ra ;
   dec := Source.dec ;
+  wavemin := Source.wavemin ;
+  wavemax := Source.wavemax ;
   crval1 := Source.crval1 ;
   crval2 := Source.crval2 ;
   pixsz1 := Source.pixsz1 ;
@@ -1758,6 +1760,7 @@ with FFitsInfo do begin
    bayeroffsetx:=0; bayeroffsety:=0;
    rmult:=0; gmult:=0; bmult:=0;
    equinox:=2000; ra:=NullCoord; dec:=NullCoord; crval1:=NullCoord; crval2:=NullCoord;
+   wavemin:=NullCoord; wavemax:=NullCoord;
    pixsz1:=0; pixsz2:=0; pixratio:=1; focallen:=0; scale:=0;
    exptime:=0; stackexp:=0; airmass:=0;
    stackcount:=0;
@@ -1769,8 +1772,10 @@ end;
 procedure TFits.GetFitsInfo;
 var   i : integer;
       keyword,buf : string;
+      cdelt1: double;
 begin
  ClearFitsInfo;
+ cdelt1:=0;
  with FFitsInfo do begin
   for i:=0 to FHeader.Rows.Count-1 do begin
     keyword:=trim(FHeader.Keys[i]);
@@ -1829,11 +1834,14 @@ begin
     if (dec=NullCoord)and(keyword='OBJCTDEC') then begin
        dec:=StrToDE(buf);
     end;
+    if (keyword='WAVEMIN') then wavemin:=strtofloat(buf);
+    if (keyword='WAVEMAX') then wavemax:=strtofloat(buf);
     if (keyword='EQUINOX') then equinox:=StrToFloatDef(buf,2000);
     if (keyword='CTYPE1') then ctype1:=buf;
     if (keyword='CTYPE2') then ctype2:=buf;
     if (keyword='CRVAL1') then crval1:=strtofloat(buf);
     if (keyword='CRVAL2') then crval2:=strtofloat(buf);
+    if (keyword='CDELT1') then cdelt1:=strtofloat(buf);
     if (keyword='SCALE')  then scale:=strtofloat(buf);
     if (scale=0) and (keyword='SECPIX1')then scale:=strtofloat(buf);
     if (keyword='FRAME')or(keyword='IMAGETYP') then frametype:=UpperCase(trim(buf));
@@ -1851,6 +1859,11 @@ begin
      pixsz1:=500
    else pixsz1:=naxis1;
    pixsz2:=naxis1;
+   // compute wavelength limit
+   if ctype1='Wavelength' then begin
+     wavemin:=crval1;
+     wavemax:=crval1+cdelt1*naxis1;
+   end;
  end;
  if (pixsz1<>0)and(pixsz2<>0) then pixratio:=pixsz1/pixsz2;
  valid:=valid and (naxis>0); // do not process file without primary array
@@ -4696,6 +4709,7 @@ begin
   framestr:=trim(framestr);
   if not f.Header.Valueof('OBJECT',objectstr) then objectstr:=DefObject;
   objectstr:=SafeFileName(objectstr);
+  if FileRemoveSpace then objectstr:=StringReplace(objectstr,' ','',[rfReplaceAll]);
   if not f.Header.Valueof('EXPTIME',expstr) then expstr:=DefExp;
   expstr:=trim(expstr);
   if f.Header.Valueof('XBINNING',binstr) then begin

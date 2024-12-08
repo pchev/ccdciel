@@ -4,7 +4,7 @@ unit pu_downloadscript;
 
 interface
 
-uses u_global, u_utils, u_translation, zipper, LazFileUtils,
+uses u_global, u_utils, u_translation, zipper, LazFileUtils, FileUtil,
   Classes, SysUtils, Forms, Controls, Graphics, Dialogs, Grids, StdCtrls, ExtCtrls, downloaddialog;
 
 type
@@ -116,7 +116,8 @@ end;
 
 procedure Tf_downloadscript.ButtonDownloadClick(Sender: TObject);
 var x: integer;
-    fn,basefn,dfn: string;
+    fn,basefn,dfn,configfn: string;
+    configexist: boolean;
     FUnZipper: TUnZipper;
 begin
   FscriptName:='';
@@ -130,20 +131,31 @@ begin
   else begin
     fn:=basefn+'.script';
     dfn:=slash(ConfigDir)+fn;
+    if FileExists(dfn) then begin
+      if MessageDlg(format(rsScriptAlread,[fn]),mtConfirmation,mbYesNo,0)=mrNo
+        then exit;
   end;
-  if FileExists(dfn) then begin
-    if MessageDlg(format(rsScriptAlread,[fn]),mtConfirmation,mbYesNo,0)=mrNo
-       then exit;
   end;
   if DownloadScript(fn,dfn) then  begin
     if uppercase(ExtractFileExt(fn))='.ZIP' then begin
       try
+      configexist:=false;
+      configfn:=slash(ConfigDir)+trim(basefn)+'_config.script';
+      if FileExists(configfn) then begin
+        CopyFile(configfn,configfn+'.backup',[cffOverwriteFile]);
+        configexist:=true;
+      end;
       FUnZipper:=TUnZipper.Create;
       FUnZipper.FileName:=dfn;
       FUnZipper.OutputPath:=ConfigDir;
       FUnZipper.UseUTF8:=True;
       FUnZipper.Examine;
       FUnZipper.UnZipAllFiles;
+      if configexist then begin
+        DeleteFile(configfn+'.dist');
+        RenameFile(configfn,configfn+'.dist');
+        CopyFile(configfn+'.backup',configfn,[cffOverwriteFile]);
+      end;
       FscriptName:=trim(basefn)+'_config';
       if not FileExists(slash(ConfigDir)+FscriptName+'.script') then
         FscriptName:='';

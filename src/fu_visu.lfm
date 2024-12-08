@@ -6,6 +6,7 @@ object f_visu: Tf_visu
   AutoSize = True
   ClientHeight = 123
   ClientWidth = 405
+  Constraints.MaxWidth = 405
   OnEndDrag = FrameEndDrag
   OnResize = FrameResize
   ParentFont = False
@@ -25,405 +26,437 @@ object f_visu: Tf_visu
     ClientWidth = 405
     ParentFont = False
     TabOrder = 0
-    object Panel3: TPanel
-      Left = 0
-      Height = 100
-      Top = 0
-      Width = 259
-      BevelOuter = bvNone
-      ClientHeight = 100
-      ClientWidth = 259
-      Color = clBlack
-      Constraints.MaxWidth = 259
-      Constraints.MinHeight = 75
-      Constraints.MinWidth = 259
-      Font.Color = clSilver
-      ParentColor = False
-      ParentFont = False
-      TabOrder = 1
-      object HistGraph: TChart
-        Left = 0
-        Height = 100
-        Top = 0
-        Width = 259
-        AllowZoom = False
-        AxisList = <        
-          item
-            Visible = False
-            Marks.LabelBrush.Style = bsClear
-            Minors = <>
-            Title.LabelFont.Orientation = 900
-            Title.LabelBrush.Style = bsClear
-          end        
-          item
-            Visible = False
-            Alignment = calBottom
-            Marks.LabelBrush.Style = bsClear
-            Minors = <>
-            Title.LabelBrush.Style = bsClear
-          end>
-        BackColor = clBlack
-        Foot.Brush.Color = clBtnFace
-        Foot.Font.Color = clBlue
-        MarginsExternal.Left = 0
-        MarginsExternal.Top = 0
-        MarginsExternal.Right = 0
-        MarginsExternal.Bottom = 0
-        Title.Brush.Color = clBtnFace
-        Title.Font.Color = clBlue
-        Title.Text.Strings = (
-          'TAChart'
-        )
-        Align = alClient
-        OnMouseDown = HistogramMouseDown
-        OnMouseEnter = HistGraphMouseEnter
-        OnMouseLeave = HistGraphMouseLeave
-        OnMouseMove = HistogramMouseMove
-        OnMouseUp = HistogramMouseUp
-        object HistGraphMinLine: TConstantLine
-          Legend.Visible = False
-          LineStyle = lsVertical
-          Pen.Color = clRed
-        end
-        object HistGraphMaxLine: TConstantLine
-          LineStyle = lsVertical
-          Pen.Color = clGreen
-          Position = 65535
-        end
-        object HistGraphAreaSeries1: TAreaSeries
-          Legend.Visible = False
-          AreaBrush.Color = clBlack
-          AreaContourPen.Color = clYellow
-          AreaContourPen.Mode = pmNop
-          AreaLinesPen.Color = clWhite
-          Stacked = False
-          UseZeroLevel = True
-        end
-      end
-      object SpinEditMin: TFloatSpinEdit
-        AnchorSideLeft.Control = Panel3
-        AnchorSideTop.Control = Panel3
-        Left = 0
-        Height = 26
-        Top = 0
-        Width = 71
-        Constraints.MaxHeight = 26
-        DecimalPlaces = 0
-        Font.Color = clSilver
-        Increment = 10
-        MaxValue = 65536
-        OnChange = SpinEditMinChange
-        OnMouseEnter = HistGraphMouseEnter
-        OnMouseLeave = HistGraphMouseLeave
-        ParentFont = False
-        TabOrder = 0
-        Visible = False
-      end
-      object SpinEditMax: TFloatSpinEdit
-        AnchorSideTop.Control = Panel3
-        AnchorSideRight.Control = Panel3
-        AnchorSideRight.Side = asrBottom
-        Left = 188
-        Height = 26
-        Top = 0
-        Width = 71
-        Anchors = [akTop, akRight]
-        Constraints.MaxHeight = 26
-        DecimalPlaces = 0
-        Font.Color = clSilver
-        Increment = 10
-        MaxValue = 65536
-        OnChange = SpinEditMaxChange
-        OnMouseEnter = HistGraphMouseEnter
-        OnMouseLeave = HistGraphMouseLeave
-        ParentFont = False
-        TabOrder = 1
-        Visible = False
-      end
-    end
-    object Panel2: TPanel
-      Left = 259
-      Height = 100
-      Top = 0
-      Width = 143
+    object Panel9: TPanel
+      Left = 1
+      Height = 89
+      Top = 1
+      Width = 403
+      Align = alClient
       AutoSize = True
-      BevelOuter = bvNone
-      ClientHeight = 100
-      ClientWidth = 143
-      ParentColor = False
-      ParentFont = False
+      Caption = 'Panel9'
+      ClientHeight = 89
+      ClientWidth = 403
       TabOrder = 0
-      object Panel4: TPanel
-        Left = 0
-        Height = 100
-        Top = 0
-        Width = 115
+      object Panel3: TPanel
+        Left = 1
+        Height = 87
+        Top = 1
+        Width = 259
         Align = alClient
         BevelOuter = bvNone
-        ClientHeight = 100
-        ClientWidth = 115
+        ClientHeight = 87
+        ClientWidth = 259
+        Color = clBlack
+        Constraints.MaxWidth = 259
+        Constraints.MinHeight = 75
+        Constraints.MinWidth = 259
+        Font.Color = clSilver
         ParentColor = False
+        ParentFont = False
         TabOrder = 0
-        object Panel5: TPanel
+        object HistGraph: TChart
           Left = 0
-          Height = 30
+          Height = 87
           Top = 0
-          Width = 115
-          Align = alTop
-          AutoSize = True
-          BevelOuter = bvNone
-          ClientHeight = 30
-          ClientWidth = 115
-          TabOrder = 0
-          object HistBar: TTrackBar
-            AnchorSideRight.Control = Panel5
-            AnchorSideRight.Side = asrBottom
-            Left = 0
-            Height = 30
-            Top = 0
-            Width = 115
-            Max = 100
-            OnChange = HistBarChange
-            Position = 0
-            TickStyle = tsNone
-            TabOrder = 0
+          Width = 259
+          AllowZoom = False
+          AxisList = <          
+            item
+              Visible = False
+              Marks.LabelBrush.Style = bsClear
+              Minors = <>
+              Title.LabelFont.Orientation = 900
+              Title.LabelBrush.Style = bsClear
+            end          
+            item
+              Visible = False
+              Alignment = calBottom
+              Marks.LabelBrush.Style = bsClear
+              Minors = <>
+              Title.LabelBrush.Style = bsClear
+            end>
+          BackColor = clBlack
+          Foot.Brush.Color = clBtnFace
+          Foot.Font.Color = clBlue
+          MarginsExternal.Left = 0
+          MarginsExternal.Top = 0
+          MarginsExternal.Right = 0
+          MarginsExternal.Bottom = 0
+          Title.Brush.Color = clBtnFace
+          Title.Font.Color = clBlue
+          Title.Text.Strings = (
+            'TAChart'
+          )
+          Align = alClient
+          OnMouseDown = HistogramMouseDown
+          OnMouseEnter = HistGraphMouseEnter
+          OnMouseLeave = HistGraphMouseLeave
+          OnMouseMove = HistogramMouseMove
+          OnMouseUp = HistogramMouseUp
+          object HistGraphMinLine: TConstantLine
+            Legend.Visible = False
+            LineStyle = lsVertical
+            Pen.Color = clRed
+          end
+          object HistGraphMaxLine: TConstantLine
+            LineStyle = lsVertical
+            Pen.Color = clGreen
+            Position = 65535
+          end
+          object HistGraphAreaSeries1: TAreaSeries
+            Legend.Visible = False
+            AreaBrush.Color = clBlack
+            AreaContourPen.Color = clYellow
+            AreaContourPen.Mode = pmNop
+            AreaLinesPen.Color = clWhite
+            Stacked = False
+            UseZeroLevel = True
           end
         end
-        object Panel6: TPanel
+        object SpinEditMin: TFloatSpinEdit
+          AnchorSideLeft.Control = Panel3
+          AnchorSideTop.Control = Panel3
           Left = 0
           Height = 26
-          Top = 30
-          Width = 115
-          Align = alTop
-          AutoSize = True
-          BevelOuter = bvNone
-          ClientHeight = 26
-          ClientWidth = 115
+          Top = 0
+          Width = 71
+          Constraints.MaxHeight = 26
+          DecimalPlaces = 0
+          Font.Color = clSilver
+          Increment = 10
+          MaxValue = 65536
+          OnChange = SpinEditMinChange
+          OnMouseEnter = HistGraphMouseEnter
+          OnMouseLeave = HistGraphMouseLeave
+          ParentFont = False
+          TabOrder = 0
+          Visible = False
+        end
+        object SpinEditMax: TFloatSpinEdit
+          AnchorSideTop.Control = Panel3
+          AnchorSideRight.Control = Panel3
+          AnchorSideRight.Side = asrBottom
+          Left = 188
+          Height = 26
+          Top = 0
+          Width = 71
+          Anchors = [akTop, akRight]
+          Constraints.MaxHeight = 26
+          DecimalPlaces = 0
+          Font.Color = clSilver
+          Increment = 10
+          MaxValue = 65536
+          OnChange = SpinEditMaxChange
+          OnMouseEnter = HistGraphMouseEnter
+          OnMouseLeave = HistGraphMouseLeave
+          ParentFont = False
           TabOrder = 1
-          object Gamma: TFloatSpinEdit
+          Visible = False
+        end
+      end
+      object Panel2: TPanel
+        Left = 259
+        Height = 87
+        Top = 1
+        Width = 143
+        Align = alRight
+        BevelOuter = bvNone
+        ClientHeight = 87
+        ClientWidth = 143
+        ParentColor = False
+        ParentFont = False
+        TabOrder = 1
+        object Panel4: TPanel
+          Left = 0
+          Height = 87
+          Top = 0
+          Width = 115
+          Align = alClient
+          BevelOuter = bvNone
+          ClientHeight = 87
+          ClientWidth = 115
+          ParentColor = False
+          TabOrder = 0
+          object Panel6: TPanel
             Left = 0
             Height = 26
-            Hint = 'Gamma'
             Top = 0
-            Width = 57
-            AutoSize = False
-            Increment = 0.1
-            MaxValue = 1
-            MinValue = 0.1
-            OnChange = GammaChange
-            ParentFont = False
+            Width = 115
+            Align = alTop
+            AutoSize = True
+            BevelOuter = bvNone
+            ClientHeight = 26
+            ClientWidth = 115
             TabOrder = 0
-            Value = 1
+            object Gamma: TFloatSpinEdit
+              Left = 0
+              Height = 26
+              Hint = 'Gamma'
+              Top = 0
+              Width = 57
+              AutoSize = False
+              Increment = 0.1
+              MaxValue = 1
+              MinValue = 0.1
+              OnChange = GammaChange
+              ParentFont = False
+              TabOrder = 0
+              Value = 1
+            end
+            object BtnClipRange: TSpeedButton
+              AnchorSideLeft.Control = Gamma
+              AnchorSideLeft.Side = asrBottom
+              AnchorSideTop.Control = Gamma
+              AnchorSideTop.Side = asrCenter
+              Left = 58
+              Height = 22
+              Top = 2
+              Width = 28
+              AllowAllUp = True
+              BorderSpacing.Left = 1
+              Color = clDefault
+              GroupIndex = 110
+              OnClick = BtnClipRangeClick
+              ParentFont = False
+            end
+            object BtnInvert: TSpeedButton
+              AnchorSideLeft.Control = BtnClipRange
+              AnchorSideLeft.Side = asrBottom
+              AnchorSideTop.Control = BtnClipRange
+              Left = 87
+              Height = 22
+              Hint = 'Invert image display'
+              Top = 2
+              Width = 28
+              AllowAllUp = True
+              BorderSpacing.Left = 1
+              Color = clDefault
+              GroupIndex = 105
+              OnClick = BtnInvertClick
+              ParentFont = False
+            end
           end
-          object BtnClipRange: TSpeedButton
-            AnchorSideLeft.Control = Gamma
-            AnchorSideLeft.Side = asrBottom
-            AnchorSideTop.Control = Gamma
-            AnchorSideTop.Side = asrCenter
-            Left = 58
+          object Panel7: TPanel
+            Left = 0
+            Height = 22
+            Top = 26
+            Width = 115
+            Align = alTop
+            AutoSize = True
+            BevelOuter = bvNone
+            ClientHeight = 22
+            ClientWidth = 115
+            TabOrder = 1
+            object BtnZoom05: TSpeedButton
+              Tag = 1
+              AnchorSideLeft.Control = BtnZoomAdjust
+              AnchorSideLeft.Side = asrBottom
+              AnchorSideTop.Control = BtnZoomAdjust
+              Left = 29
+              Height = 22
+              Hint = 'Zoom to half size'
+              Top = 0
+              Width = 28
+              AllowAllUp = True
+              BorderSpacing.Left = 1
+              Caption = '1:2'
+              Color = clDefault
+              GroupIndex = 102
+              Layout = blGlyphBottom
+              OnClick = BtnZoomClick
+              ParentFont = False
+            end
+            object BtnZoomAdjust: TSpeedButton
+              Left = 0
+              Height = 22
+              Hint = 'Zoom to adjust in window'
+              Top = 0
+              Width = 28
+              AllowAllUp = True
+              Color = clDefault
+              GroupIndex = 102
+              OnClick = BtnZoomClick
+              ParentFont = False
+            end
+            object BtnZoom2: TSpeedButton
+              Tag = 3
+              AnchorSideLeft.Control = BtnZoom1
+              AnchorSideLeft.Side = asrBottom
+              AnchorSideTop.Control = BtnZoomAdjust
+              Left = 87
+              Height = 22
+              Hint = 'Zoom two time'
+              Top = 0
+              Width = 28
+              AllowAllUp = True
+              BorderSpacing.Left = 1
+              Caption = '2:1'
+              Color = clDefault
+              GroupIndex = 102
+              Layout = blGlyphBottom
+              OnClick = BtnZoomClick
+              ParentFont = False
+            end
+            object BtnZoom1: TSpeedButton
+              Tag = 2
+              AnchorSideLeft.Control = BtnZoom05
+              AnchorSideLeft.Side = asrBottom
+              AnchorSideTop.Control = BtnZoomAdjust
+              Left = 58
+              Height = 22
+              Hint = 'Zoom to original scale'
+              Top = 0
+              Width = 28
+              AllowAllUp = True
+              BorderSpacing.Left = 1
+              Caption = '1:1'
+              Color = clDefault
+              GroupIndex = 102
+              Layout = blGlyphBottom
+              OnClick = BtnZoomClick
+              ParentFont = False
+            end
+          end
+          object Panel8: TPanel
+            Left = 0
+            Height = 22
+            Top = 48
+            Width = 115
+            Align = alTop
+            AutoSize = True
+            BevelOuter = bvNone
+            ClientHeight = 22
+            ClientWidth = 115
+            TabOrder = 2
+            object BtnFlipVert: TSpeedButton
+              AnchorSideLeft.Control = BtnFlipHorz
+              AnchorSideLeft.Side = asrBottom
+              AnchorSideTop.Control = BtnFlipHorz
+              Left = 29
+              Height = 22
+              Hint = 'Flip the image vertically'
+              Top = 0
+              Width = 28
+              AllowAllUp = True
+              BorderSpacing.Left = 1
+              Color = clDefault
+              GroupIndex = 107
+              OnClick = BtnFlipVertClick
+              ParentFont = False
+            end
+            object BtnBullsEye: TSpeedButton
+              AnchorSideLeft.Control = BtnFlipVert
+              AnchorSideLeft.Side = asrBottom
+              AnchorSideTop.Control = BtnFlipHorz
+              Left = 58
+              Height = 22
+              Hint = 'Show bulls eye'
+              Top = 0
+              Width = 28
+              AllowAllUp = True
+              BorderSpacing.Left = 1
+              Color = clDefault
+              GroupIndex = 103
+              OnClick = BtnBullsEyeClick
+              ParentFont = False
+            end
+            object BtnClipping: TSpeedButton
+              AnchorSideLeft.Control = BtnBullsEye
+              AnchorSideLeft.Side = asrBottom
+              AnchorSideTop.Control = BtnFlipHorz
+              Left = 87
+              Height = 22
+              Hint = 'Show highlight and shadow clipping'
+              Top = 0
+              Width = 28
+              AllowAllUp = True
+              BorderSpacing.Left = 1
+              Color = clDefault
+              GroupIndex = 104
+              OnClick = BtnClippingClick
+              ParentFont = False
+            end
+            object BtnFlipHorz: TSpeedButton
+              Left = 0
+              Height = 22
+              Hint = 'Flip the image horizontally'
+              Top = 0
+              Width = 28
+              AllowAllUp = True
+              Color = clDefault
+              GroupIndex = 106
+              OnClick = BtnFlipHorzClick
+              ParentFont = False
+            end
+          end
+        end
+        object PanelNoDisplay: TPanel
+          Left = 115
+          Height = 87
+          Top = 0
+          Width = 28
+          Align = alRight
+          BevelOuter = bvNone
+          ClientHeight = 87
+          ClientWidth = 28
+          ParentColor = False
+          TabOrder = 1
+          Visible = False
+          object BtnShowImage: TSpeedButton
+            Left = 0
             Height = 22
             Top = 2
             Width = 28
             AllowAllUp = True
-            BorderSpacing.Left = 1
-            Color = clDefault
-            GroupIndex = 110
-            OnClick = BtnClipRangeClick
-            ParentFont = False
-          end
-          object BtnInvert: TSpeedButton
-            AnchorSideLeft.Control = BtnClipRange
-            AnchorSideLeft.Side = asrBottom
-            AnchorSideTop.Control = BtnClipRange
-            Left = 87
-            Height = 22
-            Hint = 'Invert image display'
-            Top = 2
-            Width = 28
-            AllowAllUp = True
-            BorderSpacing.Left = 1
-            Color = clDefault
-            GroupIndex = 105
-            OnClick = BtnInvertClick
-            ParentFont = False
-          end
-        end
-        object Panel7: TPanel
-          Left = 0
-          Height = 22
-          Top = 56
-          Width = 115
-          Align = alTop
-          AutoSize = True
-          BevelOuter = bvNone
-          ClientHeight = 22
-          ClientWidth = 115
-          TabOrder = 2
-          object BtnZoom05: TSpeedButton
-            Tag = 1
-            AnchorSideLeft.Control = BtnZoomAdjust
-            AnchorSideLeft.Side = asrBottom
-            AnchorSideTop.Control = BtnZoomAdjust
-            Left = 29
-            Height = 22
-            Hint = 'Zoom to half size'
-            Top = 0
-            Width = 28
-            AllowAllUp = True
-            BorderSpacing.Left = 1
-            Caption = '1:2'
-            Color = clDefault
-            GroupIndex = 102
-            Layout = blGlyphBottom
-            OnClick = BtnZoomClick
-            ParentFont = False
-          end
-          object BtnZoomAdjust: TSpeedButton
-            Left = 0
-            Height = 22
-            Hint = 'Zoom to adjust in window'
-            Top = 0
-            Width = 28
-            AllowAllUp = True
-            Color = clDefault
-            GroupIndex = 102
-            OnClick = BtnZoomClick
-            ParentFont = False
-          end
-          object BtnZoom2: TSpeedButton
-            Tag = 3
-            AnchorSideLeft.Control = BtnZoom1
-            AnchorSideLeft.Side = asrBottom
-            AnchorSideTop.Control = BtnZoomAdjust
-            Left = 87
-            Height = 22
-            Hint = 'Zoom two time'
-            Top = 0
-            Width = 28
-            AllowAllUp = True
-            BorderSpacing.Left = 1
-            Caption = '2:1'
-            Color = clDefault
-            GroupIndex = 102
-            Layout = blGlyphBottom
-            OnClick = BtnZoomClick
-            ParentFont = False
-          end
-          object BtnZoom1: TSpeedButton
-            Tag = 2
-            AnchorSideLeft.Control = BtnZoom05
-            AnchorSideLeft.Side = asrBottom
-            AnchorSideTop.Control = BtnZoomAdjust
-            Left = 58
-            Height = 22
-            Hint = 'Zoom to original scale'
-            Top = 0
-            Width = 28
-            AllowAllUp = True
-            BorderSpacing.Left = 1
-            Caption = '1:1'
-            Color = clDefault
-            GroupIndex = 102
-            Layout = blGlyphBottom
-            OnClick = BtnZoomClick
-            ParentFont = False
-          end
-        end
-        object Panel8: TPanel
-          Left = 0
-          Height = 22
-          Top = 78
-          Width = 115
-          Align = alTop
-          AutoSize = True
-          BevelOuter = bvNone
-          ClientHeight = 22
-          ClientWidth = 115
-          TabOrder = 3
-          object BtnFlipVert: TSpeedButton
-            AnchorSideLeft.Control = BtnFlipHorz
-            AnchorSideLeft.Side = asrBottom
-            AnchorSideTop.Control = BtnFlipHorz
-            Left = 29
-            Height = 22
-            Hint = 'Flip the image vertically'
-            Top = 0
-            Width = 28
-            AllowAllUp = True
-            BorderSpacing.Left = 1
-            Color = clDefault
-            GroupIndex = 107
-            OnClick = BtnFlipVertClick
-            ParentFont = False
-          end
-          object BtnBullsEye: TSpeedButton
-            AnchorSideLeft.Control = BtnFlipVert
-            AnchorSideLeft.Side = asrBottom
-            AnchorSideTop.Control = BtnFlipHorz
-            Left = 58
-            Height = 22
-            Hint = 'Show bulls eye'
-            Top = 0
-            Width = 28
-            AllowAllUp = True
-            BorderSpacing.Left = 1
-            Color = clDefault
-            GroupIndex = 103
-            OnClick = BtnBullsEyeClick
-            ParentFont = False
-          end
-          object BtnClipping: TSpeedButton
-            AnchorSideLeft.Control = BtnBullsEye
-            AnchorSideLeft.Side = asrBottom
-            AnchorSideTop.Control = BtnFlipHorz
-            Left = 87
-            Height = 22
-            Hint = 'Show highlight and shadow clipping'
-            Top = 0
-            Width = 28
-            AllowAllUp = True
-            BorderSpacing.Left = 1
-            Color = clDefault
-            GroupIndex = 104
-            OnClick = BtnClippingClick
-            ParentFont = False
-          end
-          object BtnFlipHorz: TSpeedButton
-            Left = 0
-            Height = 22
-            Hint = 'Flip the image horizontally'
-            Top = 0
-            Width = 28
-            AllowAllUp = True
-            Color = clDefault
-            GroupIndex = 106
-            OnClick = BtnFlipHorzClick
-            ParentFont = False
+            GroupIndex = 87855
+            Layout = blGlyphTop
+            OnClick = BtnShowImageClick
           end
         end
       end
-      object PanelNoDisplay: TPanel
-        Left = 115
-        Height = 100
+    end
+    object HistBar: TPanel
+      Left = 1
+      Height = 12
+      Top = 90
+      Width = 403
+      Align = alBottom
+      BevelOuter = bvNone
+      ClientHeight = 12
+      ClientWidth = 403
+      ParentColor = False
+      TabOrder = 1
+      object HistBarLeft: TPanel
+        Left = 0
+        Height = 12
         Top = 0
-        Width = 28
-        Align = alRight
+        Width = 170
+        Align = alLeft
         BevelOuter = bvNone
-        ClientHeight = 100
-        ClientWidth = 28
+        Color = clBtnHighlight
         ParentColor = False
-        TabOrder = 1
-        Visible = False
-        object BtnShowImage: TSpeedButton
-          Left = 0
-          Height = 22
-          Top = 32
-          Width = 28
-          AllowAllUp = True
-          GroupIndex = 87855
-          Layout = blGlyphTop
-          OnClick = BtnShowImageClick
-        end
+        TabOrder = 0
+        OnResize = HistBarLeftResize
+      end
+      object Splitter1: TSplitter
+        Left = 170
+        Height = 12
+        Top = 0
+        Width = 6
+        Color = clBtnFace
+        MinSize = 1
+        ParentColor = False
+      end
+      object HistBarRight: TPanel
+        Left = 176
+        Height = 12
+        Top = 0
+        Width = 227
+        Align = alClient
+        BevelOuter = bvNone
+        Color = clBtnShadow
+        ParentColor = False
+        TabOrder = 2
       end
     end
   end
@@ -443,6 +476,7 @@ object f_visu: Tf_visu
     ParentColor = False
     ParentFont = False
     Transparent = False
+    OnEndDrag = FrameEndDrag
   end
   object TimerMinMax: TTimer
     Enabled = False

@@ -17,34 +17,50 @@ uvex = UVEX4(os.path.join(scriptdir,'UVEX4_config.script'))
 print('Version_Arduino='+uvex.Version_Arduino)
 
 print('SlitSet='+str(uvex.SlitSet))
-print('NumSlit='+str(uvex.NumSlit))
-for i in range(uvex.NumSlit):
-   print(str(i+1)+', '+uvex.Slits[i].Label+', '+', '+str(uvex.Slits[i].Offset))
-spos= uvex.slitpos
-sname = uvex.Slits[spos-1].Label
-print('Current slit='+str(spos)+' '+sname)
+
+if uvex.Slit_motor_enabled :
+  print('NumSlit='+str(uvex.NumSlit))
+  for i in range(uvex.NumSlit):
+     print(str(i+1)+', '+uvex.Slits[i].Label+', '+', '+str(uvex.Slits[i].Offset))
+  spos= uvex.slitpos
+  sname = uvex.Slits[spos-1].Label
+  print('Current slit='+str(spos)+' '+sname)
+else :
+  print('Slit motor not enabled')
 
 print('Grating resolution='+str(uvex.grating_resolution)+' line/mm')
 print('Grating resolution='+str(uvex.GratingSpRes)+' A/px')
 print('Grating resolution='+str(uvex.GratingAnRes)+' A/step')
-w  = uvex.wavelength
-print("WAVELNTH="+w[1])
-print("WAVEMIN="+w[2])
-print("WAVEMAX="+w[3])
+if uvex.Grating_motor_enabled :
+  w  = uvex.wavelength
+  print("WAVELNTH="+w[1])
+  print("WAVEMIN="+w[2])
+  print("WAVEMAX="+w[3])
+else :
+  print('Grating motor not enabled')
 
-if ( uvex.CalibrationNb > 0 ) :
-   print('CalibrationNb='+str(uvex.CalibrationNb))
-   n = uvex.calibrations_name
-   c = uvex.calibration
-   for i in range(uvex.CalibrationNb):
+if uvex.Calibrex_enabled :
+  if ( uvex.CalibrationNb > 0 ) :
+    print('CalibrationNb='+str(uvex.CalibrationNb))
+    n = uvex.calibrations_name
+    c = uvex.calibration
+    for i in range(uvex.CalibrationNb):
       print('Relay '+str(i+1)+ ', ' +n[i] + ' = ' + str(c[i]) )
+else :
+  print('Calibrex not enabled')
 
-p1 = 'relative '+str(uvex.focusrelpos)
-if uvex.Focuser_hall_enabled :
-   p2 = ', absolute '+str(uvex.focuspos)
-else:
-   p2 = ''  
-print('Focuser position: '+p1+p2)
+if uvex.Focuser_motor_enabled :
+  p1 = 'relative '+str(uvex.focusrelpos)
+  if uvex.Focuser_hall_enabled :
+    p2 = ', absolute '+str(uvex.focuspos)
+  else:
+    p2 = ''
+  print('Focuser position: '+p1+p2)
+else :
+  print('Focuser motor not enabled')
 
-print('Temperature='+ str(uvex.temperature))
+if uvex.Temperature_active :
+  print('Temperature='+ str(uvex.temperature))
+else :
+  print('Temperature probe not available')
 

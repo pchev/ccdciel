@@ -49,22 +49,25 @@ type
     HistGraphMinLine: TConstantLine;
     Panel1: TPanel;
     BtnZoomAdjust: TSpeedButton;
+    HistBar: TPanel;
+    HistBarLeft: TPanel;
+    HistBarRight: TPanel;
     Panel2: TPanel;
     Panel3: TPanel;
     BtnZoom2: TSpeedButton;
     BtnZoom1: TSpeedButton;
     Panel4: TPanel;
-    Panel5: TPanel;
     Panel6: TPanel;
     Panel7: TPanel;
     Panel8: TPanel;
+    Panel9: TPanel;
     PanelNoDisplay: TPanel;
     SpinEditMin: TFloatSpinEdit;
     SpinEditMax: TFloatSpinEdit;
+    Splitter1: TSplitter;
     Title: TLabel;
     TimerRedraw: TTimer;
     TimerMinMax: TTimer;
-    HistBar: TTrackBar;
     procedure BtnBullsEyeClick(Sender: TObject);
     procedure BtnClippingClick(Sender: TObject);
     procedure BtnFlipHorzClick(Sender: TObject);
@@ -82,11 +85,11 @@ type
     procedure HistogramMouseDown(Sender: TObject; Button: TMouseButton; Shift: TShiftState; X, Y: Integer);
     procedure HistogramMouseMove(Sender: TObject; Shift: TShiftState; X, Y: Integer);
     procedure HistogramMouseUp(Sender: TObject; Button: TMouseButton; Shift: TShiftState; X, Y: Integer);
+    procedure HistBarLeftResize(Sender: TObject);
     procedure SpinEditMaxChange(Sender: TObject);
     procedure SpinEditMinChange(Sender: TObject);
     procedure TimerMinMaxTimer(Sender: TObject);
     procedure TimerRedrawTimer(Sender: TObject);
-    procedure HistBarChange(Sender: TObject);
   private
     { private declarations }
     Fhist:Thistogram;
@@ -108,6 +111,8 @@ type
     function  GetFlipVert: boolean;
     procedure SetLimit(SetLevel:boolean);
     procedure PlotHistogram;
+    function GetHistBarPosition: integer;
+    procedure SetHistBarPosition(value:integer);
   public
     { public declarations }
     constructor Create(aOwner: TComponent); override;
@@ -122,6 +127,7 @@ type
     property Invert: boolean read FInvert;
     property FlipHorz: boolean read GetFlipHorz;
     property FlipVert: boolean read GetFlipVert;
+    property HistBarPosition: integer read GetHistBarPosition write SetHistBarPosition ;
     property onZoom: TNotifyEvent read FonZoom write FonZoom;
     property onRedraw: TNotifyEvent read FRedraw write FRedraw;
     property onShowHistogramPos: TNotifyStr read FShowHistogramPos write FShowHistogramPos;
@@ -149,12 +155,6 @@ begin
  BtnZoom1.Flat:=true;
  {$endif}
  ScaleDPI(Self);
- {$ifdef lclgtk2}
-   HistBar.top:=-((HistBar.Height-Panel5.Height) div 2);
- {$else}
-   HistBar.Top:=0;
-   HistBar.Height:=Panel5.ClientHeight;
- {$endif}
  SetLang;
  Finitialized:=false;
  ImgMax:=high(word);
@@ -200,7 +200,7 @@ procedure Tf_visu.SetLimit(SetLevel:boolean);
 var histp: integer;
 begin
   if SetLevel and (not HistogramAdjusted) then begin
-    histp:=HistBar.Position;
+    histp:=HistBarPosition;
     HistLevel(histp,Fsum,FHistStart,Fmaxp,Fhist,FimgMin,FimgMax);
   end;
   // adjust spinedit for data range
@@ -304,15 +304,9 @@ procedure Tf_visu.FrameEndDrag(Sender, Target: TObject; X, Y: Integer);
 begin
   if Target is TPanel then begin
      if TPanel(Target).Width>TPanel(Target).Height then begin
-        Panel3.Constraints.MaxWidth:=256;
-        Panel3.Constraints.MinWidth:=256;
-        Panel1.ChildSizing.ControlsPerLine:=99;
-        Panel1.ChildSizing.Layout:=cclLeftToRightThenTopToBottom;
+        panel2.Align:=alRight;
      end else begin
-        Panel3.Constraints.MaxWidth:=128;
-        Panel3.Constraints.MinWidth:=128;
-        Panel1.ChildSizing.ControlsPerLine:=99;
-        Panel1.ChildSizing.Layout:=cclTopToBottomThenLeftToRight;
+        panel2.Align:=alTop;
      end;
   end;
 end;
@@ -322,19 +316,9 @@ var btnw: integer;
 begin
   if Parent is TPanel then begin
      if TPanel(Parent).Width>TPanel(Parent).Height then begin
-        Panel3.Constraints.MaxWidth:=DoScaleX(256);
-        Panel3.Constraints.MinWidth:=DoScaleX(256);
-        Panel1.ChildSizing.ControlsPerLine:=99;
-        Panel1.ChildSizing.Layout:=cclLeftToRightThenTopToBottom;
-        Panel2.Constraints.MaxWidth:=DoScaleX(144);
-        Panel2.Constraints.MinWidth:=DoScaleX(144);
+        panel2.Align:=alRight;
      end else begin
-        Panel3.Constraints.MaxWidth:=DoScaleX(192);
-        Panel3.Constraints.MinWidth:=DoScaleX(192);
-        Panel1.ChildSizing.ControlsPerLine:=99;
-        Panel1.ChildSizing.Layout:=cclTopToBottomThenLeftToRight;
-        Panel2.Constraints.MaxWidth:=DoScaleX(192);
-        Panel2.Constraints.MinWidth:=DoScaleX(192);
+        panel2.Align:=alTop;
      end;
      SpinEditMax.Left:=Panel3.Width-SpinEditMax.Width;
      btnw:=(Panel4.ClientWidth-DoScaleX(3)) div 4;
@@ -353,7 +337,7 @@ begin
   end;
 end;
 
-procedure Tf_visu.HistBarChange(Sender: TObject);
+procedure Tf_visu.HistBarLeftResize(Sender: TObject);
 begin
   HistogramAdjusted:=false;
   SetLimit(true);
@@ -582,6 +566,19 @@ begin
     end;
   end;
 end;
+
+function Tf_visu.GetHistBarPosition: integer;
+begin
+  // return splitter position in range 0..100
+  result:=round(100*HistBarLeft.Width/(HistBar.ClientWidth-Splitter1.Width));
+end;
+
+procedure Tf_visu.SetHistBarPosition(value:integer);
+begin
+ // set splitter position from value in range 0..100
+ HistBarLeft.Width:=max(min(round(value*(HistBar.ClientWidth-Splitter1.Width)/100),HistBar.ClientWidth-Splitter1.Width),1);
+end;
+
 
 end.
 

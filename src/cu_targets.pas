@@ -34,9 +34,9 @@ type
 
   TTarget = Class(TObject)
               public
-              objectname, planname, path, scriptargs: shortstring;
+              objectname, planname, path, scriptargs, initscriptname, initscriptpath, initscriptargs: shortstring;
               starttime,endtime,startmeridian,endmeridian,ra,de,pa,solarV,solarPA: double;
-              startrise,endset,darknight,skip,mandatorystarttime: boolean;
+              startrise,endset,darknight,skip,mandatorystarttime,initscript: boolean;
               repeatcount,repeatdone: integer;
               FlatBinX,FlatBinY,FlatCount: integer;
               FlatGain,FlatOffset: integer;
@@ -799,6 +799,10 @@ begin
        t.planname:=FSequenceFile.Items.GetValue('/Targets/Target'+inttostr(i)+'/Plan','');
        t.path:=FSequenceFile.Items.GetValue('/Targets/Target'+inttostr(i)+'/Path','');
        t.scriptargs:=FSequenceFile.Items.GetValue('/Targets/Target'+inttostr(i)+'/ScriptArgs','');
+       t.initscript:=FSequenceFile.Items.GetValue('/Targets/Target'+inttostr(i)+'/InitScript/InitScript',false);
+       t.initscriptname:=FSequenceFile.Items.GetValue('/Targets/Target'+inttostr(i)+'/InitScript/InitScriptName','');
+       t.initscriptpath:=FSequenceFile.Items.GetValue('/Targets/Target'+inttostr(i)+'/InitScript/InitScriptPath','');
+       t.initscriptargs:=FSequenceFile.Items.GetValue('/Targets/Target'+inttostr(i)+'/InitScript/InitScriptArgs','');
        if FileVersion>=2 then begin
          t.starttime:=StrToTimeDef(FSequenceFile.Items.GetValue('/Targets/Target'+inttostr(i)+'/StartTime',''),-1);
          t.endtime:=StrToTimeDef(FSequenceFile.Items.GetValue('/Targets/Target'+inttostr(i)+'/EndTime',''),-1);
@@ -987,6 +991,10 @@ try
       FSequenceFile.Items.SetValue('/Targets/Target'+inttostr(i)+'/Plan',t.planname);
       FSequenceFile.Items.SetValue('/Targets/Target'+inttostr(i)+'/Path',t.path);
       FSequenceFile.Items.SetValue('/Targets/Target'+inttostr(i)+'/ScriptArgs',t.scriptargs);
+      FSequenceFile.Items.SetValue('/Targets/Target'+inttostr(i)+'/InitScript/InitScript',t.initscript);
+      FSequenceFile.Items.SetValue('/Targets/Target'+inttostr(i)+'/InitScript/InitScriptName',t.initscriptname);
+      FSequenceFile.Items.SetValue('/Targets/Target'+inttostr(i)+'/InitScript/InitScriptPath',t.initscriptpath);
+      FSequenceFile.Items.SetValue('/Targets/Target'+inttostr(i)+'/InitScript/InitScriptArgs',t.initscriptargs);
       if t.starttime>=0 then
         FSequenceFile.Items.SetValue('/Targets/Target'+inttostr(i)+'/StartTime',TimetoStr(t.starttime))
       else
@@ -2431,6 +2439,24 @@ begin
     FTargetInitializing:=true;
     FWaitStarting:=false;
 
+    // initialization script
+    if t.initscript then begin
+      FScriptRunning:=true;
+      buf:='"'+t.objectname+'" "'+t.planname+'" "'+t.ra_str+'" "'+t.de_str+'" '+ t.initscriptargs;
+      if not f_scriptengine.RunScript(t.initscriptname,t.initscriptpath,buf)then begin
+        if f_scriptengine.PythonResult=2 then begin
+          SkipTarget:=true;
+          InitTargetError:=Format(rsSkipTarget, [t.objectname])+', skipped by initialization script';
+          msg(InitTargetError, 3);
+          result:=false;
+          exit;
+        end
+        else
+          msg(Format(rsScriptFailed, [t.initscriptname]),0);
+      end;
+      FScriptRunning:=false;
+    end;
+
     if (not restart) then begin
       if  ((t.ra<>NullCoord)and(t.de<>NullCoord))or(t.pa<>NullCoord) then begin
         // prepare for slewing to target
@@ -3166,8 +3192,12 @@ begin
   planname:='';
   path:='';
   scriptargs:='';
+  initscriptname:='';
+  initscriptpath:='';
+  initscriptargs:='';
   starttime:=NullCoord;
   mandatorystarttime:=false;
+  initscript:=false;
   endtime:=NullCoord;
   startmeridian:=NullCoord;
   endmeridian:=NullCoord;
@@ -3208,10 +3238,14 @@ begin
   planname:=Source.planname;
   path:=Source.path;
   scriptargs:=Source.scriptargs;
+  initscriptname:=Source.initscriptname;
+  initscriptpath:=Source.initscriptpath;
+  initscriptargs:=Source.initscriptargs;
   T_Plan(plan).Clear;
   T_Plan(plan).AssignPlan(T_Plan(Source.plan));
   starttime:=Source.starttime;
   mandatorystarttime:=Source.mandatorystarttime;
+  initscript:=Source.initscript;
   endtime:=Source.endtime;
   startrise:=Source.startrise;
   endset:=Source.endset;

@@ -64,15 +64,21 @@ type
     cbNoAutoguidingChange: TCheckBox;
     cbAutofocusHFD: TCheckBox;
     cbMandatoryStartTime: TCheckBox;
+    cbInitScript: TCheckBox;
     CheckBoxResetRepeat: TCheckBox;
     CheckBoxRestartStatus: TCheckBox;
+    Label22: TLabel;
+    Label23: TLabel;
     MenuAddCaptureStep: TMenuItem;
     MenuAddScriptStep: TMenuItem;
     MenuAddSwitchStep: TMenuItem;
     MenuInsertOnline: TMenuItem;
     MenuOnlineCoord: TMenuItem;
     Panel10: TPanel;
+    Panel16: TPanel;
     PopupAddStep: TPopupMenu;
+    ScriptList2: TComboBox;
+    ScriptParam2: TEdit;
     Switches: TComboBox;
     Switchlist: TComboBox;
     SwitchValue: TEdit;
@@ -308,6 +314,7 @@ type
     procedure SetPlanList(n: integer; pl:string);
     procedure SetScriptList(n: integer; sl, args:string);
     procedure SetScriptList1(n: integer; sp, sl, args:string);
+    procedure SetScriptList2(n: integer; sl, args:string);
     procedure SetSwitch(n: integer; swl:string);
     procedure SetSwitch1(n: integer; swni,swna,swval:string);
     procedure ResetSequences;
@@ -494,6 +501,9 @@ begin
   cbUpdCoord.Caption := Format(rsUpdateRADec2+'', [blank]);
   cbSolarTracking.Caption:= rsActivateSola;
   cbNoAutoguidingChange.Caption:=rsDoNotStartAu;
+  cbInitScript.Caption:=rsRunAnInitial;
+  Label22.Caption:=rsScript;
+  label23.Caption:=rsAdditionalSc;
   cbDarkNight.Hint:=rsWaitForFullD;
   cbSkip.Hint:=Format(rsDonTWaitForT, [crlf]);
   cbAstrometry.Hint:=rsUsePlateSolv;
@@ -661,6 +671,7 @@ begin
   s:=TStringlist.Create;
   ScriptList.Clear;
   ScriptList1.Clear;
+  ScriptList2.Clear;
   i:=FindFirstUTF8(slash(ConfigDir)+'*.script',0,fs);
   while i=0 do begin
     {$if defined(CPUARM) or defined(CPUAARCH64)}
@@ -680,6 +691,8 @@ begin
   ScriptList.ItemIndex:=0;
   ScriptList1.Items.Assign(s);
   ScriptList1.ItemIndex:=0;
+  ScriptList2.Items.Assign(s);
+  ScriptList2.ItemIndex:=0;
   f_selectscript.ComboBoxScript.Items.Assign(s);
   s.Free;
 end;
@@ -691,6 +704,14 @@ begin
   if i>=0 then ScriptList.ItemIndex:=i;
   TargetList.Cells[colplan,n]:=sl;
   ScriptParam.Text:=args;
+end;
+
+procedure Tf_EditTargets.SetScriptList2(n: integer; sl, args:string);
+var i:integer;
+begin
+  i:=ScriptList2.Items.IndexOf(sl);
+  if i>=0 then ScriptList2.ItemIndex:=i;
+  ScriptParam2.Text:=args;
 end;
 
 procedure Tf_EditTargets.SetScriptList1(n: integer; sp, sl, args:string);
@@ -1267,6 +1288,9 @@ procedure Tf_EditTargets.cbChange(Sender: TObject);
 begin
   if Sender=cbUpdCoord then begin
     PanelSolarTracking.Visible:=TCheckBox(Sender).Checked and FSolarTracking;
+  end;
+  if Sender=cbInitScript then begin
+    Panel16.Visible:=TCheckBox(Sender).Checked;
   end;
   TargetChange(Sender);
 end;
@@ -2013,6 +2037,10 @@ begin
     cbInplace.Checked:=t.inplaceautofocus;
     cbAutofocusTemp.Checked:=t.autofocustemp;
 
+    cbInitScript.Checked:=t.initscript;
+    panel16.Visible:=t.initscript;
+    SetScriptList2(n,t.initscriptname,t.initscriptargs);
+
     // When the form is saved, the corresponding values for each target are
     // saved off. IOW, the form determines the target value, and vice versa
     // when the target is selected/loaded.
@@ -2160,6 +2188,14 @@ begin
     t.planname:=TargetList.Cells[colplan,n];
     SetStartTime(trim(TargetList.Cells[colstart,n]),t);
     SetEndTime(trim(TargetList.Cells[colend,n]),t);
+    t.initscript:=cbInitScript.Checked;
+    i:=ScriptList2.ItemIndex;
+    if i>=0 then
+      t.initscriptname:=ScriptList2.Items[i]
+    else
+      t.initscriptname:='';
+    t.initscriptpath:=slash(ConfigDir);
+    t.initscriptargs:=ScriptParam2.text;
     if TargetList.Cells[colra,n]='-' then
       t.ra:=NullCoord
     else

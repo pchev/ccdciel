@@ -34,6 +34,10 @@ type
   { Tf_option }
 
   Tf_option = class(TForm)
+    GuiderAutofocus: TCheckBox;
+    PanelExposure: TPanel;
+    RemoveSpace: TCheckBox;
+    ColorizeSpectra: TCheckBox;
     SpinAutoFocusHFD: TFloatSpinEdit;
     BtnDelHdr: TButton;
     BtnAddRoi: TButton;
@@ -801,6 +805,7 @@ type
     procedure CustomHeaderValidateEntry(Sender: TObject; aCol, aRow: Integer; const OldValue: string; var NewValue: String);
     procedure DomeFlatPositionClick(Sender: TObject);
     procedure FormDestroy(Sender: TObject);
+    procedure GuiderAutofocusClick(Sender: TObject);
     procedure latdegExit(Sender: TObject);
     procedure latdegKeyDown(Sender: TObject; var Key: Word; Shift: TShiftState);
     procedure LogDirDefaultClick(Sender: TObject);
@@ -1078,6 +1083,7 @@ begin
   Label5.Caption := rsObserverName;
   Label10.Caption := rsObservatoryN;
   Label11.Caption := rsTelescopeNam;
+  Label159.Caption:=rsInstrumentNa;
   Label35.Caption := rsLatitude;
   Label36.Caption := rsLongitude;
   Label108.Caption := rsElevation;
@@ -1123,6 +1129,7 @@ begin
   BayerMode.Items[4]:=rsAutomatic;
   BalanceFromCamera.Caption:=rsUseDSLRColor;
   BGneutralization.Caption:=rsBackgroundNe;
+  ColorizeSpectra.Caption:=rsColorizeSpec;
   GroupBox26.Caption:=rsColorBalance;
   GroupBox9.Caption := rsReferenceIma;
   Label39.Caption := rsTreshold;
@@ -1289,6 +1296,7 @@ begin
   Label101.Caption := rsTheMenuFileF;
   GroupBoxExpert.Caption:=rsExpertTrick;
   Label174.Caption:=rsDefocusAmoun;
+  GuiderAutofocus.Caption:=rsAutofocusUsi;
   PageAstrometry.Caption := rsAstrometry;
   GroupBox4.Caption := rsAstrometryOp;
   FocaleFromTelescope.Caption := rsFromTelescop;
@@ -2117,6 +2125,7 @@ end;
 
 procedure Tf_option.AutofocusmodeClick(Sender: TObject);
 begin
+  if Autofocusmode.ItemIndex<>0 then GuiderAutofocus.Checked:=false;
   AutofocusNotebook.PageIndex:=Autofocusmode.ItemIndex;
   PanelAutofocus.Visible:=(Autofocusmode.ItemIndex<4);
   PanelFocusStar.Visible:=PanelAutofocus.Visible;
@@ -2295,14 +2304,26 @@ end;
 procedure Tf_option.BtnAddRoiClick(Sender: TObject);
 var i: integer;
     roi:TRoi;
+    n: string;
 begin
-  roi:=TRoi.Create;
-  roi.name:=RoiList.text;
-  roi.x:=RoiX.Value;
-  roi.y:=RoiY.Value;
-  roi.w:=RoiW.Value;
-  roi.h:=RoiH.Value;
-  i:=RoiList.Items.AddObject(roi.name,roi);
+  n:=trim(RoiList.text);
+  i:=RoiList.Items.IndexOf(n);
+  if i>=0 then begin
+    roi:=TRoi(RoiList.Items.Objects[i]);
+    roi.x:=RoiX.Value;
+    roi.y:=RoiY.Value;
+    roi.w:=RoiW.Value;
+    roi.h:=RoiH.Value;
+  end
+  else begin
+    roi:=TRoi.Create;
+    roi.name:=RoiList.text;
+    roi.x:=RoiX.Value;
+    roi.y:=RoiY.Value;
+    roi.w:=RoiW.Value;
+    roi.h:=RoiH.Value;
+    i:=RoiList.Items.AddObject(roi.name,roi);
+  end;
   RoiList.ItemIndex:=i;
   CurrentRoi:=i;
 end;
@@ -2439,6 +2460,11 @@ end;
 procedure Tf_option.FormDestroy(Sender: TObject);
 begin
   ClearRoi;
+end;
+
+procedure Tf_option.GuiderAutofocusClick(Sender: TObject);
+begin
+  PanelFocusStar.Visible:=not GuiderAutofocus.Checked;
 end;
 
 procedure Tf_option.ButtonHelpClick(Sender: TObject);

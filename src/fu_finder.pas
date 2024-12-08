@@ -40,12 +40,14 @@ type
     BtnZoom2: TSpeedButton;
     BtnZoomAdjust: TSpeedButton;
     BtnPreviewLoop: TButton;
+    Button1: TButton;
     ButtonImageCenter: TButton;
     ButtonCalibrate: TButton;
     cbSaveImages: TCheckBox;
     Label4: TLabel;
     LabelInfo: TLabel;
     LabelMsg: TLabel;
+    Panel3: TPanel;
     PreviewExp: TFloatSpinEdit;
     GroupBox1: TGroupBox;
     Label3: TLabel;
@@ -68,6 +70,7 @@ type
     procedure BtnZoom1Click(Sender: TObject);
     procedure BtnZoom2Click(Sender: TObject);
     procedure BtnZoomAdjustClick(Sender: TObject);
+    procedure Button1Click(Sender: TObject);
     procedure ButtonCalibrateClick(Sender: TObject);
     procedure ButtonImageCenterClick(Sender: TObject);
     procedure GammaChange(Sender: TObject);
@@ -80,6 +83,7 @@ type
     FAstrometry: TAstrometry;
     FonShowMessage: TNotifyMsg;
     FonRedraw: TNotifyEvent;
+    FonConfigureFinder: TNotifyEvent;
     FDrawSettingChange,FBullsEye: boolean;
     LoopExp:double;
     LoopBin,LoopGain,LoopOffset: integer;
@@ -101,6 +105,7 @@ type
     property BullsEye: boolean read FBullsEye write FBullsEye;
     property onShowMessage: TNotifyMsg read FonShowMessage write FonShowMessage;
     property onRedraw: TNotifyEvent read FonRedraw write FonRedraw;
+    property onConfigureFinder: TNotifyEvent read FonConfigureFinder write FonConfigureFinder;
   end;
 
 implementation
@@ -310,6 +315,11 @@ procedure Tf_finder.BtnZoomAdjustClick(Sender: TObject);
 begin
   FinderImgZoom:=0;
   if Assigned(FonRedraw) then FonRedraw(self);
+end;
+
+procedure Tf_finder.Button1Click(Sender: TObject);
+begin
+  if Assigned(FonConfigureFinder) then FonConfigureFinder(self);
 end;
 
 procedure Tf_finder.BtnZoom05Click(Sender: TObject);

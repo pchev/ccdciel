@@ -170,6 +170,7 @@ function SafeFileName(fn:string): string;
 function ValidateCustomHeader(key:string): boolean;
 function pseudomodal(f:Tform):TModalResult;
 function checkconnection(host,port: string):boolean;
+procedure spcolor(w: double; out red,green,blue:integer);
 
 
 implementation
@@ -3718,6 +3719,49 @@ try
 except
  result:=false;
 end;
+end;
+
+procedure spcolor(w: double; out red,green,blue:integer);
+var r,g,b: double;
+begin
+   if (w<3800) then begin
+       r := 1.0;
+       g := 0.0;
+       b := 1.0;
+   end
+   else if((w >= 3800) and (w<4400)) then begin
+       r := -(w - 4400) / (4400 - 3800);
+       g := 0.0;
+       b := 1.0;
+   end
+   else if((w >= 4400) and (w<4900)) then begin
+       r := 0.0;
+       g := (w - 4400) / (4900 - 4400);
+       b := 1.0;
+   end
+   else if((w >= 4900) and (w<5100)) then begin
+       r := 0.0;
+       g := 1.0;
+       b := -(w - 5100) / (5100 - 4900);
+   end
+   else if((w >= 5100) and (w<5800)) then begin
+       r := (w - 5100) / (5800 - 5100);
+       g := 1.0;
+       b := 0.0;
+   end
+   else if((w >= 5800) and (w<6450)) then begin
+       r := 1.0;
+       g := -(w - 6450) / (6450 - 5800);
+       b := 0.0;
+   end
+   else begin
+       r := 1.0;
+       g := 0.0;
+       b := 0.0;
+   end;
+   red := round(r * 255);
+   green := round(g * 255);
+   blue := round(b * 255);
 end;
 
 end.
