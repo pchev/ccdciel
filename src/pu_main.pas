@@ -5140,7 +5140,7 @@ begin
   f_internalguider.Temperature.Value:=config.GetValue('/InternalGuider/Camera/Temperature',0);
   f_internalguider.Gamma.Position:=config.GetValue('/InternalGuider/Visu/Gamma',50);
   f_internalguider.Luminosity.Position:=config.GetValue('/InternalGuider/Visu/Luminosity',50);
-  f_internalguider.cbEnlargeImage.Checked:=config.GetValue('/InternalGuider/EnlargeImage',false);
+  f_internalguider.cbEnlargeImage.Checked:=config.GetValue('/InternalGuider/EnlargeImage',PageControlRight.Height<f_internalguider.Height);
   f_internalguider.SpectroFunctions:=config.GetValue('/InternalGuider/Spectro/SpectroFunctions',false);
   f_internalguider.SearchWinMin:=config.GetValue('/InternalGuider/Spectro/SearchWinMin',40);
   f_internalguider.SearchWinMax:=config.GetValue('/InternalGuider/Spectro/SearchWinMax',80);
