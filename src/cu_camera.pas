@@ -786,7 +786,9 @@ begin
   if (hpix2>0) and (hbin2>0) then hpix2:=hpix2*hbin2;
   if hpix1<0 then if not f.Header.Valueof('XPIXSZ',hpix1) then hpix1:=-1;
   if hpix2<0 then if not f.Header.Valueof('YPIXSZ',hpix2) then hpix2:=-1;
-  if not f.Header.Valueof('FRAME',hframe)   then hframe:='Light   ';
+  if not f.Header.Valueof('FRAME',hframe) then
+    if not f.Header.Valueof('IMAGETYP',hframe) then
+      hframe:='Light   ';
   if not f.Header.Valueof('FILTER',hfilter) then hfilter:='';
   if not f.Header.Valueof('DATAMIN',hdmin)  then hdmin:=f.HeaderInfo.dmin;
   if not f.Header.Valueof('DATAMAX',hdmax)  then hdmax:=f.HeaderInfo.dmax;

@@ -653,8 +653,10 @@ begin
      TxtProp:=indiProp.getText;
      if TxtProp<>nil then begin
        Txt:=IUFindText(TxtProp,'DRIVER_EXEC');
-       if Txt<>nil then buf:=buf+Txt.lbl+': '+Txt.Text+', ';
-       isASI:=pos('_asi_',Txt.Text)>0;
+       if Txt<>nil then begin
+         buf:=buf+Txt.lbl+': '+Txt.Text+', ';
+         isASI:=pos('_asi_',Txt.Text)>0;
+       end;
        Txt:=IUFindText(TxtProp,'DRIVER_VERSION');
        if Txt<>nil then buf:=buf+Txt.lbl+': '+Txt.Text+', ';
        Txt:=IUFindText(TxtProp,'DRIVER_INTERFACE');
