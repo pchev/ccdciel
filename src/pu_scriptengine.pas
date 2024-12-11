@@ -267,9 +267,7 @@ type
     function cmd_cameragetframe(out fx,fy,fw,fh: integer): string;
     function cmd_Internalguider_SetGuideExposure(exp:string):string;
     function cmd_Internalguider_SetSpectrofunction(onoff:string):string;
-    function cmd_Internalguider_SetSpectroSinglestar(onoff:string):string;
-    function cmd_Internalguider_SetSpectroChangeMultistar(onoff:string):string;
-    function cmd_Internalguider_SetSpectroAstrometry(onoff:string):string;
+    function cmd_Internalguider_SetSpectroStrategy(value:string):string;
     function cmd_Internalguider_SetSpectroAstrometryExposure(exp:string):string;
     function cmd_Internalguider_SetSpectroSlitname(slit:string):string;
     function cmd_Internalguider_SetSpectroGuidestaroffset(x,y:string):string;
@@ -1637,7 +1635,7 @@ begin
    PHD2GuideLockY:=y;
    result:=msgOK;
  end;
- FInternalGuider.cbGuideLockChange(nil);
+ FInternalGuider.ChangeSpectroStrategy;
  except
    result:=msgFailed;
  end;
@@ -2527,38 +2525,21 @@ except
 end;
 end;
 
-function Tf_scriptengine.cmd_Internalguider_SetSpectroSinglestar(onoff:string):string;
+function Tf_scriptengine.cmd_Internalguider_SetSpectroStrategy(value:string):string;
+var i,n: integer;
 begin
 result:=msgFailed;
 try
- if (Fautoguider.AutoguiderType=agINTERNAL) then begin
-   Finternalguider.GuideLock:=(onoff='ON');
-   result:=msgOK;
+ value:=uppercase(trim(value));
+ n:=-1;
+ for i:=0 to ord(High(TSpectroStrategy)) do begin
+   if value=uppercase(SpectroStrategyName[i]) then begin
+     n:=i;
+     break;
+   end;
  end;
-except
-  result:=msgFailed;
-end;
-end;
-
-function Tf_scriptengine.cmd_Internalguider_SetSpectroChangeMultistar(onoff:string):string;
-begin
-result:=msgFailed;
-try
- if (Fautoguider.AutoguiderType=agINTERNAL)and(Finternalguider.GuideLock) then begin
-   Finternalguider.ForceGuideMultistar:=(onoff='ON');
-   result:=msgOK;
- end;
-except
-  result:=msgFailed;
-end;
-end;
-
-function Tf_scriptengine.cmd_Internalguider_SetSpectroAstrometry(onoff:string):string;
-begin
-result:=msgFailed;
-try
- if (Fautoguider.AutoguiderType=agINTERNAL) then begin
-   Finternalguider.cbUseAstrometry.Checked:=(onoff='ON');
+ if (n>=0) and (Fautoguider.AutoguiderType=agINTERNAL) then begin
+   Finternalguider.SpectroStrategy:=TSpectroStrategy(n);
    result:=msgOK;
  end;
 except
@@ -2573,8 +2554,8 @@ begin
 result:=msgFailed;
 try
  val(exp,x,n);
- if (n=0)and(Fautoguider.AutoguiderType=agINTERNAL)and(Finternalguider.cbUseAstrometry.Checked) then begin
-   Finternalguider.AstrometryExp.Value:=x;
+ if (n=0)and(Fautoguider.AutoguiderType=agINTERNAL)and(Finternalguider.SpectroAstrometry) then begin
+   Finternalguider.SpectroAstrometryExposure:=x;
    result:=msgOK;
  end;
 except
@@ -2620,7 +2601,7 @@ var xx,yy: double;
 begin
 result:=msgFailed;
 try
- if (Fautoguider.AutoguiderType=agINTERNAL)and(finternalguider.GuideLock)and(finternalguider.PanelGuideStar.Enabled) then begin
+ if (Fautoguider.AutoguiderType=agINTERNAL)and(finternalguider.GuideLock)and(finternalguider.GuideStarOffset) then begin
    val(x,xx,n);
    if n<>0 then exit;
    val(y,yy,n);
@@ -2638,7 +2619,7 @@ function Tf_scriptengine.cmd_Internalguider_SetSpectroGuidestarRaDec(ra,de:strin
 begin
 result:=msgFailed;
 try
- if (Fautoguider.AutoguiderType=agINTERNAL)and(finternalguider.GuideLock)and(finternalguider.PanelGuideStar.Enabled) then begin
+ if (Fautoguider.AutoguiderType=agINTERNAL)and(finternalguider.GuideLock)and(finternalguider.GuideStarOffset) then begin
    { #todo :  }
  end;
 except

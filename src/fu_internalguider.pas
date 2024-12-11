@@ -54,17 +54,14 @@ type
     ButtonCalibrate: TButton;
     ButtonGuide: TButton;
     ButtonStop: TButton;
-    cbGuideLock: TCheckBox;
     cbDrawSlit: TCheckBox;
     cbSpectro: TCheckBox;
-    cbUseAstrometry: TCheckBox;
     CalDate: TEdit;
     CalBinning: TEdit;
     CalRAspeed: TEdit;
     CalDECspeed: TEdit;
     CalDeclination: TEdit;
     CalIssue: TEdit;
-    cbFGuideMultiStar: TCheckBox;
     cbEnlargeImage: TCheckBox;
     CheckBoxBacklash: TCheckBox;
     CheckBoxTrackSolar1: TCheckBox;
@@ -78,8 +75,10 @@ type
     MenuSlitOffset: TButton;
     Panel12: TPanel;
     Panel13: TPanel;
-    PanelGuideStar: TPanel;
+    PanelAstrometryExposure: TPanel;
+    PanelGuideStarOffset: TPanel;
     PopupMenuSlit: TPopupMenu;
+    rgSpectroStrategy: TRadioGroup;
     SlitOffsetX: TFloatSpinEdit;
     StarOffsetX: TFloatSpinEdit;
     SlitOffsetY: TFloatSpinEdit;
@@ -99,7 +98,6 @@ type
     AstrometryExp: TFloatSpinEdit;
     GroupBox3: TGroupBox;
     GroupBoxSlit: TGroupBox;
-    GroupBox4: TGroupBox;
     GroupBoxSearchArea: TGroupBox;
     GroupBoxLock: TGroupBox;
     GroupBoxOffset: TGroupBox;
@@ -253,10 +251,8 @@ type
     procedure ButtonSetTempClick(Sender: TObject);
     procedure ButtonStopClick(Sender: TObject);
     procedure cbDrawSlitChange(Sender: TObject);
-    procedure cbGuideLockChange(Sender: TObject);
     procedure cbSlitListChange(Sender: TObject);
     procedure cbSpectroChange(Sender: TObject);
-    procedure cbUseAstrometryChange(Sender: TObject);
     procedure cbEnlargeImageChange(Sender: TObject);
     procedure CheckBoxBacklashChange(Sender: TObject);
     procedure CheckBoxTrackSolar1Change(Sender: TObject);
@@ -285,6 +281,7 @@ type
     procedure pulsegainWest1Change(Sender: TObject);
     procedure ra_gain1Change(Sender: TObject);
     procedure ra_hysteresis1Change(Sender: TObject);
+    procedure rgSpectroStrategySelectionChanged(Sender: TObject);
     procedure scale1Click(Sender: TObject; Button: TUDBtnType);
     procedure ShortestPulse1Change(Sender: TObject);
     procedure SlitOffsetChange(Sender: TObject);
@@ -302,6 +299,7 @@ type
     cur_pulsegainWest1: string;
     cur_disable_guiding, cur_tracksolar, FForceMultiStar: boolean;
     FDrawSettingChange: boolean;
+    FGuideLock, FGuideMultistar, FGuideAstrometry,FGuideStarOffset: boolean;
     FGuideLockNextX, FGuideLockNextY: integer;
     FonShowMessage: TNotifyMsg;
     Fcamera: T_camera;
@@ -364,12 +362,16 @@ type
     function GetBacklashCompensation:Boolean;
     procedure SetSpectro(value:Boolean);
     function GetSpectro:Boolean;
+    procedure SetSpectroStrategy(value:TSpectroStrategy);
+    function GetSpectroStrategy:TSpectroStrategy;
     procedure SetForceMultistar(value:Boolean);
     function GetForceMultistar:Boolean;
-    procedure SetFGuideMultistar(value:Boolean);
     function GetFGuideMultistar:Boolean;
     procedure SetGuideLock(value:Boolean);
     function GetGuideLock:Boolean;
+    function GetSpectroAstrometry:Boolean;
+    function GetSpectroAstrometryExposure:double;
+    procedure SetSpectroAstrometryExposure(value:double);
     // slit reference position
     function GetRefX:double;
     procedure SetRefX(value:double);
@@ -420,6 +422,8 @@ type
     function Snapshot(exp: double; fn: string):boolean;
     function SaveFits(fn: string):boolean;
     procedure ClearSlitList;
+    procedure ChangeSpectro;
+    procedure ChangeSpectroStrategy;
     property onShowMessage: TNotifyMsg read FonShowMessage write FonShowMessage;
     property Camera: T_camera read Fcamera write Fcamera;
     property onLoop: TNotifyEvent read FonLoop write FonLoop;
@@ -465,9 +469,13 @@ type
     property DecBacklash: integer read GetBacklash write SetBacklash;
     property BacklashCompensation: Boolean read GetBacklashCompensation write SetBacklashCompensation;
     property SpectroFunctions: boolean read GetSpectro write SetSpectro; // single star slit guiding
+    property SpectroStrategy:TSpectroStrategy read GetSpectroStrategy write SetSpectroStrategy;
     property GuideLock: boolean read GetGuideLock write SetGuideLock; // single star slit guiding
-    property ForceGuideMultistar: boolean read GetFGuideMultistar write SetFGuideMultistar; // force multistar after star lock
+    property ForceGuideMultistar: boolean read GetFGuideMultistar; // force multistar after star lock
     property ForceMultistar: boolean read GetForceMultistar write SetForceMultistar; // multistar mode now required
+    property SpectroAstrometry: boolean read GetSpectroAstrometry; // astrometry to find the target
+    property SpectroAstrometryExposure: double read GetSpectroAstrometryExposure write SetSpectroAstrometryExposure; // exposure time for astrometry
+    property GuideStarOffset: boolean read FGuideStarOffset;
     property RefX: double read GetRefX write SetRefX;    // slit reference position
     property RefY: double read GetRefY write SetRefY;
     property SlitPosX:double read GetSlitPosX;           // slit current position including slit offset
@@ -618,7 +626,12 @@ begin
   rgDitherMode.Items[1]:=rsRandom;
   TabSheetSpectro.Caption:=rsSpectroscopy;
   cbSpectro.Caption:=rsActivateSpec;
-  cbGuideLock.Caption:=rsActivateSing;
+  rgSpectroStrategy.Caption:=rsCenteringAnd;
+  rgSpectroStrategy.Items[0]:=rsSingleStarUs;
+  rgSpectroStrategy.Items[1]:=rsSingleStarBr;
+  rgSpectroStrategy.Items[2]:=rsSingleStarWi;
+  rgSpectroStrategy.Items[3]:=rsSingleStarWi2;
+  rgSpectroStrategy.Items[4]:=rsMultistarWit;
   GroupBoxLock.Caption:=rsGuidePositio;
   label28.Caption:='X';
   label29.Caption:='Y';
@@ -633,7 +646,6 @@ begin
   MenuSlitOffset.Caption:=rsManage;
   MenuItemAddSlit.Caption:=rsAdd;
   MenuItemDelSlit.Caption:=rsDelete;
-  cbUseAstrometry.Caption:=rsUseAstrometr2;
   label39.Caption:=rsAstrometryEx;
   GroupBoxOffset.Caption:=rsMultiStarGui;
   Label37.Caption:=rsGuideOffset+' X';
@@ -935,21 +947,75 @@ begin
   ForceRedraw(nil);
 end;
 
-procedure Tf_internalguider.cbGuideLockChange(Sender: TObject);
+procedure Tf_internalguider.ChangeSpectro;
 begin
-  if cbGuideLock.Checked then
-    PageControl2.ActivePageIndex:=0
-  else
-    PageControl2.ActivePageIndex:=1;
-  if not cbGuideLock.Checked then begin
-    StarOffsetX.Value:=0;
-    StarOffsetY.Value:=0;
+  cbSpectroChange(nil);
+end;
+
+procedure Tf_internalguider.rgSpectroStrategySelectionChanged(Sender: TObject);
+begin
+  case rgSpectroStrategy.ItemIndex of
+    0: begin // Single star, use the brightest star
+        FGuideLock:=true;
+        FGuideMultistar:=false;
+        FGuideAstrometry:=false;
+        FGuideStarOffset:=false;
+        StarOffsetX.Value:=0;
+        StarOffsetY.Value:=0;
+        PageControl2.ActivePageIndex:=0;
+        PanelAstrometryExposure.Visible:=false;
+        PanelGuideStarOffset.Visible:=false;
+       end;
+    1: begin // Single star, use the brightest star, with offset
+        FGuideLock:=true;
+        FGuideMultistar:=false;
+        FGuideAstrometry:=false;
+        FGuideStarOffset:=true;
+        PageControl2.ActivePageIndex:=0;
+        PanelAstrometryExposure.Visible:=false;
+        PanelGuideStarOffset.Visible:=true;
+       end;
+    2: begin // Single star, with guider astrometry
+        FGuideLock:=true;
+        FGuideMultistar:=false;
+        FGuideAstrometry:=true;
+        FGuideStarOffset:=false;
+        StarOffsetX.Value:=0;
+        StarOffsetY.Value:=0;
+        PageControl2.ActivePageIndex:=0;
+        PanelAstrometryExposure.Visible:=true;
+        PanelGuideStarOffset.Visible:=false;
+       end;
+    3: begin // Single star with astrometry, then multistar
+        FGuideLock:=true;
+        FGuideMultistar:=true;
+        FGuideAstrometry:=true;
+        FGuideStarOffset:=false;
+        StarOffsetX.Value:=0;
+        StarOffsetY.Value:=0;
+        PageControl2.ActivePageIndex:=0;
+        PanelAstrometryExposure.Visible:=true;
+        PanelGuideStarOffset.Visible:=false;
+       end;
+    4: begin // Multistar with guider astrometry
+        FGuideLock:=false;
+        FGuideMultistar:=false;
+        FGuideAstrometry:=true;
+        FGuideStarOffset:=false;
+        StarOffsetX.Value:=0;
+        StarOffsetY.Value:=0;
+        PageControl2.ActivePageIndex:=1;
+        PanelAstrometryExposure.Visible:=true;
+        PanelGuideStarOffset.Visible:=false;
+       end;
   end;
-  cbFGuideMultiStar.Enabled:=cbGuideLock.Checked;
-  if not cbFGuideMultiStar.Enabled then
-     cbFGuideMultiStar.Checked:=false;
   FDrawSettingChange:=true;
   if Assigned(FonSpectroGuideChange) then FonSpectroGuideChange(self);
+end;
+
+procedure Tf_internalguider.ChangeSpectroStrategy;
+begin
+  rgSpectroStrategySelectionChanged(nil);
 end;
 
 procedure Tf_internalguider.cbSpectroChange(Sender: TObject);
@@ -957,16 +1023,6 @@ begin
   PanelSpectro.Enabled:=cbSpectro.Checked;
 end;
 
-procedure Tf_internalguider.cbUseAstrometryChange(Sender: TObject);
-begin
-  AstrometryExp.Enabled:=cbUseAstrometry.Checked;
-  label39.Enabled:=cbUseAstrometry.Checked;
-  PanelGuideStar.Enabled:=not cbUseAstrometry.Checked;
-  if not PanelGuideStar.Enabled then begin
-    StarOffsetX.Value:=0;
-    StarOffsetY.Value:=0;
-  end;
-end;
 
 procedure Tf_internalguider.cbEnlargeImageChange(Sender: TObject);
 begin
@@ -1550,24 +1606,44 @@ begin
   result:=cbSpectro.Checked;
 end;
 
+procedure Tf_internalguider.SetSpectroStrategy(value:TSpectroStrategy);
+begin
+  rgSpectroStrategy.ItemIndex:=ord(value);
+end;
+
+function Tf_internalguider.GetSpectroStrategy:TSpectroStrategy;
+begin
+  result:=TSpectroStrategy(rgSpectroStrategy.ItemIndex);
+end;
+
 procedure Tf_internalguider.SetGuideLock(value:Boolean);
 begin
-  cbGuideLock.Checked:=value;
+  FGuideLock:=value;
 end;
 
 function Tf_internalguider.GetGuideLock:Boolean;
 begin
-  result:=cbGuideLock.Checked;
+  result:=FGuideLock;
 end;
 
-procedure Tf_internalguider.SetFGuideMultistar(value:Boolean);
+function Tf_internalguider.GetSpectroAstrometry:Boolean;
 begin
-  cbFGuideMultiStar.Checked:=value;
+ result:=FGuideAstrometry;
+end;
+
+function Tf_internalguider.GetSpectroAstrometryExposure:double;
+begin
+  result:=AstrometryExp.Value;
+end;
+
+procedure Tf_internalguider.SetSpectroAstrometryExposure(value:double);
+begin
+  AstrometryExp.Value:=value;
 end;
 
 function Tf_internalguider.GetFGuideMultistar:Boolean;
 begin
-  result:=cbFGuideMultiStar.Checked;
+  result:=FGuideMultistar;
 end;
 
 procedure Tf_internalguider.SetForceMultistar(value:Boolean);

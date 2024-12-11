@@ -3425,7 +3425,7 @@ end;
 end;
 
 procedure Tf_main.UpdConfig(oldver:string);
-var ok:boolean;
+var ok,b1,b2,b3:boolean;
     i: integer;
     f: double;
     bm: TBayerMode;
@@ -3687,7 +3687,28 @@ try
     NewMessage(msg,1);
     MessageDlg(caption,msg,mtWarning,[mbOK],0);
   end;
-
+  if oldver<'0.9.89' then begin
+    b1:=config.GetValue('/Autoguider/Lock/GuideSetLock',false);
+    b2:=config.GetValue('/Autoguider/Lock/ForceGuideMultistar',false);
+    b3:=config.GetValue('/InternalGuider/Spectro/UseAstrometry',false);
+    i:=ord(spSingleStar);
+    if not b1 then // multistar
+      i:=ord(spMultiStar)
+    else begin // single star
+      if b2 then
+        i:=ord(spSingleMulti)
+      else begin
+        if b3 then
+          i:=ord(spSingleAstrometry)
+        else
+          i:=ord(spSingleStar);
+      end;
+    end;
+    config.SetValue('/InternalGuider/Spectro/Strategy',i);
+    config.DeleteValue('/Autoguider/Lock/ForceGuideMultistar');
+    config.DeleteValue('/InternalGuider/Spectro/UseAstrometry');
+    // do not delete GuideSetLock also used by PHD2
+  end;
   if config.Modified then begin
      config.SetValue('/Configuration/Version',ccdcielver);
      SaveConfig;
@@ -5050,8 +5071,7 @@ begin
   PHD2GuideSetLock:=config.GetValue('/Autoguider/Lock/GuideSetLock',false);
   PHD2GuideLockX:=config.GetValue('/Autoguider/Lock/GuideLockX',0.0);
   PHD2GuideLockY:=config.GetValue('/Autoguider/Lock/GuideLockY',0.0);
-  f_internalguider.GuideLock:=config.GetValue('/Autoguider/Lock/GuideSetLock',false);
-  f_internalguider.ForceGuideMultistar:=config.GetValue('/Autoguider/Lock/ForceGuideMultistar',false);
+  f_internalguider.SpectroStrategy:=TSpectroStrategy(config.GetValue('/InternalGuider/Spectro/Strategy',0));
   f_internalguider.RefX:=config.GetValue('/Autoguider/Lock/GuideLockX',0.0);
   f_internalguider.RefY:=config.GetValue('/Autoguider/Lock/GuideLockY',0.0);
   f_internalguider.ClearSlitList;
@@ -5150,12 +5170,10 @@ begin
   f_internalguider.SlitW:=config.GetValue('/InternalGuider/Spectro/SlitW',0);
   f_internalguider.SlitL:=config.GetValue('/InternalGuider/Spectro/SlitL',0);
   f_internalguider.SlitPA:=config.GetValue('/InternalGuider/Spectro/SlitPA',0);
-  f_internalguider.cbUseAstrometry.Checked:=config.GetValue('/InternalGuider/Spectro/UseAstrometry',false);
-  f_internalguider.AstrometryExp.Value:=config.GetValue('/InternalGuider/Spectro/AstrometryExposure',10.0);
+  f_internalguider.SpectroAstrometryExposure:=config.GetValue('/InternalGuider/Spectro/AstrometryExposure',10.0);
   f_internalguider.SpiralDither:=config.GetValue('/InternalGuider/SpiralDither',true);
-  f_internalguider.cbUseAstrometryChange(nil);
-  f_internalguider.cbSpectroChange(nil);
-  f_internalguider.cbGuideLockChange(nil);
+  f_internalguider.ChangeSpectro;
+  f_internalguider.ChangeSpectroStrategy;
   f_internalguider.ForceGuideSpeedChange(nil);
   f_internalguider.cbEnlargeImageChange(nil);
 
@@ -5772,11 +5790,10 @@ begin
   config.SetValue('/InternalGuider/EnlargeImage',f_internalguider.cbEnlargeImage.Checked);
 
   config.SetValue('/InternalGuider/Spectro/SpectroFunctions',f_internalguider.SpectroFunctions);
+  config.SetValue('/InternalGuider/Spectro/Strategy',ord(f_internalguider.SpectroStrategy));
   config.SetValue('/Autoguider/Lock/GuideSetLock',f_internalguider.GuideLock);
-  config.SetValue('/Autoguider/Lock/ForceGuideMultistar',f_internalguider.ForceGuideMultistar);
   config.SetValue('/Autoguider/Lock/GuideLockX',f_internalguider.RefX);
   config.SetValue('/Autoguider/Lock/GuideLockY',f_internalguider.RefY);
-
   n:=f_internalguider.cbSlitList.Items.Count;
   config.SetValue('/InternalGuider/Spectro/Slit/NumSlit',n);
   config.SetValue('/InternalGuider/Spectro/Slit/CurrentSlit',f_internalguider.cbSlitList.ItemIndex);
@@ -5796,8 +5813,7 @@ begin
   config.SetValue('/InternalGuider/Spectro/SlitW',f_internalguider.SlitW);
   config.SetValue('/InternalGuider/Spectro/SlitL',f_internalguider.SlitL);
   config.SetValue('/InternalGuider/Spectro/SlitPA',f_internalguider.SlitPA);
-  config.SetValue('/InternalGuider/Spectro/UseAstrometry',f_internalguider.cbUseAstrometry.Checked);
-  config.SetValue('/InternalGuider/Spectro/AstrometryExposure',f_internalguider.AstrometryExp.Value);
+  config.SetValue('/InternalGuider/Spectro/AstrometryExposure',f_internalguider.SpectroAstrometryExposure);
   config.SetValue('/InternalGuider/SpiralDither',f_internalguider.SpiralDither);
 
   // finder offset need to be saved at the same time
@@ -8617,7 +8633,7 @@ if f_mount.BtnGoto.Caption=rsGoto then begin
          if astrometry.PrecisionSlew(ra,de,err) then begin
            f_capture.Fname.Text:=objn;
            if (autoguider is T_autoguider_internal) and f_internalguider.SpectroFunctions
-              and f_internalguider.cbUseAstrometry.Checked then begin
+              and f_internalguider.SpectroAstrometry then begin
                 if MessageDlg('Start guiding to complete the centering on the slit?',mtConfirmation,mbYesNo,0)=mrYes then begin
                   autoguider.SpectroSetTarget(ra2000,de2000);
                   autoguider.Guide(true);
@@ -8633,7 +8649,7 @@ if f_mount.BtnGoto.Caption=rsGoto then begin
          if mount.Slew(ra,de) then begin
            f_capture.Fname.Text:=objn;
            if (autoguider is T_autoguider_internal) and f_internalguider.SpectroFunctions
-              and f_internalguider.cbUseAstrometry.Checked then begin
+              and f_internalguider.SpectroAstrometry then begin
                 if MessageDlg('Start guiding to complete the centering on the slit?',mtConfirmation,mbYesNo,0)=mrYes then begin
                   autoguider.SpectroSetTarget(ra2000,de2000);
                   autoguider.Guide(true);
@@ -17220,10 +17236,8 @@ try
   end
   else if method='INTERNALGUIDER_GETGUIDEEXPOSURE' then result:=result+'"result": '+StringReplace(f_internalguider.Exposure.Text,',','.',[])
   else if method='INTERNALGUIDER_GETSPECTROFUNCTION' then result:=result+'"result": '+BoolToStr(f_internalguider.SpectroFunctions,tr,fa)
-  else if method='INTERNALGUIDER_GETSPECTROSINGLESTAR' then result:=result+'"result": '+BoolToStr(f_internalguider.GuideLock,tr,fa)
-  else if method='INTERNALGUIDER_GETSPECTROCHANGEMULTISTAR' then result:=result+'"result": '+BoolToStr(f_internalguider.ForceGuideMultistar,tr,fa)
-  else if method='INTERNALGUIDER_GETSPECTROASTROMETRY' then result:=result+'"result": '+BoolToStr(f_internalguider.cbUseAstrometry.Checked,tr,fa)
-  else if method='INTERNALGUIDER_GETSPECTROASTROMETRYEXPOSURE' then result:=result+'"result": '+StringReplace(f_internalguider.AstrometryExp.text,',','.',[])
+  else if method='INTERNALGUIDER_GETSPECTROSTRATEGY' then result:=result+'"result": "'+SpectroStrategyName[ord(f_internalguider.SpectroStrategy)]+'"'
+  else if method='INTERNALGUIDER_GETSPECTROASTROMETRYEXPOSURE' then result:=result+'"result": '+FormatFloat(f0,f_internalguider.SpectroAstrometryExposure)
   else if method='INTERNALGUIDER_GETSPECTROSLITNAME' then result:=result+'"result": "'+f_internalguider.cbSlitList.text+'"'
   else if method='INTERNALGUIDER_GETSPECTROGUIDESTAROFFSET' then result:=result+'"result": ['+StringReplace(f_internalguider.StarOffsetX.text,',','.',[])+','+StringReplace(f_internalguider.StarOffsetY.text,',','.',[])+']'
   else if method='INTERNALGUIDER_GETSPECTROMULTISTAROFFSET' then result:=result+'"result": ['+StringReplace(f_internalguider.edOffsetX.text,',','.',[])+','+StringReplace(f_internalguider.edOffsetY.text,',','.',[])+']'
@@ -17558,22 +17572,10 @@ try
     buf:=f_scriptengine.cmd_Internalguider_SetSpectrofunction(buf1);
     result:=result+'"result":{"status": "'+buf+'"}';
   end
-  else if method='INTERNALGUIDER_SETSPECTROSINGLESTAR' then begin
+  else if method='INTERNALGUIDER_SETSPECTROSTRATEGY' then begin
     CheckParamCount(1);
-    if uppercase(trim(value[attrib.IndexOf('params.0')]))='TRUE' then buf1:='ON' else buf1:='OFF';
-    buf:=f_scriptengine.cmd_Internalguider_SetSpectroSinglestar(buf1);
-    result:=result+'"result":{"status": "'+buf+'"}';
-  end
-  else if method='INTERNALGUIDER_SETSPECTROCHANGEMULTISTAR' then begin
-    CheckParamCount(1);
-    if uppercase(trim(value[attrib.IndexOf('params.0')]))='TRUE' then buf1:='ON' else buf1:='OFF';
-    buf:=f_scriptengine.cmd_Internalguider_SetSpectroChangeMultistar(buf1);
-    result:=result+'"result":{"status": "'+buf+'"}';
-  end
-  else if method='INTERNALGUIDER_SETSPECTROASTROMETRY' then begin
-    CheckParamCount(1);
-    if uppercase(trim(value[attrib.IndexOf('params.0')]))='TRUE' then buf1:='ON' else buf1:='OFF';
-    buf:=f_scriptengine.cmd_Internalguider_SetSpectroAstrometry(buf1);
+    buf1:=trim(value[attrib.IndexOf('params.0')]);
+    buf:=f_scriptengine.cmd_Internalguider_SetSpectroStrategy(buf1);
     result:=result+'"result":{"status": "'+buf+'"}';
   end
   else if method='INTERNALGUIDER_SETSPECTROASTROMETRYEXPOSURE' then begin

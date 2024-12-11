@@ -1498,7 +1498,6 @@ resourcestring
   rsSelectGuideS = 'Select guide star';
   rsDrawSlitArea = 'Draw slit area on image';
   rsActivateSpec = 'Activate spectroscopy functions';
-  rsActivateSing = 'Activate single star guiding on fixed position';
   rsGuidePositio = 'Guide position on the slit';
   rsMultiStarGui = 'Multi-star guide offset';
   rsGuideOffset = 'Guide offset';
@@ -1521,7 +1520,6 @@ resourcestring
   rsPredefinedRO = 'Predefined ROI';
   rsModify = 'Modify';
   rsSwitchConnec = 'Switch connection';
-  rsUseAstrometr2 = 'Use astrometry to identify the target';
   rsAstrometryEx = 'Astrometry exposure time';
   rsPlanStep = 'Plan step';
   rsFinder = 'Finder';
@@ -1592,6 +1590,12 @@ resourcestring
   rsInstrumentNa = 'Instrument name';
   rsGuideStarOff = 'Guide star offset';
   rsInstallScrip = 'Install script';
+  rsCenteringAnd = 'Centering and guiding strategy';
+  rsSingleStarUs = 'Single star, use the brightest star';
+  rsSingleStarBr = 'Single star, brightest star with offset';
+  rsSingleStarWi = 'Single star, with guider astrometry';
+  rsSingleStarWi2 = 'Single star with astrometry, then multistar';
+  rsMultistarWit = 'Multistar with guider astrometry';
 
 implementation
 

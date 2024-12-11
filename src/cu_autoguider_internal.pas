@@ -1447,12 +1447,12 @@ begin
       ( ((xy_array[0].flux=0) and (FSettleLastDistance<=(4*FSettlePix))) or   // star lost in slit
         (sqrt(driftx*driftx+drifty*drifty)<=FSettlePix) ) then begin          // reach settle distance
           Finternalguider.ForceMultistar:=True;
-          internalguider.cbGuideLockChange(Finternalguider.cbGuideLock);
+          Finternalguider.ChangeSpectroStrategy;
           FSettling := false;
           exit;
     end;
     // refine astrometry measurement closer to slit in multistar
-    if FSettling and (not finternalguider.GuideLock) and finternalguider.cbUseAstrometry.Checked  and
+    if FSettling and (not finternalguider.GuideLock) and finternalguider.SpectroAstrometry  and
        FSpectroTarget.newastrometry and (not initial) and             // time to test
        (sqrt(driftx*driftx+drifty*drifty)<=4*FSettlePix) then begin   // near settle distance
           // restart with astrometry
@@ -2496,7 +2496,7 @@ function T_autoguider_internal.SpectroSetTarget(TargetRa,TargetDec: double):bool
 begin
 // set Spectro target position ra,de J2000 in hh.hhhh dd.dddd
 // this position is used the next time guiding is started
-  if finternalguider.SpectroFunctions and finternalguider.cbUseAstrometry.Checked
+  if finternalguider.SpectroFunctions and finternalguider.SpectroAstrometry
      and(cdcwcs_sky2xy<>nil) and (TargetRa<>NullCoord)and(TargetDec<>NullCoord) then begin
     FSpectroTarget.RA:=TargetRa;
     FSpectroTarget.DEC:=TargetDec;
@@ -2522,12 +2522,12 @@ begin
 // set Spectro target at the position set by SpectroSetTarget
 // compute the target x,y position in the guide image
 // so the target is moved to the slit when the guiding is started
-  if finternalguider.SpectroFunctions and finternalguider.cbUseAstrometry.Checked
+  if finternalguider.SpectroFunctions and finternalguider.SpectroAstrometry
      and(cdcwcs_sky2xy<>nil) and (FSpectroTarget.valid or FSpectroTarget.newastrometry)
      and (FSpectroTarget.RA<>NullCoord)and(FSpectroTarget.DEC<>NullCoord) then begin
     result:=false;
     FSpectroTarget.valid:=false; // use coordinates only once
-    exp:=finternalguider.AstrometryExp.value;
+    exp:=finternalguider.SpectroAstrometryExposure;
     bin:=finternalguider.Binning.Value;
     gain:=finternalguider.Gain.Value;
     offset:=finternalguider.Offset.Value;

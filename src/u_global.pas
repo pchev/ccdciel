@@ -69,6 +69,7 @@ type
   TDomeOpenActions=array[0..DomeOpenActionNum-1] of TDomeOpenAction;
   TDomeCloseActions=array[0..DomeCloseActionNum-1] of TDomeCloseAction;
   TFileFormat = (ffFITS, ffASTROTIFF);
+  TSpectroStrategy = (spSingleStar, spSingleOffset, spSingleAstrometry, spSingleMulti, spMultiStar);
 
   TCustomFrameType = record
     Name,ScriptOn,ScriptOff,ParamOn,ParamOff: string;
@@ -231,7 +232,7 @@ type
   {$i revision.inc}
 
 const
-  ccdcielver = '0.9.88';
+  ccdcielver = '0.9.89';
   ccdciel_version='Version beta '+ccdcielver;
   TargetFileVersion = 5;
   Maxclient = 100;
@@ -302,6 +303,7 @@ const
   SafetyActionName: array[0..ord(high(TSafetyAction))] of string=('','','','','','','','','','','','','');
   DomeOpenActionName: array[0..ord(high(TDomeOpenAction))] of string=('','','','','','');
   DomeCloseActionName: array[0..ord(high(TDomeCloseAction))] of string=('','','','','','');
+  SpectroStrategyName: array[0..ord(high(TSpectroStrategy ))] of string= ('SingleStar', 'SingleOffset', 'SingleAstrometry', 'SingleMulti', 'MultiStar');
   DefaultFNlistcount=12;
   DefaultFNlist: array[0..DefaultFNlistcount-1] of string=('1','1.2','1.4','1.8','2','2.8','4','5.6','8','11','16','22');
   LM_CCDCIEL=LM_USER + 1;
