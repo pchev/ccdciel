@@ -6,15 +6,15 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ccdciel\n"
 "Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
-"POT-Creation-Date: 2024-12-01 20:12+0000\n"
+"POT-Creation-Date: 2024-12-11 15:18+0000\n"
 "PO-Revision-Date: 2024-11-16 13:09+0000\n"
 "Last-Translator: Zachary Wu <Unknown>\n"
 "Language-Team: Chinese (Simplified) <zh_CN@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2024-12-01 20:16+0000\n"
-"X-Generator: Launchpad (build 1519c6efe8e9bd78e6c5ebf2eb5bcb040b95ad32)\n"
+"X-Launchpad-Export-Date: 2024-12-11 15:28+0000\n"
+"X-Generator: Launchpad (build 39bd251485adde1a3ef538479f6c030babb8e251)\n"
 
 #: u_translation.rs2d
 msgid "2D"
@@ -65,10 +65,6 @@ msgstr "关于"
 #: u_translation.rsaction
 msgid "Action"
 msgstr "动作"
-
-#: u_translation.rsactivatesing
-msgid "Activate single star guiding on fixed position"
-msgstr "启动固定位置的单星导星"
 
 #: u_translation.rsactivatesola
 msgid "Activate solar object tracking."
@@ -919,6 +915,10 @@ msgstr "居中，指定坐标。RA=%s DEC=%s PA=%s"
 #: u_translation.rscenterdec
 msgid "Center Dec"
 msgstr "中心DEC"
+
+#: u_translation.rscenteringand
+msgid "Centering and guiding strategy"
+msgstr ""
 
 #: u_translation.rscenterra
 msgid "Center RA"
@@ -2283,6 +2283,10 @@ msgstr "导星图像"
 msgid "Guider sensor;"
 msgstr "导星传感器"
 
+#: u_translation.rsguidestaroff
+msgid "Guide star offset"
+msgstr ""
+
 #: u_translation.rsguiding
 #, object-pascal-format
 msgid "%s guiding"
@@ -2524,6 +2528,10 @@ msgstr "检测图像中HFD值的分布，以帮助进行彗差镜间距和倾斜
 #, object-pascal-format
 msgid "in %s seconds"
 msgstr "在%s秒内"
+
+#: u_translation.rsinstallscrip
+msgid "Install script"
+msgstr ""
 
 #: u_translation.rsinstrumentna
 msgid "Instrument name"
@@ -3130,6 +3138,10 @@ msgstr "多面板"
 #: u_translation.rsmultistargui
 msgid "Multi-star guide offset"
 msgstr "多星导星偏移量"
+
+#: u_translation.rsmultistarwit
+msgid "Multistar with guider astrometry"
+msgstr ""
 
 #: u_translation.rsname
 msgid "Name"
@@ -4787,6 +4799,22 @@ msgstr "单面板"
 msgid "Single star"
 msgstr "单星"
 
+#: u_translation.rssinglestarbr
+msgid "Single star, brightest star with offset"
+msgstr ""
+
+#: u_translation.rssinglestarus
+msgid "Single star, use the brightest star"
+msgstr ""
+
+#: u_translation.rssinglestarwi
+msgid "Single star, with guider astrometry"
+msgstr ""
+
+#: u_translation.rssinglestarwi2
+msgid "Single star with astrometry, then multistar"
+msgstr ""
+
 #: u_translation.rssitesendtote
 msgid "Site send to telescope."
 msgstr "地点发送至望远镜"
@@ -5866,10 +5894,6 @@ msgstr "利用解析%s来优化位置"
 #: u_translation.rsuseastrometr
 msgid "Use astrometry to refine the position"
 msgstr "利用解析来优化位置"
-
-#: u_translation.rsuseastrometr2
-msgid "Use astrometry to identify the target"
-msgstr "使用天体测量法识别目标"
 
 #: u_translation.rsusebacklashc
 msgid "Use backlash compensation"

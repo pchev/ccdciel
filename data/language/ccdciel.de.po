@@ -6,15 +6,15 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ccdciel\n"
 "Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
-"POT-Creation-Date: 2024-12-01 20:12+0000\n"
+"POT-Creation-Date: 2024-12-11 15:18+0000\n"
 "PO-Revision-Date: 2024-08-19 19:32+0000\n"
 "Last-Translator: Thomas <email@starhopper.de>\n"
 "Language-Team: German <de@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2024-12-01 20:16+0000\n"
-"X-Generator: Launchpad (build 1519c6efe8e9bd78e6c5ebf2eb5bcb040b95ad32)\n"
+"X-Launchpad-Export-Date: 2024-12-11 15:28+0000\n"
+"X-Generator: Launchpad (build 39bd251485adde1a3ef538479f6c030babb8e251)\n"
 
 #: u_translation.rs2d
 msgid "2D"
@@ -65,10 +65,6 @@ msgstr "Über"
 #: u_translation.rsaction
 msgid "Action"
 msgstr "Aktion"
-
-#: u_translation.rsactivatesing
-msgid "Activate single star guiding on fixed position"
-msgstr "Nachführung auf fester Position aktivieren"
 
 #: u_translation.rsactivatesola
 msgid "Activate solar object tracking."
@@ -919,6 +915,10 @@ msgstr "Zentralkoordinaten sind RA=%s DEC=%s PA=%s"
 #: u_translation.rscenterdec
 msgid "Center Dec"
 msgstr "Dec im Zentrum"
+
+#: u_translation.rscenteringand
+msgid "Centering and guiding strategy"
+msgstr ""
 
 #: u_translation.rscenterra
 msgid "Center RA"
@@ -2280,6 +2280,10 @@ msgstr "Bild der Nachführkamera"
 msgid "Guider sensor;"
 msgstr "Guider Senor;"
 
+#: u_translation.rsguidestaroff
+msgid "Guide star offset"
+msgstr ""
+
 #: u_translation.rsguiding
 #, object-pascal-format
 msgid "%s guiding"
@@ -2521,6 +2525,10 @@ msgstr "Untersucht die Verteilung des HFD-Werts im Bild um Verkippung zu beseiti
 #, object-pascal-format
 msgid "in %s seconds"
 msgstr "in %s Sekunden"
+
+#: u_translation.rsinstallscrip
+msgid "Install script"
+msgstr ""
 
 #: u_translation.rsinstrumentna
 msgid "Instrument name"
@@ -3127,6 +3135,10 @@ msgstr "Mehrteilig"
 #: u_translation.rsmultistargui
 msgid "Multi-star guide offset"
 msgstr "Multi-Star Guiding Offset"
+
+#: u_translation.rsmultistarwit
+msgid "Multistar with guider astrometry"
+msgstr ""
 
 #: u_translation.rsname
 msgid "Name"
@@ -4784,6 +4796,22 @@ msgstr "Einteilig"
 msgid "Single star"
 msgstr "Einzelner Stern"
 
+#: u_translation.rssinglestarbr
+msgid "Single star, brightest star with offset"
+msgstr ""
+
+#: u_translation.rssinglestarus
+msgid "Single star, use the brightest star"
+msgstr ""
+
+#: u_translation.rssinglestarwi
+msgid "Single star, with guider astrometry"
+msgstr ""
+
+#: u_translation.rssinglestarwi2
+msgid "Single star with astrometry, then multistar"
+msgstr ""
+
 #: u_translation.rssitesendtote
 msgid "Site send to telescope."
 msgstr "Standort wurde an das Teleskop gesendet."
@@ -5863,10 +5891,6 @@ msgstr "Astrometrie zur%sPositionsverbesserung nutzen"
 #: u_translation.rsuseastrometr
 msgid "Use astrometry to refine the position"
 msgstr "Benutze Astrometrie um die Position zu verbessern"
-
-#: u_translation.rsuseastrometr2
-msgid "Use astrometry to identify the target"
-msgstr "Verwendung der Astrometrie zur Identifizierung des Ziels"
 
 #: u_translation.rsusebacklashc
 msgid "Use backlash compensation"

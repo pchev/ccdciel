@@ -167,7 +167,7 @@ msgid "Zoom to half size"
 msgstr ""
 
 #: u_hints:rsshowbullseye
-msgid "Show bulls eye"
+msgid "Show crosshairs"
 msgstr ""
 
 #: u_hints:rsshowhighligh
