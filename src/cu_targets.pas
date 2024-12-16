@@ -2448,15 +2448,12 @@ begin
     // initialization script
     if t.initscript then begin
       FScriptRunning:=true;
-      if trim(t.objectname)<>'' then
-        buf:='"'+t.objectname+'"'
-      else
-        buf:='"no name"';
-      if trim(t.planname)<>'' then
-        buf:=buf+' "'+t.planname+'"'
-      else
-        buf:=buf+' "no name"';
-      buf:=buf+' "'+t.ra_str+'" "'+t.de_str+'" '+ t.initscriptargs;
+      buf:='"';
+      buf:=buf+StringReplace(t.objectname,'"',' ',[rfReplaceAll]);
+      buf:=buf+','+StringReplace(t.planname,'"',' ',[rfReplaceAll]);
+      buf:=buf+' ,'+t.ra_str+','+t.de_str;
+      buf:=buf+'"';
+      buf:=buf+' '+t.initscriptargs;
       if not f_scriptengine.RunScript(t.initscriptname,t.initscriptpath,buf) then begin
         if f_scriptengine.PythonResult=2 then begin
           SkipTarget:=true;
