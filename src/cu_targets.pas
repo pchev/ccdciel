@@ -2439,11 +2439,25 @@ begin
     FTargetInitializing:=true;
     FWaitStarting:=false;
 
+    // reset guide star offset from previous target
+    if (Autoguider<>nil)and(Autoguider.AutoguiderType=agINTERNAL) then begin
+      Finternalguider.StarOffsetX.Value:=0;
+      Finternalguider.StarOffsetY.Value:=0;
+    end;
+
     // initialization script
     if t.initscript then begin
       FScriptRunning:=true;
-      buf:='"'+t.objectname+'" "'+t.planname+'" "'+t.ra_str+'" "'+t.de_str+'" '+ t.initscriptargs;
-      if not f_scriptengine.RunScript(t.initscriptname,t.initscriptpath,buf)then begin
+      if trim(t.objectname)<>'' then
+        buf:='"'+t.objectname+'"'
+      else
+        buf:='"no name"';
+      if trim(t.planname)<>'' then
+        buf:=buf+' "'+t.planname+'"'
+      else
+        buf:=buf+' "no name"';
+      buf:=buf+' "'+t.ra_str+'" "'+t.de_str+'" '+ t.initscriptargs;
+      if not f_scriptengine.RunScript(t.initscriptname,t.initscriptpath,buf) then begin
         if f_scriptengine.PythonResult=2 then begin
           SkipTarget:=true;
           InitTargetError:=Format(rsSkipTarget, [t.objectname])+', skipped by initialization script';

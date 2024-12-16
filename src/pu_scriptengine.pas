@@ -31,7 +31,7 @@ interface
 
 uses  u_global, u_utils, cu_fits, indiapi, cu_planetarium, fu_ccdtemp, fu_devicesconnection, pu_pause,
   fu_capture, fu_preview, fu_mount, cu_wheel, cu_mount, cu_camera, cu_focuser, cu_autoguider, cu_astrometry,
-  cu_dome, cu_rotator, cu_safety, cu_weather,
+  cu_dome, cu_rotator, cu_safety, cu_weather, cu_autoguider_internal,
   fu_cover, cu_cover, fu_internalguider, fu_finder, cu_switch, fu_starprofile,
   Classes, SysUtils, FileUtil, uPSComponent, uPSComponent_Default, LazFileUtils,
   uPSComponent_Forms, uPSComponent_Controls, uPSComponent_StdCtrls, Forms, process,
@@ -272,6 +272,7 @@ type
     function cmd_Internalguider_SetSpectroSlitname(slit:string):string;
     function cmd_Internalguider_SetSpectroGuidestaroffset(x,y:string):string;
     function cmd_Internalguider_SetSpectroGuidestarRaDec(ra,de:string):string;
+    function cmd_Internalguider_ClearSpectroGuidestarRaDec: string;
     function cmd_Internalguider_SetSpectroMultistaroffset(x,y:string):string;
     function ScriptType(fn: string): TScriptType;
     function  RunScript(sname,path,args: string):boolean;
@@ -2615,13 +2616,33 @@ except
 end;
 end;
 
-function Tf_scriptengine.cmd_Internalguider_SetSpectroGuidestarRaDec(ra,de:string):string;
+function Tf_scriptengine.cmd_Internalguider_ClearSpectroGuidestarRaDec: string;
 begin
 result:=msgFailed;
 try
- if (Fautoguider.AutoguiderType=agINTERNAL)and(finternalguider.GuideLock)and(finternalguider.GuideStarOffset) then begin
-   { #todo :  }
+  T_autoguider_internal(Fautoguider).SpectroSetGuideStar(NullCoord, NullCoord);
+  result:=msgOK;
+ except
+   result:=msgFailed;
  end;
+end;
+
+function Tf_scriptengine.cmd_Internalguider_SetSpectroGuidestarRaDec(ra,de:string):string;
+var gRa,gDec: double;
+    n: integer;
+begin
+result:=msgFailed;
+try
+ if (Fautoguider.AutoguiderType<>agINTERNAL) then begin; msg('Valid only for the internal guider'); exit; end;
+ if (not finternalguider.SpectroFunctions) then begin; msg('Spectroscopy functions are not selected'); exit; end;
+ if (not finternalguider.GuideStarOffset) then begin; msg('Wrong guiding strategy is selected'); exit; end;
+ if (not FileExists(ConfigGuiderReferenceFile)) then begin; msg('Missing guider reference image'); exit; end;
+ gra:=StrToAR(ra);
+ if gra=NullCoord then begin; msg('Invalid RA '+ra); exit; end;
+ gdec:=StrToDE(de);
+ if gdec=NullCoord then begin; msg('Invalid DEC '+de); exit; end;
+ if T_autoguider_internal(Fautoguider).SpectroSetGuideStar(gRa,gDec) then
+ result:=msgOK;
 except
   result:=msgFailed;
 end;

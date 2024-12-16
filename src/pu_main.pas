@@ -1026,6 +1026,7 @@ type
     procedure ReadyForVideo(var v: boolean);
     procedure ShowStatus(str: string);
     procedure InternalguiderConfigure(Sender: TObject);
+    procedure InternalguiderReferenceImage(Sender: TObject);
     procedure InternalguiderLoop(Sender: TObject);
     procedure InternalguiderStart(Sender: TObject);
     procedure InternalguiderStop(Sender: TObject);
@@ -1731,6 +1732,7 @@ begin
   ConfigFlatFile:=slash(ConfigDir)+'flatframe_'+profile+'.fits';
   ConfigDarkFile:=slash(ConfigDir)+'darkframe_'+profile+'.fits';
   ConfigGuiderDarkFile:=slash(ConfigDir)+'darkguider_'+profile+'.fits';
+  ConfigGuiderReferenceFile:=slash(ConfigDir)+'guider_reference_'+profile+'.fits';
 
   LogFileOpen:=false;
 
@@ -1943,6 +1945,7 @@ begin
   f_internalguider.onSetCooler:=@GuideCameraSetCooler;
   f_internalguider.onShowMessage:=@NewMessage;
   f_internalguider.onShowImage:=@ShowGuideImage;
+  f_internalguider.onMeasureReferenceImage:=@InternalguiderReferenceImage;
   ShowGuiderDarkInfo;
 
   f_finder:=Tf_finder.Create(self);
@@ -5176,6 +5179,7 @@ begin
   f_internalguider.ChangeSpectroStrategy;
   f_internalguider.ForceGuideSpeedChange(nil);
   f_internalguider.cbEnlargeImageChange(nil);
+  f_internalguider.CheckGuiderReferenceFile;
 
   MeridianOption:=config.GetValue('/Meridian/MeridianOption',3);
   MinutesPastMeridian:=config.GetValue('/Meridian/MinutesPast',15);
@@ -17126,7 +17130,7 @@ end;
 
 function Tf_main.TCPjsoncmd(id:string; attrib,value:Tstringlist):string;
 var p,i,nparms: integer;
-    rpcversion,method,buf,buf1,buf2,buf3,buf4:string;
+    rpcversion,method,buf,buf1,buf2,buf3,buf4,buf5:string;
     sl:Tstringlist;
     x1,x2,x3,x4: double;
     i1,i2,i3,i4: integer;
@@ -17256,6 +17260,7 @@ try
   else if method='AUTOGUIDER_UNPAUSE' then result:=result+'"result":{"status": "'+f_scriptengine.cmd_AutoguiderUnPause+'"}'
   else if method='AUTOGUIDER_DITHER' then result:=result+'"result":{"status": "'+f_scriptengine.cmd_AutoguiderDither+'"}'
   else if method='AUTOGUIDER_SHUTDOWN' then result:=result+'"result":{"status": "'+f_scriptengine.cmd_AutoguiderShutdown+'"}'
+  else if method='INTERNALGUIDER_CLEARSPECTROGUIDESTARRADEC' then result:=result+'"result":{"status": "'+f_scriptengine.cmd_Internalguider_ClearSpectroGuidestarRaDec+'"}'
   else if method='WHEEL_GETFILTER' then result:=result+'"result":{"status": "'+f_scriptengine.cmd_Wheel_GetFilter+'"}'
   else if method='PREVIEW_SINGLE' then result:=result+'"result":{"status": "'+f_scriptengine.cmd_Preview_Single+'"}'
   else if method='PREVIEW_LOOP' then result:=result+'"result":{"status": "'+f_scriptengine.cmd_Preview_Loop+'"}'
@@ -17923,6 +17928,20 @@ begin
    FormPos(f,mouse.CursorPos.X,mouse.CursorPos.Y);
    f.Show;
  end;
+end;
+
+procedure Tf_main.InternalguiderReferenceImage(Sender: TObject);
+begin
+ if guidefits.HeaderInfo.valid and f_goto.CheckImageInfo(guidefits) then begin
+   DeleteFile(ConfigGuiderReferenceFile);
+   astrometry.SolveGuideImage(true);
+   if astrometry.LastResult then begin
+     if CopyFile(slash(TmpDir)+'guidesolved.fits',ConfigGuiderReferenceFile) then
+        ShowMessage('Reference file saved');
+   end;
+ end
+ else
+   ShowMessage('No image to solve');
 end;
 
 procedure Tf_main.InternalguiderParameterChange(msg:string);

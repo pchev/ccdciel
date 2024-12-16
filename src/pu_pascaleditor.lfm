@@ -104,7 +104,7 @@ object f_pascaleditor: Tf_pascaleditor
     Font.Height = -13
     Font.Name = 'Courier New'
     Font.Pitch = fpFixed
-    Font.Quality = fqDraft
+    Font.Quality = fqAntialiased
     ParentColor = False
     ParentFont = False
     PopupMenu = PopupMenu1

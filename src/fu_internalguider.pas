@@ -47,6 +47,7 @@ type
     BtnZoom2: TSpeedButton;
     BtnZoomAdjust: TSpeedButton;
     Button1: TButton;
+    btnRefImage: TButton;
     ButtonLoop: TButton;
     ButtonSetLock: TSpeedButton;
     ButtonSetTemp: TButton;
@@ -70,6 +71,7 @@ type
     Label55: TLabel;
     Label56: TLabel;
     Label57: TLabel;
+    Label58: TLabel;
     MenuItemAddSlit: TMenuItem;
     MenuItemDelSlit: TMenuItem;
     MenuSlitOffset: TButton;
@@ -79,6 +81,7 @@ type
     PanelGuideStarOffset: TPanel;
     PopupMenuSlit: TPopupMenu;
     rgSpectroStrategy: TRadioGroup;
+    Shape1: TShape;
     SlitOffsetX: TFloatSpinEdit;
     StarOffsetX: TFloatSpinEdit;
     SlitOffsetY: TFloatSpinEdit;
@@ -243,6 +246,7 @@ type
     procedure BtnZoom2Click(Sender: TObject);
     procedure BtnZoomAdjustClick(Sender: TObject);
     procedure Button1Click(Sender: TObject);
+    procedure btnRefImageClick(Sender: TObject);
     procedure ButtonSetLockClick(Sender: TObject);
     procedure ButtonCalibrateClick(Sender: TObject);
     procedure ButtonDarkMouseDown(Sender: TObject; Button: TMouseButton; Shift: TShiftState; X, Y: Integer);
@@ -290,7 +294,8 @@ type
   private
     { private declarations }
     thescale : double;
-    FonStart, FonStop, FonCalibrate, FonCalibrateBacklash, FonLoop, FonRedraw,FonSpectroGuideChange,FonConfigureGuider: TNotifyEvent;
+    FonStart, FonStop, FonCalibrate, FonCalibrateBacklash, FonLoop, FonRedraw,
+    FonSpectroGuideChange,FonConfigureGuider,FonMeasureReferenceImage: TNotifyEvent;
     FonSetTemperature,FonSetCooler, FonCaptureDark, FonLoadDark, FonClearDark,FonDarkInfo, FonShowImage: TNotifyEvent;
     FonParameterChange: TNotifyStr;
     cur_minHFD,cur_minSNR,cur_Exposure,cur_vsolar,cur_vpasolar : double;
@@ -424,6 +429,7 @@ type
     procedure ClearSlitList;
     procedure ChangeSpectro;
     procedure ChangeSpectroStrategy;
+    procedure CheckGuiderReferenceFile;
     property onShowMessage: TNotifyMsg read FonShowMessage write FonShowMessage;
     property Camera: T_camera read Fcamera write Fcamera;
     property onLoop: TNotifyEvent read FonLoop write FonLoop;
@@ -499,6 +505,7 @@ type
     property CameraStatus: string read GetCameraStatus write SetCameraStatus;
     property SpiralDither: boolean read GetSpiralDither write SetSpiralDither;
     property onConfigureGuider: TNotifyEvent read FonConfigureGuider write FonConfigureGuider;
+    property onMeasureReferenceImage: TNotifyEvent read FonMeasureReferenceImage write FonMeasureReferenceImage;
 
   end;
 
@@ -1989,6 +1996,20 @@ begin
     SlitOffsetX.Value := so.x;
     SlitOffsetY.Value := so.y;
   end;
+end;
+
+procedure Tf_internalguider.btnRefImageClick(Sender: TObject);
+begin
+  if assigned(FonMeasureReferenceImage) then FonMeasureReferenceImage(self);
+  CheckGuiderReferenceFile;
+end;
+
+procedure Tf_internalguider.CheckGuiderReferenceFile;
+begin
+  if FileExists(ConfigGuiderReferenceFile) then
+    Shape1.Brush.Color:=clLime
+  else
+    Shape1.Brush.Color:=clRed;
 end;
 
 end.

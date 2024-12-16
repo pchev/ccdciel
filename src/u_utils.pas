@@ -84,6 +84,7 @@ function isodate(a,m,d : integer) : string;
 function DateIso2DateTime(dt: string): double;
 function jddate(jd: double) : string;
 PROCEDURE PrecessionFK5(ti,tf : double; VAR ari,dei : double);  // Lieske 77
+function PositionAngle(ac, dc, ar, de: double): double;
 function AngularDistance(ar1,de1,ar2,de2 : Double) : Double;
 function PlaneDistance(x1,y1,x2,y2: double): double;
 function SidTim(jd0,ut,long : double; eqeq: double=0): double;
@@ -1409,6 +1410,17 @@ var i1,i2,i3,i4,i5,i6,i7 : double ;
       ARI:=ARI+I4;
       ARI:=RMOD(ARI+pi2,pi2);
    END  ;
+
+function PositionAngle(ac, dc, ar, de: double): double;
+var
+  hh, s1, s2, s3, c1, c2, c3: extended;
+begin
+  hh := (ac - ar);
+  sincos(dc, s1, c1);
+  sincos(de, s2, c2);
+  sincos(hh, s3, c3);
+  Result := rmod(pi2 + pi + arctan2((c2 * s3), (-c1 * s2 + s1 * c2 * c3)), pi2);
+end;
 
 Function AngularDistance(ar1,de1,ar2,de2 : Double) : Double;
 var s1,s2,c1,c2,c3: extended;
