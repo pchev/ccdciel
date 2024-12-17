@@ -17,6 +17,7 @@ component/synapse/lib/
 component/vosamp/lib/
 component/xmlparser/lib/
 component/controltimer/lib
+component/downloaddialog/lib
 doc/doc/
 doc/wiki_doc/
 data/language/launchpad/download/
