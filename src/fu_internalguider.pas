@@ -77,6 +77,7 @@ type
     MenuSlitOffset: TButton;
     Panel12: TPanel;
     Panel13: TPanel;
+    Panel14: TPanel;
     PanelAstrometryExposure: TPanel;
     PanelGuideStarOffset: TPanel;
     PopupMenuSlit: TPopupMenu;

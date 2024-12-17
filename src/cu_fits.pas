@@ -3202,6 +3202,8 @@ begin
     if sumval=0 then
     begin
       vmax:=0;
+      xc:=x;
+      yc:=y;
       exit;
     end;
 

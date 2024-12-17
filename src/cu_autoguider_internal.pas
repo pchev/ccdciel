@@ -596,14 +596,18 @@ begin
     if finternalguider.GuideLockNextX>-2 then begin
       // can be set to -10 by SpectroSetTarget, in this case we must skip SearchWinMin to go directly with SearchWinMax
       guidefits.FindStarPos2(fitsx,fitsy,finternalguider.SearchWinMin,xc,yc,vmax,bg,bgdev);
-      guidefits.GetHFD2(round(xc),round(yc),finternalguider.SearchWinMin,x1,y1,bg1,bgdev1,hfd1,fwhm1,vmax,snr1,flux1,false,true); // accept fully saturated stars
-      if snr1<Finternalguider.MinSNR then vmax:=0;
+      if vmax>0 then begin
+        guidefits.GetHFD2(round(xc),round(yc),finternalguider.SearchWinMin,x1,y1,bg1,bgdev1,hfd1,fwhm1,vmax,snr1,flux1,false,true); // accept fully saturated stars
+        if snr1<Finternalguider.MinSNR then vmax:=0;
+      end;
     end;
     if (vmax=0) then begin
       // if not found try with larger aperture
       guidefits.FindStarPos2(fitsx,fitsy,finternalguider.SearchWinMax,xc,yc,vmax,bg,bgdev);
-      guidefits.GetHFD2(round(xc),round(yc),finternalguider.SearchWinMin,x1,y1,bg1,bgdev1,hfd1,fwhm1,vmax,snr1,flux1,false,true);
-     if snr1<Finternalguider.MinSNR then vmax:=0;
+      if vmax>0 then begin
+        guidefits.GetHFD2(round(xc),round(yc),finternalguider.SearchWinMin,x1,y1,bg1,bgdev1,hfd1,fwhm1,vmax,snr1,flux1,false,true);
+        if snr1<Finternalguider.MinSNR then vmax:=0;
+      end;
     end;
     if (vmax=0) then begin
       // if still not found search brightest star in image
@@ -2508,6 +2512,7 @@ begin
 // this position is used to compute the guide star offset the next time guiding is started
   if finternalguider.SpectroFunctions and (finternalguider.SpectroStrategy=spSingleOffset)
      and(GuideRa<>NullCoord)and(GuideDec<>NullCoord) then begin
+    msg('Set spectro guide star ra='+RAToStr(GuideRa)+' dec='+DEToStr(GuideDec),3);
     FSpectroGuideStar.RA:=GuideRa;
     FSpectroGuideStar.DEC:=GuideDec;
     FSpectroGuideStar.valid:=true;
@@ -2528,6 +2533,7 @@ begin
 // this position is used the next time guiding is started
   if finternalguider.SpectroFunctions and (finternalguider.SpectroAstrometry or(finternalguider.SpectroStrategy=spSingleOffset))
      and(cdcwcs_sky2xy<>nil) and (TargetRa<>NullCoord)and(TargetDec<>NullCoord) then begin
+    msg('Set spectro target ra='+RAToStr(TargetRa)+' dec='+DEToStr(TargetDec),3);
     FSpectroTarget.RA:=TargetRa;
     FSpectroTarget.DEC:=TargetDec;
     FSpectroTarget.valid:=true;
@@ -2536,6 +2542,7 @@ begin
     result:=true;
   end
   else begin
+    msg('Clear spectro target position',3);
     FSpectroTarget.RA:=NullCoord;
     FSpectroTarget.DEC:=NullCoord;
     FSpectroTarget.valid:=false;
@@ -2564,7 +2571,7 @@ begin
     // load reference file
     fi:=TFits.Create(nil);
     fi.LoadFromFile(ConfigGuiderReferenceFile);
-    if not fi.HeaderInfo.valid then exit;
+    if not fi.HeaderInfo.valid then begin msg('Error reading reference image',1); exit; end;
     // reference pier side
     if fi.Header.Valueof('PIERSIDE',buf) then begin
       if pos('WEST',buf)>=0 then
@@ -2582,19 +2589,19 @@ begin
     fi.SaveToFile(slash(TmpDir)+'guidereftmp.fits');
     fi.Free;
     n:=cdcwcs_initfitsfile(pchar(slash(TmpDir)+'guidereftmp.fits'),wcsguide);
-    if n<>0 then exit;
+    if n<>0 then begin msg('Error loading reference image',1); exit; end;
     // object x,y position
     c.ra:=15*FSpectroTarget.RA;
     c.dec:=FSpectroTarget.DEC;
     n:=cdcwcs_sky2xy(@c,wcsguide);
-    if n=1 then exit;
+    if n=1 then begin msg('Error solving target position',1); exit; end;
     xt:=c.x;
     yt:=c.y;
     // guide star x,y position
     c.ra:=15*FSpectroGuideStar.RA;
     c.dec:=FSpectroGuideStar.DEC;
     n:=cdcwcs_sky2xy(@c,wcsguide);
-    if n=1 then exit;
+    if n=1 then begin msg('Error solving guide position',1); exit; end;
     xg:=c.x;
     yg:=c.y;
     // offset fron object to guide
@@ -2607,6 +2614,7 @@ begin
         yo:=-yo;
       end;
     end;
+    msg('Spectro guide star offset x='+FormatFloat(f1,xo)+' y='+FormatFloat(f1,yo),3);
     finternalguider.StarOffsetX.Value:=xo;
     finternalguider.StarOffsetY.Value:=yo;
     finternalguider.GuideLockNextX:=-1;
