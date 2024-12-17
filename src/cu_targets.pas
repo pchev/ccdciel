@@ -2449,8 +2449,8 @@ begin
     if t.initscript then begin
       FScriptRunning:=true;
       buf:='"';
-      buf:=buf+StringReplace(t.objectname,'"',' ',[rfReplaceAll]);
-      buf:=buf+','+StringReplace(t.planname,'"',' ',[rfReplaceAll]);
+      buf:=buf+StringReplace(StringReplace(t.objectname,'"',' ',[rfReplaceAll]),',',' ',[rfReplaceAll]);
+      buf:=buf+','+StringReplace(StringReplace(t.planname,'"',' ',[rfReplaceAll]),',',' ',[rfReplaceAll]);
       buf:=buf+' ,'+t.ra_str+','+t.de_str;
       buf:=buf+'"';
       buf:=buf+' '+t.initscriptargs;
