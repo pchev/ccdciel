@@ -1,0 +1,38 @@
+# Python program for CCDciel
+# see: https://www.ap-i.net/ccdciel/en/documentation/jsonrpc_reference
+
+# This script set the guide star RA/DEC for side guiding with a spectroscope
+# It work only from a sequence when the object RA/DEC is also set.
+# Set this script as the target initialization script with the guide star J2000 RA(hour)/DEC in parameter
+# parameter format can be:
+#   22h30m00s +43d30m00s  or 22.5 +43.5
+# be sure the string format do not use any " or ' character
+
+import sys
+from ccdciel import ccdciel
+
+try:
+  # standard parameter from the sequence
+  seqparam = sys.argv[1].split(",")
+  # specific parameter RA and DEC
+  guidera = sys.argv[2]
+  guidede = sys.argv[3]
+except Exception as ex:
+  print('missing parameter ',ex)
+  sys.exit(2)
+
+try:
+  # ensure the guide strategy is set to single star with offset
+  r=ccdciel('Internalguider_SetSpectroStrategy','SingleOffset')
+
+  # set the coordinates for the next time the guiding is started
+  r=ccdciel('Internalguider_SetSpectroGuidestarRaDec',[guidera,guidede])
+
+  if (r['result']['status'] != "OK!") :
+    print(r)
+    sys.exit(2)
+
+except Exception as ex:
+  print('error ',ex)
+  sys.exit(2)
+
