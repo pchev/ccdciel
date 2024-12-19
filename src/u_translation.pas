@@ -335,8 +335,6 @@ resourcestring
   rsPA = 'PA';
   rsReverse = 'Reverse';
   rsHalt = 'Halt';
-  rsCalibrated = 'Calibrated';
-  rsUncalibrated = 'Uncalibrated';
   rsRunScript = 'Run script';
   rsCopy = 'Copy';
   rsAnotherScrip = 'Another script is already running';
