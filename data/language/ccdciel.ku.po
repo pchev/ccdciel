@@ -6,15 +6,15 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ccdciel\n"
 "Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
-"POT-Creation-Date: 2024-12-11 15:18+0000\n"
+"POT-Creation-Date: 2024-12-19 16:51+0000\n"
 "PO-Revision-Date: 2021-08-31 20:35+0000\n"
 "Last-Translator: Patrick Chevalley <Unknown>\n"
 "Language-Team: Kurdish <ku@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2024-12-11 15:28+0000\n"
-"X-Generator: Launchpad (build 39bd251485adde1a3ef538479f6c030babb8e251)\n"
+"X-Launchpad-Export-Date: 2024-12-19 18:52+0000\n"
+"X-Generator: Launchpad (build 6394e03793719e8d73f5a60b5439440e693c92f1)\n"
 
 #: u_translation.rs2d
 msgid "2D"
@@ -636,10 +636,6 @@ msgstr "Pîvan"
 
 #: u_translation.rscalibrateaut
 msgid "Calibrate autoguider after meridian flip"
-msgstr ""
-
-#: u_translation.rscalibrated
-msgid "Calibrated"
 msgstr ""
 
 #: u_translation.rscalibration
@@ -5798,10 +5794,6 @@ msgstr ""
 msgid "unavailable"
 msgstr ""
 
-#: u_translation.rsuncalibrated
-msgid "Uncalibrated"
-msgstr ""
-
 #: u_translation.rsunknownstatu
 msgid "Unknown status"
 msgstr ""
@@ -6130,10 +6122,6 @@ msgstr ""
 #: u_translation.rswarningimage
 #, object-pascal-format
 msgid "Warning! %s image received"
-msgstr ""
-
-#: u_translation.rswarningrever
-msgid "Warning, reversing the rotator will invalidated the calibration. Do you want to continue?"
 msgstr ""
 
 #: u_translation.rswarningthemo

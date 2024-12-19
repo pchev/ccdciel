@@ -1142,18 +1142,6 @@ msgstr ""
 msgid "Halt"
 msgstr ""
 
-#: u_translation:rscalibrated
-msgid "Calibrated"
-msgstr ""
-
-#: u_translation:rsuncalibrated
-msgid "Uncalibrated"
-msgstr ""
-
-#: u_translation:rswarningrever
-msgid "Warning, reversing the rotator will invalidated the calibration. Do you want to continue?"
-msgstr ""
-
 #: u_translation:rsrunscript
 msgid "Run script"
 msgstr ""

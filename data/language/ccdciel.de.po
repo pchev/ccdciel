@@ -6,15 +6,15 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ccdciel\n"
 "Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
-"POT-Creation-Date: 2024-12-11 15:18+0000\n"
+"POT-Creation-Date: 2024-12-19 16:51+0000\n"
 "PO-Revision-Date: 2024-08-19 19:32+0000\n"
 "Last-Translator: Thomas <email@starhopper.de>\n"
 "Language-Team: German <de@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2024-12-11 15:28+0000\n"
-"X-Generator: Launchpad (build 39bd251485adde1a3ef538479f6c030babb8e251)\n"
+"X-Launchpad-Export-Date: 2024-12-19 18:52+0000\n"
+"X-Generator: Launchpad (build 6394e03793719e8d73f5a60b5439440e693c92f1)\n"
 
 #: u_translation.rs2d
 msgid "2D"
@@ -637,10 +637,6 @@ msgstr "Kalibrieren"
 #: u_translation.rscalibrateaut
 msgid "Calibrate autoguider after meridian flip"
 msgstr "Autoguider nach Meridianflip kalibrieren"
-
-#: u_translation.rscalibrated
-msgid "Calibrated"
-msgstr "Kalibriert"
 
 #: u_translation.rscalibration
 msgid "Calibration"
@@ -5798,10 +5794,6 @@ msgstr "Skript bei Fehler im unbeaufsichtigtem Betrieb"
 msgid "unavailable"
 msgstr "nicht verfügbar"
 
-#: u_translation.rsuncalibrated
-msgid "Uncalibrated"
-msgstr "Unkalibriert"
-
 #: u_translation.rsunknownstatu
 msgid "Unknown status"
 msgstr "Status unbekannt"
@@ -6131,10 +6123,6 @@ msgstr "Warnung! Um einen negativen Wert zu verwenden, bitte sicher stellen, das
 #, object-pascal-format
 msgid "Warning! %s image received"
 msgstr "Warnung! %s Bild empfangen"
-
-#: u_translation.rswarningrever
-msgid "Warning, reversing the rotator will invalidated the calibration. Do you want to continue?"
-msgstr "Warnung: Wenn Sie den Rotator umkehren wird die Kalibrierung ungültigWollen Sie weitermachen?"
 
 #: u_translation.rswarningthemo
 msgid "Warning! the mount will be parked every time a flat capture is started."
