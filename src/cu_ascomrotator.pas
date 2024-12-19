@@ -56,6 +56,7 @@ public
    destructor  Destroy; override;
    Procedure Connect(cp1: string; cp2:string=''; cp3:string=''; cp4:string=''; cp5:string=''; cp6:string='');  override;
    procedure Disconnect; override;
+   procedure Sync(p:double); override;
    function GetV: variant;
    Procedure Halt; override;
 end;
@@ -253,6 +254,21 @@ begin
    result:=V.Position;
    except
     on E: Exception do msg('Get position error: ' + E.Message,0);
+   end;
+ end;
+ {$endif}
+end;
+
+procedure T_ascomrotator.Sync(p:double);
+begin
+ {$ifdef mswindows}
+ if not VarIsEmpty(V) then begin
+ try
+   //msg('Rotator '+Fdevice+' sync '+FormatFloat(f1,p));
+   V.Sync(p);
+
+   except
+      // ignore if not supported
    end;
  end;
  {$endif}

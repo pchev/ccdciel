@@ -53,6 +53,7 @@ public
    destructor  Destroy; override;
    Procedure Connect(cp1: string; cp2:string=''; cp3:string=''; cp4:string=''; cp5:string=''; cp6:string='');  override;
    procedure Disconnect; override;
+   procedure Sync(p:double); override;
    Procedure Halt; override;
 end;
 
@@ -93,8 +94,6 @@ procedure T_ascomrestrotator.Connect(cp1: string; cp2:string=''; cp3:string=''; 
 begin
   try
   FStatus := devConnecting;
-  FCalibrationAngle:=0;
-  FReverse:=False;
   V.Host:=cp1;
   V.Port:=cp2;
   V.Protocol:=cp3;
@@ -236,6 +235,18 @@ begin
  except
     on E: Exception do msg('Get position error: ' + E.Message,0);
  end;
+end;
+
+procedure T_ascomrestrotator.Sync(p:double);
+begin
+ if FStatus<>devConnected then exit;
+ try
+   //msg('Rotator '+Fdevice+' sync '+FormatFloat(f1,p));
+   V.Put('sync',['Position',FormatFloat(f2,p)]);
+
+   except
+    // ignore if not supported
+   end;
 end;
 
 function T_ascomrestrotator.GetDriverReverse:boolean;

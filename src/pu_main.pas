@@ -5733,7 +5733,6 @@ begin
    config.SetValue('/Offset/OffsetMax',OffsetMax);
 
    config.SetValue('/Rotator/Reverse',f_rotator.Reverse.Checked);
-   config.SetValue('/Rotator/CalibrationAngle',rotator.CalibrationAngle);
 
    config.SetValue('/StarAnalysis/FocuserLastTemp',FocuserLastTemp);
    config.SetValue('/StarAnalysis/MagnitudeCalibration',MagnitudeCalibration);
@@ -8402,8 +8401,6 @@ case rotator.Status of
                       f_devicesconnection.LabelRotator.Font.Color:=clGreen;
                       NewMessage(Format(rsConnected, [rsRotator]),1);
                       f_rotator.SetReverse(config.GetValue('/Rotator/Reverse',false));
-                      rotator.CalibrationAngle:=config.GetValue('/Rotator/CalibrationAngle',0.0);
-                      f_rotator.SetCalibrated(rotator.CalibrationAngle<>0);
                       wait(1);
                       RotatorAngleChange(self);
                    end;
@@ -8414,7 +8411,6 @@ end;
 Procedure Tf_main.RotatorAngleChange(Sender: TObject);
 begin
  f_rotator.Angle.Value:=rotator.Angle;
- f_rotator.SetCalibrated(rotator.CalibrationAngle<>0);
 end;
 
 Procedure Tf_main.RotatorRotate(Sender: TObject);
@@ -15344,7 +15340,6 @@ if (n=0) and (rotator.Status=devConnected) then begin
   rot:=wcsinfo.rot;
 
   rotator.Sync(rot);
-  f_rotator.SetCalibrated(true);
 
 end;
 end;

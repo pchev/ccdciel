@@ -337,8 +337,6 @@ resourcestring
   rsHalt = 'Halt';
   rsCalibrated = 'Calibrated';
   rsUncalibrated = 'Uncalibrated';
-  rsWarningRever = 'Warning, reversing the rotator will invalidated the '
-    +'calibration. Do you want to continue?';
   rsRunScript = 'Run script';
   rsCopy = 'Copy';
   rsAnotherScrip = 'Another script is already running';

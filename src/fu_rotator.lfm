@@ -49,21 +49,10 @@ object f_rotator: Tf_rotator
       ClientWidth = 190
       ParentFont = False
       TabOrder = 0
-      object led: TShape
-        AnchorSideTop.Control = Angle
-        AnchorSideTop.Side = asrCenter
-        Left = 4
-        Height = 14
-        Hint = 'Uncalibrated'
-        Top = 8
-        Width = 14
-        Brush.Color = clRed
-        Shape = stCircle
-      end
       object Label6: TLabel
         AnchorSideTop.Control = Angle
         AnchorSideTop.Side = asrCenter
-        Left = 28
+        Left = 8
         Height = 18
         Top = 6
         Width = 16
@@ -73,10 +62,10 @@ object f_rotator: Tf_rotator
         ParentFont = False
       end
       object Angle: TFloatSpinEdit
-        Left = 49
+        Left = 40
         Height = 28
         Top = 1
-        Width = 66
+        Width = 75
         Constraints.MaxHeight = 28
         DecimalPlaces = 1
         MaxValue = 99999

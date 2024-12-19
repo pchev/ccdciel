@@ -40,7 +40,6 @@ type
     Panel3: TPanel;
     Reverse: TCheckBox;
     Label6: TLabel;
-    led: TShape;
     Panel1: TPanel;
     Title: TLabel;
     procedure BtnHaltClick(Sender: TObject);
@@ -57,7 +56,6 @@ type
     constructor Create(aOwner: TComponent); override;
     destructor  Destroy; override;
     procedure SetLang;
-    procedure SetCalibrated(onoff:boolean);
     procedure SetReverse(onoff:boolean);
     property onRotate: TNotifyEvent read FonRotate write FonRotate;
     property onReverse: TNotifyEvent read FonReverse write FonReverse;
@@ -82,7 +80,6 @@ begin
  noprompt:=false;
  lockreverse:=false;
  SetLang;
- led.Canvas.AntialiasingMode:=amOn;
 end;
 
 destructor  Tf_rotator.Destroy;
@@ -97,20 +94,6 @@ begin
   BtnRotate.Caption:=rsRotate;
   Reverse.Caption:=rsReverse;
   BtnHalt.Caption:=rsHalt;
-end;
-
-procedure Tf_rotator.SetCalibrated(onoff:boolean);
-begin
- if onoff then begin
-   led.Brush.Color:=clLime;
-   led.Hint:=rsCalibrated;
-   Angle.Hint:=rsCalibrated;
- end
- else begin
-   led.Brush.Color:=clRed;
-   led.Hint:=rsUncalibrated;
-   Angle.Hint:=rsUncalibrated;
- end;
 end;
 
 procedure Tf_rotator.SetReverse(onoff:boolean);
@@ -133,17 +116,7 @@ end;
 procedure Tf_rotator.ReverseChange(Sender: TObject);
 begin
    if lockreverse then exit;
-   if noprompt or
-      (led.Brush.Color=clRed) or
-      (MessageDlg(rsWarningRever, mtConfirmation, mbYesNo, 0)=mrYes)
-   then begin
-      if Assigned(FonReverse) then FonReverse(self);
-   end
-   else begin
-      lockreverse:=true;
-      Reverse.Checked:=not Reverse.Checked;
-      lockreverse:=false;
-   end;
+   if Assigned(FonReverse) then FonReverse(self);
 end;
 
 end.

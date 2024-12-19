@@ -32,8 +32,6 @@ type
 
 T_rotator = class(TComponent)
  private
-    function  GetCalibratedAngle:double;
-    procedure SetCalibratedAngle(p:double);
  protected
     FRotatorInterface: TDevInterface;
     FStatus: TDeviceStatus;
@@ -43,8 +41,6 @@ T_rotator = class(TComponent)
     FTimeOut: integer;
     Fdevice: string;
     FAutoLoadConfig: boolean;
-    FCalibrationAngle: double;
-    FReverse: Boolean;
     procedure msg(txt: string; level:integer=3);
     procedure SetReverse(value:boolean);
     function GetReverse:boolean;
@@ -59,14 +55,13 @@ T_rotator = class(TComponent)
     Procedure Connect(cp1: string; cp2:string=''; cp3:string=''; cp4:string=''; cp5:string=''; cp6:string=''); virtual; abstract;
     Procedure Disconnect; virtual; abstract;
     Procedure Halt; virtual; abstract;
-    Procedure Sync(angle:double);
+    Procedure Sync(angle:double); virtual; abstract;
     property DeviceName: string read FDevice;
     property RotatorInterface: TDevInterface read FRotatorInterface;
     property Status: TDeviceStatus read FStatus;
     property Timeout: integer read FTimeout write SetTimeout;
     property AutoLoadConfig: boolean read FAutoLoadConfig write FAutoLoadConfig;
-    property Angle: double read GetCalibratedAngle write SetCalibratedAngle;
-    property CalibrationAngle: double read FCalibrationAngle write FCalibrationAngle;
+    property Angle: double read GetAngle write SetAngle;
     property Reverse: Boolean read GetReverse write SetReverse;
     property onMsg: TNotifyMsg read FonMsg write FonMsg;
     property onDeviceMsg: TNotifyMsg read FonDeviceMsg write FonDeviceMsg;
@@ -80,8 +75,6 @@ constructor T_rotator.Create(AOwner: TComponent);
 begin
   inherited Create(AOwner);
   FStatus := devDisconnected;
-  FCalibrationAngle:=0;
-  FReverse:=False;
 end;
 
 destructor  T_rotator.Destroy;
@@ -91,55 +84,13 @@ end;
 
 procedure T_rotator.SetReverse(value:boolean);
 begin
-  FCalibrationAngle:=0;               // reset calibration
-  if value then begin
-    SetDriverReverse(True);           // try to set in driver
-    FReverse:= not GetDriverReverse;  // if not use software revert
-  end
-  else begin
-    if GetDriverReverse then SetDriverReverse(False);   // set in driver
-    FReverse:=False;                                    // set in software
-  end;
+  SetDriverReverse(value);           // in driver
   if Assigned(FonAngleChange) then FonAngleChange(self);
 end;
 
 function T_rotator.GetReverse:boolean;
 begin
-  result:=FReverse or GetDriverReverse;   // in software or in driver
-end;
-
-function  T_rotator.GetCalibratedAngle:double;
-begin
-  if FReverse then
-    result:=360-GetAngle-FCalibrationAngle
-  else
-    result:=GetAngle+FCalibrationAngle;
-  result:=Rmod(720+result,360);
-  if result>359 then result:=0;
-end;
-
-procedure T_rotator.SetCalibratedAngle(p:double);
-begin
-  msg(Format(rsRotatorMoveT, [FormatFloat(f1, p)]));
-  if FReverse then
-    p:=360-p-FCalibrationAngle
-  else
-    p:=p-FCalibrationAngle;
-  p:=rmod(720+p,360);
-  if p>359 then p:=0;
-  SetAngle(p);
-end;
-
-Procedure T_rotator.Sync(angle:double);
-begin
-  if FReverse then
-    FCalibrationAngle:=360-angle-GetAngle
-  else
-    FCalibrationAngle:=angle-GetAngle;
-  FCalibrationAngle:=rmod(720+FCalibrationAngle,360);
-  if FCalibrationAngle>359 then FCalibrationAngle:=0;
-   msg(Format(rsRotatorSyncC, [FormatFloat(f1, FCalibrationAngle)]));
-  if Assigned(FonAngleChange) then FonAngleChange(self);
+  result:=GetDriverReverse;   // in driver
 end;
 
 procedure T_rotator.msg(txt: string; level:integer=3);
