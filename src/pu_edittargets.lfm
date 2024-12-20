@@ -906,7 +906,7 @@ object f_EditTargets: Tf_EditTargets
             Width = 1020
             Align = alClient
             AutoFillColumns = True
-            ColCount = 14
+            ColCount = 15
             Columns = <            
               item
                 MinSize = 120
@@ -927,20 +927,25 @@ object f_EditTargets: Tf_EditTargets
                 )
                 Title.MultiLine = True
                 Title.Caption = 'Type'
-                Width = 72
+                Width = 66
               end            
               item
                 MaxSize = 202
                 Title.MultiLine = True
                 Title.Caption = 'Exposure'
-                Width = 72
+                Width = 66
+              end            
+              item
+                Title.MultiLine = True
+                Title.Caption = 'Ref. exposure'
+                Width = 66
               end            
               item
                 MinSize = 71
                 MaxSize = 71
                 Title.MultiLine = True
                 Title.Caption = 'Stack'
-                Width = 72
+                Width = 66
               end            
               item
                 ButtonStyle = cbsPickList
@@ -951,7 +956,7 @@ object f_EditTargets: Tf_EditTargets
                 )
                 Title.MultiLine = True
                 Title.Caption = 'Binning'
-                Width = 72
+                Width = 66
               end            
               item
                 ButtonStyle = cbsPickList
@@ -969,44 +974,44 @@ object f_EditTargets: Tf_EditTargets
                 MaxSize = 71
                 Title.MultiLine = True
                 Title.Caption = 'Count'
-                Width = 72
+                Width = 66
               end            
               item
                 ButtonStyle = cbsCheckboxColumn
                 MaxSize = 202
                 Title.MultiLine = True
                 Title.Caption = 'Autofocus before to start'
-                Width = 72
+                Width = 66
               end            
               item
                 MaxSize = 202
                 Title.MultiLine = True
                 Title.Caption = 'Autofocus every'
-                Width = 72
+                Width = 66
               end            
               item
                 MaxSize = 202
                 Title.MultiLine = True
                 Title.Caption = 'Dither every'
-                Width = 72
+                Width = 66
               end            
               item
                 ButtonStyle = cbsPickList
                 MaxSize = 202
                 Title.MultiLine = True
                 Title.Caption = 'Gain'
-                Width = 72
+                Width = 66
               end            
               item
                 Title.MultiLine = True
                 Title.Caption = 'Offset'
-                Width = 72
+                Width = 66
               end            
               item
                 ButtonStyle = cbsPickList
                 Title.MultiLine = True
                 Title.Caption = 'F-stop'
-                Width = 77
+                Width = 71
               end>
             DefaultColWidth = 30
             MouseWheelOption = mwGrid
@@ -1024,18 +1029,19 @@ object f_EditTargets: Tf_EditTargets
             ColWidths = (
               30
               120
-              72
-              72
-              72
-              72
+              66
+              66
+              66
+              66
+              66
               69
-              72
-              72
-              72
-              72
-              72
-              72
-              77
+              66
+              66
+              66
+              66
+              66
+              66
+              71
             )
           end
           object Panel17: TPanel
@@ -2018,6 +2024,11 @@ object f_EditTargets: Tf_EditTargets
     object MenuAddCaptureStep: TMenuItem
       Caption = 'Add capture'
       OnClick = MenuAddCaptureStepClick
+    end
+    object MenuAddAutoexposureStep: TMenuItem
+      Caption = 'Capture with auto-exposure'
+      Visible = False
+      OnClick = MenuAddAutoexposureStepClick
     end
     object MenuAddScriptStep: TMenuItem
       Caption = 'Add script'

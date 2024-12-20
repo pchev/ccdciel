@@ -26,13 +26,13 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 interface
 
 uses pu_planetariuminfo, u_global, u_utils, u_ccdconfig, pu_pascaleditor, u_annotation, pu_keyboard, pu_newscript, pu_onlineinfo,
-  pu_scriptengine, cu_astrometry, u_hints, u_translation, pu_selectscript, Classes, math, cu_targets, pu_viewtext, cu_switch,
+  pu_scriptengine, cu_astrometry, u_hints, u_translation, pu_selectscript, Classes, math, cu_targets, pu_viewtext, cu_switch, pu_autoexposurestep,
   SysUtils, FileUtil, Forms, Controls, Graphics, Dialogs, StdCtrls, UScaleDPI, cu_plan, LCLType,
   LazUTF8, maskedit, Grids, ExtCtrls, ComCtrls, Spin, Buttons, Menus, CheckLst, Types;
 
 const
   colseq=0; colname=1; colplan=2; colra=3; coldec=4; colpa=5; colmagn=6; colstart=7; colend=8; colrepeat=9;
-  pcolseq=0; pcoldesc=1; pcoltype=2; pcolexp=3; pcolstack=4; pcolbin=5; pcolfilter=6; pcolcount=7; pcolafstart=8; pcolafevery=9; pcoldither=10; pcolgain=11; pcoloffset=12; pcolfstop=13;
+  pcolseq=0; pcoldesc=1; pcoltype=2; pcolexp=3; pcolrefexp=4; pcolstack=5; pcolbin=6; pcolfilter=7; pcolcount=8; pcolafstart=9; pcolafevery=10; pcoldither=11; pcolgain=12; pcoloffset=13; pcolfstop=14;
   titleadd=0; titledel=1;
   pageobject=0; pagescript=1; pageflat=2; pagenone=3; pageswitch=4;
   cbNone=0; cbStopTracking=1; cbWarm=2; cbParkScope=3; cbParkDome=4; cbScript=5; cbUnattended=6;
@@ -73,6 +73,7 @@ type
     MenuAddScriptStep: TMenuItem;
     MenuAddSwitchStep: TMenuItem;
     MenuInsertOnline: TMenuItem;
+    MenuAddAutoexposureStep: TMenuItem;
     MenuOnlineCoord: TMenuItem;
     Panel10: TPanel;
     Panel16: TPanel;
@@ -255,6 +256,7 @@ type
     procedure FormCreate(Sender: TObject);
     procedure FormDestroy(Sender: TObject);
     procedure FormShow(Sender: TObject);
+    procedure MenuAddAutoexposureStepClick(Sender: TObject);
     procedure MenuAddCaptureStepClick(Sender: TObject);
     procedure MenuAddScriptStepClick(Sender: TObject);
     procedure MenuAddSwitchStepClick(Sender: TObject);
@@ -311,6 +313,7 @@ type
     FFilename: string;
     FSolarTracking: boolean;
     FSwitch: TSwitches;
+    SelectedObjectMagnitude: double;
     procedure SetPlanList(n: integer; pl:string);
     procedure SetScriptList(n: integer; sl, args:string);
     procedure SetScriptList1(n: integer; sp, sl, args:string);
@@ -334,6 +337,7 @@ type
     procedure MarkModifiedTemplate;
     procedure SetStartScriptName;
     procedure SetEndScriptName;
+    procedure UpdAutoExposure(newmagn: double);
    public
     { public declarations }
     originalFilter: TSaveFilter;
@@ -450,6 +454,7 @@ begin
   MenuImportObslist.Caption:=rsImportCdCObs;
   MenuImportMosaic.Caption:=rsImportCdCMos;
   MenuAddCaptureStep.Caption:=rsCapture;
+  MenuAddAutoexposureStep.Caption:=rsStarAutoExpo;
   MenuAddScriptStep.Caption:=rsScript;
   MenuAddSwitchStep.Caption:=rsSwitch;
   TargetList.Columns.Items[colname-1].Title.Caption := Format(rsTargetName, [crlf]);
@@ -2072,10 +2077,15 @@ begin
       TargetList.Cells[colpa,n]:='-'
     else
       TargetList.Cells[colpa,n]:=FormatFloat(f2,t.pa);
-    if t.magnitude=NullCoord then
-      TargetList.Cells[colmagn,n]:='-'
-    else
+    SelectedObjectMagnitude:=t.magnitude;
+    if t.magnitude=NullCoord then begin
+      TargetList.Cells[colmagn,n]:='-';
+      MenuAddAutoexposureStep.Visible:=false;
+    end
+    else begin
       TargetList.Cells[colmagn,n]:=FormatFloat(f2,t.magnitude);
+      MenuAddAutoexposureStep.Visible:=true;
+    end;
     TargetList.Cells[colrepeat,n]:=IntToStr(t.repeatcount);
     PanelRepeat.Visible:=t.repeatcount>1;
     TDelay.Value:=round(t.delay);
@@ -2138,7 +2148,8 @@ var i,n,j:integer;
     oldid: LongWord;
     sname,str,buf: string;
     t: TTarget;
-    planchange: boolean;
+    oldmagn: double;
+    planchange, magnchange: boolean;
 begin
   if LockTarget then exit;
   // is table empty?
@@ -2232,10 +2243,12 @@ begin
       t.pa:=NullCoord
     else
       t.pa:=StrToFloatDef(TargetList.Cells[colpa,n],t.pa);
+    oldmagn:=t.magnitude;
     if TargetList.Cells[colmagn,n]='-' then
       t.magnitude:=NullCoord
     else
       t.magnitude:=StrToFloatDef(TargetList.Cells[colmagn,n],t.magnitude);
+    magnchange:=(oldmagn<>t.magnitude);
     if (cbAstrometry.Checked)and ((t.ra=NullCoord)or(t.de=NullCoord)) then cbAstrometry.Checked:=false;
     t.astrometrypointing:=cbAstrometry.Checked;
     t.inplaceautofocus:=cbInplace.Checked;
@@ -2263,6 +2276,9 @@ begin
       PlanName.Caption:=t.planname;
       if trim(t.planname)>'' then LoadTemplate;
       SetTemplateButton;
+    end;
+    if magnchange then begin
+      UpdAutoExposure(t.magnitude);
     end;
   end;
   if t.id<>oldid then begin
@@ -2858,6 +2874,7 @@ begin
   p.filter:=j;
   p.fstop:=pfile.GetValue('/Steps/Step'+inttostr(i)+'/Fstop','');
   p.exposure:=pfile.GetValue('/Steps/Step'+inttostr(i)+'/Exposure',1.0);
+  p.refexposure:=pfile.GetValue('/Steps/Step'+inttostr(i)+'/RefExposure','');
   p.stackcount:=trunc(pfile.GetValue('/Steps/Step'+inttostr(i)+'/StackCount',1));
   p.count:=trunc(pfile.GetValue('/Steps/Step'+inttostr(i)+'/Count',1));
   p.dither:=pfile.GetValue('/Steps/Step'+inttostr(i)+'/Dither',false);
@@ -3033,6 +3050,7 @@ begin
   if p.steptype=0 then begin
     StepList.Cells[pcoltype,n]:=p.frtype_str;
     StepList.Cells[pcolexp,n]:=formatfloat(f3,p.exposure);
+    StepList.Cells[pcolrefexp,n]:=p.refexposure;
     StepList.Cells[pcolstack,n]:=inttostr(p.stackcount);
     StepList.Cells[pcolbin,n]:=p.binning_str;
     if hasGainISO then begin
@@ -3063,6 +3081,7 @@ begin
   else if p.steptype=1 then begin
     StepList.Cells[pcoltype,n]:=rsScript;
     StepList.Cells[pcolexp,n]:='';
+    StepList.Cells[pcolrefexp,n]:='';
     StepList.Cells[pcolstack,n]:='';
     StepList.Cells[pcolbin,n]:='';
     StepList.Cells[pcolfilter,n]:='';
@@ -3078,6 +3097,7 @@ begin
   else if p.steptype=2 then begin
     StepList.Cells[pcoltype,n]:=rsSwitch;
     StepList.Cells[pcolexp,n]:='';
+    StepList.Cells[pcolrefexp,n]:='';
     StepList.Cells[pcolstack,n]:='';
     StepList.Cells[pcolbin,n]:='';
     StepList.Cells[pcolfilter,n]:='';
@@ -3123,6 +3143,8 @@ begin
     x:=StrToFloatDef(stringReplace(StepList.Cells[pcolexp,n],',','.',[]),p.exposure);
     StepsModified:=StepsModified or (p.exposure<>x);
     p.exposure:=x;
+    StepsModified:=StepsModified or (p.refexposure<>StepList.Cells[pcolrefexp,n]);
+    p.refexposure:=StepList.Cells[pcolrefexp,n];
     j:=StrToIntDef(StepList.Cells[pcolstack,n],p.stackcount);
     StepsModified:=StepsModified or (p.stackcount<>j);
     p.stackcount:=j;
@@ -3340,6 +3362,53 @@ begin
   SavePlanModified(false);
 end;
 
+procedure Tf_EditTargets.MenuAddAutoexposureStepClick(Sender: TObject);
+var txt:string;
+    i,n: integer;
+    p,pp: TStep;
+begin
+  f_autoexposurestep.Magnitude.Value:=SelectedObjectMagnitude;
+  f_autoexposurestep.StepName.Text:='Step'+inttostr(StepList.RowCount);
+  if f_autoexposurestep.ShowModal=mrOK then begin
+    txt:=f_autoexposurestep.StepName.Text;
+    p:=TStep.Create;
+    n:=StepList.Row;
+    if n >= 1 then begin
+      pp:=TStep(StepList.Objects[0,n]);
+      if pp.steptype=0 then p.Assign(pp);
+    end;
+    p.steptype:=0;
+    p.description:=txt;
+    p.exposure:=f_autoexposurestep.Exposure.Value;
+    p.refexposure:=f_autoexposurestep.cbRef.Text;
+    p.frtype:=ord(LIGHT);
+    StepList.RowCount:=StepList.RowCount+1;
+    i:=StepList.RowCount-1;
+    StepList.Cells[pcolseq,i]:=IntToStr(i);
+    StepList.Cells[pcoldesc,i]:=txt;
+    StepList.Objects[pcolseq,i]:=p;
+    StepList.Row:=i;
+    StepsModified:=true;
+    SetStep(i,p);
+    SavePlanModified(false);
+  end;
+end;
+
+procedure Tf_EditTargets.UpdAutoExposure(newmagn: double);
+var i: integer;
+begin
+  for i:=1 to StepList.RowCount-1 do begin
+    if StepList.Cells[pcolrefexp,i]<>'' then begin
+      if f_autoexposurestep.SetRef(StepList.Cells[pcolrefexp,i]) then begin
+        f_autoexposurestep.Magnitude.Value:=newmagn;
+        f_autoexposurestep.cbRefChange(nil);
+        StepList.Cells[pcolexp,i]:=FormatFloat(f3,f_autoexposurestep.Exposure.Value);
+      end;
+    end;
+  end;
+  StepChange(nil);
+end;
+
 procedure Tf_EditTargets.MenuAddScriptStepClick(Sender: TObject);
 var txt:string;
     i: integer;
@@ -3464,6 +3533,7 @@ try
     pfile.SetValue('/Steps/Step'+inttostr(i)+'/Description',p.description);
     pfile.SetValue('/Steps/Step'+inttostr(i)+'/FrameType',p.frtype_str);
     pfile.SetValue('/Steps/Step'+inttostr(i)+'/Exposure',p.exposure);
+    pfile.SetValue('/Steps/Step'+inttostr(i)+'/RefExposure',p.refexposure);
     pfile.SetValue('/Steps/Step'+inttostr(i)+'/StackCount',p.stackcount);
     pfile.SetValue('/Steps/Step'+inttostr(i)+'/Binning',IntToStr(p.binx)+'x'+IntToStr(p.biny));
     pfile.SetValue('/Steps/Step'+inttostr(i)+'/Gain',p.gain);

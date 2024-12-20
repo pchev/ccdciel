@@ -1,0 +1,168 @@
+object f_autoexposurestep: Tf_autoexposurestep
+  Left = 401
+  Height = 357
+  Top = 30
+  Width = 281
+  Caption = 'f_autoexposurestep'
+  ClientHeight = 357
+  ClientWidth = 281
+  OnShow = FormShow
+  object GroupBox1: TGroupBox
+    Left = 0
+    Height = 152
+    Top = 0
+    Width = 281
+    Align = alTop
+    Caption = 'Reference exposure'
+    ClientHeight = 122
+    ClientWidth = 277
+    TabOrder = 0
+    object Label4: TLabel
+      Left = 12
+      Height = 18
+      Top = 53
+      Width = 67
+      Caption = 'Magnitude'
+      ParentColor = False
+    end
+    object Label5: TLabel
+      Left = 12
+      Height = 18
+      Top = 87
+      Width = 57
+      Caption = 'Exposure'
+      ParentColor = False
+    end
+    object RefMagn: TFloatSpinEdit
+      Left = 140
+      Height = 32
+      Top = 46
+      Width = 125
+      OnChange = RefMagnChange
+      TabOrder = 0
+      Value = 6
+    end
+    object RefExp: TFloatSpinEdit
+      Left = 140
+      Height = 32
+      Top = 85
+      Width = 125
+      OnChange = RefExpChange
+      TabOrder = 1
+      Value = 30
+    end
+    object cbRef: TComboBox
+      Left = 12
+      Height = 32
+      Top = 8
+      Width = 165
+      ItemHeight = 24
+      OnChange = cbRefChange
+      TabOrder = 2
+    end
+    object MenuRef: TButton
+      AnchorSideLeft.Side = asrBottom
+      AnchorSideTop.Side = asrCenter
+      Left = 192
+      Height = 25
+      Top = 15
+      Width = 68
+      BorderSpacing.Left = 8
+      Caption = 'Manage'
+      Color = clMenu
+      OnMouseDown = MenuRefMouseDown
+      TabOrder = 3
+    end
+  end
+  object GroupBox2: TGroupBox
+    Left = 0
+    Height = 160
+    Top = 152
+    Width = 281
+    Align = alTop
+    Caption = 'New step'
+    ClientHeight = 130
+    ClientWidth = 277
+    TabOrder = 1
+    object Label1: TLabel
+      Left = 12
+      Height = 18
+      Top = 17
+      Width = 28
+      Caption = 'Step'
+      ParentColor = False
+    end
+    object StepName: TEdit
+      Left = 140
+      Height = 32
+      Top = 8
+      Width = 120
+      TabOrder = 0
+      Text = 'StepName'
+    end
+    object Label2: TLabel
+      Left = 12
+      Height = 18
+      Top = 56
+      Width = 67
+      Caption = 'Magnitude'
+      ParentColor = False
+    end
+    object Magnitude: TFloatSpinEdit
+      Left = 140
+      Height = 32
+      Top = 48
+      Width = 98
+      EditorEnabled = False
+      Enabled = False
+      ReadOnly = True
+      TabOrder = 1
+    end
+    object Exposure: TFloatSpinEdit
+      Left = 140
+      Height = 32
+      Top = 88
+      Width = 88
+      TabOrder = 2
+    end
+    object Label3: TLabel
+      Left = 12
+      Height = 18
+      Top = 94
+      Width = 57
+      Caption = 'Exposure'
+      ParentColor = False
+    end
+  end
+  object Panel1: TPanel
+    Left = 0
+    Height = 45
+    Top = 312
+    Width = 281
+    Align = alClient
+    ClientHeight = 45
+    ClientWidth = 281
+    TabOrder = 2
+    object btnOK: TButton
+      Left = 142
+      Height = 25
+      Top = 8
+      Width = 75
+      Caption = 'OK'
+      ModalResult = 1
+      TabOrder = 0
+    end
+  end
+  object PopupMenuRef: TPopupMenu
+    Left = 32
+    Top = 304
+    object MenuItemAddRef: TMenuItem
+      Caption = 'MenuItemAddRef'
+      OnClick = MenuItemAddRefClick
+    end
+    object MenuItemDelRef: TMenuItem
+      Caption = 'MenuItemDelRef'
+      OnClick = MenuItemDelRefClick
+    end
+  end
+end

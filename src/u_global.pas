@@ -126,6 +126,7 @@ type
               offset: integer;
               frtype: integer;
               fstop: string;
+              refexposure: string;
               // script options
               scriptname: string;
               scriptpath: string;
@@ -182,6 +183,11 @@ type
   TSlitOffset = class(TObject)
     x,y: double;
     slitname: string;
+  end;
+
+  TStarAutoexposureRef = class(TObject)
+    magn,exp: double;
+    refname: string;
   end;
 
   // libcdcwcs
@@ -630,6 +636,7 @@ constructor TStep.Create;
 begin
   steptype:=0;
   exposure:=1;
+  refexposure:='';
   stackcount:=1;
   count:=1;
   donecount:=0;
@@ -657,6 +664,7 @@ end;
 procedure TStep.Assign(Source: Tstep);
 begin
   exposure:=Source.exposure;
+  refexposure:=Source.refexposure;
   stackcount:=Source.stackcount;
   count:=Source.count;
   donecount:=Source.donecount;

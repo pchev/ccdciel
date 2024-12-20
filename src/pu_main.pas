@@ -43,7 +43,7 @@ uses
   fu_rotator, cu_rotator, cu_indirotator, cu_ascomrotator, cu_watchdog, cu_indiwatchdog, pu_sensoranalysis,
   cu_weather, cu_ascomweather, cu_indiweather, cu_safety, cu_ascomsafety, cu_indisafety, fu_weather, fu_safety,
   cu_dome, cu_ascomdome, cu_indidome, fu_dome, pu_about, pu_goto, pu_photometry, u_libraw, pu_image_sharpness,
-  cu_indiwheel, cu_ascomwheel, cu_incamerawheel, cu_indicamera, cu_ascomcamera, cu_astrometry,
+  cu_indiwheel, cu_ascomwheel, cu_incamerawheel, cu_indicamera, cu_ascomcamera, cu_astrometry, pu_autoexposurestep,
   cu_autoguider, cu_autoguider_phd, cu_autoguider_linguider, cu_autoguider_none, cu_autoguider_dither, cu_autoguider_internal,
   cu_planetarium, cu_planetarium_cdc, cu_planetarium_samp, cu_planetarium_hnsky, cu_planetarium_none,
   pu_planetariuminfo, indiapi, cu_ascomrestcamera, cu_ascomrestdome, cu_ascomrestfocuser, cu_ascomrestmount, cu_manualwheel,
@@ -4834,6 +4834,7 @@ var i,n: integer;
     binprev,bincapt:string;
     roi:TRoi;
     so: TSlitOffset;
+    ref: TStarAutoexposureRef;
     ReverseDec, InverseSolarTracking : boolean;
 begin
   ShowHint:=screenconfig.GetValue('/Hint/Show',true);
@@ -4982,6 +4983,16 @@ begin
     CustomFrameType[i].ParamOff:=config.GetValue('/CustomFrameType/ParamOff'+inttostr(i),'');
   end;
   f_capture.setCustomFrameType;
+  f_autoexposurestep.ClearRefList;
+  n:=config.GetValue('/StarAutoexposure/NumRef',0);
+  for i:=1 to n do begin
+     ref:=TStarAutoexposureRef.create;
+     ref.refname:=config.GetValue('/StarAutoexposure/Ref'+inttostr(i)+'/Name','');
+     ref.magn:=round(config.GetValue('/StarAutoexposure/Ref'+inttostr(i)+'/Magn',0));
+     ref.exp:=round(config.GetValue('/StarAutoexposure/Ref'+inttostr(i)+'/Exp',0));
+     f_autoexposurestep.cbRef.Items.AddObject(ref.refname,ref);
+  end;
+  if n>0 then f_autoexposurestep.cbRef.ItemIndex:=0;
   Starwindow:=config.GetValue('/StarAnalysis/Window',60);
   Focuswindow:=config.GetValue('/StarAnalysis/Focus',400);
   Focuswindow:=max(Focuswindow,4*Starwindow);
@@ -5744,6 +5755,7 @@ end;
 
 procedure Tf_main.SaveInternalGuiderSettings;
 var so:TSlitOffset;
+    ref:TStarAutoexposureRef;
     i,n: integer;
 begin
   config.SetValue('/InternalGuider/RaGain',f_internalguider.ragain);
@@ -5824,6 +5836,19 @@ begin
   config.SetValue('/Finder/OffsetY',astrometry.FinderOffsetY);
   config.SetValue('/Finder/Gamma',f_finder.Gamma.Position);
   config.SetValue('/Finder/Luminosity',f_finder.Luminosity.Position);
+
+  // star autoexposure in sequence editor
+  n:=f_autoexposurestep.cbRef.Items.Count;
+  config.SetValue('/StarAutoexposure/NumRef',n);
+  for i:=1 to n do begin
+    if f_autoexposurestep.cbRef.Items.Objects[i-1]<>nil then begin
+      ref:=TStarAutoexposureRef(f_autoexposurestep.cbRef.Items.Objects[i-1]);
+      config.SetValue('/StarAutoexposure/Ref'+inttostr(i)+'/Name',ref.refname);
+      config.SetValue('/StarAutoexposure/Ref'+inttostr(i)+'/Magn',ref.magn);
+      config.SetValue('/StarAutoexposure/Ref'+inttostr(i)+'/Exp',ref.exp);
+    end;
+  end;
+
 end;
 
 procedure Tf_main.SaveConfig;

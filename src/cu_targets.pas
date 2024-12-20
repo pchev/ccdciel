@@ -889,6 +889,7 @@ begin
             str:=UpperCase(trim(FSequenceFile.Items.GetValue('/Targets/Target'+inttostr(i)+'/Plan/Steps/Step'+inttostr(j)+'/FrameType','Light')));
             s.frtype:=Str2Frametype(str);
             s.exposure:=FSequenceFile.Items.GetValue('/Targets/Target'+inttostr(i)+'/Plan/Steps/Step'+inttostr(j)+'/Exposure',1.0);
+            s.refexposure:=FSequenceFile.Items.GetValue('/Targets/Target'+inttostr(i)+'/Plan/Steps/Step'+inttostr(j)+'/RefExposure','');
             s.stackcount:=trunc(FSequenceFile.Items.GetValue('/Targets/Target'+inttostr(i)+'/Plan/Steps/Step'+inttostr(j)+'/StackCount',1));
             str:=FSequenceFile.Items.GetValue('/Targets/Target'+inttostr(i)+'/Plan/Steps/Step'+inttostr(j)+'/Binning','1x1');
             k:=FBinningList.IndexOf(str);
@@ -1058,6 +1059,7 @@ try
           FSequenceFile.Items.SetValue('/Targets/Target'+inttostr(i)+'/Plan/Steps/Step'+inttostr(j)+'/Description',p.Steps[j-1].description);
           FSequenceFile.Items.SetValue('/Targets/Target'+inttostr(i)+'/Plan/Steps/Step'+inttostr(j)+'/FrameType',p.Steps[j-1].frtype_str);
           FSequenceFile.Items.SetValue('/Targets/Target'+inttostr(i)+'/Plan/Steps/Step'+inttostr(j)+'/Exposure',p.Steps[j-1].exposure);
+          FSequenceFile.Items.SetValue('/Targets/Target'+inttostr(i)+'/Plan/Steps/Step'+inttostr(j)+'/RefExposure',p.Steps[j-1].refexposure);
           FSequenceFile.Items.SetValue('/Targets/Target'+inttostr(i)+'/Plan/Steps/Step'+inttostr(j)+'/StackCount',p.Steps[j-1].stackcount);
           FSequenceFile.Items.SetValue('/Targets/Target'+inttostr(i)+'/Plan/Steps/Step'+inttostr(j)+'/Binning',IntToStr(p.Steps[j-1].binx)+'x'+IntToStr(p.Steps[j-1].biny));
           FSequenceFile.Items.SetValue('/Targets/Target'+inttostr(i)+'/Plan/Steps/Step'+inttostr(j)+'/Gain',p.Steps[j-1].gain);
@@ -3369,6 +3371,7 @@ begin
   for i:=1 to p.Count do begin
      if pfile.GetValue('/Steps/Step'+inttostr(i)+'/Type',0)<>p.Steps[i-1].steptype then exit;
      if pfile.GetValue('/Steps/Step'+inttostr(i)+'/Exposure',1.0)<>p.Steps[i-1].exposure then exit;
+     if pfile.GetValue('/Steps/Step'+inttostr(i)+'/RefExposure','')<>p.Steps[i-1].refexposure then exit;
      if pfile.GetValue('/Steps/Step'+inttostr(i)+'/StackCount',1)<>p.Steps[i-1].stackcount then exit;
      if pfile.GetValue('/Steps/Step'+inttostr(i)+'/Count',1)<>p.Steps[i-1].count then exit;
      if pfile.GetValue('/Steps/Step'+inttostr(i)+'/Dither',false)<>p.Steps[i-1].dither then exit;
