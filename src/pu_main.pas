@@ -17234,6 +17234,8 @@ try
     sl.Free;
   end
   else if method='INTERNALGUIDER_GETGUIDEEXPOSURE' then result:=result+'"result": '+StringReplace(f_internalguider.Exposure.Text,',','.',[])
+  else if method='INTERNALGUIDER_GETAGRESSIVITYRA' then result:=result+'"result": ['+inttostr(f_internalguider.RAgain)+','+inttostr(f_internalguider.RA_hysteresis)+']'
+  else if method='INTERNALGUIDER_GETAGRESSIVITYDEC' then result:=result+'"result": ['+inttostr(f_internalguider.DECgain)+','+inttostr(f_internalguider.DEC_hysteresis)+']'
   else if method='INTERNALGUIDER_GETSPECTROFUNCTION' then result:=result+'"result": '+BoolToStr(f_internalguider.SpectroFunctions,tr,fa)
   else if method='INTERNALGUIDER_GETSPECTROSTRATEGY' then result:=result+'"result": "'+SpectroStrategyName[ord(f_internalguider.SpectroStrategy)]+'"'
   else if method='INTERNALGUIDER_GETSPECTROASTROMETRYEXPOSURE' then result:=result+'"result": '+FormatFloat(f0,f_internalguider.SpectroAstrometryExposure)
@@ -17564,6 +17566,20 @@ try
     CheckParamCount(1);
     buf1:=trim(value[attrib.IndexOf('params.0')]);
     buf:=f_scriptengine.cmd_Internalguider_SetGuideExposure(buf1);
+    result:=result+'"result":{"status": "'+buf+'"}';
+  end
+  else if method='INTERNALGUIDER_SETAGRESSIVITYRA' then begin
+    CheckParamCount(2);
+    buf1:=trim(value[attrib.IndexOf('params.0')]);
+    buf2:=trim(value[attrib.IndexOf('params.1')]);
+    buf:=f_scriptengine.cmd_Internalguider_SetAgressivityRA(buf1,buf2);
+    result:=result+'"result":{"status": "'+buf+'"}';
+  end
+  else if method='INTERNALGUIDER_SETAGRESSIVITYDEC' then begin
+    CheckParamCount(2);
+    buf1:=trim(value[attrib.IndexOf('params.0')]);
+    buf2:=trim(value[attrib.IndexOf('params.1')]);
+    buf:=f_scriptengine.cmd_Internalguider_SetAgressivityDEC(buf1,buf2);
     result:=result+'"result":{"status": "'+buf+'"}';
   end
   else if method='INTERNALGUIDER_SETSPECTROFUNCTION' then begin

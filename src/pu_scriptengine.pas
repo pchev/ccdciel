@@ -266,6 +266,8 @@ type
     function cmd_cameraresetframe: string;
     function cmd_cameragetframe(out fx,fy,fw,fh: integer): string;
     function cmd_Internalguider_SetGuideExposure(exp:string):string;
+    function cmd_Internalguider_SetAgressivityRA(gain,hyst:string):string;
+    function cmd_Internalguider_SetAgressivityDEC(gain,hyst:string):string;
     function cmd_Internalguider_SetSpectrofunction(onoff:string):string;
     function cmd_Internalguider_SetSpectroStrategy(value:string):string;
     function cmd_Internalguider_SetSpectroAstrometryExposure(exp:string):string;
@@ -2506,6 +2508,44 @@ try
  val(exp,x,n);
  if (n=0)and(Fautoguider.AutoguiderType=agINTERNAL) then begin
    Finternalguider.Exposure.Value:=x;
+   result:=msgOK;
+ end;
+except
+  result:=msgFailed;
+end;
+end;
+
+function Tf_scriptengine.cmd_Internalguider_SetAgressivityRA(gain,hyst:string):string;
+var  g,h,n: integer;
+begin
+result:=msgFailed;
+try
+ val(gain,g,n);
+ if (n<>0) then exit;
+ val(hyst,h,n);
+ if (n<>0) then exit;
+ if (Fautoguider.AutoguiderType=agINTERNAL) then begin
+   Finternalguider.RAgain:=g;
+   Finternalguider.RA_hysteresis:=h;
+   result:=msgOK;
+ end;
+except
+  result:=msgFailed;
+end;
+end;
+
+function Tf_scriptengine.cmd_Internalguider_SetAgressivityDEC(gain,hyst:string):string;
+var  g,h,n: integer;
+begin
+result:=msgFailed;
+try
+ val(gain,g,n);
+ if (n<>0) then exit;
+ val(hyst,h,n);
+ if (n<>0) then exit;
+ if (Fautoguider.AutoguiderType=agINTERNAL) then begin
+   Finternalguider.DECgain:=g;
+   Finternalguider.DEC_hysteresis:=h;
    result:=msgOK;
  end;
 except
