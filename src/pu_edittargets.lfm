@@ -513,7 +513,7 @@ object f_EditTargets: Tf_EditTargets
         Width = 630
         Align = alClient
         AutoFillColumns = True
-        ColCount = 9
+        ColCount = 10
         Columns = <        
           item
             MinSize = 101
@@ -561,6 +561,17 @@ object f_EditTargets: Tf_EditTargets
             Width = 40
           end        
           item
+            MinSize = 4
+            MaxSize = 51
+            PickList.Strings = (
+              '-'
+            )
+            SizePriority = 0
+            Title.MultiLine = True
+            Title.Caption = 'Magn'
+            Width = 50
+          end        
+          item
             MinSize = 60
             MaxSize = 81
             PickList.Strings = (
@@ -593,7 +604,7 @@ object f_EditTargets: Tf_EditTargets
             Title.ImageIndex = 0
             Title.MultiLine = True
             Title.Caption = 'Repeat'
-            Width = 68
+            Width = 14
           end>
         DefaultColWidth = 30
         HeaderHotZones = [gzFixedCols, gzFixedCells]
@@ -620,9 +631,10 @@ object f_EditTargets: Tf_EditTargets
           86
           86
           40
+          50
           60
           60
-          68
+          14
         )
       end
       object PanelTargetDetail: TPanel
@@ -658,11 +670,11 @@ object f_EditTargets: Tf_EditTargets
           Height = 225
           Top = 26
           Width = 390
-          HorzScrollBar.Page = 338
-          VertScrollBar.Page = 225
+          HorzScrollBar.Page = 359
+          VertScrollBar.Page = 221
           Align = alClient
-          ClientHeight = 225
-          ClientWidth = 369
+          ClientHeight = 221
+          ClientWidth = 365
           Color = clDefault
           ParentColor = False
           TabOrder = 1
@@ -994,7 +1006,7 @@ object f_EditTargets: Tf_EditTargets
                 ButtonStyle = cbsPickList
                 Title.MultiLine = True
                 Title.Caption = 'F-stop'
-                Width = 81
+                Width = 77
               end>
             DefaultColWidth = 30
             MouseWheelOption = mwGrid
@@ -1023,7 +1035,7 @@ object f_EditTargets: Tf_EditTargets
               72
               72
               72
-              81
+              77
             )
           end
           object Panel17: TPanel

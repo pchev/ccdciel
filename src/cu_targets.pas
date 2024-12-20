@@ -35,7 +35,7 @@ type
   TTarget = Class(TObject)
               public
               objectname, planname, path, scriptargs, initscriptname, initscriptpath, initscriptargs: shortstring;
-              starttime,endtime,startmeridian,endmeridian,ra,de,pa,solarV,solarPA: double;
+              starttime,endtime,startmeridian,endmeridian,ra,de,pa,magnitude,solarV,solarPA: double;
               startrise,endset,darknight,skip,mandatorystarttime,initscript: boolean;
               repeatcount,repeatdone: integer;
               FlatBinX,FlatBinY,FlatCount: integer;
@@ -55,6 +55,7 @@ type
               function ra_str: string;
               function de_str: string;
               function pa_str: string;
+              function magnitude_str: string;
               function id: LongWord;
             end;
 
@@ -847,6 +848,11 @@ begin
          t.pa:=NullCoord
        else
          t.pa:=StrToFloatDef(x,NullCoord);
+       x:=FSequenceFile.Items.GetValue('/Targets/Target'+inttostr(i)+'/Magnitude','-');
+       if x='-' then
+         t.magnitude:=NullCoord
+       else
+         t.magnitude:=StrToFloatDef(x,NullCoord);
        t.astrometrypointing:=FSequenceFile.Items.GetValue('/Targets/Target'+inttostr(i)+'/AstrometryPointing',false);
        t.updatecoord:=FSequenceFile.Items.GetValue('/Targets/Target'+inttostr(i)+'/UpdateCoord',false);
        t.solartracking:=FSequenceFile.Items.GetValue('/Targets/Target'+inttostr(i)+'/SolarTracking',false);
@@ -1016,6 +1022,10 @@ try
         FSequenceFile.Items.SetValue('/Targets/Target'+inttostr(i)+'/PA','-')
       else
         FSequenceFile.Items.SetValue('/Targets/Target'+inttostr(i)+'/PA',FormatFloat(f1,t.pa));
+      if t.magnitude=NullCoord then
+         FSequenceFile.Items.SetValue('/Targets/Target'+inttostr(i)+'/Magnitude','-')
+       else
+         FSequenceFile.Items.SetValue('/Targets/Target'+inttostr(i)+'/Magnitude',FormatFloat(f2,t.magnitude));
       FSequenceFile.Items.SetValue('/Targets/Target'+inttostr(i)+'/AstrometryPointing',t.astrometrypointing);
       FSequenceFile.Items.SetValue('/Targets/Target'+inttostr(i)+'/UpdateCoord',t.updatecoord);
       FSequenceFile.Items.SetValue('/Targets/Target'+inttostr(i)+'/SolarTracking',t.solartracking);
@@ -2452,6 +2462,7 @@ begin
       buf:=buf+StringReplace(StringReplace(t.objectname,'"',' ',[rfReplaceAll]),',',' ',[rfReplaceAll]);
       buf:=buf+','+StringReplace(StringReplace(t.planname,'"',' ',[rfReplaceAll]),',',' ',[rfReplaceAll]);
       buf:=buf+' ,'+t.ra_str+','+t.de_str;
+      buf:=buf+' ,'+t.magnitude_str;
       buf:=buf+'"';
       buf:=buf+' '+t.initscriptargs;
       if not f_scriptengine.RunScript(t.initscriptname,t.initscriptpath,buf) then begin
@@ -3215,6 +3226,7 @@ begin
   ra:=NullCoord;
   de:=NullCoord;
   pa:=NullCoord;
+  magnitude:=NullCoord;
   solarV:=0;
   solarPA:=0;
   astrometrypointing:=(astrometryResolver<>ResolverNone);
@@ -3265,6 +3277,7 @@ begin
   ra:=Source.ra;
   de:=Source.de;
   pa:=Source.pa;
+  magnitude:=Source.magnitude;
   solarV:=Source.solarV;
   solarPA:=Source.solarPA;
   astrometrypointing:=source.astrometrypointing;
@@ -3321,6 +3334,10 @@ begin
   Result:=FormatFloat(f2,pa);
 end;
 
+function TTarget.magnitude_str: string;
+begin
+  Result:=FormatFloat(f2,magnitude);
+end;
 
 function TTarget.id: LongWord;
 var buf: string;

@@ -40,7 +40,9 @@ type
     Label3: TLabel;
     Label4: TLabel;
     Label5: TLabel;
+    Label6: TLabel;
     PA: TEdit;
+    Magn: TEdit;
     Ra: TEdit;
     De: TEdit;
     Obj: TEdit;
@@ -145,6 +147,11 @@ begin
  end
  else
   PA.Text:='';
+ if planetarium.Magnitude<>NullCoord then begin
+  Magn.Text:=FormatFloat(f2,planetarium.Magnitude);
+ end
+ else
+  Magn.Text:='';
  if planetarium.Objname<>'' then begin
   Obj.Text:=trim(planetarium.Objname);
  end;

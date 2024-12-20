@@ -39,7 +39,7 @@ protected
   FRunning: boolean;
   FProgramPath,FProgramName: string;
   FStartedProgram: boolean;
-  Fra, Fde, Fpa: double;
+  Fra, Fde, Fpa, Fmagn: double;
   FplanetariumEquinox, FplanetariumJD: double;
   Fobjname, FLastErrorTxt: string;
   FPlanetariumType: TPlanetariumType;
@@ -81,6 +81,7 @@ public
   property RA: double read Fra;
   property DE: double read Fde;
   property PA: double read Fpa;
+  property Magnitude: double read Fmagn;
   property EqSys: double read FplanetariumEquinox;
   property Objname: string read Fobjname;
   property PlanetariumType: TPlanetariumType read FPlanetariumType;
@@ -106,6 +107,7 @@ FRecvData:='';
 Fra:=NullCoord;
 Fde:=NullCoord;
 Fpa:=NullCoord;
+Fmagn:=NullCoord;
 Fobjname:='';
 FLastErrorTxt:='';
 FplanetariumEquinox:=0;  // 0 = equinox of date

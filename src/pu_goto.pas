@@ -163,8 +163,8 @@ begin
 end;
 
 procedure Tf_goto.BtnSearchClick(Sender: TObject);
-var ra0,dec0,length0,width0,pa : double;
-    objname,sname,sresolv : string;
+var ra0,dec0,mag0,length0,width0,pa : double;
+    objname,sname,sresolv,magband : string;
     found: boolean;
     p: integer;
 begin
@@ -194,12 +194,12 @@ begin
     until linepos>=$FFFFFF;{Found object or end of database}
     if not found then begin
       // online search
-      found:=SearchOnline(objname,sname,sresolv,ra0,dec0);
+      found:=SearchOnline(objname,sname,sresolv,ra0,dec0,mag0,magband);
       if found then begin
         Ra.Text:=RAToStr(ra0*12/pi);{Add position}
         De.Text:=DEToStr(dec0*180/pi);
         // do not change the name by other synonym that can be returned by Simbad
-        LabelResolver.Caption:='From '+sresolv;
+        LabelResolver.Caption:=sname+', from '+sresolv;
       end;
     end;
     if not found then begin

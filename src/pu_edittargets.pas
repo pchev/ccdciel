@@ -31,7 +31,7 @@ uses pu_planetariuminfo, u_global, u_utils, u_ccdconfig, pu_pascaleditor, u_anno
   LazUTF8, maskedit, Grids, ExtCtrls, ComCtrls, Spin, Buttons, Menus, CheckLst, Types;
 
 const
-  colseq=0; colname=1; colplan=2; colra=3; coldec=4; colpa=5; colstart=6; colend=7; colrepeat=8;
+  colseq=0; colname=1; colplan=2; colra=3; coldec=4; colpa=5; colmagn=6; colstart=7; colend=8; colrepeat=9;
   pcolseq=0; pcoldesc=1; pcoltype=2; pcolexp=3; pcolstack=4; pcolbin=5; pcolfilter=6; pcolcount=7; pcolafstart=8; pcolafevery=9; pcoldither=10; pcolgain=11; pcoloffset=12; pcolfstop=13;
   titleadd=0; titledel=1;
   pageobject=0; pagescript=1; pageflat=2; pagenone=3; pageswitch=4;
@@ -457,6 +457,7 @@ begin
   TargetList.Columns.Items[colra-1].Title.Caption := rsRA+j2000;
   TargetList.Columns.Items[coldec-1].Title.Caption := rsDec+j2000;
   TargetList.Columns.Items[colpa-1].Title.Caption := rsPA;
+  TargetList.Columns.Items[colmagn-1].Title.Caption := rsMagnitude;
   TargetList.Columns.Items[colstart-1].Title.Caption := rsBegin;
   TargetList.Columns.Items[colend-1].Title.Caption := rsEnd;
   TargetList.Columns.Items[colrepeat-1].Title.Caption := rsRepeat;
@@ -1065,6 +1066,7 @@ begin
   begin
     TargetList.Cells[colra,n]:=RAToStr(ra_data*12/pi);{Add position}
     TargetList.Cells[coldec,n]:=DEToStr(dec_data*180/pi);
+    TargetList.Cells[colmagn,n]:='-';
     TargetList.Cells[colstart,n]:=rsRise;
     TargetList.Cells[colend,n]:=rsSet2;
     TargetList.Cells[colname,n]:=keyboard_text;
@@ -1075,6 +1077,7 @@ begin
     FCoordWarning:=true;
     FCoordWarningRow:=n;
     chkobj:=keyboard_text+'##%%##';
+    TargetList.Cells[colmagn,n]:='-';
     TargetList.Cells[colname,n]:=chkobj;
     lblName.Caption:=rsAdditionalOp+' : Seq '+IntToStr(n)+', '+chkobj;
   end;
@@ -1102,6 +1105,7 @@ begin
   PageControlPlan.ActivePageIndex:=pageobject;
   f_onlineinfo.Ra.Text:='';
   f_onlineinfo.De.Text:='';
+  f_onlineinfo.Magn.Text:='';
   f_onlineinfo.ShowModal;
   if (f_onlineinfo.ModalResult=mrOK)and(f_onlineinfo.Ra.Text<>'')and(f_onlineinfo.De.Text<>'') then
   begin
@@ -1109,6 +1113,7 @@ begin
     n:=TargetList.Row;
     TargetList.Cells[colra,n]:=f_onlineinfo.Ra.Text;{Add position}
     TargetList.Cells[coldec,n]:=f_onlineinfo.De.Text;
+    TargetList.Cells[colmagn,n]:=f_onlineinfo.Magn.Text;
     TargetList.Cells[colstart,n]:=rsRise;
     TargetList.Cells[colend,n]:=rsSet2;
     TargetList.Cells[colname,n]:=f_onlineinfo.Obj.Text;
@@ -1125,12 +1130,14 @@ begin
   f_onlineinfo.Obj.Text:=TargetList.Cells[colname,n];
   f_onlineinfo.Ra.Text:='';
   f_onlineinfo.De.Text:='';
+  f_onlineinfo.Magn.Text:='';
   f_onlineinfo.LabelResolver.Caption:='';
   f_onlineinfo.ShowModal;
   if (f_onlineinfo.ModalResult=mrOK)and(f_onlineinfo.Ra.Text<>'')and(f_onlineinfo.De.Text<>'') then
   begin
     TargetList.Cells[colra,n]:=f_onlineinfo.Ra.Text;{Add position}
     TargetList.Cells[coldec,n]:=f_onlineinfo.De.Text;
+    TargetList.Cells[colmagn,n]:=f_onlineinfo.Magn.Text;
     TargetList.Cells[colname,n]:=f_onlineinfo.Obj.Text;
     cbAstrometry.Checked:=(astrometryResolver<>ResolverNone);
   end
@@ -1161,6 +1168,7 @@ begin
   TargetList.Cells[colseq,i]:=IntToStr(i);
   TargetList.Cells[colname,i]:='';
   TargetList.Cells[colplan,i]:=t.planname;
+  TargetList.Cells[colmagn,n]:='';
   if t.astrometrypointing then cbAstrometry.Checked:=true;
   if t.inplaceautofocus then cbInplace.Checked:=true;
   if t.autofocustemp then cbAutofocusTemp.Checked:=true;
@@ -1253,6 +1261,7 @@ begin
   begin
     TargetList.Cells[colra,n]:=RAToStr(ra_data*12/pi);{Add position}
     TargetList.Cells[coldec,n]:=DEToStr(dec_data*180/pi);
+    TargetList.Cells[colmagn,n]:='-';
     TargetList.Cells[colname,n]:=keyboard_text;
     cbAstrometry.Checked:=(astrometryResolver<>ResolverNone);
   end
@@ -1732,6 +1741,7 @@ begin
   f_planetariuminfo.Ra.Text  := TargetList.Cells[colra,n];
   f_planetariuminfo.De.Text  := TargetList.Cells[coldec,n];
   f_planetariuminfo.PA.Text := TargetList.Cells[colpa,n];
+  f_planetariuminfo.Magn.Text := TargetList.Cells[colmagn,n];
   f_planetariuminfo.Obj.Text := TargetList.Cells[colname,n];
   f_planetariuminfo.onNewTarget := nil;
   FormPos(f_planetariuminfo,mouse.CursorPos.X,mouse.CursorPos.Y);
@@ -1740,6 +1750,7 @@ begin
     TargetList.Cells[colra,n]:=f_planetariuminfo.Ra.Text;
     TargetList.Cells[coldec,n]:=f_planetariuminfo.De.Text;
     TargetList.Cells[colpa,n]:=f_planetariuminfo.PA.Text;
+    TargetList.Cells[colmagn,n]:=f_planetariuminfo.Magn.Text;
     if f_planetariuminfo.Obj.Text<>'' then TargetList.Cells[colname,n]:=trim(f_planetariuminfo.Obj.Text);
     cbAstrometry.Checked:=(astrometryResolver<>ResolverNone);
     TargetChange(nil);
@@ -1757,6 +1768,7 @@ begin
   f_planetariuminfo.Ra.Text  := TargetList.Cells[colra,n];
   f_planetariuminfo.De.Text  := TargetList.Cells[coldec,n];
   f_planetariuminfo.PA.Text  := TargetList.Cells[colpa,n];
+  f_planetariuminfo.Magn.Text  := TargetList.Cells[colmagn,n];
   f_planetariuminfo.Obj.Text := TargetList.Cells[colname,n];
   f_planetariuminfo.onNewTarget := @NewPlanetariumTarget;
   FormPos(f_planetariuminfo,mouse.CursorPos.X,mouse.CursorPos.Y);
@@ -1771,6 +1783,7 @@ begin
   TargetList.Cells[colra,n]:=f_planetariuminfo.Ra.Text;
   TargetList.Cells[coldec,n]:=f_planetariuminfo.De.Text;
   TargetList.Cells[colpa,n]:=trim(f_planetariuminfo.PA.Text);
+  TargetList.Cells[colmagn,n]:=trim(f_planetariuminfo.Magn.Text);
   if f_planetariuminfo.Obj.Text<>'' then TargetList.Cells[colname,n]:=trim(f_planetariuminfo.Obj.Text);
   cbAstrometry.Checked:=(astrometryResolver<>ResolverNone);
   TargetChange(nil);
@@ -1787,6 +1800,7 @@ try
   if FAstrometry.CurrentCoord(ra,de,eq,pa) then begin
     TargetList.Cells[colra,n]:=RAToStr(ra);
     TargetList.Cells[coldec,n]:=DEToStr(de);
+    TargetList.Cells[colmagn,n]:='-';
     cbAstrometry.Checked:=(astrometryResolver<>ResolverNone);
     TargetChange(nil);
    end;
@@ -1858,6 +1872,7 @@ procedure Tf_EditTargets.BtnCurrentCoordClick(Sender: TObject);
 begin
   TargetList.Cells[colra,TargetList.Row]:='-';
   TargetList.Cells[coldec,TargetList.Row]:='-';
+  TargetList.Cells[colmagn,TargetList.Row]:='-';
   TargetChange(nil);
 end;
 
@@ -1912,6 +1927,7 @@ begin
     TargetList.Cells[colra,n]:='';
     TargetList.Cells[coldec,n]:='';
     TargetList.Cells[colpa,n]:='';
+    TargetList.Cells[colmagn,n]:='';
     TargetList.Cells[colstart,n]:='';
     TargetList.Cells[colend,n]:='';
     TargetList.Cells[colrepeat,n]:='';
@@ -1934,6 +1950,7 @@ begin
     TargetList.Cells[colra,n]:='';
     TargetList.Cells[coldec,n]:='';
     TargetList.Cells[colpa,n]:='';
+    TargetList.Cells[colmagn,n]:='';
     TargetList.Cells[colstart,n]:='';
     TargetList.Cells[colend,n]:='';
     TargetList.Cells[colrepeat,n]:='';
@@ -1963,6 +1980,7 @@ begin
     TargetList.Cells[colra,n]:='';
     TargetList.Cells[coldec,n]:='';
     TargetList.Cells[colpa,n]:='';
+    TargetList.Cells[colmagn,n]:='';
     TargetList.Cells[colstart,n]:='';
     TargetList.Cells[colend,n]:='';
     TargetList.Cells[colrepeat,n]:='';
@@ -2054,6 +2072,10 @@ begin
       TargetList.Cells[colpa,n]:='-'
     else
       TargetList.Cells[colpa,n]:=FormatFloat(f2,t.pa);
+    if t.magnitude=NullCoord then
+      TargetList.Cells[colmagn,n]:='-'
+    else
+      TargetList.Cells[colmagn,n]:=FormatFloat(f2,t.magnitude);
     TargetList.Cells[colrepeat,n]:=IntToStr(t.repeatcount);
     PanelRepeat.Visible:=t.repeatcount>1;
     TDelay.Value:=round(t.delay);
@@ -2210,6 +2232,10 @@ begin
       t.pa:=NullCoord
     else
       t.pa:=StrToFloatDef(TargetList.Cells[colpa,n],t.pa);
+    if TargetList.Cells[colmagn,n]='-' then
+      t.magnitude:=NullCoord
+    else
+      t.magnitude:=StrToFloatDef(TargetList.Cells[colmagn,n],t.magnitude);
     if (cbAstrometry.Checked)and ((t.ra=NullCoord)or(t.de=NullCoord)) then cbAstrometry.Checked:=false;
     t.astrometrypointing:=cbAstrometry.Checked;
     t.inplaceautofocus:=cbInplace.Checked;
@@ -2475,6 +2501,7 @@ else
     colra         : HintText:=rsTargetPositi;
     coldec        : HintText:=rsTargetPositi;
     colpa         : HintText:=rsCameraPositi;
+    colmagn       : HintText:=rsMagnitude;
     colstart      : HintText:=rsStartTimeCap;
     colend        : HintText:=rsStopTimeCapt;
     colrepeat     : HintText:=Format(rsRepeatThePla, [crlf]);
@@ -2622,6 +2649,8 @@ begin
     Editor:=TargetList.EditorByStyle(cbsPickList) // plan selection
  else if (aCol=colpa) then
     Editor:=TargetList.EditorByStyle(cbsPickList) // selection for null pa
+ else if (aCol=colmagn) then
+    Editor:=TargetList.EditorByStyle(cbsPickList) // selection for null magnitude
  else if (aCol=colstart)or(aCol=colend) then
     Editor:=TargetList.EditorByStyle(cbsPickList) // selection for rise, set
  else

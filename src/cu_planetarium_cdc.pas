@@ -207,11 +207,12 @@ end;
 
 procedure TPlanetarium_cdc.ProcessDataSyn;
 var p:Tstringlist;
+    i: integer;
 begin
 if FRecvData<>'' then begin
   p:=Tstringlist.Create;
   SplitRec(FRecvData,#9,p);
-  if p[0]='>' then begin
+  if (p[0]='>')and(copy(p[2],1,4)<>'From') then begin
     if (p.Count>=4) then begin
       Fra:=StrToAR(p[2]);
       Fde:=StrToDE(p[3]);
@@ -229,6 +230,13 @@ if FRecvData<>'' then begin
     if (p.Count>=6) then begin
        Fobjname:=trim(p[5]);
     end;
+    if (p.Count>=7)and(copy(p[6],1,1)='m') then begin
+       i:=pos(':',p[6]);
+       if i<=0 then i:=1;
+       Fmagn:=StrToFloatDef(trim(copy(p[6],i+1,99)),NullCoord);
+    end
+    else
+       Fmagn:=NullCoord;
     if (p.Count>=8)and(copy(p[7],1,3)='pa:') then begin
        Fpa:=StrToFloatDef(trim(copy(p[7],4,99)),NullCoord);
     end
