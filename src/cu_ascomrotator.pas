@@ -102,8 +102,6 @@ begin
  {$ifdef mswindows}
   try
   FStatus := devConnecting;
-  FCalibrationAngle:=0;
-  FReverse:=False;
   Fdevice:=cp1;
   if Assigned(FonStatusChange) then FonStatusChange(self);
   V:=Unassigned;
