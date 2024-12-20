@@ -65,6 +65,7 @@ begin
   Label2.Caption:=rsCenterDec;
   Label16.Caption:=j2000;
   Label3.Caption:=rsObjectName;
+  label4.Caption:=rsMagnitude;
 end;
 
 procedure Tf_onlineinfo.BtnSearchClick(Sender: TObject);

@@ -5965,3 +5965,7 @@ msgstr ""
 msgid "Multistar with guider astrometry"
 msgstr ""
 
+#: u_translation:rsmagn
+msgid "Magn."
+msgstr ""
+

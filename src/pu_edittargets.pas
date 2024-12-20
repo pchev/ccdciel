@@ -457,7 +457,7 @@ begin
   TargetList.Columns.Items[colra-1].Title.Caption := rsRA+j2000;
   TargetList.Columns.Items[coldec-1].Title.Caption := rsDec+j2000;
   TargetList.Columns.Items[colpa-1].Title.Caption := rsPA;
-  TargetList.Columns.Items[colmagn-1].Title.Caption := rsMagnitude;
+  TargetList.Columns.Items[colmagn-1].Title.Caption := rsMagn;
   TargetList.Columns.Items[colstart-1].Title.Caption := rsBegin;
   TargetList.Columns.Items[colend-1].Title.Caption := rsEnd;
   TargetList.Columns.Items[colrepeat-1].Title.Caption := rsRepeat;
@@ -2490,6 +2490,7 @@ if ARow=0 then begin
     colname       : HintText:=Format(rsClickToSortB, [rsObjectName]);
     colra         : HintText:=Format(rsClickToSortB, [rsRA]);
     coldec        : HintText:=Format(rsClickToSortB, [rsDec]);
+    colmagn       : HintText:=rsTheObjectMag;
     else HintText:=rsClickToSetVa;
   end;
 end
@@ -2501,7 +2502,7 @@ else
     colra         : HintText:=rsTargetPositi;
     coldec        : HintText:=rsTargetPositi;
     colpa         : HintText:=rsCameraPositi;
-    colmagn       : HintText:=rsMagnitude;
+    colmagn       : HintText:=rsTheObjectMag;
     colstart      : HintText:=rsStartTimeCap;
     colend        : HintText:=rsStopTimeCapt;
     colrepeat     : HintText:=Format(rsRepeatThePla, [crlf]);

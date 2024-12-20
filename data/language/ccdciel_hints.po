@@ -550,3 +550,7 @@ msgstr ""
 msgid "This option is normally unchecked, use it only if you manage the pointing and autoguiding by script."
 msgstr ""
 
+#: u_hints:rstheobjectmag
+msgid "The object magnitude"
+msgstr ""
+

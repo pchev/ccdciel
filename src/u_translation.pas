@@ -1592,6 +1592,7 @@ resourcestring
   rsSingleStarWi = 'Single star, with guider astrometry';
   rsSingleStarWi2 = 'Single star with astrometry, then multistar';
   rsMultistarWit = 'Multistar with guider astrometry';
+  rsMagn = 'Magn.';
 
 implementation
 

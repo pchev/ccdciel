@@ -119,6 +119,7 @@ begin
   Label3.Caption:=rsObjectName;
   Label4.Caption:=rsClickTheObje;
   label5.Caption :=rsPA;
+  Label6.Caption:=rsMagnitude;
 end;
 
 procedure Tf_planetariuminfo.SetPlanetarium(value: TPlanetarium);
