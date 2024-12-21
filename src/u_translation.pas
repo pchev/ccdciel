@@ -1594,6 +1594,8 @@ resourcestring
   rsMultistarWit = 'Multistar with guider astrometry';
   rsMagn = 'Magn.';
   rsStarAutoExpo = 'Star auto-exposure';
+  rsReferenceExp = 'Reference exposure';
+  rsMaxExposure = 'Max exposure';
 
 implementation
 

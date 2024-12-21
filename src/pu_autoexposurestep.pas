@@ -36,7 +36,9 @@ type
     btnOK: TButton;
     cbRef: TComboBox;
     Exposure: TFloatSpinEdit;
+    MaxExp: TFloatSpinEdit;
     GroupBox2: TGroupBox;
+    Label6: TLabel;
     MenuItemAddRef: TMenuItem;
     MenuItemDelRef: TMenuItem;
     MenuRef: TButton;
@@ -48,11 +50,10 @@ type
     Label3: TLabel;
     Label4: TLabel;
     Label5: TLabel;
-    StepName: TEdit;
     Magnitude: TFloatSpinEdit;
-    Label1: TLabel;
     Label2: TLabel;
     procedure cbRefChange(Sender: TObject);
+    procedure FormDestroy(Sender: TObject);
     procedure FormShow(Sender: TObject);
     procedure MenuItemAddRefClick(Sender: TObject);
     procedure MenuItemDelRefClick(Sender: TObject);
@@ -62,10 +63,13 @@ type
     procedure RefMagnChange(Sender: TObject);
   private
     procedure ComputeExposure;
+    procedure UpdateRef;
+    function GetExposure_str: string;
   public
     procedure SetLang;
     procedure ClearRefList;
     function SetRef(refname:string): boolean;
+    property Exposure_str: string read GetExposure_str;
   end;
 
 var
@@ -80,14 +84,25 @@ implementation
 procedure Tf_autoexposurestep.SetLang;
 begin
   Caption:=rsStarAutoExpo;
-  Label1.Caption:=rsStepDescript;
+  GroupBox1.Caption:=rsReferenceExp;
+  GroupBox2.Caption:=rsTest;
   Label2.Caption:=rsMagnitude;
   Label3.Caption:=rsExposure;
+  Label6.Caption:=rsMaxExposure;
+  MenuRef.Caption:=rsManage;
+  MenuItemAddRef.Caption:=rsAdd;
+  MenuItemDelRef.Caption:=rsDelete;
+  btnOK.Caption:=rsOK;
 end;
 
 procedure Tf_autoexposurestep.FormShow(Sender: TObject);
 begin
   ComputeExposure;
+end;
+
+procedure Tf_autoexposurestep.FormDestroy(Sender: TObject);
+begin
+  ClearRefList;
 end;
 
 procedure Tf_autoexposurestep.ClearRefList;
@@ -121,7 +136,23 @@ begin
     cbRef.text := ref.refname;
     RefMagn.Value := ref.magn;
     RefExp.Value := ref.exp;
+    MaxExp.Value := ref.maxexp;
     ComputeExposure;
+  end;
+end;
+
+procedure Tf_autoexposurestep.UpdateRef;
+var ref:TStarAutoexposureRef;
+    i: integer;
+    n: string;
+begin
+  i:=cbRef.ItemIndex;
+  if i>=0 then begin
+    ref:=TStarAutoexposureRef(cbRef.items.Objects[i]);
+    ref.magn:=RefMagn.Value;
+    ref.exp:=RefExp.Value;
+    ref.maxexp:=MaxExp.Value;
+    cbRef.Text:=ref.refname;
   end;
 end;
 
@@ -136,12 +167,14 @@ begin
     ref:=TStarAutoexposureRef(cbRef.items.Objects[i]);
     ref.magn:=RefMagn.Value;
     ref.exp:=RefExp.Value;
+    ref.maxexp:=MaxExp.Value;
   end
   else begin
     ref:=TStarAutoexposureRef.Create;
     ref.refname:=n;
     ref.magn:=RefMagn.Value;
     ref.exp:=RefExp.Value;
+    ref.maxexp:=MaxExp.Value;
     i:=cbRef.Items.AddObject(ref.refname,ref);
   end;
   cbRef.ItemIndex:=i;
@@ -174,17 +207,28 @@ end;
 
 procedure Tf_autoexposurestep.RefExpChange(Sender: TObject);
 begin
+  UpdateRef;
   ComputeExposure;
 end;
 
 procedure Tf_autoexposurestep.RefMagnChange(Sender: TObject);
 begin
+  UpdateRef;
   ComputeExposure;
 end;
 
 procedure Tf_autoexposurestep.ComputeExposure;
+var exp: double;
 begin
-  Exposure.Value := RefExp.Value / (10.0 ** ((RefMagn.Value-Magnitude.Value)/2.5));
+  exp := RefExp.Value / (10.0 ** ((RefMagn.Value-Magnitude.Value)/2.5));
+  if exp>MaxExp.Value then exp:=MaxExp.Value;
+  if exp>10 then exp:=round(exp);
+  Exposure.Value := exp;
+end;
+
+function Tf_autoexposurestep.GetExposure_str: string;
+begin
+  result:=FormatFloat(f3v,Exposure.Value);
 end;
 
 end.

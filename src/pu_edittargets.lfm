@@ -1865,6 +1865,15 @@ object f_EditTargets: Tf_EditTargets
       OnClick = BtnTimingClick
       TabOrder = 3
     end
+    object btnStarAutoexposure: TButton
+      Left = 192
+      Height = 25
+      Top = 2
+      Width = 184
+      Caption = 'Star autoexposure'
+      OnClick = btnStarAutoexposureClick
+      TabOrder = 4
+    end
   end
   object Splitter1: TSplitter
     Cursor = crVSplit
@@ -2026,11 +2035,6 @@ object f_EditTargets: Tf_EditTargets
     object MenuAddCaptureStep: TMenuItem
       Caption = 'Add capture'
       OnClick = MenuAddCaptureStepClick
-    end
-    object MenuAddAutoexposureStep: TMenuItem
-      Caption = 'Capture with auto-exposure'
-      Visible = False
-      OnClick = MenuAddAutoexposureStepClick
     end
     object MenuAddScriptStep: TMenuItem
       Caption = 'Add script'

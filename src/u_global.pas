@@ -186,7 +186,7 @@ type
   end;
 
   TStarAutoexposureRef = class(TObject)
-    magn,exp: double;
+    magn,exp,maxexp: double;
     refname: string;
   end;
 

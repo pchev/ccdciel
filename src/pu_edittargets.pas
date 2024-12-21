@@ -54,6 +54,7 @@ type
     BtnSaveAs: TButton;
     BtnSaveTemplate: TButton;
     BtnTiming: TButton;
+    btnStarAutoexposure: TButton;
     cbDarkNight: TCheckBox;
     cbSkip: TCheckBox;
     cbAstrometry: TCheckBox;
@@ -73,7 +74,6 @@ type
     MenuAddScriptStep: TMenuItem;
     MenuAddSwitchStep: TMenuItem;
     MenuInsertOnline: TMenuItem;
-    MenuAddAutoexposureStep: TMenuItem;
     MenuOnlineCoord: TMenuItem;
     Panel10: TPanel;
     Panel16: TPanel;
@@ -256,7 +256,7 @@ type
     procedure FormCreate(Sender: TObject);
     procedure FormDestroy(Sender: TObject);
     procedure FormShow(Sender: TObject);
-    procedure MenuAddAutoexposureStepClick(Sender: TObject);
+    procedure btnStarAutoexposureClick(Sender: TObject);
     procedure MenuAddCaptureStepClick(Sender: TObject);
     procedure MenuAddScriptStepClick(Sender: TObject);
     procedure MenuAddSwitchStepClick(Sender: TObject);
@@ -441,6 +441,7 @@ begin
   BtnSave.Caption := rsSave;
   BtnSaveAs.Caption := rsSaveAs;
   BtnTiming.Caption:=rsTimingEstima;
+  btnStarAutoexposure.Caption:=rsStarAutoExpo;
   BtnInsert.Caption := rsInsertRows;
   MenuNewObject.Caption := rsNewObject;
   MenuBlankRow.Caption:=rsInsertBlankR;
@@ -455,7 +456,6 @@ begin
   MenuImportObslist.Caption:=rsImportCdCObs;
   MenuImportMosaic.Caption:=rsImportCdCMos;
   MenuAddCaptureStep.Caption:=rsCapture;
-  MenuAddAutoexposureStep.Caption:=rsStarAutoExpo;
   MenuAddScriptStep.Caption:=rsScript;
   MenuAddSwitchStep.Caption:=rsSwitch;
   TargetList.Columns.Items[colname-1].Title.Caption := Format(rsTargetName, [crlf]);
@@ -2081,11 +2081,9 @@ begin
     SelectedObjectMagnitude:=t.magnitude;
     if t.magnitude=NullCoord then begin
       TargetList.Cells[colmagn,n]:='-';
-      MenuAddAutoexposureStep.Visible:=false;
     end
     else begin
       TargetList.Cells[colmagn,n]:=FormatFloat(f2,t.magnitude);
-      MenuAddAutoexposureStep.Visible:=true;
     end;
     TargetList.Cells[colrepeat,n]:=IntToStr(t.repeatcount);
     PanelRepeat.Visible:=t.repeatcount>1;
@@ -3050,7 +3048,7 @@ begin
   StepList.Cells[pcoldesc,n]:=p.description_str;
   if p.steptype=0 then begin
     StepList.Cells[pcoltype,n]:=p.frtype_str;
-    StepList.Cells[pcolexp,n]:=formatfloat(f3,p.exposure);
+    StepList.Cells[pcolexp,n]:=formatfloat(f3v,p.exposure);
     StepList.Cells[pcolrefexp,n]:=p.refexposure;
     StepList.Cells[pcolstack,n]:=inttostr(p.stackcount);
     StepList.Cells[pcolbin,n]:=p.binning_str;
@@ -3264,7 +3262,7 @@ begin
      if f_autoexposurestep.SetRef(NewValue) then begin
        f_autoexposurestep.Magnitude.Value:=SelectedObjectMagnitude;
        f_autoexposurestep.cbRefChange(nil);
-       StepList.Cells[pcolexp,aRow]:=FormatFloat(f3,f_autoexposurestep.Exposure.Value);
+       StepList.Cells[pcolexp,aRow]:=f_autoexposurestep.Exposure_str;
      end
      else NewValue:=OldValue;
   end;
@@ -3279,7 +3277,7 @@ begin
      if f_autoexposurestep.SetRef(StepList.Cells[acol,arow]) then begin
        f_autoexposurestep.Magnitude.Value:=SelectedObjectMagnitude;
        f_autoexposurestep.cbRefChange(nil);
-       StepList.Cells[pcolexp,aRow]:=FormatFloat(f3,f_autoexposurestep.Exposure.Value);
+       StepList.Cells[pcolexp,aRow]:=f_autoexposurestep.Exposure_str;
      end;
   end;
 end;
@@ -3388,36 +3386,14 @@ begin
   SavePlanModified(false);
 end;
 
-procedure Tf_EditTargets.MenuAddAutoexposureStepClick(Sender: TObject);
-var txt:string;
-    i,n: integer;
-    p,pp: TStep;
+procedure Tf_EditTargets.btnStarAutoexposureClick(Sender: TObject);
+var i,n: integer;
 begin
-  f_autoexposurestep.Magnitude.Value:=SelectedObjectMagnitude;
-  f_autoexposurestep.StepName.Text:='Step'+inttostr(StepList.RowCount);
-  if f_autoexposurestep.ShowModal=mrOK then begin
-    txt:=f_autoexposurestep.StepName.Text;
-    p:=TStep.Create;
-    n:=StepList.Row;
-    if n >= 1 then begin
-      pp:=TStep(StepList.Objects[0,n]);
-      if pp.steptype=0 then p.Assign(pp);
-    end;
-    p.steptype:=0;
-    p.description:=txt;
-    p.exposure:=f_autoexposurestep.Exposure.Value;
-    p.refexposure:=f_autoexposurestep.cbRef.Text;
-    p.frtype:=ord(LIGHT);
-    StepList.RowCount:=StepList.RowCount+1;
-    i:=StepList.RowCount-1;
-    StepList.Cells[pcolseq,i]:=IntToStr(i);
-    StepList.Cells[pcoldesc,i]:=txt;
-    StepList.Objects[pcolseq,i]:=p;
-    StepList.Row:=i;
-    StepsModified:=true;
-    SetStep(i,p);
-    SavePlanModified(false);
-  end;
+  if SelectedObjectMagnitude<>NullCoord then
+    f_autoexposurestep.Magnitude.Value:=SelectedObjectMagnitude;
+  f_autoexposurestep.ShowModal;
+  UpdAutoExposure(SelectedObjectMagnitude);
+  StepList.Columns[pcolrefexp-1].PickList.Assign(f_autoexposurestep.cbRef.Items);
 end;
 
 procedure Tf_EditTargets.UpdAutoExposure(newmagn: double);
@@ -3425,14 +3401,15 @@ var i: integer;
 begin
   for i:=1 to StepList.RowCount-1 do begin
     if StepList.Cells[pcolrefexp,i]<>'' then begin
+      StepList.Row:=i;
       if f_autoexposurestep.SetRef(StepList.Cells[pcolrefexp,i]) then begin
         f_autoexposurestep.Magnitude.Value:=newmagn;
         f_autoexposurestep.cbRefChange(nil);
-        StepList.Cells[pcolexp,i]:=FormatFloat(f3,f_autoexposurestep.Exposure.Value);
+        StepList.Cells[pcolexp,i]:=f_autoexposurestep.Exposure_str;
+        StepChange(nil);
       end;
     end;
   end;
-  StepChange(nil);
 end;
 
 procedure Tf_EditTargets.MenuAddScriptStepClick(Sender: TObject);

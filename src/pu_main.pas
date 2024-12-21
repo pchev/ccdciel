@@ -4988,8 +4988,9 @@ begin
   for i:=1 to n do begin
      ref:=TStarAutoexposureRef.create;
      ref.refname:=config.GetValue('/StarAutoexposure/Ref'+inttostr(i)+'/Name','');
-     ref.magn:=round(config.GetValue('/StarAutoexposure/Ref'+inttostr(i)+'/Magn',0));
-     ref.exp:=round(config.GetValue('/StarAutoexposure/Ref'+inttostr(i)+'/Exp',0));
+     ref.magn:=config.GetValue('/StarAutoexposure/Ref'+inttostr(i)+'/Magn',0.0);
+     ref.exp:=config.GetValue('/StarAutoexposure/Ref'+inttostr(i)+'/Exp',0.0);
+     ref.maxexp:=config.GetValue('/StarAutoexposure/Ref'+inttostr(i)+'/MaxExp',0.0);
      f_autoexposurestep.cbRef.Items.AddObject(ref.refname,ref);
   end;
   if n>0 then f_autoexposurestep.cbRef.ItemIndex:=0;
@@ -5846,6 +5847,7 @@ begin
       config.SetValue('/StarAutoexposure/Ref'+inttostr(i)+'/Name',ref.refname);
       config.SetValue('/StarAutoexposure/Ref'+inttostr(i)+'/Magn',ref.magn);
       config.SetValue('/StarAutoexposure/Ref'+inttostr(i)+'/Exp',ref.exp);
+      config.SetValue('/StarAutoexposure/Ref'+inttostr(i)+'/MaxExp',ref.maxexp);
     end;
   end;
 

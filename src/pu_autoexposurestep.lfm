@@ -1,23 +1,26 @@
 object f_autoexposurestep: Tf_autoexposurestep
   Left = 401
-  Height = 357
+  Height = 365
   Top = 30
-  Width = 281
+  Width = 310
   Caption = 'f_autoexposurestep'
-  ClientHeight = 357
-  ClientWidth = 281
+  ClientHeight = 365
+  ClientWidth = 310
+  OnDestroy = FormDestroy
   OnShow = FormShow
   object GroupBox1: TGroupBox
     Left = 0
-    Height = 152
+    Height = 192
     Top = 0
-    Width = 281
+    Width = 310
     Align = alTop
     Caption = 'Reference exposure'
-    ClientHeight = 122
-    ClientWidth = 277
+    ClientHeight = 162
+    ClientWidth = 306
     TabOrder = 0
     object Label4: TLabel
+      AnchorSideTop.Control = RefMagn
+      AnchorSideTop.Side = asrCenter
       Left = 12
       Height = 18
       Top = 53
@@ -26,9 +29,11 @@ object f_autoexposurestep: Tf_autoexposurestep
       ParentColor = False
     end
     object Label5: TLabel
+      AnchorSideTop.Control = RefExp
+      AnchorSideTop.Side = asrCenter
       Left = 12
       Height = 18
-      Top = 87
+      Top = 92
       Width = 57
       Caption = 'Exposure'
       ParentColor = False
@@ -62,10 +67,11 @@ object f_autoexposurestep: Tf_autoexposurestep
     end
     object MenuRef: TButton
       AnchorSideLeft.Side = asrBottom
+      AnchorSideTop.Control = cbRef
       AnchorSideTop.Side = asrCenter
       Left = 192
       Height = 25
-      Top = 15
+      Top = 12
       Width = 68
       BorderSpacing.Left = 8
       Caption = 'Manage'
@@ -73,37 +79,41 @@ object f_autoexposurestep: Tf_autoexposurestep
       OnMouseDown = MenuRefMouseDown
       TabOrder = 3
     end
+    object MaxExp: TFloatSpinEdit
+      Left = 140
+      Height = 32
+      Top = 125
+      Width = 120
+      TabOrder = 4
+      Value = 900
+    end
+    object Label6: TLabel
+      AnchorSideTop.Control = MaxExp
+      AnchorSideTop.Side = asrCenter
+      Left = 15
+      Height = 18
+      Top = 132
+      Width = 86
+      Caption = 'Max exposure'
+      ParentColor = False
+    end
   end
   object GroupBox2: TGroupBox
     Left = 0
-    Height = 160
-    Top = 152
-    Width = 281
+    Height = 128
+    Top = 192
+    Width = 310
     Align = alTop
-    Caption = 'New step'
-    ClientHeight = 130
-    ClientWidth = 277
+    Caption = 'Test'
+    ClientHeight = 98
+    ClientWidth = 306
     TabOrder = 1
-    object Label1: TLabel
-      Left = 12
-      Height = 18
-      Top = 17
-      Width = 28
-      Caption = 'Step'
-      ParentColor = False
-    end
-    object StepName: TEdit
-      Left = 140
-      Height = 32
-      Top = 8
-      Width = 120
-      TabOrder = 0
-      Text = 'StepName'
-    end
     object Label2: TLabel
-      Left = 12
+      AnchorSideTop.Control = Magnitude
+      AnchorSideTop.Side = asrCenter
+      Left = 15
       Height = 18
-      Top = 56
+      Top = 23
       Width = 67
       Caption = 'Magnitude'
       ParentColor = False
@@ -111,24 +121,24 @@ object f_autoexposurestep: Tf_autoexposurestep
     object Magnitude: TFloatSpinEdit
       Left = 140
       Height = 32
-      Top = 48
+      Top = 16
       Width = 98
-      EditorEnabled = False
-      Enabled = False
-      ReadOnly = True
-      TabOrder = 1
+      TabOrder = 0
+      Value = 8
     end
     object Exposure: TFloatSpinEdit
       Left = 140
       Height = 32
-      Top = 88
-      Width = 88
-      TabOrder = 2
+      Top = 56
+      Width = 97
+      TabOrder = 1
     end
     object Label3: TLabel
-      Left = 12
+      AnchorSideTop.Control = Exposure
+      AnchorSideTop.Side = asrCenter
+      Left = 15
       Height = 18
-      Top = 94
+      Top = 63
       Width = 57
       Caption = 'Exposure'
       ParentColor = False
@@ -137,25 +147,25 @@ object f_autoexposurestep: Tf_autoexposurestep
   object Panel1: TPanel
     Left = 0
     Height = 45
-    Top = 312
-    Width = 281
+    Top = 320
+    Width = 310
     Align = alClient
     ClientHeight = 45
-    ClientWidth = 281
+    ClientWidth = 310
     TabOrder = 2
     object btnOK: TButton
       Left = 142
       Height = 25
       Top = 8
-      Width = 75
+      Width = 98
       Caption = 'OK'
       ModalResult = 1
       TabOrder = 0
     end
   end
   object PopupMenuRef: TPopupMenu
-    Left = 32
-    Top = 304
+    Left = 272
+    Top = 40
     object MenuItemAddRef: TMenuItem
       Caption = 'MenuItemAddRef'
       OnClick = MenuItemAddRefClick
