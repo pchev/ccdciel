@@ -936,6 +936,7 @@ object f_EditTargets: Tf_EditTargets
                 Width = 66
               end            
               item
+                ButtonStyle = cbsPickList
                 Title.MultiLine = True
                 Title.Caption = 'Ref. exposure'
                 Width = 66
@@ -1023,6 +1024,7 @@ object f_EditTargets: Tf_EditTargets
             OnColRowMoved = StepListColRowMoved
             OnEditingDone = StepListEditingDone
             OnGetCellHint = StepListGetCellHint
+            OnPickListSelect = StepListPickListSelect
             OnSelectEditor = StepListSelectEditor
             OnSelection = StepListSelection
             OnValidateEntry = StepListValidateEntry

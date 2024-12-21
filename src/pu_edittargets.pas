@@ -278,6 +278,7 @@ type
       tIndex: Integer);
     procedure StepListEditingDone(Sender: TObject);
     procedure StepListGetCellHint(Sender: TObject; ACol, ARow: Integer; var HintText: String);
+    procedure StepListPickListSelect(Sender: TObject);
     procedure StepListSelectEditor(Sender: TObject; aCol, aRow: Integer;
       var Editor: TWinControl);
     procedure StepListSelection(Sender: TObject; aCol, aRow: Integer);
@@ -3259,7 +3260,30 @@ begin
     StepList.Cells[pcolafevery,aRow]:='0';
     StepList.Cells[pcoldither,aRow]:='0';
   end;
+  if (aRow>0)and(aCol=pcolrefexp) then begin
+     if f_autoexposurestep.SetRef(NewValue) then begin
+       f_autoexposurestep.Magnitude.Value:=SelectedObjectMagnitude;
+       f_autoexposurestep.cbRefChange(nil);
+       StepList.Cells[pcolexp,aRow]:=FormatFloat(f3,f_autoexposurestep.Exposure.Value);
+     end
+     else NewValue:=OldValue;
+  end;
 end;
+
+procedure Tf_EditTargets.StepListPickListSelect(Sender: TObject);
+var arow,acol: integer;
+begin
+  arow:=StepList.Row;
+  acol:=StepList.Col;
+  if (arow>0)and(acol=pcolrefexp) then begin
+     if f_autoexposurestep.SetRef(StepList.Cells[acol,arow]) then begin
+       f_autoexposurestep.Magnitude.Value:=SelectedObjectMagnitude;
+       f_autoexposurestep.cbRefChange(nil);
+       StepList.Cells[pcolexp,aRow]:=FormatFloat(f3,f_autoexposurestep.Exposure.Value);
+     end;
+  end;
+end;
+
 
 procedure Tf_EditTargets.StepListCheckboxToggled(sender: TObject; aCol, aRow: Integer; aState: TCheckboxState);
 begin
@@ -3311,6 +3335,8 @@ procedure Tf_EditTargets.StepListSelectEditor(Sender: TObject; aCol,
 begin
   if (aCol=pcoltype) then
      Editor:=StepList.EditorByStyle(cbsPickList)   // type selection
+  else if (aCol=pcolrefexp) then
+     Editor:=StepList.EditorByStyle(cbsPickList) // star exp ref
   else if (aCol=pcolbin) then
      Editor:=StepList.EditorByStyle(cbsPickList) // binning selection
   else if (aCol=pcolfilter) then

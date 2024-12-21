@@ -28,7 +28,7 @@ interface
 uses
   pu_edittargets, u_ccdconfig, u_global, u_utils, UScaleDPI, u_speech, cu_switch,
   fu_capture, fu_preview, fu_filterwheel, fu_internalguider, u_hints, u_translation, math,
-  cu_mount, cu_camera, cu_autoguider, cu_astrometry, cu_rotator, pu_viewtext,
+  cu_mount, cu_camera, cu_autoguider, cu_astrometry, cu_rotator, pu_viewtext, pu_autoexposurestep,
   cu_targets, cu_plan, cu_planetarium, pu_pause, fu_safety, fu_weather, cu_dome,
   Classes, SysUtils, FileUtil, Forms, Controls, Graphics, Dialogs, StdCtrls,
   LCLIntf, ExtCtrls, Grids, Menus;
@@ -567,6 +567,7 @@ begin
    f_EditTargets.LoadScriptList;
    f_EditTargets.Switch:=FSwitch;
    f_EditTargets.LoadSwitchList;
+   f_EditTargets.StepList.Columns[pcolrefexp-1].PickList.Assign(f_autoexposurestep.cbRef.Items);
    f_EditTargets.SolarTracking:=(Autoguider.AutoguiderType=agINTERNAL);
    if live then begin
      f_EditTargets.BtnSaveAs.Visible:=false;
