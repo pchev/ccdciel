@@ -39,7 +39,6 @@ type
     MaxExp: TFloatSpinEdit;
     GroupBox2: TGroupBox;
     Label6: TLabel;
-    MenuItemAddRef: TMenuItem;
     MenuItemDelRef: TMenuItem;
     MenuRef: TButton;
     Panel1: TPanel;
@@ -63,6 +62,7 @@ type
       Shift: TShiftState; X, Y: Integer);
     procedure RefChange(Sender: TObject);
   private
+    lockref:boolean;
     procedure ComputeExposure;
     procedure UpdateRef;
     function GetExposure_str: string;
@@ -93,7 +93,6 @@ begin
   Label3.Caption:=rsExposure;
   Label6.Caption:=rsMaxExposure;
   MenuRef.Caption:=rsManage;
-  MenuItemAddRef.Caption:=rsAdd;
   MenuItemDelRef.Caption:=rsDelete;
   btnOK.Caption:=rsOK;
 end;
@@ -101,6 +100,7 @@ end;
 procedure Tf_autoexposurestep.FormCreate(Sender: TObject);
 begin
   SetLang;
+  lockref:=false;
 end;
 
 procedure Tf_autoexposurestep.FormShow(Sender: TObject);
@@ -140,12 +140,17 @@ var ref:TStarAutoexposureRef;
 begin
   i:=cbRef.ItemIndex;
   if (i>=0)and(i<cbRef.Items.Count) then begin
+    try
+    lockref:=true;
     ref:=TStarAutoexposureRef(cbRef.Items.Objects[i]);
     cbRef.text := ref.refname;
     RefMagn.Value := ref.magn;
     RefExp.Value := ref.exp;
     MaxExp.Value := ref.maxexp;
     ComputeExposure;
+    finally
+      lockref:=false;
+    end;
   end;
 end;
 
@@ -214,6 +219,7 @@ end;
 
 procedure Tf_autoexposurestep.RefChange(Sender: TObject);
 begin
+  if lockref then exit;
   UpdateRef;
   ComputeExposure;
 end;

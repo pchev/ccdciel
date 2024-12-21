@@ -64,6 +64,7 @@ object f_autoexposurestep: Tf_autoexposurestep
       Width = 165
       ItemHeight = 24
       OnChange = cbRefChange
+      OnEditingDone = MenuItemAddRefClick
       TabOrder = 2
     end
     object MenuRef: TButton
@@ -169,10 +170,6 @@ object f_autoexposurestep: Tf_autoexposurestep
   object PopupMenuRef: TPopupMenu
     Left = 272
     Top = 40
-    object MenuItemAddRef: TMenuItem
-      Caption = 'MenuItemAddRef'
-      OnClick = MenuItemAddRefClick
-    end
     object MenuItemDelRef: TMenuItem
       Caption = 'MenuItemDelRef'
       OnClick = MenuItemDelRefClick

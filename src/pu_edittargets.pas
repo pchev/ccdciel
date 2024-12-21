@@ -3394,6 +3394,7 @@ begin
     f_autoexposurestep.Magnitude.Value:=SelectedObjectMagnitude;
   f_autoexposurestep.ShowModal;
   UpdAutoExposure(SelectedObjectMagnitude);
+  StepList.Columns[pcolrefexp-1].PickList.Clear;
   StepList.Columns[pcolrefexp-1].PickList.Assign(f_autoexposurestep.cbRef.Items);
 end;
 
