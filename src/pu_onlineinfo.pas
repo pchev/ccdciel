@@ -15,7 +15,9 @@ type
     BtnSearch: TButton;
     Button2: TButton;
     ButtonOK: TButton;
+    cbMagBand: TComboBox;
     De: TEdit;
+    Label5: TLabel;
     MagBand: TLabel;
     Magn: TEdit;
     Label1: TLabel;
@@ -32,9 +34,11 @@ type
     procedure BtnSearchClick(Sender: TObject);
     procedure FormCreate(Sender: TObject);
   private
-
+    function GetMagnitude: string;
+    procedure SetMagnitude(value:string);
   public
     procedure SetLang;
+    property magnitude: string read GetMagnitude write SetMagnitude;
   end;
 
 var
@@ -70,7 +74,7 @@ end;
 
 procedure Tf_onlineinfo.BtnSearchClick(Sender: TObject);
 var ra0,dec0,mag0 : double;
-    objname,sname,sresolv,band0 : string;
+    objname,band,sname,sresolv,band0 : string;
     found: boolean;
     p: integer;
 begin
@@ -79,8 +83,9 @@ begin
   objname:=uppercase(trim(Obj.Text));
   p:=pos('_',objname);
   if p>0 then objname:=copy(objname,1,p-1);
+  band:=trim(cbMagBand.Text);
   // online search
-  found:=SearchOnline(objname,sname,sresolv,ra0,dec0,mag0,band0);
+  found:=SearchOnline(objname,band,sname,sresolv,ra0,dec0,mag0,band0);
   if found then begin
     Ra.Text:=RAToStr(ra0*12/pi);{Add position}
     De.Text:=DEToStr(dec0*180/pi);
@@ -89,7 +94,7 @@ begin
       MagBand.Caption:=band0;
     end
     else begin
-      Magn.Text:='';
+      Magn.Text:=band+' '+'not found';
       MagBand.Caption:='';
     end;
     // do not change the name by other synonym that can be returned by Simbad
@@ -104,7 +109,21 @@ begin
   end;
 end;
 
+function Tf_onlineinfo.GetMagnitude: string;
+var x: double;
+    n: integer;
+begin
+  val(Magn.Text,x,n);
+  if n=0 then
+    result:=Magn.Text
+  else
+    result:='';
+end;
 
+procedure Tf_onlineinfo.SetMagnitude(value:string);
+begin
+  Magn.Text:=value;
+end;
 
 end.
 

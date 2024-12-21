@@ -194,7 +194,7 @@ begin
     until linepos>=$FFFFFF;{Found object or end of database}
     if not found then begin
       // online search
-      found:=SearchOnline(objname,sname,sresolv,ra0,dec0,mag0,magband);
+      found:=SearchOnline(objname,'V',sname,sresolv,ra0,dec0,mag0,magband);
       if found then begin
         Ra.Text:=RAToStr(ra0*12/pi);{Add position}
         De.Text:=DEToStr(dec0*180/pi);

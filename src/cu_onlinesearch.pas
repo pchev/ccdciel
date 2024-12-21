@@ -34,11 +34,11 @@ uses
   SysUtils, Classes;
 
 
-function SearchOnline(n: string;out rname,resolv: string; out rra,rdec,rmagn: double; out magband:string): boolean;
+function SearchOnline(n,band: string;out rname,resolv: string; out rra,rdec,rmagn: double; out magband:string): boolean;
 
 implementation
 
-var num,sesame_resolver,sesame_name,sesame_type,sesame_desc,sesame_band : string;
+var num,nband,sesame_resolver,sesame_name,sesame_type,sesame_desc,sesame_band : string;
     sesame_magn,ra,de: double;
 
 function LoadSesame(f:TStream): boolean;
@@ -113,7 +113,7 @@ begin
           v1 := string(Dnode.TextContent);
 
           if (k = 'mag') and (k1 = 'v') then begin
-            if (a = 'band.V')or((sesame_magn=NullCoord)and((a = 'band.B')or(a = 'band.R')or(a = 'band.G'))) then
+            if (a = 'band.'+nband) then
             begin
                sesame_band:=a;
                sesame_magn:=StrToFloatDef(v1,NullCoord);
@@ -169,7 +169,7 @@ begin
 
 end;
 
-function SearchOnline(n: string;out rname,resolv: string; out rra,rdec,rmagn: double; out magband:string): boolean;
+function SearchOnline(n,band: string;out rname,resolv: string; out rra,rdec,rmagn: double; out magband:string): boolean;
 var
   url,cat:string;
   http: THTTPSend;
@@ -180,6 +180,7 @@ begin
 
   cat:='SN';   // Simbad, then NED
   num:=n;
+  nband:=band;
 
   url:='https://cds.unistra.fr/cgi-bin/nph-sesame';
   url:=url+'/-oxF/'+cat+'?'+trim(StringReplace(num,' ','%20',[rfReplaceAll]));

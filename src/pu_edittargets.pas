@@ -1112,7 +1112,7 @@ begin
   PageControlPlan.ActivePageIndex:=pageobject;
   f_onlineinfo.Ra.Text:='';
   f_onlineinfo.De.Text:='';
-  f_onlineinfo.Magn.Text:='';
+  f_onlineinfo.magnitude:='';
   f_onlineinfo.ShowModal;
   if (f_onlineinfo.ModalResult=mrOK)and(f_onlineinfo.Ra.Text<>'')and(f_onlineinfo.De.Text<>'') then
   begin
@@ -1120,7 +1120,7 @@ begin
     n:=TargetList.Row;
     TargetList.Cells[colra,n]:=f_onlineinfo.Ra.Text;{Add position}
     TargetList.Cells[coldec,n]:=f_onlineinfo.De.Text;
-    TargetList.Cells[colmagn,n]:=f_onlineinfo.Magn.Text;
+    TargetList.Cells[colmagn,n]:=f_onlineinfo.magnitude;
     TargetList.Cells[colstart,n]:=rsRise;
     TargetList.Cells[colend,n]:=rsSet2;
     TargetList.Cells[colname,n]:=f_onlineinfo.Obj.Text;
@@ -1137,14 +1137,14 @@ begin
   f_onlineinfo.Obj.Text:=TargetList.Cells[colname,n];
   f_onlineinfo.Ra.Text:='';
   f_onlineinfo.De.Text:='';
-  f_onlineinfo.Magn.Text:='';
+  f_onlineinfo.magnitude:='';
   f_onlineinfo.LabelResolver.Caption:='';
   f_onlineinfo.ShowModal;
   if (f_onlineinfo.ModalResult=mrOK)and(f_onlineinfo.Ra.Text<>'')and(f_onlineinfo.De.Text<>'') then
   begin
     TargetList.Cells[colra,n]:=f_onlineinfo.Ra.Text;{Add position}
     TargetList.Cells[coldec,n]:=f_onlineinfo.De.Text;
-    TargetList.Cells[colmagn,n]:=f_onlineinfo.Magn.Text;
+    TargetList.Cells[colmagn,n]:=f_onlineinfo.magnitude;
     TargetList.Cells[colname,n]:=f_onlineinfo.Obj.Text;
     cbAstrometry.Checked:=(astrometryResolver<>ResolverNone);
   end
