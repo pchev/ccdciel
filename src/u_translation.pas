@@ -1593,7 +1593,7 @@ resourcestring
   rsSingleStarWi2 = 'Single star with astrometry, then multistar';
   rsMultistarWit = 'Multistar with guider astrometry';
   rsMagn = 'Magn.';
-  rsStarAutoExpo = 'Star auto-exposure';
+  rsStarAutoExpo = 'Star%sauto-exposure';
   rsReferenceExp = 'Reference exposure';
   rsMaxExposure = 'Max exposure';
 

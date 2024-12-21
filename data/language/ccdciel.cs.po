@@ -2,14 +2,14 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ccdciel\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-12-20 15:54+0000\n"
-"PO-Revision-Date: 2024-12-15 12:08+0000\n"
+"POT-Creation-Date: 2024-12-21 16:48+0000\n"
+"PO-Revision-Date: 2024-12-21 10:28+0000\n"
 "Last-Translator: Stanislav Holub <Unknown>\n"
 "Language-Team: Czech <cz@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2024-12-20 16:00+0000\n"
+"X-Launchpad-Export-Date: 2024-12-21 16:56+0000\n"
 "X-Generator: Launchpad (build 6394e03793719e8d73f5a60b5439440e693c92f1)\n"
 "Language: cs\n"
 
@@ -2707,7 +2707,7 @@ msgstr "Světelnost"
 
 #: u_translation.rsmagn
 msgid "Magn."
-msgstr ""
+msgstr "Magn."
 
 #: u_translation.rsmagnifyer
 msgid "Magnifier"
@@ -2770,6 +2770,10 @@ msgstr "Max:"
 #: u_translation.rsmax2
 msgid "Max"
 msgstr "Max"
+
+#: u_translation.rsmaxexposure
+msgid "Max exposure"
+msgstr ""
 
 #: u_translation.rsmaximum
 msgid "maximum"
@@ -4012,6 +4016,10 @@ msgstr "Zaznamenat informace o restartování"
 msgid "red"
 msgstr "červená"
 
+#: u_translation.rsreferenceexp
+msgid "Reference exposure"
+msgstr ""
+
 #: u_translation.rsreferenceima
 msgid "Reference image"
 msgstr "Referenční snímek"
@@ -5032,6 +5040,11 @@ msgstr "Hvězda"
 #: u_translation.rsstaralignmen
 msgid "Star alignment"
 msgstr "Zarovnání hvězd"
+
+#: u_translation.rsstarautoexpo
+#, object-pascal-format
+msgid "Star%sauto-exposure"
+msgstr ""
 
 #: u_translation.rsstardatabase
 msgid "Star database is empty, check path to star database files!!"

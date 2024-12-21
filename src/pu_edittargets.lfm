@@ -1869,7 +1869,7 @@ object f_EditTargets: Tf_EditTargets
       Left = 192
       Height = 25
       Top = 2
-      Width = 184
+      Width = 240
       Caption = 'Star autoexposure'
       OnClick = btnStarAutoexposureClick
       TabOrder = 4

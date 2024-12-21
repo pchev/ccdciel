@@ -2,14 +2,14 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ccdceil\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-12-20 15:55+0000\n"
-"PO-Revision-Date: 2024-12-11 15:49+0000\n"
+"POT-Creation-Date: 2024-12-21 16:48+0000\n"
+"PO-Revision-Date: 2024-12-21 10:57+0000\n"
 "Last-Translator: Stanislav Holub <Unknown>\n"
 "Language-Team: Czech <cz@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2024-12-20 16:00+0000\n"
+"X-Launchpad-Export-Date: 2024-12-21 16:56+0000\n"
 "X-Generator: Launchpad (build 6394e03793719e8d73f5a60b5439440e693c92f1)\n"
 "Language: cs\n"
 
@@ -479,7 +479,7 @@ msgstr "Počet obrázků pro tento krok"
 
 #: u_hints.rstheobjectmag
 msgid "The object magnitude"
-msgstr ""
+msgstr "Magnituda objektu"
 
 #: u_hints.rstheobjectnam
 msgid "The object name for use in FITS header and file name"

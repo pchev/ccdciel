@@ -5969,3 +5969,15 @@ msgstr ""
 msgid "Magn."
 msgstr ""
 
+#: u_translation:rsstarautoexpo
+msgid "Star%sauto-exposure"
+msgstr ""
+
+#: u_translation:rsreferenceexp
+msgid "Reference exposure"
+msgstr ""
+
+#: u_translation:rsmaxexposure
+msgid "Max exposure"
+msgstr ""
+

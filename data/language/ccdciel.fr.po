@@ -6,14 +6,14 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ccdciel\n"
 "Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
-"POT-Creation-Date: 2024-12-20 15:54+0000\n"
-"PO-Revision-Date: 2024-12-20 15:57+0000\n"
+"POT-Creation-Date: 2024-12-21 16:48+0000\n"
+"PO-Revision-Date: 2024-12-21 16:53+0000\n"
 "Last-Translator: Patrick Chevalley <Unknown>\n"
 "Language-Team: French <fr@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2024-12-20 16:00+0000\n"
+"X-Launchpad-Export-Date: 2024-12-21 16:56+0000\n"
 "X-Generator: Launchpad (build 6394e03793719e8d73f5a60b5439440e693c92f1)\n"
 
 #: u_translation.rs2d
@@ -2774,6 +2774,10 @@ msgstr "Max:"
 msgid "Max"
 msgstr "Max"
 
+#: u_translation.rsmaxexposure
+msgid "Max exposure"
+msgstr "Exposition max."
+
 #: u_translation.rsmaximum
 msgid "maximum"
 msgstr "maximum"
@@ -4015,6 +4019,10 @@ msgstr "Enregistre les informations de redémarage"
 msgid "red"
 msgstr "rouge"
 
+#: u_translation.rsreferenceexp
+msgid "Reference exposure"
+msgstr "Exposition de référence"
+
 #: u_translation.rsreferenceima
 msgid "Reference image"
 msgstr "Image de référence"
@@ -5035,6 +5043,11 @@ msgstr "Étoile"
 #: u_translation.rsstaralignmen
 msgid "Star alignment"
 msgstr "Registration stellaire"
+
+#: u_translation.rsstarautoexpo
+#, object-pascal-format
+msgid "Star%sauto-exposure"
+msgstr "Exposition automatique%sdes étoiles"
 
 #: u_translation.rsstardatabase
 msgid "Star database is empty, check path to star database files!!"

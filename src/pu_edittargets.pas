@@ -441,7 +441,7 @@ begin
   BtnSave.Caption := rsSave;
   BtnSaveAs.Caption := rsSaveAs;
   BtnTiming.Caption:=rsTimingEstima;
-  btnStarAutoexposure.Caption:=rsStarAutoExpo;
+  btnStarAutoexposure.Caption:=Format(rsStarAutoExpo, [' ']);
   BtnInsert.Caption := rsInsertRows;
   MenuNewObject.Caption := rsNewObject;
   MenuBlankRow.Caption:=rsInsertBlankR;
@@ -460,8 +460,8 @@ begin
   MenuAddSwitchStep.Caption:=rsSwitch;
   TargetList.Columns.Items[colname-1].Title.Caption := Format(rsTargetName, [crlf]);
   TargetList.Columns.Items[colplan-1].Title.Caption := rsTemplate;
-  TargetList.Columns.Items[colra-1].Title.Caption := rsRA+j2000;
-  TargetList.Columns.Items[coldec-1].Title.Caption := rsDec+j2000;
+  TargetList.Columns.Items[colra-1].Title.Caption := rsRA+crlf+j2000;
+  TargetList.Columns.Items[coldec-1].Title.Caption := rsDec+crlf+j2000;
   TargetList.Columns.Items[colpa-1].Title.Caption := rsPA;
   TargetList.Columns.Items[colmagn-1].Title.Caption := rsMagn;
   TargetList.Columns.Items[colstart-1].Title.Caption := rsBegin;
@@ -575,6 +575,7 @@ begin
   StepList.Columns.Items[pcoldesc-1].Title.Caption := rsDescription;
   StepList.Columns.Items[pcoltype-1].Title.Caption := rsType;
   StepList.Columns.Items[pcolexp-1].Title.Caption := rsExposure;
+  StepList.Columns.Items[pcolrefexp-1].Title.Caption := Format(rsStarAutoExpo, [crlf]);
   StepList.Columns.Items[pcolstack-1].Title.Caption := rsStack;
   StepList.Columns.Items[pcolbin-1].Title.Caption := rsBinning;
   StepList.Columns.Items[pcolfilter-1].Title.Caption := rsFilter;

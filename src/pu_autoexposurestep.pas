@@ -53,14 +53,15 @@ type
     Magnitude: TFloatSpinEdit;
     Label2: TLabel;
     procedure cbRefChange(Sender: TObject);
+    procedure FormCreate(Sender: TObject);
     procedure FormDestroy(Sender: TObject);
     procedure FormShow(Sender: TObject);
+    procedure MagnitudeChange(Sender: TObject);
     procedure MenuItemAddRefClick(Sender: TObject);
     procedure MenuItemDelRefClick(Sender: TObject);
     procedure MenuRefMouseDown(Sender: TObject; Button: TMouseButton;
       Shift: TShiftState; X, Y: Integer);
-    procedure RefExpChange(Sender: TObject);
-    procedure RefMagnChange(Sender: TObject);
+    procedure RefChange(Sender: TObject);
   private
     procedure ComputeExposure;
     procedure UpdateRef;
@@ -83,9 +84,11 @@ implementation
 
 procedure Tf_autoexposurestep.SetLang;
 begin
-  Caption:=rsStarAutoExpo;
+  Caption:=Format(rsStarAutoExpo, [' ']);
   GroupBox1.Caption:=rsReferenceExp;
   GroupBox2.Caption:=rsTest;
+  Label4.Caption:=rsMagnitude;
+  Label5.Caption:=rsExposure;
   Label2.Caption:=rsMagnitude;
   Label3.Caption:=rsExposure;
   Label6.Caption:=rsMaxExposure;
@@ -93,6 +96,11 @@ begin
   MenuItemAddRef.Caption:=rsAdd;
   MenuItemDelRef.Caption:=rsDelete;
   btnOK.Caption:=rsOK;
+end;
+
+procedure Tf_autoexposurestep.FormCreate(Sender: TObject);
+begin
+  SetLang;
 end;
 
 procedure Tf_autoexposurestep.FormShow(Sender: TObject);
@@ -144,7 +152,6 @@ end;
 procedure Tf_autoexposurestep.UpdateRef;
 var ref:TStarAutoexposureRef;
     i: integer;
-    n: string;
 begin
   i:=cbRef.ItemIndex;
   if i>=0 then begin
@@ -205,15 +212,14 @@ begin
 end;
 
 
-procedure Tf_autoexposurestep.RefExpChange(Sender: TObject);
+procedure Tf_autoexposurestep.RefChange(Sender: TObject);
 begin
   UpdateRef;
   ComputeExposure;
 end;
 
-procedure Tf_autoexposurestep.RefMagnChange(Sender: TObject);
+procedure Tf_autoexposurestep.MagnitudeChange(Sender: TObject);
 begin
-  UpdateRef;
   ComputeExposure;
 end;
 

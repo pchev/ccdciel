@@ -2678,6 +2678,7 @@ begin
    if f_finder<>nil then f_finder.SetLang;
    if f_findercalibration<>nil then f_findercalibration.SetLang;
    if f_onlineinfo<>nil then f_onlineinfo.SetLang;
+   if f_autoexposurestep<>nil then f_autoexposurestep.SetLang;
 end;
 
 procedure Tf_main.FormShow(Sender: TObject);
