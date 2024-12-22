@@ -2580,6 +2580,14 @@ begin
       end
       else if ((t.ra=NullCoord)or(t.de=NullCoord))and(not mount.Tracking) then
          mount.Track;
+      // check if slewing altered the rotator position, non conform alt/az driver ??
+      // https://www.ap-i.net/mantis/view.php?id=2762
+      // must not occur according to https://ascom-standards.org/newdocs/rotator-faq.html#rotator-on-an-alt-az-mount
+      { #todo :  look if still nececessary and remove}
+      if (t.pa<>NullCoord)and(Frotator.Status=devConnected) then begin
+        if round(10*Frotator.Angle)<>round(10*t.pa) then  // check position within 0.1°
+          Frotator.Angle:=t.pa;
+      end;
       // start guiding
       if autoguider is T_autoguider_internal then begin
         // set the target position if the spectroscopy function is activated, do nothing otherwise.
