@@ -4,7 +4,7 @@ unit pu_onlineinfo;
 
 interface
 
-uses cu_onlinesearch, u_utils, u_global, u_translation, UScaleDPI, StdCtrls,
+uses cu_onlinesearch, u_utils, u_global, u_translation, UScaleDPI, StdCtrls, LCLType,
   Classes, SysUtils, Forms, Controls, Graphics, Dialogs, ExtCtrls;
 
 type
@@ -32,8 +32,11 @@ type
     Panel2: TPanel;
     Ra: TEdit;
     procedure BtnSearchClick(Sender: TObject);
+    procedure cbMagBandChange(Sender: TObject);
     procedure FormCreate(Sender: TObject);
+    procedure ObjKeyDown(Sender: TObject; var Key: Word; Shift: TShiftState);
   private
+    maglist: TMagnitudeList;
     function GetMagnitude: string;
     procedure SetMagnitude(value:string);
   public
@@ -72,29 +75,42 @@ begin
   label4.Caption:=rsMagnitude;
 end;
 
+procedure Tf_onlineinfo.ObjKeyDown(Sender: TObject; var Key: Word; Shift: TShiftState);
+begin
+  if key=VK_RETURN then BtnSearchClick(nil);
+end;
+
 procedure Tf_onlineinfo.BtnSearchClick(Sender: TObject);
-var ra0,dec0,mag0 : double;
-    objname,band,sname,sresolv,band0 : string;
+var ra0,dec0 : double;
+    objname,sname,sresolv,band : string;
     found: boolean;
-    p: integer;
+    i,p: integer;
 begin
   LabelResolver.Caption:='';
   found:=false;
   objname:=uppercase(trim(Obj.Text));
   p:=pos('_',objname);
   if p>0 then objname:=copy(objname,1,p-1);
-  band:=trim(cbMagBand.Text);
   // online search
-  found:=SearchOnline(objname,band,sname,sresolv,ra0,dec0,mag0,band0);
+  found:=SearchOnline(objname,sname,sresolv,ra0,dec0,maglist);
   if found then begin
     Ra.Text:=RAToStr(ra0*12/pi);{Add position}
     De.Text:=DEToStr(dec0*180/pi);
-    if mag0<>NullCoord then begin
-      Magn.Text:=FormatFloat(f2,mag0);
-      MagBand.Caption:=band0;
+    if length(maglist)>0 then begin
+      band:=cbMagBand.Text;
+      cbMagBand.Clear;
+      for i:=0 to length(maglist)-1 do begin
+        cbMagBand.Items.Add(maglist[i].band);
+      end;
+      i:=cbMagBand.Items.IndexOf(band);
+      if i>0 then
+        cbMagBand.ItemIndex:=i
+      else
+        cbMagBand.ItemIndex:=0;
+      cbMagBandChange(nil);
     end
     else begin
-      Magn.Text:=band+' '+'not found';
+      Magn.Text:='no magnitude found';
       MagBand.Caption:='';
     end;
     // do not change the name by other synonym that can be returned by Simbad
@@ -106,6 +122,23 @@ begin
     Magn.Text:='';
     MagBand.Caption:='';
     LabelResolver.Caption:='Not found!';
+  end;
+end;
+
+
+procedure Tf_onlineinfo.cbMagBandChange(Sender: TObject);
+var i:integer;
+begin
+  if length(maglist)>0 then begin
+    i:=cbMagBand.ItemIndex;
+    if (i>=0)and(i<length(maglist)) then begin
+      Magn.Text:=FormatFloat(f2,maglist[i].magn);
+      MagBand.Caption:=maglist[i].band;
+    end;
+  end
+  else begin
+    Magn.Text:='no magnitude found';
+    MagBand.Caption:='';
   end;
 end;
 

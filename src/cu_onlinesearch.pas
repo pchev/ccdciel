@@ -33,19 +33,24 @@ uses
   httpsend, blcksock, XMLRead, DOM,
   SysUtils, Classes;
 
+type
+  TMagnitude= record magn:double; band:string; end;
+  TMagnitudeList= array of TMagnitude;
 
-function SearchOnline(n,band: string;out rname,resolv: string; out rra,rdec,rmagn: double; out magband:string): boolean;
+function SearchOnline(n: string;out rname,resolv: string; out rra,rdec: double; out maglist:TMagnitudeList): boolean;
 
 implementation
 
-var num,nband,sesame_resolver,sesame_name,sesame_type,sesame_desc,sesame_band : string;
-    sesame_magn,ra,de: double;
+var num,sesame_resolver,sesame_name,sesame_type,sesame_desc : string;
+    ra,de: double;
+    sesame_magnnum: integer;
+    sesame_magnlist: TMagnitudeList;
 
 function LoadSesame(f:TStream): boolean;
 var
   Doc: TXMLDocument;
   Node,Snode,Dnode: TDOMNode;
-  k,v,a,buf,k1,v1: string;
+  k,v,a,b,buf,k1,v1: string;
 begin
 
   result:=false;
@@ -54,8 +59,8 @@ begin
   sesame_name:='';
   sesame_type:='';
   sesame_desc:='';
-  sesame_band:='';
-  sesame_magn:=NullCoord;
+  sesame_magnnum:=0;
+  SetLength(sesame_magnlist,0);
 
   try
 
@@ -98,8 +103,11 @@ begin
 
         Dnode := Node.Attributes.Item[0];
 
-        if Dnode <> nil then
+        if Dnode <> nil then begin
            a := string(Dnode.NodeName) + '.' + string(Dnode.TextContent);
+           if (k = 'mag') and (string(Dnode.NodeName)='band') then
+             b:=string(Dnode.TextContent);
+        end;
 
         buf :='';
         Dnode := Node.FirstChild;
@@ -113,11 +121,10 @@ begin
           v1 := string(Dnode.TextContent);
 
           if (k = 'mag') and (k1 = 'v') then begin
-            if (a = 'band.'+nband) then
-            begin
-               sesame_band:=a;
-               sesame_magn:=StrToFloatDef(v1,NullCoord);
-            end;
+             inc(sesame_magnnum);
+             SetLength(sesame_magnlist,sesame_magnnum);
+             sesame_magnlist[sesame_magnnum-1].band:=b;
+             sesame_magnlist[sesame_magnnum-1].magn:=StrToFloatDef(v1,NullCoord);
           end;
 
           buf := buf+k+'.'+a+'.'+k1+':'+v1+tab;
@@ -169,7 +176,7 @@ begin
 
 end;
 
-function SearchOnline(n,band: string;out rname,resolv: string; out rra,rdec,rmagn: double; out magband:string): boolean;
+function SearchOnline(n: string;out rname,resolv: string; out rra,rdec: double; out maglist:TMagnitudeList): boolean;
 var
   url,cat:string;
   http: THTTPSend;
@@ -180,7 +187,6 @@ begin
 
   cat:='SN';   // Simbad, then NED
   num:=n;
-  nband:=band;
 
   url:='https://cds.unistra.fr/cgi-bin/nph-sesame';
   url:=url+'/-oxF/'+cat+'?'+trim(StringReplace(num,' ','%20',[rfReplaceAll]));
@@ -210,9 +216,8 @@ begin
      if result then begin
        rra:=ra;
        rdec:=de;
-       rmagn:=sesame_magn;
+       maglist:=sesame_magnlist;
        rname:=sesame_type+' '+sesame_name;
-       magband:=sesame_band;
        resolv:=sesame_resolver;
      end;
   end;
