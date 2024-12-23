@@ -67,7 +67,7 @@ object f_option: Tf_option
     Top = 0
     Width = 740
     HorzScrollBar.Page = 721
-    VertScrollBar.Page = 672
+    VertScrollBar.Page = 676
     Align = alClient
     BorderStyle = bsNone
     ClientHeight = 687
@@ -820,7 +820,7 @@ object f_option: Tf_option
                 end              
                 item
                   Title.Caption = 'Value'
-                  Width = 472
+                  Width = 468
                 end>
               FixedCols = 0
               MouseWheelOption = mwGrid
@@ -830,7 +830,7 @@ object f_option: Tf_option
               OnValidateEntry = CustomHeaderValidateEntry
               ColWidths = (
                 100
-                472
+                468
               )
             end
             object Panel8: TPanel
@@ -1691,12 +1691,12 @@ object f_option: Tf_option
         end
         object GroupBoxReadOut: TGroupBox
           Left = 0
-          Height = 155
-          Top = 528
+          Height = 139
+          Top = 544
           Width = 576
           Align = alClient
           Caption = 'Readout modes'
-          ClientHeight = 125
+          ClientHeight = 109
           ClientWidth = 572
           ParentFont = False
           TabOrder = 2
@@ -1804,20 +1804,20 @@ object f_option: Tf_option
         end
         object StackGroup: TGroupBox
           Left = 0
-          Height = 160
+          Height = 176
           Top = 368
           Width = 576
           Align = alTop
           Caption = 'Short exposure stacking'
-          ClientHeight = 130
+          ClientHeight = 146
           ClientWidth = 572
           ParentFont = False
           TabOrder = 4
           object SaveStack: TCheckBox
             AnchorSideLeft.Side = asrBottom
-            Left = 16
+            Left = 193
             Height = 22
-            Top = 100
+            Top = 76
             Width = 265
             BorderSpacing.Left = 4
             BorderSpacing.Right = 4
@@ -1853,12 +1853,10 @@ object f_option: Tf_option
             TabOrder = 4
           end
           object StackOperation: TRadioGroup
-            AnchorSideTop.Control = FileStackFloat
-            AnchorSideTop.Side = asrCenter
-            Left = 184
-            Height = 30
-            Top = 72
-            Width = 338
+            Left = 8
+            Height = 44
+            Top = 100
+            Width = 394
             AutoFill = True
             ChildSizing.LeftRightSpacing = 6
             ChildSizing.EnlargeHorizontal = crsHomogenousChildResize
@@ -1867,8 +1865,8 @@ object f_option: Tf_option
             ChildSizing.ShrinkVertical = crsScaleChilds
             ChildSizing.Layout = cclLeftToRightThenTopToBottom
             ChildSizing.ControlsPerLine = 2
-            ClientHeight = 26
-            ClientWidth = 334
+            ClientHeight = 40
+            ClientWidth = 390
             Columns = 2
             ItemIndex = 0
             Items.Strings = (
@@ -2523,21 +2521,21 @@ object f_option: Tf_option
           Columns = <          
             item
               Title.Caption = 'Title'
-              Width = 115
+              Width = 114
             end          
             item
               ButtonStyle = cbsPickList
               Title.Caption = 'Title'
-              Width = 115
+              Width = 114
             end          
             item
               Title.Caption = 'Title'
-              Width = 115
+              Width = 114
             end          
             item
               ButtonStyle = cbsPickList
               Title.Caption = 'Title'
-              Width = 115
+              Width = 114
             end          
             item
               Title.Caption = 'Title'
@@ -2552,10 +2550,10 @@ object f_option: Tf_option
           TabOrder = 0
           OnEditingDone = sgCustomTypeEditingDone
           ColWidths = (
-            115
-            115
-            115
-            115
+            114
+            114
+            114
+            114
             116
           )
         end
@@ -3126,8 +3124,8 @@ object f_option: Tf_option
             TabOrder = 0
             ColWidths = (
               123
-              214
-              214
+              212
+              212
             )
           end
         end
@@ -6219,7 +6217,7 @@ object f_option: Tf_option
                   MinSize = 101
                   MaxSize = 202
                   Title.Caption = 'Action'
-                  Width = 521
+                  Width = 496
                 end>
               DefaultColWidth = 51
               MouseWheelOption = mwGrid
@@ -6229,7 +6227,7 @@ object f_option: Tf_option
               TabOrder = 0
               ColWidths = (
                 51
-                521
+                496
               )
             end
           end
@@ -6259,7 +6257,7 @@ object f_option: Tf_option
                   MinSize = 101
                   MaxSize = 202
                   Title.Caption = 'Action'
-                  Width = 521
+                  Width = 517
                 end>
               DefaultColWidth = 51
               MouseWheelOption = mwGrid
@@ -6269,7 +6267,7 @@ object f_option: Tf_option
               TabOrder = 0
               ColWidths = (
                 51
-                521
+                517
               )
             end
           end
@@ -6595,18 +6593,18 @@ object f_option: Tf_option
           HorzScrollBar.Page = 501
           VertScrollBar.Page = 429
           Align = alClient
-          ClientHeight = 614
-          ClientWidth = 576
+          ClientHeight = 610
+          ClientWidth = 572
           ParentFont = False
           TabOrder = 0
           object PanelW1: TPanel
             Left = 0
             Height = 33
             Top = 0
-            Width = 576
+            Width = 572
             Align = alTop
             ClientHeight = 33
-            ClientWidth = 576
+            ClientWidth = 572
             ParentFont = False
             TabOrder = 0
             object LabelMi1: TLabel
@@ -6667,10 +6665,10 @@ object f_option: Tf_option
             Left = 0
             Height = 33
             Top = 33
-            Width = 576
+            Width = 572
             Align = alTop
             ClientHeight = 33
-            ClientWidth = 576
+            ClientWidth = 572
             ParentFont = False
             TabOrder = 1
             object LabelMi2: TLabel
@@ -6731,10 +6729,10 @@ object f_option: Tf_option
             Left = 0
             Height = 33
             Top = 66
-            Width = 576
+            Width = 572
             Align = alTop
             ClientHeight = 33
-            ClientWidth = 576
+            ClientWidth = 572
             ParentFont = False
             TabOrder = 2
             object LabelMi3: TLabel
@@ -6795,10 +6793,10 @@ object f_option: Tf_option
             Left = 0
             Height = 33
             Top = 99
-            Width = 576
+            Width = 572
             Align = alTop
             ClientHeight = 33
-            ClientWidth = 576
+            ClientWidth = 572
             ParentFont = False
             TabOrder = 3
             object LabelMi4: TLabel
@@ -6859,10 +6857,10 @@ object f_option: Tf_option
             Left = 0
             Height = 33
             Top = 132
-            Width = 576
+            Width = 572
             Align = alTop
             ClientHeight = 33
-            ClientWidth = 576
+            ClientWidth = 572
             ParentFont = False
             TabOrder = 4
             object LabelMi5: TLabel
@@ -6923,10 +6921,10 @@ object f_option: Tf_option
             Left = 0
             Height = 33
             Top = 165
-            Width = 576
+            Width = 572
             Align = alTop
             ClientHeight = 33
-            ClientWidth = 576
+            ClientWidth = 572
             ParentFont = False
             TabOrder = 5
             object LabelMi6: TLabel
@@ -6987,10 +6985,10 @@ object f_option: Tf_option
             Left = 0
             Height = 33
             Top = 198
-            Width = 576
+            Width = 572
             Align = alTop
             ClientHeight = 33
-            ClientWidth = 576
+            ClientWidth = 572
             ParentFont = False
             TabOrder = 6
             object LabelMi7: TLabel
@@ -7051,10 +7049,10 @@ object f_option: Tf_option
             Left = 0
             Height = 33
             Top = 231
-            Width = 576
+            Width = 572
             Align = alTop
             ClientHeight = 33
-            ClientWidth = 576
+            ClientWidth = 572
             ParentFont = False
             TabOrder = 7
             object LabelMi8: TLabel
@@ -7115,10 +7113,10 @@ object f_option: Tf_option
             Left = 0
             Height = 33
             Top = 264
-            Width = 576
+            Width = 572
             Align = alTop
             ClientHeight = 33
-            ClientWidth = 576
+            ClientWidth = 572
             ParentFont = False
             TabOrder = 8
             object LabelMi9: TLabel
@@ -7179,10 +7177,10 @@ object f_option: Tf_option
             Left = 0
             Height = 33
             Top = 297
-            Width = 576
+            Width = 572
             Align = alTop
             ClientHeight = 33
-            ClientWidth = 576
+            ClientWidth = 572
             ParentFont = False
             TabOrder = 9
             object LabelMi10: TLabel
@@ -7243,10 +7241,10 @@ object f_option: Tf_option
             Left = 0
             Height = 33
             Top = 330
-            Width = 576
+            Width = 572
             Align = alTop
             ClientHeight = 33
-            ClientWidth = 576
+            ClientWidth = 572
             ParentFont = False
             TabOrder = 10
             object LabelMi11: TLabel
@@ -7307,10 +7305,10 @@ object f_option: Tf_option
             Left = 0
             Height = 33
             Top = 363
-            Width = 576
+            Width = 572
             Align = alTop
             ClientHeight = 33
-            ClientWidth = 576
+            ClientWidth = 572
             ParentFont = False
             TabOrder = 11
             object LabelMi12: TLabel
@@ -7371,10 +7369,10 @@ object f_option: Tf_option
             Left = 0
             Height = 33
             Top = 396
-            Width = 576
+            Width = 572
             Align = alTop
             ClientHeight = 33
-            ClientWidth = 576
+            ClientWidth = 572
             ParentFont = False
             TabOrder = 12
             object LabelMi13: TLabel
@@ -7518,13 +7516,13 @@ object f_option: Tf_option
               MinSize = 101
               MaxSize = 202
               Title.Caption = 'Action'
-              Width = 262
+              Width = 260
             end          
             item
               MinSize = 101
               MaxSize = 202
               Title.Caption = 'Parameters'
-              Width = 263
+              Width = 261
             end>
           DefaultColWidth = 51
           MouseWheelOption = mwGrid
@@ -7536,8 +7534,8 @@ object f_option: Tf_option
           OnValidateEntry = SafetyActionsValidateEntry
           ColWidths = (
             51
-            262
-            263
+            260
+            261
           )
         end
         object Panel18: TPanel
@@ -7910,10 +7908,10 @@ object f_option: Tf_option
           Height = 683
           Top = 0
           Width = 576
-          ActivePage = TabSheetVoice
+          ActivePage = TabSheetEmail
           Align = alClient
           ParentFont = False
-          TabIndex = 1
+          TabIndex = 0
           TabOrder = 0
           object TabSheetEmail: TTabSheet
             Caption = 'Email'
