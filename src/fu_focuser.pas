@@ -26,7 +26,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 interface
 
 uses  UScaleDPI, u_global, u_translation, u_hints,
-  Classes, SysUtils, FileUtil, Forms, Graphics, Controls, StdCtrls, ExtCtrls, Spin;
+  Classes, SysUtils, FileUtil, Forms, Graphics, Controls, StdCtrls, ExtCtrls, SpinEx;
 
 type
 
@@ -40,9 +40,9 @@ type
     Label5: TLabel;
     lblTemp: TLabel;
     PanelTemp: TPanel;
-    speed: TSpinEdit;
-    Position: TSpinEdit;
-    timer: TSpinEdit;
+    speed: TSpinEditEx;
+    Position: TSpinEditEx;
+    timer: TSpinEditEx;
     Temp: TEdit;
     Label6: TLabel;
     Notebook1: TNotebook;

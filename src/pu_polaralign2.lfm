@@ -213,7 +213,7 @@ object f_polaralign2: Tf_polaralign2
       Caption = 'Az:'
       ParentColor = False
     end
-    object FloatSpinEditAz1: TFloatSpinEdit
+    object FloatSpinEditAz1: TFloatSpinEditEx
       Left = 116
       Height = 32
       Top = 2
@@ -223,7 +223,7 @@ object f_polaralign2: Tf_polaralign2
       TabOrder = 0
       Value = 60
     end
-    object FloatSpinEditAz2: TFloatSpinEdit
+    object FloatSpinEditAz2: TFloatSpinEditEx
       Left = 116
       Height = 32
       Top = 32
@@ -233,7 +233,7 @@ object f_polaralign2: Tf_polaralign2
       TabOrder = 1
       Value = 160
     end
-    object FloatSpinEditAlt1: TFloatSpinEdit
+    object FloatSpinEditAlt1: TFloatSpinEditEx
       Left = 240
       Height = 32
       Top = 2
@@ -243,7 +243,7 @@ object f_polaralign2: Tf_polaralign2
       TabOrder = 2
       Value = 40
     end
-    object FloatSpinEditAlt2: TFloatSpinEdit
+    object FloatSpinEditAlt2: TFloatSpinEditEx
       Left = 240
       Height = 32
       Top = 32

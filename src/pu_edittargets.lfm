@@ -107,7 +107,7 @@ object f_EditTargets: Tf_EditTargets
           ParentFont = False
           TabOrder = 2
         end
-        object RepeatCountList: TSpinEdit
+        object RepeatCountList: TSpinEditEx
           AnchorSideTop.Control = CheckBoxRepeatList
           AnchorSideTop.Side = asrCenter
           Left = 192
@@ -434,7 +434,7 @@ object f_EditTargets: Tf_EditTargets
                 ParentColor = False
                 ParentFont = False
               end
-              object TDelay: TSpinEdit
+              object TDelay: TSpinEditEx
                 Left = 141
                 Height = 26
                 Top = 0
@@ -445,7 +445,7 @@ object f_EditTargets: Tf_EditTargets
                 ParentFont = False
                 TabOrder = 1
               end
-              object PreviewExposure: TFloatSpinEdit
+              object PreviewExposure: TFloatSpinEditEx
                 AnchorSideTop.Control = TDelay
                 AnchorSideTop.Side = asrCenter
                 Left = 336
@@ -1506,7 +1506,7 @@ object f_EditTargets: Tf_EditTargets
                 ParentColor = False
                 ParentFont = False
               end
-              object FGainEdit: TSpinEdit
+              object FGainEdit: TSpinEditEx
                 Left = 91
                 Height = 26
                 Top = 0
@@ -1539,7 +1539,7 @@ object f_EditTargets: Tf_EditTargets
                   ParentColor = False
                   ParentFont = False
                 end
-                object FOffsetEdit: TSpinEdit
+                object FOffsetEdit: TSpinEditEx
                   Left = 91
                   Height = 26
                   Top = 4
@@ -1592,7 +1592,7 @@ object f_EditTargets: Tf_EditTargets
               ParentColor = False
               ParentFont = False
             end
-            object FlatCount: TSpinEdit
+            object FlatCount: TSpinEditEx
               Left = 91
               Height = 28
               Top = 0

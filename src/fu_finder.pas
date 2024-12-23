@@ -27,7 +27,7 @@ interface
 
 uses  UScaleDPI, u_global, u_utils, Graphics, Dialogs, u_translation, u_hints, cu_camera, indiapi,
       cu_astrometry, pu_findercalibration, math,
-  Classes, SysUtils, FileUtil, Forms, Controls, StdCtrls, ExtCtrls, ComCtrls, Spin, Buttons;
+  Classes, SysUtils, FileUtil, Forms, Controls, StdCtrls, ExtCtrls, ComCtrls, SpinEx, Buttons;
 
 type
 
@@ -48,10 +48,10 @@ type
     LabelInfo: TLabel;
     LabelMsg: TLabel;
     Panel3: TPanel;
-    PreviewExp: TFloatSpinEdit;
+    PreviewExp: TFloatSpinEditEx;
     GroupBox1: TGroupBox;
     Label3: TLabel;
-    OffsetX: TFloatSpinEdit;
+    OffsetX: TFloatSpinEditEx;
     Gamma: TTrackBar;
     Label1: TLabel;
     Label17: TLabel;
@@ -59,7 +59,7 @@ type
     Label19: TLabel;
     Label2: TLabel;
     Luminosity: TTrackBar;
-    OffsetY: TFloatSpinEdit;
+    OffsetY: TFloatSpinEditEx;
     Panel1: TPanel;
     Panel2: TPanel;
     Panel8: TPanel;

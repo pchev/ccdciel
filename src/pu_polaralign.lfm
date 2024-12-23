@@ -201,7 +201,7 @@ object f_polaralign: Tf_polaralign
             ClientWidth = 350
             ParentFont = False
             TabOrder = 1
-            object RotAngle: TSpinEdit
+            object RotAngle: TSpinEditEx
               Left = 129
               Height = 28
               Top = 8

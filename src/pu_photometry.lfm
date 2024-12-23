@@ -47,7 +47,7 @@ object f_photometry: Tf_photometry
     ClientWidth = 323
     ParentFont = False
     TabOrder = 0
-    object RefMag: TFloatSpinEdit
+    object RefMag: TFloatSpinEditEx
       Left = 223
       Height = 32
       Top = 6

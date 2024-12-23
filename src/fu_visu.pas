@@ -27,7 +27,7 @@ interface
 
 uses Graphics, cu_fits, math, UScaleDPI, Classes, SysUtils, FileUtil, TAGraph,
   TASeries, TAChartUtils, u_translation, u_hints, LCLType,
-  u_global, Forms, Controls, ExtCtrls, StdCtrls, Buttons, Spin, ComCtrls;
+  u_global, Forms, Controls, ExtCtrls, StdCtrls, Buttons, SpinEx, ComCtrls;
 
 type
 
@@ -44,7 +44,7 @@ type
     BtnBullsEye: TSpeedButton;
     HistGraph: TChart;
     HistGraphAreaSeries1: TAreaSeries;
-    Gamma: TFloatSpinEdit;
+    Gamma: TFloatSpinEditEx;
     HistGraphMaxLine: TConstantLine;
     HistGraphMinLine: TConstantLine;
     Panel1: TPanel;
@@ -62,8 +62,8 @@ type
     Panel8: TPanel;
     Panel9: TPanel;
     PanelNoDisplay: TPanel;
-    SpinEditMin: TFloatSpinEdit;
-    SpinEditMax: TFloatSpinEdit;
+    SpinEditMin: TFloatSpinEditEx;
+    SpinEditMax: TFloatSpinEditEx;
     Splitter1: TSplitter;
     Title: TLabel;
     TimerRedraw: TTimer;

@@ -26,7 +26,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 interface
 
 uses u_global, u_utils, UScaleDPI, cu_camera, cu_wheel, indiapi, pu_indigui, math, u_translation,
-  Classes, SysUtils, LazFileUtils, Spin, Forms, Graphics, Controls, StdCtrls, ExtCtrls, ComCtrls;
+  Classes, SysUtils, LazFileUtils, SpinEx, Forms, Graphics, Controls, StdCtrls, ExtCtrls, ComCtrls;
 
 type
 
@@ -43,7 +43,7 @@ type
     Label9: TLabel;
     PanelEncoder: TPanel;
     VideoCaptureDir: TEdit;
-    StreamExp: TFloatSpinEdit;
+    StreamExp: TFloatSpinEditEx;
     Label4: TLabel;
     Label5: TLabel;
     Label6: TLabel;

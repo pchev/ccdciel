@@ -72,7 +72,7 @@ object f_focuser: Tf_focuser
               ParentColor = False
               ParentFont = False
             end
-            object speed: TSpinEdit
+            object speed: TSpinEditEx
               Left = 64
               Height = 28
               Top = 0
@@ -82,7 +82,7 @@ object f_focuser: Tf_focuser
               ParentFont = False
               TabOrder = 0
             end
-            object timer: TSpinEdit
+            object timer: TSpinEditEx
               Left = 64
               Height = 28
               Top = 27
@@ -221,7 +221,7 @@ object f_focuser: Tf_focuser
               ParentFont = False
               TabOrder = 2
             end
-            object Position: TSpinEdit
+            object Position: TSpinEditEx
               Left = 34
               Height = 32
               Top = 0

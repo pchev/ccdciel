@@ -128,7 +128,7 @@ object f_cover: Tf_cover
         ParentColor = False
         ParentFont = False
       end
-      object Brightness: TSpinEdit
+      object Brightness: TSpinEditEx
         AnchorSideTop.Control = Light
         AnchorSideTop.Side = asrCenter
         Left = 104

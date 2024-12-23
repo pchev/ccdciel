@@ -29,7 +29,7 @@ interface
 
 uses u_translation, u_utils, u_global, fu_preview, cu_fits, cu_astrometry, cu_mount, cu_camera, cu_wheel,
   fu_visu, fu_finder, indiapi, UScaleDPI, u_refraction,
-  math, Classes, SysUtils, Forms, Controls, Graphics, Dialogs, ComCtrls, StdCtrls, ExtCtrls, CheckLst, Spin;
+  math, Classes, SysUtils, Forms, Controls, Graphics, Dialogs, ComCtrls, StdCtrls, ExtCtrls, CheckLst, SpinEx;
 
 type
 
@@ -65,7 +65,7 @@ type
     Panel6: TPanel;
     PanelManualSlew: TPanel;
     RotDir: TRadioGroup;
-    RotAngle: TSpinEdit;
+    RotAngle: TSpinEditEx;
     TabSheetCompute: TTabSheet;
     TabSheetExpose: TTabSheet;
     TabSheetStart: TTabSheet;

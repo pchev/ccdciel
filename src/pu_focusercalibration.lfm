@@ -103,7 +103,7 @@ object f_focusercalibration: Tf_focusercalibration
         ParentFont = False
         TabOrder = 1
       end
-      object Backlash: TSpinEdit
+      object Backlash: TSpinEditEx
         Left = 267
         Height = 28
         Top = 299
@@ -168,7 +168,7 @@ object f_focusercalibration: Tf_focusercalibration
         ParentFont = False
         TabOrder = 0
       end
-      object hfdmax: TSpinEdit
+      object hfdmax: TSpinEditEx
         Left = 267
         Height = 28
         Top = 154
@@ -179,7 +179,7 @@ object f_focusercalibration: Tf_focusercalibration
         TabOrder = 1
         Value = 5
       end
-      object stepmin: TSpinEdit
+      object stepmin: TSpinEditEx
         Left = 267
         Height = 28
         Top = 212

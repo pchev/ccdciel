@@ -103,7 +103,7 @@ object f_internalguider: Tf_internalguider
             ParentFont = False
             TabOrder = 2
           end
-          object dec_gain1: TSpinEdit
+          object dec_gain1: TSpinEditEx
             Left = 80
             Height = 32
             Hint = 'Proportional corrective action of the guider controller in % of the offset for declination. Typically set at 50-70%'
@@ -116,7 +116,7 @@ object f_internalguider: Tf_internalguider
             TabOrder = 5
             Value = 100
           end
-          object ra_hysteresis1: TSpinEdit
+          object ra_hysteresis1: TSpinEditEx
             AnchorSideTop.Control = ra_gain1
             AnchorSideTop.Side = asrBottom
             Left = 80
@@ -176,7 +176,7 @@ object f_internalguider: Tf_internalguider
             ParentShowHint = False
             ShowHint = True
           end
-          object ra_gain1: TSpinEdit
+          object ra_gain1: TSpinEditEx
             Left = 80
             Height = 32
             Hint = 'Proportional  corrective action of the guider controller in % of the offset for right ascension. Typically set between  50 and 80%'
@@ -220,7 +220,7 @@ object f_internalguider: Tf_internalguider
             Width = 314
             AntialiasingMode = amOn
           end
-          object dec_hysteresis1: TSpinEdit
+          object dec_hysteresis1: TSpinEditEx
             AnchorSideTop.Control = dec_gain1
             AnchorSideTop.Side = asrBottom
             Left = 80
@@ -420,7 +420,7 @@ object f_internalguider: Tf_internalguider
               Caption = 'Exposure'
               ParentColor = False
             end
-            object Exposure: TFloatSpinEdit
+            object Exposure: TFloatSpinEditEx
               Left = 103
               Height = 32
               Top = 0
@@ -442,7 +442,7 @@ object f_internalguider: Tf_internalguider
               Caption = 'Binning'
               ParentColor = False
             end
-            object Binning: TSpinEdit
+            object Binning: TSpinEditEx
               Left = 104
               Height = 32
               Top = 33
@@ -474,7 +474,7 @@ object f_internalguider: Tf_internalguider
               Caption = 'Gain'
               ParentColor = False
             end
-            object Gain: TSpinEdit
+            object Gain: TSpinEditEx
               Left = 104
               Height = 32
               Top = 0
@@ -503,7 +503,7 @@ object f_internalguider: Tf_internalguider
               Caption = 'Offset'
               ParentColor = False
             end
-            object Offset: TSpinEdit
+            object Offset: TSpinEditEx
               Left = 104
               Height = 32
               Top = 0
@@ -542,7 +542,7 @@ object f_internalguider: Tf_internalguider
               Caption = '0'
               ParentColor = False
             end
-            object Temperature: TSpinEdit
+            object Temperature: TSpinEditEx
               Left = 166
               Height = 32
               Top = 0
@@ -726,7 +726,7 @@ object f_internalguider: Tf_internalguider
             ClientWidth = 340
             ParentBackground = False
             TabOrder = 1
-            object ShortestPulse1: TSpinEdit
+            object ShortestPulse1: TSpinEditEx
               Left = 200
               Height = 32
               Hint = 'Improves stability. Typical set at 40. Guide pulses shorter then this value are skipped.  Pulses shorter then this value can cause a larger error then the required correction and are not effective.'
@@ -759,7 +759,7 @@ object f_internalguider: Tf_internalguider
               Caption = 'Minimum HFD'
               ParentColor = False
             end
-            object minSNR1: TSpinEdit
+            object minSNR1: TSpinEditEx
               Left = 200
               Height = 32
               Hint = 'Minimum signal to noise ratio'
@@ -782,7 +782,7 @@ object f_internalguider: Tf_internalguider
               Caption = 'Minimum SNR'
               ParentColor = False
             end
-            object minHFD1: TFloatSpinEdit
+            object minHFD1: TFloatSpinEditEx
               Left = 200
               Height = 32
               Hint = 'Minimum star size. could be used to ignore hot pixels.'
@@ -836,7 +836,7 @@ object f_internalguider: Tf_internalguider
               Caption = 'Longest guide pulse [ms]'
               ParentColor = False
             end
-            object LongestPulse1: TSpinEdit
+            object LongestPulse1: TSpinEditEx
               Left = 200
               Height = 32
               Top = 64
@@ -882,7 +882,7 @@ object f_internalguider: Tf_internalguider
               OnChange = CheckBoxTrackSolar1Change
               TabOrder = 5
             end
-            object v_solar1: TFloatSpinEdit
+            object v_solar1: TFloatSpinEditEx
               Left = 200
               Height = 32
               Hint = 'Apparent motion of the solar object in arcsec/min.  The Pixel scale in tab advanced should be reasonable accurate.'
@@ -894,7 +894,7 @@ object f_internalguider: Tf_internalguider
               ParentFont = False
               TabOrder = 6
             end
-            object vpa_solar1: TFloatSpinEdit
+            object vpa_solar1: TFloatSpinEditEx
               Left = 200
               Height = 32
               Hint = 'Position angle of the apparent motion'
@@ -916,7 +916,7 @@ object f_internalguider: Tf_internalguider
               OnChange = CheckBoxBacklashChange
               TabOrder = 8
             end
-            object Backlash: TSpinEdit
+            object Backlash: TSpinEditEx
               Left = 200
               Height = 32
               Top = 336
@@ -1002,7 +1002,7 @@ object f_internalguider: Tf_internalguider
               Caption = 'Initial calibration step [ms] '
               ParentColor = False
             end
-            object InitialCalibrationStep: TSpinEdit
+            object InitialCalibrationStep: TSpinEditEx
               Left = 200
               Height = 32
               Top = 0
@@ -1048,7 +1048,7 @@ object f_internalguider: Tf_internalguider
                 Caption = 'DEC'
                 ParentColor = False
               end
-              object GuideSpeedRA: TFloatSpinEdit
+              object GuideSpeedRA: TFloatSpinEditEx
                 Left = 64
                 Height = 32
                 Top = 0
@@ -1060,7 +1060,7 @@ object f_internalguider: Tf_internalguider
                 TabOrder = 0
                 Value = 0.1
               end
-              object GuideSpeedDEC: TFloatSpinEdit
+              object GuideSpeedDEC: TFloatSpinEditEx
                 Left = 200
                 Height = 32
                 Top = 0
@@ -1174,7 +1174,7 @@ object f_internalguider: Tf_internalguider
                 Caption = 'Astrometry exposure time'
                 ParentColor = False
               end
-              object AstrometryExp: TFloatSpinEdit
+              object AstrometryExp: TFloatSpinEditEx
                 AnchorSideLeft.Side = asrBottom
                 Left = 216
                 Height = 32
@@ -1215,7 +1215,7 @@ object f_internalguider: Tf_internalguider
                 Caption = 'Offset X'
                 ParentColor = False
               end
-              object StarOffsetX: TFloatSpinEdit
+              object StarOffsetX: TFloatSpinEditEx
                 AnchorSideLeft.Control = Label56
                 AnchorSideLeft.Side = asrBottom
                 AnchorSideTop.Control = Label56
@@ -1241,7 +1241,7 @@ object f_internalguider: Tf_internalguider
                 Caption = 'Offset Y'
                 ParentColor = False
               end
-              object StarOffsetY: TFloatSpinEdit
+              object StarOffsetY: TFloatSpinEditEx
                 AnchorSideLeft.Control = Label57
                 AnchorSideLeft.Side = asrBottom
                 AnchorSideTop.Control = Label56
@@ -1325,7 +1325,7 @@ object f_internalguider: Tf_internalguider
                   Caption = 'Guide box size'
                   ParentColor = False
                 end
-                object edslitWinMin: TSpinEdit
+                object edslitWinMin: TSpinEditEx
                   Left = 220
                   Height = 32
                   Top = 2
@@ -1333,7 +1333,7 @@ object f_internalguider: Tf_internalguider
                   TabOrder = 0
                   Value = 40
                 end
-                object edslitWinMax: TSpinEdit
+                object edslitWinMax: TSpinEditEx
                   AnchorSideTop.Control = edslitWinMin
                   AnchorSideTop.Side = asrBottom
                   Left = 220
@@ -1371,7 +1371,7 @@ object f_internalguider: Tf_internalguider
                 ClientWidth = 332
                 ParentBackground = False
                 TabOrder = 0
-                object edOffsetX: TFloatSpinEdit
+                object edOffsetX: TFloatSpinEditEx
                   Left = 180
                   Height = 32
                   Top = 3
@@ -1398,7 +1398,7 @@ object f_internalguider: Tf_internalguider
                   Caption = 'Guide offset Y'
                   ParentColor = False
                 end
-                object edOffsetY: TFloatSpinEdit
+                object edOffsetY: TFloatSpinEditEx
                   Left = 180
                   Height = 32
                   Top = 35
@@ -1468,7 +1468,7 @@ object f_internalguider: Tf_internalguider
                 Caption = 'Slit'
                 ParentColor = False
               end
-              object SlitOffsetX: TFloatSpinEdit
+              object SlitOffsetX: TFloatSpinEditEx
                 AnchorSideLeft.Control = Label51
                 AnchorSideLeft.Side = asrBottom
                 AnchorSideTop.Control = Label51
@@ -1483,7 +1483,7 @@ object f_internalguider: Tf_internalguider
                 OnChange = SlitOffsetChange
                 TabOrder = 1
               end
-              object SlitOffsetY: TFloatSpinEdit
+              object SlitOffsetY: TFloatSpinEditEx
                 AnchorSideLeft.Control = Label52
                 AnchorSideLeft.Side = asrBottom
                 AnchorSideTop.Control = Label51
@@ -1530,7 +1530,7 @@ object f_internalguider: Tf_internalguider
               ClientHeight = 72
               ClientWidth = 336
               TabOrder = 1
-              object edRefX: TFloatSpinEdit
+              object edRefX: TFloatSpinEditEx
                 Left = 64
                 Height = 32
                 Top = 4
@@ -1559,7 +1559,7 @@ object f_internalguider: Tf_internalguider
                 Caption = 'Y'
                 ParentColor = False
               end
-              object edRefY: TFloatSpinEdit
+              object edRefY: TFloatSpinEditEx
                 Left = 216
                 Height = 32
                 Top = 4
@@ -1661,7 +1661,7 @@ object f_internalguider: Tf_internalguider
                 Caption = 'Rotation angle'
                 ParentColor = False
               end
-              object spSlitX: TSpinEdit
+              object spSlitX: TSpinEditEx
                 Left = 64
                 Height = 32
                 Top = 0
@@ -1670,7 +1670,7 @@ object f_internalguider: Tf_internalguider
                 OnChange = ForceRedraw
                 TabOrder = 0
               end
-              object spSlitY: TSpinEdit
+              object spSlitY: TSpinEditEx
                 Left = 224
                 Height = 32
                 Top = 0
@@ -1679,7 +1679,7 @@ object f_internalguider: Tf_internalguider
                 OnChange = ForceRedraw
                 TabOrder = 1
               end
-              object spSlitW: TSpinEdit
+              object spSlitW: TSpinEditEx
                 Left = 64
                 Height = 32
                 Top = 40
@@ -1688,7 +1688,7 @@ object f_internalguider: Tf_internalguider
                 OnChange = ForceRedraw
                 TabOrder = 2
               end
-              object spSlitL: TSpinEdit
+              object spSlitL: TSpinEditEx
                 Left = 224
                 Height = 32
                 Top = 40
@@ -1697,7 +1697,7 @@ object f_internalguider: Tf_internalguider
                 OnChange = ForceRedraw
                 TabOrder = 3
               end
-              object spSlitPA: TSpinEdit
+              object spSlitPA: TSpinEditEx
                 Left = 144
                 Height = 32
                 Top = 80

@@ -108,7 +108,7 @@ object f_preview: Tf_preview
         ParentColor = False
         ParentFont = False
       end
-      object GainEdit: TSpinEdit
+      object GainEdit: TSpinEditEx
         Left = 100
         Height = 32
         Top = 0
@@ -139,7 +139,7 @@ object f_preview: Tf_preview
           Caption = 'Offset'
           ParentColor = False
         end
-        object OffsetEdit: TSpinEdit
+        object OffsetEdit: TSpinEditEx
           Left = 100
           Height = 32
           Top = 0

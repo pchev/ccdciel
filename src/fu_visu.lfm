@@ -113,7 +113,7 @@ object f_visu: Tf_visu
             UseZeroLevel = True
           end
         end
-        object SpinEditMin: TFloatSpinEdit
+        object SpinEditMin: TFloatSpinEditEx
           AnchorSideLeft.Control = Panel3
           AnchorSideTop.Control = Panel3
           Left = 0
@@ -132,7 +132,7 @@ object f_visu: Tf_visu
           TabOrder = 0
           Visible = False
         end
-        object SpinEditMax: TFloatSpinEdit
+        object SpinEditMax: TFloatSpinEditEx
           AnchorSideTop.Control = Panel3
           AnchorSideRight.Control = Panel3
           AnchorSideRight.Side = asrBottom
@@ -188,7 +188,7 @@ object f_visu: Tf_visu
             ClientHeight = 26
             ClientWidth = 115
             TabOrder = 0
-            object Gamma: TFloatSpinEdit
+            object Gamma: TFloatSpinEditEx
               Left = 0
               Height = 26
               Hint = 'Gamma'

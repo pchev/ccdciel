@@ -77,7 +77,7 @@ object f_sensoranalysis: Tf_sensoranalysis
     ClientWidth = 488
     Constraints.MaxWidth = 488
     TabOrder = 2
-    object Gain1: TSpinEdit
+    object Gain1: TSpinEditEx
       Left = 26
       Height = 32
       Hint = 'Enter here the gain values to test'
@@ -87,7 +87,7 @@ object f_sensoranalysis: Tf_sensoranalysis
       ShowHint = True
       TabOrder = 0
     end
-    object Offset1: TSpinEdit
+    object Offset1: TSpinEditEx
       Left = 397
       Height = 32
       Top = 56
@@ -111,7 +111,7 @@ object f_sensoranalysis: Tf_sensoranalysis
       Caption = 'Offset'
       ParentColor = False
     end
-    object Gain2: TSpinEdit
+    object Gain2: TSpinEditEx
       Left = 26
       Height = 32
       Hint = 'Enter here the gain values to test'
@@ -123,7 +123,7 @@ object f_sensoranalysis: Tf_sensoranalysis
       TabOrder = 1
       Value = 100
     end
-    object Gain3: TSpinEdit
+    object Gain3: TSpinEditEx
       Left = 26
       Height = 32
       Hint = 'Enter here the gain values to test'
@@ -134,7 +134,7 @@ object f_sensoranalysis: Tf_sensoranalysis
       TabOrder = 2
       Value = 200
     end
-    object Gain8: TSpinEdit
+    object Gain8: TSpinEditEx
       Left = 26
       Height = 32
       Hint = 'Enter here the gain values to test'
@@ -145,7 +145,7 @@ object f_sensoranalysis: Tf_sensoranalysis
       TabOrder = 7
       Value = 10000
     end
-    object repeats1: TSpinEdit
+    object repeats1: TSpinEditEx
       Left = 396
       Height = 32
       Hint = 'Number of images used for each measurement.'
@@ -165,7 +165,7 @@ object f_sensoranalysis: Tf_sensoranalysis
       Caption = 'Repeats'
       ParentColor = False
     end
-    object Gain4: TSpinEdit
+    object Gain4: TSpinEditEx
       Left = 26
       Height = 32
       Hint = 'Enter here the gain values to test'
@@ -176,7 +176,7 @@ object f_sensoranalysis: Tf_sensoranalysis
       TabOrder = 3
       Value = 400
     end
-    object Gain6: TSpinEdit
+    object Gain6: TSpinEditEx
       Left = 26
       Height = 32
       Hint = 'Enter here the gain values to test'
@@ -187,7 +187,7 @@ object f_sensoranalysis: Tf_sensoranalysis
       TabOrder = 5
       Value = 2000
     end
-    object Gain7: TSpinEdit
+    object Gain7: TSpinEditEx
       Left = 26
       Height = 32
       Hint = 'Enter here the gain values to test'
@@ -198,7 +198,7 @@ object f_sensoranalysis: Tf_sensoranalysis
       TabOrder = 6
       Value = 4000
     end
-    object Gain5: TSpinEdit
+    object Gain5: TSpinEditEx
       Left = 26
       Height = 32
       Hint = 'Enter here the gain values to test'
@@ -380,7 +380,7 @@ object f_sensoranalysis: Tf_sensoranalysis
         TabStop = True
       end
     end
-    object dark_current_test_duration1: TSpinEdit
+    object dark_current_test_duration1: TSpinEditEx
       Left = 232
       Height = 32
       Hint = 'Dark current test duration., '

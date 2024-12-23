@@ -25,7 +25,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 interface
 
 uses  u_translation, u_global, UScaleDPI,
-  Classes, SysUtils, Forms, Controls, Graphics, Dialogs, StdCtrls, ExtCtrls, Spin, ComCtrls;
+  Classes, SysUtils, Forms, Controls, Graphics, Dialogs, StdCtrls, ExtCtrls, SpinEx, ComCtrls;
 
 type
 
@@ -41,7 +41,7 @@ type
     BtnCenter: TButton;
     BtnStopSplit: TButton;
     BtnStopInspection: TButton;
-    CircleNum: TSpinEdit;
+    CircleNum: TSpinEditEx;
     GroupBox1: TGroupBox;
     Label1: TLabel;
     Label2: TLabel;
@@ -64,7 +64,7 @@ type
     TabSheetInspection: TTabSheet;
     TrackBarZoom: TTrackBar;
     TrackBarMargin: TTrackBar;
-    TriangleAngle: TFloatSpinEdit;
+    TriangleAngle: TFloatSpinEditEx;
     procedure BtnApplyInspectionClick(Sender: TObject);
     procedure BtnApplySplitClick(Sender: TObject);
     procedure BtnCenterClick(Sender: TObject);

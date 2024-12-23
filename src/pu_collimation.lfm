@@ -109,7 +109,7 @@ object f_collimation: Tf_collimation
           ClientHeight = 40
           ClientWidth = 346
           TabOrder = 1
-          object TriangleAngle: TFloatSpinEdit
+          object TriangleAngle: TFloatSpinEditEx
             AnchorSideTop.Control = PanelTriangle
             AnchorSideTop.Side = asrCenter
             Left = 216
@@ -303,7 +303,7 @@ object f_collimation: Tf_collimation
           ParentColor = False
           ParentFont = False
         end
-        object CircleNum: TSpinEdit
+        object CircleNum: TSpinEditEx
           Left = 176
           Height = 32
           Top = 8

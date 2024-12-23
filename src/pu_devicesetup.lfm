@@ -362,7 +362,7 @@ object f_setup: Tf_setup
             ParentColor = False
             ParentFont = False
           end
-          object DefaultARestPort: TSpinEdit
+          object DefaultARestPort: TSpinEditEx
             AnchorSideTop.Control = DefaultARestProtocol
             AnchorSideTop.Side = asrCenter
             Left = 298
@@ -450,7 +450,7 @@ object f_setup: Tf_setup
             ParentFont = False
             TabOrder = 7
           end
-          object AlpacaDiscoveryPort: TSpinEdit
+          object AlpacaDiscoveryPort: TSpinEditEx
             AnchorSideTop.Control = AlpacaServers
             AnchorSideTop.Side = asrCenter
             Left = 392
@@ -900,7 +900,7 @@ object f_setup: Tf_setup
                 ParentColor = False
                 ParentFont = False
               end
-              object CameraARestPort: TSpinEdit
+              object CameraARestPort: TSpinEditEx
                 Left = 291
                 Height = 28
                 Top = 65
@@ -921,7 +921,7 @@ object f_setup: Tf_setup
                 ParentColor = False
                 ParentFont = False
               end
-              object CameraARestDevice: TSpinEdit
+              object CameraARestDevice: TSpinEditEx
                 Left = 93
                 Height = 28
                 Top = 137
@@ -1387,7 +1387,7 @@ object f_setup: Tf_setup
                 ParentColor = False
                 ParentFont = False
               end
-              object GuideCameraARestPort: TSpinEdit
+              object GuideCameraARestPort: TSpinEditEx
                 Left = 291
                 Height = 28
                 Top = 65
@@ -1408,7 +1408,7 @@ object f_setup: Tf_setup
                 ParentColor = False
                 ParentFont = False
               end
-              object GuideCameraARestDevice: TSpinEdit
+              object GuideCameraARestDevice: TSpinEditEx
                 Left = 93
                 Height = 28
                 Top = 137
@@ -1878,7 +1878,7 @@ object f_setup: Tf_setup
                 ParentColor = False
                 ParentFont = False
               end
-              object FinderCameraARestPort: TSpinEdit
+              object FinderCameraARestPort: TSpinEditEx
                 Left = 291
                 Height = 28
                 Top = 65
@@ -1899,7 +1899,7 @@ object f_setup: Tf_setup
                 ParentColor = False
                 ParentFont = False
               end
-              object FinderCameraARestDevice: TSpinEdit
+              object FinderCameraARestDevice: TSpinEditEx
                 Left = 93
                 Height = 28
                 Top = 137
@@ -2370,7 +2370,7 @@ object f_setup: Tf_setup
                 ParentColor = False
                 ParentFont = False
               end
-              object WheelARestPort: TSpinEdit
+              object WheelARestPort: TSpinEditEx
                 Left = 291
                 Height = 28
                 Top = 65
@@ -2391,7 +2391,7 @@ object f_setup: Tf_setup
                 ParentColor = False
                 ParentFont = False
               end
-              object WheelARestDevice: TSpinEdit
+              object WheelARestDevice: TSpinEditEx
                 Left = 93
                 Height = 28
                 Top = 137
@@ -2546,7 +2546,7 @@ object f_setup: Tf_setup
                 ParentColor = False
                 ParentFont = False
               end
-              object WheelMslot: TSpinEdit
+              object WheelMslot: TSpinEditEx
                 Left = 168
                 Height = 28
                 Top = 16
@@ -2935,7 +2935,7 @@ object f_setup: Tf_setup
                   ParentColor = False
                   ParentFont = False
                 end
-                object FocuserARestPort: TSpinEdit
+                object FocuserARestPort: TSpinEditEx
                   Left = 291
                   Height = 28
                   Top = 65
@@ -2956,7 +2956,7 @@ object f_setup: Tf_setup
                   ParentColor = False
                   ParentFont = False
                 end
-                object FocuserARestDevice: TSpinEdit
+                object FocuserARestDevice: TSpinEditEx
                   Left = 93
                   Height = 28
                   Top = 137
@@ -3357,7 +3357,7 @@ object f_setup: Tf_setup
                 ParentColor = False
                 ParentFont = False
               end
-              object RotatorARestPort: TSpinEdit
+              object RotatorARestPort: TSpinEditEx
                 Left = 291
                 Height = 28
                 Top = 65
@@ -3378,7 +3378,7 @@ object f_setup: Tf_setup
                 ParentColor = False
                 ParentFont = False
               end
-              object RotatorARestDevice: TSpinEdit
+              object RotatorARestDevice: TSpinEditEx
                 Left = 93
                 Height = 28
                 Top = 137
@@ -3860,7 +3860,7 @@ object f_setup: Tf_setup
                   ParentColor = False
                   ParentFont = False
                 end
-                object MountARestPort: TSpinEdit
+                object MountARestPort: TSpinEditEx
                   Left = 291
                   Height = 28
                   Top = 65
@@ -3881,7 +3881,7 @@ object f_setup: Tf_setup
                   ParentColor = False
                   ParentFont = False
                 end
-                object MountARestDevice: TSpinEdit
+                object MountARestDevice: TSpinEditEx
                   Left = 93
                   Height = 28
                   Top = 137
@@ -4282,7 +4282,7 @@ object f_setup: Tf_setup
                 ParentColor = False
                 ParentFont = False
               end
-              object DomeARestPort: TSpinEdit
+              object DomeARestPort: TSpinEditEx
                 Left = 291
                 Height = 28
                 Top = 65
@@ -4303,7 +4303,7 @@ object f_setup: Tf_setup
                 ParentColor = False
                 ParentFont = False
               end
-              object DomeARestDevice: TSpinEdit
+              object DomeARestDevice: TSpinEditEx
                 Left = 93
                 Height = 28
                 Top = 137
@@ -4749,7 +4749,7 @@ object f_setup: Tf_setup
                 ParentColor = False
                 ParentFont = False
               end
-              object WeatherARestPort: TSpinEdit
+              object WeatherARestPort: TSpinEditEx
                 Left = 291
                 Height = 28
                 Top = 65
@@ -4770,7 +4770,7 @@ object f_setup: Tf_setup
                 ParentColor = False
                 ParentFont = False
               end
-              object WeatherARestDevice: TSpinEdit
+              object WeatherARestDevice: TSpinEditEx
                 Left = 13
                 Height = 28
                 Top = 137
@@ -5206,7 +5206,7 @@ object f_setup: Tf_setup
                 ParentColor = False
                 ParentFont = False
               end
-              object SafetyARestPort: TSpinEdit
+              object SafetyARestPort: TSpinEditEx
                 Left = 291
                 Height = 28
                 Top = 65
@@ -5227,7 +5227,7 @@ object f_setup: Tf_setup
                 ParentColor = False
                 ParentFont = False
               end
-              object SafetyARestDevice: TSpinEdit
+              object SafetyARestDevice: TSpinEditEx
                 Left = 93
                 Height = 28
                 Top = 137
@@ -5602,7 +5602,7 @@ object f_setup: Tf_setup
             Caption = 'Number of switches'
             ParentColor = False
           end
-          object NumSwitch: TSpinEdit
+          object NumSwitch: TSpinEditEx
             AnchorSideTop.Control = DeviceSwitch
             AnchorSideTop.Side = asrCenter
             Left = 320
@@ -5928,7 +5928,7 @@ object f_setup: Tf_setup
                 ParentColor = False
                 ParentFont = False
               end
-              object SwitchARestPort: TSpinEdit
+              object SwitchARestPort: TSpinEditEx
                 Left = 291
                 Height = 28
                 Top = 65
@@ -5949,7 +5949,7 @@ object f_setup: Tf_setup
                 ParentColor = False
                 ParentFont = False
               end
-              object SwitchARestDevice: TSpinEdit
+              object SwitchARestDevice: TSpinEditEx
                 Left = 93
                 Height = 28
                 Top = 137
@@ -6369,7 +6369,7 @@ object f_setup: Tf_setup
                 ParentColor = False
                 ParentFont = False
               end
-              object CoverARestPort: TSpinEdit
+              object CoverARestPort: TSpinEditEx
                 Left = 291
                 Height = 28
                 Top = 65
@@ -6390,7 +6390,7 @@ object f_setup: Tf_setup
                 ParentColor = False
                 ParentFont = False
               end
-              object CoverARestDevice: TSpinEdit
+              object CoverARestDevice: TSpinEditEx
                 Left = 120
                 Height = 28
                 Top = 137

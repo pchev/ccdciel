@@ -26,7 +26,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 interface
 
 uses  u_translation, u_global, math, Classes, SysUtils, Forms, Controls, Graphics,
-  Dialogs, StdCtrls, Spin, ExtCtrls, Menus;
+  Dialogs, StdCtrls, SpinEx, ExtCtrls, Menus;
 
 type
 
@@ -35,21 +35,21 @@ type
   Tf_autoexposurestep = class(TForm)
     btnOK: TButton;
     cbRef: TComboBox;
-    Exposure: TFloatSpinEdit;
-    MaxExp: TFloatSpinEdit;
+    Exposure: TFloatSpinEditEx;
+    MaxExp: TFloatSpinEditEx;
     GroupBox2: TGroupBox;
     Label6: TLabel;
     MenuItemDelRef: TMenuItem;
     MenuRef: TButton;
     Panel1: TPanel;
     PopupMenuRef: TPopupMenu;
-    RefMagn: TFloatSpinEdit;
-    RefExp: TFloatSpinEdit;
+    RefMagn: TFloatSpinEditEx;
+    RefExp: TFloatSpinEditEx;
     GroupBox1: TGroupBox;
     Label3: TLabel;
     Label4: TLabel;
     Label5: TLabel;
-    Magnitude: TFloatSpinEdit;
+    Magnitude: TFloatSpinEditEx;
     Label2: TLabel;
     procedure cbRefChange(Sender: TObject);
     procedure FormCreate(Sender: TObject);

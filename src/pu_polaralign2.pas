@@ -28,7 +28,7 @@ interface
 uses u_translation, u_utils, u_global, fu_preview, pu_goto, cu_fits, fu_finder,
   cu_astrometry, cu_mount, cu_wheel, cu_camera, fu_visu, indiapi, UScaleDPI, math,
   LazSysUtils, Classes, SysUtils, Forms, Controls, Graphics, Dialogs, StdCtrls,
-  ExtCtrls, ComCtrls, ActnList, Spin;
+  ExtCtrls, ComCtrls, ActnList, SpinEx;
 
 type
 
@@ -45,10 +45,10 @@ type
     ButtonNext: TButton;
     Memo2: TMemo;
     SolveUpdate: TCheckBox;
-    FloatSpinEditAz1: TFloatSpinEdit;
-    FloatSpinEditAz2: TFloatSpinEdit;
-    FloatSpinEditAlt1: TFloatSpinEdit;
-    FloatSpinEditAlt2: TFloatSpinEdit;
+    FloatSpinEditAz1: TFloatSpinEditEx;
+    FloatSpinEditAz2: TFloatSpinEditEx;
+    FloatSpinEditAlt1: TFloatSpinEditEx;
+    FloatSpinEditAlt2: TFloatSpinEditEx;
     GotoPosition: TComboBox;
     ButtonStart: TButton;
     Label1: TLabel;

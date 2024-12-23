@@ -26,7 +26,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 interface
 
 uses   UScaleDPI, Dialogs, u_hints, u_translation, u_global, cu_camera, indiapi,
-  Classes, SysUtils, FileUtil, Forms, Graphics, Controls, StdCtrls, ExtCtrls, Spin,
+  Classes, SysUtils, FileUtil, Forms, Graphics, Controls, StdCtrls, ExtCtrls, SpinEx,
   math,LCLintf, ComCtrls, Buttons, Menus;
 
 
@@ -41,7 +41,7 @@ type
   { Tf_internalguider }
 
   Tf_internalguider = class(TFrame)
-    Backlash: TSpinEdit;
+    Backlash: TSpinEditEx;
     BtnZoom05: TSpeedButton;
     BtnZoom1: TSpeedButton;
     BtnZoom2: TSpeedButton;
@@ -83,23 +83,23 @@ type
     PopupMenuSlit: TPopupMenu;
     rgSpectroStrategy: TRadioGroup;
     Shape1: TShape;
-    SlitOffsetX: TFloatSpinEdit;
-    StarOffsetX: TFloatSpinEdit;
-    SlitOffsetY: TFloatSpinEdit;
+    SlitOffsetX: TFloatSpinEditEx;
+    StarOffsetX: TFloatSpinEditEx;
+    SlitOffsetY: TFloatSpinEditEx;
     framesize1: TComboBox;
     Label51: TLabel;
     Label52: TLabel;
     Label53: TLabel;
     Label54: TLabel;
     Panel10: TPanel;
-    GuideSpeedRA: TFloatSpinEdit;
-    GuideSpeedDEC: TFloatSpinEdit;
+    GuideSpeedRA: TFloatSpinEditEx;
+    GuideSpeedDEC: TFloatSpinEditEx;
     ForceGuideSpeed: TCheckBox;
     Cooler: TCheckBox;
-    edOffsetX: TFloatSpinEdit;
-    edOffsetY: TFloatSpinEdit;
-    Exposure: TFloatSpinEdit;
-    AstrometryExp: TFloatSpinEdit;
+    edOffsetX: TFloatSpinEditEx;
+    edOffsetY: TFloatSpinEditEx;
+    Exposure: TFloatSpinEditEx;
+    AstrometryExp: TFloatSpinEditEx;
     GroupBox3: TGroupBox;
     GroupBoxSlit: TGroupBox;
     GroupBoxSearchArea: TGroupBox;
@@ -114,8 +114,8 @@ type
     Label26: TLabel;
     Label27: TLabel;
     Label30: TLabel;
-    edRefX: TFloatSpinEdit;
-    edRefY: TFloatSpinEdit;
+    edRefX: TFloatSpinEditEx;
+    edRefY: TFloatSpinEditEx;
     Label21: TLabel;
     Label28: TLabel;
     Label29: TLabel;
@@ -147,7 +147,7 @@ type
     LabelTemperature: TLabel;
     LabelStatusDec: TLabel;
     LabelStatusRA: TLabel;
-    LongestPulse1: TSpinEdit;
+    LongestPulse1: TSpinEditEx;
     MenuItemDarkInfo: TMenuItem;
     MenuItemLoadDark: TMenuItem;
     GroupBox2: TGroupBox;
@@ -169,8 +169,8 @@ type
     measure_method2: TCheckBox;
     MenuItemClearDark: TMenuItem;
     MenuItemCaptureDark: TMenuItem;
-    minHFD1: TFloatSpinEdit;
-    minSNR1: TSpinEdit;
+    minHFD1: TFloatSpinEditEx;
+    minSNR1: TSpinEditEx;
     pa1: TEdit;
     PageControl2: TPageControl;
     Panel11: TPanel;
@@ -197,37 +197,37 @@ type
     pulsegainSouth1: TEdit;
     pulsegainWest1: TEdit;
     rgDitherMode: TRadioGroup;
-    ra_hysteresis1: TSpinEdit;
-    dec_hysteresis1: TSpinEdit;
+    ra_hysteresis1: TSpinEditEx;
+    dec_hysteresis1: TSpinEditEx;
     Label1: TLabel;
     Label2: TLabel;
     Label4: TLabel;
-    ra_gain1: TSpinEdit;
+    ra_gain1: TSpinEditEx;
     scale1: TUpDown;
-    Binning: TSpinEdit;
-    Gain: TSpinEdit;
-    Offset: TSpinEdit;
-    edslitWinMin: TSpinEdit;
-    edslitWinMax: TSpinEdit;
-    InitialCalibrationStep: TSpinEdit;
-    ShortestPulse1: TSpinEdit;
-    StarOffsetY: TFloatSpinEdit;
-    spSlitX: TSpinEdit;
-    spSlitY: TSpinEdit;
-    spSlitW: TSpinEdit;
-    spSlitL: TSpinEdit;
-    spSlitPA: TSpinEdit;
+    Binning: TSpinEditEx;
+    Gain: TSpinEditEx;
+    Offset: TSpinEditEx;
+    edslitWinMin: TSpinEditEx;
+    edslitWinMax: TSpinEditEx;
+    InitialCalibrationStep: TSpinEditEx;
+    ShortestPulse1: TSpinEditEx;
+    StarOffsetY: TFloatSpinEditEx;
+    spSlitX: TSpinEditEx;
+    spSlitY: TSpinEditEx;
+    spSlitW: TSpinEditEx;
+    spSlitL: TSpinEditEx;
+    spSlitPA: TSpinEditEx;
     TabSheet1: TTabSheet;
     TabSheet2: TTabSheet;
     TabSheetSpectro: TTabSheet;
-    Temperature: TSpinEdit;
+    Temperature: TSpinEditEx;
     TabSheetOptions: TTabSheet;
     TabSheetCamera: TTabSheet;
     Gamma: TTrackBar;
     Luminosity: TTrackBar;
     unitarcseconds1: TCheckBox;
-    vpa_solar1: TFloatSpinEdit;
-    v_solar1: TFloatSpinEdit;
+    vpa_solar1: TFloatSpinEditEx;
+    v_solar1: TFloatSpinEditEx;
     xy_trend1: TImage;
     xy_Panel1: TImage;
     Label3: TLabel;
@@ -236,7 +236,7 @@ type
     PageControl1: TPageControl;
     Panel1: TPanel;
     Panel3: TPanel;
-    dec_gain1: TSpinEdit;
+    dec_gain1: TSpinEditEx;
     TabSheetAdvanced: TTabSheet;
     TabSheetGuider: TTabSheet;
     Title: TLabel;

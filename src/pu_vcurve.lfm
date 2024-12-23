@@ -331,7 +331,7 @@ object f_vcurve: Tf_vcurve
     ParentColor = False
     ParentFont = False
   end
-  object FocusPos: TSpinEdit
+  object FocusPos: TSpinEditEx
     Left = 121
     Height = 24
     Top = 8
@@ -340,7 +340,7 @@ object f_vcurve: Tf_vcurve
     ParentFont = False
     TabOrder = 6
   end
-  object HalfWidth: TSpinEdit
+  object HalfWidth: TSpinEditEx
     Left = 121
     Height = 24
     Top = 40
@@ -349,7 +349,7 @@ object f_vcurve: Tf_vcurve
     ParentFont = False
     TabOrder = 7
   end
-  object Nsteps: TSpinEdit
+  object Nsteps: TSpinEditEx
     Left = 146
     Height = 24
     Top = 73

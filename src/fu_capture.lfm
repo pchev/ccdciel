@@ -98,7 +98,7 @@ object f_capture: Tf_capture
         ParentColor = False
         ParentFont = False
       end
-      object StackNum: TSpinEdit
+      object StackNum: TSpinEditEx
         Left = 135
         Height = 28
         Hint = 'Number of exposure to stack'
@@ -146,7 +146,7 @@ object f_capture: Tf_capture
         ParentColor = False
         ParentFont = False
       end
-      object GainEdit: TSpinEdit
+      object GainEdit: TSpinEditEx
         Left = 89
         Height = 28
         Top = 4
@@ -176,7 +176,7 @@ object f_capture: Tf_capture
           Caption = 'Offset'
           ParentColor = False
         end
-        object OffsetEdit: TSpinEdit
+        object OffsetEdit: TSpinEditEx
           Left = 89
           Height = 32
           Top = 4
@@ -312,7 +312,7 @@ object f_capture: Tf_capture
         ParentColor = False
         ParentFont = False
       end
-      object SeqNum: TSpinEdit
+      object SeqNum: TSpinEditEx
         Left = 89
         Height = 28
         Top = 0
@@ -389,7 +389,7 @@ object f_capture: Tf_capture
         ParentFont = False
         TabOrder = 0
       end
-      object DitherCount: TSpinEdit
+      object DitherCount: TSpinEditEx
         Left = 135
         Height = 28
         Top = 0
@@ -424,7 +424,7 @@ object f_capture: Tf_capture
         ParentFont = False
         TabOrder = 0
       end
-      object FocusCount: TSpinEdit
+      object FocusCount: TSpinEditEx
         Left = 135
         Height = 28
         Top = 0

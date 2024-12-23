@@ -25,7 +25,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 interface
 
-uses  UScaleDPI, u_global, Graphics, Dialogs, u_translation, cu_switch, Spin,
+uses  UScaleDPI, u_global, Graphics, Dialogs, u_translation, cu_switch, SpinEx,
   Classes, SysUtils, FileUtil, Forms, Controls, StdCtrls, ExtCtrls, ComCtrls;
 
 type
@@ -125,7 +125,7 @@ var i:integer;
     cb: TCheckBox;
     p: TPanel;
     l: TLabel;
-    s: TFloatSpinEdit;
+    s: TFloatSpinEditEx;
 begin
  if initialized then begin
    for i:=0 to FNumSwitch-1 do begin
@@ -134,7 +134,7 @@ begin
      if CtrlList.Objects[i] is TCheckBox then
        TCheckBox(CtrlList.Objects[i]).Checked:=value[i].Checked;
      if CtrlList.Objects[i] is TPanel then begin
-       s:=TFloatSpinEdit(FindComponent('Switch_'+IntToStr(i)));
+       s:=TFloatSpinEditEx(FindComponent('Switch_'+IntToStr(i)));
        if s<>nil then
          s.Value:=value[i].Value;
      end;
@@ -153,7 +153,7 @@ begin
     if FSwitch[i].MultiState then begin
       p:=TPanel.Create(self);
       l:=TLabel.Create(p);
-      s:=TFloatSpinEdit.Create(self);
+      s:=TFloatSpinEditEx.Create(self);
       p.Name:='Panel_'+IntToStr(i);
       p.Caption:='';
       p.Top:=i*30;
@@ -210,7 +210,7 @@ end;
 
 procedure Tf_switchpage.BtnSetClick(Sender: TObject);
 var i:integer;
-    s: TFloatSpinEdit;
+    s: TFloatSpinEditEx;
     swchanged: boolean;
 begin
   if (not initialized)or(FNumSwitch=0) then exit;
@@ -222,7 +222,7 @@ begin
         FSwitch[i].Checked:=TCheckBox(CtrlList.Objects[i]).Checked;
       end;
       if CtrlList.Objects[i] is TPanel then begin
-        s:=TFloatSpinEdit(FindComponent('Switch_'+IntToStr(i)));
+        s:=TFloatSpinEditEx(FindComponent('Switch_'+IntToStr(i)));
         if s<>nil then begin
           swchanged:=swchanged or (s.Value<>FSwitch[i].Value);
           FSwitch[i].Value:=s.Value;

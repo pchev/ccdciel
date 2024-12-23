@@ -39,7 +39,7 @@ object f_autoexposurestep: Tf_autoexposurestep
       Caption = 'Exposure'
       ParentColor = False
     end
-    object RefMagn: TFloatSpinEdit
+    object RefMagn: TFloatSpinEditEx
       Left = 140
       Height = 32
       Top = 46
@@ -48,7 +48,7 @@ object f_autoexposurestep: Tf_autoexposurestep
       TabOrder = 0
       Value = 6
     end
-    object RefExp: TFloatSpinEdit
+    object RefExp: TFloatSpinEditEx
       Left = 140
       Height = 32
       Top = 85
@@ -81,7 +81,7 @@ object f_autoexposurestep: Tf_autoexposurestep
       OnMouseDown = MenuRefMouseDown
       TabOrder = 3
     end
-    object MaxExp: TFloatSpinEdit
+    object MaxExp: TFloatSpinEditEx
       Left = 140
       Height = 32
       Top = 125
@@ -121,7 +121,7 @@ object f_autoexposurestep: Tf_autoexposurestep
       Caption = 'Magnitude'
       ParentColor = False
     end
-    object Magnitude: TFloatSpinEdit
+    object Magnitude: TFloatSpinEditEx
       Left = 140
       Height = 32
       Top = 16
@@ -130,7 +130,7 @@ object f_autoexposurestep: Tf_autoexposurestep
       TabOrder = 0
       Value = 8
     end
-    object Exposure: TFloatSpinEdit
+    object Exposure: TFloatSpinEditEx
       Left = 140
       Height = 32
       Top = 56

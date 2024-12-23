@@ -57,7 +57,7 @@ object f_finder: Tf_finder
         Caption = 'Pixel X'
         ParentColor = False
       end
-      object OffsetX: TFloatSpinEdit
+      object OffsetX: TFloatSpinEditEx
         Left = 109
         Height = 32
         Top = 8
@@ -75,7 +75,7 @@ object f_finder: Tf_finder
         Caption = 'Pixel Y'
         ParentColor = False
       end
-      object OffsetY: TFloatSpinEdit
+      object OffsetY: TFloatSpinEditEx
         Left = 109
         Height = 32
         Top = 40
@@ -134,7 +134,7 @@ object f_finder: Tf_finder
         Caption = 'Preview exposure'
         ParentColor = False
       end
-      object PreviewExp: TFloatSpinEdit
+      object PreviewExp: TFloatSpinEditEx
         Left = 152
         Height = 32
         Top = 38

@@ -57,7 +57,7 @@ object f_video: Tf_video
         ParentColor = False
         ParentFont = False
       end
-      object StreamExp: TFloatSpinEdit
+      object StreamExp: TFloatSpinEditEx
         Left = 105
         Height = 32
         Top = 7

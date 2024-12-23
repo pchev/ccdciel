@@ -26,7 +26,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 interface
 
 uses  UScaleDPI, u_global, Graphics, Dialogs, u_translation, cu_cover,
-  Classes, SysUtils, FileUtil, Forms, Controls, StdCtrls, ExtCtrls, Spin;
+  Classes, SysUtils, FileUtil, Forms, Controls, StdCtrls, ExtCtrls, SpinEx;
 
 type
 
@@ -45,7 +45,7 @@ type
     ledCover: TShape;
     Panel1: TPanel;
     PanelCalibrator: TPanel;
-    Brightness: TSpinEdit;
+    Brightness: TSpinEditEx;
     Title: TLabel;
     procedure BrightnessChange(Sender: TObject);
     procedure BtnCloseCoverClick(Sender: TObject);

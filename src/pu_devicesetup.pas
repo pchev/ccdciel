@@ -31,7 +31,7 @@ uses indibaseclient, indibasedevice, indiapi, u_global, u_utils, u_ccdconfig, US
     Variants, comobj, math,
   {$endif}
   Classes, SysUtils, FileUtil, Forms, Controls, Graphics, Dialogs, StdCtrls,
-  ExtCtrls, ComCtrls, Grids, Buttons, Spin, Types;
+  ExtCtrls, ComCtrls, Grids, Buttons, SpinEx, Types;
 
 type
 
@@ -48,7 +48,7 @@ type
   { Tf_setup }
 
   Tf_setup = class(TForm)
-    AlpacaDiscoveryPort: TSpinEdit;
+    AlpacaDiscoveryPort: TSpinEditEx;
     AlpacaGuideCameraList: TComboBox;
     AlpacaFinderCameraList: TComboBox;
     AlpacaServers: TComboBox;
@@ -98,7 +98,7 @@ type
     cbIndistarterConfig: TComboBox;
     DefaultARestHost: TEdit;
     DefaultARestPass: TEdit;
-    DefaultARestPort: TSpinEdit;
+    DefaultARestPort: TSpinEditEx;
     DefaultARestProtocol: TComboBox;
     DefaultARestUser: TEdit;
     DeviceGuideCamera: TCheckBox;
@@ -117,16 +117,16 @@ type
     Panel10: TGroupBox;
     SwitchNickname: TEdit;
     GetIndi12: TButton;
-    GuideCameraARestDevice: TSpinEdit;
-    FinderCameraARestDevice: TSpinEdit;
+    GuideCameraARestDevice: TSpinEditEx;
+    FinderCameraARestDevice: TSpinEditEx;
     GuideCameraARestHost: TEdit;
     CameraARestPass: TEdit;
     AlpacaCameraList: TComboBox;
     FinderCameraARestHost: TEdit;
     GuideCameraARestPass: TEdit;
     FinderCameraARestPass: TEdit;
-    GuideCameraARestPort: TSpinEdit;
-    FinderCameraARestPort: TSpinEdit;
+    GuideCameraARestPort: TSpinEditEx;
+    FinderCameraARestPort: TSpinEditEx;
     GuideCameraARestProtocol: TComboBox;
     FinderCameraARestProtocol: TComboBox;
     GuideCameraARestUser: TEdit;
@@ -286,15 +286,15 @@ type
     PanelSwitchIndi: TPanel;
     PanelCoverIndi: TPanel;
     ScrollBox1: TScrollBox;
-    NumSwitch: TSpinEdit;
-    SwitchARestDevice: TSpinEdit;
-    CoverARestDevice: TSpinEdit;
+    NumSwitch: TSpinEditEx;
+    SwitchARestDevice: TSpinEditEx;
+    CoverARestDevice: TSpinEditEx;
     SwitchARestHost: TEdit;
     CoverARestHost: TEdit;
     SwitchARestPass: TEdit;
     CoverARestPass: TEdit;
-    SwitchARestPort: TSpinEdit;
-    CoverARestPort: TSpinEdit;
+    SwitchARestPort: TSpinEditEx;
+    CoverARestPort: TSpinEditEx;
     SwitchARestProtocol: TComboBox;
     CoverARestProtocol: TComboBox;
     SwitchARestUser: TEdit;
@@ -320,7 +320,7 @@ type
     GuideCamera: TTabSheet;
     FinderCamera: TTabSheet;
     SwitchTabControl: TTabControl;
-    WheelMslot: TSpinEdit;
+    WheelMslot: TSpinEditEx;
     WheelManual: TTabSheet;
     WheelARestPass: TEdit;
     FocuserARestPass: TEdit;
@@ -447,13 +447,13 @@ type
     Label76: TLabel;
     Panel11: TPanel;
     Panel12: TPanel;
-    WheelARestDevice: TSpinEdit;
-    FocuserARestDevice: TSpinEdit;
-    RotatorARestDevice: TSpinEdit;
-    MountARestDevice: TSpinEdit;
-    DomeARestDevice: TSpinEdit;
-    WeatherARestDevice: TSpinEdit;
-    SafetyARestDevice: TSpinEdit;
+    WheelARestDevice: TSpinEditEx;
+    FocuserARestDevice: TSpinEditEx;
+    RotatorARestDevice: TSpinEditEx;
+    MountARestDevice: TSpinEditEx;
+    DomeARestDevice: TSpinEditEx;
+    WeatherARestDevice: TSpinEditEx;
+    SafetyARestDevice: TSpinEditEx;
     WheelARestHost: TEdit;
     FocuserARestHost: TEdit;
     RotatorARestHost: TEdit;
@@ -461,13 +461,13 @@ type
     DomeARestHost: TEdit;
     WeatherARestHost: TEdit;
     SafetyARestHost: TEdit;
-    WheelARestPort: TSpinEdit;
-    FocuserARestPort: TSpinEdit;
-    RotatorARestPort: TSpinEdit;
-    MountARestPort: TSpinEdit;
-    DomeARestPort: TSpinEdit;
-    WeatherARestPort: TSpinEdit;
-    SafetyARestPort: TSpinEdit;
+    WheelARestPort: TSpinEditEx;
+    FocuserARestPort: TSpinEditEx;
+    RotatorARestPort: TSpinEditEx;
+    MountARestPort: TSpinEditEx;
+    DomeARestPort: TSpinEditEx;
+    WeatherARestPort: TSpinEditEx;
+    SafetyARestPort: TSpinEditEx;
     WheelARestProtocol: TComboBox;
     FocuserARestProtocol: TComboBox;
     RotatorARestProtocol: TComboBox;
@@ -569,8 +569,8 @@ type
     SafetyIndi: TTabSheet;
     SafetyAscom: TTabSheet;
     CameraAscomRest: TTabSheet;
-    CameraARestPort: TSpinEdit;
-    CameraARestDevice: TSpinEdit;
+    CameraARestPort: TSpinEditEx;
+    CameraARestDevice: TSpinEditEx;
     WheelAscomRest: TTabSheet;
     FocuserAscomRest: TTabSheet;
     RotatorAscomRest: TTabSheet;

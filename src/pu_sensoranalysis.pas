@@ -27,7 +27,7 @@ interface
 
 uses u_translation, u_global, cu_fits, cu_camera, UScaleDPI, Math, u_utils,
   Classes, SysUtils, Forms, Controls, Graphics, Dialogs, StdCtrls,
-  ExtCtrls, ComCtrls, Spin, Grids, TAGraph, TASeries, TARadialSeries;
+  ExtCtrls, ComCtrls, SpinEx, Grids, TAGraph, TASeries, TARadialSeries;
 
 type
   Tlightinfo = record
@@ -69,18 +69,18 @@ type
     Chart6LineSeries3: TLineSeries;
     exposuremax1: TLabel;
     exposuremin1: TLabel;
-    Gain3: TSpinEdit;
-    Gain4: TSpinEdit;
-    Gain5: TSpinEdit;
-    Gain6: TSpinEdit;
-    Gain7: TSpinEdit;
-    Gain8: TSpinEdit;
-    dark_current_test_duration1: TSpinEdit;
+    Gain3: TSpinEditEx;
+    Gain4: TSpinEditEx;
+    Gain5: TSpinEditEx;
+    Gain6: TSpinEditEx;
+    Gain7: TSpinEditEx;
+    Gain8: TSpinEditEx;
+    dark_current_test_duration1: TSpinEditEx;
     GroupBox1: TGroupBox;
     GroupBox2: TGroupBox;
     Label1: TLabel;
     Label10: TLabel;
-    Gain2: TSpinEdit;
+    Gain2: TSpinEditEx;
     Label11: TLabel;
     Label12: TLabel;
     Label13: TLabel;
@@ -127,15 +127,15 @@ type
     RadioButton9: TRadioButton;
     RadioGroup1: TRadioGroup;
     RadioGroup2: TRadioGroup;
-    repeats1: TSpinEdit;
+    repeats1: TSpinEditEx;
     StepButton1: TButton;
     Instructions: TMemo;
     Label2: TLabel;
     Label3: TLabel;
     Panel1: TPanel;
     Panel2: TPanel;
-    Gain1: TSpinEdit;
-    Offset1: TSpinEdit;
+    Gain1: TSpinEditEx;
+    Offset1: TSpinEditEx;
     StringGrid1: TStringGrid;
     TabSheet1: TTabSheet;
     TabSheet2: TTabSheet;

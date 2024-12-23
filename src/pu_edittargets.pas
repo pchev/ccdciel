@@ -28,7 +28,7 @@ interface
 uses pu_planetariuminfo, u_global, u_utils, u_ccdconfig, pu_pascaleditor, u_annotation, pu_keyboard, pu_newscript, pu_onlineinfo,
   pu_scriptengine, cu_astrometry, u_hints, u_translation, pu_selectscript, Classes, math, cu_targets, pu_viewtext, cu_switch, pu_autoexposurestep,
   SysUtils, FileUtil, Forms, Controls, Graphics, Dialogs, StdCtrls, UScaleDPI, cu_plan, LCLType,
-  LazUTF8, maskedit, Grids, ExtCtrls, ComCtrls, Spin, Buttons, Menus, CheckLst, Types;
+  LazUTF8, maskedit, Grids, ExtCtrls, ComCtrls, SpinEx, Buttons, Menus, CheckLst, Types;
 
 const
   colseq=0; colname=1; colplan=2; colra=3; coldec=4; colpa=5; colmagn=6; colstart=7; colend=8; colrepeat=9;
@@ -102,7 +102,7 @@ type
     TermOpt: TCheckListBox;
     FFstopbox: TComboBox;
     FlatFilterList: TCheckGroup;
-    FOffsetEdit: TSpinEdit;
+    FOffsetEdit: TSpinEditEx;
     Label4: TLabel;
     MenuApplyTemplate: TMenuItem;
     MenuSaveTemplate: TMenuItem;
@@ -138,7 +138,7 @@ type
     PopupSaveTemplate: TPopupMenu;
     PopupOptions: TPopupMenu;
     Preview: TCheckBox;
-    PreviewExposure: TFloatSpinEdit;
+    PreviewExposure: TFloatSpinEditEx;
     Splitter1: TSplitter;
     TargetMsg: TLabel;
     LabelMsg: TLabel;
@@ -176,7 +176,7 @@ type
     PlanScript: TTabSheet;
     PlanFlat: TTabSheet;
     PlanNone: TTabSheet;
-    TDelay: TSpinEdit;
+    TDelay: TSpinEditEx;
     TargetName: TLabel;
     FISObox: TComboBox;
     Label16: TLabel;
@@ -184,9 +184,9 @@ type
     LabelGain: TLabel;
     FlatTime: TRadioGroup;
     PanelGain: TPanel;
-    RepeatCountList: TSpinEdit;
-    FlatCount: TSpinEdit;
-    FGainEdit: TSpinEdit;
+    RepeatCountList: TSpinEditEx;
+    FlatCount: TSpinEditEx;
+    FGainEdit: TSpinEditEx;
     StepList: TStringGrid;
     SeqStart: TCheckBox;
     SeqStopAt: TMaskEdit;
