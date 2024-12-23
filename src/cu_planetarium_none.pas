@@ -50,6 +50,7 @@ type
     function GetEqSys: double; override;
     function Search(sname: string; out sra,sde,v_solar,vpa_solar: double): boolean; override;
     procedure ShowAstrometry(sra,sde: double); override;
+    procedure ClearData; override;
   end;
 
 
@@ -129,6 +130,16 @@ end;
 
 procedure TPlanetarium_none.ShowAstrometry(sra,sde: double);
 begin
+end;
+
+procedure TPlanetarium_none.ClearData;
+begin
+  FRecvData:='';
+  Fra:=NullCoord;
+  Fde:=NullCoord;
+  Fpa:=NullCoord;
+  Fmagn:=NullCoord;
+  Fobjname:='';
 end;
 
 end.

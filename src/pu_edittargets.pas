@@ -1772,11 +1772,11 @@ begin
     exit;
   end;
   n:=TargetList.Row;
-  f_planetariuminfo.Ra.Text  := TargetList.Cells[colra,n];
-  f_planetariuminfo.De.Text  := TargetList.Cells[coldec,n];
-  f_planetariuminfo.PA.Text  := TargetList.Cells[colpa,n];
-  f_planetariuminfo.Magn.Text  := TargetList.Cells[colmagn,n];
-  f_planetariuminfo.Obj.Text := TargetList.Cells[colname,n];
+  f_planetariuminfo.Ra.Text  := '';
+  f_planetariuminfo.De.Text  := '';
+  f_planetariuminfo.PA.Text  := '';
+  f_planetariuminfo.Magn.Text  := '';
+  f_planetariuminfo.Obj.Text := '';
   f_planetariuminfo.onNewTarget := @NewPlanetariumTarget;
   FormPos(f_planetariuminfo,mouse.CursorPos.X,mouse.CursorPos.Y);
   f_planetariuminfo.ShowModal;

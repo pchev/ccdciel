@@ -58,6 +58,7 @@ type
     function GetEqSys: double; override;
     function Search(sname: string; out sra,sde,v_solar,vpa_solar: double): boolean; override;
     procedure ShowAstrometry(sra,sde: double); override;
+    procedure ClearData; override;
   end;
 
 
@@ -225,6 +226,16 @@ end;
 procedure TPlanetarium_samp.ShowAstrometry(sra,sde: double);
 begin
   DisplayMessage('Function ShowAstrometry not supported by this planetarium');
+end;
+
+procedure TPlanetarium_samp.ClearData;
+begin
+  FRecvData:='';
+  Fra:=NullCoord;
+  Fde:=NullCoord;
+  Fpa:=NullCoord;
+  Fmagn:=NullCoord;
+  Fobjname:='';
 end;
 
 end.

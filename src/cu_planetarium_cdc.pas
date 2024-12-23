@@ -52,6 +52,7 @@ type
     function GetEqSys: double; override;
     function Search(sname: string; out sra,sde,v_solar,vpa_solar: double): boolean; override;
     procedure ShowAstrometry(sra,sde: double); override;
+    procedure ClearData; override;
   end;
 
 const msgTimeout='Timeout!';
@@ -418,6 +419,20 @@ begin
   sde:=rad2deg*sde;
   buf := 'MOVESCOPE ' + FormatFloat('0.00000', sra) + ' ' + FormatFloat('0.00000', sde);
   FLastErrorTxt:=Cmd(buf);
+end;
+
+procedure TPlanetarium_cdc.ClearData;
+var buf: string;
+begin
+  buf := 'CLEANUPMAP';
+  FLastErrorTxt:=Cmd(buf);
+  FRecvData:='';
+  Fra:=NullCoord;
+  Fde:=NullCoord;
+  Fpa:=NullCoord;
+  Fmagn:=NullCoord;
+  Fobjname:='';
+  FLastObjname:='';
 end;
 
 end.

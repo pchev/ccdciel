@@ -80,20 +80,20 @@ begin
   end
   else begin
     LastMsg:='';
+    planetarium.ClearData;
     planetarium.onReceiveData:=@recvdata;
-    recvdata('');
-  end;
-  if Assigned(FNewTarget) then begin
-    // wait for multiple entries
-    Button1.Caption:=rsClose;
-    Button2.Visible:=False;
-    Label4.Caption:=rsClickTheObje+crlf+'Every click insert a new target';
-  end
-  else begin
-    // keep only last entry, process on exit
-    Button1.Caption:=rsOK;
-    Button2.Visible:=True;
-    Label4.Caption:=rsClickTheObje;
+     if Assigned(FNewTarget) then begin
+      // wait for multiple entries
+      Button1.Caption:=rsClose;
+      Button2.Visible:=False;
+      Label4.Caption:=rsClickTheObje+crlf+'Every click insert a new target';
+    end
+    else begin
+      // keep only last entry, process on exit
+      Button1.Caption:=rsOK;
+      Button2.Visible:=True;
+      Label4.Caption:=rsClickTheObje;
+    end;
   end;
 end;
 
