@@ -121,16 +121,17 @@ object f_visu: Tf_visu
           Top = 0
           Width = 71
           Constraints.MaxHeight = 26
-          DecimalPlaces = 0
           Font.Color = clSilver
-          Increment = 10
-          MaxValue = 65536
-          OnChange = SpinEditMinChange
-          OnMouseEnter = HistGraphMouseEnter
-          OnMouseLeave = HistGraphMouseLeave
+          MaxLength = 0
           ParentFont = False
           TabOrder = 0
           Visible = False
+          OnChange = SpinEditMinChange
+          OnMouseEnter = HistGraphMouseEnter
+          OnMouseLeave = HistGraphMouseLeave
+          DecimalPlaces = 0
+          Increment = 10
+          MaxValue = 65536
         end
         object SpinEditMax: TFloatSpinEditEx
           AnchorSideTop.Control = Panel3
@@ -142,16 +143,17 @@ object f_visu: Tf_visu
           Width = 71
           Anchors = [akTop, akRight]
           Constraints.MaxHeight = 26
-          DecimalPlaces = 0
           Font.Color = clSilver
-          Increment = 10
-          MaxValue = 65536
-          OnChange = SpinEditMaxChange
-          OnMouseEnter = HistGraphMouseEnter
-          OnMouseLeave = HistGraphMouseLeave
+          MaxLength = 0
           ParentFont = False
           TabOrder = 1
           Visible = False
+          OnChange = SpinEditMaxChange
+          OnMouseEnter = HistGraphMouseEnter
+          OnMouseLeave = HistGraphMouseLeave
+          DecimalPlaces = 0
+          Increment = 10
+          MaxValue = 65536
         end
       end
       object Panel2: TPanel
@@ -189,18 +191,20 @@ object f_visu: Tf_visu
             ClientWidth = 115
             TabOrder = 0
             object Gamma: TFloatSpinEditEx
+              AnchorSideLeft.Control = Panel6
               Left = 0
               Height = 26
               Hint = 'Gamma'
               Top = 0
               Width = 57
               AutoSize = False
+              MaxLength = 0
+              ParentFont = False
+              TabOrder = 0
+              OnChange = GammaChange
               Increment = 0.1
               MaxValue = 1
               MinValue = 0.1
-              OnChange = GammaChange
-              ParentFont = False
-              TabOrder = 0
               Value = 1
             end
             object BtnClipRange: TSpeedButton
@@ -267,6 +271,7 @@ object f_visu: Tf_visu
               ParentFont = False
             end
             object BtnZoomAdjust: TSpeedButton
+              AnchorSideLeft.Control = Panel7
               Left = 0
               Height = 22
               Hint = 'Zoom to adjust in window'
@@ -377,6 +382,7 @@ object f_visu: Tf_visu
               ParentFont = False
             end
             object BtnFlipHorz: TSpeedButton
+              AnchorSideLeft.Control = Panel8
               Left = 0
               Height = 22
               Hint = 'Flip the image horizontally'
@@ -403,11 +409,13 @@ object f_visu: Tf_visu
           TabOrder = 1
           Visible = False
           object BtnShowImage: TSpeedButton
+            AnchorSideLeft.Control = PanelNoDisplay
             Left = 0
             Height = 22
             Top = 2
             Width = 28
             AllowAllUp = True
+            BorderSpacing.Top = 2
             GroupIndex = 87855
             Layout = blGlyphTop
             OnClick = BtnShowImageClick
