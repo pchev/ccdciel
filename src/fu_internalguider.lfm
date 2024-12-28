@@ -108,12 +108,14 @@ object f_internalguider: Tf_internalguider
             Height = 32
             Hint = 'Proportional corrective action of the guider controller in % of the offset for declination. Typically set at 50-70%'
             Top = 144
-            Width = 50
-            Increment = 5
-            MaxValue = 200
-            OnChange = dec_gain1Change
+            Width = 56
+            MaxLength = 0
             ParentFont = False
             TabOrder = 5
+            OnChange = dec_gain1Change
+            Increment = 5
+            MaxValue = 200
+            NullValue = 0
             Value = 100
           end
           object ra_hysteresis1: TSpinEditEx
@@ -123,13 +125,15 @@ object f_internalguider: Tf_internalguider
             Height = 32
             Hint = 'The controller will rely with the specified percentage on the last corrective action and reduce the new corrective action accordingly. Typically set at 30%'
             Top = 90
-            Width = 50
+            Width = 56
             BorderSpacing.Top = 2
-            Increment = 5
-            MaxValue = 100
-            OnChange = ra_hysteresis1Change
+            MaxLength = 0
             ParentFont = False
             TabOrder = 4
+            OnChange = ra_hysteresis1Change
+            Increment = 5
+            MaxValue = 100
+            NullValue = 0
             Value = 30
           end
           object Label1: TLabel
@@ -181,12 +185,14 @@ object f_internalguider: Tf_internalguider
             Height = 32
             Hint = 'Proportional  corrective action of the guider controller in % of the offset for right ascension. Typically set between  50 and 80%'
             Top = 56
-            Width = 50
-            Increment = 5
-            MaxValue = 200
-            OnChange = ra_gain1Change
+            Width = 56
+            MaxLength = 0
             ParentFont = False
             TabOrder = 3
+            OnChange = ra_gain1Change
+            Increment = 5
+            MaxValue = 200
+            NullValue = 0
             Value = 70
           end
           object led: TShape
@@ -227,13 +233,15 @@ object f_internalguider: Tf_internalguider
             Height = 32
             Hint = 'The controller will rely with the specified percentage on the last corrective action and reduce the new corrective action accordingly. Typically set at 70%'
             Top = 178
-            Width = 50
+            Width = 56
             BorderSpacing.Top = 2
-            Increment = 5
-            MaxValue = 100
-            OnChange = dec_hysteresis1Change
+            MaxLength = 0
             ParentFont = False
             TabOrder = 6
+            OnChange = dec_hysteresis1Change
+            Increment = 5
+            MaxValue = 100
+            NullValue = 0
             Value = 70
           end
           object Label4: TLabel
@@ -425,11 +433,12 @@ object f_internalguider: Tf_internalguider
               Height = 32
               Top = 0
               Width = 111
+              MaxLength = 0
+              TabOrder = 0
+              OnChange = ExposureChange
               DecimalPlaces = 3
               MaxValue = 120
               MinValue = 0.001
-              OnChange = ExposureChange
-              TabOrder = 0
               Value = 1
             end
             object Label14: TLabel
@@ -447,9 +456,11 @@ object f_internalguider: Tf_internalguider
               Height = 32
               Top = 33
               Width = 111
+              MaxLength = 0
+              TabOrder = 1
               MaxValue = 8
               MinValue = 1
-              TabOrder = 1
+              NullValue = 0
               Value = 1
             end
           end
@@ -479,7 +490,10 @@ object f_internalguider: Tf_internalguider
               Height = 32
               Top = 0
               Width = 111
+              MaxLength = 0
               TabOrder = 0
+              NullValue = 0
+              Value = 0
             end
           end
           object PanelOffset: TPanel
@@ -508,7 +522,10 @@ object f_internalguider: Tf_internalguider
               Height = 32
               Top = 0
               Width = 111
+              MaxLength = 0
               TabOrder = 0
+              NullValue = 0
+              Value = 0
             end
           end
           object PanelTemperature: TPanel
@@ -547,9 +564,12 @@ object f_internalguider: Tf_internalguider
               Height = 32
               Top = 0
               Width = 48
+              MaxLength = 0
+              TabOrder = 0
               MaxValue = 99
               MinValue = -99
-              TabOrder = 0
+              NullValue = 0
+              Value = 0
             end
             object ButtonSetTemp: TButton
               AnchorSideTop.Control = Temperature
@@ -732,11 +752,13 @@ object f_internalguider: Tf_internalguider
               Hint = 'Improves stability. Typical set at 40. Guide pulses shorter then this value are skipped.  Pulses shorter then this value can cause a larger error then the required correction and are not effective.'
               Top = 8
               Width = 72
+              MaxLength = 0
+              TabOrder = 0
+              OnChange = ShortestPulse1Change
               Increment = 5
               MaxValue = 10000
               MinValue = 10
-              OnChange = ShortestPulse1Change
-              TabOrder = 0
+              NullValue = 0
               Value = 40
             end
             object Label22: TLabel
@@ -765,11 +787,13 @@ object f_internalguider: Tf_internalguider
               Hint = 'Minimum signal to noise ratio'
               Top = 128
               Width = 72
+              MaxLength = 0
+              TabOrder = 3
+              OnChange = minSNR1Change
               Increment = 3
               MaxValue = 100
               MinValue = 6
-              OnChange = minSNR1Change
-              TabOrder = 3
+              NullValue = 0
               Value = 15
             end
             object Label24: TLabel
@@ -788,11 +812,12 @@ object f_internalguider: Tf_internalguider
               Hint = 'Minimum star size. could be used to ignore hot pixels.'
               Top = 96
               Width = 72
+              MaxLength = 0
+              TabOrder = 2
+              OnChange = minHFD1Change
               Increment = 0.3
               MaxValue = 10
               MinValue = 0.8
-              OnChange = minHFD1Change
-              TabOrder = 2
               Value = 1.5
             end
             object framesize1: TComboBox
@@ -841,11 +866,13 @@ object f_internalguider: Tf_internalguider
               Height = 32
               Top = 64
               Width = 72
+              MaxLength = 0
+              TabOrder = 1
+              OnChange = LongestPulse1Change
               Increment = 100
               MaxValue = 10000
               MinValue = 500
-              OnChange = LongestPulse1Change
-              TabOrder = 1
+              NullValue = 0
               Value = 500
             end
             object Label20: TLabel
@@ -889,10 +916,11 @@ object f_internalguider: Tf_internalguider
               Top = 232
               Width = 72
               Enabled = False
-              MaxValue = 1000
-              OnChange = v_solar1Change
+              MaxLength = 0
               ParentFont = False
               TabOrder = 6
+              OnChange = v_solar1Change
+              MaxValue = 1000
             end
             object vpa_solar1: TFloatSpinEditEx
               Left = 200
@@ -901,11 +929,12 @@ object f_internalguider: Tf_internalguider
               Top = 264
               Width = 72
               Enabled = False
-              MaxValue = 360
-              MinValue = -360
-              OnChange = vpa_solar1Change
+              MaxLength = 0
               ParentFont = False
               TabOrder = 7
+              OnChange = vpa_solar1Change
+              MaxValue = 360
+              MinValue = -360
             end
             object CheckBoxBacklash: TCheckBox
               Left = 8
@@ -922,8 +951,11 @@ object f_internalguider: Tf_internalguider
               Top = 336
               Width = 72
               Enabled = False
-              MaxValue = 10000
+              MaxLength = 0
               TabOrder = 9
+              MaxValue = 10000
+              NullValue = 0
+              Value = 0
             end
             object Label27: TLabel
               AnchorSideTop.Control = Backlash
@@ -1007,10 +1039,12 @@ object f_internalguider: Tf_internalguider
               Height = 32
               Top = 0
               Width = 72
+              MaxLength = 0
+              TabOrder = 1
               Increment = 100
               MaxValue = 1000
               MinValue = 100
-              TabOrder = 1
+              NullValue = 0
               Value = 100
             end
             object ForceGuideSpeed: TCheckBox
@@ -1053,11 +1087,12 @@ object f_internalguider: Tf_internalguider
                 Height = 32
                 Top = 0
                 Width = 72
+                MaxLength = 0
+                TabOrder = 0
                 DecimalPlaces = 1
                 Increment = 0.1
                 MaxValue = 0.9
                 MinValue = 0.1
-                TabOrder = 0
                 Value = 0.1
               end
               object GuideSpeedDEC: TFloatSpinEditEx
@@ -1065,11 +1100,12 @@ object f_internalguider: Tf_internalguider
                 Height = 32
                 Top = 0
                 Width = 72
+                MaxLength = 0
+                TabOrder = 1
                 DecimalPlaces = 1
                 Increment = 0.1
                 MaxValue = 0.9
                 MinValue = 0.1
-                TabOrder = 1
                 Value = 0.1
               end
             end
@@ -1181,10 +1217,11 @@ object f_internalguider: Tf_internalguider
                 Top = 0
                 Width = 69
                 BorderSpacing.Left = 8
+                MaxLength = 0
+                TabOrder = 0
                 DecimalPlaces = 0
                 MaxValue = 120
                 MinValue = 1
-                TabOrder = 0
                 Value = 10
               end
             end
@@ -1225,9 +1262,10 @@ object f_internalguider: Tf_internalguider
                 Top = 53
                 Width = 66
                 BorderSpacing.Left = 8
-                DecimalPlaces = 1
-                OnChange = ForceRedraw
+                MaxLength = 0
                 TabOrder = 0
+                OnChange = ForceRedraw
+                DecimalPlaces = 1
               end
               object Label57: TLabel
                 AnchorSideLeft.Control = StarOffsetX
@@ -1251,9 +1289,10 @@ object f_internalguider: Tf_internalguider
                 Top = 53
                 Width = 66
                 BorderSpacing.Left = 8
-                DecimalPlaces = 1
-                OnChange = ForceRedraw
+                MaxLength = 0
                 TabOrder = 1
+                OnChange = ForceRedraw
+                DecimalPlaces = 1
               end
               object btnRefImage: TButton
                 AnchorSideLeft.Control = Shape1
@@ -1330,7 +1369,9 @@ object f_internalguider: Tf_internalguider
                   Height = 32
                   Top = 2
                   Width = 65
+                  MaxLength = 0
                   TabOrder = 0
+                  NullValue = 0
                   Value = 40
                 end
                 object edslitWinMax: TSpinEditEx
@@ -1341,7 +1382,9 @@ object f_internalguider: Tf_internalguider
                   Top = 36
                   Width = 65
                   BorderSpacing.Top = 2
+                  MaxLength = 0
                   TabOrder = 1
+                  NullValue = 0
                   Value = 80
                 end
                 object Label31: TLabel
@@ -1376,6 +1419,7 @@ object f_internalguider: Tf_internalguider
                   Height = 32
                   Top = 3
                   Width = 105
+                  MaxLength = 0
                   TabOrder = 0
                 end
                 object Label37: TLabel
@@ -1403,6 +1447,7 @@ object f_internalguider: Tf_internalguider
                   Height = 32
                   Top = 35
                   Width = 105
+                  MaxLength = 0
                   TabOrder = 1
                 end
               end
@@ -1477,11 +1522,11 @@ object f_internalguider: Tf_internalguider
                 Height = 32
                 Top = 64
                 Width = 66
-                AutoSize = False
                 BorderSpacing.Left = 8
-                DecimalPlaces = 1
-                OnChange = SlitOffsetChange
+                MaxLength = 0
                 TabOrder = 1
+                OnChange = SlitOffsetChange
+                DecimalPlaces = 1
               end
               object SlitOffsetY: TFloatSpinEditEx
                 AnchorSideLeft.Control = Label52
@@ -1492,11 +1537,11 @@ object f_internalguider: Tf_internalguider
                 Height = 32
                 Top = 64
                 Width = 66
-                AutoSize = False
                 BorderSpacing.Left = 8
-                DecimalPlaces = 1
-                OnChange = SlitOffsetChange
+                MaxLength = 0
                 TabOrder = 2
+                OnChange = SlitOffsetChange
+                DecimalPlaces = 1
               end
               object Label54: TLabel
                 Left = 8
@@ -1535,9 +1580,10 @@ object f_internalguider: Tf_internalguider
                 Height = 32
                 Top = 4
                 Width = 84
-                DecimalPlaces = 1
-                OnChange = ForceRedraw
+                MaxLength = 0
                 TabOrder = 0
+                OnChange = ForceRedraw
+                DecimalPlaces = 1
                 Value = 100
               end
               object Label28: TLabel
@@ -1564,9 +1610,10 @@ object f_internalguider: Tf_internalguider
                 Height = 32
                 Top = 4
                 Width = 84
-                DecimalPlaces = 1
-                OnChange = ForceRedraw
+                MaxLength = 0
                 TabOrder = 1
+                OnChange = ForceRedraw
+                DecimalPlaces = 1
                 Value = 100
               end
               object ButtonSetLock: TSpeedButton
@@ -1666,46 +1713,61 @@ object f_internalguider: Tf_internalguider
                 Height = 32
                 Top = 0
                 Width = 80
-                MaxValue = 99999
-                OnChange = ForceRedraw
+                MaxLength = 0
                 TabOrder = 0
+                OnChange = ForceRedraw
+                MaxValue = 99999
+                NullValue = 0
+                Value = 0
               end
               object spSlitY: TSpinEditEx
                 Left = 224
                 Height = 32
                 Top = 0
                 Width = 80
-                MaxValue = 99999
-                OnChange = ForceRedraw
+                MaxLength = 0
                 TabOrder = 1
+                OnChange = ForceRedraw
+                MaxValue = 99999
+                NullValue = 0
+                Value = 0
               end
               object spSlitW: TSpinEditEx
                 Left = 64
                 Height = 32
                 Top = 40
                 Width = 80
-                MaxValue = 99999
-                OnChange = ForceRedraw
+                MaxLength = 0
                 TabOrder = 2
+                OnChange = ForceRedraw
+                MaxValue = 99999
+                NullValue = 0
+                Value = 0
               end
               object spSlitL: TSpinEditEx
                 Left = 224
                 Height = 32
                 Top = 40
                 Width = 80
-                MaxValue = 99999
-                OnChange = ForceRedraw
+                MaxLength = 0
                 TabOrder = 3
+                OnChange = ForceRedraw
+                MaxValue = 99999
+                NullValue = 0
+                Value = 0
               end
               object spSlitPA: TSpinEditEx
                 Left = 144
                 Height = 32
                 Top = 80
                 Width = 80
+                MaxLength = 0
+                TabOrder = 4
+                OnChange = ForceRedraw
                 MaxValue = 90
                 MinValue = -90
-                OnChange = ForceRedraw
-                TabOrder = 4
+                NullValue = 0
+                Value = 0
               end
             end
           end
