@@ -433,6 +433,8 @@ begin
   SetStartScriptName;
   SetEndScriptName;
   CheckRestartStatus(nil);
+  f_EditTargets.Splitter1.Top:=f_EditTargets.Splitter1.Top+1; // fix for scrollbar on second edit, check if still necessary
+  f_EditTargets.Splitter1.Top:=f_EditTargets.Splitter1.Top-1;
 end;
 
 procedure Tf_EditTargets.SetLang;
