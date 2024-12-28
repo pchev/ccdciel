@@ -560,10 +560,10 @@ object f_internalguider: Tf_internalguider
               ParentColor = False
             end
             object Temperature: TSpinEditEx
-              Left = 166
+              Left = 160
               Height = 32
               Top = 0
-              Width = 48
+              Width = 54
               MaxLength = 0
               TabOrder = 0
               MaxValue = 99
@@ -586,7 +586,7 @@ object f_internalguider: Tf_internalguider
               AnchorSideLeft.Control = Temperature
               AnchorSideTop.Control = Temperature
               AnchorSideTop.Side = asrBottom
-              Left = 166
+              Left = 160
               Height = 22
               Top = 36
               Width = 69
