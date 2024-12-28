@@ -350,17 +350,15 @@ object f_starprofile: Tf_starprofile
       end
       object Panel3: TPanel
         Left = 0
-        Height = 32
+        Height = 36
         Top = 84
         Width = 192
         Align = alTop
-        AutoSize = True
         BevelOuter = bvNone
-        ClientHeight = 32
+        ClientHeight = 36
         ClientWidth = 192
         TabOrder = 1
         object BtnSpectraProfile: TSpeedButton
-          AnchorSideTop.Control = Panel3
           AnchorSideTop.Side = asrCenter
           Left = 0
           Height = 25
@@ -373,6 +371,8 @@ object f_starprofile: Tf_starprofile
           OnClick = BtnSpectraProfileClick
         end
         object SpectraProfileMethod: TComboBox
+          AnchorSideTop.Control = BtnSpectraProfile
+          AnchorSideTop.Side = asrCenter
           Left = 125
           Height = 32
           Top = 0

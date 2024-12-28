@@ -220,10 +220,6 @@ begin
  Title1.Color:=clWindowFrame;
  Title2.Color:=clWindowFrame;
  Title3.Color:=clWindowFrame;
- PanelTarget.ChildSizing.LeftRightSpacing:=8;
- PanelBtn.ChildSizing.LeftRightSpacing:=8;
- PanelTarget.ChildSizing.VerticalSpacing:=4;
- PanelBtn.ChildSizing.VerticalSpacing:=4;
  TargetGrid.FixedColor := clBackground;
  PlanGrid.FixedColor := clBackground;
  {$endif}

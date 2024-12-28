@@ -145,14 +145,14 @@ begin
  inherited Create(aOwner);
  {$ifdef lclcocoa}
  Title.Color:=clWindowFrame;
- Panel1.ChildSizing.LeftRightSpacing:=8;
- Panel1.ChildSizing.VerticalSpacing:=4;
  BtnClipping.Flat:=true;
  BtnZoom05.Flat:=true;
  BtnBullsEye.Flat:=true;
  BtnZoomAdjust.Flat:=true;
  BtnZoom2.Flat:=true;
  BtnZoom1.Flat:=true;
+ BtnFlipHorz.Flat:=true;
+ BtnFlipVert.Flat:=true;
  {$endif}
  ScaleDPI(Self);
  SetLang;
