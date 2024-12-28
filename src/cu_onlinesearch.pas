@@ -211,7 +211,6 @@ begin
     )
   then
   begin
-    http.Document.SaveToFile('/tmp/aa');
      result:=LoadSesame(http.Document);
      if result then begin
        rra:=ra;
