@@ -3813,6 +3813,8 @@ begin
   fext:=uppercase(extractfileext(FileNames[0]));{take the first file name in the drop list}
   if ((fext='.FIT') or (fext='.FITS') or (fext='.FTS') or (fext='.FZ')) then
      LoadFitsFile(FileNames[0]) {load fits file}
+  else if pos(fext+',',UpperCase(rawext))>0  then
+     LoadRawFile(FileNames[0]) {load camera raw file}
   else
      LoadPictureFile(FileNames[0]); {load picture file}
 end;
