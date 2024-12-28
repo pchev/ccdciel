@@ -3816,7 +3816,11 @@ begin
   else if pos(fext+',',UpperCase(rawext))>0  then
      LoadRawFile(FileNames[0]) {load camera raw file}
   else
+    try
      LoadPictureFile(FileNames[0]); {load picture file}
+    except
+      ShowMessage('Invalid image file');
+    end;
 end;
 
 procedure Tf_main.FormKeyDown(Sender: TObject; var Key: Word; Shift: TShiftState);
