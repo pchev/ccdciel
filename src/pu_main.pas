@@ -246,7 +246,6 @@ type
     MenuViewRotator: TMenuItem;
     OpenPictureDialog1: TOpenDialog;
     PanelRight6: TPanel;
-    PanelMsgTabs: TPanel;
     PanelRight: TPanel;
     MagnifyerTimer: TTimer;
     MeasureTimer: TTimer;
@@ -262,7 +261,6 @@ type
     Splitter2: TSplitter;
     Splitter3: TSplitter;
     Splitter4: TSplitter;
-    TabMsgLevel: TTabControl;
     PageInternalGuider: TTabSheet;
     GuideCameraConnectTimer: TTimer;
     GuidePlotTimer: TTimer;
@@ -592,8 +590,6 @@ type
     procedure MenuVisuZoomAdjustClick(Sender: TObject);
     procedure PanelDragDrop(Sender, Source: TObject; X, Y: Integer);
     procedure PanelDragOver(Sender, Source: TObject; X, Y: Integer;State: TDragState; var Accept: Boolean);
-    procedure PanelMsgTabsMouseEnter(Sender: TObject);
-    procedure PanelMsgTabsMouseLeave(Sender: TObject);
     procedure PlotTimerTimer(Sender: TObject);
     procedure SelectTab(Sender: TObject);
     procedure Splitter1Moved(Sender: TObject);
@@ -610,7 +606,6 @@ type
     procedure ButtonDragDrop(Sender, Source: TObject; X, Y: Integer);
     procedure ButtonDragOver(Sender, Source: TObject; X, Y: Integer;
       State: TDragState; var Accept: Boolean);
-    procedure TabMsgLevelChange(Sender: TObject);
     procedure TimerStampTimerTimer(Sender: TObject);
   private
     { private declarations }
@@ -833,7 +828,6 @@ type
     procedure FinderCameraCoolerChange(var v:boolean);
     Procedure SetFilter(Sender: TObject);
     Procedure SetFilterMenu;
-    procedure ShowMsgTabs(Sender: TObject);
     procedure SwitchImageFullscreen(Data: PtrInt = 0);
     procedure ImageFormKeyDown(Sender: TObject; var Key: Word; Shift: TShiftState);
     Procedure NewMessage(msg: string; level: integer=1);
@@ -1067,6 +1061,7 @@ type
     procedure HFM_ResetMeasurements(Sender: TObject);
     function HFM_IsActive():boolean;
     function HFM_GetHFDShift():double;
+    procedure MsgLevelChange(Sender: TObject);
 
   public
     { public declarations }
@@ -1738,6 +1733,7 @@ begin
 
   SequenceDir:=globalconfig.GetValue('/Files/Sequence',ConfigDir);
   LogDir:=config.GetValue('/Files/LogDir',LogDir);
+  LogLevel:=config.GetValue('/Log/LogLevel',LogLevel);
 
   lang:=config.GetValue('/Language','');;
   lang:=u_translation.translate(lang);
@@ -1771,7 +1767,7 @@ begin
   PanelLeftBase.Width:=screenconfig.GetValue('/Window/PanelLeft',DoScaleX(250));
 
   f_msg:=Tf_msg.Create(self);
-  f_msg.onShowTabs:=@ShowMsgTabs;
+  f_msg.onMsgLevelChange:=@MsgLevelChange;
   f_msg.onOpenLog:=@MenuShowLogClick;
 
   NewMessage('CCDciel '+ccdciel_version+' Copyright (C) '+cdate+' Patrick Chevalley. This is free software, you can redistribute it under certain conditions.');
@@ -2633,9 +2629,6 @@ begin
    DomeOpenActionName[3]:=trim(rsUnparkTheTel);
    DomeOpenActionName[4]:=trim(rsStartTelesco);
    DomeOpenActionName[5]:=trim(rsSlaveTheDome);
-   TabMsgLevel.Tabs[0]:=rsSummary;
-   TabMsgLevel.Tabs[1]:=rsCommands;
-   TabMsgLevel.Tabs[2]:=rsDetails;
    u_speech.InitSpeak;
    if  f_devicesconnection<>nil then f_devicesconnection.SetLang;
    if  f_preview<>nil then f_preview.SetLang;
@@ -2722,9 +2715,7 @@ begin
   TriangleInspection:=config.GetValue('/ImageInspection/TriangleInspection',false);
   TriangleInspectionAngle:=config.GetValue('/ImageInspection/TriangleInspectionAngle',0);
 
-  LogLevel:=config.GetValue('/Log/LogLevel',LogLevel);
-  TabMsgLevel.TabIndex:=LogLevel-1;
-  TabMsgLevelChange(nil);
+  f_msg.MsgLevel:=LogLevel;
 
   ImaBmp:=TBGRABitmap.Create(1,1);
   LockTimerPlot:=false;
@@ -7446,10 +7437,10 @@ begin
   CoverChange(Sender);
 end;
 
-procedure Tf_main.TabMsgLevelChange(Sender: TObject);
+procedure Tf_main.MsgLevelChange(Sender: TObject);
  var i: integer;
 begin
-   i:=TabMsgLevel.TabIndex+1;
+   i:=f_msg.MsgLevel;
    if i<>LogLevel then begin
      LogLevel:=i;
      f_msg.msg.Clear;
@@ -7460,57 +7451,6 @@ begin
      f_msg.msg.SelStart:=f_msg.msg.GetTextLen-1;
      f_msg.msg.SelLength:=0;
    end;
-end;
-
-procedure Tf_main.ShowMsgTabs(Sender: TObject);
-begin
-  if f_msg.ShowTabs then begin
-   case f_msg.Parent.Align of
-    alBottom: begin
-       PanelMsgTabs.Height:=DoScaleY(40);
-       PanelMsgTabs.Width:=min(PanelCenter.Width,f_msg.Width-f_msg.Title.Width);
-       PanelMsgTabs.Left:=max(0,PanelCenter.Width-PanelMsgTabs.Width);
-       PanelMsgTabs.Top:=PanelCenter.Height-PanelMsgTabs.Height;
-       TabMsgLevel.TabPosition:=tpTop;
-    end;
-    alTop: begin
-       PanelMsgTabs.Height:=DoScaleY(40);
-       PanelMsgTabs.Width:=min(PanelCenter.Width,f_msg.Width-f_msg.Title.Width);
-       PanelMsgTabs.Left:=max(0,PanelCenter.Width-PanelMsgTabs.Width);
-       PanelMsgTabs.Top:=0;
-       TabMsgLevel.TabPosition:=tpBottom;
-    end;
-    alLeft: begin
-       PanelMsgTabs.Width:=DoScaleY(120);
-       PanelMsgTabs.Height:=DoScaleY(120);
-       PanelMsgTabs.Left:=0;
-       PanelMsgTabs.Top:=min(f_msg.top,PanelCenter.Height-PanelMsgTabs.Height);
-       TabMsgLevel.TabPosition:=tpLeft;
-    end;
-    else begin // right
-       PanelMsgTabs.Width:=DoScaleY(120);
-       PanelMsgTabs.Height:=DoScaleY(120);
-       PanelMsgTabs.Left:=max(0,PanelCenter.Width-PanelMsgTabs.Width);
-       PanelMsgTabs.Top:=min(f_msg.top+TBTabs.Height,PanelCenter.Height-PanelMsgTabs.Height);
-       TabMsgLevel.TabPosition:=tpLeft;
-    end;
-   end;
-
-    PanelMsgTabs.Visible:=true;
-  end
-  else begin
-    PanelMsgTabs.Visible:=false;
-  end;
-end;
-
-procedure Tf_main.PanelMsgTabsMouseEnter(Sender: TObject);
-begin
-  f_msg.msgMouseEnter(sender);
-end;
-
-procedure Tf_main.PanelMsgTabsMouseLeave(Sender: TObject);
-begin
- f_msg.msgMouseLeave(sender);
 end;
 
 procedure Tf_main.SwitchImageFullscreen(Data: PtrInt = 0);
@@ -7529,7 +7469,6 @@ begin
    f.OnKeyDown:=@ImageFormKeyDown;
    f.KeyPreview:=True;
    PanelCenter.Parent:=f;
-   PanelMsgTabs.Visible:=False;
    f.WindowState:=wsMaximized;
    f.Show;
  end;

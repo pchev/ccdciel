@@ -25,39 +25,66 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 interface
 
-uses UScaleDPI,
-  Classes, SysUtils, FileUtil, Forms, Graphics, Controls, ExtCtrls, StdCtrls, Buttons;
+uses UScaleDPI, u_translation,
+  Classes, SysUtils, FileUtil, Forms, Graphics, Controls, ExtCtrls, StdCtrls, Buttons, Menus;
 
 type
 
   { Tf_msg }
 
   Tf_msg = class(TFrame)
+    MenuItem1: TMenuItem;
+    MenuItem2: TMenuItem;
+    MenuItem3: TMenuItem;
     msg: TMemo;
     Panel1: TPanel;
-    Timer1: TTimer;
+    PopupMenu1: TPopupMenu;
+    SpeedButton1: TSpeedButton;
     Title: TLabel;
+    procedure Button1Click(Sender: TObject);
     procedure FrameResize(Sender: TObject);
+    procedure MenuItemClick(Sender: TObject);
     procedure msgDblClick(Sender: TObject);
-    procedure msgMouseEnter(Sender: TObject);
-    procedure msgMouseLeave(Sender: TObject);
-    procedure Timer1Timer(Sender: TObject);
   private
     { private declarations }
-    FonShowTabs, FonOpenLog: TNotifyEvent;
-    FShowTabs: boolean;
+    FonMsgLevelChange, FonOpenLog: TNotifyEvent;
+    function GetMsgLevel: integer;
+    procedure SetMsgLevel(value: integer);
   public
     { public declarations }
     constructor Create(aOwner: TComponent); override;
     destructor  Destroy; override;
-    property ShowTabs: Boolean read FShowTabs;
-    property onShowTabs: TNotifyEvent read FonShowTabs write FonShowTabs;
+    procedure SetLang;
+    property MsgLevel: integer read GetMsgLevel write SetMsgLevel;
+    property onMsgLevelChange: TNotifyEvent read FonMsgLevelChange write FonMsgLevelChange;
     property onOpenLog: TNotifyEvent read FonOpenLog write FonOpenLog;
   end;
 
 implementation
 
 {$R *.lfm}
+
+constructor Tf_msg.Create(aOwner: TComponent);
+begin
+ inherited Create(aOwner);
+ {$ifdef lclcocoa}
+ Title.Color:=clWindowFrame;
+ {$endif}
+ ScaleDPI(Self);
+ SetLang;
+end;
+
+destructor  Tf_msg.Destroy;
+begin
+ inherited Destroy;
+end;
+
+procedure Tf_msg.Setlang;
+begin
+ MenuItem1.Caption:=rsSummary;
+ MenuItem2.Caption:=rsCommands;
+ MenuItem3.Caption:=rsDetails;
+end;
 
 procedure Tf_msg.FrameResize(Sender: TObject);
 var i,w: integer;
@@ -71,44 +98,41 @@ begin
   end;
 end;
 
+procedure Tf_msg.Button1Click(Sender: TObject);
+begin
+  PopupMenu1.PopUp;
+end;
+
+procedure Tf_msg.MenuItemClick(Sender: TObject);
+begin
+  if Assigned(FonMsgLevelChange) then FonMsgLevelChange(Self);
+end;
+
+function Tf_msg.GetMsgLevel: integer;
+begin
+  if MenuItem1.Checked then
+    result:=1
+  else if MenuItem2.Checked then
+    result:=2
+  else if MenuItem3.Checked then
+    result:=3
+  else
+    result:=3;
+end;
+
+procedure Tf_msg.SetMsgLevel(value: integer);
+begin
+  case value of
+    1: MenuItem1.Checked:=true;
+    2: MenuItem2.Checked:=true;
+    3: MenuItem3.Checked:=true;
+    else MenuItem3.Checked:=true;
+  end;
+end;
+
 procedure Tf_msg.msgDblClick(Sender: TObject);
 begin
    if Assigned(FonOpenLog) then FonOpenLog(Self);
-end;
-
-procedure Tf_msg.msgMouseEnter(Sender: TObject);
-var p:TPoint;
-begin
- timer1.Enabled:=false;
- FShowTabs:=true;
- if Assigned(FonShowTabs) then FonShowTabs(Self);
-end;
-
-procedure Tf_msg.msgMouseLeave(Sender: TObject);
-begin
-  timer1.Enabled:=true;
-end;
-
-procedure Tf_msg.Timer1Timer(Sender: TObject);
-begin
-  timer1.Enabled:=false;
-  FShowTabs:=false;
-  if Assigned(FonShowTabs) then FonShowTabs(Self);
-end;
-
-constructor Tf_msg.Create(aOwner: TComponent);
-begin
- inherited Create(aOwner);
- {$ifdef lclcocoa}
- Title.Color:=clWindowFrame;
- {$endif}
- ScaleDPI(Self);
- FShowTabs:=false;
-end;
-
-destructor  Tf_msg.Destroy;
-begin
- inherited Destroy;
 end;
 
 end.
