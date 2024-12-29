@@ -81,6 +81,7 @@ end;
 
 procedure Tf_msg.Setlang;
 begin
+ SpeedButton1.Caption:=#$E2#$98#$B0;
  MenuItem1.Caption:=rsSummary;
  MenuItem2.Caption:=rsCommands;
  MenuItem3.Caption:=rsDetails;
