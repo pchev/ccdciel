@@ -929,14 +929,14 @@ begin
             ShowPlan;
           end;
           firstrow:=false;
-        end
-        else begin
-          if n>=1 then begin
-            // copy previous row
-            tt:=TTarget(TargetList.Objects[colseq,n]);
-            if (tt.objectname<>ScriptTxt) and (tt.objectname<>SkyFlatTxt) then t.Assign(tt);
-          end
-        end;
+       end
+       else begin
+         if n>=1 then begin
+           // copy previous row
+           tt:=TTarget(TargetList.Objects[colseq,n]);
+           if (tt.objectname<>ScriptTxt) and (tt.objectname<>SkyFlatTxt) then t.Assign(tt);
+         end
+       end;
        // assign name and coordinates J2000
        t.objectname:=obj;
        t.ra:=ra;
@@ -1732,6 +1732,13 @@ begin
       for i:=1 to n do begin
          s:=TStep.Create;
          s.Assign(TStep(StepList.Objects[0,i]));
+         if (t.magnitude<>NullCoord)and(s.refexposure<>'') then begin
+            if f_autoexposurestep.SetRef(s.refexposure) then begin
+              f_autoexposurestep.Magnitude.Value:=t.magnitude;
+              f_autoexposurestep.cbRefChange(nil);
+              s.exposure:=StrToFloatDef(f_autoexposurestep.Exposure_str,s.exposure);
+            end
+         end;
          p.Add(s);
       end;
     end;
@@ -3404,6 +3411,7 @@ end;
 procedure Tf_EditTargets.UpdAutoExposure(newmagn: double);
 var i: integer;
 begin
+if newmagn<>NullCoord then begin
   for i:=1 to StepList.RowCount-1 do begin
     if StepList.Cells[pcolrefexp,i]<>'' then begin
       StepList.Row:=i;
@@ -3415,6 +3423,7 @@ begin
       end;
     end;
   end;
+end;
 end;
 
 procedure Tf_EditTargets.MenuAddScriptStepClick(Sender: TObject);
