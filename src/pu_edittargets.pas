@@ -2554,6 +2554,8 @@ begin
                        PlanName.Caption:=t.planname;
                        Row:=i;
                        LoadTemplate;
+                       if t.magnitude<>NullCoord then
+                         UpdAutoExposure(t.magnitude)
                      end;
                 end;
               end;
