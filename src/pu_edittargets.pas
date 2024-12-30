@@ -74,6 +74,9 @@ type
     MenuAddScriptStep: TMenuItem;
     MenuAddSwitchStep: TMenuItem;
     MenuInsertOnline: TMenuItem;
+    MenuOnlineMagn: TMenuItem;
+    MenuOnlineMagnAll: TMenuItem;
+    MenuMagnitude: TMenuItem;
     MenuOnlineCoord: TMenuItem;
     Panel10: TPanel;
     Panel16: TPanel;
@@ -263,6 +266,8 @@ type
     procedure MenuBlankRowClick(Sender: TObject);
     procedure MenuInsertOnlineClick(Sender: TObject);
     procedure MenuOnlineCoordClick(Sender: TObject);
+    procedure MenuOnlineMagnAllClick(Sender: TObject);
+    procedure MenuOnlineMagnClick(Sender: TObject);
     procedure MenuSwitchClick(Sender: TObject);
     procedure PointCoordChange(Sender: TObject);
     procedure RepeatCountListChange(Sender: TObject);
@@ -543,6 +548,9 @@ begin
   MenuRotator.Caption:=rsRotator;
   MenuImgCoord.Caption := rsCurrentImage;
   MenuImgRot.Caption := rsCurrentImage;
+  MenuMagnitude.Caption:=rsMagnitude;
+  MenuOnlineMagn.Caption:=rsSearchOnline;
+  MenuOnlineMagnAll.Caption:=rsOnlineForAll;
   Label9.Caption:=rsSwitchConnec;
   Label10.Caption:=rsSwitch;
   Label12.Caption:=rsValue;
@@ -1160,6 +1168,60 @@ begin
   ShowPlan;
   Application.ProcessMessages;
   FCoordWarning:=false;
+end;
+
+procedure Tf_EditTargets.MenuOnlineMagnClick(Sender: TObject);
+var n: integer;
+begin
+  n:=TargetList.Row;
+  f_onlineinfo.Obj.Text:=TargetList.Cells[colname,n];
+  f_onlineinfo.Ra.Text:='';
+  f_onlineinfo.De.Text:='';
+  f_onlineinfo.magnitude:='';
+  f_onlineinfo.LabelResolver.Caption:='';
+  f_onlineinfo.ShowModal;
+  if (f_onlineinfo.ModalResult=mrOK)and(f_onlineinfo.magnitude<>'') then
+  begin
+    TargetList.Cells[colmagn,n]:=f_onlineinfo.magnitude; // only magnitude
+  end;
+  TargetChange(nil);
+  ShowPlan;
+end;
+
+procedure Tf_EditTargets.MenuOnlineMagnAllClick(Sender: TObject);
+var i : integer;
+    bands:TStringList;
+    buf: string;
+begin
+  bands:=TStringList.Create;
+  bands.Add('U');
+  bands.Add('B');
+  bands.Add('V');
+  bands.Add('R');
+  bands.Add('I');
+  bands.Add('G');
+  buf:=FormEntryCB(self,bands,rsBand,'V');
+  try
+  screen.Cursor:=crHourGlass;
+  for i:=1 to TargetList.RowCount-1 do begin
+    TargetList.Row:=i;
+    f_onlineinfo.Obj.Text:=TargetList.Cells[colname,i];
+    f_onlineinfo.cbMagBand.Text:=buf;
+    f_onlineinfo.Ra.Text:='';
+    f_onlineinfo.De.Text:='';
+    f_onlineinfo.magnitude:='';
+    f_onlineinfo.BtnSearchClick(nil);
+    if f_onlineinfo.magnitude<>'' then begin
+      TargetList.Cells[colmagn,i]:=f_onlineinfo.magnitude;
+      TargetChange(nil);
+      ShowPlan;
+    end;
+    Application.ProcessMessages;
+  end;
+  finally
+    screen.Cursor:=crDefault;
+    bands.Free;
+  end;
 end;
 
 procedure Tf_EditTargets.MenuBlankRowClick(Sender: TObject);

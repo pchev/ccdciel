@@ -2012,6 +2012,17 @@ object f_EditTargets: Tf_EditTargets
         OnClick = BtnCurrentCoordClick
       end
     end
+    object MenuMagnitude: TMenuItem
+      Caption = 'Magnitude'
+      object MenuOnlineMagn: TMenuItem
+        Caption = 'MenuOnlineMagn'
+        OnClick = MenuOnlineMagnClick
+      end
+      object MenuOnlineMagnAll: TMenuItem
+        Caption = 'MenuOnlineMagnAll'
+        OnClick = MenuOnlineMagnAllClick
+      end
+    end
     object MenuTime: TMenuItem
       Caption = 'Time'
       object MenuAnyTime: TMenuItem

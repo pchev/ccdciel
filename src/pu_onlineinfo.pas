@@ -73,6 +73,7 @@ begin
   Label16.Caption:=j2000;
   Label3.Caption:=rsObjectName;
   label4.Caption:=rsMagnitude;
+  Label5.Caption:=rsBand;
 end;
 
 procedure Tf_onlineinfo.ObjKeyDown(Sender: TObject; var Key: Word; Shift: TShiftState);
@@ -103,10 +104,20 @@ begin
         cbMagBand.Items.Add(maglist[i].band);
       end;
       i:=cbMagBand.Items.IndexOf(band);
-      if i>0 then
+      if i>=0 then
         cbMagBand.ItemIndex:=i
-      else
-        cbMagBand.ItemIndex:=0;
+      else begin
+        i:=cbMagBand.Items.IndexOf('V');
+        if i>=0 then
+          cbMagBand.ItemIndex:=i
+        else begin
+          i:=cbMagBand.Items.IndexOf('G');
+          if i>=0 then
+            cbMagBand.ItemIndex:=i
+          else
+            cbMagBand.ItemIndex:=0;
+        end;
+      end;
       cbMagBandChange(nil);
     end
     else begin

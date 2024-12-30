@@ -166,7 +166,6 @@ object f_onlineinfo: Tf_onlineinfo
         'G'
       )
       OnChange = cbMagBandChange
-      Style = csDropDownList
       TabOrder = 5
       Text = 'V'
     end

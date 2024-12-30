@@ -251,6 +251,7 @@ begin
   b.Default:=true;
   f.ChildSizing.ControlsPerLine:=2;
   f.ChildSizing.Layout:=cclLeftToRightThenTopToBottom;
+  f.ChildSizing.HorizontalSpacing:=8;
   f.AutoSize:=true;
   FormPos(f,mouse.CursorPos.X,mouse.CursorPos.Y);
   f.ShowModal;
@@ -288,6 +289,7 @@ begin
   b.Default:=true;
   f.ChildSizing.ControlsPerLine:=2;
   f.ChildSizing.Layout:=cclLeftToRightThenTopToBottom;
+  f.ChildSizing.HorizontalSpacing:=8;
   f.AutoSize:=true;
   FormPos(f,mouse.CursorPos.X,mouse.CursorPos.Y);
   f.ShowModal;

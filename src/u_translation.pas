@@ -1596,6 +1596,8 @@ resourcestring
   rsStarAutoExpo = 'Star%sauto-exposure';
   rsReferenceExp = 'Reference exposure';
   rsMaxExposure = 'Max exposure';
+  rsOnlineForAll = 'Online for all targets';
+  rsBand = 'Band';
 
 implementation
 
