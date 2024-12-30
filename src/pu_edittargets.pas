@@ -951,7 +951,7 @@ begin
        t.de:=de;
        // default autofocus and plate solving
        t.astrometrypointing:=(astrometryResolver<>ResolverNone);
-       t.inplaceautofocus:=AutofocusInPlace;
+       t.inplaceautofocus:=(AutofocusMode<>afNone) and AutofocusInPlace;
        // add target
        TargetList.RowCount:=TargetList.RowCount+1;
        i:=TargetList.RowCount-1;
@@ -1045,7 +1045,7 @@ begin
          t.pa:=NullCoord;
        // default autofocus and plate solving
        t.astrometrypointing:=(astrometryResolver<>ResolverNone);
-       t.inplaceautofocus:=AutofocusInPlace;
+       t.inplaceautofocus:=(AutofocusMode<>afNone) and AutofocusInPlace;
        // add target
        TargetList.RowCount:=TargetList.RowCount+1;
        i:=TargetList.RowCount-1;

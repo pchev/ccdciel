@@ -3234,9 +3234,9 @@ begin
   astrometrypointing:=(astrometryResolver<>ResolverNone);
   updatecoord:=false;
   solartracking:=false;
-  inplaceautofocus:=AutofocusInPlace;
-  autofocustemp:=(AutofocusTempChange>0);
-  autofocushfd:=(HFM_Threshold>0);
+  inplaceautofocus:=(AutofocusMode<>afNone) and AutofocusInPlace;
+  autofocustemp:=(AutofocusMode<>afNone) and (AutofocusTempChange>0);
+  autofocushfd:=(AutofocusMode<>afNone) and (HFM_Threshold>0);
   noautoguidingchange:=false;
   autoguiding:=false;
   repeatcount:=1;
