@@ -2251,6 +2251,7 @@ begin
     else
       t.magnitude:=StrToFloatDef(TargetList.Cells[colmagn,n],t.magnitude);
     magnchange:=(oldmagn<>t.magnitude);
+    SelectedObjectMagnitude:=t.magnitude;
     if (cbAstrometry.Checked)and ((t.ra=NullCoord)or(t.de=NullCoord)) then cbAstrometry.Checked:=false;
     t.astrometrypointing:=cbAstrometry.Checked;
     t.inplaceautofocus:=cbInplace.Checked;
@@ -2279,7 +2280,7 @@ begin
       if trim(t.planname)>'' then LoadTemplate;
       SetTemplateButton;
     end;
-    if magnchange then begin
+    if magnchange or planchange then begin
       UpdAutoExposure(t.magnitude);
     end;
   end;
@@ -3276,7 +3277,7 @@ var arow,acol: integer;
 begin
   arow:=StepList.Row;
   acol:=StepList.Col;
-  if (arow>0)and(acol=pcolrefexp) then begin
+  if (arow>0)and(acol=pcolrefexp)and(SelectedObjectMagnitude<>NullCoord) then begin
      if f_autoexposurestep.SetRef(StepList.Cells[acol,arow]) then begin
        f_autoexposurestep.Magnitude.Value:=SelectedObjectMagnitude;
        f_autoexposurestep.cbRefChange(nil);

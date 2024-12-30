@@ -115,11 +115,13 @@ object f_EditTargets: Tf_EditTargets
           Top = 45
           Width = 77
           Constraints.MaxHeight = 24
-          MaxValue = 999999
-          MinValue = 1
-          OnChange = RepeatCountListChange
+          MaxLength = 0
           ParentFont = False
           TabOrder = 3
+          OnChange = RepeatCountListChange
+          MaxValue = 999999
+          MinValue = 1
+          NullValue = 0
           Value = 1
         end
         object Bevel4: TBevel
@@ -440,10 +442,13 @@ object f_EditTargets: Tf_EditTargets
                 Top = 0
                 Width = 54
                 Constraints.MaxHeight = 26
-                MaxValue = 100000
-                OnChange = TargetChange
+                MaxLength = 0
                 ParentFont = False
                 TabOrder = 1
+                OnChange = TargetChange
+                MaxValue = 100000
+                NullValue = 0
+                Value = 0
               end
               object PreviewExposure: TFloatSpinEditEx
                 AnchorSideTop.Control = TDelay
@@ -453,12 +458,13 @@ object f_EditTargets: Tf_EditTargets
                 Top = 0
                 Width = 63
                 Constraints.MaxHeight = 26
+                MaxLength = 0
+                ParentFont = False
+                TabOrder = 2
+                OnChange = TargetChange
                 Increment = 0.1
                 MaxValue = 60
                 MinValue = 0.001
-                OnChange = TargetChange
-                ParentFont = False
-                TabOrder = 2
                 Value = 0.001
               end
               object Label13: TLabel
@@ -604,7 +610,7 @@ object f_EditTargets: Tf_EditTargets
             Title.ImageIndex = 0
             Title.MultiLine = True
             Title.Caption = 'Repeat'
-            Width = 14
+            Width = 18
           end>
         DefaultColWidth = 30
         HeaderHotZones = [gzFixedCols, gzFixedCells]
@@ -634,7 +640,7 @@ object f_EditTargets: Tf_EditTargets
           50
           60
           60
-          14
+          18
         )
       end
       object PanelTargetDetail: TPanel
@@ -671,10 +677,10 @@ object f_EditTargets: Tf_EditTargets
           Top = 26
           Width = 390
           HorzScrollBar.Page = 359
-          VertScrollBar.Page = 221
+          VertScrollBar.Page = 225
           Align = alClient
-          ClientHeight = 221
-          ClientWidth = 365
+          ClientHeight = 225
+          ClientWidth = 369
           Color = clDefault
           ParentColor = False
           TabOrder = 1
@@ -1012,7 +1018,7 @@ object f_EditTargets: Tf_EditTargets
                 ButtonStyle = cbsPickList
                 Title.MultiLine = True
                 Title.Caption = 'F-stop'
-                Width = 71
+                Width = 75
               end>
             DefaultColWidth = 30
             MouseWheelOption = mwGrid
@@ -1043,7 +1049,7 @@ object f_EditTargets: Tf_EditTargets
               66
               66
               66
-              71
+              75
             )
           end
           object Panel17: TPanel
@@ -1512,11 +1518,14 @@ object f_EditTargets: Tf_EditTargets
                 Top = 0
                 Width = 65
                 Constraints.MaxHeight = 26
-                MaxValue = 32767
-                MinValue = -32768
-                OnChange = TargetChange
+                MaxLength = 0
                 ParentFont = False
                 TabOrder = 1
+                OnChange = TargetChange
+                MaxValue = 32767
+                MinValue = -32768
+                NullValue = 0
+                Value = 0
               end
               object PanelOffset: TPanel
                 Left = 0
@@ -1545,11 +1554,14 @@ object f_EditTargets: Tf_EditTargets
                   Top = 4
                   Width = 65
                   Constraints.MaxHeight = 26
-                  MaxValue = 32767
-                  MinValue = -32768
-                  OnChange = TargetChange
+                  MaxLength = 0
                   ParentFont = False
                   TabOrder = 0
+                  OnChange = TargetChange
+                  MaxValue = 32767
+                  MinValue = -32768
+                  NullValue = 0
+                  Value = 0
                 end
               end
             end
@@ -1598,11 +1610,13 @@ object f_EditTargets: Tf_EditTargets
               Top = 0
               Width = 65
               Constraints.MaxHeight = 28
-              MaxValue = 10000
-              MinValue = 1
-              OnChange = TargetChange
+              MaxLength = 0
               ParentFont = False
               TabOrder = 2
+              OnChange = TargetChange
+              MaxValue = 10000
+              MinValue = 1
+              NullValue = 0
               Value = 1
             end
             object PanelFstop: TPanel
