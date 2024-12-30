@@ -3370,8 +3370,8 @@ begin
   if pfile.GetValue('/StepNum',-1)<>p.Count then exit;
   for i:=1 to p.Count do begin
      if pfile.GetValue('/Steps/Step'+inttostr(i)+'/Type',0)<>p.Steps[i-1].steptype then exit;
-     if pfile.GetValue('/Steps/Step'+inttostr(i)+'/Exposure',1.0)<>p.Steps[i-1].exposure then exit;
      if pfile.GetValue('/Steps/Step'+inttostr(i)+'/RefExposure','')<>p.Steps[i-1].refexposure then exit;
+     if (pfile.GetValue('/Steps/Step'+inttostr(i)+'/Exposure',1.0)<>p.Steps[i-1].exposure)and(p.Steps[i-1].refexposure='') then exit; // change in exposure not computed from reference magnitude
      if pfile.GetValue('/Steps/Step'+inttostr(i)+'/StackCount',1)<>p.Steps[i-1].stackcount then exit;
      if pfile.GetValue('/Steps/Step'+inttostr(i)+'/Count',1)<>p.Steps[i-1].count then exit;
      if pfile.GetValue('/Steps/Step'+inttostr(i)+'/Dither',false)<>p.Steps[i-1].dither then exit;
