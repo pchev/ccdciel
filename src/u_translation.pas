@@ -1598,6 +1598,7 @@ resourcestring
   rsMaxExposure = 'Max exposure';
   rsOnlineForAll = 'Online for all targets';
   rsBand = 'Band';
+  rsApplyToAllTa = 'Apply to all targets';
 
 implementation
 

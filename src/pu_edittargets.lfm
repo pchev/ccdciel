@@ -850,6 +850,15 @@ object f_EditTargets: Tf_EditTargets
               TabOrder = 1
             end
           end
+          object btnApplyAll: TButton
+            Left = 16
+            Height = 25
+            Top = 384
+            Width = 267
+            Caption = 'btnApplyAll'
+            OnClick = btnApplyAllClick
+            TabOrder = 12
+          end
         end
       end
       object Splitter2: TSplitter

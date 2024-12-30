@@ -55,6 +55,7 @@ type
     BtnSaveTemplate: TButton;
     BtnTiming: TButton;
     btnStarAutoexposure: TButton;
+    btnApplyAll: TButton;
     cbDarkNight: TCheckBox;
     cbSkip: TCheckBox;
     cbAstrometry: TCheckBox;
@@ -250,6 +251,7 @@ type
     procedure BtnNewScriptClick(Sender: TObject);
     procedure Btn_coord_internalClick(Sender: TObject);
     procedure BtnTimingClick(Sender: TObject);
+    procedure btnApplyAllClick(Sender: TObject);
     procedure cbChange(Sender: TObject);
     procedure CheckRestartStatus(Sender: TObject);
     procedure FormResize(Sender: TObject);
@@ -323,7 +325,7 @@ type
     procedure SetPlanList(n: integer; pl:string);
     procedure SetScriptList(n: integer; sl, args:string);
     procedure SetScriptList1(n: integer; sp, sl, args:string);
-    procedure SetScriptList2(n: integer; sl, args:string);
+    procedure SetScriptList2(sl, args:string);
     procedure SetSwitch(n: integer; swl:string);
     procedure SetSwitch1(n: integer; swni,swna,swval:string);
     procedure ResetSequences;
@@ -506,6 +508,7 @@ begin
   TargetList.Columns.Items[colend-1].PickList.Add(MeridianCrossing+'+2.0h');
   TargetList.Columns.Items[colend-1].PickList.Add(MeridianCrossing+'+3.0h');
   TargetList.Columns.Items[colend-1].PickList.Add(MeridianCrossing+'+4.0h');
+  btnApplyAll.Caption:=rsApplyToAllTa;
   cbDarkNight.Caption := Format(rsDarkNight, [blank]);
   cbSkip.Caption := Format(rsDonTSwait+'', [blank]);
   cbAstrometry.Caption := Format(rsUseAstromet2+'', [blank]);
@@ -724,7 +727,7 @@ begin
   ScriptParam.Text:=args;
 end;
 
-procedure Tf_EditTargets.SetScriptList2(n: integer; sl, args:string);
+procedure Tf_EditTargets.SetScriptList2(sl, args:string);
 var i:integer;
 begin
   i:=ScriptList2.Items.IndexOf(sl);
@@ -1362,6 +1365,46 @@ begin
   f.Memo1.Text:=rsSequence+blank+tt.TargetName+crlf+crlf+tt.DoneStatus;
   FormPos(f,mouse.CursorPos.X,mouse.CursorPos.Y);
   f.Show;
+end;
+
+procedure Tf_EditTargets.btnApplyAllClick(Sender: TObject);
+var i: integer;
+    dark,skip,astp,afinp,aftemp,iniscr,afhfd,noguid,manst,updc,cbst: boolean;
+    scrn,scarg: string;
+begin
+  dark   := cbDarkNight.Checked;
+  skip   := cbSkip.Checked;
+  astp   := cbAstrometry.Checked;
+  afinp  := cbInplace.Checked;
+  aftemp := cbAutofocusTemp.Checked;
+  iniscr := cbInitScript.Checked;
+  afhfd  := cbAutofocusHFD.Checked;
+  noguid := cbNoAutoguidingChange.Checked;
+  manst  := cbMandatoryStartTime.Checked;
+  updc   := cbUpdCoord.Checked;
+  cbst   := cbSolarTracking.Checked;
+  i:=ScriptList2.ItemIndex;
+  if i>=0 then
+    scrn:=ScriptList2.Items[i]
+  else
+    scrn:='';
+  scarg:=ScriptParam2.text;
+  for i:=1 to TargetList.RowCount-1 do begin
+    TargetList.Row:=i;
+    SetScriptList2(scrn,scarg);
+    cbDarkNight.Checked:=dark;
+    cbSkip.Checked:=skip;
+    cbAstrometry.Checked:=astp;
+    cbInplace.Checked:=afinp;
+    cbAutofocusTemp.Checked:=aftemp;
+    cbInitScript.Checked:=iniscr;
+    cbAutofocusHFD.Checked:=afhfd;
+    cbNoAutoguidingChange.Checked:=noguid;
+    cbMandatoryStartTime.Checked:=manst;
+    cbUpdCoord.Checked:=updc;
+    cbSolarTracking.Checked:=cbst;
+    TargetChange(nil);
+  end;
 end;
 
 procedure Tf_EditTargets.cbChange(Sender: TObject);
@@ -2135,7 +2178,7 @@ begin
 
     cbInitScript.Checked:=t.initscript;
     panel16.Visible:=t.initscript;
-    SetScriptList2(n,t.initscriptname,t.initscriptargs);
+    SetScriptList2(t.initscriptname,t.initscriptargs);
 
     // When the form is saved, the corresponding values for each target are
     // saved off. IOW, the form determines the target value, and vice versa
