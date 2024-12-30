@@ -5981,3 +5981,11 @@ msgstr ""
 msgid "Max exposure"
 msgstr ""
 
+#: u_translation:rsonlineforall
+msgid "Online for all targets"
+msgstr ""
+
+#: u_translation:rsband
+msgid "Band"
+msgstr ""
+

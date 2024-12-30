@@ -6,14 +6,14 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ccdciel\n"
 "Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
-"POT-Creation-Date: 2024-12-21 16:48+0000\n"
-"PO-Revision-Date: 2024-11-25 17:59+0000\n"
+"POT-Creation-Date: 2024-12-30 15:45+0000\n"
+"PO-Revision-Date: 2024-12-21 17:19+0000\n"
 "Last-Translator: Sergey Tarantsov <tsn-ast@yandex.ru>\n"
 "Language-Team: Russian <ru@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2024-12-21 16:56+0000\n"
+"X-Launchpad-Export-Date: 2024-12-30 16:12+0000\n"
 "X-Generator: Launchpad (build 6394e03793719e8d73f5a60b5439440e693c92f1)\n"
 
 #: u_translation.rs2d
@@ -104,7 +104,7 @@ msgstr "Дополнительные опции для"
 
 #: u_translation.rsadditionalsc
 msgid "Additional script parameter"
-msgstr ""
+msgstr "Дополнительный параметр скрипта"
 
 #: u_translation.rsaddstep
 msgid "Add step"
@@ -577,6 +577,10 @@ msgstr "Обнаружение битых пикселей"
 msgid "Bad pixel threshold"
 msgstr "Порог:"
 
+#: u_translation.rsband
+msgid "Band"
+msgstr ""
+
 #: u_translation.rsbayermatrixp
 msgid "Bayer matrix pattern"
 msgstr "Тип матрицы"
@@ -914,7 +918,7 @@ msgstr "Центр Dec"
 
 #: u_translation.rscenteringand
 msgid "Centering and guiding strategy"
-msgstr ""
+msgstr "Стратегия центрирования и гидирования"
 
 #: u_translation.rscenterra
 msgid "Center RA"
@@ -2281,7 +2285,7 @@ msgstr "Сенсор гида;"
 
 #: u_translation.rsguidestaroff
 msgid "Guide star offset"
-msgstr ""
+msgstr "Смещение гидирующей звезды"
 
 #: u_translation.rsguiding
 #, object-pascal-format
@@ -2527,11 +2531,11 @@ msgstr "через %s сек."
 
 #: u_translation.rsinstallscrip
 msgid "Install script"
-msgstr ""
+msgstr "Установить скрипт"
 
 #: u_translation.rsinstrumentna
 msgid "Instrument name"
-msgstr ""
+msgstr "Название инструмента"
 
 #: u_translation.rsintensity
 msgid "Intensity"
@@ -3141,11 +3145,11 @@ msgstr "Двойная"
 
 #: u_translation.rsmultistargui
 msgid "Multi-star guide offset"
-msgstr "Смещение многозвездного гидирования"
+msgstr "Смещение многозвёздного гидирования"
 
 #: u_translation.rsmultistarwit
 msgid "Multistar with guider astrometry"
-msgstr ""
+msgstr "Многозвёздная с астрометрией"
 
 #: u_translation.rsname
 msgid "Name"
@@ -3170,7 +3174,7 @@ msgstr "Необходимо подождать до %s"
 
 #: u_translation.rsnetwork
 msgid "Network"
-msgstr ""
+msgstr "Сеть"
 
 #: u_translation.rsnew
 msgid "New"
@@ -3442,6 +3446,10 @@ msgstr "Вкл"
 #: u_translation.rsonlinedocume
 msgid "Online documentation"
 msgstr "Онлайн документация"
+
+#: u_translation.rsonlineforall
+msgid "Online for all targets"
+msgstr ""
 
 #: u_translation.rsonmeridiancr
 msgid "On Meridian crossing"
@@ -3943,7 +3951,7 @@ msgstr "Осадки"
 
 #: u_translation.rsramdisk
 msgid "RAM Disk"
-msgstr ""
+msgstr "Диск RAM"
 
 #: u_translation.rsrandom
 msgid "Random"
@@ -4687,11 +4695,11 @@ msgstr "Установлен тип кадра %s"
 
 #: u_translation.rssetguidespee
 msgid "Set guide speed [x sidereal]"
-msgstr "Установить скорость гидирования [x звездной]"
+msgstr "Установить скорость гидирования [x звёздной]"
 
 #: u_translation.rssetlockposit
 msgid "Set lock position"
-msgstr ""
+msgstr "Позиция блокировки"
 
 #: u_translation.rssetmagnitude
 msgid "Set magnitude"
@@ -4809,19 +4817,19 @@ msgstr "Одиночная звезда"
 
 #: u_translation.rssinglestarbr
 msgid "Single star, brightest star with offset"
-msgstr ""
+msgstr "Одиночная звезда, самая яркая звезда со смещением"
 
 #: u_translation.rssinglestarus
 msgid "Single star, use the brightest star"
-msgstr ""
+msgstr "Одиночная звезда, использовать самую яркую звезду"
 
 #: u_translation.rssinglestarwi
 msgid "Single star, with guider astrometry"
-msgstr ""
+msgstr "Одиночная звезда с астрометрией"
 
 #: u_translation.rssinglestarwi2
 msgid "Single star with astrometry, then multistar"
-msgstr ""
+msgstr "Одиночная звезда с астрометрией, затем многозвёздная"
 
 #: u_translation.rssitesendtote
 msgid "Site send to telescope."
@@ -4933,7 +4941,7 @@ msgstr "Коррекция проскальзывания "
 
 #: u_translation.rsslit
 msgid "Slit"
-msgstr ""
+msgstr "Щель"
 
 #: u_translation.rsslitdrawing
 msgid "Slit drawing"
@@ -4979,7 +4987,7 @@ msgstr "Время %s сек."
 
 #: u_translation.rssolvemaincam
 msgid "Solve main camera image"
-msgstr ""
+msgstr "Распознать изображение основной камеры"
 
 #: u_translation.rssomedefinedd
 msgid "Some defined devices are not connected"
