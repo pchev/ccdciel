@@ -565,6 +565,7 @@ begin
     else
       cra:=(FSidtimStart+pi/4)*12/pi;//move weight half down, look east. This always rotating 135 degrees without reaching meridian. Only 2x45=90 is required
 
+    cra:=rmod(cra+24,24);
     MountToLocal(mount.EquinoxJD,cra,cde);//for case communication with mount is in J2000 coordinate system
 
     tracemsg('Slew mount to start position, RAlocal:'+FormatFloat(f6,cra)+' DEClocal='+FormatFloat(f6,cde));
