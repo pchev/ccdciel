@@ -31,7 +31,7 @@ interface
 
 uses  u_global, u_utils, cu_fits, indiapi, cu_planetarium, fu_ccdtemp, fu_devicesconnection, pu_pause,
   fu_capture, fu_preview, fu_mount, cu_wheel, cu_mount, cu_camera, cu_focuser, cu_autoguider, cu_astrometry,
-  cu_dome, cu_rotator, cu_safety, cu_weather, cu_autoguider_internal,
+  cu_dome, cu_rotator, cu_safety, cu_weather,
   fu_cover, cu_cover, fu_internalguider, fu_finder, cu_switch, fu_starprofile,
   Classes, SysUtils, FileUtil, uPSComponent, uPSComponent_Default, LazFileUtils,
   uPSComponent_Forms, uPSComponent_Controls, uPSComponent_StdCtrls, Forms, process,
@@ -271,6 +271,8 @@ type
     function cmd_Internalguider_SetSpectrofunction(onoff:string):string;
     function cmd_Internalguider_SetSpectroStrategy(value:string):string;
     function cmd_Internalguider_SetSpectroAstrometryExposure(exp:string):string;
+    function cmd_Internalguider_SetSpectroTargetRaDec(ra,de:string):string;
+    function cmd_Internalguider_ClearSpectroTargetRaDec: string;
     function cmd_Internalguider_SetSpectroSlitname(slit:string):string;
     function cmd_Internalguider_SetSpectroGuidestaroffset(x,y:string):string;
     function cmd_Internalguider_SetSpectroGuidestarRaDec(ra,de:string):string;
@@ -2636,6 +2638,37 @@ except
 end;
 end;
 
+function Tf_scriptengine.cmd_Internalguider_ClearSpectroTargetRaDec: string;
+begin
+result:=msgFailed;
+try
+  if (Fautoguider.AutoguiderType<>agINTERNAL) then begin; msg('Valid only for the internal guider'); exit; end;
+  Fautoguider.SpectroSetTarget(NullCoord, NullCoord);
+  result:=msgOK;
+ except
+   result:=msgFailed;
+ end;
+end;
+
+function Tf_scriptengine.cmd_Internalguider_SetSpectroTargetRaDec(ra,de:string):string;
+var gRa,gDec: double;
+    n: integer;
+begin
+result:=msgFailed;
+try
+ if (Fautoguider.AutoguiderType<>agINTERNAL) then begin; msg('Valid only for the internal guider'); exit; end;
+ if (not finternalguider.SpectroFunctions) then begin; msg('Spectroscopy functions are not selected'); exit; end;
+ gra:=StrToAR(ra);
+ if gra=NullCoord then begin; msg('Invalid RA '+ra); exit; end;
+ gdec:=StrToDE(de);
+ if gdec=NullCoord then begin; msg('Invalid DEC '+de); exit; end;
+ if Fautoguider.SpectroSetTarget(gRa,gDec) then
+ result:=msgOK;
+except
+  result:=msgFailed;
+end;
+end;
+
 function Tf_scriptengine.cmd_Internalguider_SetSpectroGuidestaroffset(x,y:string):string;
 var xx,yy: double;
     n: integer;
@@ -2660,7 +2693,8 @@ function Tf_scriptengine.cmd_Internalguider_ClearSpectroGuidestarRaDec: string;
 begin
 result:=msgFailed;
 try
-  T_autoguider_internal(Fautoguider).SpectroSetGuideStar(NullCoord, NullCoord);
+  if (Fautoguider.AutoguiderType<>agINTERNAL) then begin; msg('Valid only for the internal guider'); exit; end;
+  Fautoguider.SpectroSetGuideStar(NullCoord, NullCoord);
   result:=msgOK;
  except
    result:=msgFailed;
@@ -2681,7 +2715,7 @@ try
  if gra=NullCoord then begin; msg('Invalid RA '+ra); exit; end;
  gdec:=StrToDE(de);
  if gdec=NullCoord then begin; msg('Invalid DEC '+de); exit; end;
- if T_autoguider_internal(Fautoguider).SpectroSetGuideStar(gRa,gDec) then
+ if Fautoguider.SpectroSetGuideStar(gRa,gDec) then
  result:=msgOK;
 except
   result:=msgFailed;

@@ -8597,6 +8597,10 @@ if f_mount.BtnGoto.Caption=rsGoto then begin
          autoguider.Guide(false);
          autoguider.WaitBusy(15);
        end;
+       if autoguider is T_autoguider_internal then begin
+         autoguider.SpectroSetTarget(NullCoord, NullCoord);  // reset spectro target and guide that are no more valid after a slew
+         autoguider.SpectroSetGuideStar(NullCoord, NullCoord);
+       end;
        if CancelGoto then exit;
        NewMessage(rsGoto+': '+objn,1);
        ra2000:=ra;
@@ -15783,7 +15787,7 @@ begin
 end;
 
 function Tf_main.CheckMeridianFlip(nextexposure:double; canwait:boolean; out waittime:integer):boolean;
-var ra,de,hh,a,h,tra,tde,err: double;
+var ra,de,hh,a,h,tra,tde,mra,mde,err: double;
     CurSt: double;
     MeridianDelay1,MeridianDelay2,NextDelay,hhmin,waittimeout,nretry: integer;
     slewtopos,slewtoimg, restartguider, SaveCapture, ok: boolean;
@@ -15987,11 +15991,17 @@ begin
           NewMessage(rsRecenterOnLa,2);
           try
           RunningCapture:=false;  // do not save the control images
-          tra:=rad2deg*tra/15;
-          tde:=rad2deg*tde;
-          LocalToMount(mount.EquinoxJD,tra,tde);
-          astrometry.PrecisionSlew(tra,tde,err);
+          mra:=rad2deg*tra/15;
+          mde:=rad2deg*tde;
+          LocalToMount(mount.EquinoxJD,mra,mde);
+          astrometry.PrecisionSlew(mra,mde,err);
           wait(2);
+          if restartguider and (autoguider is T_autoguider_internal) then begin
+            ApparentToJ2000(tra,tde);
+            tra:=rad2deg*tra/15;
+            tde:=rad2deg*tde;
+            autoguider.SpectroSetTarget(tra,tde);
+          end;
           finally
             RunningCapture:=true;
           end;
@@ -17230,6 +17240,7 @@ try
   else if method='AUTOGUIDER_UNPAUSE' then result:=result+'"result":{"status": "'+f_scriptengine.cmd_AutoguiderUnPause+'"}'
   else if method='AUTOGUIDER_DITHER' then result:=result+'"result":{"status": "'+f_scriptengine.cmd_AutoguiderDither+'"}'
   else if method='AUTOGUIDER_SHUTDOWN' then result:=result+'"result":{"status": "'+f_scriptengine.cmd_AutoguiderShutdown+'"}'
+  else if method='INTERNALGUIDER_CLEARSPECTROTARGETRADEC' then result:=result+'"result":{"status": "'+f_scriptengine.cmd_Internalguider_ClearSpectroTargetRaDec+'"}'
   else if method='INTERNALGUIDER_CLEARSPECTROGUIDESTARRADEC' then result:=result+'"result":{"status": "'+f_scriptengine.cmd_Internalguider_ClearSpectroGuidestarRaDec+'"}'
   else if method='WHEEL_GETFILTER' then result:=result+'"result":{"status": "'+f_scriptengine.cmd_Wheel_GetFilter+'"}'
   else if method='PREVIEW_SINGLE' then result:=result+'"result":{"status": "'+f_scriptengine.cmd_Preview_Single+'"}'
@@ -17577,6 +17588,13 @@ try
     CheckParamCount(1);
     buf1:=trim(value[attrib.IndexOf('params.0')]);
     buf:=f_scriptengine.cmd_Internalguider_SetSpectroSlitname(buf1);
+    result:=result+'"result":{"status": "'+buf+'"}';
+  end
+  else if method='INTERNALGUIDER_SETSPECTROTARGETRADEC' then begin
+    CheckParamCount(2);
+    buf1:=trim(value[attrib.IndexOf('params.0')]);
+    buf2:=trim(value[attrib.IndexOf('params.1')]);
+    buf:=f_scriptengine.cmd_Internalguider_SetSpectroTargetRaDec(buf1,buf2);
     result:=result+'"result":{"status": "'+buf+'"}';
   end
   else if method='INTERNALGUIDER_SETSPECTROGUIDESTAROFFSET' then begin

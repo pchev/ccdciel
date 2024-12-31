@@ -105,7 +105,7 @@ type
     procedure Dither(pixel:double; raonly:boolean; waittime:double); override;
     function GetLockPosition(out x,y:double):boolean; override;
     procedure SetLockPosition(x,y: double); override;
-    function SpectroSetGuideStar(GuideRa,GuideDec:double):boolean;
+    function SpectroSetGuideStar(GuideRa,GuideDec:double):boolean; override;
     function SpectroSetTarget(TargetRa,TargetDec: double):boolean; override;
     procedure SpectroSelectNewStar(x,y: integer);
     procedure InternalguiderLoop;
@@ -2523,6 +2523,8 @@ begin
     FSpectroGuideStar.RA:=NullCoord;
     FSpectroGuideStar.DEC:=NullCoord;
     FSpectroGuideStar.valid:=false;
+    finternalguider.StarOffsetX.Value:=0;
+    finternalguider.StarOffsetY.Value:=0;
     result:=false;
   end;
 end;
@@ -2560,12 +2562,12 @@ var n,bin,gain,offset: integer;
     buf:string;
     refp,mountp: TPierSide;
 begin
+try
   if finternalguider.SpectroFunctions and (finternalguider.SpectroStrategy=spSingleOffset)
     and FSpectroGuideStar.valid and (FSpectroTarget.RA<>NullCoord)and(FSpectroTarget.DEC<>NullCoord)
     and (FSpectroGuideStar.RA<>NullCoord)and(FSpectroGuideStar.DEC<>NullCoord) then begin
     // compute guide star offset
     result:=false;
-    FSpectroGuideStar.valid:=false; // use guide star only once
     // current pier side
     mountp:=mount.PierSide;
     // load reference file
@@ -2595,6 +2597,7 @@ begin
     c.dec:=FSpectroTarget.DEC;
     n:=cdcwcs_sky2xy(@c,wcsguide);
     if n=1 then begin msg('Error solving target position',1); exit; end;
+    if n<>0 then begin msg('Spectro target out of frame x='+FormatFloat(f1,c.x)+' y='+FormatFloat(f1,c.y),1); exit; end;
     xt:=c.x;
     yt:=c.y;
     // guide star x,y position
@@ -2602,6 +2605,7 @@ begin
     c.dec:=FSpectroGuideStar.DEC;
     n:=cdcwcs_sky2xy(@c,wcsguide);
     if n=1 then begin msg('Error solving guide position',1); exit; end;
+    if n<>0 then begin msg('Guide star out of frame x='+FormatFloat(f1,c.x)+' y='+FormatFloat(f1,c.y),1); exit; end;
     xg:=c.x;
     yg:=c.y;
     // offset fron object to guide
@@ -2629,7 +2633,6 @@ begin
      // compute the target x,y position in the guide image
      // so the target is moved to the slit when the guiding is started
     result:=false;
-    FSpectroTarget.valid:=false; // use coordinates only once
     exp:=finternalguider.SpectroAstrometryExposure;
     bin:=finternalguider.Binning.Value;
     gain:=finternalguider.Gain.Value;
@@ -2703,6 +2706,12 @@ begin
       result:=false;
     end;
   end;
+finally
+  if not result then begin
+    FSpectroGuideStar.valid:=false;
+    FSpectroTarget.valid:=false;
+  end;
+end;
 end;
 
 procedure T_autoguider_internal.SpectroSelectNewStar(x,y: integer);

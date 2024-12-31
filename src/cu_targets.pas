@@ -2004,6 +2004,12 @@ begin
   NeedRecenterTarget:=false;
   InplaceAutofocus:=AutofocusInPlace;
   CancelAutofocus:=false;
+  if autoguider is T_autoguider_internal then begin
+    // reset the target position for spectroscopy function
+    autoguider.SpectroSetTarget(NullCoord, NullCoord);
+    autoguider.SpectroSetGuideStar(NullCoord, NullCoord);
+  end;
+
   // save current state
   SaveDoneCount;
   // refresh alldone count

@@ -88,6 +88,7 @@ type
     procedure Dither(pixel:double; raonly:boolean; waittime:double); virtual; abstract;
     function GetLockPosition(out x,y: double):boolean; virtual; abstract;
     procedure SetLockPosition(x,y: double); virtual; abstract;
+    function SpectroSetGuideStar(GuideRa,GuideDec:double):boolean; virtual; abstract;
     function SpectroSetTarget(TargetRa,TargetDec: double): boolean; virtual; abstract;
     function WaitBusy(maxwait:integer=5):boolean; virtual; abstract;
     function WaitGuiding(maxwait:integer=5):boolean; virtual; abstract;
