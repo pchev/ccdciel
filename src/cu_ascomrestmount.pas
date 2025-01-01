@@ -82,6 +82,7 @@ T_ascomrestmount = class(T_mount)
    function GetSlewRates: TstringList; override;
    function GetTrackRate: TTrackRate; override;
    procedure SetTrackRate(value: TTrackRate); override;
+   function GetMountRefraction: TMountRefraction; override;
 public
    constructor Create(AOwner: TComponent);override;
    destructor  Destroy; override;
@@ -1075,6 +1076,18 @@ begin
   V.Put('TrackingRate',i);
   except
     on E: Exception do msg('Cannot set mount tracking rate: ' + E.Message,0);
+  end;
+end;
+
+function T_ascomrestmount.GetMountRefraction: TMountRefraction;
+begin
+  try
+  if V.Get('doesrefraction').AsBool then
+    result:=refractTrue
+  else
+    result:=refractFalse;
+  except
+    result:=refractUnknown;
   end;
 end;
 

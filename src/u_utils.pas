@@ -90,8 +90,10 @@ function PlaneDistance(x1,y1,x2,y2: double): double;
 function SidTim(jd0,ut,long : double; eqeq: double=0): double;
 Function CurrentSidTim: double;
 Function SidTimT(t:TDateTime): double;
-PROCEDURE Eq2Hz(HH,DE : double ; out A,h : double);
-Procedure Hz2Eq(A,h : double; out hh,de : double);
+PROCEDURE Eq2Hz(HH,DE : double ; out A,h : double; method: smallint = 2);
+Procedure Hz2Eq(A,h : double; out hh,de : double; method: smallint = 2);
+procedure ApparentToObserved(ra,de: double; out obsra,obsde: double);
+procedure ObservedToApparent(obsra,obsde: double; out ra,de: double);
 function AirMass(h: double): double;
 function atmospheric_absorption(airmass: double):double;
 Procedure cmdEq2Hz(ra,de : double ; out a,h : double);
@@ -1396,6 +1398,7 @@ end;
 PROCEDURE PrecessionFK5(ti,tf : double; VAR ari,dei : double);  // Lieske 77
 var i1,i2,i3,i4,i5,i6,i7 : double ;
    BEGIN
+   // simplified precession
    if abs(ti-tf)<0.01 then exit;
       I1:=(TI-2451545.0)/36525 ;
       I2:=(TF-TI)/36525;
@@ -1462,9 +1465,10 @@ te:=te+rad2deg*eqeq;
 result := deg2rad*Rmod(te - long + 1.00273790935*ut*15 + 360,360);
 END ;
 
-PROCEDURE Eq2Hz(HH,DE : double ; out A,h : double);
+PROCEDURE Eq2Hz(HH,DE : double ; out A,h : double; method: smallint = 2);
 var l1,d1,h1,sh : double;
 BEGIN
+// simplified function without pole motion and diurnal aberration
 l1:=deg2rad*ObsLatitude;
 d1:=DE;
 h1:=HH;
@@ -1475,13 +1479,14 @@ else
  h:=sgn(sh)*pi/2;
 A:= arctan2(sin(h1),cos(h1)*sin(l1)-tan(d1)*cos(l1));
 A:=Rmod(A+pi2,pi2);
-Refraction(h,true);
+Refraction(h,true,method);
 END ;
 
-Procedure Hz2Eq(A,h : double; out hh,de : double);
+Procedure Hz2Eq(A,h : double; out hh,de : double; method: smallint = 2);
 var l1,a1,h1,sd : double;
 BEGIN
-Refraction(h,false);
+// simplified function without pole motion and diurnal aberration
+Refraction(h,false,method);
 l1:=deg2rad*ObsLatitude;
 a1:=A;
 h1:=h;
@@ -1493,6 +1498,26 @@ else
 hh:= arctan2(sin(a1),cos(a1)*sin(l1)+tan(h1)*cos(l1));
 hh:=Rmod(hh+pi2,pi2);
 END ;
+
+procedure ApparentToObserved(ra,de: double; out obsra,obsde: double);
+var a,h,ha,st: double;
+begin
+  st:=CurrentSidTim;
+  ha:=st - ra;
+  Eq2HZ(ha, de, a, h, 2);     // with refraction
+  Hz2Eq(a, h, ha, obsde, 0);  // geometric
+  obsra:=rmod(st - ha + pi2, pi2);
+end;
+
+procedure ObservedToApparent(obsra,obsde: double; out ra,de: double);
+var a,h,ha,st: double;
+begin
+  st:=CurrentSidTim;
+  ha:=st - obsra;
+  Eq2HZ(ha, obsde, a, h, 0);  // geometric
+  Hz2Eq(a, h, ha, de, 2);     // with refraction
+  ra:=rmod(st - ha + pi2, pi2);
+end;
 
 Function CurrentSidTim: double;
 var jd0,CurTime: double;
@@ -2445,6 +2470,7 @@ var
   cra, sra, cde, sde, ce, se, te, cp, sp, cls, sls: extended;
   p2: coordvector;
 begin
+  // simplified version without aberration relativistics term and without sun light deflection
   // nutation
   if (nutl <> 0) or (nuto <> 0) then
   begin
@@ -2490,6 +2516,7 @@ var
   p1, p2: coordvector;
   NutMATR: rotmatrix;
 begin
+  // simplified version without aberration relativistics term and without sun light deflection
   sofa_S2C(ra, de, p1);
   //aberration
   if (abp <> 0) or (abe <> 0) then

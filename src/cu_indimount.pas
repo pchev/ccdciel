@@ -135,6 +135,7 @@ T_indimount = class(T_mount)
    function GetSlewRates: TstringList; override;
    function GetTrackRate: TTrackRate; override;
    procedure SetTrackRate(value: TTrackRate); override;
+   function GetMountRefraction: TMountRefraction; override;
  public
    constructor Create(AOwner: TComponent);override;
    destructor  Destroy; override;
@@ -1188,6 +1189,12 @@ begin
       end;
     end;
   end;
+end;
+
+function T_indimount.GetMountRefraction: TMountRefraction;
+begin
+  // no propetry in INDI ?
+  result:=refractUnknown;
 end;
 
 end.
