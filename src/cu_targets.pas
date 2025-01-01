@@ -2914,12 +2914,14 @@ end;
 
 procedure T_Targets.PlanStartGuiding(Sender: TObject);
 begin
-  StartGuider;
+  if StartGuider then
+    Targets[FCurrentTarget].autoguiding:=true;
 end;
 
 procedure T_Targets.PlanStopGuiding(Sender: TObject);
 begin
   StopGuider;
+  Targets[FCurrentTarget].autoguiding:=false;
 end;
 
 function T_Targets.Slew(ra,de: double; precision,planprecision: boolean):boolean;
