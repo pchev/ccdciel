@@ -66,6 +66,8 @@ T_Plan = class(TComponent)
     FName,FObjectName: string;
     FRestartTargetNum: integer;
     FRunning: boolean;
+    Fautostartguider: boolean;
+    FStartGuiding, FStopGuiding: TNotifyEvent;
   public
     PlanTimer: TTimer;
     constructor Create(AOwner: TComponent);override;
@@ -96,9 +98,11 @@ T_Plan = class(TComponent)
     property Autoguider: T_autoguider read Fautoguider write Fautoguider;
     property onMsg: TNotifyMsg read FonMsg write FonMsg;
     property DelayMsg: TNotifyMsg read FDelayMsg write FDelayMsg;
+    property autostartguider: boolean read Fautostartguider write Fautostartguider;
     property onPlanChange: TNotifyEvent read FPlanChange write FPlanChange;
     property onStepProgress: TNotifyEvent read FonStepProgress write FonStepProgress;
-
+    property onStartGuiding:TNotifyEvent read FStartGuiding write FStartGuiding;
+    property onStopGuiding:TNotifyEvent read FStopGuiding write FStopGuiding;
 end;
 
 
@@ -272,6 +276,7 @@ begin
            msg(Format(rsStepComplete, [p.description]), 2);
            exit;
         end;
+        // set capture parameters
         if p.exposure>=0 then Fcapture.ExposureTime:=p.exposure;
         if Fcapture.PanelStack.Visible then
           Fcapture.StackNum.Value:=p.stackcount
@@ -288,7 +293,7 @@ begin
         Fcapture.DitherCount.Value:=p.dithercount;
         Fcapture.CheckBoxFocus.Checked:=p.autofocus;
         Fcapture.FocusCount.Value:=p.autofocuscount;
-        Fcapture.CheckLight(nil);
+        Fcapture.CheckLight(self); // be sure to apply the change now
         if p.autofocusstart then Fcapture.FocusNow:=true;
         Ffilter.Filters.ItemIndex:=p.filter;
         Ffilter.FiltersChange(self);
@@ -298,9 +303,18 @@ begin
           if words(p.description,'',1,1)='Dawn' then
             FlatWaitDawn:=true;
         end;
+        msg(Format(rsStartStep, [p.description_str]),1);
+        // start guiding
+        if Fautostartguider and (p.frtype=ord(LIGHT)) and assigned(FStartGuiding) and (Fautoguider.State<>GUIDER_GUIDING) then begin
+          FStartGuiding(self);
+          if Fautoguider.State<>GUIDER_GUIDING then begin
+            // cannot start guiding
+            msg(rsFailedToStar, 1);
+            exit;
+          end;
+        end;
         if not FRunning then exit;
         StepTimeStart:=now;
-        msg(Format(rsStartStep, [p.description_str]),1);
         CurrentStepName:=p.description;
         ShowDelayMsg('');
         StartCapture;

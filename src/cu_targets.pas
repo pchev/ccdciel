@@ -144,6 +144,8 @@ type
       procedure CompatLoadPlan(p: T_Plan; plan,obj:string);
       procedure ClearRunning;
       function  GetScriptRunning: boolean;
+      procedure PlanStartGuiding(Sender: TObject);
+      procedure PlanStopGuiding(Sender: TObject);
     protected
       Ftargets: TTargetList;
       NumTargets: integer;
@@ -385,7 +387,12 @@ procedure T_Targets.SetAutoguider(val: T_autoguider);
 var i: integer;
 begin
   Fautoguider:=val;
-  for i:=0 to NumTargets-1 do T_Plan(FTargets[i].plan).Autoguider:=Fautoguider;
+  for i:=0 to NumTargets-1 do
+    with T_Plan(FTargets[i].plan) do begin
+      Autoguider:=Fautoguider;
+      onStartGuiding:=@PlanStartGuiding;
+      onStopGuiding:=@PlanStopGuiding;
+    end;
 end;
 
 procedure T_Targets.SetAstrometry(val: TAstrometry);
@@ -432,6 +439,8 @@ begin
   p.Camera:=Fcamera;
   p.Filter:=Ffilter;
   p.Autoguider:=Fautoguider;
+  p.onStartGuiding:=@PlanStartGuiding;
+  p.onStopGuiding:=@PlanStopGuiding;
   p.onMsg:=FonMsg;
   t.plan:=p;
   inc(NumTargets);
@@ -2298,7 +2307,7 @@ var t: TTarget;
     ok,wtok,nd:boolean;
     stw,i,intime: integer;
     st,newra,newde,newV,newPA,enddelay,chkendtime: double;
-    autofocusstart, astrometrypointing, autostartguider,isCalibrationTarget: boolean;
+    autofocusstart, astrometrypointing, isCalibrationTarget: boolean;
     skipmsg, buf: string;
 begin
   InitTargetError:='';
@@ -2592,21 +2601,16 @@ begin
         // implemented only for the internal guider.
         autoguider.SpectroSetTarget(t.ra,t.de);
       end;
-      autostartguider:=(Autoguider<>nil)and(Autoguider.AutoguiderType<>agNONE)and
+      if p <> nil then begin
+        // autoguiding is started later from a Light plan step
+        p.autostartguider:=(Autoguider<>nil)and(Autoguider.AutoguiderType<>agNONE)and
                        (Autoguider.AutoguiderType<>agDITHER) and (Autoguider.State<>GUIDER_DISCONNECTED)and
                        (Autoguider.State<>GUIDER_GUIDING)and(not t.noautoguidingchange)and
                        ((not autofocusstart)or (InplaceAutofocus and (not AutofocusPauseGuider))) and
                        (not isCalibrationTarget);
-      if autostartguider then begin
-        if not StartGuider then begin
-          InitTargetError:=rsFailedToStar;
-          exit;
-        end;
-        Wait;
-        if not FRunning then exit;
-        if WeatherCancelRestart then exit;
-        t.autoguiding:=true;
       end;
+      if not FRunning then exit;
+      if WeatherCancelRestart then exit;
     end;
     result:=true;
   end;
@@ -2906,6 +2910,16 @@ begin
        exit;
     end;
   end;
+end;
+
+procedure T_Targets.PlanStartGuiding(Sender: TObject);
+begin
+  StartGuider;
+end;
+
+procedure T_Targets.PlanStopGuiding(Sender: TObject);
+begin
+  StopGuider;
 end;
 
 function T_Targets.Slew(ra,de: double; precision,planprecision: boolean):boolean;
