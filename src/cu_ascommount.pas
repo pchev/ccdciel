@@ -23,11 +23,20 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 }
 
+//{$define AppSkychart}
+{$define AppCcdciel}
+
 interface
 
-uses  cu_mount, u_global,  indiapi,
+uses  cu_mount, indiapi,
+  {$ifdef AppSkychart}
+  u_constant, u_util,
+  {$endif}
+  {$ifdef AppCcdciel}
+  u_global, u_utils,
+  {$endif}
   {$ifdef mswindows}
-    u_translation, Variants, comobj, u_utils, math,
+    u_translation, Variants, comobj, math,
   {$endif}
   Forms, ExtCtrls, Classes, SysUtils;
 
@@ -633,6 +642,7 @@ var sra,sde,ra1,ra2: double;
 {$endif}
 begin
   result:=false;
+  {$ifdef AppCcdciel}
   {$ifdef mswindows}
   if Connected then begin
     sra:=GetRA;
@@ -663,6 +673,7 @@ begin
       result:=(pierside2<>pierside1);
     end;
   end;
+  {$endif}
   {$endif}
 end;
 

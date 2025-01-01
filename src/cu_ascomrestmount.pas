@@ -23,10 +23,19 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 }
 
+//{$define AppSkychart}
+{$define AppCcdciel}
+
 interface
 
-uses  cu_mount, cu_ascomrest, u_global,  indiapi,
-    u_translation, u_utils,
+uses  cu_mount, cu_ascomrest, indiapi,
+    {$ifdef AppSkychart}
+    u_constant, u_util,
+    {$endif}
+    {$ifdef AppCcdciel}
+    u_global, u_utils,
+    {$endif}
+    u_translation,
   Forms, ExtCtrls, Classes, SysUtils;
 
 type
@@ -604,6 +613,7 @@ var sra,sde,ra1,ra2: double;
     pierside1,pierside2:TPierSide;
 begin
   result:=false;
+  {$ifdef AppCcdciel}
  if FStatus<>devConnected then exit;
   if Connected then begin
     sra:=GetRA;
@@ -634,6 +644,7 @@ begin
       result:=(pierside2<>pierside1);
     end;
   end;
+  {$endif}
 end;
 
 function T_ascomrestmount.Sync(sra,sde: double):boolean;

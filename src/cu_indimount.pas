@@ -23,10 +23,19 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 }
 
+//{$define AppSkychart}
+{$define AppCcdciel}
+
 interface
 
 uses cu_mount, indibaseclient, indibasedevice, indiapi, indicom, u_translation,
-     u_global, u_utils, ExtCtrls, Forms, Classes, SysUtils;
+     {$ifdef AppSkychart}
+     u_constant, u_util,
+     {$endif}
+     {$ifdef AppCcdciel}
+     u_global, u_utils,
+     {$endif}
+     ExtCtrls, Forms, Classes, SysUtils;
 
 type
 
@@ -744,6 +753,7 @@ var sra,sde,ra1,ra2: double;
     pierside1,pierside2:TPierSide;
 begin
   result:=false;
+  {$ifdef AppCcdciel}
   sra:=GetRA;
   sde:=GetDec;
   pierside1:=GetPierSide;
@@ -766,6 +776,7 @@ begin
   // check result
   pierside2:=GetPierSide;
   result:=(pierside2<>pierside1)
+  {$endif}
 end;
 
 function T_indimount.Sync(sra,sde: double):Boolean;
