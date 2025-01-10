@@ -17312,6 +17312,13 @@ try
     buf:=f_scriptengine.cmd_MountSync(buf1,buf2);
     result:=result+'"result":{"status": "'+buf+'"}';
   end
+  else if method='ASTROMETRY_GOTO' then begin
+    CheckParamCount(2);
+    buf1:=trim(value[attrib.IndexOf('params.0')]);
+    buf2:=trim(value[attrib.IndexOf('params.1')]);
+    buf:=f_scriptengine.cmd_AstrometryGoto(buf1,buf2);
+    result:=result+'"result":{"status": "'+buf+'"}';
+  end
   else if method='WHEEL_SETFILTER' then begin
     CheckParamCount(1);
     buf1:=trim(value[attrib.IndexOf('params.0')]);

@@ -232,6 +232,7 @@ type
     function cmd_Capture_Start:string;
     function cmd_Capture_Stop:string;
     function cmd_AstrometrySolve:string;
+    function cmd_AstrometryGoto(ra,de: string):string;
     function cmd_AstrometrySync:string;
     function cmd_AstrometrySlewImageCenter:string;
     function cmd_AstrometryPlotDSO:string;
@@ -2069,6 +2070,25 @@ if Astrometry.LastResult then begin
  wait(1);
  result:=msgOK;
 end;
+except
+  result:=msgFailed;
+end;
+end;
+
+function Tf_scriptengine.cmd_AstrometryGoto(ra,de: string):string;
+var r,d,err: double;
+begin
+try
+result:=msgFailed;
+if Astrometry.Busy then exit;
+r:=StrToFloatDef(ra,9999);
+d:=StrToFloatDef(de,9999);
+if (abs(r)<=24)and(abs(d)<=90) then begin
+  J2000ToMount(mount.EquinoxJD,r,d);
+  if astrometry.PrecisionSlew(r,d,err) then begin
+    result:=msgOK;
+  end;
+end
 except
   result:=msgFailed;
 end;
