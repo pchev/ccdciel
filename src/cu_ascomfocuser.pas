@@ -48,6 +48,7 @@ T_ascomfocuser = class(T_focuser)
    StatusTimer: TTimer;
    procedure StatusTimerTimer(sender: TObject);
    function  Connected: boolean;
+   function WaitConnecting(maxtime:integer):boolean;
  protected
    procedure SetPosition(p:integer); override;
    function  GetPosition:integer; override;
@@ -122,10 +123,14 @@ begin
     FInterfaceVersion:=1;
   end;
   msg('Interface version: '+inttostr(FInterfaceVersion),9);
-  if FInterfaceVersion=1 then
-    V.Link:=true
+  if FInterfaceVersion>=4 then begin
+    V.Connect;
+    WaitConnecting(30000);
+  end
+  else if FInterfaceVersion>=2 then
+    V.Connected:=true
   else
-    V.Connected:=true;
+    V.Link:=true;
   if Connected then begin
      try
      msg(V.DriverInfo,9);
@@ -158,20 +163,24 @@ procedure T_ascomfocuser.Disconnect;
 begin
  {$ifdef mswindows}
    StatusTimer.Enabled:=false;
-   FStatus := devDisconnected;
-   if Assigned(FonStatusChange) then FonStatusChange(self);
    try
    if not VarIsEmpty(V) then begin
-     msg(rsDisconnected3,1);
-     if FInterfaceVersion=1 then
-       V.Link:=false
+     if FInterfaceVersion>=4 then begin
+       V.Disconnect;
+       WaitConnecting(30000);
+     end
+     else if FInterfaceVersion>=2 then
+       V.Connected:=false
      else
-       V.Connected:=false;
+       V.Link:=false;
      V:=Unassigned;
    end;
    except
      on E: Exception do msg('Disconnection error: ' + E.Message,0);
    end;
+   FStatus := devDisconnected;
+   if Assigned(FonStatusChange) then FonStatusChange(self);
+   msg(rsDisconnected3,1);
  {$endif}
 end;
 
@@ -200,6 +209,29 @@ if not VarIsEmpty(V) then begin
   end;
 end;
 {$endif}
+end;
+
+function T_ascomfocuser.WaitConnecting(maxtime:integer):boolean;
+{$ifdef mswindows}
+var count,maxcount:integer;
+{$endif}
+begin
+ result:=true;
+ {$ifdef mswindows}
+ try
+   maxcount:=maxtime div waitpoll;
+   count:=0;
+   while (V.Connecting)and(count<maxcount) do begin
+      sleep(waitpoll);
+      if GetCurrentThreadId=MainThreadID then Application.ProcessMessages;
+      inc(count);
+   end;
+   result:=(count<maxcount);
+   if debug_msg then msg('finish to wait for connecting '+BoolToStr(result,true),9);
+ except
+   result:=false;
+ end;
+ {$endif}
 end;
 
 procedure T_ascomfocuser.StatusTimerTimer(sender: TObject);

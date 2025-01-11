@@ -42,7 +42,7 @@ T_ascomweather = class(T_weather)
    StatusTimer: TTimer;
    procedure StatusTimerTimer(sender: TObject);
    function  Connected: boolean;
-   function  InterfaceVersion: integer;
+   function WaitConnecting(maxtime:integer):boolean;
  protected
    function GetClear:boolean; override;
    procedure GetCapabilities; override;
@@ -71,6 +71,7 @@ public
 end;
 
 const statusinterval=2000;
+      waitpoll=500;
 
 implementation
 
@@ -91,20 +92,6 @@ begin
  inherited Destroy;
 end;
 
-function  T_ascomweather.InterfaceVersion: integer;
-begin
- result:=1;
- {$ifdef mswindows}
-  try
-  if not VarIsEmpty(V) then begin
-   result:=V.InterfaceVersion;
-  end;
-  except
-    result:=1;
-  end;
- {$endif}
-end;
-
 procedure T_ascomweather.Connect(cp1: string; cp2:string=''; cp3:string=''; cp4:string=''; cp5:string=''; cp6:string='');
 begin
  {$ifdef mswindows}
@@ -114,8 +101,18 @@ begin
   if Assigned(FonStatusChange) then FonStatusChange(self);
   V:=Unassigned;
   V:=CreateOleObject(Fdevice);
-  FInterfaceVersion:=InterfaceVersion;
-  V.Connected:=true;
+  try
+  FInterfaceVersion:=V.InterfaceVersion;
+  except
+    FInterfaceVersion:=1;
+  end;
+  msg('Interface version: '+inttostr(FInterfaceVersion),9);
+  if FInterfaceVersion>=2 then begin
+    V.Connect;
+    WaitConnecting(30000);
+  end
+  else
+    V.Connected:=true;
   if Connected then begin
      try
      msg(V.DriverInfo,9);
@@ -126,12 +123,6 @@ begin
      except
        msg('Error: unknown driver version',9);
      end;
-     try
-     FInterfaceVersion:=V.InterfaceVersion;
-     except
-       FInterfaceVersion:=1;
-     end;
-     msg('Interface version: '+inttostr(FInterfaceVersion),9);
      msg(rsConnected3);
      FStatus := devConnected;
      GetCapabilities;
@@ -150,17 +141,22 @@ procedure T_ascomweather.Disconnect;
 begin
  {$ifdef mswindows}
    StatusTimer.Enabled:=false;
-   FStatus := devDisconnected;
-   if Assigned(FonStatusChange) then FonStatusChange(self);
    try
    if not VarIsEmpty(V) then begin
-     msg(rsDisconnected3,1);
-     V.Connected:=false;
+     if FInterfaceVersion>=2 then begin
+       V.Disconnect;
+       WaitConnecting(30000);
+     end
+     else
+       V.Connected:=false;
      V:=Unassigned;
    end;
    except
      on E: Exception do msg('Disconnection error: ' + E.Message,0);
    end;
+   FStatus := devDisconnected;
+   if Assigned(FonStatusChange) then FonStatusChange(self);
+   msg(rsDisconnected3,1);
  {$endif}
 end;
 
@@ -183,6 +179,29 @@ if not VarIsEmpty(V) then begin
   end;
 end;
 {$endif}
+end;
+
+function T_ascomweather.WaitConnecting(maxtime:integer):boolean;
+{$ifdef mswindows}
+var count,maxcount:integer;
+{$endif}
+begin
+ result:=true;
+ {$ifdef mswindows}
+ try
+   maxcount:=maxtime div waitpoll;
+   count:=0;
+   while (V.Connecting)and(count<maxcount) do begin
+      sleep(waitpoll);
+      if GetCurrentThreadId=MainThreadID then Application.ProcessMessages;
+      inc(count);
+   end;
+   result:=(count<maxcount);
+   if debug_msg then msg('finish to wait for connecting '+BoolToStr(result,true),9);
+ except
+   result:=false;
+ end;
+ {$endif}
 end;
 
 procedure T_ascomweather.StatusTimerTimer(sender: TObject);

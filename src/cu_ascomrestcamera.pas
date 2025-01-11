@@ -50,8 +50,9 @@ T_ascomrestcamera = class(T_camera)
    FCType: string;
    ExposureTimer: TTimer;
    StatusTimer: TTimer;
-   statusinterval: integer;
+   statusinterval,waitpoll: integer;
    function Connected: boolean;
+   function WaitConnecting(maxtime:integer):boolean;
    procedure ExposureTimerTimer(sender: TObject);
    procedure StatusTimerTimer(sender: TObject);
   protected
@@ -191,6 +192,7 @@ begin
  ExposureTimer.Interval:=1000;
  ExposureTimer.OnTimer:=@ExposureTimerTimer;
  statusinterval:=1000;
+ waitpoll:=500;
  StatusTimer:=TTimer.Create(nil);
  StatusTimer.Enabled:=false;
  StatusTimer.Interval:=statusinterval;
@@ -224,7 +226,18 @@ begin
   V.Device:=Fdevice;
   if Assigned(FonStatusChange) then FonStatusChange(self);
   V.Timeout:=5000;
-  V.Put('Connected',true); // try to connect if authorized by server
+  try
+  FInterfaceVersion:=V.Get('interfaceversion').AsInt;
+  except
+    FInterfaceVersion:=1;
+  end;
+  msg('Interface version: '+inttostr(FInterfaceVersion),9);
+  if FInterfaceVersion>=4 then begin
+    V.Put('Connect');
+    WaitConnecting(30000);
+  end
+  else
+    V.Put('Connected',true);
   if V.Get('connected').AsBool then begin
     V.Timeout:=120000;
     try
@@ -237,12 +250,6 @@ begin
     except
       msg('Error: unknown driver version',9);
     end;
-    try
-    FInterfaceVersion:=V.Get('interfaceversion').AsInt;
-    except
-      FInterfaceVersion:=1;
-    end;
-    msg('Interface version: '+inttostr(FInterfaceVersion),9);
     try
     FCameraXSize:=V.Get('cameraxsize').AsInt;
     except
@@ -383,15 +390,20 @@ end;
 
 procedure T_ascomrestcamera.Disconnect;
 begin
-  StatusTimer.Enabled:=false;
-  FStatus := devDisconnected;
-  if Assigned(FonStatusChange) then FonStatusChange(self);
-  try
-    msg(rsDisconnected3,1);
-    // the server is responsible for device disconnection
-  except
+   StatusTimer.Enabled:=false;
+   try
+   if FInterfaceVersion>=4 then begin
+     V.Put('Disconnect');
+     WaitConnecting(30000);
+   end
+   else
+     V.Put('Connected',false);
+   except
     on E: Exception do msg(Format(rsDisconnectio, [E.Message]),0);
-  end;
+   end;
+   FStatus := devDisconnected;
+   if Assigned(FonStatusChange) then FonStatusChange(self);
+   msg(rsDisconnected3,1);
 end;
 
 function T_ascomrestcamera.Connected: boolean;
@@ -402,6 +414,24 @@ result:=false;
   except
    result:=false;
   end;
+end;
+
+function T_ascomrestcamera.WaitConnecting(maxtime:integer):boolean;
+var count,maxcount:integer;
+begin
+ result:=true;
+ try
+   maxcount:=maxtime div waitpoll;
+   count:=0;
+   while (V.Get('connecting').AsBool)and(count<maxcount) do begin
+      sleep(waitpoll);
+      if GetCurrentThreadId=MainThreadID then Application.ProcessMessages;
+      inc(count);
+   end;
+   result:=(count<maxcount);
+ except
+   result:=false;
+ end;
 end;
 
 procedure T_ascomrestcamera.StatusTimerTimer(sender: TObject);

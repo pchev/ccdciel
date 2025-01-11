@@ -38,6 +38,7 @@ T_ascomrestdome = class(T_dome)
    statusinterval,waitpoll: integer;
    procedure StatusTimerTimer(sender: TObject);
    function  Connected: boolean;
+   function WaitConnecting(maxtime:integer):boolean;
  protected
    function WaitDomePark(maxtime:integer):boolean;
    function WaitShutter(onoff:boolean; maxtime:integer):boolean;
@@ -94,7 +95,18 @@ begin
   if Assigned(FonStatusChange) then FonStatusChange(self);
   V.Device:=Fdevice;
   V.Timeout:=5000;
-  V.Put('Connected',true);
+  try
+  FInterfaceVersion:=V.Get('interfaceversion').AsInt;
+  except
+    FInterfaceVersion:=1;
+  end;
+  msg('Interface version: '+inttostr(FInterfaceVersion),9);
+  if FInterfaceVersion>=3 then begin
+    V.Put('Connect');
+    WaitConnecting(30000);
+  end
+  else
+    V.Put('Connected',true);
   if V.Get('connected').AsBool then begin
      V.Timeout:=120000;
      try
@@ -106,12 +118,6 @@ begin
      except
        msg('Error: unknown driver version',9);
      end;
-     try
-     FInterfaceVersion:=V.Get('interfaceversion').AsInt;
-     except
-       FInterfaceVersion:=1;
-     end;
-     msg('Interface version: '+inttostr(FInterfaceVersion),9);
      try
      FhasPark:=V.Get('canpark').AsBool;
      except
@@ -154,14 +160,19 @@ end;
 procedure T_ascomrestdome.Disconnect;
 begin
    StatusTimer.Enabled:=false;
+   try
+   if FInterfaceVersion>=3 then begin
+     V.Put('Disconnect');
+     WaitConnecting(30000);
+   end
+   else
+     V.Put('Connected',false);
+   except
+    on E: Exception do msg(Format(rsDisconnectio, [E.Message]),0);
+   end;
    FStatus := devDisconnected;
    if Assigned(FonStatusChange) then FonStatusChange(self);
-   try
-     msg(rsDisconnected3,1);
-     // the server is responsible for device disconnection
-   except
-     on E: Exception do msg('Disconnection error: ' + E.Message,0);
-   end;
+   msg(rsDisconnected3,1);
 end;
 
 function T_ascomrestdome.Connected: boolean;
@@ -172,6 +183,24 @@ result:=false;
   except
    result:=false;
   end;
+end;
+
+function T_ascomrestdome.WaitConnecting(maxtime:integer):boolean;
+var count,maxcount:integer;
+begin
+ result:=true;
+ try
+   maxcount:=maxtime div waitpoll;
+   count:=0;
+   while (V.Get('connecting').AsBool)and(count<maxcount) do begin
+      sleep(waitpoll);
+      if GetCurrentThreadId=MainThreadID then Application.ProcessMessages;
+      inc(count);
+   end;
+   result:=(count<maxcount);
+ except
+   result:=false;
+ end;
 end;
 
 procedure T_ascomrestdome.StatusTimerTimer(sender: TObject);

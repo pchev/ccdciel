@@ -35,10 +35,10 @@ T_ascomrestcover = class(T_cover)
    V: TAscomRest;
    FInterfaceVersion: integer;
    StatusTimer: TTimer;
-   statusinterval: integer;
+   statusinterval,waitpoll: integer;
    procedure StatusTimerTimer(sender: TObject);
    function  Connected: boolean;
-   function  InterfaceVersion: integer;
+   function WaitConnecting(maxtime:integer):boolean;
  protected
    function GetCoverState: TCoverStatus; override;
    function GetCalibratorState: TCalibratorStatus; override;
@@ -65,6 +65,7 @@ begin
  FCoverInterface:=ASCOMREST;
  FInterfaceVersion:=1;
  statusinterval:=1000;
+ waitpoll:=500;
  StatusTimer:=TTimer.Create(nil);
  StatusTimer.Enabled:=false;
  StatusTimer.Interval:=statusinterval;
@@ -75,16 +76,6 @@ destructor  T_ascomrestcover.Destroy;
 begin
  StatusTimer.Free;
  inherited Destroy;
-end;
-
-function  T_ascomrestcover.InterfaceVersion: integer;
-begin
- result:=1;
-  try
-   result:=V.Get('interfaceversion').AsInt;
-  except
-    result:=1;
-  end;
 end;
 
 procedure T_ascomrestcover.Connect(cp1: string; cp2:string=''; cp3:string=''; cp4:string=''; cp5:string=''; cp6:string='');
@@ -100,10 +91,20 @@ begin
   if Assigned(FonStatusChange) then FonStatusChange(self);
   V.Device:=Fdevice;
   V.Timeout:=5000;
-  V.Put('Connected',true);
+  try
+  FInterfaceVersion:=V.Get('interfaceversion').AsInt;
+  except
+    FInterfaceVersion:=1;
+  end;
+  msg('Interface version: '+inttostr(FInterfaceVersion),9);
+  if FInterfaceVersion>=2 then begin
+    V.Put('Connect');
+    WaitConnecting(30000);
+  end
+  else
+    V.Put('Connected',true);
   if V.Get('connected').AsBool then begin
      V.Timeout:=120000;
-     FInterfaceVersion:=InterfaceVersion;
      try
      msg(V.Get('driverinfo').AsString,9);
      except
@@ -113,12 +114,6 @@ begin
      except
        msg('Error: unknown driver version',9);
      end;
-     try
-     FInterfaceVersion:=V.Get('interfaceversion').AsInt;
-     except
-       FInterfaceVersion:=1;
-     end;
-     msg('Interface version: '+inttostr(FInterfaceVersion),9);
      try
        st_cov:=TCoverStatus(V.Get('coverstate').AsInt);
      except
@@ -160,14 +155,19 @@ end;
 procedure T_ascomrestcover.Disconnect;
 begin
    StatusTimer.Enabled:=false;
+   try
+   if FInterfaceVersion>=2 then begin
+     V.Put('Disconnect');
+     WaitConnecting(30000);
+   end
+   else
+     V.Put('Connected',false);
+   except
+    on E: Exception do msg(Format(rsDisconnectio, [E.Message]),0);
+   end;
    FStatus := devDisconnected;
    if Assigned(FonStatusChange) then FonStatusChange(self);
-   try
-     msg(rsDisconnected3,1);
-     // the server is responsible for device disconnection
-   except
-     on E: Exception do msg(Format(rsDisconnectio, [E.Message]),0);
-   end;
+   msg(rsDisconnected3,1);
 end;
 
 function T_ascomrestcover.Connected: boolean;
@@ -178,6 +178,24 @@ result:=false;
   except
    result:=false;
   end;
+end;
+
+function T_ascomrestcover.WaitConnecting(maxtime:integer):boolean;
+var count,maxcount:integer;
+begin
+ result:=true;
+ try
+   maxcount:=maxtime div waitpoll;
+   count:=0;
+   while (V.Get('connecting').AsBool)and(count<maxcount) do begin
+      sleep(waitpoll);
+      if GetCurrentThreadId=MainThreadID then Application.ProcessMessages;
+      inc(count);
+   end;
+   result:=(count<maxcount);
+ except
+   result:=false;
+ end;
 end;
 
 procedure T_ascomrestcover.StatusTimerTimer(sender: TObject);

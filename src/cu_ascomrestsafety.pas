@@ -36,10 +36,10 @@ T_ascomrestsafety = class(T_safety)
    stSafe: boolean;
    FInterfaceVersion: integer;
    StatusTimer: TTimer;
-   statusinterval: integer;
+   statusinterval, waitpoll: integer;
    procedure StatusTimerTimer(sender: TObject);
    function  Connected: boolean;
-   function  InterfaceVersion: integer;
+   function WaitConnecting(maxtime:integer):boolean;
  protected
    function  GetSafe:boolean; override;
    procedure SetTimeout(num:integer); override;
@@ -60,6 +60,7 @@ begin
  FSafetyInterface:=ASCOMREST;
  FInterfaceVersion:=1;
  statusinterval:=2000;
+ waitpoll:=500;
  StatusTimer:=TTimer.Create(nil);
  StatusTimer.Enabled:=false;
  StatusTimer.Interval:=statusinterval;
@@ -70,16 +71,6 @@ destructor  T_ascomrestsafety.Destroy;
 begin
  StatusTimer.Free;
  inherited Destroy;
-end;
-
-function  T_ascomrestsafety.InterfaceVersion: integer;
-begin
- result:=1;
-  try
-   result:=V.Get('interfaceversion').AsInt;
-  except
-    result:=1;
-  end;
 end;
 
 procedure T_ascomrestsafety.Connect(cp1: string; cp2:string=''; cp3:string=''; cp4:string=''; cp5:string=''; cp6:string='');
@@ -95,10 +86,20 @@ begin
   if Assigned(FonStatusChange) then FonStatusChange(self);
   V.Device:=Fdevice;
   V.Timeout:=5000;
-  V.Put('Connected',true);
+  try
+  FInterfaceVersion:=V.Get('interfaceversion').AsInt;
+  except
+    FInterfaceVersion:=1;
+  end;
+  msg('Interface version: '+inttostr(FInterfaceVersion),9);
+  if FInterfaceVersion>=3 then begin
+    V.Put('Connect');
+    WaitConnecting(30000);
+  end
+  else
+    V.Put('Connected',true);
   if V.Get('connected').AsBool then begin
      V.Timeout:=120000;
-     FInterfaceVersion:=InterfaceVersion;
      try
      msg(V.Get('driverinfo').AsString,9);
      except
@@ -108,16 +109,10 @@ begin
      except
        msg('Error: unknown driver version',9);
      end;
-     try
-     FInterfaceVersion:=V.Get('interfaceversion').AsInt;
-     except
-       FInterfaceVersion:=1;
-     end;
      if isLocalIP(V.RemoteIP) then
        statusinterval:=2000
      else
        statusinterval:=10000;
-     msg('Interface version: '+inttostr(FInterfaceVersion),9);
      msg(rsConnected3);
      FStatus := devConnected;
      if Assigned(FonStatusChange) then FonStatusChange(self);
@@ -136,14 +131,19 @@ end;
 procedure T_ascomrestsafety.Disconnect;
 begin
    StatusTimer.Enabled:=false;
+   try
+   if FInterfaceVersion>=3 then begin
+     V.Put('Disconnect');
+     WaitConnecting(30000);
+   end
+   else
+     V.Put('Connected',false);
+   except
+    on E: Exception do msg(Format(rsDisconnectio, [E.Message]),0);
+   end;
    FStatus := devDisconnected;
    if Assigned(FonStatusChange) then FonStatusChange(self);
-   try
-     msg(rsDisconnected3,1);
-     // the server is responsible for device disconnection
-   except
-     on E: Exception do msg(Format(rsDisconnectio, [E.Message]),0);
-   end;
+   msg(rsDisconnected3,1);
 end;
 
 function T_ascomrestsafety.Connected: boolean;
@@ -154,6 +154,24 @@ result:=false;
   except
    result:=false;
   end;
+end;
+
+function T_ascomrestsafety.WaitConnecting(maxtime:integer):boolean;
+var count,maxcount:integer;
+begin
+ result:=true;
+ try
+   maxcount:=maxtime div waitpoll;
+   count:=0;
+   while (V.Get('connecting').AsBool)and(count<maxcount) do begin
+      sleep(waitpoll);
+      if GetCurrentThreadId=MainThreadID then Application.ProcessMessages;
+      inc(count);
+   end;
+   result:=(count<maxcount);
+ except
+   result:=false;
+ end;
 end;
 
 procedure T_ascomrestsafety.StatusTimerTimer(sender: TObject);

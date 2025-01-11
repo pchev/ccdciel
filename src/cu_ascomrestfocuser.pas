@@ -46,6 +46,7 @@ T_ascomrestfocuser = class(T_focuser)
    FDeviceName: string;
    procedure StatusTimerTimer(sender: TObject);
    function  Connected: boolean;
+   function WaitConnecting(maxtime:integer):boolean;
    function  DeviceName: string;
  protected
    procedure SetPosition(p:integer); override;
@@ -141,7 +142,12 @@ begin
   msg('Interface version: '+inttostr(FInterfaceVersion),9);
   if FInterfaceVersion=1 then
     raise Exception.Create('IFocuser V1 is not supported');
-  V.Put('Connected',true);
+  if FInterfaceVersion>=4 then begin
+    V.Put('Connect');
+    WaitConnecting(30000);
+  end
+  else
+    V.Put('Connected',true);
   if Connected then begin
      FDeviceName:=DeviceName;
      V.Timeout:=120000;
@@ -186,14 +192,19 @@ end;
 procedure T_ascomrestfocuser.Disconnect;
 begin
    StatusTimer.Enabled:=false;
+   try
+   if FInterfaceVersion>=4 then begin
+     V.Put('Disconnect');
+     WaitConnecting(30000);
+   end
+   else
+     V.Put('Connected',false);
+   except
+    on E: Exception do msg(Format(rsDisconnectio, [E.Message]),0);
+   end;
    FStatus := devDisconnected;
    if Assigned(FonStatusChange) then FonStatusChange(self);
-   try
-     msg(rsDisconnected3,1);
-     // the server is responsible for device disconnection
-   except
-     on E: Exception do msg('Disconnection error: ' + E.Message,0);
-   end;
+   msg(rsDisconnected3,1);
 end;
 
 function T_ascomrestfocuser.Connected: boolean;
@@ -207,6 +218,24 @@ result:=false;
       result:=false;
    end;
   end;
+end;
+
+function T_ascomrestfocuser.WaitConnecting(maxtime:integer):boolean;
+var count,maxcount:integer;
+begin
+ result:=true;
+ try
+   maxcount:=maxtime div waitpoll;
+   count:=0;
+   while (V.Get('connecting').AsBool)and(count<maxcount) do begin
+      sleep(waitpoll);
+      if GetCurrentThreadId=MainThreadID then Application.ProcessMessages;
+      inc(count);
+   end;
+   result:=(count<maxcount);
+ except
+   result:=false;
+ end;
 end;
 
 procedure T_ascomrestfocuser.StatusTimerTimer(sender: TObject);
