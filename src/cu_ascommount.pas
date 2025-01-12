@@ -614,7 +614,10 @@ begin
    result:=(count<maxcount);
    if debug_msg then msg('finish to wait for connecting '+BoolToStr(result,true),9);
  except
-   result:=false;
+   on E: Exception do begin
+     msg(Format(rsConnectionEr, [E.Message]),0);
+     result:=false;
+   end;
  end;
  {$endif}
 end;

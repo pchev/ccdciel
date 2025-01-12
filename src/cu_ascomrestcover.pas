@@ -194,7 +194,10 @@ begin
    end;
    result:=(count<maxcount);
  except
-   result:=false;
+   on E: Exception do begin
+     msg(Format(rsConnectionEr, [E.Message]),0);
+     result:=false;
+   end;
  end;
 end;
 
