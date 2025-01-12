@@ -2388,7 +2388,9 @@ var i,x,y,x0,y0: integer;
 begin
 if (FBPMcount>0)and(FBPMnax=FFitsInfo.naxis) then begin
   {$ifdef debug_raw}writeln(FormatDateTime(dateiso,Now)+blank+'apply BPM');{$endif}
-  if (FFitsInfo.Frwidth>0)and(FFitsInfo.Frheight>0)and(FFitsInfo.Frx>=0)and(FFitsInfo.Fry>=0) then begin
+  if (FFitsInfo.Frwidth>0)and(FFitsInfo.Frheight>0)and(FFitsInfo.Frx>=0)and(FFitsInfo.Fry>=0) and
+     (FFitsInfo.Frwidth<>FBPMnx)and(FFitsInfo.Frheight<>FBPMny)
+  then begin
     x0:=FFitsInfo.Frx;
     y0:=FBPMny-FFitsInfo.Fry-FFitsInfo.Frheight;
   end else begin
