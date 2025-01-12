@@ -754,8 +754,19 @@ end;
 procedure Tf_starprofile.ShowSpectraProfile(f: TFits);
 var i,j,n,r,g,b:integer;
     value,wmin,wmax: double;
+    hasBPM:boolean;
 begin
  FFits:=f;
+ if not FFits.BPMProcess then begin
+   // apply BPM
+   hasBPM:=FFits.hasBPM;
+   if not hasBPM then
+     FFits.SetBPM(bpm,bpmNum,bpmX,bpmY,bpmAxis);
+   FFits.LoadStream;
+   FFits.UpdateStream;
+   if not hasBPM then
+     FFits.SetBPM(bpm,0,0,0,0);
+ end;
  wmin:=FFits.HeaderInfo.wavemin;
  wmax:=FFits.HeaderInfo.wavemax;
  if ColorizeSpectra and (wmin<>NullCoord) and (wmax<>NullCoord) then begin
