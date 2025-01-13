@@ -515,7 +515,7 @@ begin
   btnApplyAll.Caption:=rsApplyToAllTa;
   cbDarkNight.Caption := Format(rsDarkNight, [blank]);
   cbSkip.Caption := Format(rsDonTSwait+'', [blank]);
-  cbFullOnly.Caption:=rsIgnoreIfItCa;
+  cbFullOnly.Caption:=rsDoNotStartIf;
   cbAstrometry.Caption := Format(rsUseAstromet2+'', [blank]);
   cbInplace.Caption := Format(rsStayInPlace2+'', [blank]);
   cbAutofocusTemp.Caption:=rsAutofocusAft2;

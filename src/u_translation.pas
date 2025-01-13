@@ -1599,7 +1599,7 @@ resourcestring
   rsOnlineForAll = 'Online for all targets';
   rsBand = 'Band';
   rsApplyToAllTa = 'Apply to all targets';
-  rsIgnoreIfItCa = 'Ignore if it cannot be done entirely';
+  rsDoNotStartIf = 'Do not start if it cannot be done completely';
   rsCannotStartS = 'Cannot start %s now';
   rsNotEnoughTim = 'not enough time to complete the %s plan before end time at %s';
 
