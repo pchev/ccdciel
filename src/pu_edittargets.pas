@@ -312,7 +312,7 @@ type
   private
     { private declarations }
     FAstrometry: TAstrometry;
-    LockTarget: boolean;
+    LockTarget,LoadingTarget: boolean;
     FTargetsRepeat,FTargetsRepeatCount: integer;
     LockStep, StepsModified, ObjectNameChange: boolean;
     Lockcb: boolean;
@@ -352,6 +352,8 @@ type
     originalFilter: TSaveFilter;
     EndScript, UnattendedScript, StartScript: string;
     procedure SetLang;
+    procedure BeginLoading;
+    procedure EndLoading;
     procedure LoadTypeList;
     procedure LoadPlanList;
     procedure LoadScriptList;
@@ -443,6 +445,7 @@ begin
   CheckRestartStatus(nil);
   f_EditTargets.Splitter1.Top:=f_EditTargets.Splitter1.Top+1; // fix for scrollbar on second edit, check if still necessary
   f_EditTargets.Splitter1.Top:=f_EditTargets.Splitter1.Top-1;
+  EndLoading; // loading complete, unlock editing
 end;
 
 procedure Tf_EditTargets.SetLang;
@@ -645,6 +648,16 @@ end;
 procedure Tf_EditTargets.PointCoordChange(Sender: TObject);
 begin
   TargetChange(Sender);
+end;
+
+procedure Tf_EditTargets.BeginLoading;
+begin
+  LoadingTarget:=true;
+end;
+
+procedure Tf_EditTargets.EndLoading;
+begin
+  LoadingTarget:=false;
 end;
 
 procedure Tf_EditTargets.LoadTypeList;
@@ -2274,7 +2287,7 @@ var i,n,j:integer;
     oldmagn: double;
     planchange, magnchange: boolean;
 begin
-  if LockTarget then exit;
+  if LockTarget or LoadingTarget then exit;
   // is table empty?
   if TargetList.RowCount<=1 then exit;
   n:=TargetList.Row;

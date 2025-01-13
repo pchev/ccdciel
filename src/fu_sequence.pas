@@ -558,6 +558,7 @@ end;
 
 function Tf_sequence.EditTargets(et:T_Targets; live: boolean; out fn,defaultname:string):boolean;
 begin
+   f_EditTargets.BeginLoading; // lock update during loading, released in FormShow
    f_EditTargets.LoadTypeList;
    f_EditTargets.LoadPlanList;
    f_EditTargets.LoadScriptList;
