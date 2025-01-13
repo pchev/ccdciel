@@ -81,6 +81,7 @@ T_Plan = class(TComponent)
     procedure UpdateDoneCount(progress: boolean);
     procedure Restart;
     function IndexOf(id:LongWord):integer;
+    function totaltime(skipdone:boolean): double;
     property SequenceFile: T_SequenceFile read FSequenceFile write FSequenceFile;
     property Count: integer read NumSteps;
     property ScriptRunning: boolean read FScriptRunning;
@@ -405,6 +406,18 @@ begin
        result:=i;
        break;
      end;
+  end;
+end;
+
+function T_Plan.totaltime(skipdone:boolean): double;
+var i: integer;
+begin
+  result:=0;
+  if (Autoguider<>nil)and(Autoguider.AutoguiderType<>agNONE)and(Autoguider.AutoguiderType<>agDITHER)
+  then
+    result:=result+SettleMaxTime;
+  for i:=0 to Count-1 do begin
+    result:=result+Steps[i].totaltime(skipdone);
   end;
 end;
 

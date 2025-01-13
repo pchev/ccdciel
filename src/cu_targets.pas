@@ -57,6 +57,7 @@ type
               function pa_str: string;
               function magnitude_str: string;
               function id: LongWord;
+              function totaltime(skipdone:boolean=false): double;
             end;
 
   TTargetList = array of TTarget;
@@ -3370,6 +3371,27 @@ begin
   buf:=trim(objectname)+StringReplace(trim(planname),'*','',[])+ra_str+de_str;
   if UseRotator then buf:=buf+pa_str;
   result:=Hash(buf);
+end;
+
+function TTarget.totaltime(skipdone:boolean=false): double;
+const slewtime=30;
+      precisionslewtime=60;
+var remaining: integer;
+begin
+ result:=0;
+ if skipdone then
+   remaining:=repeatcount-repeatdone
+ else
+   remaining:=repeatcount;
+ if remaining<=0 then
+   exit;
+ if (ra<>NullCoord)and(de<>NullCoord) then begin
+   result:=result+slewtime;
+   if astrometrypointing then
+     result:=result+precisionslewtime;
+ end;
+ if plan<>nil then
+   result:=remaining*T_Plan(plan).totaltime(skipdone);
 end;
 
 function TemplateModified(p:T_Plan):boolean;

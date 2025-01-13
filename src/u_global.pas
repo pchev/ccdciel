@@ -151,6 +151,7 @@ type
               function gain_str: string;
               function offset_str: string;
               function id: LongWord;
+              function totaltime(skipdone:boolean): double;
             end;
 
   TFocusStar = record
@@ -769,6 +770,44 @@ begin
     if hasOffset then buf:=buf+offset_str;
   end;
   result:=Hash(buf);
+end;
+
+function TStep.totaltime(skipdone:boolean): double;
+const dithertime=30;
+      autofocustime=120;
+      filtertime=10;
+      scripttime=10;
+      switchtime=10;
+var prevfilter,remaining: integer;
+begin
+  result:=0;
+  if skipdone then
+    remaining:=count-donecount
+  else
+    remaining:=count;
+  if remaining<=0 then
+    exit;
+  prevfilter:=0;
+  if steptype=0 then begin // capture
+    if filter<>prevfilter then
+      result:=result+filtertime;
+    prevfilter:=filter;
+    if frtype>ord(High(TFrameType)) then
+      result:=result+scripttime;
+    result:=result+exposure*stackcount*remaining;
+    if dither then
+      result:=result+(remaining div dithercount)*dithertime;
+    if autofocusstart then
+      result:=result+autofocustime;
+    if autofocus then
+      result:=result+(remaining div autofocuscount)*autofocustime;
+  end
+  else if steptype=1 then begin // script
+    result:=result+scripttime;
+  end
+  else if steptype=2 then begin // switch
+    result:=result+switchtime;
+  end;
 end;
 
 end.

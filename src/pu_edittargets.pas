@@ -2043,7 +2043,7 @@ begin
   TargetMsg.Caption:='';
   TargetList.Cells[colseq,n]:=IntToStr(n);
   TargetList.Cells[colname,n]:=t.objectname;
-  lblName.Caption:=rsAdditionalOp+' : Seq '+IntToStr(n)+', '+t.objectname;
+  lblName.Caption:=rsAdditionalOp+' : Seq '+IntToStr(n)+', '+t.objectname+', '+TimToStr(t.totaltime/3600);
   if t.objectname=ScriptTxt then begin
     TargetList.Cells[colra,n]:='';
     TargetList.Cells[coldec,n]:='';
