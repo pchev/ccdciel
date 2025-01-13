@@ -36,7 +36,7 @@ type
               public
               objectname, planname, path, scriptargs, initscriptname, initscriptpath, initscriptargs: shortstring;
               starttime,endtime,startmeridian,endmeridian,ra,de,pa,magnitude,solarV,solarPA: double;
-              startrise,endset,darknight,skip,mandatorystarttime,initscript: boolean;
+              startrise,endset,darknight,skip,fullonly,mandatorystarttime,initscript: boolean;
               repeatcount,repeatdone: integer;
               FlatBinX,FlatBinY,FlatCount: integer;
               FlatGain,FlatOffset: integer;
@@ -629,6 +629,7 @@ begin
          (Ftargets[FCurrentTarget].startrise<>Source.Ftargets[newcurTarget].startrise) or
          (Ftargets[FCurrentTarget].endset<>Source.Ftargets[newcurTarget].endset) or
          (Ftargets[FCurrentTarget].darknight<>Source.Ftargets[newcurTarget].darknight) or
+         (Ftargets[FCurrentTarget].fullonly<>Source.Ftargets[newcurTarget].fullonly) or
          (Ftargets[FCurrentTarget].skip<>Source.Ftargets[newcurTarget].skip)
          then begin
            msg('Start or end conditions of active target are modified.', 9);
@@ -828,6 +829,7 @@ begin
        t.endmeridian:=FSequenceFile.Items.GetValue('/Targets/Target'+inttostr(i)+'/EndMeridian',NullCoord);
        t.darknight:=FSequenceFile.Items.GetValue('/Targets/Target'+inttostr(i)+'/DarkNight',false);
        t.skip:=FSequenceFile.Items.GetValue('/Targets/Target'+inttostr(i)+'/Skip',false);
+       t.fullonly:=FSequenceFile.Items.GetValue('/Targets/Target'+inttostr(i)+'/FullOnly',false);
        x:=FSequenceFile.Items.GetValue('/Targets/Target'+inttostr(i)+'/RA','');
        if x='-' then
          t.ra:=NullCoord
@@ -1027,6 +1029,7 @@ try
       FSequenceFile.Items.SetValue('/Targets/Target'+inttostr(i)+'/EndMeridian',t.endmeridian);
       FSequenceFile.Items.SetValue('/Targets/Target'+inttostr(i)+'/DarkNight',t.darknight);
       FSequenceFile.Items.SetValue('/Targets/Target'+inttostr(i)+'/Skip',t.skip);
+      FSequenceFile.Items.SetValue('/Targets/Target'+inttostr(i)+'/FullOnly',t.fullonly);
       FSequenceFile.Items.SetValue('/Targets/Target'+inttostr(i)+'/RA',RAToStr(t.ra));
       FSequenceFile.Items.SetValue('/Targets/Target'+inttostr(i)+'/Dec',DEToStr(t.de));
       if t.pa=NullCoord then
@@ -2372,8 +2375,12 @@ begin
           msg(Format(rsTargetSCoord, [t.objectname]), 3);
        end;
     end;
-    if (p<>nil)and (p.Count>0) then
-       enddelay:=(p.Steps[0].exposure*p.Steps[0].stackcount+180)/3600/24  // first exposure time + 3 minutes for telescope pointing, in days
+    if (p<>nil)and (p.Count>0) then begin
+      if t.fullonly then
+        enddelay:=t.totaltime/3600/24   // full target estimated time
+      else
+        enddelay:=(p.Steps[0].exposure*p.Steps[0].stackcount+180)/3600/24  // first exposure time + 3 minutes for telescope pointing, in days
+    end
     else
        enddelay:=0;
 
@@ -2424,7 +2431,10 @@ begin
     end;
     // start / stop timer
     if (intime>0) then begin
-      InitTargetError:=Format(rsTargetCancel, [t.objectname])+', '+Format(rsStopTimeAlre, [TimeToStr(t.endtime)]);
+      if t.fullonly then
+        InitTargetError:=Format(rsCannotStartS, [t.objectname])+', '+Format(rsNotEnoughTim, [TimeToStr(enddelay), TimeToStr(t.endtime)])
+      else
+        InitTargetError:=Format(rsCannotStartS, [t.objectname])+', '+Format(rsStopTimeAlre, [TimeToStr(t.endtime)]);
       msg(InitTargetError,3);
       result:=false;
       exit;
@@ -3269,6 +3279,7 @@ begin
   previewexposure:=1;
   darknight:=false;
   skip:=false;
+  fullonly:=false;
 end;
 
 destructor TTarget.Destroy;
@@ -3327,6 +3338,7 @@ begin
   FlatFstop:=Source.FlatFstop;
   darknight:=Source.darknight;
   skip:=Source.skip;
+  fullonly:=Source.fullonly;
 end;
 
 function TTarget.previewexposure_str: string;

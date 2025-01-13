@@ -177,6 +177,7 @@ resourcestring
   rsSetTheHFD = 'Set the HFD % change threshold in the Preferences. Measurements must also be enabled.';
   rsThisOptionIs = 'This option is normally unchecked, use it only if you manage the pointing and autoguiding by script.';
   rsTheObjectMag = 'The object magnitude';
+  rsSkipThisTarg = 'Skip this target if there is not enough time to do all the steps before the end time';
 
 implementation
 

@@ -67,6 +67,7 @@ type
     cbAutofocusHFD: TCheckBox;
     cbMandatoryStartTime: TCheckBox;
     cbInitScript: TCheckBox;
+    cbFullOnly: TCheckBox;
     CheckBoxResetRepeat: TCheckBox;
     CheckBoxRestartStatus: TCheckBox;
     Label22: TLabel;
@@ -511,6 +512,7 @@ begin
   btnApplyAll.Caption:=rsApplyToAllTa;
   cbDarkNight.Caption := Format(rsDarkNight, [blank]);
   cbSkip.Caption := Format(rsDonTSwait+'', [blank]);
+  cbFullOnly.Caption:=rsIgnoreIfItCa;
   cbAstrometry.Caption := Format(rsUseAstromet2+'', [blank]);
   cbInplace.Caption := Format(rsStayInPlace2+'', [blank]);
   cbAutofocusTemp.Caption:=rsAutofocusAft2;
@@ -523,6 +525,7 @@ begin
   label23.Caption:=rsAdditionalSc;
   cbDarkNight.Hint:=rsWaitForFullD;
   cbSkip.Hint:=Format(rsDonTWaitForT, [crlf]);
+  cbFullOnly.Hint:=rsSkipThisTarg;
   cbAstrometry.Hint:=rsUsePlateSolv;
   cbInplace.Hint:=Format(rsStayAtTheTar, [crlf, crlf]);
   cbNoAutoguidingChange.Hint:=rsThisOptionIs;
@@ -1369,11 +1372,12 @@ end;
 
 procedure Tf_EditTargets.btnApplyAllClick(Sender: TObject);
 var i: integer;
-    dark,skip,astp,afinp,aftemp,iniscr,afhfd,noguid,manst,updc,cbst: boolean;
+    dark,skip,fullonly,astp,afinp,aftemp,iniscr,afhfd,noguid,manst,updc,cbst: boolean;
     scrn,scarg: string;
 begin
   dark   := cbDarkNight.Checked;
   skip   := cbSkip.Checked;
+  fullonly:= cbFullOnly.Checked;
   astp   := cbAstrometry.Checked;
   afinp  := cbInplace.Checked;
   aftemp := cbAutofocusTemp.Checked;
@@ -1394,6 +1398,7 @@ begin
     SetScriptList2(scrn,scarg);
     cbDarkNight.Checked:=dark;
     cbSkip.Checked:=skip;
+    cbFullOnly.Checked:=fullonly;
     cbAstrometry.Checked:=astp;
     cbInplace.Checked:=afinp;
     cbAutofocusTemp.Checked:=aftemp;
@@ -2054,6 +2059,7 @@ begin
     TargetList.Cells[colrepeat,n]:='';
     cbDarkNight.Checked:=false;
     cbSkip.Checked:=false;
+    cbFullOnly.Checked:=false;
     cbAstrometry.Checked:=false;
     cbInplace.Checked:=false;
     cbAutofocusTemp.Checked:=false;
@@ -2077,6 +2083,7 @@ begin
     TargetList.Cells[colrepeat,n]:='';
     cbDarkNight.Checked:=false;
     cbSkip.Checked:=false;
+    cbFullOnly.Checked:=false;
     cbAstrometry.Checked:=false;
     cbInplace.Checked:=false;
     cbAutofocusTemp.Checked:=false;
@@ -2107,6 +2114,7 @@ begin
     TargetList.Cells[colrepeat,n]:='';
     cbDarkNight.Checked:=false;
     cbSkip.Checked:=false;
+    cbFullOnly.Checked:=false;
     cbAstrometry.Checked:=false;
     cbInplace.Checked:=false;
     cbAutofocusTemp.Checked:=false;
@@ -2172,6 +2180,7 @@ begin
     end;
     cbDarkNight.Checked:=t.darknight;
     cbSkip.Checked:=t.skip;
+    cbFullOnly.Checked:=t.fullonly;
     cbAstrometry.Checked:=t.astrometrypointing;
     cbInplace.Checked:=t.inplaceautofocus;
     cbAutofocusTemp.Checked:=t.autofocustemp;
@@ -2353,6 +2362,7 @@ begin
       t.de:=StrToDE(TargetList.Cells[coldec,n]);
     t.darknight:=cbDarkNight.Checked;
     t.skip:=cbSkip.Checked;
+    t.fullonly:=cbFullOnly.Checked;
     if TargetList.Cells[colpa,n]='-' then
       t.pa:=NullCoord
     else
@@ -2417,8 +2427,10 @@ if (ra<>NullCoord)and(de<>NullCoord) then begin
   if (TargetList.Cells[colstart,n]='') then TargetList.Cells[colstart,n]:=rsRise;
   if (TargetList.Cells[colend,n]='') then TargetList.Cells[colend,n]:=rsSet2;
 end;
-if (TargetList.Cells[colstart,n]='')and(TargetList.Cells[colend,n]='')and(not cbDarkNight.Checked) then
+if (TargetList.Cells[colstart,n]='')and(TargetList.Cells[colend,n]='')and(not cbDarkNight.Checked) then begin
    cbSkip.Checked:=false;
+   cbFullOnly.Checked:=false;
+end;
 if TargetList.Cells[colstart,n]=rsRise then begin
   if (ra=NullCoord)or(de=NullCoord) then begin
      if showmsg then targetmsg.Caption:=(rsCannotComput+crlf+rsInvalidObjec);

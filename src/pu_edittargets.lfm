@@ -693,53 +693,116 @@ object f_EditTargets: Tf_EditTargets
             OnChange = cbChange
             TabOrder = 0
           end
-          object cbSkip: TCheckBox
+          object cbMandatoryStartTime: TCheckBox
+            AnchorSideTop.Control = cbDarkNight
+            AnchorSideTop.Side = asrBottom
             Left = 16
             Height = 22
-            Top = 29
+            Top = 28
+            Width = 158
+            BorderSpacing.Top = 2
+            Caption = 'Mandatory start time'
+            OnChange = cbChange
+            TabOrder = 9
+          end
+          object cbSkip: TCheckBox
+            AnchorSideTop.Control = cbMandatoryStartTime
+            AnchorSideTop.Side = asrBottom
+            Left = 16
+            Height = 22
+            Top = 52
             Width = 90
+            BorderSpacing.Top = 2
             Caption = 'Don''t wait'
             OnChange = cbChange
             TabOrder = 1
           end
-          object cbAstrometry: TCheckBox
+          object cbFullOnly: TCheckBox
+            AnchorSideTop.Control = cbSkip
+            AnchorSideTop.Side = asrBottom
             Left = 16
             Height = 22
-            Top = 54
+            Top = 76
+            Width = 240
+            BorderSpacing.Top = 2
+            Caption = 'Ignore if it cannot be done entirely'
+            OnChange = cbChange
+            TabOrder = 13
+          end
+          object cbAstrometry: TCheckBox
+            AnchorSideTop.Control = cbFullOnly
+            AnchorSideTop.Side = asrBottom
+            Left = 16
+            Height = 22
+            Top = 100
             Width = 253
+            BorderSpacing.Top = 2
             Caption = 'Use astrometry to refine the position'
             OnChange = cbChange
             TabOrder = 2
           end
           object cbInplace: TCheckBox
+            AnchorSideTop.Control = cbAstrometry
+            AnchorSideTop.Side = asrBottom
             Left = 16
             Height = 22
-            Top = 79
+            Top = 124
             Width = 190
+            BorderSpacing.Top = 2
             Caption = 'Stay in place for autofocus'
             OnChange = cbChange
             TabOrder = 3
           end
-          object cbUpdCoord: TCheckBox
+          object cbAutofocusTemp: TCheckBox
+            AnchorSideTop.Control = cbInplace
+            AnchorSideTop.Side = asrBottom
             Left = 16
             Height = 22
-            Top = 152
+            Top = 148
+            Width = 251
+            BorderSpacing.Top = 2
+            Caption = 'Autofocus after temperature change'
+            OnChange = cbChange
+            TabOrder = 4
+          end
+          object cbAutofocusHFD: TCheckBox
+            AnchorSideTop.Control = cbAutofocusTemp
+            AnchorSideTop.Side = asrBottom
+            Left = 16
+            Height = 22
+            Top = 172
+            Width = 214
+            BorderSpacing.Top = 2
+            Caption = 'Autofocus after % change HFD'
+            OnChange = cbChange
+            TabOrder = 8
+          end
+          object cbUpdCoord: TCheckBox
+            AnchorSideTop.Control = cbAutofocusHFD
+            AnchorSideTop.Side = asrBottom
+            Left = 16
+            Height = 22
+            Top = 196
             Width = 234
+            BorderSpacing.Top = 2
             Caption = 'Update RA+Dec from Planetarium'
             OnChange = cbChange
             TabOrder = 5
           end
           object PanelSolarTracking: TPanel
+            AnchorSideTop.Control = cbUpdCoord
+            AnchorSideTop.Side = asrBottom
             Left = 16
             Height = 26
-            Top = 177
+            Top = 220
             Width = 322
+            BorderSpacing.Top = 2
             BevelOuter = bvNone
             ClientHeight = 26
             ClientWidth = 322
             TabOrder = 6
             object cbSolarTracking: TCheckBox
-              Left = 0
+              Left = 16
               Height = 22
               Top = 0
               Width = 204
@@ -748,57 +811,38 @@ object f_EditTargets: Tf_EditTargets
               TabOrder = 0
             end
           end
-          object cbAutofocusTemp: TCheckBox
-            Left = 16
-            Height = 22
-            Top = 104
-            Width = 251
-            Caption = 'Autofocus after temperature change'
-            OnChange = cbChange
-            TabOrder = 4
-          end
           object cbNoAutoguidingChange: TCheckBox
+            AnchorSideTop.Control = PanelSolarTracking
+            AnchorSideTop.Side = asrBottom
             Left = 16
             Height = 22
             Hint = 'This option is normally unchecked, use it only if you manage the pointing and autoguiding by script.'
-            Top = 202
+            Top = 246
             Width = 179
             Caption = 'Do not start autoguiding'
             OnChange = cbChange
             TabOrder = 7
           end
-          object cbMandatoryStartTime: TCheckBox
-            Left = 16
-            Height = 22
-            Top = 227
-            Width = 158
-            Caption = 'Mandatory start time'
-            OnChange = cbChange
-            TabOrder = 9
-          end
-          object cbAutofocusHFD: TCheckBox
-            Left = 16
-            Height = 22
-            Top = 128
-            Width = 214
-            Caption = 'Autofocus after % change HFD'
-            OnChange = cbChange
-            TabOrder = 8
-          end
           object cbInitScript: TCheckBox
+            AnchorSideTop.Control = cbNoAutoguidingChange
+            AnchorSideTop.Side = asrBottom
             Left = 16
             Height = 22
-            Top = 253
+            Top = 270
             Width = 186
+            BorderSpacing.Top = 2
             Caption = 'Run an initialization script'
             OnChange = cbChange
             TabOrder = 10
           end
           object Panel16: TPanel
+            AnchorSideTop.Control = cbInitScript
+            AnchorSideTop.Side = asrBottom
             Left = 32
             Height = 101
-            Top = 280
+            Top = 294
             Width = 264
+            BorderSpacing.Top = 2
             BevelOuter = bvNone
             ClientHeight = 101
             ClientWidth = 264
@@ -851,10 +895,13 @@ object f_EditTargets: Tf_EditTargets
             end
           end
           object btnApplyAll: TButton
+            AnchorSideTop.Control = Panel16
+            AnchorSideTop.Side = asrBottom
             Left = 16
             Height = 25
-            Top = 384
+            Top = 397
             Width = 267
+            BorderSpacing.Top = 2
             Caption = 'btnApplyAll'
             OnClick = btnApplyAllClick
             TabOrder = 12
@@ -1077,10 +1124,10 @@ object f_EditTargets: Tf_EditTargets
               Height = 72
               Top = 0
               Width = 468
-              ActivePage = StepTypeScript
+              ActivePage = StepTypeSwitch
               Align = alClient
               ShowTabs = False
-              TabIndex = 1
+              TabIndex = 2
               TabOrder = 0
               object StepTypeCapture: TTabSheet
                 Caption = 'StepTypeCapture'
