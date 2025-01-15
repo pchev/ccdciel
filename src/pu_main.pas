@@ -17949,9 +17949,9 @@ end;
 procedure Tf_main.InternalguiderReferenceImage(Sender: TObject);
 begin
  if guidefits.HeaderInfo.valid and f_goto.CheckImageInfo(guidefits) then begin
-   DeleteFile(ConfigGuiderReferenceFile);
    astrometry.SolveGuideImage(true);
    if astrometry.LastResult then begin
+     DeleteFile(ConfigGuiderReferenceFile);
      if CopyFile(slash(TmpDir)+'guidesolved.fits',ConfigGuiderReferenceFile) then
         ShowMessage('Reference file saved');
    end;
@@ -18436,9 +18436,18 @@ end;
 
 procedure Tf_main.MenuItemGuiderSolveClick(Sender: TObject);
 begin
-  if guidefits.HeaderInfo.valid then begin
-    if (not f_goto.CheckImageInfo(guidefits)) then exit;
-    astrometry.SolveGuideImage;
+  if guidefits.HeaderInfo.valid and f_goto.CheckImageInfo(guidefits) then begin
+    if f_internalguider.SpectroFunctions and (f_internalguider.SpectroStrategy=spSingleOffset) then begin
+      astrometry.SolveGuideImage(true);
+      if astrometry.LastResult then begin
+        DeleteFile(ConfigGuiderReferenceFile);
+        CopyFile(slash(TmpDir)+'guidesolved.fits',ConfigGuiderReferenceFile);
+      end;
+      f_internalguider.CheckGuiderReferenceFile;
+    end
+    else begin
+      astrometry.SolveGuideImage;
+    end;
   end;
 end;
 
