@@ -98,7 +98,7 @@ T_camera = class(TComponent)
     Fexptime: double;
     FFixPixelRange: boolean;
     FGuideCamera,FFinderCamera: boolean;
-    FGuidePixelScale: double;
+    FGuidePixelScale,FGuideLockX,FGuideLockY: double;
     FsequenceRunning: boolean;
     FStepTotalCount,FStepRepeatCount: integer;
     FCameraTimeout: integer;
@@ -327,6 +327,8 @@ T_camera = class(TComponent)
     property FinderCamera: boolean read FFinderCamera write FFinderCamera;
     property GuideCamera: boolean read FGuideCamera write FGuideCamera;
     property GuidePixelScale: double read FGuidePixelScale write FGuidePixelScale;
+    property GuideLockX: double read FGuideLockX write FGuideLockX;
+    property GuideLockY: double read FGuideLockY write FGuideLockY;
     property FullWellCapacity: double read GetFullWellCapacity;
     property onMsg: TNotifyMsg read FonMsg write FonMsg;
     property onDeviceMsg: TNotifyMsg read FonDeviceMsg write FonDeviceMsg;
@@ -430,6 +432,8 @@ begin
   FGuideCamera:=false;
   FFinderCamera:=false;
   FGuidePixelScale:=-1;
+  FGuideLockX:=-1;
+  FGuideLockY:=-1;
   FsequenceRunning:=false;
   FStepTotalCount:=1;
   FStepRepeatCount:=1;
@@ -1076,6 +1080,10 @@ begin
        f.Header.Insert(i,'SECPIX2',FGuidePixelScale,'image scale arcseconds per pixel');
        f.Header.Insert(i,'SCALE',FGuidePixelScale,'image scale arcseconds per pixel');
     end;
+  end;
+  if FGuideCamera and (FGuideLockX>0)and (FGuideLockY>0) then begin
+     f.Header.Insert(i,'GUIDEX',FGuideLockX,'guide lock position X');
+     f.Header.Insert(i,'GUIDEY',FGuideLockY,'guide lock position Y');
   end;
   if hCloudCover<>NullCoord then f.Header.Insert(i,'AOCCLOUD',hCloudCover,'Cloud coverage in percent');
   if hTemperature<>NullCoord then f.Header.Insert(i,'AOCAMBT',hTemperature,'Ambient temperature in degrees C');

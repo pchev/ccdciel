@@ -986,6 +986,14 @@ if (FCamera.Status=devConnected) then begin
     FCamera.FrameType:=LIGHT;
   FCamera.ObjectName:=rsGuide;
   FCamera.GuidePixelScale:=Finternalguider.pixel_size;
+  if Finternalguider.SpectroFunctions then begin
+    FCamera.GuideLockX:=Finternalguider.LockX;
+    FCamera.GuideLockY:=Finternalguider.LockY;
+  end
+  else begin
+    FCamera.GuideLockX:=-1;
+    FCamera.GuideLockY:=-1;
+  end;
 
   FCamera.StartExposure(e);
   FRecoveringCamera:=false;
@@ -2639,6 +2647,8 @@ try
     offset:=finternalguider.Offset.Value;
     FCamera.ObjectName:=rsGuide;
     FCamera.GuidePixelScale:=finternalguider.pixel_size;
+    FCamera.GuideLockX:=Finternalguider.LockX;
+    FCamera.GuideLockY:=Finternalguider.LockY;
     if FCamera.ControlExposure(exp,bin,bin,LIGHT,ReadoutModeAstrometry,gain,offset) then begin
       FAstrometry.SolveGuideImage(true);
       if Fastrometry.LastResult then begin

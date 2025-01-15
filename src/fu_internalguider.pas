@@ -1865,6 +1865,14 @@ try
       sgain:=gain.Value;
       soffset:=Offset.Value;
       bin:=Binning.Value;
+      if SpectroFunctions then begin
+        FCamera.GuideLockX:=LockX;
+        FCamera.GuideLockY:=LockY;
+      end
+      else begin
+        FCamera.GuideLockX:=-1;
+        FCamera.GuideLockY:=-1;
+      end;
       msg(format(rsExposureS,[FormatFloat(f3,exp)])+blank+rsSeconds,3);
       if not Fcamera.ControlExposure(exp,bin,bin,LIGHT,ReadoutModeCapture,sgain,soffset,true) then begin
         msg(rsExposureFail,0);
