@@ -39,6 +39,7 @@ Source: Data\libcrypto-3.dll; DestDir: {app}; Flags: ignoreversion recursesubdir
 Source: Data\libexpat.dll; DestDir: {app}; Flags: ignoreversion recursesubdirs createallsubdirs restartreplace;
 Source: Data\libpasraw.dll; DestDir: {app}; Flags: ignoreversion recursesubdirs createallsubdirs restartreplace;
 Source: Data\zlib1.dll; DestDir: {app}; Flags: ignoreversion recursesubdirs createallsubdirs restartreplace;
+Source: Data\libplan404.dll; DestDir: {app}; Flags: ignoreversion recursesubdirs createallsubdirs restartreplace;
 Source: Data\data\*; DestDir: {app}\data; Flags: ignoreversion recursesubdirs createallsubdirs restartreplace;
 Source: Data\doc\*; DestDir: {app}\doc; Flags: ignoreversion recursesubdirs createallsubdirs restartreplace;
 Source: Data\scripts\*; DestDir: {app}\scripts; Flags: ignoreversion recursesubdirs createallsubdirs restartreplace;
