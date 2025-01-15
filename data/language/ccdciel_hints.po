@@ -554,3 +554,7 @@ msgstr ""
 msgid "The object magnitude"
 msgstr ""
 
+#: u_hints:rsskipthistarg
+msgid "Skip this target if there is not enough time to do all the steps before the end time"
+msgstr ""
+

@@ -5989,3 +5989,35 @@ msgstr ""
 msgid "Band"
 msgstr ""
 
+#: u_translation:rsapplytoallta
+msgid "Apply to all targets"
+msgstr ""
+
+#: u_translation:rsdonotstartif
+msgid "Do not start if it cannot be done completely"
+msgstr ""
+
+#: u_translation:rscannotstarts
+msgid "Cannot start %s now"
+msgstr ""
+
+#: u_translation:rsnotenoughtim
+msgid "not enough time to complete the %s plan before end time at %s"
+msgstr ""
+
+#: u_translation:rsconfigurethe
+msgid "Configure the distance in Preferences / Sequences"
+msgstr ""
+
+#: u_translation:rsmoonavoidanc
+msgid "Moon avoidance"
+msgstr ""
+
+#: u_translation:rsminimumdista
+msgid "Minimum distance to the Moon"
+msgstr ""
+
+#: u_translation:rstooclosetoth
+msgid "too close to the Moon"
+msgstr ""
+

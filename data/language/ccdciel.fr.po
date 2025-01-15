@@ -6,14 +6,14 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ccdciel\n"
 "Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
-"POT-Creation-Date: 2024-12-30 15:45+0000\n"
-"PO-Revision-Date: 2024-12-30 16:07+0000\n"
+"POT-Creation-Date: 2025-01-15 10:42+0000\n"
+"PO-Revision-Date: 2025-01-15 10:51+0000\n"
 "Last-Translator: Patrick Chevalley <Unknown>\n"
 "Language-Team: French <fr@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2024-12-30 16:12+0000\n"
+"X-Launchpad-Export-Date: 2025-01-15 10:56+0000\n"
 "X-Generator: Launchpad (build 6394e03793719e8d73f5a60b5439440e693c92f1)\n"
 
 #: u_translation.rs2d
@@ -208,6 +208,10 @@ msgstr "Applique le Flat"
 #: u_translation.rsapplytoallde
 msgid "Apply to all devices"
 msgstr "Applique à tous les périphériques"
+
+#: u_translation.rsapplytoallta
+msgid "Apply to all targets"
+msgstr "Appliquer à tous les objets"
 
 #: u_translation.rsapplytocurre
 msgid "Apply to current image"
@@ -845,6 +849,11 @@ msgstr "Impossible de démarrer la prévisualisation maintenant"
 msgid "Cannot start preview loop now"
 msgstr "Ne peut pas démarrer la boucle d'aperçu maintenant"
 
+#: u_translation.rscannotstarts
+#, object-pascal-format
+msgid "Cannot start %s now"
+msgstr "Ne peut démarrer %s maintenant"
+
 #: u_translation.rscannotstartw
 msgid "Cannot start when capture is running"
 msgstr "Ne peut pas démarrer lorsque la capture est en cours d'exécution"
@@ -1095,6 +1104,10 @@ msgstr "Mesurer l'erreur de cône"
 #: u_translation.rsconfiguratio
 msgid "Configuration saved"
 msgstr "Configuration enregistrée"
+
+#: u_translation.rsconfigurethe
+msgid "Configure the distance in Preferences / Sequences"
+msgstr "Configurer la distance dans Préférence / Séquence"
 
 #: u_translation.rsconnect
 msgid "Connect"
@@ -1565,6 +1578,10 @@ msgstr "Ne pas executer %s comme %s"
 #: u_translation.rsdonotstartau
 msgid "Do not start autoguiding"
 msgstr "Ne démare pas l'autoguidage"
+
+#: u_translation.rsdonotstartif
+msgid "Do not start if it cannot be done completely"
+msgstr "Ne pas commencer si cela ne peut pas être fait complètement"
 
 #: u_translation.rsdontswait
 #, object-pascal-format
@@ -2974,6 +2991,10 @@ msgstr "minimum"
 msgid "Minimum"
 msgstr "Minimum"
 
+#: u_translation.rsminimumdista
+msgid "Minimum distance to the Moon"
+msgstr "Distance minumum de la Lune"
+
 #: u_translation.rsminimummove
 msgid "Minimum move"
 msgstr "Déplacement minimum"
@@ -3009,6 +3030,10 @@ msgstr "Mode:"
 #: u_translation.rsmodify
 msgid "Modify"
 msgstr "Modifier"
+
+#: u_translation.rsmoonavoidanc
+msgid "Moon avoidance"
+msgstr "Évitement de la Lune"
 
 #: u_translation.rsmoresettings
 msgid "More settings"
@@ -3334,6 +3359,11 @@ msgstr "Pas assez de points avant ou après la position de mise au point après 
 #: u_translation.rsnotenoughpoi2
 msgid "Not enough points in or out of focus position, retrying now."
 msgstr "Pas assez de points avant ou après la position de mise au point, fait un nouvel essai."
+
+#: u_translation.rsnotenoughtim
+#, object-pascal-format
+msgid "not enough time to complete the %s plan before end time at %s"
+msgstr "pas assez de temps pour terminer le plan %s avant l'heure de fin à %s"
 
 #: u_translation.rsnoterminatio
 msgid "No termination actions configured."
@@ -5721,6 +5751,10 @@ msgstr "Estimation du temps"
 #: u_translation.rstomorrow
 msgid "tomorrow"
 msgstr "demain"
+
+#: u_translation.rstooclosetoth
+msgid "too close to the Moon"
+msgstr "trop prêt de la Lune"
 
 #: u_translation.rstools
 msgid "Tools"

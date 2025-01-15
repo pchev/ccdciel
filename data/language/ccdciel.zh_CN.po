@@ -6,14 +6,14 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ccdciel\n"
 "Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
-"POT-Creation-Date: 2024-12-30 15:45+0000\n"
-"PO-Revision-Date: 2024-11-16 13:09+0000\n"
+"POT-Creation-Date: 2025-01-15 10:42+0000\n"
+"PO-Revision-Date: 2025-01-15 07:11+0000\n"
 "Last-Translator: Zachary Wu <Unknown>\n"
 "Language-Team: Chinese (Simplified) <zh_CN@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2024-12-30 16:12+0000\n"
+"X-Launchpad-Export-Date: 2025-01-15 10:56+0000\n"
 "X-Generator: Launchpad (build 6394e03793719e8d73f5a60b5439440e693c92f1)\n"
 
 #: u_translation.rs2d
@@ -104,7 +104,7 @@ msgstr "额外的选项"
 
 #: u_translation.rsadditionalsc
 msgid "Additional script parameter"
-msgstr ""
+msgstr "附加脚本参数"
 
 #: u_translation.rsaddstep
 msgid "Add step"
@@ -208,6 +208,10 @@ msgstr "应用平场"
 #: u_translation.rsapplytoallde
 msgid "Apply to all devices"
 msgstr "应用到所有设备"
+
+#: u_translation.rsapplytoallta
+msgid "Apply to all targets"
+msgstr ""
 
 #: u_translation.rsapplytocurre
 msgid "Apply to current image"
@@ -439,7 +443,7 @@ msgstr "自动对焦容差 "
 
 #: u_translation.rsautofocususi
 msgid "Autofocus using the OAG camera"
-msgstr ""
+msgstr "使用 OAG 相机自动对焦"
 
 #: u_translation.rsautofocuswil
 msgid "Autofocus will run before the next exposure"
@@ -579,7 +583,7 @@ msgstr "坏像素阙值"
 
 #: u_translation.rsband
 msgid "Band"
-msgstr ""
+msgstr "频段"
 
 #: u_translation.rsbayermatrixp
 msgid "Bayer matrix pattern"
@@ -845,6 +849,11 @@ msgstr "现在无法启动预览"
 msgid "Cannot start preview loop now"
 msgstr "现在无法启动循环预览"
 
+#: u_translation.rscannotstarts
+#, object-pascal-format
+msgid "Cannot start %s now"
+msgstr ""
+
 #: u_translation.rscannotstartw
 msgid "Cannot start when capture is running"
 msgstr "在拍摄运行时无法启动"
@@ -918,7 +927,7 @@ msgstr "中心DEC"
 
 #: u_translation.rscenteringand
 msgid "Centering and guiding strategy"
-msgstr ""
+msgstr "定心与导星策略"
 
 #: u_translation.rscenterra
 msgid "Center RA"
@@ -1031,7 +1040,7 @@ msgstr "色彩平衡"
 
 #: u_translation.rscolorizespec
 msgid "Colorize spectra images"
-msgstr ""
+msgstr "为光谱图像着色"
 
 #: u_translation.rscolorpreview
 msgid "Color preview"
@@ -1095,6 +1104,10 @@ msgstr "测量圆锥误差"
 #: u_translation.rsconfiguratio
 msgid "Configuration saved"
 msgstr "配置已保存"
+
+#: u_translation.rsconfigurethe
+msgid "Configure the distance in Preferences / Sequences"
+msgstr ""
 
 #: u_translation.rsconnect
 msgid "Connect"
@@ -1566,6 +1579,10 @@ msgstr "不要运行%s如同%s！"
 msgid "Do not start autoguiding"
 msgstr "不启动自动导星"
 
+#: u_translation.rsdonotstartif
+msgid "Do not start if it cannot be done completely"
+msgstr ""
+
 #: u_translation.rsdontswait
 #, object-pascal-format
 msgid "Don't%swait"
@@ -1695,7 +1712,7 @@ msgstr "结束时间"
 
 #: u_translation.rsenlargeguide
 msgid "Enlarge guide image"
-msgstr ""
+msgstr "放大导星图像"
 
 #: u_translation.rsenterthej200
 msgid "Enter the J2000 coordinates of the target where the main instrument is currently pointing."
@@ -2285,7 +2302,7 @@ msgstr "导星传感器"
 
 #: u_translation.rsguidestaroff
 msgid "Guide star offset"
-msgstr ""
+msgstr "导星偏移"
 
 #: u_translation.rsguiding
 #, object-pascal-format
@@ -2445,7 +2462,7 @@ msgstr "图像统计数据"
 
 #: u_translation.rsimagetransfe
 msgid "Image transfer"
-msgstr ""
+msgstr "图像传输"
 
 #: u_translation.rsimageundebay
 msgid "Image Un-debayered"
@@ -2531,11 +2548,11 @@ msgstr "在%s秒内"
 
 #: u_translation.rsinstallscrip
 msgid "Install script"
-msgstr ""
+msgstr "安装脚本"
 
 #: u_translation.rsinstrumentna
 msgid "Instrument name"
-msgstr ""
+msgstr "仪器名称"
 
 #: u_translation.rsintensity
 msgid "Intensity"
@@ -2714,7 +2731,7 @@ msgstr "亮度"
 
 #: u_translation.rsmagn
 msgid "Magn."
-msgstr ""
+msgstr "星等"
 
 #: u_translation.rsmagnifyer
 msgid "Magnifier"
@@ -2780,7 +2797,7 @@ msgstr "最大值"
 
 #: u_translation.rsmaxexposure
 msgid "Max exposure"
-msgstr ""
+msgstr "最大曝光"
 
 #: u_translation.rsmaximum
 msgid "maximum"
@@ -2870,7 +2887,7 @@ msgstr "通过停止跟踪测量像素比例尺"
 
 #: u_translation.rsmeasureteles
 msgid "Measure telescope cone error"
-msgstr ""
+msgstr "测量望远镜的圆锥误差"
 
 #: u_translation.rsmeasurewn
 msgid "Measure in the West and North"
@@ -2974,6 +2991,10 @@ msgstr "最小"
 msgid "Minimum"
 msgstr "最小值"
 
+#: u_translation.rsminimumdista
+msgid "Minimum distance to the Moon"
+msgstr ""
+
 #: u_translation.rsminimummove
 msgid "Minimum move"
 msgstr "最小移动"
@@ -3009,6 +3030,10 @@ msgstr "模式："
 #: u_translation.rsmodify
 msgid "Modify"
 msgstr "修改"
+
+#: u_translation.rsmoonavoidanc
+msgid "Moon avoidance"
+msgstr ""
 
 #: u_translation.rsmoresettings
 msgid "More settings"
@@ -3149,7 +3174,7 @@ msgstr "多星导星偏移量"
 
 #: u_translation.rsmultistarwit
 msgid "Multistar with guider astrometry"
-msgstr ""
+msgstr "多星导星带天体测量"
 
 #: u_translation.rsname
 msgid "Name"
@@ -3174,7 +3199,7 @@ msgstr "需要等待直到%s"
 
 #: u_translation.rsnetwork
 msgid "Network"
-msgstr ""
+msgstr "网络"
 
 #: u_translation.rsnew
 msgid "New"
@@ -3335,6 +3360,11 @@ msgstr "两次尝试后仍未找到足够的焦内/焦外位点。更换一个�
 msgid "Not enough points in or out of focus position, retrying now."
 msgstr "没有足够的焦内/焦外位点，重试。"
 
+#: u_translation.rsnotenoughtim
+#, object-pascal-format
+msgid "not enough time to complete the %s plan before end time at %s"
+msgstr ""
+
 #: u_translation.rsnoterminatio
 msgid "No termination actions configured."
 msgstr "未配置终止动作"
@@ -3449,7 +3479,7 @@ msgstr "在线文档"
 
 #: u_translation.rsonlineforall
 msgid "Online for all targets"
-msgstr ""
+msgstr "所有目标均在线"
 
 #: u_translation.rsonmeridiancr
 msgid "On Meridian crossing"
@@ -3630,7 +3660,7 @@ msgstr "周期性自动对焦"
 
 #: u_translation.rsperslitoffse
 msgid "Per slit offset"
-msgstr ""
+msgstr "每条狭缝偏移"
 
 #: u_translation.rsphotometry
 msgid "Photometry"
@@ -3951,7 +3981,7 @@ msgstr "降水概率"
 
 #: u_translation.rsramdisk
 msgid "RAM Disk"
-msgstr ""
+msgstr "内存盘"
 
 #: u_translation.rsrandom
 msgid "Random"
@@ -4029,7 +4059,7 @@ msgstr "红"
 
 #: u_translation.rsreferenceexp
 msgid "Reference exposure"
-msgstr ""
+msgstr "参考曝光"
 
 #: u_translation.rsreferenceima
 msgid "Reference image"
@@ -4286,7 +4316,7 @@ msgstr "执行"
 
 #: u_translation.rsrunaninitial
 msgid "Run an initialization script"
-msgstr ""
+msgstr "运行初始化脚本"
 
 #: u_translation.rsrunascript
 msgid "Run a script"
@@ -4496,7 +4526,7 @@ msgstr "先选择一颗星！"
 
 #: u_translation.rsselectcamera
 msgid "Select camera"
-msgstr ""
+msgstr "选择相机"
 
 #: u_translation.rsselectguides
 msgid "Select guide star"
@@ -4508,7 +4538,7 @@ msgstr "选择测量选项之一："
 
 #: u_translation.rsselectthecam
 msgid "Select the camera to use for the cone measurement"
-msgstr ""
+msgstr "选择用于圆锥测量的相机"
 
 #: u_translation.rsselectthecur
 msgid "Select the cursor to use "
@@ -4817,19 +4847,19 @@ msgstr "单星"
 
 #: u_translation.rssinglestarbr
 msgid "Single star, brightest star with offset"
-msgstr ""
+msgstr "单星，最亮星加偏移"
 
 #: u_translation.rssinglestarus
 msgid "Single star, use the brightest star"
-msgstr ""
+msgstr "单星，使用最亮的星"
 
 #: u_translation.rssinglestarwi
 msgid "Single star, with guider astrometry"
-msgstr ""
+msgstr "单星，带导星天体测量"
 
 #: u_translation.rssinglestarwi2
 msgid "Single star with astrometry, then multistar"
-msgstr ""
+msgstr "单星带天体测量，然后是多星"
 
 #: u_translation.rssitesendtote
 msgid "Site send to telescope."
@@ -4941,7 +4971,7 @@ msgstr "滑脱修正 "
 
 #: u_translation.rsslit
 msgid "Slit"
-msgstr ""
+msgstr "狭缝"
 
 #: u_translation.rsslitdrawing
 msgid "Slit drawing"
@@ -5055,7 +5085,7 @@ msgstr "星点对齐"
 #: u_translation.rsstarautoexpo
 #, object-pascal-format
 msgid "Star%sauto-exposure"
-msgstr ""
+msgstr "启动%s自动曝光"
 
 #: u_translation.rsstardatabase
 msgid "Star database is empty, check path to star database files!!"
@@ -5721,6 +5751,10 @@ msgstr "时序估计"
 #: u_translation.rstomorrow
 msgid "tomorrow"
 msgstr "明天"
+
+#: u_translation.rstooclosetoth
+msgid "too close to the Moon"
+msgstr ""
 
 #: u_translation.rstools
 msgid "Tools"

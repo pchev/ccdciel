@@ -6,14 +6,14 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ccdciel\n"
 "Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
-"POT-Creation-Date: 2024-12-30 15:45+0000\n"
+"POT-Creation-Date: 2025-01-15 10:42+0000\n"
 "PO-Revision-Date: 2024-08-19 19:32+0000\n"
 "Last-Translator: Thomas <email@starhopper.de>\n"
 "Language-Team: German <de@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2024-12-30 16:12+0000\n"
+"X-Launchpad-Export-Date: 2025-01-15 10:56+0000\n"
 "X-Generator: Launchpad (build 6394e03793719e8d73f5a60b5439440e693c92f1)\n"
 
 #: u_translation.rs2d
@@ -208,6 +208,10 @@ msgstr "Flatfield anwenden"
 #: u_translation.rsapplytoallde
 msgid "Apply to all devices"
 msgstr "Auf alle Geräte anwenden"
+
+#: u_translation.rsapplytoallta
+msgid "Apply to all targets"
+msgstr ""
 
 #: u_translation.rsapplytocurre
 msgid "Apply to current image"
@@ -845,6 +849,11 @@ msgstr "Vorschau kann jetzt nicht gestartet werden"
 msgid "Cannot start preview loop now"
 msgstr "Vorschau Schleife kann jetzt nicht gestartet werden"
 
+#: u_translation.rscannotstarts
+#, object-pascal-format
+msgid "Cannot start %s now"
+msgstr ""
+
 #: u_translation.rscannotstartw
 msgid "Cannot start when capture is running"
 msgstr "Kann nicht starten während die Aufnahme läuft"
@@ -1092,6 +1101,10 @@ msgstr ""
 #: u_translation.rsconfiguratio
 msgid "Configuration saved"
 msgstr "Konfiguration gespeichert"
+
+#: u_translation.rsconfigurethe
+msgid "Configure the distance in Preferences / Sequences"
+msgstr ""
 
 #: u_translation.rsconnect
 msgid "Connect"
@@ -1562,6 +1575,10 @@ msgstr "Führen Sie %s nicht als %s aus!"
 #: u_translation.rsdonotstartau
 msgid "Do not start autoguiding"
 msgstr "Autoguiding nicht starten"
+
+#: u_translation.rsdonotstartif
+msgid "Do not start if it cannot be done completely"
+msgstr ""
 
 #: u_translation.rsdontswait
 #, object-pascal-format
@@ -2971,6 +2988,10 @@ msgstr "Minimum"
 msgid "Minimum"
 msgstr "Minimum"
 
+#: u_translation.rsminimumdista
+msgid "Minimum distance to the Moon"
+msgstr ""
+
 #: u_translation.rsminimummove
 msgid "Minimum move"
 msgstr "Minimale Bewegung"
@@ -3006,6 +3027,10 @@ msgstr "Modus:"
 #: u_translation.rsmodify
 msgid "Modify"
 msgstr "Bearbeiten"
+
+#: u_translation.rsmoonavoidanc
+msgid "Moon avoidance"
+msgstr ""
 
 #: u_translation.rsmoresettings
 msgid "More settings"
@@ -3331,6 +3356,11 @@ msgstr "Nach zwei Versuchen nicht genug Punkte innerhalb oder außerhalb der Fok
 #: u_translation.rsnotenoughpoi2
 msgid "Not enough points in or out of focus position, retrying now."
 msgstr "Nicht genug Punkte innerhalb oder außerhalb der Fokusposition, versuche es jetzt erneut."
+
+#: u_translation.rsnotenoughtim
+#, object-pascal-format
+msgid "not enough time to complete the %s plan before end time at %s"
+msgstr ""
 
 #: u_translation.rsnoterminatio
 msgid "No termination actions configured."
@@ -5718,6 +5748,10 @@ msgstr "Schätzung des Zeitdauer"
 #: u_translation.rstomorrow
 msgid "tomorrow"
 msgstr "Morgen"
+
+#: u_translation.rstooclosetoth
+msgid "too close to the Moon"
+msgstr ""
 
 #: u_translation.rstools
 msgid "Tools"

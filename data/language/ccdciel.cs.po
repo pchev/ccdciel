@@ -2,14 +2,14 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ccdciel\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-12-30 15:45+0000\n"
-"PO-Revision-Date: 2024-12-22 14:29+0000\n"
+"POT-Creation-Date: 2025-01-15 10:42+0000\n"
+"PO-Revision-Date: 2024-12-31 08:58+0000\n"
 "Last-Translator: Stanislav Holub <Unknown>\n"
 "Language-Team: Czech <cz@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2024-12-30 16:12+0000\n"
+"X-Launchpad-Export-Date: 2025-01-15 10:56+0000\n"
 "X-Generator: Launchpad (build 6394e03793719e8d73f5a60b5439440e693c92f1)\n"
 "Language: cs\n"
 
@@ -205,6 +205,10 @@ msgstr "Použít Flat"
 #: u_translation.rsapplytoallde
 msgid "Apply to all devices"
 msgstr "Použít pro všechna zařízení"
+
+#: u_translation.rsapplytoallta
+msgid "Apply to all targets"
+msgstr ""
 
 #: u_translation.rsapplytocurre
 msgid "Apply to current image"
@@ -576,7 +580,7 @@ msgstr "Prahová hodnota chybných pixelů"
 
 #: u_translation.rsband
 msgid "Band"
-msgstr ""
+msgstr "Pásmo"
 
 #: u_translation.rsbayermatrixp
 msgid "Bayer matrix pattern"
@@ -842,6 +846,11 @@ msgstr "Náhled nelze spustit"
 msgid "Cannot start preview loop now"
 msgstr "Nelze spustit cyklus náhledu"
 
+#: u_translation.rscannotstarts
+#, object-pascal-format
+msgid "Cannot start %s now"
+msgstr ""
+
 #: u_translation.rscannotstartw
 msgid "Cannot start when capture is running"
 msgstr "Nelze spustit, když je spuštěno snímání"
@@ -1092,6 +1101,10 @@ msgstr "Měření kuželové chyby"
 #: u_translation.rsconfiguratio
 msgid "Configuration saved"
 msgstr "Konfigurace uložena"
+
+#: u_translation.rsconfigurethe
+msgid "Configure the distance in Preferences / Sequences"
+msgstr ""
 
 #: u_translation.rsconnect
 msgid "Connect"
@@ -1562,6 +1575,10 @@ msgstr "Nespouštět %s jako %s!"
 #: u_translation.rsdonotstartau
 msgid "Do not start autoguiding"
 msgstr "Nespouštějte automatickou pointaci"
+
+#: u_translation.rsdonotstartif
+msgid "Do not start if it cannot be done completely"
+msgstr ""
 
 #: u_translation.rsdontswait
 #, object-pascal-format
@@ -2971,6 +2988,10 @@ msgstr "minimum"
 msgid "Minimum"
 msgstr "Minimum"
 
+#: u_translation.rsminimumdista
+msgid "Minimum distance to the Moon"
+msgstr ""
+
 #: u_translation.rsminimummove
 msgid "Minimum move"
 msgstr "Minimální pohyb"
@@ -3006,6 +3027,10 @@ msgstr "Režim:"
 #: u_translation.rsmodify
 msgid "Modify"
 msgstr "Upravit"
+
+#: u_translation.rsmoonavoidanc
+msgid "Moon avoidance"
+msgstr ""
 
 #: u_translation.rsmoresettings
 msgid "More settings"
@@ -3332,6 +3357,11 @@ msgstr "Po dvou pokusech není dostatek bodů před nebo za ostřením. Začnět
 msgid "Not enough points in or out of focus position, retrying now."
 msgstr "Nedostatek bodů před nebo za ostřící polohou, zkuste to znovu."
 
+#: u_translation.rsnotenoughtim
+#, object-pascal-format
+msgid "not enough time to complete the %s plan before end time at %s"
+msgstr ""
+
 #: u_translation.rsnoterminatio
 msgid "No termination actions configured."
 msgstr "Nejsou nakonfigurovány žádné akce ukončení."
@@ -3446,7 +3476,7 @@ msgstr "Online dokumentace"
 
 #: u_translation.rsonlineforall
 msgid "Online for all targets"
-msgstr ""
+msgstr "Online pro všechny cíle"
 
 #: u_translation.rsonmeridiancr
 msgid "On Meridian crossing"
@@ -5718,6 +5748,10 @@ msgstr "Časový odhad"
 #: u_translation.rstomorrow
 msgid "tomorrow"
 msgstr "zítra"
+
+#: u_translation.rstooclosetoth
+msgid "too close to the Moon"
+msgstr ""
 
 #: u_translation.rstools
 msgid "Tools"

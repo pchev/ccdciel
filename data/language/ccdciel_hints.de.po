@@ -6,14 +6,14 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ccdciel\n"
 "Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
-"POT-Creation-Date: 2024-12-30 15:46+0000\n"
+"POT-Creation-Date: 2025-01-15 10:43+0000\n"
 "PO-Revision-Date: 2023-03-09 16:39+0000\n"
 "Last-Translator: Thomas <email@starhopper.de>\n"
 "Language-Team: German <de@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2024-12-30 16:12+0000\n"
+"X-Launchpad-Export-Date: 2025-01-15 10:56+0000\n"
 "X-Generator: Launchpad (build 6394e03793719e8d73f5a60b5439440e693c92f1)\n"
 
 #: u_hints.rsactivateback
@@ -350,6 +350,10 @@ msgstr "Zeige Helligkeits- und Dunkelbeschneidungen"
 #: u_hints.rsshowlastcapt
 msgid "Show captured image"
 msgstr "Aufgenommenes Bild anzeigen"
+
+#: u_hints.rsskipthistarg
+msgid "Skip this target if there is not enough time to do all the steps before the end time"
+msgstr ""
 
 #: u_hints.rsstacktheprev
 #, object-pascal-format

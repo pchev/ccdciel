@@ -6,14 +6,14 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ccdciel\n"
 "Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
-"POT-Creation-Date: 2024-12-30 15:45+0000\n"
+"POT-Creation-Date: 2025-01-15 10:42+0000\n"
 "PO-Revision-Date: 2024-12-21 17:19+0000\n"
 "Last-Translator: Sergey Tarantsov <tsn-ast@yandex.ru>\n"
 "Language-Team: Russian <ru@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2024-12-30 16:12+0000\n"
+"X-Launchpad-Export-Date: 2025-01-15 10:56+0000\n"
 "X-Generator: Launchpad (build 6394e03793719e8d73f5a60b5439440e693c92f1)\n"
 
 #: u_translation.rs2d
@@ -208,6 +208,10 @@ msgstr "Применить флет"
 #: u_translation.rsapplytoallde
 msgid "Apply to all devices"
 msgstr "Применить ко всем устройствам"
+
+#: u_translation.rsapplytoallta
+msgid "Apply to all targets"
+msgstr ""
 
 #: u_translation.rsapplytocurre
 msgid "Apply to current image"
@@ -845,6 +849,11 @@ msgstr "Невозможно запустить съёмку превью"
 msgid "Cannot start preview loop now"
 msgstr "Невозможно запустить циклическую съёмку превью"
 
+#: u_translation.rscannotstarts
+#, object-pascal-format
+msgid "Cannot start %s now"
+msgstr ""
+
 #: u_translation.rscannotstartw
 msgid "Cannot start when capture is running"
 msgstr "Невозможно запустить во время съёмки"
@@ -1095,6 +1104,10 @@ msgstr "Измерение ошибки конуса"
 #: u_translation.rsconfiguratio
 msgid "Configuration saved"
 msgstr "Конфигурация сохранена"
+
+#: u_translation.rsconfigurethe
+msgid "Configure the distance in Preferences / Sequences"
+msgstr ""
 
 #: u_translation.rsconnect
 msgid "Connect"
@@ -1565,6 +1578,10 @@ msgstr "Не запускайте %s как %s!"
 #: u_translation.rsdonotstartau
 msgid "Do not start autoguiding"
 msgstr "Не запускать гидирование"
+
+#: u_translation.rsdonotstartif
+msgid "Do not start if it cannot be done completely"
+msgstr ""
 
 #: u_translation.rsdontswait
 #, object-pascal-format
@@ -2974,6 +2991,10 @@ msgstr "минимум"
 msgid "Minimum"
 msgstr "Минимальный"
 
+#: u_translation.rsminimumdista
+msgid "Minimum distance to the Moon"
+msgstr ""
+
 #: u_translation.rsminimummove
 msgid "Minimum move"
 msgstr "Мин. перемещение"
@@ -3009,6 +3030,10 @@ msgstr "Mode:"
 #: u_translation.rsmodify
 msgid "Modify"
 msgstr "Изменить"
+
+#: u_translation.rsmoonavoidanc
+msgid "Moon avoidance"
+msgstr ""
 
 #: u_translation.rsmoresettings
 msgid "More settings"
@@ -3334,6 +3359,11 @@ msgstr "Недостаточно точек до или за точкой фок
 #: u_translation.rsnotenoughpoi2
 msgid "Not enough points in or out of focus position, retrying now."
 msgstr "Недостаточно точек до или за точкой фокуса, повторная попытка"
+
+#: u_translation.rsnotenoughtim
+#, object-pascal-format
+msgid "not enough time to complete the %s plan before end time at %s"
+msgstr ""
 
 #: u_translation.rsnoterminatio
 msgid "No termination actions configured."
@@ -5721,6 +5751,10 @@ msgstr "Оценка времени"
 #: u_translation.rstomorrow
 msgid "tomorrow"
 msgstr "завтра"
+
+#: u_translation.rstooclosetoth
+msgid "too close to the Moon"
+msgstr ""
 
 #: u_translation.rstools
 msgid "Tools"
