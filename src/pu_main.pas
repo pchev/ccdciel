@@ -45,7 +45,7 @@ uses
   cu_dome, cu_ascomdome, cu_indidome, fu_dome, pu_about, pu_goto, pu_photometry, u_libraw, pu_image_sharpness,
   cu_indiwheel, cu_ascomwheel, cu_incamerawheel, cu_indicamera, cu_ascomcamera, cu_astrometry, pu_autoexposurestep,
   cu_autoguider, cu_autoguider_phd, cu_autoguider_linguider, cu_autoguider_none, cu_autoguider_dither, cu_autoguider_internal,
-  cu_planetarium, cu_planetarium_cdc, cu_planetarium_samp, cu_planetarium_hnsky, cu_planetarium_none,
+  cu_planetarium, cu_planetarium_cdc, cu_planetarium_samp, cu_planetarium_hnsky, cu_planetarium_none, u_ephem,
   pu_planetariuminfo, indiapi, cu_ascomrestcamera, cu_ascomrestdome, cu_ascomrestfocuser, cu_ascomrestmount, cu_manualwheel,
   cu_ascomrestrotator, cu_ascomrestsafety, cu_ascomrestweather, cu_ascomrestwheel, pu_polaralign, pu_polaralign2, pu_collimation,
   cu_switch, cu_ascomswitch, cu_ascomrestswitch, cu_indiswitch, cu_cover, cu_ascomcover, cu_ascomrestcover, cu_indicover,
@@ -1558,6 +1558,7 @@ begin
   RecenteringTarget:=false;
   SlewPrecision:=0.5;
   RecenterTargetDistance:=1.0;
+  MinimumMoonDistance:=30.0;
   FocuserLastTemp:=NullCoord;
   AutoFocusLastTime:=NullCoord;
   FocusStarMag:=-1;
@@ -1701,6 +1702,7 @@ begin
     if uncompress<>nil then zlibok:=true;
   end;
   Load_Libraw;
+  Load_Plan404;
   ConfigExtension:= '.conf';
   config:=TCCDConfig.Create(self);
   screenconfig:=TCCDConfig.Create(self);
@@ -2678,6 +2680,7 @@ procedure Tf_main.FormShow(Sender: TObject);
 var str,fn,buf: string;
     i,i1,i2: integer;
     usecursor: boolean;
+    ra,de,ph,il: double;
 begin
 
   SetDevices;
@@ -2861,7 +2864,6 @@ begin
   f_polaralign2.onClose:=@Polaralign2Close;
 
   f_findercalibration.preview:=f_preview;
-
   StartupTimer.Enabled:=true;
 end;
 
@@ -4882,6 +4884,7 @@ begin
   ObsLatitude:=config.GetValue('/Info/ObservatoryLatitude',0.0);
   ObsLongitude:=config.GetValue('/Info/ObservatoryLongitude',0.0);
   ObsElevation:=config.GetValue('/Info/ObservatoryElevation',0.0);
+  InitObservatory;
   BayerColor:=config.GetValue('/Color/Bayer',false);
   oldbayer:=DefaultBayerMode;
   oldRed:=RedBalance;
@@ -5237,6 +5240,7 @@ begin
   end;
   SlewPrecision:=config.GetValue('/PrecSlew/Precision',SlewPrecision);
   RecenterTargetDistance:=config.GetValue('/PrecSlew/RecenterTargetDistance',RecenterTargetDistance);
+  MinimumMoonDistance:=config.GetValue('/Sequence/MinimumMoonDistance',MinimumMoonDistance);
   if (autoguider<>nil)and(autoguider.State<>GUIDER_DISCONNECTED) then autoguider.SettleTolerance(SettlePixel,SettleMinTime, SettleMaxTime);
   if refmask then SetRefImage;
   if f_focuser<>nil then f_focuser.BtnVcurve.Visible:=(AutoFocusMode=afVcurve);
@@ -8433,6 +8437,7 @@ case mount.Status of
                            config.SetValue('/Info/ObservatoryLatitude',ObsLatitude);
                            config.SetValue('/Info/ObservatoryLongitude',ObsLongitude);
                            config.SetValue('/Info/ObservatoryElevation',ObsElevation);
+                           InitObservatory;
                            NewMessage(rsSiteSetFromT, 3);
                          end;
                       end;
@@ -9732,6 +9737,7 @@ begin
    f_option.FinderSolver.ItemIndex:=config.GetValue('/Astrometry/FinderSolver',ResolverAstap);
    f_option.UseFinderSolverChange(nil);
    f_option.RecenterTargetDistance.value:=config.GetValue('/PrecSlew/RecenterTargetDistance',RecenterTargetDistance);
+   f_option.MinimumMoonDistance.Value:=round(config.GetValue('/Sequence/MinimumMoonDistance',MinimumMoonDistance));
    if (mount.Status=devConnected)and(mount.PierSide>=pierUnknown) then begin
       f_option.Panel13.Visible:=true;
       f_option.MeridianWarning.caption:='Mount is not reporting pier side, meridian process is unreliable.'
@@ -10162,6 +10168,7 @@ begin
      config.SetValue('/PrecSlew/Delay',f_option.SlewDelay.Value);
      config.SetValue('/PrecSlew/Filter',f_option.SlewFilter.ItemIndex);
      config.SetValue('/PrecSlew/RecenterTargetDistance',f_option.RecenterTargetDistance.value);
+     config.SetValue('/Sequence/MinimumMoonDistance',f_option.MinimumMoonDistance.Value);
      config.SetValue('/Astrometry/FinderFocalLength',f_option.FinderFocalLength.Value);
      config.SetValue('/Astrometry/UseFinderSolver',f_option.UseFinderSolver.Checked);
      config.SetValue('/Astrometry/FinderSolver',f_option.FinderSolver.ItemIndex);

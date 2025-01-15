@@ -34,7 +34,10 @@ type
   { Tf_option }
 
   Tf_option = class(TForm)
+    GroupBoxMoon: TGroupBox;
     GuiderAutofocus: TCheckBox;
+    Label185: TLabel;
+    Label186: TLabel;
     PanelExposure: TPanel;
     RemoveSpace: TCheckBox;
     ColorizeSpectra: TCheckBox;
@@ -56,6 +59,7 @@ type
     AstOnlineKey: TEdit;
     AutofocusMultiStarCenterPct: TComboBox;
     cbObsWeather: TCheckBox;
+    MinimumMoonDistance: TSpinEditEx;
     StackRotation: TCheckBox;
     Label182: TLabel;
     Label183: TLabel;
@@ -1198,6 +1202,9 @@ begin
   Label130.Caption:=rsRecenterIfTh;
   Label131.Caption:=rsArcmin;
   Label149.Caption:=rsLimitedTo15x;
+  GroupBoxMoon.Caption:=rsMoonAvoidanc;
+  Label185.Caption:=rsMinimumDista;
+  Label186.Caption:=rsDegree;
   GroupBoxFocus.Caption:=rsPeriodicAuto;
   Label148.Caption:=rsThisOptionsA;
   GroupBox16.Caption := rsFocuserTempe3;

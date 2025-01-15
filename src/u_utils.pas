@@ -24,7 +24,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 {$mode delphi}{$H+}
 interface
 
-uses u_global, u_refraction,
+uses u_global, u_refraction, u_ephem,
      {$ifdef mswindows}
        Windows, registry, ActiveX, comobj, variants,
      {$endif}
@@ -84,9 +84,12 @@ function isodate(a,m,d : integer) : string;
 function DateIso2DateTime(dt: string): double;
 function jddate(jd: double) : string;
 PROCEDURE PrecessionFK5(ti,tf : double; VAR ari,dei : double);  // Lieske 77
+procedure PrecessionEcl(ti, tf: double; var l, b: double);
 function PositionAngle(ac, dc, ar, de: double): double;
 function AngularDistance(ar1,de1,ar2,de2 : Double) : Double;
 function PlaneDistance(x1,y1,x2,y2: double): double;
+procedure InitObservatory;
+procedure Paralaxe(SideralTime,dist,ar1,de1 : double; var ar,de,q: double; jdcoord,jdnow: double);
 function SidTim(jd0,ut,long : double; eqeq: double=0): double;
 Function CurrentSidTim: double;
 Function SidTimT(t:TDateTime): double;
@@ -108,7 +111,6 @@ procedure CCD2Screen(x,y: integer; FlipHorz,FlipVert: boolean; vflip:boolean; ou
 procedure CircleIntersect(x0,y0,r,x1,y1: integer; out xr,yr: integer);
 procedure ResetTrackBar(tb:TTrackBar);
 procedure LeastSquares(data: array of TDouble2; out a,b,r: double);
-procedure Sun(jdn:double; out ra,de,l:double);
 procedure Time_Alt(jd, ar, de, h: double; out hp1, hp2: double);
 function TwilightAstro(dt:TDateTime; out HMorning,HEvening:double):boolean;
 procedure SecondsToWait(tnow,dt: TDateTime; forcenextday: boolean; out wt: Integer; out nextday:boolean);
@@ -116,7 +118,6 @@ procedure LoadHorizon(fname: string);
 function ObjTransit(ra,de: double; out ht:double; out i:integer):boolean;
 function ObjRise(ra,de: double; out hr:double; out i:integer):boolean;
 function ObjSet(ra,de: double; out hs:double; out i:integer):boolean;
-procedure Moon(jdn:double; out ra,de,phase,illum:double);
 function  MoonRiseSet(dt:TDateTime; out moonrise,moonset:double):boolean;
 function  DarkNight(t:Tdatetime): boolean;
 function InTimeInterval(t,begint, endt: double; st: double=0.5): integer;
@@ -146,7 +147,7 @@ procedure nutationme(j: double; var nutl, nuto: double);
 procedure aberrationme(j: double; var abe, abp: double);
 procedure apparent_equatorial(var ra, de: double);
 procedure apparent_equatorialV(var p1: coordvector);
-procedure mean_equatorial(var ra, de: double);
+procedure mean_equatorial(var ra, de: double;doaberration:boolean=true;donutation:boolean=true);
 procedure J2000ToApparent(var ra, de: double);
 procedure ApparentToJ2000(var ra, de: double);
 procedure MountToLocal(mountjd:double; var ra, de: double);
@@ -174,7 +175,7 @@ function ValidateCustomHeader(key:string): boolean;
 function pseudomodal(f:Tform):TModalResult;
 function checkconnection(host,port: string):boolean;
 procedure spcolor(w: double; out red,green,blue:integer);
-
+function SimpleDeltaT(dt: Tdatetime): double;
 
 implementation
 
@@ -1416,6 +1417,26 @@ var i1,i2,i3,i4,i5,i6,i7 : double ;
       ARI:=RMOD(ARI+pi2,pi2);
    END  ;
 
+procedure PrecessionEcl(ti, tf: double; var l, b: double);
+var
+  i1, i2, i3, i4, i5, i6, i7, i8: double;
+begin
+  i1 := (ti - 2451545.0) / 36525;
+  i2 := (tf - ti) / 36525;
+  i3 := deg2rad * (((47.0029 - 0.06603 * i1 + 0.000598 * i1 * i1) *
+    i2 + (-0.03302 + 0.000598 * i1) * i2 * i2 + 0.000060 * i2 * i2 * i2) / 3600);
+  i4 := deg2rad * ((174.876384 * 3600 + 3289.4789 * i1 + 0.60622 *
+    i1 * i1 - (869.8089 + 0.50491 * i1) * i2 + 0.03536 * i2 * i2) / 3600);
+  i5 := deg2rad * (((5029.0966 + 2.22226 * i1 - 0.000042 * i1 * i1) *
+    i2 + (1.11113 - 0.000042 * i1) * i2 * i2 - 0.000006 * i2 * i2 * i2) / 3600);
+  i6 := cos(i3) * cos(b) * sin(i4 - l) - sin(i3) * sin(b);
+  i7 := cos(b) * cos(i4 - l);
+  i8 := cos(i3) * sin(b) + sin(i3) * cos(b) * sin(i4 - l);
+  l := i5 + i4 - arctan2(i6, i7);
+  b := arcsin(i8);
+  l := rmod(l + pi2, pi2);
+end;
+
 function PositionAngle(ac, dc, ar, de: double): double;
 var
   hh, s1, s2, s3, c1, c2, c3: extended;
@@ -1454,6 +1475,39 @@ try
 except
   result:=0;
 end;
+end;
+
+procedure InitObservatory;
+var
+  u, p: double;
+const
+  ratio = 0.99664719;
+  H0    = 6378140.0;
+begin
+  p := degtorad(ObsLatitude);
+  u := arctan(ratio * tan(p));
+  ObsRoSinPhi := ratio * sin(u) + (ObsElevation / H0) * sin(p);
+  ObsRoCosPhi := cos(u) + (ObsElevation / H0) * cos(p);
+end;
+
+procedure Paralaxe(SideralTime,dist,ar1,de1 : double; var ar,de,q: double; jdcoord,jdnow: double);
+var
+   sinpi,H,a,b,d : double;
+const
+     desinpi = 4.26345151e-5;
+begin
+// AR, DE may be standard epoch but paralaxe is to be computed with coordinates of the date.
+PrecessionFK5(jdcoord,jdnow,ar1,de1);
+H:=(SideralTime-ar1);
+//rde:=de1;
+sinpi:=desinpi/dist;
+a := cos(de1)*sin(H);
+b := cos(de1)*cos(H)-ObsRoCosPhi*sinpi;
+d := sin(de1)-ObsRoSinPhi*sinpi;
+q := sqrt(a*a+b*b+d*d);
+ar:=SideralTime-arctan2(a,b);
+de:=arcsin(d/q);
+PrecessionFK5(jdnow,jdcoord,ar,de);
 end;
 
 function SidTim(jd0,ut,long : double; eqeq: double=0): double;
@@ -1804,67 +1858,6 @@ begin
  end;
 end;
 
-Procedure Sun(jdn:double; out ra,de,l:double);
-var d,ecl,q,g,r,xs,ys,xe,ye,ze: double;
-begin
-//Approximate Sun position
-d :=jdn-jd2000;
-// obliquity of the ecliptic
-ecl := deg2rad * (23.439 - 0.00000036 * d);
-// mean anomaly
-g := deg2rad * rmod(357.529 + 0.98560028 * d,360);
-// mean longitude
-q := deg2rad * rmod(280.459 + 0.98564736 * d,360);
-// geocentric apparent ecliptic longitude
-l := q + deg2rad * (1.915 * sin(g) + 0.020 * sin(2*g));
-// Sun distance
-r := 1.00014 - 0.01671 * cos(g) - 0.00014 * cos(2*g);
-// ecliptic rectangular geocentric coordinates
-xs := r * cos(l);
-ys := r * sin(l);
-// equatorial rectangular geocentric coordinates
-xe := xs;
-ye := ys * cos(ecl);
-ze := ys * sin(ecl);
-// Sun Right Ascension and Declination
-ra := arctan2( ye, xe );
-de := arctan2( ze, sqrt(xe*xe+ye*ye) );
-end;
-
-procedure Moon(jdn:double; out ra,de,phase,illum:double);
-var d,LE,M,F,l,b,e : double;
-    t,sm,mm,md: double;
-begin
-//Very approximate Moon position
-d :=jdn-jd2000;
-// ecliptic longitude
-LE := deg2rad * (218.316 + 13.176396 * d - 3.63258E-8 * d*d);
-// mean anomaly
-M := deg2rad * (134.963 + 13.064993 * d + 2.46324E-7 * d*d);
-// mean distance
-F := deg2rad * (93.272 + 13.229350 * d - 9.31666E-8 * d*d);
-// longitude
-l := LE + deg2rad * 6.289 * sin(M);
-// latitude
-b := deg2rad * 5.128 * sin(F);
-// obliquity of the Earth
-e := deg2rad * (23.4397 - 0.00000036 * d);
-// Moon Right Ascension and Declination
-ra:=arctan2(sin(l) * cos(e) - tan(b) * sin(e), cos(l));
-de:=sin(sin(b) * cos(e) + cos(b) * sin(e) * sin(l));
-ra:=rmod(ra+pi2,pi2);
-// phase
-t:=(jdn-2415020)/36525;  { meeus 15.1 }
-sm:=degtorad(358.475833+35999.0498*t-0.000150*t*t-0.0000033*t*t*t);  {meeus 30. }
-mm:=degtorad(296.104608+477198.8491*t+0.009192*t*t+0.0000144*t*t*t);
-md:=rmod(350.737486+445267.1142*t-0.001436*t*t+0.0000019*t*t*t,360);
-phase:=180-md ;     { meeus 31.4 }
-md:=degtorad(md);
-phase:=rmod(phase-6.289*sin(mm)+2.100*sin(sm)-1.274*sin(2*md-mm)-0.658*sin(2*md)-0.214*sin(2*mm)-0.112*sin(md)+360,360);
-illum:=(1+cos(degtorad(phase)))/2;
-end;
-
-
 procedure Time_Alt(jd, ar, de, h: double; out hp1, hp2: double);
 (*
    jd       :  date julienne desiree a 0H TU
@@ -1906,12 +1899,12 @@ begin
 end;
 
 function TwilightAstro(dt:TDateTime; out HMorning,HEvening:double):boolean;
-var jd0,sra,sde,sl,hp1,hp2: double;
+var jd0,sra,sde,hp1,hp2: double;
     Year, Month, Day: Word;
 begin
  DecodeDate(dt, Year, Month, Day);
  jd0:=jd(Year,Month,Day,0);
- Sun(jd0+0.5,sra,sde,sl);
+ Sun(jd0+0.5,sra,sde);
  Time_Alt(jd0, sra, sde, -18, hp1, hp2);
  if hp1<-90 then      // polar night
  begin
@@ -2267,6 +2260,7 @@ begin
   end else begin
     jdtoday:=jdnow;
   end;
+  deltaT:=SimpleDeltaT(now);
   // nutation
   nutationme(jdtoday,nutl,nuto);
   // Obliquity of the ecliptic
@@ -2283,7 +2277,8 @@ begin
   NutMAT[3, 2] := nuto;
   NutMAT[3, 3] := 1;
   // sun longitude
-  Sun(jdtoday,sra,sde,sunl);
+  SunEcl(jdtoday,sunl,sunb);
+  PrecessionEcl(jd2000, jdtoday, sunl, sunb);
   // aberration
   aberrationMe(jdtoday, abe, abp);
 
@@ -2509,7 +2504,7 @@ begin
   ra := rmod(ra + pi2, pi2);
 end;
 
-procedure mean_equatorial(var ra, de: double);
+procedure mean_equatorial(var ra, de: double;doaberration:boolean=true;donutation:boolean=true);
 var
   da, dd: double;
   cra, sra, cde, sde, ce, se, te, cp, sp, cls, sls: extended;
@@ -2519,7 +2514,7 @@ begin
   // simplified version without aberration relativistics term and without sun light deflection
   sofa_S2C(ra, de, p1);
   //aberration
-  if (abp <> 0) or (abe <> 0) then
+  if doaberration and ((abp <> 0) or (abe <> 0)) then
   begin
       sofa_C2S(p1, ra, de);
       //meeus91 22.3
@@ -2538,7 +2533,7 @@ begin
       sofa_S2C(ra, de, p1);
   end;
   // nutation
-  if (nutl <> 0) or (nuto <> 0) then
+  if donutation and ((nutl <> 0) or (nuto <> 0)) then
   begin
     // rotate using transposed nutation matrix
     sofa_TR(NutMAT, NutMATR);
@@ -3158,11 +3153,11 @@ begin
 end;
 
 function DarkNight(t:Tdatetime): boolean;
-var st,jdn,ra,de,l,phase,illum,a,h: double;
+var st,jdn,ra,de,phase,illum,a,h: double;
 begin
   st:=SidTimT(t);
   jdn:=DateTimetoJD(t);
-  Sun(jdn,ra,de,l);
+  Sun(jdn,ra,de);
   Eq2Hz(st-ra,de,a,h) ;
   h:=rad2deg*h;
   // sun below astro-twilight
@@ -3803,6 +3798,31 @@ begin
    red := round(r * 255);
    green := round(g * 255);
    blue := round(b * 255);
+end;
+
+function SimpleDeltaT(dt: Tdatetime): double;
+var year,month,day: word;
+    y,u,t: double;
+begin
+  DecodeDate(dt,year,month,day);
+  y := year + (month - 1) / 12 + (day - 1) / 365.25;
+  case year of
+    2017..2025:
+    begin
+      Result := 69.18;
+    end;
+    2026..2049:
+    begin
+      t := y - 2000;
+      Result := (58.23 + t * (0.32217 + t * (0.005589)));
+    end;
+    2050..2149:
+    begin
+      u := (y - 1820) / 100;
+      t := 2150 - y;
+      Result := (-20 + 32 * u * u - 0.5788 * t);
+    end;
+  end;
 end;
 
 end.

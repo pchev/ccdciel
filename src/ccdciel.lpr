@@ -57,7 +57,7 @@ uses
   fu_switchpage, pu_newscript, pu_polaralign2, fu_internalguider,
   cu_autoguider_internal, pu_handpad, fu_finder, pu_findercalibration,
   fu_switch, pu_sensoranalysis, cu_onlinesearch, pu_onlineinfo,
-  pu_downloadscript, u_refraction, cu_waitthread, pu_autoexposurestep;
+  pu_downloadscript, u_refraction, cu_waitthread, pu_autoexposurestep, u_ephem;
 
 {$R *.res}
 

@@ -1602,6 +1602,10 @@ resourcestring
   rsDoNotStartIf = 'Do not start if it cannot be done completely';
   rsCannotStartS = 'Cannot start %s now';
   rsNotEnoughTim = 'not enough time to complete the %s plan before end time at %s';
+  rsConfigureThe = 'Configure the distance in Preferences / Sequences';
+  rsMoonAvoidanc = 'Moon avoidance';
+  rsMinimumDista = 'Minimum distance to the Moon';
+  rsTooCloseToTh = 'too close to the Moon';
 
 implementation
 

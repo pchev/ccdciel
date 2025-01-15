@@ -371,7 +371,7 @@
         <PackageName Value="LCL"/>
       </Item13>
     </RequiredPackages>
-    <Units Count="132">
+    <Units Count="133">
       <Unit0>
         <Filename Value="ccdciel.lpr"/>
         <IsPartOfProject Value="True"/>
@@ -1060,6 +1060,10 @@
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Form"/>
       </Unit131>
+      <Unit132>
+        <Filename Value="u_ephem.pas"/>
+        <IsPartOfProject Value="True"/>
+      </Unit132>
     </Units>
   </ProjectOptions>
   <CompilerOptions>

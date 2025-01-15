@@ -676,7 +676,7 @@ object f_EditTargets: Tf_EditTargets
           Height = 225
           Top = 26
           Width = 390
-          HorzScrollBar.Page = 359
+          HorzScrollBar.Page = 338
           VertScrollBar.Page = 225
           Align = alClient
           ClientHeight = 225
@@ -723,18 +723,18 @@ object f_EditTargets: Tf_EditTargets
             Left = 16
             Height = 22
             Top = 76
-            Width = 240
+            Width = 293
             BorderSpacing.Top = 2
-            Caption = 'Ignore if it cannot be done entirely'
+            Caption = 'Do not start if it cannot be done completely'
             OnChange = cbChange
             TabOrder = 13
           end
           object cbAstrometry: TCheckBox
-            AnchorSideTop.Control = cbFullOnly
+            AnchorSideTop.Control = cbMoonAvoidance
             AnchorSideTop.Side = asrBottom
             Left = 16
             Height = 22
-            Top = 100
+            Top = 124
             Width = 253
             BorderSpacing.Top = 2
             Caption = 'Use astrometry to refine the position'
@@ -746,7 +746,7 @@ object f_EditTargets: Tf_EditTargets
             AnchorSideTop.Side = asrBottom
             Left = 16
             Height = 22
-            Top = 124
+            Top = 148
             Width = 190
             BorderSpacing.Top = 2
             Caption = 'Stay in place for autofocus'
@@ -758,7 +758,7 @@ object f_EditTargets: Tf_EditTargets
             AnchorSideTop.Side = asrBottom
             Left = 16
             Height = 22
-            Top = 148
+            Top = 172
             Width = 251
             BorderSpacing.Top = 2
             Caption = 'Autofocus after temperature change'
@@ -770,7 +770,7 @@ object f_EditTargets: Tf_EditTargets
             AnchorSideTop.Side = asrBottom
             Left = 16
             Height = 22
-            Top = 172
+            Top = 196
             Width = 214
             BorderSpacing.Top = 2
             Caption = 'Autofocus after % change HFD'
@@ -782,7 +782,7 @@ object f_EditTargets: Tf_EditTargets
             AnchorSideTop.Side = asrBottom
             Left = 16
             Height = 22
-            Top = 196
+            Top = 220
             Width = 234
             BorderSpacing.Top = 2
             Caption = 'Update RA+Dec from Planetarium'
@@ -794,7 +794,7 @@ object f_EditTargets: Tf_EditTargets
             AnchorSideTop.Side = asrBottom
             Left = 16
             Height = 26
-            Top = 220
+            Top = 244
             Width = 322
             BorderSpacing.Top = 2
             BevelOuter = bvNone
@@ -817,7 +817,7 @@ object f_EditTargets: Tf_EditTargets
             Left = 16
             Height = 22
             Hint = 'This option is normally unchecked, use it only if you manage the pointing and autoguiding by script.'
-            Top = 246
+            Top = 270
             Width = 179
             Caption = 'Do not start autoguiding'
             OnChange = cbChange
@@ -828,7 +828,7 @@ object f_EditTargets: Tf_EditTargets
             AnchorSideTop.Side = asrBottom
             Left = 16
             Height = 22
-            Top = 270
+            Top = 294
             Width = 186
             BorderSpacing.Top = 2
             Caption = 'Run an initialization script'
@@ -840,7 +840,7 @@ object f_EditTargets: Tf_EditTargets
             AnchorSideTop.Side = asrBottom
             Left = 32
             Height = 101
-            Top = 294
+            Top = 318
             Width = 264
             BorderSpacing.Top = 2
             BevelOuter = bvNone
@@ -899,12 +899,24 @@ object f_EditTargets: Tf_EditTargets
             AnchorSideTop.Side = asrBottom
             Left = 16
             Height = 25
-            Top = 397
+            Top = 421
             Width = 267
             BorderSpacing.Top = 2
             Caption = 'btnApplyAll'
             OnClick = btnApplyAllClick
             TabOrder = 12
+          end
+          object cbMoonAvoidance: TCheckBox
+            AnchorSideTop.Control = cbFullOnly
+            AnchorSideTop.Side = asrBottom
+            Left = 16
+            Height = 22
+            Top = 100
+            Width = 129
+            BorderSpacing.Top = 2
+            Caption = 'Moon avoidance'
+            OnChange = cbChange
+            TabOrder = 14
           end
         end
       end

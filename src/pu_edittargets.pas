@@ -68,6 +68,7 @@ type
     cbMandatoryStartTime: TCheckBox;
     cbInitScript: TCheckBox;
     cbFullOnly: TCheckBox;
+    cbMoonAvoidance: TCheckBox;
     CheckBoxResetRepeat: TCheckBox;
     CheckBoxRestartStatus: TCheckBox;
     Label22: TLabel;
@@ -397,6 +398,7 @@ begin
   StepList.RowHeights[0]:=DoScaleY(40);
   keyboard1:=Tkeyboard1.Create(self);
   targetmsg.Caption:='';
+  lblName.Caption:='';
   LockTarget:=false;
   FTargetsRepeat:=1;
   LockStep:=false;
@@ -516,6 +518,7 @@ begin
   cbDarkNight.Caption := Format(rsDarkNight, [blank]);
   cbSkip.Caption := Format(rsDonTSwait+'', [blank]);
   cbFullOnly.Caption:=rsDoNotStartIf;
+  cbMoonAvoidance.Caption:=rsMoonAvoidanc;
   cbAstrometry.Caption := Format(rsUseAstromet2+'', [blank]);
   cbInplace.Caption := Format(rsStayInPlace2+'', [blank]);
   cbAutofocusTemp.Caption:=rsAutofocusAft2;
@@ -529,6 +532,7 @@ begin
   cbDarkNight.Hint:=rsWaitForFullD;
   cbSkip.Hint:=Format(rsDonTWaitForT, [crlf]);
   cbFullOnly.Hint:=rsSkipThisTarg;
+  cbMoonAvoidance.Hint:=rsConfigureThe;
   cbAstrometry.Hint:=rsUsePlateSolv;
   cbInplace.Hint:=Format(rsStayAtTheTar, [crlf, crlf]);
   cbNoAutoguidingChange.Hint:=rsThisOptionIs;
@@ -1293,6 +1297,7 @@ begin
   if t.inplaceautofocus then cbInplace.Checked:=true;
   if t.autofocustemp then cbAutofocusTemp.Checked:=true;
   if t.autofocushfd then cbAutofocusHFD.Checked:=true;
+  if t.moonavoidance then cbMoonAvoidance.Checked:=true;
   cbNoAutoguidingChange.Checked:=false;
   cbMandatoryStartTime.Checked:=false;
   TargetList.Objects[colseq,i]:=t;
@@ -1385,12 +1390,13 @@ end;
 
 procedure Tf_EditTargets.btnApplyAllClick(Sender: TObject);
 var i: integer;
-    dark,skip,fullonly,astp,afinp,aftemp,iniscr,afhfd,noguid,manst,updc,cbst: boolean;
+    dark,skip,fullonly,moonavoidance,astp,afinp,aftemp,iniscr,afhfd,noguid,manst,updc,cbst: boolean;
     scrn,scarg: string;
 begin
   dark   := cbDarkNight.Checked;
   skip   := cbSkip.Checked;
   fullonly:= cbFullOnly.Checked;
+  moonavoidance:= cbMoonAvoidance.Checked;
   astp   := cbAstrometry.Checked;
   afinp  := cbInplace.Checked;
   aftemp := cbAutofocusTemp.Checked;
@@ -1412,6 +1418,7 @@ begin
     cbDarkNight.Checked:=dark;
     cbSkip.Checked:=skip;
     cbFullOnly.Checked:=fullonly;
+    cbMoonAvoidance.Checked:=moonavoidance;
     cbAstrometry.Checked:=astp;
     cbInplace.Checked:=afinp;
     cbAutofocusTemp.Checked:=aftemp;
@@ -2073,6 +2080,7 @@ begin
     cbDarkNight.Checked:=false;
     cbSkip.Checked:=false;
     cbFullOnly.Checked:=false;
+    cbMoonAvoidance.Checked:=false;
     cbAstrometry.Checked:=false;
     cbInplace.Checked:=false;
     cbAutofocusTemp.Checked:=false;
@@ -2097,6 +2105,7 @@ begin
     cbDarkNight.Checked:=false;
     cbSkip.Checked:=false;
     cbFullOnly.Checked:=false;
+    cbMoonAvoidance.Checked:=false;
     cbAstrometry.Checked:=false;
     cbInplace.Checked:=false;
     cbAutofocusTemp.Checked:=false;
@@ -2128,6 +2137,7 @@ begin
     cbDarkNight.Checked:=false;
     cbSkip.Checked:=false;
     cbFullOnly.Checked:=false;
+    cbMoonAvoidance.Checked:=false;
     cbAstrometry.Checked:=false;
     cbInplace.Checked:=false;
     cbAutofocusTemp.Checked:=false;
@@ -2194,6 +2204,7 @@ begin
     cbDarkNight.Checked:=t.darknight;
     cbSkip.Checked:=t.skip;
     cbFullOnly.Checked:=t.fullonly;
+    cbMoonAvoidance.Checked:=t.moonavoidance;
     cbAstrometry.Checked:=t.astrometrypointing;
     cbInplace.Checked:=t.inplaceautofocus;
     cbAutofocusTemp.Checked:=t.autofocustemp;
@@ -2376,6 +2387,7 @@ begin
     t.darknight:=cbDarkNight.Checked;
     t.skip:=cbSkip.Checked;
     t.fullonly:=cbFullOnly.Checked;
+    t.moonavoidance:=cbMoonAvoidance.Checked;
     if TargetList.Cells[colpa,n]='-' then
       t.pa:=NullCoord
     else

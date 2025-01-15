@@ -264,6 +264,7 @@ const
   j2000 = ' (J2000)';
   jd2000 = 2451545.0;
   abek = secarc * 20.49552;  // aberration constant
+  km_au = 149597870.691;
   UnitRange:TNumRange = (min:1;max:1;step:1);
   NullRange:TNumRange = (min:0;max:0;step:0);
   NullCoord:double=-9999;
@@ -459,7 +460,7 @@ var
   MaxADU, ClippingOverflow, ClippingUnderflow: double;
   MsgHandle: THandle;
   LastPixelSize: double;
-  ObsLongitude, ObsLatitude, ObsElevation, ObsTimeZone, ObsRefA, ObsRefB: double;
+  ObsLongitude, ObsLatitude, ObsElevation, ObsTimeZone, DeltaT, ObsRefA, ObsRefB, ObsRoCosPhi, ObsRoSinPhi: double;
   ObsWeather: boolean;
   ObsTemperature, ObsPressure, ObsHumidity, ObsTlr: double;
   BayerColor: boolean;
@@ -517,7 +518,7 @@ var
   MeridianFlipping: boolean;
   horizonlist: Thorizonlist;
   HorizonMax, HorizonMin, ElevationMin: double;
-  jdtoday,nutl,nuto,abp,abe,ecl,sunl: double;
+  jdtoday,nutl,nuto,abp,abe,ecl,sunl,sunb: double;
   AzimuthOrigin: integer;
   NutMAT: rotmatrix;
   ConfigExpEarlyStart, EarlyNextExposure, SkipEarlyExposure, EarlyDither: boolean;
@@ -561,7 +562,7 @@ var
   DevInterfaceName: array[0..5] of string=('INDI','ASCOM','In camera','In mount','ASCOM Alpaca','Manual');
   ProtocolName: array[0..1] of string=('http:','https:');
   CheckRecenterTarget,NeedRecenterTarget,RecenteringTarget,CheckRecenterBusy: boolean;
-  AstrometryTimeout,RecenterTargetDistance,SlewPrecision: double;
+  AstrometryTimeout,RecenterTargetDistance,SlewPrecision,MinimumMoonDistance: double;
   PolarAlignmentOverlay, PolarAlignmentLock: boolean;
   PolarAlignmentStartx,PolarAlignmentStarty,PolarAlignmentEndx,PolarAlignmentEndy,PolarAlignmentAzx,PolarAlignmentAzy:double;
   PolarAlignmentOverlayOffsetX,PolarAlignmentOverlayOffsetY: double;

@@ -25,7 +25,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 interface
 
-uses u_global, cu_plan, u_utils, indiapi, pu_scriptengine, pu_pause, cu_rotator, cu_planetarium,
+uses u_global, cu_plan, u_utils, indiapi, pu_scriptengine, pu_pause, cu_rotator, cu_planetarium, u_ephem,
   fu_capture, fu_preview, fu_filterwheel, cu_mount, cu_camera, cu_autoguider, cu_autoguider_internal, cu_astrometry,
   fu_safety, fu_weather, cu_dome, u_ccdconfig, cu_sequencefile, fu_internalguider, math,
   u_translation, LazFileUtils, Controls, Dialogs, ExtCtrls,Classes, Forms, SysUtils;
@@ -36,7 +36,7 @@ type
               public
               objectname, planname, path, scriptargs, initscriptname, initscriptpath, initscriptargs: shortstring;
               starttime,endtime,startmeridian,endmeridian,ra,de,pa,magnitude,solarV,solarPA: double;
-              startrise,endset,darknight,skip,fullonly,mandatorystarttime,initscript: boolean;
+              startrise,endset,darknight,skip,fullonly,moonavoidance,mandatorystarttime,initscript: boolean;
               repeatcount,repeatdone: integer;
               FlatBinX,FlatBinY,FlatCount: integer;
               FlatGain,FlatOffset: integer;
@@ -630,6 +630,7 @@ begin
          (Ftargets[FCurrentTarget].endset<>Source.Ftargets[newcurTarget].endset) or
          (Ftargets[FCurrentTarget].darknight<>Source.Ftargets[newcurTarget].darknight) or
          (Ftargets[FCurrentTarget].fullonly<>Source.Ftargets[newcurTarget].fullonly) or
+         (Ftargets[FCurrentTarget].moonavoidance<>Source.Ftargets[newcurTarget].moonavoidance) or
          (Ftargets[FCurrentTarget].skip<>Source.Ftargets[newcurTarget].skip)
          then begin
            msg('Start or end conditions of active target are modified.', 9);
@@ -830,6 +831,7 @@ begin
        t.darknight:=FSequenceFile.Items.GetValue('/Targets/Target'+inttostr(i)+'/DarkNight',false);
        t.skip:=FSequenceFile.Items.GetValue('/Targets/Target'+inttostr(i)+'/Skip',false);
        t.fullonly:=FSequenceFile.Items.GetValue('/Targets/Target'+inttostr(i)+'/FullOnly',false);
+       t.moonavoidance:=FSequenceFile.Items.GetValue('/Targets/Target'+inttostr(i)+'/MoonAvoidance',false);
        x:=FSequenceFile.Items.GetValue('/Targets/Target'+inttostr(i)+'/RA','');
        if x='-' then
          t.ra:=NullCoord
@@ -1030,6 +1032,7 @@ try
       FSequenceFile.Items.SetValue('/Targets/Target'+inttostr(i)+'/DarkNight',t.darknight);
       FSequenceFile.Items.SetValue('/Targets/Target'+inttostr(i)+'/Skip',t.skip);
       FSequenceFile.Items.SetValue('/Targets/Target'+inttostr(i)+'/FullOnly',t.fullonly);
+      FSequenceFile.Items.SetValue('/Targets/Target'+inttostr(i)+'/MoonAvoidance',t.moonavoidance);
       FSequenceFile.Items.SetValue('/Targets/Target'+inttostr(i)+'/RA',RAToStr(t.ra));
       FSequenceFile.Items.SetValue('/Targets/Target'+inttostr(i)+'/Dec',DEToStr(t.de));
       if t.pa=NullCoord then
@@ -1513,7 +1516,7 @@ end;
 function T_Targets.CheckStatus:boolean;
 var i,j,totalcount,donecount,totalspteps,donesteps,intime,rglobal,forceendtime,stw : integer;
     steptime,targettime,totaltime,pivot,stime,etime,ctime,hm,he,st,et: double;
-    sra,sde,sl,hp1,hp2,duskflats: double;
+    sra,sde,hp1,hp2,duskflats: double;
     saveSeqStart,saveSeqStartTwilight,saveSeqStop,saveSeqStopTwilight: boolean;
     tfuture,tdone,trunning,twok,dotarget,rfuture,nd,forceset,seqbreak,flatnow,duskflat: boolean;
     txt: string;
@@ -1547,7 +1550,7 @@ begin
      if (Targets[i].objectname=SkyFlatTxt)and(Targets[i].planname=FlatTimeName[0]) then begin
        // dusk skyflat require start time
        duskflat:=true;
-       Sun(jdtoday+0.5,sra,sde,sl);
+       Sun(jdtoday+0.5,sra,sde);
        Time_Alt(jdtoday, sra, sde, -2, hp1, hp2);
        if abs(hp2)<90 then begin
          duskflats:=trunc(stime)+rmod(hp2+ObsTimeZone+24,24)/24;
@@ -1573,7 +1576,7 @@ begin
      if (Targets[i].objectname=SkyFlatTxt)and(Targets[i].planname=FlatTimeName[0]) then begin
        // dusk skyflat require start time
        duskflat:=true;
-       Sun(jdtoday+0.5,sra,sde,sl);
+       Sun(jdtoday+0.5,sra,sde);
        Time_Alt(jdtoday, sra, sde, -2, hp1, hp2);
        if abs(hp2)<90 then
          duskflats:=rmod(hp2+ObsTimeZone+24,24)/24;
@@ -2311,6 +2314,7 @@ var t: TTarget;
     ok,wtok,nd:boolean;
     stw,i,intime: integer;
     st,newra,newde,newV,newPA,enddelay,chkendtime: double;
+    moonra,moonde,moonphase,moonillum,moondist: double;
     autofocusstart, astrometrypointing, isCalibrationTarget: boolean;
     skipmsg, buf: string;
 begin
@@ -2389,6 +2393,19 @@ begin
       SkipTarget:=true;
       result:=false;
       exit;
+    end;
+
+    // check moon distance
+    if t.moonavoidance and (t.ra<>NullCoord)and(t.de<>NullCoord) then begin
+      Moon(DateTimetoJD(now),moonra,moonde,moonphase,moonillum);
+      moondist:=rad2deg*AngularDistance(moonra,moonde,deg2rad*15*t.ra,deg2rad*t.de);
+      if moondist<MinimumMoonDistance then begin
+        SkipTarget:=true;
+        InitTargetError:=Format(rsSkipTarget, [t.objectname])+', '+rsTooCloseToTh+' ('+FormatFloat(f1, moondist)+'°)';
+        msg(InitTargetError, 3);
+        result:=false;
+        exit;
+      end;
     end;
 
     // let time for the first exposure to run
@@ -2704,7 +2721,7 @@ end;
 function T_Targets.InitSkyFlat: boolean;
 var wtok,nd,ForceNextStartTime:boolean;
     stw: integer;
-    sra,sde,sl,hp1,hp2: double;
+    sra,sde,hp1,hp2: double;
     flt,nextt: TTarget;
 begin
   result:=false;
@@ -2730,7 +2747,7 @@ begin
     else
       nextt:=nil;
     //Start when the Sun is 2 degree below horizon
-    Sun(jdtoday+0.5,sra,sde,sl);
+    Sun(jdtoday+0.5,sra,sde);
     Time_Alt(jdtoday, sra, sde, -2, hp1, hp2);
     if abs(hp2)<90 then
        flt.starttime:=rmod(hp2+ObsTimeZone+24,24)/24
@@ -2775,7 +2792,7 @@ begin
     FlatWaitDawn:=true;
     FlatWaitDusk:=false;
     //Start when the Sun is 16 degree below horizon
-    Sun(jdtoday+0.5,sra,sde,sl);
+    Sun(jdtoday+0.5,sra,sde);
     Time_Alt(jdtoday, sra, sde, -16, hp1, hp2);
     if abs(hp1)<90 then
        flt.starttime:=rmod(hp1+ObsTimeZone+24,24)/24
@@ -3280,6 +3297,7 @@ begin
   darknight:=false;
   skip:=false;
   fullonly:=false;
+  moonavoidance:=true;
 end;
 
 destructor TTarget.Destroy;
@@ -3339,6 +3357,7 @@ begin
   darknight:=Source.darknight;
   skip:=Source.skip;
   fullonly:=Source.fullonly;
+  moonavoidance:=Source.moonavoidance;
 end;
 
 function TTarget.previewexposure_str: string;

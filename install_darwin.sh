@@ -22,6 +22,7 @@ install -v -m 644 system_integration/MacOSX/pkg/ccdciel.app/Contents/Resources/c
 
 install -v -m 755 library/wcs/libccdcielwcs.dylib  $destdir/libccdcielwcs.dylib
 install -v -m 755 library/raw/libpasraw.dylib  $destdir/libpasraw.dylib
+install -v -m 755 library/plan404/libplan404.dylib  $destdir/libplan404.dylib
 tar xvzf system_integration/MacOSX/data/cfitsio-mac.tgz -C $destdir
 tar xvzf system_integration/MacOSX/data/exiv2-mac.tgz -C $destdir/ccdciel.app/Contents/MacOS
 tar xvzf system_integration/MacOSX/data/openssl-mac.tgz -C $destdir/ccdciel.app/Contents/Frameworks
