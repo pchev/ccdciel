@@ -2381,7 +2381,7 @@ begin
     end;
     if (p<>nil)and (p.Count>0) then begin
       if t.fullonly then
-        enddelay:=t.totaltime/3600/24   // full target estimated time
+        enddelay:=(t.totaltime+300)/3600/24   // full target estimated time + 5 minutes for security
       else
         enddelay:=(p.Steps[0].exposure*p.Steps[0].stackcount+180)/3600/24  // first exposure time + 3 minutes for telescope pointing, in days
     end
