@@ -676,7 +676,7 @@ object f_EditTargets: Tf_EditTargets
           Height = 225
           Top = 26
           Width = 390
-          HorzScrollBar.Page = 338
+          HorzScrollBar.Page = 359
           VertScrollBar.Page = 225
           Align = alClient
           ClientHeight = 225
@@ -2082,6 +2082,14 @@ object f_EditTargets: Tf_EditTargets
     end
     object MenuMagnitude: TMenuItem
       Caption = 'Magnitude'
+      object MenuPlanetariumMagn: TMenuItem
+        Caption = 'MenuPlanetariumMagn'
+        OnClick = MenuPlanetariumMagnClick
+      end
+      object MenuPlanetariumMagnAll: TMenuItem
+        Caption = 'MenuPlanetariumMagnAll'
+        OnClick = MenuPlanetariumMagnAllClick
+      end
       object MenuOnlineMagn: TMenuItem
         Caption = 'MenuOnlineMagn'
         OnClick = MenuOnlineMagnClick

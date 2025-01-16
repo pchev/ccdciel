@@ -1606,6 +1606,7 @@ resourcestring
   rsMoonAvoidanc = 'Moon avoidance';
   rsMinimumDista = 'Minimum distance to the Moon';
   rsTooCloseToTh = 'too close to the Moon';
+  rsPlanetariumF = 'Planetarium for all targets';
 
 implementation
 

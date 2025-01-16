@@ -77,6 +77,8 @@ type
     MenuAddScriptStep: TMenuItem;
     MenuAddSwitchStep: TMenuItem;
     MenuInsertOnline: TMenuItem;
+    MenuPlanetariumMagn: TMenuItem;
+    MenuPlanetariumMagnAll: TMenuItem;
     MenuOnlineMagn: TMenuItem;
     MenuOnlineMagnAll: TMenuItem;
     MenuMagnitude: TMenuItem;
@@ -232,6 +234,7 @@ type
     procedure BtnInsertPopup(Sender: TObject);
     procedure BtnInsertPlanetariumClick(Sender: TObject);
     procedure BtnOptionsPopup(Sender: TObject);
+    procedure MenuPlanetariumMagnAllClick(Sender: TObject);
     procedure BtnPlanetariumCoordClick(Sender: TObject);
     procedure BtnCurrentCoordClick(Sender: TObject);
     procedure BtnDeleteTemplateClick(Sender: TObject);
@@ -272,6 +275,7 @@ type
     procedure MenuOnlineCoordClick(Sender: TObject);
     procedure MenuOnlineMagnAllClick(Sender: TObject);
     procedure MenuOnlineMagnClick(Sender: TObject);
+    procedure MenuPlanetariumMagnClick(Sender: TObject);
     procedure MenuSwitchClick(Sender: TObject);
     procedure PointCoordChange(Sender: TObject);
     procedure RepeatCountListChange(Sender: TObject);
@@ -562,6 +566,8 @@ begin
   MenuImgCoord.Caption := rsCurrentImage;
   MenuImgRot.Caption := rsCurrentImage;
   MenuMagnitude.Caption:=rsMagnitude;
+  MenuPlanetariumMagn.Caption:=rsPlanetarium;
+  MenuPlanetariumMagnAll.Caption:=rsPlanetariumF;
   MenuOnlineMagn.Caption:=rsSearchOnline;
   MenuOnlineMagnAll.Caption:=rsOnlineForAll;
   Label9.Caption:=rsSwitchConnec;
@@ -1880,9 +1886,57 @@ begin
   ModalResult:=mrCancel;
 end;
 
+procedure Tf_EditTargets.MenuPlanetariumMagnClick(Sender: TObject);
+var i : integer;
+    sra,sde,v_solar,vpa_solar: double;
+begin
+  if (f_planetariuminfo.planetarium=nil) or (not f_planetariuminfo.planetarium.Connected) then begin
+    ShowMessage(rsPleaseConnec);
+    exit;
+  end;
+  i:=TargetList.Row;
+  if f_planetariuminfo.planetarium.Search(trim(TargetList.Cells[colname,i]),sra,sde,v_solar,vpa_solar) then begin
+     if f_planetariuminfo.planetarium.Magnitude<>NullCoord then begin
+       TargetList.Cells[colmagn,i]:=FormatFloat(f2,f_planetariuminfo.planetarium.Magnitude);
+       TargetChange(nil);
+       ShowPlan;
+     end;
+  end;
+end;
+
+procedure Tf_EditTargets.MenuPlanetariumMagnAllClick(Sender: TObject);
+var i : integer;
+    sra,sde,v_solar,vpa_solar: double;
+begin
+  if (f_planetariuminfo.planetarium=nil) or (not f_planetariuminfo.planetarium.Connected) then begin
+    ShowMessage(rsPleaseConnec);
+    exit;
+  end;
+  try
+  screen.Cursor:=crHourGlass;
+  for i:=1 to TargetList.RowCount-1 do begin
+    TargetList.Row:=i;
+    if f_planetariuminfo.planetarium.Search(trim(TargetList.Cells[colname,i]),sra,sde,v_solar,vpa_solar) then begin
+       if f_planetariuminfo.planetarium.Magnitude<>NullCoord then begin
+         TargetList.Cells[colmagn,i]:=FormatFloat(f2,f_planetariuminfo.planetarium.Magnitude);
+         TargetChange(nil);
+         ShowPlan;
+       end;
+    end;
+    Application.ProcessMessages;
+  end;
+  finally
+    screen.Cursor:=crDefault;
+  end;
+end;
+
 procedure Tf_EditTargets.BtnPlanetariumCoordClick(Sender: TObject);
 var n: integer;
 begin
+  if (f_planetariuminfo.planetarium=nil) or (not f_planetariuminfo.planetarium.Connected) then begin
+    ShowMessage(rsPleaseConnec);
+    exit;
+  end;
   n:=TargetList.Row;
   f_planetariuminfo.Ra.Text  := TargetList.Cells[colra,n];
   f_planetariuminfo.De.Text  := TargetList.Cells[coldec,n];

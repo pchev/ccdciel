@@ -394,6 +394,13 @@ begin
              sde:=rad2deg*sde;
            end;
          end;
+         if (p.Count>=7)and(copy(p[6],1,1)='m') then begin
+            i:=pos(':',p[6]);
+            if i<=0 then i:=1;
+            Fmagn:=StrToFloatDef(trim(copy(p[6],i+1,99)),NullCoord);
+         end
+         else
+            Fmagn:=NullCoord;
          for i:=0 to p.count-1 do begin
            if copy(p[i],1,11)='MotionArcm:' then v_solar:=StrToFloatDef(copy(p[i],12,99),NullCoord);
            if copy(p[i],1,9)='MotionPA:' then vpa_solar:=StrToFloatDef(copy(p[i],10,99),NullCoord);
