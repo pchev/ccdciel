@@ -185,7 +185,7 @@ begin
 
   result:=false;
 
-  cat:='SN';   // Simbad, then NED
+  cat:='~SNVA';   // Simbad, then NED
   num:=n;
 
   url:='https://cds.unistra.fr/cgi-bin/nph-sesame';
