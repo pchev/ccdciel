@@ -1,0 +1,51 @@
+# Configuration file to process spectra with specinti
+# ( https://solex.astrosurf.com/specinti1_fr.html )
+#
+# The principle is to process the spectra one by one in background
+# as soon the capture is complete by running the script
+# specinti_process as the last sequence step for each object.
+#
+# It is mandatory to first create a valid configuration file by
+# running the GUI version of specinti.
+# Complete the following settings after you are ready and familiar
+# with specinti operation.
+#
+# On Linux the script use the Windows version with wine,
+# be sure to install the 64bit version of wine.
+#
+
+[settings]
+
+# the base directory for specinti processing from ccdciel
+base_directory = C:\Users\user\Documents\specinti_ccdciel
+#base_directory = /home/user/Documents/specinti_ccdciel
+
+# the directory where specinti.exe is installed
+specinti_progdir = C:\Users\user\Documents\specinti
+#specinti_progdir = /home/user/Documents/specinti
+
+# the specinti program name, the no GUI batch version, not the editor
+specinti_prog = specinti.exe
+
+# the configuration file, must be in directory specinti_progdir/_configuration/
+specinti_config = ccdciel
+
+# Offset image prefix
+specinti_offset = Bias-
+
+# Dark image prefix
+specinti_dark = Dark-
+
+# Flat image prefix
+specinti_flat = tungsten-
+
+# postfix for calibration files
+specinti_calib_postfix = _neon-
+
+# the wine prefix to use on Linux, must be a 64bit prefix
+#wine_prefix = /home/user/.wine
+
+# Linux terminal to use, run in background if not set
+#linux_terminal = xterm -e
+#linux_terminal = gnome-terminal --
+#linux_terminal = konsole -e

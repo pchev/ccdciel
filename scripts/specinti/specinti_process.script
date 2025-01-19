@@ -1,0 +1,186 @@
+# Python program for CCDciel
+# see: https://www.ap-i.net/ccdciel/en/documentation/jsonrpc_reference
+#
+# Use specinti_config for any settings
+#
+
+from ccdciel import ccdciel
+import sys
+import os
+import platform
+import glob
+import shutil
+import subprocess
+from configparser import ConfigParser
+from datetime import datetime
+
+# read the configuration file
+scriptdir = os.path.dirname(os.path.abspath(sys.argv[0]))
+parser = ConfigParser()
+parser.read(os.path.join(scriptdir,'specinti_config.script')) 
+specinti_progdir = parser['settings']['specinti_progdir']
+specinti_prog    = parser['settings']['specinti_prog']
+specinti_config  = parser['settings']['specinti_config'] 
+specinti_calib_postfix = parser['settings']['specinti_calib_postfix']
+specinti_flat    = parser['settings']['specinti_flat']
+specinti_dark    = parser['settings']['specinti_dark']
+specinti_offset  = parser['settings']['specinti_offset']
+base_directory   = parser['settings']['base_directory']  
+wine_prefix      = parser['settings'].get('wine_prefix','')
+linux_terminal   = parser['settings'].get('linux_terminal','')  
+
+if base_directory == '':
+   print('Please set the base directory for processing')
+   sys.exit(1)   
+
+# set other directories under base_directory
+work=os.path.join(base_directory,'work')              # temporay directory to process the files, everything will be deleted!
+resp=os.path.join(base_directory,'response')          # reference files, instrumental response
+dark=os.path.join(base_directory,'dark')              # bias and dark files
+flat=os.path.join(base_directory,'flat')              # tungsten flat files
+result=os.path.join(base_directory,'result')          # directory to store the processed spectra
+archive=os.path.join(base_directory,'archive')        # directory to archive the already processed capture
+logfile=os.path.join(base_directory,'processing.log') # a summary log of the processed object
+
+# check all the directories exist
+def CheckDirectory(path):
+    if not os.path.exists(path):
+        print('Create directory '+path)
+        os.makedirs(path)
+
+CheckDirectory(base_directory)
+CheckDirectory(work)
+CheckDirectory(resp)
+CheckDirectory(dark)
+CheckDirectory(flat)
+CheckDirectory(result)
+CheckDirectory(archive)
+
+# check mandatory directories are not empty
+def IsDirectoryEmpty(path):
+    with os.scandir(path) as list:
+       if any(list):
+          return False
+       else:
+          return True 
+
+if IsDirectoryEmpty(resp) or IsDirectoryEmpty(dark) or IsDirectoryEmpty(flat):
+     print('Please copy response,dark,offset,flat files to the corresponding directories')
+     sys.exit(1) 
+    
+# ccdciel capture directory with object and neon images
+capturedir=ccdciel('CaptureDir')['result']
+if capturedir == '':
+   print('Capture directory not set in CCDciel')
+   sys.exit(1)   
+
+# current object name to process
+objname=ccdciel('Capture_getobjectname')['result']
+objfile=objname.replace(' ','')
+if objfile == '':
+   print('Not object name set in CCDciel Capture tab')
+   sys.exit(1)   
+
+print('Process '+objname)
+
+# cleanup work dir
+files = glob.glob((os.path.join(work,'*')))
+for f in files:
+    os.remove(f)
+
+# copy capture to work dir
+files = glob.glob((os.path.join(capturedir,objfile+'*')))
+for f in files:
+    shutil.copy(f, work)
+
+# copy instrumental response to work dir
+files = glob.glob((os.path.join(resp,'*')))
+for f in files:
+    shutil.copy(f, work)
+
+# copy dark,offset to work dir
+files = glob.glob((os.path.join(dark,'*')))
+for f in files:
+    shutil.copy(f, work)
+
+# copy flat to work dir
+files = glob.glob((os.path.join(flat,'*')))
+for f in files:
+    shutil.copy(f, work)
+
+# count files
+nobj=0
+ncal=0
+nflat=0
+ndark=0
+nbias=0
+files = glob.glob((os.path.join(work,'*')))
+for f in files:
+    if glob.fnmatch.fnmatch(f, '*'+objfile+'-*'):
+        nobj+=1
+    if glob.fnmatch.fnmatch(f, '*'+objfile+specinti_calib_postfix+'*'):
+        ncal+=1
+    if glob.fnmatch.fnmatch(f, '*'+specinti_flat+'*'):
+        nflat+=1
+    if glob.fnmatch.fnmatch(f, '*'+specinti_dark+'*'):
+        ndark+=1
+    if glob.fnmatch.fnmatch(f, '*'+specinti_offset+'*'):
+        nbias+=1
+
+if nobj == 0:
+   print('No file to process for '+objfile+' in '+capturedir)
+   sys.exit(1)   
+
+# archive by object name and date/time
+d = datetime.now().strftime("%Y%m%d_%H%M%S")
+archive=os.path.join(archive,objfile+'_'+d)
+CheckDirectory(archive)
+
+# make observation file
+with open(os.path.join(work,'obj.yaml'), 'w') as of:
+    of.write(objname+':\n')
+    of.write('- '+objname+'\n')
+    of.write('- '+objfile+'-\n')
+    of.write('- '+str(nobj)+'\n')
+    of.write('- '+objfile+specinti_calib_postfix+'\n')
+    of.write('- '+str(ncal)+'\n')
+    of.write('- '+specinti_flat+'\n')
+    of.write('- '+str(nflat)+'\n')
+    of.write('- '+specinti_dark+'\n')
+    of.write('- '+str(ndark)+'\n')
+    of.write('- '+specinti_offset+'\n')
+    of.write('- '+str(nbias)+'\n')
+    of.write('- None\n')
+    of.write('- 0\n')
+
+# Update configuration file for path and batch name
+f=os.path.join(specinti_progdir,'_configuration',specinti_config+'.yaml')
+with open(f, 'r', encoding = 'utf-8') as file :
+    buf = file.read()
+row = buf.split('\n')
+for i in range (len(row)):
+    if 'working_path:' in row[i] :
+       row[i]='working_path: ' + work
+    elif  'batch_name:' in row[i] :
+       row[i]='batch_name: ' +  'obj'
+buf = '\n'.join(row)
+with open(f , 'w', encoding = 'utf-8') as file:
+    file.write(buf)
+
+# run the script to call specinti and process the result
+if platform.system() == 'Windows' :
+    specinticmd=os.path.join(scriptdir,'specinti_process.cmd') 
+    subprocess.Popen(['start','/min','cmd.exe','/C',specinticmd, specinti_progdir, specinti_prog, specinti_config, objfile, work, capturedir, result, archive, logfile],shell=True)
+else:
+    specinticmd=os.path.join(scriptdir,'specinti_process.sh')
+    if linux_terminal == '':
+       subprocess.Popen(['/usr/bin/bash', specinticmd, specinti_progdir, specinti_prog, specinti_config, objfile, work, capturedir, result, archive, logfile, wine_prefix])
+    else:
+       term=linux_terminal.split(' ')
+       subprocess.Popen(term+['/usr/bin/bash', specinticmd, specinti_progdir, specinti_prog, specinti_config, objfile, work, capturedir, result, archive, logfile, wine_prefix])
+
+
+
+
+
+
