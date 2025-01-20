@@ -3828,7 +3828,7 @@ begin
     VK_F11: SwitchImageFullscreen;
   end;
  end
- else if Shift=[ssAlt] then begin
+ else if (Shift=[ssAlt])or(Shift=[ssCtrl]) then begin
   case Key of
     VK_W : if MultiCamera then begin
              MenuImageMultipanel.Checked:=not MenuImageMultipanel.Checked;
