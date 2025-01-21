@@ -2,10 +2,10 @@ object f_finder: Tf_finder
   Left = 0
   Height = 472
   Top = 0
-  Width = 243
+  Width = 280
   AutoSize = True
   ClientHeight = 472
-  ClientWidth = 243
+  ClientWidth = 280
   ParentFont = False
   TabOrder = 0
   DesignLeft = -1
@@ -14,7 +14,7 @@ object f_finder: Tf_finder
     Left = 0
     Height = 20
     Top = 0
-    Width = 243
+    Width = 280
     Align = alTop
     Alignment = taCenter
     AutoSize = False
@@ -30,22 +30,22 @@ object f_finder: Tf_finder
     Left = 0
     Height = 452
     Top = 20
-    Width = 243
+    Width = 280
     Align = alTop
     BevelOuter = bvNone
     ClientHeight = 452
-    ClientWidth = 243
+    ClientWidth = 280
     ParentFont = False
     TabOrder = 0
     object GroupBox1: TGroupBox
       Left = 0
       Height = 164
       Top = 120
-      Width = 243
+      Width = 280
       Align = alTop
       Caption = 'Target position in finder image'
       ClientHeight = 134
-      ClientWidth = 239
+      ClientWidth = 276
       TabOrder = 0
       object Label1: TLabel
         AnchorSideTop.Control = OffsetX
@@ -62,8 +62,9 @@ object f_finder: Tf_finder
         Height = 32
         Top = 8
         Width = 111
-        OnChange = OffsetXChange
+        MaxLength = 0
         TabOrder = 0
+        OnChange = OffsetXChange
       end
       object Label2: TLabel
         AnchorSideTop.Control = OffsetY
@@ -80,8 +81,9 @@ object f_finder: Tf_finder
         Height = 32
         Top = 40
         Width = 111
-        OnChange = OffsetYChange
+        MaxLength = 0
         TabOrder = 1
+        OnChange = OffsetYChange
       end
       object ButtonCalibrate: TButton
         Left = 7
@@ -108,11 +110,11 @@ object f_finder: Tf_finder
       Left = 0
       Height = 120
       Top = 0
-      Width = 243
+      Width = 280
       Align = alTop
       BevelOuter = bvNone
       ClientHeight = 120
-      ClientWidth = 243
+      ClientWidth = 280
       TabOrder = 1
       object BtnPreviewLoop: TButton
         Left = 8
@@ -139,10 +141,11 @@ object f_finder: Tf_finder
         Height = 32
         Top = 38
         Width = 69
+        MaxLength = 0
+        TabOrder = 1
         DecimalPlaces = 3
         MaxValue = 60
         MinValue = 0.001
-        TabOrder = 1
         Value = 1
       end
       object cbSaveImages: TCheckBox
@@ -165,12 +168,12 @@ object f_finder: Tf_finder
     object Panel8: TPanel
       Left = 0
       Height = 170
-      Top = 284
-      Width = 243
+      Top = 344
+      Width = 280
       Align = alTop
       BevelOuter = bvNone
       ClientHeight = 170
-      ClientWidth = 243
+      ClientWidth = 280
       TabOrder = 2
       object Label17: TLabel
         AnchorSideTop.Control = Gamma
@@ -312,21 +315,89 @@ object f_finder: Tf_finder
       Left = 0
       Height = 0
       Top = 452
-      Width = 243
+      Width = 280
       Align = alClient
       AutoSize = False
       ParentColor = False
       WordWrap = True
+    end
+    object PanelTemperature: TPanel
+      Left = 0
+      Height = 60
+      Top = 284
+      Width = 280
+      Align = alTop
+      BevelOuter = bvNone
+      ClientHeight = 60
+      ClientWidth = 280
+      ParentBackground = False
+      TabOrder = 3
+      object Label21: TLabel
+        AnchorSideTop.Control = Temperature
+        AnchorSideTop.Side = asrCenter
+        Left = 16
+        Height = 18
+        Top = 7
+        Width = 79
+        Caption = 'Temperature'
+        ParentColor = False
+      end
+      object LabelTemperature: TLabel
+        AnchorSideTop.Control = Temperature
+        AnchorSideTop.Side = asrCenter
+        Left = 109
+        Height = 18
+        Top = 7
+        Width = 8
+        Caption = '0'
+        ParentColor = False
+      end
+      object Temperature: TSpinEditEx
+        Left = 160
+        Height = 32
+        Top = 0
+        Width = 54
+        MaxLength = 0
+        TabOrder = 0
+        MaxValue = 99
+        MinValue = -99
+        NullValue = 0
+        Value = 0
+      end
+      object ButtonSetTemp: TButton
+        AnchorSideTop.Control = Temperature
+        AnchorSideTop.Side = asrCenter
+        Left = 217
+        Height = 25
+        Top = 4
+        Width = 52
+        Caption = 'Set'
+        OnClick = ButtonSetTempClick
+        TabOrder = 1
+      end
+      object Cooler: TCheckBox
+        AnchorSideLeft.Control = Temperature
+        AnchorSideTop.Control = Temperature
+        AnchorSideTop.Side = asrBottom
+        Left = 160
+        Height = 22
+        Top = 36
+        Width = 69
+        BorderSpacing.Top = 4
+        Caption = 'Cooler'
+        OnClick = CoolerClick
+        TabOrder = 2
+      end
     end
   end
   object Panel3: TPanel
     Left = 0
     Height = 50
     Top = 472
-    Width = 243
+    Width = 280
     Align = alTop
     ClientHeight = 50
-    ClientWidth = 243
+    ClientWidth = 280
     TabOrder = 1
     Visible = False
     object Button1: TButton

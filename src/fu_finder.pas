@@ -43,11 +43,16 @@ type
     Button1: TButton;
     ButtonImageCenter: TButton;
     ButtonCalibrate: TButton;
+    ButtonSetTemp: TButton;
     cbSaveImages: TCheckBox;
+    Cooler: TCheckBox;
+    Label21: TLabel;
     Label4: TLabel;
     LabelInfo: TLabel;
     LabelMsg: TLabel;
+    LabelTemperature: TLabel;
     Panel3: TPanel;
+    PanelTemperature: TPanel;
     PreviewExp: TFloatSpinEditEx;
     GroupBox1: TGroupBox;
     Label3: TLabel;
@@ -63,6 +68,7 @@ type
     Panel1: TPanel;
     Panel2: TPanel;
     Panel8: TPanel;
+    Temperature: TSpinEditEx;
     Title: TLabel;
     procedure BtnBullsEyeClick(Sender: TObject);
     procedure BtnPreviewLoopClick(Sender: TObject);
@@ -73,6 +79,8 @@ type
     procedure Button1Click(Sender: TObject);
     procedure ButtonCalibrateClick(Sender: TObject);
     procedure ButtonImageCenterClick(Sender: TObject);
+    procedure ButtonSetTempClick(Sender: TObject);
+    procedure CoolerClick(Sender: TObject);
     procedure GammaChange(Sender: TObject);
     procedure LuminosityChange(Sender: TObject);
     procedure OffsetXChange(Sender: TObject);
@@ -82,7 +90,7 @@ type
     FCamera: T_camera;
     FAstrometry: TAstrometry;
     FonShowMessage: TNotifyMsg;
-    FonRedraw: TNotifyEvent;
+    FonRedraw,FonSetTemperature,FonSetCooler: TNotifyEvent;
     FonConfigureFinder: TNotifyEvent;
     FDrawSettingChange,FBullsEye: boolean;
     LoopExp:double;
@@ -106,6 +114,8 @@ type
     property onShowMessage: TNotifyMsg read FonShowMessage write FonShowMessage;
     property onRedraw: TNotifyEvent read FonRedraw write FonRedraw;
     property onConfigureFinder: TNotifyEvent read FonConfigureFinder write FonConfigureFinder;
+    property onSetTemperature: TNotifyEvent read FonSetTemperature write FonSetTemperature;
+    property onSetCooler: TNotifyEvent read FonSetCooler write FonSetCooler;
   end;
 
 implementation
@@ -150,6 +160,9 @@ begin
   label18.Caption:=rsLuminosity;
   label19.Caption:=rsZoom;
   label4.Caption:=rsShowBullsEye;
+  label21.Caption:=rsTemperature;
+  ButtonSetTemp.Caption:=rsSet;
+  Cooler.Caption:=rsCooler;
 end;
 
 procedure Tf_finder.msg(txt:string; level: integer);
@@ -275,6 +288,16 @@ begin
     ShowCalibration;
   end
   else msg(rsSomeDefinedD,1);
+end;
+
+procedure Tf_finder.ButtonSetTempClick(Sender: TObject);
+begin
+  if Assigned(FonSetTemperature) then FonSetTemperature(self);
+end;
+
+procedure Tf_finder.CoolerClick(Sender: TObject);
+begin
+  if Assigned(FonSetCooler) then FonSetCooler(self);
 end;
 
 procedure Tf_finder.ForceRedraw;

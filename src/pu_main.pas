@@ -1046,6 +1046,8 @@ type
     procedure FinderCameraProgress(n:double);
     procedure FinderCameraNewImage(Sender: TObject);
     procedure FinderCameraNewImageAsync(Data: PtrInt);
+    procedure FinderCameraSetTemperature(Sender: TObject);
+    procedure FinderCameraSetCooler(Sender: TObject);
     procedure FinderMeasureAtPos(x,y:integer);
     Procedure DrawFinderImage(display: boolean);
     Procedure PlotFinderImage;
@@ -1951,6 +1953,8 @@ begin
   f_finder.onShowMessage:=@NewMessage;
   f_finder.onRedraw:=@FinderRedraw;
   f_finder.onConfigureFinder:=@FinderConfigure;
+  f_finder.onSetTemperature:=@FinderCameraSetTemperature;
+  f_finder.onSetCooler:=@FinderCameraSetCooler;
 
   i:=config.GetValue('/Autoguider/Software',2);
   case TAutoguiderType(i) of
@@ -4192,6 +4196,8 @@ begin
     config.SetValue('/Finder/OffsetX',astrometry.FinderOffsetX);
     config.SetValue('/Finder/OffsetY',astrometry.FinderOffsetY);
   end;
+  f_finder.PanelTemperature.Visible:=findercamera.Temperature<>NullCoord;
+  if f_finder.PanelTemperature.Visible then FinderCameraSetCooler(nil);
 end;
 
 procedure Tf_main.FocuserConnectTimerTimer(Sender: TObject);
@@ -5226,6 +5232,7 @@ begin
   f_finder.PreviewExp.Value:=config.GetValue('/PrecSlew/Exposure',10.0);
   f_finder.Gamma.Position:=config.GetValue('/Finder/Gamma',50);
   f_finder.Luminosity.Position:=config.GetValue('/Finder/Luminosity',50);
+  f_finder.Temperature.Value:=config.GetValue('/Finder/Temperature',0);
 
   astrometryResolver:=config.GetValue('/Astrometry/Resolver',ResolverAstap);
   AstrometryTimeout:=config.GetValue('/Astrometry/Timeout',30.0);
@@ -5840,6 +5847,7 @@ begin
   config.SetValue('/Finder/OffsetY',astrometry.FinderOffsetY);
   config.SetValue('/Finder/Gamma',f_finder.Gamma.Position);
   config.SetValue('/Finder/Luminosity',f_finder.Luminosity.Position);
+  config.SetValue('/Finder/Temperature',f_finder.Temperature.Value);
 
   // star autoexposure in sequence editor
   n:=f_autoexposurestep.cbRef.Items.Count;
@@ -18750,13 +18758,41 @@ begin
 end;
 
 procedure Tf_main.FinderCameraTemperatureChange(t: double);
+var tscale: string;
 begin
-
+ if t>-99 then begin
+   if TemperatureScale=0 then
+     tscale:=sdeg+'C'
+   else
+     tscale:=sdeg+'F';
+   f_finder.LabelTemperature.Caption:=FormatFloat(f1,TempDisplay(TemperatureScale,t))+tscale;
+ end
+ else begin
+  f_finder.LabelTemperature.Caption:='-';
+ end;
 end;
 
 procedure Tf_main.FinderCameraCoolerChange(var v: boolean);
 begin
+ if f_finder.Cooler.Checked<>v then begin
+    f_finder.Cooler.Checked:=v;
+ end;
+end;
 
+procedure Tf_main.FinderCameraSetTemperature(Sender: TObject);
+begin
+  findercamera.Temperature:=TempCelsius(TemperatureScale,f_finder.Temperature.Value);
+end;
+
+procedure Tf_main.FinderCameraSetCooler(Sender: TObject);
+var onoff,coolerstatus: boolean;
+begin
+  onoff:=(sender=nil) or f_finder.Cooler.Checked;
+  coolerstatus:=findercamera.Cooler;
+  if coolerstatus<>onoff then begin
+    findercamera.Cooler:=onoff;
+    if onoff then FinderCameraSetTemperature(Sender);
+  end;
 end;
 
 Procedure Tf_main.SetFinderCamera;
