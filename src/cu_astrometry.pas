@@ -53,6 +53,7 @@ TAstrometry = class(TComponent)
     logfile,solvefile,savefile: string;
     Xslew, Yslew: integer;
     FFinderOffsetX, FFinderOffsetY: double;
+    FFinderBinning: integer;
     AstrometryTimeout: double;
     TimerAstrometrySolve, TimerAstrometrySync, TimerAstrometrySlewScreenXY,TimerAstrometrySyncFinder,TimerAstrometrySyncGuider : TTimer;
     procedure AstrometrySolveonTimer(Sender: TObject);
@@ -112,6 +113,7 @@ TAstrometry = class(TComponent)
     property preview:Tf_preview read Fpreview write Fpreview;
     property visu:Tf_visu read Fvisu write Fvisu;
     property planetarium: TPlanetarium read Fplanetarium write Fplanetarium;
+    property FinderBinning: integer read FFinderBinning write FFinderBinning;
     property FinderOffsetX: double read FFinderOffsetX write FFinderOffsetX;
     property FinderOffsetY: double read FFinderOffsetY write FFinderOffsetY;
     property onShowMessage: TNotifyMsg read FonShowMessage write FonShowMessage;

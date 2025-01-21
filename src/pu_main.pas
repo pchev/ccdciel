@@ -3710,6 +3710,9 @@ try
     config.DeleteValue('/InternalGuider/Spectro/UseAstrometry');
     // do not delete GuideSetLock also used by PHD2
   end;
+  if oldver<'0.9.90' then begin
+    config.SetValue('/Finder/Binning',config.GetValue('/PrecSlew/Binning',1));
+  end;
   if config.Modified then begin
      config.SetValue('/Configuration/Version',ccdcielver);
      SaveConfig;
@@ -4196,13 +4199,16 @@ begin
   f_finder.Offset.Value:=config.GetValue('/PrecSlew/Offset',NullInt);
   f_finder.PanelTemperature.Visible:=findercamera.Temperature<>NullCoord;
   if f_finder.PanelTemperature.Visible then FinderCameraSetCooler(nil);
+  f_finder.Binning.Value:=config.GetValue('/PrecSlew/Binning',1);
   if (astrometry.FinderOffsetX=0)and(astrometry.FinderOffsetY=0) then begin
     // set default position in the middle of the image
     findercamera.GetFrameRange(rx,ry,rw,rh);
     bin:=config.GetValue('/PrecSlew/Binning',1);
     astrometry.FinderOffsetX:=rw.max/bin/2;
     astrometry.FinderOffsetY:=rh.max/bin/2;
+    astrometry.FinderBinning:=bin;
     f_finder.ShowCalibration;
+    config.SetValue('/Finder/Binning',astrometry.FinderBinning);
     config.SetValue('/Finder/OffsetX',astrometry.FinderOffsetX);
     config.SetValue('/Finder/OffsetY',astrometry.FinderOffsetY);
   end;
@@ -5236,8 +5242,12 @@ begin
 
   astrometry.FinderOffsetX:=config.GetValue('/Finder/OffsetX',0.0);
   astrometry.FinderOffsetY:=config.GetValue('/Finder/OffsetY',0.0);
+  astrometry.FinderBinning:=config.GetValue('/Finder/Binning',1);
+  f_finder.Binning.Value:=config.GetValue('/PrecSlew/Binning',1);
   f_finder.ShowCalibration;
   f_finder.PreviewExp.Value:=config.GetValue('/PrecSlew/Exposure',10.0);
+  f_finder.Gain.Value:=config.GetValue('/PrecSlew/Gain',NullInt);
+  f_finder.Offset.Value:=config.GetValue('/PrecSlew/Offset',NullInt);
   f_finder.Gamma.Position:=config.GetValue('/Finder/Gamma',50);
   f_finder.Luminosity.Position:=config.GetValue('/Finder/Luminosity',50);
   f_finder.Temperature.Value:=config.GetValue('/Finder/Temperature',0);
@@ -5853,6 +5863,7 @@ begin
   // finder offset need to be saved at the same time
   config.SetValue('/Finder/OffsetX',astrometry.FinderOffsetX);
   config.SetValue('/Finder/OffsetY',astrometry.FinderOffsetY);
+  config.SetValue('/Finder/Binning',astrometry.FinderBinning);
   config.SetValue('/Finder/Gamma',f_finder.Gamma.Position);
   config.SetValue('/Finder/Luminosity',f_finder.Luminosity.Position);
   config.SetValue('/Finder/Temperature',f_finder.Temperature.Value);

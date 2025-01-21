@@ -34,6 +34,7 @@ type
   { Tf_finder }
 
   Tf_finder = class(TFrame)
+    Binning: TSpinEditEx;
     BtnBullsEye: TSpeedButton;
     BtnZoom05: TSpeedButton;
     BtnZoom1: TSpeedButton;
@@ -47,6 +48,7 @@ type
     cbSaveImages: TCheckBox;
     Cooler: TCheckBox;
     Gain: TSpinEditEx;
+    Label14: TLabel;
     Label15: TLabel;
     Label16: TLabel;
     Label21: TLabel;
@@ -56,6 +58,7 @@ type
     LabelTemperature: TLabel;
     Offset: TSpinEditEx;
     Panel3: TPanel;
+    PanelBinning: TPanel;
     PanelGain: TPanel;
     PanelOffset: TPanel;
     PanelTemperature: TPanel;
@@ -76,6 +79,7 @@ type
     Panel8: TPanel;
     Temperature: TSpinEditEx;
     Title: TLabel;
+    procedure BinningChange(Sender: TObject);
     procedure BtnBullsEyeClick(Sender: TObject);
     procedure BtnPreviewLoopClick(Sender: TObject);
     procedure BtnZoom05Click(Sender: TObject);
@@ -171,6 +175,9 @@ begin
   label21.Caption:=rsTemperature;
   ButtonSetTemp.Caption:=rsSet;
   Cooler.Caption:=rsCooler;
+  Label14.Caption:=rsBinning;
+  Label15.Caption:=rsGain;
+  Label16.Caption:=rsOffset2;
 end;
 
 procedure Tf_finder.msg(txt:string; level: integer);
@@ -272,6 +279,7 @@ if (FCamera.Status=devConnected) then begin
     FAstrometry.SolveFinderImage;
     if FAstrometry.LastResult and FAstrometry.GetFinderOffset(ra2000,de2000) then begin
       ShowCalibration;
+      FAstrometry.FinderBinning:=bin;
       msg(rsNewFinderCal, 3);
       msg(Format(rsMainImageCen, [OffsetX.Text, OffsetY.Text]), 3);
     end
@@ -293,6 +301,7 @@ begin
     bin:=config.GetValue('/PrecSlew/Binning',1);
     astrometry.FinderOffsetX:=rw.max/bin/2;
     astrometry.FinderOffsetY:=rh.max/bin/2;
+    astrometry.FinderBinning:=bin;
     ShowCalibration;
   end
   else msg(rsSomeDefinedD,1);
@@ -350,6 +359,27 @@ procedure Tf_finder.ShowCalibration;
 begin
   OffsetX.Value:=FAstrometry.FinderOffsetX;
   OffsetY.Value:=FAstrometry.FinderOffsetY;
+end;
+
+procedure Tf_finder.BinningChange(Sender: TObject);
+var oldbin: integer;
+    scaling: double;
+begin
+  oldbin:=FAstrometry.FinderBinning;
+  scaling:=oldbin/Binning.Value;
+  FAstrometry.FinderOffsetX:=FAstrometry.FinderOffsetX*scaling;
+  FAstrometry.FinderOffsetY:=FAstrometry.FinderOffsetY*scaling;
+  FAstrometry.FinderBinning:=Binning.Value;
+  config.SetValue('/Finder/OffsetX',astrometry.FinderOffsetX);
+  config.SetValue('/Finder/OffsetY',astrometry.FinderOffsetY);
+  config.SetValue('/Finder/Binning',astrometry.FinderBinning);
+  config.SetValue('/PrecSlew/Binning',Binning.Value);
+  ShowCalibration;
+  if FinderPreviewLoop then begin
+    StopLoop;
+    wait(1);
+    StartLoop;
+  end;
 end;
 
 procedure Tf_finder.BtnZoomAdjustClick(Sender: TObject);
