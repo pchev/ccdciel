@@ -79,6 +79,8 @@ type
     procedure FrameEndDrag(Sender, Target: TObject; X, Y: Integer);
     procedure FrameResize(Sender: TObject);
     procedure GammaChange(Sender: TObject);
+    procedure HistBarLeftClick(Sender: TObject);
+    procedure HistBarRightClick(Sender: TObject);
     procedure HistGraphMouseEnter(Sender: TObject);
     procedure HistGraphMouseLeave(Sender: TObject);
     procedure histminmaxClick(Sender: TObject);
@@ -579,6 +581,21 @@ begin
  HistBarLeft.Width:=max(min(round(value*(HistBar.ClientWidth-Splitter1.Width)/100),HistBar.ClientWidth-Splitter1.Width),1);
 end;
 
+procedure Tf_visu.HistBarLeftClick(Sender: TObject);
+var i: integer;
+begin
+ i:=GetHistBarPosition;
+ i:=max(0,i-10);
+ SetHistBarPosition(i);
+end;
+
+procedure Tf_visu.HistBarRightClick(Sender: TObject);
+var i: integer;
+begin
+ i:=GetHistBarPosition;
+ i:=min(100,i+10);
+ SetHistBarPosition(i);
+end;
 
 end.
 

@@ -444,6 +444,7 @@ object f_visu: Tf_visu
         Color = clBtnHighlight
         ParentColor = False
         TabOrder = 0
+        OnClick = HistBarLeftClick
         OnResize = HistBarLeftResize
       end
       object Splitter1: TSplitter
@@ -465,6 +466,7 @@ object f_visu: Tf_visu
         Color = clBtnShadow
         ParentColor = False
         TabOrder = 2
+        OnClick = HistBarRightClick
       end
     end
   end
