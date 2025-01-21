@@ -3834,6 +3834,7 @@ begin
              MenuImageMultipanel.Checked:=not MenuImageMultipanel.Checked;
              MenuImageSinglepanel.Checked:=not MenuImageMultipanel.Checked;
              MenuImageMultipanelClick(nil);
+             Key:=0; // necessary to not continue processing with Cocoa
            end;
   end;
  end;
