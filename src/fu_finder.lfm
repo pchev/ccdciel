@@ -168,7 +168,7 @@ object f_finder: Tf_finder
     object Panel8: TPanel
       Left = 0
       Height = 170
-      Top = 344
+      Top = 412
       Width = 280
       Align = alTop
       BevelOuter = bvNone
@@ -324,7 +324,7 @@ object f_finder: Tf_finder
     object PanelTemperature: TPanel
       Left = 0
       Height = 60
-      Top = 284
+      Top = 352
       Width = 280
       Align = alTop
       BevelOuter = bvNone
@@ -387,6 +387,72 @@ object f_finder: Tf_finder
         Caption = 'Cooler'
         OnClick = CoolerClick
         TabOrder = 2
+      end
+    end
+    object PanelGain: TPanel
+      Left = 0
+      Height = 34
+      Top = 284
+      Width = 280
+      Align = alTop
+      BevelOuter = bvNone
+      ClientHeight = 34
+      ClientWidth = 280
+      ParentBackground = False
+      TabOrder = 4
+      object Label15: TLabel
+        AnchorSideTop.Control = Gain
+        AnchorSideTop.Side = asrCenter
+        Left = 16
+        Height = 18
+        Top = 7
+        Width = 29
+        Caption = 'Gain'
+        ParentColor = False
+      end
+      object Gain: TSpinEditEx
+        Left = 104
+        Height = 32
+        Top = 0
+        Width = 111
+        MaxLength = 0
+        TabOrder = 0
+        OnChange = GainChange
+        NullValue = 0
+        Value = 0
+      end
+    end
+    object PanelOffset: TPanel
+      Left = 0
+      Height = 34
+      Top = 318
+      Width = 280
+      Align = alTop
+      BevelOuter = bvNone
+      ClientHeight = 34
+      ClientWidth = 280
+      ParentBackground = False
+      TabOrder = 5
+      object Label16: TLabel
+        AnchorSideTop.Control = Offset
+        AnchorSideTop.Side = asrCenter
+        Left = 16
+        Height = 18
+        Top = 7
+        Width = 38
+        Caption = 'Offset'
+        ParentColor = False
+      end
+      object Offset: TSpinEditEx
+        Left = 104
+        Height = 32
+        Top = 0
+        Width = 111
+        MaxLength = 0
+        TabOrder = 0
+        OnChange = OffsetChange
+        NullValue = 0
+        Value = 0
       end
     end
   end

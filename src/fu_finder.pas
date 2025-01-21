@@ -46,12 +46,18 @@ type
     ButtonSetTemp: TButton;
     cbSaveImages: TCheckBox;
     Cooler: TCheckBox;
+    Gain: TSpinEditEx;
+    Label15: TLabel;
+    Label16: TLabel;
     Label21: TLabel;
     Label4: TLabel;
     LabelInfo: TLabel;
     LabelMsg: TLabel;
     LabelTemperature: TLabel;
+    Offset: TSpinEditEx;
     Panel3: TPanel;
+    PanelGain: TPanel;
+    PanelOffset: TPanel;
     PanelTemperature: TPanel;
     PreviewExp: TFloatSpinEditEx;
     GroupBox1: TGroupBox;
@@ -81,8 +87,10 @@ type
     procedure ButtonImageCenterClick(Sender: TObject);
     procedure ButtonSetTempClick(Sender: TObject);
     procedure CoolerClick(Sender: TObject);
+    procedure GainChange(Sender: TObject);
     procedure GammaChange(Sender: TObject);
     procedure LuminosityChange(Sender: TObject);
+    procedure OffsetChange(Sender: TObject);
     procedure OffsetXChange(Sender: TObject);
     procedure OffsetYChange(Sender: TObject);
   private
@@ -298,6 +306,16 @@ end;
 procedure Tf_finder.CoolerClick(Sender: TObject);
 begin
   if Assigned(FonSetCooler) then FonSetCooler(self);
+end;
+
+procedure Tf_finder.GainChange(Sender: TObject);
+begin
+  config.SetValue('/PrecSlew/Gain',Gain.Value);
+end;
+
+procedure Tf_finder.OffsetChange(Sender: TObject);
+begin
+  config.SetValue('/PrecSlew/Offset',Offset.Value);
 end;
 
 procedure Tf_finder.ForceRedraw;

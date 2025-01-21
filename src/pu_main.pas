@@ -4185,7 +4185,17 @@ begin
   FinderCameraConnectTimer.Enabled:=false;
   findercamera.CheckGain;
   findercamera.CanSetGain:=findercamera.hasGain;
+  f_finder.PanelGain.Visible:=findercamera.hasGain;
+  f_finder.Gain.MinValue:=findercamera.GainMin;
+  f_finder.Gain.MaxValue:=findercamera.GainMax;
+  f_finder.Gain.Value:=config.GetValue('/PrecSlew/Gain',NullInt);
   findercamera.CheckOffset;
+  f_finder.PanelOffset.Visible:=findercamera.hasOffset;
+  f_finder.Offset.MinValue:=findercamera.OffsetMin;
+  f_finder.Offset.MaxValue:=findercamera.OffsetMax;
+  f_finder.Offset.Value:=config.GetValue('/PrecSlew/Offset',NullInt);
+  f_finder.PanelTemperature.Visible:=findercamera.Temperature<>NullCoord;
+  if f_finder.PanelTemperature.Visible then FinderCameraSetCooler(nil);
   if (astrometry.FinderOffsetX=0)and(astrometry.FinderOffsetY=0) then begin
     // set default position in the middle of the image
     findercamera.GetFrameRange(rx,ry,rw,rh);
@@ -4196,8 +4206,6 @@ begin
     config.SetValue('/Finder/OffsetX',astrometry.FinderOffsetX);
     config.SetValue('/Finder/OffsetY',astrometry.FinderOffsetY);
   end;
-  f_finder.PanelTemperature.Visible:=findercamera.Temperature<>NullCoord;
-  if f_finder.PanelTemperature.Visible then FinderCameraSetCooler(nil);
 end;
 
 procedure Tf_main.FocuserConnectTimerTimer(Sender: TObject);
