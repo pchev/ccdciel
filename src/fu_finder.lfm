@@ -143,7 +143,7 @@ object f_finder: Tf_finder
         MaxLength = 0
         TabOrder = 1
         DecimalPlaces = 3
-        MaxValue = 60
+        MaxValue = 3600
         MinValue = 0.001
         Value = 1
       end
