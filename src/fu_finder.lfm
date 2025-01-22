@@ -1,10 +1,9 @@
 object f_finder: Tf_finder
   Left = 0
-  Height = 639
+  Height = 693
   Top = 0
   Width = 280
-  AutoSize = True
-  ClientHeight = 639
+  ClientHeight = 693
   ClientWidth = 280
   ParentFont = False
   TabOrder = 0
@@ -28,12 +27,12 @@ object f_finder: Tf_finder
   end
   object Panel1: TPanel
     Left = 0
-    Height = 617
+    Height = 628
     Top = 20
     Width = 280
     Align = alTop
     BevelOuter = bvNone
-    ClientHeight = 617
+    ClientHeight = 628
     ClientWidth = 280
     ParentFont = False
     TabOrder = 0
@@ -167,12 +166,12 @@ object f_finder: Tf_finder
     end
     object Panel8: TPanel
       Left = 0
-      Height = 170
+      Height = 178
       Top = 446
       Width = 280
       Align = alTop
       BevelOuter = bvNone
-      ClientHeight = 170
+      ClientHeight = 178
       ClientWidth = 280
       TabOrder = 2
       object Label17: TLabel
@@ -312,16 +311,6 @@ object f_finder: Tf_finder
         Caption = 'Show bulls eye'
         ParentColor = False
       end
-    end
-    object LabelMsg: TLabel
-      Left = 0
-      Height = 1
-      Top = 616
-      Width = 280
-      Align = alClient
-      AutoSize = False
-      ParentColor = False
-      WordWrap = True
     end
     object PanelTemperature: TPanel
       Left = 0
@@ -495,7 +484,7 @@ object f_finder: Tf_finder
   object Panel3: TPanel
     Left = 0
     Height = 50
-    Top = 637
+    Top = 648
     Width = 280
     Align = alTop
     ClientHeight = 50

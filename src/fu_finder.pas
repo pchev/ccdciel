@@ -54,7 +54,6 @@ type
     Label21: TLabel;
     Label4: TLabel;
     LabelInfo: TLabel;
-    LabelMsg: TLabel;
     LabelTemperature: TLabel;
     Offset: TSpinEditEx;
     Panel3: TPanel;
@@ -182,7 +181,6 @@ end;
 
 procedure Tf_finder.msg(txt:string; level: integer);
 begin
- LabelMsg.Caption:=txt;
  if assigned(FonShowMessage) then FonShowMessage(rsFinderCamera+': '+txt,level);
 end;
 

@@ -3835,7 +3835,7 @@ begin
     VK_F11: SwitchImageFullscreen;
   end;
  end
- else if (Shift=[ssAlt])or(Shift=[ssCtrl])or(Shift=[ssMeta]) then begin
+ else if (Shift=[ssAlt])or(Shift=[ssCtrl]){$ifdef lclcocoa}or(Shift=[ssMeta]){$endif} then begin
   case Key of
     VK_W : if MultiCamera then begin
              MenuImageMultipanel.Checked:=not MenuImageMultipanel.Checked;
@@ -19328,10 +19328,10 @@ begin
   if (finderfits.HeaderInfo.naxis>0) and finderfits.ImageValid then begin
      if SaveDialogFits.Execute then begin
         finderfits.SaveToFile(SaveDialogFits.FileName,false);
-        f_finder.LabelMsg.Caption:=format(rsSaved,[SaveDialogFits.FileName]);
+        f_finder.LabelInfo.Caption:=format(rsSaved,[SaveDialogFits.FileName]);
      end;
   end
-  else f_finder.LabelMsg.Caption:='No image!';
+  else f_finder.LabelInfo.Caption:='No image!';
 end;
 
 procedure Tf_main.MenuItemFinderSolveClick(Sender: TObject);
@@ -19348,7 +19348,7 @@ begin
     if (not f_goto.CheckImageInfo(finderfits)) then exit;
     astrometry.SyncFinderImage(false);
   end
-  else f_finder.LabelMsg.Caption:='No image!';
+  else f_finder.LabelInfo.Caption:='No image!';
 end;
 
 procedure Tf_main.MenuItemFinderStopAstrometryClick(Sender: TObject);
@@ -19367,7 +19367,7 @@ begin
    FormPos(f,mouse.CursorPos.X,mouse.CursorPos.Y);
    f.Show;
  end
- else f_finder.LabelMsg.Caption:='No image!';
+ else f_finder.LabelInfo.Caption:='No image!';
 end;
 
 procedure Tf_main.MenuItemFinderViewStatisticsClick(Sender: TObject);
@@ -19383,7 +19383,7 @@ begin
    FormPos(f,mouse.CursorPos.X,mouse.CursorPos.Y);
    f.Show;
  end
- else f_finder.LabelMsg.Caption:='No image!';
+ else f_finder.LabelInfo.Caption:='No image!';
 end;
 
 procedure Tf_main.MenuImageMultipanelClick(Sender: TObject);
