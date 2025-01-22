@@ -2191,6 +2191,7 @@ end;
 
 procedure T_indicamera.StopVideoPreview;
 begin
+ FVideoMsg:=false;
  if CCDVideoStream<>nil then begin
   IUResetSwitch(CCDVideoStream);
   VideoStreamOff.s:=ISS_ON;
@@ -2269,6 +2270,7 @@ end;
 
 procedure T_indicamera.StopVideoRecord;
 begin
+  FVideoMsg:=false;
   if RecordStream<>nil then begin
     IUResetSwitch(RecordStream);
     RecordStreamOff.s:=ISS_ON;
