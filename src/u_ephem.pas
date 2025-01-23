@@ -40,6 +40,15 @@ const
       lib404 = 'libplan404.dll';
 {$endif}
 
+// crash in gplan using arm processor
+{$define useplan404}
+{$ifdef CPUARM}
+  {$undef useplan404}
+{$endif}
+{$ifdef CPUAARCH64}
+  {$undef useplan404}
+{$endif}
+
 type
      TPlanetData = record
         JD : double;
@@ -62,19 +71,24 @@ procedure Load_Plan404;
 procedure Moon(jdlt : double; out ra,de,phase,illum : double);
 procedure Sun(jdlt : double; out ra, de: double);
 procedure SunEcl(jdlt : double; out l, b: double);
+Procedure SunLowprec(jdn:double; out ra,de,l:double);
+procedure MoonLowprec(jdn:double; out ra,de,phase,illum:double);
 
 implementation
 
 uses u_utils;
 
+
 procedure Load_Plan404;
 begin
+{$ifdef useplan404}
   Plan404    := nil;
   Plan404lib := LoadLibrary(lib404);
   if Plan404lib <> 0 then
   begin
     Plan404 := TPlan404(GetProcAddress(Plan404lib, 'Plan404'));
   end;
+{$endif}
 end;
 
 procedure MoonGeocentric(jdtt : double; out alpha,delta,dist,dkm,diam,phase,illum : double);
@@ -128,8 +142,12 @@ begin
   jd0:=jd(y, m, d, 0);
   st0:=SidTim(jd0, h, ObsLongitude);
   jdtt:=jdut+deltaT/3600/24;
+  {$ifdef useplan404}
   MoonGeocentric(jdtt,ra,de,dist,dkm,diam,phase,illum);
   Paralaxe(st0, dist, ra, de, ra, de, q, jd2000, jdut);
+  {$else}
+  MoonLowprec(jdut,ra,de,phase,illum);
+  {$endif}
 end;
 
 procedure SunRect(jdtt: double; out x, y, z: double);
@@ -150,6 +168,7 @@ var
 begin
   jdut:=jdlt-ObsTimeZone/24;
   jdtt:=jdut+deltaT/3600/24;
+  {$ifdef useplan404}
   SunRect(jdtt, x, y, z);
   ra := arctan2(y, x);
   if (ra < 0) then
@@ -158,6 +177,9 @@ begin
   if qr <> 0 then
     de := arctan(z / qr);
   PrecessionFK5(jd2000,jdtoday,ra,de);
+  {$else}
+  SunLowprec(jdut,ra,de,x);
+  {$endif}
 end;
 
 procedure SunEcl(jdlt : double; out l, b: double);
@@ -169,6 +191,7 @@ var
 begin
   jdut:=jdlt-ObsTimeZone/24;
   jdtt:=jdut+deltaT/3600/24;
+  {$ifdef useplan404}
   SunRect(jdtt, x1, y1, z1);
   // rotate equatorial to ecliptic
   x := x1;
@@ -181,6 +204,70 @@ begin
   qr := sqrt(x * x + y * y);
   if qr <> 0 then
     b := arctan(z / qr);
+  {$else}
+  SunLowprec(jdut,x,y,l);
+  b:=0;
+  {$endif}
+end;
+
+Procedure SunLowprec(jdn:double; out ra,de,l:double);
+var d,ecl,q,g,r,xs,ys,xe,ye,ze: double;
+begin
+//Approximate Sun position
+d :=jdn-jd2000;
+// obliquity of the ecliptic
+ecl := deg2rad * (23.439 - 0.00000036 * d);
+// mean anomaly
+g := deg2rad * rmod(357.529 + 0.98560028 * d,360);
+// mean longitude
+q := deg2rad * rmod(280.459 + 0.98564736 * d,360);
+// geocentric apparent ecliptic longitude
+l := q + deg2rad * (1.915 * sin(g) + 0.020 * sin(2*g));
+// Sun distance
+r := 1.00014 - 0.01671 * cos(g) - 0.00014 * cos(2*g);
+// ecliptic rectangular geocentric coordinates
+xs := r * cos(l);
+ys := r * sin(l);
+// equatorial rectangular geocentric coordinates
+xe := xs;
+ye := ys * cos(ecl);
+ze := ys * sin(ecl);
+// Sun Right Ascension and Declination
+ra := arctan2( ye, xe );
+de := arctan2( ze, sqrt(xe*xe+ye*ye) );
+end;
+
+procedure MoonLowprec(jdn:double; out ra,de,phase,illum:double);
+var d,LE,M,F,l,b,e : double;
+    t,sm,mm,md: double;
+begin
+//Very approximate Moon position
+d :=jdn-jd2000;
+// ecliptic longitude
+LE := deg2rad * (218.316 + 13.176396 * d - 3.63258E-8 * d*d);
+// mean anomaly
+M := deg2rad * (134.963 + 13.064993 * d + 2.46324E-7 * d*d);
+// mean distance
+F := deg2rad * (93.272 + 13.229350 * d - 9.31666E-8 * d*d);
+// longitude
+l := LE + deg2rad * 6.289 * sin(M);
+// latitude
+b := deg2rad * 5.128 * sin(F);
+// obliquity of the Earth
+e := deg2rad * (23.4397 - 0.00000036 * d);
+// Moon Right Ascension and Declination
+ra:=arctan2(sin(l) * cos(e) - tan(b) * sin(e), cos(l));
+de:=sin(sin(b) * cos(e) + cos(b) * sin(e) * sin(l));
+ra:=rmod(ra+pi2,pi2);
+// phase
+t:=(jdn-2415020)/36525;  { meeus 15.1 }
+sm:=degtorad(358.475833+35999.0498*t-0.000150*t*t-0.0000033*t*t*t);  {meeus 30. }
+mm:=degtorad(296.104608+477198.8491*t+0.009192*t*t+0.0000144*t*t*t);
+md:=rmod(350.737486+445267.1142*t-0.001436*t*t+0.0000019*t*t*t,360);
+phase:=180-md ;     { meeus 31.4 }
+md:=degtorad(md);
+phase:=rmod(phase-6.289*sin(mm)+2.100*sin(sm)-1.274*sin(2*md-mm)-0.658*sin(2*md)-0.214*sin(2*mm)-0.112*sin(md)+360,360);
+illum:=(1+cos(degtorad(phase)))/2;
 end;
 
 
