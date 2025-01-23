@@ -22,7 +22,6 @@ install -v -m 644 system_integration/MacOSX/pkg/ccdciel.app/Contents/Resources/c
 
 install -v -m 755 library/wcs/libccdcielwcs.dylib  $destdir/libccdcielwcs.dylib
 install -v -m 755 library/raw/libpasraw.dylib  $destdir/libpasraw.dylib
-install -v -m 755 library/plan404/libplan404.dylib  $destdir/libplan404.dylib
 tar xvzf system_integration/MacOSX/data/cfitsio-mac.tgz -C $destdir
 tar xvzf system_integration/MacOSX/data/exiv2-mac.tgz -C $destdir/ccdciel.app/Contents/MacOS
 tar xvzf system_integration/MacOSX/data/openssl-mac.tgz -C $destdir/ccdciel.app/Contents/Frameworks
@@ -34,6 +33,7 @@ install -d -m 755 $destdir/data/stars
 install -d -m 755 $destdir/data/dso
 install -d -m 755 $destdir/data/language
 install -m 755 -d $destdir/data/resources
+install -m 755 -d $destdir/data/jpleph
 install -d -m 755 $destdir/doc
 
 install -v -m 644 scripts/ccdciel.py  $destdir/scripts/ccdciel.py
@@ -56,6 +56,7 @@ install -v -m 644 data/stars/focus_star_8   $destdir/data/stars/focus_star_8
 install -v -m 644 data/dso/deep_sky.csv  $destdir/data/dso/deep_sky.csv
 install -v -m 644 data/resources/smallcross.cur  $destdir/data/resources/smallcross.cur
 install -v -m 644 data/resources/bigcross.cur  $destdir/data/resources/bigcross.cur
+install -v -m 644 data/jpleph/lnxp2000p2050.440  $destdir/data/jpleph/lnxp2000p2050.440
 install -v -m 644 data/language/ccdciel.po      $destdir/data/language/ccdciel.en.po
 install -v -m 644 data/language/ccdciel.en_GB.po $destdir/data/language/ccdciel.en_GB.po
 install -v -m 644 data/language/ccdciel.cs.po   $destdir/data/language/ccdciel.cs.po

@@ -22,6 +22,7 @@ install -m 755 -d $destdir/data/stars
 install -d -m 755 $destdir/data/dso
 install -m 755 -d $destdir/data/language
 install -m 755 -d $destdir/data/resources
+install -m 755 -d $destdir/data/jpleph
 install -m 755 -d $destdir/doc
 
 
@@ -29,7 +30,6 @@ if [ $OS_TARGET = win32 ]; then
   strip -v -o $destdir/ccdciel.exe src/ccdciel.exe 
   strip -v -o $destdir/libccdcielwcs.dll library/wcs/libccdcielwcs.dll
   strip -v -o $destdir/libpasraw.dll library/raw/libpasraw.dll
-  strip -v -o $destdir/libplan404.dll library/plan404/libplan404.dll
   unzip -d $destdir system_integration/Windows/data/openssl-win32.zip
   unzip -d $destdir system_integration/Windows/data/zlib-win32.zip
   unzip -d $destdir system_integration/Windows/data/cfitsio-win32.zip
@@ -40,7 +40,6 @@ if [ $OS_TARGET = win64 ]; then
   strip -v -o $destdir/ccdciel.exe src/ccdciel.exe 
   strip -v -o $destdir/libccdcielwcs.dll library/wcs/libccdcielwcs.dll
   strip -v -o $destdir/libpasraw.dll library/raw/libpasraw.dll
-  strip -v -o $destdir/libplan404.dll library/plan404/libplan404.dll
   unzip -d $destdir system_integration/Windows/data/openssl-win64.zip
   unzip -d $destdir system_integration/Windows/data/zlib-win64.zip
   unzip -d $destdir system_integration/Windows/data/cfitsio-win64.zip
@@ -70,6 +69,7 @@ install -v -m 644 data/stars/focus_star_8   $destdir/data/stars/focus_star_8
 install -v -m 644 data/dso/deep_sky.csv  $destdir/data/dso/deep_sky.csv
 install -v -m 644 data/resources/smallcross.cur  $destdir/data/resources/smallcross.cur
 install -v -m 644 data/resources/bigcross.cur  $destdir/data/resources/bigcross.cur
+install -v -m 644 data/jpleph/lnxp2000p2050.440  $destdir/data/jpleph/lnxp2000p2050.440
 install -v -m 644 data/language/ccdciel.po      $destdir/data/language/ccdciel.en.po
 install -v -m 644 data/language/ccdciel.en_GB.po $destdir/data/language/ccdciel.en_GB.po
 install -v -m 644 data/language/ccdciel.cs.po   $destdir/data/language/ccdciel.cs.po

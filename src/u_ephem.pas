@@ -28,67 +28,95 @@ interface
 uses u_global, math,
   Classes, SysUtils;
 
-// libplan404
-const
-{$ifdef linux}
-      lib404   = 'libpasplan404.so.1';
-{$endif}
-{$ifdef darwin}
-      lib404   = 'libplan404.dylib';
-{$endif}
-{$ifdef mswindows}
-      lib404 = 'libplan404.dll';
-{$endif}
-
-// crash in gplan using arm processor
-{$define useplan404}
-{$ifdef CPUARM}
-  {$undef useplan404}
-{$endif}
-{$ifdef CPUAARCH64}
-  {$undef useplan404}
-{$endif}
-
-type
-     TPlanetData = record
-        JD : double;
-         l : double ;
-         b : double ;
-         r : double ;
-         x : double ;
-         y : double ;
-         z : double ;
-         ipla : integer;
-     end;
-     PPlanetData = ^TPlanetData;
-     TPlan404=Function( pla : PPlanetData):integer; cdecl;
-
-var Plan404 : TPlan404;
-    Plan404lib: TLibHandle;
-
-
-procedure Load_Plan404;
+function Open_de(dir: string): boolean;
+procedure Close_de;
 procedure Moon(jdlt : double; out ra,de,phase,illum : double);
 procedure Sun(jdlt : double; out ra, de: double);
 procedure SunEcl(jdlt : double; out l, b: double);
 Procedure SunLowprec(jdn:double; out ra,de,l:double);
 procedure MoonLowprec(jdn:double; out ra,de,phase,illum:double);
 
+var
+  de_folder, de_filename: string;
+  de_type, de_jdcheck: integer;
+  de_jdstart, de_jdend: double;
+
 implementation
 
-uses u_utils;
+uses u_utils, uDE;
 
+type
+  Array_5D = array [0..5] of double;
 
-procedure Load_Plan404;
+const
+  nJPL_DE = 11;
+  JPL_DE: array [1..nJPL_DE] of integer = (440, 441, 430, 431, 423, 421, 422, 405, 406, 403, 200);
+
+function load_de(t: double): boolean;
+var
+  i: integer;
 begin
-{$ifdef useplan404}
-  Plan404    := nil;
-  Plan404lib := LoadLibrary(lib404);
-  if Plan404lib <> 0 then
+  if (t > de_jdstart) and (t < de_jdend) then
   begin
-    Plan404 := TPlan404(GetProcAddress(Plan404lib, 'Plan404'));
+    // a file is already loaded for this date
+    Result := (de_type <> 0);
+  end
+  else if trunc(t) = de_jdcheck then
+  begin
+    // we know that no file match this date
+    Result := (de_type <> 0);
+  end
+  else
+  begin
+    // search a file for the date
+    Result := False;
+    de_type := 0;
+    de_jdcheck := trunc(t);
+    de_jdstart := MaxInt;
+    de_jdend := -MaxInt;
+    for i := 1 to nJPL_DE do
+    begin
+      if load_de_file(t, de_folder, JPL_DE[i], de_filename, de_jdstart, de_jdend)
+      then
+      begin
+        Result := True;
+        de_type := JPL_DE[i];
+        break;
+      end;
+    end;
   end;
-{$endif}
+end;
+
+function Open_de(dir: string): boolean;
+begin
+  de_folder:=dir;
+  result:=load_de(DateTimetoJD(now));
+end;
+
+procedure Close_de;
+begin
+ close_de_file;
+end;
+
+procedure Barycenter(jdtt: double; var x, y, z: double);
+var
+  planet_arr: Array_5D;
+begin
+  Calc_Planet_de(jdtt, 12, planet_arr, True, 3, False);
+  x := planet_arr[0];
+  y := planet_arr[1];
+  z := planet_arr[2];
+end;
+
+procedure SunRect(jdtt: double; out x, y, z: double);
+var
+  planet_arr: Array_5D;
+  i: integer;
+begin
+  Calc_Planet_de(jdtt, 11, planet_arr, True, 3, False);
+  x := planet_arr[0];
+  y := planet_arr[1];
+  z := planet_arr[2];
 end;
 
 procedure MoonGeocentric(jdtt : double; out alpha,delta,dist,dkm,diam,phase,illum : double);
@@ -103,24 +131,26 @@ procedure MoonGeocentric(jdtt : double; out alpha,delta,dist,dkm,diam,phase,illu
 	illum	:  Illuminated percentage
 }
 var
-   p :TPlanetData;
    q : double;
    t,sm,mm,md : double;
+   w: array[1..3] of double;
+   planet_arr, sun_arr: Array_5D;
+   i: integer;
+   pp: double;
 begin
-  jdtt:=jdtt-(1.27/3600/24); // mean lighttime
-  p.JD:=jdtt;
-  p.ipla:=11;
-  Plan404(addr(p));
-  dist:=sqrt(p.x*p.x+p.y*p.y+p.z*p.z);
-  alpha:=arctan2(p.y,p.x);
-  if (alpha<0) then alpha:=alpha+pi2;
-  q:=sqrt(p.x*p.x+p.y*p.y);
-  delta:=arctan(p.z/q);
-  // revert aberration to move position to solar system barycenter as with jpl eph
-  mean_equatorial(alpha,delta,true,false);
-  // plan404 give equinox of the date for the moon.
-  PrecessionFK5(jdtt,jd2000,alpha,delta);
-  dkm:=dist*km_au;
+  Barycenter(jdtt, sun_arr[0], sun_arr[1], sun_arr[2]);
+  Calc_Planet_de(jdtt, 10, planet_arr, True, 3, False);
+  dist := sqrt(planet_arr[0] * planet_arr[0] + planet_arr[1] * planet_arr[1] + planet_arr[2] * planet_arr[2]);
+  jdtt := jdtt - tlight * dist;
+  Calc_Planet_de(jdtt, 10, planet_arr, True, 12, False);
+  for i := 0 to 2 do
+    w[i + 1] := planet_arr[i] + sun_arr[i];
+  alpha := arctan2(w[2], w[1]);
+  if (alpha < 0) then
+    alpha := alpha + 2 * pi;
+  pp := sqrt(w[1] * w[1] + w[2] * w[2]);
+  delta := arctan(w[3] / pp);
+  dkm := dist * km_au;
   diam:=2*358482800/dkm;
   t:=(jdtt-2415020)/36525;  { meeus 15.1 }
   sm:=degtorad(358.475833+35999.0498*t-0.000150*t*t-0.0000033*t*t*t);  {meeus 30. }
@@ -142,24 +172,13 @@ begin
   jd0:=jd(y, m, d, 0);
   st0:=SidTim(jd0, h, ObsLongitude);
   jdtt:=jdut+deltaT/3600/24;
-  {$ifdef useplan404}
-  MoonGeocentric(jdtt,ra,de,dist,dkm,diam,phase,illum);
-  Paralaxe(st0, dist, ra, de, ra, de, q, jd2000, jdut);
-  {$else}
-  MoonLowprec(jdut,ra,de,phase,illum);
-  {$endif}
-end;
-
-procedure SunRect(jdtt: double; out x, y, z: double);
-var
-  p: TPlanetData;
-begin
-  p.ipla := 3;
-  p.JD := jdtt;
-  Plan404(addr(p));
-  x := -p.x;
-  y := -p.y;
-  z := -p.z;
+  if load_de(jdtt) then begin
+    MoonGeocentric(jdtt,ra,de,dist,dkm,diam,phase,illum);
+    Paralaxe(st0, dist, ra, de, ra, de, q, jd2000, jdut);
+  end
+  else begin
+   MoonLowprec(jdut,ra,de,phase,illum);
+  end;
 end;
 
 procedure Sun(jdlt : double; out ra, de: double);
@@ -168,18 +187,19 @@ var
 begin
   jdut:=jdlt-ObsTimeZone/24;
   jdtt:=jdut+deltaT/3600/24;
-  {$ifdef useplan404}
-  SunRect(jdtt, x, y, z);
-  ra := arctan2(y, x);
-  if (ra < 0) then
-    ra := ra + pi2;
-  qr := sqrt(x * x + y * y);
-  if qr <> 0 then
-    de := arctan(z / qr);
-  PrecessionFK5(jd2000,jdtoday,ra,de);
-  {$else}
+  if load_de(jdtt) then begin
+    SunRect(jdtt, x, y, z);
+    ra := arctan2(y, x);
+    if (ra < 0) then
+      ra := ra + pi2;
+    qr := sqrt(x * x + y * y);
+    if qr <> 0 then
+      de := arctan(z / qr);
+    PrecessionFK5(jd2000,jdtoday,ra,de);
+  end
+  else begin
   SunLowprec(jdut,ra,de,x);
-  {$endif}
+  end;
 end;
 
 procedure SunEcl(jdlt : double; out l, b: double);
@@ -191,23 +211,24 @@ var
 begin
   jdut:=jdlt-ObsTimeZone/24;
   jdtt:=jdut+deltaT/3600/24;
-  {$ifdef useplan404}
-  SunRect(jdtt, x1, y1, z1);
-  // rotate equatorial to ecliptic
-  x := x1;
-  y := coseps2k * y1 + sineps2k * z1;
-  z := -sineps2k * y1 + coseps2k * z1;
-  // convert to polar
-  l := arctan2(y, x);
-  if (l < 0) then
-    l := l + 2 * pi;
-  qr := sqrt(x * x + y * y);
-  if qr <> 0 then
-    b := arctan(z / qr);
-  {$else}
-  SunLowprec(jdut,x,y,l);
-  b:=0;
-  {$endif}
+  if load_de(jdtt) then begin
+    SunRect(jdtt, x1, y1, z1);
+    // rotate equatorial to ecliptic
+    x := x1;
+    y := coseps2k * y1 + sineps2k * z1;
+    z := -sineps2k * y1 + coseps2k * z1;
+    // convert to polar
+    l := arctan2(y, x);
+    if (l < 0) then
+      l := l + 2 * pi;
+    qr := sqrt(x * x + y * y);
+    if qr <> 0 then
+      b := arctan(z / qr);
+  end
+  else begin
+    SunLowprec(jdut,x,y,l);
+    b:=0;
+  end
 end;
 
 Procedure SunLowprec(jdn:double; out ra,de,l:double);
@@ -269,6 +290,12 @@ md:=degtorad(md);
 phase:=rmod(phase-6.289*sin(mm)+2.100*sin(sm)-1.274*sin(2*md-mm)-0.658*sin(2*md)-0.214*sin(2*mm)-0.112*sin(md)+360,360);
 illum:=(1+cos(degtorad(phase)))/2;
 end;
+
+initialization
+de_type := 0;
+de_jdcheck := MaxInt;
+de_jdstart := MaxInt;
+de_jdend := -MaxInt;
 
 
 end.

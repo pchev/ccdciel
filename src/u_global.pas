@@ -265,6 +265,8 @@ const
   jd2000 = 2451545.0;
   abek = secarc * 20.49552;  // aberration constant
   km_au = 149597870.691;
+  clight = 299792.458;
+  tlight = km_au / clight / 3600 / 24;
   UnitRange:TNumRange = (min:1;max:1;step:1);
   NullRange:TNumRange = (min:0;max:0;step:0);
   NullCoord:double=-9999;

@@ -1704,7 +1704,6 @@ begin
     if uncompress<>nil then zlibok:=true;
   end;
   Load_Libraw;
-  Load_Plan404;
   ConfigExtension:= '.conf';
   config:=TCCDConfig.Create(self);
   screenconfig:=TCCDConfig.Create(self);
@@ -1779,6 +1778,9 @@ begin
   NewMessage('Screen scaling : ' + BoolToStr(ScreenScaling, True),9);
   NewMessage('Screen scale : ' + FormatFloat(f0, 100 * UScaleDPI.RunDPI / UScaleDPI.DesignDPI) + '%',9);
   NewMessage(Format(rsUsingConfigu, [config.Filename]), 3);
+
+  if not open_de(slash(Appdir) + slash('data') + 'jpleph') then
+    NewMessage('Warning! Using low precision ephemeris');
 
   fits:=TFits.Create(self);
   fits.onMsg:=@NewMessage;
@@ -3790,6 +3792,7 @@ begin
   ISOList.Free;
   deepstring.Free;
   ManualFilterNames.Free;
+  Close_de;
   if NeedRestart then begin
      ExecNoWait(paramstr(0));
      NewMessage('Program restart',1);

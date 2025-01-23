@@ -41,6 +41,7 @@ install -m 755 -d $destdir/share/ccdciel/data/stars
 install -m 755 -d $destdir/share/ccdciel/data/dso
 install -m 755 -d $destdir/share/ccdciel/data/language
 install -m 755 -d $destdir/share/ccdciel/data/resources
+install -m 755 -d $destdir/share/ccdciel/data/jpleph
 install -m 755 -d $destdir/share/ccdciel/doc
 
 install -v -m 755 src/ccdciel  $destdir/bin/ccdciel
@@ -65,6 +66,7 @@ install -v -m 644 data/stars/focus_star_8  $destdir/share/ccdciel/data/stars/foc
 install -v -m 644 data/dso/deep_sky.csv  $destdir/share/ccdciel/data/dso/deep_sky.csv
 install -v -m 644 data/resources/smallcross.cur  $destdir/share/ccdciel/data/resources/smallcross.cur
 install -v -m 644 data/resources/bigcross.cur  $destdir/share/ccdciel/data/resources/bigcross.cur
+install -v -m 644 data/jpleph/lnxp2000p2050.440  $destdir/share/ccdciel/data/jpleph/lnxp2000p2050.440
 install -v -m 644 data/language/ccdciel.po     $destdir/share/ccdciel/data/language/ccdciel.en.po
 install -v -m 644 data/language/ccdciel.en_GB.po $destdir/share/ccdciel/data/language/ccdciel.en_GB.po
 install -v -m 644 data/language/ccdciel.cs.po  $destdir/share/ccdciel/data/language/ccdciel.cs.po
