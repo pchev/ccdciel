@@ -361,6 +361,10 @@ begin
        msg('Error, new position is '+IntToStr(np)+' instead of '+IntToStr(p),0);
      end; {fix for some poor written focuser drivers. The getposition is already sufficient to fix the problem, so message should never occur.}
    end;
+
+   // Update position immediately
+   if Assigned(FonPositionChange) then FonPositionChange(p);
+
    except
     on E: Exception do msg('Error, can''t move to. ' + E.Message,0);
    end;
