@@ -5932,9 +5932,14 @@ Procedure Tf_main.Connect(Sender: TObject);
 begin
 try
   if IndistarterAutostart and (not checkconnection(config.GetValue('/INDIcamera/Server',''),config.GetValue('/INDIcamera/ServerPort',''))) then begin
-    if StartProgram('indistarter','','-c '+IndistarterConfig+' -s',true) then
+    {$ifdef darwin}
+    if StartProgram('open','','/Application/IndiStarter.app --args -c '+IndistarterConfig+' -s',true) then begin
+    {$else}
+    if StartProgram('indistarter','','-c '+IndistarterConfig+' -s',true) then begin
+    {$endif}
       NewMessage(format(rsStartS,['Indistarter'])+' ...',3);
       wait(10);
+    end;
   end;
   f_script.RunBeforeConnectScript;
   if WantCamera and (CameraName='') then begin
