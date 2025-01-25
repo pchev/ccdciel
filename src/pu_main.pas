@@ -5933,7 +5933,7 @@ begin
 try
   if IndistarterAutostart and (not checkconnection(config.GetValue('/INDIcamera/Server',''),config.GetValue('/INDIcamera/ServerPort',''))) then begin
     {$ifdef darwin}
-    if StartProgram('open','','/Application/IndiStarter.app --args -c '+IndistarterConfig+' -s',true) then begin
+    if StartProgram('open','','/Applications/IndiStarter.app --args -c '+IndistarterConfig+' -s',true) then begin
     {$else}
     if StartProgram('indistarter','','-c '+IndistarterConfig+' -s',true) then begin
     {$endif}
