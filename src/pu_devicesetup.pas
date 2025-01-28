@@ -1384,6 +1384,9 @@ if cbIndistarterConfig.Items.Count=0 then begin
   cbIndistarterAutostart.Checked:=false;
 end else begin
   gbIndistarter.Visible:=true;
+  {$ifdef darwin}
+   ButtonStartIndi.Visible:=false;
+  {$endif}
   cbIndistarterAutostart.Checked:=isStart;
   for i:=0 to cbIndistarterConfig.Items.Count-1 do begin
      if cbIndistarterConfig.Items[i]=isConf then begin
