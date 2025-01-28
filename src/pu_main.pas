@@ -14469,6 +14469,12 @@ begin
     fs:=round(MinValue([sqrt(AutofocusMultiStarCenterPct*fh.max*fw.max/100),fh.max,fw.max]));
     rx:=round(max(0,(fw.max-fs)/2));
     ry:=round(max(0,(fh.max-fs)/2));
+    if camera.CameraInterface<>INDI then begin
+      // ASCOM frame in binned pixel
+      fs:=fs div AutofocusBinning;
+      rx:=rx div AutofocusBinning;
+      ry:=ry div AutofocusBinning;
+    end;
     camera.SetFrame(rx,ry,fs,fs);
   end;
   fits.SetBPM(bpm,bpmNum,bpmX,bpmY,bpmAxis);
