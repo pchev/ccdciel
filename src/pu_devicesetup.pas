@@ -92,7 +92,6 @@ type
     BtnSetupFinderCamera: TButton;
     BtnSetupSwitch: TButton;
     BtnSetupCover: TButton;
-    ButtonStartIndi: TButton;
     ButtonHelp: TButton;
     cbIndistarterAutostart: TCheckBox;
     cbIndistarterConfig: TComboBox;
@@ -110,6 +109,7 @@ type
     Label107: TLabel;
     Label108: TLabel;
     Label26: TLabel;
+    Label29: TLabel;
     Label4: TLabel;
     Label70: TLabel;
     Label71: TLabel;
@@ -713,7 +713,6 @@ type
     procedure BtnScanClick(Sender: TObject);
     procedure Button2Click(Sender: TObject);
     procedure ButtonHelpClick(Sender: TObject);
-    procedure ButtonStartIndiClick(Sender: TObject);
     procedure CameraARestProtocolChange(Sender: TObject);
     procedure CameraIndiDeviceChange(Sender: TObject);
     procedure CameraIndiTransfertClick(Sender: TObject);
@@ -979,7 +978,7 @@ begin
   Label1.Caption:=rsTimeout;
   ApplyIndi.Caption:=rsApplyToAllDe;
   cbIndistarterAutostart.Caption:=format(rsStartS,['Indistarter']);
-  ButtonStartIndi.Caption:=rsStart;
+  Label29.Caption:=Format(rsProfile,['']);
   BtnDiscover.Caption:=rsDiscover;
   BtnDiscover1.Caption:=rsDiscover;
   BtnDiscover2.Caption:=rsDiscover;
@@ -1384,9 +1383,6 @@ if cbIndistarterConfig.Items.Count=0 then begin
   cbIndistarterAutostart.Checked:=false;
 end else begin
   gbIndistarter.Visible:=true;
-  {$ifdef darwin}
-   ButtonStartIndi.Visible:=false;
-  {$endif}
   cbIndistarterAutostart.Checked:=isStart;
   for i:=0 to cbIndistarterConfig.Items.Count-1 do begin
      if cbIndistarterConfig.Items[i]=isConf then begin
@@ -2051,11 +2047,6 @@ end;
 procedure Tf_setup.ButtonHelpClick(Sender: TObject);
 begin
   if Assigned(FShowHelp) then FShowHelp(self);
-end;
-
-procedure Tf_setup.ButtonStartIndiClick(Sender: TObject);
-begin
-  StartProgram('indistarter','','-c '+cbIndistarterConfig.Text+' -s',true);
 end;
 
 procedure Tf_setup.CameraARestProtocolChange(Sender: TObject);
