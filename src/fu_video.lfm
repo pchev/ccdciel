@@ -49,9 +49,11 @@ object f_video: Tf_video
       ClientWidth = 229
       TabOrder = 8
       object Label8: TLabel
+        AnchorSideTop.Control = StreamExp
+        AnchorSideTop.Side = asrCenter
         Left = 8
         Height = 18
-        Top = 10
+        Top = 14
         Width = 57
         Caption = 'Exposure'
         ParentColor = False
@@ -62,11 +64,12 @@ object f_video: Tf_video
         Height = 32
         Top = 7
         Width = 101
-        DecimalPlaces = 3
+        MaxLength = 0
+        TabOrder = 0
+        OnChange = StreamExpChange
+        DecimalPlaces = 4
         Increment = 0.1
         MaxValue = 1
-        OnChange = StreamExpChange
-        TabOrder = 0
       end
     end
     object PanelExposure1: TPanel
@@ -157,9 +160,11 @@ object f_video: Tf_video
       ParentFont = False
       TabOrder = 2
       object Label5: TLabel
+        AnchorSideTop.Control = Gain
+        AnchorSideTop.Side = asrCenter
         Left = 8
         Height = 18
-        Top = 0
+        Top = 13
         Width = 29
         Caption = 'Gain'
         ParentColor = False
@@ -190,9 +195,11 @@ object f_video: Tf_video
       ParentFont = False
       TabOrder = 3
       object Label6: TLabel
+        AnchorSideTop.Control = Gamma
+        AnchorSideTop.Side = asrCenter
         Left = 8
         Height = 18
-        Top = 0
+        Top = 13
         Width = 49
         Caption = 'Gamma'
         ParentColor = False
@@ -223,9 +230,11 @@ object f_video: Tf_video
       ParentFont = False
       TabOrder = 4
       object Label7: TLabel
+        AnchorSideTop.Control = Brightness
+        AnchorSideTop.Side = asrCenter
         Left = 8
         Height = 18
-        Top = 0
+        Top = 13
         Width = 66
         Caption = 'Brightness'
         ParentColor = False
@@ -256,9 +265,11 @@ object f_video: Tf_video
       ParentFont = False
       TabOrder = 5
       object Label2: TLabel
+        AnchorSideTop.Control = VideoSize
+        AnchorSideTop.Side = asrCenter
         Left = 8
         Height = 18
-        Top = 4
+        Top = 7
         Width = 24
         Caption = 'Size'
         ParentColor = False
@@ -277,9 +288,11 @@ object f_video: Tf_video
         TabOrder = 0
       end
       object Label1: TLabel
+        AnchorSideTop.Control = FrameRate
+        AnchorSideTop.Side = asrCenter
         Left = 8
         Height = 18
-        Top = 32
+        Top = 35
         Width = 67
         Caption = 'Frame rate'
         ParentColor = False
@@ -310,9 +323,11 @@ object f_video: Tf_video
       ParentFont = False
       TabOrder = 6
       object Duration: TCheckBox
+        AnchorSideTop.Control = RecDuration
+        AnchorSideTop.Side = asrCenter
         Left = 7
         Height = 22
-        Top = 2
+        Top = 5
         Width = 82
         Caption = 'Duration'
         OnClick = DurationClick
@@ -338,9 +353,11 @@ object f_video: Tf_video
         Text = '60'
       end
       object Frames: TCheckBox
+        AnchorSideTop.Control = RecFrames
+        AnchorSideTop.Side = asrCenter
         Left = 7
         Height = 22
-        Top = 28
+        Top = 32
         Width = 73
         Caption = 'Frames'
         OnClick = FramesClick
@@ -367,9 +384,11 @@ object f_video: Tf_video
         Text = '500'
       end
       object Label3: TLabel
+        AnchorSideTop.Control = ObjectName
+        AnchorSideTop.Side = asrCenter
         Left = 7
         Height = 18
-        Top = 61
+        Top = 63
         Width = 40
         Caption = 'Object'
         ParentColor = False
@@ -414,9 +433,11 @@ object f_video: Tf_video
         TabOrder = 7
       end
       object Label9: TLabel
+        AnchorSideTop.Control = VideoCaptureDir
+        AnchorSideTop.Side = asrCenter
         Left = 7
         Height = 18
-        Top = 92
+        Top = 94
         Width = 57
         Caption = 'Directory'
         ParentColor = False
@@ -464,9 +485,11 @@ object f_video: Tf_video
       ClientWidth = 229
       TabOrder = 9
       object Label10: TLabel
+        AnchorSideTop.Control = VideoEncoder
+        AnchorSideTop.Side = asrCenter
         Left = 8
         Height = 18
-        Top = 10
+        Top = 12
         Width = 52
         Caption = 'Encoder'
         ParentColor = False

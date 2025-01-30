@@ -108,7 +108,7 @@ type
     FVideoGUIready: boolean;
     Frunning: boolean;
     FonMsg: TNotifyMsg;
-    Ffps: double;
+    Ffps, FMinExposure: double;
     Ifps: integer;
     FCheckReady: TNotifyBool;
     procedure GUIdestroy(Sender: TObject);
@@ -149,6 +149,7 @@ begin
  Frunning:=false;
  FVideoGUIready:=false;
  Ffps:=1;
+ FMinExposure:=0;
  LabelRecording.Caption:='';
  SetLang;
 end;
@@ -231,9 +232,13 @@ begin
    if PanelExposure2.Visible then begin
      PanelExposure1.Visible:=false;
      StreamExp.Hint:=FormatFloat(f3,r.min)+ellipsis+FormatFloat(f3,r.max);
-     StreamExp.MinValue:=r.min;
+     FMinExposure:=max(1E-6,r.min);
+     StreamExp.MinValue:=0;
      StreamExp.MaxValue:=r.max;
-     StreamExp.Value:=camera.StreamingExposure;
+     if camera.StreamingExposure>0 then
+       StreamExp.Value:=camera.StreamingExposure
+     else
+       StreamExp.Value:=0.1;
    end
  end;
  PanelEncoder.Visible:=camera.VideoEncoders.Count>0;
@@ -279,6 +284,7 @@ procedure Tf_video.ShowExposure(value:double);
 var sr:TONumRange;
     val:integer;
 begin
+if Frunning then exit;
 val:=round(value);
 if (val>0)and PanelExposure1.visible then begin
  if Exprange.Visible then begin
@@ -414,7 +420,8 @@ end;
 
 procedure Tf_video.StreamExpChange(Sender: TObject);
 begin
-  camera.StreamingExposure:=StreamExp.Value;
+  if StreamExp.Value>=FMinExposure then
+    camera.StreamingExposure:=StreamExp.Value;
 end;
 
 procedure Tf_video.VideoEncoderChange(Sender: TObject);

@@ -2515,7 +2515,6 @@ begin
  result:=NullRange;
  if StreamExposure<>nil then begin
     result.min:=StreamExp.min;
-    if result.min<1E-5 then result.min:=0;
     result.max:=StreamExp.max;
     result.step:=StreamExp.step;
  end
