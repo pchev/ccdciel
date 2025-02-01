@@ -192,7 +192,7 @@ begin
       c:=p;
       CtrlList.AddObject(p.Name,p);
     end
-    else if (FSwitch[i].IndiType>=INDI_SWITCH)and(FSwitch[i].IndiGroup>=0) then begin
+    else if (FSwitch[i].IndiType=INDI_SWITCH)and(FSwitch[i].IndiGroup>=0) then begin
       buf:='RBGroup_'+inttostr(FSwitch[i].IndiGroup);
       cp:=FindComponent(buf);
       if cp=nil then begin
