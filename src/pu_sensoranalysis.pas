@@ -269,7 +269,7 @@ Step 7b Calculate dark current method Δσ
       dark_current[e-]:=sqr(σ_end[adu]*gain[e-/adu]) - sqr(σ_read_noise[adu]*gain[e-/adu])    (formula 4)
 
 
-Note a correction for gain in the driver should be applied. E.g. ASI1600 12 bit sensor ouput is increased from 0..4096 to 0..65535. A additional gain factor of 16.
+Note a correction for gain in the driver should be applied. E.g. ASI1600 12 bit sensor output is increased from 0..4096 to 0..65535. A additional gain factor of 16.
 }
 
 
@@ -314,7 +314,7 @@ end;
 procedure Tf_sensoranalysis.FormShow(Sender: TObject);
 begin
   exposure_min := Math.min(0.01, Math.max(camera.ExposureRange.min, 0.0));
-  //protect againt 9999 or -9999 values
+  //protect against 9999 or -9999 values
 
   Gain1.Enabled := camera.CanSetGain;
   Gain2.Enabled := camera.CanSetGain;
@@ -857,7 +857,7 @@ begin
 //  median_and_stdev(1, repeats1.Value, DARK,{out}sd_RTN_dark_adu, sd_dark_adu, median_dark_adu,RTN_perc,RTN_rms);//take an exposure of 1.01 seconds to avoid weird variations in the first second.
 //    RTN_rms:=RTN_rms* 1 / 16;//convert to e-
 //    InstructionsAdd('Percentage of RTN found after '+ IntToStr(dark_current_test_duration1.Value + 1) + ' sec:  ' + floattostrF(RTN_perc, FFfixed, 0, 2)+'%, RMS value '+ floattostrF(RTN_rms, FFfixed, 0, 2)+
-//    ' e-. Random Telegraph Noise is here defined as the number of pixels with a value more then 3 sigma above the Gaussian noise level in the difference betweem two darks.');
+//    ' e-. Random Telegraph Noise is here defined as the number of pixels with a value more then 3 sigma above the Gaussian noise level in the difference between two darks.');
 //  exit;
 
 
@@ -1120,13 +1120,13 @@ begin
           rtn_rms1.caption:= FormatFloat(f2, RTN_rms)+' e-';
           gain_used1.Caption:=IntToStr(gain);
           InstructionsAdd('Percentage of RTN found after 1.01 sec: ' + rtn1.caption+', RMS value '+ rtn_rms1.caption);
-          InstructionsAdd('Random Telegraph Noise is here defined as the number of pixels with a value more then 3 sigma above the Gaussian noise level in the difference betweem two darks.');
+          InstructionsAdd('Random Telegraph Noise is here defined as the number of pixels with a value more then 3 sigma above the Gaussian noise level in the difference between two darks.');
 
           // long duration test
           median_and_stdev(dark_current_test_duration1.Value + 1.01, repeats1.Value, DARK,{out}sd_RTN_dark_adu2, sd_dark_adu2, median_dark_adu2,RTN_perc,RTN_rms);  //take an exposure of value+1 seconds.
           RTN_rms:=RTN_rms* measurements[gainstep].gain_e / correction;//convert to e-
           InstructionsAdd('Percentage of RTN found after '+ IntToStr(dark_current_test_duration1.Value + 1) + ' sec:  ' + FormatFloat(f2,RTN_perc)+'%, RMS value '+ FormatFloat(f2,RTN_rms)+' e-.');
-          InstructionsAdd('Random Telegraph Noise is here defined as the number of pixels with a value more then 3 sigma above the Gaussian noise level in the difference betweem two darks.');
+          InstructionsAdd('Random Telegraph Noise is here defined as the number of pixels with a value more then 3 sigma above the Gaussian noise level in the difference between two darks.');
 
 
           readnoise2_e := sd_dark_adu * measurements[gainstep].gain_e / correction; // read noise after 1.1 seconds        {1.08}

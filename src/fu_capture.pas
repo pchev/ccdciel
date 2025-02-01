@@ -348,7 +348,7 @@ begin
   ExpTime.Enabled:=(cbFrameType.ItemIndex<>1);
   if ExpTime.Enabled and (ExpTime.Text='0') then ExpTime.ItemIndex:=0;
   if Sender<>nil then begin
-    // run custom frame type script immediatelly when changed interactively
+    // run custom frame type script immediately when changed interactively
     if assigned(FonFrameTypeChange) then FonFrameTypeChange(self);
   end;
 end;

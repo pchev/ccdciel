@@ -3407,7 +3407,7 @@ object f_option: Tf_option
             AnchorSideTop.Side = asrCenter
             Left = 214
             Height = 22
-            Hint = 'The prefered focuser direction for autofocus.'
+            Hint = 'The preferred focuser direction for autofocus.'
             Top = 91
             Width = 41
             Caption = 'In'
@@ -3420,7 +3420,7 @@ object f_option: Tf_option
           object AutofocusMoveDirOut: TRadioButton
             Left = 369
             Height = 22
-            Hint = 'The prefered focuser direction for autofocus.'
+            Hint = 'The preferred focuser direction for autofocus.'
             Top = 91
             Width = 51
             Caption = 'Out'

@@ -2442,7 +2442,7 @@ procedure aberrationme(j: double; var abe, abp: double);
 var
   t: double;
 const
-  minjdabe = 2378496.5; // 1800 limit for abberation calculation using Meeus function
+  minjdabe = 2378496.5; // 1800 limit for aberration calculation using Meeus function
   maxjdabe = 2524593.5; // 2200
 begin
   if (j > minjdabe) and (j < maxjdabe) then

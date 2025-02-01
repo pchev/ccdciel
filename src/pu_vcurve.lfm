@@ -252,7 +252,7 @@ object f_vcurve: Tf_vcurve
   object TrackBar1: TTrackBar
     Left = 69
     Height = 43
-    Hint = 'After learning is completed you can use this cursor to better adjust to the linear part of the curve. '#10'The fit must be particulary good near the horizontal blue line position.'
+    Hint = 'After learning is completed you can use this cursor to better adjust to the linear part of the curve. '#10'The fit must be particularly good near the horizontal blue line position.'
     Top = 335
     Width = 89
     OnChange = TrackBar1Change

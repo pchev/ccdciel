@@ -726,7 +726,7 @@ begin
   // save the updated file
   SaveTargets(FSequenceFile.Filename);
 
-  // Apply startup change immediatelly only if the sequence is waiting to start
+  // Apply startup change immediately only if the sequence is waiting to start
   if StartChange and WaitStarting then begin
     msg(rsRestartTheSe, 3);
     if assigned(FonRestart) then FonRestart(self);
@@ -1601,7 +1601,7 @@ begin
      etime:=stime+stw/secperday;
    end
    else
-     etime:=MaxDouble;             // no end time, can run infinitly
+     etime:=MaxDouble;             // no end time, can run infinitely
    twok:=TwilightAstro(now,hm,he);  // compute twilight
    if twok then begin
      if he<12 then he:=he+24;
@@ -1720,7 +1720,7 @@ begin
             txt:=txt+','+blank+rsStartAt+FormatDateTime(datehms, ctime);
           end
           else begin
-            // target is already completly done
+            // target is already completely done
             dotarget:=false;
             txt:=txt+','+blank+rsDone;
           end;
@@ -1789,7 +1789,7 @@ begin
         // total execution time for target
         targettime:=targettime*(t.repeatcount-t.repeatdone);
         if dotarget and (targettime>forceendtime) then begin
-           // interupted by object set
+           // interrupted by object set
            targettime:=forceendtime;
            forceset:=true;
         end
@@ -1803,13 +1803,13 @@ begin
           txt:=txt+','+blank+'Sequence elapsed time'+':'+blank+TimToStr(totaltime/3600,'h',false);
           FDoneStatus:=FDoneStatus+crlf+txt;
           if FSeqStop and (ctime>etime) then begin
-            // interupted by sequence end time
+            // interrupted by sequence end time
             txt:=t.objectname+blank+'Interrupted by end of sequence at:'+blank+FormatDateTime(datehms,etime);
             seqbreak:=true;
           end
           else begin
             if forceset then
-              // interupted by object set
+              // interrupted by object set
               txt:=t.objectname+blank+'Interrupted at:'+blank+FormatDateTime(datehms,ctime)
             else
               // completed time
@@ -2412,7 +2412,7 @@ begin
     chkendtime:=rmod(t.endtime-enddelay+1,1);
     // test if in time interval
     intime:=InTimeInterval(frac(now),t.starttime,chkendtime,st/24);
-    // test if skiped
+    // test if skipped
     if t.skip then begin
       skipmsg:='';
       if (intime<0) and (t.starttime>=0) then begin

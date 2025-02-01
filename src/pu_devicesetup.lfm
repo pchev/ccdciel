@@ -654,7 +654,7 @@ object f_setup: Tf_setup
                 object CameraIndiTransfertDir: TEdit
                   Left = 96
                   Height = 28
-                  Hint = 'The temporary RAM disk used to transfert the images '#10'from the Indi server'
+                  Hint = 'The temporary RAM disk used to transfer the images '#10'from the Indi server'
                   Top = 2
                   Width = 254
                   Constraints.MaxHeight = 28

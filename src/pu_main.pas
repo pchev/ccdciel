@@ -10950,7 +10950,7 @@ end;
 
 procedure Tf_main.CaptureFrameTypeChange(Sender: TObject);
 begin
-  // run custom frame type script immediatelly when changed interactively
+  // run custom frame type script immediately when changed interactively
   camera.InitFrameType(f_capture.FrameType)
 end;
 
@@ -11860,7 +11860,7 @@ begin
   NewMessage(Format(rsFlatLevel, [inttostr(round(fits.imageFlatLevel))]),2);
   // adjust exposure time only once per series
   if AdjustDomeFlat then begin
-    // new exposure adjustement
+    // new exposure adjustment
     expadjust:=DomeFlatLevel/fits.imageFlatLevel;
     exp:=StrToFloatDef(f_capture.ExpTime.Text,FlatMinExp);
     newexp:=exp*expadjust;
@@ -11870,12 +11870,12 @@ begin
          (sgn(DomeFlatExpAdjust-1)=sgn(expadjust-1)) // same direction
         )
        ) then begin
-      // continue adjustement
+      // continue adjustment
       DomeFlatExpAdjust:=expadjust;
       result:=false;
     end
     else begin
-      // not saturated, small change, direction reversal: make last adjustement and stop to prevent oscillation
+      // not saturated, small change, direction reversal: make last adjustment and stop to prevent oscillation
       AdjustDomeFlat:=false;
       doFlatAutoExposure:=false;
       result:=true;
@@ -14454,7 +14454,7 @@ begin
     f_starprofile.ChkAutofocusDown(false);
     exit;
   end;
-  // protect again wrong settting
+  // protect against wrong setting
   if AutofocusExposureFact<=0 then AutofocusExposureFact:=1;
   if AutofocusExposure<=0 then AutofocusExposure:=1;
   // start a new exposure as the current frame is probably not a preview
@@ -16142,7 +16142,7 @@ begin
 end;
 
 
-function fnmodulo2(x,range: double):double;   {specifiy range=2*pi fore -pi..pi or range=360 for -180.. 180}
+function fnmodulo2(x,range: double):double;   {specify range=2*pi fore -pi..pi or range=360 for -180.. 180}
 begin
   result:=x;
   while result<-range/2 do result:=result+range;

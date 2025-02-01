@@ -55,7 +55,7 @@ begin
   end;//for loop
 
   if Sharpness>0 then
-    result := 100*width*height/sqrt(Sharpness) //turn the curve upside down and scale simular as HFD values. A lower value indicates a sharper image
+    result := 100*width*height/sqrt(Sharpness) //turn the curve upside down and scale similar to HFD values. A lower value indicates a sharper image
   else
     result:=9999;//dummy value for case sharpness is zero
 end;

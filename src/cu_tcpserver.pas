@@ -22,7 +22,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 }
 
-{ TCP/IP Connexion, based on Synapse Echo demo }
+{ TCP/IP Connection, based on Synapse Echo demo }
 
 {$MODE objfpc}{$H+}
 
