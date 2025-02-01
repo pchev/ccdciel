@@ -152,7 +152,7 @@ begin
 end;
 
 
-procedure get_best_mean(list: array of double; leng : integer; out mean : double);{Remove outliers from polulation using MAD. }
+procedure get_best_mean(list: array of double; leng : integer; out mean : double);{Remove outliers from population using MAD. }
 var  {idea from https://eurekastatistics.com/using-the-median-absolute-deviation-to-find-outliers/}
   i,count         : integer;
   median, mad     : double;
@@ -409,7 +409,7 @@ begin
       if raonly then
         ddec:=0
       else
-        ddec:=(2*random-1)*pixel;//DEC dither ammount in pixels
+        ddec:=(2*random-1)*pixel;//DEC dither amount in pixels
     end;
 
     // move fast for the first pulse
@@ -508,7 +508,7 @@ begin
   end;
 end;
 
-function  T_autoguider_internal.measure_drift(var initialize:boolean; out drX,drY :double) : integer;// ReferenceX,Y indicates the total drift, drX,drY to drift since previouse call. Arrays old_xy_array,xy_array are for storage star positions
+function  T_autoguider_internal.measure_drift(var initialize:boolean; out drX,drY :double) : integer;// ReferenceX,Y indicates the total drift, drX,drY to drift since previous call. Arrays old_xy_array,xy_array are for storage star positions
 var
   i,fitsx,fitsy,stepsize,xsize,ysize,star_counter,star_counter2,counter,len,maxSNRstar,ix,iy: integer;
   hfd1,star_fwhm,vmax,bg,bgdev,xc,yc,snr,flux,fluxratio,min_SNR,min_HFD,maxSNR,margin,y,mhfd,peak : double;
@@ -820,14 +820,14 @@ begin
     peak:=0;
     for i:=0 to length(xy_array_old)-1 do
     begin
-      if xy_array_old[i].flux<>0 then // Previouse dection, keep tracking this star while it drifts away
+      if xy_array_old[i].flux<>0 then // Previous detection, keep tracking this star while it drifts away
       begin //try first within a small area
         guidefits.GetHFD3(round(xy_array_old[i].x2),round(xy_array_old[i].y2),round(mean_hfd*3.5){smaller search area},true{autocenter},xc,yc,bg,bgdev,hfd1,star_fwhm,vmax,snr,flux,false);
        if snr<1 then // no detection, look wider
         guidefits.GetHFD3(round(xy_array_old[i].x2),round(xy_array_old[i].y2),searchA{area},true{autocenter},xc,yc,bg,bgdev,hfd1,star_fwhm,vmax,snr,flux,false) // use a larger search area
       end
       else // try in the initial area
-        guidefits.GetHFD3(round(xy_array_old[i].x1),round(xy_array_old[i].y1),searchA,true{autocenter},xc,yc,bg,bgdev,hfd1,star_fwhm,vmax,snr,flux,false);// find a star in the orginal segment
+        guidefits.GetHFD3(round(xy_array_old[i].x1),round(xy_array_old[i].y1),searchA,true{autocenter},xc,yc,bg,bgdev,hfd1,star_fwhm,vmax,snr,flux,false);// find a star in the original segment
 
       if ((snr>max(min_SNR-10,6)) and (hfd1>Min_HFD)) then // star detection
       begin // star in this area
@@ -1388,7 +1388,7 @@ var i,maxpulse    : integer;
                 mflipcorr:=0;
 
               if finternalguider.pulsegainNorth<0 then flipDec:=-1 else flipDec:=+1;//flipped image correction. E.g. an image where north is up and east on the right size.
-              rotate2(((+finternalguider.PA+mflipcorr)*pi/180),dRaPixelsSolar,flipDec*dDecPixelsSolar,delta_ditherX,delta_ditherY);// rotate RA, DEC drift scope to X,Y drift guider image. Positive ditherY is go North. Postive ditherX is go West!
+              rotate2(((+finternalguider.PA+mflipcorr)*pi/180),dRaPixelsSolar,flipDec*dDecPixelsSolar,delta_ditherX,delta_ditherY);// rotate RA, DEC drift scope to X,Y drift guider image. Positive ditherY is go North. Positive ditherX is go West!
               ditherX:=ditherX+delta_ditherX; //integrate offset solar object in X
               ditherY:=ditherY+delta_ditherY; //integrate offset solar object in Y
               Finternalguider.OffsetX:=ditherX;  // show in spectro offset
@@ -1598,7 +1598,7 @@ begin
 
     end;
 
-    // wait for puls guide move completed
+    // wait for pulse guide move completed
     if maxpulse>finternalguider.shortestPulse then
     begin
       WaitPulseGuiding(maxpulse);//If this timer has run a new exposure is started
@@ -2616,7 +2616,7 @@ try
     if n<>0 then begin msg('Guide star out of frame x='+FormatFloat(f1,c.x)+' y='+FormatFloat(f1,c.y),1); exit; end;
     xg:=c.x;
     yg:=c.y;
-    // offset fron object to guide
+    // offset from object to guide
     xo:=xg-xt;
     yo:=yg-yt;
     // correction for pier side
@@ -2689,7 +2689,7 @@ try
       end
       else if Finternalguider.GuideLock then begin
          // try to find the brightest star instead
-         msg('Astrometry fail, try to use the brigthest star instead of the specified coordinates',1);
+         msg('Astrometry fail, try to use the brightest star instead of the specified coordinates',1);
          finternalguider.GuideLockNextX:=-10;
          finternalguider.GuideLockNextY:=-10;
          result:=false;

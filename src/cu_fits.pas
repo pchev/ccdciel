@@ -1164,7 +1164,7 @@ for i:=startline to endline do begin
    p := bgra.Scanline[i];
    for j := 0 to xs-1 do begin
        if fits.preview_axis=3 then begin
-         // 3 chanel color image
+         // 3 channel color image
          xx:=fits.Fimage[0,i,j];
          x:=round(max(0,min(MaxWord,(xx-vmin) * c )) );
          p^.red:=fits.GammaCorr(x);
@@ -1233,7 +1233,7 @@ for i:=startline to endline do begin
    p := bgra.Scanline[i];
    for j := 0 to xs-1 do begin
        if fits.preview_axis=3 then begin
-         // 3 chanel color image
+         // 3 channel color image
          xx:=(fits.Fimage[0,i,j]-minv)*c;
          x:=round(max(0,min(MaxWord,xx)) );
          p^.red:=x;
@@ -3100,7 +3100,7 @@ begin
   try
     calculate_bg_sd(Fimage,x,y,rs,4,bg,sd); {calculate background and standard deviation for position x,y around box rs x rs. }
 
-    // Get center of gravity whithin star detection box
+    // Get center of gravity within star detection box
     SumVal:=0;
     SumValX:=0;
     SumValY:=0;
@@ -3166,7 +3166,7 @@ end;
 procedure TFits.FindStarPos2(x,y,s: integer; out xc,yc,vmax,bg,sd: double);
 // center of gravity in area s*s centered on x,y
 // same as FindStarPos but with floating point xc,yc and without the radius computation
-// this is used for autoguiding on spectro slit, with possible splited star image
+// this is used for autoguiding on spectro slit, with possible split star image
 const
     max_ri=100;
 var i,j,rs :integer;
@@ -3184,7 +3184,7 @@ begin
   try
     calculate_bg_sd(Fimage,x,y,rs,4,bg,sd); {calculate background and standard deviation for position x,y around box rs x rs. }
 
-    // Get center of gravity whithin star detection box
+    // Get center of gravity within star detection box
     SumVal:=0;
     SumValX:=0;
     SumValY:=0;
@@ -3265,7 +3265,7 @@ begin
     calculate_bg_sd(Fimage,x,y,rs,4,bg,sd); {calculate background and standard deviation for position x,y around box rs x rs. }
 
     repeat {## reduce box size till symmetry to remove stars}
-      // Get center of gravity whithin star detection box and count signal pixels
+      // Get center of gravity within star detection box and count signal pixels
       SumVal:=0;
       SumValX:=0;
       SumValY:=0;
@@ -3360,7 +3360,7 @@ begin
      ri:=3; {Minimum 6+1 x 6+1 pixel box}
     end;
 
-    // Get HFD using the aproximation routine assuming that HFD line divides the star in equal portions of gravity:
+    // Get HFD using the approximation routine assuming that HFD line divides the star in equal portions of gravity:
     SumVal:=0;
     SumValR:=0;
     pixel_counter:=0;
@@ -3491,7 +3491,7 @@ begin
     calculate_bg_sd(Fimage,x,y,rs,4,bg,sd); {calculate background and standard deviation for position x,y around box rs x rs. }
 
     repeat {## reduce box size till symmetry to remove stars}
-      // Get center of gravity whithin star detection box and count signal pixels
+      // Get center of gravity within star detection box and count signal pixels
       SumVal:=0;
       SumValX:=0;
       SumValY:=0;
@@ -3592,7 +3592,7 @@ begin
      ri:=3; {Minimum 6+1 x 6+1 pixel box}
     end;
 
-    // Get HFD using the aproximation routine assuming that HFD line divides the star in equal portions of gravity:
+    // Get HFD using the approximation routine assuming that HFD line divides the star in equal portions of gravity:
     SumVal:=0;
     SumValR:=0;
     pixel_counter:=0;

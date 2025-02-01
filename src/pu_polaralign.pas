@@ -146,7 +146,7 @@ type
   (* A double precision point *)
   TPointDouble = packed record x, y: double;
   end;
-  {* Defition of a line in the euclidian plane }
+  {* Definition of a line in the euclidean plane }
   TLineDouble = record
     {** Some point in the line }
     origin: TPointDouble;

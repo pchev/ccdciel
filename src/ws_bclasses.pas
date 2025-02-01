@@ -44,7 +44,7 @@ Type
 
 var
   {:If @TRUE, than method passed TBThread.Synchronize will be executed directly,
-    without synchronization, useful for libraries and cosole projects.
+    without synchronization, useful for libraries and console projects.
   }
   BauglirSynchronizeThreads: boolean = false;
 

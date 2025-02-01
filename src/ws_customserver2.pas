@@ -88,7 +88,7 @@ type
     {:Thread suspend method}
     procedure Stop;
 
-    {:Temination procedure
+    {:Termination procedure
       One should call this procedure to terminate thread,
       it internally calls Terminate, but can be overloaded,
       and can be used for clean um
@@ -143,7 +143,7 @@ type
 //  TCustomServerConnections = class of TCustomConnection;
 
   {:Event procedural type to hook OnAfterAddConnection in server
-    Use this hook to get informations about connection accepted server that was added
+    Use this hook to get information about connection accepted server that was added
   }
   TServerAfterAddConnection = procedure (Server: TCustomServer; aConnection: TCustomConnection) of object;
   {:Event procedural type to hook OnBeforeAddConnection in server
@@ -152,15 +152,15 @@ type
   }
   TServerBeforeAddConnection = procedure (Server: TCustomServer; aConnection: TCustomConnection; var CanAdd: boolean) of object;
   {:Event procedural type to hook OnAfterRemoveConnection in server
-    Use this hook to get informations about connection removed from server (connection is closed)
+    Use this hook to get information about connection removed from server (connection is closed)
   }
   TServerAfterRemoveConnection = procedure (Server: TCustomServer; aConnection: TCustomConnection) of object;
   {:Event procedural type to hook OnAfterRemoveConnection in server
-    Use this hook to get informations about connection removed from server (connection is closed)
+    Use this hook to get information about connection removed from server (connection is closed)
   }
   TServerBeforeRemoveConnection = procedure (Server: TCustomServer; aConnection: TCustomConnection) of object;
   {:Event procedural type to hook OnSockedError in server
-    Use this hook to get informations about error on server binding
+    Use this hook to get information about error on server binding
   }
   TServerSocketError = procedure (Server: TCustomServer; Socket: TTCPBlockSocket) of object;
 
@@ -195,7 +195,7 @@ type
 
     function AddConnection(var aSocket: TTCPCustomConnectionSocket): TCustomConnection; virtual;
     {:Main function to determine what kind of connection will be used
-      @link(AddConnection) uses this functino to actually create connection thread
+      @link(AddConnection) uses this function to actually create connection thread
     }
     function CreateServerConnection(aSocket: TTCPCustomConnectionSocket): TCustomConnection; virtual;
     procedure DoAfterAddConnection; virtual;
@@ -221,7 +221,7 @@ type
 
       The same for aPort it may be number or mnemonic port ('23', 'telnet').
 
-      If port value is '0', system chooses itself and conects unused port in the
+      If port value is '0', system chooses itself and connects unused port in the
       range 1024 to 4096 (this depending by operating system!).
 
       Warning: when you call : Bind('0.0.0.0','0'); then is nothing done! In this
@@ -231,7 +231,7 @@ type
     destructor Destroy; override;
     procedure Execute; override;
 
-    {:Temination procedure
+    {:Termination procedure
       This method should be called instead of Terminate to terminate thread,
       it internally calls Terminate, but can be overloaded,
       and can be used for data clean up

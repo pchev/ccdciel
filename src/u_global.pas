@@ -233,7 +233,7 @@ type
 
 
   const
-    maxfitslist=15;  // must corespond to value in cdcwcs.c
+    maxfitslist=15;  // must correspond to value in cdcwcs.c
     wcsmain=0; wcsguide=1; wcsfind=2; wcspreview=3; wcsfits=4;
 
   {$i revision.inc}

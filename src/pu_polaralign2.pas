@@ -500,7 +500,7 @@ end;
    where da is the polar error in azimuth
    where h is the hour angle of the reference point equal ra - local_sidereal_time
 
- Using the above formula calculate the difference in RA and DEC by subtracting the first image postion from the second reference image. The common term sin(lat) will be nulified. Formula (4)
+ Using the above formula calculate the difference in RA and DEC by subtracting the first image position from the second reference image. The common term sin(lat) will be nulified. Formula (4)
  delta_ra:= de * (TAN(dec2)*SIN(h_2)-TAN(dec1)*SIN(h_1))  + da * COS(lat)*(TAN(dec1)*COS(h_1)-TAN(dec2)*COS(h_2));
  delta_dec:=de * (COS(h_2)-COS(h_1))  + da * COS(lat)*(SIN(h_2)-SIN(h_1));
 
@@ -631,7 +631,7 @@ begin
        // store center
        Fcra:=cra;
        Fcde:=cde;
-       // adjustement at current position
+       // adjustment at current position
        CurrentAdjustement(cra,cde);
        tracemsg('Stars in new image have to move: '+FormatFloat(f2,rad2deg*(corr_ra/max(0.00000000000000000001,cos(FDe[2])))*60)+' arcminutes in RA and '+FormatFloat(f2,rad2deg*(corr_de)*60)+' arcminutes in DEC by the correction.');
        ComputeCorrection;

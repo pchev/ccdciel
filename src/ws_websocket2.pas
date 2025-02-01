@@ -70,7 +70,7 @@ uses
   ws_customserver2, strutils;
 
 const
-  {:Constants section defining what kind of data are sent from one pont to another}
+  {:Constants section defining what kind of data are sent from one point to another}
   {:Continuation frame }
   wsCodeContinuation = $0;
   {:Text frame }
@@ -223,25 +223,25 @@ type
 
     {:Overload this function to process connection close (not at socket level, but as an actual WebSocket frame)
       aCloseCode represents close code (see wsClose constants)
-      aCloseReason represents textual information transfered with frame (there is no specified format or meaning)
+      aCloseReason represents textual information transferred with frame (there is no specified format or meaning)
       aClosedByPeer whether connection has been closed by this connection object or by peer endpoint
     }
     procedure ProcessClose(aCloseCode: integer; aCloseReason: string; aClosedByPeer: boolean); virtual;
 
 
     {:Overload this function to process data as soon as they are read before other Process<data> function is called
-      this function should be used by extensions to modify incomming data before the are process based on code
+      this function should be used by extensions to modify incoming data before the are process based on code
     }
     procedure ProcessData(var aFinal: boolean; var aRes1: boolean; var aRes2: boolean; var aRes3: boolean; var aCode: integer; aData: TMemoryStream); virtual;
 
 
     {:Overload this function to process ping frame)
-      aData represents textual information transfered with frame (there is no specified format or meaning)
+      aData represents textual information transferred with frame (there is no specified format or meaning)
     }
     procedure ProcessPing(aData: string); virtual;
 
     {:Overload this function to process pong frame)
-      aData represents textual information transfered with frame (there is no specified format or meaning)
+      aData represents textual information transferred with frame (there is no specified format or meaning)
     }
     procedure ProcessPong(aData: string); virtual;
 
@@ -284,7 +284,7 @@ type
 
     {:Procedure to close connection
       aCloseCode represents close code (see wsClose constants)
-      aCloseReason represents textual information transfered with frame (there is no specified format or meaning) the string can only be 123 bytes length
+      aCloseReason represents textual information transferred with frame (there is no specified format or meaning) the string can only be 123 bytes length
     }
     procedure Close(aCode: integer; aCloseReason: string); virtual; abstract;
 
@@ -337,16 +337,16 @@ type
     procedure SendTextContinuation(aData: string; aFinal: boolean = true; aRes1: boolean = false;  aRes2: boolean = false;  aRes3: boolean = false);
 
     {:Send Ping
-      aData ping informations
+      aData ping information
     }
     procedure Ping(aData: string);
 
     {:Send Pong
-      aData pong informations
+      aData pong information
     }
     procedure Pong(aData: string);
 
-    {:Temination procedure
+    {:Termination procedure
       This method should be called instead of Terminate to terminate thread,
       it internally calls Terminate, but can be overloaded,
       and can be used for data clean up
@@ -376,7 +376,7 @@ type
       e.g. foo, bar; baz=2
 
       On both client and server connection this value represents the extension(s) selected by server to be used
-      as a result of extension negotioation
+      as a result of extension negotiation
 
       value - represents that no extension was negotiated and no header will be sent to client
       it is the default value
@@ -391,7 +391,7 @@ type
 
 
     {:
-      Whether WebSocket handshake was succecfull (and connection is afer WS handshake) 
+      Whether WebSocket handshake was succecfull (and connection is after WS handshake) 
     }
     property Handshake: boolean read fHandshake;
 
@@ -412,7 +412,7 @@ type
       e.g. chat, superchat
 
       On both client and server connection this value represents the protocol(s) selected by server to be used
-      as a result of protocol negotioation
+      as a result of protocol negotiation
 
       value - represents that no protocol was negotiated and no header will be sent to client
       it is the default value
@@ -475,14 +475,14 @@ type
   {: Class of WebSocket server connections }
   TWebSocketServerConnections = class of TWebSocketServerConnection;
 
-  {: WebSocket client connection, this object shoud be created to establish client to server connection  }
+  {: WebSocket client connection, this object should be created to establish client to server connection  }
   TWebSocketClientConnection = class(TWebSocketCustomConnection)
   protected
     function BeforeExecuteConnection: boolean; override;
   public
     {: construstor to create connection,
-      parameters has the same meaning as corresponging connection properties (see 2 differences below) and
-      should be formated according to headers values
+      parameters has the same meaning as corresponding connection properties (see 2 differences below) and
+      should be formatted according to headers values
 
       aProtocol and aExtension in constructor represents protocol(s) and extension(s)
       client is trying to negotiate, obejst properties then represents
@@ -583,7 +583,7 @@ type
     procedure CloseAllConnections(aCloseCode: integer; aReason: string);
 
 
-    {:Temination procedure
+    {:Termination procedure
       This method should be called instead of Terminate to terminate thread,
       it internally calls Terminate, but can be overloaded,
       and can be used for data clean up
@@ -1128,7 +1128,7 @@ begin
       result := ReadData(fReadFinal,  fReadRes1, fReadRes2, fReadRes3, fReadCode, fReadStream);
       if (CanReceiveOrSend)  then
       begin
-        if (result = 0) then // no socket error occured
+        if (result = 0) then // no socket error occurred
         begin
           fReadStream.Position := 0;
           ProcessData(fReadFinal,  fReadRes1, fReadRes2, fReadRes3, fReadCode, fReadStream);
@@ -1371,7 +1371,7 @@ begin
           begin
             try
               try
-                // BASIC INFORMATIONS
+                // BASIC INFORMATION
                 aFinal := (b and $80) = $80;
                 aRes1 := (b and $40) = $40;
                 aRes2 := (b and $20) = $20;
@@ -1571,7 +1571,7 @@ begin
 
       s := '';
 
-      // BASIC INFORMATIONS
+      // BASIC INFORMATION
       b := IfThen(aFinal, 1, 0) * $80;
       b := b + IfThen(aRes1, 1, 0) * $40;
       b := b + IfThen(aRes2, 1, 0) * $20;

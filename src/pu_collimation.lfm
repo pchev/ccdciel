@@ -143,7 +143,7 @@ object f_collimation: Tf_collimation
         AutoSize = False
         BorderSpacing.Top = 4
         BorderSpacing.Around = 4
-        Caption = 'Inspect the distribution of the HFD across the image to help with coma corrector spacing and tilt adjustement.'
+        Caption = 'Inspect the distribution of the HFD across the image to help with coma corrector spacing and tilt adjustment.'
         ParentColor = False
         WordWrap = True
       end

@@ -360,7 +360,7 @@ begin
       read_deepsky('S',telescope_ra,telescope_dec, cos_telescope_dec {cos(telescope_dec)},fov,{var} ra2,dec2,length1,width1,pa);{deepsky database search}
 
       //5. Conversion (RA,DEC) -> (x,y).
-      sincos(dec2,SIN_dec_new,COS_dec_new);//sincos is faster then seperate sin and cos functions
+      sincos(dec2,SIN_dec_new,COS_dec_new);//sincos is faster then separate sin and cos functions
       delta_ra:=ra2-ra0;
       sincos(delta_ra,SIN_delta_ra,COS_delta_ra);
       HH := SIN_dec_new*sin_dec_ref + COS_dec_new*COS_dec_ref*COS_delta_ra;
@@ -509,7 +509,7 @@ begin
         z:=ImgZoom;
         if z=0 then z:=ImgScale0;
         len:=z*length1/(abs(cdelt2)*60*10*2); {Length in pixels}
-        if len<=2 then {too small to plot an elipse or circle, just plot four dots}
+        if len<=2 then {too small to plot an ellipse or circle, just plot four dots}
         begin {tiny object marking}
           cnv.pixels[x-2,y+2]:=clyellow;
           cnv.pixels[x+2,y+2]:=clyellow;
