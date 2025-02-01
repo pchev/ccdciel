@@ -462,6 +462,14 @@ begin
   end
   else begin
     try
+    try
+     FBinX:=V.BinX;
+    except
+    end;
+    try
+     FBinY:=V.BinY;
+    except
+    end;
     c:=GetCooler;
     if c<>stCooler then begin
        stCooler:=c;

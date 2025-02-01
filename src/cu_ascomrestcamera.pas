@@ -451,6 +451,14 @@ begin
   end
   else begin
     try
+    try
+     FBinX:=V.Get('binx').AsInt;
+    except
+    end;
+    try
+     FBinY:=V.Get('biny').AsInt;
+    except
+    end;
     c:=GetCooler;
     if c<>stCooler then begin
        stCooler:=c;
