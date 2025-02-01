@@ -25,7 +25,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 interface
 
-uses  UScaleDPI, u_global, Graphics, Dialogs, u_translation, cu_switch, SpinEx,
+uses  UScaleDPI, u_global, Graphics, Dialogs, u_translation, cu_switch, SpinEx, indiapi,
   Classes, SysUtils, FileUtil, Forms, Controls, StdCtrls, ExtCtrls, ComCtrls;
 
 type
@@ -123,9 +123,12 @@ procedure Tf_switchpage.SetSwitch(value:TSwitchList);
 var i:integer;
     c:TControl;
     cb: TCheckBox;
+    rb: TRadioButton;
     p: TPanel;
     l: TLabel;
     s: TFloatSpinEditEx;
+    buf: string;
+    cp: TComponent;
 begin
  if initialized then begin
    for i:=0 to FNumSwitch-1 do begin
@@ -133,6 +136,8 @@ begin
      FSwitch[i].Value   := value[i].Value;
      if CtrlList.Objects[i] is TCheckBox then
        TCheckBox(CtrlList.Objects[i]).Checked:=value[i].Checked;
+     if CtrlList.Objects[i] is TRadioButton then
+       TRadioButton(CtrlList.Objects[i]).Checked:=value[i].Checked;
      if CtrlList.Objects[i] is TPanel then begin
        s:=TFloatSpinEditEx(FindComponent('Switch_'+IntToStr(i)));
        if s<>nil then
@@ -143,6 +148,8 @@ begin
  else begin
   for i:=0 to FNumSwitch-1 do begin
     FSwitch[i].Name       := value[i].Name;
+    FSwitch[i].IndiType   := value[i].IndiType;
+    FSwitch[i].IndiGroup  := value[i].IndiGroup;
     FSwitch[i].CanWrite   := value[i].CanWrite;
     FSwitch[i].MultiState := value[i].MultiState;
     FSwitch[i].Min        := value[i].Min;
@@ -185,6 +192,33 @@ begin
       c:=p;
       CtrlList.AddObject(p.Name,p);
     end
+    else if (FSwitch[i].IndiType>=INDI_SWITCH)and(FSwitch[i].IndiGroup>=0) then begin
+      buf:='RBGroup_'+inttostr(FSwitch[i].IndiGroup);
+      cp:=FindComponent(buf);
+      if cp=nil then begin
+        p:=tpanel.Create(self);
+        p.Name:=buf;
+        p.Caption:='';
+        p.BevelInner:=bvLowered;
+        p.BevelOuter:=bvRaised;
+        p.Top:=i*30;
+        p.Align:=alTop;
+        p.AutoSize:=true;
+        p.Parent:=ScrollBox1;
+      end
+      else
+        p:=TPanel(cp);
+      rb:=TRadioButton.Create(self);
+      rb.Name:='RB_'+IntToStr(i);
+      rb.Top:=i*30;
+      rb.Align:=alTop;
+      rb.Caption:=FSwitch[i].Name;
+      rb.Enabled:=FSwitch[i].CanWrite;
+      rb.Checked:=value[i].Checked;
+      rb.Parent:=p;
+      c:=p;
+      CtrlList.AddObject(rb.Name,rb);
+    end
     else begin
       cb:=TCheckBox.Create(self);
       cb.Name:='CB_'+IntToStr(i);
@@ -220,6 +254,10 @@ begin
       if CtrlList.Objects[i] is TCheckBox then begin
         swchanged:=swchanged or (TCheckBox(CtrlList.Objects[i]).Checked<>FSwitch[i].Checked);
         FSwitch[i].Checked:=TCheckBox(CtrlList.Objects[i]).Checked;
+      end;
+      if CtrlList.Objects[i] is TRadioButton then begin
+        swchanged:=swchanged or (TRadioButton(CtrlList.Objects[i]).Checked<>FSwitch[i].Checked);
+        FSwitch[i].Checked:=TRadioButton(CtrlList.Objects[i]).Checked;
       end;
       if CtrlList.Objects[i] is TPanel then begin
         s:=TFloatSpinEditEx(FindComponent('Switch_'+IntToStr(i)));

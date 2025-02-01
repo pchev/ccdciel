@@ -155,6 +155,7 @@ begin
          if FSwitch[i].Step=0 then FSwitch[i].Step:=FSwitch[i].Max;
          if FSwitch[i].Step=0 then FSwitch[i].Step:=1;
          FSwitch[i].MultiState:=((FSwitch[i].Max-FSwitch[i].Min)/FSwitch[i].Step)>1;
+         FSwitch[i].IndiGroup:=-1;
        end;
      end;
      statuserrorcount:=0;
@@ -278,6 +279,7 @@ begin
       result[i].Min        := FSwitch[i].Min;
       result[i].Max        := FSwitch[i].Max;
       result[i].Step       := FSwitch[i].Step;
+      result[i].IndiGroup  := -1;
       if result[i].MultiState then begin
         result[i].Value    := V.Get('getswitchvalue','Id='+IntToStr(i)).AsFloat;
         if (FStatus<>devConnected)or(FNumSwitch=0) then exit;

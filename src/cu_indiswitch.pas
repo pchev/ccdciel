@@ -282,7 +282,7 @@ var propname: string;
     NumProp: INumberVectorProperty;
     Txt: IText;
     buf: string;
-    i,j: integer;
+    i,j,swgroup: integer;
 begin
   propname:=indiProp.getName;
   proptype:=indiProp.getType;
@@ -313,16 +313,21 @@ begin
      if (configload=nil)or(configsave=nil) then configprop:=nil;
   end
   else if (propname='DEBUG')or(propname='SIMULATION')or(propname='POLLING_PERIOD')or(propname='CONNECTION_MODE')or(propname='DEVICE_PORT')or
-       (propname='DEVICE_BAUD_RATE')or(propname='DEVICE_AUTO_SEARCH')or(propname='DEVICE_PORT_SCAN')or(propname='FIRMWARE_INFO')
+       (propname='DEVICE_BAUD_RATE')or(propname='DEVICE_AUTO_SEARCH')or(propname='DEVICE_PORT_SCAN')or(propname='FIRMWARE_INFO') or
+       (pos('FOCUS',propname)>0)or(pos('WEATHER',propname)>0)
   then begin
       // ignore this properties
       // everything else is considered as a switch
   end
   else if (proptype=INDI_SWITCH) and (NumSwitchProp<MaxSwitchProp)  then begin
      SwProp:=indiProp.getSwitch;
-     if (SwProp.r=ISR_NOFMANY) and ((SwProp.p=IP_RO)or(SwProp.p=IP_RW))
+     if ((SwProp.p=IP_RO)or(SwProp.p=IP_RW))
      then begin
        inc(NumSwitchProp);
+       if SwProp.r=ISR_NOFMANY then
+         swgroup:=-1
+       else
+         swgroup:=NumSwitchProp;
        SwitchPropList[NumSwitchProp]:=SwProp;
        j:=ISwitchVectorProperty(SwitchPropList[NumSwitchProp]).nsp;
        SetLength(FSwitch,FNumSwitch+j);
@@ -331,6 +336,7 @@ begin
          FSwitch[FNumSwitch+i].IndiType:=INDI_SWITCH;
          FSwitch[FNumSwitch+i].IndiProp:=NumSwitchProp;
          FSwitch[FNumSwitch+i].IndiIndex:=i;
+         FSwitch[FNumSwitch+i].IndiGroup:=swgroup;
          FSwitch[FNumSwitch+i].CanWrite:=ISwitchVectorProperty(SwitchPropList[NumSwitchProp]).p<>IP_RO;
          FSwitch[FNumSwitch+i].MultiState:=false;
          FSwitch[FNumSwitch+i].Min:=0;
@@ -418,6 +424,7 @@ begin
    result[i].IndiType   := FSwitch[i].IndiType;
    result[i].IndiProp   := FSwitch[i].IndiProp;
    result[i].IndiIndex  := FSwitch[i].IndiIndex;
+   result[i].IndiGroup  := FSwitch[i].IndiGroup;
    result[i].CanWrite   := FSwitch[i].CanWrite;
    result[i].MultiState := FSwitch[i].MultiState;
    result[i].Min        := FSwitch[i].Min;
@@ -459,8 +466,11 @@ begin
    case t of
      INDI_SWITCH: begin
          modified:=modified or ( value[i].Checked <> (ISwitchVectorProperty(SwitchPropList[FSwitch[i].IndiProp]).sp[FSwitch[i].IndiIndex].s=ISS_ON) );
-         if value[i].Checked then
+         if value[i].Checked then begin
+           if value[i].IndiGroup>=0 then
+             IUResetSwitch(ISwitchVectorProperty(SwitchPropList[FSwitch[i].IndiProp]));
            ISwitchVectorProperty(SwitchPropList[FSwitch[i].IndiProp]).sp[FSwitch[i].IndiIndex].s:=ISS_ON
+         end
          else
            ISwitchVectorProperty(SwitchPropList[FSwitch[i].IndiProp]).sp[FSwitch[i].IndiIndex].s:=ISS_OFF;
      end;

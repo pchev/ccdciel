@@ -2458,7 +2458,7 @@ begin
 end;
 
 function Tf_scriptengine.cmd_setswitch(nickname,swname, value: string): string;
-var i,j: integer;
+var i,j,k: integer;
     sw: TSwitchList;
 begin
 try
@@ -2472,6 +2472,12 @@ try
            sw[j].Value:=StrToFloat(value)
          else
            sw[j].Checked:=(value<>'0');
+         // reset other switch in same group
+         if (sw[j].IndiType=INDI_SWITCH)and(sw[j].IndiGroup>=0)and(sw[j].Checked) then begin
+           for k:=0 to Fswitch[i].NumSwitch-1 do
+             if (k<>j)and(sw[k].IndiType=INDI_SWITCH)and(sw[k].IndiGroup=sw[j].IndiGroup) then
+               sw[k].Checked:=false;
+         end;
          Fswitch[i].Switch:=sw;
          msg('Set switch '+nickname+', '+swname+'='+value);
          result:=msgOK;
