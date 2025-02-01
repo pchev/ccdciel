@@ -19,6 +19,7 @@ object f_switchpage: Tf_switchpage
     VertScrollBar.Page = 1
     Align = alClient
     AutoSize = True
+    PopupMenu = PopupMenu1
     TabOrder = 1
   end
   object Panel1: TPanel
@@ -42,6 +43,15 @@ object f_switchpage: Tf_switchpage
       Enabled = False
       OnClick = BtnSetClick
       TabOrder = 0
+    end
+  end
+  object PopupMenu1: TPopupMenu
+    OnPopup = PopupMenu1Popup
+    Left = 112
+    Top = 48
+    object MenuItem1: TMenuItem
+      Caption = 'MenuItem1'
+      OnClick = MenuItem1Click
     end
   end
 end

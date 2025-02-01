@@ -25,8 +25,8 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 interface
 
-uses  UScaleDPI, u_global, Graphics, Dialogs, u_translation, cu_switch, SpinEx, indiapi,
-  Classes, SysUtils, FileUtil, Forms, Controls, StdCtrls, ExtCtrls, ComCtrls;
+uses  UScaleDPI, u_global, Graphics, Dialogs, u_translation, cu_switch, SpinEx, indiapi, Clipbrd,
+  Classes, SysUtils, FileUtil, Forms, Controls, StdCtrls, ExtCtrls, ComCtrls, Menus;
 
 type
 
@@ -34,9 +34,13 @@ type
 
   Tf_switchpage = class(Tframe)
     BtnSet: TButton;
+    MenuItem1: TMenuItem;
     Panel1: TPanel;
+    PopupMenu1: TPopupMenu;
     ScrollBox1: TScrollBox;
     procedure BtnSetClick(Sender: TObject);
+    procedure MenuItem1Click(Sender: TObject);
+    procedure PopupMenu1Popup(Sender: TObject);
   private
     { private declarations }
     FConnected, initialized: boolean;
@@ -44,6 +48,7 @@ type
     FSwitch: TSwitchList;
     CtrlList: TStringList;
     FonSetSwitch: TNotifyEvent;
+    ClipboardText: string;
     procedure SetConnected(value:boolean);
     procedure SetNumSwitch(value:integer);
     procedure SetSwitch(value:TSwitchList);
@@ -269,6 +274,44 @@ begin
     end;
   end;
   if swchanged and (Assigned(FonSetSwitch)) then FonSetSwitch(self);
+end;
+
+procedure Tf_switchpage.MenuItem1Click(Sender: TObject);
+begin
+  if ClipboardText<>'' then
+    Clipboard.AsText := ClipboardText;
+end;
+
+procedure Tf_switchpage.PopupMenu1Popup(Sender: TObject);
+var p:TPoint;
+    c: TControl;
+    buf: string;
+    m: TMenuItem;
+begin
+  PopupMenu1.Items.Clear;
+  p:=mouse.CursorPos;
+  p:=ScreenToClient(p);
+  c:=ControlAtPos(p,[capfAllowWinControls,capfRecursive,capfOnlyClientAreas]);
+  if c<>nil then begin
+    buf:='';
+    if c is TCheckBox then
+      buf:=TCheckBox(c).Caption;
+    if c is TRadioButton then
+      buf:=TRadioButton(c).Caption;
+    if c is TLabel then
+      buf:=TLabel(c).Caption;
+    if buf<>'' then begin
+       m:=TMenuItem.Create(self);
+       m.Caption:=Format(rsCopyToClipbo, [buf]);
+       m.OnClick:=@MenuItem1Click;
+       PopupMenu1.Items.Add(m);
+       ClipboardText:=buf;
+    end
+    else begin
+      ClipboardText:='';
+    end;
+  end;
+
 end;
 
 end.

@@ -1607,6 +1607,7 @@ resourcestring
   rsMinimumDista = 'Minimum distance to the Moon';
   rsTooCloseToTh = 'too close to the Moon';
   rsPlanetariumF = 'Planetarium for all targets';
+  rsCopyToClipbo = 'Copy to clipboard: %s';
 
 implementation
 
