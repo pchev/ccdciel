@@ -2973,7 +2973,10 @@ begin
     for i:=0 to NumSwitches-1 do begin
       if switch[i].SwitchInterface=ASCOM then begin
         m:=TMenuItem.Create(Self);
-        m.Caption:=switch[i].Nickname;
+        if switch[i].Nickname='' then
+          m.Caption:=config.GetValue('/Switch/Switch'+inttostr(i)+'/ASCOMswitch/Device','')
+        else
+          m.Caption:=switch[i].Nickname;
         m.OnClick:=@MenuAscomSwitchSetupClick;
         m.Tag:=i;
         MenuAscomSwitchSetup.Add(m);
@@ -2990,7 +2993,10 @@ begin
     for i:=0 to NumSwitches-1 do begin
       if switch[i].SwitchInterface=ASCOMREST then begin
         m:=TMenuItem.Create(Self);
-        m.Caption:=switch[i].Nickname;
+        if switch[i].Nickname='' then
+          m.Caption:='switch/'+IntToStr(config.GetValue('/Switch/Switch'+inttostr(i)+'/ASCOMRestswitch/Device',0))
+        else
+          m.Caption:=switch[i].Nickname;
         m.OnClick:=@MenuAlpacaSwitchSetupClick;
         m.Tag:=i;
         MenuAlpacaSwitchSetup.Add(m);
