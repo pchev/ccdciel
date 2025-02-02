@@ -291,7 +291,7 @@ begin
   PopupMenu1.Items.Clear;
   p:=mouse.CursorPos;
   p:=ScreenToClient(p);
-  c:=ControlAtPos(p,[capfAllowWinControls,capfRecursive,capfOnlyClientAreas]);
+  c:=ControlAtPos(p,[capfAllowWinControls,capfAllowDisabled,capfRecursive,capfOnlyClientAreas]);
   if c<>nil then begin
     buf:='';
     if c is TCheckBox then
