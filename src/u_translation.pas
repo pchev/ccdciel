@@ -1608,6 +1608,9 @@ resourcestring
   rsTooCloseToTh = 'too close to the Moon';
   rsPlanetariumF = 'Planetarium for all targets';
   rsCopyToClipbo = 'Copy to clipboard: %s';
+  rsImportCSV = 'Import CSV';
+  rsExportCSV = 'Export CSV';
+  rsMandatorySta = 'Mandatory start time';
 
 implementation
 

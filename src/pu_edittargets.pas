@@ -77,6 +77,8 @@ type
     MenuAddScriptStep: TMenuItem;
     MenuAddSwitchStep: TMenuItem;
     MenuInsertOnline: TMenuItem;
+    MenuImportCSV: TMenuItem;
+    MenuExportCSV: TMenuItem;
     MenuPlanetariumMagn: TMenuItem;
     MenuPlanetariumMagnAll: TMenuItem;
     MenuOnlineMagn: TMenuItem;
@@ -234,6 +236,8 @@ type
     procedure BtnInsertPopup(Sender: TObject);
     procedure BtnInsertPlanetariumClick(Sender: TObject);
     procedure BtnOptionsPopup(Sender: TObject);
+    procedure MenuExportCSVClick(Sender: TObject);
+    procedure MenuImportCSVClick(Sender: TObject);
     procedure MenuPlanetariumMagnAllClick(Sender: TObject);
     procedure BtnPlanetariumCoordClick(Sender: TObject);
     procedure BtnCurrentCoordClick(Sender: TObject);
@@ -474,6 +478,8 @@ begin
   MenuSkyFlat.Caption := rsSkyFlat;
   MenuImportObslist.Caption:=rsImportCdCObs;
   MenuImportMosaic.Caption:=rsImportCdCMos;
+  MenuImportCSV.Caption:=rsImportCSV;
+  MenuExportCSV.Caption:=rsExportCSV;
   MenuAddCaptureStep.Caption:=rsCapture;
   MenuAddScriptStep.Caption:=rsScript;
   MenuAddSwitchStep.Caption:=rsSwitch;
@@ -520,6 +526,7 @@ begin
   TargetList.Columns.Items[colend-1].PickList.Add(MeridianCrossing+'+4.0h');
   btnApplyAll.Caption:=rsApplyToAllTa;
   cbDarkNight.Caption := Format(rsDarkNight, [blank]);
+  cbMandatoryStartTime.Caption:=rsMandatorySta;
   cbSkip.Caption := Format(rsDonTSwait+'', [blank]);
   cbFullOnly.Caption:=rsDoNotStartIf;
   cbMoonAvoidance.Caption:=rsMoonAvoidanc;
@@ -931,7 +938,9 @@ const
   radecl = 10;
 begin
   // Import Cartes du Ciel observation list
+  if OpenDialog1.InitialDir='' then OpenDialog1.InitialDir:=HomeDir;
   OpenDialog1.Filter:='';
+  OpenDialog1.Title:='Open CDC observing list';
   if OpenDialog1.Execute then begin
      firstrow:=true;
      AssignFile(f, UTF8ToSys(OpenDialog1.FileName));
@@ -1006,7 +1015,9 @@ var buf,buf2,obj,tra,tde,trot:string;
     firstrow: boolean;
 begin
   // Import Cartes du Ciel mosaic
+  if OpenDialog1.InitialDir='' then OpenDialog1.InitialDir:=HomeDir;
   OpenDialog1.Filter:='CdC circle file |*.cdcc';
+  OpenDialog1.Title:='Open CDC mosaic';
   if OpenDialog1.Execute then begin
      AssignFile(f, UTF8ToSys(OpenDialog1.FileName));
      reset(f);
@@ -1463,6 +1474,153 @@ begin
 p:=Point(Tcontrol(Sender).Left,Tcontrol(Sender).Top+Tcontrol(Sender).Height);
 p:=Tcontrol(Sender).Parent.ClientToScreen(p);
 PopupOptions.PopUp(p.x,p.y);
+end;
+
+procedure Tf_EditTargets.MenuExportCSVClick(Sender: TObject);
+var fn,buf: string;
+    f: textfile;
+    i:integer;
+    t:TTarget;
+begin
+  SaveDialog1.InitialDir:=HomeDir;
+  SaveDialog1.DefaultExt:='.csv';
+  SaveDialog1.filter:='CSV file|*.csv';
+  if FFilename<>'' then
+    SaveDialog1.FileName:=slash(HomeDir)+FFilename+'.csv'
+  else
+    SaveDialog1.FileName:='';
+  if SaveDialog1.Execute then
+    fn:=SaveDialog1.FileName
+  else
+    exit;
+  AssignFile(f,fn);
+  Rewrite(f);
+  buf:='Target name;';   // no translation for portability
+  buf:=buf+'Template;';
+  buf:=buf+'RA '+j2000+';';
+  buf:=buf+'Dec '+j2000+';';
+  buf:=buf+'PA;';
+  buf:=buf+'Magn.;';
+  buf:=buf+'Begin;';
+  buf:=buf+'End;';
+  buf:=buf+'Repeat;';
+  buf:=buf+'Interval;';
+  buf:=buf+'Preview;';
+  buf:=buf+'Preview exposure;';
+  buf:=buf+'Dark night;';
+  buf:=buf+'Mandatory start time;';
+  buf:=buf+'Don''t wait;';
+  buf:=buf+'Full only;';
+  buf:=buf+'Moon avoidance;';
+  buf:=buf+'Astrometry;';
+  buf:=buf+'In place autofocus;';
+  buf:=buf+'Autofocus on temperature;';
+  buf:=buf+'Autofocus on HFD;';
+  buf:=buf+'Update RA+Dec from planetarium;';
+  buf:=buf+'Solar object tracking;';
+  buf:=buf+'No autoguiding;';
+  buf:=buf+'Run init script;';
+  buf:=buf+'Script;';
+  buf:=buf+'Parameter;';
+  writeln(f,buf);
+  for i:=1 to TargetList.RowCount-1 do begin
+    t:=TTarget(TargetList.Objects[colseq,i]);
+    buf:=TargetList.Cells[colname,i]+';';
+    buf:=buf+StringReplace(TargetList.Cells[colplan,i],'*','',[])+';';
+    buf:=buf+TargetList.Cells[colra,i]+';';
+    buf:=buf+TargetList.Cells[coldec,i]+';';
+    buf:=buf+TargetList.Cells[colpa,i]+';';
+    buf:=buf+TargetList.Cells[colmagn,i]+';';
+    buf:=buf+TargetList.Cells[colstart,i]+';';
+    buf:=buf+TargetList.Cells[colend,i]+';';
+    buf:=buf+TargetList.Cells[colrepeat,i]+';';
+    buf:=buf+t.delay_str+';';
+    buf:=buf+BoolToStr(t.preview,'1','0')+';';
+    buf:=buf+t.previewexposure_str+';';
+    buf:=buf+BoolToStr(t.darknight,'1','0')+';';
+    buf:=buf+BoolToStr(t.mandatorystarttime,'1','0')+';';
+    buf:=buf+BoolToStr(t.skip,'1','0')+';';
+    buf:=buf+BoolToStr(t.fullonly,'1','0')+';';
+    buf:=buf+BoolToStr(t.moonavoidance,'1','0')+';';
+    buf:=buf+BoolToStr(t.astrometrypointing,'1','0')+';';
+    buf:=buf+BoolToStr(t.inplaceautofocus,'1','0')+';';
+    buf:=buf+BoolToStr(t.autofocustemp,'1','0')+';';
+    buf:=buf+BoolToStr(t.autofocushfd,'1','0')+';';
+    buf:=buf+BoolToStr(t.updatecoord,'1','0')+';';
+    buf:=buf+BoolToStr(t.solartracking,'1','0')+';';
+    buf:=buf+BoolToStr(t.noautoguidingchange,'1','0')+';';
+    buf:=buf+BoolToStr(t.initscript,'1','0')+';';
+    buf:=buf+t.initscriptname+';';
+    buf:=buf+t.initscriptargs+';';
+    writeln(f,buf);
+  end;
+  CloseFile(f);
+end;
+
+procedure Tf_EditTargets.MenuImportCSVClick(Sender: TObject);
+var fn,buf: string;
+    f: textfile;
+    rec: Tstringlist;
+    i,n:integer;
+    t:TTarget;
+begin
+  if OpenDialog1.InitialDir='' then OpenDialog1.InitialDir:=HomeDir;
+  OpenDialog1.Filter:='CSV file |*.csv';
+  OpenDialog1.Title:='Open a CSV file';
+  if OpenDialog1.Execute then
+    fn:=OpenDialog1.FileName
+  else
+    exit;
+  rec:=Tstringlist.Create;
+  AssignFile(f,fn);
+  Reset(f);
+  readln(f,buf);
+  if copy(buf,1,11)<>'Target name' then
+    Reset(f);
+  repeat
+    readln(f,buf);
+    SplitRec(buf,';',rec);
+    if rec.Count=0 then continue;
+    TargetList.RowCount:=TargetList.RowCount+1;
+    i:=TargetList.RowCount-1;
+    TargetList.Row:=i;
+    t:=TTarget.Create;
+    t.objectname:=rec[0];
+    TargetList.Objects[colseq,i]:=t;
+    TargetList.Cells[colseq,i]:=IntToStr(i);
+    TargetList.Cells[colname,i]:=rec[0];
+    if rec.count>1 then TargetList.Cells[colplan,i]:=rec[1];
+    if rec.count>2 then TargetList.Cells[colra,i]:=rec[2];
+    if rec.count>3 then TargetList.Cells[coldec,i]:=rec[3];
+    if rec.count>4 then TargetList.Cells[colpa,i]:=rec[4];
+    if rec.count>5 then TargetList.Cells[colmagn,i]:=rec[5];
+    if rec.count>6 then TargetList.Cells[colstart,i]:=rec[6];
+    if rec.count>7 then TargetList.Cells[colend,i]:=rec[7];
+    if rec.count>8 then TargetList.Cells[colrepeat,i]:=rec[8];
+    if rec.count>9 then TDelay.Value:=StrToIntDef(rec[9],1);
+    if rec.count>10 then Preview.Checked:=rec[10]='1';
+    if rec.count>11 then PreviewExposure.Value:=StrToFloatDef(rec[11],1.0);
+    if rec.count>12 then cbDarkNight.Checked:=rec[12]='1';
+    if rec.count>13 then cbMandatoryStartTime.Checked:=rec[13]='1';
+    if rec.count>14 then cbSkip.Checked:=rec[14]='1';
+    if rec.count>15 then cbFullOnly.Checked:=rec[15]='1';
+    if rec.count>16 then cbMoonAvoidance.Checked:=rec[16]='1';
+    if rec.count>17 then cbAstrometry.Checked:=rec[17]='1';
+    if rec.count>18 then cbInplace.Checked:=rec[18]='1';
+    if rec.count>19 then cbAutofocusTemp.Checked:=rec[19]='1';
+    if rec.count>20 then cbAutofocusHFD.Checked:=rec[20]='1';
+    if rec.count>21 then cbUpdCoord.Checked:=rec[21]='1';
+    if rec.count>22 then cbSolarTracking.Checked:=rec[22]='1';
+    if rec.count>23 then cbNoAutoguidingChange.Checked:=rec[23]='1';
+    if rec.count>24 then cbInitScript.Checked:=rec[24]='1';
+    if rec.count>25 then ScriptList2.Text:=rec[25];
+    if rec.count>26 then ScriptParam2.Text:=rec[26];
+    TargetChange(nil);
+    ShowPlan;
+    Application.ProcessMessages;
+  until eof(f);
+  CloseFile(f);
+  rec.Free;
 end;
 
 procedure Tf_EditTargets.BtnSaveTemplatePopup(Sender: TObject);

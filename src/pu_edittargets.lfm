@@ -2053,6 +2053,14 @@ object f_EditTargets: Tf_EditTargets
       Caption = 'Import mosaic'
       OnClick = BtnImportMosaicClick
     end
+    object MenuImportCSV: TMenuItem
+      Caption = 'Import CSV'
+      OnClick = MenuImportCSVClick
+    end
+    object MenuExportCSV: TMenuItem
+      Caption = 'Export CSV'
+      OnClick = MenuExportCSVClick
+    end
   end
   object PopupOptions: TPopupMenu
     Left = 280
