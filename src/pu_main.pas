@@ -3844,7 +3844,7 @@ begin
     VK_F11: SwitchImageFullscreen;
   end;
  end
- else if {$ifdef lclcocoa}Shift=[ssMeta]{$else}(Shift=[ssCtrl]){$endif} then begin
+ else if {$ifdef lclcocoa}Shift=[ssMeta]{$else}(Shift=[ssAlt])or(Shift=[ssCtrl]){$endif} then begin
   case Key of
     VK_W : if MultiCamera then begin
              MenuImageMultipanel.Checked:=not MenuImageMultipanel.Checked;
