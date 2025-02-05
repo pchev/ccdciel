@@ -39,13 +39,18 @@ specinti_dark = Dark-
 # Flat image prefix
 specinti_flat = tungsten-
 
-# postfix for calibration files
+# Flat image postfix, combined with object name, if files exists this take precedence over the prefix above
+specinti_flat_postfix = _tungsten-
+
+# postfix for calibration files, combined with object name
 specinti_calib_postfix = _neon-
 
 # the wine prefix to use on Linux, must be a 64bit prefix
 #wine_prefix = /home/user/.wine
 
 # Linux terminal to use, run in background if not set
+# this require $DISPLAY, check environment if this not work
 #linux_terminal = xterm -e
 #linux_terminal = gnome-terminal --
 #linux_terminal = konsole -e
+#linux_terminal = xfce4-terminal -e

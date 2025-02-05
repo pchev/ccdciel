@@ -22,7 +22,8 @@ specinti_progdir = parser['settings']['specinti_progdir']
 specinti_prog    = parser['settings']['specinti_prog']
 specinti_config  = parser['settings']['specinti_config'] 
 specinti_calib_postfix = parser['settings']['specinti_calib_postfix']
-specinti_flat    = parser['settings']['specinti_flat']
+specinti_flat    = parser['settings'].get('specinti_flat','')
+specinti_flat_postfix  = parser['settings'].get('specinti_flat_postfix','-----')
 specinti_dark    = parser['settings']['specinti_dark']
 specinti_offset  = parser['settings']['specinti_offset']
 base_directory   = parser['settings']['base_directory']  
@@ -64,7 +65,7 @@ def IsDirectoryEmpty(path):
        else:
           return True 
 
-if IsDirectoryEmpty(resp) or IsDirectoryEmpty(dark) or IsDirectoryEmpty(flat):
+if IsDirectoryEmpty(resp) or IsDirectoryEmpty(dark):
      print('Please copy response,dark,offset,flat files to the corresponding directories')
      sys.exit(1) 
     
@@ -111,6 +112,7 @@ for f in files:
 # count files
 nobj=0
 ncal=0
+nobjflat=0
 nflat=0
 ndark=0
 nbias=0
@@ -120,6 +122,8 @@ for f in files:
         nobj+=1
     if glob.fnmatch.fnmatch(f, '*'+objfile+specinti_calib_postfix+'*'):
         ncal+=1
+    if glob.fnmatch.fnmatch(f, '*'+objfile+specinti_flat_postfix+'*'):
+        nobjflat+=1
     if glob.fnmatch.fnmatch(f, '*'+specinti_flat+'*'):
         nflat+=1
     if glob.fnmatch.fnmatch(f, '*'+specinti_dark+'*'):
@@ -144,8 +148,12 @@ with open(os.path.join(work,'obj.yaml'), 'w') as of:
     of.write('- '+str(nobj)+'\n')
     of.write('- '+objfile+specinti_calib_postfix+'\n')
     of.write('- '+str(ncal)+'\n')
-    of.write('- '+specinti_flat+'\n')
-    of.write('- '+str(nflat)+'\n')
+    if nobjflat>0:
+      of.write('- '+objfile+specinti_flat_postfix+'\n')
+      of.write('- '+str(nobjflat)+'\n')
+    else:  
+      of.write('- '+specinti_flat+'\n')
+      of.write('- '+str(nflat)+'\n')
     of.write('- '+specinti_dark+'\n')
     of.write('- '+str(ndark)+'\n')
     of.write('- '+specinti_offset+'\n')
@@ -166,7 +174,7 @@ for i in range (len(row)):
 buf = '\n'.join(row)
 with open(f , 'w', encoding = 'utf-8') as file:
     file.write(buf)
-
+  
 # run the script to call specinti and process the result
 if platform.system() == 'Windows' :
     specinticmd=os.path.join(scriptdir,'specinti_process.cmd') 
@@ -177,7 +185,7 @@ else:
        subprocess.Popen(['/usr/bin/bash', specinticmd, specinti_progdir, specinti_prog, specinti_config, objfile, work, capturedir, result, archive, logfile, wine_prefix])
     else:
        term=linux_terminal.split(' ')
-       subprocess.Popen(term+['/usr/bin/bash', specinticmd, specinti_progdir, specinti_prog, specinti_config, objfile, work, capturedir, result, archive, logfile, wine_prefix])
+       subprocess.Popen(term+[specinticmd, specinti_progdir, specinti_prog, specinti_config, objfile, work, capturedir, result, archive, logfile, wine_prefix])
 
 
 

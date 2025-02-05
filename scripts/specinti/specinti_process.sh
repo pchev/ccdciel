@@ -15,6 +15,7 @@ wine_prefix=${10}
 
 if [[ -z $logfile ]]; then 
   echo Missing parameters
+  sleep 5
   exit 1; 
 fi
 
