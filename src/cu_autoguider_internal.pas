@@ -2527,7 +2527,7 @@ begin
     result:=true;
   end
   else begin
-    msg('Clear spectro guide star position',3);
+    //msg('Clear spectro guide star position',3);
     FSpectroGuideStar.RA:=NullCoord;
     FSpectroGuideStar.DEC:=NullCoord;
     FSpectroGuideStar.valid:=false;
@@ -2552,7 +2552,7 @@ begin
     result:=true;
   end
   else begin
-    msg('Clear spectro target position',3);
+    //msg('Clear spectro target position',3);
     FSpectroTarget.RA:=NullCoord;
     FSpectroTarget.DEC:=NullCoord;
     FSpectroTarget.valid:=false;
