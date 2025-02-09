@@ -1,4 +1,4 @@
-cfitsio Mac:
+cfitsio Mac X86_64:
 
 - tar x source code
 - edit CMakeLists.txt, comment all the block about CURL because there is no option to force curl off. This avoid the only external dependency.
@@ -10,3 +10,18 @@ cfitsio Mac:
 - install_name_tool -change  @rpath/libcfitsio.3.dylib @executable_path/libcfitsio.3.dylib Funpack
 - install_name_tool -change  @rpath/libcfitsio.3.dylib @executable_path/libcfitsio.3.dylib FPack
 - copy binary FPack Funpack libcfitsio.3.dylib
+
+
+cfitsio-4.5 Mac arm64:
+
+extract cfitsio-4.5.0
+cd cfitsio-4.5.0
+export MACOSX_DEPLOYMENT_TARGET=11.0
+./configure --disable-curl 
+make
+cd .libs
+install_name_tool -change /Users/pch/src/cfitsio-4.5.0/lib/libcfitsio.10.dylib @executable_path/libcfitsio.10.dylib fpack
+install_name_tool -change /Users/pch/src/cfitsio-4.5.0/lib/libcfitsio.10.dylib @executable_path/libcfitsio.10.dylib funpack
+install_name_tool -id @rpath/libcfitsio.10.dylib libcfitsio.10.dylib
+tar cvzf cfitsio-mac-arm64.tgz fpack funpack libcfitsio.10.dylib
+ 

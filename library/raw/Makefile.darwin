@@ -8,8 +8,12 @@ CXX           = g++
 # on macOS, link libraw statically in a single library
 SO_Name       = libpasraw.dylib
 LIBFLAGS      = -Wl,-single_module -dynamiclib
-LIBS          = -lraw -lm -mmacosx-version-min=10.10
-
+OSARCH = $(shell uname -m)
+ifneq ($(findstring arm64,$(OSARCH)),)
+LIBS      = -lraw -lm -lz -mmacos-version-min=11.0
+else
+LIBS      = -lraw -lm -lz -mmacosx-version-min=10.10
+endif
 
 SRC =	pasraw.cpp 
 

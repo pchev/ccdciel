@@ -19,7 +19,7 @@ ifeq ($(OS_TARGET),win32)
         $(MAKE) -C raw   -f Makefile.win64 all
  else
  ifeq ($(OS_TARGET),darwin)
-        $(MAKE) -C wcs   -f Makefile.darwin all
+        $(MAKE) -C wcs all arch_flags=-m64
         $(MAKE) -C raw   -f Makefile.darwin all
  endif
  endif
@@ -35,7 +35,7 @@ ifeq ($(OS_TARGET),win64)
         $(MAKE) -C raw   -f Makefile.win64 clean
 else
 ifeq ($(OS_TARGET),darwin)
-	$(MAKE) -C wcs   -f Makefile.darwin clean
+        $(MAKE) -C wcs clean
 	$(MAKE) -C raw   -f Makefile.darwin clean
 endif
 endif
