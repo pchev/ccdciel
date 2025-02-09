@@ -31,6 +31,7 @@
 #include <stdlib.h>
 #include <math.h>
 #include <string.h>
+#include <strings.h>
 
 #include "wcs.h"
 #include "lwcs.h"
@@ -48,7 +49,7 @@ static double secpix0 = PSCALE;		/* Set image scale--override header */
 static double secpix2 = PSCALE;		/* Set image scale 2--override header */
 static double *cd0 = NULL;		/* Set CD matrix--override header */
 static double rot0 = 361.0;		/* Initial image rotation */
-static int comsys = WCS_J2000;		/* Command line center coordinte system */
+static int comsys = WCS_J2000;		/* Command line center coordinate system */
 static int wp0 = 0;			/* Initial width of image */
 static int hp0 = 0;			/* Initial height of image */
 static double ra0 = -99.0;		/* Initial center RA in degrees */

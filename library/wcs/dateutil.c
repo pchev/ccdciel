@@ -305,6 +305,9 @@
  *	Return Mod of floating point number
  */
 
+#define _DARWIN_C_SOURCE
+#define _GNU_SOURCE
+
 #include <stdlib.h>
 #include <stdio.h>
 #include <string.h>
@@ -660,7 +663,7 @@ int	sys;	/* J2000, B1950, GALACTIC, ECLIPTIC */
     double lt;		/* Light travel difference to the Sun (days) */
     double l;		/* Longitude of star in orbital plane of Earth (radians) */
     double b;		/* Latitude of star in orbital plane of Earth (radians) */
-    double epoch;	/* Epoch of obervation */
+    double epoch;	/* Epoch of observation */
     double rs1,rs2;
 
     t = (dj - 2415020.0) / 36525.0;
