@@ -17091,6 +17091,7 @@ begin
       camera.GetFrame(frx,fry,frw,frh);
       resp:=resp+', "frame": "'+inttostr(frx)+'/'+inttostr(fry)+'/'+inttostr(frw)+'/'+inttostr(frh)+'"';
       resp:=resp+', "cooler": '+BoolToStr(f_ccdtemp.CCDcooler.Checked,'true','false');
+      resp:=resp+', "coolerpower": '+FormatFloat(f1,f_ccdtemp.CurrentCoolerPower);
       resp:=resp+', "temperature": '+f_ccdtemp.Current.Caption;
     end;
     resp:=resp+'}, ';
