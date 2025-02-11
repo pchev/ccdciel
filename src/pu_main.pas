@@ -17309,6 +17309,8 @@ try
   else if method='PREVIEW_STOP' then result:=result+'"result":{"status": "'+f_scriptengine.cmd_Preview_Stop+'"}'
   else if method='CAPTURE_START' then result:=result+'"result":{"status": "'+f_scriptengine.cmd_Capture_Start+'"}'
   else if method='CAPTURE_STOP' then result:=result+'"result":{"status": "'+f_scriptengine.cmd_Capture_Stop+'"}'
+  else if method='ASTROMETRY_GOTO_RUNNING' then result:=result+'"result": '+BoolToStr(f_scriptengine.AstrometryGotoRunning,tr,fa)
+  else if method='ASTROMETRY_GOTO_RESULT' then result:=result+'"result": '+BoolToStr(f_scriptengine.AstrometryGotoResult,tr,fa)
   else if method='ASTROMETRY_SOLVE' then result:=result+'"result":{"status": "'+f_scriptengine.cmd_AstrometrySolve+'"}'
   else if method='ASTROMETRY_SYNC' then result:=result+'"result":{"status": "'+f_scriptengine.cmd_AstrometrySync+'"}'
   else if method='ASTROMETRY_SLEW_IMAGE_CENTER' then result:=result+'"result":{"status": "'+f_scriptengine.cmd_AstrometrySlewImageCenter+'"}'
@@ -17377,6 +17379,13 @@ try
     buf1:=trim(value[attrib.IndexOf('params.0')]);
     buf2:=trim(value[attrib.IndexOf('params.1')]);
     buf:=f_scriptengine.cmd_AstrometryGoto(buf1,buf2);
+    result:=result+'"result":{"status": "'+buf+'"}';
+  end
+  else if method='ASTROMETRY_GOTO_ASYNC' then begin
+    CheckParamCount(2);
+    buf1:=trim(value[attrib.IndexOf('params.0')]);
+    buf2:=trim(value[attrib.IndexOf('params.1')]);
+    buf:=f_scriptengine.cmd_AstrometryGotoAsync(buf1,buf2);
     result:=result+'"result":{"status": "'+buf+'"}';
   end
   else if method='WHEEL_SETFILTER' then begin

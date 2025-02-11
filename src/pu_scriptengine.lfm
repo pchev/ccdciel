@@ -67,4 +67,10 @@ object f_scriptengine: Tf_scriptengine
     Left = 211
     Top = 37
   end
+  object DelayedAsyncTimer: TTimer
+    Enabled = False
+    OnTimer = DelayedAsyncTimerTimer
+    Left = 324
+    Top = 41
+  end
 end

@@ -45,6 +45,10 @@ type
 
   TNotifyOutput = procedure(msg:TStringList; r: integer) of object;
 
+  Tradec = class(TObject)
+    ra,dec: double;
+  end;
+
   TPythonThread = class(TThread)
   protected
     procedure Execute; override;
@@ -70,7 +74,9 @@ type
     PSImport_Forms1: TPSImport_Forms;
     PSImport_StdCtrls1: TPSImport_StdCtrls;
     ShutdownTimer: TTimer;
+    DelayedAsyncTimer: TTimer;
     TplPSScript: TPSScript;
+    procedure DelayedAsyncTimerTimer(Sender: TObject);
     procedure FormCreate(Sender: TObject);
     procedure FormDestroy(Sender: TObject);
     procedure ShutdownTimerTimer(Sender: TObject);
@@ -125,8 +131,12 @@ type
     LastErr:string;
     strllist: array of TStringList;
     Waitrunning, cancelWait, ScriptCancel: boolean;
+    FAstrometryGotoRunning, FAstrometryGotoResult: boolean;
     FParamStr: TStringList;
     RunProcess: TProcess;
+    FAsyncMethod: TDataEvent;
+    FAsyncData: PtrInt;
+    radec: Tradec;
     {$ifdef mswindows}
      PSImport_ComObj1: TPSImport_ComObj;
     {$endif}
@@ -233,6 +243,8 @@ type
     function cmd_Capture_Stop:string;
     function cmd_AstrometrySolve:string;
     function cmd_AstrometryGoto(ra,de: string):string;
+    function cmd_AstrometryGotoAsync(ra,de: string):string;
+    procedure AstrometryGotoAsync(data: PtrInt);
     function cmd_AstrometrySync:string;
     function cmd_AstrometrySlewImageCenter:string;
     function cmd_AstrometryPlotDSO:string;
@@ -287,6 +299,8 @@ type
     function PythonRunning: boolean;
     procedure ShowPythonOutput(output: TStringList; exitcode: integer);
     procedure StopScript;
+    property AstrometryGotoRunning: boolean read FAstrometryGotoRunning;
+    property AstrometryGotoResult: boolean read FAstrometryGotoResult;
     property onMsg: TNotifyMsg read FonMsg write FonMsg;
     property onStartSequence: TNotifyStr read FonStartSequence write FonStartSequence;
     property onScriptExecute: TNotifyEvent read FonScriptExecute write FonScriptExecute;
@@ -350,6 +364,9 @@ begin
   for i:=0 to 9 do strllist[i]:=TStringList.Create;
   Waitrunning:=false;
   cancelWait:=false;
+  radec:=Tradec.Create;
+  FAstrometryGotoRunning:=false;
+  FAstrometryGotoResult:=false;
   {$ifdef mswindows}
    PSImport_ComObj1 := TPSImport_ComObj.Create(self);
    TPSPluginItem(TplPSScript.Plugins.Add).Plugin := PSImport_ComObj1;
@@ -366,12 +383,19 @@ begin
   dbgscr.Plugins.Assign(TplPSScript.Plugins);
 end;
 
+procedure Tf_scriptengine.DelayedAsyncTimerTimer(Sender: TObject);
+begin
+  DelayedAsyncTimer.Enabled:=false;
+  Application.QueueAsyncCall(FAsyncMethod,FAsyncData);
+end;
+
 procedure Tf_scriptengine.FormDestroy(Sender: TObject);
 var i: integer;
 begin
   PythonOutput.Free;
   scr.Free;
   dbgscr.Free;
+  radec.Free;
   SetLength(ilist,0);
   SetLength(dlist,0);
   SetLength(slist,0);
@@ -2079,6 +2103,9 @@ function Tf_scriptengine.cmd_AstrometryGoto(ra,de: string):string;
 var r,d,err: double;
 begin
 try
+try
+FAstrometryGotoRunning:=true;
+FAstrometryGotoResult:=false;
 result:=msgFailed;
 if Astrometry.Busy then exit;
 r:=StrToFloatDef(ra,9999);
@@ -2086,12 +2113,56 @@ d:=StrToFloatDef(de,9999);
 if (abs(r)<=24)and(abs(d)<=90) then begin
   J2000ToMount(mount.EquinoxJD,r,d);
   if astrometry.PrecisionSlew(r,d,err) then begin
+    FAstrometryGotoResult:=true;
     result:=msgOK;
   end;
 end
+finally
+  FAstrometryGotoRunning:=false;
+end;
 except
   result:=msgFailed;
 end;
+end;
+
+function Tf_scriptengine.cmd_AstrometryGotoAsync(ra,de: string):string;
+var r,d: double;
+begin
+try
+result:=msgFailed;
+FAstrometryGotoRunning:=false;
+FAstrometryGotoResult:=false;
+if Astrometry.Busy then exit;
+r:=StrToFloatDef(ra,9999);
+d:=StrToFloatDef(de,9999);
+if (abs(r)<=24)and(abs(d)<=90) then begin
+  J2000ToMount(mount.EquinoxJD,r,d);
+  radec.ra:=r;
+  radec.dec:=d;
+  FAstrometryGotoRunning:=true;
+  FAsyncMethod:=@AstrometryGotoAsync;
+  FAsyncData:=PtrInt(radec);
+  DelayedAsyncTimer.Enabled:=true;
+  result:=msgOK;
+end
+except
+  FAstrometryGotoRunning:=false;
+  result:=msgFailed;
+end;
+end;
+
+procedure Tf_scriptengine.AstrometryGotoAsync(data: PtrInt);
+var ra,de,err: double;
+begin
+  try
+  FAstrometryGotoRunning:=true;
+  FAstrometryGotoResult:=false;
+  ra:=Tradec(data).ra;
+  de:=Tradec(data).dec;
+  FAstrometryGotoResult:=astrometry.PrecisionSlew(ra,de,err);
+  finally
+  FAstrometryGotoRunning:=false;
+  end;
 end;
 
 function Tf_scriptengine.cmd_AstrometrySync:string;
