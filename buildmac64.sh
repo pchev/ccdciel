@@ -43,7 +43,7 @@ currentrev=$(git rev-list --count --first-parent HEAD)
   packagesbuild -v ccdciel64.pkgproj
   if [[ $? -ne 0 ]]; then exit 1;fi
   cp readme.txt build/
-  hdiutil create -anyowners -volname ccdciel-$version-$currentrev-x86_64-macosx -imagekey zlib-level=9 -format UDZO -srcfolder ./build ccdciel-$version-$currentrev-x86_64-macosx.dmg
+  hdiutil create -anyowners -volname ccdciel-$version-$currentrev-x86_64-macos -imagekey zlib-level=9 -format UDZO -srcfolder ./build ccdciel-$version-$currentrev-x86_64-macos.dmg
   if [[ $? -ne 0 ]]; then exit 1;fi
   mv ccdciel*.dmg $wd
   if [[ $? -ne 0 ]]; then exit 1;fi
