@@ -24,7 +24,7 @@ install -v -m 755 library/wcs/libccdcielwcs.dylib  $destdir/libccdcielwcs.dylib
 install -v -m 755 library/raw/libpasraw.dylib  $destdir/libpasraw.dylib
 if [ $CPU_TARGET = aarch64 ]; then
   tar xvzf system_integration/MacOSX/data/cfitsio-mac-arm64.tgz -C $destdir
-  tar xvzf system_integration/MacOSX/data/exiv2-mac.tgz -C $destdir/ccdciel.app/Contents/MacOS
+  tar xvzf system_integration/MacOSX/data/exiv2-mac-arm64.tgz -C $destdir/ccdciel.app/Contents/MacOS
   tar xvzf system_integration/MacOSX/data/openssl-mac-arm64.tgz -C $destdir/ccdciel.app/Contents/Frameworks
 else 
   tar xvzf system_integration/MacOSX/data/cfitsio-mac.tgz -C $destdir
