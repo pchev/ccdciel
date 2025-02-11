@@ -21,9 +21,12 @@ MAC:
 First install the latest libraw from source:
  - Install the LibRaw source code, from tar or from git.
  - cd LibRaw
- - export MACOSX_DEPLOYMENT_TARGET=11.0
- - make -f Makefile.dist
- - sudo make -f Makefile.dist install
+ - cp Makefile.dist Makefile.universal
+ - vi Makefile.universal
+   CFLAGS=-arch arm64 -arch x86_64 -O3  -I. -w
+ - export MACOSX_DEPLOYMENT_TARGET=10.14
+ - make -f Makefile.universal
+ - sudo make -f Makefile.universal install
 
 The Makefile.darwin create the library libpasraw.dylib with libraw statically linked.
 No libraw.dylib is required at runtime.

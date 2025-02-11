@@ -2,7 +2,7 @@
 
 version=$(grep 'ccdcielver' src/u_global.pas |head -1| cut -d\' -f2)
 
-basedir=/Volumes/TmpInst/ccdciel   # Be sure this is set to a non existent directory, it is removed after the run!
+basedir=/tmp/ccdciel   # Be sure this is set to a non existent directory, it is removed after the run!
 
 builddir=$basedir/ccdciel
 
@@ -18,7 +18,7 @@ wd=`pwd`
 currentrev=$(git rev-list --count --first-parent HEAD)
 
 # delete old files
-  rm ccdciel*.dmg
+  rm ccdciel-*-x86_64-macos.dmg
   rm -rf $basedir
 
 # make x86_64  Mac version
@@ -27,7 +27,7 @@ currentrev=$(git rev-list --count --first-parent HEAD)
   make CPU_TARGET=x86_64 clean
   make CPU_TARGET=x86_64
   if [[ $? -ne 0 ]]; then exit 1;fi
-  make install
+  make install CPU_TARGET=x86_64
   if [[ $? -ne 0 ]]; then exit 1;fi
   # pkg
   sed -i.bak "18s/1.0/$version/"  $builddir/ccdciel.app/Contents/Info.plist
