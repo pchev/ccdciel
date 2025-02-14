@@ -10,6 +10,9 @@ arch=$(arch)
 # You MUST crosscompile Freepascal and Lazarus for this targets! 
 
 unset extratarget
+if [[ $arch == aarch64 ]]; then
+  extratarget=",aarch64-linux"
+fi
 
 make_linuxarm=1
 
@@ -29,8 +32,8 @@ echo $version - $currentrev
 
 
 # delete old files
-  rm ccdciel*.bz2
-  rm ccdciel*.deb
+  rm ccdciel-*_armhf.tar.bz2
+  rm ccdciel_*_armhf.deb
   rm -rf $builddir
 
 # make Linux arm version
@@ -40,7 +43,7 @@ if [[ $make_linuxarm ]]; then
   make CPU_TARGET=arm OS_TARGET=linux clean
   make CPU_TARGET=arm OS_TARGET=linux
   if [[ $? -ne 0 ]]; then exit 1;fi
-  make install
+  make install CPU_TARGET=arm
   if [[ $? -ne 0 ]]; then exit 1;fi
   # tar
   cd $builddir
