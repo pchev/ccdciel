@@ -56,22 +56,12 @@ object f_pascaleditor: Tf_pascaleditor
       TabOrder = 1
       object Label1: TLabel
         Left = 8
-        Height = 19
+        Height = 18
         Top = 9
         Width = 41
         Caption = 'Label1'
         ParentColor = False
         ParentFont = False
-      end
-      object Button3: TButton
-        Left = 404
-        Height = 25
-        Top = 4
-        Width = 76
-        Caption = 'Help'
-        OnClick = Button3Click
-        ParentFont = False
-        TabOrder = 0
       end
       object Button2: TButton
         Left = 509
@@ -81,7 +71,7 @@ object f_pascaleditor: Tf_pascaleditor
         Caption = 'Cancel'
         ModalResult = 2
         ParentFont = False
-        TabOrder = 1
+        TabOrder = 0
       end
       object Button1: TButton
         Left = 614
@@ -91,6 +81,15 @@ object f_pascaleditor: Tf_pascaleditor
         Caption = 'Save'
         ModalResult = 1
         ParentFont = False
+        TabOrder = 1
+      end
+      object Button4: TButton
+        Left = 368
+        Height = 25
+        Top = 4
+        Width = 115
+        Caption = 'Editor font'
+        OnClick = Button4Click
         TabOrder = 2
       end
     end
@@ -697,24 +696,24 @@ object f_pascaleditor: Tf_pascaleditor
         Left = 179
         Height = 22
         Top = 2
-        Width = 422
+        Width = 423
         AutoSize = True
         BevelOuter = bvNone
         ClientHeight = 22
-        ClientWidth = 422
+        ClientWidth = 423
         TabOrder = 0
         object Label2: TLabel
           Left = 0
-          Height = 19
+          Height = 18
           Top = 0
-          Width = 105
+          Width = 106
           Caption = 'Script arguments'
           ParentColor = False
         end
         object params: TEdit
           AnchorSideLeft.Control = Label2
           AnchorSideLeft.Side = asrBottom
-          Left = 113
+          Left = 114
           Height = 22
           Top = 0
           Width = 309
@@ -870,5 +869,12 @@ object f_pascaleditor: Tf_pascaleditor
     Enabled = False
     Left = 350
     Top = 49
+  end
+  object FontDialog1: TFontDialog
+    MinFontSize = 0
+    MaxFontSize = 0
+    Options = [fdAnsiOnly, fdFixedPitchOnly, fdForceFontExist]
+    Left = 408
+    Top = 408
   end
 end

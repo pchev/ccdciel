@@ -375,6 +375,7 @@ const
     defPHDpath = 'phd2';
     hostOS = 'linux';
     defAstrometryNetOpt='';
+    DefaultFont='Monospace';
   {$endif}
   {$ifdef darwin}
     SharedDir = './';
@@ -389,6 +390,7 @@ const
     defPHDpath = '/Applications/PHD2.app/Contents/MacOS/PHD2';
     hostOS = 'darwin';
     defAstrometryNetOpt='';
+    DefaultFont='Courier New';
   {$endif}
   {$ifdef mswindows}
     SharedDir = '.\';
@@ -403,6 +405,7 @@ const
     defPHDpath = 'C:\Program Files (x86)/PHDGuiding2/phd2.exe';
     hostOS = 'windows';
     defAstrometryNetOpt='--no-fits2fits';
+    DefaultFont='Courier New';
   {$endif}
   {$ifdef darwin}
     OpenFileCMD: string = 'open';
@@ -600,6 +603,8 @@ var
   InternalguiderRunning,InternalguiderCalibrating,InternalguiderCalibratingBacklash,InternalguiderGuiding,StopInternalguider,InternalguiderCapturingDark: boolean;
   {finder}
   UseFinder,FinderPreviewLoop: boolean;
+  EditorFontName: string;
+  EditorFontSize,EditorFontStyle: integer;
 
   procedure globalmsg(str:string);
   function Str2Frametype(str:string):integer;

@@ -44,7 +44,8 @@ type
     ActionList1: TActionList;
     Button1: TButton;
     Button2: TButton;
-    Button3: TButton;
+    Button4: TButton;
+    FontDialog1: TFontDialog;
     Label2: TLabel;
     Panel4: TPanel;
     params: TEdit;
@@ -79,7 +80,7 @@ type
     ToolButton7: TToolButton;
     ToolButton8: TToolButton;
     ToolButton9: TToolButton;
-    procedure Button3Click(Sender: TObject);
+    procedure Button4Click(Sender: TObject);
     procedure ButtonPauseClick(Sender: TObject);
     procedure ButtonRunClick(Sender: TObject);
     procedure ButtonStepIntoClick(Sender: TObject);
@@ -129,13 +130,15 @@ const
 
 procedure Tf_pascaleditor.FormCreate(Sender: TObject);
 begin
-  {$ifdef linux}
-  SynEdit1.Font.Name:='Monospace';
-  {$endif}
+  SynEdit1.Font.Name:=EditorFontName;
+  SynEdit1.Font.Size:=EditorFontSize;
+  if EditorFontStyle>=0 then
+    SynEdit1.Font.Style:=[TFontStyle(EditorFontStyle)]
+  else
+    SynEdit1.Font.Style:=[];
   ScaleDPI(Self);
   FDebugResume:=false;
   SetLang;
-  button3.Visible:=false;
 end;
 
 procedure Tf_pascaleditor.FormShow(Sender: TObject);
@@ -153,7 +156,6 @@ begin
   Caption:=rsScriptEditor;
   Button1.Caption:=rsSave;
   Button2.Caption:=rsCancel;
-  Button3.Caption:=rsHelp;
   ToolButton1.Hint:=rsRun;
   ToolButton2.Hint:=rsPause;
   ToolButton3.Hint:=rsStop;
@@ -297,9 +299,30 @@ if Fdbgscr.Exec.Status = isRunning then
   end;
 end;
 
-procedure Tf_pascaleditor.Button3Click(Sender: TObject);
+procedure Tf_pascaleditor.Button4Click(Sender: TObject);
 begin
-  ShowHelp;
+  FontDialog1.Font.Name:=EditorFontName;
+  FontDialog1.Font.Size:=EditorFontSize;
+  if EditorFontStyle>=0 then
+    FontDialog1.Font.Style:=[TFontStyle(EditorFontStyle)]
+  else
+    FontDialog1.Font.Style:=[];
+  if FontDialog1.Execute then begin
+    EditorFontName:=FontDialog1.Font.Name;
+    EditorFontSize:=FontDialog1.Font.Size;
+    if FontDialog1.Font.Style=[] then
+      EditorFontStyle:=-1;
+    if fsBold in FontDialog1.Font.Style then
+      EditorFontStyle:=ord(fsBold)
+    else
+      EditorFontStyle:=-1;
+    SynEdit1.Font.Name:=EditorFontName;
+    SynEdit1.Font.Size:=EditorFontSize;
+    if EditorFontStyle>=0 then
+      SynEdit1.Font.Style:=[TFontStyle(EditorFontStyle)]
+    else
+      SynEdit1.Font.Style:=[];
+  end;
 end;
 
 procedure Tf_pascaleditor.ButtonStepOverClick(Sender: TObject);

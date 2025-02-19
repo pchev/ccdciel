@@ -1769,6 +1769,10 @@ begin
   PanelRight.Width:=screenconfig.GetValue('/Window/PanelRight',PanelRight.Width);
   PanelLeftBase.Width:=screenconfig.GetValue('/Window/PanelLeft',DoScaleX(250));
 
+  EditorFontName:=screenconfig.GetValue('/Editor/Font/Name',DefaultFont);
+  EditorFontSize:=screenconfig.GetValue('/Editor/Font/Size',10);
+  EditorFontStyle:=screenconfig.GetValue('/Editor/Font/Style',-1);
+
   f_msg:=Tf_msg.Create(self);
   f_msg.onMsgLevelChange:=@MsgLevelChange;
   f_msg.onOpenLog:=@MenuShowLogClick;
@@ -5679,6 +5683,10 @@ begin
  screenconfig.SetValue('/Tools/Finder/Left',f_finder.Left);
 
  screenconfig.SetValue('/Tools/Clock/Visible',MenuViewClock.Checked);
+
+ screenconfig.SetValue('/Editor/Font/Name',EditorFontName);
+ screenconfig.SetValue('/Editor/Font/Size',EditorFontSize);
+ screenconfig.SetValue('/Editor/Font/Style',EditorFontStyle);
 
  screenconfig.SetValue('/Window/Maximized', WindowState=wsMaximized);
  screenconfig.SetValue('/Window/Top',Top);
