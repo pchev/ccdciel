@@ -1470,6 +1470,8 @@ begin
           Finternalguider.ForceMultistar:=True;
           Finternalguider.ChangeSpectroStrategy;
           FSettling := false;
+          SetStatus('Guiding',GUIDER_GUIDING);
+          WriteLog('INFO: SETTLING STATE CHANGE, Settling complete');
           exit;
     end;
     // refine astrometry measurement closer to slit in multistar
