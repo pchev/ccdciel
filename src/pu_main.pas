@@ -17544,6 +17544,14 @@ try
    buf:=f_scriptengine.cmd_customheader_del(buf1);
    result:=result+'"result":{"status": "'+buf+'"}';
   end
+  else if method='AUTOGUIDER_SETSETTLETOLERANCE' then begin
+    CheckParamCount(3);
+    buf1:=trim(value[attrib.IndexOf('params.0')]);
+    buf2:=trim(value[attrib.IndexOf('params.1')]);
+    buf3:=trim(value[attrib.IndexOf('params.2')]);
+    buf:=f_scriptengine.cmd_AutoguiderSetSettleTolerance(buf1,buf2,buf3);
+    result:=result+'"result":{"status": "'+buf+'"}';
+  end
   else if method='AUTOGUIDER_SETLOCKPOSITION' then begin
     try
     buf1:=trim(value[attrib.IndexOf('params.0')]);

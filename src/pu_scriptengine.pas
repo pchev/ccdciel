@@ -211,6 +211,7 @@ type
     function cmd_AutoguiderPause:string;
     function cmd_AutoguiderUnPause:string;
     function cmd_AutoguiderDither:string;
+    function cmd_AutoguiderSetSettleTolerance(spx,smint,smaxt:string):string;
     function cmd_AutoguiderGetLockPosition(out sx,sy:string):string;
     function cmd_AutoguiderSetLockPosition(sx,sy:string):string;
     function cmd_AutoguiderStoreLockPosition(sx,sy:string):string;
@@ -1600,6 +1601,25 @@ begin
  except
    result:=msgFailed;
  end;
+end;
+
+function Tf_scriptengine.cmd_AutoguiderSetSettleTolerance(spx,smint,smaxt:string):string;
+var x,px: double;
+    n,mint,maxt: integer;
+begin
+  try
+  result:=msgFailed;
+  val(spx,px,n);
+  if n<>0 then exit;
+  val(smint,mint,n);
+  if n<>0 then exit;
+  val(smaxt,maxt,n);
+  if n<>0 then exit;
+  autoguider.SettleTolerance(px,mint,maxt);
+  result:=msgOK;
+  except
+    result:=msgFailed;
+  end;
 end;
 
 function Tf_scriptengine.cmd_AutoguiderGetLockPosition(out sx,sy:string):string;
