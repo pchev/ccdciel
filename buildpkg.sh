@@ -68,7 +68,7 @@ if [[ $make_linux32 ]]; then
   # tar
   cd $builddir
   cd ..
-  tar cvJf ccdciel-$version-$currentrev_linux_i386.tar.xz ccdciel
+  tar cvJf ccdciel-$version-${currentrev}_linux_i386.tar.xz ccdciel
   if [[ $? -ne 0 ]]; then exit 1;fi
   mv ccdciel*.tar.xz $wd
   if [[ $? -ne 0 ]]; then exit 1;fi
@@ -121,7 +121,7 @@ if [[ $make_linux64 ]]; then
   # tar
   cd $builddir
   cd ..
-  tar cvJf ccdciel-$version-$currentrev_linux_x86_64.tar.xz ccdciel
+  tar cvJf ccdciel-$version-${currentrev}_linux_x86_64.tar.xz ccdciel
   if [[ $? -ne 0 ]]; then exit 1;fi
   mv ccdciel*.tar.xz $wd
   if [[ $? -ne 0 ]]; then exit 1;fi
