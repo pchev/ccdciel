@@ -7,7 +7,7 @@ else
 CC            = gcc
 endif
 ifneq ($(findstring Darwin,$(OSTYPE)),)
-  SO_Name       = libcdcwcs.dylib
+  SO_Name       = libccdcielwcs.dylib
   ifeq ($(CPU_TARGET),aarch64)
     CFLAGS= -w -fPIC $(arch_flags) -arch arm64 -std=c99 -D_XOPEN_SOURCE=500 -mmacos-version-min=11.0
     LIBFLAGS      = $(arch_flags) -arch arm64 -Wl,-single_module -dynamiclib  -lc -lm -mmacos-version-min=11.0
@@ -28,11 +28,11 @@ else
   endif
 endif
 ifneq ($(findstring W32,$(OSTYPE)),)
-  SO_Name       = libcdcwcs.dll
+  SO_Name       = libccdcielwcs.dll
   LIBFLAGS      = -shared -Wl,-soname,$(SO_Name)  -lm
 endif
 ifneq ($(findstring MINGW,$(OSTYPE)),)
-  SO_Name       = libcdcwcs.dll
+  SO_Name       = libccdcielwcs.dll
   LIBFLAGS      = -shared -Wl,-soname,$(SO_Name)  -lm
 endif
 
