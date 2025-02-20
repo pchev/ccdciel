@@ -415,6 +415,7 @@ type
     function  GetInfo: string;
     procedure SetSpiralDither(value:Boolean);
     function GetSpiralDither:Boolean;
+    function GetConfigured:Boolean;
 
   public
     { public declarations }
@@ -505,6 +506,7 @@ type
     property Info: string read GetInfo write SetInfo;
     property CameraStatus: string read GetCameraStatus write SetCameraStatus;
     property SpiralDither: boolean read GetSpiralDither write SetSpiralDither;
+    property Configured:Boolean read GetConfigured;
     property onConfigureGuider: TNotifyEvent read FonConfigureGuider write FonConfigureGuider;
     property onMeasureReferenceImage: TNotifyEvent read FonMeasureReferenceImage write FonMeasureReferenceImage;
 
@@ -1613,7 +1615,7 @@ end;
 
 function Tf_internalguider.GetSpectro:Boolean;
 begin
-  result:=cbSpectro.Checked;
+  result:= Configured and cbSpectro.Checked;
 end;
 
 procedure Tf_internalguider.SetSpectroStrategy(value:TSpectroStrategy);
@@ -2021,6 +2023,11 @@ begin
     Shape1.Brush.Color:=clLime
   else
     Shape1.Brush.Color:=clRed;
+end;
+
+function Tf_internalguider.GetConfigured:Boolean;
+begin
+  result:=Panel1.Visible;
 end;
 
 end.
