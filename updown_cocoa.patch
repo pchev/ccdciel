@@ -1,0 +1,22 @@
+diff --git a/components/lazcontrols/spinex.inc b/components/lazcontrols/spinex.inc
+index c65316ae9d..2be78af33f 100644
+--- a/components/lazcontrols/spinex.inc
++++ b/components/lazcontrols/spinex.inc
+@@ -74,10 +74,17 @@ procedure TSpinEditExBase.UpDownChangingEx(Sender: TObject;
+   var AllowChange: Boolean; NewValue: SmallInt; Direction: TUpDownDirection);
+ begin
+   if ReadOnly then Exit;
++  {$ifdef lclcocoa}
++  Case Direction of
++    updUp: SpinUpDown(False);
++    updDown: SpinUpDown(True);
++  end;
++  {$else}
+   Case Direction of
+     updUp: SpinUpDown(True);
+     updDown: SpinUpDown(False);
+   end;
++  {$endif}
+ end;
+ 
+ procedure TSpinEditExBase.UpDownClick(Sender: TObject; {%H-}Button: TUDBtnType);
