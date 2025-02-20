@@ -9,7 +9,8 @@ Preprocessing; siril_flat; Create master Flat (require Siril)
 Preprocessing; siril_light_color; Preprocessing of color images (require Siril)
 Preprocessing; siril_light; Preprocessing of mono images (require Siril)
 Spectroscope; UVEX4.pkg; Package of scripts for the UVEX4 spectroscope
-Spectroscope; Spectro_Sequence_SetGuideStar; Set the guide star coordinates for single with offset strategy
+Spectroscope; Spectro_SetGuideMethod; Allow to define per target guiding strategy and parameters
+Spectroscope; specinti.pkg; Process spectra with specINTI
 Calibrator; cover_open; Open the telescope cover
 Calibrator; cover_close; Close the telescope cover
 Calibrator; calibrator_on; Turn the calibrator light on

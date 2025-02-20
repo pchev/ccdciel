@@ -1,0 +1,181 @@
+# Python program for CCDciel
+# see: https://www.ap-i.net/ccdciel/en/documentation/jsonrpc_reference
+
+# This script set the spectroscope guide method and parameters.
+# Must be called from a sequence target initialization script,
+# it use the parameters automatically set by the sequence.
+# The exposure time is based on the target star magnitude set in the sequence, or a fixed exposure.
+# See configuration below.
+#
+# Additional parameter: the guide method to use (case insensitive), it use the default if not set
+#    SingleStar
+#    SingleOffset
+#    SingleAstrometry
+#    SingleMulti
+#    MultiStar
+#
+# For SingleOffset it require two additional parameters with
+# the guide star RA and DEC. RA in hours, DEC in degrees (hms or decimal)
+#
+# For testing, the sequence parameters can be simulated by something like: 
+# "Vega,plan1,18.61583,38.78556,0.03" SingleStar
+#
+
+import sys
+from ccdciel import ccdciel
+
+#=========== Configuration here ===============================================
+
+# the default guide method to use if the parameter is not present, this not work for SingleOffset because it also require the guide star RA,DEC.
+defaultGuideMethod = 'SingleAstrometry'
+
+#=== Single star settings ===
+# guiding aggressiveness for single star, on slit guiding
+SingleRAgain = 30   # RA gain, small value to prevent oscillation
+SingleRAhyst = 0    # RA hysteresis, no hysteresis to react to slit side change
+SingleDEgain = 80   # DEC gain
+SingleDEhyst = 30   # DEC hysteresis
+
+# Exposure time for single star guiding, depend on target magnitude, use refExp if the magnitude is not set
+refMagn = 6.0    # magnitude of reference star
+refExp = 1.0     # guide exposure (s) for reference star
+minExp = 0.01    # minimum guide exposure
+maxExp = 5.0     # maximum guide exposure
+
+# Single star settle parameters, use instead of the same settings in preferences
+SingleSettlePixel   =   6 #  about the size of the slit on the guide camera in pixel
+SingleSettleMinTime =  10 #  number of consecutive second within SettlePixel
+SingleSettleTimeout = 120 #  the maximum time to wait for guiding to start, including moving the star to the slit
+
+#=== Multi star settings ===
+# guiding aggressiveness for guiding multi-star or single with offset
+MultiRAgain = 80   # RA gain
+MultiRAhyst = 30   # RA hysteresis
+MultiDEgain = 80   # DEC gain
+MultiDEhyst = 30   # DEC hysteresis
+
+# Exposure time for multi-star or single with offset guiding, this not depend on target magnitude
+multiExp = 3
+
+# Multi star settle parameters, use instead of the same settings in preferences
+MultiSettlePixel   =   2 #  about one third of the slit on the guide camera in pixel
+MultiSettleMinTime =  10 #  number of consecutive second within SettlePixel
+MultiSettleTimeout = 120 #  the maximum time to wait for guiding to start, including moving the star to the slit
+
+#=========== End of Configuration =============================================
+
+def SingleExposureTime(magn) :
+  exp = refExp / (10.0 ** ((refMagn-magn)/2.5))
+  if exp > maxExp:
+    exp = maxExp
+  if exp < minExp:
+    exp = minExp
+  return round(exp,3)
+
+def CCDcielSet(cmd,param) :
+  # call ccdciel function but exit if anything fail
+  try:
+    r=ccdciel(cmd,param) 
+    if (r['result']['status'] != 'OK!') :
+      raise
+  except:
+    print(cmd,r)
+    sys.exit(2)
+
+if not ccdciel('Internalguider_GetSpectrofunction')['result'] :
+  print('Internal guider spectroscopy functions are not activated')
+  sys.exit(2)
+
+try:
+  # standard parameter from the sequence
+  seqparam = sys.argv[1].split(',')
+  # required guide method parameter
+  if len(sys.argv)>2 :
+    guidemethod = sys.argv[2]
+  else:
+    guidemethod = defaultGuideMethod
+  # required parameter RA and DEC for SingleOffset
+  if len(sys.argv)>4 :
+    guidera = sys.argv[3]
+    guidede = sys.argv[4]
+  else:
+    guidera = ''
+    guidede = ''
+
+except Exception as ex:
+  print('Missing parameters, do the script run from sequence initialization? ',ex)
+  sys.exit(2)
+
+try:
+  
+  try:
+    # expand the standard parameter from the sequence
+    objname = seqparam[0]
+    planname = seqparam[1]
+    objra = float(seqparam[2])
+    objdec = float(seqparam[3])
+    magnitude = float(seqparam[4])
+  except Exception as ex:
+    print('Missing parameters, do the script run from sequence initialization? ',ex)
+    sys.exit(2)
+    
+  if magnitude < -100 :  # target magnitude not set in sequence
+    magnitude = refMagn  # use exposure time set for the reference star
+
+  guidemethod = guidemethod.upper()
+
+  if guidemethod == 'SINGLESTAR':
+    exposure = SingleExposureTime(magnitude)
+    print('SingleStar, exp=',exposure,' RAgain=',SingleRAgain,' RAhyst=',SingleRAhyst,'DECgain=',SingleDEgain,'DEChyst=',SingleDEhyst,'Settling=[',SingleSettlePixel,',',SingleSettleMinTime,',',SingleSettleTimeout,']')
+    CCDcielSet('Internalguider_SetSpectroStrategy','SingleStar')
+    CCDcielSet('Internalguider_SetGuideExposure',exposure)
+    CCDcielSet('Internalguider_SetAgressivityRA',[SingleRAgain,SingleRAhyst])
+    CCDcielSet('Internalguider_SetAgressivityDEC',[SingleDEgain,SingleDEhyst])
+    CCDcielSet('Autoguider_SetSettleTolerance',[SingleSettlePixel,SingleSettleMinTime,SingleSettleTimeout])
+
+  elif guidemethod == 'SINGLEOFFSET':
+    if guidede == '' :
+      print('Missing parameter: guide star RA and DEC')
+      sys.exit(2)
+    print('SingleOffset, exp=',multiExp,' RAgain=',MultiRAgain,' RAhyst=',MultiRAhyst,'DECgain=',MultiDEgain,'DEChyst=',MultiDEhyst,'Settling=[',MultiSettlePixel,',',MultiSettleMinTime,',',MultiSettleTimeout,']')
+    print('Guide star RA=',guidera, 'DEC=',guidede)
+    CCDcielSet('Internalguider_SetSpectroStrategy','SingleOffset')
+    CCDcielSet('Internalguider_SetGuideExposure',multiExp)
+    CCDcielSet('Internalguider_SetAgressivityRA',[MultiRAgain,MultiRAhyst])
+    CCDcielSet('Internalguider_SetAgressivityDEC',[MultiDEgain,MultiDEhyst])
+    CCDcielSet('Internalguider_SetSpectroGuidestarRaDec',[guidera,guidede])
+    CCDcielSet('Autoguider_SetSettleTolerance',[MultiSettlePixel,MultiSettleMinTime,MultiSettleTimeout])
+
+  elif guidemethod == 'SINGLEASTROMETRY':
+    exposure = SingleExposureTime(magnitude)
+    print('SingleAstrometry, exp=',exposure,' RAgain=',SingleRAgain,' RAhyst=',SingleRAhyst,'DECgain=',SingleDEgain,'DEChyst=',SingleDEhyst,'Settling=[',SingleSettlePixel,',',SingleSettleMinTime,',',SingleSettleTimeout,']')
+    CCDcielSet('Internalguider_SetSpectroStrategy','SingleAstrometry')
+    CCDcielSet('Internalguider_SetGuideExposure',exposure)
+    CCDcielSet('Internalguider_SetAgressivityRA',[SingleRAgain,SingleRAhyst])
+    CCDcielSet('Internalguider_SetAgressivityDEC',[SingleDEgain,SingleDEhyst])
+    CCDcielSet('Autoguider_SetSettleTolerance',[SingleSettlePixel,SingleSettleMinTime,SingleSettleTimeout])
+
+  elif guidemethod == 'SINGLEMULTI':
+    print('SingleMulti, exp=',multiExp,' RAgain=',MultiRAgain,' RAhyst=',MultiRAhyst,'DECgain=',MultiDEgain,'DEChyst=',MultiDEhyst,'Settling=[',MultiSettlePixel,',',MultiSettleMinTime,',',MultiSettleTimeout,']')
+    CCDcielSet('Internalguider_SetSpectroStrategy','SingleMulti')
+    CCDcielSet('Internalguider_SetGuideExposure',multiExp)
+    CCDcielSet('Internalguider_SetAgressivityRA',[MultiRAgain,MultiRAhyst])
+    CCDcielSet('Internalguider_SetAgressivityDEC',[MultiDEgain,MultiDEhyst])
+    CCDcielSet('Autoguider_SetSettleTolerance',[MultiSettlePixel,MultiSettleMinTime,MultiSettleTimeout])
+
+  elif guidemethod == 'MULTISTAR':
+    print('MultiStar, exp=',multiExp,' RAgain=',MultiRAgain,' RAhyst=',MultiRAhyst,'DECgain=',MultiDEgain,'DEChyst=',MultiDEhyst,'Settling=[',MultiSettlePixel,',',MultiSettleMinTime,',',MultiSettleTimeout,']')
+    CCDcielSet('Internalguider_SetSpectroStrategy','MultiStar')
+    CCDcielSet('Internalguider_SetGuideExposure',multiExp)
+    CCDcielSet('Internalguider_SetAgressivityRA',[MultiRAgain,MultiRAhyst])
+    CCDcielSet('Internalguider_SetAgressivityDEC',[MultiDEgain,MultiDEhyst])
+    CCDcielSet('Autoguider_SetSettleTolerance',[MultiSettlePixel,MultiSettleMinTime,MultiSettleTimeout])
+
+  else :
+    print('Invalid or missing guide method: ', guidemethod)
+    sys.exit(2)
+
+except Exception as ex:
+  print('error ',ex)
+  sys.exit(2)
+
