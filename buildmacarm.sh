@@ -18,7 +18,7 @@ wd=`pwd`
 currentrev=$(git rev-list --count --first-parent HEAD)
 
 # delete old files
-  rm ccdciel-*-arm64-macos.dmg
+  rm ccdciel-*-arm64.dmg
   rm -rf $basedir
 
 # make arm64  Mac version
@@ -43,7 +43,7 @@ currentrev=$(git rev-list --count --first-parent HEAD)
   packagesbuild -v ccdcielarm.pkgproj
   if [[ $? -ne 0 ]]; then exit 1;fi
   cp readme.txt build/
-  hdiutil create -anyowners -volname ccdciel-$version-$currentrev-arm64-macos -imagekey zlib-level=9 -format UDZO -srcfolder ./build ccdciel-$version-$currentrev-arm64-macos.dmg
+  hdiutil create -anyowners -volname ccdciel-$version-$currentrev-macos-arm64 -imagekey zlib-level=9 -format UDZO -srcfolder ./build ccdciel-$version-$currentrev-macos-arm64.dmg
   if [[ $? -ne 0 ]]; then exit 1;fi
   mv ccdciel*.dmg $wd
   if [[ $? -ne 0 ]]; then exit 1;fi
