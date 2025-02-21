@@ -23,11 +23,9 @@ echo $version - $currentrev
 
 
 # delete old files
-  rm ccdciel*.xz
-  rm ccdciel*.deb
-  rm ccdciel*.rpm
-  rm ccdciel*.zip
-  rm ccdciel*.exe
+  rm ccdciel-qt6*.xz
+  rm ccdciel-qt6*.deb
+  rm ccdciel-qt6*.rpm
   rm -rf $builddir
 
 
