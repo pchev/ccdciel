@@ -62,7 +62,7 @@ opt_target= -k-macosx_version_min -k10.14 -k-framework -kCocoa -k-weak_framework
 endif
 else
 LCL_PLATFORM=qt5
-opt_target=
+opt_target=-k--build-id
 endif
 endif
 endif

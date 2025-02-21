@@ -35,7 +35,7 @@ echo $version - $currentrev
   ./configure $configopt prefix=$builddir target=x86_64-linux
   if [[ $? -ne 0 ]]; then exit 1;fi
   make CPU_TARGET=x86_64 OS_TARGET=linux LCL_PLATFORM=qt6 clean
-  make CPU_TARGET=x86_64 OS_TARGET=linux LCL_PLATFORM=qt6
+  make CPU_TARGET=x86_64 OS_TARGET=linux LCL_PLATFORM=qt6 opt_target=-k--build-id
   if [[ $? -ne 0 ]]; then exit 1;fi
   make install
   if [[ $? -ne 0 ]]; then exit 1;fi
