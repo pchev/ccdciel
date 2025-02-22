@@ -215,15 +215,15 @@ end;
 Procedure FormPos(form : Tform; x,y : integer);
 begin
 with Form do begin
-  if width>(Screen.width-ScreenMargin) then width:=Screen.width-ScreenMargin;
+  if width>(Screen.DesktopWidth-ScreenMargin) then width:=Screen.DesktopWidth-ScreenMargin;
   if x>ScreenMargin then left:=x
      else left:=ScreenMargin;
-  if left+width>(Screen.Width-ScreenMargin) then left:=Screen.Width-width-ScreenMargin;
+  if left+width>(Screen.DesktopWidth-ScreenMargin) then left:=Screen.DesktopWidth-width-ScreenMargin;
   if left<0 then left:=0;
   if y>ScreenMargin then top:=y
      else top:=ScreenMargin;
-  if height>(Screen.height-ScreenMargin) then height:=Screen.height-ScreenMargin;
-  if top+height>(Screen.height-ScreenMargin) then top:=Screen.height-height-ScreenMargin;
+  if height>(Screen.DesktopHeight-ScreenMargin) then height:=Screen.DesktopHeight-ScreenMargin;
+  if top+height>(Screen.DesktopHeight-ScreenMargin) then top:=Screen.DesktopHeight-height-ScreenMargin;
   if top<0 then top:=0;
 end;
 end;

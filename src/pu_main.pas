@@ -1431,7 +1431,7 @@ begin
   ScaleImageList(ImageListDay);
   ScaleImageList(ImageListNight);
   // resize empty drop area
-  if Screen.Height<1024 then
+  if Screen.DesktopHeight<1024 then
     rl:=DoScaleX(3)
   else
     rl:=DoScaleX(5);
@@ -1747,24 +1747,25 @@ begin
 
   Top:=screenconfig.GetValue('/Window/Top',0);
   Left:=screenconfig.GetValue('/Window/Left',0);
-  if Screen.Width<1400 then begin
+
+  if Screen.DesktopWidth<1400 then begin
     // up to 1366 x 768
     ScreenMargin:=80;
-    Width:=screenconfig.GetValue('/Window/Width',Screen.Width);
-    Height:=screenconfig.GetValue('/Window/Height',Screen.Height);
+    Width:=screenconfig.GetValue('/Window/Width',Screen.DesktopWidth);
+    Height:=screenconfig.GetValue('/Window/Height',Screen.DesktopHeight);
   end else begin
     // from 1400 x 1050 or 1440 x 900
     ScreenMargin:=120;
     Width:=screenconfig.GetValue('/Window/Width',1280);
     Height:=screenconfig.GetValue('/Window/Height',800);
   end;
-  if width>(Screen.width-ScreenMargin) then width:=Screen.width-ScreenMargin;
+  if width>(Screen.Desktopwidth-ScreenMargin) then width:=Screen.Desktopwidth-ScreenMargin;
   if left<ScreenMargin then left:=ScreenMargin;
-  if left+width>(Screen.Width-ScreenMargin) then left:=Screen.Width-width-ScreenMargin;
+  if left+width>(Screen.DesktopWidth-ScreenMargin) then left:=Screen.DesktopWidth-width-ScreenMargin;
   if left<0 then left:=0;
   if top<ScreenMargin then top:=ScreenMargin;
-  if height>(Screen.height-ScreenMargin) then height:=Screen.height-ScreenMargin;
-  if top+height>(Screen.height-ScreenMargin) then top:=Screen.height-height-ScreenMargin;
+  if height>(Screen.Desktopheight-ScreenMargin) then height:=Screen.Desktopheight-ScreenMargin;
+  if top+height>(Screen.Desktopheight-ScreenMargin) then top:=Screen.Desktopheight-height-ScreenMargin;
   if top<0 then top:=0;
 
   if screenconfig.GetValue('/Window/Maximized',false) then WindowState := wsMaximized;
