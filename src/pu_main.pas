@@ -1078,6 +1078,9 @@ implementation
 {$ifdef lclqt5}
   uses qtint;
 {$endif}
+{$ifdef lclqt6}
+  uses qtint;
+{$endif}
 
 {$R *.lfm}
 
@@ -2764,7 +2767,13 @@ begin
   if not TryStrToInt(copy(buf,1,i-1),i2) then i2:=0;
   usecursor:=(i1>=5)and(i2>=12); // cursor crash with old version, work with version in focal
   {$else}
-  usecursor:=true;
+    {$ifdef lclqt6}
+    buf:=GetQtVersion;
+    NewMessage('Running on Qt version: '+buf,9);
+    usecursor:=true;
+    {$else}
+    usecursor:=true;
+   {$endif}
   {$endif}
   if usecursor then begin
     crRetic:=6;
@@ -12513,9 +12522,13 @@ try
      // draw all star boxes
      Image1.Canvas.pen.Color:=clRed;
      {$ifdef lclqt5}
-     Image1.Canvas.pen.Mode:=pmCopy; // Qt5 pmMerge draw very bad text
-     {$else}
-     Image1.Canvas.pen.Mode:=pmMerge;
+       Image1.Canvas.pen.Mode:=pmCopy; // Qt5 pmMerge draw very bad text
+       {$else}
+       {$ifdef lclqt6}
+         Image1.Canvas.pen.Mode:=pmCopy;
+         {$else}
+         Image1.Canvas.pen.Mode:=pmMerge;
+       {$endif}
      {$endif}
      Image1.Canvas.pen.Width:=DoScaleX(1);
      Image1.Canvas.Brush.Style:=bsClear;
