@@ -3,9 +3,6 @@
 version=$(grep 'ccdcielver' src/u_global.pas |head -1| cut -d\' -f2)
 
 builddir=/tmp/ccdciel  # Be sure this is set to a non existent directory, it is removed after the run!
-export WINEPREFIX=~/.wine
-innosetup="C:\Program Files\Inno Setup 6\ISCC.exe"  # Install under Wine from http://www.jrsoftware.org/isinfo.php
-wine_build="Z:\tmp\ccdciel" # Change to match builddir, Z: is defined in ~/.wine/dosdevices
 
 arch=$(arch)
 
@@ -16,22 +13,14 @@ unset extratarget
 
 unset make_linux32
 unset make_linux64
-unset make_win32
-unset make_win64
 
 if [[ $arch == i686 ]]; then 
    make_linux32=1
 fi
 if [[ $arch == x86_64 ]]; then 
    make_linux64=1
-   make_win32=1
-   make_win64=1
    extratarget=",x86_64-linux"
 fi
-
-# For win32 and win64 target you must also install the corresponding mingw-w64 to build the C library
-#mingw32=/opt/mingw-w32/bin/
-#mingw64=/opt/mingw-w64/bin/
 
 if [[ -n $1 ]]; then
   configopt="fpc=$1"
@@ -52,8 +41,6 @@ echo $version - $currentrev
   rm ccdciel*.xz
   rm ccdciel*.deb
   rm ccdciel*.rpm
-  rm ccdciel*.zip
-  rm ccdciel*.exe
   rm -rf $builddir
 
 # make Linux i386 version
@@ -162,67 +149,4 @@ if [[ $make_linux64 ]]; then
   cd $wd
   rm -rf $builddir
 fi
-
-# make Windows i386 version
-if [[ $make_win32 ]]; then
-  rsync -a --exclude=.svn system_integration/Windows/installer/ccdciel/* $builddir
-  mkdir $builddir/Data
-  mkdir $builddir/Prog
-  export PATH=$mingw32:$save_PATH
-  ./configure $configopt prefix=$builddir/Data target=i386-win32$extratarget
-  if [[ $? -ne 0 ]]; then exit 1;fi
-  make OS_TARGET=win32 CPU_TARGET=i386 clean
-  make OS_TARGET=win32 CPU_TARGET=i386
-  if [[ $? -ne 0 ]]; then exit 1;fi
-  make install_win
-  if [[ $? -ne 0 ]]; then exit 1;fi
-  # zip
-  cd $builddir/Data
-  zip -r  ccdciel-$version-$currentrev-windows-x32.zip *
-  if [[ $? -ne 0 ]]; then exit 1;fi
-  mv ccdciel*.zip $wd
-  # exe
-  cd $builddir
-  sed -i "/AppVerName/ s/V3/V$version/" ccdciel_32.iss
-  sed -i "/OutputBaseFilename/ s/windows/$version-$currentrev-windows/" ccdciel_32.iss
-  sed -i "s/ccdciel_version/$version/" Presetup/readme.txt
-  wine "$innosetup" "$wine_build\ccdciel_32.iss"
-  if [[ $? -ne 0 ]]; then exit 1;fi
-  mv $builddir/ccdciel*.exe $wd
-
-  cd $wd
-  rm -rf $builddir
-fi
-
-# make Windows x86_64 version
-if [[ $make_win64 ]]; then
-  rsync -a --exclude=.svn system_integration/Windows/installer/ccdciel/* $builddir
-  mkdir $builddir/Data
-  mkdir $builddir/Prog
-  export PATH=$mingw64:$save_PATH
-  ./configure $configopt prefix=$builddir/Data target=x86_64-win64$extratarget
-  if [[ $? -ne 0 ]]; then exit 1;fi
-  make OS_TARGET=win64 CPU_TARGET=x86_64 clean
-  make OS_TARGET=win64 CPU_TARGET=x86_64
-  if [[ $? -ne 0 ]]; then exit 1;fi
-  make install_win64
-  if [[ $? -ne 0 ]]; then exit 1;fi
-  # zip
-  cd $builddir/Data
-  zip -r  ccdciel-$version-$currentrev-windows-x64.zip *
-  if [[ $? -ne 0 ]]; then exit 1;fi
-  mv ccdciel*.zip $wd
-  if [[ $? -ne 0 ]]; then exit 1;fi
-  # exe
-  cd $builddir
-  sed -i "/AppVerName/ s/V3/V$version/" ccdciel_64.iss
-  sed -i "/OutputBaseFilename/ s/windows-x64/$version-$currentrev-windows-x64/" ccdciel_64.iss
-  sed -i "s/ccdciel_version/$version/" Presetup/readme.txt
-  wine "$innosetup" "$wine_build\ccdciel_64.iss"
-  if [[ $? -ne 0 ]]; then exit 1;fi
-  mv $builddir/ccdciel*.exe $wd
-fi
-
-cd $wd
-rm -rf $builddir
 
