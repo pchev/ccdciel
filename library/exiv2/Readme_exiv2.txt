@@ -1,4 +1,18 @@
+Linux:
+
+Install the distribution package
+
+
+Windows x64:
+
+Download the last release file from https://github.com/Exiv2/exiv2/releases
+extract and zip the content of the bin directory.
+
+
 Mac arm64:
+
+The release file cannot be used because it require to install the dependencies from homebrew.
+The method bellow make an idependant package.
 
 download from https://github.com/Exiv2/exiv2
 install dependencies with Macports
