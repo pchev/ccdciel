@@ -48,7 +48,7 @@ if [[ $make_linuxarm ]]; then
   # tar
   cd $builddir
   cd ..
-  tar cvjf ccdciel-$version-$currentrev-linux_arm.tar.bz2 ccdciel
+  tar cvjf ccdciel-$version-$currentrev-linux_armhf.tar.bz2 ccdciel
   if [[ $? -ne 0 ]]; then exit 1;fi
   mv ccdciel*.tar.bz2 $wd
   if [[ $? -ne 0 ]]; then exit 1;fi
