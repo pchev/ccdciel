@@ -807,6 +807,18 @@ var cra,cde,eq,ar1,ar2,de1,de2,dist,raoffset,deoffset,newra,newde,pa,ara,ade: do
     fn:string;
     n,i,oldfilter,delay,RetryMeridianSyncCount:integer;
     SyncOK,NearMeridian,RetryMeridianSync: boolean;
+
+  procedure WaitSlewDelay(wt:single=5);
+  var endt: TDateTime;
+  begin
+    endt:=now+wt/secperday;
+    while now<endt do begin
+      if CancelAutofocus or CancelGoto then break;
+      Sleep(100);
+      if GetCurrentThreadId=MainThreadID then Application.ProcessMessages;
+    end;
+  end;
+
 begin
 // ra,de parameters use equinox of the mount (local or 2000), same as slew()
   result:=false;
@@ -830,7 +842,7 @@ begin
       msg(Format(rsDoSimpleSlew, [ARToStr3(ra), DEToStr(de)]),2);
       if not Mount.Slew(ra, de) then exit;
       if CancelAutofocus or CancelGoto then exit;
-      Wait(delay);
+      WaitSlewDelay(delay);
       dist:=0;
    end
    else begin
@@ -851,7 +863,7 @@ begin
     RetryMeridianSyncCount:=0;
     repeat
       RetryMeridianSync:=false;
-      Wait(delay);
+      WaitSlewDelay(delay);
       if CancelAutofocus or CancelGoto then exit;
       if FFinderCamera=nil then begin
         // Use main camera
@@ -921,7 +933,7 @@ begin
          0: begin
                SyncOK:=mount.Sync(cra,cde);
                if SyncOK then begin
-                  Wait(2);
+                  WaitSlewDelay(2);
                   if CancelAutofocus or CancelGoto then exit;
                   if not Mount.Slew(ra, de) then exit;
                   if CancelAutofocus or CancelGoto then exit;
@@ -932,7 +944,7 @@ begin
                    if RetryMeridianSyncCount<=10 then begin        // retry for 10 minutes so the mount move a bit further
                      msg('Mount Sync failed near the meridian.',2);
                      msg('Waiting 1 minute before to retry',2);
-                     Wait(60);
+                     WaitSlewDelay(60);
                      if CancelAutofocus or CancelGoto then exit;
                      RetryMeridianSync:=true;
                      dec(i);
