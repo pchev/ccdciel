@@ -17725,6 +17725,24 @@ try
     buf:=f_scriptengine.cmd_Internalguider_SetSpectroMultistaroffset(buf1,buf2);
     result:=result+'"result":{"status": "'+buf+'"}';
   end
+  else if method='J2000_TO_APPARENT' then begin
+    CheckParamCount(2);
+    x1:=deg2rad*15*StrToFloat(trim(value[attrib.IndexOf('params.0')]));
+    x2:=deg2rad*StrToFloat(trim(value[attrib.IndexOf('params.1')]));
+    J2000ToApparent(x1,x2);
+    x1:=rad2deg*x1/15;
+    x2:=rad2deg*x2;
+    result:=result+'"result":{"ra": '+FormatFloat(f9v,x1)+', "dec": '+FormatFloat(f9v,x2)+'}';
+  end
+  else if method='APPARENT_TO_J2000' then begin
+    CheckParamCount(2);
+    x1:=deg2rad*15*StrToFloat(trim(value[attrib.IndexOf('params.0')]));
+    x2:=deg2rad*StrToFloat(trim(value[attrib.IndexOf('params.1')]));
+    ApparentToJ2000(x1,x2);
+    x1:=rad2deg*x1/15;
+    x2:=rad2deg*x2;
+    result:=result+'"result":{"ra": '+FormatFloat(f9v,x1)+', "dec": '+FormatFloat(f9v,x2)+'}';
+  end
   // method not found
   else begin
     result:=result+'"error": {"code": -32601, "message": "Method not found"}';
