@@ -17271,6 +17271,7 @@ try
   else if method='OBS_LATITUDE' then result:=result+'"result": '+FormatFloat(f6,ObsLatitude)
   else if method='OBS_LONGITUDE' then result:=result+'"result": '+FormatFloat(f6,-ObsLongitude)
   else if method='OBS_ELEVATION' then result:=result+'"result": '+FormatFloat(f1,ObsElevation)
+  else if method='SIDEREALTIME' then result:=result+'"result": '+FormatFloat(f6,rad2deg*CurrentSidTim/15)
   else if method='CCDTEMP' then result:=result+'"result": '+FormatFloat(f2,f_ccdtemp.CurrentTemperature)
   else if method='CCDCOOLER_POWER' then result:=result+'"result": '+FormatFloat(f2,f_ccdtemp.CurrentCoolerPower)
   else if method='FOCUSERPOSITION' then result:=result+'"result": '+IntToStr(focuser.Position)
