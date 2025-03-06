@@ -105,10 +105,12 @@ object f_capture: Tf_capture
         Top = 1
         Width = 55
         Constraints.MaxHeight = 28
-        MaxValue = 1000
-        MinValue = 1
+        MaxLength = 0
         ParentFont = False
         TabOrder = 0
+        MaxValue = 1000
+        MinValue = 1
+        NullValue = 0
         Value = 1
       end
     end
@@ -152,10 +154,13 @@ object f_capture: Tf_capture
         Top = 4
         Width = 101
         Constraints.MaxHeight = 28
-        MaxValue = 32767
-        MinValue = -32768
+        MaxLength = 0
         ParentFont = False
         TabOrder = 1
+        MaxValue = 32767
+        MinValue = -32768
+        NullValue = 0
+        Value = 0
       end
       object PanelOffset: TPanel
         Left = 0
@@ -181,9 +186,12 @@ object f_capture: Tf_capture
           Height = 32
           Top = 4
           Width = 101
+          MaxLength = 0
+          TabOrder = 0
           MaxValue = 32767
           MinValue = -32768
-          TabOrder = 0
+          NullValue = 0
+          Value = 0
         end
       end
     end
@@ -318,10 +326,12 @@ object f_capture: Tf_capture
         Top = 0
         Width = 101
         Constraints.MaxHeight = 28
-        MaxValue = 10000
-        MinValue = 1
+        MaxLength = 0
         ParentFont = False
         TabOrder = 0
+        MaxValue = 10000
+        MinValue = 1
+        NullValue = 0
         Value = 1
       end
     end
@@ -395,10 +405,12 @@ object f_capture: Tf_capture
         Top = 0
         Width = 55
         Constraints.MaxHeight = 28
-        MaxValue = 10000
-        MinValue = 1
+        MaxLength = 0
         ParentFont = False
         TabOrder = 1
+        MaxValue = 10000
+        MinValue = 1
+        NullValue = 0
         Value = 1
       end
     end
@@ -430,10 +442,12 @@ object f_capture: Tf_capture
         Top = 0
         Width = 55
         Constraints.MaxHeight = 28
-        MaxValue = 10000
-        MinValue = 1
+        MaxLength = 0
         ParentFont = False
         TabOrder = 1
+        MaxValue = 10000
+        MinValue = 1
+        NullValue = 0
         Value = 1
       end
       object CheckBoxFocusTemp: TCheckBox
@@ -496,6 +510,7 @@ object f_capture: Tf_capture
     AutoSize = False
     Caption = 'Capture'
     Color = clBtnShadow
+    DragMode = dmAutomatic
     Font.Color = clBtnText
     Layout = tlCenter
     ParentColor = False
