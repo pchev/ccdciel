@@ -1611,6 +1611,7 @@ resourcestring
   rsImportCSV = 'Import CSV';
   rsExportCSV = 'Export CSV';
   rsMandatorySta = 'Mandatory start time';
+  rsSelectArea = 'Select area';
 
 implementation
 

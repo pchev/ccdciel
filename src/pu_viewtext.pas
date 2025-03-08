@@ -26,13 +26,14 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 interface
 
 uses  UScaleDPI, u_translation,
-  Classes, SysUtils, FileUtil, Forms, Controls, Graphics, Dialogs, StdCtrls, ExtCtrls;
+  Classes, SysUtils, FileUtil, Forms, Controls, Graphics, Dialogs, StdCtrls, ExtCtrls, Buttons;
 
 type
 
   { Tf_viewtext }
 
   Tf_viewtext = class(TForm)
+    ActionButton: TSpeedButton;
     Button1: TButton;
     Memo1: TMemo;
     Panel1: TPanel;

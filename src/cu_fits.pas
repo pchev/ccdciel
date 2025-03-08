@@ -185,13 +185,14 @@ type
      constructor Create(AOwner:TComponent); override;
      destructor  Destroy; override;
      function  GetStatistics: string;
+     function  SubStatistics(x1,y1,x2,y2: integer): string;
      Procedure LoadStream;
      Procedure UpdateStream;
      Procedure MeasureFlatLevel;
      Procedure LoadRGB;
      procedure ClearFitsInfo;
      procedure GetFitsInfo;
-     procedure stdev2(samplestep: integer; out mean,sd : double; out iterations :integer);{calculate mean and standard deviation using sigma clip to exclude outliers}
+     procedure stdev2(samplestep: integer; out mean,sd : double; out iterations :integer; x1:integer=0; y1:integer=0; x2:integer=0; y2:integer=0);{calculate mean and standard deviation using sigma clip to exclude outliers}
      procedure CreateImage(info: TFitsInfo; hdr:TFitsHeader);
      procedure BayerInterpolation(t:TBayerMode; rmult,gmult,bmult:double; rbg,gbg,bbg:single; pix1,pix2,pix3,pix4,pix5,pix6,pix7,pix8,pix9:single; row,col:integer; out pixr,pixg,pixb:single); inline;
      Procedure Debayer;
@@ -1656,12 +1657,14 @@ else begin
 end;
 end;
 
-
-procedure TFits.stdev2(samplestep: integer; out mean,sd : double; out iterations :integer);{calculate mean and standard deviation using sigma clip to exclude outliers}
+procedure TFits.stdev2(samplestep: integer; out mean,sd : double; out iterations :integer; x1:integer=0; y1:integer=0; x2:integer=0; y2:integer=0);
+{calculate mean and standard deviation using sigma clip to exclude outliers}
 var i,j,counter          : integer;
     value, sd_old,meanx  : double;
 
 begin
+  if x2=0 then x2:=Fwidth;
+  if y2=0 then y2:=Fheight;
   sd:=99999;
   mean:=0;
   iterations:=0;
@@ -1669,8 +1672,8 @@ begin
     {mean}
     counter:=0;
     meanx:=0;
-    for j:=0 to (Fheight-1) div samplestep  do
-    for i:=0 to (Fwidth-1) div samplestep do
+    for j:=y1 to (y2-1) div samplestep  do
+    for i:=x1 to (x2-1) div samplestep do
     begin
       value:=Fimage[0,j*samplestep,i*samplestep];
       if  ((iterations=0) or (abs(value-mean)<=3*sd)) then  {ignore outliers after first run}
@@ -1684,8 +1687,8 @@ begin
     {sd}
     sd_old:=sd;
     counter:=0;
-    for j:=0 to (Fheight-1) div samplestep  do
-    for i:=0 to (Fwidth-1) div samplestep do
+    for j:=y1 to (y2-1) div samplestep  do
+    for i:=x1 to (x2-1) div samplestep do
 
     begin
       value:=Fimage[0,j*samplestep,i*samplestep];
@@ -1707,6 +1710,8 @@ function TFits.GetStatistics: string;
 var ff: string;
     x: double;
     i,maxh,maxp,sz,sz2,npx,median:integer;
+    mean,sd : double;
+    iterations :integer;
 begin
   if FFitsInfo.valid then begin
     if FFitsInfo.bitpix>0 then ff:=f0 else ff:=f6;
@@ -1744,9 +1749,85 @@ begin
     // sigma
     x:= FimageMin+Fsigma/FimageC;
     result:=result+rsStdDev+blank+FormatFloat(f1, x)+crlf;
+    stdev2(4,mean,sd,iterations);//test every 4x4= 16th pixel to speed up
+    result:=result+'Mean2: '+FormatFloat(f1,mean)+' (sigma clipped)'+crlf;
+    result:=result+'Std.Dev2: '+FormatFloat(f1,sd)+' (sigma clipped)'+crlf;
   end
   else
     result:='';
+end;
+
+function TFits.SubStatistics(x1,y1,x2,y2: integer): string;
+var i,j: integer;
+    x,dmin,dmax,mean,sigma : double;
+    ni,sum,sum2 : extended;
+    hist: THistogram;
+    ff: string;
+    maxh,maxp,sz,sz2,npx,median:integer;
+    mean2,sd2 : double;
+    iterations :integer;
+begin
+if FFitsInfo.valid then begin
+  if FFitsInfo.bitpix>0 then ff:=f0 else ff:=f6;
+  if x1>x2 then begin i:=x1; x1:=x2; x2:=i; end;
+  if y1>y2 then begin i:=y1; y1:=y2; y2:=i; end;
+  x1:=max(0,min(x1,Fwidth-1));
+  x2:=max(0,min(x2,Fwidth-1));
+  y1:=max(0,min(y1,Fheight-1));
+  y2:=max(0,min(y2,Fheight-1));
+  FillByte(hist,sizeof(THistogram),0);
+  dmin:=1.0E100;
+  dmax:=-1.0E100;
+  sum:=0; sum2:=0; ni:=0;
+  for j:=y1 to y2  do begin
+    for i:=x1 to x2 do begin
+      x:=Fimage[0,j,i];
+      inc(hist[round(max(0,min(maxword,x)))]);
+      dmin:=min(x,dmin);
+      dmax:=max(x,dmax);
+      sum:=sum+x;
+      sum2:=sum2+x*x;
+      ni:=ni+1;
+    end;
+  end;
+  mean:=sum/ni;
+  sigma:=sqrt( (sum2/ni)-(mean*mean) );
+  sz:=round(ni);
+  sz2:=sz div 2;
+  result:=rsImageStatist+crlf;
+  result:=Format(rsPixelCount, [result, blank+IntToStr(sz)+crlf]);
+  // min, max
+  result:=result+rsMin2+blank+FormatFloat(ff,dmin)+crlf;
+  result:=result+rsMax+blank+FormatFloat(ff,dmax)+crlf;
+  // mode, median
+  median:=0; maxh:=0;  npx:=0; maxp:=0;
+  for i:=0 to high(word) do begin
+    npx:=npx+hist[i];
+    if (median=0) and (npx>sz2) then
+        median:=i;
+    if hist[i]>maxh then begin
+        maxh:=hist[i];
+        maxp:=i;
+    end;
+  end;
+  if maxh>0 then begin
+    result:=result+rsMode+blank+FormatFloat(ff, maxp)+crlf;
+  end;
+  if median>0 then begin
+    result:=Format(rsMedian, [result, blank+FormatFloat(ff, median)+crlf]);
+  end;
+  // mean
+  result:=result+rsMean+blank+FormatFloat(f1, mean)+crlf;
+  // sigma
+  result:=result+rsStdDev+blank+FormatFloat(f1, sigma)+crlf;
+  stdev2(1,mean2,sd2,iterations,x1,y1,x2,y2);
+  if sd2<>99999 then begin
+    result:=result+'Mean2: '+FormatFloat(f1,mean2)+' (sigma clipped)'+crlf;
+    result:=result+'Std.Dev2: '+FormatFloat(f1,sd2)+' (sigma clipped)'+crlf;
+  end;
+end
+else
+  result:='';
 end;
 
 procedure TFits.ClearFitsInfo;

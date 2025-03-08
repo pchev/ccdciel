@@ -687,6 +687,8 @@ type
     TerminateVcurve: boolean;
     ScrBmp,ScrGuideBmp,ScrFinderBmp: TBGRABitmap;
     ImageSaved: boolean;
+    FStatArea: boolean;
+    FStatForm: Tf_viewtext;
 
     trpxy : array[1..2,1..3,1..3] of integer;{for image inspection}
     median: array[1..3,1..3] of double;{for image inspection}
@@ -1064,6 +1066,10 @@ type
     function HFM_IsActive():boolean;
     function HFM_GetHFDShift():double;
     procedure MsgLevelChange(Sender: TObject);
+    procedure ShowStat(f: Tf_viewtext; txt:string);
+    procedure ImageStat(x1,y1,x2,y2: integer);
+    procedure NewStat(Sender: TObject);
+    procedure CloseStat(Sender: TObject; var CloseAction: TCloseAction);
 
   public
     { public declarations }
@@ -1544,6 +1550,7 @@ begin
   ObsPressure:=1013;
   ObsHumidity:=50;
   ObsTlr:=6.5;
+  FStatArea:=false;
   meridianflipping:=false;
   TemperatureScale:=0;
   TempLabel:=sdeg+'C';
@@ -3924,7 +3931,20 @@ begin
 if SplitImage then exit;
 MouseDownX:=X;
 MouseDownY:=Y;
-if Shift=[ssLeft] then begin
+if FStatArea then begin
+   if EndX>0 then begin
+      if fits.HeaderInfo.naxis=1 then
+        scrbmp.Rectangle(StartX,0,EndX,Image1.Height,BGRAWhite,dmXor)
+      else
+        scrbmp.Rectangle(StartX,StartY,EndX,EndY,BGRAWhite,dmXor);
+   end;
+   MouseFrame:=true;
+   Startx:=X;
+   Starty:=y;
+   EndX:=-1;
+   EndY:=-1
+end
+else if Shift=[ssLeft] then begin
   if PolarAlignmentOverlay and (not PolarAlignmentLock) then begin
      Screen2Fits(X,Y,false,false,Polx,Poly);
      PolarMoving:=true;
@@ -3949,7 +3969,7 @@ else if (ssCtrl in Shift) then begin
      screen.Cursor:=crHandPoint;
   end;
 end
-else if (ssShift in Shift)and(not (f_capture.Running or f_preview.Running))and(not f_starprofile.SpectraProfile) then begin
+else if (FStatArea or(ssShift in Shift))and(not (f_capture.Running or f_preview.Running))and(not f_starprofile.SpectraProfile) then begin
    if EndX>0 then begin
       if fits.HeaderInfo.naxis=1 then
         scrbmp.Rectangle(StartX,0,EndX,Image1.Height,BGRAWhite,dmXor)
@@ -4060,28 +4080,35 @@ if MouseFrame and fits.HeaderInfo.valid and fits.ImageValid then begin
   Image1.Canvas.Pen.Mode:=pmCopy;
   EndX:=X;
   EndY:=Y;
-  Screen2CCD(StartX,StartY,f_visu.FlipHorz,f_visu.FlipVert,camera.VerticalFlip,x1,y1);
-  Screen2CCD(EndX,EndY,f_visu.FlipHorz,f_visu.FlipVert,camera.VerticalFlip,x2,y2);
-  if camera.CameraInterface=INDI then begin
-    // INDI frame in unbinned pixel
-    x1:=x1*camera.BinX;
-    x2:=x2*camera.BinX;
-    y1:=y1*camera.BinY;
-    y2:=y2*camera.BinY;
-  end;
-  if x1>x2 then begin
-    xx:=x1; x1:=x2; x2:=xx;
-  end;
-  if y1>y2 then begin
-    xx:=y1; y1:=y2; y2:=xx;
-  end;
-  w:=x2-x1;
-  h:=y2-y1;
-  if fits.HeaderInfo.naxis>1 then begin
-    f_frame.FX.Text:=inttostr(x1);
-    f_frame.FY.Text:=inttostr(y1);
-    f_frame.FWidth.Text:=inttostr(w);
-    f_frame.FHeight.Text:=inttostr(h);
+  if FStatArea then begin
+    Screen2Fits(StartX,StartY,f_visu.FlipHorz,f_visu.FlipVert,x1,y1);
+    Screen2Fits(EndX,EndY,f_visu.FlipHorz,f_visu.FlipVert,x2,y2);
+    ImageStat(x1,y1,x2,y2);
+  end
+  else begin
+    Screen2CCD(StartX,StartY,f_visu.FlipHorz,f_visu.FlipVert,camera.VerticalFlip,x1,y1);
+    Screen2CCD(EndX,EndY,f_visu.FlipHorz,f_visu.FlipVert,camera.VerticalFlip,x2,y2);
+    if camera.CameraInterface=INDI then begin
+      // INDI frame in unbinned pixel
+      x1:=x1*camera.BinX;
+      x2:=x2*camera.BinX;
+      y1:=y1*camera.BinY;
+      y2:=y2*camera.BinY;
+    end;
+    if x1>x2 then begin
+      xx:=x1; x1:=x2; x2:=xx;
+    end;
+    if y1>y2 then begin
+      xx:=y1; y1:=y2; y2:=xx;
+    end;
+    w:=x2-x1;
+    h:=y2-y1;
+    if fits.HeaderInfo.naxis>1 then begin
+      f_frame.FX.Text:=inttostr(x1);
+      f_frame.FY.Text:=inttostr(y1);
+      f_frame.FWidth.Text:=inttostr(w);
+      f_frame.FHeight.Text:=inttostr(h);
+    end;
   end;
 end;
 if MouseSpectra and fits.HeaderInfo.valid and fits.ImageValid then begin
@@ -9040,21 +9067,18 @@ end;
 procedure Tf_main.MenuImgStatClick(Sender: TObject);
 var f: Tf_viewtext;
     txt: string;
-    mean,sd : double;
-    iterations :integer;
 begin
  if fits.HeaderInfo.valid and fits.ImageValid then begin
    f:=Tf_viewtext.Create(self);
+   f.OnClose:=@CloseStat;
    f.Width:=DoScaleX(250);
    f.Height:=DoScaleY(350);
    f.Caption:=rsImageStatist;
+   f.FormStyle:=fsStayOnTop;
+   f.ActionButton.Caption:='  '+rsSelectArea+'  ';
+   f.ActionButton.OnClick:=@newstat;
+   f.ActionButton.Visible:=true;
    txt:=fits.GetStatistics;
-
-   Fits.stdev2(4,{out}mean,sd,iterations);//test every 4x4= 16th pixel to speed up
-   txt:=txt+'Mean2: '+FormatFloat(f1,mean)+' (sigma clipped)'+crlf;
-   txt:=txt+'Std.Dev2: '+FormatFloat(f1,sd)+' (sigma clipped)'+crlf;
-
-
    if (WCScenterRA<>NullCoord) and (WCScenterDEC<>NullCoord)
    then begin
      txt:=txt+crlf+rsFromPlateSol+':'+crlf;
@@ -9073,10 +9097,37 @@ begin
        end;
      end;
    end;
-   f.Memo1.Text:=txt;
+   ShowStat(f,txt);
    FormPos(f,mouse.CursorPos.X,mouse.CursorPos.Y);
    f.Show;
  end;
+end;
+
+procedure Tf_main.ShowStat(f: Tf_viewtext; txt:string);
+begin
+  f.Memo1.Text:=txt;
+end;
+
+procedure Tf_main.ImageStat(x1,y1,x2,y2: integer);
+var txt: string;
+begin
+if FStatForm is Tf_viewtext then begin
+  txt:=fits.SubStatistics(x1,y1,x2,y2);
+  ShowStat(FStatForm,txt);
+end;
+end;
+
+procedure Tf_main.NewStat(Sender: TObject);
+begin
+ FStatArea:=not FStatArea;
+ TSpeedButton(sender).Down:=FStatArea;
+ FStatForm:=Tf_viewtext(TControl(sender).GetTopParent);
+end;
+
+procedure Tf_main.CloseStat(Sender: TObject; var CloseAction: TCloseAction);
+begin
+ FStatArea:=false;
+ CloseAction:=caFree;
 end;
 
 procedure Tf_main.MenuSaveConfigClick(Sender: TObject);

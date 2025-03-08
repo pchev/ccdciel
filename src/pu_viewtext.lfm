@@ -46,5 +46,25 @@ object f_viewtext: Tf_viewtext
       ParentFont = False
       TabOrder = 0
     end
+    object ActionButton: TSpeedButton
+      AnchorSideTop.Control = Button1
+      AnchorSideRight.Control = Button1
+      AnchorSideBottom.Control = Button1
+      AnchorSideBottom.Side = asrBottom
+      Left = 500
+      Height = 25
+      Top = 4
+      Width = 81
+      AllowAllUp = True
+      Anchors = [akTop, akRight, akBottom]
+      AutoSize = True
+      BorderSpacing.Right = 12
+      Caption = 'ActionButton'
+      GroupIndex = 100
+      Margin = 0
+      Spacing = 0
+      Transparent = False
+      Visible = False
+    end
   end
 end
