@@ -9113,7 +9113,8 @@ var txt: string;
 begin
 if FStatForm is Tf_viewtext then begin
   txt:=fits.SubStatistics(x1,y1,x2,y2);
-  ShowStat(FStatForm,txt);
+  if txt<>'' then
+    ShowStat(FStatForm,txt);
 end;
 end;
 

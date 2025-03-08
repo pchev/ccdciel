@@ -1769,6 +1769,10 @@ var i,j: integer;
 begin
 if FFitsInfo.valid then begin
   if FFitsInfo.bitpix>0 then ff:=f0 else ff:=f6;
+  result:='';
+  if (x1<0)or(x2<0)or(y1<0)or(y2<0) or
+     (x1>Fwidth)or(x2>Fwidth)or(y1>Fheight)or(y2>Fheight)
+     then exit;
   if x1>x2 then begin i:=x1; x1:=x2; x2:=i; end;
   if y1>y2 then begin i:=y1; y1:=y2; y2:=i; end;
   x1:=max(0,min(x1,Fwidth-1));
