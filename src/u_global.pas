@@ -303,6 +303,7 @@ const
   FlatTimeName: array[0..1] of string=('Dusk','Dawn');
   PierSideName: array[0..3] of string=('pierEast', 'pierWest', 'pierUnknown','pierNotImplemented');
   TrackRateName :array [0..3] of string = ('TRACK_SIDEREAL','TRACK_LUNAR','TRACK_SOLAR','TRACK_CUSTOM');
+  HFM_HIST_SIZE=3;       // HFD Focus Monitoring (HFM) size of array of HFD measurements
   ResolverAstrometryNet=0;
   ResolverElbrus=1;
   ResolverNone=2;

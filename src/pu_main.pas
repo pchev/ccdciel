@@ -703,8 +703,6 @@ type
     MultiPanelHsplit, MultiPanelVSplit: double;
 
     // HFD Focus Monitoring (HFM)
-    const HFM_HIST_SIZE=3;     // size of array of HFD measurements
-  var
     HFM_Measurements: array[0..(HFM_HIST_SIZE-1)] of double;
     HFM_Primed: boolean;   // true if measurements array filled, else false
     HFM_MeasIdx: integer;      // index location for next element in array
@@ -14228,7 +14226,7 @@ begin
    // display HFM stats
    if (HFM_IsActive and (HFM_GetHFDShift>=HFM_Threshold)) then
      NewMessage(Format(rsHFMTriggered, [FormatFloat(f2, HFM_Threshold),
-       FormatFloat(f2, HFM_RefHFD), IntToStr(self.HFM_HIST_SIZE),
+       FormatFloat(f2, HFM_RefHFD), IntToStr(HFM_HIST_SIZE),
        FormatFloat(f2, HFM_MeasAvg), FormatFloat(f2, HFM_GetHFDShift)]));
 
    f_starprofile.ChkAutofocusDown(true);
@@ -14382,7 +14380,7 @@ begin
      // display HFM stats
      if (HFM_IsActive and (HFM_GetHFDShift>=HFM_Threshold)) then
         NewMessage(Format(rsHFMTriggered, [FormatFloat(f2, HFM_Threshold),
-           FormatFloat(f2, HFM_RefHFD), IntToStr(self.HFM_HIST_SIZE),
+           FormatFloat(f2, HFM_RefHFD), IntToStr(HFM_HIST_SIZE),
            FormatFloat(f2, HFM_MeasAvg), FormatFloat(f2, HFM_GetHFDShift)]));
 
      // set the new exposure factor here, because PrecisionSlew can set another filter
