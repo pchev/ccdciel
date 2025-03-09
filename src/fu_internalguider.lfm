@@ -1159,7 +1159,6 @@ object f_internalguider: Tf_internalguider
             Width = 340
             Align = alTop
             AutoSize = True
-            Caption = 'Panel14'
             ClientHeight = 268
             ClientWidth = 340
             TabOrder = 3

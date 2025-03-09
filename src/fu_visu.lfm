@@ -33,7 +33,6 @@ object f_visu: Tf_visu
       Width = 403
       Align = alClient
       AutoSize = True
-      Caption = 'Panel9'
       ClientHeight = 89
       ClientWidth = 403
       TabOrder = 0
