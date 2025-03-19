@@ -352,8 +352,8 @@ type
   procedure RawToFits(raw:TMemoryStream; ext: string; var ImgStream:TMemoryStream; out rmsg:string; pix:double=-1;piy:double=-1;binx:integer=-1;biny:integer=-1; flip:boolean=false);
   function PackFits(unpackedfilename,packedfilename: string; out rmsg:string):integer;
   function UnpackFits(packedfilename: string; var ImgStream:TMemoryStream; out rmsg:string):integer;
-  function CapturePath(f:TFits; DefFrameType,DefObject,DefExp,DefBin:string; preview,sequence: boolean; StepTotalCount,StepRepeatCount:integer):string;
-  function CaptureFilename(f:TFits; Directory,DefFrameType,DefObject,DefExp,DefBin:string; sequence:boolean):string;
+  function CapturePath(f:TFits; DefFrameType,DefObject,DefExp,DefBin:string; preview,sequence,dslr: boolean; StepTotalCount,StepRepeatCount:integer):string;
+  function CaptureFilename(f:TFits; Directory,DefFrameType,DefObject,DefExp,DefBin:string; sequence,dslr:boolean):string;
   procedure HistLevel(pos,sum,start,maxp: integer; hist:THistogram; out imin,imax: double);
   procedure HistStats(hist:THistogram; out maxhist,maxp,sumhist,starthist,stophist:integer);
 
@@ -4718,7 +4718,7 @@ begin
  end;
 end;
 
-function CapturePath(f:TFits; DefFrameType,DefObject,DefExp,DefBin:string; preview,sequence: boolean; StepTotalCount,StepRepeatCount:integer):string;
+function CapturePath(f:TFits; DefFrameType,DefObject,DefExp,DefBin:string; preview,sequence,dslr: boolean; StepTotalCount,StepRepeatCount:integer):string;
 var dt,dn: Tdatetime;
     fd,buf,dateobs: string;
     framestr,objectstr,binstr,expstr,filterstr: string;
@@ -4743,7 +4743,7 @@ else begin
 end;
 if not f.Header.Valueof('OBJECT',objectstr) then objectstr:=DefObject;
 objectstr:=SafeFileName(objectstr);
-if not f.Header.Valueof('EXPTIME',expstr) then expstr:=DefExp;
+if dslr or (not f.Header.Valueof('EXPTIME',expstr)) then expstr:=DefExp;
 expstr:=trim(expstr);
 if f.Header.Valueof('XBINNING',binstr) then begin
   if not f.Header.Valueof('YBINNING',buf) then buf:=binstr;
@@ -4779,7 +4779,7 @@ end;
 result:=fd;
 end;
 
-function CaptureFilename(f:TFits; Directory,DefFrameType,DefObject,DefExp,DefBin:string; sequence:boolean):string;
+function CaptureFilename(f:TFits; Directory,DefFrameType,DefObject,DefExp,DefBin:string; sequence,dslr:boolean):string;
 var dt: Tdatetime;
     fn,buf,fileseqstr,fileseqext,blankrep,dateobs: string;
     framestr,objectstr,binstr,expstr,filterstr: string;
@@ -4799,7 +4799,7 @@ begin
   if not f.Header.Valueof('OBJECT',objectstr) then objectstr:=DefObject;
   objectstr:=SafeFileName(objectstr);
   if FileRemoveSpace then objectstr:=StringReplace(objectstr,' ','',[rfReplaceAll]);
-  if not f.Header.Valueof('EXPTIME',expstr) then expstr:=DefExp;
+  if dslr or (not f.Header.Valueof('EXPTIME',expstr)) then expstr:=DefExp;
   expstr:=trim(expstr);
   if f.Header.Valueof('XBINNING',binstr) then begin
     if not f.Header.Valueof('YBINNING',buf) then buf:=binstr;

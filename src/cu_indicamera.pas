@@ -652,6 +652,8 @@ begin
      buf:='';
      TxtProp:=indiProp.getText;
      if TxtProp<>nil then begin
+       Txt:=IUFindText(TxtProp,'DRIVER_NAME');
+       FDslr:=pos('GPhoto',Txt.Text)>0;
        Txt:=IUFindText(TxtProp,'DRIVER_EXEC');
        if Txt<>nil then begin
          buf:=buf+Txt.lbl+': '+Txt.Text+', ';

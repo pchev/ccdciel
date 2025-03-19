@@ -81,6 +81,7 @@ T_camera = class(TComponent)
     FAutoLoadConfig: boolean;
     FhasVideo: boolean;
     FVerticalFlip: boolean;
+    FDslr: boolean;
     FASCOMFlipImage: boolean;
     FAddFrames,FSaveFrames,FAlignFrames,FPrepareStack,FStackRotation: boolean;
     FVideoSizes, FVideoRates,FFNumberList,FVideoEncoder:TStringList;
@@ -224,6 +225,7 @@ T_camera = class(TComponent)
     property DeviceName: string read FDevice;
     property DriverInfo: string read FDriverInfo;
     property CCDname: string read FCCDname;
+    property IsDSLR: boolean read FDslr;
     property Fits: TFits read FFits write FFits;
     property Mount: T_mount read FMount write FMount;
     property Wheel: T_wheel read Fwheel write Fwheel;
@@ -382,6 +384,7 @@ begin
   FStatus := devDisconnected;
   FDriverInfo := '';
   FCCDname:='';
+  FDslr:=false;
   FFilterNames:=TStringList.Create;
   FImgStream:=TMemoryStream.Create;
   FAddFrames:=false;
@@ -696,13 +699,13 @@ if FAddFrames then begin  // stack preview frames
        objectstr:=trim(FrameName[ord(ft)]);
     if FStackCount=1 then begin
       if Assigned(FonSequenceInfo) then FonSequenceInfo(self);
-      FStackSaveDir:=CapturePath(fs,FrameName[ord(ft)],objectstr,FormatFloat(f9v,Fexptime),inttostr(BinX),(objectstr=rsPreview),FsequenceRunning,FStepTotalCount,FStepRepeatCount);
+      FStackSaveDir:=CapturePath(fs,FrameName[ord(ft)],objectstr,FormatFloat(f9v,Fexptime),inttostr(BinX),(objectstr=rsPreview),FsequenceRunning,IsDSLR,FStepTotalCount,FStepRepeatCount);
       FStackSaveDir:=slash(FStackSaveDir)+'stack_'+objectstr+'_'+FStackDate;
       if copy(FStackSaveDir,1,1)='.' then FStackSaveDir:=ExpandFileName(slash(Appdir)+FStackSaveDir);
       ForceDirectories(FStackSaveDir);
       msg('Saving individual frames to '+FStackSaveDir);
     end;
-    fn:=CaptureFilename(fs,FStackSaveDir,FrameName[ord(ft)],objectstr,FormatFloat(f9v,Fexptime),inttostr(BinX),false);
+    fn:=CaptureFilename(fs,FStackSaveDir,FrameName[ord(ft)],objectstr,FormatFloat(f9v,Fexptime),inttostr(BinX),false,IsDSLR);
     fn:=slash(FStackSaveDir)+fn+FitsFileExt;
     fs.SaveToFile(fn);
     fs.free;
