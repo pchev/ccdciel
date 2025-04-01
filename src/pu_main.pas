@@ -18804,6 +18804,7 @@ begin
    n:=QuestionDlg (rsConeTest, rsConeInstructions, mtCustom,[21,rsConeMeasureEastWest, 22, rsConeMeasureWestEast, 23,rsCancel,'IsCancel'],'');
  {$endif}
 
+  ncam:=0;
   if (n<>23) and((guidecamera.Status=devConnected) or (findercamera.Status=devConnected)) then begin
     if (guidecamera.Status=devConnected) and (findercamera.Status=devConnected) then
       nc:=QuestionDlg (rsSelectCamera, rsSelectTheCam, mtCustom, [21, rsMainCamera, 22, rsGuider, 23, rsFinder, 24,rsCancel,'IsCancel'], '') // not important if Gtk2 revert the button order
