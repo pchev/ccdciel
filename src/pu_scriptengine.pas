@@ -1000,19 +1000,13 @@ begin
  Reset(f);
  repeat
    ReadLn(f,buf);
-   p:=pos(';',buf);
-   if p>0 then buf:=copy(buf,1,p-1);
-   p:=pos('{',buf);
-   if p>0 then buf:=copy(buf,1,p-1);
-   p:=pos('//',buf);
-   if p>0 then buf:=copy(buf,1,p-1);
-   p:=pos('(*',buf);
-   if p>0 then buf:=copy(buf,1,p-1);
-   if LowerCase(trim(buf))='begin' then begin
+   p:=pos('begin',LowerCase(buf));
+   if p>0 then begin
      result:=stPascal;
      break;
    end;
-   if pos('from ccdciel import ccdciel',buf)>0 then begin
+   p:=pos('import',buf);
+   if p>0 then begin
      result:=stPython;
      break;
    end;
