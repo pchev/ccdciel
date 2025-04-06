@@ -12886,7 +12886,9 @@ if AllDevicesConnected then begin
   f_sensoranalysis.Fits:=fits;
   f_sensoranalysis.Camera:=camera;
   f_sensoranalysis.Show;
-end;
+end
+else
+  showmessage(rsSomeDefinedD);
 end;
 
 procedure Tf_main.Polaralign2Close(Sender: TObject);
