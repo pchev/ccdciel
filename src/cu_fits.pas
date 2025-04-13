@@ -2468,8 +2468,18 @@ begin
   end;
 end;
 
+
 procedure TFits.ApplyBPM;
 var i,x,y,x0,y0: integer;
+  function med4(x1,x2,x3,x4: double): double;
+  var v4: array [0..3] of double;
+  begin
+     v4[0]:=x1;
+     v4[1]:=x2;
+     v4[2]:=x3;
+     v4[3]:=x4;
+     result:=SMedian(v4,4);
+  end;
 begin
 if (FBPMcount>0)and(FBPMnax=FFitsInfo.naxis) then begin
   {$ifdef debug_raw}writeln(FormatDateTime(dateiso,Now)+blank+'apply BPM');{$endif}
@@ -2487,17 +2497,17 @@ if (FBPMcount>0)and(FBPMnax=FFitsInfo.naxis) then begin
     y:=Fbpm[i,2]-y0;
     if (x>0)and(x<Fwidth-2)and(y>0)and(y<Fheight-2) then begin
       if FUseRawImage then
-        Frawimage[0,y,x]:=(Frawimage[0,y-1,x]+Frawimage[0,y+1,x]+Frawimage[0,y,x-1]+Frawimage[0,y,x+1]) / 4
+        Frawimage[0,y,x]:=med4(Frawimage[0,y-1,x],Frawimage[0,y+1,x],Frawimage[0,y,x-1],Frawimage[0,y,x+1])
       else
-        Fimage[0,y,x]:=(Fimage[0,y-1,x]+Fimage[0,y+1,x]+Fimage[0,y,x-1]+Fimage[0,y,x+1]) / 4;
+        Fimage[0,y,x]:=med4(Fimage[0,y-1,x],Fimage[0,y+1,x],Fimage[0,y,x-1],Fimage[0,y,x+1]);
       if n_plane=3 then begin
         if FUseRawImage then begin
-          Frawimage[1,y,x]:=(Frawimage[1,y-1,x]+Frawimage[1,y+1,x]+Frawimage[1,y,x-1]+Frawimage[1,y,x+1]) / 4;
-          Frawimage[2,y,x]:=(Frawimage[2,y-1,x]+Frawimage[2,y+1,x]+Frawimage[2,y,x-1]+Frawimage[2,y,x+1]) / 4;
+          Frawimage[1,y,x]:=med4(Frawimage[1,y-1,x],Frawimage[1,y+1,x],Frawimage[1,y,x-1],Frawimage[1,y,x+1]);
+          Frawimage[2,y,x]:=med4(Frawimage[2,y-1,x],Frawimage[2,y+1,x],Frawimage[2,y,x-1],Frawimage[2,y,x+1]);
         end
         else begin
-          Fimage[1,y,x]:=(Fimage[1,y-1,x]+Fimage[1,y+1,x]+Fimage[1,y,x-1]+Fimage[1,y,x+1]) / 4;
-          Fimage[2,y,x]:=(Fimage[2,y-1,x]+Fimage[2,y+1,x]+Fimage[2,y,x-1]+Fimage[2,y,x+1]) / 4;
+          Fimage[1,y,x]:=med4(Fimage[1,y-1,x],Fimage[1,y+1,x],Fimage[1,y,x-1],Fimage[1,y,x+1]);
+          Fimage[2,y,x]:=med4(Fimage[2,y-1,x],Fimage[2,y+1,x],Fimage[2,y,x-1],Fimage[2,y,x+1]);
         end;
       end;
     end;
