@@ -29,7 +29,9 @@ wine $specintiprog $specinticonfig
 if [[ $? = 0 ]]; then 
   lobj=$(echo $obj | tr [A-Z] [a-z] )
   mv $workdir/_$lobj* $resultdir
-  mv $capturedir/$obj* $archivedir
+  if [[ $archivedir != "none" ]]; then
+    mv $capturedir/$obj* $archivedir
+  fi
   echo "$(date) : Finish processing of $obj" >> $logfile
 else
   echo "$(date) : Error $obj" >> $logfile

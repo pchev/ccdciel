@@ -11,22 +11,53 @@ import platform
 import glob
 import shutil
 import subprocess
+import argparse
 from configparser import ConfigParser
 from datetime import datetime
+
+# read parameters
+parser=argparse.ArgumentParser(description="This optional parameters overide the default set in specinti_config")
+parser.add_argument('--object', '-o', help='the name of the object to process, default is the current object in capture tab')
+parser.add_argument('--sourcedir', '-s', help='the source directory where the object files are, default is the capture directory')
+parser.add_argument('--noarchive', help='do not move the original files to the archive directory', action="store_true")
+parser.add_argument('--basedir', '-w', help='the base directory for processing')
+parser.add_argument('--config', '-c',  help='the specinti configuration name')
+parser.add_argument('--calib', '-n', help='postfix for calibration files')
+parser.add_argument('--flat', '-f', help='flat image prefix')
+parser.add_argument('--flatpostfix', '-t', help='flat image postfix')
+parser.add_argument('--dark', '-d', help='dark image prefix')
+parser.add_argument('--bias', '-b', help='bias image prefix')
+args=parser.parse_args()
+capturedir = args.sourcedir
+objname = args.object
+base_directory = args.basedir
+specinti_config = args.config
+specinti_calib_postfix = args.calib
+specinti_flat = args.flat
+specinti_flat_postfix = args.flatpostfix
+specinti_dark = args.dark
+specinti_offset = args.bias
 
 # read the configuration file
 scriptdir = os.path.dirname(os.path.abspath(sys.argv[0]))
 parser = ConfigParser()
 parser.read(os.path.join(scriptdir,'specinti_config.script')) 
+if specinti_config == None:
+   specinti_config = parser['settings']['specinti_config']
+if specinti_calib_postfix == None:
+   specinti_calib_postfix = parser['settings']['specinti_calib_postfix']
+if specinti_flat == None:
+   specinti_flat = parser['settings'].get('specinti_flat','')
+if specinti_flat_postfix == None:
+   specinti_flat_postfix  = parser['settings'].get('specinti_flat_postfix','-----')
+if specinti_dark == None:
+   specinti_dark = parser['settings']['specinti_dark']
+if specinti_offset == None:
+   specinti_offset = parser['settings']['specinti_offset']
+if base_directory == None:
+   base_directory = parser['settings']['base_directory']
 specinti_progdir = parser['settings']['specinti_progdir']
 specinti_prog    = parser['settings']['specinti_prog']
-specinti_config  = parser['settings']['specinti_config'] 
-specinti_calib_postfix = parser['settings']['specinti_calib_postfix']
-specinti_flat    = parser['settings'].get('specinti_flat','')
-specinti_flat_postfix  = parser['settings'].get('specinti_flat_postfix','-----')
-specinti_dark    = parser['settings']['specinti_dark']
-specinti_offset  = parser['settings']['specinti_offset']
-base_directory   = parser['settings']['base_directory']  
 wine_prefix      = parser['settings'].get('wine_prefix','')
 linux_terminal   = parser['settings'].get('linux_terminal','')  
 
@@ -40,8 +71,11 @@ resp=os.path.join(base_directory,'response')          # reference files, instrum
 dark=os.path.join(base_directory,'dark')              # bias and dark files
 flat=os.path.join(base_directory,'flat')              # tungsten flat files
 result=os.path.join(base_directory,'result')          # directory to store the processed spectra
-archive=os.path.join(base_directory,'archive')        # directory to archive the already processed capture
 logfile=os.path.join(base_directory,'processing.log') # a summary log of the processed object
+if args.noarchive:
+   archive='none'
+else:
+   archive=os.path.join(base_directory,'archive')     # directory to archive the already processed capture
 
 # check all the directories exist
 def CheckDirectory(path):
@@ -55,7 +89,8 @@ CheckDirectory(resp)
 CheckDirectory(dark)
 CheckDirectory(flat)
 CheckDirectory(result)
-CheckDirectory(archive)
+if not args.noarchive:
+   CheckDirectory(archive)
 
 # check mandatory directories are not empty
 def IsDirectoryEmpty(path):
@@ -70,13 +105,16 @@ if IsDirectoryEmpty(resp) or IsDirectoryEmpty(dark):
      sys.exit(1) 
     
 # ccdciel capture directory with object and neon images
-capturedir=ccdciel('CaptureDir')['result']
-if capturedir == '':
-   print('Capture directory not set in CCDciel')
-   sys.exit(1)   
+if capturedir == None:
+   capturedir=ccdciel('CaptureDir')['result']
+   if capturedir == '':
+      print('Capture directory not set in CCDciel')
+      sys.exit(1)
 
 # current object name to process
-objname=ccdciel('Capture_getobjectname')['result']
+if objname == None:
+   objname=ccdciel('Capture_getobjectname')['result']
+
 objfile=objname.replace(' ','')
 if objfile == '':
    print('Not object name set in CCDciel Capture tab')

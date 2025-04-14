@@ -31,7 +31,9 @@ if errorlevel 1 (
   echo %date% %time:~0,8% : Error %obj% >> %logfile%
 ) else (
   move %workdir%\_%obj%* %resultdir% 
-  move %capturedir%\%obj%* %archivedir%
+  if %archivedir% NEQ "none" (
+    move %capturedir%\%obj%* %archivedir%
+  )
   echo %date% %time:~0,8% : Finish processing of %obj% >> %logfile%
 )
 
