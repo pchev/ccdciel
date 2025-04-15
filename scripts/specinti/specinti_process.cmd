@@ -6,6 +6,7 @@ set specintiprogdir=%1
 set specintiprog=%2
 set specinticonfig=%3
 set obj=%4
+set robj=%obj: =%
 set workdir=%5
 set capturedir=%6
 set resultdir=%7
@@ -30,7 +31,7 @@ cd %specintiprogdir%
 if errorlevel 1 ( 
   echo %date% %time:~0,8% : Error %obj% >> %logfile%
 ) else (
-  move %workdir%\_%obj%* %resultdir% 
+  move %workdir%\_%robj%* %resultdir% 
   if %archivedir% NEQ "none" (
     move %capturedir%\%obj%* %archivedir%
   )

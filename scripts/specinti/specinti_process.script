@@ -128,9 +128,18 @@ for f in files:
     os.remove(f)
 
 # copy capture to work dir
+# try files without space
 files = glob.glob((os.path.join(capturedir,objfile+'*')))
+nfiles = 0
 for f in files:
     shutil.copy(f, work)
+    nfiles+=1
+if nfiles == 0:
+    # no file, try files with space
+    objfile = objname
+    files = glob.glob((os.path.join(capturedir,objname+'*')))
+    for f in files:
+       shutil.copy(f, work)
 
 # copy instrumental response to work dir
 files = glob.glob((os.path.join(resp,'*')))
@@ -162,16 +171,16 @@ for f in files:
         ncal+=1
     if glob.fnmatch.fnmatch(f, '*'+objfile+specinti_flat_postfix+'*'):
         nobjflat+=1
-    if glob.fnmatch.fnmatch(f, '*'+specinti_flat+'*'):
+    if (specinti_flat[0] != '_') and glob.fnmatch.fnmatch(f, '*'+specinti_flat+'*'):
         nflat+=1
-    if glob.fnmatch.fnmatch(f, '*'+specinti_dark+'*'):
+    if (specinti_dark[0] != '_') and glob.fnmatch.fnmatch(f, '*'+specinti_dark+'*'):
         ndark+=1
-    if glob.fnmatch.fnmatch(f, '*'+specinti_offset+'*'):
+    if (specinti_offset[0] != '_') and glob.fnmatch.fnmatch(f, '*'+specinti_offset+'*'):
         nbias+=1
 
 if nobj == 0:
    print('No file to process for '+objfile+' in '+capturedir)
-   sys.exit(1)   
+   sys.exit(1)
 
 # archive by object name and date/time
 d = datetime.now().strftime("%Y%m%d_%H%M%S")
@@ -212,7 +221,7 @@ for i in range (len(row)):
 buf = '\n'.join(row)
 with open(f , 'w', encoding = 'utf-8') as file:
     file.write(buf)
-  
+
 # run the script to call specinti and process the result
 if platform.system() == 'Windows' :
     specinticmd=os.path.join(scriptdir,'specinti_process.cmd') 

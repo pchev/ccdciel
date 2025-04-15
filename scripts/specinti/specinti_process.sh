@@ -23,14 +23,14 @@ echo "$(date) : Start processing for $obj" >> $logfile
 
 if [[ -n $wine_prefix ]]; then export WINEPREFIX=$wine_prefix; fi
 
-cd $specintiprogdir
-wine $specintiprog $specinticonfig
+cd "$specintiprogdir"
+wine "$specintiprog" "$specinticonfig"
 
 if [[ $? = 0 ]]; then 
   lobj=$(echo $obj | tr [A-Z] [a-z] )
-  mv $workdir/_$lobj* $resultdir
+  mv "$workdir/_${lobj/ }"* "$resultdir"
   if [[ $archivedir != "none" ]]; then
-    mv $capturedir/$obj* $archivedir
+    mv "$capturedir/$obj"* "$archivedir"
   fi
   echo "$(date) : Finish processing of $obj" >> $logfile
 else
