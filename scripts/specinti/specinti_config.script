@@ -12,38 +12,47 @@
 #
 # On Linux the script use the Windows version with wine,
 # be sure to install the 64bit version of wine.
+# install the vcrun2015 requirement using winetricks
 #
 
 [settings]
 
 # the base directory for specinti processing from ccdciel
-base_directory = C:\Users\user\Documents\specinti_ccdciel
-#base_directory = /home/user/Documents/specinti_ccdciel
+base_directory = C:\Users\user\Documents\process_ccdciel
+#base_directory = /home/user/Documents/process_ccdciel
 
-# the directory where specinti.exe is installed
+# the directory where specinti.exe is installed, http://valerie.desnoux.free.fr/inti/specinti.zip
 specinti_progdir = C:\Users\user\Documents\specinti
 #specinti_progdir = /home/user/Documents/specinti
 
-# the specinti program name, the no GUI batch version, not the editor
+# the specinti program name, the no GUI batch version, not the editor.
 specinti_prog = specinti.exe
 
 # the configuration file, must be in directory specinti_progdir/_configuration/
-specinti_config = ccdciel
+specinti_config = conf_spectro_mode2
 
-# Offset image prefix
-specinti_offset = Bias-
+# Offset image prefix, pre-processed master file _offset, or prefix of series
+specinti_offset = _offset
 
-# Dark image prefix
-specinti_dark = Dark-
+# Dark image prefix, pre-processed master file _dark, or prefix of series
+specinti_dark = _dark
 
-# Flat image prefix
-specinti_flat = tungsten-
+# Flat image prefix, pre-processed master file _flat, or prefix of series
+specinti_flat = _flat
 
-# Flat image postfix, combined with object name, if files exists this take precedence over the prefix above
+# Flat image postfix, combined with object name, if files exists this take precedence over the generic prefix above
 specinti_flat_postfix = _tungsten-
 
 # postfix for calibration files, combined with object name
 specinti_calib_postfix = _neon-
+
+# move original object and calibration files to the archive directory after processing
+archive_original = 1
+
+# show command window, run minimized if set to 0, for Windows, ignored on Linux
+show_window = 1
+# keep the command window open after execution, set to 1 only for debugging, for Windows, ignored on Linux
+keep_window = 0
 
 # the wine prefix to use on Linux, must be a 64bit prefix
 #wine_prefix = /home/user/.wine

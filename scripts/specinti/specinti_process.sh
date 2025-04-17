@@ -19,9 +19,9 @@ if [[ -z $logfile ]]; then
   exit 1; 
 fi
 
-echo "$(date) : Start processing for $obj" >> $logfile
+echo "$(date) : Start processing for $obj" >> "$logfile"
 
-if [[ -n $wine_prefix ]]; then export WINEPREFIX=$wine_prefix; fi
+if [[ -n $wine_prefix ]]; then export WINEPREFIX="$wine_prefix"; fi
 
 cd "$specintiprogdir"
 wine "$specintiprog" "$specinticonfig"
@@ -32,9 +32,9 @@ if [[ $? = 0 ]]; then
   if [[ $archivedir != "none" ]]; then
     mv "$capturedir/$obj"* "$archivedir"
   fi
-  echo "$(date) : Finish processing of $obj" >> $logfile
+  echo "$(date) : Finish processing of $obj" >> "$logfile"
 else
-  echo "$(date) : Error $obj" >> $logfile
+  echo "$(date) : Error $obj" >> "$logfile"
 fi
 
 echo Close in 30 sec ...

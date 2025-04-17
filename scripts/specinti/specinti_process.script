@@ -56,8 +56,15 @@ if specinti_offset == None:
    specinti_offset = parser['settings']['specinti_offset']
 if base_directory == None:
    base_directory = parser['settings']['base_directory']
+if not args.noarchive:
+   noarchive = not parser['settings'].getboolean('archive_original',True)
+else:
+   noarchive = args.noarchive
+
 specinti_progdir = parser['settings']['specinti_progdir']
 specinti_prog    = parser['settings']['specinti_prog']
+show_window      = parser['settings'].getboolean('show_window',True)
+keep_window      = parser['settings'].getboolean('keep_window',False)
 wine_prefix      = parser['settings'].get('wine_prefix','')
 linux_terminal   = parser['settings'].get('linux_terminal','')  
 
@@ -72,7 +79,8 @@ dark=os.path.join(base_directory,'dark')              # bias and dark files
 flat=os.path.join(base_directory,'flat')              # tungsten flat files
 result=os.path.join(base_directory,'result')          # directory to store the processed spectra
 logfile=os.path.join(base_directory,'processing.log') # a summary log of the processed object
-if args.noarchive:
+
+if noarchive:
    archive='none'
 else:
    archive=os.path.join(base_directory,'archive')     # directory to archive the already processed capture
@@ -89,7 +97,7 @@ CheckDirectory(resp)
 CheckDirectory(dark)
 CheckDirectory(flat)
 CheckDirectory(result)
-if not args.noarchive:
+if not noarchive:
    CheckDirectory(archive)
 
 # check mandatory directories are not empty
@@ -106,7 +114,11 @@ if IsDirectoryEmpty(resp) or IsDirectoryEmpty(dark):
     
 # ccdciel capture directory with object and neon images
 if capturedir == None:
-   capturedir=ccdciel('CaptureDir')['result']
+   lastfn = ccdciel('Capture_getLastfilename')['result']
+   if lastfn == '':
+      capturedir=ccdciel('CaptureDir')['result']
+   else:
+      capturedir = os.path.dirname(lastfn)
    if capturedir == '':
       print('Capture directory not set in CCDciel')
       sys.exit(1)
@@ -128,6 +140,7 @@ for f in files:
     os.remove(f)
 
 # copy capture to work dir
+print ('Process files from ' + capturedir)
 # try files without space
 files = glob.glob((os.path.join(capturedir,objfile+'*')))
 nfiles = 0
@@ -182,10 +195,11 @@ if nobj == 0:
    print('No file to process for '+objfile+' in '+capturedir)
    sys.exit(1)
 
-# archive by object name and date/time
-d = datetime.now().strftime("%Y%m%d_%H%M%S")
-archive=os.path.join(archive,objfile+'_'+d)
-CheckDirectory(archive)
+if not noarchive:
+   # archive by object name and date/time
+   d = datetime.now().strftime("%Y%m%d_%H%M%S")
+   archive=os.path.join(archive,objfile+'_'+d)
+   CheckDirectory(archive)
 
 # make observation file
 with open(os.path.join(work,'obj.yaml'), 'w') as of:
@@ -225,8 +239,14 @@ with open(f , 'w', encoding = 'utf-8') as file:
 # run the script to call specinti and process the result
 if platform.system() == 'Windows' :
     specinticmd=os.path.join(scriptdir,'specinti_process.cmd') 
-    # in case of error with the following command that cannot be trapped, replace '/C' by '/K' to keep the window open
-    subprocess.Popen(['start','/min','cmd.exe','/C',specinticmd, specinti_progdir, specinti_prog, specinti_config, objfile, work, capturedir, result, archive, logfile],shell=True)
+    if keep_window:
+       copt='/K'
+    else:
+       copt='/C'
+    if show_window:
+       subprocess.Popen(['start','cmd.exe',copt,specinticmd, specinti_progdir, specinti_prog, specinti_config, objfile, work, capturedir, result, archive, logfile],shell=True)
+    else:
+       subprocess.Popen(['start','/min','cmd.exe',copt,specinticmd, specinti_progdir, specinti_prog, specinti_config, objfile, work, capturedir, result, archive, logfile],shell=True)
 else:
     specinticmd=os.path.join(scriptdir,'specinti_process.sh')
     if linux_terminal == '':
