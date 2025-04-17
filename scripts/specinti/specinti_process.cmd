@@ -13,19 +13,15 @@ set resultdir=%7
 set archivedir=%8
 set logfile=%9
 
-if not defined specintiprogdir exit /b 1
-if not defined specintiprog exit /b 1
-if not defined specinticonfig exit /b 1
-if not defined obj exit /b 1
-if not defined workdir exit /b 1
-if not defined capturedir exit /b 1
-if not defined resultdir exit /b 1
-if not defined archivedir exit /b 1
-if not defined logfile exit /b 1
+if not defined logfile (
+  echo missing parameters
+  timeout 30
+  exit /b 1
+)
 
 echo %date% %time:~0,8% : Start processing for %obj% >> %logfile%
 
-cd %specintiprogdir%
+cd /d %specintiprogdir%
 %specintiprog% %specinticonfig%
 
 if errorlevel 1 ( 

@@ -225,6 +225,7 @@ with open(f , 'w', encoding = 'utf-8') as file:
 # run the script to call specinti and process the result
 if platform.system() == 'Windows' :
     specinticmd=os.path.join(scriptdir,'specinti_process.cmd') 
+    # in case of error with the following command that cannot be trapped, replace '/C' by '/K' to keep the window open
     subprocess.Popen(['start','/min','cmd.exe','/C',specinticmd, specinti_progdir, specinti_prog, specinti_config, objfile, work, capturedir, result, archive, logfile],shell=True)
 else:
     specinticmd=os.path.join(scriptdir,'specinti_process.sh')
