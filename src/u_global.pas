@@ -62,7 +62,7 @@ type
   TAutofocusPlanetStep=(afpStart,afpMeasure,afpEnd);
   TIndiTransfert=(itNetwork,itDisk);
   TSubDirList=(sdSeq,sdFrt,sdObj,sdStep,sdExp,sdBin,sdDate,sdNight);
-  TFilenameList=(fnObj,fnFilter,fnExp,fnBin,fnTemp,fnDate,fnGain,fnFocuspos,fnPierSide,fnOffset,fnStep,fnCtype);
+  TFilenameList=(fnObj,fnFilter,fnExp,fnBin,fnTemp,fnDate,fnGain,fnFocuspos,fnPierSide,fnOffset,fnStep,fnCtype,fnRota);
   TSafetyAction=(safNothing,safShowPrompt,safAbortSequence,safStopTelescope,safParkTelescope,safStopDomeSlaving,safParkDome,safCloseDome,safWarmCamera,safAutoguiderShutdown,safPlanetariumShutdown,safExternalCommand,safExitProgram);
   TDomeOpenAction=(dopNothing,dopOpenDome,dopUnparkdome,dopUnparkTelescope,dopStartTelescope,dopStartdomeSlaving);
   TDomeCloseAction=(dclNothing,dclStopTelescope,dclParkTelescope,dclStopDomeSlaving,dclParkDome,dclCloseDome);
@@ -358,7 +358,7 @@ const
   ScriptTxt='Script';
   SwitchTxt='Switch';
   SubDirCount=8;
-  FileNameCount=12;
+  FileNameCount=13;
   MinFrameSize=5;
   SafetyActionNum=15;
   encryptpwd='m=Nrv"wE+W^RA?$b:]w<!t1v]pcTT>3$B?3";~OG9\7$,n[~8KLaUrfCgvRh$=DnlXK]Vxr^0!.HAA';

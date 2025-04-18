@@ -251,7 +251,7 @@ begin
  result:=0;
  if FStatus<>devConnected then exit;
  try
-   result:=V.Get('position').AsInt;
+   result:=V.Get('position').AsFloat;
  except
     on E: Exception do msg('Get position error: ' + E.Message,0);
  end;

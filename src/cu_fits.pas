@@ -4793,7 +4793,7 @@ function CaptureFilename(f:TFits; Directory,DefFrameType,DefObject,DefExp,DefBin
 var dt: Tdatetime;
     fn,buf,fileseqstr,fileseqext,blankrep,dateobs: string;
     framestr,objectstr,binstr,expstr,filterstr: string;
-    ccdtemp: double;
+    ccdtemp,pa: double;
     fileseqnum,i: integer;
     UseFileSequenceNumber: boolean;
 begin
@@ -4874,6 +4874,10 @@ begin
       fnCtype: if FileNameActive[i] and (CurrentCustomFrameType>=0) and (CurrentCustomFrameType<NumCustomFrameType) then begin
                  if CustomFrameType[CurrentCustomFrameType].Name<>'' then fn:=fn+trim(CustomFrameType[CurrentCustomFrameType].Name)+FilenameSep;
               end;
+      fnRota: if FileNameActive[i]  and f.Header.Valueof('ROTATANG',pa) then begin
+                fn:=fn+StringReplace(FormatFloat(f2,pa),'.',FilenameSep,[])+FilenameSep;
+              end;
+
     end;
   end;
   fn:=StringReplace(fn,'/','',[rfReplaceAll]);

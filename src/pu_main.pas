@@ -1928,6 +1928,7 @@ begin
   f_rotator.onRotate:=@RotatorRotate;
   f_rotator.onHalt:=@RotatorHalt;
   f_rotator.onReverse:=@RotatorReverse;
+  if camera<>nil then camera.f_Rotator:=f_rotator;
 
   f_weather:=Tf_weather.Create(self);
   f_weather.onDetail:=@WeatherDetail;
@@ -2196,6 +2197,7 @@ begin
    camera.Mount:=mount;
    camera.Wheel:=wheel;
    camera.Focuser:=focuser;
+   camera.Rotator:=rotator;
    camera.Weather:=weather;
    camera.Fits:=fits;
    camera.onMsg:=@NewMessage;
@@ -2615,6 +2617,7 @@ begin
    FilenameName[9]:=rsOffset2;
    FilenameName[10]:=rsPlanStep;
    FilenameName[11]:=rsCustomType;
+   FilenameName[12]:=rsRotation;
    TBConnect.Hint := rsConnect;
    TBFocus.Hint := rsFocus;
    TBCapture.Hint := rsCapture;

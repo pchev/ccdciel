@@ -371,7 +371,7 @@ end;
 function  T_indirotator.GetAngle:double;
 begin
 if RotatorAngle<>nil then begin;
-  result:=round(RotatorAngle.np[0].value);
+  result:=RotatorAngle.np[0].value;
 end
 else result:=0;
 end;

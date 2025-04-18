@@ -28,7 +28,8 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 interface
 
-uses  cu_fits, cu_mount, cu_wheel, cu_focuser, cu_weather, u_global, u_utils, u_refraction, indiapi, math, u_translation, cu_waitthread,
+uses  cu_fits, cu_mount, cu_wheel, cu_focuser, cu_weather, u_global, u_utils, u_refraction,
+  indiapi, math, u_translation, cu_waitthread, fu_rotator, cu_rotator,
   LazSysUtils, Classes, Forms, SysUtils, ExtCtrls;
 
 type
@@ -76,6 +77,8 @@ T_camera = class(TComponent)
     FMount: T_mount;
     Fwheel: T_wheel;
     FFocuser: T_focuser;
+    FRotator: T_rotator;
+    Ff_Rotator: Tf_rotator;
     FWeather: T_weather;
     FTimeOut: integer;
     FAutoLoadConfig: boolean;
@@ -230,6 +233,8 @@ T_camera = class(TComponent)
     property Mount: T_mount read FMount write FMount;
     property Wheel: T_wheel read Fwheel write Fwheel;
     property Focuser: T_focuser read FFocuser write FFocuser;
+    property Rotator: T_rotator read FRotator write FRotator;
+    property f_Rotator: Tf_rotator read Ff_Rotator write Ff_Rotator;
     property Weather: T_weather read FWeather write FWeather;
     property ObjectName: string read FObjectName write FObjectName;
     property CameraInterface: TDevInterface read FCameraInterface;
@@ -749,7 +754,7 @@ var origin,observer,telname,instrum,objname,siso,CType,roworder,buf: string;
     hCloudCover,hDewPoint,hHumidity,hPressure,hRainRate,hSkyBrightness,hSkyQuality,
     hSkyTemperature,hStarFWHM,hTemperature,hWindDirection,hWindGust,hWindSpeed: double;
     hbzero,hbscale,hdmin,hdmax,hra,hdec,hexp,hpix1,hpix2,hairmass,focusertemp: double;
-    haz,hal: double;
+    haz,hal,pa: double;
     gamma,voffset,coffset,OffsetX,OffsetY: integer;
     Frx,Fry,Frwidth,Frheight: integer;
     hasfocusertemp,hasfocuserpos: boolean;
@@ -842,6 +847,10 @@ begin
   if (hfilter='')and(Fwheel<>nil)and(Fwheel.Status=devConnected) then begin
      hfilter:=Fwheel.CurrentFilterName;
   end;
+  if (FRotator<>nil)and(Ff_rotator<>nil)and(FRotator.Status=devConnected) then
+     pa:=Ff_rotator.Angle.Value
+  else
+     pa:=NullCoord;
   ccdtemp:=Temperature;
   objname:=FObjectName;
   if config<>nil then begin
@@ -1062,6 +1071,8 @@ begin
   if hairmass>0 then f.Header.Insert(i,'AIRMASS',hairmass ,'Airmass');
   if hasfocuserpos then f.Header.Insert(i,'FOCUSPOS',focuserpos ,'Focuser position in steps');
   if hasfocusertemp then f.Header.Insert(i,'FOCUSTEM',focusertemp ,'Focuser temperature (Celsius)');
+  if pa<>NullCoord then f.Header.Insert(i,'ROTATANG',pa ,'[deg] Rotator angle')
+  else f.Header.Delete('ROTATANG');
   if pierside<>'' then f.Header.Insert(i,'PIERSIDE',pierside,'Telescope side of pier');
   if (hra<>NullCoord)and(hdec<>NullCoord) then begin
     f.Header.Insert(i,'OBJCTRA',trim(RAToStrB(hra/15)),'[hh mm ss] Telescope pointing RA');
