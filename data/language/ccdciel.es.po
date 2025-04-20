@@ -6,15 +6,15 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ccdciel\n"
 "Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
-"POT-Creation-Date: 2025-01-15 10:42+0000\n"
+"POT-Creation-Date: 2025-04-20 16:48+0000\n"
 "PO-Revision-Date: 2023-02-08 02:21+0000\n"
 "Last-Translator: Víctor R. Ruiz <Unknown>\n"
 "Language-Team: Spanish <es@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2025-01-15 10:56+0000\n"
-"X-Generator: Launchpad (build 6394e03793719e8d73f5a60b5439440e693c92f1)\n"
+"X-Launchpad-Export-Date: 2025-04-20 16:52+0000\n"
+"X-Generator: Launchpad (build e76edd883483c71c468bb038e98836435de44530)\n"
 
 #: u_translation.rs2d
 msgid "2D"
@@ -1200,6 +1200,11 @@ msgstr "Copiar de"
 msgid "Copy to "
 msgstr "Copiar a "
 
+#: u_translation.rscopytoclipbo
+#, object-pascal-format
+msgid "Copy to clipboard: %s"
+msgstr ""
+
 #: u_translation.rscorrectionme
 msgid "Correction method"
 msgstr "Método de corrección"
@@ -1797,6 +1802,10 @@ msgstr "Exp."
 msgid "Expert trick"
 msgstr ""
 
+#: u_translation.rsexportcsv
+msgid "Export CSV"
+msgstr ""
+
 #: u_translation.rsexposure
 msgid "Exposure"
 msgstr "Exposición"
@@ -1923,6 +1932,10 @@ msgstr ""
 
 #: u_translation.rsfindercamera
 msgid "Finder camera"
+msgstr ""
+
+#: u_translation.rsfinderfocall
+msgid "Finder focal length"
 msgstr ""
 
 #: u_translation.rsfit
@@ -2477,6 +2490,10 @@ msgstr "Importar mosaico"
 msgid "Import observing list"
 msgstr "Importar lista de observación"
 
+#: u_translation.rsimportcsv
+msgid "Import CSV"
+msgstr ""
+
 #: u_translation.rsin
 msgid "In"
 msgstr "Dentro"
@@ -2762,6 +2779,10 @@ msgstr "Administrar"
 
 #: u_translation.rsmanagethegai
 msgid "Manage the Gain and Offset if available."
+msgstr ""
+
+#: u_translation.rsmandatorysta
+msgid "Mandatory start time"
 msgstr ""
 
 #: u_translation.rsmanual
@@ -3710,6 +3731,10 @@ msgstr "Planetario"
 msgid "Planetarium error."
 msgstr "Error del planetario."
 
+#: u_translation.rsplanetariumf
+msgid "Planetarium for all targets"
+msgstr ""
+
 #: u_translation.rsplanetariumi
 msgid "Planetarium is not connected"
 msgstr "El planetario no está conectado."
@@ -4517,6 +4542,10 @@ msgstr "Conexión segura SSL/TLS"
 msgid "Select a calibration option:"
 msgstr "Seleccione una opción de calibrado:"
 
+#: u_translation.rsselectarea
+msgid "Select area"
+msgstr ""
+
 #: u_translation.rsselectastarf
 msgid "Select a star first!"
 msgstr "¡Primero seleccione una estrella!"
@@ -4769,6 +4798,10 @@ msgstr "Establecer la duración del pulso medio de interpolación en segundos."
 #: u_translation.rssettletolera
 msgid "Settle tolerance"
 msgstr "Tolerancia asentamiento"
+
+#: u_translation.rssettlingfor
+msgid "Settling for"
+msgstr ""
 
 #: u_translation.rssetup
 msgid "Setup"
@@ -5925,6 +5958,10 @@ msgstr "Actualizar AR+Dec%sdesde el planetario"
 #: u_translation.rsupdatesequen
 msgid "Update sequence without interruption"
 msgstr "Actualizar secuencia sin interrupción"
+
+#: u_translation.rsusealternati
+msgid "Use alternative solver"
+msgstr ""
 
 #: u_translation.rsuseasfallbac
 msgid "Use as fallback if other software fail"

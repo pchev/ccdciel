@@ -1613,6 +1613,8 @@ resourcestring
   rsMandatorySta = 'Mandatory start time';
   rsSelectArea = 'Select area';
   rsSettlingFor = 'Settling for';
+  rsFinderFocalL = 'Finder focal length';
+  rsUseAlternati = 'Use alternative solver';
 
 implementation
 

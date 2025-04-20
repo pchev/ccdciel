@@ -6021,3 +6021,39 @@ msgstr ""
 msgid "too close to the Moon"
 msgstr ""
 
+#: u_translation:rsplanetariumf
+msgid "Planetarium for all targets"
+msgstr ""
+
+#: u_translation:rscopytoclipbo
+msgid "Copy to clipboard: %s"
+msgstr ""
+
+#: u_translation:rsimportcsv
+msgid "Import CSV"
+msgstr ""
+
+#: u_translation:rsexportcsv
+msgid "Export CSV"
+msgstr ""
+
+#: u_translation:rsmandatorysta
+msgid "Mandatory start time"
+msgstr ""
+
+#: u_translation:rsselectarea
+msgid "Select area"
+msgstr ""
+
+#: u_translation:rssettlingfor
+msgid "Settling for"
+msgstr ""
+
+#: u_translation:rsfinderfocall
+msgid "Finder focal length"
+msgstr ""
+
+#: u_translation:rsusealternati
+msgid "Use alternative solver"
+msgstr ""
+

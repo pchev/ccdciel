@@ -6,15 +6,15 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ccdciel\n"
 "Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
-"POT-Creation-Date: 2025-01-15 10:42+0000\n"
-"PO-Revision-Date: 2025-01-15 07:11+0000\n"
+"POT-Creation-Date: 2025-04-20 16:48+0000\n"
+"PO-Revision-Date: 2025-01-22 14:53+0000\n"
 "Last-Translator: Zachary Wu <Unknown>\n"
 "Language-Team: Chinese (Simplified) <zh_CN@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2025-01-15 10:56+0000\n"
-"X-Generator: Launchpad (build 6394e03793719e8d73f5a60b5439440e693c92f1)\n"
+"X-Launchpad-Export-Date: 2025-04-20 16:52+0000\n"
+"X-Generator: Launchpad (build e76edd883483c71c468bb038e98836435de44530)\n"
 
 #: u_translation.rs2d
 msgid "2D"
@@ -211,7 +211,7 @@ msgstr "应用到所有设备"
 
 #: u_translation.rsapplytoallta
 msgid "Apply to all targets"
-msgstr ""
+msgstr "适用于所有目标"
 
 #: u_translation.rsapplytocurre
 msgid "Apply to current image"
@@ -852,7 +852,7 @@ msgstr "现在无法启动循环预览"
 #: u_translation.rscannotstarts
 #, object-pascal-format
 msgid "Cannot start %s now"
-msgstr ""
+msgstr "现在无法启动 %s"
 
 #: u_translation.rscannotstartw
 msgid "Cannot start when capture is running"
@@ -1107,7 +1107,7 @@ msgstr "配置已保存"
 
 #: u_translation.rsconfigurethe
 msgid "Configure the distance in Preferences / Sequences"
-msgstr ""
+msgstr "在偏好设置/序列中配置距离"
 
 #: u_translation.rsconnect
 msgid "Connect"
@@ -1202,6 +1202,11 @@ msgstr "复制自"
 #: u_translation.rscopyto
 msgid "Copy to "
 msgstr "复制到 "
+
+#: u_translation.rscopytoclipbo
+#, object-pascal-format
+msgid "Copy to clipboard: %s"
+msgstr ""
 
 #: u_translation.rscorrectionme
 msgid "Correction method"
@@ -1581,7 +1586,7 @@ msgstr "不启动自动导星"
 
 #: u_translation.rsdonotstartif
 msgid "Do not start if it cannot be done completely"
-msgstr ""
+msgstr "如果不能完全完成，就不要开始"
 
 #: u_translation.rsdontswait
 #, object-pascal-format
@@ -1800,6 +1805,10 @@ msgstr "曝光"
 msgid "Expert trick"
 msgstr "专家技巧"
 
+#: u_translation.rsexportcsv
+msgid "Export CSV"
+msgstr ""
+
 #: u_translation.rsexposure
 msgid "Exposure"
 msgstr "曝光"
@@ -1927,6 +1936,10 @@ msgstr "寻星镜"
 #: u_translation.rsfindercamera
 msgid "Finder camera"
 msgstr "寻星相机"
+
+#: u_translation.rsfinderfocall
+msgid "Finder focal length"
+msgstr ""
 
 #: u_translation.rsfit
 msgid "Fit"
@@ -2480,6 +2493,10 @@ msgstr "导入马赛克"
 msgid "Import observing list"
 msgstr "导入观测列表"
 
+#: u_translation.rsimportcsv
+msgid "Import CSV"
+msgstr ""
+
 #: u_translation.rsin
 msgid "In"
 msgstr "向内"
@@ -2767,6 +2784,10 @@ msgstr "管理"
 msgid "Manage the Gain and Offset if available."
 msgstr "管理相机的增益和偏置"
 
+#: u_translation.rsmandatorysta
+msgid "Mandatory start time"
+msgstr ""
+
 #: u_translation.rsmanual
 msgid "Manual"
 msgstr "手动"
@@ -2993,7 +3014,7 @@ msgstr "最小值"
 
 #: u_translation.rsminimumdista
 msgid "Minimum distance to the Moon"
-msgstr ""
+msgstr "到月球的最小距离"
 
 #: u_translation.rsminimummove
 msgid "Minimum move"
@@ -3033,7 +3054,7 @@ msgstr "修改"
 
 #: u_translation.rsmoonavoidanc
 msgid "Moon avoidance"
-msgstr ""
+msgstr "月球规避"
 
 #: u_translation.rsmoresettings
 msgid "More settings"
@@ -3363,7 +3384,7 @@ msgstr "没有足够的焦内/焦外位点，重试。"
 #: u_translation.rsnotenoughtim
 #, object-pascal-format
 msgid "not enough time to complete the %s plan before end time at %s"
-msgstr ""
+msgstr "没有足够的时间完成 %s 计划在 %s 结束时间之前"
 
 #: u_translation.rsnoterminatio
 msgid "No termination actions configured."
@@ -3712,6 +3733,10 @@ msgstr "星图"
 #: u_translation.rsplanetariume
 msgid "Planetarium error."
 msgstr "星图错误"
+
+#: u_translation.rsplanetariumf
+msgid "Planetarium for all targets"
+msgstr ""
 
 #: u_translation.rsplanetariumi
 msgid "Planetarium is not connected"
@@ -4520,6 +4545,10 @@ msgstr "安全 SSL/TLS 连接"
 msgid "Select a calibration option:"
 msgstr "选择校准选项："
 
+#: u_translation.rsselectarea
+msgid "Select area"
+msgstr ""
+
 #: u_translation.rsselectastarf
 msgid "Select a star first!"
 msgstr "先选择一颗星！"
@@ -4772,6 +4801,10 @@ msgstr "设置抖动的平均脉冲时长秒数。"
 #: u_translation.rssettletolera
 msgid "Settle tolerance"
 msgstr "设备安定容差"
+
+#: u_translation.rssettlingfor
+msgid "Settling for"
+msgstr ""
 
 #: u_translation.rssetup
 msgid "Setup"
@@ -5754,7 +5787,7 @@ msgstr "明天"
 
 #: u_translation.rstooclosetoth
 msgid "too close to the Moon"
-msgstr ""
+msgstr "离月球太近"
 
 #: u_translation.rstools
 msgid "Tools"
@@ -5928,6 +5961,10 @@ msgstr "从星图更新 RA+Dec%s"
 #: u_translation.rsupdatesequen
 msgid "Update sequence without interruption"
 msgstr "更新序列而不中断"
+
+#: u_translation.rsusealternati
+msgid "Use alternative solver"
+msgstr ""
 
 #: u_translation.rsuseasfallbac
 msgid "Use as fallback if other software fail"

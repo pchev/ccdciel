@@ -1349,6 +1349,8 @@ begin
   PrecSlewBox.Caption := rsCorrectionMe;
   Label66.Caption := rsFilter;
   Label87.Caption := rsDelayAfterTe;
+  Label166.Caption := rsFinderFocalL;
+  UseFinderSolver.Caption := rsUseAlternati;
   PageMeridian.Caption := rsMeridian;
   MeridianOption.Caption := rsOnMeridianCr;
   Label40.Caption := rsCanTrackPast;

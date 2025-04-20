@@ -6,15 +6,15 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ccdciel\n"
 "Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
-"POT-Creation-Date: 2025-01-15 10:42+0000\n"
-"PO-Revision-Date: 2024-12-21 17:19+0000\n"
+"POT-Creation-Date: 2025-04-20 16:48+0000\n"
+"PO-Revision-Date: 2025-01-26 13:04+0000\n"
 "Last-Translator: Sergey Tarantsov <tsn-ast@yandex.ru>\n"
 "Language-Team: Russian <ru@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2025-01-15 10:56+0000\n"
-"X-Generator: Launchpad (build 6394e03793719e8d73f5a60b5439440e693c92f1)\n"
+"X-Launchpad-Export-Date: 2025-04-20 16:52+0000\n"
+"X-Generator: Launchpad (build e76edd883483c71c468bb038e98836435de44530)\n"
 
 #: u_translation.rs2d
 msgid "2D"
@@ -852,7 +852,7 @@ msgstr "Невозможно запустить циклическую съём�
 #: u_translation.rscannotstarts
 #, object-pascal-format
 msgid "Cannot start %s now"
-msgstr ""
+msgstr "Невозможно запустить %s сейчас"
 
 #: u_translation.rscannotstartw
 msgid "Cannot start when capture is running"
@@ -1202,6 +1202,11 @@ msgstr "Копировать из"
 #: u_translation.rscopyto
 msgid "Copy to "
 msgstr "Скопировать в "
+
+#: u_translation.rscopytoclipbo
+#, object-pascal-format
+msgid "Copy to clipboard: %s"
+msgstr ""
 
 #: u_translation.rscorrectionme
 msgid "Correction method"
@@ -1581,7 +1586,7 @@ msgstr "Не запускать гидирование"
 
 #: u_translation.rsdonotstartif
 msgid "Do not start if it cannot be done completely"
-msgstr ""
+msgstr "Не начинать, если невозможно выполнить полностью"
 
 #: u_translation.rsdontswait
 #, object-pascal-format
@@ -1712,7 +1717,7 @@ msgstr "Время окончания"
 
 #: u_translation.rsenlargeguide
 msgid "Enlarge guide image"
-msgstr ""
+msgstr "Увеличить изображение"
 
 #: u_translation.rsenterthej200
 msgid "Enter the J2000 coordinates of the target where the main instrument is currently pointing."
@@ -1799,6 +1804,10 @@ msgstr "Exp."
 #: u_translation.rsexperttrick
 msgid "Expert trick"
 msgstr "Смещение точки фокуса (не изменять без необходимости)"
+
+#: u_translation.rsexportcsv
+msgid "Export CSV"
+msgstr ""
 
 #: u_translation.rsexposure
 msgid "Exposure"
@@ -1927,6 +1936,10 @@ msgstr "Искатель"
 #: u_translation.rsfindercamera
 msgid "Finder camera"
 msgstr "Камера-искатель"
+
+#: u_translation.rsfinderfocall
+msgid "Finder focal length"
+msgstr ""
 
 #: u_translation.rsfit
 msgid "Fit"
@@ -2480,6 +2493,10 @@ msgstr "Мозаика"
 msgid "Import observing list"
 msgstr "Лист наблюдений"
 
+#: u_translation.rsimportcsv
+msgid "Import CSV"
+msgstr ""
+
 #: u_translation.rsin
 msgid "In"
 msgstr "Вовнутрь"
@@ -2767,6 +2784,10 @@ msgstr "Настроить"
 msgid "Manage the Gain and Offset if available."
 msgstr "Управлять усилением и смещением, если доступно"
 
+#: u_translation.rsmandatorysta
+msgid "Mandatory start time"
+msgstr ""
+
 #: u_translation.rsmanual
 msgid "Manual"
 msgstr "Вручную"
@@ -2993,7 +3014,7 @@ msgstr "Минимальный"
 
 #: u_translation.rsminimumdista
 msgid "Minimum distance to the Moon"
-msgstr ""
+msgstr "Минимальное расстояние до луны"
 
 #: u_translation.rsminimummove
 msgid "Minimum move"
@@ -3712,6 +3733,10 @@ msgstr "Планетарий"
 #: u_translation.rsplanetariume
 msgid "Planetarium error."
 msgstr "Ошибка планетария."
+
+#: u_translation.rsplanetariumf
+msgid "Planetarium for all targets"
+msgstr ""
 
 #: u_translation.rsplanetariumi
 msgid "Planetarium is not connected"
@@ -4520,6 +4545,10 @@ msgstr "Безопасное соединение SSL/TLS"
 msgid "Select a calibration option:"
 msgstr "Варианты калибровки:"
 
+#: u_translation.rsselectarea
+msgid "Select area"
+msgstr ""
+
 #: u_translation.rsselectastarf
 msgid "Select a star first!"
 msgstr "Сначала выберите звезду!"
@@ -4772,6 +4801,10 @@ msgstr "Установите среднюю длительность импул�
 #: u_translation.rssettletolera
 msgid "Settle tolerance"
 msgstr "Успокоение"
+
+#: u_translation.rssettlingfor
+msgid "Settling for"
+msgstr ""
 
 #: u_translation.rssetup
 msgid "Setup"
@@ -5754,7 +5787,7 @@ msgstr "завтра"
 
 #: u_translation.rstooclosetoth
 msgid "too close to the Moon"
-msgstr ""
+msgstr "cлишком близко к луне"
 
 #: u_translation.rstools
 msgid "Tools"
@@ -5928,6 +5961,10 @@ msgstr "Обновить RA+Dec%sиз планетария"
 #: u_translation.rsupdatesequen
 msgid "Update sequence without interruption"
 msgstr "Теущее задание обновлено без остановки"
+
+#: u_translation.rsusealternati
+msgid "Use alternative solver"
+msgstr ""
 
 #: u_translation.rsuseasfallbac
 msgid "Use as fallback if other software fail"

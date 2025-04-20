@@ -6,15 +6,15 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ccdciel\n"
 "Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
-"POT-Creation-Date: 2025-01-15 10:42+0000\n"
-"PO-Revision-Date: 2024-08-19 19:32+0000\n"
+"POT-Creation-Date: 2025-04-20 16:48+0000\n"
+"PO-Revision-Date: 2025-04-13 06:44+0000\n"
 "Last-Translator: Thomas <email@starhopper.de>\n"
 "Language-Team: German <de@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2025-01-15 10:56+0000\n"
-"X-Generator: Launchpad (build 6394e03793719e8d73f5a60b5439440e693c92f1)\n"
+"X-Launchpad-Export-Date: 2025-04-20 16:52+0000\n"
+"X-Generator: Launchpad (build e76edd883483c71c468bb038e98836435de44530)\n"
 
 #: u_translation.rs2d
 msgid "2D"
@@ -104,7 +104,7 @@ msgstr "Zusatzoptionen für"
 
 #: u_translation.rsadditionalsc
 msgid "Additional script parameter"
-msgstr ""
+msgstr "Zusätzliche Skript-Parameter"
 
 #: u_translation.rsaddstep
 msgid "Add step"
@@ -211,11 +211,11 @@ msgstr "Auf alle Geräte anwenden"
 
 #: u_translation.rsapplytoallta
 msgid "Apply to all targets"
-msgstr ""
+msgstr "Auf alle Ziele anwenden"
 
 #: u_translation.rsapplytocurre
 msgid "Apply to current image"
-msgstr "Übernehmen auf das aktuelle Bild"
+msgstr "Auf das aktuelle Bild übernehmen"
 
 #: u_translation.rsapproximatec
 msgid "Approximate coordinates and image scale"
@@ -443,7 +443,7 @@ msgstr "Autofokus Toleranz "
 
 #: u_translation.rsautofocususi
 msgid "Autofocus using the OAG camera"
-msgstr ""
+msgstr "Spektren einfärben"
 
 #: u_translation.rsautofocuswil
 msgid "Autofocus will run before the next exposure"
@@ -583,7 +583,7 @@ msgstr "Schwellwert fehlerhafter Pixel"
 
 #: u_translation.rsband
 msgid "Band"
-msgstr ""
+msgstr "Band"
 
 #: u_translation.rsbayermatrixp
 msgid "Bayer matrix pattern"
@@ -852,7 +852,7 @@ msgstr "Vorschau Schleife kann jetzt nicht gestartet werden"
 #: u_translation.rscannotstarts
 #, object-pascal-format
 msgid "Cannot start %s now"
-msgstr ""
+msgstr "Kann %s jetzt nicht starten"
 
 #: u_translation.rscannotstartw
 msgid "Cannot start when capture is running"
@@ -927,7 +927,7 @@ msgstr "Dec im Zentrum"
 
 #: u_translation.rscenteringand
 msgid "Centering and guiding strategy"
-msgstr ""
+msgstr "Zentrierungs- und Guiding Strategie"
 
 #: u_translation.rscenterra
 msgid "Center RA"
@@ -1040,7 +1040,7 @@ msgstr "Weißabgleich"
 
 #: u_translation.rscolorizespec
 msgid "Colorize spectra images"
-msgstr ""
+msgstr "Spektren einfärben"
 
 #: u_translation.rscolorpreview
 msgid "Color preview"
@@ -1085,18 +1085,21 @@ msgid ""
 "\n"
 "It will automatically take two images east and west of the meridian near the zenith. The cone error will be reported in the log."
 msgstr ""
+"Dieser Test schätzt den Konusfehler des Teleskops durch Messung des Positionierungsfehlers nach einem Meridianflip\n"
+"\n"
+"Es werden automatisch zwei Bilder östlich und westlich des Meridians in der Nähe des Zenits aufgenommen. Der Konusfehler wird in das Protokoll aufgenommen."
 
 #: u_translation.rsconemeasureeastwest
 msgid "Start measuring East to West"
-msgstr ""
+msgstr "Beginn der Messung von Ost nach West"
 
 #: u_translation.rsconemeasurewesteast
 msgid "Start measuring West to East"
-msgstr ""
+msgstr "Start der Messung von West nach Ost"
 
 #: u_translation.rsconetest
 msgid "Measure the cone error"
-msgstr ""
+msgstr "Messen des Konusfehlers"
 
 #: u_translation.rsconfiguratio
 msgid "Configuration saved"
@@ -1104,7 +1107,7 @@ msgstr "Konfiguration gespeichert"
 
 #: u_translation.rsconfigurethe
 msgid "Configure the distance in Preferences / Sequences"
-msgstr ""
+msgstr "Konfigurieren Sie den Abstand in Voreinstellungen / Sequenzen"
 
 #: u_translation.rsconnect
 msgid "Connect"
@@ -1200,6 +1203,11 @@ msgstr "Kopieren von"
 msgid "Copy to "
 msgstr "Kopieren nach "
 
+#: u_translation.rscopytoclipbo
+#, object-pascal-format
+msgid "Copy to clipboard: %s"
+msgstr ""
+
 #: u_translation.rscorrectionme
 msgid "Correction method"
 msgstr "Korrektionsmethode"
@@ -1238,7 +1246,7 @@ msgstr "Erstellen Sie ein neues leeres Profil"
 
 #: u_translation.rscrossmeridan
 msgid " Moving to the other side of the meridian"
-msgstr ""
+msgstr " Wechsel auf die andere Seite des Meridians"
 
 #: u_translation.rscurrent
 msgid "Current"
@@ -1517,7 +1525,7 @@ msgstr "Dithering"
 
 #: u_translation.rsdithermode
 msgid "Dither mode"
-msgstr ""
+msgstr "Dither-Modus"
 
 #: u_translation.rsditheronly
 msgid "Dither only"
@@ -1578,7 +1586,7 @@ msgstr "Autoguiding nicht starten"
 
 #: u_translation.rsdonotstartif
 msgid "Do not start if it cannot be done completely"
-msgstr ""
+msgstr "Nicht starten, wenn es nicht vollständig möglich ist"
 
 #: u_translation.rsdontswait
 #, object-pascal-format
@@ -1709,7 +1717,7 @@ msgstr "Ende"
 
 #: u_translation.rsenlargeguide
 msgid "Enlarge guide image"
-msgstr ""
+msgstr "Guiding Bild vergrößern"
 
 #: u_translation.rsenterthej200
 msgid "Enter the J2000 coordinates of the target where the main instrument is currently pointing."
@@ -1796,6 +1804,10 @@ msgstr "Exp."
 #: u_translation.rsexperttrick
 msgid "Expert trick"
 msgstr "Expertentrick"
+
+#: u_translation.rsexportcsv
+msgid "Export CSV"
+msgstr ""
 
 #: u_translation.rsexposure
 msgid "Exposure"
@@ -1924,6 +1936,10 @@ msgstr "Sucher"
 #: u_translation.rsfindercamera
 msgid "Finder camera"
 msgstr "Sucher Kamera"
+
+#: u_translation.rsfinderfocall
+msgid "Finder focal length"
+msgstr ""
 
 #: u_translation.rsfit
 msgid "Fit"
@@ -2299,7 +2315,7 @@ msgstr "Guider Senor;"
 
 #: u_translation.rsguidestaroff
 msgid "Guide star offset"
-msgstr ""
+msgstr "Leitstern Offset"
 
 #: u_translation.rsguiding
 #, object-pascal-format
@@ -2459,7 +2475,7 @@ msgstr "Bildstatistik"
 
 #: u_translation.rsimagetransfe
 msgid "Image transfer"
-msgstr ""
+msgstr "Bildübertragung"
 
 #: u_translation.rsimageundebay
 msgid "Image Un-debayered"
@@ -2476,6 +2492,10 @@ msgstr "Mosaik importieren"
 #: u_translation.rsimportcdcobs
 msgid "Import observing list"
 msgstr "Beobachtungsliste importieren"
+
+#: u_translation.rsimportcsv
+msgid "Import CSV"
+msgstr ""
 
 #: u_translation.rsin
 msgid "In"
@@ -2545,11 +2565,11 @@ msgstr "in %s Sekunden"
 
 #: u_translation.rsinstallscrip
 msgid "Install script"
-msgstr ""
+msgstr "Installations Skript"
 
 #: u_translation.rsinstrumentna
 msgid "Instrument name"
-msgstr ""
+msgstr "Instrumentenname"
 
 #: u_translation.rsintensity
 msgid "Intensity"
@@ -2728,7 +2748,7 @@ msgstr "Intensität"
 
 #: u_translation.rsmagn
 msgid "Magn."
-msgstr ""
+msgstr "Magn."
 
 #: u_translation.rsmagnifyer
 msgid "Magnifier"
@@ -2754,7 +2774,7 @@ msgstr "Hauptsensor"
 #: u_translation.rsmakeafirstpo
 #, object-pascal-format
 msgid "In mode automatic the telescope will slew to the test positions near the pole automatically.%sIn mode manual you have to slew the mount to the position by the keypad. See documentation."
-msgstr ""
+msgstr "Im automatischen Modus schwenkt das Teleskop automatisch zu den Testpositionen in der Nähe des Pols.%sIm manuellen Modus müssen Sie die Montierung zu der Position am Tastenfeld schwenken. Siehe Dokumentation."
 
 #: u_translation.rsmanage
 msgid "Manage"
@@ -2763,6 +2783,10 @@ msgstr "Verwalten"
 #: u_translation.rsmanagethegai
 msgid "Manage the Gain and Offset if available."
 msgstr "Gain und Offset einstellen falls verfügbar"
+
+#: u_translation.rsmandatorysta
+msgid "Mandatory start time"
+msgstr ""
 
 #: u_translation.rsmanual
 msgid "Manual"
@@ -2794,7 +2818,7 @@ msgstr "Max"
 
 #: u_translation.rsmaxexposure
 msgid "Max exposure"
-msgstr ""
+msgstr "Maximale Belichtung"
 
 #: u_translation.rsmaximum
 msgid "maximum"
@@ -2884,7 +2908,7 @@ msgstr "Ermittlung des Pixelmaßstabes durch Stoppen der Nachführung"
 
 #: u_translation.rsmeasureteles
 msgid "Measure telescope cone error"
-msgstr ""
+msgstr "Messung des Konusfehlers"
 
 #: u_translation.rsmeasurewn
 msgid "Measure in the West and North"
@@ -2990,7 +3014,7 @@ msgstr "Minimum"
 
 #: u_translation.rsminimumdista
 msgid "Minimum distance to the Moon"
-msgstr ""
+msgstr "Mindestabstand zum Mond"
 
 #: u_translation.rsminimummove
 msgid "Minimum move"
@@ -3030,7 +3054,7 @@ msgstr "Bearbeiten"
 
 #: u_translation.rsmoonavoidanc
 msgid "Moon avoidance"
-msgstr ""
+msgstr "Mond vermeiden"
 
 #: u_translation.rsmoresettings
 msgid "More settings"
@@ -3135,7 +3159,7 @@ msgstr "Schwenke zu neuem Planetarium Objekt %s"
 
 #: u_translation.rsmovetostartp
 msgid "Move to start position"
-msgstr ""
+msgstr "Startposition anfahren"
 
 #: u_translation.rsmoveupby
 msgid "move Up by "
@@ -3171,7 +3195,7 @@ msgstr "Multi-Star Guiding Offset"
 
 #: u_translation.rsmultistarwit
 msgid "Multistar with guider astrometry"
-msgstr ""
+msgstr "Multistar mit Autoguider Astrometrie"
 
 #: u_translation.rsname
 msgid "Name"
@@ -3196,7 +3220,7 @@ msgstr "Warten bis %s"
 
 #: u_translation.rsnetwork
 msgid "Network"
-msgstr ""
+msgstr "Netzwerk"
 
 #: u_translation.rsnew
 msgid "New"
@@ -3360,7 +3384,7 @@ msgstr "Nicht genug Punkte innerhalb oder außerhalb der Fokusposition, versuche
 #: u_translation.rsnotenoughtim
 #, object-pascal-format
 msgid "not enough time to complete the %s plan before end time at %s"
-msgstr ""
+msgstr "nicht genug Zeit, um den %s-Plan vor Ablauf der Zeit um %s abzuschließen"
 
 #: u_translation.rsnoterminatio
 msgid "No termination actions configured."
@@ -3476,7 +3500,7 @@ msgstr "Online Dokumentation"
 
 #: u_translation.rsonlineforall
 msgid "Online for all targets"
-msgstr ""
+msgstr "Online für alle Ziele"
 
 #: u_translation.rsonmeridiancr
 msgid "On Meridian crossing"
@@ -3657,7 +3681,7 @@ msgstr "Periodischer Autofokus"
 
 #: u_translation.rsperslitoffse
 msgid "Per slit offset"
-msgstr ""
+msgstr "durch Spalt Offset"
 
 #: u_translation.rsphotometry
 msgid "Photometry"
@@ -3709,6 +3733,10 @@ msgstr "Planetarium"
 #: u_translation.rsplanetariume
 msgid "Planetarium error."
 msgstr "Planetarium Fehler."
+
+#: u_translation.rsplanetariumf
+msgid "Planetarium for all targets"
+msgstr ""
 
 #: u_translation.rsplanetariumi
 msgid "Planetarium is not connected"
@@ -3978,11 +4006,11 @@ msgstr "Niederschlagsrate"
 
 #: u_translation.rsramdisk
 msgid "RAM Disk"
-msgstr ""
+msgstr "RAM Disk"
 
 #: u_translation.rsrandom
 msgid "Random"
-msgstr ""
+msgstr "Zufällig"
 
 #: u_translation.rsraonly
 msgid "RA only"
@@ -4056,7 +4084,7 @@ msgstr "rot"
 
 #: u_translation.rsreferenceexp
 msgid "Reference exposure"
-msgstr ""
+msgstr "Referenzaufnahme"
 
 #: u_translation.rsreferenceima
 msgid "Reference image"
@@ -4313,7 +4341,7 @@ msgstr "Ausführen"
 
 #: u_translation.rsrunaninitial
 msgid "Run an initialization script"
-msgstr ""
+msgstr "Ein Initialisierungsskript starten"
 
 #: u_translation.rsrunascript
 msgid "Run a script"
@@ -4517,13 +4545,17 @@ msgstr "Sichere SSL/TLS Verbindung"
 msgid "Select a calibration option:"
 msgstr "Eine Kalibrations Option auswählen"
 
+#: u_translation.rsselectarea
+msgid "Select area"
+msgstr ""
+
 #: u_translation.rsselectastarf
 msgid "Select a star first!"
 msgstr "Wählen Sie zuerst einen Stern aus"
 
 #: u_translation.rsselectcamera
 msgid "Select camera"
-msgstr ""
+msgstr "Kamera auswählen"
 
 #: u_translation.rsselectguides
 msgid "Select guide star"
@@ -4535,7 +4567,7 @@ msgstr "Eine der Messoptionen auswählen"
 
 #: u_translation.rsselectthecam
 msgid "Select the camera to use for the cone measurement"
-msgstr ""
+msgstr "Wählen Sie die Kamera aus, die für die Konusfehlermessung verwendet werden soll"
 
 #: u_translation.rsselectthecur
 msgid "Select the cursor to use "
@@ -4770,6 +4802,10 @@ msgstr "Setze die mittlere Dither Pulsdauer in Sekunden."
 msgid "Settle tolerance"
 msgstr "Beruhigungstoleranz"
 
+#: u_translation.rssettlingfor
+msgid "Settling for"
+msgstr ""
+
 #: u_translation.rssetup
 msgid "Setup"
 msgstr "Konfiguration"
@@ -4844,19 +4880,19 @@ msgstr "Einzelner Stern"
 
 #: u_translation.rssinglestarbr
 msgid "Single star, brightest star with offset"
-msgstr ""
+msgstr "Einzelstern, hellster Stern mit offset"
 
 #: u_translation.rssinglestarus
 msgid "Single star, use the brightest star"
-msgstr ""
+msgstr "Einzelstern, nutze hellesten Stern"
 
 #: u_translation.rssinglestarwi
 msgid "Single star, with guider astrometry"
-msgstr ""
+msgstr "Einzelstern, mit Guiding Astrometrie"
 
 #: u_translation.rssinglestarwi2
 msgid "Single star with astrometry, then multistar"
-msgstr ""
+msgstr "Einzelstern mit Astrometrie, dann Multistar"
 
 #: u_translation.rssitesendtote
 msgid "Site send to telescope."
@@ -4968,7 +5004,7 @@ msgstr "Schlupfkorrektur "
 
 #: u_translation.rsslit
 msgid "Slit"
-msgstr ""
+msgstr "Spalt"
 
 #: u_translation.rsslitdrawing
 msgid "Slit drawing"
@@ -5038,7 +5074,7 @@ msgstr "Geschwindigkeit"
 
 #: u_translation.rsspiral
 msgid "Spiral"
-msgstr ""
+msgstr "Spirale"
 
 #: u_translation.rssplittheimag
 #, object-pascal-format
@@ -5080,9 +5116,9 @@ msgid "Star alignment"
 msgstr "Sternausrichtung"
 
 #: u_translation.rsstarautoexpo
-#, object-pascal-format
+#, object-pascal-format, fuzzy, badformat
 msgid "Star%sauto-exposure"
-msgstr ""
+msgstr "Stern%automatische Belichtung"
 
 #: u_translation.rsstardatabase
 msgid "Star database is empty, check path to star database files!!"
@@ -5597,7 +5633,7 @@ msgstr "Die Zeitzone des Computers und der Längengrad der Sternwarte sind versc
 #: u_translation.rstheconeerror
 #, object-pascal-format
 msgid "The cone error results in a slew error of: %s arcmin at zenith. If error is positive then move telescope light inlet closer to the mount. If negative move telescope light inlet away from the mount,"
-msgstr ""
+msgstr "Der Konusfehler führt zu einem Postionierungsfehlers von: %s Bogenminuten im Zenit. Wenn der Fehler positiv ist, bewegen Sie den Lichteinlass des Teleskops näher zur Montierung. Wenn der Fehler negativ ist, bewegen Sie den Lichteinlass des Teleskops von der Montierung weg."
 
 #: u_translation.rsthedataare2
 #, object-pascal-format
@@ -5751,7 +5787,7 @@ msgstr "Morgen"
 
 #: u_translation.rstooclosetoth
 msgid "too close to the Moon"
-msgstr ""
+msgstr "Zu nahe am Mond"
 
 #: u_translation.rstools
 msgid "Tools"
@@ -5925,6 +5961,10 @@ msgstr "Aktualisiere RA+Dec%svom Planetarium"
 #: u_translation.rsupdatesequen
 msgid "Update sequence without interruption"
 msgstr "Aktualisiere Sequenz ohne Unterbrechung"
+
+#: u_translation.rsusealternati
+msgid "Use alternative solver"
+msgstr ""
 
 #: u_translation.rsuseasfallbac
 msgid "Use as fallback if other software fail"

@@ -2,15 +2,15 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ccdciel\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-01-15 10:42+0000\n"
-"PO-Revision-Date: 2024-12-31 08:58+0000\n"
+"POT-Creation-Date: 2025-04-20 16:48+0000\n"
+"PO-Revision-Date: 2025-01-15 15:25+0000\n"
 "Last-Translator: Stanislav Holub <Unknown>\n"
 "Language-Team: Czech <cz@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2025-01-15 10:56+0000\n"
-"X-Generator: Launchpad (build 6394e03793719e8d73f5a60b5439440e693c92f1)\n"
+"X-Launchpad-Export-Date: 2025-04-20 16:52+0000\n"
+"X-Generator: Launchpad (build e76edd883483c71c468bb038e98836435de44530)\n"
 "Language: cs\n"
 
 #: u_translation.rs2d
@@ -208,7 +208,7 @@ msgstr "Použít pro všechna zařízení"
 
 #: u_translation.rsapplytoallta
 msgid "Apply to all targets"
-msgstr ""
+msgstr "Použít na všechny cíle"
 
 #: u_translation.rsapplytocurre
 msgid "Apply to current image"
@@ -849,7 +849,7 @@ msgstr "Nelze spustit cyklus náhledu"
 #: u_translation.rscannotstarts
 #, object-pascal-format
 msgid "Cannot start %s now"
-msgstr ""
+msgstr "Nelze nyní spustit %s"
 
 #: u_translation.rscannotstartw
 msgid "Cannot start when capture is running"
@@ -1104,7 +1104,7 @@ msgstr "Konfigurace uložena"
 
 #: u_translation.rsconfigurethe
 msgid "Configure the distance in Preferences / Sequences"
-msgstr ""
+msgstr "Nastavte vzdálenost v Nastavení / Sekvence"
 
 #: u_translation.rsconnect
 msgid "Connect"
@@ -1199,6 +1199,11 @@ msgstr "Kopírovat z"
 #: u_translation.rscopyto
 msgid "Copy to "
 msgstr "Kopírovat do "
+
+#: u_translation.rscopytoclipbo
+#, object-pascal-format
+msgid "Copy to clipboard: %s"
+msgstr ""
 
 #: u_translation.rscorrectionme
 msgid "Correction method"
@@ -1578,7 +1583,7 @@ msgstr "Nespouštějte automatickou pointaci"
 
 #: u_translation.rsdonotstartif
 msgid "Do not start if it cannot be done completely"
-msgstr ""
+msgstr "Nezačínat, pokud nelze dokončit"
 
 #: u_translation.rsdontswait
 #, object-pascal-format
@@ -1797,6 +1802,10 @@ msgstr "Exp."
 msgid "Expert trick"
 msgstr "Odborný trik"
 
+#: u_translation.rsexportcsv
+msgid "Export CSV"
+msgstr ""
+
 #: u_translation.rsexposure
 msgid "Exposure"
 msgstr "Expozice"
@@ -1924,6 +1933,10 @@ msgstr "Vyhledávač"
 #: u_translation.rsfindercamera
 msgid "Finder camera"
 msgstr "Vyhledávací kamera"
+
+#: u_translation.rsfinderfocall
+msgid "Finder focal length"
+msgstr ""
 
 #: u_translation.rsfit
 msgid "Fit"
@@ -2477,6 +2490,10 @@ msgstr "Import mozaiky"
 msgid "Import observing list"
 msgstr "Importovat pozorovací seznam"
 
+#: u_translation.rsimportcsv
+msgid "Import CSV"
+msgstr ""
+
 #: u_translation.rsin
 msgid "In"
 msgstr "Dovnitř ↘️"
@@ -2764,6 +2781,10 @@ msgstr "Spravovat"
 msgid "Manage the Gain and Offset if available."
 msgstr "Upravit Zesílení a Offset, pokud jsou k dispozici."
 
+#: u_translation.rsmandatorysta
+msgid "Mandatory start time"
+msgstr ""
+
 #: u_translation.rsmanual
 msgid "Manual"
 msgstr "Ruční"
@@ -2990,7 +3011,7 @@ msgstr "Minimum"
 
 #: u_translation.rsminimumdista
 msgid "Minimum distance to the Moon"
-msgstr ""
+msgstr "Minimální vzdálenost od Měsíce"
 
 #: u_translation.rsminimummove
 msgid "Minimum move"
@@ -3030,7 +3051,7 @@ msgstr "Upravit"
 
 #: u_translation.rsmoonavoidanc
 msgid "Moon avoidance"
-msgstr ""
+msgstr "Vyhýbání se Měsíci"
 
 #: u_translation.rsmoresettings
 msgid "More settings"
@@ -3358,9 +3379,9 @@ msgid "Not enough points in or out of focus position, retrying now."
 msgstr "Nedostatek bodů před nebo za ostřící polohou, zkuste to znovu."
 
 #: u_translation.rsnotenoughtim
-#, object-pascal-format
+#, object-pascal-format, fuzzy, badformat
 msgid "not enough time to complete the %s plan before end time at %s"
-msgstr ""
+msgstr "Nelze nyní zahájit %s, není dost času na dokončení plánu %s před koncem v %s"
 
 #: u_translation.rsnoterminatio
 msgid "No termination actions configured."
@@ -3709,6 +3730,10 @@ msgstr "Planetárium"
 #: u_translation.rsplanetariume
 msgid "Planetarium error."
 msgstr "Chyba planetária."
+
+#: u_translation.rsplanetariumf
+msgid "Planetarium for all targets"
+msgstr ""
 
 #: u_translation.rsplanetariumi
 msgid "Planetarium is not connected"
@@ -4517,6 +4542,10 @@ msgstr "Zabezpečené připojení SSL/TLS"
 msgid "Select a calibration option:"
 msgstr "Vyberte možnosti kalibrace:"
 
+#: u_translation.rsselectarea
+msgid "Select area"
+msgstr ""
+
 #: u_translation.rsselectastarf
 msgid "Select a star first!"
 msgstr "Nejdřív vyberte hvězdu!"
@@ -4769,6 +4798,10 @@ msgstr "Nastavení střední doby trvání ditheringového impulzu v sekundách.
 #: u_translation.rssettletolera
 msgid "Settle tolerance"
 msgstr "Tolerance vyrovnání"
+
+#: u_translation.rssettlingfor
+msgid "Settling for"
+msgstr ""
 
 #: u_translation.rssetup
 msgid "Setup"
@@ -5751,7 +5784,7 @@ msgstr "zítra"
 
 #: u_translation.rstooclosetoth
 msgid "too close to the Moon"
-msgstr ""
+msgstr "příliš blízko k Měsíci"
 
 #: u_translation.rstools
 msgid "Tools"
@@ -5925,6 +5958,10 @@ msgstr "Aktualizace RA+Dec%sz Planetária"
 #: u_translation.rsupdatesequen
 msgid "Update sequence without interruption"
 msgstr "Aktualizovat sekvenci bez přerušení"
+
+#: u_translation.rsusealternati
+msgid "Use alternative solver"
+msgstr ""
 
 #: u_translation.rsuseasfallbac
 msgid "Use as fallback if other software fail"

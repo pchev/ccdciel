@@ -6,15 +6,15 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ccdciel\n"
 "Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
-"POT-Creation-Date: 2025-01-15 10:43+0000\n"
-"PO-Revision-Date: 2023-03-09 16:39+0000\n"
+"POT-Creation-Date: 2025-04-20 16:49+0000\n"
+"PO-Revision-Date: 2025-01-29 19:55+0000\n"
 "Last-Translator: Thomas <email@starhopper.de>\n"
 "Language-Team: German <de@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2025-01-15 10:56+0000\n"
-"X-Generator: Launchpad (build 6394e03793719e8d73f5a60b5439440e693c92f1)\n"
+"X-Launchpad-Export-Date: 2025-04-20 16:52+0000\n"
+"X-Generator: Launchpad (build e76edd883483c71c468bb038e98836435de44530)\n"
 
 #: u_hints.rsactivateback
 #, object-pascal-format
@@ -53,7 +53,7 @@ msgstr "Autofokus zu Beginn dieses Schritts"
 
 #: u_hints.rsautofocusifhfd
 msgid "Autofocus if the HFD % change is greater than the configured value"
-msgstr ""
+msgstr "Autofokus, wenn die HFD-%-Änderung größer ist als der konfigurierte Wert"
 
 #: u_hints.rsautofocusift
 msgid "Autofocus if the temperature change is greater than the configured value"
@@ -247,7 +247,7 @@ msgstr "Aufnahme Dauerschleife"
 #: u_hints.rsmaketesttode
 #, object-pascal-format
 msgid "Make test to determine the most performant option depending on your computer.%s(Network is mandatory if the camera is connected to a remote Indi server)"
-msgstr ""
+msgstr "Führen Sie einen Test durch, um die leistungsfähigste Option für Ihren Computer zu ermitteln.%s(Netzwerk ist notwendig, wenn die Kamera mit einem entfernten Indi-Server verbunden ist)"
 
 #: u_hints.rsmovefocuseri
 msgid "Move focuser inward"
@@ -317,7 +317,7 @@ msgstr "Stellen Sie hier die Aktion ein, die ausgeführt werden soll, nachdem di
 
 #: u_hints.rssetthehfd
 msgid "Set the HFD % change threshold in the Preferences. Measurements must also be enabled."
-msgstr ""
+msgstr "Legen Sie den Schwellenwert für die HFD-Änderung in % in den Voreinstellungen fest. Die Messungen müssen ebenfalls aktiviert sein."
 
 #: u_hints.rssetthestartt
 msgid "Set the start time at astronomical dusk, recomputed for the date you run the sequence."
@@ -333,7 +333,7 @@ msgstr "Temperaturschwellwert in den Einstellungen setzen"
 
 #: u_hints.rsshowbullseye
 msgid "Show crosshairs"
-msgstr ""
+msgstr "Fadenkreuz anzeigen"
 
 #: u_hints.rsshowcompleti
 msgid "Show completion status"
@@ -353,7 +353,7 @@ msgstr "Aufgenommenes Bild anzeigen"
 
 #: u_hints.rsskipthistarg
 msgid "Skip this target if there is not enough time to do all the steps before the end time"
-msgstr ""
+msgstr "Überspringen Sie dieses Ziel, wenn die Zeit nicht ausreicht, um alle Schritte vor der Endzeit zu erledigen"
 
 #: u_hints.rsstacktheprev
 #, object-pascal-format
@@ -486,7 +486,7 @@ msgstr "Anzahl der Einzelbilder dieses Schrittes"
 
 #: u_hints.rstheobjectmag
 msgid "The object magnitude"
-msgstr ""
+msgstr "Objekthelligkeit"
 
 #: u_hints.rstheobjectnam
 msgid "The object name for use in FITS header and file name"
@@ -522,7 +522,7 @@ msgstr "Namen des Teleskops zur Aufnahme in den FITS-Header"
 
 #: u_hints.rsthetemporary
 msgid "The temporary RAM disk used to transfer the images from the Indi server"
-msgstr ""
+msgstr "Die temporäre RAM-Disk, die für die Übertragung der Bilder vom Indi-Server verwendet wird"
 
 #: u_hints.rsthetypeoffra
 msgid "The type of frame"
