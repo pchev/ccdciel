@@ -1612,6 +1612,7 @@ resourcestring
   rsExportCSV = 'Export CSV';
   rsMandatorySta = 'Mandatory start time';
   rsSelectArea = 'Select area';
+  rsSettlingFor = 'Settling for';
 
 implementation
 

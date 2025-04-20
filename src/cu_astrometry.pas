@@ -811,6 +811,8 @@ var cra,cde,eq,ar1,ar2,de1,de2,dist,raoffset,deoffset,newra,newde,pa,ara,ade: do
   procedure WaitSlewDelay(wt:single=5);
   var endt: TDateTime;
   begin
+    if wt>=1 then
+      msg(rsSettlingFor+blank+FormatFloat(f0, wt)+blank+rsSec,3);
     endt:=now+wt/secperday;
     while now<endt do begin
       if CancelAutofocus or CancelGoto then break;
