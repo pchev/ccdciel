@@ -1065,6 +1065,8 @@ begin
   FolderOpt.Caption := rsFolderNameOp;
   BtnFolderDefault.Caption := rsDefault;
   UseFileSequenceWidth.Caption:=rsFixedSequenc;
+  Label173.Caption:=rsSequenceSepa;
+  RemoveSpace.Caption:=rsRemoveSpaceI;
   FilePack.Caption:=rsCompressTheF;
   Label156.Caption:=rsFITSFileExte;
   SaveFormat.Caption:=rsFileFormat;

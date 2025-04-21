@@ -1615,6 +1615,8 @@ resourcestring
   rsSettlingFor = 'Settling for';
   rsFinderFocalL = 'Finder focal length';
   rsUseAlternati = 'Use alternative solver';
+  rsRemoveSpaceI = 'Remove space in object name';
+  rsSequenceSepa = 'Sequence separator';
 
 implementation
 

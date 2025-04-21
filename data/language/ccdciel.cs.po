@@ -2,14 +2,14 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ccdciel\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-04-20 16:48+0000\n"
-"PO-Revision-Date: 2025-01-15 15:25+0000\n"
+"POT-Creation-Date: 2025-04-21 09:24+0000\n"
+"PO-Revision-Date: 2025-04-21 05:39+0000\n"
 "Last-Translator: Stanislav Holub <Unknown>\n"
 "Language-Team: Czech <cz@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2025-04-20 16:52+0000\n"
+"X-Launchpad-Export-Date: 2025-04-21 09:48+0000\n"
 "X-Generator: Launchpad (build e76edd883483c71c468bb038e98836435de44530)\n"
 "Language: cs\n"
 
@@ -1203,7 +1203,7 @@ msgstr "Kopírovat do "
 #: u_translation.rscopytoclipbo
 #, object-pascal-format
 msgid "Copy to clipboard: %s"
-msgstr ""
+msgstr "Kopírování do schránky: %s"
 
 #: u_translation.rscorrectionme
 msgid "Correction method"
@@ -1804,7 +1804,7 @@ msgstr "Odborný trik"
 
 #: u_translation.rsexportcsv
 msgid "Export CSV"
-msgstr ""
+msgstr "Export CSV"
 
 #: u_translation.rsexposure
 msgid "Exposure"
@@ -1936,7 +1936,7 @@ msgstr "Vyhledávací kamera"
 
 #: u_translation.rsfinderfocall
 msgid "Finder focal length"
-msgstr ""
+msgstr "Ohnisková vzdálenost hledáčku"
 
 #: u_translation.rsfit
 msgid "Fit"
@@ -2492,7 +2492,7 @@ msgstr "Importovat pozorovací seznam"
 
 #: u_translation.rsimportcsv
 msgid "Import CSV"
-msgstr ""
+msgstr "Import CSV"
 
 #: u_translation.rsin
 msgid "In"
@@ -2783,7 +2783,7 @@ msgstr "Upravit Zesílení a Offset, pokud jsou k dispozici."
 
 #: u_translation.rsmandatorysta
 msgid "Mandatory start time"
-msgstr ""
+msgstr "Povinný čas zahájení"
 
 #: u_translation.rsmanual
 msgid "Manual"
@@ -3733,7 +3733,7 @@ msgstr "Chyba planetária."
 
 #: u_translation.rsplanetariumf
 msgid "Planetarium for all targets"
-msgstr ""
+msgstr "Planetárium pro všechny cíle"
 
 #: u_translation.rsplanetariumi
 msgid "Planetarium is not connected"
@@ -4106,6 +4106,10 @@ msgstr "Odstranit všechny body"
 #: u_translation.rsremoverow
 msgid "Remove row"
 msgstr "Odstranit řádek"
+
+#: u_translation.rsremovespacei
+msgid "Remove space in object name"
+msgstr ""
 
 #: u_translation.rsremovestep
 msgid "Remove step"
@@ -4544,7 +4548,7 @@ msgstr "Vyberte možnosti kalibrace:"
 
 #: u_translation.rsselectarea
 msgid "Select area"
-msgstr ""
+msgstr "Vybrat oblast"
 
 #: u_translation.rsselectastarf
 msgid "Select a star first!"
@@ -4670,6 +4674,10 @@ msgstr "Sekvence ukončena normálně"
 #: u_translation.rssequencepaus
 msgid "Sequence paused for bad weather ..."
 msgstr "Sekvence pozastavena pro špatné počasí ..."
+
+#: u_translation.rssequencesepa
+msgid "Sequence separator"
+msgstr ""
 
 #: u_translation.rssequencestar
 #, object-pascal-format
@@ -4801,7 +4809,7 @@ msgstr "Tolerance vyrovnání"
 
 #: u_translation.rssettlingfor
 msgid "Settling for"
-msgstr ""
+msgstr "Spokojit se s"
 
 #: u_translation.rssetup
 msgid "Setup"
@@ -5961,7 +5969,7 @@ msgstr "Aktualizovat sekvenci bez přerušení"
 
 #: u_translation.rsusealternati
 msgid "Use alternative solver"
-msgstr ""
+msgstr "Použití alternativní astrometrii"
 
 #: u_translation.rsuseasfallbac
 msgid "Use as fallback if other software fail"

@@ -6057,3 +6057,11 @@ msgstr ""
 msgid "Use alternative solver"
 msgstr ""
 
+#: u_translation:rsremovespacei
+msgid "Remove space in object name"
+msgstr ""
+
+#: u_translation:rssequencesepa
+msgid "Sequence separator"
+msgstr ""
+
