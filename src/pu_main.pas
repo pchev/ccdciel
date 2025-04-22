@@ -7540,10 +7540,7 @@ begin
         if TIntList(AllMsg.Objects[i]).value<=LogLevel then
            f_msg.msg.Lines.Add(AllMsg[i]);
      end;
-     if f_msg.msg.GetTextLen>0 then begin
-       f_msg.msg.SelStart:=f_msg.msg.GetTextLen-1;
-       f_msg.msg.SelLength:=0;
-     end;
+     f_msg.msg.SelStart:=MaxInt;
    end;
 end;
 
@@ -7591,10 +7588,7 @@ begin
   if level<=LogLevel then begin
     if f_msg.msg.Lines.Count>100 then f_msg.msg.Lines.Delete(0);
     f_msg.msg.Lines.Add(buf);
-    if f_msg.msg.GetTextLen>0 then begin
-      f_msg.msg.SelStart:=f_msg.msg.GetTextLen-1;
-      f_msg.msg.SelLength:=0;
-    end;
+    f_msg.msg.SelStart:=MaxInt;
   end;
   end;
   if LogToFile then begin
