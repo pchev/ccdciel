@@ -19,12 +19,15 @@ from datetime import datetime
 parser=argparse.ArgumentParser(description="This optional parameters overide the default set in specinti_config")
 parser.add_argument('--object', '-o', help='the name of the object to process, default is the current object in capture tab')
 parser.add_argument('--sourcedir', '-s', help='the source directory where the object files are, default is the capture directory')
-parser.add_argument('--noarchive', help='do not move the original files to the archive directory', action="store_true")
+grouparchive=parser.add_mutually_exclusive_group()
+grouparchive.add_argument('--archive', help='move the original files to the archive directory', action="store_true")
+grouparchive.add_argument('--noarchive', help='do not move the original files to the archive directory', action="store_true")
 parser.add_argument('--basedir', '-w', help='the base directory for processing')
 parser.add_argument('--config', '-c',  help='the specinti configuration name')
 parser.add_argument('--calib', '-n', help='postfix for calibration files')
 parser.add_argument('--flat', '-f', help='flat image prefix')
 parser.add_argument('--flatpostfix', '-t', help='flat image postfix')
+parser.add_argument('--saveflat', help='save the resulting master flat _flat for further use', action="store_true")
 parser.add_argument('--dark', '-d', help='dark image prefix')
 parser.add_argument('--bias', '-b', help='bias image prefix')
 args=parser.parse_args()
@@ -56,10 +59,12 @@ if specinti_offset == None:
    specinti_offset = parser['settings']['specinti_offset']
 if base_directory == None:
    base_directory = parser['settings']['base_directory']
-if not args.noarchive:
-   noarchive = not parser['settings'].getboolean('archive_original',True)
+   
+if (not args.archive) and (not args.noarchive):
+   # no parameter, use config value
+   archive = parser['settings'].getboolean('archive_original',True)
 else:
-   noarchive = args.noarchive
+   archive = args.archive
 
 specinti_progdir = parser['settings']['specinti_progdir']
 specinti_prog    = parser['settings']['specinti_prog']
@@ -80,10 +85,15 @@ flat=os.path.join(base_directory,'flat')              # tungsten flat files
 result=os.path.join(base_directory,'result')          # directory to store the processed spectra
 logfile=os.path.join(base_directory,'processing.log') # a summary log of the processed object
 
-if noarchive:
-   archive='none'
+if args.saveflat:
+   saveflat=flat
 else:
-   archive=os.path.join(base_directory,'archive')     # directory to archive the already processed capture
+   saveflat='none'
+
+if archive:
+   archivedir=os.path.join(base_directory,'archive')     # directory to archive the already processed capture
+else:
+   archivedir='none'
 
 # check all the directories exist
 def CheckDirectory(path):
@@ -97,8 +107,8 @@ CheckDirectory(resp)
 CheckDirectory(dark)
 CheckDirectory(flat)
 CheckDirectory(result)
-if not noarchive:
-   CheckDirectory(archive)
+if archive:
+   CheckDirectory(archivedir)
 
 # check mandatory directories are not empty
 def IsDirectoryEmpty(path):
@@ -195,11 +205,11 @@ if nobj == 0:
    print('No file to process for '+objfile+' in '+capturedir)
    sys.exit(1)
 
-if not noarchive:
+if archive:
    # archive by object name and date/time
    d = datetime.now().strftime("%Y%m%d_%H%M%S")
-   archive=os.path.join(archive,objfile+'_'+d)
-   CheckDirectory(archive)
+   archivedir=os.path.join(archivedir,objfile+'_'+d)
+   CheckDirectory(archivedir)
 
 # make observation file
 with open(os.path.join(work,'obj.yaml'), 'w') as of:
@@ -244,16 +254,16 @@ if platform.system() == 'Windows' :
     else:
        copt='/C'
     if show_window:
-       subprocess.Popen(['start','cmd.exe',copt,specinticmd, specinti_progdir, specinti_prog, specinti_config, objfile, work, capturedir, result, archive, logfile],shell=True)
+       subprocess.Popen(['start','cmd.exe',copt,specinticmd, specinti_progdir, specinti_prog, specinti_config, objfile, work, capturedir, result, archivedir, saveflat, logfile],shell=True)
     else:
-       subprocess.Popen(['start','/min','cmd.exe',copt,specinticmd, specinti_progdir, specinti_prog, specinti_config, objfile, work, capturedir, result, archive, logfile],shell=True)
+       subprocess.Popen(['start','/min','cmd.exe',copt,specinticmd, specinti_progdir, specinti_prog, specinti_config, objfile, work, capturedir, result, archivedir, saveflat, logfile],shell=True)
 else:
     specinticmd=os.path.join(scriptdir,'specinti_process.sh')
     if linux_terminal == '':
-       subprocess.Popen(['/usr/bin/bash', specinticmd, specinti_progdir, specinti_prog, specinti_config, objfile, work, capturedir, result, archive, logfile, wine_prefix])
+       subprocess.Popen(['/usr/bin/bash', specinticmd, specinti_progdir, specinti_prog, specinti_config, objfile, work, capturedir, result, archivedir, saveflat, logfile, wine_prefix])
     else:
        term=linux_terminal.split(' ')
-       subprocess.Popen(term+[specinticmd, specinti_progdir, specinti_prog, specinti_config, objfile, work, capturedir, result, archive, logfile, wine_prefix])
+       subprocess.Popen(term+[specinticmd, specinti_progdir, specinti_prog, specinti_config, objfile, work, capturedir, result, archivedir, saveflat, logfile, wine_prefix])
 
 
 

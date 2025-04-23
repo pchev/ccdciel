@@ -2,6 +2,12 @@
 
 # This batch file is started by specinti_process.script to process the spectra in background and save the result
 
+function on_exit { 
+  echo Close in 30 sec ...
+  sleep 30 
+}
+trap on_exit EXIT
+
 specintiprogdir=${1}
 specintiprog=${2}
 specinticonfig=${3}
@@ -10,8 +16,9 @@ workdir=${5}
 capturedir=${6}
 resultdir=${7}
 archivedir=${8}
-logfile=${9}
-wine_prefix=${10}
+saveflat=${9}
+logfile=${10}
+wine_prefix=${11}
 
 if [[ -z $logfile ]]; then 
   echo Missing parameters
@@ -32,10 +39,11 @@ if [[ $? = 0 ]]; then
   if [[ $archivedir != "none" ]]; then
     mv "$capturedir/$obj"* "$archivedir"
   fi
+  if [[ $saveflat != "none" ]]; then
+    mv "$workdir/_flat"* "$saveflat"
+  fi
   echo "$(date) : Finish processing of $obj" >> "$logfile"
 else
   echo "$(date) : Error $obj" >> "$logfile"
 fi
 
-echo Close in 30 sec ...
-sleep 30

@@ -11,6 +11,8 @@ set workdir=%~5
 set capturedir=%~6
 set resultdir=%~7
 set archivedir=%~8
+set saveflat=%~9
+shift
 set logfile=%~9
 
 if not defined logfile (
@@ -31,6 +33,10 @@ if errorlevel 1 (
   if "%archivedir%" NEQ "none" (
     echo move "%capturedir%\%obj%"* "%archivedir%"
     move "%capturedir%\%obj%"* "%archivedir%"
+  )
+  if "%saveflat%" NEQ "none" (
+    echo move "%workdir%\_flat"* "%saveflat%"
+    move "%workdir%\_flat"* "%saveflat%"
   )
   echo %date% %time:~0,8% : Finish processing of %obj% >> "%logfile%"
 )
