@@ -1391,14 +1391,14 @@ if FIndiTransfert=itDisk then begin
 end;
 case FIndiTransfert of
   itNetwork:begin
-            if (UploadMode<>nil)and(UploadLocal.s=ISS_ON) then begin
+            if (UploadMode<>nil)and((UploadLocal.s=ISS_ON) or (UploadBoth.s=ISS_ON)) then begin
                IUResetSwitch(UploadMode);
                UploadClient.s:=ISS_ON;
                indiclient.sendNewSwitch(UploadMode);
             end;
             end;
   itDisk:   begin
-            if (UploadClient.s=ISS_ON) then begin
+            if (UploadClient.s=ISS_ON) or (UploadBoth.s=ISS_ON) then begin
                IUResetSwitch(UploadMode);
                UploadLocal.s:=ISS_ON;
                indiclient.sendNewSwitch(UploadMode);
