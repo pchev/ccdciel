@@ -1,5 +1,7 @@
-To create the pdf documentation execute in sequence:
+To create the pdf documentation open the page:
+https://www.ap-i.net/ccdciel/en/booklist
 
-./getdoc.sh
-./pdfdoc.sh
+Click on: "CCDciel program documentation"
+
+This use the Dokuwiki plugins Dw2Pdf and Bookcreator.
 
