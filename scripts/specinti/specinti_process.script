@@ -212,7 +212,7 @@ if archive:
    CheckDirectory(archivedir)
 
 # make observation file
-with open(os.path.join(work,'obj.yaml'), 'w') as of:
+with open(os.path.join(work,'object.yaml'), 'w') as of:
     of.write(objname+':\n')
     of.write('- '+objname+'\n')
     of.write('- '+objfile+'-\n')
@@ -241,7 +241,7 @@ for i in range (len(row)):
     if 'working_path:' in row[i] :
        row[i]='working_path: ' + work
     elif  'batch_name:' in row[i] :
-       row[i]='batch_name: ' +  'obj'
+       row[i]='batch_name: ' +  'object'
 buf = '\n'.join(row)
 with open(f , 'w', encoding = 'utf-8') as file:
     file.write(buf)
