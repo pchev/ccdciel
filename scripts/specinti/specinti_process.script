@@ -234,7 +234,7 @@ with open(os.path.join(work,'obj.yaml'), 'w') as of:
 
 # Update configuration file for path and batch name
 f=os.path.join(specinti_progdir,'_configuration',specinti_config+'.yaml')
-with open(f, 'r', encoding = 'utf-8') as file :
+with open(f, 'r', encoding = 'utf-8', errors='ignore') as file :
     buf = file.read()
 row = buf.split('\n')
 for i in range (len(row)):
