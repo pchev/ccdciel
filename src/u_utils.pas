@@ -32,7 +32,7 @@ uses u_global, u_refraction, u_ephem,
        unix,baseunix,
      {$endif}
      smtpsend, synautil, cu_tcpclient,
-     process, Classes, LCLType, FileUtil, ComCtrls, MTPCPU,
+     process, Classes, LCLType, FileUtil, ComCtrls,
      Math, SysUtils, Forms, Menus, ActnList, Controls, StdCtrls, Graphics;
 
 function InvertF32(X : LongWord) : Single;
@@ -187,6 +187,13 @@ const
 
 var
   dummy_ext : extended;
+
+{$IFDEF Linux}
+const _SC_NPROCESSORS_CONF = 83;
+const _SC_NPROCESSORS_ONLN = 84;
+function sysconf(i: cint): clong; cdecl; external name 'sysconf';
+{$ENDIF}
+
 
 function InvertF32(X : LongWord) : Single;
 var  P : PbyteArray;
@@ -3446,10 +3453,55 @@ end;
 end;
 
 function GetThreadCount: integer;
-begin
-  Result := GetSystemThreadCount;
-end;
-
+{$IF defined(windows)}
+  //returns total number of processors available to system including logical hyperthreaded processors
+  var
+    i: Integer;
+    ProcessAffinityMask, SystemAffinityMask: DWORD_PTR;
+    Mask: DWORD;
+    SystemInfo: SYSTEM_INFO;
+  begin
+    if GetProcessAffinityMask(GetCurrentProcess, ProcessAffinityMask, SystemAffinityMask)
+    then begin
+      Result := 0;
+      for i := 0 to 31 do begin
+        Mask := DWord(1) shl i;
+        if (ProcessAffinityMask and Mask)<>0 then
+          inc(Result);
+      end;
+    end else begin
+      //can't get the affinity mask so we just report the total number of processors
+      GetSystemInfo(SystemInfo);
+      Result := SystemInfo.dwNumberOfProcessors;
+    end;
+  end;
+{$ELSEIF defined(freebsd) or defined(darwin)}
+  type
+    PSysCtl = {$IF FPC_FULLVERSION>=30200}pcint{$ELSE}pchar{$ENDIF};
+  var
+    mib: array[0..1] of cint;
+    len: csize_t;
+    t: cint;
+  begin
+    mib[0] := CTL_HW;
+    mib[1] := HW_NCPU;
+    len := sizeof(t);
+    fpsysctl(PSysCtl(@mib), 2, @t, @len, Nil, 0);
+    Result:=t;
+  end;
+{$ELSEIF defined(linux)}
+  begin
+    // number of processor configured in the board
+    Result:=sysconf(_SC_NPROCESSORS_CONF);
+    if Result=128 then
+      // VMware report 128 configured processor even when much less are defined
+      Result:=sysconf(_SC_NPROCESSORS_ONLN);
+  end;
+{$ELSE}
+  begin
+    Result:=1;
+  end;
+{$ENDIF}
 
 function email(Subject,Msg:string):string;
 var MailData: TStringList;
