@@ -179,7 +179,11 @@ function SimpleDeltaT(dt: Tdatetime): double;
 
 implementation
 
-uses u_translation, u_speech;
+uses
+     {$IF defined(freebsd) or defined(darwin)}
+     ctypes, sysctl,
+     {$ENDIF}
+     u_translation, u_speech;
 
 const
   GregorianStart=15821015;
