@@ -440,18 +440,34 @@ end;
 
 procedure Tf_starprofile.BtnPin2DClick(Sender: TObject);
 var f: TForm;
+    x,y,w,h: integer;
 begin
   if Star2D.Parent=Panel2 then begin
+   x:=config.GetValue('/StarAnalysis/Profile2DX',-1);
+   y:=config.GetValue('/StarAnalysis/Profile2DY',-1);
+   w:=config.GetValue('/StarAnalysis/Profile2DW',-1);
+   h:=config.GetValue('/StarAnalysis/Profile2DH',-1);
    f:=TForm.Create(self);
    f.FormStyle:=fsStayOnTop;
    f.OnClose:=@Panel2DClose;
-   f.Width:=DoScaleX(200);
-   f.Height:=DoScaleY(200);
+    if w>0 then
+      f.Width:=w
+    else
+      f.Width:=DoScaleX(200);
+    if h>0 then
+      f.Height:=h
+    else
+      f.Height:=DoScaleY(200);
    f.Caption:=rs2D;
    f.Color:=clBlack;
    Star2D.Parent:=f;
    Star2D.Align:=alClient;
-   FormPos(f,mouse.CursorPos.x,mouse.CursorPos.y);
+   if (x>0)and(y>0) then begin
+     f.Left:=x;
+     f.Top:=y;
+   end
+   else
+     FormPos(f,mouse.CursorPos.x,mouse.CursorPos.y);
    f.Show;
   end
   else if Star2D.Parent is TForm then
@@ -460,6 +476,10 @@ end;
 
 procedure Tf_starprofile.Panel2DClose(Sender: TObject; var CloseAction: TCloseAction);
 begin
+  config.SetValue('/StarAnalysis/Profile2DX',TForm(Sender).Left);
+  config.SetValue('/StarAnalysis/Profile2DY',TForm(Sender).Top);
+  config.SetValue('/StarAnalysis/Profile2DW',TForm(Sender).Width);
+  config.SetValue('/StarAnalysis/Profile2DH',TForm(Sender).Height);
   CloseAction:=caFree;
   Star2D.Parent:=Panel2;
   PanelBtnPin2D.SendToBack;
@@ -469,13 +489,24 @@ end;
 procedure Tf_starprofile.BtnPinProfileClick(Sender: TObject);
 var f: TForm;
     p: TPanel;
+    x,y,w,h: integer;
 begin
   if ProfileChart.Parent=TSprofile then begin
+   x:=config.GetValue('/StarAnalysis/ProfileX',-1);
+   y:=config.GetValue('/StarAnalysis/ProfileY',-1);
+   w:=config.GetValue('/StarAnalysis/ProfileW',-1);
+   h:=config.GetValue('/StarAnalysis/ProfileH',-1);
    f:=TForm.Create(self);
    f.FormStyle:=fsStayOnTop;
    f.OnClose:=@PanelProfileClose;
-   f.Width:=DoScaleX(400);
-   f.Height:=DoScaleY(350);
+   if w>0 then
+     f.Width:=w
+   else
+     f.Width:=DoScaleX(400);
+   if h>0 then
+     f.Height:=h
+   else
+     f.Height:=DoScaleY(350);
    f.Caption:=rsProfile2;
    p:=TPanel.Create(f);
    p.Parent:=f;
@@ -491,7 +522,12 @@ begin
    ProfileChart.AxisList.Axes[1].Title.Caption:='X pixel';
    ProfileChart.AxisList.Axes[1].Title.Visible:=true;
    ProfileChartLine.LinePen.Width:=1;
-   FormPos(f,mouse.CursorPos.x,mouse.CursorPos.y);
+   if (x>0)and(y>0) then begin
+     f.Left:=x;
+     f.Top:=y;
+   end
+   else
+     FormPos(f,mouse.CursorPos.x,mouse.CursorPos.y);
    f.Show;
   end
   else if ProfileChart.Parent is TForm then
@@ -500,6 +536,10 @@ end;
 
 procedure Tf_starprofile.PanelProfileClose(Sender: TObject; var CloseAction: TCloseAction);
 begin
+  config.SetValue('/StarAnalysis/ProfileX',TForm(Sender).Left);
+  config.SetValue('/StarAnalysis/ProfileY',TForm(Sender).Top);
+  config.SetValue('/StarAnalysis/ProfileW',TForm(Sender).Width);
+  config.SetValue('/StarAnalysis/ProfileH',TForm(Sender).Height);
   CloseAction:=caFree;
   SpectraProfileMethod.Parent:=Panel3;
   ProfileChart.Parent:=TSprofile;
@@ -512,19 +552,35 @@ end;
 
 procedure Tf_starprofile.BtnPinTrendClick(Sender: TObject);
 var f: TForm;
+    x,y,w,h: integer;
 begin
   if HistoryChart.Parent=TStrend then begin
+   x:=config.GetValue('/StarAnalysis/TrendX',-1);
+   y:=config.GetValue('/StarAnalysis/TrendY',-1);
+   w:=config.GetValue('/StarAnalysis/TrendW',-1);
+   h:=config.GetValue('/StarAnalysis/TrendH',-1);
    f:=TForm.Create(self);
    f.FormStyle:=fsStayOnTop;
    f.OnClose:=@PanelTrendClose;
-   f.Width:=DoScaleX(400);
-   f.Height:=DoScaleY(300);
+   if w>0 then
+     f.Width:=w
+   else
+     f.Width:=DoScaleX(400);
+   if h>0 then
+     f.Height:=h
+   else
+     f.Height:=DoScaleY(300);
    f.Caption:=rsTrend;
    HistoryChart.Parent:=f;
    HistoryChart.Align:=alClient;
    HistoryChartHfd.LinePen.Width:=2;
    HistoryChartImax.LinePen.Width:=2;
-   FormPos(f,mouse.CursorPos.x,mouse.CursorPos.y);
+   if (x>0)and(y>0) then begin
+     f.Left:=x;
+     f.Top:=y;
+   end
+   else
+     FormPos(f,mouse.CursorPos.x,mouse.CursorPos.y);
    f.Show;
   end
   else if HistoryChart.Parent is TForm then
@@ -549,6 +605,10 @@ end;
 
 procedure Tf_starprofile.PanelTrendClose(Sender: TObject; var CloseAction: TCloseAction);
 begin
+  config.SetValue('/StarAnalysis/TrendX',TForm(Sender).Left);
+  config.SetValue('/StarAnalysis/TrendY',TForm(Sender).Top);
+  config.SetValue('/StarAnalysis/TrendW',TForm(Sender).Width);
+  config.SetValue('/StarAnalysis/TrendH',TForm(Sender).Height);
   CloseAction:=caFree;
   HistoryChart.Parent:=TStrend;
   HistoryChartHfd.LinePen.Width:=1;
