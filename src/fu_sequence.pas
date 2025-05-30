@@ -901,7 +901,6 @@ end;
 procedure Tf_sequence.StopSequence;
 begin
  StartTimer.Enabled:=false;
- StatusTimer.Enabled:=false;
  if StartingSequence then begin
     led.Brush.Color:=clRed;
     msg(Format(rsSequenceStop2,['']),1);
@@ -913,7 +912,6 @@ begin
  if Targets.Running then Targets.Stop;
  TargetRow:=-1;
  PlanRow:=-1;
- UpdateBtn;
 end;
 
 procedure Tf_sequence.RestartSequence(Sender: TObject);
@@ -964,7 +962,6 @@ begin
  led.Brush.Color:=clRed;
  PlanGrid.Invalidate;
  TargetGrid.Invalidate;
- UpdateBtn;
 end;
 
 procedure Tf_sequence.BtnStopClick(Sender: TObject);
@@ -1044,7 +1041,7 @@ begin
   StatusTimer.Enabled:=false;
   newtarget:=Targets.CurrentTarget+1;
   UpdateBtn;
-  if Targets.Running then begin
+  if Targets.Running or Targets.Waiting then begin
    try
    // show plan status
    if (newtarget>0) then begin
@@ -1285,7 +1282,7 @@ end;
 
 procedure Tf_sequence.UpdateBtn;
 begin
-  if targets.Running then begin
+  if targets.Running or Targets.Waiting then begin
     BtnLoadTargets.Enabled:=false;
     BtnNewTargets.Enabled:=false;
     BtnReset.Enabled:=false;

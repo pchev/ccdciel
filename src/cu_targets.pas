@@ -157,7 +157,7 @@ type
       FSeqStart,FSeqStop: boolean;
       FSeqStartTwilight,FSeqStopTwilight,FSeqLockTwilight: boolean;
       TargetTimeStart,TargetDelayEnd: TDateTime;
-      FRunning,FScriptRunning: boolean;
+      FRunning,FScriptRunning,FWaiting: boolean;
       FInitializing, FFinalizing, FStopping, FDawnFlatNow: boolean;
       FUnattended: boolean;
       FName: string;
@@ -208,6 +208,7 @@ type
       property Restarting: boolean read FRestarting;
       property Slewing: boolean read Fslewing;
       property Running: boolean read FRunning;
+      property Waiting: boolean read FWaiting;
       property ScriptRunning: boolean read GetScriptRunning;
       property TargetCoord: boolean read FTargetCoord;
       property TargetRA: double read FTargetRA;
@@ -272,6 +273,7 @@ begin
   FTargetsRepeat:=1;
   TargetForceNext:=false;
   Frunning:=false;
+  FWaiting:=false;
   FRestarting:=False;
   Fslewing:=False;
   FCurrentTarget:=-1;
@@ -1215,6 +1217,7 @@ begin
   WeatherCancelRestart:=false;
   FSeqLockTwilight:=false;
   FRunning:=true;
+  FWaiting:=true;
   FRestarting:=False;
   TargetForceNext:=false;
   FFinalizing:=false;
@@ -1416,6 +1419,7 @@ begin
   InplaceAutofocus:=AutofocusInPlace;
   FStopping:=true;
   FRunning:=false;
+  FWaiting:=false;
   WeatherPauseCanceled:=true;
   WeatherPauseCapture:=false;
   WeatherCancelRestart:=false;
@@ -3116,6 +3120,7 @@ begin
  end
  else begin
   FRunning:=false;
+  FWaiting:=false;
   TargetTimer.Enabled:=false;
   StopTimer.Enabled:=false;
   FCurrentTarget:=-1;
@@ -3254,7 +3259,6 @@ begin
  end;
  result:=result or FScriptRunning;
 end;
-
 
 ////////////////////  TTarget  /////////////////////////////
 
