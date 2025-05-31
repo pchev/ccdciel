@@ -3037,7 +3037,7 @@ begin
   SetTool(f_visu,'Histogram',PanelBottom,0,MenuViewHistogram,MenuHistogram,true);
   SetTool(f_msg,'Messages',PanelBottom,f_visu.left+1,MenuViewMessages,nil,true);
 
-  SetTool(f_devicesconnection,'Connection',PanelRight1,0,MenuViewConnection,MenuConnection,true,true);
+  SetTool(f_devicesconnection,'Connection',PanelRight1,0,MenuViewConnection,MenuConnection,true);
   SetTool(f_autoguider,'Autoguider',PanelRight1,f_devicesconnection.top+1,MenuViewAutoguider,MenuAutoguider,true);
   SetTool(f_planetarium,'Planetarium',PanelRight1,f_autoguider.top+1,MenuViewPlanetarium,MenuPlanetarium,true);
   SetTool(f_preview,'Preview',PanelRight1,f_planetarium.top+1,MenuViewPreview,MenuPreview,true);
@@ -3049,19 +3049,19 @@ begin
   SetTool(f_switch,'Switch',PanelRight1,f_cover.top+1,MenuViewSwitch,nil,WantSwitch);
 
   SetTool(f_focuser,'Focuser',PanelRight2,0,MenuViewFocuser,MenuFocuser,WantFocuser);
-  SetTool(f_starprofile,'Starprofile',PanelRight2,f_focuser.top+1,MenuViewStarProfile,MenuStarProfile,true,true);
+  SetTool(f_starprofile,'Starprofile',PanelRight2,f_focuser.top+1,MenuViewStarProfile,MenuStarProfile,true);
   SetTool(f_magnifyer,'Magnifyer',PanelRight2,f_starprofile.top+1,MenuViewMagnifyer,nil,true);
 
-  SetTool(f_capture,'Capture',PanelRight3,0,MenuViewCapture,MenuCapture,true,true);
+  SetTool(f_capture,'Capture',PanelRight3,0,MenuViewCapture,MenuCapture,true);
   SetTool(f_ccdtemp,'CCDTemp',PanelRight3,f_capture.top+1,MenuViewCCDtemp,MenuCCDtemp,true);
   SetTool(f_filterwheel,'Filters',PanelRight3,f_ccdtemp.top+1,MenuViewFilters,MenuFilters,WantWheel);
   SetTool(f_frame,'Frame',PanelRight3,f_filterwheel.top+1,MenuViewFrame,MenuFrame,true);
   SetTool(f_rotator,'Rotator',PanelRight3,f_frame.top+1,MenuViewRotator,MenuRotator,WantRotator);
   SetTool(f_mount,'Mount',PanelRight3,f_rotator.top+1,MenuViewMount,MenuMount,WantMount);
 
-  SetTool(f_sequence,'Sequence',PanelRight4,0,MenuViewSequence,MenuSequence,true,true);
+  SetTool(f_sequence,'Sequence',PanelRight4,0,MenuViewSequence,MenuSequence,true);
 
-  SetTool(f_video,'Video',PanelRight5,0,MenuViewVideo,MenuVideo,true,true);
+  SetTool(f_video,'Video',PanelRight5,0,MenuViewVideo,MenuVideo,true);
 
   SetTool(f_internalguider,'InternalGuider',PanelRight6,0,MenuViewInternalGuider,MenuInternalGuider,WantGuideCamera and WantMount);
 
