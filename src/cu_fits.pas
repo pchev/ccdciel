@@ -1720,9 +1720,9 @@ begin
     result:=rsImageStatist+crlf;
     result:=Format(rsPixelCount, [result, blank+IntToStr(sz)+crlf]);
     // min, max
-    x:= FimageMin+FFitsInfo.dmin/FimageC;
+    x:= FFitsInfo.dmin;
     result:=result+rsMin2+blank+FormatFloat(ff,x)+crlf;
-    x:= FimageMin+FFitsInfo.dmax/FimageC;
+    x:= FFitsInfo.dmax;
     result:=result+rsMax+blank+FormatFloat(ff,x)+crlf;
     // mode, median
     median:=0; maxh:=0;  npx:=0; maxp:=0;
@@ -1750,6 +1750,8 @@ begin
     x:= FimageMin+Fsigma/FimageC;
     result:=result+rsStdDev+blank+FormatFloat(f1, x)+crlf;
     stdev2(4,mean,sd,iterations);//test every 4x4= 16th pixel to speed up
+    mean:=FimageMin+mean/FimageC;
+    sd:=FimageMin+sd/FimageC;
     result:=result+'Mean2: '+FormatFloat(f1,mean)+' (sigma clipped)'+crlf;
     result:=result+'Std.Dev2: '+FormatFloat(f1,sd)+' (sigma clipped)'+crlf;
   end
@@ -2188,7 +2190,6 @@ if FimageMax>FimageMin then
   FimageC:=MaxWord/(FimageMax-FimageMin)
 else
   FimageC:=1;
-if FimageMin<0 then FimageMin:=0;
 ApplyBPM;
 ApplyFlat;
 if FimageDebayer then begin
