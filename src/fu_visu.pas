@@ -331,10 +331,10 @@ begin
 HistGraphAreaSeries1.Clear;
 if BtnClipRange.Down then begin
   if FZoomCurrentRange then begin
-    t:=abs(SpinEditMax.Value-SpinEditMin.Value)/5;
-    x:=max(SpinEditMin.MinValue,SpinEditMin.Value-t);
+    t:=abs(SpinEditMax.Value-SpinEditMin.Value)/3;
+    x:=max(FimageMin,SpinEditMin.Value-t);
     FZoomStart:=round(FimageC*(x-FimageMin));
-    x:=min(SpinEditMax.MaxValue,SpinEditMax.Value+t);
+    x:=min(FimageMax,SpinEditMax.Value+t);
     FZoomStop:=round(FimageC*(x-FimageMin));
   end
   else begin
@@ -605,7 +605,7 @@ begin
   if BtnClipRange.Down then
     ma:=FimageMin+(FZoomStart + p*(FZoomStop-FZoomStart))/FimageC
   else
-    ma:=SpinEditMax.minValue + p*(SpinEditMax.maxValue-SpinEditMax.minValue);
+    ma:=FimageMin + p*(FimageMax-FimageMin);
   LockSpinEdit:=true;
   SpinEditMax.Value:=ma;
   LockSpinEdit:=false;
@@ -620,7 +620,7 @@ begin
   if BtnClipRange.Down then
     mi:=FimageMin+(FZoomStart + p*(FZoomStop-FZoomStart))/FimageC
   else
-    mi:=SpinEditMin.minValue + p*SpinEditMin.maxValue;
+    mi:=FimageMin + p*FimageMax;
   LockSpinEdit:=true;
   SpinEditMin.Value:=mi;
   LockSpinEdit:=false;
@@ -663,7 +663,7 @@ begin
   if BtnClipRange.Down then
     mi:=FimageMin+(FZoomStart + p*(FZoomStop-FZoomStart))/FimageC
   else
-    mi:=SpinEditMin.minValue + p*SpinEditMin.maxValue;
+    mi:=FimageMin + p*FimageMax;
   case SpinEditMax.DecimalPlaces of
     0: fmt:=f0;
     1: fmt:=f1;
