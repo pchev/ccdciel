@@ -112,7 +112,7 @@ type
     FisFloatingPoint, FisFlipped, Finitialized: boolean;
     FimgMin, FimgMax: double;
     FHistStart,FHistStop,FZoomStart,FZoomStop: integer;
-    FBullsEye, LockSpinEdit, LockSpinInit, LockHistbar, FClipping, FInvert: Boolean;
+    FBullsEye, LockSpinEdit, LockSpinInit, LockHistbar, FClipping, FInvert, FZoomCurrentRange: Boolean;
     FZoom: double;
     LockRedraw: boolean;
     FRedraw: TNotifyEvent;
@@ -180,6 +180,7 @@ begin
  LockHistbar:=false;
  LockRedraw:=false;
  FisFlipped:=true;
+ FZoomCurrentRange:=false;
 end;
 
 destructor  Tf_visu.Destroy;
@@ -190,9 +191,15 @@ end;
 procedure Tf_visu.SetLang;
 begin
   Title.Caption:=rsVisualisatio;
-  HistGraph.Hint:=Format(rsHistogramOfT, [crlf]);
+  cbHistRange.Items[0]:=rsDataRange;
+  cbHistRange.Items[1]:=rsLow;
+  cbHistRange.Items[2]:=rsMedium;
+  cbHistRange.Items[3]:=rsHigh;
+  cbHistRange.Items[4]:=rsVeryHigh;
+  cbHistRange.Items[5]:=rsManual;
+  HistGraph.Hint:=rsHistogramOfT;
   BtnZoomAdjust.Hint:=rsZoomToAdjust;
-  HistBar.Hint:=rsImageLuminos;
+  HistBar.Hint:=rsClickAndMove;
   BtnZoom2.Hint:=rsZoomTwoTime;
   BtnZoom1.Hint:=rsZoomToOrigin;
   BtnZoom05.Hint:=rsZoomToHalfSi;
@@ -204,6 +211,11 @@ begin
   BtnFlipVert.Hint:=rsFlipTheImageV;
   BtnShowImage.Hint:=rsShowLastCapt;
   BtnClipRange.Hint:=rsHistogramFul;
+  BtnPinVisu.Hint:=rsDetachTheGra;
+  BtnZoomHist.Hint:=rsZoomTheHisto;
+  cbHistRange.Hint:=rsPredefinedHi;
+  SpinEditMin.Hint:=rsTheLowerLimi;
+  SpinEditMax.Hint:=rsTheUpperLimi;
 end;
 
 procedure Tf_visu.SetLimit(SetLevel:boolean);
@@ -288,6 +300,7 @@ procedure Tf_visu.DrawHistogram(f: TFits; SetLevel,ResetCursor: boolean);
 var i,iterations: integer;
 begin
 try
+if not setlevel then exit;
 LockSpinEdit:=true;
 FisFloatingPoint:=f.HeaderInfo.floatingpoint;
 FisFlipped:=f.HeaderInfo.roworder<>bottomup;
@@ -306,7 +319,6 @@ FZoomStop:=FHistStop;
 if Fmaxh=0 then exit;
 SetLimit(SetLevel);
 PlotHistogram;
-
 finally
   LockSpinEdit:=false;
 end;
@@ -314,19 +326,28 @@ end;
 
 procedure Tf_visu.PlotHistogram;
 var i,r: integer;
-    x: double;
+    x,t: double;
 begin
 HistGraphAreaSeries1.Clear;
 if BtnClipRange.Down then begin
-  FZoomStart:=FHistStart;
-  FZoomStop:=FHistStop;
-  r:=FHistStop-FHistStart;
+  if FZoomCurrentRange then begin
+    t:=abs(SpinEditMax.Value-SpinEditMin.Value)/5;
+    x:=max(SpinEditMin.MinValue,SpinEditMin.Value-t);
+    FZoomStart:=round(FimageC*(x-FimageMin));
+    x:=min(SpinEditMax.MaxValue,SpinEditMax.Value+t);
+    FZoomStop:=round(FimageC*(x-FimageMin));
+  end
+  else begin
+    FZoomStart:=FHistStart;
+    FZoomStop:=FHistStop;
+  end;
+  r:=FZoomStop-FZoomStart;
   for i:=0 to r-1  do begin
-    x:=Fhist[FHistStart+i];
+    x:=Fhist[FZoomStart+i];
     HistGraphAreaSeries1.Add(ln(x+1));
   end;
-  HistGraphMinLine.Position:=max(0,(FimgMin-FHistStart));
-  HistGraphMaxLine.Position:=min(r,(FimgMax-FHistStart));
+  HistGraphMinLine.Position:=max(0,(FimgMin-FZoomStart));
+  HistGraphMaxLine.Position:=min(r,(FimgMax-FZoomStart));
   HistGraph.Extent.XMin:=0;
   HistGraph.Extent.XMax:=r;
   HistGraph.Extent.UseXMax:=true;
@@ -342,7 +363,10 @@ else begin
   HistGraph.Extent.UseXMax:=false;
   HistGraph.Extent.UseXMin:=false;
 end;
+FZoomCurrentRange:=false;
 Finitialized:=true;
+SpinEditMaxChange(nil);
+SpinEditMinChange(nil);
 end;
 
 procedure Tf_visu.FrameEndDrag(Sender, Target: TObject; X, Y: Integer);
@@ -418,7 +442,11 @@ end;
 
 procedure Tf_visu.BtnZoomHistClick(Sender: TObject);
 begin
-  //todo
+  BtnClipRange.Down:=true;
+  FZoomCurrentRange:=true;
+  PlotHistogram;
+  SplitterMax.Left:=HistBarRight.left-1;
+  SplitterMin.Left:=HistBarLeft.left+1;
 end;
 
 procedure Tf_visu.cbHistRangeChange(Sender: TObject);
@@ -470,6 +498,7 @@ end;
 
 procedure Tf_visu.BtnClipRangeClick(Sender: TObject);
 begin
+  FZoomCurrentRange:=false;
   PlotHistogram;
 end;
 
@@ -659,7 +688,7 @@ begin
   if not Finitialized then exit;
   pt:=HistGraph.ImageToGraph(point(X,Y));
   if BtnClipRange.Down then begin
-    xpos:=FHistStart+pt.X;
+    xpos:=FZoomStart+pt.X;
   end
   else begin
     xpos:=pt.X

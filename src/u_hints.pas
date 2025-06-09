@@ -48,8 +48,7 @@ resourcestring
   rsKeepTheGraph = 'Keep the graph visible after autofocus is completed';
   rsStartImageLo = 'Start image loop centered on selected star';
   rsStartTheAuto = 'Start the auto-focus procedure';
-  rsHistogramOfT = 'Histogram of the current image.%sClick and move to adjust '
-    +'the visualisation threshold.';
+  rsHistogramOfT = 'Histogram of the current image';
   rsCreateANewEm = 'Create a new empty profile.%sWarning this also clear every'
     +' program preference for this new profile.%sUse the Copy button if you '
     +'want to configure a different equipment but keep the program options.';
@@ -167,7 +166,6 @@ resourcestring
   rsShowGuidingS = 'Show guiding statistics';
   rsGuidingHisto = 'Guiding history in arcsecond %s - blue: RA error %s - red: Dec error %s - yellow: Star mass';
   rsDoNotSetThis = 'Do not set this option if you don''t know exactly what you do and without careful testing';
-  rsImageLuminos = 'Image luminosity';
   rsCameraOffset = 'Camera offset';
   rsIfNotChecked = 'If not checked the program will never change the gain/offset value set in the driver setup';
   rsHistogramFul = 'Histogram full range or clipped to available data';
@@ -178,6 +176,12 @@ resourcestring
   rsThisOptionIs = 'This option is normally unchecked, use it only if you manage the pointing and autoguiding by script.';
   rsTheObjectMag = 'The object magnitude';
   rsSkipThisTarg = 'Skip this target if there is not enough time to do all the steps before the end time';
+  rsDetachTheGra = 'Detach the graph';
+  rsZoomTheHisto = 'Zoom the histogram to the current selection';
+  rsPredefinedHi = 'Predefined histogram truncation';
+  rsTheLowerLimi = 'The lower limit of histogram truncation';
+  rsTheUpperLimi = 'The upper limit of histogram truncation';
+  rsClickAndMove = 'Click and move to adjust the histogram truncation';
 
 implementation
 

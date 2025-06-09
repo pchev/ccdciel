@@ -278,7 +278,9 @@ object f_visu: Tf_visu
             Height = 22
             Top = 0
             Width = 28
+            Color = clDefault
             OnClick = BtnZoomHistClick
+            ParentFont = False
           end
           object PanelNoDisplay: TPanel
             Left = 145

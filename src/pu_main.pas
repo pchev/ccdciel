@@ -3118,6 +3118,7 @@ begin
   f_finder.BtnBullsEye.Glyph.Assign(btn);
   TBTabs.Images.GetBitmap(7, btn);
   f_visu.BtnClipRange.Glyph.Assign(btn);
+  TBTabs.Images.GetBitmap(16, btn);
   f_visu.BtnZoomHist.Glyph.Assign(btn);
   TBTabs.Images.GetBitmap(8, btn);
   f_visu.BtnClipping.Glyph.Assign(btn);

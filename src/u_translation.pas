@@ -1618,6 +1618,11 @@ resourcestring
   rsRemoveSpaceI = 'Remove space in object name';
   rsSequenceSepa = 'Sequence separator';
   rsHistogram = 'Histogram';
+  rsDataRange = 'Data range';
+  rsLow = 'Low';
+  rsMedium = 'Medium';
+  rsHigh = 'High';
+  rsVeryHigh = 'Very High';
 
 implementation
 
