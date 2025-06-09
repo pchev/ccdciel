@@ -49,6 +49,7 @@ type
     Gamma: TFloatSpinEditEx;
     HistGraphMaxLine: TConstantLine;
     HistGraphMinLine: TConstantLine;
+    LabelPos: TLabel;
     Panel1: TPanel;
     BtnZoomAdjust: TSpeedButton;
     HistBar: TPanel;
@@ -92,11 +93,13 @@ type
     procedure HistBarCenterClick(Sender: TObject);
     procedure HistBarLeftClick(Sender: TObject);
     procedure HistBarRightClick(Sender: TObject);
+    procedure HistGraphMouseMove(Sender: TObject; Shift: TShiftState; X, Y: Integer);
     procedure histminmaxClick(Sender: TObject);
     procedure Panel1Resize(Sender: TObject);
     procedure SpinEditMaxChange(Sender: TObject);
     procedure SpinEditMinChange(Sender: TObject);
     procedure SplitterMaxMoved(Sender: TObject);
+    procedure SplitterChangeBounds(Sender: TObject);
     procedure SplitterMinMoved(Sender: TObject);
     procedure TimerMinMaxTimer(Sender: TObject);
     procedure TimerRedrawTimer(Sender: TObject);
@@ -111,7 +114,6 @@ type
     FHistStart,FHistStop,FZoomStart,FZoomStop: integer;
     FBullsEye, LockSpinEdit, LockSpinInit, LockHistbar, FClipping, FInvert: Boolean;
     FZoom: double;
-    StartUpd,Updmax: boolean;
     LockRedraw: boolean;
     FRedraw: TNotifyEvent;
     FonZoom: TNotifyEvent;
@@ -170,8 +172,6 @@ begin
  ImgMin:=0;
  FimageC:=1;
  Fmaxh:=0;
- StartUpd:=false;
- Updmax:=false;
  FBullsEye:=false;
  FClipping:=false;
  FInvert:=false;
@@ -626,6 +626,61 @@ begin
   SplitterMaxMoved(Sender);
 end;
 
+procedure Tf_visu.SplitterChangeBounds(Sender: TObject);
+var p,mi: double;
+    txt,fmt: string;
+begin
+  p:=(TSplitter(Sender).Left-1)/HistBar.ClientWidth;
+  if BtnClipRange.Down then
+    mi:=FimageMin+(FZoomStart + p*(FZoomStop-FZoomStart))/FimageC
+  else
+    mi:=SpinEditMin.minValue + p*SpinEditMin.maxValue;
+  case SpinEditMax.DecimalPlaces of
+    0: fmt:=f0;
+    1: fmt:=f1;
+    2: fmt:=f2;
+    3: fmt:=f3;
+    4: fmt:=f4;
+    else fmt:=f1;
+  end;
+  txt:=rsHistogram+': '+FormatFloat(fmt,mi);
+  if LabelPos.Visible then
+    LabelPos.Caption:=txt
+  else
+    if Assigned(FShowHistogramPos) then
+       FShowHistogramPos(txt);
+end;
+
+procedure Tf_visu.HistGraphMouseMove(Sender: TObject; Shift: TShiftState; X, Y: Integer);
+var xpos,val: double;
+    pt: TDoublePoint;
+    txt,fmt: string;
+begin
+  if not Finitialized then exit;
+  pt:=HistGraph.ImageToGraph(point(X,Y));
+  if BtnClipRange.Down then begin
+    xpos:=FHistStart+pt.X;
+  end
+  else begin
+    xpos:=pt.X
+  end;
+  val:=FimageMin+xpos/FimageC;
+  case SpinEditMax.DecimalPlaces of
+    0: fmt:=f0;
+    1: fmt:=f1;
+    2: fmt:=f2;
+    3: fmt:=f3;
+    4: fmt:=f4;
+    else fmt:=f1;
+  end;
+  txt:=rsHistogram+': '+FormatFloat(fmt,val);
+  if LabelPos.Visible then
+    LabelPos.Caption:=txt
+  else
+    if Assigned(FShowHistogramPos) then
+       FShowHistogramPos(txt);
+end;
+
 procedure Tf_visu.BtnPinVisuClick(Sender: TObject);
 var f: TForm;
     x,y,w,h: integer;
@@ -647,6 +702,7 @@ begin
    else
      f.Height:=DoScaleY(200);
    f.Caption:=rsVisualisatio;
+   labelpos.Visible:=true;
    Panel1.Parent:=f;
    if (x>0)and(y>0) then begin
      f.Left:=x;
@@ -666,6 +722,7 @@ begin
   config.SetValue('/Visu/PosY',TForm(Sender).Top);
   config.SetValue('/Visu/PosW',TForm(Sender).Width);
   config.SetValue('/Visu/PosH',TForm(Sender).Height);
+  labelpos.Visible:=false;
   CloseAction:=caFree;
   Panel1.Parent:=self;
 end;

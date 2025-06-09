@@ -82,6 +82,7 @@ object f_visu: Tf_visu
             'TAChart'
           )
           Align = alClient
+          OnMouseMove = HistGraphMouseMove
           object HistGraphMinLine: TConstantLine
             Legend.Visible = False
             LineStyle = lsVertical
@@ -161,6 +162,7 @@ object f_visu: Tf_visu
           AutoSnap = False
           Color = clRed
           MinSize = 1
+          OnChangeBounds = SplitterChangeBounds
           OnMoved = SplitterMinMoved
           ParentColor = False
         end
@@ -174,6 +176,7 @@ object f_visu: Tf_visu
           AutoSnap = False
           Color = clGreen
           MinSize = 1
+          OnChangeBounds = SplitterChangeBounds
           OnMoved = SplitterMaxMoved
           ParentColor = False
           ResizeAnchor = akRight
@@ -514,6 +517,15 @@ object f_visu: Tf_visu
             OnClick = BtnPinVisuClick
             ParentFont = False
           end
+        end
+        object LabelPos: TLabel
+          Left = 0
+          Height = 18
+          Top = 104
+          Width = 7
+          Caption = '  '
+          ParentColor = False
+          Visible = False
         end
       end
     end

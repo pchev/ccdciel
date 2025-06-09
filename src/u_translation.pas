@@ -1617,6 +1617,7 @@ resourcestring
   rsUseAlternati = 'Use alternative solver';
   rsRemoveSpaceI = 'Remove space in object name';
   rsSequenceSepa = 'Sequence separator';
+  rsHistogram = 'Histogram';
 
 implementation
 
