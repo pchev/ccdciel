@@ -6,15 +6,15 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ccdciel\n"
 "Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
-"POT-Creation-Date: 2025-04-21 09:24+0000\n"
-"PO-Revision-Date: 2025-04-21 09:46+0000\n"
+"POT-Creation-Date: 2025-06-09 17:42+0000\n"
+"PO-Revision-Date: 2025-06-09 18:40+0000\n"
 "Last-Translator: Patrick Chevalley <Unknown>\n"
 "Language-Team: French <fr@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2025-04-21 09:48+0000\n"
-"X-Generator: Launchpad (build e76edd883483c71c468bb038e98836435de44530)\n"
+"X-Launchpad-Export-Date: 2025-06-09 18:44+0000\n"
+"X-Generator: Launchpad (build c425d5702ce6a53fe8d94ca38038ac108957fda2)\n"
 
 #: u_translation.rs2d
 msgid "2D"
@@ -1301,6 +1301,10 @@ msgstr "Image noire"
 msgid "Dark%snight"
 msgstr "Nuit%snoire"
 
+#: u_translation.rsdatarange
+msgid "Data range"
+msgstr "Données"
+
 #: u_translation.rsdate
 msgid "Date"
 msgstr "Date"
@@ -2369,9 +2373,17 @@ msgstr "Moniteur de focalisation par HFD: Réinitialisation. Effacement du HFD d
 msgid "HFD Focus Monitor: Threshold: %s%%, Ref: %s, %s-Image Avg: %s, HFD Delta: %s%%"
 msgstr "Moniteur de focalisation par HFD: Seuil: %s%%, Réf: %s, %s-Image Moy: %s, HFD Diff: %s%%"
 
+#: u_translation.rshigh
+msgid "High"
+msgstr "Haut"
+
 #: u_translation.rshighlightadu
 msgid "Highlight ADU"
 msgstr "ADU des hautes lumières"
+
+#: u_translation.rshistogram
+msgid "Histogram"
+msgstr "Histogramme"
 
 #: u_translation.rshistory
 msgid "History"
@@ -2738,6 +2750,10 @@ msgstr "Longitude"
 msgid "Loop"
 msgstr "Boucle"
 
+#: u_translation.rslow
+msgid "Low"
+msgstr "Bas"
+
 #: u_translation.rslowqualityim
 msgid "Low quality image scaling"
 msgstr "Basse qualité de mise à l'échelle des images"
@@ -2934,6 +2950,10 @@ msgstr "Mesure de la nouvelle position"
 #, object-pascal-format
 msgid "%sMedian:%s"
 msgstr "%sMédiane:%s"
+
+#: u_translation.rsmedium
+msgid "Medium"
+msgstr "Moyen"
 
 #: u_translation.rsmeridian
 msgid "Meridian"
@@ -6104,6 +6124,10 @@ msgstr "Log détaillé des périphériques"
 #: u_translation.rsverticalcorr
 msgid "Vertical correction :"
 msgstr "Correction verticale :"
+
+#: u_translation.rsveryhigh
+msgid "Very High"
+msgstr "Très haut"
 
 #: u_translation.rsvideo
 msgid "Video"

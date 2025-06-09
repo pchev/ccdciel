@@ -6,15 +6,15 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ccdciel\n"
 "Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
-"POT-Creation-Date: 2025-04-21 09:26+0000\n"
+"POT-Creation-Date: 2025-06-09 17:43+0000\n"
 "PO-Revision-Date: 2020-08-06 21:07+0000\n"
 "Last-Translator: Víctor R. Ruiz <Unknown>\n"
 "Language-Team: Spanish <es@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2025-04-21 09:48+0000\n"
-"X-Generator: Launchpad (build e76edd883483c71c468bb038e98836435de44530)\n"
+"X-Launchpad-Export-Date: 2025-06-09 18:44+0000\n"
+"X-Generator: Launchpad (build c425d5702ce6a53fe8d94ca38038ac108957fda2)\n"
 
 #: u_hints.rsactivateback
 #, object-pascal-format
@@ -91,6 +91,10 @@ msgstr "Ángulo de posición de la cámara"
 msgid "Clear the sequence completion status"
 msgstr "Limpiar el estado de completitud de la secuencia"
 
+#: u_hints.rsclickandmove
+msgid "Click and move to adjust the histogram truncation"
+msgstr ""
+
 #: u_hints.rsclicktosetva
 msgid "Click to set value for all the targets"
 msgstr "Clic para establecer el valor de todos los objetivos"
@@ -142,6 +146,10 @@ msgstr "Borrar la fila seleccionada de la lista."
 msgid "Delete this profile and associated program preference."
 msgstr "Borrar este perfil y las preferencias del programa asociadas."
 
+#: u_hints.rsdetachthegra
+msgid "Detach the graph"
+msgstr ""
+
 #: u_hints.rsditheraftert
 msgid "Dither on the specified frame interval"
 msgstr "Intepolar en el intervalo especificado"
@@ -188,9 +196,8 @@ msgid "Histogram full range or clipped to available data"
 msgstr ""
 
 #: u_hints.rshistogramoft
-#, object-pascal-format
-msgid "Histogram of the current image.%sClick and move to adjust the visualisation threshold."
-msgstr "Histograma de la imagen actual.%sHaga clic y mueva para ajustar el umbral de visualización."
+msgid "Histogram of the current image"
+msgstr ""
 
 #: u_hints.rshistoryofthe
 msgid "History of the last FWHM and Intensity measurement"
@@ -207,10 +214,6 @@ msgstr ""
 #: u_hints.rsiftheimageis
 msgid "If the image is now focused, click this button to get the current focuser position"
 msgstr "Si la imagen está ahora enfocada, haga clic en el botón para obtener la posición actual del enfocador"
-
-#: u_hints.rsimageluminos
-msgid "Image luminosity"
-msgstr "Luminosidad de imagen"
 
 #: u_hints.rsincrementste
 msgid "Increment step for the inward or outward movement"
@@ -268,6 +271,10 @@ msgstr ""
 #: u_hints.rsplanetariums2
 msgid "Planetarium status"
 msgstr "Estado planetario"
+
+#: u_hints.rspredefinedhi
+msgid "Predefined histogram truncation"
+msgstr ""
 
 #: u_hints.rspriortoslewi
 #, object-pascal-format
@@ -455,6 +462,10 @@ msgstr "El perfil del horizonte utilizado para calcular la visibilidad del objet
 msgid "The list of target to process in sequence."
 msgstr "La lista de objetivos para procesar en secuencia."
 
+#: u_hints.rsthelowerlimi
+msgid "The lower limit of histogram truncation"
+msgstr ""
+
 #: u_hints.rsthemagnitude
 #, object-pascal-format
 msgid "The magnitude of the star used to run the autofocus.%sUsing a faint star can minimize the telescope movement but prefer the brightest to avoid trouble with nearby stars."
@@ -532,6 +543,10 @@ msgstr "El tipo de fotograma"
 msgid "The Unix path equivalent to the Elbrus Images folder."
 msgstr "La ruta Unix equivalente a la carpeta"
 
+#: u_hints.rstheupperlimi
+msgid "The upper limit of histogram truncation"
+msgstr ""
+
 #: u_hints.rsthisallowtor
 msgid "This allow to restart an interrupted sequence at the point it was stopped"
 msgstr "Esto le permitirá reiniciar una secuencia interrumpida en el punto donde se detuvo."
@@ -578,6 +593,10 @@ msgstr "Esperar a una noche sin luna"
 #: u_hints.rswaittothisti
 msgid "Wait to this time before to start to process the list."
 msgstr "Esperar este tiempo antes de comenzar a procesar la lista."
+
+#: u_hints.rszoomthehisto
+msgid "Zoom the histogram to the current selection"
+msgstr ""
 
 #: u_hints.rszoomtoadjust
 msgid "Zoom to adjust in window"

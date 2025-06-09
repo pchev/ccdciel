@@ -6,15 +6,15 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ccdciel\n"
 "Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
-"POT-Creation-Date: 2025-04-21 09:24+0000\n"
-"PO-Revision-Date: 2025-01-26 13:04+0000\n"
+"POT-Creation-Date: 2025-06-09 17:42+0000\n"
+"PO-Revision-Date: 2025-04-21 18:43+0000\n"
 "Last-Translator: Sergey Tarantsov <tsn-ast@yandex.ru>\n"
 "Language-Team: Russian <ru@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2025-04-21 09:48+0000\n"
-"X-Generator: Launchpad (build e76edd883483c71c468bb038e98836435de44530)\n"
+"X-Launchpad-Export-Date: 2025-06-09 18:44+0000\n"
+"X-Generator: Launchpad (build c425d5702ce6a53fe8d94ca38038ac108957fda2)\n"
 
 #: u_translation.rs2d
 msgid "2D"
@@ -1301,6 +1301,10 @@ msgstr "Дарк"
 msgid "Dark%snight"
 msgstr "Тёмная%sночь"
 
+#: u_translation.rsdatarange
+msgid "Data range"
+msgstr ""
+
 #: u_translation.rsdate
 msgid "Date"
 msgstr "Дата"
@@ -1807,7 +1811,7 @@ msgstr "Смещение точки фокуса (не изменять без �
 
 #: u_translation.rsexportcsv
 msgid "Export CSV"
-msgstr ""
+msgstr "Экспорт CSV"
 
 #: u_translation.rsexposure
 msgid "Exposure"
@@ -1939,7 +1943,7 @@ msgstr "Камера-искатель"
 
 #: u_translation.rsfinderfocall
 msgid "Finder focal length"
-msgstr ""
+msgstr "Фокусное расстояние искателя"
 
 #: u_translation.rsfit
 msgid "Fit"
@@ -2369,9 +2373,17 @@ msgstr "Монитор фокусировки HFD: сброс. Очистка э
 msgid "HFD Focus Monitor: Threshold: %s%%, Ref: %s, %s-Image Avg: %s, HFD Delta: %s%%"
 msgstr "Монитор фокусировки HFD: Порог: %s%%, Ref: %s, %s-Image Avg: %s, Дельта HFD: %s%%"
 
+#: u_translation.rshigh
+msgid "High"
+msgstr ""
+
 #: u_translation.rshighlightadu
 msgid "Highlight ADU"
 msgstr "Света ADU"
+
+#: u_translation.rshistogram
+msgid "Histogram"
+msgstr ""
 
 #: u_translation.rshistory
 msgid "History"
@@ -2495,7 +2507,7 @@ msgstr "Лист наблюдений"
 
 #: u_translation.rsimportcsv
 msgid "Import CSV"
-msgstr ""
+msgstr "Импорт CSV"
 
 #: u_translation.rsin
 msgid "In"
@@ -2738,6 +2750,10 @@ msgstr "Долгота"
 msgid "Loop"
 msgstr "Цикл"
 
+#: u_translation.rslow
+msgid "Low"
+msgstr ""
+
 #: u_translation.rslowqualityim
 msgid "Low quality image scaling"
 msgstr "Понизить качество изображений"
@@ -2786,7 +2802,7 @@ msgstr "Управлять усилением и смещением, если д
 
 #: u_translation.rsmandatorysta
 msgid "Mandatory start time"
-msgstr ""
+msgstr "Обязательное время начала"
 
 #: u_translation.rsmanual
 msgid "Manual"
@@ -2934,6 +2950,10 @@ msgstr "Измерение новой позиции"
 #, object-pascal-format
 msgid "%sMedian:%s"
 msgstr "%sMedian:%s"
+
+#: u_translation.rsmedium
+msgid "Medium"
+msgstr ""
 
 #: u_translation.rsmeridian
 msgid "Meridian"
@@ -5972,7 +5992,7 @@ msgstr "Теущее задание обновлено без остановки
 
 #: u_translation.rsusealternati
 msgid "Use alternative solver"
-msgstr ""
+msgstr "Альтернативный солвер"
 
 #: u_translation.rsuseasfallbac
 msgid "Use as fallback if other software fail"
@@ -6104,6 +6124,10 @@ msgstr "Подробный лог устройства"
 #: u_translation.rsverticalcorr
 msgid "Vertical correction :"
 msgstr "Коррекция по вертикали:"
+
+#: u_translation.rsveryhigh
+msgid "Very High"
+msgstr ""
 
 #: u_translation.rsvideo
 msgid "Video"

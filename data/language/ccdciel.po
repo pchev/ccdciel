@@ -6065,3 +6065,27 @@ msgstr ""
 msgid "Sequence separator"
 msgstr ""
 
+#: u_translation:rshistogram
+msgid "Histogram"
+msgstr ""
+
+#: u_translation:rsdatarange
+msgid "Data range"
+msgstr ""
+
+#: u_translation:rslow
+msgid "Low"
+msgstr ""
+
+#: u_translation:rsmedium
+msgid "Medium"
+msgstr ""
+
+#: u_translation:rshigh
+msgid "High"
+msgstr ""
+
+#: u_translation:rsveryhigh
+msgid "Very High"
+msgstr ""
+

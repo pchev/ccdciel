@@ -6,15 +6,15 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ccdciel\n"
 "Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
-"POT-Creation-Date: 2025-04-21 09:26+0000\n"
+"POT-Creation-Date: 2025-06-09 17:43+0000\n"
 "PO-Revision-Date: 2024-12-21 17:04+0000\n"
 "Last-Translator: Sergey Tarantsov <tsn-ast@yandex.ru>\n"
 "Language-Team: Russian <ru@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2025-04-21 09:48+0000\n"
-"X-Generator: Launchpad (build e76edd883483c71c468bb038e98836435de44530)\n"
+"X-Launchpad-Export-Date: 2025-06-09 18:44+0000\n"
+"X-Generator: Launchpad (build c425d5702ce6a53fe8d94ca38038ac108957fda2)\n"
 
 #: u_hints.rsactivateback
 #, object-pascal-format
@@ -91,6 +91,10 @@ msgstr "Позиционный угол сенсора камеры"
 msgid "Clear the sequence completion status"
 msgstr "Убрать статус выполнения задания"
 
+#: u_hints.rsclickandmove
+msgid "Click and move to adjust the histogram truncation"
+msgstr ""
+
 #: u_hints.rsclicktosetva
 msgid "Click to set value for all the targets"
 msgstr "Нажмите, чтобы установить значение для всех объектов"
@@ -142,6 +146,10 @@ msgstr "Удалить выбранную строку из списка"
 msgid "Delete this profile and associated program preference."
 msgstr "Удалить этот профиль и связанные настройки программы."
 
+#: u_hints.rsdetachthegra
+msgid "Detach the graph"
+msgstr ""
+
 #: u_hints.rsditheraftert
 msgid "Dither on the specified frame interval"
 msgstr "Делать подвижки после ряда снимков"
@@ -188,9 +196,8 @@ msgid "Histogram full range or clipped to available data"
 msgstr "Полная или обрезанная гистограмма"
 
 #: u_hints.rshistogramoft
-#, object-pascal-format
-msgid "Histogram of the current image.%sClick and move to adjust the visualisation threshold."
-msgstr "Гистограмма текущего изображения.%sНажмите и переместите, чтобы настроить порог визуализации."
+msgid "Histogram of the current image"
+msgstr ""
 
 #: u_hints.rshistoryofthe
 msgid "History of the last FWHM and Intensity measurement"
@@ -207,10 +214,6 @@ msgstr "Если не отмечено, программа не будет из�
 #: u_hints.rsiftheimageis
 msgid "If the image is now focused, click this button to get the current focuser position"
 msgstr "Если изображение сфокусировано, нажмите эту кнопку, чтобы получить текущую позицию фокусера"
-
-#: u_hints.rsimageluminos
-msgid "Image luminosity"
-msgstr "Яркость изображения"
 
 #: u_hints.rsincrementste
 msgid "Increment step for the inward or outward movement"
@@ -268,6 +271,10 @@ msgstr "Биннинг"
 #: u_hints.rsplanetariums2
 msgid "Planetarium status"
 msgstr "Статус планетария"
+
+#: u_hints.rspredefinedhi
+msgid "Predefined histogram truncation"
+msgstr ""
 
 #: u_hints.rspriortoslewi
 #, object-pascal-format
@@ -455,6 +462,10 @@ msgstr "Профиль горизонта, используемый для вы�
 msgid "The list of target to process in sequence."
 msgstr "Список объектов для обработки в задании"
 
+#: u_hints.rsthelowerlimi
+msgid "The lower limit of histogram truncation"
+msgstr ""
+
 #: u_hints.rsthemagnitude
 #, object-pascal-format
 msgid "The magnitude of the star used to run the autofocus.%sUsing a faint star can minimize the telescope movement but prefer the brightest to avoid trouble with nearby stars."
@@ -532,6 +543,10 @@ msgstr "Тип кадра"
 msgid "The Unix path equivalent to the Elbrus Images folder."
 msgstr "Путь Unix, эквивалентный папке Elbrus Images."
 
+#: u_hints.rstheupperlimi
+msgid "The upper limit of histogram truncation"
+msgstr ""
+
 #: u_hints.rsthisallowtor
 msgid "This allow to restart an interrupted sequence at the point it was stopped"
 msgstr "Позволяет перезапустить прерванное задание с того места, где оно было остановлено"
@@ -578,6 +593,10 @@ msgstr "Ждать безлунной ночи"
 #: u_hints.rswaittothisti
 msgid "Wait to this time before to start to process the list."
 msgstr "Ожидать этого времени, прежде чем начать обработку списка"
+
+#: u_hints.rszoomthehisto
+msgid "Zoom the histogram to the current selection"
+msgstr ""
 
 #: u_hints.rszoomtoadjust
 msgid "Zoom to adjust in window"

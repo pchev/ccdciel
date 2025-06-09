@@ -6,15 +6,15 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ccdciel\n"
 "Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
-"POT-Creation-Date: 2025-04-21 09:26+0000\n"
+"POT-Creation-Date: 2025-06-09 17:43+0000\n"
 "PO-Revision-Date: 2025-01-22 14:44+0000\n"
 "Last-Translator: Zachary Wu <Unknown>\n"
 "Language-Team: Chinese (Simplified) <zh_CN@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2025-04-21 09:48+0000\n"
-"X-Generator: Launchpad (build e76edd883483c71c468bb038e98836435de44530)\n"
+"X-Launchpad-Export-Date: 2025-06-09 18:44+0000\n"
+"X-Generator: Launchpad (build c425d5702ce6a53fe8d94ca38038ac108957fda2)\n"
 
 #: u_hints.rsactivateback
 #, object-pascal-format
@@ -91,6 +91,10 @@ msgstr "相机位置角"
 msgid "Clear the sequence completion status"
 msgstr "清楚序列完成状态"
 
+#: u_hints.rsclickandmove
+msgid "Click and move to adjust the histogram truncation"
+msgstr ""
+
 #: u_hints.rsclicktosetva
 msgid "Click to set value for all the targets"
 msgstr "点击以设置所有目标的值"
@@ -142,6 +146,10 @@ msgstr "从列表中删除选定的行。"
 msgid "Delete this profile and associated program preference."
 msgstr "删除此配置文件和关联的程序首选项。"
 
+#: u_hints.rsdetachthegra
+msgid "Detach the graph"
+msgstr ""
+
 #: u_hints.rsditheraftert
 msgid "Dither on the specified frame interval"
 msgstr "在指定的帧间隔中抖动"
@@ -188,9 +196,8 @@ msgid "Histogram full range or clipped to available data"
 msgstr "直方图全范围或裁剪到可用数据"
 
 #: u_hints.rshistogramoft
-#, object-pascal-format
-msgid "Histogram of the current image.%sClick and move to adjust the visualisation threshold."
-msgstr "当前图像的直方图。%s单击并移动以调整视觉效果阈值。"
+msgid "Histogram of the current image"
+msgstr ""
 
 #: u_hints.rshistoryofthe
 msgid "History of the last FWHM and Intensity measurement"
@@ -207,10 +214,6 @@ msgstr "如果未选中，程序将永远不会更改驱动设置中设置的增
 #: u_hints.rsiftheimageis
 msgid "If the image is now focused, click this button to get the current focuser position"
 msgstr "如果图像现在已合焦，单击此按钮可获取当前调焦器位置"
-
-#: u_hints.rsimageluminos
-msgid "Image luminosity"
-msgstr "图像光度"
 
 #: u_hints.rsincrementste
 msgid "Increment step for the inward or outward movement"
@@ -268,6 +271,10 @@ msgstr "像素合并"
 #: u_hints.rsplanetariums2
 msgid "Planetarium status"
 msgstr "星图状态"
+
+#: u_hints.rspredefinedhi
+msgid "Predefined histogram truncation"
+msgstr ""
 
 #: u_hints.rspriortoslewi
 #, object-pascal-format
@@ -455,6 +462,10 @@ msgstr "用于计算天体可见性的地平线配置。此文件与Cartes du Ci
 msgid "The list of target to process in sequence."
 msgstr "要按顺序处理的目标列表。"
 
+#: u_hints.rsthelowerlimi
+msgid "The lower limit of histogram truncation"
+msgstr ""
+
 #: u_hints.rsthemagnitude
 #, object-pascal-format
 msgid "The magnitude of the star used to run the autofocus.%sUsing a faint star can minimize the telescope movement but prefer the brightest to avoid trouble with nearby stars."
@@ -532,6 +543,10 @@ msgstr "帧类型"
 msgid "The Unix path equivalent to the Elbrus Images folder."
 msgstr "等同于Elbrus图像目录的Unix路径。"
 
+#: u_hints.rstheupperlimi
+msgid "The upper limit of histogram truncation"
+msgstr ""
+
 #: u_hints.rsthisallowtor
 msgid "This allow to restart an interrupted sequence at the point it was stopped"
 msgstr "这允许在它停止的点重新启动一个中断的序列"
@@ -578,6 +593,10 @@ msgstr "等一个没有月亮的夜晚"
 #: u_hints.rswaittothisti
 msgid "Wait to this time before to start to process the list."
 msgstr "等到这个时间再开始处理列表。"
+
+#: u_hints.rszoomthehisto
+msgid "Zoom the histogram to the current selection"
+msgstr ""
 
 #: u_hints.rszoomtoadjust
 msgid "Zoom to adjust in window"

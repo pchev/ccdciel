@@ -6,15 +6,15 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ccdciel\n"
 "Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
-"POT-Creation-Date: 2025-04-21 09:26+0000\n"
-"PO-Revision-Date: 2025-01-15 10:52+0000\n"
+"POT-Creation-Date: 2025-06-09 17:43+0000\n"
+"PO-Revision-Date: 2025-06-09 18:30+0000\n"
 "Last-Translator: Patrick Chevalley <Unknown>\n"
 "Language-Team: French <fr@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2025-04-21 09:48+0000\n"
-"X-Generator: Launchpad (build e76edd883483c71c468bb038e98836435de44530)\n"
+"X-Launchpad-Export-Date: 2025-06-09 18:44+0000\n"
+"X-Generator: Launchpad (build c425d5702ce6a53fe8d94ca38038ac108957fda2)\n"
 
 #: u_hints.rsactivateback
 #, object-pascal-format
@@ -91,6 +91,10 @@ msgstr "Angle de position de la caméra"
 msgid "Clear the sequence completion status"
 msgstr "Effacer l'état d'avancement de la séquence"
 
+#: u_hints.rsclickandmove
+msgid "Click and move to adjust the histogram truncation"
+msgstr "Cliquez et déplacez pour ajuster la troncation"
+
 #: u_hints.rsclicktosetva
 msgid "Click to set value for all the targets"
 msgstr "Cliquez pour définir la valeur pour tous les objets"
@@ -142,6 +146,10 @@ msgstr "Supprimer la ligne sélectionnée de la liste"
 msgid "Delete this profile and associated program preference."
 msgstr "Supprimer ce profil et la préférence de programme associée"
 
+#: u_hints.rsdetachthegra
+msgid "Detach the graph"
+msgstr "Détacher le graphique"
+
 #: u_hints.rsditheraftert
 msgid "Dither on the specified frame interval"
 msgstr "Dither selon l’intervalle spécifié"
@@ -188,9 +196,8 @@ msgid "Histogram full range or clipped to available data"
 msgstr "Plage complète de l'histogramme ou coupée aux données disponibles"
 
 #: u_hints.rshistogramoft
-#, object-pascal-format
-msgid "Histogram of the current image.%sClick and move to adjust the visualisation threshold."
-msgstr "Histogramme de l'image courante.%sCliquez et déplacez pour ajuster le seuil de visualisation."
+msgid "Histogram of the current image"
+msgstr "Histogramme de l'image"
 
 #: u_hints.rshistoryofthe
 msgid "History of the last FWHM and Intensity measurement"
@@ -207,10 +214,6 @@ msgstr "Si ce n'est pas coché le programme ne modifiera pas le gain/offset rég
 #: u_hints.rsiftheimageis
 msgid "If the image is now focused, click this button to get the current focuser position"
 msgstr "Si l'image est maintenant mise au point, cliquez sur ce bouton pour obtenir la position actuelle du focuser"
-
-#: u_hints.rsimageluminos
-msgid "Image luminosity"
-msgstr "Luminosité de l'image"
 
 #: u_hints.rsincrementste
 msgid "Increment step for the inward or outward movement"
@@ -268,6 +271,10 @@ msgstr "Pixel binning"
 #: u_hints.rsplanetariums2
 msgid "Planetarium status"
 msgstr "Etat du planétarium"
+
+#: u_hints.rspredefinedhi
+msgid "Predefined histogram truncation"
+msgstr "Troncation d'histogramme prédéfinie"
 
 #: u_hints.rspriortoslewi
 #, object-pascal-format
@@ -455,6 +462,10 @@ msgstr "Profil d'horizon utilisé pour calculer la visibilité de l'objet. Ce fi
 msgid "The list of target to process in sequence."
 msgstr "La liste des objets à traiter en séquence"
 
+#: u_hints.rsthelowerlimi
+msgid "The lower limit of histogram truncation"
+msgstr "La limite basse de la troncation de l'histogramme"
+
 #: u_hints.rsthemagnitude
 #, object-pascal-format
 msgid "The magnitude of the star used to run the autofocus.%sUsing a faint star can minimize the telescope movement but prefer the brightest to avoid trouble with nearby stars."
@@ -532,6 +543,10 @@ msgstr "Le type d'image"
 msgid "The Unix path equivalent to the Elbrus Images folder."
 msgstr "Le chemin Unix équivalent au dossier des images Elbrus"
 
+#: u_hints.rstheupperlimi
+msgid "The upper limit of histogram truncation"
+msgstr "La limite haute de la troncation de l'histogramme"
+
 #: u_hints.rsthisallowtor
 msgid "This allow to restart an interrupted sequence at the point it was stopped"
 msgstr "Ceci permet de redémarrer une séquence interrompue au point où elle a été arrêtée"
@@ -578,6 +593,10 @@ msgstr "Attendre la nuit sans lune"
 #: u_hints.rswaittothisti
 msgid "Wait to this time before to start to process the list."
 msgstr "Attendre cette heure avant de commencer à traiter la liste"
+
+#: u_hints.rszoomthehisto
+msgid "Zoom the histogram to the current selection"
+msgstr "Zoomer l'histogramme sur la sélection actuelle"
 
 #: u_hints.rszoomtoadjust
 msgid "Zoom to adjust in window"

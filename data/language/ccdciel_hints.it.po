@@ -6,15 +6,15 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ccdciel\n"
 "Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
-"POT-Creation-Date: 2025-04-21 09:26+0000\n"
+"POT-Creation-Date: 2025-06-09 17:43+0000\n"
 "PO-Revision-Date: 2019-12-15 12:59+0000\n"
 "Last-Translator: Patrick Chevalley <Unknown>\n"
 "Language-Team: Italian <it@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2025-04-21 09:48+0000\n"
-"X-Generator: Launchpad (build e76edd883483c71c468bb038e98836435de44530)\n"
+"X-Launchpad-Export-Date: 2025-06-09 18:44+0000\n"
+"X-Generator: Launchpad (build c425d5702ce6a53fe8d94ca38038ac108957fda2)\n"
 
 #: u_hints.rsactivateback
 #, object-pascal-format
@@ -91,6 +91,10 @@ msgstr ""
 msgid "Clear the sequence completion status"
 msgstr ""
 
+#: u_hints.rsclickandmove
+msgid "Click and move to adjust the histogram truncation"
+msgstr ""
+
 #: u_hints.rsclicktosetva
 msgid "Click to set value for all the targets"
 msgstr ""
@@ -142,6 +146,10 @@ msgstr ""
 msgid "Delete this profile and associated program preference."
 msgstr ""
 
+#: u_hints.rsdetachthegra
+msgid "Detach the graph"
+msgstr ""
+
 #: u_hints.rsditheraftert
 msgid "Dither on the specified frame interval"
 msgstr ""
@@ -188,8 +196,7 @@ msgid "Histogram full range or clipped to available data"
 msgstr ""
 
 #: u_hints.rshistogramoft
-#, object-pascal-format
-msgid "Histogram of the current image.%sClick and move to adjust the visualisation threshold."
+msgid "Histogram of the current image"
 msgstr ""
 
 #: u_hints.rshistoryofthe
@@ -206,10 +213,6 @@ msgstr ""
 
 #: u_hints.rsiftheimageis
 msgid "If the image is now focused, click this button to get the current focuser position"
-msgstr ""
-
-#: u_hints.rsimageluminos
-msgid "Image luminosity"
 msgstr ""
 
 #: u_hints.rsincrementste
@@ -267,6 +270,10 @@ msgstr ""
 
 #: u_hints.rsplanetariums2
 msgid "Planetarium status"
+msgstr ""
+
+#: u_hints.rspredefinedhi
+msgid "Predefined histogram truncation"
 msgstr ""
 
 #: u_hints.rspriortoslewi
@@ -455,6 +462,10 @@ msgstr ""
 msgid "The list of target to process in sequence."
 msgstr ""
 
+#: u_hints.rsthelowerlimi
+msgid "The lower limit of histogram truncation"
+msgstr ""
+
 #: u_hints.rsthemagnitude
 #, object-pascal-format
 msgid "The magnitude of the star used to run the autofocus.%sUsing a faint star can minimize the telescope movement but prefer the brightest to avoid trouble with nearby stars."
@@ -532,6 +543,10 @@ msgstr ""
 msgid "The Unix path equivalent to the Elbrus Images folder."
 msgstr ""
 
+#: u_hints.rstheupperlimi
+msgid "The upper limit of histogram truncation"
+msgstr ""
+
 #: u_hints.rsthisallowtor
 msgid "This allow to restart an interrupted sequence at the point it was stopped"
 msgstr ""
@@ -577,6 +592,10 @@ msgstr ""
 
 #: u_hints.rswaittothisti
 msgid "Wait to this time before to start to process the list."
+msgstr ""
+
+#: u_hints.rszoomthehisto
+msgid "Zoom the histogram to the current selection"
 msgstr ""
 
 #: u_hints.rszoomtoadjust

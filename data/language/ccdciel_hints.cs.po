@@ -2,15 +2,15 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ccdceil\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-04-21 09:26+0000\n"
+"POT-Creation-Date: 2025-06-09 17:43+0000\n"
 "PO-Revision-Date: 2025-01-15 15:25+0000\n"
 "Last-Translator: Stanislav Holub <Unknown>\n"
 "Language-Team: Czech <cz@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2025-04-21 09:48+0000\n"
-"X-Generator: Launchpad (build e76edd883483c71c468bb038e98836435de44530)\n"
+"X-Launchpad-Export-Date: 2025-06-09 18:44+0000\n"
+"X-Generator: Launchpad (build c425d5702ce6a53fe8d94ca38038ac108957fda2)\n"
 "Language: cs\n"
 
 #: u_hints.rsactivateback
@@ -88,6 +88,10 @@ msgstr "Úhel polohy kamery"
 msgid "Clear the sequence completion status"
 msgstr "Vymazání stavu dokončení sekvence"
 
+#: u_hints.rsclickandmove
+msgid "Click and move to adjust the histogram truncation"
+msgstr ""
+
 #: u_hints.rsclicktosetva
 msgid "Click to set value for all the targets"
 msgstr "Klikem nastavit hodnotu pro všechny cíle"
@@ -139,6 +143,10 @@ msgstr "Odstranit vybraný řádek ze seznamu."
 msgid "Delete this profile and associated program preference."
 msgstr "Odstraňit profil a přidružené předvolby programu."
 
+#: u_hints.rsdetachthegra
+msgid "Detach the graph"
+msgstr ""
+
 #: u_hints.rsditheraftert
 msgid "Dither on the specified frame interval"
 msgstr "Dithering po sérii snímku"
@@ -185,9 +193,8 @@ msgid "Histogram full range or clipped to available data"
 msgstr "Histogram v plném rozsahu nebo oříznutý na dostupná data"
 
 #: u_hints.rshistogramoft
-#, object-pascal-format
-msgid "Histogram of the current image.%sClick and move to adjust the visualisation threshold."
-msgstr "Histogram aktuálního snímku.%sKliknutím a posunutím upravíte práh vizualizace."
+msgid "Histogram of the current image"
+msgstr ""
 
 #: u_hints.rshistoryofthe
 msgid "History of the last FWHM and Intensity measurement"
@@ -204,10 +211,6 @@ msgstr "Pokud není zaškrtnuto, program nezmění hodnotu zesílení/offsetu na
 #: u_hints.rsiftheimageis
 msgid "If the image is now focused, click this button to get the current focuser position"
 msgstr "Pokud je teď snímek zaostřen, kliknutím na toto tlačítko získáte aktuální polohu zaostřovače"
-
-#: u_hints.rsimageluminos
-msgid "Image luminosity"
-msgstr "Jas Snímku"
 
 #: u_hints.rsincrementste
 msgid "Increment step for the inward or outward movement"
@@ -265,6 +268,10 @@ msgstr "Binning"
 #: u_hints.rsplanetariums2
 msgid "Planetarium status"
 msgstr "Stav planetária"
+
+#: u_hints.rspredefinedhi
+msgid "Predefined histogram truncation"
+msgstr ""
 
 #: u_hints.rspriortoslewi
 #, object-pascal-format
@@ -452,6 +459,10 @@ msgstr "Profil horizontu použitý pro výpočet viditelnosti objektu. Tento sou
 msgid "The list of target to process in sequence."
 msgstr "Seznam cílů, které mají být zpracovávány postupně."
 
+#: u_hints.rsthelowerlimi
+msgid "The lower limit of histogram truncation"
+msgstr ""
+
 #: u_hints.rsthemagnitude
 #, object-pascal-format
 msgid "The magnitude of the star used to run the autofocus.%sUsing a faint star can minimize the telescope movement but prefer the brightest to avoid trouble with nearby stars."
@@ -529,6 +540,10 @@ msgstr "Typ snímku"
 msgid "The Unix path equivalent to the Elbrus Images folder."
 msgstr "Cesta Unix ekvivalentní ke složce Elbrus Images."
 
+#: u_hints.rstheupperlimi
+msgid "The upper limit of histogram truncation"
+msgstr ""
+
 #: u_hints.rsthisallowtor
 msgid "This allow to restart an interrupted sequence at the point it was stopped"
 msgstr "To umožňuje restartování přerušené sekvence v bodě, kdy byla zastavena"
@@ -575,6 +590,10 @@ msgstr "Počkat na noc bez Měsíce"
 #: u_hints.rswaittothisti
 msgid "Wait to this time before to start to process the list."
 msgstr "Vyčkat do času, než se začne zpracovávat seznam."
+
+#: u_hints.rszoomthehisto
+msgid "Zoom the histogram to the current selection"
+msgstr ""
 
 #: u_hints.rszoomtoadjust
 msgid "Zoom to adjust in window"

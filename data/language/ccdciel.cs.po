@@ -2,15 +2,15 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ccdciel\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-04-21 09:24+0000\n"
-"PO-Revision-Date: 2025-04-21 05:39+0000\n"
+"POT-Creation-Date: 2025-06-09 17:42+0000\n"
+"PO-Revision-Date: 2025-04-24 06:31+0000\n"
 "Last-Translator: Stanislav Holub <Unknown>\n"
 "Language-Team: Czech <cz@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2025-04-21 09:48+0000\n"
-"X-Generator: Launchpad (build e76edd883483c71c468bb038e98836435de44530)\n"
+"X-Launchpad-Export-Date: 2025-06-09 18:44+0000\n"
+"X-Generator: Launchpad (build c425d5702ce6a53fe8d94ca38038ac108957fda2)\n"
 "Language: cs\n"
 
 #: u_translation.rs2d
@@ -1298,6 +1298,10 @@ msgstr "Dark snímek"
 msgid "Dark%snight"
 msgstr "Tmavá%snoc"
 
+#: u_translation.rsdatarange
+msgid "Data range"
+msgstr ""
+
 #: u_translation.rsdate
 msgid "Date"
 msgstr "Datum"
@@ -2366,9 +2370,17 @@ msgstr "HFD Monitor Ostření: Vynulovat. Vymazání referenční HFD a měřen�
 msgid "HFD Focus Monitor: Threshold: %s%%, Ref: %s, %s-Image Avg: %s, HFD Delta: %s%%"
 msgstr "HFD Monitor Ostření: Práh: %s%%, Ref: %s, %s- Obr. průměr: %s, HFD Delta: %s%%"
 
+#: u_translation.rshigh
+msgid "High"
+msgstr ""
+
 #: u_translation.rshighlightadu
 msgid "Highlight ADU"
 msgstr "ADU pro vyvážení bílé"
+
+#: u_translation.rshistogram
+msgid "Histogram"
+msgstr ""
 
 #: u_translation.rshistory
 msgid "History"
@@ -2735,6 +2747,10 @@ msgstr "Zeměpisná délka"
 msgid "Loop"
 msgstr "Cyklus"
 
+#: u_translation.rslow
+msgid "Low"
+msgstr ""
+
 #: u_translation.rslowqualityim
 msgid "Low quality image scaling"
 msgstr "Nízká kvalita snímku"
@@ -2931,6 +2947,10 @@ msgstr "Měření nové polohy"
 #, object-pascal-format
 msgid "%sMedian:%s"
 msgstr "%sStřední:%s"
+
+#: u_translation.rsmedium
+msgid "Medium"
+msgstr ""
 
 #: u_translation.rsmeridian
 msgid "Meridian"
@@ -4109,7 +4129,7 @@ msgstr "Odstranit řádek"
 
 #: u_translation.rsremovespacei
 msgid "Remove space in object name"
-msgstr ""
+msgstr "Odstranění mezery v názvu objektu"
 
 #: u_translation.rsremovestep
 msgid "Remove step"
@@ -4677,7 +4697,7 @@ msgstr "Sekvence pozastavena pro špatné počasí ..."
 
 #: u_translation.rssequencesepa
 msgid "Sequence separator"
-msgstr ""
+msgstr "Oddělovač sekvencí"
 
 #: u_translation.rssequencestar
 #, object-pascal-format
@@ -6101,6 +6121,10 @@ msgstr "Podrobný protokol zařízení"
 #: u_translation.rsverticalcorr
 msgid "Vertical correction :"
 msgstr "Vertikální oprava:"
+
+#: u_translation.rsveryhigh
+msgid "Very High"
+msgstr ""
 
 #: u_translation.rsvideo
 msgid "Video"

@@ -143,7 +143,7 @@ msgid "Start the auto-focus procedure"
 msgstr ""
 
 #: u_hints:rshistogramoft
-msgid "Histogram of the current image.%sClick and move to adjust the visualisation threshold."
+msgid "Histogram of the current image"
 msgstr ""
 
 #: u_hints:rscreateanewem
@@ -514,10 +514,6 @@ msgstr ""
 msgid "Do not set this option if you don't know exactly what you do and without careful testing"
 msgstr ""
 
-#: u_hints:rsimageluminos
-msgid "Image luminosity"
-msgstr ""
-
 #: u_hints:rscameraoffset
 msgid "Camera offset"
 msgstr ""
@@ -556,5 +552,29 @@ msgstr ""
 
 #: u_hints:rsskipthistarg
 msgid "Skip this target if there is not enough time to do all the steps before the end time"
+msgstr ""
+
+#: u_hints:rsdetachthegra
+msgid "Detach the graph"
+msgstr ""
+
+#: u_hints:rszoomthehisto
+msgid "Zoom the histogram to the current selection"
+msgstr ""
+
+#: u_hints:rspredefinedhi
+msgid "Predefined histogram truncation"
+msgstr ""
+
+#: u_hints:rsthelowerlimi
+msgid "The lower limit of histogram truncation"
+msgstr ""
+
+#: u_hints:rstheupperlimi
+msgid "The upper limit of histogram truncation"
+msgstr ""
+
+#: u_hints:rsclickandmove
+msgid "Click and move to adjust the histogram truncation"
 msgstr ""
 
