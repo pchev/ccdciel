@@ -26,7 +26,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 interface
 
 uses Graphics, cu_fits, math, UScaleDPI, Classes, SysUtils, FileUtil, TAGraph,
-  TASeries, TAChartUtils, u_translation, u_hints, LCLType,
+  TASeries, TAChartUtils, u_translation, u_hints, LCLType, u_utils,
   u_global, Forms, Controls, ExtCtrls, StdCtrls, Buttons, SpinEx, ComCtrls;
 
 type
@@ -39,9 +39,11 @@ type
     BtnInvert: TSpeedButton;
     BtnFlipHorz: TSpeedButton;
     BtnFlipVert: TSpeedButton;
+    BtnPinVisu: TSpeedButton;
     BtnShowImage: TSpeedButton;
     BtnZoom05: TSpeedButton;
     BtnBullsEye: TSpeedButton;
+    cbHistRange: TComboBox;
     HistGraph: TChart;
     HistGraphAreaSeries1: TAreaSeries;
     Gamma: TFloatSpinEditEx;
@@ -51,20 +53,25 @@ type
     BtnZoomAdjust: TSpeedButton;
     HistBar: TPanel;
     HistBarLeft: TPanel;
+    HistBarCenter: TPanel;
     HistBarRight: TPanel;
     Panel2: TPanel;
     Panel3: TPanel;
     BtnZoom2: TSpeedButton;
     BtnZoom1: TSpeedButton;
     Panel4: TPanel;
+    Panel5: TPanel;
     Panel6: TPanel;
     Panel7: TPanel;
     Panel8: TPanel;
     Panel9: TPanel;
     PanelNoDisplay: TPanel;
+    BtnZoomHist: TSpeedButton;
     SpinEditMin: TFloatSpinEditEx;
     SpinEditMax: TFloatSpinEditEx;
-    Splitter1: TSplitter;
+    SplitterMin: TSplitter;
+    SplitterMax: TSplitter;
+    TimerResize: TTimer;
     Title: TLabel;
     TimerRedraw: TTimer;
     TimerMinMax: TTimer;
@@ -74,35 +81,37 @@ type
     procedure BtnFlipVertClick(Sender: TObject);
     procedure BtnClipRangeClick(Sender: TObject);
     procedure BtnInvertClick(Sender: TObject);
+    procedure BtnPinVisuClick(Sender: TObject);
     procedure BtnShowImageClick(Sender: TObject);
     procedure BtnZoomClick(Sender: TObject);
+    procedure BtnZoomHistClick(Sender: TObject);
+    procedure cbHistRangeChange(Sender: TObject);
     procedure FrameEndDrag(Sender, Target: TObject; X, Y: Integer);
     procedure FrameResize(Sender: TObject);
     procedure GammaChange(Sender: TObject);
+    procedure HistBarCenterClick(Sender: TObject);
     procedure HistBarLeftClick(Sender: TObject);
     procedure HistBarRightClick(Sender: TObject);
-    procedure HistGraphMouseEnter(Sender: TObject);
-    procedure HistGraphMouseLeave(Sender: TObject);
     procedure histminmaxClick(Sender: TObject);
-    procedure HistogramMouseDown(Sender: TObject; Button: TMouseButton; Shift: TShiftState; X, Y: Integer);
-    procedure HistogramMouseMove(Sender: TObject; Shift: TShiftState; X, Y: Integer);
-    procedure HistogramMouseUp(Sender: TObject; Button: TMouseButton; Shift: TShiftState; X, Y: Integer);
-    procedure HistBarLeftResize(Sender: TObject);
+    procedure Panel1Resize(Sender: TObject);
     procedure SpinEditMaxChange(Sender: TObject);
     procedure SpinEditMinChange(Sender: TObject);
+    procedure SplitterMaxMoved(Sender: TObject);
+    procedure SplitterMinMoved(Sender: TObject);
     procedure TimerMinMaxTimer(Sender: TObject);
     procedure TimerRedrawTimer(Sender: TObject);
+    procedure TimerResizeTimer(Sender: TObject);
   private
     { private declarations }
     Fhist:Thistogram;
     Fmaxh, Fmaxp, Fsum: integer;
-    FimageC, FimageMin, FimageMax : double;
+    FimageC, FimageMin, FimageMax, FdataMin, FdataMax, Fmean, Fsd : double;
     FisFloatingPoint, FisFlipped, Finitialized: boolean;
     FimgMin, FimgMax: double;
-    FHistStart,FHistStop,FHistStep: integer;
-    FBullsEye, LockSpinEdit, FClipping, FInvert: Boolean;
+    FHistStart,FHistStop,FZoomStart,FZoomStop: integer;
+    FBullsEye, LockSpinEdit, LockSpinInit, LockHistbar, FClipping, FInvert: Boolean;
     FZoom: double;
-    StartUpd,Updmax,HistogramAdjusted, LockHistogram: boolean;
+    StartUpd,Updmax: boolean;
     LockRedraw: boolean;
     FRedraw: TNotifyEvent;
     FonZoom: TNotifyEvent;
@@ -113,8 +122,7 @@ type
     function  GetFlipVert: boolean;
     procedure SetLimit(SetLevel:boolean);
     procedure PlotHistogram;
-    function GetHistBarPosition: integer;
-    procedure SetHistBarPosition(value:integer);
+    procedure PanelVisuClose(Sender: TObject; var CloseAction: TCloseAction);
   public
     { public declarations }
     constructor Create(aOwner: TComponent); override;
@@ -129,7 +137,6 @@ type
     property Invert: boolean read FInvert;
     property FlipHorz: boolean read GetFlipHorz;
     property FlipVert: boolean read GetFlipVert;
-    property HistBarPosition: integer read GetHistBarPosition write SetHistBarPosition ;
     property onZoom: TNotifyEvent read FonZoom write FonZoom;
     property onRedraw: TNotifyEvent read FRedraw write FRedraw;
     property onShowHistogramPos: TNotifyStr read FShowHistogramPos write FShowHistogramPos;
@@ -162,14 +169,15 @@ begin
  ImgMax:=high(word);
  ImgMin:=0;
  FimageC:=1;
- HistogramAdjusted:=false;
- LockHistogram:=false;
+ Fmaxh:=0;
  StartUpd:=false;
  Updmax:=false;
  FBullsEye:=false;
  FClipping:=false;
  FInvert:=false;
  LockSpinEdit:=true;
+ LockSpinInit:=false;
+ LockHistbar:=false;
  LockRedraw:=false;
  FisFlipped:=true;
 end;
@@ -199,22 +207,56 @@ begin
 end;
 
 procedure Tf_visu.SetLimit(SetLevel:boolean);
-var histp: integer;
 begin
-  if SetLevel and (not HistogramAdjusted) then begin
-    histp:=HistBarPosition;
-    HistLevel(histp,Fsum,FHistStart,Fmaxp,Fhist,FimgMin,FimgMax);
+  if SetLevel and (Fmaxh>0) then begin
+    case cbHistRange.ItemIndex of
+      0 : begin  // data range
+            FimgMin:=FdataMin;
+            FimgMax:=FdataMax;
+          end;
+      1 : begin  // low
+            FimgMin:=FdataMin;
+            FimgMax:=FdataMin + 0.5*(FdataMax-FdataMin);
+          end;
+      2 : begin  // medium
+            FimgMin:=Fmean;
+            FimgMax:=Fmean + 0.2*(FdataMax-Fmean);
+          end;
+      3 : begin  // high
+            FimgMin:=Fmean;
+            FimgMax:=Fmean + 0.1*(FdataMax-Fmean);
+          end;
+      4 : begin  // very high
+            FimgMin:=Fmean;
+            FimgMax:=Fmean + 3*Fsd;
+          end;
+      else begin  // manual
+            // do not change previous setting
+          end;
+    end;
+    if FimgMax<=FimgMin then
+      FimgMax:=FimgMin+1;
+    FImgMin:=(FImgMin-FimageMin)*FimageC;
+    FImgMax:=(FImgMax-FimageMin)*FimageC;
   end;
   // adjust spinedit for data range
-  LockHistogram:=true;
+  LockSpinInit:=true;  // setting decimalplaces trigger onchange
   if FisFloatingPoint then begin
-    SpinEditMin.DecimalPlaces:=3;
-    SpinEditMax.DecimalPlaces:=3;
-    if abs(FimageMax-FimageMin)<=10 then begin
+    if abs(FimageMax-FimageMin)<=1 then begin
+      SpinEditMin.DecimalPlaces:=4;
+      SpinEditMax.DecimalPlaces:=4;
+      SpinEditMin.Increment:=0.001;
+      SpinEditMax.Increment:=0.001;
+    end
+    else if abs(FimageMax-FimageMin)<=10 then begin
+      SpinEditMin.DecimalPlaces:=3;
+      SpinEditMax.DecimalPlaces:=3;
       SpinEditMin.Increment:=0.01;
       SpinEditMax.Increment:=0.01;
     end
     else begin
+      SpinEditMin.DecimalPlaces:=1;
+      SpinEditMax.DecimalPlaces:=1;
       SpinEditMin.Increment:=1;
       SpinEditMax.Increment:=1;
     end;
@@ -237,26 +279,31 @@ begin
   SpinEditMax.minValue:=FimageMin;
   SpinEditMax.maxValue:=FimageMax;
   // scale from 0-65535 to image min-max
+  LockSpinInit:=false;
   SpinEditMin.Value:=FimageMin+FImgMin/FimageC;
   SpinEditMax.Value:=FimageMin+FimgMax/FimageC;
-  LockHistogram:=false;
 end;
 
 procedure Tf_visu.DrawHistogram(f: TFits; SetLevel,ResetCursor: boolean);
-var i: integer;
+var i,iterations: integer;
 begin
 try
 LockSpinEdit:=true;
-if ResetCursor then HistogramAdjusted:=false;
 FisFloatingPoint:=f.HeaderInfo.floatingpoint;
 FisFlipped:=f.HeaderInfo.roworder<>bottomup;
 FimageC:=f.imageC;
 FimageMin:=f.imageMin;
 FimageMax:=f.imageMax;
+FdataMin:=f.HeaderInfo.dmin;
+FdataMax:=f.HeaderInfo.dmax;
+f.stdev2(4,Fmean,Fsd,iterations);
+Fmean:=FimageMin+Fmean/FimageC;
+Fsd:=FimageMin+Fsd/FimageC;
 for i:=0 to high(word) do Fhist[i]:=f.Histogram[i];
 HistStats(Fhist,Fmaxh,Fmaxp,Fsum,FHistStart,FHistStop);
+FZoomStart:=FHistStart;
+FZoomStop:=FHistStop;
 if Fmaxh=0 then exit;
-if Fmaxp>(FHistStart+(FHistStop-FHistStart)/10) then Fmaxp:=0; // peak is probably not sky background
 SetLimit(SetLevel);
 PlotHistogram;
 
@@ -266,36 +313,32 @@ end;
 end;
 
 procedure Tf_visu.PlotHistogram;
-var i,j,r: integer;
+var i,r: integer;
     x: double;
 begin
 HistGraphAreaSeries1.Clear;
 if BtnClipRange.Down then begin
+  FZoomStart:=FHistStart;
+  FZoomStop:=FHistStop;
   r:=FHistStop-FHistStart;
-  FHistStep:=max(1,r div 256);
-  for i:=0 to (r div FHistStep)-1 do begin
-    x:=0;
-    for j:=0 to FHistStep-1 do
-      x:=x+Fhist[FHistStart+i*FHistStep+j];
+  for i:=0 to r-1  do begin
+    x:=Fhist[FHistStart+i];
     HistGraphAreaSeries1.Add(ln(x+1));
   end;
-  HistGraphMinLine.Position:=max(0,(FimgMin-FHistStart)/FHistStep);
-  HistGraphMaxLine.Position:=min(r/FHistStep,(FimgMax-FHistStart)/FHistStep);
+  HistGraphMinLine.Position:=max(0,(FimgMin-FHistStart));
+  HistGraphMaxLine.Position:=min(r,(FimgMax-FHistStart));
   HistGraph.Extent.XMin:=0;
-  HistGraph.Extent.XMax:=r/FHistStep;
+  HistGraph.Extent.XMax:=r;
   HistGraph.Extent.UseXMax:=true;
   HistGraph.Extent.UseXMin:=true;
 end
 else begin
-  FHistStep:=255;
-  for i:=0 to 255 do begin
-    x:=0;
-    for j:=0 to FHistStep do
-      x:=x+Fhist[i*FHistStep+j];
+  for i:=0 to 65535 do begin
+    x:=Fhist[i];
     HistGraphAreaSeries1.Add(ln(x+1));
   end;
-  HistGraphMinLine.Position:=FimgMin/FHistStep;
-  HistGraphMaxLine.Position:=FimgMax/FHistStep;
+  HistGraphMinLine.Position:=FimgMin;
+  HistGraphMaxLine.Position:=FimgMax;
   HistGraph.Extent.UseXMax:=false;
   HistGraph.Extent.UseXMin:=false;
 end;
@@ -306,45 +349,49 @@ procedure Tf_visu.FrameEndDrag(Sender, Target: TObject; X, Y: Integer);
 begin
   if Target is TPanel then begin
      if TPanel(Target).Width>TPanel(Target).Height then begin
+        width:=DoScaleX(440);
+        height:=DoScaleY(127);
         panel2.Align:=alRight;
      end else begin
+        width:=DoScaleX(262);
+        height:=DoScaleY(254);
         panel2.Align:=alTop;
      end;
   end;
 end;
 
 procedure Tf_visu.FrameResize(Sender: TObject);
-var btnw: integer;
 begin
   if Parent is TPanel then begin
      if TPanel(Parent).Width>TPanel(Parent).Height then begin
+        width:=DoScaleX(440);
+        height:=DoScaleY(127);
         panel2.Align:=alRight;
      end else begin
+        width:=DoScaleX(262);
+        height:=DoScaleY(254);
         panel2.Align:=alTop;
      end;
-     SpinEditMax.Left:=Panel3.Width-SpinEditMax.Width;
-     btnw:=(Panel4.ClientWidth-DoScaleX(3)) div 4;
-     gamma.Width:=2*btnw+DoScaleX(1);
-     BtnFlipVert.Width:=btnw;
-     BtnZoomAdjust.Width:=btnw;
-     BtnZoom2.Width:=btnw;
-     BtnZoom1.Width:=btnw;
-     BtnZoom05.Width:=btnw;
-     BtnBullsEye.Width:=btnw;
-     BtnClipping.Width:=btnw;
-     BtnInvert.Width:=btnw;
-     BtnFlipHorz.Width:=btnw;
-     BtnClipRange.Width:=btnw;
-     BtnShowImage.Top:=Panel6.top+BtnClipRange.top;
   end;
 end;
 
-procedure Tf_visu.HistBarLeftResize(Sender: TObject);
+procedure Tf_visu.Panel1Resize(Sender: TObject);
 begin
-  HistogramAdjusted:=false;
-  SetLimit(true);
-  TimerMinMax.Enabled:=false;
-  TimerMinMax.Enabled:=true;
+  TimerResize.Enabled:=true;
+  if panel1.Width>panel1.Height then begin
+    panel2.Align:=alRight;
+  end else begin
+    panel2.Align:=alTop;
+  end;
+end;
+
+procedure Tf_visu.TimerResizeTimer(Sender: TObject);
+begin
+TimerResize.Enabled:=false;
+SpinEditMinChange(Sender);
+SpinEditMaxChange(Sender);
+SplitterMax.Left:=HistBarRight.left-1;
+SplitterMin.Left:=HistBarLeft.left+1;
 end;
 
 procedure Tf_visu.SetZoom(value: double);
@@ -367,6 +414,16 @@ begin
     3: FZoom:=2;
   end;
   if Assigned(FonZoom) then FonZoom(self);
+end;
+
+procedure Tf_visu.BtnZoomHistClick(Sender: TObject);
+begin
+  //todo
+end;
+
+procedure Tf_visu.cbHistRangeChange(Sender: TObject);
+begin
+  SetLimit(true);
 end;
 
 procedure Tf_visu.GammaChange(Sender: TObject);
@@ -436,108 +493,43 @@ begin
   TimerRedraw.Enabled:=true;
 end;
 
-procedure Tf_visu.HistogramMouseDown(Sender: TObject; Button: TMouseButton; Shift: TShiftState; X, Y: Integer);
-var xpos,dx1,dx2: double;
-    pt: TDoublePoint;
-begin
-  if not Finitialized then exit;
-  pt:=HistGraph.ImageToGraph(point(X,Y));
-  if BtnClipRange.Down then begin
-    xpos:=FHistStart+pt.X*FHistStep;
-  end
-  else begin
-    xpos:=pt.X*FHistStep;
-  end;
-  dx1:=abs(ImgMin-xpos);
-  dx2:=abs(ImgMax-xpos);
-  if dx1=dx2 then begin
-    Updmax:=(xpos>=ImgMax);
-  end
-  else begin
-    Updmax:=dx2<dx1;
-  end;
-  StartUpd:=true;
-end;
-
-procedure Tf_visu.HistogramMouseMove(Sender: TObject; Shift: TShiftState; X, Y: Integer);
-var xpos,val: double;
-    pt: TDoublePoint;
-    txt: string;
-begin
-if not Finitialized then exit;
-if StartUpd then begin
-  pt:=HistGraph.ImageToGraph(point(X,Y));
-  if BtnClipRange.Down then begin
-    xpos:=max(0,min(MAXWORD,FHistStart+pt.X*FHistStep));
-  end
-  else begin
-    xpos:=max(0,min(MAXWORD,pt.X*FHistStep));
-  end;
-  if Updmax then
-    HistGraphMaxLine.Position:=pt.X
-  else
-    HistGraphMinLine.Position:=pt.X;
-  val:=FimageMin+xpos/FimageC;
-  if FisFloatingPoint then
-    txt:=FormatFloat(f3,val)
-  else
-    txt:=FormatFloat(f0,round(val));
-  if Assigned(FShowHistogramPos) then FShowHistogramPos(txt);
-end;
-end;
-
-procedure Tf_visu.HistGraphMouseEnter(Sender: TObject);
-begin
-  SpinEditMin.Visible:=true;
-  SpinEditMax.Visible:=true;
-end;
-
-procedure Tf_visu.HistGraphMouseLeave(Sender: TObject);
-begin
-  SpinEditMin.Visible:=false;
-  SpinEditMax.Visible:=false;
-end;
-
-procedure Tf_visu.HistogramMouseUp(Sender: TObject; Button: TMouseButton; Shift: TShiftState; X, Y: Integer);
-var pt: TDoublePoint;
-    xpos: double;
-begin
-  if not Finitialized then exit;
-  pt:=HistGraph.ImageToGraph(point(X,Y));
-  if BtnClipRange.Down then begin
-    xpos:=max(0,min(MAXWORD,FHistStart+pt.X*FHistStep));
-  end
-  else begin
-    xpos:=max(0,min(MAXWORD,pt.X*FHistStep));
-  end;
-  if Updmax then begin
-    ImgMax:=xpos;
-    ImgMax:=max(ImgMax,ImgMin);
-  end
-  else begin
-    ImgMin:=xpos;
-    ImgMin:=min(ImgMin,ImgMax);
-  end;
-  StartUpd:=false;
-  HistogramAdjusted:=true;
-  TimerRedraw.Enabled:=false;
-  TimerRedraw.Enabled:=true;
-end;
-
 procedure Tf_visu.SpinEditMaxChange(Sender: TObject);
+var ma:double;
+    p:integer;
 begin
+  if LockSpinInit then exit;
+  if Fmaxh=0 then exit;
+  LockHistbar:=true;
+  p:=SplitterMax.Left;
+  if BtnClipRange.Down then
+    ma:=(round(FimageC*(SpinEditMax.Value-FimageMin))-FZoomStart)/(FZoomStop-FZoomStart)
+  else
+    ma:=(SpinEditMax.Value-FimageMin)/FimageMax;
+  p:=round(1+HistBar.ClientWidth-ma*HistBar.ClientWidth-SplitterMax.Width);
+  if HistBarRight.Width<>p then HistBarRight.Width:=p;
+  LockHistbar:=false;
   if LockSpinEdit then exit;
   SpinEditMin.maxValue:=min(FimageMax,SpinEditMax.Value);
-  if not LockHistogram then HistogramAdjusted:=true;
   TimerMinMax.Enabled:=false;
   TimerMinMax.Enabled:=true;
 end;
 
 procedure Tf_visu.SpinEditMinChange(Sender: TObject);
+var mi:double;
+    p:integer;
 begin
+  if LockSpinInit then exit;
+  if Fmaxh=0 then exit;
+  LockHistbar:=true;
+  if BtnClipRange.Down then
+    mi:=(round(FimageC*(SpinEditMin.Value-FimageMin))-FZoomStart)/(FZoomStop-FZoomStart)
+  else
+    mi:=(SpinEditMin.Value-FimageMin)/FimageMax;
+  p:=round(mi*HistBar.ClientWidth+1);
+  if HistBarLeft.Width<>p then HistBarLeft.Width:=p;
+  LockHistbar:=false;
   if LockSpinEdit then exit;
   SpinEditMax.minValue:=max(FimageMin,SpinEditMin.Value);
-  if not LockHistogram then HistogramAdjusted:=true;
   TimerMinMax.Enabled:=false;
   TimerMinMax.Enabled:=true;
 end;
@@ -548,6 +540,14 @@ begin
   // scale from image min-max to 0-65535
   FImgMin:=round(FimageC*(SpinEditMin.Value-FimageMin));
   FImgMax:=round(FimageC*(SpinEditMax.Value-FimageMin));
+  if BtnClipRange.Down then begin
+    HistGraphMinLine.Position:=max(0,(FimgMin-FZoomStart));
+    HistGraphMaxLine.Position:=min(FZoomStop-FZoomStart,(FimgMax-FZoomStart));
+  end
+  else begin
+    HistGraphMinLine.Position:=FimgMin;
+    HistGraphMaxLine.Position:=FimgMax;
+  end;
   TimerRedraw.Enabled:=false;
   TimerRedraw.Enabled:=true;
 end;
@@ -569,32 +569,105 @@ begin
   end;
 end;
 
-function Tf_visu.GetHistBarPosition: integer;
+procedure Tf_visu.SplitterMaxMoved(Sender: TObject);
+var p,ma: double;
 begin
-  // return splitter position in range 0..100
-  result:=round(100*HistBarLeft.Width/(HistBar.ClientWidth-Splitter1.Width));
+  p:=(SplitterMax.Left-1)/HistBar.ClientWidth;
+  if BtnClipRange.Down then
+    ma:=FimageMin+(FZoomStart + p*(FZoomStop-FZoomStart))/FimageC
+  else
+    ma:=SpinEditMax.minValue + p*(SpinEditMax.maxValue-SpinEditMax.minValue);
+  LockSpinEdit:=true;
+  SpinEditMax.Value:=ma;
+  LockSpinEdit:=false;
+  TimerMinMax.Enabled:=false;
+  TimerMinMax.Enabled:=true;
 end;
 
-procedure Tf_visu.SetHistBarPosition(value:integer);
+procedure Tf_visu.SplitterMinMoved(Sender: TObject);
+var p,mi: double;
 begin
- // set splitter position from value in range 0..100
- HistBarLeft.Width:=max(min(round(value*(HistBar.ClientWidth-Splitter1.Width)/100),HistBar.ClientWidth-Splitter1.Width),1);
+  p:=(SplitterMin.Left-1)/HistBar.ClientWidth;
+  if BtnClipRange.Down then
+    mi:=FimageMin+(FZoomStart + p*(FZoomStop-FZoomStart))/FimageC
+  else
+    mi:=SpinEditMin.minValue + p*SpinEditMin.maxValue;
+  LockSpinEdit:=true;
+  SpinEditMin.Value:=mi;
+  LockSpinEdit:=false;
+  TimerMinMax.Enabled:=false;
+  TimerMinMax.Enabled:=true;
 end;
 
 procedure Tf_visu.HistBarLeftClick(Sender: TObject);
-var i: integer;
 begin
- i:=GetHistBarPosition;
- i:=max(0,i-10);
- SetHistBarPosition(i);
+  HistBarLeft.Width:=max(1,HistBarLeft.Width-10);
+  SplitterMinMoved(Sender);
+end;
+
+procedure Tf_visu.HistBarCenterClick(Sender: TObject);
+var p: TPoint;
+begin
+  p:=mouse.CursorPos;
+  p:=HistBarCenter.ScreenToClient(p);
+  if p.x<(HistBarCenter.Width div 2) then begin
+    HistBarLeft.Width:=min(HistBar.Width-1,HistBarLeft.Width+10);
+    SplitterMinMoved(Sender);
+  end
+  else begin
+    HistBarRight.Width:=min(HistBar.Width-1,HistBarRight.Width+10);
+    SplitterMaxMoved(Sender);
+  end;
 end;
 
 procedure Tf_visu.HistBarRightClick(Sender: TObject);
-var i: integer;
 begin
- i:=GetHistBarPosition;
- i:=min(100,i+10);
- SetHistBarPosition(i);
+  HistBarRight.Width:=max(1,HistBarRight.Width-10);
+  SplitterMaxMoved(Sender);
+end;
+
+procedure Tf_visu.BtnPinVisuClick(Sender: TObject);
+var f: TForm;
+    x,y,w,h: integer;
+begin
+  if Panel1.Parent is Tf_visu then begin
+   x:=config.GetValue('/Visu/PosX',-1);
+   y:=config.GetValue('/Visu/PosY',-1);
+   w:=config.GetValue('/Visu/PosW',-1);
+   h:=config.GetValue('/Visu/PosH',-1);
+   f:=TForm.Create(self);
+   f.FormStyle:=fsStayOnTop;
+   f.OnClose:=@PanelVisuClose;
+   if w>0 then
+     f.Width:=w
+   else
+     f.Width:=DoScaleX(500);
+   if h>0 then
+     f.Height:=h
+   else
+     f.Height:=DoScaleY(200);
+   f.Caption:=rsVisualisatio;
+   Panel1.Parent:=f;
+   if (x>0)and(y>0) then begin
+     f.Left:=x;
+     f.Top:=y;
+   end
+   else
+     FormPos(f,mouse.CursorPos.x,mouse.CursorPos.y);
+   f.Show;
+  end
+  else if Panel1.Parent is TForm then
+   TForm(Panel1.Parent).Close;
+end;
+
+procedure Tf_visu.PanelVisuClose(Sender: TObject; var CloseAction: TCloseAction);
+begin
+  config.SetValue('/Visu/PosX',TForm(Sender).Left);
+  config.SetValue('/Visu/PosY',TForm(Sender).Top);
+  config.SetValue('/Visu/PosW',TForm(Sender).Width);
+  config.SetValue('/Visu/PosH',TForm(Sender).Height);
+  CloseAction:=caFree;
+  Panel1.Parent:=self;
 end;
 
 end.

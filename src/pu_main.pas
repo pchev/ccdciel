@@ -2732,7 +2732,7 @@ begin
   FrameBin:=config.GetValue('/CCDframe/FrameBin',1);
 
   f_visu.Gamma.Value:=config.GetValue('/Visu/Gamma',1.0);
-  f_visu.HistBarPosition:=config.GetValue('/Visu/HistBar',50);
+  f_visu.cbHistRange.ItemIndex:=config.GetValue('/Visu/HistRange',2);
   f_visu.BtnFlipHorz.Down:=config.GetValue('/Visu/FlipHorz',false);
   f_visu.BtnFlipVert.Down:=config.GetValue('/Visu/FlipVert',false);
   f_visu.BtnClipRange.Down:=config.GetValue('/Visu/ClipRange',false);
@@ -3118,6 +3118,7 @@ begin
   f_finder.BtnBullsEye.Glyph.Assign(btn);
   TBTabs.Images.GetBitmap(7, btn);
   f_visu.BtnClipRange.Glyph.Assign(btn);
+  f_visu.BtnZoomHist.Glyph.Assign(btn);
   TBTabs.Images.GetBitmap(8, btn);
   f_visu.BtnClipping.Glyph.Assign(btn);
   TBTabs.Images.GetBitmap(11, btn);
@@ -3129,6 +3130,7 @@ begin
   TBTabs.Images.GetBitmap(14, btn);
   f_visu.BtnShowImage.Glyph.Assign(btn);
   TBTabs.Images.GetBitmap(9, btn);
+  f_visu.BtnPinVisu.Glyph.Assign(btn);
   f_starprofile.BtnPinGraph.Glyph.Assign(btn);
   f_starprofile.BtnPinProfile.Glyph.Assign(btn);
   f_starprofile.BtnPin2D.Glyph.Assign(btn);
@@ -5784,7 +5786,7 @@ begin
    config.SetValue('/Sequence/EditTarget/SepPos2',f_EditTargets.PanelTargetDetail.Width);
 
    config.SetValue('/Visu/Gamma',f_visu.Gamma.Value);
-   config.SetValue('/Visu/HistBar',f_visu.HistBarPosition);
+   config.SetValue('/Visu/HistRange',f_visu.cbHistRange.ItemIndex);
    config.SetValue('/Visu/FlipHorz',f_visu.BtnFlipHorz.Down);
    config.SetValue('/Visu/FlipVert',f_visu.BtnFlipVert.Down);
    config.SetValue('/Visu/ClipRange',f_visu.BtnClipRange.Down);
