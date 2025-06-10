@@ -306,6 +306,8 @@ if not setlevel then exit;
 LockSpinEdit:=true;
 FisFloatingPoint:=f.HeaderInfo.floatingpoint;
 FisFlipped:=f.HeaderInfo.roworder<>bottomup;
+if FisFloatingPoint then
+  BtnClipRange.Down:=true; // floating point histogram is always clipped to data range
 FimageC:=f.imageC;
 FimageMin:=f.imageMin;
 FimageMax:=f.imageMax;
@@ -500,6 +502,8 @@ end;
 
 procedure Tf_visu.BtnClipRangeClick(Sender: TObject);
 begin
+  if FisFloatingPoint then
+    BtnClipRange.Down:=true; // floating point histogram is always clipped to data range
   FZoomCurrentRange:=false;
   PlotHistogram;
 end;
@@ -667,10 +671,7 @@ begin
     m:=FimageMin+(FZoomStart + p*(FZoomStop-FZoomStart))/FimageC
   else
     m:=FimageMin + p*FimageMax;
-  if Sender=SplitterMin then
-    p:=round(FimageC*(m-FimageMin))
-  else
-    p:=round(FimageC*(m-FimageMin));
+  p:=round(FimageC*(m-FimageMin));
   if Sender=SplitterMin then begin
     if BtnClipRange.Down then
       HistGraphMinLine.Position:=max(0,(p-FZoomStart))
