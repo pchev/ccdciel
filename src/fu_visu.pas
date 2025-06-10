@@ -656,14 +656,18 @@ begin
 end;
 
 procedure Tf_visu.SplitterChangeBounds(Sender: TObject);
-var p,mi: double;
+var p,m: double;
     txt,fmt: string;
 begin
   p:=(TSplitter(Sender).Left-1)/HistBar.ClientWidth;
   if BtnClipRange.Down then
-    mi:=FimageMin+(FZoomStart + p*(FZoomStop-FZoomStart))/FimageC
+    m:=FimageMin+(FZoomStart + p*(FZoomStop-FZoomStart))/FimageC
   else
-    mi:=FimageMin + p*FimageMax;
+    m:=FimageMin + p*FimageMax;
+  if Sender=SplitterMin then
+    HistGraphMinLine.Position:=m
+  else
+    HistGraphMaxLine.Position:=m;
   case SpinEditMax.DecimalPlaces of
     0: fmt:=f0;
     1: fmt:=f1;
@@ -672,7 +676,7 @@ begin
     4: fmt:=f4;
     else fmt:=f1;
   end;
-  txt:=rsHistogram+': '+FormatFloat(fmt,mi);
+  txt:=rsHistogram+': '+FormatFloat(fmt,m);
   if LabelPos.Visible then
     LabelPos.Caption:=txt
   else
