@@ -336,6 +336,7 @@ var i,j,r: integer;
     x,t: double;
 begin
 HistGraphAreaSeries1.Clear;
+if Fmaxh=0 then exit;
 if BtnClipRange.Down then begin
   if FZoomCurrentRange then begin
     t:=abs(SpinEditMax.Value-SpinEditMin.Value)/3;
@@ -679,6 +680,7 @@ procedure Tf_visu.SplitterChangeBounds(Sender: TObject);
 var p,m: double;
     txt,fmt: string;
 begin
+  if Fmaxh=0 then exit;
   p:=(TSplitter(Sender).Left-1)/HistBar.ClientWidth;
   if BtnClipRange.Down then
     m:=FimageMin+(FZoomStart + p*(FZoomStop-FZoomStart))/FimageC
@@ -719,6 +721,7 @@ var xpos,val: double;
     txt,fmt: string;
 begin
   if not Finitialized then exit;
+  if Fmaxh=0 then exit;
   pt:=HistGraph.ImageToGraph(point(X,Y));
   if BtnClipRange.Down then
     xpos:=FZoomStart+pt.X*FHistStep
