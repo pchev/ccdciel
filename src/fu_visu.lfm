@@ -97,8 +97,10 @@ object f_visu: Tf_visu
           object HistGraphAreaSeries1: TAreaSeries
             Legend.Visible = False
             AreaBrush.Color = clBlack
+            AreaBrush.Style = bsClear
             AreaContourPen.Color = clYellow
             AreaContourPen.Mode = pmNop
+            AreaContourPen.Style = psClear
             AreaLinesPen.Color = clWhite
             Stacked = False
             UseZeroLevel = True
