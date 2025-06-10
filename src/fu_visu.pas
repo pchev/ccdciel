@@ -181,6 +181,7 @@ begin
  LockRedraw:=false;
  FisFlipped:=true;
  FZoomCurrentRange:=false;
+ panel9.Enabled:=false;
 end;
 
 destructor  Tf_visu.Destroy;
@@ -300,6 +301,7 @@ procedure Tf_visu.DrawHistogram(f: TFits; SetLevel,ResetCursor: boolean);
 var i,iterations: integer;
 begin
 try
+panel9.Enabled:=true;
 if not setlevel then exit;
 LockSpinEdit:=true;
 FisFloatingPoint:=f.HeaderInfo.floatingpoint;
@@ -566,6 +568,7 @@ end;
 procedure Tf_visu.TimerMinMaxTimer(Sender: TObject);
 begin
   TimerMinMax.Enabled:=false;
+  if fmaxh=0 then exit;
   // scale from image min-max to 0-65535
   FImgMin:=round(FimageC*(SpinEditMin.Value-FimageMin));
   FImgMax:=round(FimageC*(SpinEditMax.Value-FimageMin));

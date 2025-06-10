@@ -87,6 +87,7 @@ object f_visu: Tf_visu
             Legend.Visible = False
             LineStyle = lsVertical
             Pen.Color = clRed
+            Position = -1
           end
           object HistGraphMaxLine: TConstantLine
             LineStyle = lsVertical
