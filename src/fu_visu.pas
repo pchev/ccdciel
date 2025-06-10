@@ -111,7 +111,7 @@ type
     FimageC, FimageMin, FimageMax, FdataMin, FdataMax, Fmean, Fsd : double;
     FisFloatingPoint, FisFlipped, Finitialized: boolean;
     FimgMin, FimgMax: double;
-    FHistStart,FHistStop,FZoomStart,FZoomStop: integer;
+    FHistStart,FHistStop,FZoomStart,FZoomStop, FHistStep : integer;
     FBullsEye, LockSpinEdit, LockSpinInit, LockHistbar, FClipping, FInvert, FZoomCurrentRange: Boolean;
     FZoom: double;
     LockRedraw: boolean;
@@ -149,6 +149,8 @@ implementation
 
 {$R *.lfm}
 
+const MaxHistSize=1500;
+
 { Tf_visu }
 
 constructor Tf_visu.Create(aOwner: TComponent);
@@ -168,6 +170,7 @@ begin
  ScaleDPI(Self);
  SetLang;
  Finitialized:=false;
+ FHistStep:=1;
  ImgMax:=high(word);
  ImgMin:=0;
  FimageC:=1;
@@ -329,7 +332,7 @@ end;
 end;
 
 procedure Tf_visu.PlotHistogram;
-var i,r: integer;
+var i,j,r: integer;
     x,t: double;
 begin
 HistGraphAreaSeries1.Clear;
@@ -346,20 +349,30 @@ if BtnClipRange.Down then begin
     FZoomStop:=FHistStop;
   end;
   r:=FZoomStop-FZoomStart;
-  for i:=0 to r-1  do begin
-    x:=Fhist[FZoomStart+i];
+  if r>MaxHistSize then
+    FHistStep:=r div MaxHistSize
+  else
+    FHistStep:=1;
+  for i:=0 to (r div FHistStep)-1 do begin
+    x:=0;
+    for j:=0 to FHistStep-1 do
+      x:=x+Fhist[FZoomStart+i*FHistStep+j];
     HistGraphAreaSeries1.Add(ln(x+1));
   end;
-  HistGraphMinLine.Position:=max(0,(FimgMin-FZoomStart));
-  HistGraphMaxLine.Position:=min(r,(FimgMax-FZoomStart));
+  HistGraphMinLine.Position:=max(0,(FimgMin-FZoomStart)/FHistStep);
+  HistGraphMaxLine.Position:=min(r/FHistStep,(FimgMax-FZoomStart)/FHistStep);
   HistGraph.Extent.XMin:=0;
-  HistGraph.Extent.XMax:=r;
+  HistGraph.Extent.XMax:=r/FHistStep;
   HistGraph.Extent.UseXMax:=true;
   HistGraph.Extent.UseXMin:=true;
 end
 else begin
-  for i:=0 to 65535 do begin
-    x:=Fhist[i];
+  r:=65535;
+  FHistStep:=r div MaxHistSize;
+  for i:=0 to (r div FHistStep)-1 do begin
+    x:=0;
+    for j:=0 to FHistStep-1 do
+      x:=x+Fhist[i*FHistStep+j];
     HistGraphAreaSeries1.Add(ln(x+1));
   end;
   HistGraphMinLine.Position:=FimgMin;
@@ -577,12 +590,12 @@ begin
   FImgMin:=round(FimageC*(SpinEditMin.Value-FimageMin));
   FImgMax:=round(FimageC*(SpinEditMax.Value-FimageMin));
   if BtnClipRange.Down then begin
-    HistGraphMinLine.Position:=max(0,(FimgMin-FZoomStart));
-    HistGraphMaxLine.Position:=min(FZoomStop-FZoomStart,(FimgMax-FZoomStart));
+    HistGraphMinLine.Position:=max(0,(FimgMin-FZoomStart)/FHistStep);
+    HistGraphMaxLine.Position:=min((FZoomStop-FZoomStart)/FHistStep,(FimgMax-FZoomStart)/FHistStep);
   end
   else begin
-    HistGraphMinLine.Position:=FimgMin;
-    HistGraphMaxLine.Position:=FimgMax;
+    HistGraphMinLine.Position:=FimgMin/FHistStep;
+    HistGraphMaxLine.Position:=FimgMax/FHistStep;
   end;
   TimerRedraw.Enabled:=false;
   TimerRedraw.Enabled:=true;
@@ -674,15 +687,15 @@ begin
   p:=round(FimageC*(m-FimageMin));
   if Sender=SplitterMin then begin
     if BtnClipRange.Down then
-      HistGraphMinLine.Position:=max(0,(p-FZoomStart))
+      HistGraphMinLine.Position:=max(0,(p-FZoomStart)/FHistStep)
     else
-      HistGraphMinLine.Position:=p;
+      HistGraphMinLine.Position:=p/FHistStep;
   end
   else begin
     if BtnClipRange.Down then
-      HistGraphMaxLine.Position:=min(FZoomStop-FZoomStart,(p-FZoomStart))
+      HistGraphMaxLine.Position:=min((FZoomStop-FZoomStart)/FHistStep,(p-FZoomStart)/FHistStep)
     else
-      HistGraphMaxLine.Position:=p;
+      HistGraphMaxLine.Position:=p/FHistStep;
   end;
   case SpinEditMax.DecimalPlaces of
     0: fmt:=f0;
@@ -707,12 +720,10 @@ var xpos,val: double;
 begin
   if not Finitialized then exit;
   pt:=HistGraph.ImageToGraph(point(X,Y));
-  if BtnClipRange.Down then begin
-    xpos:=FZoomStart+pt.X;
-  end
-  else begin
-    xpos:=pt.X
-  end;
+  if BtnClipRange.Down then
+    xpos:=FZoomStart+pt.X*FHistStep
+  else
+    xpos:=pt.X*FHistStep;
   val:=FimageMin+xpos/FimageC;
   case SpinEditMax.DecimalPlaces of
     0: fmt:=f0;
