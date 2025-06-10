@@ -742,6 +742,7 @@ begin
    f:=TForm.Create(self);
    f.FormStyle:=fsStayOnTop;
    f.OnClose:=@PanelVisuClose;
+   f.ShowHint:=ShowHint;
    if w>0 then
      f.Width:=w
    else
