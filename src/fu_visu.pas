@@ -668,9 +668,21 @@ begin
   else
     m:=FimageMin + p*FimageMax;
   if Sender=SplitterMin then
-    HistGraphMinLine.Position:=m
+    p:=round(FimageC*(m-FimageMin))
   else
-    HistGraphMaxLine.Position:=m;
+    p:=round(FimageC*(m-FimageMin));
+  if Sender=SplitterMin then begin
+    if BtnClipRange.Down then
+      HistGraphMinLine.Position:=max(0,(p-FZoomStart))
+    else
+      HistGraphMinLine.Position:=p;
+  end
+  else begin
+    if BtnClipRange.Down then
+      HistGraphMaxLine.Position:=min(FZoomStop-FZoomStart,(p-FZoomStart))
+    else
+      HistGraphMaxLine.Position:=p;
+  end;
   case SpinEditMax.DecimalPlaces of
     0: fmt:=f0;
     1: fmt:=f1;
