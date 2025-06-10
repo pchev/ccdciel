@@ -86,7 +86,7 @@ type
     procedure BtnShowImageClick(Sender: TObject);
     procedure BtnZoomClick(Sender: TObject);
     procedure BtnZoomHistClick(Sender: TObject);
-    procedure cbHistRangeChange(Sender: TObject);
+    procedure cbHistRangeCloseUp(Sender: TObject);
     procedure FrameEndDrag(Sender, Target: TObject; X, Y: Integer);
     procedure FrameResize(Sender: TObject);
     procedure GammaChange(Sender: TObject);
@@ -451,7 +451,7 @@ begin
   SplitterMin.Left:=HistBarLeft.left+1;
 end;
 
-procedure Tf_visu.cbHistRangeChange(Sender: TObject);
+procedure Tf_visu.cbHistRangeCloseUp(Sender: TObject);
 begin
   SetLimit(true);
 end;
