@@ -457,6 +457,7 @@ object f_visu: Tf_visu
               'Medium'
               'High'
               'Very High'
+              'Background'
               'Manual'
             )
             OnCloseUp = cbHistRangeCloseUp

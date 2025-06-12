@@ -1623,6 +1623,7 @@ resourcestring
   rsMedium = 'Medium';
   rsHigh = 'High';
   rsVeryHigh = 'Very High';
+  rsExtreme = 'Extreme';
 
 implementation
 

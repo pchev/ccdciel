@@ -200,7 +200,8 @@ begin
   cbHistRange.Items[2]:=rsMedium;
   cbHistRange.Items[3]:=rsHigh;
   cbHistRange.Items[4]:=rsVeryHigh;
-  cbHistRange.Items[5]:=rsManual;
+  cbHistRange.Items[5]:=rsExtreme;
+  cbHistRange.Items[6]:=rsManual;
   HistGraph.Hint:=rsHistogramOfT;
   BtnZoomAdjust.Hint:=rsZoomToAdjust;
   HistBar.Hint:=rsClickAndMove;
@@ -223,8 +224,14 @@ begin
 end;
 
 procedure Tf_visu.SetLimit(SetLevel:boolean);
+var x: array[0..3] of double;
 begin
   if SetLevel and (Fmaxh>0) then begin
+    x[3]:=min(FdataMax,Fmean + 0.2*(FdataMax-Fmean));               // medium
+    x[2]:=min(FdataMax,Fmean + 0.1*(FdataMax-Fmean));               // high
+    x[1]:=min(FdataMax,Fmean + max(10*Fsd,0.02*(FdataMax-Fmean))) ; // very high
+    x[0]:=min(FdataMax,Fmean + 3*Fsd);                              // extreme
+    quicksort(x,0,3);  // sort to respect range order with noisy camera
     case cbHistRange.ItemIndex of
       0 : begin  // data range
             FimgMin:=FdataMin;
@@ -236,15 +243,19 @@ begin
           end;
       2 : begin  // medium
             FimgMin:=Fmean;
-            FimgMax:=min(FdataMax,Fmean + 0.2*(FdataMax-Fmean));
+            FimgMax:=x[3];
           end;
       3 : begin  // high
             FimgMin:=Fmean;
-            FimgMax:=min(FdataMax,Fmean + 0.1*(FdataMax-Fmean));
+            FimgMax:=x[2];
           end;
       4 : begin  // very high
             FimgMin:=Fmean;
-            FimgMax:=min(FdataMax,Fmean + 3*Fsd);
+            FimgMax:=x[1];
+          end;
+      5 : begin  // extreme
+            FimgMin:=Fmean;
+            FimgMax:=x[0];
           end;
       else begin  // manual
             // do not change previous setting
