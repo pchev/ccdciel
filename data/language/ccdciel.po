@@ -6089,3 +6089,7 @@ msgstr ""
 msgid "Very High"
 msgstr ""
 
+#: u_translation:rsextreme
+msgid "Extreme"
+msgstr ""
+

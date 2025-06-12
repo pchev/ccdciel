@@ -2,15 +2,15 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ccdciel\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-06-09 17:42+0000\n"
-"PO-Revision-Date: 2025-04-24 06:31+0000\n"
+"POT-Creation-Date: 2025-06-12 19:48+0000\n"
+"PO-Revision-Date: 2025-06-10 15:24+0000\n"
 "Last-Translator: Stanislav Holub <Unknown>\n"
 "Language-Team: Czech <cz@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2025-06-09 18:44+0000\n"
-"X-Generator: Launchpad (build c425d5702ce6a53fe8d94ca38038ac108957fda2)\n"
+"X-Launchpad-Export-Date: 2025-06-12 19:56+0000\n"
+"X-Generator: Launchpad (build 2f3e2deec61796d4ee775e1cf25403fcfe2e4659)\n"
 "Language: cs\n"
 
 #: u_translation.rs2d
@@ -1300,7 +1300,7 @@ msgstr "Tmavá%snoc"
 
 #: u_translation.rsdatarange
 msgid "Data range"
-msgstr ""
+msgstr "Rozsah dat"
 
 #: u_translation.rsdate
 msgid "Date"
@@ -1848,6 +1848,10 @@ msgstr "Expoziční čas [sekundy]"
 msgid "Exposure time too short for measurement, need %d seconds."
 msgstr "Doba expozice je příliš krátká na měření, nutná doba je %d sekund."
 
+#: u_translation.rsextreme
+msgid "Extreme"
+msgstr ""
+
 #: u_translation.rsfahrenheit
 msgid "Fahrenheit"
 msgstr "Farenheita"
@@ -2372,7 +2376,7 @@ msgstr "HFD Monitor Ostření: Práh: %s%%, Ref: %s, %s- Obr. průměr: %s, HFD 
 
 #: u_translation.rshigh
 msgid "High"
-msgstr ""
+msgstr "Vysoká"
 
 #: u_translation.rshighlightadu
 msgid "Highlight ADU"
@@ -2380,7 +2384,7 @@ msgstr "ADU pro vyvážení bílé"
 
 #: u_translation.rshistogram
 msgid "Histogram"
-msgstr ""
+msgstr "Histogram"
 
 #: u_translation.rshistory
 msgid "History"
@@ -2749,7 +2753,7 @@ msgstr "Cyklus"
 
 #: u_translation.rslow
 msgid "Low"
-msgstr ""
+msgstr "Nízká"
 
 #: u_translation.rslowqualityim
 msgid "Low quality image scaling"
@@ -2950,7 +2954,7 @@ msgstr "%sStřední:%s"
 
 #: u_translation.rsmedium
 msgid "Medium"
-msgstr ""
+msgstr "Střední"
 
 #: u_translation.rsmeridian
 msgid "Meridian"
@@ -6124,7 +6128,7 @@ msgstr "Vertikální oprava:"
 
 #: u_translation.rsveryhigh
 msgid "Very High"
-msgstr ""
+msgstr "Velmi vysoká"
 
 #: u_translation.rsvideo
 msgid "Video"

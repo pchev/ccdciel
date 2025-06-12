@@ -2,15 +2,15 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ccdceil\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-06-09 17:43+0000\n"
-"PO-Revision-Date: 2025-01-15 15:25+0000\n"
+"POT-Creation-Date: 2025-06-12 19:49+0000\n"
+"PO-Revision-Date: 2025-06-10 15:26+0000\n"
 "Last-Translator: Stanislav Holub <Unknown>\n"
 "Language-Team: Czech <cz@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2025-06-09 18:44+0000\n"
-"X-Generator: Launchpad (build c425d5702ce6a53fe8d94ca38038ac108957fda2)\n"
+"X-Launchpad-Export-Date: 2025-06-12 19:56+0000\n"
+"X-Generator: Launchpad (build 2f3e2deec61796d4ee775e1cf25403fcfe2e4659)\n"
 "Language: cs\n"
 
 #: u_hints.rsactivateback
@@ -90,7 +90,7 @@ msgstr "Vymazání stavu dokončení sekvence"
 
 #: u_hints.rsclickandmove
 msgid "Click and move to adjust the histogram truncation"
-msgstr ""
+msgstr "Kliknutím a posunutím upravíte zkrácení histogramu."
 
 #: u_hints.rsclicktosetva
 msgid "Click to set value for all the targets"
@@ -145,7 +145,7 @@ msgstr "Odstraňit profil a přidružené předvolby programu."
 
 #: u_hints.rsdetachthegra
 msgid "Detach the graph"
-msgstr ""
+msgstr "Odpojení grafu"
 
 #: u_hints.rsditheraftert
 msgid "Dither on the specified frame interval"
@@ -194,7 +194,7 @@ msgstr "Histogram v plném rozsahu nebo oříznutý na dostupná data"
 
 #: u_hints.rshistogramoft
 msgid "Histogram of the current image"
-msgstr ""
+msgstr "Histogram aktuálního snímku"
 
 #: u_hints.rshistoryofthe
 msgid "History of the last FWHM and Intensity measurement"
@@ -271,7 +271,7 @@ msgstr "Stav planetária"
 
 #: u_hints.rspredefinedhi
 msgid "Predefined histogram truncation"
-msgstr ""
+msgstr "Předdefinované zkrácení histogramu"
 
 #: u_hints.rspriortoslewi
 #, object-pascal-format
@@ -461,7 +461,7 @@ msgstr "Seznam cílů, které mají být zpracovávány postupně."
 
 #: u_hints.rsthelowerlimi
 msgid "The lower limit of histogram truncation"
-msgstr ""
+msgstr "Dolní mez zkrácení histogramu"
 
 #: u_hints.rsthemagnitude
 #, object-pascal-format
@@ -542,7 +542,7 @@ msgstr "Cesta Unix ekvivalentní ke složce Elbrus Images."
 
 #: u_hints.rstheupperlimi
 msgid "The upper limit of histogram truncation"
-msgstr ""
+msgstr "Horní hranice zkrácení histogramu"
 
 #: u_hints.rsthisallowtor
 msgid "This allow to restart an interrupted sequence at the point it was stopped"
@@ -593,7 +593,7 @@ msgstr "Vyčkat do času, než se začne zpracovávat seznam."
 
 #: u_hints.rszoomthehisto
 msgid "Zoom the histogram to the current selection"
-msgstr ""
+msgstr "Zvětšení histogramu na aktuální výběr"
 
 #: u_hints.rszoomtoadjust
 msgid "Zoom to adjust in window"
