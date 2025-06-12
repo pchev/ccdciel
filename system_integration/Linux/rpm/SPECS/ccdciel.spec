@@ -9,7 +9,7 @@ Packager: Patrick Chevalley
 BuildRoot: %_topdir/%{name}
 BuildArch: i386
 Provides: ccdciel
-Requires: libpasastro glib2 qt5pas libjpeg libpng fpack espeak exiv2
+Requires: libpasastro glib2 qt5pas libjpeg libpng espeak exiv2
 AutoReqProv: no
 
 %description

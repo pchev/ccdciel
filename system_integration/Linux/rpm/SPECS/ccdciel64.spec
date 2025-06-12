@@ -9,7 +9,7 @@ Packager: Patrick Chevalley
 BuildRoot: %_topdir/%{name}
 BuildArch: x86_64
 Provides: ccdciel
-Requires: libpasastro libglib-2.0.so.0 libQt5Pas.so.1()(64bit) libjpeg libpng fpack espeak exiv2
+Requires: libpasastro libglib-2.0.so.0 libQt5Pas.so.1()(64bit) libjpeg libpng espeak exiv2
 AutoReqProv: no
 
 %description

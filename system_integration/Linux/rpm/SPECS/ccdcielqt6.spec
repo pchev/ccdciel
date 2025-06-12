@@ -11,7 +11,7 @@ BuildArch: x86_64
 Obsoletes: ccdciel
 Provides: ccdciel
 Conflicts: ccdciel
-Requires: libpasastro  libglib-2.0.so.0 libQt6Pas.so.6()(64bit) libjpeg libpng fpack espeak exiv2
+Requires: libpasastro  libglib-2.0.so.0 libQt6Pas.so.6()(64bit) libjpeg libpng espeak exiv2
 AutoReqProv: no
 
 %description
