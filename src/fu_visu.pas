@@ -232,19 +232,19 @@ begin
           end;
       1 : begin  // low
             FimgMin:=FdataMin;
-            FimgMax:=FdataMin + 0.5*(FdataMax-FdataMin);
+            FimgMax:=min(FdataMax,FdataMin + 0.5*(FdataMax-FdataMin));
           end;
       2 : begin  // medium
             FimgMin:=Fmean;
-            FimgMax:=Fmean + 0.2*(FdataMax-Fmean);
+            FimgMax:=min(FdataMax,Fmean + 0.2*(FdataMax-Fmean));
           end;
       3 : begin  // high
             FimgMin:=Fmean;
-            FimgMax:=Fmean + 0.1*(FdataMax-Fmean);
+            FimgMax:=min(FdataMax,Fmean + 0.1*(FdataMax-Fmean));
           end;
       4 : begin  // very high
             FimgMin:=Fmean;
-            FimgMax:=Fmean + 3*Fsd;
+            FimgMax:=min(FdataMax,Fmean + 3*Fsd);
           end;
       else begin  // manual
             // do not change previous setting
