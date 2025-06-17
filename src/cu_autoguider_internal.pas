@@ -569,7 +569,7 @@ begin
   GuideLock:=finternalguider.SpectroFunctions and finternalguider.GuideLock and (not finternalguider.ForceMultistar);
   if finternalguider.SpectroFunctions then
     // limit spectro single star move to box size
-    FLongestPulse := min(Finternalguider.LongestPulse,round(Finternalguider.SearchWinMin*1000/Finternalguider.pulsegainEast/2))
+    FLongestPulse := min(Finternalguider.LongestPulse,round(Finternalguider.SearchWinMin*1000/Finternalguider.pulsegainEast/4))
   else
     // otherwise use the configured value
     FLongestPulse := Finternalguider.LongestPulse;
