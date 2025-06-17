@@ -2244,6 +2244,7 @@ begin
      end;
      if assigned(FonEndSequence) then FonEndSequence(nil);
      finally
+       FWaiting:=false;
        FFinalizing:=false;
      end;
    end;
