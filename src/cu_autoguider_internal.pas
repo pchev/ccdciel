@@ -510,7 +510,7 @@ end;
 
 function  T_autoguider_internal.measure_drift(var initialize:boolean; out drX,drY :double) : integer;// ReferenceX,Y indicates the total drift, drX,drY to drift since previous call. Arrays old_xy_array,xy_array are for storage star positions
 var
-  i,fitsx,fitsy,stepsize,xsize,ysize,star_counter,star_counter2,counter,len,maxSNRstar,ix,iy: integer;
+  i,c,s,fitsx,fitsy,stepsize,xsize,ysize,star_counter,star_counter2,counter,len,maxSNRstar,ix,iy: integer;
   hfd1,star_fwhm,vmax,bg,bgdev,xc,yc,snr,flux,fluxratio,min_SNR,min_HFD,maxSNR,margin,y,mhfd,peak : double;
   x1,y1,bg1,bgdev1,fwhm1,vmax1,snr1,flux1: double;
   GuideLock: boolean;
@@ -786,13 +786,18 @@ begin
        FGuideBmp.Canvas.Pen.Color:=clYellow;
      end;
 
-     // search star near previous position
-     guidefits.FindStarPos2(round(xy_array_old[0].x2),round(xy_array_old[0].y2),finternalguider.SearchWinMin,xc,yc,vmax,bg,bgdev);
-     if FSettling then begin
-       // check SNR to be sure we not loss the star with a large move
-       guidefits.GetHFD2(round(xc),round(yc),finternalguider.SearchWinMin,x1,y1,bg1,bgdev1,hfd1,fwhm1,vmax,snr1,flux1,false,true);
-       if snr1<Finternalguider.MinSNR then vmax:=0;
-     end;
+     // search star near previous position, if not found repeat with increasing search area up to 2*SearchWinMin
+     c:=0;
+     repeat
+       s:=round((1+0.2*c)*finternalguider.SearchWinMin);
+       guidefits.FindStarPos2(round(xy_array_old[0].x2),round(xy_array_old[0].y2),s,xc,yc,vmax,bg,bgdev);
+       if FSettling then begin
+         // check SNR to be sure we not loss the star with a large move
+         guidefits.GetHFD2(round(xc),round(yc),s,x1,y1,bg1,bgdev1,hfd1,fwhm1,vmax,snr1,flux1,false,true);
+         if snr1<Finternalguider.MinSNR then vmax:=0;
+       end;
+       inc(c);
+     until (vmax<>0) or (c>5);
      if vmax=0 then
        // if star lost, search again with the larger area
        guidefits.FindStarPos2(round(xy_array_old[0].x2),round(xy_array_old[0].y2),finternalguider.SearchWinMax,xc,yc,vmax,bg,bgdev);
