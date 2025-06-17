@@ -53,7 +53,7 @@ type
     LastDecSign,FFullDitherRa,FFullDitherDec,PulseGuidingStartTime,RAposition,DECposition : double;
     RAduration, DECduration,BacklashDuration : longint;
     RADirection,DECDirection: string;
-    SameDecSignCount,LastBacklashDuration,Dnorth, Dsouth, CalibrationPhase2,watchdog : integer;
+    SameDecSignCount,LastBacklashDuration,Dnorth, Dsouth, CalibrationPhase2,watchdog,FLongestPulse : integer;
     LastBacklash,FirstDecDirectionChange: boolean;
     xy_trend : xy_guiderlist;
     dither_position: dither_positionarray;
@@ -200,6 +200,7 @@ begin
   FSettlePix:=1;
   FSettleTmin:=5;
   FSettleTmax:=30;
+  FLongestPulse:=1000;
   InitLog;
   StopInternalguider:=false;
   InternalguiderRunning:=false;
@@ -520,13 +521,15 @@ var
 const
     overlap=6;
     maxstars=1000;
+
+
 begin
   result:=1;// Assume no stars detected
   star_counter:=0;
 
   //square search area
   if (finternalguider.SpectroFunctions or FFastDither) and FSettling and (not finternalguider.GuideLock) then
-    searchA:=max(28,round(2*(MaxValue([pulseRA,pulseDEC,Finternalguider.LongestPulse])*Finternalguider.pulsegainEast/1000))) // large enough when moving to the slit using longestpulse
+    searchA:=max(28,round(2*(MaxValue([pulseRA,pulseDEC,Finternalguider.LongestPulse])*Finternalguider.pulsegainEast/1000))) // large enough when moving to the slit using longestpulse in multistar
   else
     searchA:=28;
 
@@ -564,6 +567,12 @@ begin
   end;
 
   GuideLock:=finternalguider.SpectroFunctions and finternalguider.GuideLock and (not finternalguider.ForceMultistar);
+  if finternalguider.SpectroFunctions then
+    // limit spectro single star move to box size
+    FLongestPulse := min(Finternalguider.LongestPulse,round(Finternalguider.SearchWinMin*1000/Finternalguider.pulsegainEast/2))
+  else
+    // otherwise use the configured value
+    FLongestPulse := Finternalguider.LongestPulse;
 
   min_SNR:=finternalguider.minSNR;//make local to reduce some CPU load
   min_HFD:=finternalguider.minHFD;//make local to reduce some CPU load
@@ -1600,7 +1609,7 @@ begin
 
     end
     else begin //standard control
-      pulse_move(finternalguider.LongestPulse);//move the mount with specified moveRA and moveDEC using pulses
+      pulse_move(FLongestPulse);//move the mount with specified moveRA and moveDEC using pulses
       maxpulse:=max(pulseRA,pulseDEC); // Assume parallel dithering
 
     end;
