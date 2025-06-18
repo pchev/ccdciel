@@ -569,7 +569,7 @@ begin
   GuideLock:=finternalguider.SpectroFunctions and finternalguider.GuideLock and (not finternalguider.ForceMultistar);
   if finternalguider.SpectroFunctions then
     // limit spectro single star move to box size
-    FLongestPulse := min(Finternalguider.LongestPulse,round(Finternalguider.SearchWinMin*1000/Finternalguider.pulsegainEast/4))
+    FLongestPulse := min(Finternalguider.LongestPulse,round(Finternalguider.SearchWinMin*1000/Finternalguider.pulsegainEast/2))
   else
     // otherwise use the configured value
     FLongestPulse := Finternalguider.LongestPulse;
@@ -786,7 +786,7 @@ begin
        ys1:=round(xy_array_old[0].y2);
        // correct search position for last move
        xy_array_old[0].x2:=xy_array_old[0].x2- SearchCorrX;
-       xy_array_old[0].y2:=xy_array_old[0].y2+ SearchCorrY;
+       xy_array_old[0].y2:=xy_array_old[0].y2- SearchCorrY;
        // mark this position
        FGuideBmp.Canvas.Pen.Color:=clRed;
        xs2:=round(xy_array_old[0].x2);
@@ -1377,7 +1377,7 @@ end;
 procedure T_autoguider_internal.InternalAutoguiding;
 var i,maxpulse    : integer;
     pulsedir: string;
-    mflipcorr,PAsolar,dsettle: double;
+    mflipcorr,PAsolar,dsettle, dd,dr: double;
     meridianflip, initial: boolean;
 
           procedure track_solar_object;//neo and comet tracking
@@ -1635,7 +1635,10 @@ begin
     xy_trend[0].deccorr:=+moveDEC;//store DEC correction in pixels for trend
 
     if finternalguider.SpectroFunctions and (moveRA<>0) and (moveDEC<>0) then begin
-      rotate2(((finternalguider.PA+mflipcorr)*pi/180),moveRA,moveDec, SearchCorrX,SearchCorrY);
+      dr:=-moveRA;
+      dd:=-moveDec;
+      if finternalguider.pulsegainNorth>0 then dd:=-dd;
+      rotate2(pi2+((finternalguider.PA+mflipcorr)*pi/180),dr,dd, SearchCorrX,SearchCorrY);
     end
     else begin
       SearchCorrX:=0;
