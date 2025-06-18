@@ -18043,6 +18043,10 @@ end;
 procedure Tf_main.InternalguiderStop(Sender: TObject);
 begin
    if autoguider is T_autoguider_internal then T_autoguider_internal(autoguider).InternalguiderStop;
+   f_internalguider.GuideLockNextX:=-1;
+   f_internalguider.GuideLockNextY:=-1;
+   DrawGuideImage(true);
+   PlotGuideImage;
 end;
 
 procedure Tf_main.InternalguiderCalibrate(Sender: TObject);
