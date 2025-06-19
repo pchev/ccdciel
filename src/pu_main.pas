@@ -3111,19 +3111,25 @@ begin
   btn := TPortableNetworkGraphic.Create;
   TBTabs.Images.GetBitmap(5, btn);
   f_visu.BtnZoomAdjust.Glyph.Assign(btn);
-  f_internalguider.BtnZoomAdjust.Glyph.Assign(btn);
-  f_finder.BtnZoomAdjust.Glyph.Assign(btn);
+  f_internalguider.visu.BtnZoomAdjust.Glyph.Assign(btn);
+  f_finder.visu.BtnZoomAdjust.Glyph.Assign(btn);
   TBTabs.Images.GetBitmap(6, btn);
   f_visu.BtnBullsEye.Glyph.Assign(btn);
-  f_finder.BtnBullsEye.Glyph.Assign(btn);
+  f_finder.visu.BtnBullsEye.Glyph.Assign(btn);
   TBTabs.Images.GetBitmap(7, btn);
   f_visu.BtnClipRange.Glyph.Assign(btn);
+  f_internalguider.visu.BtnClipRange.Glyph.Assign(btn);
+  f_finder.visu.BtnClipRange.Glyph.Assign(btn);
   TBTabs.Images.GetBitmap(16, btn);
   f_visu.BtnZoomHist.Glyph.Assign(btn);
+  f_internalguider.visu.BtnZoomHist.Glyph.Assign(btn);
+  f_finder.visu.BtnZoomHist.Glyph.Assign(btn);
   TBTabs.Images.GetBitmap(8, btn);
   f_visu.BtnClipping.Glyph.Assign(btn);
   TBTabs.Images.GetBitmap(11, btn);
   f_visu.BtnInvert.Glyph.Assign(btn);
+  f_internalguider.visu.BtnInvert.Glyph.Assign(btn);
+  f_finder.visu.BtnInvert.Glyph.Assign(btn);
   TBTabs.Images.GetBitmap(12, btn);
   f_visu.BtnFlipHorz.Glyph.Assign(btn);
   TBTabs.Images.GetBitmap(13, btn);
@@ -5249,8 +5255,9 @@ begin
   f_internalguider.Gain.Value:=config.GetValue('/InternalGuider/Camera/Gain',0);
   f_internalguider.Offset.Value:=config.GetValue('/InternalGuider/Camera/Offset',0);
   f_internalguider.Temperature.Value:=config.GetValue('/InternalGuider/Camera/Temperature',0);
-  f_internalguider.Gamma.Position:=config.GetValue('/InternalGuider/Visu/Gamma',50);
-  f_internalguider.Luminosity.Position:=config.GetValue('/InternalGuider/Visu/Luminosity',50);
+  f_internalguider.visu.Gamma.Value:=config.GetValue('/InternalGuider/Visu/Gamma',0.5);
+  f_internalguider.visu.BtnClipRange.Down:=config.GetValue('/InternalGuider/Visu/ClipRange',false);
+  f_internalguider.visu.cbHistRange.ItemIndex:=config.GetValue('/InternalGuider/Visu/HistRange',3);
   f_internalguider.cbEnlargeImage.Checked:=config.GetValue('/InternalGuider/EnlargeImage',PageControlRight.Height<f_internalguider.Height);
   f_internalguider.SpectroFunctions:=config.GetValue('/InternalGuider/Spectro/SpectroFunctions',false);
   f_internalguider.SearchWinMin:=config.GetValue('/InternalGuider/Spectro/SearchWinMin',40);
@@ -5302,8 +5309,9 @@ begin
   f_finder.PreviewExp.Value:=config.GetValue('/PrecSlew/Exposure',10.0);
   f_finder.Gain.Value:=config.GetValue('/PrecSlew/Gain',NullInt);
   f_finder.Offset.Value:=config.GetValue('/PrecSlew/Offset',NullInt);
-  f_finder.Gamma.Position:=config.GetValue('/Finder/Gamma',50);
-  f_finder.Luminosity.Position:=config.GetValue('/Finder/Luminosity',50);
+  f_finder.visu.Gamma.Value:=config.GetValue('/Finder/Visu/Gamma',0.5);
+  f_finder.visu.BtnClipRange.Down:=config.GetValue('/Finder/Visu/ClipRange',false);
+  f_finder.visu.cbHistRange.ItemIndex:=config.GetValue('/Finder/Visu/HistRange',3);
   f_finder.Temperature.Value:=config.GetValue('/Finder/Temperature',0);
 
   astrometryResolver:=config.GetValue('/Astrometry/Resolver',ResolverAstap);
@@ -5887,10 +5895,9 @@ begin
   config.SetValue('/InternalGuider/Camera/Gain',f_internalguider.Gain.Value);
   config.SetValue('/InternalGuider/Camera/Offset',f_internalguider.Offset.Value);
   config.SetValue('/InternalGuider/Camera/Temperature',f_internalguider.Temperature.Value);
-  config.SetValue('/InternalGuider/Visu/Gamma',f_internalguider.Gamma.Position);
-  config.SetValue('/InternalGuider/Visu/Luminosity',f_internalguider.Luminosity.Position);
-  config.SetValue('/InternalGuider/EnlargeImage',f_internalguider.cbEnlargeImage.Checked);
-
+  config.SetValue('/InternalGuider/Visu/Gamma',f_internalguider.visu.Gamma.Value);
+  config.SetValue('/InternalGuider/Visu/ClipRange',f_internalguider.visu.BtnClipRange.Down);
+  config.SetValue('/InternalGuider/Visu/HistRange',f_internalguider.visu.cbHistRange.ItemIndex);
   config.SetValue('/InternalGuider/Spectro/SpectroFunctions',f_internalguider.SpectroFunctions);
   config.SetValue('/InternalGuider/Spectro/Strategy',ord(f_internalguider.SpectroStrategy));
   config.SetValue('/Autoguider/Lock/GuideSetLock',f_internalguider.GuideLock);
@@ -5922,8 +5929,9 @@ begin
   config.SetValue('/Finder/OffsetX',astrometry.FinderOffsetX);
   config.SetValue('/Finder/OffsetY',astrometry.FinderOffsetY);
   config.SetValue('/Finder/Binning',astrometry.FinderBinning);
-  config.SetValue('/Finder/Gamma',f_finder.Gamma.Position);
-  config.SetValue('/Finder/Luminosity',f_finder.Luminosity.Position);
+  config.SetValue('/Finder/Visu/Gamma',f_finder.visu.Gamma.Value);
+  config.SetValue('/Finder/Visu/ClipRange',f_finder.visu.BtnClipRange.Down);
+  config.SetValue('/Finder/Visu/HistRange',f_finder.visu.cbHistRange.ItemIndex);
   config.SetValue('/Finder/Temperature',f_finder.Temperature.Value);
 
   // star autoexposure in sequence editor
@@ -18187,6 +18195,7 @@ begin
   end;
 
   // prepare image
+  f_internalguider.visu.DrawHistogram(guidefits,true,true);
   DrawGuideImage(displayimage);
   if InternalguiderRunning and (autoguider is T_autoguider_internal) then begin
     // signal an image is available
@@ -18263,21 +18272,19 @@ end;
 
 Procedure Tf_main.DrawGuideImage(display: boolean);
 var tmpbmp:TBGRABitmap;
-    dmin,dmax: double;
     xs,ys,r: integer;
     sp,cp,xx1,xx2,yy1,yy2: double;
-    maxhist,maxp,sumhist,starthist,stophist:integer;
 begin
 if (guidefits.HeaderInfo.naxis>0) and guidefits.ImageValid then begin
   f_internalguider.DrawSettingChange:=false;
-  guidefits.Gamma:=(101-f_internalguider.Gamma.Position)/100;
-  HistStats(guidefits.Histogram,maxhist,maxp,sumhist,starthist,stophist);
-  HistLevel(f_internalguider.Luminosity.Position,sumhist,starthist,maxp,guidefits.Histogram,dmin,dmax);
-  guidefits.VisuMax:=round(dmax);
-  guidefits.VisuMin:=round(dmin);
+  guidefits.Gamma:=f_internalguider.visu.Gamma.Value;
+  guidefits.VisuMax:=round(f_internalguider.visu.ImgMax);
+  guidefits.VisuMin:=round(f_internalguider.visu.ImgMin);
   guidefits.MaxADU:=MaxADU;
-  guidefits.MarkOverflow:=false; //f_visu.Clipping;
-  guidefits.Invert:=false; //f_visu.Invert;
+  guidefits.Overflow:= 0.9995*ClippingOverflow;
+  guidefits.Underflow:=ClippingUnderflow;
+  guidefits.MarkOverflow:=f_internalguider.visu.Clipping;
+  guidefits.Invert:=f_internalguider.visu.Invert;
   if display then begin
   {$ifdef debug_raw}writeln(FormatDateTime(dateiso,Now)+blank+'FITS GetBGRABitmap');{$endif}
   guidefits.GetBGRABitmap(ImaGuideBmp);
@@ -19083,6 +19090,7 @@ begin
     if f_polaralign2.Visible and f_polaralign2.SolveUpdate.Checked then f_polaralign2.UpdateAlign;
   end;
   // prepare image
+  f_finder.visu.DrawHistogram(finderfits,true,true);
   DrawFinderImage(displayimage);
   // start next exposure
   if FinderPreviewLoop then Application.QueueAsyncCall(@f_finder.StartExposureAsync,0);
@@ -19093,21 +19101,19 @@ end;
 
 procedure Tf_main.DrawFinderImage(display: boolean);
 var tmpbmp:TBGRABitmap;
-    dmin,dmax: double;
     co: TBGRAPixel;
     s,cx,cy: integer;
-    maxhist,maxp,sumhist,starthist,stophist:integer;
 begin
 if (finderfits.HeaderInfo.naxis>0) and finderfits.ImageValid then begin
   f_finder.DrawSettingChange:=false;
-  finderfits.Gamma:=(101-f_finder.Gamma.Position)/100;
-  HistStats(finderfits.Histogram,maxhist,maxp,sumhist,starthist,stophist);
-  HistLevel(f_finder.Luminosity.Position,sumhist,starthist,maxp,finderfits.Histogram,dmin,dmax);
-  finderfits.VisuMax:=round(dmax);
-  finderfits.VisuMin:=round(dmin);
+  finderfits.Gamma:=f_finder.visu.Gamma.Value;
+  finderfits.VisuMax:=round(f_finder.visu.ImgMax);
+  finderfits.VisuMin:=round(f_finder.visu.ImgMin);
   finderfits.MaxADU:=MaxADU;
-  finderfits.MarkOverflow:=false;
-  finderfits.Invert:=false;
+  finderfits.Overflow:= 0.9995*ClippingOverflow;
+  finderfits.Underflow:=ClippingUnderflow;
+  finderfits.MarkOverflow:=f_finder.visu.Clipping;
+  finderfits.Invert:=f_finder.visu.Invert;
   if display then begin
   finderfits.GetBGRABitmap(ImaFinderBmp);
   FinderImgPixRatio:=finderfits.HeaderInfo.pixratio;
@@ -19119,7 +19125,7 @@ if (finderfits.HeaderInfo.naxis>0) and finderfits.ImageValid then begin
   end;
   finderimg_Width:=ImaFinderBmp.Width;
   finderimg_Height:=ImaFinderBmp.Height;
-  if f_finder.BullsEye then begin
+  if f_finder.visu.BtnBullsEye.Down then begin
     // center cross
     co:=ColorToBGRA(clRed);
     cx:=finderimg_Width div 2;

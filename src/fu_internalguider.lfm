@@ -277,7 +277,7 @@ object f_internalguider: Tf_internalguider
             Height = 22
             Hint = 'The trend and XY scales will be in arc seconds'
             Top = 200
-            Width = 34
+            Width = 30
             Caption = '"'
             ParentFont = False
             TabOrder = 8
@@ -330,7 +330,7 @@ object f_internalguider: Tf_internalguider
             Left = 128
             Height = 22
             Top = 473
-            Width = 154
+            Width = 150
             Caption = 'Enlarge guide image'
             OnChange = cbEnlargeImageChange
             TabOrder = 10
@@ -589,7 +589,7 @@ object f_internalguider: Tf_internalguider
               Left = 160
               Height = 22
               Top = 36
-              Width = 69
+              Width = 65
               BorderSpacing.Top = 4
               Caption = 'Cooler'
               OnClick = CoolerClick
@@ -598,123 +598,22 @@ object f_internalguider: Tf_internalguider
           end
           object Panel8: TPanel
             Left = 1
-            Height = 144
+            Height = 497
             Top = 298
             Width = 338
-            Align = alTop
+            Align = alClient
             BevelOuter = bvNone
-            ClientHeight = 144
+            ClientHeight = 497
             ClientWidth = 338
-            ParentBackground = False
             TabOrder = 5
-            object Label17: TLabel
-              AnchorSideTop.Control = Gamma
-              AnchorSideTop.Side = asrCenter
-              Left = 16
-              Height = 18
-              Top = 20
-              Width = 49
-              Caption = 'Gamma'
-              ParentColor = False
-            end
-            object Gamma: TTrackBar
-              Left = 104
-              Height = 43
-              Top = 8
-              Width = 111
-              Max = 100
-              Min = 1
-              PageSize = 10
-              Position = 50
-              TickStyle = tsNone
-              OnClick = ForceRedraw
+            object PanelVisu: TPanel
+              AnchorSideTop.Side = asrBottom
+              Left = 0
+              Height = 270
+              Top = 0
+              Width = 262
+              BevelOuter = bvNone
               TabOrder = 0
-            end
-            object Label18: TLabel
-              AnchorSideTop.Control = Luminosity
-              AnchorSideTop.Side = asrCenter
-              Left = 16
-              Height = 18
-              Top = 68
-              Width = 68
-              Caption = 'Luminosity'
-              ParentColor = False
-            end
-            object Luminosity: TTrackBar
-              Left = 104
-              Height = 43
-              Top = 56
-              Width = 111
-              Max = 100
-              PageSize = 10
-              Position = 50
-              TickStyle = tsNone
-              OnClick = ForceRedraw
-              TabOrder = 1
-            end
-            object Label19: TLabel
-              Left = 16
-              Height = 18
-              Top = 114
-              Width = 36
-              Caption = 'Zoom'
-              ParentColor = False
-            end
-            object BtnZoom05: TSpeedButton
-              Tag = 1
-              AnchorSideLeft.Control = BtnZoomAdjust
-              AnchorSideLeft.Side = asrBottom
-              Left = 132
-              Height = 22
-              Hint = 'Zoom to half size'
-              Top = 114
-              Width = 28
-              BorderSpacing.Left = 1
-              Caption = '1:2'
-              Color = clDefault
-              Layout = blGlyphBottom
-              OnClick = BtnZoom05Click
-              ParentFont = False
-            end
-            object BtnZoomAdjust: TSpeedButton
-              Left = 103
-              Height = 22
-              Hint = 'Zoom to adjust in window'
-              Top = 114
-              Width = 28
-              Color = clDefault
-              OnClick = BtnZoomAdjustClick
-              ParentFont = False
-            end
-            object BtnZoom1: TSpeedButton
-              Tag = 2
-              AnchorSideLeft.Side = asrBottom
-              Left = 161
-              Height = 22
-              Hint = 'Zoom to original scale'
-              Top = 114
-              Width = 28
-              BorderSpacing.Left = 1
-              Caption = '1:1'
-              Color = clDefault
-              Layout = blGlyphBottom
-              OnClick = BtnZoom1Click
-              ParentFont = False
-            end
-            object BtnZoom2: TSpeedButton
-              Tag = 3
-              AnchorSideLeft.Side = asrBottom
-              Left = 190
-              Height = 22
-              Hint = 'Zoom two time'
-              Top = 114
-              Width = 28
-              BorderSpacing.Left = 1
-              Caption = '2:1'
-              Color = clDefault
-              Layout = blGlyphBottom
-              OnClick = BtnZoom2Click
-              ParentFont = False
             end
           end
         end
@@ -904,7 +803,7 @@ object f_internalguider: Tf_internalguider
               Height = 22
               Hint = 'If checked then the telescope will follow the moving solar object.'
               Top = 200
-              Width = 211
+              Width = 207
               Caption = 'Activate solar object tracking. '
               OnChange = CheckBoxTrackSolar1Change
               TabOrder = 5
@@ -940,7 +839,7 @@ object f_internalguider: Tf_internalguider
               Left = 8
               Height = 22
               Top = 304
-              Width = 199
+              Width = 195
               Caption = 'Use backlash compensation'
               OnChange = CheckBoxBacklashChange
               TabOrder = 8
@@ -972,7 +871,7 @@ object f_internalguider: Tf_internalguider
               Height = 22
               Hint = 'For testing. This will disable guiding but still show the trend.'
               Top = 368
-              Width = 191
+              Width = 187
               Caption = 'Disable guiding temporary'
               OnChange = disable_guiding1Change
               ParentFont = False
@@ -1019,7 +918,7 @@ object f_internalguider: Tf_internalguider
               Height = 22
               Hint = 'Use alternative method for measuring pixel scale in arc seconds during calibration. '
               Top = 104
-              Width = 285
+              Width = 281
               Caption = 'Measure pixel scale ["/px] by stop tracking'
               ParentFont = False
               TabOrder = 0
@@ -1051,7 +950,7 @@ object f_internalguider: Tf_internalguider
               Left = 8
               Height = 22
               Top = 32
-              Width = 196
+              Width = 192
               Caption = 'Set guide speed [x sidereal]'
               OnChange = ForceGuideSpeedChange
               TabOrder = 2
@@ -1133,7 +1032,7 @@ object f_internalguider: Tf_internalguider
             Left = 9
             Height = 22
             Top = 4
-            Width = 221
+            Width = 217
             Caption = 'Activate spectroscopy functions'
             OnChange = cbSpectroChange
             TabOrder = 0
@@ -1642,7 +1541,7 @@ object f_internalguider: Tf_internalguider
               Left = 0
               Height = 22
               Top = 0
-              Width = 173
+              Width = 169
               Caption = 'Draw slit area on image'
               OnChange = cbDrawSlitChange
               TabOrder = 0

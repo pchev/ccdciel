@@ -250,7 +250,7 @@ object f_visu: Tf_visu
           end
           object BtnBullsEye: TSpeedButton
             AnchorSideLeft.Side = asrBottom
-            Left = 116
+            Left = 87
             Height = 22
             Hint = 'Show bulls eye'
             Top = 0
@@ -264,7 +264,7 @@ object f_visu: Tf_visu
           end
           object BtnClipping: TSpeedButton
             AnchorSideLeft.Side = asrBottom
-            Left = 87
+            Left = 116
             Height = 22
             Hint = 'Show highlight and shadow clipping'
             Top = 0
@@ -527,9 +527,10 @@ object f_visu: Tf_visu
         object LabelPos: TLabel
           Left = 0
           Height = 18
-          Top = 104
-          Width = 7
-          Caption = '  '
+          Top = 100
+          Width = 174
+          Align = alTop
+          Caption = ' '
           ParentColor = False
           Visible = False
         end

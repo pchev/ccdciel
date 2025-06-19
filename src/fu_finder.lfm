@@ -1,9 +1,9 @@
 object f_finder: Tf_finder
   Left = 0
-  Height = 693
+  Height = 759
   Top = 0
   Width = 280
-  ClientHeight = 693
+  ClientHeight = 759
   ClientWidth = 280
   ParentFont = False
   TabOrder = 0
@@ -27,12 +27,12 @@ object f_finder: Tf_finder
   end
   object Panel1: TPanel
     Left = 0
-    Height = 628
+    Height = 716
     Top = 20
     Width = 280
     Align = alTop
     BevelOuter = bvNone
-    ClientHeight = 628
+    ClientHeight = 716
     ClientWidth = 280
     ParentFont = False
     TabOrder = 0
@@ -151,7 +151,7 @@ object f_finder: Tf_finder
         Left = 8
         Height = 22
         Top = 70
-        Width = 104
+        Width = 100
         Caption = 'Save images'
         TabOrder = 2
       end
@@ -161,154 +161,6 @@ object f_finder: Tf_finder
         Top = 95
         Width = 58
         Caption = 'LabelInfo'
-        ParentColor = False
-      end
-    end
-    object Panel8: TPanel
-      Left = 0
-      Height = 178
-      Top = 446
-      Width = 280
-      Align = alTop
-      BevelOuter = bvNone
-      ClientHeight = 178
-      ClientWidth = 280
-      TabOrder = 2
-      object Label17: TLabel
-        AnchorSideTop.Control = Gamma
-        AnchorSideTop.Side = asrCenter
-        Left = 8
-        Height = 18
-        Top = 20
-        Width = 49
-        Caption = 'Gamma'
-        ParentColor = False
-      end
-      object Gamma: TTrackBar
-        Left = 104
-        Height = 43
-        Top = 8
-        Width = 111
-        Max = 100
-        Min = 1
-        OnChange = GammaChange
-        PageSize = 10
-        Position = 50
-        TickStyle = tsNone
-        TabOrder = 0
-      end
-      object Label18: TLabel
-        AnchorSideTop.Control = Luminosity
-        AnchorSideTop.Side = asrCenter
-        Left = 8
-        Height = 18
-        Top = 68
-        Width = 68
-        Caption = 'Luminosity'
-        ParentColor = False
-      end
-      object Luminosity: TTrackBar
-        Left = 104
-        Height = 43
-        Top = 56
-        Width = 111
-        Max = 100
-        OnChange = LuminosityChange
-        PageSize = 10
-        Position = 50
-        TickStyle = tsNone
-        TabOrder = 1
-      end
-      object Label19: TLabel
-        AnchorSideTop.Control = BtnZoomAdjust
-        AnchorSideTop.Side = asrCenter
-        Left = 8
-        Height = 18
-        Top = 116
-        Width = 36
-        Caption = 'Zoom'
-        ParentColor = False
-      end
-      object BtnZoom05: TSpeedButton
-        Tag = 1
-        AnchorSideLeft.Control = BtnZoomAdjust
-        AnchorSideLeft.Side = asrBottom
-        Left = 141
-        Height = 22
-        Hint = 'Zoom to half size'
-        Top = 114
-        Width = 28
-        BorderSpacing.Left = 1
-        Caption = '1:2'
-        Color = clDefault
-        Layout = blGlyphBottom
-        OnClick = BtnZoom05Click
-        ParentFont = False
-      end
-      object BtnZoomAdjust: TSpeedButton
-        Left = 112
-        Height = 22
-        Hint = 'Zoom to adjust in window'
-        Top = 114
-        Width = 28
-        Color = clDefault
-        OnClick = BtnZoomAdjustClick
-        ParentFont = False
-      end
-      object BtnZoom1: TSpeedButton
-        Tag = 2
-        AnchorSideLeft.Control = BtnZoom05
-        AnchorSideLeft.Side = asrBottom
-        Left = 170
-        Height = 22
-        Hint = 'Zoom to original scale'
-        Top = 114
-        Width = 28
-        BorderSpacing.Left = 1
-        Caption = '1:1'
-        Color = clDefault
-        Layout = blGlyphBottom
-        OnClick = BtnZoom1Click
-        ParentFont = False
-      end
-      object BtnZoom2: TSpeedButton
-        Tag = 3
-        AnchorSideLeft.Control = BtnZoom1
-        AnchorSideLeft.Side = asrBottom
-        Left = 199
-        Height = 22
-        Hint = 'Zoom two time'
-        Top = 114
-        Width = 28
-        BorderSpacing.Left = 1
-        Caption = '2:1'
-        Color = clDefault
-        Layout = blGlyphBottom
-        OnClick = BtnZoom2Click
-        ParentFont = False
-      end
-      object BtnBullsEye: TSpeedButton
-        AnchorSideLeft.Side = asrBottom
-        Left = 112
-        Height = 22
-        Hint = 'Show bulls eye'
-        Top = 139
-        Width = 28
-        AllowAllUp = True
-        BorderSpacing.Left = 1
-        Color = clDefault
-        GroupIndex = 103
-        OnClick = BtnBullsEyeClick
-        ParentFont = False
-      end
-      object Label4: TLabel
-        AnchorSideTop.Control = BtnBullsEye
-        AnchorSideTop.Side = asrCenter
-        Left = 8
-        Height = 18
-        Top = 141
-        Width = 90
-        Caption = 'Show bulls eye'
         ParentColor = False
       end
     end
@@ -322,7 +174,7 @@ object f_finder: Tf_finder
       ClientHeight = 60
       ClientWidth = 280
       ParentBackground = False
-      TabOrder = 3
+      TabOrder = 2
       object Label21: TLabel
         AnchorSideTop.Control = Temperature
         AnchorSideTop.Side = asrCenter
@@ -373,7 +225,7 @@ object f_finder: Tf_finder
         Left = 152
         Height = 22
         Top = 36
-        Width = 69
+        Width = 65
         BorderSpacing.Top = 4
         Caption = 'Cooler'
         OnClick = CoolerClick
@@ -390,7 +242,7 @@ object f_finder: Tf_finder
       ClientHeight = 34
       ClientWidth = 280
       ParentBackground = False
-      TabOrder = 4
+      TabOrder = 3
       object Label15: TLabel
         AnchorSideTop.Control = Gain
         AnchorSideTop.Side = asrCenter
@@ -423,7 +275,7 @@ object f_finder: Tf_finder
       ClientHeight = 34
       ClientWidth = 280
       ParentBackground = False
-      TabOrder = 5
+      TabOrder = 4
       object Label16: TLabel
         AnchorSideTop.Control = Offset
         AnchorSideTop.Side = asrCenter
@@ -455,7 +307,7 @@ object f_finder: Tf_finder
       BevelOuter = bvNone
       ClientHeight = 34
       ClientWidth = 280
-      TabOrder = 6
+      TabOrder = 5
       object Label14: TLabel
         AnchorSideTop.Control = Binning
         AnchorSideTop.Side = asrCenter
@@ -480,11 +332,30 @@ object f_finder: Tf_finder
         Value = 1
       end
     end
+    object Panel4: TPanel
+      Left = 0
+      Height = 270
+      Top = 446
+      Width = 280
+      Align = alClient
+      BevelOuter = bvNone
+      ClientHeight = 270
+      ClientWidth = 280
+      TabOrder = 6
+      object PanelVisu: TPanel
+        Left = 0
+        Height = 270
+        Top = 0
+        Width = 262
+        BevelOuter = bvNone
+        TabOrder = 0
+      end
+    end
   end
   object Panel3: TPanel
     Left = 0
     Height = 50
-    Top = 648
+    Top = 736
     Width = 280
     Align = alTop
     ClientHeight = 50

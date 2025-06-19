@@ -891,7 +891,7 @@ procedure Tf_polaralign2.StartImageLoop;
 begin
   // start image loop
   if UseFinder then begin
-    Ffinder.BtnZoomAdjust.click;
+    Ffinder.visu.BtnZoomAdjust.click;
     Ffinder.PreviewExp.Value:=config.GetValue('/PrecSlew/Exposure',1.0);
     Ffinder.StartLoop;
   end

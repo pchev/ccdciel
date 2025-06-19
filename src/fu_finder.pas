@@ -26,7 +26,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 interface
 
 uses  UScaleDPI, u_global, u_utils, Graphics, Dialogs, u_translation, u_hints, cu_camera, indiapi,
-      cu_astrometry, pu_findercalibration, math,
+      fu_visu, cu_astrometry, pu_findercalibration, math,
   Classes, SysUtils, FileUtil, Forms, Controls, StdCtrls, ExtCtrls, ComCtrls, SpinEx, Buttons;
 
 type
@@ -35,11 +35,6 @@ type
 
   Tf_finder = class(TFrame)
     Binning: TSpinEditEx;
-    BtnBullsEye: TSpeedButton;
-    BtnZoom05: TSpeedButton;
-    BtnZoom1: TSpeedButton;
-    BtnZoom2: TSpeedButton;
-    BtnZoomAdjust: TSpeedButton;
     BtnPreviewLoop: TButton;
     Button1: TButton;
     ButtonImageCenter: TButton;
@@ -52,11 +47,11 @@ type
     Label15: TLabel;
     Label16: TLabel;
     Label21: TLabel;
-    Label4: TLabel;
     LabelInfo: TLabel;
     LabelTemperature: TLabel;
     Offset: TSpinEditEx;
     Panel3: TPanel;
+    Panel4: TPanel;
     PanelBinning: TPanel;
     PanelGain: TPanel;
     PanelOffset: TPanel;
@@ -65,34 +60,22 @@ type
     GroupBox1: TGroupBox;
     Label3: TLabel;
     OffsetX: TFloatSpinEditEx;
-    Gamma: TTrackBar;
     Label1: TLabel;
-    Label17: TLabel;
-    Label18: TLabel;
-    Label19: TLabel;
     Label2: TLabel;
-    Luminosity: TTrackBar;
     OffsetY: TFloatSpinEditEx;
     Panel1: TPanel;
     Panel2: TPanel;
-    Panel8: TPanel;
+    PanelVisu: TPanel;
     Temperature: TSpinEditEx;
     Title: TLabel;
     procedure BinningChange(Sender: TObject);
-    procedure BtnBullsEyeClick(Sender: TObject);
     procedure BtnPreviewLoopClick(Sender: TObject);
-    procedure BtnZoom05Click(Sender: TObject);
-    procedure BtnZoom1Click(Sender: TObject);
-    procedure BtnZoom2Click(Sender: TObject);
-    procedure BtnZoomAdjustClick(Sender: TObject);
     procedure Button1Click(Sender: TObject);
     procedure ButtonCalibrateClick(Sender: TObject);
     procedure ButtonImageCenterClick(Sender: TObject);
     procedure ButtonSetTempClick(Sender: TObject);
     procedure CoolerClick(Sender: TObject);
     procedure GainChange(Sender: TObject);
-    procedure GammaChange(Sender: TObject);
-    procedure LuminosityChange(Sender: TObject);
     procedure OffsetChange(Sender: TObject);
     procedure OffsetXChange(Sender: TObject);
     procedure OffsetYChange(Sender: TObject);
@@ -103,13 +86,16 @@ type
     FonShowMessage: TNotifyMsg;
     FonRedraw,FonSetTemperature,FonSetCooler: TNotifyEvent;
     FonConfigureFinder: TNotifyEvent;
-    FDrawSettingChange,FBullsEye: boolean;
+    FDrawSettingChange: boolean;
     LoopExp:double;
     LoopBin,LoopGain,LoopOffset: integer;
     procedure msg(txt:string; level: integer);
     procedure ForceRedraw;
+    Procedure Redraw(Sender: TObject);
+    Procedure ZoomImage(Sender: TObject);
   public
     { public declarations }
+    visu: Tf_visu;
     constructor Create(aOwner: TComponent); override;
     destructor  Destroy; override;
     procedure SetLang;
@@ -121,7 +107,6 @@ type
     property Camera: T_camera read FCamera write FCamera;
     property Astrometry: TAstrometry read FAstrometry write FAstrometry;
     property DrawSettingChange: boolean read FDrawSettingChange write FDrawSettingChange;
-    property BullsEye: boolean read FBullsEye write FBullsEye;
     property onShowMessage: TNotifyMsg read FonShowMessage write FonShowMessage;
     property onRedraw: TNotifyEvent read FonRedraw write FonRedraw;
     property onConfigureFinder: TNotifyEvent read FonConfigureFinder write FonConfigureFinder;
@@ -138,6 +123,21 @@ implementation
 constructor Tf_finder.Create(aOwner: TComponent);
 begin
  inherited Create(aOwner);
+ visu:=Tf_visu.Create(self);
+ visu.BtnFlipHorz.Visible:=false;
+ visu.BtnFlipVert.Visible:=false;
+ visu.BtnClipping.Visible:=false;
+ visu.BtnShowImage.Visible:=false;
+ visu.BtnPinVisu.Visible:=false;
+ visu.Panel6.Align:=alNone;
+ visu.Panel6.Parent:=visu.Panel7;
+ visu.Panel6.Left:=visu.BtnZoom2.Left+visu.BtnZoom2.Width+2;
+ visu.Panel6.Top:=0;
+ visu.LabelPos.Visible:=true;
+ visu.BtnClipRange.Down:=true;
+ visu.panel1.Parent:=PanelVisu;
+ visu.onRedraw:=@Redraw;
+ visu.onZoom:=@ZoomImage;
  {$ifdef lclcocoa}
  Title.Color:=clWindowFrame;
  Panel1.ChildSizing.LeftRightSpacing:=8;
@@ -146,8 +146,7 @@ begin
  ScaleDPI(Self);
  SetLang;
  FinderPreviewLoop:=false;
- FBullsEye:=true;
- BtnBullsEye.Down:=true;
+ visu.BtnBullsEye.Down:=true;
  LabelInfo.Caption:='';
 end;
 
@@ -167,16 +166,13 @@ begin
   label1.Caption:='X '+rsPixel;
   label2.Caption:='Y '+rsPixel;
   label3.Caption:=rsExposure;
-  label17.Caption:=rsGamma;
-  label18.Caption:=rsLuminosity;
-  label19.Caption:=rsZoom;
-  label4.Caption:=rsShowBullsEye;
   label21.Caption:=rsTemperature;
   ButtonSetTemp.Caption:=rsSet;
   Cooler.Caption:=rsCooler;
   Label14.Caption:=rsBinning;
   Label15.Caption:=rsGain;
   Label16.Caption:=rsOffset2;
+  if visu<>nil then visu.SetLang;
 end;
 
 procedure Tf_finder.msg(txt:string; level: integer);
@@ -236,12 +232,6 @@ begin
   else begin
     StartLoop;
   end;
-end;
-
-procedure Tf_finder.BtnBullsEyeClick(Sender: TObject);
-begin
-  FBullsEye:=not FBullsEye;
-  ForceRedraw;
 end;
 
 procedure Tf_finder.ButtonCalibrateClick(Sender: TObject);
@@ -325,32 +315,34 @@ begin
   config.SetValue('/PrecSlew/Offset',Offset.Value);
 end;
 
+Procedure Tf_finder.Redraw(Sender: TObject);
+begin
+ FDrawSettingChange:=true;
+ if Assigned(FonRedraw) then FonRedraw(self);
+end;
+
+Procedure Tf_finder.ZoomImage(Sender: TObject);
+begin
+ FinderImgZoom:=visu.Zoom;
+ if Assigned(FonRedraw) then FonRedraw(self);
+end;
+
 procedure Tf_finder.ForceRedraw;
 begin
   FDrawSettingChange:=true;
   if Assigned(FonRedraw) then FonRedraw(self);
 end;
 
-procedure Tf_finder.GammaChange(Sender: TObject);
-begin
-  ForceRedraw;
-end;
-
-procedure Tf_finder.LuminosityChange(Sender: TObject);
-begin
-  ForceRedraw;
-end;
-
 procedure Tf_finder.OffsetXChange(Sender: TObject);
 begin
   FAstrometry.FinderOffsetX:=OffsetX.Value;
-  if FBullsEye then ForceRedraw;
+  if visu.BtnBullsEye.Down then ForceRedraw;
 end;
 
 procedure Tf_finder.OffsetYChange(Sender: TObject);
 begin
   FAstrometry.FinderOffsetY:=OffsetY.Value;
-  if FBullsEye then ForceRedraw;
+  if visu.BtnBullsEye.Down then ForceRedraw;
 end;
 
 procedure Tf_finder.ShowCalibration;
@@ -380,33 +372,9 @@ begin
   end;
 end;
 
-procedure Tf_finder.BtnZoomAdjustClick(Sender: TObject);
-begin
-  FinderImgZoom:=0;
-  if Assigned(FonRedraw) then FonRedraw(self);
-end;
-
 procedure Tf_finder.Button1Click(Sender: TObject);
 begin
   if Assigned(FonConfigureFinder) then FonConfigureFinder(self);
-end;
-
-procedure Tf_finder.BtnZoom05Click(Sender: TObject);
-begin
-  FinderImgZoom:=0.5;
-  if Assigned(FonRedraw) then FonRedraw(self);
-end;
-
-procedure Tf_finder.BtnZoom1Click(Sender: TObject);
-begin
-  FinderImgZoom:=1;
-  if Assigned(FonRedraw) then FonRedraw(self);
-end;
-
-procedure Tf_finder.BtnZoom2Click(Sender: TObject);
-begin
-  FinderImgZoom:=2;
-  if Assigned(FonRedraw) then FonRedraw(self);
 end;
 
 function Tf_finder.Snapshot(exp: double; fn: string): boolean;

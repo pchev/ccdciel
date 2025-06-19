@@ -25,7 +25,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 interface
 
-uses   UScaleDPI, Dialogs, u_hints, u_translation, u_global, cu_camera, indiapi,
+uses   UScaleDPI, Dialogs, u_translation, u_global, cu_camera, indiapi, fu_visu,
   Classes, SysUtils, FileUtil, Forms, Graphics, Controls, StdCtrls, ExtCtrls, SpinEx,
   math,LCLintf, ComCtrls, Buttons, Menus;
 
@@ -42,10 +42,6 @@ type
 
   Tf_internalguider = class(TFrame)
     Backlash: TSpinEditEx;
-    BtnZoom05: TSpeedButton;
-    BtnZoom1: TSpeedButton;
-    BtnZoom2: TSpeedButton;
-    BtnZoomAdjust: TSpeedButton;
     Button1: TButton;
     btnRefImage: TButton;
     ButtonLoop: TButton;
@@ -78,6 +74,8 @@ type
     Panel12: TPanel;
     Panel13: TPanel;
     Panel14: TPanel;
+    Panel8: TPanel;
+    PanelVisu: TPanel;
     PanelAstrometryExposure: TPanel;
     PanelGuideStarOffset: TPanel;
     PopupMenuSlit: TPopupMenu;
@@ -157,9 +155,6 @@ type
     Label14: TLabel;
     Label15: TLabel;
     Label16: TLabel;
-    Label17: TLabel;
-    Label18: TLabel;
-    Label19: TLabel;
     LabelDark: TLabel;
     Label5: TLabel;
     Label6: TLabel;
@@ -181,7 +176,6 @@ type
     Panel5: TPanel;
     Panel6: TPanel;
     Panel7: TPanel;
-    Panel8: TPanel;
     Panel9: TPanel;
     PanelSpectro: TPanel;
     PanelTemperature: TPanel;
@@ -223,8 +217,6 @@ type
     Temperature: TSpinEditEx;
     TabSheetOptions: TTabSheet;
     TabSheetCamera: TTabSheet;
-    Gamma: TTrackBar;
-    Luminosity: TTrackBar;
     unitarcseconds1: TCheckBox;
     vpa_solar1: TFloatSpinEditEx;
     v_solar1: TFloatSpinEditEx;
@@ -242,10 +234,6 @@ type
     Title: TLabel;
     procedure btnAddSlitOffsetClick(Sender: TObject);
     procedure btnDelSlitOffsetClick(Sender: TObject);
-    procedure BtnZoom05Click(Sender: TObject);
-    procedure BtnZoom1Click(Sender: TObject);
-    procedure BtnZoom2Click(Sender: TObject);
-    procedure BtnZoomAdjustClick(Sender: TObject);
     procedure Button1Click(Sender: TObject);
     procedure btnRefImageClick(Sender: TObject);
     procedure ButtonSetLockClick(Sender: TObject);
@@ -416,9 +404,12 @@ type
     procedure SetSpiralDither(value:Boolean);
     function GetSpiralDither:Boolean;
     function GetConfigured:Boolean;
+    Procedure Redraw(Sender: TObject);
+    Procedure ZoomImage(Sender: TObject);
 
   public
     { public declarations }
+    visu: Tf_visu;
     constructor Create(aOwner: TComponent); override;
     destructor  Destroy; override;
     procedure SetLang;
@@ -514,8 +505,6 @@ type
 
 implementation
 
-uses cu_mount;
-
 {$R *.lfm}
 
 { Tf_internalguider }
@@ -523,6 +512,22 @@ uses cu_mount;
 constructor Tf_internalguider.Create(aOwner: TComponent);
 begin
  inherited Create(aOwner);
+ visu:=Tf_visu.Create(self);
+ visu.BtnFlipHorz.Visible:=false;
+ visu.BtnFlipVert.Visible:=false;
+ visu.BtnClipping.Visible:=false;
+ visu.BtnShowImage.Visible:=false;
+ visu.BtnBullsEye.Visible:=false;
+ visu.BtnPinVisu.Visible:=false;
+ visu.Panel6.Align:=alNone;
+ visu.Panel6.Parent:=visu.Panel7;
+ visu.Panel6.Left:=visu.BtnZoom2.Left+visu.BtnZoom2.Width+2;
+ visu.Panel6.Top:=0;
+ visu.LabelPos.Visible:=true;
+ visu.BtnClipRange.Down:=true;
+ visu.panel1.Parent:=PanelVisu;
+ visu.onRedraw:=@Redraw;
+ visu.onZoom:=@ZoomImage;
  {$ifdef lclcocoa}
  Title.Color:=clWindowFrame;
  {$endif}
@@ -605,9 +610,6 @@ begin
   Label21.Caption:=rsTemperature;
   ButtonSetTemp.Caption:=rsSet;
   Cooler.Caption:=rsCooler;
-  Label17.Caption:=rsGamma;
-  Label18.Caption:=rsLuminosity;
-  Label19.Caption:=rsZoom;
   TabSheetOptions.Caption:=rsOptions2;
   TabSheetAdvanced.Caption:=rsAdvanced;
   GroupBox2.Caption:=rsCalibrationR;
@@ -685,6 +687,7 @@ begin
   Label46.Caption:=rsDec+' '+rsSpeed;
   Label49.Caption:=rsDeclination;
   Label50.Caption:=rsIssue;
+  if visu<>nil then visu.SetLang;
 end;
 
 function Tf_internalguider.Getdisableguiding:boolean;
@@ -1555,12 +1558,6 @@ begin
  end;
 end;
 
-procedure Tf_internalguider.BtnZoomAdjustClick(Sender: TObject);
-begin
-  GuideImgZoom:=0;
-  if Assigned(FonRedraw) then FonRedraw(self);
-end;
-
 procedure Tf_internalguider.Button1Click(Sender: TObject);
 begin
   if Assigned(FonConfigureGuider) then FonConfigureGuider(self);
@@ -1572,23 +1569,6 @@ begin
   ButtonSetLock.Down:=true;
 end;
 
-procedure Tf_internalguider.BtnZoom05Click(Sender: TObject);
-begin
-  GuideImgZoom:=0.5;
-  if Assigned(FonRedraw) then FonRedraw(self);
-end;
-
-procedure Tf_internalguider.BtnZoom1Click(Sender: TObject);
-begin
-  GuideImgZoom:=1;
-  if Assigned(FonRedraw) then FonRedraw(self);
-end;
-
-procedure Tf_internalguider.BtnZoom2Click(Sender: TObject);
-begin
-  GuideImgZoom:=2;
-  if Assigned(FonRedraw) then FonRedraw(self);
-end;
 
 function Tf_internalguider.GetFrameSize: integer;
 var
@@ -2028,6 +2008,18 @@ end;
 function Tf_internalguider.GetConfigured:Boolean;
 begin
   result:=Panel1.Visible;
+end;
+
+Procedure Tf_internalguider.Redraw(Sender: TObject);
+begin
+ FDrawSettingChange:=true;
+ if Assigned(FonRedraw) then FonRedraw(self);
+end;
+
+Procedure Tf_internalguider.ZoomImage(Sender: TObject);
+begin
+ GuideImgZoom:=visu.Zoom;
+ if Assigned(FonRedraw) then FonRedraw(self);
 end;
 
 end.
