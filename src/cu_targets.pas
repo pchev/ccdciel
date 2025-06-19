@@ -1514,7 +1514,10 @@ begin
    CurrentTargetName:='';
    CurrentStepName:='';
  end
- else msg(rsNotRunningNo,1);
+ else begin
+    msg(rsNotRunningNo,1);
+    FWaiting:=false;
+ end;
 end;
 
 function T_Targets.CheckStatus:boolean;
@@ -2001,7 +2004,10 @@ begin
    else
      FRunning:=false;
  end
- else msg(rsNotRunningNo,1);
+ else begin
+    msg(rsNotRunningNo,1);
+    FWaiting:=false;
+ end;
 end;
 
 procedure T_Targets.NextTarget;
