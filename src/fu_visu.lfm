@@ -281,7 +281,9 @@ object f_visu: Tf_visu
             Height = 22
             Top = 0
             Width = 28
+            AllowAllUp = True
             Color = clDefault
+            GroupIndex = 111
             OnClick = BtnZoomHistClick
             ParentFont = False
           end

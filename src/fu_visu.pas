@@ -112,7 +112,7 @@ type
     FisFloatingPoint, FisFlipped, Finitialized: boolean;
     FimgMin, FimgMax: double;
     FHistStart,FHistStop,FZoomStart,FZoomStop, FHistStep : integer;
-    FBullsEye, LockSpinEdit, LockSpinInit, LockHistbar, FClipping, FInvert, FZoomCurrentRange: Boolean;
+    FBullsEye, LockSpinEdit, LockSpinInit, LockHistbar, FClipping, FInvert: Boolean;
     FZoom: double;
     LockRedraw: boolean;
     FRedraw: TNotifyEvent;
@@ -183,7 +183,6 @@ begin
  LockHistbar:=false;
  LockRedraw:=false;
  FisFlipped:=true;
- FZoomCurrentRange:=false;
  panel9.Enabled:=false;
 end;
 
@@ -335,6 +334,7 @@ for i:=0 to high(word) do Fhist[i]:=f.Histogram[i];
 HistStats(Fhist,Fmaxh,Fmaxp,Fsum,FHistStart,FHistStop);
 FZoomStart:=FHistStart;
 FZoomStop:=FHistStop;
+if FZoomStop<=FZoomStart then FZoomStop:=FZoomStart+1;
 if Fmaxh=0 then exit;
 SetLimit(SetLevel);
 PlotHistogram;
@@ -350,7 +350,7 @@ begin
 HistGraphAreaSeries1.Clear;
 if Fmaxh=0 then exit;
 if BtnClipRange.Down then begin
-  if FZoomCurrentRange then begin
+  if BtnZoomHist.Down then begin
     t:=abs(SpinEditMax.Value-SpinEditMin.Value)/3;
     x:=max(FimageMin,SpinEditMin.Value-t);
     FZoomStart:=round(FimageC*(x-FimageMin));
@@ -361,6 +361,7 @@ if BtnClipRange.Down then begin
     FZoomStart:=FHistStart;
     FZoomStop:=FHistStop;
   end;
+  if FZoomStop<=FZoomStart then FZoomStop:=FZoomStart+1;
   r:=FZoomStop-FZoomStart;
   if r>MaxHistSize then
     FHistStep:=r div MaxHistSize
@@ -393,7 +394,6 @@ else begin
   HistGraph.Extent.UseXMax:=false;
   HistGraph.Extent.UseXMin:=false;
 end;
-FZoomCurrentRange:=false;
 Finitialized:=true;
 SpinEditMaxChange(nil);
 SpinEditMinChange(nil);
@@ -473,7 +473,6 @@ end;
 procedure Tf_visu.BtnZoomHistClick(Sender: TObject);
 begin
   BtnClipRange.Down:=true;
-  FZoomCurrentRange:=true;
   PlotHistogram;
   SplitterMax.Left:=HistBarRight.left-1;
   SplitterMin.Left:=HistBarLeft.left+1;
@@ -530,7 +529,7 @@ procedure Tf_visu.BtnClipRangeClick(Sender: TObject);
 begin
   if FisFloatingPoint then
     BtnClipRange.Down:=true; // floating point histogram is always clipped to data range
-  FZoomCurrentRange:=false;
+  BtnZoomHist.Down:=false;
   PlotHistogram;
 end;
 
