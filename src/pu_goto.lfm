@@ -143,7 +143,7 @@ object f_goto: Tf_goto
       Left = 19
       Height = 22
       Top = 68
-      Width = 253
+      Width = 249
       Caption = 'Use astrometry to refine the position'
       Checked = True
       State = cbChecked
@@ -165,7 +165,7 @@ object f_goto: Tf_goto
       Left = 240
       Height = 25
       Top = 12
-      Width = 75
+      Width = 88
       Caption = 'Search'
       OnClick = BtnSearchClick
       ParentFont = False
@@ -263,6 +263,17 @@ object f_goto: Tf_goto
       Width = 86
       Caption = 'LabelResolver'
       ParentColor = False
+    end
+    object BtnPlanetarium: TButton
+      AnchorSideTop.Side = asrCenter
+      Left = 240
+      Height = 25
+      Top = 114
+      Width = 88
+      Caption = 'Planetarium'
+      OnClick = BtnPlanetariumClick
+      ParentFont = False
+      TabOrder = 4
     end
   end
   object msginfo: TLabel
