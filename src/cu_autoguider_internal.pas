@@ -801,14 +801,9 @@ begin
        s:=round((1+0.2*c)*finternalguider.SearchWinMin);
        guidefits.FindStarPos2(round(xy_array_old[0].x2),round(xy_array_old[0].y2),s,xc,yc,vmax,bg,bgdev);
        if FSettling then begin
-         guidefits.GetHFD2(round(xc),round(yc),s,x1,y1,bg1,bgdev1,hfd1,fwhm1,vmax,snr1,flux1,false,true);
          // check SNR to be sure we not loss the star with a large move
-         if snr1<Finternalguider.MinSNR then vmax:=0
-         else begin
-           // replace position, star is round during settling
-           xc:=x1;
-           yc:=y1;
-         end;
+         guidefits.GetHFD2(round(xc),round(yc),s,x1,y1,bg1,bgdev1,hfd1,fwhm1,vmax,snr1,flux1,false,true);
+         if snr1<Finternalguider.MinSNR then vmax:=0;
        end;
        inc(c);
      until (vmax<>0) or (c>5);
