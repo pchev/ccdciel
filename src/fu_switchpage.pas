@@ -25,7 +25,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 interface
 
-uses  UScaleDPI, u_global, Graphics, Dialogs, u_translation, cu_switch, SpinEx, indiapi, Clipbrd,
+uses  UScaleDPI, u_global, Graphics, Dialogs, u_translation, cu_switch, SpinEx, indiapi, Clipbrd, math,
   Classes, SysUtils, FileUtil, Forms, Controls, StdCtrls, ExtCtrls, ComCtrls, Menus;
 
 type
