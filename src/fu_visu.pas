@@ -111,7 +111,7 @@ type
     FimageC, FimageMin, FimageMax, FdataMin, FdataMax, Fmean, Fsd : double;
     FisFloatingPoint, FisFlipped, Finitialized: boolean;
     FimgMin, FimgMax: double;
-    FHistStart,FHistStop,FZoomStart,FZoomStop, FHistStep : integer;
+    FHistStart,FHistStop,FZoomStart,FZoomStop, FHistStep, MaxHistSize : integer;
     FBullsEye, LockSpinEdit, LockSpinInit, LockHistbar, FClipping, FInvert: Boolean;
     FZoom: double;
     LockRedraw: boolean;
@@ -149,8 +149,6 @@ implementation
 
 {$R *.lfm}
 
-const MaxHistSize=1500;
-
 { Tf_visu }
 
 constructor Tf_visu.Create(aOwner: TComponent);
@@ -171,6 +169,7 @@ begin
  SetLang;
  Finitialized:=false;
  FHistStep:=1;
+ MaxHistSize:=255;
  ImgMax:=high(word);
  ImgMin:=0;
  FimageC:=1;
@@ -431,6 +430,7 @@ end;
 
 procedure Tf_visu.Panel1Resize(Sender: TObject);
 begin
+  TimerResize.Enabled:=false;
   TimerResize.Enabled:=true;
   if panel1.Width>panel1.Height then begin
     panel2.Align:=alRight;
@@ -442,6 +442,8 @@ end;
 procedure Tf_visu.TimerResizeTimer(Sender: TObject);
 begin
 TimerResize.Enabled:=false;
+MaxHistSize:=HistGraph.ClientWidth;
+PlotHistogram;
 SpinEditMinChange(Sender);
 SpinEditMaxChange(Sender);
 SplitterMax.Left:=HistBarRight.left-1;
