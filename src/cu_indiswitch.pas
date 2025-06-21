@@ -319,7 +319,7 @@ begin
   end
   else if (proptype=INDI_SWITCH) and (NumSwitchProp<MaxSwitchProp)  then begin
      SwProp:=indiProp.getSwitch;
-     if (SwProp.p=IP_RW)
+     if ((SwProp.p=IP_RO)or(SwProp.p=IP_RW))
      then begin
        inc(NumSwitchProp);
        if SwProp.r=ISR_NOFMANY then
@@ -348,7 +348,7 @@ begin
   end
   else if (proptype=INDI_NUMBER) and (NumSwitchProp<MaxSwitchProp) then begin
      NumProp:=indiProp.getNumber;
-     if NumProp.p=IP_RW
+     if ((NumProp.p=IP_RO)or(NumProp.p=IP_RW))
      then begin
        inc(NumSwitchProp);
        SwitchPropList[NumSwitchProp]:=NumProp;
