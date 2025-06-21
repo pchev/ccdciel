@@ -275,7 +275,7 @@ begin
 end;
 
 procedure T_indiswitch.NewProperty(indiProp: IndiProperty);
-var propname: string;
+var propname,group: string;
     proptype: INDI_TYPE;
     TxtProp: ITextVectorProperty;
     SwProp: ISwitchVectorProperty;
@@ -286,7 +286,7 @@ var propname: string;
 begin
   propname:=indiProp.getName;
   proptype:=indiProp.getType;
-
+  group:=UpperCase(indiProp.getGroupName);
   if (proptype=INDI_TEXT)and(propname='DRIVER_INFO') then begin
      buf:='';
      TxtProp:=indiProp.getText;
@@ -312,16 +312,14 @@ begin
      configsave:=IUFindSwitch(configprop,'CONFIG_SAVE');
      if (configload=nil)or(configsave=nil) then configprop:=nil;
   end
-  else if (propname='DEBUG')or(propname='SIMULATION')or(propname='POLLING_PERIOD')or(propname='CONNECTION_MODE')or(propname='DEVICE_PORT')or
-       (propname='DEVICE_BAUD_RATE')or(propname='DEVICE_AUTO_SEARCH')or(propname='DEVICE_PORT_SCAN')or(propname='FIRMWARE_INFO') or
-       (pos('FOCUS',propname)>0)or(pos('WEATHER',propname)>0)
+  else if (group='OPTIONS')or(group='CONNECTION')or(group='FIRMWARE')or(group='FOCUSER')or(group='ENVIRONMENT')
   then begin
       // ignore this properties
       // everything else is considered as a switch
   end
   else if (proptype=INDI_SWITCH) and (NumSwitchProp<MaxSwitchProp)  then begin
      SwProp:=indiProp.getSwitch;
-     if ((SwProp.p=IP_RO)or(SwProp.p=IP_RW))
+     if (SwProp.p=IP_RW)
      then begin
        inc(NumSwitchProp);
        if SwProp.r=ISR_NOFMANY then
@@ -350,7 +348,7 @@ begin
   end
   else if (proptype=INDI_NUMBER) and (NumSwitchProp<MaxSwitchProp) then begin
      NumProp:=indiProp.getNumber;
-     if ((NumProp.p=IP_RO)or(NumProp.p=IP_RW))
+     if NumProp.p=IP_RW
      then begin
        inc(NumSwitchProp);
        SwitchPropList[NumSwitchProp]:=NumProp;
