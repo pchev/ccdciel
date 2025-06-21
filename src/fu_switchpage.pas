@@ -38,9 +38,12 @@ type
     Panel1: TPanel;
     PopupMenu1: TPopupMenu;
     ScrollBox1: TScrollBox;
+    TimerResize: TTimer;
     procedure BtnSetClick(Sender: TObject);
     procedure MenuItem1Click(Sender: TObject);
     procedure PopupMenu1Popup(Sender: TObject);
+    procedure ScrollBox1Resize(Sender: TObject);
+    procedure TimerResizeTimer(Sender: TObject);
   private
     { private declarations }
     FConnected, initialized: boolean;
@@ -49,9 +52,11 @@ type
     CtrlList: TStringList;
     FonSetSwitch: TNotifyEvent;
     ClipboardText: string;
+    MaxLabel,MaxCheck:integer;
     procedure SetConnected(value:boolean);
     procedure SetNumSwitch(value:integer);
     procedure SetSwitch(value:TSwitchList);
+    procedure ResizeText(Control: TWinControl);
   public
     { public declarations }
     constructor Create(aOwner: TComponent); override;
@@ -174,6 +179,7 @@ begin
       p.BevelOuter:=bvNone;
       l.Name:='Label_'+IntToStr(i);
       l.Caption:=FSwitch[i].Name;
+      l.Hint:=FSwitch[i].Name;
       l.AnchorSideTop.Control:=s;
       l.AnchorSideTop.Side:=asrCenter;
       l.Parent:=p;
@@ -187,7 +193,7 @@ begin
       s.Hint:=FloatToStr(s.MinValue)+ellipsis+FloatToStr(s.MaxValue);
       s.Enabled:=FSwitch[i].CanWrite;
       s.Value:=FSwitch[i].Value;
-      s.Width:=80;
+      s.Width:=DoScaleX(80);
       s.Constraints.MaxHeight:=DoScaleY(28);
       s.BringToFront;
       s.Align:=alRight;
@@ -218,6 +224,7 @@ begin
       rb.Top:=i*30;
       rb.Align:=alTop;
       rb.Caption:=FSwitch[i].Name;
+      rb.Hint:=FSwitch[i].Name;
       rb.Enabled:=FSwitch[i].CanWrite;
       rb.Checked:=value[i].Checked;
       rb.Parent:=p;
@@ -230,6 +237,7 @@ begin
       cb.Top:=i*30;
       cb.Align:=alTop;
       cb.Caption:=FSwitch[i].Name;
+      cb.Hint:=FSwitch[i].Name;
       cb.Enabled:=FSwitch[i].CanWrite;
       cb.Checked:=value[i].Checked;
       cb.Parent:=ScrollBox1;
@@ -245,6 +253,8 @@ begin
   initialized:=true;
   BtnSet.Enabled:=true;
  end;
+ TimerResize.Enabled:=False;
+ TimerResize.Enabled:=True;
 end;
 
 procedure Tf_switchpage.BtnSetClick(Sender: TObject);
@@ -295,11 +305,11 @@ begin
   if c<>nil then begin
     buf:='';
     if c is TCheckBox then
-      buf:=TCheckBox(c).Caption;
+      buf:=TCheckBox(c).Hint;
     if c is TRadioButton then
-      buf:=TRadioButton(c).Caption;
+      buf:=TRadioButton(c).Hint;
     if c is TLabel then
-      buf:=TLabel(c).Caption;
+      buf:=TLabel(c).Hint;
     if buf<>'' then begin
        m:=TMenuItem.Create(self);
        m.Caption:=Format(rsCopyToClipbo, [buf]);
@@ -312,6 +322,37 @@ begin
     end;
   end;
 
+end;
+
+procedure Tf_switchpage.ScrollBox1Resize(Sender: TObject);
+begin
+  TimerResize.Enabled:=False;
+  TimerResize.Enabled:=True;
+end;
+
+procedure Tf_switchpage.ResizeText(Control: TWinControl);
+var i: integer;
+begin
+  for i:=0 to Control.ControlCount-1 do begin
+    if (Control.Controls[i] is TLabel) and (Control.Controls[i].Hint<>'') then
+        Control.Controls[i].Caption:=Copy(Control.Controls[i].Hint,1,MaxLabel)
+    else if (Control.Controls[i] is TRadioButton) and (Control.Controls[i].Hint<>'') then
+        Control.Controls[i].Caption:=Copy(Control.Controls[i].Hint,1,MaxCheck)
+    else if (Control.Controls[i] is TCheckBox) and (Control.Controls[i].Hint<>'') then
+        Control.Controls[i].Caption:=Copy(Control.Controls[i].Hint,1,MaxCheck)
+    else if Control.Controls[i] is TWinControl then
+        ResizeText(TWinControl(Control.Controls[i]));
+  end;
+end;
+
+procedure Tf_switchpage.TimerResizeTimer(Sender: TObject);
+var n:integer;
+begin
+  TimerResize.Enabled:=False;
+  n:=Canvas.TextExtent('a').cx;
+  MaxLabel:=(ScrollBox1.ClientWidth-DoScaleX(80)) div n;
+  MaxCheck:=(ScrollBox1.ClientWidth-DoScaleX(20)) div n;
+  ResizeText(ScrollBox1);
 end;
 
 end.

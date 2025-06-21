@@ -21,6 +21,7 @@ object f_switchpage: Tf_switchpage
     AutoSize = True
     PopupMenu = PopupMenu1
     TabOrder = 1
+    OnResize = ScrollBox1Resize
   end
   object Panel1: TPanel
     Left = 0
@@ -53,5 +54,12 @@ object f_switchpage: Tf_switchpage
       Caption = 'MenuItem1'
       OnClick = MenuItem1Click
     end
+  end
+  object TimerResize: TTimer
+    Enabled = False
+    Interval = 500
+    OnTimer = TimerResizeTimer
+    Left = 26
+    Top = 54
   end
 end
