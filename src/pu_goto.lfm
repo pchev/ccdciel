@@ -264,17 +264,6 @@ object f_goto: Tf_goto
       Caption = 'LabelResolver'
       ParentColor = False
     end
-    object BtnPlanetarium: TButton
-      AnchorSideTop.Side = asrCenter
-      Left = 240
-      Height = 25
-      Top = 114
-      Width = 88
-      Caption = 'Planetarium'
-      OnClick = BtnPlanetariumClick
-      ParentFont = False
-      TabOrder = 4
-    end
   end
   object msginfo: TLabel
     Left = 0

@@ -429,10 +429,7 @@ begin
 end;
 
 procedure TPlanetarium_cdc.ClearData;
-var buf: string;
 begin
-  buf := 'CLEANUPMAP';
-  FLastErrorTxt:=Cmd(buf);
   FRecvData:='';
   Fra:=NullCoord;
   Fde:=NullCoord;

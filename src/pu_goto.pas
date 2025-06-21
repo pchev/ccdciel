@@ -35,7 +35,6 @@ type
   Tf_goto = class(TForm)
     BtnCompute: TButton;
     BtnSearch: TButton;
-    BtnPlanetarium: TButton;
     ButtonOK: TButton;
     Button2: TButton;
     De: TEdit;
@@ -60,7 +59,6 @@ type
     PanelAltAz: TPanel;
     PanelPxSz: TPanel;
     Ra: TEdit;
-    procedure BtnPlanetariumClick(Sender: TObject);
     procedure BtnSearchClick(Sender: TObject);
     procedure BtnComputeClick(Sender: TObject);
     procedure ButtonOKClick(Sender: TObject);
@@ -102,7 +100,6 @@ begin
   ButtonOK.Caption:=rsGoto;
   Button2.Caption:=rsCancel;
   BtnSearch.Caption:=rsSearch;
-  BtnPlanetarium.Caption:=rsPlanetarium;
   Label1.Caption:=rsCenterRA;
   Label6.Caption:=j2000;
   Label2.Caption:=rsCenterDec;
@@ -124,13 +121,9 @@ begin
   Obj.SetFocus;
   if (planetarium<>nil) and (planetarium.Connected) then begin
     LastMsg:='';
-    BtnPlanetarium.Visible:=true;
     planetarium.onReceiveData:=@recvdata;
-    if Obj.Text='' then
-      recvdata('');
-  end
-  else
-    BtnPlanetarium.Visible:=false;
+    recvdata('');
+  end;
   if PanelAltAz.Visible then msginfo.Caption:='Search object name, click on planetarium or type the coordinates';
 end;
 
@@ -144,11 +137,6 @@ begin
   FPlanetarium:=value;
 end;
 
-procedure Tf_goto.BtnPlanetariumClick(Sender: TObject);
-begin
-  recvdata('');
-end;
-
 procedure Tf_goto.recvdata(msg: string);
 begin
    if (planetarium=nil) or (not planetarium.Connected) then begin
@@ -156,12 +144,12 @@ begin
    end;
    LastMsg:=msg;
    if (planetarium.RA<>NullCoord)and(planetarium.DE<>NullCoord) then begin
-    Ra.Text:=RAToStr(planetarium.RA);
-    De.Text:=DEToStr(planetarium.DE);
-    LabelResolver.Caption:=rsFromPlanetar;
-   end;
-   if planetarium.Objname<>'' then begin
-    Obj.Text:=trim(planetarium.Objname);
+     Ra.Text:=RAToStr(planetarium.RA);
+     De.Text:=DEToStr(planetarium.DE);
+     if planetarium.Objname<>'' then
+       Obj.Text:=trim(planetarium.Objname);
+     LabelResolver.Caption:=rsFromPlanetar;
+     planetarium.ClearData;
    end;
 end;
 
