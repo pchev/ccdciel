@@ -350,8 +350,8 @@ var n:integer;
 begin
   TimerResize.Enabled:=False;
   n:=Canvas.TextExtent('a').cx;
-  MaxLabel:=(ScrollBox1.ClientWidth-DoScaleX(80)) div n;
-  MaxCheck:=(ScrollBox1.ClientWidth-DoScaleX(20)) div n;
+  MaxLabel:=max(5,(ScrollBox1.ClientWidth-DoScaleX(80)) div n);
+  MaxCheck:=max(5,(ScrollBox1.ClientWidth-DoScaleX(20)) div n);
   ResizeText(ScrollBox1);
 end;
 
