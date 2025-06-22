@@ -25,7 +25,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 interface
 
-uses u_global, UScaleDPI, u_hints, u_translation, cu_mount, u_utils, indiapi,
+uses u_global, UScaleDPI, u_hints, u_translation, cu_mount, u_utils, indiapi, LCLType,
   Classes, SysUtils, Forms, Controls, Graphics, Dialogs, StdCtrls, ExtCtrls, SpinEx, Arrow;
 
 type
@@ -52,6 +52,8 @@ type
     procedure ArrowMouseDown(Sender: TObject; Button: TMouseButton; Shift: TShiftState; X, Y: Integer);
     procedure ArrowStopClick(Sender: TObject);
     procedure FormCreate(Sender: TObject);
+    procedure FormKeyDown(Sender: TObject; var Key: Word; Shift: TShiftState);
+    procedure FormKeyUp(Sender: TObject; var Key: Word; Shift: TShiftState);
     procedure StopMoveTimerTimer(Sender: TObject);
   private
     FMount: T_mount;
@@ -80,6 +82,29 @@ begin
   Handpad.Visible:=false;
   FlipNS.Visible:=false;
   AxisRates.Visible:=false;
+end;
+
+procedure Tf_handpad.FormKeyDown(Sender: TObject; var Key: Word; Shift: TShiftState);
+begin
+  if (Shift=[ssAlt])or(Shift=[ssCtrl]) then
+  case key of
+    VK_UP    : begin ArrowMouseDown(ArrowUp,mbLeft,[],0,0); key:=0; end;
+    VK_DOWN  : begin ArrowMouseDown(ArrowDown,mbLeft,[],0,0); key:=0; end;
+    VK_LEFT  : begin ArrowMouseDown(ArrowLeft,mbLeft,[],0,0); key:=0; end;
+    VK_RIGHT : begin ArrowMouseDown(ArrowRight,mbLeft,[],0,0); key:=0; end;
+    VK_DELETE: begin ArrowStopClick(Sender); key:=0; end;
+  end;
+end;
+
+procedure Tf_handpad.FormKeyUp(Sender: TObject; var Key: Word; Shift: TShiftState);
+begin
+  if (Shift=[ssAlt])or(Shift=[ssCtrl]) then
+  case key of
+    VK_UP : begin ArrowMouseUp(ArrowUp,mbLeft,[],0,0); key:=0; end;
+    VK_DOWN : begin ArrowMouseUp(ArrowDown,mbLeft,[],0,0); key:=0; end;
+    VK_LEFT : begin ArrowMouseUp(ArrowLeft,mbLeft,[],0,0); key:=0; end;
+    VK_RIGHT : begin ArrowMouseUp(ArrowRight,mbLeft,[],0,0); key:=0; end;
+  end;
 end;
 
 procedure Tf_handpad.SetLang;

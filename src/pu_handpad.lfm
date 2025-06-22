@@ -9,7 +9,10 @@ object f_handpad: Tf_handpad
   ClientHeight = 122
   ClientWidth = 191
   FormStyle = fsStayOnTop
+  KeyPreview = True
   OnCreate = FormCreate
+  OnKeyDown = FormKeyDown
+  OnKeyUp = FormKeyUp
   ShowInTaskBar = stNever
   object AxisRates: TComboBox
     Left = 0
@@ -17,6 +20,7 @@ object f_handpad: Tf_handpad
     Top = 0
     Width = 191
     Align = alTop
+    ArrowKeysTraverseList = False
     Constraints.MaxHeight = 28
     ItemHeight = 18
     ParentFont = False
