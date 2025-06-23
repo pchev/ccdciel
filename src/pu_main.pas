@@ -8660,7 +8660,9 @@ end;
 procedure Tf_main.MountGoto(Sender: TObject);
 var ra,de,ra2000,de2000,err:double;
     tra,tde,objn: string;
+    restartguiding: boolean;
 begin
+restartguiding:=false;
 if f_mount.BtnGoto.Caption=rsGoto then begin
  if (AllDevicesConnected) and (mount.Status=devConnected) then begin
    if Mount.Park then begin
@@ -8702,6 +8704,7 @@ if f_mount.BtnGoto.Caption=rsGoto then begin
          NewMessage(rsStopAutoguid,2);
          autoguider.Guide(false);
          autoguider.WaitBusy(15);
+         restartguiding:=true;
        end;
        if autoguider is T_autoguider_internal then begin
          autoguider.SpectroSetTarget(NullCoord, NullCoord);  // reset spectro target and guide that are no more valid after a slew
@@ -8721,7 +8724,9 @@ if f_mount.BtnGoto.Caption=rsGoto then begin
                   autoguider.SpectroSetTarget(ra2000,de2000);
                   autoguider.Guide(true);
                 end;
-           end;
+           end
+           else if restartguiding then
+              autoguider.Guide(true);
          end
           else
            NewMessage(format(rsError,[rsGoto+': '+objn]) ,1);
@@ -8737,7 +8742,9 @@ if f_mount.BtnGoto.Caption=rsGoto then begin
                   autoguider.SpectroSetTarget(ra2000,de2000);
                   autoguider.Guide(true);
                 end;
-           end;
+           end
+           else if restartguiding then
+              autoguider.Guide(true);
          end
          else
            NewMessage(format(rsError,[rsGoto+': '+objn]) ,1);
