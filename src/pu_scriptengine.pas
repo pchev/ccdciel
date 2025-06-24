@@ -2965,8 +2965,9 @@ try
   PyProcess.Executable:=pycmd;
   PyProcess.Parameters:=param;
   PyProcess.Environment.Clear;
-  for i:=0 to GetEnvironmentVariableCount-1 do
+  for i:=1 to GetEnvironmentVariableCount do begin
     PyProcess.Environment.Add(GetEnvironmentString(i));
+  end;
   PyProcess.Environment.Add('PYTHONPATH='+pypath);
   PyProcess.Environment.Add('CCDCIEL_HOST=localhost');
   PyProcess.Environment.Add('CCDCIEL_PORT='+TCPIPServerPort);
