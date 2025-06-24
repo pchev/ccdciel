@@ -985,6 +985,7 @@ type
     procedure ClearRefImage(Sender: TObject);
     procedure CCDCIELMessageHandler(var Message: TLMessage); message LM_CCDCIEL;
     Procedure StartSequence(SeqName: string);
+    procedure StopSequence(Sender: TObject);
     procedure ScriptExecute(Sender: TObject);
     procedure ScriptAfterExecute(Sender: TObject);
     function CheckMeridianFlip(nextexposure:double; canwait:boolean; out waittime:integer):boolean;
@@ -2021,6 +2022,7 @@ begin
   f_scriptengine.Fits:=fits;
   f_scriptengine.onMsg:=@NewMessage;
   f_scriptengine.onStartSequence:=@StartSequence;
+  f_scriptengine.onStopSequence:=@StopSequence;
   f_scriptengine.onScriptExecute:=@ScriptExecute;
   f_scriptengine.onScriptAfterExecute:=@ScriptAfterExecute;
   f_scriptengine.onOpenFitsFile:=@LoadFitsFile;
@@ -3356,7 +3358,7 @@ end;
 
 Procedure Tf_main.StartSequence(SeqName: string);
 begin
-  if f_sequence.Running then exit;
+  if (not f_sequence.BtnStart.Enabled) or f_sequence.Running then exit;
   SeqName:=slash(SequenceDir)+SeqName+'.targets';
   if FileExists(SeqName) then begin
     f_sequence.LoadTargets(SeqName);
@@ -3371,6 +3373,12 @@ procedure Tf_main.StartSequenceTimerTimer(Sender: TObject);
 begin
   StartSequenceTimer.Enabled:=false;
   f_sequence.BtnStartClick(nil);
+end;
+
+procedure Tf_main.StopSequence(Sender: TObject);
+begin
+  if f_sequence.BtnStop.Enabled then
+    f_sequence.BtnStopClick(nil);
 end;
 
 procedure Tf_main.StatusbarTimerTimer(Sender: TObject);
@@ -17427,6 +17435,7 @@ try
     result:=result+'"result":{"status": "'+f_scriptengine.cmd_cameragetframe(i1,i2,i3,i4)+'",';
     result:=result+' "X": '+IntToStr(i1)+', "Y": '+IntToStr(i2)+', "W": '+IntToStr(i3)+', "H": '+IntToStr(i4)+'}';
   end
+  else if method='SEQUENCE_STOP' then result:=result+'"result":{"status": "'+f_scriptengine.cmd_SequenceStop+'"}'
 
   // execute command with parameter
   else if method='DEVICES_CONNECTION' then begin

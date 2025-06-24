@@ -114,6 +114,7 @@ type
     FSwitch: TSwitches;
     FonMsg: TNotifyMsg;
     FonStartSequence: TNotifyStr;
+    FonStopSequence: TNotifyEvent;
     FonScriptExecute: TNotifyEvent;
     FonScriptAfterExecute: TNotifyEvent;
     FonSaveFitsFile: TNotifyStr;
@@ -255,6 +256,7 @@ type
     function cmd_PlanetariumShutdown:string;
     function cmd_ProgramShutdown:string;
     function cmd_SequenceStart(seq:string):string;
+    function cmd_SequenceStop:string;
     function cmd_SaveFitsFile(fn:string):string;
     function cmd_OpenFitsFile(fn:string):string;
     function cmd_OpenReferenceImage(fn:string):string;
@@ -304,6 +306,7 @@ type
     property AstrometryGotoResult: boolean read FAstrometryGotoResult;
     property onMsg: TNotifyMsg read FonMsg write FonMsg;
     property onStartSequence: TNotifyStr read FonStartSequence write FonStartSequence;
+    property onStopSequence: TNotifyEvent read FonStopSequence write FonStopSequence;
     property onScriptExecute: TNotifyEvent read FonScriptExecute write FonScriptExecute;
     property onScriptAfterExecute: TNotifyEvent read FonScriptAfterExecute write FonScriptAfterExecute;
     property onSaveFitsFile: TNotifyStr read FonSaveFitsFile  write FonSaveFitsFile;
@@ -2269,6 +2272,12 @@ end;
 function Tf_scriptengine.cmd_SequenceStart(seq:string):string;
 begin
   if Assigned(FonStartSequence) then FonStartSequence(seq);
+  result:=msgOK;
+end;
+
+function Tf_scriptengine.cmd_SequenceStop:string;
+begin
+  if Assigned(FonStopSequence) then FonStopSequence(self);
   result:=msgOK;
 end;
 
