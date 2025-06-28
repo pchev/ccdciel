@@ -2590,7 +2590,12 @@ var n,bin,gain,offset: integer;
     refp,mountp: TPierSide;
 begin
 try
-  if finternalguider.SpectroFunctions and (finternalguider.SpectroStrategy=spSingleOffset)
+  if not finternalguider.SpectroFunctions then begin
+    result:=false;
+    exit;
+  end;
+  // only for spectroscopy
+  if (finternalguider.SpectroStrategy=spSingleOffset)
     and FSpectroGuideStar.valid and (FSpectroTarget.RA<>NullCoord)and(FSpectroTarget.DEC<>NullCoord)
     and (FSpectroGuideStar.RA<>NullCoord)and(FSpectroGuideStar.DEC<>NullCoord) then begin
     // compute guide star offset
@@ -2653,7 +2658,7 @@ try
     finternalguider.DrawSettingChange:=true;
     result:=true;
   end
-  else if finternalguider.SpectroFunctions and finternalguider.SpectroAstrometry
+  else if finternalguider.SpectroAstrometry
      and(cdcwcs_sky2xy<>nil) and (FSpectroTarget.valid or FSpectroTarget.newastrometry)
      and (FSpectroTarget.RA<>NullCoord)and(FSpectroTarget.DEC<>NullCoord) then begin
      // set Spectro target at the position set by SpectroSetTarget
@@ -2725,11 +2730,20 @@ try
     end;
   end
   else begin
+    if finternalguider.SpectroStrategy=spSingleOffset then
+      msg(rsMissingTarge, 0)
+    else if finternalguider.SpectroAstrometry then
+      msg(rsMissingTarge2, 0);
     if StarSelectedManually then begin
+      msg(rsUsingManuall, 3);
       result:=true;
     end
     else begin
       // search near center
+      if finternalguider.SpectroStrategy=spMultiStar then
+        msg(rsMultiStarGui+' = 0,0',3)
+      else
+        msg(rsUsingABright, 3);
       finternalguider.GuideLockNextX:=-1;
       finternalguider.GuideLockNextY:=-1;
       result:=false;

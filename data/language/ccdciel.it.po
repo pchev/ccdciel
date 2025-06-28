@@ -6,15 +6,15 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ccdciel\n"
 "Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
-"POT-Creation-Date: 2025-06-12 19:48+0000\n"
+"POT-Creation-Date: 2025-06-28 09:15+0000\n"
 "PO-Revision-Date: 2021-08-31 20:35+0000\n"
 "Last-Translator: Patrick Chevalley <Unknown>\n"
 "Language-Team: Italian <it@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2025-06-12 19:56+0000\n"
-"X-Generator: Launchpad (build 2f3e2deec61796d4ee775e1cf25403fcfe2e4659)\n"
+"X-Launchpad-Export-Date: 2025-06-28 09:24+0000\n"
+"X-Generator: Launchpad (build b5a18a1fb2c651898dbb3172b738994271938569)\n"
 
 #: u_translation.rs2d
 msgid "2D"
@@ -3061,6 +3061,14 @@ msgstr "Tempo minimo"
 msgid "minutes"
 msgstr "minuti"
 
+#: u_translation.rsmissingtarge
+msgid "Missing target or guide star coordinates"
+msgstr ""
+
+#: u_translation.rsmissingtarge2
+msgid "Missing target coordinates"
+msgstr ""
+
 #: u_translation.rsmnt
 msgid "Mnt."
 msgstr ""
@@ -6096,10 +6104,18 @@ msgstr "Usa dispositivo di controllo"
 msgid "Use weather station"
 msgstr ""
 
+#: u_translation.rsusingabright
+msgid "Using a bright star near the lock position"
+msgstr ""
+
 #: u_translation.rsusingconfigu
 #, object-pascal-format
 msgid "Using configuration file %s"
 msgstr "Utilizzando il file di configurazione %s"
+
+#: u_translation.rsusingmanuall
+msgid "Using manually selected star"
+msgstr ""
 
 #: u_translation.rsusingmediano
 #, object-pascal-format

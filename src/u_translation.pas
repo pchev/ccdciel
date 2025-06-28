@@ -1624,6 +1624,10 @@ resourcestring
   rsHigh = 'High';
   rsVeryHigh = 'Very High';
   rsExtreme = 'Extreme';
+  rsMissingTarge = 'Missing target or guide star coordinates';
+  rsMissingTarge2 = 'Missing target coordinates';
+  rsUsingManuall = 'Using manually selected star';
+  rsUsingABright = 'Using a bright star near the lock position';
 
 implementation
 

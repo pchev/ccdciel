@@ -6093,3 +6093,19 @@ msgstr ""
 msgid "Extreme"
 msgstr ""
 
+#: u_translation:rsmissingtarge
+msgid "Missing target or guide star coordinates"
+msgstr ""
+
+#: u_translation:rsmissingtarge2
+msgid "Missing target coordinates"
+msgstr ""
+
+#: u_translation:rsusingmanuall
+msgid "Using manually selected star"
+msgstr ""
+
+#: u_translation:rsusingabright
+msgid "Using a bright star near the lock position"
+msgstr ""
+
