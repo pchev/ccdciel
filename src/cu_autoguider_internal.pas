@@ -923,6 +923,7 @@ begin
   Finternalguider.ButtonLoop.enabled:=false;
   Finternalguider.ButtonCalibrate.enabled:=false;
   Finternalguider.ButtonDark.enabled:=false;
+  Finternalguider.ButtonGuide.enabled:=true;
   if InternalguiderCapturingDark then begin
     FGuideFits.SetBPM(bpm,0,0,0,0);
     FGuideFits.DarkOn:=false;
@@ -1198,6 +1199,7 @@ begin
   end;
 
   InternalguiderLoop;
+  Finternalguider.ButtonGuide.enabled:=false;
   StartSettle;
 end;
 

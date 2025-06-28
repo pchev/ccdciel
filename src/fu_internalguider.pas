@@ -74,6 +74,7 @@ type
     Panel12: TPanel;
     Panel13: TPanel;
     Panel14: TPanel;
+    Panel15: TPanel;
     Panel8: TPanel;
     PanelVisu: TPanel;
     PanelAstrometryExposure: TPanel;
