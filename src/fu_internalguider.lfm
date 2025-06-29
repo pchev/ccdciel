@@ -29,19 +29,45 @@ object f_internalguider: Tf_internalguider
   end
   object Panel1: TPanel
     Left = 0
-    Height = 866
+    Height = 867
     Top = 20
     Width = 346
     Align = alTop
     AutoSize = True
-    ClientHeight = 866
+    ClientHeight = 867
     ClientWidth = 346
     ParentFont = False
     TabOrder = 0
+    object pcTabs: TPageControl
+      Left = 1
+      Height = 32
+      Top = 1
+      Width = 344
+      ActivePage = Tab0
+      Align = alTop
+      TabIndex = 0
+      TabOrder = 2
+      OnChange = pcTabsChange
+      object Tab0: TTabSheet
+        Caption = 'Guider'
+      end
+      object Tab1: TTabSheet
+        Caption = 'Camera'
+      end
+      object Tab2: TTabSheet
+        Caption = 'Options'
+      end
+      object Tab3: TTabSheet
+        Caption = 'Spectro'
+      end
+      object Tab4: TTabSheet
+        Caption = 'Advanced'
+      end
+    end
     object Panel15: TPanel
       Left = 5
       Height = 25
-      Top = 5
+      Top = 37
       Width = 336
       Align = alTop
       AutoSize = True
@@ -95,18 +121,19 @@ object f_internalguider: Tf_internalguider
         TabOrder = 2
       end
     end
-    object PageControl1: TPageControl
+    object pcInternalguider: TPageControl
       Left = 1
-      Height = 831
-      Top = 34
+      Height = 800
+      Top = 66
       Width = 344
       ActivePage = TabSheetGuider
       Align = alTop
       AutoSize = True
       ParentFont = False
+      ShowTabs = False
       TabIndex = 0
       TabOrder = 0
-      OnChange = PageControl1Change
+      OnChange = pcInternalguiderChange
       object TabSheetGuider: TTabSheet
         Caption = 'Guider'
         ClientHeight = 796
@@ -367,6 +394,7 @@ object f_internalguider: Tf_internalguider
           Top = 0
           Width = 340
           Align = alClient
+          BevelOuter = bvNone
           ClientHeight = 796
           ClientWidth = 340
           Color = clMenu
@@ -374,14 +402,14 @@ object f_internalguider: Tf_internalguider
           ParentColor = False
           TabOrder = 0
           object Panel6: TPanel
-            Left = 1
+            Left = 0
             Height = 103
-            Top = 1
-            Width = 338
+            Top = 0
+            Width = 340
             Align = alTop
             BevelOuter = bvNone
             ClientHeight = 103
-            ClientWidth = 338
+            ClientWidth = 340
             ParentBackground = False
             TabOrder = 0
             object ButtonDark: TButton
@@ -419,14 +447,14 @@ object f_internalguider: Tf_internalguider
             end
           end
           object Panel7: TPanel
-            Left = 1
+            Left = 0
             Height = 66
-            Top = 104
-            Width = 338
+            Top = 103
+            Width = 340
             Align = alTop
             BevelOuter = bvNone
             ClientHeight = 66
-            ClientWidth = 338
+            ClientWidth = 340
             ParentBackground = False
             TabOrder = 1
             object Label10: TLabel
@@ -476,14 +504,14 @@ object f_internalguider: Tf_internalguider
             end
           end
           object PanelGain: TPanel
-            Left = 1
+            Left = 0
             Height = 34
-            Top = 170
-            Width = 338
+            Top = 169
+            Width = 340
             Align = alTop
             BevelOuter = bvNone
             ClientHeight = 34
-            ClientWidth = 338
+            ClientWidth = 340
             ParentBackground = False
             TabOrder = 2
             object Label15: TLabel
@@ -508,14 +536,14 @@ object f_internalguider: Tf_internalguider
             end
           end
           object PanelOffset: TPanel
-            Left = 1
+            Left = 0
             Height = 34
-            Top = 204
-            Width = 338
+            Top = 203
+            Width = 340
             Align = alTop
             BevelOuter = bvNone
             ClientHeight = 34
-            ClientWidth = 338
+            ClientWidth = 340
             ParentBackground = False
             TabOrder = 3
             object Label16: TLabel
@@ -540,14 +568,14 @@ object f_internalguider: Tf_internalguider
             end
           end
           object PanelTemperature: TPanel
-            Left = 1
+            Left = 0
             Height = 60
-            Top = 238
-            Width = 338
+            Top = 237
+            Width = 340
             Align = alTop
             BevelOuter = bvNone
             ClientHeight = 60
-            ClientWidth = 338
+            ClientWidth = 340
             ParentBackground = False
             TabOrder = 4
             object Label21: TLabel
@@ -608,14 +636,14 @@ object f_internalguider: Tf_internalguider
             end
           end
           object Panel8: TPanel
-            Left = 1
-            Height = 497
-            Top = 298
-            Width = 338
+            Left = 0
+            Height = 499
+            Top = 297
+            Width = 340
             Align = alClient
             BevelOuter = bvNone
-            ClientHeight = 497
-            ClientWidth = 338
+            ClientHeight = 499
+            ClientWidth = 340
             TabOrder = 5
             object PanelVisu: TPanel
               AnchorSideTop.Side = asrBottom
@@ -652,6 +680,7 @@ object f_internalguider: Tf_internalguider
             Top = 0
             Width = 340
             Align = alTop
+            BevelOuter = bvNone
             ClientHeight = 400
             ClientWidth = 340
             ParentBackground = False

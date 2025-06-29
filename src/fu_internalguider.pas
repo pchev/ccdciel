@@ -71,6 +71,7 @@ type
     MenuItemAddSlit: TMenuItem;
     MenuItemDelSlit: TMenuItem;
     MenuSlitOffset: TButton;
+    pcTabs: TPageControl;
     Panel12: TPanel;
     Panel13: TPanel;
     Panel14: TPanel;
@@ -214,6 +215,11 @@ type
     spSlitPA: TSpinEditEx;
     TabSheet1: TTabSheet;
     TabSheet2: TTabSheet;
+    Tab0: TTabSheet;
+    Tab1: TTabSheet;
+    Tab2: TTabSheet;
+    Tab3: TTabSheet;
+    Tab4: TTabSheet;
     TabSheetSpectro: TTabSheet;
     Temperature: TSpinEditEx;
     TabSheetOptions: TTabSheet;
@@ -226,7 +232,7 @@ type
     Label3: TLabel;
     led: TShape;
     Panel2: TPanel;
-    PageControl1: TPageControl;
+    pcInternalguider: TPageControl;
     Panel1: TPanel;
     Panel3: TPanel;
     dec_gain1: TSpinEditEx;
@@ -266,7 +272,8 @@ type
     procedure minHFD1Change(Sender: TObject);
     procedure minSNR1Change(Sender: TObject);
     procedure pa1Change(Sender: TObject);
-    procedure PageControl1Change(Sender: TObject);
+    procedure pcInternalguiderChange(Sender: TObject);
+    procedure pcTabsChange(Sender: TObject);
     procedure pier_side1Change(Sender: TObject);
     procedure pixelsize1Change(Sender: TObject);
     procedure pulsegainEast1Change(Sender: TObject);
@@ -540,7 +547,8 @@ begin
  Panel9.Color:=clDefault;
  PanelSpectro.Color:=clDefault;
  {$endif}
- PageControl1.ActivePageIndex:=0;
+ pcInternalguider.ActivePageIndex:=0;
+ pcTabs.ActivePageIndex:=0;
  ScaleDPI(Self);
  SetLang;
  LabelStatusRA.Caption:='';
@@ -588,6 +596,11 @@ end;
 procedure Tf_internalguider.SetLang;
 begin
   Title.Caption:=rsInternalGuid;
+  Tab0.Caption:=rsGuider;
+  Tab1.Caption:=rsCamera;
+  Tab2.Caption:=rsOptions2;
+  Tab3.Caption:=rsSpectroscopy;
+  Tab4.Caption:=rsAdvanced;
   TabSheetGuider.Caption:=rsGuider;
   ButtonGuide.Caption:=rsGuide;
   ButtonStop.Caption:=rsStop;
@@ -1105,12 +1118,17 @@ begin
   cur_pa1:=pa1.Text;
 end;
 
-procedure Tf_internalguider.PageControl1Change(Sender: TObject);
+procedure Tf_internalguider.pcInternalguiderChange(Sender: TObject);
 begin
-  if PageControl1.ActivePageIndex=1 then
+  if pcInternalguider.ActivePageIndex=1 then
     PanelImage.Parent:=Panel4  // page camera
   else
     PanelImage.Parent:=Panel3; // page guider
+end;
+
+procedure Tf_internalguider.pcTabsChange(Sender: TObject);
+begin
+  pcInternalguider.ActivePageIndex:=pcTabs.ActivePageIndex;
 end;
 
 procedure Tf_internalguider.pier_side1Change(Sender: TObject);
