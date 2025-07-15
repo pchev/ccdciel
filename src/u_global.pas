@@ -568,7 +568,7 @@ var
   DevInterfaceName: array[0..5] of string=('INDI','ASCOM','In camera','In mount','ASCOM Alpaca','Manual');
   ProtocolName: array[0..1] of string=('http:','https:');
   CheckRecenterTarget,NeedRecenterTarget,RecenteringTarget,CheckRecenterBusy: boolean;
-  AstrometryTimeout,RecenterTargetDistance,SlewPrecision,MinimumMoonDistance: double;
+  AstrometryTimeout,RecenterTargetDistance,SlewPrecision,MinimumMoonDistance,SequenceTwilight: double;
   PolarAlignmentOverlay, PolarAlignmentLock: boolean;
   PolarAlignmentStartx,PolarAlignmentStarty,PolarAlignmentEndx,PolarAlignmentEndy,PolarAlignmentAzx,PolarAlignmentAzy:double;
   PolarAlignmentOverlayOffsetX,PolarAlignmentOverlayOffsetY: double;

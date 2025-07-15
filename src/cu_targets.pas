@@ -1229,7 +1229,7 @@ begin
       FSeqStopTwilight:=true;
     end;
   end;
-  twok:=TwilightAstro(now,hm,he);
+  twok:=TwilightAstro(now,SequenceTwilight,hm,he);
   if twok then begin
     if FSeqStartTwilight then
        FSeqStartAt:=he/24;
@@ -1609,7 +1609,7 @@ begin
    end
    else
      etime:=MaxDouble;             // no end time, can run infinitely
-   twok:=TwilightAstro(now,hm,he);  // compute twilight
+   twok:=TwilightAstro(now,SequenceTwilight,hm,he);  // compute twilight
    if twok then begin
      if he<12 then he:=he+24;
      if FSeqStart and FSeqStartTwilight then
@@ -1737,7 +1737,7 @@ begin
               txt:=crlf+rsTarget+blank+t.objectname;
               if (t.planname=FlatTimeName[0]) and duskflat and (duskflats>0) then begin
                 txt:=txt+' '+FormatDateTime(datehms,duskflats);
-                twok:=TwilightAstro(now,hm,he);  // compute twilight
+                twok:=TwilightAstro(now,SequenceTwilight,hm,he);  // compute twilight
                 if FRunning and twok then begin
                   if (he/24)<frac(ctime) then ctime:=ctime+1;
                   ctime:=trunc(ctime)+he/24;
@@ -2789,7 +2789,7 @@ begin
     // Update start time of next step to astronomical twilight if not already set
     if nextt<>nil then begin
       if nextt.starttime<0 then begin
-        Time_Alt(jdtoday, sra, sde, -18, hp1, hp2);
+        Time_Alt(jdtoday, sra, sde, SequenceTwilight, hp1, hp2);
         if abs(hp2)<90 then begin
            ForceNextStartTime:=true;
            nextt.starttime:=rmod(hp2+ObsTimeZone+24,24)/24

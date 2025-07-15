@@ -3166,7 +3166,7 @@ procedure Tf_EditTargets.SeqStartTwilightChange(Sender: TObject);
 var he,hm: double;
     ok: boolean;
 begin
-  ok:=TwilightAstro(now,hm,he);
+  ok:=TwilightAstro(now,SequenceTwilight,hm,he);
   SeqStartAt.Enabled:=SeqStart.Checked and (not SeqStartTwilight.Checked);
   if SeqStartTwilight.Checked then begin
     if ok then
@@ -3183,7 +3183,7 @@ procedure Tf_EditTargets.SeqStopTwilightChange(Sender: TObject);
 var he,hm: double;
     ok: boolean;
 begin
-  ok:=TwilightAstro(now,hm,he);
+  ok:=TwilightAstro(now,SequenceTwilight,hm,he);
   SeqStopAt.Enabled:=SeqStop.Checked and (not SeqStopTwilight.Checked);
   if SeqStopTwilight.Checked then begin
     if ok then

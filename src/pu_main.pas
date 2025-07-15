@@ -1570,6 +1570,7 @@ begin
   SlewPrecision:=0.5;
   RecenterTargetDistance:=1.0;
   MinimumMoonDistance:=30.0;
+  SequenceTwilight:=-18.0;
   FocuserLastTemp:=NullCoord;
   AutoFocusLastTime:=NullCoord;
   FocusStarMag:=-1;
@@ -5341,6 +5342,7 @@ begin
   SlewPrecision:=config.GetValue('/PrecSlew/Precision',SlewPrecision);
   RecenterTargetDistance:=config.GetValue('/PrecSlew/RecenterTargetDistance',RecenterTargetDistance);
   MinimumMoonDistance:=config.GetValue('/Sequence/MinimumMoonDistance',MinimumMoonDistance);
+  SequenceTwilight:=config.GetValue('/Sequence/SequenceTwilight',SequenceTwilight);
   if (autoguider<>nil)and(autoguider.State<>GUIDER_DISCONNECTED) then autoguider.SettleTolerance(SettlePixel,SettleMinTime, SettleMaxTime);
   if refmask then SetRefImage;
   if f_focuser<>nil then f_focuser.BtnVcurve.Visible:=(AutoFocusMode=afVcurve);
@@ -9879,6 +9881,7 @@ begin
    f_option.UseFinderSolverChange(nil);
    f_option.RecenterTargetDistance.value:=config.GetValue('/PrecSlew/RecenterTargetDistance',RecenterTargetDistance);
    f_option.MinimumMoonDistance.Value:=round(config.GetValue('/Sequence/MinimumMoonDistance',MinimumMoonDistance));
+   f_option.SequenceTwilight.Value:=config.GetValue('/Sequence/SequenceTwilight',SequenceTwilight);
    if (mount.Status=devConnected)and(mount.PierSide>=pierUnknown) then begin
       f_option.Panel13.Visible:=true;
       f_option.MeridianWarning.caption:='Mount is not reporting pier side, meridian process is unreliable.'
@@ -10310,6 +10313,7 @@ begin
      config.SetValue('/PrecSlew/Filter',f_option.SlewFilter.ItemIndex);
      config.SetValue('/PrecSlew/RecenterTargetDistance',f_option.RecenterTargetDistance.value);
      config.SetValue('/Sequence/MinimumMoonDistance',f_option.MinimumMoonDistance.Value);
+     config.SetValue('/Sequence/SequenceTwilight',f_option.SequenceTwilight.Value);
      config.SetValue('/Astrometry/FinderFocalLength',f_option.FinderFocalLength.Value);
      config.SetValue('/Astrometry/UseFinderSolver',f_option.UseFinderSolver.Checked);
      config.SetValue('/Astrometry/FinderSolver',f_option.FinderSolver.ItemIndex);

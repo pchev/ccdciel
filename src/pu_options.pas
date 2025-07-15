@@ -34,10 +34,14 @@ type
   { Tf_option }
 
   Tf_option = class(TForm)
+    SequenceTwilight: TFloatSpinEditEx;
+    GroupBoxTwilight: TGroupBox;
     GroupBoxMoon: TGroupBox;
     GuiderAutofocus: TCheckBox;
     Label185: TLabel;
     Label186: TLabel;
+    Label187: TLabel;
+    Label188: TLabel;
     PanelExposure: TPanel;
     RemoveSpace: TCheckBox;
     ColorizeSpectra: TCheckBox;
@@ -1207,6 +1211,9 @@ begin
   GroupBoxMoon.Caption:=rsMoonAvoidanc;
   Label185.Caption:=rsMinimumDista;
   Label186.Caption:=rsDegree;
+  GroupBoxTwilight.Caption:=rsTwilightSequ;
+  Label187.Caption:=rsTwilightIsAt;
+  label188.Caption:=rsDegree;
   GroupBoxFocus.Caption:=rsPeriodicAuto;
   Label148.Caption:=rsThisOptionsA;
   GroupBox16.Caption := rsFocuserTempe3;

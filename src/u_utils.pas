@@ -112,7 +112,7 @@ procedure CircleIntersect(x0,y0,r,x1,y1: integer; out xr,yr: integer);
 procedure ResetTrackBar(tb:TTrackBar);
 procedure LeastSquares(data: array of TDouble2; out a,b,r: double);
 procedure Time_Alt(jd, ar, de, h: double; out hp1, hp2: double);
-function TwilightAstro(dt:TDateTime; out HMorning,HEvening:double):boolean;
+function TwilightAstro(dt:TDateTime; h: double; out HMorning,HEvening:double):boolean;
 procedure SecondsToWait(tnow,dt: TDateTime; forcenextday: boolean; out wt: Integer; out nextday:boolean);
 procedure LoadHorizon(fname: string);
 function ObjTransit(ra,de: double; out ht:double; out i:integer):boolean;
@@ -1909,14 +1909,14 @@ begin
   end;
 end;
 
-function TwilightAstro(dt:TDateTime; out HMorning,HEvening:double):boolean;
+function TwilightAstro(dt:TDateTime; h: double; out HMorning,HEvening:double):boolean;
 var jd0,sra,sde,hp1,hp2: double;
     Year, Month, Day: Word;
 begin
  DecodeDate(dt, Year, Month, Day);
  jd0:=jd(Year,Month,Day,0);
  Sun(jd0+0.5,sra,sde);
- Time_Alt(jd0, sra, sde, -18, hp1, hp2);
+ Time_Alt(jd0, sra, sde, h, hp1, hp2);
  if hp1<-90 then      // polar night
  begin
    HMorning:=0;

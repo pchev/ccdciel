@@ -178,7 +178,7 @@ object f_option: Tf_option
             Left = 8
             Height = 22
             Top = 16
-            Width = 143
+            Width = 139
             Caption = 'Verbose device log'
             ParentFont = False
             TabOrder = 0
@@ -187,7 +187,7 @@ object f_option: Tf_option
             Left = 256
             Height = 22
             Top = 16
-            Width = 95
+            Width = 91
             Caption = 'Show hints'
             ParentFont = False
             TabOrder = 1
@@ -542,7 +542,7 @@ object f_option: Tf_option
                 AnchorSideLeft.Side = asrBottom
                 AnchorSideTop.Control = UseFileSequenceWidth
                 AnchorSideTop.Side = asrCenter
-                Left = 179
+                Left = 175
                 Height = 28
                 Top = 46
                 Width = 58
@@ -561,7 +561,7 @@ object f_option: Tf_option
                 Left = 8
                 Height = 22
                 Top = 49
-                Width = 165
+                Width = 161
                 Caption = 'Fixed sequence length'
                 OnClick = UseFileSequenceWidthClick
                 ParentFont = False
@@ -573,7 +573,7 @@ object f_option: Tf_option
                 Left = 8
                 Height = 22
                 Top = 149
-                Width = 236
+                Width = 232
                 BorderSpacing.Top = 18
                 Caption = 'Compress the FITS files with fpack'
                 ParentFont = False
@@ -584,7 +584,7 @@ object f_option: Tf_option
                 Left = 8
                 Height = 22
                 Top = 175
-                Width = 258
+                Width = 254
                 BorderSpacing.Top = 4
                 Caption = 'Add FITS keywords for DSLR EXIF tags'
                 ParentFont = False
@@ -620,7 +620,7 @@ object f_option: Tf_option
                 Left = 8
                 Height = 22
                 Top = 201
-                Width = 359
+                Width = 355
                 BorderSpacing.Top = 4
                 Caption = 'Save a bitmap file additionally to the standard FITS file'
                 ParentFont = False
@@ -713,10 +713,10 @@ object f_option: Tf_option
                 AnchorSideLeft.Control = FileSequenceWidth
                 AnchorSideLeft.Side = asrBottom
                 AnchorSideTop.Control = UseFileSequenceWidth
-                Left = 249
+                Left = 245
                 Height = 22
                 Top = 49
-                Width = 210
+                Width = 206
                 BorderSpacing.Left = 12
                 Caption = 'Remove space in object name'
                 TabOrder = 10
@@ -1496,7 +1496,7 @@ object f_option: Tf_option
             Left = 13
             Height = 22
             Top = 55
-            Width = 248
+            Width = 244
             Caption = 'Get values from the weather station'
             OnChange = cbObsWeatherChange
             TabOrder = 4
@@ -1543,7 +1543,7 @@ object f_option: Tf_option
               Left = 8
               Height = 22
               Top = 2
-              Width = 259
+              Width = 255
               Caption = 'Cool down when camera is connected'
               ParentFont = False
               TabOrder = 0
@@ -1586,7 +1586,7 @@ object f_option: Tf_option
               Left = 8
               Height = 22
               Top = 2
-              Width = 187
+              Width = 183
               Caption = 'Limit temperature change'
               OnClick = TemperatureSlopeActiveClick
               ParentFont = False
@@ -1655,7 +1655,7 @@ object f_option: Tf_option
             Left = 170
             Height = 22
             Top = 33
-            Width = 149
+            Width = 145
             Caption = 'From camera driver'
             OnChange = MaxAduFromCameraChange
             ParentFont = False
@@ -1691,7 +1691,7 @@ object f_option: Tf_option
             Left = 170
             Height = 22
             Top = 4
-            Width = 149
+            Width = 145
             Caption = 'From camera driver'
             OnChange = PixelSizeFromCameraChange
             ParentFont = False
@@ -1817,7 +1817,7 @@ object f_option: Tf_option
             Left = 16
             Height = 22
             Top = 7
-            Width = 318
+            Width = 314
             Caption = 'Use specific Readout mode for different actions'
             OnChange = UseReadoutModeChange
             TabOrder = 4
@@ -1839,7 +1839,7 @@ object f_option: Tf_option
             Left = 193
             Height = 22
             Top = 76
-            Width = 265
+            Width = 261
             BorderSpacing.Left = 4
             BorderSpacing.Right = 4
             Caption = 'Save individual images before stacking'
@@ -1850,7 +1850,7 @@ object f_option: Tf_option
             Left = 16
             Height = 22
             Top = 4
-            Width = 348
+            Width = 344
             Caption = 'Show stacking option for Preview/Capture/Sequence'
             OnChange = StackShowChange
             ParentFont = False
@@ -1860,7 +1860,7 @@ object f_option: Tf_option
             Left = 16
             Height = 22
             Top = 28
-            Width = 118
+            Width = 114
             Caption = 'Star alignment'
             OnChange = StackAlignChange
             TabOrder = 2
@@ -1869,7 +1869,7 @@ object f_option: Tf_option
             Left = 16
             Height = 22
             Top = 76
-            Width = 135
+            Width = 131
             Caption = 'Floating point file'
             TabOrder = 4
           end
@@ -1900,7 +1900,7 @@ object f_option: Tf_option
             Left = 16
             Height = 22
             Top = 52
-            Width = 153
+            Width = 149
             Caption = 'Apply Dark and BPM'
             OnClick = StackUseDarkFlatChange
             TabOrder = 5
@@ -1909,7 +1909,7 @@ object f_option: Tf_option
             Left = 339
             Height = 22
             Top = 52
-            Width = 81
+            Width = 77
             Caption = 'Debayer'
             TabOrder = 6
           end
@@ -1917,7 +1917,7 @@ object f_option: Tf_option
             Left = 193
             Height = 22
             Top = 52
-            Width = 88
+            Width = 84
             Caption = 'Apply Flat'
             OnClick = StackUseDarkFlatChange
             TabOrder = 7
@@ -1926,7 +1926,7 @@ object f_option: Tf_option
             Left = 193
             Height = 22
             Top = 28
-            Width = 80
+            Width = 76
             Caption = 'Rotation'
             TabOrder = 8
           end
@@ -1945,7 +1945,7 @@ object f_option: Tf_option
             Left = 16
             Height = 22
             Top = 1
-            Width = 272
+            Width = 268
             Caption = 'Manage the Gain and Offset if available.'
             ParentFont = False
             TabOrder = 0
@@ -2124,7 +2124,7 @@ object f_option: Tf_option
             Left = 16
             Height = 22
             Top = 8
-            Width = 195
+            Width = 191
             Caption = 'Debayer the preview image'
             ParentFont = False
             TabOrder = 0
@@ -2153,7 +2153,7 @@ object f_option: Tf_option
             Left = 16
             Height = 22
             Top = 80
-            Width = 171
+            Width = 167
             Caption = 'Use DSLR color balance'
             ParentFont = False
             TabOrder = 2
@@ -2254,7 +2254,7 @@ object f_option: Tf_option
             Left = 16
             Height = 22
             Top = 112
-            Width = 190
+            Width = 186
             Caption = 'Background neutralization'
             ParentFont = False
             TabOrder = 4
@@ -2263,7 +2263,7 @@ object f_option: Tf_option
             Left = 16
             Height = 22
             Top = 152
-            Width = 129
+            Width = 125
             Caption = 'Colorize spectra '
             TabOrder = 5
           end
@@ -2308,7 +2308,7 @@ object f_option: Tf_option
             Left = 16
             Height = 22
             Top = 8
-            Width = 185
+            Width = 181
             Caption = 'Show video capture panel'
             TabOrder = 1
           end
@@ -2690,7 +2690,7 @@ object f_option: Tf_option
             Left = 8
             Height = 22
             Top = 57
-            Width = 199
+            Width = 195
             Caption = 'Use flat automatic exposure'
             ParentFont = False
             TabOrder = 0
@@ -2851,7 +2851,7 @@ object f_option: Tf_option
             Left = 18
             Height = 22
             Top = 8
-            Width = 247
+            Width = 243
             Caption = 'Slew telescope to flat panel position'
             ParentFont = False
             TabOrder = 0
@@ -2860,7 +2860,7 @@ object f_option: Tf_option
             Left = 18
             Height = 22
             Top = 168
-            Width = 319
+            Width = 315
             Caption = 'Use external command to light the panel on/off'
             ParentFont = False
             TabOrder = 1
@@ -3052,7 +3052,7 @@ object f_option: Tf_option
             Left = 8
             Height = 22
             Top = 49
-            Width = 296
+            Width = 292
             Caption = 'System is undersampled, accept 1 pixel star.'
             ParentFont = False
             TabOrder = 1
@@ -3120,7 +3120,7 @@ object f_option: Tf_option
             Height = 22
             Hint = 'Activate backlash compensation.'#10'Let this disabled if your focuser driver include backlash compensation.'
             Top = 4
-            Width = 173
+            Width = 169
             Caption = 'Backlash compensation'
             OnChange = CheckFocuserDirection
             ParentFont = False
@@ -3417,7 +3417,7 @@ object f_option: Tf_option
             Height = 22
             Hint = 'The preferred focuser direction for autofocus.'
             Top = 91
-            Width = 41
+            Width = 37
             Caption = 'In'
             Checked = True
             OnClick = CheckFocuserDirection
@@ -3430,7 +3430,7 @@ object f_option: Tf_option
             Height = 22
             Hint = 'The preferred focuser direction for autofocus.'
             Top = 91
-            Width = 51
+            Width = 47
             Caption = 'Out'
             OnClick = CheckFocuserDirection
             ParentFont = False
@@ -3893,7 +3893,7 @@ object f_option: Tf_option
               Left = 7
               Height = 22
               Top = 64
-              Width = 391
+              Width = 387
               Caption = 'Allow to select a brighter star for high filter exposure factor'
               ParentFont = False
               TabOrder = 2
@@ -3923,7 +3923,7 @@ object f_option: Tf_option
               Left = 8
               Height = 22
               Top = 64
-              Width = 228
+              Width = 224
               Caption = 'Pause guiding during auto-focus'
               ParentFont = False
               TabOrder = 0
@@ -4001,7 +4001,7 @@ object f_option: Tf_option
               Left = 170
               Height = 22
               Top = 24
-              Width = 136
+              Width = 132
               Caption = 'Slew to focus star'
               Checked = True
               OnClick = ChangeAutofocusInPlace
@@ -4015,7 +4015,7 @@ object f_option: Tf_option
               Left = 352
               Height = 22
               Top = 24
-              Width = 105
+              Width = 101
               BorderSpacing.Top = 4
               Caption = 'Stay in place'
               OnClick = ChangeAutofocusInPlace
@@ -4099,7 +4099,7 @@ object f_option: Tf_option
             Left = 6
             Height = 22
             Top = 40
-            Width = 230
+            Width = 226
             Caption = 'Autofocus using the OAG camera'
             OnClick = GuiderAutofocusClick
             TabOrder = 1
@@ -4128,7 +4128,7 @@ object f_option: Tf_option
             Left = 114
             Height = 22
             Top = 11
-            Width = 162
+            Width = 158
             Caption = 'From telescope driver'
             OnChange = FocaleFromTelescopeChange
             ParentFont = False
@@ -4382,7 +4382,7 @@ object f_option: Tf_option
                   Left = 12
                   Height = 22
                   Top = 88
-                  Width = 245
+                  Width = 241
                   Caption = 'Use as fallback if other software fail'
                   ParentFont = False
                   TabOrder = 5
@@ -4402,7 +4402,7 @@ object f_option: Tf_option
                   Left = 12
                   Height = 22
                   Top = 8
-                  Width = 137
+                  Width = 133
                   Caption = 'Use custom script'
                   OnClick = AstUseScriptClick
                   ParentFont = False
@@ -4520,7 +4520,7 @@ object f_option: Tf_option
                   Left = 12
                   Height = 22
                   Top = 5
-                  Width = 219
+                  Width = 215
                   Caption = 'Use online nova.astrometry.net'
                   OnClick = AstUseOnlineClick
                   TabOrder = 0
@@ -5190,7 +5190,7 @@ object f_option: Tf_option
               Left = 17
               Height = 22
               Top = 41
-              Width = 161
+              Width = 157
               Caption = 'Use alternative solver'
               OnChange = UseFinderSolverChange
               TabOrder = 2
@@ -5295,7 +5295,7 @@ object f_option: Tf_option
             Left = 8
             Height = 22
             Top = 129
-            Width = 193
+            Width = 189
             Caption = 'Pause before meridian flip '
             ParentFont = False
             TabOrder = 0
@@ -5304,7 +5304,7 @@ object f_option: Tf_option
             Left = 8
             Height = 22
             Top = 161
-            Width = 182
+            Width = 178
             Caption = 'Pause after meridian flip '
             ParentFont = False
             TabOrder = 1
@@ -5335,7 +5335,7 @@ object f_option: Tf_option
             Left = 8
             Height = 22
             Top = 64
-            Width = 203
+            Width = 199
             Caption = 'Autofocus after meridian flip'
             ParentFont = False
             TabOrder = 2
@@ -5344,7 +5344,7 @@ object f_option: Tf_option
             Left = 8
             Height = 22
             Top = 97
-            Width = 270
+            Width = 266
             Caption = 'Calibrate autoguider after medidian flip'
             ParentFont = False
             TabOrder = 3
@@ -5366,7 +5366,7 @@ object f_option: Tf_option
             Left = 8
             Height = 22
             Top = 32
-            Width = 166
+            Width = 162
             Caption = 'Suspend dome slaving'
             ParentFont = False
             TabOrder = 5
@@ -5375,7 +5375,7 @@ object f_option: Tf_option
             Left = 8
             Height = 22
             Top = 0
-            Width = 216
+            Width = 212
             Caption = 'Set mount pier side if available'
             TabOrder = 6
           end
@@ -5592,7 +5592,7 @@ object f_option: Tf_option
                 Left = 16
                 Height = 22
                 Top = 40
-                Width = 95
+                Width = 91
                 Caption = 'Start PHD2'
                 TabOrder = 2
               end
@@ -5766,7 +5766,7 @@ object f_option: Tf_option
             Left = 8
             Height = 22
             Top = 48
-            Width = 199
+            Width = 195
             Caption = 'Cancel and restart exposure'
             ParentFont = False
             TabOrder = 1
@@ -5824,7 +5824,7 @@ object f_option: Tf_option
             Left = 8
             Height = 22
             Top = 88
-            Width = 226
+            Width = 222
             Caption = 'Abort after restarting more than'
             TabOrder = 4
           end
@@ -5833,7 +5833,7 @@ object f_option: Tf_option
             AnchorSideLeft.Side = asrBottom
             AnchorSideTop.Control = GuideDriftAbort
             AnchorSideTop.Side = asrCenter
-            Left = 239
+            Left = 235
             Height = 32
             Top = 83
             Width = 50
@@ -5850,7 +5850,7 @@ object f_option: Tf_option
             AnchorSideLeft.Side = asrBottom
             AnchorSideTop.Control = GuideDriftAbort
             AnchorSideTop.Side = asrCenter
-            Left = 294
+            Left = 290
             Height = 18
             Top = 90
             Width = 81
@@ -5909,7 +5909,7 @@ object f_option: Tf_option
                 Left = 193
                 Height = 22
                 Top = 4
-                Width = 74
+                Width = 70
                 BorderSpacing.Left = 4
                 Caption = 'RA only'
                 ParentFont = False
@@ -5949,7 +5949,7 @@ object f_option: Tf_option
                 Left = 8
                 Height = 22
                 Top = 36
-                Width = 290
+                Width = 286
                 Caption = 'Dither while downloading from the camera'
                 TabOrder = 2
               end
@@ -6265,7 +6265,7 @@ object f_option: Tf_option
                   Left = 8
                   Height = 22
                   Top = 4
-                  Width = 128
+                  Width = 124
                   Caption = 'Set lock position'
                   Color = clDefault
                   ParentColor = False
@@ -6453,7 +6453,7 @@ object f_option: Tf_option
             Left = 16
             Height = 22
             Top = 40
-            Width = 332
+            Width = 328
             Caption = 'Automatically slave "Dome Park" to "Mount Park" '
             OnChange = DomeSlaveToMountChange
             ParentFont = False
@@ -6463,7 +6463,7 @@ object f_option: Tf_option
             Left = 16
             Height = 22
             Top = 8
-            Width = 401
+            Width = 397
             Caption = 'Allow to open the dome when safety status is bad or unknow'
             ParentFont = False
             TabOrder = 1
@@ -6529,7 +6529,7 @@ object f_option: Tf_option
                 Left = 22
                 Height = 22
                 Top = 16
-                Width = 195
+                Width = 191
                 Caption = 'Skychart on local computer'
                 OnChange = CheckBoxLocalCdcChange
                 ParentFont = False
@@ -6599,7 +6599,7 @@ object f_option: Tf_option
                   Left = 16
                   Height = 22
                   Top = 11
-                  Width = 112
+                  Width = 108
                   Caption = 'Start skychart'
                   OnChange = StartCdCChange
                   TabOrder = 0
@@ -6641,7 +6641,7 @@ object f_option: Tf_option
                 Left = 22
                 Height = 22
                 Top = 184
-                Width = 268
+                Width = 264
                 Caption = 'Adjust the chart for the image or frame'
                 TabOrder = 3
               end
@@ -6649,7 +6649,7 @@ object f_option: Tf_option
                 Left = 24
                 Height = 22
                 Top = 223
-                Width = 205
+                Width = 201
                 Caption = 'Mark every astrometry result'
                 TabOrder = 4
               end
@@ -6824,7 +6824,7 @@ object f_option: Tf_option
               Left = 8
               Height = 22
               Top = 6
-              Width = 128
+              Width = 124
               Caption = 'measurement ...'
               ParentFont = False
               TabOrder = 2
@@ -6890,7 +6890,7 @@ object f_option: Tf_option
               Left = 8
               Height = 22
               Top = 6
-              Width = 128
+              Width = 124
               Caption = 'measurement ...'
               ParentFont = False
               TabOrder = 2
@@ -6956,7 +6956,7 @@ object f_option: Tf_option
               Left = 8
               Height = 22
               Top = 6
-              Width = 128
+              Width = 124
               Caption = 'measurement ...'
               ParentFont = False
               TabOrder = 2
@@ -7022,7 +7022,7 @@ object f_option: Tf_option
               Left = 8
               Height = 22
               Top = 6
-              Width = 128
+              Width = 124
               Caption = 'measurement ...'
               ParentFont = False
               TabOrder = 2
@@ -7088,7 +7088,7 @@ object f_option: Tf_option
               Left = 8
               Height = 22
               Top = 6
-              Width = 128
+              Width = 124
               Caption = 'measurement ...'
               ParentFont = False
               TabOrder = 2
@@ -7154,7 +7154,7 @@ object f_option: Tf_option
               Left = 8
               Height = 22
               Top = 6
-              Width = 128
+              Width = 124
               Caption = 'measurement ...'
               ParentFont = False
               TabOrder = 2
@@ -7220,7 +7220,7 @@ object f_option: Tf_option
               Left = 8
               Height = 22
               Top = 6
-              Width = 128
+              Width = 124
               Caption = 'measurement ...'
               ParentFont = False
               TabOrder = 2
@@ -7286,7 +7286,7 @@ object f_option: Tf_option
               Left = 8
               Height = 22
               Top = 6
-              Width = 128
+              Width = 124
               Caption = 'measurement ...'
               ParentFont = False
               TabOrder = 2
@@ -7352,7 +7352,7 @@ object f_option: Tf_option
               Left = 8
               Height = 22
               Top = 6
-              Width = 128
+              Width = 124
               Caption = 'measurement ...'
               ParentFont = False
               TabOrder = 2
@@ -7418,7 +7418,7 @@ object f_option: Tf_option
               Left = 8
               Height = 22
               Top = 6
-              Width = 128
+              Width = 124
               Caption = 'measurement ...'
               ParentFont = False
               TabOrder = 2
@@ -7484,7 +7484,7 @@ object f_option: Tf_option
               Left = 8
               Height = 22
               Top = 6
-              Width = 128
+              Width = 124
               Caption = 'measurement ...'
               ParentFont = False
               TabOrder = 2
@@ -7550,7 +7550,7 @@ object f_option: Tf_option
               Left = 8
               Height = 22
               Top = 6
-              Width = 128
+              Width = 124
               Caption = 'measurement ...'
               ParentFont = False
               TabOrder = 2
@@ -7616,7 +7616,7 @@ object f_option: Tf_option
               Left = 8
               Height = 22
               Top = 6
-              Width = 128
+              Width = 124
               Caption = 'measurement ...'
               ParentFont = False
               TabOrder = 2
@@ -7774,10 +7774,10 @@ object f_option: Tf_option
           ParentFont = False
           TabOrder = 0
           object MeasureNewImage: TCheckBox
-            Left = 16
+            Left = 12
             Height = 22
             Top = 8
-            Width = 379
+            Width = 375
             Caption = 'Automatic HFD measurement for every sequence capture'
             OnClick = MeasureNewImageClick
             ParentFont = False
@@ -7785,20 +7785,20 @@ object f_option: Tf_option
           end
           object GroupBox23: TGroupBox
             Left = 0
-            Height = 124
-            Top = 68
+            Height = 120
+            Top = 72
             Width = 551
             Align = alBottom
             Caption = 'Recenter sequence target that drift'
-            ClientHeight = 94
+            ClientHeight = 90
             ClientWidth = 547
             ParentFont = False
             TabOrder = 1
             object CheckRecenterTarget: TCheckBox
-              Left = 16
+              Left = 12
               Height = 22
               Top = 8
-              Width = 330
+              Width = 326
               Caption = 'Run astrometry on every image to search for drift'
               ParentFont = False
               TabOrder = 0
@@ -7815,7 +7815,7 @@ object f_option: Tf_option
               Increment = 0.1
             end
             object Label130: TLabel
-              Left = 16
+              Left = 12
               Height = 18
               Top = 45
               Width = 199
@@ -7824,18 +7824,21 @@ object f_option: Tf_option
               ParentFont = False
             end
             object Label131: TLabel
+              AnchorSideLeft.Control = RecenterTargetDistance
+              AnchorSideLeft.Side = asrBottom
               AnchorSideTop.Control = RecenterTargetDistance
               AnchorSideTop.Side = asrCenter
-              Left = 425
+              Left = 426
               Height = 18
               Top = 45
               Width = 50
+              BorderSpacing.Left = 8
               Caption = 'minutes'
               ParentColor = False
               ParentFont = False
             end
             object Label149: TLabel
-              Left = 16
+              Left = 12
               Height = 18
               Top = 70
               Width = 207
@@ -7845,7 +7848,7 @@ object f_option: Tf_option
             end
           end
           object Label184: TLabel
-            Left = 16
+            Left = 12
             Height = 18
             Top = 40
             Width = 276
@@ -7879,30 +7882,30 @@ object f_option: Tf_option
         end
         object GroupBoxFocus: TGroupBox
           Left = 0
-          Height = 290
-          Top = 378
+          Height = 228
+          Top = 440
           Width = 555
           Align = alClient
           Caption = 'Periodic autofocus'
-          ClientHeight = 260
+          ClientHeight = 198
           ClientWidth = 551
           ParentFont = False
           TabOrder = 1
           object GroupBox16: TGroupBox
             Left = 0
-            Height = 92
+            Height = 90
             Top = 52
             Width = 551
             Align = alTop
             Caption = 'Focuser temperature compensation'
-            ClientHeight = 62
+            ClientHeight = 60
             ClientWidth = 547
             ParentFont = False
             TabOrder = 0
             object Label84: TLabel
               AnchorSideTop.Control = FocuserTempCoeff
               AnchorSideTop.Side = asrCenter
-              Left = 4
+              Left = 12
               Height = 18
               Top = 8
               Width = 209
@@ -7938,7 +7941,7 @@ object f_option: Tf_option
             object Label119: TLabel
               AnchorSideTop.Control = AutofocusTemp
               AnchorSideTop.Side = asrCenter
-              Left = 4
+              Left = 12
               Height = 18
               Top = 36
               Width = 247
@@ -7975,7 +7978,7 @@ object f_option: Tf_option
           object GroupBox22: TGroupBox
             Left = 0
             Height = 184
-            Top = 144
+            Top = 142
             Width = 551
             Align = alTop
             Caption = 'Periodic auto-focus'
@@ -7986,7 +7989,7 @@ object f_option: Tf_option
             object Label127: TLabel
               AnchorSideTop.Control = AutofocusPeriod
               AnchorSideTop.Side = asrCenter
-              Left = 8
+              Left = 12
               Height = 18
               Top = 5
               Width = 220
@@ -8020,13 +8023,14 @@ object f_option: Tf_option
             end
           end
           object Label148: TLabel
-            Left = 6
+            Left = 12
             Height = 40
             Top = 6
             Width = 519
             Align = alTop
             AutoSize = False
-            BorderSpacing.Right = 20
+            BorderSpacing.Left = 6
+            BorderSpacing.Right = 14
             BorderSpacing.Around = 6
             Caption = 'This options are in addition to the autofocus frequency available in the Plan definition'
             ParentColor = False
@@ -8049,7 +8053,7 @@ object f_option: Tf_option
             Left = 8
             Height = 22
             Top = 49
-            Width = 267
+            Width = 263
             Caption = 'Start new exposure as early as possible'
             ParentFont = False
             TabOrder = 0
@@ -8066,18 +8070,18 @@ object f_option: Tf_option
         end
         object GroupBoxMoon: TGroupBox
           Left = 0
-          Height = 74
-          Top = 304
+          Height = 71
+          Top = 369
           Width = 555
           Align = alTop
           Caption = 'Moon avoidance'
-          ClientHeight = 44
+          ClientHeight = 41
           ClientWidth = 551
           TabOrder = 3
           object Label185: TLabel
             AnchorSideTop.Control = MinimumMoonDistance
             AnchorSideTop.Side = asrCenter
-            Left = 8
+            Left = 12
             Height = 18
             Top = 9
             Width = 192
@@ -8085,13 +8089,10 @@ object f_option: Tf_option
             ParentColor = False
           end
           object MinimumMoonDistance: TSpinEditEx
-            AnchorSideLeft.Control = Label185
-            AnchorSideLeft.Side = asrBottom
-            Left = 212
+            Left = 344
             Height = 28
             Top = 4
-            Width = 64
-            BorderSpacing.Left = 12
+            Width = 74
             Constraints.MaxHeight = 28
             MaxLength = 0
             TabOrder = 0
@@ -8105,13 +8106,59 @@ object f_option: Tf_option
             AnchorSideLeft.Side = asrBottom
             AnchorSideTop.Control = MinimumMoonDistance
             AnchorSideTop.Side = asrCenter
-            Left = 288
+            Left = 426
             Height = 18
             Top = 9
             Width = 44
-            BorderSpacing.Left = 12
+            BorderSpacing.Left = 8
             Caption = 'degree'
             ParentColor = False
+          end
+        end
+        object GroupBoxTwilight: TGroupBox
+          Left = 0
+          Height = 65
+          Top = 304
+          Width = 555
+          Align = alTop
+          Caption = 'Twilight sequence Start / Stop'
+          ClientHeight = 35
+          ClientWidth = 551
+          TabOrder = 4
+          object Label187: TLabel
+            AnchorSideTop.Control = SequenceTwilight
+            AnchorSideTop.Side = asrCenter
+            Left = 12
+            Height = 18
+            Top = 5
+            Width = 180
+            Caption = 'Twilight is at Sun elevation of'
+            ParentColor = False
+          end
+          object Label188: TLabel
+            AnchorSideLeft.Control = SequenceTwilight
+            AnchorSideLeft.Side = asrBottom
+            AnchorSideTop.Control = Label187
+            Left = 426
+            Height = 18
+            Top = 5
+            Width = 44
+            BorderSpacing.Left = 8
+            Caption = 'degree'
+            ParentColor = False
+          end
+          object SequenceTwilight: TFloatSpinEditEx
+            Left = 344
+            Height = 28
+            Top = 0
+            Width = 74
+            Constraints.MaxHeight = 28
+            MaxLength = 0
+            TabOrder = 0
+            DecimalPlaces = 1
+            MaxValue = -12
+            MinValue = -18
+            Value = -18
           end
         end
       end
@@ -8135,7 +8182,7 @@ object f_option: Tf_option
             Left = 18
             Height = 22
             Top = 19
-            Width = 185
+            Width = 181
             Caption = 'Low quality image scaling'
             ParentFont = False
             TabOrder = 0
@@ -8144,7 +8191,7 @@ object f_option: Tf_option
             Left = 18
             Height = 22
             Top = 56
-            Width = 258
+            Width = 254
             Caption = 'Do not display images during capture'
             ParentFont = False
             TabOrder = 1
@@ -8405,7 +8452,7 @@ object f_option: Tf_option
                 Left = 226
                 Height = 22
                 Top = 86
-                Width = 191
+                Width = 187
                 Caption = 'Secure SSL/TLS connection'
                 ParentFont = False
                 TabOrder = 7
