@@ -1628,7 +1628,7 @@ resourcestring
   rsMissingTarge2 = 'Missing target coordinates';
   rsUsingManuall = 'Using manually selected star';
   rsUsingABright = 'Using a bright star near the lock position';
-  rsTwilightSequ = 'Twilight sequence Start / Stop';
+  rsTwilightSequ = 'Sequence Start/Stop at twilight ';
   rsTwilightIsAt = 'Twilight is at Sun elevation of';
 
 implementation

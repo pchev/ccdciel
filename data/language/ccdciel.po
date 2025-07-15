@@ -6109,3 +6109,11 @@ msgstr ""
 msgid "Using a bright star near the lock position"
 msgstr ""
 
+#: u_translation:rstwilightsequ
+msgid "Sequence Start/Stop at twilight "
+msgstr ""
+
+#: u_translation:rstwilightisat
+msgid "Twilight is at Sun elevation of"
+msgstr ""
+
