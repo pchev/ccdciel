@@ -25,7 +25,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 interface
 
-uses   UScaleDPI, Dialogs, u_translation, u_global, cu_camera, indiapi, fu_visu,
+uses   UScaleDPI, Dialogs, u_hints, u_translation, u_global, cu_camera, indiapi, fu_visu,
   Classes, SysUtils, FileUtil, Forms, Graphics, Controls, StdCtrls, ExtCtrls, SpinEx,
   math,LCLintf, ComCtrls, Buttons, Menus;
 
@@ -60,6 +60,7 @@ type
     CalDeclination: TEdit;
     CalIssue: TEdit;
     cbEnlargeImage: TCheckBox;
+    cbFastCentering: TCheckBox;
     CheckBoxBacklash: TCheckBox;
     CheckBoxTrackSolar1: TCheckBox;
     cbSlitList: TComboBox;
@@ -366,6 +367,8 @@ type
     function GetSpectro:Boolean;
     procedure SetSpectroStrategy(value:TSpectroStrategy);
     function GetSpectroStrategy:TSpectroStrategy;
+    function GetSpectroFastCentering: boolean;
+    procedure SetSpectroFastCentering(value:Boolean);
     procedure SetForceMultistar(value:Boolean);
     function GetForceMultistar:Boolean;
     function GetFGuideMultistar:Boolean;
@@ -478,6 +481,7 @@ type
     property SpectroFunctions: boolean read GetSpectro write SetSpectro; // single star slit guiding
     property SpectroStrategy:TSpectroStrategy read GetSpectroStrategy write SetSpectroStrategy;
     property GuideLock: boolean read GetGuideLock write SetGuideLock; // single star slit guiding
+    property SpectroFastCentering: boolean read GetSpectroFastCentering write SetSpectroFastCentering; // do not limit the move to box size
     property ForceGuideMultistar: boolean read GetFGuideMultistar; // force multistar after star lock
     property ForceMultistar: boolean read GetForceMultistar write SetForceMultistar; // multistar mode now required
     property SpectroAstrometry: boolean read GetSpectroAstrometry; // astrometry to find the target
@@ -661,6 +665,8 @@ begin
   GroupBoxLock.Caption:=rsGuidePositio;
   label28.Caption:='X';
   label29.Caption:='Y';
+  cbFastCentering.Caption:=rsFastCenterin;
+  cbFastCentering.Hint:=rsBewareThisMa;
   ButtonSetLock.Caption:=rsClickOnImage;
   Label54.Caption:=rsPerSlitOffse;
   Label53.Caption:=rsSlit;
@@ -1625,6 +1631,16 @@ end;
 function Tf_internalguider.GetSpectroStrategy:TSpectroStrategy;
 begin
   result:=TSpectroStrategy(rgSpectroStrategy.ItemIndex);
+end;
+
+function Tf_internalguider.GetSpectroFastCentering: boolean;
+begin
+  result:=cbFastCentering.Checked;
+end;
+
+procedure Tf_internalguider.SetSpectroFastCentering(value:Boolean);
+begin
+  cbFastCentering.Checked:=value;
 end;
 
 procedure Tf_internalguider.SetGuideLock(value:Boolean);

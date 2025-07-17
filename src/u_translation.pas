@@ -1630,6 +1630,7 @@ resourcestring
   rsUsingABright = 'Using a bright star near the lock position';
   rsTwilightSequ = 'Sequence Start/Stop at twilight ';
   rsTwilightIsAt = 'Twilight is at Sun elevation of';
+  rsFastCenterin = 'Fast centering on the slit';
 
 implementation
 

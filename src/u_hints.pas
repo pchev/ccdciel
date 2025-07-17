@@ -182,6 +182,7 @@ resourcestring
   rsTheLowerLimi = 'The lower limit of histogram truncation';
   rsTheUpperLimi = 'The upper limit of histogram truncation';
   rsClickAndMove = 'Click and move to adjust the histogram truncation';
+  rsBewareThisMa = 'Beware this may result in the selection of a wrong star if the mount guiding is not ideal';
 
 implementation
 

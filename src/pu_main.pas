@@ -5273,6 +5273,7 @@ begin
   f_internalguider.SpectroFunctions:=config.GetValue('/InternalGuider/Spectro/SpectroFunctions',false);
   f_internalguider.SearchWinMin:=config.GetValue('/InternalGuider/Spectro/SearchWinMin',40);
   f_internalguider.SearchWinMax:=config.GetValue('/InternalGuider/Spectro/SearchWinMax',80);
+  f_internalguider.SpectroFastCentering:=config.GetValue('/InternalGuider/Spectro/FastCentering',false);
   f_internalguider.DrawSlit:=config.GetValue('/InternalGuider/Spectro/DrawSlit',false);
   f_internalguider.SlitX:=config.GetValue('/InternalGuider/Spectro/SlitX',0);
   f_internalguider.SlitY:=config.GetValue('/InternalGuider/Spectro/SlitY',0);
@@ -5930,6 +5931,7 @@ begin
   end;
   config.SetValue('/InternalGuider/Spectro/SearchWinMin',f_internalguider.SearchWinMin);
   config.SetValue('/InternalGuider/Spectro/SearchWinMax',f_internalguider.SearchWinMax);
+  config.SetValue('/InternalGuider/Spectro/FastCentering',f_internalguider.SpectroFastCentering);
   config.SetValue('/InternalGuider/Spectro/DrawSlit',f_internalguider.DrawSlit);
   config.SetValue('/InternalGuider/Spectro/SlitX',f_internalguider.SlitX);
   config.SetValue('/InternalGuider/Spectro/SlitY',f_internalguider.SlitY);
