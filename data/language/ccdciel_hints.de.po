@@ -6,15 +6,15 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ccdciel\n"
 "Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
-"POT-Creation-Date: 2025-07-15 19:13+0000\n"
+"POT-Creation-Date: 2025-07-17 11:54+0000\n"
 "PO-Revision-Date: 2025-01-29 19:55+0000\n"
 "Last-Translator: Thomas <email@starhopper.de>\n"
 "Language-Team: German <de@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2025-07-15 19:28+0000\n"
-"X-Generator: Launchpad (build 2d6e9435c2df831e66deb7fcbe9f03f78dd14743)\n"
+"X-Launchpad-Export-Date: 2025-07-17 12:00+0000\n"
+"X-Generator: Launchpad (build 4a935a27f849d9e76af17c154eb3e276e860afb7)\n"
 
 #: u_hints.rsactivateback
 #, object-pascal-format
@@ -66,6 +66,10 @@ msgstr "Autoguider Status"
 #: u_hints.rsbesuretopaus
 msgid "Be sure to pause guiding when using a OAG. You can continue guiding when using a separate guide scope."
 msgstr "Stellen Sie sicher, dass bei Verwendung eines Off-Axis-Guiders das Autoguiding unterbrochen wird. Mit einem separaten Nachführteleskop kann das Autoguiding weiter laufen."
+
+#: u_hints.rsbewarethisma
+msgid "Beware this may result in the selection of a wrong star if the mount guiding is not ideal"
+msgstr ""
 
 #: u_hints.rscamerabinnin
 msgid "Camera binning"

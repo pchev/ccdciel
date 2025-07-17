@@ -6117,3 +6117,7 @@ msgstr ""
 msgid "Twilight is at Sun elevation of"
 msgstr ""
 
+#: u_translation:rsfastcenterin
+msgid "Fast centering on the slit"
+msgstr ""
+

@@ -578,3 +578,7 @@ msgstr ""
 msgid "Click and move to adjust the histogram truncation"
 msgstr ""
 
+#: u_hints:rsbewarethisma
+msgid "Beware this may result in the selection of a wrong star if the mount guiding is not ideal"
+msgstr ""
+
