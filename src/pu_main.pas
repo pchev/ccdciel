@@ -1476,6 +1476,8 @@ var inif: TIniFile;
 begin
   DefaultFormatSettings.DecimalSeparator:='.';
   DefaultFormatSettings.TimeSeparator:=':';
+  DefaultFormatSettings.LongTimeFormat:='hh:mm:ss';
+  DefaultFormatSettings.ShortTimeFormat:='hh:mm';
   Randomize;
   lclver:=lcl_version;
   compile_time:={$I %DATE%}+' '+{$I %TIME%};
