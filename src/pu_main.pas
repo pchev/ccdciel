@@ -682,7 +682,7 @@ type
     SaveAutofocusBinning: string;
     SaveAutofocusFX,SaveAutofocusFY,SaveAutofocusFW,SaveAutofocusFH,SaveAutofocusBX,SaveAutofocusBY: integer;
     SaveAutofocusGain, SaveAutofocusOffset, SaveAutofocusPreviewGain, SaveAutofocusPreviewOffset: integer;
-    SaveGuiderAutofocusExposure: double;
+    SaveAutofocusExposure,SaveGuiderAutofocusExposure: double;
     SaveAutofocusBin, SaveGuiderAutofocusGain, SaveGuiderAutofocusOffset: integer;
     TerminateVcurve: boolean;
     ScrBmp,ScrGuideBmp,ScrFinderBmp: TBGRABitmap;
@@ -14522,6 +14522,7 @@ begin
   end;
   CancelAutofocus:=false;
   f_starprofile.AutofocusResult:=false;
+  SaveAutofocusExposure:=f_preview.Exposure;
   SaveAutofocusBinning:=f_preview.Binning.Text;
   SaveAutofocusBX:=camera.BinX;
   SaveAutofocusBY:=camera.BinY;
@@ -14740,6 +14741,7 @@ begin
    SetBinning(SaveAutofocusBX,SaveAutofocusBY);
    camera.SetFrame(SaveAutofocusFX,SaveAutofocusFY,SaveAutofocusFW,SaveAutofocusFH);
    f_visu.Zoom:=SaveFocusZoom;
+   f_preview.Exposure:=SaveAutofocusExposure;
    f_preview.Gain:=SaveAutofocusPreviewGain;
    f_preview.Offset:=SaveAutofocusPreviewOffset;
    if camera.CanSetGain then begin
