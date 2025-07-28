@@ -6607,6 +6607,9 @@ begin
  camera.SequenceRunning:=f_sequence.Running;
  camera.StepTotalCount:=f_sequence.StepTotalCount;
  camera.StepRepeatCount:=f_sequence.StepRepeatCount;
+ camera.TargetCoord:=f_sequence.TargetCoord;
+ camera.TargetRA:=f_sequence.TargetRA;
+ camera.TargetDE:=f_sequence.TargetDE;
 end;
 
 procedure Tf_main.GainStatus(Sender: TObject);

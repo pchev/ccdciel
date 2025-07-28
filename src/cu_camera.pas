@@ -103,8 +103,10 @@ T_camera = class(TComponent)
     FFixPixelRange: boolean;
     FGuideCamera,FFinderCamera: boolean;
     FGuidePixelScale,FGuideLockX,FGuideLockY: double;
-    FsequenceRunning: boolean;
+    FsequenceRunning, FTargetCoord: boolean;
     FStepTotalCount,FStepRepeatCount: integer;
+    FTargetRA,FTargetDE: Double;
+    FCoordinateOrigin: string;
     FCameraTimeout: integer;
     WaitExposure, ControlExposureOK: boolean;
     procedure msg(txt: string; level:integer=3);
@@ -366,6 +368,9 @@ T_camera = class(TComponent)
     property SequenceRunning: Boolean read FsequenceRunning write FsequenceRunning;
     property StepTotalCount: Integer read FStepTotalCount write FStepTotalCount;
     property StepRepeatCount: Integer read FStepRepeatCount write FStepRepeatCount;
+    property TargetCoord: Boolean read FTargetCoord write FTargetCoord;
+    property TargetRA: Double read FTargetRA write FTargetRA;
+    property TargetDE: Double read FTargetDE write FTargetDE;
     property CameraTimeout: integer read FCameraTimeout write FCameraTimeout;
     property onEndControlExposure: TNotifyEvent read FonEndControlExposure write FonEndControlExposure;
     property onRunScript: TRunScript read FRunScript write FRunScript;
@@ -445,6 +450,10 @@ begin
   FsequenceRunning:=false;
   FStepTotalCount:=1;
   FStepRepeatCount:=1;
+  FTargetCoord:=false;
+  FTargetRA:=NullCoord;
+  FTargetDE:=NullCoord;
+  FCoordinateOrigin:='Telescope pointing';
 end;
 
 destructor  T_camera.Destroy;
@@ -820,16 +829,30 @@ begin
   // get other values
   pierside:='';
   hra:=NullCoord; hdec:=NullCoord;
+  if Assigned(FonSequenceInfo) then FonSequenceInfo(self);
+  if FsequenceRunning and FTargetCoord then begin
+     hra:=FTargetRA;
+     hdec:=FTargetDE;
+     if (hra<>NullCoord)and(hdec<>NullCoord) then begin
+       ApparentToJ2000(hra,hdec);
+       hra:=rad2deg*hra;
+       hdec:=rad2deg*hdec;
+       FCoordinateOrigin:='Target coordinates';
+     end;
+  end;
   if (FMount<>nil)and(Fmount.Status=devConnected) then begin
      case mount.PierSide of
        pierEast: pierside:='EAST';
        pierWest: pierside:='WEST';
      end;
-     hra:=Fmount.RA;
-     hdec:=Fmount.Dec;
-     if (hra<>NullCoord)and(hdec<>NullCoord) then begin
-       MountToJ2000(Fmount.EquinoxJD,hra,hdec);
-       hra:=15*hra;
+     if (hra=NullCoord)or(hdec=NullCoord) then begin
+       hra:=Fmount.RA;
+       hdec:=Fmount.Dec;
+       if (hra<>NullCoord)and(hdec<>NullCoord) then begin
+         MountToJ2000(Fmount.EquinoxJD,hra,hdec);
+         hra:=15*hra;
+         FCoordinateOrigin:='Telescope pointing';
+       end;
      end;
   end;
   haz:=NullCoord; hal:=NullCoord;
@@ -1075,13 +1098,13 @@ begin
   else f.Header.Delete('ROTATANG');
   if pierside<>'' then f.Header.Insert(i,'PIERSIDE',pierside,'Telescope side of pier');
   if (hra<>NullCoord)and(hdec<>NullCoord) then begin
-    f.Header.Insert(i,'OBJCTRA',trim(RAToStrB(hra/15)),'[hh mm ss] Telescope pointing RA');
-    f.Header.Insert(i,'OBJCTDEC',trim(DEToStrB(hdec)),'[+dd mm ss] Telescope pointing DEC');
+    f.Header.Insert(i,'OBJCTRA',trim(RAToStrB(hra/15)),'[hh mm ss] '+FCoordinateOrigin+' RA');
+    f.Header.Insert(i,'OBJCTDEC',trim(DEToStrB(hdec)),'[+dd mm ss] '+FCoordinateOrigin+' DEC');
     f.Header.Insert(i,'EQUINOX',2000.0,'');
-    f.Header.Insert(i,'RA',hra,'[deg] Telescope pointing RA');
-    f.Header.Insert(i,'DEC',hdec,'[deg] Telescope pointing DEC');
-    f.Header.Insert(i,'CRVAL1',hra,'[deg] Telescope pointing RA');
-    f.Header.Insert(i,'CRVAL2',hdec,'[deg] Telescope pointing DEC');
+    f.Header.Insert(i,'RA',hra,'[deg] '+FCoordinateOrigin+' RA');
+    f.Header.Insert(i,'DEC',hdec,'[deg] '+FCoordinateOrigin+' DEC');
+    f.Header.Insert(i,'CRVAL1',hra,'[deg] '+FCoordinateOrigin+' RA');
+    f.Header.Insert(i,'CRVAL2',hdec,'[deg] '+FCoordinateOrigin+' DEC');
     if (hpix1>0)and(hpix2>0)and(focal_length>0)  then begin
        pixscale1:=3600*rad2deg*arctan(hpix1/1000/focal_length);
        pixscale2:=3600*rad2deg*arctan(hpix2/1000/focal_length);
