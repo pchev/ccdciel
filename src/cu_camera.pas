@@ -1025,7 +1025,10 @@ begin
   end;
   if hfilter<>'' then f.Header.Insert(i,'FILTER',hfilter,'Filter');
   f.Header.Insert(i,'SWCREATE','CCDciel '+ccdciel_version+'-'+RevisionStr+blank+compile_system,'');
-  if objname<>'' then f.Header.Insert(i,'OBJECT',objname,'Observed object name');
+  if objname<>'' then begin
+     f.Header.Insert(i,'OBJECT',objname,'Observed object name');
+     f.Header.Insert(i,'OBJNAME',objname,'Observed object name');
+  end;
   if objname=rsPreview then begin
     f.Header.Delete('FRAME');
     f.Header.Delete('IMAGETYP');
