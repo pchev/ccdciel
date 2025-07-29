@@ -15949,7 +15949,8 @@ procedure Tf_main.StatusTimerTimer(Sender: TObject);
 begin
  // Periodic check
  StatusTimer.Enabled:=false;
- CheckMeridianFlip;
+ if not (f_capture.Running or f_sequence.Running) then
+   CheckMeridianFlip;
  StatusTimer.Enabled:=true;
  StatusBar1.Invalidate;
 end;
