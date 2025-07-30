@@ -44,6 +44,7 @@ type
     Backlash: TSpinEditEx;
     Button1: TButton;
     btnRefImage: TButton;
+    btnSetStarOffset: TButton;
     ButtonLoop: TButton;
     ButtonSetLock: TSpeedButton;
     ButtonSetTemp: TButton;
@@ -65,6 +66,7 @@ type
     CheckBoxTrackSolar1: TCheckBox;
     cbSlitList: TComboBox;
     disable_guiding1: TCheckBox;
+    LabelSetOffset: TLabel;
     Label55: TLabel;
     Label56: TLabel;
     Label57: TLabel;
@@ -242,6 +244,7 @@ type
     Title: TLabel;
     procedure btnAddSlitOffsetClick(Sender: TObject);
     procedure btnDelSlitOffsetClick(Sender: TObject);
+    procedure btnSetStarOffsetClick(Sender: TObject);
     procedure Button1Click(Sender: TObject);
     procedure btnRefImageClick(Sender: TObject);
     procedure ButtonSetLockClick(Sender: TObject);
@@ -303,7 +306,7 @@ type
     cur_disable_guiding, cur_tracksolar, FForceMultiStar: boolean;
     FDrawSettingChange: boolean;
     FGuideLock, FGuideMultistar, FGuideAstrometry,FGuideStarOffset: boolean;
-    FGuideLockNextX, FGuideLockNextY: integer;
+    FGuideLockNextX, FGuideLockNextY, FStarOffsetStep: integer;
     FonShowMessage: TNotifyMsg;
     Fcamera: T_camera;
     CurrentSlit: integer;
@@ -497,6 +500,7 @@ type
     property OffsetY: double read GetOffsetY write SetOffsetY;
     property GuideLockNextX: integer read FGuideLockNextX write FGuideLockNextX;
     property GuideLockNextY: integer read FGuideLockNextY write FGuideLockNextY;
+    property StarOffsetStep: integer read FStarOffsetStep write FStarOffsetStep;
     property SearchWinMin: integer read GetSearchWinMin write SetSearchWinMin; // star search area
     property SearchWinMax: integer read GetSearchWinMax write SetSearchWinMax;
     property DrawSlit: boolean read GetDrawSlit write SetDrawSlit;
@@ -585,6 +589,7 @@ begin
  FDrawSettingChange:=false;
  FGuideLockNextX:=-1;
  FGuideLockNextY:=-1;
+ FStarOffsetStep:=-1;
  led.Canvas.AntialiasingMode:=amOn;
  FForceMultiStar:=false;
 
@@ -2010,6 +2015,12 @@ begin
    cbSlitList.ItemIndex:=i-1;
    cbSlitListChange(Sender);
  end;
+end;
+
+procedure Tf_internalguider.btnSetStarOffsetClick(Sender: TObject);
+begin
+  FStarOffsetStep:=1;
+  LabelSetOffset.Caption:='Click on the image at the target object position';
 end;
 
 procedure Tf_internalguider.cbSlitListChange(Sender: TObject);

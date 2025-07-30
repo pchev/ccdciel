@@ -489,6 +489,7 @@ type
     procedure MenuItemGuiderStopAstrometryClick(Sender: TObject);
     procedure MenuItemPreprocessClick(Sender: TObject);
     procedure MenuItemSelectGuideStarClick(Sender: TObject);
+    procedure SetGuideStarOffset(Sender: TObject);
     procedure MenuPolarAlignment2Click(Sender: TObject);
     procedure MenuSensorAnalysisClick(Sender: TObject);
     procedure MenuViewFinderClick(Sender: TObject);
@@ -666,6 +667,7 @@ type
     StartX, StartY, EndX, EndY, MouseDownX,MouseDownY: integer;
     FrameX,FrameY,FrameW,FrameH,FrameBin: integer;
     GuideMx, GuideMy: integer;
+    GuideOffset1X,GuideOffset1Y,GuideOffset2X,GuideOffset2Y: double;
     GuideMouseMoving: boolean;
     FinderMx, FinderMy: integer;
     FinderMouseMoving: boolean;
@@ -1668,6 +1670,7 @@ begin
   ImageGuide.OnMouseUp := @ImageGuideMouseUp;
   ImageGuide.OnMouseWheel := @ImageGuideMouseWheel;
   ImageGuide.OnDblClick := @MenuItemSelectGuideStarClick;
+  ImageGuide.OnClick := @SetGuideStarOffset;
   InternalGuiderSetLockPosition:=false;
   UseFinder:=false;
   ScrFinderBmp := TBGRABitmap.Create;
@@ -18684,6 +18687,52 @@ begin
   end;
 end;
 
+procedure Tf_main.SetGuideStarOffset(Sender: TObject);
+var xx,yy: integer;
+    val,xxc,yyc,rc,s:integer;
+    bg,bgdev,xc,yc,hfd,fwhm,vmax,dval,snr,flux: double;
+begin
+  if f_internalguider.SpectroFunctions and (autoguider is T_autoguider_internal) and (f_internalguider.StarOffsetStep>0) then begin
+    case f_internalguider.StarOffsetStep of
+       1: begin
+          GuiderScreen2fits(GuideMx,GuideMy,true,xx,yy);
+          GuideOffset1X:=xx;
+          GuideOffset1Y:=guidefits.HeaderInfo.naxis2-yy;
+          s:=f_internalguider.SearchWinMin div 2;
+          guidefits.FindStarPos(xx,yy,s,xxc,yyc,rc,vmax,bg,bgdev);
+          if vmax>0 then begin
+            guidefits.GetHFD2(xxc,yyc,2*rc,xc,yc,bg,bgdev,hfd,fwhm,vmax,snr,flux);
+            if vmax>0 then begin
+              GuideOffset1X:=xc;
+              GuideOffset1Y:=guidefits.HeaderInfo.naxis2-yc;
+            end;
+          end;
+          f_internalguider.LabelSetOffset.Caption:='Click on the image at the guide star position';
+          f_internalguider.StarOffsetStep:=2;
+          end;
+       2: begin
+          GuiderScreen2fits(GuideMx,GuideMy,true,xx,yy);
+          GuideOffset2X:=xx;
+          GuideOffset2Y:=guidefits.HeaderInfo.naxis2-yy;
+          s:=f_internalguider.SearchWinMin div 2;
+          guidefits.FindStarPos(xx,yy,s,xxc,yyc,rc,vmax,bg,bgdev);
+          if vmax>0 then begin
+            guidefits.GetHFD2(xxc,yyc,2*rc,xc,yc,bg,bgdev,hfd,fwhm,vmax,snr,flux);
+            if vmax>0 then begin
+              GuideOffset2X:=xc;
+              GuideOffset2Y:=guidefits.HeaderInfo.naxis2-yc;
+            end;
+          end;
+          f_internalguider.StarOffsetX.Value:=GuideOffset2X-GuideOffset1X;
+          f_internalguider.StarOffsetY.Value:=GuideOffset2Y-GuideOffset1Y;
+          T_autoguider_internal(autoguider).SpectroSelectNewStar(round(GuideOffset2X),round(GuideOffset2Y));
+          f_internalguider.LabelSetOffset.Caption:='';
+          f_internalguider.StarOffsetStep:=-1;
+          InternalguiderStart(Sender);
+          end;
+    end;
+  end;
+end;
 
 procedure Tf_main.MenuItemGuiderViewHeaderClick(Sender: TObject);
 var f: Tf_viewtext;
