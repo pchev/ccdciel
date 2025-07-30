@@ -227,6 +227,7 @@ type
      procedure ClearStarList;
      procedure LoadDark(fn: string);
      procedure LoadFlat(fn: string);
+     procedure MedianFilter;
      function dateobs: double;
      property IntfImg: TLazIntfImage read FIntfImg;
      Property HeaderInfo : TFitsInfo read FFitsInfo;
@@ -287,6 +288,15 @@ type
     rmult,gmult,bmult: double;
     rbg,gbg,bbg: single;
     t: TBayerMode;
+    procedure Execute; override;
+    constructor Create(CreateSuspended: boolean);
+  end;
+
+  TMedianFilter = class(TThread)
+  public
+    working: boolean;
+    num, id: integer;
+    fits: TFits;
     procedure Execute; override;
     constructor Create(CreateSuspended: boolean);
   end;
@@ -1084,6 +1094,56 @@ end;
 finally
 working := False;
 end;
+end;
+
+//////////////////// TMedianFilter /////////////////////////
+
+constructor TMedianFilter.Create(CreateSuspended: boolean);
+begin
+  FreeOnTerminate := False;
+  inherited Create(CreateSuspended);
+  working := True;
+end;
+
+procedure TMedianFilter.Execute;
+var
+  i, j, k, m, n, startline, endline, xs,ys, npix: integer;
+  i1,i2,i3,j1,j2,j3 : integer;
+  t: double;
+  list: array of double;
+begin
+xs:= fits.Fwidth;
+ys:= fits.FHeight;
+i := ys div num;
+startline := id * i;
+if id = (num - 1) then
+  endline := ys - 1
+else
+  endline := (id + 1) * i - 1;
+npix:=9;
+SetLength(list,npix);
+// process the rows range for this thread
+for i:=startline to endline do begin
+  i1:=max(i-1,0);
+  i2:=i;
+  i3:= min(i+1,ys-1);
+  for j := 0 to xs-1 do begin
+     j1:=max(j-1,0);
+     j2:=j;
+     j3:=min(j+1,xs-1);
+     list[0]:=fits.Fimage[0,i1,j1];
+     list[1]:=fits.Fimage[0,i1,j2];
+     list[2]:=fits.Fimage[0,i1,j3];
+     list[3]:=fits.Fimage[0,i2,j1];
+     list[4]:=fits.Fimage[0,i2,j2];
+     list[5]:=fits.Fimage[0,i2,j3];
+     list[6]:=fits.Fimage[0,i3,j1];
+     list[7]:=fits.Fimage[0,i3,j2];
+     list[8]:=fits.Fimage[0,i3,j3];
+     fits.Fimage[0,i2,j2]:=SMedian(list,9,false);
+  end;
+end;
+working := False;
 end;
 
 //////////////////// TDebayerImage /////////////////////////
@@ -2397,6 +2457,40 @@ begin
        FHistogram[j]:=FHistogram[j]+thread[i].hist[j];
     end;
   end;
+  // cleanup
+  for i := 0 to tc - 1 do thread[i].Free;
+end;
+
+procedure TFits.MedianFilter;
+var i: integer;
+    working, timingout: boolean;
+    timelimit: TDateTime;
+    thread: array[0..15] of TMedianFilter;
+    tc,timeout: integer;
+begin
+  thread[0]:=nil;
+  // number of thread
+   tc := max(1,min(16, MaxThreadCount)); // based on number of core
+   tc := max(1,min(tc,Fheight div 100)); // do not split the image too much
+  // start thread
+  for i := 0 to tc - 1 do
+  begin
+    thread[i] := TMedianFilter.Create(True);
+    thread[i].fits := self;
+    thread[i].num := tc;
+    thread[i].id := i;
+    thread[i].Start;
+  end;
+  // wait complete
+  timeout:=60;
+  timelimit := now + timeout / secperday;
+  repeat
+    sleep(100);
+    working := False;
+    for i := 0 to tc - 1 do
+      working := working or thread[i].working;
+    timingout := (now > timelimit);
+  until (not working) or timingout;
   // cleanup
   for i := 0 to tc - 1 do thread[i].Free;
 end;

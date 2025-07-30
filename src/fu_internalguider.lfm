@@ -445,6 +445,16 @@ object f_internalguider: Tf_internalguider
               Caption = 'LabelInfo4'
               ParentColor = False
             end
+            object cbFilterNoise: TCheckBox
+              AnchorSideTop.Control = ButtonDark
+              AnchorSideTop.Side = asrCenter
+              Left = 110
+              Height = 22
+              Top = 9
+              Width = 92
+              Caption = 'Noise filter'
+              TabOrder = 1
+            end
           end
           object Panel7: TPanel
             Left = 0

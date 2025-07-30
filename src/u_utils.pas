@@ -154,8 +154,8 @@ procedure MountToLocal(mountjd:double; var ra, de: double);
 procedure LocalToMount(mountjd:double; var ra, de: double);
 procedure MountToJ2000(mountjd:double; var ra, de: double);
 procedure J2000ToMount(mountjd:double; var ra, de: double);
-procedure quicksort(var list: array of double; lo,hi: integer);
-function SMedian(list: array of double; leng: integer): double;
+procedure quicksort(var list: array of double; lo,hi: integer); inline;
+function SMedian(list: array of double; leng: integer; smooth: boolean=true): double;
 procedure SortFilterListInc(var list: TStringList);
 procedure SortFilterListDec(var list: TStringList);
 function SystemInformation: string;
@@ -3027,8 +3027,8 @@ begin
 
 end;
 
-procedure quicksort(var list: array of double; lo,hi: integer);{ Fast quick sort. Sorts elements in the array list with indices between lo and hi}
-  procedure sort ( left, right : integer); {processing takes place in the sort procedure which executes itself recursively.}
+procedure quicksort(var list: array of double; lo,hi: integer); inline;{ Fast quick sort. Sorts elements in the array list with indices between lo and hi}
+  procedure sort ( left, right : integer); inline; {processing takes place in the sort procedure which executes itself recursively.}
   var
     i, j       : integer;
     tmp, pivot : double;    { tmp & pivot are the same type as the elements of array }
@@ -3051,7 +3051,7 @@ begin {quicksort};
   sort(lo,hi);
 end;
 
-function SMedian(list: array of double; leng: integer): double;{get median of an array of double. Taken from CCDciel code but slightly modified}
+function SMedian(list: array of double; leng: integer; smooth: boolean=true): double;{get median of an array of double. Taken from CCDciel code but slightly modified}
 var
   mid : integer;
 begin
@@ -3062,16 +3062,20 @@ begin
    begin
      quickSort(list,0,leng-1);
      mid := (leng-1) div 2; //(high(list) - low(list)) div 2;
-     if Odd(leng) then
-     begin
-       if leng<=3 then  result:=list[mid]
-       else
+     if smooth then begin
+       if Odd(leng) then
        begin
-         result:=(list[mid-1]+list[mid]+list[mid+1])/3;
-       end;
+         if leng<=3 then  result:=list[mid]
+         else
+         begin
+           result:=(list[mid-1]+list[mid]+list[mid+1])/3;
+         end;
+       end
+       else
+         result:=(list[mid]+list[mid+1])/2;
      end
      else
-     result:=(list[mid]+list[mid+1])/2;
+       result:=list[mid];
   end;
 end;
 

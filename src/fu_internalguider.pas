@@ -53,6 +53,7 @@ type
     ButtonGuide: TButton;
     ButtonStop: TButton;
     cbDrawSlit: TCheckBox;
+    cbFilterNoise: TCheckBox;
     cbSpectro: TCheckBox;
     CalDate: TEdit;
     CalBinning: TEdit;
@@ -362,6 +363,8 @@ type
     function GetV_solar:double;
     procedure SetVPA_solar(value:double);
     function GetVPa_solar:double;
+    procedure SetFilterNoise(value:Boolean);
+    function GetFilterNoise:Boolean;
     procedure SetBacklash(value:integer);
     function GetBacklash:integer;
     procedure SetBacklashCompensation(value:Boolean);
@@ -479,6 +482,7 @@ type
     property SolarTracking: Boolean read GetSolarTracking write SetSolarTracking;
     property v_solar: double read GetV_solar write SetV_solar;
     property vpa_solar: double read GetVPa_solar write SetVPA_solar;
+    property FilterNoise: boolean read GetFilterNoise write SetFilterNoise;
     property DecBacklash: integer read GetBacklash write SetBacklash;
     property BacklashCompensation: Boolean read GetBacklashCompensation write SetBacklashCompensation;
     property SpectroFunctions: boolean read GetSpectro write SetSpectro; // single star slit guiding
@@ -925,6 +929,16 @@ end;
 function Tf_internalguider.GetVPa_solar:double;
 begin
   result:=vpa_solar1.Value;
+end;
+
+procedure Tf_internalguider.SetFilterNoise(value:Boolean);
+begin
+  cbFilterNoise.Checked:=value;
+end;
+
+function Tf_internalguider.GetFilterNoise:Boolean;
+begin
+  result:=cbFilterNoise.Checked;
 end;
 
 procedure Tf_internalguider.SetBacklash(value:integer);

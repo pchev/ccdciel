@@ -5269,6 +5269,7 @@ begin
   f_internalguider.Gain.Value:=config.GetValue('/InternalGuider/Camera/Gain',0);
   f_internalguider.Offset.Value:=config.GetValue('/InternalGuider/Camera/Offset',0);
   f_internalguider.Temperature.Value:=config.GetValue('/InternalGuider/Camera/Temperature',0);
+  f_internalguider.FilterNoise:=config.GetValue('/InternalGuider/FilterNoise',false);
   x:=config.GetValue('/InternalGuider/Visu/Gamma',0.5);
   if x>1 then x:=0.5;
   f_internalguider.visu.Gamma.Value:=x;
@@ -5915,6 +5916,7 @@ begin
   config.SetValue('/InternalGuider/Camera/Gain',f_internalguider.Gain.Value);
   config.SetValue('/InternalGuider/Camera/Offset',f_internalguider.Offset.Value);
   config.SetValue('/InternalGuider/Camera/Temperature',f_internalguider.Temperature.Value);
+  config.SetValue('/InternalGuider/FilterNoise',f_internalguider.FilterNoise);
   config.SetValue('/InternalGuider/Visu/Gamma',f_internalguider.visu.Gamma.Value);
   config.SetValue('/InternalGuider/Visu/ClipRange',f_internalguider.visu.BtnClipRange.Down);
   config.SetValue('/InternalGuider/Visu/HistRange',f_internalguider.visu.cbHistRange.ItemIndex);
@@ -18221,6 +18223,9 @@ begin
   if (not guidefits.ImageValid) then begin
      guidefits.LoadStream;
   end;
+
+  if f_internalguider.FilterNoise then
+    guidefits.MedianFilter;
 
   if StopInternalguider then begin
    InternalguiderRunning:=false;
