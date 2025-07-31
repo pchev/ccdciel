@@ -298,6 +298,7 @@ type
     working: boolean;
     num, id: integer;
     fits: TFits;
+    source: Timafloat;
     procedure Execute; override;
     constructor Create(CreateSuspended: boolean);
   end;
@@ -1132,15 +1133,15 @@ for i:=startline to endline do begin
      j1:=max(j-1,0);
      j2:=j;
      j3:=min(j+1,xs-1);
-     list[0]:=fits.Fimage[0,i1,j1];
-     list[1]:=fits.Fimage[0,i1,j2];
-     list[2]:=fits.Fimage[0,i1,j3];
-     list[3]:=fits.Fimage[0,i2,j1];
-     list[4]:=fits.Fimage[0,i2,j2];
-     list[5]:=fits.Fimage[0,i2,j3];
-     list[6]:=fits.Fimage[0,i3,j1];
-     list[7]:=fits.Fimage[0,i3,j2];
-     list[8]:=fits.Fimage[0,i3,j3];
+     list[0]:=source[0,i1,j1];
+     list[1]:=source[0,i1,j2];
+     list[2]:=source[0,i1,j3];
+     list[3]:=source[0,i2,j1];
+     list[4]:=source[0,i2,j2];
+     list[5]:=source[0,i2,j3];
+     list[6]:=source[0,i3,j1];
+     list[7]:=source[0,i3,j2];
+     list[8]:=source[0,i3,j3];
      fits.Fimage[0,i2,j2]:=SMedian(list,9,false);
   end;
 end;
@@ -2464,13 +2465,30 @@ begin
   for i := 0 to tc - 1 do thread[i].Free;
 end;
 
+function CopyImage(a: Timafloat):Timafloat;
+var i: integer;
+type Tf2d = array of array of single;
+   function copy2d(const a: Tf2d): Tf2d;
+   var
+     j: integer;
+   begin
+     Result := copy(a);
+     for j := low(a) to high(a) do Result[j] := copy(a[j]);
+   end;
+begin
+  Result := copy(a);
+  for i := low(a) to high(a) do Result[i] := copy2d(a[i]);
+end;
+
 procedure TFits.MedianFilter;
 var i: integer;
     working, timingout: boolean;
     timelimit: TDateTime;
     thread: array[0..15] of TMedianFilter;
     tc,timeout: integer;
+    source: Timafloat;
 begin
+  source:=CopyImage(Fimage);
   thread[0]:=nil;
   // number of thread
    tc := max(1,min(16, MaxThreadCount)); // based on number of core
@@ -2480,6 +2498,7 @@ begin
   begin
     thread[i] := TMedianFilter.Create(True);
     thread[i].fits := self;
+    thread[i].source:=source;
     thread[i].num := tc;
     thread[i].id := i;
     thread[i].Start;
@@ -2496,6 +2515,7 @@ begin
   until (not working) or timingout;
   // cleanup
   for i := 0 to tc - 1 do thread[i].Free;
+  setlength(source,0,0,0);
   FNoiseProcess:=true;
   FStreamValid:=false;
   FHeader.Insert( FHeader.Indexof('END'),'COMMENT','Noise removed by median filtering','');
