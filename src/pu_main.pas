@@ -18704,22 +18704,24 @@ end;
 
 procedure Tf_main.ImageGuideClick(Sender: TObject);
 var xx,yy: integer;
-    xxc,yyc,rc,s:integer;
-    bg,bgdev,xc,yc,hfd,fwhm,vmax,snr,flux: double;
+    xxc,yyc,rc,s,w,h:integer;
+    bg,bgdev,xc,yc,hfd,fwhm,vmax,snr,flux,lockx,locky: double;
 begin
   if f_internalguider.SpectroFunctions and (autoguider is T_autoguider_internal) and (f_internalguider.StarOffsetStep>0) then begin
+    h:=guidefits.HeaderInfo.naxis1;
+    w:=guidefits.HeaderInfo.naxis2;
     case f_internalguider.StarOffsetStep of
        1: begin
           GuiderScreen2fits(GuideMx,GuideMy,true,xx,yy);
           GuideOffset1X:=xx;
-          GuideOffset1Y:=guidefits.HeaderInfo.naxis2-yy;
+          GuideOffset1Y:=w-yy;
           s:=f_internalguider.SearchWinMin div 2;
           guidefits.FindStarPos(xx,yy,s,xxc,yyc,rc,vmax,bg,bgdev);
           if vmax>0 then begin
             guidefits.GetHFD2(xxc,yyc,2*rc,xc,yc,bg,bgdev,hfd,fwhm,vmax,snr,flux);
             if vmax>0 then begin
               GuideOffset1X:=xc;
-              GuideOffset1Y:=guidefits.HeaderInfo.naxis2-yc;
+              GuideOffset1Y:=w-yc;
             end;
           end;
           f_internalguider.LabelSetOffset.Caption:='Click on the image at the guide star position';
@@ -18729,22 +18731,33 @@ begin
        2: begin
           GuiderScreen2fits(GuideMx,GuideMy,true,xx,yy);
           GuideOffset2X:=xx;
-          GuideOffset2Y:=guidefits.HeaderInfo.naxis2-yy;
+          GuideOffset2Y:=w-yy;
           s:=f_internalguider.SearchWinMin div 2;
           guidefits.FindStarPos(xx,yy,s,xxc,yyc,rc,vmax,bg,bgdev);
           if vmax>0 then begin
             guidefits.GetHFD2(xxc,yyc,2*rc,xc,yc,bg,bgdev,hfd,fwhm,vmax,snr,flux);
             if vmax>0 then begin
               GuideOffset2X:=xc;
-              GuideOffset2Y:=guidefits.HeaderInfo.naxis2-yc;
+              GuideOffset2Y:=w-yc;
             end;
           end;
           f_internalguider.StarOffsetX.Value:=GuideOffset2X-GuideOffset1X;
           f_internalguider.StarOffsetY.Value:=GuideOffset2Y-GuideOffset1Y;
-          T_autoguider_internal(autoguider).SpectroSelectNewStar(round(GuideOffset2X),round(GuideOffset2Y));
-          f_internalguider.LabelSetOffset.Caption:='';
-          f_internalguider.StarOffsetStep:=-1;
-          InternalguiderStart(Sender);
+          lockx:=f_internalguider.LockX;
+          locky:=f_internalguider.LockY;
+          s:=f_internalguider.SearchWinMin;
+          if (lockx>s)and(lockx<(w-s))and(locky>s)and(locky<(h-s)) then begin
+            T_autoguider_internal(autoguider).SpectroSelectNewStar(round(GuideOffset2X),round(GuideOffset2Y));
+            f_internalguider.LabelSetOffset.Caption:='';
+            f_internalguider.StarOffsetStep:=-1;
+            InternalguiderStart(Sender);
+          end
+          else begin
+            f_internalguider.StarOffsetStep:=-1;
+            f_internalguider.StarOffsetX.Value:=0;
+            f_internalguider.StarOffsetY.Value:=0;
+            f_internalguider.LabelSetOffset.Caption:='Guide position out of frame!';
+          end;
           end;
     end;
   end;

@@ -2033,6 +2033,8 @@ end;
 
 procedure Tf_internalguider.btnSetStarOffsetClick(Sender: TObject);
 begin
+  StarOffsetX.Value:=0;
+  StarOffsetY.Value:=0;
   FStarOffsetStep:=1;
   LabelSetOffset.Caption:='Click on the image at the target object position';
 end;
