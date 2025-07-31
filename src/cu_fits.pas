@@ -159,7 +159,7 @@ type
     FDarkOn: boolean;
     FFlat: TFits;
     FFlatOn: boolean;
-    FDarkProcess, FBPMProcess, FFlatProcess, FPrivateDark, FPrivateFlat: boolean;
+    FDarkProcess, FBPMProcess, FFlatProcess, FPrivateDark, FPrivateFlat, FNoiseProcess: boolean;
     FonMsg: TNotifyMsg;
     ReadFitsCS : TRTLCriticalSection;
     procedure msg(txt: string; level:integer=3);
@@ -255,6 +255,7 @@ type
      property DisableBayer: boolean read FDisableBayer write FDisableBayer;
      property hasBPM: boolean read GetHasBPM;
      property BPMProcess: boolean read FBPMProcess;
+     property NoiseProcess: boolean read FNoiseProcess;
      property StarList: TStarList read FStarList;
      property DarkProcess: boolean read FDarkProcess;
      property DarkOn: boolean read FDarkOn write FDarkOn;
@@ -1415,6 +1416,7 @@ Fmean:=0;
 Fsigma:=0;
 FBPMcount:=0;
 FBPMProcess:=false;
+FNoiseProcess:=false;
 FDarkProcess:=false;
 FDarkOn:=false;
 FPrivateDark:=false;
@@ -2153,6 +2155,7 @@ if FFitsInfo.naxis1=0 then exit;
 FDarkProcess:=false;
 FFlatProcess:=false;
 FBPMProcess:=false;
+FNoiseProcess:=false;
 if (FFitsInfo.naxis1*FFitsInfo.naxis2)>(maxl*maxl) then
   raise exception.Create(Format('Image too big! limit is currently %dx%d %sPlease open an issue to request an extension.',[maxl,maxl,crlf]));
 Fheight:=FFitsInfo.naxis2;
@@ -2493,6 +2496,9 @@ begin
   until (not working) or timingout;
   // cleanup
   for i := 0 to tc - 1 do thread[i].Free;
+  FNoiseProcess:=true;
+  FStreamValid:=false;
+  FHeader.Insert( FHeader.Indexof('END'),'COMMENT','Noise removed by median filtering','');
 end;
 
 procedure TFits.LoadDark(fn: string);

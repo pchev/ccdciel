@@ -151,6 +151,8 @@ type
     MenuFlatHeader: TMenuItem;
     MeasureConeError1: TMenuItem;
     MenuInstallScript: TMenuItem;
+    MenuItemNoiseFilter2: TMenuItem;
+    MenuItemNoiseFilter: TMenuItem;
     MenuItemPreprocess: TMenuItem;
     MenuItemPreprocess2: TMenuItem;
     MenuItemGuiderSolveSync: TMenuItem;
@@ -487,6 +489,7 @@ type
     procedure MenuItemGuiderViewStatisticsClick(Sender: TObject);
     procedure MenuItemImageInspectionClick(Sender: TObject);
     procedure MenuItemGuiderStopAstrometryClick(Sender: TObject);
+    procedure MenuItemNoiseFilterClick(Sender: TObject);
     procedure MenuItemPreprocessClick(Sender: TObject);
     procedure MenuItemSelectGuideStarClick(Sender: TObject);
     procedure ImageGuideClick(Sender: TObject);
@@ -13390,6 +13393,15 @@ begin
  end;
  MenuItemDebayer.Checked:=BayerColor;
  MenuItemDebayer2.Checked:=BayerColor;
+end;
+
+procedure Tf_main.MenuItemNoiseFilterClick(Sender: TObject);
+begin
+  if (fits.HeaderInfo.naxis>1) and fits.ImageValid and (not fits.NoiseProcess) then begin
+    fits.MedianFilter;
+    DrawHistogram(true,true);
+    DrawImage;
+  end;
 end;
 
 procedure Tf_main.MenuMountParkClick(Sender: TObject);

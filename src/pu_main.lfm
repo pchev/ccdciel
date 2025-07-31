@@ -6,8 +6,8 @@ object f_main: Tf_main
   ActiveControl = PageControlRight
   AllowDropFiles = True
   Caption = 'CCD Ciel'
-  ClientHeight = 420
-  ClientWidth = 800
+  ClientHeight = 915
+  ClientWidth = 1245
   Constraints.MinHeight = 450
   Constraints.MinWidth = 800
   KeyPreview = True
@@ -21,7 +21,6 @@ object f_main: Tf_main
   OnResize = FormResize
   OnShow = FormShow
   ShowHint = True
-  LCLVersion = '2.2.6.0'
   object Panel1: TPanel
     Left = 0
     Height = 892
@@ -1036,6 +1035,10 @@ object f_main: Tf_main
         ShowAlwaysCheckable = True
         OnClick = MenuItemDebayerClick
       end
+      object MenuItemNoiseFilter2: TMenuItem
+        Caption = 'Noise filter'
+        OnClick = MenuItemNoiseFilterClick
+      end
       object MenuItem24: TMenuItem
         Caption = '-'
       end
@@ -1677,6 +1680,10 @@ object f_main: Tf_main
       Caption = 'Preview debayer'
       ShowAlwaysCheckable = True
       OnClick = MenuItemDebayerClick
+    end
+    object MenuItemNoiseFilter: TMenuItem
+      Caption = 'Noise filter'
+      OnClick = MenuItemNoiseFilterClick
     end
     object MenuItem14: TMenuItem
       Caption = '-'
