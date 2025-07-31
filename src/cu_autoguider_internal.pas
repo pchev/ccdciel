@@ -512,7 +512,7 @@ end;
 function  T_autoguider_internal.measure_drift(var initialize:boolean; out drX,drY :double) : integer;// ReferenceX,Y indicates the total drift, drX,drY to drift since previous call. Arrays old_xy_array,xy_array are for storage star positions
 var
   i,c,s,fitsx,fitsy,stepsize,xsize,ysize,star_counter,star_counter2,counter,len,maxSNRstar,ix,iy: integer;
-  hfd1,star_fwhm,vmax,bg,bgdev,xc,yc,snr,flux,fluxratio,min_SNR,min_HFD,maxSNR,margin,y,mhfd,peak : double;
+  hfd1,star_fwhm,vmax,bg,bgdev,xc,yc,xo,yo,snr,flux,fluxratio,min_SNR,min_HFD,maxSNR,margin,y,mhfd,peak : double;
   x1,y1,bg1,bgdev1,fwhm1,vmax1,snr1,flux1: double;
   GuideLock: boolean;
   drift_arrayX,drift_arrayY : array of double;
@@ -648,7 +648,13 @@ begin
         star_counter:=1;
         // Mark star area
         hfd1:=finternalguider.SearchWinMin/2/3;
+        FGuideBmp.Canvas.Pen.Color:=clYellow;
         FGuideBmp.Canvas.Frame(trunc(1+xc*GuideImgPixRatio-hfd1*3),trunc(1+yc-hfd1*3),trunc(1+xc*GuideImgPixRatio+hfd1*3),trunc(1+yc+hfd1*3));
+        if Finternalguider.GuideStarOffset then begin
+          xo:=xc-Finternalguider.StarOffsetX.Value;
+          yo:=yc+Finternalguider.StarOffsetY.Value;
+          FGuideBmp.Canvas.Frame(trunc(1+xo*GuideImgPixRatio-hfd1*3),trunc(1+yo-hfd1*3),trunc(1+xo*GuideImgPixRatio+hfd1*3),trunc(1+yo+hfd1*3));
+        end;
         WriteLog('INFO: Star(s)='+inttostr(star_counter)+', HFD='+FormatFloat(f3v,CurrentHFD));
         msg(inttostr(star_counter)+' guide stars used, HFD='+FormatFloat(f3v,CurrentHFD),3);
         finternalguider.Info:=IntToStr(star_counter)+' star, Intensity: '+FormatFloat(f1,vmax+bg)+', HFD='+FormatFloat(f3v,CurrentHFD);
@@ -820,7 +826,13 @@ begin
        finternalguider.GuideLockNextY:=ysize-round(yc);
        // Mark star area
        hfd1:=finternalguider.SearchWinMin/2/3;
+       FGuideBmp.Canvas.Pen.Color:=clYellow;
        FGuideBmp.Canvas.Frame(trunc(1+xc*GuideImgPixRatio-hfd1*3),trunc(1+yc-hfd1*3),trunc(1+xc*GuideImgPixRatio+hfd1*3),trunc(1+yc+hfd1*3));
+       if Finternalguider.GuideStarOffset then begin
+         xo:=xc-Finternalguider.StarOffsetX.Value;
+         yo:=yc+Finternalguider.StarOffsetY.Value;
+         FGuideBmp.Canvas.Frame(trunc(1+xo*GuideImgPixRatio-hfd1*3),trunc(1+yo-hfd1*3),trunc(1+xo*GuideImgPixRatio+hfd1*3),trunc(1+yo+hfd1*3));
+       end;
        finternalguider.Info:=IntToStr(star_counter)+' star, Intensity: '+FormatFloat(f1,vmax);
      end
      else begin

@@ -104,6 +104,7 @@ Procedure cmdHz2Eq(a,h : double; out ra,de : double);
 procedure GuiderScreen2Fits(x,y: integer; FlipVert: boolean; out xx,yy:integer);
 procedure FinderScreen2Fits(x,y: integer;  FlipVert: boolean; out xx,yy:integer);
 procedure Screen2Fits(x,y: integer;  FlipHorz,FlipVert: boolean; out xx,yy:integer);
+procedure GuiderFits2Screen(x,y: integer; FlipVert: boolean; out xx,yy: integer);
 procedure FinderFits2Screen(x,y: integer; FlipVert: boolean; out xx,yy: integer);
 procedure Fits2Screen(x,y: integer; FlipHorz,FlipVert: boolean; out xx,yy: integer);
 procedure Screen2CCD(x,y: integer; FlipHorz,FlipVert: boolean; vflip:boolean; out xx,yy:integer);
@@ -1772,6 +1773,36 @@ try
     end;
   end;
   if FlipVert then yy:=ScrFinderHeigth-yy;
+except
+  xx:=-1;
+  yy:=-1;
+end;
+end;
+
+procedure GuiderFits2Screen(x,y: integer; FlipVert: boolean; out xx,yy: integer);
+begin
+try
+  if GuideImgZoom=0 then begin
+    if GuideImgPixRatio>=1 then begin
+      xx:=round((x * GuideImgPixRatio+GuideOrigX )* GuideImgScale0);
+      yy:=round((y+GuideOrigY )* GuideImgScale0);
+    end
+    else begin
+      xx:=round((x+GuideOrigX )* GuideImgScale0);
+      yy:=round((y/GuideImgPixRatio+GuideOrigY )* GuideImgScale0);
+    end;
+  end
+  else begin
+    if GuideImgPixRatio>=1 then begin
+      xx:=round(((x+0.5) * GuideImgPixRatio+GuideOrigX)*GuideImgZoom);
+      yy:=round((y+0.5+GuideOrigY)*GuideImgZoom);
+    end
+    else begin
+      xx:=round((x+GuideOrigX )* GuideImgZoom);
+      yy:=round((y/GuideImgPixRatio+GuideOrigY )* GuideImgZoom);
+    end;
+  end;
+  if FlipVert then yy:=ScrGuideHeigth-yy;
 except
   xx:=-1;
   yy:=-1;

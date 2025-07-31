@@ -489,7 +489,7 @@ type
     procedure MenuItemGuiderStopAstrometryClick(Sender: TObject);
     procedure MenuItemPreprocessClick(Sender: TObject);
     procedure MenuItemSelectGuideStarClick(Sender: TObject);
-    procedure SetGuideStarOffset(Sender: TObject);
+    procedure ImageGuideClick(Sender: TObject);
     procedure MenuPolarAlignment2Click(Sender: TObject);
     procedure MenuSensorAnalysisClick(Sender: TObject);
     procedure MenuViewFinderClick(Sender: TObject);
@@ -1670,7 +1670,7 @@ begin
   ImageGuide.OnMouseUp := @ImageGuideMouseUp;
   ImageGuide.OnMouseWheel := @ImageGuideMouseWheel;
   ImageGuide.OnDblClick := @MenuItemSelectGuideStarClick;
-  ImageGuide.OnClick := @SetGuideStarOffset;
+  ImageGuide.OnClick := @ImageGuideClick;
   InternalGuiderSetLockPosition:=false;
   UseFinder:=false;
   ScrFinderBmp := TBGRABitmap.Create;
@@ -18505,7 +18505,7 @@ begin
 end;
 
 procedure Tf_main.ImageGuidePaint(Sender: TObject);
-var h: integer;
+var h,s,x,y: integer;
 begin
 try
   if (ImageGuide.Parent=f_internalguider.PanelImage) and (guideimg_Height>0) and (guideimg_Width>0) then begin
@@ -18526,6 +18526,16 @@ try
   else
     ImageGuide.Canvas.Font.Size:=DoScaleX(10);
   ImageGuide.Canvas.TextOut(1, 1, rsGuideCamera);
+
+  if f_internalguider.StarOffsetStep=2 then begin
+     GuiderFits2Screen(round(GuideOffset1X),round(guidefits.HeaderInfo.naxis2-GuideOffset1Y),true,x,y);
+     s:=max(3,round(max(GuideImgZoom,GuideImgScale0)*f_internalguider.SearchWinMin/2));
+     with ImageGuide.Canvas do begin
+        Pen.Color:=clYellow;
+        Frame(x-s,y-s,x+s,y+s);
+     end;
+  end;
+
 except
 end;
 end;
@@ -18692,10 +18702,10 @@ begin
   end;
 end;
 
-procedure Tf_main.SetGuideStarOffset(Sender: TObject);
+procedure Tf_main.ImageGuideClick(Sender: TObject);
 var xx,yy: integer;
-    val,xxc,yyc,rc,s:integer;
-    bg,bgdev,xc,yc,hfd,fwhm,vmax,dval,snr,flux: double;
+    xxc,yyc,rc,s:integer;
+    bg,bgdev,xc,yc,hfd,fwhm,vmax,snr,flux: double;
 begin
   if f_internalguider.SpectroFunctions and (autoguider is T_autoguider_internal) and (f_internalguider.StarOffsetStep>0) then begin
     case f_internalguider.StarOffsetStep of
@@ -18714,6 +18724,7 @@ begin
           end;
           f_internalguider.LabelSetOffset.Caption:='Click on the image at the guide star position';
           f_internalguider.StarOffsetStep:=2;
+          ImageGuide.Invalidate;
           end;
        2: begin
           GuiderScreen2fits(GuideMx,GuideMy,true,xx,yy);
