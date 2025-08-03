@@ -5945,12 +5945,8 @@ msgstr ""
 msgid "Centering and guiding strategy"
 msgstr ""
 
-#: u_translation:rssinglestarus
-msgid "Single star, use the brightest star"
-msgstr ""
-
 #: u_translation:rssinglestarbr
-msgid "Single star, brightest star with offset"
+msgid "Single star, with offset"
 msgstr ""
 
 #: u_translation:rssinglestarwi

@@ -2,14 +2,14 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ccdciel\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-08-03 14:03+0000\n"
-"PO-Revision-Date: 2025-07-17 14:45+0000\n"
+"POT-Creation-Date: 2025-08-03 20:15+0000\n"
+"PO-Revision-Date: 2025-08-03 14:49+0000\n"
 "Last-Translator: Stanislav Holub <Unknown>\n"
 "Language-Team: Czech <cz@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2025-08-03 14:20+0000\n"
+"X-Launchpad-Export-Date: 2025-08-03 20:28+0000\n"
 "X-Generator: Launchpad (build 3cf67b79dc0cb931b720b669b1d12163f9abeaec)\n"
 "Language: cs\n"
 
@@ -977,11 +977,11 @@ msgstr "Vymazat stav dokončení?"
 
 #: u_translation.rsclickatthegu
 msgid "Click at the guide star position"
-msgstr ""
+msgstr "Klikněte na pozici naváděcí hvězdy"
 
 #: u_translation.rsclickattheta
 msgid "Click at the target object position"
-msgstr ""
+msgstr "Klikněte na pozici cílového objektu."
 
 #: u_translation.rsclickcancelt
 msgid "Click Cancel to abort the sequence."
@@ -1009,7 +1009,7 @@ msgstr "Kliknutím na snímek nastavíte"
 
 #: u_translation.rsclickontheim
 msgid "Click on the image to set the offset and guide"
-msgstr ""
+msgstr "Kliknutím na obrázek nastavíte ofset a vedení."
 
 #: u_translation.rsclicktheobje
 msgid "Click the object in planetarium"
@@ -2320,7 +2320,7 @@ msgstr "Pointační pozice na štěrbině"
 
 #: u_translation.rsguidepositio2
 msgid "Guide position out of frame!"
-msgstr ""
+msgstr "Poloha navádění mimo rám!"
 
 #: u_translation.rsguider
 msgid "Guider"
@@ -3366,7 +3366,7 @@ msgstr "Nepřeklápět  před přechodem poledníku"
 
 #: u_translation.rsnoisefilter
 msgid "Noise filter"
-msgstr ""
+msgstr "Filtr šumu"
 
 #: u_translation.rsnone2
 msgid "None"
@@ -4940,12 +4940,8 @@ msgid "Single star"
 msgstr "Jedna hvězda"
 
 #: u_translation.rssinglestarbr
-msgid "Single star, brightest star with offset"
-msgstr "Jedna hvězda, nejjasnější hvězda s offsetem"
-
-#: u_translation.rssinglestarus
-msgid "Single star, use the brightest star"
-msgstr "Jedna hvězda, použijte nejjasnější hvězdu"
+msgid "Single star, with offset"
+msgstr ""
 
 #: u_translation.rssinglestarwi
 msgid "Single star, with guider astrometry"

@@ -1587,8 +1587,7 @@ resourcestring
   rsGuideStarOff = 'Guide star offset';
   rsInstallScrip = 'Install script';
   rsCenteringAnd = 'Centering and guiding strategy';
-  rsSingleStarUs = 'Single star, use the brightest star';
-  rsSingleStarBr = 'Single star, brightest star with offset';
+  rsSingleStarBr = 'Single star, with offset';
   rsSingleStarWi = 'Single star, with guider astrometry';
   rsSingleStarWi2 = 'Single star with astrometry, then multistar';
   rsMultistarWit = 'Multistar with guider astrometry';

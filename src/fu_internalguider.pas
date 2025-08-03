@@ -667,7 +667,7 @@ begin
   TabSheetSpectro.Caption:=rsSpectroscopy;
   cbSpectro.Caption:=rsActivateSpec;
   rgSpectroStrategy.Caption:=rsCenteringAnd;
-  rgSpectroStrategy.Items[0]:=rsSingleStarUs;
+  rgSpectroStrategy.Items[0]:=rsSingleStar;
   rgSpectroStrategy.Items[1]:=rsSingleStarBr;
   rgSpectroStrategy.Items[2]:=rsSingleStarWi;
   rgSpectroStrategy.Items[3]:=rsSingleStarWi2;
