@@ -1280,7 +1280,7 @@ object f_internalguider: Tf_internalguider
                 Height = 25
                 Top = 88
                 Width = 319
-                Caption = 'Click on image to set the offset and start guiding'
+                Caption = 'Click on the image to set the offset and guide'
                 OnClick = btnSetStarOffsetClick
                 TabOrder = 3
               end

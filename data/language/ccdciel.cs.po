@@ -2,15 +2,15 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ccdciel\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-07-17 11:54+0000\n"
-"PO-Revision-Date: 2025-07-06 09:23+0000\n"
+"POT-Creation-Date: 2025-08-03 14:03+0000\n"
+"PO-Revision-Date: 2025-07-17 14:45+0000\n"
 "Last-Translator: Stanislav Holub <Unknown>\n"
 "Language-Team: Czech <cz@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2025-07-17 12:00+0000\n"
-"X-Generator: Launchpad (build 4a935a27f849d9e76af17c154eb3e276e860afb7)\n"
+"X-Launchpad-Export-Date: 2025-08-03 14:20+0000\n"
+"X-Generator: Launchpad (build 3cf67b79dc0cb931b720b669b1d12163f9abeaec)\n"
 "Language: cs\n"
 
 #: u_translation.rs2d
@@ -975,6 +975,14 @@ msgstr "Vymazat informace při resetu o opakování"
 msgid "Clear the completion status?"
 msgstr "Vymazat stav dokončení?"
 
+#: u_translation.rsclickatthegu
+msgid "Click at the guide star position"
+msgstr ""
+
+#: u_translation.rsclickattheta
+msgid "Click at the target object position"
+msgstr ""
+
 #: u_translation.rsclickcancelt
 msgid "Click Cancel to abort the sequence."
 msgstr "Klepnutím na tlačítko Storno přerušíte sekvenci."
@@ -998,6 +1006,10 @@ msgstr "Klepnutím na tlačítko Další uložte tyto hodnoty do konfigurace toh
 #: u_translation.rsclickonimage
 msgid "Click on image to set"
 msgstr "Kliknutím na snímek nastavíte"
+
+#: u_translation.rsclickontheim
+msgid "Click on the image to set the offset and guide"
+msgstr ""
 
 #: u_translation.rsclicktheobje
 msgid "Click the object in planetarium"
@@ -1879,7 +1891,7 @@ msgstr "Vypnuto"
 
 #: u_translation.rsfastcenterin
 msgid "Fast centering on the slit"
-msgstr ""
+msgstr "Rychlé centrování na štěrbinu"
 
 #: u_translation.rsfil
 msgid "Fil."
@@ -2305,6 +2317,10 @@ msgstr "Naváděcí offset"
 #: u_translation.rsguidepositio
 msgid "Guide position on the slit"
 msgstr "Pointační pozice na štěrbině"
+
+#: u_translation.rsguidepositio2
+msgid "Guide position out of frame!"
+msgstr ""
 
 #: u_translation.rsguider
 msgid "Guider"
@@ -3347,6 +3363,10 @@ msgstr "Žádný flat"
 #: u_translation.rsnoflipuntilp
 msgid "No flip until past meridian for"
 msgstr "Nepřeklápět  před přechodem poledníku"
+
+#: u_translation.rsnoisefilter
+msgid "Noise filter"
+msgstr ""
 
 #: u_translation.rsnone2
 msgid "None"
@@ -5912,11 +5932,11 @@ msgstr "Oprava rozsahu pixelů tak, aby odpovídal bitové hloubce fotoaparátu 
 
 #: u_translation.rstwilightisat
 msgid "Twilight is at Sun elevation of"
-msgstr ""
+msgstr "Soumrak je ve výšce Slunce"
 
 #: u_translation.rstwilightsequ
 msgid "Sequence Start/Stop at twilight "
-msgstr ""
+msgstr "Sekvence Start/Stop za soumraku "
 
 #: u_translation.rstwilightskyf
 msgid "Twilight sky flat"

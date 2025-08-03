@@ -6121,3 +6121,23 @@ msgstr ""
 msgid "Fast centering on the slit"
 msgstr ""
 
+#: u_translation:rsclickattheta
+msgid "Click at the target object position"
+msgstr ""
+
+#: u_translation:rsclickatthegu
+msgid "Click at the guide star position"
+msgstr ""
+
+#: u_translation:rsguidepositio2
+msgid "Guide position out of frame!"
+msgstr ""
+
+#: u_translation:rsclickontheim
+msgid "Click on the image to set the offset and guide"
+msgstr ""
+
+#: u_translation:rsnoisefilter
+msgid "Noise filter"
+msgstr ""
+

@@ -6,15 +6,15 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ccdciel\n"
 "Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
-"POT-Creation-Date: 2025-07-17 11:54+0000\n"
-"PO-Revision-Date: 2025-07-17 11:57+0000\n"
+"POT-Creation-Date: 2025-08-03 14:03+0000\n"
+"PO-Revision-Date: 2025-08-03 14:15+0000\n"
 "Last-Translator: Patrick Chevalley <Unknown>\n"
 "Language-Team: French <fr@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2025-07-17 12:00+0000\n"
-"X-Generator: Launchpad (build 4a935a27f849d9e76af17c154eb3e276e860afb7)\n"
+"X-Launchpad-Export-Date: 2025-08-03 14:20+0000\n"
+"X-Generator: Launchpad (build 3cf67b79dc0cb931b720b669b1d12163f9abeaec)\n"
 
 #: u_translation.rs2d
 msgid "2D"
@@ -978,6 +978,14 @@ msgstr "Répétition sans informations de redémarage"
 msgid "Clear the completion status?"
 msgstr "Effacer l'état d'avancement ?"
 
+#: u_translation.rsclickatthegu
+msgid "Click at the guide star position"
+msgstr "Cliquer à la position de l'étoile guide"
+
+#: u_translation.rsclickattheta
+msgid "Click at the target object position"
+msgstr "Cliquer à la position de la cible"
+
 #: u_translation.rsclickcancelt
 msgid "Click Cancel to abort the sequence."
 msgstr "Cliquez sur Annuler pour interompre la séquence."
@@ -1001,6 +1009,10 @@ msgstr "Cliquez sur Suivant pour enregistrer ces valeurs dans ce profil."
 #: u_translation.rsclickonimage
 msgid "Click on image to set"
 msgstr "Définir avec un clic sur l'image"
+
+#: u_translation.rsclickontheim
+msgid "Click on the image to set the offset and guide"
+msgstr "Cliquer pour définir le décalage et guider"
 
 #: u_translation.rsclicktheobje
 msgid "Click the object in planetarium"
@@ -2309,6 +2321,10 @@ msgstr "Décalage du guidage"
 msgid "Guide position on the slit"
 msgstr "Position de guidage sur la fente"
 
+#: u_translation.rsguidepositio2
+msgid "Guide position out of frame!"
+msgstr "Position de guidage hors de l'image!"
+
 #: u_translation.rsguider
 msgid "Guider"
 msgstr "Guideur"
@@ -3350,6 +3366,10 @@ msgstr "Pas de flat"
 #: u_translation.rsnoflipuntilp
 msgid "No flip until past meridian for"
 msgstr "Pas de retournement avant"
+
+#: u_translation.rsnoisefilter
+msgid "Noise filter"
+msgstr "Filtre anti-bruit"
 
 #: u_translation.rsnone2
 msgid "None"

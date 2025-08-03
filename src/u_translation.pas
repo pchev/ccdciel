@@ -1631,6 +1631,11 @@ resourcestring
   rsTwilightSequ = 'Sequence Start/Stop at twilight ';
   rsTwilightIsAt = 'Twilight is at Sun elevation of';
   rsFastCenterin = 'Fast centering on the slit';
+  rsClickAtTheTa = 'Click at the target object position';
+  rsClickAtTheGu = 'Click at the guide star position';
+  rsGuidePositio2 = 'Guide position out of frame!';
+  rsClickOnTheIm = 'Click on the image to set the offset and guide';
+  rsNoiseFilter = 'Noise filter';
 
 implementation
 

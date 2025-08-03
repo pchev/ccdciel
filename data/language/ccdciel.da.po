@@ -6,15 +6,15 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ccdciel\n"
 "Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
-"POT-Creation-Date: 2025-07-17 11:54+0000\n"
+"POT-Creation-Date: 2025-08-03 14:03+0000\n"
 "PO-Revision-Date: 2021-09-24 16:13+0000\n"
 "Last-Translator: Jimmy Frydkær Jensen <jimmy@frydkaer.net>\n"
 "Language-Team: Danish <da@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2025-07-17 12:00+0000\n"
-"X-Generator: Launchpad (build 4a935a27f849d9e76af17c154eb3e276e860afb7)\n"
+"X-Launchpad-Export-Date: 2025-08-03 14:20+0000\n"
+"X-Generator: Launchpad (build 3cf67b79dc0cb931b720b669b1d12163f9abeaec)\n"
 
 #: u_translation.rs2d
 msgid "2D"
@@ -978,6 +978,14 @@ msgstr ""
 msgid "Clear the completion status?"
 msgstr ""
 
+#: u_translation.rsclickatthegu
+msgid "Click at the guide star position"
+msgstr ""
+
+#: u_translation.rsclickattheta
+msgid "Click at the target object position"
+msgstr ""
+
 #: u_translation.rsclickcancelt
 msgid "Click Cancel to abort the sequence."
 msgstr ""
@@ -1000,6 +1008,10 @@ msgstr ""
 
 #: u_translation.rsclickonimage
 msgid "Click on image to set"
+msgstr ""
+
+#: u_translation.rsclickontheim
+msgid "Click on the image to set the offset and guide"
 msgstr ""
 
 #: u_translation.rsclicktheobje
@@ -2306,6 +2318,10 @@ msgstr ""
 msgid "Guide position on the slit"
 msgstr ""
 
+#: u_translation.rsguidepositio2
+msgid "Guide position out of frame!"
+msgstr ""
+
 #: u_translation.rsguider
 msgid "Guider"
 msgstr ""
@@ -3346,6 +3362,10 @@ msgstr ""
 
 #: u_translation.rsnoflipuntilp
 msgid "No flip until past meridian for"
+msgstr ""
+
+#: u_translation.rsnoisefilter
+msgid "Noise filter"
 msgstr ""
 
 #: u_translation.rsnone2

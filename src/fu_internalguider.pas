@@ -630,6 +630,7 @@ begin
   MenuItemLoadDark.Caption:=rsLoadDarkFile;
   MenuItemClearDark.Caption:=rsClearDarkFra;
   MenuItemDarkInfo.Caption:=rsViewHeader;
+  cbFilterNoise.Caption:=rsNoiseFilter;
   Label10.Caption:=rsExposure;
   Label14.Caption:=rsBinning;
   Label15.Caption:=rsGain;
@@ -684,6 +685,7 @@ begin
   Label55.Caption:=rsGuideStarOff;
   Label56.Caption:=rsOffset+' X';
   Label57.Caption:=rsOffset+' Y';
+  btnSetStarOffset.Caption:=rsClickOnTheIm;
   Label58.Caption:=rsReferenceIma;
   btnRefImage.Caption:=rsResolve;
   MenuSlitOffset.Caption:=rsManage;
@@ -2036,7 +2038,7 @@ begin
   StarOffsetX.Value:=0;
   StarOffsetY.Value:=0;
   FStarOffsetStep:=1;
-  LabelSetOffset.Caption:='Click on the image at the target object position';
+  LabelSetOffset.Caption:=rsClickAtTheTa;
 end;
 
 procedure Tf_internalguider.cbSlitListChange(Sender: TObject);

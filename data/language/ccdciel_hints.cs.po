@@ -2,15 +2,15 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ccdceil\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-07-17 11:54+0000\n"
-"PO-Revision-Date: 2025-06-10 15:26+0000\n"
+"POT-Creation-Date: 2025-08-03 14:04+0000\n"
+"PO-Revision-Date: 2025-07-17 14:46+0000\n"
 "Last-Translator: Stanislav Holub <Unknown>\n"
 "Language-Team: Czech <cz@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2025-07-17 12:00+0000\n"
-"X-Generator: Launchpad (build 4a935a27f849d9e76af17c154eb3e276e860afb7)\n"
+"X-Launchpad-Export-Date: 2025-08-03 14:20+0000\n"
+"X-Generator: Launchpad (build 3cf67b79dc0cb931b720b669b1d12163f9abeaec)\n"
 "Language: cs\n"
 
 #: u_hints.rsactivateback
@@ -66,7 +66,7 @@ msgstr "Při použití OAG nezapomeňte pozastavit pointaci. Při použití samo
 
 #: u_hints.rsbewarethisma
 msgid "Beware this may result in the selection of a wrong star if the mount guiding is not ideal"
-msgstr ""
+msgstr "Pozor, pokud není navádění montáže ideální, může to vést k výběru špatné hvězdy."
 
 #: u_hints.rscamerabinnin
 msgid "Camera binning"

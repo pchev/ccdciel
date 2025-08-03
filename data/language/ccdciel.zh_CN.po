@@ -6,15 +6,15 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ccdciel\n"
 "Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
-"POT-Creation-Date: 2025-07-17 11:54+0000\n"
-"PO-Revision-Date: 2025-01-22 14:53+0000\n"
+"POT-Creation-Date: 2025-08-03 14:03+0000\n"
+"PO-Revision-Date: 2025-07-30 13:48+0000\n"
 "Last-Translator: Zachary Wu <Unknown>\n"
 "Language-Team: Chinese (Simplified) <zh_CN@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2025-07-17 12:00+0000\n"
-"X-Generator: Launchpad (build 4a935a27f849d9e76af17c154eb3e276e860afb7)\n"
+"X-Launchpad-Export-Date: 2025-08-03 14:20+0000\n"
+"X-Generator: Launchpad (build 3cf67b79dc0cb931b720b669b1d12163f9abeaec)\n"
 
 #: u_translation.rs2d
 msgid "2D"
@@ -978,6 +978,14 @@ msgstr "重复时清除重启信息"
 msgid "Clear the completion status?"
 msgstr "清除完成状态？"
 
+#: u_translation.rsclickatthegu
+msgid "Click at the guide star position"
+msgstr ""
+
+#: u_translation.rsclickattheta
+msgid "Click at the target object position"
+msgstr ""
+
 #: u_translation.rsclickcancelt
 msgid "Click Cancel to abort the sequence."
 msgstr "点击取消以终止序列。"
@@ -1001,6 +1009,10 @@ msgstr "点击下一步以将该值保存到配置文件"
 #: u_translation.rsclickonimage
 msgid "Click on image to set"
 msgstr "点击图像进行设置"
+
+#: u_translation.rsclickontheim
+msgid "Click on the image to set the offset and guide"
+msgstr ""
 
 #: u_translation.rsclicktheobje
 msgid "Click the object in planetarium"
@@ -1206,7 +1218,7 @@ msgstr "复制到 "
 #: u_translation.rscopytoclipbo
 #, object-pascal-format
 msgid "Copy to clipboard: %s"
-msgstr ""
+msgstr "复制到剪贴板: %s"
 
 #: u_translation.rscorrectionme
 msgid "Correction method"
@@ -1303,7 +1315,7 @@ msgstr "暗夜%s"
 
 #: u_translation.rsdatarange
 msgid "Data range"
-msgstr ""
+msgstr "数据范围"
 
 #: u_translation.rsdate
 msgid "Date"
@@ -1811,7 +1823,7 @@ msgstr "专家技巧"
 
 #: u_translation.rsexportcsv
 msgid "Export CSV"
-msgstr ""
+msgstr "导出 CSV"
 
 #: u_translation.rsexposure
 msgid "Exposure"
@@ -1853,7 +1865,7 @@ msgstr "曝光时间太短，无法测量，需要%d秒。"
 
 #: u_translation.rsextreme
 msgid "Extreme"
-msgstr ""
+msgstr "极高"
 
 #: u_translation.rsfahrenheit
 msgid "Fahrenheit"
@@ -1951,7 +1963,7 @@ msgstr "寻星相机"
 
 #: u_translation.rsfinderfocall
 msgid "Finder focal length"
-msgstr ""
+msgstr "寻星镜焦距"
 
 #: u_translation.rsfit
 msgid "Fit"
@@ -2309,6 +2321,10 @@ msgstr "导星偏移量"
 msgid "Guide position on the slit"
 msgstr "狭缝上的导星位置"
 
+#: u_translation.rsguidepositio2
+msgid "Guide position out of frame!"
+msgstr ""
+
 #: u_translation.rsguider
 msgid "Guider"
 msgstr "导星"
@@ -2383,7 +2399,7 @@ msgstr "HFD 对焦监视器：阈值： %s%%，参考： %s，%s-图像平均：
 
 #: u_translation.rshigh
 msgid "High"
-msgstr ""
+msgstr "高"
 
 #: u_translation.rshighlightadu
 msgid "Highlight ADU"
@@ -2391,7 +2407,7 @@ msgstr "高光ADU"
 
 #: u_translation.rshistogram
 msgid "Histogram"
-msgstr ""
+msgstr "直方图"
 
 #: u_translation.rshistory
 msgid "History"
@@ -2515,7 +2531,7 @@ msgstr "导入观测列表"
 
 #: u_translation.rsimportcsv
 msgid "Import CSV"
-msgstr ""
+msgstr "导入 CSV"
 
 #: u_translation.rsin
 msgid "In"
@@ -2760,7 +2776,7 @@ msgstr "循环"
 
 #: u_translation.rslow
 msgid "Low"
-msgstr ""
+msgstr "低"
 
 #: u_translation.rslowqualityim
 msgid "Low quality image scaling"
@@ -2810,7 +2826,7 @@ msgstr "管理相机的增益和偏置"
 
 #: u_translation.rsmandatorysta
 msgid "Mandatory start time"
-msgstr ""
+msgstr "强制开始时间"
 
 #: u_translation.rsmanual
 msgid "Manual"
@@ -2961,7 +2977,7 @@ msgstr "%s中位数：%s"
 
 #: u_translation.rsmedium
 msgid "Medium"
-msgstr ""
+msgstr "中"
 
 #: u_translation.rsmeridian
 msgid "Meridian"
@@ -3070,11 +3086,11 @@ msgstr "分钟"
 
 #: u_translation.rsmissingtarge
 msgid "Missing target or guide star coordinates"
-msgstr ""
+msgstr "丢失目标或导星坐标"
 
 #: u_translation.rsmissingtarge2
 msgid "Missing target coordinates"
-msgstr ""
+msgstr "丢失目标坐标"
 
 #: u_translation.rsmnt
 msgid "Mnt."
@@ -3350,6 +3366,10 @@ msgstr "无平场"
 #: u_translation.rsnoflipuntilp
 msgid "No flip until past meridian for"
 msgstr "过中天后不翻转，直到"
+
+#: u_translation.rsnoisefilter
+msgid "Noise filter"
+msgstr ""
 
 #: u_translation.rsnone2
 msgid "None"
@@ -3772,7 +3792,7 @@ msgstr "星图错误"
 
 #: u_translation.rsplanetariumf
 msgid "Planetarium for all targets"
-msgstr ""
+msgstr "所有目标的星图"
 
 #: u_translation.rsplanetariumi
 msgid "Planetarium is not connected"
@@ -4148,7 +4168,7 @@ msgstr "删除行"
 
 #: u_translation.rsremovespacei
 msgid "Remove space in object name"
-msgstr ""
+msgstr "删除天体名称中的空格"
 
 #: u_translation.rsremovestep
 msgid "Remove step"
@@ -4587,7 +4607,7 @@ msgstr "选择校准选项："
 
 #: u_translation.rsselectarea
 msgid "Select area"
-msgstr ""
+msgstr "选择区域"
 
 #: u_translation.rsselectastarf
 msgid "Select a star first!"
@@ -4716,7 +4736,7 @@ msgstr "由于坏天气导致序列暂停..."
 
 #: u_translation.rssequencesepa
 msgid "Sequence separator"
-msgstr ""
+msgstr "序列分隔符"
 
 #: u_translation.rssequencestar
 #, object-pascal-format
@@ -4848,7 +4868,7 @@ msgstr "设备安定容差"
 
 #: u_translation.rssettlingfor
 msgid "Settling for"
-msgstr ""
+msgstr "设定"
 
 #: u_translation.rssetup
 msgid "Setup"
@@ -6016,7 +6036,7 @@ msgstr "更新序列而不中断"
 
 #: u_translation.rsusealternati
 msgid "Use alternative solver"
-msgstr ""
+msgstr "使用另外的解析器"
 
 #: u_translation.rsuseasfallbac
 msgid "Use as fallback if other software fail"
@@ -6121,7 +6141,7 @@ msgstr "使用气象站"
 
 #: u_translation.rsusingabright
 msgid "Using a bright star near the lock position"
-msgstr ""
+msgstr "使用锁定位置附近的一颗亮星"
 
 #: u_translation.rsusingconfigu
 #, object-pascal-format
@@ -6130,7 +6150,7 @@ msgstr "使用配置文件%s"
 
 #: u_translation.rsusingmanuall
 msgid "Using manually selected star"
-msgstr ""
+msgstr "使用手动选择的星"
 
 #: u_translation.rsusingmediano
 #, object-pascal-format
@@ -6159,7 +6179,7 @@ msgstr "垂直修正："
 
 #: u_translation.rsveryhigh
 msgid "Very High"
-msgstr ""
+msgstr "很高"
 
 #: u_translation.rsvideo
 msgid "Video"

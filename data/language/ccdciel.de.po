@@ -6,15 +6,15 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ccdciel\n"
 "Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
-"POT-Creation-Date: 2025-07-17 11:54+0000\n"
+"POT-Creation-Date: 2025-08-03 14:03+0000\n"
 "PO-Revision-Date: 2025-04-13 06:44+0000\n"
 "Last-Translator: Thomas <email@starhopper.de>\n"
 "Language-Team: German <de@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2025-07-17 12:00+0000\n"
-"X-Generator: Launchpad (build 4a935a27f849d9e76af17c154eb3e276e860afb7)\n"
+"X-Launchpad-Export-Date: 2025-08-03 14:20+0000\n"
+"X-Generator: Launchpad (build 3cf67b79dc0cb931b720b669b1d12163f9abeaec)\n"
 
 #: u_translation.rs2d
 msgid "2D"
@@ -978,6 +978,14 @@ msgstr "Bei Wiederholung die Neustartinformation löschen"
 msgid "Clear the completion status?"
 msgstr "Status der Sequenz löschen?"
 
+#: u_translation.rsclickatthegu
+msgid "Click at the guide star position"
+msgstr ""
+
+#: u_translation.rsclickattheta
+msgid "Click at the target object position"
+msgstr ""
+
 #: u_translation.rsclickcancelt
 msgid "Click Cancel to abort the sequence."
 msgstr "Auf Abbrechen klicken, um die Sequenz abzubrechen."
@@ -1001,6 +1009,10 @@ msgstr "Klicken Sie auf Weiter, um diese Werte in der Konfiguration für dieses 
 #: u_translation.rsclickonimage
 msgid "Click on image to set"
 msgstr "Zum Einstellen auf das Bild klicken"
+
+#: u_translation.rsclickontheim
+msgid "Click on the image to set the offset and guide"
+msgstr ""
 
 #: u_translation.rsclicktheobje
 msgid "Click the object in planetarium"
@@ -2309,6 +2321,10 @@ msgstr "Guiding Offset"
 msgid "Guide position on the slit"
 msgstr "Guide Postion auf dem Schlitz"
 
+#: u_translation.rsguidepositio2
+msgid "Guide position out of frame!"
+msgstr ""
+
 #: u_translation.rsguider
 msgid "Guider"
 msgstr "Guider"
@@ -3350,6 +3366,10 @@ msgstr "Kein Flatfield"
 #: u_translation.rsnoflipuntilp
 msgid "No flip until past meridian for"
 msgstr "Kein Flip nach dem Meridian für"
+
+#: u_translation.rsnoisefilter
+msgid "Noise filter"
+msgstr ""
 
 #: u_translation.rsnone2
 msgid "None"

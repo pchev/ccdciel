@@ -18736,7 +18736,7 @@ begin
               GuideOffset1Y:=h-yc;
             end;
           end;
-          f_internalguider.LabelSetOffset.Caption:='Click on the image at the guide star position';
+          f_internalguider.LabelSetOffset.Caption:=rsClickAtTheGu;
           f_internalguider.StarOffsetStep:=2;
           ImageGuide.Invalidate;
           end;
@@ -18768,7 +18768,7 @@ begin
             f_internalguider.StarOffsetStep:=-1;
             f_internalguider.StarOffsetX.Value:=0;
             f_internalguider.StarOffsetY.Value:=0;
-            f_internalguider.LabelSetOffset.Caption:='Guide position out of frame!';
+            f_internalguider.LabelSetOffset.Caption:=rsGuidePositio2;
           end;
           end;
     end;
