@@ -18720,20 +18720,20 @@ var xx,yy: integer;
     bg,bgdev,xc,yc,hfd,fwhm,vmax,snr,flux,lockx,locky: double;
 begin
   if f_internalguider.SpectroFunctions and (autoguider is T_autoguider_internal) and (f_internalguider.StarOffsetStep>0) then begin
-    h:=guidefits.HeaderInfo.naxis1;
-    w:=guidefits.HeaderInfo.naxis2;
+    w:=guidefits.HeaderInfo.naxis1;
+    h:=guidefits.HeaderInfo.naxis2;
     case f_internalguider.StarOffsetStep of
        1: begin
           GuiderScreen2fits(GuideMx,GuideMy,true,xx,yy);
           GuideOffset1X:=xx;
-          GuideOffset1Y:=w-yy;
+          GuideOffset1Y:=h-yy;
           s:=f_internalguider.SearchWinMin div 2;
           guidefits.FindStarPos(xx,yy,s,xxc,yyc,rc,vmax,bg,bgdev);
           if vmax>0 then begin
             guidefits.GetHFD2(xxc,yyc,2*rc,xc,yc,bg,bgdev,hfd,fwhm,vmax,snr,flux);
             if vmax>0 then begin
               GuideOffset1X:=xc;
-              GuideOffset1Y:=w-yc;
+              GuideOffset1Y:=h-yc;
             end;
           end;
           f_internalguider.LabelSetOffset.Caption:='Click on the image at the guide star position';
@@ -18743,14 +18743,14 @@ begin
        2: begin
           GuiderScreen2fits(GuideMx,GuideMy,true,xx,yy);
           GuideOffset2X:=xx;
-          GuideOffset2Y:=w-yy;
+          GuideOffset2Y:=h-yy;
           s:=f_internalguider.SearchWinMin div 2;
           guidefits.FindStarPos(xx,yy,s,xxc,yyc,rc,vmax,bg,bgdev);
           if vmax>0 then begin
             guidefits.GetHFD2(xxc,yyc,2*rc,xc,yc,bg,bgdev,hfd,fwhm,vmax,snr,flux);
             if vmax>0 then begin
               GuideOffset2X:=xc;
-              GuideOffset2Y:=w-yc;
+              GuideOffset2Y:=h-yc;
             end;
           end;
           f_internalguider.StarOffsetX.Value:=GuideOffset2X-GuideOffset1X;
