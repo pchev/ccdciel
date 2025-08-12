@@ -1635,6 +1635,7 @@ resourcestring
   rsGuidePositio2 = 'Guide position out of frame!';
   rsClickOnTheIm = 'Click on the image to set the offset and guide';
   rsNoiseFilter = 'Noise filter';
+  rsTheObjectNam2 = 'The object name is not defined, do you want to continue?';
 
 implementation
 

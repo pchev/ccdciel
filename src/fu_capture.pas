@@ -25,7 +25,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 interface
 
-uses u_global, Graphics, UScaleDPI, u_hints, u_translation, cu_mount, u_utils, math,
+uses u_global, Graphics, UScaleDPI, u_hints, u_translation, cu_mount, u_utils, math, Dialogs,
   Classes, SysUtils, FileUtil, Forms, Controls, ExtCtrls, StdCtrls, SpinEx;
 
 type
@@ -195,7 +195,9 @@ end;
 
 procedure Tf_capture.BtnStartClick(Sender: TObject);
 var
-startedBy: TCaptureRunType;
+  startedBy: TCaptureRunType;
+  needobjname: boolean;
+  i: integer;
 begin
   Frunning:=not Frunning;
   if (Sender=nil) then startedBy:=SEQUENCE else startedBy:=CAPTURE;
@@ -225,27 +227,47 @@ begin
       if Assigned(FonResetHFM) then FonResetHFM(self);
     end;
 
-    DomeFlatExpAdjust:=0;
-    doFlatAutoExposure:=(TFrameType(cbFrameType.ItemIndex)=FLAT) and FlatAutoExposure;
-    if (TFrameType(cbFrameType.ItemIndex)=FLAT)and(FlatType=ftDome) then begin
-       if DomeFlatSetLight and (DomeFlatSetLightON<>'') then begin
-          AdjustFlatLight:=true;
-          ExecProcess(DomeFlatSetLightON,nil,false);
+    if (startedBy=CAPTURE) and (trim(Fname.Text)='') then begin
+      // check if object name is required for image file name
+      needobjname:=false;
+      for i:=0 to FileNameCount-1 do
+        if (FileNameOpt[i]=fnObj) and FileNameActive[i] then needobjname:=true;
+      for i:=0 to SubDirCount-1 do
+        if (SubDirOpt[i]=sdObj) and SubDirActive[i] then needobjname:=true;
+      if needobjname and
+         (TFrameType(cbFrameType.ItemIndex)<>BIAS) and
+         (TFrameType(cbFrameType.ItemIndex)<>DARK) and
+         (TFrameType(cbFrameType.ItemIndex)<>FLAT)
+       then begin
+         if MessageDlg(rsTheObjectNam2, mtConfirmation, mbYesNo, 0)<>mrYes then begin
+           Frunning:=false;
+         end;
        end;
-       if FlatAutoExposure then
-          AdjustDomeFlat:=true;
-       if DomeFlatTelescopeSlew and (FMount<>nil) then
-          Mount.SlewToDomeFlatPosition;
     end;
-    if doFlatAutoExposure then begin
-      if ExposureTime<FlatMinExp then ExposureTime:=FlatMinExp;
-      if ExposureTime>FlatMaxExp then ExposureTime:=FlatMaxExp;
+
+    if Frunning then begin
+      DomeFlatExpAdjust:=0;
+      doFlatAutoExposure:=(TFrameType(cbFrameType.ItemIndex)=FLAT) and FlatAutoExposure;
+      if (TFrameType(cbFrameType.ItemIndex)=FLAT)and(FlatType=ftDome) then begin
+         if DomeFlatSetLight and (DomeFlatSetLightON<>'') then begin
+            AdjustFlatLight:=true;
+            ExecProcess(DomeFlatSetLightON,nil,false);
+         end;
+         if FlatAutoExposure then
+            AdjustDomeFlat:=true;
+         if DomeFlatTelescopeSlew and (FMount<>nil) then
+            Mount.SlewToDomeFlatPosition;
+      end;
+      if doFlatAutoExposure then begin
+        if ExposureTime<FlatMinExp then ExposureTime:=FlatMinExp;
+        if ExposureTime>FlatMaxExp then ExposureTime:=FlatMaxExp;
+      end;
+      if Assigned(FonMsg) then FonMsg(rsStartCapture,2);
+      EarlyNextExposure:= ConfigExpEarlyStart and (ExposureTime>1) and ((TFrameType(cbFrameType.ItemIndex)=LIGHT)or(TFrameType(cbFrameType.ItemIndex)=DARK)or(cbFrameType.ItemIndex>ord(high(TFrameType))));
+      if PanelStack.Visible and (StackNum.Value>1) and Assigned(FonResetStack) then FonResetStack(self);
+      if Assigned(FonStartExposure) then FonStartExposure(self);
+      if (not Frunning) and Assigned(FonMsg) then FonMsg(rsCannotStartC,0);
     end;
-    if Assigned(FonMsg) then FonMsg(rsStartCapture,2);
-    EarlyNextExposure:= ConfigExpEarlyStart and (ExposureTime>1) and ((TFrameType(cbFrameType.ItemIndex)=LIGHT)or(TFrameType(cbFrameType.ItemIndex)=DARK)or(cbFrameType.ItemIndex>ord(high(TFrameType))));
-    if PanelStack.Visible and (StackNum.Value>1) and Assigned(FonResetStack) then FonResetStack(self);
-    if Assigned(FonStartExposure) then FonStartExposure(self);
-    if (not Frunning) and Assigned(FonMsg) then FonMsg(rsCannotStartC,0);
   end else begin
     CancelAutofocus:=true;
     EarlyNextExposure:=false;
