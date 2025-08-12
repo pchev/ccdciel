@@ -2656,6 +2656,7 @@ begin
   finally
     FTargetInitializing:=false;
     FWaitStarting:=false;
+    if FStopping then FWaiting:=false;
   end;
 end;
 
