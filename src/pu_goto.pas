@@ -37,6 +37,7 @@ type
     BtnSearch: TButton;
     ButtonOK: TButton;
     Button2: TButton;
+    SpectroGuiding: TCheckBox;
     De: TEdit;
     GotoAstrometry: TCheckBox;
     Label1: TLabel;
@@ -67,6 +68,7 @@ type
     procedure CenterChange(Sender: TObject);
     function CheckImageInfo(fits:Tfits): boolean;
     procedure FormShow(Sender: TObject);
+    procedure GotoAstrometryChange(Sender: TObject);
     procedure ObjKeyDown(Sender: TObject; var Key: Word; Shift: TShiftState);
   private
     LastMsg: string;
@@ -110,6 +112,7 @@ begin
   Label7.Caption:=rsImageScale;
   Label8.Caption:=ssec+'/'+rsPixel;
   GotoAstrometry.Caption:=rsUseAstrometr;
+  SpectroGuiding.Caption:=rsStartSpectro;
   msginfo.Caption:='';
   LabelResolver.Caption:='';
   BtnCompute.Caption:=rsCompute;
@@ -125,6 +128,11 @@ begin
     recvdata('');
   end;
   if PanelAltAz.Visible then msginfo.Caption:='Search object name, click on planetarium or type the coordinates';
+end;
+
+procedure Tf_goto.GotoAstrometryChange(Sender: TObject);
+begin
+  SpectroGuiding.Enabled:=SpectroGuiding.Visible and GotoAstrometry.Checked;
 end;
 
 procedure Tf_goto.FormClose(Sender: TObject; var CloseAction: TCloseAction);

@@ -8710,6 +8710,8 @@ if f_mount.BtnGoto.Caption=rsGoto then begin
    f_goto.msginfo.Caption:='';
    f_goto.PanelPxSz.Visible:=false;
    f_goto.PanelAltAz.Visible:=true;
+   f_goto.SpectroGuiding.Visible:=(autoguider is T_autoguider_internal) and f_internalguider.SpectroFunctions and f_internalguider.SpectroAstrometry;
+   f_goto.SpectroGuiding.Enabled:=f_goto.SpectroGuiding.Visible and f_goto.GotoAstrometry.Checked;
    f_goto.ButtonOK.Caption:=rsGoto;
    f_goto.ShowModal;
    if f_goto.ModalResult=mrok then begin
@@ -8743,12 +8745,10 @@ if f_mount.BtnGoto.Caption=rsGoto then begin
        if f_goto.GotoAstrometry.Checked then begin
          if astrometry.PrecisionSlew(ra,de,err) then begin
            f_capture.Fname.Text:=objn;
-           if (autoguider is T_autoguider_internal) and f_internalguider.SpectroFunctions
-              and f_internalguider.SpectroAstrometry then begin
-                if MessageDlg('Start guiding to complete the centering on the slit?',mtConfirmation,mbYesNo,0)=mrYes then begin
-                  autoguider.SpectroSetTarget(ra2000,de2000);
-                  autoguider.Guide(true);
-                end;
+           if f_goto.SpectroGuiding.Visible and f_goto.SpectroGuiding.Enabled and f_goto.SpectroGuiding.Checked then begin
+              NewMessage('Start guiding to complete the centering on the slit',3);
+              autoguider.SpectroSetTarget(ra2000,de2000);
+              autoguider.Guide(true);
            end
            else if restartguiding then
               autoguider.Guide(true);

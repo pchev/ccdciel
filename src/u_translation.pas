@@ -1636,6 +1636,7 @@ resourcestring
   rsClickOnTheIm = 'Click on the image to set the offset and guide';
   rsNoiseFilter = 'Noise filter';
   rsTheObjectNam2 = 'The object name is not defined, do you want to continue?';
+  rsStartSpectro = 'Start spectroscope guiding';
 
 implementation
 
