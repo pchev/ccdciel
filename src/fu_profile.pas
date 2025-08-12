@@ -40,7 +40,6 @@ type
     ChartAxisTransformations1LinearAxisTransform1: TLinearAxisTransform;
     Panel1: TPanel;
     Panel3: TPanel;
-    PanelBtnProfile: TPanel;
     ProfileChart: TChart;
     ProfileChartLine: TLineSeries;
     SpectraSource: TListChartSource;
@@ -52,6 +51,7 @@ type
   private
     FSpectraX, FSpectraY, FSpectraWidth, FSpectraHeight: integer;
     FFits: TFits;
+    FonSelectionChange: TNotifyEvent;
     procedure SetSpectralProfile(value:boolean);
     function GetSpectralProfile: boolean;
     procedure PanelProfileClose(Sender: TObject; var CloseAction: TCloseAction);
@@ -66,6 +66,7 @@ type
     property SpectraWidth: integer read FSpectraWidth;
     property SpectraHeight: integer read FSpectraHeight;
     property SpectraProfile: boolean read GetSpectralProfile write SetSpectralProfile;
+    property onSelectionChange: TNotifyEvent read FonSelectionChange write FonSelectionChange;
 
   end;
 
@@ -82,6 +83,8 @@ begin
  {$endif}
  ScaleDPI(Self);
  SetLang;
+ FSpectraHeight:=0;
+ FSpectraWidth:=0;
 end;
 
 destructor  Tf_profile.Destroy;
@@ -98,6 +101,12 @@ end;
 procedure Tf_profile.SetSpectralProfile(value:boolean);
 begin
   BtnSpectraProfile.Down:=value;
+  panel1.visible:=BtnSpectraProfile.Down;
+  if not value then begin
+    FSpectraHeight:=0;
+    FSpectraWidth:=0;
+  end;
+  if Assigned(FonSelectionChange) then FonSelectionChange(self);
 end;
 
 function Tf_profile.GetSpectralProfile: boolean;
@@ -108,12 +117,13 @@ end;
 
 procedure Tf_profile.BtnSpectraProfileClick(Sender: TObject);
 begin
-  FSpectraHeight:=0;
-  FSpectraWidth:=0;
+  panel1.Visible:=BtnSpectraProfile.Down;
+  if Assigned(FonSelectionChange) then FonSelectionChange(self);
 end;
 
 procedure Tf_profile.PanelProfileClose(Sender: TObject; var CloseAction: TCloseAction);
 begin
+  panel1.visible:=BtnSpectraProfile.Down;
   config.SetValue('/SpectraProfile/ProfileX',TForm(Sender).Left);
   config.SetValue('/SpectraProfile/ProfileY',TForm(Sender).Top);
   config.SetValue('/SpectraProfile/ProfileW',TForm(Sender).Width);
@@ -127,8 +137,6 @@ begin
   ProfileChart.AxisList.Axes[0].Transformations:=ChartAxisTransformations1;
   ProfileChart.AxisList.Axes[1].Visible:=false;
   ProfileChartLine.LinePen.Width:=1;
-  PanelBtnProfile.SendToBack;
-  PanelBtnProfile.BringToFront;
 end;
 
 procedure Tf_profile.BtnPinProfileClick(Sender: TObject);
@@ -137,6 +145,7 @@ var f: TForm;
     x,y,w,h: integer;
 begin
   if ProfileChart.Parent=Panel1 then begin
+   // detach the graph
    x:=config.GetValue('/SpectraProfile/ProfileX',-1);
    y:=config.GetValue('/SpectraProfile/ProfileY',-1);
    w:=config.GetValue('/SpectraProfile/ProfileW',-1);
@@ -169,6 +178,7 @@ begin
    ProfileChart.AxisList.Axes[1].Title.Caption:='X pixel';
    ProfileChart.AxisList.Axes[1].Title.Visible:=true;
    ProfileChartLine.LinePen.Width:=1;
+   panel1.Visible:=false;
    if (x>0)and(y>0) then begin
      f.Left:=x;
      f.Top:=y;
@@ -177,8 +187,10 @@ begin
      FormPos(f,mouse.CursorPos.x,mouse.CursorPos.y);
    f.Show;
   end
-  else if ProfileChart.Parent is TForm then
+  else if ProfileChart.Parent is TForm then begin
+   // close form and dock the graph
    TForm(ProfileChart.Parent).Close;
+  end;
 
 end;
 

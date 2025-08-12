@@ -885,6 +885,7 @@ type
     procedure MeasureImage(plot: boolean);
     procedure PrintStarList;
     procedure StarSelection(Sender: TObject);
+    procedure SpectraProfileChange(Sender: TObject);
     Procedure RotatorStatus(Sender: TObject);
     Procedure RotatorAngleChange(Sender: TObject);
     Procedure RotatorRotate(Sender: TObject);
@@ -1922,6 +1923,7 @@ begin
   f_starprofile.onStatus:=@ShowStatus;
 
   f_profile:=Tf_profile.Create(self);
+  f_profile.onSelectionChange:=@SpectraProfileChange;
 
   f_magnifyer:=Tf_magnifyer.Create(self);
 
@@ -12840,6 +12842,11 @@ begin
   // redraw star box
   image1.Invalidate;
   if GetCurrentThreadId=MainThreadID then Application.ProcessMessages;
+end;
+
+procedure Tf_main.SpectraProfileChange(Sender: TObject);
+begin
+  image1.Invalidate;
 end;
 
 Procedure Tf_main.DrawHistogram(SetLevel,ResetCursor: boolean);
