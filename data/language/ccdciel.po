@@ -6137,3 +6137,11 @@ msgstr ""
 msgid "Noise filter"
 msgstr ""
 
+#: u_translation:rstheobjectnam2
+msgid "The object name is not defined, do you want to continue?"
+msgstr ""
+
+#: u_translation:rsstartspectro
+msgid "Start spectroscope guiding"
+msgstr ""
+

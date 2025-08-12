@@ -6,15 +6,15 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ccdciel\n"
 "Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
-"POT-Creation-Date: 2025-08-03 20:15+0000\n"
+"POT-Creation-Date: 2025-08-12 13:00+0000\n"
 "PO-Revision-Date: 2021-08-31 20:37+0000\n"
 "Last-Translator: Patrick Chevalley <Unknown>\n"
 "Language-Team: English (United Kingdom) <en_GB@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2025-08-03 20:28+0000\n"
-"X-Generator: Launchpad (build 3cf67b79dc0cb931b720b669b1d12163f9abeaec)\n"
+"X-Launchpad-Export-Date: 2025-08-12 13:08+0000\n"
+"X-Generator: Launchpad (build f0653007fd1b99c04af19777cd9497fa7b6fc72f)\n"
 "Language: en_GB\n"
 
 #: u_translation.rs2d
@@ -5289,6 +5289,10 @@ msgstr ""
 msgid "Start single preview"
 msgstr "Start single preview"
 
+#: u_translation.rsstartspectro
+msgid "Start spectroscope guiding"
+msgstr ""
+
 #: u_translation.rsstartstep
 #, object-pascal-format
 msgid "Start step %s"
@@ -5730,6 +5734,10 @@ msgstr "The mount do not move enough!"
 #, object-pascal-format
 msgid "the mount indicate %s"
 msgstr "the mount indicate %s"
+
+#: u_translation.rstheobjectnam2
+msgid "The object name is not defined, do you want to continue?"
+msgstr ""
 
 #: u_translation.rstheplanismod
 #, object-pascal-format
