@@ -40,14 +40,11 @@ type
     BtnPin2D: TSpeedButton;
     BtnPinProfile: TSpeedButton;
     BtnPinTrend: TSpeedButton;
-    BtnSpectraProfile: TSpeedButton;
     BtnViewAutofocus: TButton;
-    SpectraProfileMethod: TComboBox;
     FitSourceMeasure: TListChartSource;
     FitSourceComp: TListChartSource;
     HistoryChartImax: TLineSeries;
     Panel2: TPanel;
-    Panel3: TPanel;
     PanelBtnPin2D: TPanel;
     PanelBtnProfile: TPanel;
     PanelBtnTrend: TPanel;
@@ -99,7 +96,6 @@ type
     procedure BtnPinGraphClick(Sender: TObject);
     procedure BtnPinProfileClick(Sender: TObject);
     procedure BtnPinTrendClick(Sender: TObject);
-    procedure BtnSpectraProfileClick(Sender: TObject);
     procedure BtnViewAutofocusClick(Sender: TObject);
     procedure ChkAutofocusChange(Sender: TObject);
     procedure ChkFocusChange(Sender: TObject);
@@ -111,12 +107,10 @@ type
     procedure TimerHideGraphTimer(Sender: TObject);
     procedure VcChartMouseMove(Sender: TObject; Shift: TShiftState; X,
       Y: Integer);
-    procedure SpectraProfileMethodChange(Sender: TObject);
   private
     { private declarations }
     FFindStar, FPlotImax: boolean;
     FStarX,FStarY,FValMax,FValMaxCalibrated,Fbg: double;
-    FSpectraX, FSpectraY, FSpectraWidth, FSpectraHeight: integer;
     FFocusStart,FFocusStop: TNotifyEvent;
     FAutoFocusStop,FAutoFocusStart,FAutoAutoFocusStart: TNotifyEvent;
     FonFocusIN, FonFocusOUT, FonAbsolutePosition: TNotifyEvent;
@@ -151,8 +145,6 @@ type
     procedure Panel2DClose(Sender: TObject; var CloseAction: TCloseAction);
     procedure PanelProfileClose(Sender: TObject; var CloseAction: TCloseAction);
     procedure PanelTrendClose(Sender: TObject; var CloseAction: TCloseAction);
-    procedure SetSpectralProfile(value:boolean);
-    function GetSpectralProfile: boolean;
   public
     { public declarations }
     LastFocusimage: TBGRABitmap;
@@ -161,8 +153,6 @@ type
     destructor  Destroy; override;
     procedure SetLang;
     procedure ShowProfile(f: TFits; x,y,s: integer; focal:double=-1; pxsize:double=-1);
-    procedure SetSpectra(x,y,w,h: integer; f: TFits);
-    procedure ShowSpectraProfile(f: TFits);
     procedure ShowSharpness(f: TFits);
     procedure Autofocus(f: TFits; x,y,s: integer);
     procedure InitAutofocus(restart: boolean);
@@ -171,7 +161,6 @@ type
     procedure PlotHistory(hfd,vmax: double); overload;
     property AutofocusRunning: boolean read getRunning;
     property FindStar : boolean read FFindStar write FFindStar;
-    property SpectraProfile: boolean read GetSpectralProfile write SetSpectralProfile;
     property HFD:double read Fhfd;
     property SNR:double read Fsnr;
     property ValMax: double read FValMax;
@@ -179,10 +168,6 @@ type
     property PreFocusPos: integer read FPreFocusPos write FPreFocusPos;
     property StarX: double read FStarX write FStarX;
     property StarY: double read FStarY write FStarY;
-    property SpectraX: integer read FSpectraX;
-    property SpectraY: integer read FSpectraY;
-    property SpectraWidth: integer read FSpectraWidth;
-    property SpectraHeight: integer read FSpectraHeight;
     property AutofocusResult: boolean read FAutofocusResult write FAutofocusResult;
     property AutofocusDone: boolean read FAutofocusDone;
     property preview:Tf_preview read Fpreview write Fpreview;
@@ -264,7 +249,6 @@ begin
   ChkFocus.Caption:=rsManualFocusA;
   ChkAutofocus.Caption:=rsAutofocus;
   BtnViewAutofocus.Caption:=rsViewLastAuto;
-  BtnSpectraProfile.Caption:=rsSpectralProf;
   ProfileChart.Hint:=rsTheSelectedS;
   HistoryChart.Hint:=StringReplace(rsHistoryOfThe,'FWHM','HFD',[]);
   LabelHFD.Hint:=rsTheHalfFluxD;
@@ -488,7 +472,6 @@ end;
 
 procedure Tf_starprofile.BtnPinProfileClick(Sender: TObject);
 var f: TForm;
-    p: TPanel;
     x,y,w,h: integer;
 begin
   if ProfileChart.Parent=TSprofile then begin
@@ -508,11 +491,6 @@ begin
    else
      f.Height:=DoScaleY(350);
    f.Caption:=rsProfile2;
-   p:=TPanel.Create(f);
-   p.Parent:=f;
-   p.Height:=SpectraProfileMethod.Height+SpectraProfileMethod.Top+4;
-   p.Align:=alBottom;
-   SpectraProfileMethod.Parent:=p;
    ProfileChart.Parent:=f;
    ProfileChart.Align:=alClient;
    ProfileChart.AxisList.Axes[0].Visible:=true;
@@ -541,7 +519,6 @@ begin
   config.SetValue('/StarAnalysis/ProfileW',TForm(Sender).Width);
   config.SetValue('/StarAnalysis/ProfileH',TForm(Sender).Height);
   CloseAction:=caFree;
-  SpectraProfileMethod.Parent:=Panel3;
   ProfileChart.Parent:=TSprofile;
   ProfileChart.AxisList.Axes[0].Visible:=false;
   ProfileChart.AxisList.Axes[1].Visible:=false;
@@ -585,22 +562,6 @@ begin
   end
   else if HistoryChart.Parent is TForm then
    TForm(HistoryChart.Parent).Close;
-end;
-
-procedure Tf_starprofile.BtnSpectraProfileClick(Sender: TObject);
-begin
-  FSpectraHeight:=0;
-  FSpectraWidth:=0;
-end;
-
-procedure Tf_starprofile.SetSpectralProfile(value:boolean);
-begin
-  BtnSpectraProfile.Down:=value;
-end;
-
-function Tf_starprofile.GetSpectralProfile: boolean;
-begin
-   result:=BtnSpectraProfile.Down;
 end;
 
 procedure Tf_starprofile.PanelTrendClose(Sender: TObject; var CloseAction: TCloseAction);
@@ -800,74 +761,6 @@ except
     msg('PlotProfile :'+ E.Message,0);
   end;
 end;
-end;
-
-procedure Tf_starprofile.SetSpectra(x,y,w,h: integer; f: TFits);
-begin
-  FSpectraWidth:=max(0,w);
-  FSpectraHeight:=max(0,h);
-  FSpectraX:=max(0,min(x,f.HeaderInfo.naxis1-1));
-  FSpectraY:=max(0,min(y,f.HeaderInfo.naxis2-1));
-  ShowSpectraProfile(f);
-end;
-
-procedure Tf_starprofile.ShowSpectraProfile(f: TFits);
-var i,j,n,r,g,b:integer;
-    value,wmin,wmax: double;
-    hasBPM:boolean;
-begin
- FFits:=f;
- if not FFits.BPMProcess then begin
-   // apply BPM
-   hasBPM:=FFits.hasBPM;
-   if not hasBPM then
-     FFits.SetBPM(bpm,bpmNum,bpmX,bpmY,bpmAxis);
-   FFits.LoadStream;
-   FFits.UpdateStream;
-   if not hasBPM then
-     FFits.SetBPM(bpm,0,0,0,0);
- end;
- wmin:=FFits.HeaderInfo.wavemin;
- wmax:=FFits.HeaderInfo.wavemax;
- if ColorizeSpectra and (wmin<>NullCoord) and (wmax<>NullCoord) then begin
-   ProfileChart.BackColor:=clBlack;
-   ProfileChartLine.ColorEach:=ceLineAfter;
- end
- else begin
-   ProfileChart.BackColor:=clWindow;
-   ProfileChartLine.ColorEach:=ceNone;
- end;
- ProfileSource.Clear;
- n:=SpectraProfileMethod.ItemIndex;
- for i:=FSpectraX to FSpectraX+FSpectraWidth do begin
-   value:=0;
-   case n of
-   0: begin
-        for j:=FSpectraY to FSpectraY+FSpectraHeight do begin
-          value:=value+f.imageMin+f.image[0,j,i]/f.imageC;
-        end;
-        value:=value/(FSpectraHeight+1);
-      end;
-   1: begin
-        for j:=FSpectraY to FSpectraY+FSpectraHeight do begin
-          value:=max(value,f.imageMin+f.image[0,j,i]/f.imageC);
-        end;
-      end;
-   end;
-   if ColorizeSpectra and (wmin<>NullCoord) and (wmax<>NullCoord) then begin
-     spcolor(wmin+(wmax-wmin)*i/FFits.HeaderInfo.naxis1,r,g,b);
-     ProfileSource.Add(i,value,'',RGBToColor(r,g,b));
-   end
-   else begin
-     ProfileSource.Add(i,value);
-   end;
- end;
-end;
-
-procedure Tf_starprofile.SpectraProfileMethodChange(Sender: TObject);
-begin
-  if SpectraProfile and (FFits<>nil) and(FSpectraHeight>0) then
-    ShowSpectraProfile(FFits);
 end;
 
 procedure Tf_starprofile.PlotStar2D;

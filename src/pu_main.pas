@@ -34,7 +34,7 @@ uses
   {$ifdef unix}
   BaseUnix,
   {$endif}
-  fu_devicesconnection, fu_preview, fu_capture, fu_msg, fu_visu, fu_frame, fu_magnifyer, fu_internalguider,
+  fu_devicesconnection, fu_preview, fu_capture, fu_msg, fu_visu, fu_frame, fu_magnifyer, fu_internalguider, fu_profile,
   fu_starprofile, fu_filterwheel, fu_focuser, fu_mount, fu_ccdtemp, fu_autoguider, fu_cover, fu_switch, fu_switchpage,
   fu_sequence, fu_planetarium, fu_script, fu_finder, pu_findercalibration, u_ccdconfig, pu_edittargets, pu_scriptengine,
   fu_video, pu_devicesetup, pu_options, pu_indigui, cu_fits, cu_camera, pu_pause, cu_tcpserver, cu_waitthread,
@@ -151,6 +151,7 @@ type
     MenuFlatHeader: TMenuItem;
     MeasureConeError1: TMenuItem;
     MenuInstallScript: TMenuItem;
+    MenuViewSpectraProfile: TMenuItem;
     MenuItemNoiseFilter2: TMenuItem;
     MenuItemNoiseFilter: TMenuItem;
     MenuItemPreprocess: TMenuItem;
@@ -497,6 +498,7 @@ type
     procedure MenuSensorAnalysisClick(Sender: TObject);
     procedure MenuViewFinderClick(Sender: TObject);
     procedure MenuViewInternalguiderClick(Sender: TObject);
+    procedure MenuViewSpectraProfileClick(Sender: TObject);
     procedure MenuViewVideoClick(Sender: TObject);
     procedure PageInternalGuiderShow(Sender: TObject);
     procedure PanelCenterResize(Sender: TObject);
@@ -639,6 +641,7 @@ type
     f_video: Tf_video;
     f_sequence: Tf_sequence;
     f_starprofile: Tf_starprofile;
+    f_profile: Tf_profile;
     f_focuser: Tf_focuser;
     f_magnifyer: Tf_magnifyer;
     f_rotator: Tf_rotator;
@@ -1918,6 +1921,8 @@ begin
   f_starprofile.onStarSelection:=@StarSelection;
   f_starprofile.onStatus:=@ShowStatus;
 
+  f_profile:=Tf_profile.Create(self);
+
   f_magnifyer:=Tf_magnifyer.Create(self);
 
   f_ccdtemp:=Tf_ccdtemp.Create(self);
@@ -2460,6 +2465,7 @@ begin
    MenuViewSafety.Caption:=rsSafetyMonito;
    MenuViewFocuser.Caption := rsFocuser;
    MenuViewStarProfile.Caption := rsFocus;
+   MenuViewSpectraProfile.Caption:=rsSpectralProf;
    MenuViewMagnifyer.Caption := rsMagnifyer;
    MenuViewCapture.Caption := rsCapture;
    MenuViewFilters.Caption := rsFilters;
@@ -2671,6 +2677,7 @@ begin
    if  f_capture<>nil then f_capture.SetLang;
    if  f_setup<>nil then f_setup.SetLang;
    if  f_starprofile<>nil then f_starprofile.SetLang;
+   if  f_profile<>nil then f_profile.SetLang;
    if  f_filterwheel<>nil then f_filterwheel.SetLang;
    if  f_focuser<>nil then f_focuser.SetLang;
    if  f_script<>nil then f_script.SetLang;
@@ -3061,7 +3068,8 @@ begin
 
   SetTool(f_focuser,'Focuser',PanelRight2,0,MenuViewFocuser,MenuFocuser,WantFocuser);
   SetTool(f_starprofile,'Starprofile',PanelRight2,f_focuser.top+1,MenuViewStarProfile,MenuStarProfile,true);
-  SetTool(f_magnifyer,'Magnifyer',PanelRight2,f_starprofile.top+1,MenuViewMagnifyer,nil,true);
+  SetTool(f_profile,'Spectraprofile',PanelRight2,f_starprofile.top+1,MenuViewSpectraProfile,nil,true);
+  SetTool(f_magnifyer,'Magnifyer',PanelRight2,f_profile.top+1,MenuViewMagnifyer,nil,true);
 
   SetTool(f_capture,'Capture',PanelRight3,0,MenuViewCapture,MenuCapture,true);
   SetTool(f_ccdtemp,'CCDTemp',PanelRight3,f_capture.top+1,MenuViewCCDtemp,MenuCCDtemp,true);
@@ -3153,6 +3161,7 @@ begin
   f_starprofile.BtnPinProfile.Glyph.Assign(btn);
   f_starprofile.BtnPin2D.Glyph.Assign(btn);
   f_starprofile.BtnPinTrend.Glyph.Assign(btn);
+  f_profile.BtnPinProfile.Glyph.Assign(btn);
   TBTabs.Images.GetBitmap(10, btn);
   f_EditTargets.BtnRepeatInf.Glyph.Assign(btn);
   btn.Free;
@@ -3178,6 +3187,7 @@ begin
    if f_sequence<>nil then f_sequence.Title2.Color:=clBtnShadow;
    if f_sequence<>nil then f_sequence.Title3.Color:=clBtnShadow;
    if f_starprofile<>nil then f_starprofile.Title.Color:=clBtnShadow;
+   if f_profile<>nil then f_profile.Title.Color:=clBtnShadow;
    if f_focuser<>nil then f_focuser.Title.Color:=clBtnShadow;
    if f_magnifyer<>nil then f_magnifyer.Title.Color:=clBtnShadow;
    if f_rotator<>nil then f_rotator.Title.Color:=clBtnShadow;
@@ -3420,7 +3430,8 @@ if sender is TMenuItem then begin
 
     SetTool(f_focuser,'',PanelRight2,0,MenuViewFocuser,MenuFocuser,WantFocuser);
     SetTool(f_starprofile,'',PanelRight2,f_focuser.top+1,MenuViewStarProfile,MenuStarProfile,true);
-    SetTool(f_magnifyer,'',PanelRight2,f_starprofile.top+1,MenuViewMagnifyer,nil,true);
+    SetTool(f_profile,'',PanelRight2,f_starprofile.top+1,MenuViewSpectraProfile,nil,true);
+    SetTool(f_magnifyer,'',PanelRight2,f_profile.top+1,MenuViewMagnifyer,nil,true);
 
     SetTool(f_capture,'',PanelRight3,0,MenuViewCapture,MenuCapture,true);
     SetTool(f_ccdtemp,'',PanelRight3,f_capture.top+1,MenuViewCCDtemp,MenuCCDtemp,true);
@@ -3450,6 +3461,7 @@ if sender is TMenuItem then begin
    SetTool(f_rotator,'',PanelLeft,f_frame.top+1,MenuViewRotator,MenuRotator,WantRotator);
    SetTool(f_focuser,'',PanelLeft,f_rotator.top+1,MenuViewFocuser,MenuFocuser,WantFocuser);
    SetTool(f_mount,'',PanelLeft,f_focuser.top+1,MenuViewMount,MenuMount,WantMount);
+   SetTool(f_profile,'',PanelLeft,f_mount.top+1,MenuViewSpectraProfile,nil,true);
 
    SetTool(f_devicesconnection,'',PanelRight1,0,MenuViewConnection,MenuConnection,true);
    SetTool(f_autoguider,'',PanelRight1,f_devicesconnection.top+1,MenuViewAutoguider,MenuAutoguider,true);
@@ -3769,6 +3781,9 @@ try
   if oldver<'0.9.90' then begin
     config.SetValue('/Finder/Binning',config.GetValue('/PrecSlew/Binning',1));
   end;
+  if oldver<'0.9.92' then begin
+    screenconfig.SetValue('/Tools/Spectraprofile/Visible',config.GetValue('/InternalGuider/Spectro/SpectroFunctions',false));
+  end;
   if config.Modified then begin
      config.SetValue('/Configuration/Version',ccdcielver);
      SaveConfig;
@@ -3932,7 +3947,7 @@ if fits.HeaderInfo.valid and fits.ImageValid and (not f_starprofile.AutofocusRun
         Image1.Invalidate;
       end;
    end
-   else if f_starprofile.SpectraProfile then begin
+   else if f_profile.SpectraProfile then begin
       Screen2Fits(Mx,My,f_visu.FlipHorz,f_visu.FlipVert,x1,y1);
       x1:=0;
       w:=fits.HeaderInfo.naxis1-1;
@@ -3941,7 +3956,7 @@ if fits.HeaderInfo.valid and fits.ImageValid and (not f_starprofile.AutofocusRun
       y1:=max(0,y1);
       y2:=min(fits.HeaderInfo.naxis2-1,y2);
       h:=y2-y1;
-      f_starprofile.SetSpectra(x1,y1,w,h,fits);
+      f_profile.SetSpectra(x1,y1,w,h,fits);
       Image1.Invalidate;
    end
    else begin
@@ -3996,7 +4011,7 @@ else if (ssCtrl in Shift) then begin
      screen.Cursor:=crHandPoint;
   end;
 end
-else if (FStatArea or(ssShift in Shift))and(not (f_capture.Running or f_preview.Running))and(not f_starprofile.SpectraProfile) then begin
+else if (FStatArea or(ssShift in Shift))and(not (f_capture.Running or f_preview.Running))and(not f_profile.SpectraProfile) then begin
    if EndX>0 then begin
       if fits.HeaderInfo.naxis=1 then
         scrbmp.Rectangle(StartX,0,EndX,Image1.Height,BGRAWhite,dmXor)
@@ -4009,7 +4024,7 @@ else if (FStatArea or(ssShift in Shift))and(not (f_capture.Running or f_preview.
    EndX:=-1;
    EndY:=-1
 end
-else if (ssShift in Shift)and(f_starprofile.SpectraProfile) then begin
+else if (ssShift in Shift)and(f_profile.SpectraProfile) then begin
    MouseSpectra:=true;
    Startx:=X;
    Starty:=y;
@@ -4161,7 +4176,7 @@ if MouseSpectra and fits.HeaderInfo.valid and fits.ImageValid then begin
   y2:=min(fits.HeaderInfo.naxis2-1,y2);
   w:=x2-x1;
   h:=y2-y1;
-  f_starprofile.SetSpectra(x1,y1,w,h,fits);
+  f_profile.SetSpectra(x1,y1,w,h,fits);
   Image1.Invalidate;
 end;
 if MouseRule then begin
@@ -5659,6 +5674,11 @@ begin
  screenconfig.SetValue('/Tools/Starprofile/Visible',f_starprofile.Visible);
  screenconfig.SetValue('/Tools/Starprofile/Top',f_starprofile.Top);
  screenconfig.SetValue('/Tools/Starprofile/Left',f_starprofile.Left);
+
+ screenconfig.SetValue('/Tools/Spectraprofile/Parent',f_profile.Parent.Name);
+ screenconfig.SetValue('/Tools/Spectraprofile/Visible',f_profile.Visible);
+ screenconfig.SetValue('/Tools/Spectraprofile/Top',f_profile.Top);
+ screenconfig.SetValue('/Tools/Spectraprofile/Left',f_profile.Left);
 
  screenconfig.SetValue('/Tools/Magnifyer/Parent',f_magnifyer.Parent.Name);
  screenconfig.SetValue('/Tools/Magnifyer/Visible',f_magnifyer.Visible);
@@ -10763,6 +10783,11 @@ begin
   MenuViewInternalguider.Checked:=true;
 end;
 
+procedure Tf_main.MenuViewSpectraProfileClick(Sender: TObject);
+begin
+  f_profile.Visible:=MenuViewSpectraProfile.Checked;
+end;
+
 procedure Tf_main.MenuViewFinderClick(Sender: TObject);
 begin
   MenuViewFinder.Checked:=true;
@@ -12329,8 +12354,8 @@ if (fits.HeaderInfo.naxis>0) and fits.ImageValid then begin
   {$ifdef debug_raw}writeln(FormatDateTime(dateiso,Now)+blank+'PlotImage');{$endif}
   PlotImage;
   {$ifdef debug_raw}writeln(FormatDateTime(dateiso,Now)+blank+'PlotImage end');{$endif}
-  if f_starprofile.SpectraProfile then begin
-    f_starprofile.showSpectraProfile(fits);
+  if f_profile.SpectraProfile then begin
+    f_profile.showSpectraProfile(fits);
   end;
   finally
   screen.Cursor:=crDefault;
@@ -12605,9 +12630,9 @@ try
         Frame(x-s,y-s,x+s,y+s);
      end;
   end;
-  if f_starprofile.SpectraProfile and (f_starprofile.SpectraWidth>0) then begin
-     Fits2Screen(f_starprofile.SpectraX,f_starprofile.SpectraY,f_visu.FlipHorz,f_visu.FlipVert,x1,y1);
-     Fits2Screen(f_starprofile.SpectraX+f_starprofile.SpectraWidth,f_starprofile.SpectraY+f_starprofile.SpectraHeight,f_visu.FlipHorz,f_visu.FlipVert,x2,y2);
+  if f_profile.SpectraProfile and (f_profile.SpectraWidth>0) then begin
+     Fits2Screen(f_profile.SpectraX,f_profile.SpectraY,f_visu.FlipHorz,f_visu.FlipVert,x1,y1);
+     Fits2Screen(f_profile.SpectraX+f_profile.SpectraWidth,f_profile.SpectraY+f_profile.SpectraHeight,f_visu.FlipHorz,f_visu.FlipVert,x2,y2);
      if fits.HeaderInfo.naxis=1 then begin
        y1:=0;
        y2:=Image1.Height;
@@ -15759,7 +15784,7 @@ begin
      if (oldw<>fits.HeaderInfo.naxis1)or(oldh<>fits.HeaderInfo.naxis2) then begin
        ImgCx:=0;
        ImgCy:=0;
-       f_starprofile.SpectraProfile:=false;
+       f_profile.SpectraProfile:=false;
      end;
      if (abs(oldmean-fits.imageMean)<100)and(abs(oldsigma-fits.imageSigma)<100) then
         DrawHistogram(true,false)  // images are similar, do not reset manual luminosity adjustment

@@ -1158,6 +1158,13 @@ object f_main: Tf_main
         ShowAlwaysCheckable = True
         OnClick = MenuViewStarProfileClick
       end
+      object MenuViewSpectraProfile: TMenuItem
+        AutoCheck = True
+        Caption = 'Spectra profile'
+        Checked = True
+        ShowAlwaysCheckable = True
+        OnClick = MenuViewSpectraProfileClick
+      end
       object MenuViewMagnifyer: TMenuItem
         AutoCheck = True
         Caption = 'Magnifyer'
