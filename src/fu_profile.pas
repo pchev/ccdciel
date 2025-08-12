@@ -38,6 +38,7 @@ type
     BtnSpectraProfile: TSpeedButton;
     ChartAxisTransformations1: TChartAxisTransformations;
     ChartAxisTransformations1LinearAxisTransform1: TLinearAxisTransform;
+    LabelPos: TLabel;
     Panel1: TPanel;
     Panel3: TPanel;
     ProfileChart: TChart;
@@ -47,11 +48,13 @@ type
     Title: TLabel;
     procedure BtnPinProfileClick(Sender: TObject);
     procedure BtnSpectraProfileClick(Sender: TObject);
+    procedure ProfileChartMouseMove(Sender: TObject; Shift: TShiftState; X, Y: Integer);
     procedure SpectraProfileMethodChange(Sender: TObject);
   private
     FSpectraX, FSpectraY, FSpectraWidth, FSpectraHeight: integer;
     FFits: TFits;
     FonSelectionChange: TNotifyEvent;
+    FShowProfilePos: TNotifyStr;
     procedure SetSpectralProfile(value:boolean);
     function GetSpectralProfile: boolean;
     procedure PanelProfileClose(Sender: TObject; var CloseAction: TCloseAction);
@@ -67,7 +70,7 @@ type
     property SpectraHeight: integer read FSpectraHeight;
     property SpectraProfile: boolean read GetSpectralProfile write SetSpectralProfile;
     property onSelectionChange: TNotifyEvent read FonSelectionChange write FonSelectionChange;
-
+    property onShowProfilePos: TNotifyStr read FShowProfilePos write FShowProfilePos;
   end;
 
 implementation
@@ -121,6 +124,28 @@ begin
   if Assigned(FonSelectionChange) then FonSelectionChange(self);
 end;
 
+procedure Tf_profile.ProfileChartMouseMove(Sender: TObject; Shift: TShiftState; X, Y: Integer);
+var pt: TDoublePoint;
+    i: integer;
+    val: double;
+    fmt,txt: string;
+begin
+ if SpectraSource.Count>0 then begin
+   pt:=ProfileChart.ImageToGraph(point(X,Y));
+   i:=min(SpectraSource.Count-1,max(0,round(pt.X)));
+   val:=SpectraSource.Item[i]^.Y;
+   if FFits.HeaderInfo.floatingpoint then
+     fmt:='0.0'
+   else
+     fmt:='0';
+   txt:=rsPosition+'='+inttostr(i)+' '+rsValue+'='+FormatFloat(fmt,val);
+   if LabelPos.Visible then
+     LabelPos.Caption:=txt;
+   if Assigned(FShowProfilePos) then
+       FShowProfilePos(rsSpectralProf+': '+txt);
+ end;
+end;
+
 procedure Tf_profile.PanelProfileClose(Sender: TObject; var CloseAction: TCloseAction);
 begin
   panel1.visible:=BtnSpectraProfile.Down;
@@ -130,6 +155,8 @@ begin
   config.SetValue('/SpectraProfile/ProfileH',TForm(Sender).Height);
   CloseAction:=caFree;
   SpectraProfileMethod.Parent:=Panel3;
+  LabelPos.Parent:=Panel3;
+  LabelPos.Visible:=false;
   ProfileChart.Parent:=Panel1;
   ProfileChart.AxisList.Axes[0].Visible:=true;
   ProfileChart.AxisList.Axes[0].Title.Visible:=false;
@@ -167,6 +194,8 @@ begin
    p.Height:=SpectraProfileMethod.Height+SpectraProfileMethod.Top+4;
    p.Parent:=f;
    SpectraProfileMethod.Parent:=p;
+   LabelPos.Parent:=p;
+   LabelPos.Visible:=true;
    ProfileChart.Parent:=f;
    ProfileChart.Align:=alClient;
    ProfileChart.AxisList.Axes[0].Visible:=true;

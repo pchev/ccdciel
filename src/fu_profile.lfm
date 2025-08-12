@@ -75,6 +75,15 @@ object f_profile: Tf_profile
       OnClick = BtnPinProfileClick
       ParentFont = False
     end
+    object LabelPos: TLabel
+      Left = 222
+      Height = 18
+      Top = 9
+      Width = 4
+      Caption = ' '
+      ParentColor = False
+      Visible = False
+    end
   end
   object Panel1: TPanel
     Left = 0
@@ -123,6 +132,7 @@ object f_profile: Tf_profile
         'TAChart'
       )
       Align = alClient
+      OnMouseMove = ProfileChartMouseMove
       object ProfileChartLine: TLineSeries
         Legend.Visible = False
         LinePen.Color = clRed

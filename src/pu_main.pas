@@ -1924,6 +1924,7 @@ begin
 
   f_profile:=Tf_profile.Create(self);
   f_profile.onSelectionChange:=@SpectraProfileChange;
+  f_profile.onShowProfilePos:=@ShowHistogramPos;
 
   f_magnifyer:=Tf_magnifyer.Create(self);
 
