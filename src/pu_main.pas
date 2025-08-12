@@ -3111,6 +3111,9 @@ begin
     colorBg:=clWhite;
     colorGray:=clGray;
     colorLightGray:=clSilver;
+    if f_EditTargets<>nil then begin
+      f_EditTargets.TargetList.TitleImageList:=f_EditTargets.ImageListDay;
+    end;
   end
   else begin
     TBTabs.Images:=ImageListNight;
@@ -3125,6 +3128,9 @@ begin
     {$ifdef lclcocoa}
     TBTabs.Color:=clBackground;
     {$endif}
+    if f_EditTargets<>nil then begin
+      f_EditTargets.TargetList.TitleImageList:=f_EditTargets.ImageListNight;
+    end;
   end;
   // change individual buttons
   btn := TPortableNetworkGraphic.Create;

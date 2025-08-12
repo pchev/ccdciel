@@ -402,6 +402,8 @@ begin
   StepList.FixedColor:=clBackground;
   {$endif}
   ScaleDPI(Self);
+  ScaleImageList(ImageListDay);
+  ScaleImageList(ImageListNight);
   TargetList.RowHeights[0]:=DoScaleY(40);
   StepList.RowHeights[0]:=DoScaleY(40);
   keyboard1:=Tkeyboard1.Create(self);

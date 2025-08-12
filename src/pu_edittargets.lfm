@@ -71,7 +71,7 @@ object f_EditTargets: Tf_EditTargets
           Left = 8
           Height = 22
           Top = 70
-          Width = 242
+          Width = 238
           Caption = 'Clear restart information on repeat'
           ParentFont = False
           TabOrder = 0
@@ -80,7 +80,7 @@ object f_EditTargets: Tf_EditTargets
           Left = 8
           Height = 22
           Top = 22
-          Width = 191
+          Width = 187
           Caption = 'Record restart information'
           OnChange = CheckRestartStatus
           ParentFont = False
@@ -101,7 +101,7 @@ object f_EditTargets: Tf_EditTargets
           Height = 22
           Hint = 'Repeat the whole list a number of time.'
           Top = 46
-          Width = 159
+          Width = 155
           Caption = 'Repeat the whole list '
           OnChange = CheckBoxRepeatListChange
           ParentFont = False
@@ -149,7 +149,7 @@ object f_EditTargets: Tf_EditTargets
           Height = 22
           Hint = 'Activate the start time'
           Top = 29
-          Width = 76
+          Width = 72
           Caption = 'Start at '
           OnChange = SeqStartChange
           ParentFont = False
@@ -178,7 +178,7 @@ object f_EditTargets: Tf_EditTargets
           Height = 22
           Hint = 'Set the start time at astronomical dusk, recomputed for the date you run the sequence.'
           Top = 29
-          Width = 58
+          Width = 54
           Caption = 'dusk'
           Enabled = False
           OnChange = SeqStartTwilightChange
@@ -190,7 +190,7 @@ object f_EditTargets: Tf_EditTargets
           Height = 22
           Hint = 'Activate the stop time'
           Top = 61
-          Width = 75
+          Width = 71
           Caption = 'Stop at '
           OnChange = SeqStopChange
           ParentFont = False
@@ -219,7 +219,7 @@ object f_EditTargets: Tf_EditTargets
           Height = 22
           Hint = 'Set the stop time at astronomical dawn, recomputed for the date you run the sequence.'
           Top = 61
-          Width = 62
+          Width = 58
           Caption = 'dawn'
           Enabled = False
           OnChange = SeqStopTwilightChange
@@ -418,7 +418,7 @@ object f_EditTargets: Tf_EditTargets
                 Height = 22
                 Hint = 'Start a preview loop when waiting for the delay to expire.'
                 Top = 2
-                Width = 77
+                Width = 73
                 Caption = 'Preview'
                 OnChange = TargetChange
                 ParentFont = False
@@ -676,7 +676,7 @@ object f_EditTargets: Tf_EditTargets
           Height = 225
           Top = 26
           Width = 390
-          HorzScrollBar.Page = 359
+          HorzScrollBar.Page = 338
           VertScrollBar.Page = 225
           Align = alClient
           ClientHeight = 225
@@ -688,7 +688,7 @@ object f_EditTargets: Tf_EditTargets
             Left = 16
             Height = 22
             Top = 4
-            Width = 93
+            Width = 89
             Caption = 'Dark night'
             OnChange = cbChange
             TabOrder = 0
@@ -699,7 +699,7 @@ object f_EditTargets: Tf_EditTargets
             Left = 16
             Height = 22
             Top = 28
-            Width = 158
+            Width = 154
             BorderSpacing.Top = 2
             Caption = 'Mandatory start time'
             OnChange = cbChange
@@ -711,7 +711,7 @@ object f_EditTargets: Tf_EditTargets
             Left = 16
             Height = 22
             Top = 52
-            Width = 90
+            Width = 86
             BorderSpacing.Top = 2
             Caption = 'Don''t wait'
             OnChange = cbChange
@@ -723,7 +723,7 @@ object f_EditTargets: Tf_EditTargets
             Left = 16
             Height = 22
             Top = 76
-            Width = 293
+            Width = 289
             BorderSpacing.Top = 2
             Caption = 'Do not start if it cannot be done completely'
             OnChange = cbChange
@@ -735,7 +735,7 @@ object f_EditTargets: Tf_EditTargets
             Left = 16
             Height = 22
             Top = 124
-            Width = 253
+            Width = 249
             BorderSpacing.Top = 2
             Caption = 'Use astrometry to refine the position'
             OnChange = cbChange
@@ -747,7 +747,7 @@ object f_EditTargets: Tf_EditTargets
             Left = 16
             Height = 22
             Top = 148
-            Width = 190
+            Width = 186
             BorderSpacing.Top = 2
             Caption = 'Stay in place for autofocus'
             OnChange = cbChange
@@ -759,7 +759,7 @@ object f_EditTargets: Tf_EditTargets
             Left = 16
             Height = 22
             Top = 172
-            Width = 251
+            Width = 247
             BorderSpacing.Top = 2
             Caption = 'Autofocus after temperature change'
             OnChange = cbChange
@@ -771,7 +771,7 @@ object f_EditTargets: Tf_EditTargets
             Left = 16
             Height = 22
             Top = 196
-            Width = 214
+            Width = 210
             BorderSpacing.Top = 2
             Caption = 'Autofocus after % change HFD'
             OnChange = cbChange
@@ -783,7 +783,7 @@ object f_EditTargets: Tf_EditTargets
             Left = 16
             Height = 22
             Top = 220
-            Width = 234
+            Width = 230
             BorderSpacing.Top = 2
             Caption = 'Update RA+Dec from Planetarium'
             OnChange = cbChange
@@ -805,7 +805,7 @@ object f_EditTargets: Tf_EditTargets
               Left = 16
               Height = 22
               Top = 0
-              Width = 204
+              Width = 200
               Caption = 'Activate solar object tracking'
               OnChange = cbChange
               TabOrder = 0
@@ -818,7 +818,7 @@ object f_EditTargets: Tf_EditTargets
             Height = 22
             Hint = 'This option is normally unchecked, use it only if you manage the pointing and autoguiding by script.'
             Top = 270
-            Width = 179
+            Width = 175
             Caption = 'Do not start autoguiding'
             OnChange = cbChange
             TabOrder = 7
@@ -829,7 +829,7 @@ object f_EditTargets: Tf_EditTargets
             Left = 16
             Height = 22
             Top = 294
-            Width = 186
+            Width = 182
             BorderSpacing.Top = 2
             Caption = 'Run an initialization script'
             OnChange = cbChange
@@ -912,7 +912,7 @@ object f_EditTargets: Tf_EditTargets
             Left = 16
             Height = 22
             Top = 100
-            Width = 129
+            Width = 125
             BorderSpacing.Top = 2
             Caption = 'Moon avoidance'
             OnChange = cbChange
