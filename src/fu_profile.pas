@@ -52,6 +52,7 @@ type
     procedure SpectraProfileMethodChange(Sender: TObject);
   private
     FSpectraX, FSpectraY, FSpectraWidth, FSpectraHeight: integer;
+    FScaleK: boolean;
     FFits: TFits;
     FonSelectionChange: TNotifyEvent;
     FShowProfilePos: TNotifyStr;
@@ -132,13 +133,13 @@ var pt: TDoublePoint;
 begin
  if SpectraSource.Count>0 then begin
    pt:=ProfileChart.ImageToGraph(point(X,Y));
-   i:=min(SpectraSource.Count-1,max(0,round(pt.X)));
+   i:=min(SpectraSource.Count-1,max(0,round(pt.X)-FSpectraX));
    val:=SpectraSource.Item[i]^.Y;
    if FFits.HeaderInfo.floatingpoint then
-     fmt:='0.0'
+     fmt:=f3
    else
-     fmt:='0';
-   txt:=rsPosition+'='+inttostr(i)+' '+rsValue+'='+FormatFloat(fmt,val);
+     fmt:=f0;
+   txt:=rsPosition+'='+inttostr(i+FSpectraX)+' '+rsValue+'='+FormatFloat(fmt,val);
    if LabelPos.Visible then
      LabelPos.Caption:=txt;
    if Assigned(FShowProfilePos) then
@@ -160,8 +161,14 @@ begin
   ProfileChart.Parent:=Panel1;
   ProfileChart.AxisList.Axes[0].Visible:=true;
   ProfileChart.AxisList.Axes[0].Title.Visible:=false;
-  ProfileChart.AxisList.Axes[0].Marks.Format:='%0:.9gK';
-  ProfileChart.AxisList.Axes[0].Transformations:=ChartAxisTransformations1;
+  if FScaleK then begin
+    ProfileChart.AxisList.Axes[0].Marks.Format:='%0:.9gK';
+    ProfileChart.AxisList.Axes[0].Transformations:=ChartAxisTransformations1;
+  end
+  else begin
+    ProfileChart.AxisList.Axes[0].Marks.Format:='%0:.9g';
+    ProfileChart.AxisList.Axes[0].Transformations:=nil;
+  end;
   ProfileChart.AxisList.Axes[1].Visible:=false;
   ProfileChartLine.LinePen.Width:=1;
 end;
@@ -229,7 +236,16 @@ begin
   FSpectraHeight:=max(0,h);
   FSpectraX:=max(0,min(x,f.HeaderInfo.naxis1-1));
   FSpectraY:=max(0,min(y,f.HeaderInfo.naxis2-1));
+  FScaleK:=abs(f.HeaderInfo.dmax-f.HeaderInfo.dmin)>1000;
   ProfileChart.AxisList.Axes[0].Visible:=true;
+  if FScaleK then begin
+    ProfileChart.AxisList.Axes[0].Marks.Format:='%0:.9gK';
+    ProfileChart.AxisList.Axes[0].Transformations:=ChartAxisTransformations1;
+  end
+  else begin
+    ProfileChart.AxisList.Axes[0].Marks.Format:='%0:.9g';
+    ProfileChart.AxisList.Axes[0].Transformations:=nil;
+  end;
   ShowSpectraProfile(f);
 end;
 
@@ -291,7 +307,6 @@ begin
   if SpectraProfile and (FFits<>nil) and(FSpectraHeight>0) then
     ShowSpectraProfile(FFits);
 end;
-
 
 end.
 
