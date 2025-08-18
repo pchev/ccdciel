@@ -4,14 +4,14 @@
 # Preprocess a color series
 ############################################
 
-requires 0.99.1
+requires 1.3.4
 setext fits
 
 cd $BASEDIR
 
 #preprocess lights
 cd $LIGHTDIR
-preprocess $LIGHTPREFIX$FILTER_ -dark=$MASTERDARK -flat=$MASTERFLAT$FILTER -equalize_cfa -debayer
+calibrate $LIGHTPREFIX$FILTER_ -dark=$MASTERDARK -flat=$MASTERFLAT$FILTER -equalize_cfa -debayer
 
 #stacking probably need some manual selection but it not hurt to try with all the images
 #align lights
