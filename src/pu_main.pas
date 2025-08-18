@@ -8781,9 +8781,10 @@ if f_mount.BtnGoto.Caption=rsGoto then begin
            end
            else if restartguiding then
               autoguider.Guide(true);
-         end
-          else
+         end else begin
+           f_capture.Fname.Text:='';
            NewMessage(format(rsError,[rsGoto+': '+objn]) ,1);
+         end;
        end
        else begin
          GotoStart(nil);
