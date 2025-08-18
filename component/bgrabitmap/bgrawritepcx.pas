@@ -5,6 +5,7 @@
            - added Resolution support
 }
 {*****************************************************************************}
+{ Imports the writer for the PCX image format }
 unit BGRAWritePCX;
 
 {$mode objfpc}{$H+}
@@ -14,14 +15,24 @@ interface
 uses Classes, SysUtils, FPImage, FPWritePCX, BGRABitmapTypes;
 
 type
-
+  {* Extends the TFPWriterPCX to save resolution }
   TBGRAWriterPCX = class(TFPWriterPCX)
   protected
+    {$IF FPC_FULLVERSION<30203}
     function SaveHeader(Stream: TStream; Img: TFPCustomImage): boolean; override;
+    {$ENDIF}
+
+  published
+    // MaxM: TO-DO TFPWriterPCX alway write at 8 BitsPerPixel
+    //             It might be useful to write the other modes
+    //property GrayScale: Boolean
+    //property BitsPerPixel: byte // [1, 4, 8, 24]
+    property Compressed;  //: boolean rw;
   end;
 
 implementation
 
+{$IF FPC_FULLVERSION<30203}
 uses pcxcomn;
 
 function TBGRAWriterPCX.SaveHeader(Stream: TStream; Img: TFPCustomImage): boolean;
@@ -65,11 +76,10 @@ begin
   Stream.WriteBuffer(Header, SizeOf(Header));
   Result := True;
 end;
+{$ENDIF}
 
 initialization
-  if ImageHandlers.ImageWriter['PCX Format']=nil
-  then ImageHandlers.RegisterImageWriter('PCX Format', 'pcx', TBGRAWriterPCX);
-  DefaultBGRAImageWriter[ifPcx] := TBGRAWriterPCX;
+  BGRARegisterImageWriter(ifPcx, TBGRAWriterPCX, True, 'PCX Format', 'pcx');
 
 
 end.

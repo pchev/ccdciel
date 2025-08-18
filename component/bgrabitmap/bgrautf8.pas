@@ -1,4 +1,6 @@
 // SPDX-License-Identifier: LGPL-3.0-linking-exception
+
+{ UTF8 related functions }
 unit BGRAUTF8;
 
 {$mode objfpc}{$H+}
@@ -7,13 +9,9 @@ unit BGRAUTF8;
 interface
 
 uses
-  LazVersion, BGRAClasses, SysUtils, math, BGRAUnicode
-  {$IFDEF BGRABITMAP_USE_LCL},
-    {$IFDEF BGRABITMAP_USE_LCL22}
-      classes
-    {$ELSE}
-      LazUTF8Classes
-    {$ENDIF}
+  BGRAClasses, SysUtils, math, BGRAUnicode
+  {$IFDEF BGRABITMAP_USE_LCL}, {$if FPC_FULLVERSION > 030200}classes
+  {$ELSE}LazUTF8Classes{$ENDIF}
   {$ENDIF};
 
 const
@@ -31,10 +29,13 @@ const
 
 {$IFDEF BGRABITMAP_USE_LCL}
 type
-  TFileStreamUTF8 = TFileStream;
-  TStringListUTF8 = TStringList;
+  { File stream supporting UTF8 filenames }
+  TFileStreamUTF8 = {$if FPC_FULLVERSION > 030200}TFileStream{$ELSE}LazUTF8Classes.TFileStreamUTF8{$ENDIF};
+  { String list supporting UTF8 filenames }
+  TStringListUTF8 = {$if FPC_FULLVERSION > 030200}TStringList{$ELSE}LazUTF8Classes.TStringListUTF8{$ENDIF};
 {$ELSE}
 type
+  { File stream supporting UTF8 filenames }
   TFileStreamUTF8 = class(THandleStream)
   private
     FFileName: utf8string;
@@ -45,6 +46,7 @@ type
     property FileName: utf8string Read FFilename;
   end;
 
+  { String list supporting UTF8 filenames }
   TStringListUTF8 = class(TStringList)
   protected
     function DoCompareText(const s1,s2 : string) : PtrInt; override;
@@ -93,10 +95,12 @@ function UTF16ToUTF8(const S: UnicodeString): AnsiString;
 procedure UTF8ToUnicodeArray(const sUTF8: string; out u: TUnicodeArray; out ofs: TIntegerArray);
 
 type
+  { Unicode layout information along with offset for each UTF8 character }
   TBidiUTF8Info = packed record
     Offset: Integer;
     BidiInfo: TUnicodeBidiInfo;
   end;
+  { Array of unicode layout for UTF8 text }
   TBidiUTF8Array = packed array of TBidiUTF8Info;
   TUnicodeDisplayOrder = BGRAUnicode.TUnicodeDisplayOrder;
   TUnicodeBidiInfo = BGRAUnicode.TUnicodeBidiInfo;
@@ -107,20 +111,34 @@ function GetLastStrongBidiClassUTF8(const sUTF8: string): TUnicodeBidiClass;
 function IsRightToLeftUTF8(const sUTF8: string): boolean;
 function IsZeroWidthUTF8(const sUTF8: string): boolean;
 function AddParagraphBidiUTF8(s: string; ARightToLeft: boolean): string;
+{ Returns an array with bidirectional analysis with automatic text direction. }
 function AnalyzeBidiUTF8(const sUTF8: string): TBidiUTF8Array; overload;
+{ Returns an array with bidirectional analysis with specified text direction. }
 function AnalyzeBidiUTF8(const sUTF8: string; ABidiMode: TFontBidiMode): TBidiUTF8Array; overload;
+{ Returns an array with bidirectional analysis with specified text direction. }
 function AnalyzeBidiUTF8(const sUTF8: string; ARightToLeft: boolean): TBidiUTF8Array; overload;
+
+{ @abstract(Display order of characters.)
+
+For example, a text in hebrew will be displayed from right to left.
+This function doesn't take into account word wrap. In this case, it is a bit more complicated
+and there is BGRATextBidi unit to handle text layout.)
+}
 function GetUTF8DisplayOrder(const ABidi: TBidiUTF8Array): TUnicodeDisplayOrder;
 function ContainsBidiIsolateOrFormattingUTF8(const sUTF8: string): boolean;
-
+{ Adds special unicode characters around the text to change it's direction.
+  For example "hello" from right to left would be displayed as "olleh". }
 function UTF8OverrideDirection(const sUTF8: string; ARightToLeft: boolean): string;
+{ Adds special unicode characters to make it a quote in a specific direction.
+  For example you can add a quote in arabic that will be right to left inside a text
+  in latin alphabet. This is useful for example if there is punctiation at the end of the quote,
+  so that it will be displayed on the correct side of the text. }
 function UTF8EmbedDirection(const sUTF8: string; ARightToLeft: boolean): string;
 function UTF8Ligature(const sUTF8: string; ARightToLeft: boolean; ALigatureLeft, ALigatureRight: boolean): string;
 
 type
 
-  { TGlyphUtf8 }
-
+  { Information about one glyph in a UTF8 text }
   TGlyphUtf8 = record
   private
     function GetEmpty: boolean;
@@ -131,8 +149,35 @@ type
     property Empty: boolean read GetEmpty;
   end;
 
-  { TGlyphCursorUtf8 }
+  { @abstract(Cursor to go through a UTF8 text glyph by glyph.)
 
+  A glyph is a graphical unit to be displayed. It can be formed
+  by one or more Unicode codepoints.
+
+Example drawing wavy text using TGlyphCursorUtf8 on a TBGRACanvas2D:
+```pascal
+uses ..., BGRAUTF8, BGRAClasses, BGRACanvas2D;
+
+procedure WavyText(ctx: TBGRACanvas2D; AText: string; X,Y,
+  AWavePosDeg, AWaveStepDeg, AWaveSize: single);
+var cursor : TGlyphCursorUtf8;
+  glyph: TGlyphUtf8;
+  glyphText: string;
+begin
+  cursor := TGlyphCursorUtf8.New(AText, fbmAuto);
+  while not cursor.EndOfString do
+  begin
+    glyph := cursor.GetNextGlyph;
+    if glyph.MirroredGlyphUtf8 <> '' then
+      glyphText := glyph.MirroredGlyphUtf8
+    else
+      glyphText := glyph.GlyphUtf8;
+    ctx.fillText(glyphText, x,y + AWaveSize*Sin(AWavePosDeg*Pi/180));
+    IncF(x, ctx.measureText(glyphText).width);
+    IncF(AWavePosDeg, AWaveStepDeg);
+  end;
+end;
+```}
   TGlyphCursorUtf8 = record
   private
     sUTF8: string;
@@ -145,9 +190,13 @@ type
     procedure NextMultichar;
     procedure PeekMultichar;
   public
+    { Initialize a record with the given parameters }
     class function New(const textUTF8: string; ABidiMode: TFontBidiMode): TGlyphCursorUtf8; static;
+    { Advance and retrieve the next glyph }
     function GetNextGlyph: TGlyphUtf8;
+    { Start all over again from the first character }
     procedure Rewind;
+    { Indicate whether the end of the string has bee reached }
     function EndOfString: boolean;
   end;
 
@@ -249,7 +298,8 @@ end;
 
 function UTF8CharacterLength(p: PChar): integer;
 begin
-  result := LazUtf8.UTF8CodepointSize(p);
+  result := LazUtf8.{$IF FPC_FULLVERSION>030004}UTF8CodepointSize{$ELSE}
+    UTF8CharacterLength{$ENDIF}(p);
 end;
 
 function UTF8Length(const s: string): PtrInt;

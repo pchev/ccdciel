@@ -1,4 +1,6 @@
 // SPDX-License-Identifier: LGPL-3.0-linking-exception
+
+{ SVG format implementation }
 unit BGRASVG;
 
 {$mode objfpc}{$H+}
@@ -92,8 +94,7 @@ const
 
 type
 
-  { TSVGUnits }
-
+  { Converter for units within an SVG document or group }
   TSVGUnits = class(TCSSUnitConverter)
   private
     FOnRecompute: TSVGRecomputeEvent;
@@ -132,8 +133,45 @@ type
     property OnRecompute: TSVGRecomputeEvent read FOnRecompute write SetOnRecompute;
   end;
 
-  { TBGRASVG }
+  { @abstract(Reading, writing and rendering for an SVG document.)
 
+**Example of reading and displaying SVG images:**
+
+@image(../doc/img/svg_example.png)
+
+```pascal
+uses ..., BGRABitmapTypes, BGRASVG;
+
+procedure DrawSVGImages(ctx: TBGRACanvas2D);
+var svg: TBGRASVG;
+begin
+  svg := TBGRASVG.Create;
+  svg.LoadFromFile('Amsterdammertje-icoon.svg');
+  svg.StretchDraw(ctx, taCenter,tlCenter, 0,0,ctx.Width/3,ctx.Height);
+
+  svg.LoadFromFile('BespectacledMaleUser.svg');
+  svg.StretchDraw(ctx, ctx.Width/3,0,ctx.Width*2/3,ctx.Height/2);
+
+  ctx.save;
+  ctx.beginPath;
+  ctx.rect(ctx.Width/3,ctx.Height/2,ctx.Width*2/3,ctx.Height/2);
+  ctx.clip;
+  svg.LoadFromFile('Blue_gyroelongated_pentagonal_pyramid.svg');
+  svg.Draw(ctx, taCenter,tlCenter, ctx.Width*2/3,ctx.Height*3/4);
+  ctx.restore;
+
+  svg.Free;
+
+  ctx.beginPath;
+  ctx.lineWidth:= 1;
+  ctx.strokeStyle(BGRABlack);
+  ctx.moveTo(ctx.Width/3,0);
+  ctx.lineTo(ctx.Width/3,ctx.Height);
+  ctx.moveTo(ctx.Width/3,ctx.Height/2);
+  ctx.lineTo(ctx.Width,ctx.Height/2);
+  ctx.stroke;
+end;
+```}
   TBGRASVG = class(TSVGCustomElement)
   private
     function GetColor: TBGRAPixel;
@@ -272,8 +310,7 @@ type
     property LayerCount: integer read GetLayerCount;
   end;
 
-  { TFPReaderSVG }
-
+  { Reader for SVG image format }
   TFPReaderSVG = class(TBGRAImageReader)
     private
       FRenderDpi: single;
@@ -299,6 +336,8 @@ implementation
 uses XMLRead, XMLWrite, BGRAUTF8, math, xmltextreader, URIParser, BGRATransform;
 
 const SvgNamespace = 'http://www.w3.org/2000/svg';
+const FPCTypeName = 'Scalable Vector Graphic';
+const Extension = 'svg';
 
 { TFPReaderSVG }
 
@@ -418,7 +457,10 @@ var AlreadyRegistered: boolean;
 procedure RegisterSvgFormat;
 begin
   if AlreadyRegistered then exit;
-  ImageHandlers.RegisterImageReader ('Scalable Vector Graphic', 'svg', TFPReaderSVG);
+
+  // register FPC handler
+  BGRARegisterImageReader(ifSvg, TFPReaderSVG, True, FPCTypeName, Extension);
+
   AlreadyRegistered:= True;
 end;
 
@@ -437,10 +479,10 @@ end;
 
 procedure TSVGUnits.Recompute;
 begin
-  FViewBox:= TSVGViewBox.Parse( FSvg.GetAttribute('viewBox') );
-  FPreserveAspectRatio := TSVGPreserveAspectRatio.Parse( FSvg.GetAttribute('preserveAspectRatio') );
-  FViewPortSize.width := parseValue(FSvg.GetAttribute('width'), FloatWithCSSUnit(FViewBox.size.x, cuPixel));
-  FViewPortSize.height := parseValue(FSvg.GetAttribute('height'), FloatWithCSSUnit(FViewBox.size.y, cuPixel));
+  FViewBox:= TSVGViewBox.Parse( string(FSvg.GetAttribute('viewBox')) );
+  FPreserveAspectRatio := TSVGPreserveAspectRatio.Parse( string(FSvg.GetAttribute('preserveAspectRatio')) );
+  FViewPortSize.width := parseValue(string(FSvg.GetAttribute('width')), FloatWithCSSUnit(FViewBox.size.x, cuPixel));
+  FViewPortSize.height := parseValue(string(FSvg.GetAttribute('height')), FloatWithCSSUnit(FViewBox.size.y, cuPixel));
 
   //view port defined as percentage of container
   if FViewPortSize.width.CSSUnit = cuPercent then
@@ -518,10 +560,10 @@ end;
 
 procedure TSVGUnits.SetViewBox(AValue: TSVGViewBox);
 begin
-  FSvg.SetAttribute('viewBox', formatValue(AValue.min.x)+' '+
+  FSvg.SetAttribute('viewBox', DOMString(formatValue(AValue.min.x)+' '+
     formatValue(AValue.min.y)+' '+
     formatValue(AValue.size.x)+' '+
-    formatValue(AValue.size.y));
+    formatValue(AValue.size.y)));
   Recompute;
 end;
 
@@ -1218,11 +1260,11 @@ begin
   GetViewBoxIndirect(cuPixel,vb);
   with vb do
   begin
-    ACanvas2d.translate(-min.x,-min.y);
     if size.x <> 0 then
       ACanvas2d.scale(w/size.x,1);
     if size.y <> 0 then
       ACanvas2d.scale(1,h/size.y);
+    ACanvas2d.translate(-min.x,-min.y);
   end;
   Draw(ACanvas2d, 0,0, cuPixel);
   ACanvas2d.restore;
@@ -1346,8 +1388,7 @@ begin
 end;
 
 initialization
-
-  DefaultBGRAImageReader[ifSvg] := TFPReaderSVG;
+  BGRARegisterImageReader(ifSvg, TFPReaderSVG, False, FPCTypeName, Extension);
 
 end.
 

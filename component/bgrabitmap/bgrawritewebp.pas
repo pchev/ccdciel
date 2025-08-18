@@ -1,4 +1,6 @@
 // SPDX-License-Identifier: LGPL-3.0-linking-exception
+
+{ Implements the writer for the WebP format (relies on external libwebp library) }
 unit BGRAWriteWebP;
 
 {$mode objfpc}{$H+}
@@ -9,19 +11,22 @@ uses
   BGRAClasses, SysUtils, FPimage;
 
 type
-  { TBGRAWriterWebP }
-
+  {* Extends the TFPCustomImageWriter to write the WebP image format }
   TBGRAWriterWebP = class(TFPCustomImageWriter)
   protected
     FLossless: boolean;
     FQualityPercent: Single;
     procedure InternalWrite(Stream: TStream; Img: TFPCustomImage); override;
+
   public
     constructor Create; override;
-    property QualityPercent: single read FQualityPercent write FQualityPercent;
-    { If Lossless is set to True, the QualityPercent property is ignored }
-    property Lossless: boolean read FLossless write FLossless;
 
+  published
+    {** Defines the quality when saving the file, 100 being the maximum but not
+        necessarily lossless }
+    property QualityPercent: single read FQualityPercent write FQualityPercent;
+    {** If Lossless is set to True, the _QualityPercent_ property is ignored }
+    property Lossless: boolean read FLossless write FLossless;
   end;
 
 implementation
@@ -104,8 +109,7 @@ begin
 end;
 
 initialization
-
-  DefaultBGRAImageWriter[ifWebP] := TBGRAWriterWebP;
+  BGRARegisterImageWriter(ifWebP, TBGRAWriterWebP, True, 'WebP Image Format', 'webp');
 
 finalization
 
