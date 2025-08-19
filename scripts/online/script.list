@@ -3,11 +3,7 @@ Telescope; scope_unpark; Unpark the telescope
 Telescope; scope_position; Show the telescope position
 Telescope; scope_alignment; Make a telescope pointing model
 Telescope; eqmod_alignment; Make a Eqmod telescope pointing model
-Preprocessing; siril_bias; Create master Bias (require Siril)
-Preprocessing; siril_dark; Create master Dark (require Siril)
-Preprocessing; siril_flat; Create master Flat (require Siril)
-Preprocessing; siril_light_color; Preprocessing of color images (require Siril)
-Preprocessing; siril_light; Preprocessing of mono images (require Siril)
+Preprocessing; siril.pkg; Preprocessing scripts for Bias,Dark,Flat,Light using Siril (require to install Siril)
 Spectroscope; UVEX4.pkg; Package of scripts for the UVEX4 spectroscope
 Spectroscope; Spectro_SetGuideMethod; Allow to define per target guiding strategy and parameters
 Spectroscope; specinti.pkg; Process spectra with specINTI

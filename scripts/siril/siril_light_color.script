@@ -1,6 +1,6 @@
 # CCDciel script to process files with Siril
 #
-# Process a series of images
+# Process a color series
 
 from ccdciel import ccdciel
 from ccdciel import IsWindows
@@ -35,9 +35,8 @@ if IsWindows :
 else :
    sirilcmd  = "siril"
 
-# Get scripts directory
-appdir = ccdciel('AppDir')['result']
-siriltemplatedir = appdir+DirectorySeparator+"scripts"+DirectorySeparator+"siril"
+# Get scripts directory, template are in same directory
+siriltemplatedir = os.path.dirname(os.path.abspath(sys.argv[0]))
 tmpdir = ccdciel('TmpDir')['result']
 
 processdir = basedir+DirectorySeparator+'processed'
@@ -82,7 +81,7 @@ for lightprefix in lightlist:
        ccdciel('LogMsg','Process '+lightprefix+fi)
        
        # Replace variable in template
-       templatefile = siriltemplatedir+DirectorySeparator+"template_light.ssf"
+       templatefile = siriltemplatedir+DirectorySeparator+"template_light_color.ssf"
        f = open(templatefile, 'r')
        script = f.read()
        f.close()

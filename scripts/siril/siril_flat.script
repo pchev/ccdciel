@@ -29,9 +29,8 @@ if IsWindows :
 else :
    sirilcmd  = "siril"
 
-# Get scripts directory
-appdir = ccdciel('AppDir')['result']
-siriltemplatedir = appdir+DirectorySeparator+"scripts"+DirectorySeparator+"siril"
+# Get scripts directory, template are in same directory
+siriltemplatedir = os.path.dirname(os.path.abspath(sys.argv[0]))
 tmpdir = ccdciel('TmpDir')['result']
 
 
