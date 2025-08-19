@@ -6145,3 +6145,7 @@ msgstr ""
 msgid "Start spectroscope guiding"
 msgstr ""
 
+#: u_translation:rsrefreshtheli
+msgid "Refresh the list"
+msgstr ""
+
