@@ -111,7 +111,7 @@ object f_downloadscript: Tf_downloadscript
   object DownloadDialog1: TDownloadDialog
     HttpDirectDownload = False
     Timeout = 90000
-    UserAgent = 'Skychart/4'
+    UserAgent = 'CCDciel/0.9'
     FtpFwMode = 0
     FtpFwPassive = True
     ConfirmDownload = True
