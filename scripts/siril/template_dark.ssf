@@ -7,11 +7,11 @@
 requires 1.3.4
 setext fits
 
-cd $BASEDIR
+cd '$BASEDIR'
 
 #build master-dark
-cd $DARKDIR
-stack $DARKPREFIX_ rej 3 3 -nonorm
+cd '$DARKDIR'
+stack '$DARKPREFIX_' rej 3 3 -nonorm
 
 load $DARKPREFIX_stacked.fits
 save Master_Dark.fits

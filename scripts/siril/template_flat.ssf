@@ -7,13 +7,13 @@
 requires 1.3.4
 setext fits
 
-cd $BASEDIR
+cd '$BASEDIR'
 
 #preprocess flats
-cd $FLATDIR
+cd '$FLATDIR'
 calibrate $FLATPREFIX$FILTER_ -bias=$MASTERBIAS
 #build master-flat
-stack pp_$FLATPREFIX$FILTER_ rej 3 3 -norm=mul
+stack 'pp_$FLATPREFIX$FILTER_' rej 3 3 -norm=mul
 
 load pp_$FLATPREFIX$FILTER_stacked.fits
 save Master_Flat$FILTER.fits

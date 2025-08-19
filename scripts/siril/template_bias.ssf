@@ -7,11 +7,11 @@
 requires 1.3.4
 setext fits
 
-cd $BASEDIR
+cd '$BASEDIR'
 
 #build master-bias
-cd $BIASDIR
-stack $BIASPREFIX_  rej 3 3 -nonorm
+cd '$BIASDIR'
+stack '$BIASPREFIX_'  rej 3 3 -nonorm
 
 load $BIASPREFIX_stacked.fits
 save Master_Bias.fits
