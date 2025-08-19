@@ -42,94 +42,95 @@ object f_script: Tf_script
     TabOrder = 0
     object Panel2: TPanel
       Left = 1
-      Height = 28
+      Height = 20
       Top = 1
       Width = 227
       Align = alTop
       BevelOuter = bvNone
-      ClientHeight = 28
+      ClientHeight = 20
       ClientWidth = 227
       ParentFont = False
       TabOrder = 0
       object ComboBoxScript: TComboBox
         Left = 0
-        Height = 28
+        Height = 20
         Top = 0
         Width = 202
         Align = alClient
         Constraints.MaxHeight = 28
-        ItemHeight = 24
-        OnChange = ComboBoxScriptChange
-        OnKeyDown = ComboBoxScriptKeyDown
+        ItemHeight = 18
         ParentFont = False
         TabOrder = 0
+        OnChange = ComboBoxScriptChange
+        OnKeyDown = ComboBoxScriptKeyDown
       end
       object ButtonParam: TButton
         Left = 202
-        Height = 28
+        Height = 20
         Top = 0
         Width = 25
         Align = alRight
         Caption = '...'
         Constraints.MaxHeight = 28
-        OnClick = ButtonParamClick
         TabOrder = 1
+        OnClick = ButtonParamClick
       end
     end
     object Panel5: TPanel
       Left = 1
-      Height = 32
-      Top = 29
+      Height = 20
+      Top = 21
       Width = 227
       Align = alTop
       BevelOuter = bvNone
-      ClientHeight = 32
+      ClientHeight = 20
       ClientWidth = 227
       TabOrder = 3
       Visible = False
       object ScriptParam: TComboBox
         Left = 0
-        Height = 32
+        Height = 20
         Top = 0
         Width = 227
         Align = alClient
-        ItemHeight = 24
+        ItemHeight = 18
         TabOrder = 0
       end
     end
     object Panel3: TPanel
       Left = 1
       Height = 25
-      Top = 61
+      Top = 41
       Width = 227
       Align = alTop
+      AutoSize = True
       BevelOuter = bvNone
       ClientHeight = 25
       ClientWidth = 227
       ParentFont = False
       TabOrder = 1
       object BtnRun: TButton
-        Left = 2
+        Left = 0
         Height = 25
         Top = 0
         Width = 80
         Caption = 'Run'
-        OnClick = BtnRunClick
         ParentFont = False
         TabOrder = 0
+        OnClick = BtnRunClick
       end
       object BtnStop: TButton
-        Left = 84
+        Left = 82
         Height = 25
         Top = 0
         Width = 70
         Caption = 'Stop'
-        OnClick = BtnStopClick
         ParentFont = False
         TabOrder = 1
+        OnClick = BtnStopClick
       end
       object led: TShape
-        Left = 187
+        Left = 185
         Height = 14
         Top = 8
         Width = 14
@@ -139,44 +140,47 @@ object f_script: Tf_script
     end
     object Panel4: TPanel
       Left = 1
-      Height = 31
-      Top = 86
+      Height = 29
+      Top = 66
       Width = 227
-      Align = alClient
+      Align = alTop
+      AutoSize = True
+      BorderSpacing.Bottom = 8
       BevelOuter = bvNone
-      ClientHeight = 31
+      ClientHeight = 29
       ClientWidth = 227
       ParentFont = False
       TabOrder = 2
       object BtnEdit: TButton
-        Left = 2
+        Left = 0
         Height = 25
         Top = 0
         Width = 80
         Caption = 'Edit'
-        OnClick = BtnScriptClick
         ParentFont = False
         TabOrder = 0
+        OnClick = BtnScriptClick
       end
       object BtnNew: TButton
-        Left = 84
+        Left = 82
         Height = 25
         Top = 0
         Width = 70
+        BorderSpacing.Bottom = 4
         Caption = 'New'
-        OnClick = BtnScriptClick
         ParentFont = False
         TabOrder = 1
+        OnClick = BtnScriptClick
       end
       object BtnCopy: TButton
-        Left = 156
+        Left = 154
         Height = 25
         Top = 0
         Width = 70
         Caption = 'Copy'
-        OnClick = BtnCopyClick
         ParentFont = False
         TabOrder = 2
+        OnClick = BtnCopyClick
       end
     end
   end
