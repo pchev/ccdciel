@@ -6,6 +6,8 @@ object f_downloadscript: Tf_downloadscript
   Caption = 'f_downloadscript'
   ClientHeight = 451
   ClientWidth = 608
+  Constraints.MinHeight = 200
+  Constraints.MinWidth = 500
   OnCreate = FormCreate
   OnShow = FormShow
   object StringGrid1: TStringGrid
@@ -88,11 +90,28 @@ object f_downloadscript: Tf_downloadscript
     Width = 608
     Align = alTop
     Caption = 'Select the script to download'
+    ClientHeight = 40
+    ClientWidth = 608
     TabOrder = 2
+    object ButtonRefresh: TButton
+      AnchorSideLeft.Control = PanelTitle
+      AnchorSideRight.Control = PanelTitle
+      AnchorSideRight.Side = asrBottom
+      Left = 455
+      Height = 25
+      Top = 8
+      Width = 144
+      Anchors = [akTop, akRight]
+      BorderSpacing.Right = 8
+      Caption = 'Refresh the list'
+      OnClick = ButtonRefreshClick
+      TabOrder = 0
+    end
   end
   object DownloadDialog1: TDownloadDialog
     HttpDirectDownload = False
     Timeout = 90000
+    UserAgent = 'Skychart/4'
     FtpFwMode = 0
     FtpFwPassive = True
     ConfirmDownload = True

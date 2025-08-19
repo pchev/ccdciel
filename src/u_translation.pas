@@ -1637,6 +1637,7 @@ resourcestring
   rsNoiseFilter = 'Noise filter';
   rsTheObjectNam2 = 'The object name is not defined, do you want to continue?';
   rsStartSpectro = 'Start spectroscope guiding';
+  rsRefreshTheLi = 'Refresh the list';
 
 implementation
 

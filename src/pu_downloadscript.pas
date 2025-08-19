@@ -4,7 +4,7 @@ unit pu_downloadscript;
 
 interface
 
-uses u_global, u_utils, u_translation, zipper, LazFileUtils, FileUtil,
+uses u_global, u_utils, u_translation, zipper, FileUtil, LazFileUtils,
   Classes, SysUtils, Forms, Controls, Graphics, Dialogs, Grids, StdCtrls, ExtCtrls, downloaddialog;
 
 type
@@ -12,6 +12,7 @@ type
   { Tf_downloadscript }
 
   Tf_downloadscript = class(TForm)
+    ButtonRefresh: TButton;
     ButtonDownload: TButton;
     ButtonCancel: TButton;
     DownloadDialog1: TDownloadDialog;
@@ -20,6 +21,7 @@ type
     StringGrid1: TStringGrid;
     procedure ButtonCancelClick(Sender: TObject);
     procedure ButtonDownloadClick(Sender: TObject);
+    procedure ButtonRefreshClick(Sender: TObject);
     procedure FormCreate(Sender: TObject);
     procedure FormShow(Sender: TObject);
     procedure StringGrid1Resize(Sender: TObject);
@@ -55,6 +57,7 @@ begin
   StringGrid1.Columns[2].Title.Caption:=rsDescription;
   ButtonCancel.Caption:=rsCancel;
   ButtonDownload.Caption:=rsDownload;
+  ButtonRefresh.Caption:=rsRefreshTheLi;
 end;
 
 procedure Tf_downloadscript.FormShow(Sender: TObject);
@@ -68,6 +71,12 @@ begin
   with StringGrid1 do begin
     Columns[2].Width:=ClientWidth-Columns[0].Width-Columns[1].Width;
   end;
+end;
+
+procedure Tf_downloadscript.ButtonRefreshClick(Sender: TObject);
+begin
+  DeleteFile(slash(ConfigDir)+'script.list');
+  LoadScriptList;
 end;
 
 procedure Tf_downloadscript.LoadScriptList;
@@ -157,8 +166,12 @@ begin
         CopyFile(configfn+'.backup',configfn,[cffOverwriteFile]);
       end;
       FscriptName:=trim(basefn)+'_config';
-      if not FileExists(slash(ConfigDir)+FscriptName+'.script') then
-        FscriptName:='';
+      if not FileExists(slash(ConfigDir)+FscriptName+'.script') then  begin
+        if FUnZipper.Entries.Count>0 then
+          FscriptName:=ExtractFileNameWithoutExt(FUnZipper.Entries[0].DiskFileName)
+        else
+          FscriptName:='';
+      end;
       ModalResult:=mrOK;
       except
          on E: Exception do

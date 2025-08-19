@@ -19704,7 +19704,8 @@ begin
   if  f_downloadscript.ModalResult=mrOK  then begin
     f_script.LoadScriptList;
     f_script.ScriptName:=f_downloadscript.Scriptname;
-    f_script.BtnEdit.Click;
+    if f_script.ScriptName<>'' then
+      f_script.BtnEdit.Click;
   end;
   finally
     f_downloadscript.Free;
