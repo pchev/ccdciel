@@ -1634,14 +1634,14 @@ begin
      Xmax:=round(FCameraXSize);
      Ymax:=round(FCameraYSize);
      // check range
-     if width<MinFrameSize then width:=MinFrameSize;
-     if height<MinFrameSize then height:=MinFrameSize;
+     if (width<MinFrameSize) or (height<MinFrameSize) then begin
+       width:=Xmax;
+       height:=Ymax;
+     end;
+     if (x+width)>Xmax then x:=Xmax-width;
+     if (y+height)>Ymax then y:=Ymax-height;
      if x<0 then x:=0;
      if y<0 then y:=0;
-     if x>(Xmax-MinFrameSize) then x:=Xmax-MinFrameSize;
-     if y>(Ymax-MinFrameSize) then y:=Ymax-MinFrameSize;
-     if (x+width)>Xmax then width:=Xmax-x;
-     if (y+height)>Ymax then height:=Ymax-y;
      // force even values
      x:=round(x+0.5);
      y:=round(y+0.5);
