@@ -214,19 +214,24 @@ if (FMount<>nil)and(FMount.CanPulseGuide) then begin
                       else direction:=1; // south
         durationdec:=min(30000,max(50,round(1000*abs(duration))));  // millisecond
         Fmount.PulseGuide(direction,durationdec);
-     end;
+     end
+     else
+        durationdec:=0;
+     msg('Dithering by '+FormatFloat(f2,durationra/1000)+'/'+FormatFloat(f2,durationdec/1000)+' seconds',3);
      // wait for move completed
-     timeend:=now+((max(durationra,durationdec)+10)/secperday);
+     timeend:=now+(5+max(durationra,durationdec)/1000)/secperday;
      while now<timeend do begin
        sleep(500);
        if GetCurrentThreadId=MainThreadID then Application.ProcessMessages;
        if not FMount.PulseGuiding then break;
      end;
      // wait more to stabilize
+     msg('Settling',3);
      Wait(waittime);
+     msg('Settle done',3);
   end
   else
-     DisplayMessage('Mount not ready for pulse guiding');
+     msg('Mount not ready for pulse guiding',1);
 end;
 end;
 
