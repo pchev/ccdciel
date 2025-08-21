@@ -1437,10 +1437,8 @@ resourcestring
   rsMax2 = 'Max';
   rsAbortAfterRe = 'Abort after restarting more than';
   rsTimeInARow = 'time in a row';
-  rsSelectACalib = 'Select a calibration option:';
-  rsOption1Calib = 'Option 1: Calibration at current position.';
-  rsOption3Backl = 'Option 2: Calibrate backlash compensation.';
-  rsOption4Cance = 'Option 3: Cancel.';
+  rsPressTheButt = 'Press the button "Calibration" to start the automatic calibration of the guider at the current position.';
+  rsPressTheButt2 = 'Press the button "Backlash calibration" to measure the declination backlash and store the measured value in tab options.';
   rsCalibration = 'Calibration';
   rscalibration2 ='Special calibration';
   rsGuiderCalibr = 'Guider calibration';

@@ -5346,20 +5346,12 @@ msgstr ""
 msgid "time in a row"
 msgstr ""
 
-#: u_translation:rsselectacalib
-msgid "Select a calibration option:"
+#: u_translation:rspressthebutt
+msgid "Press the button \"Calibration\" to start the automatic calibration of the guider at the current position."
 msgstr ""
 
-#: u_translation:rsoption1calib
-msgid "Option 1: Calibration at current position."
-msgstr ""
-
-#: u_translation:rsoption3backl
-msgid "Option 2: Calibrate backlash compensation."
-msgstr ""
-
-#: u_translation:rsoption4cance
-msgid "Option 3: Cancel."
+#: u_translation:rspressthebutt2
+msgid "Press the button \"Backlash calibration\" to measure the declination backlash and store the measured value in tab options."
 msgstr ""
 
 #: u_translation:rscalibration
