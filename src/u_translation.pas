@@ -1500,7 +1500,6 @@ resourcestring
   rsEnterTheJ200 = 'Enter the J2000 coordinates of the target where the main instrument is currently pointing.';
   rsPastFromClip = 'Past from clipboard';
   rsCannotInterp = 'Cannot interpret the text "%s" as RA DEC values';
-  rsImageCenter = 'Image center';
   rsCalibrationM = 'Calibration measurement';
   rsTargetPositi2 = 'Target position in finder image';
   rsSavePreviewI = 'Save preview images';

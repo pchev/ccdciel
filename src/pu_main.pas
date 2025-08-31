@@ -19504,6 +19504,7 @@ end;
 
 procedure Tf_main.ImageFinderMouseUp(Sender: TObject; Button: TMouseButton;
   Shift: TShiftState; X, Y: Integer);
+var xx,yy: integer;
 begin
 if PolarMoving then begin
   FinderMx:=X;
@@ -19516,6 +19517,14 @@ if FinderMouseMoving and finderfits.HeaderInfo.valid and finderfits.ImageValid t
     FinderMx:=X;
     FinderMy:=Y;
 end;
+if f_finder.ButtonMousePosition.Down and finderfits.HeaderInfo.valid and finderfits.ImageValid  then begin
+  FinderMx:=X;
+  FinderMy:=Y;
+  FinderScreen2Fits(FinderMx,FinderMy,true,xx,yy);
+  f_finder.OffsetX.Value:=xx;
+  f_finder.OffsetY.Value:=finderimg_Height-yy;
+end;
+f_finder.ButtonMousePosition.Down:=false;
 FinderMouseMoving:=false;
 PolarMoving:=false;
 screen.Cursor:=crDefault;

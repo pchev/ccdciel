@@ -37,8 +37,8 @@ type
     Binning: TSpinEditEx;
     BtnPreviewLoop: TButton;
     Button1: TButton;
-    ButtonImageCenter: TButton;
     ButtonCalibrate: TButton;
+    ButtonMousePosition: TSpeedButton;
     ButtonSetTemp: TButton;
     cbSaveImages: TCheckBox;
     Cooler: TCheckBox;
@@ -72,7 +72,7 @@ type
     procedure BtnPreviewLoopClick(Sender: TObject);
     procedure Button1Click(Sender: TObject);
     procedure ButtonCalibrateClick(Sender: TObject);
-    procedure ButtonImageCenterClick(Sender: TObject);
+    procedure ButtonMousePositionClick(Sender: TObject);
     procedure ButtonSetTempClick(Sender: TObject);
     procedure CoolerClick(Sender: TObject);
     procedure GainChange(Sender: TObject);
@@ -160,7 +160,7 @@ begin
   Title.Caption:=rsFinderCamera;
   BtnPreviewLoop.Caption:=rsStartPreview;
   cbSaveImages.Caption:=rsSavePreviewI;
-  ButtonImageCenter.Caption:=rsImageCenter;
+  ButtonMousePosition.Caption:=rsClickOnImage;
   ButtonCalibrate.Caption:=rsCalibrationM;
   groupbox1.Caption:=rsTargetPositi2;
   label1.Caption:='X '+rsPixel;
@@ -280,19 +280,9 @@ end
 else msg(rsSomeDefinedD,1);
 end;
 
-procedure Tf_finder.ButtonImageCenterClick(Sender: TObject);
-var rx,ry,rw,rh:TNumRange;
-    bin:integer;
+procedure Tf_finder.ButtonMousePositionClick(Sender: TObject);
 begin
-  if (FCamera.Status=devConnected) then begin
-    FCamera.GetFrameRange(rx,ry,rw,rh);
-    bin:=config.GetValue('/PrecSlew/Binning',1);
-    astrometry.FinderOffsetX:=rw.max/bin/2;
-    astrometry.FinderOffsetY:=rh.max/bin/2;
-    astrometry.FinderBinning:=bin;
-    ShowCalibration;
-  end
-  else msg(rsSomeDefinedD,1);
+ButtonMousePosition.Down:=true;
 end;
 
 procedure Tf_finder.ButtonSetTempClick(Sender: TObject);

@@ -95,14 +95,15 @@ object f_finder: Tf_finder
         ParentFont = False
         TabOrder = 2
       end
-      object ButtonImageCenter: TButton
+      object ButtonMousePosition: TSpeedButton
         Left = 7
         Height = 25
         Top = 72
         Width = 212
-        Caption = 'Image center'
-        OnClick = ButtonImageCenterClick
-        TabOrder = 3
+        AllowAllUp = True
+        Caption = 'Mouse position'
+        GroupIndex = 1
+        OnClick = ButtonMousePositionClick
       end
     end
     object Panel2: TPanel
