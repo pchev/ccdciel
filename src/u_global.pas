@@ -606,6 +606,7 @@ var
   UseFinder,FinderPreviewLoop: boolean;
   EditorFontName: string;
   EditorFontSize,EditorFontStyle: integer;
+  TabChange: boolean;
 
   procedure globalmsg(str:string);
   function Str2Frametype(str:string):integer;

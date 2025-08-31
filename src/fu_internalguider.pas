@@ -243,6 +243,7 @@ type
     TabSheetAdvanced: TTabSheet;
     TabSheetGuider: TTabSheet;
     Title: TLabel;
+    procedure BinningChange(Sender: TObject);
     procedure btnAddSlitOffsetClick(Sender: TObject);
     procedure btnDelSlitOffsetClick(Sender: TObject);
     procedure btnSetStarOffsetClick(Sender: TObject);
@@ -265,6 +266,7 @@ type
     procedure dec_gain1Change(Sender: TObject);
     procedure dec_hysteresis1Change(Sender: TObject);
     procedure disable_guiding1Change(Sender: TObject);
+    procedure edRefChange(Sender: TObject);
     procedure ForceGuideSpeedChange(Sender: TObject);
     procedure ForceRedraw(Sender: TObject);
     procedure ExposureChange(Sender: TObject);
@@ -306,8 +308,8 @@ type
     cur_pulsegainWest1: string;
     cur_disable_guiding, cur_tracksolar, FForceMultiStar: boolean;
     FDrawSettingChange: boolean;
-    FGuideLock, FGuideMultistar, FGuideAstrometry,FGuideStarOffset: boolean;
-    FGuideLockNextX, FGuideLockNextY, FStarOffsetStep: integer;
+    FGuideLock, FGuideMultistar, FGuideAstrometry,FGuideStarOffset,BinningChanging: boolean;
+    FGuideLockNextX, FGuideLockNextY, FStarOffsetStep, BinningRef: integer;
     FonShowMessage: TNotifyMsg;
     Fcamera: T_camera;
     CurrentSlit: integer;
@@ -596,7 +598,7 @@ begin
  FStarOffsetStep:=-1;
  led.Canvas.AntialiasingMode:=amOn;
  FForceMultiStar:=false;
-
+ BinningChanging:=false;
 end;
 
 destructor  Tf_internalguider.Destroy;
@@ -1217,6 +1219,29 @@ end;
 procedure Tf_internalguider.ForceGuideSpeedChange(Sender: TObject);
 begin
   PanelGuideSpeed.Enabled:=ForceGuideSpeed.Checked;
+end;
+
+procedure Tf_internalguider.BinningChange(Sender: TObject);
+var b1,b2: integer;
+begin
+  if (not TabChange) and SpectroFunctions then begin
+    try
+    BinningChanging:=true;
+    b1:=BinningRef;
+    b2:=binning.value;
+    edRefX.Value:=edRefX.Value*b1/b2;
+    edRefY.Value:=edRefY.Value*b1/b2;
+    BinningRef:=b2;
+    finally
+      BinningChanging:=false;
+    end;
+  end;
+end;
+
+procedure Tf_internalguider.edRefChange(Sender: TObject);
+begin
+  BinningRef:=Binning.Value;
+  if not BinningChanging then ForceRedraw(Sender);
 end;
 
 procedure Tf_internalguider.ForceRedraw(Sender: TObject);

@@ -507,6 +507,7 @@ object f_internalguider: Tf_internalguider
               Width = 111
               MaxLength = 0
               TabOrder = 1
+              OnChange = BinningChange
               MaxValue = 8
               MinValue = 1
               NullValue = 0
@@ -1557,7 +1558,7 @@ object f_internalguider: Tf_internalguider
                 Width = 84
                 MaxLength = 0
                 TabOrder = 0
-                OnChange = ForceRedraw
+                OnChange = edRefChange
                 DecimalPlaces = 1
                 Value = 100
               end
@@ -1587,7 +1588,7 @@ object f_internalguider: Tf_internalguider
                 Width = 84
                 MaxLength = 0
                 TabOrder = 1
-                OnChange = ForceRedraw
+                OnChange = edRefChange
                 DecimalPlaces = 1
                 Value = 100
               end

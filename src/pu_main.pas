@@ -1545,6 +1545,7 @@ begin
         halt;
      end;
   end;
+  TabChange:=false;
   PageControlRight.ActivePageIndex:=0;
   MultiPanel:=false;
   AppClose:=false;
@@ -15213,11 +15214,16 @@ end;
 procedure Tf_main.SelectTab(Sender: TObject);
 var i:integer;
 begin
+ try
+  TabChange:=true;
   TToolButton(sender).Down:=true;
   i:=TToolButton(sender).tag;
   PageControlRight.ActivePageIndex:=i;
   if PageControlRight.ActivePage=PageFocus then f_starprofile.PageControlProfileChange(Sender);
   SetVisibleImage;
+ finally
+  TabChange:=false;
+ end;
 end;
 
 procedure Tf_main.Splitter1Moved(Sender: TObject);
