@@ -932,6 +932,7 @@ begin
   InternalguiderRunning:=true;
   Finternalguider.ForceMultiStar:=false;
   Finternalguider.Info:='';
+  Finternalguider.Binning.enabled:=false;
   Finternalguider.ButtonLoop.enabled:=false;
   Finternalguider.ButtonCalibrate.enabled:=false;
   Finternalguider.ButtonDark.enabled:=false;
@@ -1813,6 +1814,7 @@ begin
   InternalguiderCalibratingBacklash:=false;
   InternalguiderCapturingDark:=false;
   InternalguiderCalibratingMeridianFlip:=false;
+  Finternalguider.Binning.enabled:=true;
   Finternalguider.ButtonLoop.enabled:=true;
   Finternalguider.ButtonCalibrate.enabled:=true;
   Finternalguider.ButtonGuide.enabled:=true;
