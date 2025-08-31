@@ -12318,8 +12318,8 @@ if (fits.HeaderInfo.naxis>0) and fits.ImageValid then begin
   if WaitCursor then screen.Cursor:=crHourGlass;
   if Length(fits.StarList)=0 then trpOK:=0;
   fits.Gamma:=f_visu.Gamma.Value;
-  fits.VisuMax:=round(f_visu.ImgMax);
-  fits.VisuMin:=round(f_visu.ImgMin);
+  fits.VisuMax:=min(MAXWORD,max(0,round(f_visu.ImgMax)));
+  fits.VisuMin:=min(MAXWORD,max(0,round(f_visu.ImgMin)));
   fits.MaxADU:=MaxADU;
   fits.Overflow:= 0.9995*ClippingOverflow;
   fits.Underflow:=ClippingUnderflow;
@@ -13513,8 +13513,8 @@ if refmask then begin
   f.LoadStream;
   if f.HeaderInfo.naxis>0 then begin
     f.Gamma:=f_visu.Gamma.Value;
-    f.VisuMax:=round(f_visu.ImgMax);
-    f.VisuMin:=round(f_visu.ImgMin);
+    f.VisuMax:=min(MAXWORD,max(0,round(f_visu.ImgMax)));
+    f.VisuMin:=min(MAXWORD,max(0,round(f_visu.ImgMin)));
     f.GetBGRABitmap(refbmp);
     p:=refbmp.data;
     for i:=0 to refbmp.NbPixels-1 do begin
@@ -18367,8 +18367,8 @@ begin
 if (guidefits.HeaderInfo.naxis>0) and guidefits.ImageValid then begin
   f_internalguider.DrawSettingChange:=false;
   guidefits.Gamma:=f_internalguider.visu.Gamma.Value;
-  guidefits.VisuMax:=round(f_internalguider.visu.ImgMax);
-  guidefits.VisuMin:=round(f_internalguider.visu.ImgMin);
+  guidefits.VisuMax:=min(MAXWORD,max(0,round(f_internalguider.visu.ImgMax)));
+  guidefits.VisuMin:=min(MAXWORD,max(0,round(f_internalguider.visu.ImgMin)));
   guidefits.MaxADU:=MaxADU;
   guidefits.Overflow:= 0.9995*ClippingOverflow;
   guidefits.Underflow:=ClippingUnderflow;
@@ -19266,8 +19266,8 @@ begin
 if (finderfits.HeaderInfo.naxis>0) and finderfits.ImageValid then begin
   f_finder.DrawSettingChange:=false;
   finderfits.Gamma:=f_finder.visu.Gamma.Value;
-  finderfits.VisuMax:=round(f_finder.visu.ImgMax);
-  finderfits.VisuMin:=round(f_finder.visu.ImgMin);
+  finderfits.VisuMax:=min(MAXWORD,max(0,round(f_finder.visu.ImgMax)));
+  finderfits.VisuMin:=min(MAXWORD,max(0,round(f_finder.visu.ImgMin)));
   finderfits.MaxADU:=MaxADU;
   finderfits.Overflow:= 0.9995*ClippingOverflow;
   finderfits.Underflow:=ClippingUnderflow;
