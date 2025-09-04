@@ -2035,7 +2035,7 @@ begin
                else begin
                  // start North measurement
                  CaldriftOld:=0;
-                 CalibrationDuration:=round(Finternalguider.InitialCalibrationStep.Value/1.5); //duration of pulse guiding
+                 CalibrationDuration:=round(CalibrationDuration*Finternalguider.GuideSpeedRA.Value/Finternalguider.GuideSpeedDEC.Value/1.5);
                  InternalguiderCalibrationStep:=2;
                  InternalCalibration;  // iterate without new image
                end;
