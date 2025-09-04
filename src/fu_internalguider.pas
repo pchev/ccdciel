@@ -760,7 +760,7 @@ end;
 
 function Tf_internalguider.GetpulsegainEASTsetting:double;
 begin
-  result:=strtofloat(pulsegainEAST1.text);
+  result:=strtofloat(pulsegainEAST1.text)*StrToIntDef(CalBinning.Text,1)/Binning.Value;
 end;
 
 procedure Tf_internalguider.SetpulsegainEastsetting(value:double);
@@ -770,7 +770,7 @@ end;
 
 function Tf_internalguider.GetpulsegainWestsetting:double;
 begin
-  result:=strtofloat(pulsegainWest1.text);
+  result:=strtofloat(pulsegainWest1.text)*StrToIntDef(CalBinning.Text,1)/Binning.Value;
 end;
 
 procedure Tf_internalguider.SetpulsegainWestsetting(value:double);
@@ -780,7 +780,7 @@ end;
 
 function Tf_internalguider.GetpulsegainNorthsetting:double;
 begin
-  result:=strtofloat(pulsegainNorth1.text);
+  result:=strtofloat(pulsegainNorth1.text)*StrToIntDef(CalBinning.Text,1)/Binning.Value;
 end;
 
 procedure Tf_internalguider.SetpulsegainNorthsetting(value:double);
@@ -790,7 +790,7 @@ end;
 
 function Tf_internalguider.GetpulsegainSouthsetting:double;
 begin
-  result:=strtofloat(pulsegainSouth1.text);
+  result:=strtofloat(pulsegainSouth1.text)*StrToIntDef(CalBinning.Text,1)/Binning.Value;
 end;
 
 procedure Tf_internalguider.SetpulsegainSouthsetting(value:double);
@@ -810,7 +810,7 @@ end;
 
 function Tf_internalguider.GetPixelSize:double;
 begin
-  result:=strtofloat(pixelsize1.text);
+  result:=strtofloat(pixelsize1.text)*Binning.Value/StrToIntDef(CalBinning.Text,1);
 end;
 
 procedure Tf_internalguider.SetPulseDirectionNorth_1(value:string);
@@ -1236,6 +1236,7 @@ begin
       BinningChanging:=false;
     end;
   end;
+  ShowMinMove;
 end;
 
 procedure Tf_internalguider.edRefChange(Sender: TObject);
@@ -1877,10 +1878,6 @@ begin
     result:=false;
     detail:='No calibration done with current program version.';
     exit;
-  end;
-  if CalBinning.Text<>IntToStr(Binning.Value) then begin
-    result:=false;
-    detail:='Binning change, ';
   end;
   if CalRAspeed.Text<>FormatFloat(f1,GuideSpeedRA.Value) then begin
     result:=false;

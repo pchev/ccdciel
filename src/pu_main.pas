@@ -5261,34 +5261,6 @@ begin
   f_internalguider.PulseNorthDirection_1:=config.GetValue('/InternalGuider/PulseNorthDirection_1','?');
   f_internalguider.PulseNorthDirection_2:=config.GetValue('/InternalGuider/PulseNorthDirection_2','?');
 
-  begin  //Upgrade old setting to new settings. Remove these temporary lines after summer 2024
-    if f_internalguider.PulseNorthDirection_1='?' then //old profile
-    begin
-      ReverseDec:=config.GetValue('/InternalGuider/ReverseDec',false);
-      InverseSolarTracking:=config.GetValue('/InternalGuider/InverseSolar',false);
-      if InverseSolarTracking then
-      begin
-        if f_internalguider.Pier_Side='E' then
-          begin f_internalguider.PulseNorthDirection_1:='N';f_internalguider.PulseNorthDirection_2:='S';end
-        else
-          begin f_internalguider.PulseNorthDirection_1:='S';f_internalguider.PulseNorthDirection_2:='N';end;
-        f_internalguider.pulseGainNorth:=-f_internalguider.pulseGainNorth;
-        f_internalguider.pulseGainSouth:=-f_internalguider.pulseGainSouth;
-      end
-      else
-      if ReverseDec then
-        begin f_internalguider.PulseNorthDirection_1:='N';f_internalguider.PulseNorthDirection_2:='N';end
-      else
-      begin
-        if f_internalguider.Pier_Side='W' then
-          begin f_internalguider.PulseNorthDirection_1:='N';f_internalguider.PulseNorthDirection_2:='S';end
-        else
-          begin f_internalguider.PulseNorthDirection_1:='S';f_internalguider.PulseNorthDirection_2:='N'; end;
-      end;
-    end;
-  end;
-
-
   f_internalguider.BacklashCompensation:=config.GetValue('/InternalGuider/BacklashCompensation',false);
   f_internalguider.DecBacklash:=config.GetValue('/InternalGuider/DecBacklash',0);
   f_internalguider.trend_scale:=config.GetValue('/InternalGuider/Scale',5);
@@ -5912,10 +5884,10 @@ begin
   config.SetValue('/InternalGuider/RaHysteresis',f_internalguider.ra_hysteresis);
   config.SetValue('/InternalGuider/DecHysteresis',f_internalguider.dec_hysteresis);
   config.SetValue('/InternalGuider/Pa',f_internalguider.pa);
-  config.SetValue('/InternalGuider/PulseGainEast',f_internalguider.pulseGainEast);
-  config.SetValue('/InternalGuider/PulseGainWest',f_internalguider.pulseGainWest);
-  config.SetValue('/InternalGuider/PulseGainNorth',f_internalguider.pulseGainNorth);
-  config.SetValue('/InternalGuider/PulseGainSouth',f_internalguider.pulsegainSouth);
+  config.SetValue('/InternalGuider/PulseGainEast',f_internalguider.pulseGainEast1.Text);  // store calibration value not affected by current binning
+  config.SetValue('/InternalGuider/PulseGainWest',f_internalguider.pulseGainWest1.Text);
+  config.SetValue('/InternalGuider/PulseGainNorth',f_internalguider.pulseGainNorth1.Text);
+  config.SetValue('/InternalGuider/PulseGainSouth',f_internalguider.pulsegainSouth1.Text);
 
   config.SetValue('/InternalGuider/PulseNorthDirection_1',f_internalguider.PulseNorthDirection_1);
   config.SetValue('/InternalGuider/PulseNorthDirection_2',f_internalguider.PulseNorthDirection_2);
@@ -5928,7 +5900,7 @@ begin
   config.SetValue('/InternalGuider/CalIssue',f_internalguider.CalIssue.Text);
 
   config.SetValue('/InternalGuider/PierSide',f_internalguider.pier_side);
-  config.SetValue('/InternalGuider/PixelSize',f_internalguider.pixel_size);
+  config.SetValue('/InternalGuider/PixelSize',f_internalguider.pixelsize1.Text);   // store calibration value not affected by current binning
   config.SetValue('/InternalGuider/ShortestPulse',f_internalguider.ShortestPulse);
   config.SetValue('/InternalGuider/LongestPulse',f_internalguider.LongestPulse);
   config.SetValue('/InternalGuider/MinHFD',f_internalguider.minHFD);
