@@ -516,7 +516,7 @@ var
   x1,y1,bg1,bgdev1,fwhm1,vmax1,snr1,flux1: double;
   GuideLock: boolean;
   drift_arrayX,drift_arrayY : array of double;
-  searchA,starx,stary,frx,fry,frw,frh: integer;
+  searchA,WinMin,starx,stary,frx,fry,frw,frh: integer;
   xs1,xs2,ys1,ys2: integer;
 const
     overlap=6;
@@ -628,7 +628,7 @@ begin
         if hfd1>0 then
           CurrentHFD:=hfd1
         else
-          CurrentHFD:=0;
+          CurrentHFD:=finternalguider.SearchWinMin div 3;
         setlength(xy_array,1);
         if (InternalguiderCalibrating or InternalguiderCalibratingBacklash) then begin
           // for calibration the reference is the star position
@@ -801,10 +801,15 @@ begin
        FGuideBmp.Canvas.Pen.Color:=clYellow;
      end;
 
+     // adjust SearchWinMin during calibration to take account for large saturated stars
+     if (InternalguiderCalibrating or InternalguiderCalibratingBacklash) and (CurrentHFD>0) then
+       WinMin:=max(finternalguider.SearchWinMin,round(5*CurrentHFD))
+     else
+       WinMin:=finternalguider.SearchWinMin;
      // search star near previous position, if not found repeat with increasing search area up to 2*SearchWinMin
      c:=0;
      repeat
-       s:=round((1+0.2*c)*finternalguider.SearchWinMin);
+       s:=round((1+0.2*c)*WinMin);
        guidefits.FindStarPos2(round(xy_array_old[0].x2),round(xy_array_old[0].y2),s,xc,yc,vmax,bg,bgdev);
        if FSettling then begin
          // check SNR to be sure we not loss the star with a large move
@@ -825,7 +830,7 @@ begin
        finternalguider.GuideLockNextX:=round(xc); // in case of recovery restart
        finternalguider.GuideLockNextY:=ysize-round(yc);
        // Mark star area
-       hfd1:=finternalguider.SearchWinMin/2/3;
+       hfd1:=WinMin/2/3;
        FGuideBmp.Canvas.Pen.Color:=clYellow;
        FGuideBmp.Canvas.Frame(trunc(1+xc*GuideImgPixRatio-hfd1*3),trunc(1+yc-hfd1*3),trunc(1+xc*GuideImgPixRatio+hfd1*3),trunc(1+yc+hfd1*3));
        if Finternalguider.GuideStarOffset then begin
@@ -2074,6 +2079,7 @@ begin
                  InternalCalibration;  // iterate without new image
                end
                else begin // retry with bigger pulse
+                 if CaldriftOld=0 then CalibrationDuration:=round(CalibrationDuration/1.5); //do not increase duration on first measurement
                  CaldriftOld:=drift;
                  InternalguiderCalibrationStep:=2;
                end;
