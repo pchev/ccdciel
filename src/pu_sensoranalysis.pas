@@ -689,6 +689,7 @@ begin
 
     {sd using sigma clip}
     sd_old := sd;
+    sd := 0;
     counter := 0;
     for i := 0 to w - 1 do
       for j := 0 to h - 1 do
