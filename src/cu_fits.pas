@@ -1749,6 +1749,7 @@ begin
 
     {sd}
     sd_old:=sd;
+    sd := 0;
     counter:=0;
     for j:=y1 to (y2-1) div samplestep  do
     for i:=x1 to (x2-1) div samplestep do
