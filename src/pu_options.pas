@@ -34,6 +34,8 @@ type
   { Tf_option }
 
   Tf_option = class(TForm)
+    cbSlewSyncRotator: TCheckBox;
+    PanelRotator: TPanel;
     SequenceTwilight: TFloatSpinEditEx;
     GroupBoxTwilight: TGroupBox;
     GroupBoxMoon: TGroupBox;
@@ -904,7 +906,7 @@ type
     procedure SetupHFMOption;
   public
     { public declarations }
-    LockTemp: Boolean;
+    LockTemp,WantRotator: Boolean;
     procedure Setlang;
     procedure SetAutofocusMode(value: TAutofocusMode);
     function  GetAutofocusMode: TAutofocusMode;
@@ -1360,6 +1362,7 @@ begin
   Label87.Caption := rsDelayAfterTe;
   Label166.Caption := rsFinderFocalL;
   UseFinderSolver.Caption := rsUseAlternati;
+  cbSlewSyncRotator.Caption := rsSyncTheRotat;
   PageMeridian.Caption := rsMeridian;
   MeridianOption.Caption := rsOnMeridianCr;
   Label40.Caption := rsCanTrackPast;
@@ -2180,6 +2183,7 @@ begin
   if AstrometryCamera.ItemIndex>0 then SlewFilter.ItemIndex:=0;
   SlewFilter.Enabled:=AstrometryCamera.ItemIndex=0;
   PanelFinder.Visible:=AstrometryCamera.ItemIndex=1;
+  PanelRotator.Visible:=WantRotator and (AstrometryCamera.ItemIndex=0);
 end;
 
 procedure Tf_option.AutofocusExpTimeChange(Sender: TObject);

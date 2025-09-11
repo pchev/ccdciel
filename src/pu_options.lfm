@@ -4989,7 +4989,7 @@ object f_option: Tf_option
             object Label30: TLabel
               AnchorSideTop.Control = SlewExp
               AnchorSideTop.Side = asrCenter
-              Left = 17
+              Left = 16
               Height = 18
               Top = 77
               Width = 150
@@ -5187,13 +5187,32 @@ object f_option: Tf_option
             object UseFinderSolver: TCheckBox
               AnchorSideTop.Control = FinderSolver
               AnchorSideTop.Side = asrCenter
-              Left = 17
+              Left = 16
               Height = 22
               Top = 41
               Width = 157
               Caption = 'Use alternative solver'
               OnChange = UseFinderSolverChange
               TabOrder = 2
+            end
+          end
+          object PanelRotator: TPanel
+            Left = 0
+            Height = 42
+            Top = 504
+            Width = 551
+            Align = alTop
+            BevelOuter = bvNone
+            ClientHeight = 42
+            ClientWidth = 551
+            TabOrder = 6
+            object cbSlewSyncRotator: TCheckBox
+              Left = 16
+              Height = 22
+              Top = 8
+              Width = 123
+              Caption = 'Sync the rotator'
+              TabOrder = 0
             end
           end
         end

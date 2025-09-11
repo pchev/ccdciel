@@ -26,7 +26,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 interface
 
 uses  u_global, u_utils, fu_preview, fu_visu, cu_astrometry_engine, cu_mount, cu_camera,
-      cu_wheel, cu_fits, indiapi, cu_planetarium,
+      cu_wheel, cu_rotator, cu_fits, indiapi, cu_planetarium,
       u_translation, LCLIntf, math, Forms, LazFileUtils, Classes, SysUtils, ExtCtrls;
 
 type
@@ -48,6 +48,7 @@ TAstrometry = class(TComponent)
     Fmount: T_mount;
     Fcamera, FFinderCamera: T_camera;
     Fwheel: T_wheel;
+    Frotator: T_rotator;
     FFits, FGuideFits, FFinderFits: TFits;
     FResolverName: string;
     logfile,solvefile,savefile: string;
@@ -107,6 +108,7 @@ TAstrometry = class(TComponent)
     property Camera: T_camera read Fcamera write Fcamera;
     property FinderCamera: T_camera read FFinderCamera write FFinderCamera;
     property Wheel: T_wheel read Fwheel write Fwheel;
+    property Rotator: T_rotator read Frotator write Frotator;
     property Fits: TFits read FFits write FFits;
     property GuideFits: TFits read FGuideFits write FGuideFits;
     property FinderFits: TFits read FFinderFits write FFinderFits;
@@ -833,6 +835,7 @@ begin
     exit;
   end;
   oldfilter:=0;
+  pa:=NullCoord;
   try
   if assigned(FonStartGoto) then FonStartGoto(self);
   delay:=config.GetValue('/PrecSlew/Delay',5);
@@ -984,6 +987,11 @@ begin
    end;
   end;
   result:=(dist<=prec);
+
+  if result and SlewSyncRotator and (FFinderCamera=nil) and (Frotator.Status=devConnected) and (pa<>NullCoord) then begin
+    msg('Sync the rotator: '+FormatFloat(f2,pa)+' '+rsDegree,3);
+    Frotator.Sync(pa);
+  end;
 
   finally
     err:=dist;

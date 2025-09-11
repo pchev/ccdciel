@@ -2317,6 +2317,7 @@ begin
    astrometry.Camera:=camera;
    astrometry.Mount:=mount;
    astrometry.Wheel:=wheel;
+   astrometry.Rotator:=rotator;
  end;
  if f_preview<>nil then begin
    f_preview.Camera:=camera;
@@ -5348,6 +5349,7 @@ begin
   end;
   SlewPrecision:=config.GetValue('/PrecSlew/Precision',SlewPrecision);
   RecenterTargetDistance:=config.GetValue('/PrecSlew/RecenterTargetDistance',RecenterTargetDistance);
+  SlewSyncRotator:=config.GetValue('/PrecSlew/SyncRotator',SlewSyncRotator);
   MinimumMoonDistance:=config.GetValue('/Sequence/MinimumMoonDistance',MinimumMoonDistance);
   SequenceTwilight:=config.GetValue('/Sequence/SequenceTwilight',SequenceTwilight);
   if (autoguider<>nil)and(autoguider.State<>GUIDER_DISCONNECTED) then autoguider.SettleTolerance(SettlePixel,SettleMinTime, SettleMaxTime);
@@ -9892,6 +9894,9 @@ begin
    f_option.UseFinderSolver.Checked:=config.GetValue('/Astrometry/UseFinderSolver',false);
    f_option.FinderSolver.ItemIndex:=config.GetValue('/Astrometry/FinderSolver',ResolverAstap);
    f_option.UseFinderSolverChange(nil);
+   f_option.WantRotator:=WantRotator;
+   f_option.cbSlewSyncRotator.Checked:=config.GetValue('/PrecSlew/SyncRotator',SlewSyncRotator);
+   f_option.PanelRotator.Visible:=WantRotator and (f_option.AstrometryCamera.ItemIndex=0);
    f_option.RecenterTargetDistance.value:=config.GetValue('/PrecSlew/RecenterTargetDistance',RecenterTargetDistance);
    f_option.MinimumMoonDistance.Value:=round(config.GetValue('/Sequence/MinimumMoonDistance',MinimumMoonDistance));
    f_option.SequenceTwilight.Value:=config.GetValue('/Sequence/SequenceTwilight',SequenceTwilight);
@@ -10325,6 +10330,7 @@ begin
      config.SetValue('/PrecSlew/Delay',f_option.SlewDelay.Value);
      config.SetValue('/PrecSlew/Filter',f_option.SlewFilter.ItemIndex);
      config.SetValue('/PrecSlew/RecenterTargetDistance',f_option.RecenterTargetDistance.value);
+     config.SetValue('/PrecSlew/SyncRotator',f_option.cbSlewSyncRotator.Checked);
      config.SetValue('/Sequence/MinimumMoonDistance',f_option.MinimumMoonDistance.Value);
      config.SetValue('/Sequence/SequenceTwilight',f_option.SequenceTwilight.Value);
      config.SetValue('/Astrometry/FinderFocalLength',f_option.FinderFocalLength.Value);
