@@ -17395,6 +17395,7 @@ try
   else if method='CAPTURE_GETDITHER' then result:=result+'"result": '+f_capture.DitherCount.Text
   else if method='CAPTURE_RUNNING' then result:=result+'"result": '+BoolToStr(f_Capture.Running,tr,fa)
   else if method='CAPTURE_GETLASTFILENAME' then result:=result+'"result": "'+stringreplace(LastCaptureFile,'\','\\',[rfReplaceAll])+'"'
+  else if method='CURRENTHEADER' then result:=result+'"result": '+fits.Header.asJSON
   else if method='TELESCOPERA' then result:=result+'"result": '+FormatFloat(f6,f_mount.CurrentRA)
   else if method='TELESCOPEDE' then result:=result+'"result": '+FormatFloat(f6,f_mount.CurrentDec)
   else if method='OBS_LATITUDE' then result:=result+'"result": '+FormatFloat(f6,ObsLatitude)

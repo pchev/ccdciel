@@ -81,6 +81,7 @@ type
       function NewWCS(ff:TMemoryStream): boolean;
       function GetStream: TMemoryStream;
       function GetString: string;
+      function GetJSON: string;
       function Indexof(key: string): integer;
       function Valueof(key: string; out val: string): boolean; overload;
       function Valueof(key: string; out val: integer): boolean; overload;
@@ -105,6 +106,7 @@ type
       property Values: TStringList read FValues;
       property Comments:TStringList read FComments;
       property AsString: string read GetString;
+      property AsJSON: string read GetJSON;
  end;
 
 const    maxl = 20000;
@@ -578,6 +580,16 @@ begin
   for i:=0 to FRows.Count-1 do begin
     result:=result+trim(FRows[i])+#10;
   end;
+end;
+
+function TFitsHeader.GetJSON: string;
+var i: integer;
+begin
+  result:='{';
+  for i:=0 to FRows.Count-1 do begin
+    result:=result+' "'+Fkeys[i]+'": '+'"'+FValues[i]+'",'
+  end;
+  result:=copy(result,1,length(result)-1)+'}';
 end;
 
 function TFitsHeader.Indexof(key: string): integer;
