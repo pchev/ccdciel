@@ -589,7 +589,9 @@ begin
   for i:=0 to FRows.Count-1 do begin
     result:=result+' "'+Fkeys[i]+'": '+'"'+FValues[i]+'",'
   end;
-  result:=copy(result,1,length(result)-1)+'}';
+  if length(result)>1 then
+    result:=copy(result,1,length(result)-1);
+  result:=result+'}';
 end;
 
 function TFitsHeader.Indexof(key: string): integer;
