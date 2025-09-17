@@ -364,7 +364,7 @@ begin
 if RotatorAngle<>nil then begin
   RotatorAngle.np[0].value:=p;
   indiclient.sendNewNumber(RotatorAngle);
-  indiclient.WaitBusy(RotatorAngle,30000);
+  indiclient.WaitBusy(RotatorAngle,120000);
 end;
 end;
 

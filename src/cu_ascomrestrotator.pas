@@ -239,7 +239,7 @@ begin
  try
    //msg('Rotator '+Fdevice+' move to internal '+FormatFloat(f1,p));
    V.Put('moveabsolute',['Position',FormatFloat(f2,p)]);
-   WaitRotatorMoving(30000);
+   WaitRotatorMoving(120000);
 
    except
     on E: Exception do msg('Error, can''t move to. ' + E.Message,0);
