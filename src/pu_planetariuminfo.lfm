@@ -7,7 +7,7 @@ object f_planetariuminfo: Tf_planetariuminfo
   Caption = 'Planetarium position'
   ClientHeight = 310
   ClientWidth = 258
-  FormStyle = fsStayOnTop
+  FormStyle = fsSystemStayOnTop
   OnClose = FormClose
   OnCreate = FormCreate
   OnShow = FormShow
