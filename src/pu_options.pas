@@ -35,6 +35,7 @@ type
 
   Tf_option = class(TForm)
     cbSlewSyncRotator: TCheckBox;
+    cbAFmedianfilter: TCheckBox;
     PanelRotator: TPanel;
     SequenceTwilight: TFloatSpinEditEx;
     GroupBoxTwilight: TGroupBox;
@@ -1293,6 +1294,7 @@ begin
   Label48.Caption := rsNearFocus;
   Label57.Caption := rsNumberOfExpo;
   Label50.Caption := rsBinning;
+  cbAFmedianfilter.Caption:=rsNoiseFilter;
   Label54.Caption := rsAutofocusTol;
   Label81.Caption := rsMinSNR;
   Label67.Caption := rsWhenPerformi;

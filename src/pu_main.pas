@@ -5156,6 +5156,7 @@ begin
   AutofocusNearHFD:=config.GetValue('/StarAnalysis/AutofocusNearHFD',10.0);
   AutofocusExposure:=config.GetValue('/StarAnalysis/AutofocusExposure',5.0);
   AutofocusBinning:=config.GetValue('/StarAnalysis/AutofocusBinning',1);
+  AFmedianfilter:=config.GetValue('/StarAnalysis/AFmedianfilter',true);
   focuser.Backlash:=config.GetValue('/StarAnalysis/FocuserBacklash',0);
   focuser.BacklashDirection:=config.GetValue('/StarAnalysis/FocuserBacklashDirection',FocusDirIn);
   focuser.BacklashActive:=config.GetValue('/StarAnalysis/FocuserBacklashActive',(focuser.Backlash<>0));
@@ -9750,6 +9751,7 @@ begin
      f_option.AutofocusGainEdit.Value:=config.GetValue('/StarAnalysis/AutofocusGain',AutofocusGain);
    f_option.AutofocusOffsetEdit.Value:=config.GetValue('/StarAnalysis/AutofocusOffset',AutofocusOffset);
    f_option.AutofocusBinning.Value:=config.GetValue('/StarAnalysis/AutofocusBinning',AutofocusBinning);
+   f_option.cbAFmedianfilter.Checked:=config.GetValue('/StarAnalysis/AFmedianfilter',true);
    if (camera.Status=devConnected)and(camera.BinXrange<>NullRange) then
        f_option.AutofocusBinning.MaxValue:=round(camera.BinXrange.max)
    else
@@ -10144,6 +10146,7 @@ begin
        config.SetValue('/StarAnalysis/AutofocusGain',f_option.AutofocusGainEdit.Value);
      config.SetValue('/StarAnalysis/AutofocusOffset',f_option.AutofocusOffsetEdit.Value);
      config.SetValue('/StarAnalysis/AutofocusBinning',f_option.AutofocusBinning.Value);
+     config.SetValue('/StarAnalysis/AFmedianfilter',f_option.cbAFmedianfilter.Checked);
      config.SetValue('/StarAnalysis/FocuserBacklash',f_option.FocuserBacklash.Value);
      config.SetValue('/StarAnalysis/FocuserBacklashActive',f_option.FocuserBacklashActive.checked);
      config.SetValue('/StarAnalysis/FocuserBacklashDirection',(f_option.FocuserBacklashDirection.ItemIndex=0));
@@ -11795,6 +11798,9 @@ begin
       fits.LoadStream;
     end;
   end;
+  if f_starprofile.AutofocusRunning and AFmedianfilter then
+    fits.MedianFilter;
+
   if displayimage then begin
   try
     // draw image
