@@ -1089,6 +1089,15 @@ begin
     f.Header.Insert(i,'FRAMEY',Fry,'Frame start y');
     f.Header.Insert(i,'FRAMEHGT',Frheight,'Frame height');
     f.Header.Insert(i,'FRAMEWDH',Frwidth,'Frame width');
+    if FCameraInterface=INDI then begin
+      Frx:=Frx div hbin1;
+      Fry:=Fry div hbin2;
+    end;
+    f.Header.Insert(i,'XORGSUBF',Frx,'Subframe origin on X axis');
+    if roworder=bottomup then
+      f.Header.Insert(i,'YORGSUBF',(FCameraYSize div hbin2)-Fry,'Subframe origin on Y axis, flipped')
+    else
+      f.Header.Insert(i,'YORGSUBF',Fry,'Subframe origin on Y axis');
   end;
   if (haz<>NullCoord)and(hal<>NullCoord) then begin
     f.Header.Insert(i,'CENTAZ',FormatFloat(f2,haz),'[deg] Azimuth of center of image, origin North');
