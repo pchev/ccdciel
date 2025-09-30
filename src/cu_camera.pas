@@ -1093,11 +1093,8 @@ begin
       Frx:=Frx div hbin1;
       Fry:=Fry div hbin2;
     end;
-    f.Header.Insert(i,'XORGSUBF',Frx,'Subframe origin on X axis');
-    if roworder=bottomup then
-      f.Header.Insert(i,'YORGSUBF',(FCameraYSize div hbin2)-Fry,'Subframe origin on Y axis, flipped')
-    else
-      f.Header.Insert(i,'YORGSUBF',Fry,'Subframe origin on Y axis');
+    f.Header.Insert(i,'XORGSUBF',Frx,'Subframe origin X axis');
+    f.Header.Insert(i,'YORGSUBF',Fry,'Subframe origin Y axis. Use ROWORDER to unflip');
   end;
   if (haz<>NullCoord)and(hal<>NullCoord) then begin
     f.Header.Insert(i,'CENTAZ',FormatFloat(f2,haz),'[deg] Azimuth of center of image, origin North');
