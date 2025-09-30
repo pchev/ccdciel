@@ -181,7 +181,10 @@ result:=false;
   try
   result:=V.Get('connected').AsBool;
   except
-   result:=false;
+   on E: Exception do begin
+     if debug_msg then msg('Error Connected : '+ E.Message);
+     result:=false;
+   end;
   end;
 end;
 
@@ -211,12 +214,7 @@ var s: boolean;
 begin
  StatusTimer.Enabled:=false;
  try
-  if not Connected then begin
-     FStatus := devDisconnected;
-     if Assigned(FonStatusChange) then FonStatusChange(self);
-     msg(rsDisconnected3,1);
-  end
-  else begin
+  if Connected then begin
      try
        s:=GetShutter;
        if s<>stShutter then begin
