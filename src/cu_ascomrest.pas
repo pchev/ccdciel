@@ -29,7 +29,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 interface
 
-uses httpsend, synautil, fpjson, jsonparser, base64,
+uses httpsend, synautil, synsock, fpjson, jsonparser, base64,
      ctypes, Forms, Classes, SysUtils;
 
 type
@@ -199,8 +199,21 @@ begin
 end;
 
 procedure THTTPthread.Execute;
+var retry: integer;
 begin
-  Fok:=Fhttp.HTTPMethod(method, fURL);
+  retry:=0;
+  repeat
+    Fok:=Fhttp.HTTPMethod(method, fURL);
+    if not Fok then begin
+      if Fhttp.Sock.LastError=WSAECONNREFUSED then begin
+        sleep(1000);
+      end
+      else begin
+         break;
+      end;
+    end;
+    inc(retry);
+  until Fok or (retry>10);
 end;
 
 
