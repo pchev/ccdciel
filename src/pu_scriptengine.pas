@@ -205,6 +205,9 @@ type
     function cmd_EqmodClearSyncDelta:string;
     function cmd_EqmodStdSync:string;
     function cmd_EqmodAppendSync:string;
+    function cmd_DomePark(onoff:string):string;
+    function cmd_DomeSlave(onoff:string):string;
+    function cmd_DomeShutter(onoff:string):string;
     function cmd_AutoguiderConnect:string;
     function cmd_AutoguiderCalibrate:string;
     function cmd_AutoguiderStartGuiding:string;
@@ -1501,6 +1504,54 @@ try
      result:=msgOK;
   end
   else result:=Format(rsNotAnEqmodMo, [msgFailed]);
+except
+  result:=msgFailed;
+end;
+end;
+
+function Tf_scriptengine.cmd_DomePark(onoff:string):string;
+var park: boolean;
+begin
+try
+result:=msgFailed;
+if Fdome.Status=devConnected then begin
+  park:=(onoff='ON');
+  Fdome.park:=park;
+  wait(2);
+  result:=msgOK;
+end;
+except
+  result:=msgFailed;
+end;
+end;
+
+function Tf_scriptengine.cmd_DomeShutter(onoff:string):string;
+var shutter: boolean;
+begin
+try
+result:=msgFailed;
+if Fdome.Status=devConnected then begin
+  shutter:=(onoff='ON');
+  Fdome.Shutter:=shutter;
+  wait(2);
+  result:=msgOK;
+end;
+except
+  result:=msgFailed;
+end;
+end;
+
+function Tf_scriptengine.cmd_DomeSlave(onoff:string):string;
+var slave: boolean;
+begin
+try
+result:=msgFailed;
+if Fdome.Status=devConnected then begin
+  slave:=(onoff='ON');
+  Fdome.Slave:=slave;
+  wait(2);
+  result:=msgOK;
+end;
 except
   result:=msgFailed;
 end;

@@ -17375,6 +17375,10 @@ try
   else if method='TELESCOPE_SLEWING' then result:=result+'"result": '+BoolToStr(mount.MountSlewing,tr,fa)
   else if method='TELESCOPE_PIERSIDE' then result:=result+'"result": "'+PierSideName[ord(mount.PierSide)]+'"'
   else if method='TELESCOPE_EQMOD' then result:=result+'"result": '+BoolToStr(mount.IsEqmod,tr,fa)
+  else if method='DOME_CONNECTED' then result:=result+'"result": '+BoolToStr(dome.Status=devConnected,tr,fa)
+  else if method='DOME_PARKED' then result:=result+'"result": '+BoolToStr(dome.park,tr,fa)
+  else if method='DOME_OPENED' then result:=result+'"result": '+BoolToStr(dome.Shutter,tr,fa)
+  else if method='DOME_SLAVED' then result:=result+'"result": '+BoolToStr(dome.Slave,tr,fa)
   else if method='AUTOGUIDER_CONNECTED' then result:=result+'"result": '+BoolToStr((Autoguider.State<>GUIDER_DISCONNECTED),tr,fa)
   else if method='AUTOGUIDER_RUNNING' then result:=result+'"result": '+BoolToStr(Autoguider.Running,tr,fa)
   else if method='AUTOGUIDER_GUIDING' then result:=result+'"result": '+BoolToStr((Autoguider.State=GUIDER_GUIDING),tr,fa)
@@ -17534,6 +17538,25 @@ try
     buf:=f_scriptengine.cmd_MountSync(buf1,buf2);
     result:=result+'"result":{"status": "'+buf+'"}';
   end
+  else if method='DOME_PARK' then begin
+    CheckParamCount(1);
+    if uppercase(trim(value[attrib.IndexOf('params.0')]))='TRUE' then buf:='ON' else buf:='OFF';
+    buf:=f_scriptengine.cmd_DomePark(buf);
+    result:=result+'"result":{"status": "'+buf+'"}';
+  end
+  else if method='DOME_SHUTTER' then begin
+    CheckParamCount(1);
+    if uppercase(trim(value[attrib.IndexOf('params.0')]))='TRUE' then buf:='ON' else buf:='OFF';
+    buf:=f_scriptengine.cmd_DomeShutter(buf);
+    result:=result+'"result":{"status": "'+buf+'"}';
+  end
+  else if method='DOME_SLAVE' then begin
+    CheckParamCount(1);
+    if uppercase(trim(value[attrib.IndexOf('params.0')]))='TRUE' then buf:='ON' else buf:='OFF';
+    buf:=f_scriptengine.cmd_DomeSlave(buf);
+    result:=result+'"result":{"status": "'+buf+'"}';
+  end
+
   else if method='ASTROMETRY_GOTO' then begin
     CheckParamCount(2);
     buf1:=trim(value[attrib.IndexOf('params.0')]);
