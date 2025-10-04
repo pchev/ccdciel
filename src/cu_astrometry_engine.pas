@@ -1015,9 +1015,9 @@ begin
     crota1:=crota2;
     // old_to_new_WCS
     cd1_1:=cdsign[1]*abs(cdelt1*cos(crota1));
-    cd1_2:=cdsign[1]*abs(cdelt2*sin(crota1));
-    cd2_1:=cdsign[1]*abs(cdelt1*sin(crota2));
-    cd2_2:=cdsign[1]*abs(cdelt2*cos(crota2));
+    cd1_2:=cdsign[2]*abs(cdelt2*sin(crota1));
+    cd2_1:=cdsign[3]*abs(cdelt1*sin(crota2));
+    cd2_2:=cdsign[4]*abs(cdelt2*cos(crota2));
 
     // write header
     for i:=1 to 36 do
