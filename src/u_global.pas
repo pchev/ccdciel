@@ -309,7 +309,8 @@ const
   ResolverNone=2;
   ResolverPlateSolve=3;
   ResolverAstap=4;
-  ResolverName: array[0..4] of string =('Astrometry.Net','Elbrus','No resolver','PlateSolve','ASTAP');
+  ResolverPlateSolve3=5;
+  ResolverName: array[0..5] of string =('Astrometry.Net','Elbrus','No resolver','PlateSolve','ASTAP','PlateSolve3');
   PlanetariumName: array[0..2] of string =('Cartes du Ciel', 'SAMP', 'HNSKY');
   SafetyActionName: array[0..ord(high(TSafetyAction))] of string=('','','','','','','','','','','','','');
   DomeOpenActionName: array[0..ord(high(TDomeOpenAction))] of string=('','','','','','');

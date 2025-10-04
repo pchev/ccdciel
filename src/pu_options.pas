@@ -36,7 +36,11 @@ type
   Tf_option = class(TForm)
     cbSlewSyncRotator: TCheckBox;
     cbAFmedianfilter: TCheckBox;
+    PlateSolve3Cmd: TFileNameEdit;
+    Label189: TLabel;
+    Page6: TPage;
     PanelRotator: TPanel;
+    platesolve3: TGroupBox;
     SequenceTwilight: TFloatSpinEditEx;
     GroupBoxTwilight: TGroupBox;
     GroupBoxMoon: TGroupBox;
@@ -177,7 +181,6 @@ type
     HeaderOpt: TTabSheet;
     CustomHeader: TStringGrid;
     UseReadoutMode: TCheckBox;
-    Page6: TPage;
     PHDpath: TEdit;
     AzimuthOrigin: TRadioGroup;
     StartPHD: TCheckBox;
@@ -1343,6 +1346,7 @@ begin
   Label78.Caption := rsProgramFolde;
   Label79.Caption := rsWaitAfterSol;
   Label80.Caption := rsSeconds;
+  Label189.Caption := rsProgramPath;
   Label105.Caption := rsProgramFolde;
   Label109.Caption := rsMaximumSearc;
   Label107.Caption := rsDownsample;

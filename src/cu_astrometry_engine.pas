@@ -34,8 +34,8 @@ uses  u_global, u_utils, cu_fits,
 type
 TAstrometry_engine = class(TThread)
    private
-     FInFile, FOutFile, FLogFile, FElbrusFile, FElbrusDir, FElbrusFolder, FElbrusUnixpath, FCygwinPath, wcsfile, apmfile: string;
-     FPlateSolveFolder,FASTAPFolder,FAstrometryPath,FAstapLogFile: string;
+     FInFile, FOutFile, FLogFile, FElbrusFile, FElbrusDir, FElbrusFolder, FElbrusUnixpath, FCygwinPath, wcsfile, apmfile, ps3file: string;
+     FPlateSolveFolder,FPlateSolve3Cmd,FASTAPFolder,FAstrometryPath,FAstapLogFile: string;
      Fscalelow,Fscalehigh,Fra,Fde,Fradius,FTimeout,FXsize,FYsize: double;
      FObjs,FDown,FResolver,FPlateSolveWait,Fiwidth,Fiheight: integer;
      Fresult,Fcode:integer;
@@ -52,6 +52,7 @@ TAstrometry_engine = class(TThread)
    protected
      procedure Execute; override;
      function Apm2Wcs: boolean;
+     function PS3Wcs:boolean;
      procedure AstapWcs(out warn: string);
      function AstapErr(errnum:integer):string;
    public
@@ -86,6 +87,7 @@ TAstrometry_engine = class(TThread)
      property ElbrusFolder: string read FElbrusFolder write FElbrusFolder;
      property ElbrusUnixpath: string read FElbrusUnixpath write FElbrusUnixpath;
      property PlateSolveFolder: string read FPlateSolveFolder write FPlateSolveFolder;
+     property PlateSolve3Cmd: string read FPlateSolve3Cmd write FPlateSolve3Cmd;
      property PlateSolveWait:integer read FPlateSolveWait write FPlateSolveWait;
      property ASTAPFolder: string read FASTAPFolder write FASTAPFolder;
      property ASTAPSearchRadius: integer read FASTAPSearchRadius write FASTAPSearchRadius;
@@ -135,6 +137,7 @@ AstrometryPath:=Source.AstrometryPath ;
 CygwinPath:=Source.CygwinPath ;
 ElbrusFolder:=Source.ElbrusFolder ;
 ElbrusUnixpath:=Source.ElbrusUnixpath ;
+PlateSolve3Cmd:=Source.PlateSolve3Cmd ;
 PlateSolveFolder:=Source.PlateSolveFolder ;
 PlateSolveWait:=Source.PlateSolveWait ;
 ASTAPFolder:=Source.ASTAPFolder ;
@@ -443,6 +446,29 @@ else if FResolver=ResolverPlateSolve then begin
   DeleteFileUTF8(wcsfile);
   Start;
 end
+else if FResolver=ResolverPlateSolve3 then begin
+  {$ifdef mswindows}
+    Fcmd:=FPlateSolve3Cmd;
+  {$else}
+    Fcmd:='wine';
+    Fparam.Add(FPlateSolve3Cmd);
+  {$endif}
+  if (Fra<>NullCoord)and(Fde<>NullCoord) then begin
+    Fparam.Add(FInFile);
+    Fparam.Add(FloatToStr(Fra*deg2rad));
+    Fparam.Add(FloatToStr(Fde*deg2rad));
+    Fparam.Add(FloatToStr(FXsize*deg2rad));
+    Fparam.Add(FloatToStr(FYsize*deg2rad));
+  end
+  else begin
+    Fparam.Add(FInFile);
+  end;
+  ps3file:=ExtractFileNameWithoutExt(FInFile)+'_PS3.txt';
+  wcsfile:=ChangeFileExt(FInFile,'.wcs');
+  DeleteFileUTF8(ps3file);
+  DeleteFileUTF8(wcsfile);
+  Start;
+end
 else if FResolver=ResolverAstap then begin
   {$ifdef mswindows}
     Fcmd:=slash(FASTAPFolder)+'astap.exe';
@@ -733,6 +759,88 @@ else if FResolver=ResolverPlateSolve then begin
   end;
   PostMessage(MsgHandle, LM_CCDCIEL, M_AstrometryDone, PtrInt(strnew(PChar(err))));
 end
+else if FResolver=ResolverPlateSolve3 then begin
+  process.Executable:=Fcmd;
+  process.Parameters:=Fparam;
+  endtime:=now+FTimeout/secperday;
+  AssignFile(ft,FLogFile);
+  Rewrite(ft);
+  WriteLn(ft,Fcmd);
+  for i:=0 to Fparam.Count-1 do
+     WriteLn(ft,Fparam[i]);
+  CloseFile(ft);
+  try
+  process.Execute;
+  while process.Running do begin
+    if now>endtime then begin
+       err:=rsTimeout+'!';
+       Stop;
+       FKilled:=false;
+       break;
+    end;
+    sleep(100);
+  end;
+  Fresult:=process.ExitStatus;
+  except
+     on E: Exception do begin
+       Fresult:=1;
+       err:='Fail to start Platesolve3:'+E.Message;
+       AssignFile(ft,FLogFile);
+       Append(ft);
+       WriteLn(ft,'Fail to start Platesolve3:');
+       WriteLn(ft,E.Message);
+       CloseFile(ft);
+     end;
+  end;
+  process.Free;
+  process:=TProcessUTF8.Create(nil);
+  // merge result
+  if (Fresult=0)and(FileExistsUTF8(ps3file)) then begin
+    if (FLogFile<>'') then begin
+      AssignFile(ft,FLogFile);
+      Append(ft);
+      AssignFile(fl,ps3file);
+      Reset(fl);
+      WriteLn(ft,'Platesolve3 result:');
+      while not eof(fl) do begin
+        ReadLn(fl,buf);
+        writeln(ft,buf);
+      end;
+      CloseFile(ft);
+      CloseFile(fl);
+    end;
+    if PS3Wcs then begin
+      Ftmpfits:=TFits.Create(nil);
+      mem:=TMemoryStream.Create;
+      try
+      mem.LoadFromFile(FInFile);
+      Ftmpfits.Stream:=mem;
+      mwcs:=TMemoryStream.Create;
+      mwcs.LoadFromFile(wcsfile);
+      Ftmpfits.Header.NewWCS(mwcs);
+      Ftmpfits.SaveToFile(FOutFile);
+      finally
+        Ftmpfits.Free;
+        mwcs.Free;
+      end;
+    end
+    else begin
+      if FFallback and (not Fretry) and (not FKilled) then begin
+        PostMessage(MsgHandle, LM_CCDCIEL, M_AstrometryMsg, PtrInt( strnew(PChar(err+crlf+rsRetryWithAst))));
+        FRetryEngine:=TAstrometry_engine.Create;
+        FRetryEngine.Assign(self);
+        FRetryEngine.Fallback:=false;
+        FRetryEngine.Fretry:=true;
+        FRetryEngine.Resolve;
+        repeat
+          sleep(100);
+        until FRetryEngine.Finished;
+        exit;
+      end;
+    end;
+  end;
+  PostMessage(MsgHandle, LM_CCDCIEL, M_AstrometryDone, PtrInt(strnew(PChar(err))));
+end
 else if FResolver=ResolverAstap then begin
   process.Executable:=Fcmd;
   process.Parameters:=Fparam;
@@ -822,6 +930,129 @@ except
     PostMessage(MsgHandle, LM_CCDCIEL, M_AstrometryDone, PtrInt(strnew(PChar(err))));
   end;
 end;
+end;
+
+function TAstrometry_engine.PS3Wcs:boolean;
+var
+  i : integer;
+  f : textfile;
+  line1, line2,line3,line4,line5 :string;
+  hdr: THeaderBlock;
+  fwcs: file of THeaderBlock;
+  ra_radians,dec_radians,scale_radian,pixel_size,crota1,crota2,cdelt1,cdelt2:double;
+  cd1_1,cd1_2,cd2_1,cd2_2: double;
+  cdsign:  array [1..4] of double;
+  List: TStrings;
+
+begin
+  result:=false;
+  AssignFile(f,ps3file);
+  // Reopen the file for reading
+  Reset(f);
+  readln(f,line1);
+  readln(f,line2);
+  readln(f,line3);
+  readln(f,line4);
+  readln(f,line5);
+  closefile(f);
+  if line1='True' then {line1 valid solution}
+  begin
+    List := TStringList.Create;
+    try
+       list.StrictDelimiter:=true;{only accept comma's}
+       {now do line2}
+       List.Clear;
+       ExtractStrings([','], [], PChar(line2),List);
+       if list.count<=2 then {commas between value, DOT as decimal separator}
+       begin
+         ra_radians:=strtofloat(list[0]);
+         dec_radians:=strtofloat(list[1]);
+       end
+       else
+       begin {commas between value, COMMA as decimal separator}
+         ra_radians:=strtofloat(list[0]+'.'+list[1]);
+         dec_radians:=strtofloat(list[2]+'.'+list[3]);
+       end;
+       {now do line3}
+       List.Clear;
+       ExtractStrings([','], [], PChar(line3),List);
+       if list.count<=2 then {commas between value, DOT as decimal separator}
+       begin
+         scale_radian:=strtofloat(list[0]);
+         crota2:=strtofloat(list[1]);
+       end
+       else
+       begin {commas between value, COMMA as decimal separator}
+         scale_radian:=strtofloat(list[0]+'.'+list[1]);
+         crota2:=strtofloat(list[2]+'.'+list[3]);
+       end;
+       {line5}
+       List.Clear;
+       ExtractStrings([','], [], PChar(line5),List);
+       if list.count<=8 then {commas between value, DOT as decimal separator}
+       begin
+         // a transformation matrix of unknow scale but with the right sign (inverted).
+         cdsign[1] := sgn(-strtofloat(list[0]));
+         cdsign[2] := sgn(-strtofloat(list[1]));
+         cdsign[3] := sgn(-strtofloat(list[2]));
+         cdsign[4] := sgn(-strtofloat(list[3]));
+       end
+       else
+       begin  {commas between value, COMMA as decimal separator}
+         cdsign[1] := sgn(-strtofloat(list[0]+'.'+list[1]));
+         cdsign[2] := sgn(-strtofloat(list[2]+'.'+list[3]));
+         cdsign[3] := sgn(-strtofloat(list[4]+'.'+list[5]));
+         cdsign[4] := sgn(-strtofloat(list[6]+'.'+list[7]));
+       end;
+    finally
+      List.Free;
+    end;
+
+    pixel_size:=3600*rad2deg/scale_radian;
+    cdelt1:=pixel_size/3600;
+    cdelt2:=pixel_size/3600;
+    crota2:=deg2rad*(180-crota2);
+    crota1:=crota2;
+    // old_to_new_WCS
+    cd1_1:=cdsign[1]*abs(cdelt1*cos(crota1));
+    cd1_2:=cdsign[1]*abs(cdelt2*sin(crota1));
+    cd2_1:=cdsign[1]*abs(cdelt1*sin(crota2));
+    cd2_2:=cdsign[1]*abs(cdelt2*cos(crota2));
+
+    // write header
+    for i:=1 to 36 do
+      hdr[i]:=blank80;
+    hdr[1] := 'COMMENT   Solved by Platesolve 3 '+line4+blank80;
+    hdr[2] := 'CTYPE1  = '+#39+'RA---TAN'+#39+'           / first parameter RA , projection TANgential'+blank80;
+    hdr[3] := 'CTYPE2  = '+#39+'DEC--TAN'+#39+'           / second parameter DEC, projection TANgential'+blank80;
+    hdr[4] := 'CUNIT1  = '+#39+'deg '+#39+'               / Unit of coordinate '+blank80;
+    hdr[5] := 'CRPIX1  = '+Format('%20.10g',[ 0.5+Fiwidth/2])+' / X of reference pixel '+blank80;
+    hdr[6] := 'CRPIX2  = '+Format('%20.10g',[ 0.5+Fiheight/2])+' / Y of reference pixel '+blank80;
+    hdr[7] := 'CRVAL1  = '+Format('%20.13e',[ra_radians*rad2deg])+' / RA of reference pixel (deg) '+blank80;
+    hdr[8] := 'CRVAL2  = '+Format('%20.13e',[dec_radians*rad2deg])+' / DEC of reference pixel (deg) '+blank80;
+    // do not write CDELTi and CROTAi, the CD_ matrix is sufficient
+    hdr[13] :='CD1_1   = '+Format('%20.13e',[cd1_1])+ ' / CD matrix to convert (x,y) to (Ra, Dec) '+blank80;
+    hdr[14] :='CD1_2   = '+Format('%20.13e',[cd1_2])+ ' / CD matrix to convert (x,y) to (Ra, Dec) '+blank80;
+    hdr[15] :='CD2_1   = '+Format('%20.13e',[cd2_1])+ ' / CD matrix to convert (x,y) to (Ra, Dec) '+blank80;
+    hdr[16] :='CD2_2   = '+Format('%20.13e',[cd2_2])+ ' / CD matrix to convert (x,y) to (Ra, Dec) '+blank80;
+    hdr[17] :='END'+blank80;
+
+    // write wcs file
+    AssignFile(fwcs,wcsfile);
+    Rewrite(fwcs,1);
+    BlockWrite(fwcs,hdr,sizeof(THeaderBlock));
+    CloseFile(fwcs);
+
+    // mark as solved
+    AssignFile(f,ChangeFileExt(FInFile,'.solved'));
+    rewrite(f);
+    write(f,' ');
+    CloseFile(f);
+    result:=true;
+  end
+  else begin
+    result:=false;
+  end;
 end;
 
 function TAstrometry_engine.Apm2Wcs:boolean;

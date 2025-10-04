@@ -9849,6 +9849,7 @@ begin
    {$ifdef unix}
    f_option.ElbrusUnixpath.Text:=config.GetValue('/Astrometry/ElbrusUnixpath',ExpandFileName('~/Elbrus/Images'));
    {$endif}
+   f_option.PlateSolve3Cmd.Text:=config.GetValue('/Astrometry/PlateSolve3Cmd','');
    f_option.PlatesolveFolder.Text:=config.GetValue('/Astrometry/PlatesolveFolder','C:\PlateSolve2.28');
    f_option.PlatesolveWait.Value:=config.GetValue('/Astrometry/PlatesolveWait',0);
    f_option.ASTAPFolder.Text:=config.GetValue('/Astrometry/ASTAPFolder',
@@ -10312,6 +10313,7 @@ begin
      {$ifdef unix}
      config.SetValue('/Astrometry/ElbrusUnixpath',f_option.ElbrusUnixpath.Text);
      {$endif}
+     config.SetValue('/Astrometry/PlateSolve3Cmd',f_option.PlateSolve3Cmd.Text);
      config.SetValue('/Astrometry/PlatesolveFolder',f_option.PlatesolveFolder.Text);
      config.SetValue('/Astrometry/PlatesolveWait',f_option.PlatesolveWait.Value);
      config.SetValue('/Astrometry/ASTAPFolder',f_option.ASTAPFolder.Text);

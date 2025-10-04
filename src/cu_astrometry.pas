@@ -225,6 +225,7 @@ begin
    engine.CygwinPath:=config.GetValue('/Astrometry/CygwinPath','C:\cygwin');
    engine.ElbrusFolder:=config.GetValue('/Astrometry/ElbrusFolder','');
    engine.ElbrusUnixpath:=config.GetValue('/Astrometry/ElbrusUnixpath','');
+   engine.PlateSolve3Cmd:=config.GetValue('/Astrometry/PlateSolve3Cmd','');
    engine.PlateSolveFolder:=config.GetValue('/Astrometry/PlatesolveFolder','');
    engine.PlateSolveWait:=config.GetValue('/Astrometry/PlatesolveWait',0);
    engine.ASTAPFolder:=config.GetValue('/Astrometry/ASTAPFolder','');
