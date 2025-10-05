@@ -2565,7 +2565,7 @@ begin
         // set coordinates
         if ((t.ra<>NullCoord)and(t.de<>NullCoord)) then begin
           // Check dome open and slaving
-          if (dome.Status=devConnected) and
+          if (dome.Status=devConnected) and (mount.SlaveDome) and
             ((not dome.Shutter)or(dome.hasSlaving and(not dome.Slave)))
             then begin
              buf:='Dome is: ';
