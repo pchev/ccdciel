@@ -5,6 +5,7 @@
 import serial
 import time
 import logging
+import platform
 from configparser import ConfigParser
 
 verbose=False
@@ -23,7 +24,16 @@ def UVEX4init(portCom,st,ct,callback=0) :
     global ser, serialtimeout, globaltimeout
     serialtimeout = st
     globaltimeout = ct 
-    ser = serial.Serial(portCom, 115200, timeout=5)  # Open serial with initial timeout of 5 seconds
+    BAUD=115200
+
+    ser= serial.Serial(port=None, baudrate=BAUD, timeout=1)
+    ser.port = portCom
+    if platform.system() == 'Windows':
+       ser.dtr = False                              # prevent Arduino reset
+       ser.rts = False                              # on Linux use "/bin/stty -F /dev/ttsUSB0 -hupcl"
+    ser.open()
+    time.sleep(0.1)
+
     r = "no response"
     ok = False                                       # if nothing is read
     while not (r == "") :                            # purge the information send after connection
