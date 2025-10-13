@@ -307,7 +307,7 @@ type
     cur_pa1,cur_pier_side1,cur_pixelsize1,cur_pulsegainEast1,cur_pulsegainNorth1,cur_pulsegainSouth1,
     cur_pulsegainWest1: string;
     cur_disable_guiding, cur_tracksolar, FForceMultiStar: boolean;
-    FDrawSettingChange: boolean;
+    FDrawSettingChange, LockSlit: boolean;
     FGuideLock, FGuideMultistar, FGuideAstrometry,FGuideStarOffset,BinningChanging: boolean;
     FGuideLockNextX, FGuideLockNextY, FStarOffsetStep, BinningRef: integer;
     FonShowMessage: TNotifyMsg;
@@ -599,6 +599,7 @@ begin
  led.Canvas.AntialiasingMode:=amOn;
  FForceMultiStar:=false;
  BinningChanging:=false;
+ LockSlit:=false;
 end;
 
 destructor  Tf_internalguider.Destroy;
@@ -2030,19 +2031,6 @@ begin
   CurrentSlit:=i;
 end;
 
-procedure Tf_internalguider.SlitOffsetChange(Sender: TObject);
-var so:TSlitOffset;
-    i: integer;
-begin
-  i:=cbSlitList.ItemIndex;
-  if (i>=0) then begin
-    so:=TSlitOffset(cbSlitList.Items.Objects[i]);
-    so.x:=SlitOffsetX.Value;
-    so.y:=SlitOffsetY.Value;
-  end;
-  ForceRedraw(Sender);
-end;
-
 procedure Tf_internalguider.btnDelSlitOffsetClick(Sender: TObject);
 var i: integer;
 begin
@@ -2063,10 +2051,26 @@ begin
   LabelSetOffset.Caption:=rsClickAtTheTa;
 end;
 
+procedure Tf_internalguider.SlitOffsetChange(Sender: TObject);
+var so:TSlitOffset;
+    i: integer;
+begin
+  if LockSlit then exit;
+  i:=cbSlitList.ItemIndex;
+  if (i>=0) then begin
+    so:=TSlitOffset(cbSlitList.Items.Objects[i]);
+    so.x:=SlitOffsetX.Value;
+    so.y:=SlitOffsetY.Value;
+  end;
+  ForceRedraw(Sender);
+end;
+
 procedure Tf_internalguider.cbSlitListChange(Sender: TObject);
 var so:TSlitOffset;
     i: integer;
 begin
+try
+  LockSlit:=true;
   i:=cbSlitList.ItemIndex;
   if (i>=0)and(i<cbSlitList.Items.Count) then begin
     CurrentSlit:=i;
@@ -2075,6 +2079,10 @@ begin
     SlitOffsetX.Value := so.x;
     SlitOffsetY.Value := so.y;
   end;
+  ForceRedraw(Sender);
+finally
+  LockSlit:=false;
+end;
 end;
 
 procedure Tf_internalguider.btnRefImageClick(Sender: TObject);

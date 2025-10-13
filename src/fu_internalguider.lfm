@@ -1,10 +1,10 @@
 object f_internalguider: Tf_internalguider
   Left = 0
-  Height = 707
+  Height = 857
   Top = 0
   Width = 346
   AutoSize = True
-  ClientHeight = 707
+  ClientHeight = 857
   ClientWidth = 346
   ParentFont = False
   TabOrder = 0
@@ -2086,7 +2086,7 @@ object f_internalguider: Tf_internalguider
   object Panel11: TPanel
     Left = 0
     Height = 27
-    Top = 707
+    Top = 857
     Width = 346
     Align = alTop
     AutoSize = True

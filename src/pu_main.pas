@@ -18654,8 +18654,8 @@ if InternalGuiderSetLockPosition and guidefits.HeaderInfo.valid and guidefits.Im
   GuideMx:=X;
   GuideMy:=Y;
   GuiderScreen2fits(GuideMx,GuideMy,true,xx,yy);
-  f_internalguider.RefX:=xx;
-  f_internalguider.RefY:=guideimg_Height-yy;
+  f_internalguider.RefX:=xx-f_internalguider.SlitOffsetX.Value;
+  f_internalguider.RefY:=guideimg_Height-yy-f_internalguider.SlitOffsetY.Value;
 end;
 f_internalguider.ButtonSetLock.Down:=false;
 InternalGuiderSetLockPosition:=false;
