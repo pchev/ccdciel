@@ -1216,15 +1216,6 @@ begin
   WriteLog('Frame,Time,mount,dx,dy,RARawDistance,DECRawDistance,RAGuideDistance,DECGuideDistance,RADuration,RADirection,DECDuration,DECDirection,XStep,YStep,StarMass,SNR,ErrorCode');
   end;
 
-  if finternalguider.SpectroAstrometry
-     and(cdcwcs_sky2xy<>nil) and (FSpectroTarget.valid or FSpectroTarget.newastrometry)
-     and (FSpectroTarget.RA<>NullCoord)and(FSpectroTarget.DEC<>NullCoord)
-     and (not Finternalguider.GuideLock) and Fastrometry.LastResult
-     then begin
-       // measure star position directly on astrometry image
-       InternalAutoguiding;
-     end;
-
   InternalguiderLoop;
   Finternalguider.ButtonGuide.enabled:=false;
   StartSettle;
