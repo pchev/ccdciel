@@ -2075,6 +2075,10 @@ object f_EditTargets: Tf_EditTargets
         Caption = 'From planetarium'
         OnClick = BtnPlanetariumCoordClick
       end
+      object MenuPlanetariumCoordAll: TMenuItem
+        Caption = 'MenuPlanetariumCoordAll'
+        OnClick = MenuPlanetariumCoordAllClick
+      end
       object MenuOnlineCoord: TMenuItem
         Caption = 'Search online'
         OnClick = MenuOnlineCoordClick

@@ -95,8 +95,8 @@ begin
   // online search
   found:=SearchOnline(objname,sname,sresolv,ra0,dec0,maglist);
   if found then begin
-    Ra.Text:=RAToStr(ra0*12/pi);{Add position}
-    De.Text:=DEToStr(dec0*180/pi);
+    Ra.Text:=ARpToStr(ra0*12/pi,2);{Add position}
+    De.Text:=DEpToStr(dec0*180/pi,2);
     if length(maglist)>0 then begin
       band:=cbMagBand.Text;
       cbMagBand.Clear;

@@ -152,8 +152,8 @@ begin
    end;
    LastMsg:=msg;
    if (planetarium.RA<>NullCoord)and(planetarium.DE<>NullCoord) then begin
-     Ra.Text:=RAToStr(planetarium.RA);
-     De.Text:=DEToStr(planetarium.DE);
+     Ra.Text:=ARpToStr(planetarium.RA,2);
+     De.Text:=DEpToStr(planetarium.DE,2);
      if planetarium.Objname<>'' then
        Obj.Text:=trim(planetarium.Objname);
      LabelResolver.Caption:=rsFromPlanetar;

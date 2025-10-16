@@ -54,6 +54,8 @@ Function RAToStr(ar: Double) : string;
 Function DEToStr(de: Double) : string;
 Function RAToStrB(ar: Double) : string;
 Function DEToStrB(de: Double) : string;
+function ARpToStr(ar: double; precision: integer = 1): string;
+function DEpToStr(de: double; precision: integer = 1): string;
 Function ARToStr4(ar: Double; f: string; out d,m,s : string) : string;
 Function StrToAR(dms : string) : double;
 Function StrToDE(dms : string) : double;
@@ -658,6 +660,110 @@ begin
     str(sec:2:0,s);
     if abs(sec)<9.5 then s:='0'+trim(s);
     result := d+' '+m+' '+s;
+end;
+
+function DEpToStr(de: double; precision: integer = 1): string;
+var
+  dd, min1, min, sec, p, pmin, psec: double;
+  d, m, s: string;
+begin
+  case precision of
+    0: p := 0.5;
+    1: p := 0.95;
+    2: p := 0.995;
+    3: p := 0.9995;
+    4: p := 0.99995;
+    else
+    begin
+      precision := 1;
+      p := 0.995;
+    end;
+  end;
+  psec := 59 + p;
+  pmin := 59 + psec / 60;
+  dd := Int(de);
+  min1 := abs(de - dd) * 60;
+  if min1 >= pmin then
+  begin
+    dd := dd + sgn(de);
+    min1 := 0.0;
+  end;
+  min := Int(min1);
+  sec := (min1 - min) * 60;
+  if sec >= psec then
+  begin
+    min := min + 1;
+    sec := 0.0;
+  end;
+  str(abs(dd): 2: 0, d);
+  if abs(dd) < 10 then
+    d := '0' + trim(d);
+  if de < 0 then
+    d := '-' + d
+  else
+    d := '+' + d;
+  str(min: 2: 0, m);
+  if abs(min) < 10 then
+    m := '0' + trim(m);
+  str(sec: 4: precision, s);
+  if abs(sec) < 9.95 then
+    s := '0' + trim(s)
+  else
+    s:=trim(s);
+  Result := d + ldeg + m + lmin + s + lsec;
+end;
+
+function ARpToStr(ar: double; precision: integer = 1): string;
+var
+  dd, min1, min, sec, p, pmin, psec: double;
+  d, m, s: string;
+begin
+  case precision of
+    0: p := 0.95;
+    1: p := 0.995;
+    2: p := 0.9995;
+    3: p := 0.99995;
+    4: p := 0.999995;
+    else
+    begin
+      precision := 1;
+      p := 0.995;
+    end;
+  end;
+  psec := 59 + p;
+  pmin := 59 + psec / 60;
+  dd := Int(ar);
+  min1 := abs(ar - dd) * 60;
+  if min1 >= pmin then
+  begin
+    dd := dd + sgn(ar);
+    if dd = 24 then
+      dd := 0;
+    min1 := 0.0;
+  end;
+  min := Int(min1);
+  sec := (min1 - min) * 60;
+  if sec >= psec then
+  begin
+    min := min + 1;
+    sec := 0.0;
+  end;
+  str(abs(dd): 2: 0, d);
+  if abs(dd) < 10 then
+    d := '0' + trim(d);
+  if ar < 0 then
+    d := '-' + d
+  else
+    d := blank + d;
+  str(min: 2: 0, m);
+  if abs(min) < 10 then
+    m := '0' + trim(m);
+  str(sec: 5: precision + 1, s);
+  if abs(sec) < 9.995 then
+    s := '0' + trim(s)
+  else
+    s:=trim(s);
+  Result := d + 'h' + m + 'm' + s + 's';
 end;
 
 Function ARToStr4(ar: Double; f: string; out d,m,s : string) : string;

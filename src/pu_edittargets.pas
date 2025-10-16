@@ -79,6 +79,7 @@ type
     MenuInsertOnline: TMenuItem;
     MenuImportCSV: TMenuItem;
     MenuExportCSV: TMenuItem;
+    MenuPlanetariumCoordAll: TMenuItem;
     MenuPlanetariumMagn: TMenuItem;
     MenuPlanetariumMagnAll: TMenuItem;
     MenuOnlineMagn: TMenuItem;
@@ -239,6 +240,7 @@ type
     procedure MenuExportCSVClick(Sender: TObject);
     procedure MenuImportCSVClick(Sender: TObject);
     procedure MenuPlanetariumMagnAllClick(Sender: TObject);
+    procedure MenuPlanetariumCoordAllClick(Sender: TObject);
     procedure BtnPlanetariumCoordClick(Sender: TObject);
     procedure BtnCurrentCoordClick(Sender: TObject);
     procedure BtnDeleteTemplateClick(Sender: TObject);
@@ -569,6 +571,7 @@ begin
   MenuCoordinates.Caption:=rsCoordinates;
   MenuNoMove.Caption := rsNone2;
   MenuPlanetariumCoord.Caption := rsPlanetarium;
+  MenuPlanetariumCoordAll.Caption:=rsPlanetariumF;
   MenuSearchCoord.Caption:=rsSearch;
   MenuOnlineCoord.Caption:=rsSearchOnline;
   MenuRotator.Caption:=rsRotator;
@@ -1123,8 +1126,8 @@ begin
 
   if object_found {found object in database}  then
   begin
-    TargetList.Cells[colra,n]:=RAToStr(ra_data*12/pi);{Add position}
-    TargetList.Cells[coldec,n]:=DEToStr(dec_data*180/pi);
+    TargetList.Cells[colra,n]:=ARpToStr(ra_data*12/pi,2);{Add position}
+    TargetList.Cells[coldec,n]:=DEpToStr(dec_data*180/pi,2);
     TargetList.Cells[colmagn,n]:='-';
     TargetList.Cells[colstart,n]:=rsRise;
     TargetList.Cells[colend,n]:=rsSet2;
@@ -1373,8 +1376,8 @@ begin
 
   if object_found {find object in database}  then
   begin
-    TargetList.Cells[colra,n]:=RAToStr(ra_data*12/pi);{Add position}
-    TargetList.Cells[coldec,n]:=DEToStr(dec_data*180/pi);
+    TargetList.Cells[colra,n]:=ARpToStr(ra_data*12/pi,2);{Add position}
+    TargetList.Cells[coldec,n]:=DEpToStr(dec_data*180/pi,2);
     TargetList.Cells[colmagn,n]:='-';
     TargetList.Cells[colname,n]:=keyboard_text;
     cbAstrometry.Checked:=(astrometryResolver<>ResolverNone);
@@ -2090,6 +2093,31 @@ begin
   end;
 end;
 
+procedure Tf_EditTargets.MenuPlanetariumCoordAllClick(Sender: TObject);
+var i : integer;
+    sra,sde,v_solar,vpa_solar: double;
+begin
+  if (f_planetariuminfo.planetarium=nil) or (not f_planetariuminfo.planetarium.Connected) then begin
+    ShowMessage(rsPleaseConnec);
+    exit;
+  end;
+  try
+  screen.Cursor:=crHourGlass;
+  for i:=1 to TargetList.RowCount-1 do begin
+    TargetList.Row:=i;
+    if f_planetariuminfo.planetarium.Search(trim(TargetList.Cells[colname,i]),sra,sde,v_solar,vpa_solar) then begin
+       TargetList.Cells[colra,i]:=ARpToStr(sra,2);
+       TargetList.Cells[coldec,i]:=DEpToStr(sde,2);
+       TargetChange(nil);
+       ShowPlan;
+    end;
+    Application.ProcessMessages;
+  end;
+  finally
+    screen.Cursor:=crDefault;
+  end;
+end;
+
 procedure Tf_EditTargets.BtnPlanetariumCoordClick(Sender: TObject);
 var n: integer;
 begin
@@ -2158,8 +2186,8 @@ try
   screen.Cursor:=crHourGlass;
   FAstrometry.SolveCurrentImage(true);
   if FAstrometry.CurrentCoord(ra,de,eq,pa) then begin
-    TargetList.Cells[colra,n]:=RAToStr(ra);
-    TargetList.Cells[coldec,n]:=DEToStr(de);
+    TargetList.Cells[colra,n]:=ARpToStr(ra,2);
+    TargetList.Cells[coldec,n]:=DEpToStr(de,2);
     TargetList.Cells[colmagn,n]:='-';
     cbAstrometry.Checked:=(astrometryResolver<>ResolverNone);
     TargetChange(nil);
@@ -2400,11 +2428,11 @@ begin
     if t.ra=NullCoord then
       TargetList.Cells[colra,n]:='-'
     else
-      TargetList.Cells[colra,n]:=RAToStr(t.ra);
+      TargetList.Cells[colra,n]:=ARpToStr(t.ra,2);
     if t.de=NullCoord then
       TargetList.Cells[coldec,n]:='-'
     else
-      TargetList.Cells[coldec,n]:=DEToStr(t.de);
+      TargetList.Cells[coldec,n]:=DEpToStr(t.de,2);
     if t.startrise then TargetList.Cells[colstart,n]:=rsRise;
     if t.endset then TargetList.Cells[colend,n]:=rsSet2;
     if t.startmeridian<>NullCoord then begin

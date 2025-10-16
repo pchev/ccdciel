@@ -1035,8 +1035,8 @@ try
       FSequenceFile.Items.SetValue('/Targets/Target'+inttostr(i)+'/Skip',t.skip);
       FSequenceFile.Items.SetValue('/Targets/Target'+inttostr(i)+'/FullOnly',t.fullonly);
       FSequenceFile.Items.SetValue('/Targets/Target'+inttostr(i)+'/MoonAvoidance',t.moonavoidance);
-      FSequenceFile.Items.SetValue('/Targets/Target'+inttostr(i)+'/RA',RAToStr(t.ra));
-      FSequenceFile.Items.SetValue('/Targets/Target'+inttostr(i)+'/Dec',DEToStr(t.de));
+      FSequenceFile.Items.SetValue('/Targets/Target'+inttostr(i)+'/RA',ARpToStr(t.ra,2));
+      FSequenceFile.Items.SetValue('/Targets/Target'+inttostr(i)+'/Dec',DEpToStr(t.de,2));
       if t.pa=NullCoord then
         FSequenceFile.Items.SetValue('/Targets/Target'+inttostr(i)+'/PA','-')
       else
