@@ -577,7 +577,7 @@ begin
      f_EditTargets.MenuImportObslist.Visible:=true;
    end;
    f_EditTargets.SetTargets(et);
-   FormPos(f_EditTargets,mouse.CursorPos.X,mouse.CursorPos.Y);
+   FormPos(f_EditTargets,Application.MainForm.Left,Application.MainForm.top);
    Result := (f_EditTargets.ShowModal=mrOK);
    if Result then begin
      f_EditTargets.GetTargets(et,fn,defaultname);
