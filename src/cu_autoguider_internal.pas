@@ -1041,6 +1041,10 @@ end;
 procedure T_autoguider_internal.InternalguiderStart(verbose: boolean=True);
 var i: PtrInt;
 begin
+  if InternalguiderGuiding then begin
+    if verbose then msg('Already guiding, do not restart now',9);
+    exit;
+  end;
   if InternalguiderRunning then InternalguiderStop;
   Finternalguider.cbSpectro.enabled:=false;
   if verbose then SetStatus('Start Guiding',GUIDER_BUSY);
