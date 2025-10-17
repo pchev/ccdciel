@@ -97,7 +97,7 @@ begin
   if found then begin
     Ra.Text:=ARpToStr(ra0*12/pi,2);{Add position}
     De.Text:=DEpToStr(dec0*180/pi,2);
-    if length(maglist)>0 then begin
+    if (cbMagBand.Text<>'') and (length(maglist)>0) then begin
       band:=cbMagBand.Text;
       cbMagBand.Clear;
       for i:=0 to length(maglist)-1 do begin

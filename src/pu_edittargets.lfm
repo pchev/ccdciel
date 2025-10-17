@@ -2083,6 +2083,10 @@ object f_EditTargets: Tf_EditTargets
         Caption = 'Search online'
         OnClick = MenuOnlineCoordClick
       end
+      object MenuOnlineCoordAll: TMenuItem
+        Caption = 'MenuOnlineCoordAll'
+        OnClick = MenuOnlineCoordAllClick
+      end
       object MenuImgCoord: TMenuItem
         Caption = 'Current image'
         OnClick = BtnImgCoordClick

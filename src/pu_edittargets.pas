@@ -79,6 +79,7 @@ type
     MenuInsertOnline: TMenuItem;
     MenuImportCSV: TMenuItem;
     MenuExportCSV: TMenuItem;
+    MenuOnlineCoordAll: TMenuItem;
     MenuPlanetariumCoordAll: TMenuItem;
     MenuPlanetariumMagn: TMenuItem;
     MenuPlanetariumMagnAll: TMenuItem;
@@ -279,6 +280,7 @@ type
     procedure MenuBlankRowClick(Sender: TObject);
     procedure MenuInsertOnlineClick(Sender: TObject);
     procedure MenuOnlineCoordClick(Sender: TObject);
+    procedure MenuOnlineCoordAllClick(Sender: TObject);
     procedure MenuOnlineMagnAllClick(Sender: TObject);
     procedure MenuOnlineMagnClick(Sender: TObject);
     procedure MenuPlanetariumMagnClick(Sender: TObject);
@@ -475,7 +477,7 @@ begin
   MenuInsertPlanetarium.Caption := rsFromPlanetar;
   MenuInsertOnline.Caption:=rsSearchOnline;
   BtnDeleteObject.Caption := rsRemoveRow;
-  BtnOptions.Caption:=rsOptions2;
+  BtnOptions.Caption:=rsModify;
   MenuNewScript.Caption := rsScript;
   MenuSwitch.Caption:=rsSwitch;
   BtnCancel.Caption := rsCancel;
@@ -574,6 +576,7 @@ begin
   MenuPlanetariumCoordAll.Caption:=rsPlanetariumF;
   MenuSearchCoord.Caption:=rsSearch;
   MenuOnlineCoord.Caption:=rsSearchOnline;
+  MenuOnlineCoordAll.Caption:=rsOnlineForAll;
   MenuRotator.Caption:=rsRotator;
   MenuImgCoord.Caption := rsCurrentImage;
   MenuImgRot.Caption := rsCurrentImage;
@@ -1213,6 +1216,33 @@ begin
   ShowPlan;
   Application.ProcessMessages;
   FCoordWarning:=false;
+end;
+
+
+procedure Tf_EditTargets.MenuOnlineCoordAllClick(Sender: TObject);
+var i : integer;
+begin
+  try
+  screen.Cursor:=crHourGlass;
+  for i:=1 to TargetList.RowCount-1 do begin
+    TargetList.Row:=i;
+    f_onlineinfo.Obj.Text:=TargetList.Cells[colname,i];
+    f_onlineinfo.cbMagBand.Text:='';
+    f_onlineinfo.Ra.Text:='';
+    f_onlineinfo.De.Text:='';
+    f_onlineinfo.magnitude:='';
+    f_onlineinfo.BtnSearchClick(nil);
+    if (f_onlineinfo.Ra.Text<>'')and(f_onlineinfo.De.Text<>'')  then begin
+      TargetList.Cells[colra,i]:=f_onlineinfo.Ra.Text;
+      TargetList.Cells[coldec,i]:=f_onlineinfo.De.Text;
+      TargetChange(nil);
+      ShowPlan;
+    end;
+    Application.ProcessMessages;
+  end;
+  finally
+    screen.Cursor:=crDefault;
+  end;
 end;
 
 procedure Tf_EditTargets.MenuOnlineMagnClick(Sender: TObject);
