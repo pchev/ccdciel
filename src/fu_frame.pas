@@ -58,6 +58,7 @@ type
     constructor Create(aOwner: TComponent); override;
     destructor  Destroy; override;
     procedure SetLang;
+    procedure SetTitleColor;
     procedure ClearRoi;
     procedure SetRoi(RoiName: string);
     property onSet: TNotifyEvent read FonSet write FonSet;
@@ -74,7 +75,6 @@ constructor Tf_frame.Create(aOwner: TComponent);
 begin
  inherited Create(aOwner);
  {$ifdef lclcocoa}
- Title.Color:=clWindowFrame;
  Panel1.ChildSizing.LeftRightSpacing:=8;
  Panel1.ChildSizing.VerticalSpacing:=4;
  {$endif}
@@ -86,6 +86,13 @@ destructor  Tf_frame.Destroy;
 begin
  ClearRoi;
  inherited Destroy;
+end;
+
+procedure Tf_frame.SetTitleColor;
+begin
+  Title.Color:=InterfaceColor[TitleColor,1];
+  Title.Font.Color:=InterfaceColor[TitleColor,2];
+  Title.Font.Style:=[fsBold];
 end;
 
 procedure Tf_frame.SetLang;

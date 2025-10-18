@@ -67,6 +67,7 @@ type
     constructor Create(aOwner: TComponent); override;
     destructor  Destroy; override;
     procedure SetLang;
+    procedure SetTitleColor;
     property AutoguiderType: TAutoguiderType read FAutoguiderType write SetAutoguiderType;
     property onConnect: TNotifyEvent read FonConnect write FonConnect;
     property onCalibrate: TNotifyEvent read FonCalibrate write FonCalibrate;
@@ -86,7 +87,6 @@ constructor Tf_autoguider.Create(aOwner: TComponent);
 begin
  inherited Create(aOwner);
  {$ifdef lclcocoa}
- Title.Color:=clWindowFrame;
  Panel1.ChildSizing.LeftRightSpacing:=8;
  Panel1.ChildSizing.VerticalSpacing:=4;
  Panel1.ChildSizing.TopBottomSpacing:=8;
@@ -99,6 +99,13 @@ end;
 destructor  Tf_autoguider.Destroy;
 begin
  inherited Destroy;
+end;
+
+procedure Tf_autoguider.SetTitleColor;
+begin
+  Title.Color:=InterfaceColor[TitleColor,1];
+  Title.Font.Color:=InterfaceColor[TitleColor,2];
+  Title.Font.Style:=[fsBold];
 end;
 
 procedure Tf_autoguider.SetLang;

@@ -73,6 +73,7 @@ type
     constructor Create(aOwner: TComponent); override;
     destructor  Destroy; override;
     procedure SetLang;
+    procedure SetTitleColor;
     procedure Connect;
     procedure Disconnect(confirm:boolean);
     property onSelectProfile: TNotifyEvent read FonSelectProfile write FonSelectProfile;
@@ -92,7 +93,6 @@ constructor Tf_devicesconnection.Create(aOwner: TComponent);
 begin
  inherited Create(aOwner);
  {$ifdef lclcocoa}
- Title.Color:=clWindowFrame;
  Panel1.ChildSizing.LeftRightSpacing:=8;
  Panel1.ChildSizing.VerticalSpacing:=4;
  {$endif}
@@ -105,6 +105,13 @@ end;
 destructor  Tf_devicesconnection.Destroy;
 begin
  inherited Destroy;
+end;
+
+procedure Tf_devicesconnection.SetTitleColor;
+begin
+  Title.Color:=InterfaceColor[TitleColor,1];
+  Title.Font.Color:=InterfaceColor[TitleColor,2];
+  Title.Font.Style:=[fsBold];
 end;
 
 procedure Tf_devicesconnection.SetLang;

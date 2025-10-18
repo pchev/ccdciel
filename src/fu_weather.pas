@@ -52,6 +52,7 @@ type
     constructor Create(aOwner: TComponent); override;
     destructor  Destroy; override;
     procedure SetLang;
+    procedure SetTitleColor;
     property Connected: boolean read FConnected write SetConnected;
     property Clear: boolean read FClear write SetClear;
     property onDetail: TNotifyEvent read FonDetail write FonDetail;
@@ -67,7 +68,6 @@ constructor Tf_weather.Create(aOwner: TComponent);
 begin
  inherited Create(aOwner);
  {$ifdef lclcocoa}
- Title.Color:=clWindowFrame;
  Panel1.ChildSizing.LeftRightSpacing:=8;
  Panel1.ChildSizing.VerticalSpacing:=4;
  {$endif}
@@ -83,6 +83,13 @@ end;
 destructor  Tf_weather.Destroy;
 begin
  inherited Destroy;
+end;
+
+procedure Tf_weather.SetTitleColor;
+begin
+  Title.Color:=InterfaceColor[TitleColor,1];
+  Title.Font.Color:=InterfaceColor[TitleColor,2];
+  Title.Font.Style:=[fsBold];
 end;
 
 procedure Tf_weather.SetLang;

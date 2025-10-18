@@ -1636,6 +1636,7 @@ resourcestring
   rsStartSpectro = 'Start spectroscope guiding';
   rsRefreshTheLi = 'Refresh the list';
   rsSyncTheRotat = 'Sync the rotator';
+  rsHighlightCol = 'Highlight color';
 
 implementation
 

@@ -56,6 +56,7 @@ type
     constructor Create(aOwner: TComponent); override;
     destructor  Destroy; override;
     procedure SetLang;
+    procedure SetTitleColor;
     procedure SetReverse(onoff:boolean);
     property onRotate: TNotifyEvent read FonRotate write FonRotate;
     property onReverse: TNotifyEvent read FonReverse write FonReverse;
@@ -72,7 +73,6 @@ constructor Tf_rotator.Create(aOwner: TComponent);
 begin
  inherited Create(aOwner);
  {$ifdef lclcocoa}
- Title.Color:=clWindowFrame;
  Panel1.ChildSizing.LeftRightSpacing:=8;
  Panel1.ChildSizing.VerticalSpacing:=4;
  {$endif}
@@ -85,6 +85,13 @@ end;
 destructor  Tf_rotator.Destroy;
 begin
  inherited Destroy;
+end;
+
+procedure Tf_rotator.SetTitleColor;
+begin
+  Title.Color:=InterfaceColor[TitleColor,1];
+  Title.Font.Color:=InterfaceColor[TitleColor,2];
+  Title.Font.Style:=[fsBold];
 end;
 
 procedure Tf_rotator.SetLang;

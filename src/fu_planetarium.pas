@@ -25,7 +25,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 interface
 
-uses  UScaleDPI,  u_translation, u_hints,
+uses  UScaleDPI,  u_translation, u_hints, u_global,
   Classes, SysUtils, FileUtil, Forms, Graphics, Controls, StdCtrls, ExtCtrls;
 
 type
@@ -50,6 +50,7 @@ type
     constructor Create(aOwner: TComponent); override;
     destructor  Destroy; override;
     procedure SetLang;
+    procedure SetTitleColor;
     property onConnect: TNotifyEvent read FonConnect write FonConnect;
   end;
 
@@ -63,7 +64,6 @@ constructor Tf_planetarium.Create(aOwner: TComponent);
 begin
  inherited Create(aOwner);
  {$ifdef lclcocoa}
- Title.Color:=clWindowFrame;
  Panel1.ChildSizing.LeftRightSpacing:=8;
  Panel1.ChildSizing.VerticalSpacing:=4;
  {$endif}
@@ -75,6 +75,13 @@ end;
 destructor  Tf_planetarium.Destroy;
 begin
  inherited Destroy;
+end;
+
+procedure Tf_planetarium.SetTitleColor;
+begin
+  Title.Color:=InterfaceColor[TitleColor,1];
+  Title.Font.Color:=InterfaceColor[TitleColor,2];
+  Title.Font.Style:=[fsBold];
 end;
 
 procedure Tf_planetarium.SetLang;

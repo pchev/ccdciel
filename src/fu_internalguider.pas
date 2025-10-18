@@ -432,6 +432,7 @@ type
     constructor Create(aOwner: TComponent); override;
     destructor  Destroy; override;
     procedure SetLang;
+    procedure SetTitleColor;
     procedure draw_xy(xy_trend :xy_guiderlist; dither_position :dither_positionarray);//draw XY points
     procedure draw_trend(xy_trend :xy_guiderlist);//draw trend
     procedure trend_message(message1,message2,message3 :string);//clear trend and place message
@@ -550,9 +551,6 @@ begin
  visu.panel1.Parent:=PanelVisu;
  visu.onRedraw:=@Redraw;
  visu.onZoom:=@ZoomImage;
- {$ifdef lclcocoa}
- Title.Color:=clWindowFrame;
- {$endif}
  {$ifndef mswindows}
  Panel2.Color:=clDefault;
  Panel3.Color:=clDefault;
@@ -608,6 +606,12 @@ begin
  inherited Destroy;
 end;
 
+procedure Tf_internalguider.SetTitleColor;
+begin
+  Title.Color:=InterfaceColor[TitleColor,1];
+  Title.Font.Color:=InterfaceColor[TitleColor,2];
+  Title.Font.Style:=[fsBold];
+end;
 
 procedure Tf_internalguider.SetLang;
 begin

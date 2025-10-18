@@ -122,6 +122,7 @@ type
     constructor Create(aOwner: TComponent); override;
     destructor  Destroy; override;
     procedure SetLang;
+    procedure SetTitleColor;
     procedure SetImageControls;
     procedure ShowExposure(value:double);
     procedure Stop;
@@ -141,7 +142,6 @@ constructor Tf_video.Create(aOwner: TComponent);
 begin
  inherited Create(aOwner);
  {$ifdef lclcocoa}
- Title.Color:=clWindowFrame;
  Panel1.ChildSizing.LeftRightSpacing:=8;
  Panel1.ChildSizing.VerticalSpacing:=4;
  {$endif}
@@ -157,6 +157,13 @@ end;
 destructor  Tf_video.Destroy;
 begin
  inherited Destroy;
+end;
+
+procedure Tf_video.SetTitleColor;
+begin
+  Title.Color:=InterfaceColor[TitleColor,1];
+  Title.Font.Color:=InterfaceColor[TitleColor,2];
+  Title.Font.Style:=[fsBold];
 end;
 
 procedure Tf_video.SetLang;

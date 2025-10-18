@@ -63,6 +63,7 @@ type
     constructor Create(aOwner: TComponent); override;
     destructor  Destroy; override;
     procedure SetLang;
+    procedure SetTitleColor;
     procedure SetSpectra(x,y,w,h: integer; f: TFits);
     procedure ShowSpectraProfile(f: TFits);
     property SpectraX: integer read FSpectraX;
@@ -82,7 +83,6 @@ constructor Tf_profile.Create(aOwner: TComponent);
 begin
  inherited Create(aOwner);
  {$ifdef lclcocoa}
- Title.Color:=clWindowFrame;
  Panel1.ChildSizing.LeftRightSpacing:=8;
  {$endif}
  ScaleDPI(Self);
@@ -94,6 +94,13 @@ end;
 destructor  Tf_profile.Destroy;
 begin
  inherited Destroy;
+end;
+
+procedure Tf_profile.SetTitleColor;
+begin
+  Title.Color:=InterfaceColor[TitleColor,1];
+  Title.Font.Color:=InterfaceColor[TitleColor,2];
+  Title.Font.Style:=[fsBold];
 end;
 
 procedure Tf_profile.SetLang;

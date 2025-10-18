@@ -75,6 +75,7 @@ type
     constructor Create(aOwner: TComponent); override;
     destructor  Destroy; override;
     procedure SetLang;
+    procedure SetTitleColor;
     property CurrentRA: double read FCurrentRA write SetCurrentRA;
     property CurrentDec: double read FCurrentDec write SetCurrentDec;
     property onPark  : TNotifyEvent read FonPark write FonPark;
@@ -93,7 +94,6 @@ constructor Tf_mount.Create(aOwner: TComponent);
 begin
  inherited Create(aOwner);
  {$ifdef lclcocoa}
- Title.Color:=clWindowFrame;
  Panel1.ChildSizing.LeftRightSpacing:=8;
  Panel1.ChildSizing.VerticalSpacing:=4;
  {$endif}
@@ -106,6 +106,13 @@ end;
 destructor  Tf_mount.Destroy;
 begin
  inherited Destroy;
+end;
+
+procedure Tf_mount.SetTitleColor;
+begin
+  Title.Color:=InterfaceColor[TitleColor,1];
+  Title.Font.Color:=InterfaceColor[TitleColor,2];
+  Title.Font.Style:=[fsBold];
 end;
 
 procedure Tf_mount.SetLang;

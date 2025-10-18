@@ -151,6 +151,7 @@ type
     LastFocusMsg: string;
     constructor Create(aOwner: TComponent); override;
     destructor  Destroy; override;
+    procedure SetTitleColor;
     procedure SetLang;
     procedure ShowProfile(f: TFits; x,y,s: integer; focal:double=-1; pxsize:double=-1);
     procedure ShowSharpness(f: TFits);
@@ -195,7 +196,6 @@ constructor Tf_starprofile.Create(aOwner: TComponent);
 begin
  inherited Create(aOwner);
  {$ifdef lclcocoa}
- Title.Color:=clWindowFrame;
  Panel1.ChildSizing.LeftRightSpacing:=8;
  Panel1.ChildSizing.VerticalSpacing:=4;
  BtnPinGraph.Flat:=true;
@@ -234,6 +234,13 @@ begin
  emptybmp.Free;
  LastFocusimage.Free;
  inherited Destroy;
+end;
+
+procedure Tf_starprofile.SetTitleColor;
+begin
+  Title.Color:=InterfaceColor[TitleColor,1];
+  Title.Font.Color:=InterfaceColor[TitleColor,2];
+  Title.Font.Style:=[fsBold];
 end;
 
 procedure Tf_starprofile.SetLang;

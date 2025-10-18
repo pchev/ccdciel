@@ -130,6 +130,7 @@ type
     constructor Create(aOwner: TComponent); override;
     destructor  Destroy; override;
     procedure SetLang;
+    procedure SetTitleColor;
     procedure DrawHistogram(f: TFits; SetLevel,ResetCursor: boolean);
     property Zoom: double read FZoom write SetZoom;
     property ImgMin: double read FimgMin write FimgMin;
@@ -155,7 +156,6 @@ constructor Tf_visu.Create(aOwner: TComponent);
 begin
  inherited Create(aOwner);
  {$ifdef lclcocoa}
- Title.Color:=clWindowFrame;
  BtnClipping.Flat:=true;
  BtnZoom05.Flat:=true;
  BtnBullsEye.Flat:=true;
@@ -188,6 +188,13 @@ end;
 destructor  Tf_visu.Destroy;
 begin
  inherited Destroy;
+end;
+
+procedure Tf_visu.SetTitleColor;
+begin
+  Title.Color:=InterfaceColor[TitleColor,1];
+  Title.Font.Color:=InterfaceColor[TitleColor,2];
+  Title.Font.Style:=[fsBold];
 end;
 
 procedure Tf_visu.SetLang;

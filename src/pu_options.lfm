@@ -108,11 +108,11 @@ object f_option: Tf_option
         ParentFont = False
         object Panel9: TPanel
           Left = 0
-          Height = 136
+          Height = 176
           Top = 0
           Width = 555
           Align = alTop
-          ClientHeight = 136
+          ClientHeight = 176
           ClientWidth = 555
           ParentFont = False
           TabOrder = 0
@@ -141,7 +141,7 @@ object f_option: Tf_option
           object TemperatureScale: TRadioGroup
             Left = 4
             Height = 64
-            Top = 64
+            Top = 96
             Width = 360
             AutoFill = True
             Caption = 'Temperature scale'
@@ -163,11 +163,36 @@ object f_option: Tf_option
             ParentFont = False
             TabOrder = 1
           end
+          object Label190: TLabel
+            Left = 8
+            Height = 18
+            Top = 64
+            Width = 92
+            Caption = 'Highlight color'
+            ParentColor = False
+          end
+          object cbHighlightColor: TComboBox
+            Left = 162
+            Height = 32
+            Top = 56
+            Width = 202
+            ItemHeight = 24
+            ItemIndex = 0
+            Items.Strings = (
+              'Default'
+              'Blue'
+              'Green'
+              'Red'
+            )
+            Style = csDropDownList
+            TabOrder = 2
+            Text = 'Default'
+          end
         end
         object Panel10: TPanel
           Left = 0
           Height = 56
-          Top = 136
+          Top = 176
           Width = 555
           Align = alTop
           ClientHeight = 56
@@ -195,11 +220,11 @@ object f_option: Tf_option
         end
         object Panel11: TPanel
           Left = 0
-          Height = 276
-          Top = 392
+          Height = 236
+          Top = 432
           Width = 555
           Align = alClient
-          ClientHeight = 276
+          ClientHeight = 236
           ClientWidth = 555
           ParentFont = False
           TabOrder = 2
@@ -252,7 +277,7 @@ object f_option: Tf_option
         object Panel25: TPanel
           Left = 0
           Height = 50
-          Top = 192
+          Top = 232
           Width = 555
           Align = alTop
           ClientHeight = 50
@@ -291,7 +316,7 @@ object f_option: Tf_option
         object Panel26: TPanel
           Left = 0
           Height = 50
-          Top = 242
+          Top = 282
           Width = 555
           Align = alTop
           ClientHeight = 50
@@ -337,7 +362,7 @@ object f_option: Tf_option
         object Panel27: TPanel
           Left = 0
           Height = 50
-          Top = 342
+          Top = 382
           Width = 555
           Align = alTop
           ClientHeight = 50
@@ -391,7 +416,7 @@ object f_option: Tf_option
         object Panel28: TPanel
           Left = 0
           Height = 50
-          Top = 292
+          Top = 332
           Width = 555
           Align = alTop
           ClientHeight = 50

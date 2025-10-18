@@ -179,6 +179,7 @@ function pseudomodal(f:Tform):TModalResult;
 function checkconnection(host,port: string):boolean;
 procedure spcolor(w: double; out red,green,blue:integer);
 function SimpleDeltaT(dt: Tdatetime): double;
+function capitalize(txt:string):string;
 
 implementation
 
@@ -4020,6 +4021,22 @@ begin
       Result := (-20 + 32 * u * u - 0.5788 * t);
     end;
   end;
+end;
+
+function capitalize(txt:string):string;
+var i: integer;
+    up: boolean;
+    c: string;
+begin
+result:='';
+up:=true;
+for i:=1 to length(txt) do begin
+  c:=copy(txt,i,1);
+  if up then c:=UpperCase(c)
+        else c:=LowerCase(c);
+  result:=result+c;
+  up:=(c=' ')or(c='-');
+end;
 end;
 
 end.

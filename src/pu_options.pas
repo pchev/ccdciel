@@ -36,6 +36,8 @@ type
   Tf_option = class(TForm)
     cbSlewSyncRotator: TCheckBox;
     cbAFmedianfilter: TCheckBox;
+    cbHighlightColor: TComboBox;
+    Label190: TLabel;
     PlateSolve3Cmd: TFileNameEdit;
     Label189: TLabel;
     Page6: TPage;
@@ -1057,6 +1059,11 @@ begin
   Button2.Caption := rsCancel;
   ButtonHelp.Caption:=rsHelp;
   PagePref.Caption:=format(rsPreferences,['']);
+  Label190.Caption:=rsHighlightCol;
+  cbHighlightColor.Items[0]:=rsDefault;
+  cbHighlightColor.Items[1]:=capitalize(rsBlue);
+  cbHighlightColor.Items[2]:=capitalize(rsGreen);
+  cbHighlightColor.Items[3]:=capitalize(rsRed);
   PageFile.Caption := rsFiles;
   Label1.Caption := rsCaptureFolde;
   SeqDirDefault.Caption := rsDefault;

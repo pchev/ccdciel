@@ -1561,6 +1561,8 @@ begin
   ObsPressure:=1013;
   ObsHumidity:=50;
   ObsTlr:=6.5;
+  InterfaceColor:=InterfaceColorDay;
+  TitleColor:=0;
   FStatArea:=false;
   meridianflipping:=false;
   TemperatureScale:=0;
@@ -3109,6 +3111,7 @@ begin
   if i>=128 then begin
     TBTabs.Images:=ImageListDay;
     MainMenu1.Images:=ImageListDay;
+    InterfaceColor:=InterfaceColorDay;
     colorGreen:=clGreen;
     colorBlue:=clBlue;
     colorRed:=clRed;
@@ -3123,6 +3126,7 @@ begin
   else begin
     TBTabs.Images:=ImageListNight;
     MainMenu1.Images:=ImageListNight;
+    InterfaceColor:=InterfaceColorNight;
     colorGreen:=clLime;
     colorBlue:=clAqua;
     colorRed:=clFuchsia;
@@ -3185,37 +3189,31 @@ begin
   end;
   if f_vcurve<>nil then f_vcurve.VcChartRef.LinePen.Color:=colorBlue;
 
-  {$ifdef lclcocoa}
-  if i<128 then begin
-   if f_devicesconnection<>nil then f_devicesconnection.Title.Color:=clBtnShadow;
-   if f_filterwheel<>nil then f_filterwheel.Title.Color:=clBtnShadow;
-   if f_ccdtemp<>nil then f_ccdtemp.Title.Color:=clBtnShadow;
-   if f_frame<>nil then f_frame.Title.Color:=clBtnShadow;
-   if f_preview<>nil then f_preview.Title.Color:=clBtnShadow;
-   if f_capture<>nil then f_capture.Title.Color:=clBtnShadow;
-   if f_video<>nil then f_video.Title.Color:=clBtnShadow;
-   if f_sequence<>nil then f_sequence.Title1.Color:=clBtnShadow;
-   if f_sequence<>nil then f_sequence.Title2.Color:=clBtnShadow;
-   if f_sequence<>nil then f_sequence.Title3.Color:=clBtnShadow;
-   if f_starprofile<>nil then f_starprofile.Title.Color:=clBtnShadow;
-   if f_profile<>nil then f_profile.Title.Color:=clBtnShadow;
-   if f_focuser<>nil then f_focuser.Title.Color:=clBtnShadow;
-   if f_magnifyer<>nil then f_magnifyer.Title.Color:=clBtnShadow;
-   if f_rotator<>nil then f_rotator.Title.Color:=clBtnShadow;
-   if f_mount<>nil then f_mount.Title.Color:=clBtnShadow;
-   if f_dome<>nil then f_dome.Title.Color:=clBtnShadow;
-   if f_weather<>nil then f_weather.Title.Color:=clBtnShadow;
-   if f_safety<>nil then f_safety.Title.Color:=clBtnShadow;
-   if f_cover<>nil then f_cover.Title.Color:=clBtnShadow;
-   if f_switch<>nil then f_switch.Title.Color:=clBtnShadow;
-   if f_internalguider<>nil then f_internalguider.Title.Color:=clBtnShadow;
-   if f_autoguider<>nil then f_autoguider.Title.Color:=clBtnShadow;
-   if f_planetarium<>nil then f_planetarium.Title.Color:=clBtnShadow;
-   if f_script<>nil then f_script.Title.Color:=clBtnShadow;
-   if f_visu<>nil then f_visu.Title.Color:=clBtnShadow;
-   if f_msg<>nil then f_msg.Title.Color:=clBtnShadow;
-  end;
- {$endif}
+  if f_devicesconnection<>nil then f_devicesconnection.SetTitleColor;
+  if f_filterwheel<>nil then f_filterwheel.SetTitleColor;
+  if f_ccdtemp<>nil then f_ccdtemp.SetTitleColor;
+  if f_frame<>nil then f_frame.SetTitleColor;
+  if f_preview<>nil then f_preview.SetTitleColor;
+  if f_capture<>nil then f_capture.SetTitleColor;
+  if f_video<>nil then f_video.SetTitleColor;
+  if f_sequence<>nil then f_sequence.SetTitleColor;
+  if f_starprofile<>nil then f_starprofile.SetTitleColor;
+  if f_profile<>nil then f_profile.SetTitleColor;
+  if f_focuser<>nil then f_focuser.SetTitleColor;
+  if f_magnifyer<>nil then f_magnifyer.SetTitleColor;
+  if f_rotator<>nil then f_rotator.SetTitleColor;
+  if f_mount<>nil then f_mount.SetTitleColor;
+  if f_dome<>nil then f_dome.SetTitleColor;
+  if f_weather<>nil then f_weather.SetTitleColor;
+  if f_safety<>nil then f_safety.SetTitleColor;
+  if f_cover<>nil then f_cover.SetTitleColor;
+  if f_switch<>nil then f_switch.SetTitleColor;
+  if f_internalguider<>nil then f_internalguider.SetTitleColor;
+  if f_autoguider<>nil then f_autoguider.SetTitleColor;
+  if f_planetarium<>nil then f_planetarium.SetTitleColor;
+  if f_script<>nil then f_script.SetTitleColor;
+  if f_visu<>nil then f_visu.SetTitleColor;
+  if f_finder<>nil then f_finder.SetTitleColor;
 end;
 
 procedure Tf_main.StartupTimerTimer(Sender: TObject);
@@ -5628,6 +5626,13 @@ begin
   end;
   SetGuiderCamera;
   SetFinderCamera;
+
+  i:=TitleColor;
+  TitleColor:=config.GetValue('/GUI/HighlightColor',0);
+  if TitleColor<>i then begin
+     SetTheme;
+  end;
+
 end;
 
 procedure Tf_main.SaveScreenConfig;
@@ -9563,6 +9568,7 @@ begin
    f_option.LogDir.Text:=config.GetValue('/Files/LogDir',LogDir);
    f_option.TCPIPport.Value:=config.GetValue('/Files/TCPIPConfigPort',3277);
    f_option.PythonCmd.Text:=config.GetValue('/Script/PythonCmd',PythonCmd);
+   f_option.cbHighlightColor.ItemIndex:=config.GetValue('/GUI/HighlightColor',TitleColor);
    f_option.FolderOptions.RowCount:=SubDirCount;
    for i:=0 to SubDirCount-1 do begin
      f_option.FolderOptions.Cells[2,i]:=SubDirName[ord(SubDirOpt[i])];
@@ -10085,6 +10091,7 @@ begin
      config.SetValue('/Files/LogDir',f_option.LogDir.Text);
      config.SetValue('/Files/TCPIPConfigPort',f_option.TCPIPport.Value);
      config.SetValue('/Script/PythonCmd',f_option.PythonCmd.Text);
+     config.SetValue('/GUI/HighlightColor',f_option.cbHighlightColor.ItemIndex);
      for i:=0 to SubDirCount-1 do begin
        for n:=0 to SubDirCount-1 do
          if SubDirName[n]=f_option.FolderOptions.Cells[2,i] then break;

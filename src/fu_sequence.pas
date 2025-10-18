@@ -161,6 +161,7 @@ type
     StepRepeatCount, StepTotalCount: integer;
     constructor Create(aOwner: TComponent); override;
     destructor  Destroy; override;
+    procedure SetTitleColor;
     procedure SetLang;
     procedure AutoguiderDisconnected;
     procedure AutoguiderIddle;
@@ -217,9 +218,6 @@ constructor Tf_sequence.Create(aOwner: TComponent);
 begin
  inherited Create(aOwner);
  {$ifdef lclcocoa}
- Title1.Color:=clWindowFrame;
- Title2.Color:=clWindowFrame;
- Title3.Color:=clWindowFrame;
  TargetGrid.FixedColor := clBackground;
  PlanGrid.FixedColor := clBackground;
  {$endif}
@@ -260,6 +258,19 @@ begin
  ClearTargetGrid;
  ClearPlanGrid;
  inherited Destroy;
+end;
+
+procedure Tf_sequence.SetTitleColor;
+begin
+  Title1.Color:=InterfaceColor[TitleColor,1];
+  Title1.Font.Color:=InterfaceColor[TitleColor,2];
+  Title1.Font.Style:=[fsBold];
+  Title2.Color:=InterfaceColor[TitleColor,1];
+  Title2.Font.Color:=InterfaceColor[TitleColor,2];
+  Title2.Font.Style:=[fsBold];
+  Title3.Color:=InterfaceColor[TitleColor,1];
+  Title3.Font.Color:=InterfaceColor[TitleColor,2];
+  Title3.Font.Style:=[fsBold];
 end;
 
 procedure Tf_sequence.SetLang;

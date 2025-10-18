@@ -25,7 +25,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 interface
 
-uses  UScaleDPI, u_translation,
+uses  UScaleDPI, u_translation,  u_global,
   Classes, SysUtils, FileUtil, Forms, Graphics, Controls, ExtCtrls, StdCtrls;
 
 type
@@ -46,6 +46,7 @@ type
     constructor Create(aOwner: TComponent); override;
     destructor  Destroy; override;
     procedure SetLang;
+    procedure SetTitleColor;
     property onSetFilter: TNotifyEvent read FonSetFilter write FonSetFilter;
   end;
 
@@ -59,7 +60,6 @@ constructor Tf_filterwheel.Create(aOwner: TComponent);
 begin
  inherited Create(aOwner);
  {$ifdef lclcocoa}
- Title.Color:=clWindowFrame;
  Panel1.ChildSizing.LeftRightSpacing:=8;
  Panel1.ChildSizing.VerticalSpacing:=4;
  {$endif}
@@ -70,6 +70,13 @@ end;
 destructor  Tf_filterwheel.Destroy;
 begin
  inherited Destroy;
+end;
+
+procedure Tf_filterwheel.SetTitleColor;
+begin
+  Title.Color:=InterfaceColor[TitleColor,1];
+  Title.Font.Color:=InterfaceColor[TitleColor,2];
+  Title.Font.Style:=[fsBold];
 end;
 
 procedure Tf_filterwheel.SetLang;

@@ -59,6 +59,7 @@ type
     constructor Create(aOwner: TComponent); override;
     destructor  Destroy; override;
     procedure SetLang;
+    procedure SetTitleColor;
     property Connected: boolean read FConnected write SetConnected;
     property Shutter: boolean read FShutter write SetShutter;
     property CanSlave: boolean read FCanSlave write SetCanSlave;
@@ -77,7 +78,6 @@ constructor Tf_dome.Create(aOwner: TComponent);
 begin
  inherited Create(aOwner);
  {$ifdef lclcocoa}
- Title.Color:=clWindowFrame;
  Panel1.ChildSizing.LeftRightSpacing:=8;
  Panel1.ChildSizing.VerticalSpacing:=4;
  {$endif}
@@ -96,6 +96,13 @@ end;
 destructor  Tf_dome.Destroy;
 begin
  inherited Destroy;
+end;
+
+procedure Tf_dome.SetTitleColor;
+begin
+  Title.Color:=InterfaceColor[TitleColor,1];
+  Title.Font.Color:=InterfaceColor[TitleColor,2];
+  Title.Font.Style:=[fsBold];
 end;
 
 procedure Tf_dome.SetLang;

@@ -111,6 +111,7 @@ type
     constructor Create(aOwner: TComponent); override;
     destructor  Destroy; override;
     procedure SetLang;
+    procedure SetTitleColor;
     procedure Stop;
     procedure setCustomFrameType;
     property Mount: T_mount read FMount write FMount;
@@ -144,7 +145,6 @@ constructor Tf_capture.Create(aOwner: TComponent);
 begin
  inherited Create(aOwner);
  {$ifdef lclcocoa}
- Title.Color:=clWindowFrame;
  Panel1.ChildSizing.LeftRightSpacing:=8;
  Panel1.ChildSizing.VerticalSpacing:=4;
  {$endif}
@@ -160,6 +160,13 @@ end;
 destructor  Tf_capture.Destroy;
 begin
  inherited Destroy;
+end;
+
+procedure Tf_capture.SetTitleColor;
+begin
+  Title.Color:=InterfaceColor[TitleColor,1];
+  Title.Font.Color:=InterfaceColor[TitleColor,2];
+  Title.Font.Style:=[fsBold];
 end;
 
 procedure Tf_capture.SetLang;

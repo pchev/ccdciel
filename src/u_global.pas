@@ -248,6 +248,14 @@ const
   blank80='                                                                                ';
   clOrange=$1080EF;
   clDarkBlue=$300D0E;
+  {$ifdef lclcocoa}
+  DefaultColor=clWindowFrame;
+  {$else}
+  DefaultColor=clBtnShadow;
+  {$endif}
+                                                   // system default         blue             green            red
+  InterfaceColorDay: array [0..3,1..2] of Tcolor=((DefaultColor,clBtnText),($ffc0c0,clBlack),($c0ffc0,clBlack),($c0c0ff,clBlack));
+  InterfaceColorNight: array [0..3,1..2] of Tcolor=((DefaultColor,clBtnText),($603030,clWhite),($306030,clWhite),($303060,clWhite));
   CR = #$0d;
   LF = #$0a;
   CRLF = CR + LF;
@@ -429,6 +437,8 @@ var
   LogLevel: integer;
   PythonCmd: string;
   config,screenconfig,credentialconfig,emailconfig,bpmconfig,globalconfig: TCCDConfig;
+  TitleColor: integer;
+  InterfaceColor: array [0..3,1..2] of Tcolor;
   profile: string;
   ProfileFromCommandLine: boolean;
   lang: string;

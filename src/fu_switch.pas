@@ -46,6 +46,7 @@ type
     constructor Create(aOwner: TComponent); override;
     destructor  Destroy; override;
     procedure SetLang;
+    procedure SetTitleColor;
     procedure Clear;
     procedure AddSwitch(sw:T_switch);
     procedure SetConnected(n: integer; s:boolean);
@@ -64,9 +65,6 @@ constructor Tf_switch.Create(aOwner: TComponent);
 var i: integer;
 begin
  inherited Create(aOwner);
- {$ifdef lclcocoa}
- Title.Color:=clWindowFrame;
- {$endif}
  for i:=0 to MaxSwitches do begin
    FConnected[i]:=false;
    SwitchPage[i]:=-1;
@@ -79,6 +77,13 @@ destructor  Tf_switch.Destroy;
 begin
  Clear;
  inherited Destroy;
+end;
+
+procedure Tf_switch.SetTitleColor;
+begin
+  Title.Color:=InterfaceColor[TitleColor,1];
+  Title.Font.Color:=InterfaceColor[TitleColor,2];
+  Title.Font.Style:=[fsBold];
 end;
 
 procedure Tf_switch.Clear;

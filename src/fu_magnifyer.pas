@@ -25,7 +25,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 interface
 
-uses  UScaleDPI, u_translation,
+uses  UScaleDPI, u_translation, u_global,
   Classes, SysUtils, FileUtil, Forms, Graphics, Controls, ExtCtrls, StdCtrls;
 
 type
@@ -43,6 +43,7 @@ type
     constructor Create(aOwner: TComponent); override;
     destructor  Destroy; override;
     procedure SetLang;
+    procedure SetTitleColor;
   end;
 
 implementation
@@ -55,7 +56,6 @@ constructor Tf_magnifyer.Create(aOwner: TComponent);
 begin
  inherited Create(aOwner);
  {$ifdef lclcocoa}
- Title.Color:=clWindowFrame;
  Panel1.ChildSizing.LeftRightSpacing:=8;
  {$endif}
  Image1.Picture.Bitmap.Height:=Image1.Height;
@@ -72,6 +72,13 @@ end;
 procedure Tf_magnifyer.SetLang;
 begin
   Title.Caption:=rsMagnifyer;
+end;
+
+procedure Tf_magnifyer.SetTitleColor;
+begin
+  Title.Color:=InterfaceColor[TitleColor,1];
+  Title.Font.Color:=InterfaceColor[TitleColor,2];
+  Title.Font.Style:=[fsBold];
 end;
 
 end.
