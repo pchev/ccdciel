@@ -1078,6 +1078,7 @@ type
     procedure ImageStat(x1,y1,x2,y2: integer);
     procedure NewStat(Sender: TObject);
     procedure CloseStat(Sender: TObject; var CloseAction: TCloseAction);
+    procedure ScriptChange(Sender: TObject);
 
   public
     { public declarations }
@@ -2069,6 +2070,7 @@ begin
 
   f_script:=Tf_script.Create(self);
   f_script.onMsg:=@NewMessage;
+  f_script.onScriptChange:=@ScriptChange;
   f_script.Preview:=f_preview;
   f_script.Capture:=f_capture;
   f_script.Autoguider:=autoguider;
@@ -11905,6 +11907,9 @@ begin
           f_capture.Stop;
           NewMessage(rsStopCapture+', '+Format(rsCaptureSFini, [inttostr(f_capture.SeqCount-1)+'/'+f_capture.SeqNum.Text]), 2);
           StatusBar1.Panels[panelstatus].Text := Format(rsCaptureSFini, [inttostr(f_capture.SeqCount-1)+'/'+f_capture.SeqNum.Text]);
+          if (not f_sequence.Running) and (f_capture.EndScript>'') and (FileExists(slash(ConfigDir)+f_capture.EndScript)) then begin
+            RunScript(f_capture.EndScript,ConfigDir,'');
+          end;
           MenuCaptureStart.Caption:=f_capture.BtnStart.Caption
        end;
      end
@@ -19742,6 +19747,18 @@ begin
   finally
     f_downloadscript.Free;
   end;
+end;
+
+procedure Tf_main.ScriptChange(Sender: TObject);
+var buf: string;
+    i: integer;
+begin
+  // script list modified in fu_script
+  buf:=f_capture.EndScript;
+  f_capture.cbEndScript.Items.Assign(f_script.ScriptList);
+  f_capture.cbEndScript.Items.Insert(0,'');
+  i:=f_capture.cbEndScript.Items.IndexOf(buf);
+  if i>=0 then f_capture.cbEndScript.ItemIndex:=i;
 end;
 
 procedure Tf_main.SetMultipanel(onoff: boolean);

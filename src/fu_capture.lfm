@@ -7,8 +7,6 @@ object f_capture: Tf_capture
   ChildSizing.ControlsPerLine = 1
   ClientHeight = 524
   ClientWidth = 218
-  OnEndDrag = FrameEndDrag
-  OnResize = FrameResize
   ParentFont = False
   TabOrder = 0
   object Panel1: TPanel
@@ -18,22 +16,22 @@ object f_capture: Tf_capture
     Width = 218
     Align = alClient
     AutoSize = True
-    ChildSizing.VerticalSpacing = 4
-    ChildSizing.Layout = cclTopToBottomThenLeftToRight
-    ChildSizing.ControlsPerLine = 99
     ClientHeight = 504
     ClientWidth = 218
+    ParentColor = False
     ParentFont = False
     TabOrder = 0
     object Panel2: TPanel
-      Left = 0
+      Left = 1
       Height = 29
-      Top = 0
-      Width = 251
+      Top = 5
+      Width = 216
+      Align = alTop
+      BorderSpacing.Top = 4
       BevelOuter = bvNone
       Caption = ' '
       ClientHeight = 29
-      ClientWidth = 251
+      ClientWidth = 216
       ParentFont = False
       TabOrder = 0
       object ExpTime: TComboBox
@@ -77,14 +75,16 @@ object f_capture: Tf_capture
       end
     end
     object PanelStack: TPanel
-      Left = 0
+      Left = 1
       Height = 29
-      Top = 33
-      Width = 251
+      Top = 272
+      Width = 216
+      Align = alTop
+      BorderSpacing.Top = 4
       BevelOuter = bvNone
       Caption = ' '
       ClientHeight = 29
-      ClientWidth = 251
+      ClientWidth = 216
       ParentFont = False
       TabOrder = 10
       object Label7: TLabel
@@ -115,13 +115,15 @@ object f_capture: Tf_capture
       end
     end
     object PanelGain: TPanel
-      Left = 0
+      Left = 1
       Height = 68
-      Top = 66
-      Width = 251
+      Top = 38
+      Width = 216
+      Align = alTop
+      BorderSpacing.Top = 4
       BevelOuter = bvNone
       ClientHeight = 68
-      ClientWidth = 251
+      ClientWidth = 216
       ParentFont = False
       TabOrder = 8
       Visible = False
@@ -196,14 +198,16 @@ object f_capture: Tf_capture
       end
     end
     object Panel3: TPanel
-      Left = 0
+      Left = 1
       Height = 29
-      Top = 138
-      Width = 251
+      Top = 110
+      Width = 216
+      Align = alTop
+      BorderSpacing.Top = 4
       BevelOuter = bvNone
       Caption = ' '
       ClientHeight = 29
-      ClientWidth = 251
+      ClientWidth = 216
       ParentFont = False
       TabOrder = 1
       object Binning: TComboBox
@@ -235,13 +239,15 @@ object f_capture: Tf_capture
       end
     end
     object PanelFnumber: TPanel
-      Left = 0
+      Left = 1
       Height = 28
-      Top = 171
-      Width = 251
+      Top = 240
+      Width = 216
+      Align = alTop
+      BorderSpacing.Top = 4
       BevelOuter = bvNone
       ClientHeight = 28
-      ClientWidth = 251
+      ClientWidth = 216
       ParentFont = False
       TabOrder = 9
       Visible = False
@@ -268,13 +274,15 @@ object f_capture: Tf_capture
       end
     end
     object Panel4: TPanel
-      Left = 0
+      Left = 1
       Height = 28
-      Top = 203
-      Width = 251
+      Top = 143
+      Width = 216
+      Align = alTop
+      BorderSpacing.Top = 4
       BevelOuter = bvNone
       ClientHeight = 28
-      ClientWidth = 251
+      ClientWidth = 216
       ParentFont = False
       TabOrder = 2
       object Fname: TEdit
@@ -299,14 +307,16 @@ object f_capture: Tf_capture
       end
     end
     object Panel5: TPanel
-      Left = 0
+      Left = 1
       Height = 28
-      Top = 235
-      Width = 251
+      Top = 175
+      Width = 216
+      Align = alTop
+      BorderSpacing.Top = 4
       BevelOuter = bvNone
       Caption = ' '
       ClientHeight = 28
-      ClientWidth = 251
+      ClientWidth = 216
       ParentFont = False
       TabOrder = 3
       object Label4: TLabel
@@ -336,13 +346,15 @@ object f_capture: Tf_capture
       end
     end
     object Panel6: TPanel
-      Left = 0
+      Left = 1
       Height = 29
-      Top = 267
-      Width = 251
+      Top = 207
+      Width = 216
+      Align = alTop
+      BorderSpacing.Top = 4
       BevelOuter = bvNone
       ClientHeight = 29
-      ClientWidth = 251
+      ClientWidth = 216
       ParentFont = False
       TabOrder = 4
       object Label5: TLabel
@@ -378,13 +390,15 @@ object f_capture: Tf_capture
       end
     end
     object Panel7: TPanel
-      Left = 0
+      Left = 1
       Height = 28
-      Top = 300
-      Width = 251
+      Top = 305
+      Width = 216
+      Align = alTop
+      BorderSpacing.Top = 4
       BevelOuter = bvNone
       ClientHeight = 28
-      ClientWidth = 251
+      ClientWidth = 216
       ParentFont = False
       TabOrder = 5
       object CheckBoxDither: TCheckBox
@@ -415,13 +429,16 @@ object f_capture: Tf_capture
       end
     end
     object Panel8: TPanel
-      Left = 0
-      Height = 84
-      Top = 332
-      Width = 251
+      Left = 1
+      Height = 88
+      Top = 337
+      Width = 216
+      Align = alTop
+      BorderSpacing.Top = 4
       BevelOuter = bvNone
-      ClientHeight = 84
-      ClientWidth = 251
+      ClientHeight = 88
+      ClientWidth = 216
+      ParentColor = False
       ParentFont = False
       TabOrder = 6
       object CheckBoxFocus: TCheckBox
@@ -469,14 +486,61 @@ object f_capture: Tf_capture
         TabOrder = 3
       end
     end
+    object Panel10: TPanel
+      Left = 1
+      Height = 32
+      Top = 425
+      Width = 216
+      Align = alTop
+      BevelOuter = bvNone
+      ClientHeight = 32
+      ClientWidth = 216
+      TabOrder = 11
+      object cbEndScript: TComboBox
+        Left = 49
+        Height = 32
+        Top = 0
+        Width = 167
+        Align = alClient
+        BorderSpacing.Left = 8
+        ItemHeight = 18
+        Style = csDropDownList
+        TabOrder = 0
+      end
+      object Panel11: TPanel
+        Left = 0
+        Height = 32
+        Top = 0
+        Width = 41
+        Align = alLeft
+        AutoSize = True
+        BevelOuter = bvNone
+        ClientHeight = 32
+        ClientWidth = 41
+        TabOrder = 1
+        object Label8: TLabel
+          AnchorSideTop.Control = Panel11
+          AnchorSideTop.Side = asrCenter
+          Left = 0
+          Height = 18
+          Top = 7
+          Width = 41
+          Caption = 'Label8'
+          ParentColor = False
+          WordWrap = True
+        end
+      end
+    end
     object Panel9: TPanel
-      Left = 0
+      Left = 1
       Height = 26
-      Top = 420
-      Width = 251
+      Top = 461
+      Width = 216
+      Align = alTop
+      BorderSpacing.Top = 4
       BevelOuter = bvNone
       ClientHeight = 26
-      ClientWidth = 251
+      ClientWidth = 216
       ParentFont = False
       TabOrder = 7
       object BtnStart: TButton

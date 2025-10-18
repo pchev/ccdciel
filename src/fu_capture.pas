@@ -40,6 +40,10 @@ type
     CheckBoxFocusTemp: TCheckBox;
     CheckBoxDither: TCheckBox;
     CheckBoxFocus: TCheckBox;
+    cbEndScript: TComboBox;
+    Label8: TLabel;
+    Panel11: TPanel;
+    Panel10: TPanel;
     StackNum: TSpinEditEx;
     Fnumber: TComboBox;
     ISObox: TComboBox;
@@ -78,8 +82,6 @@ type
     procedure BtnStartClick(Sender: TObject);
     procedure ExpTimeChange(Sender: TObject);
     procedure ExpTimeKeyPress(Sender: TObject; var Key: char);
-    procedure FrameEndDrag(Sender, Target: TObject; X, Y: Integer);
-    procedure FrameResize(Sender: TObject);
     procedure CheckLight(Sender: TObject);
   private
     { private declarations }
@@ -106,6 +108,7 @@ type
     function GetFrameType:integer;
     procedure SetFrameType(value:integer);
     function GetFrameTypeText:string;
+    function GetEndScript:string;
   public
     { public declarations }
     constructor Create(aOwner: TComponent); override;
@@ -133,6 +136,7 @@ type
     property onFrameTypeChange: TNotifyEvent read FonFrameTypeChange write FonFrameTypeChange;
     property onResetHFM: TNotifyEvent read FonResetHFM write FonResetHFM;
     property ResetHFM: boolean read FResetHFM write FResetHFM;
+    property EndScript: string read GetEndScript;
 end;
 
 implementation
@@ -185,6 +189,7 @@ begin
   CheckBoxFocus.Caption:=rsFocusEvery;
   CheckBoxFocusTemp.Caption:=rsAutofocusAft2;
   CheckBoxFocusHFD.Caption:=rsAutofocusHFD2;
+  Label8.Caption:='Termination script';
   BtnStart.Caption:=rsStart;
   ExpTime.Hint:=rsExposureTime;
   Binning.Hint:=rsCameraBinnin;
@@ -340,32 +345,6 @@ begin
   OffsetEdit.Value:=value;
 end;
 
-procedure Tf_capture.FrameEndDrag(Sender, Target: TObject; X, Y: Integer);
-begin
-  if Target is TPanel then begin
-     if TPanel(Target).Width>TPanel(Target).Height then begin
-        Panel1.ChildSizing.ControlsPerLine:=2;
-        Panel1.ChildSizing.Layout:=cclLeftToRightThenTopToBottom;
-     end else begin
-         Panel1.ChildSizing.ControlsPerLine:=99;
-         Panel1.ChildSizing.Layout:=cclTopToBottomThenLeftToRight;
-     end;
-  end;
-end;
-
-procedure Tf_capture.FrameResize(Sender: TObject);
-begin
-  if Parent is TPanel then begin
-     if TPanel(Parent).Width>TPanel(Parent).Height then begin
-        Panel1.ChildSizing.ControlsPerLine:=2;
-        Panel1.ChildSizing.Layout:=cclLeftToRightThenTopToBottom;
-     end else begin
-         Panel1.ChildSizing.ControlsPerLine:=99;
-         Panel1.ChildSizing.Layout:=cclTopToBottomThenLeftToRight;
-     end;
-  end;
-end;
-
 procedure Tf_capture.CheckLight(Sender: TObject);
 begin
   if cbFrameType.ItemIndex<>0 then begin
@@ -426,6 +405,11 @@ end;
 function Tf_capture.GetFrameTypeText:string;
 begin
   result:=cbFrameType.Text;
+end;
+
+function Tf_capture.GetEndScript:string;
+begin
+  result:=cbEndScript.text;
 end;
 
 end.

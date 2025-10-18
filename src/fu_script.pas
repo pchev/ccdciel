@@ -65,6 +65,7 @@ type
     Fautoguider: T_autoguider;
     Fastrometry: TAstrometry;
     FonMsg: TNotifyMsg;
+    FonScriptChange: TNotifyEvent;
     procedure msg(txt:string);
     function GetScriptList: TStrings;
     procedure AddMRU(txt:string);
@@ -92,6 +93,7 @@ type
     property Autoguider: T_autoguider read Fautoguider write Fautoguider;
     property Astrometry: TAstrometry read Fastrometry write Fastrometry;
     property onMsg: TNotifyMsg read FonMsg write FonMsg;
+    property onScriptChange: TNotifyEvent read FonScriptChange write FonScriptChange;
     property ScriptList: TStrings read GetScriptList;
     property ScriptName: string read GetScriptName write SetScriptName;
   end;
@@ -482,6 +484,7 @@ begin
     ComboBoxScriptChange(ComboBoxScript);
   end;
   s.Free;
+  if assigned(FonScriptChange) then FonScriptChange(self);
 end;
 
 procedure Tf_script.SetScriptList(sl:string);
