@@ -29,7 +29,7 @@ uses u_global, Graphics, UScaleDPI, u_hints, u_translation, cu_mount, u_utils, m
   Classes, SysUtils, FileUtil, Forms, Controls, ExtCtrls, StdCtrls, SpinEx;
 
 type
-  TCaptureRunType = (CAPTURE, SEQUENCE);
+  TCaptureRunType = (CAPTURE, SEQUENCE, NONE);
 
   { Tf_capture }
 
@@ -89,6 +89,7 @@ type
   private
     { private declarations }
     FMount: T_mount;
+    FstartedBy: TCaptureRunType;
     FExposureTime,FCameraExposureRemain: double;
     FSeqCount, FStackCount: integer;
     FDitherNum: integer;
@@ -103,6 +104,7 @@ type
     FonResetStack: TNotifyEvent;
     FonFrameTypeChange: TNotifyEvent;
     FonResetHFM: TNotifyEvent;
+    FRunScript: TRunScript;
     procedure SetExposureTime(val: double);
     function GetGain:integer;
     procedure SetGain(value:integer);
@@ -142,6 +144,7 @@ type
     property onResetHFM: TNotifyEvent read FonResetHFM write FonResetHFM;
     property ResetHFM: boolean read FResetHFM write FResetHFM;
     property EndScript: string read GetEndScript;
+    property onRunScript: TRunScript read FRunScript write FRunScript;
 end;
 
 implementation
@@ -163,6 +166,7 @@ begin
  FResetHFM:=true;
  FExposureTime:=-1;
  FCameraExposureRemain:=0;
+ FstartedBy:=NONE;
  SetLang;
  led.Canvas.AntialiasingMode:=amOn;
  LabelTime.Caption:='';
@@ -214,17 +218,16 @@ end;
 
 procedure Tf_capture.BtnStartClick(Sender: TObject);
 var
-  startedBy: TCaptureRunType;
   needobjname: boolean;
   i: integer;
 begin
   Frunning:=not Frunning;
-  if (Sender=nil) then startedBy:=SEQUENCE else startedBy:=CAPTURE;
+  if (Sender=nil) then FstartedBy:=SEQUENCE else FstartedBy:=CAPTURE;
   if Frunning then begin
     if assigned(FonStopPreview) then FonStopPreview(self);
     Frunning:=true;
     CancelAutofocus:=false;
-    if startedBy=CAPTURE then FSeqCount:=1; // otherwise set by plan
+    if FstartedBy=CAPTURE then FSeqCount:=1; // otherwise set by plan
     FDitherNum:=0;
     FFocusNum:=0;
 
@@ -236,17 +239,17 @@ begin
     // can trigger an autofocus via the plan or manually, which will reset the
     // HFM. If started by the capture button then always reset values as the
     // user could have done any number of manual events that require a reset.
-    if (startedBy=SEQUENCE) and FResetHFM then begin
+    if (FstartedBy=SEQUENCE) and FResetHFM then begin
       if Assigned(FonResetHFM) then FonResetHFM(self);
 
       // don't reset again for a sequence unless triggered by an autofocus
       FResetHFM:=false;
     end
-    else if (startedBy=CAPTURE) then begin
+    else if (FstartedBy=CAPTURE) then begin
       if Assigned(FonResetHFM) then FonResetHFM(self);
     end;
 
-    if (startedBy=CAPTURE) and (trim(Fname.Text)='') then begin
+    if (FstartedBy=CAPTURE) and (trim(Fname.Text)='') then begin
       // check if object name is required for image file name
       needobjname:=false;
       for i:=0 to FileNameCount-1 do
@@ -375,6 +378,12 @@ end;
 procedure Tf_capture.Stop;
 begin
   Frunning:=false;
+  if (FstartedBy=CAPTURE)and(led.Brush.Color<>clGray)and(cbEndScript.text>'')and(FileExists(slash(ConfigDir)+cbEndScript.text))and assigned(FRunScript) then begin
+    if ExpectedStop then
+      FRunScript(cbEndScript.text,ConfigDir,'0')
+    else
+      FRunScript(cbEndScript.text,ConfigDir,'1');
+  end;
   EarlyNextExposure:=false;
   CameraProcessingImage:=false;
   led.Brush.Color:=clGray;
@@ -387,6 +396,7 @@ begin
         ExecProcess(DomeFlatSetLightOFF,nil,false);
      end;
   end;
+
 end;
 
 procedure Tf_capture.setCustomFrameType;

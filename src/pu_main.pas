@@ -1897,6 +1897,7 @@ begin
   f_capture.onStopPreview:=@StopPreviewEvent;
   f_capture.onMsg:=@NewMessage;
   f_capture.onResetHFM:=@HFM_ResetMeasurements;
+  f_capture.onRunScript:=@RunScript;
 
   f_video:=Tf_video.Create(self);
   f_video.onMsg:=@NewMessage;
@@ -11907,12 +11908,10 @@ begin
        end else begin
           // end capture
           RunningCapture:=false;
+          ExpectedStop:=true;
           f_capture.Stop;
           NewMessage(rsStopCapture+', '+Format(rsCaptureSFini, [inttostr(f_capture.SeqCount-1)+'/'+f_capture.SeqNum.Text]), 2);
           StatusBar1.Panels[panelstatus].Text := Format(rsCaptureSFini, [inttostr(f_capture.SeqCount-1)+'/'+f_capture.SeqNum.Text]);
-          if (not f_sequence.Running) and (f_capture.EndScript>'') and (FileExists(slash(ConfigDir)+f_capture.EndScript)) then begin
-            RunScript(f_capture.EndScript,ConfigDir,'');
-          end;
           MenuCaptureStart.Caption:=f_capture.BtnStart.Caption
        end;
      end
