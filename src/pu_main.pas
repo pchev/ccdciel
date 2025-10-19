@@ -11743,8 +11743,11 @@ begin
   if n>=10 then txt:=FormatFloat(f0, n)
            else txt:=FormatFloat(f1, n);
   if RunningCapture then begin
-    if f_capture.Running then
+    if f_capture.Running then begin
+      f_capture.StackCount:=camera.StackCount;
+      f_capture.CameraExposureRemain:=CameraExposureRemain;
       StatusBar1.Panels[panelstatus].Text := rsCapture+blank+inttostr(f_capture.SeqCount)+'/'+f_capture.SeqNum.Text+blank+rsExp+blank+txt+blank+rsSec;
+    end;
   end
   else begin
      StatusBar1.Panels[panelstatus].Text := rsExp+blank+txt+blank+rsSec;

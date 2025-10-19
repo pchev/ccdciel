@@ -555,12 +555,30 @@ object f_capture: Tf_capture
         TabOrder = 0
       end
       object led: TShape
-        Left = 164
+        AnchorSideLeft.Control = BtnStart
+        AnchorSideLeft.Side = asrBottom
+        AnchorSideTop.Control = BtnStart
+        AnchorSideTop.Side = asrCenter
+        Left = 137
         Height = 15
-        Top = 6
+        Top = 7
         Width = 14
+        BorderSpacing.Left = 12
         Brush.Color = clGray
         Shape = stCircle
+      end
+      object LabelTime: TLabel
+        AnchorSideLeft.Control = led
+        AnchorSideLeft.Side = asrBottom
+        AnchorSideTop.Control = BtnStart
+        AnchorSideTop.Side = asrCenter
+        Left = 163
+        Height = 18
+        Top = 5
+        Width = 63
+        BorderSpacing.Left = 12
+        Caption = 'LabelTime'
+        ParentColor = False
       end
     end
   end
@@ -580,5 +598,11 @@ object f_capture: Tf_capture
     ParentColor = False
     ParentFont = False
     Transparent = False
+  end
+  object TimerExp: TTimer
+    Enabled = False
+    OnTimer = TimerExpTimer
+    Left = 96
+    Top = 472
   end
 end

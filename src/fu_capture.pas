@@ -42,6 +42,7 @@ type
     CheckBoxFocus: TCheckBox;
     cbEndScript: TComboBox;
     Label8: TLabel;
+    LabelTime: TLabel;
     Panel11: TPanel;
     Panel10: TPanel;
     StackNum: TSpinEditEx;
@@ -78,16 +79,18 @@ type
     SeqNum: TSpinEditEx;
     DitherCount: TSpinEditEx;
     FocusCount: TSpinEditEx;
+    TimerExp: TTimer;
     Title: TLabel;
     procedure BtnStartClick(Sender: TObject);
     procedure ExpTimeChange(Sender: TObject);
     procedure ExpTimeKeyPress(Sender: TObject; var Key: char);
     procedure CheckLight(Sender: TObject);
+    procedure TimerExpTimer(Sender: TObject);
   private
     { private declarations }
     FMount: T_mount;
-    FExposureTime: double;
-    FSeqCount: integer;
+    FExposureTime,FCameraExposureRemain: double;
+    FSeqCount, FStackCount: integer;
     FDitherNum: integer;
     FFocusNum: integer;
     FFocusNow: boolean;
@@ -120,7 +123,9 @@ type
     property Mount: T_mount read FMount write FMount;
     property Running: boolean read Frunning write Frunning;
     property SeqCount: Integer read FSeqCount write FSeqCount;
+    property StackCount: Integer read FStackCount write FStackCount;
     property ExposureTime: double read FExposureTime write SetExposureTime;
+    property CameraExposureRemain: double read FCameraExposureRemain write FCameraExposureRemain;
     property Gain: integer read GetGain write SetGain;
     property Offset: integer read GetOffset write SetOffset;
     property FrameType: integer read GetFrameType write SetFrameType;
@@ -157,8 +162,10 @@ begin
  FFocusNow:=false;
  FResetHFM:=true;
  FExposureTime:=-1;
+ FCameraExposureRemain:=0;
  SetLang;
  led.Canvas.AntialiasingMode:=amOn;
+ LabelTime.Caption:='';
 end;
 
 destructor  Tf_capture.Destroy;
@@ -288,10 +295,14 @@ begin
   if Frunning then begin
     led.Brush.Color:=clLime;
     BtnStart.Caption:=rsStop;
+    FCameraExposureRemain:=0;
+    TimerExp.Enabled:=true;
   end else begin
     EarlyNextExposure:=false;
     led.Brush.Color:=clGray;
     BtnStart.Caption:=rsStart;
+    TimerExp.Enabled:=false;
+    LabelTime.Caption:='';
     if Assigned(FonMsg) then FonMsg(rsStopCapture,2);
   end;
 end;
@@ -368,6 +379,8 @@ begin
   CameraProcessingImage:=false;
   led.Brush.Color:=clGray;
   BtnStart.Caption:=rsStart;
+  TimerExp.Enabled:=false;
+  LabelTime.Caption:='';
   if (TFrameType(cbFrameType.ItemIndex)=FLAT)and(FlatType=ftDome) then begin
      if DomeFlatSetLight and AdjustFlatLight and (DomeFlatSetLightOFF<>'') then begin
         AdjustFlatLight:=false;
@@ -410,6 +423,24 @@ end;
 function Tf_capture.GetEndScript:string;
 begin
   result:=cbEndScript.text;
+end;
+
+procedure Tf_capture.TimerExpTimer(Sender: TObject);
+var t: double;
+begin
+  if FCameraExposureRemain>0 then begin
+    if PanelStack.Visible and (StackNum.Value>1) then begin
+      FStackCount:=FStackCount mod StackNum.Value;
+      if FStackCount=0 then begin
+        t:=(SeqNum.Value-FSeqCount+1)*FExposureTime*StackNum.Value;
+        LabelTime.Caption:=TimToStr(t/3600);
+      end;
+    end
+    else begin
+      t:=FCameraExposureRemain+(SeqNum.Value-FSeqCount)*FExposureTime;
+      LabelTime.Caption:=TimToStr(t/3600);
+    end;
+  end;
 end;
 
 end.
