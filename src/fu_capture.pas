@@ -378,7 +378,7 @@ end;
 procedure Tf_capture.Stop;
 begin
   Frunning:=false;
-  if (FstartedBy=CAPTURE)and(led.Brush.Color<>clGray)and(cbEndScript.text>'')and(FileExists(slash(ConfigDir)+cbEndScript.text))and assigned(FRunScript) then begin
+  if (FstartedBy=CAPTURE)and(led.Brush.Color<>clGray)and(cbEndScript.text>'')and(FileExists(slash(ConfigDir)+cbEndScript.text+'.script'))and assigned(FRunScript) then begin
     if ExpectedStop then
       FRunScript(cbEndScript.text,ConfigDir,'0')
     else
