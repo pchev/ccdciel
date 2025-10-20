@@ -2055,6 +2055,14 @@ object f_main: Tf_main
       Caption = 'MenuItemGuiderSolveSync'
       OnClick = MenuItemGuiderSolveSyncClick
     end
+    object MenuItemGuiderSolveDSO: TMenuItem
+      Caption = 'MenuItemGuiderSolveDSO'
+      OnClick = MenuItemGuiderSolveDSOClick
+    end
+    object MenuItemGuiderSolveHyperleda: TMenuItem
+      Caption = 'MenuItemGuiderSolveHyperleda'
+      OnClick = MenuItemGuiderSolveHyperledaClick
+    end
     object MenuItemGuiderStopAstrometry: TMenuItem
       Caption = 'MenuItemGuiderStopAstrometry'
       Visible = False
@@ -2111,6 +2119,14 @@ object f_main: Tf_main
     object MenuItemFinderSolveSync: TMenuItem
       Caption = 'MenuItemFinderSolveSync'
       OnClick = MenuItemFinderSolveSyncClick
+    end
+    object MenuItemFinderSolveDSO: TMenuItem
+      Caption = 'MenuItemFinderSolveDSO'
+      OnClick = MenuItemFinderSolveDSOClick
+    end
+    object MenuItemFinderSolveHyperleda: TMenuItem
+      Caption = 'MenuItemFinderSolveHyperleda'
+      OnClick = MenuItemFinderSolveHyperledaClick
     end
     object MenuItemFinderStopAstrometry: TMenuItem
       Caption = 'MenuItemFinderStopAstrometry'

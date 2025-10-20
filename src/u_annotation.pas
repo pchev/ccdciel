@@ -25,7 +25,7 @@ uses  u_global, u_utils, cu_fits, UScaleDPI,
   Classes, SysUtils,strutils, math,graphics;
 
 procedure search_deepsky(f: TFits);{search the deep sky object on the image}
-procedure plot_deepsky(cnv: TCanvas; cnvwidth,cnvheight: integer; FlipHor,FlipVer: boolean);{plot the deep sky object on the image}
+procedure plot_deepsky(cnv: TCanvas; cnvwidth,cnvheight: integer; FlipHor,FlipVer: boolean; source: byte);{plot the deep sky object on the image}
 procedure load_deep;{load the deepsky database once. If loaded no action}
 procedure load_hyperleda;{load the HyperLeda database once. If loaded no action }
 procedure read_deepsky(searchmode:char; telescope_ra,telescope_dec, cos_telescope_dec {cos(telescope_dec},fov : double; out ra2,dec2,length2,width2,pa : double);{deepsky database search}
@@ -398,7 +398,7 @@ begin
 end;{search deep_sky}
 
 
-procedure plot_deepsky(cnv: TCanvas; cnvwidth,cnvheight: integer; FlipHor,FlipVer: boolean);{plot the deep sky object found by search_deepsky}
+procedure plot_deepsky(cnv: TCanvas; cnvwidth,cnvheight: integer; FlipHor,FlipVer: boolean; source: byte);{plot the deep sky object found by search_deepsky}
 type
   textarea = record
      x1,y1,x2,y2 : integer;
@@ -439,7 +439,11 @@ begin
         rot:=objlist[k].rot;
         name:=objlist[k].name;
 
-        Fits2Screen(x,y,FlipHor,FlipVer,x,y);
+        case source of
+          0: Fits2Screen(x,y,FlipHor,FlipVer,x,y);
+          1: FinderFits2Screen(x,y,FlipVer,x,y);
+          2: GuiderFits2Screen(x,y,FlipVer,x,y);
+        end;
 
         {Plot deepsky text labels on an empthy text space.}
         { 1) If the center of the deepsky object is outside the image then don't plot text}
@@ -506,8 +510,20 @@ begin
         end;{centre object visible}
 
         if width1=0 then begin width1:=length1;pa:=999;end;
-        z:=ImgZoom;
-        if z=0 then z:=ImgScale0;
+        case source of
+          0: begin
+             z:=ImgZoom;
+             if z=0 then z:=ImgScale0;
+             end;
+          1: begin
+             z:=FinderImgZoom;
+             if z=0 then z:=FinderImgScale0;
+             end;
+          2: begin
+             z:=GuideImgZoom;
+             if z=0 then z:=GuideImgScale0;
+             end;
+        end;
         len:=z*length1/(abs(cdelt2)*60*10*2); {Length in pixels}
         if len<=2 then {too small to plot an ellipse or circle, just plot four dots}
         begin {tiny object marking}

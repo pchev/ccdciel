@@ -151,6 +151,10 @@ type
     MenuFlatHeader: TMenuItem;
     MeasureConeError1: TMenuItem;
     MenuInstallScript: TMenuItem;
+    MenuItemGuiderSolveDSO: TMenuItem;
+    MenuItemGuiderSolveHyperleda: TMenuItem;
+    MenuItemFinderSolveDSO: TMenuItem;
+    MenuItemFinderSolveHyperleda: TMenuItem;
     MenuViewSpectraProfile: TMenuItem;
     MenuItemNoiseFilter2: TMenuItem;
     MenuItemNoiseFilter: TMenuItem;
@@ -453,12 +457,16 @@ type
     procedure MenuInternalGuiderStopClick(Sender: TObject);
     procedure MenuItemFinderSaveImageClick(Sender: TObject);
     procedure MenuItemFinderSolveClick(Sender: TObject);
+    procedure MenuItemFinderSolveDSOClick(Sender: TObject);
+    procedure MenuItemFinderSolveHyperledaClick(Sender: TObject);
     procedure MenuItemFinderSolveSyncClick(Sender: TObject);
     procedure MenuItemFinderStopAstrometryClick(Sender: TObject);
     procedure MenuItemFinderViewHeaderClick(Sender: TObject);
     procedure MenuItemFinderViewStatisticsClick(Sender: TObject);
     procedure MenuItemGuiderSaveImageClick(Sender: TObject);
     procedure MenuItemGuiderSolveClick(Sender: TObject);
+    procedure MenuItemGuiderSolveDSOClick(Sender: TObject);
+    procedure MenuItemGuiderSolveHyperledaClick(Sender: TObject);
     procedure MenuItemGuiderSolveSyncClick(Sender: TObject);
     procedure MenuItemGuiderViewHeaderClick(Sender: TObject);
     procedure ImageResizeTimerTimer(Sender: TObject);
@@ -668,8 +676,8 @@ type
     reffile: string;
     refbmp:TBGRABitmap;
     cdcWCSinfo: TcdcWCSinfo;
-    Annotate: boolean;
-    dsofits: TFits;
+    AnnotateMain,AnnotateFinder,AnnotateGuider: boolean;
+    resolvefits: TFits;
     SaveFocusZoom,ImgCx, ImgCy: double;
     Mx, My, PolX, PolY: integer;
     StartX, StartY, EndX, EndY, MouseDownX,MouseDownY: integer;
@@ -985,7 +993,7 @@ type
     procedure AstrometryToPlanetariumFrame(Sender: TObject);
     procedure ResolveSlewCenter(Sender: TObject);
     procedure ResolvePlotDso(Sender: TObject);
-    procedure ResolvePlot(f:TFits; dsotype:byte);
+    procedure ResolvePlot(f:TFits; dsotype:byte; source:TAstrometrySource);
     procedure ResolveSyncRotator(Sender: TObject);
     procedure ResolveRotate(Sender: TObject);
     procedure InitWCS(fn:string);
@@ -1070,7 +1078,7 @@ type
     Procedure SetMultipanel(onoff: boolean);
     Procedure SetVisibleImage;
     procedure RunScript(scname,scpath,scargs: string);
-    procedure Solve(f:pointer; out ra,de,pa,scale: double; out ok:boolean);
+    procedure StackSolve(f:pointer; out ra,de,pa,scale: double; out ok:boolean);
     procedure HFM_AddMeasurement(newHFD:double);
     procedure HFM_ResetMeasurements(Sender: TObject);
     function HFM_IsActive():boolean;
@@ -1604,7 +1612,9 @@ begin
   ImgPixRatio:=1;
   Undersampled:=false;
   ZoomMin:=1;
-  Annotate:=false;
+  AnnotateMain:=false;
+  AnnotateFinder:=false;
+  AnnotateGuider:=false;
   LogLevel:=3;
   LogToFile:=true;
   LastPixelSize:=0;
@@ -2252,7 +2262,7 @@ begin
    camera.onSequenceInfo:=@CameraSequenceInfo;
    camera.onEndControlExposure:=@EndControlExposure;
    camera.onRunScript:=@RunScript;
-   camera.onSolve:=@Solve;
+   camera.onSolve:=@StackSolve;
 
    aInt:=TDevInterface(config.GetValue('/GuideCameraInterface',ord(DefaultInterface)));
    case aInt of
@@ -2585,8 +2595,12 @@ begin
    MenuResolveSyncRotator2.Caption := rsResolveAndSy2;
    MenuResolveDSO.Caption:=rsResolveAndPl;
    MenuResolveDSO2.Caption:=rsResolveAndPl;
+   MenuItemGuiderSolveDSO.Caption:=rsResolveAndPl;
+   MenuItemFinderSolveDSO.Caption:=rsResolveAndPl;
    MenuResolveHyperLeda.Caption:=rsResolveAndPl2;
    MenuResolveHyperLeda2.Caption:=rsResolveAndPl2;
+   MenuItemGuiderSolveHyperleda.Caption:=rsResolveAndPl2;
+   MenuItemFinderSolveHyperleda.Caption:=rsResolveAndPl2;
    MenuResolvePlanetarium.Caption := rsResolveAndSh;
    MenuResolvePlanetarium2.Caption := rsResolveAndSh;
    MenuShowCCDFrame.Caption := rsResolveAndSh2;
@@ -4482,7 +4496,7 @@ var fn : string;
 begin
   OpenDialog1.Title:=rsOpenDarkFile;
   if OpenDialog1.Execute then begin
-    Annotate:=false;
+    AnnotateMain:=false;
     fn:=OpenDialog1.FileName;
     fits.SetBPM(bpm,0,0,0,0);
     fits.DarkOn:=false;
@@ -11776,7 +11790,7 @@ end;
 
 procedure Tf_main.ShowLastImage(Sender: TObject);
 begin
- Annotate:=false;
+ AnnotateMain:=false;
  if f_visu.BtnShowImage.Down then begin
   fits.LoadStream;
   DrawHistogram(true,false);
@@ -11797,7 +11811,7 @@ var buf: string;
     loadimage,displayimage,DomeFlatExposureOK: boolean;
 begin
  try
-  Annotate:=false;
+  AnnotateMain:=false;
   DomeFlatExposureOK:=false;
   StatusBar1.Panels[panelstatus].Text:='';
   ImgFrameX:=FrameX;
@@ -12269,7 +12283,7 @@ ImgFrameX:=FrameX;
 ImgFrameY:=FrameY;
 ImgFrameW:=FrameW;
 ImgFrameH:=FrameH;
-Annotate:=false;
+AnnotateMain:=false;
 DrawHistogram(true,false);
 DrawImage(false,true);
 end;
@@ -12481,7 +12495,7 @@ if f_visu.FlipVert then {$ifdef debug_raw}begin; writeln(FormatDateTime(dateiso,
 
 if fits.HeaderInfo.solved and (cdcWCSinfo.secpix<>0) and (not SplitImage) then begin
   plot_north;
-  if Annotate then plot_deepsky(ScrBmp.Canvas,ScrBmp.Width,ScrBmp.Height,f_visu.FlipHorz,f_visu.FlipVert);
+  if AnnotateMain then plot_deepsky(ScrBmp.Canvas,ScrBmp.Width,ScrBmp.Height,f_visu.FlipHorz,f_visu.FlipVert,0);
 end;
 if f_visu.BullsEye and (not SplitImage) and (fits.HeaderInfo.naxis>1) then begin
   {$ifdef debug_raw}writeln(FormatDateTime(dateiso,Now)+blank+'BullsEye');{$endif}
@@ -13364,7 +13378,7 @@ end;
 procedure Tf_main.MenuItemCleanupClick(Sender: TObject);
 begin
    fits.ClearStarList;
-   Annotate:=false;
+   AnnotateMain:=false;
    DrawImage;
 end;
 
@@ -13545,7 +13559,7 @@ if refmask then begin
     end;
     refbmp.InvalidateBitmap;
     refmask:=true;
-    Annotate:=false;
+    AnnotateMain:=false;
     DrawImage;
   end;
   finally
@@ -15073,7 +15087,7 @@ begin
 end;
 
 procedure Tf_main.AstrometryEnd(i: Integer);
-// i values:
+// i values ord(TAstrometrySource) :
 // 0 : main camera
 // 1 : preview
 // 2 : finder camera
@@ -15158,6 +15172,7 @@ begin
   else if i=2 then begin
     // finder camera result
     if astrometry.LastResult then begin
+       finderfits.LoadFromFile(astrometry.ResultFile);
        NewMessage(Format(rsResolveSucce, [rsFinderCamera]),3);
     end else begin
       NewMessage(Format(rsResolveError, [rsFinderCamera])+' '+astrometry.LastError,1);
@@ -15171,6 +15186,7 @@ begin
   else if i=3 then begin
     // guide camera result
     if astrometry.LastResult then begin
+       guidefits.LoadFromFile(astrometry.ResultFile);
        NewMessage(Format(rsResolveSucce, [rsGuideCamera]),3);
     end else begin
       NewMessage(Format(rsResolveError, [rsGuideCamera])+' '+astrometry.LastError,1);
@@ -15355,7 +15371,7 @@ begin
        if (not astrometry.Busy) and (fits.HeaderInfo.naxis>0) then begin
          if not f_goto.CheckImageInfo(fits) then exit;
          fits.SaveToFile(slash(TmpDir)+'ccdcieltmp.fits');
-         astrometry.StartAstrometry(slash(TmpDir)+'ccdcieltmp.fits',slash(TmpDir)+'ccdcielsolved.fits',@ResolveSyncRotator);
+         astrometry.StartAstrometry(slash(TmpDir)+'ccdcieltmp.fits',slash(TmpDir)+'ccdcielsolved.fits',@ResolveSyncRotator,asMain);
        end;
      end;
   end
@@ -15382,7 +15398,7 @@ begin
  if SplitImage then exit;
  fits.ClearStarList;
  DrawImage; {cleanup to avoid label overlap}
- ResolvePlot(fits,1)
+ ResolvePlot(fits,1,asMain)
 end;
 
 procedure Tf_main.MenuResolveDSOClick(Sender: TObject);
@@ -15390,38 +15406,49 @@ begin
   if SplitImage then exit;
   fits.ClearStarList;
   DrawImage; {cleanup to avoid label overlap}
-  ResolvePlot(fits,0);
+  ResolvePlot(fits,0,asMain);
 end;
 
-procedure Tf_main.ResolvePlot(f:TFits; dsotype:byte);
+procedure Tf_main.ResolvePlot(f:TFits; dsotype:byte; source:TAstrometrySource);
 var
   Save_Cursor:TCursor;
 begin
   if f.HeaderInfo.valid and f.ImageValid then begin
      Save_Cursor := Screen.Cursor; {loading Hyperleda could take some time}
      Screen.Cursor := crHourglass; { Show hourglass cursor }
-     dsofits:=f;
+     resolvefits:=f;
      if f.HeaderInfo.solved then begin
         if dsotype=1 then
           load_hyperleda
         else
           load_deep;
         search_deepsky(f);
-        Annotate:=true;
-        if f=fits then
+        if f=fits then begin
+          AnnotateMain:=true;
+          AnnotateGuider:=false;
+          AnnotateFinder:=false;
           PlotImage
-        else if f=guidefits then
-            PlotGuideImage
-        else if f=finderfits then
-            PlotFinderImage;
+        end
+        else if f=guidefits then begin
+          AnnotateGuider:=true;
+          AnnotateMain:=false;
+          AnnotateFinder:=false;
+          PlotGuideImage
+        end
+        else if f=finderfits then begin
+          AnnotateFinder:=true;
+          AnnotateMain:=false;
+          AnnotateGuider:=false;
+          PlotFinderImage;
+        end;
      end else begin
        if (not astrometry.Busy) and (f.HeaderInfo.naxis>0) then begin
          if not f_goto.CheckImageInfo(f) then exit;
          f.SaveToFile(slash(TmpDir)+'ccdcieltmp.fits');
          if dsotype=1 then
-           astrometry.StartAstrometry(slash(TmpDir)+'ccdcieltmp.fits',slash(TmpDir)+'ccdcielsolved.fits',@AstrometryPlotHyperleda)
+           astrometry.StartAstrometry(slash(TmpDir)+'ccdcieltmp.fits',slash(TmpDir)+'ccdcielsolved.fits',@AstrometryPlotHyperleda,source)
          else
-           astrometry.StartAstrometry(slash(TmpDir)+'ccdcieltmp.fits',slash(TmpDir)+'ccdcielsolved.fits',@AstrometryPlotDSO);
+           astrometry.StartAstrometry(slash(TmpDir)+'ccdcieltmp.fits',slash(TmpDir)+'ccdcielsolved.fits',@AstrometryPlotDSO,source);
        end;
      end;
      Screen.Cursor:=Save_Cursor;
@@ -15432,16 +15459,26 @@ procedure Tf_main.AstrometryPlotDSO(Sender: TObject);
 begin
 if astrometry.LastResult then begin
   load_deep;
-  dsofits.ClearStarList;
-  DrawImage;
-  search_deepsky(dsofits);
-  Annotate:=true;
-  if dsofits=fits then
+  resolvefits.ClearStarList;
+  search_deepsky(resolvefits);
+  if resolvefits=fits then begin
+    AnnotateMain:=true;
+    AnnotateGuider:=false;
+    AnnotateFinder:=false;
     PlotImage
-  else if dsofits=guidefits then
-      PlotGuideImage
-  else if dsofits=finderfits then
-      PlotFinderImage;
+  end
+  else if resolvefits=guidefits then begin
+    AnnotateGuider:=true;
+    AnnotateMain:=false;
+    AnnotateFinder:=false;
+    PlotGuideImage
+  end
+  else if resolvefits=finderfits then begin
+    AnnotateFinder:=true;
+    AnnotateMain:=false;
+    AnnotateGuider:=false;
+    PlotFinderImage;
+  end;
 end;
 end;
 
@@ -15449,16 +15486,26 @@ procedure Tf_main.AstrometryPlotHyperleda(Sender: TObject);
 begin
 if astrometry.LastResult then begin
   load_hyperleda;
-  dsofits.ClearStarList;
-  DrawImage;
-  search_deepsky(dsofits);
-  Annotate:=true;
-  if dsofits=fits then
+  resolvefits.ClearStarList;
+  search_deepsky(resolvefits);
+  if resolvefits=fits then begin
+    AnnotateMain:=true;
+    AnnotateGuider:=false;
+    AnnotateFinder:=false;
     PlotImage
-  else if dsofits=guidefits then
-      PlotGuideImage
-  else if dsofits=finderfits then
-      PlotFinderImage;
+  end
+  else if resolvefits=guidefits then begin
+    AnnotateGuider:=true;
+    AnnotateMain:=false;
+    AnnotateFinder:=false;
+    PlotGuideImage
+  end
+  else if resolvefits=finderfits then begin
+    AnnotateFinder:=true;
+    AnnotateMain:=false;
+    AnnotateGuider:=false;
+    PlotFinderImage;
+  end;
 end;
 end;
 
@@ -15477,7 +15524,7 @@ begin
         if (not astrometry.Busy) and (fits.HeaderInfo.naxis>0) then begin
           if not f_goto.CheckImageInfo(fits) then exit;
           fits.SaveToFile(slash(TmpDir)+'ccdcieltmp.fits');
-          astrometry.StartAstrometry(slash(TmpDir)+'ccdcieltmp.fits',slash(TmpDir)+'ccdcielsolved.fits',@AstrometryToPlanetarium);
+          astrometry.StartAstrometry(slash(TmpDir)+'ccdcieltmp.fits',slash(TmpDir)+'ccdcielsolved.fits',@AstrometryToPlanetarium,asMain);
         end;
       end;
    end
@@ -15498,7 +15545,7 @@ begin
         if (not astrometry.Busy) and (fits.HeaderInfo.naxis>0) then begin
           if not f_goto.CheckImageInfo(fits) then exit;
           fits.SaveToFile(slash(TmpDir)+'ccdcieltmp.fits');
-          astrometry.StartAstrometry(slash(TmpDir)+'ccdcieltmp.fits',slash(TmpDir)+'ccdcielsolved.fits',@AstrometryToPlanetariumFrame);
+          astrometry.StartAstrometry(slash(TmpDir)+'ccdcieltmp.fits',slash(TmpDir)+'ccdcielsolved.fits',@AstrometryToPlanetariumFrame,asMain);
         end;
       end;
    end
@@ -15812,7 +15859,7 @@ var imgsize: string;
     n,oldw,oldh:integer;
     oldmean,oldsigma: double;
 begin
-   Annotate:=false;
+   AnnotateMain:=false;
    oldw:=fits.HeaderInfo.naxis1;
    oldh:=fits.HeaderInfo.naxis2;
    oldmean:=fits.imageMean;
@@ -15846,7 +15893,7 @@ var RawStream, FitsStream: TMemoryStream;
     oldmean,oldsigma: double;
 begin
  {$ifdef debug_raw}writeln(FormatDateTime(dateiso,Now)+blank+'LoadRawFile'+blank+fn);{$endif}
- Annotate:=false;
+ AnnotateMain:=false;
  oldmean:=fits.imageMean;
  oldsigma:=fits.imageSigma;
  // create resources
@@ -15893,7 +15940,7 @@ var PictStream, FitsStream: TMemoryStream;
     imgsize,ext: string;
     oldmean,oldsigma: double;
 begin
- Annotate:=false;
+ AnnotateMain:=false;
  oldmean:=fits.imageMean;
  oldsigma:=fits.imageSigma;
  // create resources
@@ -16383,8 +16430,8 @@ begin
   Saved_Cursor := Screen.Cursor;
   Screen.Cursor := crHourglass; { Show hourglass cursor since analysing will take some time}
 
-  if plot and (Annotate or SplitImage) then begin   {draw clean image}
-    Annotate:=false;
+  if plot and (AnnotateMain or SplitImage) then begin   {draw clean image}
+    AnnotateMain:=false;
     if SplitImage then begin
       SplitImage:=false;
       PlotImage;
@@ -17972,9 +18019,9 @@ begin
  f_scriptengine.RunScript(scname,scpath,scargs);
 end;
 
-procedure Tf_main.Solve(f:pointer; out ra,de,pa,scale: double; out ok:boolean);
+procedure Tf_main.StackSolve(f:pointer; out ra,de,pa,scale: double; out ok:boolean);
 begin
-  astrometry.Solve(TFits(f^),ra,de,pa,scale,ok);
+  astrometry.StackSolve(TFits(f^),ra,de,pa,scale,ok);
 end;
 
 function Tf_main.TCPcmd(s: string):string;
@@ -18579,6 +18626,9 @@ else begin
 end;
 
 ScrGuideBmp.VerticalFlip; // "Windows orientation"
+if guidefits.HeaderInfo.solved and AnnotateGuider then begin
+  plot_deepsky(ScrGuideBmp.Canvas,ScrGuideBmp.Width,ScrGuideBmp.Height,false,true,2);
+end;
 ImageGuide.Invalidate;
 {$ifdef debug_raw}writeln(FormatDateTime(dateiso,Now)+blank+'PlotImage end');{$endif}
 end;
@@ -18778,6 +18828,20 @@ begin
       astrometry.SolveGuideImage;
     end;
   end;
+end;
+
+procedure Tf_main.MenuItemGuiderSolveDSOClick(Sender: TObject);
+begin
+  guidefits.ClearStarList;
+  DrawGuideImage(true); {cleanup to avoid label overlap}
+  ResolvePlot(guidefits,0,asGuider);
+end;
+
+procedure Tf_main.MenuItemGuiderSolveHyperledaClick(Sender: TObject);
+begin
+  guidefits.ClearStarList;
+  DrawGuideImage(true); {cleanup to avoid label overlap}
+  ResolvePlot(guidefits,1,asGuider);
 end;
 
 procedure Tf_main.MenuItemGuiderSolveSyncClick(Sender: TObject);
@@ -19442,6 +19506,9 @@ else begin
    tmpbmp.Free;
 end;
 ScrFinderBmp.VerticalFlip; // same as guider
+if finderfits.HeaderInfo.solved and AnnotateFinder then begin
+  plot_deepsky(ScrFinderBmp.Canvas,ScrFinderBmp.Width,ScrFinderBmp.Height,false,true,1);
+end;
 ImageFinder.Invalidate;
 end;
 
@@ -19710,6 +19777,20 @@ begin
     if (not f_goto.CheckImageInfo(finderfits)) then exit;
     astrometry.SolveFinderImage;
   end;
+end;
+
+procedure Tf_main.MenuItemFinderSolveDSOClick(Sender: TObject);
+begin
+  finderfits.ClearStarList;
+  DrawFinderImage(true); {cleanup to avoid label overlap}
+  ResolvePlot(finderfits,0,asFinder);
+end;
+
+procedure Tf_main.MenuItemFinderSolveHyperledaClick(Sender: TObject);
+begin
+  finderfits.ClearStarList;
+  DrawFinderImage(true); {cleanup to avoid label overlap}
+  ResolvePlot(finderfits,1,asFinder);
 end;
 
 procedure Tf_main.MenuItemFinderSolveSyncClick(Sender: TObject);

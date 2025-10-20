@@ -31,6 +31,8 @@ uses  u_global, u_utils, fu_preview, fu_visu, cu_astrometry_engine, cu_mount, cu
 
 type
 
+TAstrometrySource = (asMain, asPreview, asFinder, asGuider, asStack);
+
 TAstrometry = class(TComponent)
   private
     engine: TAstrometry_engine;
@@ -45,6 +47,7 @@ TAstrometry = class(TComponent)
     FBusy, FSlewBusy, FLastResult: Boolean;
     FLastError: string;
     FLastSlewErr,FInitra,FInitdec,FStartTime: double;
+    AstrometrySource: TAstrometrySource;
     Fmount: T_mount;
     Fcamera, FFinderCamera: T_camera;
     Fwheel: T_wheel;
@@ -74,7 +77,7 @@ TAstrometry = class(TComponent)
     procedure AstrometrySolvePreview(Sender: TObject);
   public
     constructor Create(AOwner: TComponent);override;
-    function StartAstrometry(infile,outfile: string; terminatecmd:TNotifyEvent): boolean;
+    function StartAstrometry(infile,outfile: string; terminatecmd:TNotifyEvent; source:TAstrometrySource): boolean;
     procedure StopAstrometry;
     procedure AstrometryDone(errstr:string);
     function  CurrentCoord(out cra,cde,eq,pa: double):boolean;
@@ -88,7 +91,7 @@ TAstrometry = class(TComponent)
     procedure SyncFinderImage(wait: boolean);
     function GetFinderOffset(ra2000,de2000: double):boolean;
     procedure SyncCurrentImage(wait: boolean);
-    procedure Solve(f: TFits; out ra,de,pa,scale: double; out ok:boolean);
+    procedure StackSolve(f: TFits; out ra,de,pa,scale: double; out ok:boolean);
     procedure SlewScreenXY(x,y: integer);
     function PrecisionSlew(ra,de,prec,exp:double; filter,binx,biny,method,maxslew,sgain,soffset: integer; out err: double):boolean;
     function PrecisionSlew(ra,de:double; out err: double):boolean;
@@ -137,6 +140,7 @@ begin
   FLastSlewErr:=0;
   FFinderCamera:=nil;
   AstrometryTimeout:=60;
+  AstrometrySource:=asMain;
   TimerAstrometrySolve:=TTimer.Create(self);
   TimerAstrometrySolve.Enabled:=false;
   TimerAstrometrySolve.Interval:=100;
@@ -175,7 +179,7 @@ begin
   result:=not FBusy;
 end;
 
-function TAstrometry.StartAstrometry(infile,outfile: string; terminatecmd:TNotifyEvent): boolean;
+function TAstrometry.StartAstrometry(infile,outfile: string; terminatecmd:TNotifyEvent; source:TAstrometrySource): boolean;
 var pixsize,pixscale,telescope_focal_length,tolerance,MaxRadius,ra,de: double;
     iwidth,iheight:integer;
     online: boolean;
@@ -183,6 +187,7 @@ var pixsize,pixscale,telescope_focal_length,tolerance,MaxRadius,ra,de: double;
 begin
  if (not FBusy) then begin
    Fterminatecmd:=terminatecmd;
+   AstrometrySource:=source;
    ra:=NullCoord;
    de:=NullCoord;
    pixscale:=NullCoord;
@@ -313,17 +318,7 @@ begin
    except
    end;
  end;
- if (Fterminatecmd<>@AstrometrySolveGuide)and
-    (Fterminatecmd<>@AstrometrySolvePreview)and
-    (Fterminatecmd<>@AstrometrySolveFinder) and
-    (Fterminatecmd<>nil) and
-    Assigned(FonEndAstrometry)
-    then
-       FonEndAstrometry(0)
-    else if (Fterminatecmd=nil) and
-    Assigned(FonEndAstrometry)
-    then
-       FonEndAstrometry(4);
+ if Assigned(FonEndAstrometry) then FonEndAstrometry(ord(AstrometrySource));
  if Assigned(Fterminatecmd) then Fterminatecmd(self);
  Fterminatecmd:=nil;
 end;
@@ -408,7 +403,7 @@ begin
     msg('Missing library '+libwcs,1);
 end;
 
-procedure TAstrometry.Solve(f: TFits; out ra,de,pa,scale: double; out ok:boolean);
+procedure TAstrometry.StackSolve(f: TFits; out ra,de,pa,scale: double; out ok:boolean);
 var n,m: integer;
     i: TcdcWCSinfo;
     c: TcdcWCScoord;
@@ -416,7 +411,7 @@ begin
   ok:=false;
   if (not FBusy) and (f.HeaderInfo.naxis>0) and f.ImageValid then begin
     f.SaveToFile(slash(TmpDir)+'fitstmp.fits');
-    StartAstrometry(slash(TmpDir)+'fitstmp.fits',slash(TmpDir)+'fitssolved.fits',nil);
+    StartAstrometry(slash(TmpDir)+'fitstmp.fits',slash(TmpDir)+'fitssolved.fits',nil,asStack);
     if WaitBusy(AstrometryTimeout+30) and (cdcwcs_xy2sky<>nil) then begin
       n:=cdcwcs_initfitsfile(pchar(slash(TmpDir)+'fitssolved.fits'),wcsfits);
       if n=0 then n:=cdcwcs_getinfo(addr(i),wcsfits);
@@ -447,7 +442,7 @@ begin
    end
    else begin
     FFits.SaveToFile(slash(TmpDir)+'ccdcieltmp.fits');
-    StartAstrometry(slash(TmpDir)+'ccdcieltmp.fits',slash(TmpDir)+'ccdcielsolved.fits',@AstrometrySolve);
+    StartAstrometry(slash(TmpDir)+'ccdcieltmp.fits',slash(TmpDir)+'ccdcielsolved.fits',@AstrometrySolve,asMain);
     if wait then WaitBusy(AstrometryTimeout+30);
    end;
   end;
@@ -479,7 +474,7 @@ var n: integer;
 begin
   if (not FBusy) and (FFits.HeaderInfo.naxis>0) and FFits.ImageValid then begin
     FFits.SaveToFile(slash(TmpDir)+'ccdcieltmp.fits');
-    StartAstrometry(slash(TmpDir)+'ccdcieltmp.fits',slash(TmpDir)+'ccdcielsolved.fits',@AstrometrySolvePreview);
+    StartAstrometry(slash(TmpDir)+'ccdcieltmp.fits',slash(TmpDir)+'ccdcielsolved.fits',@AstrometrySolvePreview,asPreview);
   end;
 end;
 
@@ -489,7 +484,6 @@ var ra,de,pa,ra2000,de2000: double;
     i: TcdcWCSinfo;
     c: TcdcWCScoord;
 begin
-  if Assigned(FonEndAstrometry) then FonEndAstrometry(1);
   if cdcwcs_xy2sky<>nil then begin
     n:=cdcwcs_initfitsfile(pchar(slash(TmpDir)+'ccdcielsolved.fits'),wcspreview);
     try
@@ -527,7 +521,7 @@ procedure TAstrometry.SolveFinderImage(wait: boolean =true);
 begin
   if (not FBusy) and (FFinderFits.HeaderInfo.naxis>0) and FFinderFits.ImageValid then begin
     FFinderFits.SaveToFile(slash(TmpDir)+'findertmp.fits');
-    StartAstrometry(slash(TmpDir)+'findertmp.fits',slash(TmpDir)+'findersolved.fits',@AstrometrySolveFinder);
+    StartAstrometry(slash(TmpDir)+'findertmp.fits',slash(TmpDir)+'findersolved.fits',@AstrometrySolveFinder,asFinder);
     if wait then WaitBusy(AstrometryTimeout+30);
   end;
 end;
@@ -538,7 +532,6 @@ var ra,de,pa,ra2000,de2000: double;
     i: TcdcWCSinfo;
     c: TcdcWCScoord;
 begin
-  if Assigned(FonEndAstrometry) then FonEndAstrometry(2);
   if cdcwcs_xy2sky<>nil then begin
     n:=cdcwcs_initfitsfile(pchar(slash(TmpDir)+'findersolved.fits'),wcsfind);
     try
@@ -578,7 +571,7 @@ begin
       AstrometrySyncFinder(nil);
     end else begin
      FFinderFits.SaveToFile(slash(TmpDir)+'findertmp.fits');
-     StartAstrometry(slash(TmpDir)+'findertmp.fits',slash(TmpDir)+'findersolved.fits',@AstrometrySyncFinder);
+     StartAstrometry(slash(TmpDir)+'findertmp.fits',slash(TmpDir)+'findersolved.fits',@AstrometrySyncFinder,asFinder);
      if wait then WaitBusy(AstrometryTimeout+30);
     end;
   end;
@@ -625,7 +618,7 @@ procedure TAstrometry.SolveGuideImage(wait: boolean = false);
 begin
   if (not FBusy) and (FGuideFits.HeaderInfo.naxis>0) and FGuideFits.ImageValid then begin
     FGuideFits.SaveToFile(slash(TmpDir)+'guidetmp.fits');
-    StartAstrometry(slash(TmpDir)+'guidetmp.fits',slash(TmpDir)+'guidesolved.fits',@AstrometrySolveGuide);
+    StartAstrometry(slash(TmpDir)+'guidetmp.fits',slash(TmpDir)+'guidesolved.fits',@AstrometrySolveGuide,asGuider);
     if wait then WaitBusy(AstrometryTimeout+30);
   end;
 end;
@@ -636,7 +629,6 @@ var ra,de,pa,ra2000,de2000: double;
     i: TcdcWCSinfo;
     c: TcdcWCScoord;
 begin
-if Assigned(FonEndAstrometry) then FonEndAstrometry(3);
 if cdcwcs_xy2sky<>nil then begin
   n:=cdcwcs_initfitsfile(pchar(slash(TmpDir)+'guidesolved.fits'),wcsguide);
   if n=0 then n:=cdcwcs_getinfo(addr(i),wcsguide);
@@ -672,7 +664,7 @@ begin
       AstrometrySyncGuider(nil);
     end else begin
      FGuideFits.SaveToFile(slash(TmpDir)+'guidetmp.fits');
-     StartAstrometry(slash(TmpDir)+'guidetmp.fits',slash(TmpDir)+'guidesolved.fits',@AstrometrySyncGuider);
+     StartAstrometry(slash(TmpDir)+'guidetmp.fits',slash(TmpDir)+'guidesolved.fits',@AstrometrySyncGuider,asGuider);
      if wait then WaitBusy(AstrometryTimeout+30);
     end;
   end;
@@ -707,7 +699,7 @@ begin
      AstrometrySync(nil);
    end else begin
     FFits.SaveToFile(slash(TmpDir)+'ccdcieltmp.fits');
-    StartAstrometry(slash(TmpDir)+'ccdcieltmp.fits',slash(TmpDir)+'ccdcielsolved.fits',@AstrometrySync);
+    StartAstrometry(slash(TmpDir)+'ccdcieltmp.fits',slash(TmpDir)+'ccdcielsolved.fits',@AstrometrySync,asMain);
     if wait then WaitBusy(AstrometryTimeout+30);
    end;
   end;
@@ -749,7 +741,7 @@ begin
     AstrometrySlewScreenXY(nil);
    end else begin
     FFits.SaveToFile(slash(TmpDir)+'ccdcieltmp.fits');
-    StartAstrometry(slash(TmpDir)+'ccdcieltmp.fits',slash(TmpDir)+'ccdcielsolved.fits',@AstrometrySlewScreenXY);
+    StartAstrometry(slash(TmpDir)+'ccdcieltmp.fits',slash(TmpDir)+'ccdcielsolved.fits',@AstrometrySlewScreenXY,asMain);
    end;
   end;
 end;
@@ -880,7 +872,7 @@ begin
         if CancelAutofocus or CancelGoto then exit;
         msg(rsResolveContr,3);
         FFits.SaveToFile(slash(TmpDir)+'ccdcieltmp.fits');
-        if StartAstrometry(slash(TmpDir)+'ccdcieltmp.fits',slash(TmpDir)+'ccdcielsolved.fits',nil) then
+        if StartAstrometry(slash(TmpDir)+'ccdcieltmp.fits',slash(TmpDir)+'ccdcielsolved.fits',nil,asMain) then
            WaitBusy(AstrometryTimeout+30);
         if not LastResult then begin
            StopAstrometry;
@@ -906,7 +898,7 @@ begin
         if CancelAutofocus or CancelGoto then exit;
         msg(rsResolveContr,3);
         FFinderFits.SaveToFile(slash(TmpDir)+'finder.fits');
-        if StartAstrometry(slash(TmpDir)+'finder.fits',slash(TmpDir)+'findersolved.fits',@AstrometrySolveFinder) then
+        if StartAstrometry(slash(TmpDir)+'finder.fits',slash(TmpDir)+'findersolved.fits',@AstrometrySolveFinder,asFinder) then
            WaitBusy(AstrometryTimeout+30);
         if not LastResult then begin
            StopAstrometry;
