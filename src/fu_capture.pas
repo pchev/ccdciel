@@ -85,6 +85,9 @@ type
     procedure ExpTimeChange(Sender: TObject);
     procedure ExpTimeKeyPress(Sender: TObject; var Key: char);
     procedure CheckLight(Sender: TObject);
+    procedure Panel1Resize(Sender: TObject);
+    procedure SeqNumChange(Sender: TObject);
+    procedure StackNumChange(Sender: TObject);
     procedure TimerExpTimer(Sender: TObject);
   private
     { private declarations }
@@ -114,6 +117,7 @@ type
     procedure SetFrameType(value:integer);
     function GetFrameTypeText:string;
     function GetEndScript:string;
+    procedure ComputeTotalTime;
   public
     { public declarations }
     constructor Create(aOwner: TComponent); override;
@@ -313,6 +317,7 @@ end;
 procedure Tf_capture.ExpTimeChange(Sender: TObject);
 begin
   FExposureTime:=StrToFloatDef(ExpTime.Text,-1);
+  ComputeTotalTime;
 end;
 
 procedure Tf_capture.ExpTimeKeyPress(Sender: TObject; var Key: char);
@@ -375,6 +380,22 @@ begin
   end;
 end;
 
+procedure Tf_capture.Panel1Resize(Sender: TObject);
+begin
+  // resize when stacking is enabled or disabled
+  ComputeTotalTime;
+end;
+
+procedure Tf_capture.SeqNumChange(Sender: TObject);
+begin
+  ComputeTotalTime;
+end;
+
+procedure Tf_capture.StackNumChange(Sender: TObject);
+begin
+  ComputeTotalTime;
+end;
+
 procedure Tf_capture.Stop;
 begin
   Frunning:=false;
@@ -396,7 +417,7 @@ begin
         ExecProcess(DomeFlatSetLightOFF,nil,false);
      end;
   end;
-
+  ComputeTotalTime;
 end;
 
 procedure Tf_capture.setCustomFrameType;
@@ -448,6 +469,21 @@ begin
     end
     else begin
       t:=FCameraExposureRemain+(SeqNum.Value-FSeqCount)*FExposureTime;
+      LabelTime.Caption:=TimToStr(t/3600);
+    end;
+  end;
+end;
+
+procedure Tf_capture.ComputeTotalTime;
+var t: double;
+begin
+  if not Frunning then begin
+    if PanelStack.Visible and (StackNum.Value>1) then begin
+      t:=SeqNum.Value*StackNum.Value*FExposureTime;
+      LabelTime.Caption:=TimToStr(t/3600);
+    end
+    else begin
+      t:=SeqNum.Value*FExposureTime;
       LabelTime.Caption:=TimToStr(t/3600);
     end;
   end;
