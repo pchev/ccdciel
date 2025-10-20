@@ -520,6 +520,7 @@ type
     procedure MenuItemCleanupClick(Sender: TObject);
     procedure MenuItemPhotometryClick(Sender: TObject);
     procedure MenuResolveDSOClick(Sender: TObject);
+    procedure MenuResolveHyperledaClick(Sender: TObject);
     procedure MenuSaveConfigClick(Sender: TObject);
     procedure MenuOpenPictureClick(Sender: TObject);
     procedure MenuResolveRotateClick(Sender: TObject);
@@ -668,6 +669,7 @@ type
     refbmp:TBGRABitmap;
     cdcWCSinfo: TcdcWCSinfo;
     Annotate: boolean;
+    dsofits: TFits;
     SaveFocusZoom,ImgCx, ImgCy: double;
     Mx, My, PolX, PolY: integer;
     StartX, StartY, EndX, EndY, MouseDownX,MouseDownY: integer;
@@ -983,7 +985,7 @@ type
     procedure AstrometryToPlanetariumFrame(Sender: TObject);
     procedure ResolveSlewCenter(Sender: TObject);
     procedure ResolvePlotDso(Sender: TObject);
-    procedure ResolvePlotHyperleda(Sender: TObject);
+    procedure ResolvePlot(f:TFits; dsotype:byte);
     procedure ResolveSyncRotator(Sender: TObject);
     procedure ResolveRotate(Sender: TObject);
     procedure InitWCS(fn:string);
@@ -2053,7 +2055,7 @@ begin
   f_scriptengine.onClearReferenceImage:=@ClearRefImage;
   f_scriptengine.onSlewImageCenter:=@ResolveSlewCenter;
   f_scriptengine.onPlotDSO:=@ResolvePlotDso;
-  f_scriptengine.onPlotHyperleda:=@ResolvePlotHyperleda;
+  f_scriptengine.onPlotHyperleda:=@MenuResolveHyperledaClick;
   f_scriptengine.onAutomaticAutofocus:=@cmdAutomaticAutofocus;
   f_scriptengine.onAutofocus:=@cmdAutofocus;
   f_scriptengine.DevicesConnection:=f_devicesconnection;
@@ -15375,34 +15377,48 @@ begin
   MenuResolveDSOClick(MenuResolveDSO)
 end;
 
-procedure Tf_main.ResolvePlotHyperleda(Sender: TObject);
+procedure Tf_main.MenuResolveHyperledaClick(Sender: TObject);
 begin
-  MenuResolveDSOClick(MenuResolveHyperLeda);
+ if SplitImage then exit;
+ fits.ClearStarList;
+ DrawImage; {cleanup to avoid label overlap}
+ ResolvePlot(fits,1)
 end;
 
 procedure Tf_main.MenuResolveDSOClick(Sender: TObject);
+begin
+  if SplitImage then exit;
+  fits.ClearStarList;
+  DrawImage; {cleanup to avoid label overlap}
+  ResolvePlot(fits,0);
+end;
+
+procedure Tf_main.ResolvePlot(f:TFits; dsotype:byte);
 var
   Save_Cursor:TCursor;
 begin
-  if SplitImage then exit;
-  if fits.HeaderInfo.valid and fits.ImageValid then begin
+  if f.HeaderInfo.valid and f.ImageValid then begin
      Save_Cursor := Screen.Cursor; {loading Hyperleda could take some time}
      Screen.Cursor := crHourglass; { Show hourglass cursor }
-     if fits.HeaderInfo.solved then begin
-        if (sender=MenuResolveHyperLeda)or(sender=MenuResolveHyperLeda2) then
+     dsofits:=f;
+     if f.HeaderInfo.solved then begin
+        if dsotype=1 then
           load_hyperleda
         else
           load_deep;
-        fits.ClearStarList;
-        DrawImage; {cleanup to avoid label overlap}
-        search_deepsky(fits);
+        search_deepsky(f);
         Annotate:=true;
-        PlotImage;
+        if f=fits then
+          PlotImage
+        else if f=guidefits then
+            PlotGuideImage
+        else if f=finderfits then
+            PlotFinderImage;
      end else begin
-       if (not astrometry.Busy) and (fits.HeaderInfo.naxis>0) then begin
-         if not f_goto.CheckImageInfo(fits) then exit;
-         fits.SaveToFile(slash(TmpDir)+'ccdcieltmp.fits');
-         if (sender=MenuResolveHyperLeda)or(sender=MenuResolveHyperLeda2) then
+       if (not astrometry.Busy) and (f.HeaderInfo.naxis>0) then begin
+         if not f_goto.CheckImageInfo(f) then exit;
+         f.SaveToFile(slash(TmpDir)+'ccdcieltmp.fits');
+         if dsotype=1 then
            astrometry.StartAstrometry(slash(TmpDir)+'ccdcieltmp.fits',slash(TmpDir)+'ccdcielsolved.fits',@AstrometryPlotHyperleda)
          else
            astrometry.StartAstrometry(slash(TmpDir)+'ccdcieltmp.fits',slash(TmpDir)+'ccdcielsolved.fits',@AstrometryPlotDSO);
@@ -15416,11 +15432,16 @@ procedure Tf_main.AstrometryPlotDSO(Sender: TObject);
 begin
 if astrometry.LastResult then begin
   load_deep;
-  fits.ClearStarList;
+  dsofits.ClearStarList;
   DrawImage;
-  search_deepsky(fits);
+  search_deepsky(dsofits);
   Annotate:=true;
-  PlotImage;
+  if dsofits=fits then
+    PlotImage
+  else if dsofits=guidefits then
+      PlotGuideImage
+  else if dsofits=finderfits then
+      PlotFinderImage;
 end;
 end;
 
@@ -15428,11 +15449,16 @@ procedure Tf_main.AstrometryPlotHyperleda(Sender: TObject);
 begin
 if astrometry.LastResult then begin
   load_hyperleda;
-  fits.ClearStarList;
+  dsofits.ClearStarList;
   DrawImage;
-  search_deepsky(fits);
+  search_deepsky(dsofits);
   Annotate:=true;
-  PlotImage;
+  if dsofits=fits then
+    PlotImage
+  else if dsofits=guidefits then
+      PlotGuideImage
+  else if dsofits=finderfits then
+      PlotFinderImage;
 end;
 end;
 

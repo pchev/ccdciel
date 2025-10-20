@@ -993,7 +993,7 @@ object f_main: Tf_main
       end
       object MenuResolveHyperLeda2: TMenuItem
         Caption = 'Resolve and plot HyperLeda'
-        OnClick = MenuResolveDSOClick
+        OnClick = MenuResolveHyperledaClick
       end
       object MenuResolvePlanetarium2: TMenuItem
         Caption = 'Resolve and show image in planetarium'
@@ -1646,7 +1646,7 @@ object f_main: Tf_main
     end
     object MenuResolveHyperLeda: TMenuItem
       Caption = 'Resolve and plot HyperLeda'
-      OnClick = MenuResolveDSOClick
+      OnClick = MenuResolveHyperledaClick
     end
     object MenuResolvePlanetarium: TMenuItem
       Caption = 'Resolve and show image in planetarium'
