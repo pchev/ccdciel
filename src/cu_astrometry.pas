@@ -102,7 +102,7 @@ TAstrometry = class(TComponent)
     property LastSlewErr: double read FLastSlewErr;
     property LastResult: Boolean read FLastResult;
     property LastError: String read FLastError;
-    property LastAstrometrySource: TAstrometrySource read AstrometrySource;
+    property LastAstrometrySource: TAstrometrySource read AstrometrySource write AstrometrySource;
     property InitRA: double read Finitra;
     property InitDEC: double read Finitdec;
     property StartTime: double read FStartTime;

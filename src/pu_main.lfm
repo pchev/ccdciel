@@ -2047,6 +2047,9 @@ object f_main: Tf_main
       Caption = 'MenuItemGuiderViewStatistics'
       OnClick = MenuItemGuiderViewStatisticsClick
     end
+    object Separator6: TMenuItem
+      Caption = '-'
+    end
     object MenuItemGuiderSolve: TMenuItem
       Caption = 'MenuItemGuiderSolve'
       OnClick = MenuItemGuiderSolveClick
@@ -2054,6 +2057,16 @@ object f_main: Tf_main
     object MenuItemGuiderSolveSync: TMenuItem
       Caption = 'MenuItemGuiderSolveSync'
       OnClick = MenuItemGuiderSolveSyncClick
+    end
+    object Separator7: TMenuItem
+      Caption = '-'
+    end
+    object MenuItemGuiderSolveSyncRotator: TMenuItem
+      Caption = 'MenuItemGuiderSolveSyncRotator'
+      OnClick = MenuItemGuiderSolveSyncRotatorClick
+    end
+    object Separator8: TMenuItem
+      Caption = '-'
     end
     object MenuItemGuiderSolveDSO: TMenuItem
       Caption = 'MenuItemGuiderSolveDSO'
@@ -2120,6 +2133,9 @@ object f_main: Tf_main
       Caption = 'MenuItemFinderViewStatistics'
       OnClick = MenuItemFinderViewStatisticsClick
     end
+    object Separator9: TMenuItem
+      Caption = '-'
+    end
     object MenuItemFinderSolve: TMenuItem
       Caption = 'MenuItemFinderSolve'
       OnClick = MenuItemFinderSolveClick
@@ -2127,6 +2143,9 @@ object f_main: Tf_main
     object MenuItemFinderSolveSync: TMenuItem
       Caption = 'MenuItemFinderSolveSync'
       OnClick = MenuItemFinderSolveSyncClick
+    end
+    object Separator10: TMenuItem
+      Caption = '-'
     end
     object MenuItemFinderSolveDSO: TMenuItem
       Caption = 'MenuItemFinderSolveDSO'

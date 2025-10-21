@@ -151,6 +151,7 @@ type
     MenuFlatHeader: TMenuItem;
     MeasureConeError1: TMenuItem;
     MenuInstallScript: TMenuItem;
+    MenuItemGuiderSolveSyncRotator: TMenuItem;
     MenuItemFinderSolvePlanetarium: TMenuItem;
     MenuItemFinderShowCCDFrame: TMenuItem;
     MenuItemGuiderSolvePlanetarium: TMenuItem;
@@ -264,10 +265,15 @@ type
     ImageResizeTimer: TTimer;
     GuiderPopUpmenu1: TPopupMenu;
     SaveDialogPicture: TSaveDialog;
+    Separator10: TMenuItem;
     Separator2: TMenuItem;
     Separator3: TMenuItem;
     Separator4: TMenuItem;
     Separator5: TMenuItem;
+    Separator6: TMenuItem;
+    Separator7: TMenuItem;
+    Separator8: TMenuItem;
+    Separator9: TMenuItem;
     Splitter1: TSplitter;
     Splitter2: TSplitter;
     Splitter3: TSplitter;
@@ -476,6 +482,7 @@ type
     procedure MenuItemGuiderSolveHyperledaClick(Sender: TObject);
     procedure MenuItemGuiderSolvePlanetariumClick(Sender: TObject);
     procedure MenuItemGuiderSolveSyncClick(Sender: TObject);
+    procedure MenuItemGuiderSolveSyncRotatorClick(Sender: TObject);
     procedure MenuItemGuiderViewHeaderClick(Sender: TObject);
     procedure ImageResizeTimerTimer(Sender: TObject);
     procedure MagnifyerTimerTimer(Sender: TObject);
@@ -2601,6 +2608,7 @@ begin
    MenuResolveRotate2.Caption := rsResolveAndRo;
    MenuResolveSyncRotator.Caption := rsResolveAndSy2;
    MenuResolveSyncRotator2.Caption := rsResolveAndSy2;
+   MenuItemGuiderSolveSyncRotator.Caption := rsResolveAndSy2;
    MenuResolveDSO.Caption:=rsResolveAndPl;
    MenuResolveDSO2.Caption:=rsResolveAndPl;
    MenuItemGuiderSolveDSO.Caption:=rsResolveAndPl;
@@ -15378,6 +15386,7 @@ begin
   if rotator.Status=devConnected then begin
      if fits.HeaderInfo.solved then begin
        fits.SaveToFile(slash(TmpDir)+'ccdcielsolved.fits');
+       astrometry.LastAstrometrySource:=asMain;
        ResolveSyncRotator(self);
      end else begin
        if (not astrometry.Busy) and (fits.HeaderInfo.naxis>0) then begin
@@ -15528,6 +15537,7 @@ begin
    if planetarium.Connected then begin
       if fits.HeaderInfo.solved then begin
         fits.SaveToFile(slash(TmpDir)+'ccdcielsolved.fits');
+        astrometry.LastAstrometrySource:=asMain;
         if planetarium.ShowImage(slash(TmpDir)+'ccdcielsolved.fits') then
            NewMessage(rsSendImageToP,1)
         else
@@ -15552,6 +15562,7 @@ begin
    if planetarium.Connected then begin
       if fits.HeaderInfo.solved then begin
         fits.SaveToFile(slash(TmpDir)+'ccdcielsolved.fits');
+        astrometry.LastAstrometrySource:=asMain;
         AstrometryToPlanetariumFrame(Sender);
       end else begin
         if (not astrometry.Busy) and (fits.HeaderInfo.naxis>0) then begin
@@ -15614,15 +15625,21 @@ end;
 procedure Tf_main.ResolveSyncRotator(Sender: TObject);
 var fn: string;
     rot: Double;
-    n: integer;
+    n,wcsnum: integer;
     wcsinfo: TcdcWCSinfo;
 begin
 rot:=NullCoord;
+if astrometry.LastAstrometrySource=asGuider then
+   wcsnum:=wcsguide
+else if astrometry.LastAstrometrySource=asFinder then
+   wcsnum:=wcsfind
+else
+   wcsnum:=wcsmain;
 
 fn:=slash(TmpDir)+'ccdcielsolved.fits';
-n:=cdcwcs_initfitsfile(pchar(fn),wcsmain);
+n:=cdcwcs_initfitsfile(pchar(fn),wcsnum);
 if n=0 then
-  n:=cdcwcs_getinfo(addr(wcsinfo),wcsmain)
+  n:=cdcwcs_getinfo(addr(wcsinfo),wcsnum)
 else begin
   NewMessage(Format(rsErrorProcess, [TmpDir]),1);
   exit;
@@ -18868,6 +18885,7 @@ begin
    if planetarium.Connected then begin
       if guidefits.HeaderInfo.solved then begin
         guidefits.SaveToFile(slash(TmpDir)+'ccdcielsolved.fits');
+        astrometry.LastAstrometrySource:=asGuider;
         if planetarium.ShowImage(slash(TmpDir)+'ccdcielsolved.fits') then
            NewMessage(rsSendImageToP,1)
         else
@@ -18891,6 +18909,7 @@ begin
    if planetarium.Connected then begin
       if guidefits.HeaderInfo.solved then begin
         guidefits.SaveToFile(slash(TmpDir)+'ccdcielsolved.fits');
+        astrometry.LastAstrometrySource:=asGuider;
         AstrometryToPlanetariumFrame(Sender);
       end else begin
         if (not astrometry.Busy) and (guidefits.HeaderInfo.naxis>0) then begin
@@ -18912,6 +18931,27 @@ begin
     astrometry.SyncGuideImage(false);
   end
   else f_internalguider.Info:='No image!';
+end;
+
+procedure Tf_main.MenuItemGuiderSolveSyncRotatorClick(Sender: TObject);
+begin
+  if guidefits.HeaderInfo.valid and guidefits.ImageValid then begin
+   if rotator.Status=devConnected then begin
+      if guidefits.HeaderInfo.solved then begin
+        guidefits.SaveToFile(slash(TmpDir)+'ccdcielsolved.fits');
+        astrometry.LastAstrometrySource:=asGuider;
+        ResolveSyncRotator(self);
+      end else begin
+        if (not astrometry.Busy) and (guidefits.HeaderInfo.naxis>0) then begin
+          if not f_goto.CheckImageInfo(guidefits) then exit;
+          guidefits.SaveToFile(slash(TmpDir)+'ccdcieltmp.fits');
+          astrometry.StartAstrometry(slash(TmpDir)+'ccdcieltmp.fits',slash(TmpDir)+'ccdcielsolved.fits',@ResolveSyncRotator,asGuider);
+        end;
+      end;
+   end
+   else
+      NewMessage(rsRotatorIsNot,1);
+  end;
 end;
 
 procedure Tf_main.MenuItemGuiderStopAstrometryClick(Sender: TObject);
@@ -19860,6 +19900,7 @@ begin
    if planetarium.Connected then begin
       if finderfits.HeaderInfo.solved then begin
         finderfits.SaveToFile(slash(TmpDir)+'ccdcielsolved.fits');
+        astrometry.LastAstrometrySource:=asFinder;
         if planetarium.ShowImage(slash(TmpDir)+'ccdcielsolved.fits') then
            NewMessage(rsSendImageToP,1)
         else
@@ -19883,6 +19924,7 @@ begin
    if planetarium.Connected then begin
       if finderfits.HeaderInfo.solved then begin
         finderfits.SaveToFile(slash(TmpDir)+'ccdcielsolved.fits');
+        astrometry.LastAstrometrySource:=asFinder;
         AstrometryToPlanetariumFrame(Sender);
       end else begin
         if (not astrometry.Busy) and (finderfits.HeaderInfo.naxis>0) then begin
