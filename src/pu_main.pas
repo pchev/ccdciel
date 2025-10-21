@@ -151,6 +151,10 @@ type
     MenuFlatHeader: TMenuItem;
     MeasureConeError1: TMenuItem;
     MenuInstallScript: TMenuItem;
+    MenuItemFinderSolvePlanetarium: TMenuItem;
+    MenuItemFinderShowCCDFrame: TMenuItem;
+    MenuItemGuiderSolvePlanetarium: TMenuItem;
+    MenuItemGuiderShowCCDFrame: TMenuItem;
     MenuItemGuiderSolveDSO: TMenuItem;
     MenuItemGuiderSolveHyperleda: TMenuItem;
     MenuItemFinderSolveDSO: TMenuItem;
@@ -456,17 +460,21 @@ type
     procedure MenuInternalguiderStartClick(Sender: TObject);
     procedure MenuInternalGuiderStopClick(Sender: TObject);
     procedure MenuItemFinderSaveImageClick(Sender: TObject);
+    procedure MenuItemFinderShowCCDFrameClick(Sender: TObject);
     procedure MenuItemFinderSolveClick(Sender: TObject);
     procedure MenuItemFinderSolveDSOClick(Sender: TObject);
     procedure MenuItemFinderSolveHyperledaClick(Sender: TObject);
+    procedure MenuItemFinderSolvePlanetariumClick(Sender: TObject);
     procedure MenuItemFinderSolveSyncClick(Sender: TObject);
     procedure MenuItemFinderStopAstrometryClick(Sender: TObject);
     procedure MenuItemFinderViewHeaderClick(Sender: TObject);
     procedure MenuItemFinderViewStatisticsClick(Sender: TObject);
     procedure MenuItemGuiderSaveImageClick(Sender: TObject);
+    procedure MenuItemGuiderShowCCDFrameClick(Sender: TObject);
     procedure MenuItemGuiderSolveClick(Sender: TObject);
     procedure MenuItemGuiderSolveDSOClick(Sender: TObject);
     procedure MenuItemGuiderSolveHyperledaClick(Sender: TObject);
+    procedure MenuItemGuiderSolvePlanetariumClick(Sender: TObject);
     procedure MenuItemGuiderSolveSyncClick(Sender: TObject);
     procedure MenuItemGuiderViewHeaderClick(Sender: TObject);
     procedure ImageResizeTimerTimer(Sender: TObject);
@@ -2603,8 +2611,12 @@ begin
    MenuItemFinderSolveHyperleda.Caption:=rsResolveAndPl2;
    MenuResolvePlanetarium.Caption := rsResolveAndSh;
    MenuResolvePlanetarium2.Caption := rsResolveAndSh;
+   MenuItemGuiderSolvePlanetarium.Caption := rsResolveAndSh;
+   MenuItemFinderSolvePlanetarium.Caption := rsResolveAndSh;
    MenuShowCCDFrame.Caption := rsResolveAndSh2;
    MenuShowCCDFrame2.Caption := rsResolveAndSh2;
+   MenuItemGuiderShowCCDFrame.Caption := rsResolveAndSh2;
+   MenuItemFinderShowCCDFrame.Caption := rsResolveAndSh2;
    MenuViewAstrometryLog.Caption := rsViewLastReso;
    MenuViewAstrometryLog2.Caption := rsViewLastReso;
    MenuStopAstrometry.Caption := rsStopAstromet;
@@ -15628,15 +15640,22 @@ end;
 procedure Tf_main.AstrometryToPlanetariumFrame(Sender: TObject);
 var fn: string;
     ra, dec, rot, sizeH, sizeV: Double;
-    n: integer;
+    n,wcsnum: integer;
     wcsinfo: TcdcWCSinfo;
 begin
 ra:=NullCoord; dec:=NullCoord; rot:=NullCoord; sizeH:=0; sizeV:=0;
 
+if astrometry.LastAstrometrySource=asGuider then
+   wcsnum:=wcsguide
+else if astrometry.LastAstrometrySource=asFinder then
+   wcsnum:=wcsfind
+else
+   wcsnum:=wcsmain;
+
 fn:=slash(TmpDir)+'ccdcielsolved.fits';
-n:=cdcwcs_initfitsfile(pchar(fn),wcsmain);
+n:=cdcwcs_initfitsfile(pchar(fn),wcsnum);
 if n=0 then
-   n:=cdcwcs_getinfo(addr(wcsinfo),wcsmain)
+   n:=cdcwcs_getinfo(addr(wcsinfo),wcsnum)
 else begin
   NewMessage(Format(rsErrorProcess, [TmpDir]),1);
   exit;
@@ -15649,7 +15668,6 @@ if (n=0) and planetarium.Connected then begin
   rot:=wcsinfo.rot;
   sizeH:=wcsinfo.secpix*wcsinfo.wp/3600;
   sizeV:=wcsinfo.secpix*wcsinfo.hp/3600;
-
 
   if((ra=NullCoord) or (dec=NullCoord) or (sizeV=0) or (sizeH=0) or (rot=NullCoord)) then
   begin
@@ -18844,6 +18862,49 @@ begin
   ResolvePlot(guidefits,1,asGuider);
 end;
 
+procedure Tf_main.MenuItemGuiderSolvePlanetariumClick(Sender: TObject);
+begin
+  if guidefits.HeaderInfo.valid and guidefits.ImageValid then begin
+   if planetarium.Connected then begin
+      if guidefits.HeaderInfo.solved then begin
+        guidefits.SaveToFile(slash(TmpDir)+'ccdcielsolved.fits');
+        if planetarium.ShowImage(slash(TmpDir)+'ccdcielsolved.fits') then
+           NewMessage(rsSendImageToP,1)
+        else
+           NewMessage(rsPlanetariumE+blank+planetarium.LastErrorTxt,1);
+      end else begin
+        if (not astrometry.Busy) and (guidefits.HeaderInfo.naxis>0) then begin
+          if not f_goto.CheckImageInfo(guidefits) then exit;
+          guidefits.SaveToFile(slash(TmpDir)+'ccdcieltmp.fits');
+          astrometry.StartAstrometry(slash(TmpDir)+'ccdcieltmp.fits',slash(TmpDir)+'ccdcielsolved.fits',@AstrometryToPlanetarium,asGuider);
+        end;
+      end;
+   end
+   else
+      NewMessage(rsPlanetariumI,1);
+  end;
+end;
+
+procedure Tf_main.MenuItemGuiderShowCCDFrameClick(Sender: TObject);
+begin
+  if guidefits.HeaderInfo.valid and guidefits.ImageValid then begin
+   if planetarium.Connected then begin
+      if guidefits.HeaderInfo.solved then begin
+        guidefits.SaveToFile(slash(TmpDir)+'ccdcielsolved.fits');
+        AstrometryToPlanetariumFrame(Sender);
+      end else begin
+        if (not astrometry.Busy) and (guidefits.HeaderInfo.naxis>0) then begin
+          if not f_goto.CheckImageInfo(guidefits) then exit;
+          guidefits.SaveToFile(slash(TmpDir)+'ccdcieltmp.fits');
+          astrometry.StartAstrometry(slash(TmpDir)+'ccdcieltmp.fits',slash(TmpDir)+'ccdcielsolved.fits',@AstrometryToPlanetariumFrame,asGuider);
+        end;
+      end;
+   end
+   else
+      NewMessage(rsPlanetariumI,1);
+  end;
+end;
+
 procedure Tf_main.MenuItemGuiderSolveSyncClick(Sender: TObject);
 begin
   if guidefits.HeaderInfo.valid then begin
@@ -19791,6 +19852,49 @@ begin
   finderfits.ClearStarList;
   DrawFinderImage(true); {cleanup to avoid label overlap}
   ResolvePlot(finderfits,1,asFinder);
+end;
+
+procedure Tf_main.MenuItemFinderSolvePlanetariumClick(Sender: TObject);
+begin
+  if finderfits.HeaderInfo.valid and finderfits.ImageValid then begin
+   if planetarium.Connected then begin
+      if finderfits.HeaderInfo.solved then begin
+        finderfits.SaveToFile(slash(TmpDir)+'ccdcielsolved.fits');
+        if planetarium.ShowImage(slash(TmpDir)+'ccdcielsolved.fits') then
+           NewMessage(rsSendImageToP,1)
+        else
+           NewMessage(rsPlanetariumE+blank+planetarium.LastErrorTxt,1);
+      end else begin
+        if (not astrometry.Busy) and (finderfits.HeaderInfo.naxis>0) then begin
+          if not f_goto.CheckImageInfo(finderfits) then exit;
+          finderfits.SaveToFile(slash(TmpDir)+'ccdcieltmp.fits');
+          astrometry.StartAstrometry(slash(TmpDir)+'ccdcieltmp.fits',slash(TmpDir)+'ccdcielsolved.fits',@AstrometryToPlanetarium,asFinder);
+        end;
+      end;
+   end
+   else
+      NewMessage(rsPlanetariumI,1);
+  end;
+end;
+
+procedure Tf_main.MenuItemFinderShowCCDFrameClick(Sender: TObject);
+begin
+  if finderfits.HeaderInfo.valid and finderfits.ImageValid then begin
+   if planetarium.Connected then begin
+      if finderfits.HeaderInfo.solved then begin
+        finderfits.SaveToFile(slash(TmpDir)+'ccdcielsolved.fits');
+        AstrometryToPlanetariumFrame(Sender);
+      end else begin
+        if (not astrometry.Busy) and (finderfits.HeaderInfo.naxis>0) then begin
+          if not f_goto.CheckImageInfo(finderfits) then exit;
+          finderfits.SaveToFile(slash(TmpDir)+'ccdcieltmp.fits');
+          astrometry.StartAstrometry(slash(TmpDir)+'ccdcieltmp.fits',slash(TmpDir)+'ccdcielsolved.fits',@AstrometryToPlanetariumFrame,asFinder);
+        end;
+      end;
+   end
+   else
+      NewMessage(rsPlanetariumI,1);
+  end;
 end;
 
 procedure Tf_main.MenuItemFinderSolveSyncClick(Sender: TObject);

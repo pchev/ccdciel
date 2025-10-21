@@ -2063,6 +2063,14 @@ object f_main: Tf_main
       Caption = 'MenuItemGuiderSolveHyperleda'
       OnClick = MenuItemGuiderSolveHyperledaClick
     end
+    object MenuItemGuiderSolvePlanetarium: TMenuItem
+      Caption = 'MenuItemGuiderSolvePlanetarium'
+      OnClick = MenuItemGuiderSolvePlanetariumClick
+    end
+    object MenuItemGuiderShowCCDFrame: TMenuItem
+      Caption = 'MenuItemGuiderShowCCDFrame'
+      OnClick = MenuItemGuiderShowCCDFrameClick
+    end
     object MenuItemGuiderStopAstrometry: TMenuItem
       Caption = 'MenuItemGuiderStopAstrometry'
       Visible = False
@@ -2127,6 +2135,14 @@ object f_main: Tf_main
     object MenuItemFinderSolveHyperleda: TMenuItem
       Caption = 'MenuItemFinderSolveHyperleda'
       OnClick = MenuItemFinderSolveHyperledaClick
+    end
+    object MenuItemFinderSolvePlanetarium: TMenuItem
+      Caption = 'MenuItemFinderSolvePlanetarium'
+      OnClick = MenuItemFinderSolvePlanetariumClick
+    end
+    object MenuItemFinderShowCCDFrame: TMenuItem
+      Caption = 'MenuItemFinderShowCCDFrame'
+      OnClick = MenuItemFinderShowCCDFrameClick
     end
     object MenuItemFinderStopAstrometry: TMenuItem
       Caption = 'MenuItemFinderStopAstrometry'
